@@ -1,0 +1,26 @@
+#summary How to compile this project for Windows with MS VC++
+
+=How to build HeeksSolid=
+
+I used Windows XP.
+
+Get Microsoft Visual C++ 2008 Express Edition ( it's free ) Download the Open CASCADE installation.
+
+Download the wxWidgets installation.
+
+Set an environment variable called WXWIN to be C:\wxWidgets-2.8.7 or whereever wxWidgets installed to.
+
+Edit C:\wxWidgets-2.8.7\include\wx\msw\setup.h
+
+change #define wxUSE_GLCANVAS 0 to #define wxUSE_GLCANVAS 1
+
+Open and build C:\wxWidgets-2.8.7\build\msw\wx.dsw ( let VC2008 convert the projects )
+
+Open "HeeksSolid.sln" ( for VC2008), or "HeeksSolid VC2003.sln" (for VC2003 )
+
+Press build.
+==VC2003 and VC2005==
+
+To use VC2003 or VC2005, run vc_retro.py ( you will need to install Python first ).
+
+This will make .vcproj and .sln files for VC2003 and for VC2005. 
