@@ -45,7 +45,7 @@ class WXDLLEXPORT wxButton;
 #elif defined(WXMAKINGDLL_PROPGRID)
     #define WXDLLEXPORT_PGODC WXEXPORT
 #elif defined(WXUSINGDLL)
-    #define WXDLLEXPORT_PGODC WXIMPORT
+    #define WXDLLEXPORT_PGODC //WXIMPORT
 #else // not making nor using DLL
     #define WXDLLEXPORT_PGODC
 #endif
