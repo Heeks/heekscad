@@ -1,15 +1,15 @@
 // declares all the exported functions for HeeksCAD
 
 extern "C"{
-#define EXPORT __declspec( dllexport ) __cdecl
+#define HEEKS_EXPORT __declspec( dllexport ) __cdecl
 
 class wxFrame;
 class wxAuiManager;
 
-double	EXPORT	HeeksGetTolerance(void);
-void	EXPORT	HeeksRefreshProperties(void);
-void	EXPORT	HeeksRepaint(void);
-int		EXPORT	HeeksGetMainFrame(void);
-int		EXPORT	HeeksGetAuiManager();
-void	EXPORT	HeeksAddToolBarTool(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&));
+double	HEEKS_EXPORT	HeeksGetTolerance(void);
+void	HEEKS_EXPORT	HeeksRefreshProperties(void);
+void	HEEKS_EXPORT	HeeksRepaint(void);
+int		HEEKS_EXPORT	HeeksGetMainFrame(void);
+int		HEEKS_EXPORT	HeeksGetAuiManager();
+void	HEEKS_EXPORT	HeeksAddToolBarTool(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&));
 }
