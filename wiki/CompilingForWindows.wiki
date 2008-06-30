@@ -1,6 +1,6 @@
 #summary How to compile this project for Windows with MS VC++
 
-=How to build HeeksSolid=
+=How to build HeeksCAD=
 
 I used Windows XP.
 
@@ -16,7 +16,7 @@ change #define wxUSE_GLCANVAS 0 to #define wxUSE_GLCANVAS 1
 
 Open and build C:\wxWidgets-2.8.7\build\msw\wx.dsw ( let VC2008 convert the projects )
 
-Open "HeeksSolid.sln" ( for VC2008), or "HeeksSolid VC2003.sln" (for VC2003 )
+Open "HeeksCAD.sln" ( for VC2008), or "HeeksCAD VC2003.sln" (for VC2003 )
 
 Press build.
 ==VC2003 and VC2005==
