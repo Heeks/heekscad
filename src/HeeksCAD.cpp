@@ -4,6 +4,7 @@
 #include "HeeksCAD.h"
 #include <wx/filedlg.h>
 #include <wx/clipbrd.h>
+#include <wx/stdpaths.h>
 #include "../interface/Tool.h"
 #include "../interface/Material.h"
 #include "../interface/ToolList.h"
@@ -846,4 +847,21 @@ void HeeksCADapp::AddMenusToToolList(MarkedObject* marked_object, std::list<Tool
 			}
 		}
 	}
+}
+
+wxString HeeksCADapp::GetExeFolder()const
+{
+	wxStandardPaths sp;
+	wxString exepath = sp.GetExecutablePath();
+	int last_fs = exepath.Find('/', true);
+	int last_bs = exepath.Find('\\', true);
+	wxString exedir;
+	if(last_fs > last_bs){
+		exedir = exepath.Truncate(last_fs);
+	}
+	else{
+		exedir = exepath.Truncate(last_bs);
+	}
+
+	return exedir;
 }

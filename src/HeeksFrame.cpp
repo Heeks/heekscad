@@ -2,24 +2,6 @@
 
 #include "stdafx.h"
 #include "HeeksFrame.h"
-#include <wx/stdpaths.h>
-#include "bitmaps/new.xpm"
-#include "bitmaps/open.xpm"
-#include "bitmaps/save.xpm"
-#include "bitmaps/undo.xpm"
-#include "bitmaps/redo.xpm"
-#include "bitmaps/viewing.xpm"
-#include "bitmaps/lines.xpm"
-#include "bitmaps/subtract.xpm"
-#include "bitmaps/fuse.xpm"
-#include "bitmaps/common.xpm"
-#include "bitmaps/sphere.xpm"
-#include "bitmaps/cube.xpm"
-#include "bitmaps/cyl.xpm"
-#include "bitmaps/redraw.xpm"
-#include "bitmaps/mag.xpm"
-#include "bitmaps/magextents.xpm"
-#include "bitmaps/magnorot.xpm"
 #include "GraphicsCanvas.h"
 #include "LeftCanvas.h"
 #include "PropertiesCanvas.h"
@@ -157,76 +139,33 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_viewingBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
 	m_viewingBar->SetToolBitmapSize(wxSize(32, 32));
 
-	// Set up toolbar
-    enum
-    {
-        Tool_new,
-        Tool_open,
-        Tool_save,
-		Tool_undo,
-		Tool_redo,
-		Tool_viewing,
-        Tool_lines,
-		Tool_subtract,
-		Tool_sphere,
-		Tool_cube,
-		Tool_cyl,
-		Tool_redraw,
-		Tool_fuse,
-		Tool_common,
-		Tool_mag,
-		Tool_magextents,
-		Tool_magnorot,
-        Tool_Max
-    };
-
-    wxBitmap toolBarBitmaps[Tool_Max];
-
-    #define INIT_TOOL_BMP(bmp) \
-        toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
-
-    INIT_TOOL_BMP(new);
-    INIT_TOOL_BMP(open);
-    INIT_TOOL_BMP(save);
-    INIT_TOOL_BMP(undo);
-    INIT_TOOL_BMP(redo);
-    INIT_TOOL_BMP(viewing);
-    INIT_TOOL_BMP(lines);
-    INIT_TOOL_BMP(subtract);
-    INIT_TOOL_BMP(sphere);
-    INIT_TOOL_BMP(cube);
-    INIT_TOOL_BMP(cyl);
-    INIT_TOOL_BMP(redraw);
-    INIT_TOOL_BMP(fuse);
-    INIT_TOOL_BMP(common);
-    INIT_TOOL_BMP(mag);
-	INIT_TOOL_BMP(magextents);
-	INIT_TOOL_BMP(magnorot);
+	wxString exe_folder = wxGetApp().GetExeFolder();
 
 	// main tool bar
-    m_toolBar->AddTool(wxID_NEW, _T("New"), toolBarBitmaps[Tool_new], _T("New file"));
-    m_toolBar->AddTool(wxID_OPEN, _T("Open"), toolBarBitmaps[Tool_open], _T("Open file"));
-    m_toolBar->AddTool(wxID_SAVE, _T("Save"), toolBarBitmaps[Tool_save], _T("Save file"));
-    m_toolBar->AddTool(ID_UNDO, _T("Undo"), toolBarBitmaps[Tool_undo], _T("Undo the previous command"));
-    m_toolBar->AddTool(ID_REDO, _T("Redo"), toolBarBitmaps[Tool_redo], _T("Redo the next command"));
-    m_toolBar->AddTool(ID_VIEWING, _T("Select"), toolBarBitmaps[Tool_viewing], _T("Select Mode"));
-    m_toolBar->AddTool(ID_LINES, _T("Lines"), toolBarBitmaps[Tool_lines], _T("Start Line Drawing"));
+	wxImage::AddHandler(new wxPNGHandler);
+    m_toolBar->AddTool(wxID_NEW, _T("New"), wxBitmap(exe_folder + "/bitmaps/new.png", wxBITMAP_TYPE_PNG), _T("New file"));
+    m_toolBar->AddTool(wxID_OPEN, _T("Open"), wxBitmap(exe_folder + "/bitmaps/open.png", wxBITMAP_TYPE_PNG), _T("Open file"));
+    m_toolBar->AddTool(wxID_SAVE, _T("Save"), wxBitmap(exe_folder + "/bitmaps/save.png", wxBITMAP_TYPE_PNG), _T("Save file"));
+    m_toolBar->AddTool(ID_UNDO, _T("Undo"), wxBitmap(exe_folder + "/bitmaps/undo.png", wxBITMAP_TYPE_PNG), _T("Undo the previous command"));
+    m_toolBar->AddTool(ID_REDO, _T("Redo"), wxBitmap(exe_folder + "/bitmaps/redo.png", wxBITMAP_TYPE_PNG), _T("Redo the next command"));
+    m_toolBar->AddTool(ID_VIEWING, _T("Select"), wxBitmap(exe_folder + "/bitmaps/select.png", wxBITMAP_TYPE_PNG), _T("Select Mode"));
+    m_toolBar->AddTool(ID_LINES, _T("Lines"), wxBitmap(exe_folder + "/bitmaps/lines.png", wxBITMAP_TYPE_PNG), _T("Start Line Drawing"));
     m_toolBar->Realize();
 
 	// Solids tool bar
-    m_solidBar->AddTool(ID_SPHERE, _T("Sphere"), toolBarBitmaps[Tool_sphere], _T("Add a sphere"));
-    m_solidBar->AddTool(ID_CUBE, _T("Cube"), toolBarBitmaps[Tool_cube], _T("Add a cube"));
-    m_solidBar->AddTool(ID_CYL, _T("Cylinder"), toolBarBitmaps[Tool_cyl], _T("Add a cylinder"));
-	m_solidBar->AddTool(ID_SUBTRACT, _T("Cut"), toolBarBitmaps[Tool_subtract], _T("Cut one solid from another"));
-	m_solidBar->AddTool(ID_FUSE, _T("Fuse"), toolBarBitmaps[Tool_fuse], _T("Fuse one solid to another"));
-	m_solidBar->AddTool(ID_COMMON, _T("Common"), toolBarBitmaps[Tool_common], _T("Find common solid between two solids"));
-    m_solidBar->AddTool(ID_REDRAW, _T("Redraw"), toolBarBitmaps[Tool_redraw], _T("Redraw"));
+    m_solidBar->AddTool(ID_SPHERE, _T("Sphere"), wxBitmap(exe_folder + "/bitmaps/sphere.png", wxBITMAP_TYPE_PNG), _T("Add a sphere"));
+    m_solidBar->AddTool(ID_CUBE, _T("Cube"), wxBitmap(exe_folder + "/bitmaps/cube.png", wxBITMAP_TYPE_PNG), _T("Add a cube"));
+    m_solidBar->AddTool(ID_CYL, _T("Cylinder"), wxBitmap(exe_folder + "/bitmaps/cyl.png", wxBITMAP_TYPE_PNG), _T("Add a cylinder"));
+	m_solidBar->AddTool(ID_SUBTRACT, _T("Cut"), wxBitmap(exe_folder + "/bitmaps/cut.png", wxBITMAP_TYPE_PNG), _T("Cut one solid from another"));
+	m_solidBar->AddTool(ID_FUSE, _T("Fuse"), wxBitmap(exe_folder + "/bitmaps/fuse.png", wxBITMAP_TYPE_PNG), _T("Fuse one solid to another"));
+	m_solidBar->AddTool(ID_COMMON, _T("Common"), wxBitmap(exe_folder + "/bitmaps/common.png", wxBITMAP_TYPE_PNG), _T("Find common solid between two solids"));
+    m_solidBar->AddTool(ID_REDRAW, _T("Redraw"), wxBitmap(exe_folder + "/bitmaps/redraw.png", wxBITMAP_TYPE_PNG), _T("Redraw"));
 	m_solidBar->Realize();
 
 	// viewing tool bar
-	m_viewingBar->AddTool(ID_MAG, _T("Magnify"), toolBarBitmaps[Tool_mag], _T("Zoom in to a dragged window"));
-	m_viewingBar->AddTool(ID_MAG_EXTENTS, _T("Mag Extents"), toolBarBitmaps[Tool_magextents], _T("Zoom in to fit the extents of the drawing into the graphics window"));
-	m_viewingBar->AddTool(ID_MAG_NO_ROT, _T("Mag No Rotation"), toolBarBitmaps[Tool_magnorot], _T("Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"));
+	m_viewingBar->AddTool(ID_MAG, _T("Magnify"), wxBitmap(exe_folder + "/bitmaps/mag.png", wxBITMAP_TYPE_PNG), _T("Zoom in to a dragged window"));
+	m_viewingBar->AddTool(ID_MAG_EXTENTS, _T("Mag Extents"), wxBitmap(exe_folder + "/bitmaps/magextents.png", wxBITMAP_TYPE_PNG), _T("Zoom in to fit the extents of the drawing into the graphics window"));
+	m_viewingBar->AddTool(ID_MAG_NO_ROT, _T("Mag No Rotation"), wxBitmap(exe_folder + "/bitmaps/magnorot.png", wxBITMAP_TYPE_PNG), _T("Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"));
 	m_viewingBar->Realize();
 
 	bool objects_visible = true;
@@ -263,21 +202,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 	// load up any other dlls and call OnStartUp on each of them
 	{
-		wxStandardPaths sp;
-		wxString exepath = sp.GetExecutablePath();
-		int last_fs = exepath.Find('/', true);
-		int last_bs = exepath.Find('\\', true);
-		wxString exedir;
-		if(last_fs > last_bs){
-			exedir = exepath.Truncate(last_fs);
-			exedir.Append('/');
-		}
-		else{
-			exedir = exepath.Truncate(last_bs);
-			exedir.Append('\\');
-		}
-
-		::wxSetWorkingDirectory(exedir);
+		::wxSetWorkingDirectory(wxGetApp().GetExeFolder());
 
 		ifstream ifs("AddIns.txt");
 		char str[1024];
