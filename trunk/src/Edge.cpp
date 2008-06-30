@@ -13,7 +13,6 @@
 #include <TopTools_ListIteratorOfListOfShape.hxx>
 #include <TopExp.hxx>
 #include <BRepFilletAPI_MakeFillet.hxx>
-#include "icons/edge.xpm"
 
 wxIcon* CEdge::m_icon = NULL;
 
@@ -96,7 +95,11 @@ void CEdge::GetBox(CBox &box){
 }
 
 wxIcon* CEdge::GetIcon(){
-	if(m_icon == NULL)m_icon = new wxIcon(edge_xpm);
+	if(m_icon == NULL)
+	{
+		wxString exe_folder = wxGetApp().GetExeFolder();
+		m_icon = new wxIcon(exe_folder + "/icons/edge.png", wxBITMAP_TYPE_PNG);
+	}
 	return m_icon;
 }
 

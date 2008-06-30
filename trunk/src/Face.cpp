@@ -12,7 +12,6 @@
 #include <GProp_GProps.hxx>
 #include <BRepGProp.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
-#include "icons/face.xpm"
 #include <BRepOffsetAPI_MakeOffset.hxx>
 #include "../interface/Tool.h"
 #include <TopTools_ListIteratorOfListOfShape.hxx>
@@ -150,7 +149,11 @@ void CFace::GetBox(CBox &box){
 }
 
 wxIcon* CFace::GetIcon(){
-	if(m_icon == NULL)m_icon = new wxIcon(face_xpm);
+	if(m_icon == NULL)
+	{
+		wxString exe_folder = wxGetApp().GetExeFolder();
+		m_icon = new wxIcon(exe_folder + "/icons/face.png", wxBITMAP_TYPE_PNG);
+	}
 	return m_icon;
 }
 

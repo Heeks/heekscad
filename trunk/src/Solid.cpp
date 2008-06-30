@@ -1,7 +1,6 @@
 // Solid.cpp
 #include "stdafx.h"
 #include "Solid.h"
-#include "icons/solid.xpm"
 
 wxIcon* CSolid::m_icon = NULL;
 
@@ -15,7 +14,11 @@ CSolid::~CSolid()
 
 wxIcon* CSolid::GetIcon()
 {
-	if(m_icon == NULL)m_icon = new wxIcon(solid_xpm);
+	if(m_icon == NULL)
+	{
+		wxString exe_folder = wxGetApp().GetExeFolder();
+		m_icon = new wxIcon(exe_folder + "/icons/solid.png", wxBITMAP_TYPE_PNG);
+	}
 	return m_icon;
 }
 

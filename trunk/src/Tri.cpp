@@ -6,7 +6,6 @@
 #include "Tri.h"
 #include "../interface/PropertyString.h"
 #include "Triangles.h"
-#include "icons/tri.xpm"
 
 CTri::CTri(void):m_norm_exists(false)
 {
@@ -47,13 +46,18 @@ HeeksObj *CTri::MakeACopy(void)const{
 
 static wxIcon* icon = NULL;
 
-wxIcon* CTri::GetIcon(){
-
-if(icon == NULL)icon = new wxIcon(tri_xpm);
-return icon;
+wxIcon* CTri::GetIcon()
+{
+	if(icon == NULL)
+	{
+		wxString exe_folder = wxGetApp().GetExeFolder();
+		icon = new wxIcon(exe_folder + "/icons/tri.png", wxBITMAP_TYPE_PNG);
+	}
+	return icon;
 }
 
-void CTri::glCommands(bool select, bool marked, bool no_color){
+void CTri::glCommands(bool select, bool marked, bool no_color)
+{
 	if(!no_color)
 	{	
 		glEnable(GL_LIGHTING);
