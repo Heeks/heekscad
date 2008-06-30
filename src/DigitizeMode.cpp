@@ -97,8 +97,6 @@ int digitize_comparer::importance(){
 	default:
 		return 0;
 	}
-
-	return 0;
 }
 	
 DigitizeType DigitizeMode::digitize1(const wxPoint &input_point, gp_Pnt &point, gp_Pnt &closest_point){

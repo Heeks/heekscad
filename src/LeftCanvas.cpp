@@ -2,8 +2,6 @@
 #include "wx/dcmirror.h"
 #include "LeftCanvas.h"
 #include "../interface/MarkedObject.h"
-#include "icons/line.xpm"
-#include "icons/solid.xpm"
 #include "MarkedList.h"
 
 class DanObjectTreeData : public wxTreeItemData{
