@@ -14,8 +14,6 @@
 #include "advprops.h"
 #include "MarkedList.h"
 #include "HeeksFrame.h"
-#include "bitmaps/apply.xpm"
-#include "bitmaps/cancel.xpm"
 
 BEGIN_EVENT_TABLE(CPropertiesCanvas, wxScrolledWindow)
 	EVT_SIZE(CPropertiesCanvas::OnSize)
@@ -62,8 +60,11 @@ CPropertiesCanvas::CPropertiesCanvas(wxWindow* parent, bool wants_apply_cancel_t
 		m_toolBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
 		m_toolBar->SetToolBitmapSize(wxSize(32, 32));
 
-		wxGetApp().m_frame->AddToolBarTool(m_toolBar, _T("Apply"), wxBitmap(apply_xpm), _T("Apply any changes made to the properties"), OnApply);
-		wxGetApp().m_frame->AddToolBarTool(m_toolBar, _T("Cancel"), wxBitmap(cancel_xpm), _T("Stop editing the object"), OnCancel);
+		wxString exe_folder = wxGetApp().GetExeFolder();
+
+		wxImage::AddHandler(new wxPNGHandler);
+		wxGetApp().m_frame->AddToolBarTool(m_toolBar, _T("Apply"), wxBitmap(exe_folder + "/bitmaps/apply.png", wxBITMAP_TYPE_PNG), _T("Apply any changes made to the properties"), OnApply);
+		wxGetApp().m_frame->AddToolBarTool(m_toolBar, _T("Cancel"), wxBitmap(exe_folder + "/bitmaps/cancel.png", wxBITMAP_TYPE_PNG), _T("Stop editing the object"), OnCancel);
 
 		m_toolBar->Realize();
 	}
