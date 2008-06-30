@@ -198,8 +198,8 @@ void CGraphicsCanvas::SetViewPoint(void){
 			gp_Vec right = m_view_point.rightwards_vector().Normalized();
 			gp_Vec vertical = m_view_point.m_vertical.Normalized();
 			gp_Vec v_choices[4] = {vx, vy, -vx, -vy};
-			gp_Vec *best_x, *best_y;
-			double best_x_dp, best_y_dp;
+			gp_Vec *best_x = NULL, *best_y = NULL;
+			double best_x_dp = 0, best_y_dp = 0;
 			for(int i = 0; i<4; i++){
 				double x_dp = v_choices[i] * right;
 				double y_dp = v_choices[i] * vertical;
