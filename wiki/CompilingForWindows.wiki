@@ -17,7 +17,7 @@ and change #define wxUSE_ODBC 0 to #define wxUSE_ODBC 1
 
 Open and build C:\wxWidgets-2.8.7\build\msw\wx_dll.dsw ( let VC2008 convert the projects )
 
-Copy all the dlls that get made ( 20 of them like wxbase28d_net_vc_custom.dll ) from C:\wxWidgets-2.8.7\lib\vc_dll to HeeksCAD ( the folder you checked out this project to ).
+Copy all the dlls that get made ( 20 of them named wx*_vc_custom.dll ) from C:\wxWidgets-2.8.7\lib\vc_dll to HeeksCAD ( the folder you checked out this project to ).
 
 Open "HeeksCAD.sln" ( for VC2008), or "HeeksCAD VC2003.sln" (for VC2003 )
 
