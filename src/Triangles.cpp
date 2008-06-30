@@ -5,7 +5,7 @@
 #include "../interface/Tool.h"
 #include "Tri.h"
 #include "../interface/PropertyString.h"
-#include "bitmaps/triangles.xpm"
+#include "icons/triangles.xpm"
 
 #include <fstream>
 

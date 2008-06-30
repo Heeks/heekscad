@@ -364,7 +364,7 @@
 #elif defined(WXMAKINGDLL_PROPGRID)
     #define WXDLLIMPEXP_PG WXEXPORT
 #elif defined(WXUSINGDLL)
-    #define WXDLLIMPEXP_PG WXIMPORT
+    #define WXDLLIMPEXP_PG //WXIMPORT
 #else // not making nor using DLL
     #define WXDLLIMPEXP_PG
 #endif

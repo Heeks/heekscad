@@ -6,7 +6,7 @@
 #include "Tri.h"
 #include "../interface/PropertyString.h"
 #include "Triangles.h"
-#include "bitmaps/tri.xpm"
+#include "icons/tri.xpm"
 
 CTri::CTri(void):m_norm_exists(false)
 {

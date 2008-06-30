@@ -142,7 +142,6 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	wxString exe_folder = wxGetApp().GetExeFolder();
 
 	// main tool bar
-	wxImage::AddHandler(new wxPNGHandler);
     m_toolBar->AddTool(wxID_NEW, _T("New"), wxBitmap(exe_folder + "/bitmaps/new.png", wxBITMAP_TYPE_PNG), _T("New file"));
     m_toolBar->AddTool(wxID_OPEN, _T("Open"), wxBitmap(exe_folder + "/bitmaps/open.png", wxBITMAP_TYPE_PNG), _T("Open file"));
     m_toolBar->AddTool(wxID_SAVE, _T("Save"), wxBitmap(exe_folder + "/bitmaps/save.png", wxBITMAP_TYPE_PNG), _T("Save file"));
