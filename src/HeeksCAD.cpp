@@ -89,6 +89,7 @@ HeeksCADapp::~HeeksCADapp()
 	delete m_select_mode;
 	delete m_digitizing;
 	delete gripper_mode;
+	delete m_config;
 }
 
 bool HeeksCADapp::OnInit()
@@ -173,8 +174,6 @@ int HeeksCADapp::OnExit(){
 	m_config->Write("GridMode", grid_mode);
 	m_config->Write("m_light_push_matrix", m_light_push_matrix);
 	m_config->Write("WheelForwardAway", mouse_wheel_forward_away);
-	
-	delete m_config;
 
 	return result;
 }
