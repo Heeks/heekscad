@@ -132,6 +132,7 @@ public:
 	const char* GetKnownFilesWildCardString()const;
 	const char* GetKnownFilesCommaSeparatedList()const;
 	void AddMenusToToolList(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool from_graphics_canvas, bool control_pressed);
+	wxString GetExeFolder()const;
 };
 
 DECLARE_APP(HeeksCADapp)
