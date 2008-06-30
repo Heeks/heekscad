@@ -5,7 +5,6 @@
 #include "../interface/Tool.h"
 #include "Tri.h"
 #include "../interface/PropertyString.h"
-#include "icons/triangles.xpm"
 
 #include <fstream>
 
@@ -26,8 +25,13 @@ CTriangles::~CTriangles()
 
 static wxIcon* icon = NULL;
 
-wxIcon* CTriangles::GetIcon(){
-	if(icon == NULL)icon = new wxIcon(triangles_xpm);
+wxIcon* CTriangles::GetIcon()
+{
+	if(icon == NULL)
+	{
+		wxString exe_folder = wxGetApp().GetExeFolder();
+		icon = new wxIcon(exe_folder + "/icons/triangles.png", wxBITMAP_TYPE_PNG);
+	}
 	return icon;
 }
 
