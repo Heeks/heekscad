@@ -247,6 +247,7 @@ CHeeksFrame::~CHeeksFrame()
 		//wxDynamicLibrary* shared_library = *It;
 		//delete shared_library;
 	//}	
+	delete m_aui_manager;
 }
 
 bool CHeeksFrame::ShowFullScreen(bool show, long style){

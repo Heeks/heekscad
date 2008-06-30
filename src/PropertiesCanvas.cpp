@@ -83,6 +83,7 @@ CPropertiesCanvas::~CPropertiesCanvas()
 		delete m_copy_for_cancel;
 		m_copy_for_cancel = NULL;
 	}
+	ClearProperties();
 }
 
 void CPropertiesCanvas::OnSize(wxSizeEvent& event)
