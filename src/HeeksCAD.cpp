@@ -895,7 +895,7 @@ void HeeksCADapp::get_2d_arc_segments(double xs, double ys, double xe, double ye
 	double dyc = ys - yc;
 	double radius = sqrt(dxc*dxc + dyc*dyc);
 	double d_angle = end_angle - start_angle;
-	int segments = pixels_per_mm * radius * d_angle / 6.28318530717958 + 1;
+	int segments = pixels_per_mm * radius * fabs(d_angle) / 6.28318530717958 + 1;
     
     double theta = d_angle / (double)segments;
     double tangetial_factor = tan(theta);

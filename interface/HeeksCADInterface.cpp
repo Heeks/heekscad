@@ -49,7 +49,7 @@ void CHeeksCADInterface::AddUndoably(HeeksObj* object)
 	wxGetApp().AddUndoably(object, NULL, NULL);
 }
 
-const std::list<HeeksObj*>& CHeeksCADInterface::GetSelection(void)
+const std::list<HeeksObj*>& CHeeksCADInterface::GetMarkedList(void)
 {
 	return wxGetApp().m_marked_list->list();
 }
@@ -79,4 +79,14 @@ void CHeeksCADInterface::get_2d_arc_segments(double xs, double ys, double xe, do
 double CHeeksCADInterface::GetPixelScale()
 {
 	return wxGetApp().GetPixelScale();
+}
+
+void CHeeksCADInterface::Mark(HeeksObj* object)
+{
+	wxGetApp().m_marked_list->Add(object);
+}
+
+void CHeeksCADInterface::ClearMarkedList()
+{
+	wxGetApp().m_marked_list->Clear();
 }
