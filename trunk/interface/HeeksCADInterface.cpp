@@ -7,6 +7,7 @@
 #include "HeeksFrame.h"
 #include "PropertiesCanvas.h"
 #include "MarkedList.h"
+#include "HArc.h"
 
 double CHeeksCADInterface::GetTolerance()
 {
@@ -51,4 +52,21 @@ void CHeeksCADInterface::AddUndoably(HeeksObj* object)
 const std::list<HeeksObj*>& CHeeksCADInterface::GetSelection(void)
 {
 	return wxGetApp().m_marked_list->list();
+}
+
+bool CHeeksCADInterface::GetArcDirection(HeeksObj* object)
+{
+	return ((HArc*)object)->m_dir;
+}
+
+bool CHeeksCADInterface::GetArcCentre(HeeksObj* object, double* c)
+{
+	extract(((HArc*)object)->m_circle.Location(), c);
+	return true;
+}
+
+bool CHeeksCADInterface::GetArcAxis(HeeksObj* object, double* a)
+{
+	extract(((HArc*)object)->m_circle.Axis().Direction(), a);
+	return true;
 }
