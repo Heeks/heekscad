@@ -142,6 +142,7 @@ bool HeeksCADapp::OnInit()
 	m_config->Read("WheelForwardAway", &mouse_wheel_forward_away);
 	gripper_mode->GetProfileStrings();
 	m_frame = new CHeeksFrame( wxT( "HeeksCAD free Solid Modelling software based on Open CASCADE" ), wxPoint(posx, posy), wxSize(width, height));
+	m_frame->SetIcon(wxIcon(GetExeFolder() + "/icons/app.png", wxBITMAP_TYPE_PNG));
 	SetInputMode(m_select_mode);
 	m_frame->Show(TRUE);
 	SetTopWindow(m_frame);
