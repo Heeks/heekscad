@@ -1,17 +1,17 @@
-// HeeksSolidInterface.cpp
+// HeeksCADInterface.cpp
 
-// include this in your dynamic library to interface with HeeksSolid
+// include this in your dynamic library to interface with HeeksCAD
 
 #include "stdafx.h"
 
 #include <wx/dynlib.h>
 
-HeeksSolidInterface::HeeksSolidInterface(const char* full_path)
+HeeksCADInterface::HeeksCADInterface(const char* full_path)
 {
 	m_executable = new wxDynamicLibrary(full_path);
 }
 
-HeeksSolidInterface::~HeeksSolidInterface()
+HeeksCADInterface::~HeeksCADInterface()
 {
 	delete m_executable;
 }
@@ -19,9 +19,9 @@ HeeksSolidInterface::~HeeksSolidInterface()
 static double(*HeeksGetTolerance)() = NULL;
 static bool HeeksGetTolerance_find = false;
 
-double HeeksSolidInterface::GetTolerance()
+double HeeksCADInterface::GetTolerance()
 {
-	// get the geometry tolerance from HeeksSolid
+	// get the geometry tolerance from HeeksCAD
 
 	if(!HeeksGetTolerance_find){
 		HeeksGetTolerance = (double (*)(void))(m_executable->GetSymbol("HeeksGetTolerance"));
@@ -38,9 +38,9 @@ double HeeksSolidInterface::GetTolerance()
 static void(*HeeksRefreshProperties)() = NULL;
 static bool HeeksRefreshProperties_find = false;
 
-void HeeksSolidInterface::RefreshProperties()
+void HeeksCADInterface::RefreshProperties()
 {
-	// Refresh the properties window in HeeksSolid
+	// Refresh the properties window in HeeksCAD
 
 	if(!HeeksRefreshProperties_find){
 		HeeksRefreshProperties = (void (*)())(m_executable->GetSymbol("HeeksRefreshProperties"));
@@ -55,9 +55,9 @@ void HeeksSolidInterface::RefreshProperties()
 static void(*HeeksRepaint)() = NULL;
 static bool HeeksRepaint_find = false;
 
-void HeeksSolidInterface::Repaint()
+void HeeksCADInterface::Repaint()
 {
-	// Refresh the properties window in HeeksSolid
+	// Refresh the properties window in HeeksCAD
 
 	if(!HeeksRepaint_find){
 		HeeksRepaint = (void (*)())(m_executable->GetSymbol("HeeksRepaint"));
@@ -72,9 +72,9 @@ void HeeksSolidInterface::Repaint()
 static wxFrame* (*HeeksGetMainFrame)() = NULL;
 static bool HeeksGetMainFrame_find = false;
 
-wxFrame* HeeksSolidInterface::GetMainFrame()
+wxFrame* HeeksCADInterface::GetMainFrame()
 {
-	// Refresh the properties window in HeeksSolid
+	// Refresh the properties window in HeeksCAD
 
 	if(!HeeksGetMainFrame_find){
 		HeeksGetMainFrame = (wxFrame* (*)())(m_executable->GetSymbol("HeeksGetMainFrame"));
@@ -91,9 +91,9 @@ wxFrame* HeeksSolidInterface::GetMainFrame()
 static wxAuiManager* (*HeeksGetAuiManager)() = NULL;
 static bool HeeksGetAuiManager_find = false;
 
-wxAuiManager* HeeksSolidInterface::GetAuiManager()
+wxAuiManager* HeeksCADInterface::GetAuiManager()
 {
-	// Refresh the properties window in HeeksSolid
+	// Refresh the properties window in HeeksCAD
 
 	if(!HeeksGetAuiManager_find){
 		HeeksGetAuiManager = (wxAuiManager* (*)())(m_executable->GetSymbol("HeeksGetAuiManager"));
@@ -110,9 +110,9 @@ wxAuiManager* HeeksSolidInterface::GetAuiManager()
 static void(*HeeksAddToolBarTool)(wxToolBar*, const wxString&, wxBitmap&, const wxString&, void(*)(wxCommandEvent&)) = NULL;
 static bool HeeksAddToolBarTool_find = false;
 
-void HeeksSolidInterface::Bastart(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&))
+void HeeksCADInterface::Bastart(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&))
 {
-	// Refresh the properties window in HeeksSolid
+	// Refresh the properties window in HeeksCAD
 
 	if(!HeeksAddToolBarTool_find){
 		HeeksAddToolBarTool = (void (*)(wxToolBar*, const wxString&, wxBitmap&, const wxString&, void(*)(wxCommandEvent&)))(m_executable->GetSymbol("HeeksAddToolBarTool"));

@@ -1,16 +1,16 @@
-// HeeksSolidInterface.h
+// HeeksCADInterface.h
 
-// include this in your dynamic library to interface with HeeksSolid
+// include this in your dynamic library to interface with HeeksCAD
 
 class wxDynamicLibrary;
 
-class HeeksSolidInterface{
+class HeeksCADInterface{
 private:
 	wxDynamicLibrary *m_executable;
 
 public:
-	HeeksSolidInterface(const char* full_path);
-	~HeeksSolidInterface();
+	HeeksCADInterface(const char* full_path);
+	~HeeksCADInterface();
 
 	double GetTolerance();
 	void RefreshProperties();
