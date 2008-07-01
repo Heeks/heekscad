@@ -1701,6 +1701,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\HeeksCAD.rc"
+			>
+		</File>
+		<File
 			RelativePath="..\interface\HeeksColor.cpp"
 			>
 		</File>
