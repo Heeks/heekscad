@@ -22,4 +22,7 @@ public:
 	virtual wxString GetExeFolder();
 	virtual void AddUndoably(HeeksObj* object);
 	virtual const std::list<HeeksObj*>& GetSelection();
+	virtual bool GetArcDirection(HeeksObj* object);
+	virtual bool GetArcCentre(HeeksObj* object, double* c);
+	virtual bool GetArcAxis(HeeksObj* object, double* a);
 };

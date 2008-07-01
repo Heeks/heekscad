@@ -18,7 +18,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory=".\vc_mswd"
-			IntermediateDirectory=".\vc_mswd\dialogs"
+			IntermediateDirectory=".\vc_mswd"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -42,7 +42,7 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\vc_mswd/dialogs.tlb"
+				TypeLibraryName=".\vc_mswd/HeeksCAD.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -55,10 +55,10 @@
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderFile=".\vc_mswd\dialogs/dialogs.pch"
-				AssemblerListingLocation=".\vc_mswd\dialogs/"
-				ObjectFile=".\vc_mswd\dialogs/"
-				ProgramDataBaseFileName="vc_mswd\dialogs.pdb"
+				PrecompiledHeaderFile=".\vc_mswd\HeeksCAD.pch"
+				AssemblerListingLocation=".\vc_mswd\"
+				ObjectFile=".\vc_mswd\"
+				ProgramDataBaseFileName="vc_mswd\HeeksCAD.pdb"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -84,7 +84,7 @@
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="&quot;$(WXWIN)\lib\vc_dll&quot;;&quot;$(CASROOT)\win32\lib&quot;"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\vc_mswd/dialogs.pdb"
+				ProgramDatabaseFile=".\vc_mswd/HeeksCAD.pdb"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -115,7 +115,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory=".\vc_msw"
-			IntermediateDirectory=".\vc_msw\dialogs"
+			IntermediateDirectory=".\vc_msw"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -139,7 +139,7 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\vc_msw/dialogs.tlb"
+				TypeLibraryName=".\vc_msw/HeeksCAD.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -153,10 +153,10 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				RuntimeTypeInfo="true"
-				PrecompiledHeaderFile=".\vc_msw\dialogs/dialogs.pch"
-				AssemblerListingLocation=".\vc_msw\dialogs/"
-				ObjectFile=".\vc_msw\dialogs/"
-				ProgramDataBaseFileName="vc_msw\dialogs.pdb"
+				PrecompiledHeaderFile=".\vc_msw\HeeksCAD.pch"
+				AssemblerListingLocation=".\vc_msw\"
+				ObjectFile=".\vc_msw\"
+				ProgramDataBaseFileName="vc_msw\HeeksCAD.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				CompileAs="0"
@@ -180,7 +180,7 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="&quot;$(WXWIN)\lib\vc_dll&quot;;&quot;$(CASROOT)\win32\lib&quot;"
-				ProgramDatabaseFile=".\vc_msw/dialogs.pdb"
+				ProgramDatabaseFile=".\vc_msw/HeeksCAD.pdb"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -354,6 +354,10 @@
 		</File>
 		<File
 			RelativePath="..\interface\HeeksCADInterface.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\interface\HeeksCADInterface.h"
 			>
 		</File>
 		<File
