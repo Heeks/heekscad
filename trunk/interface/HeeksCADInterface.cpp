@@ -1,125 +1,54 @@
 // HeeksCADInterface.cpp
 
-// include this in your dynamic library to interface with HeeksCAD
+// included only in the executable
 
 #include "stdafx.h"
+#include "HeeksCADInterface.h"
+#include "HeeksFrame.h"
+#include "PropertiesCanvas.h"
+#include "MarkedList.h"
 
-#include <wx/dynlib.h>
-
-HeeksCADInterface::HeeksCADInterface(const char* full_path)
+double CHeeksCADInterface::GetTolerance()
 {
-	m_executable = new wxDynamicLibrary(full_path);
+	return wxGetApp().m_geom_tol;
 }
 
-HeeksCADInterface::~HeeksCADInterface()
+void CHeeksCADInterface::RefreshProperties()
 {
-	delete m_executable;
+	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
 }
 
-static double(*HeeksGetTolerance)() = NULL;
-static bool HeeksGetTolerance_find = false;
-
-double HeeksCADInterface::GetTolerance()
+void CHeeksCADInterface::Repaint()
 {
-	// get the geometry tolerance from HeeksCAD
-
-	if(!HeeksGetTolerance_find){
-		HeeksGetTolerance = (double (*)(void))(m_executable->GetSymbol("HeeksGetTolerance"));
-		HeeksGetTolerance_find = true;
-	}
-
-	if(HeeksGetTolerance){
-		return (*HeeksGetTolerance)();
-	}
-
-	return 0.001;
+	wxGetApp().Repaint();
 }
 
-static void(*HeeksRefreshProperties)() = NULL;
-static bool HeeksRefreshProperties_find = false;
-
-void HeeksCADInterface::RefreshProperties()
+wxFrame* CHeeksCADInterface::GetMainFrame()
 {
-	// Refresh the properties window in HeeksCAD
-
-	if(!HeeksRefreshProperties_find){
-		HeeksRefreshProperties = (void (*)())(m_executable->GetSymbol("HeeksRefreshProperties"));
-		HeeksRefreshProperties_find = true;
-	}
-
-	if(HeeksRefreshProperties){
-		(*HeeksRefreshProperties)();
-	}
+	return wxGetApp().m_frame;
 }
 
-static void(*HeeksRepaint)() = NULL;
-static bool HeeksRepaint_find = false;
-
-void HeeksCADInterface::Repaint()
+wxAuiManager* CHeeksCADInterface::GetAuiManager()
 {
-	// Refresh the properties window in HeeksCAD
-
-	if(!HeeksRepaint_find){
-		HeeksRepaint = (void (*)())(m_executable->GetSymbol("HeeksRepaint"));
-		HeeksRepaint_find = true;
-	}
-
-	if(HeeksRepaint){
-		(*HeeksRepaint)();
-	}
+	return wxGetApp().m_frame->m_aui_manager;
 }
 
-static wxFrame* (*HeeksGetMainFrame)() = NULL;
-static bool HeeksGetMainFrame_find = false;
-
-wxFrame* HeeksCADInterface::GetMainFrame()
+void CHeeksCADInterface::AddToolBarButton(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&))
 {
-	// Refresh the properties window in HeeksCAD
-
-	if(!HeeksGetMainFrame_find){
-		HeeksGetMainFrame = (wxFrame* (*)())(m_executable->GetSymbol("HeeksGetMainFrame"));
-		HeeksGetMainFrame_find = true;
-	}
-
-	if(HeeksGetMainFrame){
-		return (*HeeksGetMainFrame)();
-	}
-
-	return NULL;
+	wxGetApp().m_frame->AddToolBarTool(toolbar, title, bitmap, caption, onButtonFunction);
 }
 
-static wxAuiManager* (*HeeksGetAuiManager)() = NULL;
-static bool HeeksGetAuiManager_find = false;
-
-wxAuiManager* HeeksCADInterface::GetAuiManager()
+wxString CHeeksCADInterface::GetExeFolder()
 {
-	// Refresh the properties window in HeeksCAD
-
-	if(!HeeksGetAuiManager_find){
-		HeeksGetAuiManager = (wxAuiManager* (*)())(m_executable->GetSymbol("HeeksGetAuiManager"));
-		HeeksGetAuiManager_find = true;
-	}
-
-	if(HeeksGetAuiManager){
-		return (*HeeksGetAuiManager)();
-	}
-
-	return NULL;
+	return wxGetApp().GetExeFolder();
 }
 
-static void(*HeeksAddToolBarTool)(wxToolBar*, const wxString&, wxBitmap&, const wxString&, void(*)(wxCommandEvent&)) = NULL;
-static bool HeeksAddToolBarTool_find = false;
-
-void HeeksCADInterface::Bastart(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&))
+void CHeeksCADInterface::AddUndoably(HeeksObj* object)
 {
-	// Refresh the properties window in HeeksCAD
+	wxGetApp().AddUndoably(object, NULL, NULL);
+}
 
-	if(!HeeksAddToolBarTool_find){
-		HeeksAddToolBarTool = (void (*)(wxToolBar*, const wxString&, wxBitmap&, const wxString&, void(*)(wxCommandEvent&)))(m_executable->GetSymbol("HeeksAddToolBarTool"));
-		HeeksAddToolBarTool_find = true;
-	}
-
-	if(HeeksAddToolBarTool){
-		(*HeeksAddToolBarTool)(toolbar, title, bitmap, caption, onButtonFunction);
-	}
+const std::list<HeeksObj*>& CHeeksCADInterface::GetSelection(void)
+{
+	return wxGetApp().m_marked_list->list();
 }
