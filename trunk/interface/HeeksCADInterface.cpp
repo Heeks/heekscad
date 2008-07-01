@@ -70,3 +70,13 @@ bool CHeeksCADInterface::GetArcAxis(HeeksObj* object, double* a)
 	extract(((HArc*)object)->m_circle.Axis().Direction(), a);
 	return true;
 }
+
+void CHeeksCADInterface::get_2d_arc_segments(double xs, double ys, double xe, double ye, double xc, double yc, bool dir, bool want_start, double pixels_per_mm, void(*callbackfunc)(const double* xy))
+{
+	wxGetApp().get_2d_arc_segments(xs, ys, xe, ye, xc, yc, dir, want_start, pixels_per_mm, callbackfunc);
+}
+
+double CHeeksCADInterface::GetPixelScale()
+{
+	return wxGetApp().GetPixelScale();
+}

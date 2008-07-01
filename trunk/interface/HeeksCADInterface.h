@@ -25,4 +25,6 @@ public:
 	virtual bool GetArcDirection(HeeksObj* object);
 	virtual bool GetArcCentre(HeeksObj* object, double* c);
 	virtual bool GetArcAxis(HeeksObj* object, double* a);
+	virtual void get_2d_arc_segments(double xs, double ys, double xe, double ye, double xc, double yc, bool dir, bool want_start, double pixels_per_mm, void(*callbackfunc)(const double* xy));
+	virtual double GetPixelScale();
 };
