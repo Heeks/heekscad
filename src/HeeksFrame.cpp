@@ -243,10 +243,6 @@ CHeeksFrame::~CHeeksFrame()
 	wxGetApp().m_config->Write("FrameSolidBarVisible", m_aui_manager->GetPane(m_solidBar).IsShown());
 	wxGetApp().m_config->Write("FrameViewingBarVisible", m_aui_manager->GetPane(m_viewingBar).IsShown());
 	wxGetApp().m_config->Write("FrameStatusBarVisible", m_statusBar->IsShown());
-	//for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
-		//wxDynamicLibrary* shared_library = *It;
-		//delete shared_library;
-	//}	
 	delete m_aui_manager;
 }
 

@@ -690,6 +690,13 @@ void on_grid_edit(double grid_value)
 	wxGetApp().Repaint();
 }
 
+static std::list<Property *> *list_for_GetProperties = NULL;
+
+static void AddPropertyCallBack(Property* p)
+{
+	list_for_GetProperties->push_back(p);
+}
+
 void HeeksCADapp::GetProperties(std::list<Property *> *list)
 {
 	list->push_back ( new PropertyColor ( "background color",  background_color, on_set_background_color ) );
@@ -705,8 +712,9 @@ void HeeksCADapp::GetProperties(std::list<Property *> *list)
 	list->push_back(new PropertyCheck("grid", draw_to_grid, on_grid));
 	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
 		wxDynamicLibrary* shared_library = *It;
-		void(*GetProperties)(std::list<Property *> *) = (void (*)(std::list<Property *> *))(shared_library->GetSymbol("GetProperties"));
-		(*GetProperties)(list);
+		list_for_GetProperties = list;
+		void(*GetProperties)(void(*)(Property*)) = (void(*)(void(*)(Property*)))(shared_library->GetSymbol("GetProperties"));
+		(*GetProperties)(AddPropertyCallBack);
 	}
 }
 
