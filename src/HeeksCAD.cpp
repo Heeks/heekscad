@@ -873,3 +873,52 @@ wxString HeeksCADapp::GetExeFolder()const
 
 	return exedir;
 }
+
+// do your own glBegin and glEnd
+void HeeksCADapp::get_2d_arc_segments(double xs, double ys, double xe, double ye, double xc, double yc, bool dir, bool want_start, double pixels_per_mm, void(*callbackfunc)(const double* xy)){
+	double ax = xs - xc;
+	double ay = ys - yc;
+	double bx = xe - xc;
+	double by = ye - yc;
+
+	double start_angle = atan2(ay, ax);
+	double end_angle = atan2(by, bx);
+
+	if(dir){
+		if(start_angle > end_angle)end_angle += 6.28318530717958;
+	}
+	else{
+		if(end_angle > start_angle)start_angle += 6.28318530717958;
+	}
+
+	double dxc = xs - xc;
+	double dyc = ys - yc;
+	double radius = sqrt(dxc*dxc + dyc*dyc);
+	double d_angle = end_angle - start_angle;
+	int segments = pixels_per_mm * radius * d_angle / 6.28318530717958 + 1;
+    
+    double theta = d_angle / (double)segments;
+    double tangetial_factor = tan(theta);
+    double radial_factor = 1 - cos(theta);
+    
+    double x = radius * cos(start_angle);
+    double y = radius * sin(start_angle);
+
+    for(int i = 0; i < segments + 1; i++)
+    {
+		if(i != 0 || want_start)
+		glVertex2d(xc + x, yc + y);
+        
+        double tx = -y;
+        double ty = x;
+        
+        x += tx * tangetial_factor;
+        y += ty * tangetial_factor;
+        
+        double rx = - x;
+        double ry = - y;
+        
+        x += rx * radial_factor;
+        y += ry * radial_factor;
+    }
+}
