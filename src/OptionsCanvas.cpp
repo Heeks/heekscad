@@ -15,7 +15,7 @@ END_EVENT_TABLE()
 
 
 COptionsCanvas::COptionsCanvas(wxWindow* parent)
-        : CPropertiesCanvas(parent, false)
+        : CPropertiesCanvas(parent)
 {
 }
 

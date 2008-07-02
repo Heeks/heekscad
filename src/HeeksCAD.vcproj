@@ -497,6 +497,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\ObjPropsCanvas.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ObjPropsCanvas.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Observer.h"
 			>
 		</File>

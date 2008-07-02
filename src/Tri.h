@@ -28,7 +28,7 @@ public:
 	const char* GetTypeString(void)const{return "Triangle";}
 	void GetGripperPositions(std::list<double> *list, bool just_for_endof);
 	void ModifyByMatrix(const double *m);
-	void GetTools(std::list<Tool*>* f_list, const wxPoint* p);
+	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	void Stretch(const double *p, const double* shift, double* new_position);
 	wxIcon* GetIcon();
 	bool GetStartPoint(double* pos);

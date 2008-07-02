@@ -1,6 +1,8 @@
 // HeeksFrame.h
 #include <wx/dynlib.h>
 
+class CObjPropsCanvas;
+
 class CHeeksFrame : public wxFrame
 {
 private:
@@ -10,7 +12,7 @@ private:
 public:
 	CLeftCanvas *m_left;
 	CGraphicsCanvas* m_graphics;
-	CPropertiesCanvas* m_properties;
+	CObjPropsCanvas* m_properties;
 	COptionsCanvas* m_options;
 	wxAuiManager* m_aui_manager;
 	wxToolBarBase *m_toolBar;
@@ -59,7 +61,9 @@ public:
 	void OnExternalButton( wxCommandEvent& event );
 	void OnSize( wxSizeEvent& evt );
 	void OnMove( wxMoveEvent& evt );
-	void AddToolBarTool(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&));
+	int AddToolBarTool(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&));
+	void AddToolBarTool(wxToolBar* toolbar, Tool* tool);
+	void ClearToolBar(wxToolBar* m_toolBar);
 
 	//wxTopLevelWindow's virtual functions
 	bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);

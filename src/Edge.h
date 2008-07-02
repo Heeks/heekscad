@@ -21,7 +21,7 @@ public:
 	HeeksObj *MakeACopy(void)const{ return new CEdge(*this);}
 	wxIcon* GetIcon();
 	const char* GetTypeString(void)const{return "Edge";}
-	void GetTools(std::list<Tool*>* f_list, const wxPoint* p);
+	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 
 	const TopoDS_Shape &Edge(){return m_topods_edge;}
 	void Blend(double radius);

@@ -176,9 +176,9 @@ public:
 	const char* GetTitle(){ return "Offset Face";}
 };
 
-void CFace::GetTools(std::list<Tool*>* f_list, const wxPoint* p)
+void CFace::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
-	f_list->push_back(new OffsetFaceTool(this));
+	t_list->push_back(new OffsetFaceTool(this));
 }
 
 void CFace::ModifyByMatrix(const double *m){
