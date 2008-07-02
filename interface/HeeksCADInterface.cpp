@@ -90,3 +90,8 @@ void CHeeksCADInterface::ClearMarkedList()
 {
 	wxGetApp().m_marked_list->Clear();
 }
+
+void CHeeksCADInterface::WasModified(HeeksObj* object)
+{
+	wxGetApp().WasModified(object);
+}

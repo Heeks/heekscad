@@ -29,4 +29,5 @@ public:
 	virtual double GetPixelScale();
 	virtual void Mark(HeeksObj* object);
 	virtual void ClearMarkedList();
+	virtual void WasModified(HeeksObj* object);
 };

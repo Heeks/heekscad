@@ -922,3 +922,8 @@ void HeeksCADapp::get_2d_arc_segments(double xs, double ys, double xe, double ye
         y += ry * radial_factor;
     }
 }
+
+void HeeksCADapp::PassMouseWheelToGraphics(wxMouseEvent& event)
+{
+	m_frame->m_graphics->OnMouse(event);
+}

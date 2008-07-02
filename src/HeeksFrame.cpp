@@ -26,6 +26,7 @@ enum{
 	ID_MAG,
 	ID_MAG_EXTENTS,
 	ID_MAG_NO_ROT,
+	ID_MAG_PREVIOUS,
 	ID_UNDO,
 	ID_REDO,
 	ID_NEXT_ID
@@ -65,6 +66,7 @@ EVT_MENU(ID_UNDO, CHeeksFrame::OnUndoButton)
 EVT_MENU(ID_REDO, CHeeksFrame::OnRedoButton)
 EVT_MENU(ID_MAG_EXTENTS, CHeeksFrame::OnMagExtentsButton)
 EVT_MENU(ID_MAG_NO_ROT, CHeeksFrame::OnMagNoRotButton)
+EVT_MENU(ID_MAG_PREVIOUS, CHeeksFrame::OnMagPreviousButton)
 EVT_MENU_RANGE(ID_NEXT_ID, ID_NEXT_ID + 1000, CHeeksFrame::OnExternalButton)
 EVT_SIZE(CHeeksFrame::OnSize)
 EVT_MOVE(CHeeksFrame::OnMove)
@@ -162,7 +164,8 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_solidBar->Realize();
 
 	// viewing tool bar
-	m_viewingBar->AddTool(ID_MAG, _T("Magnify"), wxBitmap(exe_folder + "/bitmaps/mag.png", wxBITMAP_TYPE_PNG), _T("Zoom in to a dragged window"));
+	m_viewingBar->AddTool(ID_MAG_PREVIOUS, _T("View Back"), wxBitmap(exe_folder + "/bitmaps/magprev.png", wxBITMAP_TYPE_PNG), _T("Go back to previous view"));
+	m_viewingBar->AddTool(ID_MAG, _T("Zoom Window"), wxBitmap(exe_folder + "/bitmaps/mag.png", wxBITMAP_TYPE_PNG), _T("Zoom in to a dragged window"));
 	m_viewingBar->AddTool(ID_MAG_EXTENTS, _T("Mag Extents"), wxBitmap(exe_folder + "/bitmaps/magextents.png", wxBITMAP_TYPE_PNG), _T("Zoom in to fit the extents of the drawing into the graphics window"));
 	m_viewingBar->AddTool(ID_MAG_NO_ROT, _T("Mag No Rotation"), wxBitmap(exe_folder + "/bitmaps/magnorot.png", wxBITMAP_TYPE_PNG), _T("Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"));
 	m_viewingBar->Realize();
@@ -503,6 +506,11 @@ void CHeeksFrame::OnMagExtentsButton( wxCommandEvent& event )
 void CHeeksFrame::OnMagNoRotButton( wxCommandEvent& event )
 {
 	wxGetApp().m_frame->m_graphics->OnMagExtents(false, true);
+}
+
+void CHeeksFrame::OnMagPreviousButton( wxCommandEvent& event )
+{
+	wxGetApp().m_frame->m_graphics->OnMagPrevious();
 }
 
 void CHeeksFrame::OnExternalButton( wxCommandEvent& event )
