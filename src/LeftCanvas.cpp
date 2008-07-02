@@ -14,6 +14,7 @@ class DanObjectTreeData : public wxTreeItemData{
 
 BEGIN_EVENT_TABLE(CLeftCanvas, wxScrolledWindow)
     EVT_SIZE(CLeftCanvas::OnSize)
+	EVT_MOUSEWHEEL(CLeftCanvas::OnMouseWheel)
 END_EVENT_TABLE()
 
 
@@ -48,6 +49,11 @@ void CLeftCanvas::OnSize(wxSizeEvent& event)
     }
 
     event.Skip();
+}
+
+void CLeftCanvas::OnMouseWheel(wxMouseEvent& event)
+{
+	wxGetApp().PassMouseWheelToGraphics(event);
 }
 
 void CLeftCanvas::Resize()

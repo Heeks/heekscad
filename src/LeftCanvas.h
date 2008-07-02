@@ -167,6 +167,7 @@ public:
     virtual ~CLeftCanvas();
 
     void OnSize(wxSizeEvent& event);
+	void OnMouseWheel(wxMouseEvent& event);
     wxTreeItemId Find(HeeksObj *object);
  
     DECLARE_NO_COPY_CLASS(CLeftCanvas)

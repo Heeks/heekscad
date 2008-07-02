@@ -24,6 +24,8 @@ CGraphicsCanvas::CGraphicsCanvas(wxWindow* parent, int *attribList)
         : wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, "some text", attribList)
 {
 	m_render_on_front_done = false;
+
+	wxGetApp().RegisterObserver(this);
 }
 
 void CGraphicsCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
@@ -164,11 +166,18 @@ void CGraphicsCanvas::OnMenuEvent(wxCommandEvent& event)
 	wxGetApp().on_menu_event(event);
 }
 
-void CGraphicsCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified){
+void CGraphicsCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified)
+{
 	Refresh(0);
 }
 
-void CGraphicsCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list){
+void CGraphicsCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)
+{
+	Refresh(0);
+}
+
+void CGraphicsCanvas::Clear()
+{
 	Refresh(0);
 }
 
@@ -187,6 +196,12 @@ void CGraphicsCanvas::OnMagExtents(bool rotate, bool recalculate_gl_lists)
 	if(recalculate_gl_lists)
 		wxGetApp().RecalculateGLLists();
 
+	Refresh(0);
+}
+
+void CGraphicsCanvas::OnMagPrevious()
+{
+	RestorePreviousViewPoint();
 	Refresh(0);
 }
 
@@ -279,8 +294,8 @@ bool CGraphicsCanvas::UsePreviousViewPoint(void){
 }
 
 void CGraphicsCanvas::WindowMag(wxRect &window_box){
-	m_view_point.WindowMag(window_box);
 	StoreViewPoint();
+	m_view_point.WindowMag(window_box);
 	Refresh(false);
 }
 

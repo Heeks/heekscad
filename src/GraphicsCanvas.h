@@ -1,7 +1,8 @@
 
 #include "ViewPoint.h"
+#include "Observer.h"
 
-class CGraphicsCanvas: public wxGLCanvas
+class CGraphicsCanvas: public wxGLCanvas, Observer
 {
 private:
 	bool m_LButton;
@@ -21,6 +22,7 @@ public:
 	void OnKeyDown(wxKeyEvent& event);
 	void OnKeyUp(wxKeyEvent& event);
 	void OnMagExtents(bool rotate, bool recalculate_gl_lists);
+	void OnMagPrevious();
 	void SetViewPoint(void);
 	void StoreViewPoint(void);
 	void RestorePreviousViewPoint(void);
