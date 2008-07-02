@@ -15,7 +15,7 @@
 #include "Face.h"
 #include "Solid.h"
 
-void GetConversionMenuTools(std::list<Tool*>* f_list, const wxPoint* p, MarkedObject* marked_object){
+void GetConversionMenuTools(std::list<Tool*>* t_list, const wxPoint* p, MarkedObject* marked_object){
 	bool lines_or_arcs_in_marked_list = false;
 	bool wire_in_marked_list = false;
 	bool face_in_marked_list = false;
@@ -39,11 +39,11 @@ void GetConversionMenuTools(std::list<Tool*>* f_list, const wxPoint* p, MarkedOb
 	}
 
 	if(lines_or_arcs_in_marked_list){
-		f_list->push_back(new ConvertLineArcsToWire);
-		f_list->push_back(new ConvertLineArcsToFace);
+		t_list->push_back(new ConvertLineArcsToWire);
+		t_list->push_back(new ConvertLineArcsToFace);
 	}
 	if(wire_in_marked_list){
-		f_list->push_back(new ConvertWireToFace);
+		t_list->push_back(new ConvertWireToFace);
 	}
 }
 

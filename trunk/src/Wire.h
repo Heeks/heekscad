@@ -15,7 +15,7 @@ public:
 	const char* GetTypeString(void)const{return "Wire";}
 	HeeksObj *MakeACopy(void)const{ return new CWire(*this);}
 	wxIcon* GetIcon();
-	void GetTools(std::list<Tool*>* f_list, const wxPoint* p);
+	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 
 	const TopoDS_Wire &Wire()const;
 };

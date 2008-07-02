@@ -122,11 +122,11 @@ void CTri::ModifyByMatrix(const double* m){
 	m_p[2].Transform(mat);
 }
 
-void CTri::GetTools(std::list<Tool*>* f_list, const wxPoint* p)
+void CTri::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
-	if(CTriangles::cull_mode != 0)f_list->push_back(new SetCullFaceTool(0));
-	if(CTriangles::cull_mode != GL_FRONT)f_list->push_back(new SetCullFaceTool(GL_FRONT));
-	if(CTriangles::cull_mode != GL_BACK)f_list->push_back(new SetCullFaceTool(GL_BACK));
+	if(CTriangles::cull_mode != 0)t_list->push_back(new SetCullFaceTool(0));
+	if(CTriangles::cull_mode != GL_FRONT)t_list->push_back(new SetCullFaceTool(GL_FRONT));
+	if(CTriangles::cull_mode != GL_BACK)t_list->push_back(new SetCullFaceTool(GL_BACK));
 }
 
 void CTri::Stretch(const double *p, const double* shift, double* new_position){

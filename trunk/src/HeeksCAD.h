@@ -85,7 +85,7 @@ public:
 	void FindMarkedObject(const wxPoint &point, MarkedObject* marked_object);
 	void clear_marked_list(void);
 	void SetInputMode(CInputMode *i);
-	void GetTools(std::list<Tool*>* f_list, const wxPoint* point, MarkedObject* marked_object);
+	void GetTools(std::list<Tool*>* t_list, const wxPoint* point, MarkedObject* marked_object);
 	void Repaint(bool soon = false);
 	void RecalculateGLLists();
 	void SetLikeNewFile(void);

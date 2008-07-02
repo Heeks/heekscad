@@ -44,7 +44,7 @@ public:
 	void OnEditString(const char* str);
 	void GetTriangles(void(*callbackfunc)(double* x, double* n), double cusp);
 	void GetCentreNormals(void(*callbackfunc)(double area, double *x, double *n));
-	void GetTools(std::list<Tool*>* f_list, const wxPoint* p);
+	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	void CopyFrom(const HeeksObj* object);
 
 	const TopoDS_Shape &Shape(){return m_shape;}

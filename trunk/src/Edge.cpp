@@ -116,11 +116,11 @@ public:
 	}
 };
 
-void CEdge::GetTools(std::list<Tool*>* f_list, const wxPoint* p){
+void CEdge::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 	switch(m_owner->GetType()){
 		case SolidType:
 			{
-				f_list->push_back(new BlendTool(this));
+				t_list->push_back(new BlendTool(this));
 			}
 			break;
 	}

@@ -8,6 +8,7 @@
 #include "PropertiesCanvas.h"
 #include "MarkedList.h"
 #include "HArc.h"
+#include "ObjPropsCanvas.h"
 
 double CHeeksCADInterface::GetTolerance()
 {

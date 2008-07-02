@@ -119,12 +119,12 @@ void CTriangles::GetBox(CBox &box)
 	box.Insert(m_box);
 }
 
-void CTriangles::GetTools(std::list<Tool*>* f_list, const wxPoint* p)
+void CTriangles::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
-	f_list->push_back(NULL);
-	if(cull_mode != 0)f_list->push_back(new SetCullFaceTool(0));
-	if(cull_mode != GL_FRONT)f_list->push_back(new SetCullFaceTool(GL_FRONT));
-	if(cull_mode != GL_BACK)f_list->push_back(new SetCullFaceTool(GL_BACK));
+	t_list->push_back(NULL);
+	if(cull_mode != 0)t_list->push_back(new SetCullFaceTool(0));
+	if(cull_mode != GL_FRONT)t_list->push_back(new SetCullFaceTool(GL_FRONT));
+	if(cull_mode != GL_BACK)t_list->push_back(new SetCullFaceTool(GL_BACK));
 }
 
 void CTriangles::ModifyByMatrix(const double *m)

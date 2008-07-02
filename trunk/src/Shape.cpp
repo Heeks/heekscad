@@ -220,6 +220,7 @@ void CShape::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 
 class OffsetShapeTool:public Tool{
 	CShape* m_shape;
+	static wxBitmap* m_bitmap;
 public:
 	OffsetShapeTool(CShape* shape):m_shape(shape){}
 
@@ -231,11 +232,23 @@ public:
 		wxGetApp().DeleteUndoably(m_shape);
 	}
 	const char* GetTitle(){ return "Offset Shape";}
+	wxBitmap* Bitmap()
+	{
+		if(m_bitmap == NULL)
+		{
+			wxString exe_folder = wxGetApp().GetExeFolder();
+			m_bitmap = new wxBitmap(exe_folder + "/bitmaps/new.png", wxBITMAP_TYPE_PNG);
+		}
+		return m_bitmap;
+	}
+	const char* GetToolTip(){return "Offset the shape";}
 };
 
-void CShape::GetTools(std::list<Tool*>* f_list, const wxPoint* p)
+wxBitmap* OffsetShapeTool::m_bitmap = NULL;
+
+void CShape::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
-	f_list->push_back(new OffsetShapeTool(this));
+	t_list->push_back(new OffsetShapeTool(this));
 }
 
 void CShape::ModifyByMatrix(const double* m){
