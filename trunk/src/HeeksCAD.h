@@ -134,6 +134,7 @@ public:
 	void AddMenusToToolList(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool from_graphics_canvas, bool control_pressed);
 	wxString GetExeFolder()const;
 	void get_2d_arc_segments(double xs, double ys, double xe, double ye, double xc, double yc, bool dir, bool want_start, double pixels_per_mm, void(*callbackfunc)(const double* xy));
+	void PassMouseWheelToGraphics(wxMouseEvent& event);
 };
 
 DECLARE_APP(HeeksCADapp)

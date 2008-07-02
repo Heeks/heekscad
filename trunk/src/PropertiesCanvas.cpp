@@ -340,5 +340,6 @@ void CPropertiesCanvas::OnApply2()
 		m_copy_for_cancel = NULL;
 	}
 
+	// cause all of the properties to be applied
 	RefreshByRemovingAndAddingAll();
 }

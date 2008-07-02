@@ -55,6 +55,7 @@ public:
 	void OnMagButton( wxCommandEvent& event );
 	void OnMagExtentsButton( wxCommandEvent& event );
 	void OnMagNoRotButton( wxCommandEvent& event );
+	void OnMagPreviousButton( wxCommandEvent& event );
 	void OnExternalButton( wxCommandEvent& event );
 	void OnSize( wxSizeEvent& evt );
 	void OnMove( wxMoveEvent& evt );
