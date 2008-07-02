@@ -22,21 +22,9 @@ BEGIN_EVENT_TABLE(CPropertiesCanvas, wxScrolledWindow)
         EVT_PG_CHANGED( -1, CPropertiesCanvas::OnPropertyGridChange )
 END_EVENT_TABLE()
 
-static void OnApply(wxCommandEvent& event)
-{
-	wxGetApp().m_frame->m_properties->OnApply2();
-}
-
-static void OnCancel(wxCommandEvent& event)
-{
-	// just deselect the object, and the cancel will happen automatically in RefreshByRemovingAndAddingAll
-	wxGetApp().m_marked_list->Clear();
-}
-
-
-CPropertiesCanvas::CPropertiesCanvas(wxWindow* parent, bool wants_apply_cancel_toolbar)
+CPropertiesCanvas::CPropertiesCanvas(wxWindow* parent)
 : wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-				   wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE), m_copy_for_cancel(NULL)
+				   wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE)
 {
 	// Assumes code is in frame/dialog constructor
 
@@ -54,35 +42,11 @@ CPropertiesCanvas::CPropertiesCanvas(wxWindow* parent, bool wants_apply_cancel_t
 
 	m_pg->SetExtraStyle( wxPG_EX_HELP_AS_TOOLTIPS );  
 
-	if(wants_apply_cancel_toolbar)
-	{
-		// make a tool bar with an "Apply" tick and a "Cancel" cross.
-		m_toolBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
-		m_toolBar->SetToolBitmapSize(wxSize(32, 32));
-
-		wxString exe_folder = wxGetApp().GetExeFolder();
-
-		wxImage::AddHandler(new wxPNGHandler);
-		wxGetApp().m_frame->AddToolBarTool(m_toolBar, _T("Apply"), wxBitmap(exe_folder + "/bitmaps/apply.png", wxBITMAP_TYPE_PNG), _T("Apply any changes made to the properties"), OnApply);
-		wxGetApp().m_frame->AddToolBarTool(m_toolBar, _T("Cancel"), wxBitmap(exe_folder + "/bitmaps/cancel.png", wxBITMAP_TYPE_PNG), _T("Stop editing the object"), OnCancel);
-
-		m_toolBar->Realize();
-	}
-	else
-	{
-		m_toolBar = NULL;
-	}
-
 	wxGetApp().RegisterObserver(this);
 }
 
 CPropertiesCanvas::~CPropertiesCanvas()
 {
-	if(m_copy_for_cancel)
-	{
-		delete m_copy_for_cancel;
-		m_copy_for_cancel = NULL;
-	}
 	ClearProperties();
 }
 
@@ -91,17 +55,7 @@ void CPropertiesCanvas::OnSize(wxSizeEvent& event)
 	wxScrolledWindow::OnSize(event);
 
 	wxSize size = GetClientSize();
-
-	if(m_toolBar)
-	{
-		wxSize toolbar_size = m_toolBar->GetClientSize();
-		m_pg->SetSize(0, 0, size.x, size.y - toolbar_size.y );
-		m_toolBar->SetSize(0, size.y - toolbar_size.y , size.x, toolbar_size.y );
-	}
-	else
-	{
-		m_pg->SetSize(0, 0, size.x, size.y );
-	}
+	m_pg->SetSize(0, 0, size.x, size.y );
 
     event.Skip();
 }
@@ -221,11 +175,6 @@ void CPropertiesCanvas::AddProperty(Property* p, wxPGProperty* parent_prop)
 	}
 }
 
-void CPropertiesCanvas::RemoveProperty(Property* p)
-{
-	// to do, if needed
-}
-
 Property* CPropertiesCanvas::GetProperty(wxPGProperty* p)
 {
 	std::map<wxPGProperty*, Property*>::iterator FindIt;
@@ -299,47 +248,5 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 
 void CPropertiesCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)
 {
-	RefreshByRemovingAndAddingAll();
-}
-
-void CPropertiesCanvas::RefreshByRemovingAndAddingAll()
-{
-	ClearProperties();
-
-	if(m_copy_for_cancel)
-	{
-		// if an object becomes unselected, this cancels the editing
-		m_object_for_cancel->CopyFrom(m_copy_for_cancel);
-		wxGetApp().WasModified(m_object_for_cancel);
-		delete m_copy_for_cancel;
-		m_copy_for_cancel = NULL;
-	}
-
-	if(wxGetApp().m_marked_list->size() == 1)
-	{
-		HeeksObj* object = (*wxGetApp().m_marked_list->list().begin());
-		m_object_for_cancel = object;
-		m_copy_for_cancel = object->MakeACopy();
-
-		std::list<Property *> list;
-		object->GetProperties(&list);
-		std::list<Property*>::iterator It;
-		for(It = list.begin(); It != list.end(); It++)
-		{
-			Property* property = *It;
-			AddProperty(property);
-		}
-	}
-}
-
-void CPropertiesCanvas::OnApply2()
-{
-	if(m_copy_for_cancel)
-	{
-		delete m_copy_for_cancel;
-		m_copy_for_cancel = NULL;
-	}
-
-	// cause all of the properties to be applied
 	RefreshByRemovingAndAddingAll();
 }

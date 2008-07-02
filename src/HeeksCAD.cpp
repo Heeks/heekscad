@@ -141,6 +141,8 @@ bool HeeksCADapp::OnInit()
 	m_config->Read("m_light_push_matrix", &m_light_push_matrix);
 	m_config->Read("WheelForwardAway", &mouse_wheel_forward_away);
 	gripper_mode->GetProfileStrings();
+
+	wxImage::AddHandler(new wxPNGHandler);
 	m_frame = new CHeeksFrame( wxT( "HeeksCAD free Solid Modelling software based on Open CASCADE" ), wxPoint(posx, posy), wxSize(width, height));
 	m_frame->SetIcon(wxICON(HeeksCAD));
 	SetInputMode(m_select_mode);
@@ -827,12 +829,6 @@ void HeeksCADapp::AddMenusToToolList(MarkedObject* marked_object, std::list<Tool
 		unsigned int s = tools.size();
 		marked_object->GetObject()->GetTools(&tools, &point);
 		if (tools.size()>s) tools.push_back(NULL);
-		if (marked_object->GetObject()->m_owner)
-		{
-			s = tools.size();
-			marked_object->GetObject()->m_owner->GetToolsForChild(marked_object->GetObject(), &tools, &point);
-			if (tools.size()>s) tools.push_back(NULL);
-		}
 		if (wxGetApp().input_mode_object)
 		{
 			s = tools.size();

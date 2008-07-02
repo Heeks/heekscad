@@ -4,13 +4,14 @@
 #include "HeeksFrame.h"
 #include "GraphicsCanvas.h"
 #include "LeftCanvas.h"
-#include "PropertiesCanvas.h"
+#include "ObjPropsCanvas.h"
 #include "OptionsCanvas.h"
 #include "LineArcDrawing.h"
 #include "Shape.h"
 #include "MarkedList.h"
 #include "MagDragWindow.h"
 #include "HArc.h"
+#include "../interface/Tool.h"
 
 enum{
 	ID_LINES = 1,
@@ -127,7 +128,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
     m_options = new COptionsCanvas(this);
 
-    m_properties = new CPropertiesCanvas(this);
+    m_properties = new CObjPropsCanvas(this);
 
 	m_statusBar = CreateStatusBar();
 	SetStatusText( wxT( "" ) );
@@ -565,9 +566,77 @@ void CHeeksFrame::OnMove( wxMoveEvent& evt )
 	wxGetApp().m_config->Write("MainFramePosY", posy);
 }
 
-void CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&))
+int CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&))
 {
-	toolbar->AddTool(m_next_id_for_button, title, bitmap, caption);
-	m_external_buttons.insert(std::pair<int, void (*)(wxCommandEvent&) > ( m_next_id_for_button, onButtonFunction ));
+	while(m_external_buttons.find(m_next_id_for_button) != m_external_buttons.end())
+	{
+		// already used
+		m_next_id_for_button++;
+	}
+
+	if(m_next_id_for_button > ID_NEXT_ID + 1000)
+	{
+		// too many button IDs!
+		wxMessageBox("too many button IDs!, see CHeeksFrame::AddToolBarTool");
+	}
+
+	int id_to_use = m_next_id_for_button;
+	toolbar->AddTool(id_to_use, title, bitmap, caption);
+	m_external_buttons.insert(std::pair<int, void (*)(wxCommandEvent&) > ( id_to_use, onButtonFunction ));
 	m_next_id_for_button++;
+	return id_to_use;
 }
+
+static std::map<int, Tool*> tool_map_for_OnTool;
+
+static void OnTool(wxCommandEvent& event)
+{
+	std::map<int, Tool*>::iterator FindIt = tool_map_for_OnTool.find(event.GetId());
+	if(FindIt != tool_map_for_OnTool.end())
+	{
+		Tool* tool = FindIt->second;
+		tool->Run();
+	}
+}
+
+void CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, Tool* tool)
+{
+	wxBitmap* bitmap = tool->Bitmap();
+	if(bitmap)
+	{
+		int id_used_for_button = wxGetApp().m_frame->AddToolBarTool(toolbar, _T(tool->GetTitle()), *bitmap, _T(tool->GetToolTip()), OnTool);
+		tool_map_for_OnTool.insert( std::pair<int, Tool*> ( id_used_for_button, tool ) );
+	}
+}
+
+// a class just so I can get at the protected m_tools of wxToolBar
+class ToolBarForGettingToolsFrom: public wxToolBar
+{
+public:
+	void GetToolsIdList(std::list<int> &list)
+	{
+		wxToolBarToolsList::Node *node;
+		for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+		{
+			wxToolBarToolBase *tool = node->GetData();
+			list.push_back(tool->GetId());
+		}
+	}
+};
+
+void CHeeksFrame::ClearToolBar(wxToolBar* m_toolBar)
+{
+	ToolBarForGettingToolsFrom* toolBar = (ToolBarForGettingToolsFrom*)m_toolBar;
+
+	std::list<int> list;
+	toolBar->GetToolsIdList(list);
+	for(std::list<int>::iterator It = list.begin(); It != list.end(); It++)
+	{
+		int id = *It;
+		m_external_buttons.erase(id);
+		tool_map_for_OnTool.erase(id);
+		if(id < m_next_id_for_button)m_next_id_for_button = id;
+		m_toolBar->DeleteTool(id);
+	}
+}
+

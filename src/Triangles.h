@@ -40,7 +40,7 @@ class CTriangles : public ObjList
 	const HeeksColor* GetColor()const{return &color;}
 	bool CanAdd(HeeksObj* object);
 	bool Add(HeeksObj* object, HeeksObj* prev_object);
-	void GetTools(std::list<Tool*>* f_list, const wxPoint* p);
+	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	void ModifyByMatrix(const double *m);
 	HeeksObj *MakeACopy(void)const;
 	void GetGripperPositions(std::list<double> *list, bool just_for_endof);

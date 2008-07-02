@@ -68,10 +68,10 @@ public:
 	}
 };
 
-void CWire::GetTools(std::list<Tool*>* f_list, const wxPoint* p)
+void CWire::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
-	f_list->push_back(new OffsetWireTool(this, 2.0));
-	f_list->push_back(new OffsetWireTool(this, -2.0));
+	t_list->push_back(new OffsetWireTool(this, 2.0));
+	t_list->push_back(new OffsetWireTool(this, -2.0));
 }
 
 const TopoDS_Wire &CWire::Wire()const{
