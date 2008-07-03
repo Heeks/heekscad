@@ -29,9 +29,6 @@ protected:
     void AddProperty(Property* property, wxPGProperty* parent_prop = NULL);
     Property* GetProperty(wxPGProperty* property);
 
-// Observer's virtual functions
-    void WhenMarkedListChanges(bool all_added, bool all_removed, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list);
-
 public:
 	virtual void RefreshByRemovingAndAddingAll() = 0;
 

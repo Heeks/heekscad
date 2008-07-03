@@ -96,3 +96,8 @@ void CHeeksCADInterface::WasModified(HeeksObj* object)
 {
 	wxGetApp().WasModified(object);
 }
+
+int CHeeksCADInterface::PickObjects(const char* str)
+{
+	return wxGetApp().PickObjects(str);
+}
