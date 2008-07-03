@@ -136,6 +136,7 @@ static std::string global_string;
 class EndDrawing:public Tool{
 private:
 	Drawing *drawing;
+	static wxBitmap* m_bitmap;
 
 public:
 	EndDrawing(Drawing* d){drawing = d;}
@@ -147,7 +148,18 @@ public:
 		global_string.assign(str);
 		return global_string.c_str();
 	}
+	wxBitmap* Bitmap()
+	{
+		if(m_bitmap == NULL)
+		{
+			wxString exe_folder = wxGetApp().GetExeFolder();
+			m_bitmap = new wxBitmap(exe_folder + "/bitmaps/enddraw.png", wxBITMAP_TYPE_PNG);
+		}
+		return m_bitmap;
+	}
+	const char* GetToolTip(){return "Finish drawing";}
 };
+wxBitmap* EndDrawing::m_bitmap = NULL;
 
 void Drawing::GetTools(std::list<Tool*> *f_list, const wxPoint *p){
 	f_list->push_back(new EndDrawing(this));

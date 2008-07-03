@@ -245,8 +245,3 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 		break;
 	}
 }
-
-void CPropertiesCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)
-{
-	RefreshByRemovingAndAddingAll();
-}

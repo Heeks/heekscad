@@ -29,7 +29,7 @@ static void OnCancel(wxCommandEvent& event)
 CObjPropsCanvas::CObjPropsCanvas(wxWindow* parent)
         : CPropertiesCanvas(parent), m_copy_for_cancel(NULL)
 {
-	// make a tool bar with an "Apply" tick and a "Cancel" cross.
+	// make a tool bar for Apply, Cancel and any tools of the marked object.
 	m_toolBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
 	m_toolBar->SetToolBitmapSize(wxSize(32, 32));
 	m_toolBar->Realize();
@@ -62,26 +62,32 @@ void CObjPropsCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 
 void CObjPropsCanvas::RefreshByRemovingAndAddingAll(){
 	ClearProperties();
+	wxGetApp().m_frame->ClearToolBar(m_toolBar);
 
-	if(m_copy_for_cancel)
+	HeeksObj* marked_object = NULL;
+	if(wxGetApp().m_marked_list->size() == 1)
+	{
+		marked_object = (*wxGetApp().m_marked_list->list().begin());
+	}
+
+	if(m_copy_for_cancel && marked_object != m_object_for_cancel)
 	{
 		// if an object becomes unselected, this cancels the editing
 		m_object_for_cancel->CopyFrom(m_copy_for_cancel);
-		wxGetApp().WasModified(m_object_for_cancel);
 		delete m_copy_for_cancel;
 		m_copy_for_cancel = NULL;
+		wxGetApp().WasModified(m_object_for_cancel);
+		return;
 	}
 
-	wxGetApp().m_frame->ClearToolBar(m_toolBar);
+	m_object_for_cancel = marked_object;
 
-	if(wxGetApp().m_marked_list->size() == 1)
+	if(marked_object)
 	{
-		HeeksObj* object = (*wxGetApp().m_marked_list->list().begin());
-		m_object_for_cancel = object;
-		m_copy_for_cancel = object->MakeACopy();
+		if(m_copy_for_cancel == NULL)m_copy_for_cancel = marked_object->MakeACopy();
 
 		std::list<Property *> list;
-		object->GetProperties(&list);
+		marked_object->GetProperties(&list);
 		for(std::list<Property*>::iterator It = list.begin(); It != list.end(); It++)
 		{
 			Property* property = *It;
@@ -94,7 +100,7 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll(){
 		wxGetApp().m_frame->AddToolBarTool(m_toolBar, _T("Cancel"), wxBitmap(exe_folder + "/bitmaps/cancel.png", wxBITMAP_TYPE_PNG), _T("Stop editing the object"), OnCancel);
 
 		std::list<Tool*> t_list;
-		object->GetTools(&t_list, NULL);
+		marked_object->GetTools(&t_list, NULL);
 		for(std::list<Tool*>::iterator It = t_list.begin(); It != t_list.end(); It++)
 		{
 			Tool* tool = *It;
@@ -120,5 +126,15 @@ void CObjPropsCanvas::OnApply2()
 	}
 
 	// cause all of the properties to be applied
+	RefreshByRemovingAndAddingAll();
+}
+
+void CObjPropsCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)
+{
+	RefreshByRemovingAndAddingAll();
+}
+
+void CObjPropsCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified)
+{
 	RefreshByRemovingAndAddingAll();
 }

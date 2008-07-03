@@ -829,12 +829,7 @@ void HeeksCADapp::AddMenusToToolList(MarkedObject* marked_object, std::list<Tool
 		unsigned int s = tools.size();
 		marked_object->GetObject()->GetTools(&tools, &point);
 		if (tools.size()>s) tools.push_back(NULL);
-		if (wxGetApp().input_mode_object)
-		{
-			s = tools.size();
-			wxGetApp().input_mode_object->GetObjectGetTools(&tools, marked_object->GetObject(), &point);
-			if (tools.size()>s) tools.push_back(NULL);
-		}
+
 		if (tools.size()>0)
 		{
 			if (from_graphics_canvas)
@@ -922,4 +917,17 @@ void HeeksCADapp::get_2d_arc_segments(double xs, double ys, double xe, double ye
 void HeeksCADapp::PassMouseWheelToGraphics(wxMouseEvent& event)
 {
 	m_frame->m_graphics->OnMouse(event);
+}
+
+int HeeksCADapp::PickObjects(const char* str)
+{
+	m_select_mode->m_prompt_when_doing_a_main_loop.assign(str);
+	m_select_mode->m_doing_a_main_loop = true;
+	SetInputMode(m_select_mode);
+
+	OnRun();
+
+	m_select_mode->m_doing_a_main_loop = false;
+	SetInputMode(m_select_mode); // update tool bar
+	return 1;
 }

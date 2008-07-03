@@ -5,6 +5,7 @@
 #include "../interface/Property.h"
 #include "PropertyVertex.h"
 #include "propgrid.h"
+#include "HeeksFrame.h"
 
 BEGIN_EVENT_TABLE(COptionsCanvas, wxScrolledWindow)
 	EVT_SIZE(COptionsCanvas::OnSize)
@@ -17,6 +18,10 @@ END_EVENT_TABLE()
 COptionsCanvas::COptionsCanvas(wxWindow* parent)
         : CPropertiesCanvas(parent)
 {
+	// make a toolbar for the current input modes's tools
+	m_toolBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
+	m_toolBar->SetToolBitmapSize(wxSize(32, 32));
+	m_toolBar->Realize();
 }
 
 COptionsCanvas::~COptionsCanvas()
@@ -26,7 +31,12 @@ COptionsCanvas::~COptionsCanvas()
 
 void COptionsCanvas::OnSize(wxSizeEvent& event)
 {
-   CPropertiesCanvas::OnSize(event);
+	wxScrolledWindow::OnSize(event);
+
+	wxSize size = GetClientSize();
+	wxSize toolbar_size = m_toolBar->GetClientSize();
+	m_pg->SetSize(0, 0, size.x, size.y - toolbar_size.y );
+	m_toolBar->SetSize(0, size.y - toolbar_size.y , size.x, toolbar_size.y );
 
     event.Skip();
 }
@@ -37,6 +47,7 @@ void COptionsCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 
 void COptionsCanvas::RefreshByRemovingAndAddingAll(){
 	ClearProperties();
+	wxGetApp().m_frame->ClearToolBar(m_toolBar);
 
 	std::list<Property *> list;
 
@@ -53,4 +64,21 @@ void COptionsCanvas::RefreshByRemovingAndAddingAll(){
 		Property* property = *It;
 		AddProperty(property);
 	}
+
+	// add toolbar buttons
+	std::list<Tool*> t_list;
+	wxGetApp().input_mode_object->GetTools(&t_list, NULL);
+	for(std::list<Tool*>::iterator It = t_list.begin(); It != t_list.end(); It++)
+	{
+		Tool* tool = *It;
+		wxGetApp().m_frame->AddToolBarTool(m_toolBar, tool);
+	}
+
+	m_toolBar->Realize();
+
+	// resize property grid and toolbar
+	wxSize size = GetClientSize();
+	wxSize toolbar_size = m_toolBar->GetClientSize();
+	m_pg->SetSize(0, 0, size.x, size.y - toolbar_size.y );
+	m_toolBar->SetSize(0, size.y - toolbar_size.y , size.x, toolbar_size.y );
 }

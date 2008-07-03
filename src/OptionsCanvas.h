@@ -2,6 +2,9 @@
 
 class COptionsCanvas: public CPropertiesCanvas
 {
+private:
+	wxToolBar *m_toolBar;
+
 public:
     COptionsCanvas(wxWindow* parent);
     virtual ~COptionsCanvas();
