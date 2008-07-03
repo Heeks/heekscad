@@ -30,4 +30,5 @@ public:
 	virtual void Mark(HeeksObj* object);
 	virtual void ClearMarkedList();
 	virtual void WasModified(HeeksObj* object);
+	virtual int PickObjects(const char* str);
 };
