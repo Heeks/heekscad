@@ -120,8 +120,8 @@ public:
 	gp_Trsf GetDrawMatrix(bool get_the_appropriate_orthogonal);
 	void GetProperties(std::list<Property *> *list);
 	void DeleteMarkedItems();
-	void AddUndoably(HeeksObj *object, HeeksObj* parent, HeeksObj* prev_object);
-	void AddUndoably(const std::list<HeeksObj*>& list, HeeksObj* parent);
+	void AddUndoably(HeeksObj *object, HeeksObj* owner, HeeksObj* prev_object);
+	void AddUndoably(const std::list<HeeksObj*>& list, HeeksObj* owner);
 	void glColorEnsuringContrast(const HeeksColor &c);
 	void HideMarkedList(){m_hide_marked_list_stack++;}
 	void UnHideMarkedList(){if(m_hide_marked_list_stack>0)m_hide_marked_list_stack--;}
@@ -136,6 +136,7 @@ public:
 	void get_2d_arc_segments(double xs, double ys, double xe, double ye, double xc, double yc, bool dir, bool want_start, double pixels_per_mm, void(*callbackfunc)(const double* xy));
 	void PassMouseWheelToGraphics(wxMouseEvent& event);
 	int PickObjects(const char* str);
+	void glSphere(double radius, const double* pos = NULL);
 };
 
 DECLARE_APP(HeeksCADapp)

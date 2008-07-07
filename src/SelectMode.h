@@ -21,14 +21,10 @@ public:
 
 	// virtual functions for InputMode
 	void OnMouse( wxMouseEvent& event );
-	bool start();
+	bool OnStart();
 	void OnFrontRender();
 	void OnRender();
 	void GetProperties(std::list<Property *> *list);
 	void GetSharedProperties(std::list<Property *> *list);
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
-
-	virtual void mouse_move2(const wxPoint &point){};
-	virtual void left_button_down2(const wxPoint &point){};
-	virtual void set_cursor2(void){}
 };

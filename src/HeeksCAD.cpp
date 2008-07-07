@@ -307,7 +307,16 @@ bool HeeksCADapp::SaveFile(const char *filepath){
 
 
 void HeeksCADapp::Repaint(bool soon){
-	m_frame->m_graphics->Refresh(0);
+	if(soon){
+#ifdef __WXMSW__
+		::SendMessage((HWND)(m_frame->m_graphics->GetHandle()), WM_PAINT, 0, 0);
+#else
+		m_frame->m_graphics->Update();
+#endif
+	}
+	else{
+		m_frame->m_graphics->Refresh(0);
+	}
 }
 
 void HeeksCADapp::RecalculateGLLists(){
@@ -886,7 +895,7 @@ void HeeksCADapp::get_2d_arc_segments(double xs, double ys, double xe, double ye
 	double dyc = ys - yc;
 	double radius = sqrt(dxc*dxc + dyc*dyc);
 	double d_angle = end_angle - start_angle;
-	int segments = pixels_per_mm * radius * fabs(d_angle) / 6.28318530717958 + 1;
+	int segments = (int)(pixels_per_mm * radius * fabs(d_angle) / 6.28318530717958 + 1);
     
     double theta = d_angle / (double)segments;
     double tangetial_factor = tan(theta);
@@ -930,4 +939,85 @@ int HeeksCADapp::PickObjects(const char* str)
 	m_select_mode->m_doing_a_main_loop = false;
 	SetInputMode(m_select_mode); // update tool bar
 	return 1;
+}
+
+static int sphere_display_list = 0;
+
+void HeeksCADapp::glSphere(double radius, const double* pos)
+{
+	glPushMatrix();
+
+	if(pos)
+	{
+		glTranslated(pos[0], pos[1], pos[2]);
+	}
+
+	glScaled(radius, radius, radius);
+
+	if(sphere_display_list)
+	{
+		glCallList(sphere_display_list);
+	}
+	else{
+		sphere_display_list = glGenLists(1);
+		glNewList(sphere_display_list, GL_COMPILE_AND_EXECUTE);
+
+		glBegin(GL_QUADS);
+
+		double v_ang = 0.0;
+		double pcosv = 0.0;
+		double psinv = 0.0;
+
+		for(int i = 0; i<11; i++, v_ang += 0.15707963267948966)
+		{
+			double cosv = cos(v_ang);
+			double sinv = sin(v_ang);
+
+			if(i > 0)
+			{
+				double h_ang = 0.0;
+				double pcosh = 0.0;
+				double psinh = 0.0;
+
+				for(int j = 0; j<21; j++, h_ang += 0.314159265358979323)
+				{
+					double cosh = cos(h_ang);
+					double sinh = sin(h_ang);
+
+					if(j > 0)
+					{
+						// top quad
+						glNormal3d(pcosh * pcosv, psinh * pcosv, psinv);
+						glVertex3d(pcosh * pcosv, psinh * pcosv, psinv);
+						glNormal3d(cosh * pcosv, sinh * pcosv, psinv);
+						glVertex3d(cosh * pcosv, sinh * pcosv, psinv);
+						glNormal3d(cosh * cosv, sinh * cosv, sinv);
+						glVertex3d(cosh * cosv, sinh * cosv, sinv);
+						glNormal3d(pcosh * cosv, psinh * cosv, sinv);
+						glVertex3d(pcosh * cosv, psinh * cosv, sinv);
+
+						// bottom quad
+						glNormal3d(pcosh * pcosv, psinh * pcosv, -psinv);
+						glVertex3d(pcosh * pcosv, psinh * pcosv, -psinv);
+						glNormal3d(pcosh * cosv, psinh * cosv, -sinv);
+						glVertex3d(pcosh * cosv, psinh * cosv, -sinv);
+						glNormal3d(cosh * cosv, sinh * cosv, -sinv);
+						glVertex3d(cosh * cosv, sinh * cosv, -sinv);
+						glNormal3d(cosh * pcosv, sinh * pcosv, -psinv);
+						glVertex3d(cosh * pcosv, sinh * pcosv, -psinv);
+					}
+					pcosh = cosh;
+					psinh = sinh;
+				}
+			}
+			pcosv = cosv;
+			psinv = sinv;
+		}
+
+		glEnd();
+
+		glEndList();
+	}
+
+	glPopMatrix();
 }
