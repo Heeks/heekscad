@@ -20,7 +20,7 @@ public:
 	virtual wxAuiManager* GetAuiManager();
 	virtual void AddToolBarButton(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&));
 	virtual wxString GetExeFolder();
-	virtual void AddUndoably(HeeksObj* object);
+	virtual void AddUndoably(HeeksObj* object, HeeksObj* owner);
 	virtual const std::list<HeeksObj*>& GetMarkedList();
 	virtual bool GetArcDirection(HeeksObj* object);
 	virtual bool GetArcCentre(HeeksObj* object, double* c);

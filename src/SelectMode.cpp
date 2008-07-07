@@ -320,7 +320,7 @@ void CSelectMode::OnRender()
 	}
 }
 
-bool CSelectMode::start(){
+bool CSelectMode::OnStart(){
 	return true;
 }
 

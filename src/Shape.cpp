@@ -26,6 +26,7 @@
 #include "TopTools_ListIteratorOfListOfShape.hxx"
 #include "BRepOffsetAPI_MakeOffsetShape.hxx"
 #include "../interface/Tool.h"
+#include "SphereCreate.h"
 
 CShape::CShape(const TopoDS_Shape &shape, const char* title, bool use_one_gl_list):m_shape(shape), m_title(title), m_gl_list(0), m_use_one_gl_list(use_one_gl_list)
 {
@@ -337,8 +338,7 @@ CFace* CShape::find(const TopoDS_Face &face)
 
 void CShape::AddASphere()
 {
-	TopoDS_Solid solid = BRepPrimAPI_MakeSphere(5);
-	wxGetApp().AddUndoably(new CSolid(solid, "Sphere"), NULL, NULL);
+	wxGetApp().SetInputMode(&sphere_creator);
 	wxGetApp().Repaint();
 }
 
