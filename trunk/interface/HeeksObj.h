@@ -22,6 +22,7 @@ enum{
 	TrianglesType,
 	TriType,
 	SubstituteTreeType,
+	LineArcCollectionType,
 	ObjectMaximumType
 };
 

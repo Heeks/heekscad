@@ -49,9 +49,16 @@ void CObjPropsCanvas::OnSize(wxSizeEvent& event)
 	wxScrolledWindow::OnSize(event);
 
 	wxSize size = GetClientSize();
-	wxSize toolbar_size = m_toolBar->GetClientSize();
-	m_pg->SetSize(0, 0, size.x, size.y - toolbar_size.y );
-	m_toolBar->SetSize(0, size.y - toolbar_size.y , size.x, toolbar_size.y );
+	if(m_toolBar->GetToolsCount() > 0){
+		wxSize toolbar_size = m_toolBar->GetClientSize();
+		m_pg->SetSize(0, 0, size.x, size.y - 39 );
+		m_toolBar->SetSize(0, size.y - 39 , size.x, 39 );
+		m_toolBar->Show();
+	}
+	else{
+		m_pg->SetSize(0, 0, size.x, size.y );
+		m_toolBar->Show(false);
+	}
 
     event.Skip();
 }
@@ -111,9 +118,16 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll(){
 
 		// resize property grid and toolbar
 		wxSize size = GetClientSize();
-		wxSize toolbar_size = m_toolBar->GetClientSize();
-		m_pg->SetSize(0, 0, size.x, size.y - toolbar_size.y );
-		m_toolBar->SetSize(0, size.y - toolbar_size.y , size.x, toolbar_size.y );
+		if(m_toolBar->GetToolsCount() > 0){
+			wxSize toolbar_size = m_toolBar->GetClientSize();
+			m_pg->SetSize(0, 0, size.x, size.y - 39 );
+			m_toolBar->SetSize(0, size.y - 39 , size.x, 39 );
+			m_toolBar->Show();
+		}
+		else{
+			m_pg->SetSize(0, 0, size.x, size.y );
+			m_toolBar->Show(false);
+		}
 	}
 }
 
