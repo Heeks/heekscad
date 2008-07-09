@@ -5,7 +5,7 @@
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"
 #include "../interface/InputMode.h"
-#include "ObjList.h"
+#include "../interface/ObjList.h"
 
 class CLeftCanvas;
 class CGraphicsCanvas;

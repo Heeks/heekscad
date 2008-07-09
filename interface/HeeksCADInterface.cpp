@@ -9,6 +9,8 @@
 #include "MarkedList.h"
 #include "HArc.h"
 #include "ObjPropsCanvas.h"
+#include "GraphicsCanvas.h"
+#include "LineArcCollection.h"
 
 double CHeeksCADInterface::GetTolerance()
 {
@@ -50,6 +52,11 @@ void CHeeksCADInterface::AddUndoably(HeeksObj* object, HeeksObj* owner)
 	wxGetApp().AddUndoably(object, owner, NULL);
 }
 
+void CHeeksCADInterface::DeleteUndoably(HeeksObj* object)
+{
+	wxGetApp().DeleteUndoably(object);
+}
+
 const std::list<HeeksObj*>& CHeeksCADInterface::GetMarkedList(void)
 {
 	return wxGetApp().m_marked_list->list();
@@ -87,6 +94,11 @@ void CHeeksCADInterface::Mark(HeeksObj* object)
 	wxGetApp().m_marked_list->Add(object);
 }
 
+bool CHeeksCADInterface::ObjectMarked(HeeksObj* object)
+{
+	return wxGetApp().m_marked_list->ObjectMarked(object);
+}
+
 void CHeeksCADInterface::ClearMarkedList()
 {
 	wxGetApp().m_marked_list->Clear();
@@ -100,4 +112,24 @@ void CHeeksCADInterface::WasModified(HeeksObj* object)
 int CHeeksCADInterface::PickObjects(const char* str)
 {
 	return wxGetApp().PickObjects(str);
+}
+
+HeeksObj* CHeeksCADInterface::GetFirstObject()
+{
+	return wxGetApp().GetFirstChild();
+}
+
+HeeksObj* CHeeksCADInterface::GetNextObject()
+{
+	return wxGetApp().GetNextChild();
+}
+
+void CHeeksCADInterface::DrawObjectsOnFront(const std::list<HeeksObj*> &list)
+{
+	wxGetApp().m_frame->m_graphics->DrawObjectsOnFront(list);
+}
+
+HeeksObj* CHeeksCADInterface::GetLineArcCollection(int id)
+{
+	return CLineArcCollection::GetLineArcCollection(id);
 }

@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "ObjList.h"
+#include "../interface/ObjList.h"
 #include "../interface/Tool.h"
 #include "../interface/HeeksColor.h"
 

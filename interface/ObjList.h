@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "../interface/HeeksObj.h"
+#include "HeeksObj.h"
 
 class ObjList : public HeeksObj
 {
@@ -26,6 +26,7 @@ public:
 	void glCommands(bool select, bool marked, bool no_color);
 	HeeksObj* GetFirstChild();
 	HeeksObj* GetNextChild();
+	bool CanAdd(HeeksObj* object){return true;}
 	bool Add(HeeksObj* object, HeeksObj* prev_object);
 	void Remove(HeeksObj* object);
 	void KillGLLists(void);
