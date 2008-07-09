@@ -12,6 +12,7 @@
 #include "DigitizeMode.h"
 #include "HeeksFrame.h"
 #include "OptionsCanvas.h"
+#include "LineArcCollection.h"
 
 wxCursor LineArcDrawing::m_cursor_start;
 wxCursor LineArcDrawing::m_cursor_end;
@@ -23,6 +24,7 @@ LineArcDrawing::LineArcDrawing(void){
 	m_previous_direction = gp_Vec(1, 0, 0);
 	drawing_mode = 0;
 	m_A_down = false;
+	m_container = NULL;
 }
 
 LineArcDrawing::~LineArcDrawing(void){
@@ -117,6 +119,22 @@ void LineArcDrawing::calculate_item(const gp_Pnt &end){
 	}
 }
 
+HeeksObj* LineArcDrawing::GetOwnerForDrawingObjects()
+{
+	if(m_container == NULL)
+	{
+		m_container = new CLineArcCollection;
+		wxGetApp().AddUndoably(m_container, NULL, NULL);
+	}
+	return m_container;
+}
+
+void LineArcDrawing::clear_drawing_objects()
+{
+	temp_object = NULL;
+	temp_object_in_list.clear();
+}
+
 void LineArcDrawing::OnKeyDown(wxKeyEvent& event)
 {
 	switch(event.GetKeyCode()){
@@ -183,5 +201,7 @@ void LineArcDrawing::GetProperties(std::list<Property *> *list){
 bool LineArcDrawing::OnModeChange(void){
 	if(!__super::OnModeChange())return false;
 	drawing_mode = 0;
+	if(m_container)m_container = NULL;
+
 	return true;
 }

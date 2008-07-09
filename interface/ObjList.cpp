@@ -1,7 +1,11 @@
 // ObjList.cpp
 #include "stdafx.h"
 #include "ObjList.h"
-#include "MarkedList.h"
+#ifdef HEEKSCAD
+#include "../src/MarkedList.h"
+#else
+#include "HeeksCADInterface.h"
+#endif
 
 ObjList::ObjList(const ObjList& objlist): HeeksObj(objlist) {operator=(objlist);}
 
@@ -34,7 +38,14 @@ void ObjList::ClearUndoably(void)
 	if (m_objects.size() == 0) return;
 	std::list<HeeksObj*> objects_to_delete = m_objects;
 	std::list<HeeksObj*>::iterator It;
-	for (It=objects_to_delete.begin();It!=objects_to_delete.end();It++)wxGetApp().DeleteUndoably(*It);
+	for (It=objects_to_delete.begin();It!=objects_to_delete.end();It++)
+	{
+#ifdef HEEKSCAD
+		wxGetApp().DeleteUndoably(*It);
+#else
+		heeksCAD->DeleteUndoably(*It);
+#endif
+	}
 	m_objects.clear();
 	LoopItStack.clear();
 }
@@ -57,7 +68,11 @@ void ObjList::glCommands(bool select, bool marked, bool no_color)
 	for(It=m_objects.begin(); It!=m_objects.end() ;It++)
 	{
 		if(select)glPushName((unsigned int)(*It));
-		(*It)->glCommands(select, marked || (wxGetApp().m_marked_list->ObjectMarked(*It) != 0), no_color);
+#ifdef HEEKSCAD
+		(*It)->glCommands(select, marked || wxGetApp().m_marked_list->ObjectMarked(*It), no_color);
+#else
+		(*It)->glCommands(select, marked || heeksCAD->ObjectMarked(*It), no_color);
+#endif
 		if(select)glPopName();
 	}
 }

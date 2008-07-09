@@ -69,7 +69,7 @@ void Drawing::OnMouse( wxMouseEvent& event )
 					calculate_item(wxGetApp().m_digitizing->position_found);
 					before_add_item();
 					const std::list<HeeksObj*>& drawing_objects = GetObjectsMade();
-					wxGetApp().AddUndoably(drawing_objects, NULL);
+					wxGetApp().AddUndoably(drawing_objects, GetOwnerForDrawingObjects());
 					wxGetApp().m_frame->m_graphics->DrawObjectsOnFront(drawing_objects, true);
 					set_previous_direction();
 					clear_drawing_objects();

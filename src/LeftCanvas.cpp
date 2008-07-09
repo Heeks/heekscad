@@ -98,12 +98,6 @@ void CLeftCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<H
 
 					bool is_expanded = m_treeCtrl->IsExpanded(owner);
 
-					if(!is_expanded){
-						if(count == 1){
-							AddSubstitute(owner_object, owner);
-						}
-					}
-					else{
 						int child_count = 0;
 						if(m_treeCtrl->ItemHasChildren(owner)){
 							wxTreeItemIdValue cookie;
@@ -119,7 +113,6 @@ void CLeftCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<H
 						if(count > child_count){					
 							Add(object, owner, false);
 						}
-					}
 				}
 				else{
 					wxTreeItemId item = Add(object, m_root, false);
@@ -206,15 +199,9 @@ const wxTreeItemId CLeftCanvas::Add(HeeksObj* object, const wxTreeItemId &owner,
 	int image = m_treeCtrl->GetImage(object);
 	wxTreeItemId item = m_treeCtrl->AppendItem(owner, object->GetShortStringOrTypeString(), image, -1, new DanObjectTreeData(object));
 	tree_map.insert(std::pair<HeeksObj*, wxTreeItemId>(object, item));
-	if(expand)
-	{
-		m_treeCtrl->Expand(item);
-		AddChildren(object, item);
-	} 
-	else
-	{
-		AddSubstitute(object, item);
-	}
+
+	m_treeCtrl->Expand(item);
+	AddChildren(object, item);
 
 	return item;
 }
@@ -236,23 +223,6 @@ void CLeftCanvas::AddChildren(HeeksObj* object, const wxTreeItemId &item)
 	}
 }
 
-class SubstituteTreeItem: public HeeksObj{
-public:
-	int GetType()const{return SubstituteTreeType;}
-	HeeksObj *MakeACopy(void)const{ return new SubstituteTreeItem(*this);}
-};
-
-void CLeftCanvas::AddSubstitute(HeeksObj* object, const wxTreeItemId &owner)
-{
-	int nchildren = 0;
-	for(HeeksObj* child = object->GetFirstChild(); child; child = object->GetNextChild())
-	{
-		if (CanAdd(child)) nchildren++;
-	}
-	if (nchildren>0)Add(new SubstituteTreeItem, owner, false);
-
-}
-
 void CLeftCanvas::Remove(HeeksObj *object, const wxTreeItemId &item, bool set_not_marked){
 	if(object == NULL)return;
 	if(tree_map.find(object) == tree_map.end())return;
@@ -266,7 +236,6 @@ void CLeftCanvas::Remove(HeeksObj *object, const wxTreeItemId &item, bool set_no
 
 bool CLeftCanvas::RemoveChildren(const wxTreeItemId &item)
 {
-	bool child_was_a_substitute = false;
 	wxTreeItemIdValue cookie;
 	wxTreeItemId child = m_treeCtrl->GetFirstChild(item, cookie);
 	if(child){
@@ -279,13 +248,9 @@ bool CLeftCanvas::RemoveChildren(const wxTreeItemId &item)
 		for(It = child_list.begin(); It != child_list.end(); It++){
 			HeeksObj *child_object = (HeeksObj *)(m_treeCtrl->GetItemData( *It ));
 			Remove(child_object, *It, false);
-			if(child_object->GetType() == SubstituteTreeType){
-				child_was_a_substitute = true;
-				delete child_object;
-			}
 		}
 	}
-	return child_was_a_substitute;
+	return false;
 }
 
 wxTreeItemId CLeftCanvas::Find(HeeksObj *object){

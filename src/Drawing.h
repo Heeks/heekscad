@@ -37,6 +37,7 @@ protected:
 	virtual int number_of_steps(){return 2;}
 	virtual int step_to_go_to_after_last_step(){return 0;}
 	virtual bool is_an_add_level(int level){return false;}
+	virtual HeeksObj* GetOwnerForDrawingObjects(){return NULL;}
 
 	void SetView(int);
 	int GetView();
