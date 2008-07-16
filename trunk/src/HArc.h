@@ -17,7 +17,7 @@ public:
 
 	~HArc(void);
 	HArc(const gp_Pnt &a, const gp_Pnt &b, const gp_Circ &c, const HeeksColor* col);
-	HArc(const HArc &line);
+	HArc(const HArc &arc);
 
 	const HArc& operator=(const HArc &b);
 
@@ -37,4 +37,5 @@ public:
 	void GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point = true)const;
 	bool GetStartPoint(double* pos);
 	bool GetEndPoint(double* pos);
+	bool GetCentrePoint(double* pos);
 };

@@ -27,6 +27,7 @@ void GetConversionMenuTools(std::list<Tool*>* t_list, const wxPoint* p, MarkedOb
 		switch(object->GetType()){
 			case LineType:
 			case ArcType:
+			case LineArcCollectionType:
 				lines_or_arcs_in_marked_list = true;
 				break;
 			case WireType:
@@ -49,8 +50,22 @@ void GetConversionMenuTools(std::list<Tool*>* t_list, const wxPoint* p, MarkedOb
 
 void ConvertLineArcsToWire::Run(){
 	std::list<TopoDS_Edge> edges;
+	std::list<HeeksObj*> list2;
 	std::list<HeeksObj*>::const_iterator It;
 	for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+		HeeksObj* object = *It;
+		if(object->GetType() == LineArcCollectionType){
+			for(HeeksObj* child = object->GetFirstChild(); child; child = object->GetNextChild())
+			{
+				list2.push_back(child);
+			}
+		}
+		else{
+			list2.push_back(object);
+		}
+	}
+
+	for(std::list<HeeksObj*>::iterator It = list2.begin(); It != list2.end(); It++){
 		HeeksObj* object = *It;
 		switch(object->GetType()){
 			case LineType:
@@ -111,8 +126,22 @@ void ConvertWireToFace::Run(){
 
 void ConvertLineArcsToFace::Run(){
 	std::list<TopoDS_Edge> edges;
+	std::list<HeeksObj*> list2;
 	std::list<HeeksObj*>::const_iterator It;
 	for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+		HeeksObj* object = *It;
+		if(object->GetType() == LineArcCollectionType){
+			for(HeeksObj* child = object->GetFirstChild(); child; child = object->GetNextChild())
+			{
+				list2.push_back(child);
+			}
+		}
+		else{
+			list2.push_back(object);
+		}
+	}
+
+	for(std::list<HeeksObj*>::iterator It = list2.begin(); It != list2.end(); It++){
 		HeeksObj* object = *It;
 		switch(object->GetType()){
 			case LineType:

@@ -68,6 +68,8 @@ public:
 	virtual void Remove(HeeksObj* object) {}
 	virtual HeeksObj* GetFirstChild(){return NULL;}
 	virtual HeeksObj* GetNextChild(){return NULL;}
+	virtual HeeksObj* GetAtIndex(int index){return NULL;}
+	virtual int GetNumChildren(){return 0;}
 	virtual HeeksObj* GetFirstAutoExpandChild(){return NULL;}
 	virtual HeeksObj* GetNextAutoExpandChild(){return NULL;}
 	void    SetCurrentChild(HeeksObj* child) {}
