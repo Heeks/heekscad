@@ -530,7 +530,7 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Observer.h"
+			RelativePath="..\interface\Observer.h"
 			>
 		</File>
 		<File

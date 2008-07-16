@@ -7,6 +7,7 @@
 #include "HeeksFrame.h"
 #include "PropertiesCanvas.h"
 #include "MarkedList.h"
+#include "HLine.h"
 #include "HArc.h"
 #include "ObjPropsCanvas.h"
 #include "GraphicsCanvas.h"
@@ -50,6 +51,11 @@ wxString CHeeksCADInterface::GetExeFolder()
 void CHeeksCADInterface::AddUndoably(HeeksObj* object, HeeksObj* owner)
 {
 	wxGetApp().AddUndoably(object, owner, NULL);
+}
+
+HeeksObj* CHeeksCADInterface::GetMainObject()
+{
+	return &(wxGetApp());
 }
 
 void CHeeksCADInterface::DeleteUndoably(HeeksObj* object)
@@ -109,6 +115,11 @@ void CHeeksCADInterface::WasModified(HeeksObj* object)
 	wxGetApp().WasModified(object);
 }
 
+void CHeeksCADInterface::WasAdded(HeeksObj* object)
+{
+	wxGetApp().WasAdded(object);
+}
+
 int CHeeksCADInterface::PickObjects(const char* str)
 {
 	return wxGetApp().PickObjects(str);
@@ -132,4 +143,47 @@ void CHeeksCADInterface::DrawObjectsOnFront(const std::list<HeeksObj*> &list)
 HeeksObj* CHeeksCADInterface::GetLineArcCollection(int id)
 {
 	return CLineArcCollection::GetLineArcCollection(id);
+}
+
+HeeksObj* CHeeksCADInterface::NewLineArcCollection()
+{
+	return new CLineArcCollection;
+}
+
+int CHeeksCADInterface::GetLineArcCollectionID(HeeksObj* la)
+{
+	return ((CLineArcCollection*)la)->m_id;
+}
+
+void CHeeksCADInterface::SetLineArcCollectionID(HeeksObj* la, int id)
+{
+	CLineArcCollection::used_ids.erase(((CLineArcCollection*)la)->m_id);
+	((CLineArcCollection*)la)->m_id = id;
+	CLineArcCollection::used_ids.insert( std::pair<int, CLineArcCollection*>(id, (CLineArcCollection*)la) );
+}
+
+HeeksObj* CHeeksCADInterface::NewLine(const double* s, const double* e)
+{
+	return new HLine(make_point(s), make_point(e), &wxGetApp().current_color);
+}
+
+HeeksObj* CHeeksCADInterface::NewArc(const double* s, const double* e, const double* c, const double* up)
+{
+	// arc
+	gp_Pnt p0 = make_point(s);
+	gp_Pnt p1 = make_point(e);
+	gp_Dir dir(up[0], up[1], up[2]);
+	gp_Pnt pc = make_point(c);
+	gp_Circ circle(gp_Ax2(pc, dir), p1.Distance(pc));
+	return new HArc(p0, p1, circle, &wxGetApp().current_color);
+}
+
+void CHeeksCADInterface::RegisterObserver(Observer* observer)
+{
+	wxGetApp().RegisterObserver(observer);
+}
+
+void CHeeksCADInterface::RemoveObserver(Observer* observer)
+{
+	wxGetApp().RemoveObserver(observer);
 }

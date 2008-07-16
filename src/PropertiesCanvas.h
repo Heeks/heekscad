@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Observer.h"
+#include "../interface/Observer.h"
 
 class HeeksObj;
 class Property;

@@ -30,7 +30,7 @@
 #include "ViewPoint.h"
 #include "MarkedList.h"
 #include "History.h"
-#include "Observer.h"
+#include "../interface/Observer.h"
 #include "TransformTool.h"
 #include "Grid.h"
 #include "StretchTool.h"
@@ -333,6 +333,7 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_POLYGON_OFFSET_FILL);
+	glShadeModel(GL_FLAT);
 	m_frame->m_graphics->m_view_point.SetPolygonOffset();
 	glCommands(select, false, false);
 	input_mode_object->OnRender();
@@ -1020,4 +1021,15 @@ void HeeksCADapp::glSphere(double radius, const double* pos)
 	}
 
 	glPopMatrix();
+}
+
+void HeeksCADapp::OnNewOrOpen()
+{
+	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
+		wxDynamicLibrary* shared_library = *It;
+		void(*fnOnNewOrOpen)() = (void(*)())(shared_library->GetSymbol("OnNewOrOpen"));
+		if(fnOnNewOrOpen){
+			(*fnOnNewOrOpen)();
+		}
+	}
 }

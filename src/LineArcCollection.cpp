@@ -8,17 +8,36 @@ wxIcon* CLineArcCollection::m_icon = NULL;
 std::map<int, CLineArcCollection*> CLineArcCollection::used_ids;
 int CLineArcCollection::next_id = 1;
 
-CLineArcCollection::CLineArcCollection()
+void CLineArcCollection::set_initial()
 {
 	while(used_ids.find(next_id) != used_ids.end())next_id++;
 	m_id = next_id;
 	used_ids.insert( std::pair<int, CLineArcCollection*> (m_id, this) );
 }
 
+CLineArcCollection::CLineArcCollection()
+{
+	set_initial();
+}
+
+CLineArcCollection::CLineArcCollection(const CLineArcCollection& c)
+{
+	set_initial();
+	operator=(c);
+}
+
 CLineArcCollection::~CLineArcCollection()
 {
 	next_id = m_id; // this id has now become available
 	used_ids.erase(m_id);
+}
+
+const CLineArcCollection& CLineArcCollection::operator=(const CLineArcCollection& c)
+{
+	// just copy all the lines and arcs, not the id
+	__super::operator =(c);
+
+	return *this;
 }
 
 wxIcon* CLineArcCollection::GetIcon(){
@@ -53,4 +72,9 @@ HeeksObj* CLineArcCollection:: GetLineArcCollection(int id)
 	std::map<int, CLineArcCollection*>::iterator FindIt = used_ids.find(id);
 	if(FindIt == used_ids.end())return NULL;
 	return FindIt->second;
+}
+
+HeeksObj *CLineArcCollection::MakeACopy(void)const
+{
+	return new CLineArcCollection(*this);
 }

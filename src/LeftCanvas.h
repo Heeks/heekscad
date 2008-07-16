@@ -1,5 +1,5 @@
 #include "wx/treectrl.h"
-#include "Observer.h"
+#include "../interface/Observer.h"
 #include "Images.h"
 
 class HeeksObj;

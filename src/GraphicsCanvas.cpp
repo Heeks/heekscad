@@ -267,6 +267,8 @@ void CGraphicsCanvas::DrawObjectsOnFront(const std::list<HeeksObj*> &list, bool 
 	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_POLYGON_OFFSET_FILL);
+	glShadeModel(GL_FLAT);
+
 	wxGetApp().m_frame->m_graphics->m_view_point.SetPolygonOffset();
 
 	for(std::list<HeeksObj*>::const_iterator It = list.begin(); It != list.end(); It++)

@@ -186,3 +186,9 @@ bool HArc::GetEndPoint(double* pos)
 	extract(B, pos);
 	return true;
 }
+
+bool HArc::GetCentrePoint(double* pos)
+{
+	extract(m_circle.Location(), pos);
+	return true;
+}
