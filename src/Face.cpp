@@ -64,6 +64,7 @@ void CFace::glCommands(bool select, bool marked, bool no_color){
 
 		if(!facing.IsNull()){
 			glEnable(GL_LIGHTING);
+			glShadeModel(GL_SMOOTH);
 			glBegin(GL_TRIANGLES);
 			Poly_Connect pc(facing);	
 			const TColgp_Array1OfPnt& Nodes = facing->Nodes();
@@ -103,6 +104,7 @@ void CFace::glCommands(bool select, bool marked, bool no_color){
 			}
 			glEnd();
 			glDisable(GL_LIGHTING);
+			glShadeModel(GL_FLAT);
 		}
 	}
 }

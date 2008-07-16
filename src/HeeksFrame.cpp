@@ -235,6 +235,8 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 		}
 	}
 
+	wxGetApp().OnNewOrOpen();
+
 	m_aui_manager->Update();
 }
 
@@ -421,6 +423,7 @@ void CHeeksFrame::OnOpenButton( wxCommandEvent& event )
     {
 		wxGetApp().Reset();
 		wxGetApp().OpenFile( dialog.GetPath().c_str() );
+		wxGetApp().OnNewOrOpen();
     }
 }
 
@@ -455,6 +458,7 @@ void CHeeksFrame::OnRedoButton( wxCommandEvent& event )
 void CHeeksFrame::OnNewButton( wxCommandEvent& event )
 {
 	wxGetApp().Reset();
+	wxGetApp().OnNewOrOpen();
 	wxGetApp().Repaint();
 }
 

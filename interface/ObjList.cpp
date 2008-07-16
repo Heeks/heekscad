@@ -7,7 +7,7 @@
 #include "HeeksCADInterface.h"
 #endif
 
-ObjList::ObjList(const ObjList& objlist): HeeksObj(objlist) {operator=(objlist);}
+ObjList::ObjList(const ObjList& objlist): HeeksObj(objlist), m_index_list_valid(true) {operator=(objlist);}
 
 void ObjList::Clear()
 {
@@ -18,12 +18,14 @@ void ObjList::Clear()
 		delete *It;
 	}
 	m_objects.clear();
+	m_index_list.clear();
+	m_index_list_valid = true;
 }
 
 const ObjList& ObjList::operator=(const ObjList& objlist)
 {
 	HeeksObj::operator=(objlist);
-	ClearUndoably();
+	Clear();
 	std::list<HeeksObj*>::const_iterator It;
 	for (It=objlist.m_objects.begin();It!=objlist.m_objects.end();It++)
 	{
@@ -48,6 +50,7 @@ void ObjList::ClearUndoably(void)
 	}
 	m_objects.clear();
 	LoopItStack.clear();
+	m_index_list_valid = true;
 }
 
 HeeksObj* ObjList::MakeACopy(void) const { return new ObjList(*this); }
@@ -92,6 +95,35 @@ HeeksObj* ObjList::GetNextChild()
 	return *LoopIt;
 }
 
+void ObjList::recalculate_index_list()
+{
+	m_index_list.clear();
+	m_index_list.reserve(m_objects.size());
+	int i = 0;
+	for(std::list<HeeksObj*>::iterator It=m_objects.begin(); It!=m_objects.end() ;It++, i++)
+	{
+		HeeksObj* object = *It;
+		m_index_list[i] = object;
+	}
+	m_index_list_valid = true;
+}
+
+HeeksObj* ObjList::GetAtIndex(int index)
+{
+	if(!m_index_list_valid)
+	{
+		recalculate_index_list();
+	}
+
+	if(index < 0 || index >= (int)(m_index_list.size()))return NULL;
+	return m_index_list[index];
+}
+
+int ObjList::GetNumChildren()
+{
+	return m_objects.size();
+}
+
 bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 {
 	if (object==NULL) return false;
@@ -99,6 +131,10 @@ bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 	if (m_objects.size()==0 || prev_object==NULL)
 	{
 		m_objects.push_back(object);
+		if(m_index_list_valid)
+		{
+			m_index_list.push_back(object);
+		}
 		LoopIt = m_objects.end();
 		LoopIt--;
 	}
@@ -106,6 +142,7 @@ bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 	{
 		for(LoopIt = m_objects.begin(); LoopIt != m_objects.end(); LoopIt++) { if (*LoopIt==prev_object) break; }
 		m_objects.insert(LoopIt, object);
+		m_index_list_valid = false;
 	}
 	HeeksObj::Add(object, prev_object);
 	return true;
@@ -118,7 +155,11 @@ void ObjList::Remove(HeeksObj* object)
 	for(LoopIt = m_objects.begin(); LoopIt != m_objects.end(); LoopIt++){
 		if(*LoopIt==object)break;
 	}
-	if(LoopIt != m_objects.end())m_objects.erase(LoopIt);
+	if(LoopIt != m_objects.end())
+	{
+		m_objects.erase(LoopIt);
+		m_index_list_valid = false;
+	}
 	HeeksObj::Remove(object);
 }
 

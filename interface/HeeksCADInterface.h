@@ -7,6 +7,7 @@
 class HeeksObj;
 class wxFrame;
 class wxAuiManager;
+class Observer;
 
 class CHeeksCADInterface{
 public:
@@ -21,6 +22,7 @@ public:
 	virtual void AddToolBarButton(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&));
 	virtual wxString GetExeFolder();
 	virtual void AddUndoably(HeeksObj* object, HeeksObj* owner);
+	virtual HeeksObj* GetMainObject();
 	virtual void DeleteUndoably(HeeksObj* object);
 	virtual const std::list<HeeksObj*>& GetMarkedList();
 	virtual bool GetArcDirection(HeeksObj* object);
@@ -32,9 +34,17 @@ public:
 	virtual bool ObjectMarked(HeeksObj* object);
 	virtual void ClearMarkedList();
 	virtual void WasModified(HeeksObj* object);
+	virtual void WasAdded(HeeksObj* object);
 	virtual int PickObjects(const char* str);
 	virtual HeeksObj* GetFirstObject();
 	virtual HeeksObj* GetNextObject();
 	virtual void DrawObjectsOnFront(const std::list<HeeksObj*> &list);
 	virtual HeeksObj* GetLineArcCollection(int id);
+	virtual HeeksObj* NewLineArcCollection();
+	virtual int GetLineArcCollectionID(HeeksObj* la);
+	virtual void SetLineArcCollectionID(HeeksObj* la, int id); // check for existing id using GetLineArcCollection and call DeleteUndoably first
+	virtual HeeksObj* NewLine(const double* s, const double* e);
+	virtual HeeksObj* NewArc(const double* s, const double* e, const double* c, const double* up); // set up to (0, 0, -1) for a clockwise arc
+	virtual void RegisterObserver(Observer* observer);
+	virtual void RemoveObserver(Observer* observer);
 };

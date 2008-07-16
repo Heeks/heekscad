@@ -137,6 +137,7 @@ public:
 	void PassMouseWheelToGraphics(wxMouseEvent& event);
 	int PickObjects(const char* str);
 	void glSphere(double radius, const double* pos = NULL);
+	void OnNewOrOpen();
 };
 
 DECLARE_APP(HeeksCADapp)
