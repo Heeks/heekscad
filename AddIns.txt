@@ -1,0 +1,2 @@
+# this file tells HeeksCAD.exe which dlls to load at startup, it then calls OnStartUp
+#../HeeksCNC/HeeksCNC.dll
