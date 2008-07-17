@@ -186,3 +186,8 @@ bool HLine::GetEndPoint(double* pos)
 	extract(B, pos);
 	return true;
 }
+
+gp_Vec HLine::GetSegmentVector(double fraction)
+{
+	return gp_Vec(A, B).Normalized();
+}

@@ -192,3 +192,78 @@ bool HArc::GetCentrePoint(double* pos)
 	extract(m_circle.Location(), pos);
 	return true;
 }
+
+gp_Vec HArc::GetSegmentVector(double fraction)
+{
+	gp_Pnt centre = m_circle.Location();
+	gp_Pnt p = GetPointAtFraction(fraction);
+	gp_Vec vp(centre, p);
+	gp_Vec vd = gp_Vec(m_circle.Axis().Direction()) ^ vp;
+	vd.Normalize();
+	if(m_dir)vd = -vd;
+	return vd;
+}
+
+gp_Pnt HArc::GetPointAtFraction(double fraction)
+{
+	if(A.IsEqual(B, wxGetApp().m_geom_tol)){
+		return A;
+	}
+	gp_Dir x_axis = m_circle.XAxis().Direction();
+	gp_Dir y_axis = m_circle.YAxis().Direction();
+	gp_Pnt centre = m_circle.Location();
+
+	double ax = gp_Vec(A.XYZ() - centre.XYZ()) * x_axis;
+	double ay = gp_Vec(A.XYZ() - centre.XYZ()) * y_axis;
+	double bx = gp_Vec(B.XYZ() - centre.XYZ()) * x_axis;
+	double by = gp_Vec(B.XYZ() - centre.XYZ()) * y_axis;
+
+	double start_angle = atan2(ay, ax);
+	double end_angle = atan2(by, bx);
+
+	if(m_dir){
+		if(start_angle > end_angle)end_angle += 6.28318530717958;
+	}
+	else{
+		if(end_angle > start_angle)start_angle += 6.28318530717958;
+	}
+
+	double radius = m_circle.Radius();
+	double d_angle = end_angle - start_angle;
+	double angle = start_angle + d_angle * fraction;
+    double x = radius * cos(angle);
+    double y = radius * sin(angle);
+
+	return centre.XYZ() + x * x_axis.XYZ() + y * y_axis.XYZ();
+}
+
+//static
+bool HArc::TangentialArc(const gp_Pnt &p0, const gp_Vec &v0, const gp_Pnt &p1, gp_Pnt &centre, gp_Vec &axis)
+{
+	// returns false if a straight line is needed 
+	// else returns true and sets centre and axis
+	std::list<gp_Pnt> rl;
+	gp_Dir direction_for_circle;
+	if(p0.Distance(p1) > 0.0000000001){
+		gp_Vec v1(p0, p1);
+		gp_Pnt halfway(p0.XYZ() + v1.XYZ() * 0.5);
+		gp_Pln pl1(halfway, v1);
+		gp_Pln pl2(p0, v0);
+		gp_Lin plane_line;
+		intersect(pl1, pl2, plane_line);
+		direction_for_circle = -(plane_line.Direction());
+		gp_Lin l1(halfway, v1);
+		intersect(plane_line, l1, rl);
+	}
+
+	if(rl.size() == 0){
+		// line
+		return false;
+	}
+	else{
+		// arc
+		centre = rl.front();
+		axis = direction_for_circle;
+		return true;
+	}
+}

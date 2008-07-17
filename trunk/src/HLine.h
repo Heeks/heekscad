@@ -39,4 +39,5 @@ public:
 
 	gp_Lin GetLine()const;
 	int Intersects(const gp_Lin &line, std::list< double > *rl)const;
+	gp_Vec GetSegmentVector(double fraction);
 };
