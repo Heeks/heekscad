@@ -38,4 +38,8 @@ public:
 	bool GetStartPoint(double* pos);
 	bool GetEndPoint(double* pos);
 	bool GetCentrePoint(double* pos);
+
+	gp_Vec GetSegmentVector(double fraction);
+	gp_Pnt GetPointAtFraction(double fraction);
+	static bool TangentialArc(const gp_Pnt &p0, const gp_Vec &v0, const gp_Pnt &p1, gp_Pnt &centre, gp_Vec &axis);
 };

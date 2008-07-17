@@ -63,28 +63,34 @@ void LineArcDrawing::calculate_item(const gp_Pnt &end){
 		}
 	}
 	else{
+		// tangential arcs
 		if(temp_object && temp_object->GetType() != ArcType){
 			delete temp_object;
 			temp_object = NULL;
 			temp_object_in_list.clear();
 		}
 
-		std::list<gp_Pnt> rl;
+		gp_Pnt centre;
+		gp_Vec axis;
 		gp_Pnt startp = GetStartPos();
-		gp_Dir direction_for_circle;
-		if(startp.Distance(end) > 0.0000000001){
-			gp_Vec v1(GetStartPos(), end);
-			gp_Pnt halfway(GetStartPos().XYZ() + v1.XYZ() * 0.5);
-			gp_Pln pl1(halfway, v1);
-			gp_Pln pl2(GetStartPos(), m_previous_direction);
-			gp_Lin plane_line;
-			intersect(pl1, pl2, plane_line);
-			direction_for_circle = -(plane_line.Direction());
-			gp_Lin l1(halfway, v1);
-			intersect(plane_line, l1, rl);
-		}
+		if(HArc::TangentialArc(startp, m_previous_direction, end, centre, axis))
+		{
+			// arc
+			gp_Circ circle(gp_Ax2(centre, axis), centre.Distance(GetStartPos()));
 
-		if(rl.size() == 0){
+			if(!temp_object){
+				HeeksColor c(0);
+				temp_object = new HArc(GetStartPos(), end, circle, &wxGetApp().current_color);
+				if(temp_object)temp_object_in_list.push_back(temp_object);
+			}
+			else{
+				((HArc*)temp_object)->m_circle = circle;
+				((HArc*)temp_object)->A = GetStartPos();
+				((HArc*)temp_object)->B = end;
+			}
+		}
+		else
+		{
 			// line
 			if(temp_object && temp_object->GetType() != LineType){
 				delete temp_object;
@@ -99,21 +105,6 @@ void LineArcDrawing::calculate_item(const gp_Pnt &end){
 			else{
 				((HLine*)temp_object)->A = GetStartPos();
 				((HLine*)temp_object)->B = end;
-			}
-		}
-		else{
-			// arc
-			gp_Circ circle(gp_Ax2(rl.front(), direction_for_circle), rl.front().Distance(GetStartPos()));
-
-			if(!temp_object){
-				HeeksColor c(0);
-				temp_object = new HArc(GetStartPos(), end, circle, &wxGetApp().current_color);
-				if(temp_object)temp_object_in_list.push_back(temp_object);
-			}
-			else{
-				((HArc*)temp_object)->m_circle = circle;
-				((HArc*)temp_object)->A = GetStartPos();
-				((HArc*)temp_object)->B = end;
 			}
 		}
 	}
