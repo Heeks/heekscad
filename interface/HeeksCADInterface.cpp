@@ -90,6 +90,26 @@ void CHeeksCADInterface::get_2d_arc_segments(double xs, double ys, double xe, do
 	wxGetApp().get_2d_arc_segments(xs, ys, xe, ye, xc, yc, dir, want_start, pixels_per_mm, callbackfunc);
 }
 
+bool CHeeksCADInterface::GetSegmentVector(HeeksObj* object, double fraction, double* v)
+{
+	gp_Vec gv;
+
+	switch(object->GetType())
+	{
+	case LineType:
+		gv = ((HLine*)object)->GetSegmentVector(fraction);
+		break;
+	case ArcType:
+		gv = ((HArc*)object)->GetSegmentVector(fraction);
+		break;
+	default:
+		return false;
+	}
+
+	extract(gv, v);
+	return true;
+}
+
 double CHeeksCADInterface::GetPixelScale()
 {
 	return wxGetApp().GetPixelScale();
@@ -186,4 +206,17 @@ void CHeeksCADInterface::RegisterObserver(Observer* observer)
 void CHeeksCADInterface::RemoveObserver(Observer* observer)
 {
 	wxGetApp().RemoveObserver(observer);
+}
+
+bool CHeeksCADInterface::TangentialArc(const double* p0, const double* v0, const double* p1, double *c, double *a)
+{
+	gp_Pnt centre;
+	gp_Vec axis;
+	bool arc_found = HArc::TangentialArc(make_point(p0), make_vector(v0), make_point(p1), centre, axis);
+	if(arc_found)
+	{
+		extract(centre, c);
+		extract(axis, a);
+	}
+	return arc_found;
 }
