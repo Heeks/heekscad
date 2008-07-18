@@ -179,6 +179,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 	bool objects_visible = true;
 	bool options_visible = true;
+	bool input_canvas_visible = true;
 	bool properties_visible = true;
 	bool toolbar_visible = true;
 	bool solidbar_visible = true;
@@ -187,6 +188,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 	wxGetApp().m_config->Read("FrameObjectsVisible", &objects_visible);
 	wxGetApp().m_config->Read("FrameOptionsVisible", &options_visible);
+	wxGetApp().m_config->Read("FrameInputVisible", &input_canvas_visible);
 	wxGetApp().m_config->Read("FramePropertiesVisible", &properties_visible);
 	wxGetApp().m_config->Read("FrameToolBarVisible", &toolbar_visible);
 	wxGetApp().m_config->Read("FrameSolidBarVisible", &solidbar_visible);
@@ -204,7 +206,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 	m_aui_manager->GetPane(m_left).Show(objects_visible);
 	m_aui_manager->GetPane(m_options).Show(options_visible);
-	m_aui_manager->GetPane(m_input_canvas).Show(options_visible);
+	m_aui_manager->GetPane(m_input_canvas).Show(input_canvas_visible);
 	m_aui_manager->GetPane(m_properties).Show(properties_visible);
 	m_aui_manager->GetPane(m_toolBar).Show(toolbar_visible);
 	m_aui_manager->GetPane(m_solidBar).Show(solidbar_visible);
@@ -293,6 +295,7 @@ bool CHeeksFrame::ShowFullScreen(bool show, long style){
 		statusbar_visible = m_statusBar->IsShown();
 		m_aui_manager->GetPane(m_left).Show(false);
 		m_aui_manager->GetPane(m_options).Show(false);
+		m_aui_manager->GetPane(m_input_canvas).Show(false);
 		m_aui_manager->GetPane(m_properties).Show(false);
 		m_aui_manager->GetPane(m_toolBar).Show(false);
 		m_aui_manager->GetPane(m_solidBar).Show(false);
