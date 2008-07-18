@@ -18,11 +18,21 @@ and changing "#define wxUSE_ODBC 0" to "#define wxUSE_ODBC 1"
 
 Open and build C:\wxWidgets-2.8.7\build\msw\wx_dll.dsw ( let VC2008 convert the projects )
 
-Copy all the dlls that get made ( 20 of them named wxXXXX_vc_custom.dll ) from C:\wxWidgets-2.8.7\lib\vc_dll to HeeksCAD ( the folder you checked out this project to ).
+Copy 4 of the dlls that get made from C:\wxWidgets-2.8.7\lib\vc_dll to HeeksCAD ( the folder you checked out this project to ).
+
+They are: wxbase28_vc_custom.dll wxmsw28_aui_vc_custom.dll wxmsw28_core_vc_custom.dll wxmsw28_gl_vc_custom.dll
+
+or if you are building Debug
+
+wxbase28d_vc_custom.dll wxmsw28d_aui_vc_custom.dll wxmsw28d_core_vc_custom.dll wxmsw28d_gl_vc_custom.dll
 
 Open "HeeksCAD.sln"
 
-Press build.
+Press "Build Solution"
+
+If it builds OK, press "Start Debugging"
+
+
 ==VC2003 and VC2005==
 
 To use VC2003 or VC2005, run vc_retro.py ( you will need to install Python first ).
