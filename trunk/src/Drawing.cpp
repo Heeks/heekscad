@@ -243,6 +243,6 @@ void Drawing::OnFrontRender(){
 	wxGetApp().m_digitizing->OnFrontRender();
 }
 
-void Drawing::GetProperties(std::list<Property *> *list){
-	wxGetApp().m_digitizing->GetProperties(list);
+void Drawing::GetOptions(std::list<Property *> *list){
+	wxGetApp().m_digitizing->GetOptions(list);
 }

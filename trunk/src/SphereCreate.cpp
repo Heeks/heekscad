@@ -11,7 +11,7 @@
 #include "DigitizeMode.h"
 #include "Solid.h"
 #include "HeeksFrame.h"
-#include "OptionsCanvas.h"
+#include "InputModeCanvas.h"
 #include "SelectMode.h"
 
 CSphereCreate sphere_creator;
@@ -48,7 +48,7 @@ void CSphereCreate::SetPositionOrRadius(const wxPoint& point)
 				}
 				break;
 			}
-			wxGetApp().m_frame->m_options->RefreshByRemovingAndAddingAll();
+			wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
 			wxGetApp().Repaint(true);
 		}
 }
@@ -77,7 +77,7 @@ void CSphereCreate::OnKeyDown(wxKeyEvent& event)
 	case 'R':
 		// switch to radius mode, until released
 		m_mode = 1;
-		wxGetApp().m_frame->m_options->RefreshByRemovingAndAddingAll();
+		wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
 		wxGetApp().Repaint();
 		return;
 	}
@@ -91,7 +91,7 @@ void CSphereCreate::OnKeyUp(wxKeyEvent& event)
 	case 'R':
 		// switch back to position mode
 		m_mode = 0;
-		wxGetApp().m_frame->m_options->RefreshByRemovingAndAddingAll();
+		wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
 		wxGetApp().Repaint();
 		return;
 	}
@@ -125,7 +125,7 @@ static void set_x(double value){sphere_creator.m_pos[0] = value; wxGetApp().Repa
 static void set_y(double value){sphere_creator.m_pos[1] = value; wxGetApp().Repaint();}
 static void set_z(double value){sphere_creator.m_pos[2] = value; wxGetApp().Repaint();}
 static void set_r(double value){sphere_creator.m_r = value; wxGetApp().Repaint();}
-static void set_mode(int value){sphere_creator.m_mode = value; wxGetApp().m_frame->m_options->RefreshByRemovingAndAddingAll();}
+static void set_mode(int value){sphere_creator.m_mode = value; wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();}
 
 void CSphereCreate::GetProperties(std::list<Property *> *list)
 {

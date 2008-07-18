@@ -38,6 +38,7 @@ public:
 	void set_cursor(void);
 	void GetTools(std::list<Tool*> *f_list, const wxPoint *p);
 	void GetProperties(std::list<Property *> *list);
+	void GetOptions(std::list<Property *> *list);
 	bool OnModeChange(void);
 };
 

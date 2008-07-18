@@ -1,10 +1,13 @@
 #include "PropertiesCanvas.h"
 
-class COptionsCanvas: public CPropertiesCanvas
+class CInputModeCanvas: public CPropertiesCanvas
 {
+private:
+	wxToolBar *m_toolBar;
+
 public:
-    COptionsCanvas(wxWindow* parent);
-    virtual ~COptionsCanvas();
+    CInputModeCanvas(wxWindow* parent);
+    virtual ~CInputModeCanvas();
 
     //virtual void OnDraw(wxDC& dc);
     void OnSize(wxSizeEvent& event);
@@ -14,6 +17,6 @@ public:
 	// CPropertiesCanvas's virtual functions
 	void RefreshByRemovingAndAddingAll();
 
-    DECLARE_NO_COPY_CLASS(COptionsCanvas)
+    DECLARE_NO_COPY_CLASS(CInputModeCanvas)
     DECLARE_EVENT_TABLE()
 };

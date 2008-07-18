@@ -5,16 +5,20 @@
 #include "../interface/PropertyList.h"
 #include "../interface/PropertyCheck.h"
 #include "../interface/PropertyDouble.h"
+#include "../interface/PropertyString.h"
+#include "../interface/Tool.h"
 #include "SelectMode.h"
 #include "MarkedList.h"
 #include "PointOrWindow.h"
 #include "GraphicsCanvas.h"
 #include "HeeksFrame.h"
+#include "InputModeCanvas.h"
 
 DigitizeMode::DigitizeMode(){
 	point_or_window = new PointOrWindow(false);
 	position_found = gp_Pnt(0, 0, 0);
 	digitize_type_found = DigitizeNoItemType;
+	m_doing_a_main_loop = false;
 }
 
 DigitizeMode::~DigitizeMode(void){
@@ -31,11 +35,15 @@ void DigitizeMode::OnMouse( wxMouseEvent& event ){
 		if(lbutton_type_found != DigitizeNoItemType){
 			position_found = lbutton_position;
 			digitize_type_found = lbutton_type_found;
+			if(m_doing_a_main_loop){
+				wxGetApp().ExitMainLoop();
+			}
 		}
 	}
 	else if(event.Moving()){
 		digitize(wxPoint(event.GetX(), event.GetY()));
 		point_or_window->OnMouse(event);
+		if(m_doing_a_main_loop)wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
 	}
 }
 
@@ -301,11 +309,22 @@ void on_relative(bool onoff){
 	wxGetApp().digitize_screen = onoff;
 }
 
+static void set_x(double value){wxGetApp().m_digitizing->position_found.SetX(value); wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();}
+static void set_y(double value){wxGetApp().m_digitizing->position_found.SetY(value); wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();}
+static void set_z(double value){wxGetApp().m_digitizing->position_found.SetZ(value); wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();}
+
 void DigitizeMode::GetProperties(std::list<Property *> *list){
-	GetSharedProperties(list);
+	if(m_doing_a_main_loop)
+	{
+		// set the title for picking a position
+		list->push_back(new PropertyString("Position Picking...", m_prompt_when_doing_a_main_loop.c_str()));
+		list->push_back(new PropertyDouble("X", position_found.X(), set_x));
+		list->push_back(new PropertyDouble("Y", position_found.Y(), set_y));
+		list->push_back(new PropertyDouble("Z", position_found.Z(), set_z));
+	}
 }
 
-void DigitizeMode::GetSharedProperties(std::list<Property *> *list){
+void DigitizeMode::GetOptions(std::list<Property *> *list){
 	PropertyList* plist = new PropertyList("digitizing");
 	plist->m_list.push_back(new PropertyCheck("end", wxGetApp().digitize_end, on_end_of));
 	plist->m_list.push_back(new PropertyCheck("intersection", wxGetApp().digitize_inters, on_intersection));
@@ -315,6 +334,40 @@ void DigitizeMode::GetSharedProperties(std::list<Property *> *list){
 	plist->m_list.push_back(new PropertyCheck("coordinates", wxGetApp().digitize_coords, on_coords));
 	plist->m_list.push_back(new PropertyCheck("screen", wxGetApp().digitize_screen, on_relative));
 	list->push_back(plist);
+}
+
+class EndPosPicking:public Tool{
+private:
+	static wxBitmap* m_bitmap;
+
+public:
+	void Run(){
+		if(wxGetApp().m_select_mode->m_doing_a_main_loop)
+		{
+			wxGetApp().ExitMainLoop();
+		}
+		else{
+			wxMessageBox("Error! The \"Stop Picking\" button shouldn't have been available!");
+		}
+	}
+	const char* GetTitle(){return "Stop Picking";}
+	wxBitmap* Bitmap()
+	{
+		if(m_bitmap == NULL)
+		{
+			wxString exe_folder = wxGetApp().GetExeFolder();
+			m_bitmap = new wxBitmap(exe_folder + "/bitmaps/endpospick.png", wxBITMAP_TYPE_PNG);
+		}
+		return m_bitmap;
+	}
+	const char* GetToolTip(){return "Finish picking";}
+};
+wxBitmap* EndPosPicking::m_bitmap = NULL;
+
+
+void DigitizeMode::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
+{
+	if(m_doing_a_main_loop)t_list->push_back(new EndPosPicking);
 }
 
 void DigitizeMode::SetOnlyCoords(HeeksObj* object, bool onoff){
