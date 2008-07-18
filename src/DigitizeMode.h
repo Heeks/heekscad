@@ -30,6 +30,8 @@ private:
 public:
 	gp_Pnt position_found;
 	DigitizeType digitize_type_found;
+	bool m_doing_a_main_loop;
+	std::string m_prompt_when_doing_a_main_loop;
 
 	DigitizeMode();
 	virtual ~DigitizeMode(void);
@@ -39,7 +41,8 @@ public:
 	bool OnModeChange(void);
 	void OnFrontRender();
 	void GetProperties(std::list<Property *> *list);
-	void GetSharedProperties(std::list<Property *> *list);
+	void GetOptions(std::list<Property *> *list);
+	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 
 	DigitizeType Digitize(const gp_Lin &ray, gp_Pnt &point);
 	DigitizeType digitize(const wxPoint &point);

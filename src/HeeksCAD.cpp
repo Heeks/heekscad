@@ -19,6 +19,7 @@
 #include "HeeksFrame.h"
 #include "GraphicsCanvas.h"
 #include "OptionsCanvas.h"
+#include "InputModeCanvas.h"
 #include "LeftCanvas.h"
 #include "SelectMode.h"
 #include "MagDragWindow.h"
@@ -190,6 +191,7 @@ void HeeksCADapp::SetInputMode(CInputMode *new_mode){
 	else{
 		input_mode_object = m_select_mode;
 	}
+	if(m_frame && m_frame->m_input_canvas)m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
 	if(m_frame && m_frame->m_options)m_frame->m_options->RefreshByRemovingAndAddingAll();
 	m_frame->m_graphics->DrawFront();
 }
@@ -335,13 +337,13 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	glEnable(GL_POLYGON_OFFSET_FILL);
 	glShadeModel(GL_FLAT);
 	m_frame->m_graphics->m_view_point.SetPolygonOffset();
+	RenderGrid(&view_point);
 	glCommands(select, false, false);
 	input_mode_object->OnRender();
 	DestroyLights();
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glPolygonMode(GL_FRONT_AND_BACK ,GL_FILL );
-	RenderGrid(&view_point);
 	if(m_hide_marked_list_stack == 0)m_marked_list->GrippersGLCommands(select, false);
 }
 
@@ -702,14 +704,14 @@ void on_grid_edit(double grid_value)
 	wxGetApp().Repaint();
 }
 
-static std::list<Property *> *list_for_GetProperties = NULL;
+static std::list<Property *> *list_for_GetOptions = NULL;
 
 static void AddPropertyCallBack(Property* p)
 {
-	list_for_GetProperties->push_back(p);
+	list_for_GetOptions->push_back(p);
 }
 
-void HeeksCADapp::GetProperties(std::list<Property *> *list)
+void HeeksCADapp::GetOptions(std::list<Property *> *list)
 {
 	list->push_back ( new PropertyColor ( "background color",  background_color, on_set_background_color ) );
 	{
@@ -724,9 +726,9 @@ void HeeksCADapp::GetProperties(std::list<Property *> *list)
 	list->push_back(new PropertyCheck("grid", draw_to_grid, on_grid));
 	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
 		wxDynamicLibrary* shared_library = *It;
-		list_for_GetProperties = list;
-		void(*GetProperties)(void(*)(Property*)) = (void(*)(void(*)(Property*)))(shared_library->GetSymbol("GetProperties"));
-		(*GetProperties)(AddPropertyCallBack);
+		list_for_GetOptions = list;
+		void(*GetOptions)(void(*)(Property*)) = (void(*)(void(*)(Property*)))(shared_library->GetSymbol("GetOptions"));
+		(*GetOptions)(AddPropertyCallBack);
 	}
 }
 
@@ -907,8 +909,10 @@ void HeeksCADapp::get_2d_arc_segments(double xs, double ys, double xe, double ye
 
     for(int i = 0; i < segments + 1; i++)
     {
-		if(i != 0 || want_start)
-		glVertex2d(xc + x, yc + y);
+		if(i != 0 || want_start){
+			double xy[2] = {xc + x, yc + y};
+			(*callbackfunc)(xy);
+		}
         
         double tx = -y;
         double ty = x;
@@ -931,6 +935,7 @@ void HeeksCADapp::PassMouseWheelToGraphics(wxMouseEvent& event)
 
 int HeeksCADapp::PickObjects(const char* str)
 {
+	CInputMode* save_mode = input_mode_object;
 	m_select_mode->m_prompt_when_doing_a_main_loop.assign(str);
 	m_select_mode->m_doing_a_main_loop = true;
 	SetInputMode(m_select_mode);
@@ -938,8 +943,28 @@ int HeeksCADapp::PickObjects(const char* str)
 	OnRun();
 
 	m_select_mode->m_doing_a_main_loop = false;
-	SetInputMode(m_select_mode); // update tool bar
+	SetInputMode(save_mode); // update tool bar
 	return 1;
+}
+
+bool HeeksCADapp::PickPosition(const char* str, double* pos)
+{
+	CInputMode* save_mode = input_mode_object;
+	m_digitizing->m_prompt_when_doing_a_main_loop.assign(str);
+	m_digitizing->m_doing_a_main_loop = true;
+	SetInputMode(m_digitizing);
+
+	OnRun();
+
+	bool return_found = false;
+	if(m_digitizing->digitize_type_found != DigitizeNoItemType){
+		extract(m_digitizing->position_found, pos);
+		return_found = true;
+	}
+
+	m_digitizing->m_doing_a_main_loop = false;
+	SetInputMode(save_mode);
+	return return_found;
 }
 
 static int sphere_display_list = 0;
@@ -1032,4 +1057,9 @@ void HeeksCADapp::OnNewOrOpen()
 			(*fnOnNewOrOpen)();
 		}
 	}
+}
+
+void HeeksCADapp::RegisterHideableWindow(wxWindow* w)
+{
+	m_hideable_windows.push_back(w);
 }

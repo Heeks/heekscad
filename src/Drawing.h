@@ -53,7 +53,7 @@ public:
 	bool OnModeChange(void);
 	void GetTools(std::list<Tool*> *f_list, const wxPoint *p);
 	void OnFrontRender();
-	void GetProperties(std::list<Property *> *list);
+	void GetOptions(std::list<Property *> *list);
 
 	// Drawing's virtual functions
 	virtual const char* get_drawing_title(){return "Drawing";}

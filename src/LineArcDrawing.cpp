@@ -11,7 +11,7 @@
 #include "SelectMode.h"
 #include "DigitizeMode.h"
 #include "HeeksFrame.h"
-#include "OptionsCanvas.h"
+#include "InputModeCanvas.h"
 #include "LineArcCollection.h"
 
 wxCursor LineArcDrawing::m_cursor_start;
@@ -135,7 +135,7 @@ void LineArcDrawing::OnKeyDown(wxKeyEvent& event)
 			m_A_down = true;
 			m_save_drawing_mode.push_back(drawing_mode);
 			drawing_mode = 1;
-			wxGetApp().m_frame->m_options->RefreshByRemovingAndAddingAll();
+			wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
 			RecalculateAndRedraw(wxPoint(event.GetX(), event.GetY()));
 		}
 		return;
@@ -153,7 +153,7 @@ void LineArcDrawing::OnKeyUp(wxKeyEvent& event)
 			drawing_mode = m_save_drawing_mode.back();
 			m_save_drawing_mode.pop_back();
 		}
-		wxGetApp().m_frame->m_options->RefreshByRemovingAndAddingAll();
+		wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
 		RecalculateAndRedraw(wxPoint(event.GetX(), event.GetY()));
 		m_A_down = false;
 		return;
@@ -184,9 +184,10 @@ void LineArcDrawing::GetProperties(std::list<Property *> *list){
 	choices.push_back ( std::string ( "draw tangential arcs" ) );
 	line_drawing_for_GetProperties = this;
 	list->push_back ( new PropertyChoice ( "drawing mode",  choices, drawing_mode, on_set_drawing_mode ) );
+}
 
-	wxGetApp().m_select_mode->GetSharedProperties(list);
-	wxGetApp().m_digitizing->GetSharedProperties(list);
+void LineArcDrawing::GetOptions(std::list<Property *> *list){
+	wxGetApp().m_select_mode->GetOptions(list);
 }
 
 bool LineArcDrawing::OnModeChange(void){

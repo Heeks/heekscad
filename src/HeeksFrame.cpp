@@ -6,6 +6,7 @@
 #include "LeftCanvas.h"
 #include "ObjPropsCanvas.h"
 #include "OptionsCanvas.h"
+#include "InputModeCanvas.h"
 #include "LineArcDrawing.h"
 #include "Shape.h"
 #include "MarkedList.h"
@@ -40,6 +41,8 @@ EVT_MENU( Menu_View_Objects, CHeeksFrame::OnViewObjects )
 EVT_UPDATE_UI(Menu_View_Objects, CHeeksFrame::OnUpdateViewObjects)
 EVT_MENU( Menu_View_Options, CHeeksFrame::OnViewOptions )
 EVT_UPDATE_UI(Menu_View_Options, CHeeksFrame::OnUpdateViewOptions)
+EVT_MENU( Menu_View_Input, CHeeksFrame::OnViewInput )
+EVT_UPDATE_UI(Menu_View_Input, CHeeksFrame::OnUpdateViewInput)
 EVT_MENU( Menu_View_Properties, CHeeksFrame::OnViewProperties )
 EVT_UPDATE_UI(Menu_View_Properties, CHeeksFrame::OnUpdateViewProperties)
 EVT_MENU( Menu_View_ToolBar, CHeeksFrame::OnViewToolBar )
@@ -69,6 +72,7 @@ EVT_MENU(ID_MAG_EXTENTS, CHeeksFrame::OnMagExtentsButton)
 EVT_MENU(ID_MAG_NO_ROT, CHeeksFrame::OnMagNoRotButton)
 EVT_MENU(ID_MAG_PREVIOUS, CHeeksFrame::OnMagPreviousButton)
 EVT_MENU_RANGE(ID_NEXT_ID, ID_NEXT_ID + 1000, CHeeksFrame::OnExternalButton)
+EVT_UPDATE_UI_RANGE(ID_NEXT_ID, ID_NEXT_ID + 1000, CHeeksFrame::OnUpdateExternalButton)
 EVT_SIZE(CHeeksFrame::OnSize)
 EVT_MOVE(CHeeksFrame::OnMove)
 END_EVENT_TABLE()
@@ -86,20 +90,21 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	menuFile->Append( Menu_File_Quit, wxT( "E&xit" ) );
 	
 	// View Menu
-	wxMenu *menuView = new wxMenu;
-	menuView->AppendCheckItem( Menu_View_Objects, wxT( "&Objects" ) );
-	menuView->AppendCheckItem( Menu_View_Options, wxT( "Opt&ions" ) );
-	menuView->AppendCheckItem( Menu_View_Properties, wxT( "&Properties" ) );
-	menuView->AppendCheckItem( Menu_View_ToolBar, wxT( "&Tool Bar" ) );
-	menuView->AppendCheckItem( Menu_View_SolidBar, wxT( "&Solids Tool Bar" ) );
-	menuView->AppendCheckItem( Menu_View_ViewingBar, wxT( "&Viewing Tool Bar" ) );
-	menuView->AppendCheckItem( Menu_View_StatusBar, wxT( "St&atus Bar" ) );
+	m_menuView = new wxMenu;
+	m_menuView->AppendCheckItem( Menu_View_Objects, wxT( "&Objects" ) );
+	m_menuView->AppendCheckItem( Menu_View_Options, wxT( "Optio&ns" ) );
+	m_menuView->AppendCheckItem( Menu_View_Input, wxT( "&Input" ) );
+	m_menuView->AppendCheckItem( Menu_View_Properties, wxT( "&Properties" ) );
+	m_menuView->AppendCheckItem( Menu_View_ToolBar, wxT( "&Tool Bar" ) );
+	m_menuView->AppendCheckItem( Menu_View_SolidBar, wxT( "&Solids Tool Bar" ) );
+	m_menuView->AppendCheckItem( Menu_View_ViewingBar, wxT( "&Viewing Tool Bar" ) );
+	m_menuView->AppendCheckItem( Menu_View_StatusBar, wxT( "St&atus Bar" ) );
 	
 	// Add them to the main menu
 	m_menuBar = new wxMenuBar;
 	m_menuBar->Append( menuFile, wxT( "&File" ) );
 	SetMenuBar( m_menuBar );
-	m_menuBar->Append( menuView, wxT( "&View" ) );
+	m_menuBar->Append( m_menuView, wxT( "&View" ) );
 
 	m_aui_manager = new wxAuiManager(this);
 
@@ -127,6 +132,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
     m_left->SetCursor(wxCursor(wxCURSOR_MAGNIFIER));
 
     m_options = new COptionsCanvas(this);
+	m_input_canvas = new CInputModeCanvas(this);
 
     m_properties = new CObjPropsCanvas(this);
 
@@ -190,6 +196,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_aui_manager->AddPane(m_graphics, wxAuiPaneInfo().Name("Graphics").Caption("Graphics").CentrePane().BestSize(wxSize(800, 600)));
 	m_aui_manager->AddPane(m_left, wxAuiPaneInfo().Name("Objects").Caption("Objects").Left().BestSize(wxSize(300, 400)));
 	m_aui_manager->AddPane(m_options, wxAuiPaneInfo().Name("Options").Caption("Options").Left().BestSize(wxSize(300, 200)));
+	m_aui_manager->AddPane(m_input_canvas, wxAuiPaneInfo().Name("Input").Caption("Input").Left().BestSize(wxSize(300, 200)));
 	m_aui_manager->AddPane(m_properties, wxAuiPaneInfo().Name("Properties").Caption("Properties").Left().BestSize(wxSize(300, 200)));
 	m_aui_manager->AddPane(m_toolBar, wxAuiPaneInfo().Name("ToolBar").Caption("General Tools").ToolbarPane().Top());
 	m_aui_manager->AddPane(m_solidBar, wxAuiPaneInfo().Name("SolidBar").Caption("Solid Tools").ToolbarPane().Top());
@@ -197,6 +204,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 	m_aui_manager->GetPane(m_left).Show(objects_visible);
 	m_aui_manager->GetPane(m_options).Show(options_visible);
+	m_aui_manager->GetPane(m_input_canvas).Show(options_visible);
 	m_aui_manager->GetPane(m_properties).Show(properties_visible);
 	m_aui_manager->GetPane(m_toolBar).Show(toolbar_visible);
 	m_aui_manager->GetPane(m_solidBar).Show(solidbar_visible);
@@ -244,27 +252,40 @@ CHeeksFrame::~CHeeksFrame()
 {
 	wxGetApp().m_config->Write("FrameObjectsVisible", m_aui_manager->GetPane(m_left).IsShown());
 	wxGetApp().m_config->Write("FrameOptionsVisible", m_aui_manager->GetPane(m_options).IsShown());
+	wxGetApp().m_config->Write("FrameInputVisible", m_aui_manager->GetPane(m_input_canvas).IsShown());
 	wxGetApp().m_config->Write("FramePropertiesVisible", m_aui_manager->GetPane(m_properties).IsShown());
 	wxGetApp().m_config->Write("FrameToolBarVisible", m_aui_manager->GetPane(m_toolBar).IsShown());
 	wxGetApp().m_config->Write("FrameSolidBarVisible", m_aui_manager->GetPane(m_solidBar).IsShown());
 	wxGetApp().m_config->Write("FrameViewingBarVisible", m_aui_manager->GetPane(m_viewingBar).IsShown());
 	wxGetApp().m_config->Write("FrameStatusBarVisible", m_statusBar->IsShown());
+
+	// call the shared libraries function OnFrameDelete, so they can write profiel strings while aui manager still exists
+	for(std::list<wxDynamicLibrary*>::iterator It = wxGetApp().m_loaded_libraries.begin(); It != wxGetApp().m_loaded_libraries.end(); It++){
+		wxDynamicLibrary* shared_library = *It;
+		void(*OnFrameDelete)() = (void(*)())(shared_library->GetSymbol("OnFrameDelete"));
+		if(OnFrameDelete)(*OnFrameDelete)();
+	}
+
 	delete m_aui_manager;
 }
 
 bool CHeeksFrame::ShowFullScreen(bool show, long style){
 	static bool objects_visible = true;
 	static bool options_visible = true;
+	static bool input_visible = true;
 	static bool properties_visible = true;
 	static bool toolbar_visible = true;
 	static bool solidbar_visible = true;
 	static bool viewingbar_visible = true;
 	static bool statusbar_visible = true;
 
+	static std::map< wxWindow*, bool > windows_visible;
+
 	if(show){
 		SetMenuBar(NULL);
 		objects_visible = m_aui_manager->GetPane(m_left).IsShown();
 		options_visible = m_aui_manager->GetPane(m_options).IsShown();
+		input_visible = m_aui_manager->GetPane(m_input_canvas).IsShown();
 		properties_visible = m_aui_manager->GetPane(m_properties).IsShown();
 		toolbar_visible = m_aui_manager->GetPane(m_toolBar).IsShown();
 		solidbar_visible = m_aui_manager->GetPane(m_solidBar).IsShown();
@@ -277,16 +298,32 @@ bool CHeeksFrame::ShowFullScreen(bool show, long style){
 		m_aui_manager->GetPane(m_solidBar).Show(false);
 		m_aui_manager->GetPane(m_viewingBar).Show(false);
 		m_statusBar->Show(false);
+		for(std::list<wxWindow*>::iterator It = wxGetApp().m_hideable_windows.begin(); It != wxGetApp().m_hideable_windows.end(); It++)
+		{
+			wxWindow* w = *It;
+			windows_visible.insert(std::pair< wxWindow*, bool > (w, w->IsShown()));
+			m_aui_manager->GetPane(w).Show(false);
+		}
 	}
 	else{
 		SetMenuBar(m_menuBar);
 		m_aui_manager->GetPane(m_left).Show(objects_visible);
 		m_aui_manager->GetPane(m_options).Show(options_visible);
+		m_aui_manager->GetPane(m_input_canvas).Show(input_visible);
 		m_aui_manager->GetPane(m_properties).Show(properties_visible);
 		m_aui_manager->GetPane(m_toolBar).Show(toolbar_visible);
 		m_aui_manager->GetPane(m_solidBar).Show(solidbar_visible);
 		m_aui_manager->GetPane(m_viewingBar).Show(viewingbar_visible);
 		m_statusBar->Show(statusbar_visible);
+		for(std::list<wxWindow*>::iterator It = wxGetApp().m_hideable_windows.begin(); It != wxGetApp().m_hideable_windows.end(); It++)
+		{
+			wxWindow* w = *It;
+			std::map< wxWindow*, bool >::iterator FindIt = windows_visible.find(w);
+			if(FindIt != windows_visible.end()){
+				bool visible = FindIt->second;
+				m_aui_manager->GetPane(w).Show(visible);
+			}
+		}
 	}
 
 	bool res =  wxTopLevelWindow::ShowFullScreen(show, style);
@@ -333,6 +370,20 @@ void CHeeksFrame::OnViewOptions( wxCommandEvent& event )
 void CHeeksFrame::OnUpdateViewOptions( wxUpdateUIEvent& event )
 {
 	event.Check(m_aui_manager->GetPane(m_options).IsShown());
+}
+
+void CHeeksFrame::OnViewInput( wxCommandEvent& event )
+{
+	wxAuiPaneInfo& pane_info = m_aui_manager->GetPane(m_input_canvas);
+	if(pane_info.IsOk()){
+		pane_info.Show(event.IsChecked());
+		m_aui_manager->Update();
+	}
+}
+
+void CHeeksFrame::OnUpdateViewInput( wxUpdateUIEvent& event )
+{
+	event.Check(m_aui_manager->GetPane(m_input_canvas).IsShown());
 }
 
 void CHeeksFrame::OnViewToolBar( wxCommandEvent& event )
@@ -522,10 +573,21 @@ void CHeeksFrame::OnExternalButton( wxCommandEvent& event )
 {
 	int id = event.GetId();
 
-	std::map<int, void (*)(wxCommandEvent&) >::iterator FindIt = m_external_buttons.find(id);
+	std::map<int, SExternalButtonFunctions >::iterator FindIt = m_external_buttons.find(id);
 	if(FindIt != m_external_buttons.end()){
-		void (*onButtonFunction)(wxCommandEvent&) = FindIt->second;
-		(*(onButtonFunction))(event);
+		SExternalButtonFunctions& ebf = FindIt->second;
+		(*(ebf.on_button))(event);
+	}
+}
+
+void CHeeksFrame::OnUpdateExternalButton( wxUpdateUIEvent& event )
+{
+	int id = event.GetId();
+
+	std::map<int, SExternalButtonFunctions >::iterator FindIt = m_external_buttons.find(id);
+	if(FindIt != m_external_buttons.end()){
+		SExternalButtonFunctions& ebf = FindIt->second;
+		if(ebf.on_update_button)(*(ebf.on_update_button))(event);
 	}
 }
 
@@ -570,7 +632,7 @@ void CHeeksFrame::OnMove( wxMoveEvent& evt )
 	wxGetApp().m_config->Write("MainFramePosY", posy);
 }
 
-int CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&))
+int CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&))
 {
 	while(m_external_buttons.find(m_next_id_for_button) != m_external_buttons.end())
 	{
@@ -586,7 +648,34 @@ int CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, const wxString& title, wxBit
 
 	int id_to_use = m_next_id_for_button;
 	toolbar->AddTool(id_to_use, title, bitmap, caption);
-	m_external_buttons.insert(std::pair<int, void (*)(wxCommandEvent&) > ( id_to_use, onButtonFunction ));
+	SExternalButtonFunctions ebf;
+	ebf.on_button = onButtonFunction;
+	ebf.on_update_button = onUpdateButtonFunction;
+	m_external_buttons.insert(std::pair<int, SExternalButtonFunctions > ( id_to_use, ebf ));
+	m_next_id_for_button++;
+	return id_to_use;
+}
+
+int CHeeksFrame::AddMenuCheckItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&))
+{
+	while(m_external_buttons.find(m_next_id_for_button) != m_external_buttons.end())
+	{
+		// already used
+		m_next_id_for_button++;
+	}
+
+	if(m_next_id_for_button > ID_NEXT_ID + 1000)
+	{
+		// too many button IDs!
+		wxMessageBox("too many button IDs!, see CHeeksFrame::AddMenuCheckItem");
+	}
+
+	int id_to_use = m_next_id_for_button;
+	menu->AppendCheckItem(id_to_use, title);
+	SExternalButtonFunctions ebf;
+	ebf.on_button = onButtonFunction;
+	ebf.on_update_button = onUpdateButtonFunction;
+	m_external_buttons.insert(std::pair<int, SExternalButtonFunctions > ( id_to_use, ebf ));
 	m_next_id_for_button++;
 	return id_to_use;
 }

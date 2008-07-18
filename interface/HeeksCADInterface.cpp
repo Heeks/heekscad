@@ -10,8 +10,12 @@
 #include "HLine.h"
 #include "HArc.h"
 #include "ObjPropsCanvas.h"
+#include "OptionsCanvas.h"
+#include "InputModeCanvas.h"
 #include "GraphicsCanvas.h"
 #include "LineArcCollection.h"
+#include "DigitizeMode.h"
+#include "SelectMode.h"
 
 double CHeeksCADInterface::GetTolerance()
 {
@@ -23,9 +27,19 @@ void CHeeksCADInterface::RefreshProperties()
 	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
 }
 
-void CHeeksCADInterface::Repaint()
+void CHeeksCADInterface::RefreshOptions()
 {
-	wxGetApp().Repaint();
+	wxGetApp().m_frame->m_options->RefreshByRemovingAndAddingAll();
+}
+
+void CHeeksCADInterface::RefreshInput()
+{
+	wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
+}
+
+void CHeeksCADInterface::Repaint(bool soon)
+{
+	wxGetApp().Repaint(soon);
 }
 
 wxFrame* CHeeksCADInterface::GetMainFrame()
@@ -33,14 +47,29 @@ wxFrame* CHeeksCADInterface::GetMainFrame()
 	return wxGetApp().m_frame;
 }
 
+wxMenuBar* CHeeksCADInterface::GetMenuBar()
+{
+	return wxGetApp().m_frame->m_menuBar;
+}
+
+wxMenu* CHeeksCADInterface::GetViewMenu()
+{
+	return wxGetApp().m_frame->m_menuView;
+}
+
 wxAuiManager* CHeeksCADInterface::GetAuiManager()
 {
 	return wxGetApp().m_frame->m_aui_manager;
 }
 
-void CHeeksCADInterface::AddToolBarButton(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&))
+void CHeeksCADInterface::AddToolBarButton(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&))
 {
-	wxGetApp().m_frame->AddToolBarTool(toolbar, title, bitmap, caption, onButtonFunction);
+	wxGetApp().m_frame->AddToolBarTool(toolbar, title, bitmap, caption, onButtonFunction, onUpdateButtonFunction);
+}
+
+int CHeeksCADInterface::AddMenuCheckItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&))
+{
+	return wxGetApp().m_frame->AddMenuCheckItem(menu, title, onButtonFunction, onUpdateButtonFunction);
 }
 
 wxString CHeeksCADInterface::GetExeFolder()
@@ -130,6 +159,16 @@ void CHeeksCADInterface::ClearMarkedList()
 	wxGetApp().m_marked_list->Clear();
 }
 
+CInputMode* CHeeksCADInterface::GetSelectMode()
+{
+	return wxGetApp().m_select_mode;
+}
+
+void CHeeksCADInterface::SetInputMode(CInputMode* input_mode)
+{
+	wxGetApp().SetInputMode(input_mode);
+}
+
 void CHeeksCADInterface::WasModified(HeeksObj* object)
 {
 	wxGetApp().WasModified(object);
@@ -143,6 +182,20 @@ void CHeeksCADInterface::WasAdded(HeeksObj* object)
 int CHeeksCADInterface::PickObjects(const char* str)
 {
 	return wxGetApp().PickObjects(str);
+}
+
+bool CHeeksCADInterface::PickPosition(const char* str, double* pos)
+{
+	return wxGetApp().PickPosition(str, pos);
+}
+
+bool CHeeksCADInterface::Digitize(const wxPoint &point, double* pos)
+{
+	if(wxGetApp().m_digitizing->digitize(point) == DigitizeNoItemType)
+		return false;
+
+	extract(wxGetApp().m_digitizing->position_found, pos);
+	return true;
 }
 
 HeeksObj* CHeeksCADInterface::GetFirstObject()
@@ -219,4 +272,9 @@ bool CHeeksCADInterface::TangentialArc(const double* p0, const double* v0, const
 		extract(axis, a);
 	}
 	return arc_found;
+}
+
+void CHeeksCADInterface::RegisterHideableWindow(wxWindow* w)
+{
+	wxGetApp().RegisterHideableWindow(w);
 }
