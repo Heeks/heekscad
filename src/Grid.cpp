@@ -224,14 +224,12 @@ static void RenderGrid(const CViewPoint *view_point, int plane)
 			gp_Vec v_gc1 = v_bg + unit_contrast * l1;
 			gp_Vec v_gc2 = v_bg + unit_contrast * l2;
 			gp_Vec v_gc3 = v_bg + unit_contrast * l3;
-			glEnable(GL_DEPTH_TEST);
 			glColor3ub((unsigned char)(v_gc3.X()), (unsigned char)(v_gc3.Y()), (unsigned char)(v_gc3.Z()));
 			RenderGrid(view_point, 200, false, true, NULL, NULL, 0, plane);
 			glColor3ub((unsigned char)(v_gc2.X()), (unsigned char)(v_gc2.Y()), (unsigned char)(v_gc2.Z()));
 			RenderGrid(view_point, 20, true, false, NULL, NULL, 0, plane);
 			glColor3ub((unsigned char)(v_gc1.X()), (unsigned char)(v_gc1.Y()), (unsigned char)(v_gc1.Z()));
 			RenderGrid(view_point, 20, false, false, NULL, NULL, 0, plane);
-			glDisable(GL_DEPTH_TEST);
 		}
 		break;
 
@@ -246,12 +244,10 @@ static void RenderGrid(const CViewPoint *view_point, int plane)
 				glEnable(GL_BLEND);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			}
-			glEnable(GL_DEPTH_TEST);
 			RenderGrid(view_point, 200, false, true, &bg, &cc, light_color ? 40:10, plane);
 			RenderGrid(view_point, 20, true, false, &bg, &cc, light_color ? 80:20, plane);
 			RenderGrid(view_point, 20, false, false, &bg, &cc, light_color ? 120:30, plane);
 			if(!wxGetApp().m_antialiasing)glDisable(GL_BLEND);
-			glDisable(GL_DEPTH_TEST);
 		}
 		break;
 	}
