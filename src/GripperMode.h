@@ -32,5 +32,5 @@ public:
 
 	void GetProfileStrings();
 	void WriteProfileStrings();
-	void GetProperties(std::list<Property *> *list);
+	void GetOptions(std::list<Property *> *list);
 };

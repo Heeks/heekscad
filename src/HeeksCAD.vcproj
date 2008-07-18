@@ -430,6 +430,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\InputModeCanvas.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\InputModeCanvas.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Interface.cpp"
 			>
 		</File>

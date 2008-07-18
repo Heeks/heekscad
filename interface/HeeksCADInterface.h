@@ -8,6 +8,8 @@ class HeeksObj;
 class wxFrame;
 class wxAuiManager;
 class Observer;
+class wxPoint;
+class CInputMode;
 
 class CHeeksCADInterface{
 public:
@@ -16,10 +18,15 @@ public:
 
 	virtual double GetTolerance();
 	virtual void RefreshProperties();
-	virtual void Repaint();
+	virtual void RefreshOptions();
+	virtual void RefreshInput();
+	virtual void Repaint(bool soon = false);
 	virtual wxFrame* GetMainFrame();
+	virtual wxMenuBar* GetMenuBar();
+	virtual wxMenu* GetViewMenu();
 	virtual wxAuiManager* GetAuiManager();
-	virtual void AddToolBarButton(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&));
+	virtual void AddToolBarButton(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
+	virtual int AddMenuCheckItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
 	virtual wxString GetExeFolder();
 	virtual void AddUndoably(HeeksObj* object, HeeksObj* owner);
 	virtual HeeksObj* GetMainObject();
@@ -34,9 +41,13 @@ public:
 	virtual void Mark(HeeksObj* object);
 	virtual bool ObjectMarked(HeeksObj* object);
 	virtual void ClearMarkedList();
+	virtual CInputMode* GetSelectMode();
+	virtual void SetInputMode(CInputMode* input_mode);
 	virtual void WasModified(HeeksObj* object);
 	virtual void WasAdded(HeeksObj* object);
 	virtual int PickObjects(const char* str);
+	virtual bool PickPosition(const char* str, double* pos);
+	virtual bool Digitize(const wxPoint &point, double* pos);
 	virtual HeeksObj* GetFirstObject();
 	virtual HeeksObj* GetNextObject();
 	virtual void DrawObjectsOnFront(const std::list<HeeksObj*> &list);
@@ -49,4 +60,5 @@ public:
 	virtual void RegisterObserver(Observer* observer);
 	virtual void RemoveObserver(Observer* observer);
 	virtual bool TangentialArc(const double* p0, const double* v0, const double* p1, double *c, double *a); // given p0, v0, p1, returns true if an arc found and sets c and a ( centre and axis direction ), false for a straight line
+	virtual void RegisterHideableWindow(wxWindow* w);
 };

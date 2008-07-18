@@ -352,18 +352,17 @@ void CSelectMode::GetProperties(std::list<Property *> *list){
 		// set the title for picking some objects
 		list->push_back(new PropertyString("Picking......", m_prompt_when_doing_a_main_loop.c_str()));
 	}
+}
 
-	wxGetApp().gripper_mode->GetProperties(list);
-	GetSharedProperties(list);
+void CSelectMode::GetOptions(std::list<Property *> *list){
+	wxGetApp().gripper_mode->GetOptions(list);
 
 	if(!m_doing_a_main_loop)
 	{
 		// let the user change the digitizing options, if not picking some objects
-		wxGetApp().m_digitizing->GetSharedProperties(list);
+		wxGetApp().m_digitizing->GetOptions(list);
 	}
-}
 
-void CSelectMode::GetSharedProperties(std::list<Property *> *list){
 	PropertyList* plist = new PropertyList("view options");
 
 	std::list< std::string > choices;

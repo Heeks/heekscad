@@ -84,7 +84,7 @@ void choice_callback(int choice){
 	wxGetApp().Repaint();
 }
 
-void GripperMode::GetProperties(std::list<Property *> *list){
+void GripperMode::GetOptions(std::list<Property *> *list){
 	std::list< std::string > choices;
 	choices.push_back(std::string("Translate"));
 	choices.push_back(std::string("StretchMode"));

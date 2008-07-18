@@ -2,21 +2,14 @@
 
 #pragma once
 
-#include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"
-#include "../interface/InputMode.h"
 #include "../interface/ObjList.h"
 
-class CLeftCanvas;
-class CGraphicsCanvas;
-class CPropertiesCanvas;
-class COptionsCanvas;
 class Tool;
 class MagDragWindow;
 class CInputMode;
 class CSelectMode;
 class DigitizeMode;
-class Window;
 class MarkedList;
 class GripperMode;
 class HeeksObj;
@@ -72,6 +65,7 @@ public:
 	int m_hide_marked_list_stack;
 	double m_geom_tol;
 	std::list<wxDynamicLibrary*> m_loaded_libraries;
+	std::list<wxWindow*> m_hideable_windows;
 
 	// HeeksObj's virtual functions
 	void glCommands(bool select, bool marked, bool no_color);
@@ -118,7 +112,7 @@ public:
 	void WereRemoved(const std::list<HeeksObj*>& list);
 	void SetDrawMatrix(const gp_Trsf& mat);
 	gp_Trsf GetDrawMatrix(bool get_the_appropriate_orthogonal);
-	void GetProperties(std::list<Property *> *list);
+	void GetOptions(std::list<Property *> *list);
 	void DeleteMarkedItems();
 	void AddUndoably(HeeksObj *object, HeeksObj* owner, HeeksObj* prev_object);
 	void AddUndoably(const std::list<HeeksObj*>& list, HeeksObj* owner);
@@ -136,8 +130,10 @@ public:
 	void get_2d_arc_segments(double xs, double ys, double xe, double ye, double xc, double yc, bool dir, bool want_start, double pixels_per_mm, void(*callbackfunc)(const double* xy));
 	void PassMouseWheelToGraphics(wxMouseEvent& event);
 	int PickObjects(const char* str);
+	bool PickPosition(const char* str, double* pos);
 	void glSphere(double radius, const double* pos = NULL);
 	void OnNewOrOpen();
+	void RegisterHideableWindow(wxWindow* w);
 };
 
 DECLARE_APP(HeeksCADapp)
