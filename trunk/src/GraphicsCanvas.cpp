@@ -42,8 +42,6 @@ void CGraphicsCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 	glDrawBuffer(GL_BACK);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-	CViewPoint* save_view_point = NULL;
-
 	if(wxGetApp().m_antialiasing)
 	{
 		glEnable(GL_LINE_SMOOTH);

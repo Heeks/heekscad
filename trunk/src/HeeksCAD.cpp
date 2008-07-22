@@ -23,7 +23,6 @@
 #include "LeftCanvas.h"
 #include "SelectMode.h"
 #include "MagDragWindow.h"
-#include "Window.h"
 #include "DigitizeMode.h"
 #include "GripperMode.h"
 #include "ConversionTools.h"
@@ -113,6 +112,8 @@ bool HeeksCADapp::OnInit()
 	m_config->Read("MainFrameHeight", &height);
 	m_config->Read("MainFramePosX", &posx);
 	m_config->Read("MainFramePosY", &posy);
+	if(posx < 0)posx = 0;
+	if(posy < 0)posy = 0;
 	m_config->Read("DrawEnd", &digitize_end, true);
 	m_config->Read("DrawInters", &digitize_inters, false);
 	m_config->Read("DrawCentre", &digitize_centre, false);
@@ -704,6 +705,12 @@ void on_grid_edit(double grid_value)
 	wxGetApp().Repaint();
 }
 
+void on_set_geom_tol(double value)
+{
+	wxGetApp().m_geom_tol = value;
+	wxGetApp().Repaint();
+}
+
 static std::list<Property *> *list_for_GetOptions = NULL;
 
 static void AddPropertyCallBack(Property* p)
@@ -724,6 +731,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	}
 	list->push_back(new PropertyDouble("grid size", digitizing_grid, on_grid_edit));
 	list->push_back(new PropertyCheck("grid", draw_to_grid, on_grid));
+	list->push_back(new PropertyDouble("geometry tolerance", m_geom_tol, on_set_geom_tol));
 	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
 		wxDynamicLibrary* shared_library = *It;
 		list_for_GetOptions = list;

@@ -86,6 +86,7 @@ void CPropertiesCanvas::Append(wxPGProperty* parent_prop, wxPGProperty* new_prop
 		m_pg->Append(new_prop);
 		pset.insert(property);
 	}
+
 	pmap.insert(std::pair<wxPGProperty*, Property*>( new_prop, property));
 }
 
@@ -97,6 +98,7 @@ void CPropertiesCanvas::AddProperty(Property* p, wxPGProperty* parent_prop)
 			wxPGProperty *new_prop = wxStringProperty(p->GetShortString(),wxPG_LABEL, ((PropertyString*)p)->m_initial_value);
 			if(!p->property_editable())new_prop->SetFlag(wxPG_PROP_READONLY);
 			Append( parent_prop, new_prop, p);
+			if(p->m_highlighted)m_pg->SetPropertyBackgroundColour(new_prop->GetId(), wxColour(RGB(71, 141, 248)));
 		}
 		break;
 	case DoublePropertyType:

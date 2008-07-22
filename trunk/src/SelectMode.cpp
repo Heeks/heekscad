@@ -22,12 +22,20 @@ CSelectMode::CSelectMode(){
 	control_key_initially_pressed = false;
 	window_box_exists = false;
 	m_doing_a_main_loop = false;
-	m_right_up_with_left_down_done = false;
-	m_left_up_with_right_down_done = false;
 }
 
 void CSelectMode::OnMouse( wxMouseEvent& event )
 {
+	bool event_used = false;
+	if(LeftAndRightPressed(event, event_used))
+	{
+		if(m_doing_a_main_loop){
+			wxGetApp().ExitMainLoop();
+		}
+	}
+
+	if(event_used)return;
+
 	if(event.LeftDown())
 	{
 		button_down_point = wxPoint(event.GetX(), event.GetY());
@@ -81,149 +89,125 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 
 	if(event.LeftUp())
 	{
-		if(m_right_up_with_left_down_done){
-			if(m_doing_a_main_loop){
-				// end main loop, if left and right were pressed together
-				m_right_up_with_left_down_done = false;
-				wxGetApp().ExitMainLoop();
-			}
+		if(wxGetApp().drag_gripper)
+		{
+			double to[3], from[3];
+			to[0] = wxGetApp().grip_to.X();
+			to[1] = wxGetApp().grip_to.Y();
+			to[2] = wxGetApp().grip_to.Z();
+			from[0] = wxGetApp().grip_from.X();
+			from[1] = wxGetApp().grip_from.Y();
+			from[2] = wxGetApp().grip_from.Z();
+			wxGetApp().drag_gripper->OnGripperReleased(from, to);
+			wxGetApp().m_digitizing->SetOnlyCoords(wxGetApp().drag_gripper, false);
+			wxGetApp().drag_gripper = NULL;
 		}
-		else if(event.RightIsDown()){
-			m_left_up_with_right_down_done = true;
+		else if(window_box_exists)
+		{
+			if(window_box.width > 0){
+				// only select objects which are completely within the window
+				MarkedObjectManyOfSame marked_object;
+				wxGetApp().m_marked_list->ObjectsInWindow(window_box, &marked_object, false);
+				std::set<HeeksObj*> obj_set;
+				for(HeeksObj* object = marked_object.GetFirstOfTopOnly(); object; object = marked_object.Increment())if(object->GetType() != GripperType)
+					obj_set.insert(object);
+
+				int bottom = window_box.y;
+				int top = window_box.y + window_box.height;
+				int height = abs(window_box.height);
+				if(top < bottom)
+				{
+					int temp = bottom;
+					bottom = top;
+					top = temp;
+				}
+
+				wxRect strip_boxes[4];
+				// top
+				strip_boxes[0] = wxRect(window_box.x - 1, top, window_box.width + 2, 1);
+				// bottom
+				strip_boxes[1] = wxRect(window_box.x - 1, bottom - 1, window_box.width + 2, 1);
+				// left
+				strip_boxes[2] = wxRect(window_box.x - 1, bottom, 1, height);
+				// right
+				strip_boxes[3] = wxRect(window_box.x + window_box.width, bottom, 1, height);
+
+				for(int i = 0; i<4; i++)
+				{
+					MarkedObjectManyOfSame marked_object2;
+					wxGetApp().m_marked_list->ObjectsInWindow(strip_boxes[i], &marked_object2, false);
+					for(HeeksObj* object = marked_object2.GetFirstOfTopOnly(); object; object = marked_object2.Increment())if(object->GetType() != GripperType)
+						obj_set.erase(object);
+				}
+
+				std::list<HeeksObj*> obj_list;
+				for(std::set<HeeksObj*>::iterator It = obj_set.begin(); It != obj_set.end(); It++)obj_list.push_back(*It);
+				wxGetApp().m_marked_list->Add(obj_list);
+			}
+			else{
+				// select all the objects in the window, even if only partly in the window
+				MarkedObjectManyOfSame marked_object;
+				wxGetApp().m_marked_list->ObjectsInWindow(window_box, &marked_object, false);
+				std::list<HeeksObj*> obj_list;
+				for(HeeksObj* object = marked_object.GetFirstOfTopOnly(); object; object = marked_object.Increment())if(object->GetType() != GripperType)
+					obj_list.push_back(object);
+				wxGetApp().m_marked_list->Add(obj_list);
+			}
+			wxGetApp().m_frame->m_graphics->DrawWindow(window_box, true); // undraw the window
+			window_box_exists = false;
 		}
-		else{
-			if(wxGetApp().drag_gripper)
-			{
-				double to[3], from[3];
-				to[0] = wxGetApp().grip_to.X();
-				to[1] = wxGetApp().grip_to.Y();
-				to[2] = wxGetApp().grip_to.Z();
-				from[0] = wxGetApp().grip_from.X();
-				from[1] = wxGetApp().grip_from.Y();
-				from[2] = wxGetApp().grip_from.Z();
-				wxGetApp().drag_gripper->OnGripperReleased(from, to);
-				wxGetApp().m_digitizing->SetOnlyCoords(wxGetApp().drag_gripper, false);
-				wxGetApp().drag_gripper = NULL;
-			}
-			else if(window_box_exists)
-			{
-				if(window_box.width > 0){
-					// only select objects which are completely within the window
-					MarkedObjectManyOfSame marked_object;
-					wxGetApp().m_marked_list->ObjectsInWindow(window_box, &marked_object, false);
-					std::set<HeeksObj*> obj_set;
-					for(HeeksObj* object = marked_object.GetFirstOfTopOnly(); object; object = marked_object.Increment())if(object->GetType() != GripperType)
-						obj_set.insert(object);
-
-					int bottom = window_box.y;
-					int top = window_box.y + window_box.height;
-					int height = abs(window_box.height);
-					if(top < bottom)
-					{
-						int temp = bottom;
-						bottom = top;
-						top = temp;
-					}
-
-					wxRect strip_boxes[4];
-					// top
-					strip_boxes[0] = wxRect(window_box.x - 1, top, window_box.width + 2, 1);
-					// bottom
-					strip_boxes[1] = wxRect(window_box.x - 1, bottom - 1, window_box.width + 2, 1);
-					// left
-					strip_boxes[2] = wxRect(window_box.x - 1, bottom, 1, height);
-					// right
-					strip_boxes[3] = wxRect(window_box.x + window_box.width, bottom, 1, height);
-
-					for(int i = 0; i<4; i++)
-					{
-						MarkedObjectManyOfSame marked_object2;
-						wxGetApp().m_marked_list->ObjectsInWindow(strip_boxes[i], &marked_object2, false);
-						for(HeeksObj* object = marked_object2.GetFirstOfTopOnly(); object; object = marked_object2.Increment())if(object->GetType() != GripperType)
-							obj_set.erase(object);
-					}
-
-					std::list<HeeksObj*> obj_list;
-					for(std::set<HeeksObj*>::iterator It = obj_set.begin(); It != obj_set.end(); It++)obj_list.push_back(*It);
-					wxGetApp().m_marked_list->Add(obj_list);
+		else
+		{
+			// select one object
+			MarkedObjectOneOfEach marked_object;
+			wxGetApp().FindMarkedObject(wxPoint(event.GetX(), event.GetY()), &marked_object);
+			if(marked_object.m_map.size()>0){
+				HeeksObj* previously_marked = NULL;
+				if(wxGetApp().m_marked_list->size() == 1)
+				{
+					previously_marked = *(wxGetApp().m_marked_list->list().begin());
 				}
-				else{
-					// select all the objects in the window, even if only partly in the window
-					MarkedObjectManyOfSame marked_object;
-					wxGetApp().m_marked_list->ObjectsInWindow(window_box, &marked_object, false);
-					std::list<HeeksObj*> obj_list;
-					for(HeeksObj* object = marked_object.GetFirstOfTopOnly(); object; object = marked_object.Increment())if(object->GetType() != GripperType)
-						obj_list.push_back(object);
-					wxGetApp().m_marked_list->Add(obj_list);
+				HeeksObj* o = marked_object.GetFirstOfOneFromLevel();
+				HeeksObj* object = o;
+				while(o)
+				{
+					if(o == previously_marked)
+					{
+						object = o;
+						break;
+					}
+					o = marked_object.Increment();
 				}
-				wxGetApp().m_frame->m_graphics->DrawWindow(window_box, true); // undraw the window
-				window_box_exists = false;
-			}
-			else
-			{
-				// select one object
-				MarkedObjectOneOfEach marked_object;
-				wxGetApp().FindMarkedObject(wxPoint(event.GetX(), event.GetY()), &marked_object);
-				if(marked_object.m_map.size()>0){
-					HeeksObj* previously_marked = NULL;
-					if(wxGetApp().m_marked_list->size() == 1)
-					{
-						previously_marked = *(wxGetApp().m_marked_list->list().begin());
-					}
-					HeeksObj* o = marked_object.GetFirstOfOneFromLevel();
-					HeeksObj* object = o;
-					while(o)
-					{
-						if(o == previously_marked)
-						{
-							object = o;
-							break;
-						}
-						o = marked_object.Increment();
-					}
-					if(!event.ShiftDown() && !event.ControlDown())
-					{
-						wxGetApp().m_marked_list->Clear();
-					}
-					if(wxGetApp().m_marked_list->ObjectMarked(object))
-					{
-						wxGetApp().m_marked_list->Remove(object);
-					}
-					else
-					{
-						wxGetApp().m_marked_list->Add(object);
-						gp_Lin ray = wxGetApp().m_frame->m_graphics->m_view_point.SightLine(wxPoint(event.GetX(), event.GetY()));
-						double ray_start[3], ray_direction[3];
-						extract(ray.Location(), ray_start);
-						extract(ray.Direction(), ray_direction);
-						object->SetClickMarkPoint(&marked_object, ray_start, ray_direction);
-					}
-				}
-				else
+				if(!event.ShiftDown() && !event.ControlDown())
 				{
 					wxGetApp().m_marked_list->Clear();
 				}
+				if(wxGetApp().m_marked_list->ObjectMarked(object))
+				{
+					wxGetApp().m_marked_list->Remove(object);
+				}
+				else
+				{
+					wxGetApp().m_marked_list->Add(object);
+					gp_Lin ray = wxGetApp().m_frame->m_graphics->m_view_point.SightLine(wxPoint(event.GetX(), event.GetY()));
+					double ray_start[3], ray_direction[3];
+					extract(ray.Location(), ray_start);
+					extract(ray.Direction(), ray_direction);
+					object->SetClickMarkPoint(&marked_object, ray_start, ray_direction);
+				}
 			}
-			wxGetApp().Repaint();
+			else
+			{
+				wxGetApp().m_marked_list->Clear();
+			}
 		}
+		wxGetApp().Repaint();
 	}
 	else if(event.RightUp())
 	{
-		if(m_left_up_with_right_down_done){
-			if(m_doing_a_main_loop){
-				// end main loop, if left and right were pressed together
-				m_right_up_with_left_down_done = false;
-				wxGetApp().ExitMainLoop();
-			}
-		}
-		else if(event.LeftIsDown()){
-			m_right_up_with_left_down_done = true;
-		}
-		else{
-			MarkedObjectOneOfEach marked_object;
-			wxGetApp().FindMarkedObject(wxPoint(event.GetX(), event.GetY()), &marked_object);
-			wxGetApp().DoDropDownMenu(wxGetApp().m_frame->m_graphics, wxPoint(event.GetX(), event.GetY()), &marked_object, false, true, event.ControlDown());
-		}
+		MarkedObjectOneOfEach marked_object;
+		wxGetApp().FindMarkedObject(wxPoint(event.GetX(), event.GetY()), &marked_object);
+		wxGetApp().DoDropDownMenu(wxGetApp().m_frame->m_graphics, wxPoint(event.GetX(), event.GetY()), &marked_object, false, true, event.ControlDown());
 	}
 	else if(event.Dragging())
 	{
@@ -347,11 +331,6 @@ void on_set_reverse_mouse_wheel(bool value)
 }
 
 void CSelectMode::GetProperties(std::list<Property *> *list){
-	if(m_doing_a_main_loop)
-	{
-		// set the title for picking some objects
-		list->push_back(new PropertyString("Picking......", m_prompt_when_doing_a_main_loop.c_str()));
-	}
 }
 
 void CSelectMode::GetOptions(std::list<Property *> *list){

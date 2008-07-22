@@ -4,6 +4,7 @@ class CInputModeCanvas: public CPropertiesCanvas
 {
 private:
 	wxToolBar *m_toolBar;
+	std::list<Tool*> m_previous_tools; // to decide whether to remove and reshow toolbar
 
 public:
     CInputModeCanvas(wxWindow* parent);

@@ -14,6 +14,34 @@
 #include "InputModeCanvas.h"
 #include "SelectMode.h"
 
+class CSphereApply:public Tool{
+private:
+	static wxBitmap* m_bitmap;
+
+public:
+	void Run(){
+		// add a sphere with using m_pos, m_r
+		TopoDS_Solid solid = BRepPrimAPI_MakeSphere(gp_Pnt(sphere_creator.m_pos[0], sphere_creator.m_pos[1], sphere_creator.m_pos[2]), sphere_creator.m_r);
+		wxGetApp().AddUndoably(new CSolid(solid, "Sphere"), NULL, NULL);
+		wxGetApp().SetInputMode(wxGetApp().m_select_mode);
+		wxGetApp().Repaint();
+	}
+	const char* GetTitle(){return "Apply";}
+	wxBitmap* Bitmap()
+	{
+		if(m_bitmap == NULL)
+		{
+			wxString exe_folder = wxGetApp().GetExeFolder();
+			m_bitmap = new wxBitmap(exe_folder + "/bitmaps/apply.png", wxBITMAP_TYPE_PNG);
+		}
+		return m_bitmap;
+	}
+	const char* GetToolTip(){return "Create Sphere, and finish";}
+};
+wxBitmap* CSphereApply::m_bitmap = NULL;
+
+CSphereApply sphere_apply;
+
 CSphereCreate sphere_creator;
 
 CSphereCreate::CSphereCreate()
@@ -55,6 +83,14 @@ void CSphereCreate::SetPositionOrRadius(const wxPoint& point)
 
 void CSphereCreate::OnMouse( wxMouseEvent& event )
 {
+	bool event_used = false;
+	if(LeftAndRightPressed(event, event_used))
+	{
+		sphere_apply.Run();
+	}
+
+	if(event_used)return;
+
 	if(event.MiddleIsDown() || event.GetWheelRotation() != 0)
 	{
 		wxGetApp().m_select_mode->OnMouse(event);
@@ -129,11 +165,11 @@ static void set_mode(int value){sphere_creator.m_mode = value; wxGetApp().m_fram
 
 void CSphereCreate::GetProperties(std::list<Property *> *list)
 {
-	list->push_back(new PropertyString("Create a sphere......", "press 'r' for radius"));
 	std::list< std::string > choices;
 	choices.push_back(std::string("choose position"));
 	choices.push_back(std::string("choose radius"));
 	list->push_back(new PropertyChoice("drag mode", choices, m_mode, set_mode));
+	list->push_back(new PropertyString("(press 'r' for radius)", ""));
 
 	// add x, y, z and radius for the "create" button
 	list->push_back(new PropertyDouble("X", m_pos[0], set_x));
@@ -141,32 +177,6 @@ void CSphereCreate::GetProperties(std::list<Property *> *list)
 	list->push_back(new PropertyDouble("Z", m_pos[2], set_z));
 	list->push_back(new PropertyDouble("radius", m_r, set_r));
 }
-
-class CSphereApply:public Tool{
-private:
-	static wxBitmap* m_bitmap;
-
-public:
-	void Run(){
-		// add a sphere with using m_pos, m_r
-		TopoDS_Solid solid = BRepPrimAPI_MakeSphere(gp_Pnt(sphere_creator.m_pos[0], sphere_creator.m_pos[1], sphere_creator.m_pos[2]), sphere_creator.m_r);
-		wxGetApp().AddUndoably(new CSolid(solid, "Sphere"), NULL, NULL);
-		wxGetApp().SetInputMode(wxGetApp().m_select_mode);
-		wxGetApp().Repaint();
-	}
-	const char* GetTitle(){return "Apply";}
-	wxBitmap* Bitmap()
-	{
-		if(m_bitmap == NULL)
-		{
-			wxString exe_folder = wxGetApp().GetExeFolder();
-			m_bitmap = new wxBitmap(exe_folder + "/bitmaps/apply.png", wxBITMAP_TYPE_PNG);
-		}
-		return m_bitmap;
-	}
-	const char* GetToolTip(){return "Create Sphere, and finish";}
-};
-wxBitmap* CSphereApply::m_bitmap = NULL;
 
 class CSphereCancel:public Tool{
 private:
@@ -192,9 +202,11 @@ public:
 };
 wxBitmap* CSphereCancel::m_bitmap = NULL;
 
+CSphereCancel sphere_cancel;
+
 void CSphereCreate::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	// add a do it now button
-	t_list->push_back(new CSphereApply);
-	t_list->push_back(new CSphereCancel);
+	t_list->push_back(&sphere_apply);
+	t_list->push_back(&sphere_cancel);
 }
