@@ -14,6 +14,7 @@ public:
 	Window();
 
 	// virtual functions from InputMode
+	const char* GetTitle(){return "Dragging a window";}
 	void OnMouse( wxMouseEvent& event );
 
 	void reset(void);

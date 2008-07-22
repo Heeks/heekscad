@@ -77,14 +77,7 @@ void ConvertLineArcsToWire::Run(){
 			case ArcType:
 				{
 					HArc* arc = (HArc*)object;
-					if(arc->m_dir){
-						edges.push_back(BRepBuilderAPI_MakeEdge(arc->m_circle, arc->A, arc->B));
-					}
-					else{
-						gp_Circ circle = arc->m_circle;
-						circle.SetAxis( circle.Axis().Reversed());
-						edges.push_back(BRepBuilderAPI_MakeEdge(circle, arc->A, arc->B));
-					}
+					edges.push_back(BRepBuilderAPI_MakeEdge(arc->m_circle, arc->A, arc->B));
 				}
 				break;
 		}
@@ -153,14 +146,7 @@ void ConvertLineArcsToFace::Run(){
 			case ArcType:
 				{
 					HArc* arc = (HArc*)object;
-					if(arc->m_dir){
-						edges.push_back(BRepBuilderAPI_MakeEdge(arc->m_circle, arc->A, arc->B));
-					}
-					else{
-						gp_Circ circle = arc->m_circle;
-						circle.SetAxis( circle.Axis().Reversed());
-						edges.push_back(BRepBuilderAPI_MakeEdge(circle, arc->A, arc->B));
-					}
+					edges.push_back(BRepBuilderAPI_MakeEdge(arc->m_circle, arc->A, arc->B));
 				}
 				break;
 		}

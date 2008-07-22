@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../interface/InputMode.h"
+#include "../interface/LeftAndRight.h"
 
 class HeeksObj;
 
@@ -18,14 +19,12 @@ public:
 	}
 };
 
-class Drawing: public CInputMode{
+class Drawing: public CInputMode, CLeftAndRight{
 protected:
 	std::map<int, ViewSpecific*> view_map;
 	ViewSpecific *current_view_stuff;
 	ViewSpecific *null_view;
 	wxPoint button_down_point;
-	bool m_right_up_with_left_down_done;
-	bool m_left_up_with_right_down_done;
 
 	// Drawing's virtual functions
 	virtual void set_digitize_plane(){}

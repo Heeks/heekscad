@@ -8,6 +8,7 @@
 #include "HLine.h"
 #include "HArc.h"
 #include "../interface/PropertyChoice.h"
+#include "../interface/PropertyString.h"
 #include "SelectMode.h"
 #include "DigitizeMode.h"
 #include "HeeksFrame.h"
@@ -41,7 +42,6 @@ void LineArcDrawing::set_previous_direction(){
 		gp_Vec circlev(((HArc*)temp_object)->m_circle.Axis().Direction());
 		gp_Vec endv(((HArc*)temp_object)->m_circle.Location(), ((HArc*)temp_object)->B);
 		m_previous_direction = (circlev ^ endv).Normalized();
-		if(!(((HArc*)temp_object)->m_dir))m_previous_direction = m_previous_direction * -1;
 	}
 }
 
@@ -184,6 +184,7 @@ void LineArcDrawing::GetProperties(std::list<Property *> *list){
 	choices.push_back ( std::string ( "draw tangential arcs" ) );
 	line_drawing_for_GetProperties = this;
 	list->push_back ( new PropertyChoice ( "drawing mode",  choices, drawing_mode, on_set_drawing_mode ) );
+	list->push_back(new PropertyString("(press 'a' for arcs)", ""));
 }
 
 void LineArcDrawing::GetOptions(std::list<Property *> *list){

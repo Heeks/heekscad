@@ -6,7 +6,6 @@
 #include "../interface/MarkedObject.h"
 #include "DigitizeMode.h"
 #include "SelectMode.h"
-#include "Window.h"
 #include "PointOrWindow.h"
 #include "GripperSelTransform.h"
 #include "GripperMode.h"
@@ -118,7 +117,7 @@ void MarkedList::ObjectsInWindow( wxRect window, MarkedObject* marked_object, bo
 	GLuint *data = (GLuint *)malloc( buffer_length * sizeof(GLuint) );
 	if(data == NULL)return;
 	int i, j;
-	int half_window_width;
+	int half_window_width = 0;
 	wxPoint window_centre;
 	if(single_picking){
 		half_window_width = (window.width)/2;

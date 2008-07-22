@@ -15,8 +15,6 @@
 Drawing::Drawing(void){
 	null_view = new ViewSpecific(0);
 	SetView(0);
-	m_right_up_with_left_down_done = false;
-	m_left_up_with_right_down_done = false;
 }
 
 Drawing::~Drawing(void){
@@ -44,24 +42,23 @@ void Drawing::RecalculateAndRedraw(const wxPoint& point)
 
 void Drawing::OnMouse( wxMouseEvent& event )
 {
-	if(event.ShiftDown()){
-		// do everything same as select mode
-		wxGetApp().m_select_mode->OnMouse( event );
+	bool event_used = false;
+
+	if(LeftAndRightPressed(event, event_used))
+	{
+		wxGetApp().SetInputMode(wxGetApp().m_select_mode);
 	}
-	else{
-		if(event.LeftDown()){
-			button_down_point = wxPoint(event.GetX(), event.GetY());
+
+	if(!event_used){
+		if(event.ShiftDown()){
+			// do everything same as select mode
+			wxGetApp().m_select_mode->OnMouse( event );
 		}
-		else if(event.LeftUp()){
-			if(m_right_up_with_left_down_done){
-				// end drawing, if left and right were pressed together
-				m_right_up_with_left_down_done = false;
-				wxGetApp().SetInputMode(wxGetApp().m_select_mode);
+		else{
+			if(event.LeftDown()){
+				button_down_point = wxPoint(event.GetX(), event.GetY());
 			}
-			else if(event.RightIsDown()){
-				m_left_up_with_right_down_done = true;
-			}
-			else{
+			else if(event.LeftUp()){
 				set_digitize_plane();
 				DigitizeType type_found = wxGetApp().m_digitizing->digitize(button_down_point);
 				wxGetApp().StartHistory(get_drawing_title());
@@ -87,23 +84,13 @@ void Drawing::OnMouse( wxMouseEvent& event )
 				SetDrawStepUndoable(next_step);
 				wxGetApp().EndHistory();
 			}
-		}
-		else if(event.RightUp()){
-			if(m_left_up_with_right_down_done){
-				// end drawing, if left and right were pressed together
-				m_left_up_with_right_down_done = false;
-				wxGetApp().SetInputMode(wxGetApp().m_select_mode);
-			}
-			else if(event.LeftIsDown()){
-				m_right_up_with_left_down_done = true;
-			}
-			else{
+			else if(event.RightUp()){
 				// do context menu same as select mode
 				wxGetApp().m_select_mode->OnMouse(event);
 			}
-		}
-		else if(event.Moving()){
-			RecalculateAndRedraw(wxPoint(event.GetX(), event.GetY()));
+			else if(event.Moving()){
+				RecalculateAndRedraw(wxPoint(event.GetX(), event.GetY()));
+			}
 		}
 	}
 }
@@ -135,19 +122,11 @@ static std::string global_string;
 
 class EndDrawing:public Tool{
 private:
-	Drawing *drawing;
 	static wxBitmap* m_bitmap;
 
 public:
-	EndDrawing(Drawing* d){drawing = d;}
-
 	void Run(){wxGetApp().SetInputMode(wxGetApp().m_select_mode);}
-	const char* GetTitle(){
-		char str[1024];
-		sprintf(str, "Stop %s", drawing->get_drawing_title());
-		global_string.assign(str);
-		return global_string.c_str();
-	}
+	const char* GetTitle(){return "Stop drawing";}
 	wxBitmap* Bitmap()
 	{
 		if(m_bitmap == NULL)
@@ -161,8 +140,10 @@ public:
 };
 wxBitmap* EndDrawing::m_bitmap = NULL;
 
+static EndDrawing end_drawing;
+
 void Drawing::GetTools(std::list<Tool*> *f_list, const wxPoint *p){
-	f_list->push_back(new EndDrawing(this));
+	f_list->push_back(&end_drawing);
 }
 
 void Drawing::SetView(int v){

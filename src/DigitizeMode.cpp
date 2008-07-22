@@ -314,14 +314,9 @@ static void set_y(double value){wxGetApp().m_digitizing->position_found.SetY(val
 static void set_z(double value){wxGetApp().m_digitizing->position_found.SetZ(value); wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();}
 
 void DigitizeMode::GetProperties(std::list<Property *> *list){
-	if(m_doing_a_main_loop)
-	{
-		// set the title for picking a position
-		list->push_back(new PropertyString("Position Picking...", m_prompt_when_doing_a_main_loop.c_str()));
-		list->push_back(new PropertyDouble("X", position_found.X(), set_x));
-		list->push_back(new PropertyDouble("Y", position_found.Y(), set_y));
-		list->push_back(new PropertyDouble("Z", position_found.Z(), set_z));
-	}
+	list->push_back(new PropertyDouble("X", position_found.X(), set_x));
+	list->push_back(new PropertyDouble("Y", position_found.Y(), set_y));
+	list->push_back(new PropertyDouble("Z", position_found.Z(), set_z));
 }
 
 void DigitizeMode::GetOptions(std::list<Property *> *list){
@@ -364,10 +359,11 @@ public:
 };
 wxBitmap* EndPosPicking::m_bitmap = NULL;
 
+static EndPosPicking end_pos_picking;
 
 void DigitizeMode::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
-	if(m_doing_a_main_loop)t_list->push_back(new EndPosPicking);
+	if(m_doing_a_main_loop)t_list->push_back(&end_pos_picking);
 }
 
 void DigitizeMode::SetOnlyCoords(HeeksObj* object, bool onoff){

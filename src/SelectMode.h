@@ -3,8 +3,9 @@
 #pragma once
 
 #include "../interface/InputMode.h"
+#include "../interface/LeftAndRight.h"
 
-class CSelectMode: public CInputMode{
+class CSelectMode: public CInputMode, CLeftAndRight{
 public:
 	wxPoint CurrentPoint;
 	wxPoint button_down_point;
@@ -13,13 +14,13 @@ public:
 	bool window_box_exists;
 	bool m_doing_a_main_loop;
 	std::string m_prompt_when_doing_a_main_loop;
-	bool m_right_up_with_left_down_done;
-	bool m_left_up_with_right_down_done;
 
 	CSelectMode();
 	virtual ~CSelectMode(void){}
 
 	// virtual functions for InputMode
+	const char* GetTitle(){return "Picking objects";}
+	bool TitleHighlighted(){return m_doing_a_main_loop;}
 	void OnMouse( wxMouseEvent& event );
 	bool OnStart();
 	void OnFrontRender();

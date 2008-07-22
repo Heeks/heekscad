@@ -33,6 +33,7 @@ public:
 	virtual ~LineArcDrawing(void);
 
 	// InputMode's virtual functions
+	const char* GetTitle(){return "Line and arc drawing";}
 	void OnKeyDown(wxKeyEvent& event);
 	void OnKeyUp(wxKeyEvent& event);
 	void set_cursor(void);

@@ -97,11 +97,6 @@ const std::list<HeeksObj*>& CHeeksCADInterface::GetMarkedList(void)
 	return wxGetApp().m_marked_list->list();
 }
 
-bool CHeeksCADInterface::GetArcDirection(HeeksObj* object)
-{
-	return ((HArc*)object)->m_dir;
-}
-
 bool CHeeksCADInterface::GetArcCentre(HeeksObj* object, double* c)
 {
 	extract(((HArc*)object)->m_circle.Location(), c);
