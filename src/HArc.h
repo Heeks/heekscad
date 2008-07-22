@@ -13,7 +13,6 @@ private:
 public:
 	gp_Pnt A, B;
 	gp_Circ m_circle;
-	bool m_dir; // true - anti-clockwise, false - clockwise
 
 	~HArc(void);
 	HArc(const gp_Pnt &a, const gp_Pnt &b, const gp_Circ &c, const HeeksColor* col);

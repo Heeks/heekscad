@@ -3,7 +3,10 @@
 
 #include "HArc.h"
 #include "../interface/PropertyDouble.h"
+#include "../interface/PropertyChoice.h"
 #include "PropertyVertex.h"
+
+#define CRAP_ARC_TESTS
 
 HArc::HArc(const HArc &line){
 	operator=(line);
@@ -30,6 +33,9 @@ const HArc& HArc::operator=(const HArc &b){
 void HArc::GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point)const
 {
 	if(A.IsEqual(B, wxGetApp().m_geom_tol)){
+#ifdef CRAP_ARC_TESTS
+		wxMessageBox("no length arc");
+#endif
 		return; // start and end point the same; no length arc
 	}
 	gp_Dir x_axis = m_circle.XAxis().Direction();
@@ -44,16 +50,11 @@ void HArc::GetSegments(void(*callbackfunc)(const double *p), double pixels_per_m
 	double start_angle = atan2(ay, ax);
 	double end_angle = atan2(by, bx);
 
-	if(m_dir){
-		if(start_angle > end_angle)end_angle += 6.28318530717958;
-	}
-	else{
-		if(end_angle > start_angle)start_angle += 6.28318530717958;
-	}
+	if(start_angle > end_angle)end_angle += 6.28318530717958;
 
 	double radius = m_circle.Radius();
 	double d_angle = end_angle - start_angle;
-	int segments = pixels_per_mm * radius * d_angle / 6.28318530717958 + 1;
+	int segments = fabs(pixels_per_mm * radius * d_angle / 6.28318530717958 + 1);
     
     double theta = d_angle / (double)segments;
     double tangetial_factor = tan(theta);
@@ -63,8 +64,8 @@ void HArc::GetSegments(void(*callbackfunc)(const double *p), double pixels_per_m
     double y = radius * sin(start_angle);
 
 	double pp[3];
-    
-    for(int i = 0; i < segments + 1; i++)
+
+   for(int i = 0; i < segments + 1; i++)
     {
 		gp_Pnt p = centre.XYZ() + x * x_axis.XYZ() + y * y_axis.XYZ();
 		extract(p, pp);
@@ -84,7 +85,7 @@ void HArc::GetSegments(void(*callbackfunc)(const double *p), double pixels_per_m
     }
 }
 
-static void glVertexFunction(const double *p){glVertex3dv(p);}
+static void glVertexFunction(const double *p){glVertex3d(p[0], p[1], p[2]);}
 
 void HArc::glCommands(bool select, bool marked, bool no_color){
 	if(!no_color){
@@ -146,12 +147,26 @@ static void on_set_end(gp_Pnt &vt){
 	wxGetApp().Repaint();
 }
 
+static void on_set_centre(gp_Pnt &vt){
+	arc_for_properties->m_circle.SetLocation(vt);
+	wxGetApp().Repaint();
+}
+
+static void on_set_axis(gp_Pnt &vt){
+	gp_Ax1 a = arc_for_properties->m_circle.Axis();
+	a.SetDirection(gp_Dir(vt.XYZ()));
+	arc_for_properties->m_circle.SetAxis(a);
+	wxGetApp().Repaint();
+}
+
 void HArc::GetProperties(std::list<Property *> *list){
 	__super::GetProperties(list);
 
 	arc_for_properties = this;
 	list->push_back(new PropertyVertex("start", A, on_set_start));
 	list->push_back(new PropertyVertex("end", B, on_set_end));
+	list->push_back(new PropertyVertex("centre", m_circle.Location(), on_set_centre));
+	list->push_back(new PropertyVertex("axis", gp_Pnt(m_circle.Axis().Direction().XYZ()), on_set_axis));
 	double length = A.Distance(B);
 	list->push_back(new PropertyDouble("Length", length, NULL));
 }
@@ -200,7 +215,6 @@ gp_Vec HArc::GetSegmentVector(double fraction)
 	gp_Vec vp(centre, p);
 	gp_Vec vd = gp_Vec(m_circle.Axis().Direction()) ^ vp;
 	vd.Normalize();
-	if(m_dir)vd = -vd;
 	return vd;
 }
 
@@ -221,12 +235,7 @@ gp_Pnt HArc::GetPointAtFraction(double fraction)
 	double start_angle = atan2(ay, ax);
 	double end_angle = atan2(by, bx);
 
-	if(m_dir){
-		if(start_angle > end_angle)end_angle += 6.28318530717958;
-	}
-	else{
-		if(end_angle > start_angle)start_angle += 6.28318530717958;
-	}
+	if(start_angle > end_angle)end_angle += 6.28318530717958;
 
 	double radius = m_circle.Radius();
 	double d_angle = end_angle - start_angle;

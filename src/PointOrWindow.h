@@ -21,6 +21,7 @@ public:
 	~PointOrWindow(void);
 
 	// virtual functions for InputMode
+	const char* GetTitle(){return "Dragging a window or picking a point";}
 	void OnMouse( wxMouseEvent& event );
 	bool OnModeChange(void);
 	void OnFrontRender();

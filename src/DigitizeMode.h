@@ -37,6 +37,7 @@ public:
 	virtual ~DigitizeMode(void);
 
 	// InputMode's virtual functions
+	const char* GetTitle(){return "Picking a position";}
 	void OnMouse( wxMouseEvent& event );
 	bool OnModeChange(void);
 	void OnFrontRender();

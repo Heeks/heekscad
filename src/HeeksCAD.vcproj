@@ -446,6 +446,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\interface\LeftAndRight.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\interface\LeftAndRight.h"
+			>
+		</File>
+		<File
 			RelativePath=".\LeftCanvas.cpp"
 			>
 		</File>
