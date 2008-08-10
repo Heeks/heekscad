@@ -364,3 +364,8 @@ double CFace::Area()const{
 	BRepGProp::SurfaceProperties(m_topods_face,System);
 	return System.Mass();
 }
+
+void CFace::WriteXML(TiXmlElement *root)
+{
+	CShape::m_solids_found = true;
+}

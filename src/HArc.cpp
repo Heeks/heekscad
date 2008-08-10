@@ -4,9 +4,8 @@
 #include "HArc.h"
 #include "../interface/PropertyDouble.h"
 #include "../interface/PropertyChoice.h"
+#include "../tinyxml/tinyxml.h"
 #include "PropertyVertex.h"
-
-#define CRAP_ARC_TESTS
 
 HArc::HArc(const HArc &line){
 	operator=(line);
@@ -33,10 +32,7 @@ const HArc& HArc::operator=(const HArc &b){
 void HArc::GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point)const
 {
 	if(A.IsEqual(B, wxGetApp().m_geom_tol)){
-#ifdef CRAP_ARC_TESTS
-		wxMessageBox("no length arc");
-#endif
-		return; // start and end point the same; no length arc
+		return;
 	}
 	gp_Dir x_axis = m_circle.XAxis().Direction();
 	gp_Dir y_axis = m_circle.YAxis().Direction();
@@ -275,4 +271,57 @@ bool HArc::TangentialArc(const gp_Pnt &p0, const gp_Vec &v0, const gp_Pnt &p1, g
 		axis = direction_for_circle;
 		return true;
 	}
+}
+
+void HArc::WriteXML(TiXmlElement *root)
+{
+	TiXmlElement * element;
+	element = new TiXmlElement( "Arc" );
+	root->LinkEndChild( element );  
+	element->SetAttribute("col", color.COLORREF_color());
+	element->SetDoubleAttribute("sx", A.X());
+	element->SetDoubleAttribute("sy", A.Y());
+	element->SetDoubleAttribute("sz", A.Z());
+	element->SetDoubleAttribute("ex", B.X());
+	element->SetDoubleAttribute("ey", B.Y());
+	element->SetDoubleAttribute("ez", B.Z());
+	gp_Pnt C = m_circle.Location();
+	gp_Dir D = m_circle.Axis().Direction();
+	element->SetDoubleAttribute("cx", C.X());
+	element->SetDoubleAttribute("cy", C.Y());
+	element->SetDoubleAttribute("cz", C.Z());
+	element->SetDoubleAttribute("ax", D.X());
+	element->SetDoubleAttribute("ay", D.Y());
+	element->SetDoubleAttribute("az", D.Z());
+}
+
+// static member function
+HeeksObj* HArc::ReadFromXMLElement(TiXmlElement* pElem)
+{
+	gp_Pnt p0, p1, centre;
+	double axis[3];
+	HeeksColor c;
+
+	// get the attributes
+	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
+	{
+		wxString name(a->Name());
+		if(name == "col"){c = HeeksColor(a->IntValue());}
+		else if(name == "sx"){p0.SetX(a->DoubleValue());}
+		else if(name == "sy"){p0.SetY(a->DoubleValue());}
+		else if(name == "sz"){p0.SetZ(a->DoubleValue());}
+		else if(name == "ex"){p1.SetX(a->DoubleValue());}
+		else if(name == "ey"){p1.SetY(a->DoubleValue());}
+		else if(name == "ez"){p1.SetZ(a->DoubleValue());}
+		else if(name == "cx"){centre.SetX(a->DoubleValue());}
+		else if(name == "cy"){centre.SetY(a->DoubleValue());}
+		else if(name == "cz"){centre.SetZ(a->DoubleValue());}
+		else if(name == "ax"){axis[0] = a->DoubleValue();}
+		else if(name == "ay"){axis[1] = a->DoubleValue();}
+		else if(name == "az"){axis[2] = a->DoubleValue();}
+	}
+
+	gp_Circ circle(gp_Ax2(centre, gp_Dir(make_vector(axis))), centre.Distance(p0));
+
+	return new HArc(p0, p1, circle, &c);
 }

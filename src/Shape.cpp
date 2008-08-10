@@ -19,6 +19,7 @@
 #include "IGESControl_Reader.hxx"
 #include "IGESControl_Writer.hxx"
 #include "IGESControl_Controller.hxx"
+#include "BRepOffsetAPI_Sewing.hxx"
 #include "STLAPI.hxx"
 #include "STLAPI_Reader.hxx"
 #include "STLAPI_Writer.hxx"
@@ -27,6 +28,9 @@
 #include "BRepOffsetAPI_MakeOffsetShape.hxx"
 #include "../interface/Tool.h"
 #include "SphereCreate.h"
+
+// static member variable
+bool CShape::m_solids_found = false;
 
 CShape::CShape(const TopoDS_Shape &shape, const char* title, bool use_one_gl_list):m_shape(shape), m_title(title), m_gl_list(0), m_use_one_gl_list(use_one_gl_list)
 {
@@ -422,7 +426,7 @@ void CShape::CommonShapes(const std::list<HeeksObj*> &list_in)
 	wxGetApp().Repaint();
 }
 
-bool CShape::ImportSolidsFile(const char* filepath)
+bool CShape::ImportSolidsFile(const char* filepath, bool undoably)
 {
 	// returns true, if suffix handled
 	wxString wf(filepath);
@@ -440,7 +444,9 @@ bool CShape::ImportSolidsFile(const char* filepath)
 			for(int i = 1; i<=nshapes; i++){
 				TopoDS_Shape rShape;
 				rShape = Reader.Shape(i);      
-				wxGetApp().AddUndoably(MakeObject(rShape, "STEP solid"), NULL, NULL);
+				HeeksObj* new_object = MakeObject(rShape, "STEP solid");
+				if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
+				else wxGetApp().Add(new_object, NULL);
 			}
 			wxGetApp().Repaint();
 		}
@@ -454,19 +460,27 @@ bool CShape::ImportSolidsFile(const char* filepath)
 		Standard_CString aFileName = (Standard_CString) (wf.c_str());
 		IGESControl_Reader Reader;
 		int status = Reader.ReadFile( aFileName );
-
+	
 		if ( status == IFSelect_RetDone )
 		{
 			Reader.TransferRoots();
-			int nshapes = Reader.NbShapes();
-			for(int i = 1; i<=nshapes; i++){
-				TopoDS_Shape rShape;
-				rShape = Reader.Shape(i);      
-				wxGetApp().AddUndoably(MakeObject(rShape, "IGES solid"), NULL, NULL);
-			}
 
-			// but these are all sheets, so we need to sew them
-			// to do...
+			TopoDS_Shape one_shape = Reader.OneShape ();
+
+			BRepOffsetAPI_Sewing face_sewer (0.001);
+			TopExp_Explorer explorer (one_shape, TopAbs_FACE);
+			while (explorer.More ())
+			{
+				face_sewer.Add (explorer.Current ());
+				explorer.Next ();
+			}
+			face_sewer.Perform ();
+
+
+			HeeksObj* new_object = MakeObject(face_sewer.SewedShape (), "sewed IGES solid");
+			if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
+			else wxGetApp().Add(new_object, NULL);
+
 			wxGetApp().Repaint();
 		}
 		else{
@@ -480,7 +494,9 @@ bool CShape::ImportSolidsFile(const char* filepath)
 		TopoDS_Shape rShape;
 		StlAPI_Reader Reader;
 		Reader.Read(rShape, aFileName);
-		wxGetApp().AddUndoably(MakeObject(rShape, "STL solid", false, true), NULL, NULL);
+		HeeksObj* new_object = MakeObject(rShape, "STL solid", false, true);
+		if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
+		else wxGetApp().Add(new_object, NULL);
 		wxGetApp().Repaint();
 		return true;
 	}
@@ -580,4 +596,9 @@ bool CShape::IsTypeAShape(int t){
 void CShape::CopyFrom(const HeeksObj* object)
 {
 	*this = *((CShape*)object);
+}
+
+void CShape::WriteXML(TiXmlElement *root)
+{
+	CShape::m_solids_found = true;
 }

@@ -4,6 +4,7 @@
 #include "HLine.h"
 #include "../interface/PropertyDouble.h"
 #include "PropertyVertex.h"
+#include "../tinyxml/tinyxml.h"
 
 HLine::HLine(const HLine &line){
 	operator=(line);
@@ -190,4 +191,40 @@ bool HLine::GetEndPoint(double* pos)
 gp_Vec HLine::GetSegmentVector(double fraction)
 {
 	return gp_Vec(A, B).Normalized();
+}
+
+void HLine::WriteXML(TiXmlElement *root)
+{
+	TiXmlElement * element;
+	element = new TiXmlElement( "Line" );
+	root->LinkEndChild( element );  
+	element->SetAttribute("col", color.COLORREF_color());
+	element->SetDoubleAttribute("sx", A.X());
+	element->SetDoubleAttribute("sy", A.Y());
+	element->SetDoubleAttribute("sz", A.Z());
+	element->SetDoubleAttribute("ex", B.X());
+	element->SetDoubleAttribute("ey", B.Y());
+	element->SetDoubleAttribute("ez", B.Z());
+}
+
+// static member function
+HeeksObj* HLine::ReadFromXMLElement(TiXmlElement* pElem)
+{
+	gp_Pnt p0, p1;
+	HeeksColor c;
+
+	// get the attributes
+	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
+	{
+		wxString name(a->Name());
+		if(name == "col"){c = HeeksColor(a->IntValue());}
+		else if(name == "sx"){p0.SetX(a->DoubleValue());}
+		else if(name == "sy"){p0.SetY(a->DoubleValue());}
+		else if(name == "sz"){p0.SetZ(a->DoubleValue());}
+		else if(name == "ex"){p1.SetX(a->DoubleValue());}
+		else if(name == "ey"){p1.SetY(a->DoubleValue());}
+		else if(name == "ez"){p1.SetZ(a->DoubleValue());}
+	}
+
+	return new HLine(p0, p1, &c);
 }

@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "LineArcCollection.h"
 #include "../interface/PropertyInt.h"
+#include "../tinyxml/tinyxml.h"
 
 wxIcon* CLineArcCollection::m_icon = NULL;
 std::map<int, CLineArcCollection*> CLineArcCollection::used_ids;
@@ -77,4 +78,30 @@ HeeksObj* CLineArcCollection:: GetLineArcCollection(int id)
 HeeksObj *CLineArcCollection::MakeACopy(void)const
 {
 	return new CLineArcCollection(*this);
+}
+
+void CLineArcCollection::WriteXML(TiXmlElement *root)
+{
+	TiXmlElement * element = new TiXmlElement( "LineArcCollection" );  
+	root->LinkEndChild( element );
+	element->SetAttribute("id", m_id);
+
+	ObjList::WriteXML(element);
+}
+
+// static member function
+HeeksObj* CLineArcCollection::ReadFromXMLElement(TiXmlElement* pElem)
+{
+	CLineArcCollection* new_object = new CLineArcCollection;
+
+	// get the attributes
+	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
+	{
+		wxString name(a->Name());
+		if(name == "id"){new_object->m_id = a->IntValue();}
+	}
+
+	new_object->ReadXMLChildren(pElem);
+
+	return new_object;
 }
