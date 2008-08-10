@@ -27,6 +27,8 @@ protected:
 	void delete_edge_objects();
 
 public:
+	static bool m_solids_found; // a flag for xml writing
+
 	CShape(const TopoDS_Shape &shape, const char* title, bool use_one_gl_list = false);
 	CShape(const CShape& s);
 	~CShape();
@@ -46,6 +48,7 @@ public:
 	void GetCentreNormals(void(*callbackfunc)(double area, double *x, double *n));
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	void CopyFrom(const HeeksObj* object);
+	void WriteXML(TiXmlElement *root);
 
 	const TopoDS_Shape &Shape(){return m_shape;}
 
@@ -57,7 +60,7 @@ public:
 	static void CutShapes(const std::list<HeeksObj*> &list);
 	static void FuseShapes(const std::list<HeeksObj*> &list);
 	static void CommonShapes(const std::list<HeeksObj*> &list);
-	static bool ImportSolidsFile(const char* filepath);
+	static bool ImportSolidsFile(const char* filepath, bool undoably);
 	static bool ExportSolidsFile(const char* filepath);
 	static HeeksObj* MakeObject(const TopoDS_Shape &shape, const char* title, bool use_one_gl_list = false, bool stl_body = false);
 	static bool IsTypeAShape(int t);

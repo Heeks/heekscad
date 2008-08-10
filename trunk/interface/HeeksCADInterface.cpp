@@ -273,3 +273,13 @@ void CHeeksCADInterface::RegisterHideableWindow(wxWindow* w)
 {
 	wxGetApp().RegisterHideableWindow(w);
 }
+
+HeeksObj* CHeeksCADInterface::ReadXMLElement(TiXmlElement* pElem)
+{
+	return wxGetApp().ReadXMLElement(pElem);
+}
+
+void CHeeksCADInterface::RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem))
+{
+	wxGetApp().RegisterReadXMLfunction(type_name, read_xml_function);
+}

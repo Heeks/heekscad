@@ -66,6 +66,8 @@ public:
 	double m_geom_tol;
 	std::list<wxDynamicLibrary*> m_loaded_libraries;
 	std::list<wxWindow*> m_hideable_windows;
+	bool m_show_ruler;
+	std::list< wxString > m_recent_files;
 
 	// HeeksObj's virtual functions
 	void glCommands(bool select, bool marked, bool no_color);
@@ -98,7 +100,11 @@ public:
 	void ClearRollingForward(void);
 	bool Add(HeeksObj* object, HeeksObj* prev_object);
 	void Reset();
+	HeeksObj* HeeksCADapp::ReadXMLElement(TiXmlElement* pElem);
+	void InitializeXMLFunctions();
+	void OpenXMLFile(const char *filepath);
 	bool OpenFile(const char *filepath);
+	void SaveXMLFile(const char *filepath);
 	bool SaveFile(const char *filepath);
 	void DeleteUndoably(HeeksObj* object);
 	void DeleteUndoably(const std::list<HeeksObj*>& list);
@@ -132,8 +138,9 @@ public:
 	int PickObjects(const char* str);
 	bool PickPosition(const char* str, double* pos);
 	void glSphere(double radius, const double* pos = NULL);
-	void OnNewOrOpen();
+	void OnNewOrOpen(bool open);
 	void RegisterHideableWindow(wxWindow* w);
+	void RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem));
 };
 
 DECLARE_APP(HeeksCADapp)

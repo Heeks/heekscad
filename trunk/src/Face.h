@@ -28,6 +28,7 @@ public:
 	void GetCentreNormals(void(*callbackfunc)(double area, double *x, double *n));
 	void ModifyByMatrix(const double* m);
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
+	void WriteXML(TiXmlElement *root);
 
 	const TopoDS_Face &Face(){return m_topods_face;}
 	const Material &GetMaterial(){return m_material;}

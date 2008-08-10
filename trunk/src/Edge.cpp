@@ -137,3 +137,8 @@ void CEdge::Blend(double radius){
 		wxGetApp().EndHistory();
 	}
 }
+
+void CEdge::WriteXML(TiXmlElement *root)
+{
+	CShape::m_solids_found = true;
+}

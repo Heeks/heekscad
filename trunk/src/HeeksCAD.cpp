@@ -33,9 +33,14 @@
 #include "../interface/Observer.h"
 #include "TransformTool.h"
 #include "Grid.h"
+#include "Ruler.h"
 #include "StretchTool.h"
 #include "HLine.h"
+#include "HArc.h"
+#include "HImage.h"
 #include "RemoveOrAddTool.h"
+#include "LineArcCollection.h"
+#include "../tinyxml/tinyxml.h"
 
 const int ID_TOOLBAR = 500;
 const int ID_SOLID_TOOLBAR = 501;
@@ -76,6 +81,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_doing_rollback = false;
 	m_hide_marked_list_stack = 0;
 	mouse_wheel_forward_away = true;
+	m_show_ruler = true;
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -271,18 +277,133 @@ void HeeksCADapp::Reset(){
 	m_frame->m_graphics->m_view_point.SetView(gp_Vec(0, 1, 0), gp_Vec(0, 0, 1));
 }
 
-bool HeeksCADapp::OpenFile(const char *filepath){
+static std::map< std::string, HeeksObj*(*)(TiXmlElement* pElem) > *xml_read_fn_map = NULL;
+
+static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
+{
+	// get the attributes
+	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
+	{
+		wxString name(a->Name());
+		if(name == "text")
+		{
+			wxStandardPaths sp;
+			sp.GetTempDir();
+			wxString temp_file = sp.GetTempDir() + "/temp_HeeksCAD_STEP_file.step";
+			{
+				ofstream ofs(temp_file);
+				ofs<<a->Value();
+			}
+			CShape::ImportSolidsFile(temp_file, false);
+		}
+	}
+
+	return NULL;
+}
+
+void HeeksCADapp::InitializeXMLFunctions()
+{
+	// set up function map
+	if(xml_read_fn_map == NULL)
+	{
+		xml_read_fn_map = new std::map< std::string, HeeksObj*(*)(TiXmlElement* pElem) >;
+		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Line", HLine::ReadFromXMLElement ) );
+		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Arc", HArc::ReadFromXMLElement ) );
+		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Image", HImage::ReadFromXMLElement ) );
+		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "LineArcCollection", CLineArcCollection::ReadFromXMLElement ) );
+		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "STEP_file", ReadSTEPFileFromXMLElement ) );
+	}
+}
+
+void HeeksCADapp::RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem))
+{
+	if(xml_read_fn_map->find(type_name) != xml_read_fn_map->end()){
+		char str[1024];
+		sprintf(str, "Error - trying to register an XML read function for an exisiting type - %s", type_name);
+		wxMessageBox(str);
+		return;
+	}
+	xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( type_name, read_xml_function ) );
+}
+
+HeeksObj* HeeksCADapp::ReadXMLElement(TiXmlElement* pElem)
+{
+	std::string name(pElem->Value());
+
+	std::map< std::string, HeeksObj*(*)(TiXmlElement* pElem) >::iterator FindIt = xml_read_fn_map->find( name );
+	if(FindIt != xml_read_fn_map->end())
+	{
+		HeeksObj* object = (*(FindIt->second))(pElem);
+		return object;
+	}
+
+	return NULL;
+}
+
+void HeeksCADapp::OpenXMLFile(const char *filepath)
+{
+	TiXmlDocument doc(filepath);
+	if (!doc.LoadFile())
+	{
+		if(doc.Error())
+		{
+			wxMessageBox(doc.ErrorDesc());
+		}
+		return;
+	}
+
+	TiXmlHandle hDoc(&doc);
+	TiXmlElement* pElem;
+	TiXmlHandle hRoot(0);
+
+	// block: name
+	{
+		pElem=hDoc.FirstChildElement().Element();
+		// should always have a valid root but handle gracefully if it does
+		if (!pElem) return;
+		const char* name=pElem->Value();
+
+		if(wxString(name) != wxString("HeeksCAD_Document"))
+		{
+			wxMessageBox("This is not a HeeksCAD document!");
+		}
+
+		// save this for later
+		hRoot=TiXmlHandle(pElem);
+	}
+
+	// loop through all the objects
+	for(pElem = hRoot.FirstChildElement().Element(); pElem;	pElem = pElem->NextSiblingElement())
+	{
+		HeeksObj* object = ReadXMLElement(pElem);
+		if(object)Add(object, NULL);
+	}
+
+	WereAdded(m_objects);
+}
+
+bool HeeksCADapp::OpenFile(const char *filepath)
+{
 	// i'm not sure what return value means if anything
 
 	wxString wf(filepath);
 
+	if(wf.EndsWith(".heeks") || wf.EndsWith(".HEEKS"))
+	{
+		OpenXMLFile(filepath);
+		return true;
+	}
+
 	// check for solid files
-	if(CShape::ImportSolidsFile(filepath)){
+	if(CShape::ImportSolidsFile(filepath, false))
+	{
+		WereAdded(m_objects);
 		return true;
 	}
 
 	// error
-	else{
+	else
+	{
 		char mess[1024];
 		sprintf(mess, "Invalid file type chosen ( expecting file with %s suffix )", wxGetApp().GetKnownFilesCommaSeparatedList());
 		wxMessageBox(mess);
@@ -291,15 +412,69 @@ bool HeeksCADapp::OpenFile(const char *filepath){
 	return false;
 }
 
-bool HeeksCADapp::SaveFile(const char *filepath){
+void HeeksCADapp::SaveXMLFile(const char *filepath)
+{
+	// write an xml file
+	TiXmlDocument doc;  
+	TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );  
+	doc.LinkEndChild( decl );  
+
+	TiXmlElement * root = new TiXmlElement( "HeeksCAD_Document" );  
+	doc.LinkEndChild( root );  
+
+	// loop through all the objects writing them
+	CShape::m_solids_found = false;
+	for(std::list<HeeksObj*>::iterator It = m_objects.begin(); It != m_objects.end(); It++)
+	{
+		HeeksObj* object = *It;
+		object->WriteXML(root);
+	}
+
+	// write a step file for all the solids
+	if(CShape::m_solids_found){
+		wxStandardPaths sp;
+		sp.GetTempDir();
+		wxString temp_file = sp.GetTempDir() + "/temp_HeeksCAD_STEP_file.step";
+		CShape::ExportSolidsFile(temp_file);
+
+		ifstream ifs(temp_file);
+		if(!(!ifs)){
+			std::string fstr;
+			char str[1024];
+			while(!(ifs.eof())){
+				ifs.getline(str, 1024);
+				fstr.append(str);
+				if(!ifs)break;
+			}
+
+			TiXmlElement * element;
+			element = new TiXmlElement( "STEP_file" );
+			root->LinkEndChild( element );  
+			element->SetAttribute("text", fstr.c_str());
+		}
+	}
+
+	doc.SaveFile( filepath );  
+}
+
+bool HeeksCADapp::SaveFile(const char *filepath)
+{
 	// i'm not sure what return value means, if anything
 
 	wxString wf(filepath);
 
-	if(CShape::ExportSolidsFile(filepath)){
+	if(wf.EndsWith(".heeks") || wf.EndsWith(".HEEKS"))
+	{
+		SaveXMLFile(filepath);
 		return true;
 	}
-	else{
+
+	if(CShape::ExportSolidsFile(filepath))
+	{
+		return true;
+	}
+	else
+	{
 		char mess[1024];
 		sprintf(mess, "Invalid file type chosen ( expecting file with %s suffix )", wxGetApp().GetKnownFilesCommaSeparatedList());
 		wxMessageBox(mess);
@@ -309,7 +484,8 @@ bool HeeksCADapp::SaveFile(const char *filepath){
 }
 
 
-void HeeksCADapp::Repaint(bool soon){
+void HeeksCADapp::Repaint(bool soon)
+{
 	if(soon){
 #ifdef __WXMSW__
 		::SendMessage((HWND)(m_frame->m_graphics->GetHandle()), WM_PAINT, 0, 0);
@@ -322,7 +498,8 @@ void HeeksCADapp::Repaint(bool soon){
 	}
 }
 
-void HeeksCADapp::RecalculateGLLists(){
+void HeeksCADapp::RecalculateGLLists()
+{
 	for(HeeksObj* object = GetFirstChild(); object; object = GetNextChild()){
 		object->KillGLLists();
 	}
@@ -339,6 +516,7 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	glShadeModel(GL_FLAT);
 	m_frame->m_graphics->m_view_point.SetPolygonOffset();
 	RenderGrid(&view_point);
+	RenderRuler();
 	glCommands(select, false, false);
 	input_mode_object->OnRender();
 	DestroyLights();
@@ -781,12 +959,12 @@ void HeeksCADapp::glColorEnsuringContrast(const HeeksColor &c)
 
 const char* HeeksCADapp::GetKnownFilesWildCardString()const
 {
-	return "Known Files |*.igs;*.iges;*.stp;*.step|IGES files (*.igs *.iges)|*.igs;*.iges|STEP files (*.stp *.step)|*.stp;*.step|STL files (*.stl)|*.stl";
+	return "Known Files |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl|Heeks files (*.heeks)|*.heeks|IGES files (*.igs *.iges)|*.igs;*.iges|STEP files (*.stp *.step)|*.stp;*.step|STL files (*.stl)|*.stl";
 }
 
 const char* HeeksCADapp::GetKnownFilesCommaSeparatedList()const
 {
-	return "igs, iges, stp, step, stl";
+	return "heeks, igs, iges, stp, step, stl";
 }
 
 class MarkObjectTool:public Tool{
@@ -1056,13 +1234,13 @@ void HeeksCADapp::glSphere(double radius, const double* pos)
 	glPopMatrix();
 }
 
-void HeeksCADapp::OnNewOrOpen()
+void HeeksCADapp::OnNewOrOpen(bool open)
 {
 	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
 		wxDynamicLibrary* shared_library = *It;
-		void(*fnOnNewOrOpen)() = (void(*)())(shared_library->GetSymbol("OnNewOrOpen"));
+		void(*fnOnNewOrOpen)(int) = (void(*)(int))(shared_library->GetSymbol("OnNewOrOpen"));
 		if(fnOnNewOrOpen){
-			(*fnOnNewOrOpen)();
+			(*fnOnNewOrOpen)(open ? 1:0);
 		}
 	}
 }

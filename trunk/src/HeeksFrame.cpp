@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "HeeksFrame.h"
+#include "../interface/Tool.h"
 #include "GraphicsCanvas.h"
 #include "LeftCanvas.h"
 #include "ObjPropsCanvas.h"
@@ -12,10 +13,11 @@
 #include "MarkedList.h"
 #include "MagDragWindow.h"
 #include "HArc.h"
-#include "../interface/Tool.h"
+#include "HImage.h"
 
 enum{
 	ID_LINES = 1,
+	ID_IMAGE,
 	ID_VIEWING,
 	ID_SUBTRACT,
 	ID_SPHERE,
@@ -57,6 +59,7 @@ EVT_MENU(wxID_OPEN, CHeeksFrame::OnOpenButton)
 EVT_MENU(wxID_SAVE, CHeeksFrame::OnSaveButton)
 EVT_MENU(wxID_NEW, CHeeksFrame::OnNewButton)
 EVT_MENU(ID_LINES, CHeeksFrame::OnLinesButton)
+EVT_MENU(ID_IMAGE, CHeeksFrame::OnImageButton)
 EVT_MENU(ID_VIEWING, CHeeksFrame::OnViewingButton)
 EVT_MENU(ID_SPHERE, CHeeksFrame::OnSphereButton)
 EVT_MENU(ID_CUBE, CHeeksFrame::OnCubeButton)
@@ -158,6 +161,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
     m_toolBar->AddTool(ID_REDO, _T("Redo"), wxBitmap(exe_folder + "/bitmaps/redo.png", wxBITMAP_TYPE_PNG), _T("Redo the next command"));
     m_toolBar->AddTool(ID_VIEWING, _T("Select"), wxBitmap(exe_folder + "/bitmaps/select.png", wxBITMAP_TYPE_PNG), _T("Select Mode"));
     m_toolBar->AddTool(ID_LINES, _T("Lines"), wxBitmap(exe_folder + "/bitmaps/lines.png", wxBITMAP_TYPE_PNG), _T("Start Line Drawing"));
+    m_toolBar->AddTool(ID_IMAGE, _T("Picture"), wxBitmap(exe_folder + "/bitmaps/picture.png", wxBITMAP_TYPE_PNG), _T("Add a picture"));
     m_toolBar->Realize();
 
 	// Solids tool bar
@@ -213,6 +217,9 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_aui_manager->GetPane(m_viewingBar).Show(viewingbar_visible);
 	m_statusBar->Show(statusbar_visible);
 
+	// set xml reading functions
+	wxGetApp().InitializeXMLFunctions();
+
 	// load up any other dlls and call OnStartUp on each of them
 	{
 		::wxSetWorkingDirectory(wxGetApp().GetExeFolder());
@@ -245,7 +252,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 		}
 	}
 
-	wxGetApp().OnNewOrOpen();
+	wxGetApp().OnNewOrOpen(false);
 
 	m_aui_manager->Update();
 }
@@ -467,6 +474,20 @@ CHeeksFrame::OnLinesButton( wxCommandEvent& WXUNUSED( event ) )
 	wxGetApp().SetInputMode(&line_strip);
 }
 
+void 
+CHeeksFrame::OnImageButton( wxCommandEvent& WXUNUSED( event ) )
+{
+	wxFileDialog dialog(this, _T("Open Image File"), wxEmptyString, wxEmptyString,	wxImage::GetImageExtWildcard());
+    dialog.SetDirectory(wxGetHomeDir());
+    dialog.CentreOnParent();
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+		wxGetApp().AddUndoably(new HImage(dialog.GetPath().c_str()), NULL, NULL);
+		wxGetApp().Repaint();
+    }
+}
+
 void CHeeksFrame::OnOpenButton( wxCommandEvent& event )
 {
     wxFileDialog dialog(this, _T("Open solid data file"), wxEmptyString, wxEmptyString,	_T(wxGetApp().GetKnownFilesWildCardString()));
@@ -476,8 +497,12 @@ void CHeeksFrame::OnOpenButton( wxCommandEvent& event )
     if (dialog.ShowModal() == wxID_OK)
     {
 		wxGetApp().Reset();
-		wxGetApp().OpenFile( dialog.GetPath().c_str() );
-		wxGetApp().OnNewOrOpen();
+		if(wxGetApp().OpenFile( dialog.GetPath().c_str() )){
+			// add to recent files list
+			wxGetApp().m_recent_files.push_front( wxString( dialog.GetPath().c_str() ) );
+			if(wxGetApp().m_recent_files.size() > 20)wxGetApp().m_recent_files.pop_back();
+		}
+		wxGetApp().OnNewOrOpen(true);
     }
 }
 
@@ -512,7 +537,7 @@ void CHeeksFrame::OnRedoButton( wxCommandEvent& event )
 void CHeeksFrame::OnNewButton( wxCommandEvent& event )
 {
 	wxGetApp().Reset();
-	wxGetApp().OnNewOrOpen();
+	wxGetApp().OnNewOrOpen(false);
 	wxGetApp().Repaint();
 }
 
