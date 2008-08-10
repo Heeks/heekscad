@@ -6,6 +6,7 @@
 #else
 #include "HeeksCADInterface.h"
 #endif
+#include "../tinyxml/tinyxml.h"
 
 ObjList::ObjList(const ObjList& objlist): HeeksObj(objlist), m_index_list_valid(true) {operator=(objlist);}
 
@@ -167,4 +168,24 @@ void ObjList::KillGLLists(void)
 {
 	std::list<HeeksObj*>::iterator It;
 	for(It=m_objects.begin(); It!=m_objects.end() ;It++) (*It)->KillGLLists();
+}
+
+void ObjList::WriteXML(TiXmlElement *root)
+{
+	std::list<HeeksObj*>::iterator It;
+	for(It=m_objects.begin(); It!=m_objects.end() ;It++) (*It)->WriteXML(root);
+}
+
+void ObjList::ReadXMLChildren(TiXmlElement* root)
+{
+	// loop through all the objects
+	for(TiXmlElement* pElem = TiXmlHandle(root).FirstChildElement().Element(); pElem;	pElem = pElem->NextSiblingElement())
+	{
+#ifdef HEEKSCAD
+		HeeksObj* object = wxGetApp().ReadXMLElement(pElem);
+#else
+		HeeksObj* object = heeksCAD->ReadXMLElement(pElem);
+#endif
+		if(object)Add(object, NULL);
+	}
 }

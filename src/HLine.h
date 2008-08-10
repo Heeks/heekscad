@@ -36,6 +36,9 @@ public:
 	bool GetStartPoint(double* pos);
 	bool GetEndPoint(double* pos);
 	void CopyFrom(const HeeksObj* object){operator=(*((HLine*)object));}
+	void WriteXML(TiXmlElement *root);
+
+	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 
 	gp_Lin GetLine()const;
 	int Intersects(const gp_Lin &line, std::list< double > *rl)const;

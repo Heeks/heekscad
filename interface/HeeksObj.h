@@ -8,6 +8,7 @@ class HeeksColor;
 class Property;
 class Tool;
 class MarkedObject;
+class TiXmlElement;
 
 enum{
 	UnknownType,
@@ -23,6 +24,7 @@ enum{
 	TriType,
 	SubstituteTreeType,
 	LineArcCollectionType,
+	ImageType,
 	ObjectMaximumType
 };
 
@@ -76,4 +78,5 @@ public:
 	virtual void GetTriangles(void(*callbackfunc)(double* x, double* n), double cusp){} // nine doubles, nine doubles
 	virtual void GetCentreNormals(void(*callbackfunc)(double area, double *x, double *n)){} // three doubles, three doubles
 	virtual void GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point = true)const{};
+	virtual void WriteXML(TiXmlElement *root){}
 };

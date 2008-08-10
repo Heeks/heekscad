@@ -22,6 +22,7 @@ public:
 	wxIcon* GetIcon();
 	const char* GetTypeString(void)const{return "Edge";}
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
+	void WriteXML(TiXmlElement *root);
 
 	const TopoDS_Shape &Edge(){return m_topods_edge;}
 	void Blend(double radius);
