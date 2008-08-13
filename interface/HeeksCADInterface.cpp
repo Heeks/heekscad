@@ -174,6 +174,21 @@ void CHeeksCADInterface::WasAdded(HeeksObj* object)
 	wxGetApp().WasAdded(object);
 }
 
+void CHeeksCADInterface::WasRemoved(HeeksObj* object)
+{
+	wxGetApp().WasRemoved(object);
+}
+
+void CHeeksCADInterface::WereAdded(const std::list<HeeksObj*> &list)
+{
+	wxGetApp().WereAdded(list);
+}
+
+void CHeeksCADInterface::WereRemoved(const std::list<HeeksObj*> &list)
+{
+	wxGetApp().WereRemoved(list);
+}
+
 int CHeeksCADInterface::PickObjects(const char* str)
 {
 	return wxGetApp().PickObjects(str);
@@ -225,9 +240,7 @@ int CHeeksCADInterface::GetLineArcCollectionID(HeeksObj* la)
 
 void CHeeksCADInterface::SetLineArcCollectionID(HeeksObj* la, int id)
 {
-	CLineArcCollection::used_ids.erase(((CLineArcCollection*)la)->m_id);
-	((CLineArcCollection*)la)->m_id = id;
-	CLineArcCollection::used_ids.insert( std::pair<int, CLineArcCollection*>(id, (CLineArcCollection*)la) );
+	CLineArcCollection::SetID((CLineArcCollection*)la, id);
 }
 
 HeeksObj* CHeeksCADInterface::NewLine(const double* s, const double* e)

@@ -20,6 +20,7 @@ public:
 	int get_property_type(){return DoublePropertyType;}
 	bool property_editable()const{return m_callbackfunc != NULL;}
 	Property *MakeACopy(void)const;
+	void CallSetFunction()const{ if(m_callbackfunc)(*m_callbackfunc)(m_initial_value);}
 
 	// HeeksObj's virtual functions
 	const char* GetShortString(void)const;

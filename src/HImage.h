@@ -13,6 +13,7 @@ private:
 	int m_frame_when_loaded;// for movies only. only valid if m_texture_number != 0
     int width, height, textureWidth, textureHeight;
 	bool m_rectangle_intialized;
+	static wxIcon* m_icon;
 
 	void destroy_texture();
 	const char* GetTextureFileName(const std::string &file_path, int is_a_movie);
@@ -34,6 +35,7 @@ public:
 	int GetType()const{return ImageType;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
+	wxIcon* GetIcon();
 	const char* GetShortString(void)const;
 	const char* GetTypeString(void)const{return "Image";}
 	HeeksObj *MakeACopy(void)const;

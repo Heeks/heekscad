@@ -153,11 +153,7 @@ void CLeftCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, const 
 		}
 	}
 	else if(all_removed){
-		wxTreeItemId item = m_treeCtrl->GetFirstVisibleItem();
-		while(item.m_pItem != NULL){
-			m_treeCtrl->SelectItem(item, false);
-			item = m_treeCtrl->GetNextVisible(item);
-		}
+		m_treeCtrl->UnselectAll();
 	}
 	else{
 		if(added_list){
@@ -271,10 +267,10 @@ BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
     EVT_TREE_END_LABEL_EDIT(TreeTest_Ctrl, MyTreeCtrl::OnEndLabelEdit)
     EVT_TREE_DELETE_ITEM(TreeTest_Ctrl, MyTreeCtrl::OnDeleteItem)
     EVT_TREE_SET_INFO(TreeTest_Ctrl, MyTreeCtrl::OnSetInfo)
-    EVT_TREE_ITEM_EXPANDED(TreeTest_Ctrl, MyTreeCtrl::OnItemExpanded)
-    EVT_TREE_ITEM_EXPANDING(TreeTest_Ctrl, MyTreeCtrl::OnItemExpanding)
-    EVT_TREE_ITEM_COLLAPSED(TreeTest_Ctrl, MyTreeCtrl::OnItemCollapsed)
-    EVT_TREE_ITEM_COLLAPSING(TreeTest_Ctrl, MyTreeCtrl::OnItemCollapsing)
+//    EVT_TREE_ITEM_EXPANDED(TreeTest_Ctrl, MyTreeCtrl::OnItemExpanded)
+//    EVT_TREE_ITEM_EXPANDING(TreeTest_Ctrl, MyTreeCtrl::OnItemExpanding)
+//    EVT_TREE_ITEM_COLLAPSED(TreeTest_Ctrl, MyTreeCtrl::OnItemCollapsed)
+//    EVT_TREE_ITEM_COLLAPSING(TreeTest_Ctrl, MyTreeCtrl::OnItemCollapsing)
 
     EVT_TREE_SEL_CHANGED(TreeTest_Ctrl, MyTreeCtrl::OnSelChanged)
     EVT_TREE_SEL_CHANGING(TreeTest_Ctrl, MyTreeCtrl::OnSelChanging)
@@ -358,9 +354,9 @@ TREE_EVENT_HANDLER(OnBeginRDrag)
 TREE_EVENT_HANDLER(OnDeleteItem)
 TREE_EVENT_HANDLER(OnGetInfo)
 TREE_EVENT_HANDLER(OnSetInfo)
-TREE_EVENT_HANDLER(OnItemExpanded)
-TREE_EVENT_HANDLER(OnItemExpanding)
-TREE_EVENT_HANDLER(OnItemCollapsed)
+//TREE_EVENT_HANDLER(OnItemExpanded)
+//TREE_EVENT_HANDLER(OnItemExpanding)
+//TREE_EVENT_HANDLER(OnItemCollapsed)
 
 #undef TREE_EVENT_HANDLER
 
@@ -434,10 +430,10 @@ void MyTreeCtrl::OnEndLabelEdit(wxTreeEvent& event)
     event.Skip();
 }
 
-void MyTreeCtrl::OnItemCollapsing(wxTreeEvent& event)
-{
-    event.Skip();
-}
+//void MyTreeCtrl::OnItemCollapsing(wxTreeEvent& event)
+//{
+//    event.Skip();
+//}
 
 void MyTreeCtrl::OnItemActivated(wxTreeEvent& event)
 {

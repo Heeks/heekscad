@@ -14,6 +14,7 @@
 #include "MagDragWindow.h"
 #include "HArc.h"
 #include "HImage.h"
+#include "RuledSurface.h"
 
 enum{
 	ID_LINES = 1,
@@ -33,6 +34,10 @@ enum{
 	ID_MAG_PREVIOUS,
 	ID_UNDO,
 	ID_REDO,
+	ID_RECENT_FIRST,
+	ID_OPEN_RECENT = ID_RECENT_FIRST + MAX_RECENT_FILES,
+	ID_IMPORT,
+	ID_RULED_SURFACE,
 	ID_NEXT_ID
 };
 
@@ -58,6 +63,9 @@ EVT_UPDATE_UI(Menu_View_StatusBar, CHeeksFrame::OnUpdateViewStatusBar)
 EVT_MENU(wxID_OPEN, CHeeksFrame::OnOpenButton)
 EVT_MENU(wxID_SAVE, CHeeksFrame::OnSaveButton)
 EVT_MENU(wxID_NEW, CHeeksFrame::OnNewButton)
+EVT_UPDATE_UI(ID_OPEN_RECENT, CHeeksFrame::OnUpdateOpenRecent)
+EVT_MENU(ID_IMPORT, CHeeksFrame::OnImportButton)
+EVT_MENU_RANGE(	ID_RECENT_FIRST, ID_RECENT_FIRST + MAX_RECENT_FILES, CHeeksFrame::OnRecentFile)
 EVT_MENU(ID_LINES, CHeeksFrame::OnLinesButton)
 EVT_MENU(ID_IMAGE, CHeeksFrame::OnImageButton)
 EVT_MENU(ID_VIEWING, CHeeksFrame::OnViewingButton)
@@ -68,6 +76,7 @@ EVT_MENU(ID_SUBTRACT, CHeeksFrame::OnSubtractButton)
 EVT_MENU(ID_FUSE, CHeeksFrame::OnFuseButton)
 EVT_MENU(ID_COMMON, CHeeksFrame::OnCommonButton)
 EVT_MENU(ID_REDRAW, CHeeksFrame::OnRedrawButton)
+EVT_MENU(ID_RULED_SURFACE, CHeeksFrame::OnRuledSurfaceButton)
 EVT_MENU(ID_MAG, CHeeksFrame::OnMagButton)
 EVT_MENU(ID_UNDO, CHeeksFrame::OnUndoButton)
 EVT_MENU(ID_REDO, CHeeksFrame::OnRedoButton)
@@ -88,6 +97,17 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 	// File Menu
 	wxMenu *menuFile = new wxMenu;
+	menuFile->Append( wxID_NEW, wxT( "&New..." ) );
+	menuFile->Append( wxID_OPEN, wxT( "&Open..." ) );
+	menuFile->Append( wxID_SAVE, wxT( "&Save..." ) );
+	menuFile->Append( wxID_SAVEAS, wxT( "Save &As..." ) );
+
+    m_recent_files_menu = new wxMenu;
+    m_recent_files_menu->Append(-1, _T("&test"), _T("test submenu item"));
+    menuFile->Append(ID_OPEN_RECENT, _T("Open Recent"), m_recent_files_menu);
+
+	menuFile->Append( ID_IMPORT, wxT( "Import..." ) );
+
 	menuFile->Append( Menu_File_About, wxT( "&About..." ) );
 	menuFile->AppendSeparator();
 	menuFile->Append( Menu_File_Quit, wxT( "E&xit" ) );
@@ -172,6 +192,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_solidBar->AddTool(ID_FUSE, _T("Fuse"), wxBitmap(exe_folder + "/bitmaps/fuse.png", wxBITMAP_TYPE_PNG), _T("Fuse one solid to another"));
 	m_solidBar->AddTool(ID_COMMON, _T("Common"), wxBitmap(exe_folder + "/bitmaps/common.png", wxBITMAP_TYPE_PNG), _T("Find common solid between two solids"));
     m_solidBar->AddTool(ID_REDRAW, _T("Redraw"), wxBitmap(exe_folder + "/bitmaps/redraw.png", wxBITMAP_TYPE_PNG), _T("Redraw"));
+    m_solidBar->AddTool(ID_RULED_SURFACE, _T("Ruled Surface"), wxBitmap(exe_folder + "/bitmaps/ruled.png", wxBITMAP_TYPE_PNG), _T("Create a lofted face"));
 	m_solidBar->Realize();
 
 	// viewing tool bar
@@ -253,6 +274,8 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	}
 
 	wxGetApp().OnNewOrOpen(false);
+	wxGetApp().SetLikeNewFile();
+	wxGetApp().SetFrameTitle();
 
 	m_aui_manager->Update();
 }
@@ -457,6 +480,25 @@ void CHeeksFrame::OnViewProperties( wxCommandEvent& event )
 	}
 }
 
+void CHeeksFrame::OnUpdateOpenRecent( wxUpdateUIEvent& event )
+{
+	size_t size = m_recent_files_menu->GetMenuItemCount();
+	std::list<wxMenuItem*> menu_items;
+	for(size_t i = 0; i< size; i++)menu_items.push_back(m_recent_files_menu->FindItemByPosition(i));
+	for(std::list<wxMenuItem*>::iterator It = menu_items.begin(); It != menu_items.end(); It++)
+	{
+		wxMenuItem* menu_item = *It;
+		m_recent_files_menu->Delete(menu_item);
+	}
+
+	int recent_id = ID_RECENT_FIRST;
+	for(std::list< wxString >::iterator It = wxGetApp().m_recent_files.begin(); It != wxGetApp().m_recent_files.end() && recent_id < ID_RECENT_FIRST + MAX_RECENT_FILES; It++, recent_id++)
+	{
+		wxString& filepath = *It;
+		m_recent_files_menu->Append(recent_id, filepath, filepath);
+	}
+}
+
 void CHeeksFrame::OnUpdateViewProperties( wxUpdateUIEvent& event )
 {
 	event.Check(m_aui_manager->GetPane(m_properties).IsShown());
@@ -490,36 +532,38 @@ CHeeksFrame::OnImageButton( wxCommandEvent& WXUNUSED( event ) )
 
 void CHeeksFrame::OnOpenButton( wxCommandEvent& event )
 {
-    wxFileDialog dialog(this, _T("Open solid data file"), wxEmptyString, wxEmptyString,	_T(wxGetApp().GetKnownFilesWildCardString()));
-    dialog.SetDirectory(wxGetHomeDir());
+    wxFileDialog dialog(this, _T("Open file"), wxEmptyString, wxEmptyString,	_T(wxGetApp().GetKnownFilesWildCardString()));
     dialog.CentreOnParent();
 
     if (dialog.ShowModal() == wxID_OK)
     {
-		wxGetApp().Reset();
-		if(wxGetApp().OpenFile( dialog.GetPath().c_str() )){
-			// add to recent files list
-			wxGetApp().m_recent_files.push_front( wxString( dialog.GetPath().c_str() ) );
-			if(wxGetApp().m_recent_files.size() > 20)wxGetApp().m_recent_files.pop_back();
+		if(wxGetApp().CheckForModifiedDoc())
+		{
+			wxGetApp().Reset();
+			wxGetApp().OpenFile(dialog.GetPath().c_str());
+			wxGetApp().OnNewOrOpen(true);
+			wxGetApp().SetLikeNewFile();
 		}
-		wxGetApp().OnNewOrOpen(true);
+    }
+}
+
+void CHeeksFrame::OnImportButton( wxCommandEvent& event )
+{
+    wxFileDialog dialog(this, _T("Import file"), wxEmptyString, wxEmptyString,	_T(wxGetApp().GetKnownFilesWildCardString()));
+    dialog.CentreOnParent();
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+		if(wxGetApp().CheckForModifiedDoc())
+		{
+			wxGetApp().OpenFile(dialog.GetPath().c_str());
+		}
     }
 }
 
 void CHeeksFrame::OnSaveButton( wxCommandEvent& event )
 {
-	wxString default_file = wxString(wxGetApp().m_filepath).BeforeLast('.');
-	if(default_file.size() == 0)default_file = wxString("Untitled");
-	default_file = default_file + wxString(".step");
-
-	wxFileDialog fd(this, _T("Save graphical data file"), wxEmptyString, default_file, wxGetApp().GetKnownFilesWildCardString(), wxSAVE|wxOVERWRITE_PROMPT);
-
-	fd.SetFilterIndex(1);
-
-    if (fd.ShowModal() == wxID_OK)
-    {
-        wxGetApp().SaveFile( fd.GetPath().c_str() );
-    }
+    wxGetApp().SaveFile( wxGetApp().m_filepath.c_str(), true );
 }
 
 void CHeeksFrame::OnUndoButton( wxCommandEvent& event )
@@ -538,6 +582,7 @@ void CHeeksFrame::OnNewButton( wxCommandEvent& event )
 {
 	wxGetApp().Reset();
 	wxGetApp().OnNewOrOpen(false);
+	wxGetApp().SetLikeNewFile();
 	wxGetApp().Repaint();
 }
 
@@ -559,6 +604,11 @@ void CHeeksFrame::OnCommonButton( wxCommandEvent& event )
 void CHeeksFrame::OnSphereButton( wxCommandEvent& event )
 {
 	CShape::AddASphere();
+}
+
+void CHeeksFrame::OnRuledSurfaceButton( wxCommandEvent& event )
+{
+	PickCreateRuledSurface();
 }
 
 void CHeeksFrame::OnCubeButton( wxCommandEvent& event )
@@ -605,6 +655,27 @@ void CHeeksFrame::OnExternalButton( wxCommandEvent& event )
 	if(FindIt != m_external_buttons.end()){
 		SExternalButtonFunctions& ebf = FindIt->second;
 		(*(ebf.on_button))(event);
+	}
+}
+
+void CHeeksFrame::OnRecentFile( wxCommandEvent& event )
+{
+	int id = event.GetId();
+
+	int recent_id = ID_RECENT_FIRST;
+	for(std::list< wxString >::iterator It = wxGetApp().m_recent_files.begin(); It != wxGetApp().m_recent_files.end() && recent_id < ID_RECENT_FIRST + MAX_RECENT_FILES; It++, recent_id++)
+	{
+		if(recent_id != id)continue;
+		wxString& filepath = *It;
+
+		if(wxGetApp().CheckForModifiedDoc())
+		{
+			wxGetApp().Reset();
+			wxGetApp().OpenFile(filepath.c_str());
+			wxGetApp().OnNewOrOpen(true);
+			wxGetApp().SetLikeNewFile();
+		}
+		break;
 	}
 }
 

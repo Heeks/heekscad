@@ -28,6 +28,9 @@ protected:
 
 public:
 	static bool m_solids_found; // a flag for xml writing
+	static std::map<int, CShape*> used_ids;
+	static int next_id;
+	int m_id;
 
 	CShape(const TopoDS_Shape &shape, const char* title, bool use_one_gl_list = false);
 	CShape(const CShape& s);
@@ -49,6 +52,9 @@ public:
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	void CopyFrom(const HeeksObj* object);
 	void WriteXML(TiXmlElement *root);
+	void GetProperties(std::list<Property *> *list);
+	void OnAdd();
+	void OnRemove();
 
 	const TopoDS_Shape &Shape(){return m_shape;}
 
@@ -60,8 +66,10 @@ public:
 	static void CutShapes(const std::list<HeeksObj*> &list);
 	static void FuseShapes(const std::list<HeeksObj*> &list);
 	static void CommonShapes(const std::list<HeeksObj*> &list);
-	static bool ImportSolidsFile(const char* filepath, bool undoably);
-	static bool ExportSolidsFile(const char* filepath);
+	static bool ImportSolidsFile(const char* filepath, bool undoably, std::map<int, int> *index_map = NULL);
+	static bool ExportSolidsFile(const char* filepath, std::map<int, int> *index_map = NULL);
 	static HeeksObj* MakeObject(const TopoDS_Shape &shape, const char* title, bool use_one_gl_list = false, bool stl_body = false);
 	static bool IsTypeAShape(int t);
+	static CShape* GetShape(int id);
+	static void SetID(CShape* shape, int id);
 };

@@ -285,6 +285,19 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 		double multiplier = wheel_value /1000.0;
 		if(wxGetApp().mouse_wheel_forward_away)multiplier = -multiplier;
 		wxGetApp().m_frame->m_graphics->m_view_point.Scale(multiplier);
+
+		{
+			// move towards mouse point, when zooming
+			wxSize client_size = wxGetApp().m_frame->m_graphics->GetClientSize();
+			double offset_x = (double)(event.GetX()) - (double)(client_size.GetWidth()) / 2;
+			double offset_y = (double)(event.GetY()) - (double)(client_size.GetHeight()) / 2;
+
+			offset_x *= multiplier / wxGetApp().GetPixelScale() * (multiplier > 0 ? 1.2 : -0.3);
+			offset_y *= -multiplier / wxGetApp().GetPixelScale() * (multiplier > 0 ? 1.2 : -0.3);
+
+			wxGetApp().m_frame->m_graphics->m_view_point.Shift(gp_Vec(offset_x, offset_y, 0));
+		}
+
 		wxGetApp().m_frame->m_graphics->Refresh(0);
 	}
 
@@ -331,11 +344,10 @@ void on_set_reverse_mouse_wheel(bool value)
 }
 
 void CSelectMode::GetProperties(std::list<Property *> *list){
+	wxGetApp().gripper_mode->GetOptions(list);
 }
 
 void CSelectMode::GetOptions(std::list<Property *> *list){
-	wxGetApp().gripper_mode->GetOptions(list);
-
 	if(!m_doing_a_main_loop)
 	{
 		// let the user change the digitizing options, if not picking some objects

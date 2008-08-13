@@ -62,6 +62,7 @@ public:
 	const gp_Pnt& GetStartPos()const{return current_view_stuff->start_pos;}
 	void SetStartPosUndoable(const gp_Pnt& pos);
 	bool IsDrawing(CInputMode* i);
+	void AddPoint();
 
 	void set_draw_step_not_undoable(int s){current_view_stuff->draw_step = s;}
 	void set_start_pos_not_undoable(const gp_Pnt& pos){current_view_stuff->start_pos = pos;}

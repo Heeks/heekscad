@@ -48,7 +48,7 @@ public:
 	virtual bool CanEditString(void)const{return false;}
 	virtual void OnEditString(const char* str){}
 	virtual void KillGLLists(void){};
-	virtual HeeksObj *MakeACopy(void)const = 0;
+	virtual HeeksObj *MakeACopy()const = 0;
 	virtual void CopyFrom(const HeeksObj* object){}
 	virtual void SetColor(const HeeksColor &col){}
 	virtual const HeeksColor* GetColor()const{return NULL;}
@@ -66,8 +66,10 @@ public:
 	virtual void Stretch(const double *p, const double* shift, double* new_position){}
 	virtual void SetClickMarkPoint(MarkedObject* marked_object, const double* ray_start, const double* ray_direction){}
 	virtual bool CanAdd(HeeksObj* object){return false;}
-	virtual bool Add(HeeksObj* object, HeeksObj* prev_object) {object->m_owner=this; return true;}
-	virtual void Remove(HeeksObj* object) {}
+	virtual bool Add(HeeksObj* object, HeeksObj* prev_object) {object->m_owner=this; object->OnAdd(); return true;}
+	virtual void Remove(HeeksObj* object){object->OnRemove();}
+	virtual void OnAdd(){}
+	virtual void OnRemove(){}
 	virtual HeeksObj* GetFirstChild(){return NULL;}
 	virtual HeeksObj* GetNextChild(){return NULL;}
 	virtual HeeksObj* GetAtIndex(int index){return NULL;}

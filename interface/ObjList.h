@@ -37,4 +37,5 @@ public:
 	void KillGLLists(void);
 	void WriteXML(TiXmlElement *root);
 	void ReadXMLChildren(TiXmlElement* root);
+	void ModifyByMatrix(const double *m);
 };

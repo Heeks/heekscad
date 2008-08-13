@@ -29,6 +29,7 @@ public:
 	virtual int get_property_type(){return InvalidPropertyType;}
 	virtual bool property_editable()const = 0;
 	virtual Property *MakeACopy(void)const = 0;
+	virtual void CallSetFunction()const = 0;
 	virtual const char* GetShortString(void)const{return "Unknown Property";}
 };
 
