@@ -8,6 +8,8 @@
 #include "DigitizeMode.h"
 #include "GripperMode.h"
 #include "StretchTool.h"
+#include "HeeksFrame.h"
+#include "ObjPropsCanvas.h"
 
 GripperSelTransform::GripperSelTransform(MarkedList* m, const gp_Pnt& pos):Gripper(pos, ""), m_marked_list(m), m_transform_gl_list(0){
 }
@@ -109,6 +111,10 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 		wxGetApp().EndHistory();
 		wxGetApp().UnHideMarkedList();
 	}
+
+	// don't need to press tick to make changes
+	wxGetApp().m_frame->m_properties->OnApply2();
+
 	{
 		std::list<HeeksObj *>::iterator It;
 		for ( It = m_items_marked_at_grab.begin(); It != m_items_marked_at_grab.end(); It++ )

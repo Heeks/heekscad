@@ -45,6 +45,9 @@ public:
 	virtual void SetInputMode(CInputMode* input_mode);
 	virtual void WasModified(HeeksObj* object);
 	virtual void WasAdded(HeeksObj* object);
+	virtual void WasRemoved(HeeksObj* object);
+	virtual void WereAdded(const std::list<HeeksObj*> &list);
+	virtual void WereRemoved(const std::list<HeeksObj*> &list);
 	virtual int PickObjects(const char* str);
 	virtual bool PickPosition(const char* str, double* pos);
 	virtual bool Digitize(const wxPoint &point, double* pos);

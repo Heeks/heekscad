@@ -75,12 +75,12 @@ void HLine::GetGripperPositions(std::list<double> *list, bool just_for_endof){
 }
 
 HLine* line_for_properties = NULL;
-void on_set_start(gp_Pnt &vt){
+void on_set_start(const gp_Pnt &vt){
 	line_for_properties->A = vt;
 	wxGetApp().Repaint();
 }
 
-void on_set_end(gp_Pnt &vt){
+void on_set_end(const gp_Pnt &vt){
 	line_for_properties->B = vt;
 	wxGetApp().Repaint();
 }
@@ -190,6 +190,8 @@ bool HLine::GetEndPoint(double* pos)
 
 gp_Vec HLine::GetSegmentVector(double fraction)
 {
+	gp_Vec line_vector(A, B);
+	if(line_vector.Magnitude() < 0.000000001)return gp_Vec(0, 0, 0);
 	return gp_Vec(A, B).Normalized();
 }
 

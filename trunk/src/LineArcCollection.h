@@ -25,9 +25,12 @@ public:
 	wxIcon* GetIcon();
 	void GetProperties(std::list<Property *> *list);
 	HeeksObj *MakeACopy(void)const;
+	void CopyFrom(const HeeksObj* object){operator=(*((CLineArcCollection*)object));}
 	void WriteXML(TiXmlElement *root);
+	void GetGripperPositions(std::list<double> *list, bool just_for_endof);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 	static HeeksObj* GetLineArcCollection(int id);
+	static void SetID(CLineArcCollection* la, int id);
 };
 

@@ -165,10 +165,6 @@ void LineArcDrawing::OnKeyUp(wxKeyEvent& event)
 void LineArcDrawing::set_cursor(void){
 }
 
-void LineArcDrawing::GetTools(std::list<Tool*> *f_list, const wxPoint *p){
-	Drawing::GetTools(f_list, p);
-}
-
 LineArcDrawing* line_drawing_for_GetProperties = NULL;
 
 void on_set_drawing_mode(int drawing_mode)
@@ -185,6 +181,11 @@ void LineArcDrawing::GetProperties(std::list<Property *> *list){
 	line_drawing_for_GetProperties = this;
 	list->push_back ( new PropertyChoice ( "drawing mode",  choices, drawing_mode, on_set_drawing_mode ) );
 	list->push_back(new PropertyString("(press 'a' for arcs)", ""));
+	wxGetApp().m_digitizing->GetProperties(list); // x, y, z
+}
+
+void LineArcDrawing::GetTools(std::list<Tool*> *f_list, const wxPoint *p){
+	Drawing::GetTools(f_list, p);
 }
 
 void LineArcDrawing::GetOptions(std::list<Property *> *list){

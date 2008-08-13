@@ -13,12 +13,14 @@
 #include "HArc.h"
 #include "Wire.h"
 #include "Face.h"
+#include "Edge.h"
 #include "Solid.h"
 
 void GetConversionMenuTools(std::list<Tool*>* t_list, const wxPoint* p, MarkedObject* marked_object){
 	bool lines_or_arcs_in_marked_list = false;
 	bool wire_in_marked_list = false;
 	bool face_in_marked_list = false;
+	bool edge_in_marked_list = false;
 
 	// check to see what types have been marked
 	std::list<HeeksObj*>::const_iterator It;
@@ -36,6 +38,9 @@ void GetConversionMenuTools(std::list<Tool*>* t_list, const wxPoint* p, MarkedOb
 			case FaceType:
 				face_in_marked_list = true;
 				break;
+			case EdgeType:
+				edge_in_marked_list = true;
+				break;
 		}
 	}
 
@@ -46,13 +51,17 @@ void GetConversionMenuTools(std::list<Tool*>* t_list, const wxPoint* p, MarkedOb
 	if(wire_in_marked_list){
 		t_list->push_back(new ConvertWireToFace);
 	}
+	if(edge_in_marked_list){
+		t_list->push_back(new ConvertEdgesToWire);
+	}
 }
 
-void ConvertLineArcsToWire::Run(){
+bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wire &wire)
+{
 	std::list<TopoDS_Edge> edges;
 	std::list<HeeksObj*> list2;
 	std::list<HeeksObj*>::const_iterator It;
-	for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+	for(It = list.begin(); It != list.end(); It++){
 		HeeksObj* object = *It;
 		if(object->GetType() == LineArcCollectionType){
 			for(HeeksObj* child = object->GetFirstChild(); child; child = object->GetNextChild())
@@ -92,7 +101,18 @@ void ConvertLineArcsToWire::Run(){
 			wire_maker.Add(edge);
 		}
 
-		wxGetApp().AddUndoably(new CWire(wire_maker.Wire(), "Wire"), NULL, NULL);
+		wire = wire_maker.Wire();
+		return true;
+	}
+
+	return false;
+}
+
+void ConvertLineArcsToWire::Run(){
+	TopoDS_Wire wire;
+	if(ConvertLineArcsToWire2(wxGetApp().m_marked_list->list(), wire))
+	{
+		wxGetApp().AddUndoably(new CWire(wire, "Wire"), NULL, NULL);
 		wxGetApp().Repaint();
 	}
 }
@@ -117,6 +137,34 @@ void ConvertWireToFace::Run(){
 	}
 }
 
+
+void ConvertEdgesToWire::Run(){
+	std::list<HeeksObj*> edges;
+	std::list<HeeksObj*>::const_iterator It;
+	for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+		HeeksObj* object = *It;
+		switch(object->GetType()){
+			case EdgeType:
+				{
+					edges.push_back(object);
+				}
+				break;
+		}
+	}
+
+	if(edges.size() > 0){
+		BRepBuilderAPI_MakeWire wire_maker;
+		std::list<HeeksObj*>::iterator It;
+		for(It = edges.begin(); It != edges.end(); It++)
+		{
+			HeeksObj* object = *It;
+			wire_maker.Add(TopoDS::Edge(((CEdge*)object)->Edge()));
+		}
+
+		wxGetApp().AddUndoably(new CWire(wire_maker.Wire(), "Wire"), NULL, NULL);
+		wxGetApp().Repaint();
+	}
+}
 void ConvertLineArcsToFace::Run(){
 	std::list<TopoDS_Edge> edges;
 	std::list<HeeksObj*> list2;

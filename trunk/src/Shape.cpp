@@ -26,19 +26,23 @@
 #include "TopTools_ListOfShape.hxx"
 #include "TopTools_ListIteratorOfListOfShape.hxx"
 #include "BRepOffsetAPI_MakeOffsetShape.hxx"
+#include "Interface_Static.hxx"
 #include "../interface/Tool.h"
+#include "../interface/PropertyInt.h"
 #include "SphereCreate.h"
 
 // static member variable
 bool CShape::m_solids_found = false;
+std::map<int, CShape*> CShape::used_ids;
+int CShape::next_id = 1;
 
-CShape::CShape(const TopoDS_Shape &shape, const char* title, bool use_one_gl_list):m_shape(shape), m_title(title), m_gl_list(0), m_use_one_gl_list(use_one_gl_list)
+CShape::CShape(const TopoDS_Shape &shape, const char* title, bool use_one_gl_list):m_shape(shape), m_title(title), m_gl_list(0), m_use_one_gl_list(use_one_gl_list), m_id(-1)
 {
 	create_face_objects();
 	create_edge_objects();
 }
 
-CShape::CShape(const CShape& s):m_gl_list(0)
+CShape::CShape(const CShape& s):m_gl_list(0), m_id(-1)
 {
 	operator=(s);
 }
@@ -52,6 +56,7 @@ CShape::~CShape()
 
 const CShape& CShape::operator=(const CShape& s)
 {
+	// don't copy id
 	delete_face_objects();
 	delete_edge_objects();
 	m_box = s.m_box;
@@ -64,6 +69,20 @@ const CShape& CShape::operator=(const CShape& s)
 	KillGLLists();
 
 	return *this;
+}
+
+void CShape::OnAdd()
+{
+	// set id
+	while(used_ids.find(next_id) != used_ids.end())next_id++;
+	m_id = next_id;
+	used_ids.insert( std::pair<int, CShape*> (m_id, this) );
+}
+
+void CShape::OnRemove()
+{
+	next_id = m_id; // this id has now become available
+	used_ids.erase(m_id);
 }
 
 void CShape::KillGLLists()
@@ -426,7 +445,7 @@ void CShape::CommonShapes(const std::list<HeeksObj*> &list_in)
 	wxGetApp().Repaint();
 }
 
-bool CShape::ImportSolidsFile(const char* filepath, bool undoably)
+bool CShape::ImportSolidsFile(const char* filepath, bool undoably, std::map<int, int> *index_map)
 {
 	// returns true, if suffix handled
 	wxString wf(filepath);
@@ -439,14 +458,24 @@ bool CShape::ImportSolidsFile(const char* filepath, bool undoably)
 
 		if ( status == IFSelect_RetDone )
 		{
-			Reader.TransferRoots();
-			int nshapes = Reader.NbShapes();
-			for(int i = 1; i<=nshapes; i++){
-				TopoDS_Shape rShape;
-				rShape = Reader.Shape(i);      
+			int num = Reader.NbRootsForTransfer();
+			for(int i = 1; i<=num; i++)
+			{
+				Handle_Standard_Transient root = Reader.RootForTransfer(i);
+				Reader.TransferEntity(root);
+				TopoDS_Shape rShape = Reader.Shape(i);      
 				HeeksObj* new_object = MakeObject(rShape, "STEP solid");
 				if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
 				else wxGetApp().Add(new_object, NULL);
+				if(index_map)
+				{
+					// change the id, to the one in the step file index
+					std::map<int, int>::iterator FindIt = index_map->find(i);
+					if(FindIt != index_map->end())
+					{
+						CShape::SetID((CShape*)new_object, FindIt->second);
+					}
+				}
 			}
 			wxGetApp().Repaint();
 		}
@@ -503,7 +532,7 @@ bool CShape::ImportSolidsFile(const char* filepath, bool undoably)
 	return false;
 }
 
-bool CShape::ExportSolidsFile(const char* filepath)
+bool CShape::ExportSolidsFile(const char* filepath, std::map<int, int> *index_map)
 {
 	// returns true, if suffix handled
 	wxString wf(filepath);
@@ -513,9 +542,12 @@ bool CShape::ExportSolidsFile(const char* filepath)
 		Standard_CString aFileName = (Standard_CString) (wf.c_str());
 		STEPControl_Writer writer;
 		// add all the solids
+		int i = 1;
 		for(HeeksObj* object = wxGetApp().GetFirstChild(); object; object = wxGetApp().GetNextChild()){
 			if(CShape::IsTypeAShape(object->GetType())){
-				writer.Transfer(((CSolid*)object)->Shape(), STEPControl_ManifoldSolidBrep);
+				if(index_map)index_map->insert( std::pair<int, int>(i, ((CShape*)object)->m_id) );
+				i++;
+				writer.Transfer(((CSolid*)object)->Shape(), STEPControl_AsIs);
 			}
 		}
 		writer.Write(aFileName);
@@ -531,7 +563,7 @@ bool CShape::ExportSolidsFile(const char* filepath)
 		// add all the solids
 		for(HeeksObj* object = wxGetApp().GetFirstChild(); object; object = wxGetApp().GetNextChild()){
 			if(CShape::IsTypeAShape(object->GetType())){
-				writer.AddShape(((CSolid*)object)->Shape());
+				writer.AddShape(((CShape*)object)->Shape());
 			}
 			else if(object->GetType() == WireType){
 				writer.AddShape(((CWire*)object)->Shape());
@@ -554,7 +586,7 @@ bool CShape::ExportSolidsFile(const char* filepath)
 		for(HeeksObj* object = wxGetApp().GetFirstChild(); object; object = wxGetApp().GetNextChild()){
 			if(CShape::IsTypeAShape(object->GetType())){
 				// append stl to file with default coefficient
-				writer.Write(((CSolid*)object)->Shape(), aFileName);
+				writer.Write(((CShape*)object)->Shape(), aFileName);
 			}
 		}
 		return true;
@@ -601,4 +633,34 @@ void CShape::CopyFrom(const HeeksObj* object)
 void CShape::WriteXML(TiXmlElement *root)
 {
 	CShape::m_solids_found = true;
+}
+
+static CShape* object_for_properties = NULL;
+
+static void on_set_id(int value)
+{
+	CShape::SetID(object_for_properties, value);
+}
+
+void CShape::GetProperties(std::list<Property *> *list){
+	__super::GetProperties(list);
+
+	object_for_properties = this;
+	list->push_back(new PropertyInt("ID", m_id, on_set_id));
+}
+
+// static
+CShape* CShape::GetShape(int id)
+{
+	std::map<int, CShape*>::iterator FindIt = used_ids.find(id);
+	if(FindIt == used_ids.end())return NULL;
+	return FindIt->second;
+}
+
+// static
+void CShape::SetID(CShape* shape, int id)
+{
+	used_ids.erase(shape->m_id);
+	shape->m_id = id;
+	used_ids.insert( std::pair<int, CShape*> (shape->m_id, shape) );
 }
