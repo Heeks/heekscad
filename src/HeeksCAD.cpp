@@ -5,6 +5,7 @@
 #include <wx/filedlg.h>
 #include <wx/clipbrd.h>
 #include <wx/stdpaths.h>
+#include <wx/filename.h>
 #include "../interface/Tool.h"
 #include "../interface/Material.h"
 #include "../interface/ToolList.h"
@@ -41,6 +42,8 @@
 #include "RemoveOrAddTool.h"
 #include "LineArcCollection.h"
 #include "../tinyxml/tinyxml.h"
+#include "BezierCurve.h"
+
 
 const int ID_TOOLBAR = 500;
 const int ID_SOLID_TOOLBAR = 501;
@@ -82,6 +85,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_hide_marked_list_stack = 0;
 	mouse_wheel_forward_away = true;
 	m_show_ruler = true;
+	m_filepath.assign("Untitled.heeks");
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -150,6 +154,8 @@ bool HeeksCADapp::OnInit()
 	m_config->Read("WheelForwardAway", &mouse_wheel_forward_away);
 	gripper_mode->GetProfileStrings();
 
+	GetRecentFilesProfileString();
+
 	wxImage::AddHandler(new wxPNGHandler);
 	m_frame = new CHeeksFrame( wxT( "HeeksCAD free Solid Modelling software based on Open CASCADE" ), wxPoint(posx, posy), wxSize(width, height));
 	m_frame->SetIcon(wxICON(HeeksCAD));
@@ -185,6 +191,8 @@ int HeeksCADapp::OnExit(){
 	m_config->Write("GridMode", grid_mode);
 	m_config->Write("m_light_push_matrix", m_light_push_matrix);
 	m_config->Write("WheelForwardAway", mouse_wheel_forward_away);
+
+	WriteRecentFilesProfileString();
 
 	return result;
 }
@@ -275,12 +283,42 @@ void HeeksCADapp::Reset(){
 	history = new MainHistory;
 	m_doing_rollback = false;
 	m_frame->m_graphics->m_view_point.SetView(gp_Vec(0, 1, 0), gp_Vec(0, 0, 1));
+	m_filepath.assign("Untitled.heeks");
 }
 
 static std::map< std::string, HeeksObj*(*)(TiXmlElement* pElem) > *xml_read_fn_map = NULL;
 
 static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 {
+	std::map<int, int> index_map;
+
+	// get the children ( an index map)
+	for(TiXmlElement* subElem = TiXmlHandle(pElem).FirstChildElement().Element(); subElem; subElem = subElem->NextSiblingElement())
+	{
+		std::string subname(subElem->Value());
+		if(subname == std::string("index_map"))
+		{
+			// loop through all the child elements, looking for index_pair items
+			for(TiXmlElement* subsubElem = TiXmlHandle(subElem).FirstChildElement().Element(); subsubElem; subsubElem = subsubElem->NextSiblingElement())
+			{
+				std::string subsubname(subsubElem->Value());
+				if(subsubname == std::string("index_pair"))
+				{
+					int id = -1, index = -1;
+
+					// get the attributes
+					for(TiXmlAttribute* a = subsubElem->FirstAttribute(); a; a = a->Next())
+					{
+						wxString attr_name(a->Name());
+						if(attr_name == "index"){index = a->IntValue();}
+						else if(attr_name == "id"){id = a->IntValue();}
+					}
+					if(id != -1 && index != -1)index_map.insert(std::pair<int, int>(index, id));
+				}
+			}
+		}
+	}
+
 	// get the attributes
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
@@ -294,7 +332,7 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 				ofstream ofs(temp_file);
 				ofs<<a->Value();
 			}
-			CShape::ImportSolidsFile(temp_file, false);
+			CShape::ImportSolidsFile(temp_file, false, &index_map);
 		}
 	}
 
@@ -340,7 +378,7 @@ HeeksObj* HeeksCADapp::ReadXMLElement(TiXmlElement* pElem)
 	return NULL;
 }
 
-void HeeksCADapp::OpenXMLFile(const char *filepath)
+void HeeksCADapp::OpenXMLFile(const char *filepath, bool update_recent_file_list, bool set_app_caption)
 {
 	TiXmlDocument doc(filepath);
 	if (!doc.LoadFile())
@@ -359,13 +397,13 @@ void HeeksCADapp::OpenXMLFile(const char *filepath)
 	// block: name
 	{
 		pElem=hDoc.FirstChildElement().Element();
-		// should always have a valid root but handle gracefully if it does
 		if (!pElem) return;
 		const char* name=pElem->Value();
 
 		if(wxString(name) != wxString("HeeksCAD_Document"))
 		{
 			wxMessageBox("This is not a HeeksCAD document!");
+			return;
 		}
 
 		// save this for later
@@ -380,9 +418,145 @@ void HeeksCADapp::OpenXMLFile(const char *filepath)
 	}
 
 	WereAdded(m_objects);
+
+	m_filepath.assign(filepath);
+	if(update_recent_file_list)InsertRecentFileItem(filepath);
+	if(set_app_caption)SetFrameTitle();
 }
 
-bool HeeksCADapp::OpenFile(const char *filepath)
+static CLineArcCollection* line_arc_collection_for_callback = NULL;
+static void add_line_from_bezier_curve(const gp_Pnt& vt0, const gp_Pnt& vt1)
+{
+	HLine* new_object = new HLine(vt0, vt1, &(wxGetApp().current_color));
+	line_arc_collection_for_callback->Add(new_object, NULL);
+}
+
+void HeeksCADapp::ReadSVGElement(TiXmlElement* pElem)
+{
+	std::string name(pElem->Value());
+
+	if(name == std::string("g"))
+	{
+		// loop through all the child elements, looking for path
+		for(pElem = TiXmlHandle(pElem).FirstChildElement().Element(); pElem; pElem = pElem->NextSiblingElement())
+		{
+			ReadSVGElement(pElem);
+		}
+		return;
+	}
+
+	if(name == std::string("path"))
+	{
+		// get the attributes
+		for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
+		{
+			wxString name(a->Name());
+			if(name == "d")
+			{
+				// add lines and arcs and bezier curves
+				const char* d = a->Value();
+
+				double sx, sy;
+				double px, py;
+				CLineArcCollection* line_arc_collection = NULL;
+
+				int pos = 0;
+				while(1){
+					if(d[pos] == 'M'){
+						// make a line arc collection
+						pos++;
+						sscanf(&d[pos], "%lf,%lf", &sx, &sy);
+						sy = -sy;
+						px = sx; py = sy;
+						line_arc_collection = new CLineArcCollection;
+						Add(line_arc_collection, NULL);
+					}
+					else if(d[pos] == 'L'){
+						// add a line
+						pos++;
+						double x, y;
+						sscanf(&d[pos], "%lf,%lf", &x, &y);
+						y = -y;
+						HLine* new_object = new HLine(gp_Pnt(px, py, 0), gp_Pnt(x, y, 0), &current_color);
+						px = x; py = y;
+						line_arc_collection->Add(new_object, NULL);
+					}
+					else if(d[pos] == 'C'){
+						// add a bezier curve ( just split into lines for now )
+						pos++;
+						double x1, y1, x2, y2, x3, y3;
+						sscanf(&d[pos], "%lf,%lf %lf,%lf %lf,%lf", &x1, &y1, &x2, &y2, &x3, &y3);
+						y1 = -y1; y2 = -y2; y3 = -y3;
+						line_arc_collection_for_callback = line_arc_collection;
+						split_bezier_curve(3, gp_Pnt(px, py,  0), gp_Pnt(x3, y3, 0), gp_Pnt(x1, y1, 0), gp_Pnt(x2, y2, 0), add_line_from_bezier_curve);
+						px = x3; py = y3;
+					}
+					else if(toupper(d[pos]) == 'Z'){
+						// join to end
+						pos++;
+						HLine* new_object = new HLine(gp_Pnt(px, py, 0), gp_Pnt(sx, sy, 0), &current_color);
+						px = sx; py = sy;
+						line_arc_collection->Add(new_object, NULL);
+					}
+					else if(d[pos] == 0){
+						break;
+					}
+					else{
+						pos++;
+					}
+				}
+			}
+		}
+	}
+
+}
+
+void HeeksCADapp::OpenSVGFile(const char *filepath, bool update_recent_file_list, bool set_app_caption)
+{
+	TiXmlDocument doc(filepath);
+	if (!doc.LoadFile())
+	{
+		if(doc.Error())
+		{
+			wxMessageBox(doc.ErrorDesc());
+		}
+		return;
+	}
+
+	TiXmlHandle hDoc(&doc);
+	TiXmlElement* pElem;
+	TiXmlHandle hRoot(0);
+
+	// block: name
+	{
+		pElem=hDoc.FirstChildElement().Element();
+		if (!pElem) return;
+		const char* name=pElem->Value();
+
+		if(wxString(name) != wxString("svg"))
+		{
+			wxMessageBox("This is not an SVG document!");
+			return;
+		}
+
+		// save this for later
+		hRoot=TiXmlHandle(pElem);
+	}
+
+	// loop through all the objects
+	for(pElem = hRoot.FirstChildElement().Element(); pElem;	pElem = pElem->NextSiblingElement())
+	{
+		ReadSVGElement(pElem);
+	}
+
+	WereAdded(m_objects);
+
+	m_filepath.assign(filepath);
+	if(update_recent_file_list)InsertRecentFileItem(filepath);
+	if(set_app_caption)SetFrameTitle();
+}
+
+bool HeeksCADapp::OpenFile(const char *filepath, bool update_recent_file_list, bool set_app_caption)
 {
 	// i'm not sure what return value means if anything
 
@@ -390,7 +564,13 @@ bool HeeksCADapp::OpenFile(const char *filepath)
 
 	if(wf.EndsWith(".heeks") || wf.EndsWith(".HEEKS"))
 	{
-		OpenXMLFile(filepath);
+		OpenXMLFile(filepath, update_recent_file_list, set_app_caption);
+		return true;
+	}
+
+	if(wf.EndsWith(".svg") || wf.EndsWith(".SVG"))
+	{
+		OpenSVGFile(filepath, update_recent_file_list, set_app_caption);
 		return true;
 	}
 
@@ -398,6 +578,9 @@ bool HeeksCADapp::OpenFile(const char *filepath)
 	if(CShape::ImportSolidsFile(filepath, false))
 	{
 		WereAdded(m_objects);
+		m_filepath.assign(filepath);
+		if(update_recent_file_list)InsertRecentFileItem(filepath);
+		if(set_app_caption)SetFrameTitle();
 		return true;
 	}
 
@@ -412,7 +595,7 @@ bool HeeksCADapp::OpenFile(const char *filepath)
 	return false;
 }
 
-void HeeksCADapp::SaveXMLFile(const char *filepath)
+void HeeksCADapp::SaveXMLFile(const char *filepath, bool update_recent_file_list, bool set_app_caption)
 {
 	// write an xml file
 	TiXmlDocument doc;  
@@ -435,8 +618,26 @@ void HeeksCADapp::SaveXMLFile(const char *filepath)
 		wxStandardPaths sp;
 		sp.GetTempDir();
 		wxString temp_file = sp.GetTempDir() + "/temp_HeeksCAD_STEP_file.step";
-		CShape::ExportSolidsFile(temp_file);
+		std::map<int, int> index_map;
+		CShape::ExportSolidsFile(temp_file, &index_map);
 
+		TiXmlElement *step_file_element = new TiXmlElement( "STEP_file" );
+		root->LinkEndChild( step_file_element );  
+
+		// write the index map as a child of step_file
+		{
+			TiXmlElement *index_map_element = new TiXmlElement( "index_map" );
+			step_file_element->LinkEndChild( index_map_element );
+			for(std::map<int, int>::iterator It = index_map.begin(); It != index_map.end(); It++)
+			{
+				TiXmlElement *index_pair_element = new TiXmlElement( "index_pair" );
+				index_map_element->LinkEndChild( index_pair_element );
+				index_pair_element->SetAttribute("index", It->first);
+				index_pair_element->SetAttribute("id", It->second);
+			}
+		}
+
+		// write the step file as a string attribute of step_file
 		ifstream ifs(temp_file);
 		if(!(!ifs)){
 			std::string fstr;
@@ -447,30 +648,41 @@ void HeeksCADapp::SaveXMLFile(const char *filepath)
 				if(!ifs)break;
 			}
 
-			TiXmlElement * element;
-			element = new TiXmlElement( "STEP_file" );
-			root->LinkEndChild( element );  
-			element->SetAttribute("text", fstr.c_str());
+			step_file_element->SetAttribute("text", fstr.c_str());
 		}
 	}
 
 	doc.SaveFile( filepath );  
+
+	m_filepath.assign(filepath);
+	if(update_recent_file_list)InsertRecentFileItem(filepath);
+	if(set_app_caption)SetFrameTitle();
+	SetLikeNewFile();
 }
 
-bool HeeksCADapp::SaveFile(const char *filepath)
+bool HeeksCADapp::SaveFile(const char *filepath, bool use_dialog, bool update_recent_file_list, bool set_app_caption)
 {
-	// i'm not sure what return value means, if anything
+	if(use_dialog){
+		wxFileDialog fd(m_frame, _T("Save graphical data file"), wxEmptyString, filepath, GetKnownFilesWildCardString(), wxSAVE|wxOVERWRITE_PROMPT);
+		fd.SetFilterIndex(1);
+		if (fd.ShowModal() == wxID_CANCEL)return false;
+		return SaveFile( fd.GetPath().c_str(), false, update_recent_file_list );
+	}
 
 	wxString wf(filepath);
 
 	if(wf.EndsWith(".heeks") || wf.EndsWith(".HEEKS"))
 	{
-		SaveXMLFile(filepath);
+		SaveXMLFile(filepath, update_recent_file_list, set_app_caption);
 		return true;
 	}
 
 	if(CShape::ExportSolidsFile(filepath))
 	{
+		m_filepath.assign(filepath);
+		if(update_recent_file_list)InsertRecentFileItem(filepath);
+		if(set_app_caption)SetFrameTitle();
+		SetLikeNewFile();
 		return true;
 	}
 	else
@@ -838,6 +1050,9 @@ void HeeksCADapp::WereRemoved(const std::list<HeeksObj*>& list)
 	if (list.size() == 0) return;
 	HeeksObj* object = *(list.begin());
 	if (object == NULL) return;
+
+	wxGetApp().m_marked_list->Remove(list);
+
 	ObserversOnChange(NULL, &list, NULL);
 	SetAsModified();
 }
@@ -959,12 +1174,12 @@ void HeeksCADapp::glColorEnsuringContrast(const HeeksColor &c)
 
 const char* HeeksCADapp::GetKnownFilesWildCardString()const
 {
-	return "Known Files |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl|Heeks files (*.heeks)|*.heeks|IGES files (*.igs *.iges)|*.igs;*.iges|STEP files (*.stp *.step)|*.stp;*.step|STL files (*.stl)|*.stl";
+	return "Known Files |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl;*.svg|Heeks files (*.heeks)|*.heeks|IGES files (*.igs *.iges)|*.igs;*.iges|STEP files (*.stp *.step)|*.stp;*.step|STL files (*.stl)|*.stl|Scalar Vector Graphics files (*.svg)|*.svg";
 }
 
 const char* HeeksCADapp::GetKnownFilesCommaSeparatedList()const
 {
-	return "heeks, igs, iges, stp, step, stl";
+	return "heeks, igs, iges, stp, step, stl, svg";
 }
 
 class MarkObjectTool:public Tool{
@@ -1019,7 +1234,7 @@ void HeeksCADapp::AddMenusToToolList(MarkedObject* marked_object, std::list<Tool
 		tools.push_back(new RemoveObjectTool(marked_object->GetObject()));
 		tools.push_back(NULL);
 		if(from_graphics_canvas){
-			if (!wxGetApp().m_marked_list->ObjectMarked(marked_object->GetObject()))
+			if (!m_marked_list->ObjectMarked(marked_object->GetObject()))
 			{
 				tools.push_back(new MarkObjectTool(marked_object, point, control_pressed));
 			}
@@ -1248,4 +1463,67 @@ void HeeksCADapp::OnNewOrOpen(bool open)
 void HeeksCADapp::RegisterHideableWindow(wxWindow* w)
 {
 	m_hideable_windows.push_back(w);
+}
+
+void HeeksCADapp::GetRecentFilesProfileString()
+{
+	for(int i = 0; i < MAX_RECENT_FILES; i++)
+	{
+		char key_name[1024];
+		sprintf(key_name, "RecentFilePath%d", i);
+		wxString filepath = m_config->Read(key_name);
+		if(filepath.IsEmpty())break;
+		m_recent_files.push_back(filepath);
+	}
+}
+
+void HeeksCADapp::WriteRecentFilesProfileString()
+{
+	std::list< wxString >::iterator It = m_recent_files.begin();
+	for(int i = 0; i < MAX_RECENT_FILES; i++)
+	{
+		char key_name[1024];
+		sprintf(key_name, "RecentFilePath%d", i);
+		wxString filepath;
+		if(It != m_recent_files.end())
+		{
+			filepath = *It;
+			It++;
+		}
+		m_config->Write(key_name, filepath);
+	}
+}
+
+void HeeksCADapp::InsertRecentFileItem(const char* filepath)
+{
+	// add to recent files list
+	m_recent_files.remove(filepath);
+	m_recent_files.push_front( wxString( filepath ) );
+	if(m_recent_files.size() > MAX_RECENT_FILES)m_recent_files.pop_back();
+}
+
+bool HeeksCADapp::CheckForModifiedDoc()
+{
+	// returns true if OK to continue opening file
+	if(history->IsModified())
+	{
+		char str[1024];
+		sprintf(str, "Save changes to %s", m_filepath.c_str());
+		int res = wxMessageBox(str, wxMessageBoxCaptionStr, wxCANCEL|wxYES_NO|wxCENTRE);
+		if(res == wxCANCEL)return false;
+		if(res == wxYES)
+		{
+			return SaveFile(m_filepath.c_str(), true);
+		}
+	}
+
+	return true;
+}
+
+void HeeksCADapp::SetFrameTitle()
+{
+	char str[1024];
+	wxFileName f(m_filepath.c_str());
+	sprintf(str, "%s.%s - %s", f.GetName(), f.GetExt(), m_filepath.c_str());
+	m_frame->SetTitle(str);
 }

@@ -220,7 +220,9 @@ void MarkedList::Remove(const std::list<HeeksObj *> &obj_list){
 	std::list<HeeksObj *>::const_iterator It;
 	for(It = obj_list.begin(); It != obj_list.end(); It++){
 		HeeksObj *object = *It;
-		m_list.remove(object);
+		if(m_set.find(object) != m_set.end()){
+			m_list.remove(object);
+		}
 		m_set.erase(object);
 	}
 	OnChanged(false, false, NULL, &obj_list);

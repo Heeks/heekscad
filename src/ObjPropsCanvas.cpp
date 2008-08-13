@@ -27,7 +27,7 @@ static void OnCancel(wxCommandEvent& event)
 }
 
 CObjPropsCanvas::CObjPropsCanvas(wxWindow* parent)
-        : CPropertiesCanvas(parent), m_copy_for_cancel(NULL)
+        : CPropertiesCanvas(parent), m_object_for_cancel(NULL)
 {
 	// make a tool bar for Apply, Cancel and any tools of the marked object.
 	m_toolBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
@@ -37,11 +37,7 @@ CObjPropsCanvas::CObjPropsCanvas(wxWindow* parent)
 
 CObjPropsCanvas::~CObjPropsCanvas()
 {
-	if(m_copy_for_cancel)
-	{
-		delete m_copy_for_cancel;
-		m_copy_for_cancel = NULL;
-	}
+	ClearInitialProperties();
 }
 
 void CObjPropsCanvas::OnSize(wxSizeEvent& event)
@@ -67,6 +63,17 @@ void CObjPropsCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 	CPropertiesCanvas::OnPropertyGridChange(event);
 }
 
+void CObjPropsCanvas::ClearInitialProperties()
+{
+	for(std::list<Property *>::iterator It = m_initial_properties.begin(); It != m_initial_properties.end(); It++)
+	{
+		Property* p = *It;
+		delete p;
+	}
+
+	m_initial_properties.clear();
+}
+
 void CObjPropsCanvas::RefreshByRemovingAndAddingAll(){
 	ClearProperties();
 	wxGetApp().m_frame->ClearToolBar(m_toolBar);
@@ -77,27 +84,27 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll(){
 		marked_object = (*wxGetApp().m_marked_list->list().begin());
 	}
 
-	if(m_copy_for_cancel && marked_object != m_object_for_cancel)
+	if(marked_object != m_object_for_cancel)
 	{
 		// if an object becomes unselected, this cancels the editing
-		m_object_for_cancel->CopyFrom(m_copy_for_cancel);
-		delete m_copy_for_cancel;
-		m_copy_for_cancel = NULL;
-		wxGetApp().WasModified(m_object_for_cancel);
-		return;
+		for(std::list<Property*>::iterator It = m_initial_properties.begin(); It != m_initial_properties.end(); It++){
+			Property* p = *It;
+			p->CallSetFunction();
+		}
 	}
+
+	ClearInitialProperties();
 
 	m_object_for_cancel = marked_object;
 
 	if(marked_object)
 	{
-		if(m_copy_for_cancel == NULL)m_copy_for_cancel = marked_object->MakeACopy();
-
 		std::list<Property *> list;
 		marked_object->GetProperties(&list);
 		for(std::list<Property*>::iterator It = list.begin(); It != list.end(); It++)
 		{
 			Property* property = *It;
+			m_initial_properties.push_back(property->MakeACopy());
 			AddProperty(property);
 		}
 
@@ -133,12 +140,6 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll(){
 
 void CObjPropsCanvas::OnApply2()
 {
-	if(m_copy_for_cancel)
-	{
-		delete m_copy_for_cancel;
-		m_copy_for_cancel = NULL;
-	}
-
 	// cause all of the properties to be applied
 	RefreshByRemovingAndAddingAll();
 }
@@ -150,5 +151,4 @@ void CObjPropsCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, co
 
 void CObjPropsCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified)
 {
-	RefreshByRemovingAndAddingAll();
 }

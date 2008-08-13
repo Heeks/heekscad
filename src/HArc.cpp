@@ -133,22 +133,22 @@ void HArc::GetGripperPositions(std::list<double> *list, bool just_for_endof){
 }
 
 static HArc* arc_for_properties = NULL;
-static void on_set_start(gp_Pnt &vt){
+static void on_set_start(const gp_Pnt &vt){
 	arc_for_properties->A = vt;
 	wxGetApp().Repaint();
 }
 
-static void on_set_end(gp_Pnt &vt){
+static void on_set_end(const gp_Pnt &vt){
 	arc_for_properties->B = vt;
 	wxGetApp().Repaint();
 }
 
-static void on_set_centre(gp_Pnt &vt){
+static void on_set_centre(const gp_Pnt &vt){
 	arc_for_properties->m_circle.SetLocation(vt);
 	wxGetApp().Repaint();
 }
 
-static void on_set_axis(gp_Pnt &vt){
+static void on_set_axis(const gp_Pnt &vt){
 	gp_Ax1 a = arc_for_properties->m_circle.Axis();
 	a.SetDirection(gp_Dir(vt.XYZ()));
 	arc_for_properties->m_circle.SetAxis(a);
@@ -249,7 +249,7 @@ bool HArc::TangentialArc(const gp_Pnt &p0, const gp_Vec &v0, const gp_Pnt &p1, g
 	// else returns true and sets centre and axis
 	std::list<gp_Pnt> rl;
 	gp_Dir direction_for_circle;
-	if(p0.Distance(p1) > 0.0000000001){
+	if(p0.Distance(p1) > 0.0000000001 && v0.Magnitude() > 0.0000000001){
 		gp_Vec v1(p0, p1);
 		gp_Pnt halfway(p0.XYZ() + v1.XYZ() * 0.5);
 		gp_Pln pl1(halfway, v1);

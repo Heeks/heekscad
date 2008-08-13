@@ -9,7 +9,9 @@ class CObjPropsCanvas: public CPropertiesCanvas
 private:
 	wxToolBar *m_toolBar;
 	HeeksObj* m_object_for_cancel;
-	HeeksObj* m_copy_for_cancel;
+	std::list<Property *> m_initial_properties;
+
+	void ClearInitialProperties();
 
 public:
     CObjPropsCanvas(wxWindow* parent);

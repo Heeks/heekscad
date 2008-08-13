@@ -189,3 +189,8 @@ void ObjList::ReadXMLChildren(TiXmlElement* root)
 		if(object)Add(object, NULL);
 	}
 }
+
+void ObjList::ModifyByMatrix(const double *m)
+{
+	for(std::list<HeeksObj*>::iterator It=m_objects.begin(); It!=m_objects.end() ;It++) (*It)->ModifyByMatrix(m);
+}

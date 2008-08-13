@@ -242,6 +242,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\BezierCurve.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\BezierCurve.h"
+			>
+		</File>
+		<File
 			RelativePath="..\interface\Box.h"
 			>
 		</File>
@@ -727,6 +735,14 @@
 		</File>
 		<File
 			RelativePath=".\RemoveOrAddTool.h"
+			>
+		</File>
+		<File
+			RelativePath=".\RuledSurface.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\RuledSurface.h"
 			>
 		</File>
 		<File

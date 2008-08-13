@@ -57,7 +57,6 @@ void RemoveOrAddTool::Remove()
 	{
 		m_owner = m_object->m_owner;
 		m_object->m_owner->Remove(m_object);
-		wxGetApp().m_marked_list->Remove(m_object);
 		wxGetApp().WasRemoved(m_object);
 		wxGetApp().WasModified(m_owner);
 		m_object->m_owner = NULL;

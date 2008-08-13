@@ -21,6 +21,8 @@ class Observer;
 class CHeeksFrame;
 class wxDynamicLibrary;
 
+#define MAX_RECENT_FILES 20
+
 class HeeksCADapp : public wxApp, public ObjList
 {
 private:
@@ -100,12 +102,14 @@ public:
 	void ClearRollingForward(void);
 	bool Add(HeeksObj* object, HeeksObj* prev_object);
 	void Reset();
-	HeeksObj* HeeksCADapp::ReadXMLElement(TiXmlElement* pElem);
+	HeeksObj* ReadXMLElement(TiXmlElement* pElem);
 	void InitializeXMLFunctions();
-	void OpenXMLFile(const char *filepath);
-	bool OpenFile(const char *filepath);
-	void SaveXMLFile(const char *filepath);
-	bool SaveFile(const char *filepath);
+	void OpenXMLFile(const char *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
+	void ReadSVGElement(TiXmlElement* pElem);
+	void OpenSVGFile(const char *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
+	bool OpenFile(const char *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
+	void SaveXMLFile(const char *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
+	bool SaveFile(const char *filepath, bool use_dialog = false, bool update_recent_file_list = true, bool set_app_caption = true);
 	void DeleteUndoably(HeeksObj* object);
 	void DeleteUndoably(const std::list<HeeksObj*>& list);
 	void TransformUndoably(HeeksObj *object, double *m);
@@ -141,6 +145,11 @@ public:
 	void OnNewOrOpen(bool open);
 	void RegisterHideableWindow(wxWindow* w);
 	void RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem));
+	void GetRecentFilesProfileString();
+	void WriteRecentFilesProfileString();
+	void InsertRecentFileItem(const char* filepath);
+	bool CheckForModifiedDoc(); // returns true, if OK to continue with file open etc.
+	void SetFrameTitle();
 };
 
 DECLARE_APP(HeeksCADapp)

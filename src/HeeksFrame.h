@@ -30,6 +30,7 @@ public:
 	wxToolBarBase *m_viewingBar;
 	wxStatusBar* m_statusBar;
 	wxMenuBar *m_menuBar;
+	wxMenu* m_recent_files_menu;
 	wxMenu *m_menuView;
 
 	CHeeksFrame( const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize );
@@ -44,6 +45,7 @@ public:
 	void OnViewInput( wxCommandEvent& event );
 	void OnUpdateViewInput( wxUpdateUIEvent& event );
 	void OnViewProperties( wxCommandEvent& event );
+	void OnUpdateOpenRecent( wxUpdateUIEvent& event );
 	void OnUpdateViewProperties( wxUpdateUIEvent& event );
 	void OnViewToolBar( wxCommandEvent& event );
 	void OnUpdateViewToolBar( wxUpdateUIEvent& event );
@@ -57,6 +59,7 @@ public:
 	void OnImageButton( wxCommandEvent& event );
 	void OnViewingButton( wxCommandEvent& event );
 	void OnOpenButton( wxCommandEvent& event );
+	void OnImportButton( wxCommandEvent& event );
 	void OnSaveButton( wxCommandEvent& event );
 	void OnUndoButton( wxCommandEvent& event );
 	void OnRedoButton( wxCommandEvent& event );
@@ -65,6 +68,7 @@ public:
 	void OnFuseButton( wxCommandEvent& event );
 	void OnCommonButton( wxCommandEvent& event );
 	void OnSphereButton( wxCommandEvent& event );
+	void OnRuledSurfaceButton( wxCommandEvent& event );
 	void OnCubeButton( wxCommandEvent& event );
 	void OnCylButton( wxCommandEvent& event );
 	void OnRedrawButton( wxCommandEvent& event );
@@ -73,6 +77,7 @@ public:
 	void OnMagNoRotButton( wxCommandEvent& event );
 	void OnMagPreviousButton( wxCommandEvent& event );
 	void OnExternalButton( wxCommandEvent& event );
+	void OnRecentFile( wxCommandEvent& event );
 	void OnUpdateExternalButton( wxUpdateUIEvent& event );
 	void OnSize( wxSizeEvent& evt );
 	void OnMove( wxMoveEvent& evt );

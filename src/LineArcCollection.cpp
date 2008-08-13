@@ -54,9 +54,7 @@ static CLineArcCollection* object_for_properties = NULL;
 
 static void on_set_id(int value)
 {
-	CLineArcCollection::used_ids.erase(object_for_properties->m_id);
-	object_for_properties->m_id = value;
-	CLineArcCollection::used_ids.insert( std::pair<int, CLineArcCollection*> (object_for_properties->m_id, object_for_properties) );
+	CLineArcCollection::SetID(object_for_properties, value);
 }
 
 void CLineArcCollection::GetProperties(std::list<Property *> *list)
@@ -65,6 +63,29 @@ void CLineArcCollection::GetProperties(std::list<Property *> *list)
 
 	object_for_properties = this;
 	list->push_back(new PropertyInt("ID", m_id, on_set_id));
+	list->push_back(new PropertyInt("Number of elements", GetNumChildren()));
+}
+
+void CLineArcCollection::GetGripperPositions(std::list<double> *list, bool just_for_endof){
+	// return the four corners of a 2d box
+	CBox box;
+	GetBox(box);
+	list->push_back(0);
+	list->push_back(box.m_x[0]);
+	list->push_back(box.m_x[1]);
+	list->push_back(box.m_x[2]);
+	list->push_back(0);
+	list->push_back(box.m_x[3]);
+	list->push_back(box.m_x[1]);
+	list->push_back(box.m_x[2]);
+	list->push_back(0);
+	list->push_back(box.m_x[3]);
+	list->push_back(box.m_x[4]);
+	list->push_back(box.m_x[2]);
+	list->push_back(0);
+	list->push_back(box.m_x[0]);
+	list->push_back(box.m_x[4]);
+	list->push_back(box.m_x[2]);
 }
 
 // static
@@ -73,6 +94,14 @@ HeeksObj* CLineArcCollection:: GetLineArcCollection(int id)
 	std::map<int, CLineArcCollection*>::iterator FindIt = used_ids.find(id);
 	if(FindIt == used_ids.end())return NULL;
 	return FindIt->second;
+}
+
+// static
+void CLineArcCollection::SetID(CLineArcCollection* la, int id)
+{
+	used_ids.erase(la->m_id);
+	la->m_id = id;
+	used_ids.insert( std::pair<int, CLineArcCollection*> (la->m_id, la) );
 }
 
 HeeksObj *CLineArcCollection::MakeACopy(void)const
