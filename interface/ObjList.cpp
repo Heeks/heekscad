@@ -51,6 +51,7 @@ void ObjList::ClearUndoably(void)
 	}
 	m_objects.clear();
 	LoopItStack.clear();
+	m_index_list.clear();
 	m_index_list_valid = true;
 }
 
@@ -99,7 +100,7 @@ HeeksObj* ObjList::GetNextChild()
 void ObjList::recalculate_index_list()
 {
 	m_index_list.clear();
-	m_index_list.reserve(m_objects.size());
+	m_index_list.resize(m_objects.size());
 	int i = 0;
 	for(std::list<HeeksObj*>::iterator It=m_objects.begin(); It!=m_objects.end() ;It++, i++)
 	{
@@ -132,10 +133,6 @@ bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 	if (m_objects.size()==0 || prev_object==NULL)
 	{
 		m_objects.push_back(object);
-		if(m_index_list_valid)
-		{
-			m_index_list.push_back(object);
-		}
 		LoopIt = m_objects.end();
 		LoopIt--;
 	}
@@ -143,8 +140,8 @@ bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 	{
 		for(LoopIt = m_objects.begin(); LoopIt != m_objects.end(); LoopIt++) { if (*LoopIt==prev_object) break; }
 		m_objects.insert(LoopIt, object);
-		m_index_list_valid = false;
 	}
+	m_index_list_valid = false;
 	HeeksObj::Add(object, prev_object);
 	return true;
 }
@@ -159,8 +156,8 @@ void ObjList::Remove(HeeksObj* object)
 	if(LoopIt != m_objects.end())
 	{
 		m_objects.erase(LoopIt);
-		m_index_list_valid = false;
 	}
+	m_index_list_valid = false;
 	HeeksObj::Remove(object);
 }
 
