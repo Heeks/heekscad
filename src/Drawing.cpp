@@ -6,6 +6,7 @@
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"
 #include "../interface/Tool.h"
+#include "../interface/Property.h"
 #include "LineArcDrawing.h"
 #include "SelectMode.h"
 #include "DigitizeMode.h"
@@ -13,7 +14,7 @@
 #include "GraphicsCanvas.h"
 #include "InputModeCanvas.h"
 
-Drawing::Drawing(void){
+Drawing::Drawing(void): m_inhibit_coordinate_change(false), m_getting_position(false){
 	null_view = new ViewSpecific(0);
 	SetView(0);
 }
@@ -43,28 +44,39 @@ void Drawing::RecalculateAndRedraw(const wxPoint& point)
 
 void Drawing::AddPoint()
 {
-				wxGetApp().StartHistory(get_drawing_title());
-				if(is_an_add_level(GetDrawStep())){
-					calculate_item(wxGetApp().m_digitizing->position_found);
-					before_add_item();
-					const std::list<HeeksObj*>& drawing_objects = GetObjectsMade();
-					wxGetApp().AddUndoably(drawing_objects, GetOwnerForDrawingObjects());
-					wxGetApp().m_frame->m_graphics->DrawObjectsOnFront(drawing_objects, true);
-					set_previous_direction();
-					clear_drawing_objects();
-					if(wxGetApp().m_digitizing->digitize_type_found != DigitizeNoItemType)SetStartPosUndoable(wxGetApp().m_digitizing->position_found);
-				}
-				else if(GetDrawStep() == 0){
-					clear_drawing_objects();
-					SetStartPosUndoable(wxGetApp().m_digitizing->digitize_type_found == DigitizeNoItemType ? gp_Pnt(0, 0, 0) : wxGetApp().m_digitizing->position_found);
-				}
+	// set the position from the properties
+	std::list<Property *> list;
+	wxGetApp().m_digitizing->GetProperties(&list);
+	for(std::list<Property *>::iterator It = list.begin(); It != list.end(); It++)
+	{
+		Property* p = *It;
+		p->CallSetFunction();
+	}
 
-				int next_step = GetDrawStep() + 1;
-				if(next_step >= number_of_steps()){
-					next_step = step_to_go_to_after_last_step();
-				}
-				SetDrawStepUndoable(next_step);
-				wxGetApp().EndHistory();
+	wxGetApp().StartHistory(get_drawing_title());
+	if(is_an_add_level(GetDrawStep())){
+		calculate_item(wxGetApp().m_digitizing->position_found);
+		before_add_item();
+		const std::list<HeeksObj*>& drawing_objects = GetObjectsMade();
+		wxGetApp().AddUndoably(drawing_objects, GetOwnerForDrawingObjects());
+		wxGetApp().m_frame->m_graphics->DrawObjectsOnFront(drawing_objects, true);
+		set_previous_direction();
+		clear_drawing_objects();
+		if(wxGetApp().m_digitizing->digitize_type_found != DigitizeNoItemType)SetStartPosUndoable(wxGetApp().m_digitizing->position_found);
+	}
+	else if(GetDrawStep() == 0){
+		clear_drawing_objects();
+		SetStartPosUndoable(wxGetApp().m_digitizing->digitize_type_found == DigitizeNoItemType ? gp_Pnt(0, 0, 0) : wxGetApp().m_digitizing->position_found);
+	}
+
+	int next_step = GetDrawStep() + 1;
+	if(next_step >= number_of_steps()){
+		next_step = step_to_go_to_after_last_step();
+	}
+	SetDrawStepUndoable(next_step);
+	wxGetApp().EndHistory();
+	m_getting_position = false;
+	m_inhibit_coordinate_change = false;
 }
 
 void Drawing::OnMouse( wxMouseEvent& event )
@@ -83,20 +95,36 @@ void Drawing::OnMouse( wxMouseEvent& event )
 		}
 		else{
 			if(event.LeftDown()){
-				button_down_point = wxPoint(event.GetX(), event.GetY());
+				if(!m_inhibit_coordinate_change)
+				{
+					button_down_point = wxPoint(event.GetX(), event.GetY());
+				}
 			}
 			else if(event.LeftUp()){
-				set_digitize_plane();
-				DigitizeType type_found = wxGetApp().m_digitizing->digitize(button_down_point);
-				AddPoint();
+				if(m_inhibit_coordinate_change){
+					m_inhibit_coordinate_change = false;
+				}
+				else{
+					set_digitize_plane();
+					DigitizeType type_found = wxGetApp().m_digitizing->digitize(button_down_point);
+					if(m_getting_position){
+						m_inhibit_coordinate_change = true;
+						m_getting_position = false;
+					}
+					else{
+						AddPoint();
+					}
+				}
 			}
 			else if(event.RightUp()){
 				// do context menu same as select mode
 				wxGetApp().m_select_mode->OnMouse(event);
 			}
 			else if(event.Moving()){
-				RecalculateAndRedraw(wxPoint(event.GetX(), event.GetY()));
-				wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
+				if(!m_inhibit_coordinate_change){
+					RecalculateAndRedraw(wxPoint(event.GetX(), event.GetY()));
+					wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
+				}
 			}
 		}
 	}
@@ -176,10 +204,41 @@ wxBitmap* AddPointTool::m_bitmap = NULL;
 
 static AddPointTool add_point;
 
+class GetPosTool:public Tool{
+private:
+	static wxBitmap* m_bitmap;
+
+public:
+	Drawing* m_drawing;
+
+	GetPosTool(): m_drawing(NULL){}
+
+	void Run()
+	{
+		m_drawing->m_getting_position = true;
+	}
+	const char* GetTitle(){return "Get Position";}
+	wxBitmap* Bitmap()
+	{
+		if(m_bitmap == NULL)
+		{
+			wxString exe_folder = wxGetApp().GetExeFolder();
+			m_bitmap = new wxBitmap(exe_folder + "/bitmaps/pickpos.png", wxBITMAP_TYPE_PNG);
+		}
+		return m_bitmap;
+	}
+	const char* GetToolTip(){return "Pick position without adding to the drawing";}
+};
+wxBitmap* GetPosTool::m_bitmap = NULL;
+
+static GetPosTool get_pos_tool;
+
 void Drawing::GetTools(std::list<Tool*> *f_list, const wxPoint *p){
 	f_list->push_back(&end_drawing);
 	add_point.m_drawing = this;
 	f_list->push_back(&add_point);
+	get_pos_tool.m_drawing = this;
+	f_list->push_back(&get_pos_tool);
 }
 
 void Drawing::SetView(int v){
@@ -258,6 +317,10 @@ void Drawing::OnFrontRender(){
 	}
 
 	wxGetApp().m_digitizing->OnFrontRender();
+}
+
+void Drawing::GetProperties(std::list<Property *> *list){
+	wxGetApp().m_digitizing->GetProperties(list); // x, y, z
 }
 
 void Drawing::GetOptions(std::list<Property *> *list){
