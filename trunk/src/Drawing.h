@@ -43,6 +43,9 @@ protected:
 	void RecalculateAndRedraw(const wxPoint& point);
 
 public:
+	bool m_getting_position;
+	bool m_inhibit_coordinate_change; // so that user can type into properties
+
 	Drawing(void);
 	virtual ~Drawing(void);
 
@@ -50,6 +53,7 @@ public:
 	void OnMouse( wxMouseEvent& event );
 	void OnKeyDown(wxKeyEvent& event);
 	bool OnModeChange(void);
+	void GetProperties(std::list<Property *> *list);
 	void GetTools(std::list<Tool*> *f_list, const wxPoint *p);
 	void OnFrontRender();
 	void GetOptions(std::list<Property *> *list);
@@ -67,3 +71,4 @@ public:
 	void set_draw_step_not_undoable(int s){current_view_stuff->draw_step = s;}
 	void set_start_pos_not_undoable(const gp_Pnt& pos){current_view_stuff->start_pos = pos;}
 };
+
