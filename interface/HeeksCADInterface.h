@@ -66,4 +66,5 @@ public:
 	virtual void RegisterHideableWindow(wxWindow* w);
 	virtual HeeksObj* ReadXMLElement(TiXmlElement* pElem);
 	virtual void RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem));
+	virtual HeeksObj* GetSolidShape(int id);
 };

@@ -16,6 +16,7 @@
 #include "LineArcCollection.h"
 #include "DigitizeMode.h"
 #include "SelectMode.h"
+#include "Shape.h"
 
 double CHeeksCADInterface::GetTolerance()
 {
@@ -295,4 +296,9 @@ HeeksObj* CHeeksCADInterface::ReadXMLElement(TiXmlElement* pElem)
 void CHeeksCADInterface::RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem))
 {
 	wxGetApp().RegisterReadXMLfunction(type_name, read_xml_function);
+}
+
+HeeksObj* CHeeksCADInterface::GetSolidShape(int id)
+{
+	return CShape::GetShape(id);
 }

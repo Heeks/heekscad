@@ -275,7 +275,8 @@ void CGraphicsCanvas::DrawObjectsOnFront(const std::list<HeeksObj*> &list, bool 
 
 	for(std::list<HeeksObj*>::const_iterator It = list.begin(); It != list.end(); It++)
 	{
-		(*It)->glCommands(false, false, false);
+		HeeksObj* object = *It;
+		object->glCommands(false, false, false);
 	}
 
 	wxGetApp().DestroyLights();

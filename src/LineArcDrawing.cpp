@@ -181,7 +181,7 @@ void LineArcDrawing::GetProperties(std::list<Property *> *list){
 	line_drawing_for_GetProperties = this;
 	list->push_back ( new PropertyChoice ( "drawing mode",  choices, drawing_mode, on_set_drawing_mode ) );
 	list->push_back(new PropertyString("(press 'a' for arcs)", ""));
-	wxGetApp().m_digitizing->GetProperties(list); // x, y, z
+	__super::GetProperties(list);
 }
 
 void LineArcDrawing::GetTools(std::list<Tool*> *f_list, const wxPoint *p){

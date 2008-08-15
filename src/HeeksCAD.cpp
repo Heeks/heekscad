@@ -724,6 +724,7 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	Material().glMaterial(1.0);
 	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_DEPTH_TEST);
+	glDepthMask(1);
 	glEnable(GL_POLYGON_OFFSET_FILL);
 	glShadeModel(GL_FLAT);
 	m_frame->m_graphics->m_view_point.SetPolygonOffset();
