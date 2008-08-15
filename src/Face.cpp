@@ -240,6 +240,9 @@ void CFace::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 }
 
 void CFace::GetTriangles(void(*callbackfunc)(double* x, double* n), double cusp){
+	BRepTools::Clean(m_topods_face);
+	BRepMesh::Mesh(m_topods_face, cusp);
+
 	StdPrs_ToolShadedShape SST;
 
 	// Get triangulation
@@ -247,58 +250,60 @@ void CFace::GetTriangles(void(*callbackfunc)(double* x, double* n), double cusp)
 	Handle_Poly_Triangulation facing = BRep_Tool::Triangulation(m_topods_face,L);
 	gp_Trsf tr = L;
 
-	Poly_Connect pc(facing);	
-	const TColgp_Array1OfPnt& Nodes = facing->Nodes();
-	const TColgp_Array1OfPnt2d& UVNodes = facing->UVNodes();
-	const Poly_Array1OfTriangle& triangles = facing->Triangles();
-	TColgp_Array1OfDir myNormal(Nodes.Lower(), Nodes.Upper());
+	if(!facing.IsNull()){
+		Poly_Connect pc(facing);	
+		const TColgp_Array1OfPnt& Nodes = facing->Nodes();
+		const TColgp_Array1OfPnt2d& UVNodes = facing->UVNodes();
+		const Poly_Array1OfTriangle& triangles = facing->Triangles();
+		TColgp_Array1OfDir myNormal(Nodes.Lower(), Nodes.Upper());
 
-	SST.Normal(m_topods_face, pc, myNormal);
-	double Umin, Umax, Vmin, Vmax;
-	BRepTools::UVBounds(m_topods_face,Umin, Umax, Vmin, Vmax);
-	double dUmax = (Umax - Umin);
-	double dVmax = (Vmax - Vmin);
+		SST.Normal(m_topods_face, pc, myNormal);
+		double Umin, Umax, Vmin, Vmax;
+		BRepTools::UVBounds(m_topods_face,Umin, Umax, Vmin, Vmax);
+		double dUmax = (Umax - Umin);
+		double dVmax = (Vmax - Vmin);
 
-	Standard_Integer nnn = facing->NbTriangles();					// nnn : nombre de triangles
-	Standard_Integer nt, n1, n2, n3 = 0;						// nt  : triangle courant
+		Standard_Integer nnn = facing->NbTriangles();					// nnn : nombre de triangles
+		Standard_Integer nt, n1, n2, n3 = 0;						// nt  : triangle courant
 
-	double x[9], n[9];
+		double x[9], n[9];
 
-	// ni  : sommet i du triangle courant
-	for (nt = 1; nt <= nnn; nt++)					
-	{
-		if (SST.Orientation(m_topods_face) == TopAbs_REVERSED)			// si la face est "reversed"
-			triangles(nt).Get(n1,n3,n2);						// le triangle est n1,n3,n2
-		else 
-			triangles(nt).Get(n1,n2,n3);						// le triangle est n1,n2,n3
-
-		if (TriangleIsValid (Nodes(n1),Nodes(n2),Nodes(n3)) )
+		// ni  : sommet i du triangle courant
+		for (nt = 1; nt <= nnn; nt++)					
 		{
-			gp_Pnt v1 = Nodes(n1).Transformed(tr);
-			gp_Pnt v2 = Nodes(n2).Transformed(tr);
-			gp_Pnt v3 = Nodes(n3).Transformed(tr);
+			if (SST.Orientation(m_topods_face) == TopAbs_REVERSED)			// si la face est "reversed"
+				triangles(nt).Get(n1,n3,n2);						// le triangle est n1,n3,n2
+			else 
+				triangles(nt).Get(n1,n2,n3);						// le triangle est n1,n2,n3
+
+			if (TriangleIsValid (Nodes(n1),Nodes(n2),Nodes(n3)) )
+			{
+				gp_Pnt v1 = Nodes(n1).Transformed(tr);
+				gp_Pnt v2 = Nodes(n2).Transformed(tr);
+				gp_Pnt v3 = Nodes(n3).Transformed(tr);
 
 
-			x[0] = v1.X();
-			x[1] = v1.Y();
-			x[2] = v1.Z();
-			x[3] = v2.X();
-			x[4] = v2.Y();
-			x[5] = v2.Z();
-			x[6] = v3.X();
-			x[7] = v3.Y();
-			x[8] = v3.Z();
+				x[0] = v1.X();
+				x[1] = v1.Y();
+				x[2] = v1.Z();
+				x[3] = v2.X();
+				x[4] = v2.Y();
+				x[5] = v2.Z();
+				x[6] = v3.X();
+				x[7] = v3.Y();
+				x[8] = v3.Z();
 
-			n[0] = myNormal(n1).X();
-			n[1] = myNormal(n1).Y();
-			n[2] = myNormal(n1).Z();
-			n[3] = myNormal(n2).X();
-			n[4] = myNormal(n2).Y();
-			n[5] = myNormal(n2).Z();
-			n[6] = myNormal(n3).X();
-			n[7] = myNormal(n3).Y();
-			n[8] = myNormal(n3).Z();
-			(*callbackfunc)(x, n);
+				n[0] = myNormal(n1).X();
+				n[1] = myNormal(n1).Y();
+				n[2] = myNormal(n1).Z();
+				n[3] = myNormal(n2).X();
+				n[4] = myNormal(n2).Y();
+				n[5] = myNormal(n2).Z();
+				n[6] = myNormal(n3).X();
+				n[7] = myNormal(n3).Y();
+				n[8] = myNormal(n3).Z();
+				(*callbackfunc)(x, n);
+			}
 		}
 	}
 }
