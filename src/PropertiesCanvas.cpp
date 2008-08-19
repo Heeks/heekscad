@@ -247,3 +247,8 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 		break;
 	}
 }
+
+void CPropertiesCanvas::DeselectProperties()
+{
+	m_pg->DoSelectProperty(NULL);
+}

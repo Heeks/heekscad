@@ -7,4 +7,5 @@ void RenderRuler()
 {
 	// simply render a foot rule
 
+	// to do
 }

@@ -2,10 +2,15 @@
 #include "stdafx.h"
 
 #include "HArc.h"
+#include "HLine.h"
+#include "HILine.h"
+#include "HCircle.h"
 #include "../interface/PropertyDouble.h"
 #include "../interface/PropertyChoice.h"
 #include "../tinyxml/tinyxml.h"
 #include "PropertyVertex.h"
+
+wxIcon* HArc::m_icon = NULL;
 
 HArc::HArc(const HArc &line){
 	operator=(line);
@@ -18,9 +23,10 @@ HArc::~HArc(){
 }
 
 const HArc& HArc::operator=(const HArc &b){
-	HGeomObject::operator=(b);
+	HeeksObj::operator=(b);
 	A = b.A;
 	B = b.B;
+	m_circle = b.m_circle;
 	color = b.color;
 	return *this;
 }
@@ -109,6 +115,15 @@ HeeksObj *HArc::MakeACopy(void)const{
 		return new_object;
 }
 
+wxIcon* HArc::GetIcon(){
+	if(m_icon == NULL)
+	{
+		wxString exe_folder = wxGetApp().GetExeFolder();
+		m_icon = new wxIcon(exe_folder + "/icons/arc.png", wxBITMAP_TYPE_PNG);
+	}
+	return m_icon;
+}
+
 void HArc::ModifyByMatrix(const double* m){
 	gp_Trsf mat = make_matrix(m);
 	A.Transform(mat);
@@ -167,9 +182,139 @@ void HArc::GetProperties(std::list<Property *> *list){
 	list->push_back(new PropertyDouble("Length", length, NULL));
 }
 
+int HArc::Intersects(const HeeksObj *object, std::list< double > *rl)const
+{
+	int numi = 0;
+
+	switch(object->GetType())
+	{
+	case LineType:
+		{
+			std::list<gp_Pnt> plist;
+			intersect(((HLine*)object)->GetLine(), m_circle, plist);
+			for(std::list<gp_Pnt>::iterator It = plist.begin(); It != plist.end(); It++)
+			{
+				gp_Pnt& pnt = *It;
+				if(Intersects(pnt) && ((HLine*)object)->Intersects(pnt))
+				{
+					if(rl)add_pnt_to_doubles(pnt, *rl);
+					numi++;
+				}
+			}
+		}
+		break;
+
+	case ILineType:
+		{
+			std::list<gp_Pnt> plist;
+			intersect(((HILine*)object)->GetLine(), m_circle, plist);
+			for(std::list<gp_Pnt>::iterator It = plist.begin(); It != plist.end(); It++)
+			{
+				gp_Pnt& pnt = *It;
+				if(Intersects(pnt))
+				{
+					if(rl)add_pnt_to_doubles(pnt, *rl);
+					numi++;
+				}
+			}
+		}
+		break;
+
+	case ArcType:
+		{
+			std::list<gp_Pnt> plist;
+			intersect(m_circle, ((HArc*)object)->m_circle, plist);
+			for(std::list<gp_Pnt>::iterator It = plist.begin(); It != plist.end(); It++)
+			{
+				gp_Pnt& pnt = *It;
+				if(Intersects(pnt) && ((HArc*)object)->Intersects(pnt))
+				{
+					if(rl)add_pnt_to_doubles(pnt, *rl);
+					numi++;
+				}
+			}
+		}
+		break;
+
+	case CircleType:
+		{
+			std::list<gp_Pnt> plist;
+			intersect(m_circle, ((HCircle*)object)->m_circle, plist);
+			for(std::list<gp_Pnt>::iterator It = plist.begin(); It != plist.end(); It++)
+			{
+				gp_Pnt& pnt = *It;
+				if(Intersects(pnt))
+				{
+					if(rl)add_pnt_to_doubles(pnt, *rl);
+					numi++;
+				}
+			}
+		}
+		break;
+	}
+
+	return numi;
+}
+
+bool HArc::Intersects(const gp_Pnt &pnt)const
+{
+	if(!intersect(pnt, m_circle))return false;
+
+	if(pnt.IsEqual(A, wxGetApp().m_geom_tol)){
+		return true;
+	}
+
+	if(pnt.IsEqual(B, wxGetApp().m_geom_tol)){
+		return true;
+	}
+
+	if(A.IsEqual(B, wxGetApp().m_geom_tol)){
+		return false; // no size arc!
+	}
+
+	gp_Dir x_axis = m_circle.XAxis().Direction();
+	gp_Dir y_axis = m_circle.YAxis().Direction();
+	gp_Pnt centre = m_circle.Location();
+
+	double ax = gp_Vec(A.XYZ() - centre.XYZ()) * x_axis;
+	double ay = gp_Vec(A.XYZ() - centre.XYZ()) * y_axis;
+	double bx = gp_Vec(B.XYZ() - centre.XYZ()) * x_axis;
+	double by = gp_Vec(B.XYZ() - centre.XYZ()) * y_axis;
+	double px = gp_Vec(pnt.XYZ() - centre.XYZ()) * x_axis;
+	double py = gp_Vec(pnt.XYZ() - centre.XYZ()) * y_axis;
+
+	double start_angle = atan2(ay, ax);
+	double end_angle = atan2(by, bx);
+	double pnt_angle = atan2(py, px);
+
+	// force the angle to be greater than start angle
+	if(start_angle > end_angle)end_angle += 6.28318530717958;
+	while(pnt_angle < start_angle)pnt_angle += 6.28318530717958;
+
+	// point lies on the arc, if the angle is less than the end angle
+	return pnt_angle < end_angle;
+}
+
 bool HArc::FindNearPoint(const double* ray_start, const double* ray_direction, double *point){
-	// to do
+	gp_Lin ray(make_point(ray_start), make_vector(ray_direction));
+	std::list< gp_Pnt > rl;
+	ClosestPointsLineAndCircle(ray, m_circle, rl);
+	if(rl.size()>0)
+	{
+		gp_Pnt p = rl.front();
+		if(Intersects(p))
+		{
+			extract(p, point);
+			return true;
+		}
+	}
+
 	return false;
+}
+
+bool HArc::FindPossTangentPoint(const double* ray_start, const double* ray_direction, double *point){
+	// any point on this arc is a possible tangent point
+	return FindNearPoint(ray_start, ray_direction, point);
 }
 
 void HArc::Stretch(const double *p, const double* shift, double* new_position){
@@ -243,34 +388,27 @@ gp_Pnt HArc::GetPointAtFraction(double fraction)
 }
 
 //static
-bool HArc::TangentialArc(const gp_Pnt &p0, const gp_Vec &v0, const gp_Pnt &p1, gp_Pnt &centre, gp_Vec &axis)
+bool HArc::TangentialArc(const gp_Pnt &p0, const gp_Vec &v0, const gp_Pnt &p1, gp_Pnt &centre, gp_Dir &axis)
 {
 	// returns false if a straight line is needed 
 	// else returns true and sets centre and axis
-	std::list<gp_Pnt> rl;
-	gp_Dir direction_for_circle;
 	if(p0.Distance(p1) > 0.0000000001 && v0.Magnitude() > 0.0000000001){
 		gp_Vec v1(p0, p1);
 		gp_Pnt halfway(p0.XYZ() + v1.XYZ() * 0.5);
 		gp_Pln pl1(halfway, v1);
 		gp_Pln pl2(p0, v0);
 		gp_Lin plane_line;
-		intersect(pl1, pl2, plane_line);
-		direction_for_circle = -(plane_line.Direction());
-		gp_Lin l1(halfway, v1);
-		intersect(plane_line, l1, rl);
+		if(intersect(pl1, pl2, plane_line))
+		{
+			gp_Lin l1(halfway, v1);
+			gp_Pnt unused_p2;
+			ClosestPointsOnLines(plane_line, l1, centre, unused_p2);
+			axis = -(plane_line.Direction());
+			return true;
+		}
 	}
 
-	if(rl.size() == 0){
-		// line
-		return false;
-	}
-	else{
-		// arc
-		centre = rl.front();
-		axis = direction_for_circle;
-		return true;
-	}
+	return false; // you'll have to do a line instead
 }
 
 void HArc::WriteXML(TiXmlElement *root)

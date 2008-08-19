@@ -4,6 +4,7 @@
 
 #include "../interface/InputMode.h"
 #include "../interface/LeftAndRight.h"
+#include "DigitizedPoint.h"
 
 class HeeksObj;
 
@@ -11,7 +12,7 @@ class ViewSpecific{
 public:
 	int view;
 	int draw_step;
-	gp_Pnt start_pos;
+	DigitizedPoint start_pos;
 
 	ViewSpecific(int v){
 		view = v;
@@ -28,10 +29,10 @@ protected:
 
 	// Drawing's virtual functions
 	virtual void set_digitize_plane(){}
-	virtual void calculate_item(const gp_Pnt &end){}
+	virtual void calculate_item(DigitizedPoint &end){}
 	virtual void before_add_item(){}
 	virtual const std::list<HeeksObj*>& GetObjectsMade()const = 0;
-	virtual void clear_drawing_objects(){}
+	virtual void clear_drawing_objects(bool store_as_previous_objects = false){}
 	virtual void set_previous_direction(){}
 	virtual int number_of_steps(){return 2;}
 	virtual int step_to_go_to_after_last_step(){return 0;}
@@ -60,15 +61,15 @@ public:
 
 	// Drawing's virtual functions
 	virtual const char* get_drawing_title(){return "Drawing";}
+	virtual void AddPoint();
 
 	int GetDrawStep()const{return current_view_stuff->draw_step;}
 	void SetDrawStepUndoable(int s);
-	const gp_Pnt& GetStartPos()const{return current_view_stuff->start_pos;}
-	void SetStartPosUndoable(const gp_Pnt& pos);
+	const DigitizedPoint& GetStartPos()const{return current_view_stuff->start_pos;}
+	void SetStartPosUndoable(const DigitizedPoint& pos);
 	bool IsDrawing(CInputMode* i);
-	void AddPoint();
 
 	void set_draw_step_not_undoable(int s){current_view_stuff->draw_step = s;}
-	void set_start_pos_not_undoable(const gp_Pnt& pos){current_view_stuff->start_pos = pos;}
+	void set_start_pos_not_undoable(const DigitizedPoint& pos){current_view_stuff->start_pos = pos;}
 };
 

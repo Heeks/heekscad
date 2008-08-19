@@ -6,6 +6,7 @@
 #include <wx/clipbrd.h>
 #include <wx/stdpaths.h>
 #include <wx/filename.h>
+#include <wx/cmdline.h>
 #include "../interface/Tool.h"
 #include "../interface/Material.h"
 #include "../interface/ToolList.h"
@@ -38,6 +39,8 @@
 #include "StretchTool.h"
 #include "HLine.h"
 #include "HArc.h"
+#include "HILine.h"
+#include "HCircle.h"
 #include "HImage.h"
 #include "RemoveOrAddTool.h"
 #include "LineArcCollection.h"
@@ -56,6 +59,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_geom_tol = 0.001;
 	background_color = HeeksColor(0, 0, 0);
 	current_color = HeeksColor(0, 0, 0);
+	construction_color = HeeksColor(0, 0, 255);
 	input_mode_object = NULL;
 	cur_mouse_pos.x = 0;
 	cur_mouse_pos.y = 0;
@@ -70,8 +74,10 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	digitize_centre = false;
 	digitize_midpoint = false;
 	digitize_nearest = false;
+	digitize_tangent = false;
 	digitize_coords = true;
 	digitize_screen = false;
+	digitizing_radius = 5.0;
 	draw_to_grid = true;
 	digitizing_grid = 1.0;
 	grid_mode = 3;
@@ -129,10 +135,12 @@ bool HeeksCADapp::OnInit()
 	m_config->Read("DrawCentre", &digitize_centre, false);
 	m_config->Read("DrawMidpoint", &digitize_midpoint, false);
 	m_config->Read("DrawNearest", &digitize_nearest, false);
+	m_config->Read("DrawTangent", &digitize_tangent, false);
 	m_config->Read("DrawCoords", &digitize_coords, true);
 	m_config->Read("DrawScreen", &digitize_screen, false);
 	m_config->Read("DrawToGrid", &draw_to_grid, false);
 	m_config->Read("DrawGrid", &digitizing_grid);
+	m_config->Read("DrawRadius", &digitizing_radius);
 	{
 		wxString str;
 		m_config->Read("BackgroundColor", &str, "242 204 162");
@@ -146,6 +154,13 @@ bool HeeksCADapp::OnInit()
 		int r = 0, g = 0, b = 0;
 		sscanf(str, "%d %d %d", &r, &g, &b);
 		current_color = HeeksColor(r, g, b);
+	}
+	{
+		wxString str;
+		m_config->Read("ConstructionColor", &str, "0 0 255");
+		int r = 0, g = 0, b = 255;
+		sscanf(str, "%d %d %d", &r, &g, &b);
+		construction_color = HeeksColor(r, g, b);
 	}
 	m_config->Read("RotateMode", &m_rotate_mode);
 	m_config->Read("Antialiasing", &m_antialiasing);
@@ -162,6 +177,33 @@ bool HeeksCADapp::OnInit()
 	SetInputMode(m_select_mode);
 	m_frame->Show(TRUE);
 	SetTopWindow(m_frame);
+
+	{
+		// Open the file passed in the command line argument
+		wxCmdLineEntryDesc cmdLineDesc[2];
+		cmdLineDesc[0].kind = wxCMD_LINE_PARAM;
+		cmdLineDesc[0].shortName = NULL;
+		cmdLineDesc[0].longName = NULL;
+		cmdLineDesc[0].description = wxT("input files");
+		cmdLineDesc[0].type = wxCMD_LINE_VAL_STRING;
+		cmdLineDesc[0].flags = wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_PARAM_MULTIPLE;
+
+		cmdLineDesc[1].kind = wxCMD_LINE_NONE;
+
+		//gets the passed files from cmd line
+		wxCmdLineParser parser (cmdLineDesc, argc, argv);
+
+		// get filenames from the commandline
+		if (parser.Parse() == 0)
+		{
+			for (size_t paramNr=0; paramNr < parser.GetParamCount(); ++paramNr)
+			{
+				OpenFile((parser.GetParam (paramNr)));
+				break;
+			}
+		}
+	}
+
 	return TRUE;
 } 
 
@@ -172,10 +214,12 @@ int HeeksCADapp::OnExit(){
 	m_config->Write("DrawCentre", digitize_centre);
 	m_config->Write("DrawMidpoint", digitize_midpoint);
 	m_config->Write("DrawNearest", digitize_nearest);
+	m_config->Write("DrawTangent", digitize_tangent);
 	m_config->Write("DrawCoords", digitize_coords);
 	m_config->Write("DrawScreen", digitize_screen);
 	m_config->Write("DrawToGrid", draw_to_grid);
 	m_config->Write("DrawGrid", digitizing_grid);
+	m_config->Write("DrawRadius", digitizing_radius);
 	{
 		char str[1024];
 		sprintf(str, "%d %d %d", background_color.red, background_color.green, background_color.blue);
@@ -185,6 +229,11 @@ int HeeksCADapp::OnExit(){
 		char str[1024];
 		sprintf(str, "%d %d %d", current_color.red, current_color.green, current_color.blue);
 		m_config->Write("CurrentColor", str);
+	}
+	{
+		char str[1024];
+		sprintf(str, "%d %d %d", construction_color.red, construction_color.green, construction_color.blue);
+		m_config->Write("ConstructionColor", str);
 	}
 	m_config->Write("RotateMode", m_rotate_mode);	
 	m_config->Write("Antialiasing", m_antialiasing);	
@@ -347,6 +396,8 @@ void HeeksCADapp::InitializeXMLFunctions()
 		xml_read_fn_map = new std::map< std::string, HeeksObj*(*)(TiXmlElement* pElem) >;
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Line", HLine::ReadFromXMLElement ) );
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Arc", HArc::ReadFromXMLElement ) );
+		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "InfiniteLine", HILine::ReadFromXMLElement ) );
+		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Circle", HCircle::ReadFromXMLElement ) );
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Image", HImage::ReadFromXMLElement ) );
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "LineArcCollection", CLineArcCollection::ReadFromXMLElement ) );
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "STEP_file", ReadSTEPFileFromXMLElement ) );
@@ -574,6 +625,13 @@ bool HeeksCADapp::OpenFile(const char *filepath, bool update_recent_file_list, b
 		return true;
 	}
 
+	if(wf.EndsWith(".stl") || wf.EndsWith(".STL"))
+	{
+		// open stl file
+		// to do
+		return true;
+	}
+
 	// check for solid files
 	if(CShape::ImportSolidsFile(filepath, false))
 	{
@@ -585,12 +643,9 @@ bool HeeksCADapp::OpenFile(const char *filepath, bool update_recent_file_list, b
 	}
 
 	// error
-	else
-	{
-		char mess[1024];
-		sprintf(mess, "Invalid file type chosen ( expecting file with %s suffix )", wxGetApp().GetKnownFilesCommaSeparatedList());
-		wxMessageBox(mess);
-	}
+	char mess[1024];
+	sprintf(mess, "Invalid file type chosen ( expecting file with %s suffix )", wxGetApp().GetKnownFilesCommaSeparatedList());
+	wxMessageBox(mess);
 
 	return false;
 }
@@ -1081,6 +1136,16 @@ void on_set_background_color(HeeksColor value)
 	wxGetApp().Repaint();
 }
 
+void on_set_current_color(HeeksColor value)
+{
+	wxGetApp().current_color = value;
+}
+
+void on_set_construction_color(HeeksColor value)
+{
+	wxGetApp().construction_color = value;
+}
+
 void on_set_grid_mode(int value)
 {
 	wxGetApp().grid_mode = value;
@@ -1115,6 +1180,8 @@ static void AddPropertyCallBack(Property* p)
 void HeeksCADapp::GetOptions(std::list<Property *> *list)
 {
 	list->push_back ( new PropertyColor ( "background color",  background_color, on_set_background_color ) );
+	list->push_back ( new PropertyColor ( "current color",  current_color, on_set_current_color ) );
+	list->push_back ( new PropertyColor ( "construction color",  construction_color, on_set_construction_color ) );
 	{
 		std::list< std::string > choices;
 		choices.push_back ( std::string ( "no grid" ) );
@@ -1359,8 +1426,8 @@ bool HeeksCADapp::PickPosition(const char* str, double* pos)
 	OnRun();
 
 	bool return_found = false;
-	if(m_digitizing->digitize_type_found != DigitizeNoItemType){
-		extract(m_digitizing->position_found, pos);
+	if(m_digitizing->digitized_point.m_type != DigitizeNoItemType){
+		extract(m_digitizing->digitized_point.m_point, pos);
 		return_found = true;
 	}
 

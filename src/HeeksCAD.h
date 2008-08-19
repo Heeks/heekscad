@@ -35,6 +35,7 @@ public:
 
 	wxPoint cur_mouse_pos;
 	HeeksColor current_color;
+	HeeksColor construction_color;
 	HeeksColor background_color;
 	int m_rotate_mode;
 	bool m_antialiasing;
@@ -45,6 +46,8 @@ public:
 	bool digitize_nearest;
 	bool digitize_coords;
 	bool digitize_screen;
+	bool digitize_tangent;
+	double digitizing_radius; // for ambiguous arcs and circles
 	bool draw_to_grid;
 	double digitizing_grid;
 	bool mouse_wheel_forward_away; // true for forwards/backwards = zoom out / zoom in, false for reverse
