@@ -262,6 +262,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\DigitizedPoint.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\DigitizedPoint.h"
+			>
+		</File>
+		<File
 			RelativePath=".\DigitizeMode.cpp"
 			>
 		</File>
@@ -358,6 +366,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\HCircle.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\HCircle.h"
+			>
+		</File>
+		<File
 			RelativePath=".\HeeksCAD.cpp"
 			>
 		</File>
@@ -402,11 +418,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\HGeomObject.cpp"
+			RelativePath=".\HILine.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\HGeomObject.h"
+			RelativePath=".\HILine.h"
 			>
 		</File>
 		<File

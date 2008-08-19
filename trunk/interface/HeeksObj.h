@@ -14,6 +14,8 @@ enum{
 	UnknownType,
 	LineType,
 	ArcType,
+	ILineType,
+	CircleType,
 	GripperType,
 	SolidType,
 	StlSolidType,
@@ -61,6 +63,7 @@ public:
 	virtual wxIcon* GetIcon(){return NULL;}
 	virtual int Intersects(const HeeksObj *object, std::list< double > *rl)const{return 0;}
 	virtual bool FindNearPoint(const double* ray_start, const double* ray_direction, double *point){return false;}
+	virtual bool FindPossTangentPoint(const double* ray_start, const double* ray_direction, double *point){return false;}
 	virtual void GetGripperPositions(std::list<double> *list, bool just_for_endof){}
 	virtual void GetTools(std::list<Tool*>* t_list, const wxPoint* p){}
 	virtual void Stretch(const double *p, const double* shift, double* new_position){}

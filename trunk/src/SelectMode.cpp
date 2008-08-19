@@ -61,7 +61,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 					{				
 						wxGetApp().digitize_end = false;
 						wxGetApp().m_digitizing->digitize(wxPoint(event.GetX(), event.GetY()));
-						wxGetApp().grip_from = wxGetApp().m_digitizing->position_found;
+						wxGetApp().grip_from = wxGetApp().m_digitizing->digitized_point.m_point;
 						wxGetApp().digitize_end = save_digitize_end;
 					}
 					wxGetApp().grip_to = wxGetApp().grip_from;
@@ -239,8 +239,8 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 			{
 				double to[3], from[3];
 				wxGetApp().m_digitizing->digitize(wxPoint(event.GetX(), event.GetY()));
-				extract(wxGetApp().m_digitizing->position_found, to);
-				wxGetApp().grip_to = wxGetApp().m_digitizing->position_found;
+				extract(wxGetApp().m_digitizing->digitized_point.m_point, to);
+				wxGetApp().grip_to = wxGetApp().m_digitizing->digitized_point.m_point;
 				extract(wxGetApp().grip_from, from);
 				wxGetApp().drag_gripper->OnGripperMoved(from, to);
 			}
@@ -301,6 +301,27 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 		wxGetApp().m_frame->m_graphics->Refresh(0);
 	}
 
+}
+
+void CSelectMode::OnKeyDown(wxKeyEvent& event)
+{
+	switch(event.GetKeyCode()){
+	case WXK_DELETE:
+		wxGetApp().DeleteMarkedItems();
+		return;
+	}
+
+	__super::OnKeyDown(event);
+}
+
+void CSelectMode::OnKeyUp(wxKeyEvent& event)
+{
+	switch(event.GetKeyCode()){
+	case WXK_DELETE:
+		return;
+	}
+
+	__super::OnKeyUp(event);
 }
 
 void CSelectMode::OnFrontRender(){

@@ -2,6 +2,9 @@
 #include "stdafx.h"
 #include "GripperMode.h"
 #include "../interface/PropertyChoice.h"
+#include "../interface/PropertyDouble.h"
+#include "HeeksFrame.h"
+#include "InputModeCanvas.h"
 
 GripperMode::GripperMode()
 {
@@ -81,7 +84,25 @@ void choice_callback(int choice){
 		default:
 			return;
 	}
+	wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
 	wxGetApp().Repaint();
+}
+
+static GripperMode* gripper_mode_for_on_set = NULL;
+
+static void on_set_centre_x(double value)
+{
+	gripper_mode_for_on_set->m_centre_point.SetX(value);
+}
+
+static void on_set_centre_y(double value)
+{
+	gripper_mode_for_on_set->m_centre_point.SetY(value);
+}
+
+static void on_set_centre_z(double value)
+{
+	gripper_mode_for_on_set->m_centre_point.SetZ(value);
 }
 
 void GripperMode::GetOptions(std::list<Property *> *list){
@@ -109,4 +130,16 @@ void GripperMode::GetOptions(std::list<Property *> *list){
 			break;
 	}
 	list->push_back( new PropertyChoice("gripper mode",  choices, index, choice_callback));	
+	switch(m_mode){
+		case RotationMode:
+			list->push_back(new PropertyDouble("X rotate about", m_centre_point.X(), on_set_centre_x));
+			list->push_back(new PropertyDouble("Y rotate about", m_centre_point.Y(), on_set_centre_y));
+			list->push_back(new PropertyDouble("Z rotate about", m_centre_point.Z(), on_set_centre_z));
+			break;
+		case ScaleMode:
+			list->push_back(new PropertyDouble("X scale about", m_centre_point.X(), on_set_centre_x));
+			list->push_back(new PropertyDouble("Y scale about", m_centre_point.Y(), on_set_centre_y));
+			list->push_back(new PropertyDouble("Z scale about", m_centre_point.Z(), on_set_centre_z));
+			break;
+	}
 }

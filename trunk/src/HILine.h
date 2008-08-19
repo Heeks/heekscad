@@ -1,30 +1,28 @@
-// HArc.h
+// HILine.h
 
 #pragma once
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"
-#include <gp_Circ.hxx>
 
-class HArc: public HeeksObj{
+class HILine: public HeeksObj{
 private:
 	HeeksColor color;
 	static wxIcon* m_icon;
 
 public:
 	gp_Pnt A, B;
-	gp_Circ m_circle;
 
-	~HArc(void);
-	HArc(const gp_Pnt &a, const gp_Pnt &b, const gp_Circ &c, const HeeksColor* col);
-	HArc(const HArc &arc);
+	~HILine(void);
+	HILine(const gp_Pnt &a, const gp_Pnt &b, const HeeksColor* col);
+	HILine(const HILine &line);
 
-	const HArc& operator=(const HArc &b);
+	const HILine& operator=(const HILine &b);
 
 	// HeeksObj's virtual functions
-	int GetType()const{return ArcType;}
+	int GetType()const{return ILineType;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
-	const char* GetTypeString(void)const{return "Arc";}
+	const char* GetTypeString(void)const{return "Infinite Line";}
 	HeeksObj *MakeACopy(void)const;
 	wxIcon* GetIcon();
 	void ModifyByMatrix(const double *mat);
@@ -35,17 +33,13 @@ public:
 	bool FindNearPoint(const double* ray_start, const double* ray_direction, double *point);
 	bool FindPossTangentPoint(const double* ray_start, const double* ray_direction, double *point);
 	void Stretch(const double *p, const double* shift, double* new_position);
-	void GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point = true)const;
+	int Intersects(const HeeksObj *object, std::list< double > *rl)const;
 	bool GetStartPoint(double* pos);
 	bool GetEndPoint(double* pos);
-	bool GetCentrePoint(double* pos);
+	void CopyFrom(const HeeksObj* object){operator=(*((HILine*)object));}
 	void WriteXML(TiXmlElement *root);
-	int Intersects(const HeeksObj *object, std::list< double > *rl)const;
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 
-	bool Intersects(const gp_Pnt &pnt)const;
-	gp_Vec GetSegmentVector(double fraction);
-	gp_Pnt GetPointAtFraction(double fraction);
-	static bool TangentialArc(const gp_Pnt &p0, const gp_Vec &v0, const gp_Pnt &p1, gp_Pnt &centre, gp_Dir &axis);
+	gp_Lin GetLine()const;
 };

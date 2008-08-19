@@ -1,30 +1,30 @@
-// HLine.cpp
+// HILine.cpp
 #include "stdafx.h"
 
-#include "HLine.h"
 #include "HILine.h"
-#include "HCircle.h"
+#include "HLine.h"
 #include "HArc.h"
+#include "HCircle.h"
 #include "../interface/PropertyDouble.h"
 #include "PropertyVertex.h"
 #include "../tinyxml/tinyxml.h"
 
-wxIcon* HLine::m_icon = NULL;
+wxIcon* HILine::m_icon = NULL;
 
-HLine::HLine(const HLine &line){
+HILine::HILine(const HILine &line){
 	operator=(line);
 }
 
-HLine::HLine(const gp_Pnt &a, const gp_Pnt &b, const HeeksColor* col){
+HILine::HILine(const gp_Pnt &a, const gp_Pnt &b, const HeeksColor* col){
 	A = a;
 	B = b;
 	color = *col;
 }
 
-HLine::~HLine(){
+HILine::~HILine(){
 }
 
-const HLine& HLine::operator=(const HLine &b){
+const HILine& HILine::operator=(const HILine &b){
 	HeeksObj::operator=(b);
 	A = b.A;
 	B = b.B;
@@ -32,63 +32,87 @@ const HLine& HLine::operator=(const HLine &b){
 	return *this;
 }
 
-void HLine::glCommands(bool select, bool marked, bool no_color){
-	if(!no_color){
+void HILine::glCommands(bool select, bool marked, bool no_color)
+{
+	if(!no_color)
+	{
 		wxGetApp().glColorEnsuringContrast(color);
+		glEnable(GL_LINE_STIPPLE);
+		glLineStipple(3, 0xaaaa);
 	}
 	GLfloat save_depth_range[2];
-	if(marked){
+	if(marked)
+	{
 		glGetFloatv(GL_DEPTH_RANGE, save_depth_range);
 		glDepthRange(0, 0);
 		glLineWidth(2);
 	}
-	glBegin(GL_LINES);
-	glVertex3d(A.X(), A.Y(), A.Z());
-	glVertex3d(B.X(), B.Y(), B.Z());
-	glEnd();
-	if(marked){
+
+	gp_Vec v(A, B);
+	if(v.Magnitude() > 0.0000000001)
+	{
+		v.Normalize();
+
+		gp_Pnt p1 = A.XYZ() - v.XYZ() * 10000;
+		gp_Pnt p2 = A.XYZ() + v.XYZ() * 10000;
+
+		glBegin(GL_LINES);
+		glVertex3d(p1.X(), p1.Y(), p1.Z());
+		glVertex3d(p2.X(), p2.Y(), p2.Z());
+		glEnd();
+	}
+
+	if(marked)
+	{
 		glLineWidth(1);
 		glDepthRange(save_depth_range[0], save_depth_range[1]);
 	}
+	if(!no_color)
+	{
+		glDisable(GL_LINE_STIPPLE);
+	}
 }
 
-HeeksObj *HLine::MakeACopy(void)const{
-		HLine *new_object = new HLine(*this);
+HeeksObj *HILine::MakeACopy(void)const{
+		HILine *new_object = new HILine(*this);
 		return new_object;
 }
 
-void HLine::ModifyByMatrix(const double* m){
+void HILine::ModifyByMatrix(const double* m){
 	gp_Trsf mat = make_matrix(m);
 	A.Transform(mat);
 	B.Transform(mat);
 }
 
-wxIcon* HLine::GetIcon(){
+wxIcon* HILine::GetIcon(){
 	if(m_icon == NULL)
 	{
 		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + "/icons/line.png", wxBITMAP_TYPE_PNG);
+		m_icon = new wxIcon(exe_folder + "/icons/iline.png", wxBITMAP_TYPE_PNG);
 	}
 	return m_icon;
 }
 
-void HLine::GetBox(CBox &box){
+void HILine::GetBox(CBox &box){
 	box.Insert(A.X(), A.Y(), A.Z());
 	box.Insert(B.X(), B.Y(), B.Z());
 }
 
-void HLine::GetGripperPositions(std::list<double> *list, bool just_for_endof){
-	list->push_back(0);
-	list->push_back(A.X());
-	list->push_back(A.Y());
-	list->push_back(A.Z());
-	list->push_back(0);
-	list->push_back(B.X());
-	list->push_back(B.Y());
-	list->push_back(B.Z());
+void HILine::GetGripperPositions(std::list<double> *list, bool just_for_endof){
+	if(!just_for_endof) // we don't want to snap to these for endof
+	{
+		list->push_back(0);
+		list->push_back(A.X());
+		list->push_back(A.Y());
+		list->push_back(A.Z());
+		list->push_back(0);
+		list->push_back(B.X());
+		list->push_back(B.Y());
+		list->push_back(B.Z());
+	}
 }
 
-HLine* line_for_properties = NULL;
+HILine* line_for_properties = NULL;
 
 static void on_set_start(const gp_Pnt &vt){
 	line_for_properties->A = vt;
@@ -100,7 +124,7 @@ static void on_set_end(const gp_Pnt &vt){
 	wxGetApp().Repaint();
 }
 
-void HLine::GetProperties(std::list<Property *> *list){
+void HILine::GetProperties(std::list<Property *> *list){
 	__super::GetProperties(list);
 
 	line_for_properties = this;
@@ -110,24 +134,20 @@ void HLine::GetProperties(std::list<Property *> *list){
 	list->push_back(new PropertyDouble("Length", length, NULL));
 }
 
-bool HLine::FindNearPoint(const double* ray_start, const double* ray_direction, double *point){
+bool HILine::FindNearPoint(const double* ray_start, const double* ray_direction, double *point){
 	gp_Lin ray(make_point(ray_start), make_vector(ray_direction));
 	gp_Pnt p1, p2;
 	ClosestPointsOnLines(GetLine(), ray, p1, p2);
-
-	if(!Intersects(p1))
-		return false;
-
 	extract(p1, point);
 	return true;
 }
 
-bool HLine::FindPossTangentPoint(const double* ray_start, const double* ray_direction, double *point){
+bool HILine::FindPossTangentPoint(const double* ray_start, const double* ray_direction, double *point){
 	// any point on this line is a possible tangent point
 	return FindNearPoint(ray_start, ray_direction, point);
 }
 
-void HLine::Stretch(const double *p, const double* shift, double* new_position){
+void HILine::Stretch(const double *p, const double* shift, double* new_position){
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);
 
@@ -141,12 +161,12 @@ void HLine::Stretch(const double *p, const double* shift, double* new_position){
 	}
 }
 
-gp_Lin HLine::GetLine()const{
+gp_Lin HILine::GetLine()const{
 	gp_Vec v(A, B);
 	return gp_Lin(A, v);
 }
 
-int HLine::Intersects(const HeeksObj *object, std::list< double > *rl)const{
+int HILine::Intersects(const HeeksObj *object, std::list< double > *rl)const{
 	int numi = 0;
 
 	switch(object->GetType())
@@ -156,7 +176,7 @@ int HLine::Intersects(const HeeksObj *object, std::list< double > *rl)const{
 			gp_Pnt pnt;
 			if(intersect(GetLine(), ((HLine*)object)->GetLine(), pnt))
 			{
-				if(Intersects(pnt) && ((HLine*)object)->Intersects(pnt)){
+				if(((HLine*)object)->Intersects(pnt)){
 					if(rl)add_pnt_to_doubles(pnt, *rl);
 					numi++;
 				}
@@ -169,10 +189,8 @@ int HLine::Intersects(const HeeksObj *object, std::list< double > *rl)const{
 			gp_Pnt pnt;
 			if(intersect(GetLine(), ((HILine*)object)->GetLine(), pnt))
 			{
-				if(Intersects(pnt)){
-					if(rl)add_pnt_to_doubles(pnt, *rl);
-					numi++;
-				}
+				if(rl)add_pnt_to_doubles(pnt, *rl);
+				numi++;
 			}
 		}
 		break;
@@ -184,7 +202,7 @@ int HLine::Intersects(const HeeksObj *object, std::list< double > *rl)const{
 			for(std::list<gp_Pnt>::iterator It = plist.begin(); It != plist.end(); It++)
 			{
 				gp_Pnt& pnt = *It;
-				if(Intersects(pnt) && ((HArc*)object)->Intersects(pnt))
+				if(((HArc*)object)->Intersects(pnt))
 				{
 					if(rl)add_pnt_to_doubles(pnt, *rl);
 					numi++;
@@ -197,15 +215,8 @@ int HLine::Intersects(const HeeksObj *object, std::list< double > *rl)const{
 		{
 			std::list<gp_Pnt> plist;
 			intersect(GetLine(), ((HCircle*)object)->m_circle, plist);
-			for(std::list<gp_Pnt>::iterator It = plist.begin(); It != plist.end(); It++)
-			{
-				gp_Pnt& pnt = *It;
-				if(Intersects(pnt))
-				{
-					if(rl)add_pnt_to_doubles(pnt, *rl);
-					numi++;
-				}
-			}
+			if(rl)convert_pnts_to_doubles(plist, *rl);
+			numi += plist.size();
 		}
 		break;
 	}
@@ -213,55 +224,22 @@ int HLine::Intersects(const HeeksObj *object, std::list< double > *rl)const{
 	return numi;
 }
 
-bool HLine::Intersects(const gp_Pnt &pnt)const
-{
-	gp_Lin& this_line = GetLine();
-	if(!intersect(pnt, this_line))return false;
-
-	// check it lies between A and B
-	gp_Vec v = this_line.Direction();
-	double dpA = gp_Vec(A.XYZ()) * v;
-	double dpB = gp_Vec(B.XYZ()) * v;
-	double dp = gp_Vec(pnt.XYZ()) * v;
-	return dp >= dpA - wxGetApp().m_geom_tol && dp <= dpB + wxGetApp().m_geom_tol;
-}
-
-void HLine::GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point)const{
-	if(want_start_point)
-	{
-		double p[3];
-		extract(A, p);
-		(*callbackfunc)(p);
-	}
-
-	double p[3];
-	extract(B, p);
-	(*callbackfunc)(p);
-}
-
-bool HLine::GetStartPoint(double* pos)
+bool HILine::GetStartPoint(double* pos)
 {
 	extract(A, pos);
 	return true;
 }
 
-bool HLine::GetEndPoint(double* pos)
+bool HILine::GetEndPoint(double* pos)
 {
 	extract(B, pos);
 	return true;
 }
 
-gp_Vec HLine::GetSegmentVector(double fraction)
-{
-	gp_Vec line_vector(A, B);
-	if(line_vector.Magnitude() < 0.000000001)return gp_Vec(0, 0, 0);
-	return gp_Vec(A, B).Normalized();
-}
-
-void HLine::WriteXML(TiXmlElement *root)
+void HILine::WriteXML(TiXmlElement *root)
 {
 	TiXmlElement * element;
-	element = new TiXmlElement( "Line" );
+	element = new TiXmlElement( "InfiniteLine" );
 	root->LinkEndChild( element );  
 	element->SetAttribute("col", color.COLORREF_color());
 	element->SetDoubleAttribute("sx", A.X());
@@ -273,7 +251,7 @@ void HLine::WriteXML(TiXmlElement *root)
 }
 
 // static member function
-HeeksObj* HLine::ReadFromXMLElement(TiXmlElement* pElem)
+HeeksObj* HILine::ReadFromXMLElement(TiXmlElement* pElem)
 {
 	gp_Pnt p0, p1;
 	HeeksColor c;
@@ -291,5 +269,5 @@ HeeksObj* HLine::ReadFromXMLElement(TiXmlElement* pElem)
 		else if(name == "ez"){p1.SetZ(a->DoubleValue());}
 	}
 
-	return new HLine(p0, p1, &c);
+	return new HILine(p0, p1, &c);
 }

@@ -55,30 +55,29 @@ CSphereCreate::CSphereCreate()
 
 void CSphereCreate::SetPositionOrRadius(const wxPoint& point)
 {
-		DigitizeType type_found = wxGetApp().m_digitizing->digitize(point);
-		if(type_found != DigitizeNoItemType)
+	DigitizedPoint digitized_point = wxGetApp().m_digitizing->digitize(point);
+	if(digitized_point.m_type != DigitizeNoItemType)
+	{
+		switch(m_mode)
 		{
-			gp_Pnt p = wxGetApp().m_digitizing->position_found;
-			switch(m_mode)
+		case 0:
 			{
-			case 0:
-				{
-					// position
-					extract(p, m_pos);
-				}
-				break;
-
-			case 1:
-				{
-					// radius
-					gp_Vec v(make_point(m_pos), p);
-					m_r = v.Magnitude();
-				}
-				break;
+				// position
+				extract(digitized_point.m_point, m_pos);
 			}
-			wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
-			wxGetApp().Repaint(true);
+			break;
+
+		case 1:
+			{
+				// radius
+				gp_Vec v(make_point(m_pos), digitized_point.m_point);
+				m_r = v.Magnitude();
+			}
+			break;
 		}
+		wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
+		wxGetApp().Repaint(true);
+	}
 }
 
 void CSphereCreate::OnMouse( wxMouseEvent& event )

@@ -31,6 +31,7 @@ protected:
 
 public:
 	virtual void RefreshByRemovingAndAddingAll() = 0;
+	void DeselectProperties();
 
     DECLARE_NO_COPY_CLASS(CPropertiesCanvas)
     DECLARE_EVENT_TABLE()

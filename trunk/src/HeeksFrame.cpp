@@ -15,9 +15,12 @@
 #include "HArc.h"
 #include "HImage.h"
 #include "RuledSurface.h"
+#include "wx/dnd.h"
 
 enum{
 	ID_LINES = 1,
+	ID_CIRCLES,
+	ID_ILINE,
 	ID_IMAGE,
 	ID_VIEWING,
 	ID_SUBTRACT,
@@ -67,6 +70,8 @@ EVT_UPDATE_UI(ID_OPEN_RECENT, CHeeksFrame::OnUpdateOpenRecent)
 EVT_MENU(ID_IMPORT, CHeeksFrame::OnImportButton)
 EVT_MENU_RANGE(	ID_RECENT_FIRST, ID_RECENT_FIRST + MAX_RECENT_FILES, CHeeksFrame::OnRecentFile)
 EVT_MENU(ID_LINES, CHeeksFrame::OnLinesButton)
+EVT_MENU(ID_CIRCLES, CHeeksFrame::OnCirclesButton)
+EVT_MENU(ID_ILINE, CHeeksFrame::OnILineButton)
 EVT_MENU(ID_IMAGE, CHeeksFrame::OnImageButton)
 EVT_MENU(ID_VIEWING, CHeeksFrame::OnViewingButton)
 EVT_MENU(ID_SPHERE, CHeeksFrame::OnSphereButton)
@@ -88,6 +93,30 @@ EVT_UPDATE_UI_RANGE(ID_NEXT_ID, ID_NEXT_ID + 1000, CHeeksFrame::OnUpdateExternal
 EVT_SIZE(CHeeksFrame::OnSize)
 EVT_MOVE(CHeeksFrame::OnMove)
 END_EVENT_TABLE()
+
+class DnDFile : public wxFileDropTarget
+{
+public:
+    DnDFile(wxFrame *pOwner) { m_pOwner = pOwner; }
+
+    virtual bool OnDropFiles(wxCoord x, wxCoord y,
+                             const wxArrayString& filenames);
+
+private:
+    wxFrame *m_pOwner;
+};
+
+bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
+{
+    size_t nFiles = filenames.GetCount();
+    for ( size_t n = 0; n < nFiles; n++ )
+    {
+		wxGetApp().OpenFile(filenames[n]);
+    }
+
+    return true;
+}
+
 
 CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSize& size )
 	: wxFrame((wxWindow *)NULL, -1, title, pos, size)
@@ -181,6 +210,8 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
     m_toolBar->AddTool(ID_REDO, _T("Redo"), wxBitmap(exe_folder + "/bitmaps/redo.png", wxBITMAP_TYPE_PNG), _T("Redo the next command"));
     m_toolBar->AddTool(ID_VIEWING, _T("Select"), wxBitmap(exe_folder + "/bitmaps/select.png", wxBITMAP_TYPE_PNG), _T("Select Mode"));
     m_toolBar->AddTool(ID_LINES, _T("Lines"), wxBitmap(exe_folder + "/bitmaps/lines.png", wxBITMAP_TYPE_PNG), _T("Start Line Drawing"));
+    m_toolBar->AddTool(ID_CIRCLES, _T("Circles"), wxBitmap(exe_folder + "/bitmaps/circles.png", wxBITMAP_TYPE_PNG), _T("Start Circle Drawing"));
+    m_toolBar->AddTool(ID_ILINE, _T("ILine"), wxBitmap(exe_folder + "/bitmaps/iline.png", wxBITMAP_TYPE_PNG), _T("Start Drawing Infinite Lines"));
     m_toolBar->AddTool(ID_IMAGE, _T("Picture"), wxBitmap(exe_folder + "/bitmaps/picture.png", wxBITMAP_TYPE_PNG), _T("Add a picture"));
     m_toolBar->Realize();
 
@@ -272,6 +303,8 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 			}
 		}
 	}
+
+	SetDropTarget(new DnDFile(this));
 
 	wxGetApp().OnNewOrOpen(false);
 	wxGetApp().SetLikeNewFile();
@@ -367,6 +400,8 @@ bool CHeeksFrame::ShowFullScreen(bool show, long style){
 void 
 CHeeksFrame::OnQuit( wxCommandEvent& WXUNUSED( event ) )
 {
+	if(!wxGetApp().CheckForModifiedDoc())
+		return;
 	Close(TRUE);
 }
 
@@ -513,13 +548,30 @@ CHeeksFrame::OnViewingButton( wxCommandEvent& WXUNUSED( event ) )
 void 
 CHeeksFrame::OnLinesButton( wxCommandEvent& WXUNUSED( event ) )
 {
+	line_strip.drawing_mode = LineDrawingMode;
+	wxGetApp().SetInputMode(&line_strip);
+}
+
+void 
+CHeeksFrame::OnCirclesButton( wxCommandEvent& WXUNUSED( event ) )
+{
+	line_strip.drawing_mode = CircleDrawingMode;
+	wxGetApp().SetInputMode(&line_strip);
+}
+
+void 
+CHeeksFrame::OnILineButton( wxCommandEvent& WXUNUSED( event ) )
+{
+	line_strip.drawing_mode = ILineDrawingMode;
 	wxGetApp().SetInputMode(&line_strip);
 }
 
 void 
 CHeeksFrame::OnImageButton( wxCommandEvent& WXUNUSED( event ) )
 {
-	wxFileDialog dialog(this, _T("Open Image File"), wxEmptyString, wxEmptyString,	wxImage::GetImageExtWildcard());
+	wxInitAllImageHandlers();
+	wxString ext = wxImage::GetImageExtWildcard();
+	wxFileDialog dialog(this, _T("Open Image File"), wxEmptyString, wxEmptyString,	ext);
     dialog.SetDirectory(wxGetHomeDir());
     dialog.CentreOnParent();
 
