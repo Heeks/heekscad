@@ -2,34 +2,21 @@
 #pragma once
 
 #include "../interface/InputMode.h"
+#include "DigitizedPoint.h"
 
 class CViewPoint;
 class PointOrWindow;
 
-enum DigitizeType{
-	DigitizeNoItemType,
-	DigitizeEndofType,
-	DigitizeIntersType,
-	DigitizeMidpointType,
-	DigitizeCentreType,
-	DigitizeScreenType,
-	DigitizeCoordsType,
-	DigitizeNearestType
-};
-
-
 class DigitizeMode:public CInputMode{
 private:
 	PointOrWindow *point_or_window;
-	gp_Pnt lbutton_position;
-	DigitizeType lbutton_type_found;
+	DigitizedPoint lbutton_point;
 	std::set<HeeksObj*> m_only_coords_set;
 
-	DigitizeType digitize1(const wxPoint &input_point, gp_Pnt &point, gp_Pnt &closest_point);
+	DigitizedPoint digitize1(const wxPoint &input_point);
 
 public:
-	gp_Pnt position_found;
-	DigitizeType digitize_type_found;
+	DigitizedPoint digitized_point;
 	bool m_doing_a_main_loop;
 	std::string m_prompt_when_doing_a_main_loop;
 
@@ -45,8 +32,8 @@ public:
 	void GetOptions(std::list<Property *> *list);
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 
-	DigitizeType Digitize(const gp_Lin &ray, gp_Pnt &point);
-	DigitizeType digitize(const wxPoint &point);
+	DigitizedPoint Digitize(const gp_Lin &ray);
+	DigitizedPoint digitize(const wxPoint &point);
 	void SetOnlyCoords(HeeksObj* object, bool onoff);
 	bool OnlyCoords(HeeksObj* object);
 };

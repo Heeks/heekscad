@@ -202,10 +202,11 @@ bool CHeeksCADInterface::PickPosition(const char* str, double* pos)
 
 bool CHeeksCADInterface::Digitize(const wxPoint &point, double* pos)
 {
-	if(wxGetApp().m_digitizing->digitize(point) == DigitizeNoItemType)
+	DigitizedPoint p = wxGetApp().m_digitizing->digitize(point);
+	if(p.m_type == DigitizeNoItemType)
 		return false;
 
-	extract(wxGetApp().m_digitizing->position_found, pos);
+	extract(p.m_point, pos);
 	return true;
 }
 
@@ -273,7 +274,7 @@ void CHeeksCADInterface::RemoveObserver(Observer* observer)
 bool CHeeksCADInterface::TangentialArc(const double* p0, const double* v0, const double* p1, double *c, double *a)
 {
 	gp_Pnt centre;
-	gp_Vec axis;
+	gp_Dir axis;
 	bool arc_found = HArc::TangentialArc(make_point(p0), make_vector(v0), make_point(p1), centre, axis);
 	if(arc_found)
 	{

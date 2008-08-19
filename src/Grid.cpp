@@ -30,12 +30,11 @@ static void RenderGrid(const CViewPoint *view_point, double max_number_across, b
 			sp[i].SetZ(0);
 			gp_Pnt p2 = view_point->glUnproject(sp[i]);
 			gp_Lin line = make_line(p1, p2);
-			std::list<gp_Pnt> rl;
-
-			intersect(line, plane, rl);
-			if(rl.size()>0){
-				sp[i].SetX((gp_Vec(rl.front().XYZ()) * vx) - (gp_Vec(datum.XYZ()) * vx));
-				sp[i].SetY((gp_Vec(rl.front().XYZ()) * vy) - (gp_Vec(datum.XYZ()) * vy));
+			gp_Pnt pnt;
+			if(intersect(line, plane, pnt))
+			{
+				sp[i].SetX((gp_Vec(pnt.XYZ()) * vx) - (gp_Vec(datum.XYZ()) * vx));
+				sp[i].SetY((gp_Vec(pnt.XYZ()) * vy) - (gp_Vec(datum.XYZ()) * vy));
 				sp[i].SetZ(0);
 			}
 		}
@@ -173,10 +172,10 @@ void GetGridBox(const CViewPoint *view_point, CBox &ext){
 			sp[i].SetZ(0);
 			gp_Pnt p2 = view_point->glUnproject(sp[i]);
 			gp_Lin line = make_line(p1, p2);
-			std::list<gp_Pnt> rl;
-			intersect(line, plane, rl);
-			if(rl.size()>0){
-				ext.Insert(rl.front().X(), rl.front().Y(), rl.front().Z());
+			gp_Pnt pnt;
+			if(intersect(line, plane, pnt))
+			{
+				ext.Insert(pnt.X(), pnt.Y(), pnt.Z());
 			}
 		}
 	}

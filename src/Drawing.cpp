@@ -33,9 +33,8 @@ void Drawing::RecalculateAndRedraw(const wxPoint& point)
 {
 	set_digitize_plane();
 
-	DigitizeType type_found = wxGetApp().m_digitizing->digitize(point);
-	gp_Pnt end = wxGetApp().m_digitizing->position_found;
-	if(type_found == DigitizeNoItemType)return;
+	DigitizedPoint end = wxGetApp().m_digitizing->digitize(point);
+	if(end.m_type == DigitizeNoItemType)return;
 
 	wxGetApp().m_frame->m_graphics->EndDrawFront();
 	calculate_item(end);
@@ -44,29 +43,26 @@ void Drawing::RecalculateAndRedraw(const wxPoint& point)
 
 void Drawing::AddPoint()
 {
-	// set the position from the properties
-	std::list<Property *> list;
-	wxGetApp().m_digitizing->GetProperties(&list);
-	for(std::list<Property *>::iterator It = list.begin(); It != list.end(); It++)
-	{
-		Property* p = *It;
-		p->CallSetFunction();
-	}
+	// kill focus on control being typed into
+	wxGetApp().m_frame->m_input_canvas->DeselectProperties();
+	wxGetApp().ProcessPendingEvents();
+
+	if(wxGetApp().m_digitizing->digitized_point.m_type == DigitizeNoItemType)return;
 
 	wxGetApp().StartHistory(get_drawing_title());
 	if(is_an_add_level(GetDrawStep())){
-		calculate_item(wxGetApp().m_digitizing->position_found);
+		calculate_item(wxGetApp().m_digitizing->digitized_point);
 		before_add_item();
 		const std::list<HeeksObj*>& drawing_objects = GetObjectsMade();
 		wxGetApp().AddUndoably(drawing_objects, GetOwnerForDrawingObjects());
 		wxGetApp().m_frame->m_graphics->DrawObjectsOnFront(drawing_objects, true);
 		set_previous_direction();
-		clear_drawing_objects();
-		if(wxGetApp().m_digitizing->digitize_type_found != DigitizeNoItemType)SetStartPosUndoable(wxGetApp().m_digitizing->position_found);
+		clear_drawing_objects(true);
+		SetStartPosUndoable(wxGetApp().m_digitizing->digitized_point);
 	}
 	else if(GetDrawStep() == 0){
 		clear_drawing_objects();
-		SetStartPosUndoable(wxGetApp().m_digitizing->digitize_type_found == DigitizeNoItemType ? gp_Pnt(0, 0, 0) : wxGetApp().m_digitizing->position_found);
+		SetStartPosUndoable(wxGetApp().m_digitizing->digitized_point);
 	}
 
 	int next_step = GetDrawStep() + 1;
@@ -89,9 +85,9 @@ void Drawing::OnMouse( wxMouseEvent& event )
 	}
 
 	if(!event_used){
-		if(event.ShiftDown()){
-			// do everything same as select mode
-			wxGetApp().m_select_mode->OnMouse( event );
+		if(event.MiddleIsDown() || event.GetWheelRotation() != 0)
+		{
+			wxGetApp().m_select_mode->OnMouse(event);
 		}
 		else{
 			if(event.LeftDown()){
@@ -106,7 +102,7 @@ void Drawing::OnMouse( wxMouseEvent& event )
 				}
 				else{
 					set_digitize_plane();
-					DigitizeType type_found = wxGetApp().m_digitizing->digitize(button_down_point);
+					wxGetApp().m_digitizing->digitize(button_down_point);
 					if(m_getting_position){
 						m_inhibit_coordinate_change = true;
 						m_getting_position = false;
@@ -149,6 +145,10 @@ bool Drawing::IsDrawing(CInputMode* i){
 }
 
 bool Drawing::OnModeChange(void){
+	view_map.clear();
+	*null_view = ViewSpecific(0);
+	current_view_stuff = null_view;
+
 	if(!IsDrawing(wxGetApp().input_mode_object))SetDrawStepUndoable(false);
 	return true;
 }
@@ -186,6 +186,7 @@ public:
 
 	void Run()
 	{
+		wxGetApp().m_digitizing->digitized_point.m_type = DigitizeInputType;
 		m_drawing->AddPoint();
 	}
 	const char* GetTitle(){return "Add point";}
@@ -281,11 +282,11 @@ public:
 class SetDrawingPosition:public Tool{
 private:
 	Drawing *drawing;
-	gp_Pnt prev_pos;
-	gp_Pnt next_pos;
+	DigitizedPoint prev_pos;
+	DigitizedPoint next_pos;
 
 public:
-	SetDrawingPosition(Drawing *d, const gp_Pnt &pos){
+	SetDrawingPosition(Drawing *d, const DigitizedPoint &pos){
 		drawing = d;
 		prev_pos = d->GetStartPos();
 		next_pos = pos;
@@ -302,7 +303,7 @@ void Drawing::SetDrawStepUndoable(int s){
 	wxGetApp().DoToolUndoably(new SetDrawingDrawStep(this, s));
 }
 
-void Drawing::SetStartPosUndoable(const gp_Pnt& pos){
+void Drawing::SetStartPosUndoable(const DigitizedPoint& pos){
 	wxGetApp().DoToolUndoably(new SetDrawingPosition(this, pos));
 }
 

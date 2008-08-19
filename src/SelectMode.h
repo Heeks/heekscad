@@ -22,6 +22,8 @@ public:
 	const char* GetTitle(){return "Picking objects";}
 	bool TitleHighlighted(){return m_doing_a_main_loop;}
 	void OnMouse( wxMouseEvent& event );
+	void OnKeyDown(wxKeyEvent& event);
+	void OnKeyUp(wxKeyEvent& event);
 	bool OnStart();
 	void OnFrontRender();
 	void OnRender();
