@@ -192,20 +192,6 @@ void LineArcDrawing::calculate_item(DigitizedPoint &end){
 
 			if(arc_found)
 			{
-				gp_Circ circle(gp_Ax2(centre, axis), centre.Distance(p1));
-				if(!temp_object){
-					HeeksColor c(0);
-					temp_object = new HArc(p1, p2, circle, &wxGetApp().current_color);
-					if(temp_object)temp_object_in_list.push_back(temp_object);
-				}
-				else{
-					((HArc*)temp_object)->m_circle = circle;
-					((HArc*)temp_object)->A = p1;
-					((HArc*)temp_object)->B = p2;
-				}
-			}
-			else if(m_previous_direction_set)
-			{
 				if(HArc::TangentialArc(p1, m_previous_direction, p2, centre, axis))
 				{
 					// arc
