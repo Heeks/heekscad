@@ -127,7 +127,7 @@ HeeksObj* CLineArcCollection::ReadFromXMLElement(TiXmlElement* pElem)
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
 		wxString name(a->Name());
-		if(name == "id"){new_object->m_id = a->IntValue();}
+		if(name == "id"){CLineArcCollection::SetID(new_object, a->IntValue());}
 	}
 
 	new_object->ReadXMLChildren(pElem);

@@ -366,6 +366,21 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 				}
 			}
 		}
+		else if(subname == std::string("file_text"))
+		{
+			const char* file_text = subElem->GetText();
+			if(file_text)
+			{
+				wxStandardPaths sp;
+				sp.GetTempDir();
+				wxString temp_file = sp.GetTempDir() + "/temp_HeeksCAD_STEP_file.step";
+				{
+					ofstream ofs(temp_file);
+					ofs<<file_text;
+				}
+				CShape::ImportSolidsFile(temp_file, false, &index_map);
+			}
+		}
 	}
 
 	// get the attributes
@@ -698,12 +713,17 @@ void HeeksCADapp::SaveXMLFile(const char *filepath, bool update_recent_file_list
 			std::string fstr;
 			char str[1024];
 			while(!(ifs.eof())){
-				ifs.getline(str, 1024);
+				ifs.getline(str, 1022);
+				strcat(str, "\n");
 				fstr.append(str);
 				if(!ifs)break;
 			}
 
-			step_file_element->SetAttribute("text", fstr.c_str());
+			TiXmlElement *file_text_element = new TiXmlElement( "file_text" );
+			step_file_element->LinkEndChild( file_text_element );
+			TiXmlText *text = new TiXmlText(fstr.c_str());
+			text->SetCDATA(true);
+			file_text_element->LinkEndChild( text );
 		}
 	}
 
@@ -914,8 +934,7 @@ void HeeksCADapp::DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObje
 		new_point.x = -1;
 		new_point.y = -1;
 	}
-	wxString title(wxT("menu"));
-	wxMenu menu(title);
+	wxMenu menu;
 	std::list<Tool*> f_list;
 	std::list<Tool*> temp_f_list;
 	{
