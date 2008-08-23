@@ -133,48 +133,55 @@ bool DigitizedPoint::GetArcPoints(const DigitizedPoint& d1, const gp_Vec *initia
 	{
 		if(type1 == CircleType && type2 == CircleType)
 		{
-			axis = c1.Axis().Direction();
-			return HCircle::GetArcTangentPoints(c1, c2, d1.m_point, d2.m_point, wxGetApp().digitizing_radius, p1, p2, centre);
+			bool success = HCircle::GetArcTangentPoints(c1, c2, d1.m_point, d2.m_point, wxGetApp().digitizing_radius, p1, p2, centre, axis);
+			if(success && initial_direction){
+				// get the axis the right way round
+			}
+			return success;
 		}
 		if(type1 == LineType && type2 == CircleType)
 		{
-			axis = c2.Axis().Direction();
-			return HCircle::GetArcTangentPoints(c2, l1, d2.m_point, wxGetApp().digitizing_radius, p2, p1, centre);
+			return HCircle::GetArcTangentPoints(c2, l1, d2.m_point, wxGetApp().digitizing_radius, p1, p2, centre, axis);
 		}
 		if(type1 == CircleType && type2 == LineType)
 		{
-			axis = c1.Axis().Direction();
-			return HCircle::GetArcTangentPoints(c1, l2, d1.m_point, wxGetApp().digitizing_radius, p1, p2, centre);
+			return HCircle::GetArcTangentPoints(c1, l2, d1.m_point, wxGetApp().digitizing_radius, p2, p1, centre, axis);
 		}
 		if(type1 == LineType && type2 == LineType)
 		{
 			return HCircle::GetArcTangentPoints(l1, l2, d1.m_point, d2.m_point, wxGetApp().digitizing_radius, p1, p2, centre, axis);
 		}
+		return false;
 	}
 	else if(d1.m_type == DigitizeTangentType)
 	{
 		if(type1 == CircleType)
 		{
-			return HCircle::GetArcTangentPoint(c1, d1.m_point, d2.m_point, p1);
+			return HCircle::GetArcTangentPoint(c1, d1.m_point, d2.m_point, initial_direction, NULL, p1, centre, axis);
 		}
 		else if(type1 == LineType)
 		{
 			return HCircle::GetArcTangentPoint(l1, d1.m_point, d2.m_point, initial_direction, NULL, p1, centre, axis);
 		}
+		return false;
 	}
 	else if(d2.m_type == DigitizeTangentType)
 	{
+		gp_Vec minus_dir;
+		if(initial_direction)minus_dir = -(*initial_direction);
 		if(type2 == CircleType)
 		{
-			return HCircle::GetArcTangentPoint(c2, d2.m_point, d1.m_point, p2);
+			return HCircle::GetArcTangentPoint(c2, d2.m_point, d1.m_point, (initial_direction != NULL) ? (&minus_dir):NULL, NULL, p2, centre, axis);
 		}
 		else if(type2 == LineType)
 		{
-			gp_Vec minus_dir;
-			if(initial_direction)minus_dir = -(*initial_direction);
 			return HCircle::GetArcTangentPoint(l2, d2.m_point, d1.m_point, (initial_direction != NULL) ? (&minus_dir):NULL, NULL, p2, centre, axis);
 		}
+		return false;
 	}
 
-	return false;
+	p1 = d1.m_point;
+	p2 = d2.m_point;
+
+	return true;
 }

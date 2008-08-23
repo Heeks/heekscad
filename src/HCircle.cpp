@@ -421,7 +421,7 @@ bool HCircle::GetLineTangentPoint(const gp_Circ& c, const gp_Pnt& a, const gp_Pn
 }
 
 // static
-bool HCircle::GetArcTangentPoints(const gp_Circ& c, const gp_Lin &line, const gp_Pnt& p, double radius, gp_Pnt& p1, gp_Pnt& p2, gp_Pnt& centre)
+bool HCircle::GetArcTangentPoints(const gp_Circ& c, const gp_Lin &line, const gp_Pnt& p, double radius, gp_Pnt& p1, gp_Pnt& p2, gp_Pnt& centre, gp_Dir& axis)
 {
 	// find the arc that fits tangentially from the line to the circle
 	// returns p1 - on the line, p2 - on the circle, centre - the centre point of the arc
@@ -487,6 +487,8 @@ bool HCircle::GetArcTangentPoints(const gp_Circ& c, const gp_Lin &line, const gp
 		p2 = rl.front();
 	}
 
+	axis = c.Axis().Direction();
+
 	return true;
 }
 
@@ -537,7 +539,7 @@ static const two_points* find_best_points_pair(const std::list<two_points>& poin
 }
 
 // static
-bool HCircle::GetArcTangentPoints(const gp_Circ& c1, const gp_Circ &c2, const gp_Pnt& a, const gp_Pnt& b, double radius, gp_Pnt& p1, gp_Pnt& p2, gp_Pnt& centre)
+bool HCircle::GetArcTangentPoints(const gp_Circ& c1, const gp_Circ &c2, const gp_Pnt& a, const gp_Pnt& b, double radius, gp_Pnt& p1, gp_Pnt& p2, gp_Pnt& centre, gp_Dir& axis)
 {
 	// find the arc that fits tangentially from the circle to the circle
 	// returns p1 - on c1, p2 - on c2, centre - the centre point of the arc
@@ -607,6 +609,7 @@ bool HCircle::GetArcTangentPoints(const gp_Circ& c1, const gp_Circ &c2, const gp
 		p1 = best_pair->m_p1;
 		p2 = best_pair->m_p2;
 		centre = best_pair->m_c;
+		axis = c1.Axis().Direction();
 		return true;
 	}
 
@@ -679,22 +682,62 @@ bool HCircle::GetArcTangentPoint(const gp_Lin& l, const gp_Pnt& a, const gp_Pnt&
 
 	if(final_direction)
 	{
-		if((*final_direction) * gp_Vec(sideways.XYZ()) < 0)return false; // b on wrong side compared with final direction
-		gp_Lin final_dir_line(b, gp_Dir(final_direction->XYZ()));
-		axis = l.Direction() ^ final_dir_line.Direction();
-		gp_Dir perp = axis ^ (*final_direction);
-		gp_Lin perp_line(gp_Ax1(b, perp));
-		gp_Dir half_angle_dir = gp_Dir(perp.XYZ() + sideways.XYZ());
-		gp_Pnt pnt;
-		if(!intersect(final_dir_line, l, pnt))return false;
-		gp_Lin half_angle_line(pnt, half_angle_dir);
-		if(!intersect(half_angle_line, perp_line, centre))return false;
-		double R = b.Distance(centre);
-		std::list<gp_Pnt> plist;
-		intersect(l, gp_Circ(gp_Ax2(centre, axis), R), plist);
-		if(plist.size() != 1)return false;
-		p = plist.front();
-		return true;
+		if((*final_direction) * gp_Vec(sideways.XYZ()) >= 0)// b on correct side compared with final direction
+		{			
+			gp_Lin final_dir_line(b, gp_Dir(final_direction->XYZ()));
+			if(!l.Direction().IsEqual(gp_Dir(final_direction->XYZ()), 0.00000001) && !l.Direction().IsEqual(-gp_Dir(final_direction->XYZ()), 0.00000001))
+			{
+				axis = l.Direction() ^ final_dir_line.Direction();
+				gp_Dir perp = axis ^ (*final_direction);
+				gp_Lin perp_line(gp_Ax1(b, perp));
+				gp_Dir half_angle_dir[2];
+				half_angle_dir[0] = gp_Dir(perp.XYZ() + sideways.XYZ());
+				half_angle_dir[1] = gp_Dir(sideways.XYZ() - perp.XYZ());
+
+
+				std::list<gp_Pnt> maybe_p;
+				for(int i = 0; i<2; i++)
+				{
+					gp_Pnt pnt;
+					if(intersect(final_dir_line, l, pnt))
+					{
+						gp_Lin half_angle_line(pnt, half_angle_dir[i]);
+						if(intersect(half_angle_line, perp_line, centre))
+						{
+							double R = b.Distance(centre);
+							std::list<gp_Pnt> plist;
+							intersect(l, gp_Circ(gp_Ax2(centre, axis), R), plist);
+							if(plist.size() == 1)
+							{
+								maybe_p.push_back(plist.front());
+							}
+						}
+					}
+				}
+
+				gp_Pnt* best_pnt = NULL;
+				double best_dist;
+
+				for(std::list<gp_Pnt>::iterator It = maybe_p.begin(); It != maybe_p.end(); It++)
+				{
+					gp_Pnt& pnt = *It;
+					double dist = a.Distance(pnt);
+					if(best_pnt == NULL || dist < best_dist)
+					{
+						best_pnt = &pnt;
+						best_dist = dist;
+					}
+				}
+
+				if(best_pnt)
+				{
+					p = *best_pnt;
+					return true;
+				}
+			}
+		}
+		gp_Vec v0 = -(*final_direction);
+		return HArc::TangentialArc(b, v0, a, centre, axis);
 	}
 	else
 	{
@@ -739,8 +782,22 @@ bool HCircle::GetArcTangentPoint(const gp_Lin& l, const gp_Pnt& a, const gp_Pnt&
 }
 
 // static
-bool HCircle::GetArcTangentPoint(const gp_Circ& c, const gp_Pnt& a, const gp_Pnt& b, gp_Pnt& p)
+bool HCircle::GetArcTangentPoint(const gp_Circ& c, const gp_Pnt& a, const gp_Pnt& b, const gp_Vec *final_direction, double* radius, gp_Pnt& p, gp_Pnt& centre, gp_Dir& axis)
 {
 	// to do
+#if 0
+	// find the tangent point on the circle c, for an arc from near point "a" on the circle to exact given point "b"
+	if(final_direction)
+	{
+		// consider the line parallel with the final direction, but through the circle centre
+		gp_Lin final_dir_line(b, gp_Dir(final_direction->XYZ()));
+		gp_Lin offset_line(c.Location(), final_dir_line.Direction());
+		centre = ClosestPointOnLine(offset_line, b);
+		if(centre.Distance(b) < 0.000000000001)return false;
+	gp_Dir sideways(gp_Vec(c, b));
+
+	}
+#endif
+
 	return false;
 }
