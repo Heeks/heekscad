@@ -16,6 +16,7 @@ enum{
 	ArcType,
 	ILineType,
 	CircleType,
+	PointType,
 	GripperType,
 	SolidType,
 	StlSolidType,

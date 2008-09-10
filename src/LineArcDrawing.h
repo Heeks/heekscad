@@ -11,6 +11,11 @@ enum EnumDrawingMode{
 	CircleDrawingMode
 };
 
+enum EnumCircleDrawingMode{
+	CentreAndPointCircleMode,
+	ThreePointsCircleMode
+};
+
 class LineArcDrawing: public Drawing{
 private:
 	std::list<HeeksObj*> temp_object_in_list;
@@ -39,6 +44,7 @@ public:
 	EnumDrawingMode drawing_mode;
 	std::list<EnumDrawingMode> m_save_drawing_mode;
 	double radius_for_circle;
+	EnumCircleDrawingMode circle_mode;
 
 	LineArcDrawing(void);
 	virtual ~LineArcDrawing(void);
