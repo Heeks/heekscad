@@ -51,6 +51,7 @@ public:
 	bool draw_to_grid;
 	double digitizing_grid;
 	bool mouse_wheel_forward_away; // true for forwards/backwards = zoom out / zoom in, false for reverse
+	bool ctrl_does_rotate; // true - rotate on Ctrl, pan when not Ctrl      false - rotate when not Ctrl, pan when Ctrl
 	gp_Trsf digitizing_matrix;
 	CInputMode *input_mode_object;
 	MagDragWindow *magnification;

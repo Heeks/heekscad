@@ -32,6 +32,7 @@ LineArcDrawing::LineArcDrawing(void){
 	m_A_down = false;
 	m_container = NULL;
 	radius_for_circle = 5.0;
+	circle_mode = ThreePointsCircleMode;
 }
 
 LineArcDrawing::~LineArcDrawing(void){
@@ -58,6 +59,15 @@ void LineArcDrawing::set_previous_direction(){
 
 int LineArcDrawing::number_of_steps()
 {
+	switch(drawing_mode)
+	{
+	case CircleDrawingMode:
+		switch(circle_mode)
+		{
+		case ThreePointsCircleMode:
+			return 3;
+		}
+	}
 	return 2;
 }
 
@@ -77,8 +87,16 @@ int LineArcDrawing::step_to_go_to_after_last_step()
 
 bool LineArcDrawing::is_an_add_level(int level)
 {
-	if(level == 1)return true;
-	return false;
+	switch(drawing_mode)
+	{
+	case CircleDrawingMode:
+		switch(circle_mode)
+		{
+		case ThreePointsCircleMode:
+			return level == 2;
+		}
+	}
+	return level == 1;
 }
 
 void LineArcDrawing::AddPoint()
@@ -87,6 +105,7 @@ void LineArcDrawing::AddPoint()
 	{
 	case CircleDrawingMode:
 		{
+#if 0
 			// kill focus on control being typed into
 			wxGetApp().m_frame->m_input_canvas->DeselectProperties();
 			wxGetApp().ProcessPendingEvents();
@@ -99,6 +118,8 @@ void LineArcDrawing::AddPoint()
 			wxGetApp().m_frame->m_graphics->DrawObjectsOnFront(list, true);
 			m_getting_position = false;
 			m_inhibit_coordinate_change = false;
+#endif
+		__super::AddPoint();
 		}
 		break;
 
@@ -165,7 +186,6 @@ void LineArcDrawing::calculate_item(DigitizedPoint &end){
 			DigitizedPoint::GetLinePoints(GetStartPos(), end, p1, p2);
 			end.m_point = p2;
 			if(!temp_object){
-				HeeksColor c(0);
 				temp_object = new HLine(p1, p2, &wxGetApp().current_color);
 				if(temp_object)temp_object_in_list.push_back(temp_object);
 			}
@@ -198,7 +218,6 @@ void LineArcDrawing::calculate_item(DigitizedPoint &end){
 					gp_Circ circle(gp_Ax2(centre, axis), centre.Distance(p1));
 
 					if(!temp_object){
-						HeeksColor c(0);
 						temp_object = new HArc(p1, p2, circle, &wxGetApp().current_color);
 						if(temp_object)temp_object_in_list.push_back(temp_object);
 					}
@@ -217,7 +236,6 @@ void LineArcDrawing::calculate_item(DigitizedPoint &end){
 						temp_object_in_list.clear();
 					}
 					if(!temp_object){
-						HeeksColor c(0);
 						temp_object = new HLine(p1, p2, &wxGetApp().current_color);
 						if(temp_object)temp_object_in_list.push_back(temp_object);
 					}
@@ -240,7 +258,6 @@ void LineArcDrawing::calculate_item(DigitizedPoint &end){
 			gp_Pnt p1, p2;
 			DigitizedPoint::GetLinePoints(GetStartPos(), end, p1, p2);
 			if(!temp_object){
-				HeeksColor c(0);
 				temp_object = new HILine(p1, p2, &wxGetApp().construction_color);
 				if(temp_object)temp_object_in_list.push_back(temp_object);
 			}
@@ -259,19 +276,41 @@ void LineArcDrawing::calculate_item(DigitizedPoint &end){
 				temp_object_in_list.clear();
 			}
 			
-			gp_Pnt p1, p2, centre;
-			gp_Dir axis;
-			DigitizedPoint::GetArcPoints(GetStartPos(), NULL, end, p1, p2, centre, axis);
-			radius_for_circle = p1.Distance(p2);
+			switch(circle_mode)
+			{
+			case CentreAndPointCircleMode:
+				{
+					gp_Pnt p1, p2, centre;
+					gp_Dir axis;
+					DigitizedPoint::GetArcPoints(GetStartPos(), NULL, end, p1, p2, centre, axis);
+					radius_for_circle = p1.Distance(p2);
 
-			if(!temp_object){
-				HeeksColor c(0);
-				temp_object = new HCircle(gp_Circ(gp_Ax2(p1, gp_Dir(0, 0, 1)), radius_for_circle), &wxGetApp().construction_color);
-				if(temp_object)temp_object_in_list.push_back(temp_object);
-			}
-			else{
-				((HCircle*)temp_object)->m_circle.SetLocation(p1);
-				((HCircle*)temp_object)->m_circle.SetRadius(radius_for_circle);
+					if(!temp_object){
+						temp_object = new HCircle(gp_Circ(gp_Ax2(p1, gp_Dir(0, 0, 1)), radius_for_circle), &wxGetApp().construction_color);
+						if(temp_object)temp_object_in_list.push_back(temp_object);
+					}
+					else{
+						((HCircle*)temp_object)->m_circle.SetLocation(p1);
+						((HCircle*)temp_object)->m_circle.SetRadius(radius_for_circle);
+					}
+				}
+				break;
+
+			case ThreePointsCircleMode:
+				{
+					gp_Circ c;
+					if(DigitizedPoint::GetTangentCircle(GetBeforeStartPos(), GetStartPos(), end, c))
+					{
+						if(!temp_object){
+							temp_object = new HCircle(c, &wxGetApp().construction_color);
+							if(temp_object)temp_object_in_list.push_back(temp_object);
+						}
+						else{
+							((HCircle*)temp_object)->m_circle = c;
+						}
+					}
+				}
+				break;
 			}
 		}
 		break;

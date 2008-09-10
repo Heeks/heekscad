@@ -45,9 +45,7 @@ public:
     void OnPaint(wxPaintEvent& event);
     void OnSize(wxSizeEvent& event);
 	void OnEraseBackground(wxEraseEvent& event);
-	void LoadLWO( const wxString &filename);
     void OnMouse( wxMouseEvent& event );
-    void InitGL();
 	void OnMenuEvent(wxCommandEvent& WXUNUSED(event));
 
 	// Observer's virtual functions

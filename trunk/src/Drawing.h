@@ -12,6 +12,7 @@ class ViewSpecific{
 public:
 	int view;
 	int draw_step;
+	DigitizedPoint before_start_pos; // for three items, like circle from three points
 	DigitizedPoint start_pos;
 
 	ViewSpecific(int v){
@@ -66,10 +67,11 @@ public:
 	int GetDrawStep()const{return current_view_stuff->draw_step;}
 	void SetDrawStepUndoable(int s);
 	const DigitizedPoint& GetStartPos()const{return current_view_stuff->start_pos;}
+	const DigitizedPoint& GetBeforeStartPos()const{return current_view_stuff->before_start_pos;}
 	void SetStartPosUndoable(const DigitizedPoint& pos);
 	bool IsDrawing(CInputMode* i);
 
 	void set_draw_step_not_undoable(int s){current_view_stuff->draw_step = s;}
-	void set_start_pos_not_undoable(const DigitizedPoint& pos){current_view_stuff->start_pos = pos;}
+	void set_start_pos_not_undoable(const DigitizedPoint& pos){current_view_stuff->before_start_pos = current_view_stuff->start_pos; current_view_stuff->start_pos = pos;}
 };
 

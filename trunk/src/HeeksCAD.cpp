@@ -90,6 +90,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_doing_rollback = false;
 	m_hide_marked_list_stack = 0;
 	mouse_wheel_forward_away = true;
+	ctrl_does_rotate = true;
 	m_show_ruler = true;
 	m_filepath.assign("Untitled.heeks");
 }
@@ -167,6 +168,7 @@ bool HeeksCADapp::OnInit()
 	m_config->Read("GridMode", &grid_mode);
 	m_config->Read("m_light_push_matrix", &m_light_push_matrix);
 	m_config->Read("WheelForwardAway", &mouse_wheel_forward_away);
+	m_config->Read("CtrlDoesRotate", &ctrl_does_rotate);
 	gripper_mode->GetProfileStrings();
 
 	GetRecentFilesProfileString();
@@ -240,6 +242,7 @@ int HeeksCADapp::OnExit(){
 	m_config->Write("GridMode", grid_mode);
 	m_config->Write("m_light_push_matrix", m_light_push_matrix);
 	m_config->Write("WheelForwardAway", mouse_wheel_forward_away);
+	m_config->Write("CtrlDoesRotate", ctrl_does_rotate);
 
 	WriteRecentFilesProfileString();
 
