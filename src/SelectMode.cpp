@@ -216,7 +216,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 			wxPoint dm;
 			dm.x = event.GetX() - CurrentPoint.x;
 			dm.y = event.GetY() - CurrentPoint.y;
-			if(event.ControlDown())
+			if(wxGetApp().ctrl_does_rotate == event.ControlDown())
 			{
 				if(wxGetApp().m_rotate_mode)
 				{
@@ -364,6 +364,11 @@ void on_set_reverse_mouse_wheel(bool value)
 	wxGetApp().mouse_wheel_forward_away = !value;
 }
 
+void on_set_ctrl_does_rotate(bool value)
+{
+	wxGetApp().ctrl_does_rotate = value;
+}
+
 void CSelectMode::GetProperties(std::list<Property *> *list){
 	wxGetApp().gripper_mode->GetOptions(list);
 }
@@ -386,6 +391,7 @@ void CSelectMode::GetOptions(std::list<Property *> *list){
 	plist->m_list.push_back( new PropertyCheck("fixed light", wxGetApp().m_light_push_matrix, on_set_light_push_matrix));
 #endif
 	plist->m_list.push_back( new PropertyCheck("reverse mouse wheel", !(wxGetApp().mouse_wheel_forward_away), on_set_reverse_mouse_wheel));
+	plist->m_list.push_back( new PropertyCheck("Ctrl key does rotate", wxGetApp().ctrl_does_rotate, on_set_ctrl_does_rotate));
 	list->push_back(plist);
 }
 

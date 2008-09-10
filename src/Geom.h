@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "gp_Pnt.hxx"
+
 static const double Pi = 3.14159265358979323846264338327950288419716939937511;
 
 // functions to find intersections between gp items
@@ -21,10 +23,58 @@ void extract(const gp_XYZ &xyz, double *m);
 void extract(const gp_Trsf& tr, double *m);
 void extract_transposed(const gp_Trsf& tr, double *m);
 
+#define TwoCircleType 100000
+
+class PointLineOrCircle{
+public:
+	int type; // UnknownType, PointType, LineType, CircleType or TwoCircleType
+	gp_Pnt p;
+	gp_Lin l;
+	gp_Circ c;
+	gp_Circ c2;
+
+	PointLineOrCircle() :type(0){}
+};
+
 gp_Pnt ClosestPointOnPlane(const gp_Pln& pln, const gp_Pnt &p);
 gp_Pnt ClosestPointOnLine(const gp_Lin& line, const gp_Pnt &p);
 void ClosestPointsOnLines(const gp_Lin& lin, const gp_Lin& lin2, gp_Pnt &p1, gp_Pnt &p2);// they might be the same point
 void ClosestPointsLineAndCircle(const gp_Lin& lin, const gp_Circ& cir, std::list<gp_Pnt> &list);
+
+// I've made all the combinations of these, 3*3*3 = 27 :), but all except 10 are just to redirect
+void TangentCircles(const gp_Pnt& p1, const gp_Pnt& p2, const gp_Pnt& p3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Pnt& p1, const gp_Pnt& p2, const gp_Lin& l3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Pnt& p1, const gp_Pnt& p2, const gp_Circ& c3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Pnt& p1, const gp_Lin& l2, const gp_Pnt& p3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Pnt& p1, const gp_Lin& l2, const gp_Lin& l3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Pnt& p1, const gp_Lin& l2, const gp_Circ& c3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Pnt& p1, const gp_Circ& c2, const gp_Pnt& p3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Pnt& p1, const gp_Circ& c2, const gp_Lin& l3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Pnt& p1, const gp_Circ& c2, const gp_Circ& c3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Lin& l1, const gp_Pnt& p2, const gp_Pnt& p3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Lin& l1, const gp_Pnt& p2, const gp_Lin& l3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Lin& l1, const gp_Pnt& p2, const gp_Circ& c3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Lin& l1, const gp_Lin& l2, const gp_Pnt& p3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Lin& l1, const gp_Lin& l2, const gp_Lin& l3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Lin& l1, const gp_Lin& l2, const gp_Circ& c3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Lin& l1, const gp_Circ& c2, const gp_Pnt& p3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Lin& l1, const gp_Circ& c2, const gp_Lin& l3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Lin& l1, const gp_Circ& c2, const gp_Circ& c3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Circ& c1, const gp_Pnt& p2, const gp_Pnt& p3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Circ& c1, const gp_Pnt& p2, const gp_Lin& l3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Circ& c1, const gp_Pnt& p2, const gp_Circ& c3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Circ& c1, const gp_Lin& l2, const gp_Pnt& p3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Circ& c1, const gp_Lin& l2, const gp_Lin& l3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Circ& c1, const gp_Lin& l2, const gp_Circ& c3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Circ& c1, const gp_Circ& c2, const gp_Pnt& p3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Circ& c1, const gp_Circ& c2, const gp_Lin& l3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Circ& c1, const gp_Circ& c2, const gp_Circ& c3, std::list<gp_Circ>& c_list);
+
+void TangentCircles(const gp_Circ& c1, const gp_Circ& c2, const gp_Circ& c3, std::list<gp_Circ>& c_list);
+void TangentCircles(const gp_Circ& c1, const gp_Lin& l2, const gp_Pnt& p3, std::list<gp_Circ>& c_list);
+void TangentCircles(const PointLineOrCircle& plc1, const PointLineOrCircle& plc2, const PointLineOrCircle& plc3, std::list<gp_Circ>& c_list);
+gp_Circ PointToCircle(const gp_Pnt& p);
+bool LineToBigCircles(const gp_Lin& lin, const gp_Dir& z_axis, gp_Circ& c1, gp_Circ& c2);
 
 gp_Pnt make_point(const double* p);
 gp_Vec make_vector(const gp_Pnt &p1, const gp_Pnt &p2);

@@ -784,20 +784,44 @@ bool HCircle::GetArcTangentPoint(const gp_Lin& l, const gp_Pnt& a, const gp_Pnt&
 // static
 bool HCircle::GetArcTangentPoint(const gp_Circ& c, const gp_Pnt& a, const gp_Pnt& b, const gp_Vec *final_direction, double* radius, gp_Pnt& p, gp_Pnt& centre, gp_Dir& axis)
 {
-	// to do
-#if 0
 	// find the tangent point on the circle c, for an arc from near point "a" on the circle to exact given point "b"
 	if(final_direction)
 	{
-		// consider the line parallel with the final direction, but through the circle centre
+		// get tangent circles
 		gp_Lin final_dir_line(b, gp_Dir(final_direction->XYZ()));
-		gp_Lin offset_line(c.Location(), final_dir_line.Direction());
-		centre = ClosestPointOnLine(offset_line, b);
-		if(centre.Distance(b) < 0.000000000001)return false;
-	gp_Dir sideways(gp_Vec(c, b));
+		std::list<gp_Circ> c_list;
+		TangentCircles(c, final_dir_line, b, c_list);
 
+		gp_Circ* best_pnt_circle = NULL;
+		gp_Pnt best_pnt;
+		double best_dist;
+
+		for(std::list<gp_Circ>::iterator It = c_list.begin(); It != c_list.end(); It++)
+		{
+			gp_Circ& circle = *It;
+			std::list<gp_Pnt> p_list;
+			intersect(circle, c, p_list);
+			if(p_list.size() == 1)
+			{
+				gp_Pnt& p = p_list.front();
+				double dist = p.Distance(a);
+				if(best_pnt_circle == NULL || dist < best_dist)
+				{
+					best_pnt = p;
+					best_dist = dist;
+					best_pnt_circle = &circle;
+				}
+			}
+		}
+
+		if(best_pnt_circle)
+		{
+			p = best_pnt;
+			centre = best_pnt_circle->Location();
+			axis = best_pnt_circle->Axis().Direction();
+			return true;
+		}
 	}
-#endif
 
 	return false;
 }

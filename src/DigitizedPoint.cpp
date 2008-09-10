@@ -48,140 +48,215 @@ int DigitizedPoint::importance(){
 	}
 }
 
-static void GetLineOrCircleType(const DigitizedPoint& d, int &type, gp_Lin &l, gp_Circ &c)
+static PointLineOrCircle GetLineOrCircleType(const DigitizedPoint& d)
 {
-	type = UnknownType;
+	PointLineOrCircle plc;
 
-	if(d.m_object1)
+	plc.type = UnknownType;
+
+	if(d.m_type == DigitizeTangentType && d.m_object1)
 	{
 		switch(d.m_object1->GetType())
 		{
 		case LineType:
-			type = LineType;
-			l = ((HLine*)(d.m_object1))->GetLine();
+			plc.type = LineType;
+			plc.l = ((HLine*)(d.m_object1))->GetLine();
 			break;
 		case ILineType:
-			type = LineType;
-			l = ((HILine*)(d.m_object1))->GetLine();
+			plc.type = LineType;
+			plc.l = ((HILine*)(d.m_object1))->GetLine();
 			break;
 		case ArcType:
-			type = CircleType;
-			c = ((HArc*)(d.m_object1))->m_circle;
+			plc.type = CircleType;
+			plc.c = ((HArc*)(d.m_object1))->m_circle;
 			break;
 		case CircleType:
-			type = CircleType;
-			c = ((HCircle*)(d.m_object1))->m_circle;
+			plc.type = CircleType;
+			plc.c = ((HCircle*)(d.m_object1))->m_circle;
 			break;
 		}
+	}
+
+	if(plc.type == UnknownType && d.m_type != DigitizeNoItemType)
+	{
+		plc.type = PointType;
+		plc.p = d.m_point;
+	}
+
+	return plc;
+}
+
+static bool PointOrLineToCircle(PointLineOrCircle &plc)
+{
+	switch(plc.type){
+		case CircleType:
+			return true;
+		case PointType:
+			plc.type = CircleType;
+			plc.c = PointToCircle(plc.p);
+			return true;
+		case LineType:
+			plc.type = TwoCircleType;
+			return LineToBigCircles(plc.l, gp_Dir(0, 0, 1), plc.c, plc.c2);
+		default:
+			return false;
 	}
 }
 
 // static member function
-bool DigitizedPoint::GetLinePoints(const DigitizedPoint& d1, const DigitizedPoint& d2, gp_Pnt &p1, gp_Pnt &p2)
+bool DigitizedPoint::GetLinePoints(const DigitizedPoint& d1, const DigitizedPoint& d2, gp_Pnt &P1, gp_Pnt &P2)
 {
 	// calculate tangent points
-	p1 = d1.m_point;
-	p2 = d2.m_point;
+	P1 = d1.m_point;
+	P2 = d2.m_point;
 
-	gp_Circ c1, c2;
-	gp_Lin l1, l2;
-	int type1, type2; // UnknownType, LineType or CircleType
+	PointLineOrCircle plc1 = GetLineOrCircleType(d1);
+	PointLineOrCircle plc2 = GetLineOrCircleType(d2);
 
-	GetLineOrCircleType(d1, type1, l1, c1);
-	GetLineOrCircleType(d2, type2, l2, c2);
-
-	if(d1.m_type == DigitizeTangentType && d2.m_type == DigitizeTangentType)
+	if(plc1.type == CircleType && plc2.type == CircleType)
 	{
-		if(type1 == CircleType && type2 == CircleType)
-		{
-			return HCircle::GetLineTangentPoints(c1, c2, d1.m_point, d2.m_point, p1, p2);
-		}
+		return HCircle::GetLineTangentPoints(plc1.c, plc2.c, d1.m_point, d2.m_point, P1, P2);
 	}
-	else if(d1.m_type == DigitizeTangentType)
+	else if(plc1.type == CircleType && plc2.type == PointType)
 	{
-		if(type1 == CircleType)
-		{
-			return HCircle::GetLineTangentPoint(c1, d1.m_point, d2.m_point, p1);
-		}
+		return HCircle::GetLineTangentPoint(plc1.c, d1.m_point, plc2.p, P1);
 	}
-	else if(d2.m_type == DigitizeTangentType)
+	else if(plc1.type == PointType && plc2.type == CircleType)
 	{
-		if(type2 == CircleType)
-		{
-			return HCircle::GetLineTangentPoint(c2, d2.m_point, d1.m_point, p2);
-		}
+		return HCircle::GetLineTangentPoint(plc2.c, d2.m_point, plc1.p, P2);
 	}
 
 	return false;
 }
 
 // static member function
-bool DigitizedPoint::GetArcPoints(const DigitizedPoint& d1, const gp_Vec *initial_direction, const DigitizedPoint& d2, gp_Pnt &p1, gp_Pnt &p2, gp_Pnt &centre, gp_Dir &axis)
+bool DigitizedPoint::GetArcPoints(const DigitizedPoint& d1, const gp_Vec *initial_direction, const DigitizedPoint& d2, gp_Pnt &P1, gp_Pnt &P2, gp_Pnt &centre, gp_Dir &axis)
 {
 	// calculate tangent points
-	p1 = d1.m_point;
-	p2 = d2.m_point;
+	P1 = d1.m_point;
+	P2 = d2.m_point;
 
-	gp_Circ c1, c2;
-	gp_Lin l1, l2;
-	int type1, type2; // UnknownType, LineType or CircleType
+	PointLineOrCircle plc1 = GetLineOrCircleType(d1);
+	PointLineOrCircle plc2 = GetLineOrCircleType(d2);
 
-	GetLineOrCircleType(d1, type1, l1, c1);
-	GetLineOrCircleType(d2, type2, l2, c2);
-
-	if(d1.m_type == DigitizeTangentType && d2.m_type == DigitizeTangentType)
+	if(plc1.type == CircleType && plc2.type == CircleType)
 	{
-		if(type1 == CircleType && type2 == CircleType)
-		{
-			bool success = HCircle::GetArcTangentPoints(c1, c2, d1.m_point, d2.m_point, wxGetApp().digitizing_radius, p1, p2, centre, axis);
-			if(success && initial_direction){
-				// get the axis the right way round
-			}
-			return success;
+		bool success = HCircle::GetArcTangentPoints(plc1.c, plc2.c, d1.m_point, d2.m_point, wxGetApp().digitizing_radius, P1, P2, centre, axis);
+		if(success && initial_direction){
+			// get the axis the right way round
 		}
-		if(type1 == LineType && type2 == CircleType)
-		{
-			return HCircle::GetArcTangentPoints(c2, l1, d2.m_point, wxGetApp().digitizing_radius, p1, p2, centre, axis);
-		}
-		if(type1 == CircleType && type2 == LineType)
-		{
-			return HCircle::GetArcTangentPoints(c1, l2, d1.m_point, wxGetApp().digitizing_radius, p2, p1, centre, axis);
-		}
-		if(type1 == LineType && type2 == LineType)
-		{
-			return HCircle::GetArcTangentPoints(l1, l2, d1.m_point, d2.m_point, wxGetApp().digitizing_radius, p1, p2, centre, axis);
-		}
-		return false;
+		return success;
 	}
-	else if(d1.m_type == DigitizeTangentType)
+	else if(plc1.type == LineType && plc2.type == CircleType)
 	{
-		if(type1 == CircleType)
-		{
-			return HCircle::GetArcTangentPoint(c1, d1.m_point, d2.m_point, initial_direction, NULL, p1, centre, axis);
-		}
-		else if(type1 == LineType)
-		{
-			return HCircle::GetArcTangentPoint(l1, d1.m_point, d2.m_point, initial_direction, NULL, p1, centre, axis);
-		}
-		return false;
+		return HCircle::GetArcTangentPoints(plc2.c, plc1.l, d2.m_point, wxGetApp().digitizing_radius, P1, P2, centre, axis);
 	}
-	else if(d2.m_type == DigitizeTangentType)
+	else if(plc1.type == CircleType && plc2.type == LineType)
+	{
+		return HCircle::GetArcTangentPoints(plc1.c, plc2.l, d1.m_point, wxGetApp().digitizing_radius, P2, P1, centre, axis);
+	}
+	else if(plc1.type == LineType && plc2.type == LineType)
+	{
+		return HCircle::GetArcTangentPoints(plc1.l, plc2.l, d1.m_point, d2.m_point, wxGetApp().digitizing_radius, P1, P2, centre, axis);
+	}
+	else if(plc1.type == CircleType && plc2.type == PointType)
+	{
+		return HCircle::GetArcTangentPoint(plc1.c, d1.m_point, d2.m_point, initial_direction, NULL, P1, centre, axis);
+	}
+	else if(plc1.type == LineType && plc2.type == PointType)
+	{
+		return HCircle::GetArcTangentPoint(plc1.l, d1.m_point, d2.m_point, initial_direction, NULL, P1, centre, axis);
+	}
+	else if(plc1.type == PointType && plc2.type == CircleType)
 	{
 		gp_Vec minus_dir;
 		if(initial_direction)minus_dir = -(*initial_direction);
-		if(type2 == CircleType)
-		{
-			return HCircle::GetArcTangentPoint(c2, d2.m_point, d1.m_point, (initial_direction != NULL) ? (&minus_dir):NULL, NULL, p2, centre, axis);
-		}
-		else if(type2 == LineType)
-		{
-			return HCircle::GetArcTangentPoint(l2, d2.m_point, d1.m_point, (initial_direction != NULL) ? (&minus_dir):NULL, NULL, p2, centre, axis);
-		}
-		return false;
+		return HCircle::GetArcTangentPoint(plc2.c, d2.m_point, d1.m_point, (initial_direction != NULL) ? (&minus_dir):NULL, NULL, P2, centre, axis);
+	}
+	else if(plc1.type == PointType && plc2.type == LineType)
+	{
+		gp_Vec minus_dir;
+		if(initial_direction)minus_dir = -(*initial_direction);
+		return HCircle::GetArcTangentPoint(plc2.l, d2.m_point, d1.m_point, (initial_direction != NULL) ? (&minus_dir):NULL, NULL, P2, centre, axis);
+	}
+	else if(plc1.type == PointType && plc2.type == PointType)
+	{
+		P1 = d1.m_point;
+		P2 = d2.m_point;
+		return true;
 	}
 
-	p1 = d1.m_point;
-	p2 = d2.m_point;
+	return false;
+}
 
-	return true;
+bool DigitizedPoint::GetTangentCircle(const DigitizedPoint& d1, const DigitizedPoint& d2, const DigitizedPoint& d3, gp_Circ& c)
+{
+	PointLineOrCircle plc1 = GetLineOrCircleType(d1);
+	PointLineOrCircle plc2 = GetLineOrCircleType(d2);
+	PointLineOrCircle plc3 = GetLineOrCircleType(d3);
+
+	if(!PointOrLineToCircle(plc1))return false;
+	if(!PointOrLineToCircle(plc2))return false;
+	if(!PointOrLineToCircle(plc3))return false;
+
+	std::list<gp_Circ> c_list;
+	TangentCircles(plc1, plc2, plc3, c_list);
+
+	gp_Circ* best_circle = NULL;
+	double best_dist;
+
+	for(std::list<gp_Circ>::iterator It = c_list.begin(); It != c_list.end(); It++)
+	{
+		gp_Circ& circle = *It;
+
+		std::list<gp_Pnt> p_list;
+		intersect(circle, plc1.c, p_list);
+		if(p_list.size() != 1 && plc1.type == TwoCircleType)
+		{
+			p_list.clear();
+			intersect(circle, plc1.c2, p_list);
+		}
+		if(p_list.size() == 1)
+		{
+			gp_Pnt p1 = p_list.front();
+			p_list.clear();
+			intersect(circle, plc2.c, p_list);
+			if(p_list.size() != 1 && plc2.type == TwoCircleType)
+			{
+				p_list.clear();
+				intersect(circle, plc2.c2, p_list);
+			}
+
+			if(p_list.size() == 1)
+			{
+				gp_Pnt p2 = p_list.front();
+				p_list.clear();
+
+				intersect(circle, plc3.c, p_list);
+				if(p_list.size() != 1 && plc3.type == TwoCircleType)
+				{
+					p_list.clear();
+					intersect(circle, plc3.c2, p_list);
+				}
+				if(p_list.size() == 1)
+				{
+					gp_Pnt p3 = p_list.front();
+					p_list.clear();
+					double dist = d1.m_point.Distance(p1) + d2.m_point.Distance(p2) + d3.m_point.Distance(p3);
+					if(best_circle == NULL || dist<best_dist)
+					{
+						best_circle = &circle;
+						best_dist = dist;
+					}
+				}
+			}
+		}
+	}
+
+	if(best_circle){
+		c = *best_circle;
+		return true;
+	}
+
+	return false;
 }

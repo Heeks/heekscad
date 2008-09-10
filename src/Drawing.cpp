@@ -60,7 +60,7 @@ void Drawing::AddPoint()
 		clear_drawing_objects(true);
 		SetStartPosUndoable(wxGetApp().m_digitizing->digitized_point);
 	}
-	else if(GetDrawStep() == 0){
+	else{
 		clear_drawing_objects();
 		SetStartPosUndoable(wxGetApp().m_digitizing->digitized_point);
 	}
