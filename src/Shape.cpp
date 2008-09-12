@@ -536,8 +536,9 @@ bool CShape::ExportSolidsFile(const char* filepath, std::map<int, int> *index_ma
 {
 	// returns true, if suffix handled
 	wxString wf(filepath);
+	wf.LowerCase();
 
-	if(wf.EndsWith(".stp") || wf.EndsWith(".STP") || wf.EndsWith(".step") || wf.EndsWith(".STEP"))
+	if(wf.EndsWith(".stp") || wf.EndsWith(".step"))
 	{
 		Standard_CString aFileName = (Standard_CString) (wf.c_str());
 		STEPControl_Writer writer;
@@ -553,7 +554,7 @@ bool CShape::ExportSolidsFile(const char* filepath, std::map<int, int> *index_ma
 		writer.Write(aFileName);
 		return true;
 	}
-	else if(wf.EndsWith(".igs") || wf.EndsWith(".IGS") || wf.EndsWith(".iges") || wf.EndsWith(".IGES"))
+	else if(wf.EndsWith(".igs") || wf.EndsWith(".iges"))
 	{
 		Standard_CString aFileName = (Standard_CString) (wf.c_str());
 
@@ -572,7 +573,7 @@ bool CShape::ExportSolidsFile(const char* filepath, std::map<int, int> *index_ma
 		writer.Write(aFileName);
 		return true;
 	}
-	else if(wf.EndsWith(".stl") || wf.EndsWith(".STL"))
+	else if(wf.EndsWith(".stl"))
 	{
 		Standard_CString aFileName = (Standard_CString) (wf.c_str());
 

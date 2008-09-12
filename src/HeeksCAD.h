@@ -112,6 +112,7 @@ public:
 	void ReadSVGElement(TiXmlElement* pElem);
 	void OpenSVGFile(const char *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
 	bool OpenFile(const char *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
+	void SaveDXFFile(const char *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
 	void SaveXMLFile(const char *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
 	bool SaveFile(const char *filepath, bool use_dialog = false, bool update_recent_file_list = true, bool set_app_caption = true);
 	void DeleteUndoably(HeeksObj* object);
@@ -137,8 +138,8 @@ public:
 	void RemoveObserver(Observer* observer);
 	void ObserversOnChange(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified);
 	void ObserversMarkedListChanged(bool all_marked, bool none_marked, const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed);
-	const char* GetKnownFilesWildCardString()const;
-	const char* GetKnownFilesCommaSeparatedList()const;
+	const char* GetKnownFilesWildCardString(bool open = true)const;
+	const char* GetKnownFilesCommaSeparatedList(bool open = true)const;
 	void AddMenusToToolList(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool from_graphics_canvas, bool control_pressed);
 	wxString GetExeFolder()const;
 	void get_2d_arc_segments(double xs, double ys, double xe, double ye, double xc, double yc, bool dir, bool want_start, double pixels_per_mm, void(*callbackfunc)(const double* xy));

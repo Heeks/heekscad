@@ -46,7 +46,7 @@
 #include "LineArcCollection.h"
 #include "../tinyxml/tinyxml.h"
 #include "BezierCurve.h"
-
+#include "dxf.h"
 
 const int ID_TOOLBAR = 500;
 const int ID_SOLID_TOOLBAR = 501;
@@ -668,6 +668,62 @@ bool HeeksCADapp::OpenFile(const char *filepath, bool update_recent_file_list, b
 	return false;
 }
 
+static void WriteDXFEntity(HeeksObj* object, CDXF& dxf_file)
+{
+	switch(object->GetType())
+	{
+	case LineType:
+		{
+			HLine* l = (HLine*)object;
+			double s[3], e[3];
+			extract(l->A, s);
+			extract(l->B, e);
+			dxf_file.WriteLine(s, e);
+		}
+		break;
+	case ArcType:
+		{
+			HArc* a = (HArc*)object;
+			double s[3], e[3], c[3];
+			extract(a->A, s);
+			extract(a->B, e);
+			extract(a->m_circle.Location(), c);
+			bool dir = a->m_circle.Axis().Direction().Z() > 0;
+			dxf_file.WriteArc(s, e, c, dir);
+		}
+		break;
+	default:
+		{
+			for(HeeksObj* child = object->GetFirstChild(); child; child = object->GetNextChild())
+			{
+				// recursive
+				WriteDXFEntity(child, dxf_file);
+			}
+		}
+	}
+}
+
+void HeeksCADapp::SaveDXFFile(const char *filepath, bool update_recent_file_list, bool set_app_caption)
+{
+	CDXF dxf_file(filepath);
+	if(dxf_file.Failed())
+	{
+		char str[1024];
+		sprintf(str, "couldn't open file - %s", filepath);
+		wxMessageBox(str);
+		return;
+	}
+
+	// write all the objects
+	for(std::list<HeeksObj*>::iterator It = m_objects.begin(); It != m_objects.end(); It++)
+	{
+		HeeksObj* object = *It;
+		WriteDXFEntity(object, dxf_file);
+	}
+
+	// when dxf_file goes out of scope it writes the file, see ~CDXF
+}
+
 void HeeksCADapp::SaveXMLFile(const char *filepath, bool update_recent_file_list, bool set_app_caption)
 {
 	// write an xml file
@@ -741,17 +797,23 @@ void HeeksCADapp::SaveXMLFile(const char *filepath, bool update_recent_file_list
 bool HeeksCADapp::SaveFile(const char *filepath, bool use_dialog, bool update_recent_file_list, bool set_app_caption)
 {
 	if(use_dialog){
-		wxFileDialog fd(m_frame, _T("Save graphical data file"), wxEmptyString, filepath, GetKnownFilesWildCardString(), wxSAVE|wxOVERWRITE_PROMPT);
+		wxFileDialog fd(m_frame, _T("Save graphical data file"), wxEmptyString, filepath, GetKnownFilesWildCardString(false), wxSAVE|wxOVERWRITE_PROMPT);
 		fd.SetFilterIndex(1);
 		if (fd.ShowModal() == wxID_CANCEL)return false;
 		return SaveFile( fd.GetPath().c_str(), false, update_recent_file_list );
 	}
 
 	wxString wf(filepath);
+	wf.LowerCase();
 
-	if(wf.EndsWith(".heeks") || wf.EndsWith(".HEEKS"))
+	if(wf.EndsWith(".heeks"))
 	{
 		SaveXMLFile(filepath, update_recent_file_list, set_app_caption);
+		return true;
+	}
+	else if(wf.EndsWith(".dxf"))
+	{
+		SaveDXFFile(filepath, update_recent_file_list, set_app_caption);
 		return true;
 	}
 
@@ -766,7 +828,7 @@ bool HeeksCADapp::SaveFile(const char *filepath, bool use_dialog, bool update_re
 	else
 	{
 		char mess[1024];
-		sprintf(mess, "Invalid file type chosen ( expecting file with %s suffix )", wxGetApp().GetKnownFilesCommaSeparatedList());
+		sprintf(mess, "Invalid file type chosen ( expecting file with %s suffix )", wxGetApp().GetKnownFilesCommaSeparatedList(false));
 		wxMessageBox(mess);
 	}
 
@@ -1262,14 +1324,26 @@ void HeeksCADapp::glColorEnsuringContrast(const HeeksColor &c)
 	else c.glColor();
 }
 
-const char* HeeksCADapp::GetKnownFilesWildCardString()const
+const char* HeeksCADapp::GetKnownFilesWildCardString(bool open)const
 {
-	return "Known Files |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl;*.svg|Heeks files (*.heeks)|*.heeks|IGES files (*.igs *.iges)|*.igs;*.iges|STEP files (*.stp *.step)|*.stp;*.step|STL files (*.stl)|*.stl|Scalar Vector Graphics files (*.svg)|*.svg";
+	if(open){
+		return "Known Files |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl;*.svg;|Heeks files (*.heeks)|*.heeks|IGES files (*.igs *.iges)|*.igs;*.iges|STEP files (*.stp *.step)|*.stp;*.step|STL files (*.stl)|*.stl|Scalar Vector Graphics files (*.svg)|*.svg";
+	}
+	else{
+		// file save
+		return "Known Files |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl;*.dxf|Heeks files (*.heeks)|*.heeks|IGES files (*.igs *.iges)|*.igs;*.iges|STEP files (*.stp *.step)|*.stp;*.step|STL files (*.stl)|*.stl|DXF files (*.dxf)|*.dxf";
+	}
 }
 
-const char* HeeksCADapp::GetKnownFilesCommaSeparatedList()const
+const char* HeeksCADapp::GetKnownFilesCommaSeparatedList(bool open)const
 {
-	return "heeks, igs, iges, stp, step, stl, svg";
+	if(open){
+		return "heeks, igs, iges, stp, step, stl, svg";
+	}
+	else{
+		// file save
+		return "heeks, igs, iges, stp, step, stl, svg";
+	}
 }
 
 class MarkObjectTool:public Tool{
