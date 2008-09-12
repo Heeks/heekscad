@@ -286,6 +286,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\dxf.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\dxf.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Edge.cpp"
 			>
 		</File>

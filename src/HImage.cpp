@@ -140,7 +140,7 @@ void HImage::glCommands(bool select, bool marked, bool no_color)
 
 void HImage::GetBox(CBox &box)
 {
-	for(int i = 0; i<4; i++)box.Insert(m_x[0]);
+	for(int i = 0; i<4; i++)box.Insert(m_x[i]);
 }
 
 wxIcon* HImage::GetIcon(){
