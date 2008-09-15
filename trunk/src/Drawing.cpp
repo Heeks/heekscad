@@ -149,7 +149,7 @@ bool Drawing::OnModeChange(void){
 	*null_view = ViewSpecific(0);
 	current_view_stuff = null_view;
 
-	if(!IsDrawing(wxGetApp().input_mode_object))SetDrawStepUndoable(false);
+	if(!IsDrawing(wxGetApp().input_mode_object))SetDrawStepUndoable(0);
 	return true;
 }
 
@@ -267,15 +267,16 @@ int Drawing::GetView(){
 class SetDrawingDrawStep:public Tool{
 private:
 	Drawing *drawing;
+	int old_step;
 	int step;
 
 public:
-	SetDrawingDrawStep(Drawing *d, int s){drawing = d; step = s;}
+	SetDrawingDrawStep(Drawing *d, int s){drawing = d; old_step = drawing->GetDrawStep(); step = s;}
 
 	// Tool's virtual functions
 	const char* GetTitle(){return "set_draw_step";}
 	void Run(){drawing->set_draw_step_not_undoable(step);}
-	void RollBack(){drawing->set_draw_step_not_undoable(!step);}
+	void RollBack(){drawing->set_draw_step_not_undoable(old_step);}
 	bool Undoable(){return true;}
 };
 
