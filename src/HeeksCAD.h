@@ -111,6 +111,7 @@ public:
 	void OpenXMLFile(const char *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
 	void ReadSVGElement(TiXmlElement* pElem);
 	void OpenSVGFile(const char *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
+	void OpenDXFFile(const char *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
 	bool OpenFile(const char *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
 	void SaveDXFFile(const char *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
 	void SaveXMLFile(const char *filepath, bool update_recent_file_list = true, bool set_app_caption = true);

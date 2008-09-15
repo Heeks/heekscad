@@ -21,8 +21,6 @@ private:
 	std::list<HeeksObj*> temp_object_in_list;
 	std::list<HeeksObj*> prev_object_in_list;
 	HeeksObj *temp_object;
-	bool m_previous_direction_set;
-	gp_Vec m_previous_direction;
 	bool m_A_down; // is key A pressed
 	HeeksObj* m_container;
 
@@ -45,6 +43,8 @@ public:
 	std::list<EnumDrawingMode> m_save_drawing_mode;
 	double radius_for_circle;
 	EnumCircleDrawingMode circle_mode;
+	bool m_previous_direction_set;
+	gp_Vec m_previous_direction;
 
 	LineArcDrawing(void);
 	virtual ~LineArcDrawing(void);

@@ -18,15 +18,6 @@ GLuint* loadImage(wxString path, int* imageWidth, int* imageHeight, int* texture
 	
 	glBindTexture( GL_TEXTURE_2D, *ID );
 	
-	// the first time, init image handlers (remove this part if you do it somewhere else in your app)
-	static bool is_first_time = true;
-	if(is_first_time)
-	{
-		wxInitAllImageHandlers();
-		
-		is_first_time = false;
-	}
-	
 	// check the file exists
 	if(!wxFileExists(path))
 	{
