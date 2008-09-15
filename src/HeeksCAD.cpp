@@ -112,6 +112,7 @@ HeeksCADapp::~HeeksCADapp()
 bool HeeksCADapp::OnInit()
 {
 	m_config = new wxConfig("HeeksCAD");
+	wxInitAllImageHandlers();
 
 	// initialise glut
 #ifdef WIN32
@@ -625,28 +626,79 @@ void HeeksCADapp::OpenSVGFile(const char *filepath, bool update_recent_file_list
 	if(set_app_caption)SetFrameTitle();
 }
 
+class HeeksDxfRead : public CDxfRead{
+public:
+	HeeksDxfRead(const char* filepath):CDxfRead(filepath){}
+
+	// CDxfRead's virtual functions
+	void OnReadLine(const double* s, const double* e);
+	void OnReadArc(const double* s, const double* e, const double* c, bool dir);
+};
+
+void HeeksDxfRead::OnReadLine(const double* s, const double* e)
+{
+	HLine* new_object = new HLine(make_point(s), make_point(e), &(wxGetApp().current_color));
+	wxGetApp().Add(new_object, NULL);
+}
+
+void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, bool dir)
+{
+	gp_Pnt p0 = make_point(s);
+	gp_Pnt p1 = make_point(e);
+	gp_Dir up(0, 0, 1);
+	if(!dir)up = -up;
+	gp_Pnt pc = make_point(c);
+	gp_Circ circle(gp_Ax2(pc, up), p1.Distance(pc));
+	HArc* new_object = new HArc(p0, p1, circle, &wxGetApp().current_color);
+	wxGetApp().Add(new_object, NULL);
+}
+
+void HeeksCADapp::OpenDXFFile(const char *filepath, bool update_recent_file_list, bool set_app_caption)
+{
+	{
+		HeeksDxfRead dxf_file(filepath);
+		dxf_file.DoRead();
+	}
+
+	m_filepath.assign(filepath);
+	if(update_recent_file_list)InsertRecentFileItem(filepath);
+	if(set_app_caption)SetFrameTitle();
+}
+
 bool HeeksCADapp::OpenFile(const char *filepath, bool update_recent_file_list, bool set_app_caption)
 {
-	// i'm not sure what return value means if anything
-
+	// returns true if file open was successful
 	wxString wf(filepath);
+	wf.LowerCase();
 
-	if(wf.EndsWith(".heeks") || wf.EndsWith(".HEEKS"))
+	if(wf.EndsWith(".heeks"))
 	{
 		OpenXMLFile(filepath, update_recent_file_list, set_app_caption);
 		return true;
 	}
 
-	if(wf.EndsWith(".svg") || wf.EndsWith(".SVG"))
+	if(wf.EndsWith(".svg"))
 	{
 		OpenSVGFile(filepath, update_recent_file_list, set_app_caption);
 		return true;
 	}
 
-	if(wf.EndsWith(".stl") || wf.EndsWith(".STL"))
+	if(wf.EndsWith(".svg"))
+	{
+		OpenSVGFile(filepath, update_recent_file_list, set_app_caption);
+		return true;
+	}
+
+	if(wf.EndsWith(".stl"))
 	{
 		// open stl file
 		// to do
+		return true;
+	}
+
+	if(wf.EndsWith(".dxf"))
+	{
+		OpenDXFFile(filepath, update_recent_file_list, set_app_caption);
 		return true;
 	}
 
@@ -668,7 +720,7 @@ bool HeeksCADapp::OpenFile(const char *filepath, bool update_recent_file_list, b
 	return false;
 }
 
-static void WriteDXFEntity(HeeksObj* object, CDXF& dxf_file)
+static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file)
 {
 	switch(object->GetType())
 	{
@@ -705,7 +757,7 @@ static void WriteDXFEntity(HeeksObj* object, CDXF& dxf_file)
 
 void HeeksCADapp::SaveDXFFile(const char *filepath, bool update_recent_file_list, bool set_app_caption)
 {
-	CDXF dxf_file(filepath);
+	CDxfWrite dxf_file(filepath);
 	if(dxf_file.Failed())
 	{
 		char str[1024];
@@ -721,7 +773,7 @@ void HeeksCADapp::SaveDXFFile(const char *filepath, bool update_recent_file_list
 		WriteDXFEntity(object, dxf_file);
 	}
 
-	// when dxf_file goes out of scope it writes the file, see ~CDXF
+	// when dxf_file goes out of scope it writes the file, see ~CDxfWrite
 }
 
 void HeeksCADapp::SaveXMLFile(const char *filepath, bool update_recent_file_list, bool set_app_caption)
@@ -1324,10 +1376,14 @@ void HeeksCADapp::glColorEnsuringContrast(const HeeksColor &c)
 	else c.glColor();
 }
 
+static wxString known_file_ext;
+
 const char* HeeksCADapp::GetKnownFilesWildCardString(bool open)const
 {
 	if(open){
-		return "Known Files |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl;*.svg;|Heeks files (*.heeks)|*.heeks|IGES files (*.igs *.iges)|*.igs;*.iges|STEP files (*.stp *.step)|*.stp;*.step|STL files (*.stl)|*.stl|Scalar Vector Graphics files (*.svg)|*.svg";
+		wxString image_str = wxImage::GetImageExtWildcard();
+		known_file_ext = "Known Files |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl;*.svg;*.dxf;|Heeks files (*.heeks)|*.heeks|IGES files (*.igs *.iges)|*.igs;*.iges|STEP files (*.stp *.step)|*.stp;*.step|STL files (*.stl)|*.stl|Scalar Vector Graphics files (*.svg)|*.svg|DXF files (*.dxf)|*.dxf";
+		return known_file_ext.c_str();
 	}
 	else{
 		// file save
@@ -1338,11 +1394,11 @@ const char* HeeksCADapp::GetKnownFilesWildCardString(bool open)const
 const char* HeeksCADapp::GetKnownFilesCommaSeparatedList(bool open)const
 {
 	if(open){
-		return "heeks, igs, iges, stp, step, stl, svg";
+		return "heeks, igs, iges, stp, step, stl, svg, dxf";
 	}
 	else{
 		// file save
-		return "heeks, igs, iges, stp, step, stl, svg";
+		return "heeks, igs, iges, stp, step, stl, dxf";
 	}
 }
 

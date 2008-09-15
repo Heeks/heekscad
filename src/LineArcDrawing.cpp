@@ -38,6 +38,37 @@ LineArcDrawing::LineArcDrawing(void){
 LineArcDrawing::~LineArcDrawing(void){
 }
 
+class SetPreviousDirection:public Tool{
+private:
+	LineArcDrawing *drawing;
+	gp_Vec old_direction;
+	gp_Vec new_direction;
+	bool old_previous_direction_set;
+
+public:
+	SetPreviousDirection(LineArcDrawing *d, const gp_Vec& n)
+	{
+		drawing = d;
+		old_direction = drawing->m_previous_direction;
+		new_direction = n;
+		old_previous_direction_set = drawing->m_previous_direction_set;
+	}
+
+	// Tool's virtual functions
+	const char* GetTitle(){return "set previous direction";}
+	void Run()
+	{
+		drawing->m_previous_direction = new_direction;
+		drawing->m_previous_direction_set = true;
+	}
+	void RollBack()
+	{
+		if(old_previous_direction_set)drawing->m_previous_direction = old_direction;
+		drawing->m_previous_direction_set = old_previous_direction_set;
+	}
+	bool Undoable(){return true;}
+};
+
 void LineArcDrawing::set_previous_direction(){
 	if(temp_object == NULL)return;
 
@@ -45,15 +76,13 @@ void LineArcDrawing::set_previous_direction(){
 		double s[3], e[3];
 		if(temp_object->GetStartPoint(s) && temp_object->GetEndPoint(e))
 		{
-			m_previous_direction = make_vector(make_point(s), make_point(e));
-			m_previous_direction_set = true;
+			wxGetApp().DoToolUndoably(new SetPreviousDirection(this, make_vector(make_point(s), make_point(e))));
 		}
 	}
 	else if(temp_object->GetType() == ArcType){
 		gp_Vec circlev(((HArc*)temp_object)->m_circle.Axis().Direction());
 		gp_Vec endv(((HArc*)temp_object)->m_circle.Location(), ((HArc*)temp_object)->B);
-		m_previous_direction = (circlev ^ endv).Normalized();
-		m_previous_direction_set = true;
+		wxGetApp().DoToolUndoably(new SetPreviousDirection(this, (circlev ^ endv).Normalized()));
 	}
 }
 
