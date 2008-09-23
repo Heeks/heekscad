@@ -28,21 +28,18 @@
 #include "BRepOffsetAPI_MakeOffsetShape.hxx"
 #include "Interface_Static.hxx"
 #include "../interface/Tool.h"
-#include "../interface/PropertyInt.h"
 #include "SphereCreate.h"
 
 // static member variable
 bool CShape::m_solids_found = false;
-std::map<int, CShape*> CShape::used_ids;
-int CShape::next_id = 1;
 
-CShape::CShape(const TopoDS_Shape &shape, const char* title, bool use_one_gl_list):m_shape(shape), m_title(title), m_gl_list(0), m_use_one_gl_list(use_one_gl_list), m_id(-1)
+CShape::CShape(const TopoDS_Shape &shape, const char* title, bool use_one_gl_list):m_shape(shape), m_title(title), m_gl_list(0), m_use_one_gl_list(use_one_gl_list)
 {
 	create_face_objects();
 	create_edge_objects();
 }
 
-CShape::CShape(const CShape& s):m_gl_list(0), m_id(-1)
+CShape::CShape(const CShape& s):m_gl_list(0)
 {
 	operator=(s);
 }
@@ -69,20 +66,6 @@ const CShape& CShape::operator=(const CShape& s)
 	KillGLLists();
 
 	return *this;
-}
-
-void CShape::OnAdd()
-{
-	// set id
-	while(used_ids.find(next_id) != used_ids.end())next_id++;
-	m_id = next_id;
-	used_ids.insert( std::pair<int, CShape*> (m_id, this) );
-}
-
-void CShape::OnRemove()
-{
-	next_id = m_id; // this id has now become available
-	used_ids.erase(m_id);
 }
 
 void CShape::KillGLLists()
@@ -194,54 +177,6 @@ void CShape::GetBox(CBox &box){
 	box.Insert(m_box);
 }
 
-void CShape::GetGripperPositions(std::list<double> *list, bool just_for_endof)
-{
-	CBox box;
-	GetBox(box);
-	if(box.m_valid)
-	{
-		list->push_back(0);
-		list->push_back(box.m_x[0]);
-		list->push_back(box.m_x[1]);
-		list->push_back(box.m_x[2]);
-
-		list->push_back(0);
-		list->push_back(box.m_x[3]);
-		list->push_back(box.m_x[1]);
-		list->push_back(box.m_x[2]);
-
-		list->push_back(0);
-		list->push_back(box.m_x[3]);
-		list->push_back(box.m_x[4]);
-		list->push_back(box.m_x[2]);
-
-		list->push_back(0);
-		list->push_back(box.m_x[0]);
-		list->push_back(box.m_x[4]);
-		list->push_back(box.m_x[2]);
-
-		list->push_back(0);
-		list->push_back(box.m_x[0]);
-		list->push_back(box.m_x[1]);
-		list->push_back(box.m_x[5]);
-
-		list->push_back(0);
-		list->push_back(box.m_x[3]);
-		list->push_back(box.m_x[1]);
-		list->push_back(box.m_x[5]);
-
-		list->push_back(0);
-		list->push_back(box.m_x[3]);
-		list->push_back(box.m_x[4]);
-		list->push_back(box.m_x[5]);
-
-		list->push_back(0);
-		list->push_back(box.m_x[0]);
-		list->push_back(box.m_x[4]);
-		list->push_back(box.m_x[5]);
-	}
-}
-
 class OffsetShapeTool:public Tool{
 	CShape* m_shape;
 	static wxBitmap* m_bitmap;
@@ -279,7 +214,7 @@ void CShape::ModifyByMatrix(const double* m){
 	gp_Trsf mat = make_matrix(m);
 	BRepBuilderAPI_Transform myBRepTransformation(m_shape,mat);
 	TopoDS_Shape new_shape = myBRepTransformation.Shape();
-	wxGetApp().Add(MakeObject(new_shape, m_title.c_str()), NULL);
+	wxGetApp().AddUndoably(MakeObject(new_shape, m_title.c_str()), m_owner, NULL);
 	wxGetApp().DeleteUndoably(this);
 }
 
@@ -473,7 +408,7 @@ bool CShape::ImportSolidsFile(const char* filepath, bool undoably, std::map<int,
 					std::map<int, int>::iterator FindIt = index_map->find(i);
 					if(FindIt != index_map->end())
 					{
-						CShape::SetID((CShape*)new_object, FindIt->second);
+						new_object->SetID(FindIt->second);
 					}
 				}
 			}
@@ -546,7 +481,7 @@ bool CShape::ExportSolidsFile(const char* filepath, std::map<int, int> *index_ma
 		int i = 1;
 		for(HeeksObj* object = wxGetApp().GetFirstChild(); object; object = wxGetApp().GetNextChild()){
 			if(CShape::IsTypeAShape(object->GetType())){
-				if(index_map)index_map->insert( std::pair<int, int>(i, ((CShape*)object)->m_id) );
+				if(index_map)index_map->insert( std::pair<int, int>(i, object->GetID()) );
 				i++;
 				writer.Transfer(((CSolid*)object)->Shape(), STEPControl_AsIs);
 			}
@@ -595,23 +530,27 @@ bool CShape::ExportSolidsFile(const char* filepath, std::map<int, int> *index_ma
 	return false;
 }
 
-void CShape::GetTriangles(void(*callbackfunc)(double* x, double* n), double cusp){
+void CShape::GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal){
 	BRepTools::Clean(m_shape);
 	BRepMesh::Mesh(m_shape, cusp);
 
 	std::list<CFace*>::iterator It;
 	for(It = m_faces.begin(); It != m_faces.end(); It++){
 		CFace* face = *It;
-		face->GetTriangles(callbackfunc, cusp);
+		face->GetTriangles(callbackfunc, cusp, just_one_average_normal);
 	}
 }
 
-void CShape::GetCentreNormals(void(*callbackfunc)(double area, double *x, double *n)){
-	std::list<CFace*>::iterator It;
+double CShape::Area()const{
+	double area = 0.0;
+
+	std::list<CFace*>::const_iterator It;
 	for(It = m_faces.begin(); It != m_faces.end(); It++){
 		CFace* face = *It;
-		face->GetCentreNormals(callbackfunc);
+		area += face->Area();
 	}
+
+	return area;
 }
 
 // static member function
@@ -634,34 +573,4 @@ void CShape::CopyFrom(const HeeksObj* object)
 void CShape::WriteXML(TiXmlElement *root)
 {
 	CShape::m_solids_found = true;
-}
-
-static CShape* object_for_properties = NULL;
-
-static void on_set_id(int value)
-{
-	CShape::SetID(object_for_properties, value);
-}
-
-void CShape::GetProperties(std::list<Property *> *list){
-	__super::GetProperties(list);
-
-	object_for_properties = this;
-	list->push_back(new PropertyInt("ID", m_id, on_set_id));
-}
-
-// static
-CShape* CShape::GetShape(int id)
-{
-	std::map<int, CShape*>::iterator FindIt = used_ids.find(id);
-	if(FindIt == used_ids.end())return NULL;
-	return FindIt->second;
-}
-
-// static
-void CShape::SetID(CShape* shape, int id)
-{
-	used_ids.erase(shape->m_id);
-	shape->m_id = id;
-	used_ids.insert( std::pair<int, CShape*> (shape->m_id, shape) );
 }

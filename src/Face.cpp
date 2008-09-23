@@ -191,55 +191,7 @@ void CFace::ModifyByMatrix(const double *m){
 	wxGetApp().DeleteUndoably(this);
 }
 
-void CFace::GetGripperPositions(std::list<double> *list, bool just_for_endof)
-{
-	CBox box;
-	GetBox(box);
-	if(box.m_valid)
-	{
-		list->push_back(0);
-		list->push_back(box.m_x[0]);
-		list->push_back(box.m_x[1]);
-		list->push_back(box.m_x[2]);
-
-		list->push_back(0);
-		list->push_back(box.m_x[3]);
-		list->push_back(box.m_x[1]);
-		list->push_back(box.m_x[2]);
-
-		list->push_back(0);
-		list->push_back(box.m_x[3]);
-		list->push_back(box.m_x[4]);
-		list->push_back(box.m_x[2]);
-
-		list->push_back(0);
-		list->push_back(box.m_x[0]);
-		list->push_back(box.m_x[4]);
-		list->push_back(box.m_x[2]);
-
-		list->push_back(0);
-		list->push_back(box.m_x[0]);
-		list->push_back(box.m_x[1]);
-		list->push_back(box.m_x[5]);
-
-		list->push_back(0);
-		list->push_back(box.m_x[3]);
-		list->push_back(box.m_x[1]);
-		list->push_back(box.m_x[5]);
-
-		list->push_back(0);
-		list->push_back(box.m_x[3]);
-		list->push_back(box.m_x[4]);
-		list->push_back(box.m_x[5]);
-
-		list->push_back(0);
-		list->push_back(box.m_x[0]);
-		list->push_back(box.m_x[4]);
-		list->push_back(box.m_x[5]);
-	}
-}
-
-void CFace::GetTriangles(void(*callbackfunc)(double* x, double* n), double cusp){
+void CFace::GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal){
 	BRepTools::Clean(m_topods_face);
 	BRepMesh::Mesh(m_topods_face, cusp);
 
@@ -293,15 +245,24 @@ void CFace::GetTriangles(void(*callbackfunc)(double* x, double* n), double cusp)
 				x[7] = v3.Y();
 				x[8] = v3.Z();
 
-				n[0] = myNormal(n1).X();
-				n[1] = myNormal(n1).Y();
-				n[2] = myNormal(n1).Z();
-				n[3] = myNormal(n2).X();
-				n[4] = myNormal(n2).Y();
-				n[5] = myNormal(n2).Z();
-				n[6] = myNormal(n3).X();
-				n[7] = myNormal(n3).Y();
-				n[8] = myNormal(n3).Z();
+				if(just_one_average_normal)
+				{
+					gp_Vec V1(v1, v2);
+					gp_Vec V2(v1, v3);
+					extract((V1 ^ V2).Normalized(), n);
+				}
+				else
+				{
+					n[0] = myNormal(n1).X();
+					n[1] = myNormal(n1).Y();
+					n[2] = myNormal(n1).Z();
+					n[3] = myNormal(n2).X();
+					n[4] = myNormal(n2).Y();
+					n[5] = myNormal(n2).Z();
+					n[6] = myNormal(n3).X();
+					n[7] = myNormal(n3).Y();
+					n[8] = myNormal(n3).Z();
+				}
 				(*callbackfunc)(x, n);
 			}
 		}
@@ -326,29 +287,6 @@ void best_triangle_for_face(double *x, double *n)
 		memcpy(best_triangle_coords, x, 9*sizeof(double));
 		memcpy(best_triangle_normals, n, 9*sizeof(double));
 		best_triangle_found = true;
-	}
-}
-
-void CFace::GetCentreNormals(void(*callbackfunc)(double area, double *x, double *n)){
-	// find best triangle
-	best_triangle_found = false;
-	GetTriangles(best_triangle_for_face, 1);
-
-	if(best_triangle_found){
-		// average normal
-		double n[3];
-		for(int i = 0; i<3; i++)n[i] = (best_triangle_normals[i] + best_triangle_normals[i+3] + best_triangle_normals[i+6])/3;
-
-		// middle point
-		gp_Pnt p1(best_triangle_coords[0], best_triangle_coords[1], best_triangle_coords[2]);
-		gp_Pnt p2(best_triangle_coords[3], best_triangle_coords[4], best_triangle_coords[5]);
-		gp_Pnt p3(best_triangle_coords[6], best_triangle_coords[7], best_triangle_coords[8]);
-		gp_Vec v1(p1, p2);
-		gp_Vec v2(p1, p3);
-		gp_Pnt c(p1.XYZ() + ((v1 + v2)/4).XYZ());
-		double x[3] = {c.X(), c.Y(), c.Z()};
-
-		(*callbackfunc)(Area(), x, n);
 	}
 }
 

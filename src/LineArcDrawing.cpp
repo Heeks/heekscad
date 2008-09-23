@@ -355,7 +355,7 @@ HeeksObj* LineArcDrawing::GetOwnerForDrawingObjects()
 		{
 			if(m_container == NULL)
 			{
-				m_container = new CLineArcCollection;
+				m_container = (ObjList*)new CLineArcCollection;
 				wxGetApp().AddUndoably(m_container, NULL, NULL);
 			}
 			return m_container;

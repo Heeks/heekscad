@@ -8,6 +8,7 @@
 #endif
 #include "../tinyxml/tinyxml.h"
 
+
 ObjList::ObjList(const ObjList& objlist): HeeksObj(objlist), m_index_list_valid(true) {operator=(objlist);}
 
 void ObjList::Clear()
@@ -143,6 +144,16 @@ bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 	}
 	m_index_list_valid = false;
 	HeeksObj::Add(object, prev_object);
+
+	if(object->GetID() == 0)
+	{
+#ifdef HEEKSCAD
+		object->SetID(wxGetApp().GetNextID(object->GetIDGroupType()));
+#else
+		object->SetID(heeksCAD->GetNextID(object->GetIDGroupType()));
+#endif
+	}
+
 	return true;
 }
 
@@ -159,6 +170,12 @@ void ObjList::Remove(HeeksObj* object)
 	}
 	m_index_list_valid = false;
 	HeeksObj::Remove(object);
+
+#ifdef HEEKSCAD
+	wxGetApp().RemoveID(object);
+#else
+	heeksCAD->RemoveID(object);
+#endif
 }
 
 void ObjList::KillGLLists(void)
@@ -167,13 +184,13 @@ void ObjList::KillGLLists(void)
 	for(It=m_objects.begin(); It!=m_objects.end() ;It++) (*It)->KillGLLists();
 }
 
-void ObjList::WriteXML(TiXmlElement *root)
+void ObjList::WriteBaseXML(TiXmlElement *element)
 {
 	std::list<HeeksObj*>::iterator It;
-	for(It=m_objects.begin(); It!=m_objects.end() ;It++) (*It)->WriteXML(root);
+	for(It=m_objects.begin(); It!=m_objects.end() ;It++) (*It)->WriteXML(element);
 }
 
-void ObjList::ReadXMLChildren(TiXmlElement* root)
+void ObjList::ReadBaseXML(TiXmlElement* root)
 {
 	// loop through all the objects
 	for(TiXmlElement* pElem = TiXmlHandle(root).FirstChildElement().Element(); pElem;	pElem = pElem->NextSiblingElement())

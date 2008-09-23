@@ -28,6 +28,8 @@ class HeeksCADapp : public wxApp, public ObjList
 private:
 	std::set<Observer*> observers;
 	MainHistory *history;
+	std::map< int, std::map<int, HeeksObj*> > used_ids; // map of group type ( usually same as object type ) to "map of ID to object"
+	std::map< int, int > next_id_map;
 
 public:
 	HeeksCADapp();
@@ -108,13 +110,16 @@ public:
 	void Reset();
 	HeeksObj* ReadXMLElement(TiXmlElement* pElem);
 	void InitializeXMLFunctions();
-	void OpenXMLFile(const char *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
+	void OpenXMLFile(const char *filepath);
 	void ReadSVGElement(TiXmlElement* pElem);
-	void OpenSVGFile(const char *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
-	void OpenDXFFile(const char *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
+	void OpenSVGFile(const char *filepath);
+	void OpenSTLFile(const char *filepath);
+	void OpenDXFFile(const char *filepath);
+	bool OpenImageFile(const char *filepath);
 	bool OpenFile(const char *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
-	void SaveDXFFile(const char *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
-	void SaveXMLFile(const char *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
+	void SaveDXFFile(const char *filepath);
+	void SaveSTLFile(const char *filepath);
+	void SaveXMLFile(const char *filepath);
 	bool SaveFile(const char *filepath, bool use_dialog = false, bool update_recent_file_list = true, bool set_app_caption = true);
 	void DeleteUndoably(HeeksObj* object);
 	void DeleteUndoably(const std::list<HeeksObj*>& list);
@@ -156,6 +161,13 @@ public:
 	void InsertRecentFileItem(const char* filepath);
 	bool CheckForModifiedDoc(); // returns true, if OK to continue with file open etc.
 	void SetFrameTitle();
+	HeeksObj* GetIDObject(int type, int id);
+	void SetObjectID(HeeksObj* object, int id);
+	int GetNextID(int type);
+	void RemoveID(HeeksObj* object); // only call this from ObjList::Remove()
+	void ResetIDs();
+	void WriteIDToXML(HeeksObj* object, TiXmlElement *element);
+	void ReadIDFromXML(HeeksObj* object, TiXmlElement *element);
 };
 
 DECLARE_APP(HeeksCADapp)
