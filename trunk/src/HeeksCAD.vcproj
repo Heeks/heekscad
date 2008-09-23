@@ -870,22 +870,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Tri.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Tri.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Triangles.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Triangles.h"
-			>
-		</File>
-		<File
 			RelativePath=".\ViewPoint.cpp"
 			>
 		</File>

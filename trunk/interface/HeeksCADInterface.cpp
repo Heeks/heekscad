@@ -225,24 +225,9 @@ void CHeeksCADInterface::DrawObjectsOnFront(const std::list<HeeksObj*> &list)
 	wxGetApp().m_frame->m_graphics->DrawObjectsOnFront(list);
 }
 
-HeeksObj* CHeeksCADInterface::GetLineArcCollection(int id)
-{
-	return CLineArcCollection::GetLineArcCollection(id);
-}
-
 HeeksObj* CHeeksCADInterface::NewLineArcCollection()
 {
 	return new CLineArcCollection;
-}
-
-int CHeeksCADInterface::GetLineArcCollectionID(HeeksObj* la)
-{
-	return ((CLineArcCollection*)la)->m_id;
-}
-
-void CHeeksCADInterface::SetLineArcCollectionID(HeeksObj* la, int id)
-{
-	CLineArcCollection::SetID((CLineArcCollection*)la, id);
 }
 
 HeeksObj* CHeeksCADInterface::NewLine(const double* s, const double* e)
@@ -299,7 +284,32 @@ void CHeeksCADInterface::RegisterReadXMLfunction(const char* type_name, HeeksObj
 	wxGetApp().RegisterReadXMLfunction(type_name, read_xml_function);
 }
 
-HeeksObj* CHeeksCADInterface::GetSolidShape(int id)
+HeeksObj* CHeeksCADInterface::GetIDObject(int type, int id)
 {
-	return CShape::GetShape(id);
+	return wxGetApp().GetIDObject(type, id);
+}
+
+void CHeeksCADInterface::SetObjectID(HeeksObj* object, int id)
+{
+	wxGetApp().SetObjectID(object, id);
+}
+
+void CHeeksCADInterface::WriteIDToXML(HeeksObj* object, TiXmlElement *element)
+{
+	wxGetApp().WriteIDToXML(object, element);
+}
+
+void CHeeksCADInterface::ReadIDFromXML(HeeksObj* object, TiXmlElement *element)
+{
+	wxGetApp().ReadIDFromXML(object, element);
+}
+
+int CHeeksCADInterface::GetNextID(int type)
+{
+	return wxGetApp().GetNextID(type);
+}
+
+void CHeeksCADInterface::RemoveID(HeeksObj* object)
+{
+	wxGetApp().RemoveID(object);
 }

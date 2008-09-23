@@ -431,6 +431,7 @@ void HArc::WriteXML(TiXmlElement *root)
 	element->SetDoubleAttribute("ax", D.X());
 	element->SetDoubleAttribute("ay", D.Y());
 	element->SetDoubleAttribute("az", D.Z());
+	WriteBaseXML(element);
 }
 
 // static member function
@@ -461,5 +462,8 @@ HeeksObj* HArc::ReadFromXMLElement(TiXmlElement* pElem)
 
 	gp_Circ circle(gp_Ax2(centre, gp_Dir(make_vector(axis))), centre.Distance(p0));
 
-	return new HArc(p0, p1, circle, &c);
+	HArc* new_object = new HArc(p0, p1, circle, &c);
+	new_object->ReadBaseXML(pElem);
+
+	return new_object;
 }

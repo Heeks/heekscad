@@ -33,16 +33,19 @@ enum{
 
 class HeeksObj{
 public:
+	unsigned int m_id;
+	unsigned int m_layer;
 	HeeksObj *m_owner;
 
-	HeeksObj(void): m_owner(NULL){}
-	HeeksObj(const HeeksObj& ho): m_owner(NULL) {operator=(ho);}
+	HeeksObj(void);
+	HeeksObj(const HeeksObj& ho);
 	virtual ~HeeksObj() {if (m_owner) m_owner->Remove(this);}
 
-	virtual const HeeksObj& operator=(const HeeksObj &ho) {return *this;}
+	virtual const HeeksObj& operator=(const HeeksObj &ho);
 
 	// virtual functions
 	virtual int GetType()const{return UnknownType;}
+	virtual int GetIDGroupType()const{return GetType();}
 	virtual void glCommands(bool select, bool marked, bool no_color){};
 	virtual void GetBox(CBox &box){}
 	virtual const char* GetShortString(void)const{return NULL;}
@@ -65,7 +68,7 @@ public:
 	virtual int Intersects(const HeeksObj *object, std::list< double > *rl)const{return 0;}
 	virtual bool FindNearPoint(const double* ray_start, const double* ray_direction, double *point){return false;}
 	virtual bool FindPossTangentPoint(const double* ray_start, const double* ray_direction, double *point){return false;}
-	virtual void GetGripperPositions(std::list<double> *list, bool just_for_endof){}
+	virtual void GetGripperPositions(std::list<double> *list, bool just_for_endof);
 	virtual void GetTools(std::list<Tool*>* t_list, const wxPoint* p){}
 	virtual void Stretch(const double *p, const double* shift, double* new_position){}
 	virtual void SetClickMarkPoint(MarkedObject* marked_object, const double* ray_start, const double* ray_direction){}
@@ -80,9 +83,14 @@ public:
 	virtual int GetNumChildren(){return 0;}
 	virtual HeeksObj* GetFirstAutoExpandChild(){return NULL;}
 	virtual HeeksObj* GetNextAutoExpandChild(){return NULL;}
-	void    SetCurrentChild(HeeksObj* child) {}
-	virtual void GetTriangles(void(*callbackfunc)(double* x, double* n), double cusp){} // nine doubles, nine doubles
-	virtual void GetCentreNormals(void(*callbackfunc)(double area, double *x, double *n)){} // three doubles, three doubles
+	virtual void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true){} // [nine doubles, three doubles],  or [nine doubles, nine doubles] if just_one_average_normal = false
+	virtual double Area()const{return 0.0;}
 	virtual void GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point = true)const{};
 	virtual void WriteXML(TiXmlElement *root){}
+	virtual void WriteBaseXML(TiXmlElement *element);
+	virtual void ReadBaseXML(TiXmlElement* element);
+	int GetID(void){ return m_id;}
+	void SetID(int id);
+	int GetLayer(void){ return m_layer;}
+	void SetLayer(int layer);
 };

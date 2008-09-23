@@ -248,6 +248,7 @@ void HCircle::WriteXML(TiXmlElement *root)
 	element->SetDoubleAttribute("ax", D.X());
 	element->SetDoubleAttribute("ay", D.Y());
 	element->SetDoubleAttribute("az", D.Z());
+	WriteBaseXML(element);
 }
 
 // static member function
@@ -274,7 +275,10 @@ HeeksObj* HCircle::ReadFromXMLElement(TiXmlElement* pElem)
 
 	gp_Circ circle(gp_Ax2(centre, gp_Dir(make_vector(axis))), r);
 
-	return new HCircle(circle, &c);
+	HCircle* new_object = new HCircle(circle, &c);
+	new_object->ReadBaseXML(pElem);
+
+	return new_object;
 }
 
 int HCircle::Intersects(const HeeksObj *object, std::list< double > *rl)const

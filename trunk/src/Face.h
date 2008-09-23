@@ -22,10 +22,9 @@ public:
 	void GetBox(CBox &box);
 	wxIcon* GetIcon();
 	HeeksObj *MakeACopy(void)const{ return new CFace(*this);}
-	void GetGripperPositions(std::list<double> *list, bool just_for_endof);
 	const char* GetTypeString(void)const{return "Face";}
-	void GetTriangles(void(*callbackfunc)(double* x, double* n), double cusp);
-	void GetCentreNormals(void(*callbackfunc)(double area, double *x, double *n));
+	void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true);
+	double Area()const;
 	void ModifyByMatrix(const double* m);
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	void WriteXML(TiXmlElement *root);
@@ -34,5 +33,4 @@ public:
 	const Material &GetMaterial(){return m_material;}
 	void SetMaterial(const Material& mat){m_material = mat;}
 	gp_Dir GetMiddleNormal(gp_Pnt *pos = NULL)const;
-	double Area()const;
 };

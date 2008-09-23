@@ -270,6 +270,7 @@ void HLine::WriteXML(TiXmlElement *root)
 	element->SetDoubleAttribute("ex", B.X());
 	element->SetDoubleAttribute("ey", B.Y());
 	element->SetDoubleAttribute("ez", B.Z());
+	WriteBaseXML(element);
 }
 
 // static member function
@@ -291,5 +292,8 @@ HeeksObj* HLine::ReadFromXMLElement(TiXmlElement* pElem)
 		else if(name == "ez"){p1.SetZ(a->DoubleValue());}
 	}
 
-	return new HLine(p0, p1, &c);
+	HLine* new_object = new HLine(p0, p1, &c);
+	new_object->ReadBaseXML(pElem);
+
+	return new_object;
 }
