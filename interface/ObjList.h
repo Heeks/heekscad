@@ -35,7 +35,7 @@ public:
 	bool Add(HeeksObj* object, HeeksObj* prev_object);
 	void Remove(HeeksObj* object);
 	void KillGLLists(void);
-	void WriteXML(TiXmlElement *root);
-	void ReadXMLChildren(TiXmlElement* root);
+	void WriteBaseXML(TiXmlElement *element);
+	void ReadBaseXML(TiXmlElement* element);
 	void ModifyByMatrix(const double *m);
 };

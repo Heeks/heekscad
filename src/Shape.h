@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "../interface/HeeksObj.h"
 #include "../interface/Material.h"
 #include <TopoDS_Shape.hxx>
 
@@ -28,9 +27,6 @@ protected:
 
 public:
 	static bool m_solids_found; // a flag for xml writing
-	static std::map<int, CShape*> used_ids;
-	static int next_id;
-	int m_id;
 
 	CShape(const TopoDS_Shape &shape, const char* title, bool use_one_gl_list = false);
 	CShape(const CShape& s);
@@ -41,20 +37,16 @@ public:
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
 	void KillGLLists(void);
-	void GetGripperPositions(std::list<double> *list, bool just_for_endof);
 	void ModifyByMatrix(const double* m);
 	const char* GetShortString(void)const{return m_title.c_str();}
 	const char* GetTypeString(void)const{return "Shape";}
 	bool CanEditString(void)const{return true;}
 	void OnEditString(const char* str);
-	void GetTriangles(void(*callbackfunc)(double* x, double* n), double cusp);
-	void GetCentreNormals(void(*callbackfunc)(double area, double *x, double *n));
+	void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true);
+	double Area()const;
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	void CopyFrom(const HeeksObj* object);
 	void WriteXML(TiXmlElement *root);
-	void GetProperties(std::list<Property *> *list);
-	void OnAdd();
-	void OnRemove();
 
 	const TopoDS_Shape &Shape(){return m_shape;}
 
@@ -70,6 +62,4 @@ public:
 	static bool ExportSolidsFile(const char* filepath, std::map<int, int> *index_map = NULL);
 	static HeeksObj* MakeObject(const TopoDS_Shape &shape, const char* title, bool use_one_gl_list = false, bool stl_body = false);
 	static bool IsTypeAShape(int t);
-	static CShape* GetShape(int id);
-	static void SetID(CShape* shape, int id);
 };

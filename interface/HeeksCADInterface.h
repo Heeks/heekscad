@@ -54,10 +54,7 @@ public:
 	virtual HeeksObj* GetFirstObject();
 	virtual HeeksObj* GetNextObject();
 	virtual void DrawObjectsOnFront(const std::list<HeeksObj*> &list);
-	virtual HeeksObj* GetLineArcCollection(int id);
 	virtual HeeksObj* NewLineArcCollection();
-	virtual int GetLineArcCollectionID(HeeksObj* la);
-	virtual void SetLineArcCollectionID(HeeksObj* la, int id); // check for existing id using GetLineArcCollection and call DeleteUndoably first
 	virtual HeeksObj* NewLine(const double* s, const double* e);
 	virtual HeeksObj* NewArc(const double* s, const double* e, const double* c, const double* up); // set up to (0, 0, -1) for a clockwise arc
 	virtual void RegisterObserver(Observer* observer);
@@ -66,5 +63,10 @@ public:
 	virtual void RegisterHideableWindow(wxWindow* w);
 	virtual HeeksObj* ReadXMLElement(TiXmlElement* pElem);
 	virtual void RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem));
-	virtual HeeksObj* GetSolidShape(int id);
+	virtual HeeksObj* GetIDObject(int type, int id);
+	virtual void SetObjectID(HeeksObj* object, int id); // check for existing id using GetIDObject and call DeleteUndoably first
+	virtual int GetNextID(int type);
+	virtual void RemoveID(HeeksObj* object); // only call this from ObjList::Remove()
+	virtual void WriteIDToXML(HeeksObj* object, TiXmlElement *element);
+	virtual void ReadIDFromXML(HeeksObj* object, TiXmlElement *element);
 };

@@ -248,6 +248,7 @@ void HILine::WriteXML(TiXmlElement *root)
 	element->SetDoubleAttribute("ex", B.X());
 	element->SetDoubleAttribute("ey", B.Y());
 	element->SetDoubleAttribute("ez", B.Z());
+	WriteBaseXML(element);
 }
 
 // static member function
@@ -269,5 +270,7 @@ HeeksObj* HILine::ReadFromXMLElement(TiXmlElement* pElem)
 		else if(name == "ez"){p1.SetZ(a->DoubleValue());}
 	}
 
-	return new HILine(p0, p1, &c);
+	HILine* new_object = new HILine(p0, p1, &c);
+	new_object->ReadBaseXML(pElem);
+	return new_object;
 }

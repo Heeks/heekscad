@@ -46,6 +46,7 @@
 #include "LineArcCollection.h"
 #include "../tinyxml/tinyxml.h"
 #include "BezierCurve.h"
+#include "StlSolid.h"
 #include "dxf.h"
 
 const int ID_TOOLBAR = 500;
@@ -337,6 +338,7 @@ void HeeksCADapp::Reset(){
 	m_doing_rollback = false;
 	m_frame->m_graphics->m_view_point.SetView(gp_Vec(0, 1, 0), gp_Vec(0, 0, 1));
 	m_filepath.assign("Untitled.heeks");
+	ResetIDs();
 }
 
 static std::map< std::string, HeeksObj*(*)(TiXmlElement* pElem) > *xml_read_fn_map = NULL;
@@ -420,6 +422,7 @@ void HeeksCADapp::InitializeXMLFunctions()
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Image", HImage::ReadFromXMLElement ) );
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "LineArcCollection", CLineArcCollection::ReadFromXMLElement ) );
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "STEP_file", ReadSTEPFileFromXMLElement ) );
+		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "STLSolid", CStlSolid::ReadFromXMLElement ) );
 	}
 }
 
@@ -448,7 +451,7 @@ HeeksObj* HeeksCADapp::ReadXMLElement(TiXmlElement* pElem)
 	return NULL;
 }
 
-void HeeksCADapp::OpenXMLFile(const char *filepath, bool update_recent_file_list, bool set_app_caption)
+void HeeksCADapp::OpenXMLFile(const char *filepath)
 {
 	TiXmlDocument doc(filepath);
 	if (!doc.LoadFile())
@@ -486,12 +489,6 @@ void HeeksCADapp::OpenXMLFile(const char *filepath, bool update_recent_file_list
 		HeeksObj* object = ReadXMLElement(pElem);
 		if(object)Add(object, NULL);
 	}
-
-	WereAdded(m_objects);
-
-	m_filepath.assign(filepath);
-	if(update_recent_file_list)InsertRecentFileItem(filepath);
-	if(set_app_caption)SetFrameTitle();
 }
 
 static CLineArcCollection* line_arc_collection_for_callback = NULL;
@@ -581,7 +578,7 @@ void HeeksCADapp::ReadSVGElement(TiXmlElement* pElem)
 
 }
 
-void HeeksCADapp::OpenSVGFile(const char *filepath, bool update_recent_file_list, bool set_app_caption)
+void HeeksCADapp::OpenSVGFile(const char *filepath)
 {
 	TiXmlDocument doc(filepath);
 	if (!doc.LoadFile())
@@ -618,12 +615,12 @@ void HeeksCADapp::OpenSVGFile(const char *filepath, bool update_recent_file_list
 	{
 		ReadSVGElement(pElem);
 	}
+}
 
-	WereAdded(m_objects);
-
-	m_filepath.assign(filepath);
-	if(update_recent_file_list)InsertRecentFileItem(filepath);
-	if(set_app_caption)SetFrameTitle();
+void HeeksCADapp::OpenSTLFile(const char *filepath)
+{
+	CStlSolid* new_object = new CStlSolid(filepath, &wxGetApp().current_color);
+	wxGetApp().Add(new_object, NULL);
 }
 
 class HeeksDxfRead : public CDxfRead{
@@ -653,16 +650,33 @@ void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, 
 	wxGetApp().Add(new_object, NULL);
 }
 
-void HeeksCADapp::OpenDXFFile(const char *filepath, bool update_recent_file_list, bool set_app_caption)
+void HeeksCADapp::OpenDXFFile(const char *filepath)
 {
 	{
 		HeeksDxfRead dxf_file(filepath);
 		dxf_file.DoRead();
 	}
+}
 
-	m_filepath.assign(filepath);
-	if(update_recent_file_list)InsertRecentFileItem(filepath);
-	if(set_app_caption)SetFrameTitle();
+bool HeeksCADapp::OpenImageFile(const char *filepath)
+{
+	wxString wf(filepath);
+	wf.LowerCase();
+
+	wxList handlers = wxImage::GetHandlers();
+	for(wxList::iterator It = handlers.begin(); It != handlers.end(); It++)
+	{
+		wxImageHandler* handler = (wxImageHandler*)(*It);
+		wxString ext = "." + handler->GetExtension();
+		if(wf.EndsWith(ext))
+		{
+			wxGetApp().AddUndoably(new HImage(filepath), NULL, NULL);
+			wxGetApp().Repaint();
+			return true;
+		}
+	}
+
+	return false;
 }
 
 bool HeeksCADapp::OpenFile(const char *filepath, bool update_recent_file_list, bool set_app_caption)
@@ -673,51 +687,49 @@ bool HeeksCADapp::OpenFile(const char *filepath, bool update_recent_file_list, b
 
 	if(wf.EndsWith(".heeks"))
 	{
-		OpenXMLFile(filepath, update_recent_file_list, set_app_caption);
-		return true;
+		OpenXMLFile(filepath);
+	}
+	else if(wf.EndsWith(".svg"))
+	{
+		OpenSVGFile(filepath);
+	}
+	else if(wf.EndsWith(".svg"))
+	{
+		OpenSVGFile(filepath);
+	}
+	else if(wf.EndsWith(".stl"))
+	{
+		OpenSTLFile(filepath);
+	}
+	else if(wf.EndsWith(".dxf"))
+	{
+		OpenDXFFile(filepath);
 	}
 
-	if(wf.EndsWith(".svg"))
+	// check for images
+	else if(OpenImageFile(filepath))
 	{
-		OpenSVGFile(filepath, update_recent_file_list, set_app_caption);
-		return true;
-	}
-
-	if(wf.EndsWith(".svg"))
-	{
-		OpenSVGFile(filepath, update_recent_file_list, set_app_caption);
-		return true;
-	}
-
-	if(wf.EndsWith(".stl"))
-	{
-		// open stl file
-		// to do
-		return true;
-	}
-
-	if(wf.EndsWith(".dxf"))
-	{
-		OpenDXFFile(filepath, update_recent_file_list, set_app_caption);
-		return true;
 	}
 
 	// check for solid files
-	if(CShape::ImportSolidsFile(filepath, false))
+	else if(CShape::ImportSolidsFile(filepath, false))
 	{
-		WereAdded(m_objects);
-		m_filepath.assign(filepath);
-		if(update_recent_file_list)InsertRecentFileItem(filepath);
-		if(set_app_caption)SetFrameTitle();
-		return true;
+	}
+	else
+	{
+		// error
+		char mess[1024];
+		sprintf(mess, "Invalid file type chosen ( expecting file with %s suffix )", wxGetApp().GetKnownFilesCommaSeparatedList());
+		wxMessageBox(mess);
+		return false;
 	}
 
-	// error
-	char mess[1024];
-	sprintf(mess, "Invalid file type chosen ( expecting file with %s suffix )", wxGetApp().GetKnownFilesCommaSeparatedList());
-	wxMessageBox(mess);
+	WereAdded(m_objects);
+	m_filepath.assign(filepath);
+	if(update_recent_file_list)InsertRecentFileItem(filepath);
+	if(set_app_caption)SetFrameTitle();
 
-	return false;
+	return true;
 }
 
 static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file)
@@ -755,7 +767,7 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file)
 	}
 }
 
-void HeeksCADapp::SaveDXFFile(const char *filepath, bool update_recent_file_list, bool set_app_caption)
+void HeeksCADapp::SaveDXFFile(const char *filepath)
 {
 	CDxfWrite dxf_file(filepath);
 	if(dxf_file.Failed())
@@ -776,7 +788,49 @@ void HeeksCADapp::SaveDXFFile(const char *filepath, bool update_recent_file_list
 	// when dxf_file goes out of scope it writes the file, see ~CDxfWrite
 }
 
-void HeeksCADapp::SaveXMLFile(const char *filepath, bool update_recent_file_list, bool set_app_caption)
+static ofstream* ofs_for_write_stl_triangle = NULL;
+
+static void write_stl_triangle(const double* x, const double* n)
+{
+	char str[1024];
+	sprintf(str, " facet normal %g %g %g", n[0], n[1], n[2]);
+	(*ofs_for_write_stl_triangle)<<str<<endl;
+	(*ofs_for_write_stl_triangle)<<"   outer loop"<<endl;
+	sprintf(str, "     vertex %g %g %g", x[0], x[1], x[2]);
+	(*ofs_for_write_stl_triangle)<<str<<endl;
+	sprintf(str, "     vertex %g %g %g", x[3], x[4], x[5]);
+	(*ofs_for_write_stl_triangle)<<str<<endl;
+	sprintf(str, "     vertex %g %g %g", x[6], x[7], x[8]);
+	(*ofs_for_write_stl_triangle)<<str<<endl;
+	(*ofs_for_write_stl_triangle)<<"   endloop"<<endl;
+	(*ofs_for_write_stl_triangle)<<" endfacet"<<endl;
+}
+
+void HeeksCADapp::SaveSTLFile(const char *filepath)
+{
+	ofstream ofs(filepath);
+	if(!ofs)
+	{
+		char str[1024];
+		sprintf(str, "couldn't open file - %s", filepath);
+		wxMessageBox(str);
+		return;
+	}
+
+	ofs<<"solid"<<endl;
+
+	// write all the objects
+	ofs_for_write_stl_triangle = &ofs;
+	for(std::list<HeeksObj*>::iterator It = m_objects.begin(); It != m_objects.end(); It++)
+	{
+		HeeksObj* object = *It;
+		object->GetTriangles(write_stl_triangle, 0.1);
+	}
+
+	ofs<<"endsolid"<<endl;
+}
+
+void HeeksCADapp::SaveXMLFile(const char *filepath)
 {
 	// write an xml file
 	TiXmlDocument doc;  
@@ -839,11 +893,6 @@ void HeeksCADapp::SaveXMLFile(const char *filepath, bool update_recent_file_list
 	}
 
 	doc.SaveFile( filepath );  
-
-	m_filepath.assign(filepath);
-	if(update_recent_file_list)InsertRecentFileItem(filepath);
-	if(set_app_caption)SetFrameTitle();
-	SetLikeNewFile();
 }
 
 bool HeeksCADapp::SaveFile(const char *filepath, bool use_dialog, bool update_recent_file_list, bool set_app_caption)
@@ -860,31 +909,33 @@ bool HeeksCADapp::SaveFile(const char *filepath, bool use_dialog, bool update_re
 
 	if(wf.EndsWith(".heeks"))
 	{
-		SaveXMLFile(filepath, update_recent_file_list, set_app_caption);
-		return true;
+		SaveXMLFile(filepath);
 	}
 	else if(wf.EndsWith(".dxf"))
 	{
-		SaveDXFFile(filepath, update_recent_file_list, set_app_caption);
-		return true;
+		SaveDXFFile(filepath);
 	}
-
-	if(CShape::ExportSolidsFile(filepath))
+	else if(wf.EndsWith(".stl"))
 	{
-		m_filepath.assign(filepath);
-		if(update_recent_file_list)InsertRecentFileItem(filepath);
-		if(set_app_caption)SetFrameTitle();
-		SetLikeNewFile();
-		return true;
+		SaveSTLFile(filepath);
+	}
+	else if(CShape::ExportSolidsFile(filepath))
+	{
 	}
 	else
 	{
 		char mess[1024];
 		sprintf(mess, "Invalid file type chosen ( expecting file with %s suffix )", wxGetApp().GetKnownFilesCommaSeparatedList(false));
 		wxMessageBox(mess);
+		return false;
 	}
 
-	return false;
+	m_filepath.assign(filepath);
+	if(update_recent_file_list)InsertRecentFileItem(filepath);
+	if(set_app_caption)SetFrameTitle();
+	SetLikeNewFile();
+
+	return true;
 }
 
 
@@ -1339,12 +1390,17 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 
 void HeeksCADapp::DeleteMarkedItems()
 {
-	if(m_marked_list->size() == 1){
-		DeleteUndoably(*(m_marked_list->list().begin()));
+	std::list<HeeksObj *> list = m_marked_list->list();
+
+	// clear first, so properties cancel happens first
+	m_marked_list->Clear();
+
+	if(list.size() == 1){
+		DeleteUndoably(*(list.begin()));
 	}
-	else if(m_marked_list->size()>1){
+	else if(list.size()>1){
 		StartHistory("Delete Marked Items");
-		DeleteUndoably(m_marked_list->list());
+		DeleteUndoably(list);
 		EndHistory();
 	}
 	Repaint(0);
@@ -1381,8 +1437,21 @@ static wxString known_file_ext;
 const char* HeeksCADapp::GetKnownFilesWildCardString(bool open)const
 {
 	if(open){
-		wxString image_str = wxImage::GetImageExtWildcard();
-		known_file_ext = "Known Files |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl;*.svg;*.dxf;|Heeks files (*.heeks)|*.heeks|IGES files (*.igs *.iges)|*.igs;*.iges|STEP files (*.stp *.step)|*.stp;*.step|STL files (*.stl)|*.stl|Scalar Vector Graphics files (*.svg)|*.svg|DXF files (*.dxf)|*.dxf";
+		wxList handlers = wxImage::GetHandlers();
+		wxString imageExtStr;
+		wxString imageExtStr2;
+		for(wxList::iterator It = handlers.begin(); It != handlers.end(); It++)
+		{
+			wxImageHandler* handler = (wxImageHandler*)(*It);
+			wxString ext = handler->GetExtension();
+			if(It != handlers.begin())imageExtStr.Append(";");
+			imageExtStr.Append("*.");
+			imageExtStr.Append(ext);
+			if(It != handlers.begin())imageExtStr2.Append(" ");
+			imageExtStr2.Append("*.");
+			imageExtStr2.Append(ext);
+		}
+		known_file_ext = "Known Files |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl;*.svg;*.dxf;" + imageExtStr + "|Heeks files (*.heeks)|*.heeks|IGES files (*.igs *.iges)|*.igs;*.iges|STEP files (*.stp *.step)|*.stp;*.step|STL files (*.stl)|*.stl|Scalar Vector Graphics files (*.svg)|*.svg|DXF files (*.dxf)|*.dxf|Picture files (" + imageExtStr2 + ")|" + imageExtStr;
 		return known_file_ext.c_str();
 	}
 	else{
@@ -1394,7 +1463,17 @@ const char* HeeksCADapp::GetKnownFilesWildCardString(bool open)const
 const char* HeeksCADapp::GetKnownFilesCommaSeparatedList(bool open)const
 {
 	if(open){
-		return "heeks, igs, iges, stp, step, stl, svg, dxf";
+		wxList handlers = wxImage::GetHandlers();
+		wxString known_ext_str = "heeks, igs, iges, stp, step, stl, svg, dxf";
+		for(wxList::iterator It = handlers.begin(); It != handlers.end(); It++)
+		{
+			wxImageHandler* handler = (wxImageHandler*)(*It);
+			wxString ext = handler->GetExtension();
+			known_ext_str.Append(", ");
+			known_ext_str.Append(ext);
+		}
+
+		return known_ext_str;
 	}
 	else{
 		// file save
@@ -1747,3 +1826,89 @@ void HeeksCADapp::SetFrameTitle()
 	sprintf(str, "%s.%s - %s", f.GetName(), f.GetExt(), m_filepath.c_str());
 	m_frame->SetTitle(str);
 }
+
+HeeksObj* HeeksCADapp::GetIDObject(int type, int id)
+{
+	std::map< int, std::map<int, HeeksObj*> >::iterator FindIt1 = used_ids.find(type);
+	if(FindIt1 == used_ids.end())return NULL;
+	std::map<int, HeeksObj*> &map = FindIt1->second;
+	std::map<int, HeeksObj*>::iterator FindIt2 = map.find(id);
+	if(FindIt2 == map.end())return NULL;
+	return FindIt2->second;
+}
+
+void HeeksCADapp::SetObjectID(HeeksObj* object, int id)
+{
+	int id_group_type = object->GetIDGroupType();
+
+	std::map< int, std::map<int, HeeksObj*> >::iterator FindIt1 = used_ids.find(id_group_type);
+	if(FindIt1 == used_ids.end())
+	{
+		// add a new map
+		std::map<int, HeeksObj*> empty_map;
+		FindIt1 = used_ids.insert( make_pair( id_group_type, empty_map )).first;		
+	}
+	std::map<int, HeeksObj*> &map = FindIt1->second;
+	map.insert( std::pair<int, HeeksObj*> (id, object) );
+	object->m_id = id;
+}
+
+int HeeksCADapp::GetNextID(int id_group_type)
+{
+	std::map< int, std::map<int, HeeksObj*> >::iterator FindIt1 = used_ids.find(id_group_type);
+	if(FindIt1 == used_ids.end())return 1;
+	std::map< int, int >::iterator FindIt2 = next_id_map.find(id_group_type);
+	std::map<int, HeeksObj*> &map = FindIt1->second;
+
+	if(FindIt2 == next_id_map.end())
+	{
+		// add a new int
+		int next_id = map.begin()->first + 1;
+		FindIt2 = next_id_map.insert( make_pair(id_group_type, next_id) ).first;
+	}
+
+	int &next_id = FindIt2->second;
+
+	while(map.find(next_id) != map.end())next_id++;
+	return next_id;
+}
+
+void HeeksCADapp::RemoveID(HeeksObj* object)
+{
+	int id_group_type = object->GetIDGroupType();
+	std::map< int, std::map<int, HeeksObj*> >::iterator FindIt1 = used_ids.find(id_group_type);
+	if(FindIt1 == used_ids.end())return;
+	std::map< int, int >::iterator FindIt2 = next_id_map.find(id_group_type);
+	std::map<int, HeeksObj*> &map = FindIt1->second;
+	if(FindIt2 == next_id_map.end())
+	{
+		// add a new int
+		int next_id = 0;
+		FindIt2 = next_id_map.insert( make_pair(id_group_type, next_id) ).first;
+	}
+	int &next_id = FindIt2->second;
+	next_id = object->GetID(); // this id has now become available
+	map.erase(next_id);
+}
+
+void HeeksCADapp::ResetIDs()
+{
+	used_ids.clear();
+	next_id_map.clear();
+}
+
+void HeeksCADapp::WriteIDToXML(HeeksObj* object, TiXmlElement *element)
+{
+	element->SetAttribute("id", object->GetID());
+}
+
+void HeeksCADapp::ReadIDFromXML(HeeksObj* object, TiXmlElement *element)
+{
+	// get the attributes
+	for(TiXmlAttribute* a = element->FirstAttribute(); a; a = a->Next())
+	{
+		wxString name(a->Name());
+		if(name == "id"){object->SetID(a->IntValue());}
+	}
+}
+

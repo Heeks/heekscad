@@ -13,7 +13,6 @@
 #include "MarkedList.h"
 #include "MagDragWindow.h"
 #include "HArc.h"
-#include "HImage.h"
 #include "RuledSurface.h"
 #include "wx/dnd.h"
 
@@ -21,7 +20,6 @@ enum{
 	ID_LINES = 1,
 	ID_CIRCLES,
 	ID_ILINE,
-	ID_IMAGE,
 	ID_VIEWING,
 	ID_SUBTRACT,
 	ID_SPHERE,
@@ -72,7 +70,6 @@ EVT_MENU_RANGE(	ID_RECENT_FIRST, ID_RECENT_FIRST + MAX_RECENT_FILES, CHeeksFrame
 EVT_MENU(ID_LINES, CHeeksFrame::OnLinesButton)
 EVT_MENU(ID_CIRCLES, CHeeksFrame::OnCirclesButton)
 EVT_MENU(ID_ILINE, CHeeksFrame::OnILineButton)
-EVT_MENU(ID_IMAGE, CHeeksFrame::OnImageButton)
 EVT_MENU(ID_VIEWING, CHeeksFrame::OnViewingButton)
 EVT_MENU(ID_SPHERE, CHeeksFrame::OnSphereButton)
 EVT_MENU(ID_CUBE, CHeeksFrame::OnCubeButton)
@@ -212,7 +209,6 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
     m_toolBar->AddTool(ID_LINES, _T("Lines"), wxBitmap(exe_folder + "/bitmaps/lines.png", wxBITMAP_TYPE_PNG), _T("Start Line Drawing"));
     m_toolBar->AddTool(ID_CIRCLES, _T("Circles"), wxBitmap(exe_folder + "/bitmaps/circles.png", wxBITMAP_TYPE_PNG), _T("Start Circle Drawing"));
     m_toolBar->AddTool(ID_ILINE, _T("ILine"), wxBitmap(exe_folder + "/bitmaps/iline.png", wxBITMAP_TYPE_PNG), _T("Start Drawing Infinite Lines"));
-    m_toolBar->AddTool(ID_IMAGE, _T("Picture"), wxBitmap(exe_folder + "/bitmaps/picture.png", wxBITMAP_TYPE_PNG), _T("Add a picture"));
     m_toolBar->Realize();
 
 	// Solids tool bar
@@ -566,22 +562,6 @@ CHeeksFrame::OnILineButton( wxCommandEvent& WXUNUSED( event ) )
 	wxGetApp().SetInputMode(&line_strip);
 }
 
-void 
-CHeeksFrame::OnImageButton( wxCommandEvent& WXUNUSED( event ) )
-{
-	wxInitAllImageHandlers();
-	wxString ext = wxImage::GetImageExtWildcard();
-	wxFileDialog dialog(this, _T("Open Image File"), wxEmptyString, wxEmptyString,	ext);
-    dialog.SetDirectory(wxGetHomeDir());
-    dialog.CentreOnParent();
-
-    if (dialog.ShowModal() == wxID_OK)
-    {
-		wxGetApp().AddUndoably(new HImage(dialog.GetPath().c_str()), NULL, NULL);
-		wxGetApp().Repaint();
-    }
-}
-
 void CHeeksFrame::OnOpenButton( wxCommandEvent& event )
 {
     wxFileDialog dialog(this, _T("Open file"), wxEmptyString, wxEmptyString,	_T(wxGetApp().GetKnownFilesWildCardString()));
@@ -606,10 +586,7 @@ void CHeeksFrame::OnImportButton( wxCommandEvent& event )
 
     if (dialog.ShowModal() == wxID_OK)
     {
-		if(wxGetApp().CheckForModifiedDoc())
-		{
-			wxGetApp().OpenFile(dialog.GetPath().c_str());
-		}
+		wxGetApp().OpenFile(dialog.GetPath().c_str());
     }
 }
 
@@ -635,6 +612,7 @@ void CHeeksFrame::OnNewButton( wxCommandEvent& event )
 	wxGetApp().Reset();
 	wxGetApp().OnNewOrOpen(false);
 	wxGetApp().SetLikeNewFile();
+	wxGetApp().SetFrameTitle();
 	wxGetApp().Repaint();
 }
 

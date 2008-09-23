@@ -58,7 +58,6 @@ public:
 	void OnLinesButton( wxCommandEvent& event );
 	void OnCirclesButton( wxCommandEvent& event );
 	void OnILineButton( wxCommandEvent& event );
-	void OnImageButton( wxCommandEvent& event );
 	void OnViewingButton( wxCommandEvent& event );
 	void OnOpenButton( wxCommandEvent& event );
 	void OnImportButton( wxCommandEvent& event );

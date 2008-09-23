@@ -223,6 +223,7 @@ void HImage::WriteXML(TiXmlElement *root)
 	element->SetDoubleAttribute("x30", m_x[3][0]);
 	element->SetDoubleAttribute("x31", m_x[3][1]);
 	element->SetDoubleAttribute("x32", m_x[3][2]);
+	WriteBaseXML(element);
 }
 
 // static member function
@@ -254,6 +255,7 @@ HeeksObj* HImage::ReadFromXMLElement(TiXmlElement* pElem)
 	HImage *new_object = new HImage(filepath.c_str());
 	memcpy(new_object->m_x[0], x[0], 12*sizeof(double));
 	new_object->m_rectangle_intialized = true;
+	new_object->ReadBaseXML(pElem);
 
 	return new_object;
 }
