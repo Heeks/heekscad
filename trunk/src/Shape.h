@@ -8,15 +8,28 @@
 class CFace;
 class CEdge;
 
-class CShape:public HeeksObj{
+class CFaceList: public ObjList{
+};
+
+class CEdgeList: public ObjList{
+};
+
+class CShapeIndex{
+public:
+	int id;
+	std::map<int, int> edge_index; // map of index to id
+	std::map<int, int> face_index; // map of index to id
+};
+
+class CShape:public ObjList{
 protected:
 	int m_gl_list;
 	CBox m_box;
 	TopoDS_Shape m_shape;
 	Material m_material;
 	std::string m_title;
-	std::list<CFace*> m_faces;
-	std::list<CEdge*> m_edges;
+	CFaceList* m_faces;
+	CEdgeList* m_edges;
 	static wxIcon* m_icon;
 	bool m_use_one_gl_list;
 
@@ -35,7 +48,6 @@ public:
 	virtual const CShape& operator=(const CShape& s);
 
 	void glCommands(bool select, bool marked, bool no_color);
-	void GetBox(CBox &box);
 	void KillGLLists(void);
 	void ModifyByMatrix(const double* m);
 	const char* GetShortString(void)const{return m_title.c_str();}

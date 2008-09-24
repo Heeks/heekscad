@@ -7,6 +7,17 @@
 #include <set>
 #include <fstream>
 
+#include <wx/wx.h>
+#include <wx/glcanvas.h>
+#include <wx/config.h>
+#include <wx/confbase.h>
+#include <wx/fileconf.h>
+#include <wx/splitter.h>
+#ifdef WIN32
+#include <wx/msw/regconf.h>
+#endif
+#include <wx/aui/aui.h>
+
 #pragma warning(disable:4100)
 #pragma warning(  disable : 4244 )        // Issue warning 4244
 #include "Standard_ShortReal.hxx"
@@ -63,17 +74,6 @@ extern "C" {
 #include <GL/glut.h>
 #endif
 }
-
-#include <wx/wx.h>
-#include <wx/glcanvas.h>
-#include <wx/config.h>
-#include <wx/confbase.h>
-#include <wx/fileconf.h>
-#include <wx/splitter.h>
-#ifdef WIN32
-#include <wx/msw/regconf.h>
-#endif
-#include <wx/aui/aui.h>
 
 #include "Geom.h"
 

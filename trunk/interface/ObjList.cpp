@@ -145,14 +145,17 @@ bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 	m_index_list_valid = false;
 	HeeksObj::Add(object, prev_object);
 
-	if(object->GetID() == 0)
-	{
 #ifdef HEEKSCAD
+	if(!wxGetApp().m_disable_SetObjectID_on_Add && object->GetID() == 0)
+	{
 		object->SetID(wxGetApp().GetNextID(object->GetIDGroupType()));
-#else
-		object->SetID(heeksCAD->GetNextID(object->GetIDGroupType()));
-#endif
 	}
+#else
+	if(!heeksCAD->GetDisableSetObjectIDOnAdd() && object->GetID() == 0)
+	{
+		object->SetID(heeksCAD->GetNextID(object->GetIDGroupType()));
+	}
+#endif
 
 	return true;
 }
@@ -188,12 +191,13 @@ void ObjList::WriteBaseXML(TiXmlElement *element)
 {
 	std::list<HeeksObj*>::iterator It;
 	for(It=m_objects.begin(); It!=m_objects.end() ;It++) (*It)->WriteXML(element);
+	HeeksObj::WriteBaseXML(element);
 }
 
-void ObjList::ReadBaseXML(TiXmlElement* root)
+void ObjList::ReadBaseXML(TiXmlElement* element)
 {
 	// loop through all the objects
-	for(TiXmlElement* pElem = TiXmlHandle(root).FirstChildElement().Element(); pElem;	pElem = pElem->NextSiblingElement())
+	for(TiXmlElement* pElem = TiXmlHandle(element).FirstChildElement().Element(); pElem;	pElem = pElem->NextSiblingElement())
 	{
 #ifdef HEEKSCAD
 		HeeksObj* object = wxGetApp().ReadXMLElement(pElem);
@@ -202,6 +206,8 @@ void ObjList::ReadBaseXML(TiXmlElement* root)
 #endif
 		if(object)Add(object, NULL);
 	}
+
+	HeeksObj::ReadBaseXML(element);
 }
 
 void ObjList::ModifyByMatrix(const double *m)

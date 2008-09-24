@@ -13,7 +13,6 @@ protected:
 	std::vector<HeeksObj*> m_index_list; // for quick performance of GetAtIndex();
 	bool m_index_list_valid;
 
-	void Clear();
 	void recalculate_index_list();
 
 public:
@@ -24,6 +23,8 @@ public:
 	const ObjList& operator=(const ObjList& objlist);
 
 	void ClearUndoably(void);
+	void Clear();
+
 	HeeksObj* MakeACopy(void) const;
 	void GetBox(CBox &box);
 	void glCommands(bool select, bool marked, bool no_color);

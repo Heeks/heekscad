@@ -309,6 +309,11 @@ int CHeeksCADInterface::GetNextID(int type)
 	return wxGetApp().GetNextID(type);
 }
 
+bool CHeeksCADInterface::GetDisableSetObjectIDOnAdd()
+{
+	return wxGetApp().m_disable_SetObjectID_on_Add;
+}
+
 void CHeeksCADInterface::RemoveID(HeeksObj* object)
 {
 	wxGetApp().RemoveID(object);
