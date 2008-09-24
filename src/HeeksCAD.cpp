@@ -94,6 +94,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	ctrl_does_rotate = true;
 	m_show_ruler = true;
 	m_filepath.assign("Untitled.heeks");
+	m_disable_SetObjectID_on_Add = false;
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -681,9 +682,13 @@ bool HeeksCADapp::OpenImageFile(const char *filepath)
 
 bool HeeksCADapp::OpenFile(const char *filepath, bool update_recent_file_list, bool set_app_caption)
 {
+	wxGetApp().m_disable_SetObjectID_on_Add = true;
+
 	// returns true if file open was successful
 	wxString wf(filepath);
 	wf.LowerCase();
+
+	bool open_failed = false;
 
 	if(wf.EndsWith(".heeks"))
 	{
@@ -721,13 +726,18 @@ bool HeeksCADapp::OpenFile(const char *filepath, bool update_recent_file_list, b
 		char mess[1024];
 		sprintf(mess, "Invalid file type chosen ( expecting file with %s suffix )", wxGetApp().GetKnownFilesCommaSeparatedList());
 		wxMessageBox(mess);
-		return false;
+		open_failed = true;
 	}
 
-	WereAdded(m_objects);
-	m_filepath.assign(filepath);
-	if(update_recent_file_list)InsertRecentFileItem(filepath);
-	if(set_app_caption)SetFrameTitle();
+	if(!open_failed)
+	{
+		WereAdded(m_objects);
+		m_filepath.assign(filepath);
+		if(update_recent_file_list)InsertRecentFileItem(filepath);
+		if(set_app_caption)SetFrameTitle();
+	}
+
+	wxGetApp().m_disable_SetObjectID_on_Add = false;
 
 	return true;
 }
@@ -1846,7 +1856,7 @@ void HeeksCADapp::SetObjectID(HeeksObj* object, int id)
 	{
 		// add a new map
 		std::map<int, HeeksObj*> empty_map;
-		FindIt1 = used_ids.insert( make_pair( id_group_type, empty_map )).first;		
+		FindIt1 = used_ids.insert( std::make_pair( id_group_type, empty_map )).first;		
 	}
 	std::map<int, HeeksObj*> &map = FindIt1->second;
 	map.insert( std::pair<int, HeeksObj*> (id, object) );
@@ -1864,7 +1874,7 @@ int HeeksCADapp::GetNextID(int id_group_type)
 	{
 		// add a new int
 		int next_id = map.begin()->first + 1;
-		FindIt2 = next_id_map.insert( make_pair(id_group_type, next_id) ).first;
+		FindIt2 = next_id_map.insert( std::make_pair(id_group_type, next_id) ).first;
 	}
 
 	int &next_id = FindIt2->second;
@@ -1884,7 +1894,7 @@ void HeeksCADapp::RemoveID(HeeksObj* object)
 	{
 		// add a new int
 		int next_id = 0;
-		FindIt2 = next_id_map.insert( make_pair(id_group_type, next_id) ).first;
+		FindIt2 = next_id_map.insert( std::make_pair(id_group_type, next_id) ).first;
 	}
 	int &next_id = FindIt2->second;
 	next_id = object->GetID(); // this id has now become available

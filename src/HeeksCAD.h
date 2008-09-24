@@ -76,6 +76,7 @@ public:
 	std::list<wxWindow*> m_hideable_windows;
 	bool m_show_ruler;
 	std::list< wxString > m_recent_files;
+	bool m_disable_SetObjectID_on_Add;
 
 	// HeeksObj's virtual functions
 	void glCommands(bool select, bool marked, bool no_color);

@@ -35,12 +35,20 @@ bool CShape::m_solids_found = false;
 
 CShape::CShape(const TopoDS_Shape &shape, const char* title, bool use_one_gl_list):m_shape(shape), m_title(title), m_gl_list(0), m_use_one_gl_list(use_one_gl_list)
 {
+	m_faces = new CFaceList;
+	m_edges = new CEdgeList;
+	Add(m_faces, NULL);
+	Add(m_edges, NULL);
 	create_face_objects();
 	create_edge_objects();
 }
 
 CShape::CShape(const CShape& s):m_gl_list(0)
 {
+	m_faces = new CFaceList;
+	m_edges = new CEdgeList;
+	Add(m_faces, NULL);
+	Add(m_edges, NULL);
 	operator=(s);
 }
 
@@ -86,8 +94,7 @@ void CShape::create_face_objects()
 	{
 		TopoDS_Face F = TopoDS::Face(ex.Current());
 		CFace* new_object = new CFace(F);
-		new_object->m_owner = this;
-		m_faces.push_back(new_object);
+		m_faces->Add(new_object, NULL);
 	}
 }
 
@@ -98,31 +105,18 @@ void CShape::create_edge_objects()
 	{
 		TopoDS_Edge E = TopoDS::Edge(ex.Current());
 		CEdge* new_object = new CEdge(E);
-		new_object->m_owner = this;
-		m_edges.push_back(new_object);
+		m_edges->Add(new_object, NULL);
 	}
 }
 
 void CShape::delete_face_objects()
 {
-	std::list<CFace*>::iterator It;
-	for(It = m_faces.begin(); It != m_faces.end(); It++){
-		CFace* face = *It;
-		delete face;
-	}
-
-	m_faces.clear();
+	m_faces->Clear();
 }
 
 void CShape::delete_edge_objects()
 {
-	std::list<CEdge*>::iterator It;
-	for(It = m_edges.begin(); It != m_edges.end(); It++){
-		CEdge* edge = *It;
-		delete edge;
-	}
-
-	m_edges.clear();
+	m_edges->Clear();
 }
 
 void CShape::glCommands(bool select, bool marked, bool no_color){
@@ -138,43 +132,15 @@ void CShape::glCommands(bool select, bool marked, bool no_color){
 
 		BRepTools::Clean(m_shape);
 		BRepMesh::Mesh(m_shape, 1/pixels_per_mm);
+
 		// render all the faces
-		{
-			std::list<CFace*>::iterator It;
-			for(It = m_faces.begin(); It != m_faces.end(); It++){
-				CFace* face = *It;
-				glPushName((unsigned int)face);
-				face->glCommands(select, marked || wxGetApp().m_marked_list->ObjectMarked(face), no_color);
-				glPopName();
-			}
-		}
+		m_faces->glCommands(true, marked, no_color);
 
 		// render all the edges
-		if(GetType() != StlSolidType){
-			std::list<CEdge*>::iterator It;
-			for(It = m_edges.begin(); It != m_edges.end(); It++){
-				CEdge* edge = *It;
-				glPushName((unsigned int)edge);
-				edge->glCommands(select, marked || wxGetApp().m_marked_list->ObjectMarked(edge), no_color);
-				glPopName();
-			}
-		}
+		m_edges->glCommands(true, marked, no_color);
 
 		glEndList();
 	}
-}
-
-void CShape::GetBox(CBox &box){
-	if(!m_box.m_valid)
-	{
-		std::list<CFace*>::iterator It;
-		for(It = m_faces.begin(); It != m_faces.end(); It++){
-			CFace* face = *It;
-			face->GetBox(m_box);
-		}
-	}
-
-	box.Insert(m_box);
 }
 
 class OffsetShapeTool:public Tool{
@@ -286,9 +252,9 @@ static HeeksObj* Common(HeeksObj* s1, HeeksObj* s2){
 
 CFace* CShape::find(const TopoDS_Face &face)
 {
-	std::list<CFace*>::iterator It;
-	for(It = m_faces.begin(); It != m_faces.end(); It++){
-		CFace* f = *It;
+	for(HeeksObj* object = m_faces->GetFirstChild(); object; object = m_faces->GetNextChild())
+	{
+		CFace* f = (CFace*)object;
 		if(f->Face() == face)return f;
 	}
 	return NULL;
@@ -534,20 +500,16 @@ void CShape::GetTriangles(void(*callbackfunc)(const double* x, const double* n),
 	BRepTools::Clean(m_shape);
 	BRepMesh::Mesh(m_shape, cusp);
 
-	std::list<CFace*>::iterator It;
-	for(It = m_faces.begin(); It != m_faces.end(); It++){
-		CFace* face = *It;
-		face->GetTriangles(callbackfunc, cusp, just_one_average_normal);
-	}
+	return ObjList::GetTriangles(callbackfunc, cusp, just_one_average_normal);
 }
 
 double CShape::Area()const{
 	double area = 0.0;
 
-	std::list<CFace*>::const_iterator It;
-	for(It = m_faces.begin(); It != m_faces.end(); It++){
-		CFace* face = *It;
-		area += face->Area();
+	for(HeeksObj* object = m_faces->GetFirstChild(); object; object = m_faces->GetNextChild())
+	{
+		CFace* f = (CFace*)object;
+		area += f->Area();
 	}
 
 	return area;
