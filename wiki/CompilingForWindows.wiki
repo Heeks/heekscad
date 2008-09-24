@@ -16,7 +16,9 @@ Edit C:\wxWidgets-2.8.7\include\wx\msw\setup.h
 changing "#define wxUSE_GLCANVAS 0" to "#define wxUSE_GLCANVAS 1"
 and changing "#define wxUSE_ODBC 0" to "#define wxUSE_ODBC 1"
 
-Open and build C:\wxWidgets-2.8.7\build\msw\wx_dll.dsw ( let VC2008 convert the projects )
+Open C:\wxWidgets-2.8.7\build\msw\wx_dll.dsw ( let VC2008 convert the projects ).
+Change the configuration to "DLL Release" or to "DLL Debug" if you will be building HeeksCAD in Debug mode.
+Press "Build Solution"
 
 Copy 4 of the dlls that get made from C:\wxWidgets-2.8.7\lib\vc_dll to HeeksCAD ( the folder you checked out this project to ).
 
