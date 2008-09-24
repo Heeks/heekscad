@@ -1,0 +1,85 @@
+#summary Using HeeksCAD
+
+You start in Select mode.
+
+= Selecting =
+
+To select items, click on them with the left mouse button.
+
+To select multiple items, drag a box with then left mouse button.
+
+If you drag from left to right, only items completely within the box are selected.
+
+If you drag from right to left, all items withing the box are selected.
+
+If you select with Ctrl pressd, then items can be added or removed from the selection.
+
+
+= Viewing =
+To zoom the view, roll the middle wheel.
+
+To shift the view, drag with the middle button pressed.
+
+To rotate the view, press and hold Ctrl and drag with the middle button pressed.
+
+
+= Solid Creation = 
+
+== Sphere ==
+Press the sphere button to create a sphere.
+
+The sphere doesn't get made until the green tick box is pressed.
+
+Drag the centre point of the sphere to where you want it.
+
+Press and hold the 'R' key to drag the radius of the sphere.
+
+Or type in the radius in the "Input" window.
+
+
+== Cube == 
+Press the cube button to create a 10x10x10 cube.
+
+I want this to work interactively, like the sphere creation, eventually.
+
+== Cylinder == 
+Press the cylinder button to create a simple cylinder.
+
+I want this to work interactively, like the sphere creation, eventually.
+
+== Cone ==
+Not yet.
+
+== Extrusion ==
+I think this will have to be done next, this will be useful. You will need to create some lines and arcs first.
+
+= 2D Geometry =
+
+== Lines and arcs ==
+Press the Line/Arc button to enter line/arc drawing mode.
+
+Click for the start point of a line and then for end points of each line.
+
+Press and hold the 'A' key to switch to tangential arc drawing mode.
+
+== Circles ==
+Press the circle button to enter circle drawing mode.
+
+I think this is just for circle-through-three-points mode.
+
+== Infinite Lines ==
+Press the infinite lines button.
+
+Click on two points to define a line.
+
+= Options =
+
+Have a look at the "Options" window to see what choices there are.
+
+These change depending what you are doing.
+
+= Properties =
+
+When one object is selected, you can see its properties in the "Properties" window.
+
+You can edit them too, but the changes are only really made if you press the green tick button at the bottom of the "Properties" window.
