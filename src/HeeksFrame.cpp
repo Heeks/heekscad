@@ -39,6 +39,7 @@ enum{
 	ID_OPEN_RECENT = ID_RECENT_FIRST + MAX_RECENT_FILES,
 	ID_IMPORT,
 	ID_RULED_SURFACE,
+	ID_EXTRUDE,
 	ID_NEXT_ID
 };
 
@@ -79,6 +80,7 @@ EVT_MENU(ID_FUSE, CHeeksFrame::OnFuseButton)
 EVT_MENU(ID_COMMON, CHeeksFrame::OnCommonButton)
 EVT_MENU(ID_REDRAW, CHeeksFrame::OnRedrawButton)
 EVT_MENU(ID_RULED_SURFACE, CHeeksFrame::OnRuledSurfaceButton)
+EVT_MENU(ID_EXTRUDE, CHeeksFrame::OnExtrudeButton)
 EVT_MENU(ID_MAG, CHeeksFrame::OnMagButton)
 EVT_MENU(ID_UNDO, CHeeksFrame::OnUndoButton)
 EVT_MENU(ID_REDO, CHeeksFrame::OnRedoButton)
@@ -215,11 +217,12 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
     m_solidBar->AddTool(ID_SPHERE, _T("Sphere"), wxBitmap(exe_folder + "/bitmaps/sphere.png", wxBITMAP_TYPE_PNG), _T("Add a sphere"));
     m_solidBar->AddTool(ID_CUBE, _T("Cube"), wxBitmap(exe_folder + "/bitmaps/cube.png", wxBITMAP_TYPE_PNG), _T("Add a cube"));
     m_solidBar->AddTool(ID_CYL, _T("Cylinder"), wxBitmap(exe_folder + "/bitmaps/cyl.png", wxBITMAP_TYPE_PNG), _T("Add a cylinder"));
+    m_solidBar->AddTool(ID_RULED_SURFACE, _T("Ruled Surface"), wxBitmap(exe_folder + "/bitmaps/ruled.png", wxBITMAP_TYPE_PNG), _T("Create a lofted face"));
+    m_solidBar->AddTool(ID_EXTRUDE, _T("Extrude"), wxBitmap(exe_folder + "/bitmaps/extrude.png", wxBITMAP_TYPE_PNG), _T("Extrude a wire or face"));
 	m_solidBar->AddTool(ID_SUBTRACT, _T("Cut"), wxBitmap(exe_folder + "/bitmaps/cut.png", wxBITMAP_TYPE_PNG), _T("Cut one solid from another"));
 	m_solidBar->AddTool(ID_FUSE, _T("Fuse"), wxBitmap(exe_folder + "/bitmaps/fuse.png", wxBITMAP_TYPE_PNG), _T("Fuse one solid to another"));
 	m_solidBar->AddTool(ID_COMMON, _T("Common"), wxBitmap(exe_folder + "/bitmaps/common.png", wxBITMAP_TYPE_PNG), _T("Find common solid between two solids"));
     m_solidBar->AddTool(ID_REDRAW, _T("Redraw"), wxBitmap(exe_folder + "/bitmaps/redraw.png", wxBITMAP_TYPE_PNG), _T("Redraw"));
-    m_solidBar->AddTool(ID_RULED_SURFACE, _T("Ruled Surface"), wxBitmap(exe_folder + "/bitmaps/ruled.png", wxBITMAP_TYPE_PNG), _T("Create a lofted face"));
 	m_solidBar->Realize();
 
 	// viewing tool bar
@@ -639,6 +642,11 @@ void CHeeksFrame::OnSphereButton( wxCommandEvent& event )
 void CHeeksFrame::OnRuledSurfaceButton( wxCommandEvent& event )
 {
 	PickCreateRuledSurface();
+}
+
+void CHeeksFrame::OnExtrudeButton( wxCommandEvent& event )
+{
+	PickCreateExtrusion();
 }
 
 void CHeeksFrame::OnCubeButton( wxCommandEvent& event )
