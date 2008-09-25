@@ -70,6 +70,7 @@ public:
 	void OnCommonButton( wxCommandEvent& event );
 	void OnSphereButton( wxCommandEvent& event );
 	void OnRuledSurfaceButton( wxCommandEvent& event );
+	void OnExtrudeButton( wxCommandEvent& event );
 	void OnCubeButton( wxCommandEvent& event );
 	void OnCylButton( wxCommandEvent& event );
 	void OnRedrawButton( wxCommandEvent& event );
