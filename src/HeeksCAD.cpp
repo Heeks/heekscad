@@ -1922,3 +1922,91 @@ void HeeksCADapp::ReadIDFromXML(HeeksObj* object, TiXmlElement *element)
 	}
 }
 
+static double* value_for_set_value = NULL;
+static void set_value(double value){*value_for_set_value = value;}
+
+static bool *success_for_double_input = NULL;
+
+class CInputApply:public Tool{
+private:
+	static wxBitmap* m_bitmap;
+
+public:
+	void Run(){
+		*success_for_double_input = true;
+		wxGetApp().ExitMainLoop();
+	}
+	const char* GetTitle(){return "Apply";}
+	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + "/bitmaps/apply.png", wxBITMAP_TYPE_PNG);}	return m_bitmap;}
+	const char* GetToolTip(){return "Accept value and continue";}
+};
+wxBitmap* CInputApply::m_bitmap = NULL;
+
+CInputApply input_apply;
+
+class CInputCancel:public Tool{
+private:
+	static wxBitmap* m_bitmap;
+
+public:
+	void Run(){wxGetApp().ExitMainLoop();}
+	const char* GetTitle(){return "Cancel";}
+	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + "/bitmaps/cancel.png", wxBITMAP_TYPE_PNG);}return m_bitmap;}
+	const char* GetToolTip(){return "Cancel operation";}
+};
+wxBitmap* CInputCancel::m_bitmap = NULL;
+
+CInputCancel input_cancel;
+
+class CDoubleInput: public CInputMode, CLeftAndRight
+{
+public:
+	std::string m_title;
+	std::string m_value_title;
+	double m_value;
+	bool m_success;
+
+	CDoubleInput(const char* prompt, const char* value_name, double initial_value)
+	{
+		m_title.assign(prompt);
+		m_value_title.assign(value_name);
+		m_value = initial_value;
+		m_success = false;
+	}
+	virtual ~CDoubleInput(){}
+
+	// virtual functions for InputMode
+	const char* GetTitle(){return m_title.c_str();}
+	void OnMouse( wxMouseEvent& event ){
+		bool event_used = false;
+		if(LeftAndRightPressed(event, event_used))
+			wxGetApp().ExitMainLoop();
+	}
+	void GetProperties(std::list<Property *> *list)
+	{
+		value_for_set_value = &m_value;
+		list->push_back(new PropertyDouble(m_value_title.c_str(), m_value, set_value));
+	}
+	void GetTools(std::list<Tool*>* t_list, const wxPoint* p)
+	{
+		// add a do it now button
+		t_list->push_back(&input_apply);
+		t_list->push_back(&input_cancel);
+	}
+};
+
+bool HeeksCADapp::InputDouble(const char* prompt, const char* value_name, double &value)
+{
+	CInputMode* save_mode = input_mode_object;
+	CDoubleInput double_input(prompt, value_name, value);
+	success_for_double_input = &(double_input.m_success);
+	SetInputMode(&double_input);
+
+	OnRun();
+
+	SetInputMode(save_mode);
+
+	if(double_input.m_success)value = double_input.m_value;
+
+	return double_input.m_success;
+}
