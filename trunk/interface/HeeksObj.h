@@ -76,7 +76,7 @@ public:
 	virtual bool Add(HeeksObj* object, HeeksObj* prev_object) {object->m_owner=this; object->OnAdd(); return true;}
 	virtual void Remove(HeeksObj* object){object->OnRemove();}
 	virtual void OnAdd(){}
-	virtual void OnRemove(){}
+	virtual void OnRemove();
 	virtual HeeksObj* GetFirstChild(){return NULL;}
 	virtual HeeksObj* GetNextChild(){return NULL;}
 	virtual HeeksObj* GetAtIndex(int index){return NULL;}

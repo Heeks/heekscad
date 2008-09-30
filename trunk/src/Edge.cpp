@@ -23,71 +23,64 @@ CEdge::~CEdge(){
 }
 
 void CEdge::glCommands(bool select, bool marked, bool no_color){
-	if(marked)glColor3ub(255, 0, 0);
-	else glColor3ub(0, 0, 0);
+	glColor3ub(0, 0, 0);
 
-	switch(m_owner->GetType()){
-		case SolidType:
+	if(m_owner && m_owner->m_owner && m_owner->m_owner->GetType() == SolidType)
+	{
+		// triangulate a face on the edge first
+		TopTools_IndexedDataMapOfShapeListOfShape lface;
+		TopExp::MapShapesAndAncestors(((CShape*)(m_owner->m_owner))->Shape(),TopAbs_EDGE,TopAbs_FACE,lface);
+		const TopTools_ListOfShape& lfac = lface.FindFromKey(m_topods_edge);
+		Standard_Integer nelem= lfac.Extent();
+		if(nelem == 2){
+			TopTools_ListIteratorOfListOfShape It;
+			It.Initialize(lfac);
+			TopoDS_Face Face1 = TopoDS::Face(It.Value());
+			TopLoc_Location fL;
+			Handle_Poly_Triangulation facing = BRep_Tool::Triangulation(Face1,fL);
+
+			if(!facing.IsNull())
 			{
-				// triangulate a face on the edge first
-				TopTools_IndexedDataMapOfShapeListOfShape lface;
-				TopExp::MapShapesAndAncestors(((CShape*)m_owner)->Shape(),TopAbs_EDGE,TopAbs_FACE,lface);
-				const TopTools_ListOfShape& lfac = lface.FindFromKey(m_topods_edge);
-				Standard_Integer nelem= lfac.Extent();
-				if(nelem == 2){
-					TopTools_ListIteratorOfListOfShape It;
-					It.Initialize(lfac);
-					TopoDS_Face Face1 = TopoDS::Face(It.Value());
-					It.Next();
-					TopoDS_Face Face2=TopoDS::Face(It.Value());
-					TopLoc_Location fL;
-					Handle_Poly_Triangulation facing = BRep_Tool::Triangulation(Face1,fL);
-					Handle_Poly_Triangulation facing2 = BRep_Tool::Triangulation(Face2,fL);
+				// Get polygon
+				Handle_Poly_PolygonOnTriangulation polygon = BRep_Tool::PolygonOnTriangulation(m_topods_edge, facing, fL);
+				gp_Trsf tr = fL;
+				double m[16];
+				extract_transposed(tr, m);
+				glPushMatrix();
+				glMultMatrixd(m);
 
-					// Get polygon
-					TopLoc_Location L;
-					Handle_Poly_PolygonOnTriangulation polygon = BRep_Tool::PolygonOnTriangulation(m_topods_edge, facing, L);
-					gp_Trsf tr = L;
-					double m[16];
-					extract_transposed(tr, m);
-					glPushMatrix();
-					glMultMatrixd(m);
-
-					if (!polygon.IsNull())
-					{
-						glBegin(GL_LINE_STRIP);
-						const TColStd_Array1OfInteger& Nodes = polygon->Nodes();
-						const TColgp_Array1OfPnt& FNodes = facing->Nodes();
-						int nnn = polygon->NbNodes();
-						for (int nn = 1; nn <= nnn; nn++)
-						{
-							gp_Pnt v = FNodes(Nodes(nn));
-							glVertex3d(v.X(), v.Y(), v.Z());
-						}
-						glEnd();
-					}
-
-					glPopMatrix();
-				}
-			}
-			break;
-
-		case WireType:
-			{
-				TopLoc_Location L;
-				Handle(Poly_Polygon3D) Polyg = BRep_Tool::Polygon3D(m_topods_edge, L);
-				if (!Polyg.IsNull()) {
-					const TColgp_Array1OfPnt& Points = Polyg->Nodes();
-					Standard_Integer po;
+				if (!polygon.IsNull())
+				{
 					glBegin(GL_LINE_STRIP);
-					for (po = Points.Lower(); po <= Points.Upper(); po++) {
-						gp_Pnt p = (Points.Value(po)).Transformed(L);
-						glVertex3d(p.X(), p.Y(), p.Z());
+					const TColStd_Array1OfInteger& Nodes = polygon->Nodes();
+					const TColgp_Array1OfPnt& FNodes = facing->Nodes();
+					int nnn = polygon->NbNodes();
+					for (int nn = 1; nn <= nnn; nn++)
+					{
+						gp_Pnt v = FNodes(Nodes(nn));
+						glVertex3d(v.X(), v.Y(), v.Z());
 					}
 					glEnd();
 				}
+
+				glPopMatrix();
 			}
-			break;
+		}
+	}
+	else
+	{
+		TopLoc_Location L;
+		Handle(Poly_Polygon3D) Polyg = BRep_Tool::Polygon3D(m_topods_edge, L);
+		if (!Polyg.IsNull()) {
+			const TColgp_Array1OfPnt& Points = Polyg->Nodes();
+			Standard_Integer po;
+			glBegin(GL_LINE_STRIP);
+			for (po = Points.Lower(); po <= Points.Upper(); po++) {
+				gp_Pnt p = (Points.Value(po)).Transformed(L);
+				glVertex3d(p.X(), p.Y(), p.Z());
+			}
+			glEnd();
+		}
 	}
 }
 
@@ -112,28 +105,29 @@ public:
 
 	const char* GetTitle(){return "Blend";}
 	void Run(){
-		m_edge->Blend(2.0);
+		double rad = 2.0;
+		wxGetApp().m_config->Read("EdgeBlendRadius", &rad);
+		if(wxGetApp().InputDouble("Enter Blend Radius", "Radius", rad))
+		{
+			m_edge->Blend(rad);
+			wxGetApp().m_config->Write("EdgeBlendRadius", rad);
+		}
 	}
 };
 
 void CEdge::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
-	switch(m_owner->GetType()){
-		case SolidType:
-			{
-				t_list->push_back(new BlendTool(this));
-			}
-			break;
-	}
+	if(m_owner && m_owner->m_owner && m_owner->m_owner->GetType() == SolidType)
+		t_list->push_back(new BlendTool(this));
 }
 
 void CEdge::Blend(double radius){
-	if(CShape::IsTypeAShape(m_owner->GetType())){
-		BRepFilletAPI_MakeFillet fillet(((CShape*)m_owner)->Shape());
+	if(m_owner && m_owner->m_owner && CShape::IsTypeAShape(m_owner->m_owner->GetType())){
+		BRepFilletAPI_MakeFillet fillet(((CShape*)(m_owner->m_owner))->Shape());
 		fillet.Add(radius, m_topods_edge);
 		TopoDS_Shape new_shape = fillet.Shape();
 		wxGetApp().StartHistory("Blending Edge");
 		wxGetApp().AddUndoably(new CSolid(*((TopoDS_Solid*)(&new_shape)), "Edge Blended Solid"), NULL, NULL);
-		wxGetApp().DeleteUndoably(m_owner);
+		wxGetApp().DeleteUndoably(m_owner->m_owner);
 		wxGetApp().EndHistory();
 	}
 }

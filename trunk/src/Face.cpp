@@ -48,7 +48,10 @@ static Standard_Boolean TriangleIsValid(const gp_Pnt& P1, const gp_Pnt& P2, cons
 void CFace::glCommands(bool select, bool marked, bool no_color){
 	m_material.glMaterial(1.0);
 	
-	if(m_owner && m_owner->GetType() != SolidType){
+	if(m_owner && m_owner->m_owner && m_owner->m_owner->GetType() == SolidType) {
+		// using existing BRepMesh::Mesh
+	}
+	else {
 		double pixels_per_mm = wxGetApp().GetPixelScale();
 		BRepTools::Clean(m_topods_face);
 		BRepMesh::Mesh(m_topods_face, 1/pixels_per_mm);
@@ -114,7 +117,7 @@ void CFace::GetBox(CBox &box){
 	{
 		// there must be a better way than re-using the render code
 		// Get triangulation
-		if(m_owner && m_owner->GetType() != SolidType){
+		if(m_owner && m_owner->m_owner && m_owner->m_owner->GetType() != SolidType){
 			double pixels_per_mm = wxGetApp().GetPixelScale();
 			BRepTools::Clean(m_topods_face);
 			BRepMesh::Mesh(m_topods_face, 1/pixels_per_mm);
