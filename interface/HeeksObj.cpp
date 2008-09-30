@@ -94,6 +94,11 @@ void HeeksObj::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 	}
 }
 
+void HeeksObj::OnRemove()
+{
+	KillGLLists();
+}
+
 void HeeksObj::SetID(int id)
 {
 #ifdef HEEKSCAD

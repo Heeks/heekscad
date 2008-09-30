@@ -9,6 +9,7 @@
 #include "GripperMode.h"
 #include "StretchTool.h"
 #include "HeeksFrame.h"
+#include "GraphicsCanvas.h"
 #include "ObjPropsCanvas.h"
 
 GripperSelTransform::GripperSelTransform(MarkedList* m, const gp_Pnt& pos):Gripper(pos, ""), m_marked_list(m), m_transform_gl_list(0){
@@ -160,6 +161,7 @@ void GripperSelTransform::MakeMatrix ( const double* from, const double* to, gp_
 		break;
 	case RotationMode:
 		{
+
 			gp_Vec start_to_end_vector(make_point(from), make_point(to));
 			if ( start_to_end_vector.Magnitude() <0.000001 ) return;
 			gp_Vec start_vector ( wxGetApp().gripper_mode->m_centre_point, make_point ( from ) );
@@ -168,10 +170,16 @@ void GripperSelTransform::MakeMatrix ( const double* from, const double* to, gp_
 			if ( end_vector.Magnitude() <0.000001 ) return;
 			mat.SetTranslation ( -gp_Vec ( wxGetApp().gripper_mode->m_centre_point.XYZ() ) );
 
-			gp_Vec rot_dir(0, 0, 1);
+			gp_Vec vx, vy;
+			wxGetApp().m_frame->m_graphics->m_view_point.GetTwoAxes(vx, vy, false, 0);			
+			gp_Vec rot_dir = vx ^ vy;
 			rot_dir.Normalize();
 			gp_Ax1 rot_axis(wxGetApp().gripper_mode->m_centre_point, rot_dir);
-			double angle = start_vector.AngleWithRef(end_vector, rot_dir);
+			double sx = start_vector * vx;
+			double sy = start_vector * vy;
+			double ex = end_vector * vx;
+			double ey = end_vector * vy;
+			double angle = gp_Vec(sx, sy, 0).AngleWithRef(gp_Vec(ex, ey, 0), gp_Vec(0,0,1));
 			mat.SetRotation(rot_axis, angle);
 		}
 		break;

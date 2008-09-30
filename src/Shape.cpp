@@ -151,10 +151,16 @@ public:
 
 	// Tool's virtual functions
 	void Run(){
-		TopoDS_Shape new_shape = BRepOffsetAPI_MakeOffsetShape(m_shape->Shape(), 2.0, 0.01, BRepOffset_RectoVerso);
-		HeeksObj* new_object = CShape::MakeObject(new_shape, "Result of MakeOffsetShape");
-		wxGetApp().AddUndoably(new_object, NULL, NULL);
-		wxGetApp().DeleteUndoably(m_shape);
+		double offset_value = 2.0;
+		wxGetApp().m_config->Read("OffsetShapeValue", &offset_value);
+		if(wxGetApp().InputDouble("Enter Offset Value, + for making bigger, - for making smaller", "Offset value", offset_value))
+		{
+			TopoDS_Shape new_shape = BRepOffsetAPI_MakeOffsetShape(m_shape->Shape(), offset_value, 0.01, BRepOffset_RectoVerso);
+			HeeksObj* new_object = CShape::MakeObject(new_shape, "Result of 'Offset Shape'");
+			wxGetApp().AddUndoably(new_object, NULL, NULL);
+			wxGetApp().DeleteUndoably(m_shape);
+			wxGetApp().m_config->Write("OffsetShapeValue", offset_value);
+		}
 	}
 	const char* GetTitle(){ return "Offset Shape";}
 	wxBitmap* Bitmap()
@@ -162,7 +168,7 @@ public:
 		if(m_bitmap == NULL)
 		{
 			wxString exe_folder = wxGetApp().GetExeFolder();
-			m_bitmap = new wxBitmap(exe_folder + "/bitmaps/new.png", wxBITMAP_TYPE_PNG);
+			m_bitmap = new wxBitmap(exe_folder + "/bitmaps/offsetsolid.png", wxBITMAP_TYPE_PNG);
 		}
 		return m_bitmap;
 	}

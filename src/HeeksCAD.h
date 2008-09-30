@@ -169,6 +169,7 @@ public:
 	void ResetIDs();
 	void WriteIDToXML(HeeksObj* object, TiXmlElement *element);
 	void ReadIDFromXML(HeeksObj* object, TiXmlElement *element);
+	bool InputDouble(const char* prompt, const char* value_name, double &value);
 };
 
 DECLARE_APP(HeeksCADapp)
