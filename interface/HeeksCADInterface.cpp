@@ -48,6 +48,11 @@ wxFrame* CHeeksCADInterface::GetMainFrame()
 	return wxGetApp().m_frame;
 }
 
+wxWindow* CHeeksCADInterface::GetGraphicsCanvas()
+{
+	return wxGetApp().m_frame->m_graphics;
+}
+
 wxMenuBar* CHeeksCADInterface::GetMenuBar()
 {
 	return wxGetApp().m_frame->m_menuBar;
