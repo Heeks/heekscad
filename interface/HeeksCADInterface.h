@@ -23,6 +23,7 @@ public:
 	virtual void RefreshInput();
 	virtual void Repaint(bool soon = false);
 	virtual wxFrame* GetMainFrame();
+	virtual wxWindow* GetGraphicsCanvas();
 	virtual wxMenuBar* GetMenuBar();
 	virtual wxMenu* GetViewMenu();
 	virtual wxAuiManager* GetAuiManager();
