@@ -32,7 +32,7 @@ wxIcon* CLineArcCollection::GetIcon(){
 	if(m_icon == NULL)
 	{
 		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + "/icons/linedrawing.png", wxBITMAP_TYPE_PNG);
+		m_icon = new wxIcon(exe_folder + _T("/icons/linedrawing.png"), wxBITMAP_TYPE_PNG);
 	}
 	return m_icon;
 }
@@ -44,7 +44,7 @@ void CLineArcCollection::GetProperties(std::list<Property *> *list)
 	__super::GetProperties(list);
 
 	object_for_properties = this;
-	list->push_back(new PropertyInt("Number of elements", ObjList::GetNumChildren()));
+	list->push_back(new PropertyInt(_T("Number of elements"), ObjList::GetNumChildren()));
 }
 
 HeeksObj *CLineArcCollection::MakeACopy(void)const

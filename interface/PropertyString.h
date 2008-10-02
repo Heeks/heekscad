@@ -7,13 +7,13 @@
 
 class PropertyString:public Property{
 private:
-	std::string m_title;
+	wxString m_title;
 
 public:
-	std::string m_initial_value;
-	void(*m_callbackfunc)(const char*);
+	wxString m_initial_value;
+	void(*m_callbackfunc)(const wxChar*);
 
-	PropertyString(const char* t, const char* v, void(*callbackfunc)(const char*) = NULL);
+	PropertyString(const wxChar* t, const wxChar* v, void(*callbackfunc)(const wxChar*) = NULL);
 
 	// Property's virtual functions
 	int get_property_type(){return StringPropertyType;}
@@ -22,7 +22,7 @@ public:
 	void CallSetFunction()const{ if(m_callbackfunc)(*m_callbackfunc)(m_initial_value.c_str());}
 
 	// HeeksObj's virtual functions
-	const char* GetShortString(void)const;
+	const wxChar* GetShortString(void)const;
 };
 
 #endif

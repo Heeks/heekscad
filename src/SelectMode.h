@@ -13,13 +13,13 @@ public:
 	wxRect window_box;
 	bool window_box_exists;
 	bool m_doing_a_main_loop;
-	std::string m_prompt_when_doing_a_main_loop;
+	wxString m_prompt_when_doing_a_main_loop;
 
 	CSelectMode();
 	virtual ~CSelectMode(void){}
 
 	// virtual functions for InputMode
-	const char* GetTitle(){return "Picking objects";}
+	const wxChar* GetTitle(){return _T("Picking objects");}
 	bool TitleHighlighted(){return m_doing_a_main_loop;}
 	void OnMouse( wxMouseEvent& event );
 	void OnKeyDown(wxKeyEvent& event);

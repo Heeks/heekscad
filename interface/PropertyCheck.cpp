@@ -4,16 +4,16 @@
 
 #include "PropertyCheck.h"
 
-PropertyCheck::PropertyCheck(const char* t, bool initial_value,  void(*callbackfunc)(bool)):Property(){
+PropertyCheck::PropertyCheck(const wxChar* t, bool initial_value,  void(*callbackfunc)(bool)):Property(){
 	m_callbackfunc = callbackfunc;
 	m_initial_value = initial_value;
-	title = std::string(t);
+	title = wxString(t);
 }
 
 PropertyCheck::~PropertyCheck(){
 }
 
-const char* PropertyCheck::GetShortString(void)const{
+const wxChar* PropertyCheck::GetShortString(void)const{
 	return title.c_str();
 }
 

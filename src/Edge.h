@@ -20,7 +20,7 @@ public:
 	void GetBox(CBox &box);
 	HeeksObj *MakeACopy(void)const{ return new CEdge(*this);}
 	wxIcon* GetIcon();
-	const char* GetTypeString(void)const{return "Edge";}
+	const wxChar* GetTypeString(void)const{return _T("Edge");}
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	void WriteXML(TiXmlElement *root);
 

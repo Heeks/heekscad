@@ -29,7 +29,7 @@ private:
 	const std::list<HeeksObj*>& GetObjectsMade()const{return temp_object_in_list;}
 	void clear_drawing_objects(bool store_as_previous_objects);
 	void set_previous_direction();
-	const char* get_drawing_title(){return "Line/Arc Drawing";}
+	const wxChar* get_drawing_title(){return _T("Line/Arc Drawing");}
 	int number_of_steps();
 	int step_to_go_to_after_last_step();
 	bool is_an_add_level(int level);
@@ -50,7 +50,7 @@ public:
 	virtual ~LineArcDrawing(void);
 
 	// InputMode's virtual functions
-	const char* GetTitle(){return "Line and arc drawing";}
+	const wxChar* GetTitle(){return _T("Line and arc drawing");}
 	void OnKeyDown(wxKeyEvent& event);
 	void OnKeyUp(wxKeyEvent& event);
 	void set_cursor(void);

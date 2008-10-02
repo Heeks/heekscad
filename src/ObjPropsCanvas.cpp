@@ -110,8 +110,8 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll(){
 
 		// add toolbar buttons
 		wxString exe_folder = wxGetApp().GetExeFolder();
-		wxGetApp().m_frame->AddToolBarTool(m_toolBar, _T("Apply"), wxBitmap(exe_folder + "/bitmaps/apply.png", wxBITMAP_TYPE_PNG), _T("Apply any changes made to the properties"), OnApply);
-		wxGetApp().m_frame->AddToolBarTool(m_toolBar, _T("Cancel"), wxBitmap(exe_folder + "/bitmaps/cancel.png", wxBITMAP_TYPE_PNG), _T("Stop editing the object"), OnCancel);
+		wxGetApp().m_frame->AddToolBarTool(m_toolBar, _T("Apply"), wxBitmap(exe_folder + _T("/bitmaps/apply.png"), wxBITMAP_TYPE_PNG), _T("Apply any changes made to the properties"), OnApply);
+		wxGetApp().m_frame->AddToolBarTool(m_toolBar, _T("Cancel"), wxBitmap(exe_folder + _T("/bitmaps/cancel.png"), wxBITMAP_TYPE_PNG), _T("Stop editing the object"), OnCancel);
 
 		std::list<Tool*> t_list;
 		marked_object->GetTools(&t_list, NULL);

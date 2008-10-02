@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "dxf.h"
 
-CDxfWrite::CDxfWrite(const char* filepath)
+CDxfWrite::CDxfWrite(const wxChar* filepath)
 {
 	// start the file
 	m_fail = false;
@@ -84,7 +84,7 @@ void CDxfWrite::WriteArc(const double* s, const double* e, const double* c, bool
 	(*m_ofs) << end_angle	<< endl;	// End angle
 }
 
-CDxfRead::CDxfRead(const char* filepath)
+CDxfRead::CDxfRead(const wxChar* filepath)
 {
 	// start the file
 	m_fail = false;

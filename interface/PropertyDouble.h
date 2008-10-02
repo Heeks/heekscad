@@ -7,13 +7,13 @@
 
 class PropertyDouble:public Property{
 private:
-	std::string title;
+	wxString title;
 
 public:
 	double m_initial_value;
 	void(*m_callbackfunc)(double);
 
-	PropertyDouble(const char* t, double initial_value, void(*callbackfunc)(double) = NULL);
+	PropertyDouble(const wxChar* t, double initial_value, void(*callbackfunc)(double) = NULL);
 	~PropertyDouble();
 
 	// Property's virtual functions
@@ -23,7 +23,7 @@ public:
 	void CallSetFunction()const{ if(m_callbackfunc)(*m_callbackfunc)(m_initial_value);}
 
 	// HeeksObj's virtual functions
-	const char* GetShortString(void)const;
+	const wxChar* GetShortString(void)const;
 };
 
 #endif

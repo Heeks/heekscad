@@ -27,9 +27,7 @@ protected:
 	CBox m_box;
 	TopoDS_Shape m_shape;
 	Material m_material;
-	std::string m_title;
-	CFaceList* m_faces;
-	CEdgeList* m_edges;
+	wxString m_title;
 	static wxIcon* m_icon;
 	bool m_use_one_gl_list;
 
@@ -40,8 +38,10 @@ protected:
 
 public:
 	static bool m_solids_found; // a flag for xml writing
+	CFaceList* m_faces;
+	CEdgeList* m_edges;
 
-	CShape(const TopoDS_Shape &shape, const char* title, bool use_one_gl_list = false);
+	CShape(const TopoDS_Shape &shape, const wxChar* title, bool use_one_gl_list = false);
 	CShape(const CShape& s);
 	~CShape();
 
@@ -50,10 +50,10 @@ public:
 	void glCommands(bool select, bool marked, bool no_color);
 	void KillGLLists(void);
 	void ModifyByMatrix(const double* m);
-	const char* GetShortString(void)const{return m_title.c_str();}
-	const char* GetTypeString(void)const{return "Shape";}
+	const wxChar* GetShortString(void)const{return m_title.c_str();}
+	const wxChar* GetTypeString(void)const{return _T("Shape");}
 	bool CanEditString(void)const{return true;}
-	void OnEditString(const char* str);
+	void OnEditString(const wxChar* str);
 	void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true);
 	double Area()const;
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
@@ -70,8 +70,8 @@ public:
 	static void CutShapes(const std::list<HeeksObj*> &list);
 	static void FuseShapes(const std::list<HeeksObj*> &list);
 	static void CommonShapes(const std::list<HeeksObj*> &list);
-	static bool ImportSolidsFile(const char* filepath, bool undoably, std::map<int, int> *index_map = NULL);
-	static bool ExportSolidsFile(const char* filepath, std::map<int, int> *index_map = NULL);
-	static HeeksObj* MakeObject(const TopoDS_Shape &shape, const char* title, bool use_one_gl_list = false, bool stl_body = false);
+	static bool ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<int, int> *index_map = NULL);
+	static bool ExportSolidsFile(const wxChar* filepath, std::map<int, int> *index_map = NULL);
+	static HeeksObj* MakeObject(const TopoDS_Shape &shape, const wxChar* title, bool use_one_gl_list = false, bool stl_body = false);
 	static bool IsTypeAShape(int t);
 };

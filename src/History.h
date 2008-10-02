@@ -18,13 +18,13 @@ private:
 	virtual void RemoveAsNewPosIfEqual(std::list<Tool *>::iterator &){}
 
 public:
-	std::string title;
+	wxString title;
 
-	History(int Level, const char*t);
+	History(int Level, const wxChar*t);
 	virtual ~History(void);
 
 	// Tool's virtual functions
-	const char* GetTitle(){return title.c_str();}
+	const wxChar* GetTitle(){return title.c_str();}
 	void Run();
 	void RollBack();
 
@@ -32,7 +32,7 @@ public:
 	bool InternalRollForward(void);
 	void DoToolUndoably(Tool *);
 	void Add(Tool *);
-	void StartHistory(const char* title);
+	void StartHistory(const wxChar* title);
 	bool EndHistory(void);
 	int size(void){return m_tools.size();}
 	void Clear(std::list<Tool *>::iterator FromIt);
@@ -51,7 +51,7 @@ private:
 	void RemoveAsNewPosIfEqual(std::list<Tool *>::iterator &It);
 
 public:
-	MainHistory(void): History(0, "Main History"){as_new_pos_exists = false; as_new_when_at_list_start = true;}
+	MainHistory(void): History(0, _T("Main History")){as_new_pos_exists = false; as_new_when_at_list_start = true;}
 	~MainHistory(void){}
 
 	bool IsModified(void);

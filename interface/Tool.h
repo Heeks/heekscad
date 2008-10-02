@@ -10,8 +10,8 @@ class Tool
 	virtual ~Tool(){}
 
 	virtual void Run() = 0;
-	virtual const char* GetTitle() = 0;
-	virtual const char* GetToolTip(){return "";}
+	virtual const wxChar* GetTitle() = 0;
+	virtual const wxChar* GetToolTip(){return _T("");}
 	virtual bool Undoable(){return false;}
 	virtual void RollBack(){};
 	virtual bool Disabled(){return false;}

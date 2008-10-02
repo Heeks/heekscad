@@ -10,15 +10,15 @@ private:
 
 public:
 	gp_Pnt position;
-	std::string prompt;
+	wxString prompt;
 
-	Gripper(const gp_Pnt& pos, const char* str);
+	Gripper(const gp_Pnt& pos, const wxChar* str);
 	virtual ~Gripper(){}
 
 	// HeeksObj's virtual functions
 	int GetType()const{return GripperType;}
 	void glCommands(bool select, bool marked, bool no_color);
-	const char* GetTypeString(void)const{return "Gripper";}
+	const wxChar* GetTypeString(void)const{return _T("Gripper");}
 	void ModifyByMatrix(const double* m);
 
 	//Gripper's virtual functions
@@ -30,7 +30,7 @@ public:
 	virtual void OnGripperReleased(const double* from, const double* to){}
 
 	// member functions
-	const char* get_gripper_prompt(){return prompt.c_str();}
+	const wxChar* get_gripper_prompt(){return prompt.c_str();}
 };
 
 #endif

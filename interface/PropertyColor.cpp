@@ -4,16 +4,16 @@
 
 #include "PropertyColor.h"
 
-PropertyColor::PropertyColor(const char* t, HeeksColor initial_value, void(*callbackfunc)(HeeksColor)):Property(){
+PropertyColor::PropertyColor(const wxChar* t, HeeksColor initial_value, void(*callbackfunc)(HeeksColor)):Property(){
 	m_initial_value = initial_value;
 	m_callbackfunc = callbackfunc;
-	title = std::string(t);
+	title = wxString(t);
 }
 
 PropertyColor::~PropertyColor(){
 }
 
-const char* PropertyColor::GetShortString(void)const{
+const wxChar* PropertyColor::GetShortString(void)const{
 	return title.c_str();
 }
 

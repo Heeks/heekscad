@@ -6,7 +6,7 @@ private:
 	bool m_fail;
 
 public:
-	CDxfWrite(const char* filepath);
+	CDxfWrite(const wxChar* filepath);
 	~CDxfWrite();
 
 	bool Failed(){return m_fail;}
@@ -27,7 +27,7 @@ private:
 	void OnReadArc(double start_angle, double end_angle, double radius, const double* c);
 
 public:
-	CDxfRead(const char* filepath); // this opens the file
+	CDxfRead(const wxChar* filepath); // this opens the file
 	~CDxfRead(); // this closes the file
 
 	bool Failed(){return m_fail;}

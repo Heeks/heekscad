@@ -22,21 +22,21 @@ public:
 	void Run(){
 		// add a sphere with using m_pos, m_r
 		TopoDS_Solid solid = BRepPrimAPI_MakeSphere(gp_Pnt(sphere_creator.m_pos[0], sphere_creator.m_pos[1], sphere_creator.m_pos[2]), sphere_creator.m_r);
-		wxGetApp().AddUndoably(new CSolid(solid, "Sphere"), NULL, NULL);
+		wxGetApp().AddUndoably(new CSolid(solid, _T("Sphere")), NULL, NULL);
 		wxGetApp().SetInputMode(wxGetApp().m_select_mode);
 		wxGetApp().Repaint();
 	}
-	const char* GetTitle(){return "Apply";}
+	const wxChar* GetTitle(){return _T("Apply");}
 	wxBitmap* Bitmap()
 	{
 		if(m_bitmap == NULL)
 		{
 			wxString exe_folder = wxGetApp().GetExeFolder();
-			m_bitmap = new wxBitmap(exe_folder + "/bitmaps/apply.png", wxBITMAP_TYPE_PNG);
+			m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/apply.png"), wxBITMAP_TYPE_PNG);
 		}
 		return m_bitmap;
 	}
-	const char* GetToolTip(){return "Create Sphere, and finish";}
+	const wxChar* GetToolTip(){return _T("Create Sphere, and finish");}
 };
 wxBitmap* CSphereApply::m_bitmap = NULL;
 
@@ -164,17 +164,17 @@ static void set_mode(int value){sphere_creator.m_mode = value; wxGetApp().m_fram
 
 void CSphereCreate::GetProperties(std::list<Property *> *list)
 {
-	std::list< std::string > choices;
-	choices.push_back(std::string("choose position"));
-	choices.push_back(std::string("choose radius"));
-	list->push_back(new PropertyChoice("drag mode", choices, m_mode, set_mode));
-	list->push_back(new PropertyString("(press 'r' for radius)", ""));
+	std::list< wxString > choices;
+	choices.push_back(wxString(_T("choose position")));
+	choices.push_back(wxString(_T("choose radius")));
+	list->push_back(new PropertyChoice(_T("drag mode"), choices, m_mode, set_mode));
+	list->push_back(new PropertyString(_T("(press 'r' for radius)"), _T("")));
 
 	// add x, y, z and radius for the "create" button
-	list->push_back(new PropertyDouble("X", m_pos[0], set_x));
-	list->push_back(new PropertyDouble("Y", m_pos[1], set_y));
-	list->push_back(new PropertyDouble("Z", m_pos[2], set_z));
-	list->push_back(new PropertyDouble("radius", m_r, set_r));
+	list->push_back(new PropertyDouble(_T("X"), m_pos[0], set_x));
+	list->push_back(new PropertyDouble(_T("Y"), m_pos[1], set_y));
+	list->push_back(new PropertyDouble(_T("Z"), m_pos[2], set_z));
+	list->push_back(new PropertyDouble(_T("radius"), m_r, set_r));
 }
 
 class CSphereCancel:public Tool{
@@ -187,17 +187,17 @@ public:
 		wxGetApp().SetInputMode(wxGetApp().m_select_mode);
 		wxGetApp().Repaint();
 	}
-	const char* GetTitle(){return "Cancel";}
+	const wxChar* GetTitle(){return _T("Cancel");}
 	wxBitmap* Bitmap()
 	{
 		if(m_bitmap == NULL)
 		{
 			wxString exe_folder = wxGetApp().GetExeFolder();
-			m_bitmap = new wxBitmap(exe_folder + "/bitmaps/cancel.png", wxBITMAP_TYPE_PNG);
+			m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/cancel.png"), wxBITMAP_TYPE_PNG);
 		}
 		return m_bitmap;
 	}
-	const char* GetToolTip(){return "Finish without creating sphere";}
+	const wxChar* GetToolTip(){return _T("Finish without creating sphere");}
 };
 wxBitmap* CSphereCancel::m_bitmap = NULL;
 

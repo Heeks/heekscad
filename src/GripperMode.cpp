@@ -29,42 +29,42 @@ GripperMode::~GripperMode()
 }
 
 void GripperMode::GetProfileStrings(){
-	wxGetApp().m_config->Read("GripMode", (long*)(&m_mode), 0);
-	wxGetApp().m_config->Read("GripMakeCopies", &m_make_copies, false);
-	wxGetApp().m_config->Read("GripNumberOfCopies", &m_number_of_copies, 1);
-	wxGetApp().m_config->Read("GripMakePattern", &m_make_as_pattern, false);
+	wxGetApp().m_config->Read(_T("GripMode"), (long*)(&m_mode), 0);
+	wxGetApp().m_config->Read(_T("GripMakeCopies"), &m_make_copies, false);
+	wxGetApp().m_config->Read(_T("GripNumberOfCopies"), &m_number_of_copies, 1);
+	wxGetApp().m_config->Read(_T("GripMakePattern"), &m_make_as_pattern, false);
 	double x, y, z;
-	wxGetApp().m_config->Read("GrippingCentreX", &x, 0.0);
-	wxGetApp().m_config->Read("GrippingCentreY", &y, 0.0);
-	wxGetApp().m_config->Read("GrippingCentreZ", &z, 0.0);
+	wxGetApp().m_config->Read(_T("GrippingCentreX"), &x, 0.0);
+	wxGetApp().m_config->Read(_T("GrippingCentreY"), &y, 0.0);
+	wxGetApp().m_config->Read(_T("GrippingCentreZ"), &z, 0.0);
 	m_centre_point = gp_Pnt(x, y, z);
-	wxGetApp().m_config->Read("GrippingCentre2X", &x, 0.0);
-	wxGetApp().m_config->Read("GrippingCentre2Y", &y, 0.0);
-	wxGetApp().m_config->Read("GrippingCentre2Z", &z, 0.0);
+	wxGetApp().m_config->Read(_T("GrippingCentre2X"), &x, 0.0);
+	wxGetApp().m_config->Read(_T("GrippingCentre2Y"), &y, 0.0);
+	wxGetApp().m_config->Read(_T("GrippingCentre2Z"), &z, 0.0);
 	m_centre_point2 = gp_Pnt(x, y, z);
-	wxGetApp().m_config->Read("GripFromUsesEndofExceptScreen", &m_use_endof_for_from_except_for_screen_xy, 1);
-	wxGetApp().m_config->Read("GrippingRotateAngle", &m_rotate_angle_degrees, 90.0);
-	wxGetApp().m_config->Read("GrippingScaleX", &m_scale_x, 1.0);
-	wxGetApp().m_config->Read("GrippingScaleY", &m_scale_y, 1.0);
-	wxGetApp().m_config->Read("GrippingScaleZ", &m_scale_z, 1.0);
+	wxGetApp().m_config->Read(_T("GripFromUsesEndofExceptScreen"), &m_use_endof_for_from_except_for_screen_xy, 1);
+	wxGetApp().m_config->Read(_T("GrippingRotateAngle"), &m_rotate_angle_degrees, 90.0);
+	wxGetApp().m_config->Read(_T("GrippingScaleX"), &m_scale_x, 1.0);
+	wxGetApp().m_config->Read(_T("GrippingScaleY"), &m_scale_y, 1.0);
+	wxGetApp().m_config->Read(_T("GrippingScaleZ"), &m_scale_z, 1.0);
 }
 
 void GripperMode::WriteProfileStrings(){
-	wxGetApp().m_config->Write("GripMode", (long)(m_mode));
-	wxGetApp().m_config->Write("GripMakeCopies", m_make_copies);
-	wxGetApp().m_config->Write("GripNumberOfCopies", m_number_of_copies);
-	wxGetApp().m_config->Write("GripMakePattern", m_make_as_pattern);
-	wxGetApp().m_config->Write("GrippingCentreX", m_centre_point.X());
-	wxGetApp().m_config->Write("GrippingCentreY", m_centre_point.Y());
-	wxGetApp().m_config->Write("GrippingCentreZ", m_centre_point.Z());
-	wxGetApp().m_config->Write("GrippingCentre2X", m_centre_point2.X());
-	wxGetApp().m_config->Write("GrippingCentre2Y", m_centre_point2.Y());
-	wxGetApp().m_config->Write("GrippingCentre2Z", m_centre_point2.Z());
-	wxGetApp().m_config->Write("GripFromUsesEndofExceptScreen", m_use_endof_for_from_except_for_screen_xy);
-	wxGetApp().m_config->Write("GrippingRotateAngle", m_rotate_angle_degrees);
-	wxGetApp().m_config->Write("GrippingScaleX", m_scale_x);
-	wxGetApp().m_config->Write("GrippingScaleY", m_scale_y);
-	wxGetApp().m_config->Write("GrippingScaleZ", m_scale_z);
+	wxGetApp().m_config->Write(_T("GripMode"), (long)(m_mode));
+	wxGetApp().m_config->Write(_T("GripMakeCopies"), m_make_copies);
+	wxGetApp().m_config->Write(_T("GripNumberOfCopies"), m_number_of_copies);
+	wxGetApp().m_config->Write(_T("GripMakePattern"), m_make_as_pattern);
+	wxGetApp().m_config->Write(_T("GrippingCentreX"), m_centre_point.X());
+	wxGetApp().m_config->Write(_T("GrippingCentreY"), m_centre_point.Y());
+	wxGetApp().m_config->Write(_T("GrippingCentreZ"), m_centre_point.Z());
+	wxGetApp().m_config->Write(_T("GrippingCentre2X"), m_centre_point2.X());
+	wxGetApp().m_config->Write(_T("GrippingCentre2Y"), m_centre_point2.Y());
+	wxGetApp().m_config->Write(_T("GrippingCentre2Z"), m_centre_point2.Z());
+	wxGetApp().m_config->Write(_T("GripFromUsesEndofExceptScreen"), m_use_endof_for_from_except_for_screen_xy);
+	wxGetApp().m_config->Write(_T("GrippingRotateAngle"), m_rotate_angle_degrees);
+	wxGetApp().m_config->Write(_T("GrippingScaleX"), m_scale_x);
+	wxGetApp().m_config->Write(_T("GrippingScaleY"), m_scale_y);
+	wxGetApp().m_config->Write(_T("GrippingScaleZ"), m_scale_z);
 }
 
 void choice_callback(int choice){
@@ -106,11 +106,11 @@ static void on_set_centre_z(double value)
 }
 
 void GripperMode::GetOptions(std::list<Property *> *list){
-	std::list< std::string > choices;
-	choices.push_back(std::string("Translate"));
-	choices.push_back(std::string("StretchMode"));
-	choices.push_back(std::string("Rotate"));
-	choices.push_back(std::string("ScaleMode"));
+	std::list< wxString > choices;
+	choices.push_back(wxString(_T("Translate")));
+	choices.push_back(wxString(_T("StretchMode")));
+	choices.push_back(wxString(_T("Rotate")));
+	choices.push_back(wxString(_T("ScaleMode")));
 	int index = 0;
 	switch(m_mode){
 		case TranslationMode:
@@ -129,17 +129,17 @@ void GripperMode::GetOptions(std::list<Property *> *list){
 			index = 3;
 			break;
 	}
-	list->push_back( new PropertyChoice("gripper mode",  choices, index, choice_callback));	
+	list->push_back( new PropertyChoice(_T("gripper mode"),  choices, index, choice_callback));	
 	switch(m_mode){
 		case RotationMode:
-			list->push_back(new PropertyDouble("X rotate about", m_centre_point.X(), on_set_centre_x));
-			list->push_back(new PropertyDouble("Y rotate about", m_centre_point.Y(), on_set_centre_y));
-			list->push_back(new PropertyDouble("Z rotate about", m_centre_point.Z(), on_set_centre_z));
+			list->push_back(new PropertyDouble(_T("X rotate about"), m_centre_point.X(), on_set_centre_x));
+			list->push_back(new PropertyDouble(_T("Y rotate about"), m_centre_point.Y(), on_set_centre_y));
+			list->push_back(new PropertyDouble(_T("Z rotate about"), m_centre_point.Z(), on_set_centre_z));
 			break;
 		case ScaleMode:
-			list->push_back(new PropertyDouble("X scale about", m_centre_point.X(), on_set_centre_x));
-			list->push_back(new PropertyDouble("Y scale about", m_centre_point.Y(), on_set_centre_y));
-			list->push_back(new PropertyDouble("Z scale about", m_centre_point.Z(), on_set_centre_z));
+			list->push_back(new PropertyDouble(_T("X scale about"), m_centre_point.X(), on_set_centre_x));
+			list->push_back(new PropertyDouble(_T("Y scale about"), m_centre_point.Y(), on_set_centre_y));
+			list->push_back(new PropertyDouble(_T("Z scale about"), m_centre_point.Z(), on_set_centre_z));
 			break;
 	}
 }

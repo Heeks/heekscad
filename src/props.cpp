@@ -407,7 +407,7 @@ void wxPropertyGrid::DoubleToString(wxString& target,
     if ( removeZeroes && precision != 0 && target.length() )
     {
         // Remove excess zeroes (do not remove this code just yet,
-        // since sprintf can't do the same consistently across platforms).
+        // since wsprintf can't do the same consistently across platforms).
         wxString::const_iterator i = target.end() - 1;
         size_t new_len = target.length() - 1;
 

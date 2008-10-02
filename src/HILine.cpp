@@ -88,7 +88,7 @@ wxIcon* HILine::GetIcon(){
 	if(m_icon == NULL)
 	{
 		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + "/icons/iline.png", wxBITMAP_TYPE_PNG);
+		m_icon = new wxIcon(exe_folder + _T("/icons/iline.png"), wxBITMAP_TYPE_PNG);
 	}
 	return m_icon;
 }
@@ -128,10 +128,10 @@ void HILine::GetProperties(std::list<Property *> *list){
 	__super::GetProperties(list);
 
 	line_for_properties = this;
-	list->push_back(new PropertyVertex("start", A, on_set_start));
-	list->push_back(new PropertyVertex("end", B, on_set_end));
+	list->push_back(new PropertyVertex(_T("start"), A, on_set_start));
+	list->push_back(new PropertyVertex(_T("end"), B, on_set_end));
 	double length = A.Distance(B);
-	list->push_back(new PropertyDouble("Length", length, NULL));
+	list->push_back(new PropertyDouble(_T("Length"), length, NULL));
 }
 
 bool HILine::FindNearPoint(const double* ray_start, const double* ray_direction, double *point){
@@ -260,7 +260,7 @@ HeeksObj* HILine::ReadFromXMLElement(TiXmlElement* pElem)
 	// get the attributes
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
-		wxString name(a->Name());
+		std::string name(a->Name());
 		if(name == "col"){c = HeeksColor(a->IntValue());}
 		else if(name == "sx"){p0.SetX(a->DoubleValue());}
 		else if(name == "sy"){p0.SetY(a->DoubleValue());}

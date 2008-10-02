@@ -22,7 +22,7 @@ public:
 	int GetType()const{return LineType;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
-	const char* GetTypeString(void)const{return "Line";}
+	const wxChar* GetTypeString(void)const{return _T("Line");}
 	HeeksObj *MakeACopy(void)const;
 	wxIcon* GetIcon();
 	void ModifyByMatrix(const double *mat);

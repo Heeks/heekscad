@@ -23,7 +23,7 @@ public:
 	int GetType()const{return CircleType;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
-	const char* GetTypeString(void)const{return "Circle";}
+	const wxChar* GetTypeString(void)const{return _T("Circle");}
 	HeeksObj *MakeACopy(void)const;
 	wxIcon* GetIcon();
 	void ModifyByMatrix(const double *mat);

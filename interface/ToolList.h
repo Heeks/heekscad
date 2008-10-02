@@ -9,15 +9,15 @@ private:
 	std::list<Tool*>::iterator LoopIt;
 
 public:
-	std::string m_title;
+	wxString m_title;
 	std::list<Tool*> m_tool_list;
 
-	ToolList(const char *t): m_title(t){}
-	ToolList(std::list<Tool*>& tools, const char *t): m_tool_list(tools), m_title(t){}
+	ToolList(const wxChar *t): m_title(t){}
+	ToolList(std::list<Tool*>& tools, const wxChar *t): m_tool_list(tools), m_title(t){}
 	~ToolList(){Clear();}
 
 	// Tool's virtual functions
-	const char* GetTitle(){return m_title.c_str();}
+	const wxChar* GetTitle(){return m_title.c_str();}
 	void Run(){};
 	bool IsAToolList(){return true;}
 

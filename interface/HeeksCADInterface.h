@@ -26,9 +26,11 @@ public:
 	virtual wxWindow* GetGraphicsCanvas();
 	virtual wxMenuBar* GetMenuBar();
 	virtual wxMenu* GetViewMenu();
+	virtual wxWindow* GetObjectsCanvas();
 	virtual wxAuiManager* GetAuiManager();
 	virtual void AddToolBarButton(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
 	virtual int AddMenuCheckItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
+	virtual int AddMenuItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&));
 	virtual wxString GetExeFolder();
 	virtual void AddUndoably(HeeksObj* object, HeeksObj* owner);
 	virtual HeeksObj* GetMainObject();
@@ -49,8 +51,8 @@ public:
 	virtual void WasRemoved(HeeksObj* object);
 	virtual void WereAdded(const std::list<HeeksObj*> &list);
 	virtual void WereRemoved(const std::list<HeeksObj*> &list);
-	virtual int PickObjects(const char* str);
-	virtual bool PickPosition(const char* str, double* pos);
+	virtual int PickObjects(const wxChar* str);
+	virtual bool PickPosition(const wxChar* str, double* pos);
 	virtual bool Digitize(const wxPoint &point, double* pos);
 	virtual HeeksObj* GetFirstObject();
 	virtual HeeksObj* GetNextObject();
@@ -71,4 +73,12 @@ public:
 	virtual void RemoveID(HeeksObj* object); // only call this from ObjList::Remove()
 	virtual void WriteIDToXML(HeeksObj* object, TiXmlElement *element);
 	virtual void ReadIDFromXML(HeeksObj* object, TiXmlElement *element);
+	virtual const wxChar* GetFileFullPath(); // returns NULL for untitled
+	virtual long BodyGetNumFaces(HeeksObj* body);
+	virtual HeeksObj* BodyGetFirstFace(HeeksObj* body);
+	virtual HeeksObj* BodyGetNextFace(HeeksObj* body);
+	virtual long BodyGetNumEdges(HeeksObj* body);
+	virtual HeeksObj* BodyGetFirstEdge(HeeksObj* body);
+	virtual HeeksObj* BodyGetNextEdge(HeeksObj* body);
+	virtual const wxChar* GetRevisionNumber();
 };

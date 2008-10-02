@@ -7,12 +7,12 @@
 
 class PropertyList:public Property{
 private:
-	std::string title;
+	wxString title;
 
 public:
 	std::list< Property* > m_list;
 
-	PropertyList(const char* t);
+	PropertyList(const wxChar* t);
 	~PropertyList();
 
 	// Property's virtual functions
@@ -22,7 +22,7 @@ public:
 	void CallSetFunction()const{ for(std::list< Property* >::const_iterator It = m_list.begin(); It != m_list.end(); It++)(*It)->CallSetFunction();}
 
 	// HeeksObj's virtual functions
-	const char* GetShortString(void)const;
+	const wxChar* GetShortString(void)const;
 };
 
 #endif

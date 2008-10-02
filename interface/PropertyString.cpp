@@ -4,12 +4,12 @@
 
 #include "PropertyString.h"
 
-PropertyString::PropertyString(const char* t, const char* v, void(*callbackfunc)(const char*)):Property() , m_callbackfunc(callbackfunc){
-	m_title = std::string(t);
-	m_initial_value = std::string(v);
+PropertyString::PropertyString(const wxChar* t, const wxChar* v, void(*callbackfunc)(const wxChar*)):Property() , m_callbackfunc(callbackfunc){
+	m_title = wxString(t);
+	m_initial_value = wxString(v);
 }
 
-const char* PropertyString::GetShortString(void)const{
+const wxChar* PropertyString::GetShortString(void)const{
 	return m_title.c_str();
 }
 

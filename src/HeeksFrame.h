@@ -87,6 +87,7 @@ public:
 	void AddToolBarTool(wxToolBar* toolbar, Tool* tool);
 	void ClearToolBar(wxToolBar* m_toolBar);
 	int AddMenuCheckItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
+	int AddMenuItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&));
 
 	//wxTopLevelWindow's virtual functions
 	bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);

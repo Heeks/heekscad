@@ -8,7 +8,7 @@
 
 wxIcon* HImage::m_icon = NULL;
 
-HImage::HImage(const char* file_path)
+HImage::HImage(const wxChar* file_path)
 {
 	m_rectangle_intialized = false;
 	m_file_path.assign(file_path);
@@ -147,15 +147,15 @@ wxIcon* HImage::GetIcon(){
 	if(m_icon == NULL)
 	{
 		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + "/icons/picture.png", wxBITMAP_TYPE_PNG);
+		m_icon = new wxIcon(exe_folder + _T("/icons/picture.png"), wxBITMAP_TYPE_PNG);
 	}
 	return m_icon;
 }
 
-std::string m_global_pic_string;
+wxString m_global_pic_string;
 
-const char* HImage::GetShortString(void)const{
-	m_global_pic_string.assign("Picture - ");
+const wxChar* HImage::GetShortString(void)const{
+	m_global_pic_string.assign(_T("Picture - "));
 	m_global_pic_string.append(m_file_path.c_str());
 	return m_global_pic_string.c_str();
 }
@@ -209,7 +209,7 @@ void HImage::WriteXML(TiXmlElement *root)
 	TiXmlElement * element;
 	element = new TiXmlElement( "Image" );
 	root->LinkEndChild( element );  
-	element->SetAttribute("filepath", m_file_path.c_str());
+	element->SetAttribute("filepath", Ttc(m_file_path.c_str()));
 
 	element->SetDoubleAttribute("x00", m_x[0][0]);
 	element->SetDoubleAttribute("x01", m_x[0][1]);
@@ -229,15 +229,15 @@ void HImage::WriteXML(TiXmlElement *root)
 // static member function
 HeeksObj* HImage::ReadFromXMLElement(TiXmlElement* pElem)
 {
-	std::string filepath;
+	wxString filepath;
 
 	double x[4][3];
 
 	// get the attributes
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
-		wxString name(a->Name());
-		if(name == "filepath"){filepath.assign(a->Value());}
+		std::string name(a->Name());
+		if(name == "filepath"){filepath.assign(Ctt(a->Value()));}
 		else if(name == "x00"){x[0][0] = a->DoubleValue();}
 		else if(name == "x01"){x[0][1] = a->DoubleValue();}
 		else if(name == "x02"){x[0][2] = a->DoubleValue();}
