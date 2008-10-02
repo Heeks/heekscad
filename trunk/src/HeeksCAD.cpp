@@ -49,6 +49,9 @@
 #include "StlSolid.h"
 #include "dxf.h"
 
+#include <sstream>
+using namespace std;
+
 const int ID_TOOLBAR = 500;
 const int ID_SOLID_TOOLBAR = 501;
 static const long TOOLBAR_STYLE = wxTB_FLAT | wxTB_DOCKABLE | wxTB_TEXT;
@@ -57,6 +60,7 @@ IMPLEMENT_APP(HeeksCADapp)
 
 HeeksCADapp::HeeksCADapp(): ObjList()
 {
+	m_version_number = _T("0 1 1");
 	m_geom_tol = 0.001;
 	background_color = HeeksColor(0, 0, 0);
 	current_color = HeeksColor(0, 0, 0);
@@ -93,7 +97,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	mouse_wheel_forward_away = true;
 	ctrl_does_rotate = true;
 	m_show_ruler = true;
-	m_filepath.assign("Untitled.heeks");
+	m_filepath.assign(_T("Untitled.heeks"));
 	m_disable_SetObjectID_on_Add = false;
 }
 
@@ -113,7 +117,7 @@ HeeksCADapp::~HeeksCADapp()
 
 bool HeeksCADapp::OnInit()
 {
-	m_config = new wxConfig("HeeksCAD");
+	m_config = new wxConfig(_T("HeeksCAD"));
 	wxInitAllImageHandlers();
 
 	// initialise glut
@@ -128,50 +132,50 @@ bool HeeksCADapp::OnInit()
 	int height = 400;
 	int posx = 200;
 	int posy = 200;
-	m_config->Read("MainFrameWidth", &width);
-	m_config->Read("MainFrameHeight", &height);
-	m_config->Read("MainFramePosX", &posx);
-	m_config->Read("MainFramePosY", &posy);
+	m_config->Read(_T("MainFrameWidth"), &width);
+	m_config->Read(_T("MainFrameHeight"), &height);
+	m_config->Read(_T("MainFramePosX"), &posx);
+	m_config->Read(_T("MainFramePosY"), &posy);
 	if(posx < 0)posx = 0;
 	if(posy < 0)posy = 0;
-	m_config->Read("DrawEnd", &digitize_end, true);
-	m_config->Read("DrawInters", &digitize_inters, false);
-	m_config->Read("DrawCentre", &digitize_centre, false);
-	m_config->Read("DrawMidpoint", &digitize_midpoint, false);
-	m_config->Read("DrawNearest", &digitize_nearest, false);
-	m_config->Read("DrawTangent", &digitize_tangent, false);
-	m_config->Read("DrawCoords", &digitize_coords, true);
-	m_config->Read("DrawScreen", &digitize_screen, false);
-	m_config->Read("DrawToGrid", &draw_to_grid, false);
-	m_config->Read("DrawGrid", &digitizing_grid);
-	m_config->Read("DrawRadius", &digitizing_radius);
+	m_config->Read(_T("DrawEnd"), &digitize_end, true);
+	m_config->Read(_T("DrawInters"), &digitize_inters, false);
+	m_config->Read(_T("DrawCentre"), &digitize_centre, false);
+	m_config->Read(_T("DrawMidpoint"), &digitize_midpoint, false);
+	m_config->Read(_T("DrawNearest"), &digitize_nearest, false);
+	m_config->Read(_T("DrawTangent"), &digitize_tangent, false);
+	m_config->Read(_T("DrawCoords"), &digitize_coords, true);
+	m_config->Read(_T("DrawScreen"), &digitize_screen, false);
+	m_config->Read(_T("DrawToGrid"), &draw_to_grid, false);
+	m_config->Read(_T("DrawGrid"), &digitizing_grid);
+	m_config->Read(_T("DrawRadius"), &digitizing_radius);
 	{
 		wxString str;
-		m_config->Read("BackgroundColor", &str, "242 204 162");
+		m_config->Read(_T("BackgroundColor"), &str, _T("242 204 162"));
 		int r = 0, g = 0, b = 0;
-		sscanf(str, "%d %d %d", &r, &g, &b);
+		_stscanf(str, _T("%d %d %d"), &r, &g, &b);
 		background_color = HeeksColor(r, g, b);
 	}
 	{
 		wxString str;
-		m_config->Read("CurrentColor", &str, "0 0 0");
+		m_config->Read(_T("CurrentColor"), &str, _T("0 0 0"));
 		int r = 0, g = 0, b = 0;
-		sscanf(str, "%d %d %d", &r, &g, &b);
+		_stscanf(str, _T("%d %d %d"), &r, &g, &b);
 		current_color = HeeksColor(r, g, b);
 	}
 	{
 		wxString str;
-		m_config->Read("ConstructionColor", &str, "0 0 255");
+		m_config->Read(_T("ConstructionColor"), &str, _T("0 0 255"));
 		int r = 0, g = 0, b = 255;
-		sscanf(str, "%d %d %d", &r, &g, &b);
+		_stscanf(str, _T("%d %d %d"), &r, &g, &b);
 		construction_color = HeeksColor(r, g, b);
 	}
-	m_config->Read("RotateMode", &m_rotate_mode);
-	m_config->Read("Antialiasing", &m_antialiasing);
-	m_config->Read("GridMode", &grid_mode);
-	m_config->Read("m_light_push_matrix", &m_light_push_matrix);
-	m_config->Read("WheelForwardAway", &mouse_wheel_forward_away);
-	m_config->Read("CtrlDoesRotate", &ctrl_does_rotate);
+	m_config->Read(_T("RotateMode"), &m_rotate_mode);
+	m_config->Read(_T("Antialiasing"), &m_antialiasing);
+	m_config->Read(_T("GridMode"), &grid_mode);
+	m_config->Read(_T("m_light_push_matrix"), &m_light_push_matrix);
+	m_config->Read(_T("WheelForwardAway"), &mouse_wheel_forward_away);
+	m_config->Read(_T("CtrlDoesRotate"), &ctrl_does_rotate);
 	gripper_mode->GetProfileStrings();
 
 	GetRecentFilesProfileString();
@@ -214,43 +218,65 @@ bool HeeksCADapp::OnInit()
 
 int HeeksCADapp::OnExit(){
 	int result = wxApp::OnExit();
-	m_config->Write("DrawEnd", digitize_end);
-	m_config->Write("DrawInters", digitize_inters);
-	m_config->Write("DrawCentre", digitize_centre);
-	m_config->Write("DrawMidpoint", digitize_midpoint);
-	m_config->Write("DrawNearest", digitize_nearest);
-	m_config->Write("DrawTangent", digitize_tangent);
-	m_config->Write("DrawCoords", digitize_coords);
-	m_config->Write("DrawScreen", digitize_screen);
-	m_config->Write("DrawToGrid", draw_to_grid);
-	m_config->Write("DrawGrid", digitizing_grid);
-	m_config->Write("DrawRadius", digitizing_radius);
+	m_config->Write(_T("DrawEnd"), digitize_end);
+	m_config->Write(_T("DrawInters"), digitize_inters);
+	m_config->Write(_T("DrawCentre"), digitize_centre);
+	m_config->Write(_T("DrawMidpoint"), digitize_midpoint);
+	m_config->Write(_T("DrawNearest"), digitize_nearest);
+	m_config->Write(_T("DrawTangent"), digitize_tangent);
+	m_config->Write(_T("DrawCoords"), digitize_coords);
+	m_config->Write(_T("DrawScreen"), digitize_screen);
+	m_config->Write(_T("DrawToGrid"), draw_to_grid);
+	m_config->Write(_T("DrawGrid"), digitizing_grid);
+	m_config->Write(_T("DrawRadius"), digitizing_radius);
 	{
-		char str[1024];
-		sprintf(str, "%d %d %d", background_color.red, background_color.green, background_color.blue);
-		m_config->Write("BackgroundColor", str);
+		wxChar str[1024];
+		wsprintf(str, _T("%d %d %d"), background_color.red, background_color.green, background_color.blue);
+		m_config->Write(_T("BackgroundColor"), str);
 	}
 	{
-		char str[1024];
-		sprintf(str, "%d %d %d", current_color.red, current_color.green, current_color.blue);
-		m_config->Write("CurrentColor", str);
+		wxChar str[1024];
+		wsprintf(str, _T("%d %d %d"), current_color.red, current_color.green, current_color.blue);
+		m_config->Write(_T("CurrentColor"), str);
 	}
 	{
-		char str[1024];
-		sprintf(str, "%d %d %d", construction_color.red, construction_color.green, construction_color.blue);
-		m_config->Write("ConstructionColor", str);
+		wxChar str[1024];
+		wsprintf(str, _T("%d %d %d"), construction_color.red, construction_color.green, construction_color.blue);
+		m_config->Write(_T("ConstructionColor"), str);
 	}
-	m_config->Write("RotateMode", m_rotate_mode);	
-	m_config->Write("Antialiasing", m_antialiasing);	
-	m_config->Write("GridMode", grid_mode);
-	m_config->Write("m_light_push_matrix", m_light_push_matrix);
-	m_config->Write("WheelForwardAway", mouse_wheel_forward_away);
-	m_config->Write("CtrlDoesRotate", ctrl_does_rotate);
+	m_config->Write(_T("RotateMode"), m_rotate_mode);	
+	m_config->Write(_T("Antialiasing"), m_antialiasing);	
+	m_config->Write(_T("GridMode"), grid_mode);
+	m_config->Write(_T("m_light_push_matrix"), m_light_push_matrix);
+	m_config->Write(_T("WheelForwardAway"), mouse_wheel_forward_away);
+	m_config->Write(_T("CtrlDoesRotate"), ctrl_does_rotate);
 
 	WriteRecentFilesProfileString();
 
 	return result;
 }
+
+#if wxUSE_UNICODE
+static std::string str_for_Ttc;
+
+const char* Ttc(const wchar_t* str)
+{
+	str_for_Ttc.assign("");
+	while (*str)
+		str_for_Ttc.push_back((char) *str++);
+	return str_for_Ttc.c_str();
+}
+
+static std::wstring wstr_for_Ttc;
+
+const wchar_t* Ctt(const char* str)
+{
+	wstr_for_Ttc.assign(_T(""));
+	while (*str)
+		wstr_for_Ttc.push_back((wchar_t) *str++);
+	return wstr_for_Ttc.c_str();
+}
+#endif
 
 void HeeksCADapp::SetInputMode(CInputMode *new_mode){
 	if(!new_mode)return;
@@ -310,9 +336,9 @@ class CFullScreenTool : public Tool
 {
 public:
 	// Tool's virtual functions
-	const char* CFullScreenTool::GetTitle(){
-		if (wxGetApp().m_frame->IsFullScreen()) return "Exit Full Screen Mode";
-		else return "Show Full Screen";
+	const wxChar* CFullScreenTool::GetTitle(){
+		if (wxGetApp().m_frame->IsFullScreen()) return _T("Exit Full Screen Mode");
+		else return _T("Show Full Screen");
 	}
 	void CFullScreenTool::Run(){
 		wxGetApp().m_frame->ShowFullScreen(!wxGetApp().m_frame->IsFullScreen());
@@ -338,7 +364,7 @@ void HeeksCADapp::Reset(){
 	history = new MainHistory;
 	m_doing_rollback = false;
 	m_frame->m_graphics->m_view_point.SetView(gp_Vec(0, 1, 0), gp_Vec(0, 0, 1));
-	m_filepath.assign("Untitled.heeks");
+	m_filepath.assign(_T("Untitled.heeks"));
 	ResetIDs();
 }
 
@@ -365,9 +391,9 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 					// get the attributes
 					for(TiXmlAttribute* a = subsubElem->FirstAttribute(); a; a = a->Next())
 					{
-						wxString attr_name(a->Name());
-						if(attr_name == "index"){index = a->IntValue();}
-						else if(attr_name == "id"){id = a->IntValue();}
+						std::string attr_name(a->Name());
+						if(attr_name == std::string("index")){index = a->IntValue();}
+						else if(attr_name == std::string("id")){id = a->IntValue();}
 					}
 					if(id != -1 && index != -1)index_map.insert(std::pair<int, int>(index, id));
 				}
@@ -380,9 +406,13 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 			{
 				wxStandardPaths sp;
 				sp.GetTempDir();
-				wxString temp_file = sp.GetTempDir() + "/temp_HeeksCAD_STEP_file.step";
+				wxString temp_file = sp.GetTempDir() + _T("/temp_HeeksCAD_STEP_file.step");
 				{
+#if wxUSE_UNICODE
+					wofstream ofs(temp_file);
+#else
 					ofstream ofs(temp_file);
+#endif
 					ofs<<file_text;
 				}
 				CShape::ImportSolidsFile(temp_file, false, &index_map);
@@ -393,12 +423,12 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 	// get the attributes
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
-		wxString name(a->Name());
+		std::string name(a->Name());
 		if(name == "text")
 		{
 			wxStandardPaths sp;
 			sp.GetTempDir();
-			wxString temp_file = sp.GetTempDir() + "/temp_HeeksCAD_STEP_file.step";
+			wxString temp_file = sp.GetTempDir() + _T("/temp_HeeksCAD_STEP_file.step");
 			{
 				ofstream ofs(temp_file);
 				ofs<<a->Value();
@@ -430,9 +460,7 @@ void HeeksCADapp::InitializeXMLFunctions()
 void HeeksCADapp::RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem))
 {
 	if(xml_read_fn_map->find(type_name) != xml_read_fn_map->end()){
-		char str[1024];
-		sprintf(str, "Error - trying to register an XML read function for an exisiting type - %s", type_name);
-		wxMessageBox(str);
+		wxMessageBox(_T("Error - trying to register an XML read function for an exisiting type"));
 		return;
 	}
 	xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( type_name, read_xml_function ) );
@@ -452,14 +480,14 @@ HeeksObj* HeeksCADapp::ReadXMLElement(TiXmlElement* pElem)
 	return NULL;
 }
 
-void HeeksCADapp::OpenXMLFile(const char *filepath)
+void HeeksCADapp::OpenXMLFile(const wxChar *filepath)
 {
-	TiXmlDocument doc(filepath);
+	TiXmlDocument doc(Ttc(filepath));
 	if (!doc.LoadFile())
 	{
 		if(doc.Error())
 		{
-			wxMessageBox(doc.ErrorDesc());
+			wxMessageBox(Ctt(doc.ErrorDesc()));
 		}
 		return;
 	}
@@ -472,11 +500,11 @@ void HeeksCADapp::OpenXMLFile(const char *filepath)
 	{
 		pElem=hDoc.FirstChildElement().Element();
 		if (!pElem) return;
-		const char* name=pElem->Value();
+		std::string name(pElem->Value());
 
-		if(wxString(name) != wxString("HeeksCAD_Document"))
+		if(name != "HeeksCAD_Document")
 		{
-			wxMessageBox("This is not a HeeksCAD document!");
+			wxMessageBox(_T("This is not a HeeksCAD document!"));
 			return;
 		}
 
@@ -503,7 +531,7 @@ void HeeksCADapp::ReadSVGElement(TiXmlElement* pElem)
 {
 	std::string name(pElem->Value());
 
-	if(name == std::string("g"))
+	if(name == "g")
 	{
 		// loop through all the child elements, looking for path
 		for(pElem = TiXmlHandle(pElem).FirstChildElement().Element(); pElem; pElem = pElem->NextSiblingElement())
@@ -513,12 +541,12 @@ void HeeksCADapp::ReadSVGElement(TiXmlElement* pElem)
 		return;
 	}
 
-	if(name == std::string("path"))
+	if(name == "path")
 	{
 		// get the attributes
 		for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 		{
-			wxString name(a->Name());
+			std::string name(a->Name());
 			if(name == "d")
 			{
 				// add lines and arcs and bezier curves
@@ -576,17 +604,16 @@ void HeeksCADapp::ReadSVGElement(TiXmlElement* pElem)
 			}
 		}
 	}
-
 }
 
-void HeeksCADapp::OpenSVGFile(const char *filepath)
+void HeeksCADapp::OpenSVGFile(const wxChar *filepath)
 {
-	TiXmlDocument doc(filepath);
+	TiXmlDocument doc(Ttc(filepath));
 	if (!doc.LoadFile())
 	{
 		if(doc.Error())
 		{
-			wxMessageBox(doc.ErrorDesc());
+			wxMessageBox(Ctt(doc.ErrorDesc()));
 		}
 		return;
 	}
@@ -599,11 +626,11 @@ void HeeksCADapp::OpenSVGFile(const char *filepath)
 	{
 		pElem=hDoc.FirstChildElement().Element();
 		if (!pElem) return;
-		const char* name=pElem->Value();
+		std::string name(pElem->Value());
 
-		if(wxString(name) != wxString("svg"))
+		if(name != "svg")
 		{
-			wxMessageBox("This is not an SVG document!");
+			wxMessageBox(_T("This is not an SVG document!"));
 			return;
 		}
 
@@ -618,7 +645,7 @@ void HeeksCADapp::OpenSVGFile(const char *filepath)
 	}
 }
 
-void HeeksCADapp::OpenSTLFile(const char *filepath)
+void HeeksCADapp::OpenSTLFile(const wxChar *filepath)
 {
 	CStlSolid* new_object = new CStlSolid(filepath, &wxGetApp().current_color);
 	wxGetApp().Add(new_object, NULL);
@@ -626,7 +653,7 @@ void HeeksCADapp::OpenSTLFile(const char *filepath)
 
 class HeeksDxfRead : public CDxfRead{
 public:
-	HeeksDxfRead(const char* filepath):CDxfRead(filepath){}
+	HeeksDxfRead(const wxChar* filepath):CDxfRead(filepath){}
 
 	// CDxfRead's virtual functions
 	void OnReadLine(const double* s, const double* e);
@@ -651,7 +678,7 @@ void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, 
 	wxGetApp().Add(new_object, NULL);
 }
 
-void HeeksCADapp::OpenDXFFile(const char *filepath)
+void HeeksCADapp::OpenDXFFile(const wxChar *filepath)
 {
 	{
 		HeeksDxfRead dxf_file(filepath);
@@ -659,7 +686,7 @@ void HeeksCADapp::OpenDXFFile(const char *filepath)
 	}
 }
 
-bool HeeksCADapp::OpenImageFile(const char *filepath)
+bool HeeksCADapp::OpenImageFile(const wxChar *filepath)
 {
 	wxString wf(filepath);
 	wf.LowerCase();
@@ -668,7 +695,7 @@ bool HeeksCADapp::OpenImageFile(const char *filepath)
 	for(wxList::iterator It = handlers.begin(); It != handlers.end(); It++)
 	{
 		wxImageHandler* handler = (wxImageHandler*)(*It);
-		wxString ext = "." + handler->GetExtension();
+		wxString ext = _T(".") + handler->GetExtension();
 		if(wf.EndsWith(ext))
 		{
 			wxGetApp().AddUndoably(new HImage(filepath), NULL, NULL);
@@ -680,7 +707,7 @@ bool HeeksCADapp::OpenImageFile(const char *filepath)
 	return false;
 }
 
-bool HeeksCADapp::OpenFile(const char *filepath, bool update_recent_file_list, bool set_app_caption)
+bool HeeksCADapp::OpenFile(const wxChar *filepath, bool update_recent_file_list, bool set_app_caption)
 {
 	wxGetApp().m_disable_SetObjectID_on_Add = true;
 
@@ -690,23 +717,23 @@ bool HeeksCADapp::OpenFile(const char *filepath, bool update_recent_file_list, b
 
 	bool open_failed = false;
 
-	if(wf.EndsWith(".heeks"))
+	if(wf.EndsWith(_T(".heeks")))
 	{
 		OpenXMLFile(filepath);
 	}
-	else if(wf.EndsWith(".svg"))
+	else if(wf.EndsWith(_T(".svg")))
 	{
 		OpenSVGFile(filepath);
 	}
-	else if(wf.EndsWith(".svg"))
+	else if(wf.EndsWith(_T(".svg")))
 	{
 		OpenSVGFile(filepath);
 	}
-	else if(wf.EndsWith(".stl"))
+	else if(wf.EndsWith(_T(".stl")))
 	{
 		OpenSTLFile(filepath);
 	}
-	else if(wf.EndsWith(".dxf"))
+	else if(wf.EndsWith(_T(".dxf")))
 	{
 		OpenDXFFile(filepath);
 	}
@@ -723,8 +750,8 @@ bool HeeksCADapp::OpenFile(const char *filepath, bool update_recent_file_list, b
 	else
 	{
 		// error
-		char mess[1024];
-		sprintf(mess, "Invalid file type chosen ( expecting file with %s suffix )", wxGetApp().GetKnownFilesCommaSeparatedList());
+		wxChar mess[1024];
+		wsprintf(mess, _T("Invalid file type chosen ( expecting file with %s suffix )"), wxGetApp().GetKnownFilesCommaSeparatedList());
 		wxMessageBox(mess);
 		open_failed = true;
 	}
@@ -777,13 +804,13 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file)
 	}
 }
 
-void HeeksCADapp::SaveDXFFile(const char *filepath)
+void HeeksCADapp::SaveDXFFile(const wxChar *filepath)
 {
 	CDxfWrite dxf_file(filepath);
 	if(dxf_file.Failed())
 	{
-		char str[1024];
-		sprintf(str, "couldn't open file - %s", filepath);
+		wxChar str[1024];
+		wsprintf(str, _T("couldn't open file - %s"), filepath);
 		wxMessageBox(str);
 		return;
 	}
@@ -802,27 +829,27 @@ static ofstream* ofs_for_write_stl_triangle = NULL;
 
 static void write_stl_triangle(const double* x, const double* n)
 {
-	char str[1024];
-	sprintf(str, " facet normal %g %g %g", n[0], n[1], n[2]);
+	wxChar str[1024];
+	wsprintf(str, _T(" facet normal %g %g %g"), n[0], n[1], n[2]);
 	(*ofs_for_write_stl_triangle)<<str<<endl;
 	(*ofs_for_write_stl_triangle)<<"   outer loop"<<endl;
-	sprintf(str, "     vertex %g %g %g", x[0], x[1], x[2]);
+	wsprintf(str, _T("     vertex %g %g %g"), x[0], x[1], x[2]);
 	(*ofs_for_write_stl_triangle)<<str<<endl;
-	sprintf(str, "     vertex %g %g %g", x[3], x[4], x[5]);
+	wsprintf(str, _T("     vertex %g %g %g"), x[3], x[4], x[5]);
 	(*ofs_for_write_stl_triangle)<<str<<endl;
-	sprintf(str, "     vertex %g %g %g", x[6], x[7], x[8]);
+	wsprintf(str, _T("     vertex %g %g %g"), x[6], x[7], x[8]);
 	(*ofs_for_write_stl_triangle)<<str<<endl;
 	(*ofs_for_write_stl_triangle)<<"   endloop"<<endl;
 	(*ofs_for_write_stl_triangle)<<" endfacet"<<endl;
 }
 
-void HeeksCADapp::SaveSTLFile(const char *filepath)
+void HeeksCADapp::SaveSTLFile(const wxChar *filepath)
 {
 	ofstream ofs(filepath);
 	if(!ofs)
 	{
-		char str[1024];
-		sprintf(str, "couldn't open file - %s", filepath);
+		wxChar str[1024];
+		wsprintf(str, _T("couldn't open file - %s"), filepath);
 		wxMessageBox(str);
 		return;
 	}
@@ -840,7 +867,7 @@ void HeeksCADapp::SaveSTLFile(const char *filepath)
 	ofs<<"endsolid"<<endl;
 }
 
-void HeeksCADapp::SaveXMLFile(const char *filepath)
+void HeeksCADapp::SaveXMLFile(const wxChar *filepath)
 {
 	// write an xml file
 	TiXmlDocument doc;  
@@ -862,7 +889,7 @@ void HeeksCADapp::SaveXMLFile(const char *filepath)
 	if(CShape::m_solids_found){
 		wxStandardPaths sp;
 		sp.GetTempDir();
-		wxString temp_file = sp.GetTempDir() + "/temp_HeeksCAD_STEP_file.step";
+		wxString temp_file = sp.GetTempDir() + _T("/temp_HeeksCAD_STEP_file.step");
 		std::map<int, int> index_map;
 		CShape::ExportSolidsFile(temp_file, &index_map);
 
@@ -902,10 +929,10 @@ void HeeksCADapp::SaveXMLFile(const char *filepath)
 		}
 	}
 
-	doc.SaveFile( filepath );  
+	doc.SaveFile( Ttc(filepath) );  
 }
 
-bool HeeksCADapp::SaveFile(const char *filepath, bool use_dialog, bool update_recent_file_list, bool set_app_caption)
+bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_recent_file_list, bool set_app_caption)
 {
 	if(use_dialog){
 		wxFileDialog fd(m_frame, _T("Save graphical data file"), wxEmptyString, filepath, GetKnownFilesWildCardString(false), wxSAVE|wxOVERWRITE_PROMPT);
@@ -917,15 +944,15 @@ bool HeeksCADapp::SaveFile(const char *filepath, bool use_dialog, bool update_re
 	wxString wf(filepath);
 	wf.LowerCase();
 
-	if(wf.EndsWith(".heeks"))
+	if(wf.EndsWith(_T(".heeks")))
 	{
 		SaveXMLFile(filepath);
 	}
-	else if(wf.EndsWith(".dxf"))
+	else if(wf.EndsWith(_T(".dxf")))
 	{
 		SaveDXFFile(filepath);
 	}
-	else if(wf.EndsWith(".stl"))
+	else if(wf.EndsWith(_T(".stl")))
 	{
 		SaveSTLFile(filepath);
 	}
@@ -934,8 +961,8 @@ bool HeeksCADapp::SaveFile(const char *filepath, bool use_dialog, bool update_re
 	}
 	else
 	{
-		char mess[1024];
-		sprintf(mess, "Invalid file type chosen ( expecting file with %s suffix )", wxGetApp().GetKnownFilesCommaSeparatedList(false));
+		wxChar mess[1024];
+		wsprintf(mess, _T("Invalid file type chosen ( expecting file with %s suffix )"), wxGetApp().GetKnownFilesCommaSeparatedList(false));
 		wxMessageBox(mess);
 		return false;
 	}
@@ -1094,13 +1121,13 @@ static std::vector<ToolIndex> tool_index_list;
 class DeleteMarkedListTool : public Tool
 {
 protected:
-	std::string m_text;
+	wxString m_text;
 
 public:
-	DeleteMarkedListTool(void) {m_text.assign("Delete");}
-	DeleteMarkedListTool(const char* text) {m_text.assign(text);}
+	DeleteMarkedListTool(void) {m_text.assign(_T("Delete"));}
+	DeleteMarkedListTool(const wxChar* text) {m_text.assign(text);}
 	
-	const char* GetTitle() {return m_text.c_str();}
+	const wxChar* GetTitle() {return m_text.c_str();}
 	void Run() {wxGetApp().DeleteMarkedItems();}
 };
 
@@ -1118,7 +1145,7 @@ void HeeksCADapp::DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObje
 	{
 		if (m_marked_list->size() > 1)
 		{
-			f_list.push_back(new DeleteMarkedListTool("Delete Marked Items"));
+			f_list.push_back(new DeleteMarkedListTool(_T("Delete Marked Items")));
 			f_list.push_back(NULL);
 		}
 		else if (marked_object->GetFirstOfEverything())
@@ -1174,7 +1201,7 @@ bool HeeksCADapp::RollForward(void)
 	return result;
 }
 
-void HeeksCADapp::StartHistory(const char* str)
+void HeeksCADapp::StartHistory(const wxChar* str)
 {
 	history->StartHistory(str);
 }
@@ -1225,8 +1252,8 @@ bool HeeksCADapp::Add(HeeksObj *object, HeeksObj* prev_object)
 void HeeksCADapp::DeleteUndoably(HeeksObj *object){
 	if(object == NULL)return;
 	RemoveObjectTool *tool = new RemoveObjectTool(object);
-	char str[1024];
-	sprintf(str, "Deleting %s", object->GetShortStringOrTypeString());
+	wxChar str[1024];
+	wsprintf(str, _T("Deleting %s"), object->GetShortStringOrTypeString());
 	StartHistory(str);
 	DoToolUndoably(tool);
 	EndHistory();
@@ -1376,24 +1403,24 @@ static void AddPropertyCallBack(Property* p)
 
 void HeeksCADapp::GetOptions(std::list<Property *> *list)
 {
-	list->push_back ( new PropertyColor ( "background color",  background_color, on_set_background_color ) );
-	list->push_back ( new PropertyColor ( "current color",  current_color, on_set_current_color ) );
-	list->push_back ( new PropertyColor ( "construction color",  construction_color, on_set_construction_color ) );
+	list->push_back ( new PropertyColor ( _T("background color"),  background_color, on_set_background_color ) );
+	list->push_back ( new PropertyColor ( _T("current color"),  current_color, on_set_current_color ) );
+	list->push_back ( new PropertyColor ( _T("construction color"),  construction_color, on_set_construction_color ) );
 	{
-		std::list< std::string > choices;
-		choices.push_back ( std::string ( "no grid" ) );
-		choices.push_back ( std::string ( "faint color" ) );
-		choices.push_back ( std::string ( "alpha blending" ) );
-		choices.push_back ( std::string ( "colored alpha blending" ) );
-		list->push_back ( new PropertyChoice ( "grid mode",  choices, grid_mode, on_set_grid_mode ) );
+		std::list< wxString > choices;
+		choices.push_back ( wxString ( _T("no grid") ) );
+		choices.push_back ( wxString ( _T("faint color") ) );
+		choices.push_back ( wxString ( _T("alpha blending") ) );
+		choices.push_back ( wxString ( _T("colored alpha blending") ) );
+		list->push_back ( new PropertyChoice ( _T("grid mode"),  choices, grid_mode, on_set_grid_mode ) );
 	}
-	list->push_back(new PropertyDouble("grid size", digitizing_grid, on_grid_edit));
-	list->push_back(new PropertyCheck("grid", draw_to_grid, on_grid));
-	list->push_back(new PropertyDouble("geometry tolerance", m_geom_tol, on_set_geom_tol));
+	list->push_back(new PropertyDouble(_T("grid size"), digitizing_grid, on_grid_edit));
+	list->push_back(new PropertyCheck(_T("grid"), draw_to_grid, on_grid));
+	list->push_back(new PropertyDouble(_T("geometry tolerance"), m_geom_tol, on_set_geom_tol));
 	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
 		wxDynamicLibrary* shared_library = *It;
 		list_for_GetOptions = list;
-		void(*GetOptions)(void(*)(Property*)) = (void(*)(void(*)(Property*)))(shared_library->GetSymbol("GetOptions"));
+		void(*GetOptions)(void(*)(Property*)) = (void(*)(void(*)(Property*)))(shared_library->GetSymbol(_T("GetOptions")));
 		(*GetOptions)(AddPropertyCallBack);
 	}
 }
@@ -1409,7 +1436,7 @@ void HeeksCADapp::DeleteMarkedItems()
 		DeleteUndoably(*(list.begin()));
 	}
 	else if(list.size()>1){
-		StartHistory("Delete Marked Items");
+		StartHistory(_T("Delete Marked Items"));
 		DeleteUndoably(list);
 		EndHistory();
 	}
@@ -1421,8 +1448,8 @@ void HeeksCADapp::AddUndoably(HeeksObj *object, HeeksObj* owner, HeeksObj* prev_
 	if(object == NULL)return;
 	if(owner == NULL)owner = this;
 	AddObjectTool *tool = new AddObjectTool(object, owner, prev_object);
-	char str[1024];
-	sprintf(str, "*Adding %s", object->GetShortStringOrTypeString());
+	wxChar str[1024];
+	wsprintf(str, _T("*Adding %s"), object->GetShortStringOrTypeString());
 	StartHistory(str);
 	DoToolUndoably(tool);
 	EndHistory();
@@ -1444,7 +1471,7 @@ void HeeksCADapp::glColorEnsuringContrast(const HeeksColor &c)
 
 static wxString known_file_ext;
 
-const char* HeeksCADapp::GetKnownFilesWildCardString(bool open)const
+const wxChar* HeeksCADapp::GetKnownFilesWildCardString(bool open)const
 {
 	if(open){
 		wxList handlers = wxImage::GetHandlers();
@@ -1454,32 +1481,32 @@ const char* HeeksCADapp::GetKnownFilesWildCardString(bool open)const
 		{
 			wxImageHandler* handler = (wxImageHandler*)(*It);
 			wxString ext = handler->GetExtension();
-			if(It != handlers.begin())imageExtStr.Append(";");
-			imageExtStr.Append("*.");
+			if(It != handlers.begin())imageExtStr.Append(_T(";"));
+			imageExtStr.Append(_T("*."));
 			imageExtStr.Append(ext);
-			if(It != handlers.begin())imageExtStr2.Append(" ");
-			imageExtStr2.Append("*.");
+			if(It != handlers.begin())imageExtStr2.Append(_T(" "));
+			imageExtStr2.Append(_T("*."));
 			imageExtStr2.Append(ext);
 		}
-		known_file_ext = "Known Files |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl;*.svg;*.dxf;" + imageExtStr + "|Heeks files (*.heeks)|*.heeks|IGES files (*.igs *.iges)|*.igs;*.iges|STEP files (*.stp *.step)|*.stp;*.step|STL files (*.stl)|*.stl|Scalar Vector Graphics files (*.svg)|*.svg|DXF files (*.dxf)|*.dxf|Picture files (" + imageExtStr2 + ")|" + imageExtStr;
+		known_file_ext = _T("Known Files |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl;*.svg;*.dxf;") + imageExtStr + _T("|Heeks files (*.heeks)|*.heeks|IGES files (*.igs *.iges)|*.igs;*.iges|STEP files (*.stp *.step)|*.stp;*.step|STL files (*.stl)|*.stl|Scalar Vector Graphics files (*.svg)|*.svg|DXF files (*.dxf)|*.dxf|Picture files (") + imageExtStr2 + _T(")|") + imageExtStr;
 		return known_file_ext.c_str();
 	}
 	else{
 		// file save
-		return "Known Files |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl;*.dxf|Heeks files (*.heeks)|*.heeks|IGES files (*.igs *.iges)|*.igs;*.iges|STEP files (*.stp *.step)|*.stp;*.step|STL files (*.stl)|*.stl|DXF files (*.dxf)|*.dxf";
+		return _T("Known Files |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl;*.dxf|Heeks files (*.heeks)|*.heeks|IGES files (*.igs *.iges)|*.igs;*.iges|STEP files (*.stp *.step)|*.stp;*.step|STL files (*.stl)|*.stl|DXF files (*.dxf)|*.dxf");
 	}
 }
 
-const char* HeeksCADapp::GetKnownFilesCommaSeparatedList(bool open)const
+const wxChar* HeeksCADapp::GetKnownFilesCommaSeparatedList(bool open)const
 {
 	if(open){
 		wxList handlers = wxImage::GetHandlers();
-		wxString known_ext_str = "heeks, igs, iges, stp, step, stl, svg, dxf";
+		wxString known_ext_str = _T("heeks, igs, iges, stp, step, stl, svg, dxf");
 		for(wxList::iterator It = handlers.begin(); It != handlers.end(); It++)
 		{
 			wxImageHandler* handler = (wxImageHandler*)(*It);
 			wxString ext = handler->GetExtension();
-			known_ext_str.Append(", ");
+			known_ext_str.Append(_T(", "));
 			known_ext_str.Append(ext);
 		}
 
@@ -1487,7 +1514,7 @@ const char* HeeksCADapp::GetKnownFilesCommaSeparatedList(bool open)const
 	}
 	else{
 		// file save
-		return "heeks, igs, iges, stp, step, stl, dxf";
+		return _T("heeks, igs, iges, stp, step, stl, dxf");
 	}
 }
 
@@ -1501,7 +1528,7 @@ public:
 	MarkObjectTool(MarkedObject *o, const wxPoint& point, bool xor_marked_list){m_marked_object = o; m_point = point; m_xor_marked_list = xor_marked_list;}
 
 	// Tool's virtual functions
-	const char* GetTitle(){return "Mark";}
+	const wxChar* GetTitle(){return _T("Mark");}
 	void Run(){
 		if(m_marked_object == NULL)return;
 		if(m_marked_object->GetObject() == NULL)return;
@@ -1643,7 +1670,7 @@ void HeeksCADapp::PassMouseWheelToGraphics(wxMouseEvent& event)
 	m_frame->m_graphics->OnMouse(event);
 }
 
-int HeeksCADapp::PickObjects(const char* str)
+int HeeksCADapp::PickObjects(const wxChar* str)
 {
 	CInputMode* save_mode = input_mode_object;
 	m_select_mode->m_prompt_when_doing_a_main_loop.assign(str);
@@ -1657,7 +1684,7 @@ int HeeksCADapp::PickObjects(const char* str)
 	return 1;
 }
 
-bool HeeksCADapp::PickPosition(const char* str, double* pos)
+bool HeeksCADapp::PickPosition(const wxChar* str, double* pos)
 {
 	CInputMode* save_mode = input_mode_object;
 	m_digitizing->m_prompt_when_doing_a_main_loop.assign(str);
@@ -1762,7 +1789,7 @@ void HeeksCADapp::OnNewOrOpen(bool open)
 {
 	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
 		wxDynamicLibrary* shared_library = *It;
-		void(*fnOnNewOrOpen)(int) = (void(*)(int))(shared_library->GetSymbol("OnNewOrOpen"));
+		void(*fnOnNewOrOpen)(int) = (void(*)(int))(shared_library->GetSymbol(_T("OnNewOrOpen")));
 		if(fnOnNewOrOpen){
 			(*fnOnNewOrOpen)(open ? 1:0);
 		}
@@ -1778,8 +1805,8 @@ void HeeksCADapp::GetRecentFilesProfileString()
 {
 	for(int i = 0; i < MAX_RECENT_FILES; i++)
 	{
-		char key_name[1024];
-		sprintf(key_name, "RecentFilePath%d", i);
+		wxChar key_name[1024];
+		wsprintf(key_name, _T("RecentFilePath%d"), i);
 		wxString filepath = m_config->Read(key_name);
 		if(filepath.IsEmpty())break;
 		m_recent_files.push_back(filepath);
@@ -1791,8 +1818,8 @@ void HeeksCADapp::WriteRecentFilesProfileString()
 	std::list< wxString >::iterator It = m_recent_files.begin();
 	for(int i = 0; i < MAX_RECENT_FILES; i++)
 	{
-		char key_name[1024];
-		sprintf(key_name, "RecentFilePath%d", i);
+		wxChar key_name[1024];
+		wsprintf(key_name, _T("RecentFilePath%d"), i);
 		wxString filepath;
 		if(It != m_recent_files.end())
 		{
@@ -1803,7 +1830,7 @@ void HeeksCADapp::WriteRecentFilesProfileString()
 	}
 }
 
-void HeeksCADapp::InsertRecentFileItem(const char* filepath)
+void HeeksCADapp::InsertRecentFileItem(const wxChar* filepath)
 {
 	// add to recent files list
 	m_recent_files.remove(filepath);
@@ -1816,8 +1843,8 @@ bool HeeksCADapp::CheckForModifiedDoc()
 	// returns true if OK to continue opening file
 	if(history->IsModified())
 	{
-		char str[1024];
-		sprintf(str, "Save changes to %s", m_filepath.c_str());
+		wxChar str[1024];
+		wsprintf(str, _T("Save changes to %s"), m_filepath.c_str());
 		int res = wxMessageBox(str, wxMessageBoxCaptionStr, wxCANCEL|wxYES_NO|wxCENTRE);
 		if(res == wxCANCEL)return false;
 		if(res == wxYES)
@@ -1831,9 +1858,9 @@ bool HeeksCADapp::CheckForModifiedDoc()
 
 void HeeksCADapp::SetFrameTitle()
 {
-	char str[1024];
+	wxChar str[1024];
 	wxFileName f(m_filepath.c_str());
-	sprintf(str, "%s.%s - %s", f.GetName(), f.GetExt(), m_filepath.c_str());
+	wsprintf(str, _T("%s.%s - %s"), f.GetName(), f.GetExt(), m_filepath.c_str());
 	m_frame->SetTitle(str);
 }
 
@@ -1897,7 +1924,7 @@ void HeeksCADapp::RemoveID(HeeksObj* object)
 		FindIt2 = next_id_map.insert( std::make_pair(id_group_type, next_id) ).first;
 	}
 	int &next_id = FindIt2->second;
-	next_id = object->GetID(); // this id has now become available
+	next_id = object->m_id; // this id has now become available
 	map.erase(next_id);
 }
 
@@ -1909,7 +1936,7 @@ void HeeksCADapp::ResetIDs()
 
 void HeeksCADapp::WriteIDToXML(HeeksObj* object, TiXmlElement *element)
 {
-	element->SetAttribute("id", object->GetID());
+	element->SetAttribute("id", object->m_id);
 }
 
 void HeeksCADapp::ReadIDFromXML(HeeksObj* object, TiXmlElement *element)
@@ -1917,7 +1944,7 @@ void HeeksCADapp::ReadIDFromXML(HeeksObj* object, TiXmlElement *element)
 	// get the attributes
 	for(TiXmlAttribute* a = element->FirstAttribute(); a; a = a->Next())
 	{
-		wxString name(a->Name());
+		std::string name(a->Name());
 		if(name == "id"){object->SetID(a->IntValue());}
 	}
 }
@@ -1936,9 +1963,9 @@ public:
 		*success_for_double_input = true;
 		wxGetApp().ExitMainLoop();
 	}
-	const char* GetTitle(){return "Apply";}
-	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + "/bitmaps/apply.png", wxBITMAP_TYPE_PNG);}	return m_bitmap;}
-	const char* GetToolTip(){return "Accept value and continue";}
+	const wxChar* GetTitle(){return _T("Apply");}
+	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/apply.png"), wxBITMAP_TYPE_PNG);}	return m_bitmap;}
+	const wxChar* GetToolTip(){return _T("Accept value and continue");}
 };
 wxBitmap* CInputApply::m_bitmap = NULL;
 
@@ -1950,9 +1977,9 @@ private:
 
 public:
 	void Run(){wxGetApp().ExitMainLoop();}
-	const char* GetTitle(){return "Cancel";}
-	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + "/bitmaps/cancel.png", wxBITMAP_TYPE_PNG);}return m_bitmap;}
-	const char* GetToolTip(){return "Cancel operation";}
+	const wxChar* GetTitle(){return _T("Cancel");}
+	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/cancel.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
+	const wxChar* GetToolTip(){return _T("Cancel operation");}
 };
 wxBitmap* CInputCancel::m_bitmap = NULL;
 
@@ -1961,12 +1988,12 @@ CInputCancel input_cancel;
 class CDoubleInput: public CInputMode, CLeftAndRight
 {
 public:
-	std::string m_title;
-	std::string m_value_title;
+	wxString m_title;
+	wxString m_value_title;
 	double m_value;
 	bool m_success;
 
-	CDoubleInput(const char* prompt, const char* value_name, double initial_value)
+	CDoubleInput(const wxChar* prompt, const wxChar* value_name, double initial_value)
 	{
 		m_title.assign(prompt);
 		m_value_title.assign(value_name);
@@ -1976,7 +2003,7 @@ public:
 	virtual ~CDoubleInput(){}
 
 	// virtual functions for InputMode
-	const char* GetTitle(){return m_title.c_str();}
+	const wxChar* GetTitle(){return m_title.c_str();}
 	void OnMouse( wxMouseEvent& event ){
 		bool event_used = false;
 		if(LeftAndRightPressed(event, event_used))
@@ -1995,7 +2022,7 @@ public:
 	}
 };
 
-bool HeeksCADapp::InputDouble(const char* prompt, const char* value_name, double &value)
+bool HeeksCADapp::InputDouble(const wxChar* prompt, const wxChar* value_name, double &value)
 {
 	CInputMode* save_mode = input_mode_object;
 	CDoubleInput double_input(prompt, value_name, value);

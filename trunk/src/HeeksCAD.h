@@ -68,7 +68,7 @@ public:
 	wxConfig* m_config;
 	MarkedList *m_marked_list;
 	bool m_doing_rollback;
-	std::string m_filepath;
+	wxString m_filepath;
 	bool m_light_push_matrix;
 	int m_hide_marked_list_stack;
 	double m_geom_tol;
@@ -77,6 +77,7 @@ public:
 	bool m_show_ruler;
 	std::list< wxString > m_recent_files;
 	bool m_disable_SetObjectID_on_Add;
+	wxString m_version_number;
 
 	// HeeksObj's virtual functions
 	void glCommands(bool select, bool marked, bool no_color);
@@ -104,24 +105,24 @@ public:
 	void DoToolUndoably(Tool *);
 	bool RollBack(void);
 	bool RollForward(void);
-	void StartHistory(const char* str);
+	void StartHistory(const wxChar* str);
 	void EndHistory(void);
 	void ClearRollingForward(void);
 	bool Add(HeeksObj* object, HeeksObj* prev_object);
 	void Reset();
 	HeeksObj* ReadXMLElement(TiXmlElement* pElem);
 	void InitializeXMLFunctions();
-	void OpenXMLFile(const char *filepath);
+	void OpenXMLFile(const wxChar *filepath);
 	void ReadSVGElement(TiXmlElement* pElem);
-	void OpenSVGFile(const char *filepath);
-	void OpenSTLFile(const char *filepath);
-	void OpenDXFFile(const char *filepath);
-	bool OpenImageFile(const char *filepath);
-	bool OpenFile(const char *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
-	void SaveDXFFile(const char *filepath);
-	void SaveSTLFile(const char *filepath);
-	void SaveXMLFile(const char *filepath);
-	bool SaveFile(const char *filepath, bool use_dialog = false, bool update_recent_file_list = true, bool set_app_caption = true);
+	void OpenSVGFile(const wxChar *filepath);
+	void OpenSTLFile(const wxChar *filepath);
+	void OpenDXFFile(const wxChar *filepath);
+	bool OpenImageFile(const wxChar *filepath);
+	bool OpenFile(const wxChar *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
+	void SaveDXFFile(const wxChar *filepath);
+	void SaveSTLFile(const wxChar *filepath);
+	void SaveXMLFile(const wxChar *filepath);
+	bool SaveFile(const wxChar *filepath, bool use_dialog = false, bool update_recent_file_list = true, bool set_app_caption = true);
 	void DeleteUndoably(HeeksObj* object);
 	void DeleteUndoably(const std::list<HeeksObj*>& list);
 	void TransformUndoably(HeeksObj *object, double *m);
@@ -145,21 +146,21 @@ public:
 	void RemoveObserver(Observer* observer);
 	void ObserversOnChange(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified);
 	void ObserversMarkedListChanged(bool all_marked, bool none_marked, const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed);
-	const char* GetKnownFilesWildCardString(bool open = true)const;
-	const char* GetKnownFilesCommaSeparatedList(bool open = true)const;
+	const wxChar* GetKnownFilesWildCardString(bool open = true)const;
+	const wxChar* GetKnownFilesCommaSeparatedList(bool open = true)const;
 	void AddMenusToToolList(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool from_graphics_canvas, bool control_pressed);
 	wxString GetExeFolder()const;
 	void get_2d_arc_segments(double xs, double ys, double xe, double ye, double xc, double yc, bool dir, bool want_start, double pixels_per_mm, void(*callbackfunc)(const double* xy));
 	void PassMouseWheelToGraphics(wxMouseEvent& event);
-	int PickObjects(const char* str);
-	bool PickPosition(const char* str, double* pos);
+	int PickObjects(const wxChar* str);
+	bool PickPosition(const wxChar* str, double* pos);
 	void glSphere(double radius, const double* pos = NULL);
 	void OnNewOrOpen(bool open);
 	void RegisterHideableWindow(wxWindow* w);
 	void RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem));
 	void GetRecentFilesProfileString();
 	void WriteRecentFilesProfileString();
-	void InsertRecentFileItem(const char* filepath);
+	void InsertRecentFileItem(const wxChar* filepath);
 	bool CheckForModifiedDoc(); // returns true, if OK to continue with file open etc.
 	void SetFrameTitle();
 	HeeksObj* GetIDObject(int type, int id);
@@ -169,7 +170,7 @@ public:
 	void ResetIDs();
 	void WriteIDToXML(HeeksObj* object, TiXmlElement *element);
 	void ReadIDFromXML(HeeksObj* object, TiXmlElement *element);
-	bool InputDouble(const char* prompt, const char* value_name, double &value);
+	bool InputDouble(const wxChar* prompt, const wxChar* value_name, double &value);
 };
 
 DECLARE_APP(HeeksCADapp)

@@ -21,7 +21,7 @@ BEGIN_EVENT_TABLE(CGraphicsCanvas, wxGLCanvas)
 END_EVENT_TABLE()
 
 CGraphicsCanvas::CGraphicsCanvas(wxWindow* parent, int *attribList)
-        : wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, "some text", attribList)
+        : wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("some text"), attribList)
 {
 	m_render_on_front_done = false;
 

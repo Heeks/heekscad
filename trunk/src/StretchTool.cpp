@@ -12,12 +12,12 @@ StretchTool::StretchTool(HeeksObj *object, const double *p, const double* shift)
 StretchTool::~StretchTool(void){
 }
 
-std::string stretch_function_string;
+wxString stretch_function_string;
 
 // Tool's virtual functions
-const char* StretchTool::GetTitle(){
-	char str[1024];
-	sprintf(str, "Stretch %s", m_object->GetShortStringOrTypeString());
+const wxChar* StretchTool::GetTitle(){
+	wxChar str[1024];
+	wsprintf(str, _T("Stretch %s"), m_object->GetShortStringOrTypeString());
 	stretch_function_string.assign(str);
 	return stretch_function_string.c_str();
 }

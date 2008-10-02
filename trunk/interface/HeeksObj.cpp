@@ -22,7 +22,7 @@ const HeeksObj& HeeksObj::operator=(const HeeksObj &ho)
 
 static HeeksObj* object_for_properties = NULL;
 
-void on_edit_string(const char* value)
+void on_edit_string(const wxChar* value)
 {
 	object_for_properties->OnEditString(value);
 
@@ -40,9 +40,9 @@ void HeeksObj::GetProperties(std::list<Property *> *list)
 {
 	bool editable = CanEditString();
 	object_for_properties = this;
-	list->push_back(new PropertyString("object type", GetTypeString(), NULL));
-	if(GetShortString())list->push_back(new PropertyString("object title", GetShortString(), editable ? on_edit_string : NULL));
-	list->push_back(new PropertyInt("ID", GetID(), on_set_id));
+	list->push_back(new PropertyString(_T("object type"), GetTypeString(), NULL));
+	if(GetShortString())list->push_back(new PropertyString(_T("object title"), GetShortString(), editable ? on_edit_string : NULL));
+	list->push_back(new PropertyInt(_T("ID"), m_id, on_set_id));
 }
 
 void HeeksObj::GetGripperPositions(std::list<double> *list, bool just_for_endof)
@@ -124,4 +124,12 @@ void HeeksObj::ReadBaseXML(TiXmlElement* element)
 #else
 	heeksCAD->ReadIDFromXML(this, element);
 #endif
+}
+
+bool HeeksObj::OnVisibleLayer()
+{
+	// to do, support multiple layers.
+
+	// for now, layer -1 is invisible, all others are visible
+	return m_layer != -1;
 }

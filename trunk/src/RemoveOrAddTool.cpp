@@ -19,11 +19,11 @@ RemoveOrAddTool::~RemoveOrAddTool()
 	if(!m_belongs_to_owner)delete m_object;
 }
 
-static std::string string_for_GetTitle;
+static wxString string_for_GetTitle;
 
-const char* AddObjectTool::GetTitle()
+const wxChar* AddObjectTool::GetTitle()
 {
-	string_for_GetTitle.assign("Add ");
+	string_for_GetTitle.assign(_T("Add "));
 	string_for_GetTitle.append(m_object->GetShortStringOrTypeString());
 	return string_for_GetTitle.c_str();
 }
@@ -38,7 +38,7 @@ void RemoveOrAddTool::Add()
 
 	if (m_owner == NULL)
 	{
-		wxMessageBox("*Can't Have NULL owner!");
+		wxMessageBox(_T("*Can't Have NULL owner!"));
 		return;
 	}
 
@@ -105,7 +105,7 @@ void ManyRemoveOrAddTool::Add()
 {
 	if (m_owner == NULL)
 	{
-		wxMessageBox("*Can't have NULL owner!");
+		wxMessageBox(_T("*Can't have NULL owner!"));
 		return;
 	}
 
@@ -141,9 +141,9 @@ void ManyRemoveOrAddTool::Remove()
 	m_belongs_to_owner = false;
 }
 
-const char* AddObjectsTool::GetTitle()
+const wxChar* AddObjectsTool::GetTitle()
 {
-	return "Add Objects";
+	return _T("Add Objects");
 }
 
 void AddObjectsTool::Run()
@@ -156,9 +156,9 @@ void AddObjectsTool::RollBack()
 	Remove();
 }
 
-const char* RemoveObjectsTool::GetTitle()
+const wxChar* RemoveObjectsTool::GetTitle()
 {
-	return "Remove Objects";
+	return _T("Remove Objects");
 }
 
 void RemoveObjectsTool::Run()

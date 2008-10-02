@@ -25,7 +25,7 @@ public:
 	int GetIDGroupType()const{return LineType;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
-	const char* GetTypeString(void)const{return "Arc";}
+	const wxChar* GetTypeString(void)const{return _T("Arc");}
 	HeeksObj *MakeACopy(void)const;
 	wxIcon* GetIcon();
 	void ModifyByMatrix(const double *mat);

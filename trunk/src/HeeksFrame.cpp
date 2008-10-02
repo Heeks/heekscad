@@ -15,6 +15,9 @@
 #include "HArc.h"
 #include "RuledSurface.h"
 #include "wx/dnd.h"
+#include <fstream>
+
+using namespace std;
 
 enum{
 	ID_LINES = 1,
@@ -202,34 +205,34 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	wxString exe_folder = wxGetApp().GetExeFolder();
 
 	// main tool bar
-    m_toolBar->AddTool(wxID_NEW, _T("New"), wxBitmap(exe_folder + "/bitmaps/new.png", wxBITMAP_TYPE_PNG), _T("New file"));
-    m_toolBar->AddTool(wxID_OPEN, _T("Open"), wxBitmap(exe_folder + "/bitmaps/open.png", wxBITMAP_TYPE_PNG), _T("Open file"));
-    m_toolBar->AddTool(wxID_SAVE, _T("Save"), wxBitmap(exe_folder + "/bitmaps/save.png", wxBITMAP_TYPE_PNG), _T("Save file"));
-    m_toolBar->AddTool(ID_UNDO, _T("Undo"), wxBitmap(exe_folder + "/bitmaps/undo.png", wxBITMAP_TYPE_PNG), _T("Undo the previous command"));
-    m_toolBar->AddTool(ID_REDO, _T("Redo"), wxBitmap(exe_folder + "/bitmaps/redo.png", wxBITMAP_TYPE_PNG), _T("Redo the next command"));
-    m_toolBar->AddTool(ID_VIEWING, _T("Select"), wxBitmap(exe_folder + "/bitmaps/select.png", wxBITMAP_TYPE_PNG), _T("Select Mode"));
-    m_toolBar->AddTool(ID_LINES, _T("Lines"), wxBitmap(exe_folder + "/bitmaps/lines.png", wxBITMAP_TYPE_PNG), _T("Start Line Drawing"));
-    m_toolBar->AddTool(ID_CIRCLES, _T("Circles"), wxBitmap(exe_folder + "/bitmaps/circles.png", wxBITMAP_TYPE_PNG), _T("Start Circle Drawing"));
-    m_toolBar->AddTool(ID_ILINE, _T("ILine"), wxBitmap(exe_folder + "/bitmaps/iline.png", wxBITMAP_TYPE_PNG), _T("Start Drawing Infinite Lines"));
+    m_toolBar->AddTool(wxID_NEW, _T("New"), wxBitmap(exe_folder + _T("/bitmaps/new.png"), wxBITMAP_TYPE_PNG), _T("New file"));
+    m_toolBar->AddTool(wxID_OPEN, _T("Open"), wxBitmap(exe_folder + _T("/bitmaps/open.png"), wxBITMAP_TYPE_PNG), _T("Open file"));
+    m_toolBar->AddTool(wxID_SAVE, _T("Save"), wxBitmap(exe_folder + _T("/bitmaps/save.png"), wxBITMAP_TYPE_PNG), _T("Save file"));
+    m_toolBar->AddTool(ID_UNDO, _T("Undo"), wxBitmap(exe_folder + _T("/bitmaps/undo.png"), wxBITMAP_TYPE_PNG), _T("Undo the previous command"));
+    m_toolBar->AddTool(ID_REDO, _T("Redo"), wxBitmap(exe_folder + _T("/bitmaps/redo.png"), wxBITMAP_TYPE_PNG), _T("Redo the next command"));
+    m_toolBar->AddTool(ID_VIEWING, _T("Select"), wxBitmap(exe_folder + _T("/bitmaps/select.png"), wxBITMAP_TYPE_PNG), _T("Select Mode"));
+    m_toolBar->AddTool(ID_LINES, _T("Lines"), wxBitmap(exe_folder + _T("/bitmaps/lines.png"), wxBITMAP_TYPE_PNG), _T("Start Line Drawing"));
+    m_toolBar->AddTool(ID_CIRCLES, _T("Circles"), wxBitmap(exe_folder + _T("/bitmaps/circles.png"), wxBITMAP_TYPE_PNG), _T("Start Circle Drawing"));
+    m_toolBar->AddTool(ID_ILINE, _T("ILine"), wxBitmap(exe_folder + _T("/bitmaps/iline.png"), wxBITMAP_TYPE_PNG), _T("Start Drawing Infinite Lines"));
     m_toolBar->Realize();
 
 	// Solids tool bar
-    m_solidBar->AddTool(ID_SPHERE, _T("Sphere"), wxBitmap(exe_folder + "/bitmaps/sphere.png", wxBITMAP_TYPE_PNG), _T("Add a sphere"));
-    m_solidBar->AddTool(ID_CUBE, _T("Cube"), wxBitmap(exe_folder + "/bitmaps/cube.png", wxBITMAP_TYPE_PNG), _T("Add a cube"));
-    m_solidBar->AddTool(ID_CYL, _T("Cylinder"), wxBitmap(exe_folder + "/bitmaps/cyl.png", wxBITMAP_TYPE_PNG), _T("Add a cylinder"));
-    m_solidBar->AddTool(ID_RULED_SURFACE, _T("Ruled Surface"), wxBitmap(exe_folder + "/bitmaps/ruled.png", wxBITMAP_TYPE_PNG), _T("Create a lofted face"));
-    m_solidBar->AddTool(ID_EXTRUDE, _T("Extrude"), wxBitmap(exe_folder + "/bitmaps/extrude.png", wxBITMAP_TYPE_PNG), _T("Extrude a wire or face"));
-	m_solidBar->AddTool(ID_SUBTRACT, _T("Cut"), wxBitmap(exe_folder + "/bitmaps/cut.png", wxBITMAP_TYPE_PNG), _T("Cut one solid from another"));
-	m_solidBar->AddTool(ID_FUSE, _T("Fuse"), wxBitmap(exe_folder + "/bitmaps/fuse.png", wxBITMAP_TYPE_PNG), _T("Fuse one solid to another"));
-	m_solidBar->AddTool(ID_COMMON, _T("Common"), wxBitmap(exe_folder + "/bitmaps/common.png", wxBITMAP_TYPE_PNG), _T("Find common solid between two solids"));
-    m_solidBar->AddTool(ID_REDRAW, _T("Redraw"), wxBitmap(exe_folder + "/bitmaps/redraw.png", wxBITMAP_TYPE_PNG), _T("Redraw"));
+    m_solidBar->AddTool(ID_SPHERE, _T("Sphere"), wxBitmap(exe_folder + _T("/bitmaps/sphere.png"), wxBITMAP_TYPE_PNG), _T("Add a sphere"));
+    m_solidBar->AddTool(ID_CUBE, _T("Cube"), wxBitmap(exe_folder + _T("/bitmaps/cube.png"), wxBITMAP_TYPE_PNG), _T("Add a cube"));
+    m_solidBar->AddTool(ID_CYL, _T("Cylinder"), wxBitmap(exe_folder + _T("/bitmaps/cyl.png"), wxBITMAP_TYPE_PNG), _T("Add a cylinder"));
+    m_solidBar->AddTool(ID_RULED_SURFACE, _T("Ruled Surface"), wxBitmap(exe_folder + _T("/bitmaps/ruled.png"), wxBITMAP_TYPE_PNG), _T("Create a lofted face"));
+    m_solidBar->AddTool(ID_EXTRUDE, _T("Extrude"), wxBitmap(exe_folder + _T("/bitmaps/extrude.png"), wxBITMAP_TYPE_PNG), _T("Extrude a wire or face"));
+	m_solidBar->AddTool(ID_SUBTRACT, _T("Cut"), wxBitmap(exe_folder + _T("/bitmaps/cut.png"), wxBITMAP_TYPE_PNG), _T("Cut one solid from another"));
+	m_solidBar->AddTool(ID_FUSE, _T("Fuse"), wxBitmap(exe_folder + _T("/bitmaps/fuse.png"), wxBITMAP_TYPE_PNG), _T("Fuse one solid to another"));
+	m_solidBar->AddTool(ID_COMMON, _T("Common"), wxBitmap(exe_folder + _T("/bitmaps/common.png"), wxBITMAP_TYPE_PNG), _T("Find common solid between two solids"));
+    m_solidBar->AddTool(ID_REDRAW, _T("Redraw"), wxBitmap(exe_folder + _T("/bitmaps/redraw.png"), wxBITMAP_TYPE_PNG), _T("Redraw"));
 	m_solidBar->Realize();
 
 	// viewing tool bar
-	m_viewingBar->AddTool(ID_MAG_PREVIOUS, _T("View Back"), wxBitmap(exe_folder + "/bitmaps/magprev.png", wxBITMAP_TYPE_PNG), _T("Go back to previous view"));
-	m_viewingBar->AddTool(ID_MAG, _T("Zoom Window"), wxBitmap(exe_folder + "/bitmaps/mag.png", wxBITMAP_TYPE_PNG), _T("Zoom in to a dragged window"));
-	m_viewingBar->AddTool(ID_MAG_EXTENTS, _T("Mag Extents"), wxBitmap(exe_folder + "/bitmaps/magextents.png", wxBITMAP_TYPE_PNG), _T("Zoom in to fit the extents of the drawing into the graphics window"));
-	m_viewingBar->AddTool(ID_MAG_NO_ROT, _T("Mag No Rotation"), wxBitmap(exe_folder + "/bitmaps/magnorot.png", wxBITMAP_TYPE_PNG), _T("Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"));
+	m_viewingBar->AddTool(ID_MAG_PREVIOUS, _T("View Back"), wxBitmap(exe_folder + _T("/bitmaps/magprev.png"), wxBITMAP_TYPE_PNG), _T("Go back to previous view"));
+	m_viewingBar->AddTool(ID_MAG, _T("Zoom Window"), wxBitmap(exe_folder + _T("/bitmaps/mag.png"), wxBITMAP_TYPE_PNG), _T("Zoom in to a dragged window"));
+	m_viewingBar->AddTool(ID_MAG_EXTENTS, _T("Mag Extents"), wxBitmap(exe_folder + _T("/bitmaps/magextents.png"), wxBITMAP_TYPE_PNG), _T("Zoom in to fit the extents of the drawing into the graphics window"));
+	m_viewingBar->AddTool(ID_MAG_NO_ROT, _T("Mag No Rotation"), wxBitmap(exe_folder + _T("/bitmaps/magnorot.png"), wxBITMAP_TYPE_PNG), _T("Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"));
 	m_viewingBar->Realize();
 
 	bool objects_visible = true;
@@ -241,23 +244,23 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	bool viewingbar_visible = true;
 	bool statusbar_visible = true;
 
-	wxGetApp().m_config->Read("FrameObjectsVisible", &objects_visible);
-	wxGetApp().m_config->Read("FrameOptionsVisible", &options_visible);
-	wxGetApp().m_config->Read("FrameInputVisible", &input_canvas_visible);
-	wxGetApp().m_config->Read("FramePropertiesVisible", &properties_visible);
-	wxGetApp().m_config->Read("FrameToolBarVisible", &toolbar_visible);
-	wxGetApp().m_config->Read("FrameSolidBarVisible", &solidbar_visible);
-	wxGetApp().m_config->Read("FrameViewingBarVisible", &viewingbar_visible);
-	wxGetApp().m_config->Read("FrameStatusBarVisible", &statusbar_visible);
+	wxGetApp().m_config->Read(_T("FrameObjectsVisible"), &objects_visible);
+	wxGetApp().m_config->Read(_T("FrameOptionsVisible"), &options_visible);
+	wxGetApp().m_config->Read(_T("FrameInputVisible"), &input_canvas_visible);
+	wxGetApp().m_config->Read(_T("FramePropertiesVisible"), &properties_visible);
+	wxGetApp().m_config->Read(_T("FrameToolBarVisible"), &toolbar_visible);
+	wxGetApp().m_config->Read(_T("FrameSolidBarVisible"), &solidbar_visible);
+	wxGetApp().m_config->Read(_T("FrameViewingBarVisible"), &viewingbar_visible);
+	wxGetApp().m_config->Read(_T("FrameStatusBarVisible"), &statusbar_visible);
 
-	m_aui_manager->AddPane(m_graphics, wxAuiPaneInfo().Name("Graphics").Caption("Graphics").CentrePane().BestSize(wxSize(800, 600)));
-	m_aui_manager->AddPane(m_left, wxAuiPaneInfo().Name("Objects").Caption("Objects").Left().BestSize(wxSize(300, 400)));
-	m_aui_manager->AddPane(m_options, wxAuiPaneInfo().Name("Options").Caption("Options").Left().BestSize(wxSize(300, 200)));
-	m_aui_manager->AddPane(m_input_canvas, wxAuiPaneInfo().Name("Input").Caption("Input").Left().BestSize(wxSize(300, 200)));
-	m_aui_manager->AddPane(m_properties, wxAuiPaneInfo().Name("Properties").Caption("Properties").Left().BestSize(wxSize(300, 200)));
-	m_aui_manager->AddPane(m_toolBar, wxAuiPaneInfo().Name("ToolBar").Caption("General Tools").ToolbarPane().Top());
-	m_aui_manager->AddPane(m_solidBar, wxAuiPaneInfo().Name("SolidBar").Caption("Solid Tools").ToolbarPane().Top());
-	m_aui_manager->AddPane(m_viewingBar, wxAuiPaneInfo().Name("ViewingBar").Caption("Viewing Tools").ToolbarPane().Top());
+	m_aui_manager->AddPane(m_graphics, wxAuiPaneInfo().Name(_T("Graphics")).Caption(_T("Graphics")).CentrePane().BestSize(wxSize(800, 600)));
+	m_aui_manager->AddPane(m_left, wxAuiPaneInfo().Name(_T("Objects")).Caption(_T("Objects")).Left().BestSize(wxSize(300, 400)));
+	m_aui_manager->AddPane(m_options, wxAuiPaneInfo().Name(_T("Options")).Caption(_T("Options")).Left().BestSize(wxSize(300, 200)));
+	m_aui_manager->AddPane(m_input_canvas, wxAuiPaneInfo().Name(_T("Input")).Caption(_T("Input")).Left().BestSize(wxSize(300, 200)));
+	m_aui_manager->AddPane(m_properties, wxAuiPaneInfo().Name(_T("Properties")).Caption(_T("Properties")).Left().BestSize(wxSize(300, 200)));
+	m_aui_manager->AddPane(m_toolBar, wxAuiPaneInfo().Name(_T("ToolBar")).Caption(_T("General Tools")).ToolbarPane().Top());
+	m_aui_manager->AddPane(m_solidBar, wxAuiPaneInfo().Name(_T("SolidBar")).Caption(_T("Solid Tools")).ToolbarPane().Top());
+	m_aui_manager->AddPane(m_viewingBar, wxAuiPaneInfo().Name(_T("ViewingBar")).Caption(_T("Viewing Tools")).ToolbarPane().Top());
 
 	m_aui_manager->GetPane(m_left).Show(objects_visible);
 	m_aui_manager->GetPane(m_options).Show(options_visible);
@@ -275,8 +278,15 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	{
 		::wxSetWorkingDirectory(wxGetApp().GetExeFolder());
 
-		ifstream ifs("AddIns.txt");
-		char str[1024];
+#if wxUSE_UNICODE
+		wifstream ifs(_T("AddIns.txt"));
+#else
+		ifstream ifs(_T("AddIns.txt"));
+#endif
+
+		::wxSetWorkingDirectory(_T("C:\\Program Files\\SolidWorks\\SolidWorks"));
+
+		wxChar str[1024];
 		if(!(!ifs)){
 			while(!ifs.eof()){
 				ifs.getline(str, 1024);
@@ -293,7 +303,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 				wxDynamicLibrary* shared_library = new wxDynamicLibrary(wstr);
 				if(shared_library->IsLoaded()){
 					wxGetApp().m_loaded_libraries.push_back(shared_library);
-					void(*OnStartUp)() = (void (*)())(shared_library->GetSymbol("OnStartUp"));
+					void(*OnStartUp)() = (void (*)())(shared_library->GetSymbol(_T("OnStartUp")));
 					(*OnStartUp)();
 				}
 				else{
@@ -314,19 +324,19 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 CHeeksFrame::~CHeeksFrame()
 {
-	wxGetApp().m_config->Write("FrameObjectsVisible", m_aui_manager->GetPane(m_left).IsShown());
-	wxGetApp().m_config->Write("FrameOptionsVisible", m_aui_manager->GetPane(m_options).IsShown());
-	wxGetApp().m_config->Write("FrameInputVisible", m_aui_manager->GetPane(m_input_canvas).IsShown());
-	wxGetApp().m_config->Write("FramePropertiesVisible", m_aui_manager->GetPane(m_properties).IsShown());
-	wxGetApp().m_config->Write("FrameToolBarVisible", m_aui_manager->GetPane(m_toolBar).IsShown());
-	wxGetApp().m_config->Write("FrameSolidBarVisible", m_aui_manager->GetPane(m_solidBar).IsShown());
-	wxGetApp().m_config->Write("FrameViewingBarVisible", m_aui_manager->GetPane(m_viewingBar).IsShown());
-	wxGetApp().m_config->Write("FrameStatusBarVisible", m_statusBar->IsShown());
+	wxGetApp().m_config->Write(_T("FrameObjectsVisible"), m_aui_manager->GetPane(m_left).IsShown());
+	wxGetApp().m_config->Write(_T("FrameOptionsVisible"), m_aui_manager->GetPane(m_options).IsShown());
+	wxGetApp().m_config->Write(_T("FrameInputVisible"), m_aui_manager->GetPane(m_input_canvas).IsShown());
+	wxGetApp().m_config->Write(_T("FramePropertiesVisible"), m_aui_manager->GetPane(m_properties).IsShown());
+	wxGetApp().m_config->Write(_T("FrameToolBarVisible"), m_aui_manager->GetPane(m_toolBar).IsShown());
+	wxGetApp().m_config->Write(_T("FrameSolidBarVisible"), m_aui_manager->GetPane(m_solidBar).IsShown());
+	wxGetApp().m_config->Write(_T("FrameViewingBarVisible"), m_aui_manager->GetPane(m_viewingBar).IsShown());
+	wxGetApp().m_config->Write(_T("FrameStatusBarVisible"), m_statusBar->IsShown());
 
 	// call the shared libraries function OnFrameDelete, so they can write profiel strings while aui manager still exists
 	for(std::list<wxDynamicLibrary*>::iterator It = wxGetApp().m_loaded_libraries.begin(); It != wxGetApp().m_loaded_libraries.end(); It++){
 		wxDynamicLibrary* shared_library = *It;
-		void(*OnFrameDelete)() = (void(*)())(shared_library->GetSymbol("OnFrameDelete"));
+		void(*OnFrameDelete)() = (void(*)())(shared_library->GetSymbol(_T("OnFrameDelete")));
 		if(OnFrameDelete)(*OnFrameDelete)();
 	}
 
@@ -408,7 +418,7 @@ void
 CHeeksFrame::OnAbout( wxCommandEvent& WXUNUSED( event ) )
 {
 	wxMessageBox( wxT( "HeeksCAD" ),
-			wxT( "Version 0.1 October 2007" ), wxOK | wxICON_INFORMATION, this );
+			wxGetApp().m_version_number, wxOK | wxICON_INFORMATION, this );
 }
 
 void CHeeksFrame::OnViewObjects( wxCommandEvent& event )
@@ -567,7 +577,7 @@ CHeeksFrame::OnILineButton( wxCommandEvent& WXUNUSED( event ) )
 
 void CHeeksFrame::OnOpenButton( wxCommandEvent& event )
 {
-    wxFileDialog dialog(this, _T("Open file"), wxEmptyString, wxEmptyString,	_T(wxGetApp().GetKnownFilesWildCardString()));
+    wxFileDialog dialog(this, _T("Open file"), wxEmptyString, wxEmptyString, wxGetApp().GetKnownFilesWildCardString());
     dialog.CentreOnParent();
 
     if (dialog.ShowModal() == wxID_OK)
@@ -584,7 +594,7 @@ void CHeeksFrame::OnOpenButton( wxCommandEvent& event )
 
 void CHeeksFrame::OnImportButton( wxCommandEvent& event )
 {
-    wxFileDialog dialog(this, _T("Import file"), wxEmptyString, wxEmptyString,	_T(wxGetApp().GetKnownFilesWildCardString()));
+    wxFileDialog dialog(this, _T("Import file"), wxEmptyString, wxEmptyString, wxGetApp().GetKnownFilesWildCardString());
     dialog.CentreOnParent();
 
     if (dialog.ShowModal() == wxID_OK)
@@ -756,8 +766,8 @@ void CHeeksFrame::OnSize( wxSizeEvent& evt )
 	wxSize size = evt.GetSize();
 	int width = size.GetWidth();
 	int height = size.GetHeight();
-	wxGetApp().m_config->Write("MainFrameWidth", width);
-	wxGetApp().m_config->Write("MainFrameHeight", height);
+	wxGetApp().m_config->Write(_T("MainFrameWidth"), width);
+	wxGetApp().m_config->Write(_T("MainFrameHeight"), height);
 }
 
 void CHeeksFrame::OnMove( wxMoveEvent& evt )
@@ -765,8 +775,8 @@ void CHeeksFrame::OnMove( wxMoveEvent& evt )
 	wxPoint pos = GetPosition();
 	int posx = pos.x;
 	int posy = pos.y;
-	wxGetApp().m_config->Write("MainFramePosX", posx);
-	wxGetApp().m_config->Write("MainFramePosY", posy);
+	wxGetApp().m_config->Write(_T("MainFramePosX"), posx);
+	wxGetApp().m_config->Write(_T("MainFramePosY"), posy);
 }
 
 int CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&))
@@ -780,7 +790,7 @@ int CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, const wxString& title, wxBit
 	if(m_next_id_for_button > ID_NEXT_ID + 1000)
 	{
 		// too many button IDs!
-		wxMessageBox("too many button IDs!, see CHeeksFrame::AddToolBarTool");
+		wxMessageBox(_T("too many button IDs!, see CHeeksFrame::AddToolBarTool"));
 	}
 
 	int id_to_use = m_next_id_for_button;
@@ -804,7 +814,7 @@ int CHeeksFrame::AddMenuCheckItem(wxMenu* menu, const wxString& title, void(*onB
 	if(m_next_id_for_button > ID_NEXT_ID + 1000)
 	{
 		// too many button IDs!
-		wxMessageBox("too many button IDs!, see CHeeksFrame::AddMenuCheckItem");
+		wxMessageBox(_T("too many button IDs!, see CHeeksFrame::AddMenuCheckItem"));
 	}
 
 	int id_to_use = m_next_id_for_button;
@@ -812,6 +822,29 @@ int CHeeksFrame::AddMenuCheckItem(wxMenu* menu, const wxString& title, void(*onB
 	SExternalButtonFunctions ebf;
 	ebf.on_button = onButtonFunction;
 	ebf.on_update_button = onUpdateButtonFunction;
+	m_external_buttons.insert(std::pair<int, SExternalButtonFunctions > ( id_to_use, ebf ));
+	m_next_id_for_button++;
+	return id_to_use;
+}
+
+int CHeeksFrame::AddMenuItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&)){
+	while(m_external_buttons.find(m_next_id_for_button) != m_external_buttons.end())
+	{
+		// already used
+		m_next_id_for_button++;
+	}
+
+	if(m_next_id_for_button > ID_NEXT_ID + 1000)
+	{
+		// too many button IDs!
+		wxMessageBox(_T("too many button IDs!, see CHeeksFrame::AddMenuItem"));
+	}
+
+	int id_to_use = m_next_id_for_button;
+	menu->Append(id_to_use, title);
+	SExternalButtonFunctions ebf;
+	ebf.on_button = onButtonFunction;
+	ebf.on_update_button = NULL;
 	m_external_buttons.insert(std::pair<int, SExternalButtonFunctions > ( id_to_use, ebf ));
 	m_next_id_for_button++;
 	return id_to_use;
@@ -834,7 +867,7 @@ void CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, Tool* tool)
 	wxBitmap* bitmap = tool->Bitmap();
 	if(bitmap)
 	{
-		int id_used_for_button = wxGetApp().m_frame->AddToolBarTool(toolbar, _T(tool->GetTitle()), *bitmap, _T(tool->GetToolTip()), OnTool);
+		int id_used_for_button = wxGetApp().m_frame->AddToolBarTool(toolbar, tool->GetTitle(), *bitmap, tool->GetToolTip(), OnTool);
 		tool_map_for_OnTool.insert( std::pair<int, Tool*> ( id_used_for_button, tool ) );
 	}
 }

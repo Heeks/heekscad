@@ -18,13 +18,13 @@ private:
 public:
 	DigitizedPoint digitized_point;
 	bool m_doing_a_main_loop;
-	std::string m_prompt_when_doing_a_main_loop;
+	wxString m_prompt_when_doing_a_main_loop;
 
 	DigitizeMode();
 	virtual ~DigitizeMode(void);
 
 	// InputMode's virtual functions
-	const char* GetTitle(){return "Picking a position";}
+	const wxChar* GetTitle(){return _T("Picking a position");}
 	void OnMouse( wxMouseEvent& event );
 	bool OnModeChange(void);
 	void OnFrontRender();

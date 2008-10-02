@@ -12,7 +12,7 @@
 #include "GraphicsCanvas.h"
 #include "ObjPropsCanvas.h"
 
-GripperSelTransform::GripperSelTransform(MarkedList* m, const gp_Pnt& pos):Gripper(pos, ""), m_marked_list(m), m_transform_gl_list(0){
+GripperSelTransform::GripperSelTransform(MarkedList* m, const gp_Pnt& pos):Gripper(pos, _T("")), m_marked_list(m), m_transform_gl_list(0){
 }
 
 bool GripperSelTransform::OnGripperGrabbed(double* from){
@@ -68,7 +68,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 {
 	if ( wxGetApp().gripper_mode->m_mode == StretchMode )
 	{
-		wxGetApp().StartHistory ( "Stretch Marked List" );
+		wxGetApp().StartHistory ( _T("Stretch Marked List") );
 		double shift[3] = {to[0] - from[0], to[1] - from[1], to[2] - from[2]};
 		{
 			std::list<HeeksObj *>::iterator It;
@@ -87,7 +87,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 		MakeMatrix ( from, to, mat );
 		double m[16];
 		extract(mat, m );
-		wxGetApp().StartHistory ( "Move Marked List" );
+		wxGetApp().StartHistory ( _T("Move Marked List") );
 		std::list<HeeksObj*> marked_list = m_marked_list->list();
 		std::list<HeeksObj *>::iterator It;
 		for ( It = marked_list.begin(); It != marked_list.end(); It++ )

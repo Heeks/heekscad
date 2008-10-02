@@ -61,7 +61,7 @@ public:
 	void GetOptions(std::list<Property *> *list);
 
 	// Drawing's virtual functions
-	virtual const char* get_drawing_title(){return "Drawing";}
+	virtual const wxChar* get_drawing_title(){return _T("Drawing");}
 	virtual void AddPoint();
 
 	int GetDrawStep()const{return current_view_stuff->draw_step;}

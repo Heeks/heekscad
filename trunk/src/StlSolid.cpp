@@ -1,7 +1,12 @@
 // StlSolid.cpp
 #include "stdafx.h"
 #include "StlSolid.h"
+
 #include "../tinyxml/tinyxml.h"
+
+#include <fstream>
+
+using namespace std;
 
 wxIcon* CStlSolid::m_icon = NULL;
 
@@ -9,48 +14,60 @@ CStlSolid::CStlSolid(const HeeksColor* col):m_gl_list(0), color(*col){
 	m_title.assign(GetTypeString());
 }
 
-CStlSolid::CStlSolid(const char* filepath, const HeeksColor* col):m_gl_list(0), color(*col){
+CStlSolid::CStlSolid(const wxChar* filepath, const HeeksColor* col):m_gl_list(0), color(*col){
 	// read the stl file
+#if wxUSE_UNICODE
+	wifstream ifs(filepath);
+#else
 	ifstream ifs(filepath);
+#endif
 	if(!ifs)return;
 
-	char solid_string[6] = "aaaaa";
+	wxChar solid_string[6] = _T("aaaaa");
 	ifs.read(solid_string, 5);
 	if(ifs.eof())return;
-	if(stricmp(solid_string, "solid"))
+#if wxUSE_UNICODE
+	if(wcsicmp(solid_string, _T("solid")))
+#else
+	if(stricmp(solid_string, _T("solid")))
+#endif
 	{
 		// try binary file read
 
 		// read the header
-		char header[81];
+		wxChar header[81];
 		header[80] = 0;
 		memcpy(header, solid_string, 5);
 		ifs.read(&header[5], 75);
 
 		unsigned int num_facets = 0;
-		ifs.read((char*)(&num_facets), 4);
+		ifs.read((wxChar*)(&num_facets), 4);
 
 		for(unsigned int i = 0; i<num_facets; i++)
 		{
 			CStlTri tri;
-			ifs.read((char*)(tri.n), 12);
-			ifs.read((char*)(tri.x[0]), 36);
+			ifs.read((wxChar*)(tri.n), 12);
+			ifs.read((wxChar*)(tri.x[0]), 36);
 			short attr;
-			ifs.read((char*)(&attr), 2);
+			ifs.read((wxChar*)(&attr), 2);
 			m_list.push_back(tri);
 		}
 	}
 	else
 	{
 		// "solid" already found
-		char str[1024] = "solid";
+		wxChar str[1024] = _T("solid");
 		ifs.getline(&str[5], 1024);
-		char title[1024];
-		if(sscanf(str, "solid %s", title) == 1)
+		wxChar title[1024];
+#if wxUSE_UNICODE
+		if(swscanf(str, _T("solid %s"), title) == 1)
+#else
+		if(sscanf(str, _T("solid %s"), title) == 1)
+#endif
 			m_title.assign(title);
 
 		CStlTri t;
-		char five_chars[6] = "aaaaa";
+		wxChar five_chars[6] = _T("aaaaa");
 
 		int vertex = 0;
 
@@ -67,24 +84,45 @@ CStlSolid::CStlSolid(const char* filepath, const HeeksColor* col):m_gl_list(0), 
 			}
 			if(i == 5)
 			{
-				if(!stricmp(five_chars, "verte"))
+#if wxUSE_UNICODE
+				if(!wcsicmp(five_chars, _T("verte")))
 				{
-					sscanf(str, " vertex %f %f %f", &(t.x[vertex][0]), &(t.x[vertex][1]), &(t.x[vertex][2]));
+					swscanf(str, _T(" vertex %f %f %f"), &(t.x[vertex][0]), &(t.x[vertex][1]), &(t.x[vertex][2]));
 					vertex++;
 					if(vertex > 2)vertex = 2;
 				}
-				else if(!stricmp(five_chars, "facet"))
+				else if(!wcsicmp(five_chars, _T("facet")))
 				{
-					sscanf(str, " facet normal %f %f %f", &(t.n[0]), &(t.n[1]), &(t.n[2]));
+					swscanf(str, _T(" facet normal %f %f %f"), &(t.n[0]), &(t.n[1]), &(t.n[2]));
 					vertex = 0;
 				}
-				else if(!stricmp(five_chars, "endfa"))
+				else if(!wcsicmp(five_chars, _T("endfa")))
 				{
 					if(vertex == 2)
 					{
 						m_list.push_back(t);
 					}
 				}
+#else
+				if(!stricmp(five_chars, _T("verte")))
+				{
+					sscanf(str, _T(" vertex %f %f %f"), &(t.x[vertex][0]), &(t.x[vertex][1]), &(t.x[vertex][2]));
+					vertex++;
+					if(vertex > 2)vertex = 2;
+				}
+				else if(!stricmp(five_chars, _T("facet")))
+				{
+					sscanf(str, _T(" facet normal %f %f %f"), &(t.n[0]), &(t.n[1]), &(t.n[2]));
+					vertex = 0;
+				}
+				else if(!stricmp(five_chars, _T("endfa")))
+				{
+					if(vertex == 2)
+					{
+						m_list.push_back(t);
+					}
+				}
+#endif
 			}
 		}
 	}
@@ -108,7 +146,7 @@ wxIcon* CStlSolid::GetIcon(){
 	if(m_icon == NULL)
 	{
 		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + "/icons/stlsolid.png", wxBITMAP_TYPE_PNG);
+		m_icon = new wxIcon(exe_folder + _T("/icons/stlsolid.png"), wxBITMAP_TYPE_PNG);
 	}
 	return m_icon;
 }
@@ -203,7 +241,7 @@ void CStlSolid::CopyFrom(const HeeksObj* object)
 	operator=(*((CStlSolid*)object));
 }
 
-void CStlSolid::OnEditString(const char* str){
+void CStlSolid::OnEditString(const wxChar* str){
 	m_title.assign(str);
 	wxGetApp().WasModified(this);
 }
@@ -279,7 +317,7 @@ HeeksObj* CStlSolid::ReadFromXMLElement(TiXmlElement* pElem)
 	// get the attributes
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
-		wxString name(a->Name());
+		std::string name(a->Name());
 		if(name == "col"){c = HeeksColor(a->IntValue());}
 	}
 
@@ -291,7 +329,7 @@ HeeksObj* CStlSolid::ReadFromXMLElement(TiXmlElement* pElem)
 		// get the attributes
 		for(TiXmlAttribute* a = pTriElem->FirstAttribute(); a; a = a->Next())
 		{
-			wxString name(a->Name());
+			std::string name(a->Name());
 			if(name == "nx"){t.n[0] = a->DoubleValue();}
 			else if(name == "ny"){t.n[1] = a->DoubleValue();}
 			else if(name == "nz"){t.n[2] = a->DoubleValue();}

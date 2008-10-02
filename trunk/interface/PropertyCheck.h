@@ -7,13 +7,13 @@
 
 class PropertyCheck:public Property{
 private:
-	std::string title;
+	wxString title;
 
 public:
 	void (*m_callbackfunc)(bool); // onoff
 	bool m_initial_value;
 
-	PropertyCheck(const char* t, bool initial_value,  void(*callbackfunc)(bool) = NULL);
+	PropertyCheck(const wxChar* t, bool initial_value,  void(*callbackfunc)(bool) = NULL);
 	~PropertyCheck();
 
 	// Property's virtual functions
@@ -21,7 +21,7 @@ public:
 	bool property_editable()const{return m_callbackfunc != NULL;}
 	Property *MakeACopy(void)const;
 	void CallSetFunction()const{ if(m_callbackfunc)(*m_callbackfunc)(m_initial_value);}
-	const char* GetShortString(void)const;
+	const wxChar* GetShortString(void)const;
 };
 
 #endif

@@ -63,7 +63,11 @@ void ObjList::GetBox(CBox &box)
 	std::list<HeeksObj*>::iterator It;
 	for(It=m_objects.begin(); It!=m_objects.end() ;It++)
 	{
-		(*It)->GetBox(box);
+		HeeksObj* object = *It;
+		if(object->OnVisibleLayer() && object->m_visible)
+		{
+			object->GetBox(box);
+		}
 	}
 }
 
@@ -73,13 +77,17 @@ void ObjList::glCommands(bool select, bool marked, bool no_color)
 	std::list<HeeksObj*>::iterator It;
 	for(It=m_objects.begin(); It!=m_objects.end() ;It++)
 	{
-		if(select)glPushName((unsigned int)(*It));
+		HeeksObj* object = *It;
+		if(object->OnVisibleLayer() && object->m_visible)
+		{
+			if(select)glPushName((unsigned int)object);
 #ifdef HEEKSCAD
-		(*It)->glCommands(select, marked || wxGetApp().m_marked_list->ObjectMarked(*It), no_color);
+			(*It)->glCommands(select, marked || wxGetApp().m_marked_list->ObjectMarked(object), no_color);
 #else
-		(*It)->glCommands(select, marked || heeksCAD->ObjectMarked(*It), no_color);
+			(*It)->glCommands(select, marked || heeksCAD->ObjectMarked(object), no_color);
 #endif
-		if(select)glPopName();
+			if(select)glPopName();
+		}
 	}
 }
 
@@ -146,7 +154,7 @@ bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 	HeeksObj::Add(object, prev_object);
 
 #ifdef HEEKSCAD
-	if(!wxGetApp().m_disable_SetObjectID_on_Add && object->GetID() == 0)
+	if(!wxGetApp().m_disable_SetObjectID_on_Add && object->m_id == 0)
 	{
 		object->SetID(wxGetApp().GetNextID(object->GetIDGroupType()));
 	}

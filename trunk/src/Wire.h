@@ -8,11 +8,11 @@ private:
 	static wxIcon* m_icon;
 
 public:
-	CWire(const TopoDS_Wire &shape, const char* title);
+	CWire(const TopoDS_Wire &shape, const wxChar* title);
 	~CWire();
 
 	int GetType()const{return WireType;}
-	const char* GetTypeString(void)const{return "Wire";}
+	const wxChar* GetTypeString(void)const{return _T("Wire");}
 	HeeksObj *MakeACopy(void)const{ return new CWire(*this);}
 	wxIcon* GetIcon();
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);

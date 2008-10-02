@@ -4,7 +4,7 @@
 
 wxIcon* CSolid::m_icon = NULL;
 
-CSolid::CSolid(const TopoDS_Solid &solid, const char* title, bool use_one_gl_list):CShape(solid, title, use_one_gl_list)
+CSolid::CSolid(const TopoDS_Solid &solid, const wxChar* title, bool use_one_gl_list):CShape(solid, title, use_one_gl_list)
 {
 }
 
@@ -17,7 +17,7 @@ wxIcon* CSolid::GetIcon()
 	if(m_icon == NULL)
 	{
 		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + "/icons/solid.png", wxBITMAP_TYPE_PNG);
+		m_icon = new wxIcon(exe_folder + _T("/icons/solid.png"), wxBITMAP_TYPE_PNG);
 	}
 	return m_icon;
 }

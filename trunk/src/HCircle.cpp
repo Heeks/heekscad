@@ -108,7 +108,7 @@ wxIcon* HCircle::GetIcon(){
 	if(m_icon == NULL)
 	{
 		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + "/icons/circle.png", wxBITMAP_TYPE_PNG);
+		m_icon = new wxIcon(exe_folder + _T("/icons/circle.png"), wxBITMAP_TYPE_PNG);
 	}
 	return m_icon;
 }
@@ -182,9 +182,9 @@ void HCircle::GetProperties(std::list<Property *> *list){
 	__super::GetProperties(list);
 
 	circle_for_properties = this;
-	list->push_back(new PropertyVertex("centre", m_circle.Location(), on_set_centre));
-	list->push_back(new PropertyVertex("axis", gp_Pnt(m_circle.Axis().Direction().XYZ()), on_set_axis));
-	list->push_back(new PropertyDouble("radius", m_circle.Radius(), on_set_radius));
+	list->push_back(new PropertyVertex(_T("centre"), m_circle.Location(), on_set_centre));
+	list->push_back(new PropertyVertex(_T("axis"), gp_Pnt(m_circle.Axis().Direction().XYZ()), on_set_axis));
+	list->push_back(new PropertyDouble(_T("radius"), m_circle.Radius(), on_set_radius));
 }
 
 bool HCircle::FindNearPoint(const double* ray_start, const double* ray_direction, double *point){
@@ -262,7 +262,7 @@ HeeksObj* HCircle::ReadFromXMLElement(TiXmlElement* pElem)
 	// get the attributes
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
-		wxString name(a->Name());
+		std::string name(a->Name());
 		if(name == "col"){c = HeeksColor(a->IntValue());}
 		else if(name == "r"){r = a->DoubleValue();}
 		else if(name == "cx"){centre.SetX(a->DoubleValue());}

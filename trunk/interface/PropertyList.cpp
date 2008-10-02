@@ -4,8 +4,8 @@
 
 #include "PropertyList.h"
 
-PropertyList::PropertyList(const char* t):Property(){
-	title = std::string(t);
+PropertyList::PropertyList(const wxChar* t):Property(){
+	title = wxString(t);
 }
 
 PropertyList::~PropertyList(){
@@ -17,7 +17,7 @@ PropertyList::~PropertyList(){
 	}
 }
 
-const char* PropertyList::GetShortString(void)const{
+const wxChar* PropertyList::GetShortString(void)const{
 	return title.c_str();
 }
 

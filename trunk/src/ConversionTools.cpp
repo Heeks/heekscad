@@ -112,7 +112,7 @@ void ConvertLineArcsToWire::Run(){
 	TopoDS_Wire wire;
 	if(ConvertLineArcsToWire2(wxGetApp().m_marked_list->list(), wire))
 	{
-		wxGetApp().AddUndoably(new CWire(wire, "Wire"), NULL, NULL);
+		wxGetApp().AddUndoably(new CWire(wire, _T("Wire")), NULL, NULL);
 		wxGetApp().Repaint();
 	}
 }
@@ -161,7 +161,7 @@ void ConvertEdgesToWire::Run(){
 			wire_maker.Add(TopoDS::Edge(((CEdge*)object)->Edge()));
 		}
 
-		wxGetApp().AddUndoably(new CWire(wire_maker.Wire(), "Wire"), NULL, NULL);
+		wxGetApp().AddUndoably(new CWire(wire_maker.Wire(), _T("Wire")), NULL, NULL);
 		wxGetApp().Repaint();
 	}
 }

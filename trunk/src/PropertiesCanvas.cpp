@@ -127,7 +127,7 @@ void CPropertiesCanvas::AddProperty(Property* p, wxPGProperty* parent_prop)
 	case ChoicePropertyType:
 		{
 			wxArrayString array_string;
-			std::list< std::string >::iterator It;
+			std::list< wxString >::iterator It;
 			for(It = ((PropertyChoice*)p)->m_choices.begin(); It != ((PropertyChoice*)p)->m_choices.end(); It++){
 				array_string.Add(wxString(It->c_str()));
 			}
@@ -142,13 +142,13 @@ void CPropertiesCanvas::AddProperty(Property* p, wxPGProperty* parent_prop)
 			extract(((PropertyVertex*)p)->m_vt, x);
 			wxPGProperty* new_prop = wxParentProperty(p->GetShortString(),wxPG_LABEL);
 			Append( parent_prop, new_prop, p );
-			wxPGProperty* x_prop = wxFloatProperty("x",wxPG_LABEL,x[0]);
+			wxPGProperty* x_prop = wxFloatProperty(_T("x"),wxPG_LABEL,x[0]);
 			if(!p->property_editable())x_prop->SetFlag(wxPG_PROP_READONLY);
 			Append( new_prop, x_prop, p );
-			wxPGProperty* y_prop = wxFloatProperty("y",wxPG_LABEL,x[1]);
+			wxPGProperty* y_prop = wxFloatProperty(_T("y"),wxPG_LABEL,x[1]);
 			if(!p->property_editable())y_prop->SetFlag(wxPG_PROP_READONLY);
 			Append( new_prop, y_prop, p );
-			wxPGProperty* z_prop = wxFloatProperty("z",wxPG_LABEL,x[2]);
+			wxPGProperty* z_prop = wxFloatProperty(_T("z"),wxPG_LABEL,x[2]);
 			if(!p->property_editable())z_prop->SetFlag(wxPG_PROP_READONLY);
 			new_prop->SetFlag(wxPG_PROP_READONLY);
 			Append( new_prop, z_prop, p );

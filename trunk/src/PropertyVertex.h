@@ -6,13 +6,13 @@
 
 class PropertyVertex:public Property{
 private:
-	std::string title;
+	wxString title;
 
 public:
 	gp_Pnt m_vt;
 	void(*m_callbackfunc)(const gp_Pnt& vt);
 	
-	PropertyVertex(const char *t, const gp_Pnt &initial_vt, void(*callbackfunc)(const gp_Pnt& vt) = NULL);
+	PropertyVertex(const wxChar *t, const gp_Pnt &initial_vt, void(*callbackfunc)(const gp_Pnt& vt) = NULL);
 	~PropertyVertex();
 
 	// Property's virtual functions
@@ -22,6 +22,6 @@ public:
 	void CallSetFunction()const{ if(m_callbackfunc)(*m_callbackfunc)(m_vt);}
 
 	// HeeksObj's virtual functions
-	const char* GetShortString(void)const;
+	const wxChar* GetShortString(void)const;
 };
 

@@ -380,18 +380,18 @@ void CSelectMode::GetOptions(std::list<Property *> *list){
 		wxGetApp().m_digitizing->GetOptions(list);
 	}
 
-	PropertyList* plist = new PropertyList("view options");
+	PropertyList* plist = new PropertyList(_T("view options"));
 
-	std::list< std::string > choices;
-	choices.push_back ( std::string ( "stay upright" ) );
-	choices.push_back ( std::string ( "free" ) );
-	plist->m_list.push_back ( new PropertyChoice ( "rotate mode",  choices, wxGetApp().m_rotate_mode, on_set_rotate_mode ) );
-	plist->m_list.push_back( new PropertyCheck("antialiasing", wxGetApp().m_antialiasing, on_set_antialiasing));
+	std::list< wxString > choices;
+	choices.push_back ( wxString ( _T("stay upright") ) );
+	choices.push_back ( wxString ( _T("free") ) );
+	plist->m_list.push_back ( new PropertyChoice ( _T("rotate mode"),  choices, wxGetApp().m_rotate_mode, on_set_rotate_mode ) );
+	plist->m_list.push_back( new PropertyCheck(_T("antialiasing"), wxGetApp().m_antialiasing, on_set_antialiasing));
 #if _DEBUG
-	plist->m_list.push_back( new PropertyCheck("fixed light", wxGetApp().m_light_push_matrix, on_set_light_push_matrix));
+	plist->m_list.push_back( new PropertyCheck(_T("fixed light"), wxGetApp().m_light_push_matrix, on_set_light_push_matrix));
 #endif
-	plist->m_list.push_back( new PropertyCheck("reverse mouse wheel", !(wxGetApp().mouse_wheel_forward_away), on_set_reverse_mouse_wheel));
-	plist->m_list.push_back( new PropertyCheck("Ctrl key does rotate", wxGetApp().ctrl_does_rotate, on_set_ctrl_does_rotate));
+	plist->m_list.push_back( new PropertyCheck(_T("reverse mouse wheel"), !(wxGetApp().mouse_wheel_forward_away), on_set_reverse_mouse_wheel));
+	plist->m_list.push_back( new PropertyCheck(_T("Ctrl key does rotate"), wxGetApp().ctrl_does_rotate, on_set_ctrl_does_rotate));
 	list->push_back(plist);
 }
 
@@ -406,20 +406,20 @@ public:
 			wxGetApp().ExitMainLoop();
 		}
 		else{
-			wxMessageBox("Error! The \"Stop Picking\" button shouldn't have been available!");
+			wxMessageBox(_T("Error! The \"Stop Picking\" button shouldn't have been available!"));
 		}
 	}
-	const char* GetTitle(){return "Stop Picking";}
+	const wxChar* GetTitle(){return _T("Stop Picking");}
 	wxBitmap* Bitmap()
 	{
 		if(m_bitmap == NULL)
 		{
 			wxString exe_folder = wxGetApp().GetExeFolder();
-			m_bitmap = new wxBitmap(exe_folder + "/bitmaps/endpick.png", wxBITMAP_TYPE_PNG);
+			m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/endpick.png"), wxBITMAP_TYPE_PNG);
 		}
 		return m_bitmap;
 	}
-	const char* GetToolTip(){return "Finish picking";}
+	const wxChar* GetToolTip(){return _T("Finish picking");}
 };
 wxBitmap* EndPicking::m_bitmap = NULL;
 
