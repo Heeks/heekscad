@@ -7,14 +7,14 @@
 
 class PropertyChoice:public Property{
 private:
-	std::string title;
+	wxString title;
 
 public:
-	std::list< std::string > m_choices;
+	std::list< wxString > m_choices;
 	void (*m_callbackfunc)(int choice); // 0 is the first
 	int m_initial_index;
 
-	PropertyChoice(const char* t, std::list< std::string > &choices, int initial_index,  void(*callbackfunc)(int) = NULL);
+	PropertyChoice(const wxChar* t, std::list< wxString > &choices, int initial_index,  void(*callbackfunc)(int) = NULL);
 	~PropertyChoice();
 
 	// Property's virtual functions
@@ -24,7 +24,7 @@ public:
 	void CallSetFunction()const{ if(m_callbackfunc)(*m_callbackfunc)(m_initial_index);}
 
 	// HeeksObj's virtual functions
-	const char* GetShortString(void)const;
+	const wxChar* GetShortString(void)const;
 };
 
 #endif

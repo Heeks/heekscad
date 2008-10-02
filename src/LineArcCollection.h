@@ -16,7 +16,7 @@ public:
 	const CLineArcCollection& operator=(const CLineArcCollection& c);
 
 	int GetType()const{return LineArcCollectionType;}
-	const char* GetTypeString(void)const{return "Line Drawing";}
+	const wxChar* GetTypeString(void)const{return _T("Line Drawing");}
 	wxIcon* GetIcon();
 	void GetProperties(std::list<Property *> *list);
 	HeeksObj *MakeACopy(void)const;

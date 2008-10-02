@@ -12,12 +12,12 @@ TransformTool::TransformTool(HeeksObj *o, const gp_Trsf &t, const gp_Trsf &i){
 TransformTool::~TransformTool(void){
 }
 
-std::string global_string;
+wxString global_string;
 
 // Tool's virtual functions
-const char* TransformTool::GetTitle(){
-	char str[1024];
-	sprintf(str, "Transform %s", object->GetShortStringOrTypeString());
+const wxChar* TransformTool::GetTitle(){
+	wxChar str[1024];
+	wsprintf(str, _T("Transform %s"), object->GetShortStringOrTypeString());
 	global_string.assign(str);
 	return global_string.c_str();
 }
@@ -40,8 +40,8 @@ TransformObjectsTool::~TransformObjectsTool(void){
 }
 
 // Tool's virtual functions
-const char* TransformObjectsTool::GetTitle(){
-	return "Transform Objects";
+const wxChar* TransformObjectsTool::GetTitle(){
+	return _T("Transform Objects");
 }
 
 void TransformObjectsTool::Run(){

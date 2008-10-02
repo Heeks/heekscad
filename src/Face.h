@@ -22,7 +22,7 @@ public:
 	void GetBox(CBox &box);
 	wxIcon* GetIcon();
 	HeeksObj *MakeACopy(void)const{ return new CFace(*this);}
-	const char* GetTypeString(void)const{return "Face";}
+	const wxChar* GetTypeString(void)const{return _T("Face");}
 	void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true);
 	double Area()const;
 	void ModifyByMatrix(const double* m);

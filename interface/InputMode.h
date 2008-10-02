@@ -8,7 +8,7 @@ class CInputMode{
 public:
 	virtual ~CInputMode() {}
 
-	virtual const char* GetTitle() = 0;
+	virtual const wxChar* GetTitle() = 0;
 	virtual bool TitleHighlighted(){return true;}
 	virtual void OnMouse( wxMouseEvent& event ){}
 	virtual void OnKeyDown(wxKeyEvent& event){}

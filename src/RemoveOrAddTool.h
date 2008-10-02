@@ -27,7 +27,7 @@ public:
 	AddObjectTool(HeeksObj *object, HeeksObj* owner, HeeksObj* prev_object):RemoveOrAddTool(object, owner, prev_object){}
 
 	// Tool's virtual functions
-	const char* GetTitle();
+	const wxChar* GetTitle();
 	void Run();
 	void RollBack();
 };
@@ -37,7 +37,7 @@ public:
 	RemoveObjectTool(HeeksObj *object);
 
 	// Tool's virtual functions
-	const char* GetTitle() {return "Remove";}
+	const wxChar* GetTitle() {return _T("Remove");}
 	void Run();
 	void RollBack();
 };
@@ -64,7 +64,7 @@ public:
 	AddObjectsTool(const std::list<HeeksObj*> &list, HeeksObj *owner):ManyRemoveOrAddTool(list, owner){}
 
 	// Tool's virtual functions
-	const char* GetTitle();
+	const wxChar* GetTitle();
 	void Run();
 	void RollBack();
 };
@@ -74,7 +74,7 @@ public:
 	RemoveObjectsTool(const std::list<HeeksObj*> &list, HeeksObj *owner):ManyRemoveOrAddTool(list, owner){}
 
 	// Tool's virtual functions
-	const char* GetTitle();
+	const wxChar* GetTitle();
 	void Run();
 	void RollBack();
 };

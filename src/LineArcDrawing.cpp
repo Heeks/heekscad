@@ -55,7 +55,7 @@ public:
 	}
 
 	// Tool's virtual functions
-	const char* GetTitle(){return "set previous direction";}
+	const wxChar* GetTitle(){return _T("set previous direction");}
 	void Run()
 	{
 		drawing->m_previous_direction = new_direction;
@@ -426,29 +426,29 @@ void on_set_drawing_mode(int drawing_mode)
 static void on_set_circle_radius(double value)
 {
 	line_drawing_for_GetProperties->radius_for_circle = value;
-	wxGetApp().m_config->Write("RadiusForCircle", value);
+	wxGetApp().m_config->Write(_T("RadiusForCircle"), value);
 }
 
 void LineArcDrawing::GetProperties(std::list<Property *> *list){
 	// add drawing mode
-	std::list< std::string > choices;
-	choices.push_back ( std::string ( "draw lines" ) );
-	choices.push_back ( std::string ( "draw tangential arcs" ) );
-	choices.push_back ( std::string ( "infinite line" ) );
-	choices.push_back ( std::string ( "draw circles" ) );
+	std::list< wxString > choices;
+	choices.push_back ( wxString ( _T("draw lines") ) );
+	choices.push_back ( wxString ( _T("draw tangential arcs") ) );
+	choices.push_back ( wxString ( _T("infinite line") ) );
+	choices.push_back ( wxString ( _T("draw circles") ) );
 	line_drawing_for_GetProperties = this;
-	list->push_back ( new PropertyChoice ( "drawing mode",  choices, drawing_mode, on_set_drawing_mode ) );
+	list->push_back ( new PropertyChoice ( _T("drawing mode"),  choices, drawing_mode, on_set_drawing_mode ) );
 	switch(drawing_mode)
 	{
 	case LineDrawingMode:
 		{
-			list->push_back(new PropertyString("(press 'a' for arcs)", ""));
+			list->push_back(new PropertyString(_T("(press 'a' for arcs)"), (_T(""))));
 		}
 		break;
 
 	case CircleDrawingMode:
 		{
-			list->push_back(new PropertyDouble("radius", radius_for_circle, on_set_circle_radius));
+			list->push_back(new PropertyDouble(_T("radius"), radius_for_circle, on_set_circle_radius));
 		}
 		break;
 	}
@@ -469,7 +469,7 @@ bool LineArcDrawing::OnModeChange(void){
 	if(!__super::OnModeChange())return false;
 	if(m_container)m_container = NULL;
 
-	wxGetApp().m_config->Read("RadiusForCircle", &radius_for_circle, 5.0);
+	wxGetApp().m_config->Read(_T("RadiusForCircle"), &radius_for_circle, 5.0);
 
 	prev_object_in_list.clear();
 	m_previous_direction_set = false;

@@ -4,17 +4,17 @@
 
 #include "PropertyChoice.h"
 
-PropertyChoice::PropertyChoice(const char* t, std::list< std::string > &choices, int initial_index, void(*callbackfunc)(int)):Property(){
+PropertyChoice::PropertyChoice(const wxChar* t, std::list< wxString > &choices, int initial_index, void(*callbackfunc)(int)):Property(){
 	m_callbackfunc = callbackfunc;
 	m_choices = choices;
 	m_initial_index = initial_index;
-	title = std::string(t);
+	title = wxString(t);
 }
 
 PropertyChoice::~PropertyChoice(){
 }
 
-const char* PropertyChoice::GetShortString(void)const{
+const wxChar* PropertyChoice::GetShortString(void)const{
 	return title.c_str();
 }
 

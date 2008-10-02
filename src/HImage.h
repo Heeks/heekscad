@@ -16,15 +16,15 @@ private:
 	static wxIcon* m_icon;
 
 	void destroy_texture();
-	const char* GetTextureFileName(const std::string &file_path, int is_a_movie);
+	const wxChar* GetTextureFileName(const wxString &file_path, int is_a_movie);
 	void do_vertex_for_lots_of_quads( double x, double y );
 
 public:
 	double m_x[4][3]; // bottom left, bottom right, top right, top left
-	std::string m_file_path;
+	wxString m_file_path;
 	bool m_lots_of_quads;
 
-	HImage(const char* file_path);
+	HImage(const wxChar* file_path);
 	HImage(const HImage &p);
 	virtual ~HImage();
 
@@ -36,8 +36,8 @@ public:
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
 	wxIcon* GetIcon();
-	const char* GetShortString(void)const;
-	const char* GetTypeString(void)const{return "Image";}
+	const wxChar* GetShortString(void)const;
+	const wxChar* GetTypeString(void)const{return _T("Image");}
 	HeeksObj *MakeACopy(void)const;
 	void ModifyByMatrix(const double *mat);
 	void GetGripperPositions(std::list<double> *list, bool just_for_endof);

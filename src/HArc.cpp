@@ -119,7 +119,7 @@ wxIcon* HArc::GetIcon(){
 	if(m_icon == NULL)
 	{
 		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + "/icons/arc.png", wxBITMAP_TYPE_PNG);
+		m_icon = new wxIcon(exe_folder + _T("/icons/arc.png"), wxBITMAP_TYPE_PNG);
 	}
 	return m_icon;
 }
@@ -174,12 +174,12 @@ void HArc::GetProperties(std::list<Property *> *list){
 	__super::GetProperties(list);
 
 	arc_for_properties = this;
-	list->push_back(new PropertyVertex("start", A, on_set_start));
-	list->push_back(new PropertyVertex("end", B, on_set_end));
-	list->push_back(new PropertyVertex("centre", m_circle.Location(), on_set_centre));
-	list->push_back(new PropertyVertex("axis", gp_Pnt(m_circle.Axis().Direction().XYZ()), on_set_axis));
+	list->push_back(new PropertyVertex(_T("start"), A, on_set_start));
+	list->push_back(new PropertyVertex(_T("end"), B, on_set_end));
+	list->push_back(new PropertyVertex(_T("centre"), m_circle.Location(), on_set_centre));
+	list->push_back(new PropertyVertex(_T("axis"), gp_Pnt(m_circle.Axis().Direction().XYZ()), on_set_axis));
 	double length = A.Distance(B);
-	list->push_back(new PropertyDouble("Length", length, NULL));
+	list->push_back(new PropertyDouble(_T("Length"), length, NULL));
 }
 
 int HArc::Intersects(const HeeksObj *object, std::list< double > *rl)const
@@ -413,8 +413,7 @@ bool HArc::TangentialArc(const gp_Pnt &p0, const gp_Vec &v0, const gp_Pnt &p1, g
 
 void HArc::WriteXML(TiXmlElement *root)
 {
-	TiXmlElement * element;
-	element = new TiXmlElement( "Arc" );
+	TiXmlElement *element = new TiXmlElement( "Arc" );
 	root->LinkEndChild( element );  
 	element->SetAttribute("col", color.COLORREF_color());
 	element->SetDoubleAttribute("sx", A.X());
@@ -444,7 +443,7 @@ HeeksObj* HArc::ReadFromXMLElement(TiXmlElement* pElem)
 	// get the attributes
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
-		wxString name(a->Name());
+		std::string name(a->Name());
 		if(name == "col"){c = HeeksColor(a->IntValue());}
 		else if(name == "sx"){p0.SetX(a->DoubleValue());}
 		else if(name == "sy"){p0.SetY(a->DoubleValue());}

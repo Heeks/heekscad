@@ -157,7 +157,7 @@ wxIcon* CFace::GetIcon(){
 	if(m_icon == NULL)
 	{
 		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + "/icons/face.png", wxBITMAP_TYPE_PNG);
+		m_icon = new wxIcon(exe_folder + _T("/icons/face.png"), wxBITMAP_TYPE_PNG);
 	}
 	return m_icon;
 }
@@ -171,14 +171,14 @@ public:
 	void Run(){
 		BRepOffsetAPI_MakeOffset make_operation(m_face->Face());
 		make_operation.Perform(-6.0);
-		HeeksObj* new_object = CShape::MakeObject(make_operation.Shape(), "Result of Face Offset");
+		HeeksObj* new_object = CShape::MakeObject(make_operation.Shape(), _T("Result of Face Offset"));
 		if(make_operation.Generated(m_face->Face()).Extent() > 0){
-			wxMessageBox("Generated");
+			wxMessageBox(_T("Generated"));
 		}
 		wxGetApp().AddUndoably(new_object, NULL, NULL);
 		wxGetApp().DeleteUndoably(m_face);
 	}
-	const char* GetTitle(){ return "Offset Face";}
+	const wxChar* GetTitle(){ return _T("Offset Face");}
 };
 
 void CFace::GetTools(std::list<Tool*>* t_list, const wxPoint* p)

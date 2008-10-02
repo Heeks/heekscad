@@ -35,6 +35,7 @@ class HeeksObj{
 public:
 	unsigned int m_id;
 	unsigned int m_layer;
+	bool m_visible; // only temporary, ( use layer to be more permanent )
 	HeeksObj *m_owner;
 
 	HeeksObj(void);
@@ -48,11 +49,11 @@ public:
 	virtual int GetIDGroupType()const{return GetType();}
 	virtual void glCommands(bool select, bool marked, bool no_color){};
 	virtual void GetBox(CBox &box){}
-	virtual const char* GetShortString(void)const{return NULL;}
-	virtual const char* GetTypeString(void)const{return "Unknown";}
-	const char* GetShortStringOrTypeString(void)const{if(GetShortString())return GetShortString();return GetTypeString();}
+	virtual const wxChar* GetShortString(void)const{return NULL;}
+	virtual const wxChar* GetTypeString(void)const{return _T("Unknown");}
+	const wxChar* GetShortStringOrTypeString(void)const{if(GetShortString())return GetShortString();return GetTypeString();}
 	virtual bool CanEditString(void)const{return false;}
-	virtual void OnEditString(const char* str){}
+	virtual void OnEditString(const wxChar* str){}
 	virtual void KillGLLists(void){};
 	virtual HeeksObj *MakeACopy()const = 0;
 	virtual void CopyFrom(const HeeksObj* object){}
@@ -89,8 +90,6 @@ public:
 	virtual void WriteXML(TiXmlElement *root){}
 	virtual void WriteBaseXML(TiXmlElement *element);
 	virtual void ReadBaseXML(TiXmlElement* element);
-	int GetID(void){ return m_id;}
 	void SetID(int id);
-	int GetLayer(void){ return m_layer;}
-	void SetLayer(int layer);
+	bool OnVisibleLayer();
 };

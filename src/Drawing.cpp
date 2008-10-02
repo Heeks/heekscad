@@ -159,17 +159,17 @@ private:
 
 public:
 	void Run(){wxGetApp().SetInputMode(wxGetApp().m_select_mode);}
-	const char* GetTitle(){return "Stop drawing";}
+	const wxChar* GetTitle(){return _T("Stop drawing");}
 	wxBitmap* Bitmap()
 	{
 		if(m_bitmap == NULL)
 		{
 			wxString exe_folder = wxGetApp().GetExeFolder();
-			m_bitmap = new wxBitmap(exe_folder + "/bitmaps/enddraw.png", wxBITMAP_TYPE_PNG);
+			m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/enddraw.png"), wxBITMAP_TYPE_PNG);
 		}
 		return m_bitmap;
 	}
-	const char* GetToolTip(){return "Finish drawing";}
+	const wxChar* GetToolTip(){return _T("Finish drawing");}
 };
 wxBitmap* EndDrawing::m_bitmap = NULL;
 
@@ -189,17 +189,17 @@ public:
 		wxGetApp().m_digitizing->digitized_point.m_type = DigitizeInputType;
 		m_drawing->AddPoint();
 	}
-	const char* GetTitle(){return "Add point";}
+	const wxChar* GetTitle(){return _T("Add point");}
 	wxBitmap* Bitmap()
 	{
 		if(m_bitmap == NULL)
 		{
 			wxString exe_folder = wxGetApp().GetExeFolder();
-			m_bitmap = new wxBitmap(exe_folder + "/bitmaps/add.png", wxBITMAP_TYPE_PNG);
+			m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/add.png"), wxBITMAP_TYPE_PNG);
 		}
 		return m_bitmap;
 	}
-	const char* GetToolTip(){return "Add a point to drawing";}
+	const wxChar* GetToolTip(){return _T("Add a point to drawing");}
 };
 wxBitmap* AddPointTool::m_bitmap = NULL;
 
@@ -218,17 +218,17 @@ public:
 	{
 		m_drawing->m_getting_position = true;
 	}
-	const char* GetTitle(){return "Get Position";}
+	const wxChar* GetTitle(){return _T("Get Position");}
 	wxBitmap* Bitmap()
 	{
 		if(m_bitmap == NULL)
 		{
 			wxString exe_folder = wxGetApp().GetExeFolder();
-			m_bitmap = new wxBitmap(exe_folder + "/bitmaps/pickpos.png", wxBITMAP_TYPE_PNG);
+			m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/pickpos.png"), wxBITMAP_TYPE_PNG);
 		}
 		return m_bitmap;
 	}
-	const char* GetToolTip(){return "Pick position without adding to the drawing";}
+	const wxChar* GetToolTip(){return _T("Pick position without adding to the drawing");}
 };
 wxBitmap* GetPosTool::m_bitmap = NULL;
 
@@ -274,7 +274,7 @@ public:
 	SetDrawingDrawStep(Drawing *d, int s){drawing = d; old_step = drawing->GetDrawStep(); step = s;}
 
 	// Tool's virtual functions
-	const char* GetTitle(){return "set_draw_step";}
+	const wxChar* GetTitle(){return _T("set_draw_step");}
 	void Run(){drawing->set_draw_step_not_undoable(step);}
 	void RollBack(){drawing->set_draw_step_not_undoable(old_step);}
 	bool Undoable(){return true;}
@@ -294,7 +294,7 @@ public:
 	}
 
 	// Tool's virtual functions
-	const char* GetTitle(){return "set_position";}
+	const wxChar* GetTitle(){return _T("set_position");}
 	void Run(){drawing->set_start_pos_not_undoable(next_pos);}
 	void RollBack(){drawing->set_start_pos_not_undoable(prev_pos);}
 	bool Undoable(){return true;}

@@ -7,13 +7,13 @@
 
 class PropertyColor:public Property{
 private:
-	std::string title;
+	wxString title;
 
 public:
 	HeeksColor m_initial_value;
 	void(*m_callbackfunc)(HeeksColor);
 
-	PropertyColor(const char* t, HeeksColor initial_value, void(*callbackfunc)(HeeksColor value) = NULL);
+	PropertyColor(const wxChar* t, HeeksColor initial_value, void(*callbackfunc)(HeeksColor value) = NULL);
 	~PropertyColor();
 
 	// Property's virtual functions
@@ -23,5 +23,5 @@ public:
 	void CallSetFunction()const{ if(m_callbackfunc)(*m_callbackfunc)(m_initial_value);}
 
 	// HeeksObj's virtual functions
-	const char* GetShortString(void)const;
+	const wxChar* GetShortString(void)const;
 };

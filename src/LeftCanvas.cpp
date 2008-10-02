@@ -68,7 +68,7 @@ void CLeftCanvas::CreateTree(long style)
                                 wxDefaultPosition, wxDefaultSize,
                                 style);
 
-	m_root = m_treeCtrl->AddRoot("root", -1, -1, NULL);
+	m_root = m_treeCtrl->AddRoot(_T("root"), -1, -1, NULL);
 
     wxGetApp().RegisterObserver(this);
     Resize();

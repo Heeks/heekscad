@@ -311,22 +311,22 @@ static void set_y(double value){wxGetApp().m_digitizing->digitized_point.m_point
 static void set_z(double value){wxGetApp().m_digitizing->digitized_point.m_point.SetZ(value); wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();}
 
 void DigitizeMode::GetProperties(std::list<Property *> *list){
-	list->push_back(new PropertyDouble("X", digitized_point.m_point.X(), set_x));
-	list->push_back(new PropertyDouble("Y", digitized_point.m_point.Y(), set_y));
-	list->push_back(new PropertyDouble("Z", digitized_point.m_point.Z(), set_z));
+	list->push_back(new PropertyDouble(_T("X"), digitized_point.m_point.X(), set_x));
+	list->push_back(new PropertyDouble(_T("Y"), digitized_point.m_point.Y(), set_y));
+	list->push_back(new PropertyDouble(_T("Z"), digitized_point.m_point.Z(), set_z));
 }
 
 void DigitizeMode::GetOptions(std::list<Property *> *list){
-	PropertyList* plist = new PropertyList("digitizing");
-	plist->m_list.push_back(new PropertyCheck("end", wxGetApp().digitize_end, on_end_of));
-	plist->m_list.push_back(new PropertyCheck("intersection", wxGetApp().digitize_inters, on_intersection));
-	plist->m_list.push_back(new PropertyCheck("centre", wxGetApp().digitize_centre, on_centre));
-	plist->m_list.push_back(new PropertyCheck("midpoint", wxGetApp().digitize_midpoint, on_mid_point));
-	plist->m_list.push_back(new PropertyCheck("nearest", wxGetApp().digitize_nearest, on_nearest));
-	plist->m_list.push_back(new PropertyCheck("tangent", wxGetApp().digitize_tangent, on_tangent));
-	plist->m_list.push_back(new PropertyDouble("radius for undefined circles", wxGetApp().digitizing_radius, on_radius));
-	plist->m_list.push_back(new PropertyCheck("coordinates", wxGetApp().digitize_coords, on_coords));
-	plist->m_list.push_back(new PropertyCheck("screen", wxGetApp().digitize_screen, on_relative));
+	PropertyList* plist = new PropertyList(_T("digitizing"));
+	plist->m_list.push_back(new PropertyCheck(_T("end"), wxGetApp().digitize_end, on_end_of));
+	plist->m_list.push_back(new PropertyCheck(_T("intersection"), wxGetApp().digitize_inters, on_intersection));
+	plist->m_list.push_back(new PropertyCheck(_T("centre"), wxGetApp().digitize_centre, on_centre));
+	plist->m_list.push_back(new PropertyCheck(_T("midpoint"), wxGetApp().digitize_midpoint, on_mid_point));
+	plist->m_list.push_back(new PropertyCheck(_T("nearest"), wxGetApp().digitize_nearest, on_nearest));
+	plist->m_list.push_back(new PropertyCheck(_T("tangent"), wxGetApp().digitize_tangent, on_tangent));
+	plist->m_list.push_back(new PropertyDouble(_T("radius for undefined circles"), wxGetApp().digitizing_radius, on_radius));
+	plist->m_list.push_back(new PropertyCheck(_T("coordinates"), wxGetApp().digitize_coords, on_coords));
+	plist->m_list.push_back(new PropertyCheck(_T("screen"), wxGetApp().digitize_screen, on_relative));
 	list->push_back(plist);
 }
 
@@ -341,20 +341,20 @@ public:
 			wxGetApp().ExitMainLoop();
 		}
 		else{
-			wxMessageBox("Error! The \"Stop Picking\" button shouldn't have been available!");
+			wxMessageBox(_T("Error! The \"Stop Picking\" button shouldn't have been available!"));
 		}
 	}
-	const char* GetTitle(){return "Stop Picking";}
+	const wxChar* GetTitle(){return _T("Stop Picking");}
 	wxBitmap* Bitmap()
 	{
 		if(m_bitmap == NULL)
 		{
 			wxString exe_folder = wxGetApp().GetExeFolder();
-			m_bitmap = new wxBitmap(exe_folder + "/bitmaps/endpospick.png", wxBITMAP_TYPE_PNG);
+			m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/endpospick.png"), wxBITMAP_TYPE_PNG);
 		}
 		return m_bitmap;
 	}
-	const char* GetToolTip(){return "Finish picking";}
+	const wxChar* GetToolTip(){return _T("Finish picking");}
 };
 wxBitmap* EndPosPicking::m_bitmap = NULL;
 

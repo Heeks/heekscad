@@ -6,9 +6,9 @@
 
 static unsigned char circle[18] = {0x1c, 0x00, 0x63, 0x00, 0x41, 0x00, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x41, 0x00, 0x63, 0x00, 0x1c, 0x00};
 
-Gripper::Gripper(const gp_Pnt& pos, const char* str){
+Gripper::Gripper(const gp_Pnt& pos, const wxChar* str){
 	position = pos;
-	prompt = std::string(str);
+	prompt = wxString(str);
 }
 
 void Gripper::glCommands(bool select, bool marked, bool no_color){

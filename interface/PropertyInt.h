@@ -7,13 +7,13 @@
 
 class PropertyInt:public Property{
 private:
-	std::string title;
+	wxString title;
 
 public:
 	int m_initial_value;
 	void(*m_callbackfunc)(int);
 
-	PropertyInt(const char* t, int initial_value, void(*callbackfunc)(int) = NULL);
+	PropertyInt(const wxChar* t, int initial_value, void(*callbackfunc)(int) = NULL);
 	~PropertyInt();
 
 	// Property's virtual functions
@@ -23,7 +23,7 @@ public:
 	void CallSetFunction()const{ if(m_callbackfunc)(*m_callbackfunc)(m_initial_value);}
 
 	// HeeksObj's virtual functions
-	const char* GetShortString(void)const;
+	const wxChar* GetShortString(void)const;
 };
 
 #endif

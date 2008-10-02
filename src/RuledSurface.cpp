@@ -11,7 +11,7 @@ void PickCreateRuledSurface()
 {
 	if(wxGetApp().m_marked_list->size() == 0)
 	{
-		wxGetApp().PickObjects("pick some wires or line-arcs");
+		wxGetApp().PickObjects(_T("pick some wires or line-arcs"));
 	}
 
 	if(wxGetApp().m_marked_list->size() > 0)
@@ -40,7 +40,7 @@ void PickCreateRuledSurface()
 		TopoDS_Shape shape;
 		if(CreateRuledSurface(wire_list, shape))
 		{
-			HeeksObj* new_object = CShape::MakeObject(shape, "Ruled Surface");
+			HeeksObj* new_object = CShape::MakeObject(shape, _T("Ruled Surface"));
 			wxGetApp().AddUndoably(new_object, NULL, NULL);
 			wxGetApp().Repaint();
 		}
@@ -51,7 +51,7 @@ void PickCreateExtrusion()
 {
 	if(wxGetApp().m_marked_list->size() == 0)
 	{
-		wxGetApp().PickObjects("pick a wire, face or line/arc collection");
+		wxGetApp().PickObjects(_T("pick a wire, face or line/arc collection"));
 	}
 
 	if(wxGetApp().m_marked_list->size() > 0)
@@ -89,7 +89,7 @@ void PickCreateExtrusion()
 		TopoDS_Shape shape;
 		if(CreateExtrusion(wire_or_face_list, shape))
 		{
-			HeeksObj* new_object = CShape::MakeObject(shape, "Extruded Solid");
+			HeeksObj* new_object = CShape::MakeObject(shape, _T("Extruded Solid"));
 			wxGetApp().AddUndoably(new_object, NULL, NULL);
 			wxGetApp().Repaint();
 		}

@@ -91,7 +91,7 @@ wxIcon* CEdge::GetIcon(){
 	if(m_icon == NULL)
 	{
 		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + "/icons/edge.png", wxBITMAP_TYPE_PNG);
+		m_icon = new wxIcon(exe_folder + _T("/icons/edge.png"), wxBITMAP_TYPE_PNG);
 	}
 	return m_icon;
 }
@@ -103,14 +103,14 @@ class BlendTool:public Tool
 public:
 	BlendTool(CEdge* edge):m_edge(edge){}
 
-	const char* GetTitle(){return "Blend";}
+	const wxChar* GetTitle(){return _T("Blend");}
 	void Run(){
 		double rad = 2.0;
-		wxGetApp().m_config->Read("EdgeBlendRadius", &rad);
-		if(wxGetApp().InputDouble("Enter Blend Radius", "Radius", rad))
+		wxGetApp().m_config->Read(_T("EdgeBlendRadius"), &rad);
+		if(wxGetApp().InputDouble(_T("Enter Blend Radius"), _T("Radius"), rad))
 		{
 			m_edge->Blend(rad);
-			wxGetApp().m_config->Write("EdgeBlendRadius", rad);
+			wxGetApp().m_config->Write(_T("EdgeBlendRadius"), rad);
 		}
 	}
 };
@@ -125,8 +125,8 @@ void CEdge::Blend(double radius){
 		BRepFilletAPI_MakeFillet fillet(((CShape*)(m_owner->m_owner))->Shape());
 		fillet.Add(radius, m_topods_edge);
 		TopoDS_Shape new_shape = fillet.Shape();
-		wxGetApp().StartHistory("Blending Edge");
-		wxGetApp().AddUndoably(new CSolid(*((TopoDS_Solid*)(&new_shape)), "Edge Blended Solid"), NULL, NULL);
+		wxGetApp().StartHistory(_T("Blending Edge"));
+		wxGetApp().AddUndoably(new CSolid(*((TopoDS_Solid*)(&new_shape)), _T("Edge Blended Solid")), NULL, NULL);
 		wxGetApp().DeleteUndoably(m_owner->m_owner);
 		wxGetApp().EndHistory();
 	}

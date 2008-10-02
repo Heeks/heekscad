@@ -14,7 +14,7 @@ public:
 	~TransformTool(void);
 
 	// Tool's virtual functions
-	const char* GetTitle();
+	const wxChar* GetTitle();
 	void Run();
 	void RollBack();
 	bool Undoable(){return true;}
@@ -31,7 +31,7 @@ public:
 	~TransformObjectsTool(void);
 
 	// Tool's virtual functions
-	const char* GetTitle();
+	const wxChar* GetTitle();
 	void Run();
 	void RollBack();
 	bool Undoable(){return true;}

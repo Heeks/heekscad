@@ -17,7 +17,7 @@ public:
 	~StretchTool(void);
 
 	// Tool's virtual functions
-	const char* GetTitle();
+	const wxChar* GetTitle();
 	void Run();
 	void RollBack();
 	bool Undoable(){return true;}

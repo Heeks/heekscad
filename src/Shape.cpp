@@ -33,7 +33,7 @@
 // static member variable
 bool CShape::m_solids_found = false;
 
-CShape::CShape(const TopoDS_Shape &shape, const char* title, bool use_one_gl_list):m_shape(shape), m_title(title), m_gl_list(0), m_use_one_gl_list(use_one_gl_list)
+CShape::CShape(const TopoDS_Shape &shape, const wxChar* title, bool use_one_gl_list):m_shape(shape), m_title(title), m_gl_list(0), m_use_one_gl_list(use_one_gl_list)
 {
 	m_faces = new CFaceList;
 	m_edges = new CEdgeList;
@@ -152,27 +152,27 @@ public:
 	// Tool's virtual functions
 	void Run(){
 		double offset_value = 2.0;
-		wxGetApp().m_config->Read("OffsetShapeValue", &offset_value);
-		if(wxGetApp().InputDouble("Enter Offset Value, + for making bigger, - for making smaller", "Offset value", offset_value))
+		wxGetApp().m_config->Read(_T("OffsetShapeValue"), &offset_value);
+		if(wxGetApp().InputDouble(_T("Enter Offset Value, + for making bigger, - for making smaller"), _T("Offset value"), offset_value))
 		{
 			TopoDS_Shape new_shape = BRepOffsetAPI_MakeOffsetShape(m_shape->Shape(), offset_value, 0.01, BRepOffset_RectoVerso);
-			HeeksObj* new_object = CShape::MakeObject(new_shape, "Result of 'Offset Shape'");
+			HeeksObj* new_object = CShape::MakeObject(new_shape, _T("Result of 'Offset Shape'"));
 			wxGetApp().AddUndoably(new_object, NULL, NULL);
 			wxGetApp().DeleteUndoably(m_shape);
-			wxGetApp().m_config->Write("OffsetShapeValue", offset_value);
+			wxGetApp().m_config->Write(_T("OffsetShapeValue"), offset_value);
 		}
 	}
-	const char* GetTitle(){ return "Offset Shape";}
+	const wxChar* GetTitle(){ return _T("Offset Shape");}
 	wxBitmap* Bitmap()
 	{
 		if(m_bitmap == NULL)
 		{
 			wxString exe_folder = wxGetApp().GetExeFolder();
-			m_bitmap = new wxBitmap(exe_folder + "/bitmaps/offsetsolid.png", wxBITMAP_TYPE_PNG);
+			m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/offsetsolid.png"), wxBITMAP_TYPE_PNG);
 		}
 		return m_bitmap;
 	}
-	const char* GetToolTip(){return "Offset the shape";}
+	const wxChar* GetToolTip(){return _T("Offset the shape");}
 };
 
 wxBitmap* OffsetShapeTool::m_bitmap = NULL;
@@ -190,13 +190,13 @@ void CShape::ModifyByMatrix(const double* m){
 	wxGetApp().DeleteUndoably(this);
 }
 
-void CShape::OnEditString(const char* str){
+void CShape::OnEditString(const wxChar* str){
 	m_title.assign(str);
 	wxGetApp().WasModified(this);
 }
 
 // static member function
-HeeksObj* CShape::MakeObject(const TopoDS_Shape &shape, const char* title, bool use_one_gl_list, bool stl_body){
+HeeksObj* CShape::MakeObject(const TopoDS_Shape &shape, const wxChar* title, bool use_one_gl_list, bool stl_body){
 	switch(shape.ShapeType()){
 		case TopAbs_FACE:
 			{
@@ -227,7 +227,7 @@ static HeeksObj* Cut(HeeksObj* s1, HeeksObj* s2){
 	TopoDS_Shape sh1, sh2;
 	TopoDS_Shape new_shape = BRepAlgoAPI_Cut(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
 
-	HeeksObj* new_object = CShape::MakeObject(new_shape, "Result of Cut Operation");
+	HeeksObj* new_object = CShape::MakeObject(new_shape, _T("Result of Cut Operation"));
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().DeleteUndoably(s1);
 	wxGetApp().DeleteUndoably(s2);
@@ -238,7 +238,7 @@ static HeeksObj* Fuse(HeeksObj* s1, HeeksObj* s2){
 	TopoDS_Shape sh1, sh2;
 	TopoDS_Shape new_shape = BRepAlgoAPI_Fuse(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
 
-	HeeksObj* new_object = CShape::MakeObject(new_shape, "Result of Fuse Operation");
+	HeeksObj* new_object = CShape::MakeObject(new_shape, _T("Result of Fuse Operation"));
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().DeleteUndoably(s1);
 	wxGetApp().DeleteUndoably(s2);
@@ -249,7 +249,7 @@ static HeeksObj* Common(HeeksObj* s1, HeeksObj* s2){
 	TopoDS_Shape sh1, sh2;
 	TopoDS_Shape new_shape = BRepAlgoAPI_Common(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
 
-	HeeksObj* new_object = CShape::MakeObject(new_shape, "Result of Common Operation");
+	HeeksObj* new_object = CShape::MakeObject(new_shape, _T("Result of Common Operation"));
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().DeleteUndoably(s1);
 	wxGetApp().DeleteUndoably(s2);
@@ -275,21 +275,21 @@ void CShape::AddASphere()
 void CShape::AddACube()
 {
 	TopoDS_Solid solid = BRepPrimAPI_MakeBox(10, 10, 10);
-	wxGetApp().AddUndoably(new CSolid(solid, "Cube"), NULL, NULL);
+	wxGetApp().AddUndoably(new CSolid(solid, _T("Cube")), NULL, NULL);
 	wxGetApp().Repaint();
 }
 
 void CShape::AddACylinder()
 {
 	TopoDS_Solid solid = BRepPrimAPI_MakeCylinder(5, 10);
-	wxGetApp().AddUndoably(new CSolid(solid, "Cylinder"), NULL, NULL);
+	wxGetApp().AddUndoably(new CSolid(solid, _T("Cylinder")), NULL, NULL);
 	wxGetApp().Repaint();
 }
 
 void CShape::CutShapes(const std::list<HeeksObj*> &list_in)
 {
 	// subtract from the first one in the list all the others
-	wxGetApp().StartHistory("Shape Cut");
+	wxGetApp().StartHistory(_T("Shape Cut"));
 	HeeksObj* s1 = NULL;
 	std::list<HeeksObj*> list = list_in;
 
@@ -311,7 +311,7 @@ void CShape::CutShapes(const std::list<HeeksObj*> &list_in)
 void CShape::FuseShapes(const std::list<HeeksObj*> &list_in)
 {
 	// fuse with the first one in the list all the others
-	wxGetApp().StartHistory("Shape Fuse");
+	wxGetApp().StartHistory(_T("Shape Fuse"));
 	HeeksObj* s1 = NULL;
 	std::list<HeeksObj*> list = list_in;
 
@@ -333,7 +333,7 @@ void CShape::FuseShapes(const std::list<HeeksObj*> &list_in)
 void CShape::CommonShapes(const std::list<HeeksObj*> &list_in)
 {
 	// find common solid ( intersect ) with the first one in the list all the others
-	wxGetApp().StartHistory("Shape Common");
+	wxGetApp().StartHistory(_T("Shape Common"));
 	HeeksObj* s1 = NULL;
 	std::list<HeeksObj*> list = list_in;
 
@@ -352,14 +352,14 @@ void CShape::CommonShapes(const std::list<HeeksObj*> &list_in)
 	wxGetApp().Repaint();
 }
 
-bool CShape::ImportSolidsFile(const char* filepath, bool undoably, std::map<int, int> *index_map)
+bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<int, int> *index_map)
 {
 	// returns true, if suffix handled
 	wxString wf(filepath);
 
-	if(wf.EndsWith(".stp") || wf.EndsWith(".STP") || wf.EndsWith(".step") || wf.EndsWith(".STEP"))
+	if(wf.EndsWith(_T(".stp")) || wf.EndsWith(_T(".STP")) || wf.EndsWith(_T(".step")) || wf.EndsWith(_T(".STEP")))
 	{
-		Standard_CString aFileName = (Standard_CString) (wf.c_str());
+		Standard_CString aFileName = (Standard_CString) (Ttc(filepath));
 		STEPControl_Reader Reader;
 		int status = Reader.ReadFile( aFileName );
 
@@ -371,7 +371,7 @@ bool CShape::ImportSolidsFile(const char* filepath, bool undoably, std::map<int,
 				Handle_Standard_Transient root = Reader.RootForTransfer(i);
 				Reader.TransferEntity(root);
 				TopoDS_Shape rShape = Reader.Shape(i);      
-				HeeksObj* new_object = MakeObject(rShape, "STEP solid");
+				HeeksObj* new_object = MakeObject(rShape, _T("STEP solid"));
 				if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
 				else wxGetApp().Add(new_object, NULL);
 				if(index_map)
@@ -387,13 +387,13 @@ bool CShape::ImportSolidsFile(const char* filepath, bool undoably, std::map<int,
 			wxGetApp().Repaint();
 		}
 		else{
-			wxMessageBox("STEP import not done!");
+			wxMessageBox(_T("STEP import not done!"));
 		}
 		return true;
 	}
-	else if(wf.EndsWith(".igs") || wf.EndsWith(".IGS") || wf.EndsWith(".iges") || wf.EndsWith(".IGES"))
+	else if(wf.EndsWith(_T(".igs")) || wf.EndsWith(_T(".IGS")) || wf.EndsWith(_T(".iges")) || wf.EndsWith(_T(".IGES")))
 	{
-		Standard_CString aFileName = (Standard_CString) (wf.c_str());
+		Standard_CString aFileName = (Standard_CString) (Ttc(filepath));
 		IGESControl_Reader Reader;
 		int status = Reader.ReadFile( aFileName );
 	
@@ -413,24 +413,24 @@ bool CShape::ImportSolidsFile(const char* filepath, bool undoably, std::map<int,
 			face_sewer.Perform ();
 
 
-			HeeksObj* new_object = MakeObject(face_sewer.SewedShape (), "sewed IGES solid");
+			HeeksObj* new_object = MakeObject(face_sewer.SewedShape (), _T("sewed IGES solid"));
 			if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
 			else wxGetApp().Add(new_object, NULL);
 
 			wxGetApp().Repaint();
 		}
 		else{
-			wxMessageBox("IGES import not done!");
+			wxMessageBox(_T("IGES import not done!"));
 		}
 		return true;
 	}
-	else if(wf.EndsWith(".stl") || wf.EndsWith(".STL"))
+	else if(wf.EndsWith(_T(".stl")) || wf.EndsWith(_T(".STL")))
 	{
-		Standard_CString aFileName = (Standard_CString) (wf.c_str());
+		Standard_CString aFileName = (Standard_CString) (Ttc(filepath));
 		TopoDS_Shape rShape;
 		StlAPI_Reader Reader;
 		Reader.Read(rShape, aFileName);
-		HeeksObj* new_object = MakeObject(rShape, "STL solid", false, true);
+		HeeksObj* new_object = MakeObject(rShape, _T("STL solid"), false, true);
 		if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
 		else wxGetApp().Add(new_object, NULL);
 		wxGetApp().Repaint();
@@ -439,21 +439,21 @@ bool CShape::ImportSolidsFile(const char* filepath, bool undoably, std::map<int,
 	return false;
 }
 
-bool CShape::ExportSolidsFile(const char* filepath, std::map<int, int> *index_map)
+bool CShape::ExportSolidsFile(const wxChar* filepath, std::map<int, int> *index_map)
 {
 	// returns true, if suffix handled
 	wxString wf(filepath);
 	wf.LowerCase();
 
-	if(wf.EndsWith(".stp") || wf.EndsWith(".step"))
+	if(wf.EndsWith(_T(".stp")) || wf.EndsWith(_T(".step")))
 	{
-		Standard_CString aFileName = (Standard_CString) (wf.c_str());
+		Standard_CString aFileName = (Standard_CString) (Ttc(filepath));
 		STEPControl_Writer writer;
 		// add all the solids
 		int i = 1;
 		for(HeeksObj* object = wxGetApp().GetFirstChild(); object; object = wxGetApp().GetNextChild()){
 			if(CShape::IsTypeAShape(object->GetType())){
-				if(index_map)index_map->insert( std::pair<int, int>(i, object->GetID()) );
+				if(index_map)index_map->insert( std::pair<int, int>(i, object->m_id) );
 				i++;
 				writer.Transfer(((CSolid*)object)->Shape(), STEPControl_AsIs);
 			}
@@ -461,9 +461,9 @@ bool CShape::ExportSolidsFile(const char* filepath, std::map<int, int> *index_ma
 		writer.Write(aFileName);
 		return true;
 	}
-	else if(wf.EndsWith(".igs") || wf.EndsWith(".iges"))
+	else if(wf.EndsWith(_T(".igs")) || wf.EndsWith(_T(".iges")))
 	{
-		Standard_CString aFileName = (Standard_CString) (wf.c_str());
+		Standard_CString aFileName = (Standard_CString) (Ttc(filepath));
 
 		IGESControl_Controller::Init();
 		IGESControl_Writer writer;
@@ -480,9 +480,9 @@ bool CShape::ExportSolidsFile(const char* filepath, std::map<int, int> *index_ma
 		writer.Write(aFileName);
 		return true;
 	}
-	else if(wf.EndsWith(".stl"))
+	else if(wf.EndsWith(_T(".stl")))
 	{
-		Standard_CString aFileName = (Standard_CString) (wf.c_str());
+		Standard_CString aFileName = (Standard_CString) (Ttc(filepath));
 
 		{
 			// clear file

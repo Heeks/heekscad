@@ -4,16 +4,16 @@
 
 #include "PropertyInt.h"
 
-PropertyInt::PropertyInt(const char* t, int initial_value, void(*callbackfunc)(int)):Property(){
+PropertyInt::PropertyInt(const wxChar* t, int initial_value, void(*callbackfunc)(int)):Property(){
 	m_initial_value = initial_value;
 	m_callbackfunc = callbackfunc;
-	title = std::string(t);
+	title = wxString(t);
 }
 
 PropertyInt::~PropertyInt(){
 }
 
-const char* PropertyInt::GetShortString(void)const{
+const wxChar* PropertyInt::GetShortString(void)const{
 	return title.c_str();
 }
 

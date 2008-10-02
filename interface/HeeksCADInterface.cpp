@@ -11,6 +11,7 @@
 #include "HArc.h"
 #include "ObjPropsCanvas.h"
 #include "OptionsCanvas.h"
+#include "LeftCanvas.h"
 #include "InputModeCanvas.h"
 #include "GraphicsCanvas.h"
 #include "LineArcCollection.h"
@@ -63,6 +64,11 @@ wxMenu* CHeeksCADInterface::GetViewMenu()
 	return wxGetApp().m_frame->m_menuView;
 }
 
+wxWindow* CHeeksCADInterface::GetObjectsCanvas()
+{
+	return wxGetApp().m_frame->m_left;
+}
+
 wxAuiManager* CHeeksCADInterface::GetAuiManager()
 {
 	return wxGetApp().m_frame->m_aui_manager;
@@ -76,6 +82,11 @@ void CHeeksCADInterface::AddToolBarButton(wxToolBar* toolbar, const wxString& ti
 int CHeeksCADInterface::AddMenuCheckItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&))
 {
 	return wxGetApp().m_frame->AddMenuCheckItem(menu, title, onButtonFunction, onUpdateButtonFunction);
+}
+	
+int CHeeksCADInterface::AddMenuItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&))
+{
+	return wxGetApp().m_frame->AddMenuItem(menu, title, onButtonFunction);
 }
 
 wxString CHeeksCADInterface::GetExeFolder()
@@ -195,12 +206,12 @@ void CHeeksCADInterface::WereRemoved(const std::list<HeeksObj*> &list)
 	wxGetApp().WereRemoved(list);
 }
 
-int CHeeksCADInterface::PickObjects(const char* str)
+int CHeeksCADInterface::PickObjects(const wxChar* str)
 {
 	return wxGetApp().PickObjects(str);
 }
 
-bool CHeeksCADInterface::PickPosition(const char* str, double* pos)
+bool CHeeksCADInterface::PickPosition(const wxChar* str, double* pos)
 {
 	return wxGetApp().PickPosition(str, pos);
 }
@@ -322,4 +333,44 @@ bool CHeeksCADInterface::GetDisableSetObjectIDOnAdd()
 void CHeeksCADInterface::RemoveID(HeeksObj* object)
 {
 	wxGetApp().RemoveID(object);
+}
+
+const wxChar* CHeeksCADInterface::GetFileFullPath()
+{
+	return wxGetApp().m_filepath;
+}
+
+long CHeeksCADInterface::BodyGetNumFaces(HeeksObj* body)
+{
+	return ((CShape*)body)->m_faces->GetNumChildren();
+}
+
+HeeksObj* CHeeksCADInterface::BodyGetFirstFace(HeeksObj* body)
+{
+	return ((CShape*)body)->m_faces->GetFirstChild();
+}
+
+HeeksObj* CHeeksCADInterface::BodyGetNextFace(HeeksObj* body)
+{
+	return ((CShape*)body)->m_faces->GetNextChild();
+}
+
+long CHeeksCADInterface::BodyGetNumEdges(HeeksObj* body)
+{
+	return ((CShape*)body)->m_edges->GetNumChildren();
+}
+
+HeeksObj* CHeeksCADInterface::BodyGetFirstEdge(HeeksObj* body)
+{
+	return ((CShape*)body)->m_edges->GetFirstChild();
+}
+
+HeeksObj* CHeeksCADInterface::BodyGetNextEdge(HeeksObj* body)
+{
+	return ((CShape*)body)->m_edges->GetNextChild();
+}
+
+const wxChar* CHeeksCADInterface::GetRevisionNumber()
+{
+	return wxGetApp().m_version_number;
 }

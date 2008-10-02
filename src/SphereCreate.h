@@ -16,7 +16,7 @@ public:
 	virtual ~CSphereCreate(void){}
 
 	// virtual functions for InputMode
-	const char* GetTitle(){return "Creating a sphere";}
+	const wxChar* GetTitle(){return _T("Creating a sphere");}
 	void OnMouse( wxMouseEvent& event );
 	void OnKeyDown(wxKeyEvent& event);
 	void OnKeyUp(wxKeyEvent& event);
