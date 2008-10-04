@@ -49,6 +49,8 @@ public:
 		glMaterialfv( GL_FRONT_AND_BACK, GL_DIFFUSE, f );
 		memcpy(f, &matf[6], 3*sizeof(float));
 		glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, f );
+		f[0] = 0.0f; f[1] = 0.0f; f[2] = 0.0f;
+		glMaterialfv( GL_FRONT_AND_BACK, GL_EMISSION, f );
 		glMaterialf( GL_FRONT_AND_BACK, GL_SHININESS, matf[9] );
 	}
 };

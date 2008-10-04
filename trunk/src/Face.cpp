@@ -15,11 +15,23 @@
 #include <BRepOffsetAPI_MakeOffset.hxx>
 #include "../interface/Tool.h"
 #include <TopTools_ListIteratorOfListOfShape.hxx>
+#include <BRepAdaptor_Surface.hxx>
+#include <GeomAPI_ProjectPointOnSurf.hxx>
 
 wxIcon* CFace::m_icon = NULL;
 
-CFace::CFace(const TopoDS_Face &face):m_topods_face(face){
-
+CFace::CFace(const TopoDS_Face &face):m_topods_face(face), m_temp_attr(0){
+#if _DEBUG
+	gp_Pnt pos;
+	gp_Dir norm = GetNormalAtUV(0, 0, &pos);
+	m_pos_x = pos.X();
+	m_pos_y = pos.Y();
+	m_pos_z = pos.Z();
+	m_normal_x = norm.X();
+	m_normal_y = norm.Y();
+	m_normal_z = norm.Z();
+	m_orientation = Orientation();
+#endif
 }
 
 CFace::~CFace(){
@@ -296,13 +308,32 @@ void best_triangle_for_face(double *x, double *n)
 gp_Dir CFace::GetMiddleNormal(gp_Pnt *pos)const{
 	// get bounds of face
 	Standard_Real umin, umax, vmin, vmax;
-	BRepTools::UVBounds(m_topods_face, umin, umax, vmin, vmax);          // create surface
+	BRepTools::UVBounds(m_topods_face, umin, umax, vmin, vmax); 
+	return GetNormalAtUV((umin + umax)/2, (vmin + vmax)/2, pos);
+}
+
+gp_Dir CFace::GetNormalAtUV(double u, double v, gp_Pnt *pos)const{
 	Handle(Geom_Surface) surf=BRep_Tool::Surface(m_topods_face);          // get surface properties
-	GeomLProp_SLProps props(surf, (umin + umax)/2, (vmin + vmax)/2, 1, 0.01);          // get surface normal
+	GeomLProp_SLProps props(surf, u, v, 1, 0.01);          // get surface normal
 	gp_Dir norm=props.Normal();                         // check orientation
 	if(pos)*pos = props.Value();
 	if(m_topods_face.Orientation()==TopAbs_REVERSED) norm.Reverse();
 	return norm;
+}
+
+bool CFace::GetUVAtPoint(const gp_Pnt &pos, double *u, double *v)const{
+	Handle(Geom_Surface) surface = BRep_Tool::Surface(m_topods_face);
+	GeomAPI_ProjectPointOnSurf projection( pos, surface);
+
+	if(projection.NbPoints() > 0)
+	{               
+		if(projection.LowerDistance() < Precision::Confusion() )
+		{
+			projection.LowerDistanceParameters(*u, *v);
+			return true;
+		}
+	}     
+	return false;
 }
 
 double CFace::Area()const{
@@ -314,4 +345,51 @@ double CFace::Area()const{
 void CFace::WriteXML(TiXmlElement *root)
 {
 	CShape::m_solids_found = true;
+}
+
+int CFace::GetSurfaceType()
+{
+	// enum GeomAbs_SurfaceType
+	// 0 - GeomAbs_Plane
+	// 1 - GeomAbs_Cylinder
+	// 2 - GeomAbs_Cone
+	// 3 - GeomAbs_Sphere
+	// 4 - GeomAbs_Torus
+	// 5 - GeomAbs_BezierSurface
+	// 6 - GeomAbs_BSplineSurface
+	// 7 - GeomAbs_SurfaceOfRevolution
+	// 8 - GeomAbs_SurfaceOfExtrusion
+	// 9 - GeomAbs_OffsetSurface
+	// 10- GeomAbs_OtherSurface
+
+	BRepAdaptor_Surface surface(m_topods_face, Standard_True);
+	GeomAbs_SurfaceType surface_type = surface.GetType();
+	return surface_type;
+}
+
+void CFace::GetPlaneParams(gp_Pln &p)
+{
+	BRepAdaptor_Surface surface(m_topods_face, Standard_True);
+	p = surface.Plane();
+}
+
+CEdge* CFace::GetFirstEdge()
+{
+	if (m_edges.size()==0) return NULL;
+	m_edgeIt = m_edges.begin();
+	return *m_edgeIt;
+}
+
+CEdge* CFace::GetNextEdge()
+{
+	if (m_edges.size()==0 || m_edgeIt==m_edges.end()) return NULL;
+	m_edgeIt++;
+	if (m_edgeIt==m_edges.end()) return NULL;
+	return *m_edgeIt;
+}
+
+bool CFace::Orientation()
+{
+	TopAbs_Orientation o = m_topods_face.Orientation();
+	return (o == TopAbs_FORWARD);
 }

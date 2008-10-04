@@ -18,6 +18,8 @@
 #include "DigitizeMode.h"
 #include "SelectMode.h"
 #include "Shape.h"
+#include "Face.h"
+#include "Edge.h"
 
 double CHeeksCADInterface::GetTolerance()
 {
@@ -355,6 +357,61 @@ HeeksObj* CHeeksCADInterface::BodyGetNextFace(HeeksObj* body)
 	return ((CShape*)body)->m_faces->GetNextChild();
 }
 
+void CHeeksCADInterface::FaceSetTempAttribute(HeeksObj* face, int attr)
+{
+	((CFace*)face)->m_temp_attr = attr;
+}
+
+int CHeeksCADInterface::FaceGetTempAttribute(HeeksObj* face)
+{
+	return ((CFace*)face)->m_temp_attr;
+}
+
+int CHeeksCADInterface::FaceGetSurfaceType(HeeksObj* face)
+{
+	return ((CFace*)face)->GetSurfaceType();
+}
+
+void CHeeksCADInterface::FaceGetNormalAtUV(HeeksObj* face, double u, double v, double* norm)
+{
+	gp_Dir n = ((CFace*)face)->GetNormalAtUV(u, v);
+	extract(n, norm);
+}
+
+bool CHeeksCADInterface::FaceGetUVAtPoint(HeeksObj* face, const double *pos, double *u, double *v)
+{
+	return ((CFace*)face)->GetUVAtPoint(make_point(pos), u, v);
+}
+
+void CHeeksCADInterface::FaceGetPlaneParams(HeeksObj* face, double *d, double *norm)
+{
+	gp_Pln p;
+	((CFace*)face)->GetPlaneParams(p);
+
+	extract(p.Axis().Direction(), norm);
+	*d = -(gp_Vec(p.Axis().Direction().XYZ()) * gp_Vec(p.Axis().Location().XYZ()));
+}
+
+int CHeeksCADInterface::FaceGetEdgeCount(HeeksObj* face)
+{
+	return ((CFace*)face)->m_edges.size();
+}
+
+HeeksObj* CHeeksCADInterface::FaceGetFirstEdge(HeeksObj* face)
+{
+	return ((CFace*)face)->GetFirstEdge();
+}
+
+HeeksObj* CHeeksCADInterface::FaceGetNextEdge(HeeksObj* face)
+{
+	return ((CFace*)face)->GetNextEdge();
+}
+
+bool CHeeksCADInterface::FaceOrientation(HeeksObj* face)
+{
+	return ((CFace*)face)->Orientation();
+}
+
 long CHeeksCADInterface::BodyGetNumEdges(HeeksObj* body)
 {
 	return ((CShape*)body)->m_edges->GetNumChildren();
@@ -370,7 +427,57 @@ HeeksObj* CHeeksCADInterface::BodyGetNextEdge(HeeksObj* body)
 	return ((CShape*)body)->m_edges->GetNextChild();
 }
 
+int CHeeksCADInterface::EdgeGetCurveType(HeeksObj* edge)
+{
+	return ((CEdge*)edge)->GetCurveType();
+}
+
+int CHeeksCADInterface::EdgeGetFaceCount(HeeksObj* edge)
+{
+	return ((CEdge*)edge)->m_faces.size();
+}
+
+HeeksObj* CHeeksCADInterface::EdgeGetFirstFace(HeeksObj* edge)
+{
+	return ((CEdge*)edge)->GetFirstFace();
+}
+
+HeeksObj* CHeeksCADInterface::EdgeGetNextFace(HeeksObj* edge)
+{
+	return ((CEdge*)edge)->GetNextFace();
+}
+
+void CHeeksCADInterface::EdgeGetCurveParams(HeeksObj* edge, double* start, double* end, double* uStart, double* uEnd, int* Reversed)
+{
+	((CEdge*)edge)->GetCurveParams(start, end, uStart, uEnd, Reversed);
+}
+
+void CHeeksCADInterface::EdgeGetCurveParams2(HeeksObj* edge, double *uStart, double *uEnd, int *isClosed, int *isPeriodic)
+{
+	((CEdge*)edge)->GetCurveParams2(uStart, uEnd, isClosed, isPeriodic);
+}
+
+bool CHeeksCADInterface::EdgeInFaceSense(HeeksObj* edge, HeeksObj* face)
+{
+	return ((CEdge*)edge)->InFaceSense((CFace*)face);
+}
+
+void CHeeksCADInterface::EdgeEvaluate(HeeksObj* edge, double u, double *p, double *tangent)
+{
+	((CEdge*)edge)->Evaluate(u, p, tangent);
+}
+
 const wxChar* CHeeksCADInterface::GetRevisionNumber()
 {
 	return wxGetApp().m_version_number;
+}
+
+void CHeeksCADInterface::RegisterOnGLCommands( void(*callbackfunc)() )
+{
+	wxGetApp().RegisterOnGLCommands(callbackfunc);
+}
+
+void CHeeksCADInterface::RemoveOnGLCommands( void(*callbackfunc)() )
+{
+	wxGetApp().RemoveOnGLCommands(callbackfunc);
 }
