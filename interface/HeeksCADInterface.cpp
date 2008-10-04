@@ -66,11 +66,6 @@ wxMenu* CHeeksCADInterface::GetViewMenu()
 	return wxGetApp().m_frame->m_menuView;
 }
 
-wxWindow* CHeeksCADInterface::GetObjectsCanvas()
-{
-	return wxGetApp().m_frame->m_left;
-}
-
 wxAuiManager* CHeeksCADInterface::GetAuiManager()
 {
 	return wxGetApp().m_frame->m_aui_manager;

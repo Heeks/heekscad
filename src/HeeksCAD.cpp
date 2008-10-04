@@ -372,7 +372,7 @@ static std::map< std::string, HeeksObj*(*)(TiXmlElement* pElem) > *xml_read_fn_m
 
 static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 {
-	std::map<int, int> index_map;
+	std::map<int, CShapeData> index_map;
 
 	// get the children ( an index map)
 	for(TiXmlElement* subElem = TiXmlHandle(pElem).FirstChildElement().Element(); subElem; subElem = subElem->NextSiblingElement())
@@ -386,16 +386,18 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 				std::string subsubname(subsubElem->Value());
 				if(subsubname == std::string("index_pair"))
 				{
-					int id = -1, index = -1;
+					int index = -1;
+					CShapeData shape_data;
 
 					// get the attributes
 					for(TiXmlAttribute* a = subsubElem->FirstAttribute(); a; a = a->Next())
 					{
 						std::string attr_name(a->Name());
 						if(attr_name == std::string("index")){index = a->IntValue();}
-						else if(attr_name == std::string("id")){id = a->IntValue();}
+						else if(attr_name == std::string("id")){shape_data.m_id = a->IntValue();}
+						else if(attr_name == std::string("title")){shape_data.m_title.assign(Ctt(a->Value()));}
 					}
-					if(id != -1 && index != -1)index_map.insert(std::pair<int, int>(index, id));
+					if(index != -1)index_map.insert(std::pair<int, CShapeData>(index, shape_data));
 				}
 			}
 		}
@@ -890,7 +892,7 @@ void HeeksCADapp::SaveXMLFile(const wxChar *filepath)
 		wxStandardPaths sp;
 		sp.GetTempDir();
 		wxString temp_file = sp.GetTempDir() + _T("/temp_HeeksCAD_STEP_file.step");
-		std::map<int, int> index_map;
+		std::map<int, CShapeData> index_map;
 		CShape::ExportSolidsFile(temp_file, &index_map);
 
 		TiXmlElement *step_file_element = new TiXmlElement( "STEP_file" );
@@ -900,12 +902,15 @@ void HeeksCADapp::SaveXMLFile(const wxChar *filepath)
 		{
 			TiXmlElement *index_map_element = new TiXmlElement( "index_map" );
 			step_file_element->LinkEndChild( index_map_element );
-			for(std::map<int, int>::iterator It = index_map.begin(); It != index_map.end(); It++)
+			for(std::map<int, CShapeData>::iterator It = index_map.begin(); It != index_map.end(); It++)
 			{
 				TiXmlElement *index_pair_element = new TiXmlElement( "index_pair" );
 				index_map_element->LinkEndChild( index_pair_element );
-				index_pair_element->SetAttribute("index", It->first);
-				index_pair_element->SetAttribute("id", It->second);
+				int index = It->first;
+				CShapeData& shape_data = It->second;
+				index_pair_element->SetAttribute("index", index);
+				index_pair_element->SetAttribute("id", shape_data.m_id);
+				index_pair_element->SetAttribute("title", Ttc(shape_data.m_title.c_str()));
 			}
 		}
 
@@ -978,7 +983,7 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 
 void HeeksCADapp::Repaint(bool soon)
 {
-	if(soon){
+	if(soon && m_frame->IsShown()){
 #ifdef __WXMSW__
 		::SendMessage((HWND)(m_frame->m_graphics->GetHandle()), WM_PAINT, 0, 0);
 #else

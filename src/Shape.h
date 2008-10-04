@@ -14,11 +14,21 @@ class CFaceList: public ObjList{
 class CEdgeList: public ObjList{
 };
 
-class CShapeIndex{
+class CShape;
+
+// used for reading and writing to the XML file
+class CShapeData{
 public:
-	int id;
-	std::map<int, int> edge_index; // map of index to id
-	std::map<int, int> face_index; // map of index to id
+	CShapeData();
+	CShapeData(int id, const wchar_t* title);
+	CShapeData(CShape* shape);
+
+	int m_id;
+	wxString m_title;
+	std::map<int, int> m_edge_index; // map of index to id
+	std::map<int, int> m_face_index; // map of index to id
+
+	void SetShape(CShape* shape);
 };
 
 class CShape:public ObjList{
@@ -27,7 +37,6 @@ protected:
 	CBox m_box;
 	TopoDS_Shape m_shape;
 	Material m_material;
-	wxString m_title;
 	static wxIcon* m_icon;
 	bool m_use_one_gl_list;
 
@@ -38,6 +47,7 @@ public:
 	static bool m_solids_found; // a flag for xml writing
 	CFaceList* m_faces;
 	CEdgeList* m_edges;
+	wxString m_title;
 
 	CShape(const TopoDS_Shape &shape, const wxChar* title, bool use_one_gl_list = false);
 	CShape(const CShape& s);
@@ -68,8 +78,8 @@ public:
 	static void CutShapes(const std::list<HeeksObj*> &list);
 	static void FuseShapes(const std::list<HeeksObj*> &list);
 	static void CommonShapes(const std::list<HeeksObj*> &list);
-	static bool ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<int, int> *index_map = NULL);
-	static bool ExportSolidsFile(const wxChar* filepath, std::map<int, int> *index_map = NULL);
+	static bool ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<int, CShapeData> *index_map = NULL);
+	static bool ExportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> *index_map = NULL);
 	static HeeksObj* MakeObject(const TopoDS_Shape &shape, const wxChar* title, bool use_one_gl_list = false, bool stl_body = false);
 	static bool IsTypeAShape(int t);
 };

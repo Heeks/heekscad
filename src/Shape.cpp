@@ -34,6 +34,29 @@
 #include "../interface/Tool.h"
 #include "SphereCreate.h"
 
+CShapeData::CShapeData()
+{
+	m_id = -1;
+}
+
+CShapeData::CShapeData(int id, const wchar_t* title)
+{
+	m_id = id;
+	m_title.assign(title);
+}
+
+CShapeData::CShapeData(CShape* shape)
+{
+	m_id = shape->m_id;
+	m_title = shape->m_title;
+}
+
+void CShapeData::SetShape(CShape* shape)
+{
+	if(m_id != -1)shape->SetID(m_id);
+	if(m_title.length() > 0)shape->m_title = m_title;
+}
+
 // static member variable
 bool CShape::m_solids_found = false;
 
@@ -436,7 +459,7 @@ void CShape::CommonShapes(const std::list<HeeksObj*> &list_in)
 	wxGetApp().Repaint();
 }
 
-bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<int, int> *index_map)
+bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<int, CShapeData> *index_map)
 {
 	// returns true, if suffix handled
 	wxString wf(filepath);
@@ -461,10 +484,11 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<in
 				if(index_map)
 				{
 					// change the id, to the one in the step file index
-					std::map<int, int>::iterator FindIt = index_map->find(i);
+					std::map<int, CShapeData>::iterator FindIt = index_map->find(i);
 					if(FindIt != index_map->end())
 					{
-						new_object->SetID(FindIt->second);
+						CShapeData& shape_data = FindIt->second;
+						shape_data.SetShape((CShape*)new_object);
 					}
 				}
 			}
@@ -523,7 +547,7 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<in
 	return false;
 }
 
-bool CShape::ExportSolidsFile(const wxChar* filepath, std::map<int, int> *index_map)
+bool CShape::ExportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> *index_map)
 {
 	// returns true, if suffix handled
 	wxString wf(filepath);
@@ -537,7 +561,7 @@ bool CShape::ExportSolidsFile(const wxChar* filepath, std::map<int, int> *index_
 		int i = 1;
 		for(HeeksObj* object = wxGetApp().GetFirstChild(); object; object = wxGetApp().GetNextChild()){
 			if(CShape::IsTypeAShape(object->GetType())){
-				if(index_map)index_map->insert( std::pair<int, int>(i, object->m_id) );
+				if(index_map)index_map->insert( std::pair<int, CShapeData>(i, CShapeData((CShape*)object)) );
 				i++;
 				writer.Transfer(((CSolid*)object)->Shape(), STEPControl_AsIs);
 			}
