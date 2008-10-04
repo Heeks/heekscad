@@ -207,8 +207,13 @@ void CFace::ModifyByMatrix(const double *m){
 }
 
 void CFace::GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal){
-	BRepTools::Clean(m_topods_face);
-	BRepMesh::Mesh(m_topods_face, cusp);
+	if(m_owner && m_owner->m_owner && m_owner->m_owner->GetType() == SolidType) {
+		// using existing BRepMesh::Mesh
+	}
+	else {
+		BRepTools::Clean(m_topods_face);
+		BRepMesh::Mesh(m_topods_face, cusp);
+	}
 
 	StdPrs_ToolShadedShape SST;
 
