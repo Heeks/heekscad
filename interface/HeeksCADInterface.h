@@ -74,11 +74,38 @@ public:
 	virtual void WriteIDToXML(HeeksObj* object, TiXmlElement *element);
 	virtual void ReadIDFromXML(HeeksObj* object, TiXmlElement *element);
 	virtual const wxChar* GetFileFullPath(); // returns NULL for untitled
+
+	// body functions
 	virtual long BodyGetNumFaces(HeeksObj* body);
 	virtual HeeksObj* BodyGetFirstFace(HeeksObj* body);
 	virtual HeeksObj* BodyGetNextFace(HeeksObj* body);
 	virtual long BodyGetNumEdges(HeeksObj* body);
 	virtual HeeksObj* BodyGetFirstEdge(HeeksObj* body);
 	virtual HeeksObj* BodyGetNextEdge(HeeksObj* body);
+
+	// face functions
+	virtual void FaceSetTempAttribute(HeeksObj* face, int attr);
+	virtual int FaceGetTempAttribute(HeeksObj* face);
+	virtual int FaceGetSurfaceType(HeeksObj* face);
+	virtual void FaceGetNormalAtUV(HeeksObj* face, double u, double v, double* norm);
+	virtual bool FaceGetUVAtPoint(HeeksObj* face, const double *pos, double *u, double *v);
+	virtual void FaceGetPlaneParams(HeeksObj* face, double *d, double *norm);
+	virtual int FaceGetEdgeCount(HeeksObj* face);
+	virtual HeeksObj* FaceGetFirstEdge(HeeksObj* face);
+	virtual HeeksObj* FaceGetNextEdge(HeeksObj* face);
+	virtual bool FaceOrientation(HeeksObj* face);
+
+	// edge functions
+	virtual int EdgeGetCurveType(HeeksObj* edge);
+	virtual int EdgeGetFaceCount(HeeksObj* edge);
+	virtual HeeksObj* EdgeGetFirstFace(HeeksObj* edge);
+	virtual HeeksObj* EdgeGetNextFace(HeeksObj* edge);
+	virtual void EdgeGetCurveParams(HeeksObj* edge, double* start, double* end, double* uStart, double* uEnd, int* Reversed);
+	virtual void EdgeGetCurveParams2(HeeksObj* edge, double *uStart, double *uEnd, int *isClosed, int *isPeriodic);
+	virtual bool EdgeInFaceSense(HeeksObj* edge, HeeksObj* face);
+	virtual void EdgeEvaluate(HeeksObj* edge, double u, double *p, double *tangent);
+
 	virtual const wxChar* GetRevisionNumber();
+	virtual void RegisterOnGLCommands( void(*callbackfunc)() );
+	virtual void RemoveOnGLCommands( void(*callbackfunc)() );
 };

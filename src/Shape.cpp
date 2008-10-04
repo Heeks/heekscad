@@ -20,12 +20,16 @@
 #include "IGESControl_Writer.hxx"
 #include "IGESControl_Controller.hxx"
 #include "BRepOffsetAPI_Sewing.hxx"
+#include "TopTools_MapOfShape.hxx"
+#include "TopTools_MapIteratorOfMapOfShape.hxx"
 #include "STLAPI.hxx"
 #include "STLAPI_Reader.hxx"
 #include "STLAPI_Writer.hxx"
+#include <TopExp_Explorer.hxx>
 #include "TopTools_ListOfShape.hxx"
 #include "TopTools_ListIteratorOfListOfShape.hxx"
 #include "BRepOffsetAPI_MakeOffsetShape.hxx"
+#include "TopoDS_Edge.hxx"
 #include "Interface_Static.hxx"
 #include "../interface/Tool.h"
 #include "SphereCreate.h"
@@ -39,8 +43,7 @@ CShape::CShape(const TopoDS_Shape &shape, const wxChar* title, bool use_one_gl_l
 	m_edges = new CEdgeList;
 	Add(m_faces, NULL);
 	Add(m_edges, NULL);
-	create_face_objects();
-	create_edge_objects();
+	create_faces_and_edges();
 }
 
 CShape::CShape(const CShape& s):m_gl_list(0)
@@ -55,22 +58,19 @@ CShape::CShape(const CShape& s):m_gl_list(0)
 CShape::~CShape()
 {
 	KillGLLists();
-	delete_face_objects();
-	delete_edge_objects();
+	delete_faces_and_edges();
 }
 
 const CShape& CShape::operator=(const CShape& s)
 {
 	// don't copy id
-	delete_face_objects();
-	delete_edge_objects();
+	delete_faces_and_edges();
 	m_box = s.m_box;
 	m_shape = s.m_shape;
 	m_material = s.m_material;
 	m_title = s.m_title;
 	m_use_one_gl_list = s.m_use_one_gl_list;
-	create_face_objects();
-	create_edge_objects();
+	create_faces_and_edges();
 	KillGLLists();
 
 	return *this;
@@ -86,40 +86,124 @@ void CShape::KillGLLists()
 	}
 }
 
-void CShape::create_face_objects()
+void CShape::create_faces_and_edges()
 {
-	// creates the face objects
-	TopExp_Explorer ex;
-	for ( ex.Init( m_shape, TopAbs_FACE ) ; ex.More(); ex.Next() )
+	// create the face objects
+	TopTools_MapOfShape edgeMap;
+	for (TopExp_Explorer expFace(m_shape, TopAbs_FACE); expFace.More(); expFace.Next())
 	{
-		TopoDS_Face F = TopoDS::Face(ex.Current());
+		TopoDS_Face F = TopoDS::Face(expFace.Current());
 		CFace* new_object = new CFace(F);
 		m_faces->Add(new_object, NULL);
+		
+		// create the edge objects from each face
+		for (TopExp_Explorer expEdge(F, TopAbs_EDGE); expEdge.More(); expEdge.Next())
+		{
+			edgeMap.Add(expEdge.Current());
+		}
 	}
-}
 
-void CShape::create_edge_objects()
-{
-	TopExp_Explorer ex;
-	for ( ex.Init( m_shape, TopAbs_EDGE ) ; ex.More(); ex.Next() )
+	int count = 0;
+	TopTools_MapIteratorOfMapOfShape It(edgeMap);
+	std::map<const TopoDS_Shape*, CEdge*> edge_finder;
+	for (;It.More(); It.Next())
 	{
-		TopoDS_Edge E = TopoDS::Edge(ex.Current());
-		CEdge* new_object = new CEdge(E);
+		const TopoDS_Shape &E = It.Key();
+		CEdge* new_object = new CEdge(TopoDS::Edge(E));
 		m_edges->Add(new_object, NULL);
+		edge_finder.insert( std::pair<const TopoDS_Shape*, CEdge*>(&E, new_object) );
+		count++;
 	}
+
+	// make an edge map for each face
+	std::map< CFace*, TopTools_MapOfShape*> face_edge_maps;
+	for(HeeksObj* object = m_faces->GetFirstChild(); object; object = m_faces->GetNextChild())
+	{
+		CFace* face = (CFace*)object;
+		TopTools_MapOfShape* newEdgeMap = new TopTools_MapOfShape;
+		face_edge_maps.insert( std::make_pair(face, newEdgeMap) );
+
+		for (TopExp_Explorer expEdge(face->Face(), TopAbs_EDGE); expEdge.More(); expEdge.Next())
+		{
+			const TopoDS_Shape &E = expEdge.Current();
+			newEdgeMap->Add(E);
+		}
+	}
+
+	// for each edge, find which faces it belongs to
+	for(HeeksObj* object = m_edges->GetFirstChild(); object; object = m_edges->GetNextChild())
+	{
+		CEdge* edge = (CEdge*)object;
+
+		const TopoDS_Shape &E = edge->Edge();
+
+		// test each face
+		for(std::map< CFace*, TopTools_MapOfShape*>::iterator It = face_edge_maps.begin(); It != face_edge_maps.end(); It++)
+		{
+			CFace* face = It->first;
+			TopTools_MapOfShape *map = It->second;
+			if(map->Contains(E)){
+				edge->m_faces.push_back(face);
+				face->m_edges.push_back(edge);
+			}
+		}
+	}
+
+	// calculate face senses
+	for(HeeksObj* object = m_edges->GetFirstChild(); object; object = m_edges->GetNextChild())
+	{
+		CEdge* edge = (CEdge*)object;
+		const TopoDS_Shape &E1 = edge->Edge();
+		for(CFace* face = edge->GetFirstFace(); face; face = edge->GetNextFace())
+		{
+			bool sense = false;
+			const TopoDS_Shape &F = face->Face();
+			for (TopExp_Explorer expEdge(F, TopAbs_EDGE); expEdge.More(); expEdge.Next())
+			{
+				const TopoDS_Shape &E2 = expEdge.Current(); // this is the edge on the face
+				if(E1.IsSame(E2))// same edge, but maybe different orientation
+				{
+					if(E1.IsEqual(E2))sense = true; // same orientation too
+					break; // same edge ( ignore the face's other edges )
+				}
+			}
+			edge->m_face_senses.push_back(sense); // one sense for each face, for each edge
+		}
+	}
+
+	// delete the maps
+	for(std::map< CFace*, TopTools_MapOfShape*>::iterator It = face_edge_maps.begin(); It != face_edge_maps.end(); It++)
+	{
+		CFace* face = It->first;
+		TopTools_MapOfShape *map = It->second;
+		delete map;
+	}
+
+#if _DEBUG
+	// test InFaceSense
+	for(HeeksObj* object = m_edges->GetFirstChild(); object; object = m_edges->GetNextChild())
+	{
+		CEdge* edge = (CEdge*)object;
+
+		for(CFace* face = edge->GetFirstFace(); face; face = edge->GetNextFace())
+		{
+			bool in_face_sense = edge->InFaceSense(face);
+
+			bool here = false;
+			here = true;
+		}
+	}
+#endif
 }
 
-void CShape::delete_face_objects()
+void CShape::delete_faces_and_edges()
 {
 	m_faces->Clear();
-}
-
-void CShape::delete_edge_objects()
-{
 	m_edges->Clear();
 }
 
 void CShape::glCommands(bool select, bool marked, bool no_color){
+	m_material.glMaterial(1.0);
 	if(m_gl_list)
 	{
 		glCallList(m_gl_list);

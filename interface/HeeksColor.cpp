@@ -37,6 +37,10 @@ void HeeksColor::glMaterial(double opacity, GLenum face)const{
 	matf[1] = 0.3f;
 	matf[2] = 0.3f;
 	glMaterialfv (face, GL_SPECULAR, matf);
+	matf[0] = 0.3f;
+	matf[1] = 0.2f;
+	matf[2] = 0.2f;
+	glMaterialfv (face, GL_EMISSION, matf);
     glMaterialf (face, GL_SHININESS, 128.0);
 }
 

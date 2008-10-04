@@ -73,6 +73,7 @@ public:
 	int m_hide_marked_list_stack;
 	double m_geom_tol;
 	std::list<wxDynamicLibrary*> m_loaded_libraries;
+	std::list< void(*)() > m_on_glCommands_list;
 	std::list<wxWindow*> m_hideable_windows;
 	bool m_show_ruler;
 	std::list< wxString > m_recent_files;
@@ -171,6 +172,8 @@ public:
 	void WriteIDToXML(HeeksObj* object, TiXmlElement *element);
 	void ReadIDFromXML(HeeksObj* object, TiXmlElement *element);
 	bool InputDouble(const wxChar* prompt, const wxChar* value_name, double &value);
+	void RegisterOnGLCommands( void(*callbackfunc)() );
+	void RemoveOnGLCommands( void(*callbackfunc)() );
 };
 
 DECLARE_APP(HeeksCADapp)
