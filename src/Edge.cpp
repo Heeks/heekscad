@@ -1,6 +1,7 @@
 // Edge.cpp
 #include "stdafx.h"
 #include "Edge.h"
+#include "Face.h"
 #include "Solid.h"
 #include "../interface/Tool.h"
 #include <BRepMesh.hxx>
@@ -13,10 +14,18 @@
 #include <TopTools_ListIteratorOfListOfShape.hxx>
 #include <TopExp.hxx>
 #include <BRepFilletAPI_MakeFillet.hxx>
+#include <BRepAdaptor_Curve.hxx>
 
 wxIcon* CEdge::m_icon = NULL;
 
 CEdge::CEdge(const TopoDS_Edge &edge):m_topods_edge(edge){
+#if _DEBUG
+	GetCurveParams2(&m_start_u, &m_end_u, &m_isClosed, &m_isPeriodic);
+	Evaluate(m_start_u, &m_start_x, &m_start_tangent_x);
+	double t[3];
+	Evaluate(m_end_u, &m_end_x, t);
+	m_orientation = Orientation();
+#endif
 }
 
 CEdge::~CEdge(){
@@ -135,4 +144,92 @@ void CEdge::Blend(double radius){
 void CEdge::WriteXML(TiXmlElement *root)
 {
 	CShape::m_solids_found = true;
+}
+
+CFace* CEdge::GetFirstFace()
+{
+	if (m_faces.size()==0) return NULL;
+	m_faceIt = m_faces.begin();
+	return *m_faceIt;
+}
+
+CFace* CEdge::GetNextFace()
+{
+	if (m_faces.size()==0 || m_faceIt==m_faces.end()) return NULL;
+	m_faceIt++;
+	if (m_faceIt==m_faces.end()) return NULL;
+	return *m_faceIt;
+}
+
+int CEdge::GetCurveType()
+{
+	// enum GeomAbs_CurveType
+	// 0 - GeomAbs_Line
+	// 1 - GeomAbs_Circle
+	// 2 - GeomAbs_Ellipse
+	// 3 - GeomAbs_Hyperbola
+	// 4 - GeomAbs_Parabola
+	// 5 - GeomAbs_BezierCurve
+	// 6 - GeomAbs_BSplineCurve
+	// 7 - GeomAbs_OtherCurve
+
+	BRepAdaptor_Curve curve(m_topods_edge);
+	GeomAbs_CurveType curve_type = curve.GetType();
+	return curve_type;
+}
+
+void CEdge::GetCurveParams(double* start, double* end, double* uStart, double* uEnd, int* Reversed)
+{
+	BRepAdaptor_Curve curve(m_topods_edge);
+	double us = curve.FirstParameter();
+	double ue = curve.LastParameter();
+	if(uStart)*uStart = us;
+	if(uEnd)*uEnd = ue;
+	if(start)extract(curve.Value(us), start);
+	if(end)extract(curve.Value(ue), end);
+	if(Reversed)*Reversed = Orientation() ? 0:1;
+}
+
+void CEdge::GetCurveParams2(double *uStart, double *uEnd, int *isClosed, int *isPeriodic)
+{
+	BRepAdaptor_Curve curve(m_topods_edge);
+	*uStart = curve.FirstParameter();
+	*uEnd = curve.LastParameter();
+	*isClosed = curve.IsClosed();
+	*isPeriodic = curve.IsPeriodic();
+}
+
+bool CEdge::InFaceSense(CFace* face)
+{
+	std::list<CFace*>::iterator FIt = m_faces.begin();
+	std::list<bool>::iterator FSIt = m_face_senses.begin();
+	for(;FIt != m_faces.end(); FIt++, FSIt++)
+	{
+		CFace* f = *FIt;
+		bool sense = *FSIt;
+
+		if(f == face)
+		{
+			bool eo = Orientation();
+			return (sense == eo);
+		}
+	}
+
+	return false; // shouldn't get here
+}
+
+void CEdge::Evaluate(double u, double *p, double *tangent)
+{
+	BRepAdaptor_Curve curve(m_topods_edge);
+	gp_Pnt P;
+	gp_Vec V;
+	curve.D1(u, P, V);
+	extract(P, p);
+	extract(V, tangent);
+}
+
+bool CEdge::Orientation()
+{
+	TopAbs_Orientation o = m_topods_edge.Orientation();
+	return (o == TopAbs_FORWARD);
 }

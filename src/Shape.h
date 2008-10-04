@@ -31,10 +31,8 @@ protected:
 	static wxIcon* m_icon;
 	bool m_use_one_gl_list;
 
-	void create_face_objects();
-	void create_edge_objects();
-	void delete_face_objects();
-	void delete_edge_objects();
+	void create_faces_and_edges();
+	void delete_faces_and_edges();
 
 public:
 	static bool m_solids_found; // a flag for xml writing

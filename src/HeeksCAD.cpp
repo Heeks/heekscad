@@ -1004,6 +1004,7 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	Material().glMaterial(1.0);
 	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_DEPTH_TEST);
+	glLineWidth(1);
 	glDepthMask(1);
 	glEnable(GL_POLYGON_OFFSET_FILL);
 	glShadeModel(GL_FLAT);
@@ -1011,6 +1012,13 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	RenderGrid(&view_point);
 	RenderRuler();
 	glCommands(select, false, false);
+
+	for(std::list< void(*)() >::iterator It = m_on_glCommands_list.begin(); It != m_on_glCommands_list.end(); It++)
+	{
+		void(*callbackfunc)() = *It;
+		(*callbackfunc)();
+	}
+
 	input_mode_object->OnRender();
 	DestroyLights();
 	glDisable(GL_DEPTH_TEST);
@@ -2036,4 +2044,14 @@ bool HeeksCADapp::InputDouble(const wxChar* prompt, const wxChar* value_name, do
 	if(double_input.m_success)value = double_input.m_value;
 
 	return double_input.m_success;
+}
+
+void HeeksCADapp::RegisterOnGLCommands( void(*callbackfunc)() )
+{
+	m_on_glCommands_list.push_back(callbackfunc);
+}
+
+void HeeksCADapp::RemoveOnGLCommands( void(*callbackfunc)() )
+{
+	m_on_glCommands_list.remove(callbackfunc);
 }
