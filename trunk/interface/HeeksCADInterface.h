@@ -22,6 +22,7 @@ public:
 	virtual void RefreshOptions();
 	virtual void RefreshInput();
 	virtual void Repaint(bool soon = false);
+	virtual bool GetCamera(double* pos, double* target, double* up, bool& perspective, double& field_of_view);
 	virtual wxFrame* GetMainFrame();
 	virtual wxWindow* GetGraphicsCanvas();
 	virtual wxMenuBar* GetMenuBar();

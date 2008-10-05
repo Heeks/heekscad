@@ -40,6 +40,16 @@ enum{
 	ID_REDO,
 	ID_RECENT_FIRST,
 	ID_OPEN_RECENT = ID_RECENT_FIRST + MAX_RECENT_FILES,
+	Menu_File_Quit,
+	Menu_File_About,
+	Menu_View_Objects,
+	Menu_View_Properties,
+	Menu_View_Options,
+	Menu_View_Input,
+	Menu_View_ToolBar,
+	Menu_View_SolidBar,
+	Menu_View_ViewingBar,
+	Menu_View_StatusBar,
 	ID_IMPORT,
 	ID_RULED_SURFACE,
 	ID_EXTRUDE,
@@ -235,41 +245,14 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_viewingBar->AddTool(ID_MAG_NO_ROT, _T("Mag No Rotation"), wxBitmap(exe_folder + _T("/bitmaps/magnorot.png"), wxBITMAP_TYPE_PNG), _T("Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"));
 	m_viewingBar->Realize();
 
-	bool objects_visible = true;
-	bool options_visible = true;
-	bool input_canvas_visible = true;
-	bool properties_visible = true;
-	bool toolbar_visible = true;
-	bool solidbar_visible = true;
-	bool viewingbar_visible = true;
-	bool statusbar_visible = true;
-
-	wxGetApp().m_config->Read(_T("FrameObjectsVisible"), &objects_visible);
-	wxGetApp().m_config->Read(_T("FrameOptionsVisible"), &options_visible);
-	wxGetApp().m_config->Read(_T("FrameInputVisible"), &input_canvas_visible);
-	wxGetApp().m_config->Read(_T("FramePropertiesVisible"), &properties_visible);
-	wxGetApp().m_config->Read(_T("FrameToolBarVisible"), &toolbar_visible);
-	wxGetApp().m_config->Read(_T("FrameSolidBarVisible"), &solidbar_visible);
-	wxGetApp().m_config->Read(_T("FrameViewingBarVisible"), &viewingbar_visible);
-	wxGetApp().m_config->Read(_T("FrameStatusBarVisible"), &statusbar_visible);
-
 	m_aui_manager->AddPane(m_graphics, wxAuiPaneInfo().Name(_T("Graphics")).Caption(_T("Graphics")).CentrePane().BestSize(wxSize(800, 600)));
-	m_aui_manager->AddPane(m_left, wxAuiPaneInfo().Name(_T("Objects")).Caption(_T("Objects")).Left().BestSize(wxSize(300, 400)));
-	m_aui_manager->AddPane(m_options, wxAuiPaneInfo().Name(_T("Options")).Caption(_T("Options")).Left().BestSize(wxSize(300, 200)));
-	m_aui_manager->AddPane(m_input_canvas, wxAuiPaneInfo().Name(_T("Input")).Caption(_T("Input")).Left().BestSize(wxSize(300, 200)));
-	m_aui_manager->AddPane(m_properties, wxAuiPaneInfo().Name(_T("Properties")).Caption(_T("Properties")).Left().BestSize(wxSize(300, 200)));
+	m_aui_manager->AddPane(m_left, wxAuiPaneInfo().Name(_T("Objects")).Caption(_T("Objects")).Left().Layer(1).BestSize(wxSize(300, 400)));
+	m_aui_manager->AddPane(m_options, wxAuiPaneInfo().Name(_T("Options")).Caption(_T("Options")).Left().Layer(1).BestSize(wxSize(300, 200)));
+	m_aui_manager->AddPane(m_input_canvas, wxAuiPaneInfo().Name(_T("Input")).Caption(_T("Input")).Left().Layer(1).BestSize(wxSize(300, 200)));
+	m_aui_manager->AddPane(m_properties, wxAuiPaneInfo().Name(_T("Properties")).Caption(_T("Properties")).Left().Layer(1).BestSize(wxSize(300, 200)));
 	m_aui_manager->AddPane(m_toolBar, wxAuiPaneInfo().Name(_T("ToolBar")).Caption(_T("General Tools")).ToolbarPane().Top());
 	m_aui_manager->AddPane(m_solidBar, wxAuiPaneInfo().Name(_T("SolidBar")).Caption(_T("Solid Tools")).ToolbarPane().Top());
 	m_aui_manager->AddPane(m_viewingBar, wxAuiPaneInfo().Name(_T("ViewingBar")).Caption(_T("Viewing Tools")).ToolbarPane().Top());
-
-	m_aui_manager->GetPane(m_left).Show(objects_visible);
-	m_aui_manager->GetPane(m_options).Show(options_visible);
-	m_aui_manager->GetPane(m_input_canvas).Show(input_canvas_visible);
-	m_aui_manager->GetPane(m_properties).Show(properties_visible);
-	m_aui_manager->GetPane(m_toolBar).Show(toolbar_visible);
-	m_aui_manager->GetPane(m_solidBar).Show(solidbar_visible);
-	m_aui_manager->GetPane(m_viewingBar).Show(viewingbar_visible);
-	m_statusBar->Show(statusbar_visible);
 
 	// set xml reading functions
 	wxGetApp().InitializeXMLFunctions();
@@ -319,26 +302,26 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	wxGetApp().SetLikeNewFile();
 	wxGetApp().SetFrameTitle();
 
+	//Read layout
+	wxString str;
+	wxGetApp().m_config->Read(_T("AuiPerspective"), &str, _T("layout2|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=351;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=0;pos=362;prop=100000;bestw=351;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=0;pos=724;prop=100000;bestw=156;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=549|dock_size(4,1,0)=302|dock_size(1,10,0)=41|"));
+	m_aui_manager->LoadPerspective(str);
+
 	m_aui_manager->Update();
 }
 
 CHeeksFrame::~CHeeksFrame()
 {
-	wxGetApp().m_config->Write(_T("FrameObjectsVisible"), m_aui_manager->GetPane(m_left).IsShown());
-	wxGetApp().m_config->Write(_T("FrameOptionsVisible"), m_aui_manager->GetPane(m_options).IsShown());
-	wxGetApp().m_config->Write(_T("FrameInputVisible"), m_aui_manager->GetPane(m_input_canvas).IsShown());
-	wxGetApp().m_config->Write(_T("FramePropertiesVisible"), m_aui_manager->GetPane(m_properties).IsShown());
-	wxGetApp().m_config->Write(_T("FrameToolBarVisible"), m_aui_manager->GetPane(m_toolBar).IsShown());
-	wxGetApp().m_config->Write(_T("FrameSolidBarVisible"), m_aui_manager->GetPane(m_solidBar).IsShown());
-	wxGetApp().m_config->Write(_T("FrameViewingBarVisible"), m_aui_manager->GetPane(m_viewingBar).IsShown());
-	wxGetApp().m_config->Write(_T("FrameStatusBarVisible"), m_statusBar->IsShown());
-
-	// call the shared libraries function OnFrameDelete, so they can write profiel strings while aui manager still exists
+	// call the shared libraries function OnFrameDelete, so they can write profile strings while aui manager still exists
 	for(std::list<wxDynamicLibrary*>::iterator It = wxGetApp().m_loaded_libraries.begin(); It != wxGetApp().m_loaded_libraries.end(); It++){
 		wxDynamicLibrary* shared_library = *It;
 		void(*OnFrameDelete)() = (void(*)())(shared_library->GetSymbol(_T("OnFrameDelete")));
 		if(OnFrameDelete)(*OnFrameDelete)();
 	}
+
+	//Save the application layout
+	wxString str = m_aui_manager->SavePerspective();
+	wxGetApp().m_config->Write(_T("AuiPerspective"), str);
 
 	delete m_aui_manager;
 }
