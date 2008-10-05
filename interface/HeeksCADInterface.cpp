@@ -46,6 +46,25 @@ void CHeeksCADInterface::Repaint(bool soon)
 	wxGetApp().Repaint(soon);
 }
 
+bool CHeeksCADInterface::GetCamera(double* pos, double* target, double* up, bool& perspective, double& field_of_view)
+{
+	if(wxGetApp().m_frame == NULL)return false;
+	if(wxGetApp().m_frame->m_graphics == NULL)return false;
+	CViewPoint &v = wxGetApp().m_frame->m_graphics->m_view_point;
+	extract(v.m_lens_point, pos);
+	extract(v.m_target_point, target);
+	extract(v.m_vertical, up);
+	perspective = false;
+	{
+		int width = v.m_window_rect[2];
+		int height = v.m_window_rect[3];
+		// use smallest
+		if(height < width)width = height;
+		field_of_view = width / v.pixel_scale;
+	}
+	return true;
+}
+
 wxFrame* CHeeksCADInterface::GetMainFrame()
 {
 	return wxGetApp().m_frame;

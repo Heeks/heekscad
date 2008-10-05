@@ -96,17 +96,3 @@ private:
 
 	DECLARE_EVENT_TABLE()
 };
-
-enum
-{
-	Menu_File_Quit = 100,
-	Menu_File_About,
-	Menu_View_Objects,
-	Menu_View_Properties,
-	Menu_View_Options,
-	Menu_View_Input,
-	Menu_View_ToolBar,
-	Menu_View_SolidBar,
-	Menu_View_ViewingBar,
-	Menu_View_StatusBar
-};

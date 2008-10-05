@@ -984,11 +984,12 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 void HeeksCADapp::Repaint(bool soon)
 {
 	if(soon && m_frame->IsShown()){
-#ifdef __WXMSW__
-		::SendMessage((HWND)(m_frame->m_graphics->GetHandle()), WM_PAINT, 0, 0);
-#else
+//#ifdef __WXMSW__
+//		::SendMessage((HWND)(m_frame->m_graphics->GetHandle()), WM_PAINT, 0, 0);
+//#else
+		m_frame->m_graphics->Refresh(0);
 		m_frame->m_graphics->Update();
-#endif
+//#endif
 	}
 	else{
 		m_frame->m_graphics->Refresh(0);
@@ -1014,8 +1015,6 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	glEnable(GL_POLYGON_OFFSET_FILL);
 	glShadeModel(GL_FLAT);
 	m_frame->m_graphics->m_view_point.SetPolygonOffset();
-	RenderGrid(&view_point);
-	RenderRuler();
 	glCommands(select, false, false);
 
 	for(std::list< void(*)() >::iterator It = m_on_glCommands_list.begin(); It != m_on_glCommands_list.end(); It++)
@@ -1025,6 +1024,8 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	}
 
 	input_mode_object->OnRender();
+	RenderGrid(&view_point);
+	RenderRuler();
 	DestroyLights();
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_POLYGON_OFFSET_FILL);
