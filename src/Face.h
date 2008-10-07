@@ -6,6 +6,7 @@
 
 class CShape;
 class CEdge;
+class CLoop;
 
 class CFace:public HeeksObj{
 private:
@@ -27,6 +28,8 @@ public:
 	int m_temp_attr; // not saved with the model
 	std::list<CEdge*>::iterator m_edgeIt;
 	std::list<CEdge*> m_edges;
+	std::list<CLoop*>::iterator m_loopIt;
+	std::list<CLoop*> m_loops;
 
 	CFace(const TopoDS_Face &face);
 	~CFace();
@@ -50,8 +53,12 @@ public:
 	gp_Dir GetNormalAtUV(double u, double v, gp_Pnt *pos = NULL)const;
 	bool GetUVAtPoint(const gp_Pnt &pos, double *u, double *v)const;
 	void GetPlaneParams(gp_Pln &p);
+	void GetCylinderParams(gp_Cylinder &c);
 	int GetSurfaceType();
 	CEdge* GetFirstEdge();
 	CEdge* GetNextEdge();
+	CLoop* GetFirstLoop();
+	CLoop* GetNextLoop();
 	bool Orientation();
+	void GetUVBox(double *uv_box);
 };

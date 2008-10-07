@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "HeeksFrame.h"
 #include "../interface/Tool.h"
+#include "../interface/ToolList.h"
 #include "GraphicsCanvas.h"
 #include "LeftCanvas.h"
 #include "ObjPropsCanvas.h"
@@ -18,43 +19,6 @@
 #include <fstream>
 
 using namespace std;
-
-enum{
-	ID_LINES = 1,
-	ID_CIRCLES,
-	ID_ILINE,
-	ID_VIEWING,
-	ID_SUBTRACT,
-	ID_SPHERE,
-	ID_CUBE,
-	ID_CYL,
-	ID_REDRAW,
-	ID_FUSE,
-	ID_COMMON,
-	ID_VEWING,
-	ID_MAG,
-	ID_MAG_EXTENTS,
-	ID_MAG_NO_ROT,
-	ID_MAG_PREVIOUS,
-	ID_UNDO,
-	ID_REDO,
-	ID_RECENT_FIRST,
-	ID_OPEN_RECENT = ID_RECENT_FIRST + MAX_RECENT_FILES,
-	Menu_File_Quit,
-	Menu_File_About,
-	Menu_View_Objects,
-	Menu_View_Properties,
-	Menu_View_Options,
-	Menu_View_Input,
-	Menu_View_ToolBar,
-	Menu_View_SolidBar,
-	Menu_View_ViewingBar,
-	Menu_View_StatusBar,
-	ID_IMPORT,
-	ID_RULED_SURFACE,
-	ID_EXTRUDE,
-	ID_NEXT_ID
-};
 
 BEGIN_EVENT_TABLE( CHeeksFrame, wxFrame )
 EVT_MENU( Menu_File_Quit, CHeeksFrame::OnQuit )
@@ -100,8 +64,8 @@ EVT_MENU(ID_REDO, CHeeksFrame::OnRedoButton)
 EVT_MENU(ID_MAG_EXTENTS, CHeeksFrame::OnMagExtentsButton)
 EVT_MENU(ID_MAG_NO_ROT, CHeeksFrame::OnMagNoRotButton)
 EVT_MENU(ID_MAG_PREVIOUS, CHeeksFrame::OnMagPreviousButton)
-EVT_MENU_RANGE(ID_NEXT_ID, ID_NEXT_ID + 1000, CHeeksFrame::OnExternalButton)
-EVT_UPDATE_UI_RANGE(ID_NEXT_ID, ID_NEXT_ID + 1000, CHeeksFrame::OnUpdateExternalButton)
+EVT_MENU_RANGE(ID_FIRST_EXTERNAL_BUTTON, ID_FIRST_POP_UP_MENU_TOOL + 1000, CHeeksFrame::OnExternalButton)
+EVT_UPDATE_UI_RANGE(ID_FIRST_EXTERNAL_BUTTON, ID_FIRST_POP_UP_MENU_TOOL + 1000, CHeeksFrame::OnUpdateExternalButton)
 EVT_SIZE(CHeeksFrame::OnSize)
 EVT_MOVE(CHeeksFrame::OnMove)
 END_EVENT_TABLE()
@@ -134,7 +98,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	: wxFrame((wxWindow *)NULL, -1, title, pos, size)
 {
 	wxGetApp().m_frame = this;
-	m_next_id_for_button = ID_NEXT_ID;
+	m_next_id_for_button = ID_FIRST_EXTERNAL_BUTTON;
 
 	// File Menu
 	wxMenu *menuFile = new wxMenu;
@@ -770,7 +734,7 @@ int CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, const wxString& title, wxBit
 		m_next_id_for_button++;
 	}
 
-	if(m_next_id_for_button > ID_NEXT_ID + 1000)
+	if(m_next_id_for_button >= ID_FIRST_POP_UP_MENU_TOOL)
 	{
 		// too many button IDs!
 		wxMessageBox(_T("too many button IDs!, see CHeeksFrame::AddToolBarTool"));
@@ -794,7 +758,7 @@ int CHeeksFrame::AddMenuCheckItem(wxMenu* menu, const wxString& title, void(*onB
 		m_next_id_for_button++;
 	}
 
-	if(m_next_id_for_button > ID_NEXT_ID + 1000)
+	if(m_next_id_for_button >= ID_FIRST_POP_UP_MENU_TOOL)
 	{
 		// too many button IDs!
 		wxMessageBox(_T("too many button IDs!, see CHeeksFrame::AddMenuCheckItem"));
@@ -817,7 +781,7 @@ int CHeeksFrame::AddMenuItem(wxMenu* menu, const wxString& title, void(*onButton
 		m_next_id_for_button++;
 	}
 
-	if(m_next_id_for_button > ID_NEXT_ID + 1000)
+	if(m_next_id_for_button >= ID_FIRST_POP_UP_MENU_TOOL)
 	{
 		// too many button IDs!
 		wxMessageBox(_T("too many button IDs!, see CHeeksFrame::AddMenuItem"));
@@ -883,6 +847,34 @@ void CHeeksFrame::ClearToolBar(wxToolBar* m_toolBar)
 		tool_map_for_OnTool.erase(id);
 		if(id < m_next_id_for_button)m_next_id_for_button = id;
 		m_toolBar->DeleteTool(id);
+	}
+}
+
+//static
+void CHeeksFrame::AddToolToListAndMenu(Tool *t, std::vector<ToolIndex> &tool_index_list, wxMenu *menu)
+{
+	if (t == NULL)
+		menu->AppendSeparator();
+	else if (t->IsAToolList())
+	{
+		wxMenu *menu2 = new wxMenu;
+		std::list<Tool*>& tool_list = ((ToolList*)t)->m_tool_list;
+		std::list<Tool*>::iterator It;
+		for (It=tool_list.begin();It!=tool_list.end();It++)
+		{
+			AddToolToListAndMenu(*It, tool_index_list, menu2);
+		}
+		menu->Append(0, t->GetTitle(), menu2);
+	}
+	else
+	{
+		ToolIndex ti;
+		ti.m_tool = t;
+		ti.m_index = tool_index_list.size();
+		tool_index_list.push_back(ti);
+		menu->Append(ti.m_index+ID_FIRST_POP_UP_MENU_TOOL, t->GetTitle());
+		if(t->Disabled())menu->Enable(ti.m_index+1, false);
+		if(t->Checked ())menu->Check(ti.m_index+1, true);
 	}
 }
 

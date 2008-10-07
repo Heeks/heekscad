@@ -5,6 +5,7 @@
 #include "Wire.h"
 #include "Face.h"
 #include "Edge.h"
+#include "Loop.h"
 #include "HeeksFrame.h"
 #include "MarkedList.h"
 #include <BRepMesh.hxx>
@@ -166,9 +167,37 @@ void CShape::create_faces_and_edges()
 			CFace* face = It->first;
 			TopTools_MapOfShape *map = It->second;
 			if(map->Contains(E)){
-				edge->m_faces.push_back(face);
 				face->m_edges.push_back(edge);
 			}
+		}
+	}
+
+	// create the face loops
+	for(HeeksObj* object = m_faces->GetFirstChild(); object; object = m_faces->GetNextChild())
+	{
+		CFace* face = (CFace*)object;
+		const TopoDS_Shape &F = face->Face();
+		for (TopExp_Explorer expWire(F, TopAbs_WIRE); expWire.More(); expWire.Next())
+		{
+			const TopoDS_Shape &W = expWire.Current();
+			std::list<CEdge*> edges;
+
+			for (TopExp_Explorer expEdge(W, TopAbs_EDGE); expEdge.More(); expEdge.Next())
+			{
+				// look through the face's existing edges to find the CEdge*
+				for(CEdge* edge = face->GetFirstEdge(); edge; edge = face->GetNextEdge())
+				{
+					const TopoDS_Shape &E = edge->Edge();
+					if(E.IsSame(expEdge.Current())) {
+						edges.push_back(edge);
+						edge->m_faces.push_back(face);
+						break;
+					}
+				}
+			}
+
+			CLoop* new_loop = new CLoop(face, edges);
+			face->m_loops.push_back(new_loop);
 		}
 	}
 
@@ -217,6 +246,7 @@ void CShape::create_faces_and_edges()
 		}
 	}
 #endif
+
 }
 
 void CShape::delete_faces_and_edges()
