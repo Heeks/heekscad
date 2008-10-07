@@ -20,6 +20,7 @@
 #include "Shape.h"
 #include "Face.h"
 #include "Edge.h"
+#include "Loop.h"
 
 double CHeeksCADInterface::GetTolerance()
 {
@@ -386,10 +387,17 @@ int CHeeksCADInterface::FaceGetSurfaceType(HeeksObj* face)
 	return ((CFace*)face)->GetSurfaceType();
 }
 
-void CHeeksCADInterface::FaceGetNormalAtUV(HeeksObj* face, double u, double v, double* norm)
+void CHeeksCADInterface::FaceGetUVBox(HeeksObj* face, double *uv_box)
 {
-	gp_Dir n = ((CFace*)face)->GetNormalAtUV(u, v);
-	extract(n, norm);
+	return ((CFace*)face)->GetUVBox(uv_box);
+}
+
+void CHeeksCADInterface::FaceGetPointAndNormalAtUV(HeeksObj* face, double u, double v, double* p, double* norm)
+{
+	gp_Pnt pos;
+	gp_Dir n = ((CFace*)face)->GetNormalAtUV(u, v, p ? (&pos):NULL);
+	if(p)extract(pos, p);
+	if(norm)extract(n, norm);
 }
 
 bool CHeeksCADInterface::FaceGetUVAtPoint(HeeksObj* face, const double *pos, double *u, double *v)
@@ -402,8 +410,18 @@ void CHeeksCADInterface::FaceGetPlaneParams(HeeksObj* face, double *d, double *n
 	gp_Pln p;
 	((CFace*)face)->GetPlaneParams(p);
 
-	extract(p.Axis().Direction(), norm);
-	*d = -(gp_Vec(p.Axis().Direction().XYZ()) * gp_Vec(p.Axis().Location().XYZ()));
+	if(norm)extract(p.Axis().Direction(), norm);
+	if(d)*d = -(gp_Vec(p.Axis().Direction().XYZ()) * gp_Vec(p.Axis().Location().XYZ()));
+}
+
+void CHeeksCADInterface::FaceGetCylinderParams(HeeksObj* face, double *pos, double *dir, double *radius)
+{
+	gp_Cylinder c;
+	((CFace*)face)->GetCylinderParams(c);
+
+	if(pos)extract(c.Location(), pos);
+	if(dir)extract(c.Axis().Direction(), dir);
+	if(radius)*radius = c.Radius();
 }
 
 int CHeeksCADInterface::FaceGetEdgeCount(HeeksObj* face)
@@ -419,6 +437,16 @@ HeeksObj* CHeeksCADInterface::FaceGetFirstEdge(HeeksObj* face)
 HeeksObj* CHeeksCADInterface::FaceGetNextEdge(HeeksObj* face)
 {
 	return ((CFace*)face)->GetNextEdge();
+}
+
+HeeksObj* CHeeksCADInterface::FaceGetFirstLoop(HeeksObj* face)
+{
+	return ((CFace*)face)->GetFirstLoop();
+}
+
+HeeksObj* CHeeksCADInterface::FaceGetNextLoop(HeeksObj* face)
+{
+	return ((CFace*)face)->GetNextLoop();
 }
 
 bool CHeeksCADInterface::FaceOrientation(HeeksObj* face)
@@ -479,6 +507,16 @@ bool CHeeksCADInterface::EdgeInFaceSense(HeeksObj* edge, HeeksObj* face)
 void CHeeksCADInterface::EdgeEvaluate(HeeksObj* edge, double u, double *p, double *tangent)
 {
 	((CEdge*)edge)->Evaluate(u, p, tangent);
+}
+
+HeeksObj* CHeeksCADInterface::LoopGetFirstEdge(HeeksObj* loop)
+{
+	return ((CLoop*)loop)->GetFirstEdge();
+}
+
+HeeksObj* CHeeksCADInterface::LoopGetNextEdge(HeeksObj* loop)
+{
+	return ((CLoop*)loop)->GetNextEdge();
 }
 
 const wxChar* CHeeksCADInterface::GetRevisionNumber()

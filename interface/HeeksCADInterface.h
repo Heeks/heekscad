@@ -87,12 +87,16 @@ public:
 	virtual void FaceSetTempAttribute(HeeksObj* face, int attr);
 	virtual int FaceGetTempAttribute(HeeksObj* face);
 	virtual int FaceGetSurfaceType(HeeksObj* face);
-	virtual void FaceGetNormalAtUV(HeeksObj* face, double u, double v, double* norm);
+	virtual void FaceGetUVBox(HeeksObj* face, double *uv_box);// 4 doubles
+	virtual void FaceGetPointAndNormalAtUV(HeeksObj* face, double u, double v, double* p, double* norm);
 	virtual bool FaceGetUVAtPoint(HeeksObj* face, const double *pos, double *u, double *v);
 	virtual void FaceGetPlaneParams(HeeksObj* face, double *d, double *norm);
+	virtual void FaceGetCylinderParams(HeeksObj* face, double *pos, double *dir, double *radius);
 	virtual int FaceGetEdgeCount(HeeksObj* face);
 	virtual HeeksObj* FaceGetFirstEdge(HeeksObj* face);
 	virtual HeeksObj* FaceGetNextEdge(HeeksObj* face);
+	virtual HeeksObj* FaceGetFirstLoop(HeeksObj* face);
+	virtual HeeksObj* FaceGetNextLoop(HeeksObj* face);
 	virtual bool FaceOrientation(HeeksObj* face);
 
 	// edge functions
@@ -104,6 +108,10 @@ public:
 	virtual void EdgeGetCurveParams2(HeeksObj* edge, double *uStart, double *uEnd, int *isClosed, int *isPeriodic);
 	virtual bool EdgeInFaceSense(HeeksObj* edge, HeeksObj* face);
 	virtual void EdgeEvaluate(HeeksObj* edge, double u, double *p, double *tangent);
+
+	// loop functions
+	virtual HeeksObj* LoopGetFirstEdge(HeeksObj* loop);
+	virtual HeeksObj* LoopGetNextEdge(HeeksObj* loop);
 
 	virtual const wxChar* GetRevisionNumber();
 	virtual void RegisterOnGLCommands( void(*callbackfunc)() );

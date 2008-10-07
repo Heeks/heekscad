@@ -18,36 +18,18 @@ private:
 class MyTreeCtrl : public wxTreeCtrl, public Images
 {
 public:
-    enum
-    {
-        TreeCtrlIcon_File,
-        TreeCtrlIcon_FileSelected,
-        TreeCtrlIcon_Folder,
-        TreeCtrlIcon_FolderSelected,
-        TreeCtrlIcon_FolderOpened
-    };
-
     MyTreeCtrl() { }
     MyTreeCtrl(wxWindow *parent, const wxWindowID id,
                const wxPoint& pos, const wxSize& size,
                long style);
     virtual ~MyTreeCtrl(){};
 
-    void OnBeginDrag(wxTreeEvent& event);
-    void OnBeginRDrag(wxTreeEvent& event);
-    void OnEndDrag(wxTreeEvent& event);
-    void OnBeginLabelEdit(wxTreeEvent& event);
-    void OnEndLabelEdit(wxTreeEvent& event);
     void OnDeleteItem(wxTreeEvent& event);
     void OnContextMenu(wxContextMenuEvent& event);
     void OnItemMenu(wxTreeEvent& event);
     void OnMenuEvent(wxCommandEvent& event);
     void OnGetInfo(wxTreeEvent& event);
     void OnSetInfo(wxTreeEvent& event);
-    void OnItemExpanded(wxTreeEvent& event);
-    void OnItemExpanding(wxTreeEvent& event);
-    void OnItemCollapsed(wxTreeEvent& event);
-    void OnItemCollapsing(wxTreeEvent& event);
     void OnSelChanged(wxTreeEvent& event);
     void OnSelChanging(wxTreeEvent& event);
     void OnTreeKeyDown(wxTreeEvent& event);
