@@ -46,6 +46,7 @@
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <gp_Circ.hxx>
 #include <gp_Pln.hxx>
+#include <gp_Cylinder.hxx>
 #include <BRepPrimAPI_MakeRevol.hxx>
 #include <Geom_Axis1Placement.hxx>
 #include <AIS_Axis.hxx>

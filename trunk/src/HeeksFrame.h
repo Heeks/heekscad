@@ -12,6 +12,50 @@ struct SExternalButtonFunctions{
 	void (*on_update_button)(wxUpdateUIEvent&);
 };
 
+struct ToolIndex{
+	Tool *m_tool;
+	int m_index;
+};
+
+enum{
+	ID_LINES = 1,
+	ID_CIRCLES,
+	ID_ILINE,
+	ID_VIEWING,
+	ID_SUBTRACT,
+	ID_SPHERE,
+	ID_CUBE,
+	ID_CYL,
+	ID_REDRAW,
+	ID_FUSE,
+	ID_COMMON,
+	ID_VEWING,
+	ID_MAG,
+	ID_MAG_EXTENTS,
+	ID_MAG_NO_ROT,
+	ID_MAG_PREVIOUS,
+	ID_UNDO,
+	ID_REDO,
+	ID_RECENT_FIRST,
+	ID_OPEN_RECENT = ID_RECENT_FIRST + MAX_RECENT_FILES,
+	Menu_File_Quit,
+	Menu_File_About,
+	Menu_View_Objects,
+	Menu_View_Properties,
+	Menu_View_Options,
+	Menu_View_Input,
+	Menu_View_ToolBar,
+	Menu_View_SolidBar,
+	Menu_View_ViewingBar,
+	Menu_View_StatusBar,
+	ID_IMPORT,
+	ID_RULED_SURFACE,
+	ID_EXTRUDE,
+	ID_FIRST_EXTERNAL_BUTTON,
+	ID_FIRST_POP_UP_MENU_TOOL = ID_FIRST_EXTERNAL_BUTTON + 1000,
+	ID_NEXT_ID = ID_FIRST_POP_UP_MENU_TOOL + 1000
+};
+
 class CHeeksFrame : public wxFrame
 {
 private:
@@ -91,7 +135,7 @@ public:
 
 	//wxTopLevelWindow's virtual functions
 	bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
-
+	static void AddToolToListAndMenu(Tool *t, std::vector<ToolIndex> &tool_index_list, wxMenu *menu);
 private:
 
 	DECLARE_EVENT_TABLE()

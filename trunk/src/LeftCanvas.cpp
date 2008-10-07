@@ -3,6 +3,7 @@
 #include "LeftCanvas.h"
 #include "../interface/MarkedObject.h"
 #include "MarkedList.h"
+#include "HeeksFrame.h"
 
 class DanObjectTreeData : public wxTreeItemData{
 	public:
@@ -260,18 +261,8 @@ BEGIN_EVENT_TABLE(MyTreeCtrl, wxGenericTreeCtrl)
 #else
 BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
 #endif
-    EVT_TREE_BEGIN_DRAG(TreeTest_Ctrl, MyTreeCtrl::OnBeginDrag)
-    EVT_TREE_BEGIN_RDRAG(TreeTest_Ctrl, MyTreeCtrl::OnBeginRDrag)
-    EVT_TREE_END_DRAG(TreeTest_Ctrl, MyTreeCtrl::OnEndDrag)
-    EVT_TREE_BEGIN_LABEL_EDIT(TreeTest_Ctrl, MyTreeCtrl::OnBeginLabelEdit)
-    EVT_TREE_END_LABEL_EDIT(TreeTest_Ctrl, MyTreeCtrl::OnEndLabelEdit)
     EVT_TREE_DELETE_ITEM(TreeTest_Ctrl, MyTreeCtrl::OnDeleteItem)
     EVT_TREE_SET_INFO(TreeTest_Ctrl, MyTreeCtrl::OnSetInfo)
-//    EVT_TREE_ITEM_EXPANDED(TreeTest_Ctrl, MyTreeCtrl::OnItemExpanded)
-//    EVT_TREE_ITEM_EXPANDING(TreeTest_Ctrl, MyTreeCtrl::OnItemExpanding)
-//    EVT_TREE_ITEM_COLLAPSED(TreeTest_Ctrl, MyTreeCtrl::OnItemCollapsed)
-//    EVT_TREE_ITEM_COLLAPSING(TreeTest_Ctrl, MyTreeCtrl::OnItemCollapsing)
-
     EVT_TREE_SEL_CHANGED(TreeTest_Ctrl, MyTreeCtrl::OnSelChanged)
     EVT_TREE_SEL_CHANGING(TreeTest_Ctrl, MyTreeCtrl::OnSelChanging)
     EVT_TREE_KEY_DOWN(TreeTest_Ctrl, MyTreeCtrl::OnTreeKeyDown)
@@ -284,7 +275,7 @@ BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
     // meaning that no additional placement calculations are required.
 //    EVT_TREE_ITEM_MENU(TreeTest_Ctrl, MyTreeCtrl::OnItemMenu)
 //    EVT_TREE_ITEm_graphics_CLICK(TreeTest_Ctrl, MyTreeCtrl::OnItemRClick)
-   EVT_MENU_RANGE(1, 1000, MyTreeCtrl::OnMenuEvent)
+   EVT_MENU_RANGE(ID_FIRST_POP_UP_MENU_TOOL, ID_FIRST_POP_UP_MENU_TOOL + 1000, MyTreeCtrl::OnMenuEvent)
 
     EVT_LEFT_DOWN(MyTreeCtrl::OnLMouseDown)
     EVT_LEFT_UP(MyTreeCtrl::OnLMouseUp)
@@ -350,13 +341,9 @@ void MyTreeCtrl::name(wxTreeEvent& event)                        \
     event.Skip();                                                \
 }
 
-TREE_EVENT_HANDLER(OnBeginRDrag)
 TREE_EVENT_HANDLER(OnDeleteItem)
 TREE_EVENT_HANDLER(OnGetInfo)
 TREE_EVENT_HANDLER(OnSetInfo)
-//TREE_EVENT_HANDLER(OnItemExpanded)
-//TREE_EVENT_HANDLER(OnItemExpanding)
-//TREE_EVENT_HANDLER(OnItemCollapsed)
 
 #undef TREE_EVENT_HANDLER
 
@@ -372,68 +359,6 @@ void MyTreeCtrl::OnTreeKeyDown(wxTreeEvent& event)
 {
     event.Skip();
 }
-
-void MyTreeCtrl::OnBeginDrag(wxTreeEvent& event)
-{
-    // need to explicitly allow drag
-    if ( event.GetItem() != GetRootItem() )
-    {
-        m_draggedItem = event.GetItem();
-        event.Allow();
-    }
-    else
-    {
-        wxLogMessage(wxT("OnBeginDrag: this item can't be dragged."));
-    }
-}
-
-void MyTreeCtrl::OnEndDrag(wxTreeEvent& event)
-{
-    wxTreeItemId itemSrc = m_draggedItem,
-                 itemDst = event.GetItem();
-    m_draggedItem = (wxTreeItemId)0l;
-
-    if ( itemDst.IsOk() && !ItemHasChildren(itemDst) )
-    {
-        itemDst = GetItemParent(itemDst);
-    }
-
-    if ( !itemDst.IsOk() )
-    {
-        wxLogMessage(wxT("OnEndDrag: can't drop here."));
-
-        return;
-    }
-
-    wxString text = GetItemText(itemSrc);
-    wxLogMessage(wxT("OnEndDrag: '%s' copied to '%s'."),
-                 text.c_str(), GetItemText(itemDst).c_str());
-
-    // just do append here - we could also insert it just before/after the item
-    // on which it was dropped, but this requires slightly more work... we also
-    // completely ignore the client data and icon of the old item but could
-    // copy them as well.
-    //
-    // Finally, we only copy one item here but we might copy the entire tree if
-    // we were dragging a folder.
-    int image = TreeCtrlIcon_File;
-    AppendItem(itemDst, text, image);
-}
-
-void MyTreeCtrl::OnBeginLabelEdit(wxTreeEvent& event)
-{
-    event.Skip();
-}
-
-void MyTreeCtrl::OnEndLabelEdit(wxTreeEvent& event)
-{
-    event.Skip();
-}
-
-//void MyTreeCtrl::OnItemCollapsing(wxTreeEvent& event)
-//{
-//    event.Skip();
-//}
 
 void MyTreeCtrl::OnItemActivated(wxTreeEvent& event)
 {
@@ -468,7 +393,7 @@ void MyTreeCtrl::ShowMenu(wxTreeItemId itemId, const wxPoint& point)
      MyTreeItemData *item = itemId.IsOk() ? (MyTreeItemData *)GetItemData(itemId)
                                          : NULL;
     MarkedObjectOneOfEach marked_object(0, item->m_object, 1);
-		wxGetApp().DoDropDownMenu(this, point, &marked_object, false, false, false);
+		wxGetApp().DoDropDownMenu(this, point, &marked_object, true, false, false);
 }
 
 void MyTreeCtrl::OnItemRClick(wxTreeEvent& event)

@@ -23,6 +23,7 @@
 #include "OptionsCanvas.h"
 #include "InputModeCanvas.h"
 #include "LeftCanvas.h"
+#include "ObjPropsCanvas.h"
 #include "SelectMode.h"
 #include "MagDragWindow.h"
 #include "DigitizeMode.h"
@@ -51,10 +52,6 @@
 
 #include <sstream>
 using namespace std;
-
-const int ID_TOOLBAR = 500;
-const int ID_SOLID_TOOLBAR = 501;
-static const long TOOLBAR_STYLE = wxTB_FLAT | wxTB_DOCKABLE | wxTB_TEXT;
 
 IMPLEMENT_APP(HeeksCADapp)
 
@@ -1087,38 +1084,6 @@ void HeeksCADapp::ClearHistory(void){
 	history->SetLikeNewFile();
 }
 
-struct ToolIndex{
-	Tool *m_tool;
-	int m_index;
-};
-
-static void AddToolToListAndMenu(Tool *t, std::vector<ToolIndex> &tool_index_list, wxMenu *menu)
-{
-	if (t == NULL)
-		menu->AppendSeparator();
-	else if (t->IsAToolList())
-	{
-		wxMenu *menu2 = new wxMenu;
-		std::list<Tool*>& tool_list = ((ToolList*)t)->m_tool_list;
-		std::list<Tool*>::iterator It;
-		for (It=tool_list.begin();It!=tool_list.end();It++)
-		{
-			AddToolToListAndMenu(*It, tool_index_list, menu2);
-		}
-		menu->Append(0, t->GetTitle(), menu2);
-	}
-	else
-	{
-		ToolIndex ti;
-		ti.m_tool = t;
-		ti.m_index = tool_index_list.size();
-		tool_index_list.push_back(ti);
-		menu->Append(ti.m_index+1, t->GetTitle());
-		if(t->Disabled())menu->Enable(ti.m_index+1, false);
-		if(t->Checked ())menu->Check(ti.m_index+1, true);
-	}
-}
-
 static void AddToolListWithSeparator(std::list<Tool*> &l, std::list<Tool*> &temp_l)
 {
 	if(temp_l.size()>0)
@@ -1175,7 +1140,7 @@ void HeeksCADapp::DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObje
 	AddToolListWithSeparator(f_list, temp_f_list);
 	std::list<Tool*>::iterator FIt;
 	for (FIt = f_list.begin(); FIt != f_list.end(); FIt++)
-		AddToolToListAndMenu(*FIt, tool_index_list, &menu);
+		m_frame->AddToolToListAndMenu(*FIt, tool_index_list, &menu);
 	wnd->PopupMenu(&menu, point);
 }
 
@@ -1183,7 +1148,7 @@ void HeeksCADapp::on_menu_event(wxCommandEvent& event)
 {
 	int id = event.GetId();
 	if(id){
-		Tool *t = tool_index_list[id - 1].m_tool;
+		Tool *t = tool_index_list[id - ID_FIRST_POP_UP_MENU_TOOL].m_tool;
 		if(t->Undoable())DoToolUndoably(t);
 		else{
 			t->Run();
@@ -1542,7 +1507,17 @@ public:
 	MarkObjectTool(MarkedObject *o, const wxPoint& point, bool xor_marked_list){m_marked_object = o; m_point = point; m_xor_marked_list = xor_marked_list;}
 
 	// Tool's virtual functions
-	const wxChar* GetTitle(){return _T("Mark");}
+	const wxChar* GetTitle(){
+		if(m_xor_marked_list){
+			if(wxGetApp().m_marked_list->ObjectMarked(m_marked_object->GetObject())){
+				return _T("Unmark");
+			}
+			else{
+				return _T("Mark");
+			}
+		}
+		return _T("Properties");
+	}
 	void Run(){
 		if(m_marked_object == NULL)return;
 		if(m_marked_object->GetObject() == NULL)return;
@@ -1557,6 +1532,10 @@ public:
 		else{
 			wxGetApp().m_marked_list->Clear();
 			wxGetApp().m_marked_list->Add(m_marked_object->GetObject());
+			if(!(wxGetApp().m_frame->m_properties->IsShown())){
+				wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_properties).Show();
+				wxGetApp().m_frame->m_aui_manager->Update();
+			}
 		}
 		if(m_point.x >= 0){
 			gp_Lin ray = wxGetApp().m_frame->m_graphics->m_view_point.SightLine(m_point);
@@ -1581,21 +1560,15 @@ void HeeksCADapp::AddMenusToToolList(MarkedObject* marked_object, std::list<Tool
 	{
 		std::list<Tool*> tools;
 
+		marked_object->GetObject()->GetTools(&tools, &point);
+		if(tools.size() > 0)tools.push_back(NULL);
 		tools.push_back(new RemoveObjectTool(marked_object->GetObject()));
 		tools.push_back(NULL);
-		if(from_graphics_canvas){
-			if (!m_marked_list->ObjectMarked(marked_object->GetObject()))
-			{
-				tools.push_back(new MarkObjectTool(marked_object, point, control_pressed));
-			}
-		}
-		unsigned int s = tools.size();
-		marked_object->GetObject()->GetTools(&tools, &point);
-		if (tools.size()>s) tools.push_back(NULL);
+		tools.push_back(new MarkObjectTool(marked_object, point, control_pressed));
 
 		if (tools.size()>0)
 		{
-			if (from_graphics_canvas)
+			if (from_graphics_canvas || 1)
 			{
 				ToolList *function_list = new ToolList(marked_object->GetObject()->GetShortStringOrTypeString());
 				function_list->Add(tools);

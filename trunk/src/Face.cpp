@@ -378,6 +378,12 @@ void CFace::GetPlaneParams(gp_Pln &p)
 	p = surface.Plane();
 }
 
+void CFace::GetCylinderParams(gp_Cylinder &c)
+{
+	BRepAdaptor_Surface surface(m_topods_face, Standard_True);
+	c = surface.Cylinder();
+}
+
 CEdge* CFace::GetFirstEdge()
 {
 	if (m_edges.size()==0) return NULL;
@@ -393,8 +399,32 @@ CEdge* CFace::GetNextEdge()
 	return *m_edgeIt;
 }
 
+CLoop* CFace::GetFirstLoop()
+{
+	if (m_loops.size()==0) return NULL;
+	m_loopIt = m_loops.begin();
+	return *m_loopIt;
+}
+
+CLoop* CFace::GetNextLoop()
+{
+	if (m_loops.size()==0 || m_loopIt==m_loops.end()) return NULL;
+	m_loopIt++;
+	if (m_loopIt==m_loops.end()) return NULL;
+	return *m_loopIt;
+}
+
 bool CFace::Orientation()
 {
 	TopAbs_Orientation o = m_topods_face.Orientation();
 	return (o == TopAbs_FORWARD);
+}
+
+void CFace::GetUVBox(double *uv_box)
+{
+	BRepAdaptor_Surface surface(m_topods_face, Standard_True);
+	uv_box[0] = surface.FirstUParameter();
+	uv_box[1] = surface.FirstVParameter();
+	uv_box[2] = surface.LastUParameter();
+	uv_box[3] = surface.LastVParameter();
 }
