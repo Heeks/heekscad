@@ -148,6 +148,13 @@ void CGraphicsCanvas::OnMouse( wxMouseEvent& event )
 	}
 
 	wxGetApp().input_mode_object->OnMouse( event );
+
+	for(std::list< void(*)(wxMouseEvent&) >::iterator It = wxGetApp().m_lbutton_up_callbacks.begin(); It != wxGetApp().m_lbutton_up_callbacks.end(); It++)
+	{
+		void(*callbackfunc)(wxMouseEvent& event) = *It;
+		(*callbackfunc)(event);
+	}
+
 	event.Skip();
 }
 

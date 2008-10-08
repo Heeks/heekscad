@@ -17,6 +17,7 @@ MarkedList::MarkedList(){
 	point_or_window = new PointOrWindow(true);
 	gripper_marked_list_changed = false;
 	ignore_coords_only = false;
+	m_filter = -1;
 }
 
 MarkedList::~MarkedList(void){
@@ -171,8 +172,10 @@ void MarkedList::ObjectsInWindow( wxRect window, MarkedObject* marked_object, bo
 						ignore_coords_only_found = true;
 					}
 					else{
-						int window_size = window.width;
-						current_found_object = current_found_object->Add(object, min_depth, window_size);
+						if(object->GetMarkingMask() & m_filter){
+							int window_size = window.width;
+							current_found_object = current_found_object->Add(object, min_depth, window_size);
+						}
 					}
 				}
 			}

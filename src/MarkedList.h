@@ -4,6 +4,7 @@
 
 #include "ViewPoint.h"
 
+
 class Gripper;
 class PointOrWindow;
 
@@ -25,6 +26,7 @@ public:
 	std::list<Gripper*> move_grips;
 	bool gripper_marked_list_changed;
 	bool ignore_coords_only;
+	long m_filter;
 
 	MarkedList();
 	virtual ~MarkedList(void);
