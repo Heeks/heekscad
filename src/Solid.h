@@ -14,6 +14,7 @@ public:
 	virtual const CSolid& operator=(const CSolid& s){ return *this;}
 
 	int GetType()const{return SolidType;}
+	long GetMarkingMask()const{return MARKING_FILTER_SOLID;}
 	const wxChar* GetTypeString(void)const{return _T("Solid");}
 	wxIcon* GetIcon();
 	HeeksObj *MakeACopy(void)const;

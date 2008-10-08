@@ -1,6 +1,5 @@
 // Shape.cpp
 #include "stdafx.h"
-#include "Shape.h"
 #include "Solid.h"
 #include "Wire.h"
 #include "Face.h"
@@ -173,6 +172,7 @@ void CShape::create_faces_and_edges()
 	}
 
 	// create the face loops
+	std::set<HeeksObj*> edges_to_delete;
 	for(HeeksObj* object = m_faces->GetFirstChild(); object; object = m_faces->GetNextChild())
 	{
 		CFace* face = (CFace*)object;
@@ -196,10 +196,31 @@ void CShape::create_faces_and_edges()
 				}
 			}
 
-			CLoop* new_loop = new CLoop(face, edges);
-			face->m_loops.push_back(new_loop);
+			std::list<CEdge*> edges_for_loop;
+			for(std::list<CEdge*>::iterator It = edges.begin(); It != edges.end(); It++){
+				CEdge* edge = *It;
+				if(edge->m_faces.size() == 2 && edge->m_faces.front() == edge->m_faces.back()){
+					if(edges_for_loop.size() > 0){
+						CLoop* new_loop = new CLoop(face, edges_for_loop);
+						face->m_loops.push_back(new_loop);
+						edges_for_loop.clear();
+					}
+					edges_to_delete.insert(edge);
+					face->m_edges.clear();
+				}
+				else{
+					edges_for_loop.push_back(edge);
+				}
+			}
+			if(edges_for_loop.size() > 0){
+				CLoop* new_loop = new CLoop(face, edges_for_loop);
+				face->m_loops.push_back(new_loop);
+			}
 		}
 	}
+
+	// delete edges
+	m_edges->Clear(edges_to_delete);
 
 	// calculate face senses
 	for(HeeksObj* object = m_edges->GetFirstChild(); object; object = m_edges->GetNextChild())

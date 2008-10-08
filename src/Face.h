@@ -35,6 +35,7 @@ public:
 	~CFace();
 
 	int GetType()const{return FaceType;}
+	long GetMarkingMask()const{return MARKING_FILTER_FACE;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
 	wxIcon* GetIcon();

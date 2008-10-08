@@ -29,7 +29,7 @@
 #include "DigitizeMode.h"
 #include "GripperMode.h"
 #include "ConversionTools.h"
-#include "Solid.h"
+#include "Shape.h"
 #include "ViewPoint.h"
 #include "MarkedList.h"
 #include "History.h"
@@ -183,6 +183,10 @@ bool HeeksCADapp::OnInit()
 	SetInputMode(m_select_mode);
 	m_frame->Show(TRUE);
 	SetTopWindow(m_frame);
+
+	OnNewOrOpen(false);
+	SetLikeNewFile();
+	SetFrameTitle();
 
 	{
 		// Open the file passed in the command line argument
@@ -1373,6 +1377,11 @@ void on_set_geom_tol(double value)
 	wxGetApp().Repaint();
 }
 
+void on_set_selection_filter(int value)
+{
+	wxGetApp().m_marked_list->m_filter = value;
+}
+
 static std::list<Property *> *list_for_GetOptions = NULL;
 
 static void AddPropertyCallBack(Property* p)
@@ -1402,6 +1411,8 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 		void(*GetOptions)(void(*)(Property*)) = (void(*)(void(*)(Property*)))(shared_library->GetSymbol(_T("GetOptions")));
 		(*GetOptions)(AddPropertyCallBack);
 	}
+
+	list->push_back(new PropertyInt(_T("selection filter"), m_marked_list->m_filter, on_set_selection_filter));
 }
 
 void HeeksCADapp::DeleteMarkedItems()
@@ -2033,4 +2044,24 @@ void HeeksCADapp::RegisterOnGLCommands( void(*callbackfunc)() )
 void HeeksCADapp::RemoveOnGLCommands( void(*callbackfunc)() )
 {
 	m_on_glCommands_list.remove(callbackfunc);
+}
+
+void HeeksCADapp::RegisterOnGraphicsSize( void(*callbackfunc)(wxSizeEvent& evt) )
+{
+	m_on_graphics_size_list.push_back(callbackfunc);
+}
+
+void HeeksCADapp::RemoveOnGraphicsSize( void(*callbackfunc)(wxSizeEvent& evt) )
+{
+	m_on_graphics_size_list.remove(callbackfunc);
+}
+
+void HeeksCADapp::RegisterOnMouseFn( void(*callbackfunc)(wxMouseEvent&) )
+{
+	m_lbutton_up_callbacks.push_back(callbackfunc);
+}
+
+void HeeksCADapp::RemoveOnMouseFn( void(*callbackfunc)(wxMouseEvent&) )
+{
+	m_lbutton_up_callbacks.remove(callbackfunc);
 }
