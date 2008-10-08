@@ -12,6 +12,7 @@ public:
 	~CWire();
 
 	int GetType()const{return WireType;}
+	long GetMarkingMask()const{return MARKING_FILTER_WIRE;}
 	const wxChar* GetTypeString(void)const{return _T("Wire");}
 	HeeksObj *MakeACopy(void)const{ return new CWire(*this);}
 	wxIcon* GetIcon();

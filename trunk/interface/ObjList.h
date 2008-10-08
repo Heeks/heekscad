@@ -24,6 +24,7 @@ public:
 
 	void ClearUndoably(void);
 	void Clear();
+	void Clear(std::set<HeeksObj*> &to_delete);
 
 	HeeksObj* MakeACopy(void) const;
 	void GetBox(CBox &box);

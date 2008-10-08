@@ -79,6 +79,8 @@ public:
 	std::list< wxString > m_recent_files;
 	bool m_disable_SetObjectID_on_Add;
 	wxString m_version_number;
+	std::list< void(*)(wxSizeEvent&) > m_on_graphics_size_list;
+	std::list< void(*)(wxMouseEvent&) > m_lbutton_up_callbacks;
 
 	// HeeksObj's virtual functions
 	void glCommands(bool select, bool marked, bool no_color);
@@ -174,6 +176,10 @@ public:
 	bool InputDouble(const wxChar* prompt, const wxChar* value_name, double &value);
 	void RegisterOnGLCommands( void(*callbackfunc)() );
 	void RemoveOnGLCommands( void(*callbackfunc)() );
+	void RegisterOnGraphicsSize( void(*callbackfunc)(wxSizeEvent&) );
+	void RemoveOnGraphicsSize( void(*callbackfunc)(wxSizeEvent&) );
+	void RegisterOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
+	void RemoveOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
 };
 
 DECLARE_APP(HeeksCADapp)

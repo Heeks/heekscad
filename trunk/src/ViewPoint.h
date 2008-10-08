@@ -7,7 +7,7 @@ private:
 	wxPoint m_initial_point;
 	double m_initial_pixel_scale;
 
-	void SetProjection2(bool use_depth_testing)const;
+	void SetProjection2(bool use_depth_testing);
 	int ChooseBestPlane(int plane)const;
 	
 public:
@@ -19,6 +19,8 @@ public:
 	double m_projm[16], m_modelm[16]; 
 	int m_window_rect[4];
 	bool m_matrix_valid;
+	double m_near_plane;
+	double m_far_plane;
 
 	CViewPoint(void);
 	~CViewPoint(void);
@@ -40,7 +42,7 @@ public:
 	void Twist(wxPoint start, wxPoint point_diff);
 	void SetViewport(void)const;
 	void SetProjection(bool use_depth_testing);
-	void SetPickProjection(wxRect &pick_box)const;
+	void SetPickProjection(wxRect &pick_box);
 	void SetModelview(void);
 	void SetView(gp_Vec &unity, gp_Vec &unitz);
 	gp_Pnt glUnproject(const gp_Pnt &v)const;

@@ -191,20 +191,18 @@ void CViewPoint::Twist(wxPoint start, wxPoint point_diff){
 	m_vertical = r.XYZ() * -sin(angle - old_angle) + uu.XYZ() * cos(angle - old_angle);
 }
 
-void CViewPoint::SetProjection2(bool use_depth_testing)const{
-	double near_plane;
-	double far_plane;
+void CViewPoint::SetProjection2(bool use_depth_testing){
 	double rad;
 	CBox box;
 	if(use_depth_testing)wxGetApp().GetBox(box);
 	if(!use_depth_testing){
-		near_plane = 0;
-		far_plane = 100000000;
+		m_near_plane = 0;
+		m_far_plane = 100000000;
 		rad = 20000000;
 	}
 	else if(!box.m_valid){
-		near_plane = 0.2;
-		far_plane = 2000;
+		m_near_plane = 0.2;
+		m_far_plane = 2000;
 		rad = 1000;
 	}
 	else{
@@ -216,21 +214,21 @@ void CViewPoint::SetProjection2(bool use_depth_testing)const{
 		f.Normalize();
 		double distance =to_centre_of_box*f;
 		if(m_section)rad /= 100;
-		near_plane = distance - rad;
-		far_plane = distance + rad;
+		m_near_plane = distance - rad;
+		m_far_plane = distance + rad;
 	}
 	{
 		wxSize size = wxGetApp().m_frame->m_graphics->GetClientSize();
 		double w = size.GetWidth()/pixel_scale;
 		double h = size.GetHeight()/pixel_scale;
 		double s = sqrt(w*w + h*h);
-		near_plane -= s/2;
-		far_plane += s/2;
+		m_near_plane -= s/2;
+		m_far_plane += s/2;
 	}
 	wxSize size = wxGetApp().m_frame->m_graphics->GetClientSize();
 	double hw = (double)(size.GetWidth())/2;
 	double hh = (double)(size.GetHeight())/2;
-	glOrtho((-0.5 - hw)/pixel_scale, (hw+0.5)/pixel_scale, (-0.5-hh)/pixel_scale, (0.5+hh)/pixel_scale, (GLfloat)near_plane, (GLfloat)far_plane);
+	glOrtho((-0.5 - hw)/pixel_scale, (hw+0.5)/pixel_scale, (-0.5-hh)/pixel_scale, (0.5+hh)/pixel_scale, (GLfloat)m_near_plane, (GLfloat)m_far_plane);
 }
 
 void CViewPoint::SetProjection(bool use_depth_testing){
@@ -246,7 +244,7 @@ void CViewPoint::SetProjection(bool use_depth_testing){
 	m_matrix_valid = true;
 }
 
-void CViewPoint::SetPickProjection(wxRect &pick_box)const{
+void CViewPoint::SetPickProjection(wxRect &pick_box){
 	wxSize size = wxGetApp().m_frame->m_graphics->GetClientSize();
 	int vp[4] ={0, 0, size.GetWidth(), size.GetHeight()};
 	double box_width = pick_box.width;

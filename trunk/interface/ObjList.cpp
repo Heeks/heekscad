@@ -24,6 +24,23 @@ void ObjList::Clear()
 	m_index_list_valid = true;
 }
 
+void ObjList::Clear(std::set<HeeksObj*> &to_delete)
+{
+	std::list<HeeksObj*>::iterator It;
+	for(It=m_objects.begin(); It!=m_objects.end();)
+	{
+		if(to_delete.find(*It) != to_delete.end())
+		{
+			(*It)->m_owner = NULL;
+			It = m_objects.erase(It);
+		}
+		else
+			It++;
+	}
+	m_index_list.clear();
+	m_index_list_valid = false;
+}
+
 const ObjList& ObjList::operator=(const ObjList& objlist)
 {
 	HeeksObj::operator=(objlist);
@@ -159,7 +176,7 @@ bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 		object->SetID(wxGetApp().GetNextID(object->GetIDGroupType()));
 	}
 #else
-	if(!heeksCAD->GetDisableSetObjectIDOnAdd() && object->GetID() == 0)
+	if(!heeksCAD->GetDisableSetObjectIDOnAdd() && object->m_id == 0)
 	{
 		object->SetID(heeksCAD->GetNextID(object->GetIDGroupType()));
 	}

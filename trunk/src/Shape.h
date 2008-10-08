@@ -3,7 +3,7 @@
 #pragma once
 
 #include "../interface/Material.h"
-#include <TopoDS_Shape.hxx>
+#include <TopoDS_Solid.hxx>
 
 class CFace;
 class CEdge;
@@ -55,11 +55,11 @@ public:
 
 	virtual const CShape& operator=(const CShape& s);
 
+	int GetType()const{return SolidType;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void KillGLLists(void);
 	void ModifyByMatrix(const double* m);
 	const wxChar* GetShortString(void)const{return m_title.c_str();}
-	const wxChar* GetTypeString(void)const{return _T("Shape");}
 	bool CanEditString(void)const{return true;}
 	void OnEditString(const wxChar* str);
 	void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true);

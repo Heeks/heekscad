@@ -22,7 +22,7 @@ public:
 	virtual void RefreshOptions();
 	virtual void RefreshInput();
 	virtual void Repaint(bool soon = false);
-	virtual bool GetCamera(double* pos, double* target, double* up, bool& perspective, double& field_of_view);
+	virtual bool GetCamera(double* pos, double* target, double* up, bool& perspective, double& field_of_view, double& near_plane, double& far_plane);
 	virtual wxFrame* GetMainFrame();
 	virtual wxWindow* GetGraphicsCanvas();
 	virtual wxMenuBar* GetMenuBar();
@@ -43,6 +43,8 @@ public:
 	virtual double GetPixelScale();
 	virtual void Mark(HeeksObj* object);
 	virtual bool ObjectMarked(HeeksObj* object);
+	virtual void SetMarkingFilter(long filter);
+	virtual long GetMarkingFilter();
 	virtual void ClearMarkedList();
 	virtual CInputMode* GetSelectMode();
 	virtual void SetInputMode(CInputMode* input_mode);
@@ -116,4 +118,8 @@ public:
 	virtual const wxChar* GetRevisionNumber();
 	virtual void RegisterOnGLCommands( void(*callbackfunc)() );
 	virtual void RemoveOnGLCommands( void(*callbackfunc)() );
+	virtual void RegisterOnGraphicsSize( void(*callbackfunc)(wxSizeEvent& evt) );
+	virtual void RemoveOnGraphicsSize( void(*callbackfunc)(wxSizeEvent& evt) );
+	virtual void RegisterOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
+	virtual void RemoveOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
 };

@@ -47,7 +47,7 @@ void CHeeksCADInterface::Repaint(bool soon)
 	wxGetApp().Repaint(soon);
 }
 
-bool CHeeksCADInterface::GetCamera(double* pos, double* target, double* up, bool& perspective, double& field_of_view)
+bool CHeeksCADInterface::GetCamera(double* pos, double* target, double* up, bool& perspective, double& field_of_view, double& near_plane, double& far_plane)
 {
 	if(wxGetApp().m_frame == NULL)return false;
 	if(wxGetApp().m_frame->m_graphics == NULL)return false;
@@ -63,6 +63,8 @@ bool CHeeksCADInterface::GetCamera(double* pos, double* target, double* up, bool
 		if(height < width)width = height;
 		field_of_view = width / v.pixel_scale;
 	}
+	near_plane = v.m_near_plane;
+	far_plane = v.m_far_plane;
 	return true;
 }
 
@@ -181,6 +183,16 @@ void CHeeksCADInterface::Mark(HeeksObj* object)
 bool CHeeksCADInterface::ObjectMarked(HeeksObj* object)
 {
 	return wxGetApp().m_marked_list->ObjectMarked(object);
+}
+
+void CHeeksCADInterface::SetMarkingFilter(long filter)
+{
+	wxGetApp().m_marked_list->m_filter = filter;
+}
+
+long CHeeksCADInterface::GetMarkingFilter()
+{
+	return wxGetApp().m_marked_list->m_filter;
 }
 
 void CHeeksCADInterface::ClearMarkedList()
@@ -532,4 +544,24 @@ void CHeeksCADInterface::RegisterOnGLCommands( void(*callbackfunc)() )
 void CHeeksCADInterface::RemoveOnGLCommands( void(*callbackfunc)() )
 {
 	wxGetApp().RemoveOnGLCommands(callbackfunc);
+}
+
+void CHeeksCADInterface::RegisterOnGraphicsSize( void(*callbackfunc)(wxSizeEvent& evt) )
+{
+	wxGetApp().RegisterOnGraphicsSize(callbackfunc);
+}
+
+void CHeeksCADInterface::RemoveOnGraphicsSize( void(*callbackfunc)(wxSizeEvent& evt) )
+{
+	wxGetApp().RemoveOnGraphicsSize(callbackfunc);
+}
+
+void CHeeksCADInterface::RegisterOnMouseFn( void(*callbackfunc)(wxMouseEvent&) )
+{
+	wxGetApp().RegisterOnMouseFn(callbackfunc);
+}
+
+void CHeeksCADInterface::RemoveOnMouseFn( void(*callbackfunc)(wxMouseEvent&) )
+{
+	wxGetApp().RemoveOnMouseFn(callbackfunc);
 }

@@ -37,6 +37,7 @@ public:
 	~CEdge();
 
 	int GetType()const{return EdgeType;}
+	long GetMarkingMask()const{return MARKING_FILTER_EDGE;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
 	HeeksObj *MakeACopy(void)const{ return new CEdge(*this);}

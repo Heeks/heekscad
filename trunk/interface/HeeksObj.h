@@ -31,6 +31,19 @@ enum{
 	ObjectMaximumType
 };
 
+#define MARKING_FILTER_LINE					0x00000001
+#define MARKING_FILTER_ARC					0x00000002
+#define MARKING_FILTER_ILINE				0x00000004
+#define MARKING_FILTER_CIRCLE				0x00000008
+#define MARKING_FILTER_POINT				0x00000010
+#define MARKING_FILTER_SOLID				0x00000020
+#define MARKING_FILTER_STL_SOLID			0x00000040
+#define MARKING_FILTER_WIRE					0x00000080
+#define MARKING_FILTER_FACE					0x00000100
+#define MARKING_FILTER_EDGE					0x00000200
+#define MARKING_FILTER_LINE_ARC_COLLECTION	0x00000400
+#define MARKING_FILTER_IMAGE				0x00000800
+
 class HeeksObj{
 public:
 	unsigned int m_id;
@@ -46,6 +59,7 @@ public:
 
 	// virtual functions
 	virtual int GetType()const{return UnknownType;}
+	virtual long GetMarkingMask()const{return 0;}
 	virtual int GetIDGroupType()const{return GetType();}
 	virtual void glCommands(bool select, bool marked, bool no_color){};
 	virtual void GetBox(CBox &box){}
