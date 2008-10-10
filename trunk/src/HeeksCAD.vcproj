@@ -518,6 +518,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Loop.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Loop.h"
+			>
+		</File>
+		<File
 			RelativePath=".\MagDragWindow.cpp"
 			>
 		</File>
