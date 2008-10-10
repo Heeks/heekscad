@@ -15,7 +15,9 @@
 #include "MagDragWindow.h"
 #include "HArc.h"
 #include "RuledSurface.h"
+#include "Solid.h"
 #include "wx/dnd.h"
+#include "wx/filename.h"
 #include <fstream>
 
 using namespace std;
@@ -39,6 +41,7 @@ EVT_MENU( Menu_View_ViewingBar, CHeeksFrame::OnViewViewingBar )
 EVT_UPDATE_UI(Menu_View_ViewingBar, CHeeksFrame::OnUpdateViewViewingBar)
 EVT_MENU( Menu_View_StatusBar, CHeeksFrame::OnViewStatusBar )
 EVT_UPDATE_UI(Menu_View_StatusBar, CHeeksFrame::OnUpdateViewStatusBar)
+EVT_MENU( Menu_View_ResetLayout, CHeeksFrame::OnResetLayout )
 EVT_MENU(wxID_OPEN, CHeeksFrame::OnOpenButton)
 EVT_MENU(wxID_SAVE, CHeeksFrame::OnSaveButton)
 EVT_MENU(wxID_NEW, CHeeksFrame::OnNewButton)
@@ -52,6 +55,7 @@ EVT_MENU(ID_VIEWING, CHeeksFrame::OnViewingButton)
 EVT_MENU(ID_SPHERE, CHeeksFrame::OnSphereButton)
 EVT_MENU(ID_CUBE, CHeeksFrame::OnCubeButton)
 EVT_MENU(ID_CYL, CHeeksFrame::OnCylButton)
+EVT_MENU(ID_CONE, CHeeksFrame::OnConeButton)
 EVT_MENU(ID_SUBTRACT, CHeeksFrame::OnSubtractButton)
 EVT_MENU(ID_FUSE, CHeeksFrame::OnFuseButton)
 EVT_MENU(ID_COMMON, CHeeksFrame::OnCommonButton)
@@ -93,6 +97,7 @@ bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
     return true;
 }
 
+static wxString default_layout_string = _T("layout2|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=351;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=0;pos=362;prop=100000;bestw=351;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=0;pos=724;prop=100000;bestw=156;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=549|dock_size(4,1,0)=302|dock_size(1,10,0)=41|");
 
 CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSize& size )
 	: wxFrame((wxWindow *)NULL, -1, title, pos, size)
@@ -127,7 +132,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_menuView->AppendCheckItem( Menu_View_SolidBar, wxT( "&Solids Tool Bar" ) );
 	m_menuView->AppendCheckItem( Menu_View_ViewingBar, wxT( "&Viewing Tool Bar" ) );
 	m_menuView->AppendCheckItem( Menu_View_StatusBar, wxT( "St&atus Bar" ) );
-	
+
 	// Add them to the main menu
 	m_menuBar = new wxMenuBar;
 	m_menuBar->Append( menuFile, wxT( "&File" ) );
@@ -194,6 +199,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
     m_solidBar->AddTool(ID_SPHERE, _T("Sphere"), wxBitmap(exe_folder + _T("/bitmaps/sphere.png"), wxBITMAP_TYPE_PNG), _T("Add a sphere"));
     m_solidBar->AddTool(ID_CUBE, _T("Cube"), wxBitmap(exe_folder + _T("/bitmaps/cube.png"), wxBITMAP_TYPE_PNG), _T("Add a cube"));
     m_solidBar->AddTool(ID_CYL, _T("Cylinder"), wxBitmap(exe_folder + _T("/bitmaps/cyl.png"), wxBITMAP_TYPE_PNG), _T("Add a cylinder"));
+    m_solidBar->AddTool(ID_CONE, _T("Cone"), wxBitmap(exe_folder + _T("/bitmaps/cone.png"), wxBITMAP_TYPE_PNG), _T("Add a cone"));
     m_solidBar->AddTool(ID_RULED_SURFACE, _T("Ruled Surface"), wxBitmap(exe_folder + _T("/bitmaps/ruled.png"), wxBITMAP_TYPE_PNG), _T("Create a lofted face"));
     m_solidBar->AddTool(ID_EXTRUDE, _T("Extrude"), wxBitmap(exe_folder + _T("/bitmaps/extrude.png"), wxBITMAP_TYPE_PNG), _T("Extrude a wire or face"));
 	m_solidBar->AddTool(ID_SUBTRACT, _T("Cut"), wxBitmap(exe_folder + _T("/bitmaps/cut.png"), wxBITMAP_TYPE_PNG), _T("Cut one solid from another"));
@@ -230,9 +236,6 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 #else
 		ifstream ifs(_T("AddIns.txt"));
 #endif
-
-		::wxSetWorkingDirectory(_T("C:\\Program Files\\SolidWorks\\SolidWorks"));
-
 		wxChar str[1024];
 		if(!(!ifs)){
 			while(!ifs.eof()){
@@ -246,6 +249,12 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 				if(wstr.Len() == 0)continue;
 
 				if(wstr[0] == '#')continue;
+
+				wxFileName fn(wstr);
+				fn.Normalize();
+				wxString path = fn.GetPath();
+
+				::wxSetWorkingDirectory(path);
 
 				wxDynamicLibrary* shared_library = new wxDynamicLibrary(wstr);
 				if(shared_library->IsLoaded()){
@@ -262,13 +271,14 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 	SetDropTarget(new DnDFile(this));
 
+	m_menuView->Append( Menu_View_ResetLayout, wxT( "Reset Layout" ) );
+
 	//Read layout
 	wxString str;
 	wxGetApp().m_config->Read(_T("AuiPerspective"), &str, _T("layout2|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=351;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=0;pos=362;prop=100000;bestw=351;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=0;pos=724;prop=100000;bestw=156;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=549|dock_size(4,1,0)=302|dock_size(1,10,0)=41|"));
 	m_aui_manager->LoadPerspective(str);
 
-	m_aui_manager->Update();
-}
+	m_aui_manager->Update();}
 
 CHeeksFrame::~CHeeksFrame()
 {
@@ -458,6 +468,12 @@ void CHeeksFrame::OnUpdateViewStatusBar( wxUpdateUIEvent& event )
 	event.Check(m_statusBar->IsShown());
 }
 
+void CHeeksFrame::OnResetLayout( wxCommandEvent& event )
+{
+	m_aui_manager->LoadPerspective(default_layout_string);
+	m_aui_manager->Update();
+}
+
 void CHeeksFrame::OnViewProperties( wxCommandEvent& event )
 {
 	wxAuiPaneInfo& pane_info = m_aui_manager->GetPane(m_properties);
@@ -587,11 +603,6 @@ void CHeeksFrame::OnCommonButton( wxCommandEvent& event )
 	CShape::CommonShapes(wxGetApp().m_marked_list->list());
 }
 
-void CHeeksFrame::OnSphereButton( wxCommandEvent& event )
-{
-	CShape::AddASphere();
-}
-
 void CHeeksFrame::OnRuledSurfaceButton( wxCommandEvent& event )
 {
 	PickCreateRuledSurface();
@@ -602,14 +613,32 @@ void CHeeksFrame::OnExtrudeButton( wxCommandEvent& event )
 	PickCreateExtrusion();
 }
 
+void CHeeksFrame::OnSphereButton( wxCommandEvent& event )
+{
+	CSphere* new_object = new CSphere(gp_Pnt(0, 0, 0), 5);
+	wxGetApp().AddUndoably(new_object, NULL, NULL);
+	wxGetApp().Repaint();
+}
+
 void CHeeksFrame::OnCubeButton( wxCommandEvent& event )
 {
-	CShape::AddACube();
+	CCuboid* new_object = new CCuboid(gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), 10, 10, 10);
+	wxGetApp().AddUndoably(new_object, NULL, NULL);
+	wxGetApp().Repaint();
 }
 
 void CHeeksFrame::OnCylButton( wxCommandEvent& event )
 {
-	CShape::AddACylinder();
+	CCylinder* new_object = new CCylinder(gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), 5, 10);
+	wxGetApp().AddUndoably(new_object, NULL, NULL);
+	wxGetApp().Repaint();
+}
+
+void CHeeksFrame::OnConeButton( wxCommandEvent& event )
+{
+	CCone* new_object = new CCone(gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), 10, 0, 20);
+	wxGetApp().AddUndoably(new_object, NULL, NULL);
+	wxGetApp().Repaint();
 }
 
 void CHeeksFrame::OnRedrawButton( wxCommandEvent& event )

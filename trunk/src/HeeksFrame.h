@@ -26,6 +26,7 @@ enum{
 	ID_SPHERE,
 	ID_CUBE,
 	ID_CYL,
+	ID_CONE,
 	ID_REDRAW,
 	ID_FUSE,
 	ID_COMMON,
@@ -48,6 +49,7 @@ enum{
 	Menu_View_SolidBar,
 	Menu_View_ViewingBar,
 	Menu_View_StatusBar,
+	Menu_View_ResetLayout,
 	ID_IMPORT,
 	ID_RULED_SURFACE,
 	ID_EXTRUDE,
@@ -99,6 +101,7 @@ public:
 	void OnUpdateViewViewingBar( wxUpdateUIEvent& event );
 	void OnViewStatusBar( wxCommandEvent& event );
 	void OnUpdateViewStatusBar( wxUpdateUIEvent& event );
+	void OnResetLayout( wxCommandEvent& event );
 	void OnLinesButton( wxCommandEvent& event );
 	void OnCirclesButton( wxCommandEvent& event );
 	void OnILineButton( wxCommandEvent& event );
@@ -117,6 +120,7 @@ public:
 	void OnExtrudeButton( wxCommandEvent& event );
 	void OnCubeButton( wxCommandEvent& event );
 	void OnCylButton( wxCommandEvent& event );
+	void OnConeButton( wxCommandEvent& event );
 	void OnRedrawButton( wxCommandEvent& event );
 	void OnMagButton( wxCommandEvent& event );
 	void OnMagExtentsButton( wxCommandEvent& event );
