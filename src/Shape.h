@@ -72,9 +72,6 @@ public:
 
 	CFace* find(const TopoDS_Face &face);
 
-	static void AddASphere();
-	static void AddACube();
-	static void AddACylinder();
 	static void CutShapes(const std::list<HeeksObj*> &list);
 	static void FuseShapes(const std::list<HeeksObj*> &list);
 	static void CommonShapes(const std::list<HeeksObj*> &list);

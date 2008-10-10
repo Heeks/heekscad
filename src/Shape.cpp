@@ -32,7 +32,6 @@
 #include "TopoDS_Edge.hxx"
 #include "Interface_Static.hxx"
 #include "../interface/Tool.h"
-#include "SphereCreate.h"
 
 CShapeData::CShapeData()
 {
@@ -422,26 +421,6 @@ CFace* CShape::find(const TopoDS_Face &face)
 		if(f->Face() == face)return f;
 	}
 	return NULL;
-}
-
-void CShape::AddASphere()
-{
-	wxGetApp().SetInputMode(&sphere_creator);
-	wxGetApp().Repaint();
-}
-
-void CShape::AddACube()
-{
-	TopoDS_Solid solid = BRepPrimAPI_MakeBox(10, 10, 10);
-	wxGetApp().AddUndoably(new CSolid(solid, _T("Cube")), NULL, NULL);
-	wxGetApp().Repaint();
-}
-
-void CShape::AddACylinder()
-{
-	TopoDS_Solid solid = BRepPrimAPI_MakeCylinder(5, 10);
-	wxGetApp().AddUndoably(new CSolid(solid, _T("Cylinder")), NULL, NULL);
-	wxGetApp().Repaint();
 }
 
 void CShape::CutShapes(const std::list<HeeksObj*> &list_in)
