@@ -802,14 +802,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\SphereCreate.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\SphereCreate.h"
-			>
-		</File>
-		<File
 			RelativePath=".\stdafx.cpp"
 			>
 			<FileConfiguration
