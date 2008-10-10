@@ -179,6 +179,7 @@ bool HeeksCADapp::OnInit()
 
 	wxImage::AddHandler(new wxPNGHandler);
 	m_frame = new CHeeksFrame( wxT( "HeeksCAD free Solid Modelling software based on Open CASCADE" ), wxPoint(posx, posy), wxSize(width, height));
+
 	m_frame->SetIcon(wxICON(HeeksCAD));
 	SetInputMode(m_select_mode);
 	m_frame->Show(TRUE);
