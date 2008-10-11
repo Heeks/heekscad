@@ -339,12 +339,14 @@ void CShape::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 	t_list->push_back(new OffsetShapeTool(this));
 }
 
-void CShape::ModifyByMatrix(const double* m){
-	gp_Trsf mat = make_matrix(m);
-	BRepBuilderAPI_Transform myBRepTransformation(m_shape,mat);
-	TopoDS_Shape new_shape = myBRepTransformation.Shape();
-	wxGetApp().AddUndoably(MakeObject(new_shape, m_title.c_str()), m_owner, NULL);
-	wxGetApp().DeleteUndoably(this);
+void CShape::ModifyByMatrix(const double* m, bool for_undo){
+	if(!for_undo){
+		gp_Trsf mat = make_matrix(m);
+		BRepBuilderAPI_Transform myBRepTransformation(m_shape,mat);
+		TopoDS_Shape new_shape = myBRepTransformation.Shape();
+		wxGetApp().AddUndoably(MakeObject(new_shape, m_title.c_str()), m_owner, NULL);
+		wxGetApp().DeleteUndoably(this);
+	}
 }
 
 void CShape::OnEditString(const wxChar* str){

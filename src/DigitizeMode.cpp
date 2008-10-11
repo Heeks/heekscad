@@ -270,63 +270,63 @@ void DigitizeMode::OnFrontRender(){
 	point_or_window->OnFrontRender();
 }
 
-void on_intersection(bool onoff){
+void on_intersection(bool onoff, HeeksObj* object){
 	wxGetApp().digitize_inters = onoff;
 }
 
-void on_centre(bool onoff){
+void on_centre(bool onoff, HeeksObj* object){
 	wxGetApp().digitize_centre = onoff;
 }
 
-void on_end_of(bool onoff){
+void on_end_of(bool onoff, HeeksObj* object){
 	wxGetApp().digitize_end = onoff;
 }
 
-void on_mid_point(bool onoff){
+void on_mid_point(bool onoff, HeeksObj* object){
 	wxGetApp().digitize_midpoint = onoff;
 }
 
-void on_nearest(bool onoff){
+void on_nearest(bool onoff, HeeksObj* object){
 	wxGetApp().digitize_nearest = onoff;
 }
 
-void on_tangent(bool onoff){
+void on_tangent(bool onoff, HeeksObj* object){
 	wxGetApp().digitize_tangent = onoff;
 }
 
-void on_radius(double value){
+void on_radius(double value, HeeksObj* object){
 	wxGetApp().digitizing_radius = value;
 }
 
-void on_coords(bool onoff){
+void on_coords(bool onoff, HeeksObj* object){
 	wxGetApp().digitize_coords = onoff;
 }
 
-void on_relative(bool onoff){
+void on_relative(bool onoff, HeeksObj* object){
 	wxGetApp().digitize_screen = onoff;
 }
 
-static void set_x(double value){wxGetApp().m_digitizing->digitized_point.m_point.SetX(value); wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();}
-static void set_y(double value){wxGetApp().m_digitizing->digitized_point.m_point.SetY(value); wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();}
-static void set_z(double value){wxGetApp().m_digitizing->digitized_point.m_point.SetZ(value); wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();}
+static void set_x(double value, HeeksObj* object){wxGetApp().m_digitizing->digitized_point.m_point.SetX(value); wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();}
+static void set_y(double value, HeeksObj* object){wxGetApp().m_digitizing->digitized_point.m_point.SetY(value); wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();}
+static void set_z(double value, HeeksObj* object){wxGetApp().m_digitizing->digitized_point.m_point.SetZ(value); wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();}
 
 void DigitizeMode::GetProperties(std::list<Property *> *list){
-	list->push_back(new PropertyDouble(_T("X"), digitized_point.m_point.X(), set_x));
-	list->push_back(new PropertyDouble(_T("Y"), digitized_point.m_point.Y(), set_y));
-	list->push_back(new PropertyDouble(_T("Z"), digitized_point.m_point.Z(), set_z));
+	list->push_back(new PropertyDouble(_T("X"), digitized_point.m_point.X(), NULL, set_x));
+	list->push_back(new PropertyDouble(_T("Y"), digitized_point.m_point.Y(), NULL, set_y));
+	list->push_back(new PropertyDouble(_T("Z"), digitized_point.m_point.Z(), NULL, set_z));
 }
 
 void DigitizeMode::GetOptions(std::list<Property *> *list){
 	PropertyList* plist = new PropertyList(_T("digitizing"));
-	plist->m_list.push_back(new PropertyCheck(_T("end"), wxGetApp().digitize_end, on_end_of));
-	plist->m_list.push_back(new PropertyCheck(_T("intersection"), wxGetApp().digitize_inters, on_intersection));
-	plist->m_list.push_back(new PropertyCheck(_T("centre"), wxGetApp().digitize_centre, on_centre));
-	plist->m_list.push_back(new PropertyCheck(_T("midpoint"), wxGetApp().digitize_midpoint, on_mid_point));
-	plist->m_list.push_back(new PropertyCheck(_T("nearest"), wxGetApp().digitize_nearest, on_nearest));
-	plist->m_list.push_back(new PropertyCheck(_T("tangent"), wxGetApp().digitize_tangent, on_tangent));
-	plist->m_list.push_back(new PropertyDouble(_T("radius for undefined circles"), wxGetApp().digitizing_radius, on_radius));
-	plist->m_list.push_back(new PropertyCheck(_T("coordinates"), wxGetApp().digitize_coords, on_coords));
-	plist->m_list.push_back(new PropertyCheck(_T("screen"), wxGetApp().digitize_screen, on_relative));
+	plist->m_list.push_back(new PropertyCheck(_T("end"), wxGetApp().digitize_end, NULL, on_end_of));
+	plist->m_list.push_back(new PropertyCheck(_T("intersection"), wxGetApp().digitize_inters, NULL, on_intersection));
+	plist->m_list.push_back(new PropertyCheck(_T("centre"), wxGetApp().digitize_centre, NULL, on_centre));
+	plist->m_list.push_back(new PropertyCheck(_T("midpoint"), wxGetApp().digitize_midpoint, NULL, on_mid_point));
+	plist->m_list.push_back(new PropertyCheck(_T("nearest"), wxGetApp().digitize_nearest, NULL, on_nearest));
+	plist->m_list.push_back(new PropertyCheck(_T("tangent"), wxGetApp().digitize_tangent, NULL, on_tangent));
+	plist->m_list.push_back(new PropertyDouble(_T("radius for undefined circles"), wxGetApp().digitizing_radius, NULL, on_radius));
+	plist->m_list.push_back(new PropertyCheck(_T("coordinates"), wxGetApp().digitize_coords, NULL, on_coords));
+	plist->m_list.push_back(new PropertyCheck(_T("screen"), wxGetApp().digitize_screen, NULL, on_relative));
 	list->push_back(plist);
 }
 

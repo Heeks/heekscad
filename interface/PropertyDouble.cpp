@@ -4,9 +4,10 @@
 
 #include "PropertyDouble.h"
 
-PropertyDouble::PropertyDouble(const wxChar* t, double initial_value, void(*callbackfunc)(double)):Property(){
+PropertyDouble::PropertyDouble(const wxChar* t, double initial_value, HeeksObj* object, void(*callbackfunc)(double, HeeksObj*)):Property(){
 	m_initial_value = initial_value;
 	m_callbackfunc = callbackfunc;
+	m_object = object;
 	title = wxString(t);
 }
 

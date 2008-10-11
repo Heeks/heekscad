@@ -4,8 +4,9 @@
 
 #include "PropertyColor.h"
 
-PropertyColor::PropertyColor(const wxChar* t, HeeksColor initial_value, void(*callbackfunc)(HeeksColor)):Property(){
+PropertyColor::PropertyColor(const wxChar* t, HeeksColor initial_value, HeeksObj* object, void(*callbackfunc)(HeeksColor, HeeksObj*)):Property(){
 	m_initial_value = initial_value;
+	m_object = object;
 	m_callbackfunc = callbackfunc;
 	title = wxString(t);
 }

@@ -6,13 +6,12 @@
 #include "../interface/Tool.h"
 #include "MarkedList.h"
 #include "DigitizeMode.h"
-#include "GripperMode.h"
 #include "StretchTool.h"
 #include "HeeksFrame.h"
 #include "GraphicsCanvas.h"
 #include "ObjPropsCanvas.h"
 
-GripperSelTransform::GripperSelTransform(MarkedList* m, const gp_Pnt& pos):Gripper(pos, _T("")), m_marked_list(m), m_transform_gl_list(0){
+GripperSelTransform::GripperSelTransform(MarkedList* m, const gp_Pnt& pos, EnumGripperType gripper_type):Gripper(pos, _T(""), gripper_type), m_marked_list(m), m_transform_gl_list(0){
 }
 
 bool GripperSelTransform::OnGripperGrabbed(double* from){
@@ -26,7 +25,7 @@ bool GripperSelTransform::OnGripperGrabbed(double* from){
 		m_items_marked_at_grab.push_back(*It);
 		wxGetApp().m_marked_list->set_ignore_onoff(*It, true);
 	}
-	if ( wxGetApp().gripper_mode->m_mode != StretchMode )
+	if ( m_gripper_type <= GripperTypeScale )
 	{
 		CreateGLList();
 		m_drag_matrix = gp_Trsf();
@@ -56,17 +55,24 @@ void GripperSelTransform::CreateGLList(){
 }
 
 void GripperSelTransform::OnGripperMoved( const double* from, const double* to ){
-	if ( wxGetApp().gripper_mode->m_mode == StretchMode )
+	if ( m_gripper_type > GripperTypeScale )
 	{
 		return;
 	}
-	MakeMatrix ( from, to, m_drag_matrix );
+
+	double about[3] = {0, 0, 0};
+	double x_axis[3] = {1, 0, 0};
+	double y_axis[3] = {0, 1, 0};
+
+	if(m_items_marked_at_grab.size() > 0)m_items_marked_at_grab.front()->GetScaleAboutPoint(about, x_axis, y_axis);
+
+	MakeMatrix ( from, to, about, x_axis, y_axis, m_drag_matrix );
 	wxGetApp().Repaint();
 }
 
 void GripperSelTransform::OnGripperReleased ( const double* from, const double* to )
 {
-	if ( wxGetApp().gripper_mode->m_mode == StretchMode )
+	if ( m_gripper_type > GripperTypeScale )
 	{
 		wxGetApp().StartHistory ( _T("Stretch Marked List") );
 		double shift[3] = {to[0] - from[0], to[1] - from[1], to[2] - from[2]};
@@ -84,7 +90,11 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 	else
 	{
 		gp_Trsf mat;
-		MakeMatrix ( from, to, mat );
+		double about[3] = {0, 0, 0};
+		double x_axis[3] = {1, 0, 0};
+		double y_axis[3] = {0, 1, 0};
+		if(m_items_marked_at_grab.size() > 0)m_items_marked_at_grab.front()->GetScaleAboutPoint(about, x_axis, y_axis);
+		MakeMatrix ( from, to, about, x_axis, y_axis, mat );
 		double m[16];
 		extract(mat, m );
 		wxGetApp().StartHistory ( _T("Move Marked List") );
@@ -93,21 +103,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 		for ( It = marked_list.begin(); It != marked_list.end(); It++ )
 		{
 			HeeksObj* object = *It;
-			if ( wxGetApp().gripper_mode->m_make_copies )
-			{
-				HeeksObj *new_object = object;
-				for ( int i = 0; i<wxGetApp().gripper_mode->m_number_of_copies; i++ )
-				{
-					new_object = new_object->MakeACopy();
-					if ( new_object == NULL ) break;
-					new_object->ModifyByMatrix ( m );
-					wxGetApp().AddUndoably ( new_object, object->m_owner, NULL );
-				}
-			}
-			else
-			{
-				wxGetApp().TransformUndoably( object, m );
-			}
+			wxGetApp().TransformUndoably( object, m );
 		}
 		wxGetApp().EndHistory();
 		wxGetApp().UnHideMarkedList();
@@ -140,41 +136,73 @@ void GripperSelTransform::OnRender(){
 	}
 }
 
-void GripperSelTransform::MakeMatrix ( const double* from, const double* to, gp_Trsf& mat )
+void GripperSelTransform::MakeMatrix ( const double* from, const double* to, const double* about, const double* x_axis, const double* y_axis, gp_Trsf& mat )
 {
 	mat = gp_Trsf();
-	switch ( wxGetApp().gripper_mode->m_mode )
+	switch ( m_gripper_type )
 	{
-	case TranslationMode:
+	case GripperTypeTranslate:
 		mat.SetTranslation ( gp_Vec ( make_point ( from ), make_point ( to ) ) );
 		break;
-	case ScaleMode:
+	case GripperTypeScale:
 		{
-			double dist = make_point ( from ).Distance ( wxGetApp().gripper_mode->m_centre_point );
+			gp_Pnt scale_centre_point = make_point(about);
+			double dist = make_point ( from ).Distance ( scale_centre_point );
 			if ( dist<0.00000001 )
 			{
 				return;
 			}
-			double scale = make_point ( to ).Distance ( wxGetApp().gripper_mode->m_centre_point ) /dist;
-			mat.SetScale( wxGetApp().gripper_mode->m_centre_point, scale );
+			double scale = make_point ( to ).Distance ( scale_centre_point ) /dist;
+			mat.SetScale( scale_centre_point, scale );
 		}
 		break;
-	case RotationMode:
+	case GripperTypeRotate:
+	case GripperTypeRotateObject:
 		{
-
+			gp_Pnt rotate_centre_point = make_point(about);
 			gp_Vec start_to_end_vector(make_point(from), make_point(to));
 			if ( start_to_end_vector.Magnitude() <0.000001 ) return;
-			gp_Vec start_vector ( wxGetApp().gripper_mode->m_centre_point, make_point ( from ) );
-			gp_Vec end_vector ( wxGetApp().gripper_mode->m_centre_point, make_point ( to ) );
+			gp_Vec start_vector ( rotate_centre_point, make_point ( from ) );
+			gp_Vec end_vector ( rotate_centre_point, make_point ( to ) );
 			if ( start_vector.Magnitude() <0.000001 ) return;
 			if ( end_vector.Magnitude() <0.000001 ) return;
-			mat.SetTranslation ( -gp_Vec ( wxGetApp().gripper_mode->m_centre_point.XYZ() ) );
+			mat.SetTranslation ( -gp_Vec ( rotate_centre_point.XYZ() ) );
 
 			gp_Vec vx, vy;
 			wxGetApp().m_frame->m_graphics->m_view_point.GetTwoAxes(vx, vy, false, 0);			
 			gp_Vec rot_dir = vx ^ vy;
 			rot_dir.Normalize();
-			gp_Ax1 rot_axis(wxGetApp().gripper_mode->m_centre_point, rot_dir);
+
+			if(m_gripper_type == GripperTypeRotateObject){
+				// choose the closest object axis to use
+				gp_Vec object_x = make_vector(x_axis).Normalized();
+				gp_Vec object_y = make_vector(y_axis).Normalized();
+				gp_Vec object_z = (object_x ^ object_y).Normalized();
+
+				double dpx = fabs(rot_dir * object_x);
+				double dpy = fabs(rot_dir * object_y);
+				double dpz = fabs(rot_dir * object_z);
+				if(dpx > dpy && dpx > dpz){
+					// use object x axis
+					rot_dir = object_x;
+					vx = object_y;
+					vy = object_z;
+				}
+				else if(dpy > dpz){
+					// use object y axis
+					rot_dir = object_y;
+					vx = object_z;
+					vy = object_x;
+				}
+				else{
+					// use object z axis
+					rot_dir = object_z;
+					vx = object_x;
+					vy = object_y;
+				}
+			}
+
+			gp_Ax1 rot_axis(rotate_centre_point, rot_dir);
 			double sx = start_vector * vx;
 			double sy = start_vector * vy;
 			double ex = end_vector * vx;

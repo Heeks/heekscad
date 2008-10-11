@@ -56,7 +56,7 @@ void HArc::GetSegments(void(*callbackfunc)(const double *p), double pixels_per_m
 
 	double radius = m_circle.Radius();
 	double d_angle = end_angle - start_angle;
-	int segments = fabs(pixels_per_mm * radius * d_angle / 6.28318530717958 + 1);
+	int segments = (int)(fabs(pixels_per_mm * radius * d_angle / 6.28318530717958 + 1));
     
     double theta = d_angle / (double)segments;
     double tangetial_factor = tan(theta);
@@ -124,7 +124,7 @@ wxIcon* HArc::GetIcon(){
 	return m_icon;
 }
 
-void HArc::ModifyByMatrix(const double* m){
+void HArc::ModifyByMatrix(const double* m, bool for_undo){
 	gp_Trsf mat = make_matrix(m);
 	A.Transform(mat);
 	B.Transform(mat);
@@ -147,37 +147,35 @@ void HArc::GetGripperPositions(std::list<double> *list, bool just_for_endof){
 	list->push_back(B.Z());
 }
 
-static HArc* arc_for_properties = NULL;
-static void on_set_start(const gp_Pnt &vt){
-	arc_for_properties->A = vt;
+static void on_set_start(const gp_Pnt &vt, HeeksObj* object){
+	((HArc*)object)->A = vt;
 	wxGetApp().Repaint();
 }
 
-static void on_set_end(const gp_Pnt &vt){
-	arc_for_properties->B = vt;
+static void on_set_end(const gp_Pnt &vt, HeeksObj* object){
+	((HArc*)object)->B = vt;
 	wxGetApp().Repaint();
 }
 
-static void on_set_centre(const gp_Pnt &vt){
-	arc_for_properties->m_circle.SetLocation(vt);
+static void on_set_centre(const gp_Pnt &vt, HeeksObj* object){
+	((HArc*)object)->m_circle.SetLocation(vt);
 	wxGetApp().Repaint();
 }
 
-static void on_set_axis(const gp_Pnt &vt){
-	gp_Ax1 a = arc_for_properties->m_circle.Axis();
+static void on_set_axis(const gp_Pnt &vt, HeeksObj* object){
+	gp_Ax1 a = ((HArc*)object)->m_circle.Axis();
 	a.SetDirection(gp_Dir(vt.XYZ()));
-	arc_for_properties->m_circle.SetAxis(a);
+	((HArc*)object)->m_circle.SetAxis(a);
 	wxGetApp().Repaint();
 }
 
 void HArc::GetProperties(std::list<Property *> *list){
 	__super::GetProperties(list);
 
-	arc_for_properties = this;
-	list->push_back(new PropertyVertex(_T("start"), A, on_set_start));
-	list->push_back(new PropertyVertex(_T("end"), B, on_set_end));
-	list->push_back(new PropertyVertex(_T("centre"), m_circle.Location(), on_set_centre));
-	list->push_back(new PropertyVertex(_T("axis"), gp_Pnt(m_circle.Axis().Direction().XYZ()), on_set_axis));
+	list->push_back(new PropertyVertex(_T("start"), A, this, on_set_start));
+	list->push_back(new PropertyVertex(_T("end"), B, this, on_set_end));
+	list->push_back(new PropertyVertex(_T("centre"), m_circle.Location(), this, on_set_centre));
+	list->push_back(new PropertyVertex(_T("axis"), gp_Pnt(m_circle.Axis().Direction().XYZ()), this, on_set_axis));
 	double length = A.Distance(B);
 	list->push_back(new PropertyDouble(_T("Length"), length, NULL));
 }

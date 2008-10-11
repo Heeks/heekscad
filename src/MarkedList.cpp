@@ -8,7 +8,6 @@
 #include "SelectMode.h"
 #include "PointOrWindow.h"
 #include "GripperSelTransform.h"
-#include "GripperMode.h"
 #include "GraphicsCanvas.h"
 #include "HeeksFrame.h"
 
@@ -50,13 +49,14 @@ void MarkedList::create_move_grips(){
 		std::list<double>::iterator It;
 		object->GetGripperPositions(&vl, false);
 		for(It = vl.begin(); It != vl.end() && number_of_grips_made<100; It++){
+			EnumGripperType gripper_type = (EnumGripperType)((int)(*It));
 			It++;
 			pos[0] = *It;
 			It++;
 			pos[1] = *It;
 			It++;
 			pos[2] = *It;
-			move_grips.push_back(new GripperSelTransform(this, make_point(pos)));
+			move_grips.push_back(new GripperSelTransform(this, make_point(pos), gripper_type));
 			number_of_grips_made++;
 		}
 	}

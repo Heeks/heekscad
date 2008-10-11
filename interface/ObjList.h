@@ -39,6 +39,6 @@ public:
 	void KillGLLists(void);
 	void WriteBaseXML(TiXmlElement *element);
 	void ReadBaseXML(TiXmlElement* element);
-	void ModifyByMatrix(const double *m);
+	void ModifyByMatrix(const double *m, bool for_undo);
 	void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true);
 };

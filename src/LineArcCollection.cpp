@@ -37,14 +37,11 @@ wxIcon* CLineArcCollection::GetIcon(){
 	return m_icon;
 }
 
-static CLineArcCollection* object_for_properties = NULL;
-
 void CLineArcCollection::GetProperties(std::list<Property *> *list)
 {
 	__super::GetProperties(list);
 
-	object_for_properties = this;
-	list->push_back(new PropertyInt(_T("Number of elements"), ObjList::GetNumChildren()));
+	list->push_back(new PropertyInt(_T("Number of elements"), ObjList::GetNumChildren(), this));
 }
 
 HeeksObj *CLineArcCollection::MakeACopy(void)const

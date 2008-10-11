@@ -39,7 +39,7 @@ void HCircle::GetSegments(void(*callbackfunc)(const double *p), double pixels_pe
 	gp_Pnt centre = m_circle.Location();
 
 	double radius = m_circle.Radius();
-	int segments = fabs(pixels_per_mm * radius + 1);
+	int segments = (int)(fabs(pixels_per_mm * radius + 1));
     
     double theta = 6.28318530717958 / (double)segments;
     double tangetial_factor = tan(theta);
@@ -113,7 +113,7 @@ wxIcon* HCircle::GetIcon(){
 	return m_icon;
 }
 
-void HCircle::ModifyByMatrix(const double* m){
+void HCircle::ModifyByMatrix(const double* m, bool for_undo){
 	gp_Trsf mat = make_matrix(m);
 	m_circle.Transform(mat);
 }
@@ -159,32 +159,29 @@ void HCircle::GetGripperPositions(std::list<double> *list, bool just_for_endof){
 	}
 }
 
-static HCircle* circle_for_properties = NULL;
-
-static void on_set_centre(const gp_Pnt &vt){
-	circle_for_properties->m_circle.SetLocation(vt);
+static void on_set_centre(const gp_Pnt &vt, HeeksObj* object){
+	((HCircle*)object)->m_circle.SetLocation(vt);
 	wxGetApp().Repaint();
 }
 
-static void on_set_axis(const gp_Pnt &vt){
-	gp_Ax1 a = circle_for_properties->m_circle.Axis();
+static void on_set_axis(const gp_Pnt &vt, HeeksObj* object){
+	gp_Ax1 a = ((HCircle*)object)->m_circle.Axis();
 	a.SetDirection(gp_Dir(vt.XYZ()));
-	circle_for_properties->m_circle.SetAxis(a);
+	((HCircle*)object)->m_circle.SetAxis(a);
 	wxGetApp().Repaint();
 }
 
-static void on_set_radius(double value){
-	circle_for_properties->m_circle.SetRadius(value);
+static void on_set_radius(double value, HeeksObj* object){
+	((HCircle*)object)->m_circle.SetRadius(value);
 	wxGetApp().Repaint();
 }
 
 void HCircle::GetProperties(std::list<Property *> *list){
 	__super::GetProperties(list);
 
-	circle_for_properties = this;
-	list->push_back(new PropertyVertex(_T("centre"), m_circle.Location(), on_set_centre));
-	list->push_back(new PropertyVertex(_T("axis"), gp_Pnt(m_circle.Axis().Direction().XYZ()), on_set_axis));
-	list->push_back(new PropertyDouble(_T("radius"), m_circle.Radius(), on_set_radius));
+	list->push_back(new PropertyVertex(_T("centre"), m_circle.Location(), this, on_set_centre));
+	list->push_back(new PropertyVertex(_T("axis"), gp_Pnt(m_circle.Axis().Direction().XYZ()), this, on_set_axis));
+	list->push_back(new PropertyDouble(_T("radius"), m_circle.Radius(), this, on_set_radius));
 }
 
 bool HCircle::FindNearPoint(const double* ray_start, const double* ray_direction, double *point){
