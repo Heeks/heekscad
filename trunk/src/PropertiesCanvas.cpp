@@ -38,8 +38,7 @@ CPropertiesCanvas::CPropertiesCanvas(wxWindow* parent)
 		// see Modules->PropertyGrid Window Styles
 		wxPG_SPLITTER_AUTO_CENTER | // Automatically center splitter until user manually adjusts it
 		// Default style
-		wxPG_DEFAULT_STYLE);
-		//| wxBORDER_THEME );
+		wxPG_DEFAULT_STYLE | wxBORDER_THEME );
 
 	m_pg->SetExtraStyle( wxPG_EX_HELP_AS_TOOLTIPS );  
 
@@ -195,17 +194,17 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 	switch(property->get_property_type()){
 	case StringPropertyType:
 		{
-			(*(((PropertyString*)property)->m_callbackfunc))(event.GetPropertyValue().GetString());
+			(*(((PropertyString*)property)->m_callbackfunc))(event.GetPropertyValue().GetString(), ((PropertyString*)property)->m_object);
 		}
 		break;
 	case DoublePropertyType:
 		{
-			(*(((PropertyDouble*)property)->m_callbackfunc))(event.GetPropertyValue().GetDouble());
+			(*(((PropertyDouble*)property)->m_callbackfunc))(event.GetPropertyValue().GetDouble(), ((PropertyDouble*)property)->m_object);
 		}
 		break;
 	case IntPropertyType:
 		{
-			(*(((PropertyInt*)property)->m_callbackfunc))(event.GetPropertyValue().GetLong());
+			(*(((PropertyInt*)property)->m_callbackfunc))(event.GetPropertyValue().GetLong(), ((PropertyInt*)property)->m_object);
 		}
 		break;
 	case ColorPropertyType:
@@ -213,7 +212,7 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 			wxVariant var = event.GetPropertyValue();
 			const wxColour* wcol = wxGetVariantCast(var,wxColour);
 			HeeksColor col(wcol->Red(), wcol->Green(), wcol->Blue());
-			(*(((PropertyColor*)property)->m_callbackfunc))(col);
+			(*(((PropertyColor*)property)->m_callbackfunc))(col, ((PropertyColor*)property)->m_object);
 		}
 		break;
 	case VertexPropertyType:
@@ -229,17 +228,17 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 			else if(p->GetName()[0] == 'z'){
 				pos[2] = event.GetPropertyValue().GetDouble();
 			}
-			(*(((PropertyVertex*)property)->m_callbackfunc))(make_point(pos));
+			(*(((PropertyVertex*)property)->m_callbackfunc))(make_point(pos), ((PropertyVertex*)property)->m_object);
 		}
 		break;
 	case ChoicePropertyType:
 		{
-			(*(((PropertyChoice*)property)->m_callbackfunc))(event.GetPropertyValue().GetLong());
+			(*(((PropertyChoice*)property)->m_callbackfunc))(event.GetPropertyValue().GetLong(), ((PropertyChoice*)property)->m_object);
 		}
 		break;
 	case CheckPropertyType:
 		{
-			(*(((PropertyCheck*)property)->m_callbackfunc))(event.GetPropertyValue().GetBool());
+			(*(((PropertyCheck*)property)->m_callbackfunc))(event.GetPropertyValue().GetBool(), ((PropertyCheck*)property)->m_object);
 		}
 		break;
 	case ListOfPropertyType:

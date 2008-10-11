@@ -5,21 +5,31 @@
 
 #include "../interface/HeeksObj.h"
 
+enum EnumGripperType{
+	GripperTypeTranslate,
+	GripperTypeRotate,
+	GripperTypeRotateObject,
+	GripperTypeScale,
+	GripperTypeAngle,
+	GripperTypeStretch
+};
+
 class Gripper: public HeeksObj{
 private:
 
 public:
 	gp_Pnt position;
 	wxString prompt;
+	EnumGripperType m_gripper_type;
 
-	Gripper(const gp_Pnt& pos, const wxChar* str);
+	Gripper(const gp_Pnt& pos, const wxChar* str, EnumGripperType gripper_type);
 	virtual ~Gripper(){}
 
 	// HeeksObj's virtual functions
 	int GetType()const{return GripperType;}
 	void glCommands(bool select, bool marked, bool no_color);
 	const wxChar* GetTypeString(void)const{return _T("Gripper");}
-	void ModifyByMatrix(const double* m);
+	void ModifyByMatrix(const double* m, bool for_undo);
 
 	//Gripper's virtual functions
 	virtual wxCursor* get_gripper_cursor(){return NULL;}

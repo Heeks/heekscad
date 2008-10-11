@@ -165,7 +165,7 @@ HeeksObj *HImage::MakeACopy(void)const
 	return new HImage(*this);
 }
 
-void HImage::ModifyByMatrix(const double *m)
+void HImage::ModifyByMatrix(const double *m, bool for_undo)
 {
 	gp_Trsf mat = make_matrix(m);
 

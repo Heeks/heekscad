@@ -11,16 +11,17 @@ private:
 
 public:
 	HeeksColor m_initial_value;
-	void(*m_callbackfunc)(HeeksColor);
+	HeeksObj* m_object;
+	void(*m_callbackfunc)(HeeksColor, HeeksObj*);
 
-	PropertyColor(const wxChar* t, HeeksColor initial_value, void(*callbackfunc)(HeeksColor value) = NULL);
+	PropertyColor(const wxChar* t, HeeksColor initial_value, HeeksObj* object, void(*callbackfunc)(HeeksColor, HeeksObj*) = NULL);
 	~PropertyColor();
 
 	// Property's virtual functions
 	int get_property_type(){return ColorPropertyType;}
 	bool property_editable()const{return m_callbackfunc != NULL;}
 	Property *MakeACopy(void)const;
-	void CallSetFunction()const{ if(m_callbackfunc)(*m_callbackfunc)(m_initial_value);}
+	void CallSetFunction()const{ if(m_callbackfunc)(*m_callbackfunc)(m_initial_value, m_object);}
 
 	// HeeksObj's virtual functions
 	const wxChar* GetShortString(void)const;

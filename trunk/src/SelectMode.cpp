@@ -14,7 +14,6 @@
 #include "MarkedList.h"
 #include "DigitizeMode.h"
 #include "Gripper.h"
-#include "GripperMode.h"
 #include "GraphicsCanvas.h"
 #include "HeeksFrame.h"
 
@@ -52,18 +51,8 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 					wxGetApp().m_frame->m_graphics->DrawFront();
 					wxGetApp().drag_gripper = (Gripper*)object;
 					wxGetApp().m_digitizing->SetOnlyCoords(wxGetApp().drag_gripper, true);
-					bool save_digitize_end = wxGetApp().digitize_end;
-					if(wxGetApp().gripper_mode->m_use_endof_for_from_except_for_screen_xy && !wxGetApp().digitize_screen)
-					{
-							wxGetApp().grip_from = wxGetApp().drag_gripper->position;
-					}
-					else
-					{				
-						wxGetApp().digitize_end = false;
-						wxGetApp().m_digitizing->digitize(wxPoint(event.GetX(), event.GetY()));
-						wxGetApp().grip_from = wxGetApp().m_digitizing->digitized_point.m_point;
-						wxGetApp().digitize_end = save_digitize_end;
-					}
+					wxGetApp().m_digitizing->digitize(wxPoint(event.GetX(), event.GetY()));
+					wxGetApp().grip_from = wxGetApp().m_digitizing->digitized_point.m_point;
 					wxGetApp().grip_to = wxGetApp().grip_from;
 					double from[3];
 					from[0] = wxGetApp().grip_from.X();
@@ -342,35 +331,34 @@ bool CSelectMode::OnStart(){
 	return true;
 }
 
-void on_set_rotate_mode(int value)
+void on_set_rotate_mode(int value, HeeksObj* object)
 {
 	wxGetApp().m_rotate_mode = value;
 }
 
-void on_set_antialiasing(bool value)
+void on_set_antialiasing(bool value, HeeksObj* object)
 {
 	wxGetApp().m_antialiasing = value;
 	wxGetApp().Repaint();
 }
 
-void on_set_light_push_matrix(bool value)
+void on_set_light_push_matrix(bool value, HeeksObj* object)
 {
 	wxGetApp().m_light_push_matrix = value;
 	wxGetApp().Repaint();
 }
 
-void on_set_reverse_mouse_wheel(bool value)
+void on_set_reverse_mouse_wheel(bool value, HeeksObj* object)
 {
 	wxGetApp().mouse_wheel_forward_away = !value;
 }
 
-void on_set_ctrl_does_rotate(bool value)
+void on_set_ctrl_does_rotate(bool value, HeeksObj* object)
 {
 	wxGetApp().ctrl_does_rotate = value;
 }
 
 void CSelectMode::GetProperties(std::list<Property *> *list){
-	wxGetApp().gripper_mode->GetOptions(list);
 }
 
 void CSelectMode::GetOptions(std::list<Property *> *list){
@@ -385,13 +373,13 @@ void CSelectMode::GetOptions(std::list<Property *> *list){
 	std::list< wxString > choices;
 	choices.push_back ( wxString ( _T("stay upright") ) );
 	choices.push_back ( wxString ( _T("free") ) );
-	plist->m_list.push_back ( new PropertyChoice ( _T("rotate mode"),  choices, wxGetApp().m_rotate_mode, on_set_rotate_mode ) );
-	plist->m_list.push_back( new PropertyCheck(_T("antialiasing"), wxGetApp().m_antialiasing, on_set_antialiasing));
+	plist->m_list.push_back ( new PropertyChoice ( _T("rotate mode"),  choices, wxGetApp().m_rotate_mode, NULL, on_set_rotate_mode ) );
+	plist->m_list.push_back( new PropertyCheck(_T("antialiasing"), wxGetApp().m_antialiasing, NULL, on_set_antialiasing));
 #if _DEBUG
-	plist->m_list.push_back( new PropertyCheck(_T("fixed light"), wxGetApp().m_light_push_matrix, on_set_light_push_matrix));
+	plist->m_list.push_back( new PropertyCheck(_T("fixed light"), wxGetApp().m_light_push_matrix, NULL, on_set_light_push_matrix));
 #endif
-	plist->m_list.push_back( new PropertyCheck(_T("reverse mouse wheel"), !(wxGetApp().mouse_wheel_forward_away), on_set_reverse_mouse_wheel));
-	plist->m_list.push_back( new PropertyCheck(_T("Ctrl key does rotate"), wxGetApp().ctrl_does_rotate, on_set_ctrl_does_rotate));
+	plist->m_list.push_back( new PropertyCheck(_T("reverse mouse wheel"), !(wxGetApp().mouse_wheel_forward_away), NULL, on_set_reverse_mouse_wheel));
+	plist->m_list.push_back( new PropertyCheck(_T("Ctrl key does rotate"), wxGetApp().ctrl_does_rotate, NULL, on_set_ctrl_does_rotate));
 	list->push_back(plist);
 }
 

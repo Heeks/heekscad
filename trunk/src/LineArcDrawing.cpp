@@ -417,13 +417,13 @@ void LineArcDrawing::set_cursor(void){
 
 LineArcDrawing* line_drawing_for_GetProperties = NULL;
 
-void on_set_drawing_mode(int drawing_mode)
+void on_set_drawing_mode(int drawing_mode, HeeksObj* object)
 {
 	line_drawing_for_GetProperties->drawing_mode = (EnumDrawingMode)drawing_mode;
 	line_drawing_for_GetProperties->m_save_drawing_mode.clear();
 }
 
-static void on_set_circle_radius(double value)
+static void on_set_circle_radius(double value, HeeksObj* object)
 {
 	line_drawing_for_GetProperties->radius_for_circle = value;
 	wxGetApp().m_config->Write(_T("RadiusForCircle"), value);
@@ -437,18 +437,18 @@ void LineArcDrawing::GetProperties(std::list<Property *> *list){
 	choices.push_back ( wxString ( _T("infinite line") ) );
 	choices.push_back ( wxString ( _T("draw circles") ) );
 	line_drawing_for_GetProperties = this;
-	list->push_back ( new PropertyChoice ( _T("drawing mode"),  choices, drawing_mode, on_set_drawing_mode ) );
+	list->push_back ( new PropertyChoice ( _T("drawing mode"),  choices, drawing_mode, NULL, on_set_drawing_mode ) );
 	switch(drawing_mode)
 	{
 	case LineDrawingMode:
 		{
-			list->push_back(new PropertyString(_T("(press 'a' for arcs)"), (_T(""))));
+			list->push_back(new PropertyString(_T("(press 'a' for arcs)"), _T(""), NULL));
 		}
 		break;
 
 	case CircleDrawingMode:
 		{
-			list->push_back(new PropertyDouble(_T("radius"), radius_for_circle, on_set_circle_radius));
+			list->push_back(new PropertyDouble(_T("radius"), radius_for_circle, NULL, on_set_circle_radius));
 		}
 		break;
 	}

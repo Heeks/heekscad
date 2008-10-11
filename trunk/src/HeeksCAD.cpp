@@ -27,7 +27,6 @@
 #include "SelectMode.h"
 #include "MagDragWindow.h"
 #include "DigitizeMode.h"
-#include "GripperMode.h"
 #include "ConversionTools.h"
 #include "Shape.h"
 #include "ViewPoint.h"
@@ -65,7 +64,6 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	input_mode_object = NULL;
 	cur_mouse_pos.x = 0;
 	cur_mouse_pos.y = 0;
-	gripper_mode = new GripperMode;
 	drag_gripper = NULL;
 	cursor_gripper = NULL;
 	magnification = new MagDragWindow();
@@ -108,7 +106,6 @@ HeeksCADapp::~HeeksCADapp()
 	delete magnification;
 	delete m_select_mode;
 	delete m_digitizing;
-	delete gripper_mode;
 	delete m_config;
 }
 
@@ -173,7 +170,6 @@ bool HeeksCADapp::OnInit()
 	m_config->Read(_T("m_light_push_matrix"), &m_light_push_matrix);
 	m_config->Read(_T("WheelForwardAway"), &mouse_wheel_forward_away);
 	m_config->Read(_T("CtrlDoesRotate"), &ctrl_does_rotate);
-	gripper_mode->GetProfileStrings();
 
 	GetRecentFilesProfileString();
 
@@ -1338,47 +1334,47 @@ gp_Trsf HeeksCADapp::GetDrawMatrix(bool get_the_appropriate_orthogonal)
 	return digitizing_matrix;
 }
 
-void on_set_background_color(HeeksColor value)
+void on_set_background_color(HeeksColor value, HeeksObj* object)
 {
 	wxGetApp().background_color = value;
 	wxGetApp().Repaint();
 }
 
-void on_set_current_color(HeeksColor value)
+void on_set_current_color(HeeksColor value, HeeksObj* object)
 {
 	wxGetApp().current_color = value;
 }
 
-void on_set_construction_color(HeeksColor value)
+void on_set_construction_color(HeeksColor value, HeeksObj* object)
 {
 	wxGetApp().construction_color = value;
 }
 
-void on_set_grid_mode(int value)
+void on_set_grid_mode(int value, HeeksObj* object)
 {
 	wxGetApp().grid_mode = value;
 	wxGetApp().Repaint();
 }
 
-void on_grid(bool onoff)
+void on_grid(bool onoff, HeeksObj* object)
 {
 	wxGetApp().draw_to_grid = onoff;
 	wxGetApp().Repaint();
 }
 
-void on_grid_edit(double grid_value)
+void on_grid_edit(double grid_value, HeeksObj* object)
 {
 	wxGetApp().digitizing_grid = grid_value;
 	wxGetApp().Repaint();
 }
 
-void on_set_geom_tol(double value)
+void on_set_geom_tol(double value, HeeksObj* object)
 {
 	wxGetApp().m_geom_tol = value;
 	wxGetApp().Repaint();
 }
 
-void on_set_selection_filter(int value)
+void on_set_selection_filter(int value, HeeksObj* object)
 {
 	wxGetApp().m_marked_list->m_filter = value;
 }
@@ -1392,20 +1388,20 @@ static void AddPropertyCallBack(Property* p)
 
 void HeeksCADapp::GetOptions(std::list<Property *> *list)
 {
-	list->push_back ( new PropertyColor ( _T("background color"),  background_color, on_set_background_color ) );
-	list->push_back ( new PropertyColor ( _T("current color"),  current_color, on_set_current_color ) );
-	list->push_back ( new PropertyColor ( _T("construction color"),  construction_color, on_set_construction_color ) );
+	list->push_back ( new PropertyColor ( _T("background color"),  background_color, NULL, on_set_background_color ) );
+	list->push_back ( new PropertyColor ( _T("current color"),  current_color, NULL, on_set_current_color ) );
+	list->push_back ( new PropertyColor ( _T("construction color"),  construction_color, NULL, on_set_construction_color ) );
 	{
 		std::list< wxString > choices;
 		choices.push_back ( wxString ( _T("no grid") ) );
 		choices.push_back ( wxString ( _T("faint color") ) );
 		choices.push_back ( wxString ( _T("alpha blending") ) );
 		choices.push_back ( wxString ( _T("colored alpha blending") ) );
-		list->push_back ( new PropertyChoice ( _T("grid mode"),  choices, grid_mode, on_set_grid_mode ) );
+		list->push_back ( new PropertyChoice ( _T("grid mode"),  choices, grid_mode, NULL, on_set_grid_mode ) );
 	}
-	list->push_back(new PropertyDouble(_T("grid size"), digitizing_grid, on_grid_edit));
-	list->push_back(new PropertyCheck(_T("grid"), draw_to_grid, on_grid));
-	list->push_back(new PropertyDouble(_T("geometry tolerance"), m_geom_tol, on_set_geom_tol));
+	list->push_back(new PropertyDouble(_T("grid size"), digitizing_grid, NULL, on_grid_edit));
+	list->push_back(new PropertyCheck(_T("grid"), draw_to_grid, NULL, on_grid));
+	list->push_back(new PropertyDouble(_T("geometry tolerance"), m_geom_tol, NULL, on_set_geom_tol));
 	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
 		wxDynamicLibrary* shared_library = *It;
 		list_for_GetOptions = list;
@@ -1413,7 +1409,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 		(*GetOptions)(AddPropertyCallBack);
 	}
 
-	list->push_back(new PropertyInt(_T("selection filter"), m_marked_list->m_filter, on_set_selection_filter));
+	list->push_back(new PropertyInt(_T("selection filter"), m_marked_list->m_filter, NULL, on_set_selection_filter));
 }
 
 void HeeksCADapp::DeleteMarkedItems()
@@ -1949,7 +1945,7 @@ void HeeksCADapp::ReadIDFromXML(HeeksObj* object, TiXmlElement *element)
 }
 
 static double* value_for_set_value = NULL;
-static void set_value(double value){*value_for_set_value = value;}
+static void set_value(double value, HeeksObj* object){*value_for_set_value = value;}
 
 static bool *success_for_double_input = NULL;
 
@@ -2011,7 +2007,7 @@ public:
 	void GetProperties(std::list<Property *> *list)
 	{
 		value_for_set_value = &m_value;
-		list->push_back(new PropertyDouble(m_value_title.c_str(), m_value, set_value));
+		list->push_back(new PropertyDouble(m_value_title.c_str(), m_value, NULL, set_value));
 	}
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 	{

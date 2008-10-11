@@ -206,7 +206,7 @@ void CStlSolid::GetBox(CBox &box){
 	box.Insert(m_box);
 }
 
-void CStlSolid::ModifyByMatrix(const double* m){
+void CStlSolid::ModifyByMatrix(const double* m, bool for_undo){
 	gp_Trsf mat = make_matrix(m);
 	for(std::list<CStlTri>::iterator It = m_list.begin(); It != m_list.end(); It++)
 	{
