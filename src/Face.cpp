@@ -198,12 +198,14 @@ void CFace::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 	t_list->push_back(new OffsetFaceTool(this));
 }
 
-void CFace::ModifyByMatrix(const double *m){
-	gp_Trsf mat = make_matrix(m);
-	BRepBuilderAPI_Transform myBRepTransformation(m_topods_face,mat);
-	TopoDS_Shape new_shape = myBRepTransformation.Shape();
-	wxGetApp().Add(new CFace(*((TopoDS_Face*)(&new_shape))), NULL);
-	wxGetApp().DeleteUndoably(this);
+void CFace::ModifyByMatrix(const double *m, bool for_undo){
+	if(!for_undo){
+		gp_Trsf mat = make_matrix(m);
+		BRepBuilderAPI_Transform myBRepTransformation(m_topods_face,mat);
+		TopoDS_Shape new_shape = myBRepTransformation.Shape();
+		wxGetApp().Add(new CFace(*((TopoDS_Face*)(&new_shape))), NULL);
+		wxGetApp().DeleteUndoably(this);
+	}
 }
 
 void CFace::GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal){

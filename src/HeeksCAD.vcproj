@@ -254,11 +254,35 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Cone.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Cone.h"
+			>
+		</File>
+		<File
 			RelativePath=".\ConversionTools.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\ConversionTools.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Cuboid.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Cuboid.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Cylinder.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Cylinder.h"
 			>
 		</File>
 		<File
@@ -347,14 +371,6 @@
 		</File>
 		<File
 			RelativePath=".\Gripper.h"
-			>
-		</File>
-		<File
-			RelativePath=".\GripperMode.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\GripperMode.h"
 			>
 		</File>
 		<File
@@ -807,6 +823,14 @@
 		</File>
 		<File
 			RelativePath=".\Solid.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Sphere.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Sphere.h"
 			>
 		</File>
 		<File

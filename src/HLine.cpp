@@ -57,7 +57,7 @@ HeeksObj *HLine::MakeACopy(void)const{
 		return new_object;
 }
 
-void HLine::ModifyByMatrix(const double* m){
+void HLine::ModifyByMatrix(const double* m, bool for_undo){
 	gp_Trsf mat = make_matrix(m);
 	A.Transform(mat);
 	B.Transform(mat);
@@ -88,24 +88,21 @@ void HLine::GetGripperPositions(std::list<double> *list, bool just_for_endof){
 	list->push_back(B.Z());
 }
 
-HLine* line_for_properties = NULL;
-
-static void on_set_start(const gp_Pnt &vt){
-	line_for_properties->A = vt;
+static void on_set_start(const gp_Pnt &vt, HeeksObj* object){
+	((HLine*)object)->A = vt;
 	wxGetApp().Repaint();
 }
 
-static void on_set_end(const gp_Pnt &vt){
-	line_for_properties->B = vt;
+static void on_set_end(const gp_Pnt &vt, HeeksObj* object){
+	((HLine*)object)->B = vt;
 	wxGetApp().Repaint();
 }
 
 void HLine::GetProperties(std::list<Property *> *list){
 	__super::GetProperties(list);
 
-	line_for_properties = this;
-	list->push_back(new PropertyVertex(_T("start"), A, on_set_start));
-	list->push_back(new PropertyVertex(_T("end"), B, on_set_end));
+	list->push_back(new PropertyVertex(_T("start"), A, this, on_set_start));
+	list->push_back(new PropertyVertex(_T("end"), B, this, on_set_end));
 	double length = A.Distance(B);
 	list->push_back(new PropertyDouble(_T("Length"), length, NULL));
 }

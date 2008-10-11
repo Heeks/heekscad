@@ -73,12 +73,14 @@ public:
 	virtual void CopyFrom(const HeeksObj* object){}
 	virtual void SetColor(const HeeksColor &col){}
 	virtual const HeeksColor* GetColor()const{return NULL;}
-	virtual void ModifyByMatrix(const double *m){}
+	virtual void ModifyByMatrix(const double *m, bool for_undo){} // transform the object, some objects will ignore this if for_undo is set, because they will implement undo/redo with AddUndoably
 	virtual bool GetStartPoint(double* pos){return false;}
 	virtual bool GetEndPoint(double* pos){return false;}
 	virtual bool GetCentrePoint(double* pos){return false;}
 	virtual bool GetMidPoint(double* pos){return false;}
+	virtual bool GetScaleAboutPoint(double* pos, double* x_axis, double* y_axis){x_axis[0] = 1; x_axis[1] = 0; x_axis[2] = 0; x_axis[0] = 0; x_axis[1] = 1; x_axis[2] = 0; return GetCentrePoint(pos);}
 	virtual void GetProperties(std::list<Property *> *list);
+	virtual void OnApplyProperties(){}
 	virtual wxIcon* GetIcon(){return NULL;}
 	virtual int Intersects(const HeeksObj *object, std::list< double > *rl)const{return 0;}
 	virtual bool FindNearPoint(const double* ray_start, const double* ray_direction, double *point){return false;}

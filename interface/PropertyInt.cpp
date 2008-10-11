@@ -4,8 +4,9 @@
 
 #include "PropertyInt.h"
 
-PropertyInt::PropertyInt(const wxChar* t, int initial_value, void(*callbackfunc)(int)):Property(){
+PropertyInt::PropertyInt(const wxChar* t, int initial_value, HeeksObj* object, void(*callbackfunc)(int, HeeksObj*)):Property(){
 	m_initial_value = initial_value;
+	m_object = object;
 	m_callbackfunc = callbackfunc;
 	title = wxString(t);
 }

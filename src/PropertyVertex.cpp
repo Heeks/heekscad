@@ -3,10 +3,11 @@
 #include "stdafx.h"
 #include "PropertyVertex.h"
 
-PropertyVertex::PropertyVertex(const wxChar *t, const gp_Pnt &initial_vt, void(*callbackfunc)(const gp_Pnt& vt)):Property(){
+PropertyVertex::PropertyVertex(const wxChar *t, const gp_Pnt &initial_vt, HeeksObj* object, void(*callbackfunc)(const gp_Pnt& vt, HeeksObj* m_object)):Property(){
 	title = wxString(t);
 	m_vt = initial_vt;
 	m_callbackfunc = callbackfunc;
+	m_object = object;
 }
 
 PropertyVertex::~PropertyVertex(){

@@ -15,7 +15,10 @@
 #include "MagDragWindow.h"
 #include "HArc.h"
 #include "RuledSurface.h"
-#include "Solid.h"
+#include "Sphere.h"
+#include "Cuboid.h"
+#include "Cylinder.h"
+#include "Cone.h"
 #include "wx/dnd.h"
 #include "wx/filename.h"
 #include <fstream>
@@ -615,32 +618,36 @@ void CHeeksFrame::OnExtrudeButton( wxCommandEvent& event )
 
 void CHeeksFrame::OnSphereButton( wxCommandEvent& event )
 {
-	CSphere* new_object = new CSphere(gp_Pnt(0, 0, 0), 5);
+	CSphere* new_object = new CSphere(gp_Pnt(0, 0, 0), 5, _T("Sphere"));
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
+	wxGetApp().m_marked_list->Clear();
 	wxGetApp().m_marked_list->Add(new_object);
 	wxGetApp().Repaint();
 }
 
 void CHeeksFrame::OnCubeButton( wxCommandEvent& event )
 {
-	CCuboid* new_object = new CCuboid(gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), 10, 10, 10);
+	CCuboid* new_object = new CCuboid(gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), 10, 10, 10, _T("Cuboid"));
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
+	wxGetApp().m_marked_list->Clear();
 	wxGetApp().m_marked_list->Add(new_object);
 	wxGetApp().Repaint();
 }
 
 void CHeeksFrame::OnCylButton( wxCommandEvent& event )
 {
-	CCylinder* new_object = new CCylinder(gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), 5, 10);
+	CCylinder* new_object = new CCylinder(gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), 5, 10, _T("Cylinder"));
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
+	wxGetApp().m_marked_list->Clear();
 	wxGetApp().m_marked_list->Add(new_object);
 	wxGetApp().Repaint();
 }
 
 void CHeeksFrame::OnConeButton( wxCommandEvent& event )
 {
-	CCone* new_object = new CCone(gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), 10, 0, 20);
+	CCone* new_object = new CCone(gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), 10, 0, 20, _T("Cone"));
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
+	wxGetApp().m_marked_list->Clear();
 	wxGetApp().m_marked_list->Add(new_object);
 	wxGetApp().Repaint();
 }

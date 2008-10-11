@@ -20,29 +20,26 @@ const HeeksObj& HeeksObj::operator=(const HeeksObj &ho)
 	return *this;
 }
 
-static HeeksObj* object_for_properties = NULL;
-
-void on_edit_string(const wxChar* value)
+void on_edit_string(const wxChar* value, HeeksObj* object)
 {
-	object_for_properties->OnEditString(value);
+	object->OnEditString(value);
 
 	// to do , reconnect these two
 //	wxGetApp().WasModified(object_for_properties);
 //	wxGetApp().Repaint();
 }
 
-static void on_set_id(int value)
+static void on_set_id(int value, HeeksObj* object)
 {
-	object_for_properties->SetID(value);
+	object->SetID(value);
 }
 
 void HeeksObj::GetProperties(std::list<Property *> *list)
 {
 	bool editable = CanEditString();
-	object_for_properties = this;
 	list->push_back(new PropertyString(_T("object type"), GetTypeString(), NULL));
-	if(GetShortString())list->push_back(new PropertyString(_T("object title"), GetShortString(), editable ? on_edit_string : NULL));
-	list->push_back(new PropertyInt(_T("ID"), m_id, on_set_id));
+	if(GetShortString())list->push_back(new PropertyString(_T("object title"), GetShortString(), this, editable ? on_edit_string : NULL));
+	list->push_back(new PropertyInt(_T("ID"), m_id, this, on_set_id));
 }
 
 void HeeksObj::GetGripperPositions(std::list<double> *list, bool just_for_endof)
