@@ -20,6 +20,7 @@ public:
 
 	// HeeksObj's virtual functions
 	int GetType()const{return ILineType;}
+	long GetMarkingMask()const{return MARKING_FILTER_ILINE;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
 	const wxChar* GetTypeString(void)const{return _T("Infinite Line");}

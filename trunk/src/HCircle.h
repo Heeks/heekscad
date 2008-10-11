@@ -21,6 +21,7 @@ public:
 
 	// HeeksObj's virtual functions
 	int GetType()const{return CircleType;}
+	long GetMarkingMask()const{return MARKING_FILTER_CIRCLE;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
 	const wxChar* GetTypeString(void)const{return _T("Circle");}

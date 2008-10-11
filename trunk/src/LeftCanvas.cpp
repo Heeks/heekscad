@@ -154,7 +154,11 @@ void CLeftCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, const 
 		}
 	}
 	else if(all_removed){
-		m_treeCtrl->UnselectAll();
+		wxTreeItemId item = m_treeCtrl->GetFirstVisibleItem();
+		while(item.m_pItem != NULL){
+			m_treeCtrl->SelectItem(item, false);
+			item = m_treeCtrl->GetNextVisible(item);
+		}
 	}
 	else{
 		if(added_list){
