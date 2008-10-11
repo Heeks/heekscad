@@ -38,7 +38,8 @@ CPropertiesCanvas::CPropertiesCanvas(wxWindow* parent)
 		// see Modules->PropertyGrid Window Styles
 		wxPG_SPLITTER_AUTO_CENTER | // Automatically center splitter until user manually adjusts it
 		// Default style
-		wxPG_DEFAULT_STYLE | wxBORDER_THEME );
+		wxPG_DEFAULT_STYLE);
+		//| wxBORDER_THEME );
 
 	m_pg->SetExtraStyle( wxPG_EX_HELP_AS_TOOLTIPS );  
 

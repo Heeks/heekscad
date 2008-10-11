@@ -22,6 +22,7 @@ public:
 
 	// HeeksObj's virtual functions
 	int GetType()const{return ArcType;}
+	long GetMarkingMask()const{return MARKING_FILTER_ARC;}
 	int GetIDGroupType()const{return LineType;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);

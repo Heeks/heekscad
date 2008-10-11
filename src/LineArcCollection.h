@@ -16,6 +16,7 @@ public:
 	const CLineArcCollection& operator=(const CLineArcCollection& c);
 
 	int GetType()const{return LineArcCollectionType;}
+	long GetMarkingMask()const{return MARKING_FILTER_LINE_ARC_COLLECTION;}
 	const wxChar* GetTypeString(void)const{return _T("Line Drawing");}
 	wxIcon* GetIcon();
 	void GetProperties(std::list<Property *> *list);
