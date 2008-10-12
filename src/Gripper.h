@@ -13,6 +13,7 @@ enum EnumGripperType{
 	GripperTypeObjectScaleX,
 	GripperTypeObjectScaleY,
 	GripperTypeObjectScaleZ,
+	GripperTypeObjectScaleXY,
 	GripperTypeAngle,
 	GripperTypeStretch
 };
