@@ -228,7 +228,9 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 			else if(p->GetName()[0] == 'z'){
 				pos[2] = event.GetPropertyValue().GetDouble();
 			}
-			(*(((PropertyVertex*)property)->m_callbackfunc))(make_point(pos), ((PropertyVertex*)property)->m_object);
+			((PropertyVertex*)property)->m_vt = make_point(pos);
+
+			(*(((PropertyVertex*)property)->m_callbackfunc))(((PropertyVertex*)property)->m_vt, ((PropertyVertex*)property)->m_object);
 		}
 		break;
 	case ChoicePropertyType:

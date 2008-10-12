@@ -214,17 +214,17 @@ void CStlSolid::ModifyByMatrix(const double* m, bool for_undo){
 
 		gp_Vec vn(t.n[0], t.n[1], t.n[2]);
 		vn.Transform(mat);
-		t.n[0] = vn.X();
-		t.n[1] = vn.Y();
-		t.n[2] = vn.Z();
+		t.n[0] = (float)vn.X();
+		t.n[1] = (float)vn.Y();
+		t.n[2] = (float)vn.Z();
 
 		for(int i = 0; i<3; i++){
 			gp_Pnt vx;
 			vx = gp_Pnt(t.x[i][0], t.x[i][1], t.x[i][2]);
 			vx.Transform(mat);
-			t.x[i][0] = vx.X();
-			t.x[i][1] = vx.Y();
-			t.x[i][2] = vx.Z();
+			t.x[i][0] = (float)vx.X();
+			t.x[i][1] = (float)vx.Y();
+			t.x[i][2] = (float)vx.Z();
 		}
 	}
 
@@ -330,18 +330,18 @@ HeeksObj* CStlSolid::ReadFromXMLElement(TiXmlElement* pElem)
 		for(TiXmlAttribute* a = pTriElem->FirstAttribute(); a; a = a->Next())
 		{
 			std::string name(a->Name());
-			if(name == "nx"){t.n[0] = a->DoubleValue();}
-			else if(name == "ny"){t.n[1] = a->DoubleValue();}
-			else if(name == "nz"){t.n[2] = a->DoubleValue();}
-			else if(name == "p1x"){t.x[0][0] = a->DoubleValue();}
-			else if(name == "p1y"){t.x[0][1] = a->DoubleValue();}
-			else if(name == "p1z"){t.x[0][2] = a->DoubleValue();}
-			else if(name == "p2x"){t.x[1][0] = a->DoubleValue();}
-			else if(name == "p2y"){t.x[1][1] = a->DoubleValue();}
-			else if(name == "p2z"){t.x[1][2] = a->DoubleValue();}
-			else if(name == "p3x"){t.x[2][0] = a->DoubleValue();}
-			else if(name == "p3y"){t.x[2][1] = a->DoubleValue();}
-			else if(name == "p3z"){t.x[2][2] = a->DoubleValue();}
+			if(name == "nx"){t.n[0] = (float)a->DoubleValue();}
+			else if(name == "ny"){t.n[1] = (float)a->DoubleValue();}
+			else if(name == "nz"){t.n[2] = (float)a->DoubleValue();}
+			else if(name == "p1x"){t.x[0][0] = (float)a->DoubleValue();}
+			else if(name == "p1y"){t.x[0][1] = (float)a->DoubleValue();}
+			else if(name == "p1z"){t.x[0][2] = (float)a->DoubleValue();}
+			else if(name == "p2x"){t.x[1][0] = (float)a->DoubleValue();}
+			else if(name == "p2y"){t.x[1][1] = (float)a->DoubleValue();}
+			else if(name == "p2z"){t.x[1][2] = (float)a->DoubleValue();}
+			else if(name == "p3x"){t.x[2][0] = (float)a->DoubleValue();}
+			else if(name == "p3y"){t.x[2][1] = (float)a->DoubleValue();}
+			else if(name == "p3z"){t.x[2][2] = (float)a->DoubleValue();}
 		}
 		new_object->m_list.push_back(t);
 	}

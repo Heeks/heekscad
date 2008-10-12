@@ -10,6 +10,9 @@ enum EnumGripperType{
 	GripperTypeRotate,
 	GripperTypeRotateObject,
 	GripperTypeScale,
+	GripperTypeObjectScaleX,
+	GripperTypeObjectScaleY,
+	GripperTypeObjectScaleZ,
 	GripperTypeAngle,
 	GripperTypeStretch
 };
