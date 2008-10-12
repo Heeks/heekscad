@@ -23,6 +23,7 @@ public:
 	void GetGripperPositions(std::list<double> *list, bool just_for_endof);
 	void OnApplyProperties();
 	bool GetCentrePoint(double* pos);
+	bool GetScaleAboutMatrix(double *m);
 
 	// CSolid's virtual functions
 	SolidTypeEnum GetSolidType(){return SOLID_TYPE_SPHERE;}

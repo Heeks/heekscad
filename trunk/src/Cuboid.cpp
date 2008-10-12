@@ -73,21 +73,13 @@ void CCuboid::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 	gp_Pnt py(o.XYZ() + m_pos.YDirection().XYZ() * m_y);
 	gp_Dir z_dir = m_pos.XDirection() ^ m_pos.YDirection();
 	gp_Pnt pz(o.XYZ() + z_dir.XYZ() * m_z);
-	gp_Pnt m1(o.XYZ() + m_pos.XDirection().XYZ() * m_x/2);
 	gp_Pnt m2(o.XYZ() + m_pos.XDirection().XYZ() * m_x + m_pos.YDirection().XYZ() * m_y/2);
 	gp_Pnt m3(o.XYZ() + m_pos.XDirection().XYZ() * m_x/2 + m_pos.YDirection().XYZ() * m_y);
-	gp_Pnt m4(o.XYZ() + m_pos.YDirection().XYZ() * m_y/2);
-	gp_Pnt m5(o.XYZ() + m_pos.XDirection().XYZ() * m_x/2 + z_dir.XYZ() * m_z);
-	gp_Pnt m6(o.XYZ() + m_pos.XDirection().XYZ() * m_x + m_pos.YDirection().XYZ() * m_y/2 + z_dir.XYZ() * m_z);
-	gp_Pnt m7(o.XYZ() + m_pos.XDirection().XYZ() * m_x/2 + m_pos.YDirection().XYZ() * m_y + z_dir.XYZ() * m_z);
 	gp_Pnt m8(o.XYZ() + m_pos.YDirection().XYZ() * m_y/2 + z_dir.XYZ() * m_z);
-	gp_Pnt m9(o.XYZ() + m_pos.XDirection().XYZ() * m_x + z_dir.XYZ() * m_z/2);
-	gp_Pnt ma(o.XYZ() + m_pos.XDirection().XYZ() * m_x + m_pos.YDirection().XYZ() * m_y + z_dir.XYZ() * m_z/2);
-	gp_Pnt mb(o.XYZ() + m_pos.YDirection().XYZ() * m_y + z_dir.XYZ() * m_z/2);
-	gp_Pnt mc(o.XYZ() + z_dir.XYZ() * m_z/2);
 	gp_Pnt pxy(o.XYZ() + m_pos.XDirection().XYZ() * m_x + m_pos.YDirection().XYZ() * m_y);
 	gp_Pnt pxz(o.XYZ() + m_pos.XDirection().XYZ() * m_x + z_dir.XYZ() * m_z);
 	gp_Pnt pyz(o.XYZ() + m_pos.YDirection().XYZ() * m_y + z_dir.XYZ() * m_z);
+	gp_Pnt pxyz(o.XYZ() + m_pos.XDirection().XYZ() * m_x  + m_pos.YDirection().XYZ() * m_y + z_dir.XYZ() * m_z);
 	list->push_back(GripperTypeTranslate);
 	list->push_back(o.X());
 	list->push_back(o.Y());
@@ -104,6 +96,10 @@ void CCuboid::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 	list->push_back(pz.X());
 	list->push_back(pz.Y());
 	list->push_back(pz.Z());
+	list->push_back(GripperTypeScale);
+	list->push_back(pxyz.X());
+	list->push_back(pxyz.Y());
+	list->push_back(pxyz.Z());
 	list->push_back(GripperTypeRotate);
 	list->push_back(pxy.X());
 	list->push_back(pxy.Y());
@@ -116,60 +112,24 @@ void CCuboid::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 	list->push_back(pyz.X());
 	list->push_back(pyz.Y());
 	list->push_back(pyz.Z());
-	list->push_back(GripperTypeStretch);
-	list->push_back(m1.X());
-	list->push_back(m1.Y());
-	list->push_back(m1.Z());
-	list->push_back(GripperTypeStretch);
+	list->push_back(GripperTypeObjectScaleX);
 	list->push_back(m2.X());
 	list->push_back(m2.Y());
 	list->push_back(m2.Z());
-	list->push_back(GripperTypeStretch);
+	list->push_back(GripperTypeObjectScaleY);
 	list->push_back(m3.X());
 	list->push_back(m3.Y());
 	list->push_back(m3.Z());
-	list->push_back(GripperTypeStretch);
-	list->push_back(m4.X());
-	list->push_back(m4.Y());
-	list->push_back(m4.Z());
-	list->push_back(GripperTypeStretch);
-	list->push_back(m5.X());
-	list->push_back(m5.Y());
-	list->push_back(m5.Z());
-	list->push_back(GripperTypeStretch);
-	list->push_back(m6.X());
-	list->push_back(m6.Y());
-	list->push_back(m6.Z());
-	list->push_back(GripperTypeStretch);
-	list->push_back(m7.X());
-	list->push_back(m7.Y());
-	list->push_back(m7.Z());
-	list->push_back(GripperTypeStretch);
+	list->push_back(GripperTypeObjectScaleZ);
 	list->push_back(m8.X());
 	list->push_back(m8.Y());
 	list->push_back(m8.Z());
-	list->push_back(GripperTypeStretch);
-	list->push_back(m9.X());
-	list->push_back(m9.Y());
-	list->push_back(m9.Z());
-	list->push_back(GripperTypeStretch);
-	list->push_back(ma.X());
-	list->push_back(ma.Y());
-	list->push_back(ma.Z());
-	list->push_back(GripperTypeStretch);
-	list->push_back(mb.X());
-	list->push_back(mb.Y());
-	list->push_back(mb.Z());
-	list->push_back(GripperTypeStretch);
-	list->push_back(mc.X());
-	list->push_back(mc.Y());
-	list->push_back(mc.Z());
 }
 
 void CCuboid::OnApplyProperties()
 {
 	CCuboid* new_object = new CCuboid(m_pos, m_x, m_y, m_z, m_title.c_str());
-	wxGetApp().StartHistory("Edit Cuboid");
+	wxGetApp().StartHistory(_T("Edit Cuboid"));
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().DeleteUndoably(this);
 	wxGetApp().EndHistory();
@@ -178,10 +138,57 @@ void CCuboid::OnApplyProperties()
 	wxGetApp().Repaint();
 }
 
-bool CCuboid::GetScaleAboutPoint(double* pos, double* x_axis, double* y_axis)
+
+bool CCuboid::GetScaleAboutMatrix(double *m)
 {
-	extract(m_pos.Location(), pos);
-	extract(m_pos.XDirection(), x_axis);
-	extract(m_pos.YDirection(), y_axis);
+	gp_Trsf mat = make_matrix(m_pos.Location(), m_pos.XDirection(), m_pos.YDirection());
+	extract(mat, m);
 	return true;
+}
+
+void CCuboid::Stretch(const double *p, const double* shift, double* new_position)
+{
+	gp_Pnt vp = make_point(p);
+	gp_Vec vshift = make_vector(shift);
+
+	gp_Pnt o = m_pos.Location();
+	gp_Dir z_dir = m_pos.XDirection() ^ m_pos.YDirection();
+	gp_Pnt m2(o.XYZ() + m_pos.XDirection().XYZ() * m_x + m_pos.YDirection().XYZ() * m_y/2);
+	gp_Pnt m3(o.XYZ() + m_pos.XDirection().XYZ() * m_x/2 + m_pos.YDirection().XYZ() * m_y);
+	gp_Pnt m8(o.XYZ() + m_pos.YDirection().XYZ() * m_y/2 + z_dir.XYZ() * m_z);
+
+	bool make_a_new_cuboid = false;
+
+	if(m2.IsEqual(vp, wxGetApp().m_geom_tol)){
+		double start_x = gp_Vec(m2.XYZ()) * gp_Vec(m_pos.XDirection()) - gp_Vec(o.XYZ()) * gp_Vec(m_pos.XDirection());
+		m2 = m2.XYZ() + vshift.XYZ();
+		extract(m2, new_position);
+		make_a_new_cuboid = true;
+		m_x = gp_Vec(m2.XYZ()) * gp_Vec(m_pos.XDirection()) - gp_Vec(o.XYZ()) * gp_Vec(m_pos.XDirection());
+	}
+	else if(m3.IsEqual(vp, wxGetApp().m_geom_tol)){
+		double start_y = gp_Vec(m3.XYZ()) * gp_Vec(m_pos.YDirection()) - gp_Vec(o.XYZ()) * gp_Vec(m_pos.YDirection());
+		m3 = m3.XYZ() + vshift.XYZ();
+		extract(m3, new_position);
+		make_a_new_cuboid = true;
+		m_y = gp_Vec(m3.XYZ()) * gp_Vec(m_pos.YDirection()) - gp_Vec(o.XYZ()) * gp_Vec(m_pos.YDirection());
+	}
+	else if(m8.IsEqual(vp, wxGetApp().m_geom_tol)){
+		double start_z = gp_Vec(m8.XYZ()) * gp_Vec(z_dir) - gp_Vec(o.XYZ()) * gp_Vec(z_dir);
+		m8 = m8.XYZ() + vshift.XYZ();
+		extract(m8, new_position);
+		make_a_new_cuboid = true;
+		m_z = gp_Vec(m8.XYZ()) * gp_Vec(z_dir) - gp_Vec(o.XYZ()) * gp_Vec(z_dir);
+	}
+
+	if(make_a_new_cuboid)
+	{
+		CCuboid* new_object = new CCuboid(m_pos, m_x, m_y, m_z, m_title.c_str());
+		wxGetApp().StartHistory(_T("Stretch Cuboid"));
+		wxGetApp().AddUndoably(new_object, NULL, NULL);
+		wxGetApp().DeleteUndoably(this);
+		wxGetApp().EndHistory();
+		wxGetApp().m_marked_list->Clear();
+		wxGetApp().m_marked_list->Add(new_object);
+	}
 }

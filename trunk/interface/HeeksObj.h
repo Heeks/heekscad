@@ -78,7 +78,7 @@ public:
 	virtual bool GetEndPoint(double* pos){return false;}
 	virtual bool GetCentrePoint(double* pos){return false;}
 	virtual bool GetMidPoint(double* pos){return false;}
-	virtual bool GetScaleAboutPoint(double* pos, double* x_axis, double* y_axis){x_axis[0] = 1; x_axis[1] = 0; x_axis[2] = 0; x_axis[0] = 0; x_axis[1] = 1; x_axis[2] = 0; return GetCentrePoint(pos);}
+	virtual bool GetScaleAboutMatrix(double *m){return false;}
 	virtual void GetProperties(std::list<Property *> *list);
 	virtual void OnApplyProperties(){}
 	virtual wxIcon* GetIcon(){return NULL;}

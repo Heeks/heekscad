@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "Sphere.h"
 #include <BRepPrimAPI_MakeSphere.hxx>
+#include <gp_Trsf.hxx>
 #include "PropertyVertex.h"
 #include "../interface/PropertyDouble.h"
 #include "Gripper.h"
@@ -67,7 +68,7 @@ void CSphere::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 void CSphere::OnApplyProperties()
 {
 	CSphere* new_object = new CSphere(m_pos, m_radius, m_title.c_str());
-	wxGetApp().StartHistory("Edit Sphere");
+	wxGetApp().StartHistory(_T("Edit Sphere"));
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().DeleteUndoably(this);
 	wxGetApp().EndHistory();
@@ -79,5 +80,13 @@ void CSphere::OnApplyProperties()
 bool CSphere::GetCentrePoint(double* pos)
 {
 	extract(m_pos, pos);
+	return true;
+}
+
+bool CSphere::GetScaleAboutMatrix(double *m)
+{
+	gp_Trsf mat;
+	mat.SetTranslationPart(gp_Vec(m_pos.XYZ()));
+	extract(mat, m);
 	return true;
 }
