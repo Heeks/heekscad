@@ -25,7 +25,7 @@ bool GripperSelTransform::OnGripperGrabbed(double* from){
 		m_items_marked_at_grab.push_back(*It);
 		wxGetApp().m_marked_list->set_ignore_onoff(*It, true);
 	}
-	if ( m_gripper_type <= GripperTypeObjectScaleZ )
+	if ( m_gripper_type <= GripperTypeObjectScaleXY )
 	{
 		CreateGLList();
 		m_drag_matrix = gp_Trsf();
@@ -52,11 +52,12 @@ void GripperSelTransform::CreateGLList(){
 	}
 	glDisable(GL_DEPTH_TEST);
 	m_marked_list->GrippersGLCommands(false, false);
+	glEnable(GL_DEPTH_TEST);
 	glEndList();
 }
 
 void GripperSelTransform::OnGripperMoved( const double* from, const double* to ){
-	if ( m_gripper_type > GripperTypeObjectScaleZ )
+	if ( m_gripper_type > GripperTypeObjectScaleXY )
 	{
 		return;
 	}
@@ -105,7 +106,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 		wxGetApp().EndHistory();
 	}
 
-	if ( m_gripper_type <= GripperTypeObjectScaleZ )
+	if ( m_gripper_type <= GripperTypeObjectScaleXY )
 	{
 		wxGetApp().UnHideMarkedList();
 	}
@@ -195,6 +196,18 @@ void GripperSelTransform::MakeMatrix ( const double* from, const double* to, con
 			if(fabs(old_z) < 0.000000001)return;
 			double scale = new_z/old_z;
 			double m[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, scale, 0, 0, 0, 0, 1};
+			mat = object_mat * make_matrix(m) * object_mat.Inverted();
+		}
+	case GripperTypeObjectScaleXY:
+		{
+			gp_Trsf object_mat = make_matrix(object_m);
+			gp_Vec object_x = gp_Vec(1, 0, 0).Transformed(object_mat).Normalized();
+			gp_Pnt scale_centre_point = gp_Pnt(0, 0, 0).Transformed(object_mat);
+			double old_x = make_vector(from) * object_x - gp_Vec(scale_centre_point.XYZ()) * object_x;
+			double new_x = make_vector(to) * object_x - gp_Vec(scale_centre_point.XYZ()) * object_x;
+			if(fabs(old_x) < 0.000000001)return;
+			double scale = new_x/old_x;
+			double m[16] = {scale, 0, 0, 0, 0, scale, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
 			mat = object_mat * make_matrix(m) * object_mat.Inverted();
 		}
 		break;
