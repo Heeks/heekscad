@@ -19,8 +19,12 @@ public:
 	const wxChar* GetTypeString(void)const{return _T("Cylinder");}
 	wxIcon* GetIcon();
 	HeeksObj *MakeACopy(void)const;
+	void ModifyByMatrix(const double* m, bool for_undo);
 	void GetProperties(std::list<Property *> *list);
 	void GetGripperPositions(std::list<double> *list, bool just_for_endof);
+	void OnApplyProperties();
+	bool GetScaleAboutMatrix(double *m);
+	void Stretch(const double *p, const double* shift, double* new_position);
 
 	// CSolid's virtual functions
 	SolidTypeEnum GetSolidType(){return SOLID_TYPE_CYLINDER;}

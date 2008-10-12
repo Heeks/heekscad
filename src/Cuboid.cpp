@@ -160,25 +160,31 @@ void CCuboid::Stretch(const double *p, const double* shift, double* new_position
 	bool make_a_new_cuboid = false;
 
 	if(m2.IsEqual(vp, wxGetApp().m_geom_tol)){
-		double start_x = gp_Vec(m2.XYZ()) * gp_Vec(m_pos.XDirection()) - gp_Vec(o.XYZ()) * gp_Vec(m_pos.XDirection());
 		m2 = m2.XYZ() + vshift.XYZ();
 		extract(m2, new_position);
-		make_a_new_cuboid = true;
-		m_x = gp_Vec(m2.XYZ()) * gp_Vec(m_pos.XDirection()) - gp_Vec(o.XYZ()) * gp_Vec(m_pos.XDirection());
+		double new_x = gp_Vec(m2.XYZ()) * gp_Vec(m_pos.XDirection()) - gp_Vec(o.XYZ()) * gp_Vec(m_pos.XDirection());
+		if(new_x > 0){
+			make_a_new_cuboid = true;
+			m_x = new_x;
+		}
 	}
 	else if(m3.IsEqual(vp, wxGetApp().m_geom_tol)){
-		double start_y = gp_Vec(m3.XYZ()) * gp_Vec(m_pos.YDirection()) - gp_Vec(o.XYZ()) * gp_Vec(m_pos.YDirection());
 		m3 = m3.XYZ() + vshift.XYZ();
 		extract(m3, new_position);
-		make_a_new_cuboid = true;
-		m_y = gp_Vec(m3.XYZ()) * gp_Vec(m_pos.YDirection()) - gp_Vec(o.XYZ()) * gp_Vec(m_pos.YDirection());
+		double new_y = gp_Vec(m3.XYZ()) * gp_Vec(m_pos.YDirection()) - gp_Vec(o.XYZ()) * gp_Vec(m_pos.YDirection());
+		if(new_y > 0){
+			make_a_new_cuboid = true;
+			m_y = new_y;
+		}
 	}
 	else if(m8.IsEqual(vp, wxGetApp().m_geom_tol)){
-		double start_z = gp_Vec(m8.XYZ()) * gp_Vec(z_dir) - gp_Vec(o.XYZ()) * gp_Vec(z_dir);
 		m8 = m8.XYZ() + vshift.XYZ();
 		extract(m8, new_position);
-		make_a_new_cuboid = true;
-		m_z = gp_Vec(m8.XYZ()) * gp_Vec(z_dir) - gp_Vec(o.XYZ()) * gp_Vec(z_dir);
+		double new_z = gp_Vec(m8.XYZ()) * gp_Vec(z_dir) - gp_Vec(o.XYZ()) * gp_Vec(z_dir);
+		if(new_z > 0){
+			make_a_new_cuboid = true;
+			m_z = new_z;
+		}
 	}
 
 	if(make_a_new_cuboid)
