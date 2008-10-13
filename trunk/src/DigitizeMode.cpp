@@ -18,10 +18,16 @@
 DigitizeMode::DigitizeMode(){
 	point_or_window = new PointOrWindow(false);
 	m_doing_a_main_loop = false;
+	m_callback = NULL;
 }
 
 DigitizeMode::~DigitizeMode(void){
 	delete point_or_window;
+}
+
+const wxChar* DigitizeMode::GetTitle()
+{
+	return m_doing_a_main_loop ? (m_prompt_when_doing_a_main_loop.c_str()):_T("Digitize Mode");
 }
 
 void DigitizeMode::OnMouse( wxMouseEvent& event ){
@@ -41,6 +47,12 @@ void DigitizeMode::OnMouse( wxMouseEvent& event ){
 		digitize(wxPoint(event.GetX(), event.GetY()));
 		point_or_window->OnMouse(event);
 		if(m_doing_a_main_loop)wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
+		if(m_callback)
+		{
+			double pos[3];
+			extract(digitized_point.m_point, pos);
+			(*m_callback)(pos);
+		}
 	}
 }
 
@@ -336,7 +348,7 @@ private:
 
 public:
 	void Run(){
-		if(wxGetApp().m_select_mode->m_doing_a_main_loop)
+		if(wxGetApp().m_digitizing->m_doing_a_main_loop)
 		{
 			wxGetApp().ExitMainLoop();
 		}

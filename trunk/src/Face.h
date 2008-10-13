@@ -43,7 +43,7 @@ public:
 	const wxChar* GetTypeString(void)const{return _T("Face");}
 	void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true);
 	double Area()const;
-	void ModifyByMatrix(const double* m, bool for_undo);
+	bool ModifyByMatrix(const double* m);
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	void WriteXML(TiXmlElement *root);
 

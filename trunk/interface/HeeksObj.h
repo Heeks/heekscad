@@ -73,7 +73,7 @@ public:
 	virtual void CopyFrom(const HeeksObj* object){}
 	virtual void SetColor(const HeeksColor &col){}
 	virtual const HeeksColor* GetColor()const{return NULL;}
-	virtual void ModifyByMatrix(const double *m, bool for_undo){} // transform the object, some objects will ignore this if for_undo is set, because they will implement undo/redo with AddUndoably
+	virtual bool ModifyByMatrix(const double *m){return false;} // transform the object, returns true if objects created new to move them
 	virtual bool GetStartPoint(double* pos){return false;}
 	virtual bool GetEndPoint(double* pos){return false;}
 	virtual bool GetCentrePoint(double* pos){return false;}

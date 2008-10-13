@@ -19,6 +19,7 @@
 #include "Cuboid.h"
 #include "Cylinder.h"
 #include "Cone.h"
+#include "TransformTools.h"
 #include "wx/dnd.h"
 #include "wx/filename.h"
 #include <fstream>
@@ -42,6 +43,8 @@ EVT_MENU( Menu_View_SolidBar, CHeeksFrame::OnViewSolidBar )
 EVT_UPDATE_UI(Menu_View_SolidBar, CHeeksFrame::OnUpdateViewSolidBar)
 EVT_MENU( Menu_View_ViewingBar, CHeeksFrame::OnViewViewingBar )
 EVT_UPDATE_UI(Menu_View_ViewingBar, CHeeksFrame::OnUpdateViewViewingBar)
+EVT_MENU( Menu_View_TransformBar, CHeeksFrame::OnViewTransformBar )
+EVT_UPDATE_UI(Menu_View_TransformBar, CHeeksFrame::OnUpdateViewTransformBar)
 EVT_MENU( Menu_View_StatusBar, CHeeksFrame::OnViewStatusBar )
 EVT_UPDATE_UI(Menu_View_StatusBar, CHeeksFrame::OnUpdateViewStatusBar)
 EVT_MENU( Menu_View_ResetLayout, CHeeksFrame::OnResetLayout )
@@ -71,6 +74,10 @@ EVT_MENU(ID_REDO, CHeeksFrame::OnRedoButton)
 EVT_MENU(ID_MAG_EXTENTS, CHeeksFrame::OnMagExtentsButton)
 EVT_MENU(ID_MAG_NO_ROT, CHeeksFrame::OnMagNoRotButton)
 EVT_MENU(ID_MAG_PREVIOUS, CHeeksFrame::OnMagPreviousButton)
+EVT_MENU(ID_MOVE_TRANSLATE, CHeeksFrame::OnMoveTranslateButton)
+EVT_MENU(ID_COPY_TRANSLATE, CHeeksFrame::OnCopyTranslateButton)
+EVT_MENU(ID_MOVE_ROTATE, CHeeksFrame::OnMoveRotateButton)
+EVT_MENU(ID_COPY_ROTATE, CHeeksFrame::OnCopyRotateButton)
 EVT_MENU_RANGE(ID_FIRST_EXTERNAL_BUTTON, ID_FIRST_POP_UP_MENU_TOOL + 1000, CHeeksFrame::OnExternalButton)
 EVT_UPDATE_UI_RANGE(ID_FIRST_EXTERNAL_BUTTON, ID_FIRST_POP_UP_MENU_TOOL + 1000, CHeeksFrame::OnUpdateExternalButton)
 EVT_SIZE(CHeeksFrame::OnSize)
@@ -100,7 +107,7 @@ bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
     return true;
 }
 
-static wxString default_layout_string = _T("layout2|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=351;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=0;pos=362;prop=100000;bestw=390;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=0;pos=724;prop=100000;bestw=156;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=549|dock_size(4,1,0)=302|dock_size(1,10,0)=41|");
+static wxString default_layout_string = _T("layout2|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=351;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=0;pos=362;prop=100000;bestw=390;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=0;pos=763;prop=100000;bestw=156;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=TransformBar;caption=Transformation Tools;state=2108156;dir=1;layer=10;row=0;pos=930;prop=100000;bestw=156;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=549|dock_size(4,1,0)=302|dock_size(1,10,0)=41|");
 
 CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSize& size )
 	: wxFrame((wxWindow *)NULL, -1, title, pos, size)
@@ -134,6 +141,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_menuView->AppendCheckItem( Menu_View_ToolBar, wxT( "&Tool Bar" ) );
 	m_menuView->AppendCheckItem( Menu_View_SolidBar, wxT( "&Solids Tool Bar" ) );
 	m_menuView->AppendCheckItem( Menu_View_ViewingBar, wxT( "&Viewing Tool Bar" ) );
+	m_menuView->AppendCheckItem( Menu_View_TransformBar, wxT( "&Transformations Tool Bar" ) );
 	m_menuView->AppendCheckItem( Menu_View_StatusBar, wxT( "St&atus Bar" ) );
 
 	// Add them to the main menu
@@ -184,6 +192,9 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_viewingBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
 	m_viewingBar->SetToolBitmapSize(wxSize(32, 32));
 
+	m_transformBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
+	m_transformBar->SetToolBitmapSize(wxSize(32, 32));
+
 	wxString exe_folder = wxGetApp().GetExeFolder();
 
 	// main tool bar
@@ -218,6 +229,13 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_viewingBar->AddTool(ID_MAG_NO_ROT, _T("Mag No Rotation"), wxBitmap(exe_folder + _T("/bitmaps/magnorot.png"), wxBITMAP_TYPE_PNG), _T("Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"));
 	m_viewingBar->Realize();
 
+	// transformations tool bar
+	m_transformBar->AddTool(ID_MOVE_TRANSLATE, _T("Move Translate"), wxBitmap(exe_folder + _T("/bitmaps/movet.png"), wxBITMAP_TYPE_PNG), _T("Translate selected items"));
+	m_transformBar->AddTool(ID_COPY_TRANSLATE, _T("Copy Translate"), wxBitmap(exe_folder + _T("/bitmaps/copyt.png"), wxBITMAP_TYPE_PNG), _T("Copy and translate selected items"));
+	m_transformBar->AddTool(ID_MOVE_ROTATE, _T("Move Rotate"), wxBitmap(exe_folder + _T("/bitmaps/mover.png"), wxBITMAP_TYPE_PNG), _T("Rotate selected items"));
+	m_transformBar->AddTool(ID_COPY_ROTATE, _T("Copy Rotate"), wxBitmap(exe_folder + _T("/bitmaps/copyr.png"), wxBITMAP_TYPE_PNG), _T("Copy and rotate selected items"));
+	m_transformBar->Realize();
+
 	m_aui_manager->AddPane(m_graphics, wxAuiPaneInfo().Name(_T("Graphics")).Caption(_T("Graphics")).CentrePane().BestSize(wxSize(800, 600)));
 	m_aui_manager->AddPane(m_left, wxAuiPaneInfo().Name(_T("Objects")).Caption(_T("Objects")).Left().Layer(1).BestSize(wxSize(300, 400)));
 	m_aui_manager->AddPane(m_options, wxAuiPaneInfo().Name(_T("Options")).Caption(_T("Options")).Left().Layer(1).BestSize(wxSize(300, 200)));
@@ -226,6 +244,17 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_aui_manager->AddPane(m_toolBar, wxAuiPaneInfo().Name(_T("ToolBar")).Caption(_T("General Tools")).ToolbarPane().Top());
 	m_aui_manager->AddPane(m_solidBar, wxAuiPaneInfo().Name(_T("SolidBar")).Caption(_T("Solid Tools")).ToolbarPane().Top());
 	m_aui_manager->AddPane(m_viewingBar, wxAuiPaneInfo().Name(_T("ViewingBar")).Caption(_T("Viewing Tools")).ToolbarPane().Top());
+	m_aui_manager->AddPane(m_transformBar, wxAuiPaneInfo().Name(_T("TransformBar")).Caption(_T("Transformation Tools")).ToolbarPane().Top());
+
+	// add to hiding list for full screen mode
+	wxGetApp().RegisterHideableWindow(m_left);
+	wxGetApp().RegisterHideableWindow(m_options);
+	wxGetApp().RegisterHideableWindow(m_input_canvas);
+	wxGetApp().RegisterHideableWindow(m_properties);
+	wxGetApp().RegisterHideableWindow(m_toolBar);
+	wxGetApp().RegisterHideableWindow(m_solidBar);
+	wxGetApp().RegisterHideableWindow(m_viewingBar);
+	wxGetApp().RegisterHideableWindow(m_transformBar);
 
 	// set xml reading functions
 	wxGetApp().InitializeXMLFunctions();
@@ -294,40 +323,26 @@ CHeeksFrame::~CHeeksFrame()
 
 	//Save the application layout
 	wxString str = m_aui_manager->SavePerspective();
+#if 1
+	{
+		ofstream ofs("layout.txt");
+		ofs<<str;
+	}
+#endif
+
 	wxGetApp().m_config->Write(_T("AuiPerspective"), str);
 
 	delete m_aui_manager;
 }
 
 bool CHeeksFrame::ShowFullScreen(bool show, long style){
-	static bool objects_visible = true;
-	static bool options_visible = true;
-	static bool input_visible = true;
-	static bool properties_visible = true;
-	static bool toolbar_visible = true;
-	static bool solidbar_visible = true;
-	static bool viewingbar_visible = true;
 	static bool statusbar_visible = true;
 
 	static std::map< wxWindow*, bool > windows_visible;
 
 	if(show){
 		SetMenuBar(NULL);
-		objects_visible = m_aui_manager->GetPane(m_left).IsShown();
-		options_visible = m_aui_manager->GetPane(m_options).IsShown();
-		input_visible = m_aui_manager->GetPane(m_input_canvas).IsShown();
-		properties_visible = m_aui_manager->GetPane(m_properties).IsShown();
-		toolbar_visible = m_aui_manager->GetPane(m_toolBar).IsShown();
-		solidbar_visible = m_aui_manager->GetPane(m_solidBar).IsShown();
-		viewingbar_visible = m_aui_manager->GetPane(m_viewingBar).IsShown();
 		statusbar_visible = m_statusBar->IsShown();
-		m_aui_manager->GetPane(m_left).Show(false);
-		m_aui_manager->GetPane(m_options).Show(false);
-		m_aui_manager->GetPane(m_input_canvas).Show(false);
-		m_aui_manager->GetPane(m_properties).Show(false);
-		m_aui_manager->GetPane(m_toolBar).Show(false);
-		m_aui_manager->GetPane(m_solidBar).Show(false);
-		m_aui_manager->GetPane(m_viewingBar).Show(false);
 		m_statusBar->Show(false);
 		for(std::list<wxWindow*>::iterator It = wxGetApp().m_hideable_windows.begin(); It != wxGetApp().m_hideable_windows.end(); It++)
 		{
@@ -338,13 +353,6 @@ bool CHeeksFrame::ShowFullScreen(bool show, long style){
 	}
 	else{
 		SetMenuBar(m_menuBar);
-		m_aui_manager->GetPane(m_left).Show(objects_visible);
-		m_aui_manager->GetPane(m_options).Show(options_visible);
-		m_aui_manager->GetPane(m_input_canvas).Show(input_visible);
-		m_aui_manager->GetPane(m_properties).Show(properties_visible);
-		m_aui_manager->GetPane(m_toolBar).Show(toolbar_visible);
-		m_aui_manager->GetPane(m_solidBar).Show(solidbar_visible);
-		m_aui_manager->GetPane(m_viewingBar).Show(viewingbar_visible);
 		m_statusBar->Show(statusbar_visible);
 		for(std::list<wxWindow*>::iterator It = wxGetApp().m_hideable_windows.begin(); It != wxGetApp().m_hideable_windows.end(); It++)
 		{
@@ -459,6 +467,20 @@ void CHeeksFrame::OnViewViewingBar( wxCommandEvent& event )
 void CHeeksFrame::OnUpdateViewViewingBar( wxUpdateUIEvent& event )
 {
 	event.Check(m_aui_manager->GetPane(m_viewingBar).IsShown());
+}
+
+void CHeeksFrame::OnViewTransformBar( wxCommandEvent& event )
+{
+	wxAuiPaneInfo& pane_info = m_aui_manager->GetPane(m_transformBar);
+	if(pane_info.IsOk()){
+		pane_info.Show(event.IsChecked());
+		m_aui_manager->Update();
+	}
+}
+
+void CHeeksFrame::OnUpdateViewTransformBar( wxUpdateUIEvent& event )
+{
+	event.Check(m_aui_manager->GetPane(m_transformBar).IsShown());
 }
 
 void CHeeksFrame::OnViewStatusBar( wxCommandEvent& event )
@@ -676,6 +698,26 @@ void CHeeksFrame::OnMagNoRotButton( wxCommandEvent& event )
 void CHeeksFrame::OnMagPreviousButton( wxCommandEvent& event )
 {
 	wxGetApp().m_frame->m_graphics->OnMagPrevious();
+}
+
+void CHeeksFrame::OnMoveTranslateButton( wxCommandEvent& event )
+{
+	TransformTools::MoveTranslate();
+}
+
+void CHeeksFrame::OnCopyTranslateButton( wxCommandEvent& event )
+{
+	TransformTools::CopyTranslate();
+}
+
+void CHeeksFrame::OnMoveRotateButton( wxCommandEvent& event )
+{
+	TransformTools::MoveRotate();
+}
+
+void CHeeksFrame::OnCopyRotateButton( wxCommandEvent& event )
+{
+	TransformTools::CopyRotate();
 }
 
 void CHeeksFrame::OnExternalButton( wxCommandEvent& event )

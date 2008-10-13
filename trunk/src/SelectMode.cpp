@@ -23,6 +23,11 @@ CSelectMode::CSelectMode(){
 	m_doing_a_main_loop = false;
 }
 
+const wxChar* CSelectMode::GetTitle()
+{
+	return m_doing_a_main_loop ? (m_prompt_when_doing_a_main_loop.c_str()):_T("Select Mode");
+}
+
 void CSelectMode::OnMouse( wxMouseEvent& event )
 {
 	bool event_used = false;
@@ -319,13 +324,6 @@ void CSelectMode::OnFrontRender(){
 		wxGetApp().drag_gripper->OnFrontRender();
 	}
 	if(window_box_exists)wxGetApp().m_frame->m_graphics->DrawWindow(window_box, true);
-}
-
-void CSelectMode::OnRender()
-{
-	if(wxGetApp().drag_gripper){
-		wxGetApp().drag_gripper->OnRender();
-	}
 }
 
 bool CSelectMode::OnStart(){

@@ -235,9 +235,15 @@ void ObjList::ReadBaseXML(TiXmlElement* element)
 	HeeksObj::ReadBaseXML(element);
 }
 
-void ObjList::ModifyByMatrix(const double *m, bool for_undo)
+bool ObjList::ModifyByMatrix(const double *m)
 {
-	for(std::list<HeeksObj*>::iterator It=m_objects.begin(); It!=m_objects.end() ;It++) (*It)->ModifyByMatrix(m, for_undo);
+	bool done_with_add_and_remove = false;
+	for(std::list<HeeksObj*>::iterator It=m_objects.begin(); It!=m_objects.end() ;It++)
+	{
+		if((*It)->ModifyByMatrix(m))done_with_add_and_remove = true;
+	}
+
+	return done_with_add_and_remove;
 }
 
 void ObjList::GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal)

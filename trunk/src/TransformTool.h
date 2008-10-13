@@ -8,7 +8,7 @@ private:
 	double modify_matrix[16];
 	double revert_matrix[16];
 	HeeksObj *object;
-	bool first_time;
+	bool m_done_with_add_and_remove;
 
 public:
 	TransformTool(HeeksObj *o, const gp_Trsf &t, const gp_Trsf &i);
@@ -26,7 +26,7 @@ private:
 	double modify_matrix[16];
 	double revert_matrix[16];
 	const std::list<HeeksObj*> *m_list;
-	bool first_time;
+	std::set<HeeksObj*> m_done_with_add_and_remove;
 
 public:
 	TransformObjectsTool(const std::list<HeeksObj*>& list, const gp_Trsf &t, const gp_Trsf &i);

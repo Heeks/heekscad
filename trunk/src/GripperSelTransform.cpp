@@ -11,50 +11,29 @@
 #include "GraphicsCanvas.h"
 #include "ObjPropsCanvas.h"
 
-GripperSelTransform::GripperSelTransform(MarkedList* m, const gp_Pnt& pos, EnumGripperType gripper_type):Gripper(pos, _T(""), gripper_type), m_marked_list(m), m_transform_gl_list(0){
+GripperSelTransform::GripperSelTransform(const gp_Pnt& pos, EnumGripperType gripper_type):Gripper(pos, _T(""), gripper_type){
 }
 
 bool GripperSelTransform::OnGripperGrabbed(double* from){
 	extract(position, m_initial_grip_pos);
 	memcpy(m_from, from, 3*sizeof(double));
 	memcpy(m_last_from, from, 3*sizeof(double));
-	m_marked_list->gripping = true;
+	wxGetApp().m_marked_list->gripping = true;
 	m_items_marked_at_grab.clear();
 	std::list<HeeksObj *>::const_iterator It;
-	for(It = m_marked_list->list().begin(); It != m_marked_list->list().end(); It++){
+	for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
 		m_items_marked_at_grab.push_back(*It);
 		wxGetApp().m_marked_list->set_ignore_onoff(*It, true);
 	}
 	if ( m_gripper_type <= GripperTypeObjectScaleXY )
 	{
-		CreateGLList();
-		m_drag_matrix = gp_Trsf();
+		wxGetApp().CreateTransformGLList(true);
+		wxGetApp().m_drag_matrix = gp_Trsf();
 		wxGetApp().HideMarkedList();
 	}
 	return true;
 }
 
-void GripperSelTransform::DestroyGLList(){
-	if (m_transform_gl_list)
-	{
-		glDeleteLists(m_transform_gl_list, 1);
-	}
-	m_transform_gl_list = 0;
-}
-
-void GripperSelTransform::CreateGLList(){
-	DestroyGLList();
-	m_transform_gl_list = glGenLists(1);
-	glNewList(m_transform_gl_list, GL_COMPILE);
-	std::list<HeeksObj *>::const_iterator It;
-	for(It = m_marked_list->list().begin(); It != m_marked_list->list().end(); It++){
-		(*It)->glCommands(false, true, false);
-	}
-	glDisable(GL_DEPTH_TEST);
-	m_marked_list->GrippersGLCommands(false, false);
-	glEnable(GL_DEPTH_TEST);
-	glEndList();
-}
 
 void GripperSelTransform::OnGripperMoved( const double* from, const double* to ){
 	if ( m_gripper_type > GripperTypeObjectScaleXY )
@@ -75,7 +54,7 @@ void GripperSelTransform::OnGripperMoved( const double* from, const double* to )
 
 	if(m_items_marked_at_grab.size() > 0)m_items_marked_at_grab.front()->GetScaleAboutMatrix(object_m);
 
-	MakeMatrix ( from, to, object_m, m_drag_matrix );
+	MakeMatrix ( from, to, object_m, wxGetApp().m_drag_matrix );
 	wxGetApp().Repaint();
 }
 
@@ -105,7 +84,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 		double m[16];
 		extract(mat, m );
 		wxGetApp().StartHistory ( _T("Move Marked List") );
-		std::list<HeeksObj*> marked_list = m_marked_list->list();
+		std::list<HeeksObj*> marked_list = wxGetApp().m_marked_list->list();
 		std::list<HeeksObj *>::iterator It;
 		for ( It = marked_list.begin(); It != marked_list.end(); It++ )
 		{
@@ -132,20 +111,8 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 		}
 	}
 	m_items_marked_at_grab.clear();
-	DestroyGLList();
-	m_marked_list->gripping = false;
-}
-
-void GripperSelTransform::OnRender(){
-	if(m_transform_gl_list)
-	{
-        glPushMatrix();
-		double m[16];
-		extract_transposed(m_drag_matrix, m);
-		glMultMatrixd(m);
-		glCallList(m_transform_gl_list);
-		glPopMatrix();
-	}
+	wxGetApp().DestroyTransformGLList();
+	wxGetApp().m_marked_list->gripping = false;
 }
 
 void GripperSelTransform::MakeMatrix ( const double* from, const double* to, const double* object_m, gp_Trsf& mat )

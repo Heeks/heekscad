@@ -206,7 +206,7 @@ void CStlSolid::GetBox(CBox &box){
 	box.Insert(m_box);
 }
 
-void CStlSolid::ModifyByMatrix(const double* m, bool for_undo){
+bool CStlSolid::ModifyByMatrix(const double* m){
 	gp_Trsf mat = make_matrix(m);
 	for(std::list<CStlTri>::iterator It = m_list.begin(); It != m_list.end(); It++)
 	{
@@ -229,6 +229,8 @@ void CStlSolid::ModifyByMatrix(const double* m, bool for_undo){
 	}
 
 	KillGLLists();
+
+	return false;
 }
 
 HeeksObj *CStlSolid::MakeACopy(void)const{

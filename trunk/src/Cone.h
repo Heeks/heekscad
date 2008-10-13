@@ -20,7 +20,7 @@ public:
 	const wxChar* GetTypeString(void)const{return _T("Cone");}
 	wxIcon* GetIcon();
 	HeeksObj *MakeACopy(void)const;
-	void ModifyByMatrix(const double* m, bool for_undo);
+	bool ModifyByMatrix(const double* m);
 	void GetProperties(std::list<Property *> *list);
 	void GetGripperPositions(std::list<double> *list, bool just_for_endof);
 	void OnApplyProperties();

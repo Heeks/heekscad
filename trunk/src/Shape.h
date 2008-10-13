@@ -58,7 +58,7 @@ public:
 	int GetType()const{return SolidType;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void KillGLLists(void);
-	void ModifyByMatrix(const double* m, bool for_undo);
+	bool ModifyByMatrix(const double* m);
 	const wxChar* GetShortString(void)const{return m_title.c_str();}
 	bool CanEditString(void)const{return true;}
 	void OnEditString(const wxChar* str);

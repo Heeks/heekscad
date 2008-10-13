@@ -39,16 +39,15 @@ static void on_set_height(double value, HeeksObj* object){
 	((CCylinder*)object)->m_height = value;
 }
 
-void CCylinder::ModifyByMatrix(const double* m, bool for_undo){
-	if(!for_undo){
-		gp_Trsf mat = make_matrix(m);
-		gp_Ax2 new_pos = m_pos.Transformed(mat);
-		double scale = gp_Vec(1, 0, 0).Transformed(mat).Magnitude();
-		double new_radius = fabs(m_radius * scale);
-		double new_height = fabs(m_height * scale);
-		wxGetApp().AddUndoably(new CCylinder(new_pos, new_radius, new_height, m_title.c_str()), m_owner, NULL);
-		wxGetApp().DeleteUndoably(this);
-	}
+bool CCylinder::ModifyByMatrix(const double* m){
+	gp_Trsf mat = make_matrix(m);
+	gp_Ax2 new_pos = m_pos.Transformed(mat);
+	double scale = gp_Vec(1, 0, 0).Transformed(mat).Magnitude();
+	double new_radius = fabs(m_radius * scale);
+	double new_height = fabs(m_height * scale);
+	wxGetApp().AddUndoably(new CCylinder(new_pos, new_radius, new_height, m_title.c_str()), m_owner, NULL);
+	wxGetApp().DeleteUndoably(this);
+	return true;
 }
 
 void CCylinder::GetProperties(std::list<Property *> *list)

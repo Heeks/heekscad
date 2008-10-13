@@ -57,10 +57,11 @@ HeeksObj *HLine::MakeACopy(void)const{
 		return new_object;
 }
 
-void HLine::ModifyByMatrix(const double* m, bool for_undo){
+bool HLine::ModifyByMatrix(const double* m){
 	gp_Trsf mat = make_matrix(m);
 	A.Transform(mat);
 	B.Transform(mat);
+	return false;
 }
 
 wxIcon* HLine::GetIcon(){
