@@ -202,7 +202,7 @@ bool HCircle::FindPossTangentPoint(const double* ray_start, const double* ray_di
 	return FindNearPoint(ray_start, ray_direction, point);
 }
 
-void HCircle::Stretch(const double *p, const double* shift, double* new_position){
+bool HCircle::Stretch(const double *p, const double* shift, double* new_position){
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);
 
@@ -222,6 +222,7 @@ void HCircle::Stretch(const double *p, const double* shift, double* new_position
 		s = c.XYZ() + x_axis.XYZ() * new_radius;
 		extract(s, new_position);
 	}
+	return false;
 }
 
 bool HCircle::GetCentrePoint(double* pos)

@@ -93,6 +93,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 		}
 		else if(window_box_exists)
 		{
+			wxGetApp().m_marked_list->Clear();
 			if(window_box.width > 0){
 				// only select objects which are completely within the window
 				MarkedObjectManyOfSame marked_object;

@@ -146,7 +146,7 @@ bool CCuboid::GetScaleAboutMatrix(double *m)
 	return true;
 }
 
-void CCuboid::Stretch(const double *p, const double* shift, double* new_position)
+bool CCuboid::Stretch(const double *p, const double* shift, double* new_position)
 {
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);
@@ -197,4 +197,6 @@ void CCuboid::Stretch(const double *p, const double* shift, double* new_position
 		wxGetApp().m_marked_list->Clear();
 		wxGetApp().m_marked_list->Add(new_object);
 	}
+
+	return true;
 }
