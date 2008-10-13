@@ -110,7 +110,7 @@ bool CCylinder::GetScaleAboutMatrix(double *m)
 	return true;
 }
 
-void CCylinder::Stretch(const double *p, const double* shift, double* new_position)
+bool CCylinder::Stretch(const double *p, const double* shift, double* new_position)
 {
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);
@@ -150,4 +150,6 @@ void CCylinder::Stretch(const double *p, const double* shift, double* new_positi
 		wxGetApp().m_marked_list->Clear();
 		wxGetApp().m_marked_list->Add(new_object);
 	}
+
+	return true;
 }

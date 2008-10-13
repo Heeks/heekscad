@@ -645,7 +645,7 @@ void CHeeksFrame::OnCylButton( wxCommandEvent& event )
 
 void CHeeksFrame::OnConeButton( wxCommandEvent& event )
 {
-	CCone* new_object = new CCone(gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), 10, 0, 20, _T("Cone"));
+	CCone* new_object = new CCone(gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), 10, 5, 20, _T("Cone"));
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().m_marked_list->Clear();
 	wxGetApp().m_marked_list->Add(new_object);

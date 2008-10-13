@@ -124,7 +124,7 @@ bool HLine::FindPossTangentPoint(const double* ray_start, const double* ray_dire
 	return FindNearPoint(ray_start, ray_direction, point);
 }
 
-void HLine::Stretch(const double *p, const double* shift, double* new_position){
+bool HLine::Stretch(const double *p, const double* shift, double* new_position){
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);
 
@@ -136,6 +136,7 @@ void HLine::Stretch(const double *p, const double* shift, double* new_position){
 		B = B.XYZ() + vshift.XYZ();
 		extract(B, new_position);
 	}
+	return false;
 }
 
 gp_Lin HLine::GetLine()const{

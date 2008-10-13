@@ -189,7 +189,7 @@ void HImage::GetProperties(std::list<Property *> *list)
 {
 }
 
-void HImage::Stretch(const double *p, const double* shift, double* new_position){
+bool HImage::Stretch(const double *p, const double* shift, double* new_position){
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);
 
@@ -202,6 +202,7 @@ void HImage::Stretch(const double *p, const double* shift, double* new_position)
 			break;
 		}
 	}
+	return false;
 }	
 
 void HImage::WriteXML(TiXmlElement *root)

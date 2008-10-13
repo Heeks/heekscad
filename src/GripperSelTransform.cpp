@@ -59,6 +59,15 @@ void GripperSelTransform::CreateGLList(){
 void GripperSelTransform::OnGripperMoved( const double* from, const double* to ){
 	if ( m_gripper_type > GripperTypeObjectScaleXY )
 	{
+		double shift[3] = {to[0] - from[0], to[1] - from[1], to[2] - from[2]};
+		{
+			std::list<HeeksObj *>::iterator It;
+			for ( It = m_items_marked_at_grab.begin(); It != m_items_marked_at_grab.end(); It++ )
+			{
+				HeeksObj* object = *It;
+				if(object)object->StretchTemporary(from, shift);
+			}
+		}
 		return;
 	}
 
