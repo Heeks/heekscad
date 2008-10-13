@@ -43,17 +43,17 @@ static void on_set_height(double value, HeeksObj* object){
 	((CCone*)object)->m_height = value;
 }
 
-void CCone::ModifyByMatrix(const double* m, bool for_undo){
-	if(!for_undo){
-		gp_Trsf mat = make_matrix(m);
-		gp_Ax2 new_pos = m_pos.Transformed(mat);
-		double scale = gp_Vec(1, 0, 0).Transformed(mat).Magnitude();
-		double new_r1 = fabs(m_r1 * scale);
-		double new_r2 = fabs(m_r2 * scale);
-		double new_height = fabs(m_height * scale);
-		wxGetApp().AddUndoably(new CCone(new_pos, new_r1, new_r2, new_height, m_title.c_str()), m_owner, NULL);
-		wxGetApp().DeleteUndoably(this);
-	}
+bool CCone::ModifyByMatrix(const double *m){
+	gp_Trsf mat = make_matrix(m);
+	gp_Ax2 new_pos = m_pos.Transformed(mat);
+	double scale = gp_Vec(1, 0, 0).Transformed(mat).Magnitude();
+	double new_r1 = fabs(m_r1 * scale);
+	double new_r2 = fabs(m_r2 * scale);
+	double new_height = fabs(m_height * scale);
+	wxGetApp().AddUndoably(new CCone(new_pos, new_r1, new_r2, new_height, m_title.c_str()), m_owner, NULL);
+	wxGetApp().DeleteUndoably(this);
+
+	return true;
 }
 
 void CCone::GetProperties(std::list<Property *> *list)

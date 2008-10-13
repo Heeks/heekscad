@@ -34,15 +34,14 @@ static void on_set_radius(double value, HeeksObj* object){
 	((CSphere*)object)->m_radius = value;
 }
 
-void CSphere::ModifyByMatrix(const double* m, bool for_undo){
-	if(!for_undo){
-		gp_Trsf mat = make_matrix(m);
-		gp_Pnt new_pos = m_pos.Transformed(mat);
-		double scale = gp_Vec(1, 0, 0).Transformed(mat).Magnitude();
-		double new_radius = fabs(m_radius * scale);
-		wxGetApp().AddUndoably(new CSphere(new_pos, new_radius, m_title.c_str()), m_owner, NULL);
-		wxGetApp().DeleteUndoably(this);
-	}
+bool CSphere::ModifyByMatrix(const double* m){
+	gp_Trsf mat = make_matrix(m);
+	gp_Pnt new_pos = m_pos.Transformed(mat);
+	double scale = gp_Vec(1, 0, 0).Transformed(mat).Magnitude();
+	double new_radius = fabs(m_radius * scale);
+	wxGetApp().AddUndoably(new CSphere(new_pos, new_radius, m_title.c_str()), m_owner, NULL);
+	wxGetApp().DeleteUndoably(this);
+	return true;
 }
 
 void CSphere::GetProperties(std::list<Property *> *list)

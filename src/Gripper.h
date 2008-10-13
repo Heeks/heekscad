@@ -33,7 +33,7 @@ public:
 	int GetType()const{return GripperType;}
 	void glCommands(bool select, bool marked, bool no_color);
 	const wxChar* GetTypeString(void)const{return _T("Gripper");}
-	void ModifyByMatrix(const double* m, bool for_undo);
+	bool ModifyByMatrix(const double* m);
 
 	//Gripper's virtual functions
 	virtual wxCursor* get_gripper_cursor(){return NULL;}

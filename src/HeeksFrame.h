@@ -39,6 +39,10 @@ enum{
 	ID_REDO,
 	ID_RECENT_FIRST,
 	ID_OPEN_RECENT = ID_RECENT_FIRST + MAX_RECENT_FILES,
+	ID_MOVE_TRANSLATE,
+	ID_COPY_TRANSLATE,
+	ID_MOVE_ROTATE,
+	ID_COPY_ROTATE,
 	Menu_File_Quit,
 	Menu_File_About,
 	Menu_View_Objects,
@@ -48,6 +52,7 @@ enum{
 	Menu_View_ToolBar,
 	Menu_View_SolidBar,
 	Menu_View_ViewingBar,
+	Menu_View_TransformBar,
 	Menu_View_StatusBar,
 	Menu_View_ResetLayout,
 	ID_IMPORT,
@@ -74,6 +79,7 @@ public:
 	wxToolBarBase *m_toolBar;
 	wxToolBarBase *m_solidBar;
 	wxToolBarBase *m_viewingBar;
+	wxToolBarBase *m_transformBar;
 	wxStatusBar* m_statusBar;
 	wxMenuBar *m_menuBar;
 	wxMenu* m_recent_files_menu;
@@ -99,6 +105,8 @@ public:
 	void OnUpdateViewSolidBar( wxUpdateUIEvent& event );
 	void OnViewViewingBar( wxCommandEvent& event );
 	void OnUpdateViewViewingBar( wxUpdateUIEvent& event );
+	void OnViewTransformBar( wxCommandEvent& event );
+	void OnUpdateViewTransformBar( wxUpdateUIEvent& event );
 	void OnViewStatusBar( wxCommandEvent& event );
 	void OnUpdateViewStatusBar( wxUpdateUIEvent& event );
 	void OnResetLayout( wxCommandEvent& event );
@@ -126,6 +134,10 @@ public:
 	void OnMagExtentsButton( wxCommandEvent& event );
 	void OnMagNoRotButton( wxCommandEvent& event );
 	void OnMagPreviousButton( wxCommandEvent& event );
+	void OnMoveTranslateButton( wxCommandEvent& event );
+	void OnCopyTranslateButton( wxCommandEvent& event );
+	void OnMoveRotateButton( wxCommandEvent& event );
+	void OnCopyRotateButton( wxCommandEvent& event );
 	void OnExternalButton( wxCommandEvent& event );
 	void OnRecentFile( wxCommandEvent& event );
 	void OnUpdateExternalButton( wxUpdateUIEvent& event );

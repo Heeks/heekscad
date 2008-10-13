@@ -56,7 +56,7 @@ void MarkedList::create_move_grips(){
 			pos[1] = *It;
 			It++;
 			pos[2] = *It;
-			move_grips.push_back(new GripperSelTransform(this, make_point(pos), gripper_type));
+			move_grips.push_back(new GripperSelTransform(make_point(pos), gripper_type));
 			number_of_grips_made++;
 		}
 	}

@@ -113,9 +113,10 @@ wxIcon* HCircle::GetIcon(){
 	return m_icon;
 }
 
-void HCircle::ModifyByMatrix(const double* m, bool for_undo){
+bool HCircle::ModifyByMatrix(const double* m){
 	gp_Trsf mat = make_matrix(m);
 	m_circle.Transform(mat);
+	return false;
 }
 
 void HCircle::GetBox(CBox &box){

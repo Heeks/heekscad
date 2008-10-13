@@ -198,9 +198,9 @@ void LineArcDrawing::AddPoint()
 	}
 }
 
-void LineArcDrawing::calculate_item(DigitizedPoint &end){
-	if(GetStartPos().m_type == DigitizeNoItemType)return;
-	if(end.m_type == DigitizeNoItemType)return;
+bool LineArcDrawing::calculate_item(DigitizedPoint &end){
+	if(GetStartPos().m_type == DigitizeNoItemType)return false;
+	if(end.m_type == DigitizeNoItemType)return false;
 
 	switch(drawing_mode)
 	{
@@ -213,6 +213,7 @@ void LineArcDrawing::calculate_item(DigitizedPoint &end){
 			}
 			gp_Pnt p1, p2;
 			DigitizedPoint::GetLinePoints(GetStartPos(), end, p1, p2);
+			if(p1.IsEqual(p2, wxGetApp().m_geom_tol))return false;
 			end.m_point = p2;
 			if(!temp_object){
 				temp_object = new HLine(p1, p2, &wxGetApp().current_color);
@@ -223,7 +224,7 @@ void LineArcDrawing::calculate_item(DigitizedPoint &end){
 				((HLine*)temp_object)->B = p2;
 			}
 		}
-		break;
+		return true;
 
 	case ArcDrawingMode:
 		{
@@ -238,6 +239,7 @@ void LineArcDrawing::calculate_item(DigitizedPoint &end){
 			gp_Dir axis;
 			gp_Pnt p1, p2;
 			bool arc_found = DigitizedPoint::GetArcPoints(GetStartPos(), m_previous_direction_set ? (&m_previous_direction) : NULL, end, p1, p2, centre, axis);
+			if(p1.IsEqual(p2, wxGetApp().m_geom_tol))return false;
 
 			if(arc_found)
 			{
@@ -275,7 +277,7 @@ void LineArcDrawing::calculate_item(DigitizedPoint &end){
 				}
 			}
 		}
-		break;
+		return true;
 
 	case ILineDrawingMode:
 		{
@@ -286,6 +288,7 @@ void LineArcDrawing::calculate_item(DigitizedPoint &end){
 			}
 			gp_Pnt p1, p2;
 			DigitizedPoint::GetLinePoints(GetStartPos(), end, p1, p2);
+			if(p1.IsEqual(p2, wxGetApp().m_geom_tol))return false;
 			if(!temp_object){
 				temp_object = new HILine(p1, p2, &wxGetApp().construction_color);
 				if(temp_object)temp_object_in_list.push_back(temp_object);
@@ -295,7 +298,7 @@ void LineArcDrawing::calculate_item(DigitizedPoint &end){
 				((HILine*)temp_object)->B = p2;
 			}
 		}
-		break;
+		return true;
 
 	case CircleDrawingMode:
 		{
@@ -323,7 +326,7 @@ void LineArcDrawing::calculate_item(DigitizedPoint &end){
 						((HCircle*)temp_object)->m_circle.SetRadius(radius_for_circle);
 					}
 				}
-				break;
+				return true;
 
 			case ThreePointsCircleMode:
 				{
@@ -339,11 +342,13 @@ void LineArcDrawing::calculate_item(DigitizedPoint &end){
 						}
 					}
 				}
-				break;
+				return true;
 			}
 		}
 		break;
 	}
+
+	return false;
 }
 
 HeeksObj* LineArcDrawing::GetOwnerForDrawingObjects()

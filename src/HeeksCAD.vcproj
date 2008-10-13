@@ -894,6 +894,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\TransformTools.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\TransformTools.h"
+			>
+		</File>
+		<File
 			RelativePath=".\ViewPoint.cpp"
 			>
 		</File>

@@ -81,6 +81,8 @@ public:
 	wxString m_version_number;
 	std::list< void(*)(wxSizeEvent&) > m_on_graphics_size_list;
 	std::list< void(*)(wxMouseEvent&) > m_lbutton_up_callbacks;
+	int m_transform_gl_list;
+	gp_Trsf m_drag_matrix;
 
 	// HeeksObj's virtual functions
 	void glCommands(bool select, bool marked, bool no_color);
@@ -156,7 +158,7 @@ public:
 	void get_2d_arc_segments(double xs, double ys, double xe, double ye, double xc, double yc, bool dir, bool want_start, double pixels_per_mm, void(*callbackfunc)(const double* xy));
 	void PassMouseWheelToGraphics(wxMouseEvent& event);
 	int PickObjects(const wxChar* str);
-	bool PickPosition(const wxChar* str, double* pos);
+	bool PickPosition(const wxChar* str, double* pos, void(*callback)(const double*) = NULL);
 	void glSphere(double radius, const double* pos = NULL);
 	void OnNewOrOpen(bool open);
 	void RegisterHideableWindow(wxWindow* w);
@@ -180,6 +182,8 @@ public:
 	void RemoveOnGraphicsSize( void(*callbackfunc)(wxSizeEvent&) );
 	void RegisterOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
 	void RemoveOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
+	void CreateTransformGLList(bool show_grippers_on_drag);
+	void DestroyTransformGLList();
 };
 
 DECLARE_APP(HeeksCADapp)

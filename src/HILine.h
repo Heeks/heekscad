@@ -26,7 +26,7 @@ public:
 	const wxChar* GetTypeString(void)const{return _T("Infinite Line");}
 	HeeksObj *MakeACopy(void)const;
 	wxIcon* GetIcon();
-	void ModifyByMatrix(const double *mat, bool for_undo);
+	bool ModifyByMatrix(const double *mat);
 	void SetColor(const HeeksColor &col){color = col;}
 	const HeeksColor* GetColor()const{return &color;}
 	void GetGripperPositions(std::list<double> *list, bool just_for_endof);

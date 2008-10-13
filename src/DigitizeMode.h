@@ -19,12 +19,13 @@ public:
 	DigitizedPoint digitized_point;
 	bool m_doing_a_main_loop;
 	wxString m_prompt_when_doing_a_main_loop;
+	void(*m_callback)(const double*);
 
 	DigitizeMode();
 	virtual ~DigitizeMode(void);
 
 	// InputMode's virtual functions
-	const wxChar* GetTitle(){return _T("Picking a position");}
+	const wxChar* GetTitle();
 	void OnMouse( wxMouseEvent& event );
 	bool OnModeChange(void);
 	void OnFrontRender();
