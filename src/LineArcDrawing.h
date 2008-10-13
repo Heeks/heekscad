@@ -25,7 +25,7 @@ private:
 	HeeksObj* m_container;
 
 	// Drawing's virtual functions
-	void calculate_item(DigitizedPoint &end);
+	bool calculate_item(DigitizedPoint &end);
 	const std::list<HeeksObj*>& GetObjectsMade()const{return temp_object_in_list;}
 	void clear_drawing_objects(bool store_as_previous_objects);
 	void set_previous_direction();

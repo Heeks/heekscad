@@ -19,14 +19,13 @@ public:
 	virtual ~CSelectMode(void){}
 
 	// virtual functions for InputMode
-	const wxChar* GetTitle(){return _T("Picking objects");}
+	const wxChar* GetTitle();
 	bool TitleHighlighted(){return m_doing_a_main_loop;}
 	void OnMouse( wxMouseEvent& event );
 	void OnKeyDown(wxKeyEvent& event);
 	void OnKeyUp(wxKeyEvent& event);
 	bool OnStart();
 	void OnFrontRender();
-	void OnRender();
 	void GetProperties(std::list<Property *> *list);
 	void GetOptions(std::list<Property *> *list);
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);

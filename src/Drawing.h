@@ -30,7 +30,7 @@ protected:
 
 	// Drawing's virtual functions
 	virtual void set_digitize_plane(){}
-	virtual void calculate_item(DigitizedPoint &end){}
+	virtual bool calculate_item(DigitizedPoint &end){return false;}
 	virtual void before_add_item(){}
 	virtual const std::list<HeeksObj*>& GetObjectsMade()const = 0;
 	virtual void clear_drawing_objects(bool store_as_previous_objects = false){}

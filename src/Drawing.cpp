@@ -50,20 +50,21 @@ void Drawing::AddPoint()
 	if(wxGetApp().m_digitizing->digitized_point.m_type == DigitizeNoItemType)return;
 
 	wxGetApp().StartHistory(get_drawing_title());
+
+	bool calculated = false;
 	if(is_an_add_level(GetDrawStep())){
-		calculate_item(wxGetApp().m_digitizing->digitized_point);
-		before_add_item();
-		const std::list<HeeksObj*>& drawing_objects = GetObjectsMade();
-		wxGetApp().AddUndoably(drawing_objects, GetOwnerForDrawingObjects());
-		wxGetApp().m_frame->m_graphics->DrawObjectsOnFront(drawing_objects, true);
-		set_previous_direction();
-		clear_drawing_objects(true);
-		SetStartPosUndoable(wxGetApp().m_digitizing->digitized_point);
+		calculated = calculate_item(wxGetApp().m_digitizing->digitized_point);
+		if(calculated){
+			before_add_item();
+			const std::list<HeeksObj*>& drawing_objects = GetObjectsMade();
+			wxGetApp().AddUndoably(drawing_objects, GetOwnerForDrawingObjects());
+			wxGetApp().m_frame->m_graphics->DrawObjectsOnFront(drawing_objects, true);
+			set_previous_direction();
+		}
 	}
-	else{
-		clear_drawing_objects();
-		SetStartPosUndoable(wxGetApp().m_digitizing->digitized_point);
-	}
+	
+	clear_drawing_objects(calculated);
+	SetStartPosUndoable(wxGetApp().m_digitizing->digitized_point);
 
 	int next_step = GetDrawStep() + 1;
 	if(next_step >= number_of_steps()){

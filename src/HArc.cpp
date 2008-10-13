@@ -124,11 +124,12 @@ wxIcon* HArc::GetIcon(){
 	return m_icon;
 }
 
-void HArc::ModifyByMatrix(const double* m, bool for_undo){
+bool HArc::ModifyByMatrix(const double* m){
 	gp_Trsf mat = make_matrix(m);
 	A.Transform(mat);
 	B.Transform(mat);
 	m_circle.Transform(mat);
+	return false;
 }
 
 void HArc::GetBox(CBox &box){

@@ -48,7 +48,8 @@ void Gripper::glCommands(bool select, bool marked, bool no_color){
 	}
 }
 
-void Gripper::ModifyByMatrix(const double *m, bool for_undo){
+bool Gripper::ModifyByMatrix(const double *m){
 	gp_Trsf mat = make_matrix(m);
 	position.Transform(mat);
+	return false;
 }

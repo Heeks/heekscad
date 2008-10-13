@@ -94,6 +94,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_show_ruler = true;
 	m_filepath.assign(_T("Untitled.heeks"));
 	m_disable_SetObjectID_on_Add = false;
+	m_transform_gl_list = 0;
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -356,7 +357,7 @@ void HeeksCADapp::Reset(){
 		Observer *ov = *It;
 		ov->Clear();
 	}
-	ClearUndoably();
+	Clear();
 	EndHistory();
 	delete history;
 	history = new MainHistory;
@@ -1022,6 +1023,17 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	}
 
 	input_mode_object->OnRender();
+
+	if(m_transform_gl_list)
+	{
+        glPushMatrix();
+		double m[16];
+		extract_transposed(m_drag_matrix, m);
+		glMultMatrixd(m);
+		glCallList(m_transform_gl_list);
+		glPopMatrix();
+	}
+
 	RenderGrid(&view_point);
 	RenderRuler();
 	DestroyLights();
@@ -1679,11 +1691,12 @@ int HeeksCADapp::PickObjects(const wxChar* str)
 	return 1;
 }
 
-bool HeeksCADapp::PickPosition(const wxChar* str, double* pos)
+bool HeeksCADapp::PickPosition(const wxChar* str, double* pos, void(*callback)(const double*))
 {
 	CInputMode* save_mode = input_mode_object;
 	m_digitizing->m_prompt_when_doing_a_main_loop.assign(str);
 	m_digitizing->m_doing_a_main_loop = true;
+	m_digitizing->m_callback = callback;
 	SetInputMode(m_digitizing);
 
 	OnRun();
@@ -1695,6 +1708,7 @@ bool HeeksCADapp::PickPosition(const wxChar* str, double* pos)
 	}
 
 	m_digitizing->m_doing_a_main_loop = false;
+	m_digitizing->m_callback = NULL;
 	SetInputMode(save_mode);
 	return return_found;
 }
@@ -2061,4 +2075,26 @@ void HeeksCADapp::RegisterOnMouseFn( void(*callbackfunc)(wxMouseEvent&) )
 void HeeksCADapp::RemoveOnMouseFn( void(*callbackfunc)(wxMouseEvent&) )
 {
 	m_lbutton_up_callbacks.remove(callbackfunc);
+}
+
+void HeeksCADapp::CreateTransformGLList(bool show_grippers_on_drag){
+	DestroyTransformGLList();
+	m_transform_gl_list = glGenLists(1);
+	glNewList(m_transform_gl_list, GL_COMPILE);
+	std::list<HeeksObj *>::const_iterator It;
+	for(It = m_marked_list->list().begin(); It != m_marked_list->list().end(); It++){
+		(*It)->glCommands(false, true, false);
+	}
+	glDisable(GL_DEPTH_TEST);
+	if(show_grippers_on_drag)m_marked_list->GrippersGLCommands(false, false);
+	glEnable(GL_DEPTH_TEST);
+	glEndList();
+}
+
+void HeeksCADapp::DestroyTransformGLList(){
+	if (m_transform_gl_list)
+	{
+		glDeleteLists(m_transform_gl_list, 1);
+	}
+	m_transform_gl_list = 0;
 }

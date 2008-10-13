@@ -165,7 +165,7 @@ HeeksObj *HImage::MakeACopy(void)const
 	return new HImage(*this);
 }
 
-void HImage::ModifyByMatrix(const double *m, bool for_undo)
+bool HImage::ModifyByMatrix(const double *m)
 {
 	gp_Trsf mat = make_matrix(m);
 
@@ -173,6 +173,7 @@ void HImage::ModifyByMatrix(const double *m, bool for_undo)
 		gp_Pnt vt = make_point(m_x[i]);
 		extract(vt.Transformed(mat), m_x[i]);
 	}
+	return false;
 }
 
 void HImage::GetGripperPositions(std::list<double> *list, bool just_for_endof)

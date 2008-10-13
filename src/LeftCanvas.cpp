@@ -148,16 +148,17 @@ void CLeftCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, const 
 {
 	if(all_added){
 		wxTreeItemId item = m_treeCtrl->GetFirstVisibleItem();
-		while(item.m_pItem != NULL){
+		while(item.IsOk()){
 			m_treeCtrl->SelectItem(item);
 			item = m_treeCtrl->GetNextVisible(item);
 		}
 	}
 	else if(all_removed){
-		wxTreeItemId item = m_treeCtrl->GetFirstVisibleItem();
-		while(item.m_pItem != NULL){
+		wxTreeItemIdValue cookie;
+		wxTreeItemId item = m_treeCtrl->GetFirstChild(m_root, cookie);
+		while(item.IsOk()){
 			m_treeCtrl->SelectItem(item, false);
-			item = m_treeCtrl->GetNextVisible(item);
+			item = m_treeCtrl->GetNextChild(m_root, cookie);
 		}
 	}
 	else{
@@ -184,6 +185,7 @@ void CLeftCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, const 
 void CLeftCanvas::Clear()
 {
 	m_treeCtrl->DeleteAllItems();
+	tree_map.clear();
 }
 
 bool CLeftCanvas::CanAdd(HeeksObj* object)
