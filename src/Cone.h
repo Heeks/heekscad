@@ -20,9 +20,16 @@ public:
 	const wxChar* GetTypeString(void)const{return _T("Cone");}
 	wxIcon* GetIcon();
 	HeeksObj *MakeACopy(void)const;
+	void ModifyByMatrix(const double* m, bool for_undo);
 	void GetProperties(std::list<Property *> *list);
 	void GetGripperPositions(std::list<double> *list, bool just_for_endof);
+	void OnApplyProperties();
+	bool GetScaleAboutMatrix(double *m);
+	bool Stretch(const double *p, const double* shift, double* new_position);
+	void StretchTemporary(const double *p, const double* shift);
 
 	// CSolid's virtual functions
 	SolidTypeEnum GetSolidType(){return SOLID_TYPE_CONE;}
+
+	bool Stretch2(const double *p, const double* shift, gp_Ax2& new_pos, double& new_r1, double& new_r2, double& new_height, double* new_position = NULL);
 };

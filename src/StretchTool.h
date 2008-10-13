@@ -11,6 +11,7 @@ private:
 	double m_shift[3];
 	double m_new_pos[3];
 	HeeksObj *m_object;
+	bool m_undo_uses_add;
 
 public:
 	StretchTool(HeeksObj *object, const double *p, const double* shift);
