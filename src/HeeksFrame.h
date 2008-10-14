@@ -21,7 +21,7 @@ enum{
 	ID_LINES = 1,
 	ID_CIRCLES,
 	ID_ILINE,
-	ID_VIEWING,
+	ID_SELECT_MODE,
 	ID_SUBTRACT,
 	ID_SPHERE,
 	ID_CUBE,
@@ -47,6 +47,7 @@ enum{
 	ID_COPY_MIRROR,
 	ID_MOVE_SCALE,
 	ID_COPY_SCALE,
+	ID_COORDINATE_SYSTEM,
 	Menu_File_Quit,
 	Menu_File_About,
 	Menu_View_Objects,
@@ -54,6 +55,7 @@ enum{
 	Menu_View_Options,
 	Menu_View_Input,
 	Menu_View_ToolBar,
+	Menu_View_GeometryBar,
 	Menu_View_SolidBar,
 	Menu_View_ViewingBar,
 	Menu_View_TransformBar,
@@ -81,6 +83,7 @@ public:
 	CInputModeCanvas* m_input_canvas;
 	wxAuiManager* m_aui_manager;
 	wxToolBarBase *m_toolBar;
+	wxToolBarBase *m_geometryBar;
 	wxToolBarBase *m_solidBar;
 	wxToolBarBase *m_viewingBar;
 	wxToolBarBase *m_transformBar;
@@ -105,6 +108,8 @@ public:
 	void OnUpdateViewProperties( wxUpdateUIEvent& event );
 	void OnViewToolBar( wxCommandEvent& event );
 	void OnUpdateViewToolBar( wxUpdateUIEvent& event );
+	void OnViewGeometryBar( wxCommandEvent& event );
+	void OnUpdateViewGeometryBar( wxUpdateUIEvent& event );
 	void OnViewSolidBar( wxCommandEvent& event );
 	void OnUpdateViewSolidBar( wxUpdateUIEvent& event );
 	void OnViewViewingBar( wxCommandEvent& event );
@@ -117,7 +122,8 @@ public:
 	void OnLinesButton( wxCommandEvent& event );
 	void OnCirclesButton( wxCommandEvent& event );
 	void OnILineButton( wxCommandEvent& event );
-	void OnViewingButton( wxCommandEvent& event );
+	void OnCoordinateSystem( wxCommandEvent& event );
+	void OnSelectModeButton( wxCommandEvent& event );
 	void OnOpenButton( wxCommandEvent& event );
 	void OnImportButton( wxCommandEvent& event );
 	void OnSaveButton( wxCommandEvent& event );

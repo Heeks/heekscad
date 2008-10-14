@@ -20,6 +20,7 @@
 #include "Cylinder.h"
 #include "Cone.h"
 #include "TransformTools.h"
+#include "CoordinateSystem.h"
 #include "wx/dnd.h"
 #include "wx/filename.h"
 #include <fstream>
@@ -39,6 +40,8 @@ EVT_MENU( Menu_View_Properties, CHeeksFrame::OnViewProperties )
 EVT_UPDATE_UI(Menu_View_Properties, CHeeksFrame::OnUpdateViewProperties)
 EVT_MENU( Menu_View_ToolBar, CHeeksFrame::OnViewToolBar )
 EVT_UPDATE_UI(Menu_View_ToolBar, CHeeksFrame::OnUpdateViewToolBar)
+EVT_MENU( Menu_View_GeometryBar, CHeeksFrame::OnViewGeometryBar )
+EVT_UPDATE_UI(Menu_View_GeometryBar, CHeeksFrame::OnUpdateViewGeometryBar)
 EVT_MENU( Menu_View_SolidBar, CHeeksFrame::OnViewSolidBar )
 EVT_UPDATE_UI(Menu_View_SolidBar, CHeeksFrame::OnUpdateViewSolidBar)
 EVT_MENU( Menu_View_ViewingBar, CHeeksFrame::OnViewViewingBar )
@@ -57,7 +60,8 @@ EVT_MENU_RANGE(	ID_RECENT_FIRST, ID_RECENT_FIRST + MAX_RECENT_FILES, CHeeksFrame
 EVT_MENU(ID_LINES, CHeeksFrame::OnLinesButton)
 EVT_MENU(ID_CIRCLES, CHeeksFrame::OnCirclesButton)
 EVT_MENU(ID_ILINE, CHeeksFrame::OnILineButton)
-EVT_MENU(ID_VIEWING, CHeeksFrame::OnViewingButton)
+EVT_MENU(ID_COORDINATE_SYSTEM, CHeeksFrame::OnCoordinateSystem)
+EVT_MENU(ID_SELECT_MODE, CHeeksFrame::OnSelectModeButton)
 EVT_MENU(ID_SPHERE, CHeeksFrame::OnSphereButton)
 EVT_MENU(ID_CUBE, CHeeksFrame::OnCubeButton)
 EVT_MENU(ID_CYL, CHeeksFrame::OnCylButton)
@@ -110,7 +114,7 @@ bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
     return true;
 }
 
-static wxString default_layout_string = _T("layout2|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=351;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=0;pos=362;prop=100000;bestw=390;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=0;pos=763;prop=100000;bestw=156;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=TransformBar;caption=Transformation Tools;state=2108156;dir=1;layer=10;row=0;pos=930;prop=100000;bestw=273;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=549|dock_size(4,1,0)=302|dock_size(1,10,0)=41|");
+static wxString default_layout_string = _T("layout2|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=234;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=245;prop=100000;bestw=156;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=6;pos=0;prop=100000;bestw=390;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=444;floaty=105;floatw=407;floath=65|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=6;pos=401;prop=100000;bestw=156;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=TransformBar;caption=Transformation Tools;state=2108156;dir=1;layer=10;row=0;pos=373;prop=100000;bestw=273;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=504|dock_size(4,1,0)=302|dock_size(1,10,0)=41|dock_size(1,10,6)=41|");
 
 CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSize& size )
 	: wxFrame((wxWindow *)NULL, -1, title, pos, size)
@@ -143,8 +147,9 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_menuView->AppendCheckItem( Menu_View_Properties, wxT( "&Properties" ) );
 	m_menuView->AppendCheckItem( Menu_View_ToolBar, wxT( "&Tool Bar" ) );
 	m_menuView->AppendCheckItem( Menu_View_SolidBar, wxT( "&Solids Tool Bar" ) );
+	m_menuView->AppendCheckItem( Menu_View_GeometryBar, wxT( "&Geometry Tool Bar" ) );
 	m_menuView->AppendCheckItem( Menu_View_ViewingBar, wxT( "&Viewing Tool Bar" ) );
-	m_menuView->AppendCheckItem( Menu_View_TransformBar, wxT( "&Transformations Tool Bar" ) );
+	m_menuView->AppendCheckItem( Menu_View_TransformBar, wxT( "T&ransformations Tool Bar" ) );
 	m_menuView->AppendCheckItem( Menu_View_StatusBar, wxT( "St&atus Bar" ) );
 
 	// Add them to the main menu
@@ -189,6 +194,9 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_toolBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
 	m_toolBar->SetToolBitmapSize(wxSize(32, 32));
 
+	m_geometryBar = new wxToolBar(this, -1, wxDefaultPosition, wxSize(600, -1), wxTB_NODIVIDER | wxTB_FLAT);
+	m_geometryBar->SetToolBitmapSize(wxSize(32, 32));
+
 	m_solidBar = new wxToolBar(this, -1, wxDefaultPosition, wxSize(600, -1), wxTB_NODIVIDER | wxTB_FLAT);
 	m_solidBar->SetToolBitmapSize(wxSize(32, 32));
 
@@ -206,11 +214,15 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
     m_toolBar->AddTool(wxID_SAVE, _T("Save"), wxBitmap(exe_folder + _T("/bitmaps/save.png"), wxBITMAP_TYPE_PNG), _T("Save file"));
     m_toolBar->AddTool(ID_UNDO, _T("Undo"), wxBitmap(exe_folder + _T("/bitmaps/undo.png"), wxBITMAP_TYPE_PNG), _T("Undo the previous command"));
     m_toolBar->AddTool(ID_REDO, _T("Redo"), wxBitmap(exe_folder + _T("/bitmaps/redo.png"), wxBITMAP_TYPE_PNG), _T("Redo the next command"));
-    m_toolBar->AddTool(ID_VIEWING, _T("Select"), wxBitmap(exe_folder + _T("/bitmaps/select.png"), wxBITMAP_TYPE_PNG), _T("Select Mode"));
-    m_toolBar->AddTool(ID_LINES, _T("Lines"), wxBitmap(exe_folder + _T("/bitmaps/lines.png"), wxBITMAP_TYPE_PNG), _T("Start Line Drawing"));
-    m_toolBar->AddTool(ID_CIRCLES, _T("Circles"), wxBitmap(exe_folder + _T("/bitmaps/circles.png"), wxBITMAP_TYPE_PNG), _T("Start Circle Drawing"));
-    m_toolBar->AddTool(ID_ILINE, _T("ILine"), wxBitmap(exe_folder + _T("/bitmaps/iline.png"), wxBITMAP_TYPE_PNG), _T("Start Drawing Infinite Lines"));
+    m_toolBar->AddTool(ID_SELECT_MODE, _T("Select"), wxBitmap(exe_folder + _T("/bitmaps/select.png"), wxBITMAP_TYPE_PNG), _T("Select Mode"));
     m_toolBar->Realize();
+
+	// geometry tool bar
+    m_geometryBar->AddTool(ID_LINES, _T("Lines"), wxBitmap(exe_folder + _T("/bitmaps/lines.png"), wxBITMAP_TYPE_PNG), _T("Start Line Drawing"));
+    m_geometryBar->AddTool(ID_CIRCLES, _T("Circles"), wxBitmap(exe_folder + _T("/bitmaps/circles.png"), wxBITMAP_TYPE_PNG), _T("Start Circle Drawing"));
+    m_geometryBar->AddTool(ID_ILINE, _T("ILine"), wxBitmap(exe_folder + _T("/bitmaps/iline.png"), wxBITMAP_TYPE_PNG), _T("Start Drawing Infinite Lines"));
+    m_geometryBar->AddTool(ID_COORDINATE_SYSTEM, _T("CoordSys"), wxBitmap(exe_folder + _T("/bitmaps/coordsys.png"), wxBITMAP_TYPE_PNG), _T("Create a Coordinate System"));
+    m_geometryBar->Realize();
 
 	// Solids tool bar
     m_solidBar->AddTool(ID_SPHERE, _T("Sphere"), wxBitmap(exe_folder + _T("/bitmaps/sphere.png"), wxBITMAP_TYPE_PNG), _T("Add a sphere"));
@@ -248,6 +260,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_aui_manager->AddPane(m_input_canvas, wxAuiPaneInfo().Name(_T("Input")).Caption(_T("Input")).Left().Layer(1).BestSize(wxSize(300, 200)));
 	m_aui_manager->AddPane(m_properties, wxAuiPaneInfo().Name(_T("Properties")).Caption(_T("Properties")).Left().Layer(1).BestSize(wxSize(300, 200)));
 	m_aui_manager->AddPane(m_toolBar, wxAuiPaneInfo().Name(_T("ToolBar")).Caption(_T("General Tools")).ToolbarPane().Top());
+	m_aui_manager->AddPane(m_geometryBar, wxAuiPaneInfo().Name(_T("GeomBar")).Caption(_T("Geometry Tools")).ToolbarPane().Top());
 	m_aui_manager->AddPane(m_solidBar, wxAuiPaneInfo().Name(_T("SolidBar")).Caption(_T("Solid Tools")).ToolbarPane().Top());
 	m_aui_manager->AddPane(m_viewingBar, wxAuiPaneInfo().Name(_T("ViewingBar")).Caption(_T("Viewing Tools")).ToolbarPane().Top());
 	m_aui_manager->AddPane(m_transformBar, wxAuiPaneInfo().Name(_T("TransformBar")).Caption(_T("Transformation Tools")).ToolbarPane().Top());
@@ -258,6 +271,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	wxGetApp().RegisterHideableWindow(m_input_canvas);
 	wxGetApp().RegisterHideableWindow(m_properties);
 	wxGetApp().RegisterHideableWindow(m_toolBar);
+	wxGetApp().RegisterHideableWindow(m_geometryBar);
 	wxGetApp().RegisterHideableWindow(m_solidBar);
 	wxGetApp().RegisterHideableWindow(m_viewingBar);
 	wxGetApp().RegisterHideableWindow(m_transformBar);
@@ -447,6 +461,20 @@ void CHeeksFrame::OnUpdateViewToolBar( wxUpdateUIEvent& event )
 	event.Check(m_aui_manager->GetPane(m_toolBar).IsShown());
 }
 
+void CHeeksFrame::OnViewGeometryBar( wxCommandEvent& event )
+{
+	wxAuiPaneInfo& pane_info = m_aui_manager->GetPane(m_geometryBar);
+	if(pane_info.IsOk()){
+		pane_info.Show(event.IsChecked());
+		m_aui_manager->Update();
+	}
+}
+
+void CHeeksFrame::OnUpdateViewGeometryBar( wxUpdateUIEvent& event )
+{
+	event.Check(m_aui_manager->GetPane(m_geometryBar).IsShown());
+}
+
 void CHeeksFrame::OnViewSolidBar( wxCommandEvent& event )
 {
 	wxAuiPaneInfo& pane_info = m_aui_manager->GetPane(m_solidBar);
@@ -539,7 +567,7 @@ void CHeeksFrame::OnUpdateViewProperties( wxUpdateUIEvent& event )
 }
 
 void 
-CHeeksFrame::OnViewingButton( wxCommandEvent& WXUNUSED( event ) )
+CHeeksFrame::OnSelectModeButton( wxCommandEvent& WXUNUSED( event ) )
 {
 	wxGetApp().SetInputMode((CInputMode*)(wxGetApp().m_select_mode));
 }
@@ -563,6 +591,16 @@ CHeeksFrame::OnILineButton( wxCommandEvent& WXUNUSED( event ) )
 {
 	line_strip.drawing_mode = ILineDrawingMode;
 	wxGetApp().SetInputMode(&line_strip);
+}
+
+void 
+CHeeksFrame::OnCoordinateSystem( wxCommandEvent& WXUNUSED( event ) )
+{
+	CoordinateSystem* new_object = new CoordinateSystem(_T("Coordinate System"), gp_Pnt(0, 0, 0), gp_Dir(1, 0, 0), gp_Dir(0, 1, 0));
+	wxGetApp().AddUndoably(new_object, NULL, NULL);
+	wxGetApp().m_marked_list->Clear();
+	wxGetApp().m_marked_list->Add(new_object);
+	wxGetApp().Repaint();
 }
 
 void CHeeksFrame::OnOpenButton( wxCommandEvent& event )

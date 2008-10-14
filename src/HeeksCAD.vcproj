@@ -270,6 +270,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\CoordinateSystem.h"
+			>
+		</File>
+		<File
+			RelativePath=".\CordinateSystem.cpp"
+			>
+		</File>
+		<File
 			RelativePath=".\Cuboid.cpp"
 			>
 		</File>

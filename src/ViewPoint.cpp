@@ -4,6 +4,7 @@
 #include "SelectMode.h"
 #include "GraphicsCanvas.h"
 #include "HeeksFrame.h"
+#include "CoordinateSystem.h"
 
 CViewPoint::CViewPoint(void){
 	m_lens_point = gp_Pnt(0, 0, 200);
@@ -354,7 +355,8 @@ gp_Lin CViewPoint::SightLine(const wxPoint &point){
 int CViewPoint::ChooseBestPlane(int plane)const{
 	gp_Vec f = forwards_vector();
 	double dp[3];
-	gp_Trsf orimat = wxGetApp().digitizing_matrix;
+	gp_Trsf orimat;
+	if(wxGetApp().m_current_coordinate_system)orimat = wxGetApp().m_current_coordinate_system->GetMatrix();
 	dp[0] = gp_Vec(0, 0, 1).Transformed(orimat) * f;
 	dp[1] = gp_Vec(0, 1, 0).Transformed(orimat) * f;
 	dp[2] = gp_Vec(1, 0, 0).Transformed(orimat) * f;
@@ -410,7 +412,8 @@ int CViewPoint::ChooseBestPlane(int plane)const{
 
 int CViewPoint::GetTwoAxes(gp_Vec& vx, gp_Vec& vy, bool flattened_onto_screen, int plane)const{
 	int plane_mode = ChooseBestPlane(plane);
-	gp_Trsf orimat = wxGetApp().digitizing_matrix;
+	gp_Trsf orimat;
+	if(wxGetApp().m_current_coordinate_system)orimat = wxGetApp().m_current_coordinate_system->GetMatrix();
 	switch(plane_mode){
 	case 0:
 		vx = gp_Vec(1, 0, 0).Transformed(orimat);
@@ -444,7 +447,8 @@ int CViewPoint::GetTwoAxes(gp_Vec& vx, gp_Vec& vy, bool flattened_onto_screen, i
 
 void CViewPoint::Set90PlaneDrawMatrix(gp_Trsf &mat)const{
 	int plane = ChooseBestPlane(0);
-	mat = wxGetApp().digitizing_matrix;
+	if(wxGetApp().m_current_coordinate_system)mat = wxGetApp().m_current_coordinate_system->GetMatrix();
+	else mat = gp_Trsf();
 	switch(plane){
 	case 1:
 		mat = make_matrix(gp_Pnt(0, 0, 0).Transformed(mat), gp_Vec(1, 0, 0).Transformed(mat), gp_Vec(0, 0, 1).Transformed(mat));
