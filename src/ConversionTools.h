@@ -2,6 +2,8 @@
 #include "../interface/Tool.h"
 
 extern bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wire& wire);
+extern bool ConvertLineArcsToFace2(const std::list<HeeksObj *> &list, TopoDS_Face& face);
+extern bool ConvertWireToFace2(const std::list<TopoDS_Wire> &list, std::list<TopoDS_Face>& faces);
 
 class ConvertLineArcsToWire: public Tool
 {

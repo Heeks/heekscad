@@ -78,6 +78,9 @@ EVT_MENU(ID_MOVE_TRANSLATE, CHeeksFrame::OnMoveTranslateButton)
 EVT_MENU(ID_COPY_TRANSLATE, CHeeksFrame::OnCopyTranslateButton)
 EVT_MENU(ID_MOVE_ROTATE, CHeeksFrame::OnMoveRotateButton)
 EVT_MENU(ID_COPY_ROTATE, CHeeksFrame::OnCopyRotateButton)
+EVT_MENU(ID_MOVE_MIRROR, CHeeksFrame::OnMoveMirrorButton)
+EVT_MENU(ID_COPY_MIRROR, CHeeksFrame::OnCopyMirrorButton)
+EVT_MENU(ID_MOVE_SCALE, CHeeksFrame::OnMoveScaleButton)
 EVT_MENU_RANGE(ID_FIRST_EXTERNAL_BUTTON, ID_FIRST_POP_UP_MENU_TOOL + 1000, CHeeksFrame::OnExternalButton)
 EVT_UPDATE_UI_RANGE(ID_FIRST_EXTERNAL_BUTTON, ID_FIRST_POP_UP_MENU_TOOL + 1000, CHeeksFrame::OnUpdateExternalButton)
 EVT_SIZE(CHeeksFrame::OnSize)
@@ -107,7 +110,7 @@ bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
     return true;
 }
 
-static wxString default_layout_string = _T("layout2|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=351;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=0;pos=362;prop=100000;bestw=390;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=0;pos=763;prop=100000;bestw=156;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=TransformBar;caption=Transformation Tools;state=2108156;dir=1;layer=10;row=0;pos=930;prop=100000;bestw=156;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=549|dock_size(4,1,0)=302|dock_size(1,10,0)=41|");
+static wxString default_layout_string = _T("layout2|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=351;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=0;pos=362;prop=100000;bestw=390;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=0;pos=763;prop=100000;bestw=156;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=TransformBar;caption=Transformation Tools;state=2108156;dir=1;layer=10;row=0;pos=930;prop=100000;bestw=273;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=549|dock_size(4,1,0)=302|dock_size(1,10,0)=41|");
 
 CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSize& size )
 	: wxFrame((wxWindow *)NULL, -1, title, pos, size)
@@ -234,6 +237,9 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_transformBar->AddTool(ID_COPY_TRANSLATE, _T("Copy Translate"), wxBitmap(exe_folder + _T("/bitmaps/copyt.png"), wxBITMAP_TYPE_PNG), _T("Copy and translate selected items"));
 	m_transformBar->AddTool(ID_MOVE_ROTATE, _T("Move Rotate"), wxBitmap(exe_folder + _T("/bitmaps/mover.png"), wxBITMAP_TYPE_PNG), _T("Rotate selected items"));
 	m_transformBar->AddTool(ID_COPY_ROTATE, _T("Copy Rotate"), wxBitmap(exe_folder + _T("/bitmaps/copyr.png"), wxBITMAP_TYPE_PNG), _T("Copy and rotate selected items"));
+	m_transformBar->AddTool(ID_MOVE_MIRROR, _T("Move Mirror"), wxBitmap(exe_folder + _T("/bitmaps/movem.png"), wxBITMAP_TYPE_PNG), _T("Mirror selected items"));
+	m_transformBar->AddTool(ID_COPY_MIRROR, _T("Copy Mirror"), wxBitmap(exe_folder + _T("/bitmaps/copym.png"), wxBITMAP_TYPE_PNG), _T("Copy and mirror selected items"));
+	m_transformBar->AddTool(ID_MOVE_SCALE, _T("Move Scale"), wxBitmap(exe_folder + _T("/bitmaps/moves.png"), wxBITMAP_TYPE_PNG), _T("Scale selected items"));
 	m_transformBar->Realize();
 
 	m_aui_manager->AddPane(m_graphics, wxAuiPaneInfo().Name(_T("Graphics")).Caption(_T("Graphics")).CentrePane().BestSize(wxSize(800, 600)));
@@ -702,22 +708,37 @@ void CHeeksFrame::OnMagPreviousButton( wxCommandEvent& event )
 
 void CHeeksFrame::OnMoveTranslateButton( wxCommandEvent& event )
 {
-	TransformTools::MoveTranslate();
+	TransformTools::Translate(false);
 }
 
 void CHeeksFrame::OnCopyTranslateButton( wxCommandEvent& event )
 {
-	TransformTools::CopyTranslate();
+	TransformTools::Translate(true);
 }
 
 void CHeeksFrame::OnMoveRotateButton( wxCommandEvent& event )
 {
-	TransformTools::MoveRotate();
+	TransformTools::Rotate(false);
 }
 
 void CHeeksFrame::OnCopyRotateButton( wxCommandEvent& event )
 {
-	TransformTools::CopyRotate();
+	TransformTools::Rotate(true);
+}
+
+void CHeeksFrame::OnMoveMirrorButton( wxCommandEvent& event )
+{
+	TransformTools::Mirror(false);
+}
+
+void CHeeksFrame::OnCopyMirrorButton( wxCommandEvent& event )
+{
+	TransformTools::Mirror(true);
+}
+
+void CHeeksFrame::OnMoveScaleButton( wxCommandEvent& event )
+{
+	TransformTools::Scale(false);
 }
 
 void CHeeksFrame::OnExternalButton( wxCommandEvent& event )
