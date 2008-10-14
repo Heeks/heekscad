@@ -9,9 +9,19 @@ class CFace;
 class CEdge;
 
 class CFaceList: public ObjList{
+	static wxIcon* m_icon;
+public:
+	const wxChar* GetTypeString(void)const{return _T("Faces");}
+	HeeksObj *MakeACopy(void)const{ return new CFaceList(*this);}
+	wxIcon* GetIcon();
 };
 
 class CEdgeList: public ObjList{
+	static wxIcon* m_icon;
+public:
+	const wxChar* GetTypeString(void)const{return _T("Edges");}
+	HeeksObj *MakeACopy(void)const{ return new CEdgeList(*this);}
+	wxIcon* GetIcon();
 };
 
 class CShape;

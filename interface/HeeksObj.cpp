@@ -6,6 +6,7 @@
 #include "PropertyInt.h"
 #ifdef HEEKSCAD
 #include "ObjList.h"
+#include "../src/Gripper.h" // needs to be moved to interface, and made independent of gp_Pnt
 #endif
 
 HeeksObj::HeeksObj(void): m_owner(NULL), m_id(0){}
@@ -42,53 +43,61 @@ void HeeksObj::GetProperties(std::list<Property *> *list)
 	list->push_back(new PropertyInt(_T("ID"), m_id, this, on_set_id));
 }
 
-void HeeksObj::GetGripperPositions(std::list<double> *list, bool just_for_endof)
+bool HeeksObj::GetScaleAboutMatrix(double *m)
 {
-	// default gripper positions; every corner of the box around the object
+#ifdef HEEKSCAD
+	// return the bottom left corner of the box
 	CBox box;
 	GetBox(box);
-	if(box.m_valid)
-	{
-		list->push_back(0);
-		list->push_back(box.m_x[0]);
-		list->push_back(box.m_x[1]);
-		list->push_back(box.m_x[2]);
+	if(!box.m_valid)return false;
+	gp_Trsf mat;
+	mat.SetTranslationPart(gp_Vec(box.m_x[0], box.m_x[1], box.m_x[2]));
+	extract(mat, m);
+	return true;
+#else
+	return false;
+#endif
+}
 
-		list->push_back(0);
-		list->push_back(box.m_x[3]);
-		list->push_back(box.m_x[1]);
-		list->push_back(box.m_x[2]);
-
-		list->push_back(0);
-		list->push_back(box.m_x[3]);
-		list->push_back(box.m_x[4]);
-		list->push_back(box.m_x[2]);
-
-		list->push_back(0);
-		list->push_back(box.m_x[0]);
-		list->push_back(box.m_x[4]);
-		list->push_back(box.m_x[2]);
-
-		list->push_back(0);
-		list->push_back(box.m_x[0]);
-		list->push_back(box.m_x[1]);
-		list->push_back(box.m_x[5]);
-
-		list->push_back(0);
-		list->push_back(box.m_x[3]);
-		list->push_back(box.m_x[1]);
-		list->push_back(box.m_x[5]);
-
-		list->push_back(0);
-		list->push_back(box.m_x[3]);
-		list->push_back(box.m_x[4]);
-		list->push_back(box.m_x[5]);
-
-		list->push_back(0);
-		list->push_back(box.m_x[0]);
-		list->push_back(box.m_x[4]);
-		list->push_back(box.m_x[5]);
-	}
+void HeeksObj::GetGripperPositions(std::list<double> *list, bool just_for_endof)
+{
+#ifdef HEEKSCAD
+	CBox box;
+	GetBox(box);
+	if(!box.m_valid)return;
+	list->push_back(GripperTypeTranslate);
+	list->push_back(box.m_x[0]);
+	list->push_back(box.m_x[1]);
+	list->push_back(box.m_x[2]);
+	list->push_back(GripperTypeRotateObject);
+	list->push_back(box.m_x[3]);
+	list->push_back(box.m_x[1]);
+	list->push_back(box.m_x[2]);
+	list->push_back(GripperTypeRotateObject);
+	list->push_back(box.m_x[0]);
+	list->push_back(box.m_x[4]);
+	list->push_back(box.m_x[2]);
+	list->push_back(GripperTypeRotateObject);
+	list->push_back(box.m_x[0]);
+	list->push_back(box.m_x[1]);
+	list->push_back(box.m_x[5]);
+	list->push_back(GripperTypeScale);
+	list->push_back(box.m_x[3]);
+	list->push_back(box.m_x[4]);
+	list->push_back(box.m_x[5]);
+	list->push_back(GripperTypeRotate);
+	list->push_back(box.m_x[3]);
+	list->push_back(box.m_x[4]);
+	list->push_back(box.m_x[2]);
+	list->push_back(GripperTypeRotate);
+	list->push_back(box.m_x[0]);
+	list->push_back(box.m_x[4]);
+	list->push_back(box.m_x[5]);
+	list->push_back(GripperTypeRotate);
+	list->push_back(box.m_x[3]);
+	list->push_back(box.m_x[1]);
+	list->push_back(box.m_x[5]);
+#endif
 }
 
 void HeeksObj::OnRemove()
