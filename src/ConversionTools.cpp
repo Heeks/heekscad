@@ -108,6 +108,69 @@ bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wire &wire
 	return false;
 }
 
+bool ConvertLineArcsToFace2(const std::list<HeeksObj *> &list, TopoDS_Face& face)
+{
+	std::list<HeeksObj*> list2;
+	std::list<HeeksObj*>::const_iterator It;
+	for(It = list.begin(); It != list.end(); It++){
+		HeeksObj* object = *It;
+		if(object->GetType() == LineArcCollectionType){
+			for(HeeksObj* child = object->GetFirstChild(); child; child = object->GetNextChild())
+			{
+				list2.push_back(child);
+			}
+		}
+		else{
+			list2.push_back(object);
+		}
+	}
+
+	std::list<TopoDS_Edge> edges;
+	for(std::list<HeeksObj*>::const_iterator It = list2.begin(); It != list2.end(); It++){
+		HeeksObj* object = *It;
+		switch(object->GetType()){
+			case LineType:
+				{
+					HLine* line = (HLine*)object;
+					edges.push_back(BRepBuilderAPI_MakeEdge(line->A, line->B));
+				}
+				break;
+			case ArcType:
+				{
+					HArc* arc = (HArc*)object;
+					edges.push_back(BRepBuilderAPI_MakeEdge(arc->m_circle, arc->A, arc->B));
+				}
+				break;
+		}
+	}
+
+	if(edges.size() > 0){
+		BRepBuilderAPI_MakeWire wire_maker;
+		std::list<TopoDS_Edge>::iterator It;
+		for(It = edges.begin(); It != edges.end(); It++)
+		{
+			TopoDS_Edge &edge = *It;
+			wire_maker.Add(edge);
+		}
+
+		face = BRepBuilderAPI_MakeFace(wire_maker.Wire());
+		return true;
+	}
+
+	return false;
+}
+
+bool ConvertWireToFace2(const std::list<TopoDS_Wire> &list, std::list<TopoDS_Face>& faces)
+{
+	for(std::list<TopoDS_Wire>::const_iterator It = list.begin(); It != list.end(); It++)
+	{
+		const TopoDS_Wire &wire = *It;
+		faces.push_back(BRepBuilderAPI_MakeFace(wire));
+	}
+
+	return true;
+}
+
 void ConvertLineArcsToWire::Run(){
 	TopoDS_Wire wire;
 	if(ConvertLineArcsToWire2(wxGetApp().m_marked_list->list(), wire))
@@ -118,22 +181,30 @@ void ConvertLineArcsToWire::Run(){
 }
 
 void ConvertWireToFace::Run(){
-	std::list<HeeksObj*> faces;
+	std::list<TopoDS_Wire> wires;
 	std::list<HeeksObj*>::const_iterator It;
 	for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
 		HeeksObj* object = *It;
 		switch(object->GetType()){
 			case WireType:
 				{
-					faces.push_back(new CFace(BRepBuilderAPI_MakeFace(((CWire*)object)->Wire())));
+					wires.push_back(((CWire*)object)->Wire());
 				}
 				break;
 		}
 	}
 
+	std::list<TopoDS_Face> faces;
+
+	ConvertWireToFace2(wires, faces);
+
 	if(faces.size() > 0){
-		wxGetApp().AddUndoably(faces, NULL);
-		wxGetApp().Repaint();
+		for(std::list<TopoDS_Face>::iterator It = faces.begin(); It != faces.end(); It++)
+		{
+			TopoDS_Face &face = *It;
+			wxGetApp().AddUndoably(new CFace(face), NULL, NULL);
+			wxGetApp().Repaint();
+		}
 	}
 }
 
@@ -182,34 +253,12 @@ void ConvertLineArcsToFace::Run(){
 		}
 	}
 
-	for(std::list<HeeksObj*>::iterator It = list2.begin(); It != list2.end(); It++){
-		HeeksObj* object = *It;
-		switch(object->GetType()){
-			case LineType:
-				{
-					HLine* line = (HLine*)object;
-					edges.push_back(BRepBuilderAPI_MakeEdge(line->A, line->B));
-				}
-				break;
-			case ArcType:
-				{
-					HArc* arc = (HArc*)object;
-					edges.push_back(BRepBuilderAPI_MakeEdge(arc->m_circle, arc->A, arc->B));
-				}
-				break;
-		}
-	}
+	TopoDS_Face face;
 
-	if(edges.size() > 0){
-		BRepBuilderAPI_MakeWire wire_maker;
-		std::list<TopoDS_Edge>::iterator It;
-		for(It = edges.begin(); It != edges.end(); It++)
-		{
-			TopoDS_Edge &edge = *It;
-			wire_maker.Add(edge);
-		}
-
-		wxGetApp().AddUndoably(new CFace(BRepBuilderAPI_MakeFace(wire_maker.Wire())), NULL, NULL);
+	if(ConvertLineArcsToFace2(list2, face))
+	{
+		wxGetApp().AddUndoably(new CFace(face), NULL, NULL);
 		wxGetApp().Repaint();
 	}
+
 }

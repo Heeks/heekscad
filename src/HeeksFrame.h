@@ -43,6 +43,10 @@ enum{
 	ID_COPY_TRANSLATE,
 	ID_MOVE_ROTATE,
 	ID_COPY_ROTATE,
+	ID_MOVE_MIRROR,
+	ID_COPY_MIRROR,
+	ID_MOVE_SCALE,
+	ID_COPY_SCALE,
 	Menu_File_Quit,
 	Menu_File_About,
 	Menu_View_Objects,
@@ -138,6 +142,9 @@ public:
 	void OnCopyTranslateButton( wxCommandEvent& event );
 	void OnMoveRotateButton( wxCommandEvent& event );
 	void OnCopyRotateButton( wxCommandEvent& event );
+	void OnMoveMirrorButton( wxCommandEvent& event );
+	void OnCopyMirrorButton( wxCommandEvent& event );
+	void OnMoveScaleButton( wxCommandEvent& event );
 	void OnExternalButton( wxCommandEvent& event );
 	void OnRecentFile( wxCommandEvent& event );
 	void OnUpdateExternalButton( wxUpdateUIEvent& event );
