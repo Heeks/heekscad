@@ -14,6 +14,7 @@
 #include "HeeksFrame.h"
 #include "InputModeCanvas.h"
 #include "OptionsCanvas.h"
+#include "CoordinateSystem.h"
 
 DigitizeMode::DigitizeMode(){
 	point_or_window = new PointOrWindow(false);
@@ -61,7 +62,8 @@ static gp_Trsf global_matrix_relative_to_screen;
 static const gp_Trsf& digitizing_matrix(bool calculate = false){
 	if(calculate){
 		if(wxGetApp().digitize_screen){
-			gp_Trsf mat = wxGetApp().digitizing_matrix;
+			gp_Trsf mat;
+			if(wxGetApp().m_current_coordinate_system)mat = wxGetApp().m_current_coordinate_system->GetMatrix();
 			gp_Pnt origin = gp_Pnt(0, 0, 0).Transformed(mat);
 			gp_Pnt x1 = origin.XYZ() + gp_XYZ(1, 0, 0);
 			gp_Pnt y1 = origin.XYZ() + gp_XYZ(0, 1, 0);

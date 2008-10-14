@@ -20,6 +20,7 @@ class MainHistory;
 class Observer;
 class CHeeksFrame;
 class wxDynamicLibrary;
+class CoordinateSystem;
 
 #define MAX_RECENT_FILES 20
 
@@ -54,7 +55,8 @@ public:
 	double digitizing_grid;
 	bool mouse_wheel_forward_away; // true for forwards/backwards = zoom out / zoom in, false for reverse
 	bool ctrl_does_rotate; // true - rotate on Ctrl, pan when not Ctrl      false - rotate when not Ctrl, pan when Ctrl
-	gp_Trsf digitizing_matrix;
+	//gp_Trsf digitizing_matrix;
+	CoordinateSystem *m_current_coordinate_system;
 	CInputMode *input_mode_object;
 	MagDragWindow *magnification;
 	CSelectMode *m_select_mode;
@@ -114,6 +116,7 @@ public:
 	void EndHistory(void);
 	void ClearRollingForward(void);
 	bool Add(HeeksObj* object, HeeksObj* prev_object);
+	void Remove(HeeksObj* object);
 	void Reset();
 	HeeksObj* ReadXMLElement(TiXmlElement* pElem);
 	void InitializeXMLFunctions();
@@ -138,7 +141,6 @@ public:
 	void WereModified(const std::list<HeeksObj*>& list);
 	void WereAdded(const std::list<HeeksObj*>& list);
 	void WereRemoved(const std::list<HeeksObj*>& list);
-	void SetDrawMatrix(const gp_Trsf& mat);
 	gp_Trsf GetDrawMatrix(bool get_the_appropriate_orthogonal);
 	void GetOptions(std::list<Property *> *list);
 	void DeleteMarkedItems();
