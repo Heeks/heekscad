@@ -28,6 +28,7 @@ enum{
 	SubstituteTreeType,
 	LineArcCollectionType,
 	ImageType,
+	CoordinateSystemType,
 	ObjectMaximumType
 };
 
@@ -43,6 +44,7 @@ enum{
 #define MARKING_FILTER_EDGE					0x00000200
 #define MARKING_FILTER_LINE_ARC_COLLECTION	0x00000400
 #define MARKING_FILTER_IMAGE				0x00000800
+#define MARKING_FILTER_COORDINATE_SYSTEM	0x00000800
 
 class HeeksObj{
 public:
@@ -78,7 +80,7 @@ public:
 	virtual bool GetEndPoint(double* pos){return false;}
 	virtual bool GetCentrePoint(double* pos){return false;}
 	virtual bool GetMidPoint(double* pos){return false;}
-	virtual bool GetScaleAboutMatrix(double *m){return false;}
+	virtual bool GetScaleAboutMatrix(double *m);
 	virtual void GetProperties(std::list<Property *> *list);
 	virtual void OnApplyProperties(){}
 	virtual wxIcon* GetIcon(){return NULL;}
