@@ -4,8 +4,8 @@
 
 class TransformTools{
 public:
-	static void MoveTranslate();
-	static void MoveRotate();
-	static void CopyTranslate();
-	static void CopyRotate();
+	static void Translate(bool copy);
+	static void Rotate(bool copy);
+	static void Mirror(bool copy);
+	static void Scale(bool copy);
 };

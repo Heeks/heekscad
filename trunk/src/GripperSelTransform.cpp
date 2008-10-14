@@ -174,6 +174,7 @@ void GripperSelTransform::MakeMatrix ( const double* from, const double* to, con
 			double m[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, scale, 0, 0, 0, 0, 1};
 			mat = object_mat * make_matrix(m) * object_mat.Inverted();
 		}
+		break;
 	case GripperTypeObjectScaleXY:
 		{
 			gp_Trsf object_mat = make_matrix(object_m);

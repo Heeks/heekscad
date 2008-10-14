@@ -6,6 +6,7 @@
 #include "Face.h"
 #include "ConversionTools.h"
 #include "MarkedList.h"
+#include <BRepPrimAPI_MakePrism.hxx>
 
 void PickCreateRuledSurface()
 {
@@ -54,9 +55,12 @@ void PickCreateExtrusion()
 		wxGetApp().PickObjects(_T("pick a wire, face or line/arc collection"));
 	}
 
+	double height = 10;
+	wxGetApp().InputDouble(_T("Input extrusion height"), _T("height"), height);
+
 	if(wxGetApp().m_marked_list->size() > 0)
 	{
-		std::list<TopoDS_Shape> wire_or_face_list;
+		std::list<TopoDS_Face> faces;
 
 		for(std::list<HeeksObj *>::const_iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
 		{
@@ -64,30 +68,33 @@ void PickCreateExtrusion()
 			switch(object->GetType())
 			{
 			case WireType:
-				wire_or_face_list.push_back(((CWire*)object)->Wire());
+				{
+					std::list<TopoDS_Wire> wires;
+					wires.push_back(((CWire*)object)->Wire());
+					ConvertWireToFace2(wires, faces);
+				}
 				break;
 
 			case FaceType:
-				wire_or_face_list.push_back(((CFace*)object)->Face());
+				faces.push_back(((CFace*)object)->Face());
 				break;
 
 			case LineArcCollectionType:
 				{
 					std::list<HeeksObj*> list;
 					list.push_back(object);
-					TopoDS_Wire wire;
-					if(ConvertLineArcsToWire2(list, wire))
+					TopoDS_Face face;
+					if(ConvertLineArcsToFace2(list, face))
 					{
-						wire_or_face_list.push_back(wire);
+						faces.push_back(face);
 					}
 				}
 				break;
-
 			}
 		}
 
 		TopoDS_Shape shape;
-		if(CreateExtrusion(wire_or_face_list, shape))
+		if(CreateExtrusion(faces, shape, gp_Vec(0, 0, height)))
 		{
 			HeeksObj* new_object = CShape::MakeObject(shape, _T("Extruded Solid"));
 			wxGetApp().AddUndoably(new_object, NULL, NULL);
@@ -115,11 +122,11 @@ bool CreateRuledSurface(const std::list<TopoDS_Wire> &wire_list, TopoDS_Shape& s
 	return false;
 }
 
-bool CreateExtrusion(const std::list<TopoDS_Shape> &wire_or_face_list, TopoDS_Shape& shape)
+bool CreateExtrusion(const std::list<TopoDS_Face> &faces, TopoDS_Shape& shape, gp_Vec& extrude_vector)
 {
-	if(wire_or_face_list.size() > 0)
+	if(faces.size() > 0)
 	{
-		BRepPrimAPI_MakePrism generator( wire_or_face_list.front(), gp_Vec(0, 0, 1) );
+		BRepPrimAPI_MakePrism generator( faces.front(), extrude_vector );
 		generator.Build();
 		shape = generator.Shape();
 
