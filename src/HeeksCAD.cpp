@@ -48,6 +48,7 @@
 #include "BezierCurve.h"
 #include "StlSolid.h"
 #include "dxf.h"
+#include "CoordinateSystem.h"
 
 #include <sstream>
 using namespace std;
@@ -95,6 +96,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_filepath.assign(_T("Untitled.heeks"));
 	m_disable_SetObjectID_on_Add = false;
 	m_transform_gl_list = 0;
+	m_current_coordinate_system = NULL;
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -455,6 +457,7 @@ void HeeksCADapp::InitializeXMLFunctions()
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "LineArcCollection", CLineArcCollection::ReadFromXMLElement ) );
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "STEP_file", ReadSTEPFileFromXMLElement ) );
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "STLSolid", CStlSolid::ReadFromXMLElement ) );
+		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "CoordinateSystem", CoordinateSystem::ReadFromXMLElement ) );
 	}
 }
 
@@ -1238,7 +1241,19 @@ void HeeksCADapp::ObserversMarkedListChanged(bool all_marked, bool none_marked, 
 bool HeeksCADapp::Add(HeeksObj *object, HeeksObj* prev_object)
 {
 	if (!ObjList::Add(object, prev_object)) return false;
+
+	if(object->GetType() == CoordinateSystemType)
+	{
+		m_current_coordinate_system = (CoordinateSystem*)object;
+	}
+
 	return true;
+}
+
+void HeeksCADapp::Remove(HeeksObj* object)
+{
+	ObjList::Remove(object);
+	if(object == m_current_coordinate_system)m_current_coordinate_system = NULL;
 }
 
 void HeeksCADapp::DeleteUndoably(HeeksObj *object){
@@ -1329,21 +1344,21 @@ void HeeksCADapp::WereRemoved(const std::list<HeeksObj*>& list)
 	SetAsModified();
 }
 
-void HeeksCADapp::SetDrawMatrix(const gp_Trsf& mat)
-{
-	digitizing_matrix = mat;
-}
-
 gp_Trsf HeeksCADapp::GetDrawMatrix(bool get_the_appropriate_orthogonal)
 {
 	if(get_the_appropriate_orthogonal){
 		gp_Vec vx, vy;
 		m_frame->m_graphics->m_view_point.GetTwoAxes(vx, vy, false, 0);
 		{
-			return make_matrix(gp_Pnt(0, 0, 0).Transformed(digitizing_matrix), vx, vy);
+			gp_Pnt o(0, 0, 0);
+			if(wxGetApp().m_current_coordinate_system)o.Transform(wxGetApp().m_current_coordinate_system->GetMatrix());
+			return make_matrix(o, vx, vy);
 		}
 	}
-	return digitizing_matrix;
+
+	gp_Trsf mat;
+	if(wxGetApp().m_current_coordinate_system)mat = wxGetApp().m_current_coordinate_system->GetMatrix();
+	return mat;
 }
 
 void on_set_background_color(HeeksColor value, HeeksObj* object)
