@@ -370,6 +370,7 @@ void HeeksCADapp::Reset(){
 	EndHistory();
 	delete history;
 	history = new MainHistory;
+	m_current_coordinate_system = NULL;
 	m_doing_rollback = false;
 	m_frame->m_graphics->m_view_point.SetView(gp_Vec(0, 1, 0), gp_Vec(0, 0, 1));
 	m_filepath.assign(_T("Untitled.heeks"));

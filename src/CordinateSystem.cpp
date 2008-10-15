@@ -3,6 +3,10 @@
 #include "stdafx.h"
 #include "CoordinateSystem.h"
 #include "PropertyVertex.h"
+#include "../interface/PropertyDouble.h"
+#include "HeeksFrame.h"
+#include "ObjPropsCanvas.h"
+#include "../tinyxml/tinyxml.h"
 
 wxIcon* CoordinateSystem::m_icon = NULL;
 
@@ -104,13 +108,36 @@ static void on_set_pos(const gp_Pnt& pos, HeeksObj* object)
 
 static void on_set_x(const gp_Pnt& pos, HeeksObj* object)
 {
-	((CoordinateSystem*)object)->m_x = gp_Vec(pos.XYZ());
-	wxGetApp().Repaint();
+//	((CoordinateSystem*)object)->m_x = gp_Vec(pos.XYZ());
+//	((CoordinateSystem*)object)->AxesToAngles();
+//	wxGetApp().Repaint();
 }
 
 static void on_set_y(const gp_Pnt& pos, HeeksObj* object)
 {
-	((CoordinateSystem*)object)->m_y = gp_Vec(pos.XYZ());
+//	((CoordinateSystem*)object)->m_y = gp_Vec(pos.XYZ());
+//	((CoordinateSystem*)object)->AxesToAngles();
+//	wxGetApp().Repaint();
+}
+
+static void on_set_vertical_angle(double value, HeeksObj* object)
+{
+	((CoordinateSystem*)object)->m_vertical_angle = value * Pi/180;
+	((CoordinateSystem*)object)->AnglesToAxes();
+	wxGetApp().Repaint();
+}
+
+static void on_set_horizontal_angle(double value, HeeksObj* object)
+{
+	((CoordinateSystem*)object)->m_horizontal_angle = value * Pi/180;
+	((CoordinateSystem*)object)->AnglesToAxes();
+	wxGetApp().Repaint();
+}
+
+static void on_set_twist_angle(double value, HeeksObj* object)
+{
+	((CoordinateSystem*)object)->m_twist_angle = value * Pi/180;
+	((CoordinateSystem*)object)->AnglesToAxes();
 	wxGetApp().Repaint();
 }
 
@@ -119,13 +146,28 @@ void CoordinateSystem::GetProperties(std::list<Property *> *list)
 	list->push_back(new PropertyVertex(_T("position"), m_o, this, on_set_pos));
 	list->push_back(new PropertyVertex(_T("x axis"), gp_Pnt(m_x.XYZ()), this, on_set_x));
 	list->push_back(new PropertyVertex(_T("y axis"), gp_Pnt(m_y.XYZ()), this, on_set_y));
-	double v, h, t;
-	AxesToAngles(m_x, m_y, v, h, t);
+	AxesToAngles(m_x, m_y, m_vertical_angle, m_horizontal_angle, m_twist_angle);
+	list->push_back(new PropertyDouble(_T("Vertical Angle"), m_vertical_angle * 180/Pi, this, on_set_vertical_angle));
+	list->push_back(new PropertyDouble(_T("Horizontal Angle"), m_horizontal_angle * 180/Pi, this, on_set_horizontal_angle));
+	list->push_back(new PropertyDouble(_T("Twist Angle"), m_twist_angle * 180/Pi, this, on_set_twist_angle));
 }
 
 void CoordinateSystem::WriteXML(TiXmlElement *root)
 {
-	// to do
+	TiXmlElement * element;
+	element = new TiXmlElement( "CoordinateSystem" );
+	root->LinkEndChild( element );  
+	element->SetAttribute("title", m_title.c_str());
+	element->SetDoubleAttribute("ox", m_o.X());
+	element->SetDoubleAttribute("oy", m_o.Y());
+	element->SetDoubleAttribute("oz", m_o.Z());
+	element->SetDoubleAttribute("xx", m_x.X());
+	element->SetDoubleAttribute("xy", m_x.Y());
+	element->SetDoubleAttribute("xz", m_x.Z());
+	element->SetDoubleAttribute("yx", m_y.X());
+	element->SetDoubleAttribute("yy", m_y.Y());
+	element->SetDoubleAttribute("yz", m_y.Z());
+	WriteBaseXML(element);
 }
 
 gp_Trsf CoordinateSystem::GetMatrix()
@@ -136,8 +178,30 @@ gp_Trsf CoordinateSystem::GetMatrix()
 // static
 HeeksObj* CoordinateSystem::ReadFromXMLElement(TiXmlElement* pElem)
 {
-	// to do
-	return NULL;
+	gp_Pnt o;
+	gp_Dir x, y;
+	wxString title;
+
+	// get the attributes
+	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
+	{
+		std::string name(a->Name());
+		if(name == "title"){title.assign(a->Value());}
+		else if(name == "ox"){o.SetX(a->DoubleValue());}
+		else if(name == "oy"){o.SetY(a->DoubleValue());}
+		else if(name == "oz"){o.SetZ(a->DoubleValue());}
+		else if(name == "xx"){x.SetX(a->DoubleValue());}
+		else if(name == "xy"){x.SetY(a->DoubleValue());}
+		else if(name == "xz"){x.SetZ(a->DoubleValue());}
+		else if(name == "yx"){y.SetX(a->DoubleValue());}
+		else if(name == "yy"){y.SetY(a->DoubleValue());}
+		else if(name == "yz"){y.SetZ(a->DoubleValue());}
+	}
+
+	CoordinateSystem* new_object = new CoordinateSystem(title, o, x, y);
+	new_object->ReadBaseXML(pElem);
+
+	return new_object;
 }
 
 // code for AxesToAngles copied from http://tog.acm.org/GraphicsGems/gemsiv/euler_angle/EulerAngles.c
@@ -145,13 +209,15 @@ HeeksObj* CoordinateSystem::ReadFromXMLElement(TiXmlElement* pElem)
 #define EulSafe	     "\000\001\002\000"
 #define EulNext	     "\001\002\000\001"
 #define EulGetOrd(ord,i,j,k,h,n,s,f) {unsigned o=ord;f=o&1;o>>=1;s=o&1;o>>=1;n=o&1;o>>=1;i=EulSafe[o&3];j=EulNext[i+n];k=EulNext[i+1-n];h=s?k:i;}
+#define EulOrd(i,p,r,f)	   (((((((i)<<1)+(p))<<1)+(r))<<1)+(f))
+#define EulOrdZXZs    EulOrd(2,0,1,0)
 
 //static
 void CoordinateSystem::AxesToAngles(const gp_Dir &x, const gp_Dir &y, double &v_angle, double &h_angle, double &t_angle)
 {
 	double M[4][4];
 	extract(make_matrix(gp_Pnt(0, 0, 0), x, y), M[0]);
-	int order = 0;
+	int order = EulOrdZXZs;
 
     int i,j,k,h,n,s,f;
     EulGetOrd(order,i,j,k,h,n,s,f);
@@ -168,7 +234,7 @@ void CoordinateSystem::AxesToAngles(const gp_Dir &x, const gp_Dir &y, double &v_
 	}
     } else {
 	double cy = sqrt(M[i][i]*M[i][i] + M[j][i]*M[j][i]);
-	if (cy > 16*FLT_EPSILON) {
+	if (cy > 16*DBL_EPSILON) {
 	    t_angle = atan2(M[k][j], M[k][k]);
 	    v_angle = atan2(-M[k][i], cy);
 	    h_angle = atan2(M[j][i], M[i][i]);
@@ -185,4 +251,17 @@ void CoordinateSystem::AxesToAngles(const gp_Dir &x, const gp_Dir &y, double &v_
 //static
 void CoordinateSystem::AnglesToAxes(const double &v_angle, const double &h_angle, const double &t_angle, gp_Dir &x, gp_Dir &y)
 {
+	gp_Trsf zmat1;
+	zmat1.SetRotation(gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)), t_angle);
+
+	gp_Trsf xmat;
+	xmat.SetRotation(gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(1, 0, 0)), v_angle);
+
+	gp_Trsf zmat2;
+	zmat2.SetRotation(gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)), h_angle);
+
+	gp_Trsf mat = zmat2 * xmat * zmat1;
+
+	x = gp_Dir(1, 0, 0).Transformed(mat);
+	y = gp_Dir(0, 1, 0).Transformed(mat);
 }
