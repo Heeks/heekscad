@@ -401,8 +401,8 @@ CHeeksFrame::OnQuit( wxCommandEvent& WXUNUSED( event ) )
 void 
 CHeeksFrame::OnAbout( wxCommandEvent& WXUNUSED( event ) )
 {
-	wxMessageBox( wxT( "HeeksCAD" ),
-			wxGetApp().m_version_number, wxOK | wxICON_INFORMATION, this );
+	wxString str = _T("HeeksCAD, written by Dan Heeks\n\nusing Open CASCADE solid modeller - http://www.opencascade.org\n\nwindows made with wxWidgets - http://wxwidgets.org");
+	wxMessageBox( str, wxGetApp().m_version_number, wxOK | wxICON_INFORMATION, this );
 }
 
 void CHeeksFrame::OnViewObjects( wxCommandEvent& event )
@@ -596,7 +596,7 @@ CHeeksFrame::OnILineButton( wxCommandEvent& WXUNUSED( event ) )
 void 
 CHeeksFrame::OnCoordinateSystem( wxCommandEvent& WXUNUSED( event ) )
 {
-	CoordinateSystem* new_object = new CoordinateSystem(_T("Coordinate System"), gp_Pnt(0, 0, 0), gp_Dir(1, 0, 0), gp_Dir(0, 1, 0));
+	CoordinateSystem* new_object = new CoordinateSystem(_T("Coordinate System"), gp_Pnt(10, 10, 0), gp_Dir(1, 0, 0), gp_Dir(0, 1, 0.2));
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().m_marked_list->Clear();
 	wxGetApp().m_marked_list->Add(new_object);
