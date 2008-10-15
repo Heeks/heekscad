@@ -49,6 +49,10 @@
 #include "StlSolid.h"
 #include "dxf.h"
 #include "CoordinateSystem.h"
+#include "../interface/PropertyChoice.h"
+#include "../interface/PropertyCheck.h"
+#include "../interface/PropertyString.h"
+#include "../interface/PropertyList.h"
 
 #include <sstream>
 using namespace std;
@@ -93,6 +97,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	mouse_wheel_forward_away = true;
 	ctrl_does_rotate = true;
 	m_show_ruler = true;
+	m_show_datum_coords_system = true;
 	m_filepath.assign(_T("Untitled.heeks"));
 	m_disable_SetObjectID_on_Add = false;
 	m_transform_gl_list = 0;
@@ -173,6 +178,7 @@ bool HeeksCADapp::OnInit()
 	m_config->Read(_T("m_light_push_matrix"), &m_light_push_matrix);
 	m_config->Read(_T("WheelForwardAway"), &mouse_wheel_forward_away);
 	m_config->Read(_T("CtrlDoesRotate"), &ctrl_does_rotate);
+	m_config->Read(_T("DrawDatum"), &m_show_datum_coords_system, true);
 
 	GetRecentFilesProfileString();
 
@@ -251,6 +257,7 @@ int HeeksCADapp::OnExit(){
 	m_config->Write(_T("m_light_push_matrix"), m_light_push_matrix);
 	m_config->Write(_T("WheelForwardAway"), mouse_wheel_forward_away);
 	m_config->Write(_T("CtrlDoesRotate"), ctrl_does_rotate);
+	m_config->Write(_T("DrawDatum"), m_show_datum_coords_system);
 
 	WriteRecentFilesProfileString();
 
@@ -1038,7 +1045,8 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	}
 
 	RenderGrid(&view_point);
-	RenderRuler();
+	if(m_show_ruler)RenderRuler();
+	if(m_show_datum_coords_system)CoordinateSystem::RenderDatum();
 	DestroyLights();
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_POLYGON_OFFSET_FILL);
@@ -1406,6 +1414,75 @@ void on_set_selection_filter(int value, HeeksObj* object)
 	wxGetApp().m_marked_list->m_filter = value;
 }
 
+void on_set_show_datum(bool onoff, HeeksObj* object)
+{
+	wxGetApp().m_show_datum_coords_system = onoff;
+	wxGetApp().Repaint();
+}
+
+void on_set_rotate_mode(int value, HeeksObj* object)
+{
+	wxGetApp().m_rotate_mode = value;
+}
+
+void on_set_antialiasing(bool value, HeeksObj* object)
+{
+	wxGetApp().m_antialiasing = value;
+	wxGetApp().Repaint();
+}
+
+void on_set_light_push_matrix(bool value, HeeksObj* object)
+{
+	wxGetApp().m_light_push_matrix = value;
+	wxGetApp().Repaint();
+}
+
+void on_set_reverse_mouse_wheel(bool value, HeeksObj* object)
+{
+	wxGetApp().mouse_wheel_forward_away = !value;
+}
+
+void on_set_ctrl_does_rotate(bool value, HeeksObj* object)
+{
+	wxGetApp().ctrl_does_rotate = value;
+}
+
+void on_intersection(bool onoff, HeeksObj* object){
+	wxGetApp().digitize_inters = onoff;
+}
+
+void on_centre(bool onoff, HeeksObj* object){
+	wxGetApp().digitize_centre = onoff;
+}
+
+void on_end_of(bool onoff, HeeksObj* object){
+	wxGetApp().digitize_end = onoff;
+}
+
+void on_mid_point(bool onoff, HeeksObj* object){
+	wxGetApp().digitize_midpoint = onoff;
+}
+
+void on_nearest(bool onoff, HeeksObj* object){
+	wxGetApp().digitize_nearest = onoff;
+}
+
+void on_tangent(bool onoff, HeeksObj* object){
+	wxGetApp().digitize_tangent = onoff;
+}
+
+void on_radius(double value, HeeksObj* object){
+	wxGetApp().digitizing_radius = value;
+}
+
+void on_coords(bool onoff, HeeksObj* object){
+	wxGetApp().digitize_coords = onoff;
+}
+
+void on_relative(bool onoff, HeeksObj* object){
+	wxGetApp().digitize_screen = onoff;
+}
+
 static std::list<Property *> *list_for_GetOptions = NULL;
 
 static void AddPropertyCallBack(Property* p)
@@ -1415,6 +1492,33 @@ static void AddPropertyCallBack(Property* p)
 
 void HeeksCADapp::GetOptions(std::list<Property *> *list)
 {
+	PropertyList* view_options = new PropertyList(_T("view options"));
+
+	std::list< wxString > choices;
+	choices.push_back ( wxString ( _T("stay upright") ) );
+	choices.push_back ( wxString ( _T("free") ) );
+	view_options->m_list.push_back ( new PropertyChoice ( _T("rotate mode"),  choices, wxGetApp().m_rotate_mode, NULL, on_set_rotate_mode ) );
+	view_options->m_list.push_back( new PropertyCheck(_T("antialiasing"), wxGetApp().m_antialiasing, NULL, on_set_antialiasing));
+#if _DEBUG
+	view_options->m_list.push_back( new PropertyCheck(_T("fixed light"), wxGetApp().m_light_push_matrix, NULL, on_set_light_push_matrix));
+#endif
+	view_options->m_list.push_back( new PropertyCheck(_T("reverse mouse wheel"), !(wxGetApp().mouse_wheel_forward_away), NULL, on_set_reverse_mouse_wheel));
+	view_options->m_list.push_back( new PropertyCheck(_T("Ctrl key does rotate"), wxGetApp().ctrl_does_rotate, NULL, on_set_ctrl_does_rotate));
+	view_options->m_list.push_back(new PropertyCheck(_T("show datum"), m_show_datum_coords_system, NULL, on_set_show_datum));
+	list->push_back(view_options);
+
+	PropertyList* digitizing = new PropertyList(_T("digitizing"));
+	digitizing->m_list.push_back(new PropertyCheck(_T("end"), wxGetApp().digitize_end, NULL, on_end_of));
+	digitizing->m_list.push_back(new PropertyCheck(_T("intersection"), wxGetApp().digitize_inters, NULL, on_intersection));
+	digitizing->m_list.push_back(new PropertyCheck(_T("centre"), wxGetApp().digitize_centre, NULL, on_centre));
+	digitizing->m_list.push_back(new PropertyCheck(_T("midpoint"), wxGetApp().digitize_midpoint, NULL, on_mid_point));
+	digitizing->m_list.push_back(new PropertyCheck(_T("nearest"), wxGetApp().digitize_nearest, NULL, on_nearest));
+	digitizing->m_list.push_back(new PropertyCheck(_T("tangent"), wxGetApp().digitize_tangent, NULL, on_tangent));
+	digitizing->m_list.push_back(new PropertyDouble(_T("radius for undefined circles"), wxGetApp().digitizing_radius, NULL, on_radius));
+	digitizing->m_list.push_back(new PropertyCheck(_T("coordinates"), wxGetApp().digitize_coords, NULL, on_coords));
+	digitizing->m_list.push_back(new PropertyCheck(_T("screen"), wxGetApp().digitize_screen, NULL, on_relative));
+	list->push_back(digitizing);
+
 	list->push_back ( new PropertyColor ( _T("background color"),  background_color, NULL, on_set_background_color ) );
 	list->push_back ( new PropertyColor ( _T("current color"),  current_color, NULL, on_set_current_color ) );
 	list->push_back ( new PropertyColor ( _T("construction color"),  construction_color, NULL, on_set_construction_color ) );

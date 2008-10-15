@@ -15,6 +15,11 @@ public:
 	gp_Dir m_y;
 	wxString m_title;
 
+	// used for user properties, but only to create m_x and m_y
+	double m_vertical_angle;
+	double m_horizontal_angle;
+	double m_twist_angle;
+
 	CoordinateSystem(const wxString& str, const gp_Pnt &o, const gp_Dir &x, const gp_Dir &y);
 	CoordinateSystem(const CoordinateSystem &c);
 	~CoordinateSystem(void);
@@ -37,4 +42,7 @@ public:
 	gp_Trsf GetMatrix();
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
+	static void RenderDatum(); // render a coordinate system at 0, 0, 0
+	static void AxesToAngles(const gp_Dir &x, const gp_Dir &y, double &v_angle, double &h_angle, double &t_angle);
+	static void AnglesToAxes(const double &v_angle, const double &h_angle, const double &t_angle, gp_Dir &x, gp_Dir &y);
 };

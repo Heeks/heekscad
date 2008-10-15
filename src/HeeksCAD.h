@@ -78,6 +78,7 @@ public:
 	std::list< void(*)() > m_on_glCommands_list;
 	std::list<wxWindow*> m_hideable_windows;
 	bool m_show_ruler;
+	bool m_show_datum_coords_system;
 	std::list< wxString > m_recent_files;
 	bool m_disable_SetObjectID_on_Add;
 	wxString m_version_number;

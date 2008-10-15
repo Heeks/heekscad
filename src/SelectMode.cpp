@@ -5,10 +5,6 @@
 #include "../interface/InputMode.h"
 #include "../interface/Tool.h"
 #include "../interface/MarkedObject.h"
-#include "../interface/PropertyChoice.h"
-#include "../interface/PropertyCheck.h"
-#include "../interface/PropertyString.h"
-#include "../interface/PropertyList.h"
 #include "ViewPoint.h"
 #include "MagDragWindow.h"
 #include "MarkedList.h"
@@ -330,56 +326,10 @@ bool CSelectMode::OnStart(){
 	return true;
 }
 
-void on_set_rotate_mode(int value, HeeksObj* object)
-{
-	wxGetApp().m_rotate_mode = value;
-}
-
-void on_set_antialiasing(bool value, HeeksObj* object)
-{
-	wxGetApp().m_antialiasing = value;
-	wxGetApp().Repaint();
-}
-
-void on_set_light_push_matrix(bool value, HeeksObj* object)
-{
-	wxGetApp().m_light_push_matrix = value;
-	wxGetApp().Repaint();
-}
-
-void on_set_reverse_mouse_wheel(bool value, HeeksObj* object)
-{
-	wxGetApp().mouse_wheel_forward_away = !value;
-}
-
-void on_set_ctrl_does_rotate(bool value, HeeksObj* object)
-{
-	wxGetApp().ctrl_does_rotate = value;
-}
-
 void CSelectMode::GetProperties(std::list<Property *> *list){
 }
 
 void CSelectMode::GetOptions(std::list<Property *> *list){
-	if(!m_doing_a_main_loop)
-	{
-		// let the user change the digitizing options, if not picking some objects
-		wxGetApp().m_digitizing->GetOptions(list);
-	}
-
-	PropertyList* plist = new PropertyList(_T("view options"));
-
-	std::list< wxString > choices;
-	choices.push_back ( wxString ( _T("stay upright") ) );
-	choices.push_back ( wxString ( _T("free") ) );
-	plist->m_list.push_back ( new PropertyChoice ( _T("rotate mode"),  choices, wxGetApp().m_rotate_mode, NULL, on_set_rotate_mode ) );
-	plist->m_list.push_back( new PropertyCheck(_T("antialiasing"), wxGetApp().m_antialiasing, NULL, on_set_antialiasing));
-#if _DEBUG
-	plist->m_list.push_back( new PropertyCheck(_T("fixed light"), wxGetApp().m_light_push_matrix, NULL, on_set_light_push_matrix));
-#endif
-	plist->m_list.push_back( new PropertyCheck(_T("reverse mouse wheel"), !(wxGetApp().mouse_wheel_forward_away), NULL, on_set_reverse_mouse_wheel));
-	plist->m_list.push_back( new PropertyCheck(_T("Ctrl key does rotate"), wxGetApp().ctrl_does_rotate, NULL, on_set_ctrl_does_rotate));
-	list->push_back(plist);
 }
 
 class EndPicking:public Tool{
