@@ -9,14 +9,15 @@
 #include "../src/Gripper.h" // needs to be moved to interface, and made independent of gp_Pnt
 #endif
 
-HeeksObj::HeeksObj(void): m_owner(NULL), m_id(0){}
+HeeksObj::HeeksObj(void): m_owner(NULL), m_id(0), m_layer(0), m_visible(true){}
 
-HeeksObj::HeeksObj(const HeeksObj& ho): m_owner(NULL), m_id(0){operator=(ho);}
+HeeksObj::HeeksObj(const HeeksObj& ho): m_owner(NULL), m_id(0), m_layer(0), m_visible(true){operator=(ho);}
 
 const HeeksObj& HeeksObj::operator=(const HeeksObj &ho)
 {
 	// don't copy the ID or the owner
 	m_layer = ho.m_layer;
+	m_visible = ho.m_visible;
 
 	return *this;
 }
