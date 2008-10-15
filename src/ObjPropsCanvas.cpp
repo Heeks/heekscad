@@ -148,6 +148,8 @@ void CObjPropsCanvas::OnApply2()
 		HeeksObj* marked_object = (*wxGetApp().m_marked_list->list().begin());
 		marked_object->OnApplyProperties();
 	}
+
+	m_object_for_cancel = NULL;
 }
 
 void CObjPropsCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)

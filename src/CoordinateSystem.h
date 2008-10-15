@@ -45,4 +45,6 @@ public:
 	static void RenderDatum(); // render a coordinate system at 0, 0, 0
 	static void AxesToAngles(const gp_Dir &x, const gp_Dir &y, double &v_angle, double &h_angle, double &t_angle);
 	static void AnglesToAxes(const double &v_angle, const double &h_angle, const double &t_angle, gp_Dir &x, gp_Dir &y);
+	void AxesToAngles(){AxesToAngles(m_x, m_y, m_vertical_angle, m_horizontal_angle, m_twist_angle);}
+	void AnglesToAxes(){AnglesToAxes(m_vertical_angle, m_horizontal_angle, m_twist_angle, m_x, m_y);}
 };
