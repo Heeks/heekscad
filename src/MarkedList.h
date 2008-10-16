@@ -46,4 +46,6 @@ public:
 	void OnChanged(bool all_marked, bool none_marked, const std::list<HeeksObj *>* added, const std::list<HeeksObj *>* removed);
 	void set_ignore_onoff(HeeksObj* object, bool b);
 	bool get_ignore(HeeksObj* object);
+	void GetProperties(std::list<Property *> *list);
+	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 };

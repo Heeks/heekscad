@@ -61,6 +61,7 @@ void PickCreateExtrusion()
 	if(wxGetApp().m_marked_list->size() > 0)
 	{
 		std::list<TopoDS_Face> faces;
+		std::list<HeeksObj*> lines_arcs;
 
 		for(std::list<HeeksObj *>::const_iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
 		{
@@ -80,21 +81,23 @@ void PickCreateExtrusion()
 				break;
 
 			case LineArcCollectionType:
-				{
-					std::list<HeeksObj*> list;
-					list.push_back(object);
-					TopoDS_Face face;
-					if(ConvertLineArcsToFace2(list, face))
-					{
-						faces.push_back(face);
-					}
-				}
+			case LineType:
+			case ArcType:
+				lines_arcs.push_back(object);
 				break;
 			}
 		}
 
+		{
+			TopoDS_Face face;
+			if(ConvertLineArcsToFace2(lines_arcs, face))
+			{
+				faces.push_back(face);
+			}
+		}
+
 		TopoDS_Shape shape;
-		if(CreateExtrusion(faces, shape, gp_Vec(0, 0, height)))
+		if(CreateExtrusion(faces, shape, gp_Vec(0, 0, height).Transformed(wxGetApp().GetDrawMatrix(false))))
 		{
 			HeeksObj* new_object = CShape::MakeObject(shape, _T("Extruded Solid"));
 			wxGetApp().AddUndoably(new_object, NULL, NULL);
