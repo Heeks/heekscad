@@ -270,11 +270,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\CoordinateSystem.h"
+			RelativePath=".\CoordinateSystem.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\CordinateSystem.cpp"
+			RelativePath=".\CoordinateSystem.h"
 			>
 		</File>
 		<File
