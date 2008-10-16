@@ -97,10 +97,10 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll(){
 
 	m_object_for_cancel = marked_object;
 
-	if(marked_object)
+	if(wxGetApp().m_marked_list->size() > 0)
 	{
 		std::list<Property *> list;
-		marked_object->GetProperties(&list);
+		wxGetApp().m_marked_list->GetProperties(&list);
 		for(std::list<Property*>::iterator It = list.begin(); It != list.end(); It++)
 		{
 			Property* property = *It;
@@ -114,11 +114,11 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll(){
 		wxGetApp().m_frame->AddToolBarTool(m_toolBar, _T("Cancel"), wxBitmap(exe_folder + _T("/bitmaps/cancel.png"), wxBITMAP_TYPE_PNG), _T("Stop editing the object"), OnCancel);
 
 		std::list<Tool*> t_list;
-		marked_object->GetTools(&t_list, NULL);
+		wxGetApp().m_marked_list->GetTools(&t_list, NULL);
 		for(std::list<Tool*>::iterator It = t_list.begin(); It != t_list.end(); It++)
 		{
 			Tool* tool = *It;
-			wxGetApp().m_frame->AddToolBarTool(m_toolBar, tool);
+			if(tool)wxGetApp().m_frame->AddToolBarTool(m_toolBar, tool);
 		}
 
 		m_toolBar->Realize();
@@ -138,6 +138,11 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll(){
 	}
 }
 
+void CObjPropsCanvas::ApplyChanges()
+{
+	m_object_for_cancel = NULL;
+}
+
 void CObjPropsCanvas::OnApply2()
 {
 	// cause all of the properties to be applied
@@ -149,7 +154,7 @@ void CObjPropsCanvas::OnApply2()
 		marked_object->OnApplyProperties();
 	}
 
-	m_object_for_cancel = NULL;
+	ApplyChanges();
 }
 
 void CObjPropsCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)

@@ -29,6 +29,8 @@ public:
 	void RefreshByRemovingAndAddingAll();
 	void OnApply2();
 
+	void ApplyChanges(); // clear the cancel object
+
     DECLARE_NO_COPY_CLASS(CObjPropsCanvas)
     DECLARE_EVENT_TABLE()
 };

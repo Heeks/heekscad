@@ -4,6 +4,7 @@
 #include "CoordinateSystem.h"
 #include "PropertyVertex.h"
 #include "../interface/PropertyDouble.h"
+#include "../interface/Tool.h"
 #include "HeeksFrame.h"
 #include "ObjPropsCanvas.h"
 #include "../tinyxml/tinyxml.h"
@@ -47,17 +48,21 @@ CoordinateSystem::~CoordinateSystem(void)
 }
 
 // static
-void CoordinateSystem::RenderDatum()
+void CoordinateSystem::RenderDatum(bool bright)
 {
+	// red, green, blue for x, y, z, like I saw on Open Arena
 	double size = 30.0 / wxGetApp().GetPixelScale(); // 30 pixels as mm
 	glBegin(GL_LINES);
-	glColor3ub(255, 0, 0);
+	if(bright)glColor3ub(255, 0, 0);
+	else glColor3ub(128, 64, 64);
 	glVertex3d(0, 0, 0);
 	glVertex3d(size, 0, 0);
-	glColor3ub(0, 255, 0);
+	if(bright)glColor3ub(0, 255, 0);
+	else glColor3ub(64, 128, 64);
 	glVertex3d(0, 0, 0);
 	glVertex3d(0, size, 0);
-	glColor3ub(0, 0, 255);
+	if(bright)glColor3ub(0, 0, 255);
+	else glColor3ub(64, 64, 128);
 	glVertex3d(0, 0, 0);
 	glVertex3d(0, 0, size);
 	glEnd();
@@ -65,14 +70,13 @@ void CoordinateSystem::RenderDatum()
 
 void CoordinateSystem::glCommands(bool select, bool marked, bool no_color)
 {
-	// red, green, blue for x, y, z, like I saw on Open Arena
-	if(this == wxGetApp().m_current_coordinate_system)glLineWidth(2);
-
+	if(marked)glLineWidth(2);
 	glPushMatrix();
 	double m[16];
 	extract_transposed(GetMatrix(), m);
 	glMultMatrixd(m);
-	RenderDatum();
+	bool bright = (this == wxGetApp().m_current_coordinate_system);
+	RenderDatum(bright);
 	glPopMatrix();
 	glLineWidth(1);
 }
@@ -106,20 +110,6 @@ static void on_set_pos(const gp_Pnt& pos, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
-static void on_set_x(const gp_Pnt& pos, HeeksObj* object)
-{
-//	((CoordinateSystem*)object)->m_x = gp_Vec(pos.XYZ());
-//	((CoordinateSystem*)object)->AxesToAngles();
-//	wxGetApp().Repaint();
-}
-
-static void on_set_y(const gp_Pnt& pos, HeeksObj* object)
-{
-//	((CoordinateSystem*)object)->m_y = gp_Vec(pos.XYZ());
-//	((CoordinateSystem*)object)->AxesToAngles();
-//	wxGetApp().Repaint();
-}
-
 static void on_set_vertical_angle(double value, HeeksObj* object)
 {
 	((CoordinateSystem*)object)->m_vertical_angle = value * Pi/180;
@@ -141,11 +131,92 @@ static void on_set_twist_angle(double value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+static double origin[3];
+static double x_axis_pos[3];
+static double y_axis_pos[3];
+
+static void on_set_origin(const double* pos){ memcpy(origin, pos, 3*sizeof(double));}
+static void on_set_x(const double* pos){ memcpy(x_axis_pos, pos, 3*sizeof(double));}
+static void on_set_y(const double* pos){ memcpy(y_axis_pos, pos, 3*sizeof(double));}
+
+static CoordinateSystem* coord_system_for_Tool = NULL;
+
+class CoordSystem3Points:public Tool{
+	// to set the position and orientation of a CoordinateSystem, by picking 1 - datum position, 2 - x axis position, 3 - y axis position ( somewhere where y > 0 )
+private:
+	static wxBitmap* m_bitmap;
+
+public:
+	void Run(){
+		if(!wxGetApp().PickPosition(_T("Pick the location"), origin, on_set_origin))return;
+		if(!wxGetApp().PickPosition(_T("Pick a point on the x-axis"), x_axis_pos, on_set_x))return;
+		if(!wxGetApp().PickPosition(_T("Pick a point where y > 0"), y_axis_pos, on_set_y))return;
+
+		coord_system_for_Tool->m_o = make_point(origin);
+		coord_system_for_Tool->m_x = make_vector(coord_system_for_Tool->m_o, make_point(x_axis_pos));
+		coord_system_for_Tool->m_y = make_vector(coord_system_for_Tool->m_o, make_point(y_axis_pos));
+
+		wxGetApp().m_frame->m_properties->ApplyChanges();
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("CoordSystem3Points");}
+	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/coords3.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
+	const wxChar* GetToolTip(){return _T("Set position and orientation by picking 3 points");}
+};
+wxBitmap* CoordSystem3Points::m_bitmap = NULL;
+
+static CoordSystem3Points coord_system_3_points;
+
+class SetCoordSystemActive:public Tool{
+	// setthe coordinate system as the current one
+private:
+	static wxBitmap* m_bitmap;
+
+public:
+	void Run(){
+		wxGetApp().m_current_coordinate_system = coord_system_for_Tool;
+		wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("SetCoordSystemActive");}
+	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/setcoordsys.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
+	const wxChar* GetToolTip(){return _T("Set this coordinate system as the active one");}
+};
+wxBitmap* SetCoordSystemActive::m_bitmap = NULL;
+
+static SetCoordSystemActive coord_system_set;
+
+class UnsetCoordSystemActive:public Tool{
+	// set world coordinate system active again
+private:
+	static wxBitmap* m_bitmap;
+
+public:
+	void Run(){
+		wxGetApp().m_current_coordinate_system = NULL;
+		wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("UnsetCoordSystemActive");}
+	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/unsetcoordsys.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
+	const wxChar* GetToolTip(){return _T("Set world coordinate system active");}
+};
+wxBitmap* UnsetCoordSystemActive::m_bitmap = NULL;
+
+static UnsetCoordSystemActive coord_system_unset;
+
+void CoordinateSystem::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
+{
+	coord_system_for_Tool = this;
+	t_list->push_back(&coord_system_3_points);
+	t_list->push_back((this == wxGetApp().m_current_coordinate_system) ? ((Tool*)(&coord_system_unset)) : ((Tool*)(&coord_system_set)));
+}
+
 void CoordinateSystem::GetProperties(std::list<Property *> *list)
 {
 	list->push_back(new PropertyVertex(_T("position"), m_o, this, on_set_pos));
-	list->push_back(new PropertyVertex(_T("x axis"), gp_Pnt(m_x.XYZ()), this, on_set_x));
-	list->push_back(new PropertyVertex(_T("y axis"), gp_Pnt(m_y.XYZ()), this, on_set_y));
+	list->push_back(new PropertyVertex(_T("x axis"), gp_Pnt(m_x.XYZ()), NULL));
+	list->push_back(new PropertyVertex(_T("y axis"), gp_Pnt(m_y.XYZ()), NULL));
 	AxesToAngles(m_x, m_y, m_vertical_angle, m_horizontal_angle, m_twist_angle);
 	list->push_back(new PropertyDouble(_T("Vertical Angle"), m_vertical_angle * 180/Pi, this, on_set_vertical_angle));
 	list->push_back(new PropertyDouble(_T("Horizontal Angle"), m_horizontal_angle * 180/Pi, this, on_set_horizontal_angle));

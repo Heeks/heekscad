@@ -33,4 +33,4 @@ public:
 	const wxChar* GetTitle(){return _T("Convert Lines and/or Arcs To Face");}
 };
 
-void GetConversionMenuTools(std::list<Tool*>* t_list, const wxPoint* p, MarkedObject* marked_object);
+void GetConversionMenuTools(std::list<Tool*>* t_list);

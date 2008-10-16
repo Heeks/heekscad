@@ -99,7 +99,6 @@ public:
 	void FindMarkedObject(const wxPoint &point, MarkedObject* marked_object);
 	void clear_marked_list(void);
 	void SetInputMode(CInputMode *i);
-	void GetTools(std::list<Tool*>* t_list, const wxPoint* point, MarkedObject* marked_object);
 	void Repaint(bool soon = false);
 	void RecalculateGLLists();
 	void SetLikeNewFile(void);
@@ -156,7 +155,7 @@ public:
 	void ObserversMarkedListChanged(bool all_marked, bool none_marked, const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed);
 	const wxChar* GetKnownFilesWildCardString(bool open = true)const;
 	const wxChar* GetKnownFilesCommaSeparatedList(bool open = true)const;
-	void AddMenusToToolList(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool from_graphics_canvas, bool control_pressed);
+	void GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool from_graphics_canvas, bool control_pressed);
 	wxString GetExeFolder()const;
 	void get_2d_arc_segments(double xs, double ys, double xe, double ye, double xc, double yc, bool dir, bool want_start, double pixels_per_mm, void(*callbackfunc)(const double* xy));
 	void PassMouseWheelToGraphics(wxMouseEvent& event);

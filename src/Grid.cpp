@@ -18,8 +18,7 @@ static void RenderGrid(const CViewPoint *view_point, double max_number_across, b
 	gp_Vec vx, vy;
 	int plane_mode2 = view_point->GetTwoAxes(vx, vy, false, plane_mode);
 	gp_Pnt datum(0, 0, 0);
-	gp_Trsf orimat;
-	if(wxGetApp().m_current_coordinate_system)orimat = wxGetApp().m_current_coordinate_system->GetMatrix();
+	gp_Trsf orimat = wxGetApp().GetDrawMatrix(false);
 	datum.Transform(orimat);
 	orimat = make_matrix(datum, vx, vy);
 	gp_Vec unit_forward = view_point->forwards_vector().Normalized();
@@ -164,8 +163,7 @@ void GetGridBox(const CViewPoint *view_point, CBox &ext){
 	gp_Vec vx, vy;
 	view_point->GetTwoAxes(vx, vy, false, 0);
 	gp_Pnt datum(0, 0, 0);
-	gp_Trsf orimat;
-	if(wxGetApp().m_current_coordinate_system)orimat = wxGetApp().m_current_coordinate_system->GetMatrix();
+	gp_Trsf orimat = wxGetApp().GetDrawMatrix(false);
 	datum.Transform(orimat);
 	orimat = make_matrix(datum, vx, vy);
 	gp_Pln plane(datum, gp_Vec(0, 0, 1).Transformed(orimat));
@@ -213,8 +211,7 @@ static void RenderGrid(const CViewPoint *view_point, int plane)
 			gp_Vec vx, vy;
 			view_point->GetTwoAxes(vx, vy, false, plane);
 			gp_Pnt datum(0, 0, 0);
-			gp_Trsf orimat;
-			if(wxGetApp().m_current_coordinate_system)orimat = wxGetApp().m_current_coordinate_system->GetMatrix();
+			gp_Trsf orimat = wxGetApp().GetDrawMatrix(false);
 			datum = datum.Transformed(orimat);
 			orimat = make_matrix(datum, vx, vy);
 			gp_Vec v_up = gp_Vec(0,0, 1).Transformed(orimat);
