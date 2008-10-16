@@ -33,6 +33,7 @@ LineArcDrawing::LineArcDrawing(void){
 	m_container = NULL;
 	radius_for_circle = 5.0;
 	circle_mode = ThreePointsCircleMode;
+	m_add_to_collection = false;
 }
 
 LineArcDrawing::~LineArcDrawing(void){
@@ -358,17 +359,19 @@ HeeksObj* LineArcDrawing::GetOwnerForDrawingObjects()
 	case LineDrawingMode:
 	case ArcDrawingMode:
 		{
-			if(m_container == NULL)
+			if(m_add_to_collection)
 			{
-				m_container = (ObjList*)new CLineArcCollection;
-				wxGetApp().AddUndoably(m_container, NULL, NULL);
+				if(m_container == NULL)
+				{
+					m_container = (ObjList*)new CLineArcCollection;
+					wxGetApp().AddUndoably(m_container, NULL, NULL);
+				}
+				return m_container;
 			}
-			return m_container;
 		}
 		break;
-	default:
-		return NULL;
 	}
+	return NULL;
 }
 
 void LineArcDrawing::clear_drawing_objects(bool store_as_previous_objects)

@@ -16,7 +16,7 @@
 #include "Edge.h"
 #include "Shape.h"
 
-void GetConversionMenuTools(std::list<Tool*>* t_list, const wxPoint* p, MarkedObject* marked_object){
+void GetConversionMenuTools(std::list<Tool*>* t_list){
 	bool lines_or_arcs_in_marked_list = false;
 	bool wire_in_marked_list = false;
 	bool face_in_marked_list = false;

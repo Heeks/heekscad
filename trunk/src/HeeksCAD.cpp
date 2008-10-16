@@ -27,7 +27,6 @@
 #include "SelectMode.h"
 #include "MagDragWindow.h"
 #include "DigitizeMode.h"
-#include "ConversionTools.h"
 #include "Shape.h"
 #include "ViewPoint.h"
 #include "MarkedList.h"
@@ -338,25 +337,6 @@ void HeeksCADapp::DestroyLights(void)
 	glDisable(GL_LIGHT0);
     glDisable(GL_AUTO_NORMAL);
     glDisable(GL_NORMALIZE);
-}
-
-class CFullScreenTool : public Tool  
-{
-public:
-	// Tool's virtual functions
-	const wxChar* CFullScreenTool::GetTitle(){
-		if (wxGetApp().m_frame->IsFullScreen()) return _T("Exit Full Screen Mode");
-		else return _T("Show Full Screen");
-	}
-	void CFullScreenTool::Run(){
-		wxGetApp().m_frame->ShowFullScreen(!wxGetApp().m_frame->IsFullScreen());
-	}
-};
-
-void HeeksCADapp::GetTools(std::list<Tool*>* t_list, const wxPoint* point, MarkedObject* marked_object)
-{
-	if(point->x>=0 && point->y>=0)t_list->push_back(new CFullScreenTool);
-	GetConversionMenuTools(t_list, point, marked_object);
 }
 
 void HeeksCADapp::Reset(){
@@ -1045,9 +1025,19 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 		glPopMatrix();
 	}
 
+	// draw the grid
 	RenderGrid(&view_point);
+
+	// draw the ruler
 	if(m_show_ruler)RenderRuler();
-	if(m_show_datum_coords_system)CoordinateSystem::RenderDatum();
+
+	// draw the datum
+	if(m_show_datum_coords_system)
+	{
+		bool bright = (m_current_coordinate_system == NULL);
+		CoordinateSystem::RenderDatum(bright);
+	}
+
 	DestroyLights();
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_POLYGON_OFFSET_FILL);
@@ -1122,17 +1112,17 @@ static void AddToolListWithSeparator(std::list<Tool*> &l, std::list<Tool*> &temp
 
 static std::vector<ToolIndex> tool_index_list;
 
-class DeleteMarkedListTool : public Tool
+class CFullScreenTool : public Tool  
 {
-protected:
-	wxString m_text;
-
 public:
-	DeleteMarkedListTool(void) {m_text.assign(_T("Delete"));}
-	DeleteMarkedListTool(const wxChar* text) {m_text.assign(text);}
-	
-	const wxChar* GetTitle() {return m_text.c_str();}
-	void Run() {wxGetApp().DeleteMarkedItems();}
+	// Tool's virtual functions
+	const wxChar* CFullScreenTool::GetTitle(){
+		if (wxGetApp().m_frame->IsFullScreen()) return _T("Exit Full Screen Mode");
+		else return _T("Show Full Screen");
+	}
+	void CFullScreenTool::Run(){
+		wxGetApp().m_frame->ShowFullScreen(!wxGetApp().m_frame->IsFullScreen());
+	}
 };
 
 void HeeksCADapp::DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool from_graphics_canvas, bool control_pressed)
@@ -1146,22 +1136,20 @@ void HeeksCADapp::DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObje
 	wxMenu menu;
 	std::list<Tool*> f_list;
 	std::list<Tool*> temp_f_list;
-	{
-		if (m_marked_list->size() > 1)
-		{
-			f_list.push_back(new DeleteMarkedListTool(_T("Delete Marked Items")));
-			f_list.push_back(NULL);
-		}
-		else if (marked_object->GetFirstOfEverything())
-		{
-			AddMenusToToolList(marked_object, f_list, new_point, from_graphics_canvas, control_pressed);
-		}
-	}
+
+	GetTools(marked_object, f_list, new_point, from_graphics_canvas, control_pressed);
+
+	m_marked_list->GetTools(&f_list, &new_point);
+
 	temp_f_list.clear();
 	if(input_mode_object)input_mode_object->GetTools(&temp_f_list, &new_point);
 	AddToolListWithSeparator(f_list, temp_f_list);
 	temp_f_list.clear();
-	GetTools(&temp_f_list, &new_point, marked_object);
+
+	if(point.x>=0 && point.y>=0)temp_f_list.push_back(new CFullScreenTool);
+
+
+
 	AddToolListWithSeparator(f_list, temp_f_list);
 	std::list<Tool*>::iterator FIt;
 	for (FIt = f_list.begin(); FIt != f_list.end(); FIt++)
@@ -1356,6 +1344,7 @@ void HeeksCADapp::WereRemoved(const std::list<HeeksObj*>& list)
 gp_Trsf HeeksCADapp::GetDrawMatrix(bool get_the_appropriate_orthogonal)
 {
 	if(get_the_appropriate_orthogonal){
+		// choose from the three orthoganal possibilities, the one where it's z-axis closest to the camera direction
 		gp_Vec vx, vy;
 		m_frame->m_graphics->m_view_point.GetTwoAxes(vx, vy, false, 0);
 		{
@@ -1688,13 +1677,13 @@ public:
 	}
 };
 
-void HeeksCADapp::AddMenusToToolList(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool from_graphics_canvas, bool control_pressed)
+void HeeksCADapp::GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool from_graphics_canvas, bool control_pressed)
 {
 	std::map<HeeksObj*, MarkedObject*>::iterator It;
 	for (It = marked_object->m_map.begin(); It != marked_object->m_map.end(); It++)
 	{
 		MarkedObject* object = It->second;
-		AddMenusToToolList(object, t_list, point, from_graphics_canvas, control_pressed);
+		GetTools(object, t_list, point, from_graphics_canvas, control_pressed);
 	}
 	if (marked_object->GetObject())
 	{

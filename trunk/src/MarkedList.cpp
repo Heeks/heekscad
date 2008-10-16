@@ -4,12 +4,14 @@
 #include "MarkedList.h"
 #include "../interface/HeeksObj.h"
 #include "../interface/MarkedObject.h"
+#include "../interface/PropertyInt.h"
 #include "DigitizeMode.h"
 #include "SelectMode.h"
 #include "PointOrWindow.h"
 #include "GripperSelTransform.h"
 #include "GraphicsCanvas.h"
 #include "HeeksFrame.h"
+#include "ConversionTools.h"
 
 MarkedList::MarkedList(){
 	gripping = false;
@@ -260,4 +262,44 @@ void MarkedList::set_ignore_onoff(HeeksObj* object, bool b){
 bool MarkedList::get_ignore(HeeksObj* object){
 	if(m_ignore_set.find(object) != m_ignore_set.end())return true;
 	return false;
+}
+
+void MarkedList::GetProperties(std::list<Property *> *list){
+	if(m_list.size() == 1)
+	{
+		m_list.front()->GetProperties(list);
+	}
+	else
+	{
+		// multiple selection
+		list->push_back(new PropertyInt(_T("Number of items selected"), m_list.size(), NULL));
+	}
+}
+
+class DeleteMarkedListTool : public Tool
+{
+protected:
+	wxString m_text;
+
+public:
+	DeleteMarkedListTool(void) {m_text.assign(_T("Delete"));}
+	DeleteMarkedListTool(const wxChar* text) {m_text.assign(text);}
+	
+	const wxChar* GetTitle() {return m_text.c_str();}
+	void Run() {wxGetApp().DeleteMarkedItems();}
+};
+
+void MarkedList::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
+	if (m_list.size() > 1)
+	{
+		t_list->push_back(new DeleteMarkedListTool(_T("Delete Marked Items")));
+		t_list->push_back(NULL);
+	}
+
+	if(m_list.size() == 1)
+	{
+		m_list.front()->GetTools(t_list, p);
+	}
+
+	GetConversionMenuTools(t_list);
 }

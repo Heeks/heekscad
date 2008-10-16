@@ -23,6 +23,7 @@ private:
 	HeeksObj *temp_object;
 	bool m_A_down; // is key A pressed
 	HeeksObj* m_container;
+	bool m_add_to_collection;
 
 	// Drawing's virtual functions
 	bool calculate_item(DigitizedPoint &end);

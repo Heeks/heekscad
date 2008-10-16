@@ -78,6 +78,7 @@ EVT_MENU(ID_REDO, CHeeksFrame::OnRedoButton)
 EVT_MENU(ID_MAG_EXTENTS, CHeeksFrame::OnMagExtentsButton)
 EVT_MENU(ID_MAG_NO_ROT, CHeeksFrame::OnMagNoRotButton)
 EVT_MENU(ID_MAG_PREVIOUS, CHeeksFrame::OnMagPreviousButton)
+EVT_MENU(ID_FULL_SCREEN, CHeeksFrame::OnFullScreenButton)
 EVT_MENU(ID_MOVE_TRANSLATE, CHeeksFrame::OnMoveTranslateButton)
 EVT_MENU(ID_COPY_TRANSLATE, CHeeksFrame::OnCopyTranslateButton)
 EVT_MENU(ID_MOVE_ROTATE, CHeeksFrame::OnMoveRotateButton)
@@ -114,7 +115,7 @@ bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
     return true;
 }
 
-static wxString default_layout_string = _T("layout2|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=234;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=245;prop=100000;bestw=156;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=6;pos=0;prop=100000;bestw=390;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=444;floaty=105;floatw=407;floath=65|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=6;pos=401;prop=100000;bestw=156;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=TransformBar;caption=Transformation Tools;state=2108156;dir=1;layer=10;row=0;pos=373;prop=100000;bestw=273;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=504|dock_size(4,1,0)=302|dock_size(1,10,0)=41|dock_size(1,10,6)=41|");
+static wxString default_layout_string = _T("layout2|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=234;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=245;prop=100000;bestw=156;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=6;pos=0;prop=100000;bestw=390;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=444;floaty=105;floatw=407;floath=65|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=6;pos=401;prop=100000;bestw=195;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=TransformBar;caption=Transformation Tools;state=2108156;dir=1;layer=10;row=0;pos=373;prop=100000;bestw=273;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=504|dock_size(4,1,0)=302|dock_size(1,10,0)=41|dock_size(1,10,6)=41|");
 
 CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSize& size )
 	: wxFrame((wxWindow *)NULL, -1, title, pos, size)
@@ -242,6 +243,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_viewingBar->AddTool(ID_MAG, _T("Zoom Window"), wxBitmap(exe_folder + _T("/bitmaps/mag.png"), wxBITMAP_TYPE_PNG), _T("Zoom in to a dragged window"));
 	m_viewingBar->AddTool(ID_MAG_EXTENTS, _T("Mag Extents"), wxBitmap(exe_folder + _T("/bitmaps/magextents.png"), wxBITMAP_TYPE_PNG), _T("Zoom in to fit the extents of the drawing into the graphics window"));
 	m_viewingBar->AddTool(ID_MAG_NO_ROT, _T("Mag No Rotation"), wxBitmap(exe_folder + _T("/bitmaps/magnorot.png"), wxBITMAP_TYPE_PNG), _T("Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"));
+	m_viewingBar->AddTool(ID_FULL_SCREEN, _T("FullScreen"), wxBitmap(exe_folder + _T("/bitmaps/fullscreen.png"), wxBITMAP_TYPE_PNG), _T("Switch to full screen view ( press escape to return )"));
 	m_viewingBar->Realize();
 
 	// transformations tool bar
@@ -596,7 +598,11 @@ CHeeksFrame::OnILineButton( wxCommandEvent& WXUNUSED( event ) )
 void 
 CHeeksFrame::OnCoordinateSystem( wxCommandEvent& WXUNUSED( event ) )
 {
-	CoordinateSystem* new_object = new CoordinateSystem(_T("Coordinate System"), gp_Pnt(10, 10, 0), gp_Dir(1, 0, 0), gp_Dir(0, 1, 0.2));
+	gp_Trsf mat = wxGetApp().GetDrawMatrix(false);
+	gp_Pnt o = gp_Pnt(0, 0, 0).Transformed(mat);
+	gp_Dir x = gp_Dir(1, 0, 0).Transformed(mat);
+	gp_Dir y = gp_Dir(0, 1, 0).Transformed(mat);
+	CoordinateSystem* new_object = new CoordinateSystem(_T("Coordinate System"), o, x, y);
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().m_marked_list->Clear();
 	wxGetApp().m_marked_list->Add(new_object);
@@ -684,7 +690,8 @@ void CHeeksFrame::OnExtrudeButton( wxCommandEvent& event )
 
 void CHeeksFrame::OnSphereButton( wxCommandEvent& event )
 {
-	CSphere* new_object = new CSphere(gp_Pnt(0, 0, 0), 5, _T("Sphere"));
+	gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
+	CSphere* new_object = new CSphere(gp_Pnt(0, 0, 0).Transformed(mat), 5, _T("Sphere"));
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().m_marked_list->Clear();
 	wxGetApp().m_marked_list->Add(new_object);
@@ -693,7 +700,8 @@ void CHeeksFrame::OnSphereButton( wxCommandEvent& event )
 
 void CHeeksFrame::OnCubeButton( wxCommandEvent& event )
 {
-	CCuboid* new_object = new CCuboid(gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), 10, 10, 10, _T("Cuboid"));
+	gp_Trsf mat = wxGetApp().GetDrawMatrix(false);
+	CCuboid* new_object = new CCuboid(gp_Ax2(gp_Pnt(0, 0, 0).Transformed(mat), gp_Dir(0, 0, 1).Transformed(mat), gp_Dir(1, 0, 0)).Transformed(mat), 10, 10, 10, _T("Cuboid"));
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().m_marked_list->Clear();
 	wxGetApp().m_marked_list->Add(new_object);
@@ -702,7 +710,8 @@ void CHeeksFrame::OnCubeButton( wxCommandEvent& event )
 
 void CHeeksFrame::OnCylButton( wxCommandEvent& event )
 {
-	CCylinder* new_object = new CCylinder(gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), 5, 10, _T("Cylinder"));
+	gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
+	CCylinder* new_object = new CCylinder(gp_Ax2(gp_Pnt(0, 0, 0).Transformed(mat), gp_Dir(0, 0, 1).Transformed(mat), gp_Dir(1, 0, 0).Transformed(mat)), 5, 10, _T("Cylinder"));
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().m_marked_list->Clear();
 	wxGetApp().m_marked_list->Add(new_object);
@@ -711,7 +720,8 @@ void CHeeksFrame::OnCylButton( wxCommandEvent& event )
 
 void CHeeksFrame::OnConeButton( wxCommandEvent& event )
 {
-	CCone* new_object = new CCone(gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), 10, 5, 20, _T("Cone"));
+	gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
+	CCone* new_object = new CCone(gp_Ax2(gp_Pnt(0, 0, 0).Transformed(mat), gp_Dir(0, 0, 1).Transformed(mat), gp_Dir(1, 0, 0).Transformed(mat)), 10, 5, 20, _T("Cone"));
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().m_marked_list->Clear();
 	wxGetApp().m_marked_list->Add(new_object);
@@ -742,6 +752,11 @@ void CHeeksFrame::OnMagNoRotButton( wxCommandEvent& event )
 void CHeeksFrame::OnMagPreviousButton( wxCommandEvent& event )
 {
 	wxGetApp().m_frame->m_graphics->OnMagPrevious();
+}
+
+void CHeeksFrame::OnFullScreenButton( wxCommandEvent& event )
+{
+	wxGetApp().m_frame->ShowFullScreen(true);
 }
 
 void CHeeksFrame::OnMoveTranslateButton( wxCommandEvent& event )
