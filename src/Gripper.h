@@ -40,7 +40,7 @@ public:
 	virtual void OnFrontRender(){}
 	virtual void OnRender(){}
 	virtual bool OnGripperGrabbed(double* from){return false;}
-	virtual void OnGripperMoved(const double* from, const double* to){}
+	virtual void OnGripperMoved(double* from, const double* to){}
 	virtual void OnGripperReleased(const double* from, const double* to){}
 
 	// member functions

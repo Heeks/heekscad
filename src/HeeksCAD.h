@@ -81,6 +81,7 @@ public:
 	bool m_show_datum_coords_system;
 	std::list< wxString > m_recent_files;
 	bool m_in_OpenFile;
+	bool m_mark_newly_added_objects;
 	wxString m_version_number;
 	std::list< void(*)(wxSizeEvent&) > m_on_graphics_size_list;
 	std::list< void(*)(wxMouseEvent&) > m_lbutton_up_callbacks;
@@ -187,6 +188,8 @@ public:
 	void RemoveOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
 	void CreateTransformGLList(bool show_grippers_on_drag);
 	void DestroyTransformGLList();
+	bool IsPasteReady();
+	void Paste();
 };
 
 DECLARE_APP(HeeksCADapp)

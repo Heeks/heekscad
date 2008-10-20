@@ -25,7 +25,7 @@ public:
 	void GetGripperPositions(std::list<double> *list, bool just_for_endof);
 	void OnApplyProperties();
 	bool GetScaleAboutMatrix(double *m);
-	bool Stretch(const double *p, const double* shift, double* new_position);
+	bool Stretch(const double *p, const double* shift);
 
 	// CSolid's virtual functions
 	SolidTypeEnum GetSolidType(){return SOLID_TYPE_CUBOID;}

@@ -131,6 +131,12 @@ public:
 	void OnUndoButton( wxCommandEvent& event );
 	void OnRedoButton( wxCommandEvent& event );
 	void OnNewButton( wxCommandEvent& event );
+	void OnCutButton( wxCommandEvent& event );
+	void OnUpdateCut( wxUpdateUIEvent& event );
+	void OnCopyButton( wxCommandEvent& event );
+	void OnUpdateCopy( wxUpdateUIEvent& event );
+	void OnPasteButton( wxCommandEvent& event );
+	void OnUpdatePaste( wxUpdateUIEvent& event );
 	void OnSubtractButton( wxCommandEvent& event );
 	void OnFuseButton( wxCommandEvent& event );
 	void OnCommonButton( wxCommandEvent& event );
