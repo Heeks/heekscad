@@ -12,6 +12,11 @@
 #include "GraphicsCanvas.h"
 #include "HeeksFrame.h"
 #include "ConversionTools.h"
+#include <wx/clipbrd.h>
+#include "../tinyxml/tinyxml.h"
+#include <wx/stdpaths.h>
+#include <fstream>
+using namespace std;
 
 MarkedList::MarkedList(){
 	gripping = false;
@@ -278,21 +283,105 @@ void MarkedList::GetProperties(std::list<Property *> *list){
 
 class DeleteMarkedListTool : public Tool
 {
-protected:
-	wxString m_text;
-
+private:
+	static wxBitmap* m_bitmap;
 public:
-	DeleteMarkedListTool(void) {m_text.assign(_T("Delete"));}
-	DeleteMarkedListTool(const wxChar* text) {m_text.assign(text);}
-	
-	const wxChar* GetTitle() {return m_text.c_str();}
+	const wxChar* GetTitle() {return _T("Delete Marked Items");}
 	void Run() {wxGetApp().DeleteMarkedItems();}
-};
+	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/delete.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
+} delete_marked_list_tool;
+wxBitmap* DeleteMarkedListTool::m_bitmap = NULL;
+
+class CopyMarkedList: public Tool
+{
+private:
+	static wxBitmap* m_bitmap;
+public:
+	void Run();
+	const wxChar* GetTitle(){return _T("Copy");}
+	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/copy.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
+	const wxChar* GetToolTip(){return _T("Copies the selected items to the clipboard");}
+} copy_marked_list;
+wxBitmap* CopyMarkedList::m_bitmap = NULL;
+
+void CopyMarkedList::Run()
+{
+
+	wxStandardPaths sp;
+	sp.GetTempDir();
+	wxString temp_file = sp.GetTempDir() + _T("/temp_Heeks_clipboard_file.xml");
+
+	wxGetApp().SaveXMLFile(wxGetApp().m_marked_list->list(), temp_file);
+
+	ifstream ifs(temp_file);
+	if(!ifs)return;
+
+	wxString fstr;
+	char str[1024];
+	while(!(ifs.eof())){
+		ifs.getline(str, 1022);
+		strcat(str, "\r\n");
+		fstr.append(Ctt(str));
+		if(!ifs)break;
+	}
+
+	if (wxTheClipboard->Open())
+	{
+		// This data objects are held by the clipboard, 
+		// so do not delete them in the app.
+		wxTheClipboard->SetData( new wxTextDataObject(fstr));
+		wxTheClipboard->Close();
+	}
+}
+
+class PasteTool: public Tool
+{
+private:
+	static wxBitmap* m_bitmap;
+public:
+	void Run();
+	const wxChar* GetTitle(){return _T("Paste");}
+	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/paste.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
+	const wxChar* GetToolTip(){return _T("Paste items from the clipboard to the drawing");}
+} paste_tool;
+wxBitmap* PasteTool::m_bitmap = NULL;
+
+void PasteTool::Run()
+{
+	wxString fstr;
+
+	if (wxTheClipboard->Open())
+	{
+		if (wxTheClipboard->IsSupported( wxDF_TEXT ))
+		{
+			wxTextDataObject data;
+			wxTheClipboard->GetData( data );
+			fstr = data.GetText();
+		}  
+		wxTheClipboard->Close();
+	}
+
+	// write a temporary file
+	wxStandardPaths sp;
+	sp.GetTempDir();
+	wxString temp_file = sp.GetTempDir() + _T("/temp_Heeks_clipboard_file.heeks");
+
+	{
+#if wxUSE_UNICODE
+		wofstream ofs(temp_file);
+#else
+		ofstream ofs(temp_file);
+#endif
+		ofs<<fstr;
+	}
+
+	wxGetApp().OpenFile(temp_file, true);
+}
 
 void MarkedList::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 	if (m_list.size() > 1)
 	{
-		t_list->push_back(new DeleteMarkedListTool(_T("Delete Marked Items")));
+		t_list->push_back(&delete_marked_list_tool);
 		t_list->push_back(NULL);
 	}
 
@@ -302,4 +391,16 @@ void MarkedList::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 	}
 
 	GetConversionMenuTools(t_list);
+
+	// cut and copy tools
+	t_list->push_back(&copy_marked_list);
+
+	// paste
+	if (wxTheClipboard->Open())
+	{
+		if (wxTheClipboard->IsSupported( wxDF_TEXT ))
+			t_list->push_back(&paste_tool);
+	}
+
+
 }

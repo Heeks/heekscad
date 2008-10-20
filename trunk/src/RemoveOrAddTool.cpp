@@ -76,7 +76,8 @@ void AddObjectTool::RollBack()
 
 RemoveObjectTool::RemoveObjectTool(HeeksObj *object):RemoveOrAddTool(object, NULL, NULL)
 {
-	m_owner = object->m_owner;
+	if(object)m_owner = object->m_owner;
+	else m_owner = NULL;
 }
 
 void RemoveObjectTool::Run()

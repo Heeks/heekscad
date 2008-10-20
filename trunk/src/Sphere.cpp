@@ -39,7 +39,9 @@ bool CSphere::ModifyByMatrix(const double* m){
 	gp_Pnt new_pos = m_pos.Transformed(mat);
 	double scale = gp_Vec(1, 0, 0).Transformed(mat).Magnitude();
 	double new_radius = fabs(m_radius * scale);
-	wxGetApp().AddUndoably(new CSphere(new_pos, new_radius, m_title.c_str()), m_owner, NULL);
+	CSphere* new_object = new CSphere(new_pos, new_radius, m_title.c_str());
+	wxGetApp().AddUndoably(new_object, m_owner, NULL);
+	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object);
 	wxGetApp().DeleteUndoably(this);
 	return true;
 }

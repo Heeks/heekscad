@@ -14,7 +14,6 @@ private:
 	std::set<HeeksObj*> m_set;
 	std::set<HeeksObj*> m_ignore_set;
 
-	void create_grippers();
 	void delete_move_grips(bool check_app_grippers = false);
 	void create_move_grips();
 	void update_move_grips();
@@ -31,6 +30,7 @@ public:
 	MarkedList();
 	virtual ~MarkedList(void);
 
+	void create_grippers();
 	void glCommands();
 	void Add(std::list<HeeksObj *> &obj_list);
 	void Add(HeeksObj *object);
