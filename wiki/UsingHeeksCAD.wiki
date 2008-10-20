@@ -41,7 +41,8 @@ Press the cone button to create a cone based at x0 y0 z0, with lower radius 10mm
 Draw some lines/arcs ( see below ), press the extrude button, enter the extrude height, in the Input window, and press the green tick.
 
 == Editing Solids ==
-Solids can be moved by dragging them, whilst in Select Mode
+Solids can be moved by dragging them, whilst in Select Mode.
+
 When selected, gripper points appear. Dragging these perform other transformations, like scale, rotate, etc.
 
 = 2D Geometry =
