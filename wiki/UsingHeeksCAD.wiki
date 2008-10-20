@@ -26,32 +26,23 @@ To rotate the view, press and hold Ctrl and drag with the middle button pressed.
 = Solid Creation = 
 
 == Sphere ==
-Press the sphere button to create a sphere.
-
-The sphere doesn't get made until the green tick box is pressed.
-
-Drag the centre point of the sphere to where you want it.
-
-Press and hold the 'R' key to drag the radius of the sphere.
-
-Or type in the radius in the "Input" window.
-
+Press the sphere button to create a sphere at x0 y0 z0, with a radius of 5mm
 
 == Cube == 
 Press the cube button to create a 10x10x10 cube.
 
-I want this to work interactively, like the sphere creation, eventually.
-
 == Cylinder == 
-Press the cylinder button to create a simple cylinder.
-
-I want this to work interactively, like the sphere creation, eventually.
+Press the cylinder button to create a cylinder based at x0 y0 z0, with a radius of 5mm and height of 10mm.
 
 == Cone ==
-Not yet.
+Press the cone button to create a cone based at x0 y0 z0, with lower radius 10mm, upper radius 5mm, and height 20mm
 
 == Extrusion ==
-I think this will have to be done next, this will be useful. You will need to create some lines and arcs first.
+Draw some lines/arcs ( see below ), press the extrude button, enter the extrude height, in the Input window, and press the green tick.
+
+== Editing Solids ==
+Solids can be moved by dragging them, whilst in Select Mode
+When selected, gripper points appear. Dragging these perform other transformations, like scale, rotate, etc.
 
 = 2D Geometry =
 
