@@ -54,6 +54,14 @@ EVT_MENU( Menu_View_ResetLayout, CHeeksFrame::OnResetLayout )
 EVT_MENU(wxID_OPEN, CHeeksFrame::OnOpenButton)
 EVT_MENU(wxID_SAVE, CHeeksFrame::OnSaveButton)
 EVT_MENU(wxID_NEW, CHeeksFrame::OnNewButton)
+
+EVT_MENU(wxID_CUT, CHeeksFrame::OnCutButton)
+EVT_UPDATE_UI(wxID_CUT, CHeeksFrame::OnUpdateCut)
+EVT_MENU(wxID_COPY, CHeeksFrame::OnCopyButton)
+EVT_UPDATE_UI(wxID_COPY, CHeeksFrame::OnUpdateCopy)
+EVT_MENU(wxID_PASTE, CHeeksFrame::OnPasteButton)
+EVT_UPDATE_UI(wxID_PASTE, CHeeksFrame::OnUpdatePaste)
+
 EVT_UPDATE_UI(ID_OPEN_RECENT, CHeeksFrame::OnUpdateOpenRecent)
 EVT_MENU(ID_IMPORT, CHeeksFrame::OnImportButton)
 EVT_MENU_RANGE(	ID_RECENT_FIRST, ID_RECENT_FIRST + MAX_RECENT_FILES, CHeeksFrame::OnRecentFile)
@@ -115,7 +123,7 @@ bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
     return true;
 }
 
-static wxString default_layout_string = _T("layout2|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=234;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=245;prop=100000;bestw=156;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=6;pos=0;prop=100000;bestw=390;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=444;floaty=105;floatw=407;floath=65|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=6;pos=401;prop=100000;bestw=195;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=TransformBar;caption=Transformation Tools;state=2108156;dir=1;layer=10;row=0;pos=373;prop=100000;bestw=273;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=504|dock_size(4,1,0)=302|dock_size(1,10,0)=41|dock_size(1,10,6)=41|");
+static wxString default_layout_string = _T("layout2|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=351;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=245;prop=100000;bestw=156;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=6;pos=0;prop=100000;bestw=390;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=444;floaty=105;floatw=407;floath=65|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=6;pos=401;prop=100000;bestw=195;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=TransformBar;caption=Transformation Tools;state=2108156;dir=1;layer=10;row=0;pos=373;prop=100000;bestw=273;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=504|dock_size(4,1,0)=302|dock_size(1,10,0)=41|dock_size(1,10,6)=41|");
 
 CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSize& size )
 	: wxFrame((wxWindow *)NULL, -1, title, pos, size)
@@ -213,6 +221,9 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
     m_toolBar->AddTool(wxID_NEW, _T("New"), wxBitmap(exe_folder + _T("/bitmaps/new.png"), wxBITMAP_TYPE_PNG), _T("New file"));
     m_toolBar->AddTool(wxID_OPEN, _T("Open"), wxBitmap(exe_folder + _T("/bitmaps/open.png"), wxBITMAP_TYPE_PNG), _T("Open file"));
     m_toolBar->AddTool(wxID_SAVE, _T("Save"), wxBitmap(exe_folder + _T("/bitmaps/save.png"), wxBITMAP_TYPE_PNG), _T("Save file"));
+    m_toolBar->AddTool(wxID_CUT, _T("Cut"), wxBitmap(exe_folder + _T("/bitmaps/cut.png"), wxBITMAP_TYPE_PNG), _T("Cut selected items to the clipboard"));
+    m_toolBar->AddTool(wxID_COPY, _T("Copy"), wxBitmap(exe_folder + _T("/bitmaps/copy.png"), wxBITMAP_TYPE_PNG), _T("Copy selected items to the clipboard"));
+    m_toolBar->AddTool(wxID_PASTE, _T("Paste"), wxBitmap(exe_folder + _T("/bitmaps/paste.png"), wxBITMAP_TYPE_PNG), _T("Paste items from the clipboard"));
     m_toolBar->AddTool(ID_UNDO, _T("Undo"), wxBitmap(exe_folder + _T("/bitmaps/undo.png"), wxBITMAP_TYPE_PNG), _T("Undo the previous command"));
     m_toolBar->AddTool(ID_REDO, _T("Redo"), wxBitmap(exe_folder + _T("/bitmaps/redo.png"), wxBITMAP_TYPE_PNG), _T("Redo the next command"));
     m_toolBar->AddTool(ID_SELECT_MODE, _T("Select"), wxBitmap(exe_folder + _T("/bitmaps/select.png"), wxBITMAP_TYPE_PNG), _T("Select Mode"));
@@ -232,7 +243,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
     m_solidBar->AddTool(ID_CONE, _T("Cone"), wxBitmap(exe_folder + _T("/bitmaps/cone.png"), wxBITMAP_TYPE_PNG), _T("Add a cone"));
     m_solidBar->AddTool(ID_RULED_SURFACE, _T("Ruled Surface"), wxBitmap(exe_folder + _T("/bitmaps/ruled.png"), wxBITMAP_TYPE_PNG), _T("Create a lofted face"));
     m_solidBar->AddTool(ID_EXTRUDE, _T("Extrude"), wxBitmap(exe_folder + _T("/bitmaps/extrude.png"), wxBITMAP_TYPE_PNG), _T("Extrude a wire or face"));
-	m_solidBar->AddTool(ID_SUBTRACT, _T("Cut"), wxBitmap(exe_folder + _T("/bitmaps/cut.png"), wxBITMAP_TYPE_PNG), _T("Cut one solid from another"));
+	m_solidBar->AddTool(ID_SUBTRACT, _T("Cut"), wxBitmap(exe_folder + _T("/bitmaps/subtract.png"), wxBITMAP_TYPE_PNG), _T("Cut one solid from another"));
 	m_solidBar->AddTool(ID_FUSE, _T("Fuse"), wxBitmap(exe_folder + _T("/bitmaps/fuse.png"), wxBITMAP_TYPE_PNG), _T("Fuse one solid to another"));
 	m_solidBar->AddTool(ID_COMMON, _T("Common"), wxBitmap(exe_folder + _T("/bitmaps/common.png"), wxBITMAP_TYPE_PNG), _T("Find common solid between two solids"));
     m_solidBar->AddTool(ID_REDRAW, _T("Redraw"), wxBitmap(exe_folder + _T("/bitmaps/redraw.png"), wxBITMAP_TYPE_PNG), _T("Redraw"));
@@ -664,6 +675,36 @@ void CHeeksFrame::OnNewButton( wxCommandEvent& event )
 	wxGetApp().SetLikeNewFile();
 	wxGetApp().SetFrameTitle();
 	wxGetApp().Repaint();
+}
+
+void CHeeksFrame::OnCutButton( wxCommandEvent& event )
+{
+	wxGetApp().m_marked_list->CutSelectedItems();
+}
+
+void CHeeksFrame::OnUpdateCut( wxUpdateUIEvent& event )
+{
+	event.Enable(wxGetApp().m_marked_list->size() > 0);
+}
+
+void CHeeksFrame::OnCopyButton( wxCommandEvent& event )
+{
+	wxGetApp().m_marked_list->CopySelectedItems();
+}
+
+void CHeeksFrame::OnUpdateCopy( wxUpdateUIEvent& event )
+{
+	event.Enable(wxGetApp().m_marked_list->size() > 0);
+}
+
+void CHeeksFrame::OnPasteButton( wxCommandEvent& event )
+{
+	wxGetApp().Paste();
+}
+
+void CHeeksFrame::OnUpdatePaste( wxUpdateUIEvent& event )
+{
+	event.Enable(wxGetApp().IsPasteReady());
 }
 
 void CHeeksFrame::OnSubtractButton( wxCommandEvent& event )

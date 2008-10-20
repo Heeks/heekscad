@@ -8,6 +8,7 @@
 #include "../interface/PropertyDouble.h"
 #include "PropertyVertex.h"
 #include "../tinyxml/tinyxml.h"
+#include "Gripper.h"
 
 wxIcon* HLine::m_icon = NULL;
 
@@ -79,11 +80,11 @@ void HLine::GetBox(CBox &box){
 }
 
 void HLine::GetGripperPositions(std::list<double> *list, bool just_for_endof){
-	list->push_back(0);
+	list->push_back(GripperTypeStretch);
 	list->push_back(A.X());
 	list->push_back(A.Y());
 	list->push_back(A.Z());
-	list->push_back(0);
+	list->push_back(GripperTypeStretch);
 	list->push_back(B.X());
 	list->push_back(B.Y());
 	list->push_back(B.Z());
@@ -125,17 +126,15 @@ bool HLine::FindPossTangentPoint(const double* ray_start, const double* ray_dire
 	return FindNearPoint(ray_start, ray_direction, point);
 }
 
-bool HLine::Stretch(const double *p, const double* shift, double* new_position){
+bool HLine::Stretch(const double *p, const double* shift){
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);
 
 	if(A.IsEqual(vp, wxGetApp().m_geom_tol)){
 		A = A.XYZ() + vshift.XYZ();
-		extract(A, new_position);
 	}
 	else if(B.IsEqual(vp, wxGetApp().m_geom_tol)){
 		B = B.XYZ() + vshift.XYZ();
-		extract(B, new_position);
 	}
 	return false;
 }

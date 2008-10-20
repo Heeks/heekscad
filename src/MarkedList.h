@@ -48,4 +48,6 @@ public:
 	bool get_ignore(HeeksObj* object);
 	void GetProperties(std::list<Property *> *list);
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
+	void CutSelectedItems();
+	void CopySelectedItems();
 };

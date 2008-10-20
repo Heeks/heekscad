@@ -21,7 +21,7 @@ public:
 	void MakeMatrix(const double* from, const double* to, const double* object_m, gp_Trsf& mat);
 
 	//Gripper's virtual functions
-	void OnGripperMoved( const double* from, const double* to );
+	void OnGripperMoved( double* from, const double* to );
 	bool OnGripperGrabbed(double* from);
 	void OnGripperReleased(const double* from, const double* to);
 };

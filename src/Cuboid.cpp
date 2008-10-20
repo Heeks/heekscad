@@ -147,7 +147,7 @@ bool CCuboid::GetScaleAboutMatrix(double *m)
 	return true;
 }
 
-bool CCuboid::Stretch(const double *p, const double* shift, double* new_position)
+bool CCuboid::Stretch(const double *p, const double* shift)
 {
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);
@@ -162,7 +162,6 @@ bool CCuboid::Stretch(const double *p, const double* shift, double* new_position
 
 	if(m2.IsEqual(vp, wxGetApp().m_geom_tol)){
 		m2 = m2.XYZ() + vshift.XYZ();
-		extract(m2, new_position);
 		double new_x = gp_Vec(m2.XYZ()) * gp_Vec(m_pos.XDirection()) - gp_Vec(o.XYZ()) * gp_Vec(m_pos.XDirection());
 		if(new_x > 0){
 			make_a_new_cuboid = true;
@@ -171,7 +170,6 @@ bool CCuboid::Stretch(const double *p, const double* shift, double* new_position
 	}
 	else if(m3.IsEqual(vp, wxGetApp().m_geom_tol)){
 		m3 = m3.XYZ() + vshift.XYZ();
-		extract(m3, new_position);
 		double new_y = gp_Vec(m3.XYZ()) * gp_Vec(m_pos.YDirection()) - gp_Vec(o.XYZ()) * gp_Vec(m_pos.YDirection());
 		if(new_y > 0){
 			make_a_new_cuboid = true;
@@ -180,7 +178,6 @@ bool CCuboid::Stretch(const double *p, const double* shift, double* new_position
 	}
 	else if(m8.IsEqual(vp, wxGetApp().m_geom_tol)){
 		m8 = m8.XYZ() + vshift.XYZ();
-		extract(m8, new_position);
 		double new_z = gp_Vec(m8.XYZ()) * gp_Vec(z_dir) - gp_Vec(o.XYZ()) * gp_Vec(z_dir);
 		if(new_z > 0){
 			make_a_new_cuboid = true;

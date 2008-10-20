@@ -190,7 +190,7 @@ void HImage::GetProperties(std::list<Property *> *list)
 {
 }
 
-bool HImage::Stretch(const double *p, const double* shift, double* new_position){
+bool HImage::Stretch(const double *p, const double* shift){
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);
 
@@ -198,7 +198,6 @@ bool HImage::Stretch(const double *p, const double* shift, double* new_position)
 		gp_Pnt vt = make_point(m_x[i]);
 		if(vt.IsEqual(vp, wxGetApp().m_geom_tol)){
 			vt = vt.XYZ() + vshift.XYZ();
-			extract(vt, new_position);
 			extract(vt, m_x[i]);
 			break;
 		}

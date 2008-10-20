@@ -306,32 +306,7 @@ wxBitmap* CopyMarkedList::m_bitmap = NULL;
 
 void CopyMarkedList::Run()
 {
-
-	wxStandardPaths sp;
-	sp.GetTempDir();
-	wxString temp_file = sp.GetTempDir() + _T("/temp_Heeks_clipboard_file.xml");
-
-	wxGetApp().SaveXMLFile(wxGetApp().m_marked_list->list(), temp_file);
-
-	ifstream ifs(temp_file);
-	if(!ifs)return;
-
-	wxString fstr;
-	char str[1024];
-	while(!(ifs.eof())){
-		ifs.getline(str, 1022);
-		strcat(str, "\r\n");
-		fstr.append(Ctt(str));
-		if(!ifs)break;
-	}
-
-	if (wxTheClipboard->Open())
-	{
-		// This data objects are held by the clipboard, 
-		// so do not delete them in the app.
-		wxTheClipboard->SetData( new wxTextDataObject(fstr));
-		wxTheClipboard->Close();
-	}
+	wxGetApp().m_marked_list->CopySelectedItems();
 }
 
 class PasteTool: public Tool
@@ -348,34 +323,7 @@ wxBitmap* PasteTool::m_bitmap = NULL;
 
 void PasteTool::Run()
 {
-	wxString fstr;
-
-	if (wxTheClipboard->Open())
-	{
-		if (wxTheClipboard->IsSupported( wxDF_TEXT ))
-		{
-			wxTextDataObject data;
-			wxTheClipboard->GetData( data );
-			fstr = data.GetText();
-		}  
-		wxTheClipboard->Close();
-	}
-
-	// write a temporary file
-	wxStandardPaths sp;
-	sp.GetTempDir();
-	wxString temp_file = sp.GetTempDir() + _T("/temp_Heeks_clipboard_file.heeks");
-
-	{
-#if wxUSE_UNICODE
-		wofstream ofs(temp_file);
-#else
-		ofstream ofs(temp_file);
-#endif
-		ofs<<fstr;
-	}
-
-	wxGetApp().OpenFile(temp_file, true);
+	wxGetApp().Paste();
 }
 
 void MarkedList::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
@@ -403,4 +351,41 @@ void MarkedList::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 	}
 
 
+}
+
+void MarkedList::CutSelectedItems()
+{
+	wxGetApp().StartHistory(_T("Cut Selected Items"));
+	CopySelectedItems();
+	wxGetApp().DeleteUndoably(m_list);
+	wxGetApp().EndHistory();
+}
+
+void MarkedList::CopySelectedItems()
+{
+	wxStandardPaths sp;
+	sp.GetTempDir();
+	wxString temp_file = sp.GetTempDir() + _T("/temp_Heeks_clipboard_file.xml");
+
+	wxGetApp().SaveXMLFile(m_list, temp_file);
+
+	ifstream ifs(temp_file);
+	if(!ifs)return;
+
+	wxString fstr;
+	char str[1024];
+	while(!(ifs.eof())){
+		ifs.getline(str, 1022);
+		strcat(str, "\r\n");
+		fstr.append(Ctt(str));
+		if(!ifs)break;
+	}
+
+	if (wxTheClipboard->Open())
+	{
+		// This data object is held by the clipboard, 
+		// so do not delete them in the app.
+		wxTheClipboard->SetData( new wxTextDataObject(fstr));
+		wxTheClipboard->Close();
+	}
 }

@@ -239,6 +239,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 				wxGetApp().grip_to = wxGetApp().m_digitizing->digitized_point.m_point;
 				extract(wxGetApp().grip_from, from);
 				wxGetApp().drag_gripper->OnGripperMoved(from, to);
+				wxGetApp().grip_from = make_point(from);
 			}
 			else if(abs(button_down_point.x - event.GetX())>2 || abs(button_down_point.y - event.GetY())>2)
 			{
