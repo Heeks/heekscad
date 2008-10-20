@@ -35,8 +35,8 @@ bool GripperSelTransform::OnGripperGrabbed(double* from){
 }
 
 
-void GripperSelTransform::OnGripperMoved( const double* from, const double* to ){
-	if ( m_gripper_type > GripperTypeObjectScaleXY )
+void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
+	if ( m_gripper_type == GripperTypeStretch )
 	{
 		double shift[3] = {to[0] - from[0], to[1] - from[1], to[2] - from[2]};
 		{
@@ -47,6 +47,9 @@ void GripperSelTransform::OnGripperMoved( const double* from, const double* to )
 				if(object)object->StretchTemporary(from, shift);
 			}
 		}
+		extract(gp_Pnt(make_point(from).XYZ() + make_vector( shift ).XYZ()), from);
+		position = position.XYZ() + make_vector( shift ).XYZ();
+		wxGetApp().Repaint();
 		return;
 	}
 

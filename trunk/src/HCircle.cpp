@@ -9,6 +9,7 @@
 #include "HLine.h"
 #include "HILine.h"
 #include "HArc.h"
+#include "Gripper.h"
 
 wxIcon* HCircle::m_icon = NULL;
 
@@ -149,11 +150,7 @@ void HCircle::GetGripperPositions(std::list<double> *list, bool just_for_endof){
 		double r = m_circle.Radius();
 		gp_Pnt s(c + x_axis.XYZ() * r);
 
-		list->push_back(0);
-		list->push_back(c.X());
-		list->push_back(c.Y());
-		list->push_back(c.Z());
-		list->push_back(0);
+		list->push_back(GripperTypeStretch);
 		list->push_back(s.X());
 		list->push_back(s.Y());
 		list->push_back(s.Z());
@@ -203,7 +200,7 @@ bool HCircle::FindPossTangentPoint(const double* ray_start, const double* ray_di
 	return FindNearPoint(ray_start, ray_direction, point);
 }
 
-bool HCircle::Stretch(const double *p, const double* shift, double* new_position){
+bool HCircle::Stretch(const double *p, const double* shift){
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);
 
@@ -214,14 +211,12 @@ bool HCircle::Stretch(const double *p, const double* shift, double* new_position
 
 	if(c.IsEqual(vp, wxGetApp().m_geom_tol)){
 		m_circle.SetLocation(c.XYZ() + vshift.XYZ());
-		extract(m_circle.Location(), new_position);
 	}
 	else if(s.IsEqual(vp, wxGetApp().m_geom_tol)){
 		s = gp_Pnt(s.XYZ() + vshift.XYZ());
 		double new_radius = c.Distance(s);
 		m_circle.SetRadius(new_radius);
 		s = c.XYZ() + x_axis.XYZ() * new_radius;
-		extract(s, new_position);
 	}
 	return false;
 }

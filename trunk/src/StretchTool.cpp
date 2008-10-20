@@ -24,7 +24,8 @@ const wxChar* StretchTool::GetTitle(){
 }
 
 void StretchTool::Run(){
-	m_undo_uses_add = m_object->Stretch(m_pos, m_shift, m_new_pos);
+	m_undo_uses_add = m_object->Stretch(m_pos, m_shift);
+	for(int i = 0; i<3; i++)m_new_pos[i]= m_pos[i] + m_shift[i];
 }
 
 void StretchTool::RollBack(){
@@ -33,7 +34,6 @@ void StretchTool::RollBack(){
 		for(int i = 0; i<3; i++){
 			unshift[i] = -m_shift[i];
 		}
-		double dummy_pos[3];
-		m_object->Stretch(m_new_pos, unshift, dummy_pos);
+		m_object->Stretch(m_new_pos, unshift);
 	}
 }

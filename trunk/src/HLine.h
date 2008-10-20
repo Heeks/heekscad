@@ -33,7 +33,7 @@ public:
 	void GetProperties(std::list<Property *> *list);
 	bool FindNearPoint(const double* ray_start, const double* ray_direction, double *point);
 	bool FindPossTangentPoint(const double* ray_start, const double* ray_direction, double *point);
-	bool Stretch(const double *p, const double* shift, double* new_position);
+	bool Stretch(const double *p, const double* shift);
 	void GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point = true)const;
 	int Intersects(const HeeksObj *object, std::list< double > *rl)const;
 	bool GetStartPoint(double* pos);

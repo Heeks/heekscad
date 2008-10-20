@@ -6,6 +6,7 @@
 #include <wx/stdpaths.h>
 #include <wx/filename.h>
 #include <wx/cmdline.h>
+#include <wx/clipbrd.h>
 #include "../interface/Tool.h"
 #include "../interface/Material.h"
 #include "../interface/ToolList.h"
@@ -100,6 +101,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_in_OpenFile = false;
 	m_transform_gl_list = 0;
 	m_current_coordinate_system = NULL;
+	m_mark_newly_added_objects = false;
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -1258,6 +1260,11 @@ bool HeeksCADapp::Add(HeeksObj *object, HeeksObj* prev_object)
 		m_current_coordinate_system = (CoordinateSystem*)object;
 	}
 
+	if(m_mark_newly_added_objects)
+	{
+		m_marked_list->Add(object);
+	}
+
 	return true;
 }
 
@@ -2239,4 +2246,61 @@ void HeeksCADapp::DestroyTransformGLList(){
 		glDeleteLists(m_transform_gl_list, 1);
 	}
 	m_transform_gl_list = 0;
+}
+
+bool HeeksCADapp::IsPasteReady()
+{
+	// assume the text is the contents of a heeks file
+	wxString fstr;
+
+	if (wxTheClipboard->Open())
+	{
+		if (wxTheClipboard->IsSupported( wxDF_TEXT ))
+		{
+			wxTextDataObject data;
+			wxTheClipboard->GetData( data );
+			fstr = data.GetText();
+		}  
+		wxTheClipboard->Close();
+
+		if(fstr.StartsWith("<?xml version=\"1.0\" ?>\r\n<HeeksCAD_Document>"))return true;
+	}
+
+	return false;
+}
+
+void HeeksCADapp::Paste()
+{
+	// assume the text is the contents of a heeks file
+	wxString fstr;
+
+	if (wxTheClipboard->Open())
+	{
+		if (wxTheClipboard->IsSupported( wxDF_TEXT ))
+		{
+			wxTextDataObject data;
+			wxTheClipboard->GetData( data );
+			fstr = data.GetText();
+		}  
+		wxTheClipboard->Close();
+	}
+
+	// write a temporary file
+	wxStandardPaths sp;
+	sp.GetTempDir();
+	wxString temp_file = sp.GetTempDir() + _T("/temp_Heeks_clipboard_file.heeks");
+
+	{
+#if wxUSE_UNICODE
+		wofstream ofs(temp_file);
+#else
+		ofstream ofs(temp_file);
+#endif
+		ofs<<fstr;
+	}
+
+	m_marked_list->Clear();
+	m_mark_newly_added_objects = true;
+	wxGetApp().OpenFile(temp_file, true);
+	m_mark_newly_added_objects = false;
 }

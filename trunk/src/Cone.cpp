@@ -124,7 +124,7 @@ bool CCone::GetScaleAboutMatrix(double *m)
 	return true;
 }
 
-bool CCone::Stretch2(const double *p, const double* shift, gp_Ax2& new_pos, double& new_r1, double& new_r2, double& new_height, double* new_position)
+bool CCone::Stretch2(const double *p, const double* shift, gp_Ax2& new_pos, double& new_r1, double& new_r2, double& new_height)
 {
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);
@@ -142,7 +142,6 @@ bool CCone::Stretch2(const double *p, const double* shift, gp_Ax2& new_pos, doub
 
 	if(px.IsEqual(vp, wxGetApp().m_geom_tol)){
 		px = px.XYZ() + vshift.XYZ();
-		if(new_position)extract(px, new_position);
 		double new_x = gp_Vec(px.XYZ()) * gp_Vec(m_pos.XDirection()) - gp_Vec(o.XYZ()) * gp_Vec(m_pos.XDirection());
 		double new_y = gp_Vec(px.XYZ()) * gp_Vec(m_pos.YDirection()) - gp_Vec(o.XYZ()) * gp_Vec(m_pos.YDirection());
 		new_r1 = sqrt(new_x * new_x + new_y * new_y);
@@ -152,7 +151,6 @@ bool CCone::Stretch2(const double *p, const double* shift, gp_Ax2& new_pos, doub
 	}
 	else if(pxz.IsEqual(vp, wxGetApp().m_geom_tol)){
 		pxz = pxz.XYZ() + vshift.XYZ();
-		if(new_position)extract(pxz, new_position);
 		double new_x = gp_Vec(pxz.XYZ()) * gp_Vec(m_pos.XDirection()) - gp_Vec(o.XYZ()) * gp_Vec(m_pos.XDirection());
 		double new_y = gp_Vec(pxz.XYZ()) * gp_Vec(m_pos.YDirection()) - gp_Vec(o.XYZ()) * gp_Vec(m_pos.YDirection());
 		new_r2 = sqrt(new_x * new_x + new_y * new_y);
@@ -162,7 +160,6 @@ bool CCone::Stretch2(const double *p, const double* shift, gp_Ax2& new_pos, doub
 	}
 	else if(pz.IsEqual(vp, wxGetApp().m_geom_tol)){
 		pz = pz.XYZ() + vshift.XYZ();
-		if(new_position)extract(pz, new_position);
 		new_height = gp_Vec(pz.XYZ()) * gp_Vec(z_dir) - gp_Vec(o.XYZ()) * gp_Vec(z_dir);
 		if(new_height > 0){
 			make_a_new_cone = true;
@@ -172,14 +169,14 @@ bool CCone::Stretch2(const double *p, const double* shift, gp_Ax2& new_pos, doub
 	return make_a_new_cone;
 }
 
-bool CCone::Stretch(const double *p, const double* shift, double* new_position)
+bool CCone::Stretch(const double *p, const double* shift)
 {
 	gp_Ax2 new_pos = m_pos;
 	double new_r1 = m_r1;
 	double new_r2 = m_r2;
 	double new_height = m_height;
 
-	bool make_a_new_cone = Stretch2(p, shift, new_pos, new_r1, new_r2, new_height, new_position);
+	bool make_a_new_cone = Stretch2(p, shift, new_pos, new_r1, new_r2, new_height);
 
 	if(make_a_new_cone)
 	{
@@ -195,6 +192,7 @@ bool CCone::Stretch(const double *p, const double* shift, double* new_position)
 	return true;
 }
 
-void CCone::StretchTemporary(const double *p, const double* shift)
+bool CCone::StretchTemporary(const double *p, const double* shift)
 {
+	return true;
 }

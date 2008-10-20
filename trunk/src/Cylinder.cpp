@@ -111,7 +111,7 @@ bool CCylinder::GetScaleAboutMatrix(double *m)
 	return true;
 }
 
-bool CCylinder::Stretch(const double *p, const double* shift, double* new_position)
+bool CCylinder::Stretch(const double *p, const double* shift)
 {
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);
@@ -125,7 +125,6 @@ bool CCylinder::Stretch(const double *p, const double* shift, double* new_positi
 
 	if(px.IsEqual(vp, wxGetApp().m_geom_tol)){
 		px = px.XYZ() + vshift.XYZ();
-		extract(px, new_position);
 		double new_x = gp_Vec(px.XYZ()) * gp_Vec(m_pos.XDirection()) - gp_Vec(o.XYZ()) * gp_Vec(m_pos.XDirection());
 		double new_y = gp_Vec(px.XYZ()) * gp_Vec(m_pos.YDirection()) - gp_Vec(o.XYZ()) * gp_Vec(m_pos.YDirection());
 		make_a_new_cylinder = true;
@@ -133,7 +132,6 @@ bool CCylinder::Stretch(const double *p, const double* shift, double* new_positi
 	}
 	else if(pz.IsEqual(vp, wxGetApp().m_geom_tol)){
 		pz = pz.XYZ() + vshift.XYZ();
-		extract(pz, new_position);
 		double new_height = gp_Vec(pz.XYZ()) * gp_Vec(z_dir) - gp_Vec(o.XYZ()) * gp_Vec(z_dir);
 		if(new_height > 0){
 			make_a_new_cylinder = true;
