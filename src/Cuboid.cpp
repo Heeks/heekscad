@@ -50,7 +50,9 @@ bool CCuboid::ModifyByMatrix(const double* m){
 	double new_x = fabs(m_x * scale);
 	double new_y = fabs(m_y * scale);
 	double new_z = fabs(m_z * scale);
-	wxGetApp().AddUndoably(new CCuboid(new_pos, new_x, new_y, new_z, m_title.c_str()), m_owner, NULL);
+	CCuboid* new_object = new CCuboid(new_pos, new_x, new_y, new_z, m_title.c_str());
+	wxGetApp().AddUndoably(new_object, m_owner, NULL);
+	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object);
 	wxGetApp().DeleteUndoably(this);
 	return true;
 }

@@ -607,6 +607,9 @@ CHeeksFrame::OnCoordinateSystem( wxCommandEvent& WXUNUSED( event ) )
 	wxGetApp().m_marked_list->Clear();
 	wxGetApp().m_marked_list->Add(new_object);
 	wxGetApp().Repaint();
+
+	// and pick from three points
+	new_object->PickFrom3Points();
 }
 
 void CHeeksFrame::OnOpenButton( wxCommandEvent& event )
@@ -701,7 +704,7 @@ void CHeeksFrame::OnSphereButton( wxCommandEvent& event )
 void CHeeksFrame::OnCubeButton( wxCommandEvent& event )
 {
 	gp_Trsf mat = wxGetApp().GetDrawMatrix(false);
-	CCuboid* new_object = new CCuboid(gp_Ax2(gp_Pnt(0, 0, 0).Transformed(mat), gp_Dir(0, 0, 1).Transformed(mat), gp_Dir(1, 0, 0)).Transformed(mat), 10, 10, 10, _T("Cuboid"));
+	CCuboid* new_object = new CCuboid(gp_Ax2(gp_Pnt(0, 0, 0).Transformed(mat), gp_Dir(0, 0, 1).Transformed(mat), gp_Dir(1, 0, 0).Transformed(mat)), 10, 10, 10, _T("Cuboid"));
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().m_marked_list->Clear();
 	wxGetApp().m_marked_list->Add(new_object);

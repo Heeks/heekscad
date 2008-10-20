@@ -50,7 +50,9 @@ bool CCone::ModifyByMatrix(const double *m){
 	double new_r1 = fabs(m_r1 * scale);
 	double new_r2 = fabs(m_r2 * scale);
 	double new_height = fabs(m_height * scale);
-	wxGetApp().AddUndoably(new CCone(new_pos, new_r1, new_r2, new_height, m_title.c_str()), m_owner, NULL);
+	CCone* new_object = new CCone(new_pos, new_r1, new_r2, new_height, m_title.c_str());
+	wxGetApp().AddUndoably(new_object, m_owner, NULL);
+	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object);
 	wxGetApp().DeleteUndoably(this);
 
 	return true;

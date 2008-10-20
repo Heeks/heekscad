@@ -15,6 +15,8 @@ public:
 	bool m_doing_a_main_loop;
 	wxString m_prompt_when_doing_a_main_loop;
 
+	static bool m_can_grip_objects;
+
 	CSelectMode();
 	virtual ~CSelectMode(void){}
 

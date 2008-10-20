@@ -107,9 +107,9 @@ wxIcon* CEdge::GetIcon(){
 
 class BlendTool:public Tool
 {
+public:
 	CEdge* m_edge;
 
-public:
 	BlendTool(CEdge* edge):m_edge(edge){}
 
 	const wxChar* GetTitle(){return _T("Blend");}
@@ -124,9 +124,12 @@ public:
 	}
 };
 
+static BlendTool blend_tool(NULL);
+
 void CEdge::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 	if(m_owner && m_owner->m_owner && m_owner->m_owner->GetType() == SolidType)
-		t_list->push_back(new BlendTool(this));
+		blend_tool.m_edge = this;
+		t_list->push_back(&blend_tool);
 }
 
 void CEdge::Blend(double radius){

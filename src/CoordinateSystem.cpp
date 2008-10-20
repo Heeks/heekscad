@@ -10,6 +10,8 @@
 #include "../tinyxml/tinyxml.h"
 
 wxIcon* CoordinateSystem::m_icon = NULL;
+double CoordinateSystem::size = 30;
+bool CoordinateSystem::size_is_pixels = true;
 
 wxIcon* CoordinateSystem::GetIcon()
 {
@@ -51,20 +53,21 @@ CoordinateSystem::~CoordinateSystem(void)
 void CoordinateSystem::RenderDatum(bool bright)
 {
 	// red, green, blue for x, y, z, like I saw on Open Arena
-	double size = 30.0 / wxGetApp().GetPixelScale(); // 30 pixels as mm
+	double s = size;
+	if(size_is_pixels)s /= wxGetApp().GetPixelScale();
 	glBegin(GL_LINES);
 	if(bright)glColor3ub(255, 0, 0);
 	else glColor3ub(128, 64, 64);
 	glVertex3d(0, 0, 0);
-	glVertex3d(size, 0, 0);
+	glVertex3d(s, 0, 0);
 	if(bright)glColor3ub(0, 255, 0);
 	else glColor3ub(64, 128, 64);
 	glVertex3d(0, 0, 0);
-	glVertex3d(0, size, 0);
+	glVertex3d(0, s, 0);
 	if(bright)glColor3ub(0, 0, 255);
 	else glColor3ub(64, 64, 128);
 	glVertex3d(0, 0, 0);
-	glVertex3d(0, 0, size);
+	glVertex3d(0, 0, s);
 	glEnd();
 }
 
@@ -75,8 +78,25 @@ void CoordinateSystem::glCommands(bool select, bool marked, bool no_color)
 	double m[16];
 	extract_transposed(GetMatrix(), m);
 	glMultMatrixd(m);
-	bool bright = (this == wxGetApp().m_current_coordinate_system);
+	bool bright = false;
+	GLfloat save_depth_range[2];
+	
+	if(this == wxGetApp().m_current_coordinate_system)
+	{
+		bright = true;
+		// set depth range, so that it appears in front of everything
+		glGetFloatv(GL_DEPTH_RANGE, save_depth_range);
+		glDepthRange(0, 0);
+	}
+
 	RenderDatum(bright);
+
+	if(bright)
+	{
+		// restore depth range
+		glDepthRange(save_depth_range[0], save_depth_range[1]);
+	}
+
 	glPopMatrix();
 	glLineWidth(1);
 }
@@ -131,14 +151,6 @@ static void on_set_twist_angle(double value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
-static double origin[3];
-static double x_axis_pos[3];
-static double y_axis_pos[3];
-
-static void on_set_origin(const double* pos){ memcpy(origin, pos, 3*sizeof(double));}
-static void on_set_x(const double* pos){ memcpy(x_axis_pos, pos, 3*sizeof(double));}
-static void on_set_y(const double* pos){ memcpy(y_axis_pos, pos, 3*sizeof(double));}
-
 static CoordinateSystem* coord_system_for_Tool = NULL;
 
 class CoordSystem3Points:public Tool{
@@ -148,16 +160,7 @@ private:
 
 public:
 	void Run(){
-		if(!wxGetApp().PickPosition(_T("Pick the location"), origin, on_set_origin))return;
-		if(!wxGetApp().PickPosition(_T("Pick a point on the x-axis"), x_axis_pos, on_set_x))return;
-		if(!wxGetApp().PickPosition(_T("Pick a point where y > 0"), y_axis_pos, on_set_y))return;
-
-		coord_system_for_Tool->m_o = make_point(origin);
-		coord_system_for_Tool->m_x = make_vector(coord_system_for_Tool->m_o, make_point(x_axis_pos));
-		coord_system_for_Tool->m_y = make_vector(coord_system_for_Tool->m_o, make_point(y_axis_pos));
-
-		wxGetApp().m_frame->m_properties->ApplyChanges();
-		wxGetApp().Repaint();
+		coord_system_for_Tool->PickFrom3Points();
 	}
 	const wxChar* GetTitle(){return _T("CoordSystem3Points");}
 	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/coords3.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
@@ -228,7 +231,7 @@ void CoordinateSystem::WriteXML(TiXmlElement *root)
 	TiXmlElement * element;
 	element = new TiXmlElement( "CoordinateSystem" );
 	root->LinkEndChild( element );  
-	element->SetAttribute("title", m_title.c_str());
+	element->SetAttribute("title", Ttc(m_title.c_str()));
 	element->SetDoubleAttribute("ox", m_o.X());
 	element->SetDoubleAttribute("oy", m_o.Y());
 	element->SetDoubleAttribute("oz", m_o.Z());
@@ -257,7 +260,7 @@ HeeksObj* CoordinateSystem::ReadFromXMLElement(TiXmlElement* pElem)
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
 		std::string name(a->Name());
-		if(name == "title"){title.assign(a->Value());}
+		if(name == "title"){title.assign(Ctt(a->Value()));}
 		else if(name == "ox"){o.SetX(a->DoubleValue());}
 		else if(name == "oy"){o.SetY(a->DoubleValue());}
 		else if(name == "oz"){o.SetZ(a->DoubleValue());}
@@ -335,4 +338,26 @@ void CoordinateSystem::AnglesToAxes(const double &v_angle, const double &h_angle
 
 	x = gp_Dir(1, 0, 0).Transformed(mat);
 	y = gp_Dir(0, 1, 0).Transformed(mat);
+}
+
+static double origin[3];
+static double x_axis_pos[3];
+static double y_axis_pos[3];
+
+static void on_set_origin(const double* pos){ memcpy(origin, pos, 3*sizeof(double));}
+static void on_set_x(const double* pos){ memcpy(x_axis_pos, pos, 3*sizeof(double));}
+static void on_set_y(const double* pos){ memcpy(y_axis_pos, pos, 3*sizeof(double));}
+
+void CoordinateSystem::PickFrom3Points()
+{
+	if(!wxGetApp().PickPosition(_T("Pick the location"), origin, on_set_origin))return;
+	if(!wxGetApp().PickPosition(_T("Pick a point on the x-axis"), x_axis_pos, on_set_x))return;
+	if(!wxGetApp().PickPosition(_T("Pick a point where y > 0"), y_axis_pos, on_set_y))return;
+
+	coord_system_for_Tool->m_o = make_point(origin);
+	coord_system_for_Tool->m_x = make_vector(coord_system_for_Tool->m_o, make_point(x_axis_pos));
+	coord_system_for_Tool->m_y = make_vector(coord_system_for_Tool->m_o, make_point(y_axis_pos));
+
+	wxGetApp().m_frame->m_properties->ApplyChanges();
+	wxGetApp().Repaint();
 }

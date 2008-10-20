@@ -15,6 +15,9 @@ public:
 	gp_Dir m_y;
 	wxString m_title;
 
+	static double size;
+	static bool size_is_pixels; // false for mm
+
 	// used for user properties, but only to create m_x and m_y
 	double m_vertical_angle;
 	double m_horizontal_angle;
@@ -48,4 +51,5 @@ public:
 	static void AnglesToAxes(const double &v_angle, const double &h_angle, const double &t_angle, gp_Dir &x, gp_Dir &y);
 	void AxesToAngles(){AxesToAngles(m_x, m_y, m_vertical_angle, m_horizontal_angle, m_twist_angle);}
 	void AnglesToAxes(){AnglesToAxes(m_vertical_angle, m_horizontal_angle, m_twist_angle, m_x, m_y);}
+	void PickFrom3Points();
 };

@@ -175,9 +175,9 @@ wxIcon* CFace::GetIcon(){
 }
 
 class OffsetFaceTool:public Tool{
-	CFace* m_face;
 public:
-	OffsetFaceTool(CFace* face):m_face(face){}
+	CFace* m_face;
+	OffsetFaceTool():m_face(NULL){}
 
 	// Tool's virtual functions
 	void Run(){
@@ -193,9 +193,12 @@ public:
 	const wxChar* GetTitle(){ return _T("Offset Face");}
 };
 
+static OffsetFaceTool offset_face_tool;
+
 void CFace::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
-	t_list->push_back(new OffsetFaceTool(this));
+	offset_face_tool.m_face = this;
+	t_list->push_back(&offset_face_tool);
 }
 
 bool CFace::ModifyByMatrix(const double *m){

@@ -24,10 +24,10 @@ wxIcon* CWire::GetIcon(){
 static wxString title_for_OffsetWireTool;
 
 class OffsetWireTool:public Tool{
-	CWire* m_wire;
-	double m_offset;
-
 public:
+	double m_offset;
+	CWire* m_wire;
+
 	OffsetWireTool(CWire* wire, double offset):m_wire(wire), m_offset(offset){}
 
 	// Tool's virtual functions
@@ -68,10 +68,15 @@ public:
 	}
 };
 
+static OffsetWireTool offset_wire_out(NULL, 2.0);
+static OffsetWireTool offset_wire_in(NULL, -2.0);
+
 void CWire::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
-	t_list->push_back(new OffsetWireTool(this, 2.0));
-	t_list->push_back(new OffsetWireTool(this, -2.0));
+	offset_wire_out.m_wire = this;
+	offset_wire_in.m_wire = this;
+	t_list->push_back(&offset_wire_out);
+	t_list->push_back(&offset_wire_in);
 }
 
 const TopoDS_Wire &CWire::Wire()const{

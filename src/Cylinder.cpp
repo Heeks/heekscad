@@ -45,7 +45,9 @@ bool CCylinder::ModifyByMatrix(const double* m){
 	double scale = gp_Vec(1, 0, 0).Transformed(mat).Magnitude();
 	double new_radius = fabs(m_radius * scale);
 	double new_height = fabs(m_height * scale);
-	wxGetApp().AddUndoably(new CCylinder(new_pos, new_radius, new_height, m_title.c_str()), m_owner, NULL);
+	CCylinder* new_object = new CCylinder(new_pos, new_radius, new_height, m_title.c_str());
+	wxGetApp().AddUndoably(new_object, m_owner, NULL);
+	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object);
 	wxGetApp().DeleteUndoably(this);
 	return true;
 }
