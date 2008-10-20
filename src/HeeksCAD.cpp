@@ -3,7 +3,6 @@
 #include "stdafx.h"
 #include "HeeksCAD.h"
 #include <wx/filedlg.h>
-#include <wx/clipbrd.h>
 #include <wx/stdpaths.h>
 #include <wx/filename.h>
 #include <wx/cmdline.h>
@@ -98,7 +97,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_show_ruler = true;
 	m_show_datum_coords_system = true;
 	m_filepath.assign(_T("Untitled.heeks"));
-	m_disable_SetObjectID_on_Add = false;
+	m_in_OpenFile = false;
 	m_transform_gl_list = 0;
 	m_current_coordinate_system = NULL;
 }
@@ -178,6 +177,8 @@ bool HeeksCADapp::OnInit()
 	m_config->Read(_T("WheelForwardAway"), &mouse_wheel_forward_away);
 	m_config->Read(_T("CtrlDoesRotate"), &ctrl_does_rotate);
 	m_config->Read(_T("DrawDatum"), &m_show_datum_coords_system, true);
+	m_config->Read(_T("DatumSize"), &CoordinateSystem::size, 30);
+	m_config->Read(_T("DatumSizeIsPixels"), &CoordinateSystem::size_is_pixels, true);
 
 	GetRecentFilesProfileString();
 
@@ -257,6 +258,8 @@ int HeeksCADapp::OnExit(){
 	m_config->Write(_T("WheelForwardAway"), mouse_wheel_forward_away);
 	m_config->Write(_T("CtrlDoesRotate"), ctrl_does_rotate);
 	m_config->Write(_T("DrawDatum"), m_show_datum_coords_system);
+	m_config->Write(_T("DatumSize"), CoordinateSystem::size);
+	m_config->Write(_T("DatumSizeIsPixels"), CoordinateSystem::size_is_pixels);
 
 	WriteRecentFilesProfileString();
 
@@ -699,9 +702,9 @@ bool HeeksCADapp::OpenImageFile(const wxChar *filepath)
 	return false;
 }
 
-bool HeeksCADapp::OpenFile(const wxChar *filepath, bool update_recent_file_list, bool set_app_caption)
+bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open)
 {
-	wxGetApp().m_disable_SetObjectID_on_Add = true;
+	wxGetApp().m_in_OpenFile = true;
 
 	// returns true if file open was successful
 	wxString wf(filepath);
@@ -751,12 +754,15 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool update_recent_file_list,
 	if(!open_failed)
 	{
 		WereAdded(m_objects);
-		m_filepath.assign(filepath);
-		if(update_recent_file_list)InsertRecentFileItem(filepath);
-		if(set_app_caption)SetFrameTitle();
+		if(!import_not_open)
+		{
+			m_filepath.assign(filepath);
+			InsertRecentFileItem(filepath);
+			SetFrameTitle();
+		}
 	}
 
-	wxGetApp().m_disable_SetObjectID_on_Add = false;
+	wxGetApp().m_in_OpenFile = false;
 
 	return true;
 }
@@ -859,7 +865,7 @@ void HeeksCADapp::SaveSTLFile(const wxChar *filepath)
 	ofs<<"endsolid"<<endl;
 }
 
-void HeeksCADapp::SaveXMLFile(const wxChar *filepath)
+void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath)
 {
 	// write an xml file
 	TiXmlDocument doc;  
@@ -871,7 +877,7 @@ void HeeksCADapp::SaveXMLFile(const wxChar *filepath)
 
 	// loop through all the objects writing them
 	CShape::m_solids_found = false;
-	for(std::list<HeeksObj*>::iterator It = m_objects.begin(); It != m_objects.end(); It++)
+	for(std::list<HeeksObj*>::const_iterator It = objects.begin(); It != objects.end(); It++)
 	{
 		HeeksObj* object = *It;
 		object->WriteXML(root);
@@ -883,7 +889,7 @@ void HeeksCADapp::SaveXMLFile(const wxChar *filepath)
 		sp.GetTempDir();
 		wxString temp_file = sp.GetTempDir() + _T("/temp_HeeksCAD_STEP_file.step");
 		std::map<int, CShapeData> index_map;
-		CShape::ExportSolidsFile(temp_file, &index_map);
+		CShape::ExportSolidsFile(objects, temp_file, &index_map);
 
 		TiXmlElement *step_file_element = new TiXmlElement( "STEP_file" );
 		root->LinkEndChild( step_file_element );  
@@ -951,7 +957,7 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 	{
 		SaveSTLFile(filepath);
 	}
-	else if(CShape::ExportSolidsFile(filepath))
+	else if(CShape::ExportSolidsFile(m_objects, filepath))
 	{
 	}
 	else
@@ -1035,7 +1041,16 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	if(m_show_datum_coords_system)
 	{
 		bool bright = (m_current_coordinate_system == NULL);
+
+		// make the datum appear at the front of everything, by setting the depth range
+		GLfloat save_depth_range[2];
+		glGetFloatv(GL_DEPTH_RANGE, save_depth_range);
+		glDepthRange(0, 0);
+
 		CoordinateSystem::RenderDatum(bright);
+
+		// restore the depth range
+		glDepthRange(save_depth_range[0], save_depth_range[1]);
 	}
 
 	DestroyLights();
@@ -1165,7 +1180,6 @@ void HeeksCADapp::on_menu_event(wxCommandEvent& event)
 		if(t->Undoable())DoToolUndoably(t);
 		else{
 			t->Run();
-			delete t;
 		}
 		Repaint();
 	}
@@ -1239,7 +1253,7 @@ bool HeeksCADapp::Add(HeeksObj *object, HeeksObj* prev_object)
 {
 	if (!ObjList::Add(object, prev_object)) return false;
 
-	if(object->GetType() == CoordinateSystemType)
+	if(object->GetType() == CoordinateSystemType && !m_in_OpenFile)
 	{
 		m_current_coordinate_system = (CoordinateSystem*)object;
 	}
@@ -1480,6 +1494,14 @@ static void AddPropertyCallBack(Property* p)
 	list_for_GetOptions->push_back(p);
 }
 
+void on_set_datum_size(double value, HeeksObj* object){
+	CoordinateSystem::size = value;
+}
+
+void on_set_size_is_pixels(bool value, HeeksObj* object){
+	CoordinateSystem::size_is_pixels = value;
+}
+
 void HeeksCADapp::GetOptions(std::list<Property *> *list)
 {
 	PropertyList* view_options = new PropertyList(_T("view options"));
@@ -1495,6 +1517,17 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	view_options->m_list.push_back( new PropertyCheck(_T("reverse mouse wheel"), !(wxGetApp().mouse_wheel_forward_away), NULL, on_set_reverse_mouse_wheel));
 	view_options->m_list.push_back( new PropertyCheck(_T("Ctrl key does rotate"), wxGetApp().ctrl_does_rotate, NULL, on_set_ctrl_does_rotate));
 	view_options->m_list.push_back(new PropertyCheck(_T("show datum"), m_show_datum_coords_system, NULL, on_set_show_datum));
+	view_options->m_list.push_back(new PropertyDouble(_T("datum size"), CoordinateSystem::size, NULL, on_set_datum_size));
+	view_options->m_list.push_back(new PropertyCheck(_T("datum size is pixels not mm"), CoordinateSystem::size_is_pixels, NULL, on_set_size_is_pixels));
+	view_options->m_list.push_back ( new PropertyColor ( _T("background color"),  background_color, NULL, on_set_background_color ) );
+	{
+		std::list< wxString > choices;
+		choices.push_back ( wxString ( _T("no grid") ) );
+		choices.push_back ( wxString ( _T("faint color") ) );
+		choices.push_back ( wxString ( _T("alpha blending") ) );
+		choices.push_back ( wxString ( _T("colored alpha blending") ) );
+		view_options->m_list.push_back ( new PropertyChoice ( _T("grid mode"),  choices, grid_mode, NULL, on_set_grid_mode ) );
+	}
 	list->push_back(view_options);
 
 	PropertyList* digitizing = new PropertyList(_T("digitizing"));
@@ -1509,17 +1542,8 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	digitizing->m_list.push_back(new PropertyCheck(_T("screen"), wxGetApp().digitize_screen, NULL, on_relative));
 	list->push_back(digitizing);
 
-	list->push_back ( new PropertyColor ( _T("background color"),  background_color, NULL, on_set_background_color ) );
 	list->push_back ( new PropertyColor ( _T("current color"),  current_color, NULL, on_set_current_color ) );
 	list->push_back ( new PropertyColor ( _T("construction color"),  construction_color, NULL, on_set_construction_color ) );
-	{
-		std::list< wxString > choices;
-		choices.push_back ( wxString ( _T("no grid") ) );
-		choices.push_back ( wxString ( _T("faint color") ) );
-		choices.push_back ( wxString ( _T("alpha blending") ) );
-		choices.push_back ( wxString ( _T("colored alpha blending") ) );
-		list->push_back ( new PropertyChoice ( _T("grid mode"),  choices, grid_mode, NULL, on_set_grid_mode ) );
-	}
 	list->push_back(new PropertyDouble(_T("grid size"), digitizing_grid, NULL, on_grid_edit));
 	list->push_back(new PropertyCheck(_T("grid"), draw_to_grid, NULL, on_grid));
 	list->push_back(new PropertyDouble(_T("geometry tolerance"), m_geom_tol, NULL, on_set_geom_tol));
@@ -1627,13 +1651,12 @@ const wxChar* HeeksCADapp::GetKnownFilesCommaSeparatedList(bool open)const
 }
 
 class MarkObjectTool:public Tool{
-private:
+public:
 	MarkedObject *m_marked_object;
 	wxPoint m_point;
 	bool m_xor_marked_list;
 
-public:
-	MarkObjectTool(MarkedObject *o, const wxPoint& point, bool xor_marked_list){m_marked_object = o; m_point = point; m_xor_marked_list = xor_marked_list;}
+	MarkObjectTool():m_marked_object(NULL), m_xor_marked_list(false){}
 
 	// Tool's virtual functions
 	const wxChar* GetTitle(){
@@ -1677,6 +1700,9 @@ public:
 	}
 };
 
+static MarkObjectTool mark_object_tool;
+static RemoveObjectTool remove_object_tool(NULL);
+
 void HeeksCADapp::GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool from_graphics_canvas, bool control_pressed)
 {
 	std::map<HeeksObj*, MarkedObject*>::iterator It;
@@ -1691,9 +1717,16 @@ void HeeksCADapp::GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list
 
 		marked_object->GetObject()->GetTools(&tools, &point);
 		if(tools.size() > 0)tools.push_back(NULL);
-		tools.push_back(new RemoveObjectTool(marked_object->GetObject()));
+
+		remove_object_tool.m_object = marked_object->GetObject();
+		remove_object_tool.m_owner = remove_object_tool.m_object->m_owner;
+		tools.push_back(&remove_object_tool);
 		tools.push_back(NULL);
-		tools.push_back(new MarkObjectTool(marked_object, point, control_pressed));
+
+		mark_object_tool.m_marked_object = marked_object;
+		mark_object_tool.m_point = point;
+		mark_object_tool.m_xor_marked_list = control_pressed;
+		tools.push_back(&mark_object_tool);
 
 		if (tools.size()>0)
 		{

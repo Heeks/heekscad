@@ -86,7 +86,7 @@ public:
 	static void FuseShapes(const std::list<HeeksObj*> &list);
 	static void CommonShapes(const std::list<HeeksObj*> &list);
 	static bool ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<int, CShapeData> *index_map = NULL);
-	static bool ExportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> *index_map = NULL);
+	static bool ExportSolidsFile(const std::list<HeeksObj*>& objects, const wxChar* filepath, std::map<int, CShapeData> *index_map = NULL);
 	static HeeksObj* MakeObject(const TopoDS_Shape &shape, const wxChar* title, bool use_one_gl_list = false, bool stl_body = false);
 	static bool IsTypeAShape(int t);
 };

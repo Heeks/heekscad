@@ -12,6 +12,9 @@
 #include "Gripper.h"
 #include "GraphicsCanvas.h"
 #include "HeeksFrame.h"
+#include "GripperSelTransform.h"
+
+bool CSelectMode::m_can_grip_objects = true;
 
 CSelectMode::CSelectMode(){
 	control_key_initially_pressed = false;
@@ -23,6 +26,8 @@ const wxChar* CSelectMode::GetTitle()
 {
 	return m_doing_a_main_loop ? (m_prompt_when_doing_a_main_loop.c_str()):_T("Select Mode");
 }
+
+static GripperSelTransform drag_object_gripper(gp_Pnt(0, 0, 0), GripperTypeTranslate);
 
 void CSelectMode::OnMouse( wxMouseEvent& event )
 {
@@ -39,9 +44,9 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 	if(event.LeftDown())
 	{
 		button_down_point = wxPoint(event.GetX(), event.GetY());
-		CurrentPoint = wxPoint(event.GetX(), event.GetY());
+		CurrentPoint = button_down_point;
 		MarkedObjectManyOfSame marked_object;
-		wxGetApp().FindMarkedObject(wxPoint(event.GetX(), event.GetY()), &marked_object);
+		wxGetApp().FindMarkedObject(button_down_point, &marked_object);
 		if(marked_object.m_map.size()>0)
 		{
 			HeeksObj* object = marked_object.GetFirstOfTopOnly();
@@ -52,7 +57,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 					wxGetApp().m_frame->m_graphics->DrawFront();
 					wxGetApp().drag_gripper = (Gripper*)object;
 					wxGetApp().m_digitizing->SetOnlyCoords(wxGetApp().drag_gripper, true);
-					wxGetApp().m_digitizing->digitize(wxPoint(event.GetX(), event.GetY()));
+					wxGetApp().m_digitizing->digitize(button_down_point);
 					wxGetApp().grip_from = wxGetApp().m_digitizing->digitized_point.m_point;
 					wxGetApp().grip_to = wxGetApp().grip_from;
 					double from[3];
@@ -72,9 +77,9 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 	if(event.MiddleDown())
 	{
 		button_down_point = wxPoint(event.GetX(), event.GetY());
-		CurrentPoint = wxPoint(event.GetX(), event.GetY());
+		CurrentPoint = button_down_point;
 		wxGetApp().m_frame->m_graphics->StoreViewPoint();
-		wxGetApp().m_frame->m_graphics->m_view_point.SetStartMousePoint(wxPoint(event.GetX(), event.GetY()));
+		wxGetApp().m_frame->m_graphics->m_view_point.SetStartMousePoint(button_down_point);
 	}
 
 	if(event.LeftUp())
@@ -237,6 +242,60 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 			}
 			else if(abs(button_down_point.x - event.GetX())>2 || abs(button_down_point.y - event.GetY())>2)
 			{
+				if(m_can_grip_objects)
+				{
+					MarkedObjectManyOfSame marked_object;
+					wxGetApp().FindMarkedObject(button_down_point, &marked_object);
+					bool selected_object_dragged = false;
+					if(marked_object.m_map.size()>0)
+					{
+						HeeksObj* object = marked_object.GetFirstOfTopOnly();
+						while(object)
+						{
+							if(wxGetApp().m_marked_list->ObjectMarked(object)){
+								selected_object_dragged = true;
+								break;
+							}
+
+							object = marked_object.Increment();
+						}
+					}
+
+					if(!selected_object_dragged)
+					{
+						if(marked_object.m_map.size()>0)
+						{
+							HeeksObj* object = marked_object.GetFirstOfTopOnly();
+							wxGetApp().m_marked_list->Clear();
+							wxGetApp().m_marked_list->Add(object);
+							wxGetApp().m_marked_list->create_grippers();
+							selected_object_dragged = true;
+						}
+					}
+
+					if(selected_object_dragged)
+					{
+						wxGetApp().drag_gripper = &drag_object_gripper;
+						wxGetApp().m_digitizing->SetOnlyCoords(wxGetApp().drag_gripper, true);
+						wxGetApp().m_digitizing->digitize(button_down_point);
+						wxGetApp().grip_from = wxGetApp().m_digitizing->digitized_point.m_point;
+						wxGetApp().grip_to = wxGetApp().grip_from;
+						double from[3];
+						from[0] = wxGetApp().grip_from.X();
+						from[1] = wxGetApp().grip_from.Y();
+						from[2] = wxGetApp().grip_from.Z();
+						wxGetApp().drag_gripper->OnGripperGrabbed(from);
+						wxGetApp().grip_from = gp_Pnt(from[0], from[1], from[2]);
+						double to[3];
+						wxGetApp().m_digitizing->digitize(wxPoint(event.GetX(), event.GetY()));
+						extract(wxGetApp().m_digitizing->digitized_point.m_point, to);
+						wxGetApp().grip_to = wxGetApp().m_digitizing->digitized_point.m_point;
+						extract(wxGetApp().grip_from, from);
+						wxGetApp().drag_gripper->OnGripperMoved(from, to);
+						return;
+					}
+				}
+
 				// do window selection
 				wxGetApp().m_frame->m_graphics->SetXOR();
 				if(window_box_exists)wxGetApp().m_frame->m_graphics->DrawWindow(window_box, true); // undraw the window
@@ -360,8 +419,10 @@ public:
 };
 wxBitmap* EndPicking::m_bitmap = NULL;
 
+static EndPicking end_picking;
+
 
 void CSelectMode::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
-	if(m_doing_a_main_loop)t_list->push_back(new EndPicking);
+	if(m_doing_a_main_loop)t_list->push_back(&end_picking);
 }

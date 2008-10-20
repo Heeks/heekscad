@@ -4,8 +4,6 @@
 
 class RemoveOrAddTool:public Tool{
 protected:
-	HeeksObj* m_object;
-	HeeksObj* m_owner;
 	HeeksObj* m_prev_object;
 	bool m_belongs_to_owner;
 
@@ -13,6 +11,9 @@ protected:
 	void Remove();
 
 public:
+	HeeksObj* m_owner;
+	HeeksObj* m_object;
+
 	RemoveOrAddTool(HeeksObj *object, HeeksObj *owner, HeeksObj* prev_object);
 	virtual ~RemoveOrAddTool();
 

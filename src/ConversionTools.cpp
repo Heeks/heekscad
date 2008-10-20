@@ -171,6 +171,11 @@ bool ConvertWireToFace2(const std::list<TopoDS_Wire> &list, std::list<TopoDS_Fac
 	return true;
 }
 
+wxBitmap* ConvertLineArcsToWire::m_bitmap = NULL;
+wxBitmap* ConvertWireToFace::m_bitmap = NULL;
+wxBitmap* ConvertEdgesToWire::m_bitmap = NULL;
+wxBitmap* ConvertLineArcsToFace::m_bitmap = NULL;
+
 void ConvertLineArcsToWire::Run(){
 	TopoDS_Wire wire;
 	if(ConvertLineArcsToWire2(wxGetApp().m_marked_list->list(), wire))

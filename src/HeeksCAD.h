@@ -80,7 +80,7 @@ public:
 	bool m_show_ruler;
 	bool m_show_datum_coords_system;
 	std::list< wxString > m_recent_files;
-	bool m_disable_SetObjectID_on_Add;
+	bool m_in_OpenFile;
 	wxString m_version_number;
 	std::list< void(*)(wxSizeEvent&) > m_on_graphics_size_list;
 	std::list< void(*)(wxMouseEvent&) > m_lbutton_up_callbacks;
@@ -126,10 +126,11 @@ public:
 	void OpenSTLFile(const wxChar *filepath);
 	void OpenDXFFile(const wxChar *filepath);
 	bool OpenImageFile(const wxChar *filepath);
-	bool OpenFile(const wxChar *filepath, bool update_recent_file_list = true, bool set_app_caption = true);
+	bool OpenFile(const wxChar *filepath, bool import_not_open = false);
 	void SaveDXFFile(const wxChar *filepath);
 	void SaveSTLFile(const wxChar *filepath);
-	void SaveXMLFile(const wxChar *filepath);
+	void SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath);
+	void SaveXMLFile(const wxChar *filepath){SaveXMLFile(m_objects, filepath);}
 	bool SaveFile(const wxChar *filepath, bool use_dialog = false, bool update_recent_file_list = true, bool set_app_caption = true);
 	void DeleteUndoably(HeeksObj* object);
 	void DeleteUndoably(const std::list<HeeksObj*>& list);

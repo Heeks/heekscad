@@ -325,9 +325,9 @@ void CShape::glCommands(bool select, bool marked, bool no_color){
 }
 
 class OffsetShapeTool:public Tool{
-	CShape* m_shape;
 	static wxBitmap* m_bitmap;
 public:
+	CShape* m_shape;
 	OffsetShapeTool(CShape* shape):m_shape(shape){}
 
 	// Tool's virtual functions
@@ -357,10 +357,12 @@ public:
 };
 
 wxBitmap* OffsetShapeTool::m_bitmap = NULL;
+static OffsetShapeTool offset_shape_tool(NULL);
 
 void CShape::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
-	t_list->push_back(new OffsetShapeTool(this));
+	offset_shape_tool.m_shape = this;
+	t_list->push_back(&offset_shape_tool);
 }
 
 bool CShape::ModifyByMatrix(const double* m){
@@ -602,7 +604,7 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<in
 	return false;
 }
 
-bool CShape::ExportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> *index_map)
+bool CShape::ExportSolidsFile(const std::list<HeeksObj*>& objects, const wxChar* filepath, std::map<int, CShapeData> *index_map)
 {
 	// returns true, if suffix handled
 	wxString wf(filepath);
@@ -614,7 +616,9 @@ bool CShape::ExportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 		STEPControl_Writer writer;
 		// add all the solids
 		int i = 1;
-		for(HeeksObj* object = wxGetApp().GetFirstChild(); object; object = wxGetApp().GetNextChild()){
+		for(std::list<HeeksObj*>::const_iterator It = objects.begin(); It != objects.end(); It++)
+		{
+			HeeksObj* object = *It;
 			if(CShape::IsTypeAShape(object->GetType())){
 				if(index_map)index_map->insert( std::pair<int, CShapeData>(i, CShapeData((CShape*)object)) );
 				i++;
@@ -632,7 +636,9 @@ bool CShape::ExportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 		IGESControl_Writer writer;
 
 		// add all the solids
-		for(HeeksObj* object = wxGetApp().GetFirstChild(); object; object = wxGetApp().GetNextChild()){
+		for(std::list<HeeksObj*>::const_iterator It = objects.begin(); It != objects.end(); It++)
+		{
+			HeeksObj* object = *It;
 			if(CShape::IsTypeAShape(object->GetType())){
 				writer.AddShape(((CShape*)object)->Shape());
 			}
@@ -654,7 +660,9 @@ bool CShape::ExportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 
 		StlAPI_Writer writer;
 		// add all the solids
-		for(HeeksObj* object = wxGetApp().GetFirstChild(); object; object = wxGetApp().GetNextChild()){
+		for(std::list<HeeksObj*>::const_iterator It = objects.begin(); It != objects.end(); It++)
+		{
+			HeeksObj* object = *It;
 			if(CShape::IsTypeAShape(object->GetType())){
 				// append stl to file with default coefficient
 				writer.Write(((CShape*)object)->Shape(), aFileName);
