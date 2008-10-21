@@ -918,6 +918,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\ViewRotating.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ViewRotating.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Window.cpp"
 			>
 		</File>
