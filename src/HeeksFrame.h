@@ -35,6 +35,7 @@ enum{
 	ID_MAG_EXTENTS,
 	ID_MAG_NO_ROT,
 	ID_MAG_PREVIOUS,
+	ID_VIEW_ROT,
 	ID_FULL_SCREEN,
 	ID_UNDO,
 	ID_REDO,
@@ -151,6 +152,7 @@ public:
 	void OnMagExtentsButton( wxCommandEvent& event );
 	void OnMagNoRotButton( wxCommandEvent& event );
 	void OnMagPreviousButton( wxCommandEvent& event );
+	void OnViewRotateButton( wxCommandEvent& event );
 	void OnFullScreenButton( wxCommandEvent& event );
 	void OnMoveTranslateButton( wxCommandEvent& event );
 	void OnCopyTranslateButton( wxCommandEvent& event );

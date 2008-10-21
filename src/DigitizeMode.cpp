@@ -32,6 +32,12 @@ const wxChar* DigitizeMode::GetTitle()
 }
 
 void DigitizeMode::OnMouse( wxMouseEvent& event ){
+	if(event.MiddleIsDown() || event.GetWheelRotation() != 0)
+	{
+		wxGetApp().m_select_mode->OnMouse(event);
+		return;
+	}
+
 	if(event.LeftDown()){
 		point_or_window->OnMouse(event);
 		lbutton_point = digitize(wxPoint(event.GetX(), event.GetY()));

@@ -26,6 +26,7 @@
 #include "ObjPropsCanvas.h"
 #include "SelectMode.h"
 #include "MagDragWindow.h"
+#include "ViewRotating.h"
 #include "DigitizeMode.h"
 #include "Shape.h"
 #include "ViewPoint.h"
@@ -71,6 +72,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	drag_gripper = NULL;
 	cursor_gripper = NULL;
 	magnification = new MagDragWindow();
+	viewrotating = new ViewRotating;
 	m_select_mode = new CSelectMode();
 	m_digitizing = new DigitizeMode();
 	digitize_end = true;
@@ -1434,6 +1436,12 @@ void on_set_show_datum(bool onoff, HeeksObj* object)
 void on_set_rotate_mode(int value, HeeksObj* object)
 {
 	wxGetApp().m_rotate_mode = value;
+	if(!wxGetApp().m_rotate_mode)
+	{
+		wxGetApp().m_frame->m_graphics->m_view_point.SetView(gp_Vec(0, 1, 0), gp_Vec(0, 0, 1));
+		wxGetApp().m_frame->m_graphics->StoreViewPoint();
+		wxGetApp().Repaint();
+	}
 }
 
 void on_set_antialiasing(bool value, HeeksObj* object)
@@ -1826,11 +1834,12 @@ void HeeksCADapp::PassMouseWheelToGraphics(wxMouseEvent& event)
 	m_frame->m_graphics->OnMouse(event);
 }
 
-int HeeksCADapp::PickObjects(const wxChar* str)
+int HeeksCADapp::PickObjects(const wxChar* str, bool just_one)
 {
 	CInputMode* save_mode = input_mode_object;
 	m_select_mode->m_prompt_when_doing_a_main_loop.assign(str);
 	m_select_mode->m_doing_a_main_loop = true;
+	m_select_mode->m_just_one = just_one;
 	SetInputMode(m_select_mode);
 
 	OnRun();
@@ -2263,7 +2272,7 @@ bool HeeksCADapp::IsPasteReady()
 		}  
 		wxTheClipboard->Close();
 
-		if(fstr.StartsWith("<?xml version=\"1.0\" ?>\r\n<HeeksCAD_Document>"))return true;
+		if(fstr.StartsWith(_T("<?xml version=\"1.0\" ?>\r\n<HeeksCAD_Document>")))return true;
 	}
 
 	return false;
@@ -2296,7 +2305,7 @@ void HeeksCADapp::Paste()
 #else
 		ofstream ofs(temp_file);
 #endif
-		ofs<<fstr;
+		ofs<<fstr.c_str();
 	}
 
 	m_marked_list->Clear();

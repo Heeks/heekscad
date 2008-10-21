@@ -20,6 +20,7 @@ CSelectMode::CSelectMode(){
 	control_key_initially_pressed = false;
 	window_box_exists = false;
 	m_doing_a_main_loop = false;
+	m_just_one = false;
 }
 
 const wxChar* CSelectMode::GetTitle()
@@ -197,7 +198,15 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 				wxGetApp().m_marked_list->Clear();
 			}
 		}
-		wxGetApp().Repaint();
+
+		if(m_just_one && m_doing_a_main_loop && (wxGetApp().m_marked_list->size() > 0))
+		{
+			wxGetApp().ExitMainLoop();
+		}
+		else
+		{
+			wxGetApp().Repaint();
+		}
 	}
 	else if(event.RightUp())
 	{
@@ -298,15 +307,18 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 				}
 
 				// do window selection
-				wxGetApp().m_frame->m_graphics->SetXOR();
-				if(window_box_exists)wxGetApp().m_frame->m_graphics->DrawWindow(window_box, true); // undraw the window
-				window_box.x = button_down_point.x;
-				window_box.width = event.GetX() - button_down_point.x;
-				window_box.y = wxGetApp().m_frame->m_graphics->GetClientSize().GetHeight() - button_down_point.y;
-				window_box.height = button_down_point.y - event.GetY();
-				wxGetApp().m_frame->m_graphics->DrawWindow(window_box, true);// draw the window
-				wxGetApp().m_frame->m_graphics->EndXOR();
-				window_box_exists = true;
+				if(!m_just_one)
+				{
+					wxGetApp().m_frame->m_graphics->SetXOR();
+					if(window_box_exists)wxGetApp().m_frame->m_graphics->DrawWindow(window_box, true); // undraw the window
+					window_box.x = button_down_point.x;
+					window_box.width = event.GetX() - button_down_point.x;
+					window_box.y = wxGetApp().m_frame->m_graphics->GetClientSize().GetHeight() - button_down_point.y;
+					window_box.height = button_down_point.y - event.GetY();
+					wxGetApp().m_frame->m_graphics->DrawWindow(window_box, true);// draw the window
+					wxGetApp().m_frame->m_graphics->EndXOR();
+					window_box_exists = true;
+				}
 			}
 		}
 		CurrentPoint = wxPoint(event.GetX(), event.GetY());

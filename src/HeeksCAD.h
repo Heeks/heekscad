@@ -7,6 +7,7 @@
 
 class Tool;
 class MagDragWindow;
+class ViewRotating;
 class CInputMode;
 class CSelectMode;
 class DigitizeMode;
@@ -59,6 +60,7 @@ public:
 	CoordinateSystem *m_current_coordinate_system;
 	CInputMode *input_mode_object;
 	MagDragWindow *magnification;
+	ViewRotating *viewrotating;
 	CSelectMode *m_select_mode;
 	DigitizeMode *m_digitizing;
 	GripperMode* gripper_mode;
@@ -161,7 +163,7 @@ public:
 	wxString GetExeFolder()const;
 	void get_2d_arc_segments(double xs, double ys, double xe, double ye, double xc, double yc, bool dir, bool want_start, double pixels_per_mm, void(*callbackfunc)(const double* xy));
 	void PassMouseWheelToGraphics(wxMouseEvent& event);
-	int PickObjects(const wxChar* str);
+	int PickObjects(const wxChar* str, bool just_one = false);
 	bool PickPosition(const wxChar* str, double* pos, void(*callback)(const double*) = NULL);
 	void glSphere(double radius, const double* pos = NULL);
 	void OnNewOrOpen(bool open);

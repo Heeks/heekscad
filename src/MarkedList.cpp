@@ -369,15 +369,19 @@ void MarkedList::CopySelectedItems()
 
 	wxGetApp().SaveXMLFile(m_list, temp_file);
 
+#if wxUSE_UNICODE
+	wifstream ifs(temp_file);
+#else
 	ifstream ifs(temp_file);
+#endif
 	if(!ifs)return;
 
 	wxString fstr;
-	char str[1024];
+	wchar_t str[1024];
 	while(!(ifs.eof())){
 		ifs.getline(str, 1022);
-		strcat(str, "\r\n");
-		fstr.append(Ctt(str));
+		wcscat(str, _T("\r\n"));
+		fstr.append(str);
 		if(!ifs)break;
 	}
 
