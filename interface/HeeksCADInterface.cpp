@@ -235,9 +235,9 @@ void CHeeksCADInterface::WereRemoved(const std::list<HeeksObj*> &list)
 	wxGetApp().WereRemoved(list);
 }
 
-int CHeeksCADInterface::PickObjects(const wxChar* str)
+int CHeeksCADInterface::PickObjects(const wxChar* str, bool m_just_one)
 {
-	return wxGetApp().PickObjects(str);
+	return wxGetApp().PickObjects(str, m_just_one);
 }
 
 bool CHeeksCADInterface::PickPosition(const wxChar* str, double* pos)

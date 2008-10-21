@@ -322,6 +322,7 @@ gp_Dir CFace::GetMiddleNormal(gp_Pnt *pos)const{
 }
 
 gp_Dir CFace::GetNormalAtUV(double u, double v, gp_Pnt *pos)const{
+	if(m_topods_face.IsNull()) return gp_Dir(0, 0, 0);
 	Handle(Geom_Surface) surf=BRep_Tool::Surface(m_topods_face);          // get surface properties
 	GeomLProp_SLProps props(surf, u, v, 1, 0.01);          // get surface normal
 	gp_Dir norm=props.Normal();                         // check orientation
