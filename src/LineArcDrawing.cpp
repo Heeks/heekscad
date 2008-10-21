@@ -16,7 +16,6 @@
 #include "DigitizeMode.h"
 #include "HeeksFrame.h"
 #include "InputModeCanvas.h"
-#include "LineArcCollection.h"
 #include "GraphicsCanvas.h"
 
 wxCursor LineArcDrawing::m_cursor_start;
@@ -30,10 +29,8 @@ LineArcDrawing::LineArcDrawing(void){
 	m_previous_direction = gp_Vec(1, 0, 0);
 	drawing_mode = LineDrawingMode;
 	m_A_down = false;
-	m_container = NULL;
 	radius_for_circle = 5.0;
 	circle_mode = ThreePointsCircleMode;
-	m_add_to_collection = false;
 }
 
 LineArcDrawing::~LineArcDrawing(void){
@@ -352,28 +349,6 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 	return false;
 }
 
-HeeksObj* LineArcDrawing::GetOwnerForDrawingObjects()
-{
-	switch(drawing_mode)
-	{
-	case LineDrawingMode:
-	case ArcDrawingMode:
-		{
-			if(m_add_to_collection)
-			{
-				if(m_container == NULL)
-				{
-					m_container = (ObjList*)new CLineArcCollection;
-					wxGetApp().AddUndoably(m_container, NULL, NULL);
-				}
-				return m_container;
-			}
-		}
-		break;
-	}
-	return NULL;
-}
-
 void LineArcDrawing::clear_drawing_objects(bool store_as_previous_objects)
 {
 	if(store_as_previous_objects)
@@ -475,7 +450,6 @@ void LineArcDrawing::GetOptions(std::list<Property *> *list){
 bool LineArcDrawing::OnModeChange(void){
 	// on start of drawing mode
 	if(!__super::OnModeChange())return false;
-	if(m_container)m_container = NULL;
 
 	wxGetApp().m_config->Read(_T("RadiusForCircle"), &radius_for_circle, 5.0);
 

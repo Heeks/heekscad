@@ -44,7 +44,6 @@
 #include "HImage.h"
 #include "HPoint.h"
 #include "RemoveOrAddTool.h"
-#include "LineArcCollection.h"
 #include "../tinyxml/tinyxml.h"
 #include "BezierCurve.h"
 #include "StlSolid.h"
@@ -451,7 +450,6 @@ void HeeksCADapp::InitializeXMLFunctions()
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Circle", HCircle::ReadFromXMLElement ) );
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Point", HPoint::ReadFromXMLElement ) );
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Image", HImage::ReadFromXMLElement ) );
-		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "LineArcCollection", CLineArcCollection::ReadFromXMLElement ) );
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "STEP_file", ReadSTEPFileFromXMLElement ) );
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "STLSolid", CStlSolid::ReadFromXMLElement ) );
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "CoordinateSystem", CoordinateSystem::ReadFromXMLElement ) );
@@ -521,11 +519,10 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath)
 	}
 }
 
-static CLineArcCollection* line_arc_collection_for_callback = NULL;
 static void add_line_from_bezier_curve(const gp_Pnt& vt0, const gp_Pnt& vt1)
 {
 	HLine* new_object = new HLine(vt0, vt1, &(wxGetApp().current_color));
-	line_arc_collection_for_callback->Add(new_object, NULL);
+	wxGetApp().Add(new_object, NULL);
 }
 
 void HeeksCADapp::ReadSVGElement(TiXmlElement* pElem)
@@ -555,7 +552,6 @@ void HeeksCADapp::ReadSVGElement(TiXmlElement* pElem)
 
 				double sx, sy;
 				double px, py;
-				CLineArcCollection* line_arc_collection = NULL;
 
 				int pos = 0;
 				while(1){
@@ -565,8 +561,6 @@ void HeeksCADapp::ReadSVGElement(TiXmlElement* pElem)
 						sscanf(&d[pos], "%lf,%lf", &sx, &sy);
 						sy = -sy;
 						px = sx; py = sy;
-						line_arc_collection = new CLineArcCollection;
-						Add(line_arc_collection, NULL);
 					}
 					else if(d[pos] == 'L'){
 						// add a line
@@ -576,7 +570,7 @@ void HeeksCADapp::ReadSVGElement(TiXmlElement* pElem)
 						y = -y;
 						HLine* new_object = new HLine(gp_Pnt(px, py, 0), gp_Pnt(x, y, 0), &current_color);
 						px = x; py = y;
-						line_arc_collection->Add(new_object, NULL);
+						Add(new_object, NULL);
 					}
 					else if(d[pos] == 'C'){
 						// add a bezier curve ( just split into lines for now )
@@ -584,7 +578,6 @@ void HeeksCADapp::ReadSVGElement(TiXmlElement* pElem)
 						double x1, y1, x2, y2, x3, y3;
 						sscanf(&d[pos], "%lf,%lf %lf,%lf %lf,%lf", &x1, &y1, &x2, &y2, &x3, &y3);
 						y1 = -y1; y2 = -y2; y3 = -y3;
-						line_arc_collection_for_callback = line_arc_collection;
 						split_bezier_curve(3, gp_Pnt(px, py,  0), gp_Pnt(x3, y3, 0), gp_Pnt(x1, y1, 0), gp_Pnt(x2, y2, 0), add_line_from_bezier_curve);
 						px = x3; py = y3;
 					}
@@ -593,7 +586,7 @@ void HeeksCADapp::ReadSVGElement(TiXmlElement* pElem)
 						pos++;
 						HLine* new_object = new HLine(gp_Pnt(px, py, 0), gp_Pnt(sx, sy, 0), &current_color);
 						px = sx; py = sy;
-						line_arc_collection->Add(new_object, NULL);
+						Add(new_object, NULL);
 					}
 					else if(d[pos] == 0){
 						break;
@@ -2261,7 +2254,6 @@ void HeeksCADapp::DestroyTransformGLList(){
 
 bool HeeksCADapp::IsPasteReady()
 {
-	// assume the text is the contents of a heeks file
 	wxString fstr;
 
 	if (wxTheClipboard->Open())

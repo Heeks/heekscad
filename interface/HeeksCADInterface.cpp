@@ -14,7 +14,6 @@
 #include "LeftCanvas.h"
 #include "InputModeCanvas.h"
 #include "GraphicsCanvas.h"
-#include "LineArcCollection.h"
 #include "DigitizeMode.h"
 #include "SelectMode.h"
 #include "Shape.h"
@@ -268,11 +267,6 @@ HeeksObj* CHeeksCADInterface::GetNextObject()
 void CHeeksCADInterface::DrawObjectsOnFront(const std::list<HeeksObj*> &list)
 {
 	wxGetApp().m_frame->m_graphics->DrawObjectsOnFront(list);
-}
-
-HeeksObj* CHeeksCADInterface::NewLineArcCollection()
-{
-	return new CLineArcCollection;
 }
 
 HeeksObj* CHeeksCADInterface::NewLine(const double* s, const double* e)
