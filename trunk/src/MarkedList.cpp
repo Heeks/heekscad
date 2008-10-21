@@ -377,11 +377,11 @@ void MarkedList::CopySelectedItems()
 	if(!ifs)return;
 
 	wxString fstr;
-	wchar_t str[1024];
+	wxChar str[1024];
 	while(!(ifs.eof())){
 		ifs.getline(str, 1022);
-		wcscat(str, _T("\r\n"));
 		fstr.append(str);
+		fstr.append(_T("\r\n"));
 		if(!ifs)break;
 	}
 
