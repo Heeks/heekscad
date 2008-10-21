@@ -482,6 +482,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\HPoint.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\HPoint.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Images.cpp"
 			>
 		</File>
@@ -651,6 +659,14 @@
 		</File>
 		<File
 			RelativePath=".\OptionsCanvas.h"
+			>
+		</File>
+		<File
+			RelativePath=".\PointDrawing.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\PointDrawing.h"
 			>
 		</File>
 		<File
