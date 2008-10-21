@@ -344,13 +344,7 @@ void MarkedList::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 	t_list->push_back(&copy_marked_list);
 
 	// paste
-	if (wxTheClipboard->Open())
-	{
-		if (wxTheClipboard->IsSupported( wxDF_TEXT ))
-			t_list->push_back(&paste_tool);
-	}
-
-
+	if (wxGetApp().IsPasteReady())t_list->push_back(&paste_tool);
 }
 
 void MarkedList::CutSelectedItems()
