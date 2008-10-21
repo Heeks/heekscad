@@ -172,7 +172,7 @@ void TransformTools::Mirror(bool copy)
 	gp_Lin line;
 	int save_filter = wxGetApp().m_marked_list->m_filter;
 	wxGetApp().m_marked_list->m_filter = MARKING_FILTER_LINE | MARKING_FILTER_ILINE;
-	wxGetApp().PickObjects(_T("Pick line to mirror about"));
+	wxGetApp().PickObjects(_T("Pick line to mirror about"), true);
 	wxGetApp().m_marked_list->m_filter = save_filter;
 	for(std::list<HeeksObj *>::const_iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
 	{

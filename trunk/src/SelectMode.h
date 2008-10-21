@@ -13,6 +13,7 @@ public:
 	wxRect window_box;
 	bool window_box_exists;
 	bool m_doing_a_main_loop;
+	bool m_just_one;
 	wxString m_prompt_when_doing_a_main_loop;
 
 	static bool m_can_grip_objects;

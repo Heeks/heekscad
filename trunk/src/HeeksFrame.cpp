@@ -13,6 +13,7 @@
 #include "Shape.h"
 #include "MarkedList.h"
 #include "MagDragWindow.h"
+#include "ViewRotating.h"
 #include "HArc.h"
 #include "RuledSurface.h"
 #include "Sphere.h"
@@ -86,6 +87,7 @@ EVT_MENU(ID_REDO, CHeeksFrame::OnRedoButton)
 EVT_MENU(ID_MAG_EXTENTS, CHeeksFrame::OnMagExtentsButton)
 EVT_MENU(ID_MAG_NO_ROT, CHeeksFrame::OnMagNoRotButton)
 EVT_MENU(ID_MAG_PREVIOUS, CHeeksFrame::OnMagPreviousButton)
+EVT_MENU(ID_VIEW_ROT, CHeeksFrame::OnViewRotateButton)
 EVT_MENU(ID_FULL_SCREEN, CHeeksFrame::OnFullScreenButton)
 EVT_MENU(ID_MOVE_TRANSLATE, CHeeksFrame::OnMoveTranslateButton)
 EVT_MENU(ID_COPY_TRANSLATE, CHeeksFrame::OnCopyTranslateButton)
@@ -123,7 +125,7 @@ bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
     return true;
 }
 
-static wxString default_layout_string = _T("layout2|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=351;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=245;prop=100000;bestw=156;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=6;pos=0;prop=100000;bestw=390;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=444;floaty=105;floatw=407;floath=65|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=6;pos=401;prop=100000;bestw=195;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=TransformBar;caption=Transformation Tools;state=2108156;dir=1;layer=10;row=0;pos=373;prop=100000;bestw=273;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=504|dock_size(4,1,0)=302|dock_size(1,10,0)=41|dock_size(1,10,6)=41|");
+static wxString default_layout_string = _T("layout2|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=351;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=362;prop=100000;bestw=156;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=0;pos=529;prop=100000;bestw=390;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=444;floaty=105;floatw=407;floath=65|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=0;pos=930;prop=100000;bestw=234;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=TransformBar;caption=Transformation Tools;state=2108159;dir=1;layer=10;row=0;pos=540;prop=100000;bestw=273;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=589;floaty=156;floatw=298;floath=73|dock_size(5,0,0)=504|dock_size(4,1,0)=302|dock_size(1,10,0)=41|");
 
 CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSize& size )
 	: wxFrame((wxWindow *)NULL, -1, title, pos, size)
@@ -254,6 +256,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_viewingBar->AddTool(ID_MAG, _T("Zoom Window"), wxBitmap(exe_folder + _T("/bitmaps/mag.png"), wxBITMAP_TYPE_PNG), _T("Zoom in to a dragged window"));
 	m_viewingBar->AddTool(ID_MAG_EXTENTS, _T("Mag Extents"), wxBitmap(exe_folder + _T("/bitmaps/magextents.png"), wxBITMAP_TYPE_PNG), _T("Zoom in to fit the extents of the drawing into the graphics window"));
 	m_viewingBar->AddTool(ID_MAG_NO_ROT, _T("Mag No Rotation"), wxBitmap(exe_folder + _T("/bitmaps/magnorot.png"), wxBITMAP_TYPE_PNG), _T("Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"));
+	m_viewingBar->AddTool(ID_VIEW_ROT, _T("View Rotate"), wxBitmap(exe_folder + _T("/bitmaps/viewrot.png"), wxBITMAP_TYPE_PNG), _T("Enter view rotating mode"));
 	m_viewingBar->AddTool(ID_FULL_SCREEN, _T("FullScreen"), wxBitmap(exe_folder + _T("/bitmaps/fullscreen.png"), wxBITMAP_TYPE_PNG), _T("Switch to full screen view ( press escape to return )"));
 	m_viewingBar->Realize();
 
@@ -356,10 +359,14 @@ CHeeksFrame::~CHeeksFrame()
 
 	//Save the application layout
 	wxString str = m_aui_manager->SavePerspective();
-#if 1
+#if _DEBUG
 	{
+#if wxUSE_UNICODE
+		wofstream ofs("layout.txt");
+#else
 		ofstream ofs("layout.txt");
-		ofs<<str;
+#endif
+		ofs<<str.c_str();
 	}
 #endif
 
@@ -796,6 +803,11 @@ void CHeeksFrame::OnMagNoRotButton( wxCommandEvent& event )
 void CHeeksFrame::OnMagPreviousButton( wxCommandEvent& event )
 {
 	wxGetApp().m_frame->m_graphics->OnMagPrevious();
+}
+
+void CHeeksFrame::OnViewRotateButton( wxCommandEvent& event )
+{
+	wxGetApp().SetInputMode(wxGetApp().viewrotating);
 }
 
 void CHeeksFrame::OnFullScreenButton( wxCommandEvent& event )
