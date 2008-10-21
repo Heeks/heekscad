@@ -21,6 +21,7 @@ enum{
 	ID_LINES = 1,
 	ID_CIRCLES,
 	ID_ILINE,
+	ID_POINTS,
 	ID_SELECT_MODE,
 	ID_SUBTRACT,
 	ID_SPHERE,
@@ -124,6 +125,7 @@ public:
 	void OnLinesButton( wxCommandEvent& event );
 	void OnCirclesButton( wxCommandEvent& event );
 	void OnILineButton( wxCommandEvent& event );
+	void OnPointsButton( wxCommandEvent& event );
 	void OnCoordinateSystem( wxCommandEvent& event );
 	void OnSelectModeButton( wxCommandEvent& event );
 	void OnOpenButton( wxCommandEvent& event );

@@ -54,8 +54,8 @@ void HLine::glCommands(bool select, bool marked, bool no_color){
 }
 
 HeeksObj *HLine::MakeACopy(void)const{
-		HLine *new_object = new HLine(*this);
-		return new_object;
+	HLine *new_object = new HLine(*this);
+	return new_object;
 }
 
 bool HLine::ModifyByMatrix(const double* m){
