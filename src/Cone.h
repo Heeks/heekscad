@@ -15,6 +15,7 @@ public:
 	double m_height;
 
 	CCone(const gp_Ax2& pos, double r1, double r2, double height, const wxChar* title);
+	CCone(const TopoDS_Solid &solid, const wxChar* title, bool use_one_gl_list = false);
 
 	// HeeksObj's virtual functions
 	const wxChar* GetTypeString(void)const{return _T("Cone");}
@@ -27,6 +28,10 @@ public:
 	bool GetScaleAboutMatrix(double *m);
 	bool Stretch(const double *p, const double* shift);
 	bool StretchTemporary(const double *p, const double* shift);
+
+	// CShape's virtual functions
+	void SetXMLElement(TiXmlElement* element);
+	void SetFromXMLElement(TiXmlElement* pElem);
 
 	// CSolid's virtual functions
 	SolidTypeEnum GetSolidType(){return SOLID_TYPE_CONE;}

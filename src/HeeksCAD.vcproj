@@ -834,6 +834,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\ShapeData.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ShapeData.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Solid.cpp"
 			>
 		</File>
