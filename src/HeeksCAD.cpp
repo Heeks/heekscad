@@ -303,7 +303,7 @@ void HeeksCADapp::SetInputMode(CInputMode *new_mode){
 	}
 	if(m_frame && m_frame->m_input_canvas)m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
 	if(m_frame && m_frame->m_options)m_frame->m_options->RefreshByRemovingAndAddingAll();
-	m_frame->m_graphics->DrawFront();
+//	m_frame->m_graphics->DrawFront();
 }
 
 void HeeksCADapp::FindMarkedObject(const wxPoint &point, MarkedObject* marked_object){
