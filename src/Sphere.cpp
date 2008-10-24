@@ -8,10 +8,15 @@
 #include "../interface/PropertyDouble.h"
 #include "Gripper.h"
 #include "MarkedList.h"
+#include "../tinyxml/tinyxml.h"
 
 wxIcon* CSphere::m_icon = NULL;
 
 CSphere::CSphere(const gp_Pnt& pos, double radius, const wxChar* title):m_pos(pos), m_radius(radius), CSolid(BRepPrimAPI_MakeSphere(pos, radius), title)
+{
+}
+
+CSphere::CSphere(const TopoDS_Solid &solid, const wxChar* title, bool use_one_gl_list):CSolid(solid, title, use_one_gl_list), m_pos(0, 0, 0), m_radius(0.0)
 {
 }
 
@@ -90,4 +95,25 @@ bool CSphere::GetScaleAboutMatrix(double *m)
 	mat.SetTranslationPart(gp_Vec(m_pos.XYZ()));
 	extract(mat, m);
 	return true;
+}
+
+void CSphere::SetXMLElement(TiXmlElement* element)
+{
+	element->SetDoubleAttribute("px", m_pos.X());
+	element->SetDoubleAttribute("py", m_pos.Y());
+	element->SetDoubleAttribute("pz", m_pos.Z());
+	element->SetDoubleAttribute("r", m_radius);
+}
+
+void CSphere::SetFromXMLElement(TiXmlElement* pElem)
+{
+	// get the attributes
+	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
+	{
+		std::string name(a->Name());
+		if(name == "px"){m_pos.SetX(a->DoubleValue());}
+		else if(name == "py"){m_pos.SetY(a->DoubleValue());}
+		else if(name == "pz"){m_pos.SetZ(a->DoubleValue());}
+		else if(name == "r"){m_radius = a->DoubleValue();}
+	}
 }

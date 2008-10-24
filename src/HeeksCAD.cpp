@@ -391,6 +391,8 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 						if(attr_name == std::string("index")){index = a->IntValue();}
 						else if(attr_name == std::string("id")){shape_data.m_id = a->IntValue();}
 						else if(attr_name == std::string("title")){shape_data.m_title.assign(Ctt(a->Value()));}
+						else if(attr_name == std::string("solid_type")){shape_data.m_solid_type = (SolidTypeEnum)(a->IntValue());}
+						else shape_data.m_xml_element.SetAttribute(a->Name(), a->Value());
 					}
 					if(index != -1)index_map.insert(std::pair<int, CShapeData>(index, shape_data));
 				}
@@ -905,6 +907,13 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 				index_pair_element->SetAttribute("index", index);
 				index_pair_element->SetAttribute("id", shape_data.m_id);
 				index_pair_element->SetAttribute("title", Ttc(shape_data.m_title.c_str()));
+				if(shape_data.m_solid_type != SOLID_TYPE_UNKNOWN)index_pair_element->SetAttribute("solid_type", shape_data.m_solid_type);
+				// get the CShapeData attributes
+				for(TiXmlAttribute* a = shape_data.m_xml_element.FirstAttribute(); a; a = a->Next())
+				{
+					index_pair_element->SetAttribute(a->Name(), a->Value());
+				}
+
 			}
 		}
 
