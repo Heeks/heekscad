@@ -5,14 +5,6 @@
 #include "Shape.h"
 #include <TopoDS_Solid.hxx>
 
-enum SolidTypeEnum{
-	SOLID_TYPE_UNKNOWN, // probably not a primitive solid anymore
-	SOLID_TYPE_SPHERE,
-	SOLID_TYPE_CYLINDER,
-	SOLID_TYPE_CUBOID,
-	SOLID_TYPE_CONE
-};
-
 class CSolid:public CShape{
 private:
 	static wxIcon* m_icon;

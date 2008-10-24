@@ -7,10 +7,15 @@
 #include "../interface/PropertyDouble.h"
 #include "Gripper.h"
 #include "MarkedList.h"
+#include "../tinyxml/tinyxml.h"
 
 wxIcon* CCone::m_icon = NULL;
 
 CCone::CCone(const gp_Ax2& pos, double r1, double r2, double height, const wxChar* title):m_pos(pos), m_r1(r1), m_r2(r2), m_height(height), CSolid(BRepPrimAPI_MakeCone(pos, r1, r2, height), title)
+{
+}
+
+CCone::CCone(const TopoDS_Solid &solid, const wxChar* title, bool use_one_gl_list):CSolid(solid, title, use_one_gl_list), m_pos(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), m_r1(0.0), m_r2(0.0), m_height(0.0)
 {
 }
 
@@ -63,6 +68,8 @@ void CCone::GetProperties(std::list<Property *> *list)
 	__super::GetProperties(list);
 
 	list->push_back(new PropertyVertex(_T("centre pos"), m_pos.Location(), this, on_set_centre));
+	list->push_back(new PropertyVertex(_T("direction"), gp_Pnt(m_pos.Direction().XYZ()), NULL));
+	list->push_back(new PropertyVertex(_T("x direction"), gp_Pnt(m_pos.XDirection().XYZ()), NULL));
 	list->push_back(new PropertyDouble(_T("r1"), m_r1, this, on_set_r1));
 	list->push_back(new PropertyDouble(_T("r2"), m_r2, this, on_set_r2));
 	list->push_back(new PropertyDouble(_T("height"), m_height, this, on_set_height));
@@ -195,4 +202,55 @@ bool CCone::Stretch(const double *p, const double* shift)
 bool CCone::StretchTemporary(const double *p, const double* shift)
 {
 	return true;
+}
+
+void CCone::SetXMLElement(TiXmlElement* element)
+{
+	const gp_Pnt& l = m_pos.Location();
+	element->SetDoubleAttribute("lx", l.X());
+	element->SetDoubleAttribute("ly", l.Y());
+	element->SetDoubleAttribute("lz", l.Z());
+
+	const gp_Dir& d = m_pos.Direction();
+	element->SetDoubleAttribute("dx", d.X());
+	element->SetDoubleAttribute("dy", d.Y());
+	element->SetDoubleAttribute("dz", d.Z());
+
+	const gp_Dir& x = m_pos.XDirection();
+	element->SetDoubleAttribute("xx", x.X());
+	element->SetDoubleAttribute("xy", x.Y());
+	element->SetDoubleAttribute("xz", x.Z());
+
+	element->SetDoubleAttribute("r1", m_r1);
+	element->SetDoubleAttribute("r2", m_r2);
+	element->SetDoubleAttribute("h", m_height);
+}
+
+void CCone::SetFromXMLElement(TiXmlElement* pElem)
+{
+	double l[3] = {0, 0, 0};
+	double d[3] = {0, 0, 1};
+	double x[3] = {1, 0, 0};
+
+	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
+	{
+		std::string name(a->Name());
+		if(name == "lx")	 {l[0] = a->DoubleValue();}
+		else if(name == "ly"){l[1] = a->DoubleValue();}
+		else if(name == "lz"){l[2] = a->DoubleValue();}
+
+		else if(name == "dx"){d[0] = a->DoubleValue();}
+		else if(name == "dy"){d[1] = a->DoubleValue();}
+		else if(name == "dz"){d[2] = a->DoubleValue();}
+
+		else if(name == "xx"){x[0] = a->DoubleValue();}
+		else if(name == "xy"){x[1] = a->DoubleValue();}
+		else if(name == "xz"){x[2] = a->DoubleValue();}
+
+		else if(name == "r1"){m_r1 = a->DoubleValue();}
+		else if(name == "r2"){m_r2 = a->DoubleValue();}
+		else if(name == "h"){m_height = a->DoubleValue();}
+	}
+
+	m_pos = gp_Ax2(make_point(l), make_vector(d), make_vector(x));
 }

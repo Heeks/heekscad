@@ -13,6 +13,7 @@ public:
 	double m_radius;
 
 	CSphere(const gp_Pnt& pos, double radius, const wxChar* title);
+	CSphere(const TopoDS_Solid &solid, const wxChar* title, bool use_one_gl_list = false);
 
 	// HeeksObj's virtual functions
 	const wxChar* GetTypeString(void)const{return _T("Sphere");}
@@ -24,6 +25,10 @@ public:
 	void OnApplyProperties();
 	bool GetCentrePoint(double* pos);
 	bool GetScaleAboutMatrix(double *m);
+
+	// CShape's virtual functions
+	void SetXMLElement(TiXmlElement* element);
+	void SetFromXMLElement(TiXmlElement* pElem);
 
 	// CSolid's virtual functions
 	SolidTypeEnum GetSolidType(){return SOLID_TYPE_SPHERE;}

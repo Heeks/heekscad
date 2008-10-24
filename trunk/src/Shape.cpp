@@ -5,6 +5,10 @@
 #include "Face.h"
 #include "Edge.h"
 #include "Loop.h"
+#include "Cylinder.h"
+#include "Cuboid.h"
+#include "Sphere.h"
+#include "Cone.h"
 #include "HeeksFrame.h"
 #include "MarkedList.h"
 #include <BRepMesh.hxx>
@@ -32,6 +36,7 @@
 #include "TopoDS_Edge.hxx"
 #include "Interface_Static.hxx"
 #include "../interface/Tool.h"
+#include "../tinyxml/tinyxml.h"
 
 wxIcon* CFaceList::m_icon = NULL;
 
@@ -55,29 +60,6 @@ wxIcon* CEdgeList::GetIcon()
 		m_icon = new wxIcon(exe_folder + _T("/icons/edges.png"), wxBITMAP_TYPE_PNG);
 	}
 	return m_icon;
-}
-
-CShapeData::CShapeData()
-{
-	m_id = -1;
-}
-
-CShapeData::CShapeData(int id, const wchar_t* title)
-{
-	m_id = id;
-	m_title.assign(title);
-}
-
-CShapeData::CShapeData(CShape* shape)
-{
-	m_id = shape->m_id;
-	m_title = shape->m_title;
-}
-
-void CShapeData::SetShape(CShape* shape)
-{
-	if(m_id != -1)shape->SetID(m_id);
-	if(m_title.length() > 0)shape->m_title = m_title;
 }
 
 // static member variable
@@ -380,7 +362,7 @@ void CShape::OnEditString(const wxChar* str){
 }
 
 // static member function
-HeeksObj* CShape::MakeObject(const TopoDS_Shape &shape, const wxChar* title, bool use_one_gl_list, bool stl_body){
+HeeksObj* CShape::MakeObject(const TopoDS_Shape &shape, const wxChar* title, SolidTypeEnum solid_type, bool use_one_gl_list, bool stl_body){
 	switch(shape.ShapeType()){
 		case TopAbs_FACE:
 			{
@@ -400,7 +382,19 @@ HeeksObj* CShape::MakeObject(const TopoDS_Shape &shape, const wxChar* title, boo
 		case TopAbs_SHELL:
 		case TopAbs_SHAPE:
 			{
-				return new CSolid(*((TopoDS_Solid*)(&shape)), title, use_one_gl_list);
+				switch(solid_type)
+				{
+				case SOLID_TYPE_SPHERE:
+					return new CSphere(*((TopoDS_Solid*)(&shape)), title, use_one_gl_list);
+				case SOLID_TYPE_CYLINDER:
+					return new CCylinder(*((TopoDS_Solid*)(&shape)), title, use_one_gl_list);
+				case SOLID_TYPE_CUBOID:
+					return new CCuboid(*((TopoDS_Solid*)(&shape)), title, use_one_gl_list);
+				case SOLID_TYPE_CONE:
+					return new CCone(*((TopoDS_Solid*)(&shape)), title, use_one_gl_list);
+				default:
+					return new CSolid(*((TopoDS_Solid*)(&shape)), title, use_one_gl_list);
+				}
 			}
 	}
 
@@ -535,9 +529,6 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<in
 				Handle_Standard_Transient root = Reader.RootForTransfer(i);
 				Reader.TransferEntity(root);
 				TopoDS_Shape rShape = Reader.Shape(i);      
-				HeeksObj* new_object = MakeObject(rShape, _T("STEP solid"));
-				if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
-				else wxGetApp().Add(new_object, NULL);
 				if(index_map)
 				{
 					// change the id, to the one in the step file index
@@ -545,6 +536,9 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<in
 					if(FindIt != index_map->end())
 					{
 						CShapeData& shape_data = FindIt->second;
+						HeeksObj* new_object = MakeObject(rShape, _T("STEP solid"), shape_data.m_solid_type);
+						if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
+						else wxGetApp().Add(new_object, NULL);
 						shape_data.SetShape((CShape*)new_object);
 					}
 				}
@@ -595,7 +589,7 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<in
 		TopoDS_Shape rShape;
 		StlAPI_Reader Reader;
 		Reader.Read(rShape, aFileName);
-		HeeksObj* new_object = MakeObject(rShape, _T("STL solid"), false, true);
+		HeeksObj* new_object = MakeObject(rShape, _T("STL solid"), SOLID_TYPE_UNKNOWN, false, true);
 		if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
 		else wxGetApp().Add(new_object, NULL);
 		wxGetApp().Repaint();

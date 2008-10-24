@@ -4,6 +4,7 @@
 
 #include "../interface/Material.h"
 #include <TopoDS_Solid.hxx>
+#include "ShapeData.h"
 
 class CFace;
 class CEdge;
@@ -22,23 +23,6 @@ public:
 	const wxChar* GetTypeString(void)const{return _T("Edges");}
 	HeeksObj *MakeACopy(void)const{ return new CEdgeList(*this);}
 	wxIcon* GetIcon();
-};
-
-class CShape;
-
-// used for reading and writing to the XML file
-class CShapeData{
-public:
-	CShapeData();
-	CShapeData(int id, const wchar_t* title);
-	CShapeData(CShape* shape);
-
-	int m_id;
-	wxString m_title;
-	std::map<int, int> m_edge_index; // map of index to id
-	std::map<int, int> m_face_index; // map of index to id
-
-	void SetShape(CShape* shape);
 };
 
 class CShape:public ObjList{
@@ -87,6 +71,9 @@ public:
 	static void CommonShapes(const std::list<HeeksObj*> &list);
 	static bool ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<int, CShapeData> *index_map = NULL);
 	static bool ExportSolidsFile(const std::list<HeeksObj*>& objects, const wxChar* filepath, std::map<int, CShapeData> *index_map = NULL);
-	static HeeksObj* MakeObject(const TopoDS_Shape &shape, const wxChar* title, bool use_one_gl_list = false, bool stl_body = false);
+	static HeeksObj* MakeObject(const TopoDS_Shape &shape, const wxChar* title, SolidTypeEnum solid_type = SOLID_TYPE_UNKNOWN, bool use_one_gl_list = false, bool stl_body = false);
 	static bool IsTypeAShape(int t);
+
+	virtual void SetXMLElement(TiXmlElement* element){}
+	virtual void SetFromXMLElement(TiXmlElement* pElem){}
 };

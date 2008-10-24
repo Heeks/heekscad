@@ -7,10 +7,15 @@
 #include "../interface/PropertyDouble.h"
 #include "Gripper.h"
 #include "MarkedList.h"
+#include "../tinyxml/tinyxml.h"
 
 wxIcon* CCuboid::m_icon = NULL;
 
 CCuboid::CCuboid(const gp_Ax2& pos, double x, double y, double z, const wxChar* title):m_pos(pos), m_x(x), m_y(y), m_z(z), CSolid(BRepPrimAPI_MakeBox(pos, x, y, z), title)
+{
+}
+
+CCuboid::CCuboid(const TopoDS_Solid &solid, const wxChar* title, bool use_one_gl_list):CSolid(solid, title, use_one_gl_list), m_pos(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), m_x(0.0), m_y(0.0), m_z(0.0)
 {
 }
 
@@ -197,4 +202,55 @@ bool CCuboid::Stretch(const double *p, const double* shift)
 	}
 
 	return true;
+}
+
+void CCuboid::SetXMLElement(TiXmlElement* element)
+{
+	const gp_Pnt& l = m_pos.Location();
+	element->SetDoubleAttribute("lx", l.X());
+	element->SetDoubleAttribute("ly", l.Y());
+	element->SetDoubleAttribute("lz", l.Z());
+
+	const gp_Dir& d = m_pos.Direction();
+	element->SetDoubleAttribute("dx", d.X());
+	element->SetDoubleAttribute("dy", d.Y());
+	element->SetDoubleAttribute("dz", d.Z());
+
+	const gp_Dir& x = m_pos.XDirection();
+	element->SetDoubleAttribute("xx", x.X());
+	element->SetDoubleAttribute("xy", x.Y());
+	element->SetDoubleAttribute("xz", x.Z());
+
+	element->SetDoubleAttribute("wx", m_x);
+	element->SetDoubleAttribute("wy", m_y);
+	element->SetDoubleAttribute("wz", m_z);
+}
+
+void CCuboid::SetFromXMLElement(TiXmlElement* pElem)
+{
+	double l[3] = {0, 0, 0};
+	double d[3] = {0, 0, 1};
+	double x[3] = {1, 0, 0};
+
+	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
+	{
+		std::string name(a->Name());
+		if(name == "lx")	 {l[0] = a->DoubleValue();}
+		else if(name == "ly"){l[1] = a->DoubleValue();}
+		else if(name == "lz"){l[2] = a->DoubleValue();}
+
+		else if(name == "dx"){d[0] = a->DoubleValue();}
+		else if(name == "dy"){d[1] = a->DoubleValue();}
+		else if(name == "dz"){d[2] = a->DoubleValue();}
+
+		else if(name == "xx"){x[0] = a->DoubleValue();}
+		else if(name == "xy"){x[1] = a->DoubleValue();}
+		else if(name == "xz"){x[2] = a->DoubleValue();}
+
+		else if(name == "wx"){m_x = a->DoubleValue();}
+		else if(name == "wy"){m_y = a->DoubleValue();}
+		else if(name == "wz"){m_z = a->DoubleValue();}
+	}
+
+	m_pos = gp_Ax2(make_point(l), make_vector(d), make_vector(x));
 }
