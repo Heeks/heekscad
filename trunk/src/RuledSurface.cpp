@@ -7,6 +7,7 @@
 #include "ConversionTools.h"
 #include "MarkedList.h"
 #include <BRepPrimAPI_MakePrism.hxx>
+#include <BRepOffsetAPI_ThruSections.hxx>
 
 void PickCreateRuledSurface()
 {

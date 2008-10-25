@@ -22,6 +22,8 @@ private:
 	std::list<HeeksObj*> prev_object_in_list;
 	HeeksObj *temp_object;
 	bool m_A_down; // is key A pressed
+	HeeksObj* m_container;
+	bool m_add_to_collection;
 
 	// Drawing's virtual functions
 	bool calculate_item(DigitizedPoint &end);
@@ -32,6 +34,7 @@ private:
 	int number_of_steps();
 	int step_to_go_to_after_last_step();
 	bool is_an_add_level(int level);
+	HeeksObj* GetOwnerForDrawingObjects();
 	void AddPoint();
 
 public:
