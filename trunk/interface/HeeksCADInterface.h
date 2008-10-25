@@ -53,7 +53,7 @@ public:
 	virtual void WasRemoved(HeeksObj* object);
 	virtual void WereAdded(const std::list<HeeksObj*> &list);
 	virtual void WereRemoved(const std::list<HeeksObj*> &list);
-	virtual int PickObjects(const wxChar* str, bool m_just_one = false);
+	virtual int PickObjects(const wxChar* str, long marking_filter = -1, bool m_just_one = false);
 	virtual bool PickPosition(const wxChar* str, double* pos);
 	virtual bool Digitize(const wxPoint &point, double* pos);
 	virtual HeeksObj* GetFirstObject();
