@@ -725,16 +725,19 @@ void CHeeksFrame::OnUpdatePaste( wxUpdateUIEvent& event )
 
 void CHeeksFrame::OnSubtractButton( wxCommandEvent& event )
 {
+	if(!CShape::CheckForTwoOrMoreSolids(_T("Pick two or more solids, the first one will be cut by the others\n( hold down Ctrl key to select more than one solids )"), _T("Subtract Solids")))return;
 	CShape::CutShapes(wxGetApp().m_marked_list->list());
 }
 
 void CHeeksFrame::OnFuseButton( wxCommandEvent& event )
 {
+	if(!CShape::CheckForTwoOrMoreSolids(_T("Pick two or more solids to be fused together\n( hold down Ctrl key to select more than one solids )"), _T("Fuse Solids")))return;
 	CShape::FuseShapes(wxGetApp().m_marked_list->list());
 }
 
 void CHeeksFrame::OnCommonButton( wxCommandEvent& event )
 {
+	if(!CShape::CheckForTwoOrMoreSolids(_T("Pick two or more solids, only the shape that is contained by all of them will remain\n( hold down Ctrl key to select more than one solids )"), _T("Intersection of Solids")))return;
 	CShape::CommonShapes(wxGetApp().m_marked_list->list());
 }
 
