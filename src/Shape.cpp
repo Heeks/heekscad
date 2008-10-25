@@ -510,6 +510,23 @@ void CShape::CommonShapes(const std::list<HeeksObj*> &list_in)
 	wxGetApp().Repaint();
 }
 
+bool CShape::CheckForTwoOrMoreSolids(const wxString& msg, const wxString& caption)
+{
+	int num_solids = 0;
+	for(std::list<HeeksObj*>::const_iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+		HeeksObj* object = *It;
+		if(object->GetType() == SolidType)num_solids++;
+	}
+
+	if(num_solids < 2)
+	{
+		wxMessageBox(msg, caption);
+		return false;
+	}
+
+	return true;
+}
+
 bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<int, CShapeData> *index_map)
 {
 	// returns true, if suffix handled
