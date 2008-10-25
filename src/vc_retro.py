@@ -36,6 +36,7 @@ while (True):
         f_vc3.write('\tVersion="7.10"\n');
         f_vc5.write('\tVersion="8.00"\n');
     else:
+        line = line.replace('tinyxml.lib', 'tinyxml2005.lib')
         f_vc3.write(line);
         f_vc5.write(line);
 
