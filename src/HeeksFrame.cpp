@@ -302,41 +302,38 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	{
 		::wxSetWorkingDirectory(wxGetApp().GetExeFolder());
 
-#if wxUSE_UNICODE
-		wifstream ifs(_T("AddIns.txt"));
-#else
-		ifstream ifs(_T("AddIns.txt"));
-#endif
-		wxChar str[1024];
-		if(!(!ifs)){
-			while(!ifs.eof()){
-				ifs.getline(str, 1024);
+		wxConfig plugins_config(_T("HeeksCAD"));
+		plugins_config.SetPath(_T("/plugins"));
 
-				// strip white space
-				wxString wstr(str);
-				wstr = wstr.Trim();
-				wstr = wstr.Trim(false);
+		wxString key;
+		long Index;
+		wxString str;
 
-				if(wstr.Len() == 0)continue;
+		bool entry_found = false;
 
-				if(wstr[0] == '#')continue;
+		entry_found = plugins_config.GetFirstEntry(key, Index);
 
-				wxFileName fn(wstr);
-				fn.Normalize();
-				wxString path = fn.GetPath();
+		while(entry_found)
+		{
+			plugins_config.Read(key, &str);
 
-				::wxSetWorkingDirectory(path);
+			wxFileName fn(str);
+			fn.Normalize();
+			wxString path = fn.GetPath();
 
-				wxDynamicLibrary* shared_library = new wxDynamicLibrary(wstr);
-				if(shared_library->IsLoaded()){
-					wxGetApp().m_loaded_libraries.push_back(shared_library);
-					void(*OnStartUp)() = (void (*)())(shared_library->GetSymbol(_T("OnStartUp")));
-					(*OnStartUp)();
-				}
-				else{
-					delete shared_library;
-				}
+			::wxSetWorkingDirectory(path);
+
+			wxDynamicLibrary* shared_library = new wxDynamicLibrary(fn.GetFullPath());
+			if(shared_library->IsLoaded()){
+				wxGetApp().m_loaded_libraries.push_back(shared_library);
+				void(*OnStartUp)() = (void (*)())(shared_library->GetSymbol(_T("OnStartUp")));
+				(*OnStartUp)();
 			}
+			else{
+				delete shared_library;
+			}
+
+			entry_found = plugins_config.GetNextEntry(key, Index);
 		}
 	}
 
