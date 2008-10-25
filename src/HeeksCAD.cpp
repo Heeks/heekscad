@@ -61,7 +61,7 @@ IMPLEMENT_APP(HeeksCADapp)
 
 HeeksCADapp::HeeksCADapp(): ObjList()
 {
-	m_version_number = _T("0 1 1");
+	m_version_number = _T("0 3 2");
 	m_geom_tol = 0.001;
 	background_color = HeeksColor(0, 0, 0);
 	current_color = HeeksColor(0, 0, 0);
@@ -1837,7 +1837,7 @@ void HeeksCADapp::PassMouseWheelToGraphics(wxMouseEvent& event)
 	m_frame->m_graphics->OnMouse(event);
 }
 
-int HeeksCADapp::PickObjects(const wxChar* str, bool just_one)
+int HeeksCADapp::PickObjects(const wxChar* str, long marking_filter, bool just_one)
 {
 	CInputMode* save_mode = input_mode_object;
 	m_select_mode->m_prompt_when_doing_a_main_loop.assign(str);
@@ -1845,7 +1845,15 @@ int HeeksCADapp::PickObjects(const wxChar* str, bool just_one)
 	m_select_mode->m_just_one = just_one;
 	SetInputMode(m_select_mode);
 
+	// set marking filter
+	long save_filter = wxGetApp().m_marked_list->m_filter;
+	wxGetApp().m_marked_list->m_filter = marking_filter;
+
+	// stay in an input loop until finished picking
 	OnRun();
+
+	// restore marking filter
+	wxGetApp().m_marked_list->m_filter = save_filter;
 
 	m_select_mode->m_doing_a_main_loop = false;
 	SetInputMode(save_mode); // update tool bar
