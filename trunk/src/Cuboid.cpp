@@ -11,11 +11,11 @@
 
 wxIcon* CCuboid::m_icon = NULL;
 
-CCuboid::CCuboid(const gp_Ax2& pos, double x, double y, double z, const wxChar* title):m_pos(pos), m_x(x), m_y(y), m_z(z), CSolid(BRepPrimAPI_MakeBox(pos, x, y, z), title)
+CCuboid::CCuboid(const gp_Ax2& pos, double x, double y, double z, const wxChar* title, const HeeksColor& col):m_pos(pos), m_x(x), m_y(y), m_z(z), CSolid(BRepPrimAPI_MakeBox(pos, x, y, z), title, col)
 {
 }
 
-CCuboid::CCuboid(const TopoDS_Solid &solid, const wxChar* title, bool use_one_gl_list):CSolid(solid, title, use_one_gl_list), m_pos(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), m_x(0.0), m_y(0.0), m_z(0.0)
+CCuboid::CCuboid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col):CSolid(solid, title, col), m_pos(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), m_x(0.0), m_y(0.0), m_z(0.0)
 {
 }
 
@@ -55,7 +55,7 @@ bool CCuboid::ModifyByMatrix(const double* m){
 	double new_x = fabs(m_x * scale);
 	double new_y = fabs(m_y * scale);
 	double new_z = fabs(m_z * scale);
-	CCuboid* new_object = new CCuboid(new_pos, new_x, new_y, new_z, m_title.c_str());
+	CCuboid* new_object = new CCuboid(new_pos, new_x, new_y, new_z, m_title.c_str(), m_color);
 	wxGetApp().AddUndoably(new_object, m_owner, NULL);
 	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object);
 	wxGetApp().DeleteUndoably(this);
@@ -134,7 +134,7 @@ void CCuboid::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 
 void CCuboid::OnApplyProperties()
 {
-	CCuboid* new_object = new CCuboid(m_pos, m_x, m_y, m_z, m_title.c_str());
+	CCuboid* new_object = new CCuboid(m_pos, m_x, m_y, m_z, m_title.c_str(), m_color);
 	wxGetApp().StartHistory(_T("Edit Cuboid"));
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().DeleteUndoably(this);
@@ -192,7 +192,7 @@ bool CCuboid::Stretch(const double *p, const double* shift)
 
 	if(make_a_new_cuboid)
 	{
-		CCuboid* new_object = new CCuboid(m_pos, m_x, m_y, m_z, m_title.c_str());
+		CCuboid* new_object = new CCuboid(m_pos, m_x, m_y, m_z, m_title.c_str(), m_color);
 		wxGetApp().StartHistory(_T("Stretch Cuboid"));
 		wxGetApp().AddUndoably(new_object, NULL, NULL);
 		wxGetApp().DeleteUndoably(this);
@@ -224,6 +224,8 @@ void CCuboid::SetXMLElement(TiXmlElement* element)
 	element->SetDoubleAttribute("wx", m_x);
 	element->SetDoubleAttribute("wy", m_y);
 	element->SetDoubleAttribute("wz", m_z);
+
+	CSolid::SetXMLElement(element);
 }
 
 void CCuboid::SetFromXMLElement(TiXmlElement* pElem)
@@ -253,4 +255,6 @@ void CCuboid::SetFromXMLElement(TiXmlElement* pElem)
 	}
 
 	m_pos = gp_Ax2(make_point(l), make_vector(d), make_vector(x));
+
+	CSolid::SetFromXMLElement(pElem);
 }

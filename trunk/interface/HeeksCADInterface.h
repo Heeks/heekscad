@@ -122,4 +122,5 @@ public:
 	virtual void RemoveOnGraphicsSize( void(*callbackfunc)(wxSizeEvent& evt) );
 	virtual void RegisterOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
 	virtual void RemoveOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
+	virtual void PropertiesOnApply2();// don't need to press tick to make changes
 };

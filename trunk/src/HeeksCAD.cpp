@@ -95,7 +95,6 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_marked_list = new MarkedList;
 	history = new MainHistory;
 	m_doing_rollback = false;
-	m_hide_marked_list_stack = 0;
 	mouse_wheel_forward_away = true;
 	ctrl_does_rotate = true;
 	m_show_ruler = true;
@@ -1071,27 +1070,7 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glPolygonMode(GL_FRONT_AND_BACK ,GL_FILL );
-	if(m_hide_marked_list_stack == 0)m_marked_list->GrippersGLCommands(select, false);
-}
-
-void HeeksCADapp::glCommands(bool select, bool marked, bool no_color)
-{
-	if(m_hide_marked_list_stack>0){
-		HeeksObj::glCommands(select, marked, no_color);
-
-		std::list<HeeksObj*>::iterator It;
-		for(It=m_objects.begin(); It!=m_objects.end() ;It++)
-		{
-			if(m_marked_list->ObjectMarked(*It) == 0){
-				if(select)glPushName((unsigned int)(*It));
-				(*It)->glCommands(select, marked, no_color);
-				if(select)glPopName();
-			}
-		}
-	}
-	else{
-		__super::glCommands(select, marked, no_color);
-	}
+	if(m_hidden_for_drag.size() == 0)m_marked_list->GrippersGLCommands(select, false);
 }
 
 void HeeksCADapp::GetBox(CBox &box){

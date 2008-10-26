@@ -74,7 +74,7 @@ public:
 	bool m_doing_rollback;
 	wxString m_filepath;
 	bool m_light_push_matrix;
-	int m_hide_marked_list_stack;
+	std::list<HeeksObj*> m_hidden_for_drag;
 	double m_geom_tol;
 	std::list<wxDynamicLibrary*> m_loaded_libraries;
 	std::list< void(*)() > m_on_glCommands_list;
@@ -91,7 +91,6 @@ public:
 	gp_Trsf m_drag_matrix;
 
 	// HeeksObj's virtual functions
-	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
 	bool CanAdd(HeeksObj* object){return true;}
 
@@ -151,8 +150,6 @@ public:
 	void AddUndoably(HeeksObj *object, HeeksObj* owner, HeeksObj* prev_object);
 	void AddUndoably(const std::list<HeeksObj*>& list, HeeksObj* owner);
 	void glColorEnsuringContrast(const HeeksColor &c);
-	void HideMarkedList(){m_hide_marked_list_stack++;}
-	void UnHideMarkedList(){if(m_hide_marked_list_stack>0)m_hide_marked_list_stack--;}
 	void RegisterObserver(Observer* observer);
 	void RemoveObserver(Observer* observer);
 	void ObserversOnChange(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified);

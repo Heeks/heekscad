@@ -4,9 +4,12 @@
 #include "HeeksObj.h"
 #include "PropertyString.h"
 #include "PropertyInt.h"
+#include "PropertyColor.h"
 #ifdef HEEKSCAD
 #include "ObjList.h"
-#include "../src/Gripper.h" // needs to be moved to interface, and made independent of gp_Pnt
+#include "../src/Gripper.h"
+#include "../src/HeeksFrame.h"
+#include "../src/ObjPropsCanvas.h"
 #endif
 
 HeeksObj::HeeksObj(void): m_owner(NULL), m_id(0), m_layer(0), m_visible(true){}
@@ -31,6 +34,20 @@ void on_edit_string(const wxChar* value, HeeksObj* object)
 //	wxGetApp().Repaint();
 }
 
+static void on_set_color(HeeksColor value, HeeksObj* object)
+{
+	object->SetColor(value);
+
+
+#ifdef HEEKSCAD
+	wxGetApp().m_frame->m_properties->OnApply2();
+	wxGetApp().Repaint();
+#else
+	heeksCAD->PropertiesOnApply2();
+	heeksCAD->Repaint();
+#endif
+}
+
 static void on_set_id(int value, HeeksObj* object)
 {
 	object->SetID(value);
@@ -42,6 +59,11 @@ void HeeksObj::GetProperties(std::list<Property *> *list)
 	list->push_back(new PropertyString(_T("object type"), GetTypeString(), NULL));
 	if(GetShortString())list->push_back(new PropertyString(_T("object title"), GetShortString(), this, editable ? on_edit_string : NULL));
 	list->push_back(new PropertyInt(_T("ID"), m_id, this, on_set_id));
+	const HeeksColor* c = GetColor();
+	if(c)
+	{
+		list->push_back ( new PropertyColor ( _T("color"),  *c, this, on_set_color ) );
+	}
 }
 
 bool HeeksObj::GetScaleAboutMatrix(double *m)
