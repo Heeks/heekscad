@@ -26,11 +26,14 @@ private:
 	bool is_an_add_level(int level){return level == 1;}
 
 	void CalculateRectangle(double x, double y, const gp_Pnt& p0, const gp_Pnt& p1, const gp_Pnt& p2, const gp_Pnt& p3, const gp_Dir& xdir, const gp_Dir& ydir, const gp_Dir& zdir);
+	void CalculatePolygon(const gp_Pnt& p0, const gp_Pnt& p1, const gp_Dir& zdir);
+	void CalculateObround(const gp_Pnt& p0, const gp_Pnt& p1, const gp_Dir& xdir, const gp_Dir& zdir);
 
 public:
 	RegularShapeMode m_mode;
 	int m_number_of_side_for_polygon;
-	double m_radius; // used for rectangles, polygons and obrounds
+	double m_rect_radius;
+	double m_obround_radius;
 
 	RegularShapesDrawing(void);
 	virtual ~RegularShapesDrawing(void);

@@ -54,6 +54,7 @@
 #include "../interface/PropertyCheck.h"
 #include "../interface/PropertyString.h"
 #include "../interface/PropertyList.h"
+#include "RegularShapesDrawing.h"
 
 #include <sstream>
 using namespace std;
@@ -184,6 +185,10 @@ bool HeeksCADapp::OnInit()
 	m_config->Read(_T("DrawDatum"), &m_show_datum_coords_system, true);
 	m_config->Read(_T("DatumSize"), &CoordinateSystem::size, 30);
 	m_config->Read(_T("DatumSizeIsPixels"), &CoordinateSystem::size_is_pixels, true);
+	m_config->Read(_T("RegularShapesMode"), (int*)(&(regular_shapes_drawing.m_mode)));
+	m_config->Read(_T("RegularShapesNSides"), &(regular_shapes_drawing.m_number_of_side_for_polygon));
+	m_config->Read(_T("RegularShapesRectRad"), &(regular_shapes_drawing.m_rect_radius));
+	m_config->Read(_T("RegularShapesObRad"), &(regular_shapes_drawing.m_obround_radius));
 
 	GetRecentFilesProfileString();
 
@@ -265,6 +270,10 @@ int HeeksCADapp::OnExit(){
 	m_config->Write(_T("DrawDatum"), m_show_datum_coords_system);
 	m_config->Write(_T("DatumSize"), CoordinateSystem::size);
 	m_config->Write(_T("DatumSizeIsPixels"), CoordinateSystem::size_is_pixels);
+	m_config->Write(_T("RegularShapesMode"), regular_shapes_drawing.m_mode);
+	m_config->Write(_T("RegularShapesNSides"), regular_shapes_drawing.m_number_of_side_for_polygon);
+	m_config->Write(_T("RegularShapesRectRad"), regular_shapes_drawing.m_rect_radius);
+	m_config->Write(_T("RegularShapesObRad"), regular_shapes_drawing.m_obround_radius);
 
 	WriteRecentFilesProfileString();
 
