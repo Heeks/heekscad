@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 #include "RegularShapesDrawing.h"
-#include "LineArcCollection.h"
+#include "Sketch.h"
 #include "HLine.h"
 #include "HArc.h"
 #include "../interface/PropertyChoice.h"
@@ -26,24 +26,24 @@ RegularShapesDrawing::~RegularShapesDrawing(void)
 {
 }
 
-void RegularShapesDrawing::ClearCollection()
+void RegularShapesDrawing::ClearSketch()
 {
-	((CLineArcCollection*)temp_object)->Clear();
+	((CSketch*)temp_object)->Clear();
 }
 
 bool RegularShapesDrawing::calculate_item(DigitizedPoint &end)
 {
 	if(end.m_type == DigitizeNoItemType)return false;
 
-	if(temp_object && temp_object->GetType() != LineArcCollectionType){
+	if(temp_object && temp_object->GetType() != SketchType){
 		delete temp_object;
 		temp_object = NULL;
 		temp_object_in_list.clear();
 	}
 
-	// make sure line collection exists
+	// make sure sketch exists
 	if(!temp_object){
-		temp_object = new CLineArcCollection;
+		temp_object = new CSketch;
 		if(temp_object)temp_object_in_list.push_back(temp_object);
 	}
 
@@ -123,10 +123,10 @@ void RegularShapesDrawing::CalculateRectangle(double x, double y, const gp_Pnt& 
 		else good_num = 8;
 	}
 
-	if(temp_object->GetNumChildren() != good_num)ClearCollection();
+	if(temp_object->GetNumChildren() != good_num)ClearSketch();
 	// check first item
 	else if(temp_object->GetFirstChild()->GetType() != (radii_wanted ? ArcType:LineType))
-		ClearCollection();
+		ClearSketch();
 
 	if(radii_wanted)
 	{
@@ -295,7 +295,7 @@ void RegularShapesDrawing::CalculatePolygon(const gp_Pnt& p0, const gp_Pnt& p1, 
 {
 	if(p0.IsEqual(p1, wxGetApp().m_geom_tol))return;
 
-	if(temp_object->GetNumChildren() != m_number_of_side_for_polygon)ClearCollection();
+	if(temp_object->GetNumChildren() != m_number_of_side_for_polygon)ClearSketch();
 	{
 		HLine** lines = (HLine**)malloc(m_number_of_side_for_polygon * sizeof(HLine*));
 
@@ -345,7 +345,7 @@ void RegularShapesDrawing::CalculateObround(const gp_Pnt& p0, const gp_Pnt& p1, 
 	int good_num = 4;
 	if(lines_disappear)good_num = 2;
 
-	if(temp_object->GetNumChildren() != good_num)ClearCollection();
+	if(temp_object->GetNumChildren() != good_num)ClearSketch();
 
 	if(lines_disappear)
 	{
@@ -429,7 +429,7 @@ static RegularShapesDrawing* RegularShapesDrawing_for_GetProperties = NULL;
 static void on_set_drawing_mode(int value, HeeksObj* object)
 {
 	RegularShapesDrawing_for_GetProperties->m_mode = (RegularShapeMode)value;
-	RegularShapesDrawing_for_GetProperties->ClearCollection();
+	RegularShapesDrawing_for_GetProperties->ClearSketch();
 	wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
 }
 

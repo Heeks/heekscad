@@ -16,7 +16,7 @@
 #include "DigitizeMode.h"
 #include "HeeksFrame.h"
 #include "InputModeCanvas.h"
-#include "LineArcCollection.h"
+#include "Sketch.h"
 #include "GraphicsCanvas.h"
 
 wxCursor LineArcDrawing::m_cursor_start;
@@ -33,7 +33,7 @@ LineArcDrawing::LineArcDrawing(void){
 	m_container = NULL;
 	radius_for_circle = 5.0;
 	circle_mode = ThreePointsCircleMode;
-	m_add_to_collection = true;
+	m_add_to_sketch = true;
 }
 
 LineArcDrawing::~LineArcDrawing(void){
@@ -359,11 +359,11 @@ HeeksObj* LineArcDrawing::GetOwnerForDrawingObjects()
 	case LineDrawingMode:
 	case ArcDrawingMode:
 		{
-			if(m_add_to_collection)
+			if(m_add_to_sketch)
 			{
 				if(m_container == NULL)
 				{
-					m_container = (ObjList*)new CLineArcCollection;
+					m_container = (ObjList*)new CSketch;
 					wxGetApp().AddUndoably(m_container, NULL, NULL);
 				}
 				return m_container;

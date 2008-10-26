@@ -59,7 +59,7 @@ public:
 	virtual HeeksObj* GetFirstObject();
 	virtual HeeksObj* GetNextObject();
 	virtual void DrawObjectsOnFront(const std::list<HeeksObj*> &list);
-	virtual HeeksObj* NewLineArcCollection();
+	virtual HeeksObj* NewSketch();
 	virtual HeeksObj* NewLine(const double* s, const double* e);
 	virtual HeeksObj* NewArc(const double* s, const double* e, const double* c, const double* up); // set up to (0, 0, -1) for a clockwise arc
 	virtual void RegisterObserver(Observer* observer);

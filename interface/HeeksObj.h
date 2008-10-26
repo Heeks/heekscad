@@ -26,7 +26,7 @@ enum{
 	TrianglesType,
 	TriType,
 	SubstituteTreeType,
-	LineArcCollectionType,
+	SketchType,
 	ImageType,
 	CoordinateSystemType,
 	ObjectMaximumType
@@ -42,7 +42,7 @@ enum{
 #define MARKING_FILTER_WIRE					0x00000080
 #define MARKING_FILTER_FACE					0x00000100
 #define MARKING_FILTER_EDGE					0x00000200
-#define MARKING_FILTER_LINE_ARC_COLLECTION	0x00000400
+#define MARKING_FILTER_SKETCH				0x00000400
 #define MARKING_FILTER_IMAGE				0x00000800
 #define MARKING_FILTER_COORDINATE_SYSTEM	0x00000800
 

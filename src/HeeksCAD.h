@@ -190,6 +190,9 @@ public:
 	void DestroyTransformGLList();
 	bool IsPasteReady();
 	void Paste();
+	bool CheckForTwoOrMoreSolids(const std::list<HeeksObj*> &list, const wxString& msg, const wxString& caption);
+	bool CheckForTwoOrMoreSketchs(const std::list<HeeksObj*> &list, const wxString& msg, const wxString& caption);
+	bool CheckForOneOrMoreSketchs(const std::list<HeeksObj*> &list, const wxString& msg, const wxString& caption);
 };
 
 DECLARE_APP(HeeksCADapp)

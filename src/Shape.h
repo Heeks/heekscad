@@ -73,7 +73,6 @@ public:
 	static bool ExportSolidsFile(const std::list<HeeksObj*>& objects, const wxChar* filepath, std::map<int, CShapeData> *index_map = NULL);
 	static HeeksObj* MakeObject(const TopoDS_Shape &shape, const wxChar* title, SolidTypeEnum solid_type, const HeeksColor& col);
 	static bool IsTypeAShape(int t);
-	static bool CheckForTwoOrMoreSolids(const wxString& msg, const wxString& caption);
 
 	virtual void SetXMLElement(TiXmlElement* element){}
 	virtual void SetFromXMLElement(TiXmlElement* pElem){}

@@ -27,7 +27,7 @@ void PickCreateRuledSurface()
 			{
 				wire_list.push_back(((CWire*)object)->Wire());
 			}
-			else if(object->GetType() == LineArcCollectionType)
+			else if(object->GetType() == SketchType)
 			{
 				std::list<HeeksObj*> list;
 				list.push_back(object);
@@ -53,7 +53,7 @@ void PickCreateExtrusion()
 {
 	if(wxGetApp().m_marked_list->size() == 0)
 	{
-		wxGetApp().PickObjects(_T("pick a wire, face or line/arc collection"));
+		wxGetApp().PickObjects(_T("pick a wire, face or sketch"));
 	}
 
 	double height = 10;
@@ -81,7 +81,7 @@ void PickCreateExtrusion()
 				faces.push_back(((CFace*)object)->Face());
 				break;
 
-			case LineArcCollectionType:
+			case SketchType:
 			case LineType:
 			case ArcType:
 				lines_arcs.push_back(object);
