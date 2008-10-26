@@ -25,6 +25,7 @@ public:
 	void SetColor(const HeeksColor &col){m_color = col;}
 	const HeeksColor* GetColor()const{return &m_color;}
 	bool ModifyByMatrix(const double* m);
+	void OnApplyProperties();
 
 	// CShape's virtual functions
 	void SetXMLElement(TiXmlElement* element);
