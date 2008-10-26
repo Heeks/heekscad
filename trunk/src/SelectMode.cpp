@@ -65,7 +65,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 					from[0] = wxGetApp().grip_from.X();
 					from[1] = wxGetApp().grip_from.Y();
 					from[2] = wxGetApp().grip_from.Z();
-					wxGetApp().drag_gripper->OnGripperGrabbed(from);
+					wxGetApp().drag_gripper->OnGripperGrabbed(wxGetApp().m_marked_list->list(), true, from);
 					wxGetApp().grip_from = gp_Pnt(from[0], from[1], from[2]);
 					wxGetApp().m_frame->m_graphics->EndDrawFront();
 					return;
@@ -256,14 +256,17 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 				{
 					MarkedObjectManyOfSame marked_object;
 					wxGetApp().FindMarkedObject(button_down_point, &marked_object);
-					bool selected_object_dragged = false;
+
+					std::list<HeeksObj*> selected_objects_dragged;
+					wxGetApp().m_show_grippers_on_drag = true;
+
 					if(marked_object.m_map.size()>0)
 					{
 						HeeksObj* object = marked_object.GetFirstOfTopOnly();
 						while(object)
 						{
 							if(wxGetApp().m_marked_list->ObjectMarked(object)){
-								selected_object_dragged = true;
+								selected_objects_dragged.push_back(object);
 								break;
 							}
 
@@ -271,19 +274,17 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 						}
 					}
 
-					if(!selected_object_dragged)
+					if(selected_objects_dragged.size() == 0)
 					{
 						if(marked_object.m_map.size()>0)
 						{
 							HeeksObj* object = marked_object.GetFirstOfTopOnly();
-							wxGetApp().m_marked_list->Clear();
-							wxGetApp().m_marked_list->Add(object);
-							wxGetApp().m_marked_list->create_grippers();
-							selected_object_dragged = true;
+							selected_objects_dragged.push_back(object);
+							wxGetApp().m_show_grippers_on_drag = false;
 						}
 					}
 
-					if(selected_object_dragged)
+					if(selected_objects_dragged.size() > 0)
 					{
 						wxGetApp().drag_gripper = &drag_object_gripper;
 						wxGetApp().m_digitizing->SetOnlyCoords(wxGetApp().drag_gripper, true);
@@ -294,7 +295,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 						from[0] = wxGetApp().grip_from.X();
 						from[1] = wxGetApp().grip_from.Y();
 						from[2] = wxGetApp().grip_from.Z();
-						wxGetApp().drag_gripper->OnGripperGrabbed(from);
+						wxGetApp().drag_gripper->OnGripperGrabbed(selected_objects_dragged, wxGetApp().m_show_grippers_on_drag, from);
 						wxGetApp().grip_from = gp_Pnt(from[0], from[1], from[2]);
 						double to[3];
 						wxGetApp().m_digitizing->digitize(wxPoint(event.GetX(), event.GetY()));

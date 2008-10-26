@@ -43,12 +43,11 @@ void TransformTools::Translate(bool copy)
 	if(!wxGetApp().PickPosition(_T("Click position to move from"), from))return;
 
 	// pick "to" position
-	wxGetApp().m_marked_list->Add(selected_items);
-	wxGetApp().CreateTransformGLList(false);
+	wxGetApp().CreateTransformGLList(selected_items, false);
 	wxGetApp().m_drag_matrix = gp_Trsf();
 	if(!copy)
 	{
-		for(std::list<HeeksObj*>::const_iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+		for(std::list<HeeksObj*>::const_iterator It = selected_items.begin(); It != selected_items.end(); It++){
 			HeeksObj* object = *It;
 			if(object->m_visible)wxGetApp().m_hidden_for_drag.push_back(object);
 			object->m_visible = false;
@@ -66,7 +65,6 @@ void TransformTools::Translate(bool copy)
 		wxGetApp().m_hidden_for_drag.clear();
 	}
 	wxGetApp().DestroyTransformGLList();
-	wxGetApp().m_marked_list->Clear();
 
 	// transform the objects
 	if(copy)

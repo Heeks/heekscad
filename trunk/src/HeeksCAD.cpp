@@ -104,6 +104,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_transform_gl_list = 0;
 	m_current_coordinate_system = NULL;
 	m_mark_newly_added_objects = false;
+	m_show_grippers_on_drag = true;
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -360,6 +361,9 @@ void HeeksCADapp::Reset(){
 	m_doing_rollback = false;
 	m_frame->m_graphics->m_view_point.SetView(gp_Vec(0, 1, 0), gp_Vec(0, 0, 1));
 	m_filepath.assign(_T("Untitled.heeks"));
+	m_hidden_for_drag.clear();
+	m_show_grippers_on_drag = true;
+
 	ResetIDs();
 }
 
@@ -1070,7 +1074,7 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glPolygonMode(GL_FRONT_AND_BACK ,GL_FILL );
-	if(m_hidden_for_drag.size() == 0)m_marked_list->GrippersGLCommands(select, false);
+	if(m_hidden_for_drag.size() == 0 || !m_show_grippers_on_drag)m_marked_list->GrippersGLCommands(select, false);
 }
 
 void HeeksCADapp::GetBox(CBox &box){
@@ -1347,7 +1351,13 @@ void HeeksCADapp::WereRemoved(const std::list<HeeksObj*>& list)
 	HeeksObj* object = *(list.begin());
 	if (object == NULL) return;
 
-	wxGetApp().m_marked_list->Remove(list);
+	std::list<HeeksObj*> marked_remove;
+	for(std::list<HeeksObj*>::const_iterator It = list.begin(); It != list.end(); It++)
+	{
+		object = *It;
+		if(wxGetApp().m_marked_list->ObjectMarked(object))marked_remove.push_back(object);
+	}
+	if(marked_remove.size() > 0)wxGetApp().m_marked_list->Remove(marked_remove);
 
 	ObserversOnChange(NULL, &list, NULL);
 	SetAsModified();
@@ -2232,12 +2242,12 @@ void HeeksCADapp::RemoveOnMouseFn( void(*callbackfunc)(wxMouseEvent&) )
 	m_lbutton_up_callbacks.remove(callbackfunc);
 }
 
-void HeeksCADapp::CreateTransformGLList(bool show_grippers_on_drag){
+void HeeksCADapp::CreateTransformGLList(const std::list<HeeksObj*>& list, bool show_grippers_on_drag){
 	DestroyTransformGLList();
 	m_transform_gl_list = glGenLists(1);
 	glNewList(m_transform_gl_list, GL_COMPILE);
 	std::list<HeeksObj *>::const_iterator It;
-	for(It = m_marked_list->list().begin(); It != m_marked_list->list().end(); It++){
+	for(It = list.begin(); It != list.end(); It++){
 		(*It)->glCommands(false, true, false);
 	}
 	glDisable(GL_DEPTH_TEST);
