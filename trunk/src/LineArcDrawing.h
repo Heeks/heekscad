@@ -30,7 +30,6 @@ private:
 	const std::list<HeeksObj*>& GetObjectsMade()const{return temp_object_in_list;}
 	void clear_drawing_objects(bool store_as_previous_objects);
 	void set_previous_direction();
-	const wxChar* get_drawing_title(){return _T("Line/Arc Drawing");}
 	int number_of_steps();
 	int step_to_go_to_after_last_step();
 	bool is_an_add_level(int level);

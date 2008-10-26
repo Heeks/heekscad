@@ -423,9 +423,9 @@ void LineArcDrawing::OnKeyUp(wxKeyEvent& event)
 void LineArcDrawing::set_cursor(void){
 }
 
-LineArcDrawing* line_drawing_for_GetProperties = NULL;
+static LineArcDrawing* line_drawing_for_GetProperties = NULL;
 
-void on_set_drawing_mode(int drawing_mode, HeeksObj* object)
+static void on_set_drawing_mode(int drawing_mode, HeeksObj* object)
 {
 	line_drawing_for_GetProperties->drawing_mode = (EnumDrawingMode)drawing_mode;
 	line_drawing_for_GetProperties->m_save_drawing_mode.clear();

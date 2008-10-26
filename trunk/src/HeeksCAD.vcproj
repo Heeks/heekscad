@@ -802,6 +802,14 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath=".\RegularShapesDrawing.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\RegularShapesDrawing.h"
+			>
+		</File>
+		<File
 			RelativePath=".\RemoveOrAddTool.cpp"
 			>
 		</File>
