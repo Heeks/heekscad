@@ -311,10 +311,10 @@ void HeeksCADapp::FindMarkedObject(const wxPoint &point, MarkedObject* marked_ob
 
 void HeeksCADapp::CreateLights(void)
 {
-	GLfloat amb[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat dif[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat spec[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat pos[4] = {0.1f, 0.1f, 1.1f, 0.0f};
+	GLfloat amb[4] =  {0.8f, 0.8f, 0.8f, 1.0f};
+    GLfloat dif[4] =  {0.8f, 0.8f, 0.8f, 1.0f};
+    GLfloat spec[4] = {0.8f, 0.8f, 0.8f, 1.0f};
+    GLfloat pos[4] = {0.5f, 0.5f, 0.5f, 0.0f};
     GLfloat lmodel_amb[] = { 0.2f, 0.2f, 0.2f, 1.0 };
     GLfloat local_viewer[] = { 0.0 };
 	if(m_light_push_matrix){

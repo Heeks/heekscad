@@ -119,7 +119,7 @@ void CCone::OnApplyProperties()
 	wxGetApp().DeleteUndoably(this);
 	wxGetApp().EndHistory();
 	wxGetApp().m_marked_list->Clear();
-	wxGetApp().m_marked_list->Add(new_object);
+	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object);
 	wxGetApp().Repaint();
 }
 
