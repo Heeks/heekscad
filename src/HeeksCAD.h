@@ -75,6 +75,7 @@ public:
 	wxString m_filepath;
 	bool m_light_push_matrix;
 	std::list<HeeksObj*> m_hidden_for_drag;
+	bool m_show_grippers_on_drag;
 	double m_geom_tol;
 	std::list<wxDynamicLibrary*> m_loaded_libraries;
 	std::list< void(*)() > m_on_glCommands_list;
@@ -185,7 +186,7 @@ public:
 	void RemoveOnGraphicsSize( void(*callbackfunc)(wxSizeEvent&) );
 	void RegisterOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
 	void RemoveOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
-	void CreateTransformGLList(bool show_grippers_on_drag);
+	void CreateTransformGLList(const std::list<HeeksObj*>& list, bool show_grippers_on_drag);
 	void DestroyTransformGLList();
 	bool IsPasteReady();
 	void Paste();

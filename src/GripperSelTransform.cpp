@@ -14,22 +14,22 @@
 GripperSelTransform::GripperSelTransform(const gp_Pnt& pos, EnumGripperType gripper_type):Gripper(pos, _T(""), gripper_type){
 }
 
-bool GripperSelTransform::OnGripperGrabbed(double* from){
+bool GripperSelTransform::OnGripperGrabbed(const std::list<HeeksObj*>& list, bool show_grippers_on_drag, double* from){
 	extract(position, m_initial_grip_pos);
 	memcpy(m_from, from, 3*sizeof(double));
 	memcpy(m_last_from, from, 3*sizeof(double));
 	wxGetApp().m_marked_list->gripping = true;
 	m_items_marked_at_grab.clear();
 	std::list<HeeksObj *>::const_iterator It;
-	for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+	for(It = list.begin(); It != list.end(); It++){
 		m_items_marked_at_grab.push_back(*It);
 		wxGetApp().m_marked_list->set_ignore_onoff(*It, true);
 	}
 	if ( m_gripper_type <= GripperTypeObjectScaleXY )
 	{
-		wxGetApp().CreateTransformGLList(true);
+		wxGetApp().CreateTransformGLList(list, show_grippers_on_drag);
 		wxGetApp().m_drag_matrix = gp_Trsf();
-		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+		for(It = list.begin(); It != list.end(); It++){
 			HeeksObj* object = *It;
 			if(object->m_visible)wxGetApp().m_hidden_for_drag.push_back(object);
 			object->m_visible = false;
@@ -91,9 +91,8 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 		double m[16];
 		extract(mat, m );
 		wxGetApp().StartHistory ( _T("Move Marked List") );
-		std::list<HeeksObj*> marked_list = wxGetApp().m_marked_list->list();
 		std::list<HeeksObj *>::iterator It;
-		for ( It = marked_list.begin(); It != marked_list.end(); It++ )
+		for ( It = m_items_marked_at_grab.begin(); It != m_items_marked_at_grab.end(); It++ )
 		{
 			HeeksObj* object = *It;
 			wxGetApp().TransformUndoably( object, m );
@@ -105,7 +104,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 	wxGetApp().DestroyTransformGLList();
 
 	// don't need to press tick to make changes
-	wxGetApp().m_frame->m_properties->OnApply2();
+	wxGetApp().m_frame->m_properties->ApplyChanges();
 
 	if ( m_gripper_type <= GripperTypeObjectScaleXY )
 	{

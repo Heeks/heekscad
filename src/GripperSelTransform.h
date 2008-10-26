@@ -22,7 +22,7 @@ public:
 
 	//Gripper's virtual functions
 	void OnGripperMoved( double* from, const double* to );
-	bool OnGripperGrabbed(double* from);
+	bool OnGripperGrabbed(const std::list<HeeksObj*>& list, bool show_grippers_on_drag, double* from);
 	void OnGripperReleased(const double* from, const double* to);
 };
 
