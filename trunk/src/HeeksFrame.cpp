@@ -724,29 +724,31 @@ void CHeeksFrame::OnUpdatePaste( wxUpdateUIEvent& event )
 
 void CHeeksFrame::OnSubtractButton( wxCommandEvent& event )
 {
-	if(!CShape::CheckForTwoOrMoreSolids(_T("Pick two or more solids, the first one will be cut by the others\n( hold down Ctrl key to select more than one solids )"), _T("Subtract Solids")))return;
+	if(!wxGetApp().CheckForTwoOrMoreSolids(wxGetApp().m_marked_list->list(), _T("Pick two or more solids, the first one will be cut by the others\n( hold down Ctrl key to select more than one solid )"), _T("Subtract Solids")))return;
 	CShape::CutShapes(wxGetApp().m_marked_list->list());
 }
 
 void CHeeksFrame::OnFuseButton( wxCommandEvent& event )
 {
-	if(!CShape::CheckForTwoOrMoreSolids(_T("Pick two or more solids to be fused together\n( hold down Ctrl key to select more than one solids )"), _T("Fuse Solids")))return;
+	if(!wxGetApp().CheckForTwoOrMoreSolids(wxGetApp().m_marked_list->list(), _T("Pick two or more solids to be fused together\n( hold down Ctrl key to select more than one solid )"), _T("Fuse Solids")))return;
 	CShape::FuseShapes(wxGetApp().m_marked_list->list());
 }
 
 void CHeeksFrame::OnCommonButton( wxCommandEvent& event )
 {
-	if(!CShape::CheckForTwoOrMoreSolids(_T("Pick two or more solids, only the shape that is contained by all of them will remain\n( hold down Ctrl key to select more than one solids )"), _T("Intersection of Solids")))return;
+	if(!wxGetApp().CheckForTwoOrMoreSolids(wxGetApp().m_marked_list->list(), _T("Pick two or more solids, only the shape that is contained by all of them will remain\n( hold down Ctrl key to select more than one solid )"), _T("Intersection of Solids")))return;
 	CShape::CommonShapes(wxGetApp().m_marked_list->list());
 }
 
 void CHeeksFrame::OnRuledSurfaceButton( wxCommandEvent& event )
 {
+	if(!wxGetApp().CheckForTwoOrMoreSketchs(wxGetApp().m_marked_list->list(), _T("Pick two or more sketches, to create a lofted solid between\n( hold down Ctrl key to select more than one solid )"), _T("Lofted Body")))return;
 	PickCreateRuledSurface();
 }
 
 void CHeeksFrame::OnExtrudeButton( wxCommandEvent& event )
 {
+	if(!wxGetApp().CheckForOneOrMoreSketchs(wxGetApp().m_marked_list->list(), _T("Pick one or more sketches, to create extruded body from\n( hold down Ctrl key to select more than one solid )"), _T("Extrude")))return;
 	PickCreateExtrusion();
 }
 
