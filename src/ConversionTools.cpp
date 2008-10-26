@@ -29,7 +29,7 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 		switch(object->GetType()){
 			case LineType:
 			case ArcType:
-			case LineArcCollectionType:
+			case SketchType:
 				lines_or_arcs_in_marked_list = true;
 				break;
 			case WireType:
@@ -63,7 +63,7 @@ bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wire &wire
 	std::list<HeeksObj*>::const_iterator It;
 	for(It = list.begin(); It != list.end(); It++){
 		HeeksObj* object = *It;
-		if(object->GetType() == LineArcCollectionType){
+		if(object->GetType() == SketchType){
 			for(HeeksObj* child = object->GetFirstChild(); child; child = object->GetNextChild())
 			{
 				list2.push_back(child);
@@ -114,7 +114,7 @@ bool ConvertLineArcsToFace2(const std::list<HeeksObj *> &list, TopoDS_Face& face
 	std::list<HeeksObj*>::const_iterator It;
 	for(It = list.begin(); It != list.end(); It++){
 		HeeksObj* object = *It;
-		if(object->GetType() == LineArcCollectionType){
+		if(object->GetType() == SketchType){
 			for(HeeksObj* child = object->GetFirstChild(); child; child = object->GetNextChild())
 			{
 				list2.push_back(child);
@@ -247,7 +247,7 @@ void ConvertLineArcsToFace::Run(){
 	std::list<HeeksObj*>::const_iterator It;
 	for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
 		HeeksObj* object = *It;
-		if(object->GetType() == LineArcCollectionType){
+		if(object->GetType() == SketchType){
 			for(HeeksObj* child = object->GetFirstChild(); child; child = object->GetNextChild())
 			{
 				list2.push_back(child);

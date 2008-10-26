@@ -43,7 +43,7 @@ public:
 	void GetTools(std::list<Tool*> *f_list, const wxPoint *p);
 	void GetProperties(std::list<Property *> *list);
 
-	void ClearCollection();
+	void ClearSketch();
 };
 
 extern RegularShapesDrawing regular_shapes_drawing;
