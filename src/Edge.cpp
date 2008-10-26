@@ -139,7 +139,7 @@ void CEdge::Blend(double radius){
 			fillet.Add(radius, m_topods_edge);
 			TopoDS_Shape new_shape = fillet.Shape();
 			wxGetApp().StartHistory(_T("Blending Edge"));
-			wxGetApp().AddUndoably(new CSolid(*((TopoDS_Solid*)(&new_shape)), _T("Edge Blended Solid")), NULL, NULL);
+			wxGetApp().AddUndoably(new CSolid(*((TopoDS_Solid*)(&new_shape)), _T("Edge Blended Solid"), *(m_owner->m_owner->GetColor())), NULL, NULL);
 			wxGetApp().DeleteUndoably(m_owner->m_owner);
 			wxGetApp().EndHistory();
 		}

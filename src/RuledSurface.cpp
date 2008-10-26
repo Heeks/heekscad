@@ -42,7 +42,7 @@ void PickCreateRuledSurface()
 		TopoDS_Shape shape;
 		if(CreateRuledSurface(wire_list, shape))
 		{
-			HeeksObj* new_object = CShape::MakeObject(shape, _T("Ruled Surface"));
+			HeeksObj* new_object = CShape::MakeObject(shape, _T("Ruled Surface"), SOLID_TYPE_UNKNOWN, HeeksColor(51, 45, 51));
 			wxGetApp().AddUndoably(new_object, NULL, NULL);
 			wxGetApp().Repaint();
 		}
@@ -100,7 +100,7 @@ void PickCreateExtrusion()
 		TopoDS_Shape shape;
 		if(CreateExtrusion(faces, shape, gp_Vec(0, 0, height).Transformed(wxGetApp().GetDrawMatrix(false))))
 		{
-			HeeksObj* new_object = CShape::MakeObject(shape, _T("Extruded Solid"));
+			HeeksObj* new_object = CShape::MakeObject(shape, _T("Extruded Solid"), SOLID_TYPE_UNKNOWN, HeeksColor(89, 95, 89));
 			wxGetApp().AddUndoably(new_object, NULL, NULL);
 			wxGetApp().Repaint();
 		}

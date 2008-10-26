@@ -11,11 +11,11 @@
 
 wxIcon* CCone::m_icon = NULL;
 
-CCone::CCone(const gp_Ax2& pos, double r1, double r2, double height, const wxChar* title):m_pos(pos), m_r1(r1), m_r2(r2), m_height(height), CSolid(BRepPrimAPI_MakeCone(pos, r1, r2, height), title)
+CCone::CCone(const gp_Ax2& pos, double r1, double r2, double height, const wxChar* title, const HeeksColor& col):m_pos(pos), m_r1(r1), m_r2(r2), m_height(height), CSolid(BRepPrimAPI_MakeCone(pos, r1, r2, height), title, col)
 {
 }
 
-CCone::CCone(const TopoDS_Solid &solid, const wxChar* title, bool use_one_gl_list):CSolid(solid, title, use_one_gl_list), m_pos(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), m_r1(0.0), m_r2(0.0), m_height(0.0)
+CCone::CCone(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col):CSolid(solid, title, col), m_pos(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), m_r1(0.0), m_r2(0.0), m_height(0.0)
 {
 }
 
@@ -55,7 +55,7 @@ bool CCone::ModifyByMatrix(const double *m){
 	double new_r1 = fabs(m_r1 * scale);
 	double new_r2 = fabs(m_r2 * scale);
 	double new_height = fabs(m_height * scale);
-	CCone* new_object = new CCone(new_pos, new_r1, new_r2, new_height, m_title.c_str());
+	CCone* new_object = new CCone(new_pos, new_r1, new_r2, new_height, m_title.c_str(), m_color);
 	wxGetApp().AddUndoably(new_object, m_owner, NULL);
 	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object);
 	wxGetApp().DeleteUndoably(this);
@@ -113,7 +113,7 @@ void CCone::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 
 void CCone::OnApplyProperties()
 {
-	CCone* new_object = new CCone(m_pos, m_r1, m_r2, m_height, m_title.c_str());
+	CCone* new_object = new CCone(m_pos, m_r1, m_r2, m_height, m_title.c_str(), m_color);
 	wxGetApp().StartHistory(_T("Edit Cone"));
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().DeleteUndoably(this);
@@ -187,7 +187,7 @@ bool CCone::Stretch(const double *p, const double* shift)
 
 	if(make_a_new_cone)
 	{
-		CCone* new_object = new CCone(new_pos, new_r1, new_r2, new_height, m_title.c_str());
+		CCone* new_object = new CCone(new_pos, new_r1, new_r2, new_height, m_title.c_str(), m_color);
 		wxGetApp().StartHistory(_T("Stretch Cone"));
 		wxGetApp().AddUndoably(new_object, NULL, NULL);
 		wxGetApp().DeleteUndoably(this);
@@ -224,6 +224,8 @@ void CCone::SetXMLElement(TiXmlElement* element)
 	element->SetDoubleAttribute("r1", m_r1);
 	element->SetDoubleAttribute("r2", m_r2);
 	element->SetDoubleAttribute("h", m_height);
+
+	CSolid::SetXMLElement(element);
 }
 
 void CCone::SetFromXMLElement(TiXmlElement* pElem)
@@ -253,4 +255,6 @@ void CCone::SetFromXMLElement(TiXmlElement* pElem)
 	}
 
 	m_pos = gp_Ax2(make_point(l), make_vector(d), make_vector(x));
+
+	CSolid::SetFromXMLElement(pElem);
 }

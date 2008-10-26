@@ -12,8 +12,8 @@ public:
 	gp_Pnt m_pos;
 	double m_radius;
 
-	CSphere(const gp_Pnt& pos, double radius, const wxChar* title);
-	CSphere(const TopoDS_Solid &solid, const wxChar* title, bool use_one_gl_list = false);
+	CSphere(const gp_Pnt& pos, double radius, const wxChar* title, const HeeksColor& col);
+	CSphere(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
 
 	// HeeksObj's virtual functions
 	const wxChar* GetTypeString(void)const{return _T("Sphere");}

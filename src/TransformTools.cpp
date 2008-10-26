@@ -46,10 +46,25 @@ void TransformTools::Translate(bool copy)
 	wxGetApp().m_marked_list->Add(selected_items);
 	wxGetApp().CreateTransformGLList(false);
 	wxGetApp().m_drag_matrix = gp_Trsf();
-	if(!copy)wxGetApp().HideMarkedList();
+	if(!copy)
+	{
+		for(std::list<HeeksObj*>::const_iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+			HeeksObj* object = *It;
+			if(object->m_visible)wxGetApp().m_hidden_for_drag.push_back(object);
+			object->m_visible = false;
+		}
+	}
 	double to[3];
 	bool success = wxGetApp().PickPosition(_T("Click position to move to"), to, on_move_translate);
-	if(!copy)wxGetApp().UnHideMarkedList();
+	if(!copy)
+	{
+		for(std::list<HeeksObj*>::iterator It = wxGetApp().m_hidden_for_drag.begin(); It != wxGetApp().m_hidden_for_drag.end(); It++)
+		{
+			HeeksObj* object = *It;
+			object->m_visible = true;
+		}
+		wxGetApp().m_hidden_for_drag.clear();
+	}
 	wxGetApp().DestroyTransformGLList();
 	wxGetApp().m_marked_list->Clear();
 

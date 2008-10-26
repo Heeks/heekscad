@@ -12,11 +12,11 @@
 
 wxIcon* CSphere::m_icon = NULL;
 
-CSphere::CSphere(const gp_Pnt& pos, double radius, const wxChar* title):m_pos(pos), m_radius(radius), CSolid(BRepPrimAPI_MakeSphere(pos, radius), title)
+CSphere::CSphere(const gp_Pnt& pos, double radius, const wxChar* title, const HeeksColor& col):m_pos(pos), m_radius(radius), CSolid(BRepPrimAPI_MakeSphere(pos, radius), title, col)
 {
 }
 
-CSphere::CSphere(const TopoDS_Solid &solid, const wxChar* title, bool use_one_gl_list):CSolid(solid, title, use_one_gl_list), m_pos(0, 0, 0), m_radius(0.0)
+CSphere::CSphere(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col):CSolid(solid, title, col), m_pos(0, 0, 0), m_radius(0.0)
 {
 }
 
@@ -44,7 +44,7 @@ bool CSphere::ModifyByMatrix(const double* m){
 	gp_Pnt new_pos = m_pos.Transformed(mat);
 	double scale = gp_Vec(1, 0, 0).Transformed(mat).Magnitude();
 	double new_radius = fabs(m_radius * scale);
-	CSphere* new_object = new CSphere(new_pos, new_radius, m_title.c_str());
+	CSphere* new_object = new CSphere(new_pos, new_radius, m_title.c_str(), m_color);
 	wxGetApp().AddUndoably(new_object, m_owner, NULL);
 	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object);
 	wxGetApp().DeleteUndoably(this);
@@ -73,7 +73,7 @@ void CSphere::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 
 void CSphere::OnApplyProperties()
 {
-	CSphere* new_object = new CSphere(m_pos, m_radius, m_title.c_str());
+	CSphere* new_object = new CSphere(m_pos, m_radius, m_title.c_str(), m_color);
 	wxGetApp().StartHistory(_T("Edit Sphere"));
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().DeleteUndoably(this);
@@ -103,6 +103,8 @@ void CSphere::SetXMLElement(TiXmlElement* element)
 	element->SetDoubleAttribute("py", m_pos.Y());
 	element->SetDoubleAttribute("pz", m_pos.Z());
 	element->SetDoubleAttribute("r", m_radius);
+
+	CSolid::SetXMLElement(element);
 }
 
 void CSphere::SetFromXMLElement(TiXmlElement* pElem)
@@ -116,4 +118,6 @@ void CSphere::SetFromXMLElement(TiXmlElement* pElem)
 		else if(name == "pz"){m_pos.SetZ(a->DoubleValue());}
 		else if(name == "r"){m_radius = a->DoubleValue();}
 	}
+
+	CSolid::SetFromXMLElement(pElem);
 }

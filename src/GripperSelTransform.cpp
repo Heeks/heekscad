@@ -29,7 +29,11 @@ bool GripperSelTransform::OnGripperGrabbed(double* from){
 	{
 		wxGetApp().CreateTransformGLList(true);
 		wxGetApp().m_drag_matrix = gp_Trsf();
-		wxGetApp().HideMarkedList();
+		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+			HeeksObj* object = *It;
+			if(object->m_visible)wxGetApp().m_hidden_for_drag.push_back(object);
+			object->m_visible = false;
+		}
 	}
 	return true;
 }
@@ -97,14 +101,21 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 		wxGetApp().EndHistory();
 	}
 
-	if ( m_gripper_type <= GripperTypeObjectScaleXY )
-	{
-		wxGetApp().UnHideMarkedList();
-	}
-
+	m_items_marked_at_grab.clear();
+	wxGetApp().DestroyTransformGLList();
 
 	// don't need to press tick to make changes
 	wxGetApp().m_frame->m_properties->OnApply2();
+
+	if ( m_gripper_type <= GripperTypeObjectScaleXY )
+	{
+		for(std::list<HeeksObj*>::iterator It = wxGetApp().m_hidden_for_drag.begin(); It != wxGetApp().m_hidden_for_drag.end(); It++)
+		{
+			HeeksObj* object = *It;
+			object->m_visible = true;
+		}
+		wxGetApp().m_hidden_for_drag.clear();
+	}
 
 	{
 		std::list<HeeksObj *>::iterator It;
@@ -113,8 +124,6 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 			wxGetApp().m_marked_list->set_ignore_onoff ( *It, false );
 		}
 	}
-	m_items_marked_at_grab.clear();
-	wxGetApp().DestroyTransformGLList();
 	wxGetApp().m_marked_list->gripping = false;
 }
 

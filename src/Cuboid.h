@@ -14,8 +14,8 @@ public:
 	double m_y; // height
 	double m_z; // depth
 
-	CCuboid(const gp_Ax2& pos, double x, double y, double z, const wxChar* title);
-	CCuboid(const TopoDS_Solid &solid, const wxChar* title, bool use_one_gl_list = false);
+	CCuboid(const gp_Ax2& pos, double x, double y, double z, const wxChar* title, const HeeksColor& col);
+	CCuboid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
 
 	// HeeksObj's virtual functions
 	const wxChar* GetTypeString(void)const{return _T("Cuboid");}
