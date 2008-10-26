@@ -13,8 +13,8 @@ public:
 	double m_radius;
 	double m_height;
 
-	CCylinder(const gp_Ax2& pos, double radius, double height, const wxChar* title);
-	CCylinder(const TopoDS_Solid &solid, const wxChar* title, bool use_one_gl_list = false);
+	CCylinder(const gp_Ax2& pos, double radius, double height, const wxChar* title, const HeeksColor& col);
+	CCylinder(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
 
 	// HeeksObj's virtual functions
 	const wxChar* GetTypeString(void)const{return _T("Cylinder");}

@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Face.h"
 #include "Shape.h"
+#include "Solid.h"
 #include <BRepMesh.hxx>
 #include <StdPrs_ToolShadedShape.hxx>
 #include <Poly_Connect.hxx>
@@ -58,15 +59,21 @@ static Standard_Boolean TriangleIsValid(const gp_Pnt& P1, const gp_Pnt& P2, cons
 
 
 void CFace::glCommands(bool select, bool marked, bool no_color){
-	m_material.glMaterial(1.0);
 	
 	if(m_owner && m_owner->m_owner && m_owner->m_owner->GetType() == SolidType) {
 		// using existing BRepMesh::Mesh
+
+		// use solid's colour
+		Material(((CSolid*)(m_owner->m_owner))->m_color).glMaterial(1.0);
 	}
 	else {
+		// clean mesh
 		double pixels_per_mm = wxGetApp().GetPixelScale();
 		BRepTools::Clean(m_topods_face);
 		BRepMesh::Mesh(m_topods_face, 1/pixels_per_mm);
+
+		// use a default material
+		Material().glMaterial(1.0);
 	}
 
 	{
@@ -183,7 +190,7 @@ public:
 	void Run(){
 		BRepOffsetAPI_MakeOffset make_operation(m_face->Face());
 		make_operation.Perform(-6.0);
-		HeeksObj* new_object = CShape::MakeObject(make_operation.Shape(), _T("Result of Face Offset"));
+		HeeksObj* new_object = CShape::MakeObject(make_operation.Shape(), _T("Result of Face Offset"), SOLID_TYPE_UNKNOWN, HeeksColor(12, 67, 99));
 		if(make_operation.Generated(m_face->Face()).Extent() > 0){
 			wxMessageBox(_T("Generated"));
 		}

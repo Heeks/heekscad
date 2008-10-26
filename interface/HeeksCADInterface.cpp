@@ -565,3 +565,9 @@ void CHeeksCADInterface::RemoveOnMouseFn( void(*callbackfunc)(wxMouseEvent&) )
 {
 	wxGetApp().RemoveOnMouseFn(callbackfunc);
 }
+
+void CHeeksCADInterface::PropertiesOnApply2()
+{
+	// don't need to press tick to make changes
+	wxGetApp().m_frame->m_properties->OnApply2();
+}

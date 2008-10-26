@@ -11,11 +11,11 @@
 
 wxIcon* CCylinder::m_icon = NULL;
 
-CCylinder::CCylinder(const gp_Ax2& pos, double radius, double height, const wxChar* title):m_pos(pos), m_radius(radius), m_height(height), CSolid(BRepPrimAPI_MakeCylinder(pos, radius, height), title)
+CCylinder::CCylinder(const gp_Ax2& pos, double radius, double height, const wxChar* title, const HeeksColor& col):m_pos(pos), m_radius(radius), m_height(height), CSolid(BRepPrimAPI_MakeCylinder(pos, radius, height), title, col)
 {
 }
 
-CCylinder::CCylinder(const TopoDS_Solid &solid, const wxChar* title, bool use_one_gl_list):CSolid(solid, title, use_one_gl_list), m_pos(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), m_radius(0.0), m_height(0.0)
+CCylinder::CCylinder(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col):CSolid(solid, title, col), m_pos(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), m_radius(0.0), m_height(0.0)
 {
 }
 
@@ -50,7 +50,7 @@ bool CCylinder::ModifyByMatrix(const double* m){
 	double scale = gp_Vec(1, 0, 0).Transformed(mat).Magnitude();
 	double new_radius = fabs(m_radius * scale);
 	double new_height = fabs(m_height * scale);
-	CCylinder* new_object = new CCylinder(new_pos, new_radius, new_height, m_title.c_str());
+	CCylinder* new_object = new CCylinder(new_pos, new_radius, new_height, m_title.c_str(), m_color);
 	wxGetApp().AddUndoably(new_object, m_owner, NULL);
 	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object);
 	wxGetApp().DeleteUndoably(this);
@@ -98,7 +98,7 @@ void CCylinder::GetGripperPositions(std::list<double> *list, bool just_for_endof
 
 void CCylinder::OnApplyProperties()
 {
-	CCylinder* new_object = new CCylinder(m_pos, m_radius, m_height, m_title.c_str());
+	CCylinder* new_object = new CCylinder(m_pos, m_radius, m_height, m_title.c_str(), m_color);
 	wxGetApp().StartHistory(_T("Edit Cylinder"));
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().DeleteUndoably(this);
@@ -146,7 +146,7 @@ bool CCylinder::Stretch(const double *p, const double* shift)
 
 	if(make_a_new_cylinder)
 	{
-		CCylinder* new_object = new CCylinder(m_pos, m_radius, m_height, m_title.c_str());
+		CCylinder* new_object = new CCylinder(m_pos, m_radius, m_height, m_title.c_str(), m_color);
 		wxGetApp().StartHistory(_T("Stretch Cylinder"));
 		wxGetApp().AddUndoably(new_object, NULL, NULL);
 		wxGetApp().DeleteUndoably(this);
@@ -177,6 +177,8 @@ void CCylinder::SetXMLElement(TiXmlElement* element)
 
 	element->SetDoubleAttribute("r", m_radius);
 	element->SetDoubleAttribute("h", m_height);
+
+	CSolid::SetXMLElement(element);
 }
 
 void CCylinder::SetFromXMLElement(TiXmlElement* pElem)
@@ -206,4 +208,6 @@ void CCylinder::SetFromXMLElement(TiXmlElement* pElem)
 	}
 
 	m_pos = gp_Ax2(make_point(l), make_vector(d), make_vector(x));
+
+	CSolid::SetFromXMLElement(pElem);
 }

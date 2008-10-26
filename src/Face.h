@@ -11,7 +11,6 @@ class CLoop;
 class CFace:public HeeksObj{
 private:
 	CBox m_box;
-	Material m_material;
 	TopoDS_Face m_topods_face;
 	static wxIcon* m_icon;
 #if _DEBUG
@@ -48,8 +47,6 @@ public:
 	void WriteXML(TiXmlElement *root);
 
 	const TopoDS_Face &Face(){return m_topods_face;}
-	const Material &GetMaterial(){return m_material;}
-	void SetMaterial(const Material& mat){m_material = mat;}
 	gp_Dir GetMiddleNormal(gp_Pnt *pos = NULL)const;
 	gp_Dir GetNormalAtUV(double u, double v, gp_Pnt *pos = NULL)const;
 	bool GetUVAtPoint(const gp_Pnt &pos, double *u, double *v)const;

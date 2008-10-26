@@ -23,16 +23,16 @@ public:
 	Material(float *m){memcpy(matf, m, 10*sizeof(float));}
 
 	Material(const HeeksColor& col){
-		matf[0] = 0.1f + 0.1f * (float)col.red/255;
-		matf[1] = 0.1f + 0.1f * (float)col.green/255;
-		matf[2] = 0.1f + 0.1f * (float)col.blue/255;
+		matf[0] = 0.1f + 0.2666666667f * (float)col.red/255;
+		matf[1] = 0.1f + 0.2666666667f * (float)col.green/255;
+		matf[2] = 0.1f + 0.2666666667f * (float)col.blue/255;
 		matf[3] = 0.2f + 0.8f * (float)col.red / 255;
 		matf[4] = 0.2f + 0.8f * (float)col.green / 255;
 		matf[5] = 0.2f + 0.8f * (float)col.blue / 255;
 		matf[6] = 0.3f;
 		matf[7] = 0.3f;
 		matf[8] = 0.3f;
-		matf[9] = 128.0f;
+		matf[9] = 15.0f;
 	}
 
 	void glMaterial(float opacity)
