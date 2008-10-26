@@ -59,9 +59,9 @@ public:
 	void GetTools(std::list<Tool*> *f_list, const wxPoint *p);
 	void OnFrontRender();
 	void GetOptions(std::list<Property *> *list);
+	const wxChar* GetTitle(){return _T("Drawing");}
 
 	// Drawing's virtual functions
-	virtual const wxChar* get_drawing_title(){return _T("Drawing");}
 	virtual void AddPoint();
 
 	int GetDrawStep()const{return current_view_stuff->draw_step;}
