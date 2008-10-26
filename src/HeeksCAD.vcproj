@@ -534,11 +534,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\LineArcCollection.cpp"
+			RelativePath=".\Sketch.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\LineArcCollection.h"
+			RelativePath=".\Sketch.h"
 			>
 		</File>
 		<File
