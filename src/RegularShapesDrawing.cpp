@@ -8,6 +8,8 @@
 #include "../interface/PropertyChoice.h"
 #include "../interface/PropertyDouble.h"
 #include "../interface/PropertyInt.h"
+#include "HeeksFrame.h"
+#include "InputModeCanvas.h"
 
 RegularShapesDrawing regular_shapes_drawing;
 
@@ -15,7 +17,9 @@ RegularShapesDrawing::RegularShapesDrawing(void)
 {
 	temp_object = NULL;
 	m_mode = RectanglesRegularShapeMode;
-	m_number_of_side_for_polygon = 4;
+	m_number_of_side_for_polygon = 6;
+	m_rect_radius = 0.0;
+	m_obround_radius = 2.0;
 }
 
 RegularShapesDrawing::~RegularShapesDrawing(void)
@@ -84,12 +88,10 @@ bool RegularShapesDrawing::calculate_item(DigitizedPoint &end)
 		CalculateRectangle(x, y, p0, p1, p2, p3, xdir, ydir, zdir);
 		break;
 	case PolygonsRegularShapeMode:
-		{
-		}
+		CalculatePolygon(GetStartPos().m_point, end.m_point, zdir);
 		break;
 	case ObroundRegularShapeMode:
-		{
-		}
+		CalculateObround(GetStartPos().m_point, end.m_point, xdir, zdir);
 		break;
 	}
 
@@ -102,18 +104,16 @@ void RegularShapesDrawing::CalculateRectangle(double x, double y, const gp_Pnt& 
 	bool x_lines_disappear = false;
 	bool y_lines_disappear = false;
 
-	if(m_radius > 0.0000000001)
+	if(m_rect_radius > 0.0000000001)
 	{
-		if(fabs(x) - m_radius*2 > -0.0000000001 && fabs(y) - m_radius*2 > -0.0000000001)
+		if(fabs(x) - m_rect_radius*2 > -0.0000000001 && fabs(y) - m_rect_radius*2 > -0.0000000001)
 			radii_wanted = true;
-		if(fabs(fabs(x) - m_radius*2) < 0.0000000001)
+		if(fabs(fabs(x) - m_rect_radius*2) < 0.0000000001)
 			x_lines_disappear = true;
-		if(fabs(fabs(y) - m_radius*2) < 0.0000000001)
+		if(fabs(fabs(y) - m_rect_radius*2) < 0.0000000001)
 			y_lines_disappear = true;
 	}
 
-	// check existing combination
-	bool good_line_arc_combination = false;
 	int good_num = 4;
 
 	if(radii_wanted)
@@ -151,9 +151,9 @@ void RegularShapesDrawing::CalculateRectangle(double x, double y, const gp_Pnt& 
 					temp_object->Add(arcs[i], NULL);
 				}
 			}
-			arcs[0]->A = p0.XYZ() + xdir.XYZ() * m_radius;
-			arcs[0]->B = p3.XYZ() + xdir.XYZ() * m_radius;
-			arcs[0]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p0.XYZ() + xdir.XYZ() * m_radius + ydir.XYZ() * m_radius), zdir), m_radius);
+			arcs[0]->A = p0.XYZ() + xdir.XYZ() * m_rect_radius;
+			arcs[0]->B = p3.XYZ() + xdir.XYZ() * m_rect_radius;
+			arcs[0]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p0.XYZ() + xdir.XYZ() * m_rect_radius + ydir.XYZ() * m_rect_radius), zdir), m_rect_radius);
 			arcs[1]->A = arcs[0]->B;
 			arcs[1]->B = arcs[0]->A;
 			arcs[1]->m_circle = arcs[0]->m_circle;
@@ -186,26 +186,26 @@ void RegularShapesDrawing::CalculateRectangle(double x, double y, const gp_Pnt& 
 			}
 
 			if(x_lines_disappear){
-				arcs[0]->A = p2.XYZ() - ydir.XYZ() * m_radius;
-				arcs[0]->B = p3.XYZ() - ydir.XYZ() * m_radius;
-				arcs[0]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p3.XYZ() + xdir.XYZ() * m_radius - ydir.XYZ() * m_radius), zdir), m_radius);
+				arcs[0]->A = p2.XYZ() - ydir.XYZ() * m_rect_radius;
+				arcs[0]->B = p3.XYZ() - ydir.XYZ() * m_rect_radius;
+				arcs[0]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p3.XYZ() + xdir.XYZ() * m_rect_radius - ydir.XYZ() * m_rect_radius), zdir), m_rect_radius);
 				lines[0]->A = arcs[0]->B;
-				lines[0]->B = p0.XYZ() + ydir.XYZ() * m_radius;
+				lines[0]->B = p0.XYZ() + ydir.XYZ() * m_rect_radius;
 				arcs[1]->A = lines[0]->B;
-				arcs[1]->B = p1.XYZ() + ydir.XYZ() * m_radius;
-				arcs[1]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p0.XYZ() + xdir.XYZ() * m_radius + ydir.XYZ() * m_radius), zdir), m_radius);
+				arcs[1]->B = p1.XYZ() + ydir.XYZ() * m_rect_radius;
+				arcs[1]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p0.XYZ() + xdir.XYZ() * m_rect_radius + ydir.XYZ() * m_rect_radius), zdir), m_rect_radius);
 				lines[1]->A = arcs[1]->B;
 				lines[1]->B = arcs[0]->A;
 			}
 			else{
-				arcs[0]->A = p1.XYZ() - xdir.XYZ() * m_radius;
-				arcs[0]->B = p2.XYZ() - xdir.XYZ() * m_radius;
-				arcs[0]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p1.XYZ() - xdir.XYZ() * m_radius + ydir.XYZ() * m_radius), zdir), m_radius);
+				arcs[0]->A = p1.XYZ() - xdir.XYZ() * m_rect_radius;
+				arcs[0]->B = p2.XYZ() - xdir.XYZ() * m_rect_radius;
+				arcs[0]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p1.XYZ() - xdir.XYZ() * m_rect_radius + ydir.XYZ() * m_rect_radius), zdir), m_rect_radius);
 				lines[0]->A = arcs[0]->B;
-				lines[0]->B = p3.XYZ() + xdir.XYZ() * m_radius;
+				lines[0]->B = p3.XYZ() + xdir.XYZ() * m_rect_radius;
 				arcs[1]->A = lines[0]->B;
-				arcs[1]->B = p0.XYZ() + xdir.XYZ() * m_radius;
-				arcs[1]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p0.XYZ() + xdir.XYZ() * m_radius + ydir.XYZ() * m_radius), zdir), m_radius);
+				arcs[1]->B = p0.XYZ() + xdir.XYZ() * m_rect_radius;
+				arcs[1]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p0.XYZ() + xdir.XYZ() * m_rect_radius + ydir.XYZ() * m_rect_radius), zdir), m_rect_radius);
 				lines[1]->A = arcs[1]->B;
 				lines[1]->B = arcs[0]->A;
 			}
@@ -236,24 +236,24 @@ void RegularShapesDrawing::CalculateRectangle(double x, double y, const gp_Pnt& 
 				}
 			}
 
-			arcs[0]->A = p1.XYZ() - xdir.XYZ() * m_radius;
-			arcs[0]->B = p1.XYZ() + ydir.XYZ() * m_radius;
-			arcs[0]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p1.XYZ() - xdir.XYZ() * m_radius + ydir.XYZ() * m_radius), zdir), m_radius);
+			arcs[0]->A = p1.XYZ() - xdir.XYZ() * m_rect_radius;
+			arcs[0]->B = p1.XYZ() + ydir.XYZ() * m_rect_radius;
+			arcs[0]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p1.XYZ() - xdir.XYZ() * m_rect_radius + ydir.XYZ() * m_rect_radius), zdir), m_rect_radius);
 			lines[0]->A = arcs[0]->B;
-			lines[0]->B = p2.XYZ() - ydir.XYZ() * m_radius;
+			lines[0]->B = p2.XYZ() - ydir.XYZ() * m_rect_radius;
 			arcs[1]->A = lines[0]->B;
-			arcs[1]->B = p2.XYZ() - xdir.XYZ() * m_radius;
-			arcs[1]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p2.XYZ() - xdir.XYZ() * m_radius - ydir.XYZ() * m_radius), zdir), m_radius);
+			arcs[1]->B = p2.XYZ() - xdir.XYZ() * m_rect_radius;
+			arcs[1]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p2.XYZ() - xdir.XYZ() * m_rect_radius - ydir.XYZ() * m_rect_radius), zdir), m_rect_radius);
 			lines[1]->A = arcs[1]->B;
-			lines[1]->B = p3.XYZ() + xdir.XYZ() * m_radius;
+			lines[1]->B = p3.XYZ() + xdir.XYZ() * m_rect_radius;
 			arcs[2]->A = lines[1]->B;
-			arcs[2]->B = p3.XYZ() - ydir.XYZ() * m_radius;
-			arcs[2]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p3.XYZ() + xdir.XYZ() * m_radius - ydir.XYZ() * m_radius), zdir), m_radius);
+			arcs[2]->B = p3.XYZ() - ydir.XYZ() * m_rect_radius;
+			arcs[2]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p3.XYZ() + xdir.XYZ() * m_rect_radius - ydir.XYZ() * m_rect_radius), zdir), m_rect_radius);
 			lines[2]->A = arcs[2]->B;
-			lines[2]->B = p0.XYZ() + ydir.XYZ() * m_radius;
+			lines[2]->B = p0.XYZ() + ydir.XYZ() * m_rect_radius;
 			arcs[3]->A = lines[2]->B;
-			arcs[3]->B = p0.XYZ() + xdir.XYZ() * m_radius;
-			arcs[3]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p0.XYZ() + xdir.XYZ() * m_radius + ydir.XYZ() * m_radius), zdir), m_radius);
+			arcs[3]->B = p0.XYZ() + xdir.XYZ() * m_rect_radius;
+			arcs[3]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p0.XYZ() + xdir.XYZ() * m_rect_radius + ydir.XYZ() * m_rect_radius), zdir), m_rect_radius);
 			lines[3]->A = arcs[3]->B;
 			lines[3]->B = arcs[0]->A;
 		}
@@ -291,6 +291,133 @@ void RegularShapesDrawing::CalculateRectangle(double x, double y, const gp_Pnt& 
 	}
 }
 
+void RegularShapesDrawing::CalculatePolygon(const gp_Pnt& p0, const gp_Pnt& p1, const gp_Dir& zdir)
+{
+	if(p0.IsEqual(p1, wxGetApp().m_geom_tol))return;
+
+	if(temp_object->GetNumChildren() != m_number_of_side_for_polygon)ClearCollection();
+	{
+		HLine** lines = (HLine**)malloc(m_number_of_side_for_polygon * sizeof(HLine*));
+
+		if(temp_object->GetNumChildren() > 0)
+		{
+			HeeksObj* object = temp_object->GetFirstChild();
+			for(int i = 0; i<m_number_of_side_for_polygon; i++)
+			{
+				lines[i] = (HLine*)object;
+				object = temp_object->GetNextChild();
+			}
+		}
+		else
+		{
+			for(int i = 0; i<m_number_of_side_for_polygon; i++)
+			{
+				lines[i] = new HLine(gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), &(wxGetApp().current_color));
+				temp_object->Add(lines[i], NULL);
+			}
+		}
+
+		double radius = p0.Distance(p1);
+
+		for(int i = 0; i<m_number_of_side_for_polygon; i++)
+		{
+			gp_Dir xdir(make_vector(p0, p1));
+			gp_Dir ydir = zdir ^ xdir;
+			double angle0 = 2.0 * Pi / m_number_of_side_for_polygon * i;
+			double angle1 = 2.0 * Pi / m_number_of_side_for_polygon * (i+1);
+			lines[i]->A = p0.XYZ() + xdir.XYZ() * ( cos(angle0) * radius ) + ydir.XYZ() * ( sin(angle0) * radius );
+			if(i == m_number_of_side_for_polygon - 1)lines[i]->B = lines[0]->A;
+			lines[i]->B = p0.XYZ() + xdir.XYZ() * ( cos(angle1) * radius ) + ydir .XYZ()* ( sin(angle1) * radius );
+		}
+	}
+}
+
+void RegularShapesDrawing::CalculateObround(const gp_Pnt& p0, const gp_Pnt& p1, const gp_Dir& xdir, const gp_Dir& zdir)
+{
+	bool lines_disappear = false;
+
+	if(m_obround_radius > 0.0000000001)
+	{
+		if(p0.IsEqual(p1, wxGetApp().m_geom_tol))lines_disappear = true;
+	}
+	else return;
+
+	int good_num = 4;
+	if(lines_disappear)good_num = 2;
+
+	if(temp_object->GetNumChildren() != good_num)ClearCollection();
+
+	if(lines_disappear)
+	{
+		// make two arcs, for a circle
+		HArc* arcs[2];
+		if(temp_object->GetNumChildren() > 0)
+		{
+			HeeksObj* object = temp_object->GetFirstChild();
+			for(int i = 0; i<2; i++)
+			{
+				arcs[i] = (HArc*)object;
+				object = temp_object->GetNextChild();
+			}
+		}
+		else
+		{
+			for(int i = 0; i<2; i++)
+			{
+				arcs[i] = new HArc(gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), gp_Circ(), &(wxGetApp().current_color));
+				temp_object->Add(arcs[i], NULL);
+			}
+		}
+		arcs[0]->A = p0.XYZ() + xdir.XYZ() * m_obround_radius;
+		arcs[0]->B = p0.XYZ() - xdir.XYZ() * m_obround_radius;
+		arcs[0]->m_circle = gp_Circ(gp_Ax2(p0, zdir), m_obround_radius);
+		arcs[1]->A = arcs[0]->B;
+		arcs[1]->B = arcs[0]->A;
+		arcs[1]->m_circle = arcs[0]->m_circle;
+	}
+	else
+	{
+		// arc-line-arc-line
+		HArc* arcs[2];
+		HLine* lines[2];
+		if(temp_object->GetNumChildren() > 0)
+		{
+			HeeksObj* object = temp_object->GetFirstChild();
+			for(int i = 0; i<2; i++)
+			{
+				arcs[i] = (HArc*)object;
+				object = temp_object->GetNextChild();
+				lines[i] = (HLine*)object;
+				object = temp_object->GetNextChild();
+			}
+		}
+		else
+		{
+			for(int i = 0; i<2; i++)
+			{
+				arcs[i] = new HArc(gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), gp_Circ(), &(wxGetApp().current_color));
+				temp_object->Add(arcs[i], NULL);
+				lines[i] = new HLine(gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), &(wxGetApp().current_color));
+				temp_object->Add(lines[i], NULL);
+			}
+		}
+
+		gp_Dir along_dir(make_vector(p0, p1));
+		gp_Dir right_dir = along_dir ^ zdir;
+
+		arcs[0]->A = p1.XYZ() + right_dir.XYZ() * m_obround_radius;
+		arcs[0]->B = p1.XYZ() - right_dir.XYZ() * m_obround_radius;
+		arcs[0]->m_circle = gp_Circ(gp_Ax2(p1, zdir), m_obround_radius);
+		lines[0]->A = arcs[0]->B;
+		lines[0]->B = p0.XYZ() - right_dir.XYZ() * m_obround_radius;
+		arcs[1]->A = lines[0]->B;
+		arcs[1]->B = p0.XYZ() + right_dir.XYZ() * m_obround_radius;
+		arcs[1]->m_circle = gp_Circ(gp_Ax2(p0, zdir), m_obround_radius);
+		lines[1]->A = arcs[1]->B;
+		lines[1]->B = arcs[0]->A;
+	}
+}
+
 void RegularShapesDrawing::clear_drawing_objects(bool store_as_previous_objects)
 {
 	temp_object = NULL;
@@ -303,11 +430,17 @@ static void on_set_drawing_mode(int value, HeeksObj* object)
 {
 	RegularShapesDrawing_for_GetProperties->m_mode = (RegularShapeMode)value;
 	RegularShapesDrawing_for_GetProperties->ClearCollection();
+	wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
 }
 
-static void on_set_radius(double value, HeeksObj* object)
+static void on_set_rect_radius(double value, HeeksObj* object)
 {
-	RegularShapesDrawing_for_GetProperties->m_radius = value;
+	RegularShapesDrawing_for_GetProperties->m_rect_radius = value;
+}
+
+static void on_set_obround_radius(double value, HeeksObj* object)
+{
+	RegularShapesDrawing_for_GetProperties->m_obround_radius = value;
 }
 
 static void on_set_num_sides(int value, HeeksObj* object)
@@ -325,8 +458,8 @@ void RegularShapesDrawing::GetProperties(std::list<Property *> *list){
 	list->push_back ( new PropertyChoice ( _T("drawing mode"),  choices, m_mode, NULL, on_set_drawing_mode ) );
 
 
-	list->push_back( new PropertyDouble( _T("radius"), m_radius, NULL, on_set_radius));
-
+	if(m_mode == RectanglesRegularShapeMode)list->push_back( new PropertyDouble( _T("radius"), m_rect_radius, NULL, on_set_rect_radius));
+	if(m_mode == ObroundRegularShapeMode)list->push_back( new PropertyDouble( _T("radius"), m_obround_radius, NULL, on_set_obround_radius));
 	if(m_mode == PolygonsRegularShapeMode)list->push_back( new PropertyInt(_T("number of sides for polygon"), m_number_of_side_for_polygon, NULL, on_set_num_sides));
 
 	__super::GetProperties(list);

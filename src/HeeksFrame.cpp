@@ -424,7 +424,7 @@ CHeeksFrame::OnQuit( wxCommandEvent& WXUNUSED( event ) )
 void 
 CHeeksFrame::OnAbout( wxCommandEvent& WXUNUSED( event ) )
 {
-	wxString str = _T("HeeksCAD, written by Dan Heeks\n\nusing Open CASCADE solid modeller - http://www.opencascade.org\n\nwindows made with wxWidgets - http://wxwidgets.org");
+	wxString str = _T("HeeksCAD, written by Dan Heeks\n\nusing Open CASCADE solid modeller - http://www.opencascade.org\n\nwindows made with wxWidgets - http://wxwidgets.org\n\nWith contributions by:\n Hirutso Enni");
 	wxMessageBox( str, wxGetApp().m_version_number, wxOK | wxICON_INFORMATION, this );
 }
 
