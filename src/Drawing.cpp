@@ -49,7 +49,7 @@ void Drawing::AddPoint()
 
 	if(wxGetApp().m_digitizing->digitized_point.m_type == DigitizeNoItemType)return;
 
-	wxGetApp().StartHistory(get_drawing_title());
+	wxGetApp().StartHistory(GetTitle());
 
 	bool calculated = false;
 	if(is_an_add_level(GetDrawStep())){

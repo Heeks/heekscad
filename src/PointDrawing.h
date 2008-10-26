@@ -14,7 +14,6 @@ private:
 	bool calculate_item(DigitizedPoint &end);
 	const std::list<HeeksObj*>& GetObjectsMade()const{return temp_object_in_list;}
 	void clear_drawing_objects(bool store_as_previous_objects);
-	const wxChar* get_drawing_title(){return _T("Point Drawing");}
 	int number_of_steps(){return 1;}
 	int step_to_go_to_after_last_step(){return 0;}
 	bool is_an_add_level(int level){return true;}

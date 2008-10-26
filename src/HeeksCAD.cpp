@@ -1049,7 +1049,9 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	}
 
 	// draw the grid
+	glDepthFunc(GL_LESS);
 	RenderGrid(&view_point);
+	glDepthFunc(GL_LEQUAL);
 
 	// draw the ruler
 	if(m_show_ruler)RenderRuler();
