@@ -23,6 +23,7 @@ enum{
 	ID_ILINE,
 	ID_POINTS,
 	ID_REGSHAPES,
+	ID_TEXT,
 	ID_SELECT_MODE,
 	ID_SUBTRACT,
 	ID_SPHERE,
@@ -99,6 +100,7 @@ public:
 	CHeeksFrame( const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize );
 	virtual ~CHeeksFrame();
 
+    void OnClose( wxCloseEvent& event );
 	void OnQuit( wxCommandEvent& event );
 	void OnAbout( wxCommandEvent& event );
 	void OnViewObjects( wxCommandEvent& event );
@@ -128,6 +130,7 @@ public:
 	void OnILineButton( wxCommandEvent& event );
 	void OnPointsButton( wxCommandEvent& event );
 	void OnRegularShapesButton( wxCommandEvent& event );
+	void OnTextButton( wxCommandEvent& event );
 	void OnCoordinateSystem( wxCommandEvent& event );
 	void OnSelectModeButton( wxCommandEvent& event );
 	void OnOpenButton( wxCommandEvent& event );

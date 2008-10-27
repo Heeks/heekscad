@@ -43,6 +43,7 @@
 #include "HCircle.h"
 #include "HImage.h"
 #include "HPoint.h"
+#include "HText.h"
 #include "RemoveOrAddTool.h"
 #include "Sketch.h"
 #include "../tinyxml/tinyxml.h"
@@ -55,6 +56,7 @@
 #include "../interface/PropertyString.h"
 #include "../interface/PropertyList.h"
 #include "RegularShapesDrawing.h"
+#include "glfont.h"
 
 #include <sstream>
 using namespace std;
@@ -474,6 +476,7 @@ void HeeksCADapp::InitializeXMLFunctions()
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "STEP_file", ReadSTEPFileFromXMLElement ) );
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "STLSolid", CStlSolid::ReadFromXMLElement ) );
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "CoordinateSystem", CoordinateSystem::ReadFromXMLElement ) );
+		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Text", HText::ReadFromXMLElement ) );
 	}
 }
 
@@ -1043,7 +1046,23 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	glEnable(GL_POLYGON_OFFSET_FILL);
 	glShadeModel(GL_FLAT);
 	m_frame->m_graphics->m_view_point.SetPolygonOffset();
-	glCommands(select, false, false);
+
+	std::list<HeeksObj*> after_others_objects;
+
+	for(std::list<HeeksObj*>::iterator It=m_objects.begin(); It!=m_objects.end() ;It++)
+	{
+		HeeksObj* object = *It;
+		if(object->OnVisibleLayer() && object->m_visible)
+		{
+			if(object->DrawAfterOthers())after_others_objects.push_back(object);
+			else
+			{
+				if(select)glPushName((unsigned int)object);
+				object->glCommands(select, wxGetApp().m_marked_list->ObjectMarked(object), false);
+				if(select)glPopName();
+			}
+		}
+	}
 
 	for(std::list< void(*)() >::iterator It = m_on_glCommands_list.begin(); It != m_on_glCommands_list.end(); It++)
 	{
@@ -1061,6 +1080,15 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 		glMultMatrixd(m);
 		glCallList(m_transform_gl_list);
 		glPopMatrix();
+	}
+
+	// draw any last_objects
+	for(std::list<HeeksObj*>::iterator It = after_others_objects.begin(); It != after_others_objects.end(); It++)
+	{
+		HeeksObj* object = *It;
+		if(select)glPushName((unsigned int)object);
+		object->glCommands(select, wxGetApp().m_marked_list->ObjectMarked(object), false);
+		if(select)glPopName();
 	}
 
 	// draw the grid
@@ -2388,3 +2416,47 @@ bool HeeksCADapp::CheckForOneOrMoreSketchs(const std::list<HeeksObj*> &list, con
 	return true;
 }
 
+static bool font_created = false;
+static GLFONT gl_font;
+static unsigned int tex_number = 0;
+
+static void make_sure_font_exists()
+{
+	if(!font_created)
+	{
+		wxString fstr = wxGetApp().GetExeFolder() + _T("/bitmaps/font.glf");
+		glGenTextures( 1, &tex_number );
+		glFontCreate(&gl_font, (char*)Ttc(fstr.c_str()), tex_number);
+		font_created = true;
+	}
+}
+
+void HeeksCADapp::render_text(const wxChar* str)
+{
+	make_sure_font_exists();
+
+	//Needs to be called before text output
+	glEnable(GL_BLEND);
+	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+	glEnable(GL_TEXTURE_2D);
+	glDepthMask(0);
+	glDisable(GL_POLYGON_OFFSET_FILL);
+	glFontBegin (&gl_font);
+
+	//Draws text with a glFont
+	glFontTextOut ((char*)Ttc(str), 0.0f, 0.0f, 0.0f);
+
+	//Needs to be called after text output
+	glFontEnd ();
+	glDepthMask(1);
+	glEnable(GL_POLYGON_OFFSET_FILL);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+}
+
+bool HeeksCADapp::get_text_size(const wxChar* str, float* width, float* height)
+{
+	make_sure_font_exists();
+
+	return glFontTextSize(&gl_font, (char*)Ttc(str), width, height) != 0;
+}
