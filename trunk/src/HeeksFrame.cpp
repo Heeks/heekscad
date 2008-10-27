@@ -236,7 +236,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
     m_toolBar->Realize();
 
 	// geometry tool bar
-    m_geometryBar->AddTool(ID_LINES, _T("Lines"), wxBitmap(exe_folder + _T("/bitmaps/lines.png"), wxBITMAP_TYPE_PNG), _T("Start Line Drawing"));
+    m_geometryBar->AddTool(ID_LINES, _T("Lines"), wxBitmap(exe_folder + _T("/bitmaps/lines.png"), wxBITMAP_TYPE_PNG), _T("Draw a sketch"));
     m_geometryBar->AddTool(ID_CIRCLES, _T("Circles"), wxBitmap(exe_folder + _T("/bitmaps/circles.png"), wxBITMAP_TYPE_PNG), _T("Start Circle Drawing"));
     m_geometryBar->AddTool(ID_ILINE, _T("ILine"), wxBitmap(exe_folder + _T("/bitmaps/iline.png"), wxBITMAP_TYPE_PNG), _T("Start Drawing Infinite Lines"));
     m_geometryBar->AddTool(ID_POINTS, _T("Points"), wxBitmap(exe_folder + _T("/bitmaps/point.png"), wxBITMAP_TYPE_PNG), _T("Start Drawing Points"));

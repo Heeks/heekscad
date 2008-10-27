@@ -97,7 +97,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	history = new MainHistory;
 	m_doing_rollback = false;
 	mouse_wheel_forward_away = true;
-	ctrl_does_rotate = true;
+	ctrl_does_rotate = false;
 	m_show_ruler = true;
 	m_show_datum_coords_system = true;
 	m_filepath.assign(_T("Untitled.heeks"));
@@ -106,6 +106,8 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_current_coordinate_system = NULL;
 	m_mark_newly_added_objects = false;
 	m_show_grippers_on_drag = true;
+	m_extrude_removes_sketches = false;
+	m_loft_removes_sketches = false;
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -189,6 +191,8 @@ bool HeeksCADapp::OnInit()
 	m_config->Read(_T("RegularShapesNSides"), &(regular_shapes_drawing.m_number_of_side_for_polygon));
 	m_config->Read(_T("RegularShapesRectRad"), &(regular_shapes_drawing.m_rect_radius));
 	m_config->Read(_T("RegularShapesObRad"), &(regular_shapes_drawing.m_obround_radius));
+	m_config->Read(_T("ExtrudeRemovesSketches"), &m_extrude_removes_sketches, true);
+	m_config->Read(_T("LoftRemovesSketches"), &m_loft_removes_sketches, true);
 
 	GetRecentFilesProfileString();
 
@@ -274,6 +278,8 @@ int HeeksCADapp::OnExit(){
 	m_config->Write(_T("RegularShapesNSides"), regular_shapes_drawing.m_number_of_side_for_polygon);
 	m_config->Write(_T("RegularShapesRectRad"), regular_shapes_drawing.m_rect_radius);
 	m_config->Write(_T("RegularShapesObRad"), regular_shapes_drawing.m_obround_radius);
+	m_config->Write(_T("ExtrudeRemovesSketches"), m_extrude_removes_sketches);
+	m_config->Write(_T("LoftRemovesSketches"), m_loft_removes_sketches);
 
 	WriteRecentFilesProfileString();
 

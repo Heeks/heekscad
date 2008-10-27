@@ -13,21 +13,19 @@ void PickCreateRuledSurface()
 {
 	if(wxGetApp().m_marked_list->size() == 0)
 	{
-		wxGetApp().PickObjects(_T("pick some wires or line-arcs"));
+		wxGetApp().PickObjects(_T("pick some sketches"));
 	}
 
 	if(wxGetApp().m_marked_list->size() > 0)
 	{
 		std::list<TopoDS_Wire> wire_list;
 
+		std::list<HeeksObj*> sketches_to_delete;
+
 		for(std::list<HeeksObj *>::const_iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
 		{
 			HeeksObj* object = *It;
-			if(object->GetType() == WireType)
-			{
-				wire_list.push_back(((CWire*)object)->Wire());
-			}
-			else if(object->GetType() == SketchType)
+			if(object->GetType() == SketchType)
 			{
 				std::list<HeeksObj*> list;
 				list.push_back(object);
@@ -35,9 +33,13 @@ void PickCreateRuledSurface()
 				if(ConvertLineArcsToWire2(list, wire))
 				{
 					wire_list.push_back(wire);
+					if(wxGetApp().m_loft_removes_sketches)sketches_to_delete.push_back(object);
 				}
 			}
 		}
+
+		wxGetApp().StartHistory(_T("Make Lofted Body"));
+		wxGetApp().DeleteUndoably(sketches_to_delete);
 
 		TopoDS_Shape shape;
 		if(CreateRuledSurface(wire_list, shape))
@@ -46,6 +48,8 @@ void PickCreateRuledSurface()
 			wxGetApp().AddUndoably(new_object, NULL, NULL);
 			wxGetApp().Repaint();
 		}
+
+		wxGetApp().EndHistory();
 	}
 }
 
@@ -53,7 +57,7 @@ void PickCreateExtrusion()
 {
 	if(wxGetApp().m_marked_list->size() == 0)
 	{
-		wxGetApp().PickObjects(_T("pick a wire, face or sketch"));
+		wxGetApp().PickObjects(_T("pick sketches"));
 	}
 
 	double height = 10;
@@ -62,48 +66,41 @@ void PickCreateExtrusion()
 	if(wxGetApp().m_marked_list->size() > 0)
 	{
 		std::list<TopoDS_Face> faces;
-		std::list<HeeksObj*> lines_arcs;
+
+		std::list<HeeksObj*> sketches_to_delete;
 
 		for(std::list<HeeksObj *>::const_iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
 		{
 			HeeksObj* object = *It;
 			switch(object->GetType())
 			{
-			case WireType:
-				{
-					std::list<TopoDS_Wire> wires;
-					wires.push_back(((CWire*)object)->Wire());
-					ConvertWireToFace2(wires, faces);
-				}
-				break;
-
-			case FaceType:
-				faces.push_back(((CFace*)object)->Face());
-				break;
-
 			case SketchType:
-			case LineType:
-			case ArcType:
-				lines_arcs.push_back(object);
-				break;
+				TopoDS_Face face;
+				if(ConvertSketchToFace2(object, face))
+				{
+					faces.push_back(face);
+					if(wxGetApp().m_extrude_removes_sketches)sketches_to_delete.push_back(object);
+				}
 			}
 		}
 
-		{
-			TopoDS_Face face;
-			if(ConvertLineArcsToFace2(lines_arcs, face))
-			{
-				faces.push_back(face);
-			}
-		}
+		wxGetApp().StartHistory(_T("Extrude Sketches"));
 
-		TopoDS_Shape shape;
-		if(CreateExtrusion(faces, shape, gp_Vec(0, 0, height).Transformed(wxGetApp().GetDrawMatrix(false))))
+		wxGetApp().DeleteUndoably(sketches_to_delete);
+
+		std::list<TopoDS_Shape> new_shapes;
+		CreateExtrusions(faces, new_shapes, gp_Vec(0, 0, height).Transformed(wxGetApp().GetDrawMatrix(false)));
+		if(new_shapes.size() > 0)
 		{
-			HeeksObj* new_object = CShape::MakeObject(shape, _T("Extruded Solid"), SOLID_TYPE_UNKNOWN, HeeksColor(89, 95, 89));
-			wxGetApp().AddUndoably(new_object, NULL, NULL);
+			for(std::list<TopoDS_Shape>::iterator It = new_shapes.begin(); It != new_shapes.end(); It++){
+				TopoDS_Shape& shape = *It;
+				HeeksObj* new_object = CShape::MakeObject(shape, _T("Extruded Solid"), SOLID_TYPE_UNKNOWN, HeeksColor(89, 95, 89));
+				wxGetApp().AddUndoably(new_object, NULL, NULL);
+			}
 			wxGetApp().Repaint();
 		}
+
+		wxGetApp().EndHistory();
 	}
 }
 
@@ -126,15 +123,13 @@ bool CreateRuledSurface(const std::list<TopoDS_Wire> &wire_list, TopoDS_Shape& s
 	return false;
 }
 
-bool CreateExtrusion(const std::list<TopoDS_Face> &faces, TopoDS_Shape& shape, gp_Vec& extrude_vector)
+void CreateExtrusions(const std::list<TopoDS_Face> &faces, std::list<TopoDS_Shape>& new_shapes, gp_Vec& extrude_vector)
 {
-	if(faces.size() > 0)
+	for(std::list<TopoDS_Face>::const_iterator It = faces.begin(); It != faces.end(); It++)
 	{
-		BRepPrimAPI_MakePrism generator( faces.front(), extrude_vector );
+		const TopoDS_Face& face = *It;
+		BRepPrimAPI_MakePrism generator( face, extrude_vector );
 		generator.Build();
-		shape = generator.Shape();
-
-		return true;
+		new_shapes.push_back(generator.Shape());
 	}
-	return false;
 }
