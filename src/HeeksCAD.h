@@ -195,6 +195,8 @@ public:
 	bool CheckForTwoOrMoreSolids(const std::list<HeeksObj*> &list, const wxString& msg, const wxString& caption);
 	bool CheckForTwoOrMoreSketchs(const std::list<HeeksObj*> &list, const wxString& msg, const wxString& caption);
 	bool CheckForOneOrMoreSketchs(const std::list<HeeksObj*> &list, const wxString& msg, const wxString& caption);
+	void render_text(const wxChar* str);
+	bool get_text_size(const wxChar* str, float* width, float* height);
 };
 
 DECLARE_APP(HeeksCADapp)

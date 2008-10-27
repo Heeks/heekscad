@@ -23,8 +23,6 @@ public:
 	bool property_editable()const{return m_callbackfunc != NULL;}
 	Property *MakeACopy(void)const;
 	void CallSetFunction()const{ if(m_callbackfunc)(*m_callbackfunc)(m_initial_index, m_object);}
-
-	// HeeksObj's virtual functions
 	const wxChar* GetShortString(void)const;
 };
 

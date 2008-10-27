@@ -350,6 +350,22 @@
 			>
 		</File>
 		<File
+			RelativePath=".\glfont.c"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath=".\glfont.h"
+			>
+		</File>
+		<File
 			RelativePath=".\GLList.cpp"
 			>
 		</File>
@@ -490,6 +506,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\HText.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\HText.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Images.cpp"
 			>
 		</File>
@@ -531,14 +555,6 @@
 		</File>
 		<File
 			RelativePath=".\LeftCanvas.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Sketch.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Sketch.h"
 			>
 		</File>
 		<File
@@ -750,6 +766,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\PropertyTrsf.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\PropertyTrsf.h"
+			>
+		</File>
+		<File
 			RelativePath=".\PropertyVertex.cpp"
 			>
 		</File>
@@ -855,6 +879,14 @@
 		</File>
 		<File
 			RelativePath=".\ShapeData.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Sketch.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Sketch.h"
 			>
 		</File>
 		<File

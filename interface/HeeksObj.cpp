@@ -100,26 +100,10 @@ void HeeksObj::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 	list->push_back(box.m_x[0]);
 	list->push_back(box.m_x[4]);
 	list->push_back(box.m_x[2]);
-	list->push_back(GripperTypeRotateObject);
-	list->push_back(box.m_x[0]);
-	list->push_back(box.m_x[1]);
-	list->push_back(box.m_x[5]);
 	list->push_back(GripperTypeScale);
 	list->push_back(box.m_x[3]);
 	list->push_back(box.m_x[4]);
-	list->push_back(box.m_x[5]);
-	list->push_back(GripperTypeRotate);
-	list->push_back(box.m_x[3]);
-	list->push_back(box.m_x[4]);
 	list->push_back(box.m_x[2]);
-	list->push_back(GripperTypeRotate);
-	list->push_back(box.m_x[0]);
-	list->push_back(box.m_x[4]);
-	list->push_back(box.m_x[5]);
-	list->push_back(GripperTypeRotate);
-	list->push_back(box.m_x[3]);
-	list->push_back(box.m_x[1]);
-	list->push_back(box.m_x[5]);
 #endif
 }
 
