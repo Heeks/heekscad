@@ -90,6 +90,8 @@ public:
 	std::list< void(*)(wxMouseEvent&) > m_lbutton_up_callbacks;
 	int m_transform_gl_list;
 	gp_Trsf m_drag_matrix;
+	bool m_extrude_removes_sketches;
+	bool m_loft_removes_sketches;
 
 	// HeeksObj's virtual functions
 	void GetBox(CBox &box);
