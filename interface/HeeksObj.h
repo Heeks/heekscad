@@ -27,6 +27,7 @@ enum{
 	ImageType,
 	CoordinateSystemType,
 	TextType,
+	DimensionType,
 	ObjectMaximumType
 };
 
@@ -44,6 +45,7 @@ enum{
 #define MARKING_FILTER_IMAGE				0x00000800
 #define MARKING_FILTER_COORDINATE_SYSTEM	0x00000800
 #define MARKING_FILTER_TEXT					0x00001000
+#define MARKING_FILTER_DIMENSION			0x00002000
 
 class HeeksObj{
 public:

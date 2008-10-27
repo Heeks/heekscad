@@ -12,6 +12,7 @@
 #include "LineArcDrawing.h"
 #include "PointDrawing.h"
 #include "RegularShapesDrawing.h"
+#include "DimensionDrawing.h"
 #include "Shape.h"
 #include "MarkedList.h"
 #include "MagDragWindow.h"
@@ -76,6 +77,7 @@ EVT_MENU(ID_ILINE, CHeeksFrame::OnILineButton)
 EVT_MENU(ID_POINTS, CHeeksFrame::OnPointsButton)
 EVT_MENU(ID_REGSHAPES, CHeeksFrame::OnRegularShapesButton)
 EVT_MENU(ID_TEXT, CHeeksFrame::OnTextButton)
+EVT_MENU(ID_DIMENSIONING, CHeeksFrame::OnDimensioningButton)
 EVT_MENU(ID_COORDINATE_SYSTEM, CHeeksFrame::OnCoordinateSystem)
 EVT_MENU(ID_SELECT_MODE, CHeeksFrame::OnSelectModeButton)
 EVT_MENU(ID_SPHERE, CHeeksFrame::OnSphereButton)
@@ -132,7 +134,7 @@ bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
     return true;
 }
 
-static wxString default_layout_string = _T("layout2|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=351;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=362;prop=100000;bestw=273;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=0;pos=529;prop=100000;bestw=390;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=444;floaty=105;floatw=407;floath=65|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=0;pos=930;prop=100000;bestw=234;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=TransformBar;caption=Transformation Tools;state=2108159;dir=1;layer=10;row=0;pos=540;prop=100000;bestw=273;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=589;floaty=156;floatw=298;floath=73|dock_size(5,0,0)=504|dock_size(4,1,0)=302|dock_size(1,10,0)=41|");
+static wxString default_layout_string = _T("layout2|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=351;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=362;prop=100000;bestw=312;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=0;pos=529;prop=100000;bestw=390;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=444;floaty=105;floatw=407;floath=65|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=0;pos=930;prop=100000;bestw=234;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=TransformBar;caption=Transformation Tools;state=2108159;dir=1;layer=10;row=0;pos=540;prop=100000;bestw=273;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=589;floaty=156;floatw=298;floath=73|dock_size(5,0,0)=504|dock_size(4,1,0)=302|dock_size(1,10,0)=41|");
 
 CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSize& size )
 	: wxFrame((wxWindow *)NULL, -1, title, pos, size)
@@ -246,6 +248,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
     m_geometryBar->AddTool(ID_REGSHAPES, _T("Regular Shapes"), wxBitmap(exe_folder + _T("/bitmaps/regshapes.png"), wxBITMAP_TYPE_PNG), _T("Draw regular shapes; rectangles, polygons, obrounds"));
     m_geometryBar->AddTool(ID_TEXT, _T("Text"), wxBitmap(exe_folder + _T("/bitmaps/text.png"), wxBITMAP_TYPE_PNG), _T("Add a text object"));
     m_geometryBar->AddTool(ID_COORDINATE_SYSTEM, _T("CoordSys"), wxBitmap(exe_folder + _T("/bitmaps/coordsys.png"), wxBITMAP_TYPE_PNG), _T("Create a Coordinate System"));
+    m_geometryBar->AddTool(ID_DIMENSIONING, _T("Dimensioning"), wxBitmap(exe_folder + _T("/bitmaps/dimension.png"), wxBITMAP_TYPE_PNG), _T("Add a dimension"));
     m_geometryBar->Realize();
 
 	// Solids tool bar
@@ -638,6 +641,11 @@ void CHeeksFrame::OnTextButton( wxCommandEvent& WXUNUSED( event ) )
 	wxGetApp().m_marked_list->Clear();
 	wxGetApp().m_marked_list->Add(new_object);
 	wxGetApp().Repaint();
+}
+
+void CHeeksFrame::OnDimensioningButton( wxCommandEvent& WXUNUSED( event ) )
+{
+	wxGetApp().SetInputMode(&dimension_drawing);
 }
 
 void CHeeksFrame::OnCirclesButton( wxCommandEvent& WXUNUSED( event ) )

@@ -24,6 +24,7 @@ enum{
 	ID_POINTS,
 	ID_REGSHAPES,
 	ID_TEXT,
+	ID_DIMENSIONING,
 	ID_SELECT_MODE,
 	ID_SUBTRACT,
 	ID_SPHERE,
@@ -131,6 +132,7 @@ public:
 	void OnPointsButton( wxCommandEvent& event );
 	void OnRegularShapesButton( wxCommandEvent& event );
 	void OnTextButton( wxCommandEvent& event );
+	void OnDimensioningButton( wxCommandEvent& event );
 	void OnCoordinateSystem( wxCommandEvent& event );
 	void OnSelectModeButton( wxCommandEvent& event );
 	void OnOpenButton( wxCommandEvent& event );
