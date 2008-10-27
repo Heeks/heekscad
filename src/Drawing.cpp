@@ -36,9 +36,10 @@ void Drawing::RecalculateAndRedraw(const wxPoint& point)
 	DigitizedPoint end = wxGetApp().m_digitizing->digitize(point);
 	if(end.m_type == DigitizeNoItemType)return;
 
-	wxGetApp().m_frame->m_graphics->EndDrawFront();
+	if(DragDoneWithXOR())wxGetApp().m_frame->m_graphics->EndDrawFront();
 	calculate_item(end);
-	wxGetApp().m_frame->m_graphics->DrawFront();
+	if(DragDoneWithXOR())wxGetApp().m_frame->m_graphics->DrawFront();
+	else wxGetApp().Repaint();
 }
 
 void Drawing::AddPoint()
@@ -58,7 +59,8 @@ void Drawing::AddPoint()
 			before_add_item();
 			const std::list<HeeksObj*>& drawing_objects = GetObjectsMade();
 			wxGetApp().AddUndoably(drawing_objects, GetOwnerForDrawingObjects());
-			wxGetApp().m_frame->m_graphics->DrawObjectsOnFront(drawing_objects, true);
+			if(DragDoneWithXOR())wxGetApp().m_frame->m_graphics->DrawObjectsOnFront(drawing_objects, true);
+			else wxGetApp().Repaint();
 			set_previous_direction();
 		}
 	}
@@ -310,7 +312,7 @@ void Drawing::SetStartPosUndoable(const DigitizedPoint& pos){
 }
 
 void Drawing::OnFrontRender(){
-	if(GetDrawStep()){
+	if(DragDoneWithXOR() && GetDrawStep()){
 		std::list<HeeksObj*>::const_iterator It;
 		const std::list<HeeksObj*>& drawing_objects = GetObjectsMade();
 		for(It = drawing_objects.begin(); It != drawing_objects.end(); It++){
@@ -320,6 +322,17 @@ void Drawing::OnFrontRender(){
 	}
 
 	wxGetApp().m_digitizing->OnFrontRender();
+}
+
+void Drawing::OnRender(){
+	if(!DragDoneWithXOR() && GetDrawStep()){
+		std::list<HeeksObj*>::const_iterator It;
+		const std::list<HeeksObj*>& drawing_objects = GetObjectsMade();
+		for(It = drawing_objects.begin(); It != drawing_objects.end(); It++){
+			HeeksObj *object = *It;
+			object->glCommands(false, false, true);
+		}
+	}
 }
 
 void Drawing::GetProperties(std::list<Property *> *list){
