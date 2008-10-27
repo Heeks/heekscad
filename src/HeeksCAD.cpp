@@ -44,6 +44,7 @@
 #include "HImage.h"
 #include "HPoint.h"
 #include "HText.h"
+#include "HDimension.h"
 #include "RemoveOrAddTool.h"
 #include "Sketch.h"
 #include "../tinyxml/tinyxml.h"
@@ -477,6 +478,7 @@ void HeeksCADapp::InitializeXMLFunctions()
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "STLSolid", CStlSolid::ReadFromXMLElement ) );
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "CoordinateSystem", CoordinateSystem::ReadFromXMLElement ) );
 		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Text", HText::ReadFromXMLElement ) );
+		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Dimension", HDimension::ReadFromXMLElement ) );
 	}
 }
 

@@ -39,7 +39,7 @@ void Drawing::RecalculateAndRedraw(const wxPoint& point)
 	if(DragDoneWithXOR())wxGetApp().m_frame->m_graphics->EndDrawFront();
 	calculate_item(end);
 	if(DragDoneWithXOR())wxGetApp().m_frame->m_graphics->DrawFront();
-	else wxGetApp().Repaint();
+	else wxGetApp().Repaint(true);
 }
 
 void Drawing::AddPoint()
@@ -330,7 +330,7 @@ void Drawing::OnRender(){
 		const std::list<HeeksObj*>& drawing_objects = GetObjectsMade();
 		for(It = drawing_objects.begin(); It != drawing_objects.end(); It++){
 			HeeksObj *object = *It;
-			object->glCommands(false, false, true);
+			object->glCommands(false, false, false);
 		}
 	}
 }

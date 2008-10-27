@@ -46,7 +46,7 @@ bool DimensionDrawing::calculate_item(DigitizedPoint &end)
 	{
 		p0 = GetStartPos().m_point;
 		p1 = end.m_point;
-		p2 = gp_Pnt((p0.XYZ() + p1.XYZ()) * 0.5);
+		p2 = end.m_point;
 	}
 	else if(GetDrawStep() == 2)
 	{
