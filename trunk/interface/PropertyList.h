@@ -20,8 +20,6 @@ public:
 	bool property_editable()const{return false;}
 	Property *MakeACopy(void)const;
 	void CallSetFunction()const{ for(std::list< Property* >::const_iterator It = m_list.begin(); It != m_list.end(); It++)(*It)->CallSetFunction();}
-
-	// HeeksObj's virtual functions
 	const wxChar* GetShortString(void)const;
 };
 

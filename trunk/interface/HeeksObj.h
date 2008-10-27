@@ -23,12 +23,10 @@ enum{
 	WireType,
 	FaceType,
 	EdgeType,
-	TrianglesType,
-	TriType,
-	SubstituteTreeType,
 	SketchType,
 	ImageType,
 	CoordinateSystemType,
+	TextType,
 	ObjectMaximumType
 };
 
@@ -45,6 +43,7 @@ enum{
 #define MARKING_FILTER_SKETCH				0x00000400
 #define MARKING_FILTER_IMAGE				0x00000800
 #define MARKING_FILTER_COORDINATE_SYSTEM	0x00000800
+#define MARKING_FILTER_TEXT					0x00001000
 
 class HeeksObj{
 public:
@@ -64,6 +63,7 @@ public:
 	virtual long GetMarkingMask()const{return 0;}
 	virtual int GetIDGroupType()const{return GetType();}
 	virtual void glCommands(bool select, bool marked, bool no_color){};
+	virtual bool DrawAfterOthers(){return false;}
 	virtual void GetBox(CBox &box){}
 	virtual const wxChar* GetShortString(void)const{return NULL;}
 	virtual const wxChar* GetTypeString(void)const{return _T("Unknown");}

@@ -10,10 +10,12 @@
 #include "../interface/PropertyInt.h"
 #include "../interface/PropertyList.h"
 #include "PropertyVertex.h"
+#include "PropertyTrsf.h"
 #include "propgrid.h"
 #include "advprops.h"
 #include "MarkedList.h"
 #include "HeeksFrame.h"
+#include "CoordinateSystem.h"
 
 BEGIN_EVENT_TABLE(CPropertiesCanvas, wxScrolledWindow)
 	EVT_SIZE(CPropertiesCanvas::OnSize)
@@ -154,6 +156,44 @@ void CPropertiesCanvas::AddProperty(Property* p, wxPGProperty* parent_prop)
 			Append( new_prop, z_prop, p );
 		}
 		break;
+	case TrsfPropertyType:
+		{
+			double x[3];
+			extract(((PropertyTrsf*)p)->m_trsf.TranslationPart(), x);
+
+			gp_Dir xaxis(1, 0, 0);
+			xaxis.Transform(((PropertyTrsf*)p)->m_trsf);
+			gp_Dir yaxis(0, 1, 0);
+			yaxis.Transform(((PropertyTrsf*)p)->m_trsf);
+
+			double vertical_angle = 0;
+			double horizontal_angle = 0;
+			double twist_angle = 0;
+			CoordinateSystem::AxesToAngles(xaxis, yaxis, vertical_angle, horizontal_angle, twist_angle);
+
+			wxPGProperty* new_prop = wxParentProperty(p->GetShortString(),wxPG_LABEL);
+			Append( parent_prop, new_prop, p );
+			wxPGProperty* x_prop = wxFloatProperty(_T("x"),wxPG_LABEL,x[0]);
+			if(!p->property_editable())x_prop->SetFlag(wxPG_PROP_READONLY);
+			Append( new_prop, x_prop, p );
+			wxPGProperty* y_prop = wxFloatProperty(_T("y"),wxPG_LABEL,x[1]);
+			if(!p->property_editable())y_prop->SetFlag(wxPG_PROP_READONLY);
+			Append( new_prop, y_prop, p );
+			wxPGProperty* z_prop = wxFloatProperty(_T("z"),wxPG_LABEL,x[2]);
+			if(!p->property_editable())z_prop->SetFlag(wxPG_PROP_READONLY);
+			Append( new_prop, z_prop, p );
+			wxPGProperty* v_prop = wxFloatProperty(_T("vertical angle"),wxPG_LABEL,vertical_angle);
+			if(!p->property_editable())v_prop->SetFlag(wxPG_PROP_READONLY);
+			Append( new_prop, v_prop, p );
+			wxPGProperty* h_prop = wxFloatProperty(_T("horizontal angle"),wxPG_LABEL,horizontal_angle);
+			if(!p->property_editable())h_prop->SetFlag(wxPG_PROP_READONLY);
+			Append( new_prop, h_prop, p );
+			wxPGProperty* t_prop = wxFloatProperty(_T("twist angle"),wxPG_LABEL,twist_angle);
+			if(!p->property_editable())t_prop->SetFlag(wxPG_PROP_READONLY);
+			new_prop->SetFlag(wxPG_PROP_READONLY);
+			Append( new_prop, t_prop, p );
+		}
+		break;
 	case CheckPropertyType:
 		{
 			wxPGProperty* new_prop = wxBoolProperty(p->GetShortString(),wxPG_LABEL, ((PropertyCheck*)p)->m_initial_value);
@@ -231,6 +271,47 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 			((PropertyVertex*)property)->m_vt = make_point(pos);
 
 			(*(((PropertyVertex*)property)->m_callbackfunc))(((PropertyVertex*)property)->m_vt, ((PropertyVertex*)property)->m_object);
+		}
+		break;
+	case TrsfPropertyType:
+		{
+			double pos[3];
+			extract(((PropertyTrsf*)property)->m_trsf.TranslationPart(), pos);
+
+			gp_Dir xaxis(1, 0, 0);
+			xaxis.Transform(((PropertyTrsf*)p)->m_trsf);
+			gp_Dir yaxis(0, 1, 0);
+			yaxis.Transform(((PropertyTrsf*)p)->m_trsf);
+
+			double vertical_angle = 0;
+			double horizontal_angle = 0;
+			double twist_angle = 0;
+			CoordinateSystem::AxesToAngles(xaxis, yaxis, vertical_angle, horizontal_angle, twist_angle);
+
+			if(p->GetName()[0] == 'x'){
+				pos[0] = event.GetPropertyValue().GetDouble();
+			}
+			else if(p->GetName()[0] == 'y'){
+				pos[1] = event.GetPropertyValue().GetDouble();
+			}
+			else if(p->GetName()[0] == 'z'){
+				pos[2] = event.GetPropertyValue().GetDouble();
+			}
+			else if(p->GetName()[0] == 'v'){
+				vertical_angle = event.GetPropertyValue().GetDouble();
+			}
+			else if(p->GetName()[0] == 'h'){
+				horizontal_angle = event.GetPropertyValue().GetDouble();
+			}
+			else if(p->GetName()[0] == 't'){
+				twist_angle = event.GetPropertyValue().GetDouble();
+			}
+
+			CoordinateSystem::AnglesToAxes(vertical_angle, horizontal_angle, twist_angle, xaxis, yaxis);
+
+			((PropertyTrsf*)property)->m_trsf = make_matrix(make_point(pos), xaxis, yaxis);
+
+			(*(((PropertyTrsf*)property)->m_callbackfunc))(((PropertyTrsf*)property)->m_trsf, ((PropertyTrsf*)property)->m_object);
 		}
 		break;
 	case ChoicePropertyType:

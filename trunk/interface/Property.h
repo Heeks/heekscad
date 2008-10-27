@@ -14,7 +14,8 @@ enum{
 	ChoicePropertyType,
 	ColorPropertyType,
 	CheckPropertyType,
-	ListOfPropertyType
+	ListOfPropertyType,
+	TrsfPropertyType
 };
 
 #include <vector>
