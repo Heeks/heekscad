@@ -310,6 +310,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\DimensionDrawing.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\DimensionDrawing.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Drawing.cpp"
 			>
 		</File>
@@ -419,6 +427,14 @@
 		</File>
 		<File
 			RelativePath=".\HCircle.h"
+			>
+		</File>
+		<File
+			RelativePath=".\HDimension.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\HDimension.h"
 			>
 		</File>
 		<File

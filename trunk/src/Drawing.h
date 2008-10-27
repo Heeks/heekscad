@@ -39,6 +39,7 @@ protected:
 	virtual int step_to_go_to_after_last_step(){return 0;}
 	virtual bool is_an_add_level(int level){return false;}
 	virtual HeeksObj* GetOwnerForDrawingObjects(){return NULL;}
+	virtual bool DragDoneWithXOR(){return true;}
 
 	void SetView(int);
 	int GetView();
@@ -58,6 +59,7 @@ public:
 	void GetProperties(std::list<Property *> *list);
 	void GetTools(std::list<Tool*> *f_list, const wxPoint *p);
 	void OnFrontRender();
+	void OnRender();
 	void GetOptions(std::list<Property *> *list);
 	const wxChar* GetTitle(){return _T("Drawing");}
 
