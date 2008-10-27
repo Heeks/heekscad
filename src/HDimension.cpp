@@ -42,34 +42,33 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 
 	if(!no_color)wxGetApp().glColorEnsuringContrast(m_color);
 
-	switch(m_mode)
+	gp_Dir xdir = gp_Dir(1, 0, 0).Transformed(m_trsf);
+	gp_Dir ydir = gp_Dir(0, 1, 0).Transformed(m_trsf);
+	gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(m_trsf);
+	if(m_mode == TwoPointsDimensionMode)
 	{
-	case TwoPointsDimensionMode:
-		{
-			gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(m_trsf);
-			gp_Dir xdir(make_vector(m_p0, m_p1));
-			gp_Dir ydir = zdir ^ xdir;
-
-			draw_arrow_line(m_p0, m_p1, m_p2, xdir ,ydir, m_scale);
-
-			// make a matrix at top left of text
-			float width, height;
-			if(!wxGetApp().get_text_size(m_text, &width, &height))return;
-			gp_Pnt text_top_left( m_p2.XYZ() + ydir.XYZ() * (m_scale * height) );
-			gp_Trsf text_matrix = make_matrix(text_top_left, xdir, ydir);
-
-			glPushMatrix();
-			double m[16];
-			extract_transposed(text_matrix, m);
-			glMultMatrixd(m);
-
-			wxGetApp().render_text(m_text);
-
-			glPopMatrix();
-		}
-		break;
-
+		xdir = make_vector(m_p0, m_p1);
+		ydir = zdir ^ xdir;
 	}
+
+	float width, height;
+	if(!wxGetApp().get_text_size(m_text, &width, &height))return;
+
+	// draw arrow line
+	draw_arrow_line(m_mode, m_p0, m_p1, m_p2, xdir, ydir, width, m_scale);
+
+	// make a matrix at top left of text
+	gp_Pnt text_top_left( m_p2.XYZ() + ydir.XYZ() * (m_scale * height) );
+	gp_Trsf text_matrix = make_matrix(text_top_left, xdir, ydir);
+
+	glPushMatrix();
+	double m[16];
+	extract_transposed(text_matrix, m);
+	glMultMatrixd(m);
+
+	wxGetApp().render_text(m_text);
+
+	glPopMatrix();
 }
 
 void HDimension::GetBox(CBox &box)
@@ -170,7 +169,7 @@ void HDimension::OnEditString(const wxChar* str){
 void HDimension::WriteXML(TiXmlElement *root)
 {
 	TiXmlElement * element;
-	element = new TiXmlElement( "Text" );
+	element = new TiXmlElement( "Dimension" );
 	root->LinkEndChild( element );  
 	element->SetAttribute("text", Ttc(m_text.c_str()));
 
@@ -253,19 +252,111 @@ HeeksObj* HDimension::ReadFromXMLElement(TiXmlElement* pElem)
 }
 
 // static
-void HDimension::draw_arrow_line(const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, const gp_Dir &xdir, const gp_Dir &ydir, double scale)
+void HDimension::draw_arrow_line(DimensionMode mode, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, const gp_Dir &xdir, const gp_Dir &ydir, double width, double scale)
 {
-	double y2 = gp_Vec(p2.XYZ()) * gp_Vec(ydir.XYZ()) - gp_Vec(p0.XYZ()) * gp_Vec(ydir.XYZ());
+	double short_line_length = 5.0 * scale;
+	double long_line_extra = 2.0 * scale;
 
-	gp_Pnt vt0( p0.XYZ() + ydir.XYZ() * y2);
-	gp_Pnt vt1( p1.XYZ() + ydir.XYZ() * y2);
+	double y0 = gp_Vec(p2.XYZ()) * gp_Vec(ydir.XYZ()) - gp_Vec(p0.XYZ()) * gp_Vec(ydir.XYZ());
+	double y1 = gp_Vec(p2.XYZ()) * gp_Vec(ydir.XYZ()) - gp_Vec(p1.XYZ()) * gp_Vec(ydir.XYZ());
+
+	gp_Pnt vt0( p0.XYZ() + ydir.XYZ() * y0);
+	gp_Pnt vt1( p1.XYZ() + ydir.XYZ() * y1);
 	gp_Pnt vt2 = p2;
 
-	// to do - arrow heads too
+	gp_Dir along_dir = make_vector(gp_Pnt(p0), gp_Pnt(p1));
+	gp_Dir xdir_along = xdir;
+	if(along_dir * xdir < 0)xdir_along = -xdir;
 
-	// just a line, for now
+	gp_Pnt new_vt0 = vt0;
+	gp_Pnt new_vt1 = vt1;
+
+	gp_Pnt middle_text_point = p2.XYZ() + along_dir.XYZ() * (width/2 * scale);
+	double x0 = gp_Vec(p0.XYZ()) * gp_Vec(xdir_along.XYZ());
+	double x1 = gp_Vec(p1.XYZ()) * gp_Vec(xdir_along.XYZ());
+	double xm = gp_Vec(middle_text_point.XYZ()) * gp_Vec(xdir_along.XYZ());
+
+	double arrow_head_scale = scale;
+	if(xm < x0 || xm > x1)
+	{
+		arrow_head_scale *= -1;
+	}
+
+	double distance = vt0.Distance(vt1);
+
+	// draw arrow heads, if there's room
+	if((distance > 2 * scale + wxGetApp().m_geom_tol) || (xm < x0) || (xm > x1))
+	{
+		gp_XYZ t[2][3];
+		t[0][0] = vt0.XYZ();
+		t[0][1] = vt0.XYZ() + xdir_along.XYZ() * arrow_head_scale + ydir.XYZ() * (arrow_head_scale * (-0.4));
+		t[0][2] = vt0.XYZ() + xdir_along.XYZ() * arrow_head_scale + ydir.XYZ() * (arrow_head_scale * 0.4);
+		t[1][0] = vt1.XYZ();
+		t[1][1] = vt1.XYZ() + xdir_along.XYZ() * (-arrow_head_scale) + ydir.XYZ() * (arrow_head_scale * 0.4);
+		t[1][2] = vt1.XYZ() + xdir_along.XYZ() * (-arrow_head_scale) + ydir.XYZ() * (arrow_head_scale * (-0.4));
+
+		// adjust line vertices
+		new_vt0 = gp_Pnt(vt0.XYZ() + xdir_along.XYZ() * arrow_head_scale);
+		new_vt1 = gp_Pnt(vt1.XYZ() + xdir_along.XYZ() * (-arrow_head_scale));
+
+		// draw two triangles
+		for(int i = 0; i<2; i++)
+		{
+			glBegin(GL_LINE_STRIP);
+			glVertex3d(t[i][0].X(), t[i][0].Y(), t[i][0].Z());
+			glVertex3d(t[i][1].X(), t[i][1].Y(), t[i][1].Z());
+			glVertex3d(t[i][2].X(), t[i][2].Y(), t[i][2].Z());
+			glVertex3d(t[i][0].X(), t[i][0].Y(), t[i][0].Z());
+			glEnd();
+		}
+	}
+
+	// draw side lines
 	glBegin(GL_LINES);
+	glVertex3d(p0.X(), p0.Y(), p0.Z());
 	glVertex3d(vt0.X(), vt0.Y(), vt0.Z());
+	glVertex3d(p1.X(), p1.Y(), p1.Z());
 	glVertex3d(vt1.X(), vt1.Y(), vt1.Z());
 	glEnd();
+
+	if(xm < x0)
+	{
+		// long line first
+		gp_Pnt vt4 = vt2.XYZ() + xdir_along.XYZ() * (-long_line_extra);
+		glBegin(GL_LINES);
+		glVertex3d(vt2.X(), vt2.Y(), vt2.Z());
+		glVertex3d(new_vt0.X(), new_vt0.Y(), new_vt0.Z());
+		glEnd();
+
+		// little line
+		gp_Pnt vt3 = new_vt1.XYZ() + xdir_along.XYZ() * short_line_length;
+		glBegin(GL_LINES);
+		glVertex3d(new_vt1.X(), new_vt1.Y(), new_vt1.Z());
+		glVertex3d(vt3.X(), vt3.Y(), vt3.Z());
+		glEnd();
+	}
+	else if(xm > x1)
+	{
+		// little first
+		gp_Pnt vt3 = new_vt0.XYZ() - xdir_along.XYZ() * short_line_length;
+		glBegin(GL_LINES);
+		glVertex3d(vt3.X(), vt3.Y(), vt3.Z());
+		glVertex3d(new_vt0.X(), new_vt0.Y(), new_vt0.Z());
+		glEnd();
+
+		// long line
+		glBegin(GL_LINES);
+		gp_Pnt vt4 = vt2.XYZ() + xdir_along.XYZ() * (width * scale + long_line_extra);
+		glVertex3d(vt1.X(), vt1.Y(), vt1.Z());
+		glVertex3d(vt4.X(), vt4.Y(), vt4.Z());
+		glEnd();
+	}
+	else
+	{
+		// draw the arrow line
+		glBegin(GL_LINES);
+		glVertex3d(new_vt0.X(), new_vt0.Y(), new_vt0.Z());
+		glVertex3d(new_vt1.X(), new_vt1.Y(), new_vt1.Z());
+		glEnd();
+	}
 }
