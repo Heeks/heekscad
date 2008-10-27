@@ -53,5 +53,5 @@ public:
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 
-	static void draw_arrow_line(const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, const gp_Dir &xdir, const gp_Dir &ydir, double scale);
+	static void draw_arrow_line(DimensionMode mode, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, const gp_Dir &xdir, const gp_Dir &ydir, double width, double scale);
 };
