@@ -8,6 +8,7 @@
 class Tool;
 class MagDragWindow;
 class ViewRotating;
+class ViewZooming;
 class CInputMode;
 class CSelectMode;
 class DigitizeMode;
@@ -61,6 +62,7 @@ public:
 	CInputMode *input_mode_object;
 	MagDragWindow *magnification;
 	ViewRotating *viewrotating;
+	ViewZooming *viewzooming;
 	CSelectMode *m_select_mode;
 	DigitizeMode *m_digitizing;
 	GripperMode* gripper_mode;

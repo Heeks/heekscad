@@ -27,6 +27,7 @@
 #include "SelectMode.h"
 #include "MagDragWindow.h"
 #include "ViewRotating.h"
+#include "ViewZooming.h"
 #include "DigitizeMode.h"
 #include "Shape.h"
 #include "ViewPoint.h"
@@ -78,6 +79,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	cursor_gripper = NULL;
 	magnification = new MagDragWindow();
 	viewrotating = new ViewRotating;
+	viewzooming = new ViewZooming;
 	m_select_mode = new CSelectMode();
 	m_digitizing = new DigitizeMode();
 	digitize_end = true;
@@ -124,6 +126,8 @@ HeeksCADapp::~HeeksCADapp()
 	delete m_select_mode;
 	delete m_digitizing;
 	delete m_config;
+	delete viewrotating;
+	delete viewzooming;
 }
 
 bool HeeksCADapp::OnInit()
