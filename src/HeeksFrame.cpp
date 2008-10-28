@@ -17,6 +17,7 @@
 #include "MarkedList.h"
 #include "MagDragWindow.h"
 #include "ViewRotating.h"
+#include "ViewZooming.h"
 #include "HArc.h"
 #include "RuledSurface.h"
 #include "Sphere.h"
@@ -97,6 +98,7 @@ EVT_MENU(ID_MAG_EXTENTS, CHeeksFrame::OnMagExtentsButton)
 EVT_MENU(ID_MAG_NO_ROT, CHeeksFrame::OnMagNoRotButton)
 EVT_MENU(ID_MAG_PREVIOUS, CHeeksFrame::OnMagPreviousButton)
 EVT_MENU(ID_VIEW_ROT, CHeeksFrame::OnViewRotateButton)
+EVT_MENU(ID_VIEW_ZOOM, CHeeksFrame::OnViewZoomButton)
 EVT_MENU(ID_FULL_SCREEN, CHeeksFrame::OnFullScreenButton)
 EVT_MENU(ID_MOVE_TRANSLATE, CHeeksFrame::OnMoveTranslateButton)
 EVT_MENU(ID_COPY_TRANSLATE, CHeeksFrame::OnCopyTranslateButton)
@@ -270,6 +272,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_viewingBar->AddTool(ID_MAG_EXTENTS, _T("Mag Extents"), wxBitmap(exe_folder + _T("/bitmaps/magextents.png"), wxBITMAP_TYPE_PNG), _T("Zoom in to fit the extents of the drawing into the graphics window"));
 	m_viewingBar->AddTool(ID_MAG_NO_ROT, _T("Mag No Rotation"), wxBitmap(exe_folder + _T("/bitmaps/magnorot.png"), wxBITMAP_TYPE_PNG), _T("Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"));
 	m_viewingBar->AddTool(ID_VIEW_ROT, _T("View Rotate"), wxBitmap(exe_folder + _T("/bitmaps/viewrot.png"), wxBITMAP_TYPE_PNG), _T("Enter view rotating mode"));
+	m_viewingBar->AddTool(ID_VIEW_ZOOM, _T("View Zoom"), wxBitmap(exe_folder + _T("/bitmaps/zoom.png"), wxBITMAP_TYPE_PNG), _T("Drag to zoom in and out"));
 	m_viewingBar->AddTool(ID_FULL_SCREEN, _T("FullScreen"), wxBitmap(exe_folder + _T("/bitmaps/fullscreen.png"), wxBITMAP_TYPE_PNG), _T("Switch to full screen view ( press escape to return )"));
 	m_viewingBar->Realize();
 
@@ -859,6 +862,11 @@ void CHeeksFrame::OnMagPreviousButton( wxCommandEvent& event )
 void CHeeksFrame::OnViewRotateButton( wxCommandEvent& event )
 {
 	wxGetApp().SetInputMode(wxGetApp().viewrotating);
+}
+
+void CHeeksFrame::OnViewZoomButton( wxCommandEvent& event )
+{
+	wxGetApp().SetInputMode(wxGetApp().viewzooming);
 }
 
 void CHeeksFrame::OnFullScreenButton( wxCommandEvent& event )

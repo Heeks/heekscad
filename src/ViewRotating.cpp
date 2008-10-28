@@ -32,7 +32,7 @@ void ViewRotating::OnMouse( wxMouseEvent& event )
 				wxGetApp().m_frame->m_graphics->m_view_point.TurnVertical(dm);
 			}
 		}
-		else
+		else if(event.MiddleIsDown())
 		{
 			wxGetApp().m_frame->m_graphics->m_view_point.Shift(dm, wxPoint(event.GetX(), event.GetY()));
 		}
