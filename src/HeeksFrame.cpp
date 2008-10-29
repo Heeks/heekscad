@@ -443,10 +443,15 @@ void CHeeksFrame::OnQuit( wxCommandEvent& WXUNUSED( event ) )
 
 void CHeeksFrame::OnAbout( wxCommandEvent& WXUNUSED( event ) )
 {
-	wxString str = wxString(_T("HeeksCAD, written by Dan Heeks\n\nusing Open CASCADE solid modeller - http://www.opencascade.org"))
+	wxString str = wxString(_T("HeeksCAD, written by Dan Heeks danheeks@gmail.com\n\nusing Open CASCADE solid modeller - http://www.opencascade.org"))
 		+ wxString(_T("\n\nwindows made with wxWidgets - http://wxwidgets.org"))
 		+ wxString(_T("\n\ntext uses glFont Copyright (c) 1998 Brad Fish E-mail: bhf5@email.byu.edu Web: http://students.cs.byu.edu/~bfish/"))
-		+ wxString(_T("\n\nWith contributions from:\n Hirutso Enni"));
+		+ wxString(_T("\n\nWith contributions from:\n Hirutso Enni"))
+		+ wxString(_T("\n\nThis is free, open source software."))
+		+ wxString(_T("\nIt can be used by citizens and residents of Cuba, Iran, Iraq, Libya, North Korea, Sudan and Syria."))
+		+ wxString(_T("\nYou may use this software in the design, development, production, stockpiling, use and testing of chemical"))
+		+ wxString(_T("\nand biological weapons, weapons of mass destruction and rocket systems and in a facility engaged in such activities."))
+		+ wxString(_T("\nHowever, I would prefer it to be used to design children's toys."));
 
 	wxString version_str = wxGetApp().m_version_number;
 	version_str.Replace(_T(" "), _T("."));

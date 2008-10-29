@@ -23,6 +23,7 @@ class Observer;
 class CHeeksFrame;
 class wxDynamicLibrary;
 class CoordinateSystem;
+class HRuler;
 
 #define MAX_RECENT_FILES 20
 
@@ -82,6 +83,7 @@ public:
 	std::list<wxDynamicLibrary*> m_loaded_libraries;
 	std::list< void(*)() > m_on_glCommands_list;
 	std::list<wxWindow*> m_hideable_windows;
+	HRuler* m_ruler;
 	bool m_show_ruler;
 	bool m_show_datum_coords_system;
 	std::list< wxString > m_recent_files;
@@ -112,6 +114,7 @@ public:
 	bool IsModified(void);
 	void SetAsModified();
 	void ClearHistory(void);
+	void glCommands(bool select, bool marked, bool no_color);
 	void glCommandsAll(bool select, const CViewPoint &view_point);
 	double GetPixelScale(void);
 	void DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool from_graphics_canvas, bool control_pressed);
