@@ -103,6 +103,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_doing_rollback = false;
 	mouse_wheel_forward_away = true;
 	ctrl_does_rotate = false;
+	m_ruler = new HRuler();
 	m_show_ruler = true;
 	m_show_datum_coords_system = true;
 	m_filepath.assign(_T("Untitled.heeks"));
@@ -128,6 +129,7 @@ HeeksCADapp::~HeeksCADapp()
 	delete m_config;
 	delete viewrotating;
 	delete viewzooming;
+	delete m_ruler;
 }
 
 bool HeeksCADapp::OnInit()
@@ -385,6 +387,7 @@ void HeeksCADapp::Reset(){
 	m_filepath.assign(_T("Untitled.heeks"));
 	m_hidden_for_drag.clear();
 	m_show_grippers_on_drag = true;
+	*m_ruler = HRuler();
 
 	ResetIDs();
 }
@@ -1096,13 +1099,18 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 		if(select)glPopName();
 	}
 
+	// draw the ruler
+	if(m_show_ruler)
+	{
+		if(select)glPushName((unsigned int)m_ruler);
+		m_ruler->glCommands(select, false, false);
+		if(select)glPopName();
+	}
+
 	// draw the grid
 	glDepthFunc(GL_LESS);
 	RenderGrid(&view_point);
 	glDepthFunc(GL_LEQUAL);
-
-	// draw the ruler
-	if(m_show_ruler)RenderRuler();
 
 	// draw the datum
 	if(m_show_datum_coords_system)
@@ -1125,6 +1133,29 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glPolygonMode(GL_FRONT_AND_BACK ,GL_FILL );
 	if(m_hidden_for_drag.size() == 0 || !m_show_grippers_on_drag)m_marked_list->GrippersGLCommands(select, false);
+}
+
+void HeeksCADapp::glCommands(bool select, bool marked, bool no_color)
+{
+	std::list<HeeksObj*>::iterator It;
+	for(It=m_objects.begin(); It!=m_objects.end() ;It++)
+	{
+		HeeksObj* object = *It;
+		if(object->OnVisibleLayer() && object->m_visible)
+		{
+			if(select)glPushName((unsigned int)object);
+			(*It)->glCommands(select, marked || wxGetApp().m_marked_list->ObjectMarked(object), no_color);
+			if(select)glPopName();
+		}
+	}
+
+	// draw the ruler
+	if(m_show_ruler)
+	{
+		if(select)glPushName((unsigned int)m_ruler);
+		m_ruler->glCommands(select, false, false);
+		if(select)glPopName();
+	}
 }
 
 void HeeksCADapp::GetBox(CBox &box){
@@ -2438,9 +2469,11 @@ static void make_sure_font_exists()
 
 void HeeksCADapp::render_text(const wxChar* str)
 {
+	// load font file
 	make_sure_font_exists();
 
 	//Needs to be called before text output
+	glColor4ub(0, 0, 0, 255);
 	glEnable(GL_BLEND);
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 	glEnable(GL_TEXTURE_2D);

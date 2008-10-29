@@ -77,6 +77,8 @@ void CLeftCanvas::CreateTree(long style)
 
 void CLeftCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified)
 {
+	return;
+
 	if(added){
 		std::list<HeeksObj*>::const_iterator It;
 		for(It = added->begin(); It != added->end(); It++){
