@@ -861,15 +861,15 @@ static ofstream* ofs_for_write_stl_triangle = NULL;
 
 static void write_stl_triangle(const double* x, const double* n)
 {
-	wxChar str[1024];
-	wsprintf(str, _T(" facet normal %g %g %g"), n[0], n[1], n[2]);
+	char str[1024];
+	sprintf(str, " facet normal %g %g %g", n[0], n[1], n[2]);
 	(*ofs_for_write_stl_triangle)<<str<<endl;
 	(*ofs_for_write_stl_triangle)<<"   outer loop"<<endl;
-	wsprintf(str, _T("     vertex %g %g %g"), x[0], x[1], x[2]);
+	sprintf(str, "     vertex %g %g %g", x[0], x[1], x[2]);
 	(*ofs_for_write_stl_triangle)<<str<<endl;
-	wsprintf(str, _T("     vertex %g %g %g"), x[3], x[4], x[5]);
+	sprintf(str, "     vertex %g %g %g", x[3], x[4], x[5]);
 	(*ofs_for_write_stl_triangle)<<str<<endl;
-	wsprintf(str, _T("     vertex %g %g %g"), x[6], x[7], x[8]);
+	sprintf(str, "     vertex %g %g %g", x[6], x[7], x[8]);
 	(*ofs_for_write_stl_triangle)<<str<<endl;
 	(*ofs_for_write_stl_triangle)<<"   endloop"<<endl;
 	(*ofs_for_write_stl_triangle)<<" endfacet"<<endl;
@@ -880,8 +880,7 @@ void HeeksCADapp::SaveSTLFile(const wxChar *filepath)
 	ofstream ofs(filepath);
 	if(!ofs)
 	{
-		wxChar str[1024];
-		wsprintf(str, _T("couldn't open file - %s"), filepath);
+		wxString str = wxString(_T("couldn't open file - ")) + filepath;
 		wxMessageBox(str);
 		return;
 	}
