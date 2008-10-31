@@ -3,9 +3,19 @@
 #include "stdafx.h"
 #include "Ruler.h"
 #include "Gripper.h"
+#include "../interface/Tool.h"
+#include "HeeksFrame.h"
+#include "ObjPropsCanvas.h"
 
 void RulerMark::glCommands()
 {
+	if(wxGetApp().m_font_tex_number == 0)
+	{
+		wxString fstr = wxGetApp().GetExeFolder() + _T("/bitmaps/font.glf");
+		glGenTextures( 1, &wxGetApp().m_font_tex_number );
+		glFontCreate(&wxGetApp().m_gl_font, (char*)Ttc(fstr.c_str()), wxGetApp().m_font_tex_number);
+	}
+
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	double half_width = width/2;
 	double dpos = (double)pos;
@@ -55,7 +65,7 @@ void RulerMark::glCommands()
 	else if(pos % 10 == 0)
 	{
 		float text_width, text_height;
-		wxString str = wxString::Format(_T("%d"), pos);
+		wxString str = wxString::Format(_T("%d"), pos/10);
 		if(!wxGetApp().get_text_size(str, &text_width, &text_height))return;
 		glPushMatrix();
 		glTranslated(dpos - half_width - text_width, -length + 2.05, 0.0);
@@ -67,7 +77,7 @@ void RulerMark::glCommands()
 
 HRuler::HRuler(): m_gl_list(0)
 {
-	m_width = 20;
+	m_width = 25;
 	m_length = 306;
 	m_empty_length = 3;
 }
@@ -119,7 +129,6 @@ void HRuler::glCommands(bool select, bool marked, bool no_color)
 	glPushMatrix();
 	glMultMatrixd(m);
 
-#if 0
 	if(m_gl_list)
 	{
 		glCallList(m_gl_list);
@@ -127,12 +136,14 @@ void HRuler::glCommands(bool select, bool marked, bool no_color)
 	else{
 		m_gl_list = glGenLists(1);
 		glNewList(m_gl_list, GL_COMPILE_AND_EXECUTE);
-#endif
 
 		// draw a filled white rectangle
 		glDisable(GL_POLYGON_OFFSET_FILL);
 		glPolygonOffset(1.0, 0.0);
-		glColor3ub(255, 255, 255); // white
+		glColor4ub(255, 255, 255, 120); // white
+		glEnable(GL_BLEND);
+		glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+		glDepthMask(0);
 		gp_Pnt point[4];
 		GetFourCorners(point);
 		glBegin(GL_TRIANGLES);
@@ -143,6 +154,8 @@ void HRuler::glCommands(bool select, bool marked, bool no_color)
 		glVertex3d(point[2].X(), point[2].Y(), point[2].Z());
 		glVertex3d(point[3].X(), point[3].Y(), point[3].Z());
 		glEnd();
+		glDisable(GL_BLEND);
+		glDepthMask(1);
 
 		// draw a black rectangle border
 		glColor4ub(0, 0, 0, 255); // black
@@ -165,8 +178,8 @@ void HRuler::glCommands(bool select, bool marked, bool no_color)
 		}
 		glEnable(GL_POLYGON_OFFSET_FILL);
 
-//		glEndList();
-//	}
+		glEndList();
+	}
 
 	glPopMatrix();
 }
@@ -217,8 +230,32 @@ void HRuler::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 	list->push_back(point[2].Z());
 }
 
+class ResetRulerTool:public Tool{
+	// reset ruler
+private:
+	static wxBitmap* m_bitmap;
+
+public:
+	void Run(){
+		wxGetApp().m_ruler->m_trsf = gp_Trsf();
+		wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("ResetRuler");}
+	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/resetruler.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
+	const wxChar* GetToolTip(){return _T("Reset the ruler");}
+};
+wxBitmap* ResetRulerTool::m_bitmap = NULL;
+
+static ResetRulerTool reset_ruler_tool;
+
 void HRuler::GetProperties(std::list<Property *> *list)
 {
+}
+
+void HRuler::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
+{
+	t_list->push_back(&reset_ruler_tool);
 }
 
 bool HRuler::GetScaleAboutMatrix(double *m)

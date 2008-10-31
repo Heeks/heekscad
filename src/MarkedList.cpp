@@ -341,7 +341,15 @@ void MarkedList::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 	GetConversionMenuTools(t_list);
 
 	// cut and copy tools
-	t_list->push_back(&copy_marked_list);
+	for(std::list<HeeksObj*>::iterator It = m_list.begin(); It != m_list.end(); It++)
+	{
+		HeeksObj* object = *It;
+		if(object->CanBeCopied())
+		{
+			t_list->push_back(&copy_marked_list);
+			break;
+		}
+	}
 
 	// paste
 	if (wxGetApp().IsPasteReady())t_list->push_back(&paste_tool);

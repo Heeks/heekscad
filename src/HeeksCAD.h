@@ -4,6 +4,7 @@
 
 #include "../interface/HeeksColor.h"
 #include "../interface/ObjList.h"
+#include "glfont.h"
 
 class Tool;
 class MagDragWindow;
@@ -96,6 +97,9 @@ public:
 	gp_Trsf m_drag_matrix;
 	bool m_extrude_removes_sketches;
 	bool m_loft_removes_sketches;
+	bool m_font_created;
+	GLFONT m_gl_font;
+	unsigned int m_font_tex_number;
 
 	// HeeksObj's virtual functions
 	void GetBox(CBox &box);
