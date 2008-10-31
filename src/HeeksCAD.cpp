@@ -58,7 +58,6 @@
 #include "../interface/PropertyString.h"
 #include "../interface/PropertyList.h"
 #include "RegularShapesDrawing.h"
-#include "glfont.h"
 
 #include <sstream>
 using namespace std;
@@ -104,7 +103,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	mouse_wheel_forward_away = true;
 	ctrl_does_rotate = false;
 	m_ruler = new HRuler();
-	m_show_ruler = true;
+	m_show_ruler = false;
 	m_show_datum_coords_system = true;
 	m_filepath.assign(_T("Untitled.heeks"));
 	m_in_OpenFile = false;
@@ -114,6 +113,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_show_grippers_on_drag = true;
 	m_extrude_removes_sketches = false;
 	m_loft_removes_sketches = false;
+	m_font_tex_number = 0;
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -196,6 +196,7 @@ bool HeeksCADapp::OnInit()
 	m_config->Read(_T("DrawDatum"), &m_show_datum_coords_system, true);
 	m_config->Read(_T("DatumSize"), &CoordinateSystem::size, 30);
 	m_config->Read(_T("DatumSizeIsPixels"), &CoordinateSystem::size_is_pixels, true);
+	m_config->Read(_T("DrawRuler"), &m_show_ruler, false);
 	m_config->Read(_T("RegularShapesMode"), (int*)(&(regular_shapes_drawing.m_mode)));
 	m_config->Read(_T("RegularShapesNSides"), &(regular_shapes_drawing.m_number_of_side_for_polygon));
 	m_config->Read(_T("RegularShapesRectRad"), &(regular_shapes_drawing.m_rect_radius));
@@ -283,6 +284,7 @@ int HeeksCADapp::OnExit(){
 	m_config->Write(_T("DrawDatum"), m_show_datum_coords_system);
 	m_config->Write(_T("DatumSize"), CoordinateSystem::size);
 	m_config->Write(_T("DatumSizeIsPixels"), CoordinateSystem::size_is_pixels);
+	m_config->Write(_T("DrawRuler"), m_show_ruler);
 	m_config->Write(_T("RegularShapesMode"), regular_shapes_drawing.m_mode);
 	m_config->Write(_T("RegularShapesNSides"), regular_shapes_drawing.m_number_of_side_for_polygon);
 	m_config->Write(_T("RegularShapesRectRad"), regular_shapes_drawing.m_rect_radius);
@@ -291,6 +293,8 @@ int HeeksCADapp::OnExit(){
 	m_config->Write(_T("LoftRemovesSketches"), m_loft_removes_sketches);
 
 	WriteRecentFilesProfileString();
+
+	glFontDestroy(&m_gl_font);
 
 	return result;
 }
@@ -388,6 +392,7 @@ void HeeksCADapp::Reset(){
 	m_hidden_for_drag.clear();
 	m_show_grippers_on_drag = true;
 	*m_ruler = HRuler();
+	input_mode_object = m_select_mode;
 
 	ResetIDs();
 }
@@ -1100,7 +1105,7 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	}
 
 	// draw the ruler
-	if(m_show_ruler)
+	if(m_show_ruler && m_ruler->m_visible)
 	{
 		if(select)glPushName((unsigned int)m_ruler);
 		m_ruler->glCommands(select, false, false);
@@ -1352,6 +1357,7 @@ void HeeksCADapp::Remove(HeeksObj* object)
 
 void HeeksCADapp::DeleteUndoably(HeeksObj *object){
 	if(object == NULL)return;
+	if(!object->CanBeRemoved())return;
 	RemoveObjectTool *tool = new RemoveObjectTool(object);
 	wxChar str[1024];
 	wsprintf(str, _T("Deleting %s"), object->GetShortStringOrTypeString());
@@ -1363,7 +1369,14 @@ void HeeksCADapp::DeleteUndoably(HeeksObj *object){
 void HeeksCADapp::DeleteUndoably(const std::list<HeeksObj*>& list)
 {
 	if(list.size() == 0)return;
-	RemoveObjectsTool *tool = new RemoveObjectsTool(list, list.front()->m_owner);
+	std::list<HeeksObj*> list2;
+	for(std::list<HeeksObj*>::const_iterator It = list.begin(); It != list.end(); It++)
+	{
+		HeeksObj* object = *It;
+		if(object->CanBeRemoved())list2.push_back(object);
+	}
+	if(list2.size() == 0)return;
+	RemoveObjectsTool *tool = new RemoveObjectsTool(list2, list2.front()->m_owner);
 	DoToolUndoably(tool);
 }
 
@@ -1513,6 +1526,12 @@ void on_set_show_datum(bool onoff, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+void on_set_show_ruler(bool onoff, HeeksObj* object)
+{
+	wxGetApp().m_show_ruler = onoff;
+	wxGetApp().Repaint();
+}
+
 void on_set_rotate_mode(int value, HeeksObj* object)
 {
 	wxGetApp().m_rotate_mode = value;
@@ -1614,6 +1633,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	view_options->m_list.push_back(new PropertyCheck(_T("show datum"), m_show_datum_coords_system, NULL, on_set_show_datum));
 	view_options->m_list.push_back(new PropertyDouble(_T("datum size"), CoordinateSystem::size, NULL, on_set_datum_size));
 	view_options->m_list.push_back(new PropertyCheck(_T("datum size is pixels not mm"), CoordinateSystem::size_is_pixels, NULL, on_set_size_is_pixels));
+	view_options->m_list.push_back(new PropertyCheck(_T("show ruler"), m_show_ruler, NULL, on_set_show_ruler));
 	view_options->m_list.push_back ( new PropertyColor ( _T("background color"),  background_color, NULL, on_set_background_color ) );
 	{
 		std::list< wxString > choices;
@@ -2452,26 +2472,8 @@ bool HeeksCADapp::CheckForOneOrMoreSketchs(const std::list<HeeksObj*> &list, con
 	return true;
 }
 
-static bool font_created = false;
-static GLFONT gl_font;
-static unsigned int tex_number = 0;
-
-static void make_sure_font_exists()
-{
-	if(!font_created)
-	{
-		wxString fstr = wxGetApp().GetExeFolder() + _T("/bitmaps/font.glf");
-		glGenTextures( 1, &tex_number );
-		glFontCreate(&gl_font, (char*)Ttc(fstr.c_str()), tex_number);
-		font_created = true;
-	}
-}
-
 void HeeksCADapp::render_text(const wxChar* str)
 {
-	// load font file
-	make_sure_font_exists();
-
 	//Needs to be called before text output
 	glColor4ub(0, 0, 0, 255);
 	glEnable(GL_BLEND);
@@ -2479,7 +2481,7 @@ void HeeksCADapp::render_text(const wxChar* str)
 	glEnable(GL_TEXTURE_2D);
 	glDepthMask(0);
 	glDisable(GL_POLYGON_OFFSET_FILL);
-	glFontBegin (&gl_font);
+	glFontBegin (&m_gl_font);
 
 	//Draws text with a glFont
 	glFontTextOut ((char*)Ttc(str), 0.0f, 0.0f, 0.0f);
@@ -2494,7 +2496,5 @@ void HeeksCADapp::render_text(const wxChar* str)
 
 bool HeeksCADapp::get_text_size(const wxChar* str, float* width, float* height)
 {
-	make_sure_font_exists();
-
-	return glFontTextSize(&gl_font, (char*)Ttc(str), width, height) != 0;
+	return glFontTextSize(&m_gl_font, (char*)Ttc(str), width, height) != 0;
 }
