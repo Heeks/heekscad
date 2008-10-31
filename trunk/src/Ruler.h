@@ -47,5 +47,8 @@ public:
 	bool ModifyByMatrix(const double *mat);
 	void GetGripperPositions(std::list<double> *list, bool just_for_endof);
 	void GetProperties(std::list<Property *> *list);
+	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	bool GetScaleAboutMatrix(double *m);
+	bool CanBeRemoved(){return false;}
+	bool CanBeCopied(){return false;}
 };

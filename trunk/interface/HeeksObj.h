@@ -101,6 +101,8 @@ public:
 	virtual void Remove(HeeksObj* object){object->OnRemove();}
 	virtual void OnAdd(){}
 	virtual void OnRemove();
+	virtual bool CanBeRemoved(){return true;}
+	virtual bool CanBeCopied(){return true;}
 	virtual HeeksObj* GetFirstChild(){return NULL;}
 	virtual HeeksObj* GetNextChild(){return NULL;}
 	virtual HeeksObj* GetAtIndex(int index){return NULL;}

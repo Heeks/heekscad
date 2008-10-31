@@ -26,6 +26,7 @@
 #include "Cone.h"
 #include "HText.h"
 #include "TransformTools.h"
+#include "SelectMode.h"
 #include "CoordinateSystem.h"
 #include "wx/dnd.h"
 #include "wx/filename.h"
@@ -648,6 +649,7 @@ void CHeeksFrame::OnTextButton( wxCommandEvent& WXUNUSED( event ) )
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().m_marked_list->Clear();
 	wxGetApp().m_marked_list->Add(new_object);
+	wxGetApp().SetInputMode(wxGetApp().m_select_mode);
 	wxGetApp().Repaint();
 }
 
@@ -678,6 +680,7 @@ void CHeeksFrame::OnCoordinateSystem( wxCommandEvent& WXUNUSED( event ) )
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().m_marked_list->Clear();
 	wxGetApp().m_marked_list->Add(new_object);
+	wxGetApp().SetInputMode(wxGetApp().m_select_mode);
 	wxGetApp().Repaint();
 
 	// and pick from three points
@@ -805,6 +808,7 @@ void CHeeksFrame::OnSphereButton( wxCommandEvent& event )
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().m_marked_list->Clear();
 	wxGetApp().m_marked_list->Add(new_object);
+	wxGetApp().SetInputMode(wxGetApp().m_select_mode);
 	wxGetApp().Repaint();
 }
 
@@ -815,6 +819,7 @@ void CHeeksFrame::OnCubeButton( wxCommandEvent& event )
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().m_marked_list->Clear();
 	wxGetApp().m_marked_list->Add(new_object);
+	wxGetApp().SetInputMode(wxGetApp().m_select_mode);
 	wxGetApp().Repaint();
 }
 
@@ -825,6 +830,7 @@ void CHeeksFrame::OnCylButton( wxCommandEvent& event )
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().m_marked_list->Clear();
 	wxGetApp().m_marked_list->Add(new_object);
+	wxGetApp().SetInputMode(wxGetApp().m_select_mode);
 	wxGetApp().Repaint();
 }
 
@@ -835,6 +841,7 @@ void CHeeksFrame::OnConeButton( wxCommandEvent& event )
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().m_marked_list->Clear();
 	wxGetApp().m_marked_list->Add(new_object);
+	wxGetApp().SetInputMode(wxGetApp().m_select_mode);
 	wxGetApp().Repaint();
 }
 
