@@ -36,6 +36,9 @@ enum{
 	ID_COMMON,
 	ID_VEWING,
 	ID_MAG,
+	WXPRINT_PRINT,
+	WXPRINT_PAGE_SETUP,
+	WXPRINT_PREVIEW,
 	ID_MAG_EXTENTS,
 	ID_MAG_NO_ROT,
 	ID_MAG_PREVIOUS,
@@ -182,6 +185,10 @@ public:
 	void ClearToolBar(wxToolBar* m_toolBar);
 	int AddMenuCheckItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
 	int AddMenuItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&));
+    void Draw(wxDC& dc);
+    void OnPrint(wxCommandEvent& event);
+    void OnPrintPreview(wxCommandEvent& event);
+    void OnPageSetup(wxCommandEvent& event);
 
 	//wxTopLevelWindow's virtual functions
 	bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);

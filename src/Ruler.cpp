@@ -9,13 +9,6 @@
 
 void RulerMark::glCommands()
 {
-	if(wxGetApp().m_font_tex_number == 0)
-	{
-		wxString fstr = wxGetApp().GetExeFolder() + _T("/bitmaps/font.glf");
-		glGenTextures( 1, &wxGetApp().m_font_tex_number );
-		glFontCreate(&wxGetApp().m_gl_font, (char*)Ttc(fstr.c_str()), wxGetApp().m_font_tex_number);
-	}
-
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	double half_width = width/2;
 	double dpos = (double)pos;
