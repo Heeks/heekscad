@@ -36,6 +36,8 @@ private:
 	std::map< int, std::map<int, HeeksObj*> > used_ids; // map of group type ( usually same as object type ) to "map of ID to object"
 	std::map< int, int > next_id_map;
 
+	void create_font();
+
 public:
 	HeeksCADapp();
 	~HeeksCADapp();
@@ -98,7 +100,7 @@ public:
 	bool m_extrude_removes_sketches;
 	bool m_loft_removes_sketches;
 	bool m_font_created;
-	GLFONT m_gl_font;
+	GLFONT *m_gl_font;
 	unsigned int m_font_tex_number;
 
 	// HeeksObj's virtual functions
