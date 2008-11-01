@@ -62,6 +62,9 @@
 #include <sstream>
 using namespace std;
 
+extern wxPrintData *g_printData;
+extern wxPageSetupDialogData* g_pageSetupData;
+
 IMPLEMENT_APP(HeeksCADapp)
 
 HeeksCADapp::HeeksCADapp(): ObjList()
@@ -114,6 +117,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_extrude_removes_sketches = false;
 	m_loft_removes_sketches = false;
 	m_font_tex_number = 0;
+	m_gl_font = NULL;
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -130,6 +134,7 @@ HeeksCADapp::~HeeksCADapp()
 	delete viewrotating;
 	delete viewzooming;
 	delete m_ruler;
+	if(m_gl_font)delete m_gl_font;
 }
 
 bool HeeksCADapp::OnInit()
@@ -145,6 +150,15 @@ bool HeeksCADapp::OnInit()
 	glutInit(&argc, &argv);
 #endif
 	ClearHistory();
+
+    g_printData = new wxPrintData;
+    g_pageSetupData = new wxPageSetupDialogData;
+    // copy over initial paper size from print record
+    (*g_pageSetupData) = *g_printData;
+    // Set some initial page margins in mm. 
+    g_pageSetupData->SetMarginTopLeft(wxPoint(15, 15));
+    g_pageSetupData->SetMarginBottomRight(wxPoint(15, 15));
+
 	int width = 600;
 	int height = 400;
 	int posx = 200;
@@ -294,7 +308,7 @@ int HeeksCADapp::OnExit(){
 
 	WriteRecentFilesProfileString();
 
-	glFontDestroy(&m_gl_font);
+	if(m_gl_font)glFontDestroy(m_gl_font);
 
 	return result;
 }
@@ -2472,8 +2486,21 @@ bool HeeksCADapp::CheckForOneOrMoreSketchs(const std::list<HeeksObj*> &list, con
 	return true;
 }
 
+void HeeksCADapp::create_font()
+{
+	if(m_gl_font == NULL)
+	{
+		wxString fstr = wxGetApp().GetExeFolder() + _T("/bitmaps/font.glf");
+		glGenTextures( 1, &m_font_tex_number );
+		m_gl_font = new GLFONT;
+		glFontCreate(m_gl_font, (char*)Ttc(fstr.c_str()), wxGetApp().m_font_tex_number);
+	}
+}
+
 void HeeksCADapp::render_text(const wxChar* str)
 {
+	create_font();
+
 	//Needs to be called before text output
 	glColor4ub(0, 0, 0, 255);
 	glEnable(GL_BLEND);
@@ -2481,7 +2508,7 @@ void HeeksCADapp::render_text(const wxChar* str)
 	glEnable(GL_TEXTURE_2D);
 	glDepthMask(0);
 	glDisable(GL_POLYGON_OFFSET_FILL);
-	glFontBegin (&m_gl_font);
+	glFontBegin (m_gl_font);
 
 	//Draws text with a glFont
 	glFontTextOut ((char*)Ttc(str), 0.0f, 0.0f, 0.0f);
@@ -2496,5 +2523,6 @@ void HeeksCADapp::render_text(const wxChar* str)
 
 bool HeeksCADapp::get_text_size(const wxChar* str, float* width, float* height)
 {
-	return glFontTextSize(&m_gl_font, (char*)Ttc(str), width, height) != 0;
+	create_font();
+	return glFontTextSize(m_gl_font, (char*)Ttc(str), width, height) != 0;
 }
