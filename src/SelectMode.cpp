@@ -100,7 +100,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 		}
 		else if(window_box_exists)
 		{
-			wxGetApp().m_marked_list->Clear();
+			if(!event.ControlDown())wxGetApp().m_marked_list->Clear();
 			if(window_box.width > 0){
 				// only select objects which are completely within the window
 				MarkedObjectManyOfSame marked_object;
@@ -138,7 +138,10 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 				}
 
 				std::list<HeeksObj*> obj_list;
-				for(std::set<HeeksObj*>::iterator It = obj_set.begin(); It != obj_set.end(); It++)obj_list.push_back(*It);
+				for(std::set<HeeksObj*>::iterator It = obj_set.begin(); It != obj_set.end(); It++)
+				{
+					if(!event.ControlDown() || !wxGetApp().m_marked_list->ObjectMarked(*It))obj_list.push_back(*It);
+				}
 				wxGetApp().m_marked_list->Add(obj_list);
 			}
 			else{
@@ -146,8 +149,11 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 				MarkedObjectManyOfSame marked_object;
 				wxGetApp().m_marked_list->ObjectsInWindow(window_box, &marked_object, false);
 				std::list<HeeksObj*> obj_list;
-				for(HeeksObj* object = marked_object.GetFirstOfTopOnly(); object; object = marked_object.Increment())if(object->GetType() != GripperType)
-					obj_list.push_back(object);
+				for(HeeksObj* object = marked_object.GetFirstOfTopOnly(); object; object = marked_object.Increment())
+				{
+					if(object->GetType() != GripperType && (!event.ControlDown() || !wxGetApp().m_marked_list->ObjectMarked(object)))
+						obj_list.push_back(object);
+				}
 				wxGetApp().m_marked_list->Add(obj_list);
 			}
 			wxGetApp().m_frame->m_graphics->DrawWindow(window_box, true); // undraw the window
@@ -236,6 +242,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 			{
 				wxGetApp().m_frame->m_graphics->m_view_point.Shift(dm, wxPoint(event.GetX(), event.GetY()));
 			}
+			wxGetApp().m_frame->m_graphics->Update();
 			wxGetApp().m_frame->m_graphics->Refresh(0);
 		}
 		else
@@ -252,34 +259,27 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 			}
 			else if(abs(button_down_point.x - event.GetX())>2 || abs(button_down_point.y - event.GetY())>2)
 			{
-				if(m_can_grip_objects)
+				if(!window_box_exists && m_can_grip_objects)
 				{
-					MarkedObjectManyOfSame marked_object;
-					wxGetApp().FindMarkedObject(button_down_point, &marked_object);
-
 					std::list<HeeksObj*> selected_objects_dragged;
 					wxGetApp().m_show_grippers_on_drag = true;
 
-					if(marked_object.m_map.size()>0)
-					{
+					MarkedObjectManyOfSame marked_object;
+					wxGetApp().FindMarkedObject(button_down_point, &marked_object);
+					if(marked_object.m_map.size()>0){
 						HeeksObj* object = marked_object.GetFirstOfTopOnly();
+						HeeksObj* first_object = object;
 						while(object)
 						{
-							if(wxGetApp().m_marked_list->ObjectMarked(object)){
-								selected_objects_dragged.push_back(object);
+							if(wxGetApp().m_marked_list->ObjectMarked(object))
+							{
+								selected_objects_dragged = wxGetApp().m_marked_list->list();
 								break;
 							}
-
 							object = marked_object.Increment();
 						}
-					}
-
-					if(selected_objects_dragged.size() == 0)
-					{
-						if(marked_object.m_map.size()>0)
-						{
-							HeeksObj* object = marked_object.GetFirstOfTopOnly();
-							selected_objects_dragged.push_back(object);
+						if(selected_objects_dragged.size() == 0 && first_object){
+							selected_objects_dragged.push_back(first_object);
 							wxGetApp().m_show_grippers_on_drag = false;
 						}
 					}

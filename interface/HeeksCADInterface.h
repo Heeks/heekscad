@@ -25,6 +25,7 @@ public:
 	virtual bool GetCamera(double* pos, double* target, double* up, bool& perspective, double& field_of_view, double& near_plane, double& far_plane);
 	virtual wxFrame* GetMainFrame();
 	virtual wxWindow* GetGraphicsCanvas();
+	virtual HGLRC GetRC();
 	virtual wxMenuBar* GetMenuBar();
 	virtual wxMenu* GetViewMenu();
 	virtual wxAuiManager* GetAuiManager();
@@ -123,4 +124,5 @@ public:
 	virtual void RegisterOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
 	virtual void RemoveOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
 	virtual void PropertiesOnApply2();// don't need to press tick to make changes
+	virtual void PropertiesApplyChanges();// don't need to press tick to make changes
 };

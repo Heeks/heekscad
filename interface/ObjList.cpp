@@ -108,6 +108,19 @@ void ObjList::glCommands(bool select, bool marked, bool no_color)
 	}
 }
 
+void ObjList::Draw(wxDC& dc){
+	HeeksObj::Draw(dc);
+	std::list<HeeksObj*>::iterator It;
+	for(It=m_objects.begin(); It!=m_objects.end() ;It++)
+	{
+		HeeksObj* object = *It;
+		if(object->OnVisibleLayer() && object->m_visible)
+		{
+			object->Draw(dc);
+		}
+	}
+}
+
 HeeksObj* ObjList::GetFirstChild()
 {
 	if (m_objects.size()==0) return NULL;

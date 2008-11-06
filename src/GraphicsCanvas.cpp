@@ -61,6 +61,8 @@ void CGraphicsCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 
 
 	wxGetApp().background_color.glClearColor(wxGetApp().m_antialiasing ? 0.0f : 1.0f);
+
+	// clear the buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// render everything
