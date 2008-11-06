@@ -5,6 +5,7 @@
 #include "PropertyString.h"
 #include "PropertyInt.h"
 #include "PropertyColor.h"
+#include "PropertyCheck.h"
 #ifdef HEEKSCAD
 #include "ObjList.h"
 #include "../src/Gripper.h"
@@ -53,6 +54,18 @@ static void on_set_id(int value, HeeksObj* object)
 	object->SetID(value);
 }
 
+static void on_set_visible(bool value, HeeksObj* object)
+{
+	object->m_visible = value;
+#ifdef HEEKSCAD
+	wxGetApp().m_frame->m_properties->ApplyChanges();
+	wxGetApp().Repaint();
+#else
+	heeksCAD->PropertiesApplyChanges();
+	heeksCAD->Repaint();
+#endif
+}
+
 void HeeksObj::GetProperties(std::list<Property *> *list)
 {
 	bool editable = CanEditString();
@@ -64,6 +77,7 @@ void HeeksObj::GetProperties(std::list<Property *> *list)
 	{
 		list->push_back ( new PropertyColor ( _T("color"),  *c, this, on_set_color ) );
 	}
+	list->push_back(new PropertyCheck(_T("visible"), m_visible, this, on_set_visible));
 }
 
 bool HeeksObj::GetScaleAboutMatrix(double *m)

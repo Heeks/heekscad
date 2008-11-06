@@ -67,6 +67,7 @@ public:
 	virtual long GetMarkingMask()const{return 0;}
 	virtual int GetIDGroupType()const{return GetType();}
 	virtual void glCommands(bool select, bool marked, bool no_color){};
+	virtual void Draw(wxDC& dc){} // for printing
 	virtual bool DrawAfterOthers(){return false;}
 	virtual void GetBox(CBox &box){}
 	virtual const wxChar* GetShortString(void)const{return NULL;}
