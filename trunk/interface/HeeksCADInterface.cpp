@@ -78,6 +78,11 @@ wxWindow* CHeeksCADInterface::GetGraphicsCanvas()
 	return wxGetApp().m_frame->m_graphics;
 }
 
+HGLRC CHeeksCADInterface::GetRC()
+{
+	return wxGetApp().m_frame->m_graphics->GetContext()->GetGLRC();
+}
+
 wxMenuBar* CHeeksCADInterface::GetMenuBar()
 {
 	return wxGetApp().m_frame->m_menuBar;
@@ -570,4 +575,10 @@ void CHeeksCADInterface::PropertiesOnApply2()
 {
 	// don't need to press tick to make changes
 	wxGetApp().m_frame->m_properties->OnApply2();
+}
+
+void CHeeksCADInterface::PropertiesApplyChanges()
+{
+	// don't need to press tick to make changes
+	wxGetApp().m_frame->m_properties->ApplyChanges();
 }

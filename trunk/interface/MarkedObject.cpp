@@ -102,6 +102,7 @@ MarkedObject* MarkedObject::Add(HeeksObj* object, double depth, int window_size)
 	else
 	{
 		marked_object = FindIt->second;
+		if(depth<marked_object->m_depth)marked_object->m_depth = depth;
 	}
 	return marked_object;
 }

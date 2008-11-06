@@ -53,6 +53,12 @@ void HLine::glCommands(bool select, bool marked, bool no_color){
 	}
 }
 
+void HLine::Draw(wxDC& dc)
+{
+    dc.SetPen(*wxBLACK_PEN);
+    dc.DrawLine(0, 0, 229, 349);
+}
+
 HeeksObj *HLine::MakeACopy(void)const{
 	HLine *new_object = new HLine(*this);
 	return new_object;

@@ -137,9 +137,8 @@ void CFace::GetBox(CBox &box){
 		// there must be a better way than re-using the render code
 		// Get triangulation
 		if(m_owner && m_owner->m_owner && m_owner->m_owner->GetType() != SolidType){
-			double pixels_per_mm = wxGetApp().GetPixelScale();
 			BRepTools::Clean(m_topods_face);
-			BRepMesh::Mesh(m_topods_face, 1/pixels_per_mm);
+			BRepMesh::Mesh(m_topods_face, 1.0);
 		}
 		TopLoc_Location L;
 		Handle_Poly_Triangulation facing = BRep_Tool::Triangulation(m_topods_face,L);

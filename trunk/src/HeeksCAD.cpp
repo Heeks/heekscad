@@ -120,6 +120,8 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_gl_font = NULL;
 }
 
+static RemoveObjectTool remove_object_tool(NULL);
+
 HeeksCADapp::~HeeksCADapp()
 {
 	delete m_marked_list;
@@ -127,6 +129,7 @@ HeeksCADapp::~HeeksCADapp()
 	observers.clear();
 	EndHistory();
 	delete history;
+	remove_object_tool = RemoveObjectTool(NULL);
 	delete magnification;
 	delete m_select_mode;
 	delete m_digitizing;
@@ -371,6 +374,7 @@ void HeeksCADapp::CreateLights(void)
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_amb);
     glLightModelfv(GL_LIGHT_MODEL_LOCAL_VIEWER, local_viewer);
     glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+	glLightfv(GL_LIGHT0,GL_SPOT_DIRECTION,pos);
 	if(m_light_push_matrix){
 		glPopMatrix();
 	}
@@ -378,6 +382,13 @@ void HeeksCADapp::CreateLights(void)
 	glEnable(GL_LIGHT0);
 	glEnable(GL_AUTO_NORMAL);
     glEnable(GL_NORMALIZE);
+	glDisable(GL_LIGHT1);
+	glDisable(GL_LIGHT2);
+	glDisable(GL_LIGHT3);
+	glDisable(GL_LIGHT4);
+	glDisable(GL_LIGHT5);
+	glDisable(GL_LIGHT6);
+	glDisable(GL_LIGHT7);
 }
 
 void HeeksCADapp::DestroyLights(void)
@@ -398,6 +409,7 @@ void HeeksCADapp::Reset(){
 	Clear();
 	EndHistory();
 	delete history;
+	remove_object_tool = RemoveObjectTool(NULL);
 	history = new MainHistory;
 	m_current_coordinate_system = NULL;
 	m_doing_rollback = false;
@@ -1830,7 +1842,6 @@ public:
 };
 
 static MarkObjectTool mark_object_tool;
-static RemoveObjectTool remove_object_tool(NULL);
 
 void HeeksCADapp::GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool from_graphics_canvas, bool control_pressed)
 {

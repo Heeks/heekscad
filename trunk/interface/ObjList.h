@@ -29,6 +29,7 @@ public:
 	HeeksObj* MakeACopy(void) const;
 	void GetBox(CBox &box);
 	void glCommands(bool select, bool marked, bool no_color);
+	void Draw(wxDC& dc);
 	HeeksObj* GetFirstChild();
 	HeeksObj* GetNextChild();
 	HeeksObj* GetAtIndex(int index);

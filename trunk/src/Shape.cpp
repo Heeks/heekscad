@@ -279,7 +279,8 @@ void CShape::delete_faces_and_edges()
 	m_edges->Clear();
 }
 
-void CShape::glCommands(bool select, bool marked, bool no_color){
+void CShape::glCommands(bool select, bool marked, bool no_color)
+{
 	m_material.glMaterial(1.0);
 	if(m_gl_list)
 	{
@@ -302,6 +303,14 @@ void CShape::glCommands(bool select, bool marked, bool no_color){
 
 		glEndList();
 	}
+}
+
+void CShape::GetBox(CBox &box)
+{
+	BRepTools::Clean(m_shape);
+	BRepMesh::Mesh(m_shape, 1.0);
+
+	m_faces->GetBox(box);
 }
 
 class OffsetShapeTool:public Tool{
@@ -399,15 +408,21 @@ HeeksObj* CShape::MakeObject(const TopoDS_Shape &shape, const wxChar* title, Sol
 	return NULL;
 }
 
-static HeeksObj* Cut(HeeksObj* s1, HeeksObj* s2){
-	TopoDS_Shape sh1, sh2;
-	TopoDS_Shape new_shape = BRepAlgoAPI_Cut(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
+static bool Cut(const std::list<TopoDS_Shape> &shapes, TopoDS_Shape& new_shape){
+	if(shapes.size() < 2)return false;
 
-	HeeksObj* new_object = CShape::MakeObject(new_shape, _T("Result of Cut Operation"), SOLID_TYPE_UNKNOWN, ((CShape*)s1)->m_color);
-	wxGetApp().AddUndoably(new_object, NULL, NULL);
-	wxGetApp().DeleteUndoably(s1);
-	wxGetApp().DeleteUndoably(s2);
-	return new_object;
+	std::list<TopoDS_Shape>::const_iterator It = shapes.begin();
+	TopoDS_Shape current_shape = *It;
+	It++;
+	while(It != shapes.end())
+	{
+		const TopoDS_Shape &cutting_shape = *It;
+		current_shape = BRepAlgoAPI_Cut(current_shape, cutting_shape);
+		It++;
+	}
+
+	new_shape = current_shape;
+	return true;
 }
 
 static HeeksObj* Fuse(HeeksObj* s1, HeeksObj* s2){
@@ -445,23 +460,30 @@ CFace* CShape::find(const TopoDS_Face &face)
 void CShape::CutShapes(const std::list<HeeksObj*> &list_in)
 {
 	// subtract from the first one in the list all the others
-	wxGetApp().StartHistory(_T("Shape Cut"));
-	HeeksObj* s1 = NULL;
-	std::list<HeeksObj*> list = list_in;
+	std::list<TopoDS_Shape> shapes;
+	std::list<HeeksObj*> delete_list;
+	HeeksObj* first_solid = NULL;
 
-	for(std::list<HeeksObj*>::const_iterator It = list.begin(); It != list.end(); It++){
+	for(std::list<HeeksObj*>::const_iterator It = list_in.begin(); It != list_in.end(); It++){
 		HeeksObj* object = *It;
-		if(object->GetType() == SolidType || object->GetType() == FaceType)
+		if(object->GetType() == SolidType)
 		{
-			if(s1 == NULL)s1 = object;
-			else{
-				s1 = Cut(s1, object);
-			}
+			shapes.push_back(((CSolid*)object)->Shape());
+			if(first_solid == NULL)first_solid = object;
+			delete_list.push_back(object);
 		}
 	}
 
-	wxGetApp().EndHistory();
-	wxGetApp().Repaint();
+	TopoDS_Shape new_shape;
+	if(Cut(shapes, new_shape))
+	{
+		wxGetApp().StartHistory(_T("Shape Cut"));
+		HeeksObj* new_object = CShape::MakeObject(new_shape, _T("Result of Cut Operation"), SOLID_TYPE_UNKNOWN, ((CShape*)first_solid)->m_color);
+		wxGetApp().AddUndoably(new_object, NULL, NULL);
+		wxGetApp().DeleteUndoably(delete_list);
+		wxGetApp().EndHistory();
+		wxGetApp().Repaint();
+	}
 }
 
 void CShape::FuseShapes(const std::list<HeeksObj*> &list_in)
