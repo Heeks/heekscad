@@ -58,7 +58,7 @@
 #include "../interface/PropertyString.h"
 #include "../interface/PropertyList.h"
 #include "RegularShapesDrawing.h"
-
+#include "HeeksPrintout.h"
 #include <sstream>
 using namespace std;
 
@@ -2536,4 +2536,14 @@ bool HeeksCADapp::get_text_size(const wxChar* str, float* width, float* height)
 {
 	create_font();
 	return glFontTextSize(m_gl_font, (char*)Ttc(str), width, height) != 0;
+}
+
+void HeeksCADapp::PlotSetColor(const HeeksColor &c)
+{
+	m_frame->m_printout->SetColor(c);
+}
+
+void HeeksCADapp::PlotLine(const double* s, const double* e)
+{
+	m_frame->m_printout->DrawLine(s, e);
 }
