@@ -55,8 +55,11 @@ void HLine::glCommands(bool select, bool marked, bool no_color){
 
 void HLine::Draw(wxDC& dc)
 {
-    dc.SetPen(*wxBLACK_PEN);
-    dc.DrawLine(0, 0, 229, 349);
+	wxGetApp().PlotSetColor(color);
+	double s[3], e[3];
+	extract(A, s);
+	extract(B, e);
+	wxGetApp().PlotLine(s, e);
 }
 
 HeeksObj *HLine::MakeACopy(void)const{
