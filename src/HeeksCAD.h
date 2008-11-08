@@ -102,6 +102,7 @@ public:
 	bool m_font_created;
 	GLFONT *m_gl_font;
 	unsigned int m_font_tex_number;
+	bool m_print_scaled_to_page;
 
 	// HeeksObj's virtual functions
 	void GetBox(CBox &box);
@@ -208,6 +209,8 @@ public:
 	bool CheckForOneOrMoreSketchs(const std::list<HeeksObj*> &list, const wxString& msg, const wxString& caption);
 	void render_text(const wxChar* str);
 	bool get_text_size(const wxChar* str, float* width, float* height);
+	void PlotSetColor(const HeeksColor &c);
+	void PlotLine(const double* s, const double* e);
 };
 
 DECLARE_APP(HeeksCADapp)

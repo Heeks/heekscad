@@ -6,6 +6,7 @@ class CGraphicsCanvas;
 class CObjPropsCanvas;
 class COptionsCanvas;
 class CInputModeCanvas;
+class HeeksPrintout;
 
 struct SExternalButtonFunctions{
 	void (*on_button)(wxCommandEvent&);
@@ -101,6 +102,7 @@ public:
 	wxMenuBar *m_menuBar;
 	wxMenu* m_recent_files_menu;
 	wxMenu *m_menuView;
+	HeeksPrintout* m_printout;
 
 	CHeeksFrame( const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize );
 	virtual ~CHeeksFrame();

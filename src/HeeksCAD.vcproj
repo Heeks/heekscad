@@ -490,6 +490,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\HeeksPrintout.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\HeeksPrintout.h"
+			>
+		</File>
+		<File
 			RelativePath=".\HILine.cpp"
 			>
 		</File>
