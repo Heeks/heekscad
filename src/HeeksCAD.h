@@ -211,6 +211,7 @@ public:
 	bool get_text_size(const wxChar* str, float* width, float* height);
 	void PlotSetColor(const HeeksColor &c);
 	void PlotLine(const double* s, const double* e);
+	void PlotArc(const double* s, const double* e, const double* c);
 };
 
 DECLARE_APP(HeeksCADapp)

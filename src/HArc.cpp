@@ -111,6 +111,16 @@ void HArc::glCommands(bool select, bool marked, bool no_color){
 	}
 }
 
+void HArc::Draw(wxDC& dc)
+{
+	wxGetApp().PlotSetColor(color);
+	double s[3], e[3], c[3];
+	extract(A, s);
+	extract(B, e);
+	extract(m_circle.Location(), c);
+	wxGetApp().PlotArc(s, e, c);
+}
+
 HeeksObj *HArc::MakeACopy(void)const{
 		HArc *new_object = new HArc(*this);
 		return new_object;

@@ -2547,3 +2547,8 @@ void HeeksCADapp::PlotLine(const double* s, const double* e)
 {
 	m_frame->m_printout->DrawLine(s, e);
 }
+
+void HeeksCADapp::PlotArc(const double* s, const double* e, const double* c)
+{
+	m_frame->m_printout->DrawArc(s, e, c);
+}

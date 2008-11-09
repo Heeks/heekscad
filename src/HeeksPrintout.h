@@ -11,6 +11,7 @@ public:
 	float m_logUnitsFactory;
     wxCoord m_xoff;
     wxCoord m_yoff;
+	float m_scale;
 
 	HeeksPrintout(const wxChar *title = _T("Heeks printout")):wxPrintout(title) {}
 	bool OnPrintPage(int page);
@@ -21,5 +22,6 @@ public:
 
 	void SetColor(const HeeksColor &c);
 	void DrawLine(const double* s, const double* e);
+	void DrawArc(const double* s, const double* e, const double* c);
 };
 

@@ -146,6 +146,7 @@ void CGraphicsCanvas::EndXOR(void){
 void CGraphicsCanvas::OnMouse( wxMouseEvent& event )
 {
 	if(event.Entering()){
+	    SetCurrent();
 		SetFocus(); // so middle wheel works
 	}
 
