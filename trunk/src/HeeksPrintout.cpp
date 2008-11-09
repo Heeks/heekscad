@@ -85,15 +85,17 @@ void HeeksPrintout::SetUnitsFactor()
     // might be the preview bitmap width, so scale down.
     float overallScalex = scalex * (float)(w/(float)pageWidth);
     float overallScaley = scaley * (float)(h/(float)pageHeight);
-    dc->SetUserScale(overallScalex, overallScaley);
+//    dc->SetUserScale(overallScalex, overallScaley);
 
     // Calculate conversion factor for converting millimetres into logical
     // units. There are approx. 25.4 mm to the inch. There are ppi device units
     // to the inch. Therefore 1 mm corresponds to ppi/25.4 device units. We also
     // divide by the screen-to-printer scaling factor, because we need to
     // unscale to pass logical units to DrawLine.
-    m_logUnitsFactorx = (float)(ppiPrinterX/(scalex*25.4));
-    m_logUnitsFactory = (float)(ppiPrinterY/(scaley*25.4));
+    m_logUnitsFactorx = (float)(ppiPrinterX/25.4) * (float)(w/(float)pageWidth);
+    m_logUnitsFactory = (float)(ppiPrinterY/25.4) * (float)(h/(float)pageHeight);
+
+	m_scale = overallScalex;
 
 	wxRect fitRect = GetLogicalPageMarginsRect(*g_pageSetupData);
     m_xoff = fitRect.x + fitRect.width / 2;
@@ -102,12 +104,40 @@ void HeeksPrintout::SetUnitsFactor()
 
 void HeeksPrintout::SetColor(const HeeksColor &c)
 {
+	wxPen pen(c.COLORREF_color(), (int)(m_scale + 0.99));
     wxDC *dc = GetDC();
-    dc->SetPen(*wxBLACK_PEN);
+    dc->SetPen(pen);
 }
 
 void HeeksPrintout::DrawLine(const double* s, const double* e)
 {
     wxDC *dc = GetDC();
-	dc->DrawLine(m_xoff + (long)(s[0] * m_logUnitsFactorx), m_yoff - (long)(s[1] * m_logUnitsFactory), m_xoff + (long)(e[0] * m_logUnitsFactorx), m_yoff - (long)(e[1] * m_logUnitsFactory));
+	dc->DrawLine(m_xoff + (long)(s[0] * m_logUnitsFactorx + 0.5), m_yoff - (long)(s[1] * m_logUnitsFactory + 0.5), m_xoff + (long)(e[0] * m_logUnitsFactorx + 0.5), m_yoff - (long)(e[1] * m_logUnitsFactory + 0.5));
+}
+
+void HeeksPrintout::DrawArc(const double* s, const double* e, const double* c)
+{
+    wxDC *dc = GetDC();
+
+	double srad = sqrt(pow(s[0] - c[0], 2.0) + pow(s[1] - c[1], 2.0));
+	double erad = sqrt(pow(e[0] - c[0], 2.0) + pow(e[1] - c[1], 2.0));
+
+	int isx = m_xoff + (long)(e[0] * m_logUnitsFactorx + 0.5);
+	int isy = m_yoff - (long)(e[1] * m_logUnitsFactory + 0.5);
+	int iex = m_xoff + (long)(s[0] * m_logUnitsFactorx + 0.5);
+	int iey = m_yoff - (long)(s[1] * m_logUnitsFactory + 0.5);
+	int icx = m_xoff + (long)(c[0] * m_logUnitsFactorx + 0.5);
+	int icy = m_yoff - (long)(c[1] * m_logUnitsFactory + 0.5);
+
+	int dsx = isx - icx;
+	int dsy = isy - icy;
+	int dex = iex - icx;
+	int dey = iey - icy;
+
+	double s_centre_dist = sqrt((double)(dsx*dsx + dsy*dsy));
+	double e_centre_dist = sqrt((double)(dex*dex + dey*dey));
+
+    dc->SetBackgroundMode(wxTRANSPARENT);
+    dc->SetBrush(*wxTRANSPARENT_BRUSH);
+	dc->DrawArc(isx, isy, iex, iey, icx, icy);
 }

@@ -25,6 +25,7 @@ public:
 	long GetMarkingMask()const{return MARKING_FILTER_ARC;}
 	int GetIDGroupType()const{return LineType;}
 	void glCommands(bool select, bool marked, bool no_color);
+	void Draw(wxDC& dc);
 	void GetBox(CBox &box);
 	const wxChar* GetTypeString(void)const{return _T("Arc");}
 	HeeksObj *MakeACopy(void)const;
