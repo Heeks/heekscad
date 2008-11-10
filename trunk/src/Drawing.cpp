@@ -36,10 +36,13 @@ void Drawing::RecalculateAndRedraw(const wxPoint& point)
 	DigitizedPoint end = wxGetApp().m_digitizing->digitize(point);
 	if(end.m_type == DigitizeNoItemType)return;
 
-	if(DragDoneWithXOR())wxGetApp().m_frame->m_graphics->EndDrawFront();
-	calculate_item(end);
-	if(DragDoneWithXOR())wxGetApp().m_frame->m_graphics->DrawFront();
-	else wxGetApp().Repaint(true);
+	if(is_an_add_level(GetDrawStep()))
+	{
+		if(DragDoneWithXOR())wxGetApp().m_frame->m_graphics->EndDrawFront();
+		calculate_item(end);
+		if(DragDoneWithXOR())wxGetApp().m_frame->m_graphics->DrawFront();
+		else wxGetApp().Repaint(true);
+	}
 }
 
 void Drawing::AddPoint()
