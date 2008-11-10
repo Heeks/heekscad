@@ -201,7 +201,7 @@ bool CCone::Stretch(const double *p, const double* shift)
 
 bool CCone::StretchTemporary(const double *p, const double* shift)
 {
-	return true;
+	return false;
 }
 
 void CCone::SetXMLElement(TiXmlElement* element)
