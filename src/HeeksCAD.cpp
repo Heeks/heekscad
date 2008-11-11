@@ -401,6 +401,7 @@ void HeeksCADapp::DestroyLights(void)
 
 void HeeksCADapp::Reset(){
 	m_marked_list->Clear();
+	m_marked_list->Reset();
 	std::set<Observer*>::iterator It;
 	for(It = observers.begin(); It != observers.end(); It++){
 		Observer *ov = *It;
