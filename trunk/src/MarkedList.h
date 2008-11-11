@@ -50,4 +50,5 @@ public:
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	void CutSelectedItems();
 	void CopySelectedItems();
+	void Reset();
 };

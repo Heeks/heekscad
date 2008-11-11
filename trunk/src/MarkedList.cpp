@@ -395,3 +395,8 @@ void MarkedList::CopySelectedItems()
 		wxTheClipboard->Close();
 	}
 }
+
+void MarkedList::Reset()
+{
+	delete_move_grips();
+}
