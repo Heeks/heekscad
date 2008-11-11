@@ -562,6 +562,12 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<in
 						shape_data.SetShape((CShape*)new_object);
 					}
 				}
+				else
+				{
+					HeeksObj* new_object = MakeObject(rShape, _T("STEP solid"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191));
+					if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
+					else wxGetApp().Add(new_object, NULL);
+				}
 			}
 			wxGetApp().Repaint();
 		}

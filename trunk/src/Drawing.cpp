@@ -36,7 +36,7 @@ void Drawing::RecalculateAndRedraw(const wxPoint& point)
 	DigitizedPoint end = wxGetApp().m_digitizing->digitize(point);
 	if(end.m_type == DigitizeNoItemType)return;
 
-	if(is_an_add_level(GetDrawStep()))
+	if(is_a_draw_level(GetDrawStep()))
 	{
 		if(DragDoneWithXOR())wxGetApp().m_frame->m_graphics->EndDrawFront();
 		calculate_item(end);

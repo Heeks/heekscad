@@ -69,7 +69,7 @@ IMPLEMENT_APP(HeeksCADapp)
 
 HeeksCADapp::HeeksCADapp(): ObjList()
 {
-	m_version_number = _T("0 3 2");
+	m_version_number = _T("0 4 0");
 	m_geom_tol = 0.001;
 	background_color = HeeksColor(0, 0, 0);
 	current_color = HeeksColor(0, 0, 0);
@@ -84,7 +84,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	viewzooming = new ViewZooming;
 	m_select_mode = new CSelectMode();
 	m_digitizing = new DigitizeMode();
-	digitize_end = true;
+	digitize_end = false;
 	digitize_inters = false;
 	digitize_centre = false;
 	digitize_midpoint = false;
@@ -172,7 +172,7 @@ bool HeeksCADapp::OnInit()
 	m_config->Read(_T("MainFramePosY"), &posy);
 	if(posx < 0)posx = 0;
 	if(posy < 0)posy = 0;
-	m_config->Read(_T("DrawEnd"), &digitize_end, true);
+	m_config->Read(_T("DrawEnd"), &digitize_end, false);
 	m_config->Read(_T("DrawInters"), &digitize_inters, false);
 	m_config->Read(_T("DrawCentre"), &digitize_centre, false);
 	m_config->Read(_T("DrawMidpoint"), &digitize_midpoint, false);
@@ -180,7 +180,7 @@ bool HeeksCADapp::OnInit()
 	m_config->Read(_T("DrawTangent"), &digitize_tangent, false);
 	m_config->Read(_T("DrawCoords"), &digitize_coords, true);
 	m_config->Read(_T("DrawScreen"), &digitize_screen, false);
-	m_config->Read(_T("DrawToGrid"), &draw_to_grid, false);
+	m_config->Read(_T("DrawToGrid"), &draw_to_grid, true);
 	m_config->Read(_T("DrawGrid"), &digitizing_grid);
 	m_config->Read(_T("DrawRadius"), &digitizing_radius);
 	{
