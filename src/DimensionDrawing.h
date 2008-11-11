@@ -18,6 +18,7 @@ private:
 	int number_of_steps(){return 3;}
 	int step_to_go_to_after_last_step(){return 0;}
 	bool is_an_add_level(int level){return level == 2;}
+	bool is_a_draw_level(int level){return level >= 1;}
 	bool DragDoneWithXOR(){return false;}
 
 public:
