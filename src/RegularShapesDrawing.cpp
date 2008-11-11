@@ -28,7 +28,7 @@ RegularShapesDrawing::~RegularShapesDrawing(void)
 
 void RegularShapesDrawing::ClearSketch()
 {
-	((CSketch*)temp_object)->Clear();
+	if(temp_object)((CSketch*)temp_object)->Clear();
 }
 
 bool RegularShapesDrawing::calculate_item(DigitizedPoint &end)
