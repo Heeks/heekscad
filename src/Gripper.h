@@ -32,7 +32,7 @@ public:
 	// HeeksObj's virtual functions
 	int GetType()const{return GripperType;}
 	void glCommands(bool select, bool marked, bool no_color);
-	const wxChar* GetTypeString(void)const{return _T("Gripper");}
+	const wxChar* GetTypeString(void)const{return _("Gripper");}
 	bool ModifyByMatrix(const double* m);
 
 	//Gripper's virtual functions

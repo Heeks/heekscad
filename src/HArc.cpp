@@ -184,12 +184,12 @@ static void on_set_axis(const gp_Pnt &vt, HeeksObj* object){
 void HArc::GetProperties(std::list<Property *> *list){
 	__super::GetProperties(list);
 
-	list->push_back(new PropertyVertex(_T("start"), A, this, on_set_start));
-	list->push_back(new PropertyVertex(_T("end"), B, this, on_set_end));
-	list->push_back(new PropertyVertex(_T("centre"), m_circle.Location(), this, on_set_centre));
-	list->push_back(new PropertyVertex(_T("axis"), gp_Pnt(m_circle.Axis().Direction().XYZ()), this, on_set_axis));
+	list->push_back(new PropertyVertex(_("start"), A, this, on_set_start));
+	list->push_back(new PropertyVertex(_("end"), B, this, on_set_end));
+	list->push_back(new PropertyVertex(_("centre"), m_circle.Location(), this, on_set_centre));
+	list->push_back(new PropertyVertex(_("axis"), gp_Pnt(m_circle.Axis().Direction().XYZ()), this, on_set_axis));
 	double length = A.Distance(B);
-	list->push_back(new PropertyDouble(_T("Length"), length, NULL));
+	list->push_back(new PropertyDouble(_("Length"), length, NULL));
 }
 
 int HArc::Intersects(const HeeksObj *object, std::list< double > *rl)const

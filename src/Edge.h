@@ -42,7 +42,7 @@ public:
 	void GetBox(CBox &box);
 	HeeksObj *MakeACopy(void)const{ return new CEdge(*this);}
 	wxIcon* GetIcon();
-	const wxChar* GetTypeString(void)const{return _T("Edge");}
+	const wxChar* GetTypeString(void)const{return _("Edge");}
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	void WriteXML(TiXmlElement *root);
 

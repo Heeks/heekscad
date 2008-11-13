@@ -23,7 +23,7 @@ public:
 	virtual ~PointDrawing(void);
 
 	// InputMode's virtual functions
-	const wxChar* GetTitle(){return _T("Point drawing");}
+	const wxChar* GetTitle(){return _("Point drawing");}
 };
 
 extern PointDrawing point_drawing;

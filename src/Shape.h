@@ -12,7 +12,7 @@ class CEdge;
 class CFaceList: public ObjList{
 	static wxIcon* m_icon;
 public:
-	const wxChar* GetTypeString(void)const{return _T("Faces");}
+	const wxChar* GetTypeString(void)const{return _("Faces");}
 	HeeksObj *MakeACopy(void)const{ return new CFaceList(*this);}
 	wxIcon* GetIcon();
 };
@@ -20,7 +20,7 @@ public:
 class CEdgeList: public ObjList{
 	static wxIcon* m_icon;
 public:
-	const wxChar* GetTypeString(void)const{return _T("Edges");}
+	const wxChar* GetTypeString(void)const{return _("Edges");}
 	HeeksObj *MakeACopy(void)const{ return new CEdgeList(*this);}
 	wxIcon* GetIcon();
 };

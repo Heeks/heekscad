@@ -75,7 +75,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 {
 	if ( m_gripper_type > GripperTypeScale )
 	{
-		wxGetApp().StartHistory ( _T("Stretch Marked List") );
+		wxGetApp().StartHistory();
 		double shift[3] = {to[0] - from[0], to[1] - from[1], to[2] - from[2]};
 		{
 			std::list<HeeksObj *>::iterator It;
@@ -96,7 +96,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 		MakeMatrix ( from, to, object_m, mat );
 		double m[16];
 		extract(mat, m );
-		wxGetApp().StartHistory ( _T("Move Marked List") );
+		wxGetApp().StartHistory();
 		std::list<HeeksObj *>::iterator It;
 		for ( It = m_items_marked_at_grab.begin(); It != m_items_marked_at_grab.end(); It++ )
 		{

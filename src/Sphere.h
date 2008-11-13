@@ -16,7 +16,7 @@ public:
 	CSphere(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
 
 	// HeeksObj's virtual functions
-	const wxChar* GetTypeString(void)const{return _T("Sphere");}
+	const wxChar* GetTypeString(void)const{return _("Sphere");}
 	wxIcon* GetIcon();
 	HeeksObj *MakeACopy(void)const;
 	bool ModifyByMatrix(const double* m);

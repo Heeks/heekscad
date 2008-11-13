@@ -24,7 +24,7 @@ public:
 	long GetMarkingMask()const{return MARKING_FILTER_CIRCLE;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
-	const wxChar* GetTypeString(void)const{return _T("Circle");}
+	const wxChar* GetTypeString(void)const{return _("Circle");}
 	HeeksObj *MakeACopy(void)const;
 	wxIcon* GetIcon();
 	bool ModifyByMatrix(const double *mat);

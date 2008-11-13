@@ -69,15 +69,15 @@ static void on_set_visible(bool value, HeeksObj* object)
 void HeeksObj::GetProperties(std::list<Property *> *list)
 {
 	bool editable = CanEditString();
-	list->push_back(new PropertyString(_T("object type"), GetTypeString(), NULL));
-	if(GetShortString())list->push_back(new PropertyString(_T("object title"), GetShortString(), this, editable ? on_edit_string : NULL));
-	list->push_back(new PropertyInt(_T("ID"), m_id, this, on_set_id));
+	list->push_back(new PropertyString(_("object type"), GetTypeString(), NULL));
+	if(GetShortString())list->push_back(new PropertyString(_("object title"), GetShortString(), this, editable ? on_edit_string : NULL));
+	list->push_back(new PropertyInt(_("ID"), m_id, this, on_set_id));
 	const HeeksColor* c = GetColor();
 	if(c)
 	{
-		list->push_back ( new PropertyColor ( _T("color"),  *c, this, on_set_color ) );
+		list->push_back ( new PropertyColor ( _("color"),  *c, this, on_set_color ) );
 	}
-	list->push_back(new PropertyCheck(_T("visible"), m_visible, this, on_set_visible));
+	list->push_back(new PropertyCheck(_("visible"), m_visible, this, on_set_visible));
 }
 
 bool HeeksObj::GetScaleAboutMatrix(double *m)

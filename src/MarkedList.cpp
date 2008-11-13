@@ -277,7 +277,7 @@ void MarkedList::GetProperties(std::list<Property *> *list){
 	else
 	{
 		// multiple selection
-		list->push_back(new PropertyInt(_T("Number of items selected"), m_list.size(), NULL));
+		list->push_back(new PropertyInt(_("Number of items selected"), m_list.size(), NULL));
 	}
 }
 
@@ -286,7 +286,7 @@ class DeleteMarkedListTool : public Tool
 private:
 	static wxBitmap* m_bitmap;
 public:
-	const wxChar* GetTitle() {return _T("Delete Marked Items");}
+	const wxChar* GetTitle() {return _("Delete Marked Items");}
 	void Run() {wxGetApp().DeleteMarkedItems();}
 	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/delete.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
 } delete_marked_list_tool;
@@ -298,9 +298,9 @@ private:
 	static wxBitmap* m_bitmap;
 public:
 	void Run();
-	const wxChar* GetTitle(){return _T("Copy");}
+	const wxChar* GetTitle(){return _("Copy");}
 	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/copy.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
-	const wxChar* GetToolTip(){return _T("Copies the selected items to the clipboard");}
+	const wxChar* GetToolTip(){return _("Copies the selected items to the clipboard");}
 } copy_marked_list;
 wxBitmap* CopyMarkedList::m_bitmap = NULL;
 
@@ -315,9 +315,9 @@ private:
 	static wxBitmap* m_bitmap;
 public:
 	void Run();
-	const wxChar* GetTitle(){return _T("Paste");}
+	const wxChar* GetTitle(){return _("Paste");}
 	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/paste.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
-	const wxChar* GetToolTip(){return _T("Paste items from the clipboard to the drawing");}
+	const wxChar* GetToolTip(){return _("Paste items from the clipboard to the drawing");}
 } paste_tool;
 wxBitmap* PasteTool::m_bitmap = NULL;
 
@@ -357,7 +357,7 @@ void MarkedList::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 
 void MarkedList::CutSelectedItems()
 {
-	wxGetApp().StartHistory(_T("Cut Selected Items"));
+	wxGetApp().StartHistory();
 	CopySelectedItems();
 	wxGetApp().DeleteUndoably(m_list);
 	wxGetApp().EndHistory();

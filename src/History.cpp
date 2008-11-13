@@ -3,11 +3,10 @@
 #include "../interface/HeeksObj.h"
 #include "History.h"
 
-History::History(int Level, const wxChar*t)
+History::History(int Level)
 {
 	sub_history = NULL;
 	level = Level;
-	title = wxString(t);
 }
 
 void History::Run()
@@ -49,15 +48,15 @@ bool History::InternalRollForward(void)
 	return true;
 }
 
-void History::StartHistory(const wxChar* title)
+void History::StartHistory()
 {
 	if(sub_history)
 	{
-		sub_history->StartHistory(title);
+		sub_history->StartHistory();
 	}
 	else
 	{
-		sub_history = new History(level+1, title);
+		sub_history = new History(level+1);
 	}
 }
 

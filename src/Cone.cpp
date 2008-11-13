@@ -67,12 +67,12 @@ void CCone::GetProperties(std::list<Property *> *list)
 {
 	__super::GetProperties(list);
 
-	list->push_back(new PropertyVertex(_T("centre pos"), m_pos.Location(), this, on_set_centre));
-	list->push_back(new PropertyVertex(_T("direction"), gp_Pnt(m_pos.Direction().XYZ()), NULL));
-	list->push_back(new PropertyVertex(_T("x direction"), gp_Pnt(m_pos.XDirection().XYZ()), NULL));
-	list->push_back(new PropertyDouble(_T("r1"), m_r1, this, on_set_r1));
-	list->push_back(new PropertyDouble(_T("r2"), m_r2, this, on_set_r2));
-	list->push_back(new PropertyDouble(_T("height"), m_height, this, on_set_height));
+	list->push_back(new PropertyVertex(_("centre pos"), m_pos.Location(), this, on_set_centre));
+	list->push_back(new PropertyVertex(_("direction"), gp_Pnt(m_pos.Direction().XYZ()), NULL));
+	list->push_back(new PropertyVertex(_("x direction"), gp_Pnt(m_pos.XDirection().XYZ()), NULL));
+	list->push_back(new PropertyDouble(_("r1"), m_r1, this, on_set_r1));
+	list->push_back(new PropertyDouble(_("r2"), m_r2, this, on_set_r2));
+	list->push_back(new PropertyDouble(_("height"), m_height, this, on_set_height));
 }
 
 void CCone::GetGripperPositions(std::list<double> *list, bool just_for_endof)
@@ -114,7 +114,7 @@ void CCone::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 void CCone::OnApplyProperties()
 {
 	CCone* new_object = new CCone(m_pos, m_r1, m_r2, m_height, m_title.c_str(), m_color);
-	wxGetApp().StartHistory(_T("Edit Cone"));
+	wxGetApp().StartHistory();
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().DeleteUndoably(this);
 	wxGetApp().EndHistory();
@@ -188,7 +188,7 @@ bool CCone::Stretch(const double *p, const double* shift)
 	if(make_a_new_cone)
 	{
 		CCone* new_object = new CCone(new_pos, new_r1, new_r2, new_height, m_title.c_str(), m_color);
-		wxGetApp().StartHistory(_T("Stretch Cone"));
+		wxGetApp().StartHistory();
 		wxGetApp().AddUndoably(new_object, NULL, NULL);
 		wxGetApp().DeleteUndoably(this);
 		wxGetApp().EndHistory();

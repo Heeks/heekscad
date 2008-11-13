@@ -25,7 +25,7 @@ CSelectMode::CSelectMode(){
 
 const wxChar* CSelectMode::GetTitle()
 {
-	return m_doing_a_main_loop ? (m_prompt_when_doing_a_main_loop.c_str()):_T("Select Mode");
+	return m_doing_a_main_loop ? (m_prompt_when_doing_a_main_loop.c_str()):_("Select Mode");
 }
 
 static GripperSelTransform drag_object_gripper(gp_Pnt(0, 0, 0), GripperTypeTranslate);
@@ -419,7 +419,7 @@ public:
 			wxMessageBox(_T("Error! The \"Stop Picking\" button shouldn't have been available!"));
 		}
 	}
-	const wxChar* GetTitle(){return _T("Stop Picking");}
+	const wxChar* GetTitle(){return _("Stop Picking");}
 	wxBitmap* Bitmap()
 	{
 		if(m_bitmap == NULL)
@@ -429,7 +429,7 @@ public:
 		}
 		return m_bitmap;
 	}
-	const wxChar* GetToolTip(){return _T("Finish picking");}
+	const wxChar* GetToolTip(){return _("Finish picking");}
 };
 wxBitmap* EndPicking::m_bitmap = NULL;
 

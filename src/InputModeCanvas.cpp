@@ -58,7 +58,7 @@ void CInputModeCanvas::RefreshByRemovingAndAddingAll(){
 	std::list<Property *> list;
 
 	// add the input_mode mode's properties
-	PropertyString* title = new PropertyString(_T("Input Mode"), wxGetApp().input_mode_object->GetTitle(), NULL);
+	PropertyString* title = new PropertyString(_("Input Mode"), wxGetApp().input_mode_object->GetTitle(), NULL);
 	if(wxGetApp().input_mode_object->TitleHighlighted())title->m_highlighted = true;
 	list.push_back(title);
 	wxGetApp().input_mode_object->GetProperties(&list);
