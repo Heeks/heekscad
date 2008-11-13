@@ -17,7 +17,7 @@ public:
 	CCylinder(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
 
 	// HeeksObj's virtual functions
-	const wxChar* GetTypeString(void)const{return _T("Cylinder");}
+	const wxChar* GetTypeString(void)const{return _("Cylinder");}
 	wxIcon* GetIcon();
 	HeeksObj *MakeACopy(void)const;
 	bool ModifyByMatrix(const double* m);

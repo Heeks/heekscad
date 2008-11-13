@@ -57,7 +57,7 @@ bool CSolid::ModifyByMatrix(const double* m){
 void CSolid::OnApplyProperties()
 {
 	CSolid* new_object = new CSolid(*((TopoDS_Solid*)(&m_shape)), m_title.c_str(), m_color);
-	wxGetApp().StartHistory(_T("Edit Solid"));
+	wxGetApp().StartHistory();
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().DeleteUndoably(this);
 	wxGetApp().EndHistory();

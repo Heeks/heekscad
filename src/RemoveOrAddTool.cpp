@@ -23,7 +23,7 @@ static wxString string_for_GetTitle;
 
 const wxChar* AddObjectTool::GetTitle()
 {
-	string_for_GetTitle.assign(_T("Add "));
+	string_for_GetTitle.assign(_("Add "));
 	string_for_GetTitle.append(m_object->GetShortStringOrTypeString());
 	return string_for_GetTitle.c_str();
 }
@@ -38,7 +38,7 @@ void RemoveOrAddTool::Add()
 
 	if (m_owner == NULL)
 	{
-		wxMessageBox(_T("*Can't Have NULL owner!"));
+		wxMessageBox(_T("Can't Have NULL owner!"));
 		return;
 	}
 
@@ -106,7 +106,7 @@ void ManyRemoveOrAddTool::Add()
 {
 	if (m_owner == NULL)
 	{
-		wxMessageBox(_T("*Can't have NULL owner!"));
+		wxMessageBox(_T("Can't have NULL owner!"));
 		return;
 	}
 
@@ -144,7 +144,7 @@ void ManyRemoveOrAddTool::Remove()
 
 const wxChar* AddObjectsTool::GetTitle()
 {
-	return _T("Add Objects");
+	return _("Add Objects");
 }
 
 void AddObjectsTool::Run()
@@ -159,7 +159,7 @@ void AddObjectsTool::RollBack()
 
 const wxChar* RemoveObjectsTool::GetTitle()
 {
-	return _T("Remove Objects");
+	return _("Remove Objects");
 }
 
 void RemoveObjectsTool::Run()

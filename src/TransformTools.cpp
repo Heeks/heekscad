@@ -20,7 +20,7 @@ void TransformTools::Translate(bool copy)
 {
 	// pick items
 	if(wxGetApp().m_marked_list->size() == 0){
-		wxGetApp().PickObjects(_T("Pick objects to move"));
+		wxGetApp().PickObjects(_("Pick objects to move"));
 	}
 	if(wxGetApp().m_marked_list->size() == 0)return;
 
@@ -30,7 +30,7 @@ void TransformTools::Translate(bool copy)
 	{
 		// input "number of copies"
 		double number_of_copies = 1.0;
-		wxGetApp().InputDouble(_T("Enter number of copies"), _T("number of copies"), number_of_copies);
+		wxGetApp().InputDouble(_("Enter number of copies"), _("number of copies"), number_of_copies);
 		ncopies = (int)(number_of_copies + 0.5);
 		if(ncopies < 1)return;
 	}
@@ -40,7 +40,7 @@ void TransformTools::Translate(bool copy)
 	wxGetApp().m_marked_list->Clear();
 
 	// pick "from" position
-	if(!wxGetApp().PickPosition(_T("Click position to move from"), from))return;
+	if(!wxGetApp().PickPosition(_("Click position to move from"), from))return;
 
 	// pick "to" position
 	wxGetApp().CreateTransformGLList(selected_items, false);
@@ -54,7 +54,7 @@ void TransformTools::Translate(bool copy)
 		}
 	}
 	double to[3];
-	bool success = wxGetApp().PickPosition(_T("Click position to move to"), to, on_move_translate);
+	bool success = wxGetApp().PickPosition(_("Click position to move to"), to, on_move_translate);
 	if(!copy)
 	{
 		for(std::list<HeeksObj*>::iterator It = wxGetApp().m_hidden_for_drag.begin(); It != wxGetApp().m_hidden_for_drag.end(); It++)
@@ -69,7 +69,7 @@ void TransformTools::Translate(bool copy)
 	// transform the objects
 	if(copy)
 	{
-		wxGetApp().StartHistory(_T("Copy Translate"));
+		wxGetApp().StartHistory();
 		for(int i = 0; i<ncopies; i++)
 		{
 			gp_Trsf mat;
@@ -102,7 +102,7 @@ void TransformTools::Rotate(bool copy)
 {
 	// pick items
 	if(wxGetApp().m_marked_list->size() == 0){
-		wxGetApp().PickObjects(_T("Pick objects to rotate"));
+		wxGetApp().PickObjects(_("Pick objects to rotate"));
 	}
 	if(wxGetApp().m_marked_list->size() == 0)return;
 
@@ -112,7 +112,7 @@ void TransformTools::Rotate(bool copy)
 	{
 		// input "number of copies"
 		double number_of_copies = 1.0;
-		wxGetApp().InputDouble(_T("Enter number of copies"), _T("number of copies"), number_of_copies);
+		wxGetApp().InputDouble(_("Enter number of copies"), _("number of copies"), number_of_copies);
 		ncopies = (int)(number_of_copies + 0.5);
 		if(ncopies < 1)return;
 	}
@@ -122,16 +122,16 @@ void TransformTools::Rotate(bool copy)
 	wxGetApp().m_marked_list->Clear();
 
 	// pick "centre" position
-	if(!wxGetApp().PickPosition(_T("Click centre position to rotate about"), centre))return;
+	if(!wxGetApp().PickPosition(_("Click centre position to rotate about"), centre))return;
 
 	// enter angle
 	double angle = 45.0;
-	if(!wxGetApp().InputDouble(_T("Enter angle to rotate by"), _T("angle"), angle))return;
+	if(!wxGetApp().InputDouble(_("Enter angle to rotate by"), _("angle"), angle))return;
 
 	// transform the objects
 	if(copy)
 	{
-		wxGetApp().StartHistory(_T("Copy rotate"));
+		wxGetApp().StartHistory();
 		for(int i = 0; i<ncopies; i++)
 		{
 			gp_Trsf mat;
@@ -163,7 +163,7 @@ void TransformTools::Mirror(bool copy)
 {
 	// pick items
 	if(wxGetApp().m_marked_list->size() == 0){
-		wxGetApp().PickObjects(_T("Pick objects to mirror"));
+		wxGetApp().PickObjects(_("Pick objects to mirror"));
 	}
 	if(wxGetApp().m_marked_list->size() == 0)return;
 
@@ -171,7 +171,7 @@ void TransformTools::Mirror(bool copy)
 	{
 		// input "number of copies"
 		double number_of_copies = 1.0;
-		wxGetApp().InputDouble(_T("Enter number of copies"), _T("number of copies"), number_of_copies);
+		wxGetApp().InputDouble(_("Enter number of copies"), _("number of copies"), number_of_copies);
 		int ncopies = (int)(number_of_copies + 0.5);
 		if(ncopies < 1)return;
 	}
@@ -185,7 +185,7 @@ void TransformTools::Mirror(bool copy)
 	gp_Lin line;
 	int save_filter = wxGetApp().m_marked_list->m_filter;
 	wxGetApp().m_marked_list->m_filter = MARKING_FILTER_LINE | MARKING_FILTER_ILINE;
-	wxGetApp().PickObjects(_T("Pick line to mirror about"), true);
+	wxGetApp().PickObjects(_("Pick line to mirror about"), true);
 	wxGetApp().m_marked_list->m_filter = save_filter;
 	for(std::list<HeeksObj *>::const_iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
 	{
@@ -211,7 +211,7 @@ void TransformTools::Mirror(bool copy)
 
 	if(copy)
 	{
-		wxGetApp().StartHistory(_T("Copy Mirror"));
+		wxGetApp().StartHistory();
 		for(std::list<HeeksObj*>::iterator It = selected_items.begin(); It != selected_items.end(); It++)
 		{
 			HeeksObj* object = *It;
@@ -232,7 +232,7 @@ void TransformTools::Scale(bool copy)
 {
 	// pick items
 	if(wxGetApp().m_marked_list->size() == 0){
-		wxGetApp().PickObjects(_T("Pick objects to scale"));
+		wxGetApp().PickObjects(_("Pick objects to scale"));
 	}
 	if(wxGetApp().m_marked_list->size() == 0)return;
 
@@ -242,7 +242,7 @@ void TransformTools::Scale(bool copy)
 	{
 		// input "number of copies"
 		double number_of_copies = 1.0;
-		wxGetApp().InputDouble(_T("Enter number of copies"), _T("number of copies"), number_of_copies);
+		wxGetApp().InputDouble(_("Enter number of copies"), _("number of copies"), number_of_copies);
 		ncopies = (int)(number_of_copies + 0.5);
 		if(ncopies < 1)return;
 	}
@@ -252,16 +252,16 @@ void TransformTools::Scale(bool copy)
 	wxGetApp().m_marked_list->Clear();
 
 	// pick "centre" position
-	if(!wxGetApp().PickPosition(_T("Click centre position to scale about"), centre))return;
+	if(!wxGetApp().PickPosition(_("Click centre position to scale about"), centre))return;
 
 	// enter scale factor
 	double scale = 2.0;
-	if(!wxGetApp().InputDouble(_T("Enter scale factor"), _T("scale factor"), scale))return;
+	if(!wxGetApp().InputDouble(_("Enter scale factor"), _("scale factor"), scale))return;
 
 	// transform the objects
 	if(copy)
 	{
-		wxGetApp().StartHistory(_T("Copy scale"));
+		wxGetApp().StartHistory();
 		for(int i = 0; i<ncopies; i++)
 		{
 			gp_Trsf mat;

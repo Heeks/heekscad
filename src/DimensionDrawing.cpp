@@ -91,10 +91,10 @@ static void on_set_mode(int value, HeeksObj* object)
 void DimensionDrawing::GetProperties(std::list<Property *> *list){
 	// add drawing mode
 	std::list< wxString > choices;
-	choices.push_back ( wxString ( _T("between two points") ) );
-	choices.push_back ( wxString ( _T("orthogonal") ) );
+	choices.push_back ( wxString ( _("between two points") ) );
+	choices.push_back ( wxString ( _("orthogonal") ) );
 	DimensionDrawing_for_GetProperties = this;
-	list->push_back ( new PropertyChoice ( _T("mode"),  choices, m_mode, NULL, on_set_mode ) );
+	list->push_back ( new PropertyChoice ( _("mode"),  choices, m_mode, NULL, on_set_mode ) );
 
 	__super::GetProperties(list);
 }

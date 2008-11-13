@@ -62,7 +62,7 @@ public:
 	void OnFrontRender();
 	void OnRender();
 	void GetOptions(std::list<Property *> *list);
-	const wxChar* GetTitle(){return _T("Drawing");}
+	const wxChar* GetTitle(){return _("Drawing");}
 
 	// Drawing's virtual functions
 	virtual void AddPoint();

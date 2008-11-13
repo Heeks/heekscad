@@ -177,9 +177,9 @@ static void on_set_radius(double value, HeeksObj* object){
 void HCircle::GetProperties(std::list<Property *> *list){
 	__super::GetProperties(list);
 
-	list->push_back(new PropertyVertex(_T("centre"), m_circle.Location(), this, on_set_centre));
-	list->push_back(new PropertyVertex(_T("axis"), gp_Pnt(m_circle.Axis().Direction().XYZ()), this, on_set_axis));
-	list->push_back(new PropertyDouble(_T("radius"), m_circle.Radius(), this, on_set_radius));
+	list->push_back(new PropertyVertex(_("centre"), m_circle.Location(), this, on_set_centre));
+	list->push_back(new PropertyVertex(_("axis"), gp_Pnt(m_circle.Axis().Direction().XYZ()), this, on_set_axis));
+	list->push_back(new PropertyDouble(_("radius"), m_circle.Radius(), this, on_set_radius));
 }
 
 bool HCircle::FindNearPoint(const double* ray_start, const double* ray_direction, double *point){

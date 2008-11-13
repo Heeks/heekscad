@@ -112,11 +112,11 @@ public:
 
 	BlendTool(CEdge* edge):m_edge(edge){}
 
-	const wxChar* GetTitle(){return _T("Blend");}
+	const wxChar* GetTitle(){return _("Blend");}
 	void Run(){
 		double rad = 2.0;
 		wxGetApp().m_config->Read(_T("EdgeBlendRadius"), &rad);
-		if(wxGetApp().InputDouble(_T("Enter Blend Radius"), _T("Radius"), rad))
+		if(wxGetApp().InputDouble(_("Enter Blend Radius"), _("Radius"), rad))
 		{
 			m_edge->Blend(rad);
 			wxGetApp().m_config->Write(_T("EdgeBlendRadius"), rad);
@@ -138,19 +138,19 @@ void CEdge::Blend(double radius){
 			BRepFilletAPI_MakeFillet fillet(((CShape*)(m_owner->m_owner))->Shape());
 			fillet.Add(radius, m_topods_edge);
 			TopoDS_Shape new_shape = fillet.Shape();
-			wxGetApp().StartHistory(_T("Blending Edge"));
-			wxGetApp().AddUndoably(new CSolid(*((TopoDS_Solid*)(&new_shape)), _T("Edge Blended Solid"), *(m_owner->m_owner->GetColor())), NULL, NULL);
+			wxGetApp().StartHistory();
+			wxGetApp().AddUndoably(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(m_owner->m_owner->GetColor())), NULL, NULL);
 			wxGetApp().DeleteUndoably(m_owner->m_owner);
 			wxGetApp().EndHistory();
 		}
 	}
 	catch(wchar_t *message)
 	{
-		wxMessageBox(_T("A fatal error happened during Blend -\n") + wxString(message));
+		wxMessageBox(wxString(_("A fatal error happened during Blend")) + _T(" -\n") + wxString(message));
 	}
 	catch(...)
 	{
-		wxMessageBox(_T("A fatal error happened during Blend"));
+		wxMessageBox(_("A fatal error happened during Blend"));
 	}
 }
 

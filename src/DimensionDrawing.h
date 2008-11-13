@@ -28,7 +28,7 @@ public:
 	virtual ~DimensionDrawing(void);
 
 	// InputMode's virtual functions
-	const wxChar* GetTitle(){return _T("Dimension drawing");}
+	const wxChar* GetTitle(){return _("Dimension drawing");}
 	void GetTools(std::list<Tool*> *f_list, const wxPoint *p);
 	void GetProperties(std::list<Property *> *list);
 };

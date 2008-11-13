@@ -127,7 +127,7 @@ void HText::GetProperties(std::list<Property *> *list)
 {
 	__super::GetProperties(list);
 
-	list->push_back(new PropertyTrsf(_T("orientation"), m_trsf, this, on_set_trsf));
+	list->push_back(new PropertyTrsf(_("orientation"), m_trsf, this, on_set_trsf));
 }
 
 bool HText::Stretch(const double *p, const double* shift)

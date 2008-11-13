@@ -155,7 +155,7 @@ wxIcon* HImage::GetIcon(){
 wxString m_global_pic_string;
 
 const wxChar* HImage::GetShortString(void)const{
-	m_global_pic_string.assign(_T("Picture - "));
+	m_global_pic_string.assign(_("Picture - "));
 	m_global_pic_string.append(m_file_path.c_str());
 	return m_global_pic_string.c_str();
 }

@@ -41,7 +41,7 @@ void CSketch::GetProperties(std::list<Property *> *list)
 {
 	__super::GetProperties(list);
 
-	list->push_back(new PropertyInt(_T("Number of elements"), ObjList::GetNumChildren(), this));
+	list->push_back(new PropertyInt(_("Number of elements"), ObjList::GetNumChildren(), this));
 }
 
 HeeksObj *CSketch::MakeACopy(void)const

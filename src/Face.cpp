@@ -189,14 +189,14 @@ public:
 	void Run(){
 		BRepOffsetAPI_MakeOffset make_operation(m_face->Face());
 		make_operation.Perform(-6.0);
-		HeeksObj* new_object = CShape::MakeObject(make_operation.Shape(), _T("Result of Face Offset"), SOLID_TYPE_UNKNOWN, HeeksColor(12, 67, 99));
+		HeeksObj* new_object = CShape::MakeObject(make_operation.Shape(), _("Result of Face Offset"), SOLID_TYPE_UNKNOWN, HeeksColor(12, 67, 99));
 		if(make_operation.Generated(m_face->Face()).Extent() > 0){
-			wxMessageBox(_T("Generated"));
+			wxMessageBox(_("Generated"));
 		}
 		wxGetApp().AddUndoably(new_object, NULL, NULL);
 		wxGetApp().DeleteUndoably(m_face);
 	}
-	const wxChar* GetTitle(){ return _T("Offset Face");}
+	const wxChar* GetTitle(){ return _("Offset Face");}
 };
 
 static OffsetFaceTool offset_face_tool;

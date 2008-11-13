@@ -34,9 +34,9 @@ public:
 	void Run(){
 		BRepOffsetAPI_MakeOffset make_operation(m_wire->Wire());
 		make_operation.Perform(m_offset);
-		HeeksObj* new_object = CShape::MakeObject(make_operation.Shape(), _T("Result of Wire Offset"), SOLID_TYPE_UNKNOWN, HeeksColor(234, 123, 89));
+		HeeksObj* new_object = CShape::MakeObject(make_operation.Shape(), _("Result of Wire Offset"), SOLID_TYPE_UNKNOWN, HeeksColor(234, 123, 89));
 		if(make_operation.Generated(make_operation.Shape()).Extent() > 0){
-			wxMessageBox(_T("Generated"));
+			wxMessageBox(_("Generated"));
 		}
 
 		// ask about generation for each edge
@@ -46,23 +46,23 @@ public:
 			TopoDS_Edge E = TopoDS::Edge(ex.Current());
 			if(int extent = make_operation.Generated(E).Extent() > 0){
 				wxChar mess[1024];
-				wsprintf(mess, _T("Generated from edge = %d"), extent);
+				wsprintf(mess, _("Generated from edge = %d"), extent);
 				wxMessageBox(mess);
 			}
 		}
 
 		if(make_operation.Modified(make_operation.Shape()).Extent() > 0){
-			wxMessageBox(_T("Modified"));
+			wxMessageBox(_("Modified"));
 		}
 		if(make_operation.IsDeleted(make_operation.Shape())){
-			wxMessageBox(_T("IsDeleted"));
+			wxMessageBox(_("Is Deleted"));
 		}
 		wxGetApp().AddUndoably(new_object, NULL, NULL);
 		wxGetApp().DeleteUndoably(m_wire);
 	}
 	const wxChar* GetTitle(){
 		wxChar str[1024];
-		wsprintf(str, _T("Offset Wire ( %lf )"), m_offset);
+		wsprintf(str, _("Offset Wire ( %lf )"), m_offset);
 		title_for_OffsetWireTool.assign(str);
 		return title_for_OffsetWireTool.c_str();
 	}

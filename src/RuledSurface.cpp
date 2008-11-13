@@ -13,7 +13,7 @@ void PickCreateRuledSurface()
 {
 	if(wxGetApp().m_marked_list->size() == 0)
 	{
-		wxGetApp().PickObjects(_T("pick some sketches"));
+		wxGetApp().PickObjects(_("pick some sketches"));
 	}
 
 	if(wxGetApp().m_marked_list->size() > 0)
@@ -38,13 +38,13 @@ void PickCreateRuledSurface()
 			}
 		}
 
-		wxGetApp().StartHistory(_T("Make Lofted Body"));
+		wxGetApp().StartHistory();
 		wxGetApp().DeleteUndoably(sketches_to_delete);
 
 		TopoDS_Shape shape;
 		if(CreateRuledSurface(wire_list, shape))
 		{
-			HeeksObj* new_object = CShape::MakeObject(shape, _T("Ruled Surface"), SOLID_TYPE_UNKNOWN, HeeksColor(51, 45, 51));
+			HeeksObj* new_object = CShape::MakeObject(shape, _("Ruled Surface"), SOLID_TYPE_UNKNOWN, HeeksColor(51, 45, 51));
 			wxGetApp().AddUndoably(new_object, NULL, NULL);
 			wxGetApp().Repaint();
 		}
@@ -57,11 +57,11 @@ void PickCreateExtrusion()
 {
 	if(wxGetApp().m_marked_list->size() == 0)
 	{
-		wxGetApp().PickObjects(_T("pick sketches"));
+		wxGetApp().PickObjects(_("pick sketches"));
 	}
 
 	double height = 10;
-	wxGetApp().InputDouble(_T("Input extrusion height"), _T("height"), height);
+	wxGetApp().InputDouble(_("Input extrusion height"), _("height"), height);
 
 	if(wxGetApp().m_marked_list->size() > 0)
 	{
@@ -84,7 +84,7 @@ void PickCreateExtrusion()
 			}
 		}
 
-		wxGetApp().StartHistory(_T("Extrude Sketches"));
+		wxGetApp().StartHistory();
 
 		wxGetApp().DeleteUndoably(sketches_to_delete);
 
@@ -94,7 +94,7 @@ void PickCreateExtrusion()
 		{
 			for(std::list<TopoDS_Shape>::iterator It = new_shapes.begin(); It != new_shapes.end(); It++){
 				TopoDS_Shape& shape = *It;
-				HeeksObj* new_object = CShape::MakeObject(shape, _T("Extruded Solid"), SOLID_TYPE_UNKNOWN, HeeksColor(89, 95, 89));
+				HeeksObj* new_object = CShape::MakeObject(shape, _("Extruded Solid"), SOLID_TYPE_UNKNOWN, HeeksColor(89, 95, 89));
 				wxGetApp().AddUndoably(new_object, NULL, NULL);
 			}
 			wxGetApp().Repaint();
