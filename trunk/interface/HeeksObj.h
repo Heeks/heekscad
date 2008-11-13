@@ -71,7 +71,7 @@ public:
 	virtual bool DrawAfterOthers(){return false;}
 	virtual void GetBox(CBox &box){}
 	virtual const wxChar* GetShortString(void)const{return NULL;}
-	virtual const wxChar* GetTypeString(void)const{return _T("Unknown");}
+	virtual const wxChar* GetTypeString(void)const{return _("Unknown");}
 	const wxChar* GetShortStringOrTypeString(void)const{if(GetShortString())return GetShortString();return GetTypeString();}
 	virtual bool CanEditString(void)const{return false;}
 	virtual void OnEditString(const wxChar* str){}

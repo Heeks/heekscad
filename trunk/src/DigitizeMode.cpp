@@ -28,7 +28,7 @@ DigitizeMode::~DigitizeMode(void){
 
 const wxChar* DigitizeMode::GetTitle()
 {
-	return m_doing_a_main_loop ? (m_prompt_when_doing_a_main_loop.c_str()):_T("Digitize Mode");
+	return m_doing_a_main_loop ? (m_prompt_when_doing_a_main_loop.c_str()):_("Digitize Mode");
 }
 
 void DigitizeMode::OnMouse( wxMouseEvent& event ){
@@ -294,9 +294,9 @@ static void set_y(double value, HeeksObj* object){wxGetApp().m_digitizing->digit
 static void set_z(double value, HeeksObj* object){wxGetApp().m_digitizing->digitized_point.m_point.SetZ(value); wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();}
 
 void DigitizeMode::GetProperties(std::list<Property *> *list){
-	list->push_back(new PropertyDouble(_T("X"), digitized_point.m_point.X(), NULL, set_x));
-	list->push_back(new PropertyDouble(_T("Y"), digitized_point.m_point.Y(), NULL, set_y));
-	list->push_back(new PropertyDouble(_T("Z"), digitized_point.m_point.Z(), NULL, set_z));
+	list->push_back(new PropertyDouble(_("X"), digitized_point.m_point.X(), NULL, set_x));
+	list->push_back(new PropertyDouble(_("Y"), digitized_point.m_point.Y(), NULL, set_y));
+	list->push_back(new PropertyDouble(_("Z"), digitized_point.m_point.Z(), NULL, set_z));
 }
 
 void DigitizeMode::GetOptions(std::list<Property *> *list){
@@ -313,10 +313,10 @@ public:
 			wxGetApp().ExitMainLoop();
 		}
 		else{
-			wxMessageBox(_T("Error! The \"Stop Picking\" button shouldn't have been available!"));
+			wxMessageBox(_("Error! The 'Stop Picking' button shouldn't have been available!"));
 		}
 	}
-	const wxChar* GetTitle(){return _T("Stop Picking");}
+	const wxChar* GetTitle(){return _("Stop Picking");}
 	wxBitmap* Bitmap()
 	{
 		if(m_bitmap == NULL)
@@ -326,7 +326,7 @@ public:
 		}
 		return m_bitmap;
 	}
-	const wxChar* GetToolTip(){return _T("Finish picking");}
+	const wxChar* GetToolTip(){return _("Finish picking");}
 };
 wxBitmap* EndPosPicking::m_bitmap = NULL;
 

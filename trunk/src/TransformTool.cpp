@@ -18,7 +18,7 @@ wxString global_string;
 // Tool's virtual functions
 const wxChar* TransformTool::GetTitle(){
 	wxChar str[1024];
-	wsprintf(str, _T("Transform %s"), object->GetShortStringOrTypeString());
+	wsprintf(str, _T("%s %s"), _("Transform"), object->GetShortStringOrTypeString());
 	global_string.assign(str);
 	return global_string.c_str();
 }
@@ -46,7 +46,7 @@ TransformObjectsTool::~TransformObjectsTool(void){
 
 // Tool's virtual functions
 const wxChar* TransformObjectsTool::GetTitle(){
-	return _T("Transform Objects");
+	return _("Transform Objects");
 }
 
 void TransformObjectsTool::Run(){

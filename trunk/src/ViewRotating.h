@@ -10,7 +10,7 @@ class ViewRotating: public CInputMode{
 	wxPoint CurrentPoint;
 public:
 	// virtual functions for InputMode
-	const wxChar* GetTitle(){return _T("View Rotate");}
+	const wxChar* GetTitle(){return _("View Rotate");}
 	void OnMouse( wxMouseEvent& event );
 };
 

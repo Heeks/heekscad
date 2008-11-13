@@ -23,7 +23,7 @@ public:
 	long GetMarkingMask()const{return MARKING_FILTER_ILINE;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
-	const wxChar* GetTypeString(void)const{return _T("Infinite Line");}
+	const wxChar* GetTypeString(void)const{return _("Infinite Line");}
 	HeeksObj *MakeACopy(void)const;
 	wxIcon* GetIcon();
 	bool ModifyByMatrix(const double *mat);

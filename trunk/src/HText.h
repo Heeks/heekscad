@@ -25,7 +25,7 @@ public:
 	void glCommands(bool select, bool marked, bool no_color);
 	bool DrawAfterOthers(){return true;}
 	void GetBox(CBox &box);
-	const wxChar* GetTypeString(void)const{return _T("Text");}
+	const wxChar* GetTypeString(void)const{return _("Text");}
 	HeeksObj *MakeACopy(void)const;
 	wxIcon* GetIcon();
 	bool ModifyByMatrix(const double *mat);

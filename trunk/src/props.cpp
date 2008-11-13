@@ -477,7 +477,7 @@ bool wxFloatPropertyClass::SetValueFromString( const wxString& text, int argFlag
     }
     else if ( argFlags & wxPG_REPORT_ERROR )
     {
-        ShowError(wxString::Format( _("\"%s\" is not a floating-point number"), text.c_str() ));
+        ShowError(wxString::Format( _T("\"%s\" "), text.c_str() ) + _("is not a floating-point number"));
     }
     return false;
 }

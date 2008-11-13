@@ -38,7 +38,7 @@ public:
 	RemoveObjectTool(HeeksObj *object);
 
 	// Tool's virtual functions
-	const wxChar* GetTitle() {return _T("Remove");}
+	const wxChar* GetTitle() {return _("Remove");}
 	void Run();
 	void RollBack();
 };

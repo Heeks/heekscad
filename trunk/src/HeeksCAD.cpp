@@ -108,7 +108,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_ruler = new HRuler();
 	m_show_ruler = false;
 	m_show_datum_coords_system = true;
-	m_filepath.assign(_T("Untitled.heeks"));
+	m_filepath.assign(_("Untitled.heeks"));
 	m_in_OpenFile = false;
 	m_transform_gl_list = 0;
 	m_current_coordinate_system = NULL;
@@ -144,6 +144,16 @@ bool HeeksCADapp::OnInit()
 {
 	m_config = new wxConfig(_T("HeeksCAD"));
 	wxInitAllImageHandlers();
+
+    // Initialize the catalogs we'll be using
+	if ( !m_locale.Init(wxLANGUAGE_CHINESE_SIMPLIFIED, wxLOCALE_CONV_ENCODING) )
+	{
+		wxLogError(_T("This language is not supported by the system."));
+		return false;
+	}
+	
+    wxLocale::AddCatalogLookupPathPrefix(wxT("."));
+    m_locale.AddCatalog(wxT("HeeksCAD"));
 
 	// initialise glut
 #ifdef WIN32
@@ -415,7 +425,7 @@ void HeeksCADapp::Reset(){
 	m_current_coordinate_system = NULL;
 	m_doing_rollback = false;
 	m_frame->m_graphics->m_view_point.SetView(gp_Vec(0, 1, 0), gp_Vec(0, 0, 1));
-	m_filepath.assign(_T("Untitled.heeks"));
+	m_filepath.assign(_("Untitled.heeks"));
 	m_hidden_for_drag.clear();
 	m_show_grippers_on_drag = true;
 	*m_ruler = HRuler();
@@ -568,7 +578,7 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath)
 
 		if(name != "HeeksCAD_Document")
 		{
-			wxMessageBox(_T("This is not a HeeksCAD document!"));
+			wxMessageBox(_("This is not a HeeksCAD document!"));
 			return;
 		}
 
@@ -694,7 +704,7 @@ void HeeksCADapp::OpenSVGFile(const wxChar *filepath)
 
 		if(name != "svg")
 		{
-			wxMessageBox(_T("This is not an SVG document!"));
+			wxMessageBox(_("This is not an SVG document!"));
 			return;
 		}
 
@@ -814,9 +824,8 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open)
 	else
 	{
 		// error
-		wxChar mess[1024];
-		wsprintf(mess, _T("Invalid file type chosen ( expecting file with %s suffix )"), wxGetApp().GetKnownFilesCommaSeparatedList());
-		wxMessageBox(mess);
+		wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + wxGetApp().GetKnownFilesCommaSeparatedList();
+		wxMessageBox(str);
 		open_failed = true;
 	}
 
@@ -876,8 +885,7 @@ void HeeksCADapp::SaveDXFFile(const wxChar *filepath)
 	CDxfWrite dxf_file(filepath);
 	if(dxf_file.Failed())
 	{
-		wxChar str[1024];
-		wsprintf(str, _T("couldn't open file - %s"), filepath);
+		wxString str = wxString(_("couldn't open file")) + filepath;
 		wxMessageBox(str);
 		return;
 	}
@@ -915,7 +923,7 @@ void HeeksCADapp::SaveSTLFile(const wxChar *filepath)
 	ofstream ofs(filepath);
 	if(!ofs)
 	{
-		wxString str = wxString(_T("couldn't open file - ")) + filepath;
+		wxString str = wxString(_("couldn't open file - ")) + filepath;
 		wxMessageBox(str);
 		return;
 	}
@@ -1011,7 +1019,7 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_recent_file_list, bool set_app_caption)
 {
 	if(use_dialog){
-		wxFileDialog fd(m_frame, _T("Save graphical data file"), wxEmptyString, filepath, GetKnownFilesWildCardString(false), wxSAVE|wxOVERWRITE_PROMPT);
+		wxFileDialog fd(m_frame, _("Save graphical data file"), wxEmptyString, filepath, GetKnownFilesWildCardString(false), wxSAVE|wxOVERWRITE_PROMPT);
 		fd.SetFilterIndex(1);
 		if (fd.ShowModal() == wxID_CANCEL)return false;
 		return SaveFile( fd.GetPath().c_str(), false, update_recent_file_list );
@@ -1037,9 +1045,8 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 	}
 	else
 	{
-		wxChar mess[1024];
-		wsprintf(mess, _T("Invalid file type chosen ( expecting file with %s suffix )"), wxGetApp().GetKnownFilesCommaSeparatedList(false));
-		wxMessageBox(mess);
+		wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + wxGetApp().GetKnownFilesCommaSeparatedList();
+		wxMessageBox(str);
 		return false;
 	}
 
@@ -1242,8 +1249,8 @@ class CFullScreenTool : public Tool
 public:
 	// Tool's virtual functions
 	const wxChar* CFullScreenTool::GetTitle(){
-		if (wxGetApp().m_frame->IsFullScreen()) return _T("Exit Full Screen Mode");
-		else return _T("Show Full Screen");
+		if (wxGetApp().m_frame->IsFullScreen()) return _("Exit Full Screen Mode");
+		else return _("Show Full Screen");
 	}
 	void CFullScreenTool::Run(){
 		wxGetApp().m_frame->ShowFullScreen(!wxGetApp().m_frame->IsFullScreen());
@@ -1317,9 +1324,9 @@ bool HeeksCADapp::RollForward(void)
 	return result;
 }
 
-void HeeksCADapp::StartHistory(const wxChar* str)
+void HeeksCADapp::StartHistory()
 {
-	history->StartHistory(str);
+	history->StartHistory();
 }
 
 void HeeksCADapp::EndHistory(void)
@@ -1386,9 +1393,7 @@ void HeeksCADapp::DeleteUndoably(HeeksObj *object){
 	if(object == NULL)return;
 	if(!object->CanBeRemoved())return;
 	RemoveObjectTool *tool = new RemoveObjectTool(object);
-	wxChar str[1024];
-	wsprintf(str, _T("Deleting %s"), object->GetShortStringOrTypeString());
-	StartHistory(str);
+	StartHistory();
 	DoToolUndoably(tool);
 	EndHistory();
 }
@@ -1645,50 +1650,50 @@ void on_set_size_is_pixels(bool value, HeeksObj* object){
 
 void HeeksCADapp::GetOptions(std::list<Property *> *list)
 {
-	PropertyList* view_options = new PropertyList(_T("view options"));
+	PropertyList* view_options = new PropertyList(_("view options"));
 
 	std::list< wxString > choices;
-	choices.push_back ( wxString ( _T("stay upright") ) );
-	choices.push_back ( wxString ( _T("free") ) );
-	view_options->m_list.push_back ( new PropertyChoice ( _T("rotate mode"),  choices, wxGetApp().m_rotate_mode, NULL, on_set_rotate_mode ) );
-	view_options->m_list.push_back( new PropertyCheck(_T("antialiasing"), wxGetApp().m_antialiasing, NULL, on_set_antialiasing));
+	choices.push_back ( wxString ( _("stay upright") ) );
+	choices.push_back ( wxString ( _("free") ) );
+	view_options->m_list.push_back ( new PropertyChoice ( _("rotate mode"),  choices, wxGetApp().m_rotate_mode, NULL, on_set_rotate_mode ) );
+	view_options->m_list.push_back( new PropertyCheck(_("antialiasing"), wxGetApp().m_antialiasing, NULL, on_set_antialiasing));
 #if _DEBUG
-	view_options->m_list.push_back( new PropertyCheck(_T("fixed light"), wxGetApp().m_light_push_matrix, NULL, on_set_light_push_matrix));
+	view_options->m_list.push_back( new PropertyCheck(_("fixed light"), wxGetApp().m_light_push_matrix, NULL, on_set_light_push_matrix));
 #endif
-	view_options->m_list.push_back( new PropertyCheck(_T("reverse mouse wheel"), !(wxGetApp().mouse_wheel_forward_away), NULL, on_set_reverse_mouse_wheel));
-	view_options->m_list.push_back( new PropertyCheck(_T("Ctrl key does rotate"), wxGetApp().ctrl_does_rotate, NULL, on_set_ctrl_does_rotate));
-	view_options->m_list.push_back(new PropertyCheck(_T("show datum"), m_show_datum_coords_system, NULL, on_set_show_datum));
-	view_options->m_list.push_back(new PropertyDouble(_T("datum size"), CoordinateSystem::size, NULL, on_set_datum_size));
-	view_options->m_list.push_back(new PropertyCheck(_T("datum size is pixels not mm"), CoordinateSystem::size_is_pixels, NULL, on_set_size_is_pixels));
-	view_options->m_list.push_back(new PropertyCheck(_T("show ruler"), m_show_ruler, NULL, on_set_show_ruler));
-	view_options->m_list.push_back ( new PropertyColor ( _T("background color"),  background_color, NULL, on_set_background_color ) );
+	view_options->m_list.push_back( new PropertyCheck(_("reverse mouse wheel"), !(wxGetApp().mouse_wheel_forward_away), NULL, on_set_reverse_mouse_wheel));
+	view_options->m_list.push_back( new PropertyCheck(_("Ctrl key does rotate"), wxGetApp().ctrl_does_rotate, NULL, on_set_ctrl_does_rotate));
+	view_options->m_list.push_back(new PropertyCheck(_("show datum"), m_show_datum_coords_system, NULL, on_set_show_datum));
+	view_options->m_list.push_back(new PropertyDouble(_("datum size"), CoordinateSystem::size, NULL, on_set_datum_size));
+	view_options->m_list.push_back(new PropertyCheck(_("datum size is pixels not mm"), CoordinateSystem::size_is_pixels, NULL, on_set_size_is_pixels));
+	view_options->m_list.push_back(new PropertyCheck(_("show ruler"), m_show_ruler, NULL, on_set_show_ruler));
+	view_options->m_list.push_back ( new PropertyColor ( _("background color"),  background_color, NULL, on_set_background_color ) );
 	{
 		std::list< wxString > choices;
-		choices.push_back ( wxString ( _T("no grid") ) );
-		choices.push_back ( wxString ( _T("faint color") ) );
-		choices.push_back ( wxString ( _T("alpha blending") ) );
-		choices.push_back ( wxString ( _T("colored alpha blending") ) );
-		view_options->m_list.push_back ( new PropertyChoice ( _T("grid mode"),  choices, grid_mode, NULL, on_set_grid_mode ) );
+		choices.push_back ( wxString ( _("no grid") ) );
+		choices.push_back ( wxString ( _("faint color") ) );
+		choices.push_back ( wxString ( _("alpha blending") ) );
+		choices.push_back ( wxString ( _("colored alpha blending") ) );
+		view_options->m_list.push_back ( new PropertyChoice ( _("grid mode"),  choices, grid_mode, NULL, on_set_grid_mode ) );
 	}
 	list->push_back(view_options);
 
-	PropertyList* digitizing = new PropertyList(_T("digitizing"));
-	digitizing->m_list.push_back(new PropertyCheck(_T("end"), wxGetApp().digitize_end, NULL, on_end_of));
-	digitizing->m_list.push_back(new PropertyCheck(_T("intersection"), wxGetApp().digitize_inters, NULL, on_intersection));
-	digitizing->m_list.push_back(new PropertyCheck(_T("centre"), wxGetApp().digitize_centre, NULL, on_centre));
-	digitizing->m_list.push_back(new PropertyCheck(_T("midpoint"), wxGetApp().digitize_midpoint, NULL, on_mid_point));
-	digitizing->m_list.push_back(new PropertyCheck(_T("nearest"), wxGetApp().digitize_nearest, NULL, on_nearest));
-	digitizing->m_list.push_back(new PropertyCheck(_T("tangent"), wxGetApp().digitize_tangent, NULL, on_tangent));
-	digitizing->m_list.push_back(new PropertyDouble(_T("radius for undefined circles"), wxGetApp().digitizing_radius, NULL, on_radius));
-	digitizing->m_list.push_back(new PropertyCheck(_T("coordinates"), wxGetApp().digitize_coords, NULL, on_coords));
-	digitizing->m_list.push_back(new PropertyCheck(_T("screen"), wxGetApp().digitize_screen, NULL, on_relative));
+	PropertyList* digitizing = new PropertyList(_("digitizing"));
+	digitizing->m_list.push_back(new PropertyCheck(_("end"), wxGetApp().digitize_end, NULL, on_end_of));
+	digitizing->m_list.push_back(new PropertyCheck(_("intersection"), wxGetApp().digitize_inters, NULL, on_intersection));
+	digitizing->m_list.push_back(new PropertyCheck(_("centre"), wxGetApp().digitize_centre, NULL, on_centre));
+	digitizing->m_list.push_back(new PropertyCheck(_("midpoint"), wxGetApp().digitize_midpoint, NULL, on_mid_point));
+	digitizing->m_list.push_back(new PropertyCheck(_("nearest"), wxGetApp().digitize_nearest, NULL, on_nearest));
+	digitizing->m_list.push_back(new PropertyCheck(_("tangent"), wxGetApp().digitize_tangent, NULL, on_tangent));
+	digitizing->m_list.push_back(new PropertyDouble(_("radius for undefined circles"), wxGetApp().digitizing_radius, NULL, on_radius));
+	digitizing->m_list.push_back(new PropertyCheck(_("coordinates"), wxGetApp().digitize_coords, NULL, on_coords));
+	digitizing->m_list.push_back(new PropertyCheck(_("screen"), wxGetApp().digitize_screen, NULL, on_relative));
 	list->push_back(digitizing);
 
-	list->push_back ( new PropertyColor ( _T("current color"),  current_color, NULL, on_set_current_color ) );
-	list->push_back ( new PropertyColor ( _T("construction color"),  construction_color, NULL, on_set_construction_color ) );
-	list->push_back(new PropertyDouble(_T("grid size"), digitizing_grid, NULL, on_grid_edit));
-	list->push_back(new PropertyCheck(_T("grid"), draw_to_grid, NULL, on_grid));
-	list->push_back(new PropertyDouble(_T("geometry tolerance"), m_geom_tol, NULL, on_set_geom_tol));
+	list->push_back ( new PropertyColor ( _("current color"),  current_color, NULL, on_set_current_color ) );
+	list->push_back ( new PropertyColor ( _("construction color"),  construction_color, NULL, on_set_construction_color ) );
+	list->push_back(new PropertyDouble(_("grid size"), digitizing_grid, NULL, on_grid_edit));
+	list->push_back(new PropertyCheck(_("grid"), draw_to_grid, NULL, on_grid));
+	list->push_back(new PropertyDouble(_("geometry tolerance"), m_geom_tol, NULL, on_set_geom_tol));
 	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
 		wxDynamicLibrary* shared_library = *It;
 		list_for_GetOptions = list;
@@ -1696,7 +1701,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 		(*GetOptions)(AddPropertyCallBack);
 	}
 
-	list->push_back(new PropertyInt(_T("selection filter"), m_marked_list->m_filter, NULL, on_set_selection_filter));
+	list->push_back(new PropertyInt(_("selection filter"), m_marked_list->m_filter, NULL, on_set_selection_filter));
 }
 
 void HeeksCADapp::DeleteMarkedItems()
@@ -1710,7 +1715,7 @@ void HeeksCADapp::DeleteMarkedItems()
 		DeleteUndoably(*(list.begin()));
 	}
 	else if(list.size()>1){
-		StartHistory(_T("Delete Marked Items"));
+		StartHistory();
 		DeleteUndoably(list);
 		EndHistory();
 	}
@@ -1722,9 +1727,7 @@ void HeeksCADapp::AddUndoably(HeeksObj *object, HeeksObj* owner, HeeksObj* prev_
 	if(object == NULL)return;
 	if(owner == NULL)owner = this;
 	AddObjectTool *tool = new AddObjectTool(object, owner, prev_object);
-	wxChar str[1024];
-	wsprintf(str, _T("*Adding %s"), object->GetShortStringOrTypeString());
-	StartHistory(str);
+	StartHistory();
 	DoToolUndoably(tool);
 	EndHistory();
 }
@@ -1762,12 +1765,13 @@ const wxChar* HeeksCADapp::GetKnownFilesWildCardString(bool open)const
 			imageExtStr2.Append(_T("*."));
 			imageExtStr2.Append(ext);
 		}
-		known_file_ext = _T("Known Files |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl;*.svg;*.dxf;") + imageExtStr + _T("|Heeks files (*.heeks)|*.heeks|IGES files (*.igs *.iges)|*.igs;*.iges|STEP files (*.stp *.step)|*.stp;*.step|STL files (*.stl)|*.stl|Scalar Vector Graphics files (*.svg)|*.svg|DXF files (*.dxf)|*.dxf|Picture files (") + imageExtStr2 + _T(")|") + imageExtStr;
+		wxString(_("Known Files")) + _T(" |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl;*.svg;*.dxf;") + imageExtStr + _T("|") + _("Heeks files") + _T(" (*.heeks)|*.heeks|") + _("IGES files") + _T(" (*.igs *.iges)|*.igs;*.iges|") + _("STEP files") + _T(" (*.stp *.step)|*.stp;*.step|") + _("STL files") + _T(" (*.stl)|*.stl|") + _("Scalar Vector Graphics files") + _T(" (*.svg)|*.svg|") + _("DXF files") + _T(" (*.dxf)|*.dxf|") + _("Picture files") + _T(" (") + imageExtStr2 + _T(")|") + imageExtStr;
 		return known_file_ext.c_str();
 	}
 	else{
 		// file save
-		return _T("Known Files |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl;*.dxf|Heeks files (*.heeks)|*.heeks|IGES files (*.igs *.iges)|*.igs;*.iges|STEP files (*.stp *.step)|*.stp;*.step|STL files (*.stl)|*.stl|DXF files (*.dxf)|*.dxf");
+		known_file_ext = wxString(_("Known Files")) + _T(" |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl;*.dxf|") + _("Heeks files") + _T(" (*.heeks)|*.heeks|") + _("IGES files") + _T(" (*.igs *.iges)|*.igs;*.iges|") + _("STEP files") + _T(" (*.stp *.step)|*.stp;*.step|") + _("STL files") + _T(" (*.stl)|*.stl|") + _("DXF files") + _T(" (*.dxf)|*.dxf");
+		return known_file_ext.c_str();
 	}
 }
 
@@ -1804,13 +1808,13 @@ public:
 	const wxChar* GetTitle(){
 		if(m_xor_marked_list){
 			if(wxGetApp().m_marked_list->ObjectMarked(m_marked_object->GetObject())){
-				return _T("Unmark");
+				return _("Unmark");
 			}
 			else{
-				return _T("Mark");
+				return _("Mark");
 			}
 		}
-		return _T("Properties");
+		return _("Properties");
 	}
 	void Run(){
 		if(m_marked_object == NULL)return;
@@ -2144,8 +2148,7 @@ bool HeeksCADapp::CheckForModifiedDoc()
 	// returns true if OK to continue opening file
 	if(history->IsModified())
 	{
-		wxChar str[1024];
-		wsprintf(str, _T("Save changes to %s"), m_filepath.c_str());
+		wxString str = wxString(_("Save changes to file")) + _T(" ") + m_filepath;
 		int res = wxMessageBox(str, wxMessageBoxCaptionStr, wxCANCEL|wxYES_NO|wxCENTRE);
 		if(res == wxCANCEL)return false;
 		if(res == wxYES)
@@ -2264,9 +2267,9 @@ public:
 		*success_for_double_input = true;
 		wxGetApp().ExitMainLoop();
 	}
-	const wxChar* GetTitle(){return _T("Apply");}
+	const wxChar* GetTitle(){return _("Apply");}
 	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/apply.png"), wxBITMAP_TYPE_PNG);}	return m_bitmap;}
-	const wxChar* GetToolTip(){return _T("Accept value and continue");}
+	const wxChar* GetToolTip(){return _("Accept value and continue");}
 };
 wxBitmap* CInputApply::m_bitmap = NULL;
 
@@ -2278,9 +2281,9 @@ private:
 
 public:
 	void Run(){wxGetApp().ExitMainLoop();}
-	const wxChar* GetTitle(){return _T("Cancel");}
+	const wxChar* GetTitle(){return _("Cancel");}
 	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/cancel.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
-	const wxChar* GetToolTip(){return _T("Cancel operation");}
+	const wxChar* GetToolTip(){return _("Cancel operation");}
 };
 wxBitmap* CInputCancel::m_bitmap = NULL;
 

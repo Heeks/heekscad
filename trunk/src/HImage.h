@@ -38,7 +38,7 @@ public:
 	void GetBox(CBox &box);
 	wxIcon* GetIcon();
 	const wxChar* GetShortString(void)const;
-	const wxChar* GetTypeString(void)const{return _T("Image");}
+	const wxChar* GetTypeString(void)const{return _("Image");}
 	HeeksObj *MakeACopy(void)const;
 	bool ModifyByMatrix(const double *mat);
 	void GetGripperPositions(std::list<double> *list, bool just_for_endof);

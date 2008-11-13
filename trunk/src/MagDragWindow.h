@@ -16,7 +16,7 @@ public:
 	MagDragWindow(){save_input_mode = NULL; window_box_exists = false;}
 
 	// virtual functions for InputMode
-	const wxChar* GetTitle(){return _T("Magnifying by dragging a window");}
+	const wxChar* GetTitle(){return _("Magnifying by dragging a window");}
 	void OnMouse( wxMouseEvent& event );
 	bool OnModeChange(void);
 	void OnFrontRender();

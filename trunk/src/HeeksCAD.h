@@ -38,6 +38,9 @@ private:
 
 	void create_font();
 
+protected:
+    wxLocale m_locale; // locale we'll be using
+
 public:
 	HeeksCADapp();
 	~HeeksCADapp();
@@ -129,7 +132,7 @@ public:
 	void DoToolUndoably(Tool *);
 	bool RollBack(void);
 	bool RollForward(void);
-	void StartHistory(const wxChar* str);
+	void StartHistory();
 	void EndHistory(void);
 	void ClearRollingForward(void);
 	bool Add(HeeksObj* object, HeeksObj* prev_object);

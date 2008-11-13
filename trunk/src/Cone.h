@@ -18,7 +18,7 @@ public:
 	CCone(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
 
 	// HeeksObj's virtual functions
-	const wxChar* GetTypeString(void)const{return _T("Cone");}
+	const wxChar* GetTypeString(void)const{return _("Cone");}
 	wxIcon* GetIcon();
 	HeeksObj *MakeACopy(void)const;
 	bool ModifyByMatrix(const double* m);

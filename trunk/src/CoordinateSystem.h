@@ -34,7 +34,7 @@ public:
 	long GetMarkingMask()const{return MARKING_FILTER_COORDINATE_SYSTEM;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
-	const wxChar* GetTypeString(void)const{return _T("Coordinate System");}
+	const wxChar* GetTypeString(void)const{return _("Coordinate System");}
 	HeeksObj *MakeACopy(void)const;
 	wxIcon* GetIcon();
 	bool ModifyByMatrix(const double *mat);

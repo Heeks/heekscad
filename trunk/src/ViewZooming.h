@@ -10,7 +10,7 @@ class ViewZooming: public CInputMode{
 	wxPoint CurrentPoint;
 public:
 	// virtual functions for InputMode
-	const wxChar* GetTitle(){return _T("View Zoom");}
+	const wxChar* GetTitle(){return _("View Zoom");}
 	void OnMouse( wxMouseEvent& event );
 };
 

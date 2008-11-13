@@ -61,9 +61,9 @@ void CCylinder::GetProperties(std::list<Property *> *list)
 {
 	__super::GetProperties(list);
 
-	list->push_back(new PropertyVertex(_T("centre pos"), m_pos.Location(), this, on_set_centre));
-	list->push_back(new PropertyDouble(_T("radius"), m_radius, this, on_set_radius));
-	list->push_back(new PropertyDouble(_T("height"), m_height, this, on_set_height));
+	list->push_back(new PropertyVertex(_("centre pos"), m_pos.Location(), this, on_set_centre));
+	list->push_back(new PropertyDouble(_("radius"), m_radius, this, on_set_radius));
+	list->push_back(new PropertyDouble(_("height"), m_height, this, on_set_height));
 }
 
 void CCylinder::GetGripperPositions(std::list<double> *list, bool just_for_endof)
@@ -99,7 +99,7 @@ void CCylinder::GetGripperPositions(std::list<double> *list, bool just_for_endof
 void CCylinder::OnApplyProperties()
 {
 	CCylinder* new_object = new CCylinder(m_pos, m_radius, m_height, m_title.c_str(), m_color);
-	wxGetApp().StartHistory(_T("Edit Cylinder"));
+	wxGetApp().StartHistory();
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().DeleteUndoably(this);
 	wxGetApp().EndHistory();
@@ -147,7 +147,7 @@ bool CCylinder::Stretch(const double *p, const double* shift)
 	if(make_a_new_cylinder)
 	{
 		CCylinder* new_object = new CCylinder(m_pos, m_radius, m_height, m_title.c_str(), m_color);
-		wxGetApp().StartHistory(_T("Stretch Cylinder"));
+		wxGetApp().StartHistory();
 		wxGetApp().AddUndoably(new_object, NULL, NULL);
 		wxGetApp().DeleteUndoably(this);
 		wxGetApp().EndHistory();

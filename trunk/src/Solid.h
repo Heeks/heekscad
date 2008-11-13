@@ -19,7 +19,7 @@ public:
 
 	int GetType()const{return SolidType;}
 	long GetMarkingMask()const{return MARKING_FILTER_SOLID;}
-	const wxChar* GetTypeString(void)const{return _T("Solid");}
+	const wxChar* GetTypeString(void)const{return _("Solid");}
 	wxIcon* GetIcon();
 	HeeksObj *MakeACopy(void)const;
 	void SetColor(const HeeksColor &col){m_color = col;}

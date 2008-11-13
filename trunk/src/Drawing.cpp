@@ -53,7 +53,7 @@ void Drawing::AddPoint()
 
 	if(wxGetApp().m_digitizing->digitized_point.m_type == DigitizeNoItemType)return;
 
-	wxGetApp().StartHistory(GetTitle());
+	wxGetApp().StartHistory();
 
 	bool calculated = false;
 	if(is_an_add_level(GetDrawStep())){
@@ -165,7 +165,7 @@ private:
 
 public:
 	void Run(){wxGetApp().SetInputMode(wxGetApp().m_select_mode);}
-	const wxChar* GetTitle(){return _T("Stop drawing");}
+	const wxChar* GetTitle(){return _("Stop drawing");}
 	wxBitmap* Bitmap()
 	{
 		if(m_bitmap == NULL)
@@ -175,7 +175,7 @@ public:
 		}
 		return m_bitmap;
 	}
-	const wxChar* GetToolTip(){return _T("Finish drawing");}
+	const wxChar* GetToolTip(){return _("Finish drawing");}
 };
 wxBitmap* EndDrawing::m_bitmap = NULL;
 
@@ -195,7 +195,7 @@ public:
 		wxGetApp().m_digitizing->digitized_point.m_type = DigitizeInputType;
 		m_drawing->AddPoint();
 	}
-	const wxChar* GetTitle(){return _T("Add point");}
+	const wxChar* GetTitle(){return _("Add point");}
 	wxBitmap* Bitmap()
 	{
 		if(m_bitmap == NULL)
@@ -205,7 +205,7 @@ public:
 		}
 		return m_bitmap;
 	}
-	const wxChar* GetToolTip(){return _T("Add a point to drawing");}
+	const wxChar* GetToolTip(){return _("Add a point to drawing");}
 };
 wxBitmap* AddPointTool::m_bitmap = NULL;
 
@@ -224,7 +224,7 @@ public:
 	{
 		m_drawing->m_getting_position = true;
 	}
-	const wxChar* GetTitle(){return _T("Get Position");}
+	const wxChar* GetTitle(){return _("Get Position");}
 	wxBitmap* Bitmap()
 	{
 		if(m_bitmap == NULL)
@@ -234,7 +234,7 @@ public:
 		}
 		return m_bitmap;
 	}
-	const wxChar* GetToolTip(){return _T("Pick position without adding to the drawing");}
+	const wxChar* GetToolTip(){return _("Pick position without adding to the drawing");}
 };
 wxBitmap* GetPosTool::m_bitmap = NULL;
 

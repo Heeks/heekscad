@@ -42,7 +42,7 @@ public:
 	void glCommands(bool select, bool marked, bool no_color);
 	void KillGLLists(void);
 	void GetBox(CBox &box);
-	const wxChar* GetTypeString(void)const{return _T("Ruler");}
+	const wxChar* GetTypeString(void)const{return _("Ruler");}
 	HeeksObj *MakeACopy(void)const;
 	bool ModifyByMatrix(const double *mat);
 	void GetGripperPositions(std::list<double> *list, bool just_for_endof);

@@ -164,7 +164,7 @@ public:
 	}
 	const wxChar* GetTitle(){return _T("CoordSystem3Points");}
 	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/coords3.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
-	const wxChar* GetToolTip(){return _T("Set position and orientation by picking 3 points");}
+	const wxChar* GetToolTip(){return _("Set position and orientation by picking 3 points");}
 };
 wxBitmap* CoordSystem3Points::m_bitmap = NULL;
 
@@ -183,7 +183,7 @@ public:
 	}
 	const wxChar* GetTitle(){return _T("SetCoordSystemActive");}
 	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/setcoordsys.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
-	const wxChar* GetToolTip(){return _T("Set this coordinate system as the active one");}
+	const wxChar* GetToolTip(){return _("Set this coordinate system as the active one");}
 };
 wxBitmap* SetCoordSystemActive::m_bitmap = NULL;
 
@@ -202,7 +202,7 @@ public:
 	}
 	const wxChar* GetTitle(){return _T("UnsetCoordSystemActive");}
 	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/unsetcoordsys.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
-	const wxChar* GetToolTip(){return _T("Set world coordinate system active");}
+	const wxChar* GetToolTip(){return _("Set world coordinate system active");}
 };
 wxBitmap* UnsetCoordSystemActive::m_bitmap = NULL;
 
@@ -217,13 +217,13 @@ void CoordinateSystem::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 
 void CoordinateSystem::GetProperties(std::list<Property *> *list)
 {
-	list->push_back(new PropertyVertex(_T("position"), m_o, this, on_set_pos));
-	list->push_back(new PropertyVertex(_T("x axis"), gp_Pnt(m_x.XYZ()), NULL));
-	list->push_back(new PropertyVertex(_T("y axis"), gp_Pnt(m_y.XYZ()), NULL));
+	list->push_back(new PropertyVertex(_("position"), m_o, this, on_set_pos));
+	list->push_back(new PropertyVertex(_("x axis"), gp_Pnt(m_x.XYZ()), NULL));
+	list->push_back(new PropertyVertex(_("y axis"), gp_Pnt(m_y.XYZ()), NULL));
 	AxesToAngles(m_x, m_y, m_vertical_angle, m_horizontal_angle, m_twist_angle);
-	list->push_back(new PropertyDouble(_T("Vertical Angle"), m_vertical_angle * 180/Pi, this, on_set_vertical_angle));
-	list->push_back(new PropertyDouble(_T("Horizontal Angle"), m_horizontal_angle * 180/Pi, this, on_set_horizontal_angle));
-	list->push_back(new PropertyDouble(_T("Twist Angle"), m_twist_angle * 180/Pi, this, on_set_twist_angle));
+	list->push_back(new PropertyDouble(_("Vertical Angle"), m_vertical_angle * 180/Pi, this, on_set_vertical_angle));
+	list->push_back(new PropertyDouble(_("Horizontal Angle"), m_horizontal_angle * 180/Pi, this, on_set_horizontal_angle));
+	list->push_back(new PropertyDouble(_("Twist Angle"), m_twist_angle * 180/Pi, this, on_set_twist_angle));
 }
 
 void CoordinateSystem::WriteXML(TiXmlElement *root)
@@ -350,9 +350,9 @@ static void on_set_y(const double* pos){ memcpy(y_axis_pos, pos, 3*sizeof(double
 
 void CoordinateSystem::PickFrom3Points()
 {
-	if(!wxGetApp().PickPosition(_T("Pick the location"), origin, on_set_origin))return;
-	if(!wxGetApp().PickPosition(_T("Pick a point on the x-axis"), x_axis_pos, on_set_x))return;
-	if(!wxGetApp().PickPosition(_T("Pick a point where y > 0"), y_axis_pos, on_set_y))return;
+	if(!wxGetApp().PickPosition(_("Pick the location"), origin, on_set_origin))return;
+	if(!wxGetApp().PickPosition(_("Pick a point on the x-axis"), x_axis_pos, on_set_x))return;
+	if(!wxGetApp().PickPosition(_("Pick a point where y > 0"), y_axis_pos, on_set_y))return;
 
 	coord_system_for_Tool->m_o = make_point(origin);
 	coord_system_for_Tool->m_x = make_vector(coord_system_for_Tool->m_o, make_point(x_axis_pos));

@@ -55,8 +55,8 @@ void CSphere::GetProperties(std::list<Property *> *list)
 {
 	__super::GetProperties(list);
 
-	list->push_back(new PropertyVertex(_T("centre"), m_pos, this, on_set_centre));
-	list->push_back(new PropertyDouble(_T("radius"), m_radius, this, on_set_radius));
+	list->push_back(new PropertyVertex(_("centre"), m_pos, this, on_set_centre));
+	list->push_back(new PropertyDouble(_("radius"), m_radius, this, on_set_radius));
 }
 
 void CSphere::GetGripperPositions(std::list<double> *list, bool just_for_endof)
@@ -74,7 +74,7 @@ void CSphere::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 void CSphere::OnApplyProperties()
 {
 	CSphere* new_object = new CSphere(m_pos, m_radius, m_title.c_str(), m_color);
-	wxGetApp().StartHistory(_T("Edit Sphere"));
+	wxGetApp().StartHistory();
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().DeleteUndoably(this);
 	wxGetApp().EndHistory();
