@@ -560,8 +560,18 @@ wxPGVariant wxBoolPropertyClass::DoGetValue() const
     return wxPGVariant(m_value);
 }
 
+static bool true_false_translated = false;
+
 wxString wxBoolPropertyClass::GetValueAsString( int argFlags ) const
 {
+	if(!true_false_translated)
+	{
+		wxPGGlobalVars->m_boolChoices[0] = _("False");
+		wxPGGlobalVars->m_boolChoices[1] = _("True");
+		wxPGGlobalVars->m_boolChoices[2] = _("Unspecified");
+		true_false_translated = true;
+	}
+
     if ( !(argFlags & wxPG_FULL_VALUE) )
     {
         return wxPGGlobalVars->m_boolChoices[m_value];

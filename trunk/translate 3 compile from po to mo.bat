@@ -1,6 +1,7 @@
-"C:\Program Files\GnuWin32\bin\msgfmt.exe" -o "C:\Users\Dan\Heeks Software\HeeksCAD\de\HeeksCAD.mo" "C:\Users\Dan\Heeks Software\HeeksCAD\de\HeeksCAD.po"
-"C:\Program Files\GnuWin32\bin\msgfmt.exe" -o "C:\Users\Dan\Heeks Software\HeeksCAD\zh_CN\HeeksCAD.mo" "C:\Users\Dan\Heeks Software\HeeksCAD\zh_CN\HeeksCAD.po"
-"C:\Program Files\GnuWin32\bin\msgfmt.exe" -o "C:\Users\Dan\Heeks Software\HeeksCAD\zh_TW\HeeksCAD.mo" "C:\Users\Dan\Heeks Software\HeeksCAD\zh_TW\HeeksCAD.po"
-"C:\Program Files\GnuWin32\bin\msgfmt.exe" -o "C:\Users\Dan\Heeks Software\HeeksCAD\ru\HeeksCAD.mo" "C:\Users\Dan\Heeks Software\HeeksCAD\ru\HeeksCAD.po"
+"C:\Program Files\GnuWin32\bin\msgfmt.exe" -o "%HEEKSCADPATH%\de\HeeksCAD.mo" "%HEEKSCADPATH%\de\HeeksCAD.po"
+"C:\Program Files\GnuWin32\bin\msgfmt.exe" -o "%HEEKSCADPATH%\zh_CN\HeeksCAD.mo" "%HEEKSCADPATH%\zh_CN\HeeksCAD.po"
+"C:\Program Files\GnuWin32\bin\msgfmt.exe" -o "%HEEKSCADPATH%\zh_TW\HeeksCAD.mo" "%HEEKSCADPATH%\zh_TW\HeeksCAD.po"
+"C:\Program Files\GnuWin32\bin\msgfmt.exe" -o "%HEEKSCADPATH%\ru\HeeksCAD.mo" "%HEEKSCADPATH%\ru\HeeksCAD.po"
+"C:\Program Files\GnuWin32\bin\msgfmt.exe" -o "%HEEKSCADPATH%\ru\ru.mo" "%HEEKSCADPATH%\ru\ru.po"
 
 pause
