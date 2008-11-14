@@ -1349,14 +1349,17 @@ const wxString& wxPGGetDefaultImageWildcard()
             wxString ext_up = ext_lo.Upper();
 
             str.append( ext_up );
-            str.append( wxT(" files (*.") );
+			str.append(_T(" "));
+            str.append( _("files"));
+			str.append( _T(" (*.") );
             str.append( ext_up );
             str.append( wxT(")|*.") );
             str.append( ext_lo );
             str.append( wxT("|") );
         }
 
-        str.append ( wxT("All files (*.*)|*.*") );
+        str.append ( _("All files"));
+		str.append ( _T(" (*.*)|*.*") );
 
         wxPGGlobalVars->m_pDefaultImageWildcard = str;
     }

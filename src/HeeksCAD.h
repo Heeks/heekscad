@@ -40,6 +40,7 @@ private:
 
 protected:
     wxLocale m_locale; // locale we'll be using
+	bool m_locale_initialised;
 
 public:
 	HeeksCADapp();
@@ -215,6 +216,7 @@ public:
 	void PlotSetColor(const HeeksColor &c);
 	void PlotLine(const double* s, const double* e);
 	void PlotArc(const double* s, const double* e, const double* c);
+	void InitialiseLocale();
 };
 
 DECLARE_APP(HeeksCADapp)

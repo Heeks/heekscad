@@ -453,7 +453,7 @@ void RegularShapesDrawing::GetProperties(std::list<Property *> *list){
 	std::list< wxString > choices;
 	choices.push_back ( wxString ( _("draw rectangles") ) );
 	choices.push_back ( wxString ( _("draw polygons") ) );
-	choices.push_back ( wxString ( _("draw obrounds") ) );
+	choices.push_back ( wxString ( _("draw slots") ) );
 	RegularShapesDrawing_for_GetProperties = this;
 	list->push_back ( new PropertyChoice ( _("drawing mode"),  choices, m_mode, NULL, on_set_drawing_mode ) );
 

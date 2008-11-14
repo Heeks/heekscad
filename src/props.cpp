@@ -568,8 +568,8 @@ wxString wxBoolPropertyClass::GetValueAsString( int argFlags ) const
     }
     wxString text;
 
-    if (m_value) text = wxT("true");
-    else text = wxT("false");
+    if (m_value) text = _("true");
+    else text = _("false");
 
     return text;
 }
@@ -589,7 +589,7 @@ int wxBoolPropertyClass::GetChoiceInfo( wxPGChoiceInfo* choiceinfo )
 bool wxBoolPropertyClass::SetValueFromString( const wxString& text, int /*argFlags*/ )
 {
     int value = 0;
-    if ( text.CmpNoCase(wxPGGlobalVars->m_boolChoices[1]) == 0 || text.CmpNoCase(wxT("true")) == 0 )
+    if ( text.CmpNoCase(wxPGGlobalVars->m_boolChoices[1]) == 0 || text.CmpNoCase(_("true")) == 0 )
         value = 1;
 
     if ( text.length() == 0 )
@@ -1496,7 +1496,7 @@ WX_PG_IMPLEMENT_PROPERTY_CLASS(wxFileProperty,wxBaseProperty,
 wxFilePropertyClass::wxFilePropertyClass( const wxString& label, const wxString& name,
     const wxString& value ) : wxPGProperty(label,name)
 {
-    m_wildcard = _("All files (*.*)|*.*");
+    m_wildcard = wxString(_("All files")) + _T(" (*.*)|*.*");
     m_flags |= wxPG_PROP_SHOW_FULL_FILENAME;
     m_indFilter = -1;
 

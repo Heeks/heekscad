@@ -297,7 +297,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_transformBar->Realize();
 
 	m_aui_manager->AddPane(m_graphics, wxAuiPaneInfo().Name(_T("Graphics")).Caption(_("Graphics")).CentrePane().BestSize(wxSize(800, 600)));
-	m_aui_manager->AddPane(m_left, wxAuiPaneInfo().Name(_T("Objects")).Caption(_("Hello")).Left().Layer(1).BestSize(wxSize(300, 400)));
+	m_aui_manager->AddPane(m_left, wxAuiPaneInfo().Name(_T("Objects")).Caption(_("Objects")).Left().Layer(1).BestSize(wxSize(300, 400)));
 	m_aui_manager->AddPane(m_options, wxAuiPaneInfo().Name(_T("Options")).Caption(_("Options")).Left().Layer(1).BestSize(wxSize(300, 200)));
 	m_aui_manager->AddPane(m_input_canvas, wxAuiPaneInfo().Name(_T("Input")).Caption(_("Input")).Left().Layer(1).BestSize(wxSize(300, 200)));
 	m_aui_manager->AddPane(m_properties, wxAuiPaneInfo().Name(_T("Properties")).Caption(_("Properties")).Left().Layer(1).BestSize(wxSize(300, 200)));
@@ -372,6 +372,18 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	wxString str;
 	wxGetApp().m_config->Read(_T("AuiPerspective"), &str, default_layout_string);
 	m_aui_manager->LoadPerspective(str);
+
+	// translate the window captions
+	m_aui_manager->GetPane(m_graphics).Caption(_("Graphics"));
+	m_aui_manager->GetPane(m_left).Caption(_("Objects"));
+	m_aui_manager->GetPane(m_options).Caption(_("Options"));
+	m_aui_manager->GetPane(m_input_canvas).Caption(_("Input"));
+	m_aui_manager->GetPane(m_properties).Caption(_("Properties"));
+	m_aui_manager->GetPane(m_toolBar).Caption(_("General Tools"));
+	m_aui_manager->GetPane(m_geometryBar).Caption(_("Geometry Tools"));
+	m_aui_manager->GetPane(m_solidBar).Caption(_("Solid Tools"));
+	m_aui_manager->GetPane(m_viewingBar).Caption(_("Viewing Tools"));
+	m_aui_manager->GetPane(m_transformBar).Caption(_("Transformation Tools"));
 
 	m_aui_manager->Update();}
 

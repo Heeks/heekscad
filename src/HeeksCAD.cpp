@@ -108,7 +108,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_ruler = new HRuler();
 	m_show_ruler = false;
 	m_show_datum_coords_system = true;
-	m_filepath.assign(_("Untitled.heeks"));
+	m_filepath = wxString(_("Untitled")) + _T(".heeks");
 	m_in_OpenFile = false;
 	m_transform_gl_list = 0;
 	m_current_coordinate_system = NULL;
@@ -118,6 +118,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_loft_removes_sketches = false;
 	m_font_tex_number = 0;
 	m_gl_font = NULL;
+	m_locale_initialised = false;
 }
 
 static RemoveObjectTool remove_object_tool(NULL);
@@ -145,15 +146,7 @@ bool HeeksCADapp::OnInit()
 	m_config = new wxConfig(_T("HeeksCAD"));
 	wxInitAllImageHandlers();
 
-    // Initialize the catalogs we'll be using
-	if ( !m_locale.Init(wxLANGUAGE_CHINESE_SIMPLIFIED, wxLOCALE_CONV_ENCODING) )
-	{
-		wxLogError(_T("This language is not supported by the system."));
-		return false;
-	}
-	
-    wxLocale::AddCatalogLookupPathPrefix(wxT("."));
-    m_locale.AddCatalog(wxT("HeeksCAD"));
+	InitialiseLocale();
 
 	// initialise glut
 #ifdef WIN32
@@ -425,7 +418,7 @@ void HeeksCADapp::Reset(){
 	m_current_coordinate_system = NULL;
 	m_doing_rollback = false;
 	m_frame->m_graphics->m_view_point.SetView(gp_Vec(0, 1, 0), gp_Vec(0, 0, 1));
-	m_filepath.assign(_("Untitled.heeks"));
+	m_filepath = wxString(_("Untitled")) + _T(".heeks");
 	m_hidden_for_drag.clear();
 	m_show_grippers_on_drag = true;
 	*m_ruler = HRuler();
@@ -2555,4 +2548,22 @@ void HeeksCADapp::PlotLine(const double* s, const double* e)
 void HeeksCADapp::PlotArc(const double* s, const double* e, const double* c)
 {
 	m_frame->m_printout->DrawArc(s, e, c);
+}
+
+void HeeksCADapp::InitialiseLocale()
+{
+	if(!m_locale_initialised)
+	{
+		m_locale_initialised = true;
+
+		// Initialize the catalogs we'll be using
+		if ( !m_locale.Init(wxLANGUAGE_RUSSIAN, wxLOCALE_CONV_ENCODING) )
+		{
+			wxLogError(_T("This language is not supported by the system."));
+			return;
+		}
+
+		wxLocale::AddCatalogLookupPathPrefix(wxT("."));
+		m_locale.AddCatalog(wxT("HeeksCAD"));
+	}
 }
