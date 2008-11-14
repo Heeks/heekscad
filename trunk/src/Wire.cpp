@@ -45,9 +45,8 @@ public:
 		{
 			TopoDS_Edge E = TopoDS::Edge(ex.Current());
 			if(int extent = make_operation.Generated(E).Extent() > 0){
-				wxChar mess[1024];
-				wsprintf(mess, _("Generated from edge = %d"), extent);
-				wxMessageBox(mess);
+				wxString str = wxString(_("Generated from edge")) + _T(" = ") + wxString::Format("%d", extent);
+				wxMessageBox(str);
 			}
 		}
 
@@ -61,8 +60,7 @@ public:
 		wxGetApp().DeleteUndoably(m_wire);
 	}
 	const wxChar* GetTitle(){
-		wxChar str[1024];
-		wsprintf(str, _("Offset Wire ( %lf )"), m_offset);
+		wxString str = wxString(_("Offset Wire")) + wxString::Format(" %lf", m_offset);
 		title_for_OffsetWireTool.assign(str);
 		return title_for_OffsetWireTool.c_str();
 	}

@@ -3,10 +3,15 @@ import re
 import codecs
 
 f_in = open('HeeksCAD.po')
-#f_de = codecs.open('de/HeeksCAD.po', encoding='latin_1', mode='w')
-f_de = codecs.open('zh_CN/HeeksCAD.po', encoding='utf_8', mode='w')
+#f_out = codecs.open('de/HeeksCAD.po', encoding='latin_1', mode='w')
+#f_out = codecs.open('zh_CN/HeeksCAD.po', encoding='utf_8', mode='w')
+#f_out = codecs.open('zh_TW/HeeksCAD.po', encoding='utf_8', mode='w')
+# turkish not available yet f_out = codecs.open('tr/HeeksCAD.po', encoding='utf_8', mode='w')
+f_out = codecs.open('ru/HeeksCAD.po', encoding='utf_8', mode='w')
 
 translate_str = ''
+
+count = 1
 
 while (True):
     line = f_in.readline();
@@ -20,7 +25,9 @@ while (True):
             #translate_str = unicode(translate_str, encoding='latin_1')
             #translate_str = translate.translate('en', 'de', translate_str)
             translate_str = unicode(translate_str, encoding='utf_8')
-            translate_str = translate.translate('en', 'zh-CN', translate_str)
+            #translate_str = translate.translate('en', 'zh-CN', translate_str)
+            #translate_str = translate.translate('en', 'zh-TW', translate_str)
+            translate_str = translate.translate('en', 'ru', translate_str)
             if translate_str:
                 pass
             else:
@@ -29,14 +36,15 @@ while (True):
             translate_str = ''
 
     if(line.find('Content-Type: text/plain') != -1):
-        f_de.write('"Content-Type: text/plain; charset=utf-8\\n"')
+        f_out.write('"Content-Type: text/plain; charset=utf-8\\n"')
     elif(line.find('msgstr') != -1):
         new_line = 'msgstr "' + translate_str + '"\n'
         #print new_line,
-        print line,
-        f_de.write(new_line)
+        print count
+        count = count + 1
+        f_out.write(new_line)
     else:
-        f_de.write(line)
+        f_out.write(line)
 
 f_in.close();
-f_de.close();
+f_out.close();
