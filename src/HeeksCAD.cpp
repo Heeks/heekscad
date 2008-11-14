@@ -916,7 +916,7 @@ void HeeksCADapp::SaveSTLFile(const wxChar *filepath)
 	ofstream ofs(filepath);
 	if(!ofs)
 	{
-		wxString str = wxString(_("couldn't open file - ")) + filepath;
+		wxString str = wxString(_("couldn't open file")) + _T(" - ") + filepath;
 		wxMessageBox(str);
 		return;
 	}
@@ -2556,14 +2556,19 @@ void HeeksCADapp::InitialiseLocale()
 	{
 		m_locale_initialised = true;
 
+		int language = wxLANGUAGE_DEFAULT;
+		m_config->Read(_T("Language"), &language);
+
 		// Initialize the catalogs we'll be using
-		if ( !m_locale.Init(wxLANGUAGE_RUSSIAN, wxLOCALE_CONV_ENCODING) )
+		if ( !m_locale.Init(language, wxLOCALE_CONV_ENCODING) )
 		{
 			wxLogError(_T("This language is not supported by the system."));
 			return;
 		}
 
 		wxLocale::AddCatalogLookupPathPrefix(wxT("."));
+
+		m_locale.AddCatalog(m_locale.GetCanonicalName());
 		m_locale.AddCatalog(wxT("HeeksCAD"));
 	}
 }
