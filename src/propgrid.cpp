@@ -20,6 +20,8 @@
     #pragma hdrstop
 #endif
 
+#include "stdafx.h"
+
 #ifndef WX_PRECOMP
     #include "wx/defs.h"
     #include "wx/object.h"
@@ -626,6 +628,8 @@ wxPGGlobalVarsClass* wxPGGlobalVars = (wxPGGlobalVarsClass*) NULL;
 
 wxPGGlobalVarsClass::wxPGGlobalVarsClass()
 {
+	wxGetApp().InitialiseLocale();
+
     m_boolChoices[0] = _("False");
     m_boolChoices[1] = _("True");
     m_boolChoices[2] = _("Unspecified");
@@ -4583,7 +4587,7 @@ void wxPGTypeOperationFailed( const wxPGProperty* p, const wxChar* typestr,
     const wxChar* op )
 {
     wxASSERT( p != NULL );
-    wxLogError( _("Type operation \"%s\" failed: Property labeled \"%s\" is of type \"%s\", NOT \"%s\"."),
+    wxLogError( _T("Type operation \"%s\" failed: Property labeled \"%s\" is of type \"%s\", NOT \"%s\"."),
         op,p->GetLabel().c_str(),wxPG_TO_WXCHAR_PTR(p->GetValueTypePtr()->GetCustomTypeName()),typestr );
 }
 
