@@ -144,7 +144,7 @@ void CEdge::Blend(double radius){
 			wxGetApp().EndHistory();
 		}
 	}
-	catch(wchar_t *message)
+	catch(wxChar *message)
 	{
 		wxMessageBox(wxString(_("A fatal error happened during Blend")) + _T(" -\n") + wxString(message));
 	}
