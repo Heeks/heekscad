@@ -34,6 +34,7 @@
 #include "wx/print.h"
 #include "wx/printdlg.h"
 #include "HeeksPrintout.h"
+#include "ToolImage.h"
 
 using namespace std;
 
@@ -62,6 +63,7 @@ EVT_UPDATE_UI(Menu_View_TransformBar, CHeeksFrame::OnUpdateViewTransformBar)
 EVT_MENU( Menu_View_StatusBar, CHeeksFrame::OnViewStatusBar )
 EVT_UPDATE_UI(Menu_View_StatusBar, CHeeksFrame::OnUpdateViewStatusBar)
 EVT_MENU( Menu_View_ResetLayout, CHeeksFrame::OnResetLayout )
+EVT_MENU( Menu_View_SetToolBarsToLeft, CHeeksFrame::OnSetToolBarsToLeft )
 EVT_MENU(wxID_OPEN, CHeeksFrame::OnOpenButton)
 EVT_MENU(wxID_SAVE, CHeeksFrame::OnSaveButton)
 EVT_MENU(wxID_NEW, CHeeksFrame::OnNewButton)
@@ -141,7 +143,7 @@ bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
     return true;
 }
 
-static wxString default_layout_string = _T("layout2|name=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=351;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=362;prop=100000;bestw=312;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=1;pos=0;prop=100000;bestw=390;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=732;floaty=259;floatw=407;floath=65|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=1;pos=401;prop=100000;bestw=234;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=TransformBar;caption=Transformation Tools;state=2108159;dir=1;layer=10;row=0;pos=540;prop=100000;bestw=273;besth=39;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=589;floaty=156;floatw=298;floath=73|dock_size(5,0,0)=504|dock_size(4,1,0)=302|dock_size(1,10,0)=41|dock_size(1,10,1)=41|");
+static wxString default_layout_string = _T("layout2|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=279;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=290;prop=100000;bestw=248;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=551;floaty=336;floatw=275;floath=71|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=1;pos=0;prop=100000;bestw=310;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=783;floaty=287;floatw=337;floath=71|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=1;pos=321;prop=100000;bestw=217;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=463;floaty=389;floatw=244;floath=71|name=TransformBar;caption=Transformation Tools;state=2108159;dir=4;layer=10;row=0;pos=171;prop=100000;bestw=217;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=676;floaty=507;floatw=244;floath=71|dock_size(5,0,0)=504|dock_size(4,1,0)=302|dock_size(1,10,0)=33|dock_size(1,10,1)=33|");
 
 CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSize& size )
 	: wxFrame((wxWindow *)NULL, -1, title, pos, size)
@@ -223,100 +225,25 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_statusBar = CreateStatusBar();
 	SetStatusText( _T( "" ) );
 
-	m_toolBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
-	m_toolBar->SetToolBitmapSize(wxSize(32, 32));
-
-	m_geometryBar = new wxToolBar(this, -1, wxDefaultPosition, wxSize(600, -1), wxTB_NODIVIDER | wxTB_FLAT);
-	m_geometryBar->SetToolBitmapSize(wxSize(32, 32));
-
-	m_solidBar = new wxToolBar(this, -1, wxDefaultPosition, wxSize(600, -1), wxTB_NODIVIDER | wxTB_FLAT);
-	m_solidBar->SetToolBitmapSize(wxSize(32, 32));
-
-	m_viewingBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
-	m_viewingBar->SetToolBitmapSize(wxSize(32, 32));
-
-	m_transformBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
-	m_transformBar->SetToolBitmapSize(wxSize(32, 32));
-
 	wxString exe_folder = wxGetApp().GetExeFolder();
 
-	// main tool bar
-    m_toolBar->AddTool(wxID_NEW, _T("New"), wxBitmap(exe_folder + _T("/bitmaps/new.png"), wxBITMAP_TYPE_PNG), _("New file"));
-    m_toolBar->AddTool(wxID_OPEN, _T("Open"), wxBitmap(exe_folder + _T("/bitmaps/open.png"), wxBITMAP_TYPE_PNG), _("Open file"));
-    m_toolBar->AddTool(wxID_SAVE, _T("Save"), wxBitmap(exe_folder + _T("/bitmaps/save.png"), wxBITMAP_TYPE_PNG), _("Save file"));
-    m_toolBar->AddTool(wxID_CUT, _T("Cut"), wxBitmap(exe_folder + _T("/bitmaps/cut.png"), wxBITMAP_TYPE_PNG), _("Cut selected items to the clipboard"));
-    m_toolBar->AddTool(wxID_COPY, _T("Copy"), wxBitmap(exe_folder + _T("/bitmaps/copy.png"), wxBITMAP_TYPE_PNG), _("Copy selected items to the clipboard"));
-    m_toolBar->AddTool(wxID_PASTE, _T("Paste"), wxBitmap(exe_folder + _T("/bitmaps/paste.png"), wxBITMAP_TYPE_PNG), _("Paste items from the clipboard"));
-    m_toolBar->AddTool(ID_UNDO, _T("Undo"), wxBitmap(exe_folder + _T("/bitmaps/undo.png"), wxBITMAP_TYPE_PNG), _("Undo the previous command"));
-    m_toolBar->AddTool(ID_REDO, _T("Redo"), wxBitmap(exe_folder + _T("/bitmaps/redo.png"), wxBITMAP_TYPE_PNG), _("Redo the next command"));
-    m_toolBar->AddTool(ID_SELECT_MODE, _T("Select"), wxBitmap(exe_folder + _T("/bitmaps/select.png"), wxBITMAP_TYPE_PNG), _("Select Mode"));
-    m_toolBar->Realize();
+	int bitmap_size = ToolImage::default_bitmap_size;
+	wxGetApp().m_config->Read(_T("ToolImageSize"), &bitmap_size);
+	ToolImage::SetBitmapSize(bitmap_size);
 
-	// geometry tool bar
-    m_geometryBar->AddTool(ID_LINES, _T("Lines"), wxBitmap(exe_folder + _T("/bitmaps/lines.png"), wxBITMAP_TYPE_PNG), _("Draw a sketch"));
-    m_geometryBar->AddTool(ID_CIRCLES, _T("Circles"), wxBitmap(exe_folder + _T("/bitmaps/circles.png"), wxBITMAP_TYPE_PNG), _("Start Circle Drawing"));
-    m_geometryBar->AddTool(ID_ILINE, _T("ILine"), wxBitmap(exe_folder + _T("/bitmaps/iline.png"), wxBITMAP_TYPE_PNG), _("Start Drawing Infinite Lines"));
-    m_geometryBar->AddTool(ID_POINTS, _T("Points"), wxBitmap(exe_folder + _T("/bitmaps/point.png"), wxBITMAP_TYPE_PNG), _("Start Drawing Points"));
-    m_geometryBar->AddTool(ID_REGSHAPES, _T("Regular Shapes"), wxBitmap(exe_folder + _T("/bitmaps/regshapes.png"), wxBITMAP_TYPE_PNG), _("Draw regular shapes; rectangles, polygons, obrounds"));
-    m_geometryBar->AddTool(ID_TEXT, _T("Text"), wxBitmap(exe_folder + _T("/bitmaps/text.png"), wxBITMAP_TYPE_PNG), _("Add a text object"));
-    m_geometryBar->AddTool(ID_COORDINATE_SYSTEM, _T("CoordSys"), wxBitmap(exe_folder + _T("/bitmaps/coordsys.png"), wxBITMAP_TYPE_PNG), _("Create a Coordinate System"));
-    m_geometryBar->AddTool(ID_DIMENSIONING, _T("Dimensioning"), wxBitmap(exe_folder + _T("/bitmaps/dimension.png"), wxBITMAP_TYPE_PNG), _("Add a dimension"));
-    m_geometryBar->Realize();
-
-	// Solids tool bar
-    m_solidBar->AddTool(ID_SPHERE, _T("Sphere"), wxBitmap(exe_folder + _T("/bitmaps/sphere.png"), wxBITMAP_TYPE_PNG), _("Add a sphere"));
-    m_solidBar->AddTool(ID_CUBE, _T("Cube"), wxBitmap(exe_folder + _T("/bitmaps/cube.png"), wxBITMAP_TYPE_PNG), _("Add a cube"));
-    m_solidBar->AddTool(ID_CYL, _T("Cylinder"), wxBitmap(exe_folder + _T("/bitmaps/cyl.png"), wxBITMAP_TYPE_PNG), _("Add a cylinder"));
-    m_solidBar->AddTool(ID_CONE, _T("Cone"), wxBitmap(exe_folder + _T("/bitmaps/cone.png"), wxBITMAP_TYPE_PNG), _("Add a cone"));
-    m_solidBar->AddTool(ID_RULED_SURFACE, _T("Ruled Surface"), wxBitmap(exe_folder + _T("/bitmaps/ruled.png"), wxBITMAP_TYPE_PNG), _("Create a lofted face"));
-    m_solidBar->AddTool(ID_EXTRUDE, _T("Extrude"), wxBitmap(exe_folder + _T("/bitmaps/extrude.png"), wxBITMAP_TYPE_PNG), _("Extrude a wire or face"));
-	m_solidBar->AddTool(ID_SUBTRACT, _T("Cut"), wxBitmap(exe_folder + _T("/bitmaps/subtract.png"), wxBITMAP_TYPE_PNG), _("Cut one solid from another"));
-	m_solidBar->AddTool(ID_FUSE, _T("Fuse"), wxBitmap(exe_folder + _T("/bitmaps/fuse.png"), wxBITMAP_TYPE_PNG), _("Fuse one solid to another"));
-	m_solidBar->AddTool(ID_COMMON, _T("Common"), wxBitmap(exe_folder + _T("/bitmaps/common.png"), wxBITMAP_TYPE_PNG), _("Find common solid between two solids"));
-    m_solidBar->AddTool(ID_REDRAW, _T("Redraw"), wxBitmap(exe_folder + _T("/bitmaps/redraw.png"), wxBITMAP_TYPE_PNG), _("Redraw"));
-	m_solidBar->Realize();
-
-	// viewing tool bar
-	m_viewingBar->AddTool(ID_MAG_PREVIOUS, _T("View Back"), wxBitmap(exe_folder + _T("/bitmaps/magprev.png"), wxBITMAP_TYPE_PNG), _("Go back to previous view"));
-	m_viewingBar->AddTool(ID_MAG, _T("Zoom Window"), wxBitmap(exe_folder + _T("/bitmaps/mag.png"), wxBITMAP_TYPE_PNG), _("Zoom in to a dragged window"));
-	m_viewingBar->AddTool(ID_MAG_EXTENTS, _T("Mag Extents"), wxBitmap(exe_folder + _T("/bitmaps/magextents.png"), wxBITMAP_TYPE_PNG), _("Zoom in to fit the extents of the drawing into the graphics window"));
-	m_viewingBar->AddTool(ID_MAG_NO_ROT, _T("Mag No Rotation"), wxBitmap(exe_folder + _T("/bitmaps/magnorot.png"), wxBITMAP_TYPE_PNG), _("Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"));
-	m_viewingBar->AddTool(ID_VIEW_ROT, _T("View Rotate"), wxBitmap(exe_folder + _T("/bitmaps/viewrot.png"), wxBITMAP_TYPE_PNG), _("Enter view rotating mode"));
-	m_viewingBar->AddTool(ID_VIEW_ZOOM, _T("View Zoom"), wxBitmap(exe_folder + _T("/bitmaps/zoom.png"), wxBITMAP_TYPE_PNG), _("Drag to zoom in and out"));
-	m_viewingBar->AddTool(ID_FULL_SCREEN, _T("FullScreen"), wxBitmap(exe_folder + _T("/bitmaps/fullscreen.png"), wxBITMAP_TYPE_PNG), _("Switch to full screen view ( press escape to return )"));
-	m_viewingBar->Realize();
-
-	// transformations tool bar
-	m_transformBar->AddTool(ID_MOVE_TRANSLATE, _T("Move Translate"), wxBitmap(exe_folder + _T("/bitmaps/movet.png"), wxBITMAP_TYPE_PNG), _("Translate selected items"));
-	m_transformBar->AddTool(ID_COPY_TRANSLATE, _T("Copy Translate"), wxBitmap(exe_folder + _T("/bitmaps/copyt.png"), wxBITMAP_TYPE_PNG), _("Copy and translate selected items"));
-	m_transformBar->AddTool(ID_MOVE_ROTATE, _T("Move Rotate"), wxBitmap(exe_folder + _T("/bitmaps/mover.png"), wxBITMAP_TYPE_PNG), _("Rotate selected items"));
-	m_transformBar->AddTool(ID_COPY_ROTATE, _T("Copy Rotate"), wxBitmap(exe_folder + _T("/bitmaps/copyr.png"), wxBITMAP_TYPE_PNG), _("Copy and rotate selected items"));
-	m_transformBar->AddTool(ID_MOVE_MIRROR, _T("Move Mirror"), wxBitmap(exe_folder + _T("/bitmaps/movem.png"), wxBITMAP_TYPE_PNG), _("Mirror selected items"));
-	m_transformBar->AddTool(ID_COPY_MIRROR, _T("Copy Mirror"), wxBitmap(exe_folder + _T("/bitmaps/copym.png"), wxBITMAP_TYPE_PNG), _("Copy and mirror selected items"));
-	m_transformBar->AddTool(ID_MOVE_SCALE, _T("Move Scale"), wxBitmap(exe_folder + _T("/bitmaps/moves.png"), wxBITMAP_TYPE_PNG), _("Scale selected items"));
-	m_transformBar->Realize();
+	AddToolBars();
 
 	m_aui_manager->AddPane(m_graphics, wxAuiPaneInfo().Name(_T("Graphics")).Caption(_("Graphics")).CentrePane().BestSize(wxSize(800, 600)));
 	m_aui_manager->AddPane(m_tree_canvas, wxAuiPaneInfo().Name(_T("Objects")).Caption(_("Objects")).Left().Layer(1).BestSize(wxSize(300, 400)));
 	m_aui_manager->AddPane(m_options, wxAuiPaneInfo().Name(_T("Options")).Caption(_("Options")).Left().Layer(1).BestSize(wxSize(300, 200)));
 	m_aui_manager->AddPane(m_input_canvas, wxAuiPaneInfo().Name(_T("Input")).Caption(_("Input")).Left().Layer(1).BestSize(wxSize(300, 200)));
 	m_aui_manager->AddPane(m_properties, wxAuiPaneInfo().Name(_T("Properties")).Caption(_("Properties")).Left().Layer(1).BestSize(wxSize(300, 200)));
-	m_aui_manager->AddPane(m_toolBar, wxAuiPaneInfo().Name(_T("ToolBar")).Caption(_("General Tools")).ToolbarPane().Top());
-	m_aui_manager->AddPane(m_geometryBar, wxAuiPaneInfo().Name(_T("GeomBar")).Caption(_("Geometry Tools")).ToolbarPane().Top());
-	m_aui_manager->AddPane(m_solidBar, wxAuiPaneInfo().Name(_T("SolidBar")).Caption(_("Solid Tools")).ToolbarPane().Top());
-	m_aui_manager->AddPane(m_viewingBar, wxAuiPaneInfo().Name(_T("ViewingBar")).Caption(_("Viewing Tools")).ToolbarPane().Top());
-	m_aui_manager->AddPane(m_transformBar, wxAuiPaneInfo().Name(_T("TransformBar")).Caption(_("Transformation Tools")).ToolbarPane().Top());
 
 	// add to hiding list for full screen mode
 	wxGetApp().RegisterHideableWindow(m_tree_canvas);
 	wxGetApp().RegisterHideableWindow(m_options);
 	wxGetApp().RegisterHideableWindow(m_input_canvas);
 	wxGetApp().RegisterHideableWindow(m_properties);
-	wxGetApp().RegisterHideableWindow(m_toolBar);
-	wxGetApp().RegisterHideableWindow(m_geometryBar);
-	wxGetApp().RegisterHideableWindow(m_solidBar);
-	wxGetApp().RegisterHideableWindow(m_viewingBar);
-	wxGetApp().RegisterHideableWindow(m_transformBar);
 
 	// set xml reading functions
 	wxGetApp().InitializeXMLFunctions();
@@ -367,25 +294,15 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	SetDropTarget(new DnDFile(this));
 
 	m_menuView->Append( Menu_View_ResetLayout, _( "Reset Layout" ) );
+	m_menuView->Append( Menu_View_SetToolBarsToLeft, _( "Set toolbars to left" ) );
 
 	//Read layout
 	wxString str;
 	wxGetApp().m_config->Read(_T("AuiPerspective"), &str, default_layout_string);
-	m_aui_manager->LoadPerspective(str);
+	LoadPerspective(str);
 
-	// translate the window captions
-	m_aui_manager->GetPane(m_graphics).Caption(_("Graphics"));
-	m_aui_manager->GetPane(m_tree_canvas).Caption(_("Objects"));
-	m_aui_manager->GetPane(m_options).Caption(_("Options"));
-	m_aui_manager->GetPane(m_input_canvas).Caption(_("Input"));
-	m_aui_manager->GetPane(m_properties).Caption(_("Properties"));
-	m_aui_manager->GetPane(m_toolBar).Caption(_("General Tools"));
-	m_aui_manager->GetPane(m_geometryBar).Caption(_("Geometry Tools"));
-	m_aui_manager->GetPane(m_solidBar).Caption(_("Solid Tools"));
-	m_aui_manager->GetPane(m_viewingBar).Caption(_("Viewing Tools"));
-	m_aui_manager->GetPane(m_transformBar).Caption(_("Transformation Tools"));
-
-	m_aui_manager->Update();}
+	m_aui_manager->Update();
+}
 
 CHeeksFrame::~CHeeksFrame()
 {
@@ -410,6 +327,7 @@ CHeeksFrame::~CHeeksFrame()
 #endif
 
 	wxGetApp().m_config->Write(_T("AuiPerspective"), str);
+	wxGetApp().m_config->Write(_T("ToolImageSize"), ToolImage::GetBitmapSize());
 
 	delete m_aui_manager;
 }
@@ -426,7 +344,7 @@ bool CHeeksFrame::ShowFullScreen(bool show, long style){
 		for(std::list<wxWindow*>::iterator It = wxGetApp().m_hideable_windows.begin(); It != wxGetApp().m_hideable_windows.end(); It++)
 		{
 			wxWindow* w = *It;
-			windows_visible.insert(std::pair< wxWindow*, bool > (w, w->IsShown()));
+			windows_visible.insert(std::pair< wxWindow*, bool > (w, m_aui_manager->GetPane(w).IsShown()));
 			m_aui_manager->GetPane(w).Show(false);
 		}
 	}
@@ -609,7 +527,16 @@ void CHeeksFrame::OnUpdateViewStatusBar( wxUpdateUIEvent& event )
 
 void CHeeksFrame::OnResetLayout( wxCommandEvent& event )
 {
-	m_aui_manager->LoadPerspective(default_layout_string);
+	ToolImage::SetBitmapSize(ToolImage::default_bitmap_size);
+	OnChangeBitmapSize();
+	LoadPerspective(default_layout_string);
+	m_aui_manager->Update();
+}
+
+void CHeeksFrame::OnSetToolBarsToLeft( wxCommandEvent& event )
+{
+	OnChangeBitmapSize();
+	SetToolBarsToLeft();
 	m_aui_manager->Update();
 }
 
@@ -1249,3 +1176,130 @@ void CHeeksFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
     (*g_pageSetupData) = pageSetupDialog.GetPageSetupDialogData();
 }
 
+void CHeeksFrame::OnChangeBitmapSize()
+{
+	m_aui_manager->DetachPane(m_toolBar);
+	m_aui_manager->DetachPane(m_geometryBar);
+	m_aui_manager->DetachPane(m_solidBar);
+	m_aui_manager->DetachPane(m_viewingBar);
+	m_aui_manager->DetachPane(m_transformBar);
+
+	wxGetApp().RemoveHideableWindow(m_toolBar);
+	wxGetApp().RemoveHideableWindow(m_geometryBar);
+	wxGetApp().RemoveHideableWindow(m_solidBar);
+	wxGetApp().RemoveHideableWindow(m_viewingBar);
+	wxGetApp().RemoveHideableWindow(m_transformBar);
+
+	delete m_toolBar;
+	delete m_geometryBar;
+	delete m_solidBar;
+	delete m_viewingBar;
+	delete m_transformBar;
+
+	AddToolBars();
+}
+
+void CHeeksFrame::SetToolBarsSize()
+{
+	m_toolBar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
+	m_geometryBar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
+	m_solidBar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
+	m_viewingBar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
+	m_transformBar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
+}
+
+void CHeeksFrame::AddToolBars()
+{
+	m_toolBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
+	m_geometryBar = new wxToolBar(this, -1, wxDefaultPosition, wxSize(600, -1), wxTB_NODIVIDER | wxTB_FLAT);
+	m_solidBar = new wxToolBar(this, -1, wxDefaultPosition, wxSize(600, -1), wxTB_NODIVIDER | wxTB_FLAT);
+	m_viewingBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
+	m_transformBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
+
+	SetToolBarsSize();
+
+    m_toolBar->AddTool(wxID_NEW, _T("New"), ToolImage(_T("new")), _("New file"));
+    m_toolBar->AddTool(wxID_OPEN, _T("Open"), ToolImage(_T("open")), _("Open file"));
+    m_toolBar->AddTool(wxID_SAVE, _T("Save"), ToolImage(_T("save")), _("Save file"));
+    m_toolBar->AddTool(wxID_CUT, _T("Cut"), ToolImage(_T("cut")), _("Cut selected items to the clipboard"));
+    m_toolBar->AddTool(wxID_COPY, _T("Copy"), ToolImage(_T("copy")), _("Copy selected items to the clipboard"));
+    m_toolBar->AddTool(wxID_PASTE, _T("Paste"), ToolImage(_T("paste")), _("Paste items from the clipboard"));
+    m_toolBar->AddTool(ID_UNDO, _T("Undo"), ToolImage(_T("undo")), _("Undo the previous command"));
+    m_toolBar->AddTool(ID_REDO, _T("Redo"), ToolImage(_T("redo")), _("Redo the next command"));
+    m_toolBar->AddTool(ID_SELECT_MODE, _T("Select"), ToolImage(_T("select")), _("Select Mode"));
+    m_geometryBar->AddTool(ID_LINES, _T("Lines"), ToolImage(_T("lines")), _("Draw a sketch"));
+    m_geometryBar->AddTool(ID_CIRCLES, _T("Circles"), ToolImage(_T("circles")), _("Start Circle Drawing"));
+    m_geometryBar->AddTool(ID_ILINE, _T("ILine"), ToolImage(_T("iline")), _("Start Drawing Infinite Lines"));
+    m_geometryBar->AddTool(ID_POINTS, _T("Points"), ToolImage(_T("point")), _("Start Drawing Points"));
+    m_geometryBar->AddTool(ID_REGSHAPES, _T("Regular Shapes"), ToolImage(_T("regshapes")), _("Draw regular shapes; rectangles, polygons, obrounds"));
+    m_geometryBar->AddTool(ID_TEXT, _T("Text"), ToolImage(_T("text")), _("Add a text object"));
+    m_geometryBar->AddTool(ID_COORDINATE_SYSTEM, _T("CoordSys"), ToolImage(_T("coordsys")), _("Create a Coordinate System"));
+    m_geometryBar->AddTool(ID_DIMENSIONING, _T("Dimensioning"), ToolImage(_T("dimension")), _("Add a dimension"));
+    m_solidBar->AddTool(ID_SPHERE, _T("Sphere"), ToolImage(_T("sphere")), _("Add a sphere"));
+    m_solidBar->AddTool(ID_CUBE, _T("Cube"), ToolImage(_T("cube")), _("Add a cube"));
+    m_solidBar->AddTool(ID_CYL, _T("Cylinder"), ToolImage(_T("cyl")), _("Add a cylinder"));
+    m_solidBar->AddTool(ID_CONE, _T("Cone"), ToolImage(_T("cone")), _("Add a cone"));
+    m_solidBar->AddTool(ID_RULED_SURFACE, _T("Ruled Surface"), ToolImage(_T("ruled")), _("Create a lofted face"));
+    m_solidBar->AddTool(ID_EXTRUDE, _T("Extrude"), ToolImage(_T("extrude")), _("Extrude a wire or face"));
+	m_solidBar->AddTool(ID_SUBTRACT, _T("Cut"), ToolImage(_T("subtract")), _("Cut one solid from another"));
+	m_solidBar->AddTool(ID_FUSE, _T("Fuse"), ToolImage(_T("fuse")), _("Fuse one solid to another"));
+	m_solidBar->AddTool(ID_COMMON, _T("Common"), ToolImage(_T("common")), _("Find common solid between two solids"));
+    m_solidBar->AddTool(ID_REDRAW, _T("Redraw"), ToolImage(_T("redraw")), _("Redraw"));
+	m_viewingBar->AddTool(ID_MAG_PREVIOUS, _T("View Back"), ToolImage(_T("magprev")), _("Go back to previous view"));
+	m_viewingBar->AddTool(ID_MAG, _T("Zoom Window"), ToolImage(_T("mag")), _("Zoom in to a dragged window"));
+	m_viewingBar->AddTool(ID_MAG_EXTENTS, _T("Mag Extents"), ToolImage(_T("magextents")), _("Zoom in to fit the extents of the drawing into the graphics window"));
+	m_viewingBar->AddTool(ID_MAG_NO_ROT, _T("Mag No Rotation"), ToolImage(_T("magnorot")), _("Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"));
+	m_viewingBar->AddTool(ID_VIEW_ROT, _T("View Rotate"), ToolImage(_T("viewrot")), _("Enter view rotating mode"));
+	m_viewingBar->AddTool(ID_VIEW_ZOOM, _T("View Zoom"), ToolImage(_T("zoom")), _("Drag to zoom in and out"));
+	m_viewingBar->AddTool(ID_FULL_SCREEN, _T("FullScreen"), ToolImage(_T("fullscreen")), _("Switch to full screen view ( press escape to return )"));
+	m_transformBar->AddTool(ID_MOVE_TRANSLATE, _T("Move Translate"), ToolImage(_T("movet")), _("Translate selected items"));
+	m_transformBar->AddTool(ID_COPY_TRANSLATE, _T("Copy Translate"), ToolImage(_T("copyt")), _("Copy and translate selected items"));
+	m_transformBar->AddTool(ID_MOVE_ROTATE, _T("Move Rotate"), ToolImage(_T("mover")), _("Rotate selected items"));
+	m_transformBar->AddTool(ID_COPY_ROTATE, _T("Copy Rotate"), ToolImage(_T("copyr")), _("Copy and rotate selected items"));
+	m_transformBar->AddTool(ID_MOVE_MIRROR, _T("Move Mirror"), ToolImage(_T("movem")), _("Mirror selected items"));
+	m_transformBar->AddTool(ID_COPY_MIRROR, _T("Copy Mirror"), ToolImage(_T("copym")), _("Copy and mirror selected items"));
+	m_transformBar->AddTool(ID_MOVE_SCALE, _T("Move Scale"), ToolImage(_T("moves")), _("Scale selected items"));
+	m_toolBar->Realize();
+	m_geometryBar->Realize();
+	m_solidBar->Realize();
+	m_viewingBar->Realize();
+	m_transformBar->Realize();
+	m_aui_manager->AddPane(m_toolBar, wxAuiPaneInfo().Name(_T("ToolBar")).Caption(_("General Tools")).ToolbarPane().Top());
+	m_aui_manager->AddPane(m_geometryBar, wxAuiPaneInfo().Name(_T("GeomBar")).Caption(_("Geometry Tools")).ToolbarPane().Top());
+	m_aui_manager->AddPane(m_solidBar, wxAuiPaneInfo().Name(_T("SolidBar")).Caption(_("Solid Tools")).ToolbarPane().Top());
+	m_aui_manager->AddPane(m_viewingBar, wxAuiPaneInfo().Name(_T("ViewingBar")).Caption(_("Viewing Tools")).ToolbarPane().Top());
+	m_aui_manager->AddPane(m_transformBar, wxAuiPaneInfo().Name(_T("TransformBar")).Caption(_("Transformation Tools")).ToolbarPane().Top());
+	wxGetApp().RegisterHideableWindow(m_toolBar);
+	wxGetApp().RegisterHideableWindow(m_geometryBar);
+	wxGetApp().RegisterHideableWindow(m_solidBar);
+	wxGetApp().RegisterHideableWindow(m_viewingBar);
+	wxGetApp().RegisterHideableWindow(m_transformBar);
+}
+
+void CHeeksFrame::LoadPerspective(const wxString& str)
+{
+	m_aui_manager->LoadPerspective(str);
+
+	// translate the window captions
+	m_aui_manager->GetPane(m_graphics).Caption(_("Graphics"));
+	m_aui_manager->GetPane(m_tree_canvas).Caption(_("Objects"));
+	m_aui_manager->GetPane(m_options).Caption(_("Options"));
+	m_aui_manager->GetPane(m_input_canvas).Caption(_("Input"));
+	m_aui_manager->GetPane(m_properties).Caption(_("Properties"));
+	m_aui_manager->GetPane(m_toolBar).Caption(_("General Tools"));
+	m_aui_manager->GetPane(m_geometryBar).Caption(_("Geometry Tools"));
+	m_aui_manager->GetPane(m_solidBar).Caption(_("Solid Tools"));
+	m_aui_manager->GetPane(m_viewingBar).Caption(_("Viewing Tools"));
+	m_aui_manager->GetPane(m_transformBar).Caption(_("Transformation Tools"));
+
+	SetToolBarsSize();
+}
+
+void CHeeksFrame::SetToolBarsToLeft()
+{
+	m_aui_manager->GetPane(m_toolBar).Left();
+	m_aui_manager->GetPane(m_geometryBar).Left();
+	m_aui_manager->GetPane(m_solidBar).Left();
+	m_aui_manager->GetPane(m_viewingBar).Left();
+	m_aui_manager->GetPane(m_transformBar).Left();
+}

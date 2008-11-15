@@ -72,6 +72,7 @@ enum{
 	Menu_View_TransformBar,
 	Menu_View_StatusBar,
 	Menu_View_ResetLayout,
+	Menu_View_SetToolBarsToLeft,
 	ID_IMPORT,
 	ID_RULED_SURFACE,
 	ID_EXTRUDE,
@@ -132,6 +133,7 @@ public:
 	void OnViewStatusBar( wxCommandEvent& event );
 	void OnUpdateViewStatusBar( wxUpdateUIEvent& event );
 	void OnResetLayout( wxCommandEvent& event );
+	void OnSetToolBarsToLeft( wxCommandEvent& event );
 	void OnLinesButton( wxCommandEvent& event );
 	void OnCirclesButton( wxCommandEvent& event );
 	void OnILineButton( wxCommandEvent& event );
@@ -191,6 +193,11 @@ public:
     void OnPrint(wxCommandEvent& event);
     void OnPrintPreview(wxCommandEvent& event);
     void OnPageSetup(wxCommandEvent& event);
+	void OnChangeBitmapSize();
+	void AddToolBars();
+	void LoadPerspective(const wxString& str);
+	void SetToolBarsToLeft();
+	void SetToolBarsSize();
 
 	//wxTopLevelWindow's virtual functions
 	bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
