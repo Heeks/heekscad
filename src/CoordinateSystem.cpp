@@ -8,6 +8,7 @@
 #include "HeeksFrame.h"
 #include "ObjPropsCanvas.h"
 #include "../tinyxml/tinyxml.h"
+#include "ToolImage.h"
 
 wxIcon* CoordinateSystem::m_icon = NULL;
 double CoordinateSystem::size = 30;
@@ -182,7 +183,7 @@ public:
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("SetCoordSystemActive");}
-	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/setcoordsys.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
+	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(ToolImage(_T("setcoordsys")));}return m_bitmap;}
 	const wxChar* GetToolTip(){return _("Set this coordinate system as the active one");}
 };
 wxBitmap* SetCoordSystemActive::m_bitmap = NULL;
@@ -201,7 +202,7 @@ public:
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("UnsetCoordSystemActive");}
-	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/unsetcoordsys.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
+	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(ToolImage(_T("unsetcoordsys")));}return m_bitmap;}
 	const wxChar* GetToolTip(){return _("Set world coordinate system active");}
 };
 wxBitmap* UnsetCoordSystemActive::m_bitmap = NULL;

@@ -6,6 +6,7 @@
 #include "../interface/PropertyString.h"
 #include "propgrid.h"
 #include "HeeksFrame.h"
+#include "ToolImage.h"
 
 BEGIN_EVENT_TABLE(CInputModeCanvas, wxScrolledWindow)
 	EVT_SIZE(CInputModeCanvas::OnSize)
@@ -20,7 +21,7 @@ CInputModeCanvas::CInputModeCanvas(wxWindow* parent)
 {
 	// make a toolbar for the current input modes's tools
 	m_toolBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
-	m_toolBar->SetToolBitmapSize(wxSize(32, 32));
+	m_toolBar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
 	m_toolBar->Realize();
 }
 
@@ -36,8 +37,9 @@ void CInputModeCanvas::OnSize(wxSizeEvent& event)
 	wxSize size = GetClientSize();
 	if(m_toolBar->GetToolsCount() > 0){
 		wxSize toolbar_size = m_toolBar->GetClientSize();
-		m_pg->SetSize(0, 0, size.x, size.y - 39 );
-		m_toolBar->SetSize(0, size.y - 39 , size.x, 39 );
+		int toolbar_height = ToolImage::GetBitmapSize() + 7;
+		m_pg->SetSize(0, 0, size.x, size.y - toolbar_height );
+		m_toolBar->SetSize(0, size.y - toolbar_height , size.x, toolbar_height );
 		m_toolBar->Show();
 	}
 	else{
@@ -107,8 +109,9 @@ void CInputModeCanvas::RefreshByRemovingAndAddingAll(){
 		wxSize size = GetClientSize();
 		if(m_toolBar->GetToolsCount() > 0){
 			wxSize toolbar_size = m_toolBar->GetClientSize();
-			m_pg->SetSize(0, 0, size.x, size.y - 39 );
-			m_toolBar->SetSize(0, size.y - 39 , size.x, 39 );
+			int toolbar_height = ToolImage::GetBitmapSize() + 7;
+			m_pg->SetSize(0, 0, size.x, size.y - toolbar_height );
+			m_toolBar->SetSize(0, size.y - toolbar_height , size.x, toolbar_height );
 			m_toolBar->Show();
 		}
 		else{
