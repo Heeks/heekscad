@@ -122,7 +122,7 @@ enum
     TreeTest_Ctrl = 1000
 };
 
-class CLeftCanvas: public wxScrolledWindow, public Observer
+class CTreeCanvas: public wxScrolledWindow, public Observer
 {
 private:
 // Observer's virtual functions
@@ -145,13 +145,13 @@ private:
     wxTreeItemId m_root;
 
 public:
-    CLeftCanvas(wxWindow* parent);
-    virtual ~CLeftCanvas();
+    CTreeCanvas(wxWindow* parent);
+    virtual ~CTreeCanvas();
 
     void OnSize(wxSizeEvent& event);
 	void OnMouseWheel(wxMouseEvent& event);
     wxTreeItemId Find(HeeksObj *object);
  
-    DECLARE_NO_COPY_CLASS(CLeftCanvas)
+    DECLARE_NO_COPY_CLASS(CTreeCanvas)
     DECLARE_EVENT_TABLE()
 };
