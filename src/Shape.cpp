@@ -93,7 +93,6 @@ const CShape& CShape::operator=(const CShape& s)
 	delete_faces_and_edges();
 	m_box = s.m_box;
 	m_shape = s.m_shape;
-	m_material = s.m_material;
 	m_title = s.m_title;
 	m_color = s.m_color;
 	create_faces_and_edges();
@@ -281,7 +280,8 @@ void CShape::delete_faces_and_edges()
 
 void CShape::glCommands(bool select, bool marked, bool no_color)
 {
-	m_material.glMaterial(1.0);
+	Material(m_color).glMaterial(1.0);
+
 	if(m_gl_list)
 	{
 		glCallList(m_gl_list);
@@ -296,7 +296,13 @@ void CShape::glCommands(bool select, bool marked, bool no_color)
 		BRepMesh::Mesh(m_shape, 1/pixels_per_mm);
 
 		// render all the faces
-		m_faces->glCommands(true, marked, no_color);
+		glEnable(GL_LIGHTING);
+		glShadeModel(GL_SMOOTH);
+		glBegin(GL_TRIANGLES);
+		m_faces->glCommands(false, marked, no_color);
+		glEnd();
+		glDisable(GL_LIGHTING);
+		glShadeModel(GL_FLAT);
 
 		// render all the edges
 		m_edges->glCommands(true, marked, no_color);

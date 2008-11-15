@@ -22,7 +22,7 @@
 #include "GraphicsCanvas.h"
 #include "OptionsCanvas.h"
 #include "InputModeCanvas.h"
-#include "LeftCanvas.h"
+#include "TreeCanvas.h"
 #include "ObjPropsCanvas.h"
 #include "SelectMode.h"
 #include "MagDragWindow.h"

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "wx/dcmirror.h"
-#include "LeftCanvas.h"
+#include "TreeCanvas.h"
 #include "../interface/MarkedObject.h"
 #include "MarkedList.h"
 #include "HeeksFrame.h"
@@ -13,24 +13,24 @@ class DanObjectTreeData : public wxTreeItemData{
 };
 
 
-BEGIN_EVENT_TABLE(CLeftCanvas, wxScrolledWindow)
-    EVT_SIZE(CLeftCanvas::OnSize)
-	EVT_MOUSEWHEEL(CLeftCanvas::OnMouseWheel)
+BEGIN_EVENT_TABLE(CTreeCanvas, wxScrolledWindow)
+    EVT_SIZE(CTreeCanvas::OnSize)
+	EVT_MOUSEWHEEL(CTreeCanvas::OnMouseWheel)
 END_EVENT_TABLE()
 
 
-CLeftCanvas::CLeftCanvas(wxWindow* parent)
+CTreeCanvas::CTreeCanvas(wxWindow* parent)
         : wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                            wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE), m_treeCtrl(NULL)
 {
     CreateTreeWithDefStyle();
 }
 
-CLeftCanvas::~CLeftCanvas()
+CTreeCanvas::~CTreeCanvas()
 {
 }
 
-void CLeftCanvas::CreateTreeWithDefStyle()
+void CTreeCanvas::CreateTreeWithDefStyle()
 {
     long style = wxTR_DEFAULT_STYLE | wxTR_HIDE_ROOT |
 #ifndef NO_VARIABLE_HEIGHT
@@ -42,7 +42,7 @@ void CLeftCanvas::CreateTreeWithDefStyle()
 
 }
 
-void CLeftCanvas::OnSize(wxSizeEvent& event)
+void CTreeCanvas::OnSize(wxSizeEvent& event)
 {
     if ( m_treeCtrl  )
     {
@@ -52,18 +52,18 @@ void CLeftCanvas::OnSize(wxSizeEvent& event)
     event.Skip();
 }
 
-void CLeftCanvas::OnMouseWheel(wxMouseEvent& event)
+void CTreeCanvas::OnMouseWheel(wxMouseEvent& event)
 {
 	wxGetApp().PassMouseWheelToGraphics(event);
 }
 
-void CLeftCanvas::Resize()
+void CTreeCanvas::Resize()
 {
     wxSize size = GetClientSize();
     m_treeCtrl->SetSize(0, 0, size.x, size.y );
 }
 
-void CLeftCanvas::CreateTree(long style)
+void CTreeCanvas::CreateTree(long style)
 {
     m_treeCtrl = new MyTreeCtrl(this, TreeTest_Ctrl,
                                 wxDefaultPosition, wxDefaultSize,
@@ -75,7 +75,7 @@ void CLeftCanvas::CreateTree(long style)
     Resize();
 }
 
-void CLeftCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified)
+void CTreeCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified)
 {
 	if(added){
 		std::list<HeeksObj*>::const_iterator It;
@@ -144,7 +144,7 @@ void CLeftCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<H
 	}
 }
 
-void CLeftCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)
+void CTreeCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)
 {
 	if(all_added){
 		wxTreeItemId item = m_treeCtrl->GetFirstVisibleItem();
@@ -182,13 +182,13 @@ void CLeftCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, const 
 	Refresh();
 }
 
-void CLeftCanvas::Clear()
+void CTreeCanvas::Clear()
 {
 	m_treeCtrl->DeleteAllItems();
 	tree_map.clear();
 }
 
-bool CLeftCanvas::CanAdd(HeeksObj* object)
+bool CTreeCanvas::CanAdd(HeeksObj* object)
 {
 	if (object == NULL) return false;
 	if (tree_map.find(object) != tree_map.end()) return false;
@@ -196,7 +196,7 @@ bool CLeftCanvas::CanAdd(HeeksObj* object)
 	return true;
 }
 
-const wxTreeItemId CLeftCanvas::Add(HeeksObj* object, const wxTreeItemId &owner, bool expand)
+const wxTreeItemId CTreeCanvas::Add(HeeksObj* object, const wxTreeItemId &owner, bool expand)
 {
 	if (!CanAdd(object)) return wxTreeItemId();
 	int image = m_treeCtrl->GetImage(object);
@@ -209,7 +209,7 @@ const wxTreeItemId CLeftCanvas::Add(HeeksObj* object, const wxTreeItemId &owner,
 	return item;
 }
 
-void CLeftCanvas::AddChildren(HeeksObj* object, const wxTreeItemId &item)
+void CTreeCanvas::AddChildren(HeeksObj* object, const wxTreeItemId &item)
 {
 	std::set<HeeksObj*> expand_set;
 	{
@@ -226,7 +226,7 @@ void CLeftCanvas::AddChildren(HeeksObj* object, const wxTreeItemId &item)
 	}
 }
 
-void CLeftCanvas::Remove(HeeksObj *object, const wxTreeItemId &item, bool set_not_marked){
+void CTreeCanvas::Remove(HeeksObj *object, const wxTreeItemId &item, bool set_not_marked){
 	if(object == NULL)return;
 	if(tree_map.find(object) == tree_map.end())return;
 	if(item == wxTreeItemId())return;
@@ -237,7 +237,7 @@ void CLeftCanvas::Remove(HeeksObj *object, const wxTreeItemId &item, bool set_no
 	}
 }
 
-bool CLeftCanvas::RemoveChildren(const wxTreeItemId &item)
+bool CTreeCanvas::RemoveChildren(const wxTreeItemId &item)
 {
 	wxTreeItemIdValue cookie;
 	wxTreeItemId child = m_treeCtrl->GetFirstChild(item, cookie);
@@ -256,7 +256,7 @@ bool CLeftCanvas::RemoveChildren(const wxTreeItemId &item)
 	return false;
 }
 
-wxTreeItemId CLeftCanvas::Find(HeeksObj *object){
+wxTreeItemId CTreeCanvas::Find(HeeksObj *object){
 	std::map<HeeksObj*, wxTreeItemId>::iterator FindIt = tree_map.find(object);
 	if(FindIt == tree_map.end())return wxTreeItemId();
 	return FindIt->second;
