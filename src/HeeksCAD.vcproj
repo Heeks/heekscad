@@ -974,6 +974,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\ToolImage.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ToolImage.h"
+			>
+		</File>
+		<File
 			RelativePath="..\interface\ToolList.cpp"
 			>
 		</File>
