@@ -59,6 +59,7 @@
 #include "../interface/PropertyList.h"
 #include "RegularShapesDrawing.h"
 #include "HeeksPrintout.h"
+#include "ToolImage.h"
 #include <sstream>
 using namespace std;
 
@@ -1522,6 +1523,37 @@ void on_set_grid_mode(int value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+void on_set_tool_icon_size(int value, HeeksObj* object)
+{
+	int size = 16;
+	switch(value)
+	{
+	case 0:
+		size = 16;
+		break;
+	case 1:
+		size = 24;
+		break;
+	case 2:
+		size = 32;
+		break;
+	case 3:
+		size = 48;
+		break;
+	case 4:
+		size = 64;
+		break;
+	case 5:
+		size = 96;
+		break;
+	}
+
+	ToolImage::SetBitmapSize(size);
+
+	wxGetApp().m_frame->OnChangeBitmapSize();
+	wxGetApp().m_frame->m_aui_manager->Update();
+}
+
 void on_grid(bool onoff, HeeksObj* object)
 {
 	wxGetApp().draw_to_grid = onoff;
@@ -1695,6 +1727,23 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	}
 
 	list->push_back(new PropertyInt(_("selection filter"), m_marked_list->m_filter, NULL, on_set_selection_filter));
+	{
+		std::list< wxString > choices;
+		choices.push_back ( wxString ( _T("16") ) );
+		choices.push_back ( wxString ( _T("24") ) );
+		choices.push_back ( wxString ( _T("32") ) );
+		choices.push_back ( wxString ( _T("48") ) );
+		choices.push_back ( wxString ( _T("64") ) );
+		choices.push_back ( wxString ( _T("96") ) );
+		int s = ToolImage::GetBitmapSize();
+		int choice = 0;
+		if(s > 70)choice = 5;
+		else if(s > 60)choice = 4;
+		else if(s > 40)choice = 3;
+		else if(s > 30)choice = 2;
+		else if(s > 20)choice = 1;
+		list->push_back ( new PropertyChoice ( _("tool icon size"),  choices, choice, NULL, on_set_tool_icon_size ) );
+	}
 }
 
 void HeeksCADapp::DeleteMarkedItems()
@@ -2097,6 +2146,11 @@ void HeeksCADapp::OnNewOrOpen(bool open)
 void HeeksCADapp::RegisterHideableWindow(wxWindow* w)
 {
 	m_hideable_windows.push_back(w);
+}
+
+void HeeksCADapp::RemoveHideableWindow(wxWindow* w)
+{
+	m_hideable_windows.remove(w);
 }
 
 void HeeksCADapp::GetRecentFilesProfileString()

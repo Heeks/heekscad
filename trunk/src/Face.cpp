@@ -74,8 +74,9 @@ void CFace::glCommands(bool select, bool marked, bool no_color){
 		Material().glMaterial(1.0);
 		glEnable(GL_LIGHTING);
 		glShadeModel(GL_SMOOTH);
-		glBegin(GL_TRIANGLES);
 	}
+
+	glBegin(GL_TRIANGLES);
 
 	{
 		StdPrs_ToolShadedShape SST;
@@ -125,9 +126,10 @@ void CFace::glCommands(bool select, bool marked, bool no_color){
 		}
 	}
 
+	glEnd();
+
 	if(!owned_by_solid)
 	{
-		glEnd();
 		glDisable(GL_LIGHTING);
 		glShadeModel(GL_FLAT);
 	}

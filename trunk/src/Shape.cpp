@@ -298,9 +298,7 @@ void CShape::glCommands(bool select, bool marked, bool no_color)
 		// render all the faces
 		glEnable(GL_LIGHTING);
 		glShadeModel(GL_SMOOTH);
-		glBegin(GL_TRIANGLES);
-		m_faces->glCommands(false, marked, no_color);
-		glEnd();
+		m_faces->glCommands(true, marked, no_color);
 		glDisable(GL_LIGHTING);
 		glShadeModel(GL_FLAT);
 
@@ -313,10 +311,14 @@ void CShape::glCommands(bool select, bool marked, bool no_color)
 
 void CShape::GetBox(CBox &box)
 {
-	BRepTools::Clean(m_shape);
-	BRepMesh::Mesh(m_shape, 1.0);
+	if(!m_box.m_valid)
+	{
+		BRepTools::Clean(m_shape);
+		BRepMesh::Mesh(m_shape, 1.0);
+		m_faces->GetBox(m_box);
+	}
 
-	m_faces->GetBox(box);
+	box.Insert(m_box);
 }
 
 class OffsetShapeTool:public Tool{
