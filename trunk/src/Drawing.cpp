@@ -13,6 +13,7 @@
 #include "HeeksFrame.h"
 #include "GraphicsCanvas.h"
 #include "InputModeCanvas.h"
+#include "ToolImage.h"
 
 Drawing::Drawing(void): m_inhibit_coordinate_change(false), m_getting_position(false){
 	null_view = new ViewSpecific(0);
@@ -171,7 +172,7 @@ public:
 		if(m_bitmap == NULL)
 		{
 			wxString exe_folder = wxGetApp().GetExeFolder();
-			m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/enddraw.png"), wxBITMAP_TYPE_PNG);
+			m_bitmap = new wxBitmap(ToolImage(_T("enddraw")));
 		}
 		return m_bitmap;
 	}
@@ -201,7 +202,7 @@ public:
 		if(m_bitmap == NULL)
 		{
 			wxString exe_folder = wxGetApp().GetExeFolder();
-			m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/add.png"), wxBITMAP_TYPE_PNG);
+			m_bitmap = new wxBitmap(ToolImage(_T("add")));
 		}
 		return m_bitmap;
 	}
@@ -230,7 +231,7 @@ public:
 		if(m_bitmap == NULL)
 		{
 			wxString exe_folder = wxGetApp().GetExeFolder();
-			m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/pickpos.png"), wxBITMAP_TYPE_PNG);
+			m_bitmap = new wxBitmap(ToolImage(_T("pickpos")));
 		}
 		return m_bitmap;
 	}

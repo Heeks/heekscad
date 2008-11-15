@@ -17,5 +17,5 @@ class Tool
 	virtual bool Disabled(){return false;}
 	virtual bool Checked(){return false;}
 	virtual bool IsAToolList() {return false;}
-	virtual wxBitmap* Bitmap(){return NULL;} // 32x32 picture for toolbar button
+	virtual wxBitmap* Bitmap(){return NULL;}
 };

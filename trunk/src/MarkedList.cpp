@@ -288,7 +288,7 @@ private:
 public:
 	const wxChar* GetTitle() {return _("Delete Marked Items");}
 	void Run() {wxGetApp().DeleteMarkedItems();}
-	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/delete.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
+	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(ToolImage(_T("delete")));}return m_bitmap;}
 } delete_marked_list_tool;
 wxBitmap* DeleteMarkedListTool::m_bitmap = NULL;
 
@@ -299,7 +299,7 @@ private:
 public:
 	void Run();
 	const wxChar* GetTitle(){return _("Copy");}
-	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/copy.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
+	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(ToolImage(_T("copy")));}return m_bitmap;}
 	const wxChar* GetToolTip(){return _("Copies the selected items to the clipboard");}
 } copy_marked_list;
 wxBitmap* CopyMarkedList::m_bitmap = NULL;
@@ -316,7 +316,7 @@ private:
 public:
 	void Run();
 	const wxChar* GetTitle(){return _("Paste");}
-	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/paste.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
+	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(ToolImage(_T("paste")));}return m_bitmap;}
 	const wxChar* GetToolTip(){return _("Paste items from the clipboard to the drawing");}
 } paste_tool;
 wxBitmap* PasteTool::m_bitmap = NULL;

@@ -2315,7 +2315,7 @@ public:
 		wxGetApp().ExitMainLoop();
 	}
 	const wxChar* GetTitle(){return _("Apply");}
-	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/apply.png"), wxBITMAP_TYPE_PNG);}	return m_bitmap;}
+	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(ToolImage(_T("apply")));}	return m_bitmap;}
 	const wxChar* GetToolTip(){return _("Accept value and continue");}
 };
 wxBitmap* CInputApply::m_bitmap = NULL;
@@ -2329,7 +2329,7 @@ private:
 public:
 	void Run(){wxGetApp().ExitMainLoop();}
 	const wxChar* GetTitle(){return _("Cancel");}
-	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/cancel.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
+	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(ToolImage(_T("cancel")));}return m_bitmap;}
 	const wxChar* GetToolTip(){return _("Cancel operation");}
 };
 wxBitmap* CInputCancel::m_bitmap = NULL;

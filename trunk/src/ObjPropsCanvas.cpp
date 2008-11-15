@@ -7,6 +7,7 @@
 #include "propgrid.h"
 #include "HeeksFrame.h"
 #include "MarkedList.h"
+#include "ToolImage.h"
 
 BEGIN_EVENT_TABLE(CObjPropsCanvas, wxScrolledWindow)
 	EVT_SIZE(CObjPropsCanvas::OnSize)
@@ -31,7 +32,7 @@ CObjPropsCanvas::CObjPropsCanvas(wxWindow* parent)
 {
 	// make a tool bar for Apply, Cancel and any tools of the marked object.
 	m_toolBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
-	m_toolBar->SetToolBitmapSize(wxSize(32, 32));
+	m_toolBar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
 	m_toolBar->Realize();
 }
 
@@ -47,8 +48,9 @@ void CObjPropsCanvas::OnSize(wxSizeEvent& event)
 	wxSize size = GetClientSize();
 	if(m_toolBar->GetToolsCount() > 0){
 		wxSize toolbar_size = m_toolBar->GetClientSize();
-		m_pg->SetSize(0, 0, size.x, size.y - 39 );
-		m_toolBar->SetSize(0, size.y - 39 , size.x, 39 );
+		int toolbar_height = ToolImage::GetBitmapSize() + 7;
+		m_pg->SetSize(0, 0, size.x, size.y - toolbar_height );
+		m_toolBar->SetSize(0, size.y - toolbar_height , size.x, toolbar_height );
 		m_toolBar->Show();
 	}
 	else{
@@ -110,8 +112,8 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll(){
 
 		// add toolbar buttons
 		wxString exe_folder = wxGetApp().GetExeFolder();
-		wxGetApp().m_frame->AddToolBarTool(m_toolBar, _("Apply"), wxBitmap(exe_folder + _T("/bitmaps/apply.png"), wxBITMAP_TYPE_PNG), _("Apply any changes made to the properties"), OnApply);
-		wxGetApp().m_frame->AddToolBarTool(m_toolBar, _("Cancel"), wxBitmap(exe_folder + _T("/bitmaps/cancel.png"), wxBITMAP_TYPE_PNG), _("Stop editing the object"), OnCancel);
+		wxGetApp().m_frame->AddToolBarTool(m_toolBar, _("Apply"), wxBitmap(ToolImage(_T("apply"))), _("Apply any changes made to the properties"), OnApply);
+		wxGetApp().m_frame->AddToolBarTool(m_toolBar, _("Cancel"), wxBitmap(ToolImage(_T("cancel"))), _("Stop editing the object"), OnCancel);
 
 		std::list<Tool*> t_list;
 		wxGetApp().m_marked_list->GetTools(&t_list, NULL);
@@ -127,8 +129,9 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll(){
 		wxSize size = GetClientSize();
 		if(m_toolBar->GetToolsCount() > 0){
 			wxSize toolbar_size = m_toolBar->GetClientSize();
-			m_pg->SetSize(0, 0, size.x, size.y - 39 );
-			m_toolBar->SetSize(0, size.y - 39 , size.x, 39 );
+			int toolbar_height = ToolImage::GetBitmapSize() + 7;
+			m_pg->SetSize(0, 0, size.x, size.y - toolbar_height );
+			m_toolBar->SetSize(0, size.y - toolbar_height , size.x, toolbar_height );
 			m_toolBar->Show();
 		}
 		else{

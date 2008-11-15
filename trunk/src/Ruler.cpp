@@ -6,6 +6,7 @@
 #include "../interface/Tool.h"
 #include "HeeksFrame.h"
 #include "ObjPropsCanvas.h"
+#include "ToolImage.h"
 
 void RulerMark::glCommands()
 {
@@ -235,7 +236,7 @@ public:
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("ResetRuler");}
-	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/resetruler.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
+	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(ToolImage(_T("resetruler")));}return m_bitmap;}
 	const wxChar* GetToolTip(){return _("Reset the ruler");}
 };
 wxBitmap* ResetRulerTool::m_bitmap = NULL;

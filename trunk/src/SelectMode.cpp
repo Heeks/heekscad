@@ -13,6 +13,7 @@
 #include "GraphicsCanvas.h"
 #include "HeeksFrame.h"
 #include "GripperSelTransform.h"
+#include "ToolImage.h"
 
 bool CSelectMode::m_can_grip_objects = true;
 
@@ -427,7 +428,7 @@ public:
 		if(m_bitmap == NULL)
 		{
 			wxString exe_folder = wxGetApp().GetExeFolder();
-			m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/endpick.png"), wxBITMAP_TYPE_PNG);
+			m_bitmap = new wxBitmap(ToolImage(_T("endpick")));
 		}
 		return m_bitmap;
 	}
