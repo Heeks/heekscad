@@ -15,6 +15,7 @@
 #include "InputModeCanvas.h"
 #include "OptionsCanvas.h"
 #include "CoordinateSystem.h"
+#include "ToolImage.h"
 
 DigitizeMode::DigitizeMode(){
 	point_or_window = new PointOrWindow(false);
@@ -322,7 +323,7 @@ public:
 		if(m_bitmap == NULL)
 		{
 			wxString exe_folder = wxGetApp().GetExeFolder();
-			m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/endpospick.png"), wxBITMAP_TYPE_PNG);
+			m_bitmap = new wxBitmap(ToolImage(_T("endpospick")));
 		}
 		return m_bitmap;
 	}

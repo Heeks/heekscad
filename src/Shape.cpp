@@ -35,6 +35,7 @@
 #include "Interface_Static.hxx"
 #include "../interface/Tool.h"
 #include "../tinyxml/tinyxml.h"
+#include "ToolImage.h"
 
 wxIcon* CFaceList::m_icon = NULL;
 
@@ -346,7 +347,7 @@ public:
 		if(m_bitmap == NULL)
 		{
 			wxString exe_folder = wxGetApp().GetExeFolder();
-			m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/offsetsolid.png"), wxBITMAP_TYPE_PNG);
+			m_bitmap = new wxBitmap(ToolImage(_T("offsetsolid")));
 		}
 		return m_bitmap;
 	}

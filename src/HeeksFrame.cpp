@@ -212,6 +212,10 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 		0
 	};
 
+	int bitmap_size = ToolImage::default_bitmap_size;
+	wxGetApp().m_config->Read(_T("ToolImageSize"), &bitmap_size);
+	ToolImage::SetBitmapSize(bitmap_size);
+
     m_graphics = new CGraphicsCanvas(this, graphics_attrib_list);
 
     m_tree_canvas = new CTreeCanvas(this);
@@ -226,10 +230,6 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	SetStatusText( _T( "" ) );
 
 	wxString exe_folder = wxGetApp().GetExeFolder();
-
-	int bitmap_size = ToolImage::default_bitmap_size;
-	wxGetApp().m_config->Read(_T("ToolImageSize"), &bitmap_size);
-	ToolImage::SetBitmapSize(bitmap_size);
 
 	AddToolBars();
 
