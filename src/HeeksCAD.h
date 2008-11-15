@@ -184,6 +184,7 @@ public:
 	void glSphere(double radius, const double* pos = NULL);
 	void OnNewOrOpen(bool open);
 	void RegisterHideableWindow(wxWindow* w);
+	void RemoveHideableWindow(wxWindow* w);
 	void RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem));
 	void GetRecentFilesProfileString();
 	void WriteRecentFilesProfileString();
