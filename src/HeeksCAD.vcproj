@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="HeeksCAD"
 	ProjectGUID="{2702996F-5BCC-436D-A756-D9675FE828A8}"
 	RootNamespace="HeeksCAD"
@@ -582,14 +582,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\LeftCanvas.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\LeftCanvas.h"
-			>
-		</File>
-		<File
 			RelativePath=".\LineArcDrawing.cpp"
 			>
 		</File>
@@ -1003,6 +995,14 @@
 		</File>
 		<File
 			RelativePath=".\TransformTools.h"
+			>
+		</File>
+		<File
+			RelativePath=".\TreeCanvas.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\TreeCanvas.h"
 			>
 		</File>
 		<File
