@@ -11,7 +11,7 @@
 #include "HArc.h"
 #include "ObjPropsCanvas.h"
 #include "OptionsCanvas.h"
-#include "LeftCanvas.h"
+#include "TreeCanvas.h"
 #include "InputModeCanvas.h"
 #include "GraphicsCanvas.h"
 #include "Sketch.h"

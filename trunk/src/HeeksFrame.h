@@ -1,7 +1,7 @@
 // HeeksFrame.h
 #include <wx/dynlib.h>
 
-class CLeftCanvas;
+class CTreeCanvas;
 class CGraphicsCanvas;
 class CObjPropsCanvas;
 class COptionsCanvas;
@@ -87,7 +87,7 @@ private:
 	std::map<int, SExternalButtonFunctions > m_external_buttons;
 
 public:
-	CLeftCanvas *m_left;
+	CTreeCanvas *m_tree_canvas;
 	CGraphicsCanvas* m_graphics;
 	CObjPropsCanvas* m_properties;
 	COptionsCanvas* m_options;

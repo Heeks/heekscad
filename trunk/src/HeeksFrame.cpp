@@ -5,7 +5,7 @@
 #include "../interface/Tool.h"
 #include "../interface/ToolList.h"
 #include "GraphicsCanvas.h"
-#include "LeftCanvas.h"
+#include "TreeCanvas.h"
 #include "ObjPropsCanvas.h"
 #include "OptionsCanvas.h"
 #include "InputModeCanvas.h"
@@ -212,8 +212,8 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
     m_graphics = new CGraphicsCanvas(this, graphics_attrib_list);
 
-    m_left = new CLeftCanvas(this);
-    m_left->SetCursor(wxCursor(wxCURSOR_MAGNIFIER));
+    m_tree_canvas = new CTreeCanvas(this);
+    m_tree_canvas->SetCursor(wxCursor(wxCURSOR_MAGNIFIER));
 
     m_options = new COptionsCanvas(this);
 	m_input_canvas = new CInputModeCanvas(this);
@@ -297,7 +297,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_transformBar->Realize();
 
 	m_aui_manager->AddPane(m_graphics, wxAuiPaneInfo().Name(_T("Graphics")).Caption(_("Graphics")).CentrePane().BestSize(wxSize(800, 600)));
-	m_aui_manager->AddPane(m_left, wxAuiPaneInfo().Name(_T("Objects")).Caption(_("Objects")).Left().Layer(1).BestSize(wxSize(300, 400)));
+	m_aui_manager->AddPane(m_tree_canvas, wxAuiPaneInfo().Name(_T("Objects")).Caption(_("Objects")).Left().Layer(1).BestSize(wxSize(300, 400)));
 	m_aui_manager->AddPane(m_options, wxAuiPaneInfo().Name(_T("Options")).Caption(_("Options")).Left().Layer(1).BestSize(wxSize(300, 200)));
 	m_aui_manager->AddPane(m_input_canvas, wxAuiPaneInfo().Name(_T("Input")).Caption(_("Input")).Left().Layer(1).BestSize(wxSize(300, 200)));
 	m_aui_manager->AddPane(m_properties, wxAuiPaneInfo().Name(_T("Properties")).Caption(_("Properties")).Left().Layer(1).BestSize(wxSize(300, 200)));
@@ -308,7 +308,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_aui_manager->AddPane(m_transformBar, wxAuiPaneInfo().Name(_T("TransformBar")).Caption(_("Transformation Tools")).ToolbarPane().Top());
 
 	// add to hiding list for full screen mode
-	wxGetApp().RegisterHideableWindow(m_left);
+	wxGetApp().RegisterHideableWindow(m_tree_canvas);
 	wxGetApp().RegisterHideableWindow(m_options);
 	wxGetApp().RegisterHideableWindow(m_input_canvas);
 	wxGetApp().RegisterHideableWindow(m_properties);
@@ -375,7 +375,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 	// translate the window captions
 	m_aui_manager->GetPane(m_graphics).Caption(_("Graphics"));
-	m_aui_manager->GetPane(m_left).Caption(_("Objects"));
+	m_aui_manager->GetPane(m_tree_canvas).Caption(_("Objects"));
 	m_aui_manager->GetPane(m_options).Caption(_("Options"));
 	m_aui_manager->GetPane(m_input_canvas).Caption(_("Input"));
 	m_aui_manager->GetPane(m_properties).Caption(_("Properties"));
@@ -487,7 +487,7 @@ void CHeeksFrame::OnAbout( wxCommandEvent& WXUNUSED( event ) )
 
 void CHeeksFrame::OnViewObjects( wxCommandEvent& event )
 {
-	wxAuiPaneInfo& pane_info = m_aui_manager->GetPane(m_left);
+	wxAuiPaneInfo& pane_info = m_aui_manager->GetPane(m_tree_canvas);
 	if(pane_info.IsOk()){
 		pane_info.Show(event.IsChecked());
 		m_aui_manager->Update();
@@ -496,7 +496,7 @@ void CHeeksFrame::OnViewObjects( wxCommandEvent& event )
 
 void CHeeksFrame::OnUpdateViewObjects( wxUpdateUIEvent& event )
 {
-	event.Check(m_aui_manager->GetPane(m_left).IsShown());
+	event.Check(m_aui_manager->GetPane(m_tree_canvas).IsShown());
 }
 
 void CHeeksFrame::OnViewOptions( wxCommandEvent& event )

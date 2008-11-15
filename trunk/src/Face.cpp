@@ -57,14 +57,12 @@ static Standard_Boolean TriangleIsValid(const gp_Pnt& P1, const gp_Pnt& P2, cons
   
 }
 
-
 void CFace::glCommands(bool select, bool marked, bool no_color){
-	
+	bool owned_by_solid = false;
 	if(m_owner && m_owner->m_owner && m_owner->m_owner->GetType() == SolidType) {
 		// using existing BRepMesh::Mesh
-
 		// use solid's colour
-		Material(((CSolid*)(m_owner->m_owner))->m_color).glMaterial(1.0);
+		owned_by_solid = true;
 	}
 	else {
 		// clean mesh
@@ -74,6 +72,9 @@ void CFace::glCommands(bool select, bool marked, bool no_color){
 
 		// use a default material
 		Material().glMaterial(1.0);
+		glEnable(GL_LIGHTING);
+		glShadeModel(GL_SMOOTH);
+		glBegin(GL_TRIANGLES);
 	}
 
 	{
@@ -85,9 +86,6 @@ void CFace::glCommands(bool select, bool marked, bool no_color){
 		gp_Trsf tr = L;
 
 		if(!facing.IsNull()){
-			glEnable(GL_LIGHTING);
-			glShadeModel(GL_SMOOTH);
-			glBegin(GL_TRIANGLES);
 			Poly_Connect pc(facing);	
 			const TColgp_Array1OfPnt& Nodes = facing->Nodes();
 			const TColgp_Array1OfPnt2d& UVNodes = facing->UVNodes();
@@ -116,18 +114,22 @@ void CFace::glCommands(bool select, bool marked, bool no_color){
 					gp_Pnt v2 = Nodes(n2).Transformed(tr);
 					gp_Pnt v3 = Nodes(n3).Transformed(tr);
 
-					glNormal3d(myNormal(n1).X(), myNormal(n1).Y(), myNormal(n1).Z());
-					glVertex3d(v1.X(), v1.Y(), v1.Z());
-					glNormal3d(myNormal(n2).X(), myNormal(n2).Y(), myNormal(n2).Z());
-					glVertex3d(v2.X(), v2.Y(), v2.Z());
-					glNormal3d(myNormal(n3).X(), myNormal(n3).Y(), myNormal(n3).Z());
-					glVertex3d(v3.X(), v3.Y(), v3.Z());
+					glNormal3f(myNormal(n1).X(), myNormal(n1).Y(), myNormal(n1).Z());
+					glVertex3f(v1.X(), v1.Y(), v1.Z());
+					glNormal3f(myNormal(n2).X(), myNormal(n2).Y(), myNormal(n2).Z());
+					glVertex3f(v2.X(), v2.Y(), v2.Z());
+					glNormal3f(myNormal(n3).X(), myNormal(n3).Y(), myNormal(n3).Z());
+					glVertex3f(v3.X(), v3.Y(), v3.Z());
 				}
 			}
-			glEnd();
-			glDisable(GL_LIGHTING);
-			glShadeModel(GL_FLAT);
 		}
+	}
+
+	if(!owned_by_solid)
+	{
+		glEnd();
+		glDisable(GL_LIGHTING);
+		glShadeModel(GL_FLAT);
 	}
 }
 

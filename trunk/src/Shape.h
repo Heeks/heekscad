@@ -30,7 +30,6 @@ protected:
 	int m_gl_list;
 	CBox m_box;
 	TopoDS_Shape m_shape;
-	Material m_material;
 	static wxIcon* m_icon;
 
 	void create_faces_and_edges();

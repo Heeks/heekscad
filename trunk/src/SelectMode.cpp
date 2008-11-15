@@ -326,6 +326,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 	}
 	else if(event.Moving())
 	{
+#if 0
 		MarkedObjectOneOfEach marked_object;
 		wxGetApp().FindMarkedObject(wxPoint(event.GetX(), event.GetY()), &marked_object);
 		wxGetApp().cursor_gripper = NULL;
@@ -338,6 +339,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 			object = marked_object.Increment();
 		}
 		wxGetApp().m_frame->m_graphics->Refresh(0);
+#endif
 		CurrentPoint = wxPoint(event.GetX(), event.GetY());
 	}
 
