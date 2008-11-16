@@ -16,6 +16,18 @@ static void on_move_translate(const double* to)
 }
 
 //static
+void TransformTools::RemoveUncopyable()
+{
+	std::list<HeeksObj*> uncopyable_objects;
+	for(std::list<HeeksObj*>::const_iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
+	{
+		HeeksObj* object = *It;
+		if(!object->CanBeCopied())uncopyable_objects.push_back(object);
+	}
+	if(uncopyable_objects.size() > 0)wxGetApp().m_marked_list->Remove(uncopyable_objects);
+}
+
+//static
 void TransformTools::Translate(bool copy)
 {
 	// pick items
@@ -28,6 +40,10 @@ void TransformTools::Translate(bool copy)
 	int ncopies = 1;
 	if(copy)
 	{
+		// check for uncopyable objects
+		RemoveUncopyable();
+		if(wxGetApp().m_marked_list->size() == 0)return;
+
 		// input "number of copies"
 		double number_of_copies = 1.0;
 		wxGetApp().InputDouble(_("Enter number of copies"), _("number of copies"), number_of_copies);
@@ -110,6 +126,10 @@ void TransformTools::Rotate(bool copy)
 	int ncopies = 1;
 	if(copy)
 	{
+		// check for uncopyable objects
+		RemoveUncopyable();
+		if(wxGetApp().m_marked_list->size() == 0)return;
+
 		// input "number of copies"
 		double number_of_copies = 1.0;
 		wxGetApp().InputDouble(_("Enter number of copies"), _("number of copies"), number_of_copies);
@@ -147,7 +167,8 @@ void TransformTools::Rotate(bool copy)
 			}
 		}
 		wxGetApp().EndHistory();
-		wxGetApp().m_marked_list->Clear();	}
+		wxGetApp().m_marked_list->Clear();
+	}
 	else
 	{
 		gp_Trsf mat;
@@ -169,6 +190,10 @@ void TransformTools::Mirror(bool copy)
 
 	if(copy)
 	{
+		// check for uncopyable objects
+		RemoveUncopyable();
+		if(wxGetApp().m_marked_list->size() == 0)return;
+
 		// input "number of copies"
 		double number_of_copies = 1.0;
 		wxGetApp().InputDouble(_("Enter number of copies"), _("number of copies"), number_of_copies);
@@ -240,6 +265,10 @@ void TransformTools::Scale(bool copy)
 	int ncopies = 1;
 	if(copy)
 	{
+		// check for uncopyable objects
+		RemoveUncopyable();
+		if(wxGetApp().m_marked_list->size() == 0)return;
+
 		// input "number of copies"
 		double number_of_copies = 1.0;
 		wxGetApp().InputDouble(_("Enter number of copies"), _("number of copies"), number_of_copies);
@@ -277,7 +306,8 @@ void TransformTools::Scale(bool copy)
 			}
 		}
 		wxGetApp().EndHistory();
-		wxGetApp().m_marked_list->Clear();	}
+		wxGetApp().m_marked_list->Clear();
+	}
 	else
 	{
 		gp_Trsf mat;
