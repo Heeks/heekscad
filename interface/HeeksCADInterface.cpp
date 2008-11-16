@@ -88,9 +88,9 @@ wxMenuBar* CHeeksCADInterface::GetMenuBar()
 	return wxGetApp().m_frame->m_menuBar;
 }
 
-wxMenu* CHeeksCADInterface::GetViewMenu()
+wxMenu* CHeeksCADInterface::GetWindowMenu()
 {
-	return wxGetApp().m_frame->m_menuView;
+	return wxGetApp().m_frame->m_menuWindow;
 }
 
 wxAuiManager* CHeeksCADInterface::GetAuiManager()
