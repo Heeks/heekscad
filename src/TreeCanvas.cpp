@@ -65,9 +65,7 @@ void CTreeCanvas::Resize()
 
 void CTreeCanvas::CreateTree(long style)
 {
-    m_treeCtrl = new MyTreeCtrl(this, TreeTest_Ctrl,
-                                wxDefaultPosition, wxDefaultSize,
-                                style);
+    m_treeCtrl = new MyTreeCtrl(this, style);
 
 	m_root = m_treeCtrl->AddRoot(_T("root"), -1, -1, NULL);
 
@@ -148,17 +146,16 @@ void CTreeCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, const 
 {
 	if(all_added){
 		wxTreeItemId item = m_treeCtrl->GetFirstVisibleItem();
-		while(item.IsOk()){
+		while(item.IsOk() && m_treeCtrl->IsVisible(item)){
 			m_treeCtrl->SelectItem(item);
 			item = m_treeCtrl->GetNextVisible(item);
 		}
 	}
 	else if(all_removed){
-		wxTreeItemIdValue cookie;
-		wxTreeItemId item = m_treeCtrl->GetFirstChild(m_root, cookie);
-		while(item.IsOk()){
+		wxTreeItemId item = m_treeCtrl->GetFirstVisibleItem();
+		while(item.IsOk() && m_treeCtrl->IsVisible(item)){
 			m_treeCtrl->SelectItem(item, false);
-			item = m_treeCtrl->GetNextChild(m_root, cookie);
+			item = m_treeCtrl->GetNextVisible(item);
 		}
 	}
 	else{
@@ -267,20 +264,20 @@ BEGIN_EVENT_TABLE(MyTreeCtrl, wxGenericTreeCtrl)
 #else
 BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
 #endif
-    EVT_TREE_DELETE_ITEM(TreeTest_Ctrl, MyTreeCtrl::OnDeleteItem)
-    EVT_TREE_SET_INFO(TreeTest_Ctrl, MyTreeCtrl::OnSetInfo)
-    EVT_TREE_SEL_CHANGED(TreeTest_Ctrl, MyTreeCtrl::OnSelChanged)
-    EVT_TREE_SEL_CHANGING(TreeTest_Ctrl, MyTreeCtrl::OnSelChanging)
-    EVT_TREE_KEY_DOWN(TreeTest_Ctrl, MyTreeCtrl::OnTreeKeyDown)
-    EVT_TREE_ITEM_ACTIVATED(TreeTest_Ctrl, MyTreeCtrl::OnItemActivated)
+    EVT_TREE_DELETE_ITEM(ID_TREE_CTRL, MyTreeCtrl::OnDeleteItem)
+    EVT_TREE_SET_INFO(ID_TREE_CTRL, MyTreeCtrl::OnSetInfo)
+    EVT_TREE_SEL_CHANGED(ID_TREE_CTRL, MyTreeCtrl::OnSelChanged)
+    EVT_TREE_SEL_CHANGING(ID_TREE_CTRL, MyTreeCtrl::OnSelChanging)
+    EVT_TREE_KEY_DOWN(ID_TREE_CTRL, MyTreeCtrl::OnTreeKeyDown)
+    EVT_TREE_ITEM_ACTIVATED(ID_TREE_CTRL, MyTreeCtrl::OnItemActivated)
 
     // so many differents ways to handle right mouse button clicks...
     EVT_CONTEXT_MENU(MyTreeCtrl::OnContextMenu)
     // EVT_TREE_ITEM_MENU is the preferred event for creating context menus
     // on a tree control, because it includes the point of the click or item,
     // meaning that no additional placement calculations are required.
-//    EVT_TREE_ITEM_MENU(TreeTest_Ctrl, MyTreeCtrl::OnItemMenu)
-//    EVT_TREE_ITEm_graphics_CLICK(TreeTest_Ctrl, MyTreeCtrl::OnItemRClick)
+//    EVT_TREE_ITEM_MENU(ID_TREE_CTRL, MyTreeCtrl::OnItemMenu)
+//    EVT_TREE_ITEm_graphics_CLICK(ID_TREE_CTRL, MyTreeCtrl::OnItemRClick)
    EVT_MENU_RANGE(ID_FIRST_POP_UP_MENU_TOOL, ID_FIRST_POP_UP_MENU_TOOL + 1000, MyTreeCtrl::OnMenuEvent)
 
     EVT_LEFT_DOWN(MyTreeCtrl::OnLMouseDown)
@@ -298,10 +295,8 @@ IMPLEMENT_DYNAMIC_CLASS(MyTreeCtrl, wxGenericTreeCtrl)
 IMPLEMENT_DYNAMIC_CLASS(MyTreeCtrl, wxTreeCtrl)
 #endif
 
-MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
-                       const wxPoint& pos, const wxSize& size,
-                       long style)
-          : wxTreeCtrl(parent, id, pos, size, style)
+MyTreeCtrl::MyTreeCtrl(wxWindow *parent, long style)
+          : wxTreeCtrl(parent, ID_TREE_CTRL, wxDefaultPosition, wxDefaultSize, style)
 {
     m_reverseSort = false;
     CreateImageList();
@@ -418,22 +413,68 @@ void MyTreeCtrl::OnLMouseDown(wxMouseEvent& event)
 void MyTreeCtrl::OnLMouseUp(wxMouseEvent& event)
 {
     wxTreeItemId id = HitTest(event.GetPosition());
-    if ( !id ){
+    if ( !id )
+	{
 	}
     else
     {
         MyTreeItemData *item = (MyTreeItemData *)GetItemData(id);
-		if(event.ControlDown()){
-			if(wxGetApp().m_marked_list->ObjectMarked(item->m_object))wxGetApp().m_marked_list->Remove(item->m_object);
-			else wxGetApp().m_marked_list->Add(item->m_object);
-			wxGetApp().Repaint();
+
+		bool selection_selected = false;
+
+		if(event.ShiftDown())
+		{
+			HeeksObj* most_recently_marked = NULL;
+			if(wxGetApp().m_marked_list->size() > 0)
+			{
+				most_recently_marked = wxGetApp().m_marked_list->list().back();
+				wxTreeItemId recent_id = ((CTreeCanvas*)GetParent())->Find(most_recently_marked);
+
+				std::list<HeeksObj*> objects_to_add;
+				if(After(recent_id, id))
+				{
+					wxTreeItemId loop_id = recent_id;
+					while(loop_id.IsOk() && IsVisible(loop_id))
+					{
+						MyTreeItemData *loop_item = (MyTreeItemData *)GetItemData(loop_id);
+						if(!wxGetApp().m_marked_list->ObjectMarked(loop_item->m_object))objects_to_add.push_back(loop_item->m_object);
+						if(loop_id == id)break;
+						loop_id = GetNextVisible(loop_id);
+					}
+				}
+				else if(After(id, recent_id))
+				{
+					wxTreeItemId loop_id = recent_id;
+					while(loop_id.IsOk() && IsVisible(loop_id))
+					{
+						MyTreeItemData *loop_item = (MyTreeItemData *)GetItemData(loop_id);
+						if(!wxGetApp().m_marked_list->ObjectMarked(loop_item->m_object))objects_to_add.push_back(loop_item->m_object);
+						if(loop_id == id)break;
+						loop_id = GetPrevVisible(loop_id);
+					}
+				}
+
+				if(objects_to_add.size() > 0)wxGetApp().m_marked_list->Add(objects_to_add);
+				selection_selected = true;
+			}
 		}
-		else{
-			wxGetApp().m_marked_list->Clear();
-			wxGetApp().m_marked_list->Add(item->m_object);
-			wxGetApp().Repaint();
+		
+		if(!selection_selected)
+		{
+			if(event.ControlDown())
+			{
+				if(wxGetApp().m_marked_list->ObjectMarked(item->m_object))wxGetApp().m_marked_list->Remove(item->m_object);
+				else wxGetApp().m_marked_list->Add(item->m_object);
+				wxGetApp().Repaint();
+			}
+			else
+			{
+				wxGetApp().m_marked_list->Clear();
+				wxGetApp().m_marked_list->Add(item->m_object);
+				wxGetApp().Repaint();
+			}
 		}
-    }
+	}
 
 	event.Skip();
 }
@@ -441,7 +482,8 @@ void MyTreeCtrl::OnLMouseUp(wxMouseEvent& event)
 void MyTreeCtrl::OnLMouseDClick(wxMouseEvent& event)
 {
     wxTreeItemId id = HitTest(event.GetPosition());
-    if ( !id ){
+    if ( !id )
+	{
 	}
     else
     {
@@ -475,6 +517,18 @@ void MyTreeCtrl::OnRMouseDClick(wxMouseEvent& event)
 void MyTreeCtrl::AddIcon(wxIcon icon)
 {
 	GetImageList()->Add(icon);
+}
+
+bool MyTreeCtrl::After(const wxTreeItemId& id1, const wxTreeItemId& id2)
+{
+	wxTreeItemId id = id1;
+	while(id.IsOk() && IsVisible(id))
+	{
+		if(id == id2)return true;
+		id = GetNextVisible(id);
+	}
+
+	return false;
 }
 
 static inline const wxChar *Bool2String(bool b)
