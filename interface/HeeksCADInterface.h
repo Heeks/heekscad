@@ -27,7 +27,7 @@ public:
 	virtual wxWindow* GetGraphicsCanvas();
 	virtual HGLRC GetRC();
 	virtual wxMenuBar* GetMenuBar();
-	virtual wxMenu* GetViewMenu();
+	virtual wxMenu* GetWindowMenu();
 	virtual wxAuiManager* GetAuiManager();
 	virtual void AddToolBarButton(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
 	virtual int AddMenuCheckItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
