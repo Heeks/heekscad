@@ -339,12 +339,13 @@ bool CHeeksFrame::ShowFullScreen(bool show, long style){
 
 	if(show){
 		SetMenuBar(NULL);
+		windows_visible.clear();
 		statusbar_visible = m_statusBar->IsShown();
 		m_statusBar->Show(false);
 		for(std::list<wxWindow*>::iterator It = wxGetApp().m_hideable_windows.begin(); It != wxGetApp().m_hideable_windows.end(); It++)
 		{
 			wxWindow* w = *It;
-			windows_visible.insert(std::pair< wxWindow*, bool > (w, m_aui_manager->GetPane(w).IsShown()));
+			windows_visible.insert(std::pair< wxWindow*, bool > (w, m_aui_manager->GetPane(w).IsShown() && w->IsShown()));
 			m_aui_manager->GetPane(w).Show(false);
 		}
 	}
