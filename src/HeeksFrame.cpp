@@ -145,7 +145,7 @@ bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
     return true;
 }
 
-static wxString default_layout_string = _T("layout2|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=279;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=290;prop=100000;bestw=248;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=551;floaty=336;floatw=275;floath=71|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=1;pos=0;prop=100000;bestw=310;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=783;floaty=287;floatw=337;floath=71|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=1;pos=321;prop=100000;bestw=217;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=463;floaty=389;floatw=244;floath=71|name=TransformBar;caption=Transformation Tools;state=2108159;dir=4;layer=10;row=0;pos=171;prop=100000;bestw=217;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=676;floaty=507;floatw=244;floath=71|dock_size(5,0,0)=504|dock_size(4,1,0)=302|dock_size(1,10,0)=33|dock_size(1,10,1)=33|");
+static wxString default_layout_string = _T("layout2|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=3;pos=0;prop=100000;bestw=279;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=3;pos=290;prop=100000;bestw=248;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=318;floaty=141;floatw=275;floath=71|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=6;pos=259;prop=100000;bestw=279;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=374;floaty=153;floatw=306;floath=71|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=6;pos=0;prop=100000;bestw=248;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=281;floaty=92;floatw=275;floath=71|name=TransformBar;caption=Transformation Tools;state=2108159;dir=1;layer=10;row=4;pos=1097;prop=100000;bestw=217;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=627;floaty=277;floatw=244;floath=71|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=504|dock_size(4,1,0)=234|dock_size(1,10,3)=33|dock_size(1,10,6)=33|");
 
 CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSize& size )
 	: wxFrame((wxWindow *)NULL, -1, title, pos, size)
@@ -180,7 +180,63 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
     edit_menu->Append(wxID_COPY, _("Copy"));
     edit_menu->Append(wxID_PASTE, _("Paste"));
 	edit_menu->Append( wxID_DELETE, _( "Delete" ) );
+	edit_menu->AppendSeparator();
+	edit_menu->Append( ID_SELECT_MODE, _( "Select Mode" ) );
+
+	// Geometry Menu
+	wxMenu *geometry_menu = new wxMenu;
+	geometry_menu->Append( ID_LINES, _( "Draw a sketch" ) );
+	geometry_menu->Append( ID_CIRCLES, _( "Draw Circles" ) );
+	geometry_menu->Append( ID_ILINE, _( "Draw Infinite Lines" ) );
+	geometry_menu->Append( ID_POINTS, _( "Draw Points" ) );
+	geometry_menu->Append( ID_REGSHAPES, _( "Draw Regular Shapes" ) );
+	geometry_menu->AppendSeparator();
+    geometry_menu->Append(ID_TEXT, _("Add Text"));
+    geometry_menu->Append(ID_DIMENSIONING, _("Add Dimension"));
+	geometry_menu->AppendSeparator();
+    geometry_menu->Append(ID_COORDINATE_SYSTEM, _("Add Coordinate System"));
 	
+	// View Menu
+	wxMenu *view_menu = new wxMenu;
+	view_menu->Append( ID_MAG_PREVIOUS, _( "Previous view" ) );
+	view_menu->AppendSeparator();
+	view_menu->Append( ID_MAG, _( "Zoom window" ) );
+	view_menu->Append( ID_MAG_EXTENTS, _( "Fit view to extents" ) );
+	view_menu->Append( ID_MAG_NO_ROT, _( "Fit view to extents, but no rotation" ) );
+	view_menu->AppendSeparator();
+	view_menu->Append( ID_VIEW_ROT, _( "View rotate" ) );
+    view_menu->Append(ID_VIEW_ZOOM, _("View zoom"));
+    view_menu->Append(ID_FULL_SCREEN, _("Full screen"));
+	view_menu->AppendSeparator();
+	view_menu->Append( ID_REDRAW, _( "Redraw" ) );
+	
+	// Solids Menu
+	wxMenu *solids_menu = new wxMenu;
+	solids_menu->Append( ID_SPHERE, _( "Add a sphere" ) );
+	solids_menu->Append( ID_CUBE, _( "Add a cube" ) );
+	solids_menu->Append( ID_CYL, _( "Add a cylinder" ) );
+	solids_menu->Append( ID_CONE, _( "Add a cone" ) );
+	solids_menu->AppendSeparator();
+	solids_menu->Append( ID_RULED_SURFACE, _( "Loft two sketches" ) );
+	solids_menu->Append( ID_EXTRUDE, _( "Extrude a sketch" ) );
+	solids_menu->AppendSeparator();
+	solids_menu->Append( ID_SUBTRACT, _( "Cut" ) );
+	solids_menu->Append( ID_FUSE, _( "Fuse" ) );
+	solids_menu->Append( ID_COMMON, _( "Common" ) );
+
+	// Transformations Menu
+	wxMenu *transform_menu = new wxMenu;
+	transform_menu->Append( ID_MOVE_TRANSLATE, _( "Move Translate" ) );
+	transform_menu->Append( ID_COPY_TRANSLATE, _( "Copy Translate" ) );
+	transform_menu->AppendSeparator();
+	transform_menu->Append( ID_MOVE_ROTATE, _( "Move Rotate" ) );
+	transform_menu->Append( ID_COPY_ROTATE, _( "Copy Rotate" ) );
+	transform_menu->AppendSeparator();
+	transform_menu->Append( ID_MOVE_MIRROR, _( "Move Mirror" ) );
+	transform_menu->Append( ID_COPY_MIRROR, _( "Copy Mirror" ) );
+	transform_menu->AppendSeparator();
+	transform_menu->Append( ID_MOVE_SCALE, _( "Move Scale" ) );
+
 	// Window Menu
 	m_menuWindow = new wxMenu;
 	m_menuWindow->AppendCheckItem( Menu_View_Objects, _( "Objects" ) );
@@ -198,6 +254,10 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_menuBar = new wxMenuBar;
 	m_menuBar->Append( file_menu, _( "File" ) );
 	m_menuBar->Append( edit_menu, _( "Edit" ) );
+	m_menuBar->Append( geometry_menu, _( "Geometry" ) );
+	m_menuBar->Append( view_menu, _( "View" ) );
+	m_menuBar->Append( solids_menu, _( "Solid" ) );
+	m_menuBar->Append( transform_menu, _( "Transform" ) );
 	m_menuBar->Append( m_menuWindow, _( "Window" ) );
 	SetMenuBar( m_menuBar );
 
@@ -401,11 +461,7 @@ void CHeeksFrame::OnAbout( wxCommandEvent& WXUNUSED( event ) )
 		+ wxString(_T("\n\nwindows made with wxWidgets - http://wxwidgets.org"))
 		+ wxString(_T("\n\ntext uses glFont Copyright (c) 1998 Brad Fish E-mail: bhf5@email.byu.edu Web: http://students.cs.byu.edu/~bfish/"))
 		+ wxString(_T("\n\nWith contributions from:\n Hirutso Enni"))
-		+ wxString(_T("\n\nThis is free, open source software."))
-		+ wxString(_T("\nIt can be used by citizens and residents of Cuba, Iran, Iraq, Libya, North Korea, Sudan and Syria."))
-		+ wxString(_T("\nYou may use this software in the design, development, production, stockpiling, use and testing of chemical"))
-		+ wxString(_T("\nand biological weapons, weapons of mass destruction and rocket systems and in a facility engaged in such activities."))
-		+ wxString(_T("\nHowever, I would prefer it to be used to design children's toys."));
+		+ wxString(_T("\n\nThis is free, open source software."));
 
 	wxString version_str = wxGetApp().m_version_number;
 	version_str.Replace(_T(" "), _T("."));
@@ -1264,7 +1320,6 @@ void CHeeksFrame::AddToolBars()
 	m_solidBar->AddTool(ID_SUBTRACT, _T("Cut"), ToolImage(_T("subtract")), _("Cut one solid from another"));
 	m_solidBar->AddTool(ID_FUSE, _T("Fuse"), ToolImage(_T("fuse")), _("Fuse one solid to another"));
 	m_solidBar->AddTool(ID_COMMON, _T("Common"), ToolImage(_T("common")), _("Find common solid between two solids"));
-    m_solidBar->AddTool(ID_REDRAW, _T("Redraw"), ToolImage(_T("redraw")), _("Redraw"));
 	m_viewingBar->AddTool(ID_MAG_PREVIOUS, _T("View Back"), ToolImage(_T("magprev")), _("Go back to previous view"));
 	m_viewingBar->AddTool(ID_MAG, _T("Zoom Window"), ToolImage(_T("mag")), _("Zoom in to a dragged window"));
 	m_viewingBar->AddTool(ID_MAG_EXTENTS, _T("Mag Extents"), ToolImage(_T("magextents")), _("Zoom in to fit the extents of the drawing into the graphics window"));
@@ -1272,6 +1327,7 @@ void CHeeksFrame::AddToolBars()
 	m_viewingBar->AddTool(ID_VIEW_ROT, _T("View Rotate"), ToolImage(_T("viewrot")), _("Enter view rotating mode"));
 	m_viewingBar->AddTool(ID_VIEW_ZOOM, _T("View Zoom"), ToolImage(_T("zoom")), _("Drag to zoom in and out"));
 	m_viewingBar->AddTool(ID_FULL_SCREEN, _T("FullScreen"), ToolImage(_T("fullscreen")), _("Switch to full screen view ( press escape to return )"));
+    m_viewingBar->AddTool(ID_REDRAW, _T("Redraw"), ToolImage(_T("redraw")), _("Redraw"));
 	m_transformBar->AddTool(ID_MOVE_TRANSLATE, _T("Move Translate"), ToolImage(_T("movet")), _("Translate selected items"));
 	m_transformBar->AddTool(ID_COPY_TRANSLATE, _T("Copy Translate"), ToolImage(_T("copyt")), _("Copy and translate selected items"));
 	m_transformBar->AddTool(ID_MOVE_ROTATE, _T("Move Rotate"), ToolImage(_T("mover")), _("Rotate selected items"));
