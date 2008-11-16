@@ -73,6 +73,7 @@ enum{
 	Menu_View_StatusBar,
 	Menu_View_ResetLayout,
 	Menu_View_SetToolBarsToLeft,
+	ID_TREE_CTRL,
 	ID_IMPORT,
 	ID_RULED_SURFACE,
 	ID_EXTRUDE,

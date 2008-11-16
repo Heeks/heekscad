@@ -19,9 +19,7 @@ class MyTreeCtrl : public wxTreeCtrl, public Images
 {
 public:
     MyTreeCtrl() { }
-    MyTreeCtrl(wxWindow *parent, const wxWindowID id,
-               const wxPoint& pos, const wxSize& size,
-               long style);
+    MyTreeCtrl(wxWindow *parent, long style);
     virtual ~MyTreeCtrl(){};
 
     void OnDeleteItem(wxTreeEvent& event);
@@ -55,6 +53,7 @@ public:
     void SetLastItem(wxTreeItemId id) { m_lastItem = id; }
 
     void AddIcon(wxIcon icon);
+	bool After(const wxTreeItemId& id1, const wxTreeItemId& id2);
 
 protected:
     virtual int OnCompareItems(const wxTreeItemId& i1, const wxTreeItemId& i2);
@@ -71,55 +70,6 @@ private:
     //     make default (alphabetical) sorting much faster under wxMSW.
     DECLARE_DYNAMIC_CLASS(MyTreeCtrl)
     DECLARE_EVENT_TABLE()
-};
-
-
-// menu and control ids
-enum
-{
-    TreeTest_Quit = wxID_EXIT,
-    TreeTest_About = wxID_ABOUT,
-    TreeTest_TogButtons = wxID_HIGHEST,
-    TreeTest_TogTwist,
-    TreeTest_TogLines,
-    TreeTest_TogEdit,
-    TreeTest_TogHideRoot,
-    TreeTest_TogRootLines,
-    TreeTest_TogBorder,
-    TreeTest_TogFullHighlight,
-    TreeTest_SetFgColour,
-    TreeTest_SetBgColour,
-    TreeTest_ResetStyle,
-    TreeTest_Dump,
-    TreeTest_DumpSelected,
-    TreeTest_Count,
-    TreeTest_CountRec,
-    TreeTest_Sort,
-    TreeTest_SortRev,
-    TreeTest_SetBold,
-    TreeTest_ClearBold,
-    TreeTest_Rename,
-    TreeTest_Delete,
-    TreeTest_DeleteChildren,
-    TreeTest_DeleteAll,
-    TreeTest_Recreate,
-    TreeTest_ToggleImages,
-    TreeTest_ToggleButtons,
-    TreeTest_SetImageSize,
-    TreeTest_ToggleSel,
-    TreeTest_CollapseAndReset,
-    TreeTest_EnsureVisible,
-    TreeTest_AddItem,
-    TreeTest_InsertItem,
-    TreeTest_IncIndent,
-    TreeTest_DecIndent,
-    TreeTest_IncSpacing,
-    TreeTest_DecSpacing,
-    TreeTest_ToggleIcon,
-    TreeTest_Select,
-    TreeTest_Unselect,
-    TreeTest_SelectRoot,
-    TreeTest_Ctrl = 1000
 };
 
 class CTreeCanvas: public wxScrolledWindow, public Observer
