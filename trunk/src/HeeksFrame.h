@@ -48,6 +48,7 @@ enum{
 	ID_FULL_SCREEN,
 	ID_UNDO,
 	ID_REDO,
+	ID_DELETE,
 	ID_RECENT_FIRST,
 	ID_OPEN_RECENT = ID_RECENT_FIRST + MAX_RECENT_FILES,
 	ID_MOVE_TRANSLATE,
@@ -103,7 +104,7 @@ public:
 	wxStatusBar* m_statusBar;
 	wxMenuBar *m_menuBar;
 	wxMenu* m_recent_files_menu;
-	wxMenu *m_menuView;
+	wxMenu *m_menuWindow;
 	HeeksPrintout* m_printout;
 
 	CHeeksFrame( const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize );
@@ -155,6 +156,8 @@ public:
 	void OnCopyButton( wxCommandEvent& event );
 	void OnUpdateCopy( wxUpdateUIEvent& event );
 	void OnPasteButton( wxCommandEvent& event );
+	void OnUpdateDelete( wxUpdateUIEvent& event );
+	void OnDeleteButton( wxCommandEvent& event );
 	void OnUpdatePaste( wxUpdateUIEvent& event );
 	void OnSubtractButton( wxCommandEvent& event );
 	void OnFuseButton( wxCommandEvent& event );

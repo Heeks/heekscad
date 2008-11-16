@@ -72,6 +72,8 @@ EVT_UPDATE_UI(wxID_CUT, CHeeksFrame::OnUpdateCut)
 EVT_MENU(wxID_COPY, CHeeksFrame::OnCopyButton)
 EVT_UPDATE_UI(wxID_COPY, CHeeksFrame::OnUpdateCopy)
 EVT_MENU(wxID_PASTE, CHeeksFrame::OnPasteButton)
+EVT_MENU(wxID_DELETE, CHeeksFrame::OnDeleteButton)
+EVT_UPDATE_UI(wxID_DELETE, CHeeksFrame::OnUpdateDelete)
 EVT_UPDATE_UI(wxID_PASTE, CHeeksFrame::OnUpdatePaste)
 EVT_MENU(WXPRINT_PRINT, CHeeksFrame::OnPrint)
 EVT_MENU(WXPRINT_PREVIEW, CHeeksFrame::OnPrintPreview)
@@ -154,43 +156,50 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 	// File Menu
 	wxMenu *file_menu = new wxMenu;
-	file_menu->Append( wxID_NEW, _( "New..." ) );
-	file_menu->Append( wxID_OPEN, _( "Open..." ) );
-	file_menu->Append( wxID_SAVE, _( "Save..." ) );
-	file_menu->Append( wxID_SAVEAS, _( "Save As..." ) );
+	file_menu->Append( wxID_NEW, _( "New" ) );
+	file_menu->Append( wxID_OPEN, _( "Open" ) );
+	file_menu->Append( wxID_SAVE, _( "Save" ) );
 	file_menu->AppendSeparator();
-    file_menu->Append(WXPRINT_PRINT, _("Print..."));
-    file_menu->Append(WXPRINT_PAGE_SETUP, _("Page Setup..."));
+    file_menu->Append(WXPRINT_PRINT, _("Print"));
+    file_menu->Append(WXPRINT_PAGE_SETUP, _("Page Setup"));
     file_menu->Append(WXPRINT_PREVIEW, _("Print Preview"));
-
     m_recent_files_menu = new wxMenu;
     m_recent_files_menu->Append(-1, _T("test"));
     file_menu->Append(ID_OPEN_RECENT, _("Open Recent"), m_recent_files_menu);
-
-	file_menu->Append( ID_IMPORT, _( "Import..." ) );
-
-	file_menu->Append( Menu_File_About, _( "About..." ) );
+	file_menu->Append( ID_IMPORT, _( "Import" ) );
+	file_menu->Append( Menu_File_About, _( "About" ) );
 	file_menu->AppendSeparator();
 	file_menu->Append( Menu_File_Quit, _( "Exit" ) );
+
+	// Edit Menu
+	wxMenu *edit_menu = new wxMenu;
+	edit_menu->Append( wxID_UNDO, _( "Undo" ) );
+	edit_menu->Append( wxID_REDO, _( "Redo" ) );
+	edit_menu->AppendSeparator();
+    edit_menu->Append(wxID_CUT, _("Cut"));
+    edit_menu->Append(wxID_COPY, _("Copy"));
+    edit_menu->Append(wxID_PASTE, _("Paste"));
+	edit_menu->Append( wxID_DELETE, _( "Delete" ) );
 	
-	// View Menu
-	m_menuView = new wxMenu;
-	m_menuView->AppendCheckItem( Menu_View_Objects, _( "Objects" ) );
-	m_menuView->AppendCheckItem( Menu_View_Options, _( "Options" ) );
-	m_menuView->AppendCheckItem( Menu_View_Input, _( "Input" ) );
-	m_menuView->AppendCheckItem( Menu_View_Properties, _( "Properties" ) );
-	m_menuView->AppendCheckItem( Menu_View_ToolBar, _( "Tool Bar" ) );
-	m_menuView->AppendCheckItem( Menu_View_SolidBar, _( "Solids Tool Bar" ) );
-	m_menuView->AppendCheckItem( Menu_View_GeometryBar, _( "Geometry Tool Bar" ) );
-	m_menuView->AppendCheckItem( Menu_View_ViewingBar, _( "Viewing Tool Bar" ) );
-	m_menuView->AppendCheckItem( Menu_View_TransformBar, _( "Transformations Tool Bar" ) );
-	m_menuView->AppendCheckItem( Menu_View_StatusBar, _( "Status Bar" ) );
+	// Window Menu
+	m_menuWindow = new wxMenu;
+	m_menuWindow->AppendCheckItem( Menu_View_Objects, _( "Objects" ) );
+	m_menuWindow->AppendCheckItem( Menu_View_Options, _( "Options" ) );
+	m_menuWindow->AppendCheckItem( Menu_View_Input, _( "Input" ) );
+	m_menuWindow->AppendCheckItem( Menu_View_Properties, _( "Properties" ) );
+	m_menuWindow->AppendCheckItem( Menu_View_ToolBar, _( "Tool Bar" ) );
+	m_menuWindow->AppendCheckItem( Menu_View_SolidBar, _( "Solids Tool Bar" ) );
+	m_menuWindow->AppendCheckItem( Menu_View_GeometryBar, _( "Geometry Tool Bar" ) );
+	m_menuWindow->AppendCheckItem( Menu_View_ViewingBar, _( "Viewing Tool Bar" ) );
+	m_menuWindow->AppendCheckItem( Menu_View_TransformBar, _( "Transformations Tool Bar" ) );
+	m_menuWindow->AppendCheckItem( Menu_View_StatusBar, _( "Status Bar" ) );
 
 	// Add them to the main menu
 	m_menuBar = new wxMenuBar;
 	m_menuBar->Append( file_menu, _( "File" ) );
+	m_menuBar->Append( edit_menu, _( "Edit" ) );
+	m_menuBar->Append( m_menuWindow, _( "Window" ) );
 	SetMenuBar( m_menuBar );
-	m_menuBar->Append( m_menuView, _( "View" ) );
 
 	m_aui_manager = new wxAuiManager(this);
 
@@ -293,8 +302,8 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 	SetDropTarget(new DnDFile(this));
 
-	m_menuView->Append( Menu_View_ResetLayout, _( "Reset Layout" ) );
-	m_menuView->Append( Menu_View_SetToolBarsToLeft, _( "Set toolbars to left" ) );
+	m_menuWindow->Append( Menu_View_ResetLayout, _( "Reset Layout" ) );
+	m_menuWindow->Append( Menu_View_SetToolBarsToLeft, _( "Set toolbars to left" ) );
 
 	//Read layout
 	wxString str;
@@ -717,6 +726,16 @@ void CHeeksFrame::OnUpdateCopy( wxUpdateUIEvent& event )
 void CHeeksFrame::OnPasteButton( wxCommandEvent& event )
 {
 	wxGetApp().Paste();
+}
+
+void CHeeksFrame::OnDeleteButton( wxCommandEvent& event )
+{
+	wxGetApp().DeleteUndoably(wxGetApp().m_marked_list->list());
+}
+
+void CHeeksFrame::OnUpdateDelete( wxUpdateUIEvent& event )
+{
+	event.Enable(wxGetApp().m_marked_list->size() > 0);
 }
 
 void CHeeksFrame::OnUpdatePaste( wxUpdateUIEvent& event )

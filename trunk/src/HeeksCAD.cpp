@@ -122,8 +122,6 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_locale_initialised = false;
 }
 
-static RemoveObjectTool remove_object_tool(NULL);
-
 HeeksCADapp::~HeeksCADapp()
 {
 	delete m_marked_list;
@@ -131,7 +129,6 @@ HeeksCADapp::~HeeksCADapp()
 	observers.clear();
 	EndHistory();
 	delete history;
-	remove_object_tool = RemoveObjectTool(NULL);
 	delete magnification;
 	delete m_select_mode;
 	delete m_digitizing;
@@ -414,7 +411,6 @@ void HeeksCADapp::Reset(){
 	Clear();
 	EndHistory();
 	delete history;
-	remove_object_tool = RemoveObjectTool(NULL);
 	history = new MainHistory;
 	m_current_coordinate_system = NULL;
 	m_doing_rollback = false;
@@ -1844,7 +1840,7 @@ public:
 	wxPoint m_point;
 	bool m_xor_marked_list;
 
-	MarkObjectTool():m_marked_object(NULL), m_xor_marked_list(false){}
+	MarkObjectTool(MarkedObject *marked_object, const wxPoint& point, bool xor_marked_list):m_marked_object(marked_object), m_point(point), m_xor_marked_list(xor_marked_list){}
 
 	// Tool's virtual functions
 	const wxChar* GetTitle(){
@@ -1888,8 +1884,6 @@ public:
 	}
 };
 
-static MarkObjectTool mark_object_tool;
-
 void HeeksCADapp::GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool from_graphics_canvas, bool control_pressed)
 {
 	std::map<HeeksObj*, MarkedObject*>::iterator It;
@@ -1905,30 +1899,17 @@ void HeeksCADapp::GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list
 		marked_object->GetObject()->GetTools(&tools, &point);
 		if(tools.size() > 0)tools.push_back(NULL);
 
-		remove_object_tool.m_object = marked_object->GetObject();
-		remove_object_tool.m_owner = remove_object_tool.m_object->m_owner;
-		tools.push_back(&remove_object_tool);
+		tools.push_back(new RemoveObjectTool(marked_object->GetObject()));
+
 		tools.push_back(NULL);
 
-		mark_object_tool.m_marked_object = marked_object;
-		mark_object_tool.m_point = point;
-		mark_object_tool.m_xor_marked_list = control_pressed;
-		tools.push_back(&mark_object_tool);
+		tools.push_back(new MarkObjectTool(marked_object, point, control_pressed));
 
 		if (tools.size()>0)
 		{
-			if (from_graphics_canvas || 1)
-			{
-				ToolList *function_list = new ToolList(marked_object->GetObject()->GetShortStringOrTypeString());
-				function_list->Add(tools);
-				t_list.push_back(function_list);
-			}
-			else
-			{
-				std::list<Tool*>::iterator It;
-				for (It=tools.begin();It!=tools.end();It++)
-					t_list.push_back(*It);
-			}
+			ToolList *function_list = new ToolList(marked_object->GetObject()->GetShortStringOrTypeString());
+			function_list->Add(tools);
+			t_list.push_back(function_list);
 		}
 	}
 }
