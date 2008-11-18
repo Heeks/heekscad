@@ -7,7 +7,11 @@ float ToolImage::m_button_scale = 0.25;
 const int ToolImage::full_size = 96;
 const int ToolImage::default_bitmap_size = 24;
 
+#ifdef HEEKSCAD
 ToolImage::ToolImage(const wxString& name):wxImage(wxGetApp().GetExeFolder() + _T("/bitmaps/") + name + _T(".png"), wxBITMAP_TYPE_PNG)
+#else
+ToolImage::ToolImage(const wxString& name):wxImage(theApp.GetDllFolder() + _T("/bitmaps/") + name + _T(".png"), wxBITMAP_TYPE_PNG)
+#endif
 {
 	int width = GetWidth();
 	int height = GetHeight();

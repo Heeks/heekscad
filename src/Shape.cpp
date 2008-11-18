@@ -35,7 +35,6 @@
 #include "Interface_Static.hxx"
 #include "../interface/Tool.h"
 #include "../tinyxml/tinyxml.h"
-#include "ToolImage.h"
 
 wxIcon* CFaceList::m_icon = NULL;
 
@@ -323,7 +322,6 @@ void CShape::GetBox(CBox &box)
 }
 
 class OffsetShapeTool:public Tool{
-	static wxBitmap* m_bitmap;
 public:
 	CShape* m_shape;
 	OffsetShapeTool(CShape* shape):m_shape(shape){}
@@ -342,19 +340,10 @@ public:
 		}
 	}
 	const wxChar* GetTitle(){ return _("Offset Shape");}
-	wxBitmap* Bitmap()
-	{
-		if(m_bitmap == NULL)
-		{
-			wxString exe_folder = wxGetApp().GetExeFolder();
-			m_bitmap = new wxBitmap(ToolImage(_T("offsetsolid")));
-		}
-		return m_bitmap;
-	}
+	wxString BitmapPath(){return _T("offsetsolid");}
 	const wxChar* GetToolTip(){return _("Offset the shape");}
 };
 
-wxBitmap* OffsetShapeTool::m_bitmap = NULL;
 static OffsetShapeTool offset_shape_tool(NULL);
 
 void CShape::GetTools(std::list<Tool*>* t_list, const wxPoint* p)

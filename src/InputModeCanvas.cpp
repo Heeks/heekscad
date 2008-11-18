@@ -1,12 +1,12 @@
 #include "stdafx.h"
+#include "InputModeCanvas.h"
 #include "wx/dcmirror.h"
 #include "../interface/InputMode.h"
-#include "InputModeCanvas.h"
 #include "../interface/Property.h"
 #include "../interface/PropertyString.h"
+#include "../interface/ToolImage.h"
 #include "propgrid.h"
 #include "HeeksFrame.h"
-#include "ToolImage.h"
 
 BEGIN_EVENT_TABLE(CInputModeCanvas, wxScrolledWindow)
 	EVT_SIZE(CInputModeCanvas::OnSize)

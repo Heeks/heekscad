@@ -283,26 +283,20 @@ void MarkedList::GetProperties(std::list<Property *> *list){
 
 class DeleteMarkedListTool : public Tool
 {
-private:
-	static wxBitmap* m_bitmap;
 public:
 	const wxChar* GetTitle() {return _("Delete Marked Items");}
 	void Run() {wxGetApp().DeleteMarkedItems();}
-	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(ToolImage(_T("delete")));}return m_bitmap;}
+	wxString BitmapPath(){return _T("delete");}
 } delete_marked_list_tool;
-wxBitmap* DeleteMarkedListTool::m_bitmap = NULL;
 
 class CopyMarkedList: public Tool
 {
-private:
-	static wxBitmap* m_bitmap;
 public:
 	void Run();
 	const wxChar* GetTitle(){return _("Copy");}
-	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(ToolImage(_T("copy")));}return m_bitmap;}
+	wxString BitmapPath(){return _T("copy");}
 	const wxChar* GetToolTip(){return _("Copies the selected items to the clipboard");}
 } copy_marked_list;
-wxBitmap* CopyMarkedList::m_bitmap = NULL;
 
 void CopyMarkedList::Run()
 {
@@ -311,15 +305,12 @@ void CopyMarkedList::Run()
 
 class PasteTool: public Tool
 {
-private:
-	static wxBitmap* m_bitmap;
 public:
 	void Run();
 	const wxChar* GetTitle(){return _("Paste");}
-	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(ToolImage(_T("paste")));}return m_bitmap;}
+	wxString BitmapPath(){return _T("paste");}
 	const wxChar* GetToolTip(){return _("Paste items from the clipboard to the drawing");}
 } paste_tool;
-wxBitmap* PasteTool::m_bitmap = NULL;
 
 void PasteTool::Run()
 {

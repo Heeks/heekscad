@@ -15,7 +15,6 @@
 #include "InputModeCanvas.h"
 #include "OptionsCanvas.h"
 #include "CoordinateSystem.h"
-#include "ToolImage.h"
 
 DigitizeMode::DigitizeMode(){
 	point_or_window = new PointOrWindow(false);
@@ -304,9 +303,6 @@ void DigitizeMode::GetOptions(std::list<Property *> *list){
 }
 
 class EndPosPicking:public Tool{
-private:
-	static wxBitmap* m_bitmap;
-
 public:
 	void Run(){
 		if(wxGetApp().m_digitizing->m_doing_a_main_loop)
@@ -318,18 +314,9 @@ public:
 		}
 	}
 	const wxChar* GetTitle(){return _("Stop Picking");}
-	wxBitmap* Bitmap()
-	{
-		if(m_bitmap == NULL)
-		{
-			wxString exe_folder = wxGetApp().GetExeFolder();
-			m_bitmap = new wxBitmap(ToolImage(_T("endpospick")));
-		}
-		return m_bitmap;
-	}
+	wxString BitmapPath(){return _T("endpospick");}
 	const wxChar* GetToolTip(){return _("Finish picking");}
 };
-wxBitmap* EndPosPicking::m_bitmap = NULL;
 
 static EndPosPicking end_pos_picking;
 

@@ -13,7 +13,6 @@
 #include "GraphicsCanvas.h"
 #include "HeeksFrame.h"
 #include "GripperSelTransform.h"
-#include "ToolImage.h"
 
 bool CSelectMode::m_can_grip_objects = true;
 
@@ -409,9 +408,6 @@ void CSelectMode::GetOptions(std::list<Property *> *list){
 }
 
 class EndPicking:public Tool{
-private:
-	static wxBitmap* m_bitmap;
-
 public:
 	void Run(){
 		if(wxGetApp().m_select_mode->m_doing_a_main_loop)
@@ -423,18 +419,9 @@ public:
 		}
 	}
 	const wxChar* GetTitle(){return _("Stop Picking");}
-	wxBitmap* Bitmap()
-	{
-		if(m_bitmap == NULL)
-		{
-			wxString exe_folder = wxGetApp().GetExeFolder();
-			m_bitmap = new wxBitmap(ToolImage(_T("endpick")));
-		}
-		return m_bitmap;
-	}
+	wxString BitmapPath(){return _T("endpick");}
 	const wxChar* GetToolTip(){return _("Finish picking");}
 };
-wxBitmap* EndPicking::m_bitmap = NULL;
 
 static EndPicking end_picking;
 
