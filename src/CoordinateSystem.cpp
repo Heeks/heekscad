@@ -8,7 +8,6 @@
 #include "HeeksFrame.h"
 #include "ObjPropsCanvas.h"
 #include "../tinyxml/tinyxml.h"
-#include "ToolImage.h"
 
 wxIcon* CoordinateSystem::m_icon = NULL;
 double CoordinateSystem::size = 30;
@@ -156,26 +155,19 @@ static CoordinateSystem* coord_system_for_Tool = NULL;
 
 class CoordSystem3Points:public Tool{
 	// to set the position and orientation of a CoordinateSystem, by picking 1 - datum position, 2 - x axis position, 3 - y axis position ( somewhere where y > 0 )
-private:
-	static wxBitmap* m_bitmap;
-
 public:
 	void Run(){
 		coord_system_for_Tool->PickFrom3Points();
 	}
 	const wxChar* GetTitle(){return _T("CoordSystem3Points");}
-	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(exe_folder + _T("/bitmaps/coords3.png"), wxBITMAP_TYPE_PNG);}return m_bitmap;}
+	wxString BitmapPath(){return _T("coords3");}
 	const wxChar* GetToolTip(){return _("Set position and orientation by picking 3 points");}
 };
-wxBitmap* CoordSystem3Points::m_bitmap = NULL;
 
 static CoordSystem3Points coord_system_3_points;
 
 class SetCoordSystemActive:public Tool{
 	// setthe coordinate system as the current one
-private:
-	static wxBitmap* m_bitmap;
-
 public:
 	void Run(){
 		wxGetApp().m_current_coordinate_system = coord_system_for_Tool;
@@ -183,18 +175,14 @@ public:
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("SetCoordSystemActive");}
-	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(ToolImage(_T("setcoordsys")));}return m_bitmap;}
+	wxString BitmapPath(){return _T("setcoordsys");}
 	const wxChar* GetToolTip(){return _("Set this coordinate system as the active one");}
 };
-wxBitmap* SetCoordSystemActive::m_bitmap = NULL;
 
 static SetCoordSystemActive coord_system_set;
 
 class UnsetCoordSystemActive:public Tool{
 	// set world coordinate system active again
-private:
-	static wxBitmap* m_bitmap;
-
 public:
 	void Run(){
 		wxGetApp().m_current_coordinate_system = NULL;
@@ -202,10 +190,9 @@ public:
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("UnsetCoordSystemActive");}
-	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(ToolImage(_T("unsetcoordsys")));}return m_bitmap;}
+	wxString BitmapPath(){return _T("unsetcoordsys");}
 	const wxChar* GetToolTip(){return _("Set world coordinate system active");}
 };
-wxBitmap* UnsetCoordSystemActive::m_bitmap = NULL;
 
 static UnsetCoordSystemActive coord_system_unset;
 

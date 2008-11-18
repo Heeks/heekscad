@@ -6,7 +6,6 @@
 #include "../interface/Tool.h"
 #include "HeeksFrame.h"
 #include "ObjPropsCanvas.h"
-#include "ToolImage.h"
 
 void RulerMark::glCommands()
 {
@@ -226,9 +225,6 @@ void HRuler::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 
 class ResetRulerTool:public Tool{
 	// reset ruler
-private:
-	static wxBitmap* m_bitmap;
-
 public:
 	void Run(){
 		wxGetApp().m_ruler->m_trsf = gp_Trsf();
@@ -236,10 +232,9 @@ public:
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("ResetRuler");}
-	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(ToolImage(_T("resetruler")));}return m_bitmap;}
+	wxString BitmapPath(){return _T("resetruler");}
 	const wxChar* GetToolTip(){return _("Reset the ruler");}
 };
-wxBitmap* ResetRulerTool::m_bitmap = NULL;
 
 static ResetRulerTool reset_ruler_tool;
 

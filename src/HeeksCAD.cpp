@@ -59,7 +59,6 @@
 #include "../interface/PropertyList.h"
 #include "RegularShapesDrawing.h"
 #include "HeeksPrintout.h"
-#include "ToolImage.h"
 #include <sstream>
 using namespace std;
 
@@ -2390,33 +2389,25 @@ static void set_value(double value, HeeksObj* object){*value_for_set_value = val
 static bool *success_for_double_input = NULL;
 
 class CInputApply:public Tool{
-private:
-	static wxBitmap* m_bitmap;
-
 public:
 	void Run(){
 		*success_for_double_input = true;
 		wxGetApp().ExitMainLoop();
 	}
 	const wxChar* GetTitle(){return _("Apply");}
-	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(ToolImage(_T("apply")));}	return m_bitmap;}
+	wxString BitmapPath(){return _T("apply");}
 	const wxChar* GetToolTip(){return _("Accept value and continue");}
 };
-wxBitmap* CInputApply::m_bitmap = NULL;
 
 CInputApply input_apply;
 
 class CInputCancel:public Tool{
-private:
-	static wxBitmap* m_bitmap;
-
 public:
 	void Run(){wxGetApp().ExitMainLoop();}
 	const wxChar* GetTitle(){return _("Cancel");}
-	wxBitmap* Bitmap(){if(m_bitmap == NULL){wxString exe_folder = wxGetApp().GetExeFolder();m_bitmap = new wxBitmap(ToolImage(_T("cancel")));}return m_bitmap;}
+	wxString BitmapPath(){return _T("cancel");}
 	const wxChar* GetToolTip(){return _("Cancel operation");}
 };
-wxBitmap* CInputCancel::m_bitmap = NULL;
 
 CInputCancel input_cancel;
 

@@ -3,11 +3,11 @@
 #include "wx/dcmirror.h"
 #include "ObjPropsCanvas.h"
 #include "../interface/Property.h"
+#include "../interface/ToolImage.h"
 #include "PropertyVertex.h"
 #include "propgrid.h"
 #include "HeeksFrame.h"
 #include "MarkedList.h"
-#include "ToolImage.h"
 
 BEGIN_EVENT_TABLE(CObjPropsCanvas, wxScrolledWindow)
 	EVT_SIZE(CObjPropsCanvas::OnSize)

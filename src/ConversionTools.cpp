@@ -137,8 +137,6 @@ bool ConvertSketchToFace2(HeeksObj* object, TopoDS_Face& face)
 	return false;
 }
 
-wxBitmap* ConvertSketchToFace::m_bitmap = NULL;
-
 void ConvertSketchToFace::Run(){
 	std::list<HeeksObj*>::const_iterator It;
 	for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
