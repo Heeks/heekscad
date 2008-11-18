@@ -10,7 +10,9 @@ CViewPoint::CViewPoint(void){
 	m_lens_point = gp_Pnt(0, 0, 200);
 	m_target_point = gp_Pnt(0, 0, 0);
 	m_vertical = gp_Vec(0, 1, 0);
-	pixel_scale = 10;
+	m_perspective = false;
+	m_pixel_scale = 10;
+	m_view_angle = 30;
 	m_section = false;
 	m_matrix_valid = false;
 }
@@ -27,7 +29,9 @@ const CViewPoint& CViewPoint::operator=(const CViewPoint &c){
 	m_lens_point = c.m_lens_point;
 	m_target_point = c.m_target_point;
 	m_vertical = c.m_vertical;
-	pixel_scale = c.pixel_scale;
+	m_perspective = c.m_perspective;
+	m_pixel_scale = c.m_pixel_scale;
+	m_view_angle = c.m_view_angle;
 	m_section = c.m_section;
 	memcpy(m_projm, c.m_projm, 16*sizeof(double));
 	memcpy(m_modelm, c.m_modelm, 16*sizeof(double));
@@ -121,8 +125,8 @@ void CViewPoint::Shift(const gp_Vec &tv){
 }
 
 void CViewPoint::Shift(const wxPoint &point_diff, const wxPoint &point){
-	double div_x = (double)(point_diff.x)/pixel_scale;
-	double div_y = (double)(point_diff.y)/pixel_scale;
+	double div_x = (double)(point_diff.x)/m_pixel_scale;
+	double div_y = (double)(point_diff.y)/m_pixel_scale;
 	gp_Vec f = m_target_point.XYZ() - m_lens_point.XYZ();
 	gp_Vec uu = m_vertical.Normalized();
 	gp_Vec r = (f ^ uu).Normalized();
@@ -146,24 +150,33 @@ void CViewPoint::WindowMag(wxRect &window_box){
 	gp_Vec f = m_target_point.XYZ() - m_lens_point.XYZ();
 	gp_Vec uu = m_vertical.Normalized();
 	gp_Vec r = (f ^ uu).Normalized();
-	m_target_point = m_target_point.XYZ() + r.XYZ() * move_xcen/pixel_scale;
-	m_lens_point = m_lens_point.XYZ() + r.XYZ() * move_xcen/pixel_scale;
-	m_target_point = m_target_point.XYZ() + uu.XYZ() * move_ycen/pixel_scale;
-	m_lens_point = m_lens_point.XYZ() + uu.XYZ() * move_ycen/pixel_scale;
-	pixel_scale/=width_ratio;
+	m_target_point = m_target_point.XYZ() + r.XYZ() * move_xcen/m_pixel_scale;
+	m_lens_point = m_lens_point.XYZ() + r.XYZ() * move_xcen/m_pixel_scale;
+	m_target_point = m_target_point.XYZ() + uu.XYZ() * move_ycen/m_pixel_scale;
+	m_lens_point = m_lens_point.XYZ() + uu.XYZ() * move_ycen/m_pixel_scale;
+	m_pixel_scale/=width_ratio;
 }
 
-void CViewPoint::Scale(double multiplier, bool use_initial_pixel_scale){
+void CViewPoint::Scale(double fraction, bool use_initial_pixel_scale){
+	double multiplier = fraction;
 	bool increasing=(multiplier>0);
 	if(!increasing)multiplier = -multiplier;
 	multiplier = 1 - multiplier;
 	if(multiplier<0.00001)multiplier=0.00001;
 	if(increasing)multiplier = 1/multiplier;
 	if(multiplier< 0.1)multiplier = 0.1;
-	if(use_initial_pixel_scale)pixel_scale = m_initial_pixel_scale;
-	pixel_scale *= multiplier;
-	if(pixel_scale > 1000000)pixel_scale = 1000000;
-	if(pixel_scale < 0.000001)pixel_scale = 0.000001;
+	if(use_initial_pixel_scale)m_pixel_scale = m_initial_pixel_scale;
+	m_pixel_scale *= multiplier;
+	if(m_pixel_scale > 1000000)m_pixel_scale = 1000000;
+	if(m_pixel_scale < 0.000001)m_pixel_scale = 0.000001;
+
+	// for perspective, move forward
+	gp_Vec f = m_target_point.XYZ() - m_lens_point.XYZ();
+	gp_Vec v= gp_Vec(f.XYZ() * fraction);
+	m_lens_point = gp_Pnt(m_lens_point.XYZ() + v.XYZ());
+	if(m_lens_point.Distance(m_target_point) < 10){
+		m_target_point = gp_Pnt(m_lens_point.XYZ() + f.Normalized().XYZ() * 10);
+	}
 }
 
 void CViewPoint::Scale(const wxPoint &point){
@@ -218,18 +231,27 @@ void CViewPoint::SetProjection2(bool use_depth_testing){
 		m_near_plane = distance - rad;
 		m_far_plane = distance + rad;
 	}
-	{
-		wxSize size = wxGetApp().m_frame->m_graphics->GetClientSize();
-		double w = size.GetWidth()/pixel_scale;
-		double h = size.GetHeight()/pixel_scale;
-		double s = sqrt(w*w + h*h);
-		m_near_plane -= s/2;
-		m_far_plane += s/2;
-	}
+
 	wxSize size = wxGetApp().m_frame->m_graphics->GetClientSize();
+	double w = size.GetWidth()/m_pixel_scale;
+	double h = size.GetHeight()/m_pixel_scale;
+	double s = sqrt(w*w + h*h);
+	m_near_plane -= s/2;
+	m_far_plane += s/2;
+
 	double hw = (double)(size.GetWidth())/2;
 	double hh = (double)(size.GetHeight())/2;
-	glOrtho((-0.5 - hw)/pixel_scale, (hw+0.5)/pixel_scale, (-0.5-hh)/pixel_scale, (0.5+hh)/pixel_scale, (GLfloat)m_near_plane, (GLfloat)m_far_plane);
+	if(m_perspective)
+	{
+		double fovy = m_view_angle;
+		if(h>w && w>0) fovy = 2 * 180/Pi * atan( tan(m_view_angle/2 * Pi/180) * h/w );
+		if(m_near_plane < m_far_plane / 200)m_near_plane = m_far_plane / 200;
+		gluPerspective(fovy, w/h, m_near_plane, m_far_plane);
+	}
+	else
+	{
+		glOrtho((-0.5 - hw)/m_pixel_scale, (hw+0.5)/m_pixel_scale, (-0.5-hh)/m_pixel_scale, (0.5+hh)/m_pixel_scale, (GLfloat)m_near_plane, (GLfloat)m_far_plane);
+	}
 }
 
 void CViewPoint::SetProjection(bool use_depth_testing){
@@ -276,7 +298,7 @@ void CViewPoint::SetView(gp_Vec &unity, gp_Vec &unitz){
 	m_target_point = gp_Pnt(0, 0, 0);
 	m_lens_point = m_target_point.XYZ() + unitz.XYZ();
 	m_vertical = unity;
-	pixel_scale = 10;
+	m_pixel_scale = 10;
 	SetViewAroundAllObjects();
 }
 
@@ -338,8 +360,8 @@ void CViewPoint::SetViewAroundAllObjects(){
 	if(ph<0.00001)ph = 0.00001;
 	double px = pw/Width;
 	double py = ph/Height;
-	if(px<py)pixel_scale = px;
-	else pixel_scale = py;
+	if(px<py)m_pixel_scale = px;
+	else m_pixel_scale = py;
 	m_section = false;
 }
 
@@ -454,5 +476,19 @@ void CViewPoint::Set90PlaneDrawMatrix(gp_Trsf &mat)const{
 	case 2:
 		mat = make_matrix(gp_Pnt(0, 0, 0).Transformed(mat), gp_Vec(0, 1, 0).Transformed(mat), gp_Vec(0, 0, 1).Transformed(mat));
 		break;
+	}
+}
+
+void CViewPoint::SetPerspective(bool perspective){
+	if(m_perspective == perspective)return;
+
+	m_perspective = perspective;
+	if(perspective)
+	{
+		// switch from orthographic to perpective
+	}
+	else
+	{
+		// switch from perspective to orthographic
 	}
 }

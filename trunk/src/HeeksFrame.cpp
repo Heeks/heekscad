@@ -287,7 +287,11 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
     m_graphics = new CGraphicsCanvas(this, graphics_attrib_list);
 
-    m_tree_canvas = new CTreeCanvas(this);
+	bool perspective = false;
+	wxGetApp().m_config->Read(_T("Perspective"), &perspective);
+	m_graphics->m_view_point.SetPerspective(perspective);
+
+	m_tree_canvas = new CTreeCanvas(this);
     m_tree_canvas->SetCursor(wxCursor(wxCURSOR_MAGNIFIER));
 
     m_options = new COptionsCanvas(this);
@@ -397,6 +401,7 @@ CHeeksFrame::~CHeeksFrame()
 
 	wxGetApp().m_config->Write(_T("AuiPerspective"), str);
 	wxGetApp().m_config->Write(_T("ToolImageSize"), ToolImage::GetBitmapSize());
+	wxGetApp().m_config->Write(_T("Perspective"), m_graphics->m_view_point.GetPerspective());	
 
 	delete m_aui_manager;
 }

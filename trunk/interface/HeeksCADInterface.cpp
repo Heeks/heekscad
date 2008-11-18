@@ -61,7 +61,7 @@ bool CHeeksCADInterface::GetCamera(double* pos, double* target, double* up, bool
 		int height = v.m_window_rect[3];
 		// use smallest
 		if(height < width)width = height;
-		field_of_view = width / v.pixel_scale;
+		field_of_view = width / v.m_pixel_scale;
 	}
 	near_plane = v.m_near_plane;
 	far_plane = v.m_far_plane;
