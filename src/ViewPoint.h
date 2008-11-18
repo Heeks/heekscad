@@ -6,6 +6,7 @@ class CViewPoint{
 private:
 	wxPoint m_initial_point;
 	double m_initial_pixel_scale;
+	bool m_perspective;
 
 	void SetProjection2(bool use_depth_testing);
 	int ChooseBestPlane(int plane)const;
@@ -15,7 +16,8 @@ public:
 	gp_Pnt m_lens_point;
 	gp_Pnt m_target_point;
 	gp_Vec m_vertical;
-	double pixel_scale;
+	double m_pixel_scale;  // not valid for perspective
+	double m_view_angle;  // only valid for perspective
 	double m_projm[16], m_modelm[16]; 
 	int m_window_rect[4];
 	bool m_matrix_valid;
@@ -50,8 +52,10 @@ public:
 	void SetPolygonOffset(void)const;
 	void WindowMag(wxRect &window_box);
 	void SetViewAroundAllObjects();
-	void SetStartMousePoint(const wxPoint &point){m_initial_pixel_scale = pixel_scale; m_initial_point = point;}
+	void SetStartMousePoint(const wxPoint &point){m_initial_pixel_scale = m_pixel_scale; m_initial_point = point;}
 	gp_Lin SightLine(const wxPoint &point);
 	int GetTwoAxes(gp_Vec& vx, gp_Vec& vy, bool flattened_onto_screen, int plane)const;
 	void Set90PlaneDrawMatrix(gp_Trsf &mat)const;
+	void SetPerspective(bool perspective);
+	bool GetPerspective(){return m_perspective;}
 };

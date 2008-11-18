@@ -1201,7 +1201,7 @@ void HeeksCADapp::clear_marked_list(void){
 }
 
 double HeeksCADapp::GetPixelScale(void){
-	return m_frame->m_graphics->m_view_point.pixel_scale;
+	return m_frame->m_graphics->m_view_point.m_pixel_scale;
 }
 
 bool HeeksCADapp::IsModified(void){
@@ -1519,6 +1519,12 @@ void on_set_grid_mode(int value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+void on_set_perspective(bool value, HeeksObj* object)
+{
+	wxGetApp().m_frame->m_graphics->m_view_point.SetPerspective(value);
+	wxGetApp().Repaint();
+}
+
 void on_set_tool_icon_size(int value, HeeksObj* object)
 {
 	int size = 16;
@@ -1566,11 +1572,6 @@ void on_set_geom_tol(double value, HeeksObj* object)
 {
 	wxGetApp().m_geom_tol = value;
 	wxGetApp().Repaint();
-}
-
-void on_set_selection_filter(int value, HeeksObj* object)
-{
-	wxGetApp().m_marked_list->m_filter = value;
 }
 
 void on_set_show_datum(bool onoff, HeeksObj* object)
@@ -1669,6 +1670,86 @@ void on_set_size_is_pixels(bool value, HeeksObj* object){
 	CoordinateSystem::size_is_pixels = value;
 }
 
+void on_sel_filter_line(bool value, HeeksObj* object){
+	if(value)wxGetApp().m_marked_list->m_filter |= MARKING_FILTER_LINE;
+	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_LINE;
+}
+
+void on_sel_filter_arc(bool value, HeeksObj* object){
+	if(value)wxGetApp().m_marked_list->m_filter |= MARKING_FILTER_ARC;
+	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_ARC;
+}
+
+void on_sel_filter_iline(bool value, HeeksObj* object){
+	if(value)wxGetApp().m_marked_list->m_filter |= MARKING_FILTER_ILINE;
+	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_ILINE;
+}
+
+void on_sel_filter_circle(bool value, HeeksObj* object){
+	if(value)wxGetApp().m_marked_list->m_filter |= MARKING_FILTER_CIRCLE;
+	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_CIRCLE;
+}
+
+void on_sel_filter_point(bool value, HeeksObj* object){
+	if(value)wxGetApp().m_marked_list->m_filter |= MARKING_FILTER_POINT;
+	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_POINT;
+}
+
+void on_sel_filter_solid(bool value, HeeksObj* object){
+	if(value)wxGetApp().m_marked_list->m_filter |= MARKING_FILTER_SOLID;
+	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_SOLID;
+}
+
+void on_sel_filter_stl_solid(bool value, HeeksObj* object){
+	if(value)wxGetApp().m_marked_list->m_filter |= MARKING_FILTER_STL_SOLID;
+	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_STL_SOLID;
+}
+
+void on_sel_filter_wire(bool value, HeeksObj* object){
+	if(value)wxGetApp().m_marked_list->m_filter |= MARKING_FILTER_WIRE;
+	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_WIRE;
+}
+
+void on_sel_filter_face(bool value, HeeksObj* object){
+	if(value)wxGetApp().m_marked_list->m_filter |= MARKING_FILTER_FACE;
+	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_FACE;
+}
+
+void on_sel_filter_edge(bool value, HeeksObj* object){
+	if(value)wxGetApp().m_marked_list->m_filter |= MARKING_FILTER_EDGE;
+	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_EDGE;
+}
+
+void on_sel_filter_sketch(bool value, HeeksObj* object){
+	if(value)wxGetApp().m_marked_list->m_filter |= MARKING_FILTER_SKETCH;
+	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_SKETCH;
+}
+
+void on_sel_filter_image(bool value, HeeksObj* object){
+	if(value)wxGetApp().m_marked_list->m_filter |= MARKING_FILTER_IMAGE;
+	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_IMAGE;
+}
+
+void on_sel_filter_coordinate_sys(bool value, HeeksObj* object){
+	if(value)wxGetApp().m_marked_list->m_filter |= MARKING_FILTER_COORDINATE_SYSTEM;
+	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_COORDINATE_SYSTEM;
+}
+
+void on_sel_filter_text(bool value, HeeksObj* object){
+	if(value)wxGetApp().m_marked_list->m_filter |= MARKING_FILTER_TEXT;
+	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_TEXT;
+}
+
+void on_sel_filter_dimension(bool value, HeeksObj* object){
+	if(value)wxGetApp().m_marked_list->m_filter |= MARKING_FILTER_DIMENSION;
+	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_DIMENSION;
+}
+
+void on_sel_filter_ruler(bool value, HeeksObj* object){
+	if(value)wxGetApp().m_marked_list->m_filter |= MARKING_FILTER_RULER;
+	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_RULER;
+}
+
 void HeeksCADapp::GetOptions(std::list<Property *> *list)
 {
 	PropertyList* view_options = new PropertyList(_("view options"));
@@ -1676,13 +1757,13 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	std::list< wxString > choices;
 	choices.push_back ( wxString ( _("stay upright") ) );
 	choices.push_back ( wxString ( _("free") ) );
-	view_options->m_list.push_back ( new PropertyChoice ( _("rotate mode"),  choices, wxGetApp().m_rotate_mode, NULL, on_set_rotate_mode ) );
-	view_options->m_list.push_back( new PropertyCheck(_("antialiasing"), wxGetApp().m_antialiasing, NULL, on_set_antialiasing));
+	view_options->m_list.push_back ( new PropertyChoice ( _("rotate mode"),  choices, m_rotate_mode, NULL, on_set_rotate_mode ) );
+	view_options->m_list.push_back( new PropertyCheck(_("antialiasing"), m_antialiasing, NULL, on_set_antialiasing));
 #if _DEBUG
-	view_options->m_list.push_back( new PropertyCheck(_("fixed light"), wxGetApp().m_light_push_matrix, NULL, on_set_light_push_matrix));
+	view_options->m_list.push_back( new PropertyCheck(_("fixed light"), m_light_push_matrix, NULL, on_set_light_push_matrix));
 #endif
-	view_options->m_list.push_back( new PropertyCheck(_("reverse mouse wheel"), !(wxGetApp().mouse_wheel_forward_away), NULL, on_set_reverse_mouse_wheel));
-	view_options->m_list.push_back( new PropertyCheck(_("Ctrl key does rotate"), wxGetApp().ctrl_does_rotate, NULL, on_set_ctrl_does_rotate));
+	view_options->m_list.push_back( new PropertyCheck(_("reverse mouse wheel"), !(mouse_wheel_forward_away), NULL, on_set_reverse_mouse_wheel));
+	view_options->m_list.push_back( new PropertyCheck(_("Ctrl key does rotate"), ctrl_does_rotate, NULL, on_set_ctrl_does_rotate));
 	view_options->m_list.push_back(new PropertyCheck(_("show datum"), m_show_datum_coords_system, NULL, on_set_show_datum));
 	view_options->m_list.push_back(new PropertyDouble(_("datum size"), CoordinateSystem::size, NULL, on_set_datum_size));
 	view_options->m_list.push_back(new PropertyCheck(_("datum size is pixels not mm"), CoordinateSystem::size_is_pixels, NULL, on_set_size_is_pixels));
@@ -1696,33 +1777,8 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 		choices.push_back ( wxString ( _("colored alpha blending") ) );
 		view_options->m_list.push_back ( new PropertyChoice ( _("grid mode"),  choices, grid_mode, NULL, on_set_grid_mode ) );
 	}
-	list->push_back(view_options);
+	view_options->m_list.push_back( new PropertyCheck(_("perspective"), m_frame->m_graphics->m_view_point.GetPerspective(), NULL, on_set_perspective));
 
-	PropertyList* digitizing = new PropertyList(_("digitizing"));
-	digitizing->m_list.push_back(new PropertyCheck(_("end"), wxGetApp().digitize_end, NULL, on_end_of));
-	digitizing->m_list.push_back(new PropertyCheck(_("intersection"), wxGetApp().digitize_inters, NULL, on_intersection));
-	digitizing->m_list.push_back(new PropertyCheck(_("centre"), wxGetApp().digitize_centre, NULL, on_centre));
-	digitizing->m_list.push_back(new PropertyCheck(_("midpoint"), wxGetApp().digitize_midpoint, NULL, on_mid_point));
-	digitizing->m_list.push_back(new PropertyCheck(_("nearest"), wxGetApp().digitize_nearest, NULL, on_nearest));
-	digitizing->m_list.push_back(new PropertyCheck(_("tangent"), wxGetApp().digitize_tangent, NULL, on_tangent));
-	digitizing->m_list.push_back(new PropertyDouble(_("radius for undefined circles"), wxGetApp().digitizing_radius, NULL, on_radius));
-	digitizing->m_list.push_back(new PropertyCheck(_("coordinates"), wxGetApp().digitize_coords, NULL, on_coords));
-	digitizing->m_list.push_back(new PropertyCheck(_("screen"), wxGetApp().digitize_screen, NULL, on_relative));
-	list->push_back(digitizing);
-
-	list->push_back ( new PropertyColor ( _("current color"),  current_color, NULL, on_set_current_color ) );
-	list->push_back ( new PropertyColor ( _("construction color"),  construction_color, NULL, on_set_construction_color ) );
-	list->push_back(new PropertyDouble(_("grid size"), digitizing_grid, NULL, on_grid_edit));
-	list->push_back(new PropertyCheck(_("grid"), draw_to_grid, NULL, on_grid));
-	list->push_back(new PropertyDouble(_("geometry tolerance"), m_geom_tol, NULL, on_set_geom_tol));
-	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
-		wxDynamicLibrary* shared_library = *It;
-		list_for_GetOptions = list;
-		void(*GetOptions)(void(*)(Property*)) = (void(*)(void(*)(Property*)))(shared_library->GetSymbol(_T("GetOptions")));
-		(*GetOptions)(AddPropertyCallBack);
-	}
-
-	list->push_back(new PropertyInt(_("selection filter"), m_marked_list->m_filter, NULL, on_set_selection_filter));
 	{
 		std::list< wxString > choices;
 		choices.push_back ( wxString ( _T("16") ) );
@@ -1738,8 +1794,55 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 		else if(s > 40)choice = 3;
 		else if(s > 30)choice = 2;
 		else if(s > 20)choice = 1;
-		list->push_back ( new PropertyChoice ( _("tool icon size"),  choices, choice, NULL, on_set_tool_icon_size ) );
+		view_options->m_list.push_back ( new PropertyChoice ( _("tool icon size"),  choices, choice, NULL, on_set_tool_icon_size ) );
 	}
+	list->push_back(view_options);
+
+	PropertyList* digitizing = new PropertyList(_("digitizing"));
+	digitizing->m_list.push_back(new PropertyCheck(_("end"), digitize_end, NULL, on_end_of));
+	digitizing->m_list.push_back(new PropertyCheck(_("intersection"), digitize_inters, NULL, on_intersection));
+	digitizing->m_list.push_back(new PropertyCheck(_("centre"), digitize_centre, NULL, on_centre));
+	digitizing->m_list.push_back(new PropertyCheck(_("midpoint"), digitize_midpoint, NULL, on_mid_point));
+	digitizing->m_list.push_back(new PropertyCheck(_("nearest"), digitize_nearest, NULL, on_nearest));
+	digitizing->m_list.push_back(new PropertyCheck(_("tangent"), digitize_tangent, NULL, on_tangent));
+	digitizing->m_list.push_back(new PropertyDouble(_("radius for undefined circles"), digitizing_radius, NULL, on_radius));
+	digitizing->m_list.push_back(new PropertyCheck(_("coordinates"), digitize_coords, NULL, on_coords));
+	digitizing->m_list.push_back(new PropertyCheck(_("screen"), digitize_screen, NULL, on_relative));
+	digitizing->m_list.push_back(new PropertyDouble(_("grid size"), digitizing_grid, NULL, on_grid_edit));
+	digitizing->m_list.push_back(new PropertyCheck(_("snap to grid"), draw_to_grid, NULL, on_grid));
+	list->push_back(digitizing);
+
+	PropertyList* drawing = new PropertyList(_("drawing"));
+	drawing->m_list.push_back ( new PropertyColor ( _("current color"),  current_color, NULL, on_set_current_color ) );
+	drawing->m_list.push_back ( new PropertyColor ( _("construction color"),  construction_color, NULL, on_set_construction_color ) );
+	drawing->m_list.push_back(new PropertyDouble(_("geometry tolerance"), m_geom_tol, NULL, on_set_geom_tol));
+	list->push_back(drawing);
+
+	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
+		wxDynamicLibrary* shared_library = *It;
+		list_for_GetOptions = list;
+		void(*GetOptions)(void(*)(Property*)) = (void(*)(void(*)(Property*)))(shared_library->GetSymbol(_T("GetOptions")));
+		(*GetOptions)(AddPropertyCallBack);
+	}
+
+	PropertyList* selection_filter = new PropertyList(_("selection filter"));
+	selection_filter->m_list.push_back(new PropertyCheck(_("line"), (m_marked_list->m_filter & MARKING_FILTER_LINE) != 0, NULL, on_sel_filter_line));
+	selection_filter->m_list.push_back(new PropertyCheck(_("arc"), (m_marked_list->m_filter & MARKING_FILTER_ARC) != 0, NULL, on_sel_filter_arc));
+	selection_filter->m_list.push_back(new PropertyCheck(_("infinite line"), (m_marked_list->m_filter & MARKING_FILTER_ILINE) != 0, NULL, on_sel_filter_iline));
+	selection_filter->m_list.push_back(new PropertyCheck(_("circle"), (m_marked_list->m_filter & MARKING_FILTER_CIRCLE) != 0, NULL, on_sel_filter_circle));
+	selection_filter->m_list.push_back(new PropertyCheck(_("point"), (m_marked_list->m_filter & MARKING_FILTER_POINT) != 0, NULL, on_sel_filter_point));
+	selection_filter->m_list.push_back(new PropertyCheck(_("solid"), (m_marked_list->m_filter & MARKING_FILTER_SOLID) != 0, NULL, on_sel_filter_solid));
+	selection_filter->m_list.push_back(new PropertyCheck(_("stl_solid"), (m_marked_list->m_filter & MARKING_FILTER_STL_SOLID) != 0, NULL, on_sel_filter_stl_solid));
+	selection_filter->m_list.push_back(new PropertyCheck(_("wire"), (m_marked_list->m_filter & MARKING_FILTER_WIRE) != 0, NULL, on_sel_filter_wire));
+	selection_filter->m_list.push_back(new PropertyCheck(_("face"), (m_marked_list->m_filter & MARKING_FILTER_FACE) != 0, NULL, on_sel_filter_face));
+	selection_filter->m_list.push_back(new PropertyCheck(_("edge"), (m_marked_list->m_filter & MARKING_FILTER_EDGE) != 0, NULL, on_sel_filter_edge));
+	selection_filter->m_list.push_back(new PropertyCheck(_("sketch"), (m_marked_list->m_filter & MARKING_FILTER_SKETCH) != 0, NULL, on_sel_filter_sketch));
+	selection_filter->m_list.push_back(new PropertyCheck(_("image"), (m_marked_list->m_filter & MARKING_FILTER_IMAGE) != 0, NULL, on_sel_filter_image));
+	selection_filter->m_list.push_back(new PropertyCheck(_("coordinate system"), (m_marked_list->m_filter & MARKING_FILTER_COORDINATE_SYSTEM) != 0, NULL, on_sel_filter_coordinate_sys));
+	selection_filter->m_list.push_back(new PropertyCheck(_("text"), (m_marked_list->m_filter & MARKING_FILTER_TEXT) != 0, NULL, on_sel_filter_text));
+	selection_filter->m_list.push_back(new PropertyCheck(_("dimension"), (m_marked_list->m_filter & MARKING_FILTER_DIMENSION) != 0, NULL, on_sel_filter_dimension));
+	selection_filter->m_list.push_back(new PropertyCheck(_("ruler"), (m_marked_list->m_filter & MARKING_FILTER_RULER) != 0, NULL, on_sel_filter_ruler));
+	list->push_back(selection_filter);
 }
 
 void HeeksCADapp::DeleteMarkedItems()
