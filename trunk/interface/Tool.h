@@ -4,9 +4,14 @@
 
 class wxBitmap;
 
+#include "ToolImage.h"
+
 class Tool
 {
 	public:
+	wxBitmap* m_bitmap;
+
+	Tool():m_bitmap(NULL){}
 	virtual ~Tool(){}
 
 	virtual void Run() = 0;
@@ -17,5 +22,6 @@ class Tool
 	virtual bool Disabled(){return false;}
 	virtual bool Checked(){return false;}
 	virtual bool IsAToolList() {return false;}
-	virtual wxBitmap* Bitmap(){return NULL;}
+	virtual wxString BitmapPath(){return _T("");}
+	virtual wxBitmap* Bitmap(){if(m_bitmap == NULL)m_bitmap = new wxBitmap(ToolImage(BitmapPath()));return m_bitmap;}
 };

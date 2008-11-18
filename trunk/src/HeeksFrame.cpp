@@ -34,7 +34,6 @@
 #include "wx/print.h"
 #include "wx/printdlg.h"
 #include "HeeksPrintout.h"
-#include "ToolImage.h"
 
 using namespace std;
 
