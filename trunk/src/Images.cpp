@@ -19,12 +19,7 @@ int Images::GetImage(HeeksObj *object)
 		if (image_map.size()>0) FindIt = image_map.find(object->GetType());
 		if (image_map.size() == 0 || FindIt == image_map.end())
 		{
-#ifdef HEEKSCAD
-			wxString folder = wxGetApp().GetExeFolder();
-#else
-			wxString folder = theApp.GetDllFolder();
-#endif
-			image_index = m_image_list->Add(wxIcon(folder + _T("/icons/") + object->GetIcon() + _T(".png"), wxBITMAP_TYPE_PNG));
+			image_index = m_image_list->Add(wxIcon(wxGetApp().GetExeFolder() + _T("/icons/") + object->GetIcon() + _T(".png"), wxBITMAP_TYPE_PNG));
 			FindIt = image_map.insert(std::pair<int, int>(object->GetType(), image_index)).first;
 			image_index = FindIt->second;
 		}
