@@ -374,12 +374,13 @@ HeeksObj* LineArcDrawing::GetOwnerForDrawingObjects()
 	return NULL;
 }
 
-void LineArcDrawing::clear_drawing_objects(bool store_as_previous_objects)
+void LineArcDrawing::clear_drawing_objects(int mode)
 {
-	if(store_as_previous_objects)
+	if(mode == 1)
 	{
 		prev_object_in_list = temp_object_in_list;
 	}
+	if(temp_object && mode == 2)delete temp_object;
 	temp_object = NULL;
 	temp_object_in_list.clear();
 }

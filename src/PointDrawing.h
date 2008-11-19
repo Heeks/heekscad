@@ -13,7 +13,6 @@ private:
 	// Drawing's virtual functions
 	bool calculate_item(DigitizedPoint &end);
 	const std::list<HeeksObj*>& GetObjectsMade()const{return temp_object_in_list;}
-	void clear_drawing_objects(bool store_as_previous_objects);
 	int number_of_steps(){return 1;}
 	int step_to_go_to_after_last_step(){return 0;}
 	bool is_an_add_level(int level){return true;}
@@ -24,6 +23,9 @@ public:
 
 	// InputMode's virtual functions
 	const wxChar* GetTitle(){return _("Point drawing");}
+
+	// Drawing's virtual functions
+	void clear_drawing_objects(int mode);
 };
 
 extern PointDrawing point_drawing;

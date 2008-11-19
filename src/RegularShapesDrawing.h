@@ -20,7 +20,6 @@ private:
 	// Drawing's virtual functions
 	bool calculate_item(DigitizedPoint &end);
 	const std::list<HeeksObj*>& GetObjectsMade()const{return temp_object_in_list;}
-	void clear_drawing_objects(bool store_as_previous_objects);
 	int number_of_steps(){return 2;}
 	int step_to_go_to_after_last_step(){return 0;}
 	bool is_an_add_level(int level){return level == 1;}
@@ -42,6 +41,9 @@ public:
 	const wxChar* GetTitle(){return _("Regular shapes drawing");}
 	void GetTools(std::list<Tool*> *f_list, const wxPoint *p);
 	void GetProperties(std::list<Property *> *list);
+
+	// Drawing's virtual functions
+	void clear_drawing_objects(int mode);
 
 	void ClearSketch();
 };

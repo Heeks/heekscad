@@ -5,11 +5,6 @@
 #include "wx/print.h"
 #include "HeeksFrame.h"
 
-wxPrintData *g_printData = (wxPrintData*) NULL ;
-
-// Global page setup data
-wxPageSetupDialogData* g_pageSetupData = (wxPageSetupDialogData*) NULL;
-
 
 bool HeeksPrintout::OnPrintPage(int page)
 {
@@ -97,7 +92,7 @@ void HeeksPrintout::SetUnitsFactor()
 
 	m_scale = overallScalex;
 
-	wxRect fitRect = GetLogicalPageMarginsRect(*g_pageSetupData);
+	wxRect fitRect = GetLogicalPageMarginsRect(*wxGetApp().m_pageSetupData);
     m_xoff = fitRect.x + fitRect.width / 2;
     m_yoff = fitRect.y + fitRect.height / 2;
 }

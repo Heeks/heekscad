@@ -1134,6 +1134,7 @@ void CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, Tool* tool)
 	{
 		int id_used_for_button = wxGetApp().m_frame->AddToolBarTool(toolbar, tool->GetTitle(), *bitmap, tool->GetToolTip(), OnTool);
 		tool_map_for_OnTool.insert( std::pair<int, Tool*> ( id_used_for_button, tool ) );
+		delete bitmap;
 	}
 }
 
@@ -1201,13 +1202,9 @@ void CHeeksFrame::Draw(wxDC& dc)
 	wxGetApp().Draw(dc);
 }
 
-// defined in HeeksPrintout.cpp
-extern wxPrintData *g_printData;
-extern wxPageSetupDialogData* g_pageSetupData;
-
 void CHeeksFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
 {
-    wxPrintDialogData printDialogData(* g_printData);
+    wxPrintDialogData printDialogData(* wxGetApp().m_printData);
 
     wxPrinter printer(& printDialogData);
 	m_printout = new HeeksPrintout(_T("Heeks printout"));
@@ -1220,7 +1217,7 @@ void CHeeksFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
-        (*g_printData) = printer.GetPrintDialogData().GetPrintData();
+        (*wxGetApp().m_printData) = printer.GetPrintDialogData().GetPrintData();
     }
 
 	delete m_printout;
@@ -1230,7 +1227,7 @@ void CHeeksFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
 void CHeeksFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
 {
     // Pass two printout objects: for preview, and possible printing.
-    wxPrintDialogData printDialogData(* g_printData);
+    wxPrintDialogData printDialogData(* wxGetApp().m_printData);
     wxPrintPreview *preview = new wxPrintPreview(new HeeksPrintout, new HeeksPrintout, & printDialogData);
     if (!preview->Ok())
     {
@@ -1247,13 +1244,13 @@ void CHeeksFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
 
 void CHeeksFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
 {
-    (*g_pageSetupData) = *g_printData;
+    (*wxGetApp().m_pageSetupData) = *(wxGetApp().m_printData);
 
-    wxPageSetupDialog pageSetupDialog(this, g_pageSetupData);
+	wxPageSetupDialog pageSetupDialog(this, wxGetApp().m_pageSetupData);
     pageSetupDialog.ShowModal();
 
-    (*g_printData) = pageSetupDialog.GetPageSetupDialogData().GetPrintData();
-    (*g_pageSetupData) = pageSetupDialog.GetPageSetupDialogData();
+    (*wxGetApp().m_printData) = pageSetupDialog.GetPageSetupDialogData().GetPrintData();
+    (*wxGetApp().m_pageSetupData) = pageSetupDialog.GetPageSetupDialogData();
 }
 
 void CHeeksFrame::OnChangeBitmapSize()
