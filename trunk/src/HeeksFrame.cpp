@@ -1134,7 +1134,6 @@ void CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, Tool* tool)
 	{
 		int id_used_for_button = wxGetApp().m_frame->AddToolBarTool(toolbar, tool->GetTitle(), *bitmap, tool->GetToolTip(), OnTool);
 		tool_map_for_OnTool.insert( std::pair<int, Tool*> ( id_used_for_button, tool ) );
-		delete bitmap;
 	}
 }
 

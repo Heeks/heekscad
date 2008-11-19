@@ -8,8 +8,6 @@
 
 using namespace std;
 
-wxIcon* CStlSolid::m_icon = NULL;
-
 CStlSolid::CStlSolid(const HeeksColor* col):m_gl_list(0), color(*col){
 	m_title.assign(GetTypeString());
 }
@@ -140,15 +138,6 @@ const CStlSolid& CStlSolid::operator=(const CStlSolid& s)
 	KillGLLists();
 
 	return *this;
-}
-
-wxIcon* CStlSolid::GetIcon(){
-	if(m_icon == NULL)
-	{
-		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + _T("/icons/stlsolid.png"), wxBITMAP_TYPE_PNG);
-	}
-	return m_icon;
 }
 
 void CStlSolid::KillGLLists()

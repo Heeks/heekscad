@@ -9,29 +9,28 @@ Images::Images(){
 	m_image_list = NULL;
 }
 
-int Images::Add(wxIcon* hicon)
-{
-	if(hicon == NULL)return -1;
-	std::map<wxIcon*, int>::iterator FindIt;
-	if (image_map.size()>0) FindIt = image_map.find(hicon);
-	int image_index = 2;
-	if (image_map.size() == 0 || FindIt == image_map.end())
-	{
-		image_index = m_image_list->Add(*hicon);
-		FindIt = image_map.insert(std::pair<wxIcon*, int>(hicon, image_index)).first;
-		image_index = FindIt->second;
-	}
-	else image_index = FindIt->second;
-	return image_index;
-}
-
 int Images::GetImage(HeeksObj *object)
 {
-	if(m_image_list == NULL)
+	int image_index = -1;
+
+	if(m_image_list && object->GetType() != UnknownType)
 	{
-		return -1;
+		std::map<int, int>::iterator FindIt;
+		if (image_map.size()>0) FindIt = image_map.find(object->GetType());
+		if (image_map.size() == 0 || FindIt == image_map.end())
+		{
+#ifdef HEEKSCAD
+			wxString folder = wxGetApp().GetExeFolder();
+#else
+			wxString folder = theApp.GetDllFolder();
+#endif
+			image_index = m_image_list->Add(wxIcon(folder + _T("/icons/") + object->GetIcon() + _T(".png"), wxBITMAP_TYPE_PNG));
+			FindIt = image_map.insert(std::pair<int, int>(object->GetType(), image_index)).first;
+			image_index = FindIt->second;
+		}
+		else image_index = FindIt->second;
 	}
-	return Add(object->GetIcon());
+	return image_index;
 }
 
 bool Images::InitializeImageList(int width, int height){

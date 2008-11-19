@@ -18,7 +18,7 @@ public:
 	int GetType()const{return SketchType;}
 	long GetMarkingMask()const{return MARKING_FILTER_SKETCH;}
 	const wxChar* GetTypeString(void)const{return _("Sketch");}
-	wxIcon* GetIcon();
+	wxString GetIcon(){return _T("linedrawing");}
 	void GetProperties(std::list<Property *> *list);
 	HeeksObj *MakeACopy(void)const;
 	void CopyFrom(const HeeksObj* object){operator=(*((CSketch*)((ObjList*)object)));}

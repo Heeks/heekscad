@@ -10,8 +10,6 @@
 #include "../tinyxml/tinyxml.h"
 #include "Gripper.h"
 
-wxIcon* HILine::m_icon = NULL;
-
 HILine::HILine(const HILine &line){
 	operator=(line);
 }
@@ -84,15 +82,6 @@ bool HILine::ModifyByMatrix(const double* m){
 	A.Transform(mat);
 	B.Transform(mat);
 	return false;
-}
-
-wxIcon* HILine::GetIcon(){
-	if(m_icon == NULL)
-	{
-		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + _T("/icons/iline.png"), wxBITMAP_TYPE_PNG);
-	}
-	return m_icon;
 }
 
 void HILine::GetBox(CBox &box){

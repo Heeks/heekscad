@@ -7,9 +7,8 @@
 
 class Images{
 protected:
-	std::map<wxIcon*, int> image_map;
+	std::map<int, int> image_map; // maps object type to image index
 	bool InitializeImageList(int width, int height);
-	int Add(wxIcon* hicon);
 
 public:
 	wxImageList *m_image_list;

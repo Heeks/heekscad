@@ -41,7 +41,7 @@ public:
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
 	HeeksObj *MakeACopy(void)const{ return new CEdge(*this);}
-	wxIcon* GetIcon();
+	wxString GetIcon(){return _T("edge");}
 	const wxChar* GetTypeString(void)const{return _("Edge");}
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	void WriteXML(TiXmlElement *root);

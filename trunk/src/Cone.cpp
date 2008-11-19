@@ -9,20 +9,12 @@
 #include "MarkedList.h"
 #include "../tinyxml/tinyxml.h"
 
-wxIcon* CCone::m_icon = NULL;
-
 CCone::CCone(const gp_Ax2& pos, double r1, double r2, double height, const wxChar* title, const HeeksColor& col):m_pos(pos), m_r1(r1), m_r2(r2), m_height(height), CSolid(BRepPrimAPI_MakeCone(pos, r1, r2, height), title, col)
 {
 }
 
 CCone::CCone(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col):CSolid(solid, title, col), m_pos(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), m_r1(0.0), m_r2(0.0), m_height(0.0)
 {
-}
-
-wxIcon* CCone::GetIcon()
-{
-	if(m_icon == NULL){wxString exe_folder = wxGetApp().GetExeFolder();	m_icon = new wxIcon(exe_folder + _T("/icons/cone.png"), wxBITMAP_TYPE_PNG);}
-	return m_icon;
 }
 
 HeeksObj *CCone::MakeACopy(void)const

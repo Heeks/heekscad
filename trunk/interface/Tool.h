@@ -12,7 +12,7 @@ class Tool
 	wxBitmap* m_bitmap;
 
 	Tool():m_bitmap(NULL){}
-	virtual ~Tool(){}
+	virtual ~Tool(){if(m_bitmap)delete m_bitmap;}
 
 	virtual void Run() = 0;
 	virtual const wxChar* GetTitle() = 0;

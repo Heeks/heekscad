@@ -6,8 +6,6 @@
 #include "wxImageLoader.h"
 #include "../tinyxml/tinyxml.h"
 
-wxIcon* HImage::m_icon = NULL;
-
 HImage::HImage(const wxChar* file_path)
 {
 	m_rectangle_intialized = false;
@@ -141,15 +139,6 @@ void HImage::glCommands(bool select, bool marked, bool no_color)
 void HImage::GetBox(CBox &box)
 {
 	for(int i = 0; i<4; i++)box.Insert(m_x[i]);
-}
-
-wxIcon* HImage::GetIcon(){
-	if(m_icon == NULL)
-	{
-		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + _T("/icons/picture.png"), wxBITMAP_TYPE_PNG);
-	}
-	return m_icon;
 }
 
 wxString m_global_pic_string;

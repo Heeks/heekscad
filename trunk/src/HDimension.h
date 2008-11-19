@@ -38,7 +38,7 @@ public:
 	void GetBox(CBox &box);
 	const wxChar* GetTypeString(void)const{return _("Dimension");}
 	HeeksObj *MakeACopy(void)const;
-	wxIcon* GetIcon();
+	wxString GetIcon(){return _T("dimension");}
 	bool ModifyByMatrix(const double *mat);
 	void SetColor(const HeeksColor &col){m_color = col;}
 	const HeeksColor* GetColor()const{return &m_color;}
