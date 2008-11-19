@@ -68,7 +68,7 @@ void Drawing::AddPoint()
 		}
 	}
 	
-	clear_drawing_objects(calculated);
+	clear_drawing_objects(calculated ? 1:0);
 	SetStartPosUndoable(wxGetApp().m_digitizing->digitized_point);
 
 	int next_step = GetDrawStep() + 1;
@@ -87,6 +87,7 @@ void Drawing::OnMouse( wxMouseEvent& event )
 
 	if(LeftAndRightPressed(event, event_used))
 	{
+		clear_drawing_objects(2);
 		wxGetApp().SetInputMode(wxGetApp().m_select_mode);
 	}
 
@@ -139,6 +140,7 @@ void Drawing::OnKeyDown(wxKeyEvent& event)
 	case WXK_RETURN:
 	case WXK_ESCAPE:
 		// end drawing mode
+		clear_drawing_objects(2);
 		wxGetApp().SetInputMode(wxGetApp().m_select_mode);
 	}
 }
@@ -159,9 +161,11 @@ bool Drawing::OnModeChange(void){
 	return true;
 }
 
+static Drawing* drawing_for_tools = NULL;
+
 class EndDrawing:public Tool{
 public:
-	void Run(){wxGetApp().SetInputMode(wxGetApp().m_select_mode);}
+	void Run(){drawing_for_tools->clear_drawing_objects(2); wxGetApp().SetInputMode(wxGetApp().m_select_mode);}
 	const wxChar* GetTitle(){return _("Stop drawing");}
 	wxString BitmapPath(){return _T("enddraw");}
 	const wxChar* GetToolTip(){return _("Finish drawing");}
@@ -205,6 +209,7 @@ public:
 static GetPosTool get_pos_tool;
 
 void Drawing::GetTools(std::list<Tool*> *f_list, const wxPoint *p){
+	drawing_for_tools = this;
 	f_list->push_back(&end_drawing);
 	add_point.m_drawing = this;
 	f_list->push_back(&add_point);

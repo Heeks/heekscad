@@ -115,12 +115,12 @@ void CFace::glCommands(bool select, bool marked, bool no_color){
 					gp_Pnt v2 = Nodes(n2).Transformed(tr);
 					gp_Pnt v3 = Nodes(n3).Transformed(tr);
 
-					glNormal3f(myNormal(n1).X(), myNormal(n1).Y(), myNormal(n1).Z());
-					glVertex3f(v1.X(), v1.Y(), v1.Z());
-					glNormal3f(myNormal(n2).X(), myNormal(n2).Y(), myNormal(n2).Z());
-					glVertex3f(v2.X(), v2.Y(), v2.Z());
-					glNormal3f(myNormal(n3).X(), myNormal(n3).Y(), myNormal(n3).Z());
-					glVertex3f(v3.X(), v3.Y(), v3.Z());
+					glNormal3f((float)(myNormal(n1).X()), (float)(myNormal(n1).Y()), (float)(myNormal(n1).Z()));
+					glVertex3f((float)(v1.X()), (float)(v1.Y()), (float)(v1.Z()));
+					glNormal3f((float)(myNormal(n2).X()), (float)(myNormal(n2).Y()), (float)(myNormal(n2).Z()));
+					glVertex3f((float)(v2.X()), (float)(v2.Y()), (float)(v2.Z()));
+					glNormal3f((float)(myNormal(n3).X()), (float)(myNormal(n3).Y()), (float)(myNormal(n3).Z()));
+					glVertex3f((float)(v3.X()), (float)(v3.Y()), (float)(v3.Z()));
 				}
 			}
 		}

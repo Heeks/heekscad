@@ -15,14 +15,14 @@ ToolImage::ToolImage(const wxString& name):wxImage(theApp.GetDllFolder() + _T("/
 {
 	int width = GetWidth();
 	int height = GetHeight();
-	int new_width = m_button_scale * width;
-	int new_height = m_button_scale * height;
+	int new_width = (int)(m_button_scale * width);
+	int new_height = (int)(m_button_scale * height);
 	Rescale(new_width, new_height);
 }
 
 int ToolImage::GetBitmapSize()
 {
-	return m_button_scale * full_size;
+	return (int)(m_button_scale * full_size);
 }
 
 void ToolImage::SetBitmapSize(int size)

@@ -35,6 +35,7 @@ private:
 	MainHistory *history;
 	std::map< int, std::map<int, HeeksObj*> > used_ids; // map of group type ( usually same as object type ) to "map of ID to object"
 	std::map< int, int > next_id_map;
+	std::map< std::string, HeeksObj*(*)(TiXmlElement* pElem) > xml_read_fn_map;
 
 	void create_font();
 
@@ -107,6 +108,8 @@ public:
 	GLFONT *m_gl_font;
 	unsigned int m_font_tex_number;
 	bool m_print_scaled_to_page;
+	wxPrintData *m_printData;
+	wxPageSetupDialogData* m_pageSetupData;
 
 	// HeeksObj's virtual functions
 	void GetBox(CBox &box);

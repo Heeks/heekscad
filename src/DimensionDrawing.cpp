@@ -74,8 +74,9 @@ bool DimensionDrawing::calculate_item(DigitizedPoint &end)
 	return true;
 }
 
-void DimensionDrawing::clear_drawing_objects(bool store_as_previous_objects)
+void DimensionDrawing::clear_drawing_objects(int mode)
 {
+	if(temp_object && mode == 2)delete temp_object;
 	temp_object = NULL;
 	temp_object_in_list.clear();
 }

@@ -28,7 +28,6 @@ private:
 	// Drawing's virtual functions
 	bool calculate_item(DigitizedPoint &end);
 	const std::list<HeeksObj*>& GetObjectsMade()const{return temp_object_in_list;}
-	void clear_drawing_objects(bool store_as_previous_objects);
 	void set_previous_direction();
 	int number_of_steps();
 	int step_to_go_to_after_last_step();
@@ -58,6 +57,9 @@ public:
 	void GetProperties(std::list<Property *> *list);
 	void GetOptions(std::list<Property *> *list);
 	bool OnModeChange(void);
+
+	// Drawing's virtual functions
+	void clear_drawing_objects(int mode);
 };
 
 extern LineArcDrawing line_strip;
