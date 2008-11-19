@@ -33,7 +33,6 @@ protected:
 	virtual bool calculate_item(DigitizedPoint &end){return false;}
 	virtual void before_add_item(){}
 	virtual const std::list<HeeksObj*>& GetObjectsMade()const = 0;
-	virtual void clear_drawing_objects(bool store_as_previous_objects = false){}
 	virtual void set_previous_direction(){}
 	virtual int number_of_steps(){return 2;}
 	virtual int step_to_go_to_after_last_step(){return 0;}
@@ -66,6 +65,7 @@ public:
 
 	// Drawing's virtual functions
 	virtual void AddPoint();
+	virtual void clear_drawing_objects(int mode = 0){} // 0 - set temporary objects to NULL,  1 - store the temporary objects as previous_list, 2 - delete and set to NULL
 
 	int GetDrawStep()const{return current_view_stuff->draw_step;}
 	void SetDrawStepUndoable(int s);

@@ -36,8 +36,9 @@ bool PointDrawing::calculate_item(DigitizedPoint &end)
 	return true;
 }
 
-void PointDrawing::clear_drawing_objects(bool store_as_previous_objects)
+void PointDrawing::clear_drawing_objects(int mode)
 {
+	if(mode == 2 && temp_object)delete temp_object;
 	temp_object = NULL;
 	temp_object_in_list.clear();
 }

@@ -418,8 +418,9 @@ void RegularShapesDrawing::CalculateObround(const gp_Pnt& p0, const gp_Pnt& p1, 
 	}
 }
 
-void RegularShapesDrawing::clear_drawing_objects(bool store_as_previous_objects)
+void RegularShapesDrawing::clear_drawing_objects(int mode)
 {
+	if(mode == 2 && temp_object)delete temp_object;
 	temp_object = NULL;
 	temp_object_in_list.clear();
 }

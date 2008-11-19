@@ -62,13 +62,22 @@
 #include <sstream>
 using namespace std;
 
-extern wxPrintData *g_printData;
-extern wxPageSetupDialogData* g_pageSetupData;
-
 IMPLEMENT_APP(HeeksCADapp)
+
+int MyAllocHook( int allocType, void *userData, size_t size, int blockType, long requestNumber, const unsigned char *filename, int lineNumber)
+{
+	if (size==8 && requestNumber > 14000 && requestNumber < 15000)
+	{
+		int here = 0;
+		here = 3;
+	}
+	return TRUE;
+}
 
 HeeksCADapp::HeeksCADapp(): ObjList()
 {
+	_CrtSetAllocHook(MyAllocHook);
+
 	m_version_number = _T("0 4 0");
 	m_geom_tol = 0.001;
 	background_color = HeeksColor(0, 0, 0);
@@ -119,6 +128,8 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_font_tex_number = 0;
 	m_gl_font = NULL;
 	m_locale_initialised = false;
+	m_printData = NULL;
+	m_pageSetupData = NULL;
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -136,6 +147,8 @@ HeeksCADapp::~HeeksCADapp()
 	delete viewzooming;
 	delete m_ruler;
 	if(m_gl_font)delete m_gl_font;
+	if(m_printData)delete m_printData;
+	if(m_pageSetupData)delete m_pageSetupData;
 }
 
 bool HeeksCADapp::OnInit()
@@ -154,13 +167,13 @@ bool HeeksCADapp::OnInit()
 #endif
 	ClearHistory();
 
-    g_printData = new wxPrintData;
-    g_pageSetupData = new wxPageSetupDialogData;
+    m_printData = new wxPrintData;
+    m_pageSetupData = new wxPageSetupDialogData;
     // copy over initial paper size from print record
-    (*g_pageSetupData) = *g_printData;
+    (*m_pageSetupData) = *m_printData;
     // Set some initial page margins in mm. 
-    g_pageSetupData->SetMarginTopLeft(wxPoint(15, 15));
-    g_pageSetupData->SetMarginBottomRight(wxPoint(15, 15));
+    m_pageSetupData->SetMarginTopLeft(wxPoint(15, 15));
+    m_pageSetupData->SetMarginBottomRight(wxPoint(15, 15));
 
 	int width = 600;
 	int height = 400;
@@ -423,8 +436,6 @@ void HeeksCADapp::Reset(){
 	ResetIDs();
 }
 
-static std::map< std::string, HeeksObj*(*)(TiXmlElement* pElem) > *xml_read_fn_map = NULL;
-
 static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 {
 	std::map<int, CShapeData> index_map;
@@ -502,39 +513,38 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 void HeeksCADapp::InitializeXMLFunctions()
 {
 	// set up function map
-	if(xml_read_fn_map == NULL)
+	if(xml_read_fn_map.size() == 0)
 	{
-		xml_read_fn_map = new std::map< std::string, HeeksObj*(*)(TiXmlElement* pElem) >;
-		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Line", HLine::ReadFromXMLElement ) );
-		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Arc", HArc::ReadFromXMLElement ) );
-		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "InfiniteLine", HILine::ReadFromXMLElement ) );
-		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Circle", HCircle::ReadFromXMLElement ) );
-		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Point", HPoint::ReadFromXMLElement ) );
-		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Image", HImage::ReadFromXMLElement ) );
-		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Sketch", CSketch::ReadFromXMLElement ) );
-		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "STEP_file", ReadSTEPFileFromXMLElement ) );
-		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "STLSolid", CStlSolid::ReadFromXMLElement ) );
-		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "CoordinateSystem", CoordinateSystem::ReadFromXMLElement ) );
-		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Text", HText::ReadFromXMLElement ) );
-		xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Dimension", HDimension::ReadFromXMLElement ) );
+		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Line", HLine::ReadFromXMLElement ) );
+		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Arc", HArc::ReadFromXMLElement ) );
+		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "InfiniteLine", HILine::ReadFromXMLElement ) );
+		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Circle", HCircle::ReadFromXMLElement ) );
+		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Point", HPoint::ReadFromXMLElement ) );
+		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Image", HImage::ReadFromXMLElement ) );
+		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Sketch", CSketch::ReadFromXMLElement ) );
+		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "STEP_file", ReadSTEPFileFromXMLElement ) );
+		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "STLSolid", CStlSolid::ReadFromXMLElement ) );
+		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "CoordinateSystem", CoordinateSystem::ReadFromXMLElement ) );
+		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Text", HText::ReadFromXMLElement ) );
+		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Dimension", HDimension::ReadFromXMLElement ) );
 	}
 }
 
 void HeeksCADapp::RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem))
 {
-	if(xml_read_fn_map->find(type_name) != xml_read_fn_map->end()){
+	if(xml_read_fn_map.find(type_name) != xml_read_fn_map.end()){
 		wxMessageBox(_T("Error - trying to register an XML read function for an exisiting type"));
 		return;
 	}
-	xml_read_fn_map->insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( type_name, read_xml_function ) );
+	xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( type_name, read_xml_function ) );
 }
 
 HeeksObj* HeeksCADapp::ReadXMLElement(TiXmlElement* pElem)
 {
 	std::string name(pElem->Value());
 
-	std::map< std::string, HeeksObj*(*)(TiXmlElement* pElem) >::iterator FindIt = xml_read_fn_map->find( name );
-	if(FindIt != xml_read_fn_map->end())
+	std::map< std::string, HeeksObj*(*)(TiXmlElement* pElem) >::iterator FindIt = xml_read_fn_map.find( name );
+	if(FindIt != xml_read_fn_map.end())
 	{
 		HeeksObj* object = (*(FindIt->second))(pElem);
 		return object;
