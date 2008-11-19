@@ -11,8 +11,6 @@
 #include "PropertyVertex.h"
 #include "Gripper.h"
 
-wxIcon* HArc::m_icon = NULL;
-
 HArc::HArc(const HArc &line){
 	operator=(line);
 }
@@ -124,15 +122,6 @@ void HArc::Draw(wxDC& dc)
 HeeksObj *HArc::MakeACopy(void)const{
 		HArc *new_object = new HArc(*this);
 		return new_object;
-}
-
-wxIcon* HArc::GetIcon(){
-	if(m_icon == NULL)
-	{
-		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + _T("/icons/arc.png"), wxBITMAP_TYPE_PNG);
-	}
-	return m_icon;
 }
 
 bool HArc::ModifyByMatrix(const double* m){

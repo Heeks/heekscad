@@ -9,20 +9,12 @@
 #include "MarkedList.h"
 #include "../tinyxml/tinyxml.h"
 
-wxIcon* CCuboid::m_icon = NULL;
-
 CCuboid::CCuboid(const gp_Ax2& pos, double x, double y, double z, const wxChar* title, const HeeksColor& col):m_pos(pos), m_x(x), m_y(y), m_z(z), CSolid(BRepPrimAPI_MakeBox(pos, x, y, z), title, col)
 {
 }
 
 CCuboid::CCuboid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col):CSolid(solid, title, col), m_pos(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), m_x(0.0), m_y(0.0), m_z(0.0)
 {
-}
-
-wxIcon* CCuboid::GetIcon()
-{
-	if(m_icon == NULL){wxString exe_folder = wxGetApp().GetExeFolder();	m_icon = new wxIcon(exe_folder + _T("/icons/cube.png"), wxBITMAP_TYPE_PNG);}
-	return m_icon;
 }
 
 HeeksObj *CCuboid::MakeACopy(void)const

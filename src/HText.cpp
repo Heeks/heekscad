@@ -6,9 +6,6 @@
 #include "../tinyxml/tinyxml.h"
 #include "Gripper.h"
 
-wxIcon* HText::m_icon = NULL;
-
-
 HText::HText(const gp_Trsf &trsf, const wxString &text, const HeeksColor* col): m_trsf(trsf), m_text(text), m_color(*col)
 {
 }
@@ -72,12 +69,6 @@ void HText::GetBox(CBox &box)
 HeeksObj *HText::MakeACopy(void)const
 {
 	return new HText(*this);
-}
-
-wxIcon* HText::GetIcon()
-{
-	if(m_icon == NULL)m_icon = new wxIcon(wxGetApp().GetExeFolder() + _T("/icons/text.png"), wxBITMAP_TYPE_PNG);
-	return m_icon;
 }
 
 bool HText::ModifyByMatrix(const double *m)

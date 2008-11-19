@@ -9,19 +9,8 @@
 #include "ObjPropsCanvas.h"
 #include "../tinyxml/tinyxml.h"
 
-wxIcon* CoordinateSystem::m_icon = NULL;
 double CoordinateSystem::size = 30;
 bool CoordinateSystem::size_is_pixels = true;
-
-wxIcon* CoordinateSystem::GetIcon()
-{
-	if(m_icon == NULL)
-	{
-		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + _T("/icons/coordsys.png"), wxBITMAP_TYPE_PNG);
-	}
-	return m_icon;
-}
 
 CoordinateSystem::CoordinateSystem(const wxString& str, const gp_Pnt &o, const gp_Dir &x, const gp_Dir &y)
 {

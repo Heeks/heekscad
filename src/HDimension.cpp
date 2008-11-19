@@ -6,9 +6,6 @@
 #include "../tinyxml/tinyxml.h"
 #include "Gripper.h"
 
-wxIcon* HDimension::m_icon = NULL;
-
-
 HDimension::HDimension(const gp_Trsf &trsf, const wxString &text, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, DimensionMode mode, const HeeksColor* col): m_trsf(trsf), m_text(text), m_p0(p0), m_p1(p1), m_p2(p2), m_mode(mode), m_color(*col), m_scale(1.0)
 {
 }
@@ -98,12 +95,6 @@ void HDimension::GetBox(CBox &box)
 HeeksObj *HDimension::MakeACopy(void)const
 {
 	return new HDimension(*this);
-}
-
-wxIcon* HDimension::GetIcon()
-{
-	if(m_icon == NULL)m_icon = new wxIcon(wxGetApp().GetExeFolder() + _T("/icons/dimension.png"), wxBITMAP_TYPE_PNG);
-	return m_icon;
 }
 
 bool HDimension::ModifyByMatrix(const double *m)

@@ -16,8 +16,6 @@
 #include <BRepFilletAPI_MakeFillet.hxx>
 #include <BRepAdaptor_Curve.hxx>
 
-wxIcon* CEdge::m_icon = NULL;
-
 CEdge::CEdge(const TopoDS_Edge &edge):m_topods_edge(edge){
 #if _DEBUG
 	GetCurveParams2(&m_start_u, &m_end_u, &m_isClosed, &m_isPeriodic);
@@ -94,15 +92,6 @@ void CEdge::glCommands(bool select, bool marked, bool no_color){
 }
 
 void CEdge::GetBox(CBox &box){
-}
-
-wxIcon* CEdge::GetIcon(){
-	if(m_icon == NULL)
-	{
-		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + _T("/icons/edge.png"), wxBITMAP_TYPE_PNG);
-	}
-	return m_icon;
 }
 
 class BlendTool:public Tool

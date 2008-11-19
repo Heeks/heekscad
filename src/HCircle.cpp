@@ -11,8 +11,6 @@
 #include "HArc.h"
 #include "Gripper.h"
 
-wxIcon* HCircle::m_icon = NULL;
-
 HCircle::HCircle(const HCircle &c){
 	operator=(c);
 }
@@ -103,15 +101,6 @@ void HCircle::glCommands(bool select, bool marked, bool no_color){
 HeeksObj *HCircle::MakeACopy(void)const{
 		HCircle *new_object = new HCircle(*this);
 		return new_object;
-}
-
-wxIcon* HCircle::GetIcon(){
-	if(m_icon == NULL)
-	{
-		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + _T("/icons/circle.png"), wxBITMAP_TYPE_PNG);
-	}
-	return m_icon;
 }
 
 bool HCircle::ModifyByMatrix(const double* m){

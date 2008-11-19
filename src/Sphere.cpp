@@ -10,20 +10,12 @@
 #include "MarkedList.h"
 #include "../tinyxml/tinyxml.h"
 
-wxIcon* CSphere::m_icon = NULL;
-
 CSphere::CSphere(const gp_Pnt& pos, double radius, const wxChar* title, const HeeksColor& col):m_pos(pos), m_radius(radius), CSolid(BRepPrimAPI_MakeSphere(pos, radius), title, col)
 {
 }
 
 CSphere::CSphere(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col):CSolid(solid, title, col), m_pos(0, 0, 0), m_radius(0.0)
 {
-}
-
-wxIcon* CSphere::GetIcon()
-{
-	if(m_icon == NULL){wxString exe_folder = wxGetApp().GetExeFolder();	m_icon = new wxIcon(exe_folder + _T("/icons/sphere.png"), wxBITMAP_TYPE_PNG);}
-	return m_icon;
 }
 
 HeeksObj *CSphere::MakeACopy(void)const

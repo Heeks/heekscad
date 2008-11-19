@@ -37,7 +37,7 @@ public:
 	long GetMarkingMask()const{return MARKING_FILTER_FACE;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
-	wxIcon* GetIcon();
+	wxString GetIcon(){return _T("face");}
 	HeeksObj *MakeACopy(void)const{ return new CFace(*this);}
 	const wxChar* GetTypeString(void)const{return _("Face");}
 	void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true);

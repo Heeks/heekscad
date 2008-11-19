@@ -66,7 +66,7 @@ IMPLEMENT_APP(HeeksCADapp)
 
 int MyAllocHook( int allocType, void *userData, size_t size, int blockType, long requestNumber, const unsigned char *filename, int lineNumber)
 {
-	if (size==8 && requestNumber > 14000 && requestNumber < 15000)
+	if (size==24 && requestNumber > 14000 && requestNumber < 18000)
 	{
 		int here = 0;
 		here = 3;

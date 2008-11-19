@@ -19,8 +19,6 @@
 #include <BRepAdaptor_Surface.hxx>
 #include <GeomAPI_ProjectPointOnSurf.hxx>
 
-wxIcon* CFace::m_icon = NULL;
-
 CFace::CFace(const TopoDS_Face &face):m_topods_face(face), m_temp_attr(0){
 #if _DEBUG
 	gp_Pnt pos;
@@ -173,15 +171,6 @@ void CFace::GetBox(CBox &box){
 	}
 
 	box.Insert(m_box);
-}
-
-wxIcon* CFace::GetIcon(){
-	if(m_icon == NULL)
-	{
-		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + _T("/icons/face.png"), wxBITMAP_TYPE_PNG);
-	}
-	return m_icon;
 }
 
 class OffsetFaceTool:public Tool{

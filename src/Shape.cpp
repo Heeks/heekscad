@@ -36,30 +36,6 @@
 #include "../interface/Tool.h"
 #include "../tinyxml/tinyxml.h"
 
-wxIcon* CFaceList::m_icon = NULL;
-
-wxIcon* CFaceList::GetIcon()
-{
-	if(m_icon == NULL)
-	{
-		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + _T("/icons/faces.png"), wxBITMAP_TYPE_PNG);
-	}
-	return m_icon;
-}
-
-wxIcon* CEdgeList::m_icon = NULL;
-
-wxIcon* CEdgeList::GetIcon()
-{
-	if(m_icon == NULL)
-	{
-		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + _T("/icons/edges.png"), wxBITMAP_TYPE_PNG);
-	}
-	return m_icon;
-}
-
 // static member variable
 bool CShape::m_solids_found = false;
 

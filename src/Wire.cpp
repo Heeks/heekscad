@@ -4,21 +4,10 @@
 #include "../interface/Tool.h"
 #include "BRepOffsetAPI_MakeOffset.hxx"
 
-wxIcon* CWire::m_icon = NULL;
-
 CWire::CWire(const TopoDS_Wire &wire, const wxChar* title):CShape(wire, title, false){
 }
 
 CWire::~CWire(){
-}
-
-wxIcon* CWire::GetIcon(){
-	if(m_icon == NULL)
-	{
-		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + _T("/icons/wire.png"), wxBITMAP_TYPE_PNG);
-	}
-	return m_icon;
 }
 
 static wxString title_for_OffsetWireTool;
