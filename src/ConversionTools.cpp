@@ -15,10 +15,11 @@
 #include "Face.h"
 #include "Edge.h"
 #include "Shape.h"
+#include "Sketch.h"
 
 void GetConversionMenuTools(std::list<Tool*>* t_list){
 	bool lines_or_arcs_in_marked_list = false;
-	bool sketch_in_marked_list = false;
+	int sketches_in_marked_list = 0;
 
 	// check to see what types have been marked
 	std::list<HeeksObj*>::const_iterator It;
@@ -30,13 +31,17 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 				lines_or_arcs_in_marked_list = true;
 				break;
 			case SketchType:
-				sketch_in_marked_list = true;
+				sketches_in_marked_list++;
 				break;
 		}
 	}
 
-	if(sketch_in_marked_list){
+	if(sketches_in_marked_list > 0){
 		t_list->push_back(new ConvertSketchToFace);
+	}
+
+	if(sketches_in_marked_list > 1){
+		t_list->push_back(new CombineSketches);
 	}
 }
 
@@ -150,4 +155,33 @@ void ConvertSketchToFace::Run(){
 			}
 		}
 	}
+}
+
+void CombineSketches::Run(){
+	CSketch* sketch1 = NULL;
+	std::list<HeeksObj*>::const_iterator It;
+	std::list<HeeksObj*> copy_of_marked_list = wxGetApp().m_marked_list->list();
+
+	for(It = copy_of_marked_list.begin(); It != copy_of_marked_list.end(); It++){
+		HeeksObj* object = *It;
+		if(object->GetType() == SketchType){
+			if(sketch1)
+			{
+				std::list<HeeksObj*> lines_and_arcs;
+				for(HeeksObj* o = object->GetFirstChild(); o; o = object->GetNextChild())
+				{
+					lines_and_arcs.push_back(o);
+				}
+				wxGetApp().DeleteUndoably(lines_and_arcs);
+				wxGetApp().DeleteUndoably(object);
+				wxGetApp().AddUndoably(lines_and_arcs, sketch1);
+			}
+			else
+			{
+				sketch1 = (CSketch*)object;
+			}
+		}
+	}
+
+	wxGetApp().Repaint();
 }
