@@ -88,7 +88,7 @@ public:
 	virtual bool GetScaleAboutMatrix(double *m);
 	virtual void GetProperties(std::list<Property *> *list);
 	virtual void OnApplyProperties(){}
-	virtual wxIcon* GetIcon(){return NULL;}
+	virtual wxString GetIcon(){return _T("");}
 	virtual int Intersects(const HeeksObj *object, std::list< double > *rl)const{return 0;}
 	virtual bool FindNearPoint(const double* ray_start, const double* ray_direction, double *point){return false;}
 	virtual bool FindPossTangentPoint(const double* ray_start, const double* ray_direction, double *point){return false;}

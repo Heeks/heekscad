@@ -5,8 +5,6 @@
 #include "../interface/PropertyInt.h"
 #include "../tinyxml/tinyxml.h"
 
-wxIcon* CSketch::m_icon = NULL;
-
 CSketch::CSketch()
 {
 }
@@ -26,15 +24,6 @@ const CSketch& CSketch::operator=(const CSketch& c)
 	ObjList::operator =(c);
 
 	return *this;
-}
-
-wxIcon* CSketch::GetIcon(){
-	if(m_icon == NULL)
-	{
-		wxString exe_folder = wxGetApp().GetExeFolder();
-		m_icon = new wxIcon(exe_folder + _T("/icons/linedrawing.png"), wxBITMAP_TYPE_PNG);
-	}
-	return m_icon;
 }
 
 void CSketch::GetProperties(std::list<Property *> *list)

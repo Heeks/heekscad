@@ -36,7 +36,7 @@ public:
 	long GetMarkingMask()const{return MARKING_FILTER_IMAGE;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
-	wxIcon* GetIcon();
+	wxString GetIcon(){return _T("picture");}
 	const wxChar* GetShortString(void)const;
 	const wxChar* GetTypeString(void)const{return _("Image");}
 	HeeksObj *MakeACopy(void)const;

@@ -19,7 +19,7 @@ public:
 
 	// HeeksObj's virtual functions
 	const wxChar* GetTypeString(void)const{return _("Cone");}
-	wxIcon* GetIcon();
+	wxString GetIcon(){return _T("cone");}
 	HeeksObj *MakeACopy(void)const;
 	bool ModifyByMatrix(const double* m);
 	void GetProperties(std::list<Property *> *list);

@@ -9,20 +9,12 @@
 #include "MarkedList.h"
 #include "../tinyxml/tinyxml.h"
 
-wxIcon* CCylinder::m_icon = NULL;
-
 CCylinder::CCylinder(const gp_Ax2& pos, double radius, double height, const wxChar* title, const HeeksColor& col):m_pos(pos), m_radius(radius), m_height(height), CSolid(BRepPrimAPI_MakeCylinder(pos, radius, height), title, col)
 {
 }
 
 CCylinder::CCylinder(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col):CSolid(solid, title, col), m_pos(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), m_radius(0.0), m_height(0.0)
 {
-}
-
-wxIcon* CCylinder::GetIcon()
-{
-	if(m_icon == NULL){wxString exe_folder = wxGetApp().GetExeFolder();	m_icon = new wxIcon(exe_folder + _T("/icons/cyl.png"), wxBITMAP_TYPE_PNG);}
-	return m_icon;
 }
 
 HeeksObj *CCylinder::MakeACopy(void)const
