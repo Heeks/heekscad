@@ -1,6 +1,7 @@
 // Face.cpp
 #include "stdafx.h"
 #include "Face.h"
+#include "Loop.h"
 #include "Shape.h"
 #include "Solid.h"
 #include <BRepMesh.hxx>
@@ -15,9 +16,13 @@
 #include <BRepBuilderAPI_Transform.hxx>
 #include <BRepOffsetAPI_MakeOffset.hxx>
 #include "../interface/Tool.h"
+#include "../interface/PropertyString.h"
 #include <TopTools_ListIteratorOfListOfShape.hxx>
 #include <BRepAdaptor_Surface.hxx>
 #include <GeomAPI_ProjectPointOnSurf.hxx>
+#include <gp_Sphere.hxx>
+#include <gp_Cone.hxx>
+#include <BRepExtrema_DistShapeShape.hxx>
 
 CFace::CFace(const TopoDS_Face &face):m_topods_face(face), m_temp_attr(0){
 #if _DEBUG
@@ -55,12 +60,89 @@ static Standard_Boolean TriangleIsValid(const gp_Pnt& P1, const gp_Pnt& P2, cons
   
 }
 
+static void glLineAtPoint(const gp_Dir& norm, const gp_Pnt& pos)
+{
+	glBegin(GL_LINES);
+	glVertex3d(pos.X(), pos.Y(), pos.Z());
+	glVertex3d(pos.X() + norm.X(), pos.Y() + norm.Y(), pos.Z() + norm.Z());
+	glEnd();
+}
+
 void CFace::glCommands(bool select, bool marked, bool no_color){
 	bool owned_by_solid = false;
 	if(m_owner && m_owner->m_owner && m_owner->m_owner->GetType() == SolidType) {
 		// using existing BRepMesh::Mesh
 		// use solid's colour
 		owned_by_solid = true;
+#if _DEBUG
+		// test to show surface type
+		switch(GetSurfaceType())
+		{
+		case GeomAbs_Plane:
+			HeeksColor(92, 92, 192).glMaterial(1);
+			break;
+		case GeomAbs_Cylinder:
+			HeeksColor(128, 255, 128).glMaterial(1);
+			break;
+
+		case GeomAbs_Cone:
+			HeeksColor(128, 128, 255).glMaterial(1);
+			break;
+
+		case GeomAbs_Sphere:
+			HeeksColor(128, 255, 255).glMaterial(1);
+			break;
+
+		case GeomAbs_Torus:
+			HeeksColor(255, 255, 128).glMaterial(1);
+			break;
+
+		case GeomAbs_BezierSurface:
+			HeeksColor(0, 128, 128).glMaterial(1);
+			break;
+
+		case GeomAbs_BSplineSurface:
+			{
+				if(marked)
+				{
+					HeeksColor(255, 0, 0).glMaterial(1);
+					// show U and V parameters
+					double uv_box[4];
+					GetUVBox(uv_box);
+					gp_Dir norm;
+					gp_Pnt pos;
+					glDisable(GL_LIGHTING);
+					glColor3ub(255, 0, 0);
+					norm = GetNormalAtUV(uv_box[0], uv_box[1], &pos);
+					glLineAtPoint(norm, pos);
+					glColor3ub(0, 255, 0);
+					norm = GetNormalAtUV(uv_box[2], uv_box[1], &pos);
+					glLineAtPoint(norm, pos);
+					glColor3ub(0, 0, 255);
+					norm = GetNormalAtUV(uv_box[2], uv_box[3], &pos);
+					glLineAtPoint(norm, pos);
+					glColor3ub(0, 0, 0);
+					norm = GetNormalAtUV(uv_box[0], uv_box[3], &pos);
+					glLineAtPoint(norm, pos);
+					glEnable(GL_LIGHTING);
+				}
+				else HeeksColor(128, 0, 128).glMaterial(1);
+			}
+			break;
+
+		case GeomAbs_SurfaceOfRevolution:
+			HeeksColor(128, 128, 0).glMaterial(1);
+			break;
+
+		case GeomAbs_SurfaceOfExtrusion:
+			HeeksColor(128, 0, 0).glMaterial(1);
+			break;
+
+		default:
+			HeeksColor(0, 0, 0).glMaterial(1);
+			break;
+		}
+#endif
 	}
 	else {
 		// clean mesh
@@ -171,33 +253,6 @@ void CFace::GetBox(CBox &box){
 	}
 
 	box.Insert(m_box);
-}
-
-class OffsetFaceTool:public Tool{
-public:
-	CFace* m_face;
-	OffsetFaceTool():m_face(NULL){}
-
-	// Tool's virtual functions
-	void Run(){
-		BRepOffsetAPI_MakeOffset make_operation(m_face->Face());
-		make_operation.Perform(-6.0);
-		HeeksObj* new_object = CShape::MakeObject(make_operation.Shape(), _("Result of Face Offset"), SOLID_TYPE_UNKNOWN, HeeksColor(12, 67, 99));
-		if(make_operation.Generated(m_face->Face()).Extent() > 0){
-			wxMessageBox(_("Generated"));
-		}
-		wxGetApp().AddUndoably(new_object, NULL, NULL);
-		wxGetApp().DeleteUndoably(m_face);
-	}
-	const wxChar* GetTitle(){ return _("Offset Face");}
-};
-
-static OffsetFaceTool offset_face_tool;
-
-void CFace::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
-{
-	offset_face_tool.m_face = this;
-	t_list->push_back(&offset_face_tool);
 }
 
 bool CFace::ModifyByMatrix(const double *m){
@@ -345,6 +400,18 @@ bool CFace::GetUVAtPoint(const gp_Pnt &pos, double *u, double *v)const{
 	return false;
 }
 
+bool CFace::GetClosestPoint(const gp_Pnt &pos, gp_Pnt &closest_pnt)const{
+	Handle(Geom_Surface) surface = BRep_Tool::Surface(m_topods_face);
+	GeomAPI_ProjectPointOnSurf projection( pos, surface);
+
+	if(projection.NbPoints() > 0)
+	{               
+		closest_pnt = projection.NearestPoint();
+		return true;
+	}     
+	return false;
+}
+
 double CFace::Area()const{
 	GProp_GProps System;
 	BRepGProp::SurfaceProperties(m_topods_face,System);
@@ -354,6 +421,13 @@ double CFace::Area()const{
 void CFace::WriteXML(TiXmlElement *root)
 {
 	CShape::m_solids_found = true;
+}
+
+void CFace::GetProperties(std::list<Property *> *list)
+{
+	__super::GetProperties(list);
+
+	list->push_back(new PropertyString(_("surface type"), GetSurfaceTypeStr(), NULL));
 }
 
 int CFace::GetSurfaceType()
@@ -376,6 +450,55 @@ int CFace::GetSurfaceType()
 	return surface_type;
 }
 
+wxString CFace::GetSurfaceTypeStr()
+{
+	wxString surface_type = _("unknown");
+	switch(GetSurfaceType())
+	{
+	case GeomAbs_Plane:
+		surface_type = _("plane");
+		break;
+
+	case GeomAbs_Cylinder:
+		surface_type = _("cylinder");
+		break;
+
+	case GeomAbs_Cone:
+		surface_type = _("cone");
+		break;
+
+	case GeomAbs_Sphere:
+		surface_type = _("sphere");
+		break;
+
+	case GeomAbs_Torus:
+		surface_type = _("torus");
+		break;
+
+	case GeomAbs_BezierSurface:
+		surface_type = _("bezier");
+		break;
+
+	case GeomAbs_BSplineSurface:
+		surface_type = _("bspline");
+		break;
+
+	case GeomAbs_SurfaceOfRevolution:
+		surface_type = _("revolution");
+		break;
+
+	case GeomAbs_SurfaceOfExtrusion:
+		surface_type = _("extrusion");
+		break;
+
+	case GeomAbs_OffsetSurface:
+		surface_type = _("offset");
+		break;
+	}
+
+	return surface_type;
+}
+
 void CFace::GetPlaneParams(gp_Pln &p)
 {
 	BRepAdaptor_Surface surface(m_topods_face, Standard_True);
@@ -386,6 +509,18 @@ void CFace::GetCylinderParams(gp_Cylinder &c)
 {
 	BRepAdaptor_Surface surface(m_topods_face, Standard_True);
 	c = surface.Cylinder();
+}
+
+void CFace::GetSphereParams(gp_Sphere &s)
+{
+	BRepAdaptor_Surface surface(m_topods_face, Standard_True);
+	s = surface.Sphere();
+}
+
+void CFace::GetConeParams(gp_Cone &c)
+{
+	BRepAdaptor_Surface surface(m_topods_face, Standard_True);
+	c = surface.Cone();
 }
 
 CEdge* CFace::GetFirstEdge()

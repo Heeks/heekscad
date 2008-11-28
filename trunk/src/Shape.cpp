@@ -155,9 +155,13 @@ void CShape::create_faces_and_edges()
 	{
 		CFace* face = (CFace*)object;
 		const TopoDS_Shape &F = face->Face();
+
+		TopoDS_Wire outerWire=BRepTools::OuterWire(TopoDS::Face(F));
+
 		for (TopExp_Explorer expWire(F, TopAbs_WIRE); expWire.More(); expWire.Next())
 		{
 			const TopoDS_Shape &W = expWire.Current();
+			bool is_outer = W.IsSame(outerWire) != 0;
 			std::list<CEdge*> edges;
 
 			for (TopExp_Explorer expEdge(W, TopAbs_EDGE); expEdge.More(); expEdge.Next())
@@ -179,7 +183,7 @@ void CShape::create_faces_and_edges()
 				CEdge* edge = *It;
 				if(edge->m_faces.size() == 2 && edge->m_faces.front() == edge->m_faces.back()){
 					if(edges_for_loop.size() > 0){
-						CLoop* new_loop = new CLoop(face, edges_for_loop);
+						CLoop* new_loop = new CLoop(face, edges_for_loop, is_outer);
 						face->m_loops.push_back(new_loop);
 						edges_for_loop.clear();
 					}
@@ -191,7 +195,7 @@ void CShape::create_faces_and_edges()
 				}
 			}
 			if(edges_for_loop.size() > 0){
-				CLoop* new_loop = new CLoop(face, edges_for_loop);
+				CLoop* new_loop = new CLoop(face, edges_for_loop, is_outer);
 				face->m_loops.push_back(new_loop);
 			}
 		}

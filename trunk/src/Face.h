@@ -43,16 +43,20 @@ public:
 	void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true);
 	double Area()const;
 	bool ModifyByMatrix(const double* m);
-	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	void WriteXML(TiXmlElement *root);
+	void GetProperties(std::list<Property *> *list);
 
 	const TopoDS_Face &Face(){return m_topods_face;}
 	gp_Dir GetMiddleNormal(gp_Pnt *pos = NULL)const;
 	gp_Dir GetNormalAtUV(double u, double v, gp_Pnt *pos = NULL)const;
 	bool GetUVAtPoint(const gp_Pnt &pos, double *u, double *v)const;
+	bool GetClosestPoint(const gp_Pnt &pos, gp_Pnt &closest_pnt)const;
 	void GetPlaneParams(gp_Pln &p);
 	void GetCylinderParams(gp_Cylinder &c);
+	void GetSphereParams(gp_Sphere &s);
+	void GetConeParams(gp_Cone &c);
 	int GetSurfaceType();
+	wxString GetSurfaceTypeStr();
 	CEdge* GetFirstEdge();
 	CEdge* GetNextEdge();
 	CLoop* GetFirstLoop();
