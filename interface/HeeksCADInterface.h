@@ -93,8 +93,11 @@ public:
 	virtual void FaceGetUVBox(HeeksObj* face, double *uv_box);// 4 doubles
 	virtual void FaceGetPointAndNormalAtUV(HeeksObj* face, double u, double v, double* p, double* norm);
 	virtual bool FaceGetUVAtPoint(HeeksObj* face, const double *pos, double *u, double *v);
+	virtual bool FaceGetClosestPoint(HeeksObj* face, const double *pos, double *closest_pnt);
 	virtual void FaceGetPlaneParams(HeeksObj* face, double *d, double *norm);
 	virtual void FaceGetCylinderParams(HeeksObj* face, double *pos, double *dir, double *radius);
+	virtual void FaceGetSphereParams(HeeksObj* face, double *pos, double *radius);
+	virtual void FaceGetConeParams(HeeksObj* face, double *pos, double *dir, double *radius, double* half_angle);
 	virtual int FaceGetEdgeCount(HeeksObj* face);
 	virtual HeeksObj* FaceGetFirstEdge(HeeksObj* face);
 	virtual HeeksObj* FaceGetNextEdge(HeeksObj* face);
@@ -115,6 +118,7 @@ public:
 	// loop functions
 	virtual HeeksObj* LoopGetFirstEdge(HeeksObj* loop);
 	virtual HeeksObj* LoopGetNextEdge(HeeksObj* loop);
+	virtual bool LoopIsOuter(HeeksObj* loop);
 
 	virtual const wxChar* GetRevisionNumber();
 	virtual void RegisterOnGLCommands( void(*callbackfunc)() );

@@ -154,7 +154,9 @@ void CViewPoint::WindowMag(wxRect &window_box){
 	m_lens_point = m_lens_point.XYZ() + r.XYZ() * move_xcen/m_pixel_scale;
 	m_target_point = m_target_point.XYZ() + uu.XYZ() * move_ycen/m_pixel_scale;
 	m_lens_point = m_lens_point.XYZ() + uu.XYZ() * move_ycen/m_pixel_scale;
-	m_pixel_scale/=width_ratio;
+	//m_pixel_scale/=width_ratio;
+
+	Scale(1.0/width_ratio);
 }
 
 void CViewPoint::Scale(double fraction, bool use_initial_pixel_scale){
