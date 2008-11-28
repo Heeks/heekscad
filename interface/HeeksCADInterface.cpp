@@ -21,6 +21,8 @@
 #include "Face.h"
 #include "Edge.h"
 #include "Loop.h"
+#include <gp_Sphere.hxx>
+#include <gp_Cone.hxx>
 
 double CHeeksCADInterface::GetTolerance()
 {
@@ -422,6 +424,17 @@ bool CHeeksCADInterface::FaceGetUVAtPoint(HeeksObj* face, const double *pos, dou
 	return ((CFace*)face)->GetUVAtPoint(make_point(pos), u, v);
 }
 
+bool CHeeksCADInterface::FaceGetClosestPoint(HeeksObj* face, const double *pos, double *closest_pnt)
+{
+	gp_Pnt cp;
+	if(((CFace*)face)->GetClosestPoint(make_point(pos), cp))
+	{
+		extract(cp, closest_pnt);
+		return true;
+	}
+	return false;
+}
+
 void CHeeksCADInterface::FaceGetPlaneParams(HeeksObj* face, double *d, double *norm)
 {
 	gp_Pln p;
@@ -439,6 +452,26 @@ void CHeeksCADInterface::FaceGetCylinderParams(HeeksObj* face, double *pos, doub
 	if(pos)extract(c.Location(), pos);
 	if(dir)extract(c.Axis().Direction(), dir);
 	if(radius)*radius = c.Radius();
+}
+
+void CHeeksCADInterface::FaceGetSphereParams(HeeksObj* face, double *pos, double *radius)
+{
+	gp_Sphere s;
+	((CFace*)face)->GetSphereParams(s);
+
+	if(pos)extract(s.Location(), pos);
+	if(radius)*radius = s.Radius();
+}
+
+void CHeeksCADInterface::FaceGetConeParams(HeeksObj* face, double *pos, double *dir, double *radius, double* half_angle)
+{
+	gp_Cone c;
+	((CFace*)face)->GetConeParams(c);
+
+	if(pos)extract(c.Location(), pos);
+	if(dir)extract(c.Axis().Direction(), dir);
+	if(radius)*radius = c.RefRadius();
+	if(half_angle)*half_angle = c.SemiAngle();
 }
 
 int CHeeksCADInterface::FaceGetEdgeCount(HeeksObj* face)
@@ -534,6 +567,11 @@ HeeksObj* CHeeksCADInterface::LoopGetFirstEdge(HeeksObj* loop)
 HeeksObj* CHeeksCADInterface::LoopGetNextEdge(HeeksObj* loop)
 {
 	return ((CLoop*)loop)->GetNextEdge();
+}
+
+bool CHeeksCADInterface::LoopIsOuter(HeeksObj* loop)
+{
+	return ((CLoop*)loop)->m_is_outer;
 }
 
 const wxChar* CHeeksCADInterface::GetRevisionNumber()

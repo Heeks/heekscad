@@ -102,6 +102,8 @@ public:
 	BlendTool(CEdge* edge):m_edge(edge){}
 
 	const wxChar* GetTitle(){return _("Blend");}
+	wxString BitmapPath(){return _T("edgeblend");}
+	const wxChar* GetToolTip(){return _T("Blend edge");}
 	void Run(){
 		double rad = 2.0;
 		wxGetApp().m_config->Read(_T("EdgeBlendRadius"), &rad);
