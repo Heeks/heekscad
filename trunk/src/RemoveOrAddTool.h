@@ -41,6 +41,7 @@ public:
 	const wxChar* GetTitle() {return _("Remove");}
 	void Run();
 	void RollBack();
+	wxString BitmapPath(){return _T("delete");}
 };
 
 class ManyRemoveOrAddTool:public Tool{
