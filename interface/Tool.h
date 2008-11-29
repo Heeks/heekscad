@@ -23,5 +23,5 @@ class Tool
 	virtual bool Checked(){return false;}
 	virtual bool IsAToolList() {return false;}
 	virtual wxString BitmapPath(){return _T("");}
-	virtual wxBitmap* Bitmap(){if(m_bitmap == NULL)m_bitmap = new wxBitmap(ToolImage(BitmapPath()));return m_bitmap;}
+	virtual wxBitmap* Bitmap(){if(m_bitmap == NULL && BitmapPath().Len() > 0)m_bitmap = new wxBitmap(ToolImage(BitmapPath()));return m_bitmap;}
 };

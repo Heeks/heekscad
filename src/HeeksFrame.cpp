@@ -1182,7 +1182,9 @@ void CHeeksFrame::AddToolToListAndMenu(Tool *t, std::vector<ToolIndex> &tool_ind
 		{
 			AddToolToListAndMenu(*It, tool_index_list, menu2);
 		}
-		menu->Append(0, t->GetTitle(), menu2);
+		wxMenuItem* menu_item = menu->Append(0, t->GetTitle(), menu2);
+		wxBitmap* bitmap = t->Bitmap();
+		if(bitmap)menu_item->SetBitmap(*bitmap);
 	}
 	else
 	{
@@ -1190,7 +1192,9 @@ void CHeeksFrame::AddToolToListAndMenu(Tool *t, std::vector<ToolIndex> &tool_ind
 		ti.m_tool = t;
 		ti.m_index = tool_index_list.size();
 		tool_index_list.push_back(ti);
-		menu->Append(ti.m_index+ID_FIRST_POP_UP_MENU_TOOL, t->GetTitle());
+		wxMenuItem* menu_item = menu->Append(ti.m_index+ID_FIRST_POP_UP_MENU_TOOL, t->GetTitle());
+		wxBitmap* bitmap = t->Bitmap();
+		if(bitmap)menu_item->SetBitmap(wxBitmap(*bitmap));
 		if(t->Disabled())menu->Enable(ti.m_index+1, false);
 		if(t->Checked ())menu->Check(ti.m_index+1, true);
 	}
