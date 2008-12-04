@@ -175,6 +175,11 @@ void MarkedList::ObjectsInWindow( wxRect window, MarkedObject* marked_object, bo
 			for(j=0; j<(int)names; j++, pos++){
 				if(!ignore_coords_only_found && current_found_object != NULL){
 					HeeksObj *object = (HeeksObj *)(data[pos]);
+					if(object->GetType() == EdgeType)
+					{
+						int here = 0;
+						here = 3;
+					}
 					if(ignore_coords_only && wxGetApp().m_digitizing->OnlyCoords(object)){
 						ignore_coords_only_found = true;
 					}

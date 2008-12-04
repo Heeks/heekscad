@@ -14,7 +14,7 @@ enum EnumStackedType{
 
 class MarkedObject{
 private:
-	double m_depth;
+	unsigned long m_depth;
 	std::map<HeeksObj*, MarkedObject*>::iterator CurrentIt;
 	std::map<int, std::map<int, MarkedObject*> > m_types;
 	int m_window_size;
@@ -28,16 +28,16 @@ public:
 	std::map<HeeksObj*, MarkedObject*> m_map;
 
 	MarkedObject();
-	MarkedObject(double depth, HeeksObj* object, int window_size);
+	MarkedObject(unsigned long depth, HeeksObj* object, int window_size);
 	MarkedObject(const MarkedObject &f);
 	virtual ~MarkedObject();
 
 	const MarkedObject &operator=(const MarkedObject &rhs);
-	double GetDepth(){return m_depth;}
+	unsigned long GetDepth();
 	int GetWindowSize(){return m_window_size;}
 	HeeksObj* GetObject(){return m_object;}
 	void Clear();
-	MarkedObject* Add(HeeksObj* object, double z_depth, int window_size);
+	MarkedObject* Add(HeeksObj* object, unsigned long z_depth, int window_size);
 	virtual void SetFirst(EnumStackedType stacked_type);
 	virtual HeeksObj* GetFirstOfEverything();
 	virtual HeeksObj* GetFirstOfTopOnly();
@@ -51,7 +51,7 @@ class MarkedObjectOneOfEach:public MarkedObject{
 
 public:
 	MarkedObjectOneOfEach():MarkedObject(){}
-	MarkedObjectOneOfEach(double z, HeeksObj* object, int window_size):MarkedObject(z, object, window_size){}
+	MarkedObjectOneOfEach(unsigned long z, HeeksObj* object, int window_size):MarkedObject(z, object, window_size){}
 };
 
 
@@ -60,7 +60,7 @@ class MarkedObjectManyOfSame: public MarkedObject{
 
 public:
 	MarkedObjectManyOfSame():MarkedObject(){}
-	MarkedObjectManyOfSame(double z, HeeksObj* object, int window_size):MarkedObject(z, object, window_size){}
+	MarkedObjectManyOfSame(unsigned long z, HeeksObj* object, int window_size):MarkedObject(z, object, window_size){}
 };
 
 #endif
