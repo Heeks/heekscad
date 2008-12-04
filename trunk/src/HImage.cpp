@@ -5,6 +5,7 @@
 #include <wx/stdpaths.h>
 #include "wxImageLoader.h"
 #include "../tinyxml/tinyxml.h"
+#include "Gripper.h"
 
 HImage::HImage(const wxChar* file_path)
 {
@@ -168,7 +169,7 @@ bool HImage::ModifyByMatrix(const double *m)
 void HImage::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 {
 	for(int j = 0; j<4; j++){
-		list->push_back(0);
+		list->push_back(GripperTypeStretch);
 		for(int i = 0; i<3; i++){
 			list->push_back(m_x[j][i]);
 		}
