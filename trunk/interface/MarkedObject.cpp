@@ -11,7 +11,7 @@ MarkedObject::MarkedObject()
 	m_window_size = -1;
 }
 
-MarkedObject::MarkedObject(double depth, HeeksObj* object, int window_size)
+MarkedObject::MarkedObject(unsigned long depth, HeeksObj* object, int window_size)
 {
 	m_object = object;
 	m_depth = depth;
@@ -34,6 +34,13 @@ const MarkedObject& MarkedObject::operator=(const MarkedObject &so)
 	return (*this);
 }
 
+unsigned long MarkedObject::GetDepth()
+{
+	if(m_map.size() == 0)return m_depth;
+	if(CurrentIt == m_map.end())return m_depth;
+	return CurrentIt->second->GetDepth();
+}
+
 void MarkedObject::Clear()
 {
 	for(std::map<HeeksObj*, MarkedObject*>::iterator It = m_map.begin(); It != m_map.end(); It++)
@@ -45,7 +52,7 @@ void MarkedObject::Clear()
 	m_types.clear();
 }
 
-MarkedObject* MarkedObject::Add(HeeksObj* object, double depth, int window_size)
+MarkedObject* MarkedObject::Add(HeeksObj* object, unsigned long depth, int window_size)
 {
 	std::map<HeeksObj*, MarkedObject*>::iterator FindIt = m_map.find(object);
 
@@ -85,6 +92,7 @@ MarkedObject* MarkedObject::Add(HeeksObj* object, double depth, int window_size)
 			marked_object = new MarkedObjectManyOfSame(depth, object, window_size);
 		}
 		m_map.insert(std::pair<HeeksObj*, MarkedObject*>(object, marked_object));
+		CurrentIt = m_map.end();
 		if(single_type())
 		{
 			std::pair<int, MarkedObject*> type_entry(object->GetType(), marked_object);
