@@ -170,8 +170,9 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 				{
 					previously_marked = *(wxGetApp().m_marked_list->list().begin());
 				}
-				HeeksObj* o = marked_object.GetFirstOfOneFromLevel();
+				HeeksObj* o = marked_object.GetFirstOfTopOnly();
 				HeeksObj* object = o;
+
 				while(o)
 				{
 					if(o == previously_marked)
@@ -179,7 +180,14 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 						object = o;
 						break;
 					}
+
 					o = marked_object.Increment();
+
+					if(o)
+					{
+						// prefer highest order objects
+						if(o->GetType() < object->GetType())object = o;
+					}
 				}
 				if(!event.ShiftDown() && !event.ControlDown())
 				{
