@@ -50,10 +50,9 @@ void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
 				HeeksObj* object = *It;
 				if(object)
 				{
-					if(!object->StretchTemporary(from, shift))
-					{
-						return;
-					}
+					double p[3];
+					extract(position, p);
+					object->StretchTemporary(p, shift);
 				}
 			}
 		}
