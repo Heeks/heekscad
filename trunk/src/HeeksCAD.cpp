@@ -1915,7 +1915,7 @@ const wxChar* HeeksCADapp::GetKnownFilesWildCardString(bool open)const
 			imageExtStr2.Append(_T("*."));
 			imageExtStr2.Append(ext);
 		}
-		wxString(_("Known Files")) + _T(" |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl;*.svg;*.dxf;") + imageExtStr + _T("|") + _("Heeks files") + _T(" (*.heeks)|*.heeks|") + _("IGES files") + _T(" (*.igs *.iges)|*.igs;*.iges|") + _("STEP files") + _T(" (*.stp *.step)|*.stp;*.step|") + _("STL files") + _T(" (*.stl)|*.stl|") + _("Scalar Vector Graphics files") + _T(" (*.svg)|*.svg|") + _("DXF files") + _T(" (*.dxf)|*.dxf|") + _("Picture files") + _T(" (") + imageExtStr2 + _T(")|") + imageExtStr;
+		known_file_ext = wxString(_("Known Files")) + _T(" |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl;*.svg;*.dxf;") + imageExtStr + _T("|") + _("Heeks files") + _T(" (*.heeks)|*.heeks|") + _("IGES files") + _T(" (*.igs *.iges)|*.igs;*.iges|") + _("STEP files") + _T(" (*.stp *.step)|*.stp;*.step|") + _("STL files") + _T(" (*.stl)|*.stl|") + _("Scalar Vector Graphics files") + _T(" (*.svg)|*.svg|") + _("DXF files") + _T(" (*.dxf)|*.dxf|") + _("Picture files") + _T(" (") + imageExtStr2 + _T(")|") + imageExtStr;
 		return known_file_ext.c_str();
 	}
 	else{
