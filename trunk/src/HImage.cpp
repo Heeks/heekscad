@@ -250,3 +250,4 @@ HeeksObj* HImage::ReadFromXMLElement(TiXmlElement* pElem)
 
 	return new_object;
 }
+

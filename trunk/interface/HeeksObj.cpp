@@ -160,3 +160,4 @@ bool HeeksObj::OnVisibleLayer()
 	// for now, layer -1 is invisible, all others are visible
 	return m_layer != -1;
 }
+

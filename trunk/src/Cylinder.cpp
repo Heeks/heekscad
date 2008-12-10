@@ -51,7 +51,7 @@ bool CCylinder::ModifyByMatrix(const double* m){
 
 void CCylinder::GetProperties(std::list<Property *> *list)
 {
-	__super::GetProperties(list);
+	CSolid::GetProperties(list);
 
 	list->push_back(new PropertyVertex(_("centre pos"), m_pos.Location(), this, on_set_centre));
 	list->push_back(new PropertyDouble(_("radius"), m_radius, this, on_set_radius));

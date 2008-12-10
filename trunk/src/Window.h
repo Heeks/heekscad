@@ -4,14 +4,14 @@
 
 #include "../interface/InputMode.h"
 
-class Window: public CInputMode{
+class WindowDragging: public CInputMode{
 public:
 	wxRect window_box;
 	bool finish_dragging;
 	bool box_found;
 	bool box_drawn_with_cross;
 
-	Window();
+	WindowDragging();
 
 	// virtual functions from InputMode
 	const wxChar* GetTitle(){return _("Dragging a window");}

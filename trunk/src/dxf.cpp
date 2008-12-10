@@ -7,7 +7,11 @@ CDxfWrite::CDxfWrite(const wxChar* filepath)
 {
 	// start the file
 	m_fail = false;
+#ifdef __WXMSW__
 	m_ofs = new ofstream(filepath, ios::out);
+#else
+	m_ofs = new ofstream(Ttc(filepath), ios::out);
+#endif
 	if(!(*m_ofs)){
 		m_fail = true;
 		return;
@@ -88,7 +92,11 @@ CDxfRead::CDxfRead(const wxChar* filepath)
 {
 	// start the file
 	m_fail = false;
+#ifdef __WXMSW__
 	m_ifs = new ifstream(filepath);
+#else
+	m_ifs = new ifstream(Ttc(filepath));
+#endif
 	if(!(*m_ifs)){
 		m_fail = true;
 		return;
@@ -250,14 +258,14 @@ void CDxfRead::DoRead()
 
 	while(!((*m_ifs).eof()))
 	{
-		if(!stricmp(m_str, "0"))
+		if(!strcmp(m_str, "0"))
 		{
 			m_ifs->getline(m_str, 1024);
-			if(!stricmp(m_str, "LINE")){
+			if(!strcmp(m_str, "LINE")){
 				if(!ReadLine())return;
 				continue;
 			}
-			else if(!stricmp(m_str, "ARC")){
+			else if(!strcmp(m_str, "ARC")){
 				if(!ReadArc())return;
 				continue;
 			}

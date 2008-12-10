@@ -69,3 +69,4 @@ void CWire::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 const TopoDS_Wire &CWire::Wire()const{
 	return *((TopoDS_Wire*)(&m_shape));
 }
+

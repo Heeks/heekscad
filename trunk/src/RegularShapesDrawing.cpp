@@ -47,7 +47,7 @@ bool RegularShapesDrawing::calculate_item(DigitizedPoint &end)
 		if(temp_object)temp_object_in_list.push_back(temp_object);
 	}
 
-	gp_Trsf& mat = wxGetApp().GetDrawMatrix(true);
+	gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
 	gp_Dir xdir = gp_Dir(1, 0, 0).Transformed(mat);
 	gp_Dir ydir = gp_Dir(0, 1, 0).Transformed(mat);
 	gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(mat);
@@ -463,7 +463,7 @@ void RegularShapesDrawing::GetProperties(std::list<Property *> *list){
 	if(m_mode == ObroundRegularShapeMode)list->push_back( new PropertyDouble( _("radius"), m_obround_radius, NULL, on_set_obround_radius));
 	if(m_mode == PolygonsRegularShapeMode)list->push_back( new PropertyInt(_("number of sides for polygon"), m_number_of_side_for_polygon, NULL, on_set_num_sides));
 
-	__super::GetProperties(list);
+	Drawing::GetProperties(list);
 }
 
 void RegularShapesDrawing::GetTools(std::list<Tool*> *f_list, const wxPoint *p){

@@ -99,7 +99,7 @@ static void on_set_end(const gp_Pnt &vt, HeeksObj* object){
 }
 
 void HLine::GetProperties(std::list<Property *> *list){
-	__super::GetProperties(list);
+	HeeksObj::GetProperties(list);
 
 	list->push_back(new PropertyVertex(_("start"), A, this, on_set_start));
 	list->push_back(new PropertyVertex(_("end"), B, this, on_set_end));
@@ -211,7 +211,7 @@ int HLine::Intersects(const HeeksObj *object, std::list< double > *rl)const{
 
 bool HLine::Intersects(const gp_Pnt &pnt)const
 {
-	gp_Lin& this_line = GetLine();
+	gp_Lin this_line = GetLine();
 	if(!intersect(pnt, this_line))return false;
 
 	// check it lies between A and B
@@ -293,3 +293,4 @@ HeeksObj* HLine::ReadFromXMLElement(TiXmlElement* pElem)
 
 	return new_object;
 }
+

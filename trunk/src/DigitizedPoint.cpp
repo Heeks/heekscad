@@ -260,3 +260,4 @@ bool DigitizedPoint::GetTangentCircle(const DigitizedPoint& d1, const DigitizedP
 
 	return false;
 }
+

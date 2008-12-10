@@ -6,16 +6,16 @@
 #include "GraphicsCanvas.h"
 #include "HeeksFrame.h"
 
-Window::Window(){
+WindowDragging::WindowDragging(){
 	reset();
 }
 
-void Window::reset(void){
+void WindowDragging::reset(void){
 	box_found = false;
 	finish_dragging = false;
 }
 
-void Window::OnMouse( wxMouseEvent& event ){
+void WindowDragging::OnMouse( wxMouseEvent& event ){
 	if(event.LeftDown()){
 		window_box.x = event.GetX();
 		window_box.y = wxGetApp().m_frame->m_graphics->GetSize().GetHeight() - event.GetY();

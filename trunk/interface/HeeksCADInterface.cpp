@@ -80,10 +80,12 @@ wxWindow* CHeeksCADInterface::GetGraphicsCanvas()
 	return wxGetApp().m_frame->m_graphics;
 }
 
+#ifdef WIN32
 HGLRC CHeeksCADInterface::GetRC()
 {
 	return wxGetApp().m_frame->m_graphics->GetContext()->GetGLRC();
 }
+#endif
 
 wxMenuBar* CHeeksCADInterface::GetMenuBar()
 {

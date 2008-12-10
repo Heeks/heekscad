@@ -535,14 +535,14 @@ static void wxPGDrawFocusRect( wxDC& dc, const wxRect& rect )
 
     dc.SetLogicalFunction(wxCOPY);
 #else
-    dc.SetLogicalTool(wxINVERT);
+    dc.SetLogicalFunction(wxINVERT);
 
     dc.SetPen(wxPen(*wxBLACK,1,wxDOT));
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
     dc.DrawRectangle(rect);
 
-    dc.SetLogicalTool(wxCOPY);
+    dc.SetLogicalFunction(wxCOPY);
 #endif
 }
 

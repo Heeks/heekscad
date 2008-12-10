@@ -29,3 +29,4 @@ CEdge* CLoop::GetNextEdge()
 	if (m_edgeIt==m_edges.end()) return NULL;
 	return *m_edgeIt;
 }
+

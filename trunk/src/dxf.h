@@ -36,3 +36,4 @@ public:
 	virtual void OnReadLine(const double* s, const double* e){}
 	virtual void OnReadArc(const double* s, const double* e, const double* c, bool dir){}
 };
+

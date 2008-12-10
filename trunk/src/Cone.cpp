@@ -57,7 +57,7 @@ bool CCone::ModifyByMatrix(const double *m){
 
 void CCone::GetProperties(std::list<Property *> *list)
 {
-	__super::GetProperties(list);
+	CSolid::GetProperties(list);
 
 	list->push_back(new PropertyVertex(_("centre pos"), m_pos.Location(), this, on_set_centre));
 	list->push_back(new PropertyVertex(_("direction"), gp_Pnt(m_pos.Direction().XYZ()), NULL));
