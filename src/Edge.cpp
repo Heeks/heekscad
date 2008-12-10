@@ -202,8 +202,8 @@ void CEdge::GetCurveParams2(double *uStart, double *uEnd, int *isClosed, int *is
 	BRepAdaptor_Curve curve(m_topods_edge);
 	*uStart = curve.FirstParameter();
 	*uEnd = curve.LastParameter();
-	*isClosed = curve.IsClosed();
-	*isPeriodic = curve.IsPeriodic();
+	if(isClosed)*isClosed = curve.IsClosed();
+	if(isPeriodic)*isPeriodic = curve.IsPeriodic();
 }
 
 bool CEdge::InFaceSense(CFace* face)
