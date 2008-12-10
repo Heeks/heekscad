@@ -4,11 +4,22 @@
 //See glFont.txt for terms of use
 //November 10, 1998
 //*********************************************************
+#ifdef WIN32
+#include <windows.h>
+#endif
 
 #include <stdio.h>
 #include <malloc.h>
 #include <string.h>
-extern "C" {#include <GL/gl.h>#include <GL/glu.h>}#include "glfont.h"
+extern "C" {
+#include <GL/gl.h>
+#ifdef WIN32
+#include <GL/glu.h>
+#else
+#include <GL/glu.h>
+#endif
+}
+#include "glfont.h"
 
 //*********************************************************
 //Variables
