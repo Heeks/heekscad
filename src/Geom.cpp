@@ -856,7 +856,7 @@ bool LineToBigCircles(const gp_Lin& lin, const gp_Dir& z_axis, gp_Circ& c1, gp_C
 	double dp = z_axis * lin.Direction();
 	if(dp > 0.999999999999)return false;
 	gp_Dir left = z_axis ^ lin.Direction();
-	double r = 10000000000;
+	double r = 10000000000.0;
 	gp_Pnt centre1 = lin.Location().XYZ() + left.XYZ() * r;
 	c1 = gp_Circ(gp_Ax2(centre1, z_axis), r);
 	gp_Pnt centre2 = lin.Location().XYZ() - left.XYZ() * r;
@@ -1087,3 +1087,4 @@ int convert_doubles_to_pnts(const std::list<double> &dlist, std::list<gp_Pnt> &p
 	}
 	return nump;
 }
+

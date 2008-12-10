@@ -15,6 +15,9 @@
 #include <TopExp.hxx>
 #include <BRepFilletAPI_MakeFillet.hxx>
 #include <BRepAdaptor_Curve.hxx>
+#include <wx/config.h>
+#include <wx/confbase.h>
+#include <wx/fileconf.h>
 
 CEdge::CEdge(const TopoDS_Edge &edge):m_topods_edge(edge){
 #if _DEBUG
@@ -237,3 +240,4 @@ bool CEdge::Orientation()
 	TopAbs_Orientation o = m_topods_edge.Orientation();
 	return (o == TopAbs_FORWARD);
 }
+

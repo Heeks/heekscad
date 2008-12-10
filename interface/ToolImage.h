@@ -13,3 +13,4 @@ public:
 	static int GetBitmapSize();
 	static void SetBitmapSize(int size);
 };
+

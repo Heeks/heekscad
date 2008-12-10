@@ -56,7 +56,7 @@ bool CCuboid::ModifyByMatrix(const double* m){
 
 void CCuboid::GetProperties(std::list<Property *> *list)
 {
-	__super::GetProperties(list);
+	CSolid::GetProperties(list);
 
 	list->push_back(new PropertyVertex(_("datum corner"), m_pos.Location(), this, on_set_centre));
 	list->push_back(new PropertyDouble(_("width ( x )"), m_x, this, on_set_x));

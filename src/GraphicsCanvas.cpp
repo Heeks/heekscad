@@ -163,7 +163,7 @@ void CGraphicsCanvas::OnMouse( wxMouseEvent& event )
 
 void CGraphicsCanvas::OnKeyDown(wxKeyEvent& event)
 {
-	if(event.KeyCode() == WXK_ESCAPE && wxGetApp().m_frame->IsFullScreen())wxGetApp().m_frame->ShowFullScreen(false);
+	if(event.GetKeyCode() == WXK_ESCAPE && wxGetApp().m_frame->IsFullScreen())wxGetApp().m_frame->ShowFullScreen(false);
 	else
 	{
 		wxGetApp().input_mode_object->OnKeyDown(event);
@@ -253,7 +253,8 @@ void CGraphicsCanvas::SetViewPoint(void){
 		}
 	}
 
-	m_view_point.SetView(gp_Vec(0, 1, 0), gp_Vec(0, 0, 1));
+	gp_Vec vy(0, 1, 0), vz(0, 0, 1);
+	m_view_point.SetView(vy, vz);
 	StoreViewPoint();
 }
 

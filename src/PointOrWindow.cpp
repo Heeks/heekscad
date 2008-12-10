@@ -9,7 +9,7 @@
 #include "HeeksFrame.h"
 
 PointOrWindow::PointOrWindow(bool wd){
-	if(wd)window = new Window();
+	if(wd)window = new WindowDragging();
 	else window = NULL;
 	reset();
 	visible = false;

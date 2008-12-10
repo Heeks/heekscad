@@ -368,7 +368,11 @@ void MarkedList::CopySelectedItems()
 	wxGetApp().SaveXMLFile(m_list, temp_file);
 
 #if wxUSE_UNICODE
+#ifdef __WXMSW__
 	wifstream ifs(temp_file);
+#else
+	wifstream ifs(Ttc(temp_file.c_str()));
+#endif
 #else
 	ifstream ifs(temp_file);
 #endif
@@ -396,3 +400,4 @@ void MarkedList::Reset()
 {
 	delete_move_grips();
 }
+

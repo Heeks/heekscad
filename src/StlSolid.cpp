@@ -15,7 +15,11 @@ CStlSolid::CStlSolid(const HeeksColor* col):m_gl_list(0), color(*col){
 CStlSolid::CStlSolid(const wxChar* filepath, const HeeksColor* col):m_gl_list(0), color(*col){
 	// read the stl file
 #if wxUSE_UNICODE
+#ifdef __WXMSW__
 	wifstream ifs(filepath);
+#else
+	wifstream ifs(Ttc(filepath));
+#endif
 #else
 	ifstream ifs(filepath);
 #endif
@@ -25,7 +29,7 @@ CStlSolid::CStlSolid(const wxChar* filepath, const HeeksColor* col):m_gl_list(0)
 	ifs.read(solid_string, 5);
 	if(ifs.eof())return;
 #if wxUSE_UNICODE
-	if(wcsicmp(solid_string, _T("solid")))
+	if(wcscmp(solid_string, _T("solid")))
 #else
 	if(stricmp(solid_string, _T("solid")))
 #endif
@@ -83,18 +87,18 @@ CStlSolid::CStlSolid(const wxChar* filepath, const HeeksColor* col):m_gl_list(0)
 			if(i == 5)
 			{
 #if wxUSE_UNICODE
-				if(!wcsicmp(five_chars, _T("verte")))
+				if(!wcscmp(five_chars, _T("verte")))
 				{
 					swscanf(str, _T(" vertex %f %f %f"), &(t.x[vertex][0]), &(t.x[vertex][1]), &(t.x[vertex][2]));
 					vertex++;
 					if(vertex > 2)vertex = 2;
 				}
-				else if(!wcsicmp(five_chars, _T("facet")))
+				else if(!wcscmp(five_chars, _T("facet")))
 				{
 					swscanf(str, _T(" facet normal %f %f %f"), &(t.n[0]), &(t.n[1]), &(t.n[2]));
 					vertex = 0;
 				}
-				else if(!wcsicmp(five_chars, _T("endfa")))
+				else if(!wcscmp(five_chars, _T("endfa")))
 				{
 					if(vertex == 2)
 					{
@@ -341,3 +345,4 @@ HeeksObj* CStlSolid::ReadFromXMLElement(TiXmlElement* pElem)
 
 	return new_object;
 }
+

@@ -51,3 +51,4 @@ void split_bezier_curve(int level, const gp_Pnt& vt0, const gp_Pnt& vt2, const g
 		(*call_back)(vt0, vt2);
 	}
 }
+

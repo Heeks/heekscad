@@ -7,6 +7,11 @@
 #include <wx/filename.h>
 #include <wx/cmdline.h>
 #include <wx/clipbrd.h>
+#include <wx/config.h>
+#include <wx/confbase.h>
+#include <wx/fileconf.h>
+#include <wx/aui/aui.h>
+#include <wx/toolbar.h>
 #include "../interface/Tool.h"
 #include "../interface/Material.h"
 #include "../interface/ToolList.h"
@@ -59,11 +64,12 @@
 #include "../interface/PropertyList.h"
 #include "RegularShapesDrawing.h"
 #include "HeeksPrintout.h"
-#include <sstream>
+#include <fstream>
 using namespace std;
 
 IMPLEMENT_APP(HeeksCADapp)
 
+#if 0
 int MyAllocHook( int allocType, void *userData, size_t size, int blockType, long requestNumber, const unsigned char *filename, int lineNumber)
 {
 	if (size==24 && requestNumber > 14000 && requestNumber < 18000)
@@ -73,10 +79,13 @@ int MyAllocHook( int allocType, void *userData, size_t size, int blockType, long
 	}
 	return TRUE;
 }
+#endif
 
 HeeksCADapp::HeeksCADapp(): ObjList()
 {
+#if 0
 	_CrtSetAllocHook(MyAllocHook);
+#endif
 
 	m_version_number = _T("0 4 0");
 	m_geom_tol = 0.001;
@@ -158,13 +167,6 @@ bool HeeksCADapp::OnInit()
 
 	InitialiseLocale();
 
-	// initialise glut
-#ifdef WIN32
-#else
-	int argc = 0;
-	char* argv;
-	glutInit(&argc, &argv);
-#endif
 	ClearHistory();
 
     m_printData = new wxPrintData;
@@ -200,21 +202,21 @@ bool HeeksCADapp::OnInit()
 		wxString str;
 		m_config->Read(_T("BackgroundColor"), &str, _T("242 204 162"));
 		int r = 0, g = 0, b = 0;
-		_stscanf(str, _T("%d %d %d"), &r, &g, &b);
+		wscanf(str, _T("%d %d %d"), &r, &g, &b);
 		background_color = HeeksColor(r, g, b);
 	}
 	{
 		wxString str;
 		m_config->Read(_T("CurrentColor"), &str, _T("0 0 0"));
 		int r = 0, g = 0, b = 0;
-		_stscanf(str, _T("%d %d %d"), &r, &g, &b);
+		wscanf(str, _T("%d %d %d"), &r, &g, &b);
 		current_color = HeeksColor(r, g, b);
 	}
 	{
 		wxString str;
 		m_config->Read(_T("ConstructionColor"), &str, _T("0 0 255"));
 		int r = 0, g = 0, b = 255;
-		_stscanf(str, _T("%d %d %d"), &r, &g, &b);
+		wscanf(str, _T("%d %d %d"), &r, &g, &b);
 		construction_color = HeeksColor(r, g, b);
 	}
 	m_config->Read(_T("RotateMode"), &m_rotate_mode);
@@ -239,7 +241,10 @@ bool HeeksCADapp::OnInit()
 	wxImage::AddHandler(new wxPNGHandler);
 	m_frame = new CHeeksFrame( wxT( "HeeksCAD free Solid Modelling software based on Open CASCADE" ), wxPoint(posx, posy), wxSize(width, height));
 
+#ifdef __WXMSW__
+	// to do, make this compile in Linux
 	m_frame->SetIcon(wxICON(HeeksCAD));
+#endif
 	SetInputMode(m_select_mode);
 	m_frame->Show(TRUE);
 	SetTopWindow(m_frame);
@@ -248,6 +253,8 @@ bool HeeksCADapp::OnInit()
 	SetLikeNewFile();
 	SetFrameTitle();
 
+#ifdef __WXMSW__
+	// to do, make this compile in Linux
 	{
 		// Open the file passed in the command line argument
 		wxCmdLineEntryDesc cmdLineDesc[2];
@@ -273,6 +280,7 @@ bool HeeksCADapp::OnInit()
 			}
 		}
 	}
+#endif
 
 	return TRUE;
 } 
@@ -290,21 +298,9 @@ int HeeksCADapp::OnExit(){
 	m_config->Write(_T("DrawToGrid"), draw_to_grid);
 	m_config->Write(_T("DrawGrid"), digitizing_grid);
 	m_config->Write(_T("DrawRadius"), digitizing_radius);
-	{
-		wxChar str[1024];
-		wsprintf(str, _T("%d %d %d"), background_color.red, background_color.green, background_color.blue);
-		m_config->Write(_T("BackgroundColor"), str);
-	}
-	{
-		wxChar str[1024];
-		wsprintf(str, _T("%d %d %d"), current_color.red, current_color.green, current_color.blue);
-		m_config->Write(_T("CurrentColor"), str);
-	}
-	{
-		wxChar str[1024];
-		wsprintf(str, _T("%d %d %d"), construction_color.red, construction_color.green, construction_color.blue);
-		m_config->Write(_T("ConstructionColor"), str);
-	}
+	m_config->Write(_T("BackgroundColor"), wxString::Format(_T("%d %d %d"), background_color.red, background_color.green, background_color.blue));
+	m_config->Write(_T("CurrentColor"), wxString::Format( _T("%d %d %d"), current_color.red, current_color.green, current_color.blue));
+	m_config->Write(_T("ConstructionColor"), wxString::Format(_T("%d %d %d"), construction_color.red, construction_color.green, construction_color.blue));
 	m_config->Write(_T("RotateMode"), m_rotate_mode);	
 	m_config->Write(_T("Antialiasing"), m_antialiasing);	
 	m_config->Write(_T("GridMode"), grid_mode);
@@ -426,7 +422,8 @@ void HeeksCADapp::Reset(){
 	history = new MainHistory;
 	m_current_coordinate_system = NULL;
 	m_doing_rollback = false;
-	m_frame->m_graphics->m_view_point.SetView(gp_Vec(0, 1, 0), gp_Vec(0, 0, 1));
+	gp_Vec vy(0, 1, 0), vz(0, 0, 1);
+	m_frame->m_graphics->m_view_point.SetView(vy, vz);
 	m_filepath = wxString(_("Untitled")) + _T(".heeks");
 	m_hidden_for_drag.clear();
 	m_show_grippers_on_drag = true;
@@ -479,7 +476,11 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 				wxString temp_file = sp.GetTempDir() + _T("/temp_HeeksCAD_STEP_file.step");
 				{
 #if wxUSE_UNICODE
+#ifdef __WXMSW__
 					wofstream ofs(temp_file);
+#else
+					wofstream ofs(Ttc(temp_file.c_str()));
+#endif
 #else
 					ofstream ofs(temp_file);
 #endif
@@ -500,7 +501,11 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 			sp.GetTempDir();
 			wxString temp_file = sp.GetTempDir() + _T("/temp_HeeksCAD_STEP_file.step");
 			{
+#ifdef __WXMSW__
 				ofstream ofs(temp_file);
+#else
+				ofstream ofs(Ttc(temp_file.c_str()));
+#endif
 				ofs<<a->Value();
 			}
 			CShape::ImportSolidsFile(temp_file, false, &index_map);
@@ -919,7 +924,11 @@ static void write_stl_triangle(const double* x, const double* n)
 
 void HeeksCADapp::SaveSTLFile(const wxChar *filepath)
 {
+#ifdef __WXMSW__
 	ofstream ofs(filepath);
+#else
+	ofstream ofs(Ttc(filepath));
+#endif
 	if(!ofs)
 	{
 		wxString str = wxString(_("couldn't open file")) + _T(" - ") + filepath;
@@ -993,7 +1002,11 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 		}
 
 		// write the step file as a string attribute of step_file
+#ifdef __WXMSW__
 		ifstream ifs(temp_file);
+#else
+		ifstream ifs(Ttc(temp_file.c_str()));
+#endif
 		if(!(!ifs)){
 			std::string fstr;
 			char str[1024];
@@ -1198,7 +1211,7 @@ void HeeksCADapp::glCommands(bool select, bool marked, bool no_color)
 
 void HeeksCADapp::GetBox(CBox &box){
 	CBox temp_box;
-	__super::GetBox(temp_box);
+	ObjList::GetBox(temp_box);
 	if(temp_box.m_valid && temp_box.Radius() > 0.000001)
 		box.Insert(temp_box);
 }
@@ -1247,11 +1260,11 @@ class CFullScreenTool : public Tool
 {
 public:
 	// Tool's virtual functions
-	const wxChar* CFullScreenTool::GetTitle(){
+	const wxChar* GetTitle(){
 		if (wxGetApp().m_frame->IsFullScreen()) return _("Exit Full Screen Mode");
 		else return _("Show Full Screen");
 	}
-	void CFullScreenTool::Run(){
+	void Run(){
 		wxGetApp().m_frame->ShowFullScreen(!wxGetApp().m_frame->IsFullScreen());
 	}
 };
@@ -1600,7 +1613,8 @@ void on_set_rotate_mode(int value, HeeksObj* object)
 	wxGetApp().m_rotate_mode = value;
 	if(!wxGetApp().m_rotate_mode)
 	{
-		wxGetApp().m_frame->m_graphics->m_view_point.SetView(gp_Vec(0, 1, 0), gp_Vec(0, 0, 1));
+		gp_Vec vy(0, 1, 0), vz(0, 0, 1);
+		wxGetApp().m_frame->m_graphics->m_view_point.SetView(vy, vz);
 		wxGetApp().m_frame->m_graphics->StoreViewPoint();
 		wxGetApp().Repaint();
 	}
@@ -2250,8 +2264,7 @@ void HeeksCADapp::GetRecentFilesProfileString()
 {
 	for(int i = 0; i < MAX_RECENT_FILES; i++)
 	{
-		wxChar key_name[1024];
-		wsprintf(key_name, _T("RecentFilePath%d"), i);
+		wxString key_name = wxString::Format(_T("RecentFilePath%d"), i);
 		wxString filepath = m_config->Read(key_name);
 		if(filepath.IsEmpty())break;
 		m_recent_files.push_back(filepath);
@@ -2263,8 +2276,7 @@ void HeeksCADapp::WriteRecentFilesProfileString()
 	std::list< wxString >::iterator It = m_recent_files.begin();
 	for(int i = 0; i < MAX_RECENT_FILES; i++)
 	{
-		wxChar key_name[1024];
-		wsprintf(key_name, _T("RecentFilePath%d"), i);
+		wxString key_name = wxString::Format(_T("RecentFilePath%d"), i);
 		wxString filepath;
 		if(It != m_recent_files.end())
 		{
@@ -2302,9 +2314,8 @@ bool HeeksCADapp::CheckForModifiedDoc()
 
 void HeeksCADapp::SetFrameTitle()
 {
-	wxChar str[1024];
 	wxFileName f(m_filepath.c_str());
-	wsprintf(str, _T("%s.%s - %s"), f.GetName(), f.GetExt(), m_filepath.c_str());
+	wxString str = wxString::Format(_T("%s.%s - %s"), f.GetName().c_str(), f.GetExt().c_str(), m_filepath.c_str());
 	m_frame->SetTitle(str);
 }
 
@@ -2569,7 +2580,11 @@ void HeeksCADapp::Paste()
 
 	{
 #if wxUSE_UNICODE
+#ifdef __WXMSW__
 		wofstream ofs(temp_file);
+#else
+		wofstream ofs(Ttc(temp_file.c_str()));
+#endif
 #else
 		ofstream ofs(temp_file);
 #endif

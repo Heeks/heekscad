@@ -59,3 +59,4 @@ void COptionsCanvas::RefreshByRemovingAndAddingAll(){
 		AddProperty(property);
 	}
 }
+

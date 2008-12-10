@@ -17,9 +17,7 @@ wxString global_string;
 
 // Tool's virtual functions
 const wxChar* TransformTool::GetTitle(){
-	wxChar str[1024];
-	wsprintf(str, _T("%s %s"), _("Transform"), object->GetShortStringOrTypeString());
-	global_string.assign(str);
+	global_string.assign(wxString::Format(_T("%s %s"), _("Transform"), object->GetShortStringOrTypeString()));
 	return global_string.c_str();
 }
 

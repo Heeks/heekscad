@@ -33,6 +33,10 @@
 #include <fstream>
 #include "wx/print.h"
 #include "wx/printdlg.h"
+#include <wx/aui/aui.h>
+#include <wx/config.h>
+#include <wx/confbase.h>
+#include <wx/fileconf.h>
 #include "HeeksPrintout.h"
 
 using namespace std;
@@ -1044,7 +1048,7 @@ void CHeeksFrame::OnMove( wxMoveEvent& evt )
 	wxGetApp().m_config->Write(_T("MainFramePosY"), posy);
 }
 
-int CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, const wxString& title, wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&))
+int CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, const wxString& title, const wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&))
 {
 	while(m_external_buttons.find(m_next_id_for_button) != m_external_buttons.end())
 	{

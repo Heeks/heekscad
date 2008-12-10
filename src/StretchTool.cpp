@@ -17,9 +17,7 @@ wxString stretch_function_string;
 
 // Tool's virtual functions
 const wxChar* StretchTool::GetTitle(){
-	wxChar str[1024];
-	wsprintf(str, _T("Stretch %s"), m_object->GetShortStringOrTypeString());
-	stretch_function_string.assign(str);
+	stretch_function_string.assign(wxString::Format(_T("Stretch %s"), m_object->GetShortStringOrTypeString()));
 	return stretch_function_string.c_str();
 }
 

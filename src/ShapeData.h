@@ -30,3 +30,4 @@ public:
 
 	void SetShape(CShape* shape);
 };
+

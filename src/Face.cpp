@@ -425,7 +425,7 @@ void CFace::WriteXML(TiXmlElement *root)
 
 void CFace::GetProperties(std::list<Property *> *list)
 {
-	__super::GetProperties(list);
+	HeeksObj::GetProperties(list);
 
 	list->push_back(new PropertyString(_("surface type"), GetSurfaceTypeStr(), NULL));
 }
@@ -567,3 +567,4 @@ void CFace::GetUVBox(double *uv_box)
 	uv_box[2] = surface.LastUParameter();
 	uv_box[3] = surface.LastVParameter();
 }
+

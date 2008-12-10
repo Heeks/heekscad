@@ -1,6 +1,7 @@
 
 #include "ViewPoint.h"
 #include "../interface/Observer.h"
+#include <wx/glcanvas.h>
 
 class CGraphicsCanvas: public wxGLCanvas, Observer
 {

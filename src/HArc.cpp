@@ -171,7 +171,7 @@ static void on_set_axis(const gp_Pnt &vt, HeeksObj* object){
 }
 
 void HArc::GetProperties(std::list<Property *> *list){
-	__super::GetProperties(list);
+	HeeksObj::GetProperties(list);
 
 	list->push_back(new PropertyVertex(_("start"), A, this, on_set_start));
 	list->push_back(new PropertyVertex(_("end"), B, this, on_set_end));
@@ -473,3 +473,4 @@ HeeksObj* HArc::ReadFromXMLElement(TiXmlElement* pElem)
 
 	return new_object;
 }
+

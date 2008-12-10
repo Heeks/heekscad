@@ -57,3 +57,4 @@ public:
 	void Evaluate(double u, double *p, double *tangent);
 	bool Orientation();
 };
+

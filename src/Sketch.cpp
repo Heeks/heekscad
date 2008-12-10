@@ -28,7 +28,7 @@ const CSketch& CSketch::operator=(const CSketch& c)
 
 void CSketch::GetProperties(std::list<Property *> *list)
 {
-	__super::GetProperties(list);
+	ObjList::GetProperties(list);
 
 	list->push_back(new PropertyInt(_("Number of elements"), ObjList::GetNumChildren(), this));
 }
@@ -53,3 +53,4 @@ HeeksObj* CSketch::ReadFromXMLElement(TiXmlElement* pElem)
 
 	return (ObjList*)new_object;
 }
+

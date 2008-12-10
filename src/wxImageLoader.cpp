@@ -139,3 +139,4 @@ GLuint* loadImage(wxString path, int* imageWidth, int* imageHeight, int* texture
 	return ID;
 	
 }
+
