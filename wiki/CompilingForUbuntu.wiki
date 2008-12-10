@@ -1,4 +1,4 @@
-=Compiling For Ubuntu=
+#summary How to compile HeeksCAD on Ubuntu
 
 Downloaded Ubuntu 8.04 and install it on your computer.
 
