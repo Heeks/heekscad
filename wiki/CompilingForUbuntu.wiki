@@ -1,0 +1,66 @@
+Downloaded Ubuntu 8.04 and install it on your computer.
+
+
+On the menu, go to System->Administration->"Synaptic Package Manager"
+
+
+Follow the instructions at http://www.opennovation.org/ubuntu/ to enable the Open CASCADE packages
+
+
+From synaptic package manager, I got...   build-essential,     11 items whose names begin with libopencascade,      3 items whose names begin with libgtkglext1,     libwxbase2.8-0, libwxbase2.8-dev, libwxgtk2.8-0, libwxgtk2.8-dev,   but it also marked other packages for installation, which I didn't look at their names
+
+
+Get RapidSVN:
+
+    To get RapidSVN; In Ubuntu's menu, go to Applications->"Add/Remove".
+
+    Click "Programming" on the left and then tick "RapidSVN" on the right.
+
+
+Run RapidSVN  (  menu Applications->Programming->RapidSVN )
+On the RapidSVN menu, choose Repository->Chekcout
+In the URL box put:
+https://heekscad.googlecode.com/svn/trunk/
+In the "Destination Directory" box, put:
+/home/dan/Desktop/HeeksCAD
+( but replace "dan" with your username )
+Click "OK". This should get all the source code files you need.
+
+
+On the Ubuntu menu, click Applications->Accessories->Terminal.
+The "Terminal" window appears, with some text like "dan@dan-desktop:~$" in it.
+ 
+
+Type:
+cd/Desktop/dan/HeeksCAD/src
+
+
+Then type:
+make
+
+
+It will say something like:
+dan@dan-desktop:~/Desktop/HeeksCAD/src$ make
+gcc advprops.cpp BezierCurve.cpp Cone.cpp ConversionTools.cpp CoordinateSystem.cpp Cuboid.cpp Cylinder.cpp DigitizedPoint.cpp DigitizeMode.cpp DimensionDrawing.cpp Drawing.cpp dxf.cpp Edge.cpp Face.cpp Geom.cpp glfont.cpp GLList.cpp GraphicsCanvas.cpp Grid.cpp Gripper.cpp GripperSelTransform.cpp HArc.cpp HCircle.cpp HDimension.cpp HeeksCAD.cpp HeeksFrame.cpp HeeksPrintout.cpp HILine.cpp HImage.cpp History.cpp HLine.cpp HPoint.cpp HText.cpp Images.cpp InputModeCanvas.cpp Interface.cpp LineArcDrawing.cpp Loop.cpp MagDragWindow.cpp manager.cpp MarkedList.cpp ObjPropsCanvas.cpp odcombo.cpp OptionsCanvas.cpp PointDrawing.cpp PointOrWindow.cpp PropertiesCanvas.cpp PropertyTrsf.cpp PropertyVertex.cpp propgrid.cpp props.cpp RegularShapesDrawing.cpp RemoveOrAddTool.cpp RuledSurface.cpp Ruler.cpp SelectMode.cpp Shape.cpp ShapeData.cpp Sketch.cpp Solid.cpp Sphere.cpp StlSolid.cpp StretchTool.cpp TransformTool.cpp TransformTools.cpp TreeCanvas.cpp ViewPoint.cpp ViewRotating.cpp ViewZooming.cpp Window.cpp Wire.cpp wxImageLoader.cpp ../interface/HeeksCADInterface.cpp ../interface/HeeksColor.cpp ../interface/HeeksObj.cpp ../interface/LeftAndRight.cpp ../interface/MarkedObject.cpp ../interface/ObjList.cpp ../interface/PropertyCheck.cpp ../interface/PropertyChoice.cpp ../interface/PropertyColor.cpp ../interface/PropertyDouble.cpp ../interface/PropertyInt.cpp ../interface/PropertyList.cpp ../interface/PropertyString.cpp ../interface/ToolImage.cpp ../interface/ToolList.cpp ../tinyxml/tinyxml.cpp ../tinyxml/tinystr.cpp ../tinyxml/tinyxmlerror.cpp ../tinyxml/tinyxmlparser.cpp -lstdc++ -I "./" -I "/usr/include/opencascade" -I/usr/lib/wx/include/gtk2-unicode-release-2.8 -I/usr/include/wx-2.8 -D__WXGTK__ -DHEEKSCAD -lGLU -lGL -lwx_gtk2u_richtext-2.8 -lwx_gtk2u_aui-2.8 -lwx_gtk2u_xrc-2.8 -lwx_gtk2u_qa-2.8 -lwx_gtk2u_html-2.8 -lwx_gtk2u_adv-2.8 -lwx_gtk2u_core-2.8 -lwx_baseu_xml-2.8 -lwx_baseu_net-2.8 -lwx_baseu-2.8 -lwx_gtk2u_gl-2.8 -lTKVRML -lTKSTL -lTKBRep -lTKIGES -lTKShHealing -lTKSTEP -lTKSTEP209 -lTKSTEPAttr -lTKSTEPBase -lTKXSBase -lTKShapeSchema -lFWOSPlugin -lTKBool -lTKCAF -lTKCDF -lTKernel -lTKFeat -lTKFillet -lTKG2d -lTKG3d -lTKGeomAlgo -lTKGeomBase -lTKHLR -lTKMath -lTKOffset -lTKPrim -lTKPShape -lTKService -lTKTopAlgo -lTKV2d -lTKV3d -lTKMesh -lTKAdvTools -lTKBO -lTKXDESTEP -lTKXCAF -lTKXCAFSchema -lTKLCAF -lTKPLCAF -o ../HeeksCAD.exe
+
+
+
+
+
+and then after about 5-10 minutes it will say:
+dan@dan-desktop:~/Desktop/HeeksCAD/src$ 
+
+
+
+and then it will have made HeeksCAD.exe
+
+
+
+On the Ubuntu menu, go to Places->Desktop
+Then double click on HeeksCAD folder to open it.
+You will see HeeksCAD.exe with a blue diamond icon.
+Double click on the blue diamond icon to run HeeksCAD.
+
+
+
+Let me know if something goes wrong. danheeks@googlemail.com
