@@ -45,7 +45,7 @@ bool CSphere::ModifyByMatrix(const double* m){
 
 void CSphere::GetProperties(std::list<Property *> *list)
 {
-	__super::GetProperties(list);
+	CSolid::GetProperties(list);
 
 	list->push_back(new PropertyVertex(_("centre"), m_pos, this, on_set_centre));
 	list->push_back(new PropertyDouble(_("radius"), m_radius, this, on_set_radius));

@@ -35,6 +35,9 @@
 #include "Interface_Static.hxx"
 #include "../interface/Tool.h"
 #include "../tinyxml/tinyxml.h"
+#include <wx/config.h>
+#include <wx/confbase.h>
+#include <wx/fileconf.h>
 
 // static member variable
 bool CShape::m_solids_found = false;

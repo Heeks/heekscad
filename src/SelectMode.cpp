@@ -385,7 +385,7 @@ void CSelectMode::OnKeyDown(wxKeyEvent& event)
 		return;
 	}
 
-	__super::OnKeyDown(event);
+	CInputMode::OnKeyDown(event);
 }
 
 void CSelectMode::OnKeyUp(wxKeyEvent& event)
@@ -395,7 +395,7 @@ void CSelectMode::OnKeyUp(wxKeyEvent& event)
 		return;
 	}
 
-	__super::OnKeyUp(event);
+	CInputMode::OnKeyUp(event);
 }
 
 void CSelectMode::OnFrontRender(){

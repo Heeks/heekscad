@@ -25,7 +25,9 @@ public:
 	virtual bool GetCamera(double* pos, double* target, double* up, bool& perspective, double& field_of_view, double& near_plane, double& far_plane);
 	virtual wxFrame* GetMainFrame();
 	virtual wxWindow* GetGraphicsCanvas();
+#ifdef WIN32
 	virtual HGLRC GetRC();
+#endif
 	virtual wxMenuBar* GetMenuBar();
 	virtual wxMenu* GetWindowMenu();
 	virtual wxAuiManager* GetAuiManager();

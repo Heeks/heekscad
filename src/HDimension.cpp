@@ -142,7 +142,7 @@ static void on_set_trsf(const gp_Trsf &trsf, HeeksObj* object){
 
 void HDimension::GetProperties(std::list<Property *> *list)
 {
-	__super::GetProperties(list);
+	HeeksObj::GetProperties(list);
 
 	list->push_back(new PropertyTrsf(_("orientation"), m_trsf, this, on_set_trsf));
 }
@@ -351,3 +351,4 @@ void HDimension::draw_arrow_line(DimensionMode mode, const gp_Pnt &p0, const gp_
 		glEnd();
 	}
 }
+

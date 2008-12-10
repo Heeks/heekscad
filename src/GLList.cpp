@@ -19,3 +19,4 @@ void CGLList::DestroyGLList(){
 		m_gl_list_exists = false;
 	}
 }
+

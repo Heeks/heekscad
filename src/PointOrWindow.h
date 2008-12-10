@@ -4,7 +4,7 @@
 
 #include "../interface/InputMode.h"
 
-class Window;
+class WindowDragging;
 class CViewPoint;
 
 class PointOrWindow: public CInputMode{
@@ -15,7 +15,7 @@ private:
 public:
 	bool use_window;
 	wxRect box_chosen;
-	Window *window;
+	WindowDragging *window;
 
 	PointOrWindow(bool wd);
 	~PointOrWindow(void);

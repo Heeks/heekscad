@@ -15,3 +15,4 @@
 GLuint* loadImage(wxString path, int* imageWidth, int* imageHeight, int* textureWidth, int* textureHeight);
  
 #endif 
+

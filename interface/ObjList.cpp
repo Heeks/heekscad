@@ -263,3 +263,4 @@ void ObjList::GetTriangles(void(*callbackfunc)(const double* x, const double* n)
 {
 	for(std::list<HeeksObj*>::iterator It=m_objects.begin(); It!=m_objects.end() ;It++) (*It)->GetTriangles(callbackfunc, cusp, just_one_average_normal);
 }
+

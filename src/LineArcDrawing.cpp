@@ -18,6 +18,9 @@
 #include "InputModeCanvas.h"
 #include "Sketch.h"
 #include "GraphicsCanvas.h"
+#include <wx/config.h>
+#include <wx/confbase.h>
+#include <wx/fileconf.h>
 
 wxCursor LineArcDrawing::m_cursor_start;
 wxCursor LineArcDrawing::m_cursor_end;
@@ -149,7 +152,7 @@ void LineArcDrawing::AddPoint()
 			m_getting_position = false;
 			m_inhibit_coordinate_change = false;
 #endif
-		__super::AddPoint();
+		Drawing::AddPoint();
 		}
 		break;
 
@@ -179,7 +182,7 @@ void LineArcDrawing::AddPoint()
 				}
 			}
 
-			__super::AddPoint();
+			Drawing::AddPoint();
 
 			// and move the point
 			if(current_view_stuff->start_pos.m_type == DigitizeTangentType && save_temp_object)
@@ -194,7 +197,7 @@ void LineArcDrawing::AddPoint()
 		break;
 
 	default:
-		__super::AddPoint();
+		Drawing::AddPoint();
 		break;
 	}
 }
@@ -400,7 +403,7 @@ void LineArcDrawing::OnKeyDown(wxKeyEvent& event)
 		return;
 	}
 
-	__super::OnKeyDown(event);
+	Drawing::OnKeyDown(event);
 }
 
 void LineArcDrawing::OnKeyUp(wxKeyEvent& event)
@@ -418,7 +421,7 @@ void LineArcDrawing::OnKeyUp(wxKeyEvent& event)
 		return;
 	}
 
-	__super::OnKeyUp(event);
+	Drawing::OnKeyUp(event);
 }
 
 void LineArcDrawing::set_cursor(void){
@@ -462,7 +465,7 @@ void LineArcDrawing::GetProperties(std::list<Property *> *list){
 		break;
 	}
 
-	__super::GetProperties(list);
+	Drawing::GetProperties(list);
 }
 
 void LineArcDrawing::GetTools(std::list<Tool*> *f_list, const wxPoint *p){
@@ -475,7 +478,7 @@ void LineArcDrawing::GetOptions(std::list<Property *> *list){
 
 bool LineArcDrawing::OnModeChange(void){
 	// on start of drawing mode
-	if(!__super::OnModeChange())return false;
+	if(!Drawing::OnModeChange())return false;
 	if(m_container)m_container = NULL;
 
 	wxGetApp().m_config->Read(_T("RadiusForCircle"), &radius_for_circle, 5.0);

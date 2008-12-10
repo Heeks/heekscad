@@ -33,7 +33,7 @@ bool DimensionDrawing::calculate_item(DigitizedPoint &end)
 		temp_object_in_list.clear();
 	}
 
-	gp_Trsf& mat = wxGetApp().GetDrawMatrix(true);
+	gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
 
 	// make sure dimension exists
 	if(!temp_object){
@@ -97,7 +97,7 @@ void DimensionDrawing::GetProperties(std::list<Property *> *list){
 	DimensionDrawing_for_GetProperties = this;
 	list->push_back ( new PropertyChoice ( _("mode"),  choices, m_mode, NULL, on_set_mode ) );
 
-	__super::GetProperties(list);
+	Drawing::GetProperties(list);
 }
 
 void DimensionDrawing::GetTools(std::list<Tool*> *f_list, const wxPoint *p){

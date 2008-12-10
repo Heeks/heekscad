@@ -25,6 +25,8 @@ class CHeeksFrame;
 class wxDynamicLibrary;
 class CoordinateSystem;
 class HRuler;
+class wxConfigBase;
+class wxAuiManager;
 
 #define MAX_RECENT_FILES 20
 
@@ -80,7 +82,7 @@ public:
 	gp_Pnt grip_from, grip_to;
 	Gripper *cursor_gripper;
 	CHeeksFrame *m_frame;
-	wxConfig* m_config;
+	wxConfigBase* m_config;
 	MarkedList *m_marked_list;
 	bool m_doing_rollback;
 	wxString m_filepath;

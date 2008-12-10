@@ -64,3 +64,4 @@ public:
 	bool Orientation();
 	void GetUVBox(double *uv_box);
 };
+

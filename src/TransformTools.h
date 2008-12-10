@@ -11,3 +11,4 @@ public:
 	static void Mirror(bool copy);
 	static void Scale(bool copy);
 };
+

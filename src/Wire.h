@@ -20,3 +20,4 @@ public:
 
 	const TopoDS_Wire &Wire()const;
 };
+

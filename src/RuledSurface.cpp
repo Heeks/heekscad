@@ -123,7 +123,7 @@ bool CreateRuledSurface(const std::list<TopoDS_Wire> &wire_list, TopoDS_Shape& s
 	return false;
 }
 
-void CreateExtrusions(const std::list<TopoDS_Face> &faces, std::list<TopoDS_Shape>& new_shapes, gp_Vec& extrude_vector)
+void CreateExtrusions(const std::list<TopoDS_Face> &faces, std::list<TopoDS_Shape>& new_shapes, const gp_Vec& extrude_vector)
 {
 	for(std::list<TopoDS_Face>::const_iterator It = faces.begin(); It != faces.end(); It++)
 	{
@@ -133,3 +133,4 @@ void CreateExtrusions(const std::list<TopoDS_Face> &faces, std::list<TopoDS_Shap
 		new_shapes.push_back(generator.Shape());
 	}
 }
+
