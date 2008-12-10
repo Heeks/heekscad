@@ -202,21 +202,33 @@ bool HeeksCADapp::OnInit()
 		wxString str;
 		m_config->Read(_T("BackgroundColor"), &str, _T("242 204 162"));
 		int r = 0, g = 0, b = 0;
-		wscanf(str, _T("%d %d %d"), &r, &g, &b);
+#if wxUSE_UNICODE
+		swscanf(str, _T("%d %d %d"), &r, &g, &b);
+#else
+		sscanf(str, _T("%d %d %d"), &r, &g, &b);
+#endif
 		background_color = HeeksColor(r, g, b);
 	}
 	{
 		wxString str;
 		m_config->Read(_T("CurrentColor"), &str, _T("0 0 0"));
 		int r = 0, g = 0, b = 0;
-		wscanf(str, _T("%d %d %d"), &r, &g, &b);
+#if wxUSE_UNICODE
+		swscanf(str, _T("%d %d %d"), &r, &g, &b);
+#else
+		sscanf(str, _T("%d %d %d"), &r, &g, &b);
+#endif
 		current_color = HeeksColor(r, g, b);
 	}
 	{
 		wxString str;
 		m_config->Read(_T("ConstructionColor"), &str, _T("0 0 255"));
 		int r = 0, g = 0, b = 255;
-		wscanf(str, _T("%d %d %d"), &r, &g, &b);
+#if wxUSE_UNICODE
+		swscanf(str, _T("%d %d %d"), &r, &g, &b);
+#else
+		sscanf(str, _T("%d %d %d"), &r, &g, &b);
+#endif
 		construction_color = HeeksColor(r, g, b);
 	}
 	m_config->Read(_T("RotateMode"), &m_rotate_mode);
