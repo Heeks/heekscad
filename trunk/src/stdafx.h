@@ -67,7 +67,14 @@
 
 #include "Geom.h"
 
-extern "C" {#include <GL/gl.h>#include <GL/glu.h>}
+extern "C" {
+#include <GL/gl.h>
+#ifdef WIN32
+#include <GL/glu.h>
+#else
+#include <GL/glu.h>
+#endif
+}
 #include "HeeksCAD.h"
 
 
