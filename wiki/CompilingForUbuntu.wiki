@@ -9,8 +9,7 @@ On the menu, go to System->Administration->"Synaptic Package Manager"
 Follow the instructions at http://www.opennovation.org/ubuntu/ to enable the Open CASCADE packages
 
 
-From synaptic package manager, I got...   build-essential,     11 items whose names begin with libopencascade,      3 items whose names begin with libgtkglext1,
-    libwxbase2.8-0, libwxbase2.8-dev, libwxgtk2.8-0, libwxgtk2.8-dev,   but it also marked other packages for installation, which I didn't look at their names
+From synaptic package manager, I got...   build-essential,     11 items whose names begin with libopencascade,      3 items whose names begin with libgtkglext1, also these 4 items  libwxbase2.8-0, libwxbase2.8-dev, libwxgtk2.8-0, libwxgtk2.8-dev,   but it also marked other packages for installation, which I didn't look at their names
 
 
 Get RapidSVN:
