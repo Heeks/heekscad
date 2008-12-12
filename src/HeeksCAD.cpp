@@ -1129,7 +1129,7 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 			if(object->DrawAfterOthers())after_others_objects.push_back(object);
 			else
 			{
-				if(select)glPushName((unsigned int)object);
+				if(select)glPushName((unsigned long)object);
 				object->glCommands(select, wxGetApp().m_marked_list->ObjectMarked(object), false);
 				if(select)glPopName();
 			}
@@ -1158,7 +1158,7 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	for(std::list<HeeksObj*>::iterator It = after_others_objects.begin(); It != after_others_objects.end(); It++)
 	{
 		HeeksObj* object = *It;
-		if(select)glPushName((unsigned int)object);
+		if(select)glPushName((unsigned long)object);
 		object->glCommands(select, wxGetApp().m_marked_list->ObjectMarked(object), false);
 		if(select)glPopName();
 	}
@@ -1166,7 +1166,7 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	// draw the ruler
 	if(m_show_ruler && m_ruler->m_visible)
 	{
-		if(select)glPushName((unsigned int)m_ruler);
+		if(select)glPushName((unsigned long)m_ruler);
 		m_ruler->glCommands(select, false, false);
 		if(select)glPopName();
 	}
@@ -1207,7 +1207,7 @@ void HeeksCADapp::glCommands(bool select, bool marked, bool no_color)
 		HeeksObj* object = *It;
 		if(object->OnVisibleLayer() && object->m_visible)
 		{
-			if(select)glPushName((unsigned int)object);
+			if(select)glPushName((unsigned long)object);
 			(*It)->glCommands(select, marked || wxGetApp().m_marked_list->ObjectMarked(object), no_color);
 			if(select)glPopName();
 		}
@@ -1216,7 +1216,7 @@ void HeeksCADapp::glCommands(bool select, bool marked, bool no_color)
 	// draw the ruler
 	if(m_show_ruler)
 	{
-		if(select)glPushName((unsigned int)m_ruler);
+		if(select)glPushName((unsigned long)m_ruler);
 		m_ruler->glCommands(select, false, false);
 		if(select)glPopName();
 	}
