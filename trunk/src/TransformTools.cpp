@@ -70,7 +70,7 @@ void TransformTools::Translate(bool copy)
 		}
 	}
 	double to[3];
-	bool success = wxGetApp().PickPosition(_("Click position to move to"), to, on_move_translate);
+	wxGetApp().PickPosition(_("Click position to move to"), to, on_move_translate);
 	if(!copy)
 	{
 		for(std::list<HeeksObj*>::iterator It = wxGetApp().m_hidden_for_drag.begin(); It != wxGetApp().m_hidden_for_drag.end(); It++)

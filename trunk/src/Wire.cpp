@@ -17,7 +17,7 @@ public:
 	double m_offset;
 	CWire* m_wire;
 
-	OffsetWireTool(CWire* wire, double offset):m_wire(wire), m_offset(offset){}
+	OffsetWireTool(CWire* wire, double offset):m_offset(offset), m_wire(wire){}
 
 	// Tool's virtual functions
 	void Run(){

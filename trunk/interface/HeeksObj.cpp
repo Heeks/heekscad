@@ -13,9 +13,9 @@
 #include "../src/ObjPropsCanvas.h"
 #endif
 
-HeeksObj::HeeksObj(void): m_owner(NULL), m_id(0), m_layer(0), m_visible(true){}
+HeeksObj::HeeksObj(void): m_id(0), m_layer(0), m_visible(true), m_owner(NULL){}
 
-HeeksObj::HeeksObj(const HeeksObj& ho): m_owner(NULL), m_id(0), m_layer(0), m_visible(true){operator=(ho);}
+HeeksObj::HeeksObj(const HeeksObj& ho): m_id(0), m_layer(0), m_visible(true), m_owner(NULL){operator=(ho);}
 
 const HeeksObj& HeeksObj::operator=(const HeeksObj &ho)
 {
@@ -156,8 +156,6 @@ void HeeksObj::ReadBaseXML(TiXmlElement* element)
 bool HeeksObj::OnVisibleLayer()
 {
 	// to do, support multiple layers.
-
-	// for now, layer -1 is invisible, all others are visible
-	return m_layer != -1;
+	return true;
 }
 

@@ -137,6 +137,8 @@ void MarkedObject::SetFirst(EnumStackedType stacked_type)
 				}
 			}
 			break;
+		default:
+			break;
 	}
 	m_processed = false;
 }

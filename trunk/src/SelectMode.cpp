@@ -351,8 +351,6 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 		CurrentPoint = wxPoint(event.GetX(), event.GetY());
 	}
 
-	static double max_recorded_value = 0.0;
-
 	if(event.GetWheelRotation() != 0)
 	{
 		double wheel_value = (double)(event.GetWheelRotation());
