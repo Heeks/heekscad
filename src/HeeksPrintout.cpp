@@ -67,7 +67,6 @@ void HeeksPrintout::SetUnitsFactor()
     // too small for some reason. This is a detail that will need to be
     // addressed at some point but can be fudged for the moment.
     float scalex = (float)((float)ppiPrinterX/(float)ppiScreenX);
-    float scaley = (float)((float)ppiPrinterY/(float)ppiScreenY);
 
     // Now we have to check in case our real page size is reduced (e.g. because
     // we're drawing to a print preview memory DC)
@@ -79,8 +78,6 @@ void HeeksPrintout::SetUnitsFactor()
     // If printer pageWidth == current DC width, then this doesn't change. But w
     // might be the preview bitmap width, so scale down.
     float overallScalex = scalex * (float)(w/(float)pageWidth);
-    float overallScaley = scaley * (float)(h/(float)pageHeight);
-//    dc->SetUserScale(overallScalex, overallScaley);
 
     // Calculate conversion factor for converting millimetres into logical
     // units. There are approx. 25.4 mm to the inch. There are ppi device units
@@ -90,9 +87,9 @@ void HeeksPrintout::SetUnitsFactor()
     m_logUnitsFactorx = (float)(ppiPrinterX/25.4) * (float)(w/(float)pageWidth);
     m_logUnitsFactory = (float)(ppiPrinterY/25.4) * (float)(h/(float)pageHeight);
 
-	m_scale = overallScalex;
+    m_scale = overallScalex;
 
-	wxRect fitRect = GetLogicalPageMarginsRect(*wxGetApp().m_pageSetupData);
+    wxRect fitRect = GetLogicalPageMarginsRect(*wxGetApp().m_pageSetupData);
     m_xoff = fitRect.x + fitRect.width / 2;
     m_yoff = fitRect.y + fitRect.height / 2;
 }
@@ -114,23 +111,12 @@ void HeeksPrintout::DrawArc(const double* s, const double* e, const double* c)
 {
     wxDC *dc = GetDC();
 
-	double srad = sqrt(pow(s[0] - c[0], 2.0) + pow(s[1] - c[1], 2.0));
-	double erad = sqrt(pow(e[0] - c[0], 2.0) + pow(e[1] - c[1], 2.0));
-
 	int isx = m_xoff + (long)(e[0] * m_logUnitsFactorx + 0.5);
 	int isy = m_yoff - (long)(e[1] * m_logUnitsFactory + 0.5);
 	int iex = m_xoff + (long)(s[0] * m_logUnitsFactorx + 0.5);
 	int iey = m_yoff - (long)(s[1] * m_logUnitsFactory + 0.5);
 	int icx = m_xoff + (long)(c[0] * m_logUnitsFactorx + 0.5);
 	int icy = m_yoff - (long)(c[1] * m_logUnitsFactory + 0.5);
-
-	int dsx = isx - icx;
-	int dsy = isy - icy;
-	int dex = iex - icx;
-	int dey = iey - icy;
-
-	double s_centre_dist = sqrt((double)(dsx*dsx + dsy*dsy));
-	double e_centre_dist = sqrt((double)(dex*dex + dey*dey));
 
     dc->SetBackgroundMode(wxTRANSPARENT);
     dc->SetBrush(*wxTRANSPARENT_BRUSH);

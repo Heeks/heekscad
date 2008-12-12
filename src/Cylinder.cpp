@@ -9,7 +9,7 @@
 #include "MarkedList.h"
 #include "../tinyxml/tinyxml.h"
 
-CCylinder::CCylinder(const gp_Ax2& pos, double radius, double height, const wxChar* title, const HeeksColor& col):m_pos(pos), m_radius(radius), m_height(height), CSolid(BRepPrimAPI_MakeCylinder(pos, radius, height), title, col)
+CCylinder::CCylinder(const gp_Ax2& pos, double radius, double height, const wxChar* title, const HeeksColor& col):CSolid(BRepPrimAPI_MakeCylinder(pos, radius, height), title, col), m_pos(pos), m_radius(radius), m_height(height)
 {
 }
 

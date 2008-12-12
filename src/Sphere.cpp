@@ -10,7 +10,7 @@
 #include "MarkedList.h"
 #include "../tinyxml/tinyxml.h"
 
-CSphere::CSphere(const gp_Pnt& pos, double radius, const wxChar* title, const HeeksColor& col):m_pos(pos), m_radius(radius), CSolid(BRepPrimAPI_MakeSphere(pos, radius), title, col)
+CSphere::CSphere(const gp_Pnt& pos, double radius, const wxChar* title, const HeeksColor& col):CSolid(BRepPrimAPI_MakeSphere(pos, radius), title, col), m_pos(pos), m_radius(radius)
 {
 }
 

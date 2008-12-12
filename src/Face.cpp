@@ -60,14 +60,6 @@ static Standard_Boolean TriangleIsValid(const gp_Pnt& P1, const gp_Pnt& P2, cons
   
 }
 
-static void glLineAtPoint(const gp_Dir& norm, const gp_Pnt& pos)
-{
-	glBegin(GL_LINES);
-	glVertex3d(pos.X(), pos.Y(), pos.Z());
-	glVertex3d(pos.X() + norm.X(), pos.Y() + norm.Y(), pos.Z() + norm.Z());
-	glEnd();
-}
-
 void CFace::glCommands(bool select, bool marked, bool no_color){
 	bool owned_by_solid = false;
 	if(m_owner && m_owner->m_owner && m_owner->m_owner->GetType() == SolidType) {
@@ -169,15 +161,12 @@ void CFace::glCommands(bool select, bool marked, bool no_color){
 		if(!facing.IsNull()){
 			Poly_Connect pc(facing);	
 			const TColgp_Array1OfPnt& Nodes = facing->Nodes();
-			const TColgp_Array1OfPnt2d& UVNodes = facing->UVNodes();
 			const Poly_Array1OfTriangle& triangles = facing->Triangles();
 			TColgp_Array1OfDir myNormal(Nodes.Lower(), Nodes.Upper());
 
 			SST.Normal(m_topods_face, pc, myNormal);
 			double Umin, Umax, Vmin, Vmax;
 			BRepTools::UVBounds(m_topods_face,Umin, Umax, Vmin, Vmax);
-			double dUmax = (Umax - Umin);
-			double dVmax = (Vmax - Vmin);
 
 			Standard_Integer nnn = facing->NbTriangles();					// nnn : nombre de triangles
 			Standard_Integer nt, n1, n2, n3 = 0;						// nt  : triangle courant
@@ -283,15 +272,12 @@ void CFace::GetTriangles(void(*callbackfunc)(const double* x, const double* n), 
 	if(!facing.IsNull()){
 		Poly_Connect pc(facing);	
 		const TColgp_Array1OfPnt& Nodes = facing->Nodes();
-		const TColgp_Array1OfPnt2d& UVNodes = facing->UVNodes();
 		const Poly_Array1OfTriangle& triangles = facing->Triangles();
 		TColgp_Array1OfDir myNormal(Nodes.Lower(), Nodes.Upper());
 
 		SST.Normal(m_topods_face, pc, myNormal);
 		double Umin, Umax, Vmin, Vmax;
 		BRepTools::UVBounds(m_topods_face,Umin, Umax, Vmin, Vmax);
-		double dUmax = (Umax - Umin);
-		double dVmax = (Vmax - Vmin);
 
 		Standard_Integer nnn = facing->NbTriangles();					// nnn : nombre de triangles
 		Standard_Integer nt, n1, n2, n3 = 0;						// nt  : triangle courant

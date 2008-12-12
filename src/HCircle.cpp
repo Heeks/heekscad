@@ -15,7 +15,7 @@ HCircle::HCircle(const HCircle &c){
 	operator=(c);
 }
 
-HCircle::HCircle(const gp_Circ &c, const HeeksColor* col):m_circle(c), color(*col){
+HCircle::HCircle(const gp_Circ &c, const HeeksColor* col):color(*col), m_circle(c){
 }
 
 HCircle::~HCircle(){
@@ -547,9 +547,6 @@ bool HCircle::GetArcTangentPoints(const gp_Circ& c1, const gp_Circ &c2, const gp
 	gp_Vec c1a(c1.Location(), a);
 	gp_Vec c2b(c2.Location(), b);
 
-	bool is_left1 = c1a * left1 > 0;
-	bool is_left2 = c2b * left2 > 0;
-
 	double r1 = c1.Radius();
 	double r2 = c2.Radius();
 
@@ -733,7 +730,7 @@ bool HCircle::GetArcTangentPoint(const gp_Lin& l, const gp_Pnt& a, const gp_Pnt&
 		else
 		{
 			// fit the minimum radius arc
-			double radius_to_use = c.Distance(b);
+			radius_to_use = c.Distance(b);
 		}
 		axis = l.Direction() ^ sideways;
 		gp_Circ offset_circle(gp_Ax2(b, axis), radius_to_use);

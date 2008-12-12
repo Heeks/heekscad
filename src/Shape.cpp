@@ -42,7 +42,7 @@
 // static member variable
 bool CShape::m_solids_found = false;
 
-CShape::CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor& col):m_shape(shape), m_title(title), m_gl_list(0), m_color(col)
+CShape::CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor& col):m_gl_list(0), m_shape(shape), m_title(title), m_color(col)
 {
 	m_faces = new CFaceList;
 	m_edges = new CEdgeList;
@@ -232,7 +232,6 @@ void CShape::create_faces_and_edges()
 	// delete the maps
 	for(std::map< CFace*, TopTools_MapOfShape*>::iterator It = face_edge_maps.begin(); It != face_edge_maps.end(); It++)
 	{
-		CFace* face = It->first;
 		TopTools_MapOfShape *map = It->second;
 		delete map;
 	}

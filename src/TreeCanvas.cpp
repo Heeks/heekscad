@@ -95,23 +95,21 @@ void CTreeCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<H
 						count++;
 					}
 
-					bool is_expanded = m_treeCtrl->IsExpanded(owner);
-
-						int child_count = 0;
-						if(m_treeCtrl->ItemHasChildren(owner)){
-							wxTreeItemIdValue cookie;
-							wxTreeItemId hNextItem;
-							wxTreeItemId hChildItem = m_treeCtrl->GetFirstChild(owner, cookie);
-							while (hChildItem != wxTreeItemId())
-							{
-								hNextItem = m_treeCtrl->GetNextChild(owner, cookie);
-								child_count++;
-								hChildItem = hNextItem;
-							}
+					int child_count = 0;
+					if(m_treeCtrl->ItemHasChildren(owner)){
+						wxTreeItemIdValue cookie;
+						wxTreeItemId hNextItem;
+						wxTreeItemId hChildItem = m_treeCtrl->GetFirstChild(owner, cookie);
+						while (hChildItem != wxTreeItemId())
+						{
+							hNextItem = m_treeCtrl->GetNextChild(owner, cookie);
+							child_count++;
+							hChildItem = hNextItem;
 						}
-						if(count > child_count){					
-							Add(object, owner, false);
-						}
+					}
+					if(count > child_count){					
+						Add(object, owner, false);
+					}
 				}
 				else{
 					wxTreeItemId item = Add(object, m_root, false);
@@ -365,7 +363,7 @@ void MyTreeCtrl::OnItemActivated(wxTreeEvent& event)
 {
     // show some info about this item
     wxTreeItemId itemId = event.GetItem();
-    MyTreeItemData *item = (MyTreeItemData *)GetItemData(itemId);
+    (MyTreeItemData *)GetItemData(itemId);
 }
 
 void MyTreeCtrl::OnItemMenu(wxTreeEvent& event)
@@ -399,9 +397,6 @@ void MyTreeCtrl::ShowMenu(wxTreeItemId itemId, const wxPoint& point)
 
 void MyTreeCtrl::OnItemRClick(wxTreeEvent& event)
 {
-    wxTreeItemId itemId = event.GetItem();
-    MyTreeItemData *item = itemId.IsOk() ? (MyTreeItemData *)GetItemData(itemId)
-                                         : NULL;
     event.Skip();
 }
 
@@ -481,15 +476,6 @@ void MyTreeCtrl::OnLMouseUp(wxMouseEvent& event)
 
 void MyTreeCtrl::OnLMouseDClick(wxMouseEvent& event)
 {
-    wxTreeItemId id = HitTest(event.GetPosition());
-    if ( !id )
-	{
-	}
-    else
-    {
-        MyTreeItemData *item = (MyTreeItemData *)GetItemData(id);
-    }
-
     event.Skip();
 }
 
@@ -505,12 +491,6 @@ void MyTreeCtrl::OnRMouseUp(wxMouseEvent& event)
 
 void MyTreeCtrl::OnRMouseDClick(wxMouseEvent& event)
 {
-    wxTreeItemId id = HitTest(event.GetPosition());
-    if ( id )
-    {
-        MyTreeItemData *item = (MyTreeItemData *)GetItemData(id);
-    }
-
     event.Skip();
 }
 
