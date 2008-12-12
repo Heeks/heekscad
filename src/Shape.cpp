@@ -28,6 +28,7 @@
 #include "TopTools_MapOfShape.hxx"
 #include "TopTools_MapIteratorOfMapOfShape.hxx"
 #include <TopExp_Explorer.hxx>
+#include <BRepTools_WireExplorer.hxx>
 #include "TopTools_ListOfShape.hxx"
 #include "TopTools_ListIteratorOfListOfShape.hxx"
 #include "BRepOffsetAPI_MakeOffsetShape.hxx"
@@ -167,7 +168,13 @@ void CShape::create_faces_and_edges()
 			bool is_outer = W.IsSame(outerWire) != 0;
 			std::list<CEdge*> edges;
 
-			for (TopExp_Explorer expEdge(W, TopAbs_EDGE); expEdge.More(); expEdge.Next())
+			TopAbs_Orientation wo = W.Orientation();
+			bool bwo = (wo == TopAbs_FORWARD);
+			TopAbs_Orientation fwo = F.Orientation();
+			bool bfwo = (fwo == TopAbs_FORWARD);
+			bool ooooo = (bwo == bfwo);
+
+			for(BRepTools_WireExplorer expEdge(TopoDS::Wire(W)); expEdge.More(); expEdge.Next())
 			{
 				// look through the face's existing edges to find the CEdge*
 				for(CEdge* edge = face->GetFirstEdge(); edge; edge = face->GetNextEdge())
@@ -186,7 +193,7 @@ void CShape::create_faces_and_edges()
 				CEdge* edge = *It;
 				if(edge->m_faces.size() == 2 && edge->m_faces.front() == edge->m_faces.back()){
 					if(edges_for_loop.size() > 0){
-						CLoop* new_loop = new CLoop(face, edges_for_loop, is_outer);
+						CLoop* new_loop = new CLoop(face, ooooo, edges_for_loop, is_outer);
 						face->m_loops.push_back(new_loop);
 						edges_for_loop.clear();
 					}
@@ -198,7 +205,7 @@ void CShape::create_faces_and_edges()
 				}
 			}
 			if(edges_for_loop.size() > 0){
-				CLoop* new_loop = new CLoop(face, edges_for_loop, is_outer);
+				CLoop* new_loop = new CLoop(face, ooooo, edges_for_loop, is_outer);
 				face->m_loops.push_back(new_loop);
 			}
 		}
