@@ -13,7 +13,7 @@ public:
 	std::list<Tool*> m_tool_list;
 
 	ToolList(const wxChar *t): m_title(t){}
-	ToolList(std::list<Tool*>& tools, const wxChar *t): m_tool_list(tools), m_title(t){}
+	ToolList(std::list<Tool*>& tools, const wxChar *t): m_title(t), m_tool_list(tools){}
 	~ToolList(){Clear();}
 
 	// Tool's virtual functions
