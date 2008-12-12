@@ -100,7 +100,7 @@ void MarkedList::update_move_grips(){
 void MarkedList::render_move_grips(bool select, bool no_color){
 	std::list<Gripper*>::iterator It;
 	for(It = move_grips.begin(); It != move_grips.end(); It++){
-		if(select)glPushName((unsigned int)(*It));
+		if(select)glPushName((unsigned long)(*It));
 		(*It)->glCommands(select, false, no_color);
 		if(select)glPopName();
 	}
