@@ -6,7 +6,7 @@
 #include "../tinyxml/tinyxml.h"
 #include "Gripper.h"
 
-HText::HText(const gp_Trsf &trsf, const wxString &text, const HeeksColor* col): m_trsf(trsf), m_text(text), m_color(*col)
+HText::HText(const gp_Trsf &trsf, const wxString &text, const HeeksColor* col):m_color(*col),  m_trsf(trsf), m_text(text)
 {
 }
 

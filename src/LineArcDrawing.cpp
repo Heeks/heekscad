@@ -99,7 +99,12 @@ int LineArcDrawing::number_of_steps()
 		{
 		case ThreePointsCircleMode:
 			return 3;
+		default:
+			break;
 		}
+		break;
+	default:
+		break;
 	}
 	return 2;
 }
@@ -127,7 +132,11 @@ bool LineArcDrawing::is_an_add_level(int level)
 		{
 		case ThreePointsCircleMode:
 			return level == 2;
+		default:
+			break;
 		}
+	default:
+		break;
 	}
 	return level == 1;
 }
@@ -373,6 +382,8 @@ HeeksObj* LineArcDrawing::GetOwnerForDrawingObjects()
 			}
 		}
 		break;
+	default:
+		break;
 	}
 	return NULL;
 }
@@ -462,6 +473,9 @@ void LineArcDrawing::GetProperties(std::list<Property *> *list){
 		{
 			list->push_back(new PropertyDouble(_("radius"), radius_for_circle, NULL, on_set_circle_radius));
 		}
+		break;
+
+	default:
 		break;
 	}
 

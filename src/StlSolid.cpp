@@ -8,11 +8,11 @@
 
 using namespace std;
 
-CStlSolid::CStlSolid(const HeeksColor* col):m_gl_list(0), color(*col){
+CStlSolid::CStlSolid(const HeeksColor* col):color(*col), m_gl_list(0){
 	m_title.assign(GetTypeString());
 }
 
-CStlSolid::CStlSolid(const wxChar* filepath, const HeeksColor* col):m_gl_list(0), color(*col){
+CStlSolid::CStlSolid(const wxChar* filepath, const HeeksColor* col):color(*col), m_gl_list(0){
 	// read the stl file
 #if wxUSE_UNICODE
 #ifdef __WXMSW__

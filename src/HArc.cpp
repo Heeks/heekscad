@@ -15,7 +15,7 @@ HArc::HArc(const HArc &line){
 	operator=(line);
 }
 
-HArc::HArc(const gp_Pnt &a, const gp_Pnt &b, const gp_Circ &c, const HeeksColor* col):A(a), B(b), m_circle(c), color(*col){
+HArc::HArc(const gp_Pnt &a, const gp_Pnt &b, const gp_Circ &c, const HeeksColor* col):color(*col), A(a), B(b), m_circle(c){
 }
 
 HArc::~HArc(){
