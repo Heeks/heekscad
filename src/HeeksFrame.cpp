@@ -104,8 +104,8 @@ EVT_MENU(ID_REDRAW, CHeeksFrame::OnRedrawButton)
 EVT_MENU(ID_RULED_SURFACE, CHeeksFrame::OnRuledSurfaceButton)
 EVT_MENU(ID_EXTRUDE, CHeeksFrame::OnExtrudeButton)
 EVT_MENU(ID_MAG, CHeeksFrame::OnMagButton)
-EVT_MENU(ID_UNDO, CHeeksFrame::OnUndoButton)
-EVT_MENU(ID_REDO, CHeeksFrame::OnRedoButton)
+EVT_MENU(wxID_UNDO, CHeeksFrame::OnUndoButton)
+EVT_MENU(wxID_REDO, CHeeksFrame::OnRedoButton)
 EVT_MENU(ID_MAG_EXTENTS, CHeeksFrame::OnMagExtentsButton)
 EVT_MENU(ID_MAG_NO_ROT, CHeeksFrame::OnMagNoRotButton)
 EVT_MENU(ID_MAG_PREVIOUS, CHeeksFrame::OnMagPreviousButton)
@@ -1309,8 +1309,8 @@ void CHeeksFrame::AddToolBars()
     m_toolBar->AddTool(wxID_CUT, _T("Cut"), ToolImage(_T("cut")), _("Cut selected items to the clipboard"));
     m_toolBar->AddTool(wxID_COPY, _T("Copy"), ToolImage(_T("copy")), _("Copy selected items to the clipboard"));
     m_toolBar->AddTool(wxID_PASTE, _T("Paste"), ToolImage(_T("paste")), _("Paste items from the clipboard"));
-    m_toolBar->AddTool(ID_UNDO, _T("Undo"), ToolImage(_T("undo")), _("Undo the previous command"));
-    m_toolBar->AddTool(ID_REDO, _T("Redo"), ToolImage(_T("redo")), _("Redo the next command"));
+    m_toolBar->AddTool(wxID_UNDO, _T("Undo"), ToolImage(_T("undo")), _("Undo the previous command"));
+    m_toolBar->AddTool(wxID_REDO, _T("Redo"), ToolImage(_T("redo")), _("Redo the next command"));
     m_toolBar->AddTool(ID_SELECT_MODE, _T("Select"), ToolImage(_T("select")), _("Select Mode"));
     m_geometryBar->AddTool(ID_LINES, _T("Lines"), ToolImage(_T("lines")), _("Draw a sketch"));
     m_geometryBar->AddTool(ID_CIRCLES, _T("Circles"), ToolImage(_T("circles")), _("Start Circle Drawing"));
