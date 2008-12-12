@@ -5,9 +5,19 @@
 #include "Face.h"
 #include "Edge.h"
 
-CLoop::CLoop(CFace* face, std::list<CEdge*> edges, bool is_outer) {
+CLoop::CLoop(CFace* face, bool orientation, std::list<CEdge*> edges, bool is_outer) {
 	m_pface = face;
-	m_edges = edges;
+	//if(orientation)
+	//{
+		m_edges = edges;
+	//}
+	//else
+	//{
+	//	for(std::list<CEdge*>::reverse_iterator RIt = edges.rbegin(); RIt != edges.rend(); RIt++)
+	//	{
+	//		m_edges.push_back(*RIt);
+	//	}
+	//}
 	m_is_outer = is_outer;
 }
 
