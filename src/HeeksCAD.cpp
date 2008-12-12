@@ -968,7 +968,8 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 	TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );  
 	doc.LinkEndChild( decl );  
 
-	TiXmlElement * root = new TiXmlElement( "HeeksCAD_Document" );  
+	TiXmlElement * root = new TiXmlElement( "HeeksCAD_Document" );
+
 	doc.LinkEndChild( root );  
 
 	// loop through all the objects writing them
