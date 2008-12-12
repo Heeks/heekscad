@@ -14,7 +14,7 @@ public:
 	std::list<CEdge*>::iterator m_edgeIt;
 	bool m_is_outer;
 
-	CLoop(CFace* face, std::list<CEdge*> edges, bool is_outer);
+	CLoop(CFace* face, bool orientation, std::list<CEdge*> edges, bool is_outer);
 	~CLoop();
 
 	// HeeksObj's virtual functions
