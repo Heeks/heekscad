@@ -31,7 +31,7 @@ CStlSolid::CStlSolid(const wxChar* filepath, const HeeksColor* col):color(*col),
 #if wxUSE_UNICODE
 	if(wcscmp(solid_string, _T("solid")))
 #else
-	if(stricmp(solid_string, _T("solid")))
+	if(strcmp(solid_string, _T("solid")))
 #endif
 	{
 		// try binary file read
@@ -106,18 +106,18 @@ CStlSolid::CStlSolid(const wxChar* filepath, const HeeksColor* col):color(*col),
 					}
 				}
 #else
-				if(!stricmp(five_chars, _T("verte")))
+				if(!strcmp(five_chars, _T("verte")))
 				{
 					sscanf(str, _T(" vertex %f %f %f"), &(t.x[vertex][0]), &(t.x[vertex][1]), &(t.x[vertex][2]));
 					vertex++;
 					if(vertex > 2)vertex = 2;
 				}
-				else if(!stricmp(five_chars, _T("facet")))
+				else if(!strcmp(five_chars, _T("facet")))
 				{
 					sscanf(str, _T(" facet normal %f %f %f"), &(t.n[0]), &(t.n[1]), &(t.n[2]));
 					vertex = 0;
 				}
-				else if(!stricmp(five_chars, _T("endfa")))
+				else if(!strcmp(five_chars, _T("endfa")))
 				{
 					if(vertex == 2)
 					{

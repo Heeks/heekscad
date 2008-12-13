@@ -181,6 +181,7 @@ void CTreeCanvas::Clear()
 {
 	m_treeCtrl->DeleteAllItems();
 	tree_map.clear();
+	m_root = m_treeCtrl->AddRoot(_T("root"), -1, -1, NULL);
 }
 
 bool CTreeCanvas::CanAdd(HeeksObj* object)
