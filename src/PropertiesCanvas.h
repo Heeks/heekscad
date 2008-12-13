@@ -8,6 +8,12 @@ class wxPropertyGrid;
 class wxPGProperty;
 class wxPropertyGridEvent;
 
+#ifdef WIN32
+#define EXTRA_TOOLBAR_HEIGHT 7
+#else
+#define EXTRA_TOOLBAR_HEIGHT 14
+#endif
+
 class CPropertiesCanvas: public wxScrolledWindow, public Observer
 {
 public:
