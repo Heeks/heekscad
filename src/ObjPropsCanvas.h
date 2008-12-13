@@ -27,6 +27,7 @@ public:
 
 	// CPropertiesCanvas's virtual functions
 	void RefreshByRemovingAndAddingAll();
+	void AddToolBar();
 	void OnApply2();
 
 	void ApplyChanges(); // clear the cancel object
