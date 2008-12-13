@@ -56,7 +56,7 @@ void CObjPropsCanvas::OnSize(wxSizeEvent& event)
 	wxSize size = GetClientSize();
 	if(m_toolBar->GetToolsCount() > 0){
 		wxSize toolbar_size = m_toolBar->GetClientSize();
-		int toolbar_height = ToolImage::GetBitmapSize() + 7;
+		int toolbar_height = ToolImage::GetBitmapSize() + EXTRA_TOOLBAR_HEIGHT;
 		m_pg->SetSize(0, 0, size.x, size.y - toolbar_height );
 		m_toolBar->SetSize(0, size.y - toolbar_height , size.x, toolbar_height );
 		m_toolBar->Show();
@@ -137,7 +137,7 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll(){
 		wxSize size = GetClientSize();
 		if(m_toolBar->GetToolsCount() > 0){
 			wxSize toolbar_size = m_toolBar->GetClientSize();
-			int toolbar_height = ToolImage::GetBitmapSize() + 7;
+			int toolbar_height = ToolImage::GetBitmapSize() + EXTRA_TOOLBAR_HEIGHT;
 			m_pg->SetSize(0, 0, size.x, size.y - toolbar_height );
 			m_toolBar->SetSize(0, size.y - toolbar_height , size.x, toolbar_height );
 			m_toolBar->Show();
