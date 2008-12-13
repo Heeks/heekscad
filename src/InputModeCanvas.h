@@ -17,6 +17,7 @@ public:
 public:
 	// CPropertiesCanvas's virtual functions
 	void RefreshByRemovingAndAddingAll();
+	void AddToolBar();
 
     DECLARE_NO_COPY_CLASS(CInputModeCanvas)
     DECLARE_EVENT_TABLE()

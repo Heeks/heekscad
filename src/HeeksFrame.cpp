@@ -603,8 +603,8 @@ void CHeeksFrame::OnUpdateViewStatusBar( wxUpdateUIEvent& event )
 void CHeeksFrame::OnResetLayout( wxCommandEvent& event )
 {
 	ToolImage::SetBitmapSize(ToolImage::default_bitmap_size);
-	OnChangeBitmapSize();
 	LoadPerspective(default_layout_string);
+	OnChangeBitmapSize();
 	m_aui_manager->Update();
 }
 
@@ -1282,6 +1282,11 @@ void CHeeksFrame::OnChangeBitmapSize()
 	delete m_transformBar;
 
 	AddToolBars();
+
+	m_input_canvas->AddToolBar();
+	m_input_canvas->RefreshByRemovingAndAddingAll();
+	m_properties->AddToolBar();
+	m_properties->RefreshByRemovingAndAddingAll();
 }
 
 void CHeeksFrame::SetToolBarsSize()
