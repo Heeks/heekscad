@@ -2,16 +2,6 @@ import translate
 import re
 import codecs
 
-<<<<<<< .mine
-# goodbye!
-
-=======
-<<<<<<< .mine
-# hello! more test
-
-=======
->>>>>>> .r171
->>>>>>> .r172
 f_in = open('HeeksCAD.po')
 #f_out = codecs.open('de/HeeksCAD.po', encoding='latin_1', mode='w')
 #f_out = codecs.open('zh_CN/HeeksCAD.po', encoding='utf_8', mode='w')
