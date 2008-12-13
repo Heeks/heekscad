@@ -10,6 +10,7 @@ class Tool
 {
 	public:
 	wxBitmap* m_bitmap;
+	int m_icon_size;
 
 	Tool():m_bitmap(NULL){}
 	virtual ~Tool(){if(m_bitmap)delete m_bitmap;}
@@ -23,5 +24,5 @@ class Tool
 	virtual bool Checked(){return false;}
 	virtual bool IsAToolList() {return false;}
 	virtual wxString BitmapPath(){return _T("");}
-	virtual wxBitmap* Bitmap(){if(m_bitmap == NULL && BitmapPath().Len() > 0)m_bitmap = new wxBitmap(ToolImage(BitmapPath()));return m_bitmap;}
+	virtual wxBitmap* Bitmap(){if((m_bitmap == NULL || (m_icon_size != ToolImage::GetBitmapSize())) && BitmapPath().Len() > 0){delete m_bitmap; m_bitmap = new wxBitmap(ToolImage(BitmapPath())); m_icon_size = ToolImage::GetBitmapSize();}return m_bitmap;}
 };

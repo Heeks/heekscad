@@ -30,7 +30,15 @@ static void OnCancel(wxCommandEvent& event)
 CObjPropsCanvas::CObjPropsCanvas(wxWindow* parent)
         : CPropertiesCanvas(parent), m_object_for_cancel(NULL)
 {
-	// make a tool bar for Apply, Cancel and any tools of the marked object.
+	m_toolBar = NULL;
+	AddToolBar();
+}
+
+void CObjPropsCanvas::AddToolBar()
+{
+	if(m_toolBar)delete m_toolBar;
+
+	// make a toolbar for the current input modes's tools
 	m_toolBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
 	m_toolBar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
 	m_toolBar->Realize();
