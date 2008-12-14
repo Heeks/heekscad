@@ -253,7 +253,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 			wxGetApp().m_frame->m_graphics->Update();
 			wxGetApp().m_frame->m_graphics->Refresh(0);
 		}
-		else
+		else if(event.LeftIsDown())
 		{
 			if(wxGetApp().drag_gripper)
 			{
