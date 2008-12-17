@@ -52,7 +52,7 @@ void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
 				{
 					double p[3];
 					extract(position, p);
-					object->StretchTemporary(p, shift);
+					if(!object->StretchTemporary(p, shift))return;
 				}
 			}
 		}
