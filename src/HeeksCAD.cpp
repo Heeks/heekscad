@@ -1280,6 +1280,7 @@ public:
 	void Run(){
 		wxGetApp().m_frame->ShowFullScreen(!wxGetApp().m_frame->IsFullScreen());
 	}
+	wxString BitmapPath(){return _T("fullscreen");}
 };
 
 void HeeksCADapp::DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool from_graphics_canvas, bool control_pressed)

@@ -210,7 +210,11 @@ void CViewPoint::Twist(wxPoint start, wxPoint point_diff){
 void CViewPoint::SetProjection2(bool use_depth_testing){
 	double rad;
 	CBox box;
-	if(use_depth_testing)wxGetApp().GetBox(box);
+	if(use_depth_testing)
+	{
+		wxGetApp().GetBox(box);
+		box.Insert(m_extra_depth_box);
+	}
 	if(!use_depth_testing){
 		m_near_plane = 0;
 		m_far_plane = 100000000;

@@ -20,6 +20,7 @@ enum{
 	GripperType,
 	EdgeType,
 	FaceType,
+	LoopType,
 	SolidType,
 	StlSolidType,
 	WireType,
@@ -48,6 +49,7 @@ enum{
 #define MARKING_FILTER_TEXT					0x00001000
 #define MARKING_FILTER_DIMENSION			0x00002000
 #define MARKING_FILTER_RULER				0x00004000
+#define MARKING_FILTER_LOOP					0x00008000
 
 class HeeksObj{
 public:
