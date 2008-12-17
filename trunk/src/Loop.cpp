@@ -40,3 +40,13 @@ CEdge* CLoop::GetNextEdge()
 	return *m_edgeIt;
 }
 
+CEdge* CLoop::GetEdge(int index)
+{
+	int i = 0;
+	for(std::list<CEdge*>::iterator It = m_edges.begin(); It != m_edges.end(); It++, i++)
+	{
+		if(index == i)return *It;
+	}
+
+	return NULL;
+}
