@@ -480,8 +480,8 @@ void CFace::GetUVBox(double *uv_box)
 {
 	BRepAdaptor_Surface surface(m_topods_face, Standard_True);
 	uv_box[0] = surface.FirstUParameter();
-	uv_box[1] = surface.FirstVParameter();
-	uv_box[2] = surface.LastUParameter();
+	uv_box[1] = surface.LastUParameter();
+	uv_box[2] = surface.FirstVParameter();
 	uv_box[3] = surface.LastVParameter();
 }
 

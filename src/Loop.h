@@ -22,5 +22,6 @@ public:
 
 	CEdge* GetFirstEdge();
 	CEdge* GetNextEdge();
+	CEdge* GetEdge(int index);
 };
 

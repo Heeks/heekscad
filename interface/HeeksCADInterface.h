@@ -79,6 +79,7 @@ public:
 	virtual void WriteIDToXML(HeeksObj* object, TiXmlElement *element);
 	virtual void ReadIDFromXML(HeeksObj* object, TiXmlElement *element);
 	virtual const wxChar* GetFileFullPath(); // returns NULL for untitled
+	virtual void SetViewBox(const double* b);
 
 	// body functions
 	virtual long BodyGetNumFaces(HeeksObj* body);
@@ -116,10 +117,14 @@ public:
 	virtual void EdgeGetCurveParams2(HeeksObj* edge, double *uStart, double *uEnd, int *isClosed, int *isPeriodic);
 	virtual bool EdgeInFaceSense(HeeksObj* edge, HeeksObj* face);
 	virtual void EdgeEvaluate(HeeksObj* edge, double u, double *p, double *tangent);
+	virtual bool EdgeGetLineParams(HeeksObj* edge, double* d6);
+	virtual bool EdgeGetCircleParams(HeeksObj* edge, double* d6);
 
 	// loop functions
+	virtual long LoopGetEdgeCount(HeeksObj* loop);
 	virtual HeeksObj* LoopGetFirstEdge(HeeksObj* loop);
 	virtual HeeksObj* LoopGetNextEdge(HeeksObj* loop);
+	virtual HeeksObj* LoopGetEdge(HeeksObj* loop, int index);
 	virtual bool LoopIsOuter(HeeksObj* loop);
 
 	virtual const wxChar* GetRevisionNumber();

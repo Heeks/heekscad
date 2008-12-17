@@ -33,7 +33,7 @@ CEdge::~CEdge(){
 }
 
 void CEdge::glCommands(bool select, bool marked, bool no_color){
-	glColor3ub(0, 0, 0);
+	if(!no_color)glColor3ub(0, 0, 0);
 
 	if(m_owner && m_owner->m_owner && m_owner->m_owner->GetType() == SolidType)
 	{
@@ -233,6 +233,40 @@ void CEdge::Evaluate(double u, double *p, double *tangent)
 	curve.D1(u, P, V);
 	extract(P, p);
 	extract(V, tangent);
+}
+
+bool CEdge::GetLineParams(double *d6)
+{
+	BRepAdaptor_Curve curve(m_topods_edge);
+	if(curve.GetType() != GeomAbs_Line)return false;
+	gp_Lin line = curve.Line();
+	const gp_Pnt& pos = line.Location();
+	const gp_Dir& dir = line.Direction();
+	d6[0] = pos.X();
+	d6[1] = pos.Y();
+	d6[2] = pos.Z();
+	d6[3] = dir.X();
+	d6[4] = dir.Y();
+	d6[5] = dir.Z();
+	return true;
+}
+
+bool CEdge::GetCircleParams(double *d7)
+{
+	//center.x, center.y, center.z, axis.x, axis.y, axis.z, radius 
+	BRepAdaptor_Curve curve(m_topods_edge);
+	if(curve.GetType() != GeomAbs_Circle)return false;
+	gp_Circ c = curve.Circle();
+	const gp_Pnt& pos = c.Location();
+	const gp_Dir& dir = c.Axis().Direction();
+	d7[0] = pos.X();
+	d7[1] = pos.Y();
+	d7[2] = pos.Z();
+	d7[3] = dir.X();
+	d7[4] = dir.Y();
+	d7[5] = dir.Z();
+	d7[6] = c.Radius();
+	return true;
 }
 
 bool CEdge::Orientation()

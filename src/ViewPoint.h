@@ -26,6 +26,7 @@ public:
 	bool m_matrix_valid;
 	double m_near_plane;
 	double m_far_plane;
+	CBox m_extra_depth_box;
 
 	CViewPoint(void);
 	~CViewPoint(void);

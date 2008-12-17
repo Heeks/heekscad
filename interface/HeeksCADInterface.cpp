@@ -378,6 +378,15 @@ const wxChar* CHeeksCADInterface::GetFileFullPath()
 	return wxGetApp().m_filepath;
 }
 
+void CHeeksCADInterface::SetViewBox(const double* b)
+{
+	if(wxGetApp().m_frame == NULL)return;
+	if(wxGetApp().m_frame->m_graphics == NULL)return;
+	CViewPoint &v = wxGetApp().m_frame->m_graphics->m_view_point;
+	v.m_extra_depth_box.Insert(b[0], b[1], b[2]);
+	v.m_extra_depth_box.Insert(b[3], b[4], b[5]);
+}
+
 long CHeeksCADInterface::BodyGetNumFaces(HeeksObj* body)
 {
 	return ((CShape*)body)->m_faces->GetNumChildren();
@@ -561,6 +570,21 @@ void CHeeksCADInterface::EdgeEvaluate(HeeksObj* edge, double u, double *p, doubl
 	((CEdge*)edge)->Evaluate(u, p, tangent);
 }
 
+bool CHeeksCADInterface::EdgeGetLineParams(HeeksObj* edge, double* d6)
+{
+	return ((CEdge*)edge)->GetLineParams(d6);
+}
+
+bool CHeeksCADInterface::EdgeGetCircleParams(HeeksObj* edge, double* d6)
+{
+	return ((CEdge*)edge)->GetCircleParams(d6);
+}
+
+long CHeeksCADInterface::LoopGetEdgeCount(HeeksObj* loop)
+{
+	return ((CLoop*)loop)->m_edges.size();
+}
+
 HeeksObj* CHeeksCADInterface::LoopGetFirstEdge(HeeksObj* loop)
 {
 	return ((CLoop*)loop)->GetFirstEdge();
@@ -569,6 +593,11 @@ HeeksObj* CHeeksCADInterface::LoopGetFirstEdge(HeeksObj* loop)
 HeeksObj* CHeeksCADInterface::LoopGetNextEdge(HeeksObj* loop)
 {
 	return ((CLoop*)loop)->GetNextEdge();
+}
+
+HeeksObj* CHeeksCADInterface::LoopGetEdge(HeeksObj* loop, int index)
+{
+	return ((CLoop*)loop)->GetEdge(index);
 }
 
 bool CHeeksCADInterface::LoopIsOuter(HeeksObj* loop)
