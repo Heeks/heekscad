@@ -39,7 +39,6 @@ protected:
 	virtual bool is_an_add_level(int level){return false;}
 	virtual bool is_a_draw_level(int level){return is_an_add_level(level);}
 	virtual HeeksObj* GetOwnerForDrawingObjects(){return NULL;}
-	virtual bool DragDoneWithXOR(){return true;}
 
 	void SetView(int);
 	int GetView();
@@ -66,6 +65,7 @@ public:
 	// Drawing's virtual functions
 	virtual void AddPoint();
 	virtual void clear_drawing_objects(int mode = 0){} // 0 - set temporary objects to NULL,  1 - store the temporary objects as previous_list, 2 - delete and set to NULL
+	virtual bool DragDoneWithXOR(){return true;}
 
 	int GetDrawStep()const{return current_view_stuff->draw_step;}
 	void SetDrawStepUndoable(int s);

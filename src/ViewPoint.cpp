@@ -159,7 +159,28 @@ void CViewPoint::WindowMag(wxRect &window_box){
 	Scale(1.0/width_ratio);
 }
 
-void CViewPoint::Scale(double fraction, bool use_initial_pixel_scale){
+void CViewPoint::Scale(double multiplier, bool use_initial_pixel_scale){
+	if(use_initial_pixel_scale)m_pixel_scale = m_initial_pixel_scale;
+	m_pixel_scale *= multiplier;
+	if(m_pixel_scale > 1000000)m_pixel_scale = 1000000;
+	if(m_pixel_scale < 0.000001)m_pixel_scale = 0.000001;
+
+	// for perspective, move forward
+	if(m_perspective)
+	{
+		gp_Vec f = m_target_point.XYZ() - m_lens_point.XYZ();
+		gp_Vec v= gp_Vec(f.XYZ() * (multiplier - 1));
+		m_lens_point = gp_Pnt(m_lens_point.XYZ() + v.XYZ());
+		if(m_lens_point.Distance(m_target_point) < 10){
+			m_target_point = gp_Pnt(m_lens_point.XYZ() + f.Normalized().XYZ() * 10);
+		}
+	}
+}
+
+void CViewPoint::Scale(const wxPoint &point){
+	double mouse_ydiff = point.y - m_initial_point.y;
+	wxSize size = wxGetApp().m_frame->m_graphics->GetClientSize();
+	double fraction=(mouse_ydiff)/((double)(size.GetHeight()));
 	double multiplier = fraction;
 	bool increasing=(multiplier>0);
 	if(!increasing)multiplier = -multiplier;
@@ -167,24 +188,6 @@ void CViewPoint::Scale(double fraction, bool use_initial_pixel_scale){
 	if(multiplier<0.00001)multiplier=0.00001;
 	if(increasing)multiplier = 1/multiplier;
 	if(multiplier< 0.1)multiplier = 0.1;
-	if(use_initial_pixel_scale)m_pixel_scale = m_initial_pixel_scale;
-	m_pixel_scale *= multiplier;
-	if(m_pixel_scale > 1000000)m_pixel_scale = 1000000;
-	if(m_pixel_scale < 0.000001)m_pixel_scale = 0.000001;
-
-	// for perspective, move forward
-	gp_Vec f = m_target_point.XYZ() - m_lens_point.XYZ();
-	gp_Vec v= gp_Vec(f.XYZ() * fraction);
-	m_lens_point = gp_Pnt(m_lens_point.XYZ() + v.XYZ());
-	if(m_lens_point.Distance(m_target_point) < 10){
-		m_target_point = gp_Pnt(m_lens_point.XYZ() + f.Normalized().XYZ() * 10);
-	}
-}
-
-void CViewPoint::Scale(const wxPoint &point){
-	double mouse_ydiff = point.y - m_initial_point.y;
-	wxSize size = wxGetApp().m_frame->m_graphics->GetClientSize();
-	double multiplier=(mouse_ydiff)/((double)(size.GetHeight()));
 	Scale(multiplier, true);
 }	
 
