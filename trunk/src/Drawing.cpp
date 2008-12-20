@@ -87,6 +87,7 @@ void Drawing::OnMouse( wxMouseEvent& event )
 
 	if(LeftAndRightPressed(event, event_used))
 	{
+		if(DragDoneWithXOR())wxGetApp().m_frame->m_graphics->EndDrawFront();
 		clear_drawing_objects(2);
 		wxGetApp().SetInputMode(wxGetApp().m_select_mode);
 	}
@@ -165,7 +166,7 @@ static Drawing* drawing_for_tools = NULL;
 
 class EndDrawing:public Tool{
 public:
-	void Run(){drawing_for_tools->clear_drawing_objects(2); wxGetApp().SetInputMode(wxGetApp().m_select_mode);}
+	void Run(){if(drawing_for_tools->DragDoneWithXOR())wxGetApp().m_frame->m_graphics->EndDrawFront();drawing_for_tools->clear_drawing_objects(2); wxGetApp().SetInputMode(wxGetApp().m_select_mode);}
 	const wxChar* GetTitle(){return _("Stop drawing");}
 	wxString BitmapPath(){return _T("enddraw");}
 	const wxChar* GetToolTip(){return _("Finish drawing");}
