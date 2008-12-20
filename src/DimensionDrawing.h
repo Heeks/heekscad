@@ -18,7 +18,6 @@ private:
 	int step_to_go_to_after_last_step(){return 0;}
 	bool is_an_add_level(int level){return level == 2;}
 	bool is_a_draw_level(int level){return level >= 1;}
-	bool DragDoneWithXOR(){return false;}
 
 public:
 	DimensionMode m_mode;
@@ -33,6 +32,7 @@ public:
 
 	// Drawing's virtual functions
 	void clear_drawing_objects(int mode);
+	bool DragDoneWithXOR(){return false;}
 };
 
 extern DimensionDrawing dimension_drawing;

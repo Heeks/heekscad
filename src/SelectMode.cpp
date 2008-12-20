@@ -356,7 +356,8 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 		double wheel_value = (double)(event.GetWheelRotation());
 		double multiplier = wheel_value /1000.0;
 		if(wxGetApp().mouse_wheel_forward_away)multiplier = -multiplier;
-		wxGetApp().m_frame->m_graphics->m_view_point.Scale(multiplier);
+		double multiplier2 = 1 + multiplier;
+		wxGetApp().m_frame->m_graphics->m_view_point.Scale(multiplier2);
 
 		{
 			// move towards mouse point, when zooming
