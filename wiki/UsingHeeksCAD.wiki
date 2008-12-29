@@ -64,6 +64,9 @@ Press the infinite lines button.
 
 Click on two points to define a line.
 
+= Coordinate Systems =
+see the wiki page
+
 = Options =
 
 Have a look at the "Options" window to see what choices there are.
