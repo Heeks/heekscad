@@ -65,7 +65,7 @@ Press the infinite lines button.
 Click on two points to define a line.
 
 = Coordinate Systems =
-see the wiki page
+see the wiki page http://code.google.com/p/heekscad/wiki/CoordinateSystems
 
 = Options =
 
