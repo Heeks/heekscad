@@ -324,6 +324,16 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	// set xml reading functions
 	wxGetApp().InitializeXMLFunctions();
 
+#if 0
+	{
+		::wxSetWorkingDirectory(wxGetApp().GetExeFolder());
+
+		wxConfig plugins_config(_T("HeeksCAD"));
+		plugins_config.SetPath(_T("/plugins"));
+		plugins_config.Write(_T("TestSo"), _T("TestSo/libtestso.so.1.0.1"));	
+	}
+#endif
+
 	// load up any other dlls and call OnStartUp on each of them
 	{
 		::wxSetWorkingDirectory(wxGetApp().GetExeFolder());
