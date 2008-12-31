@@ -2555,6 +2555,8 @@ bool HeeksCADapp::IsPasteReady()
 {
 	wxString fstr;
 
+	if(wxTheClipboard->m_open)return false;
+
 	if (wxTheClipboard->Open())
 	{
 		if (wxTheClipboard->IsSupported( wxDF_TEXT ))
