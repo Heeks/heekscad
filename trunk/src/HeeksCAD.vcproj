@@ -794,14 +794,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Interface.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Interface.h"
-			>
-		</File>
-		<File
 			RelativePath="..\interface\LeftAndRight.cpp"
 			>
 		</File>
@@ -1267,6 +1259,46 @@
 		</File>
 		<File
 			RelativePath=".\StlSolid.h"
+			>
+		</File>
+		<File
+			RelativePath="..\interface\strconv.cpp"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Unicode Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Unicode Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\interface\strconv.h"
 			>
 		</File>
 		<File
