@@ -2533,7 +2533,9 @@ bool HeeksCADapp::IsPasteReady()
 {
 	wxString fstr;
 
+#ifndef WIN32
 	if(wxTheClipboard->m_open)return false;
+#endif
 
 	if (wxTheClipboard->Open())
 	{
