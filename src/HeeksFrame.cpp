@@ -324,7 +324,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	// set xml reading functions
 	wxGetApp().InitializeXMLFunctions();
 
-#if 1
+#if 0
 	{
 		::wxSetWorkingDirectory(wxGetApp().GetExeFolder());
 
