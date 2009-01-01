@@ -337,28 +337,6 @@ int HeeksCADapp::OnExit(){
 	return result;
 }
 
-#if wxUSE_UNICODE
-static std::string str_for_Ttc;
-
-const char* Ttc(const wchar_t* str)
-{
-	str_for_Ttc.assign("");
-	while (*str)
-		str_for_Ttc.push_back((char) *str++);
-	return str_for_Ttc.c_str();
-}
-
-static std::wstring wstr_for_Ttc;
-
-const wchar_t* Ctt(const char* str)
-{
-	wstr_for_Ttc.assign(_T(""));
-	while (*str)
-		wstr_for_Ttc.push_back((wchar_t) *str++);
-	return wstr_for_Ttc.c_str();
-}
-#endif
-
 void HeeksCADapp::SetInputMode(CInputMode *new_mode){
 	if(!new_mode)return;
 	m_frame->m_graphics->EndDrawFront();

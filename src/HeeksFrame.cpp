@@ -324,13 +324,13 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	// set xml reading functions
 	wxGetApp().InitializeXMLFunctions();
 
-#if 0
+#if 1
 	{
 		::wxSetWorkingDirectory(wxGetApp().GetExeFolder());
 
 		wxConfig plugins_config(_T("HeeksCAD"));
 		plugins_config.SetPath(_T("/plugins"));
-		plugins_config.Write(_T("TestSo"), _T("TestSo/libtestso.so.1.0.1"));	
+		plugins_config.Write(_T("HeeksCNC"), _T("HeeksCNC/libheekscnc.so.0.5.1"));	
 	}
 #endif
 
