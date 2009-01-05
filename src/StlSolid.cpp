@@ -13,6 +13,11 @@ CStlSolid::CStlSolid(const HeeksColor* col):color(*col), m_gl_list(0){
 }
 
 CStlSolid::CStlSolid(const wxChar* filepath, const HeeksColor* col):color(*col), m_gl_list(0){
+	read_from_file(filepath);
+}
+
+void CStlSolid::read_from_file(const wxChar* filepath)
+{
 	// read the stl file
 	ifstream ifs(filepath, ios::binary);
 	if(!ifs)return;

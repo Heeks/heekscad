@@ -16,6 +16,8 @@ private:
 	CBox m_box;
 	wxString m_title;
 
+	void read_from_file(const wxChar* filepath);
+
 public:
 	std::list<CStlTri> m_list;
 
