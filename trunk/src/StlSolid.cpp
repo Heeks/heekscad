@@ -14,62 +14,51 @@ CStlSolid::CStlSolid(const HeeksColor* col):color(*col), m_gl_list(0){
 
 CStlSolid::CStlSolid(const wxChar* filepath, const HeeksColor* col):color(*col), m_gl_list(0){
 	// read the stl file
-#if wxUSE_UNICODE
-#ifdef __WXMSW__
-	wifstream ifs(filepath);
-#else
-	wifstream ifs(Ttc(filepath));
-#endif
-#else
-	ifstream ifs(filepath);
-#endif
+	ifstream ifs(filepath, ios::binary);
 	if(!ifs)return;
 
-	wxChar solid_string[6] = _T("aaaaa");
+	char solid_string[6] = "aaaaa";
 	ifs.read(solid_string, 5);
 	if(ifs.eof())return;
-#if wxUSE_UNICODE
-	if(wcscmp(solid_string, _T("solid")))
-#else
-	if(strcmp(solid_string, _T("solid")))
-#endif
+	if(strcmp(solid_string, "solid"))
 	{
 		// try binary file read
 
 		// read the header
-		wxChar header[81];
+		char header[81];
 		header[80] = 0;
 		memcpy(header, solid_string, 5);
 		ifs.read(&header[5], 75);
 
 		unsigned int num_facets = 0;
-		ifs.read((wxChar*)(&num_facets), 4);
+		ifs.read((char*)(&num_facets), 4);
+
+		ofstream tof("trilist.txt");
 
 		for(unsigned int i = 0; i<num_facets; i++)
 		{
 			CStlTri tri;
-			ifs.read((wxChar*)(tri.n), 12);
-			ifs.read((wxChar*)(tri.x[0]), 36);
+			ifs.read((char*)(tri.n), 12);
+			ifs.read((char*)(tri.x[0]), 36);
 			short attr;
-			ifs.read((wxChar*)(&attr), 2);
+			ifs.read((char*)(&attr), 2);
 			m_list.push_back(tri);
+			char str[1024];
+			sprintf(str, "%d - %lf %lf %lf %lf %lf %lf %lf %lf %lf\n", i, tri.x[0][0], tri.x[0][1], tri.x[0][2], tri.x[1][0], tri.x[1][1], tri.x[1][2], tri.x[2][0], tri.x[2][1], tri.x[2][2]);
+			tof<<str;
 		}
 	}
 	else
 	{
 		// "solid" already found
-		wxChar str[1024] = _T("solid");
+		char str[1024] = "solid";
 		ifs.getline(&str[5], 1024);
-		wxChar title[1024];
-#if wxUSE_UNICODE
-		if(swscanf(str, _T("solid %s"), title) == 1)
-#else
-		if(sscanf(str, _T("solid %s"), title) == 1)
-#endif
-			m_title.assign(title);
+		char title[1024];
+		if(sscanf(str, "solid %s", title) == 1)
+			m_title.assign(Ctt(title));
 
 		CStlTri t;
-		wxChar five_chars[6] = _T("aaaaa");
+		char five_chars[6] = "aaaaa";
 
 		int vertex = 0;
 
@@ -86,45 +75,24 @@ CStlSolid::CStlSolid(const wxChar* filepath, const HeeksColor* col):color(*col),
 			}
 			if(i == 5)
 			{
-#if wxUSE_UNICODE
-				if(!wcscmp(five_chars, _T("verte")))
+				if(!strcmp(five_chars, "verte"))
 				{
-					swscanf(str, _T(" vertex %f %f %f"), &(t.x[vertex][0]), &(t.x[vertex][1]), &(t.x[vertex][2]));
+					sscanf(str, " vertex %f %f %f", &(t.x[vertex][0]), &(t.x[vertex][1]), &(t.x[vertex][2]));
 					vertex++;
 					if(vertex > 2)vertex = 2;
 				}
-				else if(!wcscmp(five_chars, _T("facet")))
+				else if(!strcmp(five_chars, "facet"))
 				{
-					swscanf(str, _T(" facet normal %f %f %f"), &(t.n[0]), &(t.n[1]), &(t.n[2]));
+					sscanf(str, " facet normal %f %f %f", &(t.n[0]), &(t.n[1]), &(t.n[2]));
 					vertex = 0;
 				}
-				else if(!wcscmp(five_chars, _T("endfa")))
+				else if(!strcmp(five_chars, "endfa"))
 				{
 					if(vertex == 2)
 					{
 						m_list.push_back(t);
 					}
 				}
-#else
-				if(!strcmp(five_chars, _T("verte")))
-				{
-					sscanf(str, _T(" vertex %f %f %f"), &(t.x[vertex][0]), &(t.x[vertex][1]), &(t.x[vertex][2]));
-					vertex++;
-					if(vertex > 2)vertex = 2;
-				}
-				else if(!strcmp(five_chars, _T("facet")))
-				{
-					sscanf(str, _T(" facet normal %f %f %f"), &(t.n[0]), &(t.n[1]), &(t.n[2]));
-					vertex = 0;
-				}
-				else if(!strcmp(five_chars, _T("endfa")))
-				{
-					if(vertex == 2)
-					{
-						m_list.push_back(t);
-					}
-				}
-#endif
 			}
 		}
 	}
