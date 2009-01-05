@@ -33,8 +33,6 @@ CStlSolid::CStlSolid(const wxChar* filepath, const HeeksColor* col):color(*col),
 		unsigned int num_facets = 0;
 		ifs.read((char*)(&num_facets), 4);
 
-		ofstream tof("trilist.txt");
-
 		for(unsigned int i = 0; i<num_facets; i++)
 		{
 			CStlTri tri;
@@ -43,9 +41,6 @@ CStlSolid::CStlSolid(const wxChar* filepath, const HeeksColor* col):color(*col),
 			short attr;
 			ifs.read((char*)(&attr), 2);
 			m_list.push_back(tri);
-			char str[1024];
-			sprintf(str, "%d - %lf %lf %lf %lf %lf %lf %lf %lf %lf\n", i, tri.x[0][0], tri.x[0][1], tri.x[0][2], tri.x[1][0], tri.x[1][1], tri.x[1][2], tri.x[2][0], tri.x[2][1], tri.x[2][2]);
-			tof<<str;
 		}
 	}
 	else
