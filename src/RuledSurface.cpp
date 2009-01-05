@@ -108,15 +108,21 @@ bool CreateRuledSurface(const std::list<TopoDS_Wire> &wire_list, TopoDS_Shape& s
 {
 	if(wire_list.size() > 0)
 	{
-		BRepOffsetAPI_ThruSections generator( Standard_True, Standard_False );
-		for(std::list<TopoDS_Wire>::const_iterator It = wire_list.begin(); It != wire_list.end(); It++)
-		{
-			const TopoDS_Wire &wire = *It;
-			generator.AddWire(wire);
-		}
+			BRepOffsetAPI_ThruSections generator( Standard_True, Standard_False );
+			for(std::list<TopoDS_Wire>::const_iterator It = wire_list.begin(); It != wire_list.end(); It++)
+			{
+				const TopoDS_Wire &wire = *It;
+				generator.AddWire(wire);
+			}
 
-		generator.Build();
-		shape = generator.Shape();
+		try{
+			generator.Build();
+		}
+		catch(...)
+		{
+			wxMessageBox(_("Fatal error making ruled solid"));
+		}
+			shape = generator.Shape();
 
 		return true;
 	}
