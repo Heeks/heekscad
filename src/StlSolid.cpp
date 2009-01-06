@@ -19,7 +19,7 @@ CStlSolid::CStlSolid(const wxChar* filepath, const HeeksColor* col):color(*col),
 void CStlSolid::read_from_file(const wxChar* filepath)
 {
 	// read the stl file
-	ifstream ifs(filepath, ios::binary);
+	ifstream ifs(Ttc(filepath), ios::binary);
 	if(!ifs)return;
 
 	char solid_string[6] = "aaaaa";
