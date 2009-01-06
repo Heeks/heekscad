@@ -16,7 +16,7 @@ protected:
 	void recalculate_index_list();
 
 public:
-	ObjList(){}
+	ObjList():m_index_list_valid(true){}
 	ObjList(const ObjList& objlist);
 	virtual ~ObjList() {Clear();}
 
