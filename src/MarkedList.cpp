@@ -163,6 +163,7 @@ void MarkedList::ObjectsInWindow( wxRect window, MarkedObject* marked_object, bo
 			}
 		}
 		int pos = 0;
+		bool added = false;
 		for(i=0; i<num_hits; i++)
 		{
 			unsigned int names = data[pos];
@@ -187,13 +188,14 @@ void MarkedList::ObjectsInWindow( wxRect window, MarkedObject* marked_object, bo
 						if(object->GetType() == GripperType || (object->GetMarkingMask() & m_filter)){
 							int window_size = window.width;
 							current_found_object = current_found_object->Add(object, min_depth, window_size);
+							added = true;
 						}
 					}
 				}
 			}
 		}
 		window_mode++;
-		if(!single_picking)break;
+		if(!single_picking || added)break;
 		if(window_mode > 2)break;
 	}
 	

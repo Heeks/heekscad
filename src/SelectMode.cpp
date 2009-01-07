@@ -276,7 +276,8 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 					wxGetApp().FindMarkedObject(button_down_point, &marked_object);
 					if(marked_object.m_map.size()>0){
 						HeeksObj* object = marked_object.GetFirstOfTopOnly();
-						HeeksObj* first_object = object;
+						double min_depth;
+						HeeksObj* closest_object = NULL;
 						while(object)
 						{
 							if(wxGetApp().m_marked_list->ObjectMarked(object))
@@ -284,10 +285,16 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 								selected_objects_dragged = wxGetApp().m_marked_list->list();
 								break;
 							}
+							double depth = marked_object.GetDepth();
+							if(closest_object == NULL || depth<min_depth)
+							{
+								min_depth = depth;
+								closest_object = object;
+							}
 							object = marked_object.Increment();
 						}
-						if(selected_objects_dragged.size() == 0 && first_object){
-							selected_objects_dragged.push_back(first_object);
+						if(selected_objects_dragged.size() == 0 && closest_object){
+							selected_objects_dragged.push_back(closest_object);
 							wxGetApp().m_show_grippers_on_drag = false;
 						}
 					}
