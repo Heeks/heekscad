@@ -39,6 +39,7 @@
 #include <wx/fileconf.h>
 #include "HeeksPrintout.h"
 #include "../interface/HeeksCADInterface.h"
+#include "Plugins.h"
 
 using namespace std;
 
@@ -46,6 +47,7 @@ BEGIN_EVENT_TABLE( CHeeksFrame, wxFrame )
 EVT_CLOSE(CHeeksFrame::OnClose)
 EVT_MENU( Menu_File_Quit, CHeeksFrame::OnQuit )
 EVT_MENU( Menu_File_About, CHeeksFrame::OnAbout )
+EVT_MENU( Menu_File_Plugins, CHeeksFrame::OnPlugins )
 EVT_MENU( Menu_View_Objects, CHeeksFrame::OnViewObjects )
 EVT_UPDATE_UI(Menu_View_Objects, CHeeksFrame::OnUpdateViewObjects)
 EVT_MENU( Menu_View_Options, CHeeksFrame::OnViewOptions )
@@ -174,6 +176,8 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
     file_menu->Append(ID_OPEN_RECENT, _("Open Recent"), m_recent_files_menu);
 	file_menu->Append( ID_IMPORT, _( "Import" ) );
 	file_menu->Append( Menu_File_About, _( "About" ) );
+	file_menu->AppendSeparator();
+	file_menu->Append( Menu_File_Plugins, _( "Plugins" ) );
 	file_menu->AppendSeparator();
 	file_menu->Append( Menu_File_Quit, _( "Exit" ) );
 
@@ -339,27 +343,15 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 	// load up any other dlls and call OnStartUp on each of them
 	{
-		::wxSetWorkingDirectory(wxGetApp().GetExeFolder());
+		std::list<PluginData> plugins;
+		ReadPluginsList(plugins);
 
-		wxConfig plugins_config(_T("HeeksCAD"));
-		plugins_config.SetPath(_T("/plugins"));
-
-		wxString key;
-		long Index;
-		wxString str;
-
-		bool entry_found = false;
-
-		entry_found = plugins_config.GetFirstEntry(key, Index);
-
-		while(entry_found)
+		for(std::list<PluginData>::iterator It = plugins.begin(); It != plugins.end(); It++)
 		{
-			plugins_config.Read(key, &str);
-
-			if(str[0] != '#')
+			PluginData &pd = *It;
+			if(pd.enabled)
 			{
-
-				wxFileName fn(str);
+				wxFileName fn(pd.path);
 				fn.Normalize();
 				wxString path = fn.GetPath();
 
@@ -375,8 +367,6 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 					delete shared_library;
 				}
 			}
-
-			entry_found = plugins_config.GetNextEntry(key, Index);
 		}
 	}
 
@@ -489,6 +479,12 @@ void CHeeksFrame::OnAbout( wxCommandEvent& WXUNUSED( event ) )
 	version_str.Replace(_T(" "), _T("."));
 
 	wxMessageBox( str, version_str, wxOK | wxICON_INFORMATION, this );
+}
+
+void CHeeksFrame::OnPlugins( wxCommandEvent& WXUNUSED( event ) )
+{
+	CPluginsDialog dlg(this);
+	dlg.ShowModal();
 }
 
 void CHeeksFrame::OnViewObjects( wxCommandEvent& event )
