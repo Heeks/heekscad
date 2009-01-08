@@ -10,17 +10,6 @@
 #include <fstream>
 
 #include <wx/wx.h>
-#if 0
-#include <wx/glcanvas.h>
-#include <wx/config.h>
-#include <wx/confbase.h>
-#include <wx/fileconf.h>
-#include <wx/splitter.h>
-#ifdef WIN32
-#include <wx/msw/regconf.h>
-#endif
-#include <wx/aui/aui.h>
-#endif
 
 #ifdef WIN32
 #pragma warning(disable:4100)
@@ -35,17 +24,6 @@
 #include <Standard.hxx>
 
 #include <Standard_ErrorHandler.hxx>
-#include <BRepPrimAPI_MakeBox.hxx>
-#include <BRepPrimAPI_MakeCylinder.hxx>
-#include <BRepPrimAPI_MakeCone.hxx>
-#include <BRepPrimAPI_MakeSphere.hxx>
-#include <BRepPrimAPI_MakeTorus.hxx>
-#include <BRepPrimAPI_MakeWedge.hxx>
-#include <BRepPrimAPI_MakePrism.hxx>
-#include <BRepBuilderAPI_MakeEdge.hxx>
-#include <BRepBuilderAPI_MakeVertex.hxx>
-#include <BRepBuilderAPI_MakeFace.hxx>
-#include <BRepBuilderAPI_MakeWire.hxx>
 #include <gp_Circ.hxx>
 #include <gp_Pln.hxx>
 #include <gp_Cylinder.hxx>

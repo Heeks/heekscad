@@ -5,9 +5,7 @@
 #include  "wx/sizer.h"
 #include  "wx/menuitem.h"
 #include  "wx/checklst.h"
-#include <wx/config.h>
-#include <wx/confbase.h>
-#include <wx/fileconf.h>
+#include "HeeksConfig.h"
 
 enum
 {
@@ -173,7 +171,7 @@ void ReadPluginsList(std::list<PluginData> &plugins)
 	plugins.clear();
 
 	::wxSetWorkingDirectory(wxGetApp().GetExeFolder());
-	wxConfig plugins_config(_T("HeeksCAD"));
+	HeeksConfig plugins_config;
 	plugins_config.SetPath(_T("/plugins"));
 
 	wxString key;
@@ -311,10 +309,10 @@ void CPluginsDialog::OnButtonOK(wxCommandEvent& event)
 {
 	::wxSetWorkingDirectory(wxGetApp().GetExeFolder());
 
-	wxConfig plugins_config(_T("HeeksCAD"));
-	plugins_config.SetPath(_T("/plugins"));
+	HeeksConfig plugins_config;
 
 	plugins_config.DeleteGroup(_T("plugins"));
+	plugins_config.SetPath(_T("/plugins"));
 
 	unsigned int ui = 0;
 	for ( std::list<PluginData>::iterator It = m_plugins.begin(); It != m_plugins.end(); It++, ui++ )

@@ -7,9 +7,6 @@
 #include <wx/filename.h>
 #include <wx/cmdline.h>
 #include <wx/clipbrd.h>
-#include <wx/config.h>
-#include <wx/confbase.h>
-#include <wx/fileconf.h>
 #include <wx/aui/aui.h>
 #include <wx/toolbar.h>
 #include "../interface/Tool.h"
@@ -64,6 +61,7 @@
 #include "../interface/PropertyList.h"
 #include "RegularShapesDrawing.h"
 #include "HeeksPrintout.h"
+#include "HeeksConfig.h"
 #include <fstream>
 using namespace std;
 
@@ -117,7 +115,6 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_rotate_mode = 0;
 	m_antialiasing = false;
 	m_light_push_matrix = true;
-	m_config = NULL;
 	m_marked_list = new MarkedList;
 	history = new MainHistory;
 	m_doing_rollback = false;
@@ -151,7 +148,6 @@ HeeksCADapp::~HeeksCADapp()
 	delete magnification;
 	delete m_select_mode;
 	delete m_digitizing;
-	delete m_config;
 	delete viewrotating;
 	delete viewzooming;
 	delete m_ruler;
@@ -162,7 +158,6 @@ HeeksCADapp::~HeeksCADapp()
 
 bool HeeksCADapp::OnInit()
 {
-	m_config = new wxConfig(_T("HeeksCAD"));
 	wxInitAllImageHandlers();
 
 	InitialiseLocale();
@@ -181,26 +176,27 @@ bool HeeksCADapp::OnInit()
 	int height = 400;
 	int posx = 200;
 	int posy = 200;
-	m_config->Read(_T("MainFrameWidth"), &width);
-	m_config->Read(_T("MainFrameHeight"), &height);
-	m_config->Read(_T("MainFramePosX"), &posx);
-	m_config->Read(_T("MainFramePosY"), &posy);
+	HeeksConfig config;
+	config.Read(_T("MainFrameWidth"), &width);
+	config.Read(_T("MainFrameHeight"), &height);
+	config.Read(_T("MainFramePosX"), &posx);
+	config.Read(_T("MainFramePosY"), &posy);
 	if(posx < 0)posx = 0;
 	if(posy < 0)posy = 0;
-	m_config->Read(_T("DrawEnd"), &digitize_end, false);
-	m_config->Read(_T("DrawInters"), &digitize_inters, false);
-	m_config->Read(_T("DrawCentre"), &digitize_centre, false);
-	m_config->Read(_T("DrawMidpoint"), &digitize_midpoint, false);
-	m_config->Read(_T("DrawNearest"), &digitize_nearest, false);
-	m_config->Read(_T("DrawTangent"), &digitize_tangent, false);
-	m_config->Read(_T("DrawCoords"), &digitize_coords, true);
-	m_config->Read(_T("DrawScreen"), &digitize_screen, false);
-	m_config->Read(_T("DrawToGrid"), &draw_to_grid, true);
-	m_config->Read(_T("DrawGrid"), &digitizing_grid);
-	m_config->Read(_T("DrawRadius"), &digitizing_radius);
+	config.Read(_T("DrawEnd"), &digitize_end, false);
+	config.Read(_T("DrawInters"), &digitize_inters, false);
+	config.Read(_T("DrawCentre"), &digitize_centre, false);
+	config.Read(_T("DrawMidpoint"), &digitize_midpoint, false);
+	config.Read(_T("DrawNearest"), &digitize_nearest, false);
+	config.Read(_T("DrawTangent"), &digitize_tangent, false);
+	config.Read(_T("DrawCoords"), &digitize_coords, true);
+	config.Read(_T("DrawScreen"), &digitize_screen, false);
+	config.Read(_T("DrawToGrid"), &draw_to_grid, true);
+	config.Read(_T("DrawGrid"), &digitizing_grid);
+	config.Read(_T("DrawRadius"), &digitizing_radius);
 	{
 		wxString str;
-		m_config->Read(_T("BackgroundColor"), &str, _T("242 204 162"));
+		config.Read(_T("BackgroundColor"), &str, _T("242 204 162"));
 		int r = 0, g = 0, b = 0;
 #if wxUSE_UNICODE
 		swscanf(str, _T("%d %d %d"), &r, &g, &b);
@@ -211,7 +207,7 @@ bool HeeksCADapp::OnInit()
 	}
 	{
 		wxString str;
-		m_config->Read(_T("CurrentColor"), &str, _T("0 0 0"));
+		config.Read(_T("CurrentColor"), &str, _T("0 0 0"));
 		int r = 0, g = 0, b = 0;
 #if wxUSE_UNICODE
 		swscanf(str, _T("%d %d %d"), &r, &g, &b);
@@ -222,7 +218,7 @@ bool HeeksCADapp::OnInit()
 	}
 	{
 		wxString str;
-		m_config->Read(_T("ConstructionColor"), &str, _T("0 0 255"));
+		config.Read(_T("ConstructionColor"), &str, _T("0 0 255"));
 		int r = 0, g = 0, b = 255;
 #if wxUSE_UNICODE
 		swscanf(str, _T("%d %d %d"), &r, &g, &b);
@@ -231,22 +227,22 @@ bool HeeksCADapp::OnInit()
 #endif
 		construction_color = HeeksColor(r, g, b);
 	}
-	m_config->Read(_T("RotateMode"), &m_rotate_mode);
-	m_config->Read(_T("Antialiasing"), &m_antialiasing);
-	m_config->Read(_T("GridMode"), &grid_mode);
-	m_config->Read(_T("m_light_push_matrix"), &m_light_push_matrix);
-	m_config->Read(_T("WheelForwardAway"), &mouse_wheel_forward_away);
-	m_config->Read(_T("CtrlDoesRotate"), &ctrl_does_rotate);
-	m_config->Read(_T("DrawDatum"), &m_show_datum_coords_system, true);
-	m_config->Read(_T("DatumSize"), &CoordinateSystem::size, 30);
-	m_config->Read(_T("DatumSizeIsPixels"), &CoordinateSystem::size_is_pixels, true);
-	m_config->Read(_T("DrawRuler"), &m_show_ruler, false);
-	m_config->Read(_T("RegularShapesMode"), (int*)(&(regular_shapes_drawing.m_mode)));
-	m_config->Read(_T("RegularShapesNSides"), &(regular_shapes_drawing.m_number_of_side_for_polygon));
-	m_config->Read(_T("RegularShapesRectRad"), &(regular_shapes_drawing.m_rect_radius));
-	m_config->Read(_T("RegularShapesObRad"), &(regular_shapes_drawing.m_obround_radius));
-	m_config->Read(_T("ExtrudeRemovesSketches"), &m_extrude_removes_sketches, true);
-	m_config->Read(_T("LoftRemovesSketches"), &m_loft_removes_sketches, true);
+	config.Read(_T("RotateMode"), &m_rotate_mode);
+	config.Read(_T("Antialiasing"), &m_antialiasing);
+	config.Read(_T("GridMode"), &grid_mode);
+	config.Read(_T("m_light_push_matrix"), &m_light_push_matrix);
+	config.Read(_T("WheelForwardAway"), &mouse_wheel_forward_away);
+	config.Read(_T("CtrlDoesRotate"), &ctrl_does_rotate);
+	config.Read(_T("DrawDatum"), &m_show_datum_coords_system, true);
+	config.Read(_T("DatumSize"), &CoordinateSystem::size, 30);
+	config.Read(_T("DatumSizeIsPixels"), &CoordinateSystem::size_is_pixels, true);
+	config.Read(_T("DrawRuler"), &m_show_ruler, false);
+	config.Read(_T("RegularShapesMode"), (int*)(&(regular_shapes_drawing.m_mode)));
+	config.Read(_T("RegularShapesNSides"), &(regular_shapes_drawing.m_number_of_side_for_polygon));
+	config.Read(_T("RegularShapesRectRad"), &(regular_shapes_drawing.m_rect_radius));
+	config.Read(_T("RegularShapesObRad"), &(regular_shapes_drawing.m_obround_radius));
+	config.Read(_T("ExtrudeRemovesSketches"), &m_extrude_removes_sketches, true);
+	config.Read(_T("LoftRemovesSketches"), &m_loft_removes_sketches, true);
 
 	GetRecentFilesProfileString();
 
@@ -299,36 +295,37 @@ bool HeeksCADapp::OnInit()
 
 int HeeksCADapp::OnExit(){
 	int result = wxApp::OnExit();
-	m_config->Write(_T("DrawEnd"), digitize_end);
-	m_config->Write(_T("DrawInters"), digitize_inters);
-	m_config->Write(_T("DrawCentre"), digitize_centre);
-	m_config->Write(_T("DrawMidpoint"), digitize_midpoint);
-	m_config->Write(_T("DrawNearest"), digitize_nearest);
-	m_config->Write(_T("DrawTangent"), digitize_tangent);
-	m_config->Write(_T("DrawCoords"), digitize_coords);
-	m_config->Write(_T("DrawScreen"), digitize_screen);
-	m_config->Write(_T("DrawToGrid"), draw_to_grid);
-	m_config->Write(_T("DrawGrid"), digitizing_grid);
-	m_config->Write(_T("DrawRadius"), digitizing_radius);
-	m_config->Write(_T("BackgroundColor"), wxString::Format(_T("%d %d %d"), background_color.red, background_color.green, background_color.blue));
-	m_config->Write(_T("CurrentColor"), wxString::Format( _T("%d %d %d"), current_color.red, current_color.green, current_color.blue));
-	m_config->Write(_T("ConstructionColor"), wxString::Format(_T("%d %d %d"), construction_color.red, construction_color.green, construction_color.blue));
-	m_config->Write(_T("RotateMode"), m_rotate_mode);	
-	m_config->Write(_T("Antialiasing"), m_antialiasing);	
-	m_config->Write(_T("GridMode"), grid_mode);
-	m_config->Write(_T("m_light_push_matrix"), m_light_push_matrix);
-	m_config->Write(_T("WheelForwardAway"), mouse_wheel_forward_away);
-	m_config->Write(_T("CtrlDoesRotate"), ctrl_does_rotate);
-	m_config->Write(_T("DrawDatum"), m_show_datum_coords_system);
-	m_config->Write(_T("DatumSize"), CoordinateSystem::size);
-	m_config->Write(_T("DatumSizeIsPixels"), CoordinateSystem::size_is_pixels);
-	m_config->Write(_T("DrawRuler"), m_show_ruler);
-	m_config->Write(_T("RegularShapesMode"), regular_shapes_drawing.m_mode);
-	m_config->Write(_T("RegularShapesNSides"), regular_shapes_drawing.m_number_of_side_for_polygon);
-	m_config->Write(_T("RegularShapesRectRad"), regular_shapes_drawing.m_rect_radius);
-	m_config->Write(_T("RegularShapesObRad"), regular_shapes_drawing.m_obround_radius);
-	m_config->Write(_T("ExtrudeRemovesSketches"), m_extrude_removes_sketches);
-	m_config->Write(_T("LoftRemovesSketches"), m_loft_removes_sketches);
+	HeeksConfig config;
+	config.Write(_T("DrawEnd"), digitize_end);
+	config.Write(_T("DrawInters"), digitize_inters);
+	config.Write(_T("DrawCentre"), digitize_centre);
+	config.Write(_T("DrawMidpoint"), digitize_midpoint);
+	config.Write(_T("DrawNearest"), digitize_nearest);
+	config.Write(_T("DrawTangent"), digitize_tangent);
+	config.Write(_T("DrawCoords"), digitize_coords);
+	config.Write(_T("DrawScreen"), digitize_screen);
+	config.Write(_T("DrawToGrid"), draw_to_grid);
+	config.Write(_T("DrawGrid"), digitizing_grid);
+	config.Write(_T("DrawRadius"), digitizing_radius);
+	config.Write(_T("BackgroundColor"), wxString::Format(_T("%d %d %d"), background_color.red, background_color.green, background_color.blue));
+	config.Write(_T("CurrentColor"), wxString::Format( _T("%d %d %d"), current_color.red, current_color.green, current_color.blue));
+	config.Write(_T("ConstructionColor"), wxString::Format(_T("%d %d %d"), construction_color.red, construction_color.green, construction_color.blue));
+	config.Write(_T("RotateMode"), m_rotate_mode);	
+	config.Write(_T("Antialiasing"), m_antialiasing);	
+	config.Write(_T("GridMode"), grid_mode);
+	config.Write(_T("m_light_push_matrix"), m_light_push_matrix);
+	config.Write(_T("WheelForwardAway"), mouse_wheel_forward_away);
+	config.Write(_T("CtrlDoesRotate"), ctrl_does_rotate);
+	config.Write(_T("DrawDatum"), m_show_datum_coords_system);
+	config.Write(_T("DatumSize"), CoordinateSystem::size);
+	config.Write(_T("DatumSizeIsPixels"), CoordinateSystem::size_is_pixels);
+	config.Write(_T("DrawRuler"), m_show_ruler);
+	config.Write(_T("RegularShapesMode"), regular_shapes_drawing.m_mode);
+	config.Write(_T("RegularShapesNSides"), regular_shapes_drawing.m_number_of_side_for_polygon);
+	config.Write(_T("RegularShapesRectRad"), regular_shapes_drawing.m_rect_radius);
+	config.Write(_T("RegularShapesObRad"), regular_shapes_drawing.m_obround_radius);
+	config.Write(_T("ExtrudeRemovesSketches"), m_extrude_removes_sketches);
+	config.Write(_T("LoftRemovesSketches"), m_loft_removes_sketches);
 
 	WriteRecentFilesProfileString();
 
@@ -2254,10 +2251,11 @@ void HeeksCADapp::RemoveHideableWindow(wxWindow* w)
 
 void HeeksCADapp::GetRecentFilesProfileString()
 {
+	HeeksConfig config;
 	for(int i = 0; i < MAX_RECENT_FILES; i++)
 	{
 		wxString key_name = wxString::Format(_T("RecentFilePath%d"), i);
-		wxString filepath = m_config->Read(key_name);
+		wxString filepath = config.Read(key_name);
 		if(filepath.IsEmpty())break;
 		m_recent_files.push_back(filepath);
 	}
@@ -2265,6 +2263,7 @@ void HeeksCADapp::GetRecentFilesProfileString()
 
 void HeeksCADapp::WriteRecentFilesProfileString()
 {
+	HeeksConfig config;
 	std::list< wxString >::iterator It = m_recent_files.begin();
 	for(int i = 0; i < MAX_RECENT_FILES; i++)
 	{
@@ -2275,7 +2274,7 @@ void HeeksCADapp::WriteRecentFilesProfileString()
 			filepath = *It;
 			It++;
 		}
-		m_config->Write(key_name, filepath);
+		config.Write(key_name, filepath);
 	}
 }
 
@@ -2707,7 +2706,10 @@ void HeeksCADapp::InitialiseLocale()
 		m_locale_initialised = true;
 
 		int language = wxLANGUAGE_DEFAULT;
-		m_config->Read(_T("Language"), &language);
+		{
+			HeeksConfig config;
+			config.Read(_T("Language"), &language);
+		}
 
 		// Initialize the catalogs we'll be using
 		if ( !m_locale.Init(language, wxLOCALE_CONV_ENCODING) )

@@ -15,9 +15,7 @@
 #include <TopExp.hxx>
 #include <BRepFilletAPI_MakeFillet.hxx>
 #include <BRepAdaptor_Curve.hxx>
-#include <wx/config.h>
-#include <wx/confbase.h>
-#include <wx/fileconf.h>
+#include "HeeksConfig.h"
 
 CEdge::CEdge(const TopoDS_Edge &edge):m_topods_edge(edge){
 #if _DEBUG
@@ -109,11 +107,12 @@ public:
 	const wxChar* GetToolTip(){return _T("Blend edge");}
 	void Run(){
 		double rad = 2.0;
-		wxGetApp().m_config->Read(_T("EdgeBlendRadius"), &rad);
+		HeeksConfig config;
+		config.Read(_T("EdgeBlendRadius"), &rad);
 		if(wxGetApp().InputDouble(_("Enter Blend Radius"), _("Radius"), rad))
 		{
 			m_edge->Blend(rad);
-			wxGetApp().m_config->Write(_T("EdgeBlendRadius"), rad);
+			config.Write(_T("EdgeBlendRadius"), rad);
 		}
 	}
 };
