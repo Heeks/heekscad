@@ -29,7 +29,7 @@ private:
 
 class CPluginsDialog: public wxDialog{
 	void CreateCheckListbox(long flags = 0);
-	void EditSelected(int selection);
+	void EditSelected(unsigned int selection);
 
 public:
     wxPanel *m_panel;
