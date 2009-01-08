@@ -60,6 +60,7 @@ enum{
 	ID_COORDINATE_SYSTEM,
 	Menu_File_Quit,
 	Menu_File_About,
+	Menu_File_Plugins,
 	Menu_View_Objects,
 	Menu_View_Properties,
 	Menu_View_Options,
@@ -111,6 +112,7 @@ public:
     void OnClose( wxCloseEvent& event );
 	void OnQuit( wxCommandEvent& event );
 	void OnAbout( wxCommandEvent& event );
+	void OnPlugins( wxCommandEvent& event );
 	void OnViewObjects( wxCommandEvent& event );
 	void OnUpdateViewObjects( wxUpdateUIEvent& event );
 	void OnViewOptions( wxCommandEvent& event );

@@ -954,6 +954,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Plugins.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Plugins.h"
+			>
+		</File>
+		<File
 			RelativePath=".\PointDrawing.cpp"
 			>
 		</File>
