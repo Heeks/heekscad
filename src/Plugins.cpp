@@ -239,7 +239,7 @@ void CPluginsDialog::CreateCheckListbox(long flags)
 	}
 }
 
-void CPluginsDialog::EditSelected(int selection)
+void CPluginsDialog::EditSelected(unsigned int selection)
 {
 	unsigned int ui = 0;
 	for ( std::list<PluginData>::iterator It = m_plugins.begin(); It != m_plugins.end(); It++, ui++ )
