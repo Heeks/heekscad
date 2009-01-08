@@ -18,9 +18,7 @@
 #include "InputModeCanvas.h"
 #include "Sketch.h"
 #include "GraphicsCanvas.h"
-#include <wx/config.h>
-#include <wx/confbase.h>
-#include <wx/fileconf.h>
+#include "HeeksConfig.h"
 
 wxCursor LineArcDrawing::m_cursor_start;
 wxCursor LineArcDrawing::m_cursor_end;
@@ -449,7 +447,8 @@ static void on_set_drawing_mode(int drawing_mode, HeeksObj* object)
 static void on_set_circle_radius(double value, HeeksObj* object)
 {
 	line_drawing_for_GetProperties->radius_for_circle = value;
-	wxGetApp().m_config->Write(_T("RadiusForCircle"), value);
+	HeeksConfig config;
+	config.Write(_T("RadiusForCircle"), value);
 }
 
 void LineArcDrawing::GetProperties(std::list<Property *> *list){
@@ -495,7 +494,8 @@ bool LineArcDrawing::OnModeChange(void){
 	if(!Drawing::OnModeChange())return false;
 	if(m_container)m_container = NULL;
 
-	wxGetApp().m_config->Read(_T("RadiusForCircle"), &radius_for_circle, 5.0);
+	HeeksConfig config;
+	config.Read(_T("RadiusForCircle"), &radius_for_circle, 5.0);
 
 	prev_object_in_list.clear();
 	m_previous_direction_set = false;
