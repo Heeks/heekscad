@@ -275,7 +275,7 @@ void CPluginsDialog::OnButtonAdd(wxCommandEvent& event)
 
 void CPluginsDialog::OnButtonEdit(wxCommandEvent& event)
 {
-	int selection = m_pListBox->GetSelection();
+	unsigned int selection = m_pListBox->GetSelection();
 
 	EditSelected(selection);
 }
@@ -292,8 +292,19 @@ void CPluginsDialog::OnUpdateRemove( wxUpdateUIEvent& event )
 
 void CPluginsDialog::OnButtonRemove(wxCommandEvent& event)
 {
-	delete m_pListBox;
-	CreateCheckListbox();
+	unsigned int selection = m_pListBox->GetSelection();
+	unsigned int ui = 0;
+	for ( std::list<PluginData>::iterator It = m_plugins.begin(); It != m_plugins.end(); It++, ui++ )
+	{
+		if(ui == selection)
+		{
+			m_plugins.erase(It);
+			// updata the check list
+			delete m_pListBox;
+			CreateCheckListbox();
+			break;
+		}
+	}
 }
 
 void CPluginsDialog::OnButtonOK(wxCommandEvent& event)
