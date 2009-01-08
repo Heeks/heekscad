@@ -36,9 +36,7 @@
 #include "Interface_Static.hxx"
 #include "../interface/Tool.h"
 #include "../tinyxml/tinyxml.h"
-#include <wx/config.h>
-#include <wx/confbase.h>
-#include <wx/fileconf.h>
+#include "HeeksConfig.h"
 
 // static member variable
 bool CShape::m_solids_found = false;
@@ -318,14 +316,15 @@ public:
 	// Tool's virtual functions
 	void Run(){
 		double offset_value = 2.0;
-		wxGetApp().m_config->Read(_T("OffsetShapeValue"), &offset_value);
+		HeeksConfig config;
+		config.Read(_T("OffsetShapeValue"), &offset_value);
 		if(wxGetApp().InputDouble(_("Enter Offset Value, + for making bigger, - for making smaller"), _("Offset value"), offset_value))
 		{
 			TopoDS_Shape new_shape = BRepOffsetAPI_MakeOffsetShape(m_shape->Shape(), offset_value, 0.01, BRepOffset_RectoVerso);
 			HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of 'Offset Shape'"), SOLID_TYPE_UNKNOWN, m_shape->m_color);
 			wxGetApp().AddUndoably(new_object, NULL, NULL);
 			wxGetApp().DeleteUndoably(m_shape);
-			wxGetApp().m_config->Write(_T("OffsetShapeValue"), offset_value);
+			config.Write(_T("OffsetShapeValue"), offset_value);
 		}
 	}
 	const wxChar* GetTitle(){ return _("Offset Shape");}

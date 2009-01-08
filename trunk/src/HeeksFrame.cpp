@@ -34,12 +34,10 @@
 #include "wx/print.h"
 #include "wx/printdlg.h"
 #include <wx/aui/aui.h>
-#include <wx/config.h>
-#include <wx/confbase.h>
-#include <wx/fileconf.h>
 #include "HeeksPrintout.h"
 #include "../interface/HeeksCADInterface.h"
 #include "Plugins.h"
+#include "HeeksConfig.h"
 
 using namespace std;
 
@@ -292,13 +290,14 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	};
 
 	int bitmap_size = ToolImage::default_bitmap_size;
-	wxGetApp().m_config->Read(_T("ToolImageSize"), &bitmap_size);
+	HeeksConfig config;
+	config.Read(_T("ToolImageSize"), &bitmap_size);
 	ToolImage::SetBitmapSize(bitmap_size);
 
     m_graphics = new CGraphicsCanvas(this, graphics_attrib_list);
 
 	bool perspective = false;
-	wxGetApp().m_config->Read(_T("Perspective"), &perspective);
+	config.Read(_T("Perspective"), &perspective);
 	m_graphics->m_view_point.SetPerspective(perspective);
 
 	m_tree_canvas = new CTreeCanvas(this);
@@ -377,7 +376,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 	//Read layout
 	wxString str;
-	wxGetApp().m_config->Read(_T("AuiPerspective"), &str, default_layout_string);
+	config.Read(_T("AuiPerspective"), &str, default_layout_string);
 	LoadPerspective(str);
 
 	m_aui_manager->Update();
@@ -406,9 +405,10 @@ CHeeksFrame::~CHeeksFrame()
 	}
 #endif
 
-	wxGetApp().m_config->Write(_T("AuiPerspective"), str);
-	wxGetApp().m_config->Write(_T("ToolImageSize"), ToolImage::GetBitmapSize());
-	wxGetApp().m_config->Write(_T("Perspective"), m_graphics->m_view_point.GetPerspective());	
+	HeeksConfig config;
+	config.Write(_T("AuiPerspective"), str);
+	config.Write(_T("ToolImageSize"), ToolImage::GetBitmapSize());
+	config.Write(_T("Perspective"), m_graphics->m_view_point.GetPerspective());	
 
 	delete m_aui_manager;
 }
@@ -1038,8 +1038,9 @@ void CHeeksFrame::OnSize( wxSizeEvent& evt )
 	wxSize size = evt.GetSize();
 	int width = size.GetWidth();
 	int height = size.GetHeight();
-	wxGetApp().m_config->Write(_T("MainFrameWidth"), width);
-	wxGetApp().m_config->Write(_T("MainFrameHeight"), height);
+	HeeksConfig config;
+	config.Write(_T("MainFrameWidth"), width);
+	config.Write(_T("MainFrameHeight"), height);
 
 	// call add-ins OnSize functions
 	for(std::list< void(*)(wxSizeEvent&) >::iterator It = wxGetApp().m_on_graphics_size_list.begin(); It != wxGetApp().m_on_graphics_size_list.end(); It++)
@@ -1054,8 +1055,9 @@ void CHeeksFrame::OnMove( wxMoveEvent& evt )
 	wxPoint pos = GetPosition();
 	int posx = pos.x;
 	int posy = pos.y;
-	wxGetApp().m_config->Write(_T("MainFramePosX"), posx);
-	wxGetApp().m_config->Write(_T("MainFramePosY"), posy);
+	HeeksConfig config;
+	config.Write(_T("MainFramePosX"), posx);
+	config.Write(_T("MainFramePosY"), posy);
 }
 
 int CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, const wxString& title, const wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&))
