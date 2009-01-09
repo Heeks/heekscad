@@ -4,6 +4,7 @@
 
 #include <gp_Vec.hxx>
 #include <gp_Pnt.hxx>
+#include "../interface/Box.h"
 
 class CViewPoint{
 private:

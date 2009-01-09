@@ -4,6 +4,7 @@
 #define Gripper_HEADER
 
 #include "../interface/HeeksObj.h"
+#include "gp_Pnt.hxx"
 
 enum EnumGripperType{
 	GripperTypeTranslate,

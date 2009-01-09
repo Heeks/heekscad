@@ -4,6 +4,8 @@
 
 #include "wx/print.h"
 
+class HeeksColor;
+
 class HeeksPrintout: public wxPrintout
 {
 public:

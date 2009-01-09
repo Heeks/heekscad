@@ -5,6 +5,8 @@
 
 #include <wx/imaglist.h>
 
+class HeeksObj;
+
 class Images{
 protected:
 	std::map<int, int> image_map; // maps object type to image index

@@ -2,6 +2,8 @@
 #include "stdafx.h"
 #include "TransformTool.h"
 #include "../interface/HeeksObj.h"
+#include "Geom.h"
+#include "HeeksCAD.h"
 
 TransformTool::TransformTool(HeeksObj *o, const gp_Trsf &t, const gp_Trsf &i){
 	m_done_with_add_and_remove = false;

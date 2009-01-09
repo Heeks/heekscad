@@ -1,4 +1,5 @@
 #include "PropertiesCanvas.h"
+#include "HeeksCAD.h"
 
 class CInputModeCanvas: public CPropertiesCanvas
 {

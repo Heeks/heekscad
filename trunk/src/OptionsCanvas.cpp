@@ -7,6 +7,7 @@
 #include "PropertyVertex.h"
 #include "propgrid.h"
 #include "HeeksFrame.h"
+#include "HeeksCAD.h"
 
 BEGIN_EVENT_TABLE(COptionsCanvas, wxScrolledWindow)
 	EVT_SIZE(COptionsCanvas::OnSize)

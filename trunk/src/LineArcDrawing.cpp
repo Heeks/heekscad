@@ -19,6 +19,8 @@
 #include "Sketch.h"
 #include "GraphicsCanvas.h"
 #include "HeeksConfig.h"
+#include "Geom.h"
+#include "HeeksCAD.h"
 
 wxCursor LineArcDrawing::m_cursor_start;
 wxCursor LineArcDrawing::m_cursor_end;

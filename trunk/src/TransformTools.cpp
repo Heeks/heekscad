@@ -5,13 +5,15 @@
 #include "MarkedList.h"
 #include "HLine.h"
 #include "HILine.h"
+#include "Geom.h"
+#include "HeeksCAD.h"
 
 static double from[3];
 static double centre[3];
 
 static void on_move_translate(const double* to)
 {
-	wxGetApp().m_drag_matrix.SetTranslationPart(gp_Vec(make_point(from), make_point(to)));
+	wxGetApp().m_drag_matrix->SetTranslationPart(gp_Vec(make_point(from), make_point(to)));
 	wxGetApp().Repaint(true);
 }
 
@@ -60,7 +62,7 @@ void TransformTools::Translate(bool copy)
 
 	// pick "to" position
 	wxGetApp().CreateTransformGLList(selected_items, false);
-	wxGetApp().m_drag_matrix = gp_Trsf();
+	*(wxGetApp().m_drag_matrix) = gp_Trsf();
 	if(!copy)
 	{
 		for(std::list<HeeksObj*>::const_iterator It = selected_items.begin(); It != selected_items.end(); It++){

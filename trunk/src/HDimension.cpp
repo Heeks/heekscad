@@ -5,6 +5,9 @@
 #include "PropertyTrsf.h"
 #include "../tinyxml/tinyxml.h"
 #include "Gripper.h"
+#include "Geom.h"
+#include "../interface/strconv.h"
+#include "HeeksCAD.h"
 
 HDimension::HDimension(const gp_Trsf &trsf, const wxString &text, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, DimensionMode mode, const HeeksColor* col): m_color(*col), m_trsf(trsf), m_text(text), m_p0(p0), m_p1(p1), m_p2(p2), m_mode(mode), m_scale(1.0)
 {

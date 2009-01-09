@@ -4,7 +4,9 @@
 #include "SelectMode.h"
 #include "GraphicsCanvas.h"
 #include "HeeksFrame.h"
+#include "HeeksCAD.h"
 #include "CoordinateSystem.h"
+#include "Geom.h"
 
 CViewPoint::CViewPoint(void){
 	m_lens_point = gp_Pnt(0, 0, 200);
