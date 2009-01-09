@@ -3,7 +3,6 @@
 #pragma once
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"
-#include "gp_Trsf.hxx"
 
 class HText: public HeeksObj{
 private:

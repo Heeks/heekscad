@@ -5,9 +5,6 @@
 #include "PropertyTrsf.h"
 #include "../tinyxml/tinyxml.h"
 #include "Gripper.h"
-#include "Geom.h"
-#include "../interface/strconv.h"
-#include "HeeksCAD.h"
 
 HText::HText(const gp_Trsf &trsf, const wxString &text, const HeeksColor* col):m_color(*col),  m_trsf(trsf), m_text(text)
 {

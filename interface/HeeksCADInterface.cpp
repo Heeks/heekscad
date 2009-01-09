@@ -23,9 +23,6 @@
 #include "Loop.h"
 #include <gp_Sphere.hxx>
 #include <gp_Cone.hxx>
-#include <gp_Pln.hxx>
-#include <gp_Cylinder.hxx>
-#include "Geom.h"
 
 double CHeeksCADInterface::GetTolerance()
 {

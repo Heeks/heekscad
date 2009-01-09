@@ -4,7 +4,6 @@
 
 #include "Images.h"
 #include "../interface/HeeksObj.h"
-#include "HeeksCAD.h"
 
 Images::Images(){
 	m_image_list = NULL;

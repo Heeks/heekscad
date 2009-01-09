@@ -5,11 +5,9 @@
 #include "../interface/Material.h"
 #include <TopoDS_Solid.hxx>
 #include "ShapeData.h"
-#include "../interface/ObjList.h"
 
 class CFace;
 class CEdge;
-class TopoDS_Face;
 
 class CFaceList: public ObjList{
 	static wxIcon* m_icon;

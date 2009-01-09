@@ -1,7 +1,6 @@
 // DigitizedPoint.h
-#pragma once
 
-#include "gp_Pnt.hxx"
+#pragma once
 
 enum DigitizeType{
 	DigitizeNoItemType,
@@ -15,8 +14,6 @@ enum DigitizeType{
 	DigitizeTangentType,
 	DigitizeInputType // typed into properties, for example
 };
-
-class HeeksObj;
 
 class DigitizedPoint{
 public:

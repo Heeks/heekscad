@@ -4,7 +4,6 @@
 #include "../interface/MarkedObject.h"
 #include "MarkedList.h"
 #include "HeeksFrame.h"
-#include "HeeksCAD.h"
 
 class DanObjectTreeData : public wxTreeItemData{
 	public:

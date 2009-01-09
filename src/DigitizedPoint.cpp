@@ -6,8 +6,6 @@
 #include "HLine.h"
 #include "HArc.h"
 #include "HILine.h"
-#include "Geom.h"
-#include "HeeksCAD.h"
 
 DigitizedPoint::DigitizedPoint()
 {

@@ -4,12 +4,9 @@
 
 #include "ViewPoint.h"
 
+
 class Gripper;
 class PointOrWindow;
-class Property;
-class Tool;
-class HeeksObj;
-class MarkedObject;
 
 class MarkedList{
 private:
