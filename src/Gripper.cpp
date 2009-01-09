@@ -21,8 +21,75 @@ void Gripper::glCommands(bool select, bool marked, bool no_color){
 	if(!no_color){
 		wxGetApp().glColorEnsuringContrast(HeeksColor(0, 0, 0));
 	}
-	glRasterPos3d(position.X(), position.Y(), position.Z());
-	switch(m_gripper_type){
+	if(select)
+	{
+		double s = 5.0 / wxGetApp().GetPixelScale();
+		double p[8][3] = {
+			-s, -s, -s,
+			s, -s, -s,
+			s, s, -s,
+			-s, s, -s,
+			-s, -s, s,
+			s, -s, s,
+			s, s, s,
+			-s, s, s
+		};
+
+		for(int i = 0; i<8; i++){
+			p[i][0] += position.X();
+			p[i][1] += position.Y();
+			p[i][2] += position.Z();
+		}
+
+		glBegin(GL_TRIANGLES);
+		glVertex3dv(p[0]);
+		glVertex3dv(p[2]);
+		glVertex3dv(p[1]);
+		glVertex3dv(p[0]);
+		glVertex3dv(p[3]);
+		glVertex3dv(p[2]);
+
+		glVertex3dv(p[0]);
+		glVertex3dv(p[1]);
+		glVertex3dv(p[5]);
+		glVertex3dv(p[0]);
+		glVertex3dv(p[5]);
+		glVertex3dv(p[4]);
+
+		glVertex3dv(p[3]);
+		glVertex3dv(p[0]);
+		glVertex3dv(p[4]);
+		glVertex3dv(p[3]);
+		glVertex3dv(p[4]);
+		glVertex3dv(p[7]);
+
+		glVertex3dv(p[4]);
+		glVertex3dv(p[5]);
+		glVertex3dv(p[6]);
+		glVertex3dv(p[4]);
+		glVertex3dv(p[6]);
+		glVertex3dv(p[7]);
+
+		glVertex3dv(p[3]);
+		glVertex3dv(p[7]);
+		glVertex3dv(p[6]);
+		glVertex3dv(p[3]);
+		glVertex3dv(p[6]);
+		glVertex3dv(p[2]);
+
+		glVertex3dv(p[2]);
+		glVertex3dv(p[6]);
+		glVertex3dv(p[5]);
+		glVertex3dv(p[2]);
+		glVertex3dv(p[5]);
+		glVertex3dv(p[1]);
+
+		glEnd();
+	}
+	else
+	{
+		glRasterPos3d(position.X(), position.Y(), position.Z());
+		switch(m_gripper_type){
 		case GripperTypeTranslate:
 			glBitmap(16, 15, 8, 7, 10.0, 0.0, translation_circle);
 			break;
@@ -44,6 +111,7 @@ void Gripper::glCommands(bool select, bool marked, bool no_color){
 		default:
 			glBitmap(9, 9, 4, 4, 10.0, 0.0, circle);
 			break;
+		}
 	}
 }
 
