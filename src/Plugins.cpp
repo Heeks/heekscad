@@ -6,6 +6,7 @@
 #include  "wx/menuitem.h"
 #include  "wx/checklst.h"
 #include "HeeksConfig.h"
+#include "HeeksCAD.h"
 
 enum
 {

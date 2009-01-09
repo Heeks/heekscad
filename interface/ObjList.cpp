@@ -7,7 +7,7 @@
 #include "HeeksCADInterface.h"
 #endif
 #include "../tinyxml/tinyxml.h"
-
+#include "HeeksCAD.h"
 
 ObjList::ObjList(const ObjList& objlist): HeeksObj(objlist), m_index_list_valid(true) {operator=(objlist);}
 

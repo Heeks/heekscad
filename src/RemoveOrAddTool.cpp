@@ -5,6 +5,7 @@
 #include "RemoveOrAddTool.h"
 #include "../interface/HeeksObj.h"
 #include "MarkedList.h"
+#include "HeeksCAD.h"
 
 RemoveOrAddTool::RemoveOrAddTool(HeeksObj *object, HeeksObj *owner, HeeksObj *prev_object) : m_belongs_to_owner(false)
 {

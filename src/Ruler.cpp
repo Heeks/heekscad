@@ -6,6 +6,8 @@
 #include "../interface/Tool.h"
 #include "HeeksFrame.h"
 #include "ObjPropsCanvas.h"
+#include "Geom.h"
+#include "HeeksCAD.h"
 
 void RulerMark::glCommands()
 {

@@ -4,6 +4,7 @@
 
 #include "Shape.h"
 #include <TopoDS_Solid.hxx>
+#include "Geom.h"
 
 class CSolid:public CShape{
 protected:

@@ -8,6 +8,7 @@
 #include "Gripper.h"
 #include "MarkedList.h"
 #include "../tinyxml/tinyxml.h"
+#include "HeeksCAD.h"
 
 CCone::CCone(const gp_Ax2& pos, double r1, double r2, double height, const wxChar* title, const HeeksColor& col):CSolid(BRepPrimAPI_MakeCone(pos, r1, r2, height), title, col), m_pos(pos), m_r1(r1), m_r2(r2), m_height(height)
 {

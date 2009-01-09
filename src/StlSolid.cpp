@@ -1,10 +1,11 @@
 // StlSolid.cpp
 #include "stdafx.h"
 #include "StlSolid.h"
-
+#include "Geom.h"
 #include "../tinyxml/tinyxml.h"
-
 #include <fstream>
+#include "../interface/strconv.h"
+#include "HeeksCAD.h"
 
 using namespace std;
 

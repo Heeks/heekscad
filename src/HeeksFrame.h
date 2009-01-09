@@ -7,6 +7,8 @@ class CObjPropsCanvas;
 class COptionsCanvas;
 class CInputModeCanvas;
 class HeeksPrintout;
+class wxAuiManager;
+class Tool;
 
 struct SExternalButtonFunctions{
 	void (*on_button)(wxCommandEvent&);
@@ -17,6 +19,8 @@ struct ToolIndex{
 	Tool *m_tool;
 	int m_index;
 };
+
+#define MAX_RECENT_FILES 20
 
 enum{
 	ID_LINES = 1,

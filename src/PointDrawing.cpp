@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "PointDrawing.h"
 #include "HPoint.h"
+#include "HeeksCAD.h"
 
 PointDrawing point_drawing;
 

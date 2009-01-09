@@ -3,6 +3,8 @@
 #include "../interface/Observer.h"
 #include <wx/glcanvas.h>
 
+class MarkedObject;
+
 class CGraphicsCanvas: public wxGLCanvas, Observer
 {
 private:

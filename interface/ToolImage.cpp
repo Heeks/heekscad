@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "ToolImage.h"
+#include "HeeksCAD.h"
 
 float ToolImage::m_button_scale = 0.25;
 const int ToolImage::full_size = 96;

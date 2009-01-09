@@ -3,6 +3,7 @@
 
 class HeeksObj;
 class Tool;
+class Property;
 
 class CInputMode{
 public:

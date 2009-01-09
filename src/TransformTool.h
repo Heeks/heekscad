@@ -3,6 +3,9 @@
 #pragma once
 #include "../interface/Tool.h"
 
+class HeeksObj;
+class gp_Trsf;
+
 class TransformTool: public Tool{
 private:
 	double modify_matrix[16];

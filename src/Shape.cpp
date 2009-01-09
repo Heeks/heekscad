@@ -33,10 +33,13 @@
 #include "TopTools_ListIteratorOfListOfShape.hxx"
 #include "BRepOffsetAPI_MakeOffsetShape.hxx"
 #include "TopoDS_Edge.hxx"
+#include "TopoDS.hxx"
 #include "Interface_Static.hxx"
 #include "../interface/Tool.h"
 #include "../tinyxml/tinyxml.h"
 #include "HeeksConfig.h"
+#include "../interface/strconv.h"
+#include "HeeksCAD.h"
 
 // static member variable
 bool CShape::m_solids_found = false;

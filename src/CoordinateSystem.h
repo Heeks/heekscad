@@ -3,6 +3,8 @@
 #pragma once
 
 #include "../interface/HeeksObj.h"
+#include "gp_Pnt.hxx"
+#include "gp_Dir.hxx"
 
 class CoordinateSystem: public HeeksObj
 {

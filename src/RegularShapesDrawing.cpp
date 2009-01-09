@@ -10,6 +10,8 @@
 #include "../interface/PropertyInt.h"
 #include "HeeksFrame.h"
 #include "InputModeCanvas.h"
+#include "Geom.h"
+#include "HeeksCAD.h"
 
 RegularShapesDrawing regular_shapes_drawing;
 
