@@ -3,6 +3,7 @@
 #include "Solid.h"
 #include "BRepBuilderAPI_Transform.hxx"
 #include "MarkedList.h"
+#include "HeeksCAD.h"
 
 CSolid::CSolid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col):CShape(solid, title, col)
 {

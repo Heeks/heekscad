@@ -2,6 +2,7 @@
 
 #pragma once
 #include "../interface/HeeksObj.h"
+#include "gp_Pnt.hxx"
 
 struct RulerMark{
 	int pos; // distance from the 0 mark

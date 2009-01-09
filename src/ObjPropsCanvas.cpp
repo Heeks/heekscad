@@ -8,6 +8,7 @@
 #include "propgrid.h"
 #include "HeeksFrame.h"
 #include "MarkedList.h"
+#include "HeeksCAD.h"
 
 BEGIN_EVENT_TABLE(CObjPropsCanvas, wxScrolledWindow)
 	EVT_SIZE(CObjPropsCanvas::OnSize)

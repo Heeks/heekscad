@@ -3,6 +3,8 @@
 #pragma once
 
 #include "gp_Pnt.hxx"
+#include "gp_Lin.hxx"
+#include "gp_Circ.hxx"
 
 static const double Pi = 3.14159265358979323846264338327950288419716939937511;
 

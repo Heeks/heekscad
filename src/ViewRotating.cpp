@@ -5,6 +5,7 @@
 #include "SelectMode.h"
 #include "GraphicsCanvas.h"
 #include "HeeksFrame.h"
+#include "HeeksCAD.h"
 
 void ViewRotating::OnMouse( wxMouseEvent& event )
 {

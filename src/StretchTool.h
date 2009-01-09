@@ -5,6 +5,8 @@
 
 #include "../interface/Tool.h"
 
+class HeeksObj;
+
 class StretchTool: public Tool{
 private:
 	double m_pos[3];

@@ -4,7 +4,7 @@
 #include "HeeksPrintout.h"
 #include "wx/print.h"
 #include "HeeksFrame.h"
-
+#include "HeeksCAD.h"
 
 bool HeeksPrintout::OnPrintPage(int page)
 {

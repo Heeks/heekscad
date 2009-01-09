@@ -15,7 +15,10 @@
 #include <TopExp.hxx>
 #include <BRepFilletAPI_MakeFillet.hxx>
 #include <BRepAdaptor_Curve.hxx>
+#include <TopoDS.hxx>
+#include <BRep_Tool.hxx>
 #include "HeeksConfig.h"
+#include "HeeksCAD.h"
 
 CEdge::CEdge(const TopoDS_Edge &edge):m_topods_edge(edge){
 #if _DEBUG

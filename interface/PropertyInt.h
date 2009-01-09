@@ -5,6 +5,8 @@
 
 #include "Property.h"
 
+class HeeksObj;
+
 class PropertyInt:public Property{
 private:
 	wxString title;

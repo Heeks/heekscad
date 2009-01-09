@@ -27,8 +27,7 @@ class CoordinateSystem;
 class HRuler;
 class wxConfigBase;
 class wxAuiManager;
-
-#define MAX_RECENT_FILES 20
+class gp_Trsf;
 
 class HeeksCADapp : public wxApp, public ObjList
 {
@@ -79,7 +78,6 @@ public:
 	GripperMode* gripper_mode;
 	int grid_mode;
 	Gripper *drag_gripper;
-	gp_Pnt grip_from, grip_to;
 	Gripper *cursor_gripper;
 	CHeeksFrame *m_frame;
 	MarkedList *m_marked_list;
@@ -102,7 +100,7 @@ public:
 	std::list< void(*)(wxSizeEvent&) > m_on_graphics_size_list;
 	std::list< void(*)(wxMouseEvent&) > m_lbutton_up_callbacks;
 	int m_transform_gl_list;
-	gp_Trsf m_drag_matrix;
+	gp_Trsf *m_drag_matrix;
 	bool m_extrude_removes_sketches;
 	bool m_loft_removes_sketches;
 	bool m_font_created;

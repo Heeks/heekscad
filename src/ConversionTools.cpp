@@ -16,6 +16,7 @@
 #include "Edge.h"
 #include "Shape.h"
 #include "Sketch.h"
+#include "HeeksCAD.h"
 
 void GetConversionMenuTools(std::list<Tool*>* t_list){
 	bool lines_or_arcs_in_marked_list = false;

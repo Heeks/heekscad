@@ -10,6 +10,9 @@
 #include "../tinyxml/tinyxml.h"
 #include "PropertyVertex.h"
 #include "Gripper.h"
+#include "gp_Pln.hxx"
+#include "Geom.h"
+#include "HeeksCAD.h"
 
 HArc::HArc(const HArc &line){
 	operator=(line);

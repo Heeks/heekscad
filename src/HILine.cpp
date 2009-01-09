@@ -9,6 +9,8 @@
 #include "PropertyVertex.h"
 #include "../tinyxml/tinyxml.h"
 #include "Gripper.h"
+#include "Geom.h"
+#include "HeeksCAD.h"
 
 HILine::HILine(const HILine &line){
 	operator=(line);

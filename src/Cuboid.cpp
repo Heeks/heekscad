@@ -8,6 +8,7 @@
 #include "Gripper.h"
 #include "MarkedList.h"
 #include "../tinyxml/tinyxml.h"
+#include "HeeksCAD.h"
 
 CCuboid::CCuboid(const gp_Ax2& pos, double x, double y, double z, const wxChar* title, const HeeksColor& col):CSolid(BRepPrimAPI_MakeBox(pos, x, y, z), title, col), m_pos(pos), m_x(x), m_y(y), m_z(z)
 {

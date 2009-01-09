@@ -5,6 +5,8 @@
 #include "Property.h"
 #include "HeeksColor.h"
 
+class HeeksObj;
+
 class PropertyColor:public Property{
 private:
 	wxString title;

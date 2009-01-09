@@ -7,6 +7,7 @@
 #include "SelectMode.h"
 #include "GraphicsCanvas.h"
 #include "HeeksFrame.h"
+#include "HeeksCAD.h"
 
 PointOrWindow::PointOrWindow(bool wd){
 	if(wd)window = new WindowDragging();

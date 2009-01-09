@@ -22,7 +22,10 @@
 #include <GeomAPI_ProjectPointOnSurf.hxx>
 #include <gp_Sphere.hxx>
 #include <gp_Cone.hxx>
+#include <gp_Pln.hxx>
+#include <gp_Cylinder.hxx>
 #include <BRepExtrema_DistShapeShape.hxx>
+#include "HeeksCAD.h"
 
 CFace::CFace(const TopoDS_Face &face):m_topods_face(face), m_temp_attr(0){
 #if _DEBUG
