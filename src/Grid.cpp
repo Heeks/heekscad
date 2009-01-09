@@ -6,9 +6,6 @@
 #include "HeeksFrame.h"
 #include "GraphicsCanvas.h"
 #include "CoordinateSystem.h"
-#include "gp_Pln.hxx"
-#include "Geom.h"
-#include "HeeksCAD.h"
 
 static void RenderGrid(const CViewPoint *view_point, double max_number_across, bool in_between_spaces, bool miss_main_lines, const HeeksColor *bg, const HeeksColor *cc, unsigned char brightness, int plane_mode){
 	gp_Pnt sp[4];

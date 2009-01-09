@@ -6,9 +6,6 @@
 #include "wxImageLoader.h"
 #include "../tinyxml/tinyxml.h"
 #include "Gripper.h"
-#include "Geom.h"
-#include "../interface/strconv.h"
-#include "HeeksCAD.h"
 
 HImage::HImage(const wxChar* file_path)
 {

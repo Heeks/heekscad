@@ -10,8 +10,6 @@
 #include "HeeksFrame.h"
 #include "GraphicsCanvas.h"
 #include "ObjPropsCanvas.h"
-#include "Geom.h"
-#include "HeeksCAD.h"
 
 GripperSelTransform::GripperSelTransform(const gp_Pnt& pos, EnumGripperType gripper_type):Gripper(pos, _T(""), gripper_type){
 }
@@ -30,7 +28,7 @@ bool GripperSelTransform::OnGripperGrabbed(const std::list<HeeksObj*>& list, boo
 	if ( m_gripper_type <= GripperTypeObjectScaleXY )
 	{
 		wxGetApp().CreateTransformGLList(list, show_grippers_on_drag);
-		*(wxGetApp().m_drag_matrix) = gp_Trsf();
+		wxGetApp().m_drag_matrix = gp_Trsf();
 		for(It = list.begin(); It != list.end(); It++){
 			HeeksObj* object = *It;
 			if(object->m_visible)wxGetApp().m_hidden_for_drag.push_back(object);
@@ -68,7 +66,7 @@ void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
 
 	if(m_items_marked_at_grab.size() > 0)m_items_marked_at_grab.front()->GetScaleAboutMatrix(object_m);
 
-	MakeMatrix ( from, to, object_m, *(wxGetApp().m_drag_matrix) );
+	MakeMatrix ( from, to, object_m, wxGetApp().m_drag_matrix );
 	wxGetApp().Repaint();
 }
 

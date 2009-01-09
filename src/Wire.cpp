@@ -3,10 +3,6 @@
 #include "Wire.h"
 #include "../interface/Tool.h"
 #include "BRepOffsetAPI_MakeOffset.hxx"
-#include "TopoDS.hxx"
-#include "TopExp_Explorer.hxx"
-#include "TopoDS_Edge.hxx"
-#include "HeeksCAD.h"
 
 CWire::CWire(const TopoDS_Wire &wire, const wxChar* title):CShape(wire, title, false){
 }

@@ -5,7 +5,6 @@
 #include "SelectMode.h"
 #include "GraphicsCanvas.h"
 #include "HeeksFrame.h"
-#include "HeeksCAD.h"
 
 WindowDragging::WindowDragging(){
 	reset();

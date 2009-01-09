@@ -12,11 +12,9 @@
 #include "GraphicsCanvas.h"
 #include "HeeksFrame.h"
 #include "ConversionTools.h"
-#include "Geom.h"
 #include <wx/clipbrd.h>
 #include "../tinyxml/tinyxml.h"
 #include <wx/stdpaths.h>
-#include "HeeksCAD.h"
 #include <fstream>
 using namespace std;
 

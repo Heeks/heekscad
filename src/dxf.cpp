@@ -2,7 +2,6 @@
 
 #include "stdafx.h"
 #include "dxf.h"
-#include "Geom.h"
 
 CDxfWrite::CDxfWrite(const wxChar* filepath)
 {

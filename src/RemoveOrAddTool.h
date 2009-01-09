@@ -2,8 +2,6 @@
 
 #include "../interface/Tool.h"
 
-class HeeksObj;
-
 class RemoveOrAddTool:public Tool{
 protected:
 	HeeksObj* m_prev_object;

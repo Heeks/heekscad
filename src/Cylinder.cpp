@@ -8,7 +8,6 @@
 #include "Gripper.h"
 #include "MarkedList.h"
 #include "../tinyxml/tinyxml.h"
-#include "HeeksCAD.h"
 
 CCylinder::CCylinder(const gp_Ax2& pos, double radius, double height, const wxChar* title, const HeeksColor& col):CSolid(BRepPrimAPI_MakeCylinder(pos, radius, height), title, col), m_pos(pos), m_radius(radius), m_height(height)
 {

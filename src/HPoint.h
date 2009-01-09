@@ -3,7 +3,6 @@
 #pragma once
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"
-#include "gp_Pnt.hxx"
 
 class HPoint: public HeeksObj{
 private:

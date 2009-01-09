@@ -11,8 +11,6 @@
 #include "../src/Gripper.h"
 #include "../src/HeeksFrame.h"
 #include "../src/ObjPropsCanvas.h"
-#include "Geom.h"
-#include "HeeksCAD.h"
 #endif
 
 HeeksObj::HeeksObj(void): m_id(0), m_layer(0), m_visible(true), m_owner(NULL){}

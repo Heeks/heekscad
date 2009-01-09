@@ -62,8 +62,6 @@
 #include "RegularShapesDrawing.h"
 #include "HeeksPrintout.h"
 #include "HeeksConfig.h"
-#include "Geom.h"
-#include "../interface/strconv.h"
 #include <fstream>
 using namespace std;
 
@@ -113,7 +111,6 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	digitizing_radius = 5.0;
 	draw_to_grid = true;
 	digitizing_grid = 1.0;
-	m_drag_matrix = new gp_Trsf;
 	grid_mode = 3;
 	m_rotate_mode = 0;
 	m_antialiasing = false;
@@ -154,7 +151,6 @@ HeeksCADapp::~HeeksCADapp()
 	delete viewrotating;
 	delete viewzooming;
 	delete m_ruler;
-	delete m_drag_matrix;
 	if(m_gl_font)delete m_gl_font;
 	if(m_printData)delete m_printData;
 	if(m_pageSetupData)delete m_pageSetupData;
@@ -1127,7 +1123,7 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	{
         glPushMatrix();
 		double m[16];
-		extract_transposed(*m_drag_matrix, m);
+		extract_transposed(m_drag_matrix, m);
 		glMultMatrixd(m);
 		glCallList(m_transform_gl_list);
 		glPopMatrix();

@@ -16,8 +16,6 @@
 #include "MarkedList.h"
 #include "HeeksFrame.h"
 #include "CoordinateSystem.h"
-#include "Geom.h"
-#include "HeeksCAD.h"
 
 BEGIN_EVENT_TABLE(CPropertiesCanvas, wxScrolledWindow)
 	EVT_SIZE(CPropertiesCanvas::OnSize)

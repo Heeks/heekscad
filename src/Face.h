@@ -3,7 +3,6 @@
 #include "../interface/HeeksObj.h"
 #include "../interface/Material.h"
 #include <TopoDS_Face.hxx>
-#include "gp_Dir.hxx"
 
 class CShape;
 class CEdge;

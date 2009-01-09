@@ -4,11 +4,8 @@
 #include "Geom.h"
 #include <Geom_Curve.hxx>
 #include <Geom_Line.hxx>
-#include <Geom_Plane.hxx>
 #include <GeomAPI_IntCS.hxx>
 #include <GeomAPI_IntSS.hxx>
-#include "gp_Pln.hxx"
-#include "HeeksCAD.h"
 
 void ClosestPointsOnLines(const gp_Lin& lin, const gp_Lin& lin2, gp_Pnt &p1, gp_Pnt &p2)
 {
