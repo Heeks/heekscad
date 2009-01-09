@@ -25,14 +25,14 @@ void Gripper::glCommands(bool select, bool marked, bool no_color){
 	{
 		double s = 5.0 / wxGetApp().GetPixelScale();
 		double p[8][3] = {
-			-s, -s, -s,
-			s, -s, -s,
-			s, s, -s,
-			-s, s, -s,
-			-s, -s, s,
-			s, -s, s,
-			s, s, s,
-			-s, s, s
+			{-s, -s, -s},
+			{s, -s, -s},
+			{s, s, -s},
+			{-s, s, -s},
+			{-s, -s, s},
+			{s, -s, s},
+			{s, s, s},
+			{-s, s, s}
 		};
 
 		for(int i = 0; i<8; i++){
