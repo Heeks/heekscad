@@ -6,7 +6,6 @@
 #include "MarkedList.h"
 #include "../interface/Material.h"
 #include "HeeksFrame.h"
-#include "HeeksCAD.h"
 
 #define wxID_TEST1 10001
 #define wxID_TEST2 10002

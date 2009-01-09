@@ -10,8 +10,6 @@
 #include "HILine.h"
 #include "HArc.h"
 #include "Gripper.h"
-#include "Geom.h"
-#include "HeeksCAD.h"
 
 HCircle::HCircle(const HCircle &c){
 	operator=(c);

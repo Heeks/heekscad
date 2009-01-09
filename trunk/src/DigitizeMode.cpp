@@ -15,8 +15,6 @@
 #include "InputModeCanvas.h"
 #include "OptionsCanvas.h"
 #include "CoordinateSystem.h"
-#include "gp_Pln.hxx"
-#include "Geom.h"
 
 DigitizeMode::DigitizeMode(){
 	point_or_window = new PointOrWindow(false);

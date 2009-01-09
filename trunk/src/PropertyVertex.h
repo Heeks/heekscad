@@ -3,9 +3,6 @@
 #pragma once
 
 #include "../interface/Property.h"
-#include "gp_Pnt.hxx"
-
-class HeeksObj;
 
 class PropertyVertex:public Property{
 private:

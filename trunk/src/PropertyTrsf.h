@@ -3,9 +3,6 @@
 #pragma once
 
 #include "../interface/Property.h"
-#include "gp_Trsf.hxx"
-
-class HeeksObj;
 
 class PropertyTrsf:public Property{
 private:

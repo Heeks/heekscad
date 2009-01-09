@@ -1,7 +1,6 @@
 // StlSolid.h
 
 #include "../interface/HeeksObj.h"
-#include "../interface/HeeksColor.h"
 
 class CStlTri{
 public:
