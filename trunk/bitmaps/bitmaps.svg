@@ -5076,7 +5076,7 @@
          y="42.362183">File</tspan></text>
     <g
        id="g5832"
-       inkscape:export-filename=".\new.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\new.png"
        inkscape:export-xdpi="269.99994"
        inkscape:export-ydpi="269.99994">
       <path
@@ -5127,7 +5127,7 @@
          id="tspan23922">Edit</tspan></text>
     <g
        id="g23928"
-       inkscape:export-filename=".\undo.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\undo.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <path
@@ -5143,7 +5143,7 @@
     </g>
     <g
        id="g23940"
-       inkscape:export-filename=".\redo.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\redo.png"
        inkscape:export-xdpi="268.24399"
        inkscape:export-ydpi="268.24399">
       <path
@@ -5159,7 +5159,7 @@
     </g>
     <g
        id="g6662"
-       inkscape:export-filename=".\save.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\save.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <path
@@ -5204,7 +5204,7 @@
          id="tspan24146">Modes</tspan></text>
     <g
        id="g6674"
-       inkscape:export-filename=".\select.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\select.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <path
@@ -5227,7 +5227,7 @@
        d="M 50,263.36218 L 54.011262,264.92024 L 59.526861,250.55195 C 60.469915,247.27166 65.869841,248.35556 64.441942,252.58315 L 61.441942,260.43584 C 57.46201,272.81497 73.019674,274.36845 75,265.36218 L 80,251.36218 L 75.841424,249.73046 L 70.473139,264.02509 C 69.085335,267.84695 64.263542,266.18829 65.705372,262.21487 L 68.705372,254.06755 C 72.072588,244.84544 60.374499,238.376 55,249.36218 L 50,263.36218 z"
        id="path24188"
        sodipodi:nodetypes="ccssssccssssc"
-       inkscape:export-filename=".\lines.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\lines.png"
        inkscape:export-xdpi="271.42096"
        inkscape:export-ydpi="271.42096" />
     <text
@@ -5241,7 +5241,7 @@
          id="tspan24202">View</tspan></text>
     <g
        id="g6641"
-       inkscape:export-filename=".\help.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\help.png"
        inkscape:export-xdpi="271.18655"
        inkscape:export-ydpi="271.18655">
       <path
@@ -5293,7 +5293,7 @@
        y="422.36218" />
     <g
        id="g6688"
-       inkscape:export-filename=".\sphere.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\sphere.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <path
@@ -5318,7 +5318,7 @@
     </g>
     <g
        id="g6698"
-       inkscape:export-filename=".\cube.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\cube.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <path
@@ -5351,7 +5351,7 @@
     </g>
     <g
        id="g6712"
-       inkscape:export-filename=".\cyl.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\cyl.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <path
@@ -5423,7 +5423,7 @@
        y="512.36218" />
     <g
        id="g6725"
-       inkscape:export-filename=".\fuse.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\fuse.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <path
@@ -5453,7 +5453,7 @@
     </g>
     <g
        id="g6736"
-       inkscape:export-filename=".\common.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\common.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <path
@@ -5488,7 +5488,7 @@
     </g>
     <g
        id="g6747"
-       inkscape:export-filename=".\subtract.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\subtract.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <path
@@ -5513,7 +5513,7 @@
     </g>
     <g
        id="g6680"
-       inkscape:export-filename=".\redraw.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\redraw.png"
        inkscape:export-xdpi="271.40121"
        inkscape:export-ydpi="271.40121">
       <path
@@ -5529,7 +5529,7 @@
     </g>
     <g
        id="g6799"
-       inkscape:export-filename=".\mag.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\mag.png"
        inkscape:export-xdpi="270.42001"
        inkscape:export-ydpi="270.42001">
       <rect
@@ -5569,7 +5569,7 @@
     </g>
     <g
        id="g6892"
-       inkscape:export-filename=".\magextents.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\magextents.png"
        inkscape:export-xdpi="275.72485"
        inkscape:export-ydpi="275.72485">
       <rect
@@ -5609,7 +5609,7 @@
     </g>
     <g
        id="g6899"
-       inkscape:export-filename=".\magnorot.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\magnorot.png"
        inkscape:export-xdpi="269.99896"
        inkscape:export-ydpi="269.99896">
       <rect
@@ -5650,7 +5650,7 @@
     </g>
     <g
        id="g6848"
-       inkscape:export-filename=".\open.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\open.png"
        inkscape:export-xdpi="269.39984"
        inkscape:export-ydpi="269.39984">
       <rect
@@ -5683,19 +5683,19 @@
        d="M 85,172.36218 C 89,174.72994 93,177.02582 97,182.36218 C 99.585169,169.32658 107.6245,159.71885 115,152.36218 C 108,155.36218 99.785631,162.00529 95,174.36218 C 91.333333,172.15382 88.666667,172.70009 85,172.36218 z"
        id="path6906"
        sodipodi:nodetypes="ccccc"
-       inkscape:export-filename=".\apply.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\apply.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270" />
     <path
        style="fill:#f08080;fill-rule:evenodd;stroke:#900000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1"
        d="M 120 152.375 C 123.50256 156.06148 126.5936 160.43145 130 164.8125 C 125.58 169.49628 122.18978 175.28608 120 182.375 C 124.35572 177.03028 128.54734 172.35923 132.6875 168.125 C 137.21697 173.57154 142.51227 178.78627 150 182.375 C 145.13735 176.97244 140.76598 170.68096 135.78125 165.03125 C 140.52831 160.39013 145.22384 156.2749 150 152.375 C 143.47151 154.6765 137.72455 157.82047 132.9375 162 C 129.17023 158.14277 125.0015 154.75123 120 152.375 z "
        id="path6908"
-       inkscape:export-filename=".\cancel.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\cancel.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270" />
     <g
        id="g3269"
-       inkscape:export-filename=".\magprev.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\magprev.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <g
@@ -5734,14 +5734,14 @@
     </g>
     <g
        id="g4110"
-       inkscape:export-filename=".\endpick.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\endpick.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <g
          transform="translate(70,2.6171874e-6)"
          inkscape:export-ydpi="67.060997"
          inkscape:export-xdpi="67.060997"
-         inkscape:export-filename="C:\Documents and Settings\Richard\My Documents\Programming\Heeks\HeeksCAD\bitmaps\select.png"
+         inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\select.png"
          id="g3278">
         <path
            style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#606060;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -5761,7 +5761,7 @@
       <path
          inkscape:export-ydpi="67.410004"
          inkscape:export-xdpi="67.410004"
-         inkscape:export-filename="C:\Documents and Settings\Richard\My Documents\Programming\Heeks\HeeksCAD\bitmaps\apply.png"
+         inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\apply.png"
          sodipodi:nodetypes="ccccc"
          id="path4106"
          d="M 84.999999,262.36218 C 88.999999,264.72994 92.999999,267.02582 97,272.36218 C 99.58517,259.32658 107.6245,249.71885 115,242.36218 C 108,245.36218 99.78563,252.00529 95,264.36218 C 91.333332,262.15382 88.666666,262.70009 84.999999,262.36218 z"
@@ -5769,13 +5769,13 @@
     </g>
     <g
        id="g4116"
-       inkscape:export-filename=".\enddraw.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\enddraw.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <path
          inkscape:export-ydpi="67.5"
          inkscape:export-xdpi="67.5"
-         inkscape:export-filename="C:\Documents and Settings\Richard\My Documents\Programming\Heeks\HeeksCAD\bitmaps\lines.png"
+         inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\lines.png"
          sodipodi:nodetypes="ccssssccssssc"
          id="path3286"
          d="M 120,263.37731 L 124.01126,264.93537 L 129.52686,250.56708 C 130.46992,247.28679 135.86984,248.37069 134.44194,252.59828 L 131.44194,260.45097 C 127.46201,272.8301 143.01968,274.38358 145,265.37731 L 150,251.37731 L 145.84143,249.74559 L 140.47314,264.04022 C 139.08534,267.86208 134.26354,266.20342 135.70537,262.23 L 138.70537,254.08268 C 142.07259,244.86057 130.3745,238.39113 125,249.37731 L 120,263.37731 z"
@@ -5783,7 +5783,7 @@
       <path
          inkscape:export-ydpi="67.410004"
          inkscape:export-xdpi="67.410004"
-         inkscape:export-filename="C:\Documents and Settings\Richard\My Documents\Programming\Heeks\HeeksCAD\bitmaps\apply.png"
+         inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\apply.png"
          sodipodi:nodetypes="ccccc"
          id="path4108"
          d="M 120,262.36218 C 124,264.72994 128,267.02582 132,272.36218 C 134.58517,259.32658 142.6245,249.71885 150,242.36218 C 143,245.36218 134.78563,252.00529 130,264.36218 C 126.33333,262.15382 123.66667,262.70009 120,262.36218 z"
@@ -5791,7 +5791,7 @@
     </g>
     <g
        id="g5004"
-       inkscape:export-filename=".\cut.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\cut.png"
        inkscape:export-xdpi="269.89191"
        inkscape:export-ydpi="269.89191">
       <path
@@ -5819,7 +5819,7 @@
     </g>
     <g
        id="g5074"
-       inkscape:export-filename=".\copy.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\copy.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <g
@@ -5862,7 +5862,7 @@
     </g>
     <g
        id="g5120"
-       inkscape:export-filename=".\paste.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\paste.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <rect
@@ -5901,7 +5901,7 @@
     </g>
     <g
        id="g5146"
-       inkscape:export-filename=".\cone.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\cone.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <path
@@ -5917,7 +5917,7 @@
     </g>
     <g
        id="g5176"
-       inkscape:export-filename=".\ruled.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\ruled.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <path
@@ -5938,7 +5938,7 @@
     </g>
     <g
        id="g5219"
-       inkscape:export-filename=".\extrude.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\extrude.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <path
@@ -5978,13 +5978,13 @@
        style="opacity:1;fill:#8080ff;fill-opacity:1;stroke:#0000a0;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        d="M 164.5103,247.83605 L 162.5,244.3718 C 160.31329,245.54692 158.43892,247.67737 157.00534,249.87526 L 160.4821,251.84722 C 161.45982,250.16984 162.84228,248.79682 164.5103,247.83605 z M 159,257.36218 L 155,257.36218 C 154.94964,260.05823 155.79845,262.51542 157.01311,264.87535 L 160.45851,262.8427 C 159.52496,261.21672 159,259.34397 159,257.36218 z M 164.52846,266.91154 L 162.5,270.35256 C 164.79903,271.75671 167.35337,272.23374 170,272.36859 L 170,268.36218 C 168.05103,268.41236 166.24837,267.78252 164.52846,266.91154 z M 185,257.36859 L 181,257.36218 C 180.93916,255.44585 180.39236,253.62096 179.54341,251.89786 L 183.03134,249.9395 C 184.29955,252.19118 185,254.69538 185,257.36859 z M 177.53226,244.39657 L 175.54007,247.86542 C 173.94389,246.92922 172.03627,246.36218 170,246.36218 C 170,246.36218 172.03627,246.36218 170,246.36218 L 170,242.36218 L 170,242.36859 C 172.7582,242.375 175.31103,243.09592 177.53226,244.39657 z M 179.49873,262.91618 L 182.99468,264.86189 C 181.69071,267.12699 179.80729,269.0191 177.52437,270.34523 L 175.51535,266.88036 C 177.14648,265.92378 178.52996,264.52139 179.49873,262.91618 z"
        sodipodi:nodetypes="cccccccccccccccccccccccccccccccc"
-       inkscape:export-filename=".\circles.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\circles.png"
        inkscape:export-xdpi="269.94592"
        inkscape:export-ydpi="269.94592" />
     <g
        id="g5265"
        transform="translate(-5,-4.9999974)"
-       inkscape:export-filename=".\iline.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\iline.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <path
@@ -6010,7 +6010,7 @@
     </g>
     <g
        id="g5285"
-       inkscape:export-filename=".\point.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\point.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <path
@@ -6031,7 +6031,7 @@
     </g>
     <g
        id="g5339"
-       inkscape:export-filename=".\viewrot.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\viewrot.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <g
@@ -6074,7 +6074,7 @@
     </g>
     <g
        id="g5355"
-       inkscape:export-filename=".\fullscreen.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\fullscreen.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <rect
@@ -6120,7 +6120,7 @@
          y="592.36218">Translate</tspan></text>
     <g
        id="g5421"
-       inkscape:export-filename=".\movet.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\movet.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <path
@@ -6163,7 +6163,7 @@
     </g>
     <g
        id="g5445"
-       inkscape:export-filename=".\copyt.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\copyt.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <path
@@ -6206,7 +6206,7 @@
     </g>
     <g
        id="g3402"
-       inkscape:export-filename=".\mover.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\mover.png"
        inkscape:export-xdpi="261.22"
        inkscape:export-ydpi="261.22">
       <path
@@ -6249,7 +6249,7 @@
     </g>
     <g
        id="g7477"
-       inkscape:export-filename=".\movem.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\movem.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <path
@@ -6293,7 +6293,7 @@
     <g
        id="g7482"
        transform="translate(35.000005,2.6171876e-6)"
-       inkscape:export-filename=".\copym.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\copym.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <path
@@ -6336,7 +6336,7 @@
     </g>
     <g
        id="g7503"
-       inkscape:export-filename=".\moves.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\moves.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <path
@@ -6384,7 +6384,7 @@
     </g>
     <g
        id="g7515"
-       inkscape:export-filename=".\add.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\add.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270"
        transform="translate(-35,0)">
@@ -6405,7 +6405,7 @@
     </g>
     <g
        id="g7530"
-       inkscape:export-filename=".\pickpos.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\pickpos.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270"
        transform="translate(-35,0)">
@@ -6413,7 +6413,7 @@
          transform="translate(315,2.6171874e-6)"
          inkscape:export-ydpi="67.060997"
          inkscape:export-xdpi="67.060997"
-         inkscape:export-filename="C:\Documents and Settings\Richard\My Documents\Programming\Heeks\HeeksCAD\bitmaps\select.png"
+         inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\select.png"
          id="g7520">
         <path
            style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#606060;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -6438,7 +6438,7 @@
     </g>
     <g
        id="g7554"
-       inkscape:export-filename=".\endpospick.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\endpospick.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270"
        transform="translate(-35,0)">
@@ -6446,7 +6446,7 @@
          transform="translate(350,3.9257811e-6)"
          inkscape:export-ydpi="67.060997"
          inkscape:export-xdpi="67.060997"
-         inkscape:export-filename="C:\Documents and Settings\Richard\My Documents\Programming\Heeks\HeeksCAD\bitmaps\select.png"
+         inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\select.png"
          id="g7538">
         <path
            style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#606060;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -6466,7 +6466,7 @@
       <path
          inkscape:export-ydpi="67.410004"
          inkscape:export-xdpi="67.410004"
-         inkscape:export-filename="C:\Documents and Settings\Richard\My Documents\Programming\Heeks\HeeksCAD\bitmaps\apply.png"
+         inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\apply.png"
          sodipodi:nodetypes="ccccc"
          id="path7544"
          d="M 365,262.36218 C 369,264.72994 373,267.02582 377,272.36218 C 379.58517,259.32658 387.6245,249.71885 395,242.36218 C 388,245.36218 379.78563,252.00529 375,264.36218 C 371.33333,262.15382 368.66667,262.70009 365,262.36218 z"
@@ -6479,7 +6479,7 @@
     </g>
     <g
        id="g5300"
-       inkscape:export-filename=".\coordsys.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\coordsys.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270"
        transform="translate(105,1.3085937e-6)">
@@ -6510,14 +6510,14 @@
     </g>
     <g
        id="g7709"
-       inkscape:export-filename=".\setcoordsys.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\setcoordsys.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <g
          transform="translate(175,1.3085937e-6)"
          inkscape:export-ydpi="66.459999"
          inkscape:export-xdpi="66.459999"
-         inkscape:export-filename="C:\Documents and Settings\Richard\My Documents\Programming\Heeks\Current\HeeksCADx\bitmaps\coordsys.png"
+         inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\coordsys.png"
          id="g7617">
         <path
            style="fill:#8080ff;fill-opacity:1;fill-rule:evenodd;stroke:#0000a0;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -6542,7 +6542,7 @@
       <path
          inkscape:export-ydpi="67.410004"
          inkscape:export-xdpi="67.410004"
-         inkscape:export-filename="C:\Documents and Settings\Richard\My Documents\Programming\Heeks\HeeksCAD\bitmaps\apply.png"
+         inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\apply.png"
          sodipodi:nodetypes="ccccc"
          id="path7641"
          d="M 445.2,255.56218 C 447.84,257.1249 450.48,258.64018 453.12,262.16218 C 454.82621,253.55868 460.13217,247.21758 465,242.36218 C 460.38,244.34218 454.95852,248.72663 451.8,256.88218 C 449.38,255.42466 447.62,255.7852 445.2,255.56218 z"
@@ -6550,14 +6550,14 @@
     </g>
     <g
        id="g7716"
-       inkscape:export-filename=".\unsetcoordsys.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\unsetcoordsys.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <g
          transform="translate(210,1.3085937e-6)"
          inkscape:export-ydpi="66.459999"
          inkscape:export-xdpi="66.459999"
-         inkscape:export-filename="C:\Documents and Settings\Richard\My Documents\Programming\Heeks\Current\HeeksCADx\bitmaps\coordsys.png"
+         inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\coordsys.png"
          id="g7627">
         <path
            style="fill:#8080ff;fill-opacity:1;fill-rule:evenodd;stroke:#0000a0;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -6582,7 +6582,7 @@
       <path
          inkscape:export-ydpi="67.410004"
          inkscape:export-xdpi="67.410004"
-         inkscape:export-filename="C:\Documents and Settings\Richard\My Documents\Programming\Heeks\HeeksCAD\bitmaps\cancel.png"
+         inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\cancel.png"
          id="path7643"
          d="M 480.2,242.36218 C 482.51169,244.79526 484.55178,247.67944 486.8,250.57093 C 483.8828,253.66222 481.64525,257.48349 480.2,262.16218 C 483.07478,258.63466 485.84124,255.55177 488.57375,252.75718 C 491.5632,256.3519 495.0581,259.79362 500,262.16218 C 496.79065,258.59649 493.90555,254.44411 490.61562,250.7153 C 493.74868,247.65217 496.84773,244.93611 500,242.36218 C 495.6912,243.88117 491.8982,245.95619 488.73875,248.71468 C 486.25235,246.16891 483.50099,243.93049 480.2,242.36218 z"
          style="fill:#f08080;fill-opacity:1;fill-rule:evenodd;stroke:#900000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
@@ -6590,7 +6590,7 @@
     <g
        id="g7741"
        transform="translate(35,-39.999999)"
-       inkscape:export-filename=".\coords3.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\coords3.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <g
@@ -6598,7 +6598,7 @@
          transform="translate(105,40.000001)"
          inkscape:export-ydpi="66.459999"
          inkscape:export-xdpi="66.459999"
-         inkscape:export-filename="C:\Documents and Settings\Richard\My Documents\Programming\Heeks\Current\HeeksCADx\bitmaps\coordsys.png"
+         inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\coordsys.png"
          id="g7725">
         <path
            style="fill:#80e080;fill-opacity:1;fill-rule:evenodd;stroke:#006000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -6643,7 +6643,7 @@
     </g>
     <g
        id="g3412"
-       inkscape:export-filename=".\copyr.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\copyr.png"
        inkscape:export-xdpi="261.22"
        inkscape:export-ydpi="261.22"
        transform="translate(34.462236,2.6171874e-6)">
@@ -6708,7 +6708,7 @@
        y="332.36218" />
     <g
        id="g4236"
-       inkscape:export-filename=".\zoom.png"
+       inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\zoom.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
       <g
