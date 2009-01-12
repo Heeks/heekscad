@@ -85,6 +85,7 @@ public:
 	virtual long BodyGetNumFaces(HeeksObj* body);
 	virtual HeeksObj* BodyGetFirstFace(HeeksObj* body);
 	virtual HeeksObj* BodyGetNextFace(HeeksObj* body);
+	virtual HeeksObj* BodyGetPickedFace(HeeksObj* body);
 	virtual long BodyGetNumEdges(HeeksObj* body);
 	virtual HeeksObj* BodyGetFirstEdge(HeeksObj* body);
 	virtual HeeksObj* BodyGetNextEdge(HeeksObj* body);
