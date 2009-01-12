@@ -37,11 +37,12 @@
 #include "../interface/Tool.h"
 #include "../tinyxml/tinyxml.h"
 #include "HeeksConfig.h"
+#include "../interface/MarkedObject.h"
 
 // static member variable
 bool CShape::m_solids_found = false;
 
-CShape::CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor& col):m_gl_list(0), m_shape(shape), m_title(title), m_color(col)
+CShape::CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor& col):m_gl_list(0), m_shape(shape), m_title(title), m_color(col), m_picked_face(NULL)
 {
 	m_faces = new CFaceList;
 	m_edges = new CEdgeList;
@@ -50,7 +51,7 @@ CShape::CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor&
 	create_faces_and_edges();
 }
 
-CShape::CShape(const CShape& s):m_gl_list(0)
+CShape::CShape(const CShape& s):m_gl_list(0), m_picked_face(NULL)
 {
 	m_faces = new CFaceList;
 	m_edges = new CEdgeList;
@@ -685,4 +686,22 @@ void CShape::CopyFrom(const HeeksObj* object)
 void CShape::WriteXML(TiXmlElement *root)
 {
 	CShape::m_solids_found = true;
+}
+
+void CShape::SetClickMarkPoint(MarkedObject* marked_object, const double* ray_start, const double* ray_direction)
+{
+	// set picked face
+	m_picked_face = NULL;
+	if(marked_object->m_map.size() > 0)
+	{
+		MarkedObject* sub_marked_object = marked_object->m_map.begin()->second;
+		if(sub_marked_object)
+		{
+			HeeksObj* object = sub_marked_object->m_map.begin()->first;
+			if(object && object->GetType() == FaceType)
+			{
+				m_picked_face = (CFace*)object;
+			}
+		}
+	}
 }

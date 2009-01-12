@@ -41,6 +41,7 @@ public:
 	CEdgeList* m_edges;
 	wxString m_title;
 	HeeksColor m_color;
+	CFace* m_picked_face;
 
 	CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor& col);
 	CShape(const CShape& s);
@@ -48,6 +49,7 @@ public:
 
 	virtual const CShape& operator=(const CShape& s);
 
+	// HeeksObj's virtual functions
 	int GetType()const{return SolidType;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
@@ -61,6 +63,7 @@ public:
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	void CopyFrom(const HeeksObj* object);
 	void WriteXML(TiXmlElement *root);
+	void SetClickMarkPoint(MarkedObject* marked_object, const double* ray_start, const double* ray_direction);
 
 	const TopoDS_Shape &Shape(){return m_shape;}
 

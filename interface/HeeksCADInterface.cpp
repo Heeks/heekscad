@@ -402,6 +402,11 @@ HeeksObj* CHeeksCADInterface::BodyGetNextFace(HeeksObj* body)
 	return ((CShape*)body)->m_faces->GetNextChild();
 }
 
+HeeksObj* CHeeksCADInterface::BodyGetPickedFace(HeeksObj* body)
+{
+	return ((CShape*)body)->m_picked_face;
+}
+
 void CHeeksCADInterface::FaceSetTempAttribute(HeeksObj* face, int attr)
 {
 	((CFace*)face)->m_temp_attr = attr;
