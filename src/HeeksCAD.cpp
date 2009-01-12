@@ -1111,11 +1111,13 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 		}
 	}
 
+	glDisable(GL_POLYGON_OFFSET_FILL);
 	for(std::list< void(*)() >::iterator It = m_on_glCommands_list.begin(); It != m_on_glCommands_list.end(); It++)
 	{
 		void(*callbackfunc)() = *It;
 		(*callbackfunc)();
 	}
+	glEnable(GL_POLYGON_OFFSET_FILL);
 
 	input_mode_object->OnRender();
 
