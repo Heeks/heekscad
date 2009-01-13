@@ -420,6 +420,8 @@ void HeeksCADapp::Reset(){
 	ResetIDs();
 }
 
+static bool undoably_for_ReadSTEPFileFromXMLElement = false;
+
 static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 {
 	std::map<int, CShapeData> index_map;
@@ -473,7 +475,7 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 #endif
 					ofs<<file_text;
 				}
-				CShape::ImportSolidsFile(temp_file, false, &index_map);
+				CShape::ImportSolidsFile(temp_file, undoably_for_ReadSTEPFileFromXMLElement, &index_map);
 			}
 		}
 	}
@@ -495,7 +497,7 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 #endif
 				ofs<<a->Value();
 			}
-			CShape::ImportSolidsFile(temp_file, false, &index_map);
+			CShape::ImportSolidsFile(temp_file, undoably_for_ReadSTEPFileFromXMLElement, &index_map);
 		}
 	}
 
@@ -545,7 +547,7 @@ HeeksObj* HeeksCADapp::ReadXMLElement(TiXmlElement* pElem)
 	return NULL;
 }
 
-void HeeksCADapp::OpenXMLFile(const wxChar *filepath)
+void HeeksCADapp::OpenXMLFile(const wxChar *filepath, bool undoably, HeeksObj* paste_into)
 {
 	TiXmlDocument doc(Ttc(filepath));
 	if (!doc.LoadFile())
@@ -556,6 +558,8 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath)
 		}
 		return;
 	}
+
+	undoably_for_ReadSTEPFileFromXMLElement = undoably;
 
 	TiXmlHandle hDoc(&doc);
 	TiXmlElement* pElem;
@@ -578,10 +582,18 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath)
 	}
 
 	// loop through all the objects
+	std::list<HeeksObj*> objects;
 	for(pElem = hRoot.FirstChildElement().Element(); pElem;	pElem = pElem->NextSiblingElement())
 	{
 		HeeksObj* object = ReadXMLElement(pElem);
-		if(object)Add(object, NULL);
+		if(object)objects.push_back(object);
+	}
+	if(objects.size() > 0)
+	{
+		HeeksObj* add_to = this;
+		if(paste_into)add_to = paste_into;
+		if(undoably)AddUndoably(objects, add_to);
+		else add_to->Add(objects);
 	}
 }
 
@@ -592,7 +604,7 @@ static void add_line_from_bezier_curve(const gp_Pnt& vt0, const gp_Pnt& vt1)
 	sketch_for_callback->Add(new_object, NULL);
 }
 
-void HeeksCADapp::ReadSVGElement(TiXmlElement* pElem)
+void HeeksCADapp::ReadSVGElement(TiXmlElement* pElem, bool undoably)
 {
 	std::string name(pElem->Value());
 
@@ -601,7 +613,7 @@ void HeeksCADapp::ReadSVGElement(TiXmlElement* pElem)
 		// loop through all the child elements, looking for path
 		for(pElem = TiXmlHandle(pElem).FirstChildElement().Element(); pElem; pElem = pElem->NextSiblingElement())
 		{
-			ReadSVGElement(pElem);
+			ReadSVGElement(pElem, undoably);
 		}
 		return;
 	}
@@ -630,7 +642,8 @@ void HeeksCADapp::ReadSVGElement(TiXmlElement* pElem)
 						sy = -sy;
 						px = sx; py = sy;
 						sketch = new CSketch;
-						Add(sketch, NULL);
+						if(undoably)AddUndoably(sketch, this, NULL);
+						else Add(sketch, NULL);
 					}
 					else if(d[pos] == 'L'){
 						// add a line
@@ -671,7 +684,7 @@ void HeeksCADapp::ReadSVGElement(TiXmlElement* pElem)
 	}
 }
 
-void HeeksCADapp::OpenSVGFile(const wxChar *filepath)
+void HeeksCADapp::OpenSVGFile(const wxChar *filepath, bool undoably)
 {
 	TiXmlDocument doc(Ttc(filepath));
 	if (!doc.LoadFile())
@@ -706,14 +719,15 @@ void HeeksCADapp::OpenSVGFile(const wxChar *filepath)
 	// loop through all the objects
 	for(pElem = hRoot.FirstChildElement().Element(); pElem;	pElem = pElem->NextSiblingElement())
 	{
-		ReadSVGElement(pElem);
+		ReadSVGElement(pElem, undoably);
 	}
 }
 
-void HeeksCADapp::OpenSTLFile(const wxChar *filepath)
+void HeeksCADapp::OpenSTLFile(const wxChar *filepath, bool undoably)
 {
 	CStlSolid* new_object = new CStlSolid(filepath, &wxGetApp().current_color);
-	wxGetApp().Add(new_object, NULL);
+	if(undoably)AddUndoably(new_object, this, NULL);
+	else Add(new_object, NULL);
 }
 
 class HeeksDxfRead : public CDxfRead{
@@ -721,17 +735,18 @@ public:
 	HeeksDxfRead(const wxChar* filepath):CDxfRead(filepath){}
 
 	// CDxfRead's virtual functions
-	void OnReadLine(const double* s, const double* e);
-	void OnReadArc(const double* s, const double* e, const double* c, bool dir);
+	void OnReadLine(const double* s, const double* e, bool undoably);
+	void OnReadArc(const double* s, const double* e, const double* c, bool dir, bool undoably);
 };
 
-void HeeksDxfRead::OnReadLine(const double* s, const double* e)
+void HeeksDxfRead::OnReadLine(const double* s, const double* e, bool undoably)
 {
 	HLine* new_object = new HLine(make_point(s), make_point(e), &(wxGetApp().current_color));
-	wxGetApp().Add(new_object, NULL);
+	if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
+	else wxGetApp().Add(new_object, NULL);
 }
 
-void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, bool dir)
+void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, bool dir, bool undoably)
 {
 	gp_Pnt p0 = make_point(s);
 	gp_Pnt p1 = make_point(e);
@@ -740,18 +755,17 @@ void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, 
 	gp_Pnt pc = make_point(c);
 	gp_Circ circle(gp_Ax2(pc, up), p1.Distance(pc));
 	HArc* new_object = new HArc(p0, p1, circle, &wxGetApp().current_color);
-	wxGetApp().Add(new_object, NULL);
+	if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
+	else wxGetApp().Add(new_object, NULL);
 }
 
-void HeeksCADapp::OpenDXFFile(const wxChar *filepath)
+void HeeksCADapp::OpenDXFFile(const wxChar *filepath, bool undoably)
 {
-	{
-		HeeksDxfRead dxf_file(filepath);
-		dxf_file.DoRead();
-	}
+	HeeksDxfRead dxf_file(filepath);
+	dxf_file.DoRead(undoably);
 }
 
-bool HeeksCADapp::OpenImageFile(const wxChar *filepath)
+bool HeeksCADapp::OpenImageFile(const wxChar *filepath, bool undoably)
 {
 	wxString wf(filepath);
 	wf.LowerCase();
@@ -763,8 +777,10 @@ bool HeeksCADapp::OpenImageFile(const wxChar *filepath)
 		wxString ext = _T(".") + handler->GetExtension();
 		if(wf.EndsWith(ext))
 		{
-			wxGetApp().AddUndoably(new HImage(filepath), NULL, NULL);
-			wxGetApp().Repaint();
+			HImage* new_object = new HImage(filepath);
+			if(undoably)AddUndoably(new_object, NULL, NULL);
+			else Add(new_object, NULL);
+			Repaint();
 			return true;
 		}
 	}
@@ -772,7 +788,7 @@ bool HeeksCADapp::OpenImageFile(const wxChar *filepath)
 	return false;
 }
 
-bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open)
+bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksObj* paste_into)
 {
 	wxGetApp().m_in_OpenFile = true;
 
@@ -782,34 +798,36 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open)
 
 	bool open_failed = false;
 
+	if(import_not_open)StartHistory();
+
 	if(wf.EndsWith(_T(".heeks")))
 	{
-		OpenXMLFile(filepath);
+		OpenXMLFile(filepath, import_not_open, paste_into);
 	}
 	else if(wf.EndsWith(_T(".svg")))
 	{
-		OpenSVGFile(filepath);
+		OpenSVGFile(filepath, import_not_open);
 	}
 	else if(wf.EndsWith(_T(".svg")))
 	{
-		OpenSVGFile(filepath);
+		OpenSVGFile(filepath, import_not_open);
 	}
 	else if(wf.EndsWith(_T(".stl")))
 	{
-		OpenSTLFile(filepath);
+		OpenSTLFile(filepath, import_not_open);
 	}
 	else if(wf.EndsWith(_T(".dxf")))
 	{
-		OpenDXFFile(filepath);
+		OpenDXFFile(filepath, import_not_open);
 	}
 
 	// check for images
-	else if(OpenImageFile(filepath))
+	else if(OpenImageFile(filepath, import_not_open))
 	{
 	}
 
 	// check for solid files
-	else if(CShape::ImportSolidsFile(filepath, false))
+	else if(CShape::ImportSolidsFile(filepath, import_not_open))
 	{
 	}
 	else
@@ -820,11 +838,13 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open)
 		open_failed = true;
 	}
 
+	if(import_not_open)EndHistory();
+
 	if(!open_failed)
 	{
-		WereAdded(m_objects);
 		if(!import_not_open)
 		{
+			WereAdded(m_objects);
 			m_filepath.assign(filepath);
 			InsertRecentFileItem(filepath);
 			SetFrameTitle();
@@ -1274,7 +1294,7 @@ void HeeksCADapp::DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObje
 
 	GetTools(marked_object, f_list, new_point, from_graphics_canvas, control_pressed);
 
-	m_marked_list->GetTools(&f_list, &new_point);
+	m_marked_list->GetTools(marked_object, f_list, &new_point);
 
 	temp_f_list.clear();
 	if(input_mode_object)input_mode_object->GetTools(&temp_f_list, &new_point);
@@ -2554,7 +2574,7 @@ bool HeeksCADapp::IsPasteReady()
 	return false;
 }
 
-void HeeksCADapp::Paste()
+void HeeksCADapp::Paste(HeeksObj* paste_into)
 {
 	// assume the text is the contents of a heeks file
 	wxString fstr;
@@ -2590,7 +2610,7 @@ void HeeksCADapp::Paste()
 
 	m_marked_list->Clear();
 	m_mark_newly_added_objects = true;
-	wxGetApp().OpenFile(temp_file, true);
+	wxGetApp().OpenFile(temp_file, true, paste_into);
 	m_mark_newly_added_objects = false;
 }
 

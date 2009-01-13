@@ -747,7 +747,7 @@ void CHeeksFrame::OnImportButton( wxCommandEvent& event )
 
     if (dialog.ShowModal() == wxID_OK)
     {
-		wxGetApp().OpenFile(dialog.GetPath().c_str());
+		wxGetApp().OpenFile(dialog.GetPath().c_str(), true);
     }
 }
 
@@ -799,7 +799,7 @@ void CHeeksFrame::OnUpdateCopy( wxUpdateUIEvent& event )
 
 void CHeeksFrame::OnPasteButton( wxCommandEvent& event )
 {
-	wxGetApp().Paste();
+	wxGetApp().Paste(NULL);
 }
 
 void CHeeksFrame::OnDeleteButton( wxCommandEvent& event )
