@@ -22,18 +22,18 @@ private:
 	bool m_fail;
 	char m_str[1024];
 
-	bool ReadLine();
-	bool ReadArc();
-	void OnReadArc(double start_angle, double end_angle, double radius, const double* c);
+	bool ReadLine(bool undoably);
+	bool ReadArc(bool undoably);
+	void OnReadArc(double start_angle, double end_angle, double radius, const double* c, bool undoably);
 
 public:
 	CDxfRead(const wxChar* filepath); // this opens the file
 	~CDxfRead(); // this closes the file
 
 	bool Failed(){return m_fail;}
-	void DoRead(); // this reads the file and calls the following functions
+	void DoRead(bool undoably); // this reads the file and calls the following functions
 
-	virtual void OnReadLine(const double* s, const double* e){}
-	virtual void OnReadArc(const double* s, const double* e, const double* c, bool dir){}
+	virtual void OnReadLine(const double* s, const double* e, bool undoably){}
+	virtual void OnReadArc(const double* s, const double* e, const double* c, bool dir, bool undoably){}
 };
 

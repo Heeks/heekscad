@@ -108,7 +108,7 @@ CDxfRead::~CDxfRead()
 	delete m_ifs;
 }
 
-bool CDxfRead::ReadLine()
+bool CDxfRead::ReadLine(bool undoably)
 {
 	double s[3] = {0, 0, 0};
 	double e[3] = {0, 0, 0};
@@ -121,7 +121,7 @@ bool CDxfRead::ReadLine()
 		switch(n){
 			case 0:
 				// next item found, so finish with line
-				OnReadLine(s, e);
+				OnReadLine(s, e, undoably);
 				return true;
 			case 10:
 				// start x
@@ -168,11 +168,11 @@ bool CDxfRead::ReadLine()
 		}
 	}
 
-	OnReadLine(s, e);
+	OnReadLine(s, e, undoably);
 	return false;
 }
 
-bool CDxfRead::ReadArc()
+bool CDxfRead::ReadArc(bool undoably)
 {
 	double start_angle = 0.0;// in degrees
 	double end_angle = 0.0;
@@ -187,7 +187,7 @@ bool CDxfRead::ReadArc()
 		switch(n){
 			case 0:
 				// next item found, so finish with arc
-				OnReadArc(start_angle, end_angle, radius, c);
+				OnReadArc(start_angle, end_angle, radius, c, undoably);
 				return true;
 			case 10:
 				// centre x
@@ -234,11 +234,11 @@ bool CDxfRead::ReadArc()
 		}
 	}
 
-	OnReadArc(start_angle, end_angle, radius, c);
+	OnReadArc(start_angle, end_angle, radius, c, undoably);
 	return false;
 }
 
-void CDxfRead::OnReadArc(double start_angle, double end_angle, double radius, const double* c){
+void CDxfRead::OnReadArc(double start_angle, double end_angle, double radius, const double* c, bool undoably){
 	double s[3], e[3];
 	s[0] = c[0] + radius * cos(start_angle * Pi/180);
 	s[1] = c[1] + radius * sin(start_angle * Pi/180);
@@ -247,10 +247,10 @@ void CDxfRead::OnReadArc(double start_angle, double end_angle, double radius, co
 	e[1] = c[1] + radius * sin(end_angle * Pi/180);
 	e[2] = c[2];
 
-	OnReadArc(s, e, c, true);
+	OnReadArc(s, e, c, true, undoably);
 }
 
-void CDxfRead::DoRead()
+void CDxfRead::DoRead(bool undoably)
 {
 	if(m_fail)return;
 
@@ -262,11 +262,11 @@ void CDxfRead::DoRead()
 		{
 			m_ifs->getline(m_str, 1024);
 			if(!strcmp(m_str, "LINE")){
-				if(!ReadLine())return;
+				if(!ReadLine(undoably))return;
 				continue;
 			}
 			else if(!strcmp(m_str, "ARC")){
-				if(!ReadArc())return;
+				if(!ReadArc(undoably))return;
 				continue;
 			}
 		}

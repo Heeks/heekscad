@@ -159,3 +159,21 @@ bool HeeksObj::OnVisibleLayer()
 	return true;
 }
 
+bool HeeksObj::Add(const std::list<HeeksObj*> &objects)
+{
+	for(std::list<HeeksObj*>::const_iterator It = objects.begin(); It != objects.end(); It++)
+	{
+		HeeksObj* object = *It;
+		if(!Add(object, NULL))return false;
+	}
+	return true;
+}
+
+void HeeksObj::Remove(const std::list<HeeksObj*> &objects)
+{
+	for(std::list<HeeksObj*>::const_iterator It = objects.begin(); It != objects.end(); It++)
+	{
+		HeeksObj* object = *It;
+		Remove(object);
+	}
+}
