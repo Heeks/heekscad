@@ -188,6 +188,8 @@ public:
 	void OnUpdateExternalButton( wxUpdateUIEvent& event );
 	void OnSize( wxSizeEvent& evt );
 	void OnMove( wxMoveEvent& evt );
+	void OnKeyDown(wxKeyEvent& event);
+	void OnKeyUp(wxKeyEvent& event);
 	int AddToolBarTool(wxToolBar* toolbar, const wxString& title, const wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
 	void AddToolBarTool(wxToolBar* toolbar, Tool* tool);
 	void ClearToolBar(wxToolBar* m_toolBar);

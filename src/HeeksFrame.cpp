@@ -124,6 +124,8 @@ EVT_MENU_RANGE(ID_FIRST_EXTERNAL_BUTTON, ID_FIRST_POP_UP_MENU_TOOL + 1000, CHeek
 EVT_UPDATE_UI_RANGE(ID_FIRST_EXTERNAL_BUTTON, ID_FIRST_POP_UP_MENU_TOOL + 1000, CHeeksFrame::OnUpdateExternalButton)
 EVT_SIZE(CHeeksFrame::OnSize)
 EVT_MOVE(CHeeksFrame::OnMove)
+EVT_KEY_DOWN(CHeeksFrame::OnKeyDown)
+EVT_KEY_UP(CHeeksFrame::OnKeyUp)
 END_EVENT_TABLE()
 
 class DnDFile : public wxFileDropTarget
@@ -411,6 +413,18 @@ CHeeksFrame::~CHeeksFrame()
 	config.Write(_T("Perspective"), m_graphics->m_view_point.GetPerspective());	
 
 	delete m_aui_manager;
+}
+
+void CHeeksFrame::OnKeyDown(wxKeyEvent& event)
+{
+	wxGetApp().input_mode_object->OnKeyDown(event);
+	event.Skip();
+}
+
+void CHeeksFrame::OnKeyUp(wxKeyEvent& event)
+{
+	wxGetApp().input_mode_object->OnKeyUp(event);
+	event.Skip();
 }
 
 bool CHeeksFrame::ShowFullScreen(bool show, long style){

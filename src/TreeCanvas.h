@@ -30,7 +30,8 @@ public:
     void OnSetInfo(wxTreeEvent& event);
     void OnSelChanged(wxTreeEvent& event);
     void OnSelChanging(wxTreeEvent& event);
-    void OnTreeKeyDown(wxTreeEvent& event);
+	void OnKeyDown(wxKeyEvent& event);
+	void OnKeyUp(wxKeyEvent& event);
     void OnItemActivated(wxTreeEvent& event);
     void OnItemRClick(wxTreeEvent& event);
     void OnLMouseDown(wxMouseEvent& event);
@@ -99,6 +100,8 @@ public:
     void OnSize(wxSizeEvent& event);
 	void OnMouseWheel(wxMouseEvent& event);
     wxTreeItemId Find(HeeksObj *object);
+	void OnKeyDown(wxKeyEvent& event);
+	void OnKeyUp(wxKeyEvent& event);
  
     DECLARE_NO_COPY_CLASS(CTreeCanvas)
     DECLARE_EVENT_TABLE()
