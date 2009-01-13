@@ -380,20 +380,21 @@ void MyTreeCtrl::OnMenuEvent(wxCommandEvent& event)
 
 void MyTreeCtrl::OnContextMenu(wxContextMenuEvent& event)
 {
-    wxPoint pt = event.GetPosition();
-	pt = ScreenToClient(pt);
+    wxPoint point = event.GetPosition();
+	point = ScreenToClient(point);
 	int flags;
-    wxTreeItemId item = HitTest(pt, flags);
+    wxTreeItemId itemId = HitTest(point, flags);
 
-	if(item)ShowMenu(item, pt);
-}
+	HeeksObj* object = NULL;
 
-void MyTreeCtrl::ShowMenu(wxTreeItemId itemId, const wxPoint& point)
-{
-     MyTreeItemData *item = itemId.IsOk() ? (MyTreeItemData *)GetItemData(itemId)
-                                         : NULL;
-    MarkedObjectOneOfEach marked_object(0, item->m_object, 1);
-		wxGetApp().DoDropDownMenu(this, point, &marked_object, true, false, false);
+	if(itemId)
+	{
+		MyTreeItemData *item = itemId.IsOk() ? (MyTreeItemData *)GetItemData(itemId) : NULL;
+		if(item)object = item->m_object;
+	}
+
+    MarkedObjectOneOfEach marked_object(0, object, 1);
+	wxGetApp().DoDropDownMenu(this, point, &marked_object, true, false, false);
 }
 
 void MyTreeCtrl::OnItemRClick(wxTreeEvent& event)

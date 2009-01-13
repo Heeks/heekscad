@@ -8,6 +8,7 @@
 #include "propgrid.h"
 #include "HeeksFrame.h"
 #include "MarkedList.h"
+#include "../interface/MarkedObject.h"
 
 BEGIN_EVENT_TABLE(CObjPropsCanvas, wxScrolledWindow)
 	EVT_SIZE(CObjPropsCanvas::OnSize)
@@ -124,7 +125,7 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll(){
 		wxGetApp().m_frame->AddToolBarTool(m_toolBar, _("Cancel"), wxBitmap(ToolImage(_T("cancel"))), _("Stop editing the object"), OnCancel);
 
 		std::list<Tool*> t_list;
-		wxGetApp().m_marked_list->GetTools(&t_list, NULL);
+		wxGetApp().m_marked_list->GetTools(&MarkedObjectOneOfEach(0, marked_object, 1), t_list, NULL);
 		for(std::list<Tool*>::iterator It = t_list.begin(); It != t_list.end(); It++)
 		{
 			Tool* tool = *It;

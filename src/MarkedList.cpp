@@ -313,30 +313,33 @@ void CopyMarkedList::Run()
 class PasteTool: public Tool
 {
 public:
+	HeeksObj* m_paste_into;
+
+	PasteTool():m_paste_into(NULL){}
 	void Run();
-	const wxChar* GetTitle(){return _("Paste");}
+	const wxChar* GetTitle(){return m_paste_into ? _("Paste Into") : _("Paste");}
 	wxString BitmapPath(){return _T("paste");}
 	const wxChar* GetToolTip(){return _("Paste items from the clipboard to the drawing");}
 } paste_tool;
 
 void PasteTool::Run()
 {
-	wxGetApp().Paste();
+	wxGetApp().Paste(m_paste_into);
 }
 
-void MarkedList::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
+void MarkedList::GetTools(MarkedObject* clicked_object, std::list<Tool*>& t_list, const wxPoint* p){
 	if (m_list.size() > 1)
 	{
-		t_list->push_back(&delete_marked_list_tool);
-		t_list->push_back(NULL);
+		t_list.push_back(&delete_marked_list_tool);
+		t_list.push_back(NULL);
 	}
 
 	if(m_list.size() == 1)
 	{
-		m_list.front()->GetTools(t_list, p);
+		m_list.front()->GetTools(&t_list, p);
 	}
 
-	GetConversionMenuTools(t_list);
+	GetConversionMenuTools(&t_list);
 
 	// cut and copy tools
 	for(std::list<HeeksObj*>::iterator It = m_list.begin(); It != m_list.end(); It++)
@@ -344,13 +347,17 @@ void MarkedList::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 		HeeksObj* object = *It;
 		if(object->CanBeCopied())
 		{
-			t_list->push_back(&copy_marked_list);
+			t_list.push_back(&copy_marked_list);
 			break;
 		}
 	}
 
 	// paste
-	if (wxGetApp().IsPasteReady())t_list->push_back(&paste_tool);
+	if (wxGetApp().IsPasteReady())
+	{
+		paste_tool.m_paste_into = clicked_object->GetObject();
+		t_list.push_back(&paste_tool);
+	}
 }
 
 void MarkedList::CutSelectedItems()

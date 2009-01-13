@@ -46,8 +46,6 @@ public:
         { m_reverseSort = reverse; wxTreeCtrl::SortChildren(item); }
     void DoEnsureVisible() { if (m_lastItem.IsOk()) EnsureVisible(m_lastItem); }
 
-     void ShowMenu(wxTreeItemId id, const wxPoint& pt);
-
     int ImageSize(void) const { return m_imageSize; }
 
     void SetLastItem(wxTreeItemId id) { m_lastItem = id; }
