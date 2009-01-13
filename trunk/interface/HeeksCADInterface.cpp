@@ -338,6 +338,11 @@ void CHeeksCADInterface::RegisterReadXMLfunction(const char* type_name, HeeksObj
 	wxGetApp().RegisterReadXMLfunction(type_name, read_xml_function);
 }
 
+void CHeeksCADInterface::OpenXMLFile(const wxChar *filepath, bool undoably, HeeksObj* paste_into)
+{
+	wxGetApp().OpenXMLFile(filepath, undoably, paste_into);
+}
+
 HeeksObj* CHeeksCADInterface::GetIDObject(int type, int id)
 {
 	return wxGetApp().GetIDObject(type, id);
