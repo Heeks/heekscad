@@ -115,6 +115,7 @@ public:
 	// HeeksObj's virtual functions
 	void GetBox(CBox &box);
 	bool CanAdd(HeeksObj* object){return true;}
+	int GetType()const{return DocumentType;}
 
 	virtual bool OnInit();
 	int OnExit();

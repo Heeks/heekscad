@@ -592,8 +592,32 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, bool undoably, HeeksObj* p
 	{
 		HeeksObj* add_to = this;
 		if(paste_into)add_to = paste_into;
-		if(undoably)AddUndoably(objects, add_to);
-		else add_to->Add(objects);
+		for(std::list<HeeksObj*>::const_iterator It = objects.begin(); It != objects.end(); It++)
+		{
+			HeeksObj* object = *It;
+			if(add_to->CanAdd(object) && object->CanAddTo(add_to))
+			{
+				if(undoably && object->OneOfAKind())
+				{
+					bool one_found = false;
+					for(HeeksObj* child = add_to->GetFirstChild(); child; child = add_to->GetNextChild())
+					{
+						if(child->GetType() == object->GetType())
+						{
+							child->CopyFrom(object);
+							one_found = true;
+							break;
+						}
+					}
+					if(!one_found)AddUndoably(object, add_to, NULL);
+				}
+				else
+				{
+					if(undoably)AddUndoably(object, add_to, NULL);
+					else add_to->Add(object, NULL);
+				}
+			}
+		}
 	}
 }
 
