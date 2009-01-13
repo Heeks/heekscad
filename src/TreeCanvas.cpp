@@ -4,6 +4,7 @@
 #include "../interface/MarkedObject.h"
 #include "MarkedList.h"
 #include "HeeksFrame.h"
+#include "../interface/InputMode.h"
 
 class DanObjectTreeData : public wxTreeItemData{
 	public:
@@ -16,6 +17,8 @@ class DanObjectTreeData : public wxTreeItemData{
 BEGIN_EVENT_TABLE(CTreeCanvas, wxScrolledWindow)
     EVT_SIZE(CTreeCanvas::OnSize)
 	EVT_MOUSEWHEEL(CTreeCanvas::OnMouseWheel)
+	EVT_KEY_DOWN(CTreeCanvas::OnKeyDown)
+	EVT_KEY_UP(CTreeCanvas::OnKeyUp)
 END_EVENT_TABLE()
 
 
@@ -252,6 +255,18 @@ bool CTreeCanvas::RemoveChildren(const wxTreeItemId &item)
 	return false;
 }
 
+void CTreeCanvas::OnKeyDown(wxKeyEvent& event)
+{
+	wxGetApp().input_mode_object->OnKeyDown(event);
+	event.Skip();
+}
+
+void CTreeCanvas::OnKeyUp(wxKeyEvent& event)
+{
+	wxGetApp().input_mode_object->OnKeyUp(event);
+	event.Skip();
+}
+
 wxTreeItemId CTreeCanvas::Find(HeeksObj *object){
 	std::map<HeeksObj*, wxTreeItemId>::iterator FindIt = tree_map.find(object);
 	if(FindIt == tree_map.end())return wxTreeItemId();
@@ -267,7 +282,6 @@ BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
     EVT_TREE_SET_INFO(ID_TREE_CTRL, MyTreeCtrl::OnSetInfo)
     EVT_TREE_SEL_CHANGED(ID_TREE_CTRL, MyTreeCtrl::OnSelChanged)
     EVT_TREE_SEL_CHANGING(ID_TREE_CTRL, MyTreeCtrl::OnSelChanging)
-    EVT_TREE_KEY_DOWN(ID_TREE_CTRL, MyTreeCtrl::OnTreeKeyDown)
     EVT_TREE_ITEM_ACTIVATED(ID_TREE_CTRL, MyTreeCtrl::OnItemActivated)
 
     // so many differents ways to handle right mouse button clicks...
@@ -285,6 +299,8 @@ BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
 //    EVT_RIGHT_DOWN(MyTreeCtrl::OnRMouseDown)
 //    EVT_RIGHT_UP(MyTreeCtrl::OnRMouseUp)
 //    EVT_RIGHT_DCLICK(MyTreeCtrl::OnRMouseDClick)
+	EVT_KEY_DOWN(MyTreeCtrl::OnKeyDown)
+	EVT_KEY_UP(MyTreeCtrl::OnKeyUp)
 END_EVENT_TABLE()
 
 // MyTreeCtrl implementation
@@ -355,9 +371,16 @@ void MyTreeCtrl::OnSelChanging(wxTreeEvent& event)
 { 
 }
 
-void MyTreeCtrl::OnTreeKeyDown(wxTreeEvent& event)
+void MyTreeCtrl::OnKeyDown(wxKeyEvent& event)
 {
-    event.Skip();
+	wxGetApp().input_mode_object->OnKeyDown(event);
+	event.Skip();
+}
+
+void MyTreeCtrl::OnKeyUp(wxKeyEvent& event)
+{
+	wxGetApp().input_mode_object->OnKeyUp(event);
+	event.Skip();
 }
 
 void MyTreeCtrl::OnItemActivated(wxTreeEvent& event)
