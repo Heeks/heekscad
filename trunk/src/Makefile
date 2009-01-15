@@ -1,5 +1,5 @@
 #CCFLAGS=-Wall -g -I "./" -I "/usr/include/opencascade" -I/home/dan/Desktop/wxGTK-2.8.9/buildgtk/lib/wx/include/gtk2-ansi-debug-2.8 -I/usr/include/wx-2.8 -D__WXGTK__ -DHEEKSCAD -D__WXDEBUG__ -DWXUSINGDLL
-CCFLAGS=-Wall -g -I "./" -I "/usr/include/opencascade" -I/usr/lib/wx/include/gtk2-unicode-release-2.8 -I/usr/include/wx-2.8 -DUNICODE -D__WXGTK__ -DHEEKSCAD
+CCFLAGS=-Wall -g -I "./" -I "/usr/include/opencascade" -I/usr/lib/wx/include/gtk2-unicode-release-2.8 -I/usr/include/wx-2.8 -DUNICODE -D__WXGTK__ -DHEEKSCAD -DWXUSINGDLL
 
 #WX_LIB_LETTER=d
 WX_LIB_LETTER=u
