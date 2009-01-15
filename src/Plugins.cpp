@@ -100,7 +100,7 @@ void CPluginItemDialog::OnButtonBrowse(wxCommandEvent& event)
 #ifdef WIN32
 	wxString ext_str(_T("*.dll"));
 #else
-	wxString ext_str(_T("*.so"));
+	wxString ext_str(_T("*.so*"));
 #endif
 	wxString wildcard_string = wxString(_("shared library files")) + _T(" |") + ext_str;
 
