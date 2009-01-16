@@ -171,14 +171,14 @@ static void on_set_axis(const gp_Pnt &vt, HeeksObj* object){
 }
 
 void HArc::GetProperties(std::list<Property *> *list){
-	HeeksObj::GetProperties(list);
-
 	list->push_back(new PropertyVertex(_("start"), A, this, on_set_start));
 	list->push_back(new PropertyVertex(_("end"), B, this, on_set_end));
 	list->push_back(new PropertyVertex(_("centre"), m_circle.Location(), this, on_set_centre));
 	list->push_back(new PropertyVertex(_("axis"), gp_Pnt(m_circle.Axis().Direction().XYZ()), this, on_set_axis));
 	double length = A.Distance(B);
 	list->push_back(new PropertyDouble(_("Length"), length, NULL));
+
+	HeeksObj::GetProperties(list);
 }
 
 int HArc::Intersects(const HeeksObj *object, std::list< double > *rl)const

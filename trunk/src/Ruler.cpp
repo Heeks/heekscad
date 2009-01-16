@@ -240,6 +240,7 @@ static ResetRulerTool reset_ruler_tool;
 
 void HRuler::GetProperties(std::list<Property *> *list)
 {
+	HeeksObj::GetProperties(list);
 }
 
 void HRuler::GetTools(std::list<Tool*>* t_list, const wxPoint* p)

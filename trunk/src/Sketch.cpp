@@ -28,9 +28,9 @@ const CSketch& CSketch::operator=(const CSketch& c)
 
 void CSketch::GetProperties(std::list<Property *> *list)
 {
-	ObjList::GetProperties(list);
-
 	list->push_back(new PropertyInt(_("Number of elements"), ObjList::GetNumChildren(), this));
+
+	ObjList::GetProperties(list);
 }
 
 HeeksObj *CSketch::MakeACopy(void)const
