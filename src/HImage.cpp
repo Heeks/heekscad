@@ -178,6 +178,7 @@ void HImage::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 
 void HImage::GetProperties(std::list<Property *> *list)
 {
+	HeeksObj::GetProperties(list);
 }
 
 bool HImage::Stretch(const double *p, const double* shift){

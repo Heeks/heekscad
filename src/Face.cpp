@@ -342,9 +342,9 @@ void CFace::WriteXML(TiXmlElement *root)
 
 void CFace::GetProperties(std::list<Property *> *list)
 {
-	HeeksObj::GetProperties(list);
-
 	list->push_back(new PropertyString(_("surface type"), GetSurfaceTypeStr(), NULL));
+
+	HeeksObj::GetProperties(list);
 }
 
 int CFace::GetSurfaceType()

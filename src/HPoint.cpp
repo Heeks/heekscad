@@ -84,9 +84,9 @@ static void on_set_point(const gp_Pnt &vt, HeeksObj* object){
 
 void HPoint::GetProperties(std::list<Property *> *list)
 {
-	HeeksObj::GetProperties(list);
-
 	list->push_back(new PropertyVertex(_("position"), m_p, this, on_set_point));
+
+	HeeksObj::GetProperties(list);
 }
 
 bool HPoint::GetStartPoint(double* pos)

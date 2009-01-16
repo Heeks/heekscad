@@ -45,10 +45,10 @@ bool CSphere::ModifyByMatrix(const double* m){
 
 void CSphere::GetProperties(std::list<Property *> *list)
 {
-	CSolid::GetProperties(list);
-
 	list->push_back(new PropertyVertex(_("centre"), m_pos, this, on_set_centre));
 	list->push_back(new PropertyDouble(_("radius"), m_radius, this, on_set_radius));
+
+	CSolid::GetProperties(list);
 }
 
 void CSphere::GetGripperPositions(std::list<double> *list, bool just_for_endof)

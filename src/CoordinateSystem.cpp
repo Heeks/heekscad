@@ -201,6 +201,8 @@ void CoordinateSystem::GetProperties(std::list<Property *> *list)
 	list->push_back(new PropertyDouble(_("Vertical Angle"), m_vertical_angle * 180/Pi, this, on_set_vertical_angle));
 	list->push_back(new PropertyDouble(_("Horizontal Angle"), m_horizontal_angle * 180/Pi, this, on_set_horizontal_angle));
 	list->push_back(new PropertyDouble(_("Twist Angle"), m_twist_angle * 180/Pi, this, on_set_twist_angle));
+
+	HeeksObj::GetProperties(list);
 }
 
 void CoordinateSystem::WriteXML(TiXmlElement *root)

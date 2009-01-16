@@ -99,12 +99,12 @@ static void on_set_end(const gp_Pnt &vt, HeeksObj* object){
 }
 
 void HLine::GetProperties(std::list<Property *> *list){
-	HeeksObj::GetProperties(list);
-
 	list->push_back(new PropertyVertex(_("start"), A, this, on_set_start));
 	list->push_back(new PropertyVertex(_("end"), B, this, on_set_end));
 	double length = A.Distance(B);
 	list->push_back(new PropertyDouble(_("Length"), length, NULL));
+
+	HeeksObj::GetProperties(list);
 }
 
 bool HLine::FindNearPoint(const double* ray_start, const double* ray_direction, double *point){

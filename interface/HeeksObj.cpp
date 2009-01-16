@@ -71,7 +71,7 @@ void HeeksObj::GetProperties(std::list<Property *> *list)
 	bool editable = CanEditString();
 	list->push_back(new PropertyString(_("object type"), GetTypeString(), NULL));
 	if(GetShortString())list->push_back(new PropertyString(_("object title"), GetShortString(), this, editable ? on_edit_string : NULL));
-	list->push_back(new PropertyInt(_("ID"), m_id, this, on_set_id));
+	if(UsesID())list->push_back(new PropertyInt(_("ID"), m_id, this, on_set_id));
 	const HeeksColor* c = GetColor();
 	if(c)
 	{
