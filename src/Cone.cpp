@@ -57,14 +57,14 @@ bool CCone::ModifyByMatrix(const double *m){
 
 void CCone::GetProperties(std::list<Property *> *list)
 {
-	CSolid::GetProperties(list);
-
 	list->push_back(new PropertyVertex(_("centre pos"), m_pos.Location(), this, on_set_centre));
 	list->push_back(new PropertyVertex(_("direction"), gp_Pnt(m_pos.Direction().XYZ()), NULL));
 	list->push_back(new PropertyVertex(_("x direction"), gp_Pnt(m_pos.XDirection().XYZ()), NULL));
 	list->push_back(new PropertyDouble(_("r1"), m_r1, this, on_set_r1));
 	list->push_back(new PropertyDouble(_("r2"), m_r2, this, on_set_r2));
 	list->push_back(new PropertyDouble(_("height"), m_height, this, on_set_height));
+
+	CSolid::GetProperties(list);
 }
 
 void CCone::GetGripperPositions(std::list<double> *list, bool just_for_endof)

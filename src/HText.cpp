@@ -116,9 +116,9 @@ static void on_set_trsf(const gp_Trsf &trsf, HeeksObj* object){
 
 void HText::GetProperties(std::list<Property *> *list)
 {
-	HeeksObj::GetProperties(list);
-
 	list->push_back(new PropertyTrsf(_("orientation"), m_trsf, this, on_set_trsf));
+
+	HeeksObj::GetProperties(list);
 }
 
 bool HText::Stretch(const double *p, const double* shift)

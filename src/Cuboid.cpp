@@ -56,12 +56,12 @@ bool CCuboid::ModifyByMatrix(const double* m){
 
 void CCuboid::GetProperties(std::list<Property *> *list)
 {
-	CSolid::GetProperties(list);
-
 	list->push_back(new PropertyVertex(_("datum corner"), m_pos.Location(), this, on_set_centre));
 	list->push_back(new PropertyDouble(_("width ( x )"), m_x, this, on_set_x));
 	list->push_back(new PropertyDouble(_("height( y )"), m_y, this, on_set_y));
 	list->push_back(new PropertyDouble(_("depth ( z )"), m_z, this, on_set_z));
+
+	CSolid::GetProperties(list);
 }
 
 void CCuboid::GetGripperPositions(std::list<double> *list, bool just_for_endof)
