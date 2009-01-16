@@ -2368,18 +2368,21 @@ HeeksObj* HeeksCADapp::GetIDObject(int type, int id)
 
 void HeeksCADapp::SetObjectID(HeeksObj* object, int id)
 {
-	int id_group_type = object->GetIDGroupType();
-
-	std::map< int, std::map<int, HeeksObj*> >::iterator FindIt1 = used_ids.find(id_group_type);
-	if(FindIt1 == used_ids.end())
+	if(object->UsesID())
 	{
-		// add a new map
-		std::map<int, HeeksObj*> empty_map;
-		FindIt1 = used_ids.insert( std::make_pair( id_group_type, empty_map )).first;		
+		int id_group_type = object->GetIDGroupType();
+
+		std::map< int, std::map<int, HeeksObj*> >::iterator FindIt1 = used_ids.find(id_group_type);
+		if(FindIt1 == used_ids.end())
+		{
+			// add a new map
+			std::map<int, HeeksObj*> empty_map;
+			FindIt1 = used_ids.insert( std::make_pair( id_group_type, empty_map )).first;		
+		}
+		std::map<int, HeeksObj*> &map = FindIt1->second;
+		map.insert( std::pair<int, HeeksObj*> (id, object) );
+		object->m_id = id;
 	}
-	std::map<int, HeeksObj*> &map = FindIt1->second;
-	map.insert( std::pair<int, HeeksObj*> (id, object) );
-	object->m_id = id;
 }
 
 int HeeksCADapp::GetNextID(int id_group_type)
@@ -2409,15 +2412,12 @@ void HeeksCADapp::RemoveID(HeeksObj* object)
 	if(FindIt1 == used_ids.end())return;
 	std::map< int, int >::iterator FindIt2 = next_id_map.find(id_group_type);
 	std::map<int, HeeksObj*> &map = FindIt1->second;
-	if(FindIt2 == next_id_map.end())
+	if(FindIt2 != next_id_map.end())
 	{
-		// add a new int
-		int next_id = 0;
-		FindIt2 = next_id_map.insert( std::make_pair(id_group_type, next_id) ).first;
+		int &next_id = FindIt2->second;
+		next_id = object->m_id; // this id has now become available
+		map.erase(next_id);
 	}
-	int &next_id = FindIt2->second;
-	next_id = object->m_id; // this id has now become available
-	map.erase(next_id);
 }
 
 void HeeksCADapp::ResetIDs()
@@ -2428,16 +2428,22 @@ void HeeksCADapp::ResetIDs()
 
 void HeeksCADapp::WriteIDToXML(HeeksObj* object, TiXmlElement *element)
 {
-	element->SetAttribute("id", object->m_id);
+	if(object->UsesID())
+	{
+		element->SetAttribute("id", object->m_id);
+	}
 }
 
 void HeeksCADapp::ReadIDFromXML(HeeksObj* object, TiXmlElement *element)
 {
-	// get the attributes
-	for(TiXmlAttribute* a = element->FirstAttribute(); a; a = a->Next())
+	if(object->UsesID())
 	{
-		std::string name(a->Name());
-		if(name == "id"){object->SetID(a->IntValue());}
+		// get the attributes
+		for(TiXmlAttribute* a = element->FirstAttribute(); a; a = a->Next())
+		{
+			std::string name(a->Name());
+			if(name == "id"){object->SetID(a->IntValue());}
+		}
 	}
 }
 

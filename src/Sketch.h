@@ -23,6 +23,7 @@ public:
 	HeeksObj *MakeACopy(void)const;
 	void CopyFrom(const HeeksObj* object){operator=(*((CSketch*)((ObjList*)object)));}
 	void WriteXML(TiXmlElement *root);
+	bool UsesID(){return true;}
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 };
