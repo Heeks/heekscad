@@ -184,12 +184,12 @@ bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 	HeeksObj::Add(object, prev_object);
 
 #ifdef HEEKSCAD
-	if(!wxGetApp().m_in_OpenFile && object->m_id == 0)
+	if(!wxGetApp().m_in_OpenFile && object->UsesID() && object->m_id == 0)
 	{
 		object->SetID(wxGetApp().GetNextID(object->GetIDGroupType()));
 	}
 #else
-	if(!heeksCAD->InOpenFile() && object->m_id == 0)
+	if(!heeksCAD->InOpenFile() && object->UsesID() && object->m_id == 0)
 	{
 		object->SetID(heeksCAD->GetNextID(object->GetIDGroupType()));
 	}
