@@ -45,6 +45,7 @@ public:
 	bool ModifyByMatrix(const double* m);
 	void WriteXML(TiXmlElement *root);
 	void GetProperties(std::list<Property *> *list);
+	bool UsesID(){return true;}
 
 	const TopoDS_Face &Face(){return m_topods_face;}
 	gp_Dir GetMiddleNormal(gp_Pnt *pos = NULL)const;

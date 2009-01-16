@@ -365,10 +365,12 @@ TREE_EVENT_HANDLER(OnSetInfo)
 
 void MyTreeCtrl::OnSelChanged(wxTreeEvent& event) 
 { 
+	event.Skip();
 }
 
 void MyTreeCtrl::OnSelChanging(wxTreeEvent& event) 
 { 
+	event.Skip();
 }
 
 void MyTreeCtrl::OnKeyDown(wxKeyEvent& event)
@@ -427,7 +429,7 @@ void MyTreeCtrl::OnItemRClick(wxTreeEvent& event)
 
 void MyTreeCtrl::OnLMouseDown(wxMouseEvent& event)
 {
-    //event.Skip();
+    event.Skip();
 }
 
 void MyTreeCtrl::OnLMouseUp(wxMouseEvent& event)

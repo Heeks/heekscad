@@ -45,6 +45,7 @@ public:
 	const wxChar* GetTypeString(void)const{return _("Edge");}
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	void WriteXML(TiXmlElement *root);
+	bool UsesID(){return true;}
 
 	const TopoDS_Shape &Edge(){return m_topods_edge;}
 	void Blend(double radius);

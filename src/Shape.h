@@ -64,6 +64,7 @@ public:
 	void CopyFrom(const HeeksObj* object);
 	void WriteXML(TiXmlElement *root);
 	void SetClickMarkPoint(MarkedObject* marked_object, const double* ray_start, const double* ray_direction);
+	bool UsesID(){return true;}
 
 	const TopoDS_Shape &Shape(){return m_shape;}
 

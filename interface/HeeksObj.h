@@ -122,5 +122,6 @@ public:
 	virtual void WriteBaseXML(TiXmlElement *element);
 	virtual void ReadBaseXML(TiXmlElement* element);
 	void SetID(int id);
+	virtual bool UsesID(){return false;} // most objects don't use the m_id variable
 	bool OnVisibleLayer();
 };
