@@ -459,6 +459,21 @@ int CViewPoint::GetTwoAxes(gp_Vec& vx, gp_Vec& vy, bool flattened_onto_screen, i
 		vy = gp_Vec(0, 0, 1).Transformed(orimat);
 		break;
 	}
+
+	// find closest between vx and vy to screen y
+	double dpx = vx * m_vertical;
+	double dpy = vy * m_vertical;
+	if(fabs(dpx) > fabs(dpy)){
+		gp_Vec vtemp = vx;
+		vx = vy;
+		vy = vtemp;
+	}
+
+	// make sure vz is towards us
+	if((vx ^ vy) * forwards_vector() > 0)
+	{
+		vx = -vx;
+	}
 	
 	if(flattened_onto_screen){
 		gp_Vec f = forwards_vector().Normalized();
