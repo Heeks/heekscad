@@ -122,6 +122,7 @@ public:
 
 	// HeeksObj's virtual functions
 	void GetBox(CBox &box);
+	void glCommands(bool select, bool marked, bool no_color);
 	bool CanAdd(HeeksObj* object){return true;}
 	int GetType()const{return DocumentType;}
 

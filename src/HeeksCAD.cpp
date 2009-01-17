@@ -1261,6 +1261,30 @@ void HeeksCADapp::OnInputModeHelpTextChanged()
 	}
 }
 
+void HeeksCADapp::glCommands(bool select, bool marked, bool no_color)
+{
+	// this is called when select is true
+	std::list<HeeksObj*>::iterator It;
+	for(It=m_objects.begin(); It!=m_objects.end() ;It++)
+	{
+		HeeksObj* object = *It;
+		if(object->OnVisibleLayer() && object->m_visible)
+		{
+			if(select)glPushName((unsigned long)object);
+			(*It)->glCommands(select, marked || wxGetApp().m_marked_list->ObjectMarked(object), no_color);
+			if(select)glPopName();
+		}
+	}
+
+	// draw the ruler
+	if(m_show_ruler)
+	{
+		if(select)glPushName((unsigned long)m_ruler);
+		m_ruler->glCommands(select, false, false);
+		if(select)glPopName();
+	}
+}
+
 void HeeksCADapp::GetBox(CBox &box){
 	CBox temp_box;
 	ObjList::GetBox(temp_box);
