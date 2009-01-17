@@ -2791,7 +2791,7 @@ void HeeksCADapp::render_screen_text(const wxChar* str)
 	wxChar buffer[1024];
 
 	int j = 0;
-	wxChar* newlinestr = _T("\n");
+	const wxChar* newlinestr = _T("\n");
 	wxChar newline = newlinestr[0];
 
 	for(size_t i = 0; i<n; i++)
