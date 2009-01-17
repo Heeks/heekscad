@@ -79,6 +79,7 @@ void Drawing::AddPoint()
 	wxGetApp().EndHistory();
 	m_getting_position = false;
 	m_inhibit_coordinate_change = false;
+	wxGetApp().OnInputModeTitleChanged();
 }
 
 void Drawing::OnMouse( wxMouseEvent& event )

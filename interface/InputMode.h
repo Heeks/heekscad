@@ -10,6 +10,7 @@ public:
 
 	virtual const wxChar* GetTitle() = 0;
 	virtual bool TitleHighlighted(){return true;}
+	virtual const wxChar* GetHelpText(){return NULL;}
 	virtual void OnMouse( wxMouseEvent& event ){}
 	virtual void OnKeyDown(wxKeyEvent& event){}
 	virtual void OnKeyUp(wxKeyEvent& event){}
