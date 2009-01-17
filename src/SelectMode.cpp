@@ -28,6 +28,31 @@ const wxChar* CSelectMode::GetTitle()
 	return m_doing_a_main_loop ? (m_prompt_when_doing_a_main_loop.c_str()):_("Select Mode");
 }
 
+static wxString str_for_GetHelpText;
+
+const wxChar* CSelectMode::GetHelpText()
+{
+	str_for_GetHelpText = wxString(_("Left button for selecting object"))
+		+ _T("\n") + _("( with Ctrl key for extra objects)")
+		+ _T("\n") + _("Drag with left button to window select")
+		+ _T("\n") + _("Mouse wheel to zoom in and out");
+
+	if(wxGetApp().ctrl_does_rotate){
+		str_for_GetHelpText.Append(wxString(_T("\n")) + _("Middle button to pan view"));
+		str_for_GetHelpText.Append(wxString(_T("\n")) + _("( with Ctrl key to rotate view )"));
+	}
+	else{
+		str_for_GetHelpText.Append(wxString(_T("\n")) + _("Middle button to rotate view"));
+		str_for_GetHelpText.Append(wxString(_T("\n")) + _("( with Ctrl key to pan view )"));
+	}
+
+	str_for_GetHelpText.Append(wxString(_T("\n")) + _("Right button for object menu"));
+	str_for_GetHelpText.Append(wxString(_T("\n")) + _("See options window to hide this help"));
+	str_for_GetHelpText.Append(wxString(_T("\n")) + _T("( ") + _("view options") + _T("->") + _("screen text") + _T(" )"));
+
+	return str_for_GetHelpText;
+}
+
 static GripperSelTransform drag_object_gripper(gp_Pnt(0, 0, 0), GripperTypeTranslate);
 
 void CSelectMode::OnMouse( wxMouseEvent& event )
