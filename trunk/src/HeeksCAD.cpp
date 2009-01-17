@@ -133,6 +133,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_loft_removes_sketches = false;
 	m_font_tex_number = 0;
 	m_gl_font = NULL;
+	m_graphics_text_mode = GraphicsTextModeNone;
 	m_locale_initialised = false;
 	m_printData = NULL;
 	m_pageSetupData = NULL;
@@ -243,6 +244,7 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("RegularShapesObRad"), &(regular_shapes_drawing.m_obround_radius));
 	config.Read(_T("ExtrudeRemovesSketches"), &m_extrude_removes_sketches, true);
 	config.Read(_T("LoftRemovesSketches"), &m_loft_removes_sketches, true);
+	config.Read(_T("GraphicsTextMode"), (int*)(&m_graphics_text_mode), GraphicsTextModeWithHelp);
 
 	GetRecentFilesProfileString();
 
@@ -326,6 +328,7 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("RegularShapesObRad"), regular_shapes_drawing.m_obround_radius);
 	config.Write(_T("ExtrudeRemovesSketches"), m_extrude_removes_sketches);
 	config.Write(_T("LoftRemovesSketches"), m_loft_removes_sketches);
+	config.Write(_T("GraphicsTextMode"), m_graphics_text_mode);
 
 	WriteRecentFilesProfileString();
 
@@ -345,6 +348,7 @@ void HeeksCADapp::SetInputMode(CInputMode *new_mode){
 	}
 	if(m_frame && m_frame->m_input_canvas)m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
 	if(m_frame && m_frame->m_options)m_frame->m_options->RefreshByRemovingAndAddingAll();
+	if(m_graphics_text_mode != GraphicsTextModeNone)Repaint();
 }
 
 void HeeksCADapp::FindMarkedObject(const wxPoint &point, MarkedObject* marked_object){
@@ -749,7 +753,7 @@ void HeeksCADapp::OpenSVGFile(const wxChar *filepath, bool undoably)
 
 void HeeksCADapp::OpenSTLFile(const wxChar *filepath, bool undoably)
 {
-	CStlSolid* new_object = new CStlSolid(filepath, &wxGetApp().current_color);
+	CStlSolid* new_object = new CStlSolid(filepath, &current_color);
 	if(undoably)AddUndoably(new_object, this, NULL);
 	else Add(new_object, NULL);
 }
@@ -814,7 +818,7 @@ bool HeeksCADapp::OpenImageFile(const wxChar *filepath, bool undoably)
 
 bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksObj* paste_into)
 {
-	wxGetApp().m_in_OpenFile = true;
+	m_in_OpenFile = true;
 
 	// returns true if file open was successful
 	wxString wf(filepath);
@@ -857,7 +861,7 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 	else
 	{
 		// error
-		wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + wxGetApp().GetKnownFilesCommaSeparatedList();
+		wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + GetKnownFilesCommaSeparatedList();
 		wxMessageBox(str);
 		open_failed = true;
 	}
@@ -875,7 +879,7 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 		}
 	}
 
-	wxGetApp().m_in_OpenFile = false;
+	m_in_OpenFile = false;
 
 	return true;
 }
@@ -1089,7 +1093,7 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 	}
 	else
 	{
-		wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + wxGetApp().GetKnownFilesCommaSeparatedList();
+		wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + GetKnownFilesCommaSeparatedList();
 		wxMessageBox(str);
 		return false;
 	}
@@ -1149,7 +1153,7 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 			else
 			{
 				if(select)glPushName((unsigned long)object);
-				object->glCommands(select, wxGetApp().m_marked_list->ObjectMarked(object), false);
+				object->glCommands(select, m_marked_list->ObjectMarked(object), false);
 				if(select)glPopName();
 			}
 		}
@@ -1180,7 +1184,7 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	{
 		HeeksObj* object = *It;
 		if(select)glPushName((unsigned long)object);
-		object->glCommands(select, wxGetApp().m_marked_list->ObjectMarked(object), false);
+		object->glCommands(select, m_marked_list->ObjectMarked(object), false);
 		if(select)glPopName();
 	}
 
@@ -1218,28 +1222,42 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glPolygonMode(GL_FRONT_AND_BACK ,GL_FILL );
 	if(m_hidden_for_drag.size() == 0 || !m_show_grippers_on_drag)m_marked_list->GrippersGLCommands(select, false);
+
+	// draw the input mode text on the top
+	if(m_graphics_text_mode != GraphicsTextModeNone)
+	{
+		wxString screen_text;
+
+		if(input_mode_object && input_mode_object->GetTitle())
+		{
+			screen_text.Append(input_mode_object->GetTitle());
+			screen_text.Append(_T("\n"));
+		}
+		if(m_graphics_text_mode == GraphicsTextModeWithHelp && input_mode_object)
+		{
+			const wxChar* help_str = input_mode_object->GetHelpText();
+			if(help_str)
+			{
+				screen_text.Append(help_str);
+			}
+		}
+		render_screen_text(screen_text);
+	}
 }
 
-void HeeksCADapp::glCommands(bool select, bool marked, bool no_color)
+void HeeksCADapp::OnInputModeTitleChanged()
 {
-	std::list<HeeksObj*>::iterator It;
-	for(It=m_objects.begin(); It!=m_objects.end() ;It++)
+	if(m_graphics_text_mode != GraphicsTextModeNone)
 	{
-		HeeksObj* object = *It;
-		if(object->OnVisibleLayer() && object->m_visible)
-		{
-			if(select)glPushName((unsigned long)object);
-			(*It)->glCommands(select, marked || wxGetApp().m_marked_list->ObjectMarked(object), no_color);
-			if(select)glPopName();
-		}
+		Repaint();
 	}
+}
 
-	// draw the ruler
-	if(m_show_ruler)
+void HeeksCADapp::OnInputModeHelpTextChanged()
+{
+	if(m_graphics_text_mode == GraphicsTextModeWithHelp)
 	{
-		if(select)glPushName((unsigned long)m_ruler);
-		m_ruler->glCommands(select, false, false);
-		if(select)glPopName();
+		Repaint();
 	}
 }
 
@@ -1528,9 +1546,9 @@ void HeeksCADapp::WereRemoved(const std::list<HeeksObj*>& list)
 	for(std::list<HeeksObj*>::const_iterator It = list.begin(); It != list.end(); It++)
 	{
 		object = *It;
-		if(wxGetApp().m_marked_list->ObjectMarked(object))marked_remove.push_back(object);
+		if(m_marked_list->ObjectMarked(object))marked_remove.push_back(object);
 	}
-	if(marked_remove.size() > 0)wxGetApp().m_marked_list->Remove(marked_remove);
+	if(marked_remove.size() > 0)m_marked_list->Remove(marked_remove);
 
 	ObserversOnChange(NULL, &list, NULL);
 	SetAsModified();
@@ -1544,13 +1562,13 @@ gp_Trsf HeeksCADapp::GetDrawMatrix(bool get_the_appropriate_orthogonal)
 		m_frame->m_graphics->m_view_point.GetTwoAxes(vx, vy, false, 0);
 		{
 			gp_Pnt o(0, 0, 0);
-			if(wxGetApp().m_current_coordinate_system)o.Transform(wxGetApp().m_current_coordinate_system->GetMatrix());
+			if(m_current_coordinate_system)o.Transform(m_current_coordinate_system->GetMatrix());
 			return make_matrix(o, vx, vy);
 		}
 	}
 
 	gp_Trsf mat;
-	if(wxGetApp().m_current_coordinate_system)mat = wxGetApp().m_current_coordinate_system->GetMatrix();
+	if(m_current_coordinate_system)mat = m_current_coordinate_system->GetMatrix();
 	return mat;
 }
 
@@ -1655,6 +1673,12 @@ void on_set_rotate_mode(int value, HeeksObj* object)
 	}
 }
 
+void on_set_screen_text(int value, HeeksObj* object)
+{
+	wxGetApp().m_graphics_text_mode = (GraphicsTextMode)value;
+	wxGetApp().Repaint();
+}
+
 void on_set_antialiasing(bool value, HeeksObj* object)
 {
 	wxGetApp().m_antialiasing = value;
@@ -1675,6 +1699,7 @@ void on_set_reverse_mouse_wheel(bool value, HeeksObj* object)
 void on_set_ctrl_does_rotate(bool value, HeeksObj* object)
 {
 	wxGetApp().ctrl_does_rotate = value;
+	wxGetApp().OnInputModeHelpTextChanged();
 }
 
 void on_intersection(bool onoff, HeeksObj* object){
@@ -1812,10 +1837,19 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 {
 	PropertyList* view_options = new PropertyList(_("view options"));
 
-	std::list< wxString > choices;
-	choices.push_back ( wxString ( _("stay upright") ) );
-	choices.push_back ( wxString ( _("free") ) );
-	view_options->m_list.push_back ( new PropertyChoice ( _("rotate mode"),  choices, m_rotate_mode, NULL, on_set_rotate_mode ) );
+	{
+		std::list< wxString > choices;
+		choices.push_back ( wxString ( _("stay upright") ) );
+		choices.push_back ( wxString ( _("free") ) );
+		view_options->m_list.push_back ( new PropertyChoice ( _("rotate mode"),  choices, m_rotate_mode, NULL, on_set_rotate_mode ) );
+	}
+	{
+		std::list< wxString > choices;
+		choices.push_back ( wxString ( _("none") ) );
+		choices.push_back ( wxString ( _("input mode title") ) );
+		choices.push_back ( wxString ( _("full help") ) );
+		view_options->m_list.push_back ( new PropertyChoice ( _("screen text"),  choices, m_graphics_text_mode, NULL, on_set_screen_text ) );
+	}
 	view_options->m_list.push_back( new PropertyCheck(_("antialiasing"), m_antialiasing, NULL, on_set_antialiasing));
 #if _DEBUG
 	view_options->m_list.push_back( new PropertyCheck(_("fixed light"), m_light_push_matrix, NULL, on_set_light_push_matrix));
@@ -2157,14 +2191,14 @@ int HeeksCADapp::PickObjects(const wxChar* str, long marking_filter, bool just_o
 	SetInputMode(m_select_mode);
 
 	// set marking filter
-	long save_filter = wxGetApp().m_marked_list->m_filter;
-	wxGetApp().m_marked_list->m_filter = marking_filter;
+	long save_filter = m_marked_list->m_filter;
+	m_marked_list->m_filter = marking_filter;
 
 	// stay in an input loop until finished picking
 	OnRun();
 
 	// restore marking filter
-	wxGetApp().m_marked_list->m_filter = save_filter;
+	m_marked_list->m_filter = save_filter;
 
 	m_select_mode->m_doing_a_main_loop = false;
 	SetInputMode(save_mode); // update tool bar
@@ -2640,7 +2674,7 @@ void HeeksCADapp::Paste(HeeksObj* paste_into)
 
 	m_marked_list->Clear();
 	m_mark_newly_added_objects = true;
-	wxGetApp().OpenFile(temp_file, true, paste_into);
+	OpenFile(temp_file, true, paste_into);
 	m_mark_newly_added_objects = false;
 }
 
@@ -2699,10 +2733,10 @@ void HeeksCADapp::create_font()
 {
 	if(m_gl_font == NULL)
 	{
-		wxString fstr = wxGetApp().GetExeFolder() + _T("/bitmaps/font.glf");
+		wxString fstr = GetExeFolder() + _T("/bitmaps/font.glf");
 		glGenTextures( 1, &m_font_tex_number );
 		m_gl_font = new GLFONT;
-		glFontCreate(m_gl_font, (char*)Ttc(fstr.c_str()), wxGetApp().m_font_tex_number);
+		glFontCreate(m_gl_font, (char*)Ttc(fstr.c_str()), m_font_tex_number);
 	}
 }
 
@@ -2711,7 +2745,7 @@ void HeeksCADapp::render_text(const wxChar* str)
 	create_font();
 
 	//Needs to be called before text output
-	glColor4ub(0, 0, 0, 255);
+	//glColor4ub(0, 0, 0, 255);
 	glEnable(GL_BLEND);
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 	glEnable(GL_TEXTURE_2D);
@@ -2734,6 +2768,48 @@ bool HeeksCADapp::get_text_size(const wxChar* str, float* width, float* height)
 {
 	create_font();
 	return glFontTextSize(m_gl_font, (char*)Ttc(str), width, height) != 0;
+}
+
+void HeeksCADapp::render_screen_text(const wxChar* str)
+{
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	m_frame->m_graphics->SetIdentityProjection();
+	background_color.best_black_or_white().glColor();
+	int w, h;
+	m_frame->m_graphics->GetClientSize(&w, &h);
+	glTranslated(2.0, h - 1.0, 0.0);
+	glScaled(10, 10, 0);
+
+#if wxUSE_UNICODE
+	size_t n = wcslen(str);
+#else
+	size_t n = strlen(str);
+#endif
+	wxChar buffer[1024];
+
+	int j = 0;
+	wxChar* newlinestr = _T("\n");
+	wxChar newline = newlinestr[0];
+
+	for(size_t i = 0; i<n; i++)
+	{
+		buffer[j] = str[i];
+		j++;
+		if(str[i] == newline || i == n-1 || j == 1023){
+			buffer[j] = 0;
+			render_text(buffer);
+			if(str[i] == newline)glTranslated(0.0, -2.2, 0.0);
+			j = 0;
+		}
+	}
+
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
 }
 
 void HeeksCADapp::PlotSetColor(const HeeksColor &c)

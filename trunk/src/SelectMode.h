@@ -24,6 +24,7 @@ public:
 	// virtual functions for InputMode
 	const wxChar* GetTitle();
 	bool TitleHighlighted(){return m_doing_a_main_loop;}
+	const wxChar* GetHelpText();
 	void OnMouse( wxMouseEvent& event );
 	void OnKeyDown(wxKeyEvent& event);
 	void OnKeyUp(wxKeyEvent& event);

@@ -30,6 +30,13 @@ class wxAuiManager;
 
 #define MAX_RECENT_FILES 20
 
+enum GraphicsTextMode
+{
+	GraphicsTextModeNone,
+	GraphicsTextModeInputTitle,
+	GraphicsTextModeWithHelp
+};
+
 class HeeksCADapp : public wxApp, public ObjList
 {
 private:
@@ -108,6 +115,7 @@ public:
 	bool m_font_created;
 	GLFONT *m_gl_font;
 	unsigned int m_font_tex_number;
+	GraphicsTextMode m_graphics_text_mode;
 	bool m_print_scaled_to_page;
 	wxPrintData *m_printData;
 	wxPageSetupDialogData* m_pageSetupData;
@@ -130,7 +138,6 @@ public:
 	bool IsModified(void);
 	void SetAsModified();
 	void ClearHistory(void);
-	void glCommands(bool select, bool marked, bool no_color);
 	void glCommandsAll(bool select, const CViewPoint &view_point);
 	double GetPixelScale(void);
 	void DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool from_graphics_canvas, bool control_pressed);
@@ -219,6 +226,9 @@ public:
 	bool CheckForOneOrMoreSketchs(const std::list<HeeksObj*> &list, const wxString& msg, const wxString& caption);
 	void render_text(const wxChar* str);
 	bool get_text_size(const wxChar* str, float* width, float* height);
+	void render_screen_text(const wxChar* str);
+	void OnInputModeTitleChanged();
+	void OnInputModeHelpTextChanged();
 	void PlotSetColor(const HeeksColor &c);
 	void PlotLine(const double* s, const double* e);
 	void PlotArc(const double* s, const double* e, const double* c);
