@@ -957,7 +957,7 @@ static void write_stl_triangle(const double* x, const double* n)
 	(*ofs_for_write_stl_triangle)<<" endfacet"<<endl;
 }
 
-void HeeksCADapp::SaveSTLFile(const wxChar *filepath)
+void HeeksCADapp::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath)
 {
 #ifdef __WXMSW__
 	ofstream ofs(filepath);
@@ -1086,7 +1086,7 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 	}
 	else if(wf.EndsWith(_T(".stl")))
 	{
-		SaveSTLFile(filepath);
+		SaveSTLFile(m_objects, filepath);
 	}
 	else if(CShape::ExportSolidsFile(m_objects, filepath))
 	{

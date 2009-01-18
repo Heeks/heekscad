@@ -81,6 +81,7 @@ public:
 	virtual void ReadIDFromXML(HeeksObj* object, TiXmlElement *element);
 	virtual const wxChar* GetFileFullPath(); // returns NULL for untitled
 	virtual void SetViewBox(const double* b);
+	virtual void SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath);
 
 	// body functions
 	virtual long BodyGetNumFaces(HeeksObj* body);
