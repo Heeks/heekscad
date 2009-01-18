@@ -8,8 +8,8 @@ public:
 	bool m_valid;
 
 	CBox():m_valid(false){}
-	CBox(const double *e){memcpy(m_x, e, 6*sizeof(double));}
-	CBox(double xmin, double ymin, double zmin, double xmax, double ymax, double zmax){m_x[0] = xmin; m_x[1] = ymin; m_x[2] = zmin; m_x[3] = xmax; m_x[4] = ymax; m_x[5] = zmax;}
+	CBox(const double *e):m_valid(true){memcpy(m_x, e, 6*sizeof(double));}
+	CBox(double xmin, double ymin, double zmin, double xmax, double ymax, double zmax):m_valid(true){m_x[0] = xmin; m_x[1] = ymin; m_x[2] = zmin; m_x[3] = xmax; m_x[4] = ymax; m_x[5] = zmax;}
 	void Insert(const double *p){ // insert a point ( 3 doubles )
 		if(m_valid){
 			for(int i = 0; i<3; i++){
