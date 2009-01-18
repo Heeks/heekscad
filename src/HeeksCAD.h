@@ -162,7 +162,7 @@ public:
 	bool OpenImageFile(const wxChar *filepath, bool undoably = false);
 	bool OpenFile(const wxChar *filepath, bool import_not_open = false, HeeksObj* paste_into = NULL);
 	void SaveDXFFile(const wxChar *filepath);
-	void SaveSTLFile(const wxChar *filepath);
+	void SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath);
 	void SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath);
 	void SaveXMLFile(const wxChar *filepath){SaveXMLFile(m_objects, filepath);}
 	bool SaveFile(const wxChar *filepath, bool use_dialog = false, bool update_recent_file_list = true, bool set_app_caption = true);
