@@ -392,6 +392,11 @@ void CHeeksCADInterface::SetViewBox(const double* b)
 	v.m_extra_depth_box.Insert(b[3], b[4], b[5]);
 }
 
+void CHeeksCADInterface::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath)
+{
+	wxGetApp().SaveSTLFile(objects, filepath);
+}
+
 long CHeeksCADInterface::BodyGetNumFaces(HeeksObj* body)
 {
 	return ((CShape*)body)->m_faces->GetNumChildren();

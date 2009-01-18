@@ -35,6 +35,7 @@ const wxChar* CSelectMode::GetHelpText()
 	str_for_GetHelpText = wxString(_("Left button for selecting objects"))
 		+ _T("\n") + _("( with Ctrl key for extra objects)")
 		+ _T("\n") + _("Drag with left button to window select")
+		+ _T("\n") + _("or to move object if on an object")
 		+ _T("\n") + _("Mouse wheel to zoom in and out");
 
 	if(wxGetApp().ctrl_does_rotate){
