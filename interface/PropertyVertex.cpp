@@ -3,9 +3,9 @@
 #include "stdafx.h"
 #include "PropertyVertex.h"
 
-PropertyVertex::PropertyVertex(const wxChar *t, const gp_Pnt &initial_vt, HeeksObj* object, void(*callbackfunc)(const gp_Pnt& vt, HeeksObj* m_object)):Property(){
+PropertyVertex::PropertyVertex(const wxChar *t, const double *initial_vt, HeeksObj* object, void(*callbackfunc)(const double* vt, HeeksObj* m_object)):Property(){
 	title = wxString(t);
-	m_vt = initial_vt;
+	memcpy(m_x, initial_vt, 3*sizeof(double));
 	m_callbackfunc = callbackfunc;
 	m_object = object;
 }

@@ -4,7 +4,7 @@
 #include "ObjPropsCanvas.h"
 #include "../interface/Property.h"
 #include "../interface/ToolImage.h"
-#include "PropertyVertex.h"
+#include "../interface/PropertyVertex.h"
 #include "propgrid.h"
 #include "HeeksFrame.h"
 #include "MarkedList.h"

@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 #include "CoordinateSystem.h"
-#include "PropertyVertex.h"
+#include "../interface/PropertyVertex.h"
 #include "../interface/PropertyDouble.h"
 #include "../interface/Tool.h"
 #include "HeeksFrame.h"
@@ -113,9 +113,9 @@ bool CoordinateSystem::ModifyByMatrix(const double *m)
 	return false;
 }
 
-static void on_set_pos(const gp_Pnt& pos, HeeksObj* object)
+static void on_set_pos(const double *pos, HeeksObj* object)
 {
-	((CoordinateSystem*)object)->m_o = pos;
+	((CoordinateSystem*)object)->m_o = make_point(pos);
 	wxGetApp().Repaint();
 }
 
@@ -194,9 +194,13 @@ void CoordinateSystem::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 
 void CoordinateSystem::GetProperties(std::list<Property *> *list)
 {
-	list->push_back(new PropertyVertex(_("position"), m_o, this, on_set_pos));
-	list->push_back(new PropertyVertex(_("x axis"), gp_Pnt(m_x.XYZ()), NULL));
-	list->push_back(new PropertyVertex(_("y axis"), gp_Pnt(m_y.XYZ()), NULL));
+	double o[3], x[3], y[3];
+	extract(m_o, o);
+	extract(m_x, x);
+	extract(m_y, y);
+	list->push_back(new PropertyVertex(_("position"), o, this, on_set_pos));
+	list->push_back(new PropertyVertex(_("x axis"), x, NULL));
+	list->push_back(new PropertyVertex(_("y axis"), y, NULL));
 	AxesToAngles(m_x, m_y, m_vertical_angle, m_horizontal_angle, m_twist_angle);
 	list->push_back(new PropertyDouble(_("Vertical Angle"), m_vertical_angle * 180/Pi, this, on_set_vertical_angle));
 	list->push_back(new PropertyDouble(_("Horizontal Angle"), m_horizontal_angle * 180/Pi, this, on_set_horizontal_angle));
