@@ -4,7 +4,7 @@
 #include "../interface/MarkedObject.h"
 #include "../interface/Property.h"
 #include "../interface/InputMode.h"
-#include "PropertyVertex.h"
+#include "../interface/PropertyVertex.h"
 #include "propgrid.h"
 #include "HeeksFrame.h"
 

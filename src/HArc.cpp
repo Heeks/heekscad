@@ -8,7 +8,7 @@
 #include "../interface/PropertyDouble.h"
 #include "../interface/PropertyChoice.h"
 #include "../tinyxml/tinyxml.h"
-#include "PropertyVertex.h"
+#include "../interface/PropertyVertex.h"
 #include "Gripper.h"
 
 HArc::HArc(const HArc &line){
@@ -148,33 +148,39 @@ void HArc::GetGripperPositions(std::list<double> *list, bool just_for_endof){
 	list->push_back(B.Z());
 }
 
-static void on_set_start(const gp_Pnt &vt, HeeksObj* object){
-	((HArc*)object)->A = vt;
+static void on_set_start(const double *vt, HeeksObj* object){
+	((HArc*)object)->A = make_point(vt);
 	wxGetApp().Repaint();
 }
 
-static void on_set_end(const gp_Pnt &vt, HeeksObj* object){
-	((HArc*)object)->B = vt;
+static void on_set_end(const double *vt, HeeksObj* object){
+	((HArc*)object)->B = make_point(vt);
 	wxGetApp().Repaint();
 }
 
-static void on_set_centre(const gp_Pnt &vt, HeeksObj* object){
-	((HArc*)object)->m_circle.SetLocation(vt);
+static void on_set_centre(const double *vt, HeeksObj* object){
+	((HArc*)object)->m_circle.SetLocation(make_point(vt));
 	wxGetApp().Repaint();
 }
 
-static void on_set_axis(const gp_Pnt &vt, HeeksObj* object){
+static void on_set_axis(const double *vt, HeeksObj* object){
 	gp_Ax1 a = ((HArc*)object)->m_circle.Axis();
-	a.SetDirection(gp_Dir(vt.XYZ()));
+	a.SetDirection(make_vector(vt));
 	((HArc*)object)->m_circle.SetAxis(a);
 	wxGetApp().Repaint();
 }
 
 void HArc::GetProperties(std::list<Property *> *list){
-	list->push_back(new PropertyVertex(_("start"), A, this, on_set_start));
-	list->push_back(new PropertyVertex(_("end"), B, this, on_set_end));
-	list->push_back(new PropertyVertex(_("centre"), m_circle.Location(), this, on_set_centre));
-	list->push_back(new PropertyVertex(_("axis"), gp_Pnt(m_circle.Axis().Direction().XYZ()), this, on_set_axis));
+	double a[3], b[3];
+	double c[3], ax[3];
+	extract(A, a);
+	extract(B, b);
+	extract(m_circle.Location(), c);
+	extract(m_circle.Axis().Direction(), ax);
+	list->push_back(new PropertyVertex(_("start"), a, this, on_set_start));
+	list->push_back(new PropertyVertex(_("end"), b, this, on_set_end));
+	list->push_back(new PropertyVertex(_("centre"), c, this, on_set_centre));
+	list->push_back(new PropertyVertex(_("axis"), ax, this, on_set_axis));
 	double length = A.Distance(B);
 	list->push_back(new PropertyDouble(_("Length"), length, NULL));
 

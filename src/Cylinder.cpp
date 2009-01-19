@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "Cylinder.h"
 #include <BRepPrimAPI_MakeCylinder.hxx>
-#include "PropertyVertex.h"
+#include "../interface/PropertyVertex.h"
 #include "../interface/PropertyDouble.h"
 #include "Gripper.h"
 #include "MarkedList.h"
@@ -22,9 +22,9 @@ HeeksObj *CCylinder::MakeACopy(void)const
 	return new CCylinder(*this);
 }
 
-static void on_set_centre(const gp_Pnt &vt, HeeksObj* object){
+static void on_set_centre(const double *vt, HeeksObj* object){
 	gp_Trsf mat;
-	mat.SetTranslation ( gp_Vec ( ((CCylinder*)object)->m_pos.Location(), vt ) );
+	mat.SetTranslation ( gp_Vec ( ((CCylinder*)object)->m_pos.Location(), make_point(vt) ) );
 	((CCylinder*)object)->m_pos.Transform(mat);
 }
 
@@ -51,7 +51,9 @@ bool CCylinder::ModifyByMatrix(const double* m){
 
 void CCylinder::GetProperties(std::list<Property *> *list)
 {
-	list->push_back(new PropertyVertex(_("centre pos"), m_pos.Location(), this, on_set_centre));
+	double c[3];
+	extract(m_pos.Location(), c);
+	list->push_back(new PropertyVertex(_("centre pos"), c, this, on_set_centre));
 	list->push_back(new PropertyDouble(_("radius"), m_radius, this, on_set_radius));
 	list->push_back(new PropertyDouble(_("height"), m_height, this, on_set_height));
 

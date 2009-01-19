@@ -5,7 +5,7 @@
 #include "../interface/PropertyDouble.h"
 #include "../interface/PropertyChoice.h"
 #include "../tinyxml/tinyxml.h"
-#include "PropertyVertex.h"
+#include "../interface/PropertyVertex.h"
 #include "HLine.h"
 #include "HILine.h"
 #include "HArc.h"
@@ -146,14 +146,14 @@ void HCircle::GetGripperPositions(std::list<double> *list, bool just_for_endof){
 	}
 }
 
-static void on_set_centre(const gp_Pnt &vt, HeeksObj* object){
-	((HCircle*)object)->m_circle.SetLocation(vt);
+static void on_set_centre(const double *vt, HeeksObj* object){
+	((HCircle*)object)->m_circle.SetLocation(make_point(vt));
 	wxGetApp().Repaint();
 }
 
-static void on_set_axis(const gp_Pnt &vt, HeeksObj* object){
+static void on_set_axis(const double *vt, HeeksObj* object){
 	gp_Ax1 a = ((HCircle*)object)->m_circle.Axis();
-	a.SetDirection(gp_Dir(vt.XYZ()));
+	a.SetDirection(make_vector(vt));
 	((HCircle*)object)->m_circle.SetAxis(a);
 	wxGetApp().Repaint();
 }
@@ -164,8 +164,11 @@ static void on_set_radius(double value, HeeksObj* object){
 }
 
 void HCircle::GetProperties(std::list<Property *> *list){
-	list->push_back(new PropertyVertex(_("centre"), m_circle.Location(), this, on_set_centre));
-	list->push_back(new PropertyVertex(_("axis"), gp_Pnt(m_circle.Axis().Direction().XYZ()), this, on_set_axis));
+	double c[3], a[3];
+	extract(m_circle.Location(), c);
+	extract(m_circle.Axis().Direction(), a);
+	list->push_back(new PropertyVertex(_("centre"), c, this, on_set_centre));
+	list->push_back(new PropertyVertex(_("axis"), a, this, on_set_axis));
 	list->push_back(new PropertyDouble(_("radius"), m_circle.Radius(), this, on_set_radius));
 
 	HeeksObj::GetProperties(list);
