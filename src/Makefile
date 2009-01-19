@@ -155,9 +155,6 @@ PropertiesCanvas.o: PropertiesCanvas.cpp
 PropertyTrsf.o: PropertyTrsf.cpp
 	gcc -c $? ${CCFLAGS} -o $@
 
-PropertyVertex.o: PropertyVertex.cpp
-	gcc -c $? ${CCFLAGS} -o $@
-
 propgrid.o: propgrid.cpp
 	gcc -c $? ${CCFLAGS} -o $@
 
@@ -255,6 +252,9 @@ PropertyColor.o: ../interface/PropertyColor.cpp
 	gcc -c $? ${CCFLAGS} -o $@
 
 PropertyDouble.o: ../interface/PropertyDouble.cpp
+	gcc -c $? ${CCFLAGS} -o $@
+
+PropertyVertex.o: ../interface/PropertyVertex.cpp
 	gcc -c $? ${CCFLAGS} -o $@
 
 PropertyInt.o: ../interface/PropertyInt.cpp
