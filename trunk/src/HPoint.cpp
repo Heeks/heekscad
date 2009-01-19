@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 #include "HPoint.h"
-#include "PropertyVertex.h"
+#include "../interface/PropertyVertex.h"
 #include "../tinyxml/tinyxml.h"
 
 static unsigned char cross16[32] = {0x80, 0x01, 0x40, 0x02, 0x20, 0x04, 0x10, 0x08, 0x08, 0x10, 0x04, 0x20, 0x02, 0x40, 0x01, 0x80, 0x01, 0x80, 0x02, 0x40, 0x04, 0x20, 0x08, 0x10, 0x10, 0x08, 0x20, 0x04, 0x40, 0x02, 0x80, 0x01};
@@ -77,14 +77,16 @@ void HPoint::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 	}
 }
 
-static void on_set_point(const gp_Pnt &vt, HeeksObj* object){
-	((HPoint*)object)->m_p = vt;
+static void on_set_point(const double *vt, HeeksObj* object){
+	((HPoint*)object)->m_p = make_point(vt);
 	wxGetApp().Repaint();
 }
 
 void HPoint::GetProperties(std::list<Property *> *list)
 {
-	list->push_back(new PropertyVertex(_("position"), m_p, this, on_set_point));
+	double p[3];
+	extract(m_p, p);
+	list->push_back(new PropertyVertex(_("position"), p, this, on_set_point));
 
 	HeeksObj::GetProperties(list);
 }

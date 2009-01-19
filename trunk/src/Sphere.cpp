@@ -4,7 +4,7 @@
 #include "Sphere.h"
 #include <BRepPrimAPI_MakeSphere.hxx>
 #include <gp_Trsf.hxx>
-#include "PropertyVertex.h"
+#include "../interface/PropertyVertex.h"
 #include "../interface/PropertyDouble.h"
 #include "Gripper.h"
 #include "MarkedList.h"
@@ -23,8 +23,8 @@ HeeksObj *CSphere::MakeACopy(void)const
 	return new CSphere(*this);
 }
 
-static void on_set_centre(const gp_Pnt &vt, HeeksObj* object){
-	((CSphere*)object)->m_pos = vt;
+static void on_set_centre(const double *pos, HeeksObj* object){
+	((CSphere*)object)->m_pos = make_point(pos);
 }
 
 static void on_set_radius(double value, HeeksObj* object){
@@ -45,7 +45,9 @@ bool CSphere::ModifyByMatrix(const double* m){
 
 void CSphere::GetProperties(std::list<Property *> *list)
 {
-	list->push_back(new PropertyVertex(_("centre"), m_pos, this, on_set_centre));
+	double pos[3];
+	extract(m_pos, pos);
+	list->push_back(new PropertyVertex(_("centre"), pos, this, on_set_centre));
 	list->push_back(new PropertyDouble(_("radius"), m_radius, this, on_set_radius));
 
 	CSolid::GetProperties(list);

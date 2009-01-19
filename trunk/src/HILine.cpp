@@ -6,7 +6,7 @@
 #include "HArc.h"
 #include "HCircle.h"
 #include "../interface/PropertyDouble.h"
-#include "PropertyVertex.h"
+#include "../interface/PropertyVertex.h"
 #include "../tinyxml/tinyxml.h"
 #include "Gripper.h"
 
@@ -103,19 +103,22 @@ void HILine::GetGripperPositions(std::list<double> *list, bool just_for_endof){
 	}
 }
 
-static void on_set_start(const gp_Pnt &vt, HeeksObj* object){
-	((HILine*)object)->A = vt;
+static void on_set_start(const double *vt, HeeksObj* object){
+	((HILine*)object)->A = make_point(vt);
 	wxGetApp().Repaint();
 }
 
-static void on_set_end(const gp_Pnt &vt, HeeksObj* object){
-	((HILine*)object)->B = vt;
+static void on_set_end(const double *vt, HeeksObj* object){
+	((HILine*)object)->B = make_point(vt);
 	wxGetApp().Repaint();
 }
 
 void HILine::GetProperties(std::list<Property *> *list){
-	list->push_back(new PropertyVertex(_("start"), A, this, on_set_start));
-	list->push_back(new PropertyVertex(_("end"), B, this, on_set_end));
+	double a[3], b[3];
+	extract(A, a);
+	extract(B, b);
+	list->push_back(new PropertyVertex(_("start"), a, this, on_set_start));
+	list->push_back(new PropertyVertex(_("end"), b, this, on_set_end));
 	double length = A.Distance(B);
 	list->push_back(new PropertyDouble(_("Length"), length, this));
 

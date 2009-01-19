@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "Cone.h"
 #include <BRepPrimAPI_MakeCone.hxx>
-#include "PropertyVertex.h"
+#include "../interface/PropertyVertex.h"
 #include "../interface/PropertyDouble.h"
 #include "Gripper.h"
 #include "MarkedList.h"
@@ -22,9 +22,9 @@ HeeksObj *CCone::MakeACopy(void)const
 	return new CCone(*this);
 }
 
-static void on_set_centre(const gp_Pnt &vt, HeeksObj* object){
+static void on_set_centre(const double *vt, HeeksObj* object){
 	gp_Trsf mat;
-	mat.SetTranslation ( gp_Vec ( ((CCone*)object)->m_pos.Location(), vt ) );
+	mat.SetTranslation ( gp_Vec ( ((CCone*)object)->m_pos.Location(), make_point(vt) ) );
 	((CCone*)object)->m_pos.Transform(mat);
 }
 
@@ -57,9 +57,13 @@ bool CCone::ModifyByMatrix(const double *m){
 
 void CCone::GetProperties(std::list<Property *> *list)
 {
-	list->push_back(new PropertyVertex(_("centre pos"), m_pos.Location(), this, on_set_centre));
-	list->push_back(new PropertyVertex(_("direction"), gp_Pnt(m_pos.Direction().XYZ()), NULL));
-	list->push_back(new PropertyVertex(_("x direction"), gp_Pnt(m_pos.XDirection().XYZ()), NULL));
+	double p[3], d[3], x[3];
+	extract(m_pos.Location(), p);
+	extract(m_pos.Direction(), d);
+	extract(m_pos.XDirection(), x);
+	list->push_back(new PropertyVertex(_("centre pos"), p, this, on_set_centre));
+	list->push_back(new PropertyVertex(_("direction"), d, NULL));
+	list->push_back(new PropertyVertex(_("x direction"), x, NULL));
 	list->push_back(new PropertyDouble(_("r1"), m_r1, this, on_set_r1));
 	list->push_back(new PropertyDouble(_("r2"), m_r2, this, on_set_r2));
 	list->push_back(new PropertyDouble(_("height"), m_height, this, on_set_height));

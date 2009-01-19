@@ -9,7 +9,7 @@
 #include "../interface/PropertyColor.h"
 #include "../interface/PropertyInt.h"
 #include "../interface/PropertyList.h"
-#include "PropertyVertex.h"
+#include "../interface/PropertyVertex.h"
 #include "PropertyTrsf.h"
 #include "propgrid.h"
 #include "advprops.h"
@@ -140,17 +140,15 @@ void CPropertiesCanvas::AddProperty(Property* p, wxPGProperty* parent_prop)
 		break;
 	case VertexPropertyType:
 		{
-			double x[3];
-			extract(((PropertyVertex*)p)->m_vt, x);
 			wxPGProperty* new_prop = wxParentProperty(p->GetShortString(),wxPG_LABEL);
 			Append( parent_prop, new_prop, p );
-			wxPGProperty* x_prop = wxFloatProperty(_("x"),wxPG_LABEL,x[0]);
+			wxPGProperty* x_prop = wxFloatProperty(_("x"),wxPG_LABEL,((PropertyVertex*)p)->m_x[0]);
 			if(!p->property_editable())x_prop->SetFlag(wxPG_PROP_READONLY);
 			Append( new_prop, x_prop, p );
-			wxPGProperty* y_prop = wxFloatProperty(_("y"),wxPG_LABEL,x[1]);
+			wxPGProperty* y_prop = wxFloatProperty(_("y"),wxPG_LABEL,((PropertyVertex*)p)->m_x[1]);
 			if(!p->property_editable())y_prop->SetFlag(wxPG_PROP_READONLY);
 			Append( new_prop, y_prop, p );
-			wxPGProperty* z_prop = wxFloatProperty(_("z"),wxPG_LABEL,x[2]);
+			wxPGProperty* z_prop = wxFloatProperty(_("z"),wxPG_LABEL,((PropertyVertex*)p)->m_x[2]);
 			if(!p->property_editable())z_prop->SetFlag(wxPG_PROP_READONLY);
 			new_prop->SetFlag(wxPG_PROP_READONLY);
 			Append( new_prop, z_prop, p );
@@ -257,20 +255,17 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 		break;
 	case VertexPropertyType:
 		{
-			double pos[3];
-			extract(((PropertyVertex*)property)->m_vt, pos);
 			if(p->GetName()[0] == 'x'){
-				pos[0] = event.GetPropertyValue().GetDouble();
+				((PropertyVertex*)property)->m_x[0] = event.GetPropertyValue().GetDouble();
 			}
 			else if(p->GetName()[0] == 'y'){
-				pos[1] = event.GetPropertyValue().GetDouble();
+				((PropertyVertex*)property)->m_x[1] = event.GetPropertyValue().GetDouble();
 			}
 			else if(p->GetName()[0] == 'z'){
-				pos[2] = event.GetPropertyValue().GetDouble();
+				((PropertyVertex*)property)->m_x[2] = event.GetPropertyValue().GetDouble();
 			}
-			((PropertyVertex*)property)->m_vt = make_point(pos);
 
-			(*(((PropertyVertex*)property)->m_callbackfunc))(((PropertyVertex*)property)->m_vt, ((PropertyVertex*)property)->m_object);
+			(*(((PropertyVertex*)property)->m_callbackfunc))(((PropertyVertex*)property)->m_x, ((PropertyVertex*)property)->m_object);
 		}
 		break;
 	case TrsfPropertyType:

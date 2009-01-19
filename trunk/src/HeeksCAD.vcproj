@@ -1062,11 +1062,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\PropertyVertex.cpp"
+			RelativePath="..\interface\PropertyVertex.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\PropertyVertex.h"
+			RelativePath="..\interface\PropertyVertex.h"
 			>
 		</File>
 		<File
