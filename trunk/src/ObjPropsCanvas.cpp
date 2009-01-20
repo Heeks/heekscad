@@ -95,15 +95,6 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll(){
 		marked_object = (*wxGetApp().m_marked_list->list().begin());
 	}
 
-	if(marked_object != m_object_for_cancel)
-	{
-		// if an object becomes unselected, this cancels the editing
-		for(std::list<Property*>::iterator It = m_initial_properties.begin(); It != m_initial_properties.end(); It++){
-			Property* p = *It;
-			p->CallSetFunction();
-		}
-	}
-
 	ClearInitialProperties();
 
 	m_object_for_cancel = marked_object;
