@@ -236,7 +236,7 @@ gp_Trsf CoordinateSystem::GetMatrix()
 HeeksObj* CoordinateSystem::ReadFromXMLElement(TiXmlElement* pElem)
 {
 	gp_Pnt o;
-	gp_Dir x, y;
+	gp_Vec x, y;
 	wxString title;
 
 	// get the attributes
