@@ -19,5 +19,4 @@ public:
 	virtual void OnFrontRender(){}
 	virtual void OnRender(){}
 	virtual void GetProperties(std::list<Property *> *list){}
-	virtual void GetOptions(std::list<Property *> *list){}
 };

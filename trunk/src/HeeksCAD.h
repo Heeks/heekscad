@@ -47,6 +47,7 @@ private:
 	std::map< std::string, HeeksObj*(*)(TiXmlElement* pElem) > xml_read_fn_map;
 
 	void create_font();
+	void render_screen_text2(const wxChar* str);
 
 protected:
     wxLocale m_locale; // locale we'll be using
@@ -227,7 +228,7 @@ public:
 	bool CheckForOneOrMoreSketchs(const std::list<HeeksObj*> &list, const wxString& msg, const wxString& caption);
 	void render_text(const wxChar* str);
 	bool get_text_size(const wxChar* str, float* width, float* height);
-	void render_screen_text(const wxChar* str);
+	void render_screen_text(const wxChar* str1, const wxChar* str2);
 	void OnInputModeTitleChanged();
 	void OnInputModeHelpTextChanged();
 	void PlotSetColor(const HeeksColor &c);

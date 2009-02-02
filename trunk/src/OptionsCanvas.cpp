@@ -45,9 +45,6 @@ void COptionsCanvas::RefreshByRemovingAndAddingAll(){
 
 	std::list<Property *> list;
 
-	// add the input_mode mode's properties
-	wxGetApp().input_mode_object->GetOptions(&list);
-
 	// add the application's properties
 	wxGetApp().GetOptions(&list);
 

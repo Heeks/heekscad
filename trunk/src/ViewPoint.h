@@ -43,7 +43,7 @@ public:
 	void Shift(const gp_Vec &tv);
 	void Shift(const wxPoint &point_diff, const wxPoint &point);
 	void Scale(double multiplier, bool use_initial_pixel_scale = false);
-	void Scale(const wxPoint &point);
+	void Scale(const wxPoint &point, bool reversed = false);
 	void Twist(double angle);
 	void Twist(wxPoint start, wxPoint point_diff);
 	void SetViewport(void)const;

@@ -31,6 +31,5 @@ public:
 	bool OnStart();
 	void OnFrontRender();
 	void GetProperties(std::list<Property *> *list);
-	void GetOptions(std::list<Property *> *list);
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 };
