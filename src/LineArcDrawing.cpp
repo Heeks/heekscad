@@ -545,10 +545,6 @@ void LineArcDrawing::GetTools(std::list<Tool*> *f_list, const wxPoint *p){
 	Drawing::GetTools(f_list, p);
 }
 
-void LineArcDrawing::GetOptions(std::list<Property *> *list){
-	wxGetApp().m_select_mode->GetOptions(list);
-}
-
 bool LineArcDrawing::OnModeChange(void){
 	// on start of drawing mode
 	if(!Drawing::OnModeChange())return false;

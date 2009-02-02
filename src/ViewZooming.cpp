@@ -6,6 +6,8 @@
 #include "GraphicsCanvas.h"
 #include "HeeksFrame.h"
 
+bool ViewZooming::m_reversed = false;
+
 void ViewZooming::OnMouse( wxMouseEvent& event )
 {
 	if(event.LeftDown() || event.MiddleDown())
@@ -23,7 +25,7 @@ void ViewZooming::OnMouse( wxMouseEvent& event )
 
 		if(event.LeftIsDown())
 		{
-			wxGetApp().m_frame->m_graphics->m_view_point.Scale(wxPoint(event.GetX(), event.GetY()));
+			wxGetApp().m_frame->m_graphics->m_view_point.Scale(wxPoint(event.GetX(), event.GetY()), m_reversed);
 		}
 		else if(event.MiddleIsDown())
 		{
@@ -34,4 +36,11 @@ void ViewZooming::OnMouse( wxMouseEvent& event )
 		CurrentPoint = wxPoint(event.GetX(), event.GetY());
 	}
 	if(event.GetWheelRotation() != 0)wxGetApp().m_select_mode->OnMouse(event);
+}
+
+static wxString str_for_GetHelpText;
+
+const wxChar* ViewZooming::GetHelpText(){
+	str_for_GetHelpText = wxString(_("Drag with the left mouse button")) + _T("\n") + (m_reversed ? _("Forward to zoom in, Back to zoom out"):_("Back to zoom in, Forward to zoom out")) + _T("\n") + _("Hold middle mouse button down to pan");
+	return str_for_GetHelpText;
 }

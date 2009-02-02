@@ -312,7 +312,3 @@ void Drawing::OnRender(){
 void Drawing::GetProperties(std::list<Property *> *list){
 	wxGetApp().m_digitizing->GetProperties(list); // x, y, z
 }
-
-void Drawing::GetOptions(std::list<Property *> *list){
-	wxGetApp().m_digitizing->GetOptions(list);
-}
