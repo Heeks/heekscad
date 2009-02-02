@@ -778,6 +778,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\HXml.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\HXml.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Images.cpp"
 			>
 		</File>
