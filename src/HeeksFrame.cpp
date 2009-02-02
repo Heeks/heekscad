@@ -360,9 +360,12 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 				wxDynamicLibrary* shared_library = new wxDynamicLibrary(fn.GetFullPath());
 				if(shared_library->IsLoaded()){
-					wxGetApp().m_loaded_libraries.push_back(shared_library);
 					void(*OnStartUp)(CHeeksCADInterface*) = (void (*)(CHeeksCADInterface*))(shared_library->GetSymbol(_T("OnStartUp")));
-					(*OnStartUp)(&heekscad_interface);
+					if(OnStartUp)
+					{
+						(*OnStartUp)(&heekscad_interface);
+						wxGetApp().m_loaded_libraries.push_back(shared_library);
+					}
 				}
 				else{
 					delete shared_library;
