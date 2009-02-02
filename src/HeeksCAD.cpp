@@ -49,6 +49,7 @@
 #include "HPoint.h"
 #include "HText.h"
 #include "HDimension.h"
+#include "HXml.h"
 #include "RemoveOrAddTool.h"
 #include "Sketch.h"
 #include "../tinyxml/tinyxml.h"
@@ -541,13 +542,17 @@ HeeksObj* HeeksCADapp::ReadXMLElement(TiXmlElement* pElem)
 	std::string name(pElem->Value());
 
 	std::map< std::string, HeeksObj*(*)(TiXmlElement* pElem) >::iterator FindIt = xml_read_fn_map.find( name );
+	HeeksObj* object = NULL;
 	if(FindIt != xml_read_fn_map.end())
 	{
-		HeeksObj* object = (*(FindIt->second))(pElem);
-		return object;
+		object = (*(FindIt->second))(pElem);
+	}
+	else
+	{
+		object = HXml::ReadFromXMLElement(pElem);
 	}
 
-	return NULL;
+	return object;
 }
 
 void HeeksCADapp::OpenXMLFile(const wxChar *filepath, bool undoably, HeeksObj* paste_into)

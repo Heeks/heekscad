@@ -31,6 +31,7 @@ enum{
 	TextType,
 	DimensionType,
 	RulerType,
+	XmlType,
 	ObjectMaximumType
 };
 
