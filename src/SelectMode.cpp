@@ -444,9 +444,6 @@ bool CSelectMode::OnStart(){
 void CSelectMode::GetProperties(std::list<Property *> *list){
 }
 
-void CSelectMode::GetOptions(std::list<Property *> *list){
-}
-
 class EndPicking:public Tool{
 public:
 	void Run(){

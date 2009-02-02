@@ -230,6 +230,7 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("GridMode"), &grid_mode);
 	config.Read(_T("m_light_push_matrix"), &m_light_push_matrix);
 	config.Read(_T("WheelForwardAway"), &mouse_wheel_forward_away);
+	config.Read(_T("ZoomingReversed"), &ViewZooming::m_reversed);
 	config.Read(_T("CtrlDoesRotate"), &ctrl_does_rotate);
 	config.Read(_T("DrawDatum"), &m_show_datum_coords_system, true);
 	config.Read(_T("DatumSize"), &CoordinateSystem::size, 30);
@@ -314,6 +315,7 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("GridMode"), grid_mode);
 	config.Write(_T("m_light_push_matrix"), m_light_push_matrix);
 	config.Write(_T("WheelForwardAway"), mouse_wheel_forward_away);
+	config.Write(_T("ZoomingReversed"), ViewZooming::m_reversed);
 	config.Write(_T("CtrlDoesRotate"), ctrl_does_rotate);
 	config.Write(_T("DrawDatum"), m_show_datum_coords_system);
 	config.Write(_T("DatumSize"), CoordinateSystem::size);
@@ -1223,22 +1225,22 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	// draw the input mode text on the top
 	if(m_graphics_text_mode != GraphicsTextModeNone)
 	{
-		wxString screen_text;
+		wxString screen_text1, screen_text2;
 
 		if(input_mode_object && input_mode_object->GetTitle())
 		{
-			screen_text.Append(input_mode_object->GetTitle());
-			screen_text.Append(_T("\n"));
+			screen_text1.Append(input_mode_object->GetTitle());
+			screen_text1.Append(_T("\n"));
 		}
 		if(m_graphics_text_mode == GraphicsTextModeWithHelp && input_mode_object)
 		{
 			const wxChar* help_str = input_mode_object->GetHelpText();
 			if(help_str)
 			{
-				screen_text.Append(help_str);
+				screen_text2.Append(help_str);
 			}
 		}
-		render_screen_text(screen_text);
+		render_screen_text(screen_text1, screen_text2);
 	}
 }
 
@@ -1717,6 +1719,12 @@ void on_set_reverse_mouse_wheel(bool value, HeeksObj* object)
 	wxGetApp().mouse_wheel_forward_away = !value;
 }
 
+void on_set_reverse_zooming(bool value, HeeksObj* object)
+{
+	ViewZooming::m_reversed = value;
+	wxGetApp().OnInputModeHelpTextChanged();
+}
+
 void on_set_ctrl_does_rotate(bool value, HeeksObj* object)
 {
 	wxGetApp().ctrl_does_rotate = value;
@@ -1876,6 +1884,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	view_options->m_list.push_back( new PropertyCheck(_("fixed light"), m_light_push_matrix, NULL, on_set_light_push_matrix));
 #endif
 	view_options->m_list.push_back( new PropertyCheck(_("reverse mouse wheel"), !(mouse_wheel_forward_away), NULL, on_set_reverse_mouse_wheel));
+	view_options->m_list.push_back( new PropertyCheck(_("reverse zooming mode"), ViewZooming::m_reversed, NULL, on_set_reverse_zooming));
 	view_options->m_list.push_back( new PropertyCheck(_("Ctrl key does rotate"), ctrl_does_rotate, NULL, on_set_ctrl_does_rotate));
 	view_options->m_list.push_back(new PropertyCheck(_("show datum"), m_show_datum_coords_system, NULL, on_set_show_datum));
 	view_options->m_list.push_back(new PropertyDouble(_("datum size"), CoordinateSystem::size, NULL, on_set_datum_size));
@@ -2791,19 +2800,8 @@ bool HeeksCADapp::get_text_size(const wxChar* str, float* width, float* height)
 	return glFontTextSize(m_gl_font, (char*)Ttc(str), width, height) != 0;
 }
 
-void HeeksCADapp::render_screen_text(const wxChar* str)
+void HeeksCADapp::render_screen_text2(const wxChar* str)
 {
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	m_frame->m_graphics->SetIdentityProjection();
-	background_color.best_black_or_white().glColor();
-	int w, h;
-	m_frame->m_graphics->GetClientSize(&w, &h);
-	glTranslated(2.0, h - 1.0, 0.0);
-	glScaled(10, 10, 0);
-
 #if wxUSE_UNICODE
 	size_t n = wcslen(str);
 #else
@@ -2826,6 +2824,25 @@ void HeeksCADapp::render_screen_text(const wxChar* str)
 			j = 0;
 		}
 	}
+}
+
+void HeeksCADapp::render_screen_text(const wxChar* str1, const wxChar* str2)
+{
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	m_frame->m_graphics->SetIdentityProjection();
+	background_color.best_black_or_white().glColor();
+	int w, h;
+	m_frame->m_graphics->GetClientSize(&w, &h);
+	glTranslated(2.0, h - 1.0, 0.0);
+
+	glScaled(10.0, 10.0, 0);
+	render_screen_text2(str1);
+
+	glScaled(0.612, 0.612, 0);
+	render_screen_text2(str2);
 
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();

@@ -177,8 +177,9 @@ void CViewPoint::Scale(double multiplier, bool use_initial_pixel_scale){
 	}
 }
 
-void CViewPoint::Scale(const wxPoint &point){
+void CViewPoint::Scale(const wxPoint &point, bool reversed){
 	double mouse_ydiff = point.y - m_initial_point.y;
+	if(reversed)mouse_ydiff = -mouse_ydiff;
 	wxSize size = wxGetApp().m_frame->m_graphics->GetClientSize();
 	double fraction=(mouse_ydiff)/((double)(size.GetHeight()));
 	double multiplier = fraction;

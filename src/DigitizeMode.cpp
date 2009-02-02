@@ -299,9 +299,6 @@ void DigitizeMode::GetProperties(std::list<Property *> *list){
 	list->push_back(new PropertyDouble(_("Z"), digitized_point.m_point.Z(), NULL, set_z));
 }
 
-void DigitizeMode::GetOptions(std::list<Property *> *list){
-}
-
 class EndPosPicking:public Tool{
 public:
 	void Run(){

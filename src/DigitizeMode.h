@@ -30,7 +30,6 @@ public:
 	bool OnModeChange(void);
 	void OnFrontRender();
 	void GetProperties(std::list<Property *> *list);
-	void GetOptions(std::list<Property *> *list);
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 
 	DigitizedPoint Digitize(const gp_Lin &ray);
