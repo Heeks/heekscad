@@ -335,7 +335,7 @@ double CFace::Area()const{
 	return System.Mass();
 }
 
-void CFace::WriteXML(TiXmlElement *root)
+void CFace::WriteXML(TiXmlNode *root)
 {
 	CShape::m_solids_found = true;
 }

@@ -24,7 +24,7 @@ void HXml::GetProperties(std::list<Property *> *list){
 	HeeksObj::GetProperties(list);
 }
 
-void HXml::WriteXML(TiXmlElement *root)
+void HXml::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element = new TiXmlElement( m_element );
 	root->LinkEndChild( element );  

@@ -571,31 +571,23 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, bool undoably, HeeksObj* p
 
 	TiXmlHandle hDoc(&doc);
 	TiXmlElement* pElem;
-	TiXmlHandle hRoot(0);
+	TiXmlNode* root = &doc;
 
-	// block: name
+	pElem=hDoc.FirstChildElement().Element();
+	if (!pElem) return;
+	std::string name(pElem->Value());
+	if(name == "HeeksCAD_Document")
 	{
-		pElem=hDoc.FirstChildElement().Element();
-		if (!pElem) return;
-		std::string name(pElem->Value());
-
-		if(name != "HeeksCAD_Document")
-		{
-			wxMessageBox(_("This is not a HeeksCAD document!"));
-			return;
-		}
-
-		// save this for later
-		hRoot=TiXmlHandle(pElem);
+		root = pElem;
 	}
 
-	// loop through all the objects
 	std::list<HeeksObj*> objects;
-	for(pElem = hRoot.FirstChildElement().Element(); pElem;	pElem = pElem->NextSiblingElement())
+	for(pElem = root->FirstChildElement(); pElem;	pElem = pElem->NextSiblingElement())
 	{
 		HeeksObj* object = ReadXMLElement(pElem);
 		if(object)objects.push_back(object);
 	}
+
 	if(objects.size() > 0)
 	{
 		HeeksObj* add_to = this;
@@ -988,16 +980,19 @@ void HeeksCADapp::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar 
 	ofs<<"endsolid"<<endl;
 }
 
-void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath)
+void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, bool for_clipboard)
 {
 	// write an xml file
 	TiXmlDocument doc;  
 	TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );  
 	doc.LinkEndChild( decl );  
 
-	TiXmlElement * root = new TiXmlElement( "HeeksCAD_Document" );
-
-	doc.LinkEndChild( root );  
+	TiXmlNode* root = &doc;
+	if(!for_clipboard)
+	{
+		root = new TiXmlElement( "HeeksCAD_Document" );
+		doc.LinkEndChild( root );
+	}
 
 	// loop through all the objects writing them
 	CShape::m_solids_found = false;
@@ -2667,7 +2662,7 @@ bool HeeksCADapp::IsPasteReady()
 		}  
 		wxTheClipboard->Close();
 
-		if(fstr.StartsWith(_T("<?xml version=\"1.0\" ?>\r\n<HeeksCAD_Document>")))return true;
+		if(fstr.StartsWith(_T("<?xml version=\"1.0\" ?>")))return true;
 	}
 
 	return false;

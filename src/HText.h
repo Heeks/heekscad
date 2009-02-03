@@ -35,7 +35,7 @@ public:
 	void GetProperties(std::list<Property *> *list);
 	bool Stretch(const double *p, const double* shift);
 	void CopyFrom(const HeeksObj* object){operator=(*((HText*)object));}
-	void WriteXML(TiXmlElement *root);
+	void WriteXML(TiXmlNode *root);
 	const wxChar* GetShortString(void)const{return m_text.c_str();}
 	bool CanEditString(void)const{return true;}
 	void OnEditString(const wxChar* str);

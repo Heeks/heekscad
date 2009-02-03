@@ -103,7 +103,7 @@ bool HPoint::GetEndPoint(double* pos)
 	return true;
 }
 
-void HPoint::WriteXML(TiXmlElement *root)
+void HPoint::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element;
 	element = new TiXmlElement( "Point" );

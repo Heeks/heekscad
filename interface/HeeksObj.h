@@ -8,6 +8,7 @@ class HeeksColor;
 class Property;
 class Tool;
 class MarkedObject;
+class TiXmlNode;
 class TiXmlElement;
 
 enum{
@@ -119,7 +120,7 @@ public:
 	virtual void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true){} // [nine doubles, three doubles],  or [nine doubles, nine doubles] if just_one_average_normal = false
 	virtual double Area()const{return 0.0;}
 	virtual void GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point = true)const{};
-	virtual void WriteXML(TiXmlElement *root){}
+	virtual void WriteXML(TiXmlNode *root){}
 	virtual void WriteBaseXML(TiXmlElement *element);
 	virtual void ReadBaseXML(TiXmlElement* element);
 	void SetID(int id);

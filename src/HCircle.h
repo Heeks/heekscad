@@ -37,7 +37,7 @@ public:
 	bool Stretch(const double *p, const double* shift);
 	void GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point = true)const;
 	bool GetCentrePoint(double* pos);
-	void WriteXML(TiXmlElement *root);
+	void WriteXML(TiXmlNode *root);
 	int Intersects(const HeeksObj *object, std::list< double > *rl)const;
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);

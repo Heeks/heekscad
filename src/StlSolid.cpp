@@ -240,7 +240,7 @@ void CStlSolid::GetTriangles(void(*callbackfunc)(const double* x, const double* 
 	}
 }
 
-void CStlSolid::WriteXML(TiXmlElement *root)
+void CStlSolid::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element;
 	element = new TiXmlElement( "STLSolid" );

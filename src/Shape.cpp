@@ -683,7 +683,7 @@ void CShape::CopyFrom(const HeeksObj* object)
 	*this = *((CShape*)object);
 }
 
-void CShape::WriteXML(TiXmlElement *root)
+void CShape::WriteXML(TiXmlNode *root)
 {
 	CShape::m_solids_found = true;
 }

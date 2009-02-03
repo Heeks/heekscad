@@ -62,7 +62,7 @@ public:
 	double Area()const;
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	void CopyFrom(const HeeksObj* object);
-	void WriteXML(TiXmlElement *root);
+	void WriteXML(TiXmlNode *root);
 	void SetClickMarkPoint(MarkedObject* marked_object, const double* ray_start, const double* ray_direction);
 	bool UsesID(){return true;}
 

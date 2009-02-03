@@ -157,7 +157,7 @@ void HDimension::OnEditString(const wxChar* str){
 	wxGetApp().WasModified(this);
 }
 
-void HDimension::WriteXML(TiXmlElement *root)
+void HDimension::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element;
 	element = new TiXmlElement( "Dimension" );

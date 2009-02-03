@@ -41,7 +41,7 @@ public:
 	void GetProperties(std::list<Property *> *list);
 	void GetGripperPositions(std::list<double> *list, bool just_for_endof){}
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
-	void WriteXML(TiXmlElement *root);
+	void WriteXML(TiXmlNode *root);
 
 	gp_Trsf GetMatrix();
 
