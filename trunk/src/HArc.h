@@ -42,7 +42,7 @@ public:
 	bool GetStartPoint(double* pos);
 	bool GetEndPoint(double* pos);
 	bool GetCentrePoint(double* pos);
-	void WriteXML(TiXmlElement *root);
+	void WriteXML(TiXmlNode *root);
 	int Intersects(const HeeksObj *object, std::list< double > *rl)const;
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);

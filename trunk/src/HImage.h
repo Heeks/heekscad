@@ -45,7 +45,7 @@ public:
 	void GetProperties(std::list<Property *> *list);
 	bool Stretch(const double *p, const double* shift);
 	void CopyFrom(const HeeksObj* object){operator=(*((HImage*)object));}
-	void WriteXML(TiXmlElement *root);
+	void WriteXML(TiXmlNode *root);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 };

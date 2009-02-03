@@ -196,7 +196,7 @@ bool HImage::Stretch(const double *p, const double* shift){
 	return false;
 }	
 
-void HImage::WriteXML(TiXmlElement *root)
+void HImage::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element;
 	element = new TiXmlElement( "Image" );

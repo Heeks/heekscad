@@ -226,7 +226,7 @@ bool HILine::GetEndPoint(double* pos)
 	return true;
 }
 
-void HILine::WriteXML(TiXmlElement *root)
+void HILine::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element;
 	element = new TiXmlElement( "InfiniteLine" );

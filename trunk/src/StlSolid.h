@@ -42,7 +42,7 @@ public:
 	void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true);
 	void CopyFrom(const HeeksObj* object);
 	HeeksObj *MakeACopy()const;
-	void WriteXML(TiXmlElement *root);
+	void WriteXML(TiXmlNode *root);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 };

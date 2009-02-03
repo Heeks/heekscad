@@ -147,7 +147,7 @@ void CEdge::Blend(double radius){
 	}
 }
 
-void CEdge::WriteXML(TiXmlElement *root)
+void CEdge::WriteXML(TiXmlNode *root)
 {
 	CShape::m_solids_found = true;
 }

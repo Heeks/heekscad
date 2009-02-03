@@ -257,7 +257,7 @@ gp_Vec HLine::GetSegmentVector(double fraction)
 	return gp_Vec(A, B).Normalized();
 }
 
-void HLine::WriteXML(TiXmlElement *root)
+void HLine::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element;
 	element = new TiXmlElement( "Line" );

@@ -22,7 +22,7 @@ public:
 	void GetProperties(std::list<Property *> *list);
 	HeeksObj *MakeACopy(void)const;
 	void CopyFrom(const HeeksObj* object){operator=(*((CSketch*)((ObjList*)object)));}
-	void WriteXML(TiXmlElement *root);
+	void WriteXML(TiXmlNode *root);
 	bool UsesID(){return true;}
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);

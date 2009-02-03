@@ -43,7 +43,7 @@ public:
 	void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true);
 	double Area()const;
 	bool ModifyByMatrix(const double* m);
-	void WriteXML(TiXmlElement *root);
+	void WriteXML(TiXmlNode *root);
 	void GetProperties(std::list<Property *> *list);
 	bool UsesID(){return true;}
 

@@ -219,7 +219,7 @@ bool HCircle::GetCentrePoint(double* pos)
 	return true;
 }
 
-void HCircle::WriteXML(TiXmlElement *root)
+void HCircle::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element;
 	element = new TiXmlElement( "Circle" );
