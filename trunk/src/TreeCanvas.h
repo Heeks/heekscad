@@ -83,7 +83,7 @@ private:
     void CreateTreeWithDefStyle();
     void CreateTree(long style);
     bool CanAdd(HeeksObj* object);
-    const wxTreeItemId Add(HeeksObj* object, const wxTreeItemId &owner, bool expand);
+    const wxTreeItemId Add(HeeksObj* object, const wxTreeItemId &owner);
     void AddSubstitute(HeeksObj* object, const wxTreeItemId &item);
     void AddChildren(HeeksObj* object, const wxTreeItemId &item);
     void Remove(HeeksObj *object, const wxTreeItemId &item, bool set_not_marked);

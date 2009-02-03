@@ -111,11 +111,11 @@ void CTreeCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<H
 						}
 					}
 					if(count > child_count){					
-						Add(object, owner, false);
+						Add(object, owner);
 					}
 				}
 				else{
-					wxTreeItemId item = Add(object, m_root, false);
+					wxTreeItemId item = Add(object, m_root);
 				}
 			}
 		}
@@ -195,33 +195,23 @@ bool CTreeCanvas::CanAdd(HeeksObj* object)
 	return true;
 }
 
-const wxTreeItemId CTreeCanvas::Add(HeeksObj* object, const wxTreeItemId &owner, bool expand)
+const wxTreeItemId CTreeCanvas::Add(HeeksObj* object, const wxTreeItemId &owner)
 {
 	if (!CanAdd(object)) return wxTreeItemId();
 	int image = m_treeCtrl->GetImage(object);
 	wxTreeItemId item = m_treeCtrl->AppendItem(owner, object->GetShortStringOrTypeString(), image, -1, new DanObjectTreeData(object));
 	tree_map.insert(std::pair<HeeksObj*, wxTreeItemId>(object, item));
 
-	m_treeCtrl->Expand(item);
 	AddChildren(object, item);
+	if(object->m_owner && object->m_owner->AutoExpand())m_treeCtrl->Expand(owner);
 
 	return item;
 }
 
 void CTreeCanvas::AddChildren(HeeksObj* object, const wxTreeItemId &item)
 {
-	std::set<HeeksObj*> expand_set;
-	{
-		for(HeeksObj* child = object->GetFirstAutoExpandChild(); child; child = object->GetNextAutoExpandChild()){
-			expand_set.insert(child);
-		}
-	}
-	{
-		for(HeeksObj* child = object->GetFirstChild(); child; child = object->GetNextChild()){
-			bool expand = false;
-			if(expand_set.find(child) != expand_set.end())expand = true;
-			Add(child, item, expand);
-		}
+	for(HeeksObj* child = object->GetFirstChild(); child; child = object->GetNextChild()){
+		Add(child, item);
 	}
 }
 
