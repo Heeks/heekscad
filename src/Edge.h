@@ -44,7 +44,7 @@ public:
 	wxString GetIcon(){return _T("edge");}
 	const wxChar* GetTypeString(void)const{return _("Edge");}
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
-	void WriteXML(TiXmlElement *root);
+	void WriteXML(TiXmlNode *root);
 	bool UsesID(){return true;}
 
 	const TopoDS_Shape &Edge(){return m_topods_edge;}

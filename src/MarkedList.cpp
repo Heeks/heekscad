@@ -369,7 +369,7 @@ void MarkedList::CopySelectedItems()
 	sp.GetTempDir();
 	wxString temp_file = sp.GetTempDir() + _T("/temp_Heeks_clipboard_file.xml");
 
-	wxGetApp().SaveXMLFile(m_list, temp_file);
+	wxGetApp().SaveXMLFile(m_list, temp_file, true);
 
 #if wxUSE_UNICODE
 #ifdef __WXMSW__

@@ -38,7 +38,7 @@ HeeksObj *CSketch::MakeACopy(void)const
 	return (ObjList*)(new CSketch(*this));
 }
 
-void CSketch::WriteXML(TiXmlElement *root)
+void CSketch::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element = new TiXmlElement( "Sketch" );  
 	root->LinkEndChild( element );

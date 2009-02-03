@@ -22,7 +22,7 @@ public:
 	wxString GetIcon(){return _T("xml");}
 	void GetProperties(std::list<Property *> *list);
 	void CopyFrom(const HeeksObj* object){operator=(*((HXml*)object));}
-	void WriteXML(TiXmlElement *root);
+	void WriteXML(TiXmlNode *root);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 

@@ -424,7 +424,7 @@ bool HArc::TangentialArc(const gp_Pnt &p0, const gp_Vec &v0, const gp_Pnt &p1, g
 	return false; // you'll have to do a line instead
 }
 
-void HArc::WriteXML(TiXmlElement *root)
+void HArc::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement *element = new TiXmlElement( "Arc" );
 	root->LinkEndChild( element );  

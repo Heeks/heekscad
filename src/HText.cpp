@@ -131,7 +131,7 @@ void HText::OnEditString(const wxChar* str){
 	wxGetApp().WasModified(this);
 }
 
-void HText::WriteXML(TiXmlElement *root)
+void HText::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element;
 	element = new TiXmlElement( "Text" );

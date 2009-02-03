@@ -34,7 +34,7 @@ public:
 	bool GetStartPoint(double* pos);
 	bool GetEndPoint(double* pos);
 	void CopyFrom(const HeeksObj* object){operator=(*((HPoint*)object));}
-	void WriteXML(TiXmlElement *root);
+	void WriteXML(TiXmlNode *root);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 };

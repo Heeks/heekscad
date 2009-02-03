@@ -209,7 +209,7 @@ void CoordinateSystem::GetProperties(std::list<Property *> *list)
 	HeeksObj::GetProperties(list);
 }
 
-void CoordinateSystem::WriteXML(TiXmlElement *root)
+void CoordinateSystem::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element;
 	element = new TiXmlElement( "CoordinateSystem" );
