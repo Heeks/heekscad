@@ -462,8 +462,34 @@ public:
 
 static EndPicking end_picking;
 
+class PickAnything:public Tool{
+public:
+	void Run(){
+		wxGetApp().m_marked_list->m_filter = -1;
+	}
+	const wxChar* GetTitle(){return _("Pick Anything");}
+	wxString BitmapPath(){return _T("pickany");}
+	const wxChar* GetToolTip(){return _("Set the selection filter to all items");}
+};
+
+static PickAnything pick_anything;
+
+
+class PickEdges:public Tool{
+public:
+	void Run(){
+		wxGetApp().m_marked_list->m_filter = MARKING_FILTER_EDGE;
+	}
+	const wxChar* GetTitle(){return _("Pick Edges");}
+	wxString BitmapPath(){return _T("pickedges");}
+	const wxChar* GetToolTip(){return _("Set the selection filter to only edges");}
+};
+
+static PickEdges pick_edges;
 
 void CSelectMode::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	if(m_doing_a_main_loop)t_list->push_back(&end_picking);
+	t_list->push_back(&pick_anything);
+	t_list->push_back(&pick_edges);
 }
