@@ -9,12 +9,115 @@
 #include "MarkedList.h"
 #include "../tinyxml/tinyxml.h"
 
-CCone::CCone(const gp_Ax2& pos, double r1, double r2, double height, const wxChar* title, const HeeksColor& col):CSolid(BRepPrimAPI_MakeCone(pos, r1, r2, height), title, col), m_pos(pos), m_r1(r1), m_r2(r2), m_height(height)
+CCone::CCone(const gp_Ax2& pos, double r1, double r2, double height, const wxChar* title, const HeeksColor& col):CSolid(BRepPrimAPI_MakeCone(pos, r1, r2, height), title, col), m_render_without_OpenCASCADE(false), m_pos(pos), m_r1(r1), m_r2(r2), m_height(height)
 {
 }
 
-CCone::CCone(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col):CSolid(solid, title, col), m_pos(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), m_r1(0.0), m_r2(0.0), m_height(0.0)
+CCone::CCone(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col):CSolid(solid, title, col), m_render_without_OpenCASCADE(false), m_pos(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), m_r1(0.0), m_r2(0.0), m_height(0.0)
 {
+}
+
+void CCone::glCommands(bool select, bool marked, bool no_color)
+{
+	if(!m_render_without_OpenCASCADE)
+	{
+		CSolid::glCommands(select, marked, no_color);
+		return;
+	}
+
+
+	glEnable(GL_LIGHTING);
+	glShadeModel(GL_SMOOTH);
+	Material(m_color).glMaterial(1.0);
+
+	int num_facets = 20;
+	gp_Pnt pt_top = m_pos.Location().XYZ() + m_pos.Direction().XYZ() * m_height;
+
+	for(int angle_pos = 0; angle_pos<num_facets; angle_pos++)
+	{
+		double angle0 = ((double)angle_pos)/num_facets * 6.2831853071795;
+		double angle1 = ((double)(angle_pos + 1))/num_facets * 6.2831853071795;
+
+		gp_Dir dir0(m_pos.XDirection().XYZ() * cos(angle0) + m_pos.YDirection().XYZ() * sin(angle0));
+		gp_Dir dir1(m_pos.XDirection().XYZ() * cos(angle1) + m_pos.YDirection().XYZ() * sin(angle1));
+
+		double p[4][3];
+		extract(m_pos.Location().XYZ() + dir0.XYZ() * m_temp_r1, p[0]);
+		extract(m_pos.Location().XYZ() + dir1.XYZ() * m_temp_r1, p[1]);
+		extract(pt_top.XYZ() + dir1.XYZ() * m_temp_r2, p[2]);
+		extract(pt_top.XYZ() + dir0.XYZ() * m_temp_r2, p[3]);
+
+		gp_Dir upside0(p[3][0] - p[0][0], p[3][1] - p[0][1], p[3][2] - p[0][2]);
+		gp_Dir upside1(p[2][0] - p[1][0], p[2][1] - p[1][1], p[2][2] - p[1][2]);
+		gp_Dir around0( m_pos.YDirection().XYZ() * cos(angle0) - m_pos.XDirection().XYZ() * sin(angle0));
+		gp_Dir around1( m_pos.YDirection().XYZ() * cos(angle1) - m_pos.XDirection().XYZ() * sin(angle1));
+		gp_Dir norm0 = around0 ^ upside0;
+		gp_Dir norm1 = around1 ^ upside1;
+
+		double n0[3], n1[3];
+		extract(norm0, n0);
+		extract(norm1, n1);
+
+		double up[3];
+		extract(m_pos.Direction(), up);
+		double down[3] = {-up[0], -up[1], -up[2]};
+		double p_bot[3], p_top[3];
+		extract(m_pos.Location(), p_bot);
+		extract(pt_top, p_top);
+
+		glBegin(GL_TRIANGLES);
+		glNormal3dv(n0);
+		glVertex3dv(p[0]);
+		glNormal3dv(n1);
+		glVertex3dv(p[1]);
+		glNormal3dv(n1);
+		glVertex3dv(p[2]);
+		glNormal3dv(n0);
+		glVertex3dv(p[0]);
+		glNormal3dv(n1);
+		glVertex3dv(p[2]);
+		glNormal3dv(n0);
+		glVertex3dv(p[3]);
+		glNormal3dv(up);
+		glVertex3dv(p[3]);
+		glVertex3dv(p[2]);
+		glVertex3dv(p_top);
+		glNormal3dv(down);
+		glVertex3dv(p_bot);
+		glVertex3dv(p[1]);
+		glVertex3dv(p[0]);
+		glEnd();
+	}
+
+	glDisable(GL_LIGHTING);
+	glShadeModel(GL_FLAT);
+
+	glColor3ub(0, 0, 0);
+	glBegin(GL_LINE_STRIP);
+	for(int angle_pos = 0; angle_pos<=num_facets; angle_pos++)
+	{
+		double angle = ((double)angle_pos)/num_facets * 6.2831853071795;
+
+		gp_Dir dir(m_pos.XDirection().XYZ() * cos(angle) + m_pos.YDirection().XYZ() * sin(angle));
+
+		double p[3];
+		extract(m_pos.Location().XYZ() + dir.XYZ() * m_temp_r1, p);
+		glVertex3dv(p);
+	}
+	glEnd();
+
+	glBegin(GL_LINE_STRIP);
+	for(int angle_pos = 0; angle_pos<=num_facets; angle_pos++)
+	{
+		double angle = ((double)angle_pos)/num_facets * 6.2831853071795;
+
+		gp_Dir dir(m_pos.XDirection().XYZ() * cos(angle) + m_pos.YDirection().XYZ() * sin(angle));
+
+		double p[3];
+		extract(pt_top.XYZ() + dir.XYZ() * m_temp_r2, p);
+		glVertex3dv(p);
+	}
+	glEnd();
 }
 
 HeeksObj *CCone::MakeACopy(void)const
@@ -197,6 +300,18 @@ bool CCone::Stretch(const double *p, const double* shift)
 
 bool CCone::StretchTemporary(const double *p, const double* shift)
 {
+	gp_Ax2 new_pos = m_pos;
+	double new_r1 = m_r1;
+	double new_r2 = m_r2;
+	double new_height = m_height;
+
+	if(Stretch2(p, shift, new_pos, new_r1, new_r2, new_height))
+	{
+		m_render_without_OpenCASCADE = true;
+		m_temp_r1 = new_r1;
+		m_temp_r2 = new_r2;
+		wxGetApp().Repaint();
+	}
 	return false;
 }
 
