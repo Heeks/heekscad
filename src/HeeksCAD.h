@@ -201,7 +201,7 @@ public:
 	void RemoveHideableWindow(wxWindow* w);
 	void RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem));
 	void GetRecentFilesProfileString();
-	void WriteRecentFilesProfileString();
+	void WriteRecentFilesProfileString(wxConfigBase &config);
 	void InsertRecentFileItem(const wxChar* filepath);
 	bool CheckForModifiedDoc(); // returns true, if OK to continue with file open etc.
 	void SetFrameTitle();
