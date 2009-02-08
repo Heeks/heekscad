@@ -795,11 +795,14 @@ void CHeeksFrame::OnRedoButton( wxCommandEvent& event )
 
 void CHeeksFrame::OnNewButton( wxCommandEvent& event )
 {
-	wxGetApp().Reset();
-	wxGetApp().OnNewOrOpen(false);
-	wxGetApp().SetLikeNewFile();
-	wxGetApp().SetFrameTitle();
-	wxGetApp().Repaint();
+	if(wxGetApp().CheckForModifiedDoc())
+	{
+		wxGetApp().Reset();
+		wxGetApp().OnNewOrOpen(false);
+		wxGetApp().SetLikeNewFile();
+		wxGetApp().SetFrameTitle();
+		wxGetApp().Repaint();
+	}
 }
 
 void CHeeksFrame::OnCutButton( wxCommandEvent& event )
