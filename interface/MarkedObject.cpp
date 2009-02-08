@@ -55,8 +55,8 @@ void MarkedObject::Clear()
 MarkedObject* MarkedObject::Add(HeeksObj* object, unsigned long depth, int window_size)
 {
 	std::map<HeeksObj*, MarkedObject*>::iterator FindIt = m_map.find(object);
-
 	MarkedObject* marked_object = NULL;
+	// if this object has not been added yet
 	if(FindIt == m_map.end())
 	{
 		std::map<int, std::map<int, MarkedObject*> >::iterator FindIt2 = m_types.end();
@@ -110,7 +110,11 @@ MarkedObject* MarkedObject::Add(HeeksObj* object, unsigned long depth, int windo
 	else
 	{
 		marked_object = FindIt->second;
-		if(depth<marked_object->m_depth)marked_object->m_depth = depth;
+		if(depth<marked_object->m_depth && window_size<= marked_object->m_window_size)
+		{
+			marked_object->m_depth = depth;
+			marked_object->m_window_size = window_size;
+		}
 	}
 	return marked_object;
 }
