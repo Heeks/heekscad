@@ -330,7 +330,7 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("LoftRemovesSketches"), m_loft_removes_sketches);
 	config.Write(_T("GraphicsTextMode"), m_graphics_text_mode);
 
-	WriteRecentFilesProfileString();
+	WriteRecentFilesProfileString(config);
 
 	if(m_gl_font)glFontDestroy(m_gl_font);
 
@@ -2371,9 +2371,8 @@ void HeeksCADapp::GetRecentFilesProfileString()
 	}
 }
 
-void HeeksCADapp::WriteRecentFilesProfileString()
+void HeeksCADapp::WriteRecentFilesProfileString(wxConfigBase &config)
 {
-	HeeksConfig config;
 	std::list< wxString >::iterator It = m_recent_files.begin();
 	for(int i = 0; i < MAX_RECENT_FILES; i++)
 	{
