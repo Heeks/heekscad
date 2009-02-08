@@ -1,4 +1,6 @@
-compiling on debian lenny in one easy step
+
+#summary How to compile HeeksCAD on Ubuntu
+compiling on Debian "Lenny" in one easy step
 
 copypasta this into your nearest terminal:
 {{{
@@ -13,4 +15,4 @@ echo -e "\007" | sudo tee /dev/tty10
 }}}
 take a nap for a half hour.
 
- come back to inspect that beeping noise
+come back to inspect that beeping noise
