@@ -190,7 +190,7 @@ void MarkedList::ObjectsInWindow( wxRect window, MarkedObject* marked_object, bo
 			}
 		}
 		window_mode++;
-		if(!single_picking || added)break;
+		if(!single_picking)break;
 		if(window_mode > 2)break;
 	}
 	
