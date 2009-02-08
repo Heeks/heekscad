@@ -7,12 +7,15 @@
 class CCone: public CSolid{
 private:
 	static wxIcon* m_icon;
+	bool m_render_without_OpenCASCADE;
 
 public:
 	gp_Ax2 m_pos;
 	double m_r1;
 	double m_r2;
 	double m_height;
+	double m_temp_r1;
+	double m_temp_r2;
 
 	CCone(const gp_Ax2& pos, double r1, double r2, double height, const wxChar* title, const HeeksColor& col);
 	CCone(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
@@ -20,6 +23,7 @@ public:
 	// HeeksObj's virtual functions
 	const wxChar* GetTypeString(void)const{return _("Cone");}
 	wxString GetIcon(){return _T("cone");}
+	void glCommands(bool select, bool marked, bool no_color);
 	HeeksObj *MakeACopy(void)const;
 	bool ModifyByMatrix(const double* m);
 	void GetProperties(std::list<Property *> *list);
