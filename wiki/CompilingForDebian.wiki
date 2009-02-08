@@ -1,5 +1,4 @@
-
-#summary How to compile HeeksCAD on Ubuntu
+#summary How to compile HeeksCAD on Debian
 compiling on Debian "Lenny" in one easy step
 
 copypasta this into your nearest terminal:
