@@ -32,6 +32,8 @@ public:
 	std::list<CFace*>::iterator m_faceIt;
 	std::list<CFace*> m_faces;
 	std::list<bool> m_face_senses;
+	double m_midpoint[3];
+	bool m_midpoint_calculated;
 
 	CEdge(const TopoDS_Edge &edge);
 	~CEdge();
@@ -40,6 +42,7 @@ public:
 	long GetMarkingMask()const{return MARKING_FILTER_EDGE;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
+	void GetGripperPositions(std::list<double> *list, bool just_for_endof);
 	HeeksObj *MakeACopy(void)const{ return new CEdge(*this);}
 	wxString GetIcon(){return _T("edge");}
 	const wxChar* GetTypeString(void)const{return _("Edge");}

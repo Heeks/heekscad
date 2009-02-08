@@ -101,6 +101,8 @@ EVT_MENU(ID_CONE, CHeeksFrame::OnConeButton)
 EVT_MENU(ID_SUBTRACT, CHeeksFrame::OnSubtractButton)
 EVT_MENU(ID_FUSE, CHeeksFrame::OnFuseButton)
 EVT_MENU(ID_COMMON, CHeeksFrame::OnCommonButton)
+EVT_MENU(ID_FILLET, CHeeksFrame::OnFilletButton)
+EVT_MENU(ID_CHAMFER, CHeeksFrame::OnChamferButton)
 EVT_MENU(ID_REDRAW, CHeeksFrame::OnRedrawButton)
 EVT_MENU(ID_RULED_SURFACE, CHeeksFrame::OnRuledSurfaceButton)
 EVT_MENU(ID_EXTRUDE, CHeeksFrame::OnExtrudeButton)
@@ -152,9 +154,9 @@ bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
 }
 
 #ifdef WIN32
-static wxString default_layout_string = _T("layout2|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=279;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=290;prop=100000;bestw=248;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=1;pos=0;prop=100000;bestw=279;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=970;floaty=297;floatw=296;floath=57|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=1;pos=290;prop=100000;bestw=248;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=TransformBar;caption=Transformation Tools;state=2108156;dir=1;layer=10;row=0;pos=1098;prop=100000;bestw=217;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=504|dock_size(4,1,0)=234|dock_size(1,10,0)=33|dock_size(1,10,1)=33|");
+static wxString default_layout_string = _T("layout2|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=279;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=290;prop=100000;bestw=248;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=1;pos=0;prop=100000;bestw=341;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=970;floaty=297;floatw=296;floath=57|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=1;pos=290;prop=100000;bestw=248;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=TransformBar;caption=Transformation Tools;state=2108156;dir=1;layer=10;row=0;pos=1098;prop=100000;bestw=217;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=504|dock_size(4,1,0)=234|dock_size(1,10,0)=33|dock_size(1,10,1)=33|");
 #else
-static wxString default_layout_string = _T("layout2|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=328;besth=40;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=339;prop=100000;bestw=292;besth=40;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=520;floaty=288;floatw=309;floath=64|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=1;pos=1;prop=100000;bestw=328;besth=40;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=736;floaty=259;floatw=345;floath=64|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=1;pos=340;prop=100000;bestw=292;besth=40;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=679;floaty=334;floatw=309;floath=64|name=TransformBar;caption=Transformation Tools;state=2108159;dir=1;layer=10;row=0;pos=52;prop=100000;bestw=256;besth=40;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=618;floaty=411;floatw=273;floath=64|dock_size(5,0,0)=504|dock_size(4,1,0)=234|dock_size(1,10,0)=42|dock_size(1,10,1)=42|");
+static wxString default_layout_string = _T("layout2|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=328;besth=40;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=339;prop=100000;bestw=292;besth=40;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=520;floaty=288;floatw=309;floath=64|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=1;pos=1;prop=100000;bestw=392;besth=40;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=736;floaty=259;floatw=345;floath=64|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=1;pos=340;prop=100000;bestw=292;besth=40;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=679;floaty=334;floatw=309;floath=64|name=TransformBar;caption=Transformation Tools;state=2108159;dir=1;layer=10;row=0;pos=52;prop=100000;bestw=256;besth=40;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=618;floaty=411;floatw=273;floath=64|dock_size(5,0,0)=504|dock_size(4,1,0)=234|dock_size(1,10,0)=42|dock_size(1,10,1)=42|");
 #endif
 
 CHeeksCADInterface heekscad_interface;
@@ -237,6 +239,8 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	solids_menu->Append( ID_SUBTRACT, _( "Cut" ) );
 	solids_menu->Append( ID_FUSE, _( "Fuse" ) );
 	solids_menu->Append( ID_COMMON, _( "Common" ) );
+	solids_menu->Append( ID_FILLET, _( "Fillet" ) );
+	solids_menu->Append( ID_CHAMFER, _( "Chamfer" ) );
 
 	// Transformations Menu
 	wxMenu *transform_menu = new wxMenu;
@@ -840,31 +844,57 @@ void CHeeksFrame::OnUpdatePaste( wxUpdateUIEvent& event )
 
 void CHeeksFrame::OnSubtractButton( wxCommandEvent& event )
 {
-	if(!wxGetApp().CheckForTwoOrMoreSolids(wxGetApp().m_marked_list->list(), _("Pick two or more solids, the first one will be cut by the others\n( hold down Ctrl key to select more than one solid )"), _("Subtract Solids")))return;
+	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 2, SolidType, _("Pick two or more solids, the first one will be cut by the others"), _("Subtract Solids")))return;
 	CShape::CutShapes(wxGetApp().m_marked_list->list());
 }
 
 void CHeeksFrame::OnFuseButton( wxCommandEvent& event )
 {
-	if(!wxGetApp().CheckForTwoOrMoreSolids(wxGetApp().m_marked_list->list(), _("Pick two or more solids to be fused together\n( hold down Ctrl key to select more than one solid )"), _("Fuse Solids")))return;
+	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 2, SolidType, _("Pick two or more solids to be fused together"), _("Fuse Solids")))return;
 	CShape::FuseShapes(wxGetApp().m_marked_list->list());
 }
 
 void CHeeksFrame::OnCommonButton( wxCommandEvent& event )
 {
-	if(!wxGetApp().CheckForTwoOrMoreSolids(wxGetApp().m_marked_list->list(), _("Pick two or more solids, only the shape that is contained by all of them will remain\n( hold down Ctrl key to select more than one solid )"), _("Intersection of Solids")))return;
+	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 2, SolidType, _("Pick two or more solids, only the shape that is contained by all of them will remain"), _("Intersection of Solids")))return;
 	CShape::CommonShapes(wxGetApp().m_marked_list->list());
+}
+
+void CHeeksFrame::OnFilletButton( wxCommandEvent& event )
+{
+	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 1, EdgeType, _("Pick one or more edges to add a fillet to"), _("Edge Fillet")))return;
+	double rad = 2.0;
+	HeeksConfig config;
+	config.Read(_T("EdgeBlendRadius"), &rad);
+	if(wxGetApp().InputDouble(_("Enter Blend Radius"), _("Radius"), rad))
+	{
+		CShape::FilletOrChamferEdges(wxGetApp().m_marked_list->list(), rad);
+		config.Write(_T("EdgeBlendRadius"), rad);
+	}
+}
+
+void CHeeksFrame::OnChamferButton( wxCommandEvent& event )
+{
+	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 1, EdgeType, _("Pick one or more edges to add a chamfer to"), _("Edge Chamfer")))return;
+	double rad = 2.0;
+	HeeksConfig config;
+	config.Read(_T("EdgeChamferDist"), &rad);
+	if(wxGetApp().InputDouble(_("Enter chamfer distance"), _("Distance"), rad))
+	{
+		CShape::FilletOrChamferEdges(wxGetApp().m_marked_list->list(), rad, true);
+		config.Write(_T("EdgeChamferDist"), rad);
+	}
 }
 
 void CHeeksFrame::OnRuledSurfaceButton( wxCommandEvent& event )
 {
-	if(!wxGetApp().CheckForTwoOrMoreSketchs(wxGetApp().m_marked_list->list(), _("Pick two or more sketches, to create a lofted solid between\n( hold down Ctrl key to select more than one solid )"), _("Lofted Body")))return;
+	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 2, SketchType, _("Pick two or more sketches, to create a lofted solid between\n( hold down Ctrl key to select more than one solid )"), _("Lofted Body")))return;
 	PickCreateRuledSurface();
 }
 
 void CHeeksFrame::OnExtrudeButton( wxCommandEvent& event )
 {
-	if(!wxGetApp().CheckForOneOrMoreSketchs(wxGetApp().m_marked_list->list(), _("Pick one or more sketches, to create extruded body from\n( hold down Ctrl key to select more than one solid )"), _("Extrude")))return;
+	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 1, SketchType, _("Pick one or more sketches, to create extruded body from\n( hold down Ctrl key to select more than one solid )"), _("Extrude")))return;
 	PickCreateExtrusion();
 }
 
@@ -1366,6 +1396,8 @@ void CHeeksFrame::AddToolBars()
 	m_solidBar->AddTool(ID_SUBTRACT, _T("Cut"), ToolImage(_T("subtract")), _("Cut one solid from another"));
 	m_solidBar->AddTool(ID_FUSE, _T("Fuse"), ToolImage(_T("fuse")), _("Fuse one solid to another"));
 	m_solidBar->AddTool(ID_COMMON, _T("Common"), ToolImage(_T("common")), _("Find common solid between two solids"));
+	m_solidBar->AddTool(ID_FILLET, _T("Fillet"), ToolImage(_T("fillet")), _("Make a fillet on selected edges"));
+	m_solidBar->AddTool(ID_CHAMFER, _T("Chamfer"), ToolImage(_T("chamfer")), _("Make a chamfer on selected edges"));
 	m_viewingBar->AddTool(ID_MAG_PREVIOUS, _T("View Back"), ToolImage(_T("magprev")), _("Go back to previous view"));
 	m_viewingBar->AddTool(ID_MAG, _T("Zoom Window"), ToolImage(_T("mag")), _("Zoom in to a dragged window"));
 	m_viewingBar->AddTool(ID_MAG_EXTENTS, _T("Mag Extents"), ToolImage(_T("magextents")), _("Zoom in to fit the extents of the drawing into the graphics window"));
