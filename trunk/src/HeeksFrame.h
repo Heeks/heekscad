@@ -35,6 +35,8 @@ enum{
 	ID_REDRAW,
 	ID_FUSE,
 	ID_COMMON,
+	ID_FILLET,
+	ID_CHAMFER,
 	ID_VEWING,
 	ID_MAG,
 	WXPRINT_PRINT,
@@ -162,6 +164,8 @@ public:
 	void OnSubtractButton( wxCommandEvent& event );
 	void OnFuseButton( wxCommandEvent& event );
 	void OnCommonButton( wxCommandEvent& event );
+	void OnFilletButton( wxCommandEvent& event );
+	void OnChamferButton( wxCommandEvent& event );
 	void OnSphereButton( wxCommandEvent& event );
 	void OnRuledSurfaceButton( wxCommandEvent& event );
 	void OnExtrudeButton( wxCommandEvent& event );

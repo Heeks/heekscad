@@ -2707,49 +2707,15 @@ void HeeksCADapp::Paste(HeeksObj* paste_into)
 	m_mark_newly_added_objects = false;
 }
 
-bool HeeksCADapp::CheckForTwoOrMoreSolids(const std::list<HeeksObj*> &list, const wxString& msg, const wxString& caption)
+bool HeeksCADapp::CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num, int type, const wxString& msg, const wxString& caption)
 {
-	int num_solids = 0;
+	int num_of_type = 0;
 	for(std::list<HeeksObj*>::const_iterator It = list.begin(); It != list.end(); It++){
 		HeeksObj* object = *It;
-		if(object->GetType() == SolidType)num_solids++;
+		if(object->GetType() == type)num_of_type++;
 	}
 
-	if(num_solids < 2)
-	{
-		wxMessageBox(msg, caption);
-		return false;
-	}
-
-	return true;
-}
-
-bool HeeksCADapp::CheckForTwoOrMoreSketchs(const std::list<HeeksObj*> &list, const wxString& msg, const wxString& caption)
-{
-	int num_sketchs = 0;
-	for(std::list<HeeksObj*>::const_iterator It = list.begin(); It != list.end(); It++){
-		HeeksObj* object = *It;
-		if(object->GetType() == SketchType)num_sketchs++;
-	}
-
-	if(num_sketchs < 2)
-	{
-		wxMessageBox(msg, caption);
-		return false;
-	}
-
-	return true;
-}
-
-bool HeeksCADapp::CheckForOneOrMoreSketchs(const std::list<HeeksObj*> &list, const wxString& msg, const wxString& caption)
-{
-	int num_sketchs = 0;
-	for(std::list<HeeksObj*>::const_iterator It = list.begin(); It != list.end(); It++){
-		HeeksObj* object = *It;
-		if(object->GetType() == SketchType)num_sketchs++;
-	}
-
-	if(num_sketchs < 1)
+	if(num_of_type < min_num)
 	{
 		wxMessageBox(msg, caption);
 		return false;

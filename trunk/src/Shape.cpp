@@ -32,6 +32,8 @@
 #include "TopTools_ListOfShape.hxx"
 #include "TopTools_ListIteratorOfListOfShape.hxx"
 #include "BRepOffsetAPI_MakeOffsetShape.hxx"
+#include <BRepFilletAPI_MakeFillet.hxx>
+#include <BRepFilletAPI_MakeChamfer.hxx>
 #include "TopoDS_Edge.hxx"
 #include "Interface_Static.hxx"
 #include "../interface/Tool.h"
@@ -510,6 +512,82 @@ void CShape::CommonShapes(const std::list<HeeksObj*> &list_in)
 			else{
 				s1 = Common(s1, object);
 			}
+		}
+	}
+
+	wxGetApp().EndHistory();
+	wxGetApp().Repaint();
+}
+
+void CShape::FilletOrChamferEdges(const std::list<HeeksObj*> &list, double radius, bool chamfer_not_fillet)
+{
+	wxGetApp().StartHistory();
+
+	// make a map with a list of edges for each solid
+	std::map< HeeksObj*, std::list< HeeksObj* > > solid_edge_map;
+
+	for(std::list<HeeksObj*>::const_iterator It = list.begin(); It != list.end(); It++){
+		HeeksObj* edge = *It;
+		if(edge->GetType() == EdgeType)
+		{
+			HeeksObj* solid = edge->m_owner->m_owner;
+			if(solid && solid->GetType() == SolidType)
+			{
+				std::map< HeeksObj*, std::list< HeeksObj* > >::iterator FindIt = solid_edge_map.find(solid);
+				if(FindIt == solid_edge_map.end())
+				{
+					std::list< HeeksObj* > empty_list;
+					solid_edge_map.insert( make_pair(solid, empty_list) );
+					FindIt = solid_edge_map.find(solid);
+				}
+
+				std::list< HeeksObj* > &list = FindIt->second;
+				list.push_back(edge);
+			}
+		}
+	}
+
+	// do each solid
+	for(std::map< HeeksObj*, std::list< HeeksObj* > >::iterator It = solid_edge_map.begin(); It != solid_edge_map.end(); It++)
+	{
+		HeeksObj* solid = It->first;
+		std::list< HeeksObj* > &list = It->second;
+
+		try{
+			if(chamfer_not_fillet)
+			{
+				BRepFilletAPI_MakeChamfer chamfer(((CShape*)solid)->Shape());
+				for(std::list< HeeksObj* >::iterator It2 = list.begin(); It2 != list.end(); It2++)
+				{
+					CEdge* edge = (CEdge*)(*It2);
+					for(CFace* face = (CFace*)(edge->GetFirstFace()); face; face = (CFace*)(edge->GetNextFace()))
+					{
+						chamfer.Add(radius, TopoDS::Edge(edge->Edge()), TopoDS::Face(face->Face()));
+					}
+				}
+				TopoDS_Shape new_shape = chamfer.Shape();
+				wxGetApp().AddUndoably(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(solid->GetColor())), NULL, NULL);
+				wxGetApp().DeleteUndoably(solid);
+			}
+			else
+			{
+				BRepFilletAPI_MakeFillet fillet(((CShape*)solid)->Shape());
+				for(std::list< HeeksObj* >::iterator It2 = list.begin(); It2 != list.end(); It2++)
+				{
+					fillet.Add(radius, TopoDS::Edge(((CEdge*)(*It2))->Edge()));
+				}
+				TopoDS_Shape new_shape = fillet.Shape();
+				wxGetApp().AddUndoably(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(solid->GetColor())), NULL, NULL);
+				wxGetApp().DeleteUndoably(solid);
+			}
+		}
+		catch(wxChar *message)
+		{
+			wxMessageBox(wxString(_("A fatal error happened during Blend")) + _T(" -\n") + wxString(message));
+		}
+		catch(...)
+		{
+			wxMessageBox(_("A fatal error happened during Blend"));
 		}
 	}
 
