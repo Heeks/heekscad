@@ -115,7 +115,7 @@ bool CDxfRead::ReadLine(bool undoably)
 
 	while(!((*m_ifs).eof()))
 	{
-		m_ifs->getline(m_str, 1024);
+		get_line();
 		int n;
 		if(sscanf(m_str, "%d", &n) != 1)return false;
 		switch(n){
@@ -125,32 +125,32 @@ bool CDxfRead::ReadLine(bool undoably)
 				return true;
 			case 10:
 				// start x
-				m_ifs->getline(m_str, 1024);
+				get_line();
 				if(sscanf(m_str, "%lf", &(s[0])) != 1)return false;
 				break;
 			case 20:
 				// start y
-				m_ifs->getline(m_str, 1024);
+				get_line();
 				if(sscanf(m_str, "%lf", &(s[1])) != 1)return false;
 				break;
 			case 30:
 				// start z
-				m_ifs->getline(m_str, 1024);
+				get_line();
 				if(sscanf(m_str, "%lf", &(s[2])) != 1)return false;
 				break;
 			case 11:
 				// end x
-				m_ifs->getline(m_str, 1024);
+				get_line();
 				if(sscanf(m_str, "%lf", &(e[0])) != 1)return false;
 				break;
 			case 21:
 				// end y
-				m_ifs->getline(m_str, 1024);
+				get_line();
 				if(sscanf(m_str, "%lf", &(e[1])) != 1)return false;
 				break;
 			case 31:
 				// end z
-				m_ifs->getline(m_str, 1024);
+				get_line();
 				if(sscanf(m_str, "%lf", &(e[2])) != 1)return false;
 				break;
 			case 100:
@@ -159,11 +159,11 @@ bool CDxfRead::ReadLine(bool undoably)
 			case 220:
 			case 230:
 				// skip the next line
-				m_ifs->getline(m_str, 1024);
+				get_line();
 				break;
 			default:
 				// skip the next line
-				m_ifs->getline(m_str, 1024);
+				get_line();
 				break;
 		}
 	}
@@ -181,7 +181,7 @@ bool CDxfRead::ReadArc(bool undoably)
 
 	while(!((*m_ifs).eof()))
 	{
-		m_ifs->getline(m_str, 1024);
+		get_line();
 		int n;
 		if(sscanf(m_str, "%d", &n) != 1)return false;
 		switch(n){
@@ -191,32 +191,32 @@ bool CDxfRead::ReadArc(bool undoably)
 				return true;
 			case 10:
 				// centre x
-				m_ifs->getline(m_str, 1024);
+				get_line();
 				if(sscanf(m_str, "%lf", &(c[0])) != 1)return false;
 				break;
 			case 20:
 				// centre y
-				m_ifs->getline(m_str, 1024);
+				get_line();
 				if(sscanf(m_str, "%lf", &(c[1])) != 1)return false;
 				break;
 			case 30:
 				// centre z
-				m_ifs->getline(m_str, 1024);
+				get_line();
 				if(sscanf(m_str, "%lf", &(c[2])) != 1)return false;
 				break;
 			case 40:
 				// radius
-				m_ifs->getline(m_str, 1024);
+				get_line();
 				if(sscanf(m_str, "%lf", &radius) != 1)return false;
 				break;
 			case 50:
 				// start angle
-				m_ifs->getline(m_str, 1024);
+				get_line();
 				if(sscanf(m_str, "%lf", &start_angle) != 1)return false;
 				break;
 			case 51:
 				// end angle
-				m_ifs->getline(m_str, 1024);
+				get_line();
 				if(sscanf(m_str, "%lf", &end_angle) != 1)return false;
 				break;
 			case 100:
@@ -225,11 +225,11 @@ bool CDxfRead::ReadArc(bool undoably)
 			case 220:
 			case 230:
 				// skip the next line
-				m_ifs->getline(m_str, 1024);
+				get_line();
 				break;
 			default:
 				// skip the next line
-				m_ifs->getline(m_str, 1024);
+				get_line();
 				break;
 		}
 	}
@@ -250,17 +250,39 @@ void CDxfRead::OnReadArc(double start_angle, double end_angle, double radius, co
 	OnReadArc(s, e, c, true, undoably);
 }
 
+void CDxfRead::get_line()
+{
+	m_ifs->getline(m_str, 1024);
+
+	char str[1024];
+	int len = strlen(m_str);
+	int j = 0;
+	bool non_white_found = false;
+	for(int i = 0; i<len; i++){
+		if(non_white_found || (m_str[i] != ' ' && m_str[i] != '\t')){
+			str[j] = m_str[i]; j++;
+			non_white_found = true;
+		}
+	}
+	str[j] = 0;
+	strcpy(m_str, str);
+}
+
 void CDxfRead::DoRead(bool undoably)
 {
 	if(m_fail)return;
 
-	m_ifs->getline(m_str, 1024);
+	get_line();
+
+	ofstream f("dxflog.txt");
 
 	while(!((*m_ifs).eof()))
 	{
+		
 		if(!strcmp(m_str, "0"))
 		{
-			m_ifs->getline(m_str, 1024);
+			get_line();
+
 			if(!strcmp(m_str, "LINE")){
 				if(!ReadLine(undoably))return;
 				continue;
@@ -271,6 +293,6 @@ void CDxfRead::DoRead(bool undoably)
 			}
 		}
 
-		m_ifs->getline(m_str, 1024);
+		get_line();
 	}
 }

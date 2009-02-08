@@ -25,6 +25,7 @@ private:
 	bool ReadLine(bool undoably);
 	bool ReadArc(bool undoably);
 	void OnReadArc(double start_angle, double end_angle, double radius, const double* c, bool undoably);
+	void get_line();
 
 public:
 	CDxfRead(const wxChar* filepath); // this opens the file
