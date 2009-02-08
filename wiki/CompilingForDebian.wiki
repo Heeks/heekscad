@@ -1,0 +1,16 @@
+compiling on debian lenny in one easy step
+
+copypasta this into your nearest terminal:
+{{{
+sudo apt-get update
+sudo apt-get install svn libopencascade-dev opencascade-examples opencascade-tools libwxgtk2.8-dev libgtkglext1-dev                
+#press enter
+svn checkout http://heekscad.googlecode.com/svn/trunk/ heekscad
+cd heekscad/src/
+sed -i 's/-DHEEKSCAD/-DHEEKSCAD -DHAVE_LIMITS/' Makefile
+make
+echo -e "\007" | sudo tee /dev/tty10
+}}}
+take a nap for a half hour.
+
+ come back to inspect that beeping noise
