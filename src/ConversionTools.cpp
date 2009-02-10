@@ -36,6 +36,11 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 		}
 	}
 
+	if(lines_or_arcs_in_marked_list)
+	{
+		t_list->push_back(new MakeLineArcsToSketch);
+	}
+
 	if(sketches_in_marked_list > 0){
 		t_list->push_back(new ConvertSketchToFace);
 	}
@@ -155,6 +160,25 @@ void ConvertSketchToFace::Run(){
 			}
 		}
 	}
+}
+
+void MakeLineArcsToSketch::Run(){
+	std::list<HeeksObj*> objects_to_delete;
+
+	CSketch* sketch = new CSketch();
+
+	std::list<HeeksObj*>::const_iterator It;
+	for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+		HeeksObj* object = *It;
+		if(object->GetType() == LineType || object->GetType() == ArcType){
+			HeeksObj* new_object = object->MakeACopy();
+			objects_to_delete.push_back(object);
+			sketch->Add(new_object, NULL);
+		}
+	}
+
+	wxGetApp().AddUndoably(sketch, NULL, NULL);
+	wxGetApp().DeleteUndoably(objects_to_delete);
 }
 
 void CombineSketches::Run(){

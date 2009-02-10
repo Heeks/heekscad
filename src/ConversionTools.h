@@ -8,9 +8,17 @@ class ConvertSketchToFace: public Tool
 {
 public:
 	void Run();
-	const wxChar* GetTitle(){return _("Convert Sketch To Face");}
+	const wxChar* GetTitle(){return _("Convert sketch to face");}
 	wxString BitmapPath(){return _T("la2face");}
-	const wxChar* GetToolTip(){return _("Convert sketch to face");}
+};
+
+class MakeLineArcsToSketch: public Tool
+{
+public:
+	void Run();
+	const wxChar* GetTitle(){return _("Make To Sketch");}
+	wxString BitmapPath(){return _T("makesketch");}
+	const wxChar* GetToolTip(){return _("Make selected lines and arcs into a new sketch");}
 };
 
 class CombineSketches: public Tool
