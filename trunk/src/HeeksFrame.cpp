@@ -1333,18 +1333,30 @@ void CHeeksFrame::OnChangeBitmapSize()
 	m_aui_manager->DetachPane(m_solidBar);
 	m_aui_manager->DetachPane(m_viewingBar);
 	m_aui_manager->DetachPane(m_transformBar);
+	for(std::list< wxToolBarBase* >::iterator It = wxGetApp().m_external_toolbars.begin(); It != wxGetApp().m_external_toolbars.end(); It++)
+	{
+		wxToolBarBase* toolbar = *It;
+		m_aui_manager->DetachPane(toolbar);
+	}
 
 	wxGetApp().RemoveHideableWindow(m_toolBar);
 	wxGetApp().RemoveHideableWindow(m_geometryBar);
 	wxGetApp().RemoveHideableWindow(m_solidBar);
 	wxGetApp().RemoveHideableWindow(m_viewingBar);
 	wxGetApp().RemoveHideableWindow(m_transformBar);
+	for(std::list< wxToolBarBase* >::iterator It = wxGetApp().m_external_toolbars.begin(); It != wxGetApp().m_external_toolbars.end(); It++)
+	{
+		wxToolBarBase* toolbar = *It;
+		wxGetApp().RemoveHideableWindow(toolbar);
+	}
 
 	delete m_toolBar;
 	delete m_geometryBar;
 	delete m_solidBar;
 	delete m_viewingBar;
 	delete m_transformBar;
+
+	wxGetApp().m_external_toolbars.clear();
 
 	AddToolBars();
 
@@ -1361,15 +1373,27 @@ void CHeeksFrame::SetToolBarsSize()
 	m_solidBar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
 	m_viewingBar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
 	m_transformBar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
+
+	for(std::list< wxToolBarBase* >::iterator It = wxGetApp().m_external_toolbars.begin(); It != wxGetApp().m_external_toolbars.end(); It++)
+	{
+		wxToolBarBase* toolbar = *It;
+		toolbar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
+	}
 }
 
 void CHeeksFrame::AddToolBars()
 {
 	m_toolBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
-	m_geometryBar = new wxToolBar(this, -1, wxDefaultPosition, wxSize(600, -1), wxTB_NODIVIDER | wxTB_FLAT);
-	m_solidBar = new wxToolBar(this, -1, wxDefaultPosition, wxSize(600, -1), wxTB_NODIVIDER | wxTB_FLAT);
+	m_geometryBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
+	m_solidBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
 	m_viewingBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
 	m_transformBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
+
+	for(std::list< void(*)() >::iterator It = wxGetApp().m_AddToolBars_list.begin(); It != wxGetApp().m_AddToolBars_list.end(); It++)
+	{
+		void(*callbackfunc)() = *It;
+		(*callbackfunc)();
+	}
 
 	SetToolBarsSize();
 
@@ -1459,4 +1483,10 @@ void CHeeksFrame::SetToolBarsToLeft()
 	m_aui_manager->GetPane(m_solidBar).Left();
 	m_aui_manager->GetPane(m_viewingBar).Left();
 	m_aui_manager->GetPane(m_transformBar).Left();
+
+	for(std::list< wxToolBarBase* >::iterator It = wxGetApp().m_external_toolbars.begin(); It != wxGetApp().m_external_toolbars.end(); It++)
+	{
+		wxToolBarBase* toolbar = *It;
+		m_aui_manager->GetPane(toolbar).Left();
+	}
 }

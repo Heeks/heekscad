@@ -21,6 +21,7 @@
 #include "Face.h"
 #include "Edge.h"
 #include "Loop.h"
+#include "../interface/ToolImage.h"
 #include <gp_Sphere.hxx>
 #include <gp_Cone.hxx>
 
@@ -105,6 +106,16 @@ wxAuiManager* CHeeksCADInterface::GetAuiManager()
 void CHeeksCADInterface::AddToolBarButton(wxToolBar* toolbar, const wxString& title, const wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&))
 {
 	wxGetApp().m_frame->AddToolBarTool(toolbar, title, bitmap, caption, onButtonFunction, onUpdateButtonFunction);
+}
+
+float CHeeksCADInterface::GetToolImageButtonScale()
+{
+	return ToolImage::m_button_scale;
+}
+
+int CHeeksCADInterface::GetToolImageBitmapSize()
+{
+	return ToolImage::GetBitmapSize();
 }
 
 int CHeeksCADInterface::AddMenuCheckItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&))
@@ -653,6 +664,16 @@ void CHeeksCADInterface::RegisterOnMouseFn( void(*callbackfunc)(wxMouseEvent&) )
 void CHeeksCADInterface::RemoveOnMouseFn( void(*callbackfunc)(wxMouseEvent&) )
 {
 	wxGetApp().RemoveOnMouseFn(callbackfunc);
+}
+
+void CHeeksCADInterface::RegisterToolBar( wxToolBarBase* toolbar )
+{
+	wxGetApp().m_external_toolbars.push_back(toolbar);
+}
+
+void CHeeksCADInterface::RegisterAddToolBars( void(*callbackfunc)() )
+{
+	wxGetApp().m_AddToolBars_list.push_back(callbackfunc);
 }
 
 void CHeeksCADInterface::PropertiesOnApply2()

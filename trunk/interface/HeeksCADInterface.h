@@ -32,6 +32,8 @@ public:
 	virtual wxMenu* GetWindowMenu();
 	virtual wxAuiManager* GetAuiManager();
 	virtual void AddToolBarButton(wxToolBar* toolbar, const wxString& title, const wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
+	virtual float GetToolImageButtonScale();
+	virtual int GetToolImageBitmapSize();
 	virtual int AddMenuCheckItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
 	virtual int AddMenuItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&));
 	virtual wxString GetExeFolder();
@@ -137,6 +139,8 @@ public:
 	virtual void RemoveOnGraphicsSize( void(*callbackfunc)(wxSizeEvent& evt) );
 	virtual void RegisterOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
 	virtual void RemoveOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
+	virtual void RegisterToolBar( wxToolBarBase* );
+	virtual void RegisterAddToolBars( void(*callbackfunc)() );
 	virtual void PropertiesOnApply2();// don't need to press tick to make changes
 	virtual void PropertiesApplyChanges();// don't need to press tick to make changes
 };
