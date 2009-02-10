@@ -37,6 +37,8 @@ The "Terminal" window appears, with some text like "dan@dan-desktop:~$" in it.
 Type:
 cd/Desktop/dan/HeeksCAD/src
 
+If this isn't the first time you've built HeeksCAD here, then type:
+make clean
 
 Then type:
 make
