@@ -99,6 +99,8 @@ public:
 	double m_geom_tol;
 	std::list<wxDynamicLibrary*> m_loaded_libraries;
 	std::list< void(*)() > m_on_glCommands_list;
+	std::list< wxToolBarBase* > m_external_toolbars;
+	std::list< void(*)() > m_AddToolBars_list;
 	std::list<wxWindow*> m_hideable_windows;
 	HRuler* m_ruler;
 	bool m_show_ruler;
