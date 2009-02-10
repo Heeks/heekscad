@@ -2124,7 +2124,7 @@ void HeeksCADapp::GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list
 		marked_object->GetObject()->GetTools(&tools, &point);
 		if(tools.size() > 0)tools.push_back(NULL);
 
-		tools.push_back(new RemoveObjectTool(marked_object->GetObject()));
+		if(marked_object->GetObject()->CanBeRemoved())tools.push_back(new RemoveObjectTool(marked_object->GetObject()));
 
 		tools.push_back(NULL);
 
