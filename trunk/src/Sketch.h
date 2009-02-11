@@ -3,9 +3,11 @@
 #pragma once
 
 #include "../interface/ObjList.h"
+#include "../interface/HeeksColor.h"
 
 class CSketch:public ObjList
 {
+	HeeksColor color;
 	static wxIcon* m_icon;
 
 public:
@@ -24,6 +26,8 @@ public:
 	void CopyFrom(const HeeksObj* object){operator=(*((CSketch*)((ObjList*)object)));}
 	void WriteXML(TiXmlNode *root);
 	bool UsesID(){return true;}
+	void SetColor(const HeeksColor &col);
+	const HeeksColor* GetColor()const;
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 };
