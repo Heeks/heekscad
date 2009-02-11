@@ -2,6 +2,9 @@
 
 #include "stdafx.h"
 #include "dxf.h"
+#include "HLine.h"
+#include "HArc.h"
+#include "Sketch.h"
 
 CDxfWrite::CDxfWrite(const wxChar* filepath)
 {
@@ -238,6 +241,168 @@ bool CDxfRead::ReadArc(bool undoably)
 	return false;
 }
 
+static bool poly_prev_found = false;
+static double poly_prev_x;
+static double poly_prev_y;
+static double poly_prev_bulge_found;
+static double poly_prev_bulge;
+static bool poly_first_found = false;
+static double poly_first_x;
+static double poly_first_y;
+
+static void AddPolyLinePoint(CDxfRead* dxf_read, double x, double y, bool bulge_found, double bulge, bool undoably)
+{
+	if(poly_prev_found)
+	{
+		bool arc_done = false;
+		if(poly_prev_bulge_found)
+		{
+			// from here: http://www.afralisp.net/lisp/Bulges1.htm
+			if(fabs(poly_prev_bulge)> 0.0000000000001)
+			{
+				double dx = x - poly_prev_x;
+				double dy = y - poly_prev_y;
+				double c = sqrt(dx*dx + dy*dy);
+				double chord = c/2;
+				double s = chord * poly_prev_bulge;
+				double r = (chord*chord+s*s)/(2*s);
+				double sx = -dy;
+				double sy = dx;
+				double mags = sqrt(sx*sx+sy*sy);
+				if(mags>0.0000000000000001)
+				{
+					sx = sx/mags;
+					sy = sy/mags;
+					if(poly_prev_bulge<0)
+					{
+						sx = -sx;
+						sy = -sy;
+					}
+
+					double d = r - s;
+					double mx = poly_prev_x + dx/2;
+					double my = poly_prev_y + dy/2;
+					double cx = mx + sx * d;
+					double cy = my + sy * d;
+
+					double ps[3] = {poly_prev_x, poly_prev_y, 0};
+					double pe[3] = {x, y, 0};
+					double pc[3] = {cx, cy, 0};
+					dxf_read->OnReadArc(ps, pe, pc, poly_prev_bulge >= 0, undoably);
+					arc_done = true;
+				}
+			}
+		}
+
+		if(!arc_done)
+		{
+			double s[3] = {poly_prev_x, poly_prev_y, 0};
+			double e[3] = {x, y, 0};
+			dxf_read->OnReadLine(s, e, undoably);
+		}
+	}
+
+	poly_prev_found = true;
+	poly_prev_x = x;
+	poly_prev_y = y;
+	if(!poly_first_found)
+	{
+		poly_first_x = x;
+		poly_first_y = y;
+		poly_first_found = true;
+	}
+	poly_prev_bulge_found = bulge_found;
+	poly_prev_bulge = bulge;
+}
+
+static void PolyLineStart()
+{
+	poly_prev_found = false;
+	poly_first_found = false;
+}
+
+bool CDxfRead::ReadLwPolyLine(bool undoably)
+{
+	PolyLineStart();
+
+	bool x_found = false;
+	bool y_found = false;
+	double x;
+	double y;
+	bool bulge_found = false;
+	double bulge = 0.0;
+	bool closed = false;
+	int flags;
+	bool next_item_found = false;
+
+	while(!((*m_ifs).eof()) && !next_item_found)
+	{
+		get_line();
+		int n;
+		if(sscanf(m_str, "%d", &n) != 1)return false;
+		switch(n){
+			case 0:
+				// next item found
+				if(x_found && y_found){
+					// add point
+					AddPolyLinePoint(this, x, y, bulge_found, bulge, undoably);
+					bulge_found = false;
+					x_found = false;
+					y_found = false;
+				}
+				next_item_found = true;
+				break;
+			case 10:
+				// x
+				get_line();
+				if(x_found && y_found){
+					// add point
+					AddPolyLinePoint(this, x, y, bulge_found, bulge, undoably);
+					bulge_found = false;
+					x_found = false;
+					y_found = false;
+				}
+				if(sscanf(m_str, "%lf", &x) != 1)return false;
+				x_found = true;
+				break;
+			case 20:
+				// y
+				get_line();
+				if(sscanf(m_str, "%lf", &y) != 1)return false;
+				y_found = true;
+				break;
+			case 42:
+				// bulge
+				get_line();
+				if(sscanf(m_str, "%lf", &bulge) != 1)return false;
+				bulge_found = true;
+				break;
+			case 70:
+				// flags
+				get_line();
+				if(sscanf(m_str, "%d", &flags) != 1)return false;
+				closed = ((flags & 1) != 0);
+				break;
+			default:
+				// skip the next line
+				get_line();
+				break;
+		}
+	}
+
+	if(next_item_found)
+	{
+		if(closed && poly_first_found)
+		{
+			// repeat the first point
+			AddPolyLinePoint(this, poly_first_x, poly_first_y, false, 0.0, undoably);
+		}
+		return true;
+	}
+
+	return false;
+}
+
 void CDxfRead::OnReadArc(double start_angle, double end_angle, double radius, const double* c, bool undoably){
 	double s[3], e[3];
 	s[0] = c[0] + radius * cos(start_angle * Pi/180);
@@ -291,8 +456,49 @@ void CDxfRead::DoRead(bool undoably)
 				if(!ReadArc(undoably))return;
 				continue;
 			}
+			else if(!strcmp(m_str, "LWPOLYLINE")){
+				if(!ReadLwPolyLine(undoably))return;
+				continue;
+			}
 		}
 
 		get_line();
+	}
+}
+
+// static
+bool HeeksDxfRead::m_make_as_sketch = false;
+
+void HeeksDxfRead::OnReadLine(const double* s, const double* e, bool undoably)
+{
+	HLine* new_object = new HLine(make_point(s), make_point(e), &(wxGetApp().current_color));
+	AddSketchIfNeeded(undoably);
+	if(undoably)wxGetApp().AddUndoably(new_object, m_sketch, NULL);
+	else if(m_sketch)m_sketch->Add(new_object, NULL);
+	else wxGetApp().Add(new_object, NULL);
+}
+
+void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, bool dir, bool undoably)
+{
+	gp_Pnt p0 = make_point(s);
+	gp_Pnt p1 = make_point(e);
+	gp_Dir up(0, 0, 1);
+	if(!dir)up = -up;
+	gp_Pnt pc = make_point(c);
+	gp_Circ circle(gp_Ax2(pc, up), p1.Distance(pc));
+	HArc* new_object = new HArc(p0, p1, circle, &wxGetApp().current_color);
+	AddSketchIfNeeded(undoably);
+	if(undoably)wxGetApp().AddUndoably(new_object, m_sketch, NULL);
+	else if(m_sketch)m_sketch->Add(new_object, NULL);
+	else wxGetApp().Add(new_object, NULL);
+}
+
+void HeeksDxfRead::AddSketchIfNeeded(bool undoably)
+{
+	if(m_make_as_sketch && m_sketch == NULL)
+	{
+		m_sketch = new CSketch();
+		if(undoably)wxGetApp().AddUndoably(m_sketch, NULL, NULL);
+		else wxGetApp().Add(m_sketch, NULL);
 	}
 }
