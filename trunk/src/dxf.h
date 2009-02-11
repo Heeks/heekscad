@@ -24,6 +24,7 @@ private:
 
 	bool ReadLine(bool undoably);
 	bool ReadArc(bool undoably);
+	bool ReadLwPolyLine(bool undoably);
 	void OnReadArc(double start_angle, double end_angle, double radius, const double* c, bool undoably);
 	void get_line();
 
@@ -38,3 +39,18 @@ public:
 	virtual void OnReadArc(const double* s, const double* e, const double* c, bool dir, bool undoably){}
 };
 
+class CSketch;
+
+class HeeksDxfRead : public CDxfRead{
+public:
+	CSketch* m_sketch;
+	HeeksDxfRead(const wxChar* filepath):CDxfRead(filepath), m_sketch(NULL){}
+
+	static bool m_make_as_sketch;
+
+	// CDxfRead's virtual functions
+	void OnReadLine(const double* s, const double* e, bool undoably);
+	void OnReadArc(const double* s, const double* e, const double* c, bool dir, bool undoably);
+
+	void AddSketchIfNeeded(bool undoably);
+};
