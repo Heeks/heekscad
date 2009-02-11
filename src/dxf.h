@@ -1,4 +1,5 @@
 // dxf.h
+#include <fstream>
 
 class CDxfWrite{
 private:
