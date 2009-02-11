@@ -54,3 +54,18 @@ HeeksObj* CSketch::ReadFromXMLElement(TiXmlElement* pElem)
 	return (ObjList*)new_object;
 }
 
+void CSketch::SetColor(const HeeksColor &col)
+{
+	std::list<HeeksObj*>::iterator It;
+	for(It=m_objects.begin(); It!=m_objects.end() ;It++)
+	{
+		HeeksObj* object = *It;
+		object->SetColor(col);
+	}
+}
+
+const HeeksColor* CSketch::GetColor()const
+{
+	if(m_objects.size() == 0)return NULL;
+	return m_objects.front()->GetColor();
+}
