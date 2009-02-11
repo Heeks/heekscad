@@ -245,6 +245,8 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("LoftRemovesSketches"), &m_loft_removes_sketches, true);
 	config.Read(_T("GraphicsTextMode"), (int*)(&m_graphics_text_mode), GraphicsTextModeWithHelp);
 
+	config.Read(_T("DxfMakeSketch"), &HeeksDxfRead::m_make_as_sketch, true);	
+
 	GetRecentFilesProfileString();
 
 	wxImage::AddHandler(new wxPNGHandler);
@@ -295,7 +297,6 @@ bool HeeksCADapp::OnInit()
 } 
 
 int HeeksCADapp::OnExit(){
-	int result = wxApp::OnExit();
 	HeeksConfig config;
 	config.Write(_T("DrawEnd"), digitize_end);
 	config.Write(_T("DrawInters"), digitize_inters);
@@ -330,10 +331,19 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("LoftRemovesSketches"), m_loft_removes_sketches);
 	config.Write(_T("GraphicsTextMode"), m_graphics_text_mode);
 
+	config.Write(_T("DxfMakeSketch"), HeeksDxfRead::m_make_as_sketch);
+
 	WriteRecentFilesProfileString(config);
 
 	if(m_gl_font)glFontDestroy(m_gl_font);
 
+	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
+		wxDynamicLibrary* shared_library = *It;
+		delete shared_library;
+	}
+	m_loaded_libraries.clear();
+
+	int result = wxApp::OnExit();
 	return result;
 }
 
@@ -752,35 +762,6 @@ void HeeksCADapp::OpenSTLFile(const wxChar *filepath, bool undoably)
 	CStlSolid* new_object = new CStlSolid(filepath, &current_color);
 	if(undoably)AddUndoably(new_object, this, NULL);
 	else Add(new_object, NULL);
-}
-
-class HeeksDxfRead : public CDxfRead{
-public:
-	HeeksDxfRead(const wxChar* filepath):CDxfRead(filepath){}
-
-	// CDxfRead's virtual functions
-	void OnReadLine(const double* s, const double* e, bool undoably);
-	void OnReadArc(const double* s, const double* e, const double* c, bool dir, bool undoably);
-};
-
-void HeeksDxfRead::OnReadLine(const double* s, const double* e, bool undoably)
-{
-	HLine* new_object = new HLine(make_point(s), make_point(e), &(wxGetApp().current_color));
-	if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
-	else wxGetApp().Add(new_object, NULL);
-}
-
-void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, bool dir, bool undoably)
-{
-	gp_Pnt p0 = make_point(s);
-	gp_Pnt p1 = make_point(e);
-	gp_Dir up(0, 0, 1);
-	if(!dir)up = -up;
-	gp_Pnt pc = make_point(c);
-	gp_Circ circle(gp_Ax2(pc, up), p1.Distance(pc));
-	HArc* new_object = new HArc(p0, p1, circle, &wxGetApp().current_color);
-	if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
-	else wxGetApp().Add(new_object, NULL);
 }
 
 void HeeksCADapp::OpenDXFFile(const wxChar *filepath, bool undoably)
@@ -1862,6 +1843,10 @@ void on_sel_filter_ruler(bool value, HeeksObj* object){
 	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_RULER;
 }
 
+void on_dxf_make_sketch(bool value, HeeksObj* object){
+	HeeksDxfRead::m_make_as_sketch = value;
+}
+
 void HeeksCADapp::GetOptions(std::list<Property *> *list)
 {
 	PropertyList* view_options = new PropertyList(_("view options"));
@@ -1965,6 +1950,12 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	selection_filter->m_list.push_back(new PropertyCheck(_("dimension"), (m_marked_list->m_filter & MARKING_FILTER_DIMENSION) != 0, NULL, on_sel_filter_dimension));
 	selection_filter->m_list.push_back(new PropertyCheck(_("ruler"), (m_marked_list->m_filter & MARKING_FILTER_RULER) != 0, NULL, on_sel_filter_ruler));
 	list->push_back(selection_filter);
+
+	PropertyList* file_options = new PropertyList(_("file options"));
+	PropertyList* dxf_options = new PropertyList(_("DXF"));
+	dxf_options->m_list.push_back(new PropertyCheck(_("make sketch"), HeeksDxfRead::m_make_as_sketch, NULL, on_dxf_make_sketch));
+	file_options->m_list.push_back(dxf_options);
+	list->push_back(file_options);
 }
 
 void HeeksCADapp::DeleteMarkedItems()
