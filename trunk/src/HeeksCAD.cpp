@@ -464,6 +464,7 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 						else if(attr_name == std::string("id")){shape_data.m_id = a->IntValue();}
 						else if(attr_name == std::string("title")){shape_data.m_title.assign(Ctt(a->Value()));}
 						else if(attr_name == std::string("solid_type")){shape_data.m_solid_type = (SolidTypeEnum)(a->IntValue());}
+						else if(attr_name == std::string("vis")){shape_data.m_visible = (a->IntValue() != 0);}
 						else shape_data.m_xml_element.SetAttribute(a->Name(), a->Value());
 					}
 					if(index != -1)index_map.insert(std::pair<int, CShapeData>(index, shape_data));
@@ -1011,6 +1012,7 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 				index_pair_element->SetAttribute("index", index);
 				index_pair_element->SetAttribute("id", shape_data.m_id);
 				index_pair_element->SetAttribute("title", Ttc(shape_data.m_title.c_str()));
+				index_pair_element->SetAttribute("vis", shape_data.m_visible ? 1:0);
 				if(shape_data.m_solid_type != SOLID_TYPE_UNKNOWN)index_pair_element->SetAttribute("solid_type", shape_data.m_solid_type);
 				// get the CShapeData attributes
 				for(TiXmlAttribute* a = shape_data.m_xml_element.FirstAttribute(); a; a = a->Next())
@@ -2476,27 +2478,6 @@ void HeeksCADapp::ResetIDs()
 {
 	used_ids.clear();
 	next_id_map.clear();
-}
-
-void HeeksCADapp::WriteIDToXML(HeeksObj* object, TiXmlElement *element)
-{
-	if(object->UsesID())
-	{
-		element->SetAttribute("id", object->m_id);
-	}
-}
-
-void HeeksCADapp::ReadIDFromXML(HeeksObj* object, TiXmlElement *element)
-{
-	if(object->UsesID())
-	{
-		// get the attributes
-		for(TiXmlAttribute* a = element->FirstAttribute(); a; a = a->Next())
-		{
-			std::string name(a->Name());
-			if(name == "id"){object->SetID(a->IntValue());}
-		}
-	}
 }
 
 static double* value_for_set_value = NULL;

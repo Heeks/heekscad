@@ -6,6 +6,7 @@
 #include "PropertyInt.h"
 #include "PropertyColor.h"
 #include "PropertyCheck.h"
+#include "../tinyxml/tinyxml.h"
 #ifdef HEEKSCAD
 #include "ObjList.h"
 #include "../src/Gripper.h"
@@ -137,20 +138,19 @@ void HeeksObj::SetID(int id)
 
 void HeeksObj::WriteBaseXML(TiXmlElement *element)
 {
-#ifdef HEEKSCAD
-	wxGetApp().WriteIDToXML(this, element);
-#else
-	heeksCAD->WriteIDToXML(this, element);
-#endif
+	if(UsesID())element->SetAttribute("id", m_id);
+	if(!m_visible)element->SetAttribute("vis", 0);
 }
 
 void HeeksObj::ReadBaseXML(TiXmlElement* element)
 {
-#ifdef HEEKSCAD
-	wxGetApp().ReadIDFromXML(this, element);
-#else
-	heeksCAD->ReadIDFromXML(this, element);
-#endif
+	// get the attributes
+	for(TiXmlAttribute* a = element->FirstAttribute(); a; a = a->Next())
+	{
+		std::string name(a->Name());
+		if(UsesID() && name == "id"){SetID(a->IntValue());}
+		if(name == "vis"){m_visible = (a->IntValue() != 0);}
+	}
 }
 
 bool HeeksObj::OnVisibleLayer()

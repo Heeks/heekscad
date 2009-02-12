@@ -21,6 +21,7 @@ public:
 	CShapeData(CShape* shape);
 
 	int m_id;
+	bool m_visible;
 	wxString m_title;
 	SolidTypeEnum m_solid_type;
 

@@ -364,16 +364,6 @@ void CHeeksCADInterface::SetObjectID(HeeksObj* object, int id)
 	wxGetApp().SetObjectID(object, id);
 }
 
-void CHeeksCADInterface::WriteIDToXML(HeeksObj* object, TiXmlElement *element)
-{
-	wxGetApp().WriteIDToXML(object, element);
-}
-
-void CHeeksCADInterface::ReadIDFromXML(HeeksObj* object, TiXmlElement *element)
-{
-	wxGetApp().ReadIDFromXML(object, element);
-}
-
 int CHeeksCADInterface::GetNextID(int type)
 {
 	return wxGetApp().GetNextID(type);

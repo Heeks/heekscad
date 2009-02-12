@@ -79,8 +79,6 @@ public:
 	virtual int GetNextID(int type);
 	virtual bool InOpenFile();
 	virtual void RemoveID(HeeksObj* object); // only call this from ObjList::Remove()
-	virtual void WriteIDToXML(HeeksObj* object, TiXmlElement *element);
-	virtual void ReadIDFromXML(HeeksObj* object, TiXmlElement *element);
 	virtual const wxChar* GetFileFullPath(); // returns NULL for untitled
 	virtual void SetViewBox(const double* b);
 	virtual void SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath);
