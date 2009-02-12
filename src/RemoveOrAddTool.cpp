@@ -129,7 +129,7 @@ void ManyRemoveOrAddTool::Remove()
 	for(It = m_objects.begin(); It != m_objects.end(); It++){
 		HeeksObj* object = *It;
 		m_owner->Remove(object);
-		wxGetApp().m_marked_list->Remove(object);
+		wxGetApp().m_marked_list->Remove(object, false);
 	}
 
 	wxGetApp().WereRemoved(m_objects);

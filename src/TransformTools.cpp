@@ -24,7 +24,7 @@ void TransformTools::RemoveUncopyable()
 		HeeksObj* object = *It;
 		if(!object->CanBeCopied())uncopyable_objects.push_back(object);
 	}
-	if(uncopyable_objects.size() > 0)wxGetApp().m_marked_list->Remove(uncopyable_objects);
+	if(uncopyable_objects.size() > 0)wxGetApp().m_marked_list->Remove(uncopyable_objects, true);
 }
 
 //static
@@ -53,7 +53,7 @@ void TransformTools::Translate(bool copy)
 
 	// clear the selection
 	std::list<HeeksObj *> selected_items = wxGetApp().m_marked_list->list();
-	wxGetApp().m_marked_list->Clear();
+	wxGetApp().m_marked_list->Clear(true);
 
 	// pick "from" position
 	if(!wxGetApp().PickPosition(_("Click position to move from"), from))return;
@@ -101,7 +101,7 @@ void TransformTools::Translate(bool copy)
 			}
 		}
 		wxGetApp().EndHistory();
-		wxGetApp().m_marked_list->Clear();
+		wxGetApp().m_marked_list->Clear(true);
 	}
 	else
 	{
@@ -139,7 +139,7 @@ void TransformTools::Rotate(bool copy)
 
 	// clear the selection
 	std::list<HeeksObj *> selected_items = wxGetApp().m_marked_list->list();
-	wxGetApp().m_marked_list->Clear();
+	wxGetApp().m_marked_list->Clear(true);
 
 	// pick "centre" position
 	if(!wxGetApp().PickPosition(_("Click centre position to rotate about"), centre))return;
@@ -167,7 +167,7 @@ void TransformTools::Rotate(bool copy)
 			}
 		}
 		wxGetApp().EndHistory();
-		wxGetApp().m_marked_list->Clear();
+		wxGetApp().m_marked_list->Clear(true);
 	}
 	else
 	{
@@ -203,7 +203,7 @@ void TransformTools::Mirror(bool copy)
 
 	// clear the selection
 	std::list<HeeksObj *> selected_items = wxGetApp().m_marked_list->list();
-	wxGetApp().m_marked_list->Clear();
+	wxGetApp().m_marked_list->Clear(true);
 
 	// pick a line to mirror about
 	bool line_found = false;
@@ -245,7 +245,7 @@ void TransformTools::Mirror(bool copy)
 			new_object->ModifyByMatrix(m);
 		}
 		wxGetApp().EndHistory();
-		wxGetApp().m_marked_list->Clear();
+		wxGetApp().m_marked_list->Clear(true);
 	}
 	else
 	{
@@ -278,7 +278,7 @@ void TransformTools::Scale(bool copy)
 
 	// clear the selection
 	std::list<HeeksObj *> selected_items = wxGetApp().m_marked_list->list();
-	wxGetApp().m_marked_list->Clear();
+	wxGetApp().m_marked_list->Clear(true);
 
 	// pick "centre" position
 	if(!wxGetApp().PickPosition(_("Click centre position to scale about"), centre))return;
@@ -306,7 +306,7 @@ void TransformTools::Scale(bool copy)
 			}
 		}
 		wxGetApp().EndHistory();
-		wxGetApp().m_marked_list->Clear();
+		wxGetApp().m_marked_list->Clear(true);
 	}
 	else
 	{

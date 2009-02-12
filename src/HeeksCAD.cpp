@@ -410,7 +410,7 @@ void HeeksCADapp::DestroyLights(void)
 }
 
 void HeeksCADapp::Reset(){
-	m_marked_list->Clear();
+	m_marked_list->Clear(true);
 	m_marked_list->Reset();
 	std::set<Observer*>::iterator It;
 	for(It = observers.begin(); It != observers.end(); It++){
@@ -1272,12 +1272,6 @@ void HeeksCADapp::GetBox(CBox &box){
 		box.Insert(temp_box);
 }
 
-void HeeksCADapp::clear_marked_list(void){
-	std::list<HeeksObj *>::iterator It;
-	m_marked_list->Clear();
-	Repaint();
-}
-
 double HeeksCADapp::GetPixelScale(void){
 	return m_frame->m_graphics->m_view_point.m_pixel_scale;
 }
@@ -1446,7 +1440,7 @@ bool HeeksCADapp::Add(HeeksObj *object, HeeksObj* prev_object)
 
 	if(m_mark_newly_added_objects)
 	{
-		m_marked_list->Add(object);
+		m_marked_list->Add(object, true);
 	}
 
 	return true;
@@ -1552,7 +1546,7 @@ void HeeksCADapp::WereRemoved(const std::list<HeeksObj*>& list)
 		object = *It;
 		if(m_marked_list->ObjectMarked(object))marked_remove.push_back(object);
 	}
-	if(marked_remove.size() > 0)m_marked_list->Remove(marked_remove);
+	if(marked_remove.size() > 0)m_marked_list->Remove(marked_remove, false);
 
 	ObserversOnChange(NULL, &list, NULL);
 	SetAsModified();
@@ -1963,7 +1957,7 @@ void HeeksCADapp::DeleteMarkedItems()
 	std::list<HeeksObj *> list = m_marked_list->list();
 
 	// clear first, so properties cancel happens first
-	m_marked_list->Clear();
+	m_marked_list->Clear(false);
 
 	if(list.size() == 1){
 		DeleteUndoably(*(list.begin()));
@@ -2075,15 +2069,15 @@ public:
 		if(m_marked_object->GetObject() == NULL)return;
 		if(m_xor_marked_list){
 			if(wxGetApp().m_marked_list->ObjectMarked(m_marked_object->GetObject())){
-				wxGetApp().m_marked_list->Remove(m_marked_object->GetObject());
+				wxGetApp().m_marked_list->Remove(m_marked_object->GetObject(), true);
 			}
 			else{
-				wxGetApp().m_marked_list->Add(m_marked_object->GetObject());
+				wxGetApp().m_marked_list->Add(m_marked_object->GetObject(), true);
 			}
 		}
 		else{
-			wxGetApp().m_marked_list->Clear();
-			wxGetApp().m_marked_list->Add(m_marked_object->GetObject());
+			wxGetApp().m_marked_list->Clear(true);
+			wxGetApp().m_marked_list->Add(m_marked_object->GetObject(), true);
 			if(!(wxGetApp().m_frame->m_properties->IsShown())){
 				wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_properties).Show();
 				wxGetApp().m_frame->m_aui_manager->Update();
@@ -2692,7 +2686,7 @@ void HeeksCADapp::Paste(HeeksObj* paste_into)
 		ofs<<fstr.c_str();
 	}
 
-	m_marked_list->Clear();
+	m_marked_list->Clear(true);
 	m_mark_newly_added_objects = true;
 	OpenFile(temp_file, true, paste_into);
 	m_mark_newly_added_objects = false;

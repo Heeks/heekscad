@@ -134,7 +134,6 @@ public:
 	void CreateLights(void);
 	void DestroyLights(void);
 	void FindMarkedObject(const wxPoint &point, MarkedObject* marked_object);
-	void clear_marked_list(void);
 	void SetInputMode(CInputMode *i);
 	void Repaint(bool soon = false);
 	void RecalculateGLLists();

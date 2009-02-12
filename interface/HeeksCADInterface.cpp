@@ -197,7 +197,7 @@ double CHeeksCADInterface::GetPixelScale()
 
 void CHeeksCADInterface::Mark(HeeksObj* object)
 {
-	wxGetApp().m_marked_list->Add(object);
+	wxGetApp().m_marked_list->Add(object, true);
 }
 
 bool CHeeksCADInterface::ObjectMarked(HeeksObj* object)
@@ -217,7 +217,7 @@ long CHeeksCADInterface::GetMarkingFilter()
 
 void CHeeksCADInterface::ClearMarkedList()
 {
-	wxGetApp().m_marked_list->Clear();
+	wxGetApp().m_marked_list->Clear(true);
 }
 
 CInputMode* CHeeksCADInterface::GetSelectMode()

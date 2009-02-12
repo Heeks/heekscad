@@ -480,3 +480,10 @@ HeeksObj* HArc::ReadFromXMLElement(TiXmlElement* pElem)
 	return new_object;
 }
 
+void HArc::Reverse()
+{
+	gp_Pnt temp = A;
+	A = B;
+	B = temp;
+	m_circle.SetAxis(m_circle.Axis().Reversed());
+}

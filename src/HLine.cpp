@@ -297,3 +297,9 @@ HeeksObj* HLine::ReadFromXMLElement(TiXmlElement* pElem)
 	return new_object;
 }
 
+void HLine::Reverse()
+{
+	gp_Pnt temp = A;
+	A = B;
+	B = temp;
+}
