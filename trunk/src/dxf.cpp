@@ -5,7 +5,6 @@
 #include "HLine.h"
 #include "HArc.h"
 #include "Sketch.h"
-#include <fstream>
 
 CDxfWrite::CDxfWrite(const wxChar* filepath)
 {
@@ -96,10 +95,14 @@ CDxfRead::CDxfRead(const wxChar* filepath)
 {
 	// start the file
 	m_fail = false;
+#if wxUSE_UNICODE
 #ifdef __WXMSW__
-	m_ifs = new ifstream(filepath);
+	m_ifs = new wifstream(filepath);
 #else
-	m_ifs = new ifstream(Ttc(filepath));
+	m_ifs = new wifstream(Ttc(filepath));
+#endif
+#else
+	m_ifs = new ifstream(filepath);
 #endif
 	if(!(*m_ifs)){
 		m_fail = true;
@@ -416,9 +419,18 @@ void CDxfRead::OnReadArc(double start_angle, double end_angle, double radius, co
 	OnReadArc(s, e, c, true, undoably);
 }
 
+#if wxUSE_UNICODE
+static wxChar str_for_get_line[1024];
+#endif
+
 void CDxfRead::get_line()
 {
+#if wxUSE_UNICODE
+	m_ifs->getline(str_for_get_line, 1024);
+	strcpy(m_str, Ttc(str_for_get_line));
+#else
 	m_ifs->getline(m_str, 1024);
+#endif
 
 	char str[1024];
 	int len = strlen(m_str);
@@ -426,7 +438,12 @@ void CDxfRead::get_line()
 	bool non_white_found = false;
 	for(int i = 0; i<len; i++){
 		if(non_white_found || (m_str[i] != ' ' && m_str[i] != '\t')){
-			str[j] = m_str[i]; j++;
+#if wxUSE_UNICODE
+			if(m_str[i] != '\r')
+#endif
+			{
+				str[j] = m_str[i]; j++;
+			}
 			non_white_found = true;
 		}
 	}
@@ -440,11 +457,8 @@ void CDxfRead::DoRead(bool undoably)
 
 	get_line();
 
-	ofstream f("dxflog.txt");
-
 	while(!((*m_ifs).eof()))
 	{
-		
 		if(!strcmp(m_str, "0"))
 		{
 			get_line();
