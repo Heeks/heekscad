@@ -58,7 +58,7 @@ class HeeksObj{
 public:
 	unsigned int m_id;
 	unsigned int m_layer;
-	bool m_visible; // only temporary, ( use layer to be more permanent )
+	bool m_visible;
 	HeeksObj *m_owner;
 
 	HeeksObj(void);

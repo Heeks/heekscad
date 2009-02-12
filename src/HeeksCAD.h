@@ -219,8 +219,6 @@ public:
 	int GetNextID(int type);
 	void RemoveID(HeeksObj* object); // only call this from ObjList::Remove()
 	void ResetIDs();
-	void WriteIDToXML(HeeksObj* object, TiXmlElement *element);
-	void ReadIDFromXML(HeeksObj* object, TiXmlElement *element);
 	bool InputDouble(const wxChar* prompt, const wxChar* value_name, double &value);
 	void RegisterOnGLCommands( void(*callbackfunc)() );
 	void RemoveOnGLCommands( void(*callbackfunc)() );
