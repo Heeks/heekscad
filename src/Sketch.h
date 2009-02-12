@@ -17,15 +17,6 @@ enum SketchOrderType
 	MaxSketchOrderTypes
 };
 
-#if 0
-have a "direction" drop-down in the
-Sketch's properties. This would be "open" ( for a well ordered sketch ), "badly
-ordered" ( where the start of one span doesn't line up with the end of the previous
-span ), "closed cw" or "closed ccw" ( for well ordered sketches ). If the sketch is
-well ordered, there will not be the "badly ordered" option available in the drop-down.
-If the user selects an option, it will re-order the sketch.
-#endif
-
 class CSketch:public ObjList
 {
 	HeeksColor color;
