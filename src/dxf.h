@@ -1,6 +1,4 @@
 // dxf.h
-#include <fstream>
-using namespace std;
 
 class CDxfWrite{
 private:
@@ -20,11 +18,7 @@ public:
 // derive a class from this and implement it's virtual functions
 class CDxfRead{
 private:
-#if wxUSE_UNICODE
-	wifstream* m_ifs;
-#else
 	ifstream* m_ifs;
-#endif
 
 	bool m_fail;
 	char m_str[1024];
