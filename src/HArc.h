@@ -51,4 +51,5 @@ public:
 	gp_Vec GetSegmentVector(double fraction);
 	gp_Pnt GetPointAtFraction(double fraction);
 	static bool TangentialArc(const gp_Pnt &p0, const gp_Vec &v0, const gp_Pnt &p1, gp_Pnt &centre, gp_Dir &axis);
+	void Reverse();
 };

@@ -206,29 +206,29 @@ void MarkedList::glCommands(){
 	}
 }
 
-void MarkedList::Add(std::list<HeeksObj *> &list){
+void MarkedList::Add(std::list<HeeksObj *> &list, bool call_OnChanged){
 	std::list<HeeksObj *>::iterator It;
 	for(It = list.begin(); It != list.end(); It++){
 		HeeksObj *object = *It;
 		m_list.push_back(object);
 		m_set.insert(object);
 	}
-	OnChanged(false, false, &list, NULL);
+	if(call_OnChanged)OnChanged(false, false, &list, NULL);
 }
 
-void MarkedList::Remove(HeeksObj *object){
+void MarkedList::Remove(HeeksObj *object, bool call_OnChanged){
 	std::list<HeeksObj *> list;
 	list.push_back(object);
-	Remove(list);
+	Remove(list, call_OnChanged);
 }
 
-void MarkedList::Add(HeeksObj *object){
+void MarkedList::Add(HeeksObj *object, bool call_OnChanged){
 	std::list<HeeksObj *> list;
 	list.push_back(object);
-	Add(list);
+	Add(list, call_OnChanged);
 }
 
-void MarkedList::Remove(const std::list<HeeksObj *> &obj_list){
+void MarkedList::Remove(const std::list<HeeksObj *> &obj_list, bool call_OnChanged){
 	std::list<HeeksObj *>::const_iterator It;
 	for(It = obj_list.begin(); It != obj_list.end(); It++){
 		HeeksObj *object = *It;
@@ -237,13 +237,13 @@ void MarkedList::Remove(const std::list<HeeksObj *> &obj_list){
 		}
 		m_set.erase(object);
 	}
-	OnChanged(false, false, NULL, &obj_list);
+	if(call_OnChanged)OnChanged(false, false, NULL, &obj_list);
 }
 
-void MarkedList::Clear(void){ 
+void MarkedList::Clear(bool call_OnChanged){ 
 	m_list.clear();
 	m_set.clear();
-	OnChanged(false, true, NULL, NULL);
+	if(call_OnChanged)OnChanged(false, true, NULL, NULL);
 }
 
 void MarkedList::FindMarkedObject(const wxPoint &point, MarkedObject* marked_object){
@@ -259,6 +259,20 @@ bool MarkedList::ObjectMarked(HeeksObj *object){
 void MarkedList::OnChanged(bool all_marked, bool none_marked, const std::list<HeeksObj *>* added, const std::list<HeeksObj *>* removed){
 	gripper_marked_list_changed = true;
 	wxGetApp().ObserversMarkedListChanged(all_marked, none_marked, added, removed);
+}
+
+void MarkedList::OnChangedAdded(HeeksObj* object)
+{
+	std::list<HeeksObj *> added;
+	added.push_back(object);
+	OnChanged(false, false, &added, NULL);
+}
+
+void MarkedList::OnChangedRemoved(HeeksObj* object)
+{
+	std::list<HeeksObj *> removed;
+	removed.push_back(object);
+	OnChanged(false, false, NULL, &removed);
 }
 
 void MarkedList::set_ignore_onoff(HeeksObj* object, bool b){

@@ -152,7 +152,7 @@ bool CCone::ModifyByMatrix(const double *m){
 	double new_height = fabs(m_height * scale);
 	CCone* new_object = new CCone(new_pos, new_r1, new_r2, new_height, m_title.c_str(), m_color);
 	wxGetApp().AddUndoably(new_object, m_owner, NULL);
-	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object);
+	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().DeleteUndoably(this);
 
 	return true;
@@ -217,8 +217,8 @@ void CCone::OnApplyProperties()
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().DeleteUndoably(this);
 	wxGetApp().EndHistory();
-	wxGetApp().m_marked_list->Clear();
-	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object);
+	wxGetApp().m_marked_list->Clear(true);
+	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().Repaint();
 }
 
@@ -291,8 +291,8 @@ bool CCone::Stretch(const double *p, const double* shift)
 		wxGetApp().AddUndoably(new_object, NULL, NULL);
 		wxGetApp().DeleteUndoably(this);
 		wxGetApp().EndHistory();
-		wxGetApp().m_marked_list->Clear();
-		wxGetApp().m_marked_list->Add(new_object);
+		wxGetApp().m_marked_list->Clear(true);
+		wxGetApp().m_marked_list->Add(new_object, true);
 	}
 
 	return true;

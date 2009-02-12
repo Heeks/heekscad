@@ -47,4 +47,5 @@ public:
 	gp_Lin GetLine()const;
 	bool Intersects(const gp_Pnt &pnt)const;
 	gp_Vec GetSegmentVector(double fraction);
+	void Reverse();
 };
