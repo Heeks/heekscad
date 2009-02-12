@@ -135,6 +135,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_locale_initialised = false;
 	m_printData = NULL;
 	m_pageSetupData = NULL;
+	m_file_open_or_import_type = FileOpenOrImportTypeOther;
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -796,6 +797,7 @@ bool HeeksCADapp::OpenImageFile(const wxChar *filepath, bool undoably)
 bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksObj* paste_into)
 {
 	m_in_OpenFile = true;
+	m_file_open_or_import_type = FileOpenOrImportTypeOther;
 
 	// returns true if file open was successful
 	wxString wf(filepath);
@@ -807,6 +809,7 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 
 	if(wf.EndsWith(_T(".heeks")))
 	{
+		m_file_open_or_import_type = FileOpenOrImportTypeHeeks;
 		OpenXMLFile(filepath, import_not_open, paste_into);
 	}
 	else if(wf.EndsWith(_T(".svg")))
@@ -823,6 +826,7 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 	}
 	else if(wf.EndsWith(_T(".dxf")))
 	{
+		m_file_open_or_import_type = FileOpenOrImportTypeDxf;
 		OpenDXFFile(filepath, import_not_open);
 	}
 
@@ -1433,7 +1437,7 @@ bool HeeksCADapp::Add(HeeksObj *object, HeeksObj* prev_object)
 {
 	if (!ObjList::Add(object, prev_object)) return false;
 
-	if(object->GetType() == CoordinateSystemType && !m_in_OpenFile)
+	if(object->GetType() == CoordinateSystemType && (!m_in_OpenFile || m_file_open_or_import_type !=FileOpenOrImportTypeHeeks))
 	{
 		m_current_coordinate_system = (CoordinateSystem*)object;
 	}
