@@ -126,7 +126,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 		}
 		else if(window_box_exists)
 		{
-			if(!event.ControlDown())wxGetApp().m_marked_list->Clear();
+			if(!event.ControlDown())wxGetApp().m_marked_list->Clear(true);
 			if(window_box.width > 0){
 				// only select objects which are completely within the window
 				MarkedObjectManyOfSame marked_object;
@@ -168,7 +168,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 				{
 					if(!event.ControlDown() || !wxGetApp().m_marked_list->ObjectMarked(*It))obj_list.push_back(*It);
 				}
-				wxGetApp().m_marked_list->Add(obj_list);
+				wxGetApp().m_marked_list->Add(obj_list, true);
 			}
 			else{
 				// select all the objects in the window, even if only partly in the window
@@ -180,7 +180,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 					if(object->GetType() != GripperType && (!event.ControlDown() || !wxGetApp().m_marked_list->ObjectMarked(object)))
 						obj_list.push_back(object);
 				}
-				wxGetApp().m_marked_list->Add(obj_list);
+				wxGetApp().m_marked_list->Add(obj_list, true);
 			}
 			wxGetApp().m_frame->m_graphics->DrawWindow(window_box, true); // undraw the window
 			window_box_exists = false;
@@ -217,15 +217,15 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 				}
 				if(!event.ShiftDown() && !event.ControlDown())
 				{
-					wxGetApp().m_marked_list->Clear();
+					wxGetApp().m_marked_list->Clear(true);
 				}
 				if(wxGetApp().m_marked_list->ObjectMarked(object))
 				{
-					wxGetApp().m_marked_list->Remove(object);
+					wxGetApp().m_marked_list->Remove(object, true);
 				}
 				else
 				{
-					wxGetApp().m_marked_list->Add(object);
+					wxGetApp().m_marked_list->Add(object, true);
 					gp_Lin ray = wxGetApp().m_frame->m_graphics->m_view_point.SightLine(wxPoint(event.GetX(), event.GetY()));
 					double ray_start[3], ray_direction[3];
 					extract(ray.Location(), ray_start);
@@ -235,7 +235,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 			}
 			else
 			{
-				wxGetApp().m_marked_list->Clear();
+				wxGetApp().m_marked_list->Clear(true);
 			}
 		}
 

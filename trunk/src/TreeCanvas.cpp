@@ -466,7 +466,7 @@ void MyTreeCtrl::OnLMouseUp(wxMouseEvent& event)
 					}
 				}
 
-				if(objects_to_add.size() > 0)wxGetApp().m_marked_list->Add(objects_to_add);
+				if(objects_to_add.size() > 0)wxGetApp().m_marked_list->Add(objects_to_add, true);
 				selection_selected = true;
 			}
 		}
@@ -475,14 +475,20 @@ void MyTreeCtrl::OnLMouseUp(wxMouseEvent& event)
 		{
 			if(event.ControlDown())
 			{
-				if(wxGetApp().m_marked_list->ObjectMarked(item->m_object))wxGetApp().m_marked_list->Remove(item->m_object);
-				else wxGetApp().m_marked_list->Add(item->m_object);
+				if(wxGetApp().m_marked_list->ObjectMarked(item->m_object))
+				{
+					wxGetApp().m_marked_list->Remove(item->m_object, true);
+				}
+				else
+				{
+					wxGetApp().m_marked_list->Add(item->m_object, true);
+				}
 				wxGetApp().Repaint();
 			}
 			else
 			{
-				wxGetApp().m_marked_list->Clear();
-				wxGetApp().m_marked_list->Add(item->m_object);
+				wxGetApp().m_marked_list->Clear(true);
+				wxGetApp().m_marked_list->Add(item->m_object, true);
 				wxGetApp().Repaint();
 			}
 		}

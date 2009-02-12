@@ -25,7 +25,7 @@ static void OnApply(wxCommandEvent& event)
 static void OnCancel(wxCommandEvent& event)
 {
 	// just deselect the object, and the cancel will happen automatically in RefreshByRemovingAndAddingAll
-	wxGetApp().m_marked_list->Clear();
+	wxGetApp().m_marked_list->Clear(true);
 }
 
 CObjPropsCanvas::CObjPropsCanvas(wxWindow* parent)

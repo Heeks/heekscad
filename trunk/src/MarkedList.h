@@ -18,6 +18,8 @@ private:
 	void create_move_grips();
 	void update_move_grips();
 	void render_move_grips(bool select, bool no_color);
+	void OnChangedAdded(HeeksObj* object);
+	void OnChangedRemoved(HeeksObj* object);
 
 public:
 	PointOrWindow *point_or_window;
@@ -32,12 +34,12 @@ public:
 
 	void create_grippers();
 	void glCommands();
-	void Add(std::list<HeeksObj *> &obj_list);
-	void Add(HeeksObj *object);
-	void Remove(const std::list<HeeksObj *> &obj_list);
-	void Remove(HeeksObj *object);
+	void Add(std::list<HeeksObj *> &obj_list, bool call_OnChanged);
+	void Add(HeeksObj *object, bool call_OnChanged);
+	void Remove(const std::list<HeeksObj *> &obj_list, bool call_OnChanged);
+	void Remove(HeeksObj *object, bool call_OnChanged);
 	bool ObjectMarked(HeeksObj *object);
-	void Clear(void);
+	void Clear(bool call_OnChanged);
 	int size(void){return m_list.size();}
 	const std::list<HeeksObj *> &list(void){return m_list;}
 	void FindMarkedObject(const wxPoint &point, MarkedObject* marked_object);

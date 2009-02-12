@@ -38,7 +38,7 @@ bool CSphere::ModifyByMatrix(const double* m){
 	double new_radius = fabs(m_radius * scale);
 	CSphere* new_object = new CSphere(new_pos, new_radius, m_title.c_str(), m_color);
 	wxGetApp().AddUndoably(new_object, m_owner, NULL);
-	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object);
+	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().DeleteUndoably(this);
 	return true;
 }
@@ -72,8 +72,8 @@ void CSphere::OnApplyProperties()
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().DeleteUndoably(this);
 	wxGetApp().EndHistory();
-	wxGetApp().m_marked_list->Clear();
-	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object);
+	wxGetApp().m_marked_list->Clear(true);
+	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().Repaint();
 }
 
