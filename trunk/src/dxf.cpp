@@ -5,6 +5,7 @@
 #include "HLine.h"
 #include "HArc.h"
 #include "Sketch.h"
+#include <fstream>
 
 CDxfWrite::CDxfWrite(const wxChar* filepath)
 {
@@ -95,14 +96,10 @@ CDxfRead::CDxfRead(const wxChar* filepath)
 {
 	// start the file
 	m_fail = false;
-#if wxUSE_UNICODE
 #ifdef __WXMSW__
-	m_ifs = new wifstream(filepath);
-#else
-	m_ifs = new wifstream(Ttc(filepath));
-#endif
-#else
 	m_ifs = new ifstream(filepath);
+#else
+	m_ifs = new ifstream(Ttc(filepath));
 #endif
 	if(!(*m_ifs)){
 		m_fail = true;
