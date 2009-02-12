@@ -487,3 +487,4 @@ void HArc::Reverse()
 	B = temp;
 	m_circle.SetAxis(m_circle.Axis().Reversed());
 }
+
