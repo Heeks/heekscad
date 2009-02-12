@@ -95,15 +95,7 @@ CDxfRead::CDxfRead(const wxChar* filepath)
 {
 	// start the file
 	m_fail = false;
-#if wxUSE_UNICODE
-#ifdef __WXMSW__
-	m_ifs = new wifstream(filepath);
-#else
-	m_ifs = new wifstream(Ttc(filepath));
-#endif
-#else
-	m_ifs = new ifstream(filepath);
-#endif
+	m_ifs = new ifstream(Ttc(filepath));
 	if(!(*m_ifs)){
 		m_fail = true;
 		return;
@@ -419,18 +411,9 @@ void CDxfRead::OnReadArc(double start_angle, double end_angle, double radius, co
 	OnReadArc(s, e, c, true, undoably);
 }
 
-#if wxUSE_UNICODE
-static wxChar str_for_get_line[1024];
-#endif
-
 void CDxfRead::get_line()
 {
-#if wxUSE_UNICODE
-	m_ifs->getline(str_for_get_line, 1024);
-	strcpy(m_str, Ttc(str_for_get_line));
-#else
 	m_ifs->getline(m_str, 1024);
-#endif
 
 	char str[1024];
 	int len = strlen(m_str);
