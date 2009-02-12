@@ -15,7 +15,7 @@ std::string CSketch::m_sketch_order_str[MaxSketchOrderTypes] = {
 	std::string("open"),
 	std::string("reverse"),
 	std::string("bad"),
-	std::string("good"),
+	std::string("re-order"),
 	std::string("clockwise"),
 	std::string("counter-clockwise")
 };
@@ -68,14 +68,18 @@ static bool SketchOrderAvailable(SketchOrderType old_order, SketchOrderType new_
 		{
 		case SketchOrderTypeReverse:
 			return true;
+		default:
+			break;
 		}
 		break;
 
 	case SketchOrderTypeBad:
 		switch(new_order)
 		{
-		case SketchOrderTypeGood:
+		case SketchOrderTypeReOrder:
 			return true;
+		default:
+			break;
 		}
 		break;
 
@@ -84,6 +88,8 @@ static bool SketchOrderAvailable(SketchOrderType old_order, SketchOrderType new_
 		{
 		case SketchOrderTypeCloseCCW:
 			return true;
+		default:
+			break;
 		}
 		break;
 
@@ -92,7 +98,12 @@ static bool SketchOrderAvailable(SketchOrderType old_order, SketchOrderType new_
 		{
 		case SketchOrderTypeCloseCW:
 			return true;
+		default:
+			break;
 		}
+		break;
+
+	default:
 		break;
 	}
 
@@ -115,7 +126,7 @@ void CSketch::GetProperties(std::list<Property *> *list)
 		if(SketchOrderAvailable(sketch_order, (SketchOrderType)i))
 		{
 			order_map_for_properties.insert(std::pair<int, int>(j, i));
-			choices.push_back(m_sketch_order_str[i].c_str());
+			choices.push_back(Ctt(m_sketch_order_str[i].c_str()));
 			j++;
 		}
 	}
@@ -267,6 +278,9 @@ bool CSketch::ReOrderSketch(SketchOrderType new_order)
 			break;
 		}
 		break;
+
+	default:
+		break;
 	}
 
 	return done;
@@ -303,6 +317,8 @@ void CSketch::ReverseSketch()
 				break;
 			case ArcType:
 				((HArc*)copy)->Reverse();
+				break;
+			default:
 				break;
 		}
 
@@ -479,6 +495,8 @@ bool CSketchRelinker::TryAdd(HeeksObj* object, bool front_not_back)
 				break;
 			case ArcType:
 				((HArc*)new_object)->Reverse();
+				break;
+			default:
 				break;
 			}
 
