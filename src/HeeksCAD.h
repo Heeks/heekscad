@@ -37,6 +37,13 @@ enum GraphicsTextMode
 	GraphicsTextModeWithHelp
 };
 
+enum FileOpenOrImportType
+{
+	FileOpenOrImportTypeOther,
+	FileOpenOrImportTypeHeeks,
+	FileOpenOrImportTypeDxf
+};
+
 class HeeksCADapp : public wxApp, public ObjList
 {
 private:
@@ -122,6 +129,7 @@ public:
 	bool m_print_scaled_to_page;
 	wxPrintData *m_printData;
 	wxPageSetupDialogData* m_pageSetupData;
+	FileOpenOrImportType m_file_open_or_import_type;
 
 	// HeeksObj's virtual functions
 	void GetBox(CBox &box);

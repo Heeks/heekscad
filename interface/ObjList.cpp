@@ -184,7 +184,7 @@ bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 	HeeksObj::Add(object, prev_object);
 
 #ifdef HEEKSCAD
-	if(!wxGetApp().m_in_OpenFile && object->UsesID() && object->m_id == 0)
+	if((!wxGetApp().m_in_OpenFile || wxGetApp().m_file_open_or_import_type != FileOpenOrImportTypeHeeks) && object->UsesID() && object->m_id == 0)
 	{
 		object->SetID(wxGetApp().GetNextID(object->GetIDGroupType()));
 	}
