@@ -1,7 +1,7 @@
 #summary Using HeeksCAD
 
 You start in Select mode. 
-http://code.google.com/p/heekscad/source/browse/#svn/trunk/bitmaps/select.png
+http://heekscad.googlecode.com/svn/trunk/bitmaps/select.png
 
 = Selecting =
 
