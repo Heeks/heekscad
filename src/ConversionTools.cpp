@@ -132,15 +132,22 @@ bool ConvertSketchToFace2(HeeksObj* object, TopoDS_Face& face)
 	}
 
 	if(edges.size() > 0){
-		BRepBuilderAPI_MakeWire wire_maker;
-		std::list<TopoDS_Edge>::iterator It;
-		for(It = edges.begin(); It != edges.end(); It++)
+		try
 		{
-			TopoDS_Edge &edge = *It;
-			wire_maker.Add(edge);
-		}
+			BRepBuilderAPI_MakeWire wire_maker;
+			std::list<TopoDS_Edge>::iterator It;
+			for(It = edges.begin(); It != edges.end(); It++)
+			{
+				TopoDS_Edge &edge = *It;
+				wire_maker.Add(edge);
+			}
 
-		face = BRepBuilderAPI_MakeFace(wire_maker.Wire());
+			face = BRepBuilderAPI_MakeFace(wire_maker.Wire());
+		}
+		catch(...)
+		{
+			wxMessageBox(_("Fatal Error converting sketch to face"));
+		}
 		return true;
 	}
 
