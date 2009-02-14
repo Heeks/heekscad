@@ -131,12 +131,19 @@ bool CreateRuledSurface(const std::list<TopoDS_Wire> &wire_list, TopoDS_Shape& s
 
 void CreateExtrusions(const std::list<TopoDS_Face> &faces, std::list<TopoDS_Shape>& new_shapes, const gp_Vec& extrude_vector)
 {
-	for(std::list<TopoDS_Face>::const_iterator It = faces.begin(); It != faces.end(); It++)
-	{
-		const TopoDS_Face& face = *It;
-		BRepPrimAPI_MakePrism generator( face, extrude_vector );
-		generator.Build();
-		new_shapes.push_back(generator.Shape());
+	try{
+		for(std::list<TopoDS_Face>::const_iterator It = faces.begin(); It != faces.end(); It++)
+		{
+			const TopoDS_Face& face = *It;
+			BRepPrimAPI_MakePrism generator( face, extrude_vector );
+			generator.Build();
+			new_shapes.push_back(generator.Shape());
+		}
 	}
+	catch(...)
+	{
+		wxMessageBox(_("Fatal error making extruded solid"));
+	}
+	
 }
 
