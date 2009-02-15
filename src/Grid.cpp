@@ -30,6 +30,7 @@ static void RenderGrid(const CViewPoint *view_point, double max_number_across, b
 			gp_Pnt p1 = view_point->glUnproject(sp[i]);
 			sp[i].SetZ(0);
 			gp_Pnt p2 = view_point->glUnproject(sp[i]);
+			if(p1.Distance(p2) < 0.00000000001)return;
 			gp_Lin line = make_line(p1, p2);
 			gp_Pnt pnt;
 			if(intersect(line, plane, pnt))
