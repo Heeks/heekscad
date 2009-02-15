@@ -78,6 +78,13 @@ void CEdge::glCommands(bool select, bool marked, bool no_color){
 	}
 	else
 	{
+		if(m_owner == NULL || m_owner->m_owner == NULL || m_owner->m_owner->GetType() != WireType)
+		{
+			BRepTools::Clean(m_topods_edge);
+			double pixels_per_mm = wxGetApp().GetPixelScale();
+			BRepMesh::Mesh(m_topods_edge, 1/pixels_per_mm);
+		}
+
 		TopLoc_Location L;
 		Handle(Poly_Polygon3D) Polyg = BRep_Tool::Polygon3D(m_topods_edge, L);
 		if (!Polyg.IsNull()) {
