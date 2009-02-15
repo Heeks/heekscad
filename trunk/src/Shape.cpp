@@ -359,6 +359,8 @@ void CShape::OnEditString(const wxChar* str){
 
 // static member function
 HeeksObj* CShape::MakeObject(const TopoDS_Shape &shape, const wxChar* title, SolidTypeEnum solid_type, const HeeksColor& col){
+	if(shape.IsNull())return NULL;
+
 	switch(shape.ShapeType()){
 		case TopAbs_FACE:
 			{
@@ -369,7 +371,9 @@ HeeksObj* CShape::MakeObject(const TopoDS_Shape &shape, const wxChar* title, Sol
 				return new CWire(TopoDS::Wire(shape), title);
 			}
 		case TopAbs_EDGE:
-			return NULL;
+			{
+				return new CEdge(TopoDS::Edge(shape));
+			}
 		case TopAbs_VERTEX:
 			return NULL;
 		case TopAbs_COMPOUND:
@@ -650,24 +654,41 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<in
 		if ( status == IFSelect_RetDone )
 		{
 			Reader.TransferRoots();
-
-			TopoDS_Shape one_shape = Reader.OneShape ();
-
-			BRepOffsetAPI_Sewing face_sewer (0.001);
-			TopExp_Explorer explorer (one_shape, TopAbs_FACE);
-			while (explorer.More ())
+			int num_shapes = Reader.NbShapes();
+			if(num_shapes > 0)
 			{
-				face_sewer.Add (explorer.Current ());
-				explorer.Next ();
+				BRepOffsetAPI_Sewing face_sewing (0.001);
+				int shapes_added_for_sewing = 0;
+				for(int j = 1; j<= num_shapes; j++)
+				{
+					TopoDS_Shape rShape = Reader.Shape(j); 
+					if(rShape.ShapeType() == TopAbs_EDGE)
+					{
+						HeeksObj* new_object = new CEdge(TopoDS::Edge(rShape));
+						if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
+						else wxGetApp().Add(new_object, NULL);
+					}
+					else
+					{
+						face_sewing.Add (rShape);
+						shapes_added_for_sewing++;
+					}
+				}
+
+				if(shapes_added_for_sewing > 0)
+				{
+					face_sewing.Perform ();
+
+					if(!face_sewing.SewedShape().IsNull())
+					{
+						HeeksObj* new_object = MakeObject(face_sewing.SewedShape(), _("sewed IGES solid"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191));
+						if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
+						else wxGetApp().Add(new_object, NULL);
+						wxGetApp().Repaint();
+					}
+				}
 			}
-			face_sewer.Perform ();
 
-
-			HeeksObj* new_object = MakeObject(face_sewer.SewedShape (), _("sewed IGES solid"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191));
-			if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
-			else wxGetApp().Add(new_object, NULL);
-
-			wxGetApp().Repaint();
 		}
 		else{
 			wxMessageBox(_("IGES import not done!"));
