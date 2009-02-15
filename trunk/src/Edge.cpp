@@ -32,7 +32,9 @@ CEdge::~CEdge(){
 }
 
 void CEdge::glCommands(bool select, bool marked, bool no_color){
-	if(!no_color)glColor3ub(0, 0, 0);
+	if(!no_color){
+		wxGetApp().glColorEnsuringContrast(HeeksColor(0, 0, 0));
+	}
 
 	if(m_owner && m_owner->m_owner && m_owner->m_owner->GetType() == SolidType)
 	{
@@ -78,11 +80,19 @@ void CEdge::glCommands(bool select, bool marked, bool no_color){
 	}
 	else
 	{
+		bool glwidth_done = false;
+		GLfloat save_depth_range[2];
 		if(m_owner == NULL || m_owner->m_owner == NULL || m_owner->m_owner->GetType() != WireType)
 		{
 			BRepTools::Clean(m_topods_edge);
 			double pixels_per_mm = wxGetApp().GetPixelScale();
 			BRepMesh::Mesh(m_topods_edge, 1/pixels_per_mm);
+			if(marked){
+				glGetFloatv(GL_DEPTH_RANGE, save_depth_range);
+				glDepthRange(0, 0);
+				glLineWidth(2);
+				glwidth_done = true;
+			}
 		}
 
 		TopLoc_Location L;
@@ -96,6 +106,12 @@ void CEdge::glCommands(bool select, bool marked, bool no_color){
 				glVertex3d(p.X(), p.Y(), p.Z());
 			}
 			glEnd();
+		}
+
+		if(glwidth_done)
+		{
+			glLineWidth(1);
+			glDepthRange(save_depth_range[0], save_depth_range[1]);
 		}
 	}
 }
