@@ -108,9 +108,6 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 	m_items_marked_at_grab.clear();
 	wxGetApp().DestroyTransformGLList();
 
-	// don't need to press tick to make changes
-	wxGetApp().m_frame->m_properties->ApplyChanges();
-
 	if ( m_gripper_type <= GripperTypeObjectScaleXY )
 	{
 		for(std::list<HeeksObj*>::iterator It = wxGetApp().m_hidden_for_drag.begin(); It != wxGetApp().m_hidden_for_drag.end(); It++)

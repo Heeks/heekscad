@@ -8,7 +8,6 @@ class CObjPropsCanvas: public CPropertiesCanvas
 {
 private:
 	wxToolBar *m_toolBar;
-	HeeksObj* m_object_for_cancel;
 	std::list<Property *> m_initial_properties;
 
 	void ClearInitialProperties();
@@ -29,8 +28,7 @@ public:
 	void RefreshByRemovingAndAddingAll();
 	void AddToolBar();
 	void OnApply2();
-
-	void ApplyChanges(); // clear the cancel object
+	void OnCancel2();
 
     DECLARE_NO_COPY_CLASS(CObjPropsCanvas)
     DECLARE_EVENT_TABLE()

@@ -198,14 +198,13 @@ void CombineSketches::Run(){
 		if(object->GetType() == SketchType){
 			if(sketch1)
 			{
-				std::list<HeeksObj*> lines_and_arcs;
+				std::list<HeeksObj*> new_lines_and_arcs;
 				for(HeeksObj* o = object->GetFirstChild(); o; o = object->GetNextChild())
 				{
-					lines_and_arcs.push_back(o);
+					new_lines_and_arcs.push_back(o->MakeACopy());
 				}
-				wxGetApp().DeleteUndoably(lines_and_arcs);
 				wxGetApp().DeleteUndoably(object);
-				wxGetApp().AddUndoably(lines_and_arcs, sketch1);
+				wxGetApp().AddUndoably(new_lines_and_arcs, sketch1);
 			}
 			else
 			{
