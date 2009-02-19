@@ -182,7 +182,8 @@ void HArc::GetProperties(std::list<Property *> *list){
 	list->push_back(new PropertyVertex(_("centre"), c, this, on_set_centre));
 	list->push_back(new PropertyVertex(_("axis"), ax, this, on_set_axis));
 	double length = A.Distance(B);
-	list->push_back(new PropertyDouble(_("Length"), length, NULL));
+	list->push_back(new PropertyDouble(_("length"), length, NULL));
+	list->push_back(new PropertyDouble(_("radius"), m_circle.Radius(), NULL));
 
 	HeeksObj::GetProperties(list);
 }
