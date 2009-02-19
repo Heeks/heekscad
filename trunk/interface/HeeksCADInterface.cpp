@@ -674,6 +674,4 @@ void CHeeksCADInterface::PropertiesOnApply2()
 
 void CHeeksCADInterface::PropertiesApplyChanges()
 {
-	// don't need to press tick to make changes
-	wxGetApp().m_frame->m_properties->ApplyChanges();
 }

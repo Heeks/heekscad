@@ -20,16 +20,16 @@ END_EVENT_TABLE()
 static void OnApply(wxCommandEvent& event)
 {
 	wxGetApp().m_frame->m_properties->OnApply2();
+	wxGetApp().m_marked_list->Clear(true);
 }
 
 static void OnCancel(wxCommandEvent& event)
 {
-	// just deselect the object, and the cancel will happen automatically in RefreshByRemovingAndAddingAll
-	wxGetApp().m_marked_list->Clear(true);
+	wxGetApp().m_frame->m_properties->OnCancel2();
 }
 
 CObjPropsCanvas::CObjPropsCanvas(wxWindow* parent)
-        : CPropertiesCanvas(parent), m_object_for_cancel(NULL)
+        : CPropertiesCanvas(parent)
 {
 	m_toolBar = NULL;
 	AddToolBar();
@@ -97,8 +97,6 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll(){
 
 	ClearInitialProperties();
 
-	m_object_for_cancel = marked_object;
-
 	if(wxGetApp().m_marked_list->size() > 0)
 	{
 		std::list<Property *> list;
@@ -142,11 +140,6 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll(){
 	}
 }
 
-void CObjPropsCanvas::ApplyChanges()
-{
-	m_object_for_cancel = NULL;
-}
-
 void CObjPropsCanvas::OnApply2()
 {
 	// cause all of the properties to be applied
@@ -157,8 +150,16 @@ void CObjPropsCanvas::OnApply2()
 		HeeksObj* marked_object = (*wxGetApp().m_marked_list->list().begin());
 		marked_object->OnApplyProperties();
 	}
+}
 
-	ApplyChanges();
+void CObjPropsCanvas::OnCancel2()
+{
+	ClearProperties();
+	for(std::list<Property*>::iterator It = m_initial_properties.begin(); It != m_initial_properties.end(); It++){
+		Property* p = *It;
+		p->CallSetFunction();
+	}
+	wxGetApp().m_marked_list->Clear(true);
 }
 
 void CObjPropsCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)
@@ -168,4 +169,5 @@ void CObjPropsCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, co
 
 void CObjPropsCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified)
 {
+	RefreshByRemovingAndAddingAll();
 }

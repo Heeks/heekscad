@@ -328,7 +328,16 @@ bool HArc::Stretch(const double *p, const double* shift){
 	gp_Vec vshift = make_vector(shift);
 
 	if(A.IsEqual(vp, wxGetApp().m_geom_tol)){
-		A = A.XYZ() + vshift.XYZ();
+		gp_Vec direction = -(GetSegmentVector(1.0));
+		gp_Pnt centre;
+		gp_Dir axis;
+		gp_Pnt new_A = gp_Pnt(A.XYZ() + vshift.XYZ());
+		if(HArc::TangentialArc(B, direction, new_A, centre, axis))
+		{
+			m_circle.SetAxis(gp_Ax1(centre, -axis));
+			m_circle.SetRadius(new_A.Distance(centre));
+			A = new_A;
+		}
 	}
 	else if(B.IsEqual(vp, wxGetApp().m_geom_tol)){
 		gp_Vec direction = GetSegmentVector(0.0);

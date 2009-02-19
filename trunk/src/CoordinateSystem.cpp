@@ -341,6 +341,5 @@ void CoordinateSystem::PickFrom3Points()
 	coord_system_for_Tool->m_x = make_vector(coord_system_for_Tool->m_o, make_point(x_axis_pos));
 	coord_system_for_Tool->m_y = make_vector(coord_system_for_Tool->m_o, make_point(y_axis_pos));
 
-	wxGetApp().m_frame->m_properties->ApplyChanges();
 	wxGetApp().Repaint();
 }
