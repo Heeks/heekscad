@@ -59,10 +59,8 @@ static void on_set_visible(bool value, HeeksObj* object)
 {
 	object->m_visible = value;
 #ifdef HEEKSCAD
-	wxGetApp().m_frame->m_properties->ApplyChanges();
 	wxGetApp().Repaint();
 #else
-	heeksCAD->PropertiesApplyChanges();
 	heeksCAD->Repaint();
 #endif
 }
