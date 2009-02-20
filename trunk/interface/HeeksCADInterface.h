@@ -74,6 +74,8 @@ public:
 	virtual HeeksObj* ReadXMLElement(TiXmlElement* pElem);
 	virtual void RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem));
 	virtual void OpenXMLFile(const wxChar *filepath, bool undoably = false, HeeksObj* paste_into = NULL);
+	virtual void ObjectWriteBaseXML(HeeksObj* object, TiXmlElement* element);
+	virtual void ObjectReadBaseXML(HeeksObj* object, TiXmlElement* element);
 	virtual HeeksObj* GetIDObject(int type, int id);
 	virtual void SetObjectID(HeeksObj* object, int id); // check for existing id using GetIDObject and call DeleteUndoably first
 	virtual int GetNextID(int type);

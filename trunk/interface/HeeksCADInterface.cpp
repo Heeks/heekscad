@@ -354,6 +354,16 @@ void CHeeksCADInterface::OpenXMLFile(const wxChar *filepath, bool undoably, Heek
 	wxGetApp().OpenXMLFile(filepath, undoably, paste_into);
 }
 
+void CHeeksCADInterface::ObjectWriteBaseXML(HeeksObj* object, TiXmlElement* element)
+{
+	object->WriteBaseXML(element);
+}
+
+void CHeeksCADInterface::ObjectReadBaseXML(HeeksObj* object, TiXmlElement* element)
+{
+	object->ReadBaseXML(element);
+}
+
 HeeksObj* CHeeksCADInterface::GetIDObject(int type, int id)
 {
 	return wxGetApp().GetIDObject(type, id);
