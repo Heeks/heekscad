@@ -137,8 +137,7 @@ void HeeksObj::SetID(int id)
 void HeeksObj::WriteBaseXML(TiXmlElement *element)
 {
 #ifdef HEEKSCAD
-	if(UsesID())element->SetAttribute("id", m_id);
-	if(!m_visible)element->SetAttribute("vis", 0);
+	wxGetApp().ObjectWriteBaseXML(this, element);
 #else
 	heeksCAD->ObjectWriteBaseXML(this, element);
 #endif
@@ -147,13 +146,7 @@ void HeeksObj::WriteBaseXML(TiXmlElement *element)
 void HeeksObj::ReadBaseXML(TiXmlElement* element)
 {
 #ifdef HEEKSCAD
-	// get the attributes
-	for(TiXmlAttribute* a = element->FirstAttribute(); a; a = a->Next())
-	{
-		std::string name(a->Name());
-		if(UsesID() && name == "id"){SetID(a->IntValue());}
-		if(name == "vis"){m_visible = (a->IntValue() != 0);}
-	}
+	wxGetApp().ObjectReadBaseXML(this, element);
 #else
 	heeksCAD->ObjectReadBaseXML(this, element);
 #endif
