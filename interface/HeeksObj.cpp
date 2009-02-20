@@ -136,12 +136,17 @@ void HeeksObj::SetID(int id)
 
 void HeeksObj::WriteBaseXML(TiXmlElement *element)
 {
+#ifdef HEEKSCAD
 	if(UsesID())element->SetAttribute("id", m_id);
 	if(!m_visible)element->SetAttribute("vis", 0);
+#else
+	heeksCAD->ObjectWriteBaseXML(this, element);
+#endif
 }
 
 void HeeksObj::ReadBaseXML(TiXmlElement* element)
 {
+#ifdef HEEKSCAD
 	// get the attributes
 	for(TiXmlAttribute* a = element->FirstAttribute(); a; a = a->Next())
 	{
@@ -149,6 +154,9 @@ void HeeksObj::ReadBaseXML(TiXmlElement* element)
 		if(UsesID() && name == "id"){SetID(a->IntValue());}
 		if(name == "vis"){m_visible = (a->IntValue() != 0);}
 	}
+#else
+	heeksCAD->ObjectReadBaseXML(this, element);
+#endif
 }
 
 bool HeeksObj::OnVisibleLayer()
