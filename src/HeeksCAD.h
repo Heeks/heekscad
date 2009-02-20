@@ -163,6 +163,8 @@ public:
 	void Remove(HeeksObj* object);
 	void Reset();
 	HeeksObj* ReadXMLElement(TiXmlElement* pElem);
+	void ObjectWriteBaseXML(HeeksObj *object, TiXmlElement *element);
+	void ObjectReadBaseXML(HeeksObj *object, TiXmlElement* element);
 	void InitializeXMLFunctions();
 	void OpenXMLFile(const wxChar *filepath, bool undoably = false, HeeksObj* paste_into = NULL);
 	void ReadSVGElement(TiXmlElement* pElem, bool undoably = false);

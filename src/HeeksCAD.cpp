@@ -567,6 +567,23 @@ HeeksObj* HeeksCADapp::ReadXMLElement(TiXmlElement* pElem)
 	return object;
 }
 
+void HeeksCADapp::ObjectWriteBaseXML(HeeksObj *object, TiXmlElement *element)
+{
+	if(UsesID())element->SetAttribute("id", object->m_id);
+	if(!m_visible)element->SetAttribute("vis", 0);
+}
+
+void HeeksCADapp::ObjectReadBaseXML(HeeksObj *object, TiXmlElement* element)
+{
+	// get the attributes
+	for(TiXmlAttribute* a = element->FirstAttribute(); a; a = a->Next())
+	{
+		std::string name(a->Name());
+		if(UsesID() && name == "id"){object->SetID(a->IntValue());}
+		if(name == "vis"){object->m_visible = (a->IntValue() != 0);}
+	}
+}
+
 void HeeksCADapp::OpenXMLFile(const wxChar *filepath, bool undoably, HeeksObj* paste_into)
 {
 	TiXmlDocument doc(Ttc(filepath));
