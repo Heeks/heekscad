@@ -356,12 +356,12 @@ void CHeeksCADInterface::OpenXMLFile(const wxChar *filepath, bool undoably, Heek
 
 void CHeeksCADInterface::ObjectWriteBaseXML(HeeksObj* object, TiXmlElement* element)
 {
-	object->WriteBaseXML(element);
+	wxGetApp().ObjectWriteBaseXML(object, element);
 }
 
 void CHeeksCADInterface::ObjectReadBaseXML(HeeksObj* object, TiXmlElement* element)
 {
-	object->ReadBaseXML(element);
+	wxGetApp().ObjectReadBaseXML(object, element);
 }
 
 HeeksObj* CHeeksCADInterface::GetIDObject(int type, int id)
