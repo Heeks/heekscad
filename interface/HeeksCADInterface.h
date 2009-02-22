@@ -12,6 +12,8 @@ class wxPoint;
 class CInputMode;
 class TiXmlElement;
 
+#include "SketchOrder.h"
+
 class CHeeksCADInterface{
 public:
 	CHeeksCADInterface(){}
@@ -84,6 +86,10 @@ public:
 	virtual const wxChar* GetFileFullPath(); // returns NULL for untitled
 	virtual void SetViewBox(const double* b);
 	virtual void SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath);
+
+	// sketches
+	virtual SketchOrderType GetSketchOrder(HeeksObj* sketch);
+	virtual bool ReOrderSketch(HeeksObj* sketch, SketchOrderType new_order); // returns true if done
 
 	// body functions
 	virtual long BodyGetNumFaces(HeeksObj* body);

@@ -408,6 +408,16 @@ void CHeeksCADInterface::SaveSTLFile(const std::list<HeeksObj*>& objects, const 
 	wxGetApp().SaveSTLFile(objects, filepath);
 }
 
+SketchOrderType CHeeksCADInterface::GetSketchOrder(HeeksObj* sketch)
+{
+	return ((CSketch*)sketch)->GetSketchOrder();
+}
+
+bool CHeeksCADInterface::ReOrderSketch(HeeksObj* sketch, SketchOrderType new_order)
+{
+	return ((CSketch*)sketch)->ReOrderSketch(new_order);
+}
+
 long CHeeksCADInterface::BodyGetNumFaces(HeeksObj* body)
 {
 	return ((CShape*)body)->m_faces->GetNumChildren();
