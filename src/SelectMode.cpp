@@ -302,7 +302,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 					wxGetApp().FindMarkedObject(button_down_point, &marked_object);
 					if(marked_object.m_map.size()>0){
 						HeeksObj* object = marked_object.GetFirstOfTopOnly();
-						double min_depth;
+						double min_depth = 0.0;
 						HeeksObj* closest_object = NULL;
 						while(object)
 						{
