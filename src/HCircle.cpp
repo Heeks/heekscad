@@ -435,7 +435,7 @@ bool HCircle::GetArcTangentPoints(const gp_Circ& c, const gp_Lin &line, const gp
 	{
 		std::list<gp_Pnt> rl;
 		intersect(offset_line, concentric_circle, rl);
-		double best_dp;
+		double best_dp = 0.0;
 		gp_Pnt* best_pnt = NULL;
 		for(std::list<gp_Pnt>::iterator It = rl.begin(); It != rl.end(); It++)
 		{
@@ -511,7 +511,7 @@ public:
 static const two_points* find_best_points_pair(const std::list<two_points>& point_pairs, const gp_Pnt& a, const gp_Pnt& b)
 {
 	const two_points* best_pair = NULL;
-	double best_pair_error;
+	double best_pair_error = 0.0;
 	for(std::list<two_points>::const_iterator It = point_pairs.begin(); It != point_pairs.end(); It++)
 	{
 		const two_points& point_pair = *It;
@@ -703,7 +703,7 @@ bool HCircle::GetArcTangentPoint(const gp_Lin& l, const gp_Pnt& a, const gp_Pnt&
 				}
 
 				gp_Pnt* best_pnt = NULL;
-				double best_dist;
+				double best_dist = 0.0;
 
 				for(std::list<gp_Pnt>::iterator It = maybe_p.begin(); It != maybe_p.end(); It++)
 				{
@@ -741,7 +741,7 @@ bool HCircle::GetArcTangentPoint(const gp_Lin& l, const gp_Pnt& a, const gp_Pnt&
 		std::list<gp_Pnt> plist;
 		intersect(offset_line, offset_circle, plist);
 		gp_Pnt* best_pnt = NULL;
-		double best_distance;
+		double best_distance = 0.0;
 		for(std::list<gp_Pnt>::iterator It = plist.begin(); It != plist.end(); It++)
 		{
 			gp_Pnt& pnt = *It;
@@ -781,7 +781,7 @@ bool HCircle::GetArcTangentPoint(const gp_Circ& c, const gp_Pnt& a, const gp_Pnt
 
 		gp_Circ* best_pnt_circle = NULL;
 		gp_Pnt best_pnt;
-		double best_dist;
+		double best_dist = 0.0;
 
 		for(std::list<gp_Circ>::iterator It = c_list.begin(); It != c_list.end(); It++)
 		{

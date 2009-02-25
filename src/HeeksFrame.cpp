@@ -368,12 +368,14 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 				wxDynamicLibrary* shared_library = new wxDynamicLibrary(fn.GetFullPath());
 				if(shared_library->IsLoaded()){
-					void(*OnStartUp)(CHeeksCADInterface*) = (void (*)(CHeeksCADInterface*))(shared_library->GetSymbol(_T("OnStartUp")));
+					bool success;
+					void(*OnStartUp)(CHeeksCADInterface*) = (void (*)(CHeeksCADInterface*))(shared_library->GetSymbol(_T("OnStartUp"), &success));
 					if(OnStartUp)
 					{
 						(*OnStartUp)(&heekscad_interface);
-						wxGetApp().m_loaded_libraries.push_back(shared_library);
+						//wxGetApp().m_loaded_libraries.push_back(shared_library);
 					}
+					delete shared_library;
 				}
 				else{
 					delete shared_library;
@@ -402,7 +404,8 @@ CHeeksFrame::~CHeeksFrame()
 	// call the shared libraries function OnFrameDelete, so they can write profile strings while aui manager still exists
 	for(std::list<wxDynamicLibrary*>::iterator It = wxGetApp().m_loaded_libraries.begin(); It != wxGetApp().m_loaded_libraries.end(); It++){
 		wxDynamicLibrary* shared_library = *It;
-		void(*OnFrameDelete)() = (void(*)())(shared_library->GetSymbol(_T("OnFrameDelete")));
+		bool success;
+		void(*OnFrameDelete)() = (void(*)())(shared_library->GetSymbol(_T("OnFrameDelete"), &success));
 		if(OnFrameDelete)(*OnFrameDelete)();
 	}
 

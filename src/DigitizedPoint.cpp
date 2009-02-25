@@ -203,7 +203,7 @@ bool DigitizedPoint::GetTangentCircle(const DigitizedPoint& d1, const DigitizedP
 	TangentCircles(plc1, plc2, plc3, c_list);
 
 	gp_Circ* best_circle = NULL;
-	double best_dist;
+	double best_dist = 0.0;
 
 	for(std::list<gp_Circ>::iterator It = c_list.begin(); It != c_list.end(); It++)
 	{
