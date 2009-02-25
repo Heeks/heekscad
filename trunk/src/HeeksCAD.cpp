@@ -140,6 +140,14 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 
 HeeksCADapp::~HeeksCADapp()
 {
+	wxUninitialize();
+
+	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
+		wxDynamicLibrary* shared_library = *It;
+		delete shared_library;
+	}
+	m_loaded_libraries.clear();
+
 	delete m_marked_list;
 	m_marked_list = NULL;
 	observers.clear();
@@ -203,7 +211,7 @@ bool HeeksCADapp::OnInit()
 #else
 		sscanf(str, _T("%d %d %d"), &r, &g, &b);
 #endif
-		background_color = HeeksColor(r, g, b);
+		background_color = HeeksColor((unsigned char)r, (unsigned char)g, (unsigned char)b);
 	}
 	{
 		wxString str;
@@ -214,7 +222,7 @@ bool HeeksCADapp::OnInit()
 #else
 		sscanf(str, _T("%d %d %d"), &r, &g, &b);
 #endif
-		current_color = HeeksColor(r, g, b);
+		current_color = HeeksColor((unsigned char)r, (unsigned char)g, (unsigned char)b);
 	}
 	{
 		wxString str;
@@ -225,7 +233,7 @@ bool HeeksCADapp::OnInit()
 #else
 		sscanf(str, _T("%d %d %d"), &r, &g, &b);
 #endif
-		construction_color = HeeksColor(r, g, b);
+		construction_color = HeeksColor((unsigned char)r, (unsigned char)g, (unsigned char)b);
 	}
 	config.Read(_T("RotateMode"), &m_rotate_mode);
 	config.Read(_T("Antialiasing"), &m_antialiasing);
@@ -285,10 +293,9 @@ bool HeeksCADapp::OnInit()
 		// get filenames from the commandline
 		if (parser.Parse() == 0)
 		{
-			for (size_t paramNr=0; paramNr < parser.GetParamCount(); ++paramNr)
+			if(parser.GetParamCount() > 0)
 			{
-				OpenFile((parser.GetParam (paramNr)));
-				break;
+				OpenFile(parser.GetParam(0));
 			}
 		}
 	}
@@ -337,12 +344,6 @@ int HeeksCADapp::OnExit(){
 	WriteRecentFilesProfileString(config);
 
 	if(m_gl_font)glFontDestroy(m_gl_font);
-
-	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
-		wxDynamicLibrary* shared_library = *It;
-		delete shared_library;
-	}
-	m_loaded_libraries.clear();
 
 	int result = wxApp::OnExit();
 	return result;
@@ -682,8 +683,8 @@ void HeeksCADapp::ReadSVGElement(TiXmlElement* pElem, bool undoably)
 				// add lines and arcs and bezier curves
 				const char* d = a->Value();
 
-				double sx, sy;
-				double px, py;
+				double sx = 0.0, sy = 0.0;
+				double px = 0.0, py = 0.0;
 				CSketch* sketch = NULL;
 
 				int pos = 0;
@@ -1945,8 +1946,9 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
 		wxDynamicLibrary* shared_library = *It;
 		list_for_GetOptions = list;
-		void(*GetOptions)(void(*)(Property*)) = (void(*)(void(*)(Property*)))(shared_library->GetSymbol(_T("GetOptions")));
-		(*GetOptions)(AddPropertyCallBack);
+		bool success;
+		void(*GetOptions)(void(*)(Property*)) = (void(*)(void(*)(Property*)))(shared_library->GetSymbol(_T("GetOptions"), &success));
+		if(GetOptions)(*GetOptions)(AddPropertyCallBack);
 	}
 
 	PropertyList* selection_filter = new PropertyList(_("selection filter"));
@@ -2350,7 +2352,8 @@ void HeeksCADapp::OnNewOrOpen(bool open)
 {
 	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
 		wxDynamicLibrary* shared_library = *It;
-		void(*fnOnNewOrOpen)(int) = (void(*)(int))(shared_library->GetSymbol(_T("OnNewOrOpen")));
+		bool success;
+		void(*fnOnNewOrOpen)(int) = (void(*)(int))(shared_library->GetSymbol(_T("OnNewOrOpen"), &success));
 		if(fnOnNewOrOpen){
 			(*fnOnNewOrOpen)(open ? 1:0);
 		}

@@ -323,8 +323,8 @@ bool CDxfRead::ReadLwPolyLine(bool undoably)
 
 	bool x_found = false;
 	bool y_found = false;
-	double x;
-	double y;
+	double x = 0.0;
+	double y = 0.0;
 	bool bulge_found = false;
 	double bulge = 0.0;
 	bool closed = false;
