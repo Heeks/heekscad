@@ -373,9 +373,8 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 					if(OnStartUp)
 					{
 						(*OnStartUp)(&heekscad_interface);
-						//wxGetApp().m_loaded_libraries.push_back(shared_library);
+						wxGetApp().m_loaded_libraries.push_back(shared_library);
 					}
-					delete shared_library;
 				}
 				else{
 					delete shared_library;
