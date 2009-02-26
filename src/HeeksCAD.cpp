@@ -140,14 +140,6 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 
 HeeksCADapp::~HeeksCADapp()
 {
-	wxUninitialize();
-
-	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
-		wxDynamicLibrary* shared_library = *It;
-		delete shared_library;
-	}
-	m_loaded_libraries.clear();
-
 	delete m_marked_list;
 	m_marked_list = NULL;
 	observers.clear();
@@ -344,6 +336,12 @@ int HeeksCADapp::OnExit(){
 	WriteRecentFilesProfileString(config);
 
 	if(m_gl_font)glFontDestroy(m_gl_font);
+
+	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
+		wxDynamicLibrary* shared_library = *It;
+		delete shared_library;
+	}
+	m_loaded_libraries.clear();
 
 	int result = wxApp::OnExit();
 	return result;
