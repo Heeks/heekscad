@@ -77,13 +77,21 @@ void CStlSolid::read_from_file(const wxChar* filepath)
 			{
 				if(!strcmp(five_chars, "verte"))
 				{
-					sscanf(str, " vertex %f %f %f", &(t.x[vertex][0]), &(t.x[vertex][1]), &(t.x[vertex][2]));
+					std::istringstream ss(str);
+					ss.imbue(std::locale("C"));
+					ss.seekg(std::string(" vertex").size());
+					ss >> t.x[vertex][0] >> t.x[vertex][1] >> t.x[vertex][2];
+					//sscanf(str, " vertex %f %f %f", &(t.x[vertex][0]), &(t.x[vertex][1]), &(t.x[vertex][2]));
 					vertex++;
 					if(vertex > 2)vertex = 2;
 				}
 				else if(!strcmp(five_chars, "facet"))
 				{
-					sscanf(str, " facet normal %f %f %f", &(t.n[0]), &(t.n[1]), &(t.n[2]));
+					std::istringstream ss(str);
+					ss.imbue(std::locale("C"));
+					ss.seekg(std::string(" facet normal").size());
+					ss >> t.n[0] >> t.n[1] >> t.n[2];
+					//sscanf(str, " facet normal %f %f %f", &(t.n[0]), &(t.n[1]), &(t.n[2]));
 					vertex = 0;
 				}
 				else if(!strcmp(five_chars, "endfa"))
