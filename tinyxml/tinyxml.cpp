@@ -703,7 +703,13 @@ void TiXmlElement::SetAttribute( const std::string& name, int val )
 
 
 void TiXmlElement::SetDoubleAttribute( const char * name, double val )
-{	
+{
+#if TIXML_USE_STL
+    std::ostringstream ss;
+    ss.imbue(std::locale("C"));
+    ss << val;
+	SetAttribute( name, ss.str() );
+#else
 	char buf[256];
 	#if defined(TIXML_SNPRINTF)		
 		TIXML_SNPRINTF( buf, sizeof(buf), "%f", val );
@@ -711,6 +717,8 @@ void TiXmlElement::SetDoubleAttribute( const char * name, double val )
 		sprintf( buf, "%f", val );
 	#endif
 	SetAttribute( name, buf );
+#endif
+
 }
 
 
@@ -1264,6 +1272,12 @@ void TiXmlAttribute::SetIntValue( int _value )
 
 void TiXmlAttribute::SetDoubleValue( double _value )
 {
+#if TIXML_USE_STL
+    std::ostringstream ss;
+    ss.imbue(std::locale("C"));
+    ss << _value;
+	SetValue( ss.str() );
+#else
 	char buf [256];
 	#if defined(TIXML_SNPRINTF)		
 		TIXML_SNPRINTF( buf, sizeof(buf), "%lf", _value);
@@ -1271,6 +1285,8 @@ void TiXmlAttribute::SetDoubleValue( double _value )
 		sprintf (buf, "%lf", _value);
 	#endif
 	SetValue (buf);
+#endif
+
 }
 
 int TiXmlAttribute::IntValue() const
@@ -1280,7 +1296,15 @@ int TiXmlAttribute::IntValue() const
 
 double  TiXmlAttribute::DoubleValue() const
 {
+#if TIXML_USE_STL
+    std::istringstream ss(value);
+    ss.imbue(std::locale("C"));
+    double dval;
+    ss >> dval;
+    return dval;
+#else
 	return atof (value.c_str ());
+#endif
 }
 
 
