@@ -40,6 +40,7 @@
 #include "../tinyxml/tinyxml.h"
 #include "HeeksConfig.h"
 #include "../interface/MarkedObject.h"
+#include <locale.h>
 
 // static member variable
 bool CShape::m_solids_found = false;
@@ -601,11 +602,15 @@ void CShape::FilletOrChamferEdges(const std::list<HeeksObj*> &list, double radiu
 
 bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<int, CShapeData> *index_map)
 {
+
 	// returns true, if suffix handled
 	wxString wf(filepath);
 
 	if(wf.EndsWith(_T(".stp")) || wf.EndsWith(_T(".STP")) || wf.EndsWith(_T(".step")) || wf.EndsWith(_T(".STEP")))
 	{
+		char oldlocale[1000];
+		strcpy(oldlocale, setlocale(LC_NUMERIC, "C"));
+
 		Standard_CString aFileName = (Standard_CString) (Ttc(filepath));
 		STEPControl_Reader Reader;
 		int status = Reader.ReadFile( aFileName );
@@ -643,10 +648,16 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<in
 		else{
 			wxMessageBox(_("STEP import not done!"));
 		}
+		
+		setlocale(LC_NUMERIC, oldlocale);
+
 		return true;
 	}
 	else if(wf.EndsWith(_T(".igs")) || wf.EndsWith(_T(".IGS")) || wf.EndsWith(_T(".iges")) || wf.EndsWith(_T(".IGES")))
 	{
+		char oldlocale[1000];
+		strcpy(oldlocale, setlocale(LC_NUMERIC, "C"));
+
 		Standard_CString aFileName = (Standard_CString) (Ttc(filepath));
 		IGESControl_Reader Reader;
 		int status = Reader.ReadFile( aFileName );
@@ -693,6 +704,9 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<in
 		else{
 			wxMessageBox(_("IGES import not done!"));
 		}
+		
+		setlocale(LC_NUMERIC, oldlocale);
+
 		return true;
 	}
 	return false;
@@ -706,6 +720,9 @@ bool CShape::ExportSolidsFile(const std::list<HeeksObj*>& objects, const wxChar*
 
 	if(wf.EndsWith(_T(".stp")) || wf.EndsWith(_T(".step")))
 	{
+		char oldlocale[1000];
+		strcpy(oldlocale, setlocale(LC_NUMERIC, "C"));
+
 		Standard_CString aFileName = (Standard_CString) (Ttc(filepath));
 		STEPControl_Writer writer;
 		// add all the solids
@@ -720,10 +737,16 @@ bool CShape::ExportSolidsFile(const std::list<HeeksObj*>& objects, const wxChar*
 			}
 		}
 		writer.Write(aFileName);
+		
+		setlocale(LC_NUMERIC, oldlocale);
+
 		return true;
 	}
 	else if(wf.EndsWith(_T(".igs")) || wf.EndsWith(_T(".iges")))
 	{
+		char oldlocale[1000];
+		strcpy(oldlocale, setlocale(LC_NUMERIC, "C"));
+
 		Standard_CString aFileName = (Standard_CString) (Ttc(filepath));
 
 		IGESControl_Controller::Init();
@@ -741,6 +764,9 @@ bool CShape::ExportSolidsFile(const std::list<HeeksObj*>& objects, const wxChar*
 			}
 		}
 		writer.Write(aFileName);
+		
+		setlocale(LC_NUMERIC, oldlocale);
+
 		return true;
 	}
 	return false;
