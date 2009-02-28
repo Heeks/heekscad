@@ -53,6 +53,8 @@ distribution.
 	#define TIXML_STRING		TiXmlString
 #endif
 
+#include <sstream>
+
 // Deprecated library function hell. Compilers want to use the
 // new safe versions. This probably doesn't fully address the problem,
 // but it gets closer. There are too many compilers for me to fully
