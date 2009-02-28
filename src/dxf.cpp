@@ -19,6 +19,7 @@ CDxfWrite::CDxfWrite(const wxChar* filepath)
 		m_fail = true;
 		return;
 	}
+	m_ofs->imbue(std::locale("C"));
 
 	// start
 	(*m_ofs) << 0          << endl;
@@ -100,6 +101,7 @@ CDxfRead::CDxfRead(const wxChar* filepath)
 		m_fail = true;
 		return;
 	}
+	m_ifs->imbue(std::locale("C"));
 }
 
 CDxfRead::~CDxfRead()
