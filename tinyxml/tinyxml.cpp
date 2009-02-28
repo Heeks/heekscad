@@ -612,7 +612,13 @@ const char* TiXmlElement::Attribute( const char* name, double* d ) const
 	if ( d )
 	{
 		if ( s ) {
+#if TIXML_USE_STL
+			std::istringstream ss(s);
+			ss.imbue(std::locale("C"));
+			ss >> *d;
+#else
 			*d = atof( s );
+#endif
 		}
 		else {
 			*d = 0;
@@ -629,7 +635,9 @@ const std::string* TiXmlElement::Attribute( const std::string& name, double* d )
 	if ( d )
 	{
 		if ( s ) {
-			*d = atof( s->c_str() );
+			std::istringstream ss(s->c_str());
+			ss.imbue(std::locale("C"));
+			ss >> *d;
 		}
 		else {
 			*d = 0;
