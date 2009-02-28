@@ -828,24 +828,20 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 
 	if(import_not_open)StartHistory();
 
-	if(wf.EndsWith(_T(".heeks")))
+	if(wf.EndsWith(_T(".heeks")) || wf.EndsWith(_T(".HEEKS")))
 	{
 		m_file_open_or_import_type = FileOpenOrImportTypeHeeks;
 		OpenXMLFile(filepath, import_not_open, paste_into);
 	}
-	else if(wf.EndsWith(_T(".svg")))
+	else if(wf.EndsWith(_T(".svg")) || wf.EndsWith(_T(".SVG")))
 	{
 		OpenSVGFile(filepath, import_not_open);
 	}
-	else if(wf.EndsWith(_T(".svg")))
-	{
-		OpenSVGFile(filepath, import_not_open);
-	}
-	else if(wf.EndsWith(_T(".stl")))
+	else if(wf.EndsWith(_T(".stl")) || wf.EndsWith(_T(".STL")))
 	{
 		OpenSTLFile(filepath, import_not_open);
 	}
-	else if(wf.EndsWith(_T(".dxf")))
+	else if(wf.EndsWith(_T(".dxf")) || wf.EndsWith(_T(".DXF")))
 	{
 		m_file_open_or_import_type = FileOpenOrImportTypeDxf;
 		OpenDXFFile(filepath, import_not_open);
@@ -2049,7 +2045,7 @@ const wxChar* HeeksCADapp::GetKnownFilesWildCardString(bool open)const
 			imageExtStr2.Append(_T("*."));
 			imageExtStr2.Append(ext);
 		}
-		known_file_ext = wxString(_("Known Files")) + _T(" |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl;*.svg;*.dxf;") + imageExtStr + _T("|") + _("Heeks files") + _T(" (*.heeks)|*.heeks|") + _("IGES files") + _T(" (*.igs *.iges)|*.igs;*.iges|") + _("STEP files") + _T(" (*.stp *.step)|*.stp;*.step|") + _("STL files") + _T(" (*.stl)|*.stl|") + _("Scalar Vector Graphics files") + _T(" (*.svg)|*.svg|") + _("DXF files") + _T(" (*.dxf)|*.dxf|") + _("Picture files") + _T(" (") + imageExtStr2 + _T(")|") + imageExtStr;
+		known_file_ext = wxString(_("Known Files")) + _T(" |*.heeks;*.HEEKS;*.igs;*.IGS;*.iges;*.IGES;*.stp;*.STP;*.step;*.STEP;*.stl;*.STL;*.svg;*.SVG;*.dxf;*.DXF;") + imageExtStr + _T("|") + _("Heeks files") + _T(" (*.heeks)|*.heeks;*.HEEKS|") + _("IGES files") + _T(" (*.igs *.iges)|*.igs;*.IGS;*.iges;*.IGES|") + _("STEP files") + _T(" (*.stp *.step)|*.stp;*.STP;*.step;*.STEP|") + _("STL files") + _T(" (*.stl)|*.stl;*.STL|") + _("Scalar Vector Graphics files") + _T(" (*.svg)|*.svg;*.SVG|") + _("DXF files") + _T(" (*.dxf)|*.dxf;*.DXF|") + _("Picture files") + _T(" (") + imageExtStr2 + _T(")|") + imageExtStr;
 		return known_file_ext.c_str();
 	}
 	else{
@@ -2063,7 +2059,7 @@ const wxChar* HeeksCADapp::GetKnownFilesCommaSeparatedList(bool open)const
 {
 	if(open){
 		wxList handlers = wxImage::GetHandlers();
-		wxString known_ext_str = _T("heeks, igs, iges, stp, step, stl, svg, dxf");
+		wxString known_ext_str = _T("heeks, HEEKS, igs, iges, stp, step, stl, svg, dxf");
 		for(wxList::iterator It = handlers.begin(); It != handlers.end(); It++)
 		{
 			wxImageHandler* handler = (wxImageHandler*)(*It);
