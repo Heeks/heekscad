@@ -941,7 +941,8 @@ static ofstream* ofs_for_write_stl_triangle = NULL;
 
 static void write_stl_triangle(const double* x, const double* n)
 {
-	(*ofs_for_write_stl_triangle) << " facet normal " << n[0] << " " << n[1] << " " << n[2] << "   outer loop" << endl;
+	(*ofs_for_write_stl_triangle) << " facet normal " << n[0] << " " << n[1] << " " << n[2] << endl;
+	(*ofs_for_write_stl_triangle) << "   outer loop" << endl;
 	(*ofs_for_write_stl_triangle) << "     vertex " << x[0] << " " << x[1] << " " << x[2] << endl;
 	(*ofs_for_write_stl_triangle) << "     vertex " << x[3] << " " << x[4] << " " << x[5] << endl;
 	(*ofs_for_write_stl_triangle) << "     vertex " << x[6] << " " << x[7] << " " << x[8] << endl;
