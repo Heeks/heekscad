@@ -19,8 +19,10 @@ END_EVENT_TABLE()
 
 static void OnApply(wxCommandEvent& event)
 {
-	wxGetApp().m_frame->m_properties->OnApply2();
-	wxGetApp().m_marked_list->Clear(true);
+	if(wxGetApp().m_frame->m_properties->OnApply2())
+	{
+		wxGetApp().m_marked_list->Clear(true);
+	}
 }
 
 static void OnCancel(wxCommandEvent& event)
@@ -140,7 +142,7 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll(bool make_initial_properties
 	}
 }
 
-void CObjPropsCanvas::OnApply2()
+bool CObjPropsCanvas::OnApply2()
 {
 	// cause all of the properties to be applied
 	ClearProperties();
@@ -148,8 +150,16 @@ void CObjPropsCanvas::OnApply2()
 	if(wxGetApp().m_marked_list->size() == 1)
 	{
 		HeeksObj* marked_object = (*wxGetApp().m_marked_list->list().begin());
+		if(!marked_object->ValidateProperties())return false;
+	}
+
+	if(wxGetApp().m_marked_list->size() == 1)
+	{
+		HeeksObj* marked_object = (*wxGetApp().m_marked_list->list().begin());
 		marked_object->OnApplyProperties();
 	}
+
+	return true;
 }
 
 static bool in_OnCancel2 = false;
