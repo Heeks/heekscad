@@ -11,7 +11,6 @@ public:
     void OnPropertyGridChange( wxPropertyGridEvent& event );
 
 public:
-	// CPropertiesCanvas's virtual functions
 	void RefreshByRemovingAndAddingAll();
 
     DECLARE_NO_COPY_CLASS(COptionsCanvas)

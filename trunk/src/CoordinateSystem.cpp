@@ -160,7 +160,7 @@ class SetCoordSystemActive:public Tool{
 public:
 	void Run(){
 		wxGetApp().m_current_coordinate_system = coord_system_for_Tool;
-		wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
+		wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll(false);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("SetCoordSystemActive");}
@@ -175,7 +175,7 @@ class UnsetCoordSystemActive:public Tool{
 public:
 	void Run(){
 		wxGetApp().m_current_coordinate_system = NULL;
-		wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
+		wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll(false);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("UnsetCoordSystemActive");}

@@ -36,7 +36,6 @@ protected:
     Property* GetProperty(wxPGProperty* property);
 
 public:
-	virtual void RefreshByRemovingAndAddingAll() = 0;
 	void DeselectProperties();
 
     DECLARE_NO_COPY_CLASS(CPropertiesCanvas)
