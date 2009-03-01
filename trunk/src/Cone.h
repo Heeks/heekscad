@@ -29,6 +29,7 @@ public:
 	void GetProperties(std::list<Property *> *list);
 	void GetGripperPositions(std::list<double> *list, bool just_for_endof);
 	void OnApplyProperties();
+	bool ValidateProperties();
 	bool GetScaleAboutMatrix(double *m);
 	bool Stretch(const double *p, const double* shift);
 	bool StretchTemporary(const double *p, const double* shift);

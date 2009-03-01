@@ -26,7 +26,7 @@ public:
 
 	// CPropertiesCanvas's virtual functions
 	void AddToolBar();
-	void OnApply2();
+	bool OnApply2();
 	void OnCancel2();
 
 	void RefreshByRemovingAndAddingAll(bool make_initial_properties);
