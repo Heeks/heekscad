@@ -8,6 +8,7 @@
 #include <map>
 #include <set>
 #include <fstream>
+#include <iomanip>
 
 #include <wx/wx.h>
 
@@ -54,7 +55,8 @@ extern "C" {
 #else
 #include <GL/glu.h>
 #endif
-}
+}
+
 #include "HeeksCAD.h"
 
 #include "../interface/strconv.h"
