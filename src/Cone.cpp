@@ -226,7 +226,7 @@ bool CCone::ValidateProperties()
 {
 	if(fabs(m_r1-m_r2) < wxGetApp().m_geom_tol)
 	{
-		wxMessageBox("cone must not have both radiuses the same");
+		wxMessageBox(_("cone must not have both radiuses the same"));
 		return false;
 	}
 	return true;
