@@ -25,10 +25,11 @@ public:
 	void OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified);
 
 	// CPropertiesCanvas's virtual functions
-	void RefreshByRemovingAndAddingAll();
 	void AddToolBar();
 	void OnApply2();
 	void OnCancel2();
+
+	void RefreshByRemovingAndAddingAll(bool make_initial_properties);
 
     DECLARE_NO_COPY_CLASS(CObjPropsCanvas)
     DECLARE_EVENT_TABLE()

@@ -85,7 +85,7 @@ void CObjPropsCanvas::ClearInitialProperties()
 	m_initial_properties.clear();
 }
 
-void CObjPropsCanvas::RefreshByRemovingAndAddingAll(){
+void CObjPropsCanvas::RefreshByRemovingAndAddingAll(bool make_initial_properties){
 	ClearProperties();
 	wxGetApp().m_frame->ClearToolBar(m_toolBar);
 
@@ -95,7 +95,7 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll(){
 		marked_object = (*wxGetApp().m_marked_list->list().begin());
 	}
 
-	ClearInitialProperties();
+	if(make_initial_properties)ClearInitialProperties();
 
 	if(wxGetApp().m_marked_list->size() > 0)
 	{
@@ -104,7 +104,7 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll(){
 		for(std::list<Property*>::iterator It = list.begin(); It != list.end(); It++)
 		{
 			Property* property = *It;
-			m_initial_properties.push_back(property->MakeACopy());
+			if(make_initial_properties)m_initial_properties.push_back(property->MakeACopy());
 			AddProperty(property);
 		}
 
@@ -152,22 +152,30 @@ void CObjPropsCanvas::OnApply2()
 	}
 }
 
+static bool in_OnCancel2 = false;
+
 void CObjPropsCanvas::OnCancel2()
 {
+	in_OnCancel2 = true;
 	ClearProperties();
 	for(std::list<Property*>::iterator It = m_initial_properties.begin(); It != m_initial_properties.end(); It++){
 		Property* p = *It;
 		p->CallSetFunction();
 	}
 	wxGetApp().m_marked_list->Clear(true);
+	in_OnCancel2 = false;
 }
 
 void CObjPropsCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)
 {
-	RefreshByRemovingAndAddingAll();
+	if(in_OnCancel2)return;
+	
+	RefreshByRemovingAndAddingAll(true);
 }
 
 void CObjPropsCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified)
 {
-	RefreshByRemovingAndAddingAll();
+	if(in_OnCancel2)return;
+	
+	RefreshByRemovingAndAddingAll(false);
 }

@@ -32,7 +32,7 @@ double CHeeksCADInterface::GetTolerance()
 
 void CHeeksCADInterface::RefreshProperties()
 {
-	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
+	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll(false);
 }
 
 void CHeeksCADInterface::RefreshOptions()

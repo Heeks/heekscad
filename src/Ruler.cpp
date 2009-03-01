@@ -228,7 +228,7 @@ class ResetRulerTool:public Tool{
 public:
 	void Run(){
 		wxGetApp().m_ruler->m_trsf = gp_Trsf();
-		wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
+		wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll(false);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("ResetRuler");}
