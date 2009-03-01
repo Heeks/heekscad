@@ -14,6 +14,8 @@ echo -e "\007" | sudo tee /dev/tty10
 take a nap for a half hour.
 
 come back to inspect that beeping noise
+
+
 to add CAM capability:
 {{{
 cd ..
