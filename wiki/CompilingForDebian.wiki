@@ -14,3 +14,15 @@ echo -e "\007" | sudo tee /dev/tty10
 take a nap for a half hour.
 
 come back to inspect that beeping noise
+to add CAM capability:
+{{{
+cd ..
+svn checkout http://heekscnc.googlecode.com/svn/trunk/ HeeksCNC
+cd HeeksCNC
+svn co https://pycam.svn.sourceforge.net/svnroot/pycam/ PyCam
+cd src
+make
+cd ../../
+./HeeksCAD
+}}}
+now do File->Plugins and click "..." and find HeeksCNC.so.*
