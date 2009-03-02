@@ -690,6 +690,7 @@ void CHeeksFrame::OnUpdateViewProperties( wxUpdateUIEvent& event )
 
 void CHeeksFrame::OnSelectModeButton( wxCommandEvent& WXUNUSED( event ) )
 {
+	wxGetApp().m_marked_list->m_filter = -1;
 	wxGetApp().SetInputMode((CInputMode*)(wxGetApp().m_select_mode));
 }
 
