@@ -1512,8 +1512,10 @@ void HeeksCADapp::TransformUndoably(HeeksObj *object, double *m)
 	gp_Trsf mat = make_matrix(m);
 	gp_Trsf im = mat;
 	im.Invert();
+	StartHistory(); // the following action might do add and remove, so needs to be in a group
 	TransformTool *tool = new TransformTool(object, mat, im);
 	DoToolUndoably(tool);
+	EndHistory();
 }
 
 void HeeksCADapp::TransformUndoably(const std::list<HeeksObj*> &list, double *m)
@@ -1522,8 +1524,10 @@ void HeeksCADapp::TransformUndoably(const std::list<HeeksObj*> &list, double *m)
 	gp_Trsf mat = make_matrix(m);
 	gp_Trsf im = mat;
 	im.Invert();
+	StartHistory(); // the following action might do add and remove, so needs to be in a group
 	TransformObjectsTool *tool = new TransformObjectsTool(list, mat, im);
 	DoToolUndoably(tool);
+	EndHistory();
 }
 
 void HeeksCADapp::WasModified(HeeksObj *object)

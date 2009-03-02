@@ -25,7 +25,7 @@ class TransformObjectsTool: public Tool{
 private:
 	double modify_matrix[16];
 	double revert_matrix[16];
-	const std::list<HeeksObj*> *m_list;
+	std::list<HeeksObj*> m_list;
 	std::set<HeeksObj*> m_done_with_add_and_remove;
 
 public:
