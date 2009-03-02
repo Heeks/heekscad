@@ -4,9 +4,7 @@
 
 // include this in your dynamic library to interface with HeeksCAD
 
-#ifdef WIN32
 #pragma once
-#endif
 
 class HeeksObj;
 class wxFrame;
