@@ -1,3 +1,6 @@
+// PropertiesCanvas.cpp
+// Copyright (c) 2009, Dan Heeks
+// This program is released under the BSD license. See the file COPYING for details.
 #include "stdafx.h"
 #include "PropertiesCanvas.h"
 #include "../interface/MarkedObject.h"
