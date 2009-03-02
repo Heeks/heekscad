@@ -1,4 +1,9 @@
 // GripperSelTransform.h
+/*
+ * Copyright (c) 2009, Dan Heeks
+ * This program is released under the BSD license. See the file COPYING for
+ * details.
+ */
 
 #if !defined GripperSelTransform_HEADER
 #define GripperSelTransform_HEADER
