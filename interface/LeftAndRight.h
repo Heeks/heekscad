@@ -1,6 +1,10 @@
 // LeftAndRight.h
+// Copyright (c) 2009, Dan Heeks
+// This program is released under the BSD license. See the file COPYING for details.
 
+#ifdef WIN32
 #pragma once
+#endif
 
 class CLeftAndRight{
 	// derive your input mode derived class from this and call LeftAndRightPressed from OnMouse
