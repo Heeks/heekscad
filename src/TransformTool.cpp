@@ -34,7 +34,7 @@ void TransformTool::RollBack(){
 }
 
 TransformObjectsTool::TransformObjectsTool(const std::list<HeeksObj*> &list, const gp_Trsf &t, const gp_Trsf &i){
-	m_list = &list;
+	m_list = list;
 	extract(t, modify_matrix);
 	extract(i, revert_matrix);
 }
@@ -48,8 +48,8 @@ const wxChar* TransformObjectsTool::GetTitle(){
 }
 
 void TransformObjectsTool::Run(){
-	std::list<HeeksObj*>::const_iterator It;
-	for(It = m_list->begin(); It != m_list->end(); It++){
+	std::list<HeeksObj*>::iterator It;
+	for(It = m_list.begin(); It != m_list.end(); It++){
 		HeeksObj* object = *It;
 		if(m_done_with_add_and_remove.find(object) == m_done_with_add_and_remove.end()){
 			if(object->ModifyByMatrix(modify_matrix))
@@ -59,17 +59,17 @@ void TransformObjectsTool::Run(){
 		}
 	}
 
-	wxGetApp().WereModified(*m_list);
+	wxGetApp().WereModified(m_list);
 }
 
 void TransformObjectsTool::RollBack(){
 	std::list<HeeksObj*>::const_iterator It;
-	for(It = m_list->begin(); It != m_list->end(); It++){
+	for(It = m_list.begin(); It != m_list.end(); It++){
 		HeeksObj* object = *It;
-		if(m_done_with_add_and_remove.find(object) != m_done_with_add_and_remove.end()){
+		if(m_done_with_add_and_remove.find(object) == m_done_with_add_and_remove.end()){
 			object->ModifyByMatrix(revert_matrix);
 		}
 	}
 
-	wxGetApp().WereModified(*m_list);
+	wxGetApp().WereModified(m_list);
 }
