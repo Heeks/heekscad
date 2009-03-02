@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="HeeksCAD"
 	ProjectGUID="{2702996F-5BCC-436D-A756-D9675FE828A8}"
 	RootNamespace="HeeksCAD"
