@@ -1476,6 +1476,11 @@ void CHeeksFrame::LoadPerspective(const wxString& str)
 	SetToolBarsSize();
 }
 
+void CHeeksFrame::SetDefaultLayout(const wxString& str)
+{
+	default_layout_string = str;
+}
+
 void CHeeksFrame::SetToolBarsToLeft()
 {
 	m_aui_manager->GetPane(m_toolBar).Left();
