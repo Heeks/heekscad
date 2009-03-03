@@ -40,6 +40,7 @@
 #include "../interface/HeeksCADInterface.h"
 #include "Plugins.h"
 #include "HeeksConfig.h"
+#include "AboutBox.h"
 
 using namespace std;
 
@@ -500,16 +501,8 @@ void CHeeksFrame::OnQuit( wxCommandEvent& WXUNUSED( event ) )
 
 void CHeeksFrame::OnAbout( wxCommandEvent& WXUNUSED( event ) )
 {
-	wxString str = wxString(_T("HeeksCAD, written by Dan Heeks danheeks@gmail.com\n\nusing Open CASCADE solid modeller - http://www.opencascade.org"))
-		+ wxString(_T("\n\nwindows made with wxWidgets - http://wxwidgets.org"))
-		+ wxString(_T("\n\ntext uses glFont Copyright (c) 1998 Brad Fish E-mail: bhf5@email.byu.edu Web: http://students.cs.byu.edu/~bfish/"))
-		+ wxString(_T("\n\nWith contributions from:\n Hirutso Enni"))
-		+ wxString(_T("\n\nThis is free, open source software."));
-
-	wxString version_str = wxGetApp().m_version_number;
-	version_str.Replace(_T(" "), _T("."));
-
-	wxMessageBox( str, version_str, wxOK | wxICON_INFORMATION, this );
+	CAboutBox dlg(this);
+	dlg.ShowModal();
 }
 
 void CHeeksFrame::OnPlugins( wxCommandEvent& WXUNUSED( event ) )

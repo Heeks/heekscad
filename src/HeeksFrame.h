@@ -109,6 +109,7 @@ public:
 	wxMenu* m_recent_files_menu;
 	wxMenu *m_menuWindow;
 	HeeksPrintout* m_printout;
+	wxString m_extra_about_box_str;
 
 	CHeeksFrame( const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize );
 	virtual ~CHeeksFrame();
