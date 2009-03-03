@@ -6,9 +6,9 @@ I used Windows XP.
 
 Get Microsoft Visual C++ 2008 Express Edition ( it's free, but about 1GB ).
 
-Download the Open CASCADE installation. I am currently using 6.3.0.
+Download the Open CASCADE installation. I am currently using 6.3.0.   http://www.opencascade.org/getocc/download/loadocc/     ( OpenCASCADE_win32.exe )
 
-Download the wxWidgets installation. I am using 2.8.8.
+Download the wxWidgets installation. I am using 2.8.9.    http://prdownloads.sourceforge.net/wxwindows/wxMSW-2.8.9-Setup.exe
 
 Set an environment variable called WXWIN to be C:\wxWidgets-2.8.8 or whereever wxWidgets installed to. ( to set an evironment variable go to Control Panel, then System, then Advanced tab, then press "Environment Variables" button, then press "New" ).
 
