@@ -209,6 +209,7 @@ public:
 	void OnChangeBitmapSize();
 	void AddToolBars();
 	void LoadPerspective(const wxString& str);
+	void SetDefaultLayout(const wxString& str); // call this from dll's OnStartUp
 	void SetToolBarsToLeft();
 	void SetToolBarsSize();
 

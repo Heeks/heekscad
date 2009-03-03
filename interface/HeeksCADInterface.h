@@ -151,4 +151,5 @@ public:
 	virtual void RegisterAddToolBars( void(*callbackfunc)() );
 	virtual void PropertiesOnApply2();// don't need to press tick to make changes
 	virtual void AddToAboutBox(const wxChar* str);
+	virtual void SetDefaultLayout(const wxString& str);
 };
