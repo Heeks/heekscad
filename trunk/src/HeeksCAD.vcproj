@@ -414,6 +414,14 @@
 			>
 		</Filter>
 		<File
+			RelativePath=".\AboutBox.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\AboutBox.h"
+			>
+		</File>
+		<File
 			RelativePath=".\advprops.cpp"
 			>
 			<FileConfiguration
@@ -1340,6 +1348,14 @@
 					UsePrecompiledHeader="0"
 				/>
 			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+				/>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\tinyxml\tinystr.h"
@@ -1350,6 +1366,14 @@
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
 				>
 				<Tool
 					Name="VCCLCompilerTool"
@@ -1372,12 +1396,28 @@
 					UsePrecompiledHeader="0"
 				/>
 			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+				/>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\tinyxml\tinyxmlparser.cpp"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
 				>
 				<Tool
 					Name="VCCLCompilerTool"

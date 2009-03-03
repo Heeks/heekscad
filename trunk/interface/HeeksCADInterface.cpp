@@ -694,6 +694,7 @@ void CHeeksCADInterface::PropertiesOnApply2()
 	wxGetApp().m_frame->m_properties->OnApply2();
 }
 
-void CHeeksCADInterface::PropertiesApplyChanges()
+void CHeeksCADInterface::AddToAboutBox(const wxChar* str)
 {
+	wxGetApp().m_frame->m_extra_about_box_str.Append(str);
 }
