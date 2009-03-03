@@ -698,3 +698,8 @@ void CHeeksCADInterface::AddToAboutBox(const wxChar* str)
 {
 	wxGetApp().m_frame->m_extra_about_box_str.Append(str);
 }
+
+void CHeeksCADInterface::SetDefaultLayout(const wxString& str)
+{
+	wxGetApp().m_frame->SetDefaultLayout(str);
+}
