@@ -21,6 +21,7 @@ class CSketch:public ObjList
 
 public:
 	static std::string m_sketch_order_str[MaxSketchOrderTypes];
+	SketchOrderType m_order;
 
 	CSketch();
 	CSketch(const CSketch& c);
@@ -42,6 +43,7 @@ public:
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 
+	void CalculateSketchOrder();
 	SketchOrderType GetSketchOrder();
 	bool ReOrderSketch(SketchOrderType new_order); // returns true if done
 	void ReLinkSketch();
@@ -52,16 +54,14 @@ class CSketchRelinker{
 	const std::list<HeeksObj*> &m_old_list;
 	std::set<HeeksObj*> m_added_from_old_set;
 	std::list<HeeksObj*>::const_iterator m_old_front;
-	std::list<HeeksObj*>::const_iterator m_old_back;
 	HeeksObj* m_new_front;
-	HeeksObj* m_new_back;
 	bool AddNext();
-	bool TryAdd(HeeksObj* object, bool front_not_back);
+	bool TryAdd(HeeksObj* object);
 
 public:
-	std::list<HeeksObj*> m_new_list;
+	std::list< std::list<HeeksObj*> > m_new_lists;
 
-	CSketchRelinker(const std::list<HeeksObj*>& old_list):m_old_list(old_list), m_new_front(NULL), m_new_back(NULL){}
+	CSketchRelinker(const std::list<HeeksObj*>& old_list):m_old_list(old_list), m_new_front(NULL){}
 
-	bool Do(); // makes m_new_list, returns false if there were some left over
+	bool Do(); // makes m_new_lists
 };

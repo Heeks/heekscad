@@ -4,6 +4,7 @@
 
 enum SketchOrderType
 {
+	SketchOrderTypeUnknown,
 	SketchOrderTypeEmpty,	// an empty sketch
 	SketchOrderTypeOpen,	// a well ordered sketch, which doesn't have it's start and end touching
 	SketchOrderTypeReverse,	// reverse the sketch, only used as a function, won't be returned by GetSketchOrder()
@@ -11,6 +12,7 @@ enum SketchOrderType
 	SketchOrderTypeReOrder,	// re-order the sketch, only used as a function, won't be returned by GetSketchOrder()
 	SketchOrderTypeCloseCW,	// a well ordered sketch, which is closed and clockwise
 	SketchOrderTypeCloseCCW,// a well ordered sketch, which is closed and anti-clockwise
+	SketchOrderTypeMultipleCurves,  // each of the separate parts are well ordered
 	MaxSketchOrderTypes
 };
 
