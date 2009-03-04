@@ -13,16 +13,18 @@
 #include "../tinyxml/tinyxml.h"
 
 std::string CSketch::m_sketch_order_str[MaxSketchOrderTypes] = {
+	std::string("unknown"),
 	std::string("empty"),
 	std::string("open"),
 	std::string("reverse"),
 	std::string("bad"),
 	std::string("re-order"),
 	std::string("clockwise"),
-	std::string("counter-clockwise")
+	std::string("counter-clockwise"),
+	std::string("multiple")
 };
 
-CSketch::CSketch()
+CSketch::CSketch():m_order(SketchOrderTypeUnknown)
 {
 }
 
@@ -39,6 +41,9 @@ const CSketch& CSketch::operator=(const CSketch& c)
 {
 	// just copy all the lines and arcs, not the id
 	ObjList::operator =(c);
+
+	color = c.color;
+	m_order = c.m_order;
 
 	return *this;
 }
@@ -177,7 +182,17 @@ const HeeksColor* CSketch::GetColor()const
 
 SketchOrderType CSketch::GetSketchOrder()
 {
-	if(m_objects.size() == 0)return SketchOrderTypeEmpty;
+	if(m_order == SketchOrderTypeUnknown)CalculateSketchOrder();
+	return m_order;
+}
+
+void CSketch::CalculateSketchOrder()
+{
+	if(m_objects.size() == 0)
+	{
+		m_order = SketchOrderTypeEmpty;
+		return;
+	}
 
 	HeeksObj* prev_object = NULL;
 	HeeksObj* first_object = NULL;
@@ -213,17 +228,19 @@ SketchOrderType CSketch::GetSketchOrder()
 					if(make_point(e).IsEqual(make_point(s), wxGetApp().m_geom_tol))
 					{
 						// closed
-						if(GetClosedSketchTurningNumber() > 0)return SketchOrderTypeCloseCCW;
-						return SketchOrderTypeCloseCW;
+						if(GetClosedSketchTurningNumber() > 0)m_order = SketchOrderTypeCloseCCW;
+						else m_order = SketchOrderTypeCloseCW;
+						return;
 					}
 				}
 			}
 		}
 
-		return SketchOrderTypeOpen;
+		m_order = SketchOrderTypeOpen;
+		return;
 	}
 
-	return SketchOrderTypeBad;
+	m_order = SketchOrderTypeBad; // although it might still be multiple, but will have to wait until ReOrderSketch is done.
 }
 
 bool CSketch::ReOrderSketch(SketchOrderType new_order)
@@ -292,12 +309,23 @@ void CSketch::ReLinkSketch()
 {
 	CSketchRelinker relinker(m_objects);
 
-	if(relinker.Do())
+	relinker.Do();
+
+	wxGetApp().StartHistory();
+	wxGetApp().DeleteUndoably(m_objects);
+	for(std::list< std::list<HeeksObj*> >::iterator It = relinker.m_new_lists.begin(); It != relinker.m_new_lists.end(); It++)
 	{
-		wxGetApp().StartHistory();
-		wxGetApp().DeleteUndoably(m_objects);
-		wxGetApp().AddUndoably(relinker.m_new_list, this);
-		wxGetApp().EndHistory();
+		wxGetApp().AddUndoably(*It, this);
+	}
+	wxGetApp().EndHistory();
+
+	if(relinker.m_new_lists.size() > 1)
+	{
+		m_order = SketchOrderTypeMultipleCurves;
+	}
+	else
+	{
+		CalculateSketchOrder();
 	}
 }
 
@@ -461,31 +489,28 @@ int CSketch::GetClosedSketchTurningNumber()
 	return i_turning_number;
 }
 
-bool CSketchRelinker::TryAdd(HeeksObj* object, bool front_not_back)
+bool CSketchRelinker::TryAdd(HeeksObj* object)
 {
+	// if the object is not already added
 	if(m_added_from_old_set.find(object) == m_added_from_old_set.end())
 	{
 		double old_point[3];
 		double new_point[3];
-		if(front_not_back)m_new_front->GetEndPoint(old_point);
-		else m_new_back->GetStartPoint(old_point);
+		m_new_front->GetEndPoint(old_point);
 
 		// try the object, the right way round
-		if(front_not_back)object->GetStartPoint(new_point);
-		else object->GetEndPoint(new_point);
+		object->GetStartPoint(new_point);
 		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_geom_tol))
 		{
 			HeeksObj* new_object = object->MakeACopy();
-			m_new_list.push_back(new_object);
-			if(front_not_back)m_new_front = new_object;
-			else m_new_back = new_object;
+			m_new_lists.back().push_back(new_object);
+			m_new_front = new_object;
 			m_added_from_old_set.insert(object);
 			return true;
 		}
 
 		// try the object, the wrong way round
-		if(front_not_back)object->GetEndPoint(new_point);
-		else object->GetStartPoint(new_point);
+		object->GetEndPoint(new_point);
 		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_geom_tol))
 		{
 			HeeksObj* new_object = object->MakeACopy();
@@ -502,9 +527,8 @@ bool CSketchRelinker::TryAdd(HeeksObj* object, bool front_not_back)
 				break;
 			}
 
-			m_new_list.push_back(new_object);
-			if(front_not_back)m_new_front = new_object;
-			else m_new_back = new_object;
+			m_new_lists.back().push_back(new_object);
+			m_new_front = new_object;
 			m_added_from_old_set.insert(object);
 			return true;
 		}
@@ -515,21 +539,48 @@ bool CSketchRelinker::TryAdd(HeeksObj* object, bool front_not_back)
 
 bool CSketchRelinker::AddNext()
 {
+	// returns true, if another object was added to m_new_lists
+
 	if(m_new_front)
 	{
 		bool added_at_front = false;
+
+		// look through all of the old list, starting at m_old_front
 		std::list<HeeksObj*>::const_iterator It = m_old_front;
 		do{
 			It++;
 			if(It == m_old_list.end())It = m_old_list.begin();
 			HeeksObj* object = *It;
 
-			added_at_front = TryAdd(object, true);
+			added_at_front = TryAdd(object);
 
 		}while(It != m_old_front && !added_at_front);
 
 		if(added_at_front)return true;
+
+		// nothing fits the current new list
+
 		m_new_front = NULL;
+
+		if(m_old_list.size() > m_added_from_old_set.size())
+		{
+			// there are still some to add, find a unused object
+			for(std::list<HeeksObj*>::const_iterator It = m_old_list.begin(); It != m_old_list.end(); It++)
+			{
+				HeeksObj* object = *It;
+				if(m_added_from_old_set.find(object) == m_added_from_old_set.end())
+				{
+					HeeksObj* new_object = object->MakeACopy();
+					std::list<HeeksObj*> empty_list;
+					m_new_lists.push_back(empty_list);
+					m_new_lists.back().push_back(new_object);
+					m_added_from_old_set.insert(object);
+					m_old_front = It;
+					m_new_front = new_object;
+					return true;
+				}
+			}
+		}
 	}
 
 	return false;
@@ -540,12 +591,12 @@ bool CSketchRelinker::Do()
 	if(m_old_list.size() > 0)
 	{
 		HeeksObj* new_object = m_old_list.front()->MakeACopy();
-		m_new_list.push_back(new_object);
+		std::list<HeeksObj*> empty_list;
+		m_new_lists.push_back(empty_list);
+		m_new_lists.back().push_back(new_object);
 		m_added_from_old_set.insert(m_old_list.front());
 		m_old_front = m_old_list.begin();
-		m_old_back = m_old_list.begin();
 		m_new_front = new_object;
-		m_new_back = new_object;
 
 		while(AddNext()){}
 	}
