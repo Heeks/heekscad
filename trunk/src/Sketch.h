@@ -34,6 +34,7 @@ public:
 	const wxChar* GetTypeString(void)const{return _("Sketch");}
 	wxString GetIcon(){return _T("linedrawing");}
 	void GetProperties(std::list<Property *> *list);
+	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	HeeksObj *MakeACopy(void)const;
 	void CopyFrom(const HeeksObj* object){operator=(*((CSketch*)((ObjList*)object)));}
 	void WriteXML(TiXmlNode *root);
