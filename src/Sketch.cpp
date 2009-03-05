@@ -511,6 +511,18 @@ int CSketch::GetClosedSketchTurningNumber()
 	return i_turning_number;
 }
 
+bool CSketch::Add(HeeksObj* object, HeeksObj* prev_object)
+{
+	m_order = SketchOrderTypeUnknown;
+	return ObjList::Add(object, prev_object);
+}
+
+void CSketch::Remove(HeeksObj* object)
+{
+	m_order = SketchOrderTypeUnknown;
+	ObjList::Remove(object);
+}
+
 bool CSketchRelinker::TryAdd(HeeksObj* object)
 {
 	// if the object is not already added

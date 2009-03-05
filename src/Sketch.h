@@ -40,6 +40,8 @@ public:
 	bool UsesID(){return true;}
 	void SetColor(const HeeksColor &col);
 	const HeeksColor* GetColor()const;
+	bool Add(HeeksObj* object, HeeksObj* prev_object);
+	void Remove(HeeksObj* object);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 
