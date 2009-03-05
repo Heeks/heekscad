@@ -8,6 +8,8 @@
 #include "HArc.h"
 #include "Sketch.h"
 
+#include <sstream>
+
 CDxfWrite::CDxfWrite(const wxChar* filepath)
 {
 	// start the file
@@ -121,6 +123,8 @@ bool CDxfRead::ReadLine(bool undoably)
 		get_line();
 		int n;
 		if(sscanf(m_str, "%d", &n) != 1)return false;
+		std::istringstream ss;
+		ss.imbue(std::locale("C"));
 		switch(n){
 			case 0:
 				// next item found, so finish with line
@@ -129,32 +133,32 @@ bool CDxfRead::ReadLine(bool undoably)
 			case 10:
 				// start x
 				get_line();
-				if(sscanf(m_str, "%lf", &(s[0])) != 1)return false;
+				ss.str(m_str); ss >> s[0]; if(ss.fail()) return false;
 				break;
 			case 20:
 				// start y
 				get_line();
-				if(sscanf(m_str, "%lf", &(s[1])) != 1)return false;
+				ss.str(m_str); ss >> s[1]; if(ss.fail()) return false;
 				break;
 			case 30:
 				// start z
 				get_line();
-				if(sscanf(m_str, "%lf", &(s[2])) != 1)return false;
+				ss.str(m_str); ss >> s[2]; if(ss.fail()) return false;
 				break;
 			case 11:
 				// end x
 				get_line();
-				if(sscanf(m_str, "%lf", &(e[0])) != 1)return false;
+				ss.str(m_str); ss >> e[0]; if(ss.fail()) return false;
 				break;
 			case 21:
 				// end y
 				get_line();
-				if(sscanf(m_str, "%lf", &(e[1])) != 1)return false;
+				ss.str(m_str); ss >> e[1]; if(ss.fail()) return false;
 				break;
 			case 31:
 				// end z
 				get_line();
-				if(sscanf(m_str, "%lf", &(e[2])) != 1)return false;
+				ss.str(m_str); ss >> e[2]; if(ss.fail()) return false;
 				break;
 			case 100:
 			case 39:
@@ -187,6 +191,8 @@ bool CDxfRead::ReadArc(bool undoably)
 		get_line();
 		int n;
 		if(sscanf(m_str, "%d", &n) != 1)return false;
+		std::istringstream ss;
+		ss.imbue(std::locale("C"));
 		switch(n){
 			case 0:
 				// next item found, so finish with arc
@@ -195,32 +201,32 @@ bool CDxfRead::ReadArc(bool undoably)
 			case 10:
 				// centre x
 				get_line();
-				if(sscanf(m_str, "%lf", &(c[0])) != 1)return false;
+				ss.str(m_str); ss >> c[0]; if(ss.fail()) return false;
 				break;
 			case 20:
 				// centre y
 				get_line();
-				if(sscanf(m_str, "%lf", &(c[1])) != 1)return false;
+				ss.str(m_str); ss >> c[1]; if(ss.fail()) return false;
 				break;
 			case 30:
 				// centre z
 				get_line();
-				if(sscanf(m_str, "%lf", &(c[2])) != 1)return false;
+				ss.str(m_str); ss >> c[2]; if(ss.fail()) return false;
 				break;
 			case 40:
 				// radius
 				get_line();
-				if(sscanf(m_str, "%lf", &radius) != 1)return false;
+				ss.str(m_str); ss >> radius; if(ss.fail()) return false;
 				break;
 			case 50:
 				// start angle
 				get_line();
-				if(sscanf(m_str, "%lf", &start_angle) != 1)return false;
+				ss.str(m_str); ss >> start_angle; if(ss.fail()) return false;
 				break;
 			case 51:
 				// end angle
 				get_line();
-				if(sscanf(m_str, "%lf", &end_angle) != 1)return false;
+				ss.str(m_str); ss >> end_angle; if(ss.fail()) return false;
 				break;
 			case 100:
 			case 39:
@@ -340,6 +346,8 @@ bool CDxfRead::ReadLwPolyLine(bool undoably)
 		get_line();
 		int n;
 		if(sscanf(m_str, "%d", &n) != 1)return false;
+		std::istringstream ss;
+		ss.imbue(std::locale("C"));
 		switch(n){
 			case 0:
 				// next item found
@@ -362,19 +370,19 @@ bool CDxfRead::ReadLwPolyLine(bool undoably)
 					x_found = false;
 					y_found = false;
 				}
-				if(sscanf(m_str, "%lf", &x) != 1)return false;
+				ss.str(m_str); ss >> x; if(ss.fail()) return false;
 				x_found = true;
 				break;
 			case 20:
 				// y
 				get_line();
-				if(sscanf(m_str, "%lf", &y) != 1)return false;
+				ss.str(m_str); ss >> y; if(ss.fail()) return false;
 				y_found = true;
 				break;
 			case 42:
 				// bulge
 				get_line();
-				if(sscanf(m_str, "%lf", &bulge) != 1)return false;
+				ss.str(m_str); ss >> bulge; if(ss.fail()) return false;
 				bulge_found = true;
 				break;
 			case 70:
