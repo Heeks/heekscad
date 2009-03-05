@@ -10,6 +10,7 @@
 #include "ObjPropsCanvas.h"
 #include "../interface/PropertyInt.h"
 #include "../interface/PropertyChoice.h"
+#include "../interface/Tool.h"
 #include "../tinyxml/tinyxml.h"
 
 std::string CSketch::m_sketch_order_str[MaxSketchOrderTypes] = {
@@ -141,6 +142,39 @@ void CSketch::GetProperties(std::list<Property *> *list)
 	list->push_back ( new PropertyChoice ( _("order"), choices, initial_index, this, on_set_order_type ) );
 
 	ObjList::GetProperties(list);
+}
+
+class SplitSketch:public Tool{
+public:
+	CSketch* m_sketch;
+	SplitSketch():m_sketch(NULL){}
+	void Run(){
+		if(m_sketch == NULL)return;
+		std::list<HeeksObj*> new_sketches;
+		m_sketch->ExtractSeparateSketches(new_sketches);
+		wxGetApp().StartHistory();
+		for(std::list<HeeksObj*>::iterator It = new_sketches.begin(); It != new_sketches.end(); It++)
+		{
+			HeeksObj* new_object = *It;
+			wxGetApp().AddUndoably(new_object, NULL, NULL);
+		}
+		wxGetApp().DeleteUndoably(m_sketch);
+		wxGetApp().EndHistory();
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Split Sketch");}
+	wxString BitmapPath(){return _T("splitsketch");}
+};
+
+static SplitSketch split_sketch;
+
+void CSketch::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
+{
+	if(GetSketchOrder() == SketchOrderTypeBad || GetSketchOrder() == SketchOrderTypeMultipleCurves)
+	{
+		split_sketch.m_sketch = this;
+		t_list->push_back(&split_sketch);
+	}
 }
 
 HeeksObj *CSketch::MakeACopy(void)const
@@ -363,24 +397,37 @@ void CSketch::ReverseSketch()
 
 void CSketch::ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketches)
 {
-	if(GetSketchOrder() != SketchOrderTypeMultipleCurves)return;
+	CSketch* re_ordered_sketch = NULL;
+	CSketch* sketch = this;
 
-	CSketchRelinker relinker(m_objects);
-
-	relinker.Do();
-
-	for(std::list< std::list<HeeksObj*> >::iterator It = relinker.m_new_lists.begin(); It != relinker.m_new_lists.end(); It++)
+	if(GetSketchOrder() == SketchOrderTypeBad)
 	{
-		std::list<HeeksObj*>& list = *It;
-		CSketch* new_object = new CSketch();
-		new_object->color = color;
-		for(std::list<HeeksObj*>::iterator It2 = list.begin(); It2 != list.end(); It2++)
-		{
-			HeeksObj* object = *It2;
-			new_object->Add(object->MakeACopy(), NULL);
-		}
-		new_separate_sketches.push_back(new_object);
+		re_ordered_sketch = (CSketch*)(this->MakeACopy());
+		re_ordered_sketch->ReOrderSketch(SketchOrderTypeReOrder);
+		sketch = re_ordered_sketch;
 	}
+	if(sketch->GetSketchOrder() == SketchOrderTypeMultipleCurves)
+	{
+
+		CSketchRelinker relinker(sketch->m_objects);
+
+		relinker.Do();
+
+		for(std::list< std::list<HeeksObj*> >::iterator It = relinker.m_new_lists.begin(); It != relinker.m_new_lists.end(); It++)
+		{
+			std::list<HeeksObj*>& list = *It;
+			CSketch* new_object = new CSketch();
+			new_object->color = color;
+			for(std::list<HeeksObj*>::iterator It2 = list.begin(); It2 != list.end(); It2++)
+			{
+				HeeksObj* object = *It2;
+				new_object->Add(object->MakeACopy(), NULL);
+			}
+			new_separate_sketches.push_back(new_object);
+		}
+	}
+
+	if(re_ordered_sketch)delete re_ordered_sketch;
 }
 
 static gp_Vec GetSegmentVector(HeeksObj* object, double fraction)
