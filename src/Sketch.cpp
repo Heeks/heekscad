@@ -361,6 +361,28 @@ void CSketch::ReverseSketch()
 	wxGetApp().EndHistory();
 }
 
+void CSketch::ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketches)
+{
+	if(GetSketchOrder() != SketchOrderTypeMultipleCurves)return;
+
+	CSketchRelinker relinker(m_objects);
+
+	relinker.Do();
+
+	for(std::list< std::list<HeeksObj*> >::iterator It = relinker.m_new_lists.begin(); It != relinker.m_new_lists.end(); It++)
+	{
+		std::list<HeeksObj*>& list = *It;
+		CSketch* new_object = new CSketch();
+		new_object->color = color;
+		for(std::list<HeeksObj*>::iterator It2 = list.begin(); It2 != list.end(); It2++)
+		{
+			HeeksObj* object = *It2;
+			new_object->Add(object->MakeACopy(), NULL);
+		}
+		new_separate_sketches.push_back(new_object);
+	}
+}
+
 static gp_Vec GetSegmentVector(HeeksObj* object, double fraction)
 {
 	switch(object->GetType())
