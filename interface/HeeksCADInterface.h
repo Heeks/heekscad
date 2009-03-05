@@ -92,6 +92,7 @@ public:
 	// sketches
 	virtual SketchOrderType GetSketchOrder(HeeksObj* sketch);
 	virtual bool ReOrderSketch(HeeksObj* sketch, SketchOrderType new_order); // returns true if done
+	virtual void ExtractSeparateSketches(HeeksObj* sketch, std::list<HeeksObj*> &new_separate_sketches);
 
 	// body functions
 	virtual long BodyGetNumFaces(HeeksObj* body);
