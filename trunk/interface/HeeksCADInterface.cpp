@@ -420,6 +420,11 @@ bool CHeeksCADInterface::ReOrderSketch(HeeksObj* sketch, SketchOrderType new_ord
 	return ((CSketch*)sketch)->ReOrderSketch(new_order);
 }
 
+void CHeeksCADInterface::ExtractSeparateSketches(HeeksObj* sketch, std::list<HeeksObj*> &new_separate_sketches)
+{
+	((CSketch*)sketch)->ExtractSeparateSketches(new_separate_sketches);
+}
+
 long CHeeksCADInterface::BodyGetNumFaces(HeeksObj* body)
 {
 	return ((CShape*)body)->m_faces->GetNumChildren();
