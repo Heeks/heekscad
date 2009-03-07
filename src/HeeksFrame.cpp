@@ -192,8 +192,8 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 	// Edit Menu
 	wxMenu *edit_menu = new wxMenu;
-	edit_menu->Append( wxID_UNDO, _( "Undo" ) );
-	edit_menu->Append( wxID_REDO, _( "Redo" ) );
+	edit_menu->Append( wxID_UNDO, _( "Undo\tCtrl+Z" ) );
+	edit_menu->Append( wxID_REDO, _( "Redo\tCtrl+Shift+Z" ) );
 	edit_menu->AppendSeparator();
     edit_menu->Append(wxID_CUT, _("Cut"));
     edit_menu->Append(wxID_COPY, _("Copy"));
