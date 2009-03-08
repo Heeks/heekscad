@@ -6,6 +6,7 @@
 #include "dxf.h"
 #include "HLine.h"
 #include "HArc.h"
+#include "HCircle.h"
 #include "Sketch.h"
 
 #include <sstream>
@@ -173,6 +174,7 @@ bool CDxfRead::ReadLine(bool undoably)
 				get_line();
 				break;
 		}
+
 	}
 
 	OnReadLine(s, e, undoably);
@@ -242,8 +244,62 @@ bool CDxfRead::ReadArc(bool undoably)
 				break;
 		}
 	}
-
 	OnReadArc(start_angle, end_angle, radius, c, undoably);
+	return false;
+}
+
+bool CDxfRead::ReadCircle(bool undoably)
+{
+	double radius = 0.0;
+	double c[3]; // centre
+
+	while(!((*m_ifs).eof()))
+	{
+		get_line();
+		int n;
+		if(sscanf(m_str, "%d", &n) != 1)return false;
+		std::istringstream ss;
+		ss.imbue(std::locale("C"));
+		switch(n){
+			case 0:
+				// next item found, so finish with Circle
+				OnReadCircle(c, radius, undoably);
+				return true;
+			case 10:
+				// centre x
+				get_line();
+				ss.str(m_str); ss >> c[0]; if(ss.fail()) return false;
+				break;
+			case 20:
+				// centre y
+				get_line();
+				ss.str(m_str); ss >> c[1]; if(ss.fail()) return false;
+				break;
+			case 30:
+				// centre z
+				get_line();
+				ss.str(m_str); ss >> c[2]; if(ss.fail()) return false;
+				break;
+			case 40:
+				// radius
+				get_line();
+				ss.str(m_str); ss >> radius; if(ss.fail()) return false;
+				break;
+			case 100:
+			case 39:
+			case 210:
+			case 220:
+			case 230:
+				// skip the next line
+				get_line();
+				break;
+			default:
+				// skip the next line
+				get_line();
+				break;
+		}
+	}
+	OnReadCircle(c, radius, undoably);
 	return false;
 }
 
@@ -423,6 +479,16 @@ void CDxfRead::OnReadArc(double start_angle, double end_angle, double radius, co
 	OnReadArc(s, e, c, true, undoably);
 }
 
+void CDxfRead::OnReadCircle(const double* c, double radius, bool undoably){
+	double s[3];
+    double start_angle = 0;
+	s[0] = c[0] + radius * cos(start_angle * Pi/180);
+	s[1] = c[1] + radius * sin(start_angle * Pi/180);
+	s[2] = c[2];
+
+	OnReadCircle(s, c, false, undoably); //false to change direction because otherwise the arc length is zero
+}
+
 void CDxfRead::get_line()
 {
 	m_ifs->getline(m_str, 1024);
@@ -466,6 +532,10 @@ void CDxfRead::DoRead(bool undoably)
 				if(!ReadArc(undoably))return;
 				continue;
 			}
+			else if(!strcmp(m_str, "CIRCLE")){
+				if(!ReadCircle(undoably))return;
+				continue;
+			}
 			else if(!strcmp(m_str, "LWPOLYLINE")){
 				if(!ReadLwPolyLine(undoably))return;
 				continue;
@@ -497,6 +567,21 @@ void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, 
 	gp_Pnt pc = make_point(c);
 	gp_Circ circle(gp_Ax2(pc, up), p1.Distance(pc));
 	HArc* new_object = new HArc(p0, p1, circle, &wxGetApp().current_color);
+	AddSketchIfNeeded(undoably);
+	if(undoably)wxGetApp().AddUndoably(new_object, m_sketch, NULL);
+	else if(m_sketch)m_sketch->Add(new_object, NULL);
+	else wxGetApp().Add(new_object, NULL);
+}
+
+void HeeksDxfRead::OnReadCircle(const double* s, const double* c, bool dir, bool undoably)
+{
+	gp_Pnt p0 = make_point(s);
+	//gp_Pnt p1 = make_point(e);
+	gp_Dir up(0, 0, 1);
+	if(!dir)up = -up;
+	gp_Pnt pc = make_point(c);
+	gp_Circ circle(gp_Ax2(pc, up), p0.Distance(pc));
+	HCircle* new_object = new HCircle(circle, &wxGetApp().current_color);
 	AddSketchIfNeeded(undoably);
 	if(undoably)wxGetApp().AddUndoably(new_object, m_sketch, NULL);
 	else if(m_sketch)m_sketch->Add(new_object, NULL);
