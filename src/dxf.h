@@ -27,8 +27,10 @@ private:
 
 	bool ReadLine(bool undoably);
 	bool ReadArc(bool undoably);
+	bool ReadCircle(bool undoably);
 	bool ReadLwPolyLine(bool undoably);
 	void OnReadArc(double start_angle, double end_angle, double radius, const double* c, bool undoably);
+	void OnReadCircle(const double* c, double radius, bool undoably);
 	void get_line();
 
 public:
@@ -40,6 +42,7 @@ public:
 
 	virtual void OnReadLine(const double* s, const double* e, bool undoably){}
 	virtual void OnReadArc(const double* s, const double* e, const double* c, bool dir, bool undoably){}
+	virtual void OnReadCircle(const double* s, const double* c, bool dir, bool undoably){}
 };
 
 class CSketch;
@@ -54,6 +57,7 @@ public:
 	// CDxfRead's virtual functions
 	void OnReadLine(const double* s, const double* e, bool undoably);
 	void OnReadArc(const double* s, const double* e, const double* c, bool dir, bool undoably);
+	void OnReadCircle(const double* s, const double* c, bool dir, bool undoably);
 
 	void AddSketchIfNeeded(bool undoably);
 };
