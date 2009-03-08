@@ -273,13 +273,13 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 	// Add them to the main menu
 	m_menuBar = new wxMenuBar;
-	m_menuBar->Append( file_menu, _( "File" ) );
-	m_menuBar->Append( edit_menu, _( "Edit" ) );
-	m_menuBar->Append( geometry_menu, _( "Geometry" ) );
-	m_menuBar->Append( view_menu, _( "View" ) );
-	m_menuBar->Append( solids_menu, _( "Solid" ) );
-	m_menuBar->Append( transform_menu, _( "Transform" ) );
-	m_menuBar->Append( m_menuWindow, _( "Window" ) );
+	m_menuBar->Append( file_menu, _( "&File" ) );
+	m_menuBar->Append( edit_menu, _( "&Edit" ) );
+	m_menuBar->Append( geometry_menu, _( "&Geometry" ) );
+	m_menuBar->Append( view_menu, _( "&View" ) );
+	m_menuBar->Append( solids_menu, _( "&Solid" ) );
+	m_menuBar->Append( transform_menu, _( "&Transform" ) );
+	m_menuBar->Append( m_menuWindow, _( "&Window" ) );
 	SetMenuBar( m_menuBar );
 
 	m_aui_manager = new wxAuiManager(this);
