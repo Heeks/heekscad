@@ -372,10 +372,10 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 				wxDynamicLibrary* shared_library = new wxDynamicLibrary(fn.GetFullPath());
 				if(shared_library->IsLoaded()){
 					bool success;
-					void(*OnStartUp)(CHeeksCADInterface*) = (void (*)(CHeeksCADInterface*))(shared_library->GetSymbol(_T("OnStartUp"), &success));
+					void(*OnStartUp)(CHeeksCADInterface*, const wxString&) = (void (*)(CHeeksCADInterface*, const wxString&))(shared_library->GetSymbol(_T("OnStartUp"), &success));
 					if(OnStartUp)
 					{
-						(*OnStartUp)(&heekscad_interface);
+						(*OnStartUp)(&heekscad_interface, path);
 						wxGetApp().m_loaded_libraries.push_back(shared_library);
 					}
 				}

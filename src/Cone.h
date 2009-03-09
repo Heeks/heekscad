@@ -24,7 +24,7 @@ public:
 
 	// HeeksObj's virtual functions
 	const wxChar* GetTypeString(void)const{return _("Cone");}
-	wxString GetIcon(){return _T("cone");}
+	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/cone");}
 	void glCommands(bool select, bool marked, bool no_color);
 	HeeksObj *MakeACopy(void)const;
 	bool ModifyByMatrix(const double* m);

@@ -8,6 +8,9 @@ class CStlTri{
 public:
 	float n[3];
 	float x[3][3];
+	CStlTri(){}
+	CStlTri(const float* t);
+	CStlTri(const float* t, const float* n);
 };
 
 class CStlSolid:public HeeksObj{
@@ -33,7 +36,7 @@ public:
 	long GetMarkingMask()const{return MARKING_FILTER_STL_SOLID;}
 	int GetIDGroupType()const{return SolidType;}
 	const wxChar* GetTypeString(void)const{return _("STL Solid");}
-	wxString GetIcon(){return _T("stlsolid");}
+	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/stlsolid");}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
 	void KillGLLists(void);
@@ -47,5 +50,7 @@ public:
 	void WriteXML(TiXmlNode *root);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
+
+	void AddTriangle(float* t); // 9 floats
 };
 

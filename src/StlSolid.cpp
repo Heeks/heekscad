@@ -10,6 +10,19 @@
 
 using namespace std;
 
+CStlTri::CStlTri(const float* t)
+{
+	memcpy(x[0], t, 9*sizeof(float));
+	float v1[3] = {x[1][0] - x[0][0], x[1][1] - x[0][1], x[1][2] - x[0][2]};
+	float v2[3] = {x[2][0] - x[0][0], x[2][1] - x[0][1], x[2][2] - x[0][2]};
+}
+
+CStlTri::CStlTri(const float* t, const float* N)
+{
+	memcpy(x[0], t, 9*sizeof(float));
+	memcpy(n, N, 3*sizeof(float));
+}
+
 CStlSolid::CStlSolid(const HeeksColor* col):color(*col), m_gl_list(0){
 	m_title.assign(GetTypeString());
 }
@@ -326,3 +339,8 @@ HeeksObj* CStlSolid::ReadFromXMLElement(TiXmlElement* pElem)
 	return new_object;
 }
 
+void CStlSolid::AddTriangle(float* t)
+{
+	CStlTri tri(t);
+	m_list.push_back(tri);
+}

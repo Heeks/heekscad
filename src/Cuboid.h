@@ -21,7 +21,7 @@ public:
 
 	// HeeksObj's virtual functions
 	const wxChar* GetTypeString(void)const{return _("Cuboid");}
-	wxString GetIcon(){return _T("cube");}
+	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/cube");}
 	HeeksObj *MakeACopy(void)const;
 	bool ModifyByMatrix(const double* m);
 	void GetProperties(std::list<Property *> *list);

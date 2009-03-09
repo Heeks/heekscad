@@ -28,7 +28,7 @@ public:
 	void GetBox(CBox &box);
 	const wxChar* GetTypeString(void)const{return _("Infinite Line");}
 	HeeksObj *MakeACopy(void)const;
-	wxString GetIcon(){return _T("iline");}
+	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/iline");}
 	bool ModifyByMatrix(const double *mat);
 	void SetColor(const HeeksColor &col){color = col;}
 	const HeeksColor* GetColor()const{return &color;}
