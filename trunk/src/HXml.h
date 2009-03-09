@@ -22,7 +22,7 @@ public:
 	const wxChar* GetShortString(void)const;
 	const wxChar* GetTypeString(void)const{return _("Xml");}
 	HeeksObj *MakeACopy(void)const;
-	wxString GetIcon(){return _T("xml");}
+	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/xml");}
 	void GetProperties(std::list<Property *> *list);
 	void CopyFrom(const HeeksObj* object){operator=(*((HXml*)object));}
 	void WriteXML(TiXmlNode *root);

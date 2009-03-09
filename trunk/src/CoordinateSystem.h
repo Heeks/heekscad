@@ -38,7 +38,7 @@ public:
 	void GetBox(CBox &box);
 	const wxChar* GetTypeString(void)const{return _("Coordinate System");}
 	HeeksObj *MakeACopy(void)const;
-	wxString GetIcon(){return _T("coordsys");}
+	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/coordsys");}
 	bool ModifyByMatrix(const double *mat);
 	void GetProperties(std::list<Property *> *list);
 	void GetGripperPositions(std::list<double> *list, bool just_for_endof){}

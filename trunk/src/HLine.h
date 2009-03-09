@@ -29,7 +29,7 @@ public:
 	void GetBox(CBox &box);
 	const wxChar* GetTypeString(void)const{return _("Line");}
 	HeeksObj *MakeACopy(void)const;
-	wxString GetIcon(){return _T("line");}
+	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/line");}
 	bool ModifyByMatrix(const double *mat);
 	void SetColor(const HeeksColor &col){color = col;}
 	const HeeksColor* GetColor()const{return &color;}

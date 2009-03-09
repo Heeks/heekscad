@@ -24,6 +24,7 @@
 #include "Edge.h"
 #include "Loop.h"
 #include "../interface/ToolImage.h"
+#include "StlSolid.h"
 #include <gp_Sphere.hxx>
 #include <gp_Cone.hxx>
 
@@ -707,4 +708,24 @@ void CHeeksCADInterface::AddToAboutBox(const wxChar* str)
 void CHeeksCADInterface::SetDefaultLayout(const wxString& str)
 {
 	wxGetApp().m_frame->SetDefaultLayout(str);
+}
+
+void CHeeksCADInterface::StartHistory()
+{
+	wxGetApp().StartHistory();
+}
+
+void CHeeksCADInterface::EndHistory(void)
+{
+	wxGetApp().EndHistory();
+}
+
+HeeksObj* CHeeksCADInterface::NewSTLSolid()
+{
+	return new CStlSolid(&HeeksColor(220, 40, 40));
+}
+
+void CHeeksCADInterface::STLSolidAddTriangle(HeeksObj* stl_solid, float* t)
+{
+	((CStlSolid*)stl_solid)->AddTriangle(t);
 }
