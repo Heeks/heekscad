@@ -23,7 +23,7 @@ Get RapidSVN:
 Run RapidSVN  (  menu Applications->Programming->RapidSVN )
 On the RapidSVN menu, choose Repository->Chekcout
 In the URL box put:
-https://heekscad.googlecode.com/svn/trunk/
+http://heekscad.googlecode.com/svn/trunk/
 In the "Destination Directory" box, put:
 /home/dan/Desktop/HeeksCAD
 ( but replace "dan" with your username )
