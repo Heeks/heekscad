@@ -153,4 +153,8 @@ public:
 	virtual void PropertiesOnApply2();// don't need to press tick to make changes
 	virtual void AddToAboutBox(const wxChar* str);
 	virtual void SetDefaultLayout(const wxString& str);
+	virtual void StartHistory();
+	virtual void EndHistory(void);
+	virtual HeeksObj* NewSTLSolid();
+	virtual void STLSolidAddTriangle(HeeksObj* stl_solid, float* t);
 };
