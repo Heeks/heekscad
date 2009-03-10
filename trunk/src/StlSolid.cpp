@@ -13,8 +13,15 @@ using namespace std;
 CStlTri::CStlTri(const float* t)
 {
 	memcpy(x[0], t, 9*sizeof(float));
-	float v1[3] = {x[1][0] - x[0][0], x[1][1] - x[0][1], x[1][2] - x[0][2]};
-	float v2[3] = {x[2][0] - x[0][0], x[2][1] - x[0][1], x[2][2] - x[0][2]};
+	gp_Pnt p0(x[0][0], x[0][1], x[0][2]);
+	gp_Pnt p1(x[1][0], x[1][1], x[1][2]);
+	gp_Pnt p2(x[2][0], x[2][1], x[2][2]);
+	gp_Vec v1(p0, p1);
+	gp_Vec v2(p0, p2);
+	gp_Vec norm = (v1 ^ v2).Normalized();
+	n[0] = norm.X();
+	n[1] = norm.Y();
+	n[2] = norm.Z();
 }
 
 CStlTri::CStlTri(const float* t, const float* N)

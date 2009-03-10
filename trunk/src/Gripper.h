@@ -6,19 +6,7 @@
 #define Gripper_HEADER
 
 #include "../interface/HeeksObj.h"
-
-enum EnumGripperType{
-	GripperTypeTranslate,
-	GripperTypeRotate,
-	GripperTypeRotateObject,
-	GripperTypeScale,
-	GripperTypeObjectScaleX,
-	GripperTypeObjectScaleY,
-	GripperTypeObjectScaleZ,
-	GripperTypeObjectScaleXY,
-	GripperTypeAngle,
-	GripperTypeStretch
-};
+#include "../interface/GripperTypes.h"
 
 class Gripper: public HeeksObj{
 private:

@@ -42,7 +42,7 @@ bool GripperSelTransform::OnGripperGrabbed(const std::list<HeeksObj*>& list, boo
 
 
 void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
-	if ( m_gripper_type == GripperTypeStretch )
+	if ( m_gripper_type >= GripperTypeStretch && m_gripper_type <= GripperTypeStretch4)
 	{
 		double shift[3] = {to[0] - from[0], to[1] - from[1], to[2] - from[2]};
 		{
