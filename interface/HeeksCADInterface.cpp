@@ -729,3 +729,8 @@ void CHeeksCADInterface::STLSolidAddTriangle(HeeksObj* stl_solid, float* t)
 {
 	((CStlSolid*)stl_solid)->AddTriangle(t);
 }
+
+const HeeksColor& CHeeksCADInterface::GetBackgroundColor()
+{
+	return wxGetApp().background_color;
+}

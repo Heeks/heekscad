@@ -13,6 +13,7 @@ class Observer;
 class wxPoint;
 class CInputMode;
 class TiXmlElement;
+class HeeksColor;
 
 #include "SketchOrder.h"
 
@@ -157,4 +158,5 @@ public:
 	virtual void EndHistory(void);
 	virtual HeeksObj* NewSTLSolid();
 	virtual void STLSolidAddTriangle(HeeksObj* stl_solid, float* t);
+	virtual const HeeksColor& GetBackgroundColor();
 };
