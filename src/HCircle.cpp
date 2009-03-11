@@ -209,8 +209,7 @@ bool HCircle::Stretch(const double *p, const double* shift){
 	else if(s.IsEqual(vp, wxGetApp().m_geom_tol)){
 		s = gp_Pnt(s.XYZ() + vshift.XYZ());
 		double new_radius = c.Distance(s);
-		m_circle.SetRadius(new_radius);
-		s = c.XYZ() + x_axis.XYZ() * new_radius;
+		m_circle = gp_Circ(gp_Ax2(c, m_circle.Axis().Direction(), gp_Vec(c, s)), new_radius);
 	}
 	return false;
 }
