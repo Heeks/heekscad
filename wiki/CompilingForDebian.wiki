@@ -7,7 +7,6 @@ sudo apt-get install -y subversion libopencascade-dev libwxgtk2.8-dev libgtkglex
 #press enter
 svn checkout http://heekscad.googlecode.com/svn/trunk/ heekscad
 cd heekscad/src/
-sed -i 's/-DHEEKSCAD/-DHEEKSCAD -DHAVE_LIMITS/' Makefile
 make
 echo -e "\007" | sudo tee /dev/tty10
 }}}
