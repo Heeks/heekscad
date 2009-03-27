@@ -734,3 +734,8 @@ const HeeksColor& CHeeksCADInterface::GetBackgroundColor()
 {
 	return wxGetApp().background_color;
 }
+
+bool CHeeksCADInterface::InputDouble(const wxChar* prompt, const wxChar* value_name, double &value)
+{
+	return wxGetApp().InputDouble(prompt, value_name, value);
+}

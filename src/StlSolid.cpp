@@ -19,9 +19,9 @@ CStlTri::CStlTri(const float* t)
 	gp_Vec v1(p0, p1);
 	gp_Vec v2(p0, p2);
 	gp_Vec norm = (v1 ^ v2).Normalized();
-	n[0] = norm.X();
-	n[1] = norm.Y();
-	n[2] = norm.Z();
+	n[0] = (float)(norm.X());
+	n[1] = (float)(norm.Y());
+	n[2] = (float)(norm.Z());
 }
 
 CStlTri::CStlTri(const float* t, const float* N)

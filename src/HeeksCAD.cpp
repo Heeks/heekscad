@@ -122,6 +122,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_ruler = new HRuler();
 	m_show_ruler = false;
 	m_show_datum_coords_system = true;
+	m_datum_coords_system_solid_arrows = true;
 	m_filepath = wxString(_("Untitled")) + _T(".heeks");
 	m_in_OpenFile = false;
 	m_transform_gl_list = 0;
@@ -236,6 +237,7 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("ZoomingReversed"), &ViewZooming::m_reversed);
 	config.Read(_T("CtrlDoesRotate"), &ctrl_does_rotate);
 	config.Read(_T("DrawDatum"), &m_show_datum_coords_system, true);
+	config.Read(_T("DrawDatumSolid"), &m_datum_coords_system_solid_arrows, true);
 	config.Read(_T("DatumSize"), &CoordinateSystem::size, 30);
 	config.Read(_T("DatumSizeIsPixels"), &CoordinateSystem::size_is_pixels, true);
 	config.Read(_T("DrawRuler"), &m_show_ruler, false);
@@ -321,6 +323,7 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("ZoomingReversed"), ViewZooming::m_reversed);
 	config.Write(_T("CtrlDoesRotate"), ctrl_does_rotate);
 	config.Write(_T("DrawDatum"), m_show_datum_coords_system);
+	config.Write(_T("DrawDatumSolid"), m_show_datum_coords_system);
 	config.Write(_T("DatumSize"), CoordinateSystem::size);
 	config.Write(_T("DatumSizeIsPixels"), CoordinateSystem::size_is_pixels);
 	config.Write(_T("DrawRuler"), m_show_ruler);
@@ -945,19 +948,15 @@ static void write_stl_triangle(const double* x, const double* n)
 	(*ofs_for_write_stl_triangle) << "     vertex " << x[6] << " " << x[7] << " " << x[8] << endl;
 	(*ofs_for_write_stl_triangle) << "   endloop" << endl;
 	(*ofs_for_write_stl_triangle) << " endfacet" << endl;
-#if 0
-	sprintf(str, " facet normal %g %g %g", n[0], n[1], n[2]);
-	(*ofs_for_write_stl_triangle)<<str<<endl;
-	(*ofs_for_write_stl_triangle)<<"   outer loop"<<endl;
-	sprintf(str, "     vertex %g %g %g", x[0], x[1], x[2]);
-	(*ofs_for_write_stl_triangle)<<str<<endl;
-	sprintf(str, "     vertex %g %g %g", x[3], x[4], x[5]);
-	(*ofs_for_write_stl_triangle)<<str<<endl;
-	sprintf(str, "     vertex %g %g %g", x[6], x[7], x[8]);
-	(*ofs_for_write_stl_triangle)<<str<<endl;
-	(*ofs_for_write_stl_triangle)<<"   endloop"<<endl;
-	(*ofs_for_write_stl_triangle)<<" endfacet"<<endl;
-#endif
+}
+
+static void write_cpp_triangle(const double* x, const double* n)
+{
+	for(int i = 0; i<3; i++)
+	{
+		(*ofs_for_write_stl_triangle) << "glNormal3d(" << n[i*3 + 0] << ", " << n[i*3 + 1] << ", " << n[i*3 + 2] << ");" << endl;
+		(*ofs_for_write_stl_triangle) << "glVertex3d(" << x[i*3 + 0] << ", " << x[i*3 + 1] << ", " << x[i*3 + 2] << ");" << endl;
+	}
 }
 
 void HeeksCADapp::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath)
@@ -986,6 +985,34 @@ void HeeksCADapp::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar 
 	}
 
 	ofs<<"endsolid"<<endl;
+}
+
+void HeeksCADapp::SaveCPPFile(const std::list<HeeksObj*>& objects, const wxChar *filepath)
+{
+#ifdef __WXMSW__
+	ofstream ofs(filepath);
+#else
+	ofstream ofs(Ttc(filepath));
+#endif
+	if(!ofs)
+	{
+		wxString str = wxString(_("couldn't open file")) + _T(" - ") + filepath;
+		wxMessageBox(str);
+		return;
+	}
+	ofs.imbue(std::locale("C"));
+
+	ofs<<"glBegin(GL_TRIANGLES);"<<endl;
+
+	// write all the objects
+	ofs_for_write_stl_triangle = &ofs;
+	for(std::list<HeeksObj*>::iterator It = m_objects.begin(); It != m_objects.end(); It++)
+	{
+		HeeksObj* object = *It;
+		object->GetTriangles(write_cpp_triangle, 0.1, false);
+	}
+
+	ofs<<"glEnd();"<<endl;
 }
 
 void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, bool for_clipboard)
@@ -1096,6 +1123,10 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 	{
 		SaveSTLFile(m_objects, filepath);
 	}
+	else if(wf.EndsWith(_T(".cpp")))
+	{
+		SaveCPPFile(m_objects, filepath);
+	}
 	else if(CShape::ExportSolidsFile(m_objects, filepath))
 	{
 	}
@@ -1134,6 +1165,51 @@ void HeeksCADapp::RecalculateGLLists()
 {
 	for(HeeksObj* object = GetFirstChild(); object; object = GetNextChild()){
 		object->KillGLLists();
+	}
+}
+
+void HeeksCADapp::RenderDatumOrCurrentCoordSys(bool select)
+{
+	if(m_show_datum_coords_system || m_current_coordinate_system)
+	{
+		bool bright_datum = (m_current_coordinate_system == NULL);
+		if(m_datum_coords_system_solid_arrows)
+		{
+			// make the datum appear at the front of everything, by clearing the depth buffer
+			if(m_show_datum_coords_system)
+			{
+				glClear(GL_DEPTH_BUFFER_BIT);
+				CoordinateSystem::RenderDatum(bright_datum, true);
+			}
+			if(m_current_coordinate_system)
+			{
+				glClear(GL_DEPTH_BUFFER_BIT);
+				CoordinateSystem::rendering_current = true;
+				m_current_coordinate_system->glCommands(select, wxGetApp().m_marked_list->ObjectMarked(m_current_coordinate_system), false);
+				CoordinateSystem::rendering_current = false;
+			}
+		}
+		else
+		{
+			// make the datum appear at the front of everything, by setting the depth range
+			GLfloat save_depth_range[2];
+			glGetFloatv(GL_DEPTH_RANGE, save_depth_range);
+			glDepthRange(0, 0);
+
+			if(m_current_coordinate_system)
+			{
+				CoordinateSystem::rendering_current = true;
+				m_current_coordinate_system->glCommands(select, wxGetApp().m_marked_list->ObjectMarked(m_current_coordinate_system), false);
+				CoordinateSystem::rendering_current = false;
+			}
+			if(m_show_datum_coords_system)
+			{
+				CoordinateSystem::RenderDatum(bright_datum, false);
+			}
+
+			// restore the depth range
+			glDepthRange(save_depth_range[0], save_depth_range[1]);
+		}
 	}
 }
 
@@ -1210,20 +1286,7 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	glDepthFunc(GL_LEQUAL);
 
 	// draw the datum
-	if(m_show_datum_coords_system)
-	{
-		bool bright = (m_current_coordinate_system == NULL);
-
-		// make the datum appear at the front of everything, by setting the depth range
-		GLfloat save_depth_range[2];
-		glGetFloatv(GL_DEPTH_RANGE, save_depth_range);
-		glDepthRange(0, 0);
-
-		CoordinateSystem::RenderDatum(bright);
-
-		// restore the depth range
-		glDepthRange(save_depth_range[0], save_depth_range[1]);
-	}
+	RenderDatumOrCurrentCoordSys(select);
 
 	DestroyLights();
 	glDisable(GL_DEPTH_TEST);
@@ -1392,7 +1455,6 @@ void HeeksCADapp::on_menu_event(wxCommandEvent& event)
 		Repaint();
 	}
 }
-
 
 void HeeksCADapp::DoToolUndoably(Tool *t)
 {
@@ -1685,6 +1747,12 @@ void on_set_show_datum(bool onoff, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+void on_set_solid_datum(bool onoff, HeeksObj* object)
+{
+	wxGetApp().m_datum_coords_system_solid_arrows = onoff;
+	wxGetApp().Repaint();
+}
+
 void on_set_show_ruler(bool onoff, HeeksObj* object)
 {
 	wxGetApp().m_show_ruler = onoff;
@@ -1783,10 +1851,12 @@ static void AddPropertyCallBack(Property* p)
 
 void on_set_datum_size(double value, HeeksObj* object){
 	CoordinateSystem::size = value;
+	wxGetApp().Repaint();
 }
 
 void on_set_size_is_pixels(bool value, HeeksObj* object){
 	CoordinateSystem::size_is_pixels = value;
+	wxGetApp().Repaint();
 }
 
 void on_sel_filter_line(bool value, HeeksObj* object){
@@ -1898,6 +1968,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	view_options->m_list.push_back( new PropertyCheck(_("reverse zooming mode"), ViewZooming::m_reversed, NULL, on_set_reverse_zooming));
 	view_options->m_list.push_back( new PropertyCheck(_("Ctrl key does rotate"), ctrl_does_rotate, NULL, on_set_ctrl_does_rotate));
 	view_options->m_list.push_back(new PropertyCheck(_("show datum"), m_show_datum_coords_system, NULL, on_set_show_datum));
+	view_options->m_list.push_back(new PropertyCheck(_("datum is solid"), m_datum_coords_system_solid_arrows, NULL, on_set_solid_datum));
 	view_options->m_list.push_back(new PropertyDouble(_("datum size"), CoordinateSystem::size, NULL, on_set_datum_size));
 	view_options->m_list.push_back(new PropertyCheck(_("datum size is pixels not mm"), CoordinateSystem::size_is_pixels, NULL, on_set_size_is_pixels));
 	view_options->m_list.push_back(new PropertyCheck(_("show ruler"), m_show_ruler, NULL, on_set_show_ruler));
