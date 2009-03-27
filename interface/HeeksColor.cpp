@@ -27,19 +27,19 @@ void HeeksColor::glMaterial(double opacity, GLenum face)const{
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glDepthMask(0);
 	}
-	matf[0] = 0.1f * (GLfloat)red /255 + 0.2f;
-	matf[1] = 0.1f * (GLfloat)green / 255 + 0.2f;
-	matf[2] = 0.1f * (GLfloat)blue / 255 + 0.2f;
+	matf[0] = 0.1f * (GLfloat)red /255;
+	matf[1] = 0.1f * (GLfloat)green / 255;
+	matf[2] = 0.1f * (GLfloat)blue / 255;
 	glMaterialfv (face, GL_AMBIENT, matf);
-	matf[0] = 0.8f * (GLfloat)red / 255 + 0.1f;
-	matf[1] = 0.8f * (GLfloat)green / 255 + 0.1f;
-	matf[2] = 0.8f * (GLfloat)blue / 255 + 0.1f;
+	matf[0] = 0.8f * (GLfloat)red / 255;
+	matf[1] = 0.8f * (GLfloat)green / 255;
+	matf[2] = 0.8f * (GLfloat)blue / 255;
 	glMaterialfv (face, GL_DIFFUSE, matf);
 	matf[0] = 0.3f;
 	matf[1] = 0.3f;
 	matf[2] = 0.3f;
 	glMaterialfv (face, GL_SPECULAR, matf);
-	matf[0] = 0.3f;
+	matf[0] = 0.2f;
 	matf[1] = 0.2f;
 	matf[2] = 0.2f;
 	glMaterialfv (face, GL_EMISSION, matf);
