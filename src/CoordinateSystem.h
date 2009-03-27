@@ -19,6 +19,7 @@ public:
 
 	static double size;
 	static bool size_is_pixels; // false for mm
+	static bool rendering_current;
 
 	// used for user properties, but only to create m_x and m_y
 	double m_vertical_angle;
@@ -48,7 +49,8 @@ public:
 	gp_Trsf GetMatrix();
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
-	static void RenderDatum(bool bright); // render a coordinate system at 0, 0, 0
+	static void RenderArrow();
+	static void RenderDatum(bool bright, bool solid); // render a coordinate system at 0, 0, 0
 	static void AxesToAngles(const gp_Dir &x, const gp_Dir &y, double &v_angle, double &h_angle, double &t_angle);
 	static void AnglesToAxes(const double &v_angle, const double &h_angle, const double &t_angle, gp_Dir &x, gp_Dir &y);
 	void AxesToAngles(){AxesToAngles(m_x, m_y, m_vertical_angle, m_horizontal_angle, m_twist_angle);}
