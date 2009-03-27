@@ -57,6 +57,7 @@ private:
 
 	void create_font();
 	void render_screen_text2(const wxChar* str);
+	void RenderDatumOrCurrentCoordSys(bool select);
 
 protected:
     wxLocale m_locale; // locale we'll be using
@@ -114,6 +115,7 @@ public:
 	HRuler* m_ruler;
 	bool m_show_ruler;
 	bool m_show_datum_coords_system;
+	bool m_datum_coords_system_solid_arrows;
 	std::list< wxString > m_recent_files;
 	bool m_in_OpenFile;
 	bool m_mark_newly_added_objects;
@@ -177,6 +179,7 @@ public:
 	bool OpenFile(const wxChar *filepath, bool import_not_open = false, HeeksObj* paste_into = NULL);
 	void SaveDXFFile(const wxChar *filepath);
 	void SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath);
+	void SaveCPPFile(const std::list<HeeksObj*>& objects, const wxChar *filepath);
 	void SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, bool for_clipboard = false);
 	void SaveXMLFile(const wxChar *filepath){SaveXMLFile(m_objects, filepath);}
 	bool SaveFile(const wxChar *filepath, bool use_dialog = false, bool update_recent_file_list = true, bool set_app_caption = true);
