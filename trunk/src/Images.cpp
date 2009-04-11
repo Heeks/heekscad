@@ -17,12 +17,15 @@ int Images::GetImage(HeeksObj *object)
 
 	if(m_image_list && object->GetType() != UnknownType)
 	{
-		std::map<int, int>::iterator FindIt;
-		if (image_map.size()>0) FindIt = image_map.find(object->GetType());
+		std::map<wxString, int>::iterator FindIt;
+
+		wxString icon_str = object->GetIcon();
+
+		if (image_map.size()>0) FindIt = image_map.find(icon_str);
 		if (image_map.size() == 0 || FindIt == image_map.end())
 		{
-			image_index = m_image_list->Add(wxIcon(object->GetIcon() + _T(".png"), wxBITMAP_TYPE_PNG));
-			FindIt = image_map.insert(std::pair<int, int>(object->GetType(), image_index)).first;
+			image_index = m_image_list->Add(wxIcon(icon_str + _T(".png"), wxBITMAP_TYPE_PNG));
+			FindIt = image_map.insert(std::pair<wxString, int>(icon_str, image_index)).first;
 			image_index = FindIt->second;
 		}
 		else image_index = FindIt->second;
