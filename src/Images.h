@@ -9,7 +9,7 @@
 
 class Images{
 protected:
-	std::map<int, int> image_map; // maps object type to image index
+	std::map<wxString, int> image_map; // maps icon string to image index
 	bool InitializeImageList(int width, int height);
 
 public:
