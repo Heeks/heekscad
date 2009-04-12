@@ -48,6 +48,7 @@ public:
 	virtual const std::list<HeeksObj*>& GetMarkedList();
 	virtual bool GetArcCentre(HeeksObj* object, double* c);
 	virtual bool GetArcAxis(HeeksObj* object, double* a);
+	virtual double CircleGetRadius(HeeksObj* object);
 	virtual void get_2d_arc_segments(double xs, double ys, double xe, double ye, double xc, double yc, bool dir, bool want_start, double pixels_per_mm, void(*callbackfunc)(const double* xy));
 	virtual bool GetSegmentVector(HeeksObj* object, double fraction, double* v);
 	virtual double GetPixelScale();

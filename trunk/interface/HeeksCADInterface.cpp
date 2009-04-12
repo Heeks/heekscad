@@ -11,6 +11,7 @@
 #include "MarkedList.h"
 #include "HLine.h"
 #include "HArc.h"
+#include "HCircle.h"
 #include "ObjPropsCanvas.h"
 #include "OptionsCanvas.h"
 #include "TreeCanvas.h"
@@ -166,6 +167,11 @@ bool CHeeksCADInterface::GetArcAxis(HeeksObj* object, double* a)
 {
 	extract(((HArc*)object)->m_circle.Axis().Direction(), a);
 	return true;
+}
+
+double CHeeksCADInterface::CircleGetRadius(HeeksObj* object)
+{
+	return ((HCircle*)object)->m_circle.Radius();
 }
 
 void CHeeksCADInterface::get_2d_arc_segments(double xs, double ys, double xe, double ye, double xc, double yc, bool dir, bool want_start, double pixels_per_mm, void(*callbackfunc)(const double* xy))

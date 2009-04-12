@@ -13,6 +13,7 @@ enum SketchOrderType
 	SketchOrderTypeCloseCW,	// a well ordered sketch, which is closed and clockwise
 	SketchOrderTypeCloseCCW,// a well ordered sketch, which is closed and anti-clockwise
 	SketchOrderTypeMultipleCurves,  // each of the separate parts are well ordered
+	SketchOrderHasCircles,  // there are circles in the sketch, they will need to be processed seperately and a new sketch made with no circles
 	MaxSketchOrderTypes
 };
 
