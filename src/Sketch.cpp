@@ -238,6 +238,12 @@ void CSketch::CalculateSketchOrder()
 	{
 		HeeksObj* object = *It;
 
+		if(object->GetType() == CircleType)
+		{
+			m_order = SketchOrderHasCircles;
+			return;
+		}
+
 		if(prev_object)
 		{
 			double prev_e[3], s[3];
@@ -399,6 +405,19 @@ void CSketch::ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketche
 {
 	CSketch* re_ordered_sketch = NULL;
 	CSketch* sketch = this;
+
+	if(GetSketchOrder() == SketchOrderHasCircles)
+	{
+		std::list<HeeksObj*>::iterator It;
+		for(It=m_objects.begin(); It!=m_objects.end() ;It++)
+		{
+			HeeksObj* object = *It;
+			CSketch* new_object = new CSketch();
+			new_object->color = color;
+			new_object->Add(object->MakeACopy(), NULL);
+			new_separate_sketches.push_back(new_object);
+		}
+	}
 
 	if(GetSketchOrder() == SketchOrderTypeBad)
 	{
