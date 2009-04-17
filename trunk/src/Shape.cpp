@@ -602,11 +602,14 @@ void CShape::FilletOrChamferEdges(const std::list<HeeksObj*> &list, double radiu
 	wxGetApp().Repaint();
 }
 
-bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<int, CShapeData> *index_map)
+bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<int, CShapeData> *index_map, HeeksObj* paste_into)
 {
 
 	// returns true, if suffix handled
 	wxString wf(filepath);
+
+	HeeksObj* add_to = &wxGetApp();
+	if(paste_into)add_to = paste_into;
 
 	if(wf.EndsWith(_T(".stp")) || wf.EndsWith(_T(".STP")) || wf.EndsWith(_T(".step")) || wf.EndsWith(_T(".STEP")))
 	{
@@ -633,16 +636,16 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<in
 					{
 						CShapeData& shape_data = FindIt->second;
 						HeeksObj* new_object = MakeObject(rShape, _("STEP solid"), shape_data.m_solid_type, HeeksColor(191, 191, 191));
-						if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
-						else wxGetApp().Add(new_object, NULL);
+						if(undoably)wxGetApp().AddUndoably(new_object, add_to, NULL);
+						else add_to->Add(new_object, NULL);
 						shape_data.SetShape((CShape*)new_object);
 					}
 				}
 				else
 				{
 					HeeksObj* new_object = MakeObject(rShape, _("STEP solid"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191));
-					if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
-					else wxGetApp().Add(new_object, NULL);
+					if(undoably)wxGetApp().AddUndoably(new_object, add_to, NULL);
+					else add_to->Add(new_object, NULL);
 				}
 			}
 			wxGetApp().Repaint();
@@ -678,8 +681,8 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<in
 					if(rShape.ShapeType() == TopAbs_EDGE)
 					{
 						HeeksObj* new_object = new CEdge(TopoDS::Edge(rShape));
-						if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
-						else wxGetApp().Add(new_object, NULL);
+						if(undoably)wxGetApp().AddUndoably(new_object, add_to, NULL);
+						else add_to->Add(new_object, NULL);
 					}
 					else
 					{
@@ -695,8 +698,8 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<in
 					if(!face_sewing.SewedShape().IsNull())
 					{
 						HeeksObj* new_object = MakeObject(face_sewing.SewedShape(), _("sewed IGES solid"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191));
-						if(undoably)wxGetApp().AddUndoably(new_object, NULL, NULL);
-						else wxGetApp().Add(new_object, NULL);
+						if(undoably)wxGetApp().AddUndoably(new_object, add_to, NULL);
+						else add_to->Add(new_object, NULL);
 						wxGetApp().Repaint();
 					}
 				}
