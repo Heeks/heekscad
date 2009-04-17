@@ -439,6 +439,7 @@ void HeeksCADapp::Reset(){
 }
 
 static bool undoably_for_ReadSTEPFileFromXMLElement = false;
+static HeeksObj* paste_into_for_ReadSTEPFileFromXMLElement = NULL;
 
 static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 {
@@ -494,7 +495,7 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 #endif
 					ofs<<file_text;
 				}
-				CShape::ImportSolidsFile(temp_file, undoably_for_ReadSTEPFileFromXMLElement, &index_map);
+				CShape::ImportSolidsFile(temp_file, undoably_for_ReadSTEPFileFromXMLElement, &index_map, paste_into_for_ReadSTEPFileFromXMLElement);
 			}
 		}
 	}
@@ -516,7 +517,7 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 #endif
 				ofs<<a->Value();
 			}
-			CShape::ImportSolidsFile(temp_file, undoably_for_ReadSTEPFileFromXMLElement, &index_map);
+			CShape::ImportSolidsFile(temp_file, undoably_for_ReadSTEPFileFromXMLElement, &index_map, paste_into_for_ReadSTEPFileFromXMLElement);
 		}
 	}
 
@@ -600,6 +601,7 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, bool undoably, HeeksObj* p
 	}
 
 	undoably_for_ReadSTEPFileFromXMLElement = undoably;
+	paste_into_for_ReadSTEPFileFromXMLElement = paste_into;
 
 	TiXmlHandle hDoc(&doc);
 	TiXmlElement* pElem;
