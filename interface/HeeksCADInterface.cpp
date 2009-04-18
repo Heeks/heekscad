@@ -26,6 +26,7 @@
 #include "Loop.h"
 #include "../interface/ToolImage.h"
 #include "StlSolid.h"
+#include "HeeksConfig.h"
 #include <gp_Sphere.hxx>
 #include <gp_Cone.hxx>
 
@@ -745,3 +746,19 @@ bool CHeeksCADInterface::InputDouble(const wxChar* prompt, const wxChar* value_n
 {
 	return wxGetApp().InputDouble(prompt, value_name, value);
 }
+
+double CHeeksCADInterface::GetViewUnits()
+{
+	return wxGetApp().m_view_units;
+}
+
+void CHeeksCADInterface::SetViewUnits(double units, bool write_to_config)
+{
+	wxGetApp().m_view_units = units;
+	if(write_to_config)
+	{
+		HeeksConfig config;
+		config.Write(_T("ViewUnits"), &wxGetApp().m_view_units);
+	}
+}
+
