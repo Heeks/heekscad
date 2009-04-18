@@ -9,6 +9,7 @@
 #include "../interface/PropertyCheck.h"
 #include "../interface/PropertyString.h"
 #include "../interface/PropertyDouble.h"
+#include "../interface/PropertyLength.h"
 #include "../interface/PropertyColor.h"
 #include "../interface/PropertyInt.h"
 #include "../interface/PropertyList.h"
@@ -107,6 +108,7 @@ void CPropertiesCanvas::AddProperty(Property* p, wxPGProperty* parent_prop)
 		}
 		break;
 	case DoublePropertyType:
+	case LengthPropertyType:
 		{
 			wxPGProperty *new_prop = wxFloatProperty(p->GetShortString(),wxPG_LABEL, ((PropertyDouble*)p)->m_initial_value);
 			if(!p->property_editable())new_prop->SetFlag(wxPG_PROP_READONLY);
@@ -241,6 +243,11 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 	case DoublePropertyType:
 		{
 			(*(((PropertyDouble*)property)->m_callbackfunc))(event.GetPropertyValue().GetDouble(), ((PropertyDouble*)property)->m_object);
+		}
+		break;
+	case LengthPropertyType:
+		{
+			(*(((PropertyLength*)property)->m_callbackfunc))(event.GetPropertyValue().GetDouble() * wxGetApp().m_view_units, ((PropertyDouble*)property)->m_object);
 		}
 		break;
 	case IntPropertyType:

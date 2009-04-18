@@ -11,6 +11,7 @@ enum{
 	InvalidPropertyType,
 	StringPropertyType,
 	DoublePropertyType,
+	LengthPropertyType,
 	IntPropertyType,
 	VertexPropertyType,
 	ChoicePropertyType,

@@ -161,4 +161,6 @@ public:
 	virtual void STLSolidAddTriangle(HeeksObj* stl_solid, float* t);
 	virtual const HeeksColor& GetBackgroundColor();
 	virtual bool InputDouble(const wxChar* prompt, const wxChar* value_name, double &value);
+	virtual double GetViewUnits();
+	virtual void SetViewUnits(double units, bool write_to_config);
 };
