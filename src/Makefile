@@ -1,4 +1,8 @@
-WXCFLAGS=$(shell wx-config --cflags)
+#WXCFLAGS=$(shell wx-config --cflags)
+
+# dan heeks uncomments the next line to make it work for him
+#WXCFLAGS=-I/usr/lib/wx/include/gtk2-unicode-release-2.8 -I/usr/include/wx-2.8
+
 #CCFLAGS=-Wall -g -I "./" -I "/usr/include/opencascade" -I/home/dan/Desktop/wxGTK-2.8.9/buildgtk/lib/wx/include/gtk2-ansi-debug-2.8 -I/usr/include/wx-2.8 -D__WXGTK__ -DHEEKSCAD -DHAVE_LIMITS -D__WXDEBUG__ -DWXUSINGDLL -DHAVE_LIMITS
 CCFLAGS=-Wall -g -I "./" -I "/usr/include/opencascade" $(WXCFLAGS) -DUNICODE -D__WXGTK__ -DHEEKSCAD -DHAVE_LIMITS -DWXUSINGDLL -DHAVE_LIMITS -DTIXML_USE_STL
 
