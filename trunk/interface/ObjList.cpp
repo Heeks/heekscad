@@ -253,7 +253,8 @@ void ObjList::ReadBaseXML(TiXmlElement* element)
 bool ObjList::ModifyByMatrix(const double *m)
 {
 	bool done_with_add_and_remove = false;
-	for(std::list<HeeksObj*>::iterator It=m_objects.begin(); It!=m_objects.end() ;It++)
+	std::list<HeeksObj*> copy_list = m_objects;
+	for(std::list<HeeksObj*>::iterator It=copy_list.begin(); It!=copy_list.end() ;It++)
 	{
 		if((*It)->ModifyByMatrix(m))done_with_add_and_remove = true;
 	}
