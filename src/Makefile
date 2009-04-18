@@ -1,4 +1,4 @@
-#WXCFLAGS=$(shell wx-config --cflags)
+WXCFLAGS=$(shell wx-config --cflags)
 
 # dan heeks uncomments the next line to make it work for him on his Inspiron 530
 #WXCFLAGS=-I/usr/lib/wx/include/gtk2-unicode-release-2.8 -I/usr/include/wx-2.8
