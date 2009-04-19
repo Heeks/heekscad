@@ -35,7 +35,8 @@ enum{
 	DimensionType,
 	RulerType,
 	XmlType,
-	ObjectMaximumType
+	ObjectMaximumType,
+        EllipseType
 };
 
 #define MARKING_FILTER_LINE					0x00000001
