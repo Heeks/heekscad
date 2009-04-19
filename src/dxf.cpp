@@ -7,6 +7,7 @@
 #include "HLine.h"
 #include "HArc.h"
 #include "HCircle.h"
+#include "HEllipse.h"
 #include "Sketch.h"
 
 #include <sstream>
@@ -303,6 +304,89 @@ bool CDxfRead::ReadCircle(bool undoably)
 	return false;
 }
 
+bool CDxfRead::ReadEllipse(bool undoably)
+{
+	double c[3]; // centre
+	double m[3]; //major axis point
+	double ratio=0; //ratio of major to minor axis
+	double start=0; //start of arc
+	double end=0;  // end of arc
+
+	while(!((*m_ifs).eof()))
+	{
+		get_line();
+		int n;
+		if(sscanf(m_str, "%d", &n) != 1)return false;
+		std::istringstream ss;
+		ss.imbue(std::locale("C"));
+		switch(n){
+			case 0:
+				// next item found, so finish with Ellipse
+				OnReadEllipse(c, m, ratio, start, end, undoably);
+				return true;
+			case 10:
+				// centre x
+				get_line();
+				ss.str(m_str); ss >> c[0]; if(ss.fail()) return false;
+				break;
+			case 20:
+				// centre y
+				get_line();
+				ss.str(m_str); ss >> c[1]; if(ss.fail()) return false;
+				break;
+			case 30:
+				// centre z
+				get_line();
+				ss.str(m_str); ss >> c[2]; if(ss.fail()) return false;
+				break;
+			case 11:
+				// major x
+				get_line();
+				ss.str(m_str); ss >> m[0]; if(ss.fail()) return false;
+				break;
+			case 21:
+				// major y
+				get_line();
+				ss.str(m_str); ss >> m[1]; if(ss.fail()) return false;
+				break;
+			case 31:
+				// major z
+				get_line();
+				ss.str(m_str); ss >> m[2]; if(ss.fail()) return false;
+				break;
+			case 40:
+				// ratio
+				get_line();
+				ss.str(m_str); ss >> ratio; if(ss.fail()) return false;
+				break;
+			case 41:
+				// start
+				get_line();
+				ss.str(m_str); ss >> start; if(ss.fail()) return false;
+				break;
+			case 42:
+				// end
+				get_line();
+				ss.str(m_str); ss >> end; if(ss.fail()) return false;
+				break;	
+			case 100:
+			case 210:
+			case 220:
+			case 230:
+				// skip the next line
+				get_line();
+				break;
+			default:
+				// skip the next line
+				get_line();
+				break;
+		}
+	}
+	OnReadEllipse(c, m, ratio, start, end, undoably);
+	return false;
+}
+
+
 static bool poly_prev_found = false;
 static double poly_prev_x;
 static double poly_prev_y;
@@ -489,6 +573,20 @@ void CDxfRead::OnReadCircle(const double* c, double radius, bool undoably){
 	OnReadCircle(s, c, false, undoably); //false to change direction because otherwise the arc length is zero
 }
 
+void CDxfRead::OnReadEllipse(const double* c, const double* m, double ratio, double start_angle, double end_angle, bool undoably){
+	double major_radius = sqrt(m[0]*m[0] + m[1]*m[1] + m[2]*m[2]);
+	double minor_radius = major_radius * ratio;
+
+	//Since we only support 2d stuff, we can calculate the rotation from the major axis x and y value only,
+	//since z is zero, major_radius is the vector length
+	
+	double rotation = atan2(m[1]/major_radius,m[0]/major_radius);
+
+
+	OnReadEllipse(c, major_radius, minor_radius, rotation, start_angle, end_angle, true, undoably); 
+}
+
+
 void CDxfRead::get_line()
 {
 	m_ifs->getline(m_str, 1024);
@@ -534,6 +632,10 @@ void CDxfRead::DoRead(bool undoably)
 			}
 			else if(!strcmp(m_str, "CIRCLE")){
 				if(!ReadCircle(undoably))return;
+				continue;
+			}
+			else if(!strcmp(m_str, "ELLIPSE")){
+				if(!ReadEllipse(undoably))return;
 				continue;
 			}
 			else if(!strcmp(m_str, "LWPOLYLINE")){
@@ -582,6 +684,20 @@ void HeeksDxfRead::OnReadCircle(const double* s, const double* c, bool dir, bool
 	gp_Pnt pc = make_point(c);
 	gp_Circ circle(gp_Ax2(pc, up), p0.Distance(pc));
 	HCircle* new_object = new HCircle(circle, &wxGetApp().current_color);
+	AddSketchIfNeeded(undoably);
+	if(undoably)wxGetApp().AddUndoably(new_object, m_sketch, NULL);
+	else if(m_sketch)m_sketch->Add(new_object, NULL);
+	else wxGetApp().Add(new_object, NULL);
+}
+
+void HeeksDxfRead::OnReadEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir, bool undoably)
+{
+	gp_Dir up(0, 0, 1);
+	if(!dir)up = -up;
+	gp_Pnt pc = make_point(c);
+	gp_Elips ellipse(gp_Ax2(pc, up), major_radius, minor_radius);
+	ellipse.Rotate(gp_Ax1(pc,up),rotation);
+	HEllipse* new_object = new HEllipse(ellipse, &wxGetApp().current_color);
 	AddSketchIfNeeded(undoably);
 	if(undoably)wxGetApp().AddUndoably(new_object, m_sketch, NULL);
 	else if(m_sketch)m_sketch->Add(new_object, NULL);
