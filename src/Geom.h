@@ -5,17 +5,18 @@
 #pragma once
 
 #include "gp_Pnt.hxx"
+#include <gp_Elips.hxx>
 
 static const double Pi = 3.14159265358979323846264338327950288419716939937511;
 
 // functions to find intersections between gp items
-
 bool intersect(const gp_Lin& lin, const gp_Lin& lin2, gp_Pnt &pnt);
 bool intersect(const gp_Lin& lin, const gp_Pln& pln, gp_Pnt &pnt);
 bool intersect(const gp_Pln& pln, const gp_Pln& pln2, gp_Lin& lin);
 bool intersect(const gp_Pnt& pnt, const gp_Pln& pln);
 bool intersect(const gp_Pnt& pnt, const gp_Lin& lin);
 bool intersect(const gp_Pnt& pnt, const gp_Circ& cir);
+void intersect(const gp_Lin& lin, const gp_Elips& elips, std::list<gp_Pnt> &list);
 void intersect(const gp_Lin& lin, const gp_Circ& cir, std::list<gp_Pnt> &list);
 void intersect(const gp_Circ& c1, const gp_Circ& c2, std::list<gp_Pnt> &list);
 
@@ -42,6 +43,9 @@ gp_Pnt ClosestPointOnPlane(const gp_Pln& pln, const gp_Pnt &p);
 gp_Pnt ClosestPointOnLine(const gp_Lin& line, const gp_Pnt &p);
 void ClosestPointsOnLines(const gp_Lin& lin, const gp_Lin& lin2, gp_Pnt &p1, gp_Pnt &p2);// they might be the same point
 void ClosestPointsLineAndCircle(const gp_Lin& lin, const gp_Circ& cir, std::list<gp_Pnt> &list);
+double GetEllipseRotation(const gp_Elips& elips);
+double DistanceToFoci(const gp_Pnt &pnt, const gp_Elips &elips);
+void ClosestPointsLineAndEllipse(const gp_Lin& lin, const gp_Elips& elips, std::list<gp_Pnt> &list);
 
 // I've made all the combinations of these, 3*3*3 = 27 :), but all except 10 are just to redirect
 void TangentCircles(const gp_Pnt& p1, const gp_Pnt& p2, const gp_Pnt& p3, std::list<gp_Circ>& c_list);
