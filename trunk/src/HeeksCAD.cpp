@@ -46,9 +46,9 @@
 #include "HArc.h"
 #include "HILine.h"
 #include "HCircle.h"
-#include "HEllipse.h"
 #include "HImage.h"
 #include "HPoint.h"
+#include "HEllipse.h"
 #include "HText.h"
 #include "HDimension.h"
 #include "HXml.h"
@@ -87,6 +87,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 
 	m_version_number = _T("0 6 1");
 	m_geom_tol = 0.001;
+	m_view_units = 1.0;
 	background_color = HeeksColor(0, 0, 0);
 	current_color = HeeksColor(0, 0, 0);
 	construction_color = HeeksColor(0, 0, 255);
@@ -251,6 +252,7 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("GraphicsTextMode"), (int*)(&m_graphics_text_mode), GraphicsTextModeWithHelp);
 
 	config.Read(_T("DxfMakeSketch"), &HeeksDxfRead::m_make_as_sketch, true);	
+	config.Read(_T("ViewUnits"), &m_view_units);
 
 	GetRecentFilesProfileString();
 
@@ -440,6 +442,7 @@ void HeeksCADapp::Reset(){
 }
 
 static bool undoably_for_ReadSTEPFileFromXMLElement = false;
+static HeeksObj* paste_into_for_ReadSTEPFileFromXMLElement = NULL;
 
 static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 {
@@ -495,7 +498,7 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 #endif
 					ofs<<file_text;
 				}
-				CShape::ImportSolidsFile(temp_file, undoably_for_ReadSTEPFileFromXMLElement, &index_map);
+				CShape::ImportSolidsFile(temp_file, undoably_for_ReadSTEPFileFromXMLElement, &index_map, paste_into_for_ReadSTEPFileFromXMLElement);
 			}
 		}
 	}
@@ -517,7 +520,7 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 #endif
 				ofs<<a->Value();
 			}
-			CShape::ImportSolidsFile(temp_file, undoably_for_ReadSTEPFileFromXMLElement, &index_map);
+			CShape::ImportSolidsFile(temp_file, undoably_for_ReadSTEPFileFromXMLElement, &index_map, paste_into_for_ReadSTEPFileFromXMLElement);
 		}
 	}
 
@@ -601,6 +604,7 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, bool undoably, HeeksObj* p
 	}
 
 	undoably_for_ReadSTEPFileFromXMLElement = undoably;
+	paste_into_for_ReadSTEPFileFromXMLElement = paste_into;
 
 	TiXmlHandle hDoc(&doc);
 	TiXmlElement* pElem;
@@ -907,7 +911,7 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file)
 			dxf_file.WriteArc(s, e, c, dir);
 		}
 		break;
-        case EllipseType:
+      case EllipseType:
                 {
 			HEllipse* e = (HEllipse*)object;
 			double c[3];
@@ -1965,6 +1969,13 @@ void on_dxf_make_sketch(bool value, HeeksObj* object){
 	HeeksDxfRead::m_make_as_sketch = value;
 }
 
+static void on_set_units(int value, HeeksObj* object)
+{
+	wxGetApp().m_view_units = (value == 0) ? 1.0:25.4;
+	HeeksConfig config;
+	config.Write(_T("ViewUnits"), &wxGetApp().m_view_units);
+}
+
 void HeeksCADapp::GetOptions(std::list<Property *> *list)
 {
 	PropertyList* view_options = new PropertyList(_("view options"));
@@ -2021,6 +2032,15 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 		else if(s > 30)choice = 2;
 		else if(s > 20)choice = 1;
 		view_options->m_list.push_back ( new PropertyChoice ( _("tool icon size"),  choices, choice, NULL, on_set_tool_icon_size ) );
+	}
+
+	{
+		std::list< wxString > choices;
+		choices.push_back ( wxString ( _("mm") ) );
+		choices.push_back ( wxString ( _("inch") ) );
+		int choice = 0;
+		if(m_view_units > 25.0)choice = 1;
+		view_options->m_list.push_back ( new PropertyChoice ( _("units"),  choices, choice, this, on_set_units ) );
 	}
 	list->push_back(view_options);
 
