@@ -15,6 +15,8 @@ public:
 
 	void WriteLine(const double* s, const double* e);
 	void WriteArc(const double* s, const double* e, const double* c, bool dir);
+        void WriteEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir);
+	void WriteCircle(const double* c, double radius);
 };
 
 // derive a class from this and implement it's virtual functions

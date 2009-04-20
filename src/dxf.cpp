@@ -98,6 +98,60 @@ void CDxfWrite::WriteArc(const double* s, const double* e, const double* c, bool
 	(*m_ofs) << end_angle	<< endl;	// End angle
 }
 
+void CDxfWrite::WriteCircle(const double* c, double radius)
+{
+	(*m_ofs) << 0			<< endl;
+	(*m_ofs) << "CIRCLE"		<< endl;
+	(*m_ofs) << 8			<< endl;	// Group code for layer name
+	(*m_ofs) << 0			<< endl;	// Layer number
+	(*m_ofs) << 10			<< endl;	// Centre X
+	(*m_ofs) << c[0]		<< endl;	// X in WCS coordinates
+	(*m_ofs) << 20			<< endl;
+	(*m_ofs) << c[1]		<< endl;	// Y in WCS coordinates
+	(*m_ofs) << 30			<< endl;
+	(*m_ofs) << c[2]		<< endl;	// Z in WCS coordinates
+	(*m_ofs) << 40			<< endl;	// 
+	(*m_ofs) << radius		<< endl;	// Radius
+}
+
+void CDxfWrite::WriteEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir)
+{
+	double m[3];
+	m[2]=0;
+	m[0] = major_radius * sin(rotation);
+	m[1] = major_radius * cos(rotation);
+
+	double ratio = minor_radius/major_radius;
+
+	if(!dir){
+		double temp = start_angle;
+		start_angle = end_angle;
+		end_angle = temp;
+	}
+	(*m_ofs) << 0			<< endl;
+	(*m_ofs) << "ELLIPSE"		<< endl;
+	(*m_ofs) << 8			<< endl;	// Group code for layer name
+	(*m_ofs) << 0			<< endl;	// Layer number
+	(*m_ofs) << 10			<< endl;	// Centre X
+	(*m_ofs) << c[0]		<< endl;	// X in WCS coordinates
+	(*m_ofs) << 20			<< endl;
+	(*m_ofs) << c[1]		<< endl;	// Y in WCS coordinates
+	(*m_ofs) << 30			<< endl;
+	(*m_ofs) << c[2]		<< endl;	// Z in WCS coordinates
+	(*m_ofs) << 40			<< endl;	// 
+	(*m_ofs) << ratio		<< endl;	// Ratio
+	(*m_ofs) << 11			<< endl;	// 
+	(*m_ofs) << m[0]		<< endl;	// Major X 
+	(*m_ofs) << 21			<< endl;
+	(*m_ofs) << m[1]		<< endl;	// Major Y 
+	(*m_ofs) << 31			<< endl;
+	(*m_ofs) << m[2]		<< endl;	// Major Z 
+	(*m_ofs) << 41		<< endl;
+	(*m_ofs) << start_angle	<< endl;	// Start angle
+	(*m_ofs) << 42		<< endl;
+	(*m_ofs) << end_angle	<< endl;	// End angle
+}
+
 CDxfRead::CDxfRead(const wxChar* filepath)
 {
 	// start the file
