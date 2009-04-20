@@ -224,12 +224,19 @@ bool HEllipse::FindPossTangentPoint(const double* ray_start, const double* ray_d
 }
 
 bool HEllipse::Stretch(const double *p, const double* shift){
+
+	//TODO: 
+	// 1. It is difficult to shrink the inner radius and enlarge the outer radius. 
+	// 2. The handle switches to the other radius if you go past Pi/4
+        // 3. Need to make sure that major radius is always larger than minor
+        //    Probably should just internally switch them and rotate the shape 90 degrees
+
 	gp_Pnt vp = make_point(p);
 	gp_Pnt zp(0,0,0);
 	gp_Dir up(0, 0, 1);
 	gp_Vec vshift = make_vector(shift);
 
-	//TODO: rotate vector by our rotation?
+	double rot = GetRotation();
 
 	gp_Dir x_axis = m_ellipse.XAxis().Direction();
 	gp_Dir y_axis = m_ellipse.YAxis().Direction();
@@ -247,14 +254,17 @@ bool HEllipse::Stretch(const double *p, const double* shift){
 	}
         else if(f < m_ellipse.MajorRadius() +  wxGetApp().m_geom_tol && d > m_ellipse.MinorRadius() -  wxGetApp().m_geom_tol)
 	{
+		//We have to rotate the incoming vector to be in our coordinate system
+		gp_Pnt cir = vp.XYZ() - c.XYZ();
+		cir.Rotate(gp_Ax1(zp,up),-rot);
+
+		//This is shockingly simple
 		if( d > m_ellipse.MinorRadius() + (m_ellipse.MajorRadius() - m_ellipse.MinorRadius())/2)
 		{
-			gp_Pnt cir = vp.XYZ() - c.XYZ();
 			m_ellipse.SetMajorRadius(1/sqrt((1-(1/min_r)*(1/min_r)*cir.X()*cir.X()) / cir.Y() / cir.Y())); 
 		}
 		else
 		{
-			gp_Pnt cir = vp.XYZ() - c.XYZ();
 			m_ellipse.SetMinorRadius(1/sqrt((1-(1/maj_r)*(1/maj_r)*cir.Y()*cir.Y()) / cir.X() / cir.X())); 
 		}
 	}
