@@ -121,6 +121,150 @@ void intersect(const gp_Lin& line, const gp_Circ& circle, std::list<gp_Pnt> &lis
 	}
 }
 
+void intersect(const gp_Lin& line, const gp_Elips& elips, std::list<gp_Pnt> &list)
+{
+	std::list<gp_Pnt> plist;
+	ClosestPointsLineAndEllipse(line, elips, plist);
+	for(std::list<gp_Pnt>::iterator It = plist.begin(); It != plist.end(); It++)
+	{
+		gp_Pnt& p = *It;
+		if(intersect(p, line))list.push_back(p);
+	}
+}
+
+double GetEllipseRotation(const gp_Elips& elips)
+{
+	double x = elips.YAxis().Direction().X();
+	double y = elips.YAxis().Direction().Y();
+	return atan2(y,x);
+}
+
+double DistanceToFoci(const gp_Pnt &pnt, const gp_Elips &elips)
+{
+   //Returns:
+   // 2*Major_Radius() if pnt is on the ellipse. 
+   //<2*Major_Radius if it is inside 
+   //>2*Major_Radius if it is outside
+
+   //Pnt must be coplaner to the ellipse else it won't work. Right now math computes above for elliptic solids.
+   double e = elips.Eccentricity();
+   gp_Pnt f1;
+   gp_Pnt f2;
+   f1 = elips.Location().XYZ() + elips.XAxis().Direction().XYZ() * e;
+   f2 = elips.Location().XYZ() - elips.XAxis().Direction().XYZ() * e;
+   return f1.Distance(pnt) + f2.Distance(pnt);
+}
+
+
+void ClosestPointsLineAndEllipse(const gp_Lin& line, const gp_Elips& elips, std::list<gp_Pnt> &list)
+{
+	// just do 2D equations, I can't work out the 3D case
+
+	// the points will always be somewhere on the ellipse
+
+	if(fabs(line.Direction() * elips.Axis().Direction()) > 0.4){
+		// line is a bit perpendicular to plane of ellipse
+		// just consider the point where the line passes through the plane of the ellipse
+
+		gp_Pln pl(elips.Location(), elips.Axis().Direction());
+		gp_Pnt plane_point;
+		if(!intersect(line, pl, plane_point))return;
+
+		double dist_to_centre = plane_point.Distance(elips.Location());
+
+		if(dist_to_centre < wxGetApp().m_geom_tol)return;
+
+		// just use the closest point in the direction of the closest point on line
+		gp_Vec plane_vec(elips.Location(), plane_point);
+		plane_vec.Normalize();
+		double theta = atan2(plane_vec.Y(),plane_vec.X()) + GetEllipseRotation(elips);
+		
+		// project point onto ellipse
+
+		gp_Pnt p(elips.Location().XYZ());
+		p.SetX(p.X() + elips.MajorRadius() * sin(theta));
+		p.SetY(p.Y() + elips.MinorRadius() * cos(theta));
+
+		list.push_back(p);
+	}
+	else{
+		// line is mostly flat in the plane of the ellipse
+
+		gp_Pnt to_centre = ClosestPointOnLine(line, elips.Location());
+		double dist_to_foci = DistanceToFoci(to_centre,elips);
+		if(dist_to_foci > 2 * elips.MajorRadius() - wxGetApp().m_geom_tol)
+		{
+			// just use the closest point in the direction of the closest point on line
+			gp_Vec plane_vec(elips.Location(), to_centre);
+			plane_vec.Normalize();
+
+			double theta = atan2(plane_vec.Y(),plane_vec.X()) + GetEllipseRotation(elips);
+		
+			// project point onto ellipse
+
+			gp_Pnt p(elips.Location().XYZ());
+			p.SetX(p.X() + elips.MajorRadius() * sin(theta));
+			p.SetY(p.Y() + elips.MinorRadius() * cos(theta));
+
+			list.push_back(p);
+
+		}
+		else
+		{
+			//Easiest thing to do is to move the line into the ellipses coordinate system
+			//and smash the y axis
+			gp_Vec up(0,0,1);
+			gp_Lin line2 = line.Rotated(gp_Ax1(elips.Location(),up),-GetEllipseRotation(elips));
+			gp_Pnt linepos = line2.Location();
+                        gp_Vec linedir = line2.Direction();
+			double ratio = elips.MinorRadius() / elips.MajorRadius();
+			linepos.SetY(linepos.Y() * ratio);
+			linedir.SetY(linedir.Y() * ratio);
+			line2 = gp_Lin(linepos,linedir);
+
+			// from geoff's geometry
+
+			// solving	x = x0 + dx * t			x = y0 + dy * t
+			//			x = xc + R * cos(a)		y = yc + R * sin(a)		for t
+			// gives :-  t² (dx² + dy²) + 2t(dx*dx0 + dy*dy0) + (x0-xc)² + (y0-yc)² - R² = 0
+
+			gp_Vec lv = line2.Direction();
+
+			gp_Dir x_axis = elips.XAxis().Direction();
+			gp_Dir y_axis = elips.YAxis().Direction();
+			gp_Pnt centre = elips.Location();
+
+			// do the equation in the plane of the circle with it's centre being x0, y0
+			gp_Vec local_line_location(elips.Location(), line2.Location());
+			double x0 = local_line_location * x_axis;
+			double y0 = local_line_location * y_axis;
+
+			// flatten line direction
+			lv = lv - (lv*elips.Axis().Direction()) * elips.Axis().Direction();
+			lv.Normalize();
+
+			double dx = lv * x_axis;
+			double dy = lv * y_axis;
+			double R = elips.MajorRadius();
+
+			double a = dx * dx + dy * dy;
+			double b = 2 * (dx* x0 + dy * y0);
+			double c = x0 * x0 + y0 * y0 - R * R;
+
+			// t = (-b +- sqrt(b*b - 4*a*c))/(2*a)
+			double sq = sqrt(b*b - 4*a*c);
+			double t1 = (-b + sq)/(2*a);
+			double t2 = (-b - sq)/(2*a);
+
+			gp_Pnt p1 = centre.XYZ() + x_axis.XYZ() * (x0 + t1 * dx) + y_axis.XYZ() * (y0 + t1 * dy);
+			gp_Pnt p2 = centre.XYZ() + x_axis.XYZ() * (x0 + t2 * dx) + y_axis.XYZ() * (y0 + t2 * dy);
+
+			list.push_back(p1);
+			list.push_back(p2);
+		}
+	}
+}
+
 void ClosestPointsLineAndCircle(const gp_Lin& line, const gp_Circ& circle, std::list<gp_Pnt> &list)
 {
 	// just do 2D equations, I can't work out the 3D case
