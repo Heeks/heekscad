@@ -137,14 +137,22 @@ void HEllipse::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 	if(!just_for_endof)
 	{
 		gp_Dir x_axis = m_ellipse.XAxis().Direction();
+		gp_Dir y_axis = m_ellipse.YAxis().Direction();
 		gp_XYZ c = m_ellipse.Location().XYZ();
-		double r = m_ellipse.MajorRadius();
-		gp_Pnt s(c + x_axis.XYZ() * r);
+		double maj_r = m_ellipse.MajorRadius();
+		double min_r = m_ellipse.MinorRadius();
+		gp_Pnt maj_s(c + x_axis.XYZ() * maj_r);
+		gp_Pnt min_s(c + y_axis.XYZ() * min_r);
 
 		list->push_back(GripperTypeStretch);
-		list->push_back(s.X());
-		list->push_back(s.Y());
-		list->push_back(s.Z());
+		list->push_back(maj_s.X());
+		list->push_back(maj_s.Y());
+		list->push_back(maj_s.Z());
+
+		list->push_back(GripperTypeStretch);
+		list->push_back(min_s.X());
+		list->push_back(min_s.Y());
+		list->push_back(min_s.Z());
 	} 
 }
 
@@ -170,16 +178,30 @@ static void on_set_minor_radius(double value, HeeksObj* object){
 	wxGetApp().Repaint(); 
 }
 
+static void on_set_rotation(double value, HeeksObj* object){
+	gp_Dir up(0, 0, 1);
+        double rot = ((HEllipse*)object)->GetRotation();
+	((HEllipse*)object)->m_ellipse.Rotate(gp_Ax1(((HEllipse*)object)->m_ellipse.Location(),up),value-rot);
+	wxGetApp().Repaint(); 
+}
+
+double HEllipse::GetRotation()
+{
+	double x = m_ellipse.YAxis().Direction().X();
+	double y = m_ellipse.YAxis().Direction().Y();
+	return atan2(y,x);
+}
 
 void HEllipse::GetProperties(std::list<Property *> *list){
 	double c[3], a[3];
 	extract(m_ellipse.Location(), c);
 	extract(m_ellipse.Axis().Direction(), a);
+	double rot = GetRotation();
 	list->push_back(new PropertyVertex(_("centre"), c, this, on_set_centre));
 	list->push_back(new PropertyVertex(_("axis"), a, this, on_set_axis));
 	list->push_back(new PropertyDouble(_("major radius"), m_ellipse.MajorRadius(), this, on_set_major_radius));
 	list->push_back(new PropertyDouble(_("minor radius"), m_ellipse.MinorRadius(), this, on_set_minor_radius));
-
+	list->push_back(new PropertyDouble(_("rotation"), rot, this, on_set_rotation));
 	HeeksObj::GetProperties(list);
 }
 
@@ -203,20 +225,38 @@ bool HEllipse::FindPossTangentPoint(const double* ray_start, const double* ray_d
 
 bool HEllipse::Stretch(const double *p, const double* shift){
 	gp_Pnt vp = make_point(p);
+	gp_Pnt zp(0,0,0);
+	gp_Dir up(0, 0, 1);
 	gp_Vec vshift = make_vector(shift);
 
+	//TODO: rotate vector by our rotation?
+
 	gp_Dir x_axis = m_ellipse.XAxis().Direction();
-	gp_Pnt c = m_ellipse.Location().XYZ();
-	double r = m_ellipse.MajorRadius();
-	gp_Pnt s(c.XYZ() + x_axis.XYZ() * r);
+	gp_Dir y_axis = m_ellipse.YAxis().Direction();
+	gp_Pnt c = m_ellipse.Location();
+	double maj_r = m_ellipse.MajorRadius();
+	double min_r = m_ellipse.MinorRadius();
+	gp_Pnt maj_s(c.XYZ() + x_axis.XYZ() * maj_r);
+	gp_Pnt min_s(c.XYZ() + y_axis.XYZ() * min_r);
+
+        double d = c.Distance(vp);
+        double f = DistanceToFoci(vp)/2;
 
 	if(c.IsEqual(vp, wxGetApp().m_geom_tol)){
 		m_ellipse.SetLocation(c.XYZ() + vshift.XYZ());
 	}
-	else if(s.IsEqual(vp, wxGetApp().m_geom_tol)){
-		s = gp_Pnt(s.XYZ() + vshift.XYZ());
-		double new_radius = c.Distance(s);
-		m_ellipse.SetMajorRadius(new_radius);
+        else if(f < m_ellipse.MajorRadius() +  wxGetApp().m_geom_tol && d > m_ellipse.MinorRadius() -  wxGetApp().m_geom_tol)
+	{
+		if( d > m_ellipse.MinorRadius() + (m_ellipse.MajorRadius() - m_ellipse.MinorRadius())/2)
+		{
+			gp_Pnt cir = vp.XYZ() - c.XYZ();
+			m_ellipse.SetMajorRadius(1/sqrt((1-(1/min_r)*(1/min_r)*cir.X()*cir.X()) / cir.Y() / cir.Y())); 
+		}
+		else
+		{
+			gp_Pnt cir = vp.XYZ() - c.XYZ();
+			m_ellipse.SetMinorRadius(1/sqrt((1-(1/maj_r)*(1/maj_r)*cir.Y()*cir.Y()) / cir.X() / cir.X())); 
+		}
 	}
 	return false; 
 }
@@ -276,6 +316,22 @@ HeeksObj* HEllipse::ReadFromXMLElement(TiXmlElement* pElem)
 	new_object->ReadBaseXML(pElem);
 
 	return new_object; 
+}
+
+double HEllipse::DistanceToFoci(gp_Pnt &pnt)
+{
+   //Returns:
+   // 2*Major_Radius() if pnt is on the ellipse. 
+   //<2*Major_Radius if it is inside 
+   //>2*Major_Radius if it is outside
+
+   //Pnt must be coplaner to the ellipse else it won't work. Right now math computes above for elliptic solids.
+   double e = m_ellipse.Eccentricity();
+   gp_Pnt f1;
+   gp_Pnt f2;
+   f1 = m_ellipse.Location().XYZ() + m_ellipse.XAxis().Direction().XYZ() * e;
+   f2 = m_ellipse.Location().XYZ() - m_ellipse.XAxis().Direction().XYZ() * e;
+   return f1.Distance(pnt) + f2.Distance(pnt);
 }
 
 int HEllipse::Intersects(const HeeksObj *object, std::list< double > *rl)const
