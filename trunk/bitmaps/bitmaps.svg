@@ -5046,7 +5046,7 @@
        xlink:href="#linearGradient1887"
        id="linearGradient3489"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(1,2.6171872e-6)"
+       gradientTransform="translate(1,2.6171874e-6)"
        x1="21.011263"
        y1="244.34225"
        x2="33.810226"
@@ -6813,10 +6813,7 @@
       </g>
     </g>
     <g
-       id="g3497"
-       inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\pickany.png"
-       inkscape:export-xdpi="296.30154"
-       inkscape:export-ydpi="296.30154">
+       id="g4273">
       <g
          transform="matrix(0.6428571,0,0,0.6173614,34.5,432.70859)"
          inkscape:export-ydpi="270"
@@ -7074,6 +7071,25 @@
          id="path3464"
          d="M 605,306.86218 L 605,238.86218"
          style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <g
+       id="g4294"
+       transform="matrix(0.9172261,0,0,0.8310738,15.983713,116.80316)"
+       inkscape:export-filename="/home/dan/Desktop/HeeksCAD/bitmaps/face2sketch.png"
+       inkscape:export-xdpi="276.37961"
+       inkscape:export-ydpi="276.37961">
+      <path
+         inkscape:export-ydpi="271.42096"
+         inkscape:export-xdpi="271.42096"
+         inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\lines.png"
+         sodipodi:nodetypes="ccssssccssssc"
+         id="path3463"
+         d="M 203.60012,724.06915 L 206.11381,724.96458 L 209.57021,716.70695 C 210.16119,714.82173 213.54509,715.44466 212.65029,717.87431 L 210.77031,722.38734 C 208.27625,729.50178 218.02559,730.39458 219.26658,725.21857 L 222.39988,717.1726 L 219.79387,716.23483 L 216.42979,724.45013 C 215.56011,726.6466 212.53849,725.69334 213.44203,723.40977 L 215.322,718.72741 C 217.4321,713.42735 210.10139,709.70929 206.73342,716.02318 L 203.60012,724.06915 z"
+         style="fill:#d0d0d0;fill-opacity:1;fill-rule:evenodd;stroke:#606060;stroke-width:1.20024681;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         id="path3495"
+         d="M 194.10081,711.89027 L 194.80792,695.98036 L 214.60691,692.44483 L 213.19269,709.06184 L 194.10081,711.89027 z"
+         style="fill:#004beb;fill-opacity:1;fill-rule:evenodd;stroke:#0000aa;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     </g>
   </g>
 </svg>

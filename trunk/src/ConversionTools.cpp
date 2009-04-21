@@ -3,12 +3,15 @@
 // This program is released under the BSD license. See the file COPYING for details.
 #include "stdafx.h"
 #include "ConversionTools.h"
+#include <BRepTools.hxx>
 #include <BRepBuilderAPI_MakePolygon.hxx>
 #include <BRepBuilderAPI_MakeShape.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepOffsetAPI_MakeOffset.hxx>
+#include <BRepAdaptor_Curve.hxx>
+#include <BRepTools_WireExplorer.hxx>
 #include <TopTools_ListIteratorOfListOfShape.hxx>
 #include "MarkedList.h"
 #include "HLine.h"
@@ -154,6 +157,87 @@ bool ConvertSketchToFace2(HeeksObj* object, TopoDS_Face& face)
 	}
 
 	return false;
+}
+
+bool ConvertFaceToSketch2(const TopoDS_Face& face, HeeksObj* sketch)
+{
+	// given a face, this adds lines and arcs to the given sketch
+	// loop through all the loops 
+	TopoDS_Wire outerWire=BRepTools::OuterWire(face);
+
+	for (TopExp_Explorer expWire(face, TopAbs_WIRE); expWire.More(); expWire.Next())
+	{
+		const TopoDS_Shape &W = expWire.Current();
+		bool is_outer = W.IsSame(outerWire) != 0;
+
+		for(BRepTools_WireExplorer expEdge(TopoDS::Wire(W)); expEdge.More(); expEdge.Next())
+		{
+			const TopoDS_Shape &E = expEdge.Current();
+			if(!ConvertEdgeToSketch2(TopoDS::Edge(E), sketch))return false;
+		}
+	}
+
+	return true; // success
+}
+
+bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch)
+{
+	// enum GeomAbs_CurveType
+	// 0 - GeomAbs_Line
+	// 1 - GeomAbs_Circle
+	// 2 - GeomAbs_Ellipse
+	// 3 - GeomAbs_Hyperbola
+	// 4 - GeomAbs_Parabola
+	// 5 - GeomAbs_BezierCurve
+	// 6 - GeomAbs_BSplineCurve
+	// 7 - GeomAbs_OtherCurve
+
+	BRepAdaptor_Curve curve(edge);
+	GeomAbs_CurveType curve_type = curve.GetType();
+
+	switch(curve_type)
+	{
+		case GeomAbs_Line:
+			// make a line
+		{
+			double uStart = curve.FirstParameter();
+			double uEnd = curve.LastParameter();
+			gp_Pnt PS;
+			gp_Vec VS;
+			curve.D1(uStart, PS, VS);
+			gp_Pnt PE;
+			gp_Vec VE;
+			curve.D1(uEnd, PE, VE);
+			HLine* new_object = new HLine(PS, PE, &wxGetApp().current_color);
+			sketch->Add(new_object, NULL);
+		}
+		break;
+
+		case GeomAbs_Circle:
+			// make an arc
+		{
+			double uStart = curve.FirstParameter();
+			double uEnd = curve.LastParameter();
+			gp_Pnt PS;
+			gp_Vec VS;
+			curve.D1(uStart, PS, VS);
+			gp_Pnt PE;
+			gp_Vec VE;
+			curve.D1(uEnd, PE, VE);
+			gp_Circ circle = curve.Circle();
+			HArc* new_object = new HArc(PS, PE, circle, &wxGetApp().current_color);
+			sketch->Add(new_object, NULL);
+		}
+		break;
+
+		default:
+		{
+			// to do
+		}
+		break;
+	}
+
+	return true;
 }
 
 void ConvertSketchToFace::Run(){
