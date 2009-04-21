@@ -738,6 +738,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\HEllipse.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\HEllipse.h"
+			>
+		</File>
+		<File
 			RelativePath=".\HILine.cpp"
 			>
 		</File>
