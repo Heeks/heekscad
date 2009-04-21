@@ -48,6 +48,7 @@ public:
 	void WriteXML(TiXmlNode *root);
 	void GetProperties(std::list<Property *> *list);
 	bool UsesID(){return true;}
+	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 
 	const TopoDS_Face &Face(){return m_topods_face;}
 	gp_Dir GetMiddleNormal(gp_Pnt *pos = NULL)const;

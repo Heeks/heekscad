@@ -6,6 +6,8 @@
 #include "Loop.h"
 #include "Shape.h"
 #include "Solid.h"
+#include "Sketch.h"
+#include "ConversionTools.h"
 #include <BRepMesh.hxx>
 #include <StdPrs_ToolShadedShape.hxx>
 #include <Poly_Connect.hxx>
@@ -347,6 +349,29 @@ void CFace::GetProperties(std::list<Property *> *list)
 	list->push_back(new PropertyString(_("surface type"), GetSurfaceTypeStr(), NULL));
 
 	HeeksObj::GetProperties(list);
+}
+class MakeSketchTool:public Tool
+{
+public:
+	CFace* m_face;
+
+	MakeSketchTool(CFace* face):m_face(face){}
+
+	const wxChar* GetTitle(){return _("Make Sketch");}
+	wxString BitmapPath(){return _T("face2sketch");}
+	const wxChar* GetToolTip(){return _T("Make a sketch from face");}
+	void Run(){
+		CSketch* new_object = new CSketch();
+		ConvertFaceToSketch2(m_face->Face(), new_object);
+		wxGetApp().AddUndoably(new_object, NULL, NULL);
+	}
+};
+
+static MakeSketchTool make_sketch_tool(NULL);
+
+void CFace::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
+	make_sketch_tool.m_face = this;
+	t_list->push_back(&make_sketch_tool);
 }
 
 int CFace::GetSurfaceType()
