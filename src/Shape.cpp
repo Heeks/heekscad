@@ -49,12 +49,13 @@ bool CShape::m_solids_found = false;
 
 CShape::CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor& col):m_gl_list(0), m_shape(shape), m_title(title), m_color(col), m_picked_face(NULL)
 {
-	m_faces = new CFaceList;
-	m_edges = new CEdgeList;
-	Add(m_faces, NULL);
-	Add(m_edges, NULL);
-	create_faces_and_edges();
+	Init();
 }
+
+CShape::CShape(const HeeksColor& col):m_gl_list(0), m_color(col), m_picked_face(NULL)
+{
+}
+
 
 CShape::CShape(const CShape& s):m_gl_list(0), m_picked_face(NULL)
 {
@@ -83,6 +84,15 @@ const CShape& CShape::operator=(const CShape& s)
 	KillGLLists();
 
 	return *this;
+}
+
+void CShape::Init()
+{
+	m_faces = new CFaceList;
+	m_edges = new CEdgeList;
+	Add(m_faces, NULL);
+	Add(m_edges, NULL);
+	create_faces_and_edges();
 }
 
 void CShape::KillGLLists()
