@@ -786,6 +786,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\HSpline.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\HSpline.h"
+			>
+		</File>
+		<File
 			RelativePath=".\HText.cpp"
 			>
 		</File>
