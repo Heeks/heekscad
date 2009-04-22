@@ -119,17 +119,43 @@ void HSpline::GetGripperPositions(std::list<double> *list, bool just_for_endof){
 	} 
 }
 
+void OnSetKnot(double v, HeeksObj* obj, int i)
+{
+	((HSpline*)obj)->m_spline->SetKnot(i,v);
+}
+
+void OnSetWeight(double v, HeeksObj* obj, int i)
+{
+	((HSpline*)obj)->m_spline->SetWeight(i,v);
+}
+
+void OnSetPole(const double *v, HeeksObj* obj, int i)
+{
+	gp_Pnt p = make_point(v);
+	((HSpline*)obj)->m_spline->SetPole(i,p);
+}
+
+
 void HSpline::GetProperties(std::list<Property *> *list){
-/*	double c[3], a[3];
-	extract(m_spline.Location(), c);
-	extract(m_spline.Axis().Direction(), a);
-	double rot = GetRotation();
-	list->push_back(new PropertyVertex(_("centre"), c, this, on_set_centre));
-	list->push_back(new PropertyVertex(_("axis"), a, this, on_set_axis));
-	list->push_back(new PropertyDouble(_("major radius"), m_spline.MajorRadius(), this, on_set_major_radius));
-	list->push_back(new PropertyDouble(_("minor radius"), m_spline.MinorRadius(), this, on_set_minor_radius));
-	list->push_back(new PropertyDouble(_("rotation"), rot, this, on_set_rotation)); */
-	list->push_back(new PropertyDouble(_("argh"),1,this,0));
+	wxChar str[512];
+	for(int i=1; i <= m_spline->NbKnots(); i++)
+	{
+		sprintf(str,"%s %d", _("Knot"), i);
+		list->push_back(new PropertyDouble(str,m_spline->Knot(i),this,OnSetKnot,i));
+		//TODO: Should add the multiplicity property. Complicated to change though.
+		//Will blow up bspline unless a bunch of other parameters change as well
+		//sprintf(str,"%s %d", _("Multiplicity"), i);
+		//list->push_back(new PropertyInt(str,m_spline->Mult(i),this,OnSetMult,i));
+	}
+	for(int i=1; i <= m_spline->NbPoles(); i++)
+	{
+		double p[3];
+		extract(m_spline->Pole(i),p);
+		sprintf(str,"%s %d", _("Pole"), i);
+		list->push_back(new PropertyVertex(str,p,this,OnSetPole,i));
+		sprintf(str,"%s %d", _("Weight"), i);
+		list->push_back(new PropertyDouble(str,m_spline->Weight(i),this,OnSetWeight,i));
+	}
 	HeeksObj::GetProperties(list); 
 }
 

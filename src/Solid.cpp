@@ -10,6 +10,11 @@ CSolid::CSolid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor&
 {
 }
 
+CSolid::CSolid(const HeeksColor& col):CShape(col)
+{
+}
+
+
 CSolid::~CSolid()
 {
 }
