@@ -40,7 +40,6 @@ public:
 	bool FindPossTangentPoint(const double* ray_start, const double* ray_direction, double *point);
 	bool Stretch(const double *p, const double* shift);
 	void GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point = true)const;
-	bool GetCentrePoint(double* pos);
 	void WriteXML(TiXmlNode *root);
 	int Intersects(const HeeksObj *object, std::list< double > *rl)const;
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);

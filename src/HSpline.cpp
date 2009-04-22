@@ -12,6 +12,8 @@
 #include "HILine.h"
 #include "HArc.h"
 #include "Gripper.h"
+#include <TColStd_Array1OfReal.hxx>
+#include <TColStd_Array1OfInteger.hxx>
 
 HSpline::HSpline(const HSpline &s){
 	operator=(s);
@@ -42,10 +44,10 @@ void HSpline::GetSegments(void(*callbackfunc)(const double *p), double pixels_pe
     int segments = (int)(fabs(pixels_per_mm * length + 1));
 	double pp[3];
 
-	for(int i = 0; i < 100; i++)
+	for(int i = 0; i <= segments; i++)
     {
 		gp_Pnt p;
-		m_spline->D0(i * .01,p);
+		m_spline->D0(i / (double)segments,p);
 		extract(p, pp);
 		(*callbackfunc)(pp);
     } 
@@ -87,71 +89,34 @@ HeeksObj *HSpline::MakeACopy(void)const{
 
 bool HSpline::ModifyByMatrix(const double* m){
 	gp_Trsf mat = make_matrix(m);
-//	m_spline.Transform(mat);
+	m_spline->Transform(mat);
 	return false;
 }
 
 void HSpline::GetBox(CBox &box){
-/*	gp_Dir x_axis = m_spline.XAxis().Direction();
-	gp_Dir y_axis = m_spline.YAxis().Direction();
-	gp_XYZ c = m_spline.Location().XYZ();
-	gp_XYZ x = x_axis.XYZ() * m_spline.MajorRadius();
-	gp_XYZ y = y_axis.XYZ() * m_spline.MinorRadius();
-
-	gp_Pnt p[4];
-	p[0] = gp_Pnt(c - x - y);
-	p[1] = gp_Pnt(c + x - y);
-	p[2] = gp_Pnt(c + x + y);
-	p[3] = gp_Pnt(c - x + y);
-
-	for(int i = 0; i<4; i++)
-	{
-		double pp[3];
-		extract(p[i], pp);
+	//TODO: get rid of magic number
+	double pp[3];
+	for(int i = 0; i <= 100; i++)
+    {
+		gp_Pnt p;
+		m_spline->D0(i * .01,p);
+		extract(p, pp);
 		box.Insert(pp);
-	} */
+    } 
 }
 
 void HSpline::GetGripperPositions(std::list<double> *list, bool just_for_endof){
 	if(!just_for_endof)
 	{
-/*		gp_Dir x_axis = m_spline.XAxis().Direction();
-		gp_Dir y_axis = m_spline.YAxis().Direction();
-		gp_XYZ c = m_spline.Location().XYZ();
-		double maj_r = m_spline.MajorRadius();
-		double min_r = m_spline.MinorRadius();
-		gp_Pnt maj_s(c + x_axis.XYZ() * maj_r);
-		gp_Pnt min_s(c + y_axis.XYZ() * min_r);
-		gp_Pnt rot(c+x_axis.XYZ() * maj_r * -1);
-
-		list->push_back(GripperTypeStretch);
-		list->push_back(maj_s.X());
-		list->push_back(maj_s.Y());
-		list->push_back(maj_s.Z());
-
-		list->push_back(GripperTypeStretch);
-		list->push_back(min_s.X());
-		list->push_back(min_s.Y());
-		list->push_back(min_s.Z());
-
-	        list->push_back(GripperTypeRotate);
-	        list->push_back(rot.X());
-	        list->push_back(rot.Y());
-	        list->push_back(rot.Z());
-*/
+		for(int i=1; i <= m_spline->NbPoles(); i++)
+		{
+			gp_Pnt pole = m_spline->Pole(i);
+			list->push_back(GripperTypeStretch);
+			list->push_back(pole.X());
+			list->push_back(pole.Y());
+			list->push_back(pole.Z());
+		}
 	} 
-}
-
-static void on_set_centre(const double *vt, HeeksObj* object){
-//	((HSpline*)object)->m_spline.SetLocation(make_point(vt));
-	wxGetApp().Repaint();
-}
-
-static void on_set_axis(const double *vt, HeeksObj* object){
-//	gp_Ax1 a = ((HSpline*)object)->m_spline.Axis();
-//	a.SetDirection(make_vector(vt));
-//	((HSpline*)object)->m_spline.SetAxis(a);
-	wxGetApp().Repaint(); 
 }
 
 void HSpline::GetProperties(std::list<Property *> *list){
@@ -182,122 +147,140 @@ bool HSpline::FindPossTangentPoint(const double* ray_start, const double* ray_di
 
 bool HSpline::Stretch(const double *p, const double* shift){
 
-/*	//TODO: 
-        // 1. When the major and minor axis swap, the unused handle switches sides.
-	// 2. The handle switches to the other radius if you go past Pi/4
-
-/	gp_Pnt vp = make_point(p);
-	gp_Pnt zp(0,0,0);
-	gp_Dir up(0, 0, 1);
+	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);
 
-	double rot = GetRotation();
-
-	gp_Dir x_axis = m_spline.XAxis().Direction();
-	gp_Dir y_axis = m_spline.YAxis().Direction();
-	gp_Pnt c = m_spline.Location();
-	double maj_r = m_spline.MajorRadius();
-	double min_r = m_spline.MinorRadius();
-	gp_Pnt maj_s(c.XYZ() + x_axis.XYZ() * maj_r);
-	gp_Pnt min_s(c.XYZ() + y_axis.XYZ() * min_r);
-
-        double d = c.Distance(vp);
-        double f = DistanceToFoci(vp,m_spline)/2;
-
-	if(c.IsEqual(vp, wxGetApp().m_geom_tol)){
-		m_spline.SetLocation(c.XYZ() + vshift.XYZ());
-	}
-        else if(f < m_spline.MajorRadius() +  wxGetApp().m_geom_tol && d > m_spline.MinorRadius() -  wxGetApp().m_geom_tol)
+	//There may be multiple control points at the same location, so we must move them all
+	// This could break if user drags one set of points over another
+	// The correct mapping of handles to control points can be determined
+	// from the multiplicity set
+	for(int i = 1; i <= m_spline->NbPoles(); i++)
 	{
-		//We have to rotate the incoming vector to be in our coordinate system
-		gp_Pnt cir = vp.XYZ() + vshift.XYZ() - c.XYZ();
-		cir.Rotate(gp_Ax1(zp,up),-rot);
-
-		//This is shockingly simple
-		if( d > min_r + (maj_r - min_r)/2)
+		if(m_spline->Pole(i).IsEqual(vp, wxGetApp().m_geom_tol))
 		{
-			double nradius = 1/sqrt((1-(1/min_r)*(1/min_r)*cir.X()*cir.X()) / cir.Y() / cir.Y());
-			if(nradius > min_r)
-				m_spline.SetMajorRadius(nradius); 
-			else
-			{
-				m_spline.SetMajorRadius(min_r);
-				m_spline.SetMinorRadius(nradius);
-				SetRotation(GetRotation()-Pi/2);
-			}
+			m_spline->SetPole(i,m_spline->Pole(i).XYZ() + vshift.XYZ());
 		}
-		else
-		{
-			double nradius = 1/sqrt((1-(1/maj_r)*(1/maj_r)*cir.Y()*cir.Y()) / cir.X() / cir.X());
-			if(nradius < maj_r)
-				m_spline.SetMinorRadius(nradius); 
-			else
-			{
-				m_spline.SetMinorRadius(maj_r);
-				m_spline.SetMajorRadius(nradius);
-				SetRotation(GetRotation()+Pi/2);
-			}
-		}
-	} */
+  	}
 	return false; 
-}
-
-bool HSpline::GetCentrePoint(double* pos)
-{
-//	extract(m_spline.Location(), pos);
-	return true;
 }
 
 void HSpline::WriteXML(TiXmlNode *root)
 {
-/*	TiXmlElement * element;
-	element = new TiXmlElement( "Circle" );
+	TiXmlElement * element;
+	element = new TiXmlElement( "Spline" );
 	root->LinkEndChild( element );  
 	element->SetAttribute("col", color.COLORREF_color());
-	element->SetDoubleAttribute("maj", m_spline.MajorRadius());
-	element->SetDoubleAttribute("min", m_spline.MinorRadius());
-	gp_Pnt C = m_spline.Location();
-	gp_Dir D = m_spline.Axis().Direction();
-	element->SetDoubleAttribute("cx", C.X());
-	element->SetDoubleAttribute("cy", C.Y());
-	element->SetDoubleAttribute("cz", C.Z());
-	element->SetDoubleAttribute("ax", D.X());
-	element->SetDoubleAttribute("ay", D.Y());
-	element->SetDoubleAttribute("az", D.Z());
-	WriteBaseXML(element); */
+	element->SetAttribute("rational", m_spline->IsRational()?1:0);
+	element->SetAttribute("periodic", m_spline->IsPeriodic()?1:0);
+	element->SetAttribute("knots", m_spline->NbKnots());
+	element->SetAttribute("poles", m_spline->NbPoles());
+	element->SetAttribute("degree", m_spline->Degree());
+	for(int i=1; i <= m_spline->NbPoles(); i++)
+	{
+		gp_Pnt polepnt = m_spline->Pole(i);
+		double weight = m_spline->Weight(i);
+		TiXmlElement *pole;
+		pole = new TiXmlElement("Pole");
+		element->LinkEndChild(pole);
+		pole->SetAttribute("index",i);
+		pole->SetDoubleAttribute("weight",weight);
+		pole->SetDoubleAttribute("x", polepnt.X());
+		pole->SetDoubleAttribute("y", polepnt.Y());
+		pole->SetDoubleAttribute("z", polepnt.Z());
+	}
+
+	for(int i=1; i <= m_spline->NbKnots(); i++)
+	{
+		double knotdoub = m_spline->Knot(i);
+		int mult = m_spline->Multiplicity(i);
+		TiXmlElement *knot;
+		knot = new TiXmlElement("Knot");
+		element->LinkEndChild(knot);
+		knot->SetAttribute("index",i);
+		knot->SetDoubleAttribute("knot",knotdoub);
+		knot->SetAttribute("mult", mult);
+	}
+	WriteBaseXML(element); 
 }
 
 // static member function
 HeeksObj* HSpline::ReadFromXMLElement(TiXmlElement* pElem)
 {
-/*	gp_Pnt centre;
-	double axis[3];
-	double maj = 0.0;
-	double min = 0.0;
 	HeeksColor c;
+	bool rational = false;
+	bool periodic = false;
+	int nknots = 0;
+	int npoles = 0;
+	int degree = 0;
 
 	// get the attributes
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
 		std::string name(a->Name());
 		if(name == "col"){c = HeeksColor(a->IntValue());}
-		else if(name == "maj"){maj = a->DoubleValue();}
-		else if(name == "mIN"){min = a->DoubleValue();}
-		else if(name == "cx"){centre.SetX(a->DoubleValue());}
-		else if(name == "cy"){centre.SetY(a->DoubleValue());}
-		else if(name == "cz"){centre.SetZ(a->DoubleValue());}
-		else if(name == "ax"){axis[0] = a->DoubleValue();}
-		else if(name == "ay"){axis[1] = a->DoubleValue();}
-		else if(name == "az"){axis[2] = a->DoubleValue();}
+		else if(name == "rational"){rational = a->IntValue() != 0;}
+		else if(name == "periodic"){periodic = a->IntValue() != 0;}
+		else if(name == "knots"){nknots = a->IntValue();}
+		else if(name == "poles"){npoles = a->IntValue();}
+		else if(name == "degree"){degree = a->IntValue();}
 	}
 
-	Geom_BSplineCurve ellipse(gp_Ax2(centre, gp_Dir(make_vector(axis))), maj,min);
+	TColgp_Array1OfPnt tkcontrol (1,npoles);
+	TColStd_Array1OfReal tkweight (1,npoles);
+	TColStd_Array1OfReal tkknot (1,nknots);
+	TColStd_Array1OfInteger tkmult (1,nknots);
 
-	HSpline* new_object = new HSpline(ellipse, &c);
+
+
+	// get the children
+
+	TiXmlElement *pPole = pElem->FirstChildElement("Pole");
+	for(int i=1; i <= npoles; i++)
+	{
+		double c[3];
+		double weight;
+		int index;
+		// get the attributes
+		for(TiXmlAttribute* a = pPole->FirstAttribute(); a; a = a->Next())
+		{
+			std::string name(a->Name());
+			if(name == "x"){c[0] = a->DoubleValue();}
+			else if(name == "y"){c[1] = a->DoubleValue();}
+			else if(name == "z"){c[2] = a->DoubleValue();}
+			else if(name == "weight"){weight = a->DoubleValue();}
+			else if(name == "index"){index = a->IntValue();}
+		}
+
+		tkcontrol.SetValue(index,make_point(c));
+		tkweight.SetValue(index,weight);
+		pPole = pPole->NextSiblingElement("Pole");
+	}
+	
+	TiXmlElement *pKnot = pElem->FirstChildElement("Knot");
+	for(int i=1; i <= nknots; i++)
+	{
+		double knot;
+		int mult;
+		int index;
+		// get the attributes
+		for(TiXmlAttribute* a = pKnot->FirstAttribute(); a; a = a->Next())
+		{
+			std::string name(a->Name());
+			if(name == "knot"){knot = a->DoubleValue();}
+			else if(name == "mult"){mult = a->IntValue();}
+			else if(name == "index"){index = a->IntValue();}
+		}
+		tkknot.SetValue(index,knot);
+		tkmult.SetValue(index,mult);
+		pKnot = pKnot->NextSiblingElement("Knot");
+	}
+
+	Geom_BSplineCurve spline(tkcontrol,tkweight,tkknot,tkmult,degree,periodic,rational);
+
+	HSpline* new_object = new HSpline(spline, &c);
 	new_object->ReadBaseXML(pElem);
 
-	return new_object;  */
-	return 0;
+	return new_object;  
 }
 
 int HSpline::Intersects(const HeeksObj *object, std::list< double > *rl)const
