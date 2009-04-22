@@ -155,10 +155,10 @@ void HEllipse::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 		list->push_back(min_s.Y());
 		list->push_back(min_s.Z());
 
-	        list->push_back(GripperTypeRotate);
-	        list->push_back(rot.X());
-	        list->push_back(rot.Y());
-	        list->push_back(rot.Z());
+	    list->push_back(GripperTypeRotate);
+	    list->push_back(rot.X());
+	    list->push_back(rot.Y());
+	    list->push_back(rot.Z());
 
 	} 
 }
@@ -304,11 +304,12 @@ bool HEllipse::GetCentrePoint(double* pos)
 void HEllipse::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element;
-	element = new TiXmlElement( "Circle" );
+	element = new TiXmlElement( "Ellipse" );
 	root->LinkEndChild( element );  
 	element->SetAttribute("col", color.COLORREF_color());
 	element->SetDoubleAttribute("maj", m_ellipse.MajorRadius());
 	element->SetDoubleAttribute("min", m_ellipse.MinorRadius());
+	element->SetDoubleAttribute("rot", GetRotation());
 	gp_Pnt C = m_ellipse.Location();
 	gp_Dir D = m_ellipse.Axis().Direction();
 	element->SetDoubleAttribute("cx", C.X());
@@ -327,6 +328,7 @@ HeeksObj* HEllipse::ReadFromXMLElement(TiXmlElement* pElem)
 	double axis[3];
 	double maj = 0.0;
 	double min = 0.0;
+	double rot = 0;
 	HeeksColor c;
 
 	// get the attributes
@@ -335,7 +337,8 @@ HeeksObj* HEllipse::ReadFromXMLElement(TiXmlElement* pElem)
 		std::string name(a->Name());
 		if(name == "col"){c = HeeksColor(a->IntValue());}
 		else if(name == "maj"){maj = a->DoubleValue();}
-		else if(name == "mIN"){min = a->DoubleValue();}
+		else if(name == "min"){min = a->DoubleValue();}
+		else if(name == "rot"){rot = a->DoubleValue();}
 		else if(name == "cx"){centre.SetX(a->DoubleValue());}
 		else if(name == "cy"){centre.SetY(a->DoubleValue());}
 		else if(name == "cz"){centre.SetZ(a->DoubleValue());}
@@ -347,6 +350,7 @@ HeeksObj* HEllipse::ReadFromXMLElement(TiXmlElement* pElem)
 	gp_Elips ellipse(gp_Ax2(centre, gp_Dir(make_vector(axis))), maj,min);
 
 	HEllipse* new_object = new HEllipse(ellipse, &c);
+	new_object->SetRotation(rot);
 	new_object->ReadBaseXML(pElem);
 
 	return new_object; 
