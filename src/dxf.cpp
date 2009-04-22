@@ -8,6 +8,7 @@
 #include "HArc.h"
 #include "HCircle.h"
 #include "HEllipse.h"
+#include "HSpline.h"
 #include "Sketch.h"
 
 #include <sstream>
@@ -302,6 +303,172 @@ bool CDxfRead::ReadArc(bool undoably)
 	OnReadArc(start_angle, end_angle, radius, c, undoably);
 	return false;
 }
+
+bool CDxfRead::ReadSpline(bool undoably)
+{
+	struct SplineData sd;
+	sd.norm[0] = 0;
+	sd.norm[1] = 0;
+	sd.norm[2] = 1;
+	sd.degree = 0;
+	sd.knots = 0;
+	sd.flag = 0;
+	sd.control_points = 0;
+	sd.fit_points = 0;
+
+	double temp_double;
+	while(!((*m_ifs).eof()))
+	{
+		get_line();
+		int n;
+		if(sscanf(m_str, "%d", &n) != 1)return false;
+		std::istringstream ss;
+		ss.imbue(std::locale("C"));
+		switch(n){
+			case 0:
+				// next item found, so finish with Spline
+				OnReadSpline(sd, undoably);
+				return true;
+			case 210:
+				// normal x
+				get_line();
+				ss.str(m_str); ss >> sd.norm[0]; if(ss.fail()) return false;
+				break;
+			case 220:
+				// normal y
+				get_line();
+				ss.str(m_str); ss >> sd.norm[1]; if(ss.fail()) return false;
+				break;
+			case 230:
+				// normal z
+				get_line();
+				ss.str(m_str); ss >> sd.norm[2]; if(ss.fail()) return false;
+				break;
+			case 70:
+				// flag
+				get_line();
+				ss.str(m_str); ss >> sd.flag; if(ss.fail()) return false;
+				break;
+			case 71:
+				// degree
+				get_line();
+				ss.str(m_str); ss >> sd.degree; if(ss.fail()) return false;
+				break;
+			case 72:
+				// knots
+				get_line();
+				ss.str(m_str); ss >> sd.knots; if(ss.fail()) return false;
+				break;
+			case 73:
+				// control points
+				get_line();
+				ss.str(m_str); ss >> sd.control_points; if(ss.fail()) return false;
+				break;
+			case 74:
+				// fit points
+				get_line();
+				ss.str(m_str); ss >> sd.fit_points; if(ss.fail()) return false;
+				break;
+			case 12:
+				// starttan x
+				get_line();
+				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				sd.starttanx.push_back(temp_double);
+				break;
+			case 22:
+				// starttan y
+				get_line();
+				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				sd.starttany.push_back(temp_double);
+				break;
+			case 32:
+				// starttan z
+				get_line();
+				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				sd.starttanz.push_back(temp_double);
+				break;
+			case 13:
+				// endtan x
+				get_line();
+				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				sd.endtanx.push_back(temp_double);
+				break;
+			case 23:
+				// endtan y
+				get_line();
+				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				sd.endtany.push_back(temp_double);
+				break;
+			case 33:
+				// endtan z
+				get_line();
+				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				sd.endtanz.push_back(temp_double);
+				break;
+			case 40:
+				// knot
+				get_line();
+				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				sd.knot.push_back(temp_double);
+				break;
+			case 41:
+				// weight
+				get_line();
+				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				sd.weight.push_back(temp_double);
+				break;
+			case 10:
+				// control x
+				get_line();
+				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				sd.controlx.push_back(temp_double);
+				break;
+			case 20:
+				// control y
+				get_line();
+				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				sd.controly.push_back(temp_double);
+				break;
+			case 30:
+				// control z
+				get_line();
+				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				sd.controlz.push_back(temp_double);
+				break;
+			case 11:
+				// fit x
+				get_line();
+				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				sd.fitx.push_back(temp_double);
+				break;
+			case 21:
+				// fit y
+				get_line();
+				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				sd.fity.push_back(temp_double);
+				break;
+			case 31:
+				// fit z
+				get_line();
+				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				sd.fitz.push_back(temp_double);
+				break;
+			case 42:
+			case 43:
+			case 44:
+				// skip the next line
+				get_line();
+				break;
+			default:
+				// skip the next line
+				get_line();
+				break;
+		}
+	}
+	OnReadSpline(sd, undoably);
+	return false;
+}
+
 
 bool CDxfRead::ReadCircle(bool undoably)
 {
@@ -640,6 +807,68 @@ void CDxfRead::OnReadEllipse(const double* c, const double* m, double ratio, dou
 	OnReadEllipse(c, major_radius, minor_radius, rotation, start_angle, end_angle, true, undoably); 
 }
 
+void CDxfRead::OnReadSpline(struct SplineData& sd, bool undoably)
+{
+	TColgp_Array1OfPnt control (1,sd.controlx.size());
+	TColStd_Array1OfReal weight (1,sd.controlx.size());
+
+	std::list<double> knoto;
+	std::list<double> multo;
+
+	std::list<double>::iterator ity = sd.controly.begin(); 
+	std::list<double>::iterator itz = sd.controlz.begin(); 
+	std::list<double>::iterator itw = sd.weight.begin();
+
+	int i=1;
+	for(std::list<double>::iterator itx = sd.controlx.begin(); itx!=sd.controlx.end(); ++itx)
+	{
+		gp_Pnt pnt(*itx,*ity,*itz);
+		control.SetValue(i,pnt);
+		if(sd.weight.empty())
+			weight.SetValue(i,1);
+		else
+		{
+			weight.SetValue(i,*itw);
+			++itw;
+		}
+		++i;
+		++ity;
+		++itz;
+	}
+
+	i=1;
+	double last_knot = -1;
+	for(std::list<double>::iterator it = sd.knot.begin(); it!=sd.knot.end(); ++it)
+	{	
+		if(*it != last_knot)
+		{
+			knoto.push_back(*it);
+			multo.push_back(1);
+			i++;
+		}
+		else
+		{
+			double temp = multo.back();
+			multo.pop_back();
+			multo.push_back(temp+1);
+		}
+		last_knot = *it;
+	}
+	TColStd_Array1OfReal knot (1,knoto.size());
+	TColStd_Array1OfInteger mult (1,knoto.size());
+
+	std::list<double>::iterator itm = multo.begin();
+	i = 1;
+	for(std::list<double>::iterator it = knoto.begin(); it!=knoto.end(); ++it)
+	{
+		knot.SetValue(i,*it);
+		mult.SetValue(i,*itm);
+		++itm;
+		++i;
+	}
+
+    OnReadSpline(control, weight, knot, mult, sd.degree, (sd.flag & 2) != 0, (sd.flag & 4) != 0, undoably);
+}
 
 void CDxfRead::get_line()
 {
@@ -692,6 +921,10 @@ void CDxfRead::DoRead(bool undoably)
 				if(!ReadEllipse(undoably))return;
 				continue;
 			}
+			else if(!strcmp(m_str, "SPLINE")){
+				if(!ReadSpline(undoably))return;
+				continue;
+			}
 			else if(!strcmp(m_str, "LWPOLYLINE")){
 				if(!ReadLwPolyLine(undoably))return;
 				continue;
@@ -738,6 +971,16 @@ void HeeksDxfRead::OnReadCircle(const double* s, const double* c, bool dir, bool
 	gp_Pnt pc = make_point(c);
 	gp_Circ circle(gp_Ax2(pc, up), p0.Distance(pc));
 	HCircle* new_object = new HCircle(circle, &wxGetApp().current_color);
+	AddSketchIfNeeded(undoably);
+	if(undoably)wxGetApp().AddUndoably(new_object, m_sketch, NULL);
+	else if(m_sketch)m_sketch->Add(new_object, NULL);
+	else wxGetApp().Add(new_object, NULL);
+}
+
+void HeeksDxfRead::OnReadSpline(TColgp_Array1OfPnt &control, TColStd_Array1OfReal &weight, TColStd_Array1OfReal &knot,TColStd_Array1OfInteger &mult, int degree, bool periodic, bool rational, bool undoably)
+{
+	Geom_BSplineCurve spline(control,weight,knot,mult,degree,periodic,rational);
+	HSpline* new_object = new HSpline(spline, &wxGetApp().current_color);
 	AddSketchIfNeeded(undoably);
 	if(undoably)wxGetApp().AddUndoably(new_object, m_sketch, NULL);
 	else if(m_sketch)m_sketch->Add(new_object, NULL);
