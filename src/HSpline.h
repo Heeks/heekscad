@@ -1,4 +1,4 @@
-// HEllipse.h
+// HSpline.h
 // Copyright (c) 2009, Dan Heeks
 // This program is released under the BSD license. See the file COPYING for details.
 
@@ -6,28 +6,29 @@
 
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"
-#include <gp_Elips.hxx>
+#include <Geom_BSplineCurve.hxx>
+//#include <Handle_Geom_Geometry.hxx>
 
-class HEllipse: public HeeksObj{
+class HSpline: public HeeksObj{
 private:
 	HeeksColor color;
 	static wxIcon* m_icon;
 
 public:
-	gp_Elips m_ellipse;
+	Handle(Geom_BSplineCurve) m_spline;
 
-	~HEllipse(void);
-	HEllipse(const gp_Elips &c, const HeeksColor* col);
-	HEllipse(const HEllipse &c);
+	~HSpline(void);
+	HSpline(const Geom_BSplineCurve &s, const HeeksColor* col);
+	HSpline(const HSpline &c);
 
-	const HEllipse& operator=(const HEllipse &c);
+	const HSpline& operator=(const HSpline &c);
 
 	// HeeksObj's virtual functions
-	int GetType()const{return EllipseType;}
+	int GetType()const{return SplineType;}
 	long GetMarkingMask()const{return MARKING_FILTER_CIRCLE;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
-	const wxChar* GetTypeString(void)const{return _("Ellipse");}
+	const wxChar* GetTypeString(void)const{return _("Spline");}
 	HeeksObj *MakeACopy(void)const;
 	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/circle");}
 	bool ModifyByMatrix(const double *mat);
@@ -42,10 +43,6 @@ public:
 	bool GetCentrePoint(double* pos);
 	void WriteXML(TiXmlNode *root);
 	int Intersects(const HeeksObj *object, std::list< double > *rl)const;
-	double GetRotation();
-	void SetRotation(double rot);
-
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 
 };
-
