@@ -99,23 +99,29 @@ void CStlSolid::read_from_file(const wxChar* filepath)
 			{
 				if(!strcmp(five_chars, "verte"))
 				{
+#ifdef WIN32
+					sscanf(str, " vertex %f %f %f", &(t.x[vertex][0]), &(t.x[vertex][1]), &(t.x[vertex][2]));
+#else
 					std::istringstream ss(str);
 					ss.imbue(std::locale("C"));
 					while(ss.peek() == ' ') ss.seekg(1, ios_base::cur);
 					ss.seekg(std::string("vertex").size(), ios_base::cur);
 					ss >> t.x[vertex][0] >> t.x[vertex][1] >> t.x[vertex][2];
-					//sscanf(str, " vertex %f %f %f", &(t.x[vertex][0]), &(t.x[vertex][1]), &(t.x[vertex][2]));
+#endif
 					vertex++;
 					if(vertex > 2)vertex = 2;
 				}
 				else if(!strcmp(five_chars, "facet"))
 				{
+#ifdef WIN32
+					sscanf(str, " facet normal %f %f %f", &(t.n[0]), &(t.n[1]), &(t.n[2]));
+#else
 					std::istringstream ss(str);
 					ss.imbue(std::locale("C"));
 					while(ss.peek() == ' ') ss.seekg(1, ios_base::cur);
 					ss.seekg(std::string("facet normal").size(), ios_base::cur);
 					ss >> t.n[0] >> t.n[1] >> t.n[2];
-					//sscanf(str, " facet normal %f %f %f", &(t.n[0]), &(t.n[1]), &(t.n[2]));
+#endif
 					vertex = 0;
 				}
 				else if(!strcmp(five_chars, "endfa"))
