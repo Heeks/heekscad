@@ -140,7 +140,7 @@ void HSpline::GetProperties(std::list<Property *> *list){
 	wxChar str[512];
 	for(int i=1; i <= m_spline->NbKnots(); i++)
 	{
-		sprintf(str,"%s %d", _("Knot"), i);
+		wxSprintf(str,"%s %d", _("Knot"), i);
 		list->push_back(new PropertyDouble(str,m_spline->Knot(i),this,OnSetKnot,i));
 		//TODO: Should add the multiplicity property. Complicated to change though.
 		//Will blow up bspline unless a bunch of other parameters change as well
@@ -151,9 +151,9 @@ void HSpline::GetProperties(std::list<Property *> *list){
 	{
 		double p[3];
 		extract(m_spline->Pole(i),p);
-		sprintf(str,"%s %d", _("Pole"), i);
+		wxSprintf(str,"%s %d", _("Pole"), i);
 		list->push_back(new PropertyVertex(str,p,this,OnSetPole,i));
-		sprintf(str,"%s %d", _("Weight"), i);
+		wxSprintf(str,"%s %d", _("Weight"), i);
 		list->push_back(new PropertyDouble(str,m_spline->Weight(i),this,OnSetWeight,i));
 	}
 	HeeksObj::GetProperties(list); 
