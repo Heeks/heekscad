@@ -624,41 +624,38 @@ static void AddPolyLinePoint(CDxfRead* dxf_read, double x, double y, bool bulge_
 		bool arc_done = false;
 		if(poly_prev_bulge_found)
 		{
-			// from here: http://www.afralisp.net/lisp/Bulges1.htm
-			if(fabs(poly_prev_bulge)> 0.0000000000001)
-			{
 				double dx = x - poly_prev_x;
 				double dy = y - poly_prev_y;
 				double c = sqrt(dx*dx + dy*dy);
-				double chord = c/2;
-				double s = chord * poly_prev_bulge;
-				double r = (chord*chord+s*s)/(2*s);
-				double sx = -dy;
-				double sy = dx;
-				double mags = sqrt(sx*sx+sy*sy);
-				if(mags>0.0000000000000001)
-				{
-					sx = sx/mags;
-					sy = sy/mags;
-					if(poly_prev_bulge<0)
-					{
-						sx = -sx;
-						sy = -sy;
-					}
 
-					double d = r - s;
-					double mx = poly_prev_x + dx/2;
-					double my = poly_prev_y + dy/2;
-					double cx = mx + sx * d;
-					double cy = my + sy * d;
+				double a = atan(fabs(poly_prev_bulge))*4;
 
-					double ps[3] = {poly_prev_x, poly_prev_y, 0};
-					double pe[3] = {x, y, 0};
-					double pc[3] = {cx, cy, 0};
-					dxf_read->OnReadArc(ps, pe, pc, poly_prev_bulge >= 0, undoably);
-					arc_done = true;
-				}
-			}
+				//find radius of circle that for arc of angle a, has chord length c
+				double r = (c/2) / cos((Pi-a)/2);
+
+				double d = sqrt(r*r - (c/2)*(c/2));
+				
+				double ps[3] = {poly_prev_x, poly_prev_y, 0};
+				double pe[3] = {x, y, 0};
+				gp_Pnt pPnt = make_point(ps);
+				gp_Pnt nPnt = make_point(pe);
+				gp_Dir dir(nPnt.XYZ()-pPnt.XYZ());
+				
+				gp_Pnt mid = pPnt.XYZ() + dir.XYZ() * c / 2;
+				
+				dir.Rotate(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,0,1)),Pi/2);
+				gp_Pnt off;
+				if(poly_prev_bulge >= 0)
+					off = mid.XYZ() + dir.XYZ() * (d); 
+				else
+					off = mid.XYZ() + dir.XYZ() * (-d); 
+			
+				double pc[3];
+				extract(off,pc);
+				
+				dxf_read->OnReadArc(ps, pe, pc, poly_prev_bulge >= 0, undoably);
+				arc_done = true;
+			
 		}
 
 		if(!arc_done)
