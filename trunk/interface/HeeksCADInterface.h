@@ -150,6 +150,8 @@ public:
 	virtual void RemoveOnGraphicsSize( void(*callbackfunc)(wxSizeEvent& evt) );
 	virtual void RegisterOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
 	virtual void RemoveOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
+	virtual void RegisterOnSaveFn( void(*callbackfunc)(bool from_changed_prompt) );
+	virtual void RegisterIsModifiedFn( bool(*callbackfunc)() );
 	virtual void RegisterToolBar( wxToolBarBase* );
 	virtual void RegisterAddToolBars( void(*callbackfunc)() );
 	virtual void PropertiesOnApply2();// don't need to press tick to make changes
