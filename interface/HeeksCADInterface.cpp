@@ -691,6 +691,16 @@ void CHeeksCADInterface::RemoveOnMouseFn( void(*callbackfunc)(wxMouseEvent&) )
 	wxGetApp().RemoveOnMouseFn(callbackfunc);
 }
 
+void CHeeksCADInterface::RegisterOnSaveFn( void(*callbackfunc)(bool) )
+{
+	wxGetApp().RegisterOnSaveFn(callbackfunc);
+}
+
+void CHeeksCADInterface::RegisterIsModifiedFn( bool(*callbackfunc)() )
+{
+	wxGetApp().RegisterIsModifiedFn(callbackfunc);
+}
+
 void CHeeksCADInterface::RegisterToolBar( wxToolBarBase* toolbar )
 {
 	wxGetApp().m_external_toolbars.push_back(toolbar);
