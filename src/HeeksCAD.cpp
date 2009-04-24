@@ -1142,6 +1142,13 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 
 	if(wf.EndsWith(_T(".heeks")))
 	{
+		// call external OnSave functions
+		for(std::list< void(*)(bool) >::iterator It = wxGetApp().m_on_save_callbacks.begin(); It != wxGetApp().m_on_save_callbacks.end(); It++)
+		{
+			void(*callbackfunc)(bool) = *It;
+			(*callbackfunc)(false);
+		}
+
 		SaveXMLFile(filepath);
 	}
 	else if(wf.EndsWith(_T(".dxf")))
@@ -1397,6 +1404,13 @@ double HeeksCADapp::GetPixelScale(void){
 }
 
 bool HeeksCADapp::IsModified(void){
+	for(std::list< bool(*)() >::iterator It = wxGetApp().m_is_modified_callbacks.begin(); It != wxGetApp().m_is_modified_callbacks.end(); It++)
+	{
+		bool(*callbackfunc)() = *It;
+		bool is_modified = (*callbackfunc)();
+		if(is_modified)return true;
+	}
+
 	return history->IsModified();
 }
 
@@ -2533,7 +2547,7 @@ void HeeksCADapp::InsertRecentFileItem(const wxChar* filepath)
 bool HeeksCADapp::CheckForModifiedDoc()
 {
 	// returns true if OK to continue opening file
-	if(history->IsModified())
+	if(IsModified())
 	{
 		wxString str = wxString(_("Save changes to file")) + _T(" ") + m_filepath;
 		int res = wxMessageBox(str, wxMessageBoxCaptionStr, wxCANCEL|wxYES_NO|wxCENTRE);
@@ -2733,6 +2747,16 @@ void HeeksCADapp::RegisterOnMouseFn( void(*callbackfunc)(wxMouseEvent&) )
 void HeeksCADapp::RemoveOnMouseFn( void(*callbackfunc)(wxMouseEvent&) )
 {
 	m_lbutton_up_callbacks.remove(callbackfunc);
+}
+
+void HeeksCADapp::RegisterOnSaveFn( void(*callbackfunc)(bool from_changed_prompt) )
+{
+	m_on_save_callbacks.push_back(callbackfunc);
+}
+
+void HeeksCADapp::RegisterIsModifiedFn( bool(*callbackfunc)() )
+{
+	m_is_modified_callbacks.push_back(callbackfunc);
 }
 
 void HeeksCADapp::CreateTransformGLList(const std::list<HeeksObj*>& list, bool show_grippers_on_drag){

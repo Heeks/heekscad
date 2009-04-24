@@ -122,6 +122,8 @@ public:
 	wxString m_version_number;
 	std::list< void(*)(wxSizeEvent&) > m_on_graphics_size_list;
 	std::list< void(*)(wxMouseEvent&) > m_lbutton_up_callbacks;
+	std::list< void(*)(bool) > m_on_save_callbacks;
+	std::list< bool(*)() > m_is_modified_callbacks;
 	int m_transform_gl_list;
 	gp_Trsf m_drag_matrix;
 	bool m_extrude_removes_sketches;
@@ -234,6 +236,9 @@ public:
 	void RemoveOnGraphicsSize( void(*callbackfunc)(wxSizeEvent&) );
 	void RegisterOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
 	void RemoveOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
+	void RegisterOnSaveFn( void(*callbackfunc)(bool) );
+	void RegisterIsModifiedFn( bool(*callbackfunc)() );
+	void RegisterToolBar( wxToolBarBase* );
 	void CreateTransformGLList(const std::list<HeeksObj*>& list, bool show_grippers_on_drag);
 	void DestroyTransformGLList();
 	bool IsPasteReady();
