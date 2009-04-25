@@ -15,7 +15,7 @@ int Images::GetImage(HeeksObj *object)
 {
 	int image_index = -1;
 
-	if(m_image_list && object->GetType() != UnknownType)
+	if(m_image_list)
 	{
 		std::map<wxString, int>::iterator FindIt;
 
