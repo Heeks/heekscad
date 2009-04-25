@@ -28,8 +28,8 @@ public:
 	SolidTypeEnum m_solid_type;
 
 	TiXmlElement m_xml_element;
-	std::map<int, int> m_edge_index; // map of index to id
-	std::map<int, int> m_face_index; // map of index to id
+	std::list<int> m_edge_ids;
+	std::list<int> m_face_ids;
 
 	void SetShape(CShape* shape);
 };

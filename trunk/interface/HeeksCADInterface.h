@@ -104,6 +104,7 @@ public:
 	virtual long BodyGetNumEdges(HeeksObj* body);
 	virtual HeeksObj* BodyGetFirstEdge(HeeksObj* body);
 	virtual HeeksObj* BodyGetNextEdge(HeeksObj* body);
+	virtual bool BodyGetExtents(HeeksObj* body, double* extents, const double* orig = NULL, const double* xdir = NULL, const double* ydir = NULL, const double* zdir = NULL);
 
 	// face functions
 	virtual void FaceSetTempAttribute(HeeksObj* face, int attr);
@@ -123,6 +124,7 @@ public:
 	virtual HeeksObj* FaceGetFirstLoop(HeeksObj* face);
 	virtual HeeksObj* FaceGetNextLoop(HeeksObj* face);
 	virtual bool FaceOrientation(HeeksObj* face);
+	virtual HeeksObj* FaceGetParentBody(HeeksObj* face);
 
 	// edge functions
 	virtual int EdgeGetCurveType(HeeksObj* edge);
