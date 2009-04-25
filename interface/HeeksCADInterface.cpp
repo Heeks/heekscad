@@ -566,6 +566,11 @@ bool CHeeksCADInterface::FaceOrientation(HeeksObj* face)
 	return ((CFace*)face)->Orientation();
 }
 
+HeeksObj* CHeeksCADInterface::FaceGetParentBody(HeeksObj* face)
+{
+	return ((CFace*)face)->GetParentBody();
+}
+
 long CHeeksCADInterface::BodyGetNumEdges(HeeksObj* body)
 {
 	return ((CShape*)body)->m_edges->GetNumChildren();
@@ -579,6 +584,11 @@ HeeksObj* CHeeksCADInterface::BodyGetFirstEdge(HeeksObj* body)
 HeeksObj* CHeeksCADInterface::BodyGetNextEdge(HeeksObj* body)
 {
 	return ((CShape*)body)->m_edges->GetNextChild();
+}
+
+bool CHeeksCADInterface::BodyGetExtents(HeeksObj* body, double* extents, const double* orig, const double* xdir, const double* ydir, const double* zdir)
+{
+	return ((CShape*)body)->GetExtents(extents, orig, xdir, ydir, zdir);
 }
 
 int CHeeksCADInterface::EdgeGetCurveType(HeeksObj* edge)
@@ -768,7 +778,7 @@ void CHeeksCADInterface::SetViewUnits(double units, bool write_to_config)
 	if(write_to_config)
 	{
 		HeeksConfig config;
-		config.Write(_T("ViewUnits"), &wxGetApp().m_view_units);
+		config.Write(_T("ViewUnits"), wxGetApp().m_view_units);
 	}
 }
 

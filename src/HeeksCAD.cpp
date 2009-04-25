@@ -475,6 +475,23 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 						else if(attr_name == std::string("vis")){shape_data.m_visible = (a->IntValue() != 0);}
 						else shape_data.m_xml_element.SetAttribute(a->Name(), a->Value());
 					}
+
+					// get face ids
+					for(TiXmlElement* faceElem = TiXmlHandle(subsubElem).FirstChildElement("face").Element(); faceElem; faceElem = faceElem->NextSiblingElement("face"))
+					{
+						int id = 0;
+						faceElem->Attribute("id", &id);
+						shape_data.m_face_ids.push_back(id);
+					}
+
+					// get edge ids
+					for(TiXmlElement* edgeElem = TiXmlHandle(subsubElem).FirstChildElement("edge").Element(); edgeElem; edgeElem = edgeElem->NextSiblingElement("edge"))
+					{
+						int id = 0;
+						edgeElem->Attribute("id", &id);
+						shape_data.m_edge_ids.push_back(id);
+					}
+
 					if(index != -1)index_map.insert(std::pair<int, CShapeData>(index, shape_data));
 				}
 			}
@@ -1098,6 +1115,23 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 					index_pair_element->SetAttribute(a->Name(), a->Value());
 				}
 
+				// write the face ids
+				for(std::list<int>::iterator It = shape_data.m_face_ids.begin(); It != shape_data.m_face_ids.end(); It++)
+				{
+					int id = *It;
+					TiXmlElement *face_id_element = new TiXmlElement( "face" );
+					index_pair_element->LinkEndChild( face_id_element );
+					face_id_element->SetAttribute("id", id);
+				}
+
+				// write the edge ids
+				for(std::list<int>::iterator It = shape_data.m_edge_ids.begin(); It != shape_data.m_edge_ids.end(); It++)
+				{
+					int id = *It;
+					TiXmlElement *edge_id_element = new TiXmlElement( "edge" );
+					index_pair_element->LinkEndChild( edge_id_element );
+					edge_id_element->SetAttribute("id", id);
+				}
 			}
 		}
 

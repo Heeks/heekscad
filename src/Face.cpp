@@ -144,7 +144,7 @@ void CFace::GetBox(CBox &box){
 	{
 		// there must be a better way than re-using the render code
 		// Get triangulation
-		if(m_owner && m_owner->m_owner && m_owner->m_owner->GetType() != SolidType){
+		if(GetParentBody() == NULL){
 			BRepTools::Clean(m_topods_face);
 			BRepMesh::Mesh(m_topods_face, 1.0);
 		}
@@ -512,3 +512,10 @@ void CFace::GetUVBox(double *uv_box)
 	uv_box[3] = surface.LastVParameter();
 }
 
+CShape* CFace::GetParentBody()
+{
+	if(m_owner == NULL)return NULL;
+	if(m_owner->m_owner == NULL)return NULL;
+	if(m_owner->m_owner->GetType() != SolidType)return NULL;
+	return (CShape*)(m_owner->m_owner);
+}

@@ -73,6 +73,7 @@ public:
 	const TopoDS_Shape &Shape(){return m_shape;}
 
 	CFace* find(const TopoDS_Face &face);
+	bool GetExtents(double* extents, const double* orig, const double* xdir, const double* ydir, const double* zdir);
 
 	static void CutShapes(const std::list<HeeksObj*> &list);
 	static void FuseShapes(const std::list<HeeksObj*> &list);

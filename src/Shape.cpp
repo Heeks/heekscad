@@ -463,6 +463,20 @@ CFace* CShape::find(const TopoDS_Face &face)
 	return NULL;
 }
 
+bool CShape::GetExtents(double* extents, const double* orig, const double* xdir, const double* ydir, const double* zdir)
+{
+	// to do, use some good OpenCASCADE function
+	// but for now just return the box
+	CBox box;
+	GetBox(box);
+	if(box.m_valid)
+	{
+		memcpy(extents, box.m_x, 6*sizeof(double));
+	}
+
+	return box.m_valid;
+}
+
 void CShape::CutShapes(const std::list<HeeksObj*> &list_in)
 {
 	// subtract from the first one in the list all the others
@@ -837,10 +851,13 @@ void CShape::SetClickMarkPoint(MarkedObject* marked_object, const double* ray_st
 		MarkedObject* sub_marked_object = marked_object->m_map.begin()->second;
 		if(sub_marked_object)
 		{
-			HeeksObj* object = sub_marked_object->m_map.begin()->first;
-			if(object && object->GetType() == FaceType)
+			if(sub_marked_object->m_map.size() > 0)
 			{
-				m_picked_face = (CFace*)object;
+				HeeksObj* object = sub_marked_object->m_map.begin()->first;
+				if(object && object->GetType() == FaceType)
+				{
+					m_picked_face = (CFace*)object;
+				}
 			}
 		}
 	}
