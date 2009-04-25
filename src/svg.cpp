@@ -2,6 +2,37 @@
 // Copyright (c) 2009, Dan Heeks
 // This program is released under the BSD license. See the file COPYING for details.
 
+//**********************************************************************************
+// Status and my 2 cents:
+//		Most of the SVG spec is completely implemented. A bnf parser would be better,
+//		but most of the attribute strings should be parsed correctly.
+//		
+//		SVG tags and attribute names should not be case sensitive, but they are.
+//		they should also be able to be inside of namespaces, not sure if this works
+//
+//		Matrices are fundamentally broken, there is a note about that below
+//
+//		blocks and links don't work. not sure how these should be handled
+//		autocad style or should they be exploded?
+//
+//		there was going to be a setting to explode curves to lines upon deserialization
+//		but, it seems like a better idea to implement such a thing as a command in heekscad
+//
+//		Rounded rectangles aren't handled
+//
+//		Elliptic arcs need there start and end angles calculated, but there wasn't an elliptic
+//		arc element at time of writing
+//
+//		Line widths and colors are not imported
+//	
+//		there are fundamentally different ways of deserializing the stream, ie.
+//			exploding curves
+//			using rects instead of lines
+//			grouping all objects in <g> tags with sketches
+//			creating lines with linewidths, or faces of the right width
+//		maybe the import command should give a dialog that populates a CDeserializationProfile?
+//***********************************************************************************
+
 #include "stdafx.h"
 #include "svg.h"
 #include "HLine.h"
@@ -24,6 +55,8 @@ void CSvgRead::Read(const wxChar* filepath, bool undoably)
 {
 	// start the file
 	m_fail = false;
+	m_transform = gp_Trsf();
+
 	TiXmlDocument doc(Ttc(filepath));
 	if (!doc.LoadFile())
 	{
@@ -66,9 +99,22 @@ CSvgRead::~CSvgRead()
 {
 }
 
+std::string CSvgRead::RemoveCommas(std::string input)
+{
+	//SVG allows for arbitrary whitespace and commas everywhere
+	//sscanf ignores whitespace, so the only problem is commas
+	for(int i=0; i < input.length(); i++)
+		if(input[i] == ',')
+			input[i] = ' ';
+	return input;
+}
+
 void CSvgRead::ReadSVGElement(TiXmlElement* pElem, bool undoably)
 {
 	std::string name(pElem->Value());
+	m_transform_stack.push_back(m_transform);
+
+	ReadTransform(pElem);
 
 	if(name == "g")
 	{
@@ -77,7 +123,6 @@ void CSvgRead::ReadSVGElement(TiXmlElement* pElem, bool undoably)
 		{
 			ReadSVGElement(pElem, undoably);
 		}
-		return;
 	}
 
 	if(name == "path")
@@ -114,6 +159,110 @@ void CSvgRead::ReadSVGElement(TiXmlElement* pElem, bool undoably)
 	{
 		ReadPolyline(pElem,true,undoably);
 	}
+
+	m_transform = m_transform_stack.back();
+	m_transform_stack.pop_back();
+	
+
+}
+
+void CSvgRead::ReadTransform(TiXmlElement *pElem)
+{
+	// TODO: there are lots of default parameters used in transforms
+	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
+	{
+		std::string name(a->Name());
+		if(name == "transform")
+		{
+			std::string s = a->Value();
+			s = RemoveCommas(s);
+			const char* d = s.c_str();
+			int pos=0;
+			int count=0;
+			gp_Trsf ntrsf;
+			if(d[pos] == 0)
+				break;
+			if(strncmp(&d[pos],"translate",9)==0)
+			{
+				double x,y;
+				sscanf(&d[pos],"translate(%lf %lf)%n",&x,&y,&count);
+				y=-y;
+				ntrsf.SetTranslationPart(gp_Vec(x,y,0));
+				m_transform.Multiply(ntrsf);
+				pos+=count;
+			}
+			if(strncmp(&d[pos],"matrix",6)==0)
+			{
+				double m[16];
+				sscanf(&d[pos],"matrix(%lf %lf %lf %lf %lf %lf)%n",&m[0],&m[4],&m[1],&m[5],&m[3],&m[7],&count);
+				m[2]=0;
+				m[6]=0;
+				m[8]=0;
+				m[9]=0;
+				m[10]=1;
+				m[11]=0;
+				m[12]=0;
+				m[13]=0;
+				m[14]=0;
+				m[15]=1;
+
+				double d = m[0]*m[5]-m[4]*m[1];
+				m[10] = sqrt(d); //The Z component must be of the same magnitude as the rest of
+				//the matrix. It really makes no difference what it is, since all z's are 0
+				
+				//TODO: Uncomment the following lines for matrix support. 
+				//Opencascade doesn't support assymetric transforms(non uniform matrices)
+				//unforunately most matrix transforms are non uniform, so this usually just 
+				//throws exceptions
+
+				//In all probability we will have to transform all shapes by the assymetric matrix
+				//this is tricky for ellipses and such
+				//probably a v3 feature
+
+				//:JonPry
+				
+				// ntrsf = make_matrix(m);
+				// m_transform.Multiply(ntrsf);	
+				pos+=count;
+			}
+			if(strncmp(&d[pos],"skewX",5)==0)
+			{
+				//TODO: see above, these are assymetric transforms
+				double skew=0;
+				sscanf(&d[pos],"skewX(%lf)%n",&skew,&count);
+				pos+=count;
+			}
+			if(strncmp(&d[pos],"skewY",5)==0)
+			{
+				//TODO: see above, these are assymetric transforms
+				double skew=0;
+				sscanf(&d[pos],"skewY(%lf)%n",&skew,&count);
+				pos+=count;
+			}
+			if(strncmp(&d[pos],"scale",5)==0)
+			{
+				double x=0;
+				double y=0;
+				sscanf(&d[pos],"scale(%lf %lf)%n",&x,&y,&count);
+				if(y==0)
+					y=x;
+				//TODO: assymetric scaling
+				ntrsf.SetScale(gp_Pnt(0,0,0),x);
+				m_transform.Multiply(ntrsf);
+				pos+=count;
+			}
+			if(strncmp(&d[pos],"rotate",6)==0)
+			{
+				double rot;
+				sscanf(&d[pos],"rotate(%lf)%n",&rot,&count);
+				ntrsf.SetRotation(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,0,1)),3*Pi/2-rot);
+				m_transform.Multiply(ntrsf);
+				pos+=count;
+
+			}
+		}
+	}
+
 }
 
 void CSvgRead::ReadRect(TiXmlElement *pElem, bool undoably)
@@ -262,7 +411,7 @@ void CSvgRead::ReadCircle(TiXmlElement *pElem, bool undoably)
 gp_Pnt CSvgRead::ReadStart(const char *text,gp_Pnt ppnt,bool isupper,bool undoably)
 {
 	double x, y;
-	sscanf(text, "%lf,%lf", &x, &y);
+	sscanf(text, "%lf%lf", &x, &y);
 	y = -y;
 	gp_Pnt npt(x,y,0);
 	if(!isupper)
@@ -277,7 +426,7 @@ gp_Pnt CSvgRead::ReadStart(const char *text,gp_Pnt ppnt,bool isupper,bool undoab
 gp_Pnt CSvgRead::ReadLine(const char *text,gp_Pnt ppnt,bool isupper,bool undoably)
 {
 	double x, y;
-	sscanf(text, "%lf,%lf", &x, &y);
+	sscanf(text, "%lf%lf", &x, &y);
 	y = -y;
 	gp_Pnt npt(x,y,0);
 	if(!isupper)
@@ -322,7 +471,7 @@ struct TwoPoints CSvgRead::ReadCubic(const char *text,gp_Pnt ppnt,bool isupper,b
 {
 	struct TwoPoints retpts;
 	double x1, y1, x2, y2, x3, y3;
-	sscanf(text, "%lf,%lf %lf,%lf %lf,%lf", &x1, &y1, &x2, &y2, &x3, &y3);
+	sscanf(text, "%lf%lf%lf%lf%lf%lf", &x1, &y1, &x2, &y2, &x3, &y3);
 	y1 = -y1; y2 = -y2; y3 = -y3;	
 
 	if(!isupper)
@@ -344,7 +493,7 @@ struct TwoPoints CSvgRead::ReadCubic(const char *text,gp_Pnt ppnt, gp_Pnt pcpnt,
 {
 	struct TwoPoints retpts;
 	double x2, y2, x3, y3;
-	sscanf(text, "%lf,%lf %lf,%lf", &x2, &y2, &x3, &y3);
+	sscanf(text, "%lf%lf%lf%lf", &x2, &y2, &x3, &y3);
 	y2 = -y2; y3 = -y3;	
 
 	if(!isupper)
@@ -368,7 +517,7 @@ struct TwoPoints CSvgRead::ReadQuadratic(const char *text,gp_Pnt ppnt,bool isupp
 {
 	struct TwoPoints retpts;
 	double x1, y1, x2, y2;
-	sscanf(text, "%lf,%lf %lf,%lf", &x1, &y1, &x2, &y2);
+	sscanf(text, "%lf%lf%lf%lf", &x1, &y1, &x2, &y2);
 	y1 = -y1; y2 = -y2; 
 
 	if(!isupper)
@@ -388,7 +537,7 @@ struct TwoPoints CSvgRead::ReadQuadratic(const char *text,gp_Pnt ppnt, gp_Pnt pc
 {
 	struct TwoPoints retpts;
 	double x2, y2;
-	sscanf(text, "%lf,%lf", &x2, &y2);
+	sscanf(text, "%lf%lf", &x2, &y2);
 	y2 = -y2;
 
 	if(!isupper)
@@ -410,7 +559,7 @@ gp_Pnt CSvgRead::ReadEllipse(const char *text,gp_Pnt ppnt,bool isupper,bool undo
 {
 	int large_arc_flag, sweep_flag;
 	double rx, ry, xrot, x, y;
-	sscanf(text, "%lf,%lf %lf %d,%d %lf,%lf", &rx, &ry, &xrot, &large_arc_flag, &sweep_flag, &x, &y);
+	sscanf(text, "%lf%lf%lf%d%d%lf%lf", &rx, &ry, &xrot, &large_arc_flag, &sweep_flag, &x, &y);
 	y=-y;
 	if(!isupper)
 	{
@@ -469,7 +618,9 @@ void CSvgRead::ReadPath(TiXmlElement* pElem, bool undoably)
 		if(name == "d")
 		{
 			// add lines and arcs and bezier curves
-			const char* d = a->Value();
+			std::string in(a->Value());
+			in = RemoveCommas(in);
+			const char* d = in.c_str();
 			gp_Pnt spnt(0,0,0);
 			gp_Pnt ppnt(0,0,0);
 			gp_Pnt pcpnt(0,0,0);
@@ -555,6 +706,13 @@ HeeksSvgRead::HeeksSvgRead(const wxChar* filepath, bool undoably, bool usehsplin
 	Read(filepath,undoably);
 }
 
+void HeeksSvgRead::ModifyByMatrix(HeeksObj* object)
+{
+	double m[16];
+	extract(m_transform,m);
+	object->ModifyByMatrix(m);
+}
+
 void HeeksSvgRead::OnReadStart(bool undoably)
 {
 		m_sketch = new CSketch();
@@ -566,12 +724,13 @@ void HeeksSvgRead::OnReadCubic(gp_Pnt s, gp_Pnt c1, gp_Pnt c2, gp_Pnt e,bool und
 {
 	TColgp_Array1OfPnt poles(1,4);
 	poles.SetValue(1,s); poles.SetValue(2,c1); poles.SetValue(3,c2); poles.SetValue(4,e);
-	Geom_BezierCurve curve(poles);
-	GeomConvert_CompCurveToBSplineCurve convert(&curve);
+	Handle(Geom_BezierCurve) curve = new Geom_BezierCurve(poles);
+	GeomConvert_CompCurveToBSplineCurve convert(curve);
 
 	Handle_Geom_BSplineCurve spline = convert.BSplineCurve();
-	Geom_BSplineCurve* pspline = (Geom_BSplineCurve*)spline.Access();
-	HSpline* new_object = new HSpline(*pspline, &wxGetApp().current_color);
+	Geom_BSplineCurve pspline = *((Geom_BSplineCurve*)spline.Access());
+	HSpline* new_object = new HSpline(pspline, &wxGetApp().current_color);
+	ModifyByMatrix(new_object);
 	AddSketchIfNeeded(undoably);
 	m_sketch->Add(new_object, NULL);
 }
@@ -580,19 +739,20 @@ void HeeksSvgRead::OnReadQuadratic(gp_Pnt s, gp_Pnt c, gp_Pnt e,bool undoably)
 {
 	TColgp_Array1OfPnt poles(1,3);
 	poles.SetValue(1,s); poles.SetValue(2,c); poles.SetValue(3,e);
-	Geom_BezierCurve curve(poles);
-	GeomConvert_CompCurveToBSplineCurve convert(&curve);
+	Handle(Geom_BezierCurve) curve = new Geom_BezierCurve(poles);
+	GeomConvert_CompCurveToBSplineCurve convert(curve);
 
 	Handle_Geom_BSplineCurve spline = convert.BSplineCurve();
-	Geom_BSplineCurve* pspline = (Geom_BSplineCurve*)spline.Access();
-	HSpline* new_object = new HSpline(*pspline, &wxGetApp().current_color);
+//	Geom_BSplineCurve pspline = *((Geom_BSplineCurve*)spline.Access());
+	HSpline* new_object = new HSpline(spline, &wxGetApp().current_color);
+	ModifyByMatrix(new_object);
 	AddSketchIfNeeded(undoably);
-	m_sketch->Add(new_object, NULL);
-}
+	m_sketch->Add(new_object, NULL);}
 
 void HeeksSvgRead::OnReadLine(gp_Pnt p1, gp_Pnt p2,bool undoably)
 {
 	HLine *line = new HLine(p1,p2,&wxGetApp().current_color);
+	ModifyByMatrix(line);
 	AddSketchIfNeeded(undoably);
 	m_sketch->Add(line, NULL);
 }
@@ -603,6 +763,7 @@ void HeeksSvgRead::OnReadEllipse(gp_Pnt c, double maj_r, double min_r, double ro
 	gp_Elips elip(gp_Ax2(c,gp_Dir(0,0,1)),maj_r,min_r);
 	elip.Rotate(gp_Ax1(c,up),rot);
 	HEllipse *new_object = new HEllipse(elip,&wxGetApp().current_color);
+	ModifyByMatrix(new_object);
 	AddSketchIfNeeded(undoably);
 	m_sketch->Add(new_object, NULL);
 }
@@ -612,6 +773,7 @@ void HeeksSvgRead::OnReadCircle(gp_Pnt c, double r, bool undoably)
 	gp_Dir up(0,0,1);
 	gp_Circ cir(gp_Ax2(c,up),r);
 	HCircle *new_object = new HCircle(cir,&wxGetApp().current_color);
+	ModifyByMatrix(new_object);
 	AddSketchIfNeeded(undoably);
 	m_sketch->Add(new_object, NULL);
 }

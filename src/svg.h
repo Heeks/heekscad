@@ -14,8 +14,12 @@ struct TwoPoints
 // derive a class from this and implement it's virtual functions
 class CSvgRead{
 private:
+	std::list<gp_Trsf> m_transform_stack;
 	bool m_fail;
+
+	std::string RemoveCommas(std::string input);
 	void ReadSVGElement(TiXmlElement* pElem, bool undoably);
+	void ReadTransform(TiXmlElement* pElem);
 	void ReadPath(TiXmlElement* pElem, bool undoably);
 	void ReadRect(TiXmlElement* pElem, bool undoably);
 	void ReadCircle(TiXmlElement* pElem, bool undoably);
@@ -35,6 +39,9 @@ private:
 public:
 	CSvgRead(); // this opens the file
 	~CSvgRead(); // this closes the file
+
+	gp_Trsf m_transform;
+
 	void Read(const wxChar* filepath, bool undoably);
 
 	virtual void OnReadStart(bool undoably){}
@@ -57,6 +64,7 @@ public:
 	HeeksSvgRead(const wxChar* filepath, bool undoably, bool usehspline);
 
 	void AddSketchIfNeeded(bool undoably);
+	void ModifyByMatrix(HeeksObj* object);
 	void OnReadStart(bool undoably);
 	void OnReadLine(gp_Pnt p1, gp_Pnt p2, bool undoably);
 	void OnReadCubic(gp_Pnt s, gp_Pnt c1, gp_Pnt c2, gp_Pnt e, bool undoably);
