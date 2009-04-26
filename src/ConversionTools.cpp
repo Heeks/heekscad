@@ -21,6 +21,7 @@
 #include "Edge.h"
 #include "Shape.h"
 #include "Sketch.h"
+#include "Group.h"
 
 void GetConversionMenuTools(std::list<Tool*>* t_list){
 	bool lines_or_arcs_in_marked_list = false;
@@ -53,6 +54,9 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 	if(sketches_in_marked_list > 1){
 		t_list->push_back(new CombineSketches);
 	}
+
+	if(wxGetApp().m_marked_list->list().size() > 1)t_list->push_back(new GroupSelected);
+	if(wxGetApp().m_marked_list->list().size() > 0)t_list->push_back(new UngroupSelected);
 }
 
 bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wire &wire)
@@ -299,5 +303,48 @@ void CombineSketches::Run(){
 		}
 	}
 
+	wxGetApp().Repaint();
+}
+
+void GroupSelected::Run(){
+	if(wxGetApp().m_marked_list->list().size() < 2)
+	{
+		return;
+	}
+
+	CGroup* new_group = new CGroup;
+	std::list<HeeksObj*> copy_of_marked_list = wxGetApp().m_marked_list->list();
+
+	wxGetApp().StartHistory();
+	wxGetApp().DeleteUndoably(copy_of_marked_list);
+	for(std::list<HeeksObj*>::const_iterator It = copy_of_marked_list.begin(); It != copy_of_marked_list.end(); It++){
+		HeeksObj* object = *It;
+		new_group->Add(object, NULL);
+	}
+	wxGetApp().AddUndoably(new_group, NULL, NULL);
+	wxGetApp().EndHistory();
+	wxGetApp().m_marked_list->Clear(true);
+	wxGetApp().Repaint();
+}
+
+void UngroupSelected::Run(){
+	if(wxGetApp().m_marked_list->list().size() == 0)return;
+
+	wxGetApp().StartHistory();
+	std::list<HeeksObj*> copy_of_marked_list = wxGetApp().m_marked_list->list();
+	for(std::list<HeeksObj*>::const_iterator It = copy_of_marked_list.begin(); It != copy_of_marked_list.end(); It++){
+		HeeksObj* object = *It;
+		if(object->GetType() == GroupType)
+		{
+			wxGetApp().DeleteUndoably(object);
+			for(HeeksObj* o = ((CGroup*)object)->GetFirstChild(); o; o = ((CGroup*)object)->GetNextChild())
+			{
+				wxGetApp().AddUndoably(o, NULL, NULL);
+			}
+		}
+	}
+	wxGetApp().EndHistory();
+
+	wxGetApp().m_marked_list->Clear(true);
 	wxGetApp().Repaint();
 }

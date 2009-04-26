@@ -35,8 +35,9 @@ enum{
 	DimensionType,
 	RulerType,
 	XmlType,
-        EllipseType,
+    EllipseType,
 	SplineType,
+	GroupType,
 	ObjectMaximumType
 };
 

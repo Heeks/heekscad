@@ -34,4 +34,22 @@ public:
 	const wxChar* GetToolTip(){return _("Combine selected sketches");}
 };
 
+class GroupSelected: public Tool
+{
+public:
+	void Run();
+	const wxChar* GetTitle(){return _("Group");}
+	wxString BitmapPath(){return _T("group");}
+	const wxChar* GetToolTip(){return _("Group selected items");}
+};
+
+class UngroupSelected: public Tool
+{
+public:
+	void Run();
+	const wxChar* GetTitle(){return _("Ungroup");}
+	wxString BitmapPath(){return _T("ungroup");}
+	const wxChar* GetToolTip(){return _("Ungroup selected items");}
+};
+
 void GetConversionMenuTools(std::list<Tool*>* t_list);
