@@ -173,3 +173,65 @@ void RemoveObjectsTool::RollBack()
 {
 	Add();
 }
+
+void ChangeOwnerTool::Run()
+{
+	// to do
+}
+
+void ChangeOwnerTool::RollBack()
+{
+	// to do
+}
+
+ManyChangeOwnerTool::ManyChangeOwnerTool(const std::list<HeeksObj*> &list, HeeksObj* new_owner): m_objects(list), m_new_owner(new_owner)
+{
+	for(std::list<HeeksObj*>::iterator It = m_objects.begin(); It != m_objects.end(); It++){
+		HeeksObj* object = *It;
+		m_prev_owners.push_back(object->m_owner);
+	}
+}
+
+void ManyChangeOwnerTool::Run()
+{
+	for(std::list<HeeksObj*>::iterator It = m_objects.begin(); It != m_objects.end(); It++){
+		HeeksObj* object = *It;
+		object->m_owner->Remove(object);
+		wxGetApp().m_marked_list->Remove(object, false);
+	}
+
+	wxGetApp().WereRemoved(m_objects);
+	wxGetApp().WereModified(m_prev_owners);
+
+	for(std::list<HeeksObj*>::iterator It = m_objects.begin(); It != m_objects.end(); It++){
+		HeeksObj* object = *It;
+		m_new_owner->Add(object, NULL);
+		object->m_owner = m_new_owner;
+	}
+
+	wxGetApp().WereAdded(m_objects);
+	wxGetApp().WasModified(m_new_owner);
+}
+
+void ManyChangeOwnerTool::RollBack()
+{
+	for(std::list<HeeksObj*>::iterator It = m_objects.begin(); It != m_objects.end(); It++){
+		HeeksObj* object = *It;
+		m_new_owner->Remove(object);
+		wxGetApp().m_marked_list->Remove(object, false);
+	}
+
+	wxGetApp().WereRemoved(m_objects);
+	wxGetApp().WasModified(m_new_owner);
+
+	std::list<HeeksObj*>::iterator PrevIt = m_objects.begin();
+	for(std::list<HeeksObj*>::iterator It = m_objects.begin(); It != m_objects.end(); It++, PrevIt++){
+		HeeksObj* object = *It;
+		HeeksObj* prev_owner = *PrevIt;
+		prev_owner->Add(object, NULL);
+		object->m_owner = prev_owner;
+	}
+
+	wxGetApp().WereAdded(m_objects);
+	wxGetApp().WereModified(m_prev_owners);
+}
