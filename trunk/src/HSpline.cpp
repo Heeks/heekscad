@@ -340,7 +340,7 @@ int HSpline::Intersects(const HeeksObj *object, std::list< double > *rl)const
 		}
 		break;
 
-/*	case ArcType:
+	case ArcType:
 		{
 			std::list<gp_Pnt> plist;
 			intersect(m_spline, ((HArc*)object)->m_circle, plist);

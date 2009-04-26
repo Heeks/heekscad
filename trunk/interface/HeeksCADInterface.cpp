@@ -749,7 +749,8 @@ void CHeeksCADInterface::EndHistory(void)
 
 HeeksObj* CHeeksCADInterface::NewSTLSolid()
 {
-	return new CStlSolid(&HeeksColor(220, 40, 40));
+	HeeksColor col(220, 40, 40);
+	return new CStlSolid(&col);
 }
 
 void CHeeksCADInterface::STLSolidAddTriangle(HeeksObj* stl_solid, float* t)

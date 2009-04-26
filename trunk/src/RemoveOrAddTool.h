@@ -90,7 +90,7 @@ protected:
 	HeeksObj* m_object;
 
 public:
-	ChangeOwnerTool(HeeksObj *object, HeeksObj *prev_owner, HeeksObj* new_owner):m_object(object), m_prev_owner(prev_owner), m_new_owner(new_owner){}
+	ChangeOwnerTool(HeeksObj *object, HeeksObj *prev_owner, HeeksObj* new_owner):m_prev_owner(prev_owner), m_new_owner(new_owner), m_object(object){}
 
 	// Tool's virtual functions
 	const wxChar* GetTitle() {return _("ChangeOwner");}
