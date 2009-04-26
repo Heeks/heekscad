@@ -21,3 +21,4 @@ HeeksObj* CGroup::ReadFromXMLElement(TiXmlElement* pElem)
 
 	return (ObjList*)new_object;
 }
+

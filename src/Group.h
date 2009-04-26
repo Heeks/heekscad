@@ -16,3 +16,4 @@ public:
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 };
+
