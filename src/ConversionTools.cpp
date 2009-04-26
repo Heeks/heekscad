@@ -177,8 +177,6 @@ bool ConvertFaceToSketch2(const TopoDS_Face& face, HeeksObj* sketch)
 	for (TopExp_Explorer expWire(face, TopAbs_WIRE); expWire.More(); expWire.Next())
 	{
 		const TopoDS_Shape &W = expWire.Current();
-		bool is_outer = W.IsSame(outerWire) != 0;
-
 		for(BRepTools_WireExplorer expEdge(TopoDS::Wire(W)); expEdge.More(); expEdge.Next())
 		{
 			const TopoDS_Shape &E = expEdge.Current();

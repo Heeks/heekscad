@@ -40,3 +40,4 @@ void PropertyVertex::CallSetFunction() const{
 	if(m_callbackfunc)(*m_callbackfunc)(m_x, m_object);
 	if(m_callbackfuncidx)(*m_callbackfuncidx)(m_x,m_object,m_index);
 }
+

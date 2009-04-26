@@ -519,3 +519,4 @@ CShape* CFace::GetParentBody()
 	if(m_owner->m_owner->GetType() != SolidType)return NULL;
 	return (CShape*)(m_owner->m_owner);
 }
+

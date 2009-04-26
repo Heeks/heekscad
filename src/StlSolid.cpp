@@ -357,3 +357,4 @@ void CStlSolid::AddTriangle(float* t)
 	CStlTri tri(t);
 	m_list.push_back(tri);
 }
+
