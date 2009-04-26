@@ -82,3 +82,35 @@ public:
 	void Run();
 	void RollBack();
 };
+
+class ChangeOwnerTool:public Tool{
+protected:
+	HeeksObj* m_prev_owner;
+	HeeksObj* m_new_owner;
+	HeeksObj* m_object;
+
+public:
+	ChangeOwnerTool(HeeksObj *object, HeeksObj *prev_owner, HeeksObj* new_owner):m_object(object), m_prev_owner(prev_owner), m_new_owner(new_owner){}
+
+	// Tool's virtual functions
+	const wxChar* GetTitle() {return _("ChangeOwner");}
+	void Run();
+	void RollBack();
+	bool Undoable(){return true;}
+};
+
+class ManyChangeOwnerTool:public Tool{
+protected:
+	std::list<HeeksObj*> m_objects;
+	std::list<HeeksObj*> m_prev_owners;
+	HeeksObj* m_new_owner;
+
+public:
+	ManyChangeOwnerTool(const std::list<HeeksObj*> &list, HeeksObj* new_owner);
+
+	// Tool's virtual functions
+	const wxChar* GetTitle() {return _("ManyChangeOwner");}
+	void Run();
+	void RollBack();
+	bool Undoable(){return true;}
+};
