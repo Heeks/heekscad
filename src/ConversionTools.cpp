@@ -336,23 +336,22 @@ void UngroupSelected::Run(){
 
 	wxGetApp().StartHistory();
 	std::list<HeeksObj*> copy_of_marked_list = wxGetApp().m_marked_list->list();
+	std::list<HeeksObj*> to_remove;
+	std::list<HeeksObj*> to_add;
 	for(std::list<HeeksObj*>::const_iterator It = copy_of_marked_list.begin(); It != copy_of_marked_list.end(); It++){
 		HeeksObj* object = *It;
 		if(object->GetType() == GroupType)
 		{
-			std::list<HeeksObj*> group_objects;
 			for(HeeksObj* o = ((CGroup*)object)->GetFirstChild(); o; o = ((CGroup*)object)->GetNextChild())
 			{
-				group_objects.push_back(o);
+				to_add.push_back(o);
+				to_remove.push_back(o);
 			}
-			for(std::list<HeeksObj*>::iterator It2 = group_objects.begin(); It2 != group_objects.end(); It2++){
-				HeeksObj* o = *It2;
-				wxGetApp().DeleteUndoably(o);
-				wxGetApp().AddUndoably(o, NULL, NULL);
-			}
-			wxGetApp().DeleteUndoably(object);
+			to_remove.push_back(object);
 		}
 	}
+	wxGetApp().DeleteUndoably(to_remove);
+	wxGetApp().AddUndoably(to_add, NULL);
 	wxGetApp().EndHistory();
 
 	wxGetApp().m_marked_list->Clear(true);
