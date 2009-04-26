@@ -1412,8 +1412,8 @@ void CHeeksFrame::AddToolBars()
     m_geometryBar->AddTool(ID_POINTS, _T("Points"), ToolImage(_T("point")), _("Start Drawing Points"));
     m_geometryBar->AddTool(ID_REGSHAPES, _T("Regular Shapes"), ToolImage(_T("regshapes")), _("Draw regular shapes; rectangles, polygons, obrounds"));
     m_geometryBar->AddTool(ID_TEXT, _T("Text"), ToolImage(_T("text")), _("Add a text object"));
-    m_geometryBar->AddTool(ID_COORDINATE_SYSTEM, _T("CoordSys"), ToolImage(_T("coordsys")), _("Create a Coordinate System"));
     m_geometryBar->AddTool(ID_DIMENSIONING, _T("Dimensioning"), ToolImage(_T("dimension")), _("Add a dimension"));
+    m_geometryBar->AddTool(ID_COORDINATE_SYSTEM, _T("CoordSys"), ToolImage(_T("coordsys")), _("Create a Coordinate System"));
     m_solidBar->AddTool(ID_SPHERE, _T("Sphere"), ToolImage(_T("sphere")), _("Add a sphere"));
     m_solidBar->AddTool(ID_CUBE, _T("Cube"), ToolImage(_T("cube")), _("Add a cube"));
     m_solidBar->AddTool(ID_CYL, _T("Cylinder"), ToolImage(_T("cyl")), _("Add a cylinder"));
