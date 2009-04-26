@@ -26,6 +26,7 @@
 void GetConversionMenuTools(std::list<Tool*>* t_list){
 	bool lines_or_arcs_in_marked_list = false;
 	int sketches_in_marked_list = 0;
+	bool group_in_marked_list = false;
 
 	// check to see what types have been marked
 	std::list<HeeksObj*>::const_iterator It;
@@ -38,6 +39,9 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 				break;
 			case SketchType:
 				sketches_in_marked_list++;
+				break;
+			case GroupType:
+				group_in_marked_list = true;
 				break;
 		}
 	}
@@ -56,7 +60,7 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 	}
 
 	if(wxGetApp().m_marked_list->list().size() > 1)t_list->push_back(new GroupSelected);
-	if(wxGetApp().m_marked_list->list().size() > 0)t_list->push_back(new UngroupSelected);
+	if(group_in_marked_list)t_list->push_back(new UngroupSelected);
 }
 
 bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wire &wire)
@@ -336,11 +340,17 @@ void UngroupSelected::Run(){
 		HeeksObj* object = *It;
 		if(object->GetType() == GroupType)
 		{
-			wxGetApp().DeleteUndoably(object);
+			std::list<HeeksObj*> group_objects;
 			for(HeeksObj* o = ((CGroup*)object)->GetFirstChild(); o; o = ((CGroup*)object)->GetNextChild())
 			{
+				group_objects.push_back(o);
+			}
+			for(std::list<HeeksObj*>::iterator It2 = group_objects.begin(); It2 != group_objects.end(); It2++){
+				HeeksObj* o = *It2;
+				wxGetApp().DeleteUndoably(o);
 				wxGetApp().AddUndoably(o, NULL, NULL);
 			}
+			wxGetApp().DeleteUndoably(object);
 		}
 	}
 	wxGetApp().EndHistory();
