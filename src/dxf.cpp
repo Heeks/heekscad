@@ -810,7 +810,7 @@ void CDxfRead::OnReadSpline(struct SplineData& sd, bool undoably)
 	TColStd_Array1OfReal weight (1,sd.controlx.size());
 
 	std::list<double> knoto;
-	std::list<double> multo;
+	std::list<int> multo;
 
 	std::list<double>::iterator ity = sd.controly.begin(); 
 	std::list<double>::iterator itz = sd.controlz.begin(); 
@@ -845,7 +845,7 @@ void CDxfRead::OnReadSpline(struct SplineData& sd, bool undoably)
 		}
 		else
 		{
-			double temp = multo.back();
+			int temp = multo.back();
 			multo.pop_back();
 			multo.push_back(temp+1);
 		}
@@ -854,7 +854,7 @@ void CDxfRead::OnReadSpline(struct SplineData& sd, bool undoably)
 	TColStd_Array1OfReal knot (1,knoto.size());
 	TColStd_Array1OfInteger mult (1,knoto.size());
 
-	std::list<double>::iterator itm = multo.begin();
+	std::list<int>::iterator itm = multo.begin();
 	i = 1;
 	for(std::list<double>::iterator it = knoto.begin(); it!=knoto.end(); ++it)
 	{

@@ -2026,7 +2026,7 @@ static void on_set_units(int value, HeeksObj* object)
 {
 	wxGetApp().m_view_units = (value == 0) ? 1.0:25.4;
 	HeeksConfig config;
-	config.Write(_T("ViewUnits"), &wxGetApp().m_view_units);
+	config.Write(_T("ViewUnits"), wxGetApp().m_view_units);
 }
 
 void HeeksCADapp::GetOptions(std::list<Property *> *list)
