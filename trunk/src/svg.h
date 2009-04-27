@@ -48,7 +48,7 @@ public:
 	virtual void OnReadLine(gp_Pnt p1, gp_Pnt p2, bool undoably){}
 	virtual void OnReadCubic(gp_Pnt s, gp_Pnt c1, gp_Pnt c2, gp_Pnt e, bool undoably){}
 	virtual void OnReadQuadratic(gp_Pnt s, gp_Pnt c, gp_Pnt e, bool undoably){}
-	virtual void OnReadEllipse(gp_Pnt c, double maj_r, double min_r, double rot, double start_a, double end_a, bool undoably){}
+	virtual void OnReadEllipse(gp_Pnt c, double maj_r, double min_r, double rot, double start, double end, bool undoably){}
 	virtual void OnReadCircle(gp_Pnt c, double r, bool undoably){}
 
 	bool Failed(){return m_fail;}
@@ -69,6 +69,6 @@ public:
 	void OnReadLine(gp_Pnt p1, gp_Pnt p2, bool undoably);
 	void OnReadCubic(gp_Pnt s, gp_Pnt c1, gp_Pnt c2, gp_Pnt e, bool undoably);
 	void OnReadQuadratic(gp_Pnt s, gp_Pnt c, gp_Pnt e, bool undoably);
-	void OnReadEllipse(gp_Pnt c, double maj_r, double min_r, double rot, double start_a, double end_a, bool undoably);
+	void OnReadEllipse(gp_Pnt c, double maj_r, double min_r, double rot, double start, double end, bool undoably);
 	void OnReadCircle(gp_Pnt c, double r, bool undoably);
 };

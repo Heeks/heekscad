@@ -27,7 +27,7 @@
 //	
 //		there are fundamentally different ways of deserializing the stream, ie.
 //			exploding curves
-//			using rects instead of lines
+//			using rects instead of lines	
 //			grouping all objects in <g> tags with sketches
 //			creating lines with linewidths, or faces of the right width
 //		maybe the import command should give a dialog that populates a CDeserializationProfile?
@@ -303,6 +303,8 @@ void CSvgRead::ReadEllipse(TiXmlElement *pElem, bool undoably)
 	double y=0;
 	double rx=0; 
 	double ry=0;
+	double startx=0;
+	double starty=0;
 	// get the attributes
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
@@ -603,9 +605,32 @@ gp_Pnt CSvgRead::ReadEllipse(const char *text,gp_Pnt ppnt,bool isupper,bool undo
 		xrot += Pi/2;
 	}
 
-	//TODO: calculate the start and end angles
+	gp_Pnt start(ppnt.XYZ() - cpnt.XYZ());
+	gp_Pnt end(ept.XYZ()-cpnt.XYZ());
+	start.Rotate(gp_Ax1(zp,up),-xrot);
+	end.Rotate(gp_Ax1(zp,up),-xrot);
 
-	OnReadEllipse(cpnt,rx,ry,xrot,0,2*Pi,undoably);
+	double start_angle = atan2(start.Y()/ry,start.X()/rx);
+	double end_angle = atan2(end.Y()/ry,end.X()/rx);
+
+	if(start_angle<0)
+		start_angle+=2*Pi;
+	if(end_angle<0)
+		end_angle+=2*Pi;
+
+	double d_angle = end_angle - start_angle;
+	
+	if(d_angle < 0)
+		d_angle += 2*Pi;
+
+	if((large_arc_flag && (d_angle < Pi)) || (!large_arc_flag && (d_angle > Pi)))
+	{
+		double temp = start_angle;
+		start_angle = end_angle;
+		end_angle = temp;
+	}
+
+	OnReadEllipse(cpnt,rx,ry,xrot,start_angle,end_angle,undoably);
 	return ept;
 }
 
@@ -757,12 +782,12 @@ void HeeksSvgRead::OnReadLine(gp_Pnt p1, gp_Pnt p2,bool undoably)
 	m_sketch->Add(line, NULL);
 }
 
-void HeeksSvgRead::OnReadEllipse(gp_Pnt c, double maj_r, double min_r, double rot, double start_a, double end_a,bool undoably)
+void HeeksSvgRead::OnReadEllipse(gp_Pnt c, double maj_r, double min_r, double rot, double start, double end,bool undoably)
 {
 	gp_Dir up(0,0,1);
 	gp_Elips elip(gp_Ax2(c,gp_Dir(0,0,1)),maj_r,min_r);
 	elip.Rotate(gp_Ax1(c,up),rot);
-	HEllipse *new_object = new HEllipse(elip,&wxGetApp().current_color);
+	HEllipse *new_object = new HEllipse(elip,start,end,&wxGetApp().current_color);
 	ModifyByMatrix(new_object);
 	AddSketchIfNeeded(undoably);
 	m_sketch->Add(new_object, NULL);
