@@ -769,6 +769,11 @@ void HeeksCADapp::ReadSVGElement(TiXmlElement* pElem, bool undoably)
 
 void HeeksCADapp::OpenSVGFile(const wxChar *filepath, bool undoably)
 {
+#ifdef FLASHYSVG
+	HeeksSvgRead svgread(filepath,undoably,true);
+	return;
+#endif
+
 	TiXmlDocument doc(Ttc(filepath));
 	if (!doc.LoadFile())
 	{

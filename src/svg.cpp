@@ -103,7 +103,7 @@ std::string CSvgRead::RemoveCommas(std::string input)
 {
 	//SVG allows for arbitrary whitespace and commas everywhere
 	//sscanf ignores whitespace, so the only problem is commas
-	for(int i=0; i < input.length(); i++)
+	for(unsigned int i=0; i < input.length(); i++)
 		if(input[i] == ',')
 			input[i] = ' ';
 	return input;
@@ -654,56 +654,56 @@ void CSvgRead::ReadPath(TiXmlElement* pElem, bool undoably)
 			while(1){
 				if(toupper(d[pos]) == 'M'){
 					// make a sketch
-					spnt = ReadStart(&d[pos+1],ppnt,isupper(d[pos]),undoably);
+					spnt = ReadStart(&d[pos+1],ppnt,isupper(d[pos])!=0,undoably);
 					ppnt = spnt;
 					pos++;
 				}
 				else if(toupper(d[pos]) == 'L'){
 					// add a line
-					ppnt = ReadLine(&d[pos+1],ppnt,isupper(d[pos]),undoably);
+					ppnt = ReadLine(&d[pos+1],ppnt,isupper(d[pos])!=0,undoably);
 					pos++;
 				}
 				else if(toupper(d[pos]) == 'H'){
 					//horizontal line
-					ppnt = ReadHorizontal(&d[pos+1],ppnt,isupper(d[pos]),undoably);
+					ppnt = ReadHorizontal(&d[pos+1],ppnt,isupper(d[pos])!=0,undoably);
 					pos++;
 				}
 				else if(toupper(d[pos]) == 'V'){
 					//vertical line
-					ppnt = ReadVertical(&d[pos+1],ppnt,isupper(d[pos]),undoably);
+					ppnt = ReadVertical(&d[pos+1],ppnt,isupper(d[pos])!=0,undoably);
 					pos++;
 				}
 				else if(toupper(d[pos]) == 'C'){
 					// add a cubic bezier curve ( just split into lines for now )
-					struct TwoPoints ret = ReadCubic(&d[pos+1],ppnt,isupper(d[pos]),undoably);
+					struct TwoPoints ret = ReadCubic(&d[pos+1],ppnt,isupper(d[pos])!=0,undoably);
 					ppnt = ret.ppnt;
 					pcpnt = ret.pcpnt;
 					pos++;
 				}
 				else if(toupper(d[pos]) == 'S'){
                     // add a cubic bezier curve ( short hand)
-					struct TwoPoints ret = ReadCubic(&d[pos+1],ppnt,pcpnt,isupper(d[pos]),undoably);
+					struct TwoPoints ret = ReadCubic(&d[pos+1],ppnt,pcpnt,isupper(d[pos])!=0,undoably);
 					ppnt = ret.ppnt;
 					pcpnt = ret.pcpnt;
 					pos++;
 				}
 				else if(toupper(d[pos]) == 'Q'){
 					// add a quadratic bezier curve 
-					struct TwoPoints ret = ReadQuadratic(&d[pos+1],ppnt,isupper(d[pos]),undoably);
+					struct TwoPoints ret = ReadQuadratic(&d[pos+1],ppnt,isupper(d[pos])!=0,undoably);
 					ppnt = ret.ppnt;
 					pcpnt = ret.pcpnt;
 					pos++;
 				}
 				else if(toupper(d[pos]) == 'T'){
                		// add a quadratic bezier curve 
-					struct TwoPoints ret = ReadQuadratic(&d[pos+1],ppnt,pcpnt,isupper(d[pos]),undoably);
+					struct TwoPoints ret = ReadQuadratic(&d[pos+1],ppnt,pcpnt,isupper(d[pos])!=0,undoably);
 					ppnt = ret.ppnt;
 					pcpnt = ret.pcpnt;
 					pos++;
 				}
 				else if(toupper(d[pos]) == 'A'){
 					// add an elliptic arc
-					ppnt = ReadEllipse(&d[pos+1],ppnt,isupper(d[pos]),undoably);
+					ppnt = ReadEllipse(&d[pos+1],ppnt,isupper(d[pos])!=0,undoably);
 					pos++;
 				}
 				else if(toupper(d[pos]) == 'Z'){
@@ -753,8 +753,8 @@ void HeeksSvgRead::OnReadCubic(gp_Pnt s, gp_Pnt c1, gp_Pnt c2, gp_Pnt e,bool und
 	GeomConvert_CompCurveToBSplineCurve convert(curve);
 
 	Handle_Geom_BSplineCurve spline = convert.BSplineCurve();
-	Geom_BSplineCurve pspline = *((Geom_BSplineCurve*)spline.Access());
-	HSpline* new_object = new HSpline(pspline, &wxGetApp().current_color);
+//	Geom_BSplineCurve pspline = *((Geom_BSplineCurve*)spline.Access());
+	HSpline* new_object = new HSpline(spline, &wxGetApp().current_color);
 	ModifyByMatrix(new_object);
 	AddSketchIfNeeded(undoably);
 	m_sketch->Add(new_object, NULL);
