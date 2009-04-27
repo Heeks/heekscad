@@ -19,6 +19,7 @@ public:
 
 	~HSpline(void);
 	HSpline(const Geom_BSplineCurve &s, const HeeksColor* col);
+	HSpline(const Handle_Geom_BSplineCurve s, const HeeksColor* col);
 	HSpline(const HSpline &c);
 
 	const HSpline& operator=(const HSpline &c);
