@@ -18,6 +18,12 @@ HEllipse::HEllipse(const HEllipse &e){
 }
 
 HEllipse::HEllipse(const gp_Elips &e, const HeeksColor* col):color(*col), m_ellipse(e){
+	m_start = 0;
+	m_end = 2*Pi;
+}
+
+HEllipse::HEllipse(const gp_Elips &e, double start, double end, const HeeksColor* col):color(*col), m_ellipse(e){
+	m_start = start; m_end = end;
 }
 
 HEllipse::~HEllipse(){
@@ -26,6 +32,7 @@ HEllipse::~HEllipse(){
 const HEllipse& HEllipse::operator=(const HEllipse &e){
 	HeeksObj::operator=(e);
 	m_ellipse = e.m_ellipse;
+	m_start = e.m_start; m_end = e.m_end;
 	color = e.color;
 	return *this;
 }
@@ -41,20 +48,39 @@ void HEllipse::GetSegments(void(*callbackfunc)(const double *p), double pixels_p
 
 	double radius = m_ellipse.MajorRadius();
 	double min_radius = m_ellipse.MinorRadius();
-	int segments = (int)(fabs(pixels_per_mm * radius + 1));
-    
-    double theta = 6.28318530717958 / (double)segments;
+
+	double ratio = min_radius/radius;
+
+	double rot = GetRotation();
+
+	gp_Pnt zp(0,0,0);
+	gp_Dir up(0,0,1);
+
+	double end_angle = m_end;
+	double start_angle = m_start;
+	
+	double d_angle = end_angle - start_angle;
+
+	if(fabs(d_angle) < wxGetApp().m_geom_tol)
+		d_angle = 2*Pi;
+
+	if(d_angle < 0)
+		d_angle += 2*Pi;
+
+	int segments = (int)(fabs(pixels_per_mm * radius * d_angle / (2*Pi) + 1));
+
+    double theta = d_angle / (double)segments;
     double tangetial_factor = tan(theta);
     double radial_factor = 1 - cos(theta);
     
-    double x = radius;
-    double y = 0.0;
+    double x = radius * cos(start_angle);
+    double y = radius * sin(start_angle);
 
 	double pp[3];
 
    for(int i = 0; i < segments + 1; i++)
     {
-		gp_Pnt p = centre.XYZ() + x * x_axis.XYZ() + y * y_axis.XYZ()  * min_radius/radius;
+		gp_Pnt p = centre.XYZ() + x * x_axis.XYZ() + y * y_axis.XYZ()  * ratio;
 		extract(p, pp);
 		(*callbackfunc)(pp);
         
@@ -77,8 +103,8 @@ static void glVertexFunction(const double *p){glVertex3d(p[0], p[1], p[2]);}
 void HEllipse::glCommands(bool select, bool marked, bool no_color){
 	if(!no_color){
 		wxGetApp().glColorEnsuringContrast(color);
-		glEnable(GL_LINE_STIPPLE);
-		glLineStipple(3, 0xaaaa);
+//		glEnable(GL_LINE_STIPPLE);
+//		glLineStipple(3, 0xaaaa);
 	}
 	GLfloat save_depth_range[2];
 	if(marked){
@@ -97,7 +123,7 @@ void HEllipse::glCommands(bool select, bool marked, bool no_color){
 	}
 	if(!no_color)
 	{
-		glDisable(GL_LINE_STIPPLE);
+//		glDisable(GL_LINE_STIPPLE);
 	}
 }
 
@@ -186,18 +212,29 @@ static void on_set_minor_radius(double value, HeeksObj* object){
 }
 
 static void on_set_rotation(double value, HeeksObj* object){
-        ((HEllipse*)object)->SetRotation(value);
+    ((HEllipse*)object)->SetRotation(value);
+	wxGetApp().Repaint(); 
+}
+
+static void on_set_start_angle(double value, HeeksObj* object){
+    ((HEllipse*)object)->m_start = value;
+	wxGetApp().Repaint(); 
+}
+
+static void on_set_end_angle(double value, HeeksObj* object){
+    ((HEllipse*)object)->m_end = value;
 	wxGetApp().Repaint(); 
 }
 
 void HEllipse::SetRotation(double value)
 {
 	gp_Dir up(0, 0, 1);
-        double rot = GetRotation();
+	gp_Pnt zp(0,0,0);
+    double rot = GetRotation();
 	m_ellipse.Rotate(gp_Ax1(m_ellipse.Location(),up),value-rot);
 }
 
-double HEllipse::GetRotation()
+double HEllipse::GetRotation()const
 {
 	return GetEllipseRotation(m_ellipse);
 }
@@ -212,6 +249,8 @@ void HEllipse::GetProperties(std::list<Property *> *list){
 	list->push_back(new PropertyDouble(_("major radius"), m_ellipse.MajorRadius(), this, on_set_major_radius));
 	list->push_back(new PropertyDouble(_("minor radius"), m_ellipse.MinorRadius(), this, on_set_minor_radius));
 	list->push_back(new PropertyDouble(_("rotation"), rot, this, on_set_rotation));
+	list->push_back(new PropertyDouble(_("start angle"), m_start, this, on_set_start_angle));
+	list->push_back(new PropertyDouble(_("end angle"), m_end, this, on_set_start_angle));
 	HeeksObj::GetProperties(list);
 }
 
@@ -318,6 +357,8 @@ void HEllipse::WriteXML(TiXmlNode *root)
 	element->SetDoubleAttribute("ax", D.X());
 	element->SetDoubleAttribute("ay", D.Y());
 	element->SetDoubleAttribute("az", D.Z());
+	element->SetDoubleAttribute("start", m_start);
+	element->SetDoubleAttribute("end", m_end);
 	WriteBaseXML(element); 
 }
 
@@ -329,6 +370,8 @@ HeeksObj* HEllipse::ReadFromXMLElement(TiXmlElement* pElem)
 	double maj = 0.0;
 	double min = 0.0;
 	double rot = 0;
+	double start=0;
+	double end=2*Pi;
 	HeeksColor c;
 
 	// get the attributes
@@ -345,11 +388,13 @@ HeeksObj* HEllipse::ReadFromXMLElement(TiXmlElement* pElem)
 		else if(name == "ax"){axis[0] = a->DoubleValue();}
 		else if(name == "ay"){axis[1] = a->DoubleValue();}
 		else if(name == "az"){axis[2] = a->DoubleValue();}
+		else if(name == "start"){start = a->DoubleValue();}
+		else if(name == "end"){end = a->DoubleValue();}
 	}
 
 	gp_Elips ellipse(gp_Ax2(centre, gp_Dir(make_vector(axis))), maj,min);
 
-	HEllipse* new_object = new HEllipse(ellipse, &c);
+	HEllipse* new_object = new HEllipse(ellipse,start,end,&c);
 	new_object->SetRotation(rot);
 	new_object->ReadBaseXML(pElem);
 

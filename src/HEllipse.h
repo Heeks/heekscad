@@ -15,9 +15,11 @@ private:
 
 public:
 	gp_Elips m_ellipse;
+	double m_start; double m_end;
 
 	~HEllipse(void);
 	HEllipse(const gp_Elips &c, const HeeksColor* col);
+	HEllipse(const gp_Elips &c, double start, double end,const HeeksColor* col);
 	HEllipse(const HEllipse &c);
 
 	const HEllipse& operator=(const HEllipse &c);
@@ -42,7 +44,7 @@ public:
 	bool GetCentrePoint(double* pos);
 	void WriteXML(TiXmlNode *root);
 	int Intersects(const HeeksObj *object, std::list< double > *rl)const;
-	double GetRotation();
+	double GetRotation()const;
 	void SetRotation(double rot);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
