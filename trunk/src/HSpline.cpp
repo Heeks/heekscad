@@ -23,6 +23,10 @@ HSpline::HSpline(const Geom_BSplineCurve &s, const HeeksColor* col):color(*col){
 	m_spline = Handle(Geom_BSplineCurve)::DownCast(s.Copy());	
 }
 
+HSpline::HSpline(Handle_Geom_BSplineCurve s, const HeeksColor* col):color(*col){
+	m_spline = s;//Handle(Geom_BSplineCurve)::DownCast(s->Copy());
+}
+
 HSpline::~HSpline(){
 }
 
@@ -58,8 +62,8 @@ static void glVertexFunction(const double *p){glVertex3d(p[0], p[1], p[2]);}
 void HSpline::glCommands(bool select, bool marked, bool no_color){
 	if(!no_color){
 		wxGetApp().glColorEnsuringContrast(color);
-		glEnable(GL_LINE_STIPPLE);
-		glLineStipple(3, 0xaaaa);
+//		glEnable(GL_LINE_STIPPLE);
+//		glLineStipple(3, 0xaaaa);
 	}
 	GLfloat save_depth_range[2];
 	if(marked){
@@ -78,7 +82,7 @@ void HSpline::glCommands(bool select, bool marked, bool no_color){
 	}
 	if(!no_color)
 	{
-		glDisable(GL_LINE_STIPPLE);
+//		glDisable(GL_LINE_STIPPLE);
 	}
 }
 
