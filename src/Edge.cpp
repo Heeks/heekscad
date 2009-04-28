@@ -21,13 +21,11 @@
 #include "Gripper.h"
 
 CEdge::CEdge(const TopoDS_Edge &edge):m_topods_edge(edge), m_midpoint_calculated(false){
-#if _DEBUG
 	GetCurveParams2(&m_start_u, &m_end_u, &m_isClosed, &m_isPeriodic);
 	Evaluate(m_start_u, &m_start_x, &m_start_tangent_x);
 	double t[3];
 	Evaluate(m_end_u, &m_end_x, t);
 	m_orientation = Orientation();
-#endif
 }
 
 CEdge::~CEdge(){
@@ -122,20 +120,34 @@ void CEdge::GetBox(CBox &box){
 }
 
 void CEdge::GetGripperPositions(std::list<double> *list, bool just_for_endof){
-	// add a gripper in the middle, just to show the edge is selected
-	if(!m_midpoint_calculated)
+	if(just_for_endof)
 	{
-		BRepAdaptor_Curve curve(m_topods_edge);
-		double us = curve.FirstParameter();
-		double ue = curve.LastParameter();
-		double umiddle = (us+ue)/2;
-		Evaluate(umiddle, m_midpoint, NULL);
+		list->push_back(GripperTypeTranslate);
+		list->push_back(m_start_x);
+		list->push_back(m_start_y);
+		list->push_back(m_start_z);
+		list->push_back(GripperTypeTranslate);
+		list->push_back(m_end_x);
+		list->push_back(m_end_y);
+		list->push_back(m_end_z);
 	}
+	else
+	{
+		// add a gripper in the middle, just to show the edge is selected
+		if(!m_midpoint_calculated)
+		{
+			BRepAdaptor_Curve curve(m_topods_edge);
+			double us = curve.FirstParameter();
+			double ue = curve.LastParameter();
+			double umiddle = (us+ue)/2;
+			Evaluate(umiddle, m_midpoint, NULL);
+		}
 
-	list->push_back(GripperTypeTranslate);
-	list->push_back(m_midpoint[0]);
-	list->push_back(m_midpoint[1]);
-	list->push_back(m_midpoint[2]);
+		list->push_back(GripperTypeTranslate);
+		list->push_back(m_midpoint[0]);
+		list->push_back(m_midpoint[1]);
+		list->push_back(m_midpoint[2]);
+	}
 }
 
 class BlendTool:public Tool
