@@ -7,7 +7,9 @@
 #include "Shape.h"
 #include "Solid.h"
 #include "Sketch.h"
+#include "CoordinateSystem.h"
 #include "ConversionTools.h"
+#include "MarkedList.h"
 #include <BRepMesh.hxx>
 #include <StdPrs_ToolShadedShape.hxx>
 #include <Poly_Connect.hxx>
@@ -350,28 +352,47 @@ void CFace::GetProperties(std::list<Property *> *list)
 
 	HeeksObj::GetProperties(list);
 }
+
+static CFace* face_for_tools = NULL;
+
 class MakeSketchTool:public Tool
 {
 public:
-	CFace* m_face;
-
-	MakeSketchTool(CFace* face):m_face(face){}
-
 	const wxChar* GetTitle(){return _("Make Sketch");}
 	wxString BitmapPath(){return _T("face2sketch");}
 	const wxChar* GetToolTip(){return _T("Make a sketch from face");}
 	void Run(){
 		CSketch* new_object = new CSketch();
-		ConvertFaceToSketch2(m_face->Face(), new_object);
+		ConvertFaceToSketch2(face_for_tools->Face(), new_object);
 		wxGetApp().AddUndoably(new_object, NULL, NULL);
 	}
 };
 
-static MakeSketchTool make_sketch_tool(NULL);
+static MakeSketchTool make_sketch_tool;
+
+class MakeCoordSystem:public Tool
+{
+	// only use this if GetSurfaceType() == GeomAbs_Plane
+public:
+	const wxChar* GetTitle(){return _("Make Coordinate System");}
+	wxString BitmapPath(){return _T("coordsys");}
+	void Run(){
+		gp_Pln plane;
+		face_for_tools->GetPlaneParams(plane);
+		CoordinateSystem* new_object = new CoordinateSystem(_("Face Coordinate System"), plane.Location(), plane.XAxis().Direction(), plane.YAxis().Direction());
+		wxGetApp().AddUndoably(new_object, NULL, NULL);
+		wxGetApp().m_marked_list->Clear(true);
+		wxGetApp().m_marked_list->Add(new_object, true);
+		wxGetApp().Repaint();
+	}
+};
+
+static MakeCoordSystem make_coordsys;
 
 void CFace::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
-	make_sketch_tool.m_face = this;
+	face_for_tools = this;
 	t_list->push_back(&make_sketch_tool);
+	if(GetSurfaceType() == GeomAbs_Plane)t_list->push_back(&make_coordsys);
 }
 
 int CFace::GetSurfaceType()
