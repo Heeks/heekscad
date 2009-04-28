@@ -13,7 +13,6 @@ private:
 	CBox m_box;
 	TopoDS_Edge m_topods_edge;
 	static wxIcon* m_icon;
-#if _DEBUG
 	double m_start_x;
 	double m_start_y;
 	double m_start_z;
@@ -28,7 +27,6 @@ private:
 	int m_isClosed;
 	int m_isPeriodic;
 	bool m_orientation;
-#endif
 
 public:
 	std::list<CFace*>::iterator m_faceIt;
