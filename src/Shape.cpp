@@ -31,13 +31,11 @@
 #include "TopTools_MapIteratorOfMapOfShape.hxx"
 #include <TopExp_Explorer.hxx>
 #include <BRepTools_WireExplorer.hxx>
-#include "TopTools_ListOfShape.hxx"
-#include "TopTools_ListIteratorOfListOfShape.hxx"
 #include "BRepOffsetAPI_MakeOffsetShape.hxx"
 #include <BRepFilletAPI_MakeFillet.hxx>
 #include <BRepFilletAPI_MakeChamfer.hxx>
-#include "TopoDS_Edge.hxx"
-#include "Interface_Static.hxx"
+#include <BRepExtrema_DistShapeShape.hxx>
+#include <BRepPrimAPI_MakeBox.hxx>
 #include "../interface/Tool.h"
 #include "../tinyxml/tinyxml.h"
 #include "HeeksConfig.h"
@@ -465,16 +463,55 @@ CFace* CShape::find(const TopoDS_Face &face)
 
 bool CShape::GetExtents(double* extents, const double* orig, const double* xdir, const double* ydir, const double* zdir)
 {
-	// to do, use some good OpenCASCADE function
-	// but for now just return the box
-	CBox box;
-	GetBox(box);
-	if(box.m_valid)
+	gp_Pnt p_orig(0, 0, 0);
+	if(orig)p_orig = gp_Pnt(orig[0], orig[1], orig[2]);
+	gp_Vec v_x(1, 0, 0);
+	if(xdir)v_x = gp_Vec(xdir[0], xdir[1], xdir[2]);
+	gp_Vec v_y(0, 1, 0);
+	if(ydir)v_y = gp_Vec(ydir[0], ydir[1], ydir[2]);
+	gp_Vec v_z(0, 0, 1);
+	if(zdir)v_z = gp_Vec(zdir[0], zdir[1], zdir[2]);
+
+	BRepPrimAPI_MakeBox cuboid_plus_x(gp_Ax2(gp_Pnt(p_orig.XYZ() + 2000000 * v_x.XYZ() + (-1000000) * v_z.XYZ() + (-1000000) * v_y.XYZ()), v_x, v_y), 1000000, 1000000, 1000000);
+	BRepPrimAPI_MakeBox cuboid_minus_x(gp_Ax2(gp_Pnt(p_orig.XYZ() + (-2000000) * v_x.XYZ() + (-1000000) * v_z.XYZ() + (-1000000) * v_y.XYZ()), -v_x, v_z), 1000000, 1000000, 1000000);
+	BRepPrimAPI_MakeBox cuboid_plus_y(gp_Ax2(gp_Pnt(p_orig.XYZ() + 2000000 * v_y.XYZ() + (-1000000) * v_z.XYZ() + (-1000000) * v_x.XYZ()), v_y, v_z), 1000000, 1000000, 1000000);
+	BRepPrimAPI_MakeBox cuboid_minus_y(gp_Ax2(gp_Pnt(p_orig.XYZ() + (-2000000) * v_y.XYZ() + (-1000000) * v_z.XYZ() + (-1000000) * v_x.XYZ()), -v_y, v_x), 1000000, 1000000, 1000000);
+	BRepPrimAPI_MakeBox cuboid_plus_z(gp_Ax2(gp_Pnt(p_orig.XYZ() + 2000000 * v_z.XYZ() + (-1000000) * v_x.XYZ() + (-1000000) * v_y.XYZ()), v_z, v_x), 1000000, 1000000, 1000000);
+	BRepPrimAPI_MakeBox cuboid_minus_z(gp_Ax2(gp_Pnt(p_orig.XYZ() + (-2000000) * v_z.XYZ() + (-1000000) * v_x.XYZ() + (-1000000) * v_y.XYZ()), -v_z, v_y), 1000000, 1000000, 1000000);
+
+	gp_Vec v_orig(p_orig.XYZ());
+
+	TopoDS_Solid shape[6] = 
 	{
-		memcpy(extents, box.m_x, 6*sizeof(double));
+		cuboid_minus_x,
+		cuboid_minus_y,
+		cuboid_minus_z,
+		cuboid_plus_x,
+		cuboid_plus_y,
+		cuboid_plus_z
+	};
+
+	gp_Vec vector[6] = 
+	{
+		v_x,
+		v_y,
+		v_z,
+		v_x,
+		v_y,
+		v_z
+	};
+
+	for(int i = 0; i<6; i++){
+		BRepExtrema_DistShapeShape extrema(m_shape, shape[i]);
+		extrema.Perform();
+		gp_Pnt p = extrema.PointOnShape1(1);
+		gp_Vec v(p.XYZ());
+		double dp = v * vector[i];
+		double dp_o = v_orig * vector[i];
+		extents[i] = dp - dp_o;
 	}
 
-	return box.m_valid;
+	return true;
 }
 
 void CShape::CutShapes(const std::list<HeeksObj*> &list_in)
