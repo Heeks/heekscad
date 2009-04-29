@@ -14,6 +14,8 @@
 #include <BRepAdaptor_Curve.hxx>
 #include <BRepTools_WireExplorer.hxx>
 #include <TopTools_ListIteratorOfListOfShape.hxx>
+#include <BRepMesh.hxx>
+#include <Poly_Polygon3D.hxx>
 #include "MarkedList.h"
 #include "HLine.h"
 #include "HArc.h"
@@ -232,14 +234,53 @@ bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch)
 			gp_Vec VE;
 			curve.D1(uEnd, PE, VE);
 			gp_Circ circle = curve.Circle();
-			HArc* new_object = new HArc(PS, PE, circle, &wxGetApp().current_color);
-			sketch->Add(new_object, NULL);
+			if(curve.IsPeriodic())
+			{
+				double period = curve.Period();
+				double uHalf = uStart + period/2;
+				gp_Pnt PH;
+				gp_Vec VH;
+				curve.D1(uHalf, PH, VH);
+				{
+					HArc* new_object = new HArc(PS, PH, circle, &wxGetApp().current_color);
+					sketch->Add(new_object, NULL);
+				}
+				{
+					HArc* new_object = new HArc(PH, PE, circle, &wxGetApp().current_color);
+					sketch->Add(new_object, NULL);
+				}
+			}
+			else
+			{
+				HArc* new_object = new HArc(PS, PE, circle, &wxGetApp().current_color);
+				sketch->Add(new_object, NULL);
+			}
 		}
 		break;
 
 		default:
 		{
-			// to do
+			// make lots of small lines
+			BRepTools::Clean(edge);
+			BRepMesh::Mesh(edge, 0.1);
+
+			TopLoc_Location L;
+			Handle(Poly_Polygon3D) Polyg = BRep_Tool::Polygon3D(edge, L);
+			if (!Polyg.IsNull()) {
+				const TColgp_Array1OfPnt& Points = Polyg->Nodes();
+				Standard_Integer po;
+				gp_Pnt prev_p;
+				int i = 0;
+				for (po = Points.Lower(); po <= Points.Upper(); po++, i++) {
+					gp_Pnt p = (Points.Value(po)).Transformed(L);
+					if(i != 0)
+					{
+						HLine* new_object = new HLine(prev_p, p, &wxGetApp().current_color);
+						sketch->Add(new_object, NULL);
+					}
+					prev_p = p;
+				}
+			}
 		}
 		break;
 	}
