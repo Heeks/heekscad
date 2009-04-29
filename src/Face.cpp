@@ -68,7 +68,7 @@ static Standard_Boolean TriangleIsValid(const gp_Pnt& P1, const gp_Pnt& P2, cons
 
 void CFace::glCommands(bool select, bool marked, bool no_color){
 	bool owned_by_solid = false;
-	if(m_owner && m_owner->m_owner && m_owner->m_owner->GetType() == SolidType) {
+	if(GetParentBody()) {
 		// using existing BRepMesh::Mesh
 		// use solid's colour
 		owned_by_solid = true;
@@ -182,16 +182,19 @@ void CFace::GetBox(CBox &box){
 }
 
 bool CFace::ModifyByMatrix(const double *m){
-	gp_Trsf mat = make_matrix(m);
-	BRepBuilderAPI_Transform myBRepTransformation(m_topods_face,mat);
-	TopoDS_Shape new_shape = myBRepTransformation.Shape();
-	wxGetApp().Add(new CFace(*((TopoDS_Face*)(&new_shape))), NULL);
-	wxGetApp().DeleteUndoably(this);
+	if(GetParentBody() == NULL)
+	{
+		gp_Trsf mat = make_matrix(m);
+		BRepBuilderAPI_Transform myBRepTransformation(m_topods_face,mat);
+		TopoDS_Shape new_shape = myBRepTransformation.Shape();
+		wxGetApp().Add(new CFace(*((TopoDS_Face*)(&new_shape))), NULL);
+		wxGetApp().DeleteUndoably(this);
+	}
 	return true;
 }
 
 void CFace::GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal){
-	if(m_owner && m_owner->m_owner && m_owner->m_owner->GetType() == SolidType) {
+	if(GetParentBody()) {
 		// using existing BRepMesh::Mesh
 	}
 	else {

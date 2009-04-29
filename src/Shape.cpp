@@ -358,7 +358,9 @@ bool CShape::ModifyByMatrix(const double* m){
 	gp_Trsf mat = make_matrix(m);
 	BRepBuilderAPI_Transform myBRepTransformation(m_shape,mat);
 	TopoDS_Shape new_shape = myBRepTransformation.Shape();
-	wxGetApp().AddUndoably(MakeObject(new_shape, m_title.c_str(), SOLID_TYPE_UNKNOWN, m_color), m_owner, NULL);
+	HeeksObj* new_object = MakeObject(new_shape, m_title.c_str(), SOLID_TYPE_UNKNOWN, m_color);
+	((CShape*)new_object)->CopyIDsFrom(this);
+	wxGetApp().AddUndoably(new_object, m_owner, NULL);
 	wxGetApp().DeleteUndoably(this);
 	return true;
 }
@@ -512,6 +514,21 @@ bool CShape::GetExtents(double* extents, const double* orig, const double* xdir,
 	}
 
 	return true;
+}
+
+void CShape::CopyIDsFrom(const CShape* shape_from)
+{
+	SetID(shape_from->m_id);
+	HeeksObj* face_from = shape_from->m_faces->GetFirstChild();
+	for(HeeksObj* face_to = m_faces->GetFirstChild(); face_from && face_to; face_from = shape_from->m_faces->GetNextChild(), face_to = m_faces->GetNextChild())
+	{
+		face_to->SetID(face_from->m_id);
+	}
+	HeeksObj* edge_from = shape_from->m_edges->GetFirstChild();
+	for(HeeksObj* edge_to = m_edges->GetFirstChild(); edge_from && edge_to; edge_from = shape_from->m_edges->GetNextChild(), edge_to = m_edges->GetNextChild())
+	{
+		edge_to->SetID(edge_from->m_id);
+	}
 }
 
 void CShape::CutShapes(const std::list<HeeksObj*> &list_in)
@@ -778,6 +795,23 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<in
 	return false;
 }
 
+static void WriteShapeOrGroup(STEPControl_Writer &writer, HeeksObj* object, std::map<int, CShapeData> *index_map, int &i)
+{
+	if(CShape::IsTypeAShape(object->GetType())){
+		if(index_map)index_map->insert( std::pair<int, CShapeData>(i, CShapeData((CShape*)object)) );
+		i++;
+		writer.Transfer(((CSolid*)object)->Shape(), STEPControl_AsIs);
+	}
+
+	if(object->GetType() == GroupType)
+	{
+		for(HeeksObj* o = object->GetFirstChild(); o; o = object->GetNextChild())
+		{
+			WriteShapeOrGroup(writer, o, index_map, i);
+		}
+	}
+}
+
 bool CShape::ExportSolidsFile(const std::list<HeeksObj*>& objects, const wxChar* filepath, std::map<int, CShapeData> *index_map)
 {
 	// returns true, if suffix handled
@@ -796,11 +830,7 @@ bool CShape::ExportSolidsFile(const std::list<HeeksObj*>& objects, const wxChar*
 		for(std::list<HeeksObj*>::const_iterator It = objects.begin(); It != objects.end(); It++)
 		{
 			HeeksObj* object = *It;
-			if(CShape::IsTypeAShape(object->GetType())){
-				if(index_map)index_map->insert( std::pair<int, CShapeData>(i, CShapeData((CShape*)object)) );
-				i++;
-				writer.Transfer(((CSolid*)object)->Shape(), STEPControl_AsIs);
-			}
+			WriteShapeOrGroup(writer, object, index_map, i);
 		}
 		writer.Write(aFileName);
 		

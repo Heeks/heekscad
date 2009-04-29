@@ -678,6 +678,8 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, bool undoably, HeeksObj* p
 			}
 		}
 	}
+
+	CGroup::MoveSolidsToGroupsById(this);
 }
 
 static CSketch* sketch_for_callback = NULL;
@@ -2633,6 +2635,7 @@ void HeeksCADapp::SetObjectID(HeeksObj* object, int id)
 			FindIt1 = used_ids.insert( std::make_pair( id_group_type, empty_map )).first;		
 		}
 		std::map<int, HeeksObj*> &map = FindIt1->second;
+		map.erase(id);
 		map.insert( std::pair<int, HeeksObj*> (id, object) );
 		object->m_id = id;
 	}

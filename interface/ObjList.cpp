@@ -215,9 +215,15 @@ void ObjList::Remove(HeeksObj* object)
 	HeeksObj::Remove(object);
 
 #ifdef HEEKSCAD
-	wxGetApp().RemoveID(object);
+	if((!wxGetApp().m_in_OpenFile || wxGetApp().m_file_open_or_import_type != FileOpenOrImportTypeHeeks) && object->UsesID() && object->m_id == 0)
+	{
+		wxGetApp().RemoveID(object);
+	}
 #else
-	heeksCAD->RemoveID(object);
+	if(!heeksCAD->InOpenFile() && object->UsesID() && object->m_id == 0)
+	{
+		heeksCAD->RemoveID(object);
+	}
 #endif
 }
 
