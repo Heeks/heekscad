@@ -45,6 +45,7 @@ bool CCylinder::ModifyByMatrix(const double* m){
 	double new_radius = fabs(m_radius * scale);
 	double new_height = fabs(m_height * scale);
 	CCylinder* new_object = new CCylinder(new_pos, new_radius, new_height, m_title.c_str(), m_color);
+	new_object->CopyIDsFrom(this);
 	wxGetApp().AddUndoably(new_object, m_owner, NULL);
 	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().DeleteUndoably(this);
@@ -95,6 +96,7 @@ void CCylinder::GetGripperPositions(std::list<double> *list, bool just_for_endof
 void CCylinder::OnApplyProperties()
 {
 	CCylinder* new_object = new CCylinder(m_pos, m_radius, m_height, m_title.c_str(), m_color);
+	new_object->CopyIDsFrom(this);
 	wxGetApp().StartHistory();
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().DeleteUndoably(this);
@@ -143,6 +145,7 @@ bool CCylinder::Stretch(const double *p, const double* shift)
 	if(make_a_new_cylinder)
 	{
 		CCylinder* new_object = new CCylinder(m_pos, m_radius, m_height, m_title.c_str(), m_color);
+		new_object->CopyIDsFrom(this);
 		wxGetApp().StartHistory();
 		wxGetApp().AddUndoably(new_object, NULL, NULL);
 		wxGetApp().DeleteUndoably(this);

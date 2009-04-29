@@ -50,6 +50,7 @@ bool CCuboid::ModifyByMatrix(const double* m){
 	double new_y = fabs(m_y * scale);
 	double new_z = fabs(m_z * scale);
 	CCuboid* new_object = new CCuboid(new_pos, new_x, new_y, new_z, m_title.c_str(), m_color);
+	new_object->CopyIDsFrom(this);
 	wxGetApp().AddUndoably(new_object, m_owner, NULL);
 	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().DeleteUndoably(this);
@@ -131,6 +132,7 @@ void CCuboid::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 void CCuboid::OnApplyProperties()
 {
 	CCuboid* new_object = new CCuboid(m_pos, m_x, m_y, m_z, m_title.c_str(), m_color);
+	new_object->CopyIDsFrom(this);
 	wxGetApp().StartHistory();
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().DeleteUndoably(this);
@@ -189,6 +191,7 @@ bool CCuboid::Stretch(const double *p, const double* shift)
 	if(make_a_new_cuboid)
 	{
 		CCuboid* new_object = new CCuboid(m_pos, m_x, m_y, m_z, m_title.c_str(), m_color);
+		new_object->CopyIDsFrom(this);
 		wxGetApp().StartHistory();
 		wxGetApp().AddUndoably(new_object, NULL, NULL);
 		wxGetApp().DeleteUndoably(this);
