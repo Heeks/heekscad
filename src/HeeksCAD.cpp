@@ -34,6 +34,7 @@
 #include "ViewZooming.h"
 #include "DigitizeMode.h"
 #include "Shape.h"
+#include "Face.h"
 #include "ViewPoint.h"
 #include "MarkedList.h"
 #include "History.h"
@@ -255,6 +256,7 @@ bool HeeksCADapp::OnInit()
 
 	config.Read(_T("DxfMakeSketch"), &HeeksDxfRead::m_make_as_sketch, true);	
 	config.Read(_T("ViewUnits"), &m_view_units);
+	config.Read(_T("FaceToSketchDeviation"), &(FaceToSketchTool::deviation));
 
 	GetRecentFilesProfileString();
 
@@ -339,8 +341,8 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("ExtrudeRemovesSketches"), m_extrude_removes_sketches);
 	config.Write(_T("LoftRemovesSketches"), m_loft_removes_sketches);
 	config.Write(_T("GraphicsTextMode"), m_graphics_text_mode);
-
 	config.Write(_T("DxfMakeSketch"), HeeksDxfRead::m_make_as_sketch);
+	config.Write(_T("FaceToSketchDeviation"), FaceToSketchTool::deviation);
 
 	WriteRecentFilesProfileString(config);
 
@@ -1827,6 +1829,11 @@ void on_set_geom_tol(double value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+void on_set_face_to_sketch_deviation(double value, HeeksObj* object)
+{
+	FaceToSketchTool::deviation = value;
+}
+
 void on_set_show_datum(bool onoff, HeeksObj* object)
 {
 	wxGetApp().m_show_datum_coords_system = onoff;
@@ -2122,6 +2129,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	drawing->m_list.push_back ( new PropertyColor ( _("current color"),  current_color, NULL, on_set_current_color ) );
 	drawing->m_list.push_back ( new PropertyColor ( _("construction color"),  construction_color, NULL, on_set_construction_color ) );
 	drawing->m_list.push_back(new PropertyDouble(_("geometry tolerance"), m_geom_tol, NULL, on_set_geom_tol));
+	drawing->m_list.push_back(new PropertyDouble(_("face to sketch deviaton"), FaceToSketchTool::deviation, NULL, on_set_face_to_sketch_deviation));
 	list->push_back(drawing);
 
 	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){

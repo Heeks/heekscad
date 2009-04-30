@@ -170,7 +170,7 @@ bool ConvertSketchToFace2(HeeksObj* object, TopoDS_Face& face)
 	return false;
 }
 
-bool ConvertFaceToSketch2(const TopoDS_Face& face, HeeksObj* sketch)
+bool ConvertFaceToSketch2(const TopoDS_Face& face, HeeksObj* sketch, double deviation)
 {
 	// given a face, this adds lines and arcs to the given sketch
 	// loop through all the loops 
@@ -182,14 +182,14 @@ bool ConvertFaceToSketch2(const TopoDS_Face& face, HeeksObj* sketch)
 		for(BRepTools_WireExplorer expEdge(TopoDS::Wire(W)); expEdge.More(); expEdge.Next())
 		{
 			const TopoDS_Shape &E = expEdge.Current();
-			if(!ConvertEdgeToSketch2(TopoDS::Edge(E), sketch))return false;
+			if(!ConvertEdgeToSketch2(TopoDS::Edge(E), sketch, deviation))return false;
 		}
 	}
 
 	return true; // success
 }
 
-bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch)
+bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double deviation)
 {
 	// enum GeomAbs_CurveType
 	// 0 - GeomAbs_Line
@@ -262,7 +262,7 @@ bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch)
 		{
 			// make lots of small lines
 			BRepTools::Clean(edge);
-			BRepMesh::Mesh(edge, 0.1);
+			BRepMesh::Mesh(edge, deviation);
 
 			TopLoc_Location L;
 			Handle(Poly_Polygon3D) Polyg = BRep_Tool::Polygon3D(edge, L);
