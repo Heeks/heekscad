@@ -310,6 +310,12 @@ HeeksObj* CHeeksCADInterface::NewLine(const double* s, const double* e)
 	return new HLine(make_point(s), make_point(e), &wxGetApp().current_color);
 }
 
+HeeksObj* CHeeksCADInterface::NewCircle(const double* c, double r)
+{
+	gp_Dir up(0,0,1);
+	return new HCircle(gp_Circ(gp_Ax2(make_point(c),up),r),&wxGetApp().current_color);
+}
+
 HeeksObj* CHeeksCADInterface::NewArc(const double* s, const double* e, const double* c, const double* up)
 {
 	// arc
