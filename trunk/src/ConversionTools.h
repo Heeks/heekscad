@@ -5,8 +5,8 @@
 
 extern bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wire& wire);
 extern bool ConvertSketchToFace2(HeeksObj* object, TopoDS_Face& face);
-extern bool ConvertFaceToSketch2(const TopoDS_Face& face, HeeksObj* sketch);
-extern bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch);
+extern bool ConvertFaceToSketch2(const TopoDS_Face& face, HeeksObj* sketch, double deviation);
+extern bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double deviation);
 
 class ConvertSketchToFace: public Tool
 {

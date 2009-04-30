@@ -4,6 +4,7 @@
 
 #include "../interface/HeeksObj.h"
 #include "../interface/Material.h"
+#include "../interface/Tool.h"
 #include <TopoDS_Face.hxx>
 
 class CShape;
@@ -69,4 +70,16 @@ public:
 	void GetUVBox(double *uv_box);
 	CShape* GetParentBody();
 };
+
+class FaceToSketchTool:public Tool
+{
+public:
+	const wxChar* GetTitle(){return _("Make Sketch");}
+	wxString BitmapPath(){return _T("face2sketch");}
+	const wxChar* GetToolTip(){return _T("Make a sketch from face");}
+	void Run();
+
+	static double deviation;
+};
+
 
