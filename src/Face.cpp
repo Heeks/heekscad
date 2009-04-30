@@ -21,7 +21,6 @@
 #include <BRepGProp.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
 #include <BRepOffsetAPI_MakeOffset.hxx>
-#include "../interface/Tool.h"
 #include "../interface/PropertyString.h"
 #include <TopTools_ListIteratorOfListOfShape.hxx>
 #include <BRepAdaptor_Surface.hxx>
@@ -358,20 +357,15 @@ void CFace::GetProperties(std::list<Property *> *list)
 
 static CFace* face_for_tools = NULL;
 
-class MakeSketchTool:public Tool
-{
-public:
-	const wxChar* GetTitle(){return _("Make Sketch");}
-	wxString BitmapPath(){return _T("face2sketch");}
-	const wxChar* GetToolTip(){return _T("Make a sketch from face");}
-	void Run(){
-		CSketch* new_object = new CSketch();
-		ConvertFaceToSketch2(face_for_tools->Face(), new_object);
-		wxGetApp().AddUndoably(new_object, NULL, NULL);
-	}
-};
+void FaceToSketchTool::Run(){
+	CSketch* new_object = new CSketch();
+	ConvertFaceToSketch2(face_for_tools->Face(), new_object, deviation);
+	wxGetApp().AddUndoably(new_object, NULL, NULL);
+}
 
-static MakeSketchTool make_sketch_tool;
+double FaceToSketchTool::deviation = 0.1;
+
+static FaceToSketchTool make_sketch_tool;
 
 class MakeCoordSystem:public Tool
 {
