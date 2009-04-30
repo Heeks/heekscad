@@ -73,6 +73,7 @@ public:
 	virtual HeeksObj* NewSketch();
 	virtual HeeksObj* NewLine(const double* s, const double* e);
 	virtual HeeksObj* NewArc(const double* s, const double* e, const double* c, const double* up); // set up to (0, 0, -1) for a clockwise arc
+	virtual HeeksObj* NewCircle(const double *c, double r);
 	virtual void RegisterObserver(Observer* observer);
 	virtual void RemoveObserver(Observer* observer);
 	virtual bool TangentialArc(const double* p0, const double* v0, const double* p1, double *c, double *a); // given p0, v0, p1, returns true if an arc found and sets c and a ( centre and axis direction ), false for a straight line
