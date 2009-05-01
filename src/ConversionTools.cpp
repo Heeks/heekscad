@@ -19,6 +19,9 @@
 #include "MarkedList.h"
 #include "HLine.h"
 #include "HArc.h"
+#include "HEllipse.h"
+#include "HCircle.h"
+#include "HSpline.h"
 #include "Wire.h"
 #include "Face.h"
 #include "Edge.h"
@@ -142,6 +145,24 @@ bool ConvertSketchToFace2(HeeksObj* object, TopoDS_Face& face)
 				{
 					HArc* arc = (HArc*)object;
 					edges.push_back(BRepBuilderAPI_MakeEdge(arc->m_circle, arc->A, arc->B));
+				}
+				break;
+			case CircleType:
+				{
+					HCircle* circle = (HCircle*)object;
+					edges.push_back(BRepBuilderAPI_MakeEdge(circle->m_circle));
+				}
+				break;
+			case EllipseType:
+				{
+					HEllipse* ellipse = (HEllipse*)object;
+					edges.push_back(BRepBuilderAPI_MakeEdge(ellipse->m_ellipse));
+				}
+				break;
+			case SplineType:
+				{
+					HSpline* spline = (HSpline*)object;
+					edges.push_back(BRepBuilderAPI_MakeEdge(spline->m_spline));
 				}
 				break;
 		}
