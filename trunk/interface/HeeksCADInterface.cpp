@@ -12,6 +12,7 @@
 #include "HLine.h"
 #include "HArc.h"
 #include "HCircle.h"
+#include "Cuboid.h"
 #include "ObjPropsCanvas.h"
 #include "OptionsCanvas.h"
 #include "TreeCanvas.h"
@@ -314,6 +315,31 @@ HeeksObj* CHeeksCADInterface::NewCircle(const double* c, double r)
 {
 	gp_Dir up(0,0,1);
 	return new HCircle(gp_Circ(gp_Ax2(make_point(c),up),r),&wxGetApp().current_color);
+}
+
+HeeksObj* CHeeksCADInterface::NewCuboid(const double* c, double x, double y, double z)
+{
+	gp_Dir up(0,0,1);
+	return new CCuboid(gp_Ax2(make_point(c),up),x,y,z,_T("Cuboid"),wxGetApp().current_color);
+}
+
+void CHeeksCADInterface::TranslateObject(HeeksObj* obj, const double*c)
+{
+	gp_Pnt zp(0,0,0);
+	gp_Trsf t;
+	t.SetTranslation(zp,make_point(c));
+	double m[16];
+	extract(t,m);
+	obj->ModifyByMatrix(m);
+}
+
+void CHeeksCADInterface::RotateObject(HeeksObj* obj, const double*c,const double*u, double r)
+{
+	gp_Trsf t;
+	t.SetRotation(gp_Ax1(make_point(c),gp_Dir(make_point(u).XYZ())),r);
+	double m[16];
+	extract(t,m);
+	obj->ModifyByMatrix(m);
 }
 
 HeeksObj* CHeeksCADInterface::NewArc(const double* s, const double* e, const double* c, const double* up)
