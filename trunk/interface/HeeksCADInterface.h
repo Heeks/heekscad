@@ -75,6 +75,10 @@ public:
 	virtual HeeksObj* NewArc(const double* s, const double* e, const double* c, const double* up); // set up to (0, 0, -1) for a clockwise arc
 	virtual HeeksObj* NewCircle(const double *c, double r);
 	virtual HeeksObj* NewCuboid(const double *c, double x, double y, double z);
+	virtual HeeksObj* NewCylinder(const double*c, double r, double h);
+	virtual HeeksObj* NewGroup();
+	virtual HeeksObj* Fuse(const std::list<HeeksObj*> objects);
+	virtual HeeksObj* Cut(const std::list<HeeksObj*> objects);
 	virtual void RotateObject(HeeksObj*, const double*p,const double*u,double r);
 	virtual void TranslateObject(HeeksObj*,const double* c);
 	virtual void RegisterObserver(Observer* observer);
@@ -168,6 +172,7 @@ public:
 	virtual HeeksObj* NewSTLSolid();
 	virtual void STLSolidAddTriangle(HeeksObj* stl_solid, float* t);
 	virtual const HeeksColor& GetBackgroundColor();
+	virtual void SetColor(int r, int b, int g);
 	virtual bool InputDouble(const wxChar* prompt, const wxChar* value_name, double &value);
 	virtual double GetViewUnits();
 	virtual void SetViewUnits(double units, bool write_to_config);
