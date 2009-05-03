@@ -15,6 +15,7 @@ public:
 	HeeksObj *MakeACopy(void)const{ return new CGroup(*this);}
 	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/group");}
 	void WriteXML(TiXmlNode *root);
+	bool UsesID(){return true;}
 
 	static void MoveSolidsToGroupsById(HeeksObj* object);
 

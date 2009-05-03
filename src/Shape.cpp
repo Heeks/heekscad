@@ -531,7 +531,7 @@ void CShape::CopyIDsFrom(const CShape* shape_from)
 	}
 }
 
-void CShape::CutShapes(const std::list<HeeksObj*> &list_in)
+HeeksObj* CShape::CutShapes(const std::list<HeeksObj*> &list_in)
 {
 	// subtract from the first one in the list all the others
 	std::list<TopoDS_Shape> shapes;
@@ -557,10 +557,12 @@ void CShape::CutShapes(const std::list<HeeksObj*> &list_in)
 		wxGetApp().DeleteUndoably(delete_list);
 		wxGetApp().EndHistory();
 		wxGetApp().Repaint();
+		return new_object;
 	}
+	return NULL;
 }
 
-void CShape::FuseShapes(const std::list<HeeksObj*> &list_in)
+HeeksObj* CShape::FuseShapes(const std::list<HeeksObj*> &list_in)
 {
 	// fuse with the first one in the list all the others
 	wxGetApp().StartHistory();
@@ -580,6 +582,8 @@ void CShape::FuseShapes(const std::list<HeeksObj*> &list_in)
 
 	wxGetApp().EndHistory();
 	wxGetApp().Repaint();
+
+	return s1;
 }
 
 void CShape::CommonShapes(const std::list<HeeksObj*> &list_in)
