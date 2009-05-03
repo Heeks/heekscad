@@ -12,6 +12,8 @@
 #include "HLine.h"
 #include "HArc.h"
 #include "HCircle.h"
+#include "Group.h"
+#include "Cylinder.h"
 #include "Cuboid.h"
 #include "ObjPropsCanvas.h"
 #include "OptionsCanvas.h"
@@ -317,10 +319,31 @@ HeeksObj* CHeeksCADInterface::NewCircle(const double* c, double r)
 	return new HCircle(gp_Circ(gp_Ax2(make_point(c),up),r),&wxGetApp().current_color);
 }
 
+HeeksObj* CHeeksCADInterface::NewGroup()
+{
+	return new CGroup();
+}
+
 HeeksObj* CHeeksCADInterface::NewCuboid(const double* c, double x, double y, double z)
 {
 	gp_Dir up(0,0,1);
 	return new CCuboid(gp_Ax2(make_point(c),up),x,y,z,_T("Cuboid"),wxGetApp().current_color);
+}
+
+HeeksObj* CHeeksCADInterface::NewCylinder(const double* c, double r, double h)
+{
+	gp_Dir up(0,0,1);
+	return new CCylinder(gp_Ax2(make_point(c),up),r,h,_T("Cylinder"),wxGetApp().current_color);
+}
+
+HeeksObj* CHeeksCADInterface::Fuse(const std::list<HeeksObj*> objects)
+{
+	return CShape::FuseShapes(objects);
+}
+
+HeeksObj* CHeeksCADInterface::Cut(const std::list<HeeksObj*> objects)
+{
+	return CShape::CutShapes(objects);
 }
 
 void CHeeksCADInterface::TranslateObject(HeeksObj* obj, const double*c)
@@ -793,6 +816,12 @@ void CHeeksCADInterface::STLSolidAddTriangle(HeeksObj* stl_solid, float* t)
 const HeeksColor& CHeeksCADInterface::GetBackgroundColor()
 {
 	return wxGetApp().background_color;
+}
+
+void CHeeksCADInterface::SetColor(int r, int b, int g)
+{
+	HeeksColor color(r,b,g);
+	wxGetApp().current_color = color;
 }
 
 bool CHeeksCADInterface::InputDouble(const wxChar* prompt, const wxChar* value_name, double &value)
