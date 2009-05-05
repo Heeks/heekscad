@@ -1,3 +1,13 @@
+PREFIX=/usr
+#BINDIR=$(PREFIX)/bin
+DATADIR=$(PREFIX)/share
+PIXMAPSDIR=$(DATADIR)/pixmaps
+APPSDIR=$(DATADIR)/applications
+#use /opt/HeeksCAD untill we find a way to respect linux FHS
+INSTALLPREFIX=/opt
+HEEKSCADDIR=$(INSTALLPREFIX)/HeeksCAD
+mkdir_p= mkdir -p
+
 WXCFLAGS=$(shell wx-config --cflags)
 
 # dan heeks uncomments the next line to make it work for him on his Inspiron 530
@@ -313,4 +323,24 @@ tinyxmlparser.o: ../tinyxml/tinyxmlparser.cpp
 clean:
 	-rm ${EXECUTABLE} ${OBJECTS}
 
+install:
+	test -z "$(HEEKSCADDIR)" || $(mkdir_p) "$(DESTDIR)$(HEEKSCADDIR)"
+	test -z "$(HEEKSCADDIR)/bitmaps" || $(mkdir_p) "$(DESTDIR)$(HEEKSCADDIR)/bitmaps"
+	test -z "$(HEEKSCADDIR)/icons" || $(mkdir_p) "$(DESTDIR)$(HEEKSCADDIR)/icons"
+	test -z "$(PIXMAPSDIR)" || $(mkdir_p) "$(DESTDIR)$(PIXMAPSDIR)"
+	test -z "$(APPSDIR)" || $(mkdir_p) "$(DESTDIR)$(APPSDIR)"
+	cp $(EXECUTABLE) $(DESTDIR)$(HEEKSCADDIR)/
+	cp ../bitmaps/*.png $(DESTDIR)$(HEEKSCADDIR)/bitmaps/
+	cp ../bitmaps/*.svg $(DESTDIR)$(HEEKSCADDIR)/bitmaps/
+	cp ../bitmaps/*.glf $(DESTDIR)$(HEEKSCADDIR)/bitmaps/
+	cp ../icons/*.png $(DESTDIR)$(HEEKSCADDIR)/icons/
+	cp ../bitmaps/cyl.png $(DESTDIR)$(PIXMAPSDIR)/HeeksCAD.png
+	cp ../HeeksCAD.desktop $(DESTDIR)$(APPSDIR)/
 
+uninstall:
+#	 rm -rf $(DESTDIR)$(HEEKSCADDIR)
+	rm -rf $(DESTDIR)$(HEEKSCADDIR)/bitmaps
+	rm -rf $(DESTDIR)$(HEEKSCADDIR)/icons
+	rm $(DESTDIR)$(HEEKSCADDIR)/HeeksCAD
+	rm $(DESTDIR)$(PIXMAPSDIR)/HeeksCAD.png
+	rm $(DESTDIR)$(APPSDIR)/HeeksCAD.desktop
