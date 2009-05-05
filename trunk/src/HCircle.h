@@ -29,7 +29,11 @@ public:
 	void GetBox(CBox &box);
 	const wxChar* GetTypeString(void)const{return _("Circle");}
 	HeeksObj *MakeACopy(void)const;
+#ifdef WIN32
 	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/circle");}
+#else
+	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/../share/heekscad/icons/circle");}
+#endif
 	bool ModifyByMatrix(const double *mat);
 	void SetColor(const HeeksColor &col){color = col;}
 	const HeeksColor* GetColor()const{return &color;}

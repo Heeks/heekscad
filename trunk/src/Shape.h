@@ -16,7 +16,11 @@ class CFaceList: public ObjList{
 public:
 	const wxChar* GetTypeString(void)const{return _("Faces");}
 	HeeksObj *MakeACopy(void)const{ return new CFaceList(*this);}
+#ifdef WIN32
 	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/faces");}
+#else
+	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/../share/heekscad/icons/faces");}
+#endif
 };
 
 class CEdgeList: public ObjList{
@@ -24,7 +28,11 @@ class CEdgeList: public ObjList{
 public:
 	const wxChar* GetTypeString(void)const{return _("Edges");}
 	HeeksObj *MakeACopy(void)const{ return new CEdgeList(*this);}
+#ifdef WIN32
 	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/edges");}
+#else
+	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/../share/heekscad/icons/edges");}
+#endif
 };
 
 class CShape:public ObjList{
