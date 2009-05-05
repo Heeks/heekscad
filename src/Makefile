@@ -338,7 +338,7 @@ install:
 	cp ../HeeksCAD.desktop $(DESTDIR)$(APPSDIR)/
 
 uninstall:
-#	 rm -rf $(DESTDIR)$(HEEKSCADDIR)
+	rm -rf $(DESTDIR)$(HEEKSCADDIR)
 	rm -rf $(DESTDIR)$(HEEKSCADDIR)/bitmaps
 	rm -rf $(DESTDIR)$(HEEKSCADDIR)/icons
 	rm $(DESTDIR)$(HEEKSCADDIR)/HeeksCAD
