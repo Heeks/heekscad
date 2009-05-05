@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Application
-Exec=/opt/HeeksCAD/HeeksCAD
+Exec=/usr/bin/HeeksCAD
 Icon=HeeksCAD.png
 Terminal=false
 Name=HeeksCAD
