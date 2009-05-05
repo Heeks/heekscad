@@ -1,11 +1,9 @@
-PREFIX=/usr
-#BINDIR=$(PREFIX)/bin
+PREFIX=/usr/local
+BINDIR=$(PREFIX)/bin
 DATADIR=$(PREFIX)/share
+HEEKSCADDIR=$(DATADIR)/heekscad
 PIXMAPSDIR=$(DATADIR)/pixmaps
 APPSDIR=$(DATADIR)/applications
-#use /opt/HeeksCAD untill we find a way to respect linux FHS
-INSTALLPREFIX=/opt
-HEEKSCADDIR=$(INSTALLPREFIX)/HeeksCAD
 mkdir_p= mkdir -p
 
 WXCFLAGS=$(shell wx-config --cflags)
@@ -24,312 +22,313 @@ OBJECTS=AboutBox.o advprops.o BezierCurve.o Cone.o ConversionTools.o CoordinateS
 EXECUTABLE=../HeeksCAD
 
 ${EXECUTABLE}: ${OBJECTS}
-	gcc -o ${EXECUTABLE} ${OBJECTS} -lstdc++ -lGLU -lGL -lwx_gtk2${WX_LIB_LETTER}_richtext-2.8 -lwx_gtk2${WX_LIB_LETTER}_aui-2.8 -lwx_gtk2${WX_LIB_LETTER}_xrc-2.8 -lwx_gtk2${WX_LIB_LETTER}_qa-2.8 -lwx_gtk2${WX_LIB_LETTER}_html-2.8 -lwx_gtk2${WX_LIB_LETTER}_adv-2.8 -lwx_gtk2${WX_LIB_LETTER}_core-2.8 -lwx_base${WX_LIB_LETTER}_xml-2.8 -lwx_base${WX_LIB_LETTER}_net-2.8 -lwx_base${WX_LIB_LETTER}-2.8 -lwx_gtk2${WX_LIB_LETTER}_gl-2.8 -lTKVRML -lTKSTL -lTKBRep -lTKIGES -lTKShHealing -lTKSTEP -lTKSTEP209 -lTKSTEPAttr -lTKSTEPBase -lTKXSBase -lTKShapeSchema -lFWOSPlugin -lTKBool -lTKCAF -lTKCDF -lTKernel -lTKFeat -lTKFillet -lTKG2d -lTKG3d -lTKGeomAlgo -lTKGeomBase -lTKHLR -lTKMath -lTKOffset -lTKPrim -lTKPShape -lTKService -lTKTopAlgo -lTKV2d -lTKV3d -lTKMesh -lTKAdvTools -lTKBO -lTKXDESTEP -lTKXCAF -lTKXCAFSchema -lTKLCAF -lTKPLCAF
+	$(CC) -o ${EXECUTABLE} ${OBJECTS} -lstdc++ -lGLU -lGL -lwx_gtk2${WX_LIB_LETTER}_richtext-2.8 -lwx_gtk2${WX_LIB_LETTER}_aui-2.8 -lwx_gtk2${WX_LIB_LETTER}_xrc-2.8 -lwx_gtk2${WX_LIB_LETTER}_qa-2.8 -lwx_gtk2${WX_LIB_LETTER}_html-2.8 -lwx_gtk2${WX_LIB_LETTER}_adv-2.8 -lwx_gtk2${WX_LIB_LETTER}_core-2.8 -lwx_base${WX_LIB_LETTER}_xml-2.8 -lwx_base${WX_LIB_LETTER}_net-2.8 -lwx_base${WX_LIB_LETTER}-2.8 -lwx_gtk2${WX_LIB_LETTER}_gl-2.8 -lTKVRML -lTKSTL -lTKBRep -lTKIGES -lTKShHealing -lTKSTEP -lTKSTEP209 -lTKSTEPAttr -lTKSTEPBase -lTKXSBase -lTKShapeSchema -lFWOSPlugin -lTKBool -lTKCAF -lTKCDF -lTKernel -lTKFeat -lTKFillet -lTKG2d -lTKG3d -lTKGeomAlgo -lTKGeomBase -lTKHLR -lTKMath -lTKOffset -lTKPrim -lTKPShape -lTKService -lTKTopAlgo -lTKV2d -lTKV3d -lTKMesh -lTKAdvTools -lTKBO -lTKXDESTEP -lTKXCAF -lTKXCAFSchema -lTKLCAF -lTKPLCAF
 
 AboutBox.o: AboutBox.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 advprops.o: advprops.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 BezierCurve.o: BezierCurve.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 Cone.o: Cone.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 ConversionTools.o: ConversionTools.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 CoordinateSystem.o: CoordinateSystem.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 Cuboid.o: Cuboid.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 Cylinder.o: Cylinder.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 DigitizedPoint.o: DigitizedPoint.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 DigitizeMode.o: DigitizeMode.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 DimensionDrawing.o: DimensionDrawing.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 Drawing.o: Drawing.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 dxf.o: dxf.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 Edge.o: Edge.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 Face.o: Face.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 Geom.o: Geom.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 glfont.o: glfont.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 GLList.o: GLList.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 GraphicsCanvas.o: GraphicsCanvas.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 Grid.o: Grid.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 Gripper.o: Gripper.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 GripperSelTransform.o: GripperSelTransform.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 Group.o: Group.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 HArc.o: HArc.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 HCircle.o: HCircle.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 HDimension.o: HDimension.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 HeeksCAD.o: HeeksCAD.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 HeeksFrame.o: HeeksFrame.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 HeeksPrintout.o: HeeksPrintout.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 HILine.o: HILine.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 HImage.o: HImage.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 History.o: History.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 HLine.o: HLine.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 HPoint.o: HPoint.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 HEllipse.o: HEllipse.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 	
 HSpline.o: HSpline.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 HText.o: HText.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 HXml.o: HXml.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 Images.o: Images.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 InputModeCanvas.o: InputModeCanvas.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 LineArcDrawing.o: LineArcDrawing.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 Loop.o: Loop.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 MagDragWindow.o: MagDragWindow.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 manager.o: manager.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 MarkedList.o: MarkedList.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 ObjPropsCanvas.o: ObjPropsCanvas.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 odcombo.o: odcombo.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 OptionsCanvas.o: OptionsCanvas.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 Plugins.o: Plugins.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 PointDrawing.o: PointDrawing.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 PointOrWindow.o: PointOrWindow.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 PropertiesCanvas.o: PropertiesCanvas.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 PropertyTrsf.o: PropertyTrsf.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 propgrid.o: propgrid.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 props.o: props.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 RegularShapesDrawing.o: RegularShapesDrawing.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 RemoveOrAddTool.o: RemoveOrAddTool.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 RuledSurface.o: RuledSurface.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 Ruler.o: Ruler.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 SelectMode.o: SelectMode.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 Shape.o: Shape.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 ShapeData.o: ShapeData.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 Sketch.o: Sketch.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 Solid.o: Solid.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 Sphere.o: Sphere.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 StlSolid.o: StlSolid.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 StretchTool.o: StretchTool.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 TransformTool.o: TransformTool.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 TransformTools.o: TransformTools.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 TreeCanvas.o: TreeCanvas.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 ViewPoint.o: ViewPoint.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 ViewRotating.o: ViewRotating.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 ViewZooming.o: ViewZooming.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 Window.o: Window.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 Wire.o: Wire.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 wxImageLoader.o: wxImageLoader.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 HeeksCADInterface.o: ../interface/HeeksCADInterface.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 HeeksColor.o: ../interface/HeeksColor.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 HeeksObj.o: ../interface/HeeksObj.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 LeftAndRight.o: ../interface/LeftAndRight.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 MarkedObject.o: ../interface/MarkedObject.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 ObjList.o: ../interface/ObjList.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 PropertyCheck.o: ../interface/PropertyCheck.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 PropertyChoice.o: ../interface/PropertyChoice.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 PropertyColor.o: ../interface/PropertyColor.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 PropertyDouble.o: ../interface/PropertyDouble.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 PropertyLength.o: ../interface/PropertyLength.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 PropertyVertex.o: ../interface/PropertyVertex.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 PropertyInt.o: ../interface/PropertyInt.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 PropertyList.o: ../interface/PropertyList.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 PropertyString.o: ../interface/PropertyString.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 strconv.o: ../interface/strconv.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 ToolImage.o: ../interface/ToolImage.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 ToolList.o: ../interface/ToolList.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 tinyxml.o: ../tinyxml/tinyxml.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 #tinystr.o: ../tinyxml/tinystr.cpp
-#	gcc -c $? ${CCFLAGS} -o $@
+#	$(CC) -c $? ${CCFLAGS} -o $@
 
 tinyxmlerror.o: ../tinyxml/tinyxmlerror.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 tinyxmlparser.o: ../tinyxml/tinyxmlparser.cpp
-	gcc -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
 
 clean:
 	-rm ${EXECUTABLE} ${OBJECTS}
 
 install:
-	test -z "$(HEEKSCADDIR)" || $(mkdir_p) "$(DESTDIR)$(HEEKSCADDIR)"
-	test -z "$(HEEKSCADDIR)/bitmaps" || $(mkdir_p) "$(DESTDIR)$(HEEKSCADDIR)/bitmaps"
-	test -z "$(HEEKSCADDIR)/icons" || $(mkdir_p) "$(DESTDIR)$(HEEKSCADDIR)/icons"
-	test -z "$(PIXMAPSDIR)" || $(mkdir_p) "$(DESTDIR)$(PIXMAPSDIR)"
-	test -z "$(APPSDIR)" || $(mkdir_p) "$(DESTDIR)$(APPSDIR)"
-	cp $(EXECUTABLE) $(DESTDIR)$(HEEKSCADDIR)/
+	$(mkdir_p) "$(DESTDIR)$(BINDIR)/"
+	$(mkdir_p) "$(DESTDIR)$(HEEKSCADDIR)/bitmaps"
+	$(mkdir_p) "$(DESTDIR)$(HEEKSCADDIR)/icons"
+	$(mkdir_p) "$(DESTDIR)$(PIXMAPSDIR)"
+	$(mkdir_p) "$(DESTDIR)$(APPSDIR)"
+	strip $(EXECUTABLE)
+	cp $(EXECUTABLE) $(DESTDIR)$(BINDIR)/
 	cp ../bitmaps/*.png $(DESTDIR)$(HEEKSCADDIR)/bitmaps/
 	cp ../bitmaps/*.svg $(DESTDIR)$(HEEKSCADDIR)/bitmaps/
 	cp ../bitmaps/*.glf $(DESTDIR)$(HEEKSCADDIR)/bitmaps/
@@ -338,9 +337,7 @@ install:
 	cp ../HeeksCAD.desktop $(DESTDIR)$(APPSDIR)/
 
 uninstall:
-	rm -rf $(DESTDIR)$(HEEKSCADDIR)
-	rm -rf $(DESTDIR)$(HEEKSCADDIR)/bitmaps
-	rm -rf $(DESTDIR)$(HEEKSCADDIR)/icons
-	rm $(DESTDIR)$(HEEKSCADDIR)/HeeksCAD
-	rm $(DESTDIR)$(PIXMAPSDIR)/HeeksCAD.png
-	rm $(DESTDIR)$(APPSDIR)/HeeksCAD.desktop
+	-rm -rf $(DESTDIR)$(HEEKSCADDIR)
+	-rm $(DESTDIR)$(BINDIR)/HeeksCAD
+	-rm $(DESTDIR)$(PIXMAPSDIR)/HeeksCAD.png
+	-rm $(DESTDIR)$(APPSDIR)/HeeksCAD.desktop
