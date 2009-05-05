@@ -27,7 +27,7 @@ build-stamp: configure-stamp
 	dh_testdir
 
 	# Add here commands to compile the package.
-	$(MAKE) -C src/
+	$(MAKE) -C src/ PREFIX=/usr
 	#docbook-to-man debian/heekscad.sgml > heekscad.1
 
 	touch $@
@@ -49,23 +49,7 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the package into debian/heekscad.
-#	$(MAKE) -C src/ INSTALLPREFIX=$(CURDIR)/debian/heekscad install
-#	$(MAKE) -C src/ DESTDIR=$(CURDIR)/debian/heekscad install
-
-	mkdir -p "$(CURDIR)/debian/heekscad/usr/bin/"
-	mkdir -p "$(CURDIR)/debian/heekscad/usr/share/heekscad/bitmaps"
-	mkdir -p "$(CURDIR)/debian/heekscad/usr/share/heekscad/icons"
-	mkdir -p "$(CURDIR)/debian/heekscad/usr/share/pixmaps/"
-	mkdir -p "$(CURDIR)/debian/heekscad/usr/share/applications"
-	strip HeeksCAD
-	cp HeeksCAD $(CURDIR)/debian/heekscad/usr/bin/
-	cp bitmaps/*.png $(CURDIR)/debian/heekscad/usr/share/heekscad/bitmaps/
-	cp bitmaps/*.svg $(CURDIR)/debian/heekscad/usr/share/heekscad/bitmaps/
-	cp bitmaps/*.glf $(CURDIR)/debian/heekscad/usr/share/heekscad/bitmaps/
-	cp icons/*.png $(CURDIR)/debian/heekscad/usr/share/heekscad/icons/
-	cp bitmaps/cyl.png $(CURDIR)/debian/heekscad/usr/share/pixmaps/HeeksCAD.png
-	cp HeeksCAD.desktop $(CURDIR)/debian/heekscad/usr/share/applications/
-
+	$(MAKE) -C src/ PREFIX=/usr DESTDIR=$(CURDIR)/debian/heekscad install
 
 # Build architecture-independent files here.
 binary-indep: build install
