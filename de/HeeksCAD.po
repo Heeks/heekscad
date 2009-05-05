@@ -1,11 +1,3 @@
-# translation of HeeksCAD(de).
-# Copyright (C) 2009 THE HeeksCAD(de)'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the HeeksCAD(de) package.
-# <>, 2009.
-# , fuzzy
-# <>, 2009.
-# 
-# 
 msgid ""
 msgstr ""
 "Project-Id-Version: HeeksCAD 0.1\n"
@@ -18,1085 +10,756 @@ msgstr ""
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit"
 
-#: /home/hans/Desktop/HeeksCAD/src/AboutBox.cpp:17
+
 msgid "OK"
 msgstr "OK"
 
-#: /home/hans/Desktop/HeeksCAD/src/Cone.cpp:169
-#: /home/hans/Desktop/HeeksCAD/src/Cylinder.cpp:58
 msgid "centre pos"
 msgstr "Mittelpunkt Position"
 
-#: /home/hans/Desktop/HeeksCAD/src/Cone.cpp:170
 msgid "direction"
 msgstr "Richtung"
 
-#: /home/hans/Desktop/HeeksCAD/src/Cone.cpp:171
 msgid "x direction"
 msgstr "X Richtung"
 
-#: /home/hans/Desktop/HeeksCAD/src/Cone.cpp:172
 msgid "r1"
 msgstr "r1"
 
-#: /home/hans/Desktop/HeeksCAD/src/Cone.cpp:173
 msgid "r2"
 msgstr "r2"
 
-#: /home/hans/Desktop/HeeksCAD/src/Cone.cpp:174
-#: /home/hans/Desktop/HeeksCAD/src/Cylinder.cpp:60
-#: /home/hans/Desktop/HeeksCAD/src/RuledSurface.cpp:66
 msgid "height"
 msgstr "Höhe"
 
-#: /home/hans/Desktop/HeeksCAD/src/Cone.cpp:231
 msgid "cone must not have both radiuses the same"
 msgstr "Beim Kegel nicht 2 gleiche Radien "
 
-#: /home/hans/Desktop/HeeksCAD/src/ConversionTools.cpp:163
 msgid "Fatal Error converting sketch to face"
 msgstr "Fehler beim belegen der Zeichnung mit einer Oberfläche"
 
-#: /home/hans/Desktop/HeeksCAD/src/CoordinateSystem.cpp:1236
 msgid "Set position and orientation by picking 3 points"
 msgstr "Setze Position und Richtung durch benennen 3er Punkte"
 
-#: /home/hans/Desktop/HeeksCAD/src/CoordinateSystem.cpp:1251
 msgid "Set this coordinate system as the active one"
 msgstr "Setze dieses Koordinatensystem auf Aktiv"
 
-#: /home/hans/Desktop/HeeksCAD/src/CoordinateSystem.cpp:1266
 msgid "Set world coordinate system active"
 msgstr "Setze World Koordinatensystem aktiv"
 
-#: /home/hans/Desktop/HeeksCAD/src/CoordinateSystem.cpp:1284
-#: /home/hans/Desktop/HeeksCAD/src/HPoint.cpp:91
 msgid "position"
 msgstr "Position"
 
-#: /home/hans/Desktop/HeeksCAD/src/CoordinateSystem.cpp:1285
 msgid "x axis"
 msgstr "X Achse"
 
-#: /home/hans/Desktop/HeeksCAD/src/CoordinateSystem.cpp:1286
 msgid "y axis"
 msgstr "Y Achse"
 
-#: /home/hans/Desktop/HeeksCAD/src/CoordinateSystem.cpp:1288
 msgid "Vertical Angle"
 msgstr "Vertikaler Winkel"
 
-#: /home/hans/Desktop/HeeksCAD/src/CoordinateSystem.cpp:1289
 msgid "Horizontal Angle"
 msgstr "Horizontaler Winkel"
 
-#: /home/hans/Desktop/HeeksCAD/src/CoordinateSystem.cpp:1290
 msgid "Twist Angle"
 msgstr "Dreh Winkel"
 
-#: /home/hans/Desktop/HeeksCAD/src/CoordinateSystem.cpp:1419
 msgid "Pick the location"
 msgstr "Wähle den Ort"
 
-#: /home/hans/Desktop/HeeksCAD/src/CoordinateSystem.cpp:1420
 msgid "Pick a point on the x-axis"
 msgstr "Wähle einen Punkt auf der X-Achse"
 
-#: /home/hans/Desktop/HeeksCAD/src/CoordinateSystem.cpp:1421
 msgid "Pick a point where y > 0"
 msgstr "Wähle einen Punkt wo Y>0 ist"
 
-#: /home/hans/Desktop/HeeksCAD/src/Cuboid.cpp:63
 msgid "datum corner"
 msgstr "Datums Ecke"
 
-#: /home/hans/Desktop/HeeksCAD/src/Cuboid.cpp:64
 msgid "width ( x )"
 msgstr "Grösse X"
 
-#: /home/hans/Desktop/HeeksCAD/src/Cuboid.cpp:65
 msgid "height( y )"
 msgstr "Höhe Y"
 
-#: /home/hans/Desktop/HeeksCAD/src/Cuboid.cpp:66
 msgid "depth ( z )"
 msgstr "Tiefe Z"
 
-#: /home/hans/Desktop/HeeksCAD/src/Cylinder.cpp:59
-#: /home/hans/Desktop/HeeksCAD/src/HArc.cpp:188
-#: /home/hans/Desktop/HeeksCAD/src/HCircle.cpp:174
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:535
-#: /home/hans/Desktop/HeeksCAD/src/RegularShapesDrawing.cpp:464
-#: /home/hans/Desktop/HeeksCAD/src/RegularShapesDrawing.cpp:465
-#: /home/hans/Desktop/HeeksCAD/src/Sphere.cpp:53
 msgid "radius"
 msgstr "Radius"
 
-#: /home/hans/Desktop/HeeksCAD/src/DigitizeMode.cpp:33
 msgid "Digitize Mode"
 msgstr "Digitalisieren Mode"
 
-#: /home/hans/Desktop/HeeksCAD/src/DigitizeMode.cpp:299
 msgid "X"
 msgstr "X"
 
-#: /home/hans/Desktop/HeeksCAD/src/DigitizeMode.cpp:300
 msgid "Y"
 msgstr "Y"
 
-#: /home/hans/Desktop/HeeksCAD/src/DigitizeMode.cpp:301
 msgid "Z"
 msgstr "Z"
 
-#: /home/hans/Desktop/HeeksCAD/src/DigitizeMode.cpp:312
 msgid "Error! The 'Stop Picking' button shouldn't have been available!"
 msgstr "Fehler! Der \"Stop-Picking\"-Button sollte nicht zur Verfügung stehen"
 
-#: /home/hans/Desktop/HeeksCAD/src/DigitizeMode.cpp:315
-#: /home/hans/Desktop/HeeksCAD/src/SelectMode.cpp:460
 msgid "Stop Picking"
 msgstr "Stop·Picking"
 
-#: /home/hans/Desktop/HeeksCAD/src/DigitizeMode.cpp:317
-#: /home/hans/Desktop/HeeksCAD/src/SelectMode.cpp:462
 msgid "Finish picking"
 msgstr "Finish·picking"
 
-#: /home/hans/Desktop/HeeksCAD/src/DimensionDrawing.cpp:97
 msgid "between two points"
 msgstr "zwischen 2 Punkten"
 
-#: /home/hans/Desktop/HeeksCAD/src/DimensionDrawing.cpp:98
 msgid "orthogonal"
 msgstr "orthogonal"
 
-#: /home/hans/Desktop/HeeksCAD/src/DimensionDrawing.cpp:100
 msgid "mode"
 msgstr "Mode"
 
-#: /home/hans/Desktop/HeeksCAD/src/Drawing.cpp:173
 msgid "Stop drawing"
 msgstr "Stop mit zeichnen"
 
-#: /home/hans/Desktop/HeeksCAD/src/Drawing.cpp:175
 msgid "Finish drawing"
 msgstr "Fertig mit zeichnen"
 
-#: /home/hans/Desktop/HeeksCAD/src/Drawing.cpp:191
 msgid "Add point"
 msgstr "Punkt hinzufügen"
 
-#: /home/hans/Desktop/HeeksCAD/src/Drawing.cpp:193
 msgid "Add a point to drawing"
 msgstr "Füge einen Punkt zur Zeichnung hinzu"
 
-#: /home/hans/Desktop/HeeksCAD/src/Drawing.cpp:208
 msgid "Get Position"
 msgstr "Hole Position"
 
-#: /home/hans/Desktop/HeeksCAD/src/Drawing.cpp:210
 msgid "Pick position without adding to the drawing"
 msgstr "Wähle eine Position ohne sie zur Zeichnung hinzuzufügen"
 
-#: /home/hans/Desktop/HeeksCAD/src/Edge.cpp:148
 msgid "Blend"
 msgstr "Blend"
 
-#: /home/hans/Desktop/HeeksCAD/src/Edge.cpp:155
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:872
 msgid "Enter Blend Radius"
 msgstr "Enter·Blend·Radius"
 
-#: /home/hans/Desktop/HeeksCAD/src/Edge.cpp:155
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:872
 msgid "Radius"
 msgstr "Radius"
 
-#: /home/hans/Desktop/HeeksCAD/src/Edge.cpp:178
-#: /home/hans/Desktop/HeeksCAD/src/Shape.cpp:600
-#: /home/hans/Desktop/HeeksCAD/src/Shape.cpp:611
 msgid "Solid with edge blend"
 msgstr "3D mit Kantenausblendung"
 
-#: /home/hans/Desktop/HeeksCAD/src/Edge.cpp:185
-#: /home/hans/Desktop/HeeksCAD/src/Edge.cpp:189
-#: /home/hans/Desktop/HeeksCAD/src/Shape.cpp:617
-#: /home/hans/Desktop/HeeksCAD/src/Shape.cpp:621
 msgid "A fatal error happened during Blend"
 msgstr "Schwerer Ausnahmefehler beim verbinden ;)"
 
-#: /home/hans/Desktop/HeeksCAD/src/Face.cpp:349
 msgid "surface type"
 msgstr "surface·type"
 
-#: /home/hans/Desktop/HeeksCAD/src/Face.cpp:360
 msgid "Make Sketch"
 msgstr "Erstelle Zeichnung"
 
-#: /home/hans/Desktop/HeeksCAD/src/Face.cpp:399
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:456
 msgid "unknown"
 msgstr "Unbekannt"
 
-#: /home/hans/Desktop/HeeksCAD/src/Face.cpp:403
 msgid "plane"
 msgstr "Fläche"
 
-#: /home/hans/Desktop/HeeksCAD/src/Face.cpp:407
 msgid "cylinder"
 msgstr "Zylinder"
 
-#: /home/hans/Desktop/HeeksCAD/src/Face.cpp:411
 msgid "cone"
 msgstr "Kegel"
 
-#: /home/hans/Desktop/HeeksCAD/src/Face.cpp:415
 msgid "sphere"
 msgstr "Kugel"
 
-#: /home/hans/Desktop/HeeksCAD/src/Face.cpp:419
 msgid "torus"
 msgstr "Torus"
 
-#: /home/hans/Desktop/HeeksCAD/src/Face.cpp:423
 msgid "bezier"
 msgstr "bezier"
 
-#: /home/hans/Desktop/HeeksCAD/src/Face.cpp:427
 msgid "bspline"
 msgstr "bspline"
 
-#: /home/hans/Desktop/HeeksCAD/src/Face.cpp:431
 msgid "revolution"
 msgstr "revolution"
 
-#: /home/hans/Desktop/HeeksCAD/src/Face.cpp:435
 msgid "extrusion"
 msgstr "extrusion"
 
-#: /home/hans/Desktop/HeeksCAD/src/Face.cpp:439
 msgid "offset"
 msgstr "Offset"
 
-#: /home/hans/Desktop/HeeksCAD/src/HArc.cpp:182
-#: /home/hans/Desktop/HeeksCAD/src/HILine.cpp:122
-#: /home/hans/Desktop/HeeksCAD/src/HLine.cpp:107
 msgid "start"
 msgstr "Start"
 
-#: /home/hans/Desktop/HeeksCAD/src/HArc.cpp:183
-#: /home/hans/Desktop/HeeksCAD/src/HILine.cpp:123
-#: /home/hans/Desktop/HeeksCAD/src/HLine.cpp:108
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2106
 msgid "end"
 msgstr "Ende"
 
-#: /home/hans/Desktop/HeeksCAD/src/HArc.cpp:184
-#: /home/hans/Desktop/HeeksCAD/src/HCircle.cpp:172
-#: /home/hans/Desktop/HeeksCAD/src/HEllipse.cpp:247
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2108
-#: /home/hans/Desktop/HeeksCAD/src/Sphere.cpp:52
 msgid "centre"
 msgstr "Mittelpunkt"
 
-#: /home/hans/Desktop/HeeksCAD/src/HArc.cpp:185
-#: /home/hans/Desktop/HeeksCAD/src/HCircle.cpp:173
-#: /home/hans/Desktop/HeeksCAD/src/HEllipse.cpp:248
 msgid "axis"
 msgstr "Axe"
 
-#: /home/hans/Desktop/HeeksCAD/src/HArc.cpp:187
 msgid "length"
 msgstr "Länge"
 
-#: /home/hans/Desktop/HeeksCAD/src/HDimension.cpp:147
-#: /home/hans/Desktop/HeeksCAD/src/HText.cpp:121
 msgid "orientation"
 msgstr "Richtung"
 
-#: /home/hans/Desktop/HeeksCAD/src/HEllipse.cpp:249
 msgid "major radius"
 msgstr "major·radius"
 
-#: /home/hans/Desktop/HeeksCAD/src/HEllipse.cpp:250
 msgid "minor radius"
 msgstr "minor·radius"
 
-#: /home/hans/Desktop/HeeksCAD/src/HEllipse.cpp:251
 msgid "rotation"
 msgstr "Drehung"
 
-#: /home/hans/Desktop/HeeksCAD/src/HEllipse.cpp:252
 msgid "start angle"
 msgstr "Start Winkel"
 
-#: /home/hans/Desktop/HeeksCAD/src/HEllipse.cpp:253
 msgid "end angle"
 msgstr "End Winkel"
 
-#: /home/hans/Desktop/HeeksCAD/src/HILine.cpp:125
-#: /home/hans/Desktop/HeeksCAD/src/HLine.cpp:110
 msgid "Length"
 msgstr "Länge"
 
-#: /home/hans/Desktop/HeeksCAD/src/HImage.cpp:150
 msgid "Picture - "
 msgstr "Bild-"
 
-#: /home/hans/Desktop/HeeksCAD/src/HSpline.cpp:147
-#: /home/hans/Desktop/HeeksCAD/src/HSpline.cpp:158
-#: /home/hans/Desktop/HeeksCAD/src/HSpline.cpp:160
-#, c-format
 msgid "%s %d"
 msgstr "%s·%d"
 
-#: /home/hans/Desktop/HeeksCAD/src/HSpline.cpp:147
 msgid "Knot"
 msgstr "Knot"
 
-#: /home/hans/Desktop/HeeksCAD/src/HSpline.cpp:158
 msgid "Pole"
 msgstr "Pole"
 
-#: /home/hans/Desktop/HeeksCAD/src/HSpline.cpp:160
-#: /home/hans/Desktop/HeeksCAD/src/advprops.cpp:543
 msgid "Weight"
 msgstr "Gewicht"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:130
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:437
 msgid "Untitled"
 msgstr "Unbekannt"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:799
 msgid "This is not an SVG document!"
 msgstr "Das ist kein svg Dokument"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:894
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:1212
 msgid "Invalid file type chosen"
 msgstr "Falscher Dateityp"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:894
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:1212
 msgid "expecting"
 msgstr "erwartet"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:978
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:1024
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:1052
 msgid "couldn't open file"
 msgstr "Kann Datei nicht öffnen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:1175
 msgid "Save graphical data file"
 msgstr "Speichere Bild Datei"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:1489
 msgid "Exit Full Screen Mode"
 msgstr "Exit·Full·Screen·Mode"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:1490
 msgid "Show Full Screen"
 msgstr "Ganzer Bildschirm"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2039
-#: /home/hans/Desktop/HeeksCAD/src/SelectMode.cpp:54
 msgid "view options"
 msgstr "Ansicht"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2043
 msgid "stay upright"
 msgstr "Draufsicht"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2044
 msgid "free"
 msgstr "Frei"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2045
 msgid "rotate mode"
 msgstr "rotate·mode"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2049
 msgid "none"
 msgstr "none"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2050
 msgid "input mode title"
 msgstr "nput·mode·title"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2051
 msgid "full help"
 msgstr "full·help"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2052
-#: /home/hans/Desktop/HeeksCAD/src/SelectMode.cpp:54
 msgid "screen text"
 msgstr "OSD"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2054
 msgid "antialiasing"
 msgstr "antialiasing"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2056
 msgid "fixed light"
 msgstr "fixed·light"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2058
 msgid "reverse mouse wheel"
 msgstr "Reverse·Mausrad"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2059
 msgid "reverse zooming mode"
 msgstr "Umgekehrter Zoommodus"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2060
 msgid "Ctrl key does rotate"
 msgstr "Ctrl Taste Drehen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2061
 msgid "show datum"
 msgstr "Zeige Datum"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2062
 msgid "datum is solid"
 msgstr "Datum fest"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2063
 msgid "datum size"
 msgstr "Datum Grösse"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2064
 msgid "datum size is pixels not mm"
 msgstr "Datum Grösse in Pixel statt mm"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2065
 msgid "show ruler"
 msgstr "Zeige Lineal"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2066
 msgid "background color"
 msgstr "Hintergrundfarbe"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2069
 msgid "no grid"
 msgstr "Kein Grid"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2070
 msgid "faint color"
 msgstr "schwache Farbe"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2071
 msgid "alpha blending"
 msgstr "alpha·blending"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2072
 msgid "colored alpha blending"
 msgstr "farbiges alpha-blending"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2073
 msgid "grid mode"
 msgstr "grid·mode"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2075
 msgid "perspective"
 msgstr "Perspektive"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2092
 msgid "tool icon size"
 msgstr "Werkzeug Icon Grösse"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2097
 msgid "mm"
 msgstr "mm"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2098
 msgid "inch"
 msgstr "inch"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2101
 msgid "units"
 msgstr "Einheiten"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2105
 msgid "digitizing"
 msgstr "digitizing"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2107
 msgid "intersection"
 msgstr "Kreuzung"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2109
 msgid "midpoint"
 msgstr "Mittelpunkt "
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2110
 msgid "nearest"
 msgstr "nächste"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2111
 msgid "tangent"
 msgstr "tangent"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2112
 msgid "radius for undefined circles"
 msgstr "Radius für undeffinierte Kreise"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2113
 msgid "coordinates"
 msgstr "Koordinaten"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2114
 msgid "screen"
 msgstr "Bildschirm"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2115
 msgid "grid size"
 msgstr "Grid Grösse"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2116
 msgid "snap to grid"
 msgstr "Am Grid einrasten"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2119
 msgid "drawing"
 msgstr "zeichnen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2120
 msgid "current color"
 msgstr "Derzeitige Farbe"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2121
 msgid "construction color"
 msgstr "Konstruktions Farbe"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2122
 msgid "geometry tolerance"
 msgstr "geometrie·tolerance"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2133
 msgid "selection filter"
 msgstr "selection·filter"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2134
 msgid "point"
 msgstr "Punkt"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2135
 msgid "line"
 msgstr "Linie"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2136
 msgid "arc"
 msgstr "Bogen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2137
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:521
 msgid "infinite line"
 msgstr "unendliche Linie"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2138
 msgid "circle"
 msgstr "Kreis"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2139
 msgid "edge"
 msgstr "Ecke"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2140
 msgid "face"
 msgstr "Oberfläche"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2141
 msgid "solid"
 msgstr "3D bearbeiten"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2142
 msgid "stl_solid"
 msgstr "stl_solid"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2143
 msgid "wire"
 msgstr "wire"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2144
 msgid "sketch"
 msgstr "zeichne"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2145
 msgid "image"
 msgstr "Bild"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2146
 msgid "coordinate system"
 msgstr "Koordinatensystem"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2147
 msgid "text"
 msgstr "Text"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2148
 msgid "dimension"
 msgstr "Dimension"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2149
 msgid "ruler"
 msgstr "Lineal"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2152
 msgid "file options"
 msgstr "Datei·Optionen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2153
 msgid "DXF"
 msgstr "DXF"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2154
 msgid "make sketch"
 msgstr "Erstelle Zeichnung"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2220
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2225
 msgid "Known Files"
 msgstr "Bekannte Dateien"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2220
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2225
 msgid "Heeks files"
 msgstr "Heeks Dateien"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2220
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2225
 msgid "IGES files"
 msgstr "IGES Dateien"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2220
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2225
 msgid "STEP files"
 msgstr "STEP Dateien"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2220
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2225
 msgid "STL files"
 msgstr "STL Dateien"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2220
 msgid "Scalar Vector Graphics files"
 msgstr "SVG Dateien"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2220
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2225
 msgid "DXF files"
 msgstr "DXF Dateien"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2220
 msgid "Picture files"
 msgstr "Bild Dateien"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2263
 msgid "Unmark"
 msgstr "Markierung löschen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2266
 msgid "Mark"
 msgstr "Markieren"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2269
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:266
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:335
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1469
 msgid "Properties"
 msgstr "Einstellungen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2593
 msgid "Save changes to file"
 msgstr "Änderungen abspeichern"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2693
-#: /home/hans/Desktop/HeeksCAD/src/ObjPropsCanvas.cpp:117
 msgid "Apply"
 msgstr "Änderungen anwenden"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2695
 msgid "Accept value and continue"
 msgstr "Einstellungen übernehmen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2703
-#: /home/hans/Desktop/HeeksCAD/src/ObjPropsCanvas.cpp:118
-#: /home/hans/Desktop/HeeksCAD/src/props.cpp:1853
-#: /home/hans/Desktop/HeeksCAD/src/props.cpp:2085
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksCAD.cpp:2705
 msgid "Cancel operation"
 msgstr "Operation abbrechen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:176
-#: /home/hans/Desktop/HeeksCAD/src/Plugins.cpp:139
 msgid "New"
 msgstr "Neu"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:177
 msgid "Open"
 msgstr "Öffnen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:178
 msgid "Save"
 msgstr "Speichern"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:180
 msgid "Print"
 msgstr "Drucken"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:181
 msgid "Page Setup"
 msgstr "Seiten Layout"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:182
 msgid "Print Preview"
 msgstr "Druckvorschau"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:185
 msgid "Open Recent"
 msgstr "Zuletzt geöffnet"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:186
 msgid "Import"
 msgstr "Importieren"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:187
 msgid "About"
 msgstr "Über"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:189
 msgid "Plugins"
 msgstr "Plugins"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:191
 msgid "Exit"
 msgstr "Beenden"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:195
 msgid "Undo\tCtrl+Z"
 msgstr "Rückgängig\tCtrl+Z"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:196
 msgid "Redo\tCtrl+Shift+Z"
 msgstr "Wiederholen\tCtrl+Shift+Z"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:198
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:242
 msgid "Cut"
 msgstr "Ausschneiden"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:199
-#: /home/hans/Desktop/HeeksCAD/src/MarkedList.cpp:314
 msgid "Copy"
 msgstr "Kopieren"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:200
-#: /home/hans/Desktop/HeeksCAD/src/MarkedList.cpp:331
 msgid "Paste"
 msgstr "Einfügen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:201
-#: /home/hans/Desktop/HeeksCAD/src/Plugins.cpp:141
 msgid "Delete"
 msgstr "Löschen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:203
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1408
-#: /home/hans/Desktop/HeeksCAD/src/SelectMode.cpp:30
 msgid "Select Mode"
 msgstr "Select·Mode"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:207
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1409
 msgid "Draw a sketch"
 msgstr "Zeichnung zeichnen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:208
 msgid "Draw Circles"
 msgstr "Kreise zeichnen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:209
 msgid "Draw Infinite Lines"
 msgstr "Unendliche Linien zeichnen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:210
 msgid "Draw Points"
 msgstr "Punkte zeichnen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:211
 msgid "Draw Regular Shapes"
 msgstr "Zeichne Formen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:213
 msgid "Add Text"
 msgstr "Text hinzufügen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:214
 msgid "Add Dimension"
 msgstr "Dimension hinzufügen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:216
 msgid "Add Coordinate System"
 msgstr "Koordinatensystem hinzufügen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:220
 msgid "Previous view"
 msgstr "Letzte Ansicht"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:222
 msgid "Zoom window"
 msgstr "Zoom Fenster"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:223
 msgid "Fit view to extents"
 msgstr "Gröstmöglichen Bereich zoomen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:224
 msgid "Fit view to extents, but no rotation"
 msgstr "Gröstmöglichen·Bereich·zoomen,ohne Drehung"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:226
 msgid "View rotate"
 msgstr "Ansicht drehen(linke Maustaste)"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:227
 msgid "View zoom"
 msgstr "Ansicht zoomen(linke Maustaste)"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:228
 msgid "Full screen"
 msgstr "Ganzer Bildschirm"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:230
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1435
 msgid "Redraw"
 msgstr "Neuzeichnen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:234
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1417
 msgid "Add a sphere"
 msgstr "Kugel hinzufügen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:235
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1418
 msgid "Add a cube"
 msgstr "Würfel hinzufügen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:236
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1419
 msgid "Add a cylinder"
 msgstr "Zylinder hinzufügen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:237
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1420
 msgid "Add a cone"
 msgstr "Kegel hinzufügen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:239
 msgid "Loft two sketches"
 msgstr "Verbinde 2 Sketches"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:240
 msgid "Extrude a sketch"
 msgstr "Zeichnung in 3D Körper umwandeln"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:243
 msgid "Fuse"
 msgstr "Miteinander verbinden"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:244
 msgid "Common"
 msgstr "Schnittmenge erzeugen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:245
 msgid "Fillet"
 msgstr "Teilausschnitt"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:246
 msgid "Chamfer"
 msgstr "Kanten abschrägen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:250
 msgid "Move Translate"
 msgstr "Objekt verschieben"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:251
 msgid "Copy Translate"
 msgstr "Kopiere Objekt"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:253
 msgid "Move Rotate"
 msgstr "Verschieben un drehen des Objekts"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:254
 msgid "Copy Rotate"
 msgstr "Kopieren und drehen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:256
 msgid "Move Mirror"
 msgstr "Objekt über Linie spiegeln"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:257
 msgid "Copy Mirror"
 msgstr "Obekt als·Kopie über eine Linie spiegeln"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:259
 msgid "Move Scale"
 msgstr "Move·Scale"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:263
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:332
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1466
 msgid "Objects"
 msgstr "Objekte"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:264
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:333
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1467
 msgid "Options"
 msgstr "Optionen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:265
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:334
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1468
 msgid "Input"
 msgstr "Eingabe"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:267
 msgid "Tool Bar"
 msgstr "Werkzeug Leiste"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:268
 msgid "Solids Tool Bar"
 msgstr "3D-Körper Werkzeugleiste"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:269
 msgid "Geometry Tool Bar"
 msgstr "Geometrie Werkzeugleiste"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:270
 msgid "Viewing Tool Bar"
 msgstr "Ansicht Werkzeugleiste"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:271
 msgid "Transformations Tool Bar"
 msgstr "Transformations Werkzeugleiste"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:272
 msgid "Status Bar"
 msgstr "Statusleiste"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:276
 msgid "&File"
 msgstr "&Datei"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:277
 msgid "&Edit"
 msgstr "&Bearbeiten"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:278
 msgid "&Geometry"
 msgstr "&Geometrie"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:279
 msgid "&View"
 msgstr "&Ansicht"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:280
 msgid "&Solid"
 msgstr "&3DKörper"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:281
 msgid "&Transform"
 msgstr "&Transform"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:282
 msgid "&Window"
 msgstr "&Fenster"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:331
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1465
 msgid "Graphics"
 msgstr "Graphics"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:391
 msgid "Reset Layout"
 msgstr "Layout zurücksetzen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:392
 msgid "Set toolbars to left"
 msgstr "Setze Werkzeugleisten nach links"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:740
-#: /home/hans/Desktop/HeeksCAD/src/CoordinateSystem.h:40
 msgid "Coordinate System"
 msgstr "Koordinaten·System"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:753
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1401
 msgid "Open file"
 msgstr "Öffne Datei"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:770
 msgid "Import file"
 msgstr "Importiere Datei"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:850
 msgid "Pick two or more solids, the first one will be cut by the others"
 msgstr "Pick·two·or·more·solids,·the·first·one·will·be·cut·by·the·others"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:850
 msgid "Subtract Solids"
 msgstr "Subtract·Solids"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:856
 msgid "Pick two or more solids to be fused together"
 msgstr "Markiere 2 oder mehr 3D-Körper die verbunden werden sollen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:856
 msgid "Fuse Solids"
 msgstr "Fuse·Solids"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:862
 msgid ""
 "Pick two or more solids, only the shape that is contained by all of them "
 "will remain"
 msgstr "Markiere 2 oder mehr 3D-Objekte die sich überschneiden,um die gemeinsame Schnittmenge zu erzeugen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:862
 msgid "Intersection of Solids"
 msgstr "Intersection·of·Solids"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:868
 msgid "Pick one or more edges to add a fillet to"
 msgstr "Eine/Mehrere Ecken angeben um einen Ausschnitt hinzuzufügen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:868
 msgid "Edge Fillet"
 msgstr "Edge·Fillet"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:881
 msgid "Pick one or more edges to add a chamfer to"
 msgstr "Markiere eine oder mehrere Kanten,die abgeschrägt werden sollen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:881
 msgid "Edge Chamfer"
 msgstr "Kanten abschrägen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:885
 msgid "Enter chamfer distance"
 msgstr "Tiefe der Schräge"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:885
 msgid "Distance"
 msgstr "Entfernung"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:894
 msgid ""
 "Pick two or more sketches, to create a lofted solid between\n"
 "( hold down Ctrl key to select more than one solid )"
@@ -1104,42 +767,30 @@ msgstr "Wähle 2 odere mehrere Zeichnungen,welche durch Oberflächen\n"
 " miteinander verbunden werden sollen\n"
 "( CTRL Taste für Mehrfachauswahl)"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:894
 msgid "Lofted Body"
 msgstr "Lofted·Body"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:900
 msgid ""
 "Pick one or more sketches, to create extruded body from\n"
 "( hold down Ctrl key to select more than one solid )"
 msgstr "Pick·one·or·more·sketches,·to·create·extruded·body·from\n"
 "(·hold·down·Ctrl·key·to·select·more·than·one·solid·)"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:900
 msgid "Extrude"
 msgstr "Extrude"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:907
-#: /home/hans/Desktop/HeeksCAD/src/Sphere.h:21
 msgid "Sphere"
 msgstr "Sphere"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:918
-#: /home/hans/Desktop/HeeksCAD/src/Cuboid.h:23
 msgid "Cuboid"
 msgstr "Quader"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:929
-#: /home/hans/Desktop/HeeksCAD/src/Cylinder.h:22
 msgid "Cylinder"
 msgstr "Zylinder"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:940
-#: /home/hans/Desktop/HeeksCAD/src/Cone.h:26
 msgid "Cone"
 msgstr "Kegel"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1287
 msgid ""
 "There was a problem printing.\n"
 "Perhaps your current printer is not set correctly?"
@@ -1147,1614 +798,1183 @@ msgstr ""
 "There·was·a·problem·printing.\n"
 "Perhaps·your·current·printer·is·not·set·correctly?"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1287
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1289
 msgid "Printing"
 msgstr "Drucken"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1289
 msgid "You canceled printing"
 msgstr "Druckvorgang abgebrochen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1308
 msgid ""
 "There was a problem previewing.\n"
 "Perhaps your current printer is not set correctly?"
 msgstr "There·was·a·problem·previewing.\n"
 "Perhaps·your·current·printer·is·not·set·correctly?"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1308
 msgid "Previewing"
 msgstr "Vorschau"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1312
 msgid "Demo Print Preview"
 msgstr "Demo·Print·Preview"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1400
 msgid "New file"
 msgstr "Neue Datei"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1402
 msgid "Save file"
 msgstr "Datei speichern"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1403
 msgid "Cut selected items to the clipboard"
 msgstr "Markierte Bereiche ausschneiden und in die Zwischenablage"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1404
 msgid "Copy selected items to the clipboard"
 msgstr "Markierte·Bereiche·kopieren·und·in·die·Zwischenablage"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1405
 msgid "Paste items from the clipboard"
 msgstr "Einfügen aus der Zwischenablage"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1406
 msgid "Undo the previous command"
 msgstr "Letzte Aktion rückgängig machen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1407
 msgid "Redo the next command"
 msgstr "Wiederhole die nächste Aktion"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1410
 msgid "Start Circle Drawing"
 msgstr "Zeichne Kreise"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1411
 msgid "Start Drawing Infinite Lines"
 msgstr "Zeichne unendlich lange Linien"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1412
 msgid "Start Drawing Points"
 msgstr "Zeichne Punkte"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1413
 msgid "Draw regular shapes; rectangles, polygons, obrounds"
 msgstr "Formen zeichnen: Rechtecke Poligone Kreistaschen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1414
 msgid "Add a text object"
 msgstr "Text hinzufügen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1415
 msgid "Add a dimension"
 msgstr "Dimension hinzufügen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1416
 msgid "Create a Coordinate System"
 msgstr "Koordinatensystem erstellen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1421
 msgid "Create a lofted face"
 msgstr "Create·a·lofted·face"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1422
 msgid "Extrude a wire or face"
 msgstr "Extrude·a·wire·or·face"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1423
 msgid "Cut one solid from another"
 msgstr "Cut·one·solid·from·another"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1424
 msgid "Fuse one solid to another"
 msgstr "Fuse·one·solid·to·another"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1425
 msgid "Find common solid between two solids"
 msgstr "Finde Schnittmenge von zwei 3D-Körpern"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1426
 msgid "Make a fillet on selected edges"
 msgstr "schneide markierten Bereich aus"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1427
 msgid "Make a chamfer on selected edges"
 msgstr "Markierte Kanten abschrägen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1428
 msgid "Go back to previous view"
 msgstr "zurück zur letzten Ansicht"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1429
 msgid "Zoom in to a dragged window"
 msgstr "Markierten Bereich zoomen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1430
 msgid "Zoom in to fit the extents of the drawing into the graphics window"
 msgstr "Grösstmöglichen Bereich Zoomen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1431
 msgid ""
 "Zoom in to fit the extents of the drawing into the graphics window, but "
 "without rotating the view"
 msgstr ""
 "Grösstmöglichen·Bereich·Zoomen ohne das Objekt zu drehen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1432
 msgid "Enter view rotating mode"
 msgstr "Dreh Modus (mit linker Maustaste)"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1433
 msgid "Drag to zoom in and out"
 msgstr "Mit linker Maustaste zoomen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1434
 msgid "Switch to full screen view ( press escape to return )"
 msgstr "Vollbildschirm Modus (zurück mit ESC)"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1436
 msgid "Translate selected items"
 msgstr "Verschiebe markiertes Element"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1437
 msgid "Copy and translate selected items"
 msgstr "Kopiere und Verschiebe"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1438
 msgid "Rotate selected items"
 msgstr "Drehe markierte Objekte"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1439
 msgid "Copy and rotate selected items"
 msgstr "Kopiere und drehe markierte Objekte"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1440
 msgid "Mirror selected items"
 msgstr "Markiertes Objekt spiegeln"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1441
 msgid "Copy and mirror selected items"
 msgstr "Copy·and·mirror·selected·items"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1442
 msgid "Scale selected items"
 msgstr "Scale·selected·items"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1448
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1470
 msgid "General Tools"
 msgstr "General·Tools"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1449
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1471
 msgid "Geometry Tools"
 msgstr "Geometrie·Tools"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1450
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1472
 msgid "Solid Tools"
 msgstr "3D Werkzeug"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1451
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1473
 msgid "Viewing Tools"
 msgstr "Ansicht·Tools"
 
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1452
-#: /home/hans/Desktop/HeeksCAD/src/HeeksFrame.cpp:1474
 msgid "Transformation Tools"
 msgstr "Transformation·Tools"
 
-#: /home/hans/Desktop/HeeksCAD/src/InputModeCanvas.cpp:76
 msgid "Input Mode"
 msgstr "Eingabe·Modus"
 
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:409
 msgid "Line drawing mode"
 msgstr "Modus Linien zeichnen"
 
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:411
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:418
 msgid "click on start point"
 msgstr "Startpunkt angeben"
 
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:412
 msgid "click on end of line"
 msgstr "Endpunkt angeben"
 
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:416
 msgid "Arc drawing mode"
 msgstr "Modus Bogen zeichnen"
 
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:419
 msgid "click on end of arc"
 msgstr "Endpunkt des Bogens"
 
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:423
 msgid "Infinite line drawing"
 msgstr "Unendlich lange Linie zeichnen"
 
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:425
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:446
 msgid "click on first point"
 msgstr "Der 1 Punkt"
 
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:426
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:447
 msgid "click on second point"
 msgstr "Der 2 Punkt"
 
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:430
 msgid "Circle drawing mode"
 msgstr "Kreis zeichnen"
 
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:436
 msgid "center and point mode"
 msgstr "center·and·point·mode"
 
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:438
 msgid "click on center point"
 msgstr "Mittelpunkt angeben"
 
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:439
 msgid "click on point on circle"
 msgstr "Punkt auf dem Kreis"
 
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:444
 msgid "three points mode"
 msgstr "3 Punkte Modus"
 
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:448
 msgid "click on third point"
 msgstr "1 Punkt angeben"
 
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:519
 msgid "draw lines"
 msgstr "Linien zeichnen"
 
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:520
 msgid "draw tangential arcs"
 msgstr "draw·tangential·arcs"
 
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:522
 msgid "draw circles"
 msgstr "Kreise zeichnen"
 
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:524
-#: /home/hans/Desktop/HeeksCAD/src/RegularShapesDrawing.cpp:461
 msgid "drawing mode"
 msgstr "Zeichen Modus"
 
-#: /home/hans/Desktop/HeeksCAD/src/LineArcDrawing.cpp:529
 msgid "(press 'a' for arcs)"
 msgstr "(Drücke·'a'·for·Bögen)"
 
-#: /home/hans/Desktop/HeeksCAD/src/MarkedList.cpp:298
 msgid "Number of items selected"
 msgstr "Anzahl der selektierten Items"
 
-#: /home/hans/Desktop/HeeksCAD/src/MarkedList.cpp:305
 msgid "Delete Marked Items"
 msgstr "Lösche markierte Items"
 
-#: /home/hans/Desktop/HeeksCAD/src/MarkedList.cpp:316
 msgid "Copies the selected items to the clipboard"
 msgstr "Kopiert das Selektierte in die Zwischenablage"
 
-#: /home/hans/Desktop/HeeksCAD/src/MarkedList.cpp:331
 msgid "Paste Into"
 msgstr "einfügen"
 
-#: /home/hans/Desktop/HeeksCAD/src/MarkedList.cpp:333
 msgid "Paste items from the clipboard to the drawing"
 msgstr "Füge Items aus der Zwischenablage hinzu"
 
-#: /home/hans/Desktop/HeeksCAD/src/ObjPropsCanvas.cpp:117
 msgid "Apply any changes made to the properties"
 msgstr "Aktualisiere alle Änderungen an den Einstellungen"
 
-#: /home/hans/Desktop/HeeksCAD/src/ObjPropsCanvas.cpp:118
 msgid "Stop editing the object"
 msgstr "Stoppe die Bearbeitung des Objekts"
 
-#: /home/hans/Desktop/HeeksCAD/src/Plugins.cpp:40
 msgid "Name"
 msgstr "Name"
 
-#: /home/hans/Desktop/HeeksCAD/src/Plugins.cpp:44
 msgid "File Path"
 msgstr "Datei Pfad"
 
-#: /home/hans/Desktop/HeeksCAD/src/Plugins.cpp:76
 msgid "Plugin must have a name!"
 msgstr "Plugin muss einen Namen erhalten"
 
-#: /home/hans/Desktop/HeeksCAD/src/Plugins.cpp:84
 msgid "No file specified!"
 msgstr "Keine Datei angegeben"
 
-#: /home/hans/Desktop/HeeksCAD/src/Plugins.cpp:107
 msgid "shared library files"
 msgstr "shared·library·Files"
 
-#: /home/hans/Desktop/HeeksCAD/src/Plugins.cpp:109
 msgid "Choose shared library file"
 msgstr "Wähle·shared·library·File"
 
-#: /home/hans/Desktop/HeeksCAD/src/Plugins.cpp:129
 msgid "HeeksCAD plugin libraries"
 msgstr "HeeksCAD·plugin·libraries"
 
-#: /home/hans/Desktop/HeeksCAD/src/Plugins.cpp:140
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: /home/hans/Desktop/HeeksCAD/src/Plugins.cpp:250
-#: /home/hans/Desktop/HeeksCAD/src/Plugins.cpp:264
 msgid "Add New Plugin"
 msgstr "Plugin hinzufügen"
 
-#: /home/hans/Desktop/HeeksCAD/src/PropertiesCanvas.cpp:150
-#: /home/hans/Desktop/HeeksCAD/src/PropertiesCanvas.cpp:179
 msgid "x"
 msgstr "x"
 
-#: /home/hans/Desktop/HeeksCAD/src/PropertiesCanvas.cpp:153
-#: /home/hans/Desktop/HeeksCAD/src/PropertiesCanvas.cpp:182
 msgid "y"
 msgstr "y"
 
-#: /home/hans/Desktop/HeeksCAD/src/PropertiesCanvas.cpp:156
-#: /home/hans/Desktop/HeeksCAD/src/PropertiesCanvas.cpp:185
 msgid "z"
 msgstr "z"
 
-#: /home/hans/Desktop/HeeksCAD/src/PropertiesCanvas.cpp:188
 msgid "vertical angle"
 msgstr "Vertikaler Winkel"
 
-#: /home/hans/Desktop/HeeksCAD/src/PropertiesCanvas.cpp:191
 msgid "horizontal angle"
 msgstr "Horizontaler Winkel"
 
-#: /home/hans/Desktop/HeeksCAD/src/PropertiesCanvas.cpp:194
 msgid "twist angle"
 msgstr "Drehwinkel"
 
-#: /home/hans/Desktop/HeeksCAD/src/RegularShapesDrawing.cpp:457
 msgid "draw rectangles"
 msgstr "Zeichne Rechtecke"
 
-#: /home/hans/Desktop/HeeksCAD/src/RegularShapesDrawing.cpp:458
 msgid "draw polygons"
 msgstr "Zeichne Polygone"
 
-#: /home/hans/Desktop/HeeksCAD/src/RegularShapesDrawing.cpp:459
 msgid "draw slots"
 msgstr "Zeichne Taschen"
 
-#: /home/hans/Desktop/HeeksCAD/src/RegularShapesDrawing.cpp:466
 msgid "number of sides for polygon"
 msgstr "Anzahl der Polygon Seiten"
 
-#: /home/hans/Desktop/HeeksCAD/src/RemoveOrAddTool.cpp:28
 msgid "Add "
 msgstr "Hinzufügen"
 
-#: /home/hans/Desktop/HeeksCAD/src/RemoveOrAddTool.cpp:149
 msgid "Add Objects"
 msgstr "Objekte hinzufügen"
 
-#: /home/hans/Desktop/HeeksCAD/src/RemoveOrAddTool.cpp:164
 msgid "Remove Objects"
 msgstr "Entferne Objekte"
 
-#: /home/hans/Desktop/HeeksCAD/src/RuledSurface.cpp:18
 msgid "pick some sketches"
 msgstr "Wähle mehrere Zeichnungn"
 
-#: /home/hans/Desktop/HeeksCAD/src/RuledSurface.cpp:49
 msgid "Ruled Surface"
 msgstr "Linierte Fläche"
 
-#: /home/hans/Desktop/HeeksCAD/src/RuledSurface.cpp:62
 msgid "pick sketches"
 msgstr "Wähle Zeichnung"
 
-#: /home/hans/Desktop/HeeksCAD/src/RuledSurface.cpp:66
 msgid "Input extrusion height"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/src/RuledSurface.cpp:99
 msgid "Extruded Solid"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/src/RuledSurface.cpp:125
 msgid "Fatal error making ruled solid"
 msgstr "Fehler beim erstellen des linierten 3D Objekts"
 
-#: /home/hans/Desktop/HeeksCAD/src/RuledSurface.cpp:147
 msgid "Fatal error making extruded solid"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/src/Ruler.cpp:238
 msgid "Reset the ruler"
 msgstr "Reset Lineal"
 
-#: /home/hans/Desktop/HeeksCAD/src/SelectMode.cpp:37
 msgid "Left button for selecting objects"
 msgstr "Mit linker Maustaste Objekt auswählen"
 
-#: /home/hans/Desktop/HeeksCAD/src/SelectMode.cpp:38
 msgid "( with Ctrl key for extra objects)"
 msgstr "(·mit·Ctrl·Taste für·Extras·)"
 
-#: /home/hans/Desktop/HeeksCAD/src/SelectMode.cpp:39
 msgid "Drag with left button to window select"
 msgstr "Verschiebe mit linker Maustaste ins selektierte Fenster"
 
-#: /home/hans/Desktop/HeeksCAD/src/SelectMode.cpp:40
 msgid "or to move object if on an object"
 msgstr "oder verschiebe das Objekt falls es sich über einem anderen Objekt befindet"
 
-#: /home/hans/Desktop/HeeksCAD/src/SelectMode.cpp:41
 msgid "Mouse wheel to zoom in and out"
 msgstr "Mausrad zum zoomen"
 
-#: /home/hans/Desktop/HeeksCAD/src/SelectMode.cpp:44
 msgid "Middle button to pan view"
 msgstr "Mittlere Maustaste für Pan Ansicht"
 
-#: /home/hans/Desktop/HeeksCAD/src/SelectMode.cpp:45
 msgid "( with Ctrl key to rotate view )"
 msgstr "(mit CTRL Taste um zu drehen)"
 
-#: /home/hans/Desktop/HeeksCAD/src/SelectMode.cpp:48
 msgid "Middle button to rotate view"
 msgstr "Mittlere Maustaste zum drehen der Ansicht"
 
-#: /home/hans/Desktop/HeeksCAD/src/SelectMode.cpp:49
 msgid "( with Ctrl key to pan view )"
 msgstr "(mit CTRL Taste für rauf/runter)"
 
-#: /home/hans/Desktop/HeeksCAD/src/SelectMode.cpp:52
 msgid "Right button for object menu"
 msgstr "Rechte Maustaste für Objekt Menü"
 
-#: /home/hans/Desktop/HeeksCAD/src/SelectMode.cpp:53
 msgid "See options window to hide this help"
 msgstr "Optionen Fenster um den Hilfetext auszublenden"
 
-#: /home/hans/Desktop/HeeksCAD/src/SelectMode.cpp:472
 msgid "Pick Anything"
 msgstr "Alles auswählen"
 
-#: /home/hans/Desktop/HeeksCAD/src/SelectMode.cpp:474
 msgid "Set the selection filter to all items"
 msgstr "Setze den Auswahlfilter für alle Items"
 
-#: /home/hans/Desktop/HeeksCAD/src/SelectMode.cpp:485
 msgid "Pick Edges"
 msgstr "Wähle Kanten/Ecke"
 
-#: /home/hans/Desktop/HeeksCAD/src/SelectMode.cpp:487
 msgid "Set the selection filter to only edges"
 msgstr "Setze den Auswahlfilter nur für Kanten"
 
-#: /home/hans/Desktop/HeeksCAD/src/Shape.cpp:337
 msgid "Enter Offset Value, + for making bigger, - for making smaller"
 msgstr "Offset angeben,+ für grösser,- für kleiner"
 
-#: /home/hans/Desktop/HeeksCAD/src/Shape.cpp:337
 msgid "Offset value"
 msgstr "Offset Angabe"
 
-#: /home/hans/Desktop/HeeksCAD/src/Shape.cpp:340
 msgid "Result of 'Offset Shape'"
 msgstr "Resultat für 'Offset Shape'"
 
-#: /home/hans/Desktop/HeeksCAD/src/Shape.cpp:346
 msgid "Offset Shape"
 msgstr "Offset Form"
 
-#: /home/hans/Desktop/HeeksCAD/src/Shape.cpp:348
 msgid "Offset the shape"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/src/Shape.cpp:438
 msgid "Result of Fuse Operation"
 msgstr "Resultat der Vereinigung"
 
-#: /home/hans/Desktop/HeeksCAD/src/Shape.cpp:449
 msgid "Result of Common Operation"
 msgstr "Ergebnis der Schnittmengen Operation"
 
-#: /home/hans/Desktop/HeeksCAD/src/Shape.cpp:501
 msgid "Result of Cut Operation"
 msgstr "Resultat des Ausschneidens"
 
-#: /home/hans/Desktop/HeeksCAD/src/Shape.cpp:662
-#: /home/hans/Desktop/HeeksCAD/src/Shape.cpp:670
 msgid "STEP solid"
 msgstr "STEP 3D Körper"
 
-#: /home/hans/Desktop/HeeksCAD/src/Shape.cpp:678
 msgid "STEP import not done!"
 msgstr "STEP Import hat nicht funktioniert"
 
-#: /home/hans/Desktop/HeeksCAD/src/Shape.cpp:724
 msgid "sewed IGES solid"
 msgstr "Verbinden IGES 3D Körper"
 
-#: /home/hans/Desktop/HeeksCAD/src/Shape.cpp:734
 msgid "IGES import not done!"
 msgstr "IGES Import hat nicht funktioniert"
 
-#: /home/hans/Desktop/HeeksCAD/src/Sketch.cpp:123
 msgid "Number of elements"
 msgstr "Anzahl der Elemente"
 
-#: /home/hans/Desktop/HeeksCAD/src/Sketch.cpp:142
 msgid "order"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/src/TransformTool.cpp:22
 msgid "Transform"
 msgstr "Umwandeln"
 
-#: /home/hans/Desktop/HeeksCAD/src/TransformTool.cpp:49
 msgid "Transform Objects"
 msgstr "Objekte bearbeiten"
 
-#: /home/hans/Desktop/HeeksCAD/src/TransformTools.cpp:40
 msgid "Pick objects to move"
 msgstr "Welche Objekte sollen verschoben werden"
 
-#: /home/hans/Desktop/HeeksCAD/src/TransformTools.cpp:54
-#: /home/hans/Desktop/HeeksCAD/src/TransformTools.cpp:140
-#: /home/hans/Desktop/HeeksCAD/src/TransformTools.cpp:204
-#: /home/hans/Desktop/HeeksCAD/src/TransformTools.cpp:279
 msgid "Enter number of copies"
 msgstr "Gebe die Anzahl der Kopien an"
 
-#: /home/hans/Desktop/HeeksCAD/src/TransformTools.cpp:54
-#: /home/hans/Desktop/HeeksCAD/src/TransformTools.cpp:140
-#: /home/hans/Desktop/HeeksCAD/src/TransformTools.cpp:204
-#: /home/hans/Desktop/HeeksCAD/src/TransformTools.cpp:279
 msgid "number of copies"
 msgstr "Anzahl der Kopien"
 
-#: /home/hans/Desktop/HeeksCAD/src/TransformTools.cpp:64
 msgid "Click position to move from"
 msgstr "Von welcher Position soll verschoben werden"
 
-#: /home/hans/Desktop/HeeksCAD/src/TransformTools.cpp:78
 msgid "Click position to move to"
 msgstr "An welche Position soll verschoben werden"
 
-#: /home/hans/Desktop/HeeksCAD/src/TransformTools.cpp:126
 msgid "Pick objects to rotate"
 msgstr "Objekte angeben die gedreht werden sollen"
 
-#: /home/hans/Desktop/HeeksCAD/src/TransformTools.cpp:150
 msgid "Click centre position to rotate about"
 msgstr "Position angeben um die gedreht werden soll"
 
-#: /home/hans/Desktop/HeeksCAD/src/TransformTools.cpp:154
 msgid "Enter angle to rotate by"
 msgstr "Drehwinkel angeben"
 
-#: /home/hans/Desktop/HeeksCAD/src/TransformTools.cpp:154
 msgid "angle"
 msgstr "Winkel"
 
-#: /home/hans/Desktop/HeeksCAD/src/TransformTools.cpp:192
 msgid "Pick objects to mirror"
 msgstr "Objekte die gespiegelt werden sollen"
 
-#: /home/hans/Desktop/HeeksCAD/src/TransformTools.cpp:218
 msgid "Pick line to mirror about"
 msgstr "Linie zu spiegeln"
 
-#: /home/hans/Desktop/HeeksCAD/src/TransformTools.cpp:265
 msgid "Pick objects to scale"
 msgstr "Welches Objekt soll skalliert werden"
 
-#: /home/hans/Desktop/HeeksCAD/src/TransformTools.cpp:289
 msgid "Click centre position to scale about"
 msgstr "MIttelpunkt der Neuskallierung angeben"
 
-#: /home/hans/Desktop/HeeksCAD/src/TransformTools.cpp:293
 msgid "Enter scale factor"
 msgstr "Skallierungsfaktor angeben"
 
-#: /home/hans/Desktop/HeeksCAD/src/TransformTools.cpp:293
 msgid "scale factor"
 msgstr "Skallierungsfaktor"
 
-#: /home/hans/Desktop/HeeksCAD/src/ViewZooming.cpp:46
 msgid "Drag with the left mouse button"
 msgstr "Verschieben mit linker Maustaste"
 
-#: /home/hans/Desktop/HeeksCAD/src/ViewZooming.cpp:46
 msgid "Forward to zoom in, Back to zoom out"
 msgstr "Nach vorne vergrössern,zurück verkleinern"
 
-#: /home/hans/Desktop/HeeksCAD/src/ViewZooming.cpp:46
 msgid "Back to zoom in, Forward to zoom out"
 msgstr "zurück vergrössern,nach vorne verkleinern"
 
-#: /home/hans/Desktop/HeeksCAD/src/ViewZooming.cpp:46
 msgid "Hold middle mouse button down to pan"
 msgstr "Mittlere Maustaste gedrückt halten für hoch/runter"
 
-#: /home/hans/Desktop/HeeksCAD/src/Wire.cpp:28
 msgid "Result of Wire Offset"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/src/Wire.cpp:30
 msgid "Generated"
 msgstr "Erzeugt"
 
-#: /home/hans/Desktop/HeeksCAD/src/Wire.cpp:39
 msgid "Generated from edge"
 msgstr "Von Kante erzeugt"
 
-#: /home/hans/Desktop/HeeksCAD/src/Wire.cpp:45
 msgid "Modified"
 msgstr "Modifiziert"
 
-#: /home/hans/Desktop/HeeksCAD/src/Wire.cpp:48
 msgid "Is Deleted"
 msgstr "Ist gelöscht"
 
-#: /home/hans/Desktop/HeeksCAD/src/Wire.cpp:54
 msgid "Offset Wire"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/src/advprops.cpp:521
 msgid "Point Size"
 msgstr "Punkt Grösse"
 
-#: /home/hans/Desktop/HeeksCAD/src/advprops.cpp:523
 msgid "Family"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/src/advprops.cpp:533
 msgid "Face Name"
 msgstr "Oberflächenname"
 
-#: /home/hans/Desktop/HeeksCAD/src/advprops.cpp:540
 msgid "Style"
 msgstr "Style"
 
-#: /home/hans/Desktop/HeeksCAD/src/advprops.cpp:546
 msgid "Underlined"
 msgstr "Unterstrichen"
 
-#: /home/hans/Desktop/HeeksCAD/src/advprops.cpp:1353
 msgid "files"
 msgstr "Dateien"
 
-#: /home/hans/Desktop/HeeksCAD/src/advprops.cpp:1361
-#: /home/hans/Desktop/HeeksCAD/src/props.cpp:1509
 msgid "All files"
 msgstr "Alle Dateien"
 
-#: /home/hans/Desktop/HeeksCAD/src/advprops.cpp:1613
 msgid "Make a selection:"
 msgstr "Treffe eine Auswahl"
 
-#: /home/hans/Desktop/HeeksCAD/src/manager.cpp:1323
 msgid "Categorized Mode"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/src/manager.cpp:1324
 msgid "Alphabetic Mode"
 msgstr "Alphabetischer Modus"
 
-#: /home/hans/Desktop/HeeksCAD/src/manager.cpp:1369
-#: /home/hans/Desktop/HeeksCAD/src/manager.cpp:1767
 msgid "<< Compact"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/src/manager.cpp:1369
-#: /home/hans/Desktop/HeeksCAD/src/manager.cpp:1762
 msgid "Expand >>"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/src/propgrid.cpp:629
-#: /home/hans/Desktop/HeeksCAD/src/props.cpp:569
 msgid "False"
 msgstr "Nein"
 
-#: /home/hans/Desktop/HeeksCAD/src/propgrid.cpp:630
-#: /home/hans/Desktop/HeeksCAD/src/props.cpp:570
 msgid "True"
 msgstr "Ja"
 
-#: /home/hans/Desktop/HeeksCAD/src/propgrid.cpp:631
-#: /home/hans/Desktop/HeeksCAD/src/props.cpp:571
 msgid "Unspecified"
 msgstr "Nicht angegeben"
 
-#: /home/hans/Desktop/HeeksCAD/src/props.cpp:480
 msgid "is not a floating-point number"
 msgstr "Keine Fliesskommazahl"
 
-#: /home/hans/Desktop/HeeksCAD/src/props.cpp:581
-#: /home/hans/Desktop/HeeksCAD/src/props.cpp:602
 msgid "true"
 msgstr "Ja"
 
-#: /home/hans/Desktop/HeeksCAD/src/props.cpp:582
 msgid "false"
 msgstr "Nein"
 
-#: /home/hans/Desktop/HeeksCAD/src/props.cpp:1470
 msgid "Choose a directory:"
 msgstr "Wähle Direktory"
 
-#: /home/hans/Desktop/HeeksCAD/src/props.cpp:1685
 msgid "Choose a file"
 msgstr "Wähle Datei"
 
-#: /home/hans/Desktop/HeeksCAD/src/props.cpp:1851
-#: /home/hans/Desktop/HeeksCAD/src/props.cpp:2083
 msgid "Ok"
 msgstr "Ok"
 
-#: /home/hans/Desktop/HeeksCAD/src/props.cpp:2029
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: /home/hans/Desktop/HeeksCAD/src/props.cpp:2057
 msgid "Update"
 msgstr "Update"
 
-#: /home/hans/Desktop/HeeksCAD/src/props.cpp:2060
-#: /home/hans/Desktop/HeeksCAD/src/RemoveOrAddTool.h:43
 msgid "Remove"
 msgstr "Entfernen"
 
-#: /home/hans/Desktop/HeeksCAD/src/props.cpp:2063
 msgid "Up"
 msgstr "Hoch"
 
-#: /home/hans/Desktop/HeeksCAD/src/props.cpp:2066
 msgid "Down"
 msgstr "Runter"
 
-#: /home/hans/Desktop/HeeksCAD/src/wxImageLoader.cpp:25
 msgid "Failed to load resource image"
 msgstr "Konnte Bild Resource nicht laden"
 
-#: /home/hans/Desktop/HeeksCAD/src/ConversionTools.h:15
 msgid "Convert sketch to face"
 msgstr "Wandle Zeichnung in Oberfläche um"
 
-#: /home/hans/Desktop/HeeksCAD/src/ConversionTools.h:23
 msgid "Make To Sketch"
 msgstr "Zur Zeichnung umwandeln"
 
-#: /home/hans/Desktop/HeeksCAD/src/ConversionTools.h:25
 msgid "Make selected lines and arcs into a new sketch"
 msgstr "Erstelle aus den markierten linien +Bögen eine neue Zeichnung"
 
-#: /home/hans/Desktop/HeeksCAD/src/ConversionTools.h:32
 msgid "Combine sketches"
 msgstr "Kombiniere Zeichnungen"
 
-#: /home/hans/Desktop/HeeksCAD/src/ConversionTools.h:34
 msgid "Combine selected sketches"
 msgstr "Kombiniere markierte Zeichnungen"
 
-#: /home/hans/Desktop/HeeksCAD/src/ConversionTools.h:41
-#: /home/hans/Desktop/HeeksCAD/src/Group.h:11
 msgid "Group"
 msgstr "Gruppe"
 
-#: /home/hans/Desktop/HeeksCAD/src/ConversionTools.h:43
 msgid "Group selected items"
 msgstr "Gruppiere die selektierten Bereiche"
 
-#: /home/hans/Desktop/HeeksCAD/src/ConversionTools.h:50
 msgid "Ungroup"
 msgstr "Gruppierung aufheben"
 
-#: /home/hans/Desktop/HeeksCAD/src/ConversionTools.h:52
 msgid "Ungroup selected items"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/src/DimensionDrawing.h:31
 msgid "Dimension drawing"
 msgstr "Dimensionszeichnen"
 
-#: /home/hans/Desktop/HeeksCAD/src/Drawing.h:64
 msgid "Drawing"
 msgstr "Zeichnen"
 
-#: /home/hans/Desktop/HeeksCAD/src/Edge.h:50
 msgid "Edge"
 msgstr "Kante/Ecke"
 
-#: /home/hans/Desktop/HeeksCAD/src/Face.h:44
 msgid "Face"
 msgstr "Oberfläche"
 
-#: /home/hans/Desktop/HeeksCAD/src/Gripper.h:25
 msgid "Gripper"
 msgstr "Greifer"
 
-#: /home/hans/Desktop/HeeksCAD/src/HArc.h:33
 msgid "Arc"
 msgstr "Bogen"
 
-#: /home/hans/Desktop/HeeksCAD/src/HCircle.h:30
 msgid "Circle"
 msgstr "Kreis"
 
-#: /home/hans/Desktop/HeeksCAD/src/HDimension.h:42
 msgid "Dimension"
 msgstr "Dimension"
 
-#: /home/hans/Desktop/HeeksCAD/src/HEllipse.h:32
 msgid "Ellipse"
 msgstr "Elipse"
 
-#: /home/hans/Desktop/HeeksCAD/src/HILine.h:29
 msgid "Infinite Line"
 msgstr "Unendlich lange Linie"
 
-#: /home/hans/Desktop/HeeksCAD/src/HImage.h:43
 msgid "Image"
 msgstr "Bild"
 
-#: /home/hans/Desktop/HeeksCAD/src/HLine.h:30
 msgid "Line"
 msgstr "Linie"
 
-#: /home/hans/Desktop/HeeksCAD/src/HPoint.h:29
 msgid "Point"
 msgstr "Punkt"
 
-#: /home/hans/Desktop/HeeksCAD/src/HSpline.h:32
 msgid "Spline"
 msgstr "Spline"
 
-#: /home/hans/Desktop/HeeksCAD/src/HText.h:31
 msgid "Text"
 msgstr "Text"
 
-#: /home/hans/Desktop/HeeksCAD/src/HXml.h:23
 msgid "Xml"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/src/MagDragWindow.h:21
 msgid "Magnifying by dragging a window"
 msgstr "Bereich markieren"
 
-#: /home/hans/Desktop/HeeksCAD/src/PointDrawing.h:27
 msgid "Point drawing"
 msgstr "Punkt zeichnen"
 
-#: /home/hans/Desktop/HeeksCAD/src/PointOrWindow.h:26
 msgid "Dragging a window or picking a point"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/src/RegularShapesDrawing.h:43
 msgid "Regular shapes drawing"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/src/RemoveOrAddTool.h:96
 msgid "ChangeOwner"
 msgstr "Benutzerwechsel"
 
-#: /home/hans/Desktop/HeeksCAD/src/RemoveOrAddTool.h:112
 msgid "ManyChangeOwner"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/src/Ruler.h:48
 msgid "Ruler"
 msgstr "Lineal"
 
-#: /home/hans/Desktop/HeeksCAD/src/Shape.h:17
 msgid "Faces"
 msgstr "Oberflächen"
 
-#: /home/hans/Desktop/HeeksCAD/src/Shape.h:25
 msgid "Edges"
 msgstr "Kanten/Ecken"
 
-#: /home/hans/Desktop/HeeksCAD/src/Sketch.h:34
 msgid "Sketch"
 msgstr "Zeichnung"
 
-#: /home/hans/Desktop/HeeksCAD/src/Solid.h:25
 msgid "Solid"
 msgstr "3D Körper"
 
-#: /home/hans/Desktop/HeeksCAD/src/StlSolid.h:38
 msgid "STL Solid"
 msgstr "STL 3D Körper"
 
-#: /home/hans/Desktop/HeeksCAD/src/ViewRotating.h:17
 msgid "View Rotate"
 msgstr "Ansicht·drehen(linke·Maustaste)"
 
-#: /home/hans/Desktop/HeeksCAD/src/ViewZooming.h:18
 msgid "View Zoom"
 msgstr "Ansicht·zoomen(linke·Maustaste)"
 
-#: /home/hans/Desktop/HeeksCAD/src/Window.h:19
 msgid "Dragging a window"
 msgstr "Markiere einen Ausschnitt"
 
-#: /home/hans/Desktop/HeeksCAD/src/Wire.h:18
 msgid "Wire"
 msgstr "Verbinden"
 
-#: /home/hans/Desktop/HeeksCAD/interface/HeeksObj.cpp:73
 msgid "object type"
 msgstr "Objekt Typ"
 
-#: /home/hans/Desktop/HeeksCAD/interface/HeeksObj.cpp:74
 msgid "object title"
 msgstr "Objekt Name"
 
-#: /home/hans/Desktop/HeeksCAD/interface/HeeksObj.cpp:75
 msgid "ID"
 msgstr "ID"
 
-#: /home/hans/Desktop/HeeksCAD/interface/HeeksObj.cpp:79
 msgid "color"
 msgstr "Farbe"
 
-#: /home/hans/Desktop/HeeksCAD/interface/HeeksObj.cpp:81
 msgid "visible"
 msgstr "Sichtbar"
 
-#: /home/hans/Desktop/HeeksCAD/interface/HeeksObj.h:84
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: /home/hans/Desktop/HeeksCAD/interface/Property.h:37
 msgid "Unknown Property"
 msgstr "Unbekannte Einstellung"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:124
 msgid "leadoffdz"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:125
 msgid "leadofflen"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:126
 msgid "leadoffrad"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:127
 msgid "retractzheight"
 msgstr "Rückzugsebene für Z"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:128
 msgid "leadoffsamplestep"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:129
 msgid "toolcornerrad"
 msgstr "Radius Werkzeugspitze"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:130
 msgid "toolflatrad"
 msgstr "Radius Werkzeugschaft"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:131
 msgid "samplestep"
 msgstr "Beispiel Schritt"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:132
 msgid "stepdown"
 msgstr "Schritt runter"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:133
 msgid "clearcuspheight"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:134
 msgid "triangleweaveres"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:135
 msgid "flatradweaveres"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:136
 msgid "dchangright"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:137
 msgid "dchangrightoncontour"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:138
 msgid "dchangleft"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:139
 msgid "dchangefreespace"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:140
 msgid "sidecutdisplch"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:141
 msgid "fcut"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:142
 msgid "fretract"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:143
 msgid "thintol"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:144
 msgid "startpoint_x"
 msgstr "Startpunkt X"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:145
 msgid "startpoint_y"
 msgstr "Startpunkt Y"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:146
 msgid "startvel_x"
 msgstr "Startgeschwindigkeit X"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:147
 msgid "startvel_y"
 msgstr "Startgeschwindigkeit Y"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:148
 msgid "minz"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:149
 msgid "boundaryclear"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:151
 msgid "boundary_x0"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:152
 msgid "boundary_x1"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:153
 msgid "boundary_y0"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Adaptive.cpp:154
 msgid "boundary_y1"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/DepthOp.cpp:76
 msgid "tool number"
 msgstr "Werkzeug Nummer"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/DepthOp.cpp:77
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/ZigZag.cpp:77
 msgid "tool diameter"
 msgstr "Werkzeug Durchmesser"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/DepthOp.cpp:78
 msgid "clearance height"
 msgstr "Freie Höhe"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/DepthOp.cpp:79
 msgid "step down"
 msgstr "Tiefe pro Schritt"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/DepthOp.cpp:80
 msgid "start depth"
 msgstr "Tiefe zu Beginn"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/DepthOp.cpp:81
 msgid "final depth"
 msgstr "Endgültige Tiefe"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/DepthOp.cpp:82
 msgid "rapid down to height"
 msgstr "schnell runter auf Höhe"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/DepthOp.cpp:83
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/ZigZag.cpp:94
 msgid "horizontal feed rate"
 msgstr "Horizontale Arbeitsgeschwindigkeit"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/DepthOp.cpp:84
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/ZigZag.cpp:95
 msgid "vertical feed rate"
 msgstr "Vertikale Arbeitsgeschwindigkeit"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/DepthOp.cpp:85
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/ZigZag.cpp:96
 msgid "spindle speed"
 msgstr "Spindel Geschwindigkeit"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:118
 msgid "You must select some sketches, first!"
 msgstr "Erst Zeichnungn markieren"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:173
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:208
 msgid "There are no solids!"
 msgstr "Keine 3D Körper"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:214
 msgid "You must select some sketches first!"
 msgstr "Erst eine Zeichnung markieren"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:254
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:267
 msgid "NC files"
 msgstr "G-Code Dateien"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:255
 msgid "Open NC file"
 msgstr "NC Datei öffnen"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:268
 msgid "Save NC file"
 msgstr "G-Code speichern"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:277
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/PythonStuff.cpp:80
 msgid "Couldn't open file"
 msgstr "Kann Datei nicht öffnen"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:294
 msgid "Profile"
 msgstr "Profil"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:295
 msgid "Pocket"
 msgstr "Tasche"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:296
 msgid "ZigZag"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:297
 msgid "Adaptive"
 msgstr "Anpassen"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:298
 msgid "Python"
 msgstr "Python"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:299
 msgid "PostProcess"
 msgstr "Umwandeln in G-Code"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:300
 msgid "OpenNC"
 msgstr "Öffne G-Code"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:301
 msgid "SaveNC"
 msgstr "G-Code speichern"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:319
 msgid "HeeksCNC is the free machining add-on to HeeksCAD"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:320
 msgid "          http://code.google.com/p/heekscnc/"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:321
 msgid "Written by Dan Heeks, Hirutso Enni, Perttu Ahola"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:322
 msgid "With help from archivist, crotchet1, DanielFalck, fenn, Sliptonic"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:323
 msgid ""
 "geometry code, donated by Geoff Hawkesford, Camtek GmbH http://www.peps.de/"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:324
 msgid ""
 "pocketing code from http://code.google.com/p/libarea/ , derived from the "
 "kbool library written by Klaas Holwerda http://boolean.klaasholwerda.nl/bool."
 "html"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:325
 msgid "Zig zag code from pycam http://sourceforge.net/svn/?group_id=237831"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:326
 msgid ""
 "Adaptive Roughing code from http://code.google.com/p/libactp/, using code "
 "written in 2004"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:327
 msgid ""
 "For a more modern version of adaptive roughing, see Julian Todd and Martin "
 "Dunschen of http://www.freesteel.co.uk/"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:328
 msgid ""
 "This HeeksCNC software installation is restricted by the GPL license http://"
 "www.gnu.org/licenses/gpl-3.0.txt"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:329
 msgid "  which means it is free and open source, and must stay that way"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:342
 msgid "New Profile Operation..."
 msgstr "Neues Profil fräsen"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:343
 msgid "New Pocket Operation..."
 msgstr "Neue (Fräs-)Taschen erstellen"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:344
 msgid "New ZigZag Operation..."
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:345
 msgid "New Adaptive Roughing Operation..."
 msgstr "Neuer Adaptiver Schruppzyklus "
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:349
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Program.h:18
 msgid "Operations"
 msgstr "Operationen"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:350
 msgid "Make Python Script"
 msgstr "Erstelle Python Script"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:351
 msgid "Post-Process"
 msgstr "Umwandeln nach G-Code"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/HeeksCNC.cpp:352
 msgid "Machining"
 msgstr "CNC"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/NCCode.cpp:430
 msgid "nc options"
 msgstr "G-Code Optionen"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/NCCode.cpp:432
 msgid "text colors"
 msgstr "Text Farbe"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/NCCode.cpp:433
 msgid "default color"
 msgstr "Voreingestellte Farbe"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/NCCode.cpp:434
 msgid "block color"
 msgstr "Block Farbe"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/NCCode.cpp:435
 msgid "misc color"
 msgstr "Farbe für übrige Dinge"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/NCCode.cpp:436
 msgid "program color\t"
 msgstr "Programm Farbe\t"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/NCCode.cpp:437
 msgid "tool color"
 msgstr "Werkzeug Farbe"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/NCCode.cpp:438
 msgid "comment color\t"
 msgstr "Komentar Farbe\t"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/NCCode.cpp:439
 msgid "variable color"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/NCCode.cpp:440
 msgid "prep color"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/NCCode.cpp:441
 msgid "axis color"
 msgstr "Axen Farbe"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/NCCode.cpp:442
 msgid "rapid color"
 msgstr "Rapid Farbe"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/NCCode.cpp:443
 msgid "feed color"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Op.cpp:45
 msgid "comment"
 msgstr "Kommentar"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Op.cpp:46
 msgid "active"
 msgstr "Aktiv"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Pocket.cpp:57
 msgid "step over"
 msgstr "Nächster Schritt"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Pocket.cpp:58
 msgid "material allowance"
 msgstr "Material Abzug"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Pocket.cpp:59
 msgid "round corner factor"
 msgstr "Faktor für runde Ecken"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Pocket.cpp:60
 msgid "for 90 degree corners"
 msgstr "Für 90 Grad Ecken"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Pocket.cpp:60
 msgid "1.5 for square, 1.0 for round"
 msgstr "1.5 viereckig,1.0 rund"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Pocket.cpp:63
 msgid "Boundary"
 msgstr "Umgrenzung"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Pocket.cpp:64
 msgid "Center"
 msgstr "Mittelpunkt"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Pocket.cpp:65
 msgid "starting_place"
 msgstr "Start Position"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Pocket.cpp:176
-#, c-format
 msgid "Pocket operation - Sketch doesn't exist - %d"
 msgstr "Taschen Operation - Zeichnung existiert nicht-·%d"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Pocket.cpp:194
-#, c-format
 msgid "Pocket operation - Sketch must be a closed shape - sketch %d"
 msgstr "Taschen Operation - Zeichnung muss eine geschlossene Kontur sein - sketch·%d"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Pocket.cpp:202
-#, c-format
 msgid "Pocket operation - Badly ordered sketch - sketch %d"
 msgstr "Taschen Operation - Falsch aufgebaute Zeichnung - sketch·%d"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Profile.cpp:75
 msgid "Left"
 msgstr "Links daneben"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Profile.cpp:76
 msgid "Right"
 msgstr "Rechts daneben"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Profile.cpp:77
 msgid "On"
 msgstr "Auf der Linie"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Profile.cpp:81
 msgid "tool on side"
 msgstr "Werkzeug auf der Seite"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Profile.cpp:86
 msgid "auto roll on"
 msgstr "Automatischer Einstiegsradius"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Profile.cpp:87
 msgid "roll on point"
 msgstr "Einstiegspunkt"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Profile.cpp:88
 msgid "auto roll off"
 msgstr "Automatischer Ausstiegsradius"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Profile.cpp:89
 msgid "roll off point"
 msgstr "Ausstiegspunkt"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Profile.cpp:90
 msgid "use start point"
 msgstr "Nutze Startpunkt"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Profile.cpp:91
 msgid "start point"
 msgstr "Startpunkt"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Profile.cpp:92
 msgid "use end point"
 msgstr "Nutze Endpunkt"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Profile.cpp:93
 msgid "end point"
 msgstr "Endpunkt"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Profile.cpp:560
 msgid "Pick Start"
 msgstr "Wähle Start"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Profile.cpp:561
 msgid "Pick new start point"
 msgstr "Wähle neuen Startpunkt"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Profile.cpp:569
 msgid "Pick End"
 msgstr "Wähle Ende"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Profile.cpp:570
 msgid "Pick new end point"
 msgstr "Wähle neuen Endpunkt"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Program.cpp:45
 msgid "Set All Operations Active"
 msgstr "Setze alle Operationen auf Aktiv"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Program.cpp:64
 msgid "Set All Operations Inactive"
 msgstr "Setze alle Operationen auf Inaktiv"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Program.cpp:134
 msgid "machine"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/Program.cpp:135
 msgid "output file"
 msgstr "Ausgabe Datei"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/ZigZag.cpp:80
 msgid "spherical"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/ZigZag.cpp:81
 msgid "cylindrical"
 msgstr "Zylindrisch"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/ZigZag.cpp:82
 msgid "toroidal"
 msgstr "Ringkern(Donut)"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/ZigZag.cpp:83
 msgid "tool type"
 msgstr "Werkzeugtyp"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/ZigZag.cpp:85
 msgid "corner radius"
 msgstr "Eckradius"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/ZigZag.cpp:86
 msgid "minimum x"
 msgstr "Minimum·x"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/ZigZag.cpp:87
 msgid "maximum x"
 msgstr "Maximum·x"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/ZigZag.cpp:88
 msgid "minimum y"
 msgstr "Minimum·y"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/ZigZag.cpp:89
 msgid "maximum y"
 msgstr "Maximum·y"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/ZigZag.cpp:90
 msgid "z0"
 msgstr "z0"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/ZigZag.cpp:91
 msgid "z1"
 msgstr "z1"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/ZigZag.cpp:92
 msgid "dx"
 msgstr "dx"
 
-#: /home/hans/Desktop/HeeksCAD/HeeksCNC/src/ZigZag.cpp:93
 msgid "dy"
 msgstr "dy"
 
-#: /home/hans/Desktop/HeeksArt/HeeksArt.cpp:85
 msgid "Simple Mesh"
 msgstr "Einfaches Gittermodell"
 
-#: /home/hans/Desktop/HeeksArt/HeeksArt.cpp:102
 msgid "HeeksArt is a free random add-on to HeeksCAD"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksArt/HeeksArt.cpp:103
 msgid "          http://code.google.com/p/heeksart/"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksArt/HeeksArt.cpp:104
 msgid "Written by Dan Heeks"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksArt/HeeksArt.cpp:116
 msgid "Add a simple mesh"
 msgstr "Erstelle ein einfaches Gittermodell"
 
-#: /home/hans/Desktop/HeeksArt/HeeksArt.cpp:117
-#: /home/hans/Desktop/HeeksArt/Mesh.h:51
 msgid "Mesh"
 msgstr "Gittermodell"
 
-#: /home/hans/Desktop/HeeksArt/HeeksArt.cpp:138
 msgid "mesh options"
 msgstr "Gitter Modell Optionen"
 
-#: /home/hans/Desktop/HeeksArt/HeeksArt.cpp:140
 msgid "number of splits"
 msgstr "Anzahl der Unterbrechungen"
 
-#: /home/hans/Desktop/HeeksArt/Mesh.cpp:394
 msgid "Edge cannot have more than 2 faces!"
 msgstr "Kante kann nicht mehr wie 2 Oberflächen haben"
 
-#: /home/hans/Desktop/HeeksArt/Mesh.cpp:405
 msgid "Convert Mesh To Triangles"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksArt/Mesh.cpp:421
 msgid "Normalize All Vertices"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksArt/Mesh.cpp:433
 msgid "Set All Vertex Normals"
 msgstr "Alle Ecken des Poligons normal"
 
-#: /home/hans/Desktop/HeeksArt/Mesh.cpp:436
 msgid "At least one vertex could not be normalized!"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksArt/Mesh.cpp:446
 msgid "Recalculate All Face Centres"
 msgstr "Neuberechnung aller Mittelpunkte der Oberflächen"
 
-#: /home/hans/Desktop/HeeksArt/Mesh.cpp:457
 msgid "Mirror all x<1"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksArt/MeshEdge.cpp:35
 msgid "Split Edge"
 msgstr "Kante trennen"
 
-#: /home/hans/Desktop/HeeksArt/MeshFace.cpp:26
 msgid "Recalculate a Good Centre Point"
 msgstr "Kalkuliere einen passenden Mittelpunkt"
 
-#: /home/hans/Desktop/HeeksArt/MeshVertex.cpp:40
 msgid "Normalize All Edge Directions"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksArt/MeshVertex.cpp:52
 msgid "Set Normal From Edges"
 msgstr ""
 
-#: /home/hans/Desktop/HeeksArt/MeshEdge.h:32
 msgid "Mesh Edge"
 msgstr "Gitter Ecke"
 
-#: /home/hans/Desktop/HeeksArt/MeshFace.h:33
 msgid "Mesh Face"
 msgstr "Gitter Oberfläche"
 
-#: /home/hans/Desktop/HeeksArt/MeshVertex.h:38
 msgid "Mesh Vertex"
 msgstr "Gitter-Eckpunkte"
 
