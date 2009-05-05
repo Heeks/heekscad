@@ -36,7 +36,11 @@ public:
 	long GetMarkingMask()const{return MARKING_FILTER_STL_SOLID;}
 	int GetIDGroupType()const{return SolidType;}
 	const wxChar* GetTypeString(void)const{return _("STL Solid");}
+#ifdef WIN32
 	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/stlsolid");}
+#else
+	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/../share/heekscad/icons/stlsolid");}
+#endif
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
 	void KillGLLists(void);

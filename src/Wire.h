@@ -17,7 +17,11 @@ public:
 	long GetMarkingMask()const{return MARKING_FILTER_WIRE;}
 	const wxChar* GetTypeString(void)const{return _("Wire");}
 	HeeksObj *MakeACopy(void)const{ return new CWire(*this);}
+#ifdef WIN32
 	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/wire");}
+#else
+	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/../share/heekscad/icons/wire");}
+#endif
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 
 	const TopoDS_Wire &Wire()const;

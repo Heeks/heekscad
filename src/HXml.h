@@ -22,7 +22,11 @@ public:
 	const wxChar* GetShortString(void)const;
 	const wxChar* GetTypeString(void)const{return _("Xml");}
 	HeeksObj *MakeACopy(void)const;
+#ifdef WIN32
 	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/xml");}
+#else
+	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/../share/heekscad/icons/xml");}
+#endif
 	void GetProperties(std::list<Property *> *list);
 	void CopyFrom(const HeeksObj* object){operator=(*((HXml*)object));}
 	void WriteXML(TiXmlNode *root);

@@ -2918,7 +2918,11 @@ void HeeksCADapp::create_font()
 {
 	if(m_gl_font == NULL)
 	{
+#ifdef WIN32
 		wxString fstr = GetExeFolder() + _T("/bitmaps/font.glf");
+#else
+		wxString fstr = GetExeFolder() + _T("/../share/heekscad/bitmaps/font.glf");
+#endif
 		glGenTextures( 1, &m_font_tex_number );
 		m_gl_font = new GLFONT;
 		glFontCreate(m_gl_font, (char*)Ttc(fstr.c_str()), m_font_tex_number);

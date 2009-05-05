@@ -28,7 +28,11 @@ public:
 	void GetBox(CBox &box);
 	const wxChar* GetTypeString(void)const{return _("Point");}
 	HeeksObj *MakeACopy(void)const;
+#ifdef WIN32
 	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/point");}
+#else
+	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/../share/heekscad/icons/point");}
+#endif
 	bool ModifyByMatrix(const double *mat);
 	void SetColor(const HeeksColor &col){color = col;}
 	const HeeksColor* GetColor()const{return &color;}
