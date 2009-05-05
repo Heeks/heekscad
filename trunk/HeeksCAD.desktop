@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Exec=/opt/HeeksCAD/HeeksCAD
+Icon=HeeksCAD.png
+Terminal=false
+Name=HeeksCAD
+GenericName=HeeksCAD
+Comment=HeeksCAD is a free, open source, CAD application
+Categories=Graphics;3DGraphics
