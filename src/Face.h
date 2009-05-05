@@ -40,7 +40,11 @@ public:
 	long GetMarkingMask()const{return MARKING_FILTER_FACE;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
+#ifdef WIN32
 	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/face");}
+#else
+	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/../share/heekscad/icons/face");}
+#endif
 	HeeksObj *MakeACopy(void)const{ return new CFace(*this);}
 	const wxChar* GetTypeString(void)const{return _("Face");}
 	void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true);

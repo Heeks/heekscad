@@ -38,7 +38,11 @@ public:
 	long GetMarkingMask()const{return MARKING_FILTER_IMAGE;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
+#ifdef WIN32
 	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/picture");}
+#else
+	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/../share/heekscad/icons/picture");}
+#endif
 	const wxChar* GetShortString(void)const;
 	const wxChar* GetTypeString(void)const{return _("Image");}
 	HeeksObj *MakeACopy(void)const;
