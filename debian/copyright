@@ -1,0 +1,32 @@
+This package was debianized by Joachim Steiger <ubuntu@hyte.de> on
+Tue, 05 May 2009 21:40:00 +0200.
+
+It was downloaded from <http://code.google.com/p/heekscad/>
+
+Upstream Author(s):
+
+    Dan Heeks
+
+Copyright:
+
+    <Copyright (C) 2009 danheeks@gmail.com >
+
+License:
+
+HeeksCAD is covered by the new BSD license
+
+Copyright (c) 2008, Daniel Heeks
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+    * Neither the name of Daniel Heeks nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+
+The Debian packaging is (C) 2009, Joachim Steiger <ubuntu@hyte.de> and
+is licensed under the GPL, see `/usr/share/common-licenses/GPL'.
+
+# Please also look if there are files or directories which have a
+# different copyright/license attached and list them here.
