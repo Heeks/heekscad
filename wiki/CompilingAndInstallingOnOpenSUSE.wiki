@@ -1,0 +1,32 @@
+#summary How to Install and/or compile with openSUSE
+
+= Easy Installation with RPMS =
+
+openSUSE-Education official project provides rpms for the following products:
+
+HeeksCAD
+HeeksCNC
+HeeksArt
+libarea
+libactp
+
+that means, you DO NOT NEED to compile bye your own HeeksCAD nor that plugins, just add the following repo to your list, the search and install the packages you like most:
+
+*openSUSE 11.1*:
+
+http://download.opensuse.org/repositories/Education/openSUSE_11.1
+
+*openSUSE 11.0*:
+
+http://download.opensuse.org/repositories/Education/openSUSE_11.0
+
+You can use YaST or zypper, in that case write the following commands to the shell
+
+{{{
+sudo zypper ar -f http://download.opensuse.org/repositories/Education/openSUSE_11.1 openSUSE-Education
+sudo zypper in HeeksCAD
+#if you want to install all of the then type
+sudo zypper in HeeksCAD HeeksCNC HeeksArt
+}}}
+
+= Compiling =
