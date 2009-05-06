@@ -322,11 +322,11 @@ clean:
 	-rm ${EXECUTABLE} ${OBJECTS}
 
 install:
-	$(mkdir_p) "$(DESTDIR)$(BINDIR)/"
-	$(mkdir_p) "$(DESTDIR)$(HEEKSCADDIR)/bitmaps"
-	$(mkdir_p) "$(DESTDIR)$(HEEKSCADDIR)/icons"
-	$(mkdir_p) "$(DESTDIR)$(PIXMAPSDIR)"
-	$(mkdir_p) "$(DESTDIR)$(APPSDIR)"
+	test -z "$(HEEKSCADDIR)" || $(mkdir_p) "$(DESTDIR)$(BINDIR)"
+	test -z "$(HEEKSCADDIR)/bitmaps" || $(mkdir_p) "$(DESTDIR)$(HEEKSCADDIR)/bitmaps"
+	test -z "$(HEEKSCADDIR)/icons" || $(mkdir_p) "$(DESTDIR)$(HEEKSCADDIR)/icons"
+	test -z "$(PIXMAPSDIR)" || $(mkdir_p) "$(DESTDIR)$(PIXMAPSDIR)"
+	test -z "$(APPSDIR)" || $(mkdir_p) "$(DESTDIR)$(APPSDIR)"
 	strip $(EXECUTABLE)
 	cp $(EXECUTABLE) $(DESTDIR)$(BINDIR)/
 	cp ../bitmaps/*.png $(DESTDIR)$(HEEKSCADDIR)/bitmaps/
