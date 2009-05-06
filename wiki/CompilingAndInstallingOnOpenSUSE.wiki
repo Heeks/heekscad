@@ -25,7 +25,7 @@ You can use YaST or zypper, in that case write the following commands to the she
 {{{
 sudo zypper ar -f http://download.opensuse.org/repositories/Education/openSUSE_11.1 openSUSE-Education
 sudo zypper in HeeksCAD
-#if you want to install all of the then type
+#if you want to install all of them then type
 sudo zypper in HeeksCAD HeeksCNC HeeksArt
 }}}
 
