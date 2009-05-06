@@ -54,13 +54,11 @@ as each of the files compile
 and then after about 50-60 files have compiled it will say:
 dan@dan-desktop:~/Desktop/HeeksCAD/src$ 
 
-and then it will have made HeeksCAD
+you must then type
+"sudo make install"
 
 
-On the Ubuntu menu, go to Places->Desktop
-Then double click on HeeksCAD folder to open it.
-You will see HeeksCAD with a blue diamond icon.
-Double click on the blue diamond icon to run HeeksCAD.
+To run it, open Terminal and type:
+HeeksCAD
 
-
-Let me know if something goes wrong. danheeks@googlemail.com
+Let me know if something goes wrong. danheeks@gmail.com
