@@ -60,5 +60,3 @@ you must then type
 
 To run it, open Terminal and type:
 HeeksCAD
-
-Let me know if something goes wrong. danheeks@gmail.com
