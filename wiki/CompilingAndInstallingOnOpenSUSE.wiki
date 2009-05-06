@@ -30,3 +30,15 @@ sudo zypper in HeeksCAD HeeksCNC HeeksArt
 }}}
 
 = Compiling =
+
+In order to compile bye your own HeeksCAD you need to type the following commands on your shell
+
+*attention* : OpenCASCADE is available on Education repository (the same as before) or in Packman repository: http://packman.links2linux.org/package/OpenCASCADE
+
+{{{
+sudo zypper in OpenCASCADE-devel wxGTK-devel gtkglext-devel subversion
+svn checkout http://heekscad.googlecode.com/svn/trunk/ HeeksCAD
+cd HeeksCAD/src
+make
+sudo make install
+}}}
