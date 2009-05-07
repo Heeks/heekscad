@@ -59,6 +59,7 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 
 	if(sketches_in_marked_list > 0){
 		t_list->push_back(new ConvertSketchToFace);
+		t_list->push_back(new SketchArcsToLines);
 	}
 
 	if(sketches_in_marked_list > 1){
@@ -341,6 +342,49 @@ void MakeLineArcsToSketch::Run(){
 
 	wxGetApp().AddUndoably(sketch, NULL, NULL);
 	wxGetApp().DeleteUndoably(objects_to_delete);
+}
+
+static CSketch* sketch_for_arcs_to_lines = NULL;
+static bool point_found_for_arc_to_lines = false;
+static double point_for_arcs_to_lines[3];
+static void callback_for_arcs_to_lines(const double* p)
+{
+	if(point_found_for_arc_to_lines)
+	{
+		HLine* new_object = new HLine(make_point(p), make_point(point_for_arcs_to_lines), &wxGetApp().current_color);
+		sketch_for_arcs_to_lines->Add(new_object, NULL);
+	}
+	point_found_for_arc_to_lines = true;
+	memcpy(point_for_arcs_to_lines, p, 3*sizeof(double));
+}
+
+HeeksObj* SplitArcsIntoLittleLines(HeeksObj* sketch)
+{
+	CSketch* new_sketch = new CSketch;
+	sketch_for_arcs_to_lines = new_sketch;
+	point_found_for_arc_to_lines = false;
+	for(HeeksObj* o = sketch->GetFirstChild(); o; o = sketch->GetNextChild())
+	{
+		o->GetSegments(callback_for_arcs_to_lines, 1/FaceToSketchTool::deviation);
+	}
+	return new_sketch;
+}
+
+void SketchArcsToLines::Run(){
+	wxGetApp().StartHistory();
+	std::list<HeeksObj*> copy_of_marked_list = wxGetApp().m_marked_list->list();
+	std::list<HeeksObj*> objects_to_delete;
+	for(std::list<HeeksObj*>::const_iterator It = copy_of_marked_list.begin(); It != copy_of_marked_list.end(); It++){
+		HeeksObj* object = *It;
+		if(object->GetType() == SketchType){
+			HeeksObj* new_object = SplitArcsIntoLittleLines(object);
+			wxGetApp().AddUndoably(new_object, NULL, NULL);
+			objects_to_delete.push_back(object);
+		}
+	}
+
+	wxGetApp().DeleteUndoably(objects_to_delete);
+	wxGetApp().EndHistory();
 }
 
 void CombineSketches::Run(){
