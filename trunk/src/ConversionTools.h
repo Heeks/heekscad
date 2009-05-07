@@ -7,6 +7,7 @@ extern bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wir
 extern bool ConvertSketchToFace2(HeeksObj* object, TopoDS_Face& face);
 extern bool ConvertFaceToSketch2(const TopoDS_Face& face, HeeksObj* sketch, double deviation);
 extern bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double deviation);
+extern HeeksObj* SplitArcsIntoLittleLines(HeeksObj* sketch);
 
 class ConvertSketchToFace: public Tool
 {
@@ -14,6 +15,14 @@ public:
 	void Run();
 	const wxChar* GetTitle(){return _("Convert sketch to face");}
 	wxString BitmapPath(){return _T("la2face");}
+};
+
+class SketchArcsToLines: public Tool
+{
+public:
+	void Run();
+	const wxChar* GetTitle(){return _("Split arcs to little lines");}
+	wxString BitmapPath(){return _T("splitarcs");}
 };
 
 class MakeLineArcsToSketch: public Tool
@@ -53,3 +62,4 @@ public:
 };
 
 void GetConversionMenuTools(std::list<Tool*>* t_list);
+
