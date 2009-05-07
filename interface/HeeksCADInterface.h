@@ -73,9 +73,11 @@ public:
 	virtual HeeksObj* NewSketch();
 	virtual HeeksObj* NewLine(const double* s, const double* e);
 	virtual HeeksObj* NewArc(const double* s, const double* e, const double* c, const double* up); // set up to (0, 0, -1) for a clockwise arc
+	virtual HeeksObj* NewArc(const double* c, const double* u, double r, double s, double e); // set up to (0, 0, -1) for a clockwise arc
 	virtual HeeksObj* NewCircle(const double *c, double r);
 	virtual HeeksObj* NewCuboid(const double *c, double x, double y, double z);
 	virtual HeeksObj* NewCylinder(const double*c, double r, double h);
+	virtual HeeksObj* NewCone(const double*c, double r1, double r2, double h);
 	virtual HeeksObj* NewGroup();
 	virtual HeeksObj* Fuse(const std::list<HeeksObj*> objects);
 	virtual HeeksObj* Cut(const std::list<HeeksObj*> objects);
@@ -103,6 +105,9 @@ public:
 	virtual SketchOrderType GetSketchOrder(HeeksObj* sketch);
 	virtual bool ReOrderSketch(HeeksObj* sketch, SketchOrderType new_order); // returns true if done
 	virtual void ExtractSeparateSketches(HeeksObj* sketch, std::list<HeeksObj*> &new_separate_sketches);
+	virtual HeeksObj* ExtrudeSketch(HeeksObj* sketch, double height);
+	virtual HeeksObj* LineArcsToWire(std::list<HeeksObj*> list);
+	virtual HeeksObj* MakePipe(HeeksObj* spine, HeeksObj* profile);
 
 	// body functions
 	virtual long BodyGetNumFaces(HeeksObj* body);

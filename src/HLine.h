@@ -50,7 +50,7 @@ public:
 	void WriteXML(TiXmlNode *root);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
-
+    bool UsesID(){return true;} 
 	gp_Lin GetLine()const;
 	bool Intersects(const gp_Pnt &pnt)const;
 	gp_Vec GetSegmentVector(double fraction);

@@ -130,7 +130,8 @@ void ManyRemoveOrAddTool::Remove()
 	std::list<HeeksObj*>::iterator It;
 	for(It = m_objects.begin(); It != m_objects.end(); It++){
 		HeeksObj* object = *It;
-		m_owner->Remove(object);
+		if(m_owner)
+			m_owner->Remove(object);
 		wxGetApp().m_marked_list->Remove(object, false);
 	}
 
