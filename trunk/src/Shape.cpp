@@ -5,6 +5,7 @@
 #include "Shape.h"
 #include "Solid.h"
 #include "Wire.h"
+#include "Group.h"
 #include "Face.h"
 #include "Edge.h"
 #include "Loop.h"
@@ -531,8 +532,45 @@ void CShape::CopyIDsFrom(const CShape* shape_from)
 	}
 }
 
-HeeksObj* CShape::CutShapes(const std::list<HeeksObj*> &list_in)
+HeeksObj* CShape::CutShapes(const std::list<HeeksObj*> &list_in, bool dodelete)
 {
+	if(list_in.front()->GetType() == GroupType)
+	{
+		CGroup* group = (CGroup*)list_in.front();
+		CGroup* newgroup = new CGroup();
+		group->m_owner->Add(newgroup,NULL);
+
+		std::list<HeeksObj*> children;
+		HeeksObj* child = group->GetFirstChild();
+		while(child)
+		{
+			children.push_back(child);
+			child = group->GetNextChild();
+		}
+
+		std::list<HeeksObj*>::iterator iter = children.begin();
+		while(iter != children.end())
+		{
+			std::list<HeeksObj*> newlist;
+			std::list<HeeksObj*>::const_iterator it = list_in.begin();
+			while(it!=list_in.end())
+			{
+				newlist.push_back(*it);
+				++it;
+			}
+			newlist.pop_front();
+			newlist.push_front(*iter);
+			HeeksObj* newshape = CutShapes(newlist,false);
+			newshape->m_owner->Remove(newshape);
+			newgroup->Add(newshape,NULL);
+			++iter;
+		}
+	
+		group->m_owner->Remove(group);
+		wxGetApp().DeleteUndoably(list_in);
+		return newgroup;
+	}
+
 	// subtract from the first one in the list all the others
 	std::list<TopoDS_Shape> shapes;
 	std::list<HeeksObj*> delete_list;
@@ -551,15 +589,19 @@ HeeksObj* CShape::CutShapes(const std::list<HeeksObj*> &list_in)
 	TopoDS_Shape new_shape;
 	if(Cut(shapes, new_shape))
 	{
-		wxGetApp().StartHistory();
+		if(dodelete)
+			wxGetApp().StartHistory();
 		HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of Cut Operation"), SOLID_TYPE_UNKNOWN, ((CShape*)first_solid)->m_color);
 		wxGetApp().AddUndoably(new_object, NULL, NULL);
-		wxGetApp().DeleteUndoably(delete_list);
-		wxGetApp().EndHistory();
-		wxGetApp().Repaint();
+		if(dodelete)
+		{
+			wxGetApp().DeleteUndoably(delete_list);
+			wxGetApp().EndHistory();
+			wxGetApp().Repaint();
+		}
 		return new_object;
 	}
-	return NULL;
+	return first_solid;
 }
 
 HeeksObj* CShape::FuseShapes(const std::list<HeeksObj*> &list_in)
