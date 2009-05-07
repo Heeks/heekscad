@@ -15,8 +15,15 @@ ToolImage::ToolImage(const wxString& name):wxImage(wxGetApp().GetExeFolder() + _
 #else
 ToolImage::ToolImage(const wxString& name):wxImage(wxGetApp().GetExeFolder() + _T("/../share/heekscad/bitmaps/") + name + _T(".png"), wxBITMAP_TYPE_PNG)
 #endif
+
+#else
+//remove after all plugins have some way of differentiate ressources from libs
+#ifdef HEEKSCNC
+ToolImage::ToolImage(const wxString& name):wxImage(theApp.GetResFolder() + _T("/bitmaps/") + name + _T(".png"), wxBITMAP_TYPE_PNG)
 #else
 ToolImage::ToolImage(const wxString& name):wxImage(theApp.GetDllFolder() + _T("/bitmaps/") + name + _T(".png"), wxBITMAP_TYPE_PNG)
+#endif
+
 #endif
 {
 	int width = GetWidth();
