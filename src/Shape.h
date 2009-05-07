@@ -84,7 +84,7 @@ public:
 	bool GetExtents(double* extents, const double* orig, const double* xdir, const double* ydir, const double* zdir);
 	void CopyIDsFrom(const CShape* shape_from);
 
-	static HeeksObj* CutShapes(const std::list<HeeksObj*> &list);
+	static HeeksObj* CutShapes(const std::list<HeeksObj*> &list,bool dodelete=true);
 	static HeeksObj* FuseShapes(const std::list<HeeksObj*> &list);
 	static void CommonShapes(const std::list<HeeksObj*> &list);
 	static void FilletOrChamferEdges(const std::list<HeeksObj*> &list, double radius, bool chamfer_not_fillet = false);

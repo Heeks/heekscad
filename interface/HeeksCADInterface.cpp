@@ -15,6 +15,8 @@
 #include "Group.h"
 #include "Cylinder.h"
 #include "Cuboid.h"
+#include "Cone.h"
+#include "Wire.h"
 #include "ObjPropsCanvas.h"
 #include "OptionsCanvas.h"
 #include "TreeCanvas.h"
@@ -29,9 +31,11 @@
 #include "Loop.h"
 #include "../interface/ToolImage.h"
 #include "StlSolid.h"
+#include "RuledSurface.h"
 #include "HeeksConfig.h"
 #include <gp_Sphere.hxx>
 #include <gp_Cone.hxx>
+#include <TopoDS_Wire.hxx>
 
 double CHeeksCADInterface::GetTolerance()
 {
@@ -336,6 +340,12 @@ HeeksObj* CHeeksCADInterface::NewCylinder(const double* c, double r, double h)
 	return new CCylinder(gp_Ax2(make_point(c),up),r,h,_T("Cylinder"),wxGetApp().current_color);
 }
 
+HeeksObj* CHeeksCADInterface::NewCone(const double* c, double r1, double r2, double h)
+{
+	gp_Dir up(0,0,1);
+	return new CCone(gp_Ax2(make_point(c),up),r1,r2,h,_T("Cone"),wxGetApp().current_color);
+}
+
 HeeksObj* CHeeksCADInterface::Fuse(const std::list<HeeksObj*> objects)
 {
 	return CShape::FuseShapes(objects);
@@ -374,6 +384,21 @@ HeeksObj* CHeeksCADInterface::NewArc(const double* s, const double* e, const dou
 	gp_Pnt pc = make_point(c);
 	gp_Circ circle(gp_Ax2(pc, dir), p1.Distance(pc));
 	return new HArc(p0, p1, circle, &wxGetApp().current_color);
+}
+
+HeeksObj* CHeeksCADInterface::NewArc(const double* c, const double* u, double r, double s, double e)
+{
+	// arc
+	gp_Pnt pc = make_point(c);
+	gp_Dir up(make_point(u).XYZ());
+	gp_Circ circle(gp_Ax2(pc, up), r);
+	gp_Pnt p0 = pc.XYZ() + circle.XAxis().Direction().XYZ()*r;
+	gp_Pnt p1 =pc.XYZ() + circle.XAxis().Direction().XYZ()*r;
+	p0.Rotate(circle.Axis(),s);
+	p1.Rotate(circle.Axis(),e);
+	
+	return new HArc(p0, p1, circle, &wxGetApp().current_color);
+
 }
 
 void CHeeksCADInterface::RegisterObserver(Observer* observer)
@@ -478,10 +503,30 @@ SketchOrderType CHeeksCADInterface::GetSketchOrder(HeeksObj* sketch)
 	return ((CSketch*)sketch)->GetSketchOrder();
 }
 
+HeeksObj* CHeeksCADInterface::LineArcsToWire(std::list<HeeksObj*> list)
+{
+	TopoDS_Wire wire;
+	ConvertLineArcsToWire2(list,wire);
+	return new CWire(wire,_T("Wire"));
+}
+
+HeeksObj* CHeeksCADInterface::MakePipe(HeeksObj* spine, HeeksObj* profile)
+{
+	return CreatePipeFromProfile(spine,profile);
+}
+
 bool CHeeksCADInterface::ReOrderSketch(HeeksObj* sketch, SketchOrderType new_order)
 {
 	return ((CSketch*)sketch)->ReOrderSketch(new_order);
 }
+
+HeeksObj* CHeeksCADInterface::ExtrudeSketch(HeeksObj* sketch, double height)
+{
+	std::list<HeeksObj*>list;
+	list.push_back(sketch);
+	return CreateExtrusion(list,height);
+}
+
 
 void CHeeksCADInterface::ExtractSeparateSketches(HeeksObj* sketch, std::list<HeeksObj*> &new_separate_sketches)
 {
