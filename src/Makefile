@@ -14,15 +14,12 @@ WXCFLAGS=$(shell wx-config --cflags)
 #CCFLAGS=-Wall -g -I "./" -I "/usr/include/opencascade" -I/home/dan/Desktop/wxGTK-2.8.9/buildgtk/lib/wx/include/gtk2-ansi-debug-2.8 -I/usr/include/wx-2.8 -D__WXGTK__ -DHEEKSCAD -DHAVE_LIMITS -D__WXDEBUG__ -DWXUSINGDLL -DHAVE_LIMITS
 CCFLAGS=-Wall -g -I "./" -I "/usr/include/opencascade" $(WXCFLAGS) -DUNICODE -D__WXGTK__ -DHEEKSCAD -DHAVE_LIMITS -DWXUSINGDLL -DHAVE_LIMITS -DTIXML_USE_STL
 
-#WX_LIB_LETTER=d
-WX_LIB_LETTER=u
-
 OBJECTS=AboutBox.o advprops.o BezierCurve.o Cone.o ConversionTools.o CoordinateSystem.o Cuboid.o Cylinder.o DigitizedPoint.o DigitizeMode.o DimensionDrawing.o Drawing.o dxf.o Edge.o Face.o Geom.o glfont.o GLList.o GraphicsCanvas.o Grid.o Gripper.o GripperSelTransform.o Group.o HArc.o HCircle.o HDimension.o HeeksCAD.o HeeksFrame.o HeeksPrintout.o HILine.o HEllipse.o HImage.o History.o HLine.o HPoint.o HSpline.o HText.o HXml.o Images.o InputModeCanvas.o LineArcDrawing.o Loop.o MagDragWindow.o manager.o MarkedList.o ObjPropsCanvas.o odcombo.o OptionsCanvas.o Plugins.o PointDrawing.o PointOrWindow.o PropertiesCanvas.o PropertyTrsf.o PropertyVertex.o propgrid.o props.o RegularShapesDrawing.o RemoveOrAddTool.o RuledSurface.o Ruler.o SelectMode.o Shape.o ShapeData.o Sketch.o Solid.o Sphere.o StlSolid.o StretchTool.o TransformTool.o TransformTools.o TreeCanvas.o ViewPoint.o ViewRotating.o ViewZooming.o Window.o Wire.o wxImageLoader.o HeeksCADInterface.o HeeksColor.o HeeksObj.o LeftAndRight.o MarkedObject.o ObjList.o PropertyCheck.o PropertyChoice.o PropertyColor.o PropertyDouble.o PropertyLength.o PropertyInt.o PropertyList.o PropertyString.o strconv.o ToolImage.o ToolList.o tinyxml.o tinyxmlerror.o tinyxmlparser.o
 
 EXECUTABLE=../HeeksCAD
 
 ${EXECUTABLE}: ${OBJECTS}
-	$(CC) -o ${EXECUTABLE} ${OBJECTS} -lstdc++ -lGLU -lGL -lwx_gtk2${WX_LIB_LETTER}_richtext-2.8 -lwx_gtk2${WX_LIB_LETTER}_aui-2.8 -lwx_gtk2${WX_LIB_LETTER}_xrc-2.8 -lwx_gtk2${WX_LIB_LETTER}_qa-2.8 -lwx_gtk2${WX_LIB_LETTER}_html-2.8 -lwx_gtk2${WX_LIB_LETTER}_adv-2.8 -lwx_gtk2${WX_LIB_LETTER}_core-2.8 -lwx_base${WX_LIB_LETTER}_xml-2.8 -lwx_base${WX_LIB_LETTER}_net-2.8 -lwx_base${WX_LIB_LETTER}-2.8 -lwx_gtk2${WX_LIB_LETTER}_gl-2.8 -lTKVRML -lTKSTL -lTKBRep -lTKIGES -lTKShHealing -lTKSTEP -lTKSTEP209 -lTKSTEPAttr -lTKSTEPBase -lTKXSBase -lTKShapeSchema -lFWOSPlugin -lTKBool -lTKCAF -lTKCDF -lTKernel -lTKFeat -lTKFillet -lTKG2d -lTKG3d -lTKGeomAlgo -lTKGeomBase -lTKHLR -lTKMath -lTKOffset -lTKPrim -lTKPShape -lTKService -lTKTopAlgo -lTKV2d -lTKV3d -lTKMesh -lTKAdvTools -lTKBO -lTKXDESTEP -lTKXCAF -lTKXCAFSchema -lTKLCAF -lTKPLCAF
+	$(CC) -o ${EXECUTABLE} ${OBJECTS} -lstdc++ -lGLU -lGL `wx-config --libs` `wx-config --gl-libs` -lTKVRML -lTKSTL -lTKBRep -lTKIGES -lTKShHealing -lTKSTEP -lTKSTEP209 -lTKSTEPAttr -lTKSTEPBase -lTKXSBase -lTKShapeSchema -lFWOSPlugin -lTKBool -lTKCAF -lTKCDF -lTKernel -lTKFeat -lTKFillet -lTKG2d -lTKG3d -lTKGeomAlgo -lTKGeomBase -lTKHLR -lTKMath -lTKOffset -lTKPrim -lTKPShape -lTKService -lTKTopAlgo -lTKV2d -lTKV3d -lTKMesh -lTKAdvTools -lTKBO -lTKXDESTEP -lTKXCAF -lTKXCAFSchema -lTKLCAF -lTKPLCAF
 
 AboutBox.o: AboutBox.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
@@ -322,11 +319,11 @@ clean:
 	-rm ${EXECUTABLE} ${OBJECTS}
 
 install:
-	test -z "$(HEEKSCADDIR)" || $(mkdir_p) "$(DESTDIR)$(BINDIR)"
-	test -z "$(HEEKSCADDIR)/bitmaps" || $(mkdir_p) "$(DESTDIR)$(HEEKSCADDIR)/bitmaps"
-	test -z "$(HEEKSCADDIR)/icons" || $(mkdir_p) "$(DESTDIR)$(HEEKSCADDIR)/icons"
-	test -z "$(PIXMAPSDIR)" || $(mkdir_p) "$(DESTDIR)$(PIXMAPSDIR)"
-	test -z "$(APPSDIR)" || $(mkdir_p) "$(DESTDIR)$(APPSDIR)"
+	test -z "$(DESTDIR)$(HEEKSCADDIR)" || $(mkdir_p) "$(DESTDIR)$(BINDIR)"
+	test -z "$(DESTDIR)$(HEEKSCADDIR)/bitmaps" || $(mkdir_p) "$(DESTDIR)$(HEEKSCADDIR)/bitmaps"
+	test -z "$(DESTDIR)$(HEEKSCADDIR)/icons" || $(mkdir_p) "$(DESTDIR)$(HEEKSCADDIR)/icons"
+	test -z "$(DESTDIR)$(PIXMAPSDIR)" || $(mkdir_p) "$(DESTDIR)$(PIXMAPSDIR)"
+	test -z "$(DESTDIR)$(APPSDIR)" || $(mkdir_p) "$(DESTDIR)$(APPSDIR)"
 	strip $(EXECUTABLE)
 	cp $(EXECUTABLE) $(DESTDIR)$(BINDIR)/
 	cp ../bitmaps/*.png $(DESTDIR)$(HEEKSCADDIR)/bitmaps/
