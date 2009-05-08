@@ -12,7 +12,6 @@ class CFace;
 class CEdge;
 
 class CFaceList: public ObjList{
-	static wxIcon* m_icon;
 public:
 	const wxChar* GetTypeString(void)const{return _("Faces");}
 	HeeksObj *MakeACopy(void)const{ return new CFaceList(*this);}
@@ -24,7 +23,6 @@ public:
 };
 
 class CEdgeList: public ObjList{
-	static wxIcon* m_icon;
 public:
 	const wxChar* GetTypeString(void)const{return _("Edges");}
 	HeeksObj *MakeACopy(void)const{ return new CEdgeList(*this);}
@@ -32,6 +30,17 @@ public:
 	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/edges");}
 #else
 	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/../share/heekscad/icons/edges");}
+#endif
+};
+
+class CVertexList: public ObjList{
+public:
+	const wxChar* GetTypeString(void)const{return _("Edges");}
+	HeeksObj *MakeACopy(void)const{ return new CVertexList(*this);}
+#ifdef WIN32
+	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/vertices");}
+#else
+	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/../share/heekscad/icons/vertices");}
 #endif
 };
 
@@ -49,6 +58,7 @@ public:
 	static bool m_solids_found; // a flag for xml writing
 	CFaceList* m_faces;
 	CEdgeList* m_edges;
+	CVertexList* m_vertices;
 	wxString m_title;
 	HeeksColor m_color;
 	CFace* m_picked_face;

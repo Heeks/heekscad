@@ -1997,6 +1997,11 @@ void on_sel_filter_face(bool value, HeeksObj* object){
 	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_FACE;
 }
 
+void on_sel_filter_vertex(bool value, HeeksObj* object){
+	if(value)wxGetApp().m_marked_list->m_filter |= MARKING_FILTER_VERTEX;
+	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_VERTEX;
+}
+
 void on_sel_filter_edge(bool value, HeeksObj* object){
 	if(value)wxGetApp().m_marked_list->m_filter |= MARKING_FILTER_EDGE;
 	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_EDGE;
@@ -2148,6 +2153,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	selection_filter->m_list.push_back(new PropertyCheck(_("circle"), (m_marked_list->m_filter & MARKING_FILTER_CIRCLE) != 0, NULL, on_sel_filter_circle));
 	selection_filter->m_list.push_back(new PropertyCheck(_("edge"), (m_marked_list->m_filter & MARKING_FILTER_EDGE) != 0, NULL, on_sel_filter_edge));
 	selection_filter->m_list.push_back(new PropertyCheck(_("face"), (m_marked_list->m_filter & MARKING_FILTER_FACE) != 0, NULL, on_sel_filter_face));
+	selection_filter->m_list.push_back(new PropertyCheck(_("vertex"), (m_marked_list->m_filter & MARKING_FILTER_VERTEX) != 0, NULL, on_sel_filter_vertex));
 	selection_filter->m_list.push_back(new PropertyCheck(_("solid"), (m_marked_list->m_filter & MARKING_FILTER_SOLID) != 0, NULL, on_sel_filter_solid));
 	selection_filter->m_list.push_back(new PropertyCheck(_("stl_solid"), (m_marked_list->m_filter & MARKING_FILTER_STL_SOLID) != 0, NULL, on_sel_filter_stl_solid));
 	selection_filter->m_list.push_back(new PropertyCheck(_("wire"), (m_marked_list->m_filter & MARKING_FILTER_WIRE) != 0, NULL, on_sel_filter_wire));
