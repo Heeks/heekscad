@@ -8,6 +8,7 @@
 #include "Group.h"
 #include "Face.h"
 #include "Edge.h"
+#include "Vertex.h"
 #include "Loop.h"
 #include "Cylinder.h"
 #include "Cuboid.h"
@@ -60,6 +61,7 @@ CShape::CShape(const CShape& s):m_gl_list(0), m_picked_face(NULL)
 {
 	m_faces = new CFaceList;
 	m_edges = new CEdgeList;
+	m_vertices = new CVertexList;
 	Add(m_faces, NULL);
 	Add(m_edges, NULL);
 	operator=(s);
@@ -89,6 +91,7 @@ void CShape::Init()
 {
 	m_faces = new CFaceList;
 	m_edges = new CEdgeList;
+	m_vertices = new CVertexList;
 	Add(m_faces, NULL);
 	Add(m_edges, NULL);
 	create_faces_and_edges();
@@ -119,6 +122,14 @@ void CShape::create_faces_and_edges()
 		{
 			edgeMap.Add(expEdge.Current());
 		}
+	}
+
+	// create the vertex object
+	for (TopExp_Explorer expVertex(m_shape, TopAbs_VERTEX); expVertex.More(); expVertex.Next())
+	{
+		TopoDS_Vertex v = TopoDS::Vertex(expVertex.Current());
+		CVertex* new_object = new CVertex(v);
+		m_vertices->Add(new_object, NULL);
 	}
 
 	int count = 0;
@@ -306,6 +317,9 @@ void CShape::glCommands(bool select, bool marked, bool no_color)
 
 		// render all the edges
 		m_edges->glCommands(true, marked, no_color);
+
+		// render all the vertices
+		m_vertices->glCommands(true, false, false);
 
 		glEndList();
 	}
