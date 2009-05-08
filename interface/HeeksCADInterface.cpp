@@ -29,6 +29,7 @@
 #include "Face.h"
 #include "Edge.h"
 #include "Loop.h"
+#include "Vertex.h"
 #include "../interface/ToolImage.h"
 #include "StlSolid.h"
 #include "RuledSurface.h"
@@ -686,6 +687,21 @@ HeeksObj* CHeeksCADInterface::BodyGetNextEdge(HeeksObj* body)
 	return ((CShape*)body)->m_edges->GetNextChild();
 }
 
+long CHeeksCADInterface::BodyGetNumVertices(HeeksObj* body)
+{
+	return ((CShape*)body)->m_vertices->GetNumChildren();
+}
+
+HeeksObj* CHeeksCADInterface::BodyGetFirstVertex(HeeksObj* body)
+{
+	return ((CShape*)body)->m_vertices->GetFirstChild();
+}
+
+HeeksObj* CHeeksCADInterface::BodyGetNextVertex(HeeksObj* body)
+{
+	return ((CShape*)body)->m_vertices->GetNextChild();
+}
+
 bool CHeeksCADInterface::BodyGetExtents(HeeksObj* body, double* extents, const double* orig, const double* xdir, const double* ydir, const double* zdir)
 {
 	return ((CShape*)body)->GetExtents(extents, orig, xdir, ydir, zdir);
@@ -764,6 +780,21 @@ HeeksObj* CHeeksCADInterface::LoopGetEdge(HeeksObj* loop, int index)
 bool CHeeksCADInterface::LoopIsOuter(HeeksObj* loop)
 {
 	return ((CLoop*)loop)->m_is_outer;
+}
+
+void CHeeksCADInterface::VertexGetPoint(HeeksObj* vertex, double *d3)
+{
+	memcpy(d3, ((CVertex*)vertex)->m_point, 3*sizeof(double));
+}
+
+HeeksObj* CHeeksCADInterface::VertexGetFirstEdge(HeeksObj* vertex)
+{
+	return ((CVertex*)vertex)->GetFirstEdge();
+}
+
+HeeksObj* CHeeksCADInterface::VertexGetNextEdge(HeeksObj* vertex)
+{
+	return ((CVertex*)vertex)->GetNextEdge();
 }
 
 const wxChar* CHeeksCADInterface::GetRevisionNumber()

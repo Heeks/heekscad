@@ -117,6 +117,9 @@ public:
 	virtual long BodyGetNumEdges(HeeksObj* body);
 	virtual HeeksObj* BodyGetFirstEdge(HeeksObj* body);
 	virtual HeeksObj* BodyGetNextEdge(HeeksObj* body);
+	virtual long BodyGetNumVertices(HeeksObj* body);
+	virtual HeeksObj* BodyGetFirstVertex(HeeksObj* body);
+	virtual HeeksObj* BodyGetNextVertex(HeeksObj* body);
 	virtual bool BodyGetExtents(HeeksObj* body, double* extents, const double* orig = NULL, const double* xdir = NULL, const double* ydir = NULL, const double* zdir = NULL);
 
 	// face functions
@@ -157,6 +160,11 @@ public:
 	virtual HeeksObj* LoopGetNextEdge(HeeksObj* loop); 
 	virtual HeeksObj* LoopGetEdge(HeeksObj* loop, int index);
 	virtual bool LoopIsOuter(HeeksObj* loop);
+
+	// vertex functions
+	virtual void VertexGetPoint(HeeksObj* vertex, double *d3);
+	virtual HeeksObj* VertexGetFirstEdge(HeeksObj* vertex);
+	virtual HeeksObj* VertexGetNextEdge(HeeksObj* vertex); 
 
 	virtual const wxChar* GetRevisionNumber();
 	virtual void RegisterOnGLCommands( void(*callbackfunc)() );

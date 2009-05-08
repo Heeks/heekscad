@@ -5,7 +5,6 @@
 #include "../interface/HeeksObj.h"
 #include <TopoDS_Edge.hxx>
 
-class CSolid;
 class CFace;
 
 class CEdge:public HeeksObj{

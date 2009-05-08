@@ -1,0 +1,46 @@
+// Vertex.cpp
+// Copyright (c) 2009, Dan Heeks
+// This program is released under the BSD license. See the file COPYING for details.
+#include "stdafx.h"
+#include "Vertex.h"
+#include "Face.h"
+#include "Solid.h"
+#include <BRep_Tool.hxx>
+#include <TopoDS_Vertex.hxx>
+#include <TopExp.hxx>
+#include "Gripper.h"
+
+CVertex::CVertex(const TopoDS_Vertex &vertex):m_topods_vertex(vertex){
+	gp_Pnt pos = BRep_Tool::Pnt(vertex);
+	extract(pos, m_point);
+}
+
+CVertex::~CVertex(){
+}
+
+void CVertex::glCommands(bool select, bool marked, bool no_color){
+	// don't render anything, but put a point for selection
+	glRasterPos3dv(m_point);
+}
+
+void CVertex::GetGripperPositions(std::list<double> *list, bool just_for_endof){
+	list->push_back(GripperTypeTranslate);
+	list->push_back(m_point[0]);
+	list->push_back(m_point[1]);
+	list->push_back(m_point[2]);
+}
+
+CEdge* CVertex::GetFirstEdge()
+{
+	if (m_edges.size()==0) return NULL;
+	m_edgeIt = m_edges.begin();
+	return *m_edgeIt;
+}
+
+CEdge* CVertex::GetNextEdge()
+{
+	if (m_edges.size()==0 || m_edgeIt==m_edges.end()) return NULL;
+	m_edgeIt++;
+	if (m_edgeIt==m_edges.end()) return NULL;
+	return *m_edgeIt;
+}
