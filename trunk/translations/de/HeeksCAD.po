@@ -1,15 +1,15 @@
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: HeeksCAD 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-04-28 13:02+0200\n"
-"PO-Revision-Date: 2009-05-02 01:21+0200\n"
+"PO-Revision-Date: 2009-05-08 02:07+0200\n"
 "Last-Translator: fungunner2 <fungunner2@freenet.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit"
-
 
 msgid "OK"
 msgstr "OK"
@@ -105,7 +105,7 @@ msgid "Error! The 'Stop Picking' button shouldn't have been available!"
 msgstr "Fehler! Der \"Stop-Picking\"-Button sollte nicht zur Verfügung stehen"
 
 msgid "Stop Picking"
-msgstr "Stop·Picking"
+msgstr "Stop·Auswahl"
 
 msgid "Finish picking"
 msgstr "Finish·picking"
@@ -114,10 +114,10 @@ msgid "between two points"
 msgstr "zwischen 2 Punkten"
 
 msgid "orthogonal"
-msgstr "orthogonal"
+msgstr "rechter Winkel"
 
 msgid "mode"
-msgstr "Mode"
+msgstr "Modus"
 
 msgid "Stop drawing"
 msgstr "Stop mit zeichnen"
@@ -138,10 +138,10 @@ msgid "Pick position without adding to the drawing"
 msgstr "Wähle eine Position ohne sie zur Zeichnung hinzuzufügen"
 
 msgid "Blend"
-msgstr "Blend"
+msgstr "Mischung"
 
 msgid "Enter Blend Radius"
-msgstr "Enter·Blend·Radius"
+msgstr "Verbindungs Radius"
 
 msgid "Radius"
 msgstr "Radius"
@@ -153,7 +153,7 @@ msgid "A fatal error happened during Blend"
 msgstr "Schwerer Ausnahmefehler beim verbinden ;)"
 
 msgid "surface type"
-msgstr "surface·type"
+msgstr "Oberflächentyp"
 
 msgid "Make Sketch"
 msgstr "Erstelle Zeichnung"
@@ -174,7 +174,7 @@ msgid "sphere"
 msgstr "Kugel"
 
 msgid "torus"
-msgstr "Torus"
+msgstr "Ring(Donut)"
 
 msgid "bezier"
 msgstr "bezier"
@@ -186,7 +186,7 @@ msgid "revolution"
 msgstr "revolution"
 
 msgid "extrusion"
-msgstr "extrusion"
+msgstr "Dimensionserhöhung(2D>3D)"
 
 msgid "offset"
 msgstr "Offset"
@@ -210,10 +210,10 @@ msgid "orientation"
 msgstr "Richtung"
 
 msgid "major radius"
-msgstr "major·radius"
+msgstr "grösster·radius"
 
 msgid "minor radius"
-msgstr "minor·radius"
+msgstr "kleinster·radius"
 
 msgid "rotation"
 msgstr "Drehung"
@@ -234,7 +234,7 @@ msgid "%s %d"
 msgstr "%s·%d"
 
 msgid "Knot"
-msgstr "Knot"
+msgstr "Knoten"
 
 msgid "Pole"
 msgstr "Pole"
@@ -261,10 +261,10 @@ msgid "Save graphical data file"
 msgstr "Speichere Bild Datei"
 
 msgid "Exit Full Screen Mode"
-msgstr "Exit·Full·Screen·Mode"
+msgstr "Verlasse Vollbildschirm"
 
 msgid "Show Full Screen"
-msgstr "Ganzer Bildschirm"
+msgstr "Vollbildschirm"
 
 msgid "view options"
 msgstr "Ansicht"
@@ -276,16 +276,16 @@ msgid "free"
 msgstr "Frei"
 
 msgid "rotate mode"
-msgstr "rotate·mode"
+msgstr "Dreh-Modus"
 
 msgid "none"
-msgstr "none"
+msgstr "Keine Hilfe"
 
 msgid "input mode title"
-msgstr "nput·mode·title"
+msgstr "Nur Modus zeigen"
 
 msgid "full help"
-msgstr "full·help"
+msgstr "Komplette Hilfe"
 
 msgid "screen text"
 msgstr "OSD"
@@ -297,7 +297,7 @@ msgid "fixed light"
 msgstr "fixed·light"
 
 msgid "reverse mouse wheel"
-msgstr "Reverse·Mausrad"
+msgstr "Mausrad invertieren"
 
 msgid "reverse zooming mode"
 msgstr "Umgekehrter Zoommodus"
@@ -306,16 +306,16 @@ msgid "Ctrl key does rotate"
 msgstr "Ctrl Taste Drehen"
 
 msgid "show datum"
-msgstr "Zeige Datum"
+msgstr "Zeige Koordinatenkreuz"
 
 msgid "datum is solid"
-msgstr "Datum fest"
+msgstr "Koordinatenkreuz fest"
 
 msgid "datum size"
-msgstr "Datum Grösse"
+msgstr "Koordinatenkreuz Grösse"
 
 msgid "datum size is pixels not mm"
-msgstr "Datum Grösse in Pixel statt mm"
+msgstr "Koordinatenkreuz Grösse in Pixel statt mm"
 
 msgid "show ruler"
 msgstr "Zeige Lineal"
@@ -324,7 +324,7 @@ msgid "background color"
 msgstr "Hintergrundfarbe"
 
 msgid "no grid"
-msgstr "Kein Grid"
+msgstr "Kein Raster"
 
 msgid "faint color"
 msgstr "schwache Farbe"
@@ -336,7 +336,7 @@ msgid "colored alpha blending"
 msgstr "farbiges alpha-blending"
 
 msgid "grid mode"
-msgstr "grid·mode"
+msgstr "Raster·Modus"
 
 msgid "perspective"
 msgstr "Perspektive"
@@ -378,10 +378,10 @@ msgid "screen"
 msgstr "Bildschirm"
 
 msgid "grid size"
-msgstr "Grid Grösse"
+msgstr "Raster Grösse"
 
 msgid "snap to grid"
-msgstr "Am Grid einrasten"
+msgstr "Am Raster orientieren"
 
 msgid "drawing"
 msgstr "zeichnen"
@@ -396,7 +396,7 @@ msgid "geometry tolerance"
 msgstr "geometrie·tolerance"
 
 msgid "selection filter"
-msgstr "selection·filter"
+msgstr "Auswahlfilter"
 
 msgid "point"
 msgstr "Punkt"
@@ -441,7 +441,7 @@ msgid "text"
 msgstr "Text"
 
 msgid "dimension"
-msgstr "Dimension"
+msgstr "Bemassung"
 
 msgid "ruler"
 msgstr "Lineal"
@@ -555,10 +555,10 @@ msgid "Delete"
 msgstr "Löschen"
 
 msgid "Select Mode"
-msgstr "Select·Mode"
+msgstr "Markiermodus"
 
 msgid "Draw a sketch"
-msgstr "Zeichnung zeichnen"
+msgstr "Neue Zeichnung"
 
 msgid "Draw Circles"
 msgstr "Kreise zeichnen"
@@ -576,7 +576,7 @@ msgid "Add Text"
 msgstr "Text hinzufügen"
 
 msgid "Add Dimension"
-msgstr "Dimension hinzufügen"
+msgstr "Bemassung hinzufügen"
 
 msgid "Add Coordinate System"
 msgstr "Koordinatensystem hinzufügen"
@@ -618,10 +618,10 @@ msgid "Add a cone"
 msgstr "Kegel hinzufügen"
 
 msgid "Loft two sketches"
-msgstr "Verbinde 2 Sketches"
+msgstr "Verbinde 2 Zeichnungen"
 
 msgid "Extrude a sketch"
-msgstr "Zeichnung in 3D Körper umwandeln"
+msgstr "Zeichnung in 3D Objekt umwandeln"
 
 msgid "Fuse"
 msgstr "Miteinander verbinden"
@@ -642,7 +642,7 @@ msgid "Copy Translate"
 msgstr "Kopiere Objekt"
 
 msgid "Move Rotate"
-msgstr "Verschieben un drehen des Objekts"
+msgstr "Verschieben und drehen des Objekts"
 
 msgid "Copy Rotate"
 msgstr "Kopieren und drehen"
@@ -669,7 +669,7 @@ msgid "Tool Bar"
 msgstr "Werkzeug Leiste"
 
 msgid "Solids Tool Bar"
-msgstr "3D-Körper Werkzeugleiste"
+msgstr "3D-Objekt Werkzeugleiste"
 
 msgid "Geometry Tool Bar"
 msgstr "Geometrie Werkzeugleiste"
@@ -696,7 +696,7 @@ msgid "&View"
 msgstr "&Ansicht"
 
 msgid "&Solid"
-msgstr "&3DKörper"
+msgstr "&3DObjekt"
 
 msgid "&Transform"
 msgstr "&Transform"
@@ -723,16 +723,16 @@ msgid "Import file"
 msgstr "Importiere Datei"
 
 msgid "Pick two or more solids, the first one will be cut by the others"
-msgstr "Pick·two·or·more·solids,·the·first·one·will·be·cut·by·the·others"
+msgstr "Wähle 2 oder mehr 3D Objekte,der 1 wird ausgeschnitten von den anderen"
 
 msgid "Subtract Solids"
 msgstr "Subtract·Solids"
 
 msgid "Pick two or more solids to be fused together"
-msgstr "Markiere 2 oder mehr 3D-Körper die verbunden werden sollen"
+msgstr "Markiere 2 oder mehr 3D-Objekte die verbunden werden sollen"
 
 msgid "Fuse Solids"
-msgstr "Fuse·Solids"
+msgstr "Verbinde 3D Objekte"
 
 msgid ""
 "Pick two or more solids, only the shape that is contained by all of them "
@@ -773,14 +773,14 @@ msgstr "Lofted·Body"
 msgid ""
 "Pick one or more sketches, to create extruded body from\n"
 "( hold down Ctrl key to select more than one solid )"
-msgstr "Pick·one·or·more·sketches,·to·create·extruded·body·from\n"
-"(·hold·down·Ctrl·key·to·select·more·than·one·solid·)"
+msgstr "Zeichnung(en) die zu 3D Objekt(e) werden sollen \n"
+"(·Ctrl Taste für Mehrfachwahl)"
 
 msgid "Extrude"
-msgstr "Extrude"
+msgstr "2D nach 3D"
 
 msgid "Sphere"
-msgstr "Sphere"
+msgstr "Kugel"
 
 msgid "Cuboid"
 msgstr "Quader"
@@ -795,8 +795,8 @@ msgid ""
 "There was a problem printing.\n"
 "Perhaps your current printer is not set correctly?"
 msgstr ""
-"There·was·a·problem·printing.\n"
-"Perhaps·your·current·printer·is·not·set·correctly?"
+"Problem beim Drucken.\n"
+"Druckereinstellungen ?"
 
 msgid "Printing"
 msgstr "Drucken"
@@ -807,8 +807,8 @@ msgstr "Druckvorgang abgebrochen"
 msgid ""
 "There was a problem previewing.\n"
 "Perhaps your current printer is not set correctly?"
-msgstr "There·was·a·problem·previewing.\n"
-"Perhaps·your·current·printer·is·not·set·correctly?"
+msgstr "Probleme bei der Druckvorschau.\n"
+"Drucker richtig eingestellt ?"
 
 msgid "Previewing"
 msgstr "Vorschau"
@@ -853,25 +853,25 @@ msgid "Add a text object"
 msgstr "Text hinzufügen"
 
 msgid "Add a dimension"
-msgstr "Dimension hinzufügen"
+msgstr "Bemassung hinzufügen"
 
 msgid "Create a Coordinate System"
 msgstr "Koordinatensystem erstellen"
 
 msgid "Create a lofted face"
-msgstr "Create·a·lofted·face"
+msgstr "Zeichnungen durch Oberflächen verbinden"
 
 msgid "Extrude a wire or face"
-msgstr "Extrude·a·wire·or·face"
+msgstr "2D in 3D verwandeln"
 
 msgid "Cut one solid from another"
-msgstr "Cut·one·solid·from·another"
+msgstr "Schneide ein 3D Objekt aus einem anderen"
 
 msgid "Fuse one solid to another"
-msgstr "Fuse·one·solid·to·another"
+msgstr "Verbinde 2 oder mehr 3D Objekte miteinander"
 
 msgid "Find common solid between two solids"
-msgstr "Finde Schnittmenge von zwei 3D-Körpern"
+msgstr "Finde Schnittmenge von zwei 3D-Objekten"
 
 msgid "Make a fillet on selected edges"
 msgstr "schneide markierten Bereich aus"
@@ -988,7 +988,7 @@ msgid "draw lines"
 msgstr "Linien zeichnen"
 
 msgid "draw tangential arcs"
-msgstr "draw·tangential·arcs"
+msgstr "tangential·Kreisbögen"
 
 msgid "draw circles"
 msgstr "Kreise zeichnen"
@@ -997,7 +997,7 @@ msgid "drawing mode"
 msgstr "Zeichen Modus"
 
 msgid "(press 'a' for arcs)"
-msgstr "(Drücke·'a'·for·Bögen)"
+msgstr "(Drücke·'a'·für·Kreisbogen)"
 
 msgid "Number of items selected"
 msgstr "Anzahl der selektierten Items"
@@ -1096,16 +1096,16 @@ msgid "pick sketches"
 msgstr "Wähle Zeichnung"
 
 msgid "Input extrusion height"
-msgstr ""
+msgstr "Auf welche Höhe soll das Objekt herausgeholt werden ?"
 
 msgid "Extruded Solid"
-msgstr ""
+msgstr "3D Objekt aus Fläche"
 
 msgid "Fatal error making ruled solid"
 msgstr "Fehler beim erstellen des linierten 3D Objekts"
 
 msgid "Fatal error making extruded solid"
-msgstr ""
+msgstr "Fehler beim erstellen des 3D Objektess aus der Fläche"
 
 msgid "Reset the ruler"
 msgstr "Reset Lineal"
@@ -1180,13 +1180,13 @@ msgid "Result of Cut Operation"
 msgstr "Resultat des Ausschneidens"
 
 msgid "STEP solid"
-msgstr "STEP 3D Körper"
+msgstr "STEP 3D Objekt"
 
 msgid "STEP import not done!"
 msgstr "STEP Import hat nicht funktioniert"
 
 msgid "sewed IGES solid"
-msgstr "Verbinden IGES 3D Körper"
+msgstr "Verbinden IGES 3D Objekt"
 
 msgid "IGES import not done!"
 msgstr "IGES Import hat nicht funktioniert"
@@ -1261,7 +1261,7 @@ msgid "Hold middle mouse button down to pan"
 msgstr "Mittlere Maustaste gedrückt halten für hoch/runter"
 
 msgid "Result of Wire Offset"
-msgstr ""
+msgstr "Ergebnis des Verbindungsoffsets"
 
 msgid "Generated"
 msgstr "Erzeugt"
@@ -1384,10 +1384,10 @@ msgid "Ungroup"
 msgstr "Gruppierung aufheben"
 
 msgid "Ungroup selected items"
-msgstr ""
+msgstr "Deselektiere alle Items"
 
 msgid "Dimension drawing"
-msgstr "Dimensionszeichnen"
+msgstr "Bemassung einzeichnen"
 
 msgid "Drawing"
 msgstr "Zeichnen"
@@ -1408,7 +1408,7 @@ msgid "Circle"
 msgstr "Kreis"
 
 msgid "Dimension"
-msgstr "Dimension"
+msgstr "Bemassung"
 
 msgid "Ellipse"
 msgstr "Elipse"
@@ -1441,10 +1441,10 @@ msgid "Point drawing"
 msgstr "Punkt zeichnen"
 
 msgid "Dragging a window or picking a point"
-msgstr ""
+msgstr "Bereich/Punkt markieren"
 
 msgid "Regular shapes drawing"
-msgstr ""
+msgstr "Formen zeichnen"
 
 msgid "ChangeOwner"
 msgstr "Benutzerwechsel"
@@ -1465,10 +1465,10 @@ msgid "Sketch"
 msgstr "Zeichnung"
 
 msgid "Solid"
-msgstr "3D Körper"
+msgstr "3D Objekt"
 
 msgid "STL Solid"
-msgstr "STL 3D Körper"
+msgstr "STL 3D Objekt"
 
 msgid "View Rotate"
 msgstr "Ansicht·drehen(linke·Maustaste)"
@@ -1579,19 +1579,19 @@ msgid "minz"
 msgstr ""
 
 msgid "boundaryclear"
-msgstr ""
+msgstr "ohne Umrandung"
 
 msgid "boundary_x0"
-msgstr ""
+msgstr "Rahmen_x0"
 
 msgid "boundary_x1"
-msgstr ""
+msgstr "Rahmen_x1"
 
 msgid "boundary_y0"
-msgstr ""
+msgstr "Rahmen_y0"
 
 msgid "boundary_y1"
-msgstr ""
+msgstr "Rahmen_y1"
 
 msgid "tool number"
 msgstr "Werkzeug Nummer"
@@ -1606,13 +1606,13 @@ msgid "step down"
 msgstr "Tiefe pro Schritt"
 
 msgid "start depth"
-msgstr "Tiefe zu Beginn"
+msgstr "Beginne mit Z-Tiefe"
 
 msgid "final depth"
-msgstr "Endgültige Tiefe"
+msgstr "Endgültige Z-Tiefe"
 
 msgid "rapid down to height"
-msgstr "schnell runter auf Höhe"
+msgstr "Z Schnell runter auf "
 
 msgid "horizontal feed rate"
 msgstr "Horizontale Arbeitsgeschwindigkeit"
@@ -1627,7 +1627,7 @@ msgid "You must select some sketches, first!"
 msgstr "Erst Zeichnungn markieren"
 
 msgid "There are no solids!"
-msgstr "Keine 3D Körper"
+msgstr "Keine 3D Objekte"
 
 msgid "You must select some sketches first!"
 msgstr "Erst eine Zeichnung markieren"
@@ -1711,16 +1711,16 @@ msgstr ""
 msgid "  which means it is free and open source, and must stay that way"
 msgstr ""
 
-msgid "New Profile Operation..."
+msgid "New Profile Operation ..."
 msgstr "Neues Profil fräsen"
 
-msgid "New Pocket Operation..."
-msgstr "Neue (Fräs-)Taschen erstellen"
+msgid "New Pocket Operation ..."
+msgstr "Neue (Fräs-)Tasche erstellen"
 
-msgid "New ZigZag Operation..."
+msgid "New ZigZag Operation ..."
 msgstr ""
 
-msgid "New Adaptive Roughing Operation..."
+msgid "New Adaptive Roughing Operation ..."
 msgstr "Neuer Adaptiver Schruppzyklus "
 
 msgid "Operations"
@@ -1760,19 +1760,19 @@ msgid "comment color\t"
 msgstr "Komentar Farbe\t"
 
 msgid "variable color"
-msgstr ""
+msgstr "Variabeln Farbe"
 
 msgid "prep color"
-msgstr ""
+msgstr "Grundeinstellungen PostProzessor"
 
 msgid "axis color"
 msgstr "Axen Farbe"
 
 msgid "rapid color"
-msgstr "Rapid Farbe"
+msgstr "Axen schnellverfahren"
 
 msgid "feed color"
-msgstr ""
+msgstr "Arbeitgeschwindigkeit"
 
 msgid "comment"
 msgstr "Kommentar"
@@ -1874,7 +1874,7 @@ msgid "output file"
 msgstr "Ausgabe Datei"
 
 msgid "spherical"
-msgstr ""
+msgstr "rund"
 
 msgid "cylindrical"
 msgstr "Zylindrisch"
@@ -1940,7 +1940,7 @@ msgid "Edge cannot have more than 2 faces!"
 msgstr "Kante kann nicht mehr wie 2 Oberflächen haben"
 
 msgid "Convert Mesh To Triangles"
-msgstr ""
+msgstr "Konvertiere Gittemodell in Dreiecke"
 
 msgid "Normalize All Vertices"
 msgstr ""
@@ -1955,7 +1955,7 @@ msgid "Recalculate All Face Centres"
 msgstr "Neuberechnung aller Mittelpunkte der Oberflächen"
 
 msgid "Mirror all x<1"
-msgstr ""
+msgstr "Alles spiegeln was <1 ist"
 
 msgid "Split Edge"
 msgstr "Kante trennen"
