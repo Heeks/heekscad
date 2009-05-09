@@ -60,6 +60,7 @@
 #include "BezierCurve.h"
 #include "StlSolid.h"
 #include "dxf.h"
+#include "svg.h"
 #include "CoordinateSystem.h"
 #include "RegularShapesDrawing.h"
 #include "HeeksPrintout.h"
@@ -691,128 +692,9 @@ static void add_line_from_bezier_curve(const gp_Pnt& vt0, const gp_Pnt& vt1)
 	sketch_for_callback->Add(new_object, NULL);
 }
 
-void HeeksCADapp::ReadSVGElement(TiXmlElement* pElem, bool undoably)
-{
-	std::string name(pElem->Value());
-
-	if(name == "g")
-	{
-		// loop through all the child elements, looking for path
-		for(pElem = TiXmlHandle(pElem).FirstChildElement().Element(); pElem; pElem = pElem->NextSiblingElement())
-		{
-			ReadSVGElement(pElem, undoably);
-		}
-		return;
-	}
-
-	if(name == "path")
-	{
-		// get the attributes
-		for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
-		{
-			std::string name(a->Name());
-			if(name == "d")
-			{
-				// add lines and arcs and bezier curves
-				const char* d = a->Value();
-
-				double sx = 0.0, sy = 0.0;
-				double px = 0.0, py = 0.0;
-				CSketch* sketch = NULL;
-
-				int pos = 0;
-				while(1){
-					if(d[pos] == 'M'){
-						// make a sketch
-						pos++;
-						sscanf(&d[pos], "%lf,%lf", &sx, &sy);
-						sy = -sy;
-						px = sx; py = sy;
-						sketch = new CSketch;
-						if(undoably)AddUndoably(sketch, this, NULL);
-						else Add(sketch, NULL);
-					}
-					else if(d[pos] == 'L'){
-						// add a line
-						pos++;
-						double x, y;
-						sscanf(&d[pos], "%lf,%lf", &x, &y);
-						y = -y;
-						HLine* new_object = new HLine(gp_Pnt(px, py, 0), gp_Pnt(x, y, 0), &current_color);
-						px = x; py = y;
-						sketch->Add(new_object, NULL);
-					}
-					else if(d[pos] == 'C'){
-						// add a bezier curve ( just split into lines for now )
-						pos++;
-						double x1, y1, x2, y2, x3, y3;
-						sscanf(&d[pos], "%lf,%lf %lf,%lf %lf,%lf", &x1, &y1, &x2, &y2, &x3, &y3);
-						y1 = -y1; y2 = -y2; y3 = -y3;
-						sketch_for_callback = sketch;
-						split_bezier_curve(3, gp_Pnt(px, py,  0), gp_Pnt(x3, y3, 0), gp_Pnt(x1, y1, 0), gp_Pnt(x2, y2, 0), add_line_from_bezier_curve);
-						px = x3; py = y3;
-					}
-					else if(toupper(d[pos]) == 'Z'){
-						// join to end
-						pos++;
-						HLine* new_object = new HLine(gp_Pnt(px, py, 0), gp_Pnt(sx, sy, 0), &current_color);
-						px = sx; py = sy;
-						sketch->Add(new_object, NULL);
-					}
-					else if(d[pos] == 0){
-						break;
-					}
-					else{
-						pos++;
-					}
-				}
-			}
-		}
-	}
-}
-
 void HeeksCADapp::OpenSVGFile(const wxChar *filepath, bool undoably)
 {
-#ifdef FLASHYSVG
 	HeeksSvgRead svgread(filepath,undoably,true);
-	return;
-#endif
-
-	TiXmlDocument doc(Ttc(filepath));
-	if (!doc.LoadFile())
-	{
-		if(doc.Error())
-		{
-			wxMessageBox(Ctt(doc.ErrorDesc()));
-		}
-		return;
-	}
-
-	TiXmlHandle hDoc(&doc);
-	TiXmlElement* pElem;
-	TiXmlHandle hRoot(0);
-
-	// block: name
-	{
-		pElem=hDoc.FirstChildElement().Element();
-		if (!pElem) return;
-		std::string name(pElem->Value());
-
-		if(name != "svg")
-		{
-			wxMessageBox(_("This is not an SVG document!"));
-			return;
-		}
-
-		// save this for later
-		hRoot=TiXmlHandle(pElem);
-	}
-
-	// loop through all the objects
-	for(pElem = hRoot.FirstChildElement().Element(); pElem;	pElem = pElem->NextSiblingElement())
-	{
-		ReadSVGElement(pElem, undoably);
-	}
 }
 
 void HeeksCADapp::OpenSTLFile(const wxChar *filepath, bool undoably)
@@ -2438,6 +2320,18 @@ int HeeksCADapp::PickObjects(const wxChar* str, long marking_filter, bool just_o
 	m_select_mode->m_doing_a_main_loop = false;
 	SetInputMode(save_mode); // update tool bar
 	return 1;
+}
+
+int HeeksCADapp::OnRun()
+{
+	try
+	{
+		return wxApp::OnRun();
+	}
+	catch(...)
+	{
+		return 0;
+	}
 }
 
 bool HeeksCADapp::PickPosition(const wxChar* str, double* pos, void(*callback)(const double*))

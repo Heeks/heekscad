@@ -138,6 +138,9 @@ public:
 	FileOpenOrImportType m_file_open_or_import_type;
 	double m_view_units; // units to display to the user ( but everything is stored as mm ), 1.0 for mm, 25.4 for inches
 
+	//WxApp override
+	int OnRun();
+
 	// HeeksObj's virtual functions
 	void GetBox(CBox &box);
 	void glCommands(bool select, bool marked, bool no_color);
@@ -174,7 +177,6 @@ public:
 	void ObjectReadBaseXML(HeeksObj *object, TiXmlElement* element);
 	void InitializeXMLFunctions();
 	void OpenXMLFile(const wxChar *filepath, bool undoably = false, HeeksObj* paste_into = NULL);
-	void ReadSVGElement(TiXmlElement* pElem, bool undoably = false);
 	void OpenSVGFile(const wxChar *filepath, bool undoably = false);
 	void OpenSTLFile(const wxChar *filepath, bool undoably = false);
 	void OpenDXFFile(const wxChar *filepath, bool undoably = false);

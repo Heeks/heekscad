@@ -1571,10 +1571,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Vertex.h"
-			>
-		</File>
-		<File
 			RelativePath=".\ViewPoint.cpp"
 			>
 		</File>
