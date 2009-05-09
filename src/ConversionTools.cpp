@@ -365,6 +365,8 @@ HeeksObj* SplitArcsIntoLittleLines(HeeksObj* sketch)
 	point_found_for_arc_to_lines = false;
 	for(HeeksObj* o = sketch->GetFirstChild(); o; o = sketch->GetNextChild())
 	{
+		//reset state machine
+		point_found_for_arc_to_lines = false;
 		o->GetSegments(callback_for_arcs_to_lines, 1/FaceToSketchTool::deviation);
 	}
 	return new_sketch;
