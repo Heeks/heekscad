@@ -5,7 +5,7 @@ The best thing to do is use the discussion group: http://groups.google.com/group
 or if you are helping to develop the software use this group:  http://groups.google.com/group/heekscad-devel
 
 
-= Contact Dan Heeks =
+=== Contact Dan Heeks ===
 
 Want to email me?
 
