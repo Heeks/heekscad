@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="HeeksCAD"
-	ProjectGUID="{2702996F-5BCC-436D-A756-D9675FE828A8}"
+	ProjectGUID="{2702996F-5BCC-436D-A756-D9675FE828A8}"  
 	RootNamespace="HeeksCAD"
 	TargetFrameworkVersion="131072"
 	>
@@ -1568,6 +1568,10 @@
 		</File>
 		<File
 			RelativePath=".\Vertex.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Vertex.h"
 			>
 		</File>
 		<File
