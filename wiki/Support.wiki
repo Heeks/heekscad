@@ -1,4 +1,9 @@
-#summary Contact Dan Heeks
+#summary Get some help with HeeksCAD
+
+The best thing to do is use the discussion group: http://groups.google.com/group/heekscad-users
+
+or if you are helping to develop the software use this group:  http://groups.google.com/group/heekscad-devel
+
 
 = Contact Dan Heeks =
 
