@@ -13,6 +13,6 @@
  * download pycam libs  and heekscnc
  * install pycam and the libs with dpkg -i first, then heekscnc
  * start HeeksCAD via shell or via Applications->Graphics->HeeksCAD
- * File->Plugins new name=heekscnc filepath -> press ... select /usr/lib/heekscad/libheekscnc.so.0.5.1 open OK
+ * File->Plugins new name=heekscnc filepath -> press ... select /usr/lib/heekscnc/libheekscnc.so.0.5.1 open OK
  * close HeeksCAD
  * start HeeksCAD again -> cnc installed, the machining menu and toolbar are available
