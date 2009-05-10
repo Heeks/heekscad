@@ -1,0 +1,18 @@
+#summary How to install HeeksCAD on Ubuntu
+
+= 8.10 intrepid =
+
+ there are experimental packages provided on http://yamato.hyte.de/packages/heeks/
+
+== heekscad ==
+ to install them download them and install heekscad first.
+ * install with dpkg -i or just 'doubleclick' it.
+
+== heekscnc ==
+ if you want CNC/CAM support
+ * download pycam libs  and heekscnc
+ * install pycam and the libs with dpkg -i first, then heekscnc
+ * start HeeksCAD via shell or via Applications->Graphics->HeeksCAD
+ * File->Plugins new name=heekscnc filepath -> press ... select /usr/lib/heekscad/libheekscnc.so.0.5.1 open OK
+ * close HeeksCAD
+ * start HeeksCAD again -> cnc installed, the machining menu and toolbar are available
