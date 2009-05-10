@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: HeeksCAD 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-04-28 13:02+0200\n"
-"PO-Revision-Date: 2009-05-08 02:07+0200\n"
+"PO-Revision-Date: 2009-05-10 23:39+0200\n"
 "Last-Translator: fungunner2 <fungunner2@freenet.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -102,13 +102,13 @@ msgid "Z"
 msgstr "Z"
 
 msgid "Error! The 'Stop Picking' button shouldn't have been available!"
-msgstr "Fehler! Der \"Stop-Picking\"-Button sollte nicht zur Verfügung stehen"
+msgstr "Fehler! Der \"Stop-Auswahl\"-Button sollte nicht zur Verfügung stehen"
 
 msgid "Stop Picking"
 msgstr "Stop·Auswahl"
 
 msgid "Finish picking"
-msgstr "Finish·picking"
+msgstr "Fertig Auswahl"
 
 msgid "between two points"
 msgstr "zwischen 2 Punkten"
@@ -150,7 +150,7 @@ msgid "Solid with edge blend"
 msgstr "3D mit Kantenausblendung"
 
 msgid "A fatal error happened during Blend"
-msgstr "Schwerer Ausnahmefehler beim verbinden ;)"
+msgstr "Schwerer Ausnahmefehler beim verbinden"
 
 msgid "surface type"
 msgstr "Oberflächentyp"
@@ -423,10 +423,10 @@ msgid "solid"
 msgstr "3D bearbeiten"
 
 msgid "stl_solid"
-msgstr "stl_solid"
+msgstr ""
 
 msgid "wire"
-msgstr "wire"
+msgstr "verbinden"
 
 msgid "sketch"
 msgstr "zeichne"
@@ -705,7 +705,7 @@ msgid "&Window"
 msgstr "&Fenster"
 
 msgid "Graphics"
-msgstr "Graphics"
+msgstr "Grafiken"
 
 msgid "Reset Layout"
 msgstr "Layout zurücksetzen"
@@ -740,7 +740,7 @@ msgid ""
 msgstr "Markiere 2 oder mehr 3D-Objekte die sich überschneiden,um die gemeinsame Schnittmenge zu erzeugen"
 
 msgid "Intersection of Solids"
-msgstr "Intersection·of·Solids"
+msgstr "Durchschnitt der 3D Objekte"
 
 msgid "Pick one or more edges to add a fillet to"
 msgstr "Eine/Mehrere Ecken angeben um einen Ausschnitt hinzuzufügen"
@@ -814,7 +814,7 @@ msgid "Previewing"
 msgstr "Vorschau"
 
 msgid "Demo Print Preview"
-msgstr "Demo·Print·Preview"
+msgstr "Druck Vorschau"
 
 msgid "New file"
 msgstr "Neue Datei"
@@ -865,7 +865,7 @@ msgid "Extrude a wire or face"
 msgstr "2D in 3D verwandeln"
 
 msgid "Cut one solid from another"
-msgstr "Schneide ein 3D Objekt aus einem anderen"
+msgstr "Schneide ein 3D Objekt aus einem anderen (bei einer Überlappung,1.-2.)"
 
 msgid "Fuse one solid to another"
 msgstr "Verbinde 2 oder mehr 3D Objekte miteinander"
@@ -922,10 +922,10 @@ msgid "Copy and mirror selected items"
 msgstr "Copy·and·mirror·selected·items"
 
 msgid "Scale selected items"
-msgstr "Scale·selected·items"
+msgstr "Neudimensionierung der markierten Objekte"
 
 msgid "General Tools"
-msgstr "General·Tools"
+msgstr "Standardwerkzeuge"
 
 msgid "Geometry Tools"
 msgstr "Geometrie·Tools"
@@ -1033,13 +1033,13 @@ msgid "No file specified!"
 msgstr "Keine Datei angegeben"
 
 msgid "shared library files"
-msgstr "shared·library·Files"
+msgstr ""
 
 msgid "Choose shared library file"
 msgstr "Wähle·shared·library·File"
 
 msgid "HeeksCAD plugin libraries"
-msgstr "HeeksCAD·plugin·libraries"
+msgstr "HeeksCAD·Plugin·Libraries"
 
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -1669,62 +1669,66 @@ msgid "SaveNC"
 msgstr "G-Code speichern"
 
 msgid "HeeksCNC is the free machining add-on to HeeksCAD"
-msgstr ""
+msgstr "HeeksCNC ist ein HeeksCAD Plugin zum erstellen von G-Code"
 
 msgid "          http://code.google.com/p/heekscnc/"
-msgstr ""
+msgstr "··········http://code.google.com/p/heekscnc/"
 
 msgid "Written by Dan Heeks, Hirutso Enni, Perttu Ahola"
-msgstr ""
+msgstr "Die Authoren sind: Dan·Heeks,·Hirutso·Enni,·Perttu·Ahola"
 
 msgid "With help from archivist, crotchet1, DanielFalck, fenn, Sliptonic"
-msgstr ""
+msgstr "Mit Hilfe von archivist,·crotchet1,·DanielFalck,·fenn,·Sliptonic"
 
 msgid ""
 "geometry code, donated by Geoff Hawkesford, Camtek GmbH http://www.peps.de/"
-msgstr ""
+msgstr "geometry·code,·donated·by·Geoff·Hawkesford,·Camtek·GmbH·http://www.peps.de/"
 
 msgid ""
 "pocketing code from http://code.google.com/p/libarea/ , derived from the "
 "kbool library written by Klaas Holwerda http://boolean.klaasholwerda.nl/bool."
 "html"
-msgstr ""
+msgstr "Programmcode fürs Taschenfräsen von http://code.google.com/p/libarea/·,·abgeleitet·von der"
+"kbool·library,·geschrieben·von·Klaas·Holwerda·http://boolean.klaasholwerda.nl/bool.html"
 
 msgid "Zig zag code from pycam http://sourceforge.net/svn/?group_id=237831"
-msgstr ""
+msgstr "Zig·zag·Code·von·der pycam·Website: http://sourceforge.net/svn/?group_id=237831"
 
 msgid ""
 "Adaptive Roughing code from http://code.google.com/p/libactp/, using code "
 "written in 2004"
-msgstr ""
+msgstr "Der Code zum Adaptiven·Schruppverfahren·ist zu finden·unter : http://code.google.com/p/libactp/ .Er wurde 2004 geschrieben."
 
 msgid ""
 "For a more modern version of adaptive roughing, see Julian Todd and Martin "
 "Dunschen of http://www.freesteel.co.uk/"
-msgstr ""
+msgstr "Eine ausführliche Version des adaptiven Schruppverfahrens ist auf der "
+"Website von Julian·Todd·und·Martin·Dunschen zu finden:"
+"http://www.freesteel.co.uk/"
 
 msgid ""
 "This HeeksCNC software installation is restricted by the GPL license http://"
 "www.gnu.org/licenses/gpl-3.0.txt"
-msgstr ""
+msgstr "Die Software HeeksCNC unterliegt der GPL·license·"
+"http://www.gnu.org/licenses/gpl-3.0.txt"
 
 msgid "  which means it is free and open source, and must stay that way"
+msgstr "welche besagt,das die Software FREI ist und als Open Source gehandhabt werden muss."
+
+msgid "New Profile Operation..."
+msgstr "Profil fräsen"
+
+msgid "New Pocket Operation..."
+msgstr "(Fräs-)Tasche erstellen"
+
+msgid "New ZigZag Operation..."
 msgstr ""
 
-msgid "New Profile Operation ..."
-msgstr "Neues Profil fräsen"
-
-msgid "New Pocket Operation ..."
-msgstr "Neue (Fräs-)Tasche erstellen"
-
-msgid "New ZigZag Operation ..."
-msgstr ""
-
-msgid "New Adaptive Roughing Operation ..."
-msgstr "Neuer Adaptiver Schruppzyklus "
+msgid "New Adaptive Roughing Operation..."
+msgstr "Adaptiver Schruppzyklus "
 
 msgid "Operations"
-msgstr "Operationen"
+msgstr "Neue Aufgabe"
 
 msgid "Make Python Script"
 msgstr "Erstelle Python Script"
@@ -1916,13 +1920,13 @@ msgid "Simple Mesh"
 msgstr "Einfaches Gittermodell"
 
 msgid "HeeksArt is a free random add-on to HeeksCAD"
-msgstr ""
+msgstr "HeeksArt ist ein freies Add On zu HeeksCAD"
 
 msgid "          http://code.google.com/p/heeksart/"
-msgstr ""
+msgstr "··········http://code.google.com/p/heeksart/"
 
 msgid "Written by Dan Heeks"
-msgstr ""
+msgstr "Author Dan·Heeks"
 
 msgid "Add a simple mesh"
 msgstr "Erstelle ein einfaches Gittermodell"
@@ -1949,7 +1953,7 @@ msgid "Set All Vertex Normals"
 msgstr "Alle Ecken des Poligons normal"
 
 msgid "At least one vertex could not be normalized!"
-msgstr ""
+msgstr "Mimndestens eine Ecke konnte nicht normalisiert werden"
 
 msgid "Recalculate All Face Centres"
 msgstr "Neuberechnung aller Mittelpunkte der Oberflächen"
