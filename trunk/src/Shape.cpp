@@ -352,7 +352,14 @@ public:
 		config.Read(_T("OffsetShapeValue"), &offset_value);
 		if(wxGetApp().InputDouble(_("Enter Offset Value, + for making bigger, - for making smaller"), _("Offset value"), offset_value))
 		{
-			TopoDS_Shape new_shape = BRepOffsetAPI_MakeOffsetShape(m_shape->Shape(), offset_value, 1.0, BRepOffset_Skin);
+			TopoDS_Shape new_shape = BRepOffsetAPI_MakeOffsetShape(m_shape->Shape(), offset_value, wxGetApp().m_geom_tol);
+
+#ifdef TESTNEWSHAPE
+			//This will end up throwing 90% of the exceptions caused by a bad offset
+			BRepTools::Clean(new_shape);
+			BRepMesh::Mesh(new_shape, 1.0);
+#endif
+
 			HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of 'Offset Shape'"), SOLID_TYPE_UNKNOWN, m_shape->m_color);
 			wxGetApp().AddUndoably(new_object, NULL, NULL);
 			wxGetApp().DeleteUndoably(m_shape);
