@@ -2334,6 +2334,11 @@ int HeeksCADapp::OnRun()
 	}
 }
 
+bool HeeksCADapp::OnExceptionInMainLoop()
+{
+	throw;
+}
+
 bool HeeksCADapp::PickPosition(const wxChar* str, double* pos, void(*callback)(const double*))
 {
 	CInputMode* save_mode = input_mode_object;
