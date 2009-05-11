@@ -38,6 +38,7 @@
 #include <BRepFilletAPI_MakeChamfer.hxx>
 #include <BRepExtrema_DistShapeShape.hxx>
 #include <BRepPrimAPI_MakeBox.hxx>
+#include <TopoDS_Shape.hxx>
 #include "../interface/Tool.h"
 #include "../tinyxml/tinyxml.h"
 #include "HeeksConfig.h"
@@ -64,6 +65,7 @@ CShape::CShape(const CShape& s):m_gl_list(0), m_picked_face(NULL)
 	m_vertices = new CVertexList;
 	Add(m_faces, NULL);
 	Add(m_edges, NULL);
+	Add(m_vertices, NULL);
 	operator=(s);
 }
 
@@ -94,6 +96,7 @@ void CShape::Init()
 	m_vertices = new CVertexList;
 	Add(m_faces, NULL);
 	Add(m_edges, NULL);
+	Add(m_vertices, NULL);
 	create_faces_and_edges();
 }
 
@@ -421,7 +424,10 @@ HeeksObj* CShape::MakeObject(const TopoDS_Shape &shape, const wxChar* title, Sol
 				case SOLID_TYPE_CONE:
 					return new CCone(*((TopoDS_Solid*)(&shape)), title, col);
 				default:
-					return new CSolid(*((TopoDS_Solid*)(&shape)), title, col);
+					// check there are some faces
+					if(TopExp_Explorer(shape, TopAbs_FACE).More())
+						return new CSolid(*((TopoDS_Solid*)(&shape)), title, col);
+					return NULL;
 				}
 			}
 	}

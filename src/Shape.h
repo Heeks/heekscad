@@ -35,7 +35,7 @@ public:
 
 class CVertexList: public ObjList{
 public:
-	const wxChar* GetTypeString(void)const{return _("Edges");}
+	const wxChar* GetTypeString(void)const{return _("Vertices");}
 	HeeksObj *MakeACopy(void)const{ return new CVertexList(*this);}
 #ifdef WIN32
 	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/vertices");}
