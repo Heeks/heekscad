@@ -28,6 +28,7 @@ build-stamp: configure-stamp
 
 	# Add here commands to compile the package.
 	$(MAKE) -C src/ PREFIX=/usr
+	$(MAKE) -C translations/ PREFIX=/usr
 	#docbook-to-man debian/heekscad.sgml > heekscad.1
 
 	touch $@
@@ -39,6 +40,7 @@ clean:
 
 	# Add here commands to clean up after the build process.
 	$(MAKE) -C src/ clean
+	$(MAKE) -C translations/ clean
 
 	dh_clean 
 
@@ -50,6 +52,7 @@ install: build
 
 	# Add here commands to install the package into debian/heekscad.
 	$(MAKE) -C src/ PREFIX=/usr DESTDIR=$(CURDIR)/debian/heekscad install
+	$(MAKE) -C translations/ PREFIX=/usr DESTDIR=$(CURDIR)/debian/heekscad install
 
 # Build architecture-independent files here.
 binary-indep: build install
