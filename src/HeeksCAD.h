@@ -140,6 +140,7 @@ public:
 
 	//WxApp override
 	int OnRun();
+	bool OnExceptionInMainLoop();
 
 	// HeeksObj's virtual functions
 	void GetBox(CBox &box);
