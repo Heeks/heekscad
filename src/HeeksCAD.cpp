@@ -1928,6 +1928,8 @@ static void on_set_units(int value, HeeksObj* object)
 	wxGetApp().m_view_units = (value == 0) ? 1.0:25.4;
 	HeeksConfig config;
 	config.Write(_T("ViewUnits"), wxGetApp().m_view_units);
+	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll(false);
+	wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
 }
 
 void HeeksCADapp::GetOptions(std::list<Property *> *list)
