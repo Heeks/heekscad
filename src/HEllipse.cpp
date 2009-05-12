@@ -51,8 +51,6 @@ void HEllipse::GetSegments(void(*callbackfunc)(const double *p), double pixels_p
 
 	double ratio = min_radius/radius;
 
-	double rot = GetRotation();
-
 	gp_Pnt zp(0,0,0);
 	gp_Dir up(0,0,1);
 
@@ -250,7 +248,7 @@ void HEllipse::GetProperties(std::list<Property *> *list){
 	list->push_back(new PropertyDouble(_("minor radius"), m_ellipse.MinorRadius(), this, on_set_minor_radius));
 	list->push_back(new PropertyDouble(_("rotation"), rot, this, on_set_rotation));
 	list->push_back(new PropertyDouble(_("start angle"), m_start, this, on_set_start_angle));
-	list->push_back(new PropertyDouble(_("end angle"), m_end, this, on_set_start_angle));
+	list->push_back(new PropertyDouble(_("end angle"), m_end, this, on_set_end_angle));
 	HeeksObj::GetProperties(list);
 }
 
