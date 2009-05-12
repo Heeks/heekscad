@@ -685,13 +685,6 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, bool undoably, HeeksObj* p
 	CGroup::MoveSolidsToGroupsById(this);
 }
 
-static CSketch* sketch_for_callback = NULL;
-static void add_line_from_bezier_curve(const gp_Pnt& vt0, const gp_Pnt& vt1)
-{
-	HLine* new_object = new HLine(vt0, vt1, &(wxGetApp().current_color));
-	sketch_for_callback->Add(new_object, NULL);
-}
-
 void HeeksCADapp::OpenSVGFile(const wxChar *filepath, bool undoably)
 {
 	HeeksSvgRead svgread(filepath,undoably,true);

@@ -303,8 +303,6 @@ void CSvgRead::ReadEllipse(TiXmlElement *pElem, bool undoably)
 	double y=0;
 	double rx=0; 
 	double ry=0;
-	double startx=0;
-	double starty=0;
 	// get the attributes
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
