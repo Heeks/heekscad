@@ -1,7 +1,7 @@
 #summary How to compile HeeksCAD on Ubuntu
 (For a more unixy version that should also work in Ubuntu Intrepid/Jaunty, see [[CompilingForDebian]])
 
-Download Ubuntu 8.04 and install it on your computer.
+Download Ubuntu ( 8.04, or later ) and install it on your computer.
 
 
 On the menu, go to System->Administration->"Synaptic Package Manager"
