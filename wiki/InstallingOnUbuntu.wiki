@@ -1,6 +1,10 @@
 #summary How to install HeeksCAD on Ubuntu
+= Installing on Ubuntu =
 
-= 8.10 intrepid =
+== distros ==
+ * 8.04 hardy
+ * 8.10 intrepid
+ * 9.04 jaunty
 
  there are experimental packages provided on http://yamato.hyte.de/packages/heeks/
 
