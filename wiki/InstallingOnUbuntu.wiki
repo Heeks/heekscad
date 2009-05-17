@@ -8,6 +8,13 @@
 
  there are experimental packages provided on http://yamato.hyte.de/packages/heeks/
 
+== dependencies ==
+Opencascade
+ * packages for Opencascade can be gotten from http://www.opennovation.org/ubuntu/pool/main/o/opencascade/
+ * get the libopencascade-foundation package that matches your system (i386, 64bit,etc)
+
+Python
+
 == heekscad ==
  to install them download them and install heekscad first.
  * install with dpkg -i or just 'doubleclick' it.
