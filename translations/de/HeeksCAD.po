@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: HeeksCAD 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-04-28 13:02+0200\n"
-"PO-Revision-Date: 2009-05-10 23:39+0200\n"
+"PO-Revision-Date: 2009-05-17 02:46+0200\n"
 "Last-Translator: fungunner2 <fungunner2@freenet.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -33,7 +33,7 @@ msgid "height"
 msgstr "Höhe"
 
 msgid "cone must not have both radiuses the same"
-msgstr "Beim Kegel nicht 2 gleiche Radien "
+msgstr "Beim Kegel nicht 2 gleiche Radien benutzen"
 
 msgid "Fatal Error converting sketch to face"
 msgstr "Fehler beim belegen der Zeichnung mit einer Oberfläche"
@@ -75,7 +75,7 @@ msgid "Pick a point where y > 0"
 msgstr "Wähle einen Punkt wo Y>0 ist"
 
 msgid "datum corner"
-msgstr "Datums Ecke"
+msgstr "Koordinatenkreuz Ecke"
 
 msgid "width ( x )"
 msgstr "Grösse X"
@@ -201,7 +201,7 @@ msgid "centre"
 msgstr "Mittelpunkt"
 
 msgid "axis"
-msgstr "Axe"
+msgstr "Achse"
 
 msgid "length"
 msgstr "Länge"
@@ -309,7 +309,7 @@ msgid "show datum"
 msgstr "Zeige Koordinatenkreuz"
 
 msgid "datum is solid"
-msgstr "Koordinatenkreuz fest"
+msgstr "Koordinatenkreuz 3D Ansicht"
 
 msgid "datum size"
 msgstr "Koordinatenkreuz Grösse"
@@ -333,7 +333,7 @@ msgid "alpha blending"
 msgstr "alpha·blending"
 
 msgid "colored alpha blending"
-msgstr "farbiges alpha-blending"
+msgstr "farbige Darstellung der Ebenen"
 
 msgid "grid mode"
 msgstr "Raster·Modus"
@@ -633,7 +633,7 @@ msgid "Fillet"
 msgstr "Teilausschnitt"
 
 msgid "Chamfer"
-msgstr "Kanten abschrägen"
+msgstr "Kanten abschrägen(Fasen)"
 
 msgid "Move Translate"
 msgstr "Objekt verschieben"
@@ -752,10 +752,10 @@ msgid "Pick one or more edges to add a chamfer to"
 msgstr "Markiere eine oder mehrere Kanten,die abgeschrägt werden sollen"
 
 msgid "Edge Chamfer"
-msgstr "Kanten abschrägen"
+msgstr "Kanten abschrägen(Fase)"
 
 msgid "Enter chamfer distance"
-msgstr "Tiefe der Schräge"
+msgstr "Tiefe der Schräge(Fase)"
 
 msgid "Distance"
 msgstr "Entfernung"
@@ -865,7 +865,7 @@ msgid "Extrude a wire or face"
 msgstr "2D in 3D verwandeln"
 
 msgid "Cut one solid from another"
-msgstr "Schneide ein 3D Objekt aus einem anderen (bei einer Überlappung,1.-2.)"
+msgstr "Entferne vom 1.Objekt die Schnittmenge des 2.Objekts und das 2.Objekt selber"
 
 msgid "Fuse one solid to another"
 msgstr "Verbinde 2 oder mehr 3D Objekte miteinander"
@@ -919,7 +919,7 @@ msgid "Mirror selected items"
 msgstr "Markiertes Objekt spiegeln"
 
 msgid "Copy and mirror selected items"
-msgstr "Copy·and·mirror·selected·items"
+msgstr "Kopieren und spiegeln der markierten Ojekte"
 
 msgid "Scale selected items"
 msgstr "Neudimensionierung der markierten Objekte"
@@ -1090,7 +1090,7 @@ msgid "pick some sketches"
 msgstr "Wähle mehrere Zeichnungn"
 
 msgid "Ruled Surface"
-msgstr "Linierte Fläche"
+msgstr "Verbundene Zeichnungen"
 
 msgid "pick sketches"
 msgstr "Wähle Zeichnung"
@@ -1195,7 +1195,7 @@ msgid "Number of elements"
 msgstr "Anzahl der Elemente"
 
 msgid "order"
-msgstr ""
+msgstr "Fräsrichtung"
 
 msgid "Transform"
 msgstr "Umwandeln"
@@ -1333,7 +1333,7 @@ msgid "false"
 msgstr "Nein"
 
 msgid "Choose a directory:"
-msgstr "Wähle Direktory"
+msgstr "Wähle Verzeichnis"
 
 msgid "Choose a file"
 msgstr "Wähle Datei"
@@ -1360,7 +1360,7 @@ msgid "Failed to load resource image"
 msgstr "Konnte Bild Resource nicht laden"
 
 msgid "Convert sketch to face"
-msgstr "Wandle Zeichnung in Oberfläche um"
+msgstr "Belege Zeichnung mit einer Oberfläche"
 
 msgid "Make To Sketch"
 msgstr "Zur Zeichnung umwandeln"
@@ -1393,7 +1393,7 @@ msgid "Drawing"
 msgstr "Zeichnen"
 
 msgid "Edge"
-msgstr "Kante/Ecke"
+msgstr "Kante"
 
 msgid "Face"
 msgstr "Oberfläche"
@@ -1459,7 +1459,7 @@ msgid "Faces"
 msgstr "Oberflächen"
 
 msgid "Edges"
-msgstr "Kanten/Ecken"
+msgstr "Kanten"
 
 msgid "Sketch"
 msgstr "Zeichnung"
@@ -1770,7 +1770,7 @@ msgid "prep color"
 msgstr "Grundeinstellungen PostProzessor"
 
 msgid "axis color"
-msgstr "Axen Farbe"
+msgstr "Achsen Farbe"
 
 msgid "rapid color"
 msgstr "Axen schnellverfahren"
@@ -1800,10 +1800,10 @@ msgid "1.5 for square, 1.0 for round"
 msgstr "1.5 viereckig,1.0 rund"
 
 msgid "Boundary"
-msgstr "Umgrenzung"
+msgstr "Von Ausen nach Innen"
 
 msgid "Center"
-msgstr "Mittelpunkt"
+msgstr "Von Innen nach Außen"
 
 msgid "starting_place"
 msgstr "Start Position"
@@ -1818,10 +1818,10 @@ msgid "Pocket operation - Badly ordered sketch - sketch %d"
 msgstr "Taschen Operation - Falsch aufgebaute Zeichnung - sketch·%d"
 
 msgid "Left"
-msgstr "Links daneben"
+msgstr "Außenkontur"
 
 msgid "Right"
-msgstr "Rechts daneben"
+msgstr "Innenkontur"
 
 msgid "On"
 msgstr "Auf der Linie"
@@ -1872,7 +1872,7 @@ msgid "Set All Operations Inactive"
 msgstr "Setze alle Operationen auf Inaktiv"
 
 msgid "machine"
-msgstr ""
+msgstr "G-Code Ausgabe"
 
 msgid "output file"
 msgstr "Ausgabe Datei"
@@ -1947,7 +1947,7 @@ msgid "Convert Mesh To Triangles"
 msgstr "Konvertiere Gittemodell in Dreiecke"
 
 msgid "Normalize All Vertices"
-msgstr ""
+msgstr "Normalisiere alle Eckpunkte"
 
 msgid "Set All Vertex Normals"
 msgstr "Alle Ecken des Poligons normal"
