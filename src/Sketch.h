@@ -12,6 +12,7 @@ class CSketch:public ObjList
 {
 	HeeksColor color;
 	static wxIcon* m_icon;
+	wxString m_title;
 
 	int GetClosedSketchTurningNumber(); //only use this for closed sketches
 	double GetAngleAtJunction(HeeksObj* prev_object, HeeksObj* object);
@@ -45,6 +46,9 @@ public:
 	bool UsesID(){return true;}
 	void SetColor(const HeeksColor &col);
 	const HeeksColor* GetColor()const;
+	const wxChar* GetShortString(void)const{return m_title.c_str();}
+	bool CanEditString(void)const{return true;}
+	void OnEditString(const wxChar* str);
 	bool Add(HeeksObj* object, HeeksObj* prev_object);
 	void Remove(HeeksObj* object);
 
