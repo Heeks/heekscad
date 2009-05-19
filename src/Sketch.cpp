@@ -27,6 +27,7 @@ std::string CSketch::m_sketch_order_str[MaxSketchOrderTypes] = {
 
 CSketch::CSketch():m_order(SketchOrderTypeUnknown)
 {
+	m_title = _("Sketch");
 }
 
 CSketch::CSketch(const CSketch& c)
@@ -45,6 +46,7 @@ const CSketch& CSketch::operator=(const CSketch& c)
 
 	color = c.color;
 	m_order = c.m_order;
+	m_title = c.m_title;
 
 	return *this;
 }
@@ -186,6 +188,7 @@ void CSketch::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element = new TiXmlElement( "Sketch" );  
 	root->LinkEndChild( element );
+	element->SetAttribute("title", Ttc(m_title.c_str()));
 	WriteBaseXML(element);
 }
 
@@ -193,6 +196,8 @@ void CSketch::WriteXML(TiXmlNode *root)
 HeeksObj* CSketch::ReadFromXMLElement(TiXmlElement* pElem)
 {
 	CSketch* new_object = new CSketch;
+	const char* title = pElem->Attribute("title");
+	if(title)new_object->m_title = wxString(Ctt(title));
 	new_object->ReadBaseXML(pElem);
 
 	return (ObjList*)new_object;
@@ -212,6 +217,11 @@ const HeeksColor* CSketch::GetColor()const
 {
 	if(m_objects.size() == 0)return NULL;
 	return m_objects.front()->GetColor();
+}
+
+void CSketch::OnEditString(const wxChar* str){
+	m_title.assign(str);
+	wxGetApp().WasModified(this);
 }
 
 SketchOrderType CSketch::GetSketchOrder()
