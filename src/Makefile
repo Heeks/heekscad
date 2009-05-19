@@ -1,5 +1,4 @@
 PREFIX=/usr/local
-PREFIX=/home/dan/Desktop/heekscadinstalled
 BINDIR=$(PREFIX)/bin
 DATADIR=$(PREFIX)/share
 HEEKSCADDIR=$(DATADIR)/heekscad
