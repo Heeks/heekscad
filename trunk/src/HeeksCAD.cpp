@@ -138,7 +138,6 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_extrude_removes_sketches = false;
 	m_loft_removes_sketches = false;
 	m_font_tex_number = 0;
-	m_gl_font = NULL;
 	m_graphics_text_mode = GraphicsTextModeNone;
 	m_locale_initialised = false;
 	m_printData = NULL;
@@ -159,7 +158,6 @@ HeeksCADapp::~HeeksCADapp()
 	delete viewrotating;
 	delete viewzooming;
 	delete m_ruler;
-	if(m_gl_font)delete m_gl_font;
 	if(m_printData)delete m_printData;
 	if(m_pageSetupData)delete m_pageSetupData;
 }
@@ -346,8 +344,6 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("FaceToSketchDeviation"), FaceToSketchTool::deviation);
 
 	WriteRecentFilesProfileString(config);
-
-	if(m_gl_font)glFontDestroy(m_gl_font);
 
 	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
 		wxDynamicLibrary* shared_library = *It;
@@ -2816,17 +2812,15 @@ bool HeeksCADapp::CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num,
 
 void HeeksCADapp::create_font()
 {
-	if(m_gl_font == NULL)
-	{
 #ifdef WIN32
-		wxString fstr = GetExeFolder() + _T("/bitmaps/font.glf");
+	wxString fstr = GetExeFolder() + _T("/bitmaps/font.glf");
 #else
-		wxString fstr = GetExeFolder() + _T("/../share/heekscad/bitmaps/font.glf");
+	wxString fstr = GetExeFolder() + _T("/../share/heekscad/bitmaps/font.glf");
 #endif
-		glGenTextures( 1, &m_font_tex_number );
-		m_gl_font = new GLFONT;
-		glFontCreate(m_gl_font, (char*)Ttc(fstr.c_str()), m_font_tex_number);
-	}
+	glGenTextures( 1, &m_font_tex_number );
+
+	//Create our glFont from verdana.glf, using texture 1
+	m_gl_font.Create((char*)Ttc(fstr.c_str()), m_font_tex_number);
 }
 
 void HeeksCADapp::render_text(const wxChar* str)
@@ -2840,13 +2834,11 @@ void HeeksCADapp::render_text(const wxChar* str)
 	glEnable(GL_TEXTURE_2D);
 	glDepthMask(0);
 	glDisable(GL_POLYGON_OFFSET_FILL);
-	glFontBegin (m_gl_font);
+	m_gl_font.Begin();
 
 	//Draws text with a glFont
-	glFontTextOut ((char*)Ttc(str), 0.0f, 0.0f, 0.0f);
+	m_gl_font.DrawString(str, 0.08f, 0.0f, 0.0f);
 
-	//Needs to be called after text output
-	glFontEnd ();
 	glDepthMask(1);
 	glEnable(GL_POLYGON_OFFSET_FILL);
 	glDisable(GL_TEXTURE_2D);
@@ -2856,7 +2848,13 @@ void HeeksCADapp::render_text(const wxChar* str)
 bool HeeksCADapp::get_text_size(const wxChar* str, float* width, float* height)
 {
 	create_font();
-	return glFontTextSize(m_gl_font, (char*)Ttc(str), width, height) != 0;
+
+	std::pair<int, int> size;
+	m_gl_font.GetStringSize(str, &size);
+	*width = (float)(size.first) * 0.08f;
+	*height = (float)(size.second) * 0.08f;
+
+	return true;
 }
 
 void HeeksCADapp::render_screen_text2(const wxChar* str)

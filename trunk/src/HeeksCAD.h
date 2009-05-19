@@ -6,7 +6,7 @@
 
 #include "../interface/HeeksColor.h"
 #include "../interface/ObjList.h"
-#include "glfont.h"
+#include "glfont2.h"
 
 class Tool;
 class MagDragWindow;
@@ -129,7 +129,7 @@ public:
 	bool m_extrude_removes_sketches;
 	bool m_loft_removes_sketches;
 	bool m_font_created;
-	GLFONT *m_gl_font;
+	glfont::GLFont m_gl_font;
 	unsigned int m_font_tex_number;
 	GraphicsTextMode m_graphics_text_mode;
 	bool m_print_scaled_to_page;
