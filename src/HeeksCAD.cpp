@@ -258,6 +258,8 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("ViewUnits"), &m_view_units);
 	config.Read(_T("FaceToSketchDeviation"), &(FaceToSketchTool::deviation));
 
+	m_ruler->ReadFromConfig(config);
+
 	GetRecentFilesProfileString();
 
 	wxImage::AddHandler(new wxPNGHandler);
@@ -343,6 +345,8 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("GraphicsTextMode"), m_graphics_text_mode);
 	config.Write(_T("DxfMakeSketch"), HeeksDxfRead::m_make_as_sketch);
 	config.Write(_T("FaceToSketchDeviation"), FaceToSketchTool::deviation);
+
+	m_ruler->WriteToConfig(config);
 
 	WriteRecentFilesProfileString(config);
 
