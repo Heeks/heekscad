@@ -14,6 +14,7 @@
 #include "../interface/PropertyChoice.h"
 #include "../interface/PropertyString.h"
 #include "../interface/PropertyDouble.h"
+#include "../interface/PropertyLength.h"
 #include "SelectMode.h"
 #include "DigitizeMode.h"
 #include "HeeksFrame.h"
@@ -532,7 +533,7 @@ void LineArcDrawing::GetProperties(std::list<Property *> *list){
 
 	case CircleDrawingMode:
 		{
-			list->push_back(new PropertyDouble(_("radius"), radius_for_circle, NULL, on_set_circle_radius));
+			list->push_back(new PropertyLength(_("radius"), radius_for_circle, NULL, on_set_circle_radius));
 		}
 		break;
 

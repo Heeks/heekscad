@@ -1282,8 +1282,8 @@ void CoordinateSystem::GetProperties(std::list<Property *> *list)
 	extract(m_x, x);
 	extract(m_y, y);
 	list->push_back(new PropertyVertex(_("position"), o, this, on_set_pos));
-	list->push_back(new PropertyVertex(_("x axis"), x, NULL));
-	list->push_back(new PropertyVertex(_("y axis"), y, NULL));
+	list->push_back(new PropertyVector(_("x axis"), x, NULL));
+	list->push_back(new PropertyVector(_("y axis"), y, NULL));
 	AxesToAngles(m_x, m_y, m_vertical_angle, m_horizontal_angle, m_twist_angle);
 	list->push_back(new PropertyDouble(_("Vertical Angle"), m_vertical_angle * 180/Pi, this, on_set_vertical_angle));
 	list->push_back(new PropertyDouble(_("Horizontal Angle"), m_horizontal_angle * 180/Pi, this, on_set_horizontal_angle));

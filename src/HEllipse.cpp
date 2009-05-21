@@ -5,6 +5,7 @@
 
 #include "HEllipse.h"
 #include "../interface/PropertyDouble.h"
+#include "../interface/PropertyLength.h"
 #include "../interface/PropertyChoice.h"
 #include "../tinyxml/tinyxml.h"
 #include "../interface/PropertyVertex.h"
@@ -243,9 +244,9 @@ void HEllipse::GetProperties(std::list<Property *> *list){
 	extract(m_ellipse.Axis().Direction(), a);
 	double rot = GetRotation();
 	list->push_back(new PropertyVertex(_("centre"), c, this, on_set_centre));
-	list->push_back(new PropertyVertex(_("axis"), a, this, on_set_axis));
-	list->push_back(new PropertyDouble(_("major radius"), m_ellipse.MajorRadius(), this, on_set_major_radius));
-	list->push_back(new PropertyDouble(_("minor radius"), m_ellipse.MinorRadius(), this, on_set_minor_radius));
+	list->push_back(new PropertyVector(_("axis"), a, this, on_set_axis));
+	list->push_back(new PropertyLength(_("major radius"), m_ellipse.MajorRadius(), this, on_set_major_radius));
+	list->push_back(new PropertyLength(_("minor radius"), m_ellipse.MinorRadius(), this, on_set_minor_radius));
 	list->push_back(new PropertyDouble(_("rotation"), rot, this, on_set_rotation));
 	list->push_back(new PropertyDouble(_("start angle"), m_start, this, on_set_start_angle));
 	list->push_back(new PropertyDouble(_("end angle"), m_end, this, on_set_end_angle));

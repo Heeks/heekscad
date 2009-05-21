@@ -6,6 +6,8 @@
 #include "Ruler.h"
 #include "Gripper.h"
 #include "../interface/Tool.h"
+#include "../interface/PropertyCheck.h"
+#include "../interface/PropertyLength.h"
 #include "HeeksFrame.h"
 #include "ObjPropsCanvas.h"
 
@@ -14,6 +16,10 @@ void RulerMark::glCommands()
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	double half_width = width/2;
 	double dpos = (double)pos;
+	if(wxGetApp().m_view_units > 25.0)
+	{
+		dpos *= 2.54; // position of the tenth of an inch, in mm
+	}
 
 	if(wxGetApp().GetPixelScale() < 10)
 	{
@@ -51,6 +57,7 @@ void RulerMark::glCommands()
 	if(pos == 0)
 	{
 		wxString str = _T("cm");
+		if(wxGetApp().m_view_units > 25.0)str = _T("inches");
 		glPushMatrix();
 		glTranslated(dpos + half_width, -length + 2.05, 0.0);
 		glColor4ub(0, 0, 0, 255);
@@ -73,7 +80,7 @@ void RulerMark::glCommands()
 HRuler::HRuler(): m_gl_list(0)
 {
 	m_width = 25;
-	m_length = 306;
+	m_length = 312; // long enough for 12 inches
 	m_empty_length = 3;
 }
 
@@ -87,33 +94,68 @@ void HRuler::GetFourCorners(gp_Pnt *point)
 
 void HRuler::CalculateMarks(std::list<RulerMark> &marks)
 {
-	int num_mm = (int)(m_length - 2 * m_empty_length + 0.0001);
-
-	for(int i = 0; i<= num_mm; i++)
+	if(wxGetApp().m_view_units > 25.0)
 	{
-		RulerMark mark;
-		if(i % 10 == 0)
-		{
-			// big mark
-			mark.length = 3.0; 
-			mark.width = 0.1;
-		}
-		else if(i % 5 == 0)
-		{
-			// medium mark
-			mark.length = 2.0; 
-			mark.width = 0.1;
-		}
-		else
-		{
-			// small mark
-			mark.length = 1.0; 
-			mark.width = 0.1;
-		}
+		// inches
+		int num_tenths = (int)(m_length / 2.54 - 2 * m_empty_length / 2.54 + 0.0001);
 
-		mark.pos = i;
+		for(int i = 0; i<= num_tenths; i++)
+		{
+			RulerMark mark;
+			if(i % 10 == 0)
+			{
+				// big mark
+				mark.length = 3.0; 
+				mark.width = 0.1;
+			}
+			else if(i % 5 == 0)
+			{
+				// medium mark
+				mark.length = 2.0; 
+				mark.width = 0.1;
+			}
+			else
+			{
+				// small mark
+				mark.length = 1.0; 
+				mark.width = 0.1;
+			}
 
-		marks.push_back(mark);
+			mark.pos = i;
+
+			marks.push_back(mark);
+		}
+	}
+	else
+	{
+		int num_mm = (int)(m_length - 2 * m_empty_length + 0.0001);
+
+		for(int i = 0; i<= num_mm; i++)
+		{
+			RulerMark mark;
+			if(i % 10 == 0)
+			{
+				// big mark
+				mark.length = 3.0; 
+				mark.width = 0.1;
+			}
+			else if(i % 5 == 0)
+			{
+				// medium mark
+				mark.length = 2.0; 
+				mark.width = 0.1;
+			}
+			else
+			{
+				// small mark
+				mark.length = 1.0; 
+				mark.width = 0.1;
+			}
+
+			mark.pos = i;
+
+			marks.push_back(mark);
+		}
 	}
 }
 
@@ -240,8 +282,39 @@ public:
 
 static ResetRulerTool reset_ruler_tool;
 
+static void on_set_width(double value, HeeksObj* object){
+	((HRuler*)object)->m_width = value;
+	((HRuler*)object)->KillGLLists();
+	wxGetApp().Repaint();
+}
+
+static void on_set_length(double value, HeeksObj* object){
+	((HRuler*)object)->m_length = value;
+	((HRuler*)object)->KillGLLists();
+	wxGetApp().Repaint();
+}
+
+static void on_set_empty_length(double value, HeeksObj* object){
+	((HRuler*)object)->m_empty_length = value;
+	((HRuler*)object)->KillGLLists();
+	wxGetApp().Repaint();
+}
+
+static void on_set_use_view_units(bool value, HeeksObj* object)
+{
+	((HRuler*)object)->m_use_view_units = value;
+	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll(false);
+	((HRuler*)object)->KillGLLists();
+	wxGetApp().Repaint();
+}
+
 void HRuler::GetProperties(std::list<Property *> *list)
 {
+	list->push_back( new PropertyCheck(_("use view units"), m_use_view_units, this, on_set_use_view_units));
+	list->push_back( new PropertyLength(_("width"), m_width, this, on_set_width));
+	list->push_back( new PropertyLength(_("length"), m_length, this, on_set_length));
+	list->push_back( new PropertyLength(_("empty_length"), m_empty_length, this, on_set_empty_length));
+
 	HeeksObj::GetProperties(list);
 }
 

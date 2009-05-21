@@ -7,6 +7,7 @@
 #include <BRepPrimAPI_MakeCylinder.hxx>
 #include "../interface/PropertyVertex.h"
 #include "../interface/PropertyDouble.h"
+#include "../interface/PropertyLength.h"
 #include "Gripper.h"
 #include "MarkedList.h"
 #include "../tinyxml/tinyxml.h"
@@ -57,8 +58,8 @@ void CCylinder::GetProperties(std::list<Property *> *list)
 	double c[3];
 	extract(m_pos.Location(), c);
 	list->push_back(new PropertyVertex(_("centre pos"), c, this, on_set_centre));
-	list->push_back(new PropertyDouble(_("radius"), m_radius, this, on_set_radius));
-	list->push_back(new PropertyDouble(_("height"), m_height, this, on_set_height));
+	list->push_back(new PropertyLength(_("radius"), m_radius, this, on_set_radius));
+	list->push_back(new PropertyLength(_("height"), m_height, this, on_set_height));
 
 	CSolid::GetProperties(list);
 }

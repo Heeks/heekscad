@@ -8,6 +8,7 @@
 #include "HArc.h"
 #include "HCircle.h"
 #include "../interface/PropertyDouble.h"
+#include "../interface/PropertyLength.h"
 #include "../interface/PropertyVertex.h"
 #include "../tinyxml/tinyxml.h"
 #include "Gripper.h"
@@ -122,7 +123,7 @@ void HILine::GetProperties(std::list<Property *> *list){
 	list->push_back(new PropertyVertex(_("start"), a, this, on_set_start));
 	list->push_back(new PropertyVertex(_("end"), b, this, on_set_end));
 	double length = A.Distance(B);
-	list->push_back(new PropertyDouble(_("Length"), length, this));
+	list->push_back(new PropertyLength(_("Length"), length, this));
 
 	HeeksObj::GetProperties(list);
 }
