@@ -7,6 +7,7 @@
 #include <BRepPrimAPI_MakeBox.hxx>
 #include "../interface/PropertyVertex.h"
 #include "../interface/PropertyDouble.h"
+#include "../interface/PropertyLength.h"
 #include "Gripper.h"
 #include "MarkedList.h"
 #include "../tinyxml/tinyxml.h"
@@ -62,9 +63,9 @@ void CCuboid::GetProperties(std::list<Property *> *list)
 	double pos[3];
 	extract(m_pos.Location(), pos);
 	list->push_back(new PropertyVertex(_("datum corner"), pos, this, on_set_centre));
-	list->push_back(new PropertyDouble(_("width ( x )"), m_x, this, on_set_x));
-	list->push_back(new PropertyDouble(_("height( y )"), m_y, this, on_set_y));
-	list->push_back(new PropertyDouble(_("depth ( z )"), m_z, this, on_set_z));
+	list->push_back(new PropertyLength(_("width ( x )"), m_x, this, on_set_x));
+	list->push_back(new PropertyLength(_("height( y )"), m_y, this, on_set_y));
+	list->push_back(new PropertyLength(_("depth ( z )"), m_z, this, on_set_z));
 
 	CSolid::GetProperties(list);
 }

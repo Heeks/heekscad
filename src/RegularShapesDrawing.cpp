@@ -9,6 +9,7 @@
 #include "HArc.h"
 #include "../interface/PropertyChoice.h"
 #include "../interface/PropertyDouble.h"
+#include "../interface/PropertyLength.h"
 #include "../interface/PropertyInt.h"
 #include "HeeksFrame.h"
 #include "InputModeCanvas.h"
@@ -461,8 +462,8 @@ void RegularShapesDrawing::GetProperties(std::list<Property *> *list){
 	list->push_back ( new PropertyChoice ( _("drawing mode"),  choices, m_mode, NULL, on_set_drawing_mode ) );
 
 
-	if(m_mode == RectanglesRegularShapeMode)list->push_back( new PropertyDouble( _("radius"), m_rect_radius, NULL, on_set_rect_radius));
-	if(m_mode == ObroundRegularShapeMode)list->push_back( new PropertyDouble( _("radius"), m_obround_radius, NULL, on_set_obround_radius));
+	if(m_mode == RectanglesRegularShapeMode)list->push_back( new PropertyLength( _("radius"), m_rect_radius, NULL, on_set_rect_radius));
+	if(m_mode == ObroundRegularShapeMode)list->push_back( new PropertyLength( _("radius"), m_obround_radius, NULL, on_set_obround_radius));
 	if(m_mode == PolygonsRegularShapeMode)list->push_back( new PropertyInt(_("number of sides for polygon"), m_number_of_side_for_polygon, NULL, on_set_num_sides));
 
 	Drawing::GetProperties(list);

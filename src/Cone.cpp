@@ -7,6 +7,7 @@
 #include <BRepPrimAPI_MakeCone.hxx>
 #include "../interface/PropertyVertex.h"
 #include "../interface/PropertyDouble.h"
+#include "../interface/PropertyLength.h"
 #include "Gripper.h"
 #include "MarkedList.h"
 #include "../tinyxml/tinyxml.h"
@@ -168,11 +169,11 @@ void CCone::GetProperties(std::list<Property *> *list)
 	extract(m_pos.Direction(), d);
 	extract(m_pos.XDirection(), x);
 	list->push_back(new PropertyVertex(_("centre pos"), p, this, on_set_centre));
-	list->push_back(new PropertyVertex(_("direction"), d, NULL));
-	list->push_back(new PropertyVertex(_("x direction"), x, NULL));
-	list->push_back(new PropertyDouble(_("r1"), m_r1, this, on_set_r1));
-	list->push_back(new PropertyDouble(_("r2"), m_r2, this, on_set_r2));
-	list->push_back(new PropertyDouble(_("height"), m_height, this, on_set_height));
+	list->push_back(new PropertyVector(_("direction"), d, NULL));
+	list->push_back(new PropertyVector(_("x direction"), x, NULL));
+	list->push_back(new PropertyLength(_("r1"), m_r1, this, on_set_r1));
+	list->push_back(new PropertyLength(_("r2"), m_r2, this, on_set_r2));
+	list->push_back(new PropertyLength(_("height"), m_height, this, on_set_height));
 
 	CSolid::GetProperties(list);
 }

@@ -7,7 +7,7 @@
 #include "../interface/Property.h"
 
 class PropertyVertex:public Property{
-private:
+protected:
 	wxString title;
 
 public:
@@ -15,6 +15,7 @@ public:
 	HeeksObj* m_object;
 	int m_index;
 	bool has_index;
+	bool m_affected_by_view_units;
 	void(*m_callbackfunc)(const double*, HeeksObj*);
 	void(*m_callbackfuncidx)(const double*, HeeksObj*,int);
 	
@@ -30,3 +31,11 @@ public:
 	const wxChar* GetShortString(void)const;
 };
 
+class PropertyVector: public PropertyVertex{
+	// like a PropertyVertex, but isn't affected by view units
+public:
+	PropertyVector(const wxChar *t, const double *initial_vt, HeeksObj* object, void(*callbackfunc)(const double* vt, HeeksObj* m_object) = NULL) : PropertyVertex(t, initial_vt, object, callbackfunc){m_affected_by_view_units = false;}
+	~PropertyVector(){}
+
+	Property *MakeACopy(void)const;
+};

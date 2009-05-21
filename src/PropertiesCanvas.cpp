@@ -147,13 +147,19 @@ void CPropertiesCanvas::AddProperty(Property* p, wxPGProperty* parent_prop)
 		{
 			wxPGProperty* new_prop = wxParentProperty(p->GetShortString(),wxPG_LABEL);
 			Append( parent_prop, new_prop, p );
-			wxPGProperty* x_prop = wxFloatProperty(_("x"),wxPG_LABEL,((PropertyVertex*)p)->m_x[0]);
+			double x[3];
+			memcpy(x, ((PropertyVertex*)p)->m_x, 3*sizeof(double));
+			if(((PropertyVertex*)p)->m_affected_by_view_units)
+			{
+				for(int i = 0; i<3; i++)x[i] /= wxGetApp().m_view_units;
+			}
+			wxPGProperty* x_prop = wxFloatProperty(_("x"),wxPG_LABEL, x[0]);
 			if(!p->property_editable())x_prop->SetFlag(wxPG_PROP_READONLY);
 			Append( new_prop, x_prop, p );
-			wxPGProperty* y_prop = wxFloatProperty(_("y"),wxPG_LABEL,((PropertyVertex*)p)->m_x[1]);
+			wxPGProperty* y_prop = wxFloatProperty(_("y"),wxPG_LABEL, x[1]);
 			if(!p->property_editable())y_prop->SetFlag(wxPG_PROP_READONLY);
 			Append( new_prop, y_prop, p );
-			wxPGProperty* z_prop = wxFloatProperty(_("z"),wxPG_LABEL,((PropertyVertex*)p)->m_x[2]);
+			wxPGProperty* z_prop = wxFloatProperty(_("z"),wxPG_LABEL, x[2]);
 			if(!p->property_editable())z_prop->SetFlag(wxPG_PROP_READONLY);
 			new_prop->SetFlag(wxPG_PROP_READONLY);
 			Append( new_prop, z_prop, p );
@@ -267,12 +273,15 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 		{
 			if(p->GetName()[0] == 'x'){
 				((PropertyVertex*)property)->m_x[0] = event.GetPropertyValue().GetDouble();
+				if(((PropertyVertex*)property)->m_affected_by_view_units)((PropertyVertex*)property)->m_x[0] *= wxGetApp().m_view_units;
 			}
 			else if(p->GetName()[0] == 'y'){
 				((PropertyVertex*)property)->m_x[1] = event.GetPropertyValue().GetDouble();
+				if(((PropertyVertex*)property)->m_affected_by_view_units)((PropertyVertex*)property)->m_x[1] *= wxGetApp().m_view_units;
 			}
 			else if(p->GetName()[0] == 'z'){
 				((PropertyVertex*)property)->m_x[2] = event.GetPropertyValue().GetDouble();
+				if(((PropertyVertex*)property)->m_affected_by_view_units)((PropertyVertex*)property)->m_x[2] *= wxGetApp().m_view_units;
 			}
 
 			(*(((PropertyVertex*)property)->m_callbackfunc))(((PropertyVertex*)property)->m_x, ((PropertyVertex*)property)->m_object);

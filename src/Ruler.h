@@ -24,11 +24,6 @@ class HRuler: public HeeksObj{
 	//     ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬  
 	//
 
-	//  to do - make options for showing ruler in inches, furlongs, hands, etc.  
-
-	double m_width;
-	double m_length;
-	double m_empty_length; // space at each end
 	int m_gl_list;
 
 	void GetFourCorners(gp_Pnt *point);
@@ -36,6 +31,11 @@ class HRuler: public HeeksObj{
 
 public:
 	gp_Trsf m_trsf; // position and orientation ( no scaling allowed )
+	bool m_use_view_units;
+	double m_units; // used, if m_use_view_units == false; 1.0 for mm, 25.4 for inches
+	double m_width; // in mm
+	double m_length;// in mm
+	double m_empty_length; // space at each end in mm
 
 	HRuler();
 

@@ -71,12 +71,12 @@ static void RenderGrid(const CViewPoint *view_point, double max_number_across, b
 
 	}
 	else{
-		double l = log10(widest_spacing);
+		double l = log10(widest_spacing / wxGetApp().m_view_units);
 
 		double intl = (int)l;
 		if(l>0)intl++;
 
-		spacing = pow(10.0, intl);
+		spacing = pow(10.0, intl) * wxGetApp().m_view_units;
 	}
 
 	if(wxGetApp().grid_mode == 3){
@@ -135,7 +135,7 @@ static void RenderGrid(const CViewPoint *view_point, double max_number_across, b
 	for(double x = ext2d[0] - extra; x<ext2d[2] + extra; x += spacing){
 		if(miss_main_lines){
 			double xr = x/spacing/5;
-			if( fabs(  xr - (double)(int)xr ) < 0.1)continue;
+			if( fabs(  xr - (double)(int)(xr+ (xr>0 ? 0.5:-0.5)) ) < 0.1)continue;
 		}
 		gp_Pnt temp(datum.XYZ() + (vx.XYZ() * x) + (vy.XYZ() * ext2d[1]));
 		glVertex3d(temp.X(), temp.Y(), temp.Z());
@@ -145,7 +145,7 @@ static void RenderGrid(const CViewPoint *view_point, double max_number_across, b
 	for(double y = ext2d[1] - extra; y<ext2d[3] + extra; y += spacing){
 		if(miss_main_lines){
 			double yr = y/spacing/5;
-			if( fabs(  yr - (double)(int)yr ) < 0.1)continue;
+			if( fabs(  yr - (double)(int)(yr+(yr>0 ? 0.5:-0.5)) ) < 0.1)continue;
 		}
 		gp_Pnt temp = (datum.XYZ() + (vx.XYZ() * ext2d[0]) + (vy.XYZ() * y));
 		glVertex3d(temp.X(), temp.Y(), temp.Z());

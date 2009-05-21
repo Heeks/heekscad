@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="HeeksCAD"
-	ProjectGUID="{2702996F-5BCC-436D-A756-D9675FE828A8}"  
+	ProjectGUID="{2702996F-5BCC-436D-A756-D9675FE828A8}"
 	RootNamespace="HeeksCAD"
 	TargetFrameworkVersion="131072"
 	>
@@ -579,43 +579,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\glfont.cpp"
+			RelativePath=".\glfont2.cpp"
 			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\glfont.h"
+			RelativePath=".\glfont2.h"
 			>
 		</File>
 		<File
@@ -1076,6 +1044,14 @@
 		</File>
 		<File
 			RelativePath="..\interface\PropertyInt.h"
+			>
+		</File>
+		<File
+			RelativePath="..\interface\PropertyLength.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\interface\PropertyLength.h"
 			>
 		</File>
 		<File
