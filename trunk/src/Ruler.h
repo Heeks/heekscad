@@ -5,13 +5,14 @@
 #pragma once
 
 #include "../interface/HeeksObj.h"
+class HeeksConfig;
 
 struct RulerMark{
 	int pos; // distance from the 0 mark
 	double length;
 	double width;
 
-	void glCommands(); // including text
+	void glCommands(double units); // including text
 };
 
 class HRuler: public HeeksObj{
@@ -28,6 +29,7 @@ class HRuler: public HeeksObj{
 
 	void GetFourCorners(gp_Pnt *point);
 	void CalculateMarks(std::list<RulerMark> &marks);
+	double GetUnits();
 
 public:
 	gp_Trsf m_trsf; // position and orientation ( no scaling allowed )
@@ -54,4 +56,7 @@ public:
 	bool GetScaleAboutMatrix(double *m);
 	bool CanBeRemoved(){return false;}
 	bool CanBeCopied(){return false;}
+
+	void WriteToConfig(HeeksConfig& config);
+	void ReadFromConfig(HeeksConfig& config);
 };

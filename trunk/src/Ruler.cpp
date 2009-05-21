@@ -8,15 +8,17 @@
 #include "../interface/Tool.h"
 #include "../interface/PropertyCheck.h"
 #include "../interface/PropertyLength.h"
+#include "../interface/PropertyChoice.h"
 #include "HeeksFrame.h"
 #include "ObjPropsCanvas.h"
+#include "HeeksConfig.h"
 
-void RulerMark::glCommands()
+void RulerMark::glCommands(double units)
 {
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	double half_width = width/2;
 	double dpos = (double)pos;
-	if(wxGetApp().m_view_units > 25.0)
+	if(units > 25.0)
 	{
 		dpos *= 2.54; // position of the tenth of an inch, in mm
 	}
@@ -57,7 +59,7 @@ void RulerMark::glCommands()
 	if(pos == 0)
 	{
 		wxString str = _T("cm");
-		if(wxGetApp().m_view_units > 25.0)str = _T("inches");
+		if(units > 25.0)str = _T("inches");
 		glPushMatrix();
 		glTranslated(dpos + half_width, -length + 2.05, 0.0);
 		glColor4ub(0, 0, 0, 255);
@@ -92,9 +94,15 @@ void HRuler::GetFourCorners(gp_Pnt *point)
 	point[3] = gp_Pnt(-m_empty_length, 0, 0);
 }
 
+double HRuler::GetUnits()
+{
+	if(m_use_view_units)return wxGetApp().m_view_units;
+	return m_units;
+}
+
 void HRuler::CalculateMarks(std::list<RulerMark> &marks)
 {
-	if(wxGetApp().m_view_units > 25.0)
+	if(GetUnits() > 25.0)
 	{
 		// inches
 		int num_tenths = (int)(m_length / 2.54 - 2 * m_empty_length / 2.54 + 0.0001);
@@ -211,7 +219,7 @@ void HRuler::glCommands(bool select, bool marked, bool no_color)
 		for(std::list<RulerMark>::iterator It = marks.begin(); It != marks.end(); It++)
 		{
 			RulerMark& mark = *It;
-			mark.glCommands();
+			mark.glCommands(GetUnits());
 		}
 		glEnable(GL_POLYGON_OFFSET_FILL);
 
@@ -308,9 +316,24 @@ static void on_set_use_view_units(bool value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+static void on_set_units(int value, HeeksObj* object)
+{
+	((HRuler*)object)->m_units = (value == 0) ? 1.0:25.4;
+	((HRuler*)object)->KillGLLists();
+	wxGetApp().Repaint();
+}
+
 void HRuler::GetProperties(std::list<Property *> *list)
 {
 	list->push_back( new PropertyCheck(_("use view units"), m_use_view_units, this, on_set_use_view_units));
+	if(!m_use_view_units){
+		std::list< wxString > choices;
+		choices.push_back ( wxString ( _("mm") ) );
+		choices.push_back ( wxString ( _("inch") ) );
+		int choice = 0;
+		if(m_units > 25.0)choice = 1;
+		list->push_back ( new PropertyChoice ( _("units"),  choices, choice, this, on_set_units ) );
+	}
 	list->push_back( new PropertyLength(_("width"), m_width, this, on_set_width));
 	list->push_back( new PropertyLength(_("length"), m_length, this, on_set_length));
 	list->push_back( new PropertyLength(_("empty_length"), m_empty_length, this, on_set_empty_length));
@@ -327,4 +350,50 @@ bool HRuler::GetScaleAboutMatrix(double *m)
 {
 	extract(m_trsf, m);
 	return true;
+}
+
+void HRuler::WriteToConfig(HeeksConfig& config)
+{
+	config.Write(_T("RulerTrsf11"), m_trsf.Value(1, 1));
+	config.Write(_T("RulerTrsf12"), m_trsf.Value(1, 2));
+	config.Write(_T("RulerTrsf13"), m_trsf.Value(1, 3));
+	config.Write(_T("RulerTrsf14"), m_trsf.Value(1, 4));
+	config.Write(_T("RulerTrsf21"), m_trsf.Value(2, 1));
+	config.Write(_T("RulerTrsf22"), m_trsf.Value(2, 2));
+	config.Write(_T("RulerTrsf23"), m_trsf.Value(2, 3));
+	config.Write(_T("RulerTrsf24"), m_trsf.Value(2, 4));
+	config.Write(_T("RulerTrsf31"), m_trsf.Value(3, 1));
+	config.Write(_T("RulerTrsf32"), m_trsf.Value(3, 2));
+	config.Write(_T("RulerTrsf33"), m_trsf.Value(3, 3));
+	config.Write(_T("RulerTrsf34"), m_trsf.Value(3, 4));
+
+	config.Write(_T("RulerUseViewUnits"), m_use_view_units);
+	config.Write(_T("RulerUnits"), m_units);
+	config.Write(_T("RulerWidth"), m_width);
+	config.Write(_T("RulerLength"), m_length);
+	config.Write(_T("RulerEmptyLength"), m_empty_length);
+}
+
+void HRuler::ReadFromConfig(HeeksConfig& config)
+{
+	double m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34;
+	config.Read(_T("RulerTrsf11"), &m11, 1.0);
+	config.Read(_T("RulerTrsf12"), &m12, 0.0);
+	config.Read(_T("RulerTrsf13"), &m13, 0.0);
+	config.Read(_T("RulerTrsf14"), &m14, 0.0);
+	config.Read(_T("RulerTrsf21"), &m21, 0.0);
+	config.Read(_T("RulerTrsf22"), &m22, 1.0);
+	config.Read(_T("RulerTrsf23"), &m23, 0.0);
+	config.Read(_T("RulerTrsf24"), &m24, 0.0);
+	config.Read(_T("RulerTrsf31"), &m31, 0.0);
+	config.Read(_T("RulerTrsf32"), &m32, 0.0);
+	config.Read(_T("RulerTrsf33"), &m33, 1.0);
+	config.Read(_T("RulerTrsf34"), &m34, 0.0);
+	m_trsf.SetValues(m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, 0.0001, 0.00000001);
+
+	config.Read(_T("RulerUseViewUnits"), &m_use_view_units);
+	config.Read(_T("RulerUnits"), &m_units);
+	config.Read(_T("RulerWidth"), &m_width);
+	config.Read(_T("RulerLength"), &m_length);
+	config.Read(_T("RulerEmptyLength"), &m_empty_length);
 }
