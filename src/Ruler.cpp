@@ -81,6 +81,8 @@ void RulerMark::glCommands(double units)
 
 HRuler::HRuler(): m_gl_list(0)
 {
+	m_use_view_units = true;
+	m_units = 1.0;
 	m_width = 25;
 	m_length = 312; // long enough for 12 inches
 	m_empty_length = 3;
