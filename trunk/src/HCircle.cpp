@@ -5,6 +5,7 @@
 
 #include "HCircle.h"
 #include "../interface/PropertyDouble.h"
+#include "../interface/PropertyLength.h"
 #include "../interface/PropertyChoice.h"
 #include "../tinyxml/tinyxml.h"
 #include "../interface/PropertyVertex.h"
@@ -170,8 +171,8 @@ void HCircle::GetProperties(std::list<Property *> *list){
 	extract(m_circle.Location(), c);
 	extract(m_circle.Axis().Direction(), a);
 	list->push_back(new PropertyVertex(_("centre"), c, this, on_set_centre));
-	list->push_back(new PropertyVertex(_("axis"), a, this, on_set_axis));
-	list->push_back(new PropertyDouble(_("radius"), m_circle.Radius(), this, on_set_radius));
+	list->push_back(new PropertyVector(_("axis"), a, this, on_set_axis));
+	list->push_back(new PropertyLength(_("radius"), m_circle.Radius(), this, on_set_radius));
 
 	HeeksObj::GetProperties(list);
 }

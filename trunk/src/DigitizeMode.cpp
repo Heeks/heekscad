@@ -7,6 +7,7 @@
 #include "../interface/PropertyList.h"
 #include "../interface/PropertyCheck.h"
 #include "../interface/PropertyDouble.h"
+#include "../interface/PropertyLength.h"
 #include "../interface/PropertyString.h"
 #include "../interface/Tool.h"
 #include "SelectMode.h"
@@ -296,9 +297,9 @@ static void set_y(double value, HeeksObj* object){wxGetApp().m_digitizing->digit
 static void set_z(double value, HeeksObj* object){wxGetApp().m_digitizing->digitized_point.m_point.SetZ(value); wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();}
 
 void DigitizeMode::GetProperties(std::list<Property *> *list){
-	list->push_back(new PropertyDouble(_("X"), digitized_point.m_point.X(), NULL, set_x));
-	list->push_back(new PropertyDouble(_("Y"), digitized_point.m_point.Y(), NULL, set_y));
-	list->push_back(new PropertyDouble(_("Z"), digitized_point.m_point.Z(), NULL, set_z));
+	list->push_back(new PropertyLength(_("X"), digitized_point.m_point.X(), NULL, set_x));
+	list->push_back(new PropertyLength(_("Y"), digitized_point.m_point.Y(), NULL, set_y));
+	list->push_back(new PropertyLength(_("Z"), digitized_point.m_point.Z(), NULL, set_z));
 }
 
 class EndPosPicking:public Tool{

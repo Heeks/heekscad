@@ -8,6 +8,7 @@
 #include <gp_Trsf.hxx>
 #include "../interface/PropertyVertex.h"
 #include "../interface/PropertyDouble.h"
+#include "../interface/PropertyLength.h"
 #include "Gripper.h"
 #include "MarkedList.h"
 #include "../tinyxml/tinyxml.h"
@@ -51,7 +52,7 @@ void CSphere::GetProperties(std::list<Property *> *list)
 	double pos[3];
 	extract(m_pos, pos);
 	list->push_back(new PropertyVertex(_("centre"), pos, this, on_set_centre));
-	list->push_back(new PropertyDouble(_("radius"), m_radius, this, on_set_radius));
+	list->push_back(new PropertyLength(_("radius"), m_radius, this, on_set_radius));
 
 	CSolid::GetProperties(list);
 }

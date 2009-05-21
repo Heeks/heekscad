@@ -8,6 +8,7 @@
 #include "HILine.h"
 #include "HCircle.h"
 #include "../interface/PropertyDouble.h"
+#include "../interface/PropertyLength.h"
 #include "../interface/PropertyChoice.h"
 #include "../tinyxml/tinyxml.h"
 #include "../interface/PropertyVertex.h"
@@ -182,10 +183,10 @@ void HArc::GetProperties(std::list<Property *> *list){
 	list->push_back(new PropertyVertex(_("start"), a, this, on_set_start));
 	list->push_back(new PropertyVertex(_("end"), b, this, on_set_end));
 	list->push_back(new PropertyVertex(_("centre"), c, this, on_set_centre));
-	list->push_back(new PropertyVertex(_("axis"), ax, this, on_set_axis));
+	list->push_back(new PropertyVector(_("axis"), ax, this, on_set_axis));
 	double length = A.Distance(B);
-	list->push_back(new PropertyDouble(_("length"), length, NULL));
-	list->push_back(new PropertyDouble(_("radius"), m_circle.Radius(), NULL));
+	list->push_back(new PropertyLength(_("length"), length, NULL));
+	list->push_back(new PropertyLength(_("radius"), m_circle.Radius(), NULL));
 
 	HeeksObj::GetProperties(list);
 }

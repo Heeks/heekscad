@@ -6,6 +6,7 @@
 #include "PropertyVertex.h"
 
 PropertyVertex::PropertyVertex(const wxChar *t, const double *initial_vt, HeeksObj* object, void(*callbackfunc)(const double* vt, HeeksObj* m_object)):Property(){
+	m_affected_by_view_units = true;
 	title = wxString(t);
 	memcpy(m_x, initial_vt, 3*sizeof(double));
 	m_callbackfunc = callbackfunc;
@@ -15,6 +16,7 @@ PropertyVertex::PropertyVertex(const wxChar *t, const double *initial_vt, HeeksO
 }
 
 PropertyVertex::PropertyVertex(const wxChar *t, const double *initial_vt, HeeksObj* object, void(*callbackfunc)(const double* vt, HeeksObj* m_object, int), int index){
+	m_affected_by_view_units = true;
 	title = wxString(t);
 	memcpy(m_x, initial_vt, 3*sizeof(double));
 	m_callbackfunc = 0;
@@ -41,3 +43,7 @@ void PropertyVertex::CallSetFunction() const{
 	if(m_callbackfuncidx)(*m_callbackfuncidx)(m_x,m_object,m_index);
 }
 
+Property *PropertyVector::MakeACopy(void)const{
+	PropertyVector* new_object = new PropertyVector(*this);
+	return new_object;
+}

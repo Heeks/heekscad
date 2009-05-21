@@ -18,6 +18,7 @@
 #include "../interface/PropertyColor.h"
 #include "../interface/PropertyChoice.h"
 #include "../interface/PropertyDouble.h"
+#include "../interface/PropertyLength.h"
 #include "../interface/PropertyInt.h"
 #include "../interface/PropertyCheck.h"
 #include "../interface/PropertyString.h"
@@ -1919,6 +1920,8 @@ static void on_set_units(int value, HeeksObj* object)
 	config.Write(_T("ViewUnits"), wxGetApp().m_view_units);
 	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll(false);
 	wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
+	wxGetApp().m_ruler->KillGLLists();
+	wxGetApp().Repaint();
 }
 
 void HeeksCADapp::GetOptions(std::list<Property *> *list)
@@ -1996,18 +1999,18 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	digitizing->m_list.push_back(new PropertyCheck(_("midpoint"), digitize_midpoint, NULL, on_mid_point));
 	digitizing->m_list.push_back(new PropertyCheck(_("nearest"), digitize_nearest, NULL, on_nearest));
 	digitizing->m_list.push_back(new PropertyCheck(_("tangent"), digitize_tangent, NULL, on_tangent));
-	digitizing->m_list.push_back(new PropertyDouble(_("radius for undefined circles"), digitizing_radius, NULL, on_radius));
+	digitizing->m_list.push_back(new PropertyLength(_("radius for undefined circles"), digitizing_radius, NULL, on_radius));
 	digitizing->m_list.push_back(new PropertyCheck(_("coordinates"), digitize_coords, NULL, on_coords));
 	digitizing->m_list.push_back(new PropertyCheck(_("screen"), digitize_screen, NULL, on_relative));
-	digitizing->m_list.push_back(new PropertyDouble(_("grid size"), digitizing_grid, NULL, on_grid_edit));
+	digitizing->m_list.push_back(new PropertyLength(_("grid size"), digitizing_grid, NULL, on_grid_edit));
 	digitizing->m_list.push_back(new PropertyCheck(_("snap to grid"), draw_to_grid, NULL, on_grid));
 	list->push_back(digitizing);
 
 	PropertyList* drawing = new PropertyList(_("drawing"));
 	drawing->m_list.push_back ( new PropertyColor ( _("current color"),  current_color, NULL, on_set_current_color ) );
 	drawing->m_list.push_back ( new PropertyColor ( _("construction color"),  construction_color, NULL, on_set_construction_color ) );
-	drawing->m_list.push_back(new PropertyDouble(_("geometry tolerance"), m_geom_tol, NULL, on_set_geom_tol));
-	drawing->m_list.push_back(new PropertyDouble(_("face to sketch deviaton"), FaceToSketchTool::deviation, NULL, on_set_face_to_sketch_deviation));
+	drawing->m_list.push_back(new PropertyLength(_("geometry tolerance"), m_geom_tol, NULL, on_set_geom_tol));
+	drawing->m_list.push_back(new PropertyLength(_("face to sketch deviaton"), FaceToSketchTool::deviation, NULL, on_set_face_to_sketch_deviation));
 	list->push_back(drawing);
 
 	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
