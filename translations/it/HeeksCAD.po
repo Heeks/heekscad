@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: HeeksCAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-04-28 13:02+0200\n"
-"PO-Revision-Date: 2009-05-11 00:23+0200\n"
+"PO-Revision-Date: 2009-05-22 11:18+0200\n"
 "Last-Translator: Andrea Florio <andrea@opensuse.org>\n"
 "Language-Team: italiano <translations@opensuse.org>\n"
 "MIME-Version: 1.0\n"
@@ -41,28 +41,28 @@ msgid "Fatal Error converting sketch to face"
 msgstr "Errore fatale convertendo da sketch a face"
 
 msgid "Set position and orientation by picking 3 points"
-msgstr "Setze Position und Richtung durch benennen 3er Punkte"
+msgstr "Imposta la posizione e l'orientamento scegliendo 3 punti"
 
 msgid "Set this coordinate system as the active one"
-msgstr "Setze dieses Koordinatensystem auf Aktiv"
+msgstr "Imposta le coordinate del sistema su quelle attive"
 
 msgid "Set world coordinate system active"
-msgstr "Setze World Koordinatensystem aktiv"
+msgstr "Imposta come attive le coordinate di tutto il sistema"
 
 msgid "position"
-msgstr "Position"
+msgstr "Posizione"
 
 msgid "x axis"
-msgstr "X Achse"
+msgstr "Asse X"
 
 msgid "y axis"
-msgstr "Y Achse"
+msgstr "Asse Y"
 
 msgid "Vertical Angle"
-msgstr "Vertikaler Winkel"
+msgstr "Angolo Verticale"
 
 msgid "Horizontal Angle"
-msgstr "Horizontaler Winkel"
+msgstr "Angolo Orizzontale"
 
 msgid "Twist Angle"
 msgstr "Dreh Winkel"
