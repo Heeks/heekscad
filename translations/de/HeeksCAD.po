@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: HeeksCAD 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-04-28 13:02+0200\n"
-"PO-Revision-Date: 2009-05-17 02:46+0200\n"
+"PO-Revision-Date: 2009-05-25 00:59+0200\n"
 "Last-Translator: fungunner2 <fungunner2@freenet.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -39,13 +39,13 @@ msgid "Fatal Error converting sketch to face"
 msgstr "Fehler beim belegen der Zeichnung mit einer Oberfläche"
 
 msgid "Set position and orientation by picking 3 points"
-msgstr "Setze Position und Richtung durch benennen 3er Punkte"
+msgstr "Setze Position und Richtung durch benennen von 3 Punkten"
 
 msgid "Set this coordinate system as the active one"
 msgstr "Setze dieses Koordinatensystem auf Aktiv"
 
 msgid "Set world coordinate system active"
-msgstr "Setze World Koordinatensystem aktiv"
+msgstr "Grund Koordinatensystem aktiv"
 
 msgid "position"
 msgstr "Position"
@@ -90,7 +90,7 @@ msgid "radius"
 msgstr "Radius"
 
 msgid "Digitize Mode"
-msgstr "Digitalisieren Mode"
+msgstr ""
 
 msgid "X"
 msgstr "X"
@@ -105,7 +105,7 @@ msgid "Error! The 'Stop Picking' button shouldn't have been available!"
 msgstr "Fehler! Der \"Stop-Auswahl\"-Button sollte nicht zur Verfügung stehen"
 
 msgid "Stop Picking"
-msgstr "Stop·Auswahl"
+msgstr "Stoppe·Auswahl"
 
 msgid "Finish picking"
 msgstr "Fertig Auswahl"
@@ -120,7 +120,7 @@ msgid "mode"
 msgstr "Modus"
 
 msgid "Stop drawing"
-msgstr "Stop mit zeichnen"
+msgstr "Stopp mit zeichnen"
 
 msgid "Finish drawing"
 msgstr "Fertig mit zeichnen"
@@ -150,7 +150,7 @@ msgid "Solid with edge blend"
 msgstr "3D mit Kantenausblendung"
 
 msgid "A fatal error happened during Blend"
-msgstr "Schwerer Ausnahmefehler beim verbinden"
+msgstr "Falscher Radius zum verbinden der Kanten"
 
 msgid "surface type"
 msgstr "Oberflächentyp"
@@ -210,10 +210,10 @@ msgid "orientation"
 msgstr "Richtung"
 
 msgid "major radius"
-msgstr "grösster·radius"
+msgstr "Größter·radius"
 
 msgid "minor radius"
-msgstr "kleinster·radius"
+msgstr "Kleinster·radius"
 
 msgid "rotation"
 msgstr "Drehung"
@@ -246,7 +246,7 @@ msgid "Untitled"
 msgstr "Unbekannt"
 
 msgid "This is not an SVG document!"
-msgstr "Das ist kein svg Dokument"
+msgstr "Kein svg Dokument"
 
 msgid "Invalid file type chosen"
 msgstr "Falscher Dateityp"
@@ -291,7 +291,7 @@ msgid "screen text"
 msgstr "OSD"
 
 msgid "antialiasing"
-msgstr "antialiasing"
+msgstr "Kantenglättung"
 
 msgid "fixed light"
 msgstr "fixed·light"
@@ -327,13 +327,13 @@ msgid "no grid"
 msgstr "Kein Raster"
 
 msgid "faint color"
-msgstr "schwache Farbe"
+msgstr "Leicht farbliche Darstellung"
 
 msgid "alpha blending"
-msgstr "alpha·blending"
+msgstr "Darstellung der Ebenen"
 
 msgid "colored alpha blending"
-msgstr "farbige Darstellung der Ebenen"
+msgstr "Farbige Darstellung der Ebenen"
 
 msgid "grid mode"
 msgstr "Raster·Modus"
@@ -381,7 +381,7 @@ msgid "grid size"
 msgstr "Raster Grösse"
 
 msgid "snap to grid"
-msgstr "Am Raster orientieren"
+msgstr "Zoom Raster Aus"
 
 msgid "drawing"
 msgstr "zeichnen"
@@ -393,7 +393,7 @@ msgid "construction color"
 msgstr "Konstruktions Farbe"
 
 msgid "geometry tolerance"
-msgstr "geometrie·tolerance"
+msgstr "Zeichnungstolleranz"
 
 msgid "selection filter"
 msgstr "Auswahlfilter"
@@ -585,7 +585,7 @@ msgid "Previous view"
 msgstr "Letzte Ansicht"
 
 msgid "Zoom window"
-msgstr "Zoom Fenster"
+msgstr "Markierten Bereich vergrössern"
 
 msgid "Fit view to extents"
 msgstr "Gröstmöglichen Bereich zoomen"
@@ -630,7 +630,7 @@ msgid "Common"
 msgstr "Schnittmenge erzeugen"
 
 msgid "Fillet"
-msgstr "Teilausschnitt"
+msgstr "Kanten abrunden"
 
 msgid "Chamfer"
 msgstr "Kanten abschrägen(Fasen)"
@@ -672,13 +672,13 @@ msgid "Solids Tool Bar"
 msgstr "3D-Objekt Werkzeugleiste"
 
 msgid "Geometry Tool Bar"
-msgstr "Geometrie Werkzeugleiste"
+msgstr "Zeichnung Werkzeugleiste"
 
 msgid "Viewing Tool Bar"
 msgstr "Ansicht Werkzeugleiste"
 
 msgid "Transformations Tool Bar"
-msgstr "Transformations Werkzeugleiste"
+msgstr "Objektbearbeitung Werkzeugleiste"
 
 msgid "Status Bar"
 msgstr "Statusleiste"
@@ -690,7 +690,7 @@ msgid "&Edit"
 msgstr "&Bearbeiten"
 
 msgid "&Geometry"
-msgstr "&Geometrie"
+msgstr "&Zeichnung"
 
 msgid "&View"
 msgstr "&Ansicht"
@@ -699,10 +699,10 @@ msgid "&Solid"
 msgstr "&3DObjekt"
 
 msgid "&Transform"
-msgstr "&Transform"
+msgstr "&Objekt bearbeiten"
 
 msgid "&Window"
-msgstr "&Fenster"
+msgstr "&Anzeige"
 
 msgid "Graphics"
 msgstr "Grafiken"
@@ -711,7 +711,7 @@ msgid "Reset Layout"
 msgstr "Layout zurücksetzen"
 
 msgid "Set toolbars to left"
-msgstr "Setze Werkzeugleisten nach links"
+msgstr "Werkzeugleisten links anordnen"
 
 msgid "Coordinate System"
 msgstr "Koordinaten·System"
@@ -723,10 +723,10 @@ msgid "Import file"
 msgstr "Importiere Datei"
 
 msgid "Pick two or more solids, the first one will be cut by the others"
-msgstr "Wähle 2 oder mehr 3D Objekte,der 1 wird ausgeschnitten von den anderen"
+msgstr "Wähle 2 oder mehr 3D Objekte,das 1 wird ausgeschnitten von den anderen"
 
 msgid "Subtract Solids"
-msgstr "Subtract·Solids"
+msgstr "3D-Modell auschneiden"
 
 msgid "Pick two or more solids to be fused together"
 msgstr "Markiere 2 oder mehr 3D-Objekte die verbunden werden sollen"
@@ -743,10 +743,10 @@ msgid "Intersection of Solids"
 msgstr "Durchschnitt der 3D Objekte"
 
 msgid "Pick one or more edges to add a fillet to"
-msgstr "Eine/Mehrere Ecken angeben um einen Ausschnitt hinzuzufügen"
+msgstr "Mindestens eine Kante wählen,die durch einen Radius \"gerundet\" werden soll"
 
 msgid "Edge Fillet"
-msgstr "Edge·Fillet"
+msgstr "Kante(n) abrunden"
 
 msgid "Pick one or more edges to add a chamfer to"
 msgstr "Markiere eine oder mehrere Kanten,die abgeschrägt werden sollen"
@@ -768,7 +768,7 @@ msgstr "Wähle 2 odere mehrere Zeichnungen,welche durch Oberflächen\n"
 "( CTRL Taste für Mehrfachauswahl)"
 
 msgid "Lofted Body"
-msgstr "Lofted·Body"
+msgstr "Verbundene Zeichnungen"
 
 msgid ""
 "Pick one or more sketches, to create extruded body from\n"
@@ -874,10 +874,10 @@ msgid "Find common solid between two solids"
 msgstr "Finde Schnittmenge von zwei 3D-Objekten"
 
 msgid "Make a fillet on selected edges"
-msgstr "schneide markierten Bereich aus"
+msgstr "\"Abrunden\" der markierten Kante(n) mit einem bestimmten Radius"
 
 msgid "Make a chamfer on selected edges"
-msgstr "Markierte Kanten abschrägen"
+msgstr "Markierte Kanten abschrägen(Fasen)"
 
 msgid "Go back to previous view"
 msgstr "zurück zur letzten Ansicht"
@@ -892,7 +892,7 @@ msgid ""
 "Zoom in to fit the extents of the drawing into the graphics window, but "
 "without rotating the view"
 msgstr ""
-"Grösstmöglichen·Bereich·Zoomen ohne das Objekt zu drehen"
+"Größtmöglichen·Bereich·Zoomen ohne das Objekt zu drehen"
 
 msgid "Enter view rotating mode"
 msgstr "Dreh Modus (mit linker Maustaste)"
@@ -928,7 +928,7 @@ msgid "General Tools"
 msgstr "Standardwerkzeuge"
 
 msgid "Geometry Tools"
-msgstr "Geometrie·Tools"
+msgstr "Zeichen Werkzeuge"
 
 msgid "Solid Tools"
 msgstr "3D Werkzeug"
@@ -1150,7 +1150,7 @@ msgid "Set the selection filter to all items"
 msgstr "Setze den Auswahlfilter für alle Items"
 
 msgid "Pick Edges"
-msgstr "Wähle Kanten/Ecke"
+msgstr "Wähle Kanten"
 
 msgid "Set the selection filter to only edges"
 msgstr "Setze den Auswahlfilter nur für Kanten"
@@ -1196,6 +1196,12 @@ msgstr "Anzahl der Elemente"
 
 msgid "order"
 msgstr "Fräsrichtung"
+
+msgid "counter-clockwise"
+msgstr "linksherum"
+
+msgid "clockwise"
+msgstr "rechtsherum"
 
 msgid "Transform"
 msgstr "Umwandeln"
@@ -1767,7 +1773,7 @@ msgid "variable color"
 msgstr "Variabeln Farbe"
 
 msgid "prep color"
-msgstr "Grundeinstellungen PostProzessor"
+msgstr "Grundeinstellungen"
 
 msgid "axis color"
 msgstr "Achsen Farbe"
@@ -1788,7 +1794,7 @@ msgid "step over"
 msgstr "Nächster Schritt"
 
 msgid "material allowance"
-msgstr "Material Abzug"
+msgstr "Material Zulage"
 
 msgid "round corner factor"
 msgstr "Faktor für runde Ecken"
@@ -1818,16 +1824,16 @@ msgid "Pocket operation - Badly ordered sketch - sketch %d"
 msgstr "Taschen Operation - Falsch aufgebaute Zeichnung - sketch·%d"
 
 msgid "Left"
-msgstr "Außenkontur"
+msgstr "Innenkontur"
 
 msgid "Right"
-msgstr "Innenkontur"
+msgstr "Aussenkontur"
 
 msgid "On"
 msgstr "Auf der Linie"
 
 msgid "tool on side"
-msgstr "Werkzeug auf der Seite"
+msgstr "Werkzeugkorrektur"
 
 msgid "auto roll on"
 msgstr "Automatischer Einstiegsradius"
@@ -1842,13 +1848,13 @@ msgid "roll off point"
 msgstr "Ausstiegspunkt"
 
 msgid "use start point"
-msgstr "Nutze Startpunkt"
+msgstr "Manueller Startpunkt"
 
 msgid "start point"
 msgstr "Startpunkt"
 
 msgid "use end point"
-msgstr "Nutze Endpunkt"
+msgstr "Manueller Endpunkt"
 
 msgid "end point"
 msgstr "Endpunkt"
@@ -1981,4 +1987,7 @@ msgstr "Gitter Oberfläche"
 
 msgid "Mesh Vertex"
 msgstr "Gitter-Eckpunkte"
+
+msgid "Split arcs to little lines"
+msgstr "Bogen in kleine Geraden aufteilen"
 
