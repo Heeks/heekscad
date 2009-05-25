@@ -10,7 +10,7 @@ float ToolImage::m_button_scale = 0.25;
 const int ToolImage::full_size = 96;
 const int ToolImage::default_bitmap_size = 24;
 
-#ifdef WIN32
+#if defined(WIN32) || defined(RUNINPLACE) //compile with 'RUNINPLACE=yes make' then skip 'sudo make install'
 ToolImage::ToolImage(const wxString& name):wxImage(wxGetApp().GetExeFolder() + _T("/bitmaps/") + name + _T(".png"), wxBITMAP_TYPE_PNG)
 #else
 ToolImage::ToolImage(const wxString& name):wxImage(wxGetApp().GetExeFolder() + _T("/../share/heekscad/bitmaps/") + name + _T(".png"), wxBITMAP_TYPE_PNG)
