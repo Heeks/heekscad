@@ -14,7 +14,7 @@ ToolImage::ToolImage(const wxString& name):wxImage(wxGetApp().GetResFolder() + _
 
 #else
 //remove after all plugins have some way of differentiate ressources from libs
-#ifdef HEEKSCNC
+#ifdef HEEKSPLUGIN
 ToolImage::ToolImage(const wxString& name):wxImage(theApp.GetResFolder() + _T("/bitmaps/") + name + _T(".png"), wxBITMAP_TYPE_PNG)
 #else
 ToolImage::ToolImage(const wxString& name):wxImage(theApp.GetDllFolder() + _T("/bitmaps/") + name + _T(".png"), wxBITMAP_TYPE_PNG)
