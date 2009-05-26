@@ -10,8 +10,12 @@
 #export DH_VERBOSE=1
 
 
-
-
+CFLAGS = -Wall -g -ggdb
+ifneq (,$(filter noopt,$(DEB_BUILD_OPTIONS)))
+    CFLAGS += -O0
+else
+    CFLAGS += -O2
+endif
 
 configure: configure-stamp
 configure-stamp:
@@ -27,7 +31,7 @@ build-stamp: configure-stamp
 	dh_testdir
 
 	# Add here commands to compile the package.
-	$(MAKE) -C src/ PREFIX=/usr
+	$(MAKE) -C src/ PREFIX=/usr CFLAGS="$(CFLAGS)"
 	$(MAKE) -C translations/ PREFIX=/usr
 	#docbook-to-man debian/heekscad.sgml > heekscad.1
 
@@ -78,7 +82,7 @@ binary-arch: build install
 #	dh_installinfo
 	dh_installman
 	dh_link
-	dh_strip
+	dh_strip --dbg-package=heekscad-dbg
 	dh_compress
 	dh_fixperms
 #	dh_perl
