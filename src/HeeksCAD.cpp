@@ -2241,6 +2241,15 @@ wxString HeeksCADapp::GetExeFolder()const
 	return exedir;
 }
 
+wxString HeeksCADapp::GetResFolder()const
+{
+#ifdef WIN32 || defined(RUNINPLACE)
+	return GetExeFolder();
+#else
+	return (GetExeFolder() + _T("/../share/heekscad"));
+#endif
+}
+
 // do your own glBegin and glEnd
 void HeeksCADapp::get_2d_arc_segments(double xs, double ys, double xe, double ye, double xc, double yc, bool dir, bool want_start, double pixels_per_mm, void(*callbackfunc)(const double* xy)){
 	double ax = xs - xc;
@@ -2819,11 +2828,7 @@ bool HeeksCADapp::CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num,
 
 void HeeksCADapp::create_font()
 {
-#ifdef WIN32
-	wxString fstr = GetExeFolder() + _T("/bitmaps/font.glf");
-#else
-	wxString fstr = GetExeFolder() + _T("/../share/heekscad/bitmaps/font.glf");
-#endif
+	wxString fstr = GetResFolder() + _T("/bitmaps/font.glf");
 	glGenTextures( 1, &m_font_tex_number );
 
 	//Create our glFont from verdana.glf, using texture 1

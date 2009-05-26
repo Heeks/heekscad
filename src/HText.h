@@ -30,11 +30,7 @@ public:
 	void GetBox(CBox &box);
 	const wxChar* GetTypeString(void)const{return _("Text");}
 	HeeksObj *MakeACopy(void)const;
-#ifdef WIN32
-	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/text");}
-#else
-	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/../share/heekscad/icons/text");}
-#endif
+	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/text");}
 	bool ModifyByMatrix(const double *mat);
 	void SetColor(const HeeksColor &col){m_color = col;}
 	const HeeksColor* GetColor()const{return &m_color;}

@@ -41,11 +41,7 @@ public:
 	void GetBox(CBox &box);
 	const wxChar* GetTypeString(void)const{return _("Dimension");}
 	HeeksObj *MakeACopy(void)const;
-#ifdef WIN32
-	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/dimension");}
-#else
-	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/../share/heekscad/icons/dimension");}
-#endif
+	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/dimension");}
 	bool ModifyByMatrix(const double *mat);
 	void SetColor(const HeeksColor &col){m_color = col;}
 	const HeeksColor* GetColor()const{return &m_color;}
