@@ -23,11 +23,7 @@ public:
 	int GetType()const{return SolidType;}
 	long GetMarkingMask()const{return MARKING_FILTER_SOLID;}
 	const wxChar* GetTypeString(void)const{return _("Solid");}
-#ifdef WIN32
-	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/solid");}
-#else
-	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/../share/heekscad/icons/solid");}
-#endif
+	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/solid");}
 	HeeksObj *MakeACopy(void)const;
 	void SetColor(const HeeksColor &col){m_color = col;}
 	const HeeksColor* GetColor()const{return &m_color;}
