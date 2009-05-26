@@ -152,13 +152,14 @@ bool CreateRuledSurface(const std::list<TopoDS_Wire> &wire_list, TopoDS_Shape& s
 
 		try{
 			generator.Build();
+			shape = generator.Shape();
 		}
 		catch(...)
 		{
 			wxMessageBox(_("Fatal error making ruled solid"));
+			return false;
 		}
-			shape = generator.Shape();
-
+			
 		return true;
 	}
 	return false;
