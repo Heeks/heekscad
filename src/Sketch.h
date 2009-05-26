@@ -33,11 +33,7 @@ public:
 	int GetType()const{return SketchType;}
 	long GetMarkingMask()const{return MARKING_FILTER_SKETCH;}
 	const wxChar* GetTypeString(void)const{return _("Sketch");}
-#ifdef WIN32
-	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/linedrawing");}
-#else
-	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/../share/heekscad/icons/linedrawing");}
-#endif
+	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/linedrawing");}
 	void GetProperties(std::list<Property *> *list);
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	HeeksObj *MakeACopy(void)const;

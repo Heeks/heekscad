@@ -26,11 +26,7 @@ public:
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetGripperPositions(std::list<double> *list, bool just_for_endof);
 	HeeksObj *MakeACopy(void)const{ return new CVertex(*this);}
-#ifdef WIN32
-	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/vertex");}
-#else
-	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/../share/heekscad/icons/vertex");}
-#endif
+	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/vertex");}
 	const wxChar* GetTypeString(void)const{return _("Vertex");}
 	bool UsesID(){return true;}
 

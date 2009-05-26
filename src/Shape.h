@@ -15,33 +15,21 @@ class CFaceList: public ObjList{
 public:
 	const wxChar* GetTypeString(void)const{return _("Faces");}
 	HeeksObj *MakeACopy(void)const{ return new CFaceList(*this);}
-#ifdef WIN32
-	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/faces");}
-#else
-	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/../share/heekscad/icons/faces");}
-#endif
+	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/faces");}
 };
 
 class CEdgeList: public ObjList{
 public:
 	const wxChar* GetTypeString(void)const{return _("Edges");}
 	HeeksObj *MakeACopy(void)const{ return new CEdgeList(*this);}
-#ifdef WIN32
-	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/edges");}
-#else
-	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/../share/heekscad/icons/edges");}
-#endif
+	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/edges");}
 };
 
 class CVertexList: public ObjList{
 public:
 	const wxChar* GetTypeString(void)const{return _("Vertices");}
 	HeeksObj *MakeACopy(void)const{ return new CVertexList(*this);}
-#ifdef WIN32
-	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/vertices");}
-#else
-	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/../share/heekscad/icons/vertices");}
-#endif
+	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/vertices");}
 };
 
 class CShape:public ObjList{

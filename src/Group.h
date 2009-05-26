@@ -13,11 +13,7 @@ public:
 	const wxChar* GetTypeString(void)const{return _("Group");}
 	int GetType()const{return GroupType;}
 	HeeksObj *MakeACopy(void)const{ return new CGroup(*this);}
-#ifdef WIN32
-	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/group");}
-#else
-	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/../share/heekscad/icons/group");}
-#endif
+	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/group");}
 	void WriteXML(TiXmlNode *root);
 	bool UsesID(){return true;}
 

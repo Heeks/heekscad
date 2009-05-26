@@ -43,11 +43,7 @@ public:
 	void GetBox(CBox &box);
 	void GetGripperPositions(std::list<double> *list, bool just_for_endof);
 	HeeksObj *MakeACopy(void)const{ return new CEdge(*this);}
-#ifdef WIN32
-	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/icons/edge");}
-#else
-	wxString GetIcon(){return wxGetApp().GetExeFolder() + _T("/../share/heekscad/icons/edge");}
-#endif
+	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/edge");}
 	const wxChar* GetTypeString(void)const{return _("Edge");}
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	void WriteXML(TiXmlNode *root);
