@@ -10,7 +10,7 @@ HeeksArt
 libarea
 libactp
 
-that means, you DO NOT NEED to compile bye your own HeeksCAD nor that plugins, just add the following repo to your list, the search and install the packages you like most:
+that means, you DO NOT NEED to compile by your own HeeksCAD nor that plugins, just add the following repo to your list, the search and install the packages you like most:
 
 *openSUSE 11.1*:
 
