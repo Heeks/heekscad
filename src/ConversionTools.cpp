@@ -30,7 +30,7 @@
 #include "Group.h"
 
 void GetConversionMenuTools(std::list<Tool*>* t_list){
-	bool lines_or_arcs_in_marked_list = false;
+	bool lines_or_arcs_etc_in_marked_list = false;
 	int sketches_in_marked_list = 0;
 	bool group_in_marked_list = false;
 
@@ -41,7 +41,10 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 		switch(object->GetType()){
 			case LineType:
 			case ArcType:
-				lines_or_arcs_in_marked_list = true;
+			case CircleType:
+			case EllipseType:
+			case SplineType:
+				lines_or_arcs_etc_in_marked_list = true;
 				break;
 			case SketchType:
 				sketches_in_marked_list++;
@@ -52,7 +55,7 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 		}
 	}
 
-	if(lines_or_arcs_in_marked_list)
+	if(lines_or_arcs_etc_in_marked_list)
 	{
 		t_list->push_back(new MakeLineArcsToSketch);
 	}
@@ -333,10 +336,20 @@ void MakeLineArcsToSketch::Run(){
 	std::list<HeeksObj*>::const_iterator It;
 	for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
 		HeeksObj* object = *It;
-		if(object->GetType() == LineType || object->GetType() == ArcType){
-			HeeksObj* new_object = object->MakeACopy();
-			objects_to_delete.push_back(object);
-			sketch->Add(new_object, NULL);
+		switch(object->GetType()){
+			case LineType:
+			case ArcType:
+			case CircleType:
+			case EllipseType:
+			case SplineType:
+				{
+					HeeksObj* new_object = object->MakeACopy();
+					objects_to_delete.push_back(object);
+					sketch->Add(new_object, NULL);
+				}
+				break;
+			default:
+				break;
 		}
 	}
 
