@@ -3,6 +3,7 @@
 // This program is released under the BSD license. See the file COPYING for details.
 
 #include "stdafx.h"
+#include <wx/dc.h>
 #include "AboutBox.h"
 #include "HeeksFrame.h"
 
