@@ -589,6 +589,8 @@ void TangentCircles(const gp_Circ& c1, const gp_Circ& c2, const gp_Circ& c3, std
 
 				double aBmbA = (a*B - b*A); // aB - bA
 
+				if(fabs(aBmbA) < 0.000000000000001 )continue;
+
 				// x = k + Kr where
 				double k = (B*d - b*D) / aBmbA;
 				double K = (-B*c + b*C) / aBmbA;
@@ -613,6 +615,8 @@ void TangentCircles(const gp_Circ& c1, const gp_Circ& c2, const gp_Circ& c3, std
 				double qc = k*k + x1*x1 -2*k*x1 + l*l + y1*y1 - 2*l*y1 - r1*r1;
 
 				// solve the quadratic equation, r = (-b +- sqrt(b*b - 4*a*c))/(2 * a)
+				if(fabs(qa) < 0.000000000000001 )continue;
+
 				for(int qs = 0; qs<2; qs++){
 					double bb = qb*qb;
 					double ac4 = 4*qa*qc;
