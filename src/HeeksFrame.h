@@ -22,8 +22,7 @@ struct ToolIndex{
 
 enum{
 	ID_RECENT_FIRST = 1,
-	ID_OPEN_RECENT = ID_RECENT_FIRST + MAX_RECENT_FILES,
-	Menu_View_Objects,
+	Menu_View_Objects = ID_RECENT_FIRST + MAX_RECENT_FILES,
 	Menu_View_Properties,
 	Menu_View_Options,
 	Menu_View_Input,
@@ -46,6 +45,8 @@ class CHeeksFrame : public wxFrame
 private:
 	int m_next_id_for_button;
 	std::map<int, SExternalButtonFunctions > m_external_buttons;
+
+	int MakeNextIDForTool(void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&));
 
 public:
 	CTreeCanvas *m_tree_canvas;
@@ -77,7 +78,6 @@ public:
 	void OnViewInput( wxCommandEvent& event );
 	void OnUpdateViewInput( wxUpdateUIEvent& event );
 	void OnViewProperties( wxCommandEvent& event );
-	void OnUpdateOpenRecent( wxUpdateUIEvent& event );
 	void OnUpdateViewProperties( wxUpdateUIEvent& event );
 	void OnViewToolBar( wxCommandEvent& event );
 	void OnUpdateViewToolBar( wxUpdateUIEvent& event );
@@ -106,7 +106,7 @@ public:
 	int AddMenuCheckItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
 	int AddMenuItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&));
 	int AddMenuItem(wxMenu* menu, const wxBitmap& bitmap, const wxString& text, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
-	void AddMenuSubMenu(wxMenu* menu, wxMenu* sub_menu, const wxBitmap& bitmap, const wxString& text);
+	int AddMenuSubMenu(wxMenu* menu, wxMenu* sub_menu, const wxBitmap& bitmap, const wxString& text, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
     void Draw(wxDC& dc);
 	void OnChangeBitmapSize();
 	void MakeMenus();
