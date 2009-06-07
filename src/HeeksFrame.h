@@ -21,50 +21,8 @@ struct ToolIndex{
 };
 
 enum{
-	ID_LINES = 1,
-	ID_CIRCLES,
-	ID_ILINE,
-	ID_POINTS,
-	ID_REGSHAPES,
-	ID_TEXT,
-	ID_DIMENSIONING,
-	ID_SELECT_MODE,
-	ID_SUBTRACT,
-	ID_SPHERE,
-	ID_CUBE,
-	ID_CYL,
-	ID_CONE,
-	ID_REDRAW,
-	ID_FUSE,
-	ID_COMMON,
-	ID_FILLET,
-	ID_CHAMFER,
-	ID_VEWING,
-	ID_MAG,
-	WXPRINT_PRINT,
-	WXPRINT_PAGE_SETUP,
-	WXPRINT_PREVIEW,
-	ID_MAG_EXTENTS,
-	ID_MAG_NO_ROT,
-	ID_MAG_PREVIOUS,
-	ID_VIEW_ROT,
-	ID_VIEW_ZOOM,
-	ID_FULL_SCREEN,
-	ID_DELETE,
-	ID_RECENT_FIRST,
+	ID_RECENT_FIRST = 1,
 	ID_OPEN_RECENT = ID_RECENT_FIRST + MAX_RECENT_FILES,
-	ID_MOVE_TRANSLATE,
-	ID_COPY_TRANSLATE,
-	ID_MOVE_ROTATE,
-	ID_COPY_ROTATE,
-	ID_MOVE_MIRROR,
-	ID_COPY_MIRROR,
-	ID_MOVE_SCALE,
-	ID_COPY_SCALE,
-	ID_COORDINATE_SYSTEM,
-	Menu_File_Quit,
-	Menu_File_About,
-	Menu_File_Plugins,
 	Menu_View_Objects,
 	Menu_View_Properties,
 	Menu_View_Options,
@@ -78,9 +36,6 @@ enum{
 	Menu_View_ResetLayout,
 	Menu_View_SetToolBarsToLeft,
 	ID_TREE_CTRL,
-	ID_IMPORT,
-	ID_RULED_SURFACE,
-	ID_EXTRUDE,
 	ID_FIRST_EXTERNAL_BUTTON,
 	ID_FIRST_POP_UP_MENU_TOOL = ID_FIRST_EXTERNAL_BUTTON + 1000,
 	ID_NEXT_ID = ID_FIRST_POP_UP_MENU_TOOL + 1000
@@ -99,11 +54,11 @@ public:
 	COptionsCanvas* m_options;
 	CInputModeCanvas* m_input_canvas;
 	wxAuiManager* m_aui_manager;
-	wxToolBarBase *m_toolBar;
-	wxToolBarBase *m_geometryBar;
-	wxToolBarBase *m_solidBar;
-	wxToolBarBase *m_viewingBar;
-	wxToolBarBase *m_transformBar;
+	wxToolBar *m_toolBar;
+	wxToolBar *m_geometryBar;
+	wxToolBar *m_solidBar;
+	wxToolBar *m_viewingBar;
+	wxToolBar *m_transformBar;
 	wxStatusBar* m_statusBar;
 	wxMenuBar *m_menuBar;
 	wxMenu* m_recent_files_menu;
@@ -115,9 +70,6 @@ public:
 	virtual ~CHeeksFrame();
 
     void OnClose( wxCloseEvent& event );
-	void OnQuit( wxCommandEvent& event );
-	void OnAbout( wxCommandEvent& event );
-	void OnPlugins( wxCommandEvent& event );
 	void OnViewObjects( wxCommandEvent& event );
 	void OnUpdateViewObjects( wxUpdateUIEvent& event );
 	void OnViewOptions( wxCommandEvent& event );
@@ -141,55 +93,6 @@ public:
 	void OnUpdateViewStatusBar( wxUpdateUIEvent& event );
 	void OnResetLayout( wxCommandEvent& event );
 	void OnSetToolBarsToLeft( wxCommandEvent& event );
-	void OnLinesButton( wxCommandEvent& event );
-	void OnCirclesButton( wxCommandEvent& event );
-	void OnILineButton( wxCommandEvent& event );
-	void OnPointsButton( wxCommandEvent& event );
-	void OnRegularShapesButton( wxCommandEvent& event );
-	void OnTextButton( wxCommandEvent& event );
-	void OnDimensioningButton( wxCommandEvent& event );
-	void OnCoordinateSystem( wxCommandEvent& event );
-	void OnSelectModeButton( wxCommandEvent& event );
-	void OnOpenButton( wxCommandEvent& event );
-	void OnImportButton( wxCommandEvent& event );
-	void OnSaveButton( wxCommandEvent& event );
-	void OnUndoButton( wxCommandEvent& event );
-	void OnRedoButton( wxCommandEvent& event );
-	void OnNewButton( wxCommandEvent& event );
-	void OnCutButton( wxCommandEvent& event );
-	void OnUpdateCut( wxUpdateUIEvent& event );
-	void OnCopyButton( wxCommandEvent& event );
-	void OnUpdateCopy( wxUpdateUIEvent& event );
-	void OnPasteButton( wxCommandEvent& event );
-	void OnUpdateDelete( wxUpdateUIEvent& event );
-	void OnDeleteButton( wxCommandEvent& event );
-	void OnUpdatePaste( wxUpdateUIEvent& event );
-	void OnSubtractButton( wxCommandEvent& event );
-	void OnFuseButton( wxCommandEvent& event );
-	void OnCommonButton( wxCommandEvent& event );
-	void OnFilletButton( wxCommandEvent& event );
-	void OnChamferButton( wxCommandEvent& event );
-	void OnSphereButton( wxCommandEvent& event );
-	void OnRuledSurfaceButton( wxCommandEvent& event );
-	void OnExtrudeButton( wxCommandEvent& event );
-	void OnCubeButton( wxCommandEvent& event );
-	void OnCylButton( wxCommandEvent& event );
-	void OnConeButton( wxCommandEvent& event );
-	void OnRedrawButton( wxCommandEvent& event );
-	void OnMagButton( wxCommandEvent& event );
-	void OnMagExtentsButton( wxCommandEvent& event );
-	void OnMagNoRotButton( wxCommandEvent& event );
-	void OnMagPreviousButton( wxCommandEvent& event );
-	void OnViewRotateButton( wxCommandEvent& event );
-	void OnViewZoomButton( wxCommandEvent& event );
-	void OnFullScreenButton( wxCommandEvent& event );
-	void OnMoveTranslateButton( wxCommandEvent& event );
-	void OnCopyTranslateButton( wxCommandEvent& event );
-	void OnMoveRotateButton( wxCommandEvent& event );
-	void OnCopyRotateButton( wxCommandEvent& event );
-	void OnMoveMirrorButton( wxCommandEvent& event );
-	void OnCopyMirrorButton( wxCommandEvent& event );
-	void OnMoveScaleButton( wxCommandEvent& event );
 	void OnExternalButton( wxCommandEvent& event );
 	void OnRecentFile( wxCommandEvent& event );
 	void OnUpdateExternalButton( wxUpdateUIEvent& event );
@@ -202,11 +105,11 @@ public:
 	void ClearToolBar(wxToolBar* m_toolBar);
 	int AddMenuCheckItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
 	int AddMenuItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&));
+	int AddMenuItem(wxMenu* menu, const wxBitmap& bitmap, const wxString& text, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
+	void AddMenuSubMenu(wxMenu* menu, wxMenu* sub_menu, const wxBitmap& bitmap, const wxString& text);
     void Draw(wxDC& dc);
-    void OnPrint(wxCommandEvent& event);
-    void OnPrintPreview(wxCommandEvent& event);
-    void OnPageSetup(wxCommandEvent& event);
 	void OnChangeBitmapSize();
+	void MakeMenus();
 	void AddToolBars();
 	void LoadPerspective(const wxString& str);
 	void SetDefaultLayout(const wxString& str); // call this from dll's OnStartUp
