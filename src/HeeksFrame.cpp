@@ -1281,7 +1281,7 @@ void CHeeksFrame::MakeMenus()
 	AddMenuItem(edit_menu, ToolImage(_T("cut")), _("Cut"), OnCutButton, OnUpdateCut);
 	AddMenuItem(edit_menu, ToolImage(_T("copy")), _("Copy"), OnCopyButton, OnUpdateCopy);
 	AddMenuItem(edit_menu, ToolImage(_T("paste")), _("Paste"), OnPasteButton, OnUpdatePaste);
-	AddMenuItem(edit_menu, ToolImage(_T("delete")), _("Delete"), OnDeleteButton);
+	AddMenuItem(edit_menu, ToolImage(_T("delete")), _("Delete"), OnDeleteButton, OnUpdateDelete);
 	edit_menu->AppendSeparator();
 	AddMenuItem(edit_menu, ToolImage(_T("select")), _("Select Mode"), OnSelectModeButton);
 
