@@ -68,7 +68,6 @@ EVT_MENU( Menu_View_StatusBar, CHeeksFrame::OnViewStatusBar )
 EVT_UPDATE_UI(Menu_View_StatusBar, CHeeksFrame::OnUpdateViewStatusBar)
 EVT_MENU( Menu_View_ResetLayout, CHeeksFrame::OnResetLayout )
 EVT_MENU( Menu_View_SetToolBarsToLeft, CHeeksFrame::OnSetToolBarsToLeft )
-EVT_UPDATE_UI(ID_OPEN_RECENT, CHeeksFrame::OnUpdateOpenRecent)
 EVT_MENU_RANGE(	ID_RECENT_FIRST, ID_RECENT_FIRST + MAX_RECENT_FILES, CHeeksFrame::OnRecentFile)
 EVT_MENU_RANGE(ID_FIRST_EXTERNAL_BUTTON, ID_FIRST_POP_UP_MENU_TOOL + 1000, CHeeksFrame::OnExternalButton)
 EVT_UPDATE_UI_RANGE(ID_FIRST_EXTERNAL_BUTTON, ID_FIRST_POP_UP_MENU_TOOL + 1000, CHeeksFrame::OnUpdateExternalButton)
@@ -493,22 +492,22 @@ void CHeeksFrame::OnViewProperties( wxCommandEvent& event )
 	}
 }
 
-void CHeeksFrame::OnUpdateOpenRecent( wxUpdateUIEvent& event )
+static void OnUpdateOpenRecent( wxUpdateUIEvent& event )
 {
-	size_t size = m_recent_files_menu->GetMenuItemCount();
+	size_t size = wxGetApp().m_frame->m_recent_files_menu->GetMenuItemCount();
 	std::list<wxMenuItem*> menu_items;
-	for(size_t i = 0; i< size; i++)menu_items.push_back(m_recent_files_menu->FindItemByPosition(i));
+	for(size_t i = 0; i< size; i++)menu_items.push_back(wxGetApp().m_frame->m_recent_files_menu->FindItemByPosition(i));
 	for(std::list<wxMenuItem*>::iterator It = menu_items.begin(); It != menu_items.end(); It++)
 	{
 		wxMenuItem* menu_item = *It;
-		m_recent_files_menu->Delete(menu_item);
+		wxGetApp().m_frame->m_recent_files_menu->Delete(menu_item);
 	}
 
 	int recent_id = ID_RECENT_FIRST;
 	for(std::list< wxString >::iterator It = wxGetApp().m_recent_files.begin(); It != wxGetApp().m_recent_files.end() && recent_id < ID_RECENT_FIRST + MAX_RECENT_FILES; It++, recent_id++)
 	{
 		wxString& filepath = *It;
-		m_recent_files_menu->Append(recent_id, filepath, filepath);
+		wxGetApp().m_frame->m_recent_files_menu->Append(recent_id, filepath, filepath);
 	}
 }
 
@@ -950,7 +949,7 @@ void CHeeksFrame::OnMove( wxMoveEvent& evt )
 	config.Write(_T("MainFramePosY"), posy);
 }
 
-int CHeeksFrame::AddMenuItem(wxMenu* menu, const wxBitmap& bitmap, const wxString& text, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&))
+int CHeeksFrame::MakeNextIDForTool(void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&))
 {
 	while(m_external_buttons.find(m_next_id_for_button) != m_external_buttons.end())
 	{
@@ -961,98 +960,64 @@ int CHeeksFrame::AddMenuItem(wxMenu* menu, const wxBitmap& bitmap, const wxStrin
 	if(m_next_id_for_button >= ID_FIRST_POP_UP_MENU_TOOL)
 	{
 		// too many button IDs!
-		wxMessageBox(_T("too many button IDs!, see CHeeksFrame::AddToolBarTool"));
+		wxMessageBox(_T("too many button IDs!, see CHeeksFrame::GetNextIDForTool"));
 	}
 
 	int id_to_use = m_next_id_for_button;
+
+	SExternalButtonFunctions ebf;
+	ebf.on_button = onButtonFunction;
+	ebf.on_update_button = onUpdateButtonFunction;
+	m_external_buttons.insert(std::pair<int, SExternalButtonFunctions > ( id_to_use, ebf ));
+	m_next_id_for_button++;
+	return id_to_use;
+}
+
+int CHeeksFrame::AddMenuItem(wxMenu* menu, const wxBitmap& bitmap, const wxString& text, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&))
+{
+	int id_to_use = MakeNextIDForTool(onButtonFunction, onUpdateButtonFunction);
 
 	wxMenuItem *menuItem = new wxMenuItem(menu, id_to_use, text);
 	menuItem->SetBitmap(bitmap);
 	menu->Append(menuItem);
 
-	SExternalButtonFunctions ebf;
-	ebf.on_button = onButtonFunction;
-	ebf.on_update_button = onUpdateButtonFunction;
-	m_external_buttons.insert(std::pair<int, SExternalButtonFunctions > ( id_to_use, ebf ));
-	m_next_id_for_button++;
 	return id_to_use;
 }
 
-void CHeeksFrame::AddMenuSubMenu(wxMenu* menu, wxMenu* sub_menu, const wxBitmap& bitmap, const wxString& text)
+int CHeeksFrame::AddMenuSubMenu(wxMenu* menu, wxMenu* sub_menu, const wxBitmap& bitmap, const wxString& text, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&))
 {
-	wxMenuItem *menuItem = new wxMenuItem(menu, wxID_ANY, text, wxString(_T("")), wxITEM_NORMAL, sub_menu);
+	int id_to_use = MakeNextIDForTool(onButtonFunction, onUpdateButtonFunction);
+
+	wxMenuItem *menuItem = new wxMenuItem(menu, id_to_use, text, wxString(_T("")), wxITEM_NORMAL, sub_menu);
 	menuItem->SetBitmap(bitmap);
 	menu->Append(menuItem);
+
+	return id_to_use;
 }
 
 int CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, const wxString& title, const wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&))
 {
-	while(m_external_buttons.find(m_next_id_for_button) != m_external_buttons.end())
-	{
-		// already used
-		m_next_id_for_button++;
-	}
+	int id_to_use = MakeNextIDForTool(onButtonFunction, onUpdateButtonFunction);
 
-	if(m_next_id_for_button >= ID_FIRST_POP_UP_MENU_TOOL)
-	{
-		// too many button IDs!
-		wxMessageBox(_T("too many button IDs!, see CHeeksFrame::AddToolBarTool"));
-	}
-
-	int id_to_use = m_next_id_for_button;
 	toolbar->AddTool(id_to_use, title, bitmap, caption);
-	SExternalButtonFunctions ebf;
-	ebf.on_button = onButtonFunction;
-	ebf.on_update_button = onUpdateButtonFunction;
-	m_external_buttons.insert(std::pair<int, SExternalButtonFunctions > ( id_to_use, ebf ));
-	m_next_id_for_button++;
+
 	return id_to_use;
 }
 
 int CHeeksFrame::AddMenuCheckItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&))
 {
-	while(m_external_buttons.find(m_next_id_for_button) != m_external_buttons.end())
-	{
-		// already used
-		m_next_id_for_button++;
-	}
+	int id_to_use = MakeNextIDForTool(onButtonFunction, onUpdateButtonFunction);
 
-	if(m_next_id_for_button >= ID_FIRST_POP_UP_MENU_TOOL)
-	{
-		// too many button IDs!
-		wxMessageBox(_T("too many button IDs!, see CHeeksFrame::AddMenuCheckItem"));
-	}
-
-	int id_to_use = m_next_id_for_button;
 	menu->AppendCheckItem(id_to_use, title);
-	SExternalButtonFunctions ebf;
-	ebf.on_button = onButtonFunction;
-	ebf.on_update_button = onUpdateButtonFunction;
-	m_external_buttons.insert(std::pair<int, SExternalButtonFunctions > ( id_to_use, ebf ));
-	m_next_id_for_button++;
+
 	return id_to_use;
 }
 
 int CHeeksFrame::AddMenuItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&)){
-	while(m_external_buttons.find(m_next_id_for_button) != m_external_buttons.end())
-	{
-		// already used
-		m_next_id_for_button++;
-	}
+	int id_to_use = MakeNextIDForTool(onButtonFunction, NULL);
 
-	if(m_next_id_for_button >= ID_FIRST_POP_UP_MENU_TOOL)
-	{
-		// too many button IDs!
-		wxMessageBox(_T("too many button IDs!, see CHeeksFrame::AddMenuItem"));
-	}
-
-	int id_to_use = m_next_id_for_button;
 	menu->Append(id_to_use, title);
-	SExternalButtonFunctions ebf;
-	ebf.on_button = onButtonFunction;
-	ebf.on_update_button = NULL;
-	m_external_buttons.insert(std::pair<int, SExternalButtonFunctions > ( id_to_use, ebf ));
-	m_next_id_for_button++;
+
 	return id_to_use;
 }
 
@@ -1265,7 +1230,7 @@ void CHeeksFrame::MakeMenus()
 	AddMenuItem(file_menu, ToolImage(_T("ppreview")), _("Print Preview"), OnPrintPreview);
     m_recent_files_menu = new wxMenu;
     m_recent_files_menu->Append(-1, _T("test"));
-	AddMenuSubMenu(file_menu, m_recent_files_menu, ToolImage(_T("recent")), _("Open Recent"));
+	AddMenuSubMenu(file_menu, m_recent_files_menu, ToolImage(_T("recent")), _("Open Recent"), NULL, OnUpdateOpenRecent);
 	AddMenuItem(file_menu, ToolImage(_T("import")), _("Import"), OnImportButton);
 	AddMenuItem(file_menu, ToolImage(_T("about")), _("About"), OnAbout);
 	file_menu->AppendSeparator();
