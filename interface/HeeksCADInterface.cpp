@@ -131,14 +131,9 @@ int CHeeksCADInterface::GetToolImageBitmapSize()
 	return ToolImage::GetBitmapSize();
 }
 
-int CHeeksCADInterface::AddMenuCheckItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&))
+int CHeeksCADInterface::AddMenuItem(wxMenu* menu, const wxString& title, const wxBitmap& bitmap, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&), wxMenu* submenu, bool check_item)
 {
-	return wxGetApp().m_frame->AddMenuCheckItem(menu, title, onButtonFunction, onUpdateButtonFunction);
-}
-	
-int CHeeksCADInterface::AddMenuItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&))
-{
-	return wxGetApp().m_frame->AddMenuItem(menu, title, onButtonFunction);
+	return wxGetApp().m_frame->AddMenuItem(menu, title, bitmap, onButtonFunction, onUpdateButtonFunction, submenu, check_item);
 }
 
 wxString CHeeksCADInterface::GetExeFolder()
