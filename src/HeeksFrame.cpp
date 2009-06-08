@@ -46,26 +46,6 @@ using namespace std;
 
 BEGIN_EVENT_TABLE( CHeeksFrame, wxFrame )
 EVT_CLOSE(CHeeksFrame::OnClose)
-EVT_MENU( Menu_View_Objects, CHeeksFrame::OnViewObjects )
-EVT_UPDATE_UI(Menu_View_Objects, CHeeksFrame::OnUpdateViewObjects)
-EVT_MENU( Menu_View_Options, CHeeksFrame::OnViewOptions )
-EVT_UPDATE_UI(Menu_View_Options, CHeeksFrame::OnUpdateViewOptions)
-EVT_MENU( Menu_View_Input, CHeeksFrame::OnViewInput )
-EVT_UPDATE_UI(Menu_View_Input, CHeeksFrame::OnUpdateViewInput)
-EVT_MENU( Menu_View_Properties, CHeeksFrame::OnViewProperties )
-EVT_UPDATE_UI(Menu_View_Properties, CHeeksFrame::OnUpdateViewProperties)
-EVT_MENU( Menu_View_ToolBar, CHeeksFrame::OnViewToolBar )
-EVT_UPDATE_UI(Menu_View_ToolBar, CHeeksFrame::OnUpdateViewToolBar)
-EVT_MENU( Menu_View_GeometryBar, CHeeksFrame::OnViewGeometryBar )
-EVT_UPDATE_UI(Menu_View_GeometryBar, CHeeksFrame::OnUpdateViewGeometryBar)
-EVT_MENU( Menu_View_SolidBar, CHeeksFrame::OnViewSolidBar )
-EVT_UPDATE_UI(Menu_View_SolidBar, CHeeksFrame::OnUpdateViewSolidBar)
-EVT_MENU( Menu_View_ViewingBar, CHeeksFrame::OnViewViewingBar )
-EVT_UPDATE_UI(Menu_View_ViewingBar, CHeeksFrame::OnUpdateViewViewingBar)
-EVT_MENU( Menu_View_TransformBar, CHeeksFrame::OnViewTransformBar )
-EVT_UPDATE_UI(Menu_View_TransformBar, CHeeksFrame::OnUpdateViewTransformBar)
-EVT_MENU( Menu_View_StatusBar, CHeeksFrame::OnViewStatusBar )
-EVT_UPDATE_UI(Menu_View_StatusBar, CHeeksFrame::OnUpdateViewStatusBar)
 EVT_MENU( Menu_View_ResetLayout, CHeeksFrame::OnResetLayout )
 EVT_MENU( Menu_View_SetToolBarsToLeft, CHeeksFrame::OnSetToolBarsToLeft )
 EVT_MENU_RANGE(	ID_RECENT_FIRST, ID_RECENT_FIRST + MAX_RECENT_FILES, CHeeksFrame::OnRecentFile)
@@ -346,126 +326,126 @@ static void OnPlugins( wxCommandEvent& WXUNUSED( event ) )
 	dlg.ShowModal();
 }
 
-void CHeeksFrame::OnViewObjects( wxCommandEvent& event )
+static void OnViewObjects( wxCommandEvent& event )
 {
-	wxAuiPaneInfo& pane_info = m_aui_manager->GetPane(m_tree_canvas);
+	wxAuiPaneInfo& pane_info = wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_tree_canvas);
 	if(pane_info.IsOk()){
 		pane_info.Show(event.IsChecked());
-		m_aui_manager->Update();
+		wxGetApp().m_frame->m_aui_manager->Update();
 	}
 }
 
-void CHeeksFrame::OnUpdateViewObjects( wxUpdateUIEvent& event )
+static void OnUpdateViewObjects( wxUpdateUIEvent& event )
 {
-	event.Check(m_aui_manager->GetPane(m_tree_canvas).IsShown());
+	event.Check(wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_tree_canvas).IsShown());
 }
 
-void CHeeksFrame::OnViewOptions( wxCommandEvent& event )
+static void OnViewOptions( wxCommandEvent& event )
 {
-	wxAuiPaneInfo& pane_info = m_aui_manager->GetPane(m_options);
+	wxAuiPaneInfo& pane_info = wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_options);
 	if(pane_info.IsOk()){
 		pane_info.Show(event.IsChecked());
-		m_aui_manager->Update();
+		wxGetApp().m_frame->m_aui_manager->Update();
 	}
 }
 
-void CHeeksFrame::OnUpdateViewOptions( wxUpdateUIEvent& event )
+static void OnUpdateViewOptions( wxUpdateUIEvent& event )
 {
-	event.Check(m_aui_manager->GetPane(m_options).IsShown());
+	event.Check(wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_options).IsShown());
 }
 
-void CHeeksFrame::OnViewInput( wxCommandEvent& event )
+static void OnViewInput( wxCommandEvent& event )
 {
-	wxAuiPaneInfo& pane_info = m_aui_manager->GetPane(m_input_canvas);
+	wxAuiPaneInfo& pane_info = wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_input_canvas);
 	if(pane_info.IsOk()){
 		pane_info.Show(event.IsChecked());
-		m_aui_manager->Update();
+		wxGetApp().m_frame->m_aui_manager->Update();
 	}
 }
 
-void CHeeksFrame::OnUpdateViewInput( wxUpdateUIEvent& event )
+static void OnUpdateViewInput( wxUpdateUIEvent& event )
 {
-	event.Check(m_aui_manager->GetPane(m_input_canvas).IsShown());
+	event.Check(wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_input_canvas).IsShown());
 }
 
-void CHeeksFrame::OnViewToolBar( wxCommandEvent& event )
+static void OnViewToolBar( wxCommandEvent& event )
 {
-	wxAuiPaneInfo& pane_info = m_aui_manager->GetPane(m_toolBar);
+	wxAuiPaneInfo& pane_info = wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_toolBar);
 	if(pane_info.IsOk()){
 		pane_info.Show(event.IsChecked());
-		m_aui_manager->Update();
+		wxGetApp().m_frame->m_aui_manager->Update();
 	}
 }
 
-void CHeeksFrame::OnUpdateViewToolBar( wxUpdateUIEvent& event )
+static void OnUpdateViewToolBar( wxUpdateUIEvent& event )
 {
-	event.Check(m_aui_manager->GetPane(m_toolBar).IsShown());
+	event.Check(wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_toolBar).IsShown());
 }
 
-void CHeeksFrame::OnViewGeometryBar( wxCommandEvent& event )
+static void OnViewGeometryBar( wxCommandEvent& event )
 {
-	wxAuiPaneInfo& pane_info = m_aui_manager->GetPane(m_geometryBar);
+	wxAuiPaneInfo& pane_info = wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_geometryBar);
 	if(pane_info.IsOk()){
 		pane_info.Show(event.IsChecked());
-		m_aui_manager->Update();
+		wxGetApp().m_frame->m_aui_manager->Update();
 	}
 }
 
-void CHeeksFrame::OnUpdateViewGeometryBar( wxUpdateUIEvent& event )
+static void OnUpdateViewGeometryBar( wxUpdateUIEvent& event )
 {
-	event.Check(m_aui_manager->GetPane(m_geometryBar).IsShown());
+	event.Check(wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_geometryBar).IsShown());
 }
 
-void CHeeksFrame::OnViewSolidBar( wxCommandEvent& event )
+static void OnViewSolidBar( wxCommandEvent& event )
 {
-	wxAuiPaneInfo& pane_info = m_aui_manager->GetPane(m_solidBar);
+	wxAuiPaneInfo& pane_info = wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_solidBar);
 	if(pane_info.IsOk()){
 		pane_info.Show(event.IsChecked());
-		m_aui_manager->Update();
+		wxGetApp().m_frame->m_aui_manager->Update();
 	}
 }
 
-void CHeeksFrame::OnUpdateViewSolidBar( wxUpdateUIEvent& event )
+static void OnUpdateViewSolidBar( wxUpdateUIEvent& event )
 {
-	event.Check(m_aui_manager->GetPane(m_solidBar).IsShown());
+	event.Check(wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_solidBar).IsShown());
 }
 
-void CHeeksFrame::OnViewViewingBar( wxCommandEvent& event )
+static void OnViewViewingBar( wxCommandEvent& event )
 {
-	wxAuiPaneInfo& pane_info = m_aui_manager->GetPane(m_viewingBar);
+	wxAuiPaneInfo& pane_info = wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_viewingBar);
 	if(pane_info.IsOk()){
 		pane_info.Show(event.IsChecked());
-		m_aui_manager->Update();
+		wxGetApp().m_frame->m_aui_manager->Update();
 	}
 }
 
-void CHeeksFrame::OnUpdateViewViewingBar( wxUpdateUIEvent& event )
+static void OnUpdateViewViewingBar( wxUpdateUIEvent& event )
 {
-	event.Check(m_aui_manager->GetPane(m_viewingBar).IsShown());
+	event.Check(wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_viewingBar).IsShown());
 }
 
-void CHeeksFrame::OnViewTransformBar( wxCommandEvent& event )
+static void OnViewTransformBar( wxCommandEvent& event )
 {
-	wxAuiPaneInfo& pane_info = m_aui_manager->GetPane(m_transformBar);
+	wxAuiPaneInfo& pane_info = wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_transformBar);
 	if(pane_info.IsOk()){
 		pane_info.Show(event.IsChecked());
-		m_aui_manager->Update();
+		wxGetApp().m_frame->m_aui_manager->Update();
 	}
 }
 
-void CHeeksFrame::OnUpdateViewTransformBar( wxUpdateUIEvent& event )
+static void OnUpdateViewTransformBar( wxUpdateUIEvent& event )
 {
-	event.Check(m_aui_manager->GetPane(m_transformBar).IsShown());
+	event.Check(wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_transformBar).IsShown());
 }
 
-void CHeeksFrame::OnViewStatusBar( wxCommandEvent& event )
+static void OnViewStatusBar( wxCommandEvent& event )
 {
-	m_statusBar->Show(event.IsChecked());
+	wxGetApp().m_frame->m_statusBar->Show(event.IsChecked());
 }
 
-void CHeeksFrame::OnUpdateViewStatusBar( wxUpdateUIEvent& event )
+static void OnUpdateViewStatusBar( wxUpdateUIEvent& event )
 {
-	event.Check(m_statusBar->IsShown());
+	event.Check(wxGetApp().m_frame->m_statusBar->IsShown());
 }
 
 void CHeeksFrame::OnResetLayout( wxCommandEvent& event )
@@ -483,12 +463,12 @@ void CHeeksFrame::OnSetToolBarsToLeft( wxCommandEvent& event )
 	m_aui_manager->Update();
 }
 
-void CHeeksFrame::OnViewProperties( wxCommandEvent& event )
+static void OnViewProperties( wxCommandEvent& event )
 {
-	wxAuiPaneInfo& pane_info = m_aui_manager->GetPane(m_properties);
+	wxAuiPaneInfo& pane_info = wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_properties);
 	if(pane_info.IsOk()){
 		pane_info.Show(event.IsChecked());
-		m_aui_manager->Update();
+		wxGetApp().m_frame->m_aui_manager->Update();
 	}
 }
 
@@ -511,9 +491,9 @@ static void OnUpdateOpenRecent( wxUpdateUIEvent& event )
 	}
 }
 
-void CHeeksFrame::OnUpdateViewProperties( wxUpdateUIEvent& event )
+static void OnUpdateViewProperties( wxUpdateUIEvent& event )
 {
-	event.Check(m_aui_manager->GetPane(m_properties).IsShown());
+	event.Check(wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_properties).IsShown());
 }
 
 static void OnSelectModeButton( wxCommandEvent& WXUNUSED( event ) )
@@ -973,23 +953,12 @@ int CHeeksFrame::MakeNextIDForTool(void(*onButtonFunction)(wxCommandEvent&), voi
 	return id_to_use;
 }
 
-int CHeeksFrame::AddMenuItem(wxMenu* menu, const wxBitmap& bitmap, const wxString& text, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&))
+int CHeeksFrame::AddMenuItem(wxMenu* menu, const wxString& text, const wxBitmap& bitmap, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&), wxMenu* submenu, bool check_item)
 {
 	int id_to_use = MakeNextIDForTool(onButtonFunction, onUpdateButtonFunction);
 
-	wxMenuItem *menuItem = new wxMenuItem(menu, id_to_use, text);
-	menuItem->SetBitmap(bitmap);
-	menu->Append(menuItem);
-
-	return id_to_use;
-}
-
-int CHeeksFrame::AddMenuSubMenu(wxMenu* menu, wxMenu* sub_menu, const wxBitmap& bitmap, const wxString& text, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&))
-{
-	int id_to_use = MakeNextIDForTool(onButtonFunction, onUpdateButtonFunction);
-
-	wxMenuItem *menuItem = new wxMenuItem(menu, id_to_use, text, wxString(_T("")), wxITEM_NORMAL, sub_menu);
-	menuItem->SetBitmap(bitmap);
+	wxMenuItem *menuItem = new wxMenuItem(menu, id_to_use, text, wxString(_T("")), check_item ? wxITEM_CHECK : wxITEM_NORMAL, submenu);
+	if(!check_item)menuItem->SetBitmap(bitmap);
 	menu->Append(menuItem);
 
 	return id_to_use;
@@ -1000,23 +969,6 @@ int CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, const wxString& title, const
 	int id_to_use = MakeNextIDForTool(onButtonFunction, onUpdateButtonFunction);
 
 	toolbar->AddTool(id_to_use, title, bitmap, caption);
-
-	return id_to_use;
-}
-
-int CHeeksFrame::AddMenuCheckItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&))
-{
-	int id_to_use = MakeNextIDForTool(onButtonFunction, onUpdateButtonFunction);
-
-	menu->AppendCheckItem(id_to_use, title);
-
-	return id_to_use;
-}
-
-int CHeeksFrame::AddMenuItem(wxMenu* menu, const wxString& title, void(*onButtonFunction)(wxCommandEvent&)){
-	int id_to_use = MakeNextIDForTool(onButtonFunction, NULL);
-
-	menu->Append(id_to_use, title);
 
 	return id_to_use;
 }
@@ -1221,103 +1173,103 @@ void CHeeksFrame::MakeMenus()
 {
 	// File Menu
 	wxMenu *file_menu = new wxMenu;
-	AddMenuItem(file_menu, ToolImage(_T("new")), _("New"), OnNewButton);
-	AddMenuItem(file_menu, ToolImage(_T("open")), _("Open"), OnOpenButton);
-	AddMenuItem(file_menu, ToolImage(_T("save")), _("Save"), OnSaveButton);
+	AddMenuItem(file_menu, _("New"), ToolImage(_T("new")), OnNewButton);
+	AddMenuItem(file_menu, _("Open"), ToolImage(_T("open")), OnOpenButton);
+	AddMenuItem(file_menu, _("Save"), ToolImage(_T("save")), OnSaveButton);
 	file_menu->AppendSeparator();
-	AddMenuItem(file_menu, ToolImage(_T("print")), _("Print"), OnPrint);
- 	AddMenuItem(file_menu, ToolImage(_T("psetup")), _("Page Setup"), OnPageSetup);
-	AddMenuItem(file_menu, ToolImage(_T("ppreview")), _("Print Preview"), OnPrintPreview);
+	AddMenuItem(file_menu, _("Print"), ToolImage(_T("print")), OnPrint);
+ 	AddMenuItem(file_menu, _("Page Setup"), ToolImage(_T("psetup")), OnPageSetup);
+	AddMenuItem(file_menu, _("Print Preview"), ToolImage(_T("ppreview")), OnPrintPreview);
     m_recent_files_menu = new wxMenu;
     m_recent_files_menu->Append(-1, _T("test"));
-	AddMenuSubMenu(file_menu, m_recent_files_menu, ToolImage(_T("recent")), _("Open Recent"), NULL, OnUpdateOpenRecent);
-	AddMenuItem(file_menu, ToolImage(_T("import")), _("Import"), OnImportButton);
-	AddMenuItem(file_menu, ToolImage(_T("about")), _("About"), OnAbout);
+	AddMenuItem(file_menu, _("Open Recent"), ToolImage(_T("recent")), NULL, OnUpdateOpenRecent, m_recent_files_menu);
+	AddMenuItem(file_menu, _("Import"), ToolImage(_T("import")), OnImportButton);
+	AddMenuItem(file_menu, _("About"), ToolImage(_T("about")), OnAbout);
 	file_menu->AppendSeparator();
-	AddMenuItem(file_menu, ToolImage(_T("plugin")), _("Plugins"), OnPlugins);
+	AddMenuItem(file_menu, _("Plugins"), ToolImage(_T("plugin")), OnPlugins);
 	file_menu->AppendSeparator();
-	AddMenuItem(file_menu, ToolImage(_T("exit")), _("Exit"), OnQuit);
+	AddMenuItem(file_menu, _("Exit"), ToolImage(_T("exit")), OnQuit);
 
 	// Edit Menu
 	wxMenu *edit_menu = new wxMenu;
-	AddMenuItem(edit_menu, ToolImage(_T("undo")), _("Undo\tCtrl+Z"), OnUndoButton);
-	AddMenuItem(edit_menu, ToolImage(_T("redo")), _("Redo\tCtrl+Shift+Z"), OnRedoButton);
+	AddMenuItem(edit_menu, _("Undo\tCtrl+Z"), ToolImage(_T("undo")), OnUndoButton);
+	AddMenuItem(edit_menu, _("Redo\tCtrl+Shift+Z"), ToolImage(_T("redo")), OnRedoButton);
 	edit_menu->AppendSeparator();
-	AddMenuItem(edit_menu, ToolImage(_T("cut")), _("Cut"), OnCutButton, OnUpdateCut);
-	AddMenuItem(edit_menu, ToolImage(_T("copy")), _("Copy"), OnCopyButton, OnUpdateCopy);
-	AddMenuItem(edit_menu, ToolImage(_T("paste")), _("Paste"), OnPasteButton, OnUpdatePaste);
-	AddMenuItem(edit_menu, ToolImage(_T("delete")), _("Delete"), OnDeleteButton, OnUpdateDelete);
+	AddMenuItem(edit_menu, _("Cut"), ToolImage(_T("cut")), OnCutButton, OnUpdateCut);
+	AddMenuItem(edit_menu, _("Copy"), ToolImage(_T("copy")), OnCopyButton, OnUpdateCopy);
+	AddMenuItem(edit_menu, _("Paste"), ToolImage(_T("paste")), OnPasteButton, OnUpdatePaste);
+	AddMenuItem(edit_menu, _("Delete"), ToolImage(_T("delete")), OnDeleteButton, OnUpdateDelete);
 	edit_menu->AppendSeparator();
-	AddMenuItem(edit_menu, ToolImage(_T("select")), _("Select Mode"), OnSelectModeButton);
+	AddMenuItem(edit_menu, _("Select Mode"), ToolImage(_T("select")), OnSelectModeButton);
 
 	// Geometry Menu
 	wxMenu *geometry_menu = new wxMenu;
-	AddMenuItem(geometry_menu, ToolImage(_T("lines")), _("Draw a sketch"), OnLinesButton);
-	AddMenuItem(geometry_menu, ToolImage(_T("circles")), _("Draw Circles"), OnCirclesButton);
-	AddMenuItem(geometry_menu, ToolImage(_T("iline")), _("Draw Infinite Lines"), OnILineButton);
-	AddMenuItem(geometry_menu, ToolImage(_T("point")), _("Draw Points"), OnPointsButton);
-	AddMenuItem(geometry_menu, ToolImage(_T("regshapes")), _("Draw Regular Shapes"), OnRegularShapesButton);
+	AddMenuItem(geometry_menu, _("Draw a sketch"), ToolImage(_T("lines")), OnLinesButton);
+	AddMenuItem(geometry_menu, _("Draw Circles"), ToolImage(_T("circles")), OnCirclesButton);
+	AddMenuItem(geometry_menu, _("Draw Infinite Lines"), ToolImage(_T("iline")), OnILineButton);
+	AddMenuItem(geometry_menu, _("Draw Points"), ToolImage(_T("point")), OnPointsButton);
+	AddMenuItem(geometry_menu, _("Draw Regular Shapes"), ToolImage(_T("regshapes")), OnRegularShapesButton);
 	geometry_menu->AppendSeparator();
-	AddMenuItem(geometry_menu, ToolImage(_T("text")), _("Add Text"), OnTextButton);
-	AddMenuItem(geometry_menu, ToolImage(_T("dimension")), _("Add Dimension"), OnDimensioningButton);
+	AddMenuItem(geometry_menu, _("Add Text"), ToolImage(_T("text")), OnTextButton);
+	AddMenuItem(geometry_menu, _("Add Dimension"), ToolImage(_T("dimension")), OnDimensioningButton);
 	geometry_menu->AppendSeparator();
-	AddMenuItem(geometry_menu, ToolImage(_T("coordsys")), _("Add Coordinate System"), OnCoordinateSystem);
+	AddMenuItem(geometry_menu, _("Add Coordinate System"), ToolImage(_T("coordsys")), OnCoordinateSystem);
 	
 	// View Menu
 	wxMenu *view_menu = new wxMenu;
-	AddMenuItem(view_menu, ToolImage(_T("magprev")), _("Previous view"), OnMagPreviousButton);
+	AddMenuItem(view_menu, _("Previous view"), ToolImage(_T("magprev")), OnMagPreviousButton);
 	view_menu->AppendSeparator();
-	AddMenuItem(view_menu, ToolImage(_T("mag")), _("Zoom window"), OnMagButton);
-	AddMenuItem(view_menu, ToolImage(_T("magextents")), _("Fit view to extents"), OnMagExtentsButton);
-	AddMenuItem(view_menu, ToolImage(_T("magnorot")), _("Fit view to extents, but no rotation"), OnMagNoRotButton);
+	AddMenuItem(view_menu, _("Zoom window"), ToolImage(_T("mag")), OnMagButton);
+	AddMenuItem(view_menu, _("Fit view to extents"), ToolImage(_T("magextents")), OnMagExtentsButton);
+	AddMenuItem(view_menu, _("Fit view to extents, but no rotation"), ToolImage(_T("magnorot")), OnMagNoRotButton);
 	view_menu->AppendSeparator();
-	AddMenuItem(view_menu, ToolImage(_T("viewrot")), _("View rotate"), OnViewRotateButton);
-	AddMenuItem(view_menu, ToolImage(_T("zoom")), _("View zoom"), OnViewZoomButton);
-	AddMenuItem(view_menu, ToolImage(_T("fullscreen")), _("Full screen"), OnFullScreenButton);
+	AddMenuItem(view_menu, _("View rotate"), ToolImage(_T("viewrot")), OnViewRotateButton);
+	AddMenuItem(view_menu, _("View zoom"), ToolImage(_T("zoom")), OnViewZoomButton);
+	AddMenuItem(view_menu, _("Full screen"), ToolImage(_T("fullscreen")), OnFullScreenButton);
 	view_menu->AppendSeparator();
-	AddMenuItem(view_menu, ToolImage(_T("redraw")), _("Redraw"), OnRedrawButton);
+	AddMenuItem(view_menu, _("Redraw"), ToolImage(_T("redraw")), OnRedrawButton);
 	
 	// Solids Menu
 	wxMenu *solids_menu = new wxMenu;
-	AddMenuItem(solids_menu, ToolImage(_T("sphere")), _("Add a sphere"), OnSphereButton);
-	AddMenuItem(solids_menu, ToolImage(_T("cube")), _("Add a cube"), OnCubeButton);
-	AddMenuItem(solids_menu, ToolImage(_T("cyl")), _("Add a cylinder"), OnCylButton);
-	AddMenuItem(solids_menu, ToolImage(_T("cone")), _("Add a cone"), OnConeButton);
+	AddMenuItem(solids_menu, _("Add a sphere"), ToolImage(_T("sphere")), OnSphereButton);
+	AddMenuItem(solids_menu, _("Add a cube"), ToolImage(_T("cube")), OnCubeButton);
+	AddMenuItem(solids_menu, _("Add a cylinder"), ToolImage(_T("cyl")), OnCylButton);
+	AddMenuItem(solids_menu, _("Add a cone"), ToolImage(_T("cone")), OnConeButton);
 	solids_menu->AppendSeparator();
-	AddMenuItem(solids_menu, ToolImage(_T("ruled")), _("Loft two sketches"), OnRuledSurfaceButton);
-	AddMenuItem(solids_menu, ToolImage(_T("extrude")), _("Extrude a sketch"), OnExtrudeButton);
+	AddMenuItem(solids_menu, _("Loft two sketches"), ToolImage(_T("ruled")), OnRuledSurfaceButton);
+	AddMenuItem(solids_menu, _("Extrude a sketch"), ToolImage(_T("extrude")), OnExtrudeButton);
 	solids_menu->AppendSeparator();
-	AddMenuItem(solids_menu, ToolImage(_T("subtract")), _("Cut"), OnSubtractButton);
-	AddMenuItem(solids_menu, ToolImage(_T("fuse")), _("Fuse"), OnFuseButton);
-	AddMenuItem(solids_menu, ToolImage(_T("common")), _("Common"), OnCommonButton);
-	AddMenuItem(solids_menu, ToolImage(_T("fillet")), _("Fillet"), OnFilletButton);
-	AddMenuItem(solids_menu, ToolImage(_T("chamfer")), _("Chamfer"), OnChamferButton);
+	AddMenuItem(solids_menu, _("Cut"), ToolImage(_T("subtract")), OnSubtractButton);
+	AddMenuItem(solids_menu, _("Fuse"), ToolImage(_T("fuse")), OnFuseButton);
+	AddMenuItem(solids_menu, _("Common"), ToolImage(_T("common")), OnCommonButton);
+	AddMenuItem(solids_menu, _("Fillet"), ToolImage(_T("fillet")), OnFilletButton);
+	AddMenuItem(solids_menu, _("Chamfer"), ToolImage(_T("chamfer")), OnChamferButton);
 
 	// Transformations Menu
 	wxMenu *transform_menu = new wxMenu;
-	AddMenuItem(transform_menu, ToolImage(_T("movet")), _("Move Translate"), OnMoveTranslateButton);
-	AddMenuItem(transform_menu, ToolImage(_T("copyt")), _("Copy Translate"), OnCopyTranslateButton);
+	AddMenuItem(transform_menu, _("Move Translate"), ToolImage(_T("movet")), OnMoveTranslateButton);
+	AddMenuItem(transform_menu, _("Copy Translate"), ToolImage(_T("copyt")), OnCopyTranslateButton);
 	transform_menu->AppendSeparator();
-	AddMenuItem(transform_menu, ToolImage(_T("mover")), _("Move Rotate"), OnMoveRotateButton);
-	AddMenuItem(transform_menu, ToolImage(_T("copyr")), _("Copy Rotate"), OnCopyRotateButton);
+	AddMenuItem(transform_menu, _("Move Rotate"), ToolImage(_T("mover")), OnMoveRotateButton);
+	AddMenuItem(transform_menu, _("Copy Rotate"), ToolImage(_T("copyr")), OnCopyRotateButton);
 	transform_menu->AppendSeparator();
-	AddMenuItem(transform_menu, ToolImage(_T("movem")), _("Move Mirror"), OnMoveMirrorButton);
-	AddMenuItem(transform_menu, ToolImage(_T("copym")), _("Copy Mirror"), OnCopyMirrorButton);
+	AddMenuItem(transform_menu, _("Move Mirror"), ToolImage(_T("movem")), OnMoveMirrorButton);
+	AddMenuItem(transform_menu, _("Copy Mirror"), ToolImage(_T("copym")), OnCopyMirrorButton);
 	transform_menu->AppendSeparator();
-	AddMenuItem(transform_menu, ToolImage(_T("moves")), _("Move Scale"), OnMoveScaleButton);
+	AddMenuItem(transform_menu, _("Move Scale"), ToolImage(_T("moves")), OnMoveScaleButton);
 
 	// Window Menu
 	m_menuWindow = new wxMenu;
-	m_menuWindow->AppendCheckItem( Menu_View_Objects, _( "Objects" ) );
-	m_menuWindow->AppendCheckItem( Menu_View_Options, _( "Options" ) );
-	m_menuWindow->AppendCheckItem( Menu_View_Input, _( "Input" ) );
-	m_menuWindow->AppendCheckItem( Menu_View_Properties, _( "Properties" ) );
-	m_menuWindow->AppendCheckItem( Menu_View_ToolBar, _( "Tool Bar" ) );
-	m_menuWindow->AppendCheckItem( Menu_View_SolidBar, _( "Solids Tool Bar" ) );
-	m_menuWindow->AppendCheckItem( Menu_View_GeometryBar, _( "Geometry Tool Bar" ) );
-	m_menuWindow->AppendCheckItem( Menu_View_ViewingBar, _( "Viewing Tool Bar" ) );
-	m_menuWindow->AppendCheckItem( Menu_View_TransformBar, _( "Transformations Tool Bar" ) );
-	m_menuWindow->AppendCheckItem( Menu_View_StatusBar, _( "Status Bar" ) );
+	AddMenuItem(m_menuWindow, _("Objects"), wxBitmap(), OnViewObjects, OnUpdateViewObjects, NULL, true);
+	AddMenuItem(m_menuWindow, _("Options"), wxBitmap(), OnViewOptions, OnUpdateViewOptions, NULL, true);
+	AddMenuItem(m_menuWindow, _("Input"), wxBitmap(), OnViewInput, OnUpdateViewInput, NULL, true);
+	AddMenuItem(m_menuWindow, _("Properties"), wxBitmap(), OnViewProperties, OnUpdateViewProperties, NULL, true);
+	AddMenuItem(m_menuWindow, _("Tool Bar"), wxBitmap(), OnViewToolBar, OnUpdateViewToolBar, NULL, true);
+	AddMenuItem(m_menuWindow, _("Solids Tool Bar"), wxBitmap(), OnViewSolidBar, OnUpdateViewSolidBar, NULL, true);
+	AddMenuItem(m_menuWindow, _("Geometry Tool Bar"), wxBitmap(), OnViewGeometryBar, OnUpdateViewGeometryBar, NULL, true);
+	AddMenuItem(m_menuWindow, _("Viewing Tool Bar"), wxBitmap(), OnViewViewingBar, OnUpdateViewViewingBar, NULL, true);
+	AddMenuItem(m_menuWindow, _("Transformations Tool Bar"), wxBitmap(), OnViewTransformBar, OnUpdateViewTransformBar, NULL, true);
+	AddMenuItem(m_menuWindow, _("Status Bar"), wxBitmap(), OnViewStatusBar, OnUpdateViewStatusBar, NULL, true);
 
 	// Add them to the main menu
 	m_menuBar = new wxMenuBar;
