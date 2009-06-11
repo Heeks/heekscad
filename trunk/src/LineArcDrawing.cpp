@@ -100,6 +100,8 @@ int LineArcDrawing::number_of_steps()
 		{
 		case ThreePointsCircleMode:
 			return 3;
+		case TwoPointsCircleMode:
+			return 2;
 		default:
 			break;
 		}
@@ -357,6 +359,21 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 					}
 				}
 				return true;
+			case TwoPointsCircleMode:
+				{
+					gp_Circ c;
+					if(DigitizedPoint::GetCircleBetween(GetStartPos(), end, c))
+					{
+						if(!temp_object){
+							temp_object = new HCircle(c, &wxGetApp().construction_color);
+							if(temp_object)temp_object_in_list.push_back(temp_object);
+						}
+						else{
+							((HCircle*)temp_object)->m_circle = c;
+						}
+					}
+				}
+				return true;
 			}
 		}
 		break;
@@ -449,8 +466,15 @@ const wxChar* LineArcDrawing::GetTitle()
 				else str_for_GetTitle.Append(wxString(_("click on third point")));
 			}
 			break;
+		case TwoPointsCircleMode:
+			{
+				str_for_GetTitle.Append(wxString(_("two points mode")));
+				str_for_GetTitle.Append(wxString(_T("\n  ")));
+				if(GetDrawStep() == 0)str_for_GetTitle.Append(wxString(_("click on first point")));
+				else str_for_GetTitle.Append(wxString(_("click on second point")));
+			}
+			break;
 		}
-
 		return str_for_GetTitle;
 
 	default:

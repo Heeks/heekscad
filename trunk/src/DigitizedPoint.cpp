@@ -191,6 +191,16 @@ bool DigitizedPoint::GetArcPoints(const DigitizedPoint& d1, const gp_Vec *initia
 	return false;
 }
 
+bool DigitizedPoint::GetCircleBetween(const DigitizedPoint& d1, const DigitizedPoint& d2, gp_Circ& c)
+{
+	gp_Vec v = d2.m_point.XYZ() - d1.m_point.XYZ();
+	double d = d2.m_point.Distance(d1.m_point);
+	gp_Pnt cen = d1.m_point.XYZ() + (v.XYZ() /2);
+	c.SetLocation(cen);
+	c.SetRadius(d/2);
+	return true;
+}
+
 bool DigitizedPoint::GetTangentCircle(const DigitizedPoint& d1, const DigitizedPoint& d2, const DigitizedPoint& d3, gp_Circ& c)
 {
 	PointLineOrCircle plc1 = GetLineOrCircleType(d1);
