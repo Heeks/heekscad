@@ -15,7 +15,8 @@ enum EnumDrawingMode{
 
 enum EnumCircleDrawingMode{
 	CentreAndPointCircleMode,
-	ThreePointsCircleMode
+	ThreePointsCircleMode,
+	TwoPointsCircleMode
 };
 
 class LineArcDrawing: public Drawing{

@@ -865,12 +865,36 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<in
 
 		return true;
 	}
+	else if(wf.EndsWith(_T(".brep")) || wf.EndsWith(_T(".BREP")))
+	{
+		char oldlocale[1000];
+		strcpy(oldlocale, setlocale(LC_NUMERIC, "C"));
+
+		TopoDS_Shape shape;
+		BRep_Builder builder;
+		Standard_Boolean result = BRepTools::Read(  shape, Ttc(filepath), builder );
+
+		if(result)
+		{
+			HeeksObj* new_object = MakeObject(shape, _("BREP solid"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191));
+			if(undoably)wxGetApp().AddUndoably(new_object, add_to, NULL);
+			else add_to->Add(new_object, NULL);
+		}
+		else{
+			wxMessageBox(_("STEP import not done!"));
+		}
+
+		setlocale(LC_NUMERIC, oldlocale);
+
+		return true;
+	}
 	return false;
 }
 
 static void WriteShapeOrGroup(STEPControl_Writer &writer, HeeksObj* object, std::map<int, CShapeData> *index_map, int &i)
 {
 	if(CShape::IsTypeAShape(object->GetType())){
+
 		if(index_map)index_map->insert( std::pair<int, CShapeData>(i, CShapeData((CShape*)object)) );
 		i++;
 		writer.Transfer(((CSolid*)object)->Shape(), STEPControl_AsIs);
@@ -938,6 +962,10 @@ bool CShape::ExportSolidsFile(const std::list<HeeksObj*>& objects, const wxChar*
 
 		return true;
 	}
+	else if(wf.EndsWith(_T(".brep")))
+	{
+	}
+
 	return false;
 }
 
