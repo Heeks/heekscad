@@ -30,6 +30,26 @@ enum{
 	ID_NEXT_ID = ID_FIRST_POP_UP_MENU_TOOL + 1000
 };
 
+class CFlyOutToolBar{
+public:
+	wxToolBar* toolbar;
+};
+
+class CFlyOutItem{
+public:
+	wxString m_title_and_bitmap;
+	wxString m_tooltip;
+	void(*m_onButtonFunction)(wxCommandEvent&);
+
+	CFlyOutItem(const wxString& title_and_bitmap, const wxString& tooltip, void(*onButtonFunction)(wxCommandEvent&));
+};
+
+class CFlyOutButton : public wxBitmapButton
+{
+public:
+
+};
+
 class CHeeksFrame : public wxFrame
 {
 private:
@@ -72,6 +92,8 @@ public:
 	void OnKeyUp(wxKeyEvent& event);
 	int AddToolBarTool(wxToolBar* toolbar, const wxString& title, const wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
 	void AddToolBarTool(wxToolBar* toolbar, Tool* tool);
+	void AddToolBarFlyout(wxToolBar* toolbar, const wxString& title, const std::list<CFlyOutItem> &flyout_list);
+
 	void ClearToolBar(wxToolBar* m_toolBar);
 	int AddMenuItem(wxMenu* menu, const wxString& text, const wxBitmap& bitmap, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL, wxMenu* submenu = NULL, bool check_item = false);
     void Draw(wxDC& dc);
