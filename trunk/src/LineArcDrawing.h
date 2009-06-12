@@ -10,7 +10,8 @@ enum EnumDrawingMode{
 	LineDrawingMode,
 	ArcDrawingMode,
 	ILineDrawingMode,
-	CircleDrawingMode
+	CircleDrawingMode,
+	EllipseDrawingMode
 };
 
 enum EnumCircleDrawingMode{
