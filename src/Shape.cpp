@@ -135,16 +135,21 @@ void CShape::create_faces_and_edges()
 		m_vertices->Add(new_object, NULL);
 	}
 
-	int count = 0;
 	TopTools_MapIteratorOfMapOfShape It(edgeMap);
 	std::map<const TopoDS_Shape*, CEdge*> edge_finder;
 	for (;It.More(); It.Next())
 	{
 		const TopoDS_Shape &E = It.Key();
 		CEdge* new_object = new CEdge(TopoDS::Edge(E));
-		m_edges->Add(new_object, NULL);
-		edge_finder.insert( std::pair<const TopoDS_Shape*, CEdge*>(&E, new_object) );
-		count++;
+		if(new_object->m_start_end_dist < 0.00000001)
+		{
+			delete new_object;
+		}
+		else
+		{
+			m_edges->Add(new_object, NULL);
+			edge_finder.insert( std::pair<const TopoDS_Shape*, CEdge*>(&E, new_object) );
+		}
 	}
 
 	// make an edge map for each face
