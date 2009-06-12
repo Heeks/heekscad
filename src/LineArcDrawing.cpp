@@ -11,6 +11,7 @@
 #include "HArc.h"
 #include "HILine.h"
 #include "HCircle.h"
+#include "HEllipse.h"
 #include "../interface/PropertyChoice.h"
 #include "../interface/PropertyString.h"
 #include "../interface/PropertyDouble.h"
@@ -106,6 +107,8 @@ int LineArcDrawing::number_of_steps()
 			break;
 		}
 		break;
+	case EllipseDrawingMode:
+		return 3;
 	default:
 		break;
 	}
@@ -121,6 +124,7 @@ int LineArcDrawing::step_to_go_to_after_last_step()
 		return 1;
 	case ILineDrawingMode:
 	case CircleDrawingMode:
+	case EllipseDrawingMode:
 	default:
 		return 0;
 	}
@@ -138,6 +142,8 @@ bool LineArcDrawing::is_an_add_level(int level)
 		default:
 			break;
 		}
+	case EllipseDrawingMode:
+		return level == 2;
 	default:
 		break;
 	}
@@ -166,6 +172,10 @@ void LineArcDrawing::AddPoint()
 #endif
 		Drawing::AddPoint();
 		}
+		break;
+
+	case EllipseDrawingMode:
+		Drawing::AddPoint();
 		break;
 
 	case LineDrawingMode:
@@ -316,6 +326,30 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 		}
 		return true;
 
+	case EllipseDrawingMode:
+		if(temp_object && temp_object->GetType() != EllipseType){
+			delete temp_object;
+			temp_object = NULL;
+			temp_object_in_list.clear();
+		}
+
+		if(!temp_object)
+		{
+			gp_Elips elip;
+			DigitizedPoint::GetEllipse(GetBeforeStartPos(), GetStartPos(), end,elip);
+					
+			temp_object = new HEllipse(elip, &wxGetApp().construction_color);
+			if(temp_object)temp_object_in_list.push_back(temp_object);
+
+		}
+		else
+		{
+			gp_Elips elip;
+			DigitizedPoint::GetEllipse(GetBeforeStartPos(), GetStartPos(), end,elip);
+			((HEllipse*)temp_object)->m_ellipse = elip;
+		}
+		return true;	
+
 	case CircleDrawingMode:
 		{
 			if(temp_object && temp_object->GetType() != CircleType){
@@ -442,6 +476,22 @@ const wxChar* LineArcDrawing::GetTitle()
 		str_for_GetTitle.Append(wxString(_T(" : ")));
 		if(GetDrawStep() == 0)str_for_GetTitle.Append(wxString(_("click on first point")));
 		else str_for_GetTitle.Append(wxString(_("click on second point")));
+		return str_for_GetTitle;
+
+	case EllipseDrawingMode:
+		str_for_GetTitle = wxString(_("Ellipse drawing mode"));
+		str_for_GetTitle.Append(wxString(_T(" : ")));
+
+		str_for_GetTitle.Append(wxString(_("center and 2 points mode")));
+		str_for_GetTitle.Append(wxString(_T("\n  ")));
+		if(GetDrawStep() == 0)str_for_GetTitle.Append(wxString(_("click on center point")));
+		else if(GetDrawStep() == 1) 
+		{
+			str_for_GetTitle.Append(wxString(_("click on point on ellipse\n")));
+			str_for_GetTitle.Append(wxString(_("(colinear or orthogonal to axis)")));
+		}
+		else str_for_GetTitle.Append(wxString(_("click on another point on ellipse")));
+		
 		return str_for_GetTitle;
 
 	case CircleDrawingMode:

@@ -201,6 +201,43 @@ bool DigitizedPoint::GetCircleBetween(const DigitizedPoint& d1, const DigitizedP
 	return true;
 }
 
+bool DigitizedPoint::GetEllipse(const DigitizedPoint& d1, const DigitizedPoint& d2, const DigitizedPoint& d3, gp_Elips& e)
+{
+	double d = d2.m_point.Distance(d1.m_point);
+	e.SetLocation(d1.m_point);
+	e.SetMajorRadius(d);
+	e.SetMinorRadius(d/2);
+
+	gp_Vec vec = d2.m_point.XYZ() - d1.m_point.XYZ();
+	vec = vec.XYZ() / d;
+	double rot = atan2(vec.Y(),vec.X());
+
+	gp_Dir up(0, 0, 1);
+	gp_Pnt zp(0,0,0);
+	e.Rotate(gp_Ax1(d1.m_point,up),rot);
+
+	gp_Dir x_axis = e.XAxis().Direction();
+	gp_Dir y_axis = e.YAxis().Direction();
+	double maj_r = d;
+
+	//We have to rotate the incoming vector to be in our coordinate system
+	gp_Pnt cir = d3.m_point.XYZ() - d1.m_point.XYZ();
+	cir.Rotate(gp_Ax1(zp,up),-rot+Pi/2);
+
+	double nradius = 1/sqrt((1-(1/maj_r)*(1/maj_r)*cir.Y()*cir.Y()) / cir.X() / cir.X());
+	if(nradius < maj_r)
+		e.SetMinorRadius(nradius); 
+	else
+	{
+		e.SetMajorRadius(nradius);
+		e.SetMinorRadius(maj_r);
+		e.Rotate(gp_Ax1(d1.m_point,up),Pi/2);
+	}
+	
+
+	return true;
+}
+
 bool DigitizedPoint::GetTangentCircle(const DigitizedPoint& d1, const DigitizedPoint& d2, const DigitizedPoint& d3, gp_Circ& c)
 {
 	PointLineOrCircle plc1 = GetLineOrCircleType(d1);
