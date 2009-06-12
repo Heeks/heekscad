@@ -534,10 +534,28 @@ static void OnDimensioningButton( wxCommandEvent& WXUNUSED( event ) )
 	wxGetApp().SetInputMode(&dimension_drawing);
 }
 
-static void OnCirclesButton( wxCommandEvent& WXUNUSED( event ) )
+static void OnCircles3pButton( wxCommandEvent& WXUNUSED( event ) )
 {
 	line_strip.drawing_mode = CircleDrawingMode;
+<<<<<<< .mine
+	line_strip.circle_mode = ThreePointsCircleMode;
+=======
 	//line_strip.circle_mode = TwoPointsCircleMode;
+>>>>>>> .r481
+	wxGetApp().SetInputMode(&line_strip);
+}
+
+static void OnCircles2pButton( wxCommandEvent& WXUNUSED( event ) )
+{
+	line_strip.drawing_mode = CircleDrawingMode;
+	line_strip.circle_mode = CentreAndPointCircleMode;
+	wxGetApp().SetInputMode(&line_strip);
+}
+
+static void OnCirclesprButton( wxCommandEvent& WXUNUSED( event ) )
+{
+	line_strip.drawing_mode = CircleDrawingMode;
+	line_strip.circle_mode = CentreAndPointCircleMode;
 	wxGetApp().SetInputMode(&line_strip);
 }
 
@@ -761,6 +779,32 @@ static void OnConeButton( wxCommandEvent& event )
 	wxGetApp().Repaint();
 }
 
+static void OnSphereDropButton( wxCommandEvent& event )
+{
+	// make a vertical drop menu under button
+
+	int id = event.GetId();
+
+	wxToolBarToolBase* tool = wxGetApp().m_frame->m_solidBar->FindById(id);
+	if(tool)
+	{
+		//wxRect rect = tool->GetScreenRect();
+		//wxPoint pt(rect.x, rect.y);
+		//wxPoint client_pt = wxGetApp().m_frame->m_solidBar->ScreenToClient(pt);
+		wxPoint client_pt(1 * wxGetApp().m_frame->m_solidBar->GetToolSize().x, 0);
+		client_pt = wxGetApp().m_frame->m_solidBar->ClientToScreen(client_pt);
+		client_pt = wxGetApp().m_frame->ScreenToClient(client_pt);
+
+		wxToolBar* dropBar = new wxToolBar(wxGetApp().m_frame, -1, client_pt, wxDefaultSize, wxTB_VERTICAL | wxTB_BOTTOM);
+		dropBar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
+		wxGetApp().m_frame->AddToolBarTool(dropBar, _T("Cube"), ToolImage(_T("cube")), _("Add a cube"), OnCubeButton);
+		wxGetApp().m_frame->AddToolBarTool(dropBar, _T("Cylinder"), ToolImage(_T("cyl")), _("Add a cylinder"), OnCylButton);
+		dropBar->Realize();
+		dropBar->Move(client_pt);
+		dropBar->SetFocus();
+	}
+}
+
 static void OnRedrawButton( wxCommandEvent& event )
 {
 	wxGetApp().RecalculateGLLists();
@@ -946,6 +990,7 @@ int CHeeksFrame::MakeNextIDForTool(void(*onButtonFunction)(wxCommandEvent&), voi
 
 	int id_to_use = m_next_id_for_button;
 
+
 	SExternalButtonFunctions ebf;
 	ebf.on_button = onButtonFunction;
 	ebf.on_update_button = onUpdateButtonFunction;
@@ -994,6 +1039,43 @@ void CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, Tool* tool)
 		int id_used_for_button = wxGetApp().m_frame->AddToolBarTool(toolbar, tool->GetTitle(), *bitmap, tool->GetToolTip(), OnTool);
 		tool_map_for_OnTool.insert( std::pair<int, Tool*> ( id_used_for_button, tool ) );
 	}
+}
+
+static wxString GetFlyoutConfigString(const wxString& title)
+{
+	wxString config_string = wxString(_T("ToolBar")) + title;
+	return config_string;
+}
+
+void CHeeksFrame::AddToolBarFlyout(wxToolBar* toolbar, const wxString& title, const std::list<CFlyOutItem> &flyout_list)
+{
+	if(flyout_list.size() == 0)return;
+
+	const CFlyOutItem &first_fo = flyout_list.front();
+
+	wxString config_string = GetFlyoutConfigString(title) + _T("ActiveTool");
+	HeeksConfig config;
+	wxString active_tool_str;
+	config.Read(config_string, &active_tool_str, first_fo.m_title_and_bitmap);
+
+	// get bitmap to show on main button
+	const CFlyOutItem *main_fo = &first_fo;
+	for(std::list<CFlyOutItem>::const_iterator It = flyout_list.begin(); It != flyout_list.end(); It++)
+	{
+		const CFlyOutItem &fo = *It;
+		if(fo.m_title_and_bitmap == active_tool_str)
+		{
+			main_fo = &fo;
+			break;
+		}
+	}
+
+	// add the main tool
+	AddToolBarTool(toolbar, main_fo->m_title_and_bitmap, ToolImage(main_fo->m_title_and_bitmap), main_fo->m_tooltip, main_fo->m_onButtonFunction);
+
+	int id_to_use = MakeNextIDForTool(main_fo->m_onButtonFunction, NULL);
+	wxBitmapButton* button = new wxBitmapButton(toolbar, id_to_use, ToolImage(_T("downarrow")), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	toolbar->AddControl(button);
 }
 
 // a class just so I can get at the protected m_tools of wxToolBar
@@ -1206,7 +1288,7 @@ void CHeeksFrame::MakeMenus()
 	// Geometry Menu
 	wxMenu *geometry_menu = new wxMenu;
 	AddMenuItem(geometry_menu, _("Draw a sketch"), ToolImage(_T("lines")), OnLinesButton);
-	AddMenuItem(geometry_menu, _("Draw Circles"), ToolImage(_T("circles")), OnCirclesButton);
+	//AddMenuItem(geometry_menu, _("Draw Circles"), ToolImage(_T("circles")), OnCirclesButton);
 	AddMenuItem(geometry_menu, _("Draw Infinite Lines"), ToolImage(_T("iline")), OnILineButton);
 	AddMenuItem(geometry_menu, _("Draw Points"), ToolImage(_T("point")), OnPointsButton);
 	AddMenuItem(geometry_menu, _("Draw Regular Shapes"), ToolImage(_T("regshapes")), OnRegularShapesButton);
@@ -1310,7 +1392,15 @@ void CHeeksFrame::AddToolBars()
 	AddToolBarTool(m_toolBar, _T("Redo"), ToolImage(_T("redo")), _("Redo the next command"), OnRedoButton);
 	AddToolBarTool(m_toolBar, _T("Select"), ToolImage(_T("select")), _("Select Mode"), OnSelectModeButton);
 	AddToolBarTool(m_geometryBar, _T("Lines"), ToolImage(_T("lines")), _("Draw a sketch"), OnLinesButton);
-	AddToolBarTool(m_geometryBar, _T("Circles"), ToolImage(_T("circles")), _("Start Circle Drawing"), OnCirclesButton);
+	//AddToolBarTool(m_geometryBar, _T("Circles"), ToolImage(_T("circles")), _("Start Circle Drawing"), OnCirclesButton);
+
+	std::list<CFlyOutItem> flyout_list;
+	flyout_list.push_back(CFlyOutItem(_T("circ3p"), _("Draw circles through 3 points"), OnCircles3pButton));
+	flyout_list.push_back(CFlyOutItem(_T("circ2p"), _("Draw circles with centre point and point on circle"), OnCircles2pButton));
+	flyout_list.push_back(CFlyOutItem(_T("circpr"), _("Draw circles with centre point and radius"), OnCirclesprButton));
+
+	AddToolBarFlyout(m_geometryBar, _T("circles"), flyout_list);
+
 	AddToolBarTool(m_geometryBar, _T("ILine"), ToolImage(_T("iline")), _("Start Drawing Infinite Lines"), OnILineButton);
 	AddToolBarTool(m_geometryBar, _T("Points"), ToolImage(_T("point")), _("Start Drawing Points"), OnPointsButton);
 	AddToolBarTool(m_geometryBar, _T("Regular Shapes"), ToolImage(_T("regshapes")), _("Draw regular shapes; rectangles, polygons, obrounds"), OnRegularShapesButton);
@@ -1397,4 +1487,8 @@ void CHeeksFrame::SetToolBarsToLeft()
 		wxToolBarBase* toolbar = *It;
 		m_aui_manager->GetPane(toolbar).Left();
 	}
+}
+
+CFlyOutItem::CFlyOutItem(const wxString& title_and_bitmap, const wxString& tooltip, void(*onButtonFunction)(wxCommandEvent&)):m_title_and_bitmap(title_and_bitmap), m_tooltip(tooltip), m_onButtonFunction(onButtonFunction)
+{
 }
