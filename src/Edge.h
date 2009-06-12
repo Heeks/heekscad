@@ -33,6 +33,7 @@ public:
 	std::list<bool> m_face_senses;
 	double m_midpoint[3];
 	bool m_midpoint_calculated;
+	double m_start_end_dist;
 
 	CEdge(const TopoDS_Edge &edge);
 	~CEdge();
