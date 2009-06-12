@@ -26,6 +26,10 @@ CEdge::CEdge(const TopoDS_Edge &edge):m_topods_edge(edge), m_midpoint_calculated
 	double t[3];
 	Evaluate(m_end_u, &m_end_x, t);
 	m_orientation = Orientation();
+	double dx = m_end_x - m_start_x;
+	double dy = m_end_y - m_start_y;
+	double dz = m_end_z - m_start_z;
+	m_start_end_dist = sqrt(dx*dx + dy*dy + dz*dz);
 }
 
 CEdge::~CEdge(){

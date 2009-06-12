@@ -537,11 +537,7 @@ static void OnDimensioningButton( wxCommandEvent& WXUNUSED( event ) )
 static void OnCircles3pButton( wxCommandEvent& WXUNUSED( event ) )
 {
 	line_strip.drawing_mode = CircleDrawingMode;
-<<<<<<< .mine
 	line_strip.circle_mode = ThreePointsCircleMode;
-=======
-	//line_strip.circle_mode = TwoPointsCircleMode;
->>>>>>> .r481
 	wxGetApp().SetInputMode(&line_strip);
 }
 
