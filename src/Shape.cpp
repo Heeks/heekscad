@@ -870,7 +870,7 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<in
 
 		TopoDS_Shape shape;
 		BRep_Builder builder;
-		Standard_Boolean result = BRepTools::Read(  shape, Ttc(filepath), builder );
+		Standard_Boolean result = BRepTools::Read(  shape,(char *) Ttc(filepath), builder );
 
 		if(result)
 		{
