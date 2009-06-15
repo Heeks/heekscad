@@ -163,8 +163,19 @@ const std::list<HeeksObj*>& CHeeksCADInterface::GetMarkedList(void)
 
 bool CHeeksCADInterface::GetArcCentre(HeeksObj* object, double* c)
 {
-	extract(((HArc*)object)->m_circle.Location(), c);
-	return true;
+	switch (object->GetType())
+	{
+		case ArcType:
+			extract(((HArc*)object)->m_circle.Location(), c);
+			return true;
+
+		case CircleType:
+			extract(((HCircle*)object)->m_circle.Location(), c);
+			return true;
+
+	} // End switch
+
+	return(false);
 }
 
 bool CHeeksCADInterface::GetArcAxis(HeeksObj* object, double* a)
