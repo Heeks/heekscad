@@ -12,6 +12,7 @@
 #include "HILine.h"
 #include "HCircle.h"
 #include "HEllipse.h"
+#include "HSpline.h"
 #include "../interface/PropertyChoice.h"
 #include "../interface/PropertyString.h"
 #include "../interface/PropertyDouble.h"
@@ -107,6 +108,17 @@ int LineArcDrawing::number_of_steps()
 			break;
 		}
 		break;
+	case SplineDrawingMode:
+		switch(spline_mode)
+		{
+		case CubicSplineMode:
+			return 4;
+		case QuarticSplineMode:
+			return 3;
+		default:
+			break;
+		}
+		break;
 	case EllipseDrawingMode:
 		return 3;
 	default:
@@ -125,6 +137,7 @@ int LineArcDrawing::step_to_go_to_after_last_step()
 	case ILineDrawingMode:
 	case CircleDrawingMode:
 	case EllipseDrawingMode:
+	case SplineDrawingMode:
 	default:
 		return 0;
 	}
@@ -144,6 +157,17 @@ bool LineArcDrawing::is_an_add_level(int level)
 		}
 	case EllipseDrawingMode:
 		return level == 2;
+	case SplineDrawingMode:
+		switch(spline_mode)
+		{
+		case CubicSplineMode:
+			return level == 3;
+		case QuarticSplineMode:
+			return level == 2;
+		default:
+			break;
+		}
+		break;
 	default:
 		break;
 	}
@@ -350,6 +374,37 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 		}
 		return true;	
 
+	case SplineDrawingMode:
+		{
+			if(temp_object && temp_object->GetType() != SplineType){
+				delete temp_object;
+				temp_object = NULL;
+				temp_object_in_list.clear();
+			}
+
+			Handle_Geom_BSplineCurve spline;
+			switch(spline_mode)
+			{
+				case CubicSplineMode:
+					DigitizedPoint::GetCubicSpline(GetBeforeBeforeStartPos(), GetBeforeStartPos(), GetStartPos(), end, spline);
+					break;
+				case QuarticSplineMode:
+					DigitizedPoint::GetQuarticSpline(GetBeforeStartPos(), GetStartPos(), end, spline);
+					break;
+				case RationalSplineMode:
+					break;
+			}
+
+			if(!temp_object){
+				temp_object = new HSpline(spline, &wxGetApp().construction_color);
+				if(temp_object)temp_object_in_list.push_back(temp_object);
+			}
+			else{
+				((HSpline*)temp_object)->m_spline = spline;
+			}
+
+			return true;
+		}
 	case CircleDrawingMode:
 		{
 			if(temp_object && temp_object->GetType() != CircleType){
@@ -492,6 +547,35 @@ const wxChar* LineArcDrawing::GetTitle()
 		}
 		else str_for_GetTitle.Append(wxString(_("click on another point on ellipse")));
 		
+		return str_for_GetTitle;
+
+	case SplineDrawingMode:
+		
+		str_for_GetTitle = wxString(_("Spline drawing mode"));
+		str_for_GetTitle.Append(wxString(_T(" : ")));
+
+		switch(spline_mode){
+			case CubicSplineMode:
+				str_for_GetTitle.Append(wxString(_("cubic spline mode")));
+				str_for_GetTitle.Append(wxString(_T("\n  ")));
+				if(GetDrawStep() == 0)str_for_GetTitle.Append(wxString(_("click on start point")));
+				else if(GetDrawStep() == 1) str_for_GetTitle.Append(wxString(_("click on end point")));
+				else if(GetDrawStep() == 2) str_for_GetTitle.Append(wxString(_("click on first control point")));
+				else str_for_GetTitle.Append(wxString(_("click on second control point")));
+				break;
+			case QuarticSplineMode:
+				str_for_GetTitle.Append(wxString(_("quartic spline mode")));
+				str_for_GetTitle.Append(wxString(_T("\n  ")));
+				if(GetDrawStep() == 0)str_for_GetTitle.Append(wxString(_("click on start point")));
+				else if(GetDrawStep() == 1) str_for_GetTitle.Append(wxString(_("click on end point")));
+				else str_for_GetTitle.Append(wxString(_("click on control point")));
+				break;
+			case RationalSplineMode:
+				str_for_GetTitle.Append(wxString(_("rational spline mode")));
+				str_for_GetTitle.Append(wxString(_T("\n  ")));				
+				break;
+		}
+
 		return str_for_GetTitle;
 
 	case CircleDrawingMode:

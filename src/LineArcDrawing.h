@@ -11,7 +11,8 @@ enum EnumDrawingMode{
 	ArcDrawingMode,
 	ILineDrawingMode,
 	CircleDrawingMode,
-	EllipseDrawingMode
+	EllipseDrawingMode,
+	SplineDrawingMode
 };
 
 enum EnumCircleDrawingMode{
@@ -19,6 +20,13 @@ enum EnumCircleDrawingMode{
 	ThreePointsCircleMode,
 	TwoPointsCircleMode
 };
+
+enum EnumSplineDrawingMode{
+	CubicSplineMode,
+	QuarticSplineMode,
+	RationalSplineMode
+};
+
 
 class LineArcDrawing: public Drawing{
 private:
@@ -46,6 +54,7 @@ public:
 	std::list<EnumDrawingMode> m_save_drawing_mode;
 	double radius_for_circle;
 	EnumCircleDrawingMode circle_mode;
+	EnumSplineDrawingMode spline_mode;
 	bool m_previous_direction_set;
 	gp_Vec m_previous_direction;
 

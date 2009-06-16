@@ -201,6 +201,37 @@ bool DigitizedPoint::GetCircleBetween(const DigitizedPoint& d1, const DigitizedP
 	return true;
 }
 
+bool DigitizedPoint::GetCubicSpline(const DigitizedPoint& d1, const DigitizedPoint& d2, const DigitizedPoint& d3, const DigitizedPoint& d4, Handle_Geom_BSplineCurve &spline)
+{
+	gp_Pnt s = d1.m_point;
+	gp_Pnt e = d2.m_point;
+	gp_Pnt c1 = d3.m_point;
+	gp_Pnt c2 = d4.m_point;
+
+	TColgp_Array1OfPnt poles(1,4);
+	poles.SetValue(1,s); poles.SetValue(2,c1); poles.SetValue(3,c2); poles.SetValue(4,e);
+	Handle(Geom_BezierCurve) curve = new Geom_BezierCurve(poles);
+	GeomConvert_CompCurveToBSplineCurve convert(curve);
+
+	spline = convert.BSplineCurve();
+	return true;
+}
+
+bool DigitizedPoint::GetQuarticSpline(const DigitizedPoint& d1, const DigitizedPoint& d2, const DigitizedPoint& d3, Handle_Geom_BSplineCurve &spline)
+{
+	gp_Pnt s = d1.m_point;
+	gp_Pnt e = d2.m_point;
+	gp_Pnt c = d3.m_point;
+	TColgp_Array1OfPnt poles(1,3);
+	poles.SetValue(1,s); poles.SetValue(2,c); poles.SetValue(3,e);
+	Handle(Geom_BezierCurve) curve = new Geom_BezierCurve(poles);
+	GeomConvert_CompCurveToBSplineCurve convert(curve);
+
+	spline = convert.BSplineCurve();
+
+	return true;
+}
+
 bool DigitizedPoint::GetEllipse(const DigitizedPoint& d1, const DigitizedPoint& d2, const DigitizedPoint& d3, gp_Elips& e)
 {
 	double d = d2.m_point.Distance(d1.m_point);
