@@ -152,6 +152,8 @@ public:
 	virtual void EdgeEvaluate(HeeksObj* edge, double u, double *p, double *tangent);
 	virtual bool EdgeGetLineParams(HeeksObj* edge, double* d6);
 	virtual bool EdgeGetCircleParams(HeeksObj* edge, double* d6);
+	virtual void EdgeSetTempAttribute(HeeksObj* edge, int attr);
+	virtual int EdgeGetTempAttribute(HeeksObj* edge);
 
 	// loop functions
 	virtual long LoopGetEdgeCount(HeeksObj* loop);
