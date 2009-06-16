@@ -68,6 +68,7 @@ public:
 	virtual void AddPoint();
 	virtual void clear_drawing_objects(int mode = 0){} // 0 - set temporary objects to NULL,  1 - store the temporary objects as previous_list, 2 - delete and set to NULL
 	virtual bool DragDoneWithXOR(){return true;}
+	virtual void set_draw_step_not_undoable(int s){current_view_stuff->draw_step = s;}
 
 	int GetDrawStep()const{return current_view_stuff->draw_step;}
 	void SetDrawStepUndoable(int s);
@@ -77,7 +78,6 @@ public:
 	void SetStartPosUndoable(const DigitizedPoint& pos);
 	bool IsDrawing(CInputMode* i);
 
-	void set_draw_step_not_undoable(int s){current_view_stuff->draw_step = s;}
 	void set_start_pos_not_undoable(const DigitizedPoint& pos){current_view_stuff->before_before_start_pos = current_view_stuff->before_start_pos; current_view_stuff->before_start_pos = current_view_stuff->start_pos; current_view_stuff->start_pos = pos;}
 
 };
