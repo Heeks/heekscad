@@ -763,6 +763,16 @@ bool CHeeksCADInterface::EdgeGetCircleParams(HeeksObj* edge, double* d6)
 	return ((CEdge*)edge)->GetCircleParams(d6);
 }
 
+void CHeeksCADInterface::EdgeSetTempAttribute(HeeksObj* edge, int attr)
+{
+	((CEdge*)edge)->m_temp_attr = attr;
+}
+
+int CHeeksCADInterface::EdgeGetTempAttribute(HeeksObj* edge)
+{
+	return ((CEdge*)edge)->m_temp_attr;
+}
+
 long CHeeksCADInterface::LoopGetEdgeCount(HeeksObj* loop)
 {
 	return ((CLoop*)loop)->m_edges.size();

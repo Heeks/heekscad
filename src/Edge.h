@@ -28,6 +28,7 @@ private:
 	bool m_orientation;
 
 public:
+	int m_temp_attr; // not saved with the model
 	std::list<CFace*>::iterator m_faceIt;
 	std::list<CFace*> m_faces;
 	std::list<bool> m_face_senses;
