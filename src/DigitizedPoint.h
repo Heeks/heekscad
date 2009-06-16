@@ -39,5 +39,6 @@ public:
 	static bool GetCircleBetween(const DigitizedPoint& d1, const DigitizedPoint& d2, gp_Circ& c);
 	static bool GetQuarticSpline(const DigitizedPoint& d1, const DigitizedPoint& d2, const DigitizedPoint& d3, Handle_Geom_BSplineCurve &spline);
 	static bool GetCubicSpline(const DigitizedPoint& d1, const DigitizedPoint& d2, const DigitizedPoint& d3, const DigitizedPoint& d4, Handle_Geom_BSplineCurve &spline);
+	static bool GetRationalSpline(std::list<DigitizedPoint> &spline_points, const DigitizedPoint& d4, Handle_Geom_BSplineCurve &spline);
 };
 
