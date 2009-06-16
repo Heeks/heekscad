@@ -232,6 +232,26 @@ bool DigitizedPoint::GetQuarticSpline(const DigitizedPoint& d1, const DigitizedP
 	return true;
 }
 
+bool DigitizedPoint::GetRationalSpline(std::list<DigitizedPoint> &spline_points, const DigitizedPoint& d4, Handle_Geom_BSplineCurve &spline)
+{
+	TColgp_Array1OfPnt poles(1,spline_points.size()+1);
+	int idx = 1;
+	std::list<DigitizedPoint>::iterator it;
+	for(it=spline_points.begin(); it!=spline_points.end(); ++it)
+	{
+		poles.SetValue(idx,(*it).m_point);
+		idx++;
+	}
+	poles.SetValue(spline_points.size()+1,d4.m_point);
+	Handle(Geom_BezierCurve) curve = new Geom_BezierCurve(poles);
+	GeomConvert_CompCurveToBSplineCurve convert(curve);
+
+	spline = convert.BSplineCurve();
+
+	return true;
+
+}
+
 bool DigitizedPoint::GetEllipse(const DigitizedPoint& d1, const DigitizedPoint& d2, const DigitizedPoint& d3, gp_Elips& e)
 {
 	double d = d2.m_point.Distance(d1.m_point);

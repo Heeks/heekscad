@@ -32,6 +32,7 @@ class LineArcDrawing: public Drawing{
 private:
 	std::list<HeeksObj*> temp_object_in_list;
 	std::list<HeeksObj*> prev_object_in_list;
+	std::list<DigitizedPoint> spline_points;
 	HeeksObj *temp_object;
 	bool m_A_down; // is key A pressed
 	HeeksObj* m_container;
@@ -44,6 +45,7 @@ private:
 	int number_of_steps();
 	int step_to_go_to_after_last_step();
 	bool is_an_add_level(int level);
+	bool is_a_draw_level(int level);
 	HeeksObj* GetOwnerForDrawingObjects();
 	void AddPoint();
 
@@ -72,6 +74,7 @@ public:
 
 	// Drawing's virtual functions
 	void clear_drawing_objects(int mode);
+	void set_draw_step_not_undoable(int s);
 };
 
 extern LineArcDrawing line_strip;

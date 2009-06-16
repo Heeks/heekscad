@@ -115,8 +115,8 @@ int LineArcDrawing::number_of_steps()
 			return 4;
 		case QuarticSplineMode:
 			return 3;
-		default:
-			break;
+		case RationalSplineMode:
+			return 20;
 		}
 		break;
 	case EllipseDrawingMode:
@@ -134,13 +134,21 @@ int LineArcDrawing::step_to_go_to_after_last_step()
 	case LineDrawingMode:
 	case ArcDrawingMode:
 		return 1;
+	case SplineDrawingMode:
+		return 3;
 	case ILineDrawingMode:
 	case CircleDrawingMode:
 	case EllipseDrawingMode:
-	case SplineDrawingMode:
 	default:
 		return 0;
 	}
+}
+
+bool LineArcDrawing::is_a_draw_level(int level)
+{
+	if(drawing_mode == SplineDrawingMode && spline_mode == RationalSplineMode)
+		return level>=3;
+	return Drawing::is_a_draw_level(level);
 }
 
 bool LineArcDrawing::is_an_add_level(int level)
@@ -164,8 +172,8 @@ bool LineArcDrawing::is_an_add_level(int level)
 			return level == 3;
 		case QuarticSplineMode:
 			return level == 2;
-		default:
-			break;
+		case RationalSplineMode:
+			return level == 20;
 		}
 		break;
 	default:
@@ -392,6 +400,7 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 					DigitizedPoint::GetQuarticSpline(GetBeforeStartPos(), GetStartPos(), end, spline);
 					break;
 				case RationalSplineMode:
+					DigitizedPoint::GetRationalSpline(spline_points, end, spline);
 					break;
 			}
 
@@ -572,7 +581,12 @@ const wxChar* LineArcDrawing::GetTitle()
 				break;
 			case RationalSplineMode:
 				str_for_GetTitle.Append(wxString(_("rational spline mode")));
-				str_for_GetTitle.Append(wxString(_T("\n  ")));				
+				str_for_GetTitle.Append(wxString(_T("\n  ")));	
+				if(GetDrawStep() == 0)str_for_GetTitle.Append(wxString(_("click on start point")));
+				else if(GetDrawStep() == 1) str_for_GetTitle.Append(wxString(_("click on first control point")));
+				else if(GetDrawStep() == 2) str_for_GetTitle.Append(wxString(_("click on second control point")));
+				else str_for_GetTitle.Append(wxString(_("click on next control point or endpoint")));
+	
 				break;
 		}
 
@@ -718,4 +732,13 @@ bool LineArcDrawing::OnModeChange(void){
 	m_previous_direction_set = false;
 
 	return true;
+}
+
+void LineArcDrawing::set_draw_step_not_undoable(int s)
+{
+	Drawing::set_draw_step_not_undoable(s);
+	if(drawing_mode == SplineDrawingMode && spline_mode == RationalSplineMode)
+	{
+		spline_points.push_back(GetStartPos());
+	}
 }
