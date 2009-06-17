@@ -258,16 +258,6 @@ void LineArcDrawing::AddPoint()
 
 			Drawing::AddPoint();
 
-			// and move the point
-		/*	if(current_view_stuff->start_pos.m_type == DigitizeTangentType && save_temp_object)
-			{
-				double pos[3];
-				if(save_temp_object->GetEndPoint(pos)){
-					gp_Pnt p = make_point(pos);
-					current_view_stuff->start_pos.m_point = p;
-				}
-			}
-		*/
 		}
 		break;
 
