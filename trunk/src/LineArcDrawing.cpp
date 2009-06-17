@@ -214,6 +214,9 @@ void LineArcDrawing::AddPoint()
 	case ArcDrawingMode:
 		{
 			// edit the end of the previous item to be the start of the arc
+			// this only happens if we are drawing tangents to other objects
+			// really need to fill the gap with whatever we are tangent around
+			// ellipse,arc,spline or whatever
 			HeeksObj* save_temp_object = temp_object;
 
 			if(temp_object && prev_object_in_list.size() > 0)
@@ -221,25 +224,42 @@ void LineArcDrawing::AddPoint()
 				HeeksObj* prev_object = prev_object_in_list.front();
 				if(prev_object)
 				{
-					double pos[3];
-					if(temp_object->GetStartPoint(pos)){
-						gp_Pnt p = make_point(pos);
-						switch(prev_object->GetType())
-						{
+					double spos[3];
+					double epos[3];
+					temp_object->GetStartPoint(spos);
+					prev_object->GetEndPoint(epos);
+					HeeksObj* tanobject = GetStartPos().m_object1;
+					if(current_view_stuff->start_pos.m_type == DigitizeTangentType && tanobject)
+					switch(tanobject->GetType())
+					{
 						case LineType:
-							((HLine*)prev_object)->B = p;
+							//((HLine*)prev_object)->B = p;
 							break;
 						case ArcType:
-							((HArc*)prev_object)->B = p;
+							{
+								HArc* arc = new HArc(*(HArc*)tanobject);
+								arc->A = make_point(spos);
+								arc->B = make_point(epos);
+								temp_object_in_list.push_back(arc);
+							}
+							break;
+						case CircleType:
+							{
+								HArc* arc = new HArc(make_point(spos),make_point(epos),((HCircle*)tanobject)->m_circle,&wxGetApp().current_color);
+								arc->A = make_point(spos);
+								arc->B = make_point(epos);
+								temp_object_in_list.push_back(arc);
+							}
+							break;
 						}
-					}
+					
 				}
-			}
+			} 
 
 			Drawing::AddPoint();
 
 			// and move the point
-			if(current_view_stuff->start_pos.m_type == DigitizeTangentType && save_temp_object)
+		/*	if(current_view_stuff->start_pos.m_type == DigitizeTangentType && save_temp_object)
 			{
 				double pos[3];
 				if(save_temp_object->GetEndPoint(pos)){
@@ -247,6 +267,7 @@ void LineArcDrawing::AddPoint()
 					current_view_stuff->start_pos.m_point = p;
 				}
 			}
+		*/
 		}
 		break;
 
