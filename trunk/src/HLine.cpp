@@ -83,12 +83,16 @@ void HLine::glCommands(bool select, bool marked, bool no_color){
 		glLineWidth(1);
 		glDepthRange(save_depth_range[0], save_depth_range[1]);
 	}
-	gp_Pnt mid_point = A.XYZ() + (B.XYZ() - A.XYZ())/2;
-	gp_Dir dir = B.XYZ() - mid_point.XYZ();
-	gp_Ax1 ax(mid_point,dir);
-	//gp_Dir up(0,0,1);
-	//ax.Rotate(gp_Ax1(mid_point,up),Pi/2);
-	ConstrainedObject::glCommands(color,ax);
+
+	if(!A.IsEqual(B, wxGetApp().m_geom_tol))
+	{
+		gp_Pnt mid_point = A.XYZ() + (B.XYZ() - A.XYZ())/2;
+		gp_Dir dir = B.XYZ() - mid_point.XYZ();
+		gp_Ax1 ax(mid_point,dir);
+		//gp_Dir up(0,0,1);
+		//ax.Rotate(gp_Ax1(mid_point,up),Pi/2);
+		ConstrainedObject::glCommands(color,ax);
+	}
 }
 
 void HLine::Draw(wxDC& dc)
