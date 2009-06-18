@@ -18,7 +18,8 @@ enum EnumDrawingMode{
 enum EnumCircleDrawingMode{
 	CentreAndPointCircleMode,
 	ThreePointsCircleMode,
-	TwoPointsCircleMode
+	TwoPointsCircleMode,
+	CentreAndRadiusCircleMode // only one click needed ( edit radius in the properties before clicking)
 };
 
 enum EnumSplineDrawingMode{
