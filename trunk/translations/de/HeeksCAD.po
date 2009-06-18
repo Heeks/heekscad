@@ -2058,3 +2058,31 @@ msgstr "G-Code laden"
 msgid "Save NC File"
 msgstr "G-Code speichern"
 
+msgid "cutting_tool_number"
+msgstr "Werkzeug Nummer"
+
+msgid "depth"
+msgstr "Tiefe der Bohrung"
+
+msgid "peck_depth"
+msgstr "mm pro Schritt"
+
+msgid "dwell"
+msgstr "Zeit(s) in der Bohrung pro Schritt"
+
+msgid "standoff"
+msgstr "Höhe über der Bohrung"
+
+msgid "Split Sketch"
+msgstr "In einzelne Elemente auflösen"
+
+msgid ""
+"You must select some points, circles or other intersecting elements first!"
+msgstr "Zuerst Punkte,Kreise oder andere passende Elemente auswählen !"
+
+msgid "New CounterBore Operation..."
+msgstr "Einsatz des Flachsenkers"
+
+msgid "fixture offset"
+msgstr "Maschinennullpunkt +"
+
