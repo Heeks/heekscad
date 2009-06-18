@@ -4,17 +4,14 @@
 
 #pragma once
 
-#include "../interface/HeeksObj.h"
-#include "../interface/HeeksColor.h"
+#include "EndedObject.h"
 
-class HILine: public HeeksObj{
+class HILine: public EndedObject{
 private:
 	HeeksColor color;
 	static wxIcon* m_icon;
 
 public:
-	gp_Pnt A, B;
-
 	~HILine(void);
 	HILine(const gp_Pnt &a, const gp_Pnt &b, const HeeksColor* col);
 	HILine(const HILine &line);
@@ -29,19 +26,17 @@ public:
 	const wxChar* GetTypeString(void)const{return _("Infinite Line");}
 	HeeksObj *MakeACopy(void)const;
 	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/iline");}
-	bool ModifyByMatrix(const double *mat);
 	void SetColor(const HeeksColor &col){color = col;}
 	const HeeksColor* GetColor()const{return &color;}
 	void GetGripperPositions(std::list<double> *list, bool just_for_endof);
 	void GetProperties(std::list<Property *> *list);
 	bool FindNearPoint(const double* ray_start, const double* ray_direction, double *point);
 	bool FindPossTangentPoint(const double* ray_start, const double* ray_direction, double *point);
-	bool Stretch(const double *p, const double* shift);
 	int Intersects(const HeeksObj *object, std::list< double > *rl)const;
-	bool GetStartPoint(double* pos);
-	bool GetEndPoint(double* pos);
 	void CopyFrom(const HeeksObj* object){operator=(*((HILine*)object));}
 	void WriteXML(TiXmlNode *root);
+	bool GetEndPoint(double* pos);
+	bool GetStartPoint(double* pos);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 

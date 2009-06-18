@@ -18,16 +18,16 @@ HArc::HArc(const HArc &line){
 	operator=(line);
 }
 
-HArc::HArc(const gp_Pnt &a, const gp_Pnt &b, const gp_Circ &c, const HeeksColor* col):color(*col), A(a), B(b), m_circle(c){
+HArc::HArc(const gp_Pnt &a, const gp_Pnt &b, const gp_Circ &c, const HeeksColor* col):color(*col), m_circle(c){
+	A = a;
+	B = b;
 }
 
 HArc::~HArc(){
 }
 
 const HArc& HArc::operator=(const HArc &b){
-	HeeksObj::operator=(b);
-	A = b.A;
-	B = b.B;
+	EndedObject::operator=(b);
 	m_circle = b.m_circle;
 	color = b.color;
 	return *this;
@@ -128,9 +128,8 @@ HeeksObj *HArc::MakeACopy(void)const{
 }
 
 bool HArc::ModifyByMatrix(const double* m){
+	EndedObject::ModifyByMatrix(m);
 	gp_Trsf mat = make_matrix(m);
-	A.Transform(mat);
-	B.Transform(mat);
 	m_circle.Transform(mat);
 	return false;
 }
@@ -355,18 +354,6 @@ bool HArc::Stretch(const double *p, const double* shift){
 		}
 	}
 	return false;
-}
-
-bool HArc::GetStartPoint(double* pos)
-{
-	extract(A, pos);
-	return true;
-}
-
-bool HArc::GetEndPoint(double* pos)
-{
-	extract(B, pos);
-	return true;
 }
 
 bool HArc::GetCentrePoint(double* pos)
