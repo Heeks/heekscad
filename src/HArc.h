@@ -4,17 +4,15 @@
 
 #pragma once
 
-#include "../interface/HeeksObj.h"
-#include "../interface/HeeksColor.h"
+#include "EndedObject.h"
 #include <gp_Circ.hxx>
 
-class HArc: public HeeksObj{
+class HArc: public EndedObject{
 private:
 	HeeksColor color;
 	static wxIcon* m_icon;
 
 public:
-	gp_Pnt A, B;
 	gp_Circ m_circle;
 
 	~HArc(void);
@@ -42,8 +40,6 @@ public:
 	bool FindPossTangentPoint(const double* ray_start, const double* ray_direction, double *point);
 	bool Stretch(const double *p, const double* shift);
 	void GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point = true)const;
-	bool GetStartPoint(double* pos);
-	bool GetEndPoint(double* pos);
 	bool GetCentrePoint(double* pos);
 	void WriteXML(TiXmlNode *root);
 	int Intersects(const HeeksObj *object, std::list< double > *rl)const;

@@ -7,6 +7,7 @@
 #include "HILine.h"
 #include "HCircle.h"
 #include "HArc.h"
+#include "../interface/Tool.h"
 #include "../interface/PropertyDouble.h"
 #include "../interface/PropertyLength.h"
 #include "../interface/PropertyVertex.h"
@@ -27,11 +28,41 @@ HLine::~HLine(){
 }
 
 const HLine& HLine::operator=(const HLine &b){
-	HeeksObj::operator=(b);
-	A = b.A;
-	B = b.B;
+	EndedObject::operator=(b);
 	color = b.color;
 	return *this;
+}
+HLine* line_for_tool = NULL;
+
+class SetLineHorizontal:public Tool{
+public:
+	void Run(){
+		line_for_tool->SetAbsoluteAngleConstraint(AbsoluteAngleHorizontal);
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Toggle Horizontal");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Set this line to be horizontal");}
+};
+static SetLineHorizontal horizontal_line_toggle;
+
+class SetLineVertical:public Tool{
+public:
+	void Run(){
+		line_for_tool->SetAbsoluteAngleConstraint(AbsoluteAngleVertical);
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Toggle Vertical");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Set this line to be vertical");}
+};
+static SetLineVertical vertical_line_toggle;
+
+void HLine::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
+{
+	line_for_tool = this;
+	t_list->push_back(&horizontal_line_toggle);
+	t_list->push_back(&vertical_line_toggle);
 }
 
 void HLine::glCommands(bool select, bool marked, bool no_color){
@@ -52,6 +83,12 @@ void HLine::glCommands(bool select, bool marked, bool no_color){
 		glLineWidth(1);
 		glDepthRange(save_depth_range[0], save_depth_range[1]);
 	}
+	gp_Pnt mid_point = A.XYZ() + (B.XYZ() - A.XYZ())/2;
+	gp_Dir dir = B.XYZ() - mid_point.XYZ();
+	gp_Ax1 ax(mid_point,dir);
+	//gp_Dir up(0,0,1);
+	//ax.Rotate(gp_Ax1(mid_point,up),Pi/2);
+	ConstrainedObject::glCommands(color,ax);
 }
 
 void HLine::Draw(wxDC& dc)
@@ -66,13 +103,6 @@ void HLine::Draw(wxDC& dc)
 HeeksObj *HLine::MakeACopy(void)const{
 	HLine *new_object = new HLine(*this);
 	return new_object;
-}
-
-bool HLine::ModifyByMatrix(const double* m){
-	gp_Trsf mat = make_matrix(m);
-	A.Transform(mat);
-	B.Transform(mat);
-	return false;
 }
 
 void HLine::GetBox(CBox &box){
@@ -128,19 +158,6 @@ bool HLine::FindNearPoint(const double* ray_start, const double* ray_direction, 
 bool HLine::FindPossTangentPoint(const double* ray_start, const double* ray_direction, double *point){
 	// any point on this line is a possible tangent point
 	return FindNearPoint(ray_start, ray_direction, point);
-}
-
-bool HLine::Stretch(const double *p, const double* shift){
-	gp_Pnt vp = make_point(p);
-	gp_Vec vshift = make_vector(shift);
-
-	if(A.IsEqual(vp, wxGetApp().m_geom_tol)){
-		A = A.XYZ() + vshift.XYZ();
-	}
-	else if(B.IsEqual(vp, wxGetApp().m_geom_tol)){
-		B = B.XYZ() + vshift.XYZ();
-	}
-	return false;
 }
 
 gp_Lin HLine::GetLine()const{
@@ -239,18 +256,6 @@ void HLine::GetSegments(void(*callbackfunc)(const double *p), double pixels_per_
 	double p[3];
 	extract(B, p);
 	(*callbackfunc)(p);
-}
-
-bool HLine::GetStartPoint(double* pos)
-{
-	extract(A, pos);
-	return true;
-}
-
-bool HLine::GetEndPoint(double* pos)
-{
-	extract(B, pos);
-	return true;
 }
 
 gp_Vec HLine::GetSegmentVector(double fraction)
