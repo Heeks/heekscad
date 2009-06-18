@@ -335,16 +335,16 @@ tinyxmlerror.o: ../tinyxml/tinyxmlerror.cpp
 tinyxmlparser.o: ../tinyxml/tinyxmlparser.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
 	
-Constraint.o: ../tinyxml/Constraint.cpp
+Constraint.o: Constraint.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
 	
-ConstrainedObject.o: ../tinyxml/ConstrainedObject.cpp
+ConstrainedObject.o: ConstrainedObject.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
 	
-ConstraintTools.o: ../tinyxml/ConstraintTools.cpp
+ConstraintTools.o: ConstraintTools.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
 	
-EndedObject.o: ../tinyxml/EndedObject.cpp
+EndedObject.o: EndedObject.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
 
 clean:
