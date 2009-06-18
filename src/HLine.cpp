@@ -172,6 +172,14 @@ int HLine::Intersects(const HeeksObj *object, std::list< double > *rl)const{
 	{
 	case LineType:
 		{
+			// The OpenCascase libraries throw an exception when one tries to
+			// create a gp_Lin() object using a vector that doesn't point
+			// anywhere.  If this is a zero-length line then we're in
+			// trouble.  Don't both with it.
+			if ((A.X() == B.X()) &&
+			    (A.Y() == B.Y()) &&
+			    (A.Z() == B.Z())) break;
+
 			gp_Pnt pnt;
 			if(intersect(GetLine(), ((HLine*)object)->GetLine(), pnt))
 			{

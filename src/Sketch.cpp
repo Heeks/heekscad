@@ -713,3 +713,23 @@ bool CSketchRelinker::Do()
 
 	return true;
 }
+
+
+/**
+	The Intersects() method is included in the heeks CAD interface as well as being
+	a virtual method in the HeeksObj base class.  Since this Sketch object is, itself,
+	simply a list of HeeksObj objects, we should be able to simply aggregate the
+	intersection of the specified HeeksObj with all of 'our' HeeksObj objects.
+ */
+int CSketch::Intersects(const HeeksObj *object, std::list< double > *rl) const
+{
+	int number_of_intersections = 0;
+
+	for (std::list<HeeksObj *>::const_iterator l_itObject = m_objects.begin(); l_itObject != m_objects.end(); l_itObject++)
+	{
+		number_of_intersections += (*l_itObject)->Intersects( object, rl );
+	} // End for
+
+	return(number_of_intersections);
+} // End Intersects() method
+

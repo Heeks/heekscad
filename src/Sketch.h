@@ -56,6 +56,8 @@ public:
 	void ReLinkSketch();
 	void ReverseSketch();
 	void ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketches);
+
+	int Intersects(const HeeksObj *object, std::list< double > *rl) const;
 };
 
 class CSketchRelinker{
