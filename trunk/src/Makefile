@@ -17,7 +17,7 @@ endif
 
 CCFLAGS=$(CFLAGS) -Wall -g -I "./" -I "/usr/include/opencascade" $(WXCFLAGS) -DUNICODE -D__WXGTK__ -DHEEKSCAD -DHAVE_LIMITS -DWXUSINGDLL -DHAVE_LIMITS -DTIXML_USE_STL ${RIP}
 
-OBJECTS=AboutBox.o advprops.o BezierCurve.o Cone.o ConversionTools.o CoordinateSystem.o Cuboid.o Cylinder.o DigitizedPoint.o DigitizeMode.o DimensionDrawing.o Drawing.o dxf.o svg.o Edge.o Face.o Geom.o glfont2.o GLList.o GraphicsCanvas.o Grid.o Gripper.o GripperSelTransform.o Group.o HArc.o HCircle.o HDimension.o HeeksCAD.o HeeksFrame.o HeeksPrintout.o HILine.o HEllipse.o HImage.o History.o HLine.o HPoint.o HSpline.o HText.o HXml.o Images.o InputModeCanvas.o LineArcDrawing.o Loop.o MagDragWindow.o manager.o MarkedList.o ObjPropsCanvas.o odcombo.o OptionsCanvas.o Plugins.o PointDrawing.o PointOrWindow.o PropertiesCanvas.o PropertyTrsf.o PropertyVertex.o propgrid.o props.o RegularShapesDrawing.o RemoveOrAddTool.o RuledSurface.o Ruler.o SelectMode.o Shape.o ShapeData.o Sketch.o Solid.o Sphere.o StlSolid.o StretchTool.o TransformTool.o TransformTools.o TreeCanvas.o Vertex.o ViewPoint.o ViewRotating.o ViewZooming.o Window.o Wire.o wxImageLoader.o HeeksCADInterface.o HeeksColor.o HeeksObj.o LeftAndRight.o MarkedObject.o ObjList.o PropertyCheck.o PropertyChoice.o PropertyColor.o PropertyDouble.o PropertyLength.o PropertyInt.o PropertyList.o PropertyString.o strconv.o ToolImage.o ToolList.o tinyxml.o tinyxmlerror.o tinyxmlparser.o
+OBJECTS=AboutBox.o advprops.o BezierCurve.o Cone.o ConversionTools.o CoordinateSystem.o Cuboid.o Cylinder.o DigitizedPoint.o DigitizeMode.o DimensionDrawing.o Drawing.o dxf.o svg.o Edge.o Face.o Geom.o glfont2.o GLList.o GraphicsCanvas.o Grid.o Gripper.o GripperSelTransform.o Group.o HArc.o HCircle.o HDimension.o HeeksCAD.o HeeksFrame.o HeeksPrintout.o HILine.o HEllipse.o HImage.o History.o HLine.o HPoint.o HSpline.o HText.o HXml.o Images.o InputModeCanvas.o LineArcDrawing.o Loop.o MagDragWindow.o manager.o MarkedList.o ObjPropsCanvas.o odcombo.o OptionsCanvas.o Plugins.o PointDrawing.o PointOrWindow.o PropertiesCanvas.o PropertyTrsf.o PropertyVertex.o propgrid.o props.o RegularShapesDrawing.o RemoveOrAddTool.o RuledSurface.o Ruler.o SelectMode.o Shape.o ShapeData.o Sketch.o Solid.o Sphere.o StlSolid.o StretchTool.o TransformTool.o TransformTools.o TreeCanvas.o Vertex.o ViewPoint.o ViewRotating.o ViewZooming.o Window.o Wire.o wxImageLoader.o HeeksCADInterface.o HeeksColor.o HeeksObj.o LeftAndRight.o MarkedObject.o ObjList.o PropertyCheck.o PropertyChoice.o PropertyColor.o PropertyDouble.o PropertyLength.o PropertyInt.o PropertyList.o PropertyString.o strconv.o ToolImage.o ToolList.o tinyxml.o tinyxmlerror.o tinyxmlparser.o Constraint.o ConstrainedObject.o ConstraintTools.o EndedObject.o
 
 EXECUTABLE=../HeeksCAD
 
@@ -333,6 +333,18 @@ tinyxmlerror.o: ../tinyxml/tinyxmlerror.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
 
 tinyxmlparser.o: ../tinyxml/tinyxmlparser.cpp
+	$(CC) -c $? ${CCFLAGS} -o $@
+	
+Constraint.o: ../tinyxml/Constraint.cpp
+	$(CC) -c $? ${CCFLAGS} -o $@
+	
+ConstrainedObject.o: ../tinyxml/ConstrainedObject.cpp
+	$(CC) -c $? ${CCFLAGS} -o $@
+	
+ConstraintTools.o: ../tinyxml/ConstraintTools.cpp
+	$(CC) -c $? ${CCFLAGS} -o $@
+	
+EndedObject.o: ../tinyxml/EndedObject.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
 
 clean:

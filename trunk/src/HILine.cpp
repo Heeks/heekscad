@@ -27,9 +27,7 @@ HILine::~HILine(){
 }
 
 const HILine& HILine::operator=(const HILine &b){
-	HeeksObj::operator=(b);
-	A = b.A;
-	B = b.B;
+	EndedObject::operator=(b);
 	color = b.color;
 	return *this;
 }
@@ -78,13 +76,6 @@ void HILine::glCommands(bool select, bool marked, bool no_color)
 HeeksObj *HILine::MakeACopy(void)const{
 		HILine *new_object = new HILine(*this);
 		return new_object;
-}
-
-bool HILine::ModifyByMatrix(const double* m){
-	gp_Trsf mat = make_matrix(m);
-	A.Transform(mat);
-	B.Transform(mat);
-	return false;
 }
 
 void HILine::GetBox(CBox &box){
@@ -139,19 +130,6 @@ bool HILine::FindNearPoint(const double* ray_start, const double* ray_direction,
 bool HILine::FindPossTangentPoint(const double* ray_start, const double* ray_direction, double *point){
 	// any point on this line is a possible tangent point
 	return FindNearPoint(ray_start, ray_direction, point);
-}
-
-bool HILine::Stretch(const double *p, const double* shift){
-	gp_Pnt vp = make_point(p);
-	gp_Vec vshift = make_vector(shift);
-
-	if(A.IsEqual(vp, wxGetApp().m_geom_tol)){
-		A = A.XYZ() + vshift.XYZ();
-	}
-	else if(B.IsEqual(vp, wxGetApp().m_geom_tol)){
-		B = B.XYZ() + vshift.XYZ();
-	}
-	return false;
 }
 
 gp_Lin HILine::GetLine()const{

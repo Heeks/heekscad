@@ -14,6 +14,7 @@
 #include "GraphicsCanvas.h"
 #include "HeeksFrame.h"
 #include "ConversionTools.h"
+#include "ConstraintTools.h"
 #include <wx/clipbrd.h>
 #include "../tinyxml/tinyxml.h"
 #include <wx/stdpaths.h>
@@ -351,6 +352,7 @@ void MarkedList::GetTools(MarkedObject* clicked_object, std::list<Tool*>& t_list
 	}
 
 	GetConversionMenuTools(&t_list);
+	GetConstraintMenuTools(&t_list);
 
 	// cut and copy tools
 	for(std::list<HeeksObj*>::iterator It = m_list.begin(); It != m_list.end(); It++)
