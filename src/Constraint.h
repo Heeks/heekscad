@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "..\interface\HeeksObj.h"
+#include "../interface/HeeksObj.h"
 
 #define ANGLE_OFFSET_FROM_LINE 2.5
 
@@ -33,7 +33,7 @@ public:
 	Constraint(EnumConstraintType,EnumAbsoluteAngle,HeeksObj* obj);
 	~Constraint(void);
 
-	bool Constraint::operator==(const Constraint &other) const {
+	bool operator==(const Constraint &other) const {
 		return m_type == other.m_type && m_angle==other.m_angle && m_obj1 == other.m_obj1 && m_obj2 == other.m_obj2;
   }
 	void glCommands(HeeksColor color, gp_Ax1 mid_point);
