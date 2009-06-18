@@ -21,6 +21,7 @@
 #include "DigitizeMode.h"
 #include "HeeksFrame.h"
 #include "InputModeCanvas.h"
+#include "ObjPropsCanvas.h"
 #include "Sketch.h"
 #include "GraphicsCanvas.h"
 #include "HeeksConfig.h"
@@ -102,8 +103,8 @@ int LineArcDrawing::number_of_steps()
 		{
 		case ThreePointsCircleMode:
 			return 3;
-		case TwoPointsCircleMode:
-			return 2;
+		case CentreAndRadiusCircleMode:
+			return 1;
 		default:
 			break;
 		}
@@ -160,9 +161,12 @@ bool LineArcDrawing::is_an_add_level(int level)
 		{
 		case ThreePointsCircleMode:
 			return level == 2;
+		case CentreAndRadiusCircleMode:
+			return level == 0;
 		default:
 			break;
 		}
+		break;
 	case EllipseDrawingMode:
 		return level == 2;
 	case SplineDrawingMode:
@@ -268,7 +272,7 @@ void LineArcDrawing::AddPoint()
 }
 
 bool LineArcDrawing::calculate_item(DigitizedPoint &end){
-	if(GetStartPos().m_type == DigitizeNoItemType)return false;
+	if(number_of_steps() > 1 && GetStartPos().m_type == DigitizeNoItemType)return false;
 	if(end.m_type == DigitizeNoItemType)return false;
 
 	switch(drawing_mode)
@@ -483,6 +487,19 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 					}
 				}
 				return true;
+			case CentreAndRadiusCircleMode:
+				{
+					if(!temp_object){
+						temp_object = new HCircle(gp_Circ(gp_Ax2(end.m_point, gp_Dir(0, 0, 1)), radius_for_circle), &wxGetApp().construction_color);
+						if(temp_object)temp_object_in_list.push_back(temp_object);
+					}
+					else{
+						((HCircle*)temp_object)->m_circle.SetLocation(end.m_point);
+						((HCircle*)temp_object)->m_circle.SetRadius(radius_for_circle);
+					}
+				}
+				return true;
+
 			}
 		}
 		break;
@@ -633,6 +650,13 @@ const wxChar* LineArcDrawing::GetTitle()
 				else str_for_GetTitle.Append(wxString(_("click on second point")));
 			}
 			break;
+		case CentreAndRadiusCircleMode:
+			{
+				str_for_GetTitle.Append(wxString(_("centre with radius mode")));
+				str_for_GetTitle.Append(wxString(_T("\n  ")));
+				str_for_GetTitle.Append(wxString(_("click on centre point")));
+			}
+			break;
 		}
 		return str_for_GetTitle;
 
@@ -688,6 +712,15 @@ static void on_set_drawing_mode(int drawing_mode, HeeksObj* object)
 {
 	line_drawing_for_GetProperties->drawing_mode = (EnumDrawingMode)drawing_mode;
 	line_drawing_for_GetProperties->m_save_drawing_mode.clear();
+	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll(false);
+	wxGetApp().Repaint();
+}
+
+static void on_set_circle_mode(int circle_mode, HeeksObj* object)
+{
+	line_drawing_for_GetProperties->circle_mode = (EnumCircleDrawingMode)circle_mode;
+	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll(false);
+	wxGetApp().Repaint();
 }
 
 static void on_set_circle_radius(double value, HeeksObj* object)
@@ -698,14 +731,18 @@ static void on_set_circle_radius(double value, HeeksObj* object)
 }
 
 void LineArcDrawing::GetProperties(std::list<Property *> *list){
-	// add drawing mode
-	std::list< wxString > choices;
-	choices.push_back ( wxString ( _("draw lines") ) );
-	choices.push_back ( wxString ( _("draw tangential arcs") ) );
-	choices.push_back ( wxString ( _("infinite line") ) );
-	choices.push_back ( wxString ( _("draw circles") ) );
 	line_drawing_for_GetProperties = this;
-	list->push_back ( new PropertyChoice ( _("drawing mode"),  choices, drawing_mode, NULL, on_set_drawing_mode ) );
+
+	// add drawing mode
+	{
+		std::list< wxString > choices;
+		choices.push_back ( wxString ( _("draw lines") ) );
+		choices.push_back ( wxString ( _("draw tangential arcs") ) );
+		choices.push_back ( wxString ( _("infinite line") ) );
+		choices.push_back ( wxString ( _("draw circles") ) );
+		list->push_back ( new PropertyChoice ( _("drawing mode"),  choices, drawing_mode, NULL, on_set_drawing_mode ) );
+	}
+
 	switch(drawing_mode)
 	{
 	case LineDrawingMode:
@@ -716,6 +753,12 @@ void LineArcDrawing::GetProperties(std::list<Property *> *list){
 
 	case CircleDrawingMode:
 		{
+			std::list< wxString > choices;
+			choices.push_back ( wxString ( _("centre and point") ) );
+			choices.push_back ( wxString ( _("three points") ) );
+			choices.push_back ( wxString ( _("two points") ) );
+			choices.push_back ( wxString ( _("centre and radius") ) );
+			list->push_back ( new PropertyChoice ( _("circle mode"),  choices, circle_mode, NULL, on_set_circle_mode ) );
 			list->push_back(new PropertyLength(_("radius"), radius_for_circle, NULL, on_set_circle_radius));
 		}
 		break;
