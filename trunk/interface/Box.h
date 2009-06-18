@@ -57,12 +57,12 @@ public:
 			}
 		}
 	}
-	void Centre(double *p){p[0] = (m_x[0] + m_x[3])/2; p[1] = (m_x[1] + m_x[4])/2; p[2] = (m_x[2] + m_x[5])/2;}
-	double Width(){if(m_valid)return m_x[3] - m_x[0]; else return 0.0;}
-	double Height(){if(m_valid)return m_x[4] - m_x[1]; else return 0.0;}
-	double Depth(){if(m_valid)return m_x[5] - m_x[2]; else return 0.0;}
-	double Radius(){return sqrt(Width() * Width() + Height() * Height() + Depth() * Depth()) /2;}
-	void vert(int index, double* p){
+	void Centre(double *p) const {p[0] = (m_x[0] + m_x[3])/2; p[1] = (m_x[1] + m_x[4])/2; p[2] = (m_x[2] + m_x[5])/2;}
+	double Width() const {if(m_valid)return m_x[3] - m_x[0]; else return 0.0;}
+	double Height() const {if(m_valid)return m_x[4] - m_x[1]; else return 0.0;}
+	double Depth() const {if(m_valid)return m_x[5] - m_x[2]; else return 0.0;}
+	double Radius() const {return sqrt(Width() * Width() + Height() * Height() + Depth() * Depth()) /2;}
+	void vert(int index, double* p) const {
 		switch(index){
 			case 0:
 				p[0] = m_x[0];
