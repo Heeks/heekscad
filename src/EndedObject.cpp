@@ -22,6 +22,18 @@ const EndedObject& EndedObject::operator=(const EndedObject &b){
 	return *this;
 }
 
+void EndedObject::LoadToDoubles()
+{
+	ax = A.X(); ay = A.Y();
+	bx = B.X(); by = B.Y();
+}
+
+void EndedObject::LoadFromDoubles()
+{
+	A = gp_Pnt(ax,ay,0);
+	B = gp_Pnt(bx,by,0);
+}
+
 bool EndedObject::ModifyByMatrix(const double* m){
 	gp_Trsf mat = make_matrix(m);
 	A.Transform(mat);
