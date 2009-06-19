@@ -11,11 +11,15 @@
 class EndedObject: public HeeksObj, public ConstrainedObject{
 public:
 	gp_Pnt A, B;
+	double ax,ay,bx,by;
 
 	~EndedObject(void);
 	EndedObject();
 
 	const EndedObject& operator=(const EndedObject &b);
+
+	void LoadToDoubles();
+	void LoadFromDoubles();
 
 	// HeeksObj's virtual functions
 	bool Stretch(const double *p, const double* shift);

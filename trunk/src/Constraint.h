@@ -35,7 +35,8 @@ public:
 
 	bool operator==(const Constraint &other) const {
 		return m_type == other.m_type && m_angle==other.m_angle && m_obj1 == other.m_obj1 && m_obj2 == other.m_obj2;
-  }
+	}
+
 	void glCommands(HeeksColor color, gp_Ax1 mid_point);
 	void render_text(const wxChar* str);
 };

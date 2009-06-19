@@ -11,8 +11,8 @@ class Constraint;
 
 class ConstrainedObject{
 public:
-	std::list<Constraint> constraints;
-	Constraint* absoluteanglecontraint;
+	std::list<Constraint*> constraints;
+	Constraint* absoluteangleconstraint;
 
 	ConstrainedObject();
 	~ConstrainedObject(void);
@@ -22,4 +22,5 @@ public:
 	void SetParallelConstraint(ConstrainedObject* obj);
 	void glCommands(HeeksColor color, gp_Ax1 mid_point);
 	void RemoveExisting(ConstrainedObject* obj);
+	bool HasConstraints();
 };
