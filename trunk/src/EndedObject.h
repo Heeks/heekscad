@@ -8,7 +8,7 @@
 #include "../interface/HeeksColor.h"
 #include "ConstrainedObject.h"
 
-class EndedObject: public HeeksObj, public ConstrainedObject{
+class EndedObject: public ConstrainedObject{
 public:
 	gp_Pnt A, B;
 	double ax,ay,bx,by;
