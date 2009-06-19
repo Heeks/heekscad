@@ -621,30 +621,6 @@
 					UsePrecompiledHeader="0"
 				/>
 			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\glfont2.h"
@@ -1299,6 +1275,30 @@
 			>
 		</File>
 		<File
+			RelativePath="..\sketchsolve\src\solve.cpp"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\sketchsolve\src\solve.h"
+			>
+		</File>
+		<File
+			RelativePath=".\SolveSketch.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\SolveSketch.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Sphere.cpp"
 			>
 		</File>
@@ -1408,6 +1408,10 @@
 		</File>
 		<File
 			RelativePath=".\svg.h"
+			>
+		</File>
+		<File
+			RelativePath="..\sketchsolve\src\timer.h"
 			>
 		</File>
 		<File

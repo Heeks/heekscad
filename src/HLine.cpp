@@ -13,6 +13,8 @@
 #include "../interface/PropertyVertex.h"
 #include "../tinyxml/tinyxml.h"
 #include "Gripper.h"
+#include "Sketch.h"
+#include "SolveSketch.h"
 
 HLine::HLine(const HLine &line){
 	operator=(line);
@@ -38,6 +40,7 @@ class SetLineHorizontal:public Tool{
 public:
 	void Run(){
 		line_for_tool->SetAbsoluteAngleConstraint(AbsoluteAngleHorizontal);
+		SolveSketch((CSketch*)line_for_tool->m_owner);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Toggle Horizontal");}
@@ -50,6 +53,7 @@ class SetLineVertical:public Tool{
 public:
 	void Run(){
 		line_for_tool->SetAbsoluteAngleConstraint(AbsoluteAngleVertical);
+		SolveSketch((CSketch*)line_for_tool->m_owner);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Toggle Vertical");}
