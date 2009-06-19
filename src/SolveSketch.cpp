@@ -13,11 +13,12 @@
 
 line GetLineFromEndedObject(EndedObject* eobj);
 
-std::vector<point> params;
+std::vector<double*> params;
 
 
 void SolveSketch(CSketch* sketch)
 {
+	params.clear();
 	std::list<line> lines;
 	std::vector<constraint> constraints;
 	std::set<Constraint*> cons;
@@ -100,7 +101,7 @@ void SolveSketch(CSketch* sketch)
 		obj = sketch->GetNextChild();
 	}
 
-	if(!solve((double*)&params[0],params.size(),&constraints[0],constraints.size(),1))
+	if(solve(&params[0],params.size(),&constraints[0],constraints.size(),1))
 		//No result
 		return;
 
@@ -113,6 +114,7 @@ void SolveSketch(CSketch* sketch)
 		{
 			eobj->LoadFromDoubles();
 		}
+		obj = obj->GetNextChild();
 	}
 	
 }
@@ -121,10 +123,12 @@ line GetLineFromEndedObject(EndedObject* eobj)
 {
 		point p;
 		p.x = &eobj->ax; p.y = &eobj->ay;
-		params.push_back(p);
+		params.push_back(p.x);
+		params.push_back(p.y);
 		point p2;
 		p2.x = &eobj->bx; p2.y = &eobj->by;
-		params.push_back(p2);
+		params.push_back(p2.x);
+		params.push_back(p2.y);
 
 		line l;
 		l.p1 = p;
