@@ -338,7 +338,7 @@ tinyxmlparser.o: ../tinyxml/tinyxmlparser.cpp
 SolveSketch.o: SolveSketch.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
 
-solve.o: ../sketchsolve/solve.cpp
+solve.o: ../sketchsolve/src/solve.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
 	
 Constraint.o: Constraint.cpp
