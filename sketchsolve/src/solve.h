@@ -164,7 +164,7 @@ struct constraint
 
 
 //Function Prototypes
-int solve(double  x[],int xLength, constraint * cons, int consLength, int isFine);
+int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine);
 double calc(constraint * cons, int consLength);
 
 #endif /* SOLVE_H_ */
