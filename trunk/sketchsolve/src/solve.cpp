@@ -535,7 +535,7 @@ double calc(constraint * cons, int consLength)
 			t=-(L1_P1_x*dx-P1_x*dx+L1_P1_y*dy-P1_y*dy)/(dx*dx+dy*dy);
 			Xint=L1_P1_x+dx*t;
 			Yint=L1_P1_y+dy*t;
-			temp= _hypot((P1_x - Xint),(P1_y - Yint)) - distance;
+			temp= hypot((P1_x - Xint),(P1_y - Yint)) - distance;
 			error += temp*temp/10;
 
 		}
@@ -580,7 +580,7 @@ double calc(constraint * cons, int consLength)
 			double dx,dy,Rpx,Rpy,RpxN,RpyN,hyp,error1,error2;
 			dx = L1_P2_x-L1_P1_x;
 			dy = L1_P2_y-L1_P1_y;
-			hyp=_hypot(dx,dy);
+			hyp=hypot(dx,dy);
 			//Calculate the expected tangent intersection points
 			Rpx =C1_Center_x - dy / hyp * C1_rad;
 			Rpy =C1_Center_y + dx / hyp * C1_rad;
@@ -601,9 +601,9 @@ double calc(constraint * cons, int consLength)
 			double dx,dy,Rpx,Rpy,RpxN,RpyN,hyp,error1,error2,rad;
 			dx = L1_P2_x - L1_P1_x;
 			dy = L1_P2_y - L1_P1_y;
-			hyp=_hypot(dx,dy);
+			hyp=hypot(dx,dy);
 
-			rad=_hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
+			rad=hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
 			Rpx=A1_Center_x - dy / hyp * rad;
 			Rpy=A1_Center_y + dx / hyp * rad;
 			RpxN=A1_Center_x + dy / hyp * rad;
@@ -640,35 +640,35 @@ double calc(constraint * cons, int consLength)
 
 		if(cons[i].type==arcRules)
 		{
-			rad1=_hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
-			rad2=_hypot(A1_Center_x - A1_End_x , A1_Center_y - A1_End_y);
+			rad1=hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
+			rad2=hypot(A1_Center_x - A1_End_x , A1_Center_y - A1_End_y);
 			error += (rad1-rad2)*(rad1-rad2);
 			}
 
 		if(cons[i].type==lineLength)
 		{
-			temp=_hypot(L1_P2_x - L1_P1_x , L1_P2_y - L1_P1_y) - length;
+			temp=hypot(L1_P2_x - L1_P1_x , L1_P2_y - L1_P1_y) - length;
 			error += temp*temp;
 		}
 
 		if(cons[i].type==equalLegnth)
 		{
-			temp=_hypot(L1_P2_x - L1_P1_x , L1_P2_y - L1_P1_y) - _hypot(L2_P2_x - L2_P1_x , L2_P2_y - L2_P1_y);
+			temp=hypot(L1_P2_x - L1_P1_x , L1_P2_y - L1_P1_y) - hypot(L2_P2_x - L2_P1_x , L2_P2_y - L2_P1_y);
 			error += temp*temp;
 		}
 
 		if(cons[i].type==arcRadius)
 		{
-			rad1 = _hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
-			rad2 = _hypot(A1_Center_x - A1_End_x , A1_Center_y - A1_End_y);
+			rad1 = hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
+			rad2 = hypot(A1_Center_x - A1_End_x , A1_Center_y - A1_End_y);
 			temp= rad1 - radius ;
 			error += temp*temp;
 		}
 
 		if(cons[i].type==equalRadiusArcs)
 		{
-			rad1 = _hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
-			rad2 = _hypot(A2_Center_x - A2_Start_x , A2_Center_y - A2_Start_y);
+			rad1 = hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
+			rad2 = hypot(A2_Center_x - A2_Start_x , A2_Center_y - A2_Start_y);
 			temp = rad1-rad2;
 			error += temp*temp;
 		}
@@ -681,26 +681,26 @@ double calc(constraint * cons, int consLength)
 
 		if(cons[i].type==equalRadiusCircArc)
 		{
-			rad1 = _hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
+			rad1 = hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
 			temp = rad1-C1_rad;
 			error += temp*temp;
 		}
 
 		if(cons[i].type==concentricArcs)
 		{
-			temp = _hypot(A1_Center_x - A2_Center_x , A1_Center_y - A2_Center_y);
+			temp = hypot(A1_Center_x - A2_Center_x , A1_Center_y - A2_Center_y);
 			error += temp*temp;
 		}
 
 		if(cons[i].type==concentricCircles)
 		{
-			temp = pow(_hypot(C1_Center_x - C2_Center_x , C1_Center_y - C2_Center_y),2);
+			temp = pow(hypot(C1_Center_x - C2_Center_x , C1_Center_y - C2_Center_y),2);
 			error += temp*temp;
 		}
 
 		if(cons[i].type==concentricCircArc)
 		{
-			temp = _hypot(A1_Center_x - C1_Center_x , A1_Center_y - C1_Center_y);
+			temp = hypot(A1_Center_x - C1_Center_x , A1_Center_y - C1_Center_y);
 			error += temp*temp;
 		}
 
@@ -715,8 +715,8 @@ double calc(constraint * cons, int consLength)
 			dx2 = L2_P2_x - L2_P1_x;
 			dy2 = L2_P2_y - L2_P1_y;
 
-			hyp1=_hypot(dx,dy);
-			hyp2=_hypot(dx2,dy2);
+			hyp1=hypot(dx,dy);
+			hyp2=hypot(dx2,dy2);
 
 			dx=dx/hyp1;
 			dy=dy/hyp1;
@@ -735,8 +735,8 @@ double calc(constraint * cons, int consLength)
 			dx2 = L2_P2_x - L2_P1_x;
 			dy2 = L2_P2_y - L2_P1_y;
 
-			hyp1=_hypot(dx,dy);
-			hyp2=_hypot(dx2,dy2);
+			hyp1=hypot(dx,dy);
+			hyp2=hypot(dx2,dy2);
 
 			dx=dx/hyp1;
 			dy=dy/hyp1;
@@ -755,8 +755,8 @@ double calc(constraint * cons, int consLength)
 			dx2 = L2_P2_x - L2_P1_x;
 			dy2 = L2_P2_y - L2_P1_y;
 
-			hyp1=_hypot(dx,dy);
-			hyp2=_hypot(dx2,dy2);
+			hyp1=hypot(dx,dy);
+			hyp2=hypot(dx2,dy2);
 
 			dx=-dx/hyp1;
 			dy=dy/hyp1;
@@ -774,8 +774,8 @@ double calc(constraint * cons, int consLength)
 			dx2 = L2_P2_x - L2_P1_x;
 			dy2 = L2_P2_y - L2_P1_y;
 
-			hyp1=_hypot(dx,dy);
-			hyp2=_hypot(dx2,dy2);
+			hyp1=hypot(dx,dy);
+			hyp2=hypot(dx2,dy2);
 
 			dx=dx/hyp1;
 			dy=dy/hyp1;
@@ -819,7 +819,7 @@ double calc(constraint * cons, int consLength)
 		if(cons[i].type == pointOnCircle)
 		{
 			//see what the current radius to the point is
-			rad1=_hypot(C1_Center_x-P1_x,C1_Center_y-P1_y);
+			rad1=hypot(C1_Center_x-P1_x,C1_Center_y-P1_y);
 			//Compare this radius to the radius of the circle, return the error squared
 			temp = rad1-C1_rad;
 			error += temp*temp;
@@ -828,8 +828,8 @@ double calc(constraint * cons, int consLength)
 		if(cons[i].type == pointOnArc)
 		{
 			//see what the current radius to the point is
-			rad1=_hypot(A1_Center_x-P1_x,A1_Center_y-P1_y);
-			rad2=_hypot(A1_Center_x-A1_Start_x,A1_Center_y-A1_Start_y);
+			rad1=hypot(A1_Center_x-P1_x,A1_Center_y-P1_y);
+			rad2=hypot(A1_Center_x-A1_Start_x,A1_Center_y-A1_Start_y);
 			//Compare this radius to the radius of the circle, return the error squared
 			temp = rad1-rad2;
 			error += temp*temp;
@@ -845,7 +845,7 @@ double calc(constraint * cons, int consLength)
 		}
 		if(cons[i].type == pointOnArcMidpoint)
 		{
-			rad1=_hypot(A1_Center_x-A1_Start_x,A1_Center_y-A1_Start_y);
+			rad1=hypot(A1_Center_x-A1_Start_x,A1_Center_y-A1_Start_y);
 			temp = atan2(A1_Start_y-A1_Center_y,A1_Start_x-A1_Center_x);
 			temp2= atan2(A1_End_y-A1_Center_y,A1_End_x-A1_Center_x);
 			Ex=A1_Center_x+rad1*cos((temp2+temp)/2);
@@ -945,3 +945,4 @@ double calc(constraint * cons, int consLength)
 	return error;
 
 }
+
