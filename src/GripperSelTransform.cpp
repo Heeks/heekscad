@@ -12,6 +12,9 @@
 #include "HeeksFrame.h"
 #include "GraphicsCanvas.h"
 #include "ObjPropsCanvas.h"
+#include "Sketch.h"
+#include "SolveSketch.h"
+#include "EndedObject.h"
 
 GripperSelTransform::GripperSelTransform(const gp_Pnt& pos, EnumGripperType gripper_type):Gripper(pos, _T(""), gripper_type){
 }
@@ -55,6 +58,10 @@ void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
 					double p[3];
 					extract(position, p);
 					if(!object->StretchTemporary(p, shift))return;
+					if(wxGetApp().autosolve_constraints && ((ConstrainedObject*)object))
+					{
+						SolveSketch((CSketch*)object->m_owner);
+					}
 				}
 			}
 		}

@@ -29,7 +29,7 @@ public:
 	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/line");}
 	void SetColor(const HeeksColor &col){color = col;}
 	const HeeksColor* GetColor()const{return &color;}
-	void GetGripperPositions(std::list<double> *list, bool just_for_endof);
+	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	void GetProperties(std::list<Property *> *list);
 	bool FindNearPoint(const double* ray_start, const double* ray_direction, double *point);
 	bool FindPossTangentPoint(const double* ray_start, const double* ray_direction, double *point);

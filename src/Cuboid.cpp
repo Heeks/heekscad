@@ -70,7 +70,7 @@ void CCuboid::GetProperties(std::list<Property *> *list)
 	CSolid::GetProperties(list);
 }
 
-void CCuboid::GetGripperPositions(std::list<double> *list, bool just_for_endof)
+void CCuboid::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
 {
 	gp_Pnt o = m_pos.Location();
 	gp_Pnt px(o.XYZ() + m_pos.XDirection().XYZ() * m_x);
@@ -84,50 +84,17 @@ void CCuboid::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 	gp_Pnt pxz(o.XYZ() + m_pos.XDirection().XYZ() * m_x + z_dir.XYZ() * m_z);
 	gp_Pnt pyz(o.XYZ() + m_pos.YDirection().XYZ() * m_y + z_dir.XYZ() * m_z);
 	gp_Pnt pxyz(o.XYZ() + m_pos.XDirection().XYZ() * m_x  + m_pos.YDirection().XYZ() * m_y + z_dir.XYZ() * m_z);
-	list->push_back(GripperTypeTranslate);
-	list->push_back(o.X());
-	list->push_back(o.Y());
-	list->push_back(o.Z());
-	list->push_back(GripperTypeRotateObject);
-	list->push_back(px.X());
-	list->push_back(px.Y());
-	list->push_back(px.Z());
-	list->push_back(GripperTypeRotateObject);
-	list->push_back(py.X());
-	list->push_back(py.Y());
-	list->push_back(py.Z());
-	list->push_back(GripperTypeRotateObject);
-	list->push_back(pz.X());
-	list->push_back(pz.Y());
-	list->push_back(pz.Z());
-	list->push_back(GripperTypeScale);
-	list->push_back(pxyz.X());
-	list->push_back(pxyz.Y());
-	list->push_back(pxyz.Z());
-	list->push_back(GripperTypeRotate);
-	list->push_back(pxy.X());
-	list->push_back(pxy.Y());
-	list->push_back(pxy.Z());
-	list->push_back(GripperTypeRotate);
-	list->push_back(pxz.X());
-	list->push_back(pxz.Y());
-	list->push_back(pxz.Z());
-	list->push_back(GripperTypeRotate);
-	list->push_back(pyz.X());
-	list->push_back(pyz.Y());
-	list->push_back(pyz.Z());
-	list->push_back(GripperTypeObjectScaleX);
-	list->push_back(m2.X());
-	list->push_back(m2.Y());
-	list->push_back(m2.Z());
-	list->push_back(GripperTypeObjectScaleY);
-	list->push_back(m3.X());
-	list->push_back(m3.Y());
-	list->push_back(m3.Z());
-	list->push_back(GripperTypeObjectScaleZ);
-	list->push_back(m8.X());
-	list->push_back(m8.Y());
-	list->push_back(m8.Z());
+	list->push_back(GripData(GripperTypeTranslate,o.X(),o.Y(),o.Z(),NULL));
+	list->push_back(GripData(GripperTypeRotateObject,px.X(),px.Y(),px.Z(),NULL));
+	list->push_back(GripData(GripperTypeRotateObject,py.X(),py.Y(),py.Z(),NULL));
+	list->push_back(GripData(GripperTypeRotateObject,pz.X(),pz.Y(),pz.Z(),NULL));
+	list->push_back(GripData(GripperTypeScale,pxyz.X(),pxyz.Y(),pxyz.Z(),NULL));
+	list->push_back(GripData(GripperTypeRotate,pxy.X(),pxy.Y(),pxy.Z(),NULL));
+	list->push_back(GripData(GripperTypeRotate,pxz.X(),pxz.Y(),pxz.Z(),NULL));
+	list->push_back(GripData(GripperTypeRotate,pyz.X(),pyz.Y(),pyz.Z(),NULL));
+	list->push_back(GripData(GripperTypeObjectScaleX,m2.X(),m2.Y(),m2.Z(),NULL));
+	list->push_back(GripData(GripperTypeObjectScaleY,m3.X(),m3.Y(),m3.Z(),NULL));
+	list->push_back(GripData(GripperTypeObjectScaleZ,m8.X(),m8.Y(),m8.Z(),NULL));
 }
 
 void CCuboid::OnApplyProperties()

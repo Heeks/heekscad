@@ -55,18 +55,14 @@ void MarkedList::create_move_grips(){
 	for(Iter = m_list.begin(); Iter != m_list.end() && number_of_grips_made<100; Iter++){
 		HeeksObj* object = *Iter;
 		if(object->GetType() == GripperType)continue;
-		std::list<double> vl;
-		std::list<double>::iterator It;
+		std::list<GripData> vl;
+		std::list<GripData>::iterator It;
 		object->GetGripperPositions(&vl, false);
 		for(It = vl.begin(); It != vl.end() && number_of_grips_made<100; It++){
-			EnumGripperType gripper_type = (EnumGripperType)((int)(*It));
-			It++;
-			pos[0] = *It;
-			It++;
-			pos[1] = *It;
-			It++;
-			pos[2] = *It;
-			move_grips.push_back(new GripperSelTransform(make_point(pos), gripper_type));
+			pos[0] = (*It).m_x;
+			pos[1] = (*It).m_y;
+			pos[2] = (*It).m_z;
+			move_grips.push_back(new GripperSelTransform(make_point(pos), (*It).m_type));
 			number_of_grips_made++;
 		}
 	}
@@ -82,16 +78,13 @@ void MarkedList::update_move_grips(){
 		if(Iter2 == move_grips.end())break;
 		HeeksObj* object = *Iter;
 		if(object->GetType() == GripperType)continue;
-		std::list<double> vl;
-		std::list<double>::iterator It;
+		std::list<GripData> vl;
+		std::list<GripData>::iterator It;
 		object->GetGripperPositions(&vl, false);
 		for(It = vl.begin(); It != vl.end(); It++){
-			It++;
-			pos[0] = *It;
-			It++;
-			pos[1] = *It;
-			It++;
-			pos[2] = *It;
+			pos[0] = (*It).m_x;
+			pos[1] = (*It).m_y;
+			pos[2] = (*It).m_z;
 			Gripper* gripper = *Iter2;
 			gripper->position = make_point(pos);
 			Iter2++;

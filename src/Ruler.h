@@ -50,7 +50,7 @@ public:
 	const wxChar* GetTypeString(void)const{return _("Ruler");}
 	HeeksObj *MakeACopy(void)const;
 	bool ModifyByMatrix(const double *mat);
-	void GetGripperPositions(std::list<double> *list, bool just_for_endof);
+	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	void GetProperties(std::list<Property *> *list);
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	bool GetScaleAboutMatrix(double *m);

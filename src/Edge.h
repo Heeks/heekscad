@@ -42,7 +42,7 @@ public:
 	long GetMarkingMask()const{return MARKING_FILTER_EDGE;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
-	void GetGripperPositions(std::list<double> *list, bool just_for_endof);
+	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	HeeksObj *MakeACopy(void)const{ return new CEdge(*this);}
 	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/edge");}
 	const wxChar* GetTypeString(void)const{return _("Edge");}

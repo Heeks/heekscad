@@ -32,7 +32,7 @@ public:
 	bool ModifyByMatrix(const double *mat);
 	void SetColor(const HeeksColor &col){color = col;}
 	const HeeksColor* GetColor()const{return &color;}
-	void GetGripperPositions(std::list<double> *list, bool just_for_endof);
+	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	void GetProperties(std::list<Property *> *list);
 	bool GetStartPoint(double* pos);
 	bool GetEndPoint(double* pos);

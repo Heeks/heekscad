@@ -109,16 +109,13 @@ void HSpline::GetBox(CBox &box){
     } 
 }
 
-void HSpline::GetGripperPositions(std::list<double> *list, bool just_for_endof){
+void HSpline::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
 	if(!just_for_endof)
 	{
 		for(int i=1; i <= m_spline->NbPoles(); i++)
 		{
 			gp_Pnt pole = m_spline->Pole(i);
-			list->push_back(GripperTypeStretch);
-			list->push_back(pole.X());
-			list->push_back(pole.Y());
-			list->push_back(pole.Z());
+			list->push_back(GripData(GripperTypeStretch,pole.X(),pole.Y(),pole.Z(),NULL));
 		}
 	} 
 }
