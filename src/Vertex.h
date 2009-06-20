@@ -24,7 +24,7 @@ public:
 	int GetType()const{return VertexType;}
 	long GetMarkingMask()const{return MARKING_FILTER_VERTEX;}
 	void glCommands(bool select, bool marked, bool no_color);
-	void GetGripperPositions(std::list<double> *list, bool just_for_endof);
+	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	HeeksObj *MakeACopy(void)const{ return new CVertex(*this);}
 	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/vertex");}
 	const wxChar* GetTypeString(void)const{return _("Vertex");}

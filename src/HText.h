@@ -34,7 +34,7 @@ public:
 	bool ModifyByMatrix(const double *mat);
 	void SetColor(const HeeksColor &col){m_color = col;}
 	const HeeksColor* GetColor()const{return &m_color;}
-	void GetGripperPositions(std::list<double> *list, bool just_for_endof);
+	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	void GetProperties(std::list<Property *> *list);
 	bool Stretch(const double *p, const double* shift);
 	void CopyFrom(const HeeksObj* object){operator=(*((HText*)object));}

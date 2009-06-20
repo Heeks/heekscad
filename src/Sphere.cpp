@@ -57,16 +57,10 @@ void CSphere::GetProperties(std::list<Property *> *list)
 	CSolid::GetProperties(list);
 }
 
-void CSphere::GetGripperPositions(std::list<double> *list, bool just_for_endof)
+void CSphere::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
 {
-	list->push_back(GripperTypeTranslate);
-	list->push_back(m_pos.X());
-	list->push_back(m_pos.Y());
-	list->push_back(m_pos.Z());
-	list->push_back(GripperTypeScale);
-	list->push_back(m_pos.X() + m_radius);
-	list->push_back(m_pos.Y());
-	list->push_back(m_pos.Z());
+	list->push_back(GripData(GripperTypeTranslate,m_pos.X(),m_pos.Y(),m_pos.Z(),NULL));
+	list->push_back(GripData(GripperTypeScale,m_pos.X() + m_radius,m_pos.Y(),m_pos.Z(),NULL));
 }
 
 void CSphere::OnApplyProperties()

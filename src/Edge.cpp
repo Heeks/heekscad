@@ -119,17 +119,11 @@ void CEdge::glCommands(bool select, bool marked, bool no_color){
 void CEdge::GetBox(CBox &box){
 }
 
-void CEdge::GetGripperPositions(std::list<double> *list, bool just_for_endof){
+void CEdge::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
 	if(just_for_endof)
 	{
-		list->push_back(GripperTypeTranslate);
-		list->push_back(m_start_x);
-		list->push_back(m_start_y);
-		list->push_back(m_start_z);
-		list->push_back(GripperTypeTranslate);
-		list->push_back(m_end_x);
-		list->push_back(m_end_y);
-		list->push_back(m_end_z);
+		list->push_back(GripData(GripperTypeTranslate,m_start_x,m_start_y,m_start_z,NULL));
+		list->push_back(GripData(GripperTypeTranslate,m_end_x,m_end_y,m_end_z,NULL));
 	}
 	else
 	{
@@ -143,10 +137,7 @@ void CEdge::GetGripperPositions(std::list<double> *list, bool just_for_endof){
 			Evaluate(umiddle, m_midpoint, NULL);
 		}
 
-		list->push_back(GripperTypeTranslate);
-		list->push_back(m_midpoint[0]);
-		list->push_back(m_midpoint[1]);
-		list->push_back(m_midpoint[2]);
+		list->push_back(GripData(GripperTypeTranslate,m_midpoint[0],m_midpoint[1],m_midpoint[2],NULL));
 	}
 }
 

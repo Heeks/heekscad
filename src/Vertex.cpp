@@ -23,11 +23,8 @@ void CVertex::glCommands(bool select, bool marked, bool no_color){
 	glRasterPos3dv(m_point);
 }
 
-void CVertex::GetGripperPositions(std::list<double> *list, bool just_for_endof){
-	list->push_back(GripperTypeTranslate);
-	list->push_back(m_point[0]);
-	list->push_back(m_point[1]);
-	list->push_back(m_point[2]);
+void CVertex::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
+	list->push_back(GripData(GripperTypeTranslate,m_point[0],m_point[1],m_point[2],NULL));
 }
 
 CEdge* CVertex::GetFirstEdge()

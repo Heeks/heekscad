@@ -83,17 +83,11 @@ void HILine::GetBox(CBox &box){
 	box.Insert(B.X(), B.Y(), B.Z());
 }
 
-void HILine::GetGripperPositions(std::list<double> *list, bool just_for_endof){
+void HILine::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
 	if(!just_for_endof) // we don't want to snap to these for endof
 	{
-		list->push_back(GripperTypeStretch);
-		list->push_back(A.X());
-		list->push_back(A.Y());
-		list->push_back(A.Z());
-		list->push_back(GripperTypeStretch);
-		list->push_back(B.X());
-		list->push_back(B.Y());
-		list->push_back(B.Z());
+		list->push_back(GripData(GripperTypeStretch,A.X(),A.Y(),A.Z(),NULL));
+		list->push_back(GripData(GripperTypeStretch,B.X(),B.Y(),B.Z(),NULL));
 	}
 }
 

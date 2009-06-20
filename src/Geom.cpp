@@ -4,6 +4,7 @@
 
 #include "stdafx.h"
 #include "Geom.h"
+#include "Gripper.h"
 #include <Geom_Curve.hxx>
 #include <Geom_Line.hxx>
 #include <GeomAPI_IntCS.hxx>
@@ -1232,6 +1233,21 @@ int convert_doubles_to_pnts(const std::list<double> &dlist, std::list<gp_Pnt> &p
 	{
 		gp_Pnt pnt;
 		if(!make_point_from_doubles(dlist, It, pnt, four_doubles))break;
+		plist.push_back(pnt);
+		nump++;
+	}
+	return nump;
+}
+
+int convert_gripdata_to_pnts(const std::list<GripData> &dlist, std::list<gp_Pnt> &plist)
+{
+	int nump = 0;
+	for(std::list<GripData>::const_iterator It = dlist.begin(); It != dlist.end(); ++It)
+	{
+		gp_Pnt pnt;
+		pnt.SetX((*It).m_x);
+		pnt.SetY((*It).m_y);
+		pnt.SetZ((*It).m_z);
 		plist.push_back(pnt);
 		nump++;
 	}

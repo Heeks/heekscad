@@ -48,6 +48,7 @@
 
 #include <UnitsAPI.hxx>
 
+#include "Gripper.h"
 #include "Geom.h"
 
 extern "C" {

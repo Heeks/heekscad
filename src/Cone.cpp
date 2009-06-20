@@ -178,7 +178,7 @@ void CCone::GetProperties(std::list<Property *> *list)
 	CSolid::GetProperties(list);
 }
 
-void CCone::GetGripperPositions(std::list<double> *list, bool just_for_endof)
+void CCone::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
 {
 	gp_Pnt o = m_pos.Location();
 	gp_Pnt px(o.XYZ() + m_pos.XDirection().XYZ() * m_r1);
@@ -188,30 +188,12 @@ void CCone::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 	gp_Pnt pmx(o.XYZ() + m_pos.XDirection().XYZ() * (-m_r1));
 	gp_Pnt pz(o.XYZ() + z_dir.XYZ() * m_height);
 	gp_Pnt pxz(o.XYZ() + m_pos.XDirection().XYZ() * m_r2 + z_dir.XYZ() * m_height);
-	list->push_back(GripperTypeTranslate);
-	list->push_back(o.X());
-	list->push_back(o.Y());
-	list->push_back(o.Z());
-	list->push_back(GripperTypeStretch);
-	list->push_back(px.X());
-	list->push_back(px.Y());
-	list->push_back(px.Z());
-	list->push_back(GripperTypeObjectScaleZ);
-	list->push_back(pz.X());
-	list->push_back(pz.Y());
-	list->push_back(pz.Z());
-	list->push_back(GripperTypeStretch);
-	list->push_back(pxz.X());
-	list->push_back(pxz.Y());
-	list->push_back(pxz.Z());
-	list->push_back(GripperTypeRotateObject);
-	list->push_back(py.X());
-	list->push_back(py.Y());
-	list->push_back(py.Z());
-	list->push_back(GripperTypeRotateObject);
-	list->push_back(pmx.X());
-	list->push_back(pmx.Y());
-	list->push_back(pmx.Z());
+	list->push_back(GripData(GripperTypeTranslate,o.X(),o.Y(),o.Z(),NULL));
+	list->push_back(GripData(GripperTypeStretch,px.X(),px.Y(),px.Z(),NULL));
+	list->push_back(GripData(GripperTypeObjectScaleZ,pz.X(),pz.Y(),pz.Z(),NULL));
+	list->push_back(GripData(GripperTypeStretch,pxz.X(),pxz.Y(),pxz.Z(),NULL));
+	list->push_back(GripData(GripperTypeRotateObject,py.X(),py.Y(),py.Z(),NULL));
+	list->push_back(GripData(GripperTypeRotateObject,pmx.X(),pmx.Y(),pmx.Z(),NULL));
 }
 
 void CCone::OnApplyProperties()

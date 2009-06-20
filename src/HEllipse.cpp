@@ -158,7 +158,7 @@ void HEllipse::GetBox(CBox &box){
 	} 
 }
 
-void HEllipse::GetGripperPositions(std::list<double> *list, bool just_for_endof){
+void HEllipse::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
 	if(!just_for_endof)
 	{
 		gp_Dir x_axis = m_ellipse.XAxis().Direction();
@@ -170,20 +170,11 @@ void HEllipse::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 		gp_Pnt min_s(c + y_axis.XYZ() * min_r);
 		gp_Pnt rot(c+x_axis.XYZ() * maj_r * -1);
 
-		list->push_back(GripperTypeStretch);
-		list->push_back(maj_s.X());
-		list->push_back(maj_s.Y());
-		list->push_back(maj_s.Z());
+		list->push_back(GripData(GripperTypeStretch,maj_s.X(),maj_s.Y(),maj_s.Z(),NULL));
 
-		list->push_back(GripperTypeStretch);
-		list->push_back(min_s.X());
-		list->push_back(min_s.Y());
-		list->push_back(min_s.Z());
+		list->push_back(GripData(GripperTypeStretch,min_s.X(),min_s.Y(),min_s.Z(),NULL));
 
-	    list->push_back(GripperTypeRotate);
-	    list->push_back(rot.X());
-	    list->push_back(rot.Y());
-	    list->push_back(rot.Z());
+	    list->push_back(GripData(GripperTypeRotate,rot.X(),rot.Y(),rot.Z(),NULL));
 
 	} 
 }

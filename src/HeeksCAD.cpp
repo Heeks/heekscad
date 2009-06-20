@@ -116,6 +116,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	digitize_screen = false;
 	digitizing_radius = 5.0;
 	draw_to_grid = true;
+	autosolve_constraints = false;
 	digitizing_grid = 1.0;
 	grid_mode = 3;
 	m_rotate_mode = 0;
@@ -199,6 +200,7 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("DrawCoords"), &digitize_coords, true);
 	config.Read(_T("DrawScreen"), &digitize_screen, false);
 	config.Read(_T("DrawToGrid"), &draw_to_grid, true);
+	config.Read(_T("AutoSolveConstraints"), &autosolve_constraints, false);
 	config.Read(_T("DrawGrid"), &digitizing_grid);
 	config.Read(_T("DrawRadius"), &digitizing_radius);
 	{
@@ -319,6 +321,7 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("DrawCoords"), digitize_coords);
 	config.Write(_T("DrawScreen"), digitize_screen);
 	config.Write(_T("DrawToGrid"), draw_to_grid);
+	config.Write(_T("AutoSolveConstraints"), autosolve_constraints);
 	config.Write(_T("DrawGrid"), digitizing_grid);
 	config.Write(_T("DrawRadius"), digitizing_radius);
 	config.Write(_T("BackgroundColor"), wxString::Format(_T("%d %d %d"), background_color.red, background_color.green, background_color.blue));
@@ -1693,6 +1696,13 @@ void on_grid(bool onoff, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+void on_autosolve(bool onoff, HeeksObj* object)
+{
+	wxGetApp().autosolve_constraints = onoff;
+	wxGetApp().Repaint();
+}
+
+
 void on_grid_edit(double grid_value, HeeksObj* object)
 {
 	wxGetApp().digitizing_grid = grid_value;
@@ -2008,6 +2018,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	digitizing->m_list.push_back(new PropertyCheck(_("screen"), digitize_screen, NULL, on_relative));
 	digitizing->m_list.push_back(new PropertyLength(_("grid size"), digitizing_grid, NULL, on_grid_edit));
 	digitizing->m_list.push_back(new PropertyCheck(_("snap to grid"), draw_to_grid, NULL, on_grid));
+	digitizing->m_list.push_back(new PropertyCheck(_("autosolve constraints"), autosolve_constraints, NULL, on_autosolve));
 	list->push_back(digitizing);
 
 	PropertyList* drawing = new PropertyList(_("drawing"));

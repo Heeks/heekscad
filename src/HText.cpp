@@ -80,7 +80,7 @@ bool HText::ModifyByMatrix(const double *m)
 	return false;
 }
 
-void HText::GetGripperPositions(std::list<double> *list, bool just_for_endof)
+void HText::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
 {
 	float width, height;
 	if(!wxGetApp().get_text_size(m_text, &width, &height))return;
@@ -93,22 +93,10 @@ void HText::GetGripperPositions(std::list<double> *list, bool just_for_endof)
 
 	for(int i = 0; i<4; i++)point[i].Transform(m_trsf);
 
-	list->push_back(GripperTypeTranslate);
-	list->push_back(point[0].X());
-	list->push_back(point[0].Y());
-	list->push_back(point[0].Z());
-	list->push_back(GripperTypeRotateObject);
-	list->push_back(point[1].X());
-	list->push_back(point[1].Y());
-	list->push_back(point[1].Z());
-	list->push_back(GripperTypeRotateObject);
-	list->push_back(point[2].X());
-	list->push_back(point[2].Y());
-	list->push_back(point[2].Z());
-	list->push_back(GripperTypeScale);
-	list->push_back(point[3].X());
-	list->push_back(point[3].Y());
-	list->push_back(point[3].Z());
+	list->push_back(GripData(GripperTypeTranslate,point[0].X(),point[0].Y(),point[0].Z(),NULL));
+	list->push_back(GripData(GripperTypeRotateObject,point[1].X(),point[1].Y(),point[1].Z(),NULL));
+	list->push_back(GripData(GripperTypeRotateObject,point[2].X(),point[2].Y(),point[2].Z(),NULL));
+	list->push_back(GripData(GripperTypeScale,point[3].X(),point[3].Y(),point[3].Z(),NULL));
 }
 
 static void on_set_trsf(const gp_Trsf &trsf, HeeksObj* object){
