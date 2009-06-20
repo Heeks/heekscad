@@ -97,28 +97,16 @@ bool HeeksObj::GetScaleAboutMatrix(double *m)
 #endif
 }
 
-void HeeksObj::GetGripperPositions(std::list<double> *list, bool just_for_endof)
+void HeeksObj::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
 {
 #ifdef HEEKSCAD
 	CBox box;
 	GetBox(box);
 	if(!box.m_valid)return;
-	list->push_back(GripperTypeTranslate);
-	list->push_back(box.m_x[0]);
-	list->push_back(box.m_x[1]);
-	list->push_back(box.m_x[2]);
-	list->push_back(GripperTypeRotateObject);
-	list->push_back(box.m_x[3]);
-	list->push_back(box.m_x[1]);
-	list->push_back(box.m_x[2]);
-	list->push_back(GripperTypeRotateObject);
-	list->push_back(box.m_x[0]);
-	list->push_back(box.m_x[4]);
-	list->push_back(box.m_x[2]);
-	list->push_back(GripperTypeScale);
-	list->push_back(box.m_x[3]);
-	list->push_back(box.m_x[4]);
-	list->push_back(box.m_x[2]);
+	list->push_back(GripData(GripperTypeTranslate,box.m_x[0],box.m_x[1],box.m_x[2],NULL));
+	list->push_back(GripData(GripperTypeRotateObject,box.m_x[3],box.m_x[1],box.m_x[2],NULL));
+	list->push_back(GripData(GripperTypeRotateObject,box.m_x[0],box.m_x[4],box.m_x[2],NULL));
+	list->push_back(GripData(GripperTypeScale,box.m_x[3],box.m_x[4],box.m_x[2],NULL));
 #endif
 }
 
