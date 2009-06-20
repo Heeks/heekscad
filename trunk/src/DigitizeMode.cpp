@@ -110,10 +110,10 @@ DigitizedPoint DigitizeMode::digitize1(const wxPoint &input_point){
 		if(marked_object.m_map.size()>0){
 			HeeksObj* object = marked_object.GetFirstOfBottomOnly();
 			while(object){
-				std::list<double> vl;
+				std::list<GripData> vl;
 				object->GetGripperPositions(&vl, true);
 				std::list<gp_Pnt> plist;
-				convert_doubles_to_pnts(vl, plist, true);
+				convert_gripdata_to_pnts(vl, plist);
 				for(std::list<gp_Pnt>::iterator It = plist.begin(); It != plist.end(); It++)
 				{
 					gp_Pnt& pnt = *It;

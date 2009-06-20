@@ -64,7 +64,7 @@ void CCylinder::GetProperties(std::list<Property *> *list)
 	CSolid::GetProperties(list);
 }
 
-void CCylinder::GetGripperPositions(std::list<double> *list, bool just_for_endof)
+void CCylinder::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
 {
 	gp_Pnt o = m_pos.Location();
 	gp_Pnt px(o.XYZ() + m_pos.XDirection().XYZ() * m_radius);
@@ -72,26 +72,11 @@ void CCylinder::GetGripperPositions(std::list<double> *list, bool just_for_endof
 	gp_Pnt pyz(o.XYZ() + m_pos.YDirection().XYZ() * m_radius + z_dir.XYZ() * m_height);
 	gp_Pnt pmxz(o.XYZ() + m_pos.XDirection().XYZ() * (-m_radius) + z_dir.XYZ() * m_height);
 	gp_Pnt pz(o.XYZ() + z_dir.XYZ() * m_height);
-	list->push_back(GripperTypeTranslate);
-	list->push_back(o.X());
-	list->push_back(o.Y());
-	list->push_back(o.Z());
-	list->push_back(GripperTypeObjectScaleXY);
-	list->push_back(px.X());
-	list->push_back(px.Y());
-	list->push_back(px.Z());
-	list->push_back(GripperTypeRotateObject);
-	list->push_back(pyz.X());
-	list->push_back(pyz.Y());
-	list->push_back(pyz.Z());
-	list->push_back(GripperTypeRotateObject);
-	list->push_back(pmxz.X());
-	list->push_back(pmxz.Y());
-	list->push_back(pmxz.Z());
-	list->push_back(GripperTypeObjectScaleZ);
-	list->push_back(pz.X());
-	list->push_back(pz.Y());
-	list->push_back(pz.Z());
+	list->push_back(GripData(GripperTypeTranslate,o.X(),o.Y(),o.Z(),NULL));
+	list->push_back(GripData(GripperTypeObjectScaleXY,px.X(),px.Y(),px.Z(),NULL));
+	list->push_back(GripData(GripperTypeRotateObject,pyz.X(),pyz.Y(),pyz.Z(),NULL));
+	list->push_back(GripData(GripperTypeRotateObject,pmxz.X(),pmxz.Y(),pmxz.Z(),NULL));
+	list->push_back(GripData(GripperTypeObjectScaleZ,pz.X(),pz.Y(),pz.Z(),NULL));
 }
 
 void CCylinder::OnApplyProperties()

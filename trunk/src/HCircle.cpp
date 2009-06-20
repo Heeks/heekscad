@@ -134,7 +134,7 @@ void HCircle::GetBox(CBox &box){
 	}
 }
 
-void HCircle::GetGripperPositions(std::list<double> *list, bool just_for_endof){
+void HCircle::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
 	if(!just_for_endof)
 	{
 		gp_Dir x_axis = m_circle.XAxis().Direction();
@@ -142,10 +142,7 @@ void HCircle::GetGripperPositions(std::list<double> *list, bool just_for_endof){
 		double r = m_circle.Radius();
 		gp_Pnt s(c + x_axis.XYZ() * r);
 
-		list->push_back(GripperTypeStretch);
-		list->push_back(s.X());
-		list->push_back(s.Y());
-		list->push_back(s.Z());
+		list->push_back(GripData(GripperTypeStretch,s.X(),s.Y(),s.Z(),NULL));
 	}
 }
 

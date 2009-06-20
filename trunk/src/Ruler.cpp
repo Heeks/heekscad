@@ -260,21 +260,15 @@ bool HRuler::ModifyByMatrix(const double *mat)
 	return false;
 }
 
-void HRuler::GetGripperPositions(std::list<double> *list, bool just_for_endof)
+void HRuler::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
 {
 	gp_Pnt point[4];
 	GetFourCorners(point);
 
 	for(int i = 0; i<4; i++)point[i].Transform(m_trsf);
 
-	list->push_back(GripperTypeRotateObject);
-	list->push_back(point[0].X());
-	list->push_back(point[0].Y());
-	list->push_back(point[0].Z());
-	list->push_back(GripperTypeRotateObject);
-	list->push_back(point[2].X());
-	list->push_back(point[2].Y());
-	list->push_back(point[2].Z());
+	list->push_back(GripData(GripperTypeRotateObject,point[0].X(),point[0].Y(),point[0].Z(),NULL));
+	list->push_back(GripData(GripperTypeRotateObject,point[2].X(),point[2].Y(),point[2].Z(),NULL));
 }
 
 class ResetRulerTool:public Tool{
