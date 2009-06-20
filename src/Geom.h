@@ -96,3 +96,4 @@ int convert_pnts_to_doubles(const std::list<gp_Pnt> &plist, std::list<double> &d
 bool make_point_from_doubles(const std::list<double> &dlist, std::list<double>::const_iterator &It, gp_Pnt& pnt, bool four_doubles = false);
 int convert_doubles_to_pnts(const std::list<double> &dlist, std::list<gp_Pnt> &plist, bool four_doubles = false);
 int convert_gripdata_to_pnts(const std::list<GripData> &dlist, std::list<gp_Pnt> &plist);
+
