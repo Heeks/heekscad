@@ -27,7 +27,7 @@ public:
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	void OnApplyProperties();
 	bool GetScaleAboutMatrix(double *m);
-	bool Stretch(const double *p, const double* shift);
+	bool Stretch(const double *p, const double* shift, void* data);
 
 	// CShape's virtual functions
 	void SetXMLElement(TiXmlElement* element);

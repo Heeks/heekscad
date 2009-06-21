@@ -319,7 +319,7 @@ bool HArc::FindPossTangentPoint(const double* ray_start, const double* ray_direc
 	return FindNearPoint(ray_start, ray_direction, point);
 }
 
-bool HArc::Stretch(const double *p, const double* shift){
+bool HArc::Stretch(const double *p, const double* shift, void* data){
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);
 
