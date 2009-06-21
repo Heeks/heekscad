@@ -64,7 +64,7 @@
 ///////////////////////////////////////
 /// BFGS Solver parameters
 ///////////////////////////////////////
-#define pert              1e-11
+#define pert              1e-8
 #define XconvergenceRough 1e-4
 #define XconvergenceFine  1e-12
 #define smallF            1e-20

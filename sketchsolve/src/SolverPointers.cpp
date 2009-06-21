@@ -105,8 +105,8 @@ int main() {
 
 	lines[0].p1 = points[0];
 	lines[0].p2 = points[1];
-	lines[1].p1 = points[3];
-	lines[1].p2 = points[4];
+	lines[1].p1 = points[2];
+	lines[1].p2 = points[3];
 	lines[2].p1 = points[4];
 	lines[2].p2 = points[0];
 	lines[3].p1 = points[5];
@@ -114,7 +114,7 @@ int main() {
 	lines[4].p1 = points[7];
 	lines[4].p2 = points[8];
 
-
+	/*
 	circles[0].center = points[2];
 	circles[0].rad = &parameters[10];
 	circles[1].center = points[9];
@@ -188,6 +188,10 @@ int main() {
 	cons[12].SymLine = lines[2];
 	cons[12].arc1 = arcs[0];
 	cons[12].arc2 = arcs[1];
+	*/
+	cons[0].type = parallel;
+	cons[0].line1 = lines[0];
+	cons[0].line2 = lines[1];
 
 	//double x [5];
 	//x[0]=45;
@@ -197,10 +201,10 @@ int main() {
 	parameters[1]=0;//y
 	parameters[2]=15;//x
 	parameters[3]=0;//y
-	parameters[4]=14.9;//xstart
-	parameters[5]=5.2;//y
+	parameters[4]=0;//xstart
+	parameters[5]=5;//y
 	parameters[6]=15;//xend
-	parameters[7]=10;//y
+	parameters[7]=7;//y
 	parameters[8]=0;//xcenter
 	parameters[9]=10;//y
 	parameters[10]=2;
@@ -209,14 +213,28 @@ int main() {
 
 	int sol;
 
-	sol=solve(parameters ,28,cons,13,fine);
+
+
+	double  *pparameters[100];
+
+	for(i=0;i<100;i++)
+	{
+		pparameters[i] = &parameters[i];
+	}
+
+	sol=solve(pparameters ,8,cons,1,fine);
 	if(sol==succsess)
 	{
 		cout<<"A good Solution was found"<<endl;
 	}
+
 	else if(sol==noSolution)
 	{
 		cout<<"No valid Solutions were found from this start point"<<endl;
+	}
+	for(int i=0;i<8;i++)
+	{
+		cout<<"Point"<<*pparameters[i]<<endl;
 	}
 	}
 	//end

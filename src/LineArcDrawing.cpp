@@ -25,6 +25,7 @@
 #include "Sketch.h"
 #include "GraphicsCanvas.h"
 #include "HeeksConfig.h"
+#include "ConstraintTools.h"
 
 wxCursor LineArcDrawing::m_cursor_start;
 wxCursor LineArcDrawing::m_cursor_end;
@@ -259,6 +260,7 @@ void LineArcDrawing::AddPoint()
 					
 				}
 			} 
+			ApplyCoincidentConstraints(temp_object,prev_object_in_list);
 
 			Drawing::AddPoint();
 

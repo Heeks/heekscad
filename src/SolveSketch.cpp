@@ -12,6 +12,7 @@
 
 
 line GetLineFromEndedObject(EndedObject* eobj);
+point GetPoint(EndedObject* eobj, EnumPoint point);
 
 std::vector<double*> params;
 
@@ -36,10 +37,9 @@ void SolveSketch(CSketch* sketch)
 					{
 						eobj->LoadToDoubles();
 
-						line l = GetLineFromEndedObject(eobj);
-
 						if(cobj->absoluteangleconstraint)
 						{
+							line l = GetLineFromEndedObject(eobj);
 							constraint c;
 							c.line1 = l;
 							c.type = vertical;
@@ -62,8 +62,31 @@ void SolveSketch(CSketch* sketch)
 							{
 								case CoincidantPointConstraint:
 									break;
+									{
+										constraint c;
+										c.type = pointOnPoint;
+										
+										if((ConstrainedObject*)con->m_obj1 == cobj)
+										{
+											EndedObject* eobj2 = (EndedObject*)con->m_obj2;
+											c.point1 = GetPoint(eobj,con->m_obj1_point);
+										
+											c.point2 = GetPoint(eobj2,con->m_obj2_point);
+										}
+										else
+										{
+											EndedObject* eobj2 = (EndedObject*)con->m_obj2;
+											c.point2 = GetPoint(eobj2, con->m_obj1_point);
+										
+											c.point1 = GetPoint(eobj,con->m_obj2_point);
+										}
+										constraints.push_back(c);
+										cons.insert(con);
+									}
+									break;
 								case ParallelLineConstraint:
 									{
+										line l = GetLineFromEndedObject(eobj);
 										constraint c;
 										c.type = parallel;
 										c.line1 = l;
@@ -78,6 +101,7 @@ void SolveSketch(CSketch* sketch)
 									break;
 								case PerpendicularLineConstraint:
 									{
+										line l = GetLineFromEndedObject(eobj);
 										constraint c;
 										c.type = perpendicular;
 										c.line1 = l;
@@ -119,8 +143,28 @@ void SolveSketch(CSketch* sketch)
 	
 }
 
+point GetPoint(EndedObject* obj, EnumPoint whichpoint)
+{
+		obj->LoadToDoubles();
+		point p;
+		if(whichpoint == PointA)
+		{
+			p.x = &obj->ax; p.y = &obj->ay;
+		}
+		else
+		{
+			p.x = &obj->bx; p.y = &obj->by;
+		}
+
+		params.push_back(p.x);
+		params.push_back(p.y);
+
+		return p;
+}
+
 line GetLineFromEndedObject(EndedObject* eobj)
 {
+		eobj->LoadToDoubles();
 		point p;
 		p.x = &eobj->ax; p.y = &eobj->ay;
 		params.push_back(p.x);

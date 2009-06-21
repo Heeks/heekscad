@@ -79,3 +79,47 @@ void GetConstraintMenuTools(std::list<Tool*>* t_list){
 
 }
 
+void ApplyCoincidentConstraints(HeeksObj* extobj, std::list<HeeksObj*> list)
+{
+	list.push_back(extobj);
+
+	std::list<HeeksObj*>::iterator it;
+	std::list<HeeksObj*>::iterator it2;
+
+	//Search for A's matching
+	for(it = list.begin(); it!= list.end(); ++it)
+	{
+		EndedObject* eobj = (EndedObject*)*it;
+		if(eobj)
+		{
+			for(it2 = list.begin(); it2!= list.end(); ++it2)
+			{
+				EndedObject* eobj2 = (EndedObject*)*it2;
+				if(eobj2 && eobj != eobj2)
+				{
+					//Check if these two objects share any points
+					if(eobj->A.Distance(eobj2->A) < wxGetApp().m_geom_tol)
+					{
+						//A's coincidant
+						eobj->SetCoincidentPoint(eobj2,PointA,PointA);
+					}
+					if(eobj->A.Distance(eobj2->B) < wxGetApp().m_geom_tol)
+					{
+						//A to B coincidant
+						eobj->SetCoincidentPoint(eobj2,PointA,PointB);
+					}
+					if(eobj->B.Distance(eobj2->A) < wxGetApp().m_geom_tol)
+					{
+						//B to A coincidant
+						eobj->SetCoincidentPoint(eobj2,PointB,PointA);
+					}
+					if(eobj->B.Distance(eobj2->A) < wxGetApp().m_geom_tol)
+					{
+						//B's coincidant
+						eobj->SetCoincidentPoint(eobj2,PointB,PointB);
+					}
+				}
+			}
+		}
+	}
+}
