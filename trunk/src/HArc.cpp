@@ -140,8 +140,7 @@ void HArc::GetBox(CBox &box){
 }
 
 void HArc::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
-	list->push_back(GripData(GripperTypeStretch,A.X(),A.Y(),A.Z(),NULL));
-	list->push_back(GripData(GripperTypeStretch,B.X(),B.Y(),B.Z(),NULL));
+	EndedObject::GetGripperPositions(list,just_for_endof);
 }
 
 static void on_set_start(const double *vt, HeeksObj* object){

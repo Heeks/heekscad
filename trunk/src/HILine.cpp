@@ -86,8 +86,7 @@ void HILine::GetBox(CBox &box){
 void HILine::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
 	if(!just_for_endof) // we don't want to snap to these for endof
 	{
-		list->push_back(GripData(GripperTypeStretch,A.X(),A.Y(),A.Z(),NULL));
-		list->push_back(GripData(GripperTypeStretch,B.X(),B.Y(),B.Z(),NULL));
+		EndedObject::GetGripperPositions(list,just_for_endof);
 	}
 }
 
