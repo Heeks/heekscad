@@ -172,7 +172,7 @@ bool HSpline::FindPossTangentPoint(const double* ray_start, const double* ray_di
 	return FindNearPoint(ray_start, ray_direction, point);
 }
 
-bool HSpline::Stretch(const double *p, const double* shift){
+bool HSpline::Stretch(const double *p, const double* shift, void* data){
 
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);

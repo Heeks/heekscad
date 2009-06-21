@@ -111,7 +111,7 @@ void HText::GetProperties(std::list<Property *> *list)
 	HeeksObj::GetProperties(list);
 }
 
-bool HText::Stretch(const double *p, const double* shift)
+bool HText::Stretch(const double *p, const double* shift, void* data)
 {
 	return false;
 }

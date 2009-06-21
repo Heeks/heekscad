@@ -118,7 +118,7 @@ bool CCuboid::GetScaleAboutMatrix(double *m)
 	return true;
 }
 
-bool CCuboid::Stretch(const double *p, const double* shift)
+bool CCuboid::Stretch(const double *p, const double* shift, void* data)
 {
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);

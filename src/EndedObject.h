@@ -22,9 +22,10 @@ public:
 	void LoadFromDoubles();
 
 	// HeeksObj's virtual functions
-	bool Stretch(const double *p, const double* shift);
+	bool Stretch(const double *p, const double* shift, void* data);
 	bool ModifyByMatrix(const double* m);
 	bool GetStartPoint(double* pos);
 	bool GetEndPoint(double* pos);
 	void CopyFrom(const HeeksObj* object){operator=(*((EndedObject*)object));}
+	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 };

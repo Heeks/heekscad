@@ -108,8 +108,8 @@ public:
 	virtual bool FindPossTangentPoint(const double* ray_start, const double* ray_direction, double *point){return false;}
 	virtual void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	virtual void GetTools(std::list<Tool*>* t_list, const wxPoint* p){}
-	virtual bool Stretch(const double *p, const double* shift){return false;} // return true, if undo stretch is done with Add and Delete
-	virtual bool StretchTemporary(const double *p, const double* shift){Stretch(p, shift); return true;} // returns true, because Stretch was done.  If not done, then override and return false;
+	virtual bool Stretch(const double *p, const double* shift, void* data){return false;} // return true, if undo stretch is done with Add and Delete
+	virtual bool StretchTemporary(const double *p, const double* shift, void* data){Stretch(p, shift, data); return true;} // returns true, because Stretch was done.  If not done, then override and return false;
 	virtual void SetClickMarkPoint(MarkedObject* marked_object, const double* ray_start, const double* ray_direction){}
 	virtual bool CanAdd(HeeksObj* object){return false;}
 	virtual bool CanAddTo(HeeksObj* owner){return true;}
