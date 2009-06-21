@@ -61,7 +61,6 @@ void SolveSketch(CSketch* sketch)
 							switch(con->m_type)
 							{
 								case CoincidantPointConstraint:
-									break;
 									{
 										constraint c;
 										c.type = pointOnPoint;
@@ -75,7 +74,7 @@ void SolveSketch(CSketch* sketch)
 										}
 										else
 										{
-											EndedObject* eobj2 = (EndedObject*)con->m_obj2;
+											EndedObject* eobj2 = (EndedObject*)con->m_obj1;
 											c.point2 = GetPoint(eobj2, con->m_obj1_point);
 										
 											c.point1 = GetPoint(eobj,con->m_obj2_point);
