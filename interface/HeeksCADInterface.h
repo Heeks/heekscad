@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include "wx/menu.h"
+#include "wx/toolbar.h"
+
 class HeeksObj;
 class wxFrame;
 class wxAuiManager;

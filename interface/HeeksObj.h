@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Box.h"
+#include "wx/dc.h"
 
 class HeeksColor;
 class Property;
@@ -40,6 +41,7 @@ enum{
     EllipseType,
 	SplineType,
 	GroupType,
+	CorrelationToolType,
 	ObjectMaximumType
 };
 
