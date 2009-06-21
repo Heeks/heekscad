@@ -7,6 +7,8 @@
 #include "MarkedList.h"
 #include "HLine.h"
 #include "HArc.h"
+#include "Sketch.h"
+#include "SolveSketch.h"
 
 class SetLinesPerpendicular:public Tool{
 	// set world coordinate system active again
@@ -20,6 +22,7 @@ public:
 				obj->SetPerpendicularConstraint(last);
 			last=obj;
 		}
+		SolveSketch((CSketch*)last->m_owner);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Set Perpendicular");}
@@ -39,6 +42,7 @@ public:
 				obj->SetParallelConstraint(last);
 			last=obj;
 		}
+		SolveSketch((CSketch*)last->m_owner);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Set Parallel");}
