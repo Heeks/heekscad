@@ -23,4 +23,6 @@ public:
 	void glCommands(HeeksColor color, gp_Ax1 mid_point);
 	void RemoveExisting(ConstrainedObject* obj);
 	bool HasConstraints();
+	void SetCoincidentPoint(ConstrainedObject* obj,EnumPoint obj1_point,EnumPoint obj2_point);
+	bool HasPointConstraint(ConstrainedObject* obj,EnumPoint obj1_point,EnumPoint obj2_point);
 };

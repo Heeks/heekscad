@@ -4,4 +4,5 @@
 #include "../interface/Tool.h"
 
 void GetConstraintMenuTools(std::list<Tool*>* t_list);
+void ApplyCoincidentConstraints(HeeksObj* extobj, std::list<HeeksObj*> list);
 
