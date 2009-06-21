@@ -437,6 +437,10 @@ void CSelectMode::OnKeyDown(wxKeyEvent& event)
 	case WXK_DELETE:
 		wxGetApp().DeleteMarkedItems();
 		return;
+
+	case WXK_SHIFT:
+		m_include_similar_objects = true;
+		return;
 	}
 
 	CInputMode::OnKeyDown(event);
@@ -446,6 +450,10 @@ void CSelectMode::OnKeyUp(wxKeyEvent& event)
 {
 	switch(event.GetKeyCode()){
 	case WXK_DELETE:
+		return;
+
+	case WXK_SHIFT:
+		m_include_similar_objects = false;
 		return;
 	}
 
