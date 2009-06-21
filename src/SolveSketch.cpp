@@ -51,8 +51,8 @@ void SolveSketch(CSketch* sketch)
 						std::list<Constraint*>::iterator it;
 						for(it = cobj->constraints.begin(); it!=cobj->constraints.end(); ++it)
 						{
-							//TODO: check if constraint is already processed
-							//need check hashcode
+							//check if constraint is already processed
+							//uses set of pointers for easy comparison
 
 							Constraint *con = *it;
 							if(cons.find(con)!=cons.end())
@@ -125,7 +125,7 @@ void SolveSketch(CSketch* sketch)
 		obj = sketch->GetNextChild();
 	}
 
-	if(solve(&params[0],params.size(),&constraints[0],constraints.size(),1))
+	if(solve(&params[0],params.size(),&constraints[0],constraints.size(),rough))
 		//No result
 		return;
 
