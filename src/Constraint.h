@@ -20,21 +20,30 @@ enum EnumAbsoluteAngle{
 	AbsoluteAngleVertical
 };
 
+enum EnumPoint{
+	PointA,
+	PointB
+};
 
 class Constraint{
 public:
 	HeeksObj* m_obj1;
 	HeeksObj* m_obj2;
 
+	EnumPoint m_obj1_point;
+	EnumPoint m_obj2_point;
+
 	EnumConstraintType m_type;
 	EnumAbsoluteAngle m_angle;
 
 	Constraint();
 	Constraint(EnumConstraintType,EnumAbsoluteAngle,HeeksObj* obj);
+	Constraint(EnumConstraintType,EnumPoint,EnumPoint,HeeksObj* obj1, HeeksObj* obj2);
+
 	~Constraint(void);
 
 	bool operator==(const Constraint &other) const {
-		return m_type == other.m_type && m_angle==other.m_angle && m_obj1 == other.m_obj1 && m_obj2 == other.m_obj2;
+		return m_type == other.m_type && m_angle==other.m_angle && m_obj1 == other.m_obj1 && m_obj2 == other.m_obj2 && m_obj1_point == other.m_obj1_point && m_obj2_point == other.m_obj2_point;
 	}
 
 	void glCommands(HeeksColor color, gp_Ax1 mid_point);

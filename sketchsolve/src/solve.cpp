@@ -441,7 +441,7 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 
 	for(int i=0;i<xLength;i++)
 	{
-		cout<<"Parameter("<<i<<"): "<<x[i]<<endl;
+		cout<<"Parameter("<<i<<"): "<<*(x[i])<<endl;
 		//cout<<xold[i]<<endl;
 	}
 	cout<<"Fnew: "<<fnew<<endl;
@@ -453,14 +453,14 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	{
 		delete N[i];
 		delete FirstSecond[i];
-		delete deltaXDotGammatDotN[i]; 
+		delete deltaXDotGammatDotN[i];
 		delete gammatDotDeltaXt[i];
 		delete NDotGammaDotDeltaXt[i];
-	
+
 	}
 	delete N;
 	delete FirstSecond;
-	delete deltaXDotGammatDotN; 
+	delete deltaXDotGammatDotN;
 	delete gammatDotDeltaXt;
 	delete NDotGammaDotDeltaXt;
 
@@ -763,7 +763,7 @@ double calc(constraint * cons, int consLength)
 			dx2=dx2/hyp2;
 			dy2=dy2/hyp2;
 
-			temp = dx*dx2-dy*dy2;
+			temp = dx*dy2-dy*dx2;
 			error += (temp)*(temp);
 		}
 
@@ -782,7 +782,7 @@ double calc(constraint * cons, int consLength)
 			dx2=dx2/hyp2;
 			dy2=dy2/hyp2;
 
-			temp = dx*dx2-dy*dy2;
+			temp = dy*dx2-dx*dy2;
 			error += (temp)*(temp);
 		}
 		// Colinear constraint
@@ -945,4 +945,3 @@ double calc(constraint * cons, int consLength)
 	return error;
 
 }
-
