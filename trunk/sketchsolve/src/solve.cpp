@@ -763,7 +763,7 @@ double calc(constraint * cons, int consLength)
 			dx2=dx2/hyp2;
 			dy2=dy2/hyp2;
 
-			temp = dx*dy2-dy*dx2;
+			temp = dx*dx2-dy*dy2;
 			error += (temp)*(temp);
 		}
 
