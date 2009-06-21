@@ -114,7 +114,7 @@ void SolveSketch(CSketch* sketch)
 		{
 			eobj->LoadFromDoubles();
 		}
-		obj = obj->GetNextChild();
+		obj = sketch->GetNextChild();
 	}
 	
 }
