@@ -33,8 +33,8 @@ public:
 	void OnApplyProperties();
 	bool ValidateProperties();
 	bool GetScaleAboutMatrix(double *m);
-	bool Stretch(const double *p, const double* shift);
-	bool StretchTemporary(const double *p, const double* shift);
+	bool Stretch(const double *p, const double* shift, void* data);
+	bool StretchTemporary(const double *p, const double* shift, void* data);
 
 	// CShape's virtual functions
 	void SetXMLElement(TiXmlElement* element);

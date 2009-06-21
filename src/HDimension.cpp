@@ -137,7 +137,7 @@ void HDimension::GetProperties(std::list<Property *> *list)
 	HeeksObj::GetProperties(list);
 }
 
-bool HDimension::Stretch(const double *p, const double* shift)
+bool HDimension::Stretch(const double *p, const double* shift, void* data)
 {
 	return false;
 }

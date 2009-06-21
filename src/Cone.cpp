@@ -271,7 +271,7 @@ bool CCone::Stretch2(const double *p, const double* shift, gp_Ax2& new_pos, doub
 	return make_a_new_cone;
 }
 
-bool CCone::Stretch(const double *p, const double* shift)
+bool CCone::Stretch(const double *p, const double* shift, void* data)
 {
 	gp_Ax2 new_pos = m_pos;
 	double new_r1 = m_r1;
@@ -295,7 +295,7 @@ bool CCone::Stretch(const double *p, const double* shift)
 	return true;
 }
 
-bool CCone::StretchTemporary(const double *p, const double* shift)
+bool CCone::StretchTemporary(const double *p, const double* shift, void* data)
 {
 	gp_Ax2 new_pos = m_pos;
 	double new_r1 = m_r1;

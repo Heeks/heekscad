@@ -16,7 +16,8 @@
 #include "SolveSketch.h"
 #include "EndedObject.h"
 
-GripperSelTransform::GripperSelTransform(const gp_Pnt& pos, EnumGripperType gripper_type):Gripper(pos, _T(""), gripper_type){
+GripperSelTransform::GripperSelTransform(const gp_Pnt& pos, EnumGripperType gripper_type, void* data):Gripper(pos, _T(""), gripper_type){
+	m_data = data;
 }
 
 bool GripperSelTransform::OnGripperGrabbed(const std::list<HeeksObj*>& list, bool show_grippers_on_drag, double* from){
@@ -57,7 +58,7 @@ void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
 				{
 					double p[3];
 					extract(position, p);
-					if(!object->StretchTemporary(p, shift))return;
+					if(!object->StretchTemporary(p, shift,0))return;
 					if(wxGetApp().autosolve_constraints && ((ConstrainedObject*)object))
 					{
 						SolveSketch((CSketch*)object->m_owner);
@@ -90,7 +91,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 			for ( It = m_items_marked_at_grab.begin(); It != m_items_marked_at_grab.end(); It++ )
 			{
 				HeeksObj* object = *It;
-				if(object)wxGetApp().DoToolUndoably(new StretchTool(object, m_initial_grip_pos, shift));
+				if(object)wxGetApp().DoToolUndoably(new StretchTool(object, m_initial_grip_pos, shift, m_data));
 			}
 		}
 		wxGetApp().EndHistory();

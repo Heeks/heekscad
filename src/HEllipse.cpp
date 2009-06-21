@@ -262,7 +262,7 @@ bool HEllipse::FindPossTangentPoint(const double* ray_start, const double* ray_d
 	return FindNearPoint(ray_start, ray_direction, point);
 }
 
-bool HEllipse::Stretch(const double *p, const double* shift){
+bool HEllipse::Stretch(const double *p, const double* shift, void* data){
 
 	//TODO: 
         // 1. When the major and minor axis swap, the unused handle switches sides.

@@ -13,8 +13,9 @@ public:
 	double m_last_from[3];
 	double m_initial_grip_pos[3];
 	std::list<HeeksObj *> m_items_marked_at_grab;
+	void* m_data;
 
-	GripperSelTransform(const gp_Pnt& pos, EnumGripperType gripper_type);
+	GripperSelTransform(const gp_Pnt& pos, EnumGripperType gripper_type, void* data);
 
 	// HeeksObj's virtual functions
 	HeeksObj *MakeACopy(void)const{ return new GripperSelTransform(*this);}

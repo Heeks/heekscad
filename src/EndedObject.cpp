@@ -41,17 +41,23 @@ bool EndedObject::ModifyByMatrix(const double* m){
 	return false;
 }
 
-bool EndedObject::Stretch(const double *p, const double* shift){
+bool EndedObject::Stretch(const double *p, const double* shift, void* data){
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);
 
-	if(A.IsEqual(vp, wxGetApp().m_geom_tol)){
+	if(!data){
 		A = A.XYZ() + vshift.XYZ();
 	}
-	else if(B.IsEqual(vp, wxGetApp().m_geom_tol)){
+	else if(data == (void*)1){
 		B = B.XYZ() + vshift.XYZ();
 	}
 	return false;
+}
+
+void EndedObject::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
+{
+	list->push_back(GripData(GripperTypeStretch,A.X(),A.Y(),A.Z(),0));
+	list->push_back(GripData(GripperTypeStretch,B.X(),B.Y(),B.Z(),(void*)1));
 }
 
 bool EndedObject::GetStartPoint(double* pos)

@@ -45,7 +45,7 @@ public:
 	bool ModifyByMatrix(const double *mat);
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	void GetProperties(std::list<Property *> *list);
-	bool Stretch(const double *p, const double* shift);
+	bool Stretch(const double *p, const double* shift, void* data);
 	void CopyFrom(const HeeksObj* object){operator=(*((HImage*)object));}
 	void WriteXML(TiXmlNode *root);
 
