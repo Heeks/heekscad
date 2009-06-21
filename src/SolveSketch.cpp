@@ -15,11 +15,13 @@ line GetLineFromEndedObject(EndedObject* eobj);
 point GetPoint(EndedObject* eobj, EnumPoint point);
 
 std::vector<double*> params;
+std::set<double*> paramset;
 
 
 void SolveSketch(CSketch* sketch)
 {
 	params.clear();
+	paramset.clear();
 	std::list<line> lines;
 	std::vector<constraint> constraints;
 	std::set<Constraint*> cons;
@@ -124,7 +126,7 @@ void SolveSketch(CSketch* sketch)
 		obj = sketch->GetNextChild();
 	}
 
-	if(solve(&params[0],params.size(),&constraints[0],constraints.size(),rough))
+	if(solve(&params[0],params.size(),&constraints[0],constraints.size(),fine))
 		//No result
 		return;
 
@@ -142,6 +144,15 @@ void SolveSketch(CSketch* sketch)
 	
 }
 
+void PushBack(double *v)
+{
+	if(paramset.find(v) == paramset.end())
+	{
+		params.push_back(v);
+		paramset.insert(v);
+	}
+}
+
 point GetPoint(EndedObject* obj, EnumPoint whichpoint)
 {
 		obj->LoadToDoubles();
@@ -155,8 +166,8 @@ point GetPoint(EndedObject* obj, EnumPoint whichpoint)
 			p.x = &obj->bx; p.y = &obj->by;
 		}
 
-		params.push_back(p.x);
-		params.push_back(p.y);
+		PushBack(p.x);
+		PushBack(p.y);
 
 		return p;
 }
@@ -166,12 +177,12 @@ line GetLineFromEndedObject(EndedObject* eobj)
 		eobj->LoadToDoubles();
 		point p;
 		p.x = &eobj->ax; p.y = &eobj->ay;
-		params.push_back(p.x);
-		params.push_back(p.y);
+		PushBack(p.x);
+		PushBack(p.y);
 		point p2;
 		p2.x = &eobj->bx; p2.y = &eobj->by;
-		params.push_back(p2.x);
-		params.push_back(p2.y);
+		PushBack(p2.x);
+		PushBack(p2.y);
 
 		line l;
 		l.p1 = p;
