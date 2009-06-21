@@ -8,6 +8,10 @@
  */
 #include <iostream>
 
+#ifndef WIN32
+	#define _hypot hypot
+#endif
+
 #ifndef SOLVE_H_
 #define SOLVE_H_
 
