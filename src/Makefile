@@ -17,7 +17,7 @@ endif
 
 CCFLAGS=$(CFLAGS) -Wall -g -I "./" -I "/usr/include/opencascade" $(WXCFLAGS) -DUNICODE -D__WXGTK__ -DHEEKSCAD -DHAVE_LIMITS -DWXUSINGDLL -DHAVE_LIMITS -DTIXML_USE_STL ${RIP}
 
-OBJECTS=AboutBox.o advprops.o BezierCurve.o Cone.o ConversionTools.o CoordinateSystem.o Cuboid.o Cylinder.o DigitizedPoint.o DigitizeMode.o DimensionDrawing.o Drawing.o dxf.o svg.o Edge.o Face.o Geom.o glfont2.o GLList.o GraphicsCanvas.o Grid.o Gripper.o GripperSelTransform.o Group.o HArc.o HCircle.o HDimension.o HeeksCAD.o HeeksFrame.o HeeksPrintout.o HILine.o HEllipse.o HImage.o History.o HLine.o HPoint.o HSpline.o HText.o HXml.o Images.o InputModeCanvas.o LineArcDrawing.o Loop.o MagDragWindow.o manager.o MarkedList.o ObjPropsCanvas.o odcombo.o OptionsCanvas.o Plugins.o PointDrawing.o PointOrWindow.o PropertiesCanvas.o PropertyTrsf.o PropertyVertex.o propgrid.o props.o RegularShapesDrawing.o RemoveOrAddTool.o RuledSurface.o Ruler.o SelectMode.o Shape.o ShapeData.o Sketch.o Solid.o Sphere.o StlSolid.o StretchTool.o TransformTool.o TransformTools.o TreeCanvas.o Vertex.o ViewPoint.o ViewRotating.o ViewZooming.o Window.o Wire.o wxImageLoader.o HeeksCADInterface.o HeeksColor.o HeeksObj.o LeftAndRight.o MarkedObject.o ObjList.o PropertyCheck.o PropertyChoice.o PropertyColor.o PropertyDouble.o PropertyLength.o PropertyInt.o PropertyList.o PropertyString.o strconv.o ToolImage.o ToolList.o tinyxml.o tinyxmlerror.o tinyxmlparser.o Constraint.o ConstrainedObject.o ConstraintTools.o EndedObject.o SolveSketch.o solve.o
+OBJECTS=AboutBox.o advprops.o BezierCurve.o Cone.o ConversionTools.o CoordinateSystem.o Cuboid.o Cylinder.o DigitizedPoint.o DigitizeMode.o DimensionDrawing.o Drawing.o dxf.o svg.o Edge.o Face.o Geom.o glfont2.o GLList.o GraphicsCanvas.o Grid.o Gripper.o GripperSelTransform.o Group.o HArc.o HCircle.o HDimension.o HeeksCAD.o HeeksFrame.o HeeksPrintout.o HILine.o HEllipse.o HImage.o History.o HLine.o HPoint.o HSpline.o HText.o HXml.o Images.o InputModeCanvas.o LineArcDrawing.o Loop.o MagDragWindow.o manager.o MarkedList.o ObjPropsCanvas.o odcombo.o OptionsCanvas.o Plugins.o PointDrawing.o PointOrWindow.o PropertiesCanvas.o PropertyTrsf.o PropertyVertex.o propgrid.o props.o RegularShapesDrawing.o RemoveOrAddTool.o RuledSurface.o Ruler.o SelectMode.o Shape.o ShapeData.o Sketch.o Solid.o Sphere.o StlSolid.o StretchTool.o TransformTool.o TransformTools.o TreeCanvas.o Vertex.o ViewPoint.o ViewRotating.o ViewZooming.o Window.o Wire.o wxImageLoader.o HeeksCADInterface.o HeeksColor.o HeeksObj.o LeftAndRight.o MarkedObject.o ObjList.o PropertyCheck.o PropertyChoice.o PropertyColor.o PropertyDouble.o PropertyLength.o PropertyInt.o PropertyList.o PropertyString.o strconv.o ToolImage.o ToolList.o tinyxml.o tinyxmlerror.o tinyxmlparser.o Constraint.o ConstrainedObject.o ConstraintTools.o EndedObject.o SolveSketch.o solve.o CorrelationTool.o
 
 EXECUTABLE=../HeeksCAD
 
@@ -62,14 +62,16 @@ Cylinder.o: Cylinder.cpp
 DigitizedPoint.o: DigitizedPoint.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
 
-DigitizeMode.o: DigitizeMode.cpp
-	$(CC) -c $? ${CCFLAGS} -o $@
+DigitizeMode.o: DigitizeMode.cpp	\
+		SelectMode.h
+	$(CC) -c DigitizeMode.cpp ${CCFLAGS} -o $@
 
 DimensionDrawing.o: DimensionDrawing.cpp
-	$(CC) -c $? ${CCFLAGS} -o $@
+	$(CC) -c DimensionDrawing.cpp ${CCFLAGS} -o $@
 
-Drawing.o: Drawing.cpp
-	$(CC) -c $? ${CCFLAGS} -o $@
+Drawing.o: Drawing.cpp	\
+		SelectMode.h
+	$(CC) -c Drawing.cpp ${CCFLAGS} -o $@
 
 dxf.o: dxf.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
@@ -92,8 +94,9 @@ glfont2.o: glfont2.cpp
 GLList.o: GLList.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
 
-GraphicsCanvas.o: GraphicsCanvas.cpp
-	$(CC) -c $? ${CCFLAGS} -o $@
+GraphicsCanvas.o: GraphicsCanvas.cpp	 \
+		SelectMode.h
+	$(CC) -c GraphicsCanvas.cpp ${CCFLAGS} -o $@
 
 Grid.o: Grid.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
@@ -116,11 +119,13 @@ HCircle.o: HCircle.cpp
 HDimension.o: HDimension.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
 
-HeeksCAD.o: HeeksCAD.cpp
-	$(CC) -c $? ${CCFLAGS} -o $@
+HeeksCAD.o: HeeksCAD.cpp	\
+		SelectMode.h
+	$(CC) -c HeeksCAD.cpp ${CCFLAGS} -o $@
 
-HeeksFrame.o: HeeksFrame.cpp
-	$(CC) -c $? ${CCFLAGS} -o $@
+HeeksFrame.o: HeeksFrame.cpp \
+		SelectMode.h
+	$(CC) -c HeeksFrame.cpp ${CCFLAGS} -o $@
 
 HeeksPrintout.o: HeeksPrintout.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
@@ -158,20 +163,23 @@ Images.o: Images.cpp
 InputModeCanvas.o: InputModeCanvas.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
 
-LineArcDrawing.o: LineArcDrawing.cpp
-	$(CC) -c $? ${CCFLAGS} -o $@
+LineArcDrawing.o: LineArcDrawing.cpp	\
+		SelectMode.h
+	$(CC) -c LineArcDrawing.cpp ${CCFLAGS} -o $@
 
 Loop.o: Loop.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
 
-MagDragWindow.o: MagDragWindow.cpp
-	$(CC) -c $? ${CCFLAGS} -o $@
+MagDragWindow.o: MagDragWindow.cpp	\
+		SelectMode.h
+	$(CC) -c MagDragWindow.cpp ${CCFLAGS} -o $@
 
 manager.o: manager.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
 
-MarkedList.o: MarkedList.cpp
-	$(CC) -c $? ${CCFLAGS} -o $@
+MarkedList.o: MarkedList.cpp	\
+		SelectMode.h
+	$(CC) -c MarkedList.cpp ${CCFLAGS} -o $@
 
 ObjPropsCanvas.o: ObjPropsCanvas.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
@@ -188,8 +196,9 @@ Plugins.o: Plugins.cpp
 PointDrawing.o: PointDrawing.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
 
-PointOrWindow.o: PointOrWindow.cpp
-	$(CC) -c $? ${CCFLAGS} -o $@
+PointOrWindow.o: PointOrWindow.cpp	\
+		SelectMode.h
+	$(CC) -c PointOrWindow.cpp ${CCFLAGS} -o $@
 
 PropertiesCanvas.o: PropertiesCanvas.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
@@ -215,8 +224,9 @@ RuledSurface.o: RuledSurface.cpp
 Ruler.o: Ruler.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
 
-SelectMode.o: SelectMode.cpp
-	$(CC) -c $? ${CCFLAGS} -o $@
+SelectMode.o: SelectMode.cpp	\
+		SelectMode.h
+	$(CC) -c SelectMode.cpp ${CCFLAGS} -o $@
 
 Shape.o: Shape.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
@@ -251,17 +261,21 @@ TreeCanvas.o: TreeCanvas.cpp
 Vertex.o: Vertex.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
 
-ViewPoint.o: ViewPoint.cpp
-	$(CC) -c $? ${CCFLAGS} -o $@
+ViewPoint.o: ViewPoint.cpp	\
+		SelectMode.h
+	$(CC) -c ViewPoint.cpp ${CCFLAGS} -o $@
 
-ViewRotating.o: ViewRotating.cpp
-	$(CC) -c $? ${CCFLAGS} -o $@
+ViewRotating.o: ViewRotating.cpp	\
+		SelectMode.h
+	$(CC) -c ViewRotating.cpp ${CCFLAGS} -o $@
 
-ViewZooming.o: ViewZooming.cpp
-	$(CC) -c $? ${CCFLAGS} -o $@
+ViewZooming.o: ViewZooming.cpp	\
+		SelectMode.h
+	$(CC) -c ViewZooming.cpp ${CCFLAGS} -o $@
 
-Window.o: Window.cpp
-	$(CC) -c $? ${CCFLAGS} -o $@
+Window.o: Window.cpp	\
+		SelectMode.h
+	$(CC) -c Window.cpp ${CCFLAGS} -o $@
 
 Wire.o: Wire.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
@@ -352,6 +366,10 @@ ConstraintTools.o: ConstraintTools.cpp
 	
 EndedObject.o: EndedObject.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
+
+CorrelationTool.o: CorrelationTool.cpp	\
+		CorrelationTool.h
+	$(CC) -c CorrelationTool.cpp ${CCFLAGS} -o $@
 
 clean:
 	-rm ${EXECUTABLE} ${OBJECTS}

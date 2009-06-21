@@ -17,10 +17,11 @@ public:
 	bool m_doing_a_main_loop;
 	bool m_just_one;
 	wxString m_prompt_when_doing_a_main_loop;
+	bool m_include_similar_objects;		// Use the CCorrelationTool class as well?
 
 	static bool m_can_grip_objects;
 
-	CSelectMode();
+	CSelectMode( const bool include_similar_objects = false );
 	virtual ~CSelectMode(void){}
 
 	// virtual functions for InputMode

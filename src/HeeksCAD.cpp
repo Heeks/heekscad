@@ -104,7 +104,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	magnification = new MagDragWindow();
 	viewrotating = new ViewRotating;
 	viewzooming = new ViewZooming;
-	m_select_mode = new CSelectMode();
+	m_select_mode = new CSelectMode(false);	// Set this to 'true' for 'select similar' mode.  I'm not there yet.
 	m_digitizing = new DigitizeMode();
 	digitize_end = false;
 	digitize_inters = false;

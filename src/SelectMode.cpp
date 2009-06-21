@@ -15,14 +15,16 @@
 #include "GraphicsCanvas.h"
 #include "HeeksFrame.h"
 #include "GripperSelTransform.h"
+#include "CorrelationTool.h"
 
 bool CSelectMode::m_can_grip_objects = true;
 
-CSelectMode::CSelectMode(){
+CSelectMode::CSelectMode( const bool include_similar_objects /* = false */ ){
 	control_key_initially_pressed = false;
 	window_box_exists = false;
 	m_doing_a_main_loop = false;
 	m_just_one = false;
+	m_include_similar_objects = include_similar_objects;
 }
 
 const wxChar* CSelectMode::GetTitle()
@@ -79,6 +81,24 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 		if(marked_object.m_map.size()>0)
 		{
 			HeeksObj* object = marked_object.GetFirstOfTopOnly();
+
+			if (m_include_similar_objects)
+			{
+				// Augment the marked_object list with objects that 'look' like
+				// the one selected.
+
+				CCorrelationTool correlate;
+				CCorrelationTool::Symbols_t similar_symbols = correlate.SimilarSymbols( CCorrelationTool::Symbol_t(object->GetType(), object->m_id ));
+				CCorrelationTool::Symbols_t::const_iterator l_itSymbol;
+
+				for (l_itSymbol = similar_symbols.begin(); l_itSymbol != similar_symbols.end(); l_itSymbol++)
+				{
+					HeeksObj *ob = wxGetApp().GetIDObject( l_itSymbol->first, l_itSymbol->second );
+					wxGetApp().m_marked_list->Add(ob, true);
+				} // End for
+
+			} // End if - then
+
 			while(object)
 			{
 				if(object->GetType() == GripperType)
