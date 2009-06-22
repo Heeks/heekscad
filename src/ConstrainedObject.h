@@ -28,4 +28,5 @@ public:
 	bool HasPointConstraint(ConstrainedObject* obj,EnumPoint obj1_point,EnumPoint obj2_point);
 	void SetLineLengthConstraint(double length);
 	void SetLineLength(double length);
+	void SetTangentConstraint(ConstrainedObject* obj);
 };

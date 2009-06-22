@@ -77,6 +77,16 @@ void SolveSketch(CSketch* sketch)
 
 				switch(con->m_type)
 				{
+					case LineTangentToArcConstraint:
+					{
+						arc a = GetArc((HArc*)obj);
+						constraint c;
+						c.type = tangentToArc;
+						c.arc1 = a;
+						c.line1 = GetLineFromEndedObject((EndedObject*)con->m_obj2);
+						constraints.push_back(c);
+					}
+					break;
 					case CoincidantPointConstraint:
 					{
 						constraint c;

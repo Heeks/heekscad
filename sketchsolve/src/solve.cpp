@@ -633,7 +633,7 @@ double calc(constraint * cons, int consLength)
 
 		if(cons[i].type==tangentToArc)
 		{
-			/*
+			
 			double dx,dy,Rpx,Rpy,RpxN,RpyN,hyp,error1,error2,rad;
 			dx = L1_P2_x - L1_P1_x;
 			dy = L1_P2_y - L1_P1_y;
@@ -671,10 +671,10 @@ double calc(constraint * cons, int consLength)
 				error+=error2;
 				//cout<<"error: "<<error2<<endl;
 			}
-			*/
+			
 
-			temp=-pow(-A1_Center_x + A1_Start_x,2) - pow(-A1_Center_y + A1_Start_y,2) + pow(-(L1_P1_y*L1_P2_x) + A1_Center_y*(-L1_P1_x + L1_P2_x) + A1_Center_x*(L1_P1_y - L1_P2_y) + L1_P1_x*L1_P2_y,2)/(pow(-L1_P1_x + L1_P2_x,2) + pow(-L1_P1_y + L1_P2_y,2));
-			error += temp*temp;
+			//temp=-pow(-A1_Center_x + A1_Start_x,2) - pow(-A1_Center_y + A1_Start_y,2) + pow(-(L1_P1_y*L1_P2_x) + A1_Center_y*(-L1_P1_x + L1_P2_x) + A1_Center_x*(L1_P1_y - L1_P2_y) + L1_P1_x*L1_P2_y,2)/(pow(-L1_P1_x + L1_P2_x,2) + pow(-L1_P1_y + L1_P2_y,2));
+			//error += temp*temp;
 		}
 
 		if(cons[i].type==arcRules)

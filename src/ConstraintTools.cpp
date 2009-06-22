@@ -92,31 +92,48 @@ void ApplyCoincidentConstraints(HeeksObj* extobj, std::list<HeeksObj*> list)
 		EndedObject* eobj = (EndedObject*)*it;
 		if(eobj)
 		{
-			for(it2 = list.begin(); it2!= list.end(); ++it2)
+			for(it2 = it; it2!= list.end(); ++it2)
 			{
 				EndedObject* eobj2 = (EndedObject*)*it2;
 				if(eobj2 && eobj != eobj2)
 				{
+					bool shared_points = false;
 					//Check if these two objects share any points
 					if(eobj->A.Distance(eobj2->A) < wxGetApp().m_geom_tol)
 					{
 						//A's coincidant
 						eobj->SetCoincidentPoint(eobj2,PointA,PointA);
+						shared_points = true;
 					}
 					if(eobj->A.Distance(eobj2->B) < wxGetApp().m_geom_tol)
 					{
 						//A to B coincidant
 						eobj->SetCoincidentPoint(eobj2,PointA,PointB);
+						shared_points = true;
 					}
 					if(eobj->B.Distance(eobj2->A) < wxGetApp().m_geom_tol)
 					{
 						//B to A coincidant
 						eobj->SetCoincidentPoint(eobj2,PointB,PointA);
+						shared_points = true;
 					}
 					if(eobj->B.Distance(eobj2->B) < wxGetApp().m_geom_tol)
 					{
 						//B's coincidant
 						eobj->SetCoincidentPoint(eobj2,PointB,PointB);
+						shared_points = true;
+					}
+
+					if(shared_points)
+					{
+						if(eobj->GetType() == LineType && eobj2->GetType() == ArcType)
+						{
+							eobj2->SetTangentConstraint(eobj);
+						}
+						if(eobj2->GetType() == LineType && eobj->GetType() == ArcType)
+						{
+					//		eobj->SetTangentConstraint(eobj2);
+						}
 					}
 				}
 			}
