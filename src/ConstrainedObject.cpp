@@ -7,12 +7,15 @@
 
 ConstrainedObject::ConstrainedObject(){
 	absoluteangleconstraint = NULL;
+	linelengthconstraint = NULL;
 }
 
 
 ConstrainedObject::~ConstrainedObject(){
 	if(absoluteangleconstraint)
 		delete absoluteangleconstraint;
+	if(linelengthconstraint)
+		delete linelengthconstraint;
 }
 
 void ConstrainedObject::RemoveExisting(ConstrainedObject* obj)
@@ -77,6 +80,9 @@ void ConstrainedObject::glCommands(HeeksColor color, gp_Ax1 mid_point)
 	if(absoluteangleconstraint)
 		absoluteangleconstraint->glCommands(color,mid_point);
 
+	if(linelengthconstraint)
+		linelengthconstraint->glCommands(color,mid_point);
+
 	std::list<Constraint*>::iterator it;
 	for(it = constraints.begin(); it != constraints.end(); ++it)
 	{
@@ -87,7 +93,7 @@ void ConstrainedObject::glCommands(HeeksColor color, gp_Ax1 mid_point)
 
 bool ConstrainedObject::HasConstraints()
 {
-	return absoluteangleconstraint || !constraints.empty();
+	return absoluteangleconstraint || !constraints.empty() || linelengthconstraint;
 }
 
 bool ConstrainedObject::HasPointConstraint(ConstrainedObject* obj,EnumPoint obj1_point,EnumPoint obj2_point)
@@ -119,4 +125,24 @@ void ConstrainedObject::SetCoincidentPoint(ConstrainedObject* obj,EnumPoint obj1
 	Constraint *c = new Constraint(CoincidantPointConstraint,obj1_point,obj2_point,this,obj);
 	constraints.push_back(c);
 	obj->constraints.push_back(c);
+}
+
+void ConstrainedObject::SetLineLengthConstraint(double length)
+{
+	if(linelengthconstraint)
+	{
+		delete linelengthconstraint;
+		linelengthconstraint = NULL;
+	}
+	else
+		linelengthconstraint = new Constraint(LineLengthConstraint,length,(HeeksObj*)this);
+
+}
+
+void ConstrainedObject::SetLineLength(double length)
+{
+	if(linelengthconstraint)
+	{
+		linelengthconstraint->m_length = length;
+	}
 }
