@@ -139,6 +139,10 @@ public:
 	FileOpenOrImportType m_file_open_or_import_type;
 	double m_view_units; // units to display to the user ( but everything is stored as mm ), 1.0 for mm, 25.4 for inches
 
+	double m_min_correlation_factor;
+	double m_max_scale_threshold;
+	int m_number_of_sample_points;
+
 	//WxApp override
 	int OnRun();
 	bool OnExceptionInMainLoop();

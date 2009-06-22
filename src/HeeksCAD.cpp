@@ -145,6 +145,9 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_printData = NULL;
 	m_pageSetupData = NULL;
 	m_file_open_or_import_type = FileOpenOrImportTypeOther;
+	m_min_correlation_factor = 0.75;
+	m_max_scale_threshold = 1.5;
+	m_number_of_sample_points = 10;
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -260,6 +263,10 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("ViewUnits"), &m_view_units);
 	config.Read(_T("FaceToSketchDeviation"), &(FaceToSketchTool::deviation));
 
+	config.Read(_T("MinCorrelationFactor"), &m_min_correlation_factor);
+	config.Read(_T("MaxScaleThreshold"), &m_max_scale_threshold);
+	config.Read(_T("NumberOfSamplePoints"), &m_number_of_sample_points);
+
 	m_ruler->ReadFromConfig(config);
 
 	GetRecentFilesProfileString();
@@ -348,6 +355,10 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("GraphicsTextMode"), m_graphics_text_mode);
 	config.Write(_T("DxfMakeSketch"), HeeksDxfRead::m_make_as_sketch);
 	config.Write(_T("FaceToSketchDeviation"), FaceToSketchTool::deviation);
+
+	config.Write(_T("MinCorrelationFactor"), m_min_correlation_factor);
+	config.Write(_T("MaxScaleThreshold"), m_max_scale_threshold);
+	config.Write(_T("NumberOfSamplePoints"), m_number_of_sample_points);
 
 	m_ruler->WriteToConfig(config);
 
@@ -1702,6 +1713,24 @@ void on_autosolve(bool onoff, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+void on_set_min_correlation_factor(double value, HeeksObj* object)
+{
+	wxGetApp().m_min_correlation_factor = value;
+	wxGetApp().Repaint();
+}
+
+void on_set_max_scale_threshold(double value, HeeksObj* object)
+{
+	wxGetApp().m_max_scale_threshold = value;
+	wxGetApp().Repaint();
+}
+
+void on_set_number_of_sample_points(int value, HeeksObj* object)
+{
+	wxGetApp().m_number_of_sample_points = value;
+	wxGetApp().Repaint();
+}
+
 
 void on_grid_edit(double grid_value, HeeksObj* object)
 {
@@ -2020,6 +2049,12 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	digitizing->m_list.push_back(new PropertyCheck(_("snap to grid"), draw_to_grid, NULL, on_grid));
 	digitizing->m_list.push_back(new PropertyCheck(_("autosolve constraints"), autosolve_constraints, NULL, on_autosolve));
 	list->push_back(digitizing);
+
+	PropertyList* correlation_properties = new PropertyList(_("correlation"));
+	correlation_properties->m_list.push_back(new PropertyDouble(_("Minimum correlation factor (0.0 (nothing like it) -> 1.0 (perfect match))"), m_min_correlation_factor, NULL, on_set_min_correlation_factor));
+	correlation_properties->m_list.push_back(new PropertyDouble(_("Maximum scale threshold (1.0 - must be same size, 1.5 (can be half as big again or 2/3 size)"), m_max_scale_threshold, NULL, on_set_max_scale_threshold));
+	correlation_properties->m_list.push_back(new PropertyInt(_("Number of sample points"), m_number_of_sample_points, NULL, on_set_number_of_sample_points));
+	list->push_back(correlation_properties);
 
 	PropertyList* drawing = new PropertyList(_("drawing"));
 	drawing->m_list.push_back ( new PropertyColor ( _("current color"),  current_color, NULL, on_set_current_color ) );
