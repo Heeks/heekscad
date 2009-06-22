@@ -85,7 +85,8 @@ CCorrelationTool::CorrelationData_t CCorrelationTool::CorrelationData(      cons
 	HeeksObj *sample_object = heekscad_interface.GetIDObject( sample_symbol.first, sample_symbol.second );
 	if (! sample_object)
 	{
-		// Couldn't find reference.  Return an empty set.
+		// Couldn't find sample.  Return an empty set.
+		// printf("Couldn't find sample object for type='%d', id='%d'\n", sample_symbol.first, sample_symbol.second );
 		return(results);
 	} // End if - then
 
@@ -93,6 +94,7 @@ CCorrelationTool::CorrelationData_t CCorrelationTool::CorrelationData(      cons
 	if (! reference_object)
 	{
 		// Couldn't find reference.  Return an empty set.
+		// printf("Couldn't find reference object for type='%d', id='%d'\n", reference_symbol.first, reference_symbol.second );
 		return(results);
 	} // End if - then
 
@@ -105,8 +107,11 @@ CCorrelationTool::CorrelationData_t CCorrelationTool::CorrelationData(      cons
 	if (! SimilarScale( reference_box, sample_box, max_scale_threshold, &required_scaling ))
 	{
 		// They're too different in size.
+		// printf("Rejecting on size basis. Scale required is %lf\n", required_scaling );
 		return(results);	// return an empty data set.
 	} // End if - then
+
+	// printf("Required scaling is %lf\n", required_scaling);
 
 	// They're close enough in scale to warrant further investigation.  Now roll up your sleeves and
 	// describe this thar critter.
@@ -127,18 +132,18 @@ CCorrelationTool::CorrelationData_t CCorrelationTool::CorrelationData(      cons
 		// sure we're comparing both sets on the same Z plane.  We will worry about rotation matrices when I get
 		// smarter.
 
-		sample_centroid[2] = 0.0;
-                double verification_line_end[3] = { (cos( theta ) * radius) + sample_centroid[0], (sin( theta ) * radius) + sample_centroid[1], 0.0 };
+		// sample_centroid[2] = 0.0;
+                double verification_line_end[3] = { (cos( theta ) * radius) + sample_centroid[0], (sin( theta ) * radius) + sample_centroid[1], sample_centroid[2] };
 
 		// Now find all intersection points between this verification line and the sample object.
 		HeeksObj* verification_line = heekscad_interface.NewLine(sample_centroid, verification_line_end);
 		if (verification_line)
 		{
-			verification_line->glCommands(false, true, false);
-
 			std::list<double> intersections;
                         if (sample_object->Intersects( verification_line, &intersections ))
                         {
+				// printf("Found %d intersections\n", intersections.size() / 3);
+
 				CorrelationSample_t correlation_sample;
                                 while (((intersections.size() % 3) == 0) && (intersections.size() > 0))
                                 {
@@ -165,6 +170,8 @@ CCorrelationTool::CorrelationData_t CCorrelationTool::CorrelationData(      cons
 					// designed to compare shapes rather than sizes.  Make the two similar.
 					distance *= required_scaling;
 
+					// printf("Adding scaled distance of '%lf'\n", distance );
+
 					correlation_sample.m_intersection_distances.insert( distance );
                                 } // End while
 
@@ -173,6 +180,8 @@ CCorrelationTool::CorrelationData_t CCorrelationTool::CorrelationData(      cons
 			else
 			{
 				// It didn't intersect it.  We need to remember this.
+
+				// printf("It didn't intersect so we're adding an empty intersections array\n");
 				CorrelationSample_t empty;
 				results.insert( std::make_pair( angle, empty ) );
 			} // End if - else
@@ -180,6 +189,10 @@ CCorrelationTool::CorrelationData_t CCorrelationTool::CorrelationData(      cons
 			heekscad_interface.DeleteUndoably(verification_line);
 			verification_line = NULL;
 		} // End if - then
+		else
+		{
+			// printf("Failed to create intersection line\n");
+		} // End if - else
 	} // End for
 
 	return(results);
@@ -220,6 +233,10 @@ double CCorrelationTool::Score( const CCorrelationTool::CorrelationData_t & samp
 	double distance_score = 0.0;
 	double intersections_score = 0.0;
 
+	unsigned int num_distance_samples = 0;
+
+	// printf("Score() We have %d sample and %d reference points\n", sample.size(), reference.size() );
+
 	if (sample.size() == 0)
 	{
 		return(0.0);
@@ -257,39 +274,74 @@ double CCorrelationTool::Score( const CCorrelationTool::CorrelationData_t & samp
 			// The same for both.
 			intersections_score += 1.0;
 		} // End if - then
-
-		if (l_itSample->second.m_intersection_points.size() == l_itReference->second.m_intersection_points.size())
-		{
-			// The same for both.
-			intersections_score += 1.0;
-		} // End if - then
-
-		distance_score += 1.0;	// Assume a perfect match for now.
-		/*
-		// Make sure the number of intersections is similar between the two.
-		if (l_itReference->m_intersection_points.size() > l_itSample->m_intersection_points.size())
-		{
-			int num = reference_correlation_data.m_intersection_points.size() - sample_correlation_data.m_intersection_points.size();
-			if ((1 - (num / l_itReference->m_intersection_points.size())) < m_min_correlation_factor) continue;
-		} // End if - then
 		else
 		{
-			int num = sample_correlation_data.m_intersection_points.size() - reference_correlation_data.m_intersection_points.size();
-			if ((1 - (num / sample_correlation_data.m_intersection_points.size())) < m_min_correlation_factor) continue;
+			if (l_itSample->second.m_intersection_points.size() == l_itReference->second.m_intersection_points.size())
+			{
+				// The same for both.
+				intersections_score += 1.0;
+			} // End if - then
 		} // End if - else
 
 		// Well the number of intersection points is close enough.  Look through the distances and see if they're also
 		// within scope.  Specifically, figure out what percentage each angle's distance differs by.  Create an average for this
 		// difference set.  If the average difference in size is less than the min_correlation_factor then it's still good enough.
-		if (sample_correlation_data.m_intersection_distances.size() == 0) continue;
 
 		std::set<double>::const_iterator l_itSampleDistance;
 		std::set<double>::const_iterator l_itReferenceDistance;
+
+		/*
+		printf(" We have %d sample distances and %d reference distances\n",
+			l_itSample->second.m_intersection_distances.size(),
+			l_itReference->second.m_intersection_distances.size() );
 		*/
+
+		for (	l_itSampleDistance = l_itSample->second.m_intersection_distances.begin(),
+			l_itReferenceDistance = l_itReference->second.m_intersection_distances.begin();
+			l_itSampleDistance != l_itSample->second.m_intersection_distances.end() &&
+			l_itReferenceDistance != l_itReference->second.m_intersection_distances.end();
+			l_itSampleDistance++,
+			l_itReferenceDistance++)
+		{
+			// printf("sample_dist='%lf', ref_dist='%lf'\n", *l_itSampleDistance, *l_itReferenceDistance );
+
+			if (*l_itSampleDistance < *l_itReferenceDistance)
+			{
+				distance_score += double( double(*l_itSampleDistance) / double(*l_itReferenceDistance));
+				// printf("increasing score by %lf\n", double( double(*l_itSampleDistance) / double(*l_itReferenceDistance)) );
+				num_distance_samples++;
+			} // End if - then
+			else
+			{
+				distance_score += double( double(*l_itReferenceDistance) / double(*l_itSampleDistance));
+				// printf("increasing score by %lf\n", double( double(*l_itReferenceDistance) / double(*l_itSampleDistance)) );
+				num_distance_samples++;
+			} // End if - else
+		} // End for
 	} // End for
 
 	// Return the average score for all tests
-	return((distance_score / reference.size()) + (intersections_score / reference.size())) / 2;
+	double average_distance_score = 0.0;
+
+	if (num_distance_samples > 0)
+	{
+		average_distance_score = double(double(distance_score) / double(num_distance_samples));
+	} // End if - then
+
+	double average_intersections_score = 0.0;
+	if (reference.size() > 0)
+	{
+		average_intersections_score = double(double(intersections_score) / double(reference.size()));
+	} // End if - then
+
+	double score = double((average_distance_score + average_intersections_score) / 2.0);
+
+	// printf("average_distance_score='%lf'\n", average_distance_score);
+	// printf("average_intersections_score='%lf'\n", average_intersections_score);
+	
+	// printf("Returning score=%lf\n", score);
+
+	return(score);
 
 } // End Score() method
 
@@ -337,7 +389,7 @@ CCorrelationTool::Symbols_t CCorrelationTool::SimilarSymbols( const CCorrelation
 		// Now compare the correlation data for both the reference and sample objects to see if we
 		// think they're similar.
 
-		if (Score( sample_correlation_data, reference_correlation_data ) > m_min_correlation_factor)
+		if (Score( sample_correlation_data, reference_correlation_data ) >= m_min_correlation_factor)
 		{
 			result_set.push_back( Symbol_t( ob->GetType(), ob->m_id ) );
 		} // End if - then
