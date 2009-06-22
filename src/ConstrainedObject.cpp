@@ -136,7 +136,23 @@ void ConstrainedObject::SetLineLengthConstraint(double length)
 	}
 	else
 		linelengthconstraint = new Constraint(LineLengthConstraint,length,(HeeksObj*)this);
+}
 
+void ConstrainedObject::SetTangentConstraint(ConstrainedObject* obj)
+{
+	//Check for existing tangent constraint to other object
+	std::list<Constraint*>::iterator it;
+	for(it = constraints.begin(); it!=constraints.end(); ++it)
+	{
+		Constraint* c = *it;
+		if(c->m_type == LineTangentToArcConstraint && (ConstrainedObject*)c->m_obj2 == obj)
+		{
+			 return;
+		}
+	}
+	
+	Constraint *c = new Constraint(LineTangentToArcConstraint,this,obj);
+	constraints.push_back(c);
 }
 
 void ConstrainedObject::SetLineLength(double length)
