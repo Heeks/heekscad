@@ -10,9 +10,10 @@
 #include "solve.h"
 using namespace std;
 
-void Derivatives(double x[],double der[],int xLength, constraint * cons, int consLength)
+void derivatives(double **x,double *gradF,int xLength, constraint * cons, int consLength)
 {
 	int position;
+
 	for(int i=0;i<consLength;i++)
 	{
 		//////////////////////////////////////
@@ -21,20 +22,32 @@ void Derivatives(double x[],double der[],int xLength, constraint * cons, int con
 		if((cons[i]).type==pointOnPoint)
 		{
 			// Derivative with respect to p1x
-			position = &P1_x - &x[0];
-			if(position >=0 & position<xLength) der[position] += 2 * (P1_x-P2_x);
+			position = &P1_x - x[0];
+			if(position >=0 & position<xLength)
+				{
+				gradF[position] += 2 * (P1_x-P2_x);
+				}
 
 			// Derivative with respect to p1y
-			position = &P1_y - &x[0];
-			if(position >=0 & position<xLength) der[position] += 2 * (P1_y - P2_y);
+			position = &P1_y - x[0];
+			if(position >=0 & position<xLength)
+				{
+				gradF[position] += 2 * (P1_y - P2_y);
+				}
 
 			// Derivative with respect to p2x
-			position = &P2_x - &x[0];
-			if(position >=0 & position<xLength) der[position] += -2 * (P1_x - P2_x);
+			position = &P2_x - x[0];
+			if(position >=0 & position<xLength)
+				{
+				gradF[position] += -2 * (P1_x - P2_x);
+				}
 
 			// Derivative with respect to p2y
-			position = &P2_y - &x[0];
-			if(position >=0 & position<xLength) der[position] += -2 * (P1_y - P2_y);
+			position = &P2_y - x[0];
+			if(position >=0 & position<xLength)
+				{
+				gradF[position] += -2 * (P1_y - P2_y);
+				}
 		}
 		//.........................................
 		// End Point On Point Constraint derivative
@@ -46,24 +59,24 @@ void Derivatives(double x[],double der[],int xLength, constraint * cons, int con
 		if((cons[i]).type==P2PDistance)
 		{
 			// Derivative with respect to p1x
-			position = &P1_x - &x[0];
-			if(position >=0 & position<xLength) der[position] += 2 * (P1_x-P2_x);
+			position = &P1_x - x[0];
+			if(position >=0 & position<xLength) gradF[position] += 2 * (P1_x-P2_x);
 
 			// Derivative with respect to p1y
-			position = &P1_y - &x[0];
-			if(position >=0 & position<xLength) der[position] += 2 * (P1_y - P2_y);
+			position = &P1_y - x[0];
+			if(position >=0 & position<xLength) gradF[position] += 2 * (P1_y - P2_y);
 
 			// Derivative with respect to p2x
-			position = &P2_x - &x[0];
-			if(position >=0 & position<xLength) der[position] += -2 * (P1_x - P2_x);
+			position = &P2_x - x[0];
+			if(position >=0 & position<xLength) gradF[position] += -2 * (P1_x - P2_x);
 
 			// Derivative with respect to p2y
-			position = &P2_y - &x[0];
-			if(position >=0 & position<xLength) der[position] += -2 * (P1_y - P2_y);
+			position = &P2_y - x[0];
+			if(position >=0 & position<xLength) gradF[position] += -2 * (P1_y - P2_y);
 
 			// Derivative with respect to distance
-			position = &distance - &x[0];
-			if(position >=0 & position<xLength) der[position] += -2 * distance;
+			position = &distance - x[0];
+			if(position >=0 & position<xLength) gradF[position] += -2 * distance;
 		}
 		//..................................................
 		// End Point to Point distance Constraint derivative
@@ -76,16 +89,16 @@ void Derivatives(double x[],double der[],int xLength, constraint * cons, int con
 		{
 
 			// Derivative with respect to p1y
-			position = &P1_y - &x[0];
-			if(position >=0 & position<xLength) der[position] += 2 * (P1_y - P2_y);
+			position = &P1_y - x[0];
+			if(position >=0 & position<xLength) gradF[position] += 2 * (P1_y - P2_y);
 
 			// Derivative with respect to p2y
-			position = &P2_y - &x[0];
-			if(position >=0 & position<xLength) der[position] += -2 * (P1_y - P2_y);
+			position = &P2_y - x[0];
+			if(position >=0 & position<xLength) gradF[position] += -2 * (P1_y - P2_y);
 
 			// Derivative with respect to distance
-			position = &distance - &x[0];
-			if(position >=0 & position<xLength) der[position] += -2 * distance;
+			position = &distance - x[0];
+			if(position >=0 & position<xLength) gradF[position] += -2 * distance;
 		}
 		//........................................................
 		// End Point to Point Vert distance Constraint derivative
@@ -97,16 +110,16 @@ void Derivatives(double x[],double der[],int xLength, constraint * cons, int con
 		if((cons[i]).type==P2PDistance)
 		{
 			// Derivative with respect to p1x
-			position = &P1_x - &x[0];
-			if(position >=0 & position<xLength) der[position] += 2 * (P1_x-P2_x);
+			position = &P1_x - x[0];
+			if(position >=0 & position<xLength) gradF[position] += 2 * (P1_x-P2_x);
 
 			// Derivative with respect to p2x
-			position = &P2_x - &x[0];
-			if(position >=0 & position<xLength) der[position] += -2 * (P1_x - P2_x);
+			position = &P2_x - x[0];
+			if(position >=0 & position<xLength) gradF[position] += -2 * (P1_x - P2_x);
 
 			// Derivative with respect to distance
-			position = &distance - &x[0];
-			if(position >=0 & position<xLength) der[position] += -2 * distance;
+			position = &distance - x[0];
+			if(position >=0 & position<xLength) gradF[position] += -2 * distance;
 		}
 		//.......................................................
 		// End Point to Point Horz distance Constraint derivative
@@ -118,16 +131,16 @@ void Derivatives(double x[],double der[],int xLength, constraint * cons, int con
 		if((cons[i]).type==pointOnLine)
 		{
 			// Derivative with respect to p1x
-			position = &P1_x - &x[0];
-			if(position >=0 & position<xLength) der[position] += 2 * (P1_x-P2_x);
+			position = &P1_x - x[0];
+			if(position >=0 & position<xLength) gradF[position] += 2 * (P1_x-P2_x);
 
 			// Derivative with respect to p2x
-			position = &P2_x - &x[0];
-			if(position >=0 & position<xLength) der[position] += -2 * (P1_x - P2_x);
+			position = &P2_x - x[0];
+			if(position >=0 & position<xLength) gradF[position] += -2 * (P1_x - P2_x);
 
 			// Derivative with respect to distance
-			position = &distance - &x[0];
-			if(position >=0 & position<xLength) der[position] += -2 * distance;
+			position = &distance - x[0];
+			if(position >=0 & position<xLength) gradF[position] += -2 * distance;
 		}
 		//.......................................................
 		// End Point to Point Horz distance Constraint derivative
