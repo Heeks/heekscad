@@ -4,6 +4,7 @@
  * This program is released under the BSD license. See the file COPYING for
  * details.
  */
+#include "stdafx.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,9 +20,6 @@
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksCADInterface.h"
 #include "CorrelationTool.h"
-
-#include "stdafx.h"
-
 
 #include <sstream>
 

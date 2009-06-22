@@ -46,10 +46,10 @@ bool EndedObject::Stretch(const double *p, const double* shift, void* data){
 	gp_Vec vshift = make_vector(shift);
 
 	if(!data){
-		A = A.XYZ() + vshift.XYZ();
+		A = vp.XYZ() + vshift.XYZ();
 	}
 	else if(data == (void*)1){
-		B = B.XYZ() + vshift.XYZ();
+		B = vp.XYZ() + vshift.XYZ();
 	}
 	return false;
 }

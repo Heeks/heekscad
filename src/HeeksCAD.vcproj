@@ -523,6 +523,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\CorrelationTool.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\CorrelationTool.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Cuboid.cpp"
 			>
 		</File>
