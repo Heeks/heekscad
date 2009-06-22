@@ -62,11 +62,26 @@ public:
 };
 static SetLineVertical vertical_line_toggle;
 
+class SetLineLength:public Tool{
+public:
+	void Run(){
+		line_for_tool->SetLineLengthConstraint(line_for_tool->A.Distance(line_for_tool->B));
+		SolveSketch((CSketch*)line_for_tool->m_owner);
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Toggle Line Length");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Set this lines length as constrained");}
+};
+static SetLineLength line_length_toggle;
+
+
 void HLine::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	line_for_tool = this;
 	t_list->push_back(&horizontal_line_toggle);
 	t_list->push_back(&vertical_line_toggle);
+	t_list->push_back(&line_length_toggle);
 }
 
 void HLine::glCommands(bool select, bool marked, bool no_color){
@@ -132,6 +147,13 @@ static void on_set_end(const double *vt, HeeksObj* object){
 	wxGetApp().Repaint();
 }
 
+static void on_set_length(double v, HeeksObj* object){
+	((HLine*)object)->SetLineLength(v);
+	if(wxGetApp().autosolve_constraints)
+		SolveSketch((CSketch*)object->m_owner);
+	wxGetApp().Repaint();
+}
+
 void HLine::GetProperties(std::list<Property *> *list){
 	double a[3], b[3];
 	extract(A, a);
@@ -139,7 +161,7 @@ void HLine::GetProperties(std::list<Property *> *list){
 	list->push_back(new PropertyVertex(_("start"), a, this, on_set_start));
 	list->push_back(new PropertyVertex(_("end"), b, this, on_set_end));
 	double length = A.Distance(B);
-	list->push_back(new PropertyLength(_("Length"), length, NULL));
+	list->push_back(new PropertyLength(_("Length"), length, this, on_set_length));
 
 	HeeksObj::GetProperties(list);
 }

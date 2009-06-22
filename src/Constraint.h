@@ -12,7 +12,8 @@ enum EnumConstraintType{
 	CoincidantPointConstraint,
 	ParallelLineConstraint,
 	PerpendicularLineConstraint,
-	AbsoluteAngleConstraint
+	AbsoluteAngleConstraint,
+	LineLengthConstraint
 };
 
 enum EnumAbsoluteAngle{
@@ -36,14 +37,17 @@ public:
 	EnumConstraintType m_type;
 	EnumAbsoluteAngle m_angle;
 
+	double m_length;
+
 	Constraint();
 	Constraint(EnumConstraintType,EnumAbsoluteAngle,HeeksObj* obj);
+	Constraint(EnumConstraintType,double length,HeeksObj* obj);
 	Constraint(EnumConstraintType,EnumPoint,EnumPoint,HeeksObj* obj1, HeeksObj* obj2);
 
 	~Constraint(void);
 
 	bool operator==(const Constraint &other) const {
-		return m_type == other.m_type && m_angle==other.m_angle && m_obj1 == other.m_obj1 && m_obj2 == other.m_obj2 && m_obj1_point == other.m_obj1_point && m_obj2_point == other.m_obj2_point;
+		return m_type == other.m_type && m_angle==other.m_angle && m_obj1 == other.m_obj1 && m_obj2 == other.m_obj2 && m_obj1_point == other.m_obj1_point && m_obj2_point == other.m_obj2_point && m_length == other.m_length;
 	}
 
 	void glCommands(HeeksColor color, gp_Ax1 mid_point);

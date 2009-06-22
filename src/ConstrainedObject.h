@@ -13,6 +13,7 @@ class ConstrainedObject: public HeeksObj{
 public:
 	std::list<Constraint*> constraints;
 	Constraint* absoluteangleconstraint;
+	Constraint*  linelengthconstraint;
 
 	ConstrainedObject();
 	~ConstrainedObject(void);
@@ -25,4 +26,6 @@ public:
 	bool HasConstraints();
 	void SetCoincidentPoint(ConstrainedObject* obj,EnumPoint obj1_point,EnumPoint obj2_point);
 	bool HasPointConstraint(ConstrainedObject* obj,EnumPoint obj1_point,EnumPoint obj2_point);
+	void SetLineLengthConstraint(double length);
+	void SetLineLength(double length);
 };

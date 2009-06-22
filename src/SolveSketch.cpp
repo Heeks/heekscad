@@ -49,6 +49,17 @@ void SolveSketch(CSketch* sketch)
 								c.type = horizontal;
 							constraints.push_back(c);
 						}
+
+						if(cobj->linelengthconstraint)
+						{
+							line l = GetLineFromEndedObject(eobj);
+							constraint c;
+							c.line1 = l;
+							c.type = lineLength;
+							c.parameter = &cobj->linelengthconstraint->m_length;
+							constraints.push_back(c);
+						}
+
 	
 						std::list<Constraint*>::iterator it;
 						for(it = cobj->constraints.begin(); it!=cobj->constraints.end(); ++it)
