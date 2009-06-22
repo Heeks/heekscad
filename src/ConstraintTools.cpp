@@ -108,6 +108,11 @@ void ApplyCoincidentConstraints(HeeksObj* extobj, std::list<HeeksObj*> list)
 						//A to B coincidant
 						eobj->SetCoincidentPoint(eobj2,PointA,PointB);
 					}
+					if(eobj->B.Distance(eobj2->A) < wxGetApp().m_geom_tol)
+					{
+						//B to A coincidant
+						eobj->SetCoincidentPoint(eobj2,PointB,PointA);
+					}
 					if(eobj->B.Distance(eobj2->B) < wxGetApp().m_geom_tol)
 					{
 						//B's coincidant
