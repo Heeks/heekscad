@@ -318,6 +318,7 @@ void HArc::LoadFromDoubles()
 	EndedObject::LoadFromDoubles();
 	gp_Pnt p(cx,cy,0);
 	m_circle.SetLocation(p);
+	m_circle.SetRadius(p.Distance(A));
 }
 
 void HArc::LoadToDoubles()
