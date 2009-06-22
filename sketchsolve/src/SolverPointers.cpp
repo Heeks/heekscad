@@ -30,8 +30,8 @@ int main() {
 	P= parameters;
 	parameters[0]=0;//1x
 	parameters[1]=0;//y
-	parameters[2]=10;//x
-	parameters[3]=10;//y
+	parameters[2]=1;//x
+	parameters[3]=1;//y
 	parameters[4]=6;//xstart
 	parameters[5]=15;//y
 	parameters[6]=7;//xend
@@ -106,7 +106,7 @@ int main() {
 	lines[0].p1 = points[0];
 	lines[0].p2 = points[1];
 	lines[1].p1 = points[2];
-	lines[1].p2 = points[4];
+	lines[1].p2 = points[3];
 	lines[2].p1 = points[4];
 	lines[2].p2 = points[0];
 	lines[3].p1 = points[5];
@@ -129,16 +129,16 @@ int main() {
 	arcs[1].end = points[12];
 
 
-	cons[0].type = pointOnPoint;
-	cons[0].point1 = origin;
-	cons[0].point2 = points[0];
+	cons[0].type = perpendicular;
+	cons[0].line1 = lines[0];
+	cons[0].line2 = lines[1];
 
 	cons[1].type = horizontal;
 	cons[1].line1 = lines[0];
 
-	cons[2].type = parallel;
-	cons[2].line1 = lines[0];
-	cons[2].line2 = lines[1];
+	cons[2].type = pointOnPoint;
+	cons[2].point1 = points[1];
+	cons[2].point2 = points[2];
 
 	cons[3].type = vertical;
 	cons[3].line1 = lines[2];
@@ -199,13 +199,13 @@ int main() {
 	for(int i=0;i<1;i++)
 	{
 	parameters[0]=0;//1x
-	parameters[1]=0;//y
-	parameters[2]=15;//x
+	parameters[1]=1;//y
+	parameters[2]=10;//x
 	parameters[3]=0;//y
 	parameters[4]=10;//xstart
-	parameters[5]=8;//y
+	parameters[5]=0;//y
 	parameters[6]=10;//xend
-	parameters[7]=7;//y
+	parameters[7]=-10;//y
 	parameters[8]=0;//xcenter
 	parameters[9]=10;//y
 	parameters[10]=2;
@@ -223,7 +223,7 @@ int main() {
 		pparameters[i] = &parameters[i];
 	}
 
-	sol=solve(pparameters ,10,cons,9,fine);
+	sol=solve(pparameters ,8,cons,3,fine);
 	if(sol==succsess)
 	{
 		cout<<"A good Solution was found"<<endl;
@@ -237,8 +237,29 @@ int main() {
 	{
 		cout<<"Point"<<*pparameters[i]<<endl;
 	}
+	double hey = parameters[0]*parameters[2]+parameters[1]*parameters[3];
+	cout<<"dot product: "<<hey<<endl;
+
+	double gradF[20];
+		double *ggradF[20];
+
+
+		for(int i=0;i<20;i++)
+			{
+			gradF[i]=0;
+			ggradF[i]=&gradF[i];
+			}
+
+		derivatives(pparameters, gradF, 4, cons,1);
+
+		for(int i=0;i<4;i++) cout<<"GradF["<<i<<"]: "<<*ggradF[i]<<endl;
+
+
+
 	}
 	//end
+
+
 	return 0;
 }
 
