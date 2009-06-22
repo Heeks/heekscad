@@ -13,7 +13,8 @@ enum EnumConstraintType{
 	ParallelLineConstraint,
 	PerpendicularLineConstraint,
 	AbsoluteAngleConstraint,
-	LineLengthConstraint
+	LineLengthConstraint,
+	LineTangentToArcConstraint
 };
 
 enum EnumAbsoluteAngle{
@@ -43,6 +44,7 @@ public:
 	Constraint(EnumConstraintType,EnumAbsoluteAngle,HeeksObj* obj);
 	Constraint(EnumConstraintType,double length,HeeksObj* obj);
 	Constraint(EnumConstraintType,EnumPoint,EnumPoint,HeeksObj* obj1, HeeksObj* obj2);
+	Constraint(EnumConstraintType,HeeksObj* obj1, HeeksObj* obj2);
 
 	~Constraint(void);
 
