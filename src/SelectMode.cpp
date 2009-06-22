@@ -87,7 +87,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 				// Augment the marked_object list with objects that 'look' like
 				// the one selected.
 
-				CCorrelationTool correlate;
+				CCorrelationTool correlate(wxGetApp().m_min_correlation_factor, wxGetApp().m_max_scale_threshold, wxGetApp().m_number_of_sample_points );
 				CCorrelationTool::Symbols_t similar_symbols = correlate.SimilarSymbols( CCorrelationTool::Symbol_t(object->GetType(), object->m_id ));
 				CCorrelationTool::Symbols_t::const_iterator l_itSymbol;
 
