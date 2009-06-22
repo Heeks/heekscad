@@ -136,12 +136,10 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 		if(wxGetApp().drag_gripper)
 		{
 			double to[3], from[3];
-			to[0] = wxGetApp().grip_to.X();
-			to[1] = wxGetApp().grip_to.Y();
-			to[2] = wxGetApp().grip_to.Z();
-			from[0] = wxGetApp().grip_from.X();
-			from[1] = wxGetApp().grip_from.Y();
-			from[2] = wxGetApp().grip_from.Z();
+			wxGetApp().m_digitizing->digitize(wxPoint(event.GetX(), event.GetY()));
+			extract(wxGetApp().m_digitizing->digitized_point.m_point, to);
+			wxGetApp().grip_to = wxGetApp().m_digitizing->digitized_point.m_point;
+			extract(wxGetApp().grip_from, from);	
 			wxGetApp().drag_gripper->OnGripperReleased(from, to);
 			wxGetApp().m_digitizing->SetOnlyCoords(wxGetApp().drag_gripper, false);
 			wxGetApp().drag_gripper = NULL;
