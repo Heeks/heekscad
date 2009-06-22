@@ -18,8 +18,8 @@ public:
 
 	const EndedObject& operator=(const EndedObject &b);
 
-	void LoadToDoubles();
-	void LoadFromDoubles();
+	virtual void LoadToDoubles();
+	virtual void LoadFromDoubles();
 
 	// HeeksObj's virtual functions
 	bool Stretch(const double *p, const double* shift, void* data);
