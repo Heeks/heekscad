@@ -313,6 +313,20 @@ bool HArc::FindNearPoint(const double* ray_start, const double* ray_direction, d
 	return false;
 }
 
+void HArc::LoadFromDoubles()
+{
+	EndedObject::LoadFromDoubles();
+	gp_Pnt p(cx,cy,0);
+	m_circle.SetLocation(p);
+}
+
+void HArc::LoadToDoubles()
+{
+	EndedObject::LoadToDoubles();
+	cx = m_circle.Location().X();
+	cy = m_circle.Location().Y();
+}
+
 bool HArc::FindPossTangentPoint(const double* ray_start, const double* ray_direction, double *point){
 	// any point on this arc is a possible tangent point
 	return FindNearPoint(ray_start, ray_direction, point);
@@ -321,6 +335,9 @@ bool HArc::FindPossTangentPoint(const double* ray_start, const double* ray_direc
 bool HArc::Stretch(const double *p, const double* shift, void* data){
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);
+
+	if(wxGetApp().autosolve_constraints)
+		return EndedObject::Stretch(p,shift,data);
 
 	if(A.IsEqual(vp, wxGetApp().m_geom_tol)){
 		gp_Vec direction = -(GetSegmentVector(1.0));

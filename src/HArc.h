@@ -15,6 +15,8 @@ private:
 public:
 	gp_Circ m_circle;
 
+	double cx, cy;
+
 	~HArc(void);
 	HArc(const gp_Pnt &a, const gp_Pnt &b, const gp_Circ &c, const HeeksColor* col);
 	HArc(const HArc &arc);
@@ -52,4 +54,8 @@ public:
 	static bool TangentialArc(const gp_Pnt &p0, const gp_Vec &v0, const gp_Pnt &p1, gp_Pnt &centre, gp_Dir &axis);
 	bool UsesID(){return true;} 
 	void Reverse();
+
+	//Ended Objects virtaul functions;
+	void LoadToDoubles();
+	void LoadFromDoubles();
 };
