@@ -17,7 +17,14 @@ using namespace std;
 
 int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine)
 {
-	double convergence;
+	double convergence,pert ;
+	//Save the original parameters for later.
+	double *origSolution = new double[xLength];
+	for(int i=0;i<xLength;i++)
+	{
+		origSolution[i]=*x[i];
+	}
+
 	if(isFine>0) convergence = XconvergenceFine;
 	else convergence = XconvergenceRough;
 	//integer to keep track of how many times calc is called
@@ -35,12 +42,13 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	double norm; //The norm of the gradient vector
 	double f1,f2,f3,alpha1,alpha2,alpha3,alphaStar;
 	norm = 0;
+	pert = f0*pertMag;
 	for(int j=0;j<xLength;j++)
 	{
 		*x[j]= *x[j]+pert;
 		grad[j]=(calc(cons,consLength)-f0)/pert;
 		ftimes++;
-		cout<<"gradient: "<<grad[j]<<endl;
+		//cout<<"gradient: "<<grad[j]<<endl;
 		*x[j]-=pert;
 		norm = norm+(grad[j]*grad[j]);
 	}
@@ -203,15 +211,16 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	{
 		deltaX[i]=*x[i]-xold[i];//Calculate the difference in x for the Hessian update
 	}
-
-	while(deltaXnorm>convergence && fnew>smallF)
+	double maxIterNumber = MaxIterations * xLength;
+	while(deltaXnorm>convergence && fnew>smallF && iterations<maxIterNumber)
 	{
 	//////////////////////////////////////////////////////////////////////
 	///Start of main loop!!!!
 	//////////////////////////////////////////////////////////////////////
 	bottom=0;
 	deltaXtDotGamma = 0;
-
+	pert = fnew*pertMag;
+	if(pert<pertMin) pert = pertMin;
 	for(int i=0;i<xLength;i++)
 	{
 		//Calculate the new gradient vector
@@ -439,6 +448,8 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	}
 	////Debug
 
+#ifdef DEBUG
+
 	for(int i=0;i<xLength;i++)
 	{
 		cout<<"Parameter("<<i<<"): "<<*(x[i])<<endl;
@@ -447,6 +458,8 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	cout<<"Fnew: "<<fnew<<endl;
 	cout<<"Number of Iterations: "<<iterations<<endl;
 	cout<<"Number of function calls: "<<ftimes<<endl;
+
+#endif
 
 	delete s;
 	for(int i=0; i < xLength; i++)
@@ -463,14 +476,27 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	delete deltaXDotGammatDotN;
 	delete gammatDotDeltaXt;
 	delete NDotGammaDotDeltaXt;
+	delete origSolution;
 
 	delete grad;
 	delete xold;
 	delete gammatDotN;
 
 	///End of function
-	if(fnew<validSolution) return succsess;
-	else return noSolution;
+	if(fnew<validSolution)
+		{
+		return succsess;
+		}
+	else
+		{
+		return noSolution;
+		//Replace the bad numbers with the last result
+		for(int i=0;i<xLength;i++)
+		{
+			*x[i]=origSolution[i];
+		}
+		}
+
 }
 
 
@@ -598,6 +624,7 @@ double calc(constraint * cons, int consLength)
 
 		if(cons[i].type==tangentToArc)
 		{
+			/*
 			double dx,dy,Rpx,Rpy,RpxN,RpyN,hyp,error1,error2,rad;
 			dx = L1_P2_x - L1_P1_x;
 			dy = L1_P2_y - L1_P1_y;
@@ -635,7 +662,10 @@ double calc(constraint * cons, int consLength)
 				error+=error2;
 				//cout<<"error: "<<error2<<endl;
 			}
+			*/
 
+			temp=-pow(-A1_Center_x + A1_Start_x,2) - pow(-A1_Center_y + A1_Start_y,2) + pow(-(L1_P1_y*L1_P2_x) + A1_Center_y*(-L1_P1_x + L1_P2_x) + A1_Center_x*(L1_P1_y - L1_P2_y) + L1_P1_x*L1_P2_y,2)/(pow(-L1_P1_x + L1_P2_x,2) + pow(-L1_P1_y + L1_P2_y,2));
+			error += temp*temp;
 		}
 
 		if(cons[i].type==arcRules)
