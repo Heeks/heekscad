@@ -32,6 +32,7 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	//Calculate Function at the starting point:
 	double f0;
 	f0 = calc(cons,consLength);
+	cout<<"f0: "<<f0<<endl;
 	if(f0<smallF) return succsess;
 	ftimes++;
 	//Calculate the gradient at the starting point:
@@ -39,17 +40,21 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	//Calculate the gradient
 	//gradF=x;
 	double *grad = new double[xLength]; //The gradient vector (1xn)
-	double norm; //The norm of the gradient vector
+	double norm,first,second,temper; //The norm of the gradient vector
 	double f1,f2,f3,alpha1,alpha2,alpha3,alphaStar;
 	norm = 0;
 	pert = f0*pertMag;
 	for(int j=0;j<xLength;j++)
 	{
-		*x[j]= *x[j]+pert;
-		grad[j]=(calc(cons,consLength)-f0)/pert;
+		temper= *x[j];
+		*x[j]= temper-pert;
+		first = calc(cons,consLength);
+		*x[j]= temper+pert;
+		second = calc(cons,consLength);
+		grad[j]=.5*(second-first)/pert;
 		ftimes++;
-		//cout<<"gradient: "<<grad[j]<<endl;
-		*x[j]-=pert;
+		cout<<"gradient: "<<grad[j]<<endl;
+		*x[j]=temper;
 		norm = norm+(grad[j]*grad[j]);
 	}
 	norm = sqrt(norm);
@@ -224,10 +229,14 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	for(int i=0;i<xLength;i++)
 	{
 		//Calculate the new gradient vector
-		*x[i]=*x[i]+pert;
-		gradnew[i]=(calc(cons,consLength)-fnew)/pert;
+		temper=*x[i];
+		*x[i]=temper-pert;
+		first = calc(cons,consLength);
+		*x[i]=temper+pert;
+		second= calc(cons,consLength);
+		gradnew[i]=.5*(second-first)/pert;
 		ftimes++;
-		*x[i]=*x[i]-pert;
+		*x[i]=temper;
 		//Calculate the change in the gradient
 		gamma[i]=gradnew[i]-grad[i];
 		bottom+=deltaX[i]*gamma[i];
@@ -592,13 +601,13 @@ double calc(constraint * cons, int consLength)
 		if(cons[i].type==horizontal)
 		{
 			temp= (L1_P1_y-L1_P2_y);
-			error+=temp*temp;
+			error+=temp*temp*10;
 		}
 
 		if(cons[i].type==vertical)
 		{
 			temp=(L1_P1_x-L1_P2_x);
-			error+=temp*temp;
+			error+=temp*temp*10;
 		}
 
 		if(cons[i].type==tangentToCircle)
@@ -788,12 +797,12 @@ double calc(constraint * cons, int consLength)
 			hyp1=_hypot(dx,dy);
 			hyp2=_hypot(dx2,dy2);
 
-			dx=-dx/hyp1;
+			dx=dx/hyp1;
 			dy=dy/hyp1;
 			dx2=dx2/hyp2;
 			dy2=dy2/hyp2;
 
-			temp = dx*dx2-dy*dy2;
+			temp = dx*dx2+dy*dy2;
 			error += (temp)*(temp);
 		}
 

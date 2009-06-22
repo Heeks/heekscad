@@ -12,6 +12,8 @@
 	#define _hypot hypot
 #endif
 
+#define DEBUG
+
 #ifndef SOLVE_H_
 #define SOLVE_H_
 
@@ -64,8 +66,8 @@
 ///////////////////////////////////////
 /// BFGS Solver parameters
 ///////////////////////////////////////
-#define pertMag           1e-11
-#define pertMin			  1e-11
+#define pertMag           1e-4
+#define pertMin			  1e-8
 #define XconvergenceRough 1e-4
 #define XconvergenceFine  1e-12
 #define smallF            1e-20
@@ -172,5 +174,6 @@ struct constraint
 //Function Prototypes
 int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine);
 double calc(constraint * cons, int consLength);
+void derivatives(double **x,double *gradF,int xLength, constraint * cons, int consLength);
 
 #endif /* SOLVE_H_ */
