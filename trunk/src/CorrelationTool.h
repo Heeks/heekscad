@@ -116,11 +116,12 @@ public:
 	Symbols_t SimilarSymbols( const Symbol_t & reference_symbol ) const;
 
 	//	Constructors.
-        CCorrelationTool()
+        CCorrelationTool( const double min_correlation_factor,
+			  const double max_scale_threshold,
+			  const int number_of_sample_points ) : m_min_correlation_factor(min_correlation_factor),
+								m_max_scale_threshold( max_scale_threshold ),
+								m_number_of_sample_points( number_of_sample_points )
 	{
-		m_min_correlation_factor = 0.75;
-		m_max_scale_threshold = 1.5;
-		m_number_of_sample_points = 10;
 	} // End constructor
 
 	// Obtain a single set of correlation data for the sample_symbol.
