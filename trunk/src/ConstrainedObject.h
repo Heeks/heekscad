@@ -14,6 +14,7 @@ public:
 	std::list<Constraint*> constraints;
 	Constraint* absoluteangleconstraint;
 	Constraint*  linelengthconstraint;
+	Constraint* radiusconstraint;
 
 	ConstrainedObject();
 	~ConstrainedObject(void);
@@ -27,6 +28,8 @@ public:
 	void SetCoincidentPoint(ConstrainedObject* obj,EnumPoint obj1_point,EnumPoint obj2_point);
 	bool HasPointConstraint(ConstrainedObject* obj,EnumPoint obj1_point,EnumPoint obj2_point);
 	void SetLineLengthConstraint(double length);
+	void SetRadiusConstraint(double radius);
 	void SetLineLength(double length);
+	void SetRadius(double radius);
 	void SetTangentConstraint(ConstrainedObject* obj);
 };

@@ -65,6 +65,15 @@ void SolveSketch(CSketch* sketch)
 				constraints.push_back(c);
 			}
 
+			if(cobj->radiusconstraint)
+			{
+				arc a = GetArc((HArc*)obj);
+				constraint c;
+				c.arc1 = a;
+				c.type = radiusValue;
+				c.parameter = &cobj->radiusconstraint->m_length;
+				constraints.push_back(c);
+			}
 	
 			std::list<Constraint*>::iterator it;
 			for(it = cobj->constraints.begin(); it!=cobj->constraints.end(); ++it)
