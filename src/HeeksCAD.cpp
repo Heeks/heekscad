@@ -169,6 +169,8 @@ HeeksCADapp::~HeeksCADapp()
 
 bool HeeksCADapp::OnInit()
 {
+	m_gl_font_initialized = false;
+
 	wxInitAllImageHandlers();
 
 	InitialiseLocale();
@@ -1186,6 +1188,7 @@ void HeeksCADapp::RenderDatumOrCurrentCoordSys(bool select)
 
 void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 {
+	
 	CreateLights();
 	glDisable(GL_LIGHTING);
 	Material().glMaterial(1.0);
@@ -1223,7 +1226,6 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	glEnable(GL_POLYGON_OFFSET_FILL);
 
 	input_mode_object->OnRender();
-
 	if(m_transform_gl_list)
 	{
         glPushMatrix();
@@ -2874,18 +2876,20 @@ bool HeeksCADapp::CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num,
 
 void HeeksCADapp::create_font()
 {
+	if(m_gl_font_initialized)
+		return;
 	wxString fstr = GetResFolder() + _T("/bitmaps/font.glf");
 	glGenTextures( 1, &m_font_tex_number );
 
 	//Create our glFont from verdana.glf, using texture 1
 	m_gl_font.Create((char*)Ttc(fstr.c_str()), m_font_tex_number);
+	m_gl_font_initialized = true;
 }
 
 void HeeksCADapp::render_text(const wxChar* str)
 {
-	create_font();
-
 	//Needs to be called before text output
+	create_font();
 	//glColor4ub(0, 0, 0, 255);
 	glEnable(GL_BLEND);
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
