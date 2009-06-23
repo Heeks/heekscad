@@ -3,7 +3,7 @@
 
 If the operator presses the SHIFT key while in 'select' mode and then select a single graphical object, the software will search the rest of the model for other graphical objects that 'look like' that selected.
 
-This 'correlation test' is done both on size and shape.  It (will have) parameters that allow the operator to adjust how similar in size and how similar in shape the various objects need to be before including them in the results set.
+This 'correlation test' is done both on size and shape.  It has parameters, included beneath the 'correlation' parameter set, that allow the operator to adjust how similar in size and how similar in shape the various objects need to be before including them in the results set.
 
 In the case of HeeksCNC, this CorrelationTool can be used as a source of locations for a drilling cycle operation.
 
@@ -11,7 +11,9 @@ In the case of HeeksCNC, this CorrelationTool can be used as a source of locatio
 
 This module tests size by comparing the diagonal length of each bounding box.  The reference object's bounding box diagonal length is compared with each other graphics element's bounding box diagonal.  This comparison allows for both smaller and larger scaling based on a configurable parameter.
 
-The second check is to determine shape.  The algorithm is to draw a line from the centre of each object at a configurable number of angles.  These lines are intersected with the object and both the number of intersections and the distance between the intersection and the centre is recorded.  Each distance is, of course, scaled based on the scaling test above.  Once this is complete, a score is assigned based both on the number of intersections at each angle and the intersection distance at each angle.  This score is averaged over the number of samples and compared with a configurable parameter.
+The second check is to determine shape.  The algorithm is to draw a line from the centre of each object at a configurable number of angles.  These lines are intersected with the object and both the number of intersections and the distance between the intersection and the centre is recorded.  Each distance is scaled based on the scaling test above.  Once this is complete, a score is assigned based both on the number of intersections at each angle and the intersection distance at each angle.  This score is averaged over the number of samples and compared with a configurable parameter.
+
+NOTE: Not all of the underlying graphical elements support the intersection of themselves and the Line objects.  In these cases the objects are selected/rejected based on the size check alone.
 
 = Example Workflow =
 
