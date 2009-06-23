@@ -30,6 +30,31 @@ public:
 	const wxChar* GetToolTip(){return _("Set these lines to be perpendicular");}
 };
 
+class SetArcTangent:public Tool{
+public:
+	void Run(){
+		std::list<HeeksObj*>::const_iterator It;
+		EndedObject* last=NULL;
+		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+			EndedObject* obj = (EndedObject*)*It;
+			if(last)
+			{
+				if(last->GetType() == ArcType)
+					last->SetTangentConstraint(obj);
+				else
+					obj->SetTangentConstraint(last);
+			}
+			last=obj;
+		}
+		SolveSketch((CSketch*)last->m_owner);
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Toggle Tangent");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Set line tangent to arc");}
+};
+
+
 class SetLinesParallel:public Tool{
 	// set world coordinate system active again
 public:
@@ -52,9 +77,11 @@ public:
 
 static SetLinesParallel set_lines_parallel;
 static SetLinesPerpendicular set_lines_perpendicular;
+static SetArcTangent set_arc_tangent;
 
 void GetConstraintMenuTools(std::list<Tool*>* t_list){
 	int line_count = 0;
+	int arc_count = 0;
 
 	// check to see what types have been marked
 	std::list<HeeksObj*>::const_iterator It;
@@ -64,18 +91,27 @@ void GetConstraintMenuTools(std::list<Tool*>* t_list){
 			case LineType:
 				line_count++;
 				break;
+			case ArcType:
+				arc_count++;
+				break;
 			default:
 				return;
 		}
 	}
 
-	if(line_count < 2)
+	int total_count = line_count + arc_count;
+
+	if(total_count < 2)
 		return;
 
-	if(line_count == 2)
+	if(line_count == 2 && arc_count == 0)
 		t_list->push_back(&set_lines_perpendicular);
 
-	t_list->push_back(&set_lines_parallel);
+	if(arc_count == 0)
+		t_list->push_back(&set_lines_parallel);
+
+	if(arc_count == 1 && line_count == 1)
+		t_list->push_back(&set_arc_tangent);
 
 }
 

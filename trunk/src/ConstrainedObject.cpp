@@ -155,14 +155,16 @@ void ConstrainedObject::SetRadiusConstraint(double length)
 
 void ConstrainedObject::SetTangentConstraint(ConstrainedObject* obj)
 {
-	//Check for existing tangent constraint to other object
+	//Check for existing tangent constraint to the same object
 	std::list<Constraint*>::iterator it;
 	for(it = constraints.begin(); it!=constraints.end(); ++it)
 	{
 		Constraint* c = *it;
 		if(c->m_type == LineTangentToArcConstraint && (ConstrainedObject*)c->m_obj2 == obj)
 		{
-			 return;
+			constraints.remove(c);
+			delete c;
+			return;
 		}
 	}
 	
