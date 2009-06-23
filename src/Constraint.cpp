@@ -60,7 +60,6 @@ Constraint::~Constraint(){
 
 void Constraint::render_text(const wxChar* str)
 {
-	//Needs to be called before text output
 	//glColor4ub(0, 0, 0, 255);
 	glEnable(GL_BLEND);
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );

@@ -71,6 +71,7 @@ public:
 	HeeksColor current_color;
 	HeeksColor construction_color;
 	HeeksColor background_color;
+	bool m_gl_font_initialized;
 	int m_rotate_mode;
 	bool m_antialiasing;
 	bool digitize_end;

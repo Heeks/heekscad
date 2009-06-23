@@ -70,7 +70,7 @@ void SolveSketch(CSketch* sketch)
 				arc a = GetArc((HArc*)obj);
 				constraint c;
 				c.arc1 = a;
-				c.type = radiusValue;
+				c.type = arcRadius;
 				c.parameter = &cobj->radiusconstraint->m_length;
 				constraints.push_back(c);
 			}
