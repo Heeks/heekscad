@@ -18,8 +18,12 @@ point GetPoint(EndedObject* eobj, EnumPoint point);
 std::vector<double*> params;
 std::set<double*> paramset;
 
-
 void SolveSketch(CSketch* sketch)
+{
+	SolveSketch(sketch,NULL,NULL);
+}
+
+void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 {
 	params.clear();
 	paramset.clear();
@@ -153,6 +157,20 @@ void SolveSketch(CSketch* sketch)
 			}
 		}
 		obj = sketch->GetNextChild();
+	}
+
+	//Get the soft constraint
+	if(dragged)
+	{
+		EnumPoint wpoint = (EnumPoint)(int)whichpoint;
+		if(wpoint == PointA)
+		{
+			//was point A
+		}
+		else
+		{
+			//was point B
+		}
 	}
 
 	if(solve(&params[0],params.size(),&constraints[0],constraints.size(),fine))

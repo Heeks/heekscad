@@ -5,3 +5,4 @@
 #pragma once
 
 void SolveSketch(CSketch* sketch);
+void SolveSketch(CSketch* sketch,HeeksObj* dragged, void* whichpoint);
