@@ -181,7 +181,7 @@ bool HeeksCADapp::OnInit()
     m_pageSetupData = new wxPageSetupDialogData;
     // copy over initial paper size from print record
     (*m_pageSetupData) = *m_printData;
-    // Set some initial page margins in mm. 
+    // Set some initial page margins in mm.
     m_pageSetupData->SetMarginTopLeft(wxPoint(15, 15));
     m_pageSetupData->SetMarginBottomRight(wxPoint(15, 15));
 
@@ -261,7 +261,7 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("LoftRemovesSketches"), &m_loft_removes_sketches, true);
 	config.Read(_T("GraphicsTextMode"), (int*)(&m_graphics_text_mode), GraphicsTextModeWithHelp);
 
-	config.Read(_T("DxfMakeSketch"), &HeeksDxfRead::m_make_as_sketch, true);	
+	config.Read(_T("DxfMakeSketch"), &HeeksDxfRead::m_make_as_sketch, true);
 	config.Read(_T("ViewUnits"), &m_view_units);
 	config.Read(_T("FaceToSketchDeviation"), &(FaceToSketchTool::deviation));
 
@@ -317,7 +317,7 @@ bool HeeksCADapp::OnInit()
 #endif
 
 	return TRUE;
-} 
+}
 
 int HeeksCADapp::OnExit(){
 	HeeksConfig config;
@@ -336,8 +336,8 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("BackgroundColor"), wxString::Format(_T("%d %d %d"), background_color.red, background_color.green, background_color.blue));
 	config.Write(_T("CurrentColor"), wxString::Format( _T("%d %d %d"), current_color.red, current_color.green, current_color.blue));
 	config.Write(_T("ConstructionColor"), wxString::Format(_T("%d %d %d"), construction_color.red, construction_color.green, construction_color.blue));
-	config.Write(_T("RotateMode"), m_rotate_mode);	
-	config.Write(_T("Antialiasing"), m_antialiasing);	
+	config.Write(_T("RotateMode"), m_rotate_mode);
+	config.Write(_T("Antialiasing"), m_antialiasing);
 	config.Write(_T("GridMode"), grid_mode);
 	config.Write(_T("m_light_push_matrix"), m_light_push_matrix);
 	config.Write(_T("WheelForwardAway"), mouse_wheel_forward_away);
@@ -967,9 +967,9 @@ void HeeksCADapp::SaveCPPFile(const std::list<HeeksObj*>& objects, const wxChar 
 void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, bool for_clipboard)
 {
 	// write an xml file
-	TiXmlDocument doc;  
-	TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );  
-	doc.LinkEndChild( decl );  
+	TiXmlDocument doc;
+	TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
+	doc.LinkEndChild( decl );
 
 	TiXmlNode* root = &doc;
 	if(!for_clipboard)
@@ -995,7 +995,7 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 		CShape::ExportSolidsFile(objects, temp_file, &index_map);
 
 		TiXmlElement *step_file_element = new TiXmlElement( "STEP_file" );
-		root->LinkEndChild( step_file_element );  
+		root->LinkEndChild( step_file_element );
 
 		// write the index map as a child of step_file
 		{
@@ -1062,7 +1062,7 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 		}
 	}
 
-	doc.SaveFile( Ttc(filepath) );  
+	doc.SaveFile( Ttc(filepath) );
 }
 
 bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_recent_file_list, bool set_app_caption)
@@ -1188,7 +1188,7 @@ void HeeksCADapp::RenderDatumOrCurrentCoordSys(bool select)
 
 void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 {
-	
+
 	CreateLights();
 	glDisable(GL_LIGHTING);
 	Material().glMaterial(1.0);
@@ -1377,7 +1377,7 @@ static void AddToolListWithSeparator(std::list<Tool*> &l, std::list<Tool*> &temp
 
 static std::vector<ToolIndex> tool_index_list;
 
-class CFullScreenTool : public Tool  
+class CFullScreenTool : public Tool
 {
 public:
 	// Tool's virtual functions
@@ -2291,10 +2291,18 @@ wxString HeeksCADapp::GetExeFolder()const
 
 wxString HeeksCADapp::GetResFolder()const
 {
-#ifdef WIN32 || defined(RUNINPLACE)
+#ifdef WIN32
+	return GetExeFolder();
+#else
+#ifdef CODEBLOCKS
+	return (GetExeFolder() + _T("/../.."));
+#else
+#ifdef RUNINPLACE
 	return GetExeFolder();
 #else
 	return (GetExeFolder() + _T("/../share/heekscad"));
+#endif
+#endif
 #endif
 }
 
@@ -2320,11 +2328,11 @@ void HeeksCADapp::get_2d_arc_segments(double xs, double ys, double xe, double ye
 	double radius = sqrt(dxc*dxc + dyc*dyc);
 	double d_angle = end_angle - start_angle;
 	int segments = (int)(pixels_per_mm * radius * fabs(d_angle) / 6.28318530717958 + 1);
-    
+
     double theta = d_angle / (double)segments;
     double tangetial_factor = tan(theta);
     double radial_factor = 1 - cos(theta);
-    
+
     double x = radius * cos(start_angle);
     double y = radius * sin(start_angle);
 
@@ -2334,16 +2342,16 @@ void HeeksCADapp::get_2d_arc_segments(double xs, double ys, double xe, double ye
 			double xy[2] = {xc + x, yc + y};
 			(*callbackfunc)(xy);
 		}
-        
+
         double tx = -y;
         double ty = x;
-        
+
         x += tx * tangetial_factor;
         y += ty * tangetial_factor;
-        
+
         double rx = - x;
         double ry = - y;
-        
+
         x += rx * radial_factor;
         y += ry * radial_factor;
     }
@@ -2600,7 +2608,7 @@ void HeeksCADapp::SetObjectID(HeeksObj* object, int id)
 		{
 			// add a new map
 			std::map<int, HeeksObj*> empty_map;
-			FindIt1 = used_ids.insert( std::make_pair( id_group_type, empty_map )).first;		
+			FindIt1 = used_ids.insert( std::make_pair( id_group_type, empty_map )).first;
 		}
 		std::map<int, HeeksObj*> &map = FindIt1->second;
 		map.erase(id);
@@ -2808,7 +2816,7 @@ bool HeeksCADapp::IsPasteReady()
 			wxTextDataObject data;
 			wxTheClipboard->GetData( data );
 			fstr = data.GetText();
-		}  
+		}
 		wxTheClipboard->Close();
 
 		if(fstr.StartsWith(_T("<?xml version=\"1.0\" ?>")))return true;
@@ -2829,7 +2837,7 @@ void HeeksCADapp::Paste(HeeksObj* paste_into)
 			wxTextDataObject data;
 			wxTheClipboard->GetData( data );
 			fstr = data.GetText();
-		}  
+		}
 		wxTheClipboard->Close();
 	}
 
