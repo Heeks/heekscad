@@ -45,10 +45,11 @@ bool EndedObject::Stretch(const double *p, const double* shift, void* data){
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);
 
-	if(!data){
+	EnumPoint whichpoint = (EnumPoint)(int)data;
+	if(whichpoint == PointA){
 		A = vp.XYZ() + vshift.XYZ();
 	}
-	else if(data == (void*)1){
+	else{
 		B = vp.XYZ() + vshift.XYZ();
 	}
 	return false;
@@ -56,8 +57,8 @@ bool EndedObject::Stretch(const double *p, const double* shift, void* data){
 
 void EndedObject::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
 {
-	list->push_back(GripData(GripperTypeStretch,A.X(),A.Y(),A.Z(),0));
-	list->push_back(GripData(GripperTypeStretch,B.X(),B.Y(),B.Z(),(void*)1));
+	list->push_back(GripData(GripperTypeStretch,A.X(),A.Y(),A.Z(),(void*)PointA));
+	list->push_back(GripData(GripperTypeStretch,B.X(),B.Y(),B.Z(),(void*)PointB));
 }
 
 bool EndedObject::GetStartPoint(double* pos)

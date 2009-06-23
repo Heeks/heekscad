@@ -61,7 +61,7 @@ void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
 					if(!object->StretchTemporary(p, shift,m_data))return;
 					if(wxGetApp().autosolve_constraints && ((ConstrainedObject*)object))
 					{
-						SolveSketch((CSketch*)object->m_owner);
+						SolveSketch((CSketch*)object->m_owner,object,m_data);
 					}
 				}
 			}
