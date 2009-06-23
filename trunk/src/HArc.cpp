@@ -42,7 +42,7 @@ HArc* arc_for_tool = NULL;
 class SetArcRadius:public Tool{
 public:
 	void Run(){
-		arc_for_tool->SetRadiusConstraint(arc_for_tool->m_circle.Location().Distance(arc_for_tool->A));
+		arc_for_tool->SetRadiusConstraint(arc_for_tool->m_circle.Radius());
 		SolveSketch((CSketch*)arc_for_tool->m_owner);
 		wxGetApp().Repaint();
 	}
