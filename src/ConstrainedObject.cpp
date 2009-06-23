@@ -8,6 +8,7 @@
 ConstrainedObject::ConstrainedObject(){
 	absoluteangleconstraint = NULL;
 	linelengthconstraint = NULL;
+	radiusconstraint = NULL;
 }
 
 
@@ -16,6 +17,8 @@ ConstrainedObject::~ConstrainedObject(){
 		delete absoluteangleconstraint;
 	if(linelengthconstraint)
 		delete linelengthconstraint;
+	if(radiusconstraint)
+		delete radiusconstraint;
 }
 
 void ConstrainedObject::RemoveExisting(ConstrainedObject* obj)
@@ -93,7 +96,7 @@ void ConstrainedObject::glCommands(HeeksColor color, gp_Ax1 mid_point)
 
 bool ConstrainedObject::HasConstraints()
 {
-	return absoluteangleconstraint || !constraints.empty() || linelengthconstraint;
+	return absoluteangleconstraint || !constraints.empty() || linelengthconstraint || radiusconstraint;
 }
 
 bool ConstrainedObject::HasPointConstraint(ConstrainedObject* obj,EnumPoint obj1_point,EnumPoint obj2_point)
@@ -138,6 +141,18 @@ void ConstrainedObject::SetLineLengthConstraint(double length)
 		linelengthconstraint = new Constraint(LineLengthConstraint,length,(HeeksObj*)this);
 }
 
+void ConstrainedObject::SetRadiusConstraint(double length)
+{
+	if(radiusconstraint)
+	{
+		delete radiusconstraint;
+		radiusconstraint = NULL;
+	}
+	else
+		radiusconstraint = new Constraint(RadiusConstraint,length,(HeeksObj*)this);
+}
+
+
 void ConstrainedObject::SetTangentConstraint(ConstrainedObject* obj)
 {
 	//Check for existing tangent constraint to other object
@@ -160,5 +175,13 @@ void ConstrainedObject::SetLineLength(double length)
 	if(linelengthconstraint)
 	{
 		linelengthconstraint->m_length = length;
+	}
+}
+
+void ConstrainedObject::SetRadius(double radius)
+{
+	if(radiusconstraint)
+	{
+		radiusconstraint->m_length = radius;
 	}
 }

@@ -12,7 +12,11 @@
 #include "../interface/PropertyChoice.h"
 #include "../tinyxml/tinyxml.h"
 #include "../interface/PropertyVertex.h"
+#include "../interface/Tool.h"
 #include "Gripper.h"
+#include "Sketch.h"
+#include "SolveSketch.h"
+
 
 HArc::HArc(const HArc &line){
 	operator=(line);
@@ -31,6 +35,27 @@ const HArc& HArc::operator=(const HArc &b){
 	m_circle = b.m_circle;
 	color = b.color;
 	return *this;
+}
+
+HArc* arc_for_tool = NULL;
+
+class SetArcRadius:public Tool{
+public:
+	void Run(){
+		arc_for_tool->SetRadiusConstraint(arc_for_tool->m_circle.Location().Distance(arc_for_tool->A));
+		SolveSketch((CSketch*)arc_for_tool->m_owner);
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Toggle Radius");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Set this arcs radius as constrained");}
+};
+static SetArcRadius arc_radius_toggle;
+
+void HArc::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
+{
+	arc_for_tool = this;
+	t_list->push_back(&arc_radius_toggle);
 }
 
 
@@ -165,6 +190,13 @@ static void on_set_axis(const double *vt, HeeksObj* object){
 	wxGetApp().Repaint();
 }
 
+static void on_set_radius(double v, HeeksObj* object){
+	((HArc*)object)->SetRadius(v);
+	if(wxGetApp().autosolve_constraints)
+		SolveSketch((CSketch*)object->m_owner);
+	wxGetApp().Repaint();
+}
+
 void HArc::GetProperties(std::list<Property *> *list){
 	double a[3], b[3];
 	double c[3], ax[3];
@@ -178,7 +210,7 @@ void HArc::GetProperties(std::list<Property *> *list){
 	list->push_back(new PropertyVector(_("axis"), ax, this, on_set_axis));
 	double length = A.Distance(B);
 	list->push_back(new PropertyLength(_("length"), length, NULL));
-	list->push_back(new PropertyLength(_("radius"), m_circle.Radius(), NULL));
+	list->push_back(new PropertyLength(_("radius"), m_circle.Radius(), this, on_set_radius));
 
 	HeeksObj::GetProperties(list);
 }
