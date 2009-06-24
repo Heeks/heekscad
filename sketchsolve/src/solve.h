@@ -12,7 +12,6 @@
 	#define _hypot hypot
 #endif
 
-#define DEBUG
 
 #ifndef SOLVE_H_
 #define SOLVE_H_

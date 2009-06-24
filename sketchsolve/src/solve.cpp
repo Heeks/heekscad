@@ -32,7 +32,6 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	//Calculate Function at the starting point:
 	double f0;
 	f0 = calc(cons,consLength);
-	cout<<"f0: "<<f0<<endl;
 	if(f0<smallF) return succsess;
 	ftimes++;
 	//Calculate the gradient at the starting point:
@@ -53,7 +52,9 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 		second = calc(cons,consLength);
 		grad[j]=.5*(second-first)/pert;
 		ftimes++;
+#ifdef DEBUG
 		cout<<"gradient: "<<grad[j]<<endl;
+#endif
 		*x[j]=temper;
 		norm = norm+(grad[j]*grad[j]);
 	}
@@ -389,7 +390,8 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 			f3=calc(cons,consLength);
 			ftimes++;
 		}
-		if(steps==4)
+		/* this should be deleted soon!!!!
+		if(steps==-4)
 			{
 				alpha2=1;
 				alpha3=2;
@@ -407,17 +409,24 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 					}
 				}
 			}
+		*/
+		if(steps>100)
+			{
+			continue;
+			}
 		steps=steps+1;
 	}
 
 	// get the alpha for the minimum f of the quadratic approximation
 	alphaStar= alpha2+((alpha2-alpha1)*(f1-f3))/(3*(f1-2*f2+f3));
 
+
 	//Guarantee that the new alphaStar is within the bracket
-	if(alphaStar>alpha3 || alphaStar<alpha1)
+	if(alphaStar>=alpha3 || alphaStar<=alpha1)
 	{
 		alphaStar=alpha2;
 	}
+	if(alphaStar!=alphaStar) alphaStar=0;
 
 	/// Set the values to alphaStar
 	for(int i=0;i<xLength;i++)
@@ -498,12 +507,13 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 		}
 	else
 		{
-		return noSolution;
+
 		//Replace the bad numbers with the last result
 		for(int i=0;i<xLength;i++)
 		{
 			*x[i]=origSolution[i];
 		}
+		return noSolution;
 		}
 
 }
@@ -521,6 +531,7 @@ double calc(constraint * cons, int consLength)
 			//Hopefully avoid this constraint, make coincident points use the same parameters
 			error += (P1_x - P2_x) * (P1_x - P2_x) + (P1_y - P2_y) * (P1_y - P2_y);
 		}
+
 
 		if(cons[i].type==P2PDistance)
 		{
@@ -601,7 +612,7 @@ double calc(constraint * cons, int consLength)
 		if(cons[i].type==horizontal)
 		{
 			temp= (L1_P1_y-L1_P2_y);
-			error+=temp*temp*10;
+			error+=temp*temp*100;
 		}
 
 		if(cons[i].type==vertical)
@@ -633,7 +644,7 @@ double calc(constraint * cons, int consLength)
 
 		if(cons[i].type==tangentToArc)
 		{
-			
+			/*
 			double dx,dy,Rpx,Rpy,RpxN,RpyN,hyp,error1,error2,rad;
 			dx = L1_P2_x - L1_P1_x;
 			dy = L1_P2_y - L1_P1_y;
@@ -671,10 +682,10 @@ double calc(constraint * cons, int consLength)
 				error+=error2;
 				//cout<<"error: "<<error2<<endl;
 			}
-			
+			*/
 
-			//temp=-pow(-A1_Center_x + A1_Start_x,2) - pow(-A1_Center_y + A1_Start_y,2) + pow(-(L1_P1_y*L1_P2_x) + A1_Center_y*(-L1_P1_x + L1_P2_x) + A1_Center_x*(L1_P1_y - L1_P2_y) + L1_P1_x*L1_P2_y,2)/(pow(-L1_P1_x + L1_P2_x,2) + pow(-L1_P1_y + L1_P2_y,2));
-			//error += temp*temp;
+			temp=-pow(-A1_Center_x + A1_Start_x,2) - pow(-A1_Center_y + A1_Start_y,2) + pow(-(L1_P1_y*L1_P2_x) + A1_Center_y*(-L1_P1_x + L1_P2_x) + A1_Center_x*(L1_P1_y - L1_P2_y) + L1_P1_x*L1_P2_y,2)/(pow(-L1_P1_x + L1_P2_x,2) + pow(-L1_P1_y + L1_P2_y,2));
+			error += temp*temp;
 		}
 
 		if(cons[i].type==arcRules)
