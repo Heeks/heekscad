@@ -45,7 +45,7 @@ bool EndedObject::Stretch(const double *p, const double* shift, void* data){
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);
 
-	EnumPoint whichpoint = (EnumPoint)(int)data;
+	EnumPoint whichpoint = (EnumPoint)(long)data;
 	if(whichpoint == PointA){
 		A = vp.XYZ() + vshift.XYZ();
 	}
