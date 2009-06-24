@@ -162,7 +162,7 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 	//Get the soft constraint
 	if(dragged)
 	{
-		EnumPoint wpoint = (EnumPoint)(int)whichpoint;
+		EnumPoint wpoint = (EnumPoint)(long)whichpoint;
 		if(wpoint == PointA)
 		{
 			//was point A
