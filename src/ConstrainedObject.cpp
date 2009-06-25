@@ -21,7 +21,7 @@ ConstrainedObject::~ConstrainedObject(){
 		delete radiusconstraint;
 }
 
-void ConstrainedObject::RemoveExisting(ConstrainedObject* obj)
+void ConstrainedObject::RemoveExisting(ConstrainedObject* obj, EnumConstraintType type)
 {
 	//Make sure there is not already a parallel or perpendicular constraint between
 	//these objects
@@ -31,7 +31,7 @@ void ConstrainedObject::RemoveExisting(ConstrainedObject* obj)
 		Constraint *c = *it;
 		if(((ConstrainedObject*)c->m_obj1 == this && (ConstrainedObject*)c->m_obj2 == obj)||((ConstrainedObject*)c->m_obj1 == obj && (ConstrainedObject*)c->m_obj2 == this))
 		{
-			if(c->m_type == ParallelLineConstraint || c->m_type == PerpendicularLineConstraint)
+			if(c->m_type == type)
 			{
 				constraints.remove(c);
 				obj->constraints.remove(c);
@@ -42,7 +42,8 @@ void ConstrainedObject::RemoveExisting(ConstrainedObject* obj)
 }
 
 void ConstrainedObject::SetPerpendicularConstraint(ConstrainedObject* obj){
-	RemoveExisting(obj);
+	RemoveExisting(obj,PerpendicularLineConstraint);
+	RemoveExisting(obj,ParallelLineConstraint);
 	Constraint* c = new Constraint();
 	c->m_type = PerpendicularLineConstraint;
 	c->m_obj1 = (HeeksObj*)this;
@@ -52,9 +53,30 @@ void ConstrainedObject::SetPerpendicularConstraint(ConstrainedObject* obj){
 }
 
 void ConstrainedObject::SetParallelConstraint(ConstrainedObject* obj){
-	RemoveExisting(obj);
+	RemoveExisting(obj,PerpendicularLineConstraint);
+	RemoveExisting(obj,ParallelLineConstraint);
 	Constraint* c = new Constraint();
 	c->m_type = ParallelLineConstraint;
+	c->m_obj1 = (HeeksObj*)this;
+	c->m_obj2 = (HeeksObj*)obj;
+	constraints.push_back(c);
+	obj->constraints.push_back(c);
+}
+
+void ConstrainedObject::SetEqualLengthConstraint(ConstrainedObject* obj){
+	RemoveExisting(obj, EqualLengthConstraint);
+	Constraint* c = new Constraint();
+	c->m_type = EqualLengthConstraint;
+	c->m_obj1 = (HeeksObj*)this;
+	c->m_obj2 = (HeeksObj*)obj;
+	constraints.push_back(c);
+	obj->constraints.push_back(c);
+}
+
+void ConstrainedObject::SetColinearConstraint(ConstrainedObject* obj){
+	RemoveExisting(obj,ColinearConstraint);
+	Constraint* c = new Constraint();
+	c->m_type = ColinearConstraint;
 	c->m_obj1 = (HeeksObj*)this;
 	c->m_obj2 = (HeeksObj*)obj;
 	constraints.push_back(c);
