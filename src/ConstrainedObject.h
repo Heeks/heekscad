@@ -22,8 +22,10 @@ public:
 	void SetAbsoluteAngleConstraint(EnumAbsoluteAngle angle);
 	void SetPerpendicularConstraint(ConstrainedObject* obj);
 	void SetParallelConstraint(ConstrainedObject* obj);
+	void SetEqualLengthConstraint(ConstrainedObject* obj);
+	void SetColinearConstraint(ConstrainedObject* obj);
 	void glCommands(HeeksColor color, gp_Ax1 mid_point);
-	void RemoveExisting(ConstrainedObject* obj);
+	void RemoveExisting(ConstrainedObject* obj, EnumConstraintType type);
 	bool HasConstraints();
 	void SetCoincidentPoint(ConstrainedObject* obj,EnumPoint obj1_point,EnumPoint obj2_point);
 	bool HasPointConstraint(ConstrainedObject* obj,EnumPoint obj1_point,EnumPoint obj2_point);

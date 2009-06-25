@@ -75,7 +75,50 @@ public:
 	const wxChar* GetToolTip(){return _("Set these lines to be parallel");}
 };
 
+class SetLinesEqualLength:public Tool{
+	// set world coordinate system active again
+public:
+	void Run(){
+		std::list<HeeksObj*>::const_iterator It;
+		EndedObject* last=NULL;
+		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+			EndedObject* obj = (EndedObject*)*It;
+			if(last)
+				obj->SetEqualLengthConstraint(last);
+			last=obj;
+		}
+		SolveSketch((CSketch*)last->m_owner);
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Set Equal Length");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Set these lines to be equal length");}
+};
+
+class SetLinesColinear:public Tool{
+	// set world coordinate system active again
+public:
+	void Run(){
+		std::list<HeeksObj*>::const_iterator It;
+		EndedObject* last=NULL;
+		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+			EndedObject* obj = (EndedObject*)*It;
+			if(last)
+				obj->SetColinearConstraint(last);
+			last=obj;
+		}
+		SolveSketch((CSketch*)last->m_owner);
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Set Colinear");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Set these lines to be colinear");}
+};
+
+
 static SetLinesParallel set_lines_parallel;
+static SetLinesEqualLength set_lines_equal_length;
+static SetLinesColinear set_lines_colinear;
 static SetLinesPerpendicular set_lines_perpendicular;
 static SetArcTangent set_arc_tangent;
 
@@ -108,7 +151,11 @@ void GetConstraintMenuTools(std::list<Tool*>* t_list){
 		t_list->push_back(&set_lines_perpendicular);
 
 	if(arc_count == 0)
+	{
 		t_list->push_back(&set_lines_parallel);
+		t_list->push_back(&set_lines_equal_length);
+		t_list->push_back(&set_lines_colinear);
+	}
 
 	if(arc_count == 1 && line_count == 1)
 		t_list->push_back(&set_arc_tangent);
