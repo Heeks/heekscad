@@ -73,9 +73,9 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 			if(i==j)
 			{
 				//N[i][j]=norm; //Calculate a scaled identity matrix as a Hessian inverse estimate
-				N[i][j]=grad[i]/norm;
-				if(N[i][j]<0) N[i][j]=-N[i][j];
-				s[i]=-grad[i]/norm; //Calculate the initial search vector
+				//N[i][j]=grad[i]/(norm+.001);
+				N[i][j]=100;
+				s[i]=-grad[i]/(norm/.001); //Calculate the initial search vector
 
 			}
 			else N[i][j]=0;
@@ -159,6 +159,10 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	//Guarantee that the new alphaStar is within the bracket
 	if(alphaStar>alpha3 || alphaStar<alpha1) alphaStar=alpha2;
 
+	if(alphaStar!=alphaStar)
+	{
+		alphaStar=.001;//Fix nan problem
+	}
 	/// Set the values to alphaStar
 	for(int i=0;i<xLength;i++)
 	{
@@ -612,13 +616,13 @@ double calc(constraint * cons, int consLength)
 		if(cons[i].type==horizontal)
 		{
 			temp= (L1_P1_y-L1_P2_y);
-			error+=temp*temp*100;
+			error+=temp*temp*1000;
 		}
 
 		if(cons[i].type==vertical)
 		{
 			temp=(L1_P1_x-L1_P2_x);
-			error+=temp*temp*10;
+			error+=temp*temp*1000;
 		}
 
 		if(cons[i].type==tangentToCircle)
@@ -644,7 +648,7 @@ double calc(constraint * cons, int consLength)
 
 		if(cons[i].type==tangentToArc)
 		{
-			/*
+			
 			double dx,dy,Rpx,Rpy,RpxN,RpyN,hyp,error1,error2,rad;
 			dx = L1_P2_x - L1_P1_x;
 			dy = L1_P2_y - L1_P1_y;
@@ -674,18 +678,18 @@ double calc(constraint * cons, int consLength)
 			}
 			if(error1<error2)
 			{
-				error+=error1;
+				error+=error1/100;
 				//cout<<"error: "<<error1<<endl;
 			}
 			else
 			{
-				error+=error2;
+				error+=error2/100;
 				//cout<<"error: "<<error2<<endl;
 			}
-			*/
+			
 
-			temp=-pow(-A1_Center_x + A1_Start_x,2) - pow(-A1_Center_y + A1_Start_y,2) + pow(-(L1_P1_y*L1_P2_x) + A1_Center_y*(-L1_P1_x + L1_P2_x) + A1_Center_x*(L1_P1_y - L1_P2_y) + L1_P1_x*L1_P2_y,2)/(pow(-L1_P1_x + L1_P2_x,2) + pow(-L1_P1_y + L1_P2_y,2));
-			error += temp*temp;
+			//temp=-pow(-A1_Center_x + A1_Start_x,2) - pow(-A1_Center_y + A1_Start_y,2) + pow(-(L1_P1_y*L1_P2_x) + A1_Center_y*(-L1_P1_x + L1_P2_x) + A1_Center_x*(L1_P1_y - L1_P2_y) + L1_P1_x*L1_P2_y,2)/(pow(-L1_P1_x + L1_P2_x,2) + pow(-L1_P1_y + L1_P2_y,2));
+			//error += temp*temp;
 		}
 
 		if(cons[i].type==arcRules)
