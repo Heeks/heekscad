@@ -618,21 +618,27 @@ double calc(constraint * cons, int consLength)
 			double odx = L1_P2_x - L1_P1_x;
 			double ody = L1_P2_y - L1_P1_y;
 
-			if(odx*odx-.001>ody*ody)
-				error+=(odx-ody)*(odx-ody)*1000;
-			else
-				error+=odx*odx*1000;
+			double hyp=_hypot(odx,ody);
+			dx = odx/hyp;
+			dy = ody/hyp;
+
+			double theta = atan2(dy,dx);
+			double p1 = odx-cos(theta)*cos(theta)*ody;
+			error+=p1*p1*10;
 		}
 
 		if(cons[i].type==horizontal)
 		{
 			double odx = L1_P2_x - L1_P1_x;
 			double ody = L1_P2_y - L1_P1_y;
+			
+			double hyp=_hypot(odx,ody);
+			dx = odx/hyp;
+			dy = ody/hyp;
 
-			if(ody*ody-.001>odx*odx)
-				error+=(ody-odx)*(ody-odx)*1000;
-			else
-				error+=ody*ody*1000;
+			double theta = atan2(dy,dx);
+			double p1 = (ody-sin(theta)*sin(theta)*odx);
+			error+=p1*p1*10;
 		}
 
 		if(cons[i].type==tangentToCircle)
