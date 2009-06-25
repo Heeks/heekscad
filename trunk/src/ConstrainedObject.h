@@ -24,6 +24,8 @@ public:
 	void SetParallelConstraint(ConstrainedObject* obj);
 	void SetEqualLengthConstraint(ConstrainedObject* obj);
 	void SetColinearConstraint(ConstrainedObject* obj);
+	void SetConcentricConstraint(ConstrainedObject* obj);
+	void SetEqualRadiusConstraint(ConstrainedObject* obj);
 	void glCommands(HeeksColor color, gp_Ax1 mid_point);
 	void RemoveExisting(ConstrainedObject* obj, EnumConstraintType type);
 	bool HasConstraints();
