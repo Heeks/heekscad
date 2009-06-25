@@ -12,7 +12,6 @@
 	#define _hypot hypot
 #endif
 
-
 #ifndef SOLVE_H_
 #define SOLVE_H_
 
@@ -65,10 +64,10 @@
 ///////////////////////////////////////
 /// BFGS Solver parameters
 ///////////////////////////////////////
-#define pertMag           1e-4
-#define pertMin			  1e-8
-#define XconvergenceRough 1e-4
-#define XconvergenceFine  1e-12
+#define pertMag           1e-6
+#define pertMin			  1e-10
+#define XconvergenceRough 1e-8
+#define XconvergenceFine  1e-14
 #define smallF            1e-20
 #define validSolution     1e-12
 #define rough             0
