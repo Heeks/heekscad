@@ -118,7 +118,7 @@ CCorrelationTool::CorrelationData_t CCorrelationTool::CorrelationData(      cons
 	
 		double radius = ((max_scale_threshold * reference_box.Width()) + (max_scale_threshold * reference_box.Height()));
 		double alpha = 3.1415926 * 2 / number_of_sample_points;
-                double theta = alpha * sample;
+		double theta = alpha * sample;
 		double sample_centroid[3];
 		sample_box.Centre( sample_centroid );
 
@@ -127,7 +127,7 @@ CCorrelationTool::CorrelationData_t CCorrelationTool::CorrelationData(      cons
 		// smarter.
 
 		// sample_centroid[2] = 0.0;
-                double verification_line_end[3] = { 	(cos( theta ) * radius) + sample_centroid[0], 
+		double verification_line_end[3] = { 	(cos( theta ) * radius) + sample_centroid[0], 
 							(sin( theta ) * radius) + sample_centroid[1], 
 							sample_centroid[2] };
 
@@ -136,21 +136,21 @@ CCorrelationTool::CorrelationData_t CCorrelationTool::CorrelationData(      cons
 		if (verification_line)
 		{
 			std::list<double> intersections;
-                        if (sample_object->Intersects( verification_line, &intersections ))
-                        {
+			if (sample_object->Intersects( verification_line, &intersections ))
+			{
 				CorrelationSample_t correlation_sample;
-                                while (((intersections.size() % 3) == 0) && (intersections.size() > 0))
-                                {
-                                        Point3d intersection;
+				while (((intersections.size() % 3) == 0) && (intersections.size() > 0))
+				{
+					Point3d intersection;
 
-                                        intersection.x = *(intersections.begin());
-                                        intersections.erase(intersections.begin());
+					intersection.x = *(intersections.begin());
+					intersections.erase(intersections.begin());
 
-                                        intersection.y = *(intersections.begin());
-                                        intersections.erase(intersections.begin());
+					intersection.y = *(intersections.begin());
+					intersections.erase(intersections.begin());
 
-                                        intersection.z = *(intersections.begin());
-                                        intersections.erase(intersections.begin());
+					intersection.z = *(intersections.begin());
+					intersections.erase(intersections.begin());
 				
 					correlation_sample.m_intersection_points.insert( intersection );
 				
@@ -165,10 +165,10 @@ CCorrelationTool::CorrelationData_t CCorrelationTool::CorrelationData(      cons
 					distance *= required_scaling;
 
 					correlation_sample.m_intersection_distances.insert( distance );
-                                } // End while
+				} // End while
 
 				results.insert( std::make_pair( angle, correlation_sample ) );
-                        } // End if - then
+			} // End if - then
 			else
 			{
 				// It didn't intersect it.  We need to remember this.
@@ -196,12 +196,15 @@ std::set<CCorrelationTool::Point3d> CCorrelationTool::ReferencePoints( const CCo
 	for (Symbols_t::const_iterator symbol = sample_symbols.begin(); symbol != sample_symbols.end(); symbol++)
 	{
 		HeeksObj *ob = heekscad_interface.GetIDObject( symbol->first, symbol->second );
-		CBox box;
-		ob->GetBox(box);
-		double centroid[3];
-		box.Centre(centroid);
+		if (ob != NULL)
+		{
+			CBox box;
+			ob->GetBox(box);
+			double centroid[3];
+			box.Centre(centroid);
 
-		results.insert( Point3d( centroid[0], centroid[1], centroid[2] ) );
+			results.insert( Point3d( centroid[0], centroid[1], centroid[2] ) );
+		} // End if - then
 	} // End for
 
 	// Run through these symbols and return the centroid of the bounding box.
@@ -377,10 +380,10 @@ CCorrelationTool::Symbols_t CCorrelationTool::SimilarSymbols( const CCorrelation
 			continue;	// It's the reference object.  They're identicle.
 		} // End if - then
 
-		CorrelationData_t sample_correlation_data = CorrelationData(	Symbol_t( ob->GetType(), ob->m_id ),
-										reference_symbol,
-                                               					m_number_of_sample_points,
-                                               					m_max_scale_threshold );
+		CorrelationData_t sample_correlation_data = CorrelationData(Symbol_t( ob->GetType(), ob->m_id ),
+																	reference_symbol,
+																	m_number_of_sample_points,
+																	m_max_scale_threshold );
 
 		// Now compare the correlation data for both the reference and sample objects to see if we
 		// think they're similar.
@@ -400,12 +403,7 @@ CCorrelationTool::Symbols_t CCorrelationTool::SimilarSymbols( const CCorrelation
 
 
 /**
- * 	This method looks through the symbols in the list.  If they're PointType objects
- * 	then the object's location is added to the result set.  If it's a circle object
- * 	that doesn't intersect any other element (selected) then add its centre to
- * 	the result set.  Finally, find the intersections of all of these elements and
- * 	add the intersection points to the result set.  We use std::set<Point3d> so that
- * 	we end up with no duplicate points.
+ * 	Return the centroid of all identified symbols.
  */
 std::set<CCorrelationTool::Point3d> CCorrelationTool::FindAllLocations() const
 {
