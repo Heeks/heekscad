@@ -124,31 +124,25 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 					}
 					break;
 					case ParallelLineConstraint:
+					case PerpendicularLineConstraint:
+					case EqualLengthConstraint:
+					case ColinearConstraint:
 					{
 						line l = GetLineFromEndedObject(eobj);
 						constraint c;
-						c.type = parallel;
 						c.line1 = l;
 											
 						if((ConstrainedObject*)con->m_obj1 == cobj)
 							c.line2 = GetLineFromEndedObject((EndedObject*)con->m_obj2);
 						else
 							c.line2 = GetLineFromEndedObject((EndedObject*)con->m_obj1);
-						constraints.push_back(c);
-						cons.insert(con);
-					}
-					break;
-					case PerpendicularLineConstraint:
-					{
-						line l = GetLineFromEndedObject(eobj);
-						constraint c;
-						c.type = perpendicular;
-						c.line1 = l;
-	
-						if((ConstrainedObject*)con->m_obj1 == cobj)
-							c.line2 = GetLineFromEndedObject((EndedObject*)con->m_obj2);
-						else
-							c.line2 = GetLineFromEndedObject((EndedObject*)con->m_obj1);
+						switch(con->m_type)
+						{
+							case ParallelLineConstraint: c.type = parallel; break;
+							case PerpendicularLineConstraint: c.type = perpendicular; break;
+							case EqualLengthConstraint: c.type = equalLegnth; break;
+							case ColinearConstraint: c.type = colinear; break;
+						}
 						constraints.push_back(c);
 						cons.insert(con);
 					}
