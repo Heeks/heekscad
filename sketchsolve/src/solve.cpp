@@ -618,9 +618,6 @@ double calc(constraint * cons, int consLength)
 			double odx = L1_P2_x - L1_P1_x;
 			double ody = L1_P2_y - L1_P1_y;
 
-		//	if(fabs(ody) < fabs(odx) / 100)
-		//		ody = odx / 100;
-
 			if(odx*odx-.001>ody*ody)
 				error+=(odx-ody)*(odx-ody)*1000;
 			else
@@ -632,10 +629,7 @@ double calc(constraint * cons, int consLength)
 			double odx = L1_P2_x - L1_P1_x;
 			double ody = L1_P2_y - L1_P1_y;
 
-		//	if(fabs(odx) < fabs(ody) / 100)
-		//		odx = ody / 100;
-
-			if(ody*ody-.001>odx*odx-.001)
+			if(ody*ody-.001>odx*odx)
 				error+=(ody-odx)*(ody-odx)*1000;
 			else
 				error+=ody*ody*1000;
