@@ -99,7 +99,7 @@ int main() {
 		pparameters[i] = &parameters[i];
 	}
 
-	sol=solve(pparameters ,8,cons,3,fine);
+	sol=solve(pparameters ,8,cons,3,rough);
 	if(sol==succsess)
 	{
 		cout<<"A good Solution was found"<<endl;
