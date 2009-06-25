@@ -74,7 +74,7 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 			{
 				//N[i][j]=norm; //Calculate a scaled identity matrix as a Hessian inverse estimate
 				//N[i][j]=grad[i]/(norm+.001);
-				N[i][j]=100;
+				N[i][j]=.1;
 				s[i]=-grad[i]/(norm/.001); //Calculate the initial search vector
 
 			}
@@ -701,8 +701,9 @@ double calc(constraint * cons, int consLength)
 
 		if(cons[i].type==lineLength)
 		{
-			temp=_hypot(L1_P2_x - L1_P1_x , L1_P2_y - L1_P1_y) - length;
-			error += temp*temp;
+			temp= sqrt(pow(L1_P2_x - L1_P1_x,2) + pow(L1_P2_y - L1_P1_y,2)) - length;
+			//temp=_hypot(L1_P2_x - L1_P1_x , L1_P2_y - L1_P1_y) - length;
+			error += temp*temp*100;
 		}
 
 		if(cons[i].type==equalLegnth)
