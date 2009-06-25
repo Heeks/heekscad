@@ -90,6 +90,20 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 
 				switch(con->m_type)
 				{
+					case EqualRadiusConstraint:
+					case ConcentricConstraint:
+					{ 
+						constraint c;
+						c.arc1 = GetArc((HArc*)con->m_obj1);
+						c.arc2 = GetArc((HArc*)con->m_obj2);
+						c.type = equalRadiusArcs;
+						if(con->m_type == ConcentricConstraint)
+							c.type = concentricArcs;
+						cons.insert(con);
+						constraints.push_back(c);
+					}
+					break;
+
 					case LineTangentToArcConstraint:
 					{
 						arc a = GetArc((HArc*)obj);
