@@ -55,7 +55,6 @@ private:
 	std::map< int, int > next_id_map;
 	std::map< std::string, HeeksObj*(*)(TiXmlElement* pElem) > xml_read_fn_map;
 
-	void create_font();
 	void render_screen_text2(const wxChar* str);
 	void RenderDatumOrCurrentCoordSys(bool select);
 
@@ -263,6 +262,8 @@ public:
 	void PlotLine(const double* s, const double* e);
 	void PlotArc(const double* s, const double* e, const double* c);
 	void InitialiseLocale();
+	void create_font();
+
 };
 
 DECLARE_APP(HeeksCADapp)
