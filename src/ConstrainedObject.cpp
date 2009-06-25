@@ -73,6 +73,28 @@ void ConstrainedObject::SetEqualLengthConstraint(ConstrainedObject* obj){
 	obj->constraints.push_back(c);
 }
 
+void ConstrainedObject::SetConcentricConstraint(ConstrainedObject* obj){
+	RemoveExisting(obj, ConcentricConstraint);
+	Constraint* c = new Constraint();
+	c->m_type = ConcentricConstraint;
+	c->m_obj1 = (HeeksObj*)this;
+	c->m_obj2 = (HeeksObj*)obj;
+	constraints.push_back(c);
+	obj->constraints.push_back(c);
+}
+
+
+void ConstrainedObject::SetEqualRadiusConstraint(ConstrainedObject* obj){
+	RemoveExisting(obj, EqualRadiusConstraint);
+	Constraint* c = new Constraint();
+	c->m_type = EqualRadiusConstraint;
+	c->m_obj1 = (HeeksObj*)this;
+	c->m_obj2 = (HeeksObj*)obj;
+	constraints.push_back(c);
+	obj->constraints.push_back(c);
+}
+
+
 void ConstrainedObject::SetColinearConstraint(ConstrainedObject* obj){
 	RemoveExisting(obj,ColinearConstraint);
 	Constraint* c = new Constraint();
