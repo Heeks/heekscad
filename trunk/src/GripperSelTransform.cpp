@@ -68,7 +68,7 @@ void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
 		}
 		extract(gp_Pnt(make_point(from).XYZ() + make_vector( shift ).XYZ()), from);
 		position = position.XYZ() + make_vector( shift ).XYZ();
-		wxGetApp().Repaint();
+		wxGetApp().Repaint(true);
 		return;
 	}
 
