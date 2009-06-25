@@ -34,8 +34,8 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 	HeeksObj* obj = sketch->GetFirstChild();
 	while(obj)
 	{
-		ConstrainedObject* cobj = (ConstrainedObject*)obj;
-		EndedObject *eobj = (EndedObject*)obj;
+		ConstrainedObject* cobj = (dynamic_cast<ConstrainedObject*>(obj));
+		EndedObject *eobj = (dynamic_cast<EndedObject*>(obj));
 		if(cobj)
 		{
 			eobj->LoadToDoubles();
@@ -188,7 +188,7 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 	obj = sketch->GetFirstChild();
 	while(obj)
 	{
-		ConstrainedObject* cobj = (ConstrainedObject*)obj;
+		ConstrainedObject* cobj = (dynamic_cast<ConstrainedObject*>(obj));
 		EndedObject *eobj = (EndedObject*)obj;
 		if(cobj)
 		{
