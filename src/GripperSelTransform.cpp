@@ -215,7 +215,7 @@ void GripperSelTransform::MakeMatrix ( const double* from, const double* to, con
 			double new_x = make_vector(to) * object_x - gp_Vec(scale_centre_point.XYZ()) * object_x;
 			if(fabs(old_x) < 0.000000001)return;
 			double scale = new_x/old_x;
-			double m[16] = {scale, 0, 0, 0, 0, scale, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
+			double m[16] = {scale, 0, 0, 0, 0, scale, 0, 0, 0, 0, scale, 0, 0, 0, 0, scale};
 			mat = object_mat * make_matrix(m) * object_mat.Inverted();
 		}
 		break;
