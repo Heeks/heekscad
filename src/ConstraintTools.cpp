@@ -64,7 +64,8 @@ public:
 		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
 			EndedObject* obj = (EndedObject*)*It;
 			if(last)
-				obj->SetParallelConstraint(last);
+				if(obj->SetParallelConstraint(last))
+					break;
 			last=obj;
 		}
 		SolveSketch((CSketch*)last->m_owner);
@@ -84,7 +85,8 @@ public:
 		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
 			EndedObject* obj = (EndedObject*)*It;
 			if(last)
-				obj->SetEqualLengthConstraint(last);
+				if(obj->SetEqualLengthConstraint(last))
+					break;
 			last=obj;
 		}
 		SolveSketch((CSketch*)last->m_owner);
@@ -104,7 +106,8 @@ public:
 		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
 			EndedObject* obj = (EndedObject*)*It;
 			if(last)
-				obj->SetColinearConstraint(last);
+				if(obj->SetColinearConstraint(last))
+					break;
 			last=obj;
 		}
 		SolveSketch((CSketch*)last->m_owner);
@@ -124,7 +127,8 @@ public:
 		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
 			EndedObject* obj = (EndedObject*)*It;
 			if(last)
-				obj->SetEqualRadiusConstraint(last);
+				if(obj->SetEqualRadiusConstraint(last))
+					break;
 			last=obj;
 		}
 		SolveSketch((CSketch*)last->m_owner);
@@ -144,7 +148,8 @@ public:
 		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
 			EndedObject* obj = (EndedObject*)*It;
 			if(last)
-				obj->SetConcentricConstraint(last);
+				if(obj->SetConcentricConstraint(last))
+					break;
 			last=obj;
 		}
 		SolveSketch((CSketch*)last->m_owner);
