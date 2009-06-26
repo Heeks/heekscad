@@ -33,7 +33,7 @@ endif
 OCCLIBS=-lTKVRML -lTKSTL -lTKBRep -lTKIGES -lTKShHealing -lTKSTEP -lTKSTEP209 -lTKSTEPAttr -lTKSTEPBase -lTKXSBase -lTKShapeSchema -lFWOSPlugin -lTKBool -lTKCAF -lTKCDF -lTKernel -lTKFeat -lTKFillet -lTKG2d -lTKG3d -lTKGeomAlgo -lTKGeomBase -lTKHLR -lTKMath -lTKOffset -lTKPrim -lTKPShape -lTKService -lTKTopAlgo -lTKV2d -lTKV3d -lTKMesh -lTKAdvTools -lTKBO -lTKXDESTEP -lTKXCAF -lTKXCAFSchema -lTKLCAF -lTKPLCAF ${CASLIBPATH}
 
 ${EXECUTABLE}: ${OBJECTS}
-	$(CC) -o ${EXECUTABLE} ${OBJECTS} -lstdc++ -lGLU -lGL ${WXLIBS} ${OCCLIBS}
+	$(CC) -o ${EXECUTABLE} ${OBJECTS} -lstdc++ -lGLU -lGL -g ${WXLIBS} ${OCCLIBS}
 
 AboutBox.o: AboutBox.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
