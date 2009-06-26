@@ -139,4 +139,7 @@ int main() {
 	return 0;
 }
 
-
+void debugprint(std::string s)
+{
+	cout << s;
+}
