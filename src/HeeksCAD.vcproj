@@ -50,7 +50,7 @@
 				AdditionalOptions="/EHsc "
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;d:\wxPython-2.8.9.2\lib\vc_dll\mswuh&quot;;.\;&quot;$(CASROOT)\inc&quot;;&quot;D:\wxPython-2.8.9.2\include&quot;;&quot;D:\Python-2.6.2\Include&quot;;&quot;D:\Python-2.6.2\PC&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXDEBUG__;_WINDOWS;_UNICODE;UNICODE;NOPCH;WNT;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;HEEKSCAD;STRICT"
+				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXDEBUG__;_WINDOWS;_UNICODE;UNICODE;NOPCH;WNT;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;HEEKSCAD;STRICT;DEBUG"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="true"

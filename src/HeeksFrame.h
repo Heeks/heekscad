@@ -59,6 +59,7 @@ private:
 	int MakeNextIDForTool(void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&));
 
 public:
+	wxLogWindow* m_logger;
 	CTreeCanvas *m_tree_canvas;
 	CGraphicsCanvas* m_graphics;
 	CObjPropsCanvas* m_properties;
