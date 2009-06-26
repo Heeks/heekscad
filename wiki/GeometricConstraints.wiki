@@ -1,0 +1,29 @@
+#summary How to use the geometric constraints solver
+= Introduction =
+
+HeeksCAD has a built in geometric constraints solver. Allowing you to make inaccurate sketches into perfect drawings. 
+
+
+= Details =
+
+First, there are a couple of options that make things a whole lot easier. In the options panel:
+
+Go to digitizing, and turn on autosolve constraints.
+Go to selection filter, and turn off sketches.
+
+Now, you can use the line arc drawing tool to make a polygon. Pressing and holding 'a' while drawing allows you to insert an arc segment.
+
+After drawing, you can select a segment by clicking on it. Dragging the points will move the edges of the polygon around. A right click brings up a context menu allowing you to add/remove constraints. The items in the context menu will change depending on what is selected. Ctrl clicking allows multiple things to be selected. 
+
+1 line selected:
+   horizontal,vertical,length
+2 lines selected:
+   parallel,perpendicular,colinear,equal length
+1 arc selected:
+   radius
+2 arcs selected:
+   concentric,equal radius
+1 arc and 1 line selected:
+   arc tangent to line
+
+After setting the parameter based constraints(length or radius), you can now change the parameter in the properties pane. This will update the geometry automatically.
