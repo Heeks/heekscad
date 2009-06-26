@@ -12,11 +12,13 @@
 #include "solve.h"
 #include <cmath>
 #include <stdlib.h>
+#include <sstream>
 
 using namespace std;
 
 int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine)
 {
+	std::stringstream cstr;
 	double convergence,pert ;
 	//Save the original parameters for later.
 	double *origSolution = new double[xLength];
@@ -53,7 +55,9 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 		grad[j]=.5*(second-first)/pert;
 		ftimes++;
 #ifdef DEBUG
-		cout<<"gradient: "<<grad[j]<<endl;
+		cstr << "gradient: " << grad[j];
+		debugprint(cstr.str());
+		cstr.clear();
 #endif
 		*x[j]=temper;
 		norm = norm+(grad[j]*grad[j]);
@@ -474,12 +478,14 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 
 	for(int i=0;i<xLength;i++)
 	{
-		cout<<"Parameter("<<i<<"): "<<*(x[i])<<endl;
+		cstr<<"Parameter("<<i<<"): "<<*(x[i])<<endl;
 		//cout<<xold[i]<<endl;
 	}
-	cout<<"Fnew: "<<fnew<<endl;
-	cout<<"Number of Iterations: "<<iterations<<endl;
-	cout<<"Number of function calls: "<<ftimes<<endl;
+	cstr<<"Fnew: "<<fnew<<endl;
+	cstr<<"Number of Iterations: "<<iterations<<endl;
+	cstr<<"Number of function calls: "<<ftimes<<endl;
+	debugprint(cstr.str());
+	cstr.clear();
 
 #endif
 

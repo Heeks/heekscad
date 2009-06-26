@@ -92,6 +92,10 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	: wxFrame((wxWindow *)NULL, -1, title, pos, size)
 { 
 	wxGetApp().m_frame = this;
+
+	m_logger = new wxLogWindow(NULL,_("Trace Log"),false,true);
+	wxLog::SetActiveTarget(m_logger);
+
 	m_next_id_for_button = ID_FIRST_EXTERNAL_BUTTON;
 	m_printout = NULL;
 
@@ -246,6 +250,7 @@ CHeeksFrame::~CHeeksFrame()
 	config.Write(_T("Perspective"), m_graphics->m_view_point.GetPerspective());	
 
 	delete m_aui_manager;
+	delete wxLog::SetActiveTarget(new wxLogStderr(NULL));
 }
 
 void CHeeksFrame::OnKeyDown(wxKeyEvent& event)
@@ -338,6 +343,13 @@ static void OnViewObjects( wxCommandEvent& event )
 static void OnUpdateViewObjects( wxUpdateUIEvent& event )
 {
 	event.Check(wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_tree_canvas).IsShown());
+}
+
+static void OnLog( wxCommandEvent& event )
+{
+	if(wxGetApp().m_frame->m_logger){
+		wxGetApp().m_frame->m_logger->Show(true);
+	}
 }
 
 static void OnViewOptions( wxCommandEvent& event )
@@ -1340,6 +1352,7 @@ void CHeeksFrame::MakeMenus()
 	// Window Menu
 	m_menuWindow = new wxMenu;
 	AddMenuItem(m_menuWindow, _("Objects"), wxBitmap(), OnViewObjects, OnUpdateViewObjects, NULL, true);
+	AddMenuItem(m_menuWindow, _("Log"), wxBitmap(), OnLog);
 	AddMenuItem(m_menuWindow, _("Options"), wxBitmap(), OnViewOptions, OnUpdateViewOptions, NULL, true);
 	AddMenuItem(m_menuWindow, _("Input"), wxBitmap(), OnViewInput, OnUpdateViewInput, NULL, true);
 	AddMenuItem(m_menuWindow, _("Properties"), wxBitmap(), OnViewProperties, OnUpdateViewProperties, NULL, true);

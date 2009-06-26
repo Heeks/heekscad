@@ -167,7 +167,7 @@ struct constraint
 
 
 
-
+void debugprint(std::string s);
 
 //Function Prototypes
 int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine);
