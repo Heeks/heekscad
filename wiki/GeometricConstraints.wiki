@@ -25,5 +25,11 @@ After drawing, you can select a segment by clicking on it. Dragging the points w
    concentric,equal radius
 1 arc and 1 line selected:
    arc tangent to line
+2 points selected
+   points coincident
+1 point and 1 line selected
+   point on line, point on midpoint of line
+1 point and 1 arc selected
+   point on arc, point on midpoint of arc
 
 After setting the parameter based constraints(length or radius), you can now change the parameter in the properties pane. This will update the geometry automatically.
