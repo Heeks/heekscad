@@ -8,6 +8,7 @@ class Constraint;
 
 #include "../interface/HeeksObj.h"
 #include "Constraint.h"
+#include "HPoint.h"
 
 class ConstrainedObject: public ObjList{
 public:
@@ -27,7 +28,7 @@ public:
 	bool SetConcentricConstraint(ConstrainedObject* obj);
 	bool SetEqualRadiusConstraint(ConstrainedObject* obj);
 	void glCommands(HeeksColor color, gp_Ax1 mid_point);
-	bool RemoveExisting(ConstrainedObject* obj, EnumConstraintType type);
+	bool RemoveExisting(HeeksObj* obj, EnumConstraintType type);
 	bool HasConstraints();
 	void SetCoincidentPoint(ConstrainedObject* obj,EnumPoint obj1_point,EnumPoint obj2_point);
 	bool HasPointConstraint(ConstrainedObject* obj,EnumPoint obj1_point,EnumPoint obj2_point);
@@ -36,4 +37,5 @@ public:
 	void SetLineLength(double length);
 	void SetRadius(double radius);
 	void SetTangentConstraint(ConstrainedObject* obj);
+	void SetPointOnLineConstraint(HPoint* obj);
 };

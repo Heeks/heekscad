@@ -36,14 +36,14 @@ const EndedObject& EndedObject::operator=(const EndedObject &b){
 
 void EndedObject::LoadToDoubles()
 {
-	ax = A->m_p.X(); ay = A->m_p.Y();
-	bx = B->m_p.X(); by = B->m_p.Y();
+	A->LoadToDoubles();
+	B->LoadToDoubles();
 }
 
 void EndedObject::LoadFromDoubles()
 {
-	A->m_p = gp_Pnt(ax,ay,0);
-	B->m_p = gp_Pnt(bx,by,0);
+	A->LoadFromDoubles();
+	B->LoadFromDoubles();
 }
 
 bool EndedObject::ModifyByMatrix(const double* m){

@@ -15,6 +15,7 @@ private:
 public:
 	gp_Pnt m_p;
 	bool m_draw_unselected;
+	double mx,my;
 
 	~HPoint(void);
 	HPoint(const gp_Pnt &p, const HeeksColor* col);
@@ -39,6 +40,8 @@ public:
 	bool GetEndPoint(double* pos);
 	void CopyFrom(const HeeksObj* object){operator=(*((HPoint*)object));}
 	void WriteXML(TiXmlNode *root);
+	void LoadFromDoubles();
+	void LoadToDoubles();
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 };

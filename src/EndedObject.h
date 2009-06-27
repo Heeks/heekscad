@@ -12,7 +12,6 @@
 class EndedObject: public ConstrainedObject{
 public:
 	HPoint* A, *B;
-	double ax,ay,bx,by;
 
 	~EndedObject(void);
 	EndedObject(const HeeksColor* color);
