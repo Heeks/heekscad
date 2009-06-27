@@ -234,25 +234,25 @@ void ApplyCoincidentConstraints(HeeksObj* extobj, std::list<HeeksObj*> list)
 				{
 					bool shared_points = false;
 					//Check if these two objects share any points
-					if(eobj->A.Distance(eobj2->A) < wxGetApp().m_geom_tol)
+					if(eobj->A->m_p.Distance(eobj2->A->m_p) < wxGetApp().m_geom_tol)
 					{
 						//A's coincidant
 						eobj->SetCoincidentPoint(eobj2,PointA,PointA);
 						shared_points = true;
 					}
-					if(eobj->A.Distance(eobj2->B) < wxGetApp().m_geom_tol)
+					if(eobj->A->m_p.Distance(eobj2->B->m_p) < wxGetApp().m_geom_tol)
 					{
 						//A to B coincidant
 						eobj->SetCoincidentPoint(eobj2,PointA,PointB);
 						shared_points = true;
 					}
-					if(eobj->B.Distance(eobj2->A) < wxGetApp().m_geom_tol)
+					if(eobj->B->m_p.Distance(eobj2->A->m_p) < wxGetApp().m_geom_tol)
 					{
 						//B to A coincidant
 						eobj->SetCoincidentPoint(eobj2,PointB,PointA);
 						shared_points = true;
 					}
-					if(eobj->B.Distance(eobj2->B) < wxGetApp().m_geom_tol)
+					if(eobj->B->m_p.Distance(eobj2->B->m_p) < wxGetApp().m_geom_tol)
 					{
 						//B's coincidant
 						eobj->SetCoincidentPoint(eobj2,PointB,PointB);

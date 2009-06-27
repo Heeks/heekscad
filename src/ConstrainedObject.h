@@ -9,7 +9,7 @@ class Constraint;
 #include "../interface/HeeksObj.h"
 #include "Constraint.h"
 
-class ConstrainedObject: public HeeksObj{
+class ConstrainedObject: public ObjList{
 public:
 	std::list<Constraint*> constraints;
 	Constraint* absoluteangleconstraint;

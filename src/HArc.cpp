@@ -18,13 +18,13 @@
 #include "SolveSketch.h"
 
 
-HArc::HArc(const HArc &line){
+HArc::HArc(const HArc &line):EndedObject(&line.color){
 	operator=(line);
 }
 
-HArc::HArc(const gp_Pnt &a, const gp_Pnt &b, const gp_Circ &c, const HeeksColor* col):color(*col), m_circle(c){
-	A = a;
-	B = b;
+HArc::HArc(const gp_Pnt &a, const gp_Pnt &b, const gp_Circ &c, const HeeksColor* col):color(*col), m_circle(c),EndedObject(col){
+	A->m_p = a;
+	B->m_p = b;
 }
 
 HArc::~HArc(){
@@ -64,17 +64,17 @@ void HArc::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 //d_angle - determines the direction and the ammount of the arc to draw
 void HArc::GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point)const
 {
-	if(A.IsEqual(B, wxGetApp().m_geom_tol)){
+	if(A->m_p.IsEqual(B->m_p, wxGetApp().m_geom_tol)){
 		return;
 	}
 	gp_Dir x_axis = m_circle.XAxis().Direction();
 	gp_Dir y_axis = m_circle.YAxis().Direction();
 	gp_Pnt centre = m_circle.Location();
 
-	double ax = gp_Vec(A.XYZ() - centre.XYZ()) * x_axis;
-	double ay = gp_Vec(A.XYZ() - centre.XYZ()) * y_axis;
-	double bx = gp_Vec(B.XYZ() - centre.XYZ()) * x_axis;
-	double by = gp_Vec(B.XYZ() - centre.XYZ()) * y_axis;
+	double ax = gp_Vec(A->m_p.XYZ() - centre.XYZ()) * x_axis;
+	double ay = gp_Vec(A->m_p.XYZ() - centre.XYZ()) * y_axis;
+	double bx = gp_Vec(B->m_p.XYZ() - centre.XYZ()) * x_axis;
+	double by = gp_Vec(B->m_p.XYZ() - centre.XYZ()) * y_axis;
 
 	double start_angle = atan2(ay, ax);
 	double end_angle = atan2(by, bx);
@@ -141,8 +141,8 @@ void HArc::Draw(wxDC& dc)
 {
 	wxGetApp().PlotSetColor(color);
 	double s[3], e[3], c[3];
-	extract(A, s);
-	extract(B, e);
+	extract(A->m_p, s);
+	extract(B->m_p, e);
 	extract(m_circle.Location(), c);
 	wxGetApp().PlotArc(s, e, c);
 }
@@ -160,8 +160,8 @@ bool HArc::ModifyByMatrix(const double* m){
 }
 
 void HArc::GetBox(CBox &box){
-	box.Insert(A.X(), A.Y(), A.Z());
-	box.Insert(B.X(), B.Y(), B.Z());
+	box.Insert(A->m_p.X(), A->m_p.Y(), A->m_p.Z());
+	box.Insert(B->m_p.X(), B->m_p.Y(), B->m_p.Z());
 }
 
 void HArc::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
@@ -169,12 +169,12 @@ void HArc::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
 }
 
 static void on_set_start(const double *vt, HeeksObj* object){
-	((HArc*)object)->A = make_point(vt);
+	((HArc*)object)->A->m_p = make_point(vt);
 	wxGetApp().Repaint();
 }
 
 static void on_set_end(const double *vt, HeeksObj* object){
-	((HArc*)object)->B = make_point(vt);
+	((HArc*)object)->B->m_p = make_point(vt);
 	wxGetApp().Repaint();
 }
 
@@ -200,15 +200,15 @@ static void on_set_radius(double v, HeeksObj* object){
 void HArc::GetProperties(std::list<Property *> *list){
 	double a[3], b[3];
 	double c[3], ax[3];
-	extract(A, a);
-	extract(B, b);
+	extract(A->m_p, a);
+	extract(B->m_p, b);
 	extract(m_circle.Location(), c);
 	extract(m_circle.Axis().Direction(), ax);
 	list->push_back(new PropertyVertex(_("start"), a, this, on_set_start));
 	list->push_back(new PropertyVertex(_("end"), b, this, on_set_end));
 	list->push_back(new PropertyVertex(_("centre"), c, this, on_set_centre));
 	list->push_back(new PropertyVector(_("axis"), ax, this, on_set_axis));
-	double length = A.Distance(B);
+	double length = A->m_p.Distance(B->m_p);
 	list->push_back(new PropertyLength(_("length"), length, NULL));
 	list->push_back(new PropertyLength(_("radius"), m_circle.Radius(), this, on_set_radius));
 
@@ -293,15 +293,15 @@ bool HArc::Intersects(const gp_Pnt &pnt)const
 {
 	if(!intersect(pnt, m_circle))return false;
 
-	if(pnt.IsEqual(A, wxGetApp().m_geom_tol)){
+	if(pnt.IsEqual(A->m_p, wxGetApp().m_geom_tol)){
 		return true;
 	}
 
-	if(pnt.IsEqual(B, wxGetApp().m_geom_tol)){
+	if(pnt.IsEqual(B->m_p, wxGetApp().m_geom_tol)){
 		return true;
 	}
 
-	if(A.IsEqual(B, wxGetApp().m_geom_tol)){
+	if(A->m_p.IsEqual(B->m_p, wxGetApp().m_geom_tol)){
 		return false; // no size arc!
 	}
 
@@ -309,10 +309,10 @@ bool HArc::Intersects(const gp_Pnt &pnt)const
 	gp_Dir y_axis = m_circle.YAxis().Direction();
 	gp_Pnt centre = m_circle.Location();
 
-	double ax = gp_Vec(A.XYZ() - centre.XYZ()) * x_axis;
-	double ay = gp_Vec(A.XYZ() - centre.XYZ()) * y_axis;
-	double bx = gp_Vec(B.XYZ() - centre.XYZ()) * x_axis;
-	double by = gp_Vec(B.XYZ() - centre.XYZ()) * y_axis;
+	double ax = gp_Vec(A->m_p.XYZ() - centre.XYZ()) * x_axis;
+	double ay = gp_Vec(A->m_p.XYZ() - centre.XYZ()) * y_axis;
+	double bx = gp_Vec(B->m_p.XYZ() - centre.XYZ()) * x_axis;
+	double by = gp_Vec(B->m_p.XYZ() - centre.XYZ()) * y_axis;
 	double px = gp_Vec(pnt.XYZ() - centre.XYZ()) * x_axis;
 	double py = gp_Vec(pnt.XYZ() - centre.XYZ()) * y_axis;
 
@@ -350,7 +350,7 @@ void HArc::LoadFromDoubles()
 	EndedObject::LoadFromDoubles();
 	gp_Pnt p(cx,cy,0);
 	m_circle.SetLocation(p);
-	m_circle.SetRadius(p.Distance(A));
+	m_circle.SetRadius(p.Distance(A->m_p));
 }
 
 void HArc::LoadToDoubles()
@@ -372,28 +372,28 @@ bool HArc::Stretch(const double *p, const double* shift, void* data){
 	if(wxGetApp().autosolve_constraints)
 		return EndedObject::Stretch(p,shift,data);
 
-	if(A.IsEqual(vp, wxGetApp().m_geom_tol)){
+	if(A->m_p.IsEqual(vp, wxGetApp().m_geom_tol)){
 		gp_Vec direction = -(GetSegmentVector(1.0));
 		gp_Pnt centre;
 		gp_Dir axis;
-		gp_Pnt new_A = gp_Pnt(A.XYZ() + vshift.XYZ());
-		if(HArc::TangentialArc(B, direction, new_A, centre, axis))
+		gp_Pnt new_A = gp_Pnt(A->m_p.XYZ() + vshift.XYZ());
+		if(HArc::TangentialArc(B->m_p, direction, new_A, centre, axis))
 		{
 			m_circle.SetAxis(gp_Ax1(centre, -axis));
 			m_circle.SetRadius(new_A.Distance(centre));
-			A = new_A;
+			A->m_p = new_A;
 		}
 	}
-	else if(B.IsEqual(vp, wxGetApp().m_geom_tol)){
+	else if(B->m_p.IsEqual(vp, wxGetApp().m_geom_tol)){
 		gp_Vec direction = GetSegmentVector(0.0);
 		gp_Pnt centre;
 		gp_Dir axis;
-		gp_Pnt new_B = gp_Pnt(B.XYZ() + vshift.XYZ());
-		if(HArc::TangentialArc(A, direction, new_B, centre, axis))
+		gp_Pnt new_B = gp_Pnt(B->m_p.XYZ() + vshift.XYZ());
+		if(HArc::TangentialArc(A->m_p, direction, new_B, centre, axis))
 		{
 			m_circle.SetAxis(gp_Ax1(centre, axis));
-			m_circle.SetRadius(A.Distance(centre));
-			B = new_B;
+			m_circle.SetRadius(A->m_p.Distance(centre));
+			B->m_p = new_B;
 		}
 	}
 	return false;
@@ -417,17 +417,17 @@ gp_Vec HArc::GetSegmentVector(double fraction)
 
 gp_Pnt HArc::GetPointAtFraction(double fraction)
 {
-	if(A.IsEqual(B, wxGetApp().m_geom_tol)){
-		return A;
+	if(A->m_p.IsEqual(B->m_p, wxGetApp().m_geom_tol)){
+		return A->m_p;
 	}
 	gp_Dir x_axis = m_circle.XAxis().Direction();
 	gp_Dir y_axis = m_circle.YAxis().Direction();
 	gp_Pnt centre = m_circle.Location();
 
-	double ax = gp_Vec(A.XYZ() - centre.XYZ()) * x_axis;
-	double ay = gp_Vec(A.XYZ() - centre.XYZ()) * y_axis;
-	double bx = gp_Vec(B.XYZ() - centre.XYZ()) * x_axis;
-	double by = gp_Vec(B.XYZ() - centre.XYZ()) * y_axis;
+	double ax = gp_Vec(A->m_p.XYZ() - centre.XYZ()) * x_axis;
+	double ay = gp_Vec(A->m_p.XYZ() - centre.XYZ()) * y_axis;
+	double bx = gp_Vec(B->m_p.XYZ() - centre.XYZ()) * x_axis;
+	double by = gp_Vec(B->m_p.XYZ() - centre.XYZ()) * y_axis;
 
 	double start_angle = atan2(ay, ax);
 	double end_angle = atan2(by, bx);
@@ -472,12 +472,12 @@ void HArc::WriteXML(TiXmlNode *root)
 	TiXmlElement *element = new TiXmlElement( "Arc" );
 	root->LinkEndChild( element );  
 	element->SetAttribute("col", color.COLORREF_color());
-	element->SetDoubleAttribute("sx", A.X());
-	element->SetDoubleAttribute("sy", A.Y());
-	element->SetDoubleAttribute("sz", A.Z());
-	element->SetDoubleAttribute("ex", B.X());
-	element->SetDoubleAttribute("ey", B.Y());
-	element->SetDoubleAttribute("ez", B.Z());
+	element->SetDoubleAttribute("sx", A->m_p.X());
+	element->SetDoubleAttribute("sy", A->m_p.Y());
+	element->SetDoubleAttribute("sz", A->m_p.Z());
+	element->SetDoubleAttribute("ex", B->m_p.X());
+	element->SetDoubleAttribute("ey", B->m_p.Y());
+	element->SetDoubleAttribute("ez", B->m_p.Z());
 	gp_Pnt C = m_circle.Location();
 	gp_Dir D = m_circle.Axis().Direction();
 	element->SetDoubleAttribute("cx", C.X());
@@ -525,7 +525,7 @@ HeeksObj* HArc::ReadFromXMLElement(TiXmlElement* pElem)
 
 void HArc::Reverse()
 {
-	gp_Pnt temp = A;
+	HPoint* temp = A;
 	A = B;
 	B = temp;
 	m_circle.SetAxis(m_circle.Axis().Reversed());

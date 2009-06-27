@@ -19,6 +19,7 @@ HPoint::HPoint(const gp_Pnt &p, const HeeksColor* col)
 {
 	m_p = p;
 	color = *col;
+	m_draw_unselected=true;
 }
 
 HPoint::HPoint(const HPoint &p)
@@ -31,11 +32,15 @@ const HPoint& HPoint::operator=(const HPoint &b)
 	HeeksObj::operator=(b);
 	m_p = b.m_p;
 	color = b.color;
+	m_draw_unselected = b.m_draw_unselected;
 	return *this;
 }
 
 void HPoint::glCommands(bool select, bool marked, bool no_color)
 {
+	if(!marked && !m_draw_unselected)
+		return;
+
 	if(!no_color){
 		wxGetApp().glColorEnsuringContrast(color);
 	}

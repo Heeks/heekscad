@@ -818,8 +818,8 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file)
 		{
 			HLine* l = (HLine*)object;
 			double s[3], e[3];
-			extract(l->A, s);
-			extract(l->B, e);
+			extract(l->A->m_p, s);
+			extract(l->B->m_p, e);
 			dxf_file.WriteLine(s, e);
 		}
 		break;
@@ -827,8 +827,8 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file)
 		{
 			HArc* a = (HArc*)object;
 			double s[3], e[3], c[3];
-			extract(a->A, s);
-			extract(a->B, e);
+			extract(a->A->m_p, s);
+			extract(a->B->m_p, e);
 			extract(a->m_circle.Location(), c);
 			bool dir = a->m_circle.Axis().Direction().Z() > 0;
 			dxf_file.WriteArc(s, e, c, dir);
