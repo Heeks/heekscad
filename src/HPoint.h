@@ -14,6 +14,7 @@ private:
 
 public:
 	gp_Pnt m_p;
+	bool m_draw_unselected;
 
 	~HPoint(void);
 	HPoint(const gp_Pnt &p, const HeeksColor* col);

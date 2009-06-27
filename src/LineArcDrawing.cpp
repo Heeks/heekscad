@@ -90,7 +90,7 @@ void LineArcDrawing::set_previous_direction(){
 	}
 	else if(temp_object->GetType() == ArcType){
 		gp_Vec circlev(((HArc*)temp_object)->m_circle.Axis().Direction());
-		gp_Vec endv(((HArc*)temp_object)->m_circle.Location(), ((HArc*)temp_object)->B);
+		gp_Vec endv(((HArc*)temp_object)->m_circle.Location(), ((HArc*)temp_object)->B->m_p);
 		wxGetApp().DoToolUndoably(new SetPreviousDirection(this, (circlev ^ endv).Normalized()));
 	}
 }
@@ -243,16 +243,16 @@ void LineArcDrawing::AddPoint()
 						case ArcType:
 							{
 								HArc* arc = new HArc(*(HArc*)tanobject);
-								arc->A = make_point(spos);
-								arc->B = make_point(epos);
+								arc->A->m_p = make_point(spos);
+								arc->B->m_p = make_point(epos);
 								temp_object_in_list.push_back(arc);
 							}
 							break;
 						case CircleType:
 							{
 								HArc* arc = new HArc(make_point(spos),make_point(epos),((HCircle*)tanobject)->m_circle,&wxGetApp().current_color);
-								arc->A = make_point(spos);
-								arc->B = make_point(epos);
+								arc->A->m_p = make_point(spos);
+								arc->B->m_p = make_point(epos);
 								temp_object_in_list.push_back(arc);
 							}
 							break;
@@ -295,8 +295,8 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 				if(temp_object)temp_object_in_list.push_back(temp_object);
 			}
 			else{
-				((HLine*)temp_object)->A = p1;
-				((HLine*)temp_object)->B = p2;
+				((HLine*)temp_object)->A->m_p = p1;
+				((HLine*)temp_object)->B->m_p = p2;
 			}
 		}
 		return true;
@@ -329,8 +329,8 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 					}
 					else{
 						((HArc*)temp_object)->m_circle = circle;
-						((HArc*)temp_object)->A = p1;
-						((HArc*)temp_object)->B = p2;
+						((HArc*)temp_object)->A->m_p = p1;
+						((HArc*)temp_object)->B->m_p = p2;
 					}
 				}
 				else
@@ -346,8 +346,8 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 						if(temp_object)temp_object_in_list.push_back(temp_object);
 					}
 					else{
-						((HLine*)temp_object)->A = p1;
-						((HLine*)temp_object)->B = p2;
+						((HLine*)temp_object)->A->m_p = p1;
+						((HLine*)temp_object)->B->m_p = p2;
 					}
 				}
 			}
@@ -369,8 +369,8 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 				if(temp_object)temp_object_in_list.push_back(temp_object);
 			}
 			else{
-				((HILine*)temp_object)->A = p1;
-				((HILine*)temp_object)->B = p2;
+				((HILine*)temp_object)->A->m_p = p1;
+				((HILine*)temp_object)->B->m_p = p2;
 			}
 		}
 		return true;

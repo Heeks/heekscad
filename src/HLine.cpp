@@ -16,13 +16,13 @@
 #include "Sketch.h"
 #include "SolveSketch.h"
 
-HLine::HLine(const HLine &line){
+HLine::HLine(const HLine &line):EndedObject(&line.color){
 	operator=(line);
 }
 
-HLine::HLine(const gp_Pnt &a, const gp_Pnt &b, const HeeksColor* col){
-	A = a;
-	B = b;
+HLine::HLine(const gp_Pnt &a, const gp_Pnt &b, const HeeksColor* col):EndedObject(col){
+	A->m_p = a;
+	B->m_p = b;
 	color = *col;
 }
 
@@ -65,7 +65,7 @@ static SetLineVertical vertical_line_toggle;
 class SetLineLength:public Tool{
 public:
 	void Run(){
-		line_for_tool->SetLineLengthConstraint(line_for_tool->A.Distance(line_for_tool->B));
+		line_for_tool->SetLineLengthConstraint(line_for_tool->A->m_p.Distance(line_for_tool->B->m_p));
 		SolveSketch((CSketch*)line_for_tool->m_owner);
 		wxGetApp().Repaint();
 	}
@@ -95,31 +95,33 @@ void HLine::glCommands(bool select, bool marked, bool no_color){
 		glLineWidth(2);
 	}
 	glBegin(GL_LINES);
-	glVertex3d(A.X(), A.Y(), A.Z());
-	glVertex3d(B.X(), B.Y(), B.Z());
+	glVertex3d(A->m_p.X(), A->m_p.Y(), A->m_p.Z());
+	glVertex3d(B->m_p.X(), B->m_p.Y(), B->m_p.Z());
 	glEnd();
 	if(marked){
 		glLineWidth(1);
 		glDepthRange(save_depth_range[0], save_depth_range[1]);
 	}
 
-	if(!A.IsEqual(B, wxGetApp().m_geom_tol))
+	if(!A->m_p.IsEqual(B->m_p, wxGetApp().m_geom_tol))
 	{
-		gp_Pnt mid_point = A.XYZ() + (B.XYZ() - A.XYZ())/2;
-		gp_Dir dir = B.XYZ() - mid_point.XYZ();
+		gp_Pnt mid_point = A->m_p.XYZ() + (B->m_p.XYZ() - A->m_p.XYZ())/2;
+		gp_Dir dir = B->m_p.XYZ() - mid_point.XYZ();
 		gp_Ax1 ax(mid_point,dir);
 		//gp_Dir up(0,0,1);
 		//ax.Rotate(gp_Ax1(mid_point,up),Pi/2);
 		ConstrainedObject::glCommands(color,ax);
 	}
+
+	EndedObject::glCommands(select,marked,no_color);
 }
 
 void HLine::Draw(wxDC& dc)
 {
 	wxGetApp().PlotSetColor(color);
 	double s[3], e[3];
-	extract(A, s);
-	extract(B, e);
+	extract(A->m_p, s);
+	extract(B->m_p, e);
 	wxGetApp().PlotLine(s, e);
 }
 
@@ -129,8 +131,8 @@ HeeksObj *HLine::MakeACopy(void)const{
 }
 
 void HLine::GetBox(CBox &box){
-	box.Insert(A.X(), A.Y(), A.Z());
-	box.Insert(B.X(), B.Y(), B.Z());
+	box.Insert(A->m_p.X(), A->m_p.Y(), A->m_p.Z());
+	box.Insert(B->m_p.X(), B->m_p.Y(), B->m_p.Z());
 }
 
 void HLine::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
@@ -138,12 +140,12 @@ void HLine::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
 }
 
 static void on_set_start(const double *vt, HeeksObj* object){
-	((HLine*)object)->A = make_point(vt);
+	((HLine*)object)->A->m_p = make_point(vt);
 	wxGetApp().Repaint();
 }
 
 static void on_set_end(const double *vt, HeeksObj* object){
-	((HLine*)object)->B = make_point(vt);
+	((HLine*)object)->B->m_p = make_point(vt);
 	wxGetApp().Repaint();
 }
 
@@ -156,11 +158,11 @@ static void on_set_length(double v, HeeksObj* object){
 
 void HLine::GetProperties(std::list<Property *> *list){
 	double a[3], b[3];
-	extract(A, a);
-	extract(B, b);
+	extract(A->m_p, a);
+	extract(B->m_p, b);
 	list->push_back(new PropertyVertex(_("start"), a, this, on_set_start));
 	list->push_back(new PropertyVertex(_("end"), b, this, on_set_end));
-	double length = A.Distance(B);
+	double length = A->m_p.Distance(B->m_p);
 	list->push_back(new PropertyLength(_("Length"), length, this, on_set_length));
 
 	HeeksObj::GetProperties(list);
@@ -184,8 +186,8 @@ bool HLine::FindPossTangentPoint(const double* ray_start, const double* ray_dire
 }
 
 gp_Lin HLine::GetLine()const{
-	gp_Vec v(A, B);
-	return gp_Lin(A, v);
+	gp_Vec v(A->m_p, B->m_p);
+	return gp_Lin(A->m_p, v);
 }
 
 int HLine::Intersects(const HeeksObj *object, std::list< double > *rl)const{
@@ -199,9 +201,9 @@ int HLine::Intersects(const HeeksObj *object, std::list< double > *rl)const{
 			// create a gp_Lin() object using a vector that doesn't point
 			// anywhere.  If this is a zero-length line then we're in
 			// trouble.  Don't bother with it.
-			if ((A.X() == B.X()) &&
-			    (A.Y() == B.Y()) &&
-			    (A.Z() == B.Z())) break;
+			if ((A->m_p.X() == B->m_p.X()) &&
+			    (A->m_p.Y() == B->m_p.Y()) &&
+			    (A->m_p.Z() == B->m_p.Z())) break;
 
 			gp_Pnt pnt;
 			if(intersect(GetLine(), ((HLine*)object)->GetLine(), pnt))
@@ -270,8 +272,8 @@ bool HLine::Intersects(const gp_Pnt &pnt)const
 
 	// check it lies between A and B
 	gp_Vec v = this_line.Direction();
-	double dpA = gp_Vec(A.XYZ()) * v;
-	double dpB = gp_Vec(B.XYZ()) * v;
+	double dpA = gp_Vec(A->m_p.XYZ()) * v;
+	double dpB = gp_Vec(B->m_p.XYZ()) * v;
 	double dp = gp_Vec(pnt.XYZ()) * v;
 	return dp >= dpA - wxGetApp().m_geom_tol && dp <= dpB + wxGetApp().m_geom_tol;
 }
@@ -280,20 +282,20 @@ void HLine::GetSegments(void(*callbackfunc)(const double *p), double pixels_per_
 	if(want_start_point)
 	{
 		double p[3];
-		extract(A, p);
+		extract(A->m_p, p);
 		(*callbackfunc)(p);
 	}
 
 	double p[3];
-	extract(B, p);
+	extract(B->m_p, p);
 	(*callbackfunc)(p);
 }
 
 gp_Vec HLine::GetSegmentVector(double fraction)
 {
-	gp_Vec line_vector(A, B);
+	gp_Vec line_vector(A->m_p, B->m_p);
 	if(line_vector.Magnitude() < 0.000000001)return gp_Vec(0, 0, 0);
-	return gp_Vec(A, B).Normalized();
+	return gp_Vec(A->m_p, B->m_p).Normalized();
 }
 
 void HLine::WriteXML(TiXmlNode *root)
@@ -302,12 +304,12 @@ void HLine::WriteXML(TiXmlNode *root)
 	element = new TiXmlElement( "Line" );
 	root->LinkEndChild( element );  
 	element->SetAttribute("col", color.COLORREF_color());
-	element->SetDoubleAttribute("sx", A.X());
-	element->SetDoubleAttribute("sy", A.Y());
-	element->SetDoubleAttribute("sz", A.Z());
-	element->SetDoubleAttribute("ex", B.X());
-	element->SetDoubleAttribute("ey", B.Y());
-	element->SetDoubleAttribute("ez", B.Z());
+	element->SetDoubleAttribute("sx", A->m_p.X());
+	element->SetDoubleAttribute("sy", A->m_p.Y());
+	element->SetDoubleAttribute("sz", A->m_p.Z());
+	element->SetDoubleAttribute("ex", B->m_p.X());
+	element->SetDoubleAttribute("ey", B->m_p.Y());
+	element->SetDoubleAttribute("ez", B->m_p.Z());
 	WriteBaseXML(element);
 }
 
@@ -338,7 +340,7 @@ HeeksObj* HLine::ReadFromXMLElement(TiXmlElement* pElem)
 
 void HLine::Reverse()
 {
-	gp_Pnt temp = A;
+	HPoint* temp = A;
 	A = B;
 	B = temp;
 }
