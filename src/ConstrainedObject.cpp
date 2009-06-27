@@ -4,6 +4,7 @@
 #include "stdafx.h"
 
 #include "ConstrainedObject.h"
+#include "HPoint.h"
 
 ConstrainedObject::ConstrainedObject(){
 	absoluteangleconstraint = NULL;
@@ -153,7 +154,7 @@ bool ConstrainedObject::HasConstraints()
 	return absoluteangleconstraint || !constraints.empty() || linelengthconstraint || radiusconstraint;
 }
 
-bool ConstrainedObject::HasPointConstraint(ConstrainedObject* obj,EnumPoint obj1_point,EnumPoint obj2_point)
+bool ConstrainedObject::HasPointConstraint(ConstrainedObject* obj)
 {
 	std::list<Constraint*>::iterator it;
 	for(it = constraints.begin(); it!=constraints.end(); ++it)
@@ -162,24 +163,27 @@ bool ConstrainedObject::HasPointConstraint(ConstrainedObject* obj,EnumPoint obj1
 		if(c->m_type == CoincidantPointConstraint)
 		{
 			 if(c->m_obj1 == this && c->m_obj2 == obj)
-				 if(c->m_obj1_point == obj1_point && c->m_obj2_point == obj2_point)
 					 return true;
 			 if(c->m_obj2 == this && c->m_obj1 == obj)
-				 if(c->m_obj2_point == obj1_point && c->m_obj1_point == obj2_point)
 					 return true;
 		}
 	}
 	return false;
 }
 
-void ConstrainedObject::SetCoincidentPoint(ConstrainedObject* obj,EnumPoint obj1_point,EnumPoint obj2_point)
+void ConstrainedObject::SetCoincidentPoint(ConstrainedObject* obj, bool remove)
 {
 	//check for existing constraint
-	if(HasPointConstraint(obj,obj1_point,obj2_point))
+	if(!remove && HasPointConstraint(obj))
 		return;
 
+	if(remove && RemoveExisting(obj,CoincidantPointConstraint))
+		return;
+
+
+
 	//add new constraint
-	Constraint *c = new Constraint(CoincidantPointConstraint,obj1_point,obj2_point,this,obj);
+	Constraint *c = new Constraint(CoincidantPointConstraint,this,obj);
 	constraints.push_back(c);
 	obj->constraints.push_back(c);
 }
@@ -246,5 +250,34 @@ void ConstrainedObject::SetPointOnLineConstraint(HPoint* obj)
 {
 	if(RemoveExisting(obj,PointOnLineConstraint)) return;
 
-	constraints.push_back(new Constraint(PointOnLineConstraint,this,obj));
+	Constraint *c = new Constraint(PointOnLineConstraint,this,obj);
+	constraints.push_back(c);
+	obj->constraints.push_back(c);
+}
+
+void ConstrainedObject::SetPointOnLineMidpointConstraint(HPoint* obj)
+{
+	if(RemoveExisting(obj,PointOnLineMidpointConstraint)) return;
+
+	Constraint *c = new Constraint(PointOnLineMidpointConstraint,this,obj);
+	constraints.push_back(c);
+	obj->constraints.push_back(c);
+}
+
+void ConstrainedObject::SetPointOnArcMidpointConstraint(HPoint* obj)
+{
+	if(RemoveExisting(obj,PointOnArcMidpointConstraint)) return;
+
+	Constraint *c = new Constraint(PointOnArcMidpointConstraint,this,obj);
+	constraints.push_back(c);
+	obj->constraints.push_back(c);
+}
+
+void ConstrainedObject::SetPointOnArcConstraint(HPoint* obj)
+{
+	if(RemoveExisting(obj,PointOnArcConstraint)) return;
+
+	Constraint *c = new Constraint(PointOnArcConstraint,this,obj);
+	constraints.push_back(c);
+	obj->constraints.push_back(c);
 }
