@@ -9,6 +9,9 @@
 #include "MarkedList.h"
 #include "../interface/Material.h"
 #include "HeeksFrame.h"
+#include "../interface/HeeksCADInterface.h"
+
+extern CHeeksCADInterface heekscad_interface;
 
 #define wxID_TEST1 10001
 #define wxID_TEST2 10002
@@ -21,6 +24,7 @@ BEGIN_EVENT_TABLE(CGraphicsCanvas, wxGLCanvas)
     EVT_MENU_RANGE(ID_FIRST_POP_UP_MENU_TOOL, ID_FIRST_POP_UP_MENU_TOOL + 1000, CGraphicsCanvas::OnMenuEvent)
 	EVT_KEY_DOWN(CGraphicsCanvas::OnKeyDown)
 	EVT_KEY_UP(CGraphicsCanvas::OnKeyUp)
+	EVT_CHAR(CGraphicsCanvas::OnCharEvent)
 END_EVENT_TABLE()
 
 CGraphicsCanvas::CGraphicsCanvas(wxWindow* parent, int *attribList)
@@ -173,6 +177,52 @@ void CGraphicsCanvas::OnKeyDown(wxKeyEvent& event)
 	}
 	event.Skip();
 }
+
+void CGraphicsCanvas::OnCharEvent(wxKeyEvent& event)
+{
+	const int ControlA = 1;
+	const int ControlC = 3;
+	const int ControlV = 22;
+
+	// printf("Key event is '%d'\n", event.GetKeyCode());
+	switch (event.GetKeyCode())
+	{
+		case ControlA:
+			{
+				// Select all
+				std::list<HeeksObj*> obj_list;
+				for(HeeksObj* object = heekscad_interface.GetFirstObject(); object != NULL; object = heekscad_interface.GetNextObject())
+				{
+					if(object->GetType() != GripperType)
+					{
+						obj_list.push_back(object);
+					} // End if - then
+				} // End for
+				wxGetApp().m_marked_list->Add(obj_list, true);
+				wxGetApp().Repaint();
+				event.Skip();
+				break;
+			} // End ControlA scope
+
+		case ControlC:
+			// Copy
+			wxGetApp().m_marked_list->CopySelectedItems();
+			wxGetApp().Repaint();
+			event.Skip();
+			break;
+
+		case ControlV:
+			// Paste
+			wxGetApp().Paste(NULL);
+			wxGetApp().Repaint();
+			event.Skip();
+			break;
+
+		default:
+			break;
+	} // End switch
+} // End OnCharEvent() method
+
 
 void CGraphicsCanvas::OnKeyUp(wxKeyEvent& event)
 {

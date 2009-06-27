@@ -23,6 +23,7 @@ public:
 
 	void OnEditColor();
 	void OnSelectDetails();
+	void OnCharEvent(wxKeyEvent& event);
 	void OnKeyDown(wxKeyEvent& event);
 	void OnKeyUp(wxKeyEvent& event);
 	void OnMagExtents(bool rotate, bool recalculate_gl_lists);
