@@ -6,8 +6,9 @@
 
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"
+#include "ConstrainedObject.h"
 
-class HPoint: public HeeksObj{
+class HPoint: public ConstrainedObject{
 private:
 	HeeksColor color;
 	static wxIcon* m_icon;

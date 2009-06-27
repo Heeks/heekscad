@@ -15,8 +15,6 @@ Constraint::Constraint(EnumConstraintType type,EnumAbsoluteAngle angle, HeeksObj
 	m_angle = angle;
 	m_obj1 = obj;
 	m_obj2 = NULL;
-	m_obj1_point = PointA;
-	m_obj2_point = PointA;
 	m_length = 0;
 }
 
@@ -26,22 +24,9 @@ Constraint::Constraint(EnumConstraintType type,HeeksObj* obj1,HeeksObj* obj2)
 	m_angle = (EnumAbsoluteAngle)0;
 	m_obj1 = obj1;
 	m_obj2 = obj2;
-	m_obj1_point = PointA;
-	m_obj2_point = PointA;
 	m_length = 0;
 }
 
-
-Constraint::Constraint(EnumConstraintType type,EnumPoint point1,EnumPoint point2,HeeksObj* obj1, HeeksObj* obj2)
-{
-    m_type = type;
-	m_angle = (EnumAbsoluteAngle)0;
-	m_obj1 = obj1;
-	m_obj2 = obj2;
-	m_obj1_point = point1;
-	m_obj2_point = point2;
-	m_length = 0;
-}
 
 Constraint::Constraint(EnumConstraintType type,double length,HeeksObj* obj1)
 {
@@ -49,8 +34,6 @@ Constraint::Constraint(EnumConstraintType type,double length,HeeksObj* obj1)
 	m_angle = (EnumAbsoluteAngle)0;
 	m_obj1 = obj1;
 	m_obj2 = 0;
-	m_obj1_point = (EnumPoint)0;
-	m_obj2_point = (EnumPoint)0;
 	m_length = length;
 }
 
