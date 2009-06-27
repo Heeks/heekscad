@@ -21,7 +21,7 @@ ConstrainedObject::~ConstrainedObject(){
 		delete radiusconstraint;
 }
 
-bool ConstrainedObject::RemoveExisting(ConstrainedObject* obj, EnumConstraintType type)
+bool ConstrainedObject::RemoveExisting(HeeksObj* obj, EnumConstraintType type)
 {
 	//Make sure there is not already a parallel or perpendicular constraint between
 	//these objects
@@ -34,7 +34,9 @@ bool ConstrainedObject::RemoveExisting(ConstrainedObject* obj, EnumConstraintTyp
 			if(c->m_type == type)
 			{
 				constraints.remove(c);
-				obj->constraints.remove(c);
+				ConstrainedObject* cobj = dynamic_cast<ConstrainedObject*>(obj);
+				if(cobj)
+					cobj->constraints.remove(c);
 				delete c;
 				return true;
 			}
@@ -238,4 +240,11 @@ void ConstrainedObject::SetRadius(double radius)
 	{
 		radiusconstraint->m_length = radius;
 	}
+}
+
+void ConstrainedObject::SetPointOnLineConstraint(HPoint* obj)
+{
+	if(RemoveExisting(obj,PointOnLineConstraint)) return;
+
+	constraints.push_back(new Constraint(PointOnLineConstraint,this,obj));
 }

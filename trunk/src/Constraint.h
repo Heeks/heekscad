@@ -19,7 +19,8 @@ enum EnumConstraintType{
 	EqualLengthConstraint,
 	ColinearConstraint,
 	EqualRadiusConstraint,
-	ConcentricConstraint
+	ConcentricConstraint,
+	PointOnLineConstraint
 };
 
 enum EnumAbsoluteAngle{

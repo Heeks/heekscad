@@ -36,6 +36,18 @@ const HPoint& HPoint::operator=(const HPoint &b)
 	return *this;
 }
 
+void HPoint::LoadFromDoubles()
+{
+	m_p.SetX(mx);
+	m_p.SetY(my);
+}
+
+void HPoint::LoadToDoubles()
+{
+	mx = m_p.X();
+	my = m_p.Y();
+}
+
 void HPoint::glCommands(bool select, bool marked, bool no_color)
 {
 	if(!marked && !m_draw_unselected)

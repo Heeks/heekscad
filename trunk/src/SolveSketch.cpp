@@ -14,6 +14,7 @@
 arc GetArc(HArc* a);
 line GetLineFromEndedObject(EndedObject* eobj);
 point GetPoint(EndedObject* eobj, EnumPoint point);
+point GetPoint(HPoint* point);
 
 std::vector<double*> params;
 std::set<double*> paramset;
@@ -119,6 +120,15 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 						constraints.push_back(c);
 					}
 					break;
+					case PointOnLineConstraint:
+					{
+						constraint c;
+						c.type = pointOnLine;
+						c.point1 = GetPoint((HPoint*)con->m_obj2);
+						c.line1 = GetLineFromEndedObject((EndedObject*)con->m_obj1);
+						constraints.push_back(c);
+					}
+					break;
 					case CoincidantPointConstraint:
 					{
 						constraint c;
@@ -219,11 +229,11 @@ point GetPoint(EndedObject* obj, EnumPoint whichpoint)
 		point p;
 		if(whichpoint == PointA)
 		{
-			p.x = &obj->ax; p.y = &obj->ay;
+			p.x = &obj->A->mx; p.y = &obj->A->my;
 		}
 		else
 		{
-			p.x = &obj->bx; p.y = &obj->by;
+			p.x = &obj->B->mx; p.y = &obj->B->my;
 		}
 
 		PushBack(p.x);
@@ -232,15 +242,28 @@ point GetPoint(EndedObject* obj, EnumPoint whichpoint)
 		return p;
 }
 
+point GetPoint(HPoint* obj)
+{
+		obj->LoadToDoubles();
+		point p;
+		p.x = &obj->mx; p.y = &obj->my;
+
+		PushBack(p.x);
+		PushBack(p.y);
+
+		return p;
+}
+
+
 line GetLineFromEndedObject(EndedObject* eobj)
 {
 		eobj->LoadToDoubles();
 		point p;
-		p.x = &eobj->ax; p.y = &eobj->ay;
+		p.x = &eobj->A->mx; p.y = &eobj->A->my;
 		PushBack(p.x);
 		PushBack(p.y);
 		point p2;
-		p2.x = &eobj->bx; p2.y = &eobj->by;
+		p2.x = &eobj->B->mx; p2.y = &eobj->B->my;
 		PushBack(p2.x);
 		PushBack(p2.y);
 

@@ -160,6 +160,51 @@ public:
 	const wxChar* GetToolTip(){return _("Set these arcs to be concentric");}
 };
 
+class SetPointsCoincident:public Tool{
+	//TODO:
+public:
+	void Run(){
+		std::list<HeeksObj*>::const_iterator It;
+		EndedObject* last=NULL;
+		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+			EndedObject* obj = (EndedObject*)*It;
+			if(last)
+				if(obj->SetConcentricConstraint(last))
+					break;
+			last=obj;
+		}
+		SolveSketch((CSketch*)last->m_owner);
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Set Coincident");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Set these points to be coincident");}
+};
+
+class SetPointOnLine:public Tool{
+public:
+	void Run(){
+		std::list<HeeksObj*>::const_iterator It;
+		EndedObject* line=NULL;
+		HPoint* point=NULL;
+		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+			EndedObject* obj = dynamic_cast<EndedObject*>(*It);
+			if(obj)
+				line=obj;
+			HPoint* pobj = dynamic_cast<HPoint*>(*It);
+			if(pobj)
+				point=pobj;
+		}
+		line->SetPointOnLineConstraint(point);
+
+		SolveSketch((CSketch*)line->m_owner);
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Set Point On Line");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Set this point on line");}
+};
+
 static SetArcsEqualRadius set_arcs_equal_radius;
 static SetArcsConcentric set_arcs_concentric;
 static SetLinesParallel set_lines_parallel;
@@ -167,16 +212,22 @@ static SetLinesEqualLength set_lines_equal_length;
 static SetLinesColinear set_lines_colinear;
 static SetLinesPerpendicular set_lines_perpendicular;
 static SetArcTangent set_arc_tangent;
+static SetPointOnLine set_point_on_line;
+static SetPointsCoincident set_points_coincident;
 
 void GetConstraintMenuTools(std::list<Tool*>* t_list){
 	int line_count = 0;
 	int arc_count = 0;
+	int point_count = 0;
 
 	// check to see what types have been marked
 	std::list<HeeksObj*>::const_iterator It;
 	for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
 		HeeksObj* object = *It;
 		switch(object->GetType()){
+			case PointType:
+				point_count++;
+				break;
 			case LineType:
 				line_count++;
 				break;
@@ -188,29 +239,35 @@ void GetConstraintMenuTools(std::list<Tool*>* t_list){
 		}
 	}
 
-	int total_count = line_count + arc_count;
+	int total_count = line_count + arc_count + point_count;
 
 	if(total_count < 2)
 		return;
 
-	if(line_count == 2 && arc_count == 0)
+	if(line_count == 2 && arc_count == 0 && point_count == 0)
 		t_list->push_back(&set_lines_perpendicular);
 
-	if(arc_count == 0)
+	if(arc_count == 0 && point_count == 0)
 	{
 		t_list->push_back(&set_lines_parallel);
 		t_list->push_back(&set_lines_equal_length);
 		t_list->push_back(&set_lines_colinear);
 	}
 
-	if(arc_count == 1 && line_count == 1)
+	if(arc_count == 1 && line_count == 1 && point_count == 0)
 		t_list->push_back(&set_arc_tangent);
 
-	if(line_count == 0)
+	if(line_count == 0 && point_count == 0)
 	{
 		t_list->push_back(&set_arcs_equal_radius);
 		t_list->push_back(&set_arcs_concentric);
 	}
+
+	if(line_count == 0 && arc_count == 0)
+		t_list->push_back(&set_points_coincident);
+
+	if(line_count == 1 && point_count == 1 && arc_count == 0)
+		t_list->push_back(&set_point_on_line);
 
 }
 
