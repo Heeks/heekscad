@@ -161,7 +161,6 @@ public:
 };
 
 class SetPointsCoincident:public Tool{
-	//TODO:
 public:
 	void Run(){
 		std::list<HeeksObj*>::const_iterator It;
@@ -170,9 +169,7 @@ public:
 			HPoint* obj = (HPoint*)*It;
 			if(last)
 			{
-				EndedObject* last_owner = (EndedObject*)last->m_owner;
-				EndedObject* obj_owner = (EndedObject*)obj->m_owner;
-				obj_owner->SetCoincidentPoint(last_owner,(obj_owner->A == obj)?PointA:PointB,(last_owner->A == last)?PointA:PointB);
+				obj->SetCoincidentPoint(last,true);
 				break;
 			}
 			last=obj;
@@ -209,6 +206,78 @@ public:
 	const wxChar* GetToolTip(){return _("Set this point on line");}
 };
 
+class SetPointOnMidpoint:public Tool{
+public:
+	void Run(){
+		std::list<HeeksObj*>::const_iterator It;
+		EndedObject* line=NULL;
+		HPoint* point=NULL;
+		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+			EndedObject* obj = dynamic_cast<EndedObject*>(*It);
+			if(obj)
+				line=obj;
+			HPoint* pobj = dynamic_cast<HPoint*>(*It);
+			if(pobj)
+				point=pobj;
+		}
+		line->SetPointOnLineMidpointConstraint(point);
+
+		SolveSketch((CSketch*)line->m_owner);
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Set Point On Midpoint");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Set this point on the midpoint of line");}
+};
+
+class SetPointOnArcMidpoint:public Tool{
+public:
+	void Run(){
+		std::list<HeeksObj*>::const_iterator It;
+		EndedObject* line=NULL;
+		HPoint* point=NULL;
+		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+			EndedObject* obj = dynamic_cast<EndedObject*>(*It);
+			if(obj)
+				line=obj;
+			HPoint* pobj = dynamic_cast<HPoint*>(*It);
+			if(pobj)
+				point=pobj;
+		}
+		line->SetPointOnArcMidpointConstraint(point);
+
+		SolveSketch((CSketch*)line->m_owner);
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Set Point On Midpoint");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Set this point on the midpoint of arc");}
+};
+
+class SetPointOnArc:public Tool{
+public:
+	void Run(){
+		std::list<HeeksObj*>::const_iterator It;
+		EndedObject* line=NULL;
+		HPoint* point=NULL;
+		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+			EndedObject* obj = dynamic_cast<EndedObject*>(*It);
+			if(obj)
+				line=obj;
+			HPoint* pobj = dynamic_cast<HPoint*>(*It);
+			if(pobj)
+				point=pobj;
+		}
+		line->SetPointOnArcConstraint(point);
+
+		SolveSketch((CSketch*)line->m_owner);
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Set Point On Arc");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Set this point on arc");}
+};
+
 static SetArcsEqualRadius set_arcs_equal_radius;
 static SetArcsConcentric set_arcs_concentric;
 static SetLinesParallel set_lines_parallel;
@@ -217,7 +286,11 @@ static SetLinesColinear set_lines_colinear;
 static SetLinesPerpendicular set_lines_perpendicular;
 static SetArcTangent set_arc_tangent;
 static SetPointOnLine set_point_on_line;
+static SetPointOnMidpoint set_point_on_midpoint;
 static SetPointsCoincident set_points_coincident;
+static SetPointOnArc set_point_on_arc;
+static SetPointOnArcMidpoint set_point_on_arc_midpoint;
+
 
 void GetConstraintMenuTools(std::list<Tool*>* t_list){
 	int line_count = 0;
@@ -271,7 +344,16 @@ void GetConstraintMenuTools(std::list<Tool*>* t_list){
 		t_list->push_back(&set_points_coincident);
 
 	if(line_count == 1 && point_count == 1 && arc_count == 0)
+	{
 		t_list->push_back(&set_point_on_line);
+		t_list->push_back(&set_point_on_midpoint);
+	}
+
+	if(line_count == 0 && point_count == 1 && arc_count == 1)
+	{
+		t_list->push_back(&set_point_on_arc);
+		t_list->push_back(&set_point_on_arc_midpoint);
+	}
 
 }
 
@@ -298,25 +380,25 @@ void ApplyCoincidentConstraints(HeeksObj* extobj, std::list<HeeksObj*> list)
 					if(eobj->A->m_p.Distance(eobj2->A->m_p) < wxGetApp().m_geom_tol)
 					{
 						//A's coincidant
-						eobj->SetCoincidentPoint(eobj2,PointA,PointA);
+						eobj->A->SetCoincidentPoint(eobj2->A,false);
 						shared_points = true;
 					}
 					if(eobj->A->m_p.Distance(eobj2->B->m_p) < wxGetApp().m_geom_tol)
 					{
 						//A to B coincidant
-						eobj->SetCoincidentPoint(eobj2,PointA,PointB);
+						eobj->A->SetCoincidentPoint(eobj2->B,false);
 						shared_points = true;
 					}
 					if(eobj->B->m_p.Distance(eobj2->A->m_p) < wxGetApp().m_geom_tol)
 					{
 						//B to A coincidant
-						eobj->SetCoincidentPoint(eobj2,PointB,PointA);
+						eobj->B->SetCoincidentPoint(eobj2->A,false);
 						shared_points = true;
 					}
 					if(eobj->B->m_p.Distance(eobj2->B->m_p) < wxGetApp().m_geom_tol)
 					{
 						//B's coincidant
-						eobj->SetCoincidentPoint(eobj2,PointB,PointB);
+						eobj->B->SetCoincidentPoint(eobj2->B,false);
 						shared_points = true;
 					}
 

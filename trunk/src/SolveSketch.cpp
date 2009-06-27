@@ -13,11 +13,13 @@
 
 arc GetArc(HArc* a);
 line GetLineFromEndedObject(EndedObject* eobj);
-point GetPoint(EndedObject* eobj, EnumPoint point);
 point GetPoint(HPoint* point);
+void AddPointConstraints(HPoint* point);
 
 std::vector<double*> params;
 std::set<double*> paramset;
+std::vector<constraint> constraints;
+std::set<Constraint*> cons;
 
 void debugprint(std::string s)
 {
@@ -33,9 +35,8 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 {
 	params.clear();
 	paramset.clear();
-	std::list<line> lines;
-	std::vector<constraint> constraints;
-	std::set<Constraint*> cons;
+	constraints.clear();
+	cons.clear();
 
 	HeeksObj* obj = sketch->GetFirstChild();
 	while(obj)
@@ -84,6 +85,16 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 				c.parameter = &cobj->radiusconstraint->m_length;
 				constraints.push_back(c);
 			}
+
+			if(eobj->A)
+			{
+				AddPointConstraints(eobj->A);
+			}
+
+			if(eobj->B)
+			{
+				AddPointConstraints(eobj->B);
+			}
 	
 			std::list<Constraint*>::iterator it;
 			for(it = cobj->constraints.begin(); it!=cobj->constraints.end(); ++it)
@@ -110,6 +121,20 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 					}
 					break;
 
+					case PointOnArcMidpointConstraint:
+					case PointOnArcConstraint:
+					{ 
+						constraint c;
+						c.arc1 = GetArc((HArc*)con->m_obj1);
+						c.point1 = GetPoint((HPoint*)con->m_obj2);
+						c.type = pointOnArc;
+						if(con->m_type == PointOnArcMidpointConstraint)
+							c.type = pointOnArcMidpoint;
+						cons.insert(con);
+						constraints.push_back(c);
+					}
+					break;
+
 					case LineTangentToArcConstraint:
 					{
 						arc a = GetArc((HArc*)obj);
@@ -120,36 +145,16 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 						constraints.push_back(c);
 					}
 					break;
+					case PointOnLineMidpointConstraint:
 					case PointOnLineConstraint:
 					{
 						constraint c;
 						c.type = pointOnLine;
+						if(con->m_type == PointOnLineMidpointConstraint)
+							c.type = pointOnLineMidpoint;
 						c.point1 = GetPoint((HPoint*)con->m_obj2);
 						c.line1 = GetLineFromEndedObject((EndedObject*)con->m_obj1);
 						constraints.push_back(c);
-					}
-					break;
-					case CoincidantPointConstraint:
-					{
-						constraint c;
-						c.type = pointOnPoint;
-								
-						if((ConstrainedObject*)con->m_obj1 == cobj)
-						{
-							EndedObject* eobj2 = (EndedObject*)con->m_obj2;
-							c.point1 = GetPoint(eobj,con->m_obj1_point);
-								
-							c.point2 = GetPoint(eobj2,con->m_obj2_point);
-						}
-						else
-						{
-							EndedObject* eobj2 = (EndedObject*)con->m_obj1;
-							c.point2 = GetPoint(eobj2, con->m_obj1_point);
-											
-							c.point1 = GetPoint(eobj,con->m_obj2_point);
-						}
-						constraints.push_back(c);
-						cons.insert(con);
 					}
 					break;
 					case ParallelLineConstraint:
@@ -223,23 +228,22 @@ void PushBack(double *v)
 	}
 }
 
-point GetPoint(EndedObject* obj, EnumPoint whichpoint)
+void AddPointConstraints(HPoint* point)
 {
-		obj->LoadToDoubles();
-		point p;
-		if(whichpoint == PointA)
+	std::list<Constraint*>::iterator it;
+	for(it = point->constraints.begin(); it!= point->constraints.end(); ++it)
+	{
+		Constraint* con = *it;
+		if(con->m_type == CoincidantPointConstraint)
 		{
-			p.x = &obj->A->mx; p.y = &obj->A->my;
+			constraint c;
+			c.type = pointOnPoint;
+			c.point1 = GetPoint((HPoint*)con->m_obj1);
+			c.point2 = GetPoint((HPoint*)con->m_obj2);
+			constraints.push_back(c);
+			cons.insert(con);
 		}
-		else
-		{
-			p.x = &obj->B->mx; p.y = &obj->B->my;
-		}
-
-		PushBack(p.x);
-		PushBack(p.y);
-
-		return p;
+	}
 }
 
 point GetPoint(HPoint* obj)
@@ -277,8 +281,8 @@ line GetLineFromEndedObject(EndedObject* eobj)
 arc GetArc(HArc* a)
 {
 	arc ret;
-	ret.start = GetPoint(a,PointA);
-	ret.end = GetPoint(a,PointB);
+	ret.start = GetPoint(a->A);
+	ret.end = GetPoint(a->B);
 
 	point p;
 	p.x = &a->cx;
