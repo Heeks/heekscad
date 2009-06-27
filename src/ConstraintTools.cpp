@@ -165,15 +165,19 @@ class SetPointsCoincident:public Tool{
 public:
 	void Run(){
 		std::list<HeeksObj*>::const_iterator It;
-		EndedObject* last=NULL;
+		HPoint* last=NULL;
 		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
-			EndedObject* obj = (EndedObject*)*It;
+			HPoint* obj = (HPoint*)*It;
 			if(last)
-				if(obj->SetConcentricConstraint(last))
-					break;
+			{
+				EndedObject* last_owner = (EndedObject*)last->m_owner;
+				EndedObject* obj_owner = (EndedObject*)obj->m_owner;
+				obj_owner->SetCoincidentPoint(last_owner,(obj_owner->A == obj)?PointA:PointB,(last_owner->A == last)?PointA:PointB);
+				break;
+			}
 			last=obj;
 		}
-		SolveSketch((CSketch*)last->m_owner);
+		SolveSketch((CSketch*)last->m_owner->m_owner);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Set Coincident");}
