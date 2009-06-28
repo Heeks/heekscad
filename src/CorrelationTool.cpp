@@ -367,6 +367,26 @@ CCorrelationTool::Symbols_t CCorrelationTool::SimilarSymbols( const CCorrelation
 		return(result_set);
 	} // End if - then
 
+	if (reference_symbol.first == PointType)
+	{
+		// The operator has selected a 'point' object to use as a reference.  The bounding box
+		// and line intersection functionality isn't relevant for a point feature.  By the same
+		// token, all points are 'equal'.  I can't think of a scenario where one point shouldn't
+		// be considered equal to another point.  To that end, select all point objects in the
+		// data model.
+
+		
+		for (HeeksObj *ob = heekscad_interface.GetFirstObject(); ob != NULL; ob = heekscad_interface.GetNextObject())
+		{
+			if (ob->GetType() == PointType)
+			{
+				result_set.push_back( CCorrelationTool::Symbol_t( ob->GetType(), ob->m_id ) );
+			} // End if - then
+		} // End for
+
+		return(result_set);
+	} // End if - then
+
 	CorrelationData_t reference_correlation_data = CorrelationData( reference_symbol, reference_symbol, m_number_of_sample_points, m_max_scale_threshold );
 
 	// Scan through all objects looking for something that's like this one.
