@@ -33,3 +33,6 @@ After drawing, you can select a segment by clicking on it. Dragging the points w
    point on arc, point on midpoint of arc
 
 After setting the parameter based constraints(length or radius), you can now change the parameter in the properties pane. This will update the geometry automatically.
+
+=Examples=
+To view and example of using a constraint sketch see [http://www.youtube.com/watch?v=nibjuxCbUag this video]
