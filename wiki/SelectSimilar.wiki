@@ -3,7 +3,7 @@
 
 If the operator presses the SHIFT key while in 'select' mode and then select a single graphical object, the software will search the rest of the model for other graphical objects that 'look like' that selected.
 
-This 'correlation test' is done both on size and shape.  It has parameters, included beneath the 'correlation' parameter set, that allow the operator to adjust how similar in size and how similar in shape the various objects need to be before including them in the results set.
+This 'correlation test' is done both on size and shape.  It has parameters, included beneath the 'correlation' parameter set, that allow the operator to adjust how similar in size and how similar in shape the various objects need to be before including them in the results set.  (Note: If the operator selects a Point as the reference object, the size and shape comparisons are discarded.  Instead, it will select all Point objects in the model)
 
 In the case of HeeksCNC, this CorrelationTool can be used as a source of locations for a drilling cycle operation.
 
