@@ -89,8 +89,8 @@ void LineArcDrawing::set_previous_direction(){
 		}
 	}
 	else if(temp_object->GetType() == ArcType){
-		gp_Vec circlev(((HArc*)temp_object)->m_circle.Axis().Direction());
-		gp_Vec endv(((HArc*)temp_object)->m_circle.Location(), ((HArc*)temp_object)->B->m_p);
+		gp_Vec circlev(((HArc*)temp_object)->m_axis.Direction());
+		gp_Vec endv(((HArc*)temp_object)->C->m_p, ((HArc*)temp_object)->B->m_p);
 		wxGetApp().DoToolUndoably(new SetPreviousDirection(this, (circlev ^ endv).Normalized()));
 	}
 }
@@ -326,7 +326,7 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 						if(temp_object)temp_object_in_list.push_back(temp_object);
 					}
 					else{
-						((HArc*)temp_object)->m_circle = circle;
+						((HArc*)temp_object)->SetCircle(circle);
 						((HArc*)temp_object)->A->m_p = p1;
 						((HArc*)temp_object)->B->m_p = p2;
 					}

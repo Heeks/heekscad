@@ -513,7 +513,7 @@ int CSketch::GetSegmentType(HeeksObj* object)
 {
 	if(object->GetType() == ArcType)
 	{
-		if(((HArc*)object)->m_circle.Axis().Direction().Z() > 0)return 1;
+		if(((HArc*)object)->m_axis.Direction().Z() > 0)return 1;
 		return -1;
 	}
 
@@ -524,8 +524,8 @@ double CSketch::GetSegmentCurvature(HeeksObj* object)
 {
 	if(object->GetType() == ArcType)
 	{
-		int dir = (((HArc*)object)->m_circle.Axis().Direction().Z() > 0) ? 1:-1;
-		return 1 / ((HArc*)object)->m_circle.Radius() * dir;
+		int dir = (((HArc*)object)->m_axis.Direction().Z() > 0) ? 1:-1;
+		return 1 / ((HArc*)object)->m_radius * dir;
 	}
 
 	return 0.0;
@@ -550,7 +550,7 @@ int CSketch::GetClosedSketchTurningNumber()
 			gp_Vec v1 = ((HArc*)object)->GetSegmentVector(1.0);
 			double start_angle = atan2(v0.Y(), v0.X());
 			double end_angle = atan2(v1.Y(), v1.X());
-			bool ccw = (((HArc*)object)->m_circle.Axis().Direction().Z() > 0);
+			bool ccw = (((HArc*)object)->m_axis.Direction().Z() > 0);
 			if(ccw)
 			{
 				if(start_angle < end_angle)start_angle += 6.2831853071795;

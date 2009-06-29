@@ -20,6 +20,9 @@ public:
 	ConstrainedObject();
 	~ConstrainedObject(void);
 
+	const ConstrainedObject& operator=(const ConstrainedObject &b);
+
+
 	void SetAbsoluteAngleConstraint(EnumAbsoluteAngle angle);
 	bool SetPerpendicularConstraint(ConstrainedObject* obj);
 	bool SetParallelConstraint(ConstrainedObject* obj);

@@ -166,7 +166,7 @@ bool CHeeksCADInterface::GetArcCentre(HeeksObj* object, double* c)
 	switch (object->GetType())
 	{
 		case ArcType:
-			extract(((HArc*)object)->m_circle.Location(), c);
+			extract(((HArc*)object)->C->m_p, c);
 			return true;
 
 		case CircleType:
@@ -180,7 +180,7 @@ bool CHeeksCADInterface::GetArcCentre(HeeksObj* object, double* c)
 
 bool CHeeksCADInterface::GetArcAxis(HeeksObj* object, double* a)
 {
-	extract(((HArc*)object)->m_circle.Axis().Direction(), a);
+	extract(((HArc*)object)->m_axis.Direction(), a);
 	return true;
 }
 

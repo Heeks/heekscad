@@ -156,10 +156,10 @@ void RegularShapesDrawing::CalculateRectangle(double x, double y, const gp_Pnt& 
 			}
 			arcs[0]->A->m_p = p0.XYZ() + xdir.XYZ() * m_rect_radius;
 			arcs[0]->B->m_p = p3.XYZ() + xdir.XYZ() * m_rect_radius;
-			arcs[0]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p0.XYZ() + xdir.XYZ() * m_rect_radius + ydir.XYZ() * m_rect_radius), zdir), m_rect_radius);
+			arcs[0]->SetCircle(gp_Circ(gp_Ax2(gp_Pnt(p0.XYZ() + xdir.XYZ() * m_rect_radius + ydir.XYZ() * m_rect_radius), zdir), m_rect_radius));
 			arcs[1]->A->m_p = arcs[0]->B->m_p;
 			arcs[1]->B->m_p = arcs[0]->A->m_p;
-			arcs[1]->m_circle = arcs[0]->m_circle;
+			arcs[1]->SetCircle(arcs[0]->GetCircle());
 		}
 		else if(x_lines_disappear || y_lines_disappear)
 		{
@@ -191,24 +191,24 @@ void RegularShapesDrawing::CalculateRectangle(double x, double y, const gp_Pnt& 
 			if(x_lines_disappear){
 				arcs[0]->A->m_p = p2.XYZ() - ydir.XYZ() * m_rect_radius;
 				arcs[0]->B->m_p = p3.XYZ() - ydir.XYZ() * m_rect_radius;
-				arcs[0]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p3.XYZ() + xdir.XYZ() * m_rect_radius - ydir.XYZ() * m_rect_radius), zdir), m_rect_radius);
+				arcs[0]->SetCircle(gp_Circ(gp_Ax2(gp_Pnt(p3.XYZ() + xdir.XYZ() * m_rect_radius - ydir.XYZ() * m_rect_radius), zdir), m_rect_radius));
 				lines[0]->A->m_p = arcs[0]->B->m_p;
 				lines[0]->B->m_p = p0.XYZ() + ydir.XYZ() * m_rect_radius;
 				arcs[1]->A->m_p = lines[0]->B->m_p;
 				arcs[1]->B->m_p = p1.XYZ() + ydir.XYZ() * m_rect_radius;
-				arcs[1]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p0.XYZ() + xdir.XYZ() * m_rect_radius + ydir.XYZ() * m_rect_radius), zdir), m_rect_radius);
+				arcs[1]->SetCircle(gp_Circ(gp_Ax2(gp_Pnt(p0.XYZ() + xdir.XYZ() * m_rect_radius + ydir.XYZ() * m_rect_radius), zdir), m_rect_radius));
 				lines[1]->A->m_p = arcs[1]->B->m_p;
 				lines[1]->B->m_p = arcs[0]->A->m_p;
 			}
 			else{
 				arcs[0]->A->m_p = p1.XYZ() - xdir.XYZ() * m_rect_radius;
 				arcs[0]->B->m_p = p2.XYZ() - xdir.XYZ() * m_rect_radius;
-				arcs[0]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p1.XYZ() - xdir.XYZ() * m_rect_radius + ydir.XYZ() * m_rect_radius), zdir), m_rect_radius);
+				arcs[0]->SetCircle(gp_Circ(gp_Ax2(gp_Pnt(p1.XYZ() - xdir.XYZ() * m_rect_radius + ydir.XYZ() * m_rect_radius), zdir), m_rect_radius));
 				lines[0]->A->m_p = arcs[0]->B->m_p;
 				lines[0]->B->m_p = p3.XYZ() + xdir.XYZ() * m_rect_radius;
 				arcs[1]->A->m_p = lines[0]->B->m_p;
 				arcs[1]->B->m_p = p0.XYZ() + xdir.XYZ() * m_rect_radius;
-				arcs[1]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p0.XYZ() + xdir.XYZ() * m_rect_radius + ydir.XYZ() * m_rect_radius), zdir), m_rect_radius);
+				arcs[1]->SetCircle(gp_Circ(gp_Ax2(gp_Pnt(p0.XYZ() + xdir.XYZ() * m_rect_radius + ydir.XYZ() * m_rect_radius), zdir), m_rect_radius));
 				lines[1]->A->m_p = arcs[1]->B->m_p;
 				lines[1]->B->m_p = arcs[0]->A->m_p;
 			}
@@ -241,22 +241,22 @@ void RegularShapesDrawing::CalculateRectangle(double x, double y, const gp_Pnt& 
 
 			arcs[0]->A->m_p = p1.XYZ() - xdir.XYZ() * m_rect_radius;
 			arcs[0]->B->m_p = p1.XYZ() + ydir.XYZ() * m_rect_radius;
-			arcs[0]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p1.XYZ() - xdir.XYZ() * m_rect_radius + ydir.XYZ() * m_rect_radius), zdir), m_rect_radius);
+			arcs[0]->SetCircle(gp_Circ(gp_Ax2(gp_Pnt(p1.XYZ() - xdir.XYZ() * m_rect_radius + ydir.XYZ() * m_rect_radius), zdir), m_rect_radius));
 			lines[0]->A->m_p = arcs[0]->B->m_p;
 			lines[0]->B->m_p = p2.XYZ() - ydir.XYZ() * m_rect_radius;
 			arcs[1]->A->m_p = lines[0]->B->m_p;
 			arcs[1]->B->m_p = p2.XYZ() - xdir.XYZ() * m_rect_radius;
-			arcs[1]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p2.XYZ() - xdir.XYZ() * m_rect_radius - ydir.XYZ() * m_rect_radius), zdir), m_rect_radius);
+			arcs[1]->SetCircle(gp_Circ(gp_Ax2(gp_Pnt(p2.XYZ() - xdir.XYZ() * m_rect_radius - ydir.XYZ() * m_rect_radius), zdir), m_rect_radius));
 			lines[1]->A->m_p = arcs[1]->B->m_p;
 			lines[1]->B->m_p = p3.XYZ() + xdir.XYZ() * m_rect_radius;
 			arcs[2]->A->m_p = lines[1]->B->m_p;
 			arcs[2]->B->m_p = p3.XYZ() - ydir.XYZ() * m_rect_radius;
-			arcs[2]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p3.XYZ() + xdir.XYZ() * m_rect_radius - ydir.XYZ() * m_rect_radius), zdir), m_rect_radius);
+			arcs[2]->SetCircle(gp_Circ(gp_Ax2(gp_Pnt(p3.XYZ() + xdir.XYZ() * m_rect_radius - ydir.XYZ() * m_rect_radius), zdir), m_rect_radius));
 			lines[2]->A->m_p = arcs[2]->B->m_p;
 			lines[2]->B->m_p = p0.XYZ() + ydir.XYZ() * m_rect_radius;
 			arcs[3]->A->m_p = lines[2]->B->m_p;
 			arcs[3]->B->m_p = p0.XYZ() + xdir.XYZ() * m_rect_radius;
-			arcs[3]->m_circle = gp_Circ(gp_Ax2(gp_Pnt(p0.XYZ() + xdir.XYZ() * m_rect_radius + ydir.XYZ() * m_rect_radius), zdir), m_rect_radius);
+			arcs[3]->SetCircle(gp_Circ(gp_Ax2(gp_Pnt(p0.XYZ() + xdir.XYZ() * m_rect_radius + ydir.XYZ() * m_rect_radius), zdir), m_rect_radius));
 			lines[3]->A->m_p = arcs[3]->B->m_p;
 			lines[3]->B->m_p = arcs[0]->A->m_p;
 		}
@@ -373,10 +373,11 @@ void RegularShapesDrawing::CalculateObround(const gp_Pnt& p0, const gp_Pnt& p1, 
 		}
 		arcs[0]->A->m_p = p0.XYZ() + xdir.XYZ() * m_obround_radius;
 		arcs[0]->B->m_p = p0.XYZ() - xdir.XYZ() * m_obround_radius;
-		arcs[0]->m_circle = gp_Circ(gp_Ax2(p0, zdir), m_obround_radius);
+		arcs[0]->SetCircle(gp_Circ(gp_Ax2(p0, zdir), m_obround_radius));
 		arcs[1]->A->m_p = arcs[0]->B->m_p;
 		arcs[1]->B->m_p = arcs[0]->A->m_p;
-		arcs[1]->m_circle = arcs[0]->m_circle;
+		arcs[1]->C->m_p = arcs[0]->C->m_p;
+		arcs[1]->m_axis = arcs[0]->m_axis;
 	}
 	else
 	{
@@ -410,12 +411,12 @@ void RegularShapesDrawing::CalculateObround(const gp_Pnt& p0, const gp_Pnt& p1, 
 
 		arcs[0]->A->m_p = p1.XYZ() + right_dir.XYZ() * m_obround_radius;
 		arcs[0]->B->m_p = p1.XYZ() - right_dir.XYZ() * m_obround_radius;
-		arcs[0]->m_circle = gp_Circ(gp_Ax2(p1, zdir), m_obround_radius);
+		arcs[0]->SetCircle(gp_Circ(gp_Ax2(p1, zdir), m_obround_radius));
 		lines[0]->A->m_p = arcs[0]->B->m_p;
 		lines[0]->B->m_p = p0.XYZ() - right_dir.XYZ() * m_obround_radius;
 		arcs[1]->A->m_p = lines[0]->B->m_p;
 		arcs[1]->B->m_p = p0.XYZ() + right_dir.XYZ() * m_obround_radius;
-		arcs[1]->m_circle = gp_Circ(gp_Ax2(p0, zdir), m_obround_radius);
+		arcs[1]->SetCircle(gp_Circ(gp_Ax2(p0, zdir), m_obround_radius));
 		lines[1]->A->m_p = arcs[1]->B->m_p;
 		lines[1]->B->m_p = arcs[0]->A->m_p;
 	}

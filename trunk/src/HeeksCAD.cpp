@@ -829,8 +829,8 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file)
 			double s[3], e[3], c[3];
 			extract(a->A->m_p, s);
 			extract(a->B->m_p, e);
-			extract(a->m_circle.Location(), c);
-			bool dir = a->m_circle.Axis().Direction().Z() > 0;
+			extract(a->C->m_p, c);
+			bool dir = a->m_axis.Direction().Z() > 0;
 			dxf_file.WriteArc(s, e, c, dir);
 		}
 		break;

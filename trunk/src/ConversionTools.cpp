@@ -103,7 +103,7 @@ bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wire &wire
 			case ArcType:
 				{
 					HArc* arc = (HArc*)object;
-					edges.push_back(BRepBuilderAPI_MakeEdge(arc->m_circle, arc->A->m_p, arc->B->m_p));
+					edges.push_back(BRepBuilderAPI_MakeEdge(arc->GetCircle(), arc->A->m_p, arc->B->m_p));
 				}
 				break;
 		}
@@ -148,7 +148,7 @@ bool ConvertSketchToFace2(HeeksObj* object, TopoDS_Face& face)
 			case ArcType:
 				{
 					HArc* arc = (HArc*)object;
-					edges.push_back(BRepBuilderAPI_MakeEdge(arc->m_circle, arc->A->m_p, arc->B->m_p));
+					edges.push_back(BRepBuilderAPI_MakeEdge(arc->GetCircle(), arc->A->m_p, arc->B->m_p));
 				}
 				break;
 			case CircleType:
