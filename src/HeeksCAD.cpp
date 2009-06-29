@@ -90,7 +90,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	_CrtSetAllocHook(MyAllocHook);
 #endif
 
-	m_version_number = _T("0 8 0");
+	m_version_number = _T("0 8 1");
 	m_geom_tol = 0.001;
 	m_view_units = 1.0;
 	background_color = HeeksColor(0, 0, 0);
