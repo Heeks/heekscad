@@ -117,7 +117,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 			wxGetApp().TransformUndoably( object, m );
 			if(wxGetApp().autosolve_constraints && (dynamic_cast<ConstrainedObject*>(object)))
 			{
-				SolveSketch((CSketch*)object->m_owner);
+				SolveSketch((CSketch*)object->m_owner,object,object);
 			}
 		}
 		wxGetApp().EndHistory();

@@ -38,6 +38,18 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 	constraints.clear();
 	cons.clear();
 
+	//Try going up the tree until we get a sketch
+	HeeksObj* psketch = dragged;
+	sketch = dynamic_cast<CSketch*>(psketch);
+	while(psketch && !sketch)
+	{
+		psketch = psketch->m_owner;
+		sketch = dynamic_cast<CSketch*>(psketch);
+	}
+
+	if(!sketch)
+		return; //couldn't find one
+
 	HeeksObj* obj = sketch->GetFirstChild();
 	while(obj)
 	{
