@@ -178,7 +178,7 @@ int HILine::Intersects(const HeeksObj *object, std::list< double > *rl)const{
 	case CircleType:
 		{
 			std::list<gp_Pnt> plist;
-			intersect(GetLine(), ((HCircle*)object)->m_circle, plist);
+			intersect(GetLine(), ((HCircle*)object)->GetCircle(), plist);
 			if(rl)convert_pnts_to_doubles(plist, *rl);
 			numi += plist.size();
 		}

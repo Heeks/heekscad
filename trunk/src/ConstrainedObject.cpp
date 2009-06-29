@@ -48,6 +48,16 @@ const ConstrainedObject& ConstrainedObject::operator=(const ConstrainedObject &b
 	return *this;
 }
 
+void ConstrainedObject::LoadToDoubles()
+{
+
+}
+
+void ConstrainedObject::LoadFromDoubles()
+{
+
+}
+
 
 bool ConstrainedObject::RemoveExisting(HeeksObj* obj, EnumConstraintType type)
 {
