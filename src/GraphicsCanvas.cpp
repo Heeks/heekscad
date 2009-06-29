@@ -173,7 +173,9 @@ void CGraphicsCanvas::OnKeyDown(wxKeyEvent& event)
 	if(event.GetKeyCode() == WXK_ESCAPE && wxGetApp().m_frame->IsFullScreen())wxGetApp().m_frame->ShowFullScreen(false);
 	else
 	{
-		wxGetApp().input_mode_object->OnKeyDown(event);
+		if(event.GetKeyCode() == WXK_ESCAPE && wxGetApp().EndSketchMode())
+		{}
+			else wxGetApp().input_mode_object->OnKeyDown(event);
 	}
 	event.Skip();
 }
