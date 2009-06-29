@@ -4,17 +4,18 @@
 
 #pragma once
 
-#include "../interface/HeeksObj.h"
-#include "../interface/HeeksColor.h"
+#include "ConstrainedObject.h"
 #include <gp_Circ.hxx>
 
-class HCircle: public HeeksObj{
+class HCircle: public ConstrainedObject{
 private:
 	HeeksColor color;
 	static wxIcon* m_icon;
 
 public:
-	gp_Circ m_circle;
+	gp_Ax1 m_axis;
+	HPoint *C;
+	double m_radius;
 
 	~HCircle(void);
 	HCircle(const gp_Circ &c, const HeeksColor* col);
@@ -51,4 +52,7 @@ public:
 	static bool GetArcTangentPoints(const gp_Lin& l1, const gp_Lin &l2, const gp_Pnt& a, const gp_Pnt& b, double radius, gp_Pnt& p1, gp_Pnt& p2, gp_Pnt& centre, gp_Dir& axis);
 	static bool GetArcTangentPoint(const gp_Lin& l, const gp_Pnt& a, const gp_Pnt& b, const gp_Vec *final_direction, double* radius, gp_Pnt& p, gp_Pnt& centre, gp_Dir& axis);
 	static bool GetArcTangentPoint(const gp_Circ& c, const gp_Pnt& a, const gp_Pnt& b, const gp_Vec *final_direction, double* radius, gp_Pnt& p, gp_Pnt& centre, gp_Dir& axis);
+
+	void SetCircle(gp_Circ c);
+	gp_Circ GetCircle() const;
 };

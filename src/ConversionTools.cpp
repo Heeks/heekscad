@@ -154,7 +154,7 @@ bool ConvertSketchToFace2(HeeksObj* object, TopoDS_Face& face)
 			case CircleType:
 				{
 					HCircle* circle = (HCircle*)object;
-					edges.push_back(BRepBuilderAPI_MakeEdge(circle->m_circle));
+					edges.push_back(BRepBuilderAPI_MakeEdge(circle->GetCircle()));
 				}
 				break;
 			case EllipseType:

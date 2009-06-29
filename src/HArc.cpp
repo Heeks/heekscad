@@ -287,7 +287,7 @@ int HArc::Intersects(const HeeksObj *object, std::list< double > *rl)const
 	case CircleType:
 		{
 			std::list<gp_Pnt> plist;
-			intersect(GetCircle(), ((HCircle*)object)->m_circle, plist);
+			intersect(GetCircle(), ((HCircle*)object)->GetCircle(), plist);
 			for(std::list<gp_Pnt>::iterator It = plist.begin(); It != plist.end(); It++)
 			{
 				gp_Pnt& pnt = *It;

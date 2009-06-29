@@ -74,7 +74,7 @@ static PointLineOrCircle GetLineOrCircleType(const DigitizedPoint& d)
 			break;
 		case CircleType:
 			plc.type = CircleType;
-			plc.c = ((HCircle*)(d.m_object1))->m_circle;
+			plc.c = ((HCircle*)(d.m_object1))->GetCircle();
 			break;
 		}
 	}

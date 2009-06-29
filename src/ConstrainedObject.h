@@ -22,6 +22,9 @@ public:
 
 	const ConstrainedObject& operator=(const ConstrainedObject &b);
 
+	virtual void LoadToDoubles();
+	virtual void LoadFromDoubles();
+
 
 	void SetAbsoluteAngleConstraint(EnumAbsoluteAngle angle);
 	bool SetPerpendicularConstraint(ConstrainedObject* obj);

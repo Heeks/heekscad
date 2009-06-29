@@ -248,7 +248,7 @@ void LineArcDrawing::AddPoint()
 							break;
 						case CircleType:
 							{
-								HArc* arc = new HArc(make_point(spos),make_point(epos),((HCircle*)tanobject)->m_circle,&wxGetApp().current_color);
+								HArc* arc = new HArc(make_point(spos),make_point(epos),((HCircle*)tanobject)->GetCircle(),&wxGetApp().current_color);
 								arc->A->m_p = make_point(spos);
 								arc->B->m_p = make_point(epos);
 								temp_object_in_list.push_back(arc);
@@ -451,8 +451,8 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 						if(temp_object)temp_object_in_list.push_back(temp_object);
 					}
 					else{
-						((HCircle*)temp_object)->m_circle.SetLocation(p1);
-						((HCircle*)temp_object)->m_circle.SetRadius(radius_for_circle);
+						((HCircle*)temp_object)->C->m_p = p1;
+						((HCircle*)temp_object)->m_radius = radius_for_circle;
 					}
 				}
 				return true;
@@ -467,7 +467,7 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 							if(temp_object)temp_object_in_list.push_back(temp_object);
 						}
 						else{
-							((HCircle*)temp_object)->m_circle = c;
+							((HCircle*)temp_object)->SetCircle(c);
 						}
 					}
 				}
@@ -482,7 +482,7 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 							if(temp_object)temp_object_in_list.push_back(temp_object);
 						}
 						else{
-							((HCircle*)temp_object)->m_circle = c;
+							((HCircle*)temp_object)->SetCircle(c);
 						}
 					}
 				}
@@ -494,8 +494,8 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 						if(temp_object)temp_object_in_list.push_back(temp_object);
 					}
 					else{
-						((HCircle*)temp_object)->m_circle.SetLocation(end.m_point);
-						((HCircle*)temp_object)->m_circle.SetRadius(radius_for_circle);
+						((HCircle*)temp_object)->C->m_p = end.m_point;
+						((HCircle*)temp_object)->m_radius = radius_for_circle;
 					}
 				}
 				return true;
@@ -527,6 +527,11 @@ HeeksObj* LineArcDrawing::GetOwnerForDrawingObjects()
 		break;
 	default:
 		break;
+	}
+	if(wxGetApp().m_sketch_mode)
+	{
+		m_container = wxGetApp().GetContainer(true);
+		return m_container;
 	}
 	return NULL;
 }
