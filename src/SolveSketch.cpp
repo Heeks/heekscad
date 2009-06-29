@@ -289,8 +289,8 @@ arc GetArc(HArc* a)
 	ret.end = GetPoint(a->B);
 
 	point p;
-	p.x = &a->cx;
-	p.y = &a->cy;
+	p.x = &a->C->mx;
+	p.y = &a->C->my;
 
 	PushBack(p.x);
 	PushBack(p.y);

@@ -13,15 +13,19 @@ private:
 	static wxIcon* m_icon;
 
 public:
-	gp_Circ m_circle;
+	gp_Ax1 m_axis;
 
-	double cx, cy;
+	HPoint* C;
+	double m_radius;
 
 	~HArc(void);
 	HArc(const gp_Pnt &a, const gp_Pnt &b, const gp_Circ &c, const HeeksColor* col);
 	HArc(const HArc &arc);
 
 	const HArc& operator=(const HArc &b);
+
+	gp_Circ GetCircle() const;
+	void SetCircle(gp_Circ c);
 
 	// HeeksObj's virtual functions
 	int GetType()const{return ArcType;}

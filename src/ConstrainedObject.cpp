@@ -20,7 +20,34 @@ ConstrainedObject::~ConstrainedObject(){
 		delete linelengthconstraint;
 	if(radiusconstraint)
 		delete radiusconstraint;
+	std::list<Constraint*>::iterator it;
+	for(it = constraints.begin(); it!= constraints.end(); ++it)
+	{
+		Constraint * c = *it;
+		if(c->m_obj1 && c->m_obj1!= this)
+		{
+			ConstrainedObject *obj = dynamic_cast<ConstrainedObject*>(c->m_obj1);
+			if(obj)
+				obj->constraints.remove(c);
+		}
+
+		if(c->m_obj2 && c->m_obj2!= this)
+		{
+			ConstrainedObject *obj = dynamic_cast<ConstrainedObject*>(c->m_obj2);
+			if(obj)
+				obj->constraints.remove(c);
+		}
+
+		delete c;
+	}
 }
+
+const ConstrainedObject& ConstrainedObject::operator=(const ConstrainedObject &b){
+	HeeksObj::operator=(b);
+	//TODO: copy constraints
+	return *this;
+}
+
 
 bool ConstrainedObject::RemoveExisting(HeeksObj* obj, EnumConstraintType type)
 {
