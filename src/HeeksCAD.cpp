@@ -783,7 +783,9 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 
 	if(wf.EndsWith(_T(".heeks")) || wf.EndsWith(_T(".HEEKS")))
 	{
-		m_file_open_or_import_type = FileOpenOrImportTypeHeeks;
+		m_file_open_or_import_type = FileOpenTypeHeeks;
+		if(import_not_open)
+			m_file_open_or_import_type = FileImportTypeHeeks;
 		OpenXMLFile(filepath, import_not_open, paste_into);
 	}
 	else if(wf.EndsWith(_T(".svg")) || wf.EndsWith(_T(".SVG")))
@@ -1531,7 +1533,7 @@ bool HeeksCADapp::Add(HeeksObj *object, HeeksObj* prev_object)
 {
 	if (!ObjList::Add(object, prev_object)) return false;
 
-	if(object->GetType() == CoordinateSystemType && (!m_in_OpenFile || m_file_open_or_import_type !=FileOpenOrImportTypeHeeks))
+	if(object->GetType() == CoordinateSystemType && (!m_in_OpenFile || (m_file_open_or_import_type !=FileOpenTypeHeeks && m_file_open_or_import_type  != FileImportTypeHeeks)))
 	{
 		m_current_coordinate_system = (CoordinateSystem*)object;
 	}
