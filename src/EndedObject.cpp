@@ -24,7 +24,7 @@ EndedObject::~EndedObject(){
 }
 
 const EndedObject& EndedObject::operator=(const EndedObject &b){
-	ObjList::operator=(b);
+	ConstrainedObject::operator=(b);
 	A = new HPoint(*b.A);
 	B = new HPoint(*b.B);
 	A->m_draw_unselected = false;
