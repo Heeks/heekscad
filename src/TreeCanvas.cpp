@@ -9,6 +9,7 @@
 #include "MarkedList.h"
 #include "HeeksFrame.h"
 #include "../interface/InputMode.h"
+#include "Sketch.h"
 
 class DanObjectTreeData : public wxTreeItemData{
 	public:
@@ -503,6 +504,21 @@ void MyTreeCtrl::OnLMouseUp(wxMouseEvent& event)
 
 void MyTreeCtrl::OnLMouseDClick(wxMouseEvent& event)
 {
+	//Switch to sketch mode on double click of a sketch
+	wxTreeItemId id = HitTest(event.GetPosition());
+    if ( !id )
+	{
+	}
+    else
+    {
+        MyTreeItemData *item = (MyTreeItemData *)GetItemData(id);
+		CSketch *sketch = dynamic_cast<CSketch*>(item->m_object);
+		if(sketch)
+		{
+			wxGetApp().m_sketch = sketch;
+			wxGetApp().m_sketch_mode = true;
+		}
+	}
     event.Skip();
 }
 

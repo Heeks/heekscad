@@ -519,8 +519,7 @@ HeeksObj* LineArcDrawing::GetOwnerForDrawingObjects()
 			{
 				if(m_container == NULL)
 				{
-					m_container = (ObjList*)new CSketch;
-					wxGetApp().AddUndoably(m_container, NULL, NULL);
+					m_container = wxGetApp().GetContainer(true);
 				}
 				return m_container;
 			}

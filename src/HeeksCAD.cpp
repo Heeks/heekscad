@@ -170,6 +170,7 @@ HeeksCADapp::~HeeksCADapp()
 bool HeeksCADapp::OnInit()
 {
 	m_gl_font_initialized = false;
+	m_sketch_mode = false;
 
 	wxInitAllImageHandlers();
 
@@ -374,6 +375,30 @@ int HeeksCADapp::OnExit(){
 
 	int result = wxApp::OnExit();
 	return result;
+}
+
+bool HeeksCADapp::EndSketchMode()
+{
+	if(m_sketch_mode  && input_mode_object == m_select_mode)
+	{
+		m_sketch_mode = false;
+		Repaint();
+		return true;
+	}
+	return false;
+}
+
+CSketch* HeeksCADapp::GetContainer(bool undoably)
+{
+	if(m_sketch_mode)
+		return m_sketch;
+
+	m_sketch = new CSketch();
+	if(undoably)
+		AddUndoably(m_sketch,NULL,NULL);
+	else
+		Add(m_sketch,NULL);
+	return m_sketch;
 }
 
 void HeeksCADapp::SetInputMode(CInputMode *new_mode){
@@ -1271,6 +1296,9 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	if(m_graphics_text_mode != GraphicsTextModeNone)
 	{
 		wxString screen_text1, screen_text2;
+
+		if(m_sketch_mode)
+			screen_text1.Append(_T("Sketch Mode:\n"));
 
 		if(input_mode_object && input_mode_object->GetTitle())
 		{

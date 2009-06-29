@@ -29,6 +29,7 @@ class CoordinateSystem;
 class HRuler;
 class wxConfigBase;
 class wxAuiManager;
+class CSketch;
 
 #define MAX_RECENT_FILES 20
 
@@ -131,6 +132,8 @@ public:
 	bool m_loft_removes_sketches;
 	bool m_font_created;
 	glfont::GLFont m_gl_font;
+	bool m_sketch_mode;
+	CSketch* m_sketch;
 	unsigned int m_font_tex_number;
 	GraphicsTextMode m_graphics_text_mode;
 	bool m_print_scaled_to_page;
@@ -263,7 +266,8 @@ public:
 	void PlotArc(const double* s, const double* e, const double* c);
 	void InitialiseLocale();
 	void create_font();
-
+	CSketch* GetContainer(bool undoably);
+	bool EndSketchMode();
 };
 
 DECLARE_APP(HeeksCADapp)
