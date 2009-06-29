@@ -222,8 +222,6 @@ void LineArcDrawing::AddPoint()
 			// this only happens if we are drawing tangents to other objects
 			// really need to fill the gap with whatever we are tangent around
 			// ellipse,arc,spline or whatever
-			HeeksObj* save_temp_object = temp_object;
-
 			if(temp_object && prev_object_in_list.size() > 0)
 			{
 				HeeksObj* prev_object = prev_object_in_list.front();

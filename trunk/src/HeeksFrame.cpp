@@ -787,6 +787,8 @@ static void OnConeButton( wxCommandEvent& event )
 	wxGetApp().Repaint();
 }
 
+#if 0
+// experimenting with flyout toolbars
 static void OnSphereDropButton( wxCommandEvent& event )
 {
 	// make a vertical drop menu under button
@@ -812,6 +814,7 @@ static void OnSphereDropButton( wxCommandEvent& event )
 		dropBar->SetFocus();
 	}
 }
+#endif
 
 static void OnRedrawButton( wxCommandEvent& event )
 {
@@ -1401,15 +1404,15 @@ void CHeeksFrame::AddToolBars()
 	AddToolBarTool(m_toolBar, _T("Redo"), ToolImage(_T("redo")), _("Redo the next command"), OnRedoButton);
 	AddToolBarTool(m_toolBar, _T("Select"), ToolImage(_T("select")), _("Select Mode"), OnSelectModeButton);
 	AddToolBarTool(m_geometryBar, _T("Lines"), ToolImage(_T("lines")), _("Draw a sketch"), OnLinesButton);
-	//AddToolBarTool(m_geometryBar, _T("Circles"), ToolImage(_T("circles")), _("Start Circle Drawing"), OnCirclesButton);
-
+	AddToolBarTool(m_geometryBar, _T("Circles"), ToolImage(_T("circles")), _("Start Circle Drawing"), OnCircles3pButton);
+#if 0
 	std::list<CFlyOutItem> flyout_list;
 	flyout_list.push_back(CFlyOutItem(_T("circ3p"), _("Draw circles through 3 points"), OnCircles3pButton));
 	flyout_list.push_back(CFlyOutItem(_T("circ2p"), _("Draw circles with centre point and point on circle"), OnCircles2pButton));
 	flyout_list.push_back(CFlyOutItem(_T("circpr"), _("Draw circles with centre point and radius"), OnCirclesprButton));
 
 	AddToolBarFlyout(m_geometryBar, _T("circles"), flyout_list);
-
+#endif
 	AddToolBarTool(m_geometryBar, _T("ILine"), ToolImage(_T("iline")), _("Start Drawing Infinite Lines"), OnILineButton);
 	AddToolBarTool(m_geometryBar, _T("Points"), ToolImage(_T("point")), _("Start Drawing Points"), OnPointsButton);
 	AddToolBarTool(m_geometryBar, _T("Regular Shapes"), ToolImage(_T("regshapes")), _("Draw regular shapes; rectangles, polygons, obrounds"), OnRegularShapesButton);
