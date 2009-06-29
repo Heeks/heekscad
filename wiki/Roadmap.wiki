@@ -10,24 +10,24 @@ It isn't clear to me if we should start milestoning before or after 1.0. The fol
 
 = 1.0? / M1? =
 
-1. Verify current dxf import capabilities. Elliptic arcs may not work.
-2. Dxf export is seriously behind import.
-3. Svg import not working for some users under linux.
-4. Get the new drawing functions to work. Possibly via flyout toolbars.
-5. Sketch mode.
-6. Many of the drawing functions and editing functions do not work properly in other coordinate systems.
-7. Set some kind of maximum undo depth.
-8. Save and load constraints from files.
-9. Cut, paste, undo, redo all require a graph copy to be implemented to work with constraints.
-10. Pretty symbolism for constraints.
-11. New dimension object with 3 modes (horizontal,vertical,pythagorean) which can be reference to 2 HPoint objects and will follow them around.
-12. Angle between lines dimension object
+# Verify current dxf import capabilities. Elliptic arcs may not work.
+# Dxf export is seriously behind import.
+# Svg import not working for some users under linux.
+# Get the new drawing functions to work. Possibly via flyout toolbars.
+# Sketch mode.
+# Many of the drawing functions and editing functions do not work properly in other coordinate systems.
+# Set some kind of maximum undo depth.
+# Save and load constraints from files.
+# Cut, paste, undo, redo all require a graph copy to be implemented to work with constraints.
+# Pretty symbolism for constraints.
+# New dimension object with 3 modes (horizontal,vertical,pythagorean) which can be reference to 2 HPoint objects and will follow them around.
+# Angle between lines dimension object
 
 = Wishlist = 
 
-1. Svg export
-2. Linewidth and color from dxf and svg
-3. Filled polygons 
-4. Block and reference objects.
-5. Much cooler undo engine. (takes larger and larger time steps in the past and is able to save just the modified portions of the graph)
-6. Constraint inference engine. (Infers constraints when loading non native file formats)
+# Svg export
+# Linewidth and color from dxf and svg
+# Filled polygons 
+# Block and reference objects.
+# Much cooler undo engine. (takes larger and larger time steps in the past and is able to save just the modified portions of the graph)
+# Constraint inference engine. (Infers constraints when loading non native file formats)
