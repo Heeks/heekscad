@@ -212,7 +212,7 @@ bool HCircle::Stretch(const double *p, const double* shift, void* data){
 	gp_Pnt s(c.XYZ() + x_axis.XYZ() * r);
 
 	if(data == C){
-		C->m_p = c.XYZ() + vshift.XYZ();
+		C->m_p = vp.XYZ() + vshift.XYZ();
 	}
 	else
 	{

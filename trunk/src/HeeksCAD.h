@@ -43,7 +43,8 @@ enum GraphicsTextMode
 enum FileOpenOrImportType
 {
 	FileOpenOrImportTypeOther,
-	FileOpenOrImportTypeHeeks,
+	FileOpenTypeHeeks,
+	FileImportTypeHeeks,
 	FileOpenOrImportTypeDxf
 };
 

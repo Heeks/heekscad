@@ -186,7 +186,7 @@ bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 	HeeksObj::Add(object, prev_object);
 
 #ifdef HEEKSCAD
-	if((!wxGetApp().m_in_OpenFile || wxGetApp().m_file_open_or_import_type != FileOpenOrImportTypeHeeks) && object->UsesID() && object->m_id == 0)
+	if((!wxGetApp().m_in_OpenFile || wxGetApp().m_file_open_or_import_type != FileOpenTypeHeeks) && object->UsesID() && (object->m_id == 0 || (wxGetApp().m_file_open_or_import_type == FileImportTypeHeeks && wxGetApp().m_in_OpenFile)))
 	{
 		object->SetID(wxGetApp().GetNextID(object->GetIDGroupType()));
 	}
@@ -215,7 +215,7 @@ void ObjList::Remove(HeeksObj* object)
 	HeeksObj::Remove(object);
 
 #ifdef HEEKSCAD
-	if((!wxGetApp().m_in_OpenFile || wxGetApp().m_file_open_or_import_type != FileOpenOrImportTypeHeeks) && object->UsesID() && object->m_id == 0)
+	if((!wxGetApp().m_in_OpenFile || wxGetApp().m_file_open_or_import_type != FileOpenTypeHeeks) && object->UsesID() && (object->m_id == 0 || (wxGetApp().m_file_open_or_import_type == FileImportTypeHeeks && wxGetApp().m_in_OpenFile)))
 	{
 		wxGetApp().RemoveID(object);
 	}
