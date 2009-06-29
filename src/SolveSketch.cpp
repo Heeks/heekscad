@@ -201,6 +201,10 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 		}
 	}
 
+	if(constraints.size() == 0)
+		// no contraints
+		return;
+
 	if(solve(&params[0],params.size(),&constraints[0],constraints.size(),fine))
 		//No result
 		return;
