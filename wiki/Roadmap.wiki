@@ -1,0 +1,33 @@
+#summary Roadmap for the development of heekscad
+
+= Introduction =
+
+This document outlines the future plans for heekscad. It is currently very much a work in progress. Edits and discussions on forums are encouraged. At some point these things will be converted into issues in bug tracker.
+
+All of the issues in bug tracker need to get taken care of. At the very least they should be inserted into this document under some milestone. Some things may need to be marked as do not fix, others are probably fixed, but there reporters have not verified them as so. Imho, these should be marked as fixed and they will just get rereported if they are not.
+
+It isn't clear to me if we should start milestoning before or after 1.0. The following list is stuff I think needs to happen for 1.0. Earlier stepping stones may be advisable depending on how big this list gets and the interdependencies or infrastructure requirements that arise as a consequence. 
+
+= 1.0? / M1? =
+
+1. Verify current dxf import capabilities. Elliptic arcs may not work.
+2. Dxf export is seriously behind import.
+3. Svg import not working for some users under linux.
+4. Get the new drawing functions to work. Possibly via flyout toolbars.
+5. Sketch mode.
+6. Many of the drawing functions and editing functions do not work properly in other coordinate systems.
+7. Set some kind of maximum undo depth.
+8. Save and load constraints from files.
+9. Cut, paste, undo, redo all require a graph copy to be implemented to work with constraints.
+10. Pretty symbolism for constraints.
+11. New dimension object with 3 modes (horizontal,vertical,pythagorean) which can be reference to 2 HPoint objects and will follow them around.
+12. Angle between lines dimension object
+
+= Wishlist = 
+
+1. Svg export
+2. Linewidth and color from dxf and svg
+3. Filled polygons 
+4. Block and reference objects.
+5. Much cooler undo engine. (takes larger and larger time steps in the past and is able to save just the modified portions of the graph)
+6. Constraint inference engine. (Infers constraints when loading non native file formats)
