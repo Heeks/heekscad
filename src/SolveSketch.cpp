@@ -55,9 +55,9 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 	{
 		ConstrainedObject* cobj = (dynamic_cast<ConstrainedObject*>(obj));
 		EndedObject *eobj = (dynamic_cast<EndedObject*>(obj));
-		if(cobj)
+		if(eobj)
 		{
-			eobj->LoadToDoubles();
+			cobj->LoadToDoubles();
 			if(obj->GetType() == ArcType)
 			{
 				arc a = GetArc((HArc*)obj);
