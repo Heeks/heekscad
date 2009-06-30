@@ -318,3 +318,26 @@ void ConstrainedObject::SetPointOnArcConstraint(HPoint* obj)
 	constraints.push_back(c);
 	obj->constraints.push_back(c);
 }
+
+bool ConstrainedObject::SetCirclesConcentricConstraint(ConstrainedObject* obj){
+	if(RemoveExisting(obj, CirclesConcentricConstraint)) return true;
+	Constraint* c = new Constraint();
+	c->m_type = CirclesConcentricConstraint;
+	c->m_obj1 = (HeeksObj*)this;
+	c->m_obj2 = (HeeksObj*)obj;
+	constraints.push_back(c);
+	obj->constraints.push_back(c);
+	return false;
+}
+
+
+bool ConstrainedObject::SetCirclesEqualRadiusConstraint(ConstrainedObject* obj){
+	if(RemoveExisting(obj, CirclesEqualRadiusConstraint)) return true;
+	Constraint* c = new Constraint();
+	c->m_type = CirclesEqualRadiusConstraint;
+	c->m_obj1 = (HeeksObj*)this;
+	c->m_obj2 = (HeeksObj*)obj;
+	constraints.push_back(c);
+	obj->constraints.push_back(c);
+	return false;
+}
