@@ -255,7 +255,7 @@ void ConstrainedObject::SetTangentConstraint(ConstrainedObject* obj)
 	for(it = constraints.begin(); it!=constraints.end(); ++it)
 	{
 		Constraint* c = *it;
-		if(c->m_type == LineTangentToArcConstraint && (ConstrainedObject*)c->m_obj2 == obj)
+		if(c->m_type == LineTangentConstraint && (ConstrainedObject*)c->m_obj2 == obj)
 		{
 			constraints.remove(c);
 			delete c;
@@ -263,7 +263,7 @@ void ConstrainedObject::SetTangentConstraint(ConstrainedObject* obj)
 		}
 	}
 	
-	Constraint *c = new Constraint(LineTangentToArcConstraint,this,obj);
+	Constraint *c = new Constraint(LineTangentConstraint,this,obj);
 	constraints.push_back(c);
 }
 
@@ -319,25 +319,3 @@ void ConstrainedObject::SetPointOnArcConstraint(HPoint* obj)
 	obj->constraints.push_back(c);
 }
 
-bool ConstrainedObject::SetCirclesConcentricConstraint(ConstrainedObject* obj){
-	if(RemoveExisting(obj, CirclesConcentricConstraint)) return true;
-	Constraint* c = new Constraint();
-	c->m_type = CirclesConcentricConstraint;
-	c->m_obj1 = (HeeksObj*)this;
-	c->m_obj2 = (HeeksObj*)obj;
-	constraints.push_back(c);
-	obj->constraints.push_back(c);
-	return false;
-}
-
-
-bool ConstrainedObject::SetCirclesEqualRadiusConstraint(ConstrainedObject* obj){
-	if(RemoveExisting(obj, CirclesEqualRadiusConstraint)) return true;
-	Constraint* c = new Constraint();
-	c->m_type = CirclesEqualRadiusConstraint;
-	c->m_obj1 = (HeeksObj*)this;
-	c->m_obj2 = (HeeksObj*)obj;
-	constraints.push_back(c);
-	obj->constraints.push_back(c);
-	return false;
-}

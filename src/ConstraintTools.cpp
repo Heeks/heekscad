@@ -30,19 +30,19 @@ public:
 	const wxChar* GetToolTip(){return _("Set these lines to be perpendicular");}
 };
 
-class SetArcTangent:public Tool{
+class SetLineTangent:public Tool{
 public:
 	void Run(){
 		std::list<HeeksObj*>::const_iterator It;
-		EndedObject* last=NULL;
+		ConstrainedObject* last=NULL;
 		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
-			EndedObject* obj = (EndedObject*)*It;
+			ConstrainedObject* obj = (ConstrainedObject*)*It;
 			if(last)
 			{
-				if(last->GetType() == ArcType)
-					last->SetTangentConstraint(obj);
-				else
+				if(last->GetType() == LineType)
 					obj->SetTangentConstraint(last);
+				else
+					last->SetTangentConstraint(obj);
 			}
 			last=obj;
 		}
@@ -118,14 +118,14 @@ public:
 	const wxChar* GetToolTip(){return _("Set these lines to be colinear");}
 };
 
-class SetArcsEqualRadius:public Tool{
+class SetEqualRadius:public Tool{
 	// set world coordinate system active again
 public:
 	void Run(){
 		std::list<HeeksObj*>::const_iterator It;
-		EndedObject* last=NULL;
+		ConstrainedObject* last=NULL;
 		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
-			EndedObject* obj = (EndedObject*)*It;
+			ConstrainedObject* obj = (ConstrainedObject*)*It;
 			if(last)
 				if(obj->SetEqualRadiusConstraint(last))
 					break;
@@ -139,14 +139,14 @@ public:
 	const wxChar* GetToolTip(){return _("Set these arcs to have equal radii");}
 };
 
-class SetArcsConcentric:public Tool{
+class SetConcentric:public Tool{
 	// set world coordinate system active again
 public:
 	void Run(){
 		std::list<HeeksObj*>::const_iterator It;
-		EndedObject* last=NULL;
+		ConstrainedObject* last=NULL;
 		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
-			EndedObject* obj = (EndedObject*)*It;
+			ConstrainedObject* obj = (ConstrainedObject*)*It;
 			if(last)
 				if(obj->SetConcentricConstraint(last))
 					break;
@@ -278,63 +278,18 @@ public:
 	const wxChar* GetToolTip(){return _("Set this point on arc");}
 };
 
-class SetCirclesConcentric:public Tool{
-	// set world coordinate system active again
-public:
-	void Run(){
-		std::list<HeeksObj*>::const_iterator It;
-		ConstrainedObject* last=NULL;
-		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
-			ConstrainedObject* obj = (ConstrainedObject*)*It;
-			if(last)
-				if(obj->SetCirclesConcentricConstraint(last))
-					break;
-			last=obj;
-		}
-		SolveSketch((CSketch*)last->m_owner);
-		wxGetApp().Repaint();
-	}
-	const wxChar* GetTitle(){return _T("Set Concentric");}
-	wxString BitmapPath(){return _T("new");}
-	const wxChar* GetToolTip(){return _("Set these circles to be concentric");}
-};
-
-class SetCirclesEqualRadius:public Tool{
-	// set world coordinate system active again
-public:
-	void Run(){
-		std::list<HeeksObj*>::const_iterator It;
-		ConstrainedObject* last=NULL;
-		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
-			ConstrainedObject* obj = (ConstrainedObject*)*It;
-			if(last)
-				if(obj->SetCirclesEqualRadiusConstraint(last))
-					break;
-			last=obj;
-		}
-		SolveSketch((CSketch*)last->m_owner);
-		wxGetApp().Repaint();
-	}
-	const wxChar* GetTitle(){return _T("Set Equal Radius");}
-	wxString BitmapPath(){return _T("new");}
-	const wxChar* GetToolTip(){return _("Set these circles to have equal radii");}
-};
-
-static SetArcsEqualRadius set_arcs_equal_radius;
-static SetArcsConcentric set_arcs_concentric;
+static SetEqualRadius set_equal_radius;
+static SetConcentric set_concentric;
 static SetLinesParallel set_lines_parallel;
 static SetLinesEqualLength set_lines_equal_length;
 static SetLinesColinear set_lines_colinear;
 static SetLinesPerpendicular set_lines_perpendicular;
-static SetArcTangent set_arc_tangent;
+static SetLineTangent set_line_tangent;
 static SetPointOnLine set_point_on_line;
 static SetPointOnMidpoint set_point_on_midpoint;
 static SetPointsCoincident set_points_coincident;
 static SetPointOnArc set_point_on_arc;
 static SetPointOnArcMidpoint set_point_on_arc_midpoint;
-static SetCirclesConcentric set_circles_concentric;
-static SetCirclesEqualRadius set_circles_equal_radius;
-
 
 void GetConstraintMenuTools(std::list<Tool*>* t_list){
 	int line_count = 0;
@@ -379,15 +334,6 @@ void GetConstraintMenuTools(std::list<Tool*>* t_list){
 		t_list->push_back(&set_lines_colinear);
 	}
 
-	if(arc_count == 1 && line_count == 1 && point_count == 0 && circle_count == 0)
-		t_list->push_back(&set_arc_tangent);
-
-	if(line_count == 0 && point_count == 0 && circle_count == 0)
-	{
-		t_list->push_back(&set_arcs_equal_radius);
-		t_list->push_back(&set_arcs_concentric);
-	}
-
 	if(line_count == 0 && arc_count == 0 && circle_count == 0)
 		t_list->push_back(&set_points_coincident);
 
@@ -403,12 +349,16 @@ void GetConstraintMenuTools(std::list<Tool*>* t_list){
 		t_list->push_back(&set_point_on_arc_midpoint);
 	}
 
-	if(line_count == 0 && point_count == 0 && arc_count == 0)
+	if(line_count == 0 && point_count == 0 && (arc_count + circle_count == 2))
 	{
-		t_list->push_back(&set_circles_concentric);
-		t_list->push_back(&set_circles_equal_radius);
+		t_list->push_back(&set_concentric);
+		t_list->push_back(&set_equal_radius);
 	}
 
+	if(line_count == 1 && (circle_count + arc_count == 1))
+	{
+		t_list->push_back(&set_line_tangent);
+	}
 }
 
 void ApplyCoincidentConstraints(HeeksObj* extobj, std::list<HeeksObj*> list)
