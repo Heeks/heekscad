@@ -55,4 +55,6 @@ public:
 
 	void SetCircle(gp_Circ c);
 	gp_Circ GetCircle() const;
+	void LoadFromDoubles();
+	void LoadToDoubles();
 };

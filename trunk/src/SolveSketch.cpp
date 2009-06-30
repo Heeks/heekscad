@@ -8,10 +8,12 @@
 #include "SolveSketch.h"
 #include "ConstrainedObject.h"
 #include "EndedObject.h"
-#include "../sketchsolve/src/solve.h"
 #include "HArc.h"
+#include "HCircle.h"
+#include "../sketchsolve/src/solve.h"
 
 arc GetArc(HArc* a);
+circle GetCircle(HCircle* a);
 line GetLineFromEndedObject(EndedObject* eobj);
 point GetPoint(HPoint* point);
 void AddPointConstraints(HPoint* point);
@@ -28,7 +30,7 @@ void debugprint(std::string s)
 
 void SolveSketch(CSketch* sketch)
 {
-	SolveSketch(sketch,NULL,NULL);
+	SolveSketch(NULL,sketch,NULL);
 }
 
 void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
@@ -55,7 +57,7 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 	{
 		ConstrainedObject* cobj = (dynamic_cast<ConstrainedObject*>(obj));
 		EndedObject *eobj = (dynamic_cast<EndedObject*>(obj));
-		if(eobj)
+		if(cobj)
 		{
 			cobj->LoadToDoubles();
 			if(obj->GetType() == ArcType)
@@ -98,14 +100,12 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 				constraints.push_back(c);
 			}
 
-			if(eobj->A)
+			if(eobj)
 			{
-				AddPointConstraints(eobj->A);
-			}
-
-			if(eobj->B)
-			{
-				AddPointConstraints(eobj->B);
+				if(eobj->A)
+					AddPointConstraints(eobj->A);
+				if(eobj->B)
+					AddPointConstraints(eobj->B);
 			}
 	
 			std::list<Constraint*>::iterator it;
@@ -133,6 +133,21 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 					}
 					break;
 
+					case CirclesEqualRadiusConstraint:
+					case CirclesConcentricConstraint:
+					{ 
+						constraint c;
+						c.circle1 = GetCircle((HCircle*)con->m_obj1);
+						c.circle2 = GetCircle((HCircle*)con->m_obj2);
+						c.type = equalRadiusCircles;
+						if(con->m_type == CirclesConcentricConstraint)
+							c.type = concentricCircles;
+						cons.insert(con);
+						constraints.push_back(c);
+					}
+					break;
+
+
 					case PointOnArcMidpointConstraint:
 					case PointOnArcConstraint:
 					{ 
@@ -154,6 +169,7 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 						c.type = tangentToArc;
 						c.arc1 = a;
 						c.line1 = GetLineFromEndedObject((EndedObject*)con->m_obj2);
+						cons.insert(con);
 						constraints.push_back(c);
 					}
 					break;
@@ -300,14 +316,17 @@ arc GetArc(HArc* a)
 	ret.start = GetPoint(a->A);
 	ret.end = GetPoint(a->B);
 
-	point p;
-	p.x = &a->C->mx;
-	p.y = &a->C->my;
+	ret.center = GetPoint(a->C);
 
-	PushBack(p.x);
-	PushBack(p.y);
+	return ret;
+}
 
-	ret.center = p;
+circle GetCircle(HCircle* a)
+{
+	circle ret;
+	ret.center = GetPoint(a->C);
+	ret.rad = &a->m_radius;
+	PushBack(ret.rad);
 
 	return ret;
 }

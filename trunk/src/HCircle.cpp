@@ -22,6 +22,7 @@ HCircle::HCircle(const gp_Circ &c, const HeeksColor* col):color(*col){
 	m_axis = c.Axis();
 	m_radius = c.Radius();
 	C = new HPoint(c.Location(),col);
+	Add(C,NULL);
 }
 
 HCircle::~HCircle(){
@@ -33,6 +34,7 @@ const HCircle& HCircle::operator=(const HCircle &c){
 	m_radius = c.m_radius;
 	color = c.color;
 	C = new HPoint(c.C->m_p,&color);
+	Add(C,NULL);
 	return *this;
 }
 
@@ -153,7 +155,7 @@ void HCircle::GetGripperPositions(std::list<GripData> *list, bool just_for_endof
 		gp_Pnt s(c + x_axis.XYZ() * r);
 
 		list->push_back(GripData(GripperTypeStretch,c.X(),c.Y(),c.Z(),C));
-		list->push_back(GripData(GripperTypeStretch,s.X(),s.Y(),s.Z(),NULL));
+		list->push_back(GripData(GripperTypeStretch,s.X(),s.Y(),s.Z(),&m_radius));
 	}
 }
 
@@ -214,7 +216,7 @@ bool HCircle::Stretch(const double *p, const double* shift, void* data){
 	if(data == C){
 		C->m_p = vp.XYZ() + vshift.XYZ();
 	}
-	else
+	else if(data == &m_radius)
 	{
 		s = gp_Pnt(vp.XYZ() + vshift.XYZ());
 		m_radius = c.Distance(s);
@@ -831,4 +833,14 @@ void HCircle::SetCircle(gp_Circ c)
 	m_radius = c.Radius();
 	C->m_p = c.Location();
 	m_axis = c.Axis();
+}
+
+void HCircle::LoadFromDoubles()
+{
+	C->LoadFromDoubles();
+}
+
+void HCircle::LoadToDoubles()
+{
+	C->LoadToDoubles();
 }

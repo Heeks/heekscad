@@ -278,6 +278,48 @@ public:
 	const wxChar* GetToolTip(){return _("Set this point on arc");}
 };
 
+class SetCirclesConcentric:public Tool{
+	// set world coordinate system active again
+public:
+	void Run(){
+		std::list<HeeksObj*>::const_iterator It;
+		ConstrainedObject* last=NULL;
+		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+			ConstrainedObject* obj = (ConstrainedObject*)*It;
+			if(last)
+				if(obj->SetCirclesConcentricConstraint(last))
+					break;
+			last=obj;
+		}
+		SolveSketch((CSketch*)last->m_owner);
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Set Concentric");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Set these circles to be concentric");}
+};
+
+class SetCirclesEqualRadius:public Tool{
+	// set world coordinate system active again
+public:
+	void Run(){
+		std::list<HeeksObj*>::const_iterator It;
+		ConstrainedObject* last=NULL;
+		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+			ConstrainedObject* obj = (ConstrainedObject*)*It;
+			if(last)
+				if(obj->SetCirclesEqualRadiusConstraint(last))
+					break;
+			last=obj;
+		}
+		SolveSketch((CSketch*)last->m_owner);
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Set Equal Radius");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Set these circles to have equal radii");}
+};
+
 static SetArcsEqualRadius set_arcs_equal_radius;
 static SetArcsConcentric set_arcs_concentric;
 static SetLinesParallel set_lines_parallel;
@@ -290,12 +332,15 @@ static SetPointOnMidpoint set_point_on_midpoint;
 static SetPointsCoincident set_points_coincident;
 static SetPointOnArc set_point_on_arc;
 static SetPointOnArcMidpoint set_point_on_arc_midpoint;
+static SetCirclesConcentric set_circles_concentric;
+static SetCirclesEqualRadius set_circles_equal_radius;
 
 
 void GetConstraintMenuTools(std::list<Tool*>* t_list){
 	int line_count = 0;
 	int arc_count = 0;
 	int point_count = 0;
+	int circle_count = 0;
 
 	// check to see what types have been marked
 	std::list<HeeksObj*>::const_iterator It;
@@ -311,48 +356,57 @@ void GetConstraintMenuTools(std::list<Tool*>* t_list){
 			case ArcType:
 				arc_count++;
 				break;
+			case CircleType:
+				circle_count++;
+				break;
 			default:
 				return;
 		}
 	}
 
-	int total_count = line_count + arc_count + point_count;
+	int total_count = line_count + arc_count + point_count + circle_count;
 
 	if(total_count < 2)
 		return;
 
-	if(line_count == 2 && arc_count == 0 && point_count == 0)
+	if(line_count == 2 && arc_count == 0 && point_count == 0 && circle_count == 0)
 		t_list->push_back(&set_lines_perpendicular);
 
-	if(arc_count == 0 && point_count == 0)
+	if(arc_count == 0 && point_count == 0 && circle_count == 0)
 	{
 		t_list->push_back(&set_lines_parallel);
 		t_list->push_back(&set_lines_equal_length);
 		t_list->push_back(&set_lines_colinear);
 	}
 
-	if(arc_count == 1 && line_count == 1 && point_count == 0)
+	if(arc_count == 1 && line_count == 1 && point_count == 0 && circle_count == 0)
 		t_list->push_back(&set_arc_tangent);
 
-	if(line_count == 0 && point_count == 0)
+	if(line_count == 0 && point_count == 0 && circle_count == 0)
 	{
 		t_list->push_back(&set_arcs_equal_radius);
 		t_list->push_back(&set_arcs_concentric);
 	}
 
-	if(line_count == 0 && arc_count == 0)
+	if(line_count == 0 && arc_count == 0 && circle_count == 0)
 		t_list->push_back(&set_points_coincident);
 
-	if(line_count == 1 && point_count == 1 && arc_count == 0)
+	if(line_count == 1 && point_count == 1 && arc_count == 0 && circle_count == 0)
 	{
 		t_list->push_back(&set_point_on_line);
 		t_list->push_back(&set_point_on_midpoint);
 	}
 
-	if(line_count == 0 && point_count == 1 && arc_count == 1)
+	if(line_count == 0 && point_count == 1 && arc_count == 1 && circle_count == 0)
 	{
 		t_list->push_back(&set_point_on_arc);
 		t_list->push_back(&set_point_on_arc_midpoint);
+	}
+
+	if(line_count == 0 && point_count == 0 && arc_count == 0)
+	{
+		t_list->push_back(&set_circles_concentric);
+		t_list->push_back(&set_circles_equal_radius);
 	}
 
 }
