@@ -26,4 +26,6 @@ public:
 	Matrix Subtracted(Matrix *mat);
 	void Subtract(Matrix* mat);
 	void Subtract(double s);
+	void Divide(double s);
+	Matrix Divided(double s);
 };

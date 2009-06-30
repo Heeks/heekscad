@@ -5,6 +5,16 @@
 #include "stdafx.h"
 #include "../sketchsolve/src/solve.h"
 
+#include "matrix.h"
+
+//This file is used to deal with the numeric solvers trouble with pointOnPoint constraints.
+//They seem to cause serious slowness and instability in the solver. Since they are trivial
+//to solve and are used liberally in heekscad. It was decided to maintain the appearance
+//that they can be solved efficiently by writing an algorithm that converts to and from
+//a point free and pointed data structure. 
+
+//This is an n log n realization of that scheme.
+
 std::vector<double*> usedparms;
 std::set<double*> hasusedparms;
 std::set<double*> oldparms;

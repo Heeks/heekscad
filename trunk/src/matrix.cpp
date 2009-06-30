@@ -132,6 +132,16 @@ void Matrix::Add(double s)
 	m_data = m.m_data;
 }
 
+void Matrix::Divide(double s)
+{
+	Matrix m = Divided(s);
+	m.m_temp = true;
+	m_m = m.m_m;
+	m_n = m.m_n;
+	delete m_data;
+	m_data = m.m_data;
+}
+
 Matrix Matrix::Added(Matrix *mat)
 {
 	if(m_m != mat->m_m || m_n != mat->m_n)
@@ -188,6 +198,20 @@ Matrix Matrix::Added(double s)
 		for(int j=0; j < m_m; j++)
 		{
 			nmat(i,j) = GetElement(i,j) + s;
+		}
+	}
+
+	return nmat;
+}
+
+Matrix Matrix::Divided(double s)
+{
+	Matrix nmat(m_n,m_m);
+	for(int i=0; i < m_n; i++)
+	{
+		for(int j=0; j < m_m; j++)
+		{
+			nmat(i,j) = GetElement(i,j) / s;
 		}
 	}
 
