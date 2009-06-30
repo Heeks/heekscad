@@ -17,6 +17,7 @@ circle GetCircle(HCircle* a);
 line GetLineFromEndedObject(EndedObject* eobj);
 point GetPoint(HPoint* point);
 void AddPointConstraints(HPoint* point);
+int solvewpoints(double  **parms,int nparms, constraint * cons, int consLength, int isFine);
 
 std::vector<double*> params;
 std::set<double*> paramset;
@@ -255,9 +256,9 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 		// no contraints
 		return;
 
-	if(solve(&params[0],params.size(),&constraints[0],constraints.size(),fine))
+	if(solvewpoints(&params[0],params.size(),&constraints[0],constraints.size(),fine))
 		//No result
-		return;
+	{return;}
 
 	obj = sketch->GetFirstChild();
 	while(obj)

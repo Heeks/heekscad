@@ -771,7 +771,7 @@ double calc(constraint * cons, int consLength)
 
 		if(cons[i].type==concentricCircles)
 		{
-			temp = pow(_hypot(C1_Center_x - C2_Center_x , C1_Center_y - C2_Center_y),2);
+			temp = _hypot(C1_Center_x - C2_Center_x , C1_Center_y - C2_Center_y);
 			error += temp*temp;
 		}
 

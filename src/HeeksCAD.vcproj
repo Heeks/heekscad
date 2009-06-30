@@ -1299,6 +1299,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\sketchinterface.cpp"
+			>
+		</File>
+		<File
 			RelativePath=".\Solid.cpp"
 			>
 		</File>

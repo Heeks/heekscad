@@ -1,0 +1,149 @@
+// sketchinterface.cpp
+// Copyright (c) 2009, Dan Heeks
+// This program is released under the BSD license. See the file COPYING for details.
+
+#include "stdafx.h"
+#include "../sketchsolve/src/solve.h"
+
+std::vector<double*> usedparms;
+std::set<double*> hasusedparms;
+std::set<double*> oldparms;
+std::vector<double> parmdata;
+std::vector<double*> newparms;
+std::map<double*,double*> parmmap;
+std::map<double*,std::list<double*>> rparmmap;
+std::vector<constraint> newcons;
+
+double* mapdouble(double* v)
+{
+	if(v)
+	{
+		if(parmmap[v])
+			v = parmmap[v];
+		else
+			if(oldparms.find(v) != oldparms.end())
+				newparms.push_back(v);
+			else
+				return v;
+
+		if(hasusedparms.find(v) == hasusedparms.end())
+		{
+			usedparms.push_back(v);
+			hasusedparms.insert(v);
+		}
+	}
+	return v;
+}
+
+point mappoint(point p)
+{
+	p.x = mapdouble(p.x);
+	p.y = mapdouble(p.y);
+	return p;
+}
+
+arc maparc(arc a)
+{
+	a.center = mappoint(a.center);
+	a.end = mappoint(a.end);
+	a.start = mappoint(a.start);
+	return a;
+}
+
+circle mapcircle(circle c)
+{
+	c.center = mappoint(c.center);
+	c.rad = mapdouble(c.rad);
+	return c;
+}
+
+line mapline(line l)
+{
+	l.p1 = mappoint(l.p1);
+	l.p2 = mappoint(l.p2);
+	return l;
+}
+
+int solvewpoints(double  **parms,int nparms, constraint * cons, int consLength, int isFine)
+{
+	parmdata.clear();
+	newparms.clear();
+	parmmap.clear();
+	rparmmap.clear();
+	newcons.clear();
+	usedparms.clear();
+	hasusedparms.clear();
+	oldparms.clear();
+
+	//This keeps parmdata's pointers from moving because of reallocation
+	parmdata.reserve(nparms);
+
+	//create a set of the old parameters
+	for(int i=0; i < nparms; i++)
+		oldparms.insert(parms[i]);
+
+
+    for(int i=0; i < consLength; i++)
+	{
+		if(cons[i].type == pointOnPoint)
+		{
+			int idx = parmdata.size();
+			//create some new doubles to point at. initialized to the midpoint
+			parmdata.push_back(*cons[i].point1.x/2 + *cons[i].point2.x/2);
+			parmdata.push_back(*cons[i].point1.y/2 + *cons[i].point2.y/2);
+			//push some pointers to the new doubles
+			newparms.push_back(&parmdata[idx]);
+			newparms.push_back(&parmdata[idx+1]);
+			//create associatation between old pointer and the new doubles
+			parmmap[cons[i].point1.x] = &parmdata[idx];
+			parmmap[cons[i].point1.y] = &parmdata[idx+1]; 
+			parmmap[cons[i].point2.x] = &parmdata[idx];
+			parmmap[cons[i].point2.y] = &parmdata[idx+1];
+			//create association between new doubles and the old pointer
+			rparmmap[&parmdata[idx]].push_back(cons[i].point1.x);
+			rparmmap[&parmdata[idx+1]].push_back(cons[i].point1.y);
+			rparmmap[&parmdata[idx]].push_back(cons[i].point2.x);
+			rparmmap[&parmdata[idx+1]].push_back(cons[i].point2.y);
+		}
+		else
+			//put the constraint in a new list, pointonpoint free
+			newcons.push_back(cons[i]);
+	}
+
+	for(int i=0; i < newcons.size(); i++)
+	{
+		//map all pointers
+		newcons[i].arc1 = maparc(newcons[i].arc1);
+		newcons[i].arc2 = maparc(newcons[i].arc2);
+		newcons[i].circle1 = mapcircle(newcons[i].circle1);
+		newcons[i].circle2 = mapcircle(newcons[i].circle2);
+		newcons[i].line1 = mapline(newcons[i].line1);
+		newcons[i].line2 = mapline(newcons[i].line2);
+		newcons[i].parameter = mapdouble(newcons[i].parameter);
+		newcons[i].point1 = mappoint(newcons[i].point1);
+		newcons[i].point2 = mappoint(newcons[i].point2);
+		newcons[i].SymLine = mapline(newcons[i].SymLine);
+	}
+
+    
+	int ret = 0;
+	if(newcons.size())
+		ret = solve(&usedparms[0],usedparms.size(),&newcons[0],newcons.size(),isFine);
+
+
+	//loop through all remapped pointers
+	for(int i=0; i < newparms.size(); i++)
+	{
+		if(rparmmap[newparms[i]].size() > 0)
+		{
+			std::list<double*>::iterator it;
+			for(it = rparmmap[newparms[i]].begin(); it != rparmmap[newparms[i]].end(); ++it)
+			{
+				//update
+				**it = *newparms[i];
+			}
+		}
+	}
+
+	return ret;
+}
