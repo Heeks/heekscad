@@ -21,7 +21,7 @@ std::set<double*> oldparms;
 std::vector<double> parmdata;
 std::vector<double*> newparms;
 std::map<double*,double*> parmmap;
-std::map<double*,std::list<double*>> rparmmap;
+std::map<double*,std::list<double*> > rparmmap;
 std::vector<constraint> newcons;
 
 double* mapdouble(double* v)
@@ -120,7 +120,7 @@ int solvewpoints(double  **parms,int nparms, constraint * cons, int consLength, 
 			newcons.push_back(cons[i]);
 	}
 
-	for(int i=0; i < newcons.size(); i++)
+	for(std::vector<constraint>::size_type i=0; i < newcons.size(); i++)
 	{
 		//map all pointers
 		newcons[i].arc1 = maparc(newcons[i].arc1);
@@ -142,7 +142,7 @@ int solvewpoints(double  **parms,int nparms, constraint * cons, int consLength, 
 
 
 	//loop through all remapped pointers
-	for(int i=0; i < newparms.size(); i++)
+	for(std::vector<double*>::size_type i=0; i < newparms.size(); i++)
 	{
 		if(rparmmap[newparms[i]].size() > 0)
 		{
