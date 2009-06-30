@@ -31,8 +31,16 @@ After drawing, you can select a segment by clicking on it. Dragging the points w
    point on line, point on midpoint of line
 1 point and 1 arc selected
    point on arc, point on midpoint of arc
+1 circle and 1 line selected
+   circle tangent to arc
+2 circles selected
+   equal radius and concentric circles
+1 circle and 1 arc selected
+   equal radius and concentric circle and arc
 
 After setting the parameter based constraints(length or radius), you can now change the parameter in the properties pane. This will update the geometry automatically.
+
+Double click the sketch in the objects panel will put you in "sketch mode". This will cause and new polygons or circles to become part of the existing sketch. Hitting escape twice will exit sketch mode.
 
 =Examples=
 To view and example of using a constraint sketch see [http://www.youtube.com/watch?v=nibjuxCbUag this video]
