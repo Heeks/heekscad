@@ -125,33 +125,43 @@
 #define Sym_P2_y       *cons[i].SymLine.p2.y
 
 
-struct point
+class point
 {
+public:
+	point(){x = 0; y = 0;}
 	double * x;
 	double * y;
 };
 
-struct line
+class line
 {
+public:
+	line(){}
 	point p1;
 	point p2;
 };
 
-struct arc
+class arc
 {
+public:
+	arc(){}
 	point start;
 	point end;
 	point center;
 };
 
-struct circle
+class circle
 {
+public:
+	circle(){rad = 0;}
 	point center;
 	double *rad;
 };
 
-struct constraint
+class constraint
 {
+public:
+	constraint(){parameter = 0;}
 	int type;
 	point point1;
 	point point2;
