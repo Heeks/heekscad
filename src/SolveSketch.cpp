@@ -123,30 +123,47 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 					case ConcentricConstraint:
 					{ 
 						constraint c;
-						c.arc1 = GetArc((HArc*)con->m_obj1);
-						c.arc2 = GetArc((HArc*)con->m_obj2);
-						c.type = equalRadiusArcs;
+						bool has_arc = false;
+						c.type = equalRadiusCircArc;
+
+						if(dynamic_cast<HArc*>(con->m_obj1))
+						{
+							c.arc1 = GetArc((HArc*)con->m_obj1);
+							has_arc = true;
+						}
+						else
+							c.circle1 = GetCircle((HCircle*)con->m_obj1);
+
+						if(dynamic_cast<HArc*>(con->m_obj2))
+							if(has_arc)
+							{
+								c.arc2 = GetArc((HArc*)con->m_obj2);
+								c.type = equalRadiusArcs;
+							}
+							else
+								c.arc1 = GetArc((HArc*)con->m_obj2);
+						else
+							if(has_arc)
+								c.circle1 = GetCircle((HCircle*)con->m_obj2);
+							else
+							{
+								c.circle2 = GetCircle((HCircle*)con->m_obj2);
+								c.type = equalRadiusCircles;
+							}
+
 						if(con->m_type == ConcentricConstraint)
-							c.type = concentricArcs;
+						{
+							switch(c.type)
+							{	
+								case equalRadiusCircArc: c.type = concentricCircArc; break;
+								case equalRadiusArcs: c.type = concentricArcs; break;
+								case equalRadiusCircles: c.type = concentricCircles; break;
+							}
+						}
 						cons.insert(con);
 						constraints.push_back(c);
 					}
 					break;
-
-					case CirclesEqualRadiusConstraint:
-					case CirclesConcentricConstraint:
-					{ 
-						constraint c;
-						c.circle1 = GetCircle((HCircle*)con->m_obj1);
-						c.circle2 = GetCircle((HCircle*)con->m_obj2);
-						c.type = equalRadiusCircles;
-						if(con->m_type == CirclesConcentricConstraint)
-							c.type = concentricCircles;
-						cons.insert(con);
-						constraints.push_back(c);
-					}
-					break;
-
 
 					case PointOnArcMidpointConstraint:
 					case PointOnArcConstraint:
@@ -162,12 +179,17 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 					}
 					break;
 
-					case LineTangentToArcConstraint:
+					case LineTangentConstraint:
 					{
-						arc a = GetArc((HArc*)obj);
 						constraint c;
 						c.type = tangentToArc;
-						c.arc1 = a;
+						if(dynamic_cast<HArc*>(obj))
+							c.arc1 = GetArc((HArc*)obj);
+						else
+						{
+							c.circle1 = GetCircle((HCircle*)obj);
+							c.type = tangentToCircle;
+						}
 						c.line1 = GetLineFromEndedObject((EndedObject*)con->m_obj2);
 						cons.insert(con);
 						constraints.push_back(c);
