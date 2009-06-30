@@ -12,6 +12,11 @@
 #include "HCircle.h"
 #include "../sketchsolve/src/solve.h"
 
+//This file traverses the tree associated with a sketch and creates and linear
+//data structure suitable for use by sketch solve. If the solver is succesful,
+//the new points are written into the corresponding heeksobj's. 
+
+
 arc GetArc(HArc* a);
 circle GetCircle(HCircle* a);
 line GetLineFromEndedObject(EndedObject* eobj);
