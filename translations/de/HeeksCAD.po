@@ -1809,7 +1809,7 @@ msgid "active"
 msgstr "Aktiv"
 
 msgid "step over"
-msgstr "Nächster Schritt"
+msgstr "Versatz des Fräsers"
 
 msgid "material allowance"
 msgstr "Material Zulage"
@@ -2085,4 +2085,26 @@ msgstr "Einsatz des Flachsenkers"
 
 msgid "fixture offset"
 msgstr "Maschinennullpunkt +"
+
+msgid "correlation"
+msgstr "Andere Objekte mit gleicher Größe"
+
+msgid "Minimum correlation factor (0.0 (nothing like it) -> 1.0 (perfect match))"
+msgstr "Vergleichsfaktor (von 0.0(ziemlich alles) bis 1.0(Genau gleich)) "
+
+msgid "Maximum scale threshold (1.0 - must be same size, 1.5 (can be half as big "
+"again or 2/3 size)"
+msgstr "Größenvergleich (von 1.0 (Nur gleiche Größen) bis 1.5 (um die Hälfte größer)"
+
+msgid "orientation"
+msgstr "Text Position"
+
+msgid "Make Coordinate System"
+msgstr "Neues Koordinaten System"
+
+msgid "vertex"
+msgstr "Polygon Ecke"
+
+msgid "autosolve constraints"
+msgstr "Automatisch Variabeln einschränken"
 
