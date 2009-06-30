@@ -14,7 +14,7 @@ enum EnumConstraintType{
 	PerpendicularLineConstraint,
 	AbsoluteAngleConstraint,
 	LineLengthConstraint,
-	LineTangentToArcConstraint,
+	LineTangentConstraint,
 	RadiusConstraint,
 	EqualLengthConstraint,
 	ColinearConstraint,
@@ -23,9 +23,7 @@ enum EnumConstraintType{
 	PointOnLineConstraint,
 	PointOnLineMidpointConstraint,
 	PointOnArcMidpointConstraint,
-	PointOnArcConstraint,
-	CirclesConcentricConstraint,
-	CirclesEqualRadiusConstraint
+	PointOnArcConstraint
 };
 
 enum EnumAbsoluteAngle{
