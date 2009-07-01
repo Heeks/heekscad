@@ -58,13 +58,11 @@ void HPoint::glCommands(bool select, bool marked, bool no_color)
 		glGetFloatv(GL_DEPTH_RANGE, save_depth_range);
 		glDepthRange(0, 0);
 	}
-
-	if(!marked && !m_draw_unselected)
+	else if(!m_draw_unselected)
 	{
 		glBegin(GL_POINTS);
 		glVertex3d(m_p.X(), m_p.Y(), m_p.Z());
 		glEnd();
-		glDepthRange(save_depth_range[0], save_depth_range[1]);
 		return;
 	}
 
