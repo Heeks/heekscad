@@ -674,44 +674,20 @@ double calc(constraint * cons, int consLength)
 			double dx,dy,Rpx,Rpy,RpxN,RpyN,hyp,error1,error2,rad;
 			dx = L1_P2_x - L1_P1_x;
 			dy = L1_P2_y - L1_P1_y;
+
 			hyp=_hypot(dx,dy);
-
-			rad=_hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
-			Rpx=A1_Center_x - dy / hyp * rad;
-			Rpy=A1_Center_y + dx / hyp * rad;
-			RpxN=A1_Center_x + dy / hyp * rad;
-			RpyN=A1_Center_y - dx / hyp * rad;
-
-			m=dy / dx;
-			n=dx / dy;
-			if(m<=1 && m>=-1)
-			{
-				Ey=L1_P1_y + m * (Rpx - L1_P1_x);
-				error1=(Ey - Rpy) * (Ey - Rpy);
-				Ey=L1_P1_y + m * (RpxN - L1_P1_x);
-				error2=(Ey - RpyN) * (Ey - RpyN);
-			}
-			else
-			{
-				Ex=L1_P1_x + n * (Rpy - L1_P1_y);
-				error1=(Ex - Rpx) * (Ex - Rpx);
-				Ex=L1_P1_x + n * (RpyN - L1_P1_y);
-				error2=(Ex - RpxN) * (Ex - RpxN);
-			}
-			if(error1<error2)
-			{
-				error+=error1/100;
-				//cout<<"error: "<<error1<<endl;
-			}
-			else
-			{
-				error+=error2/100;
-				//cout<<"error: "<<error2<<endl;
-			}
 			
+			double u = (A1_Center_x - L1_P1_x) * (L1_P2_x - L1_P1_x) + (A1_Center_y - L1_P1_y) * (L1_P2_y - L1_P1_y);
+			u/=hyp*hyp;
 
-			//temp=-pow(-A1_Center_x + A1_Start_x,2) - pow(-A1_Center_y + A1_Start_y,2) + pow(-(L1_P1_y*L1_P2_x) + A1_Center_y*(-L1_P1_x + L1_P2_x) + A1_Center_x*(L1_P1_y - L1_P2_y) + L1_P1_x*L1_P2_y,2)/(pow(-L1_P1_x + L1_P2_x,2) + pow(-L1_P1_y + L1_P2_y,2));
-			//error += temp*temp;
+			double x = L1_P1_x + u *(L1_P2_x - L1_P1_x);
+			double y = L1_P1_y + u *(L1_P2_y - L1_P1_y); 
+
+			rad=_hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y)/2;
+			rad+=_hypot(A1_Center_x - A1_End_x , A1_Center_y - A1_End_y)/2;
+			
+			temp = hypot(A1_Center_x-x,A1_Center_y-y) - rad;
+			error += temp*temp*100;
 		}
 
 		if(cons[i].type==arcRules)
@@ -719,7 +695,7 @@ double calc(constraint * cons, int consLength)
 			rad1=_hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
 			rad2=_hypot(A1_Center_x - A1_End_x , A1_Center_y - A1_End_y);
 			error += (rad1-rad2)*(rad1-rad2);
-			}
+		}
 
 		if(cons[i].type==lineLength)
 		{
