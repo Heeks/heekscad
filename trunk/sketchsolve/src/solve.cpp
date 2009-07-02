@@ -78,8 +78,8 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 			{
 				//N[i][j]=norm; //Calculate a scaled identity matrix as a Hessian inverse estimate
 				//N[i][j]=grad[i]/(norm+.001);
-				N[i][j]=.1;
-				s[i]=-grad[i]/(norm/.001); //Calculate the initial search vector
+				N[i][j]=1;
+				s[i]=-grad[i]; //Calculate the initial search vector
 
 			}
 			else N[i][j]=0;
@@ -418,10 +418,12 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 				}
 			}
 		*/
+		/*
 		if(steps>100)
 			{
 			continue;
 			}
+		*/
 		steps=steps+1;
 	}
 
@@ -511,6 +513,9 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	delete gammatDotN;
 
 	///End of function
+	double validSolution;
+	if(isFine==1) validSolution=validSolutionFine;
+	else validSolution=validSoltuionRough;
 	if(fnew<validSolution)
 		{
 		return succsess;
@@ -622,6 +627,7 @@ double calc(constraint * cons, int consLength)
 		if(cons[i].type==vertical)
 		{
 			double odx = L1_P2_x - L1_P1_x;
+			/*
 			double ody = L1_P2_y - L1_P1_y;
 
 			double hyp=_hypot(odx,ody);
@@ -631,13 +637,15 @@ double calc(constraint * cons, int consLength)
 			double theta = atan2(dy,dx);
 			double p1 = odx-cos(theta)*cos(theta)*ody;
 			error+=p1*p1*10;
+			*/
+			error+=odx*odx*1000;
 		}
 
 		if(cons[i].type==horizontal)
 		{
-			double odx = L1_P2_x - L1_P1_x;
+			//double odx = L1_P2_x - L1_P1_x;
 			double ody = L1_P2_y - L1_P1_y;
-			
+			/*
 			double hyp=_hypot(odx,ody);
 			dx = odx/hyp;
 			dy = ody/hyp;
@@ -645,6 +653,8 @@ double calc(constraint * cons, int consLength)
 			double theta = atan2(dy,dx);
 			double p1 = (ody-sin(theta)*sin(theta)*odx);
 			error+=p1*p1*10;
+			*/
+			error+=ody*ody*1000;
 		}
 
 		if(cons[i].type==tangentToCircle)
@@ -670,7 +680,7 @@ double calc(constraint * cons, int consLength)
 
 		if(cons[i].type==tangentToArc)
 		{
-			
+			/*
 			double dx,dy,Rpx,Rpy,RpxN,RpyN,hyp,error1,error2,rad;
 			dx = L1_P2_x - L1_P1_x;
 			dy = L1_P2_y - L1_P1_y;
@@ -694,6 +704,19 @@ double calc(constraint * cons, int consLength)
 			double dcy = A1_Center_y-y;
 			temp = (dcx * dcx + dcy * dcy) - rad;
 			error += temp*temp*100;
+			*/
+			
+			dx = L1_P2_x - L1_P1_x;
+			dy = L1_P2_y - L1_P1_y;
+
+
+			double Xint,Yint,radsq;
+			radsq = (A1_Center_x-A1_Start_x)*(A1_Center_x-A1_Start_x)+(A1_Center_y-A1_Start_y)*(A1_Center_y-A1_Start_y);
+			t=-(L1_P1_x*dx-A1_Center_x*dx+L1_P1_y*dy-A1_Center_y*dy)/(dx*dx+dy*dy);
+			Xint=L1_P1_x+dx*t;
+			Yint=L1_P1_y+dy*t;
+			temp= (A1_Center_x - Xint)*(A1_Center_x - Xint)+(A1_Center_y - Yint)*(A1_Center_y - Yint) - radsq;
+			error += temp*temp;
 		}
 
 		if(cons[i].type==arcRules)
