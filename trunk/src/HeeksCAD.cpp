@@ -2970,6 +2970,10 @@ void HeeksCADapp::render_screen_text2(const wxChar* str)
 	const wxChar* newlinestr = _T("\n");
 	wxChar newline = newlinestr[0];
 
+	wxPrintf(_("Rendertext2: "));
+	wxPrintf(str);
+	wxPrintf(_("\n"));
+
 	for(size_t i = 0; i<n; i++)
 	{
 		buffer[j] = str[i];
