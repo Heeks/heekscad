@@ -31,3 +31,5 @@ It isn't clear to me if we should start milestoning before or after 1.0. The fol
   # Block and reference objects.
   # Much cooler undo engine. (takes larger and larger time steps in the past and is able to save just the modified portions of the graph)
   # Constraint inference engine. (Infers constraints when loading non native file formats)
+  # Allow transformations by non orthogonal matrices. Start with 2d stuff, then move to 3d
+  # Start making a new set of 3d primitives that have sketches instead of faces. Eventually we will work on converting the imported geometry into this form.
