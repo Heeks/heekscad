@@ -683,18 +683,43 @@ double calc(constraint * cons, int consLength)
 			double x = L1_P1_x + u *(L1_P2_x - L1_P1_x);
 			double y = L1_P1_y + u *(L1_P2_y - L1_P1_y); 
 
-			rad=_hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y)/2;
-			rad+=_hypot(A1_Center_x - A1_End_x , A1_Center_y - A1_End_y)/2;
+			double dcsx = A1_Center_x - A1_Start_x;
+			double dcsy = A1_Center_y - A1_Start_y;
+			double dcex = A1_Center_x - A1_End_x;
+			double dcey = A1_Center_y - A1_End_y;
+			rad=(dcsx*dcsx + dcsy * dcsy);
+		//	rad+=(dcex*dcex + dcey * dcey)/4;
 			
-			temp = hypot(A1_Center_x-x,A1_Center_y-y) - rad;
+			double dcx = A1_Center_x-x;
+			double dcy = A1_Center_y-y;
+			temp = (dcx * dcx + dcy * dcy) - rad;
 			error += temp*temp*100;
 		}
 
 		if(cons[i].type==arcRules)
 		{
-			rad1=_hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
-			rad2=_hypot(A1_Center_x - A1_End_x , A1_Center_y - A1_End_y);
-			error += (rad1-rad2)*(rad1-rad2);
+			//rad1=_hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
+			//rad2=_hypot(A1_Center_x - A1_End_x , A1_Center_y - A1_End_y);
+			//error += (rad1-rad2)*(rad1-rad2);
+			//double dx,dy,Rpx,Rpy,RpxN,RpyN,hyp,error1,error2,rad;
+			//dx = A1_End_x - A1_Start_x;
+			//dy = A1_End_y - A1_Start_y;
+
+			//hyp=_hypot(dx,dy);
+			
+			//double u = (A1_Center_x - A1_Start_x) * (A1_End_x - A1_Start_x) + (A1_Center_y - A1_Start_y) * (A1_End_y - A1_Start_y);
+			//u/=hyp*hyp;
+
+			//temp = sin(u - .5);
+			//error+=temp*temp*temp*temp*100000;
+			//error+=pow(-2*A1_Center_x*A1_End_y - 2*A1_Center_y*A1_End_y + A1_End_x*A1_End_y + pow(A1_End_y,2) + 2*A1_Center_x*A1_Start_x - 2*A1_Center_y*A1_Start_x - A1_End_x*A1_Start_x + 4*A1_End_y*A1_Start_x - 3*pow(A1_Start_x,2) +  2*A1_Center_y*A1_Start_y + A1_Start_x*A1_Start_y - pow(A1_Start_y,2),2)/(8*pow(A1_End_y,2) + 8*pow(A1_Start_x,2) - 8*A1_End_y*A1_Start_y -  8*A1_Start_x*A1_Start_y + 4*pow(A1_Start_y,2)); 
+			double a1endx2 = A1_End_x * A1_End_x;
+			double a1endy2 = A1_End_y * A1_End_y;
+			double a1startx2 = A1_Start_x*A1_Start_x;
+			double a1starty2 = A1_Start_y*A1_Start_y;
+			double num = -2*A1_Center_x*A1_End_x+a1endx2-2*A1_Center_y*A1_End_y+a1endy2+2*A1_Center_x*A1_Start_x-a1startx2+2*A1_Center_y*A1_Start_y-a1starty2;
+			error += num * num /(4.*a1endx2+a1endy2-2*A1_End_x*A1_Start_x+a1startx2-2*A1_End_y*A1_Start_y+a1starty2);
+
 		}
 
 		if(cons[i].type==lineLength)
