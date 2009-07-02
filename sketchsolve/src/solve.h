@@ -67,9 +67,10 @@
 #define pertMag           1e-6
 #define pertMin			  1e-10
 #define XconvergenceRough 1e-8
-#define XconvergenceFine  1e-14
+#define XconvergenceFine  1e-10
 #define smallF            1e-20
-#define validSolution     1e-12
+#define validSolutionFine  1e-12
+#define validSoltuionRough 1e-4
 #define rough             0
 #define fine              1
 #define MaxIterations	  50 //Note that the total number of iterations allowed is MaxIterations *xLength
