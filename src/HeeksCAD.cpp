@@ -2937,6 +2937,9 @@ void HeeksCADapp::render_text(const wxChar* str)
 	m_gl_font.Begin();
 
 	//Draws text with a glFont
+	wxPrintf(_("Rendertext1: "));
+	wxPrintf(str);
+	wxPrintf(_("\n"));
 	m_gl_font.DrawString(str, 0.08f, 0.0f, 0.0f);
 
 	glDepthMask(1);
@@ -2969,10 +2972,6 @@ void HeeksCADapp::render_screen_text2(const wxChar* str)
 	int j = 0;
 	const wxChar* newlinestr = _T("\n");
 	wxChar newline = newlinestr[0];
-
-	wxPrintf(_("Rendertext2: "));
-	wxPrintf(str);
-	wxPrintf(_("\n"));
 
 	for(size_t i = 0; i<n; i++)
 	{
