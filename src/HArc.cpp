@@ -52,7 +52,7 @@ class SetArcRadius:public Tool{
 public:
 	void Run(){
 		arc_for_tool->SetRadiusConstraint(arc_for_tool->m_radius);
-		SolveSketch((CSketch*)arc_for_tool->m_owner);
+		SolveSketch((CSketch*)arc_for_tool->Owner());
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Toggle Radius");}
@@ -208,7 +208,7 @@ static void on_set_axis(const double *vt, HeeksObj* object){
 static void on_set_radius(double v, HeeksObj* object){
 	((HArc*)object)->SetRadius(v);
 	if(wxGetApp().autosolve_constraints)
-		SolveSketch((CSketch*)object->m_owner);
+		SolveSketch((CSketch*)object->Owner());
 	wxGetApp().Repaint();
 }
 

@@ -1571,7 +1571,7 @@ void HeeksCADapp::DeleteUndoably(const std::list<HeeksObj*>& list)
 		if(object->CanBeRemoved())list2.push_back(object);
 	}
 	if(list2.size() == 0)return;
-	RemoveObjectsTool *tool = new RemoveObjectsTool(list2, list2.front()->m_owner);
+	RemoveObjectsTool *tool = new RemoveObjectsTool(list2, list2.front()->Owner());
 	DoToolUndoably(tool);
 }
 
@@ -2937,9 +2937,6 @@ void HeeksCADapp::render_text(const wxChar* str)
 	m_gl_font.Begin();
 
 	//Draws text with a glFont
-	wxPrintf(_("Rendertext1: "));
-	wxPrintf(str);
-	wxPrintf(_("\n"));
 	m_gl_font.DrawString(str, 0.08f, 0.0f, 0.0f);
 
 	glDepthMask(1);

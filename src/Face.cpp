@@ -533,9 +533,9 @@ void CFace::GetUVBox(double *uv_box)
 
 CShape* CFace::GetParentBody()
 {
-	if(m_owner == NULL)return NULL;
-	if(m_owner->m_owner == NULL)return NULL;
-	if(m_owner->m_owner->GetType() != SolidType)return NULL;
-	return (CShape*)(m_owner->m_owner);
+	if(Owner() == NULL)return NULL;
+	if(Owner()->Owner() == NULL)return NULL;
+	if(Owner()->Owner()->GetType() != SolidType)return NULL;
+	return (CShape*)(Owner()->Owner());
 }
 

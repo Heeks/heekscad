@@ -22,7 +22,7 @@ public:
 				obj->SetPerpendicularConstraint(last);
 			last=obj;
 		}
-		SolveSketch((CSketch*)last->m_owner);
+		SolveSketch((CSketch*)last->Owner());
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Set Perpendicular");}
@@ -46,7 +46,7 @@ public:
 			}
 			last=obj;
 		}
-		SolveSketch((CSketch*)last->m_owner);
+		SolveSketch((CSketch*)last->Owner());
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Toggle Tangent");}
@@ -68,7 +68,7 @@ public:
 					break;
 			last=obj;
 		}
-		SolveSketch((CSketch*)last->m_owner);
+		SolveSketch((CSketch*)last->Owner());
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Set Parallel");}
@@ -89,7 +89,7 @@ public:
 					break;
 			last=obj;
 		}
-		SolveSketch((CSketch*)last->m_owner);
+		SolveSketch((CSketch*)last->Owner());
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Set Equal Length");}
@@ -110,7 +110,7 @@ public:
 					break;
 			last=obj;
 		}
-		SolveSketch((CSketch*)last->m_owner);
+		SolveSketch((CSketch*)last->Owner());
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Set Colinear");}
@@ -131,7 +131,7 @@ public:
 					break;
 			last=obj;
 		}
-		SolveSketch((CSketch*)last->m_owner);
+		SolveSketch((CSketch*)last->Owner());
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Set Equal Radius");}
@@ -152,7 +152,7 @@ public:
 					break;
 			last=obj;
 		}
-		SolveSketch((CSketch*)last->m_owner);
+		SolveSketch((CSketch*)last->Owner());
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Set Concentric");}
@@ -174,7 +174,7 @@ public:
 			}
 			last=obj;
 		}
-		SolveSketch((CSketch*)last->m_owner->m_owner);
+		SolveSketch((CSketch*)last->Owner()->Owner());
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Set Coincident");}
@@ -198,7 +198,7 @@ public:
 		}
 		line->SetPointOnLineConstraint(point);
 
-		SolveSketch((CSketch*)line->m_owner);
+		SolveSketch((CSketch*)line->Owner());
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Set Point On Line");}
@@ -222,7 +222,7 @@ public:
 		}
 		line->SetPointOnLineMidpointConstraint(point);
 
-		SolveSketch((CSketch*)line->m_owner);
+		SolveSketch((CSketch*)line->Owner());
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Set Point On Midpoint");}
@@ -246,7 +246,7 @@ public:
 		}
 		line->SetPointOnArcMidpointConstraint(point);
 
-		SolveSketch((CSketch*)line->m_owner);
+		SolveSketch((CSketch*)line->Owner());
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Set Point On Midpoint");}
@@ -270,7 +270,7 @@ public:
 		}
 		line->SetPointOnArcConstraint(point);
 
-		SolveSketch((CSketch*)line->m_owner);
+		SolveSketch((CSketch*)line->Owner());
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Set Point On Arc");}

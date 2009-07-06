@@ -47,7 +47,7 @@ bool CCylinder::ModifyByMatrix(const double* m){
 	double new_height = fabs(m_height * scale);
 	CCylinder* new_object = new CCylinder(new_pos, new_radius, new_height, m_title.c_str(), m_color);
 	new_object->CopyIDsFrom(this);
-	wxGetApp().AddUndoably(new_object, m_owner, NULL);
+	wxGetApp().AddUndoably(new_object, Owner(), NULL);
 	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().DeleteUndoably(this);
 	return true;

@@ -40,7 +40,7 @@ class SetLineHorizontal:public Tool{
 public:
 	void Run(){
 		line_for_tool->SetAbsoluteAngleConstraint(AbsoluteAngleHorizontal);
-		SolveSketch((CSketch*)line_for_tool->m_owner);
+		SolveSketch((CSketch*)line_for_tool->Owner());
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Toggle Horizontal");}
@@ -53,7 +53,7 @@ class SetLineVertical:public Tool{
 public:
 	void Run(){
 		line_for_tool->SetAbsoluteAngleConstraint(AbsoluteAngleVertical);
-		SolveSketch((CSketch*)line_for_tool->m_owner);
+		SolveSketch((CSketch*)line_for_tool->Owner());
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Toggle Vertical");}
@@ -66,7 +66,7 @@ class SetLineLength:public Tool{
 public:
 	void Run(){
 		line_for_tool->SetLineLengthConstraint(line_for_tool->A->m_p.Distance(line_for_tool->B->m_p));
-		SolveSketch((CSketch*)line_for_tool->m_owner);
+		SolveSketch((CSketch*)line_for_tool->Owner());
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Toggle Line Length");}
@@ -152,7 +152,7 @@ static void on_set_end(const double *vt, HeeksObj* object){
 static void on_set_length(double v, HeeksObj* object){
 	((HLine*)object)->SetLineLength(v);
 	if(wxGetApp().autosolve_constraints)
-		SolveSketch((CSketch*)object->m_owner);
+		SolveSketch((CSketch*)object->Owner());
 	wxGetApp().Repaint();
 }
 

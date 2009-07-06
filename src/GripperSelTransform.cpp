@@ -61,7 +61,7 @@ void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
 					if(!object->StretchTemporary(p, shift,m_data))return;
 					if(wxGetApp().autosolve_constraints && (dynamic_cast<ConstrainedObject*>(object)))
 					{
-						SolveSketch((CSketch*)object->m_owner,object,m_data);
+						SolveSketch((CSketch*)object->Owner(),object,m_data);
 					}
 				}
 			}
@@ -94,7 +94,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 				if(object)wxGetApp().DoToolUndoably(new StretchTool(object, m_initial_grip_pos, shift, m_data));
 				if(wxGetApp().autosolve_constraints && (dynamic_cast<ConstrainedObject*>(object)))
 				{
-					SolveSketch((CSketch*)object->m_owner);
+					SolveSketch((CSketch*)object->Owner());
 				}
 			}
 		}
@@ -117,7 +117,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 			wxGetApp().TransformUndoably( object, m );
 			if(wxGetApp().autosolve_constraints && (dynamic_cast<ConstrainedObject*>(object)))
 			{
-				SolveSketch((CSketch*)object->m_owner,object,object);
+				SolveSketch((CSketch*)object->Owner(),object,object);
 			}
 		}
 		wxGetApp().EndHistory();

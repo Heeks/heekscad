@@ -76,7 +76,7 @@ void CGroup::MoveSolidsToGroupsById(HeeksObj* object)
 		{
 			int id = *It;
 			HeeksObj* o = wxGetApp().GetIDObject(SolidType, id);
-			o->m_owner->Remove(o);
+			o->Owner()->Remove(o);
 			group->Add(o, NULL);
 		}
 	}
