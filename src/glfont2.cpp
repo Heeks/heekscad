@@ -57,6 +57,11 @@ bool GLFont::Create (const char *file_name, int tex)
 		return false;
 
 	//Read the header from file
+	//There is 4 byte space between the header data and the beginning of the
+	//characters. this presumably was used to account for the 4 bytes taken
+	//up by the pointer to the character array
+	//on 64-bit the sizeof(header) is no longer correct and it reads to many
+	//bytes
 	input.read((char *)&header, sizeof(header) - (sizeof(void*) - 4));
 	header.tex = tex;
 
@@ -93,7 +98,9 @@ bool GLFont::Create (const char *file_name, int tex)
 
 	//Return successfully
 
-	cout << "Start: " << header.start_char << ", End: " << header.end_char << ", Chars: " << header.chars << endl;
+	//Uncomment to print out the data structure. Useful for finding differences between systems
+
+/*	cout << "Start: " << header.start_char << ", End: " << header.end_char << ", Chars: " << header.chars << endl;
 	cout << "Height: " << header.tex_height << ", Width: " << header.tex_width << endl;
 	//Read character array
 	for(int i=header.start_char; i < header.end_char; i++)
@@ -101,7 +108,7 @@ bool GLFont::Create (const char *file_name, int tex)
 		GLFontChar c = header.chars[i - header.start_char];
 		cout << "Char: " << i << ", dx: " << c.dx << ", dy: " << c.dy << endl;
 		cout << "ty1: " << c.ty1 << ", ty2: " << c.ty2 << ", tx1: " << c.tx1 << ", tx2: " << c.tx2 << endl;
-	}
+	}*/
 
 	return true;
 }
