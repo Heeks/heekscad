@@ -383,7 +383,7 @@ bool CShape::ModifyByMatrix(const double* m){
 	TopoDS_Shape new_shape = myBRepTransformation.Shape();
 	HeeksObj* new_object = MakeObject(new_shape, m_title.c_str(), SOLID_TYPE_UNKNOWN, m_color);
 	((CShape*)new_object)->CopyIDsFrom(this);
-	wxGetApp().AddUndoably(new_object, m_owner, NULL);
+	wxGetApp().AddUndoably(new_object, Owner(), NULL);
 	wxGetApp().DeleteUndoably(this);
 	return true;
 }
@@ -563,7 +563,7 @@ HeeksObj* CShape::CutShapes(const std::list<HeeksObj*> &list_in, bool dodelete)
 	{
 		CGroup* group = (CGroup*)list_in.front();
 		CGroup* newgroup = new CGroup();
-		group->m_owner->Add(newgroup,NULL);
+		group->Owner()->Add(newgroup,NULL);
 
 		std::list<HeeksObj*> children;
 		HeeksObj* child = group->GetFirstChild();
@@ -586,12 +586,12 @@ HeeksObj* CShape::CutShapes(const std::list<HeeksObj*> &list_in, bool dodelete)
 			newlist.pop_front();
 			newlist.push_front(*iter);
 			HeeksObj* newshape = CutShapes(newlist,false);
-			newshape->m_owner->Remove(newshape);
+			newshape->Owner()->Remove(newshape);
 			newgroup->Add(newshape,NULL);
 			++iter;
 		}
 	
-		group->m_owner->Remove(group);
+		group->Owner()->Remove(group);
 		wxGetApp().DeleteUndoably(list_in);
 		return newgroup;
 	}
@@ -686,7 +686,7 @@ void CShape::FilletOrChamferEdges(const std::list<HeeksObj*> &list, double radiu
 		HeeksObj* edge = *It;
 		if(edge->GetType() == EdgeType)
 		{
-			HeeksObj* solid = edge->m_owner->m_owner;
+			HeeksObj* solid = edge->Owner()->Owner();
 			if(solid && solid->GetType() == SolidType)
 			{
 				std::map< HeeksObj*, std::list< HeeksObj* > >::iterator FindIt = solid_edge_map.find(solid);

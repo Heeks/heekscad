@@ -155,7 +155,7 @@ bool CCone::ModifyByMatrix(const double *m){
 	double new_height = fabs(m_height * scale);
 	CCone* new_object = new CCone(new_pos, new_r1, new_r2, new_height, m_title.c_str(), m_color);
 	new_object->CopyIDsFrom(this);
-	wxGetApp().AddUndoably(new_object, m_owner, NULL);
+	wxGetApp().AddUndoably(new_object, Owner(), NULL);
 	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().DeleteUndoably(this);
 

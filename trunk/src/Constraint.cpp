@@ -9,6 +9,14 @@ Constraint::Constraint(){
 	
 }
 
+Constraint::Constraint(const Constraint* obj){
+	m_type = obj->m_type;
+	m_angle = obj->m_angle;
+	m_length = obj->m_length;
+	m_obj1 = obj->m_obj1;
+	m_obj2 = obj->m_obj2;
+}
+
 Constraint::Constraint(EnumConstraintType type,EnumAbsoluteAngle angle, HeeksObj* obj)
 {
     m_type = type;
@@ -37,6 +45,15 @@ Constraint::Constraint(EnumConstraintType type,double length,HeeksObj* obj1)
 	m_length = length;
 }
 
+const Constraint& Constraint::operator=(const Constraint &b){
+	HeeksObj::operator=(b);
+	m_type = b.m_type;
+	m_angle = b.m_angle;
+	m_obj1 = b.m_obj1;
+	m_obj2 = b.m_obj2;
+	m_length = b.m_length;
+	return *this;
+}
 
 Constraint::~Constraint(){
 }
@@ -104,4 +121,9 @@ void Constraint::glCommands(HeeksColor color, gp_Ax1 axis)
 	}
 
 	glPopMatrix();
+}
+
+HeeksObj *Constraint::MakeACopy(void)const
+{
+	return new Constraint(this);
 }

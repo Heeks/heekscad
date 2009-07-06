@@ -31,7 +31,7 @@ enum EnumAbsoluteAngle{
 	AbsoluteAngleVertical
 };
 
-class Constraint{
+class Constraint : public HeeksObj{
 public:
 	HeeksObj* m_obj1;
 	HeeksObj* m_obj2;
@@ -42,15 +42,21 @@ public:
 	double m_length;
 
 	Constraint();
+	Constraint(const Constraint* obj);
 	Constraint(EnumConstraintType,EnumAbsoluteAngle,HeeksObj* obj);
 	Constraint(EnumConstraintType,double length,HeeksObj* obj);
 	Constraint(EnumConstraintType,HeeksObj* obj1, HeeksObj* obj2);
 
 	~Constraint(void);
 
+	HeeksObj *MakeACopy(void)const;
+	int GetType()const{return ConstraintType;}
+
 	bool operator==(const Constraint &other) const {
 		return m_type == other.m_type && m_angle==other.m_angle && m_obj1 == other.m_obj1 && m_obj2 == other.m_obj2 && m_length == other.m_length;
 	}
+
+	const Constraint& operator=(const Constraint &b);
 
 	void glCommands(HeeksColor color, gp_Ax1 mid_point);
 	void render_text(const wxChar* str);

@@ -635,7 +635,7 @@ double calc(constraint * cons, int consLength)
 			dy = ody/hyp;
 
 			double theta = atan2(dy,dx);
-			double p1 = odx-cos(theta)*cos(theta)*ody;
+			double p1 = odx;//-cos(theta)*cos(theta)*ody;
 			error+=p1*p1*10;
 			*/
 			error+=odx*odx*1000;
@@ -651,7 +651,7 @@ double calc(constraint * cons, int consLength)
 			dy = ody/hyp;
 
 			double theta = atan2(dy,dx);
-			double p1 = (ody-sin(theta)*sin(theta)*odx);
+			double p1 = (ody);//-sin(theta)*sin(theta)*odx);
 			error+=p1*p1*10;
 			*/
 			error+=ody*ody*1000;
@@ -685,10 +685,10 @@ double calc(constraint * cons, int consLength)
 			dx = L1_P2_x - L1_P1_x;
 			dy = L1_P2_y - L1_P1_y;
 
-			hyp=_hypot(dx,dy);
+			//hyp=sqrt(dx*dx+dy*dy);
 			
 			double u = (A1_Center_x - L1_P1_x) * (L1_P2_x - L1_P1_x) + (A1_Center_y - L1_P1_y) * (L1_P2_y - L1_P1_y);
-			u/=hyp*hyp;
+			u/=dx*dx+dy*dy;
 
 			double x = L1_P1_x + u *(L1_P2_x - L1_P1_x);
 			double y = L1_P1_y + u *(L1_P2_y - L1_P1_y); 

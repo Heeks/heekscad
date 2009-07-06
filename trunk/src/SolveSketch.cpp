@@ -51,7 +51,7 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 	sketch = dynamic_cast<CSketch*>(psketch);
 	while(psketch && !sketch)
 	{
-		psketch = psketch->m_owner;
+		psketch = psketch->Owner();
 		sketch = dynamic_cast<CSketch*>(psketch);
 	}
 

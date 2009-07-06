@@ -36,11 +36,11 @@ void CEdge::glCommands(bool select, bool marked, bool no_color){
 		wxGetApp().glColorEnsuringContrast(HeeksColor(0, 0, 0));
 	}
 
-	if(m_owner && m_owner->m_owner && m_owner->m_owner->GetType() == SolidType)
+	if(Owner() && Owner()->Owner() && Owner()->Owner()->GetType() == SolidType)
 	{
 		// triangulate a face on the edge first
 		TopTools_IndexedDataMapOfShapeListOfShape lface;
-		TopExp::MapShapesAndAncestors(((CShape*)(m_owner->m_owner))->Shape(),TopAbs_EDGE,TopAbs_FACE,lface);
+		TopExp::MapShapesAndAncestors(((CShape*)(Owner()->Owner()))->Shape(),TopAbs_EDGE,TopAbs_FACE,lface);
 		const TopTools_ListOfShape& lfac = lface.FindFromKey(m_topods_edge);
 		Standard_Integer nelem= lfac.Extent();
 		if(nelem == 2){
@@ -82,7 +82,7 @@ void CEdge::glCommands(bool select, bool marked, bool no_color){
 	{
 		bool glwidth_done = false;
 		GLfloat save_depth_range[2];
-		if(m_owner == NULL || m_owner->m_owner == NULL || m_owner->m_owner->GetType() != WireType)
+		if(Owner() == NULL || Owner()->Owner() == NULL || Owner()->Owner()->GetType() != WireType)
 		{
 			BRepTools::Clean(m_topods_edge);
 			double pixels_per_mm = wxGetApp().GetPixelScale();
@@ -166,20 +166,20 @@ public:
 static BlendTool blend_tool(NULL);
 
 void CEdge::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
-	if(m_owner && m_owner->m_owner && m_owner->m_owner->GetType() == SolidType)
+	if(Owner() && Owner()->Owner() && Owner()->Owner()->GetType() == SolidType)
 		blend_tool.m_edge = this;
 		t_list->push_back(&blend_tool);
 }
 
 void CEdge::Blend(double radius){
 	try{
-		if(m_owner && m_owner->m_owner && CShape::IsTypeAShape(m_owner->m_owner->GetType())){
-			BRepFilletAPI_MakeFillet fillet(((CShape*)(m_owner->m_owner))->Shape());
+		if(Owner() && Owner()->Owner() && CShape::IsTypeAShape(Owner()->Owner()->GetType())){
+			BRepFilletAPI_MakeFillet fillet(((CShape*)(Owner()->Owner()))->Shape());
 			fillet.Add(radius, m_topods_edge);
 			TopoDS_Shape new_shape = fillet.Shape();
 			wxGetApp().StartHistory();
-			wxGetApp().AddUndoably(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(m_owner->m_owner->GetColor())), NULL, NULL);
-			wxGetApp().DeleteUndoably(m_owner->m_owner);
+			wxGetApp().AddUndoably(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(Owner()->Owner()->GetColor())), NULL, NULL);
+			wxGetApp().DeleteUndoably(Owner()->Owner());
 			wxGetApp().EndHistory();
 		}
 	}

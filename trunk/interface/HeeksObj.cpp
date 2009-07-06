@@ -16,9 +16,9 @@
 #include "../src/ObjPropsCanvas.h"
 #endif
 
-HeeksObj::HeeksObj(void): m_id(0), m_layer(0), m_visible(true), m_owner(NULL){}
+HeeksObj::HeeksObj(void): m_id(0), m_layer(0), m_visible(true){}
 
-HeeksObj::HeeksObj(const HeeksObj& ho): m_id(0), m_layer(0), m_visible(true), m_owner(NULL){operator=(ho);}
+HeeksObj::HeeksObj(const HeeksObj& ho): m_id(0), m_layer(0), m_visible(true){operator=(ho);}
 
 const HeeksObj& HeeksObj::operator=(const HeeksObj &ho)
 {
@@ -27,6 +27,15 @@ const HeeksObj& HeeksObj::operator=(const HeeksObj &ho)
 	m_visible = ho.m_visible;
 
 	return *this;
+}
+
+HeeksObj::~HeeksObj()
+{
+	std::list<HeeksObj*>::iterator it;
+	for(it = m_owners.begin(); it!= m_owners.end(); ++it)
+	{
+		(*it)->Remove(this);
+	}
 }
 
 void on_edit_string(const wxChar* value, HeeksObj* object)
@@ -146,4 +155,36 @@ bool HeeksObj::OnVisibleLayer()
 {
 	// to do, support multiple layers.
 	return true;
+}
+
+HeeksObj* HeeksObj::Owner()
+{
+	return *m_owners.begin();
+}
+
+void HeeksObj::SetOwner(HeeksObj *obj)
+{
+	m_owners.clear();
+	m_owners.push_back(obj);
+}
+
+bool HeeksObj::HasOwner(HeeksObj *obj)
+{
+	std::list<HeeksObj*>::iterator it;
+	for(it = m_owners.begin(); it!= m_owners.end(); ++it)
+	{
+		if(*it == obj)
+			return true;
+	}
+	return false;
+}
+
+bool HeeksObj::HasOwner()
+{
+	return !m_owners.empty();
+}
+
+void HeeksObj::RemoveOwners()
+{
+	m_owners.clear();
 }
