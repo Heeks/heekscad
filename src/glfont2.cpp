@@ -57,7 +57,7 @@ bool GLFont::Create (const char *file_name, int tex)
 		return false;
 
 	//Read the header from file
-	input.read((char *)&header, sizeof(header));
+	input.read((char *)&header, sizeof(header) - (sizeof(void*) - 4));
 	header.tex = tex;
 
 	//Allocate space for character array
@@ -67,7 +67,7 @@ bool GLFont::Create (const char *file_name, int tex)
 
 	//Read character array
 	for(int i=0; i < num_chars; i++)
-		input.read((char *)&header.chars[i], sizeof(GLFontChar) - (sizeof(void*) - 4));
+		input.read((char *)&header.chars[i], sizeof(GLFontChar));
 
 	//Read texture pixel data
 	num_tex_bytes = header.tex_width * header.tex_height * 2;
