@@ -42,7 +42,8 @@ enum{
 	SplineType,
 	GroupType,
 	CorrelationToolType,
-	ObjectMaximumType
+	ObjectMaximumType,
+	ConstraintType
 };
 
 #define MARKING_FILTER_LINE					0x00000001
@@ -65,15 +66,16 @@ enum{
 #define MARKING_FILTER_VERTEX				0x00010000
 
 class HeeksObj{
+	std::list<HeeksObj*> m_owners;
 public:
 	unsigned int m_id;
 	unsigned int m_layer;
 	bool m_visible;
-	HeeksObj *m_owner;
+	
 
 	HeeksObj(void);
 	HeeksObj(const HeeksObj& ho);
-	virtual ~HeeksObj() {if (m_owner) m_owner->Remove(this);}
+	virtual ~HeeksObj();
 
 	virtual const HeeksObj& operator=(const HeeksObj &ho);
 
@@ -116,7 +118,7 @@ public:
 	virtual bool CanAdd(HeeksObj* object){return false;}
 	virtual bool CanAddTo(HeeksObj* owner){return true;}
 	virtual bool OneOfAKind(){return false;} // if true, then, instead of pasting, find the first object of the same type and copy object to it.
-	virtual bool Add(HeeksObj* object, HeeksObj* prev_object) {object->m_owner=this; object->OnAdd(); return true;}
+	virtual bool Add(HeeksObj* object, HeeksObj* prev_object) {object->SetOwner(this); object->OnAdd(); return true;}
 	virtual void Remove(HeeksObj* object){object->OnRemove();}
 	virtual void OnAdd(){}
 	virtual void OnRemove();
@@ -137,4 +139,9 @@ public:
 	void SetID(int id);
 	virtual bool UsesID(){return true;} // most objects don't use the m_id variable
 	bool OnVisibleLayer();
+	virtual HeeksObj* Owner();
+	virtual void SetOwner(HeeksObj*);
+	virtual bool HasOwner();
+	virtual bool HasOwner(HeeksObj* obj);
+	virtual void RemoveOwners();
 };

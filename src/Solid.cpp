@@ -44,7 +44,7 @@ bool CSolid::ModifyByMatrix(const double* m){
 	TopoDS_Shape new_shape = myBRepTransformation.Shape();
 	CSolid* new_object = new CSolid(*((TopoDS_Solid*)(&new_shape)), m_title.c_str(), m_color);
 	new_object->CopyIDsFrom(this);
-	wxGetApp().AddUndoably(new_object, m_owner, NULL);
+	wxGetApp().AddUndoably(new_object, Owner(), NULL);
 	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().DeleteUndoably(this);
 	return true;

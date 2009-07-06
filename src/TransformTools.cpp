@@ -101,7 +101,7 @@ void TransformTools::Translate(bool copy)
 			{
 				HeeksObj* object = *It;
 				HeeksObj* new_object = object->MakeACopy();
-				wxGetApp().AddUndoably(new_object, object->m_owner, NULL);
+				wxGetApp().AddUndoably(new_object, object->Owner(), NULL);
 				new_object->ModifyByMatrix(m);
 			}
 		}
@@ -167,7 +167,7 @@ void TransformTools::Rotate(bool copy)
 			{
 				HeeksObj* object = *It;
 				HeeksObj* new_object = object->MakeACopy();
-				wxGetApp().AddUndoably(new_object, object->m_owner, NULL);
+				wxGetApp().AddUndoably(new_object, object->Owner(), NULL);
 				new_object->ModifyByMatrix(m);
 			}
 		}
@@ -246,7 +246,7 @@ void TransformTools::Mirror(bool copy)
 		{
 			HeeksObj* object = *It;
 			HeeksObj* new_object = object->MakeACopy();
-			wxGetApp().AddUndoably(new_object, object->m_owner, NULL);
+			wxGetApp().AddUndoably(new_object, object->Owner(), NULL);
 			new_object->ModifyByMatrix(m);
 		}
 		wxGetApp().EndHistory();
@@ -306,7 +306,7 @@ void TransformTools::Scale(bool copy)
 			{
 				HeeksObj* object = *It;
 				HeeksObj* new_object = object->MakeACopy();
-				wxGetApp().AddUndoably(new_object, object->m_owner, NULL);
+				wxGetApp().AddUndoably(new_object, object->Owner(), NULL);
 				new_object->ModifyByMatrix(m);
 			}
 		}

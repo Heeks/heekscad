@@ -18,7 +18,7 @@ void ObjList::Clear()
 	std::list<HeeksObj*>::iterator It;
 	for(It=m_objects.begin(); It!=m_objects.end() ;It++)
 	{
-		(*It)->m_owner = NULL;
+		(*It)->RemoveOwners();
 		delete *It;
 	}
 	m_objects.clear();
@@ -33,7 +33,7 @@ void ObjList::Clear(std::set<HeeksObj*> &to_delete)
 	{
 		if(to_delete.find(*It) != to_delete.end())
 		{
-			(*It)->m_owner = NULL;
+			(*It)->RemoveOwners();
 			It = m_objects.erase(It);
 		}
 		else

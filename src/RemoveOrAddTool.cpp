@@ -45,7 +45,6 @@ void RemoveOrAddTool::Add()
 	}
 
 	m_owner->Add(m_object, m_prev_object);
-	m_object->m_owner = m_owner;
 
 	wxGetApp().WasAdded(m_object);
 	wxGetApp().WasModified(m_owner);
@@ -55,13 +54,13 @@ void RemoveOrAddTool::Add()
 
 void RemoveOrAddTool::Remove()
 {
-	if (m_object->m_owner)
+	if (m_object->Owner())
 	{
-		m_owner = m_object->m_owner;
-		m_object->m_owner->Remove(m_object);
+		m_owner = m_object->Owner();
+		m_object->Owner()->Remove(m_object);
 		wxGetApp().WasRemoved(m_object);
 		wxGetApp().WasModified(m_owner);
-		m_object->m_owner = NULL;
+		m_object->RemoveOwners();
 	}
 	m_belongs_to_owner = false;
 }
@@ -78,7 +77,7 @@ void AddObjectTool::RollBack()
 
 RemoveObjectTool::RemoveObjectTool(HeeksObj *object):RemoveOrAddTool(object, NULL, NULL)
 {
-	if(object)m_owner = object->m_owner;
+	if(object)m_owner = object->Owner();
 	else m_owner = NULL;
 }
 
@@ -116,7 +115,6 @@ void ManyRemoveOrAddTool::Add()
 	for(It = m_objects.begin(); It != m_objects.end(); It++){
 		HeeksObj* object = *It;
 		m_owner->Add(object, NULL);
-		object->m_owner = m_owner;
 	}
 
 	wxGetApp().WereAdded(m_objects);
@@ -139,7 +137,7 @@ void ManyRemoveOrAddTool::Remove()
 	wxGetApp().WasModified(m_owner);
 	for(It = m_objects.begin(); It != m_objects.end(); It++){
 		HeeksObj* object = *It;
-		object->m_owner = NULL;
+		object->RemoveOwners();
 	}
 
 	m_belongs_to_owner = false;
@@ -189,7 +187,7 @@ ManyChangeOwnerTool::ManyChangeOwnerTool(const std::list<HeeksObj*> &list, Heeks
 {
 	for(std::list<HeeksObj*>::iterator It = m_objects.begin(); It != m_objects.end(); It++){
 		HeeksObj* object = *It;
-		m_prev_owners.push_back(object->m_owner);
+		m_prev_owners.push_back(object->Owner());
 	}
 }
 
@@ -197,7 +195,7 @@ void ManyChangeOwnerTool::Run()
 {
 	for(std::list<HeeksObj*>::iterator It = m_objects.begin(); It != m_objects.end(); It++){
 		HeeksObj* object = *It;
-		object->m_owner->Remove(object);
+		object->Owner()->Remove(object);
 		wxGetApp().m_marked_list->Remove(object, false);
 	}
 
@@ -207,7 +205,6 @@ void ManyChangeOwnerTool::Run()
 	for(std::list<HeeksObj*>::iterator It = m_objects.begin(); It != m_objects.end(); It++){
 		HeeksObj* object = *It;
 		m_new_owner->Add(object, NULL);
-		object->m_owner = m_new_owner;
 	}
 
 	wxGetApp().WereAdded(m_objects);
@@ -230,7 +227,6 @@ void ManyChangeOwnerTool::RollBack()
 		HeeksObj* object = *It;
 		HeeksObj* prev_owner = *PrevIt;
 		prev_owner->Add(object, NULL);
-		object->m_owner = prev_owner;
 	}
 
 	wxGetApp().WereAdded(m_objects);

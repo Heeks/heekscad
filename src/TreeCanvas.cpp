@@ -88,14 +88,14 @@ void CTreeCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<H
 		for(It = added->begin(); It != added->end(); It++){
 			HeeksObj* object = *It;
 			bool can_add = false;
-			if(object->m_owner == NULL || object->m_owner == &wxGetApp()){
+			if(!object->HasOwner() || object->HasOwner(&wxGetApp())){
 				can_add = true;
 			}
 			else{
-				can_add = (Find(object->m_owner) != wxTreeItemId());
+				can_add = (Find(object->Owner()) != wxTreeItemId());
 			}
 			if(can_add){
-				HeeksObj* owner_object = object->m_owner;
+				HeeksObj* owner_object = object->Owner();
 				wxTreeItemId owner = Find(owner_object);
 				if(owner && owner_object){
 					int count = 0;
@@ -208,7 +208,7 @@ const wxTreeItemId CTreeCanvas::Add(HeeksObj* object, const wxTreeItemId &owner)
 	tree_map.insert(std::pair<HeeksObj*, wxTreeItemId>(object, item));
 
 	AddChildren(object, item);
-	if(object->m_owner && object->m_owner->AutoExpand())m_treeCtrl->Expand(owner);
+	if(object->Owner() && object->Owner()->AutoExpand())m_treeCtrl->Expand(owner);
 
 	return item;
 }
