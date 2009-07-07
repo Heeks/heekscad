@@ -6,6 +6,9 @@
 
 #include "../interface/HeeksObj.h"
 
+
+class ConstrainedObject;
+
 #define ANGLE_OFFSET_FROM_LINE 2.5
 
 enum EnumConstraintType{
@@ -33,8 +36,8 @@ enum EnumAbsoluteAngle{
 
 class Constraint : public HeeksObj{
 public:
-	HeeksObj* m_obj1;
-	HeeksObj* m_obj2;
+	ConstrainedObject* m_obj1;
+	ConstrainedObject* m_obj2;
 
 	EnumConstraintType m_type;
 	EnumAbsoluteAngle m_angle;
@@ -43,14 +46,18 @@ public:
 
 	Constraint();
 	Constraint(const Constraint* obj);
-	Constraint(EnumConstraintType,EnumAbsoluteAngle,HeeksObj* obj);
-	Constraint(EnumConstraintType,double length,HeeksObj* obj);
-	Constraint(EnumConstraintType,HeeksObj* obj1, HeeksObj* obj2);
+	Constraint(EnumConstraintType,EnumAbsoluteAngle,ConstrainedObject* obj);
+	Constraint(EnumConstraintType,double length,ConstrainedObject* obj);
+	Constraint(EnumConstraintType,ConstrainedObject* obj1, ConstrainedObject* obj2);
 
 	~Constraint(void);
 
 	HeeksObj *MakeACopy(void)const;
 	int GetType()const{return ConstraintType;}
+	const wxChar* GetTypeString(void)const{return _("Constraint");}
+	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/line");}
+	void WriteXML(TiXmlNode *root);
+	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 
 	bool operator==(const Constraint &other) const {
 		return m_type == other.m_type && m_angle==other.m_angle && m_obj1 == other.m_obj1 && m_obj2 == other.m_obj2 && m_length == other.m_length;
