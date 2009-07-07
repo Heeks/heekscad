@@ -206,12 +206,12 @@ void HILine::WriteXML(TiXmlNode *root)
 	element = new TiXmlElement( "InfiniteLine" );
 	root->LinkEndChild( element );  
 	element->SetAttribute("col", color.COLORREF_color());
-	element->SetDoubleAttribute("sx", A->m_p.X());
-	element->SetDoubleAttribute("sy", A->m_p.Y());
-	element->SetDoubleAttribute("sz", A->m_p.Z());
-	element->SetDoubleAttribute("ex", B->m_p.X());
-	element->SetDoubleAttribute("ey", B->m_p.Y());
-	element->SetDoubleAttribute("ez", B->m_p.Z());
+//	element->SetDoubleAttribute("sx", A->m_p.X());
+//	element->SetDoubleAttribute("sy", A->m_p.Y());
+//	element->SetDoubleAttribute("sz", A->m_p.Z());
+//	element->SetDoubleAttribute("ex", B->m_p.X());
+//	element->SetDoubleAttribute("ey", B->m_p.Y());
+//	element->SetDoubleAttribute("ez", B->m_p.Z());
 	WriteBaseXML(element);
 }
 
@@ -236,6 +236,17 @@ HeeksObj* HILine::ReadFromXMLElement(TiXmlElement* pElem)
 
 	HILine* new_object = new HILine(p0, p1, &c);
 	new_object->ReadBaseXML(pElem);
+
+	if(new_object->GetNumChildren()>2)
+	{
+		//This is a new style line, with children points
+		new_object->Remove(new_object->A);
+		new_object->Remove(new_object->B);
+		delete new_object->A;
+		delete new_object->B;
+		new_object->A = (HPoint*)new_object->GetFirstChild();
+		new_object->B = (HPoint*)new_object->GetNextChild();
+	}
 	return new_object;
 }
 

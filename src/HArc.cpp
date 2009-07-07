@@ -507,12 +507,12 @@ void HArc::WriteXML(TiXmlNode *root)
 	TiXmlElement *element = new TiXmlElement( "Arc" );
 	root->LinkEndChild( element );  
 	element->SetAttribute("col", color.COLORREF_color());
-	element->SetDoubleAttribute("sx", A->m_p.X());
-	element->SetDoubleAttribute("sy", A->m_p.Y());
-	element->SetDoubleAttribute("sz", A->m_p.Z());
-	element->SetDoubleAttribute("ex", B->m_p.X());
-	element->SetDoubleAttribute("ey", B->m_p.Y());
-	element->SetDoubleAttribute("ez", B->m_p.Z());
+//	element->SetDoubleAttribute("sx", A->m_p.X());
+//	element->SetDoubleAttribute("sy", A->m_p.Y());
+//	element->SetDoubleAttribute("sz", A->m_p.Z());
+//	element->SetDoubleAttribute("ex", B->m_p.X());
+//	element->SetDoubleAttribute("ey", B->m_p.Y());
+//	element->SetDoubleAttribute("ez", B->m_p.Z());
 	gp_Dir D = m_axis.Direction();
 	element->SetDoubleAttribute("cx", C->m_p.X());
 	element->SetDoubleAttribute("cy", C->m_p.Y());
@@ -554,6 +554,19 @@ HeeksObj* HArc::ReadFromXMLElement(TiXmlElement* pElem)
 	HArc* new_object = new HArc(p0, p1, circle, &c);
 	new_object->ReadBaseXML(pElem);
 
+	if(new_object->GetNumChildren()>3)
+	{
+		//This is a new style arc, with children points
+		new_object->Remove(new_object->A);
+		new_object->Remove(new_object->B);
+		new_object->Remove(new_object->C);
+		delete new_object->A;
+		delete new_object->B;
+		delete new_object->C;
+		new_object->A = (HPoint*)new_object->GetFirstChild();
+		new_object->B = (HPoint*)new_object->GetNextChild();
+		new_object->C = (HPoint*)new_object->GetNextChild();
+	}
 	return new_object;
 }
 

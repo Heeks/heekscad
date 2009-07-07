@@ -261,7 +261,7 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 		// no contraints
 		return;
 
-	if(solvewpoints(&params[0],params.size(),&constraints[0],constraints.size(),rough))
+	if(solvewpoints(&params[0],params.size(),&constraints[0],constraints.size(),fine))
 		//No result
 	{return;}
 

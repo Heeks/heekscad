@@ -67,6 +67,7 @@ enum{
 
 class HeeksObj{
 	std::list<HeeksObj*> m_owners;
+	std::list<HeeksObj*>::iterator m_owners_it;
 public:
 	unsigned int m_id;
 	unsigned int m_layer;
@@ -118,7 +119,7 @@ public:
 	virtual bool CanAdd(HeeksObj* object){return false;}
 	virtual bool CanAddTo(HeeksObj* owner){return true;}
 	virtual bool OneOfAKind(){return false;} // if true, then, instead of pasting, find the first object of the same type and copy object to it.
-	virtual bool Add(HeeksObj* object, HeeksObj* prev_object) {object->SetOwner(this); object->OnAdd(); return true;}
+	virtual bool Add(HeeksObj* object, HeeksObj* prev_object) {object->AddOwner(this); object->OnAdd(); return true;}
 	virtual void Remove(HeeksObj* object){object->OnRemove();}
 	virtual void OnAdd(){}
 	virtual void OnRemove();
@@ -143,5 +144,8 @@ public:
 	virtual void SetOwner(HeeksObj*);
 	virtual bool HasOwner();
 	virtual bool HasOwner(HeeksObj* obj);
+	virtual void AddOwner(HeeksObj*);
 	virtual void RemoveOwners();
+	virtual HeeksObj* GetFirstOwner();
+	virtual HeeksObj* GetNextOwner();
 };
