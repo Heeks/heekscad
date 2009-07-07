@@ -304,12 +304,15 @@ void HLine::WriteXML(TiXmlNode *root)
 	element = new TiXmlElement( "Line" );
 	root->LinkEndChild( element );  
 	element->SetAttribute("col", color.COLORREF_color());
+
+#ifdef OLDLINES
 	element->SetDoubleAttribute("sx", A->m_p.X());
 	element->SetDoubleAttribute("sy", A->m_p.Y());
 	element->SetDoubleAttribute("sz", A->m_p.Z());
 	element->SetDoubleAttribute("ex", B->m_p.X());
 	element->SetDoubleAttribute("ey", B->m_p.Y());
 	element->SetDoubleAttribute("ez", B->m_p.Z());
+#endif
 	WriteBaseXML(element);
 }
 
@@ -334,6 +337,17 @@ HeeksObj* HLine::ReadFromXMLElement(TiXmlElement* pElem)
 
 	HLine* new_object = new HLine(p0, p1, &c);
 	new_object->ReadBaseXML(pElem);
+	
+	if(new_object->GetNumChildren()>2)
+	{
+		//This is a new style line, with children points
+		new_object->Remove(new_object->A);
+		new_object->Remove(new_object->B);
+		delete new_object->A;
+		delete new_object->B;
+		new_object->A = (HPoint*)new_object->GetFirstChild();
+		new_object->B = (HPoint*)new_object->GetNextChild();
+	}
 
 	return new_object;
 }

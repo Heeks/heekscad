@@ -104,7 +104,7 @@ void EndedObject::glCommands(bool select, bool marked, bool no_color)
 	}
 }
 
-void EndedObject::WriteBaseXML(TiXmlElement *element)
+/*void EndedObject::WriteBaseXML(TiXmlElement *element)
 {
 	HeeksObj::WriteBaseXML(element);
-}
+}*/

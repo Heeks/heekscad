@@ -88,8 +88,8 @@ bool ConstrainedObject::SetPerpendicularConstraint(ConstrainedObject* obj){
 	if(RemoveExisting(obj,ParallelLineConstraint)) return true;
 	Constraint* c = new Constraint();
 	c->m_type = PerpendicularLineConstraint;
-	c->m_obj1 = (HeeksObj*)this;
-	c->m_obj2 = (HeeksObj*)obj;
+	c->m_obj1 = this;
+	c->m_obj2 = obj;
 	constraints.push_back(c);
 	obj->constraints.push_back(c);
 	return false;
@@ -100,8 +100,8 @@ bool ConstrainedObject::SetParallelConstraint(ConstrainedObject* obj){
 	if(RemoveExisting(obj,ParallelLineConstraint)) return true;
 	Constraint* c = new Constraint();
 	c->m_type = ParallelLineConstraint;
-	c->m_obj1 = (HeeksObj*)this;
-	c->m_obj2 = (HeeksObj*)obj;
+	c->m_obj1 = this;
+	c->m_obj2 = obj;
 	constraints.push_back(c);
 	obj->constraints.push_back(c);
 	return false;
@@ -111,8 +111,8 @@ bool ConstrainedObject::SetEqualLengthConstraint(ConstrainedObject* obj){
 	if(RemoveExisting(obj, EqualLengthConstraint)) return true;
 	Constraint* c = new Constraint();
 	c->m_type = EqualLengthConstraint;
-	c->m_obj1 = (HeeksObj*)this;
-	c->m_obj2 = (HeeksObj*)obj;
+	c->m_obj1 = this;
+	c->m_obj2 = obj;
 	constraints.push_back(c);
 	obj->constraints.push_back(c);
 	return false;
@@ -122,8 +122,8 @@ bool ConstrainedObject::SetConcentricConstraint(ConstrainedObject* obj){
 	if(RemoveExisting(obj, ConcentricConstraint)) return true;
 	Constraint* c = new Constraint();
 	c->m_type = ConcentricConstraint;
-	c->m_obj1 = (HeeksObj*)this;
-	c->m_obj2 = (HeeksObj*)obj;
+	c->m_obj1 = this;
+	c->m_obj2 = obj;
 	constraints.push_back(c);
 	obj->constraints.push_back(c);
 	return false;
@@ -134,8 +134,8 @@ bool ConstrainedObject::SetEqualRadiusConstraint(ConstrainedObject* obj){
 	if(RemoveExisting(obj, EqualRadiusConstraint)) return true;
 	Constraint* c = new Constraint();
 	c->m_type = EqualRadiusConstraint;
-	c->m_obj1 = (HeeksObj*)this;
-	c->m_obj2 = (HeeksObj*)obj;
+	c->m_obj1 = this;
+	c->m_obj2 = obj;
 	constraints.push_back(c);
 	obj->constraints.push_back(c);
 	return false;
@@ -146,8 +146,8 @@ bool ConstrainedObject::SetColinearConstraint(ConstrainedObject* obj){
 	if(RemoveExisting(obj,ColinearConstraint)) return true;
 	Constraint* c = new Constraint();
 	c->m_type = ColinearConstraint;
-	c->m_obj1 = (HeeksObj*)this;
-	c->m_obj2 = (HeeksObj*)obj;
+	c->m_obj1 = this;
+	c->m_obj2 = obj;
 	constraints.push_back(c);
 	obj->constraints.push_back(c);
 	return false;
@@ -167,7 +167,7 @@ void ConstrainedObject::SetAbsoluteAngleConstraint(EnumAbsoluteAngle angle)
 
 	}
 	else
-		absoluteangleconstraint = new Constraint(AbsoluteAngleConstraint,angle,(HeeksObj*)this);
+		absoluteangleconstraint = new Constraint(AbsoluteAngleConstraint,angle,this);
 }
 
 void ConstrainedObject::glCommands(HeeksColor color, gp_Ax1 mid_point)
@@ -233,7 +233,7 @@ void ConstrainedObject::SetLineLengthConstraint(double length)
 		linelengthconstraint = NULL;
 	}
 	else
-		linelengthconstraint = new Constraint(LineLengthConstraint,length,(HeeksObj*)this);
+		linelengthconstraint = new Constraint(LineLengthConstraint,length,this);
 }
 
 void ConstrainedObject::SetRadiusConstraint(double length)
@@ -244,7 +244,7 @@ void ConstrainedObject::SetRadiusConstraint(double length)
 		radiusconstraint = NULL;
 	}
 	else
-		radiusconstraint = new Constraint(RadiusConstraint,length,(HeeksObj*)this);
+		radiusconstraint = new Constraint(RadiusConstraint,length,this);
 }
 
 

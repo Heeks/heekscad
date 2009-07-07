@@ -4,6 +4,32 @@
 #include "stdafx.h"
 
 #include "Constraint.h"
+#include "ConstrainedObject.h"
+#include "../tinyxml/tinyxml.h"
+
+std::string AbsoluteAngle[] = {
+	"AbsoluteAngleHorizontal",
+	"AbsoluteAngleVertical"
+};
+
+std::string ConstraintTypes[]={
+	"CoincidantPointConstraint",
+	"ParallelLineConstraint",
+	"PerpendicularLineConstraint",
+	"AbsoluteAngleConstraint",
+	"LineLengthConstraint",
+	"LineTangentConstraint",
+	"RadiusConstraint",
+	"EqualLengthConstraint",
+	"ColinearConstraint",
+	"EqualRadiusConstraint",
+	"ConcentricConstraint",
+	"PointOnLineConstraint",
+	"PointOnLineMidpointConstraint",
+	"PointOnArcMidpointConstraint",
+	"PointOnArcConstraint"
+};
+
 
 Constraint::Constraint(){
 	
@@ -17,26 +43,29 @@ Constraint::Constraint(const Constraint* obj){
 	m_obj2 = obj->m_obj2;
 }
 
-Constraint::Constraint(EnumConstraintType type,EnumAbsoluteAngle angle, HeeksObj* obj)
+Constraint::Constraint(EnumConstraintType type,EnumAbsoluteAngle angle, ConstrainedObject* obj)
 {
     m_type = type;
 	m_angle = angle;
 	m_obj1 = obj;
 	m_obj2 = NULL;
 	m_length = 0;
+	m_obj1->Add(this,NULL);
 }
 
-Constraint::Constraint(EnumConstraintType type,HeeksObj* obj1,HeeksObj* obj2)
+Constraint::Constraint(EnumConstraintType type,ConstrainedObject* obj1,ConstrainedObject* obj2)
 {
     m_type = type;
 	m_angle = (EnumAbsoluteAngle)0;
 	m_obj1 = obj1;
 	m_obj2 = obj2;
 	m_length = 0;
+	m_obj1->Add(this,NULL);
+	m_obj2->Add(this,NULL);
 }
 
 
-Constraint::Constraint(EnumConstraintType type,double length,HeeksObj* obj1)
+Constraint::Constraint(EnumConstraintType type,double length,ConstrainedObject* obj1)
 {
     m_type = type;
 	m_angle = (EnumAbsoluteAngle)0;
@@ -55,7 +84,12 @@ const Constraint& Constraint::operator=(const Constraint &b){
 	return *this;
 }
 
-Constraint::~Constraint(){
+Constraint::~Constraint()
+{
+	if(m_obj1)
+		m_obj1->Remove(this);
+	if(m_obj2)
+		m_obj2->Remove(this);
 }
 
 void Constraint::render_text(const wxChar* str)
@@ -126,4 +160,28 @@ void Constraint::glCommands(HeeksColor color, gp_Ax1 axis)
 HeeksObj *Constraint::MakeACopy(void)const
 {
 	return new Constraint(this);
+}
+
+void Constraint::WriteXML(TiXmlNode *root)
+{
+	TiXmlElement * element;
+	element = new TiXmlElement( "Constraint" );
+	root->LinkEndChild( element );  
+	element->SetAttribute("type", ConstraintTypes[m_type].c_str());
+	element->SetAttribute("angle", AbsoluteAngle[m_angle].c_str());
+	element->SetDoubleAttribute("length", m_length);
+	element->SetAttribute("obj1_id",m_obj1->m_id);
+	element->SetAttribute("obj1_type",m_obj1->GetType());
+	if(m_obj2)
+	{
+		element->SetAttribute("obj2_id",m_obj2->m_id);
+		element->SetAttribute("obj2_type",m_obj2->GetType());
+	}
+
+	WriteBaseXML(element);
+}
+
+HeeksObj* Constraint::ReadFromXMLElement(TiXmlElement* pElem)
+{
+	return NULL;
 }

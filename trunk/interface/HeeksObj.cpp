@@ -165,7 +165,7 @@ HeeksObj* HeeksObj::Owner()
 void HeeksObj::SetOwner(HeeksObj *obj)
 {
 	m_owners.clear();
-	m_owners.push_back(obj);
+	AddOwner(obj);
 }
 
 bool HeeksObj::HasOwner(HeeksObj *obj)
@@ -187,4 +187,22 @@ bool HeeksObj::HasOwner()
 void HeeksObj::RemoveOwners()
 {
 	m_owners.clear();
+}
+
+void HeeksObj::AddOwner(HeeksObj *obj)
+{
+	m_owners.push_back(obj);
+}
+
+HeeksObj* HeeksObj::GetFirstOwner()
+{
+	m_owners_it = m_owners.begin();
+	return GetNextOwner();
+}
+
+HeeksObj* HeeksObj::GetNextOwner()
+{
+	if(m_owners_it != m_owners.end())
+		return *m_owners_it++;
+	return NULL;
 }

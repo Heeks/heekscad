@@ -29,6 +29,6 @@ public:
 	void CopyFrom(const HeeksObj* object){operator=(*((EndedObject*)object));}
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	void glCommands(bool select, bool marked, bool no_color);
-	void WriteBaseXML(TiXmlElement *element);
+//	void WriteBaseXML(TiXmlElement *element);
 	
 };

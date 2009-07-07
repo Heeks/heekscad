@@ -136,8 +136,6 @@ public:
 	double Score( const CorrelationData_t & sample, const CorrelationData_t & reference ) const;
 
 	std::set<Point3d> FindAllLocations() const;
-	Symbols_t GetAllChildSymbols( const Symbol_t & parent ) const;
-
 
 }; // End CCorrelationTool class definition.
 
