@@ -164,6 +164,7 @@ HeeksObj *Constraint::MakeACopy(void)const
 
 void Constraint::WriteXML(TiXmlNode *root)
 {
+	return; //Disabled for now. These should not be children of the lines/points
 	TiXmlElement * element;
 	element = new TiXmlElement( "Constraint" );
 	root->LinkEndChild( element );  
