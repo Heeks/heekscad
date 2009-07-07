@@ -189,11 +189,11 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 					{
 						constraint c;
 						c.type = tangentToArc;
-						if(dynamic_cast<HArc*>(obj))
-							c.arc1 = GetArc((HArc*)obj);
+						if(dynamic_cast<HArc*>(con->m_obj1))
+							c.arc1 = GetArc((HArc*)con->m_obj1);
 						else
 						{
-							c.circle1 = GetCircle((HCircle*)obj);
+							c.circle1 = GetCircle((HCircle*)con->m_obj1);
 							c.type = tangentToCircle;
 						}
 						c.line1 = GetLineFromEndedObject((EndedObject*)con->m_obj2);

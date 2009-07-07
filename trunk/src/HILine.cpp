@@ -246,6 +246,8 @@ HeeksObj* HILine::ReadFromXMLElement(TiXmlElement* pElem)
 		delete new_object->B;
 		new_object->A = (HPoint*)new_object->GetFirstChild();
 		new_object->B = (HPoint*)new_object->GetNextChild();
+		new_object->A->m_draw_unselected = false;
+		new_object->B->m_draw_unselected = false;
 	}
 	return new_object;
 }

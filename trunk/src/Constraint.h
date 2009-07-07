@@ -49,6 +49,7 @@ public:
 	Constraint(EnumConstraintType,EnumAbsoluteAngle,ConstrainedObject* obj);
 	Constraint(EnumConstraintType,double length,ConstrainedObject* obj);
 	Constraint(EnumConstraintType,ConstrainedObject* obj1, ConstrainedObject* obj2);
+	Constraint(EnumConstraintType,EnumAbsoluteAngle,double length,ConstrainedObject* obj1, ConstrainedObject* obj2);
 
 	~Constraint(void);
 
@@ -58,6 +59,8 @@ public:
 	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/line");}
 	void WriteXML(TiXmlNode *root);
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
+	static void BeginSave();
+	static void EndSave(TiXmlNode *root);
 
 	bool operator==(const Constraint &other) const {
 		return m_type == other.m_type && m_angle==other.m_angle && m_obj1 == other.m_obj1 && m_obj2 == other.m_obj2 && m_length == other.m_length;
