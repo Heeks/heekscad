@@ -53,6 +53,18 @@ Constraint::Constraint(EnumConstraintType type,EnumAbsoluteAngle angle, Constrai
 	m_obj1->Add(this,NULL);
 }
 
+Constraint::Constraint(EnumConstraintType type,EnumAbsoluteAngle angle, double length, ConstrainedObject* obj1, ConstrainedObject* obj2)
+{
+    m_type = type;
+	m_angle = angle;
+	m_obj1 = obj1;
+	m_obj2 = obj2;
+	m_length = length;
+	m_obj1->Add(this,NULL);
+	if(m_obj2)
+		m_obj2->Add(this,NULL);
+}
+
 Constraint::Constraint(EnumConstraintType type,ConstrainedObject* obj1,ConstrainedObject* obj2)
 {
     m_type = type;
@@ -162,27 +174,111 @@ HeeksObj *Constraint::MakeACopy(void)const
 	return new Constraint(this);
 }
 
+static std::list<Constraint*> obj_to_save;
+static std::set<Constraint*> obj_to_save_find;
+
+void Constraint::BeginSave()
+{
+	obj_to_save.clear();
+	obj_to_save_find.clear();
+}
+
+void Constraint::EndSave(TiXmlNode *root)
+{
+	std::list<Constraint*>::iterator it;
+	for(it = obj_to_save.begin(); it != obj_to_save.end(); it++)
+	{
+		Constraint *c = *it;
+		TiXmlElement * element;
+		element = new TiXmlElement( "Constraint" );	
+		root->LinkEndChild( element );  
+		element->SetAttribute("type", ConstraintTypes[c->m_type].c_str());
+		element->SetAttribute("angle", AbsoluteAngle[c->m_angle].c_str());
+		element->SetDoubleAttribute("length", c->m_length);
+		element->SetAttribute("obj1_id",c->m_obj1->m_id);
+		element->SetAttribute("obj1_type",c->m_obj1->GetIDGroupType());
+		if(c->m_obj2)
+		{
+			element->SetAttribute("obj2_id",c->m_obj2->m_id);
+			element->SetAttribute("obj2_type",c->m_obj2->GetIDGroupType());
+		}
+		c->WriteBaseXML(element);
+	}
+}
+
 void Constraint::WriteXML(TiXmlNode *root)
 {
-	return; //Disabled for now. These should not be children of the lines/points
-	TiXmlElement * element;
-	element = new TiXmlElement( "Constraint" );
-	root->LinkEndChild( element );  
-	element->SetAttribute("type", ConstraintTypes[m_type].c_str());
-	element->SetAttribute("angle", AbsoluteAngle[m_angle].c_str());
-	element->SetDoubleAttribute("length", m_length);
-	element->SetAttribute("obj1_id",m_obj1->m_id);
-	element->SetAttribute("obj1_type",m_obj1->GetType());
-	if(m_obj2)
-	{
-		element->SetAttribute("obj2_id",m_obj2->m_id);
-		element->SetAttribute("obj2_type",m_obj2->GetType());
-	}
+	if(obj_to_save_find.find(this)!=obj_to_save_find.end())
+		return;
 
-	WriteBaseXML(element);
+	obj_to_save.push_back(this);
+	obj_to_save_find.insert(this);
 }
 
 HeeksObj* Constraint::ReadFromXMLElement(TiXmlElement* pElem)
 {
+	const char* type=0;
+	EnumConstraintType etype;
+	const char* angle=0;
+	EnumAbsoluteAngle eangle;
+	double length=0;
+	int obj1_id=0;
+	int obj2_id=0;
+	int obj1_type=0;
+	int obj2_type=0;
+	ConstrainedObject* obj1=0;
+	ConstrainedObject* obj2=0;
+	// get the attributes
+	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
+	{
+		std::string name(a->Name());
+		if(name == "type"){type = a->Value();}
+		else if(name == "angle"){angle = a->Value();}
+		else if(name == "length"){length = a->DoubleValue();}
+		else if(name == "obj1_id"){obj1_id = a->IntValue();}
+		else if(name == "obj1_type"){obj1_type = a->IntValue();}
+		else if(name == "obj2_id"){obj2_id = a->IntValue();}
+		else if(name == "obj2_type"){obj2_type = a->IntValue();}
+	}
+
+	//Ugh, we need to convert the strings back into types
+	for(int i=0; i < sizeof(ConstraintTypes); i++)
+	{
+		if(strcmp(ConstraintTypes[i].c_str(),type)==0)
+		{
+			etype = (EnumConstraintType)i;
+			break;
+		}
+	}
+
+	for(int i=0; i < sizeof(AbsoluteAngle); i++)
+	{
+		if(strcmp(AbsoluteAngle[i].c_str(),type)==0)
+		{
+			eangle = (EnumAbsoluteAngle)i;
+			break;
+		}
+	}
+
+	//Get real pointers to the objects
+	obj1 = (ConstrainedObject*)wxGetApp().GetIDObject(obj1_type,obj1_id);
+	obj2 = (ConstrainedObject*)wxGetApp().GetIDObject(obj2_type,obj2_id);
+
+	Constraint *c = new Constraint(etype,eangle,length,obj1,obj2);
+
+	//Set up the quick pointers
+	if(etype == AbsoluteAngleConstraint)
+		obj1->absoluteangleconstraint = c;
+	else if(etype == RadiusConstraint)
+		obj1->radiusconstraint = c;
+	else if(etype == LineLengthConstraint)
+		obj1->linelengthconstraint = c;
+	else
+	{
+		obj1->constraints.push_back(c);
+		obj2->constraints.push_back(c);
+	}
+
+	//Don't let the xml reader try to insert us in the tree
 	return NULL;
 }

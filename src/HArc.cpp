@@ -40,7 +40,7 @@ const HArc& HArc::operator=(const HArc &b){
 	m_radius = b.m_radius;
 	m_axis = b.m_axis;
 	color = b.color;
-	C = new HPoint(b.C->m_p,&color);
+	C = new HPoint(*b.C);
 	C->m_draw_unselected = false;
 	Add(C,NULL);
 	return *this;
@@ -514,9 +514,9 @@ void HArc::WriteXML(TiXmlNode *root)
 //	element->SetDoubleAttribute("ey", B->m_p.Y());
 //	element->SetDoubleAttribute("ez", B->m_p.Z());
 	gp_Dir D = m_axis.Direction();
-	element->SetDoubleAttribute("cx", C->m_p.X());
-	element->SetDoubleAttribute("cy", C->m_p.Y());
-	element->SetDoubleAttribute("cz", C->m_p.Z());
+//	element->SetDoubleAttribute("cx", C->m_p.X());
+//	element->SetDoubleAttribute("cy", C->m_p.Y());
+//	element->SetDoubleAttribute("cz", C->m_p.Z());
 	element->SetDoubleAttribute("ax", D.X());
 	element->SetDoubleAttribute("ay", D.Y());
 	element->SetDoubleAttribute("az", D.Z());
@@ -526,7 +526,7 @@ void HArc::WriteXML(TiXmlNode *root)
 // static member function
 HeeksObj* HArc::ReadFromXMLElement(TiXmlElement* pElem)
 {
-	gp_Pnt p0, p1, centre;
+	gp_Pnt p0(1,0,0), p1(0,1,0), centre(0,0,0);
 	double axis[3];
 	HeeksColor c;
 
@@ -566,6 +566,10 @@ HeeksObj* HArc::ReadFromXMLElement(TiXmlElement* pElem)
 		new_object->A = (HPoint*)new_object->GetFirstChild();
 		new_object->B = (HPoint*)new_object->GetNextChild();
 		new_object->C = (HPoint*)new_object->GetNextChild();
+		new_object->A->m_draw_unselected = false;
+		new_object->B->m_draw_unselected = false;
+		new_object->C->m_draw_unselected = false;
+		new_object->m_radius = new_object->C->m_p.Distance(new_object->A->m_p);
 	}
 	return new_object;
 }
