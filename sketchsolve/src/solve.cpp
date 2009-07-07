@@ -476,6 +476,7 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 	}
 	////Debug
 
+
 #ifdef DEBUG
 
 	for(int i=0;i<xLength;i++)
@@ -686,12 +687,12 @@ double calc(constraint * cons, int consLength)
 			dy = L1_P2_y - L1_P1_y;
 
 			//hyp=sqrt(dx*dx+dy*dy);
-			
+
 			double u = (A1_Center_x - L1_P1_x) * (L1_P2_x - L1_P1_x) + (A1_Center_y - L1_P1_y) * (L1_P2_y - L1_P1_y);
 			u/=dx*dx+dy*dy;
 
 			double x = L1_P1_x + u *(L1_P2_x - L1_P1_x);
-			double y = L1_P1_y + u *(L1_P2_y - L1_P1_y); 
+			double y = L1_P1_y + u *(L1_P2_y - L1_P1_y);
 
 			double dcsx = A1_Center_x - A1_Start_x;
 			double dcsy = A1_Center_y - A1_Start_y;
@@ -699,13 +700,14 @@ double calc(constraint * cons, int consLength)
 			double dcey = A1_Center_y - A1_End_y;
 			rad=(dcsx*dcsx + dcsy * dcsy);
 		//	rad+=(dcex*dcex + dcey * dcey)/4;
-			
+
 			double dcx = A1_Center_x-x;
 			double dcy = A1_Center_y-y;
 			temp = (dcx * dcx + dcy * dcy) - rad;
 			error += temp*temp*100;
 			*/
-			
+
+//#if defined(NEWARC)
 			dx = L1_P2_x - L1_P1_x;
 			dy = L1_P2_y - L1_P1_y;
 
@@ -729,13 +731,13 @@ double calc(constraint * cons, int consLength)
 			//dy = A1_End_y - A1_Start_y;
 
 			//hyp=_hypot(dx,dy);
-			
+
 			//double u = (A1_Center_x - A1_Start_x) * (A1_End_x - A1_Start_x) + (A1_Center_y - A1_Start_y) * (A1_End_y - A1_Start_y);
 			//u/=hyp*hyp;
 
 			//temp = sin(u - .5);
 			//error+=temp*temp*temp*temp*100000;
-			//error+=pow(-2*A1_Center_x*A1_End_y - 2*A1_Center_y*A1_End_y + A1_End_x*A1_End_y + pow(A1_End_y,2) + 2*A1_Center_x*A1_Start_x - 2*A1_Center_y*A1_Start_x - A1_End_x*A1_Start_x + 4*A1_End_y*A1_Start_x - 3*pow(A1_Start_x,2) +  2*A1_Center_y*A1_Start_y + A1_Start_x*A1_Start_y - pow(A1_Start_y,2),2)/(8*pow(A1_End_y,2) + 8*pow(A1_Start_x,2) - 8*A1_End_y*A1_Start_y -  8*A1_Start_x*A1_Start_y + 4*pow(A1_Start_y,2)); 
+			//error+=pow(-2*A1_Center_x*A1_End_y - 2*A1_Center_y*A1_End_y + A1_End_x*A1_End_y + pow(A1_End_y,2) + 2*A1_Center_x*A1_Start_x - 2*A1_Center_y*A1_Start_x - A1_End_x*A1_Start_x + 4*A1_End_y*A1_Start_x - 3*pow(A1_Start_x,2) +  2*A1_Center_y*A1_Start_y + A1_Start_x*A1_Start_y - pow(A1_Start_y,2),2)/(8*pow(A1_End_y,2) + 8*pow(A1_Start_x,2) - 8*A1_End_y*A1_Start_y -  8*A1_Start_x*A1_Start_y + 4*pow(A1_Start_y,2));
 			double a1endx2 = A1_End_x * A1_End_x;
 			double a1endy2 = A1_End_y * A1_End_y;
 			double a1startx2 = A1_Start_x*A1_Start_x;

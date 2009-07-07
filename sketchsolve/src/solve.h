@@ -12,6 +12,11 @@
 	#define _hypot hypot
 #endif
 
+//This define selects between the old arc define by start point end point and center point
+// and the new arc defined by a centerpoint, radius, start angle, and end angle
+//#define NEWARC
+// Eventually after everything is changed we will get rid of the old arc type.
+
 #ifndef SOLVE_H_
 #define SOLVE_H_
 
@@ -103,18 +108,45 @@
 #define C2_Center_x    *cons[i].circle2.center.x
 #define C2_Center_y    *cons[i].circle2.center.y
 #define C2_rad         *cons[i].circle2.rad
-#define A1_Start_x     *cons[i].arc1.start.x
-#define A1_Start_y     *cons[i].arc1.start.y
-#define A1_End_x       *cons[i].arc1.end.x
-#define A1_End_y       *cons[i].arc1.end.y
-#define A1_Center_x    *cons[i].arc1.center.x
-#define A1_Center_y    *cons[i].arc1.center.y
-#define A2_Start_x     *cons[i].arc2.start.x
-#define A2_Start_y     *cons[i].arc2.start.y
-#define A2_End_x       *cons[i].arc2.end.x
-#define A2_End_y       *cons[i].arc2.end.y
-#define A2_Center_x    *cons[i].arc2.center.x
-#define A2_Center_y    *cons[i].arc2.center.y
+
+#ifndef NEWARC
+
+	#define A1_Start_x     *cons[i].arc1.start.x
+	#define A1_Start_y     *cons[i].arc1.start.y
+	#define A1_End_x       *cons[i].arc1.end.x
+	#define A1_End_y       *cons[i].arc1.end.y
+	#define A1_Center_x    *cons[i].arc1.center.x
+	#define A1_Center_y    *cons[i].arc1.center.y
+	#define A2_Start_x     *cons[i].arc2.start.x
+	#define A2_Start_y     *cons[i].arc2.start.y
+	#define A2_End_x       *cons[i].arc2.end.x
+	#define A2_End_y       *cons[i].arc2.end.y
+	#define A2_Center_x    *cons[i].arc2.center.x
+	#define A2_Center_y    *cons[i].arc2.center.y
+
+#else
+	#define A1_startA	   *cons[i].arc1.startAngle
+	#define A1_endA		   *cons[i].arc1.endAngle
+	#define A1_radius	   *cons[i].arc1.rad
+	#define A1_Center_x    *cons[i].arc1.center.x
+	#define A1_Center_y    *cons[i].arc1.center.y
+	#define A2_startA	   *cons[i].arc2.startAngle
+	#define A2_endA		   *cons[i].arc2.endAngle
+	#define A2_radius	   *cons[i].arc2.rad
+	#define A2_Center_x    *cons[i].arc2.center.x
+	#define A2_Center_y    *cons[i].arc2.center.y
+
+	#define A1_Start_x     (A1_Center_x+A1_radius*cos(A1_startA))
+	#define A1_Start_y     (A1_Center_y+A1_radius*sin(A1_startA))
+	#define A1_End_x       (A1_Center_x+A1_radius*cos(A1_endA))
+	#define A1_End_y     (A1_Center_y+A1_radius*sin(A1_endA))
+	#define A2_Start_x     (A1_Center_x+A2_radius*cos(A2_startA))
+	#define A2_Start_y     (A1_Center_y+A2_radius*sin(A2_startA))
+	#define A2_End_x       (A1_Center_x+A2_radius*cos(A2_endA))
+	#define A2_End_y     (A1_Center_y+A2_radius*sin(A2_endA))
+
+#endif
+
 #define length		   *cons[i].parameter
 #define distance	   *cons[i].parameter
 #define radius		   *cons[i].parameter
@@ -142,14 +174,28 @@ public:
 	point p2;
 };
 
-class arc
-{
-public:
-	arc(){}
-	point start;
-	point end;
-	point center;
-};
+#ifndef NEWARC
+	class arc
+	{
+	public:
+		arc(){}
+		point start;
+		point end;
+		point center;
+	};
+
+#else
+
+	class arc
+	{
+	public:
+		arc(){}
+		double * startAngle;
+		double * endAngle;
+		double * rad;//This is called parameter in the constraint class.
+		point center;
+	};
+#endif
 
 class circle
 {
