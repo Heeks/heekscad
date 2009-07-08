@@ -70,6 +70,14 @@ arc maparc(arc a)
 
 	double rad = (sqrt(dex*dex+dey*dey) + sqrt(dsx*dsx+dsy*dsy))/2;
 
+	if(parmmap[a.start.x])
+	{
+		a.rad = parmmap[a.start.x];
+		a.startAngle = parmmap[a.start.y];
+		a.endAngle = parmmap[a.end.x];
+		return a;
+	}
+
 	int idx = parmdata.size();
 	parmdata.push_back(rad);
 	parmdata.push_back(atan2(dsx,dsy));
@@ -83,6 +91,10 @@ arc maparc(arc a)
 	a.rad = mapdouble(&parmdata[idx]);
 	a.startAngle = mapdouble(&parmdata[idx+1]);
 	a.endAngle = mapdouble(&parmdata[idx+2]);
+
+	parmmap[a.start.x] = a.rad;
+	parmmap[a.start.y] = a.startAngle;
+	parmmap[a.end.x] = a.endAngle;
 #endif
 	return a;
 }
