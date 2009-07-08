@@ -764,7 +764,7 @@ double calc(constraint * cons, int consLength)
 		{
 			rad1 = _hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
 			rad2 = _hypot(A1_Center_x - A1_End_x , A1_Center_y - A1_End_y);
-			temp= rad1 - radius ;
+			temp= rad1 - A1_radius;
 			error += temp*temp;
 		}
 
@@ -809,7 +809,7 @@ double calc(constraint * cons, int consLength)
 
 		if(cons[i].type==circleRadius)
 		{
-			error += (C1_rad - radius)*(C1_rad - radius);
+			error += (C1_rad - C1_radius)*(C1_rad - C1_radius);
 		}
 		if(cons[i].type==internalAngle)
 		{
@@ -1071,6 +1071,7 @@ double calc(constraint * cons, int consLength)
 
 		if(cons[i].type == arcTangentToArc)
 		{
+#ifndef NEWARC
 			// temp = center point distance 
 			temp = sqrt(A1_Center_x-A2_Center_x)*(A1_Center_x-A2_Center_x)+(A1_Center_y-A2_Center_y)*(A1_Center_y-A2_Center_y);
 			// center point to center point distance= r1+r2
@@ -1087,7 +1088,8 @@ double calc(constraint * cons, int consLength)
 			}
 			if(extError<intError) error += extError;
 			else error =+ intError;
-
+#else
+#endif
 		}
 
 		if(cons[i].type == circleTangentToCircle)
@@ -1113,6 +1115,7 @@ double calc(constraint * cons, int consLength)
 
 		if(cons[i].type == circleTangentToArc)
 		{
+#ifndef NEWARC
 			// temp = center point distance 
 			temp = sqrt(C1_Center_x-A1_Center_x)*(C1_Center_x-A1_Center_x)+(C1_Center_y-A1_Center_y)*(C1_Center_y-A1_Center_y);
 			// center point to center point distance= r1+r2
@@ -1129,7 +1132,9 @@ double calc(constraint * cons, int consLength)
 			}
 			if(extError<intError) error += extError;
 			else error =+ intError;
+#else
 
+#endif
 		}
 	}
 	return error;

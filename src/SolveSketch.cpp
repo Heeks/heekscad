@@ -341,10 +341,14 @@ line GetLineFromEndedObject(EndedObject* eobj)
 arc GetArc(HArc* a)
 {
 	arc ret;
+#ifndef NEWARC
 	ret.start = GetPoint(a->A);
 	ret.end = GetPoint(a->B);
 
 	ret.center = GetPoint(a->C);
+#else
+
+#endif
 
 	return ret;
 }
