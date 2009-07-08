@@ -23,6 +23,7 @@ std::vector<double*> newparms;
 std::map<double*,double*> parmmap;
 std::map<double*,std::list<double*> > rparmmap;
 std::vector<constraint> newcons;
+std::vector<constraint> arccons;
 
 double* mapdouble(double* v)
 {
@@ -58,8 +59,44 @@ arc maparc(arc a)
 #ifndef NEWARC
 	a.end = mappoint(a.end);
 	a.start = mappoint(a.start);
+#else
+	if(!a.end.x)
+		return a;
+	//push back some new parms for the radius/startangle/endangle
+	double dex = *a.end.x - *a.center.x;
+	double dey = *a.end.y - *a.center.y;
+	double dsx = *a.start.x - *a.center.x;
+	double dsy = *a.start.y - *a.center.y;
+
+	double rad = (sqrt(dex*dex+dey*dey) + sqrt(dsx*dsx+dsy*dsy))/2;
+
+	int idx = parmdata.size();
+	parmdata.push_back(rad);
+	parmdata.push_back(atan2(dsx,dsy));
+	parmdata.push_back(atan2(dex,dey));
+
+	//push the pointers to the doubles on the parmstack
+	newparms.push_back(&parmdata[idx]);
+	newparms.push_back(&parmdata[idx+1]);
+	newparms.push_back(&parmdata[idx+2]);
+
+	a.rad = mapdouble(&parmdata[idx]);
+	a.startAngle = mapdouble(&parmdata[idx+1]);
+	a.endAngle = mapdouble(&parmdata[idx+2]);
 #endif
 	return a;
+}
+
+void unmaparc(arc a)
+{
+#ifdef NEWARC
+	if(!a.end.x)
+		return;
+	*a.end.x = sin(*a.endAngle)* *a.rad + *a.center.x;
+	*a.end.y = cos(*a.endAngle)* *a.rad + *a.center.y;
+	*a.start.x = sin(*a.startAngle)* *a.rad + *a.center.x;
+	*a.start.y = cos(*a.startAngle)* *a.rad + *a.center.y;
+#endif
 }
 
 circle mapcircle(circle c)
@@ -86,6 +123,7 @@ int solvewpoints(double  **parms,int nparms, constraint * cons, int consLength, 
 	usedparms.clear();
 	hasusedparms.clear();
 	oldparms.clear();
+	arccons.clear();
 
 	//This keeps parmdata's pointers from moving because of reallocation
 	parmdata.reserve(nparms);
@@ -119,7 +157,10 @@ int solvewpoints(double  **parms,int nparms, constraint * cons, int consLength, 
 		}
 		else
 			//put the constraint in a new list, pointonpoint free
-			newcons.push_back(cons[i]);
+			if(cons[i].type == arcRules)
+				arccons.push_back(cons[i]);
+			else
+				newcons.push_back(cons[i]);
 	}
 
 	for(std::vector<constraint>::size_type i=0; i < newcons.size(); i++)
@@ -136,6 +177,14 @@ int solvewpoints(double  **parms,int nparms, constraint * cons, int consLength, 
 		newcons[i].point2 = mappoint(newcons[i].point2);
 		newcons[i].SymLine = mapline(newcons[i].SymLine);
 	}
+
+	for(std::vector<constraint>::size_type i=0; i < arccons.size(); i++)
+	{
+		//map all arcrules
+		arccons[i].arc1 = maparc(arccons[i].arc1);
+		arccons[i].arc2 = maparc(arccons[i].arc2);
+	}
+
 
     
 	int ret = 0;
@@ -155,6 +204,13 @@ int solvewpoints(double  **parms,int nparms, constraint * cons, int consLength, 
 				**it = *newparms[i];
 			}
 		}
+	}
+
+	//fix up the arcs
+	for(std::vector<constraint>::size_type i=0; i < arccons.size(); i++)
+	{
+		unmaparc(arccons[i].arc1);
+		unmaparc(arccons[i].arc2);
 	}
 
 	return ret;
