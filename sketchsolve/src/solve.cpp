@@ -1043,7 +1043,53 @@ double calc(constraint * cons, int consLength)
 			temp = (Ex-A2_Center_x);
 			temp2 = (Ey-A2_Center_y);
 			error += temp*temp+temp2*temp2;
+		}  
+		if(cons[i].type == pointOnArcStart)
+		{
+			error += (P1_x-A1_Start_x)*(P1_x-A1_Start_x)+(P1_y-A1_Start_y)*(P1_y-A1_Start_y);
 		}
+
+		if(cons[i].type == pointOnArcEnd)
+		{
+			error += (P1_x-A1_End_x)*(P1_x-A1_End_x)+(P1_y-A1_End_y)*(P1_y-A1_End_y);
+		}
+
+		if(cons[i].type == arcStartToArcEnd)
+		{
+			error += (A1_Start_x-A2_End_x)*(A1_Start_x-A2_End_x)+(A1_Start_y-A2_End_y)*(A1_Start_y-A2_End_y);
+		}
+
+		if(cons[i].type == arcStartToArcStart)
+		{
+			error += (A1_Start_x-A2_Start_x)*(A1_Start_x-A2_Start_x)+(A1_Start_y-A2_Start_y)*(A1_Start_y-A2_Start_y);
+		}
+
+		if(cons[i].type == arcEndtoArcEnd)
+		{
+			error += (A1_End_x-A2_End_x)*(A1_End_x-A2_End_x)+(A1_End_y-A2_End_y)*(A1_End_y-A2_End_y);
+		}
+
+		if(cons[i].type == arcTangentToArc)
+		{
+			// temp = center point distance 
+			temp = sqrt(A1_Center_x-A2_Center_x)*(A1_Center_x-A2_Center_x)+(A1_Center_y-A2_Center_y)*(A1_Center_y-A2_Center_y);
+			// center point to center point distance= r1+r2
+			double radDiff=A1_radius-A2_radius;
+			double extError,intError;
+			extError = ((A1_radius+A2_radius)-temp)*((A1_radius+A2_radius)-temp);
+			if(radDiff>=1)//A1 is bigger
+			{
+				intError = (radDiff-temp)*(radDiff-temp);
+			}
+			else
+			{
+				intError = (-radDiff-temp)*(-radDiff-temp);
+			}
+			if(extError<intError) error += extError;
+			else error =+ intError;
+
+		}
+
 	}
 	return error;
 
