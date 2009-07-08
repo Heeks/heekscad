@@ -69,7 +69,10 @@
 #define arcStartToArcEnd     41
 #define arcStartToArcStart   42
 #define arcEndtoArcEnd       43
-#define arcTangentToArc		 44
+
+#define arcTangentToArc		   44
+#define circleTangentToCircle  45
+#define circleTangentToArc     46
 
 
 
@@ -132,18 +135,18 @@
 	#define A2_Center_x    *cons[i].arc2.center.x
 	#define A2_Center_y    *cons[i].arc2.center.y
 
-	#define A1_radius	   sqrt((A1_Start_x-A1_Center_x)*(A1_Start_x-A1_Center_x)+(A1_Start_y-A1_Center_y)*(A1_Start_y-A1_Center_y))
-	#define A2_radius	   sqrt((A2_Start_x-A2_Center_x)*(A2_Start_x-A2_Center_x)+(A2_Start_y-A2_Center_y)*(A2_Start_y-A2_Center_y))
+	#define A1_rad	   sqrt((A1_Start_x-A1_Center_x)*(A1_Start_x-A1_Center_x)+(A1_Start_y-A1_Center_y)*(A1_Start_y-A1_Center_y))
+	#define A2_rad	   sqrt((A2_Start_x-A2_Center_x)*(A2_Start_x-A2_Center_x)+(A2_Start_y-A2_Center_y)*(A2_Start_y-A2_Center_y))
 
 #else
 	#define A1_startA	   *cons[i].arc1.startAngle
 	#define A1_endA		   *cons[i].arc1.endAngle
-	#define A1_radius	   *cons[i].arc1.rad
+	#define A1_rad	       *cons[i].arc1.radius
 	#define A1_Center_x    *cons[i].arc1.center.x
 	#define A1_Center_y    *cons[i].arc1.center.y
 	#define A2_startA	   *cons[i].arc2.startAngle
 	#define A2_endA		   *cons[i].arc2.endAngle
-	#define A2_radius	   *cons[i].arc2.rad
+	#define A2_rad	       *cons[i].arc2.radius
 	#define A2_Center_x    *cons[i].arc2.center.x
 	#define A2_Center_y    *cons[i].arc2.center.y
 
@@ -203,7 +206,7 @@ public:
 		arc(){}
 		double * startAngle;
 		double * endAngle;
-		double * rad;//This is called parameter in the constraint class.
+		double * radius;//This is called parameter in the constraint class.
 		point center;
 	};
 #endif
