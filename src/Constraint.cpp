@@ -218,9 +218,9 @@ void Constraint::WriteXML(TiXmlNode *root)
 HeeksObj* Constraint::ReadFromXMLElement(TiXmlElement* pElem)
 {
 	const char* type=0;
-	EnumConstraintType etype;
+	EnumConstraintType etype=(EnumConstraintType)0;
 	const char* angle=0;
-	EnumAbsoluteAngle eangle;
+	EnumAbsoluteAngle eangle=(EnumAbsoluteAngle)0;
 	double length=0;
 	int obj1_id=0;
 	int obj2_id=0;
@@ -253,7 +253,7 @@ HeeksObj* Constraint::ReadFromXMLElement(TiXmlElement* pElem)
 
 	for(int i=0; i < sizeof(AbsoluteAngle); i++)
 	{
-		if(strcmp(AbsoluteAngle[i].c_str(),type)==0)
+		if(strcmp(AbsoluteAngle[i].c_str(),angle)==0)
 		{
 			eangle = (EnumAbsoluteAngle)i;
 			break;
