@@ -26,7 +26,7 @@
 
 #define pointOnPoint	 0
 #define pointToLine 	 1
-#define pointOnLine     2
+#define pointOnLine      2
 #define horizontal       3
 #define vertical         4
 #define internalAngle	 5
@@ -63,6 +63,14 @@
 #define symmetricLines       36
 #define symmetricCircles	 37
 #define symmetricArcs		 38
+
+#define pointOnArcStart      39  
+#define pointOnArcEnd        40
+#define arcStartToArcEnd     41
+#define arcStartToArcStart   42
+#define arcEndtoArcEnd       43
+#define arcTangentToArc		 44
+
 
 
 
@@ -123,6 +131,9 @@
 	#define A2_End_y       *cons[i].arc2.end.y
 	#define A2_Center_x    *cons[i].arc2.center.x
 	#define A2_Center_y    *cons[i].arc2.center.y
+
+	#define A1_radius	   sqrt((A1_Start_x-A1_Center_x)*(A1_Start_x-A1_Center_x)+(A1_Start_y-A1_Center_y)*(A1_Start_y-A1_Center_y))
+	#define A2_radius	   sqrt((A2_Start_x-A2_Center_x)*(A2_Start_x-A2_Center_x)+(A2_Start_y-A2_Center_y)*(A2_Start_y-A2_Center_y))
 
 #else
 	#define A1_startA	   *cons[i].arc1.startAngle
