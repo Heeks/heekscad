@@ -189,6 +189,11 @@ void HeeksObj::RemoveOwners()
 	m_owners.clear();
 }
 
+void HeeksObj::RemoveOwner(HeeksObj* obj)
+{
+	m_owners.remove(obj);
+}
+
 void HeeksObj::AddOwner(HeeksObj *obj)
 {
 	m_owners.push_back(obj);

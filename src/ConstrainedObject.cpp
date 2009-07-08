@@ -14,7 +14,7 @@ ConstrainedObject::ConstrainedObject(){
 
 
 ConstrainedObject::~ConstrainedObject(){
-	if(absoluteangleconstraint)
+/*	if(absoluteangleconstraint)
 		delete absoluteangleconstraint;
 	if(linelengthconstraint)
 		delete linelengthconstraint;
@@ -39,7 +39,7 @@ ConstrainedObject::~ConstrainedObject(){
 		}
 
 		delete c;
-	}
+	} */
 }
 
 const ConstrainedObject& ConstrainedObject::operator=(const ConstrainedObject &b){
