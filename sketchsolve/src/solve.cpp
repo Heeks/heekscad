@@ -1074,9 +1074,9 @@ double calc(constraint * cons, int consLength)
 			// temp = center point distance 
 			temp = sqrt(A1_Center_x-A2_Center_x)*(A1_Center_x-A2_Center_x)+(A1_Center_y-A2_Center_y)*(A1_Center_y-A2_Center_y);
 			// center point to center point distance= r1+r2
-			double radDiff=A1_radius-A2_radius;
+			double radDiff=A1_rad-A2_rad;
 			double extError,intError;
-			extError = ((A1_radius+A2_radius)-temp)*((A1_radius+A2_radius)-temp);
+			extError = ((A1_rad+A2_rad)-temp)*((A1_rad+A2_rad)-temp);
 			if(radDiff>=1)//A1 is bigger
 			{
 				intError = (radDiff-temp)*(radDiff-temp);
@@ -1090,6 +1090,47 @@ double calc(constraint * cons, int consLength)
 
 		}
 
+		if(cons[i].type == circleTangentToCircle)
+		{
+			// temp = center point distance 
+			temp = sqrt(C1_Center_x-C2_Center_x)*(C1_Center_x-C2_Center_x)+(C1_Center_y-C2_Center_y)*(C1_Center_y-C2_Center_y);
+			// center point to center point distance= r1+r2
+			double radDiff=C1_rad-C2_rad;
+			double extError,intError;
+			extError = ((C1_rad+C2_rad)-temp)*((C1_rad+C2_rad)-temp);
+			if(radDiff>=1)//A1 is bigger
+			{
+				intError = (radDiff-temp)*(radDiff-temp);
+			}
+			else
+			{
+				intError = (-radDiff-temp)*(-radDiff-temp);
+			}
+			if(extError<intError) error += extError;
+			else error =+ intError;
+
+		}
+
+		if(cons[i].type == circleTangentToArc)
+		{
+			// temp = center point distance 
+			temp = sqrt(C1_Center_x-A1_Center_x)*(C1_Center_x-A1_Center_x)+(C1_Center_y-A1_Center_y)*(C1_Center_y-A1_Center_y);
+			// center point to center point distance= r1+r2
+			double radDiff=C1_rad-A1_rad;
+			double extError,intError;
+			extError = ((C1_rad+A1_rad)-temp)*((C1_rad+A1_rad)-temp);
+			if(radDiff>=1)//A1 is bigger
+			{
+				intError = (radDiff-temp)*(radDiff-temp);
+			}
+			else
+			{
+				intError = (-radDiff-temp)*(-radDiff-temp);
+			}
+			if(extError<intError) error += extError;
+			else error =+ intError;
+
+		}
 	}
 	return error;
 
