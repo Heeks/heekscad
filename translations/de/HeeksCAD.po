@@ -42,7 +42,7 @@ msgid "cone must not have both radiuses the same"
 msgstr "Beim Kegel nicht 2 gleiche Radien benutzen"
 
 msgid "Fatal Error converting sketch to face"
-msgstr "Fehler beim belegen der Zeichnung mit einer Oberfläche"
+msgstr "Fehler beim belegen der Zeichnung mit einer Oberflaeche"
 
 msgid "Set position and orientation by picking 3 points"
 msgstr "Setze Position und Richtung durch benennen von 3 Punkten"
@@ -72,13 +72,13 @@ msgid "Twist Angle"
 msgstr "Dreh Winkel"
 
 msgid "Pick the location"
-msgstr "Wähle den Ort"
+msgstr "Waehle den Ort"
 
 msgid "Pick a point on the x-axis"
-msgstr "Wähle einen Punkt auf der X-Achse"
+msgstr "Waehle einen Punkt auf der X-Achse"
 
 msgid "Pick a point where y > 0"
-msgstr "Wähle einen Punkt wo Y>0 ist"
+msgstr "Waehle einen Punkt wo Y>0 ist"
 
 msgid "datum corner"
 msgstr "Koordinatenkreuz Ecke"
@@ -141,7 +141,7 @@ msgid "Get Position"
 msgstr "Hole Position"
 
 msgid "Pick position without adding to the drawing"
-msgstr "Wähle eine Position ohne sie zur Zeichnung hinzuzufügen"
+msgstr "Waehle eine Position ohne sie zur Zeichnung hinzuzufügen"
 
 msgid "Blend"
 msgstr "Mischung"
@@ -159,7 +159,7 @@ msgid "A fatal error happened during Blend"
 msgstr "Falscher Radius zum verbinden der Kanten"
 
 msgid "surface type"
-msgstr "Oberflächentyp"
+msgstr "Oberflaechentyp"
 
 msgid "Make Sketch"
 msgstr "Erstelle Zeichnung"
@@ -168,7 +168,7 @@ msgid "unknown"
 msgstr "Unbekannt"
 
 msgid "plane"
-msgstr "Fläche"
+msgstr "Flaeche"
 
 msgid "cylinder"
 msgstr "Zylinder"
@@ -210,7 +210,7 @@ msgid "axis"
 msgstr "Achse"
 
 msgid "length"
-msgstr "Länge"
+msgstr "Laenge"
 
 msgid ".orientation"
 msgstr "Richtung"
@@ -231,7 +231,7 @@ msgid "end angle"
 msgstr "End Winkel"
 
 msgid "Length"
-msgstr "Länge"
+msgstr "Laenge"
 
 msgid "Picture - "
 msgstr "Bild-"
@@ -297,7 +297,7 @@ msgid "screen text"
 msgstr "OSD"
 
 msgid "antialiasing"
-msgstr "Kantenglättung"
+msgstr "Kantenglaettung"
 
 msgid "fixed light"
 msgstr "fixed·light"
@@ -369,7 +369,7 @@ msgid "midpoint"
 msgstr "Mittelpunkt "
 
 msgid "nearest"
-msgstr "nächste"
+msgstr "naechste"
 
 msgid "tangent"
 msgstr "tangent"
@@ -423,7 +423,7 @@ msgid "edge"
 msgstr "Ecke"
 
 msgid "face"
-msgstr "Oberfläche"
+msgstr "Oberflaeche"
 
 msgid "solid"
 msgstr "3D bearbeiten"
@@ -495,10 +495,10 @@ msgid "Properties"
 msgstr "Einstellungen"
 
 msgid "Save changes to file"
-msgstr "Änderungen abspeichern"
+msgstr "aenderungen abspeichern"
 
 msgid "Apply"
-msgstr "Änderungen anwenden"
+msgstr "aenderungen anwenden"
 
 msgid "Accept value and continue"
 msgstr "Einstellungen übernehmen"
@@ -543,7 +543,7 @@ msgid "Exit"
 msgstr "Beenden"
 
 msgid "Undo\tCtrl+Z"
-msgstr "Rückgängig\tCtrl+Z"
+msgstr "Rückgaengig\tCtrl+Z"
 
 msgid "Redo\tCtrl+Shift+Z"
 msgstr "Wiederholen\tCtrl+Shift+Z"
@@ -639,7 +639,7 @@ msgid "Fillet"
 msgstr "Kanten abrunden"
 
 msgid "Chamfer"
-msgstr "Kanten abschrägen(Fasen)"
+msgstr "Kanten abschraegen(Fasen)"
 
 msgid "Move Translate"
 msgstr "Objekt verschieben"
@@ -729,7 +729,7 @@ msgid "Import file"
 msgstr "Importiere Datei"
 
 msgid "Pick two or more solids, the first one will be cut by the others"
-msgstr "Wähle 2 oder mehr 3D Objekte,das 1 wird ausgeschnitten von den anderen"
+msgstr "Waehle 2 oder mehr 3D Objekte,das 1 wird ausgeschnitten von den anderen"
 
 msgid "Subtract Solids"
 msgstr "3D-Modell auschneiden"
@@ -752,19 +752,19 @@ msgstr "Durchschnitt der 3D Objekte"
 
 msgid "Pick one or more edges to add a fillet to"
 msgstr ""
-"Mindestens eine Kante wählen,die durch einen Radius \"gerundet\" werden soll"
+"Mindestens eine Kante waehlen,die durch einen Radius \"gerundet\" werden soll"
 
 msgid "Edge Fillet"
 msgstr "Kante(n) abrunden"
 
 msgid "Pick one or more edges to add a chamfer to"
-msgstr "Markiere eine oder mehrere Kanten,die abgeschrägt werden sollen"
+msgstr "Markiere eine oder mehrere Kanten,die abgeschraegt werden sollen"
 
 msgid "Edge Chamfer"
-msgstr "Kanten abschrägen(Fase)"
+msgstr "Kanten abschraegen(Fase)"
 
 msgid "Enter chamfer distance"
-msgstr "Tiefe der Schräge(Fase)"
+msgstr "Tiefe der Schraege(Fase)"
 
 msgid "Distance"
 msgstr "Entfernung"
@@ -773,7 +773,7 @@ msgid ""
 "Pick two or more sketches, to create a lofted solid between\n"
 "( hold down Ctrl key to select more than one solid )"
 msgstr ""
-"Wähle 2 odere mehrere Zeichnungen,welche durch Oberflächen\n"
+"Waehle 2 odere mehrere Zeichnungen,welche durch Oberflaechen\n"
 " miteinander verbunden werden sollen\n"
 "( CTRL Taste für Mehrfachauswahl)"
 
@@ -844,10 +844,10 @@ msgid "Paste items from the clipboard"
 msgstr "Einfügen aus der Zwischenablage"
 
 msgid "Undo the previous command"
-msgstr "Letzte Aktion rückgängig machen"
+msgstr "Letzte Aktion rückgaengig machen"
 
 msgid "Redo the next command"
-msgstr "Wiederhole die nächste Aktion"
+msgstr "Wiederhole die naechste Aktion"
 
 msgid "Start Circle Drawing"
 msgstr "Zeichne Kreise"
@@ -871,7 +871,7 @@ msgid "Create a Coordinate System"
 msgstr "Koordinatensystem erstellen"
 
 msgid "Create a lofted face"
-msgstr "Zeichnungen durch Oberflächen verbinden"
+msgstr "Zeichnungen durch Oberflaechen verbinden"
 
 msgid "Extrude a wire or face"
 msgstr "2D in 3D verwandeln"
@@ -890,7 +890,7 @@ msgid "Make a fillet on selected edges"
 msgstr "\"Abrunden\" der markierten Kante(n) mit einem bestimmten Radius"
 
 msgid "Make a chamfer on selected edges"
-msgstr "Markierte Kanten abschrägen(Fasen)"
+msgstr "Markierte Kanten abschraegen(Fasen)"
 
 msgid "Go back to previous view"
 msgstr "zurück zur letzten Ansicht"
@@ -1027,7 +1027,7 @@ msgid "Paste items from the clipboard to the drawing"
 msgstr "Füge Items aus der Zwischenablage hinzu"
 
 msgid "Apply any changes made to the properties"
-msgstr "Aktualisiere alle Änderungen an den Einstellungen"
+msgstr "Aktualisiere alle aenderungen an den Einstellungen"
 
 msgid "Stop editing the object"
 msgstr "Stoppe die Bearbeitung des Objekts"
@@ -1048,7 +1048,7 @@ msgid "shared library files"
 msgstr ""
 
 msgid "Choose shared library file"
-msgstr "Wähle·shared·library·File"
+msgstr "Waehle·shared·library·File"
 
 msgid "HeeksCAD plugin libraries"
 msgstr "HeeksCAD·Plugin·Libraries"
@@ -1099,31 +1099,31 @@ msgid "Remove Objects"
 msgstr "Entferne Objekte"
 
 msgid "pick some sketches"
-msgstr "Wähle mehrere Zeichnungn"
+msgstr "Waehle mehrere Zeichnungn"
 
 msgid "Ruled Surface"
 msgstr "Verbundene Zeichnungen"
 
 msgid "pick sketches"
-msgstr "Wähle Zeichnung"
+msgstr "Waehle Zeichnung"
 
 msgid "Input extrusion height"
 msgstr "Auf welche Höhe soll das Objekt herausgeholt werden ?"
 
 msgid "Extruded Solid"
-msgstr "3D Objekt aus Fläche"
+msgstr "3D Objekt aus Flaeche"
 
 msgid "Fatal error making ruled solid"
 msgstr "Fehler beim erstellen des linierten 3D Objekts"
 
 msgid "Fatal error making extruded solid"
-msgstr "Fehler beim erstellen des 3D Objektess aus der Fläche"
+msgstr "Fehler beim erstellen des 3D Objektess aus der Flaeche"
 
 msgid "Reset the ruler"
 msgstr "Reset Lineal"
 
 msgid "Left button for selecting objects"
-msgstr "Mit linker Maustaste Objekt auswählen"
+msgstr "Mit linker Maustaste Objekt auswaehlen"
 
 msgid "( with Ctrl key for extra objects)"
 msgstr "(·mit·Ctrl·Taste für·Extras·)"
@@ -1157,13 +1157,13 @@ msgid "See options window to hide this help"
 msgstr "Optionen Fenster um den Hilfetext auszublenden"
 
 msgid "Pick Anything"
-msgstr "Alles auswählen"
+msgstr "Alles auswaehlen"
 
 msgid "Set the selection filter to all items"
 msgstr "Setze den Auswahlfilter für alle Items"
 
 msgid "Pick Edges"
-msgstr "Wähle Kanten"
+msgstr "Waehle Kanten"
 
 msgid "Set the selection filter to only edges"
 msgstr "Setze den Auswahlfilter nur für Kanten"
@@ -1208,7 +1208,7 @@ msgid "Number of elements"
 msgstr "Anzahl der Elemente"
 
 msgid "order"
-msgstr "Fräsrichtung"
+msgstr "Fraesrichtung"
 
 msgid "Transform"
 msgstr "Umwandeln"
@@ -1298,7 +1298,7 @@ msgid "Family"
 msgstr ""
 
 msgid "Face Name"
-msgstr "Oberflächenname"
+msgstr "Oberflaechenname"
 
 msgid "Style"
 msgstr "Style"
@@ -1346,10 +1346,10 @@ msgid "false"
 msgstr "Nein"
 
 msgid "Choose a directory:"
-msgstr "Wähle Verzeichnis"
+msgstr "Waehle Verzeichnis"
 
 msgid "Choose a file"
-msgstr "Wähle Datei"
+msgstr "Waehle Datei"
 
 msgid "Ok"
 msgstr "Ok"
@@ -1373,7 +1373,7 @@ msgid "Failed to load resource image"
 msgstr "Konnte Bild Resource nicht laden"
 
 msgid "Convert sketch to face"
-msgstr "Belege Zeichnung mit einer Oberfläche"
+msgstr "Belege Zeichnung mit einer Oberflaeche"
 
 msgid "Make To Sketch"
 msgstr "Zur Zeichnung umwandeln"
@@ -1409,7 +1409,7 @@ msgid "Edge"
 msgstr "Kante"
 
 msgid "Face"
-msgstr "Oberfläche"
+msgstr "Oberflaeche"
 
 msgid "Gripper"
 msgstr "Greifer"
@@ -1469,7 +1469,7 @@ msgid "Ruler"
 msgstr "Lineal"
 
 msgid "Faces"
-msgstr "Oberflächen"
+msgstr "Oberflaechen"
 
 msgid "Edges"
 msgstr "Kanten"
@@ -1703,7 +1703,7 @@ msgid ""
 "kbool library written by Klaas Holwerda http://boolean.klaasholwerda.nl/bool."
 "html"
 msgstr ""
-"Programmcode fürs Taschenfräsen von http://code.google.com/p/libarea/·,"
+"Programmcode fürs Taschenfraesen von http://code.google.com/p/libarea/·,"
 "·abgeleitet·von derkbool·library,·geschrieben·von·Klaas·Holwerda·http://"
 "boolean.klaasholwerda.nl/bool.html"
 
@@ -1740,10 +1740,10 @@ msgstr ""
 "werden muss."
 
 msgid "New Profile Operation..."
-msgstr "Profil fräsen"
+msgstr "Profil fraesen"
 
 msgid "New Pocket Operation..."
-msgstr "(Fräs-)Tasche erstellen"
+msgstr "(Fraes-)Tasche erstellen"
 
 msgid "New ZigZag Operation..."
 msgstr ""
@@ -1809,7 +1809,7 @@ msgid "active"
 msgstr "Aktiv"
 
 msgid "step over"
-msgstr "Versatz des Fräsers"
+msgstr "Versatz des Fraesers"
 
 msgid "material allowance"
 msgstr "Material Zulage"
@@ -1879,16 +1879,16 @@ msgid "end point"
 msgstr "Endpunkt"
 
 msgid "Pick Start"
-msgstr "Wähle Start"
+msgstr "Waehle Start"
 
 msgid "Pick new start point"
-msgstr "Wähle neuen Startpunkt"
+msgstr "Waehle neuen Startpunkt"
 
 msgid "Pick End"
-msgstr "Wähle Ende"
+msgstr "Waehle Ende"
 
 msgid "Pick new end point"
-msgstr "Wähle neuen Endpunkt"
+msgstr "Waehle neuen Endpunkt"
 
 msgid "Set All Operations Active"
 msgstr "Setze alle Operationen auf Aktiv"
@@ -1966,7 +1966,7 @@ msgid "number of splits"
 msgstr "Anzahl der Unterbrechungen"
 
 msgid "Edge cannot have more than 2 faces!"
-msgstr "Kante kann nicht mehr wie 2 Oberflächen haben"
+msgstr "Kante kann nicht mehr wie 2 Oberflaechen haben"
 
 msgid "Convert Mesh To Triangles"
 msgstr "Konvertiere Gittemodell in Dreiecke"
@@ -1981,7 +1981,7 @@ msgid "At least one vertex could not be normalized!"
 msgstr "Mimndestens eine Ecke konnte nicht normalisiert werden"
 
 msgid "Recalculate All Face Centres"
-msgstr "Neuberechnung aller Mittelpunkte der Oberflächen"
+msgstr "Neuberechnung aller Mittelpunkte der Oberflaechen"
 
 msgid "Mirror all x<1"
 msgstr "Alles spiegeln was <1 ist"
@@ -2002,7 +2002,7 @@ msgid "Mesh Edge"
 msgstr "Gitter Ecke"
 
 msgid "Mesh Face"
-msgstr "Gitter Oberfläche"
+msgstr "Gitter Oberflaeche"
 
 msgid "Mesh Vertex"
 msgstr "Gitter-Eckpunkte"
@@ -2047,7 +2047,7 @@ msgid "diameter"
 msgstr "Werkzeug Durchmesser"
 
 msgid "tool_length_offset"
-msgstr "Offset der Werkzeuglänge"
+msgstr "Offset der Werkzeuglaenge"
 
 msgid "pocket_number"
 msgstr "Werkzeugslot"
@@ -2078,7 +2078,7 @@ msgstr "In einzelne Elemente auflösen"
 
 msgid ""
 "You must select some points, circles or other intersecting elements first!"
-msgstr "Zuerst Punkte,Kreise oder andere passende Elemente auswählen !"
+msgstr "Zuerst Punkte,Kreise oder andere passende Elemente auswaehlen !"
 
 msgid "New CounterBore Operation..."
 msgstr "Einsatz des Flachsenkers"
@@ -2094,7 +2094,7 @@ msgstr "Vergleichsfaktor (von 0.0(ziemlich alles) bis 1.0(Genau gleich)) "
 
 msgid "Maximum scale threshold (1.0 - must be same size, 1.5 (can be half as big "
 "again or 2/3 size)"
-msgstr "Größenvergleich (von 1.0 (Nur gleiche Größen) bis 1.5 (um die Hälfte größer)"
+msgstr "Größenvergleich (von 1.0 (Nur gleiche Größen) bis 1.5 (um die Haelfte größer)"
 
 msgid "orientation"
 msgstr "Text Position"
@@ -2106,5 +2106,93 @@ msgid "vertex"
 msgstr "Polygon Ecke"
 
 msgid "autosolve constraints"
-msgstr "Automatisch Variabeln einschränken"
+msgstr "Automatisch Variabeln einschraenken"
+
+msgid "units for nc output"
+msgstr "Masseinheit für den G-Code"
+
+msgid ""
+"You haven't selected a cutting tool for this hole.  By default no 'tool "
+"definition' or 'select tool' code will be generated for this drilling cycle."
+msgstr ""
+"Für diesen Vorgang wurde noch kein Werkzeug ausgewaehl."
+"Das heisst,es wird im G-Code keine Aufforderung zum Werkzeugwechsel geben !"
+
+msgid "Tools"
+msgstr "Werkzeuge"
+
+msgid "type"
+msgstr "Fräsertyp"
+
+msgid "Drill bit"
+msgstr "Bohrer"
+
+msgid "Slot Cutter"
+msgstr "Taschen Fräser"
+
+msgid "Ball End Mill"
+msgstr "Kugelfräser"
+
+msgid "Chamfering bit"
+msgstr "Fräser incl. Fasen"
+
+msgid "End Mill"
+msgstr "Schaft Fräser"
+
+msgid "CounterBore"
+msgstr "Senkung"
+
+msgid "Centre Drill bit"
+msgstr "Zentrier Bohrer"
+
+msgid "flat_radius"
+msgstr "Radius an der Spitze"
+
+msgid "corner_radius"
+msgstr "Radius zum Schaft"
+
+msgid "cutting_edge_angle"
+msgstr "Winkel Fräskante unten"
+
+msgid "cutting_edge_height"
+msgstr "Höhe der Fräskante unten"
+
+msgid "sort_locations"
+msgstr "Reihenfolge optimieren"
+
+msgid "sort_drilling_locations"
+msgstr "Reihenfolge optimieren"
+
+msgid "Respect existing order"
+msgstr "Reihenfolge beibehalten"
+
+msgid "sort_sketches"
+msgstr "Zeichnungen sortieren"
+
+msgid "Designe Rules Check"
+msgstr "G-Code Parameter überprüfen"
+
+msgid "Designe Rules Adjustment"
+msgstr "G-Code Parameter verbessern"
+
+msgid "Design Rules Check..."
+msgstr "G-Code Parameter überprüfen..."
+
+msgid "Design Rules Adjustment..."
+msgstr "G-Code Parameter verbessern..."
+
+msgid "circle mode"
+msgstr "Kreis Modus"
+
+msgid "three points"
+msgstr "3 Punkten angeben"
+
+msgid "centre and point"
+msgstr "Mittelpunkt + 1 Punkt"
+
+msgid "two points"
+msgstr "2 Punkte"
+
+msgid "centre and radius"
+msgstr "Mittelpunkt + Radius"
 
