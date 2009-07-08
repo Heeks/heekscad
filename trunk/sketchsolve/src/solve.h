@@ -116,6 +116,7 @@
 #define C1_Center_x    *cons[i].circle1.center.x
 #define C1_Center_y    *cons[i].circle1.center.y
 #define C1_rad         *cons[i].circle1.rad
+#define C1_radius	   *cons[i].parameter
 #define C2_Center_x    *cons[i].circle2.center.x
 #define C2_Center_y    *cons[i].circle2.center.y
 #define C2_rad         *cons[i].circle2.rad
@@ -128,6 +129,7 @@
 	#define A1_End_y       *cons[i].arc1.end.y
 	#define A1_Center_x    *cons[i].arc1.center.x
 	#define A1_Center_y    *cons[i].arc1.center.y
+	#define A1_radius      *cons[i].parameter
 	#define A2_Start_x     *cons[i].arc2.start.x
 	#define A2_Start_y     *cons[i].arc2.start.y
 	#define A2_End_x       *cons[i].arc2.end.x
@@ -141,12 +143,12 @@
 #else
 	#define A1_startA	   *cons[i].arc1.startAngle
 	#define A1_endA		   *cons[i].arc1.endAngle
-	#define A1_rad	       *cons[i].arc1.radius
+	#define A1_radius      *cons[i].arc1.radius
 	#define A1_Center_x    *cons[i].arc1.center.x
 	#define A1_Center_y    *cons[i].arc1.center.y
 	#define A2_startA	   *cons[i].arc2.startAngle
 	#define A2_endA		   *cons[i].arc2.endAngle
-	#define A2_rad	       *cons[i].arc2.radius
+	#define A2_radius      *cons[i].arc2.radius
 	#define A2_Center_x    *cons[i].arc2.center.x
 	#define A2_Center_y    *cons[i].arc2.center.y
 
@@ -163,7 +165,7 @@
 
 #define length		   *cons[i].parameter
 #define distance	   *cons[i].parameter
-#define radius		   *cons[i].parameter
+//#define radius		   *cons[i].parameter
 #define angleP		   *cons[i].parameter
 #define quadIndex      *cons[i].parameter
 #define Sym_P1_x       *cons[i].SymLine.p1.x
@@ -203,10 +205,10 @@ public:
 	class arc
 	{
 	public:
-		arc(){}
-		double * startAngle;
-		double * endAngle;
-		double * radius;//This is called parameter in the constraint class.
+		arc(){startAngle=0;endAngle=0;}
+		double *startAngle;
+		double *endAngle;
+		double *radius;//This is called parameter in the constraint class.
 		point center;
 	};
 #endif

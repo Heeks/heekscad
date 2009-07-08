@@ -55,8 +55,10 @@ point mappoint(point p)
 arc maparc(arc a)
 {
 	a.center = mappoint(a.center);
+#ifndef NEWARC
 	a.end = mappoint(a.end);
 	a.start = mappoint(a.start);
+#endif
 	return a;
 }
 
