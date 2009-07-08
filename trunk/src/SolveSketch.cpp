@@ -257,9 +257,9 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 		}
 	}
 
-	if(constraints.size() == 0)
-		// no contraints
-		return;
+//	if(constraints.size() == 0)
+		// no contraints //still might be arcs
+//		return;
 
 	if(solvewpoints(&params[0],params.size(),&constraints[0],constraints.size(),fine))
 		//No result
@@ -340,15 +340,11 @@ line GetLineFromEndedObject(EndedObject* eobj)
 
 arc GetArc(HArc* a)
 {
+
 	arc ret;
-#ifndef NEWARC
 	ret.start = GetPoint(a->A);
 	ret.end = GetPoint(a->B);
-
 	ret.center = GetPoint(a->C);
-#else
-
-#endif
 
 	return ret;
 }
