@@ -98,10 +98,16 @@ const Constraint& Constraint::operator=(const Constraint &b){
 
 Constraint::~Constraint()
 {
-	if(m_obj1)
-		m_obj1->Remove(this);
-	if(m_obj2)
-		m_obj2->Remove(this);
+	//TODO: objlist will get us removed from obj1's list and obj2's list, however we may want to get out
+	//of constrained objects constraint list as well
+	//the 3 boolean like constraints should be handled as well
+	if(m_obj1 && !m_obj1->constraints.empty())
+	{
+		m_obj1->constraints.remove(this);
+	}
+	if(m_obj2 && !m_obj2->constraints.empty())
+		m_obj2->constraints.remove(this);
+
 }
 
 void Constraint::render_text(const wxChar* str)
@@ -278,6 +284,10 @@ HeeksObj* Constraint::ReadFromXMLElement(TiXmlElement* pElem)
 		obj1->constraints.push_back(c);
 		obj2->constraints.push_back(c);
 	}
+
+	obj1->Add(c,NULL);
+	if(obj2)
+		obj2->Add(c,NULL);
 
 	//Don't let the xml reader try to insert us in the tree
 	return NULL;

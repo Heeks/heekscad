@@ -146,6 +146,7 @@ public:
 	virtual bool HasOwner(HeeksObj* obj);
 	virtual void AddOwner(HeeksObj*);
 	virtual void RemoveOwners();
+	virtual void RemoveOwner(HeeksObj*);
 	virtual HeeksObj* GetFirstOwner();
 	virtual HeeksObj* GetNextOwner();
 };
