@@ -420,7 +420,7 @@ bool HArc::Stretch(const double *p, const double* shift, void* data){
 			B->m_p = gp_Pnt(sin(a)*d,cos(a)*d,B->m_p.Z());
 		}
 
-		m_radius = B->m_p.Distance(A->m_p);
+		m_radius = B->m_p.Distance(C->m_p);
 		return false;
 	}
 

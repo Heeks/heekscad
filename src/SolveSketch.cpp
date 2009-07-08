@@ -298,8 +298,27 @@ void AddPointConstraints(HPoint* point)
 		{
 			constraint c;
 			c.type = pointOnPoint;
-			c.point1 = GetPoint((HPoint*)con->m_obj1);
-			c.point2 = GetPoint((HPoint*)con->m_obj2);
+			if(dynamic_cast<HArc*>(con->m_obj1->Owner()))
+			{
+				c.arc1 = GetArc((HArc*)con->m_obj1->Owner());
+				c.point1 = GetPoint((HPoint*)con->m_obj2);
+				if(((HArc*)con->m_obj1->Owner())->A == con->m_obj1)
+					c.type = pointOnArcStart;
+				else
+					c.type = pointOnArcEnd;
+			}else if(dynamic_cast<HArc*>(con->m_obj2->Owner()))
+			{
+				c.arc1 = GetArc((HArc*)con->m_obj2->Owner());
+				c.point1 = GetPoint((HPoint*)con->m_obj1);
+
+				if(((HArc*)con->m_obj2->Owner())->A == con->m_obj2)
+					c.type = pointOnArcStart;
+				else
+					c.type = pointOnArcEnd;
+			}else{
+				c.point1 = GetPoint((HPoint*)con->m_obj1);
+				c.point2 = GetPoint((HPoint*)con->m_obj2);
+			}
 			constraints.push_back(c);
 			cons.insert(con);
 		}
