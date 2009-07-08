@@ -156,10 +156,12 @@ int solvewpoints(double  **parms,int nparms, constraint * cons, int consLength, 
 			rparmmap[&parmdata[idx+1]].push_back(cons[i].point2.y);
 		}
 		else
+#ifdef NEWARC
 			//put the constraint in a new list, pointonpoint free
 			if(cons[i].type == arcRules)
 				arccons.push_back(cons[i]);
 			else
+#endif
 				newcons.push_back(cons[i]);
 	}
 

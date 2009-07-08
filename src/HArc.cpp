@@ -399,9 +399,29 @@ bool HArc::Stretch(const double *p, const double* shift, void* data){
 	{
 		if(data == C)
 		{
-			C->m_p = vp.XYZ()+vshift.XYZ();
+			gp_Pnt npt = vp.XYZ()+vshift.XYZ();
+			B->m_p = B->m_p.XYZ() + (npt.XYZ() - C->m_p.XYZ());
+			A->m_p = A->m_p.XYZ() + (npt.XYZ() - C->m_p.XYZ());
+			C->m_p = npt;
 		}
-		return EndedObject::Stretch(p,shift,data);
+		EndedObject::Stretch(p,shift,data);
+
+		if(data == B)
+		{
+			double a = atan2(A->m_p.X(),A->m_p.Y());
+			double d = B->m_p.Distance(C->m_p);
+			A->m_p = gp_Pnt(sin(a)*d,cos(a)*d,A->m_p.Z());
+		}
+
+		if(data == A)
+		{
+			double a = atan2(B->m_p.X(),B->m_p.Y());
+			double d = A->m_p.Distance(C->m_p);
+			B->m_p = gp_Pnt(sin(a)*d,cos(a)*d,B->m_p.Z());
+		}
+
+		m_radius = B->m_p.Distance(A->m_p);
+		return false;
 	}
 
 	if(A->m_p.IsEqual(vp, wxGetApp().m_geom_tol)){
