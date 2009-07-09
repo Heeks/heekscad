@@ -14,7 +14,7 @@
 
 //This define selects between the old arc define by start point end point and center point
 // and the new arc defined by a centerpoint, radius, start angle, and end angle
-//#define NEWARC
+#define NEWARC
 // Eventually after everything is changed we will get rid of the old arc type.
 
 
@@ -152,14 +152,14 @@
         #define A2_Center_x        *cons[i].arc2.center.x
         #define A2_Center_y        *cons[i].arc2.center.y
 
-        #define A1_Start_x     (A1_Center_x+A1_radius*cos(A1_startA))
-        #define A1_Start_y     (A1_Center_y+A1_radius*sin(A1_startA))
-        #define A1_End_x       (A1_Center_x+A1_radius*cos(A1_endA))
-        #define A1_End_y     (A1_Center_y+A1_radius*sin(A1_endA))
-        #define A2_Start_x     (A1_Center_x+A2_radius*cos(A2_startA))
-        #define A2_Start_y     (A1_Center_y+A2_radius*sin(A2_startA))
-        #define A2_End_x       (A1_Center_x+A2_radius*cos(A2_endA))
-        #define A2_End_y     (A1_Center_y+A2_radius*sin(A2_endA))
+        #define A1_Start_x     (A1_Center_x+A1_radius*sin(A1_startA))
+        #define A1_Start_y     (A1_Center_y+A1_radius*cos(A1_startA))
+        #define A1_End_x       (A1_Center_x+A1_radius*sin(A1_endA))
+        #define A1_End_y     (A1_Center_y+A1_radius*cos(A1_endA))
+        #define A2_Start_x     (A1_Center_x+A2_radius*sin(A2_startA))
+        #define A2_Start_y     (A1_Center_y+A2_radius*cos(A2_startA))
+        #define A2_End_x       (A1_Center_x+A2_radius*sin(A2_endA))
+        #define A2_End_y     (A1_Center_y+A2_radius*cos(A2_endA))
 
 #endif
 
