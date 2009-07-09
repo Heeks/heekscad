@@ -24,7 +24,8 @@ CAboutBox::CAboutBox(wxWindow *parent):wxDialog(parent, wxID_ANY, _(""), wxDefau
 	wxString str = wxString(_T("HeeksCAD\n see http://code.google.com/p/heekscad/\n\nusing Open CASCADE solid modeller - http://www.opencascade.org"))
 		+ wxString(_T("\n\nwindows made with wxWidgets 2.8.9 - http://wxwidgets.org"))
 		+ wxString(_T("\n\ntext uses glFont Copyright (c) 1998 Brad Fish E-mail: bhf5@email.byu.edu Web: http://students.cs.byu.edu/~bfish/"))
-		+ wxString(_T("\n\nWith contributions from:\n Hirutso Enni\n Dave ( the archivist )\n Perttu Ahola\n mpictor\n fenn\n jonpry\n fungunner2\n andrea ( openSUSE )\n g_code\n David Nicholls"))
+		+ wxString(_T("\n\nWritten by:\n Dan Heeks\n Jon Pry\n Jonathan George\n David Nicholls"))
+		+ wxString(_T("\n\nWith contributions from:\n Hirutso Enni\n Perttu Ahola\n Dave ( the archivist )\n mpictor\n fenn\n fungunner2\n andrea ( openSUSE )\n g_code"))
 		+ wxString(_T("\n\nThis is free, open source software."));
 
 	wxString version_str = wxGetApp().m_version_number;
