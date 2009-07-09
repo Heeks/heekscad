@@ -251,24 +251,33 @@ enum varLocation
    Static
 };
 
+enum dependencyType
+{
+   line1,
+   line2
+};
+
 class SolveImpl;
 
 class SolveImpl
 {
-	//std::list<
-
-	std::map<constraintType,void(*)(constraint t, SolveImpl* s)> loaders;
-	std::map<constraintType,void(*)(constraint t, SolveImpl* s)> unloaders;
 	std::map<constraintType,double(*)()> errors;
-
+	std::map<constraintType,std::list<dependencyType>> dependencies;
+	
 public:
 	SolveImpl(std::map<double*,void*> &parms);
 
-	void registerconstraint(constraintType,void(*)(constraint t, SolveImpl*),void(*)(constraint t, SolveImpl*),double(*)());
+	void Load(constraint c);
+	void Unload();
+
+	void registerconstraint(constraintType,double(*)());
+	void registerdependency(constraintType,dependencyType);
 
 	std::list<std::list<std::pair<varLocation,void*>>> constraintvars;
 	std::list<constraintType> constrainttypes;
 	std::map<double*,void*> &parms;
+	std::map<double*,std::pair<varLocation,void*>> mapparms;
+	std::set<double*> mapset;
 	int next_vector;
 };
 
