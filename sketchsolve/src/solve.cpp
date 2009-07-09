@@ -685,42 +685,17 @@ double calc(constraint * cons, int consLength)
                 if(cons[i].type==tangentToArc)
                 {
                         
-                        double dx,dy,Rpx,Rpy,RpxN,RpyN,hyp,error1,error2,rad;
-/*                        dx = L1_P2_x - L1_P1_x;
-                        dy = L1_P2_y - L1_P1_y;
-
-                        //hyp=sqrt(dx*dx+dy*dy);
-
-                        double u = (A1_Center_x - L1_P1_x) * (L1_P2_x - L1_P1_x) + (A1_Center_y - L1_P1_y) * (L1_P2_y - L1_P1_y);
-                        u/=dx*dx+dy*dy;
-
-                        double x = L1_P1_x + u *(L1_P2_x - L1_P1_x);
-                        double y = L1_P1_y + u *(L1_P2_y - L1_P1_y);
-
-                        double dcsx = A1_Center_x - A1_Start_x;
-                        double dcsy = A1_Center_y - A1_Start_y;
-                        double dcex = A1_Center_x - A1_End_x;
-                        double dcey = A1_Center_y - A1_End_y;
-                //        rad=(dcsx*dcsx + dcsy * dcsy);
-                //      rad+=(dcex*dcex + dcey * dcey)/4;
-
-                        double dcx = A1_Center_x-x;
-                        double dcy = A1_Center_y-y;
-                        temp = (dcx * dcx + dcy * dcy) - A1_radius * A1_radius;
-                        error += temp*temp*100;
-                        
-*/
-//#if defined(NEWARC)
+                        double dx,dy;
                         dx = L1_P2_x - L1_P1_x;
                         dy = L1_P2_y - L1_P1_y;
 
 
                         double Xint,Yint,radsq;
-                        radsq = (A1_Center_x-A1_Start_x)*(A1_Center_x-A1_Start_x)+(A1_Center_y-A1_Start_y)*(A1_Center_y-A1_Start_y);
+                        radsq = A1_radius * A1_radius;
                         t=-(L1_P1_x*dx-A1_Center_x*dx+L1_P1_y*dy-A1_Center_y*dy)/(dx*dx+dy*dy);
                         Xint=L1_P1_x+dx*t;
                         Yint=L1_P1_y+dy*t;
-                        temp= (A1_Center_x - Xint)*(A1_Center_x - Xint)+(A1_Center_y - Yint)*(A1_Center_y - Yint) - radsq;
+                        temp= sqrt((A1_Center_x - Xint)*(A1_Center_x - Xint)+(A1_Center_y - Yint)*(A1_Center_y - Yint)) - sqrt(radsq);
                         error += temp*temp;
                 }
 
