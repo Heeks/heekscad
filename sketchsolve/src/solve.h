@@ -10,6 +10,7 @@
 #include <set>
 #include <map>
 #include <list>
+#include <vector>
 #ifndef WIN32
         #define _hypot hypot
 #endif
@@ -261,24 +262,29 @@ class SolveImpl;
 
 class SolveImpl
 {
-	std::map<constraintType,double(*)()> errors;
-	std::map<constraintType,std::list<dependencyType>> dependencies;
-	
-public:
-	SolveImpl(std::map<double*,void*> &parms);
-
-	void Load(constraint c);
-	void Unload();
-
-	void registerconstraint(constraintType,double(*)());
-	void registerdependency(constraintType,dependencyType);
-
+	std::vector<double(*)(std::vector<double>)> errors;
+	std::vector<std::list<dependencyType>> dependencies;
 	std::list<std::list<std::pair<varLocation,void*>>> constraintvars;
 	std::list<constraintType> constrainttypes;
 	std::map<double*,void*> &parms;
 	std::map<double*,std::pair<varLocation,void*>> mapparms;
 	std::set<double*> mapset;
 	int next_vector;
+
+	void LoadDouble(std::list<std::pair<varLocation,void*>> &mylist, double *d);
+	void LoadPoint(std::list<std::pair<varLocation,void*>> &mylist, point p);
+	void LoadLine(std::list<std::pair<varLocation,void*>> &mylist,line l);
+	void registerconstraint(constraintType,double(*)(std::vector<double>));
+	void registerdependency(constraintType,dependencyType);
+	
+public:
+	SolveImpl(std::map<double*,void*> &parms);
+
+	void Load(constraint c);
+	void Unload();
+	double GetError();
+
+	virtual double GetElement(int i) =0; //Pure virtual
 };
 
 class Solver
