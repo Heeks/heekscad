@@ -159,6 +159,7 @@ bool HeeksObj::OnVisibleLayer()
 
 HeeksObj* HeeksObj::Owner()
 {
+	if(m_owners.size() == 0)return NULL;
 	return *m_owners.begin();
 }
 
