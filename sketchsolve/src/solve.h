@@ -255,7 +255,10 @@ enum varLocation
 enum dependencyType
 {
    line1,
-   line2
+   line2,
+   point1,
+   point2,
+   parameter
 };
 
 class SolveImpl;
@@ -315,5 +318,13 @@ public:
 int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine);
 double calc(constraint * cons, int consLength);
 void derivatives(double **x,double *gradF,int xLength, constraint * cons, int consLength);
+
+//Error functions
+double HorizontalError(std::vector<double> parms);
+double ParallelError(std::vector<double> parms);
+double VerticalError(std::vector<double> parms);
+double PointOnPointError(std::vector<double> parms);
+double P2PDistanceError(std::vector<double> parms);
+
 
 #endif /* SOLVE_H_ */
