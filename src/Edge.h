@@ -48,6 +48,7 @@ public:
 	const wxChar* GetTypeString(void)const{return _("Edge");}
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	void WriteXML(TiXmlNode *root);
+	void GetProperties(std::list<Property *> *list);
 	bool UsesID(){return true;}
 
 	const TopoDS_Shape &Edge(){return m_topods_edge;}
@@ -62,5 +63,7 @@ public:
 	bool GetLineParams(double *d6);
 	bool GetCircleParams(double *d7);
 	bool Orientation();
+	double Length();
+	double Length2(double uStart, double uEnd);
 };
 
