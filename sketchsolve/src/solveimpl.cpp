@@ -48,31 +48,28 @@ void SolveImpl::LoadLine(std::list<std::pair<varLocation,void*>> &mylist,line l)
 	LoadPoint(mylist,l.p2);
 }
 
-double ParallelError(std::vector<double> parms)
-{
-     double dx = parms[2] - parms[0];
-     double dy = parms[3] - parms[1];
-     double dx2 = parms[6] - parms[4];
-     double dy2 = parms[7] - parms[5];
-
-     double hyp1=sqrt(dx*dx+dy*dy);
-     double hyp2=sqrt(dx2*dx2+dy2*dy2);
-
-     dx=dx/hyp1;
-     dy=dy/hyp1;
-     dx2=dx2/hyp2;
-     dy2=dy2/hyp2;
-
-     double temp = dy*dx2-dx*dy2;
-     return (temp)*(temp);
-}
-
 SolveImpl::SolveImpl(std::map<double*,void*> &p):parms(p)
 {
 	next_vector=0;
 	registerdependency(parallel,line1);
 	registerdependency(parallel,line2);
 	registerconstraint(parallel,ParallelError);
+
+	registerdependency(horizontal,line1);
+	registerconstraint(horizontal,HorizontalError);
+
+	registerdependency(vertical,line1);
+	registerconstraint(vertical,VerticalError);
+
+	registerdependency(pointOnPoint,point1);
+	registerdependency(pointOnPoint,point2);
+	registerconstraint(pointOnPoint,PointOnPointError);
+
+	registerdependency(P2PDistance,point1);
+	registerdependency(P2PDistance,point2);
+	registerdependency(P2PDistance,parameter);
+	registerconstraint(P2PDistance,P2PDistanceError);
+
 }
 
 double SolveImpl::GetError()
@@ -111,6 +108,9 @@ void SolveImpl::Load(constraint c)
 		{
 			case line1: LoadLine(mylist,c.line1); break;
 			case line2: LoadLine(mylist,c.line2); break;
+			case point1: LoadPoint(mylist,c.point1); break;
+			case point2: LoadPoint(mylist,c.point2); break;
+			case parameter: LoadDouble(mylist,c.parameter); break;
 		}
 	}
 	constraintvars.push_back(mylist);
