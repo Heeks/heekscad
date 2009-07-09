@@ -84,9 +84,9 @@ arc maparc(arc a)
 	parmdata.push_back(atan2(dex,dey));
 
 	//push the pointers to the doubles on the parmstack
-	newparms.push_back(&parmdata[idx]);
-	newparms.push_back(&parmdata[idx+1]);
-	newparms.push_back(&parmdata[idx+2]);
+	oldparms.insert(&parmdata[idx]);
+	oldparms.insert(&parmdata[idx+1]);
+	oldparms.insert(&parmdata[idx+2]);
 
 	a.rad = mapdouble(&parmdata[idx]);
 	a.startAngle = mapdouble(&parmdata[idx+1]);
