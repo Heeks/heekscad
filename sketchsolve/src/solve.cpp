@@ -16,6 +16,61 @@
 
 using namespace std;
 
+void LoadDouble(std::list<std::pair<varLocation,void*>> &mylist, double *d, SolveImpl*s)
+{
+	if(s->parms[d])
+	{
+		mylist.push_back(std::pair<varLocation,void*>(Vector,(void*)s->next_vector++));
+		return;
+	}
+
+	mylist.push_back(std::pair<varLocation,void*>(Static,d));
+}
+
+void LoadPoint(std::list<std::pair<varLocation,void*>> &mylist, point p, SolveImpl* s)
+{
+	LoadDouble(mylist,p.x,s);
+	LoadDouble(mylist,p.y,s);
+}
+
+void LoadLine(std::list<std::pair<varLocation,void*>> &mylist,line l, SolveImpl* s)
+{
+	LoadPoint(mylist,l.p1,s);
+	LoadPoint(mylist,l.p2,s);
+}
+
+void LoadParallel(constraint t, SolveImpl*s)
+{
+	std::list<std::pair<varLocation,void*>> mylist;
+	LoadLine(mylist,t.line1,s);
+	LoadLine(mylist,t.line2,s);
+	s->constraintvars.push_back(mylist);
+	s->constrainttypes.push_back(t.type);
+}
+
+void UnloadParallel(constraint t, SolveImpl* s)
+{
+
+}
+
+double ParallelError()
+{
+	return 0;
+}
+
+SolveImpl::SolveImpl(std::map<double*,void*> &p):parms(p)
+{
+	next_vector=0;
+	registerconstraint(parallel,LoadParallel,UnloadParallel,ParallelError);
+}
+
+void SolveImpl::registerconstraint(constraintType type,void(*load)(constraint t, SolveImpl*),void(*unload)(constraint t, SolveImpl*),double(*error)())
+{
+	loaders[type] = load;
+	unloaders[type] = unload;
+	errors[type] = error;
+}
+
 int solve(double  **x, int xLength, constraint * cons, int consLength, int isFine)
 {
 	Solver *s = new Solver(xLength);

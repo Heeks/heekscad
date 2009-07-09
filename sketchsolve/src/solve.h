@@ -7,7 +7,9 @@
  *      This program is released under the BSD license. See the file COPYING for details.
  */
 #include <iostream>
-
+#include <set>
+#include <map>
+#include <list>
 #ifndef WIN32
         #define _hypot hypot
 #endif
@@ -242,6 +244,33 @@ public:
 
 
 void debugprint(std::string s);
+
+enum varLocation
+{
+   Vector,
+   Static
+};
+
+class SolveImpl;
+
+class SolveImpl
+{
+	//std::list<
+
+	std::map<constraintType,void(*)(constraint t, SolveImpl* s)> loaders;
+	std::map<constraintType,void(*)(constraint t, SolveImpl* s)> unloaders;
+	std::map<constraintType,double(*)()> errors;
+
+public:
+	SolveImpl(std::map<double*,void*> &parms);
+
+	void registerconstraint(constraintType,void(*)(constraint t, SolveImpl*),void(*)(constraint t, SolveImpl*),double(*)());
+
+	std::list<std::list<std::pair<varLocation,void*>>> constraintvars;
+	std::list<constraintType> constrainttypes;
+	std::map<double*,void*> &parms;
+	int next_vector;
+};
 
 class Solver
 {
