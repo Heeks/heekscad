@@ -294,6 +294,8 @@ void AddPointConstraints(HPoint* point)
 	for(it = point->constraints.begin(); it!= point->constraints.end(); ++it)
 	{
 		Constraint* con = *it;
+		if(cons.find(con) != cons.end())
+			continue;
 		if(con->m_type == CoincidantPointConstraint)
 		{
 			constraint c;
