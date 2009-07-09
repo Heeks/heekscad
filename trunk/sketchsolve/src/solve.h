@@ -25,58 +25,56 @@
 #define M_PI           3.14159265358979323846
 #endif
 
-#define pointOnPoint     0
-#define pointToLine      1
-#define pointOnLine      2
-#define horizontal       3
-#define vertical         4
-#define internalAngle    5
-#define radiusValue              6
-#define tangentToArc     7
-#define tangentToCircle  8
-#define arcRules                 9
-#define P2PDistance      10
-#define P2PDistanceVert  11
-#define P2PDistanceHorz  12
-#define P2LDistance      13
-#define P2LDistanceVert  14
-#define P2LDistanceHorz  15
-#define lineLength               16
-#define equalLegnth              17
-#define arcRadius                18
-#define equalRadiusArcs      19
-#define equalRadiusCircles   20
-#define equalRadiusCircArc   21
-#define concentricArcs       22
-#define concentricCircles    23
-#define concentricCircArc    24
-#define circleRadius         25
-#define externalAngle    26
-#define parallel         27
-#define perpendicular    28
-#define colinear             29
-#define pointOnCircle    30
-#define pointOnArc       31
-#define pointOnLineMidpoint  32
-#define pointOnArcMidpoint   33
-#define pointOnCircleQuad    34
-#define symmetricPoints      35
-#define symmetricLines       36
-#define symmetricCircles         37
-#define symmetricArcs            38
-
-#define pointOnArcStart      39
-#define pointOnArcEnd        40
-#define arcStartToArcEnd     41
-#define arcStartToArcStart   42
-#define arcEndtoArcEnd       43
-
-#define arcTangentToArc            44
-#define circleTangentToCircle  45
-#define circleTangentToArc     46
-
-
-
+enum constraintType
+{
+pointOnPoint,
+pointToLine,    
+pointOnLine,     
+horizontal,      
+vertical,        
+internalAngle,   
+radiusValue,     
+tangentToArc,    
+tangentToCircle, 
+arcRules,        
+P2PDistance,     
+P2PDistanceVert,  
+P2PDistanceHorz,  
+P2LDistance,      
+P2LDistanceVert,  
+P2LDistanceHorz,  
+lineLength,        
+equalLegnth,       
+arcRadius,         
+equalRadiusArcs,   
+equalRadiusCircles,
+equalRadiusCircArc,
+concentricArcs,   
+concentricCircles,
+concentricCircArc,
+circleRadius,     
+externalAngle,    
+parallel,         
+perpendicular,    
+colinear,         
+pointOnCircle,    
+pointOnArc,       
+pointOnLineMidpoint,
+pointOnArcMidpoint, 
+pointOnCircleQuad,  
+symmetricPoints,    
+symmetricLines,     
+symmetricCircles,   
+symmetricArcs,        
+pointOnArcStart,      
+pointOnArcEnd,        
+arcStartToArcEnd,     
+arcStartToArcStart,   
+arcEndtoArcEnd,       
+arcTangentToArc,       
+circleTangentToCircle, 
+circleTangentToArc     
+};
 
 ///////////////////////////////////////
 /// BFGS Solver parameters
@@ -228,7 +226,7 @@ class constraint
 {
 public:
         constraint(){parameter = 0;}
-        int type;
+        constraintType type;
         point point1;
         point point2;
         line line1;
@@ -244,6 +242,30 @@ public:
 
 
 void debugprint(std::string s);
+
+class Solver
+{
+	int xLength;
+	double *origSolution;
+	double *grad;
+    double *s;
+    double **N;
+    double *xold;
+    double *deltaX;
+    double *gradnew;
+    double *gamma;
+    double *gammatDotN;
+    double **FirstSecond;
+    double **deltaXDotGammatDotN;
+    double **gammatDotDeltaXt;
+    double **NDotGammaDotDeltaXt;
+
+public:
+	Solver(int xLength);
+	~Solver();
+
+	int solve(double  **x,constraint * cons, int consLength, int isFine);
+};
 
 //Function Prototypes
 int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine);

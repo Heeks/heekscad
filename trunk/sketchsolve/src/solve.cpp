@@ -16,12 +16,71 @@
 
 using namespace std;
 
-int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine)
+int solve(double  **x, int xLength, constraint * cons, int consLength, int isFine)
+{
+	Solver *s = new Solver(xLength);
+	int ret = s->solve(x,cons,consLength,isFine);
+	delete s;
+	return ret;
+}
+
+Solver::Solver(int xLength)
+{
+   this->xLength = xLength;
+   origSolution = new double[xLength];
+   grad = new double[xLength]; //The gradient vector (1xn)
+   s = new double[xLength]; //The current search direction
+   xold = new double[xLength]; //Storage for the previous design variables
+   deltaX = new double[xLength];
+   gradnew = new double[xLength];
+   gamma = new double[xLength];
+   gammatDotN = new double[xLength];
+   FirstSecond = new double*[xLength];
+   deltaXDotGammatDotN = new double*[xLength];
+   gammatDotDeltaXt = new double*[xLength];
+   NDotGammaDotDeltaXt = new double*[xLength];
+   N = new double*[xLength];
+
+   for(int i=0; i < xLength; i++)
+   {
+       FirstSecond[i] = new double[xLength];
+       deltaXDotGammatDotN[i] = new double[xLength];
+       gammatDotDeltaXt[i] = new double[xLength];
+       NDotGammaDotDeltaXt[i] = new double[xLength];
+       N[i] = new double[xLength]; //The estimate of the Hessian inverse
+   }
+   
+}
+
+Solver::~Solver()
+{
+        delete s;
+        for(int i=0; i < xLength; i++)
+        {
+                delete N[i];
+                delete FirstSecond[i];
+                delete deltaXDotGammatDotN[i];
+                delete gammatDotDeltaXt[i];
+                delete NDotGammaDotDeltaXt[i];
+
+        }
+        delete N;
+        delete FirstSecond;
+        delete deltaXDotGammatDotN;
+        delete gammatDotDeltaXt;
+        delete NDotGammaDotDeltaXt;
+        delete origSolution;
+
+        delete grad;
+        delete xold;
+        delete gammatDotN;
+}
+
+int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
 {
         std::stringstream cstr;
         double convergence,pert ;
         //Save the original parameters for later.
-        double *origSolution = new double[xLength];
         for(int i=0;i<xLength;i++)
         {
                 origSolution[i]=*x[i];
@@ -40,7 +99,6 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 
         //Calculate the gradient
         //gradF=x;
-        double *grad = new double[xLength]; //The gradient vector (1xn)
         double norm,first,second,temper; //The norm of the gradient vector
         double f1,f2,f3,alpha1,alpha2,alpha3,alphaStar;
         norm = 0;
@@ -66,10 +124,6 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
         //Estimate the norm of N
 
         //Initialize N and calculate s
-        double *s = new double[xLength]; //The current search direction
-        double **N = new double*[xLength];
-        for(int i=0; i < xLength; i++)
-                N[i] = new double[xLength]; //The estimate of the Hessian inverse
         for(int i=0;i<xLength;i++)
         {
                 for(int j=0;j<xLength;j++)
@@ -89,7 +143,6 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
         fnew=f0+1;      //make fnew greater than fold
         double alpha=1; //Initial search vector multiplier
 
-        double *xold = new double[xLength]; //Storage for the previous design variables
         double fold;
         for(int i=0;i<xLength;i++)
         {
@@ -192,29 +245,10 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
         /////////////////////////////////////
 
 
-
-
-
-
-        double *deltaX = new double[xLength];
-        double *gradnew = new double[xLength];
-        double *gamma = new double[xLength];
         double bottom=0;
         double deltaXtDotGamma;
-        double *gammatDotN = new double[xLength];
         double gammatDotNDotGamma=0;
         double firstTerm=0;
-        double **FirstSecond = new double*[xLength];
-        double **deltaXDotGammatDotN = new double*[xLength];
-        double **gammatDotDeltaXt = new double*[xLength];
-        double **NDotGammaDotDeltaXt = new double*[xLength];
-        for(int i=0; i < xLength; i++)
-        {
-                FirstSecond[i] = new double[xLength];
-                deltaXDotGammatDotN[i] = new double[xLength];
-                gammatDotDeltaXt[i] = new double[xLength];
-                NDotGammaDotDeltaXt[i] = new double[xLength];
-        }
         double deltaXnorm=1;
 
 
@@ -494,27 +528,6 @@ int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine
 
 #endif
 
-        delete s;
-        for(int i=0; i < xLength; i++)
-        {
-                delete N[i];
-                delete FirstSecond[i];
-                delete deltaXDotGammatDotN[i];
-                delete gammatDotDeltaXt[i];
-                delete NDotGammaDotDeltaXt[i];
-
-        }
-        delete N;
-        delete FirstSecond;
-        delete deltaXDotGammatDotN;
-        delete gammatDotDeltaXt;
-        delete NDotGammaDotDeltaXt;
-        delete origSolution;
-
-        delete grad;
-        delete xold;
-        delete gammatDotN;
-
         ///End of function
         double validSolution;
         if(isFine==1) validSolution=validSolutionFine;
@@ -544,31 +557,35 @@ double calc(constraint * cons, int consLength)
         double temp,dx,dy,m,n,Ex,Ey,rad1,rad2,t,Xint,Yint,dx2,dy2,hyp1,hyp2,temp2;
         for(int i=0;i<consLength;i++)
         {
-                if((cons[i]).type==pointOnPoint)
+			switch(cons[i].type)
+			{
+				case pointOnPoint:
                 {
                         //Hopefully avoid this constraint, make coincident points use the same parameters
                         error += (P1_x - P2_x) * (P1_x - P2_x) + (P1_y - P2_y) * (P1_y - P2_y);
                 }
+				break;
 
-
-                if(cons[i].type==P2PDistance)
+				case P2PDistance:
                 {
                         error+= (P1_x - P2_x) * (P1_x - P2_x) + (P1_y - P2_y) * (P1_y - P2_y) - distance * distance;
 
                 }
+				break;
 
-                if(cons[i].type==P2PDistanceVert)
+				case P2PDistanceVert:
                 {
                         error+= (P1_y - P2_y) * (P1_y - P2_y) - distance * distance;
                 }
+				break;
 
-                if(cons[i].type==P2PDistanceHorz)
+				case P2PDistanceHorz:
                 {
                         error+= (P1_x - P2_x) * (P1_x - P2_x) - distance * distance;
                 }
+				break;
 
-
-                if((cons[i]).type==pointOnLine)
+				case pointOnLine:
                 {
                         dx = L1_P2_x - L1_P1_x;
                         dy = L1_P2_y - L1_P1_y;
@@ -589,8 +606,9 @@ double calc(constraint * cons, int consLength)
                                 error+=(Ex-P1_x)*(Ex-P1_x);
                         }
                 }
+				break;
 
-                if((cons[i]).type==P2LDistance)
+				case P2LDistance:
                 {
                         dx = L1_P2_x - L1_P1_x;
                         dy = L1_P2_y - L1_P1_y;
@@ -603,7 +621,9 @@ double calc(constraint * cons, int consLength)
                         error += temp*temp/10;
 
                 }
-                if((cons[i]).type==P2LDistanceVert)
+				break;
+
+				case P2LDistanceVert:
                 {
                         dx = L1_P2_x - L1_P1_x;
                         dy = L1_P2_y - L1_P1_y;
@@ -614,7 +634,9 @@ double calc(constraint * cons, int consLength)
                         error += temp*temp;
 
                 }
-                if((cons[i]).type==P2LDistanceHorz)
+				break;
+
+				case P2LDistanceHorz:
                 {
                         dx = L1_P2_x - L1_P1_x;
                         dy = L1_P2_y - L1_P1_y;
@@ -625,9 +647,10 @@ double calc(constraint * cons, int consLength)
                         error += temp*temp/10;
 
                 }
+				break;
 
 
-                if(cons[i].type==vertical)
+				case vertical:
                 {
                         double odx = L1_P2_x - L1_P1_x;
                         /*
@@ -644,8 +667,9 @@ double calc(constraint * cons, int consLength)
                         */
                         error+=odx*odx*1000;
                 }
+				break;
 
-                if(cons[i].type==horizontal)
+				case horizontal:
                 {
                         //double odx = L1_P2_x - L1_P1_x;
                         double ody = L1_P2_y - L1_P1_y;
@@ -660,8 +684,9 @@ double calc(constraint * cons, int consLength)
                         */
                         error+=ody*ody*1000;
                 }
+				break;
 
-                if(cons[i].type==tangentToCircle)
+				case tangentToCircle:
                 {
                         double dx,dy,Rpx,Rpy,RpxN,RpyN,hyp,error1,error2;
                         dx = L1_P2_x-L1_P1_x;
@@ -681,8 +706,9 @@ double calc(constraint * cons, int consLength)
                         else error+=error2;
 
                 }
+				break;
 
-                if(cons[i].type==tangentToArc)
+				case tangentToArc:
                 {
                         
                         double dx,dy;
@@ -696,10 +722,11 @@ double calc(constraint * cons, int consLength)
                         Xint=L1_P1_x+dx*t;
                         Yint=L1_P1_y+dy*t;
                         temp= sqrt((A1_Center_x - Xint)*(A1_Center_x - Xint)+(A1_Center_y - Yint)*(A1_Center_y - Yint)) - sqrt(radsq);
-                        error += temp*temp;
+                        error += temp*temp/100;
                 }
+				break;
 
-                if(cons[i].type==arcRules)
+				case arcRules:
                 {
                         //rad1=_hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
                         //rad2=_hypot(A1_Center_x - A1_End_x , A1_Center_y - A1_End_y);
@@ -725,72 +752,84 @@ double calc(constraint * cons, int consLength)
                         error += num * num /(4.*a1endx2+a1endy2-2*A1_End_x*A1_Start_x+a1startx2-2*A1_End_y*A1_Start_y+a1starty2);
 #endif
                 }
+				break;
 
-                if(cons[i].type==lineLength)
+				case lineLength:
                 {
                         temp= sqrt(pow(L1_P2_x - L1_P1_x,2) + pow(L1_P2_y - L1_P1_y,2)) - length;
                         //temp=_hypot(L1_P2_x - L1_P1_x , L1_P2_y - L1_P1_y) - length;
                         error += temp*temp*100;
                 }
+				break;
 
-                if(cons[i].type==equalLegnth)
+				case equalLegnth:
                 {
                         temp=_hypot(L1_P2_x - L1_P1_x , L1_P2_y - L1_P1_y) - _hypot(L2_P2_x - L2_P1_x , L2_P2_y - L2_P1_y);
                         error += temp*temp;
                 }
+				break;
 
-                if(cons[i].type==arcRadius)
+				case arcRadius:
                 {
                         //rad1 = _hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
                         //rad2 = _hypot(A1_Center_x - A1_End_x , A1_Center_y - A1_End_y);
                         temp= A1_radius - radius;
                         error += temp*temp;
                 }
+				break;
 
-                if(cons[i].type==equalRadiusArcs)
+				case equalRadiusArcs:
                 {
                         //rad1 = _hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
                         //rad2 = _hypot(A2_Center_x - A2_Start_x , A2_Center_y - A2_Start_y);
                         temp = A1_radius-A2_radius;
                         error += temp*temp;
                 }
+				break;
 
-                if(cons[i].type==equalRadiusCircles)
+				case equalRadiusCircles:
                 {
                         temp = C1_rad - C2_rad;
                         error += temp*temp;
                 }
+				break;
 
-                if(cons[i].type==equalRadiusCircArc)
+				case equalRadiusCircArc:
                 {
                         //rad1 = _hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
                         temp = A1_radius-C1_rad;
                         error += temp*temp;
                 }
+				break;
 
-                if(cons[i].type==concentricArcs)
+				case concentricArcs:
                 {
                         temp = _hypot(A1_Center_x - A2_Center_x , A1_Center_y - A2_Center_y);
                         error += temp*temp;
                 }
+				break;
 
-                if(cons[i].type==concentricCircles)
+				case concentricCircles:
                 {
                         temp = _hypot(C1_Center_x - C2_Center_x , C1_Center_y - C2_Center_y);
                         error += temp*temp;
                 }
+				break;
 
-                if(cons[i].type==concentricCircArc)
+				case concentricCircArc:
                 {
                         temp = _hypot(A1_Center_x - C1_Center_x , A1_Center_y - C1_Center_y);
                         error += temp*temp;
                 }
+				break;
 
-                if(cons[i].type==circleRadius)
+				case circleRadius:
                 {
                         error += (C1_rad - radius)*(C1_rad - radius);
                 }
-                if(cons[i].type==internalAngle)
+				break;
+
+				case internalAngle:
                 {
                         dx = L1_P2_x - L1_P1_x;
                         dy = L1_P2_y - L1_P1_y;
@@ -809,9 +848,9 @@ double calc(constraint * cons, int consLength)
                         temp2 = cos(angleP);
                         error += (temp+temp2)*(temp+temp2);
                 }
+				break;
 
-
-                if(cons[i].type==externalAngle)
+				case externalAngle:
                 {
                         dx = L1_P2_x - L1_P1_x;
                         dy = L1_P2_y - L1_P1_y;
@@ -830,8 +869,9 @@ double calc(constraint * cons, int consLength)
                         temp2 = cos(M_PI-angleP);
                         error += (temp+temp2)*(temp+temp2);
                 }
+				break;
 
-                if(cons[i].type==perpendicular)
+				case perpendicular:
                 {
                         dx = L1_P2_x - L1_P1_x;
                         dy = L1_P2_y - L1_P1_y;
@@ -849,8 +889,9 @@ double calc(constraint * cons, int consLength)
                         temp = dx*dx2+dy*dy2;
                         error += (temp)*(temp);
                 }
+				break;
 
-                if(cons[i].type==parallel)
+				case parallel:
                 {
                         dx = L1_P2_x - L1_P1_x;
                         dy = L1_P2_y - L1_P1_y;
@@ -868,8 +909,10 @@ double calc(constraint * cons, int consLength)
                         temp = dy*dx2-dx*dy2;
                         error += (temp)*(temp);
                 }
+				break;
+
                 // Colinear constraint
-                if(cons[i].type==colinear)
+				case colinear:
                 {
                         dx = L1_P2_x - L1_P1_x;
                         dy = L1_P2_y - L1_P1_y;
@@ -898,8 +941,10 @@ double calc(constraint * cons, int consLength)
                                 error+=(Ex-L2_P2_x)*(Ex-L2_P2_x);
                         }
                 }
+				break;
+
                 // Point on a circle
-                if(cons[i].type == pointOnCircle)
+				case pointOnCircle:
                 {
                         //see what the current radius to the point is
                         rad1=_hypot(C1_Center_x-P1_x,C1_Center_y-P1_y);
@@ -908,7 +953,9 @@ double calc(constraint * cons, int consLength)
                         error += temp*temp;
                         //cout<<"Point On circle error"<<temp*temp<<endl;
                 }
-                if(cons[i].type == pointOnArc)
+				break;
+
+				case pointOnArc:
                 {
                         //see what the current radius to the point is
                         rad1=_hypot(A1_Center_x-P1_x,A1_Center_y-P1_y);
@@ -918,7 +965,9 @@ double calc(constraint * cons, int consLength)
                         error += temp*temp;
                         //cout<<"Point On circle error"<<temp*temp<<endl;
                 }
-                if(cons[i].type == pointOnLineMidpoint)
+				break;
+
+				case pointOnLineMidpoint:
                 {
                         Ex=(L1_P1_x+L1_P2_x)/2;
                         Ey=(L1_P1_y+L1_P2_y)/2;
@@ -927,7 +976,9 @@ double calc(constraint * cons, int consLength)
                         error += temp*temp+temp2*temp2;
 
                 }
-                if(cons[i].type == pointOnArcMidpoint)
+				break;
+
+				case pointOnArcMidpoint:
                 {
                         rad1=_hypot(A1_Center_x-A1_Start_x,A1_Center_y-A1_Start_y);
                         temp = atan2(A1_Start_y-A1_Center_y,A1_Start_x-A1_Center_x);
@@ -938,8 +989,9 @@ double calc(constraint * cons, int consLength)
                         temp2 = (Ey-P1_y);
                         error += temp*temp+temp2*temp2;
                 }
+				break;
 
-                if(cons[i].type == pointOnCircleQuad)
+				case pointOnCircleQuad:
                 {
                         Ex=C1_Center_x;
                         Ey=C1_Center_y;
@@ -961,7 +1013,9 @@ double calc(constraint * cons, int consLength)
                         temp2 = (Ey-P1_y);
                         error += temp*temp+temp2*temp2;
                 }
-                if(cons[i].type == symmetricPoints)
+				break;
+
+				case symmetricPoints:
                 {
                         dx=Sym_P2_x-Sym_P1_x;
                         dy=Sym_P2_y-Sym_P1_y;
@@ -972,7 +1026,9 @@ double calc(constraint * cons, int consLength)
                         temp2 = (Ey-P2_y);
                         error += temp*temp+temp2*temp2;
                 }
-                if(cons[i].type == symmetricLines)
+				break;
+
+				case symmetricLines:
                 {
                         dx=Sym_P2_x-Sym_P1_x;
                         dy=Sym_P2_y-Sym_P1_y;
@@ -989,7 +1045,9 @@ double calc(constraint * cons, int consLength)
                         temp2 = (Ey-L2_P2_y);
                         error += temp*temp+temp2*temp2;
                 }
-                if(cons[i].type == symmetricCircles)
+				break;
+
+				case symmetricCircles:
                 {
                         dx=Sym_P2_x-Sym_P1_x;
                         dy=Sym_P2_y-Sym_P1_y;
@@ -1002,7 +1060,9 @@ double calc(constraint * cons, int consLength)
                         temp = (C1_rad-C2_rad);
                         error += temp*temp;
                 }
-                if(cons[i].type == symmetricArcs)
+				break;
+
+				case symmetricArcs:
                 {
                         dx=Sym_P2_x-Sym_P1_x;
                         dy=Sym_P2_y-Sym_P1_y;
@@ -1025,33 +1085,40 @@ double calc(constraint * cons, int consLength)
                         temp2 = (Ey-A2_Center_y);
                         error += temp*temp+temp2*temp2;
                 }
-                if(cons[i].type == pointOnArcStart)
+				break;
+
+				case pointOnArcStart:
                 {
                         error += (P1_x-A1_Start_x)*(P1_x-A1_Start_x)+(P1_y-A1_Start_y)*(P1_y-A1_Start_y);
                 }
+				break;
 
 
-                if(cons[i].type == pointOnArcEnd)
+				case pointOnArcEnd:
                 {
                         error += (P1_x-A1_End_x)*(P1_x-A1_End_x)+(P1_y-A1_End_y)*(P1_y-A1_End_y);
                 }
+				break;
 
-                if(cons[i].type == arcStartToArcEnd)
+				case arcStartToArcEnd:
                 {
                         error += (A1_Start_x-A2_End_x)*(A1_Start_x-A2_End_x)+(A1_Start_y-A2_End_y)*(A1_Start_y-A2_End_y);
                 }
+				break;
 
-                if(cons[i].type == arcStartToArcStart)
+				case arcStartToArcStart:
                 {
                         error += (A1_Start_x-A2_Start_x)*(A1_Start_x-A2_Start_x)+(A1_Start_y-A2_Start_y)*(A1_Start_y-A2_Start_y);
                 }
+				break;
 
-                if(cons[i].type == arcEndtoArcEnd)
+				case arcEndtoArcEnd:
                 {
                         error += (A1_End_x-A2_End_x)*(A1_End_x-A2_End_x)+(A1_End_y-A2_End_y)*(A1_End_y-A2_End_y);
                 }
+				break;
 
-                if(cons[i].type == arcTangentToArc)
+				case arcTangentToArc:
                 {
 //#ifndef NEWARC
                         // temp = center point distance
@@ -1073,8 +1140,9 @@ double calc(constraint * cons, int consLength)
 //#else
 //#endif
                 }
+				break;
 
-                if(cons[i].type == circleTangentToCircle)
+				case circleTangentToCircle:
                 {
                         // temp = center point distance
                         temp = sqrt(C1_Center_x-C2_Center_x)*(C1_Center_x-C2_Center_x)+(C1_Center_y-C2_Center_y)*(C1_Center_y-C2_Center_y);
@@ -1094,8 +1162,9 @@ double calc(constraint * cons, int consLength)
                         else error =+ intError;
 
                 }
+				break;
 
-                if(cons[i].type == circleTangentToArc)
+				case circleTangentToArc:
                 {
 //#ifndef NEWARC
                         // temp = center point distance
@@ -1114,10 +1183,9 @@ double calc(constraint * cons, int consLength)
                         }
                         if(extError<intError) error += extError;
                         else error =+ intError;
-//#else
-
-//#endif
                 }
+				break;
+				}
         }
         return error;
 
