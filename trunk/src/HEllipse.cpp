@@ -170,9 +170,11 @@ void HEllipse::GetGripperPositions(std::list<GripData> *list, bool just_for_endo
 		gp_Pnt min_s(c + y_axis.XYZ() * min_r);
 		gp_Pnt rot(c+x_axis.XYZ() * maj_r * -1);
 
-		list->push_back(GripData(GripperTypeStretch,maj_s.X(),maj_s.Y(),maj_s.Z(),NULL));
+		list->push_back(GripData(GripperTypeStretch,maj_s.X(),maj_s.Y(),maj_s.Z(),(void*)1));
 
-		list->push_back(GripData(GripperTypeStretch,min_s.X(),min_s.Y(),min_s.Z(),NULL));
+		list->push_back(GripData(GripperTypeStretch,min_s.X(),min_s.Y(),min_s.Z(),(void*)2));
+
+		list->push_back(GripData(GripperTypeStretch,c.X(),c.Y(),c.Z(),(void*)3));
 
 	    list->push_back(GripData(GripperTypeRotate,rot.X(),rot.Y(),rot.Z(),NULL));
 
@@ -283,22 +285,26 @@ bool HEllipse::Stretch(const double *p, const double* shift, void* data){
 	gp_Pnt maj_s(c.XYZ() + x_axis.XYZ() * maj_r);
 	gp_Pnt min_s(c.XYZ() + y_axis.XYZ() * min_r);
 
-        double d = c.Distance(vp);
-        double f = DistanceToFoci(vp,m_ellipse)/2;
+	gp_Pnt np = vp.XYZ() + vshift.XYZ();
+    double d = c.Distance(np);
+    double f = DistanceToFoci(np,m_ellipse)/2;
 
-	if(c.IsEqual(vp, wxGetApp().m_geom_tol)){
-		m_ellipse.SetLocation(c.XYZ() + vshift.XYZ());
+	if(data == (void*)3){
+		m_ellipse.SetLocation(np);
 	}
-        else if(f < m_ellipse.MajorRadius() +  wxGetApp().m_geom_tol && d > m_ellipse.MinorRadius() -  wxGetApp().m_geom_tol)
+    else if(data == (void*)1 || data == (void*)2)
 	{
 		//We have to rotate the incoming vector to be in our coordinate system
-		gp_Pnt cir = vp.XYZ() + vshift.XYZ() - c.XYZ();
+		gp_Pnt cir = np.XYZ() - c.XYZ();
 		cir.Rotate(gp_Ax1(zp,up),-rot);
 
 		//This is shockingly simple
-		if( d > min_r + (maj_r - min_r)/2)
+		if( data == (void*)1)
 		{
 			double nradius = 1/sqrt((1-(1/min_r)*(1/min_r)*cir.X()*cir.X()) / cir.Y() / cir.Y());
+			if(nradius > 1 / wxGetApp().m_geom_tol || nradius != nradius)
+				nradius = 1 / wxGetApp().m_geom_tol;
+
 			if(nradius > min_r)
 				m_ellipse.SetMajorRadius(nradius); 
 			else
@@ -306,11 +312,15 @@ bool HEllipse::Stretch(const double *p, const double* shift, void* data){
 				m_ellipse.SetMajorRadius(min_r);
 				m_ellipse.SetMinorRadius(nradius);
 				SetRotation(GetRotation()-Pi/2);
+				m_start += Pi/2;
+				m_end += Pi/2;
 			}
 		}
 		else
 		{
 			double nradius = 1/sqrt((1-(1/maj_r)*(1/maj_r)*cir.Y()*cir.Y()) / cir.X() / cir.X());
+			if(nradius > 1 / wxGetApp().m_geom_tol || nradius != nradius)
+				nradius = 1 / wxGetApp().m_geom_tol;
 			if(nradius < maj_r)
 				m_ellipse.SetMinorRadius(nradius); 
 			else
@@ -318,6 +328,8 @@ bool HEllipse::Stretch(const double *p, const double* shift, void* data){
 				m_ellipse.SetMinorRadius(maj_r);
 				m_ellipse.SetMajorRadius(nradius);
 				SetRotation(GetRotation()+Pi/2);
+				m_start-=Pi/2;
+				m_end-=Pi/2;
 			}
 		}
 	}
