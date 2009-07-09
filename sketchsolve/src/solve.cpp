@@ -20,7 +20,16 @@ void LoadDouble(std::list<std::pair<varLocation,void*>> &mylist, double *d, Solv
 {
 	if(s->parms[d])
 	{
-		mylist.push_back(std::pair<varLocation,void*>(Vector,(void*)s->next_vector++));
+		//many vars may already be in the vector, must check and remap
+		if(s->mapset.find(d) != s->mapset.end())
+		{
+			mylist.push_back(s->mapparms[d]);
+			return;
+		}
+        std::pair<varLocation,void*> newloc(Vector,(void*)s->next_vector++);
+		mylist.push_back(newloc);
+		s->mapparms[d] = newloc;
+		s->mapset.insert(d);
 		return;
 	}
 
@@ -39,20 +48,6 @@ void LoadLine(std::list<std::pair<varLocation,void*>> &mylist,line l, SolveImpl*
 	LoadPoint(mylist,l.p2,s);
 }
 
-void LoadParallel(constraint t, SolveImpl*s)
-{
-	std::list<std::pair<varLocation,void*>> mylist;
-	LoadLine(mylist,t.line1,s);
-	LoadLine(mylist,t.line2,s);
-	s->constraintvars.push_back(mylist);
-	s->constrainttypes.push_back(t.type);
-}
-
-void UnloadParallel(constraint t, SolveImpl* s)
-{
-
-}
-
 double ParallelError()
 {
 	return 0;
@@ -61,14 +56,41 @@ double ParallelError()
 SolveImpl::SolveImpl(std::map<double*,void*> &p):parms(p)
 {
 	next_vector=0;
-	registerconstraint(parallel,LoadParallel,UnloadParallel,ParallelError);
+	registerdependency(parallel,line1);
+	registerdependency(parallel,line2);
+	registerconstraint(parallel,ParallelError);
 }
 
-void SolveImpl::registerconstraint(constraintType type,void(*load)(constraint t, SolveImpl*),void(*unload)(constraint t, SolveImpl*),double(*error)())
+void SolveImpl::Load(constraint c)
 {
-	loaders[type] = load;
-	unloaders[type] = unload;
+	std::list<std::pair<varLocation,void*>> mylist;
+	std::list<dependencyType>::iterator it;
+	for(it = dependencies[c.type].begin(); it != dependencies[c.type].end(); ++it)
+	{
+		switch(*it)
+		{
+			case line1: LoadLine(mylist,c.line1,this); break;
+			case line2: LoadLine(mylist,c.line2,this); break;
+		}
+	}
+	constraintvars.push_back(mylist);
+	constrainttypes.push_back(c.type);
+}
+
+void SolveImpl::Unload()
+{
+	//For every item in mapparms, copy variable from vector into pointer
+
+}
+
+void SolveImpl::registerconstraint(constraintType type,double(*error)())
+{
 	errors[type] = error;
+}
+
+void SolveImpl::registerdependency(constraintType type, dependencyType d)
+{
+	dependencies[type].push_back(d);
 }
 
 int solve(double  **x, int xLength, constraint * cons, int consLength, int isFine)
