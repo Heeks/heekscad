@@ -17,8 +17,10 @@
 #include <TopExp.hxx>
 #include <BRepFilletAPI_MakeFillet.hxx>
 #include <BRepAdaptor_Curve.hxx>
+#include <GCPnts_AbscissaPoint.hxx>
 #include "HeeksConfig.h"
 #include "Gripper.h"
+#include "../interface/PropertyLength.h"
 
 CEdge::CEdge(const TopoDS_Edge &edge):m_topods_edge(edge), m_midpoint_calculated(false), m_temp_attr(0){
 	GetCurveParams2(&m_start_u, &m_end_u, &m_isClosed, &m_isPeriodic);
@@ -193,6 +195,13 @@ void CEdge::Blend(double radius){
 	}
 }
 
+void CEdge::GetProperties(std::list<Property *> *list)
+{
+	list->push_back(new PropertyLength(_("length"), Length(), NULL));
+
+	HeeksObj::GetProperties(list);
+}
+
 void CEdge::WriteXML(TiXmlNode *root)
 {
 	CShape::m_solids_found = true;
@@ -320,3 +329,16 @@ bool CEdge::Orientation()
 	return (o == TopAbs_FORWARD);
 }
 
+double CEdge::Length()
+{
+	BRepAdaptor_Curve c(m_topods_edge);
+	double len = GCPnts_AbscissaPoint::Length( c );
+	return len;
+}
+
+double CEdge::Length2(double uStart, double uEnd)
+{
+	BRepAdaptor_Curve c(m_topods_edge);
+	double len = GCPnts_AbscissaPoint::Length( c, uStart, uEnd );
+	return len;
+}

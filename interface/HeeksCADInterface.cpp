@@ -773,6 +773,16 @@ int CHeeksCADInterface::EdgeGetTempAttribute(HeeksObj* edge)
 	return ((CEdge*)edge)->m_temp_attr;
 }
 
+double CHeeksCADInterface::EdgeGetLength(HeeksObj* edge)
+{
+	return ((CEdge*)edge)->Length();
+}
+
+double CHeeksCADInterface::EdgeGetLength2(HeeksObj* edge, double uStart, double uEnd)
+{
+	return ((CEdge*)edge)->Length2(uStart, uEnd);
+}
+
 long CHeeksCADInterface::LoopGetEdgeCount(HeeksObj* loop)
 {
 	return ((CLoop*)loop)->m_edges.size();
