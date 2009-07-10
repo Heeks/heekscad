@@ -15,6 +15,8 @@
 
 //This is an n log n realization of that scheme.
 
+Solver solve;
+
 std::vector<double*> usedparms;
 std::set<double*> hasusedparms;
 std::set<double*> oldparms;
@@ -203,7 +205,7 @@ int solvewpoints(double  **parms,int nparms, constraint * cons, int consLength, 
     
 	int ret = 0;
 	if(newcons.size())
-		ret = solve(&usedparms[0],usedparms.size(),&newcons[0],newcons.size(),isFine);
+		ret = solve.solve(&usedparms[0],usedparms.size(),&newcons[0],newcons.size(),isFine);
 
 
 	//loop through all remapped pointers
