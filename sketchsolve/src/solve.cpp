@@ -571,7 +571,7 @@ int Solver::solve(double  **xin,constraint * cons, int consLength, int isFine)
 
 }
 
-double Solver::GetElement(int i)
+double Solver::GetElement(size_t i)
 {
 	return x[i];
 }
@@ -579,7 +579,7 @@ double Solver::GetElement(int i)
 double calc(constraint * cons, int consLength)
 {
         double error=0;
-        double temp,dx,dy,m,n,Ex,Ey,rad1,rad2,t,Xint,Yint,dx2,dy2,hyp1,hyp2,temp2;
+        double temp,dx,dy,m,n,Ex,Ey,rad1,rad2,t,dx2,dy2,hyp1,hyp2,temp2;
         for(int i=0;i<consLength;i++)
         {
 			switch(cons[i].type)
