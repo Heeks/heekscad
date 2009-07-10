@@ -258,7 +258,43 @@ enum dependencyType
    line2,
    point1,
    point2,
-   parameter
+   parameter,
+   arc1,
+   arc2,
+   circle1,
+   circle2,
+   line1_p1,
+   line1_p2,
+   line2_p1,
+   line2_p2,
+   arc1_center,
+   arc2_center,
+   circle1_center,
+   circle2_center,
+   line1_p1_x,
+   line1_p1_y,
+   line1_p2_x,
+   line1_p2_y,
+   line2_p1_x,
+   line2_p1_y,
+   line2_p2_x,
+   line2_p2_y,
+   arc1_center_x,
+   arc1_center_y,
+   arc2_center_x,
+   arc2_center_y,
+   circle1_center_x,
+   circle1_center_y,
+   circle2_center_x,
+   circle2_center_y,
+   arc1_rad,
+   arc2_rad,
+   circle1_rad,
+   circle2_rad,
+   arc1_startAngle,
+   arc1_endAngle,
+   arc2_startAngle,
+   arc2_endAngle
 };
 
 class SolveImpl;
@@ -277,6 +313,8 @@ class SolveImpl
 	void LoadDouble(std::list<std::pair<varLocation,void*> > &mylist, double *d);
 	void LoadPoint(std::list<std::pair<varLocation,void*> > &mylist, point p);
 	void LoadLine(std::list<std::pair<varLocation,void*> > &mylist,line l);
+	void LoadArc(std::list<std::pair<varLocation,void*> > &mylist,arc a);
+	void LoadCircle(std::list<std::pair<varLocation,void*> > &mylist,circle c);
 	void registerconstraint(constraintType,double(*)(std::vector<double>));
 	void registerdependency(constraintType,dependencyType);
 

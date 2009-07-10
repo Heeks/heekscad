@@ -48,6 +48,20 @@ void SolveImpl::LoadLine(std::list<std::pair<varLocation,void*> > &mylist,line l
 	LoadPoint(mylist,l.p2);
 }
 
+void SolveImpl::LoadArc(std::list<std::pair<varLocation,void*> > &mylist,arc a)
+{
+	LoadPoint(mylist,a.center);
+	LoadDouble(mylist,a.startAngle);
+	LoadDouble(mylist,a.endAngle);
+	LoadDouble(mylist,a.rad);
+}
+
+void SolveImpl::LoadCircle(std::list<std::pair<varLocation,void*> > &mylist,circle c)
+{
+	LoadPoint(mylist,c.center);
+	LoadDouble(mylist,c.rad);
+}
+
 SolveImpl::SolveImpl()
 {
 	next_vector=0;
@@ -111,10 +125,46 @@ void SolveImpl::Load(constraint &c)
 		switch(*it)
 		{
 			case line1: LoadLine(mylist,c.line1); break;
+			case line1_p1: LoadPoint(mylist,c.line1.p1); break;
+			case line1_p1_x: LoadDouble(mylist,c.line1.p1.x); break;
+			case line1_p1_y: LoadDouble(mylist,c.line1.p1.y); break;
+			case line1_p2: LoadPoint(mylist,c.line2.p2); break;
+			case line1_p2_x: LoadDouble(mylist,c.line1.p2.x); break;
+			case line1_p2_y: LoadDouble(mylist,c.line1.p2.y); break;
 			case line2: LoadLine(mylist,c.line2); break;
+			case line2_p1: LoadPoint(mylist,c.line2.p1); break;
+			case line2_p1_x: LoadDouble(mylist,c.line2.p1.x); break;
+			case line2_p1_y: LoadDouble(mylist,c.line2.p1.y); break;
+			case line2_p2: LoadPoint(mylist,c.line2.p2); break;
+			case line2_p2_x: LoadDouble(mylist,c.line2.p2.x); break;
+			case line2_p2_y: LoadDouble(mylist,c.line2.p2.y); break;
 			case point1: LoadPoint(mylist,c.point1); break;
 			case point2: LoadPoint(mylist,c.point2); break;
 			case parameter: LoadDouble(mylist,c.parameter); break;
+			case arc1: LoadArc(mylist,c.arc1); break;
+			case arc1_rad: LoadDouble(mylist,c.arc1.rad); break;
+			case arc1_startAngle: LoadDouble(mylist,c.arc1.startAngle); break;
+			case arc1_endAngle: LoadDouble(mylist,c.arc1.endAngle); break;
+			case arc1_center: LoadPoint(mylist,c.arc1.center); break;
+			case arc1_center_x: LoadDouble(mylist,c.arc1.center.x); break;
+			case arc1_center_y: LoadDouble(mylist,c.arc1.center.y); break;
+			case arc2: LoadArc(mylist,c.arc2); break;
+			case arc2_rad: LoadDouble(mylist,c.arc2.rad); break;
+			case arc2_startAngle: LoadDouble(mylist,c.arc2.startAngle); break;
+			case arc2_endAngle: LoadDouble(mylist,c.arc2.endAngle); break;
+			case arc2_center: LoadPoint(mylist,c.arc2.center); break;
+			case arc2_center_x: LoadDouble(mylist,c.arc2.center.x); break;
+			case arc2_center_y: LoadDouble(mylist,c.arc2.center.y); break;
+			case circle1: LoadCircle(mylist,c.circle1); break;
+			case circle1_rad: LoadDouble(mylist,c.circle1.rad); break;
+			case circle1_center: LoadPoint(mylist,c.circle1.center); break;
+			case circle1_center_x: LoadDouble(mylist,c.circle1.center.x); break;
+			case circle1_center_y: LoadDouble(mylist,c.circle1.center.y); break;
+			case circle2: LoadCircle(mylist,c.circle2); break;
+			case circle2_rad: LoadDouble(mylist,c.circle2.rad); break;
+			case circle2_center: LoadPoint(mylist,c.circle2.center); break;
+			case circle2_center_x: LoadDouble(mylist,c.circle2.center.x); break;
+			case circle2_center_y: LoadDouble(mylist,c.circle2.center.y); break;
 		}
 	}
 	constraintvars.push_back(mylist);
