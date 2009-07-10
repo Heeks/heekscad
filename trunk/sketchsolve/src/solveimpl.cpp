@@ -26,7 +26,7 @@ void SolveImpl::LoadDouble(std::vector<std::pair<varLocation,void*> > &mylist, d
 			std::pair<varLocation,void*> tparm = mapparms[d];
 			mylist.push_back(tparm);
 			if(tparm.first == Vector)
-				vecmap[(int)tparm.second].push_back(c);
+				vecmap[(size_t)tparm.second].push_back(c);
 			return;
 		}
 
