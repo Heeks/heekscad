@@ -198,7 +198,7 @@ double SolveImpl::GetError()
 		{
 			std::pair<varLocation,void*> tvar = *it3;
 			if(tvar.first == Vector)
-				myvec.push_back(GetElement((int)tvar.second));
+				myvec.push_back(GetElement((size_t)tvar.second));
 			else
 				myvec.push_back(*((double*)tvar.second));
 		}
