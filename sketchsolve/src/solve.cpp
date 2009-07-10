@@ -17,73 +17,64 @@
 using namespace std;
 
 
-int solve(double  **x, int xLength, constraint * cons, int consLength, int isFine)
+Solver::Solver()
 {
-	Solver *s = new Solver(xLength);
-	int ret = s->solve(x,cons,consLength,isFine);
-	if(ret == succsess)
-		s->Unload();
-	delete s;
-	return ret;
+
 }
 
-Solver::Solver(int xLength)
+void Solver::allocate(int xLength)
 {
    this->xLength = xLength;
-   origSolution = new double[xLength];
-   grad = new double[xLength]; //The gradient vector (1xn)
-   s = new double[xLength]; //The current search direction
-   xold = new double[xLength]; //Storage for the previous design variables
-   deltaX = new double[xLength];
-   gradnew = new double[xLength];
-   gamma = new double[xLength];
-   gammatDotN = new double[xLength];
-   FirstSecond = new double*[xLength];
-   deltaXDotGammatDotN = new double*[xLength];
-   gammatDotDeltaXt = new double*[xLength];
-   NDotGammaDotDeltaXt = new double*[xLength];
-   N = new double*[xLength];
-
-   for(int i=0; i < xLength; i++)
+   if(x.size() < (size_t)xLength)
    {
-       FirstSecond[i] = new double[xLength];
-       deltaXDotGammatDotN[i] = new double[xLength];
-       gammatDotDeltaXt[i] = new double[xLength];
-       NDotGammaDotDeltaXt[i] = new double[xLength];
-       N[i] = new double[xLength]; //The estimate of the Hessian inverse
+		x.resize(xLength);
+		origSolution.resize(xLength);
+		grad.resize(xLength);
+		s.resize(xLength);
+		xold.resize(xLength);
+		deltaX.resize(xLength);
+		gradnew.resize(xLength);
+		gamma.resize(xLength);
+		gammatDotN.resize(xLength);
+		FirstSecond.resize(xLength);
+		deltaXDotGammatDotN.resize(xLength);
+		gammatDotDeltaXt.resize(xLength);
+		NDotGammaDotDeltaXt.resize(xLength);
+		N.resize(xLength);
+
+		for(int i=0; i < xLength; i++)
+		{
+			FirstSecond[i].resize(xLength);
+			deltaXDotGammatDotN[i].resize(xLength);
+			gammatDotDeltaXt[i].resize(xLength);
+			NDotGammaDotDeltaXt[i].resize(xLength);
+			N[i].resize(xLength);
+		}
    }
-   
 }
 
 Solver::~Solver()
 {
-        delete s;
-        for(int i=0; i < xLength; i++)
-        {
-                delete N[i];
-                delete FirstSecond[i];
-                delete deltaXDotGammatDotN[i];
-                delete gammatDotDeltaXt[i];
-                delete NDotGammaDotDeltaXt[i];
 
-        }
-        delete N;
-        delete FirstSecond;
-        delete deltaXDotGammatDotN;
-        delete gammatDotDeltaXt;
-        delete NDotGammaDotDeltaXt;
-        delete origSolution;
-
-        delete grad;
-        delete xold;
-        delete gammatDotN;
-		delete x;
 }
 
-int Solver::solve(double  **xin,constraint * cons, int consLength, int isFine)
+void Solver::deallocate()
+{
+}
+
+int Solver::solve(double  **xin, int xLength, constraint * cons, int consLength, int isFine)
+{
+	int ret = solveI(xin,xLength,cons,consLength,isFine);
+	Unload();
+	deallocate();
+	return ret;
+}
+
+int Solver::solveI(double  **xin, int xLength, constraint * cons, int consLength, int isFine)
 {
 		xsave = xin;
 
+		BeforeLoad();
 		for(int i=0; i < xLength; i++)
 		{
 			parms[xin[i]] = 1;
@@ -95,7 +86,7 @@ int Solver::solve(double  **xin,constraint * cons, int consLength, int isFine)
 		}
 
 		xLength = GetVectorSize();
-		x = new double[xLength];
+		allocate(xLength);
 		for(int i=0; i < xLength; i++)
 			x[i] = GetInitialValue(i);
 
@@ -569,11 +560,6 @@ int Solver::solve(double  **xin,constraint * cons, int consLength, int isFine)
                 return noSolution;
                 }
 
-}
-
-double Solver::GetElement(size_t i)
-{
-	return x[i];
 }
 
 double calc(constraint * cons, int consLength)
