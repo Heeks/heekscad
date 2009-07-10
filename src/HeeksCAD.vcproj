@@ -244,10 +244,10 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/EHsc "
-				Optimization="2"
+				Optimization="0"
 				AdditionalIncludeDirectories=".\;&quot;$(CASROOT)\inc&quot;;&quot;$(WXWIN)\include&quot;;&quot;$(WXWIN)&quot;;&quot;$(WXWIN)\include\msvc&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXDEBUG__;_WINDOWS;NOPCH;WNT;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;HEEKSCAD;STRICT"
-				BasicRuntimeChecks="0"
+				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
@@ -1016,6 +1016,14 @@
 		</File>
 		<File
 			RelativePath="..\interface\Observer.h"
+			>
+		</File>
+		<File
+			RelativePath=".\OCCSolver.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\OCCSolver.h"
 			>
 		</File>
 		<File
