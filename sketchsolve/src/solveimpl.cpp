@@ -7,7 +7,7 @@
  *      Copyright (c) 2009, Jonathan George
  *      This program is released under the BSD license. See the file COPYING for details.
  *
- */
+ */	
 
 #include "solve.h"
 #include <cmath>
@@ -23,7 +23,10 @@ void SolveImpl::LoadDouble(std::vector<std::pair<varLocation,void*> > &mylist, d
 		//many vars may already be in the vector, must check and remap
 		if(mapset.find(d) != mapset.end())
 		{
-			mylist.push_back(mapparms[d]);
+			std::pair<varLocation,void*> tparm = mapparms[d];
+			mylist.push_back(tparm);
+			if(tparm.first == Vector)
+				vecmap[(int)tparm.second].push_back(c);
 			return;
 		}
 
@@ -197,13 +200,26 @@ void SolveImpl::BeforeLoad()
 	vecmap.clear();
 }
 
-double SolveImpl::GetGradient(int i)
+double SolveImpl::GetErrorForGrad(int i)
 {
+	double error = 0;
 	for(unsigned int j = 0; j < vecmap[i].size(); j++)
 	{
 		int cindex = vecmap[i][j];
+		error += GetError(cindex);
 	}
-	return 0;
+	return error;
+}
+
+double SolveImpl::GetGradient(int i, double pert)
+{
+	double OldValue = GetElement(i);
+	SetElement(i,OldValue-pert);
+	double e1 = GetErrorForGrad(i);
+	SetElement(i,OldValue+pert);
+	double e2 = GetErrorForGrad(i);
+	SetElement(i,OldValue);
+	return .5*(e2-e1)/pert;
 }
 
 double SolveImpl::GetError()

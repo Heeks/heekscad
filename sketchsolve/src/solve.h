@@ -320,6 +320,7 @@ class SolveImpl
 	void LoadCircle(std::vector<std::pair<varLocation,void*> > &mylist,circle c, int con);
 	void registerconstraint(constraintType,double(*)(std::vector<double>));
 	void registerdependency(constraintType,dependencyType);
+	double GetErrorForGrad(int i);
 
 protected:
 	std::map<double*,int> parms;
@@ -336,8 +337,9 @@ public:
 
 	int GetVectorSize();
 	double GetInitialValue(int i);
-	double GetGradient(int i);
+	double GetGradient(int i, double pert);
 	virtual double GetElement(size_t i) =0; //Pure virtual
+	virtual void SetElement(size_t i, double v) = 0;
 };
 
 class Solver: public SolveImpl
@@ -368,6 +370,7 @@ public:
 	
 	int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine);
 	double GetElement(size_t i){return x[i];}
+	void SetElement(size_t i, double v) { x[i] = v;}
 };
 
 //Function Prototypes
