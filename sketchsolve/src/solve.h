@@ -329,17 +329,18 @@ public:
 	SolveImpl();
 	~SolveImpl();
 
-	void BeforeLoad();
+	void Load(constraint* c, int nconstraints, double** p, int nparms);
 	void Load(constraint &c);
 	void Unload();
 	double GetError();
 	double GetError(int i);
 
-	int GetVectorSize();
+	int GetVectorSize() const;
 	double GetInitialValue(int i);
 	double GetGradient(int i, double pert);
 	virtual double GetElement(size_t i) =0; //Pure virtual
 	virtual void SetElement(size_t i, double v) = 0;
+	virtual int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine) = 0;
 };
 
 class Solver: public SolveImpl

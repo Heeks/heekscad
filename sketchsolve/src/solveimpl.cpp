@@ -188,7 +188,7 @@ SolveImpl::~SolveImpl()
 {
 }
 
-void SolveImpl::BeforeLoad()
+void SolveImpl::Load(constraint *c, int nconstraints, double** p, int nparms)
 {
 	constraintvars.clear();
 	myvec.clear();
@@ -198,6 +198,16 @@ void SolveImpl::BeforeLoad()
 	next_vector=0;
 	parms.clear();
 	vecmap.clear();
+
+	for(int i=0; i < nparms; i++)
+	{
+		parms[p[i]] = 1;
+	}
+
+	for(int i=0; i < nconstraints; i++)
+	{
+		Load(c[i]);
+	}
 }
 
 double SolveImpl::GetErrorForGrad(int i)
@@ -344,7 +354,7 @@ double SolveImpl::GetInitialValue(int i)
 	return *myvec[i];
 }
 
-int SolveImpl::GetVectorSize()
+int SolveImpl::GetVectorSize() const
 {
 	return myvec.size();
 }
