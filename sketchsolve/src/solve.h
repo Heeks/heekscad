@@ -332,7 +332,7 @@ public:
 
 	int GetVectorSize();
 	double GetInitialValue(int i);
-	virtual double GetElement(int i) =0; //Pure virtual
+	virtual double GetElement(size_t i) =0; //Pure virtual
 };
 
 class Solver: public SolveImpl
@@ -359,7 +359,7 @@ public:
 	~Solver();
 
 	int solve(double  **x,constraint * cons, int consLength, int isFine);
-	double GetElement(int i);
+	double GetElement(size_t i);
 };
 
 //Function Prototypes
