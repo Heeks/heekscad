@@ -302,20 +302,22 @@ class SolveImpl;
 class SolveImpl
 {
 	std::vector<double(*)(std::vector<double>)> errors;
-	std::vector<std::list<dependencyType> > dependencies;
+	std::vector<std::vector<dependencyType> > dependencies;
 	std::set<constraintType> depset;
-	std::list<std::list<std::pair<varLocation,void*> > > constraintvars;
+	std::vector<std::vector<std::pair<varLocation,void*> > > constraintvars;
 	std::vector<double* > myvec;
-	std::list<constraintType> constrainttypes;
+	std::vector<constraintType> constrainttypes;
 	std::map<double*,std::pair<varLocation,void*> > mapparms;
+	std::map<int,std::vector<int> > vecmap;
 	std::set<double*> mapset;
+	std::vector<double> pvec;
 	int next_vector;
 
-	void LoadDouble(std::list<std::pair<varLocation,void*> > &mylist, double *d);
-	void LoadPoint(std::list<std::pair<varLocation,void*> > &mylist, point p);
-	void LoadLine(std::list<std::pair<varLocation,void*> > &mylist,line l);
-	void LoadArc(std::list<std::pair<varLocation,void*> > &mylist,arc a);
-	void LoadCircle(std::list<std::pair<varLocation,void*> > &mylist,circle c);
+	void LoadDouble(std::vector<std::pair<varLocation,void*> > &mylist, double *d, int c);
+	void LoadPoint(std::vector<std::pair<varLocation,void*> > &mylist, point p, int c);
+	void LoadLine(std::vector<std::pair<varLocation,void*> > &mylist,line l, int c);
+	void LoadArc(std::vector<std::pair<varLocation,void*> > &mylist,arc a, int c);
+	void LoadCircle(std::vector<std::pair<varLocation,void*> > &mylist,circle c, int con);
 	void registerconstraint(constraintType,double(*)(std::vector<double>));
 	void registerdependency(constraintType,dependencyType);
 
@@ -326,44 +328,49 @@ public:
 	SolveImpl();
 	~SolveImpl();
 
+	void BeforeLoad();
 	void Load(constraint &c);
 	void Unload();
 	double GetError();
+	double GetError(int i);
 
 	int GetVectorSize();
 	double GetInitialValue(int i);
+	double GetGradient(int i);
 	virtual double GetElement(size_t i) =0; //Pure virtual
 };
 
 class Solver: public SolveImpl
 {
 	int xLength;
-	double *x;
+	std::vector<double> x;
 	double **xsave;
-	double *origSolution;
-	double *grad;
-    double *s;
-    double **N;
-    double *xold;
-    double *deltaX;
-    double *gradnew;
-    double *gamma;
-    double *gammatDotN;
-    double **FirstSecond;
-    double **deltaXDotGammatDotN;
-    double **gammatDotDeltaXt;
-    double **NDotGammaDotDeltaXt;
+	std::vector<double> origSolution;
+	std::vector<double> grad;
+	std::vector<double> s;
+	std::vector<std::vector<double> > N;
+	std::vector<double> xold;
+	std::vector<double> deltaX;
+	std::vector<double> gradnew;
+	std::vector<double> gamma;
+	std::vector<double> gammatDotN;
+	std::vector<std::vector<double> > FirstSecond;
+    std::vector<std::vector<double> > deltaXDotGammatDotN;
+    std::vector<std::vector<double> > gammatDotDeltaXt;
+    std::vector<std::vector<double> > NDotGammaDotDeltaXt;
 
+	void allocate(int xLength);
+	int solveI(double  **x,int xLength, constraint * cons, int consLength, int isFine);
+	void deallocate();
 public:
-	Solver(int xLength);
+	Solver();
 	~Solver();
-
-	int solve(double  **x,constraint * cons, int consLength, int isFine);
-	double GetElement(size_t i);
+	
+	int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine);
+	double GetElement(size_t i){return x[i];}
 };
 
 //Function Prototypes
-int solve(double  **x,int xLength, constraint * cons, int consLength, int isFine);
 double calc(constraint * cons, int consLength);
 void derivatives(double **x,double *gradF,int xLength, constraint * cons, int consLength);
 
