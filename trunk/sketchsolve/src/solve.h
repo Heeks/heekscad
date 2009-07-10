@@ -266,10 +266,10 @@ class SolveImpl;
 class SolveImpl
 {
 	std::vector<double(*)(std::vector<double>)> errors;
-	std::vector< std::list<dependencyType> > dependencies;
-	std::list< std::list<std::pair< varLocation,void* > > > constraintvars;
+	std::vector<std::list<dependencyType> > dependencies;
+	std::set<constraintType> depset;
+	std::list<std::list<std::pair<varLocation,void*> >> constraintvars;
 	std::list<constraintType> constrainttypes;
-	std::map<double*,void*> &parms;
 	std::map<double*,std::pair<varLocation,void*> > mapparms;
 	std::set<double*> mapset;
 	int next_vector;
@@ -279,20 +279,25 @@ class SolveImpl
 	void LoadLine(std::list<std::pair<varLocation,void*> > &mylist,line l);
 	void registerconstraint(constraintType,double(*)(std::vector<double>));
 	void registerdependency(constraintType,dependencyType);
-	
-public:
-	SolveImpl(std::map<double*,void*> &parms);
 
-	void Load(constraint c);
+protected:
+	std::map<double*,int> parms;
+
+public:
+	SolveImpl();
+	~SolveImpl();
+
+	void Load(constraint &c);
 	void Unload();
 	double GetError();
 
 	virtual double GetElement(int i) =0; //Pure virtual
 };
 
-class Solver
+class Solver: public SolveImpl
 {
 	int xLength;
+	double **x;
 	double *origSolution;
 	double *grad;
     double *s;
@@ -312,6 +317,7 @@ public:
 	~Solver();
 
 	int solve(double  **x,constraint * cons, int consLength, int isFine);
+	double GetElement(int i);
 };
 
 //Function Prototypes

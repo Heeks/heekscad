@@ -16,7 +16,7 @@
 
 using namespace std;
 
-void SolveImpl::LoadDouble(std::list<std::pair<varLocation,void*>> &mylist, double *d)
+void SolveImpl::LoadDouble(std::list<std::pair<varLocation,void*> > &mylist, double *d)
 {
 	if(parms[d])
 	{
@@ -36,19 +36,19 @@ void SolveImpl::LoadDouble(std::list<std::pair<varLocation,void*>> &mylist, doub
 	mylist.push_back(std::pair<varLocation,void*>(Static,d));
 }
 
-void SolveImpl::LoadPoint(std::list<std::pair<varLocation,void*>> &mylist, point p)
+void SolveImpl::LoadPoint(std::list<std::pair<varLocation,void*> > &mylist, point p)
 {
 	LoadDouble(mylist,p.x);
 	LoadDouble(mylist,p.y);
 }
 
-void SolveImpl::LoadLine(std::list<std::pair<varLocation,void*>> &mylist,line l)
+void SolveImpl::LoadLine(std::list<std::pair<varLocation,void*> > &mylist,line l)
 {
 	LoadPoint(mylist,l.p1);
 	LoadPoint(mylist,l.p2);
 }
 
-SolveImpl::SolveImpl(std::map<double*,void*> &p):parms(p)
+SolveImpl::SolveImpl()
 {
 	next_vector=0;
 	registerdependency(parallel,line1);
@@ -72,18 +72,22 @@ SolveImpl::SolveImpl(std::map<double*,void*> &p):parms(p)
 
 }
 
+SolveImpl::~SolveImpl()
+{
+}
+
 double SolveImpl::GetError()
 {
 	std::vector<double> myvec;
 	double error = 0;
 
 	std::list<constraintType>::iterator it;
-	std::list<std::list<std::pair<varLocation,void*>>>::iterator it2 = constraintvars.begin();
+	std::list<std::list<std::pair<varLocation,void*> >>::iterator it2 = constraintvars.begin();
 	for(it = constrainttypes.begin(); it != constrainttypes.end(); ++it)
 	{
 		myvec.clear();
-		std::list<std::pair<varLocation,void*>> tlist = *it2;
-		std::list<std::pair<varLocation,void*>>::iterator it3;
+		std::list<std::pair<varLocation,void*> > tlist = *it2;
+		std::list<std::pair<varLocation,void*> >::iterator it3;
 		for(it3 = tlist.begin(); it3 != tlist.end(); ++it3)
 		{
 			std::pair<varLocation,void*> tvar = *it3;
@@ -91,16 +95,16 @@ double SolveImpl::GetError()
 				myvec.push_back(GetElement((int)tvar.second));
 			else
 				myvec.push_back(*((double*)tvar.second));
-			error += errors[*it](myvec);
 		}
+		error += errors[*it](myvec);
 		++it2;
 	}
 	return error;
 }
 
-void SolveImpl::Load(constraint c)
+void SolveImpl::Load(constraint &c)
 {
-	std::list<std::pair<varLocation,void*>> mylist;
+	std::list<std::pair<varLocation,void*> > mylist;
 	std::list<dependencyType>::iterator it;
 	for(it = dependencies[c.type].begin(); it != dependencies[c.type].end(); ++it)
 	{
@@ -120,7 +124,7 @@ void SolveImpl::Load(constraint c)
 void SolveImpl::Unload()
 {
 	//For every item in mapparms, copy variable from vector into pointer
-	std::map<double*,std::pair<varLocation,void*>>::iterator it;
+	std::map<double*,std::pair<varLocation,void*> >::iterator it;
 	for(it = mapparms.begin(); it != mapparms.end(); ++it)
 	{
 		std::pair<varLocation, void*> parm = (*it).second;
@@ -135,10 +139,18 @@ void SolveImpl::Unload()
 
 void SolveImpl::registerconstraint(constraintType type,double(*error)(std::vector<double>))
 {
+	if(errors.size() < (int)type + 1)
+		errors.resize((int)type+1);
 	errors[type] = error;
 }
 
 void SolveImpl::registerdependency(constraintType type, dependencyType d)
 {
+	if(depset.find(type) == depset.end())
+	{
+		if(dependencies.size() < (int)type + 1)
+			dependencies.resize((int)type+1);
+		depset.insert(type);
+	}
 	dependencies[type].push_back(d);
 }

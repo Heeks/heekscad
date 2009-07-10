@@ -79,6 +79,19 @@ Solver::~Solver()
 
 int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
 {
+		this->x = x;
+
+		for(int i=0; i < xLength; i++)
+		{
+			parms[x[i]] = 1;
+		}
+
+		for(int i=0; i < consLength; i++)
+		{
+			Load(cons[i]);
+		}
+
+
         std::stringstream cstr;
         double convergence,pert ;
         //Save the original parameters for later.
@@ -93,7 +106,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
         int ftimes=0;
         //Calculate Function at the starting point:
         double f0;
-        f0 = calc(cons,consLength);
+		f0 = GetError();
         if(f0<smallF) return succsess;
         ftimes++;
         //Calculate the gradient at the starting point:
@@ -108,9 +121,9 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
         {
                 temper= *x[j];
                 *x[j]= temper-pert;
-                first = calc(cons,consLength);
+                first = GetError();
                 *x[j]= temper+pert;
-                second = calc(cons,consLength);
+                second = GetError();
                 grad[j]=.5*(second-first)/pert;
                 ftimes++;
 #ifdef DEBUG
@@ -164,7 +177,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
         {
                 *x[i]=xold[i]+alpha2*s[i];//calculate the new x
         }
-        f2 = calc(cons,consLength);
+        f2 = GetError();
         ftimes++;
 
         //Take a step of alpha 3 that is 2*alpha2
@@ -173,7 +186,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
         {
                 *x[i]=xold[i]+alpha3*s[i];//calculate the new x
         }
-        f3=calc(cons,consLength);
+        f3=GetError();
         ftimes++;
 
         //Now reduce or lengthen alpha2 and alpha3 until the minimum is
@@ -191,7 +204,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
                         {
                                 *x[i]=xold[i]+alpha2*s[i];//calculate the new x
                         }
-                        f2=calc(cons,consLength);
+                        f2=GetError();
                         ftimes++;
                 }
 
@@ -206,7 +219,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
                         {
                                 *x[i]=xold[i]+alpha3*s[i];//calculate the new x
                         }
-                        f3=calc(cons,consLength);
+                        f3=GetError();
                         ftimes++;
 
                 }
@@ -226,7 +239,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
         {
                 *x[i]=xold[i]+alphaStar*s[i];//calculate the new x
         }
-        fnew=calc(cons,consLength);
+        fnew=GetError();
         ftimes++;
         fold=fnew;
         /*
@@ -276,9 +289,9 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
                 //Calculate the new gradient vector
                 temper=*x[i];
                 *x[i]=temper-pert;
-                first = calc(cons,consLength);
+                first = GetError();
                 *x[i]=temper+pert;
-                second= calc(cons,consLength);
+                second= GetError();
                 gradnew[i]=.5*(second-first)/pert;
                 ftimes++;
                 *x[i]=temper;
@@ -388,7 +401,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
         {
                 *x[i]=xold[i]+alpha2*s[i];//calculate the new x
         }
-        f2 = calc(cons,consLength);
+        f2 = GetError();
         ftimes++;
 
         //Take a step of alpha 3 that is 2*alpha2
@@ -397,7 +410,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
         {
                 *x[i]=xold[i]+alpha3*s[i];//calculate the new x
         }
-        f3=calc(cons,consLength);
+        f3=GetError();
         ftimes++;
 
         //Now reduce or lengthen alpha2 and alpha3 until the minimum is
@@ -416,7 +429,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
                         {
                                 *x[i]=xold[i]+alpha2*s[i];//calculate the new x
                         }
-                        f2=calc(cons,consLength);
+                        f2=GetError();
                         ftimes++;
                 }
 
@@ -431,7 +444,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
                         {
                                 *x[i]=xold[i]+alpha3*s[i];//calculate the new x
                         }
-                        f3=calc(cons,consLength);
+                        f3=GetError();
                         ftimes++;
                 }
                 /* this should be deleted soon!!!!
@@ -480,7 +493,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
         {
                 *x[i]=xold[i]+alphaStar*s[i];//calculate the new x
         }
-        fnew=calc(cons,consLength);
+        fnew=GetError();
         ftimes++;
 
         /*
@@ -550,7 +563,10 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
 
 }
 
-
+double Solver::GetElement(int i)
+{
+	return *x[i];
+}
 
 double calc(constraint * cons, int consLength)
 {
