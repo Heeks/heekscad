@@ -275,7 +275,7 @@ void SolveImpl::Unload()
 		if(parm.first != Vector)
 			continue;
 
-		*location = GetElement((int)parm.second);
+		*location = GetElement((size_t)parm.second);
 	}
 }
 
