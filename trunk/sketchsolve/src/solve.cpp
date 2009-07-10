@@ -112,25 +112,19 @@ int Solver::solveI(double  **xin, int xLength, constraint * cons, int consLength
 
         //Calculate the gradient
         //gradF=x;
-        double norm,first,second,temper; //The norm of the gradient vector
+        double norm; //The norm of the gradient vector
         double f1,f2,f3,alpha1,alpha2,alpha3,alphaStar;
         norm = 0;
         pert = f0*pertMag;
         for(int j=0;j<xLength;j++)
         {
-                temper= x[j];
-                x[j]= temper-pert;
-                first = GetError();
-                x[j]= temper+pert;
-                second = GetError();
-                grad[j]=.5*(second-first)/pert;
+                grad[j]=GetGradient(j,pert);
                 ftimes++;
 #ifdef DEBUG
                 cstr << "gradient: " << grad[j];
                 debugprint(cstr.str());
                 cstr.clear();
 #endif
-                x[j]=temper;
                 norm = norm+(grad[j]*grad[j]);
         }
         norm = sqrt(norm);
@@ -286,14 +280,8 @@ int Solver::solveI(double  **xin, int xLength, constraint * cons, int consLength
         for(int i=0;i<xLength;i++)
         {
                 //Calculate the new gradient vector
-                temper=x[i];
-                x[i]=temper-pert;
-                first = GetError();
-                x[i]=temper+pert;
-                second= GetError();
-                gradnew[i]=.5*(second-first)/pert;
+                gradnew[i]= GetGradient(i,pert);
                 ftimes++;
-                x[i]=temper;
                 //Calculate the change in the gradient
                 gamma[i]=gradnew[i]-grad[i];
                 bottom+=deltaX[i]*gamma[i];
