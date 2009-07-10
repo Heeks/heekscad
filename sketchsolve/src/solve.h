@@ -266,17 +266,17 @@ class SolveImpl;
 class SolveImpl
 {
 	std::vector<double(*)(std::vector<double>)> errors;
-	std::vector<std::list<dependencyType>> dependencies;
-	std::list<std::list<std::pair<varLocation,void*>>> constraintvars;
+	std::vector< std::list<dependencyType> > dependencies;
+	std::list< std::list<std::pair< varLocation,void* > > > constraintvars;
 	std::list<constraintType> constrainttypes;
 	std::map<double*,void*> &parms;
-	std::map<double*,std::pair<varLocation,void*>> mapparms;
+	std::map<double*,std::pair<varLocation,void*> > mapparms;
 	std::set<double*> mapset;
 	int next_vector;
 
-	void LoadDouble(std::list<std::pair<varLocation,void*>> &mylist, double *d);
-	void LoadPoint(std::list<std::pair<varLocation,void*>> &mylist, point p);
-	void LoadLine(std::list<std::pair<varLocation,void*>> &mylist,line l);
+	void LoadDouble(std::list<std::pair<varLocation,void*> > &mylist, double *d);
+	void LoadPoint(std::list<std::pair<varLocation,void*> > &mylist, point p);
+	void LoadLine(std::list<std::pair<varLocation,void*> > &mylist,line l);
 	void registerconstraint(constraintType,double(*)(std::vector<double>));
 	void registerdependency(constraintType,dependencyType);
 	
