@@ -305,6 +305,7 @@ class SolveImpl
 	std::vector<std::list<dependencyType> > dependencies;
 	std::set<constraintType> depset;
 	std::list<std::list<std::pair<varLocation,void*> > > constraintvars;
+	std::vector<double* > myvec;
 	std::list<constraintType> constrainttypes;
 	std::map<double*,std::pair<varLocation,void*> > mapparms;
 	std::set<double*> mapset;
@@ -329,13 +330,16 @@ public:
 	void Unload();
 	double GetError();
 
+	int GetVectorSize();
+	double GetInitialValue(int i);
 	virtual double GetElement(int i) =0; //Pure virtual
 };
 
 class Solver: public SolveImpl
 {
 	int xLength;
-	double **x;
+	double *x;
+	double **xsave;
 	double *origSolution;
 	double *grad;
     double *s;
@@ -369,6 +373,15 @@ double ParallelError(std::vector<double> parms);
 double VerticalError(std::vector<double> parms);
 double PointOnPointError(std::vector<double> parms);
 double P2PDistanceError(std::vector<double> parms);
-
+double P2PDistanceHorzError(std::vector<double> parms);
+double P2PDistanceVertError(std::vector<double> parms);
+double PointOnLineError(std::vector<double> parms);
+double P2LDistanceError(std::vector<double> parms);
+double P2LDistanceVertError(std::vector<double> parms);
+double P2LDistanceHorzError(std::vector<double> parms);
+double LineLengthError(std::vector<double> parms);
+double EqualLengthError(std::vector<double> parms);
+double EqualScalarError(std::vector<double> parms);
+double PointOnArcAngleError(std::vector<double> parms);
 
 #endif /* SOLVE_H_ */

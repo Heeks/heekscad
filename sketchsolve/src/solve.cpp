@@ -21,6 +21,8 @@ int solve(double  **x, int xLength, constraint * cons, int consLength, int isFin
 {
 	Solver *s = new Solver(xLength);
 	int ret = s->solve(x,cons,consLength,isFine);
+	if(ret == succsess)
+		s->Unload();
 	delete s;
 	return ret;
 }
@@ -75,15 +77,16 @@ Solver::~Solver()
         delete grad;
         delete xold;
         delete gammatDotN;
+		delete x;
 }
 
-int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
+int Solver::solve(double  **xin,constraint * cons, int consLength, int isFine)
 {
-		this->x = x;
+		xsave = xin;
 
 		for(int i=0; i < xLength; i++)
 		{
-			parms[x[i]] = 1;
+			parms[xin[i]] = 1;
 		}
 
 		for(int i=0; i < consLength; i++)
@@ -91,13 +94,18 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
 			Load(cons[i]);
 		}
 
+		xLength = GetVectorSize();
+		x = new double[xLength];
+		for(int i=0; i < xLength; i++)
+			x[i] = GetInitialValue(i);
+
 
         std::stringstream cstr;
         double convergence,pert ;
         //Save the original parameters for later.
         for(int i=0;i<xLength;i++)
         {
-                origSolution[i]=*x[i];
+                origSolution[i]=x[i];
         }
 
         if(isFine>0) convergence = XconvergenceFine;
@@ -119,10 +127,10 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
         pert = f0*pertMag;
         for(int j=0;j<xLength;j++)
         {
-                temper= *x[j];
-                *x[j]= temper-pert;
+                temper= x[j];
+                x[j]= temper-pert;
                 first = GetError();
-                *x[j]= temper+pert;
+                x[j]= temper+pert;
                 second = GetError();
                 grad[j]=.5*(second-first)/pert;
                 ftimes++;
@@ -131,7 +139,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
                 debugprint(cstr.str());
                 cstr.clear();
 #endif
-                *x[j]=temper;
+                x[j]=temper;
                 norm = norm+(grad[j]*grad[j]);
         }
         norm = sqrt(norm);
@@ -160,7 +168,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
         double fold;
         for(int i=0;i<xLength;i++)
         {
-                xold[i]=*x[i];//Copy last values to xold
+                xold[i]=x[i];//Copy last values to xold
         }
 
         ///////////////////////////////////////////////////////
@@ -175,7 +183,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
         alpha2=1;
         for(int i=0;i<xLength;i++)
         {
-                *x[i]=xold[i]+alpha2*s[i];//calculate the new x
+                x[i]=xold[i]+alpha2*s[i];//calculate the new x
         }
         f2 = GetError();
         ftimes++;
@@ -184,7 +192,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
         alpha3 = alpha*2;
         for(int i=0;i<xLength;i++)
         {
-                *x[i]=xold[i]+alpha3*s[i];//calculate the new x
+                x[i]=xold[i]+alpha3*s[i];//calculate the new x
         }
         f3=GetError();
         ftimes++;
@@ -202,7 +210,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
                         alpha2=alpha2/2;
                         for(int i=0;i<xLength;i++)
                         {
-                                *x[i]=xold[i]+alpha2*s[i];//calculate the new x
+                                x[i]=xold[i]+alpha2*s[i];//calculate the new x
                         }
                         f2=GetError();
                         ftimes++;
@@ -217,7 +225,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
                         alpha3=alpha3*2;
                         for(int i=0;i<xLength;i++)
                         {
-                                *x[i]=xold[i]+alpha3*s[i];//calculate the new x
+                                x[i]=xold[i]+alpha3*s[i];//calculate the new x
                         }
                         f3=GetError();
                         ftimes++;
@@ -237,7 +245,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
         /// Set the values to alphaStar
         for(int i=0;i<xLength;i++)
         {
-                *x[i]=xold[i]+alphaStar*s[i];//calculate the new x
+                x[i]=xold[i]+alphaStar*s[i];//calculate the new x
         }
         fnew=GetError();
         ftimes++;
@@ -272,7 +280,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
         ///Calculate deltaX
         for(int i=0;i<xLength;i++)
         {
-                deltaX[i]=*x[i]-xold[i];//Calculate the difference in x for the Hessian update
+                deltaX[i]=x[i]-xold[i];//Calculate the difference in x for the Hessian update
         }
         double maxIterNumber = MaxIterations * xLength;
         while(deltaXnorm>convergence && fnew>smallF && iterations<maxIterNumber)
@@ -287,14 +295,14 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
         for(int i=0;i<xLength;i++)
         {
                 //Calculate the new gradient vector
-                temper=*x[i];
-                *x[i]=temper-pert;
+                temper=x[i];
+                x[i]=temper-pert;
                 first = GetError();
-                *x[i]=temper+pert;
+                x[i]=temper+pert;
                 second= GetError();
                 gradnew[i]=.5*(second-first)/pert;
                 ftimes++;
-                *x[i]=temper;
+                x[i]=temper;
                 //Calculate the change in the gradient
                 gamma[i]=gradnew[i]-grad[i];
                 bottom+=deltaX[i]*gamma[i];
@@ -383,7 +391,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
         //copy newest values to the xold
         for(int i=0;i<xLength;i++)
         {
-                xold[i]=*x[i];//Copy last values to xold
+                xold[i]=x[i];//Copy last values to xold
         }
         steps=0;
 
@@ -399,7 +407,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
         alpha2=1;
         for(int i=0;i<xLength;i++)
         {
-                *x[i]=xold[i]+alpha2*s[i];//calculate the new x
+                x[i]=xold[i]+alpha2*s[i];//calculate the new x
         }
         f2 = GetError();
         ftimes++;
@@ -408,7 +416,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
         alpha3 = alpha2*2;
         for(int i=0;i<xLength;i++)
         {
-                *x[i]=xold[i]+alpha3*s[i];//calculate the new x
+                x[i]=xold[i]+alpha3*s[i];//calculate the new x
         }
         f3=GetError();
         ftimes++;
@@ -427,7 +435,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
                         alpha2=alpha2/2;
                         for(int i=0;i<xLength;i++)
                         {
-                                *x[i]=xold[i]+alpha2*s[i];//calculate the new x
+                                x[i]=xold[i]+alpha2*s[i];//calculate the new x
                         }
                         f2=GetError();
                         ftimes++;
@@ -442,7 +450,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
                         alpha3=alpha3*2;
                         for(int i=0;i<xLength;i++)
                         {
-                                *x[i]=xold[i]+alpha3*s[i];//calculate the new x
+                                x[i]=xold[i]+alpha3*s[i];//calculate the new x
                         }
                         f3=GetError();
                         ftimes++;
@@ -491,7 +499,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
         /// Set the values to alphaStar
         for(int i=0;i<xLength;i++)
         {
-                *x[i]=xold[i]+alphaStar*s[i];//calculate the new x
+                x[i]=xold[i]+alphaStar*s[i];//calculate the new x
         }
         fnew=GetError();
         ftimes++;
@@ -514,7 +522,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
         deltaXnorm=0;
         for(int i=0;i<xLength;i++)
         {
-                deltaX[i]=*x[i]-xold[i];//Calculate the difference in x for the hessian update
+                deltaX[i]=x[i]-xold[i];//Calculate the difference in x for the hessian update
                 deltaXnorm+=deltaX[i]*deltaX[i];
                 grad[i]=gradnew[i];
         }
@@ -556,7 +564,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
                 //Replace the bad numbers with the last result
                 for(int i=0;i<xLength;i++)
                 {
-                        *x[i]=origSolution[i];
+                        x[i]=origSolution[i];
                 }
                 return noSolution;
                 }
@@ -565,7 +573,7 @@ int Solver::solve(double  **x,constraint * cons, int consLength, int isFine)
 
 double Solver::GetElement(int i)
 {
-	return *x[i];
+	return x[i];
 }
 
 double calc(constraint * cons, int consLength)
@@ -576,276 +584,7 @@ double calc(constraint * cons, int consLength)
         {
 			switch(cons[i].type)
 			{
-				case pointOnPoint:
-                {
-                        //Hopefully avoid this constraint, make coincident points use the same parameters
-                        error += (P1_x - P2_x) * (P1_x - P2_x) + (P1_y - P2_y) * (P1_y - P2_y);
-                }
-				break;
-
-				case P2PDistance:
-                {
-                        error+= (P1_x - P2_x) * (P1_x - P2_x) + (P1_y - P2_y) * (P1_y - P2_y) - distance * distance;
-
-                }
-				break;
-
-				case P2PDistanceVert:
-                {
-                        error+= (P1_y - P2_y) * (P1_y - P2_y) - distance * distance;
-                }
-				break;
-
-				case P2PDistanceHorz:
-                {
-                        error+= (P1_x - P2_x) * (P1_x - P2_x) - distance * distance;
-                }
-				break;
-
-				case pointOnLine:
-                {
-                        dx = L1_P2_x - L1_P1_x;
-                        dy = L1_P2_y - L1_P1_y;
-
-                        m=dy/dx; //Slope
-                        n=dx/dy; //1/Slope
-
-                        if(m<=1 && m>=-1)
-                        {
-                                //Calculate the expected y point given the x coordinate of the point
-                                Ey=L1_P1_y+m*(P1_x-L1_P1_x);
-                                error+=(Ey-P1_y)*(Ey-P1_y);
-                        }
-                        else
-                        {
-                                //Calculate the expected x point given the y coordinate of the point
-                                Ex=L1_P1_x+n*(P1_y-L1_P1_y);
-                                error+=(Ex-P1_x)*(Ex-P1_x);
-                        }
-                }
-				break;
-
-				case P2LDistance:
-                {
-                        dx = L1_P2_x - L1_P1_x;
-                        dy = L1_P2_y - L1_P1_y;
-
-                        double Xint,Yint;
-                        t=-(L1_P1_x*dx-P1_x*dx+L1_P1_y*dy-P1_y*dy)/(dx*dx+dy*dy);
-                        Xint=L1_P1_x+dx*t;
-                        Yint=L1_P1_y+dy*t;
-                        temp= _hypot((P1_x - Xint),(P1_y - Yint)) - distance;
-                        error += temp*temp/10;
-
-                }
-				break;
-
-				case P2LDistanceVert:
-                {
-                        dx = L1_P2_x - L1_P1_x;
-                        dy = L1_P2_y - L1_P1_y;
-
-                        t=(P1_x- L1_P1_x)/dx;
-                        Yint=L1_P1_y+dy*t;
-                        temp= fabs((P1_y - Yint)) - distance;
-                        error += temp*temp;
-
-                }
-				break;
-
-				case P2LDistanceHorz:
-                {
-                        dx = L1_P2_x - L1_P1_x;
-                        dy = L1_P2_y - L1_P1_y;
-
-                        t=(P1_y- L1_P1_y)/dy;
-                        Xint=L1_P1_x+dx*t;
-                        temp= fabs((P1_x - Xint)) - distance;
-                        error += temp*temp/10;
-
-                }
-				break;
-
-
-				case vertical:
-                {
-                        double odx = L1_P2_x - L1_P1_x;
-                        /*
-                        double ody = L1_P2_y - L1_P1_y;
-
-
-                        double hyp=_hypot(odx,ody);
-                        dx = odx/hyp;
-                        dy = ody/hyp;
-
-                        double theta = atan2(dy,dx);
-                        double p1 = odx;//-cos(theta)*cos(theta)*ody;
-                        error+=p1*p1*10;
-                        */
-                        error+=odx*odx*1000;
-                }
-				break;
-
-				case horizontal:
-                {
-                        //double odx = L1_P2_x - L1_P1_x;
-                        double ody = L1_P2_y - L1_P1_y;
-                        /*
-                        double hyp=_hypot(odx,ody);
-                        dx = odx/hyp;
-                        dy = ody/hyp;
-
-                        double theta = atan2(dy,dx);
-                        double p1 = (ody);//-sin(theta)*sin(theta)*odx);
-                        error+=p1*p1*10;
-                        */
-                        error+=ody*ody*1000;
-                }
-				break;
-
-				case tangentToCircle:
-                {
-                        double dx,dy,Rpx,Rpy,RpxN,RpyN,hyp,error1,error2;
-                        dx = L1_P2_x-L1_P1_x;
-                        dy = L1_P2_y-L1_P1_y;
-                        hyp=_hypot(dx,dy);
-                        //Calculate the expected tangent intersection points
-                        Rpx =C1_Center_x - dy / hyp * C1_rad;
-                        Rpy =C1_Center_y + dx / hyp * C1_rad;
-                        RpxN=C1_Center_x + dy / hyp * C1_rad;
-                        RpyN=C1_Center_y - dx / hyp * C1_rad;
-
-                        error1=(-dy * Rpx + dx * Rpy   + (L1_P1_x * L1_P2_y - L1_P2_x * L1_P1_y))/hyp;
-                        error2=(-dy * RpxN + dx * RpyN + (L1_P1_x * L1_P2_y - L1_P2_x * L1_P1_y))/hyp;
-                        error1=error1 * error1;
-                        error2=error2 * error2;
-                        if(error1<error2) error+=error1;
-                        else error+=error2;
-
-                }
-				break;
-
-				case tangentToArc:
-                {
-                        
-                        double dx,dy;
-                        dx = L1_P2_x - L1_P1_x;
-                        dy = L1_P2_y - L1_P1_y;
-
-
-                        double Xint,Yint,radsq;
-                        radsq = A1_radius * A1_radius;
-                        t=-(L1_P1_x*dx-A1_Center_x*dx+L1_P1_y*dy-A1_Center_y*dy)/(dx*dx+dy*dy);
-                        Xint=L1_P1_x+dx*t;
-                        Yint=L1_P1_y+dy*t;
-                        temp= sqrt((A1_Center_x - Xint)*(A1_Center_x - Xint)+(A1_Center_y - Yint)*(A1_Center_y - Yint)) - sqrt(radsq);
-                        error += temp*temp/100;
-                }
-				break;
-
-				case arcRules:
-                {
-                        //rad1=_hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
-                        //rad2=_hypot(A1_Center_x - A1_End_x , A1_Center_y - A1_End_y);
-                        //error += (rad1-rad2)*(rad1-rad2);
-                        //double dx,dy,Rpx,Rpy,RpxN,RpyN,hyp,error1,error2,rad;
-                        //dx = A1_End_x - A1_Start_x;
-                        //dy = A1_End_y - A1_Start_y;
-
-                        //hyp=_hypot(dx,dy);
-
-                        //double u = (A1_Center_x - A1_Start_x) * (A1_End_x - A1_Start_x) + (A1_Center_y - A1_Start_y) * (A1_End_y - A1_Start_y);
-                        //u/=hyp*hyp;
-
-                        //temp = sin(u - .5);
-                        //error+=temp*temp*temp*temp*100000;
-                        //error+=pow(-2*A1_Center_x*A1_End_y - 2*A1_Center_y*A1_End_y + A1_End_x*A1_End_y + pow(A1_End_y,2) + 2*A1_Center_x*A1_Start_x - 2*A1_Center_y*A1_Start_x - A1_End_x*A1_Start_x + 4*A1_End_y*A1_Start_x - 3*pow(A1_Start_x,2) +  2*A1_Center_y*A1_Start_y + A1_Start_x*A1_Start_y - pow(A1_Start_y,2),2)/(8*pow(A1_End_y,2) + 8*pow(A1_Start_x,2) - 8*A1_End_y*A1_Start_y -  8*A1_Start_x*A1_Start_y + 4*pow(A1_Start_y,2));
-#ifndef NEWARC
-                        double a1endx2 = A1_End_x * A1_End_x;
-                        double a1endy2 = A1_End_y * A1_End_y;
-                        double a1startx2 = A1_Start_x*A1_Start_x;
-                        double a1starty2 = A1_Start_y*A1_Start_y;
-                        double num = -2*A1_Center_x*A1_End_x+a1endx2-2*A1_Center_y*A1_End_y+a1endy2+2*A1_Center_x*A1_Start_x-a1startx2+2*A1_Center_y*A1_Start_y-a1starty2;
-                        error += num * num /(4.*a1endx2+a1endy2-2*A1_End_x*A1_Start_x+a1startx2-2*A1_End_y*A1_Start_y+a1starty2);
-#endif
-                }
-				break;
-
-				case lineLength:
-                {
-                        temp= sqrt(pow(L1_P2_x - L1_P1_x,2) + pow(L1_P2_y - L1_P1_y,2)) - length;
-                        //temp=_hypot(L1_P2_x - L1_P1_x , L1_P2_y - L1_P1_y) - length;
-                        error += temp*temp*100;
-                }
-				break;
-
-				case equalLegnth:
-                {
-                        temp=_hypot(L1_P2_x - L1_P1_x , L1_P2_y - L1_P1_y) - _hypot(L2_P2_x - L2_P1_x , L2_P2_y - L2_P1_y);
-                        error += temp*temp;
-                }
-				break;
-
-				case arcRadius:
-                {
-                        //rad1 = _hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
-                        //rad2 = _hypot(A1_Center_x - A1_End_x , A1_Center_y - A1_End_y);
-                        temp= A1_radius - radius;
-                        error += temp*temp;
-                }
-				break;
-
-				case equalRadiusArcs:
-                {
-                        //rad1 = _hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
-                        //rad2 = _hypot(A2_Center_x - A2_Start_x , A2_Center_y - A2_Start_y);
-                        temp = A1_radius-A2_radius;
-                        error += temp*temp;
-                }
-				break;
-
-				case equalRadiusCircles:
-                {
-                        temp = C1_rad - C2_rad;
-                        error += temp*temp;
-                }
-				break;
-
-				case equalRadiusCircArc:
-                {
-                        //rad1 = _hypot(A1_Center_x - A1_Start_x , A1_Center_y - A1_Start_y);
-                        temp = A1_radius-C1_rad;
-                        error += temp*temp;
-                }
-				break;
-
-				case concentricArcs:
-                {
-                        temp = _hypot(A1_Center_x - A2_Center_x , A1_Center_y - A2_Center_y);
-                        error += temp*temp;
-                }
-				break;
-
-				case concentricCircles:
-                {
-                        temp = _hypot(C1_Center_x - C2_Center_x , C1_Center_y - C2_Center_y);
-                        error += temp*temp;
-                }
-				break;
-
-				case concentricCircArc:
-                {
-                        temp = _hypot(A1_Center_x - C1_Center_x , A1_Center_y - C1_Center_y);
-                        error += temp*temp;
-                }
-				break;
-
-				case circleRadius:
-                {
-                        error += (C1_rad - radius)*(C1_rad - radius);
-                }
-				break;
-
+				
 				case internalAngle:
                 {
                         dx = L1_P2_x - L1_P1_x;
@@ -904,26 +643,6 @@ double calc(constraint * cons, int consLength)
                         dy2=dy2/hyp2;
 
                         temp = dx*dx2+dy*dy2;
-                        error += (temp)*(temp);
-                }
-				break;
-
-				case parallel:
-                {
-                        dx = L1_P2_x - L1_P1_x;
-                        dy = L1_P2_y - L1_P1_y;
-                        dx2 = L2_P2_x - L2_P1_x;
-                        dy2 = L2_P2_y - L2_P1_y;
-
-                        hyp1=_hypot(dx,dy);
-                        hyp2=_hypot(dx2,dy2);
-
-                        dx=dx/hyp1;
-                        dy=dy/hyp1;
-                        dx2=dx2/hyp2;
-                        dy2=dy2/hyp2;
-
-                        temp = dy*dx2-dx*dy2;
                         error += (temp)*(temp);
                 }
 				break;
@@ -1101,19 +820,6 @@ double calc(constraint * cons, int consLength)
                         temp = (Ex-A2_Center_x);
                         temp2 = (Ey-A2_Center_y);
                         error += temp*temp+temp2*temp2;
-                }
-				break;
-
-				case pointOnArcStart:
-                {
-                        error += (P1_x-A1_Start_x)*(P1_x-A1_Start_x)+(P1_y-A1_Start_y)*(P1_y-A1_Start_y);
-                }
-				break;
-
-
-				case pointOnArcEnd:
-                {
-                        error += (P1_x-A1_End_x)*(P1_x-A1_End_x)+(P1_y-A1_End_y)*(P1_y-A1_End_y);
                 }
 				break;
 

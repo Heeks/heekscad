@@ -30,6 +30,7 @@ void SolveImpl::LoadDouble(std::list<std::pair<varLocation,void*> > &mylist, dou
 		mylist.push_back(newloc);
 		mapparms[d] = newloc;
 		mapset.insert(d);
+		myvec.push_back(d);
 		return;
 	}
 
@@ -84,6 +85,97 @@ SolveImpl::SolveImpl()
 	registerdependency(P2PDistance,parameter);
 	registerconstraint(P2PDistance,P2PDistanceError);
 
+	registerdependency(P2PDistanceVert,point1);
+	registerdependency(P2PDistanceVert,point2);
+	registerdependency(P2PDistanceVert,parameter);
+	registerconstraint(P2PDistanceVert,P2PDistanceVertError);
+
+	registerdependency(P2PDistanceHorz,point1);
+	registerdependency(P2PDistanceHorz,point2);
+	registerdependency(P2PDistanceHorz,parameter);
+	registerconstraint(P2PDistanceHorz,P2PDistanceHorzError);
+
+	registerdependency(pointOnLine,line1);
+	registerdependency(pointOnLine,point1);
+	registerconstraint(pointOnLine,PointOnLineError);
+
+	registerdependency(P2LDistance,line1);
+	registerdependency(P2LDistance,point1);
+	registerdependency(P2LDistance,parameter);
+	registerconstraint(P2LDistance,P2LDistanceError);
+
+	registerdependency(P2LDistanceHorz,line1);
+	registerdependency(P2LDistanceHorz,point1);
+	registerdependency(P2LDistanceHorz,parameter);
+	registerconstraint(P2LDistanceHorz,P2LDistanceHorzError);
+
+
+	registerdependency(P2LDistanceVert,line1);
+	registerdependency(P2LDistanceVert,point1);
+	registerdependency(P2LDistanceVert,parameter);
+	registerconstraint(P2LDistanceVert,P2LDistanceVertError);
+
+	registerdependency(tangentToCircle,line1);
+	registerdependency(tangentToCircle,circle1_center);
+	registerdependency(tangentToCircle,circle1_rad);
+	registerconstraint(tangentToCircle,P2LDistanceError);
+
+	registerdependency(tangentToArc,line1);
+	registerdependency(tangentToArc,arc1_center);
+	registerdependency(tangentToArc,arc1_rad);
+	registerconstraint(tangentToArc,P2LDistanceError);
+
+	registerdependency(lineLength,line1);
+	registerdependency(lineLength,parameter);
+	registerconstraint(lineLength,LineLengthError);
+
+	registerdependency(equalLegnth,line1);
+	registerdependency(equalLegnth,line2);
+	registerconstraint(equalLegnth,EqualLengthError);
+
+	registerdependency(arcRadius,arc1_rad);
+	registerdependency(arcRadius,parameter);
+	registerconstraint(arcRadius,EqualScalarError);
+
+	registerdependency(circleRadius,circle1_rad);
+	registerdependency(circleRadius,parameter);
+	registerconstraint(circleRadius,EqualScalarError);
+
+	registerdependency(equalRadiusArcs,arc1_rad);
+	registerdependency(equalRadiusArcs,arc2_rad);
+	registerconstraint(equalRadiusArcs,EqualScalarError);
+
+	registerdependency(equalRadiusCircles,circle1_rad);
+	registerdependency(equalRadiusCircles,circle2_rad);
+	registerconstraint(equalRadiusCircles,EqualScalarError);
+
+	registerdependency(equalRadiusCircArc,arc1_rad);
+	registerdependency(equalRadiusCircArc,circle1_rad);
+	registerconstraint(equalRadiusCircArc,EqualScalarError);
+
+	registerdependency(concentricArcs,arc1_center);
+	registerdependency(concentricArcs,arc2_center);
+	registerconstraint(concentricArcs,PointOnPointError);
+
+	registerdependency(concentricCircles,circle1_center);
+	registerdependency(concentricCircles,circle2_center);
+	registerconstraint(concentricCircles,PointOnPointError);
+
+	registerdependency(concentricCircArc,arc1_center);
+	registerdependency(concentricCircArc,circle1_center);
+	registerconstraint(concentricCircArc,PointOnPointError);
+
+	registerdependency(pointOnArcStart,point1);
+	registerdependency(pointOnArcStart,arc1_center);
+	registerdependency(pointOnArcStart,arc1_rad);
+	registerdependency(pointOnArcStart,arc1_startAngle);
+	registerconstraint(pointOnArcStart,PointOnArcAngleError);
+	
+	registerdependency(pointOnArcEnd,point1);
+	registerdependency(pointOnArcEnd,arc1_center);
+	registerdependency(pointOnArcEnd,arc1_rad);
+	registerdependency(pointOnArcEnd,arc1_endAngle);
+	registerconstraint(pointOnArcEnd,PointOnArcAngleError);
 }
 
 SolveImpl::~SolveImpl()
@@ -189,8 +281,8 @@ void SolveImpl::Unload()
 
 void SolveImpl::registerconstraint(constraintType type,double(*error)(std::vector<double>))
 {
-	if(errors.size() < (int)type + 1)
-		errors.resize((int)type+1);
+	if(errors.size() < (unsigned int)type + 1)
+		errors.resize((unsigned int)type+1);
 	errors[type] = error;
 }
 
@@ -198,9 +290,19 @@ void SolveImpl::registerdependency(constraintType type, dependencyType d)
 {
 	if(depset.find(type) == depset.end())
 	{
-		if(dependencies.size() < (int)type + 1)
-			dependencies.resize((int)type+1);
+		if(dependencies.size() < (unsigned int)type + 1)
+			dependencies.resize((unsigned int)type+1);
 		depset.insert(type);
 	}
 	dependencies[type].push_back(d);
+}
+
+double SolveImpl::GetInitialValue(int i)
+{
+	return *myvec[i];
+}
+
+int SolveImpl::GetVectorSize()
+{
+	return myvec.size();
 }

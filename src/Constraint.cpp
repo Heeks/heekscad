@@ -97,7 +97,7 @@ const Constraint& Constraint::operator=(const Constraint &b){
 }
 
 Constraint::~Constraint()
-{
+	{
 	//TODO: objlist will get us removed from obj1's list and obj2's list, however we may want to get out
 	//of constrained objects constraint list as well
 	//the 3 boolean like constraints should be handled as well
