@@ -268,7 +268,7 @@ class SolveImpl
 	std::vector<double(*)(std::vector<double>)> errors;
 	std::vector<std::list<dependencyType> > dependencies;
 	std::set<constraintType> depset;
-	std::list<std::list<std::pair<varLocation,void*> >> constraintvars;
+	std::list<std::list<std::pair<varLocation,void*> > > constraintvars;
 	std::list<constraintType> constrainttypes;
 	std::map<double*,std::pair<varLocation,void*> > mapparms;
 	std::set<double*> mapset;

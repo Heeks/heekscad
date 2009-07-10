@@ -613,6 +613,14 @@
 					UsePrecompiledHeader="0"
 				/>
 			</FileConfiguration>
+			<FileConfiguration
+				Name="Unicode Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+				/>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\Face.cpp"
@@ -1367,6 +1375,14 @@
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Unicode Debug|Win32"
 				>
 				<Tool
 					Name="VCCLCompilerTool"

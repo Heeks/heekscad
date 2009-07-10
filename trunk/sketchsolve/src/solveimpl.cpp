@@ -82,7 +82,7 @@ double SolveImpl::GetError()
 	double error = 0;
 
 	std::list<constraintType>::iterator it;
-	std::list<std::list<std::pair<varLocation,void*> >>::iterator it2 = constraintvars.begin();
+	std::list<std::list<std::pair<varLocation,void*> > >::iterator it2 = constraintvars.begin();
 	for(it = constrainttypes.begin(); it != constrainttypes.end(); ++it)
 	{
 		myvec.clear();
