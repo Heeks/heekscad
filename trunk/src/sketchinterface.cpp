@@ -4,8 +4,7 @@
 
 #include "stdafx.h"
 #include "../sketchsolve/src/solve.h"
-
-#include "matrix.h"
+#include "OCCSolver.h"
 
 //This file is used to deal with the numeric solvers trouble with pointOnPoint constraints.
 //They seem to cause serious slowness and instability in the solver. Since they are trivial
@@ -15,7 +14,7 @@
 
 //This is an n log n realization of that scheme.
 
-Solver solve;
+OCCSolver solve;
 
 std::vector<double*> usedparms;
 std::set<double*> hasusedparms;

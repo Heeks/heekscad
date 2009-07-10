@@ -74,16 +74,7 @@ int Solver::solveI(double  **xin, int xLength, constraint * cons, int consLength
 {
 		xsave = xin;
 
-		BeforeLoad();
-		for(int i=0; i < xLength; i++)
-		{
-			parms[xin[i]] = 1;
-		}
-
-		for(int i=0; i < consLength; i++)
-		{
-			Load(cons[i]);
-		}
+		Load(cons,consLength,xin,xLength);
 
 		xLength = GetVectorSize();
 		allocate(xLength);
