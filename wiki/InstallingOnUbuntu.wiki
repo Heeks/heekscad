@@ -6,7 +6,9 @@
  * 8.10 intrepid
  * 9.04 jaunty
 
- there are experimental packages provided on http://yamato.hyte.de/packages/heeks/
+ there are packages provided on http://yamato.hyte.de/packages/heeks/
+
+ please make sure you download the right version of packages for your ubuntu release or you _will_ run into trouble with python
 
 == dependencies ==
  * Opencascade
@@ -37,3 +39,7 @@
  * File->Plugins new name=heekscnc filepath -> press ... select /usr/lib/heekscnc/libheekscnc.so.0.5.1 open OK
  * close HeeksCAD
  * start HeeksCAD again -> cnc installed, the machining menu and toolbar are available
+
+== updating ==
+ * make sure you update all the dependencies also. (just install all 6 packages)
+ * when the toolbars look incomplete after new features got added, exit heeks, delete your personal preference files ( ~/.HeeksCAD and ~/.HeeksCNC ) and start it again. then add the plugins to the config again.
