@@ -17,7 +17,7 @@ OCCSolver::~OCCSolver()
 
 int OCCSolver::solve(double  **x,int xLength, constraint * cons, int consLength, int isFine)
 {
-	pert = 10e-13;
+	pert = 10e-11;
 
 	Load(cons,consLength,x,xLength);
 	math_Vector myvec = math_Vector(1,GetVectorSize());//TODO: inclusive?
