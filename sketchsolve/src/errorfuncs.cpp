@@ -16,7 +16,7 @@
 
 using namespace std;
 
-double ParallelError(std::vector<double> parms)
+double ParallelError(std::vector<double> &parms)
 {
      double dx = parms[2] - parms[0];
      double dy = parms[3] - parms[1];
@@ -32,22 +32,41 @@ double ParallelError(std::vector<double> parms)
      dy2=dy2/hyp2;
 
      double temp = dy*dx2-dx*dy2;
-     return (temp)*(temp);
+     return (temp)*(temp)*1000;
 }
 
-double HorizontalError(std::vector<double> parms)
+double PerpendicularError(std::vector<double> &parms)
+{
+     double dx = parms[2] - parms[0];
+     double dy = parms[3] - parms[1];
+     double dx2 = parms[6] - parms[4];
+     double dy2 = parms[7] - parms[5];
+
+     double hyp1=sqrt(dx*dx+dy*dy);
+     double hyp2=sqrt(dx2*dx2+dy2*dy2);
+
+     dx=dx/hyp1;
+     dy=dy/hyp1;
+     dx2=dx2/hyp2;
+     dy2=dy2/hyp2;
+
+     double temp = dx*dx2+dy*dy2;
+     return (temp)*(temp)*1000;
+}
+
+double HorizontalError(std::vector<double> &parms)
 {
    double ody = parms[3] - parms[1];
    return ody*ody*1000;
 }
 
-double VerticalError(std::vector<double> parms)
+double VerticalError(std::vector<double> &parms)
 {
    double odx = parms[2] - parms[0];
    return odx*odx*1000;
 }
 
-double PointOnPointError(std::vector<double> parms)
+double PointOnPointError(std::vector<double> &parms)
 {
     //Hopefully avoid this constraint, make coincident points use the same parameters
 	double dx = parms[0] - parms[2];
@@ -55,7 +74,7 @@ double PointOnPointError(std::vector<double> parms)
     return dx*dx + dy*dy;
 }
 
-double P2PDistanceError(std::vector<double> parms)
+double P2PDistanceError(std::vector<double> &parms)
 {
 	double dx = parms[0] - parms[2];
 	double dy = parms[1] - parms[3];
@@ -63,21 +82,21 @@ double P2PDistanceError(std::vector<double> parms)
     return dx*dx+dy*dy - d * d;
 }
 
-double P2PDistanceHorzError(std::vector<double> parms)
+double P2PDistanceHorzError(std::vector<double> &parms)
 {
 	double dx = parms[0] - parms[2];
 	double d = parms[4];
     return dx*dx - d * d;
 }
 
-double P2PDistanceVertError(std::vector<double> parms)
+double P2PDistanceVertError(std::vector<double> &parms)
 {
 	double dy = parms[1] - parms[3];
 	double d = parms[4];
     return dy*dy - d * d;
 }
 
-double PointOnLineError(std::vector<double> parms)
+double PointOnLineError(std::vector<double> &parms)
 {
 	double dx = parms[0] - parms[2];
 	double dy = parms[1] - parms[3];
@@ -99,7 +118,7 @@ double PointOnLineError(std::vector<double> parms)
     }
 }
 
-double P2LDistanceError(std::vector<double> parms)                      
+double P2LDistanceError(std::vector<double> &parms)                      
 {
 	double dx = parms[0] - parms[2];
 	double dy = parms[1] - parms[3];
@@ -109,10 +128,10 @@ double P2LDistanceError(std::vector<double> parms)
     double Xint=parms[0]+dx*t;
     double Yint=parms[1]+dy*t;
     double temp= sqrt((parms[4] - Xint)*(parms[4] - Xint)+(parms[5] - Yint)*(parms[5] - Yint)) - sqrt(radsq);
-    return temp*temp/100;
+    return temp*temp*100;
 }
 
-double P2LDistanceVertError(std::vector<double> parms)
+double P2LDistanceVertError(std::vector<double> &parms)
 {
 	double dx = parms[0] - parms[2];
 	double dy = parms[1] - parms[3];
@@ -123,7 +142,7 @@ double P2LDistanceVertError(std::vector<double> parms)
     return temp*temp;
 }
 
-double P2LDistanceHorzError(std::vector<double> parms)
+double P2LDistanceHorzError(std::vector<double> &parms)
 {
 	double dx = parms[0] - parms[2];
 	double dy = parms[1] - parms[3];
@@ -134,7 +153,7 @@ double P2LDistanceHorzError(std::vector<double> parms)
     return temp*temp/10;
 }
 
-double LineLengthError(std::vector<double> parms)
+double LineLengthError(std::vector<double> &parms)
 {
 	double dx = parms[0] - parms[2];
 	double dy = parms[1] - parms[3];
@@ -143,7 +162,7 @@ double LineLengthError(std::vector<double> parms)
 }
 			
 
-double EqualLengthError(std::vector<double> parms)
+double EqualLengthError(std::vector<double> &parms)
 {
 	double dx = parms[0] - parms[2];
 	double dy = parms[1] - parms[3];
@@ -154,13 +173,13 @@ double EqualLengthError(std::vector<double> parms)
     return temp*temp;
 }
 
-double EqualScalarError(std::vector<double> parms)
+double EqualScalarError(std::vector<double> &parms)
 {
     double temp= parms[0] - parms[1];
     return temp*temp;
 }
 
-double PointOnArcAngleError(std::vector<double> parms)
+double PointOnArcAngleError(std::vector<double> &parms)
 {
 	double a1x = sin(parms[5]) * parms[4] + parms[2];
 	double a1y = cos(parms[5]) * parms[4] + parms[3];

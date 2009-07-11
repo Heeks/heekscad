@@ -301,7 +301,7 @@ class SolveImpl;
 
 class SolveImpl
 {
-	std::vector<double(*)(std::vector<double>)> errors;
+	std::vector<double(*)(std::vector<double>&)> errors;
 	std::vector<std::vector<dependencyType> > dependencies;
 	std::set<constraintType> depset;
 	std::vector<std::vector<std::pair<varLocation,void*> > > constraintvars;
@@ -318,7 +318,7 @@ class SolveImpl
 	void LoadLine(std::vector<std::pair<varLocation,void*> > &mylist,line l, int c);
 	void LoadArc(std::vector<std::pair<varLocation,void*> > &mylist,arc a, int c);
 	void LoadCircle(std::vector<std::pair<varLocation,void*> > &mylist,circle c, int con);
-	void registerconstraint(constraintType,double(*)(std::vector<double>));
+	void registerconstraint(constraintType,double(*)(std::vector<double>&));
 	void registerdependency(constraintType,dependencyType);
 	double GetErrorForGrad(int i);
 
@@ -379,20 +379,21 @@ double calc(constraint * cons, int consLength);
 void derivatives(double **x,double *gradF,int xLength, constraint * cons, int consLength);
 
 //Error functions
-double HorizontalError(std::vector<double> parms);
-double ParallelError(std::vector<double> parms);
-double VerticalError(std::vector<double> parms);
-double PointOnPointError(std::vector<double> parms);
-double P2PDistanceError(std::vector<double> parms);
-double P2PDistanceHorzError(std::vector<double> parms);
-double P2PDistanceVertError(std::vector<double> parms);
-double PointOnLineError(std::vector<double> parms);
-double P2LDistanceError(std::vector<double> parms);
-double P2LDistanceVertError(std::vector<double> parms);
-double P2LDistanceHorzError(std::vector<double> parms);
-double LineLengthError(std::vector<double> parms);
-double EqualLengthError(std::vector<double> parms);
-double EqualScalarError(std::vector<double> parms);
-double PointOnArcAngleError(std::vector<double> parms);
+double HorizontalError(std::vector<double> &parms);
+double ParallelError(std::vector<double> &parms);
+double VerticalError(std::vector<double> &parms);
+double PointOnPointError(std::vector<double> &parms);
+double P2PDistanceError(std::vector<double> &parms);
+double P2PDistanceHorzError(std::vector<double> &parms);
+double P2PDistanceVertError(std::vector<double> &parms);
+double PointOnLineError(std::vector<double> &parms);
+double P2LDistanceError(std::vector<double> &parms);
+double P2LDistanceVertError(std::vector<double> &parms);
+double P2LDistanceHorzError(std::vector<double> &parms);
+double LineLengthError(std::vector<double> &parms);
+double EqualLengthError(std::vector<double> &parms);
+double EqualScalarError(std::vector<double> &parms);
+double PointOnArcAngleError(std::vector<double> &parms);
+double PerpendicularError(std::vector<double> &parms);
 
 #endif /* SOLVE_H_ */

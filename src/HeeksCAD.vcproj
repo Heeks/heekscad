@@ -257,6 +257,7 @@
 				ProgramDataBaseFileName="vc_mswd\HeeksCAD.pdb"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 				CompileAs="0"
 			/>
