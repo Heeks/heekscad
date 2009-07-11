@@ -72,9 +72,14 @@ SolveImpl::SolveImpl()
 {
 	next_vector=0;
 	pvec.resize(50);
+
 	registerdependency(parallel,line1);
 	registerdependency(parallel,line2);
 	registerconstraint(parallel,ParallelError);
+
+	registerdependency(perpendicular,line1);
+	registerdependency(perpendicular,line2);
+	registerconstraint(perpendicular,PerpendicularError);
 
 	registerdependency(horizontal,line1);
 	registerconstraint(horizontal,HorizontalError);
@@ -331,7 +336,7 @@ void SolveImpl::Unload()
 	}
 }
 
-void SolveImpl::registerconstraint(constraintType type,double(*error)(std::vector<double>))
+void SolveImpl::registerconstraint(constraintType type,double(*error)(std::vector<double>&))
 {
 	if(errors.size() < (unsigned int)type + 1)
 		errors.resize((unsigned int)type+1);

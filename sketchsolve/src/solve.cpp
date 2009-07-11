@@ -592,25 +592,6 @@ double calc(constraint * cons, int consLength)
                 }
 				break;
 
-				case perpendicular:
-                {
-                        dx = L1_P2_x - L1_P1_x;
-                        dy = L1_P2_y - L1_P1_y;
-                        dx2 = L2_P2_x - L2_P1_x;
-                        dy2 = L2_P2_y - L2_P1_y;
-
-                        hyp1=_hypot(dx,dy);
-                        hyp2=_hypot(dx2,dy2);
-
-                        dx=dx/hyp1;
-                        dy=dy/hyp1;
-                        dx2=dx2/hyp2;
-                        dy2=dy2/hyp2;
-
-                        temp = dx*dx2+dy*dy2;
-                        error += (temp)*(temp);
-                }
-				break;
 
                 // Colinear constraint
 				case colinear:
