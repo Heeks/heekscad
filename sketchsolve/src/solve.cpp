@@ -593,63 +593,7 @@ double calc(constraint * cons, int consLength)
 				break;
 
 
-                // Colinear constraint
-				case colinear:
-                {
-                        dx = L1_P2_x - L1_P1_x;
-                        dy = L1_P2_y - L1_P1_y;
-
-                        m=dy/dx;
-                        n=dx/dy;
-                        // Calculate the error between the expected intersection point
-                        // and the true point of the second lines two end points on the
-                        // first line
-                        if(m<=1 && m>-1)
-                        {
-                                //Calculate the expected y point given the x coordinate of the point
-                                Ey=L1_P1_y+m*(L2_P1_x-L1_P1_x);
-                                error+=(Ey-L2_P1_y)*(Ey-L2_P1_y);
-
-                                Ey=L1_P1_y+m*(L2_P2_x-L1_P1_x);
-                                error+=(Ey-L2_P2_y)*(Ey-L2_P2_y);
-                        }
-                        else
-                        {
-                                //Calculate the expected x point given the y coordinate of the point
-                                Ex=L1_P1_x+n*(L2_P1_y-L1_P1_y);
-                                error+=(Ex-L2_P1_x)*(Ex-L2_P1_x);
-
-                                Ex=L1_P1_x+n*(L2_P2_y-L1_P1_y);
-                                error+=(Ex-L2_P2_x)*(Ex-L2_P2_x);
-                        }
-                }
-				break;
-
-                // Point on a circle
-				case pointOnCircle:
-                {
-                        //see what the current radius to the point is
-                        rad1=_hypot(C1_Center_x-P1_x,C1_Center_y-P1_y);
-                        //Compare this radius to the radius of the circle, return the error squared
-                        temp = rad1-C1_rad;
-                        error += temp*temp;
-                        //cout<<"Point On circle error"<<temp*temp<<endl;
-                }
-				break;
-
-				case pointOnArc:
-                {
-                        //see what the current radius to the point is
-                        rad1=_hypot(A1_Center_x-P1_x,A1_Center_y-P1_y);
-                        rad2=_hypot(A1_Center_x-A1_Start_x,A1_Center_y-A1_Start_y);
-                        //Compare this radius to the radius of the circle, return the error squared
-                        temp = rad1-rad2;
-                        error += temp*temp;
-                        //cout<<"Point On circle error"<<temp*temp<<endl;
-                }
-				break;
-
-				case pointOnLineMidpoint:
+  				case pointOnLineMidpoint:
                 {
                         Ex=(L1_P1_x+L1_P2_x)/2;
                         Ey=(L1_P1_y+L1_P2_y)/2;
@@ -766,24 +710,6 @@ double calc(constraint * cons, int consLength)
                         temp = (Ex-A2_Center_x);
                         temp2 = (Ey-A2_Center_y);
                         error += temp*temp+temp2*temp2;
-                }
-				break;
-
-				case arcStartToArcEnd:
-                {
-                        error += (A1_Start_x-A2_End_x)*(A1_Start_x-A2_End_x)+(A1_Start_y-A2_End_y)*(A1_Start_y-A2_End_y);
-                }
-				break;
-
-				case arcStartToArcStart:
-                {
-                        error += (A1_Start_x-A2_Start_x)*(A1_Start_x-A2_Start_x)+(A1_Start_y-A2_Start_y)*(A1_Start_y-A2_Start_y);
-                }
-				break;
-
-				case arcEndtoArcEnd:
-                {
-                        error += (A1_End_x-A2_End_x)*(A1_End_x-A2_End_x)+(A1_End_y-A2_End_y)*(A1_End_y-A2_End_y);
                 }
 				break;
 

@@ -96,6 +96,16 @@ SolveImpl::SolveImpl()
 	registerdependency(P2PDistance,parameter);
 	registerconstraint(P2PDistance,P2PDistanceError);
 
+	registerdependency(pointOnCircle,point1);
+	registerdependency(pointOnCircle,circle1_center);
+	registerdependency(pointOnCircle,circle1_rad);
+	registerconstraint(pointOnCircle,P2PDistanceError);
+
+	registerdependency(pointOnArc,point1);
+	registerdependency(pointOnArc,arc1_center);
+	registerdependency(pointOnArc,arc1_rad);
+	registerconstraint(pointOnArc,P2PDistanceError);
+
 	registerdependency(P2PDistanceVert,point1);
 	registerdependency(P2PDistanceVert,point2);
 	registerdependency(P2PDistanceVert,parameter);
@@ -130,12 +140,16 @@ SolveImpl::SolveImpl()
 	registerdependency(tangentToCircle,circle1_center);
 	registerdependency(tangentToCircle,circle1_rad);
 	registerconstraint(tangentToCircle,P2LDistanceError);
-
+/*
 	registerdependency(tangentToArc,line1);
 	registerdependency(tangentToArc,arc1_center);
 	registerdependency(tangentToArc,arc1_rad);
 	registerconstraint(tangentToArc,P2LDistanceError);
-
+*/
+	registerdependency(tangentToArc,line1);
+	registerdependency(tangentToArc,arc1_startAngle);
+	registerconstraint(tangentToArc,LinePerpToAngleError);
+	
 	registerdependency(lineLength,line1);
 	registerdependency(lineLength,parameter);
 	registerconstraint(lineLength,LineLengthError);
@@ -181,12 +195,40 @@ SolveImpl::SolveImpl()
 	registerdependency(pointOnArcStart,arc1_rad);
 	registerdependency(pointOnArcStart,arc1_startAngle);
 	registerconstraint(pointOnArcStart,PointOnArcAngleError);
-	
+
 	registerdependency(pointOnArcEnd,point1);
 	registerdependency(pointOnArcEnd,arc1_center);
 	registerdependency(pointOnArcEnd,arc1_rad);
 	registerdependency(pointOnArcEnd,arc1_endAngle);
 	registerconstraint(pointOnArcEnd,PointOnArcAngleError);
+	
+	registerdependency(arcEndtoArcEnd,arc1_center);
+	registerdependency(arcEndtoArcEnd,arc1_rad);
+	registerdependency(arcEndtoArcEnd,arc1_endAngle);
+	registerdependency(arcEndtoArcEnd,arc2_center);
+	registerdependency(arcEndtoArcEnd,arc2_rad);
+	registerdependency(arcEndtoArcEnd,arc2_endAngle);
+	registerconstraint(arcEndtoArcEnd,ArcAngleOnArcAngleError);
+
+	registerdependency(arcStartToArcEnd,arc1_center);
+	registerdependency(arcStartToArcEnd,arc1_rad);
+	registerdependency(arcStartToArcEnd,arc1_startAngle);
+	registerdependency(arcStartToArcEnd,arc2_center);
+	registerdependency(arcStartToArcEnd,arc2_rad);
+	registerdependency(arcStartToArcEnd,arc2_endAngle);
+	registerconstraint(arcStartToArcEnd,ArcAngleOnArcAngleError);	
+
+	registerdependency(arcStartToArcStart,arc1_center);
+	registerdependency(arcStartToArcStart,arc1_rad);
+	registerdependency(arcStartToArcStart,arc1_startAngle);
+	registerdependency(arcStartToArcStart,arc2_center);
+	registerdependency(arcStartToArcStart,arc2_rad);
+	registerdependency(arcStartToArcStart,arc2_startAngle);
+	registerconstraint(arcStartToArcStart,ArcAngleOnArcAngleError);	
+
+	registerdependency(colinear,line1);
+	registerdependency(colinear,line2);
+	registerconstraint(colinear,ColinearError);
 }
 
 SolveImpl::~SolveImpl()
