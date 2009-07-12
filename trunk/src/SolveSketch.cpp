@@ -28,6 +28,7 @@ std::vector<double*> params;
 std::set<double*> paramset;
 std::vector<constraint> constraints;
 std::set<Constraint*> cons;
+std::map<HeeksObj*,HeeksObj*> pointonpoint;
 
 void debugprint(std::string s)
 {
@@ -45,6 +46,7 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 	paramset.clear();
 	constraints.clear();
 	cons.clear();
+	pointonpoint.clear();
 
 	//Try going up the tree until we get a sketch
 	HeeksObj* psketch = dragged;
@@ -190,7 +192,17 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 						constraint c;
 						c.type = tangentToArc;
 						if(dynamic_cast<HArc*>(con->m_obj1))
+						{
 							c.arc1 = GetArc((HArc*)con->m_obj1);
+							//check for pointonpoint between m_obj1 and m_obj2
+							if(pointonpoint[((HArc*)con->m_obj1)->A] && pointonpoint[((HArc*)con->m_obj1)->A]->Owner() == con->m_obj2)
+							{
+								c.type = tangentToArcStart;
+							}else if(pointonpoint[((HArc*)con->m_obj1)->B] && pointonpoint[((HArc*)con->m_obj1)->B]->Owner() == con->m_obj2)
+							{
+								c.type = tangentToArcEnd;
+							}
+						}
 						else
 						{
 							c.circle1 = GetCircle((HCircle*)con->m_obj1);
@@ -323,6 +335,8 @@ void AddPointConstraints(HPoint* point)
 				c.point1 = GetPoint((HPoint*)con->m_obj1);
 				c.point2 = GetPoint((HPoint*)con->m_obj2);
 			}
+			pointonpoint[con->m_obj1] = con->m_obj2;
+			pointonpoint[con->m_obj2] = con->m_obj1;
 			constraints.push_back(c);
 			cons.insert(con);
 		}

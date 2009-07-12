@@ -140,15 +140,19 @@ SolveImpl::SolveImpl()
 	registerdependency(tangentToCircle,circle1_center);
 	registerdependency(tangentToCircle,circle1_rad);
 	registerconstraint(tangentToCircle,P2LDistanceError);
-/*
+
 	registerdependency(tangentToArc,line1);
 	registerdependency(tangentToArc,arc1_center);
 	registerdependency(tangentToArc,arc1_rad);
 	registerconstraint(tangentToArc,P2LDistanceError);
-*/
-	registerdependency(tangentToArc,line1);
-	registerdependency(tangentToArc,arc1_startAngle);
-	registerconstraint(tangentToArc,LinePerpToAngleError);
+
+	registerdependency(tangentToArcStart,line1);
+	registerdependency(tangentToArcStart,arc1_startAngle);
+	registerconstraint(tangentToArcStart,LinePerpToAngleError);
+
+	registerdependency(tangentToArcEnd,line1);
+	registerdependency(tangentToArcEnd,arc1_endAngle);
+	registerconstraint(tangentToArcEnd,LinePerpToAngleError);
 	
 	registerdependency(lineLength,line1);
 	registerdependency(lineLength,parameter);
