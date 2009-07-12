@@ -395,5 +395,8 @@ double EqualLengthError(std::vector<double> &parms);
 double EqualScalarError(std::vector<double> &parms);
 double PointOnArcAngleError(std::vector<double> &parms);
 double PerpendicularError(std::vector<double> &parms);
+double ArcAngleOnArcAngleError(std::vector<double> &parms);
+double ColinearError(std::vector<double>& parms);
+double LinePerpToAngleError(std::vector<double>& parms);
 
 #endif /* SOLVE_H_ */
