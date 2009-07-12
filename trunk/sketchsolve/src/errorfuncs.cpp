@@ -188,3 +188,65 @@ double PointOnArcAngleError(std::vector<double> &parms)
     return dx*dx + dy*dy;
 }
 
+double ArcAngleOnArcAngleError(std::vector<double> &parms)
+{
+	double a1x = sin(parms[3]) * parms[2] + parms[0];
+	double a1y = cos(parms[3]) * parms[2] + parms[1];
+
+	double a2x = sin(parms[7]) * parms[6] + parms[4];
+	double a2y = cos(parms[7]) * parms[6] + parms[5];
+
+	double dx = a2x - a1x;
+	double dy = a2y - a1y;
+    return dx*dx + dy*dy;
+}
+
+double ColinearError(std::vector<double>& parms)
+{
+    double dx = parms[2] - parms[0];
+    double dy = parms[3] - parms[1];
+
+    double m=dy/dx;
+    double n=dx/dy;
+    // Calculate the error between the expected intersection point
+    // and the true point of the second lines two end points on the
+    // first line
+	double error=0;
+    if(m<=1 && m>-1)
+    {
+        //Calculate the expected y point given the x coordinate of the point
+        double Ey=parms[1]+m*(parms[4]-parms[0]);
+        error+=(Ey-parms[5])*(Ey-parms[5]);
+        Ey=parms[1]+m*(parms[6]-parms[0]);
+        error+=(Ey-parms[7])*(Ey-parms[7]);
+    }
+    else
+    {
+        //Calculate the expected x point given the y coordinate of the point
+        double Ex=parms[0]+n*(parms[5]-parms[1]);
+        error+=(Ex-parms[4])*(Ex-parms[4]);
+        Ex=parms[0]+n*(parms[7]-parms[1]);
+        error+=(Ex-parms[6])*(Ex-parms[6]);
+    }
+	return error;
+}
+
+double LinePerpToAngleError(std::vector<double>& parms)
+{
+	double dx = parms[0] - parms[2];
+	double dy = parms[1] - parms[3];
+
+	double dx2 = sin(parms[4]);
+    double dy2 = cos(parms[4]);
+
+    double hyp1=sqrt(dx*dx+dy*dy);
+    double hyp2=sqrt(dx2*dx2+dy2*dy2);
+
+    dx=dx/hyp1;
+    dy=dy/hyp1;
+    dx2=dx2/hyp2;
+    dy2=dy2/hyp2;
+
+    double temp = dx*dx2+dy*dy2;
+    return (temp)*(temp)*1000;
+}
