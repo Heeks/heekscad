@@ -59,7 +59,7 @@ static void on_set_order_type(int value, HeeksObj* object)
 	if(FindIt != order_map_for_properties.end())
 	{
 		int order = FindIt->second;
-		if(((CSketch*)object)->ReOrderSketch((SketchOrderType)order))
+		if(((CSketch*)object)->ReOrderSketch((SketchOrderType)order, false))
 		{
 			wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll(false);
 		}
@@ -293,7 +293,7 @@ void CSketch::CalculateSketchOrder()
 	m_order = SketchOrderTypeBad; // although it might still be multiple, but will have to wait until ReOrderSketch is done.
 }
 
-bool CSketch::ReOrderSketch(SketchOrderType new_order)
+bool CSketch::ReOrderSketch(SketchOrderType new_order, bool undoably)
 {
 	SketchOrderType old_order = GetSketchOrder();
 	bool done = false;
@@ -304,7 +304,7 @@ bool CSketch::ReOrderSketch(SketchOrderType new_order)
 		switch(new_order)
 		{
 		case SketchOrderTypeReverse:
-			ReverseSketch();
+			ReverseSketch(undoably);
 			done = true;
 			break;
 		default:
@@ -318,7 +318,7 @@ bool CSketch::ReOrderSketch(SketchOrderType new_order)
 		case SketchOrderTypeBad:
 			break;
 		default:
-			ReLinkSketch();
+			ReLinkSketch(undoably);
 			done = true;
 			break;
 		}
@@ -328,7 +328,7 @@ bool CSketch::ReOrderSketch(SketchOrderType new_order)
 		switch(new_order)
 		{
 		case SketchOrderTypeCloseCCW:
-			ReverseSketch();
+			ReverseSketch(undoably);
 			done = true;
 			break;
 		default:
@@ -340,7 +340,7 @@ bool CSketch::ReOrderSketch(SketchOrderType new_order)
 		switch(new_order)
 		{
 		case SketchOrderTypeCloseCW:
-			ReverseSketch();
+			ReverseSketch(undoably);
 			done = true;
 			break;
 		default:
@@ -355,19 +355,33 @@ bool CSketch::ReOrderSketch(SketchOrderType new_order)
 	return done;
 }
 
-void CSketch::ReLinkSketch()
+void CSketch::ReLinkSketch(bool undoably)
 {
 	CSketchRelinker relinker(m_objects);
 
 	relinker.Do();
 
-	wxGetApp().StartHistory();
-	wxGetApp().DeleteUndoably(m_objects);
+	if(undoably)
+	{
+		wxGetApp().StartHistory();
+		wxGetApp().DeleteUndoably(m_objects);
+	}
+	else
+	{
+		Clear();
+	}
+
 	for(std::list< std::list<HeeksObj*> >::iterator It = relinker.m_new_lists.begin(); It != relinker.m_new_lists.end(); It++)
 	{
-		wxGetApp().AddUndoably(*It, this);
+		if(undoably)wxGetApp().AddUndoably(*It, this);
+		else{
+			for(std::list<HeeksObj*>::iterator It2 = It->begin(); It2 != It->end(); It2++)
+			{
+				Add(*It2, NULL);
+			}
+		}
 	}
-	wxGetApp().EndHistory();
+	if(undoably)wxGetApp().EndHistory();
 
 	if(relinker.m_new_lists.size() > 1)
 	{
@@ -379,7 +393,7 @@ void CSketch::ReLinkSketch()
 	}
 }
 
-void CSketch::ReverseSketch()
+void CSketch::ReverseSketch(bool undoably)
 {
 	if(m_objects.size() == 0)return;
 
@@ -405,10 +419,22 @@ void CSketch::ReverseSketch()
 		new_list.push_front(copy);
 	}
 
-	wxGetApp().StartHistory();
-	wxGetApp().DeleteUndoably(m_objects);
-	wxGetApp().AddUndoably(new_list, this);
-	wxGetApp().EndHistory();
+	if(undoably)
+	{
+		wxGetApp().StartHistory();
+		wxGetApp().DeleteUndoably(m_objects);
+		wxGetApp().AddUndoably(new_list, this);
+		wxGetApp().EndHistory();
+	}
+	else
+	{
+		Clear();
+		for(std::list<HeeksObj*>::iterator It = new_list.begin(); It != new_list.end(); It++)
+		{
+			HeeksObj* object = *It;
+			Add(object, NULL);
+		}
+	}
 }
 
 void CSketch::ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketches)
@@ -432,7 +458,7 @@ void CSketch::ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketche
 	if(GetSketchOrder() == SketchOrderTypeBad)
 	{
 		re_ordered_sketch = (CSketch*)(this->MakeACopy());
-		re_ordered_sketch->ReOrderSketch(SketchOrderTypeReOrder);
+		re_ordered_sketch->ReOrderSketch(SketchOrderTypeReOrder, false);
 		sketch = re_ordered_sketch;
 	}
 	if(sketch->GetSketchOrder() == SketchOrderTypeMultipleCurves)

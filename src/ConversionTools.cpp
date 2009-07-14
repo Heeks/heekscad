@@ -380,7 +380,7 @@ HeeksObj* SplitArcsIntoLittleLines(HeeksObj* sketch)
 	{
 		//reset state machine
 		point_found_for_arc_to_lines = false;
-		o->GetSegments(callback_for_arcs_to_lines, 1/FaceToSketchTool::deviation);
+		o->GetSegments(callback_for_arcs_to_lines, 0.2/FaceToSketchTool::deviation);
 	}
 	return new_sketch;
 }
@@ -389,15 +389,17 @@ void SketchArcsToLines::Run(){
 	wxGetApp().StartHistory();
 	std::list<HeeksObj*> copy_of_marked_list = wxGetApp().m_marked_list->list();
 	std::list<HeeksObj*> objects_to_delete;
+	std::list<HeeksObj*> new_objects;
 	for(std::list<HeeksObj*>::const_iterator It = copy_of_marked_list.begin(); It != copy_of_marked_list.end(); It++){
 		HeeksObj* object = *It;
 		if(object->GetType() == SketchType){
 			HeeksObj* new_object = SplitArcsIntoLittleLines(object);
-			wxGetApp().AddUndoably(new_object, NULL, NULL);
+			new_objects.push_back(new_object);
 			objects_to_delete.push_back(object);
 		}
 	}
 
+	wxGetApp().AddUndoably(new_objects, NULL);
 	wxGetApp().DeleteUndoably(objects_to_delete);
 	wxGetApp().EndHistory();
 }
