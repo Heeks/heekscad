@@ -529,9 +529,9 @@ HeeksObj* CHeeksCADInterface::MakePipe(HeeksObj* spine, HeeksObj* profile)
 	return CreatePipeFromProfile(spine,profile);
 }
 
-bool CHeeksCADInterface::ReOrderSketch(HeeksObj* sketch, SketchOrderType new_order)
+bool CHeeksCADInterface::ReOrderSketch(HeeksObj* sketch, SketchOrderType new_order, bool undoably)
 {
-	return ((CSketch*)sketch)->ReOrderSketch(new_order);
+	return ((CSketch*)sketch)->ReOrderSketch(new_order, undoably);
 }
 
 HeeksObj* CHeeksCADInterface::ExtrudeSketch(HeeksObj* sketch, double height)

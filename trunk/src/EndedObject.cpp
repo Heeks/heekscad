@@ -93,6 +93,8 @@ void EndedObject::glCommands(bool select, bool marked, bool no_color)
 		HeeksObj* object = *It;
 		if(object->OnVisibleLayer() && object->m_visible)
 		{
+			bool object_marked = wxGetApp().m_marked_list->ObjectMarked(object);
+			if(object->GetType() == PointType && !select && !object_marked)continue; // don't show points unless the point object is selected.
 			if(select)glPushName((unsigned long)object);
 #ifdef HEEKSCAD
 			(*It)->glCommands(select, marked || wxGetApp().m_marked_list->ObjectMarked(object), no_color);
