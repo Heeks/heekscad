@@ -19,6 +19,9 @@ class TiXmlElement;
 class HeeksColor;
 
 #include "SketchOrder.h"
+#include "HeeksColor.h"
+
+#include <TopoDS_Solid.hxx>
 
 class CHeeksCADInterface{
 public:
@@ -81,6 +84,7 @@ public:
 	virtual HeeksObj* NewCylinder(const double*c, double r, double h);
 	virtual HeeksObj* NewCone(const double*c, double r1, double r2, double h);
 	virtual HeeksObj* NewGroup();
+	virtual HeeksObj* NewSolid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
 	virtual HeeksObj* Fuse(const std::list<HeeksObj*> objects);
 	virtual HeeksObj* Cut(const std::list<HeeksObj*> objects);
 	virtual void RotateObject(HeeksObj*, const double*p,const double*u,double r);
