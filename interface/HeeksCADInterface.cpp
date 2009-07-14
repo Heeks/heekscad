@@ -353,6 +353,13 @@ HeeksObj* CHeeksCADInterface::NewCone(const double* c, double r1, double r2, dou
 	return new CCone(gp_Ax2(make_point(c),up),r1,r2,h,_T("Cone"),wxGetApp().current_color);
 }
 
+HeeksObj* CHeeksCADInterface::NewSolid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col)
+{
+	return(new CSolid( solid, title, col ) );
+
+} // End NewSolid() method
+
+
 HeeksObj* CHeeksCADInterface::Fuse(const std::list<HeeksObj*> objects)
 {
 	return CShape::FuseShapes(objects);
