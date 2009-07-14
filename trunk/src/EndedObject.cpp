@@ -110,3 +110,4 @@ void EndedObject::glCommands(bool select, bool marked, bool no_color)
 {
 	HeeksObj::WriteBaseXML(element);
 }*/
+
