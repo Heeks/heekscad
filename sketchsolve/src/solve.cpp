@@ -509,7 +509,7 @@ int Solver::solveI(double  **xin, int xLength, constraint * cons, int consLength
 
         for(int i=0;i<xLength;i++)
         {
-                cstr<<"Parameter("<<i<<"): "<<*(x[i])<<endl;
+                cstr<<"Parameter("<<i<<"): "<<x[i]<<endl;
                 //cout<<xold[i]<<endl;
         }
         cstr<<"Fnew: "<<fnew<<endl;
