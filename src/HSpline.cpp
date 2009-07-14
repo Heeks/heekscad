@@ -44,8 +44,13 @@ void HSpline::GetSegments(void(*callbackfunc)(const double *p), double pixels_pe
 {
 
 	//TODO: calculate length
-	double length = 10;
-    int segments = (int)(fabs(pixels_per_mm * length + 1));
+	gp_Pnt p0, phalf, p1;
+	m_spline->D0(0.0, p0);
+	m_spline->D0(0.5, phalf);
+	m_spline->D0(1.0, p1);
+	double approx_length = p0.Distance(phalf) + phalf.Distance(p1);
+
+	int segments = (int)(fabs(pixels_per_mm * approx_length + 1));
 	double pp[3];
 
 	for(int i = 0; i <= segments; i++)
