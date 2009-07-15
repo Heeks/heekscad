@@ -844,3 +844,4 @@ void HCircle::LoadToDoubles()
 {
 	C->LoadToDoubles();
 }
+

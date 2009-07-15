@@ -250,3 +250,4 @@ double LinePerpToAngleError(std::vector<double>& parms)
     double temp = dx*dx2+dy*dy2;
     return (temp)*(temp)*1000;
 }
+

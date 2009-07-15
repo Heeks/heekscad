@@ -248,7 +248,7 @@ HeeksObj* Constraint::ReadFromXMLElement(TiXmlElement* pElem)
 	}
 
 	//Ugh, we need to convert the strings back into types
-	for(int i=0; i < sizeof(ConstraintTypes); i++)
+	for(unsigned i=0; i < sizeof(ConstraintTypes); i++)
 	{
 		if(strcmp(ConstraintTypes[i].c_str(),type)==0)
 		{
@@ -257,7 +257,7 @@ HeeksObj* Constraint::ReadFromXMLElement(TiXmlElement* pElem)
 		}
 	}
 
-	for(int i=0; i < sizeof(AbsoluteAngle); i++)
+	for(unsigned i=0; i < sizeof(AbsoluteAngle); i++)
 	{
 		if(strcmp(AbsoluteAngle[i].c_str(),angle)==0)
 		{
