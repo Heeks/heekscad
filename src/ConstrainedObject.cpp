@@ -86,10 +86,7 @@ bool ConstrainedObject::RemoveExisting(HeeksObj* obj, EnumConstraintType type)
 bool ConstrainedObject::SetPerpendicularConstraint(ConstrainedObject* obj){
 	if(RemoveExisting(obj,PerpendicularLineConstraint)) return true;
 	if(RemoveExisting(obj,ParallelLineConstraint)) return true;
-	Constraint* c = new Constraint();
-	c->m_type = PerpendicularLineConstraint;
-	c->m_obj1 = this;
-	c->m_obj2 = obj;
+	Constraint* c = new Constraint(PerpendicularLineConstraint,this,obj);
 	constraints.push_back(c);
 	obj->constraints.push_back(c);
 	return false;
@@ -98,10 +95,7 @@ bool ConstrainedObject::SetPerpendicularConstraint(ConstrainedObject* obj){
 bool ConstrainedObject::SetParallelConstraint(ConstrainedObject* obj){
 	if(RemoveExisting(obj,PerpendicularLineConstraint)) return true;
 	if(RemoveExisting(obj,ParallelLineConstraint)) return true;
-	Constraint* c = new Constraint();
-	c->m_type = ParallelLineConstraint;
-	c->m_obj1 = this;
-	c->m_obj2 = obj;
+	Constraint* c = new Constraint(ParallelLineConstraint,this,obj);
 	constraints.push_back(c);
 	obj->constraints.push_back(c);
 	return false;
@@ -109,10 +103,7 @@ bool ConstrainedObject::SetParallelConstraint(ConstrainedObject* obj){
 
 bool ConstrainedObject::SetEqualLengthConstraint(ConstrainedObject* obj){
 	if(RemoveExisting(obj, EqualLengthConstraint)) return true;
-	Constraint* c = new Constraint();
-	c->m_type = EqualLengthConstraint;
-	c->m_obj1 = this;
-	c->m_obj2 = obj;
+	Constraint* c = new Constraint(EqualLengthConstraint,this,obj);
 	constraints.push_back(c);
 	obj->constraints.push_back(c);
 	return false;
@@ -120,10 +111,7 @@ bool ConstrainedObject::SetEqualLengthConstraint(ConstrainedObject* obj){
 
 bool ConstrainedObject::SetConcentricConstraint(ConstrainedObject* obj){
 	if(RemoveExisting(obj, ConcentricConstraint)) return true;
-	Constraint* c = new Constraint();
-	c->m_type = ConcentricConstraint;
-	c->m_obj1 = this;
-	c->m_obj2 = obj;
+	Constraint* c = new Constraint(ConcentricConstraint,this,obj);
 	constraints.push_back(c);
 	obj->constraints.push_back(c);
 	return false;
@@ -132,10 +120,7 @@ bool ConstrainedObject::SetConcentricConstraint(ConstrainedObject* obj){
 
 bool ConstrainedObject::SetEqualRadiusConstraint(ConstrainedObject* obj){
 	if(RemoveExisting(obj, EqualRadiusConstraint)) return true;
-	Constraint* c = new Constraint();
-	c->m_type = EqualRadiusConstraint;
-	c->m_obj1 = this;
-	c->m_obj2 = obj;
+	Constraint* c = new Constraint(EqualRadiusConstraint,this,obj);
 	constraints.push_back(c);
 	obj->constraints.push_back(c);
 	return false;
@@ -144,10 +129,7 @@ bool ConstrainedObject::SetEqualRadiusConstraint(ConstrainedObject* obj){
 
 bool ConstrainedObject::SetColinearConstraint(ConstrainedObject* obj){
 	if(RemoveExisting(obj,ColinearConstraint)) return true;
-	Constraint* c = new Constraint();
-	c->m_type = ColinearConstraint;
-	c->m_obj1 = this;
-	c->m_obj2 = obj;
+	Constraint* c = new Constraint(ColinearConstraint,this,obj);
 	constraints.push_back(c);
 	obj->constraints.push_back(c);
 	return false;

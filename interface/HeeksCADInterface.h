@@ -21,7 +21,7 @@ class HeeksColor;
 #include "SketchOrder.h"
 #include "HeeksColor.h"
 
-#include <TopoDS_Solid.hxx>
+class TopoDS_Solid;
 
 class CHeeksCADInterface{
 public:
