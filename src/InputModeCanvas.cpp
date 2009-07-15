@@ -137,4 +137,3 @@ void CInputModeCanvas::RefreshByRemovingAndAddingAll(){
 
 }
 
-	

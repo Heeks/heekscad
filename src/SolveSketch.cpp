@@ -395,4 +395,4 @@ circle GetCircle(HCircle* a)
 
 	return ret;
 }
- 
+

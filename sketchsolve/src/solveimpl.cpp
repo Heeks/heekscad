@@ -409,3 +409,4 @@ int SolveImpl::GetVectorSize() const
 {
 	return myvec.size();
 }
+

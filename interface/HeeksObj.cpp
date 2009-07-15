@@ -212,3 +212,4 @@ HeeksObj* HeeksObj::GetNextOwner()
 		return *m_owners_it++;
 	return NULL;
 }
+
