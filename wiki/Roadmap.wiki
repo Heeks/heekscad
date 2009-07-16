@@ -22,6 +22,7 @@ It isn't clear to me if we should start milestoning before or after 1.0. The fol
   # Pretty symbolism for constraints.
   # New dimension object with 3 modes (horizontal,vertical,pythagorean) which can be reference to 2 HPoint objects and will follow them around.
   # Angle between lines dimension object
+  # Allow extrusion of multiple sketches/ or sketches with multiple paths
 
 = Wishlist = 
 
