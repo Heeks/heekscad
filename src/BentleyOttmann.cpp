@@ -5,6 +5,22 @@
 #include "stdafx.h"
 
 //This algorithm takes an array of polygon segments and computes the intersection points
+//using a modified Bentley-Ottmann algorithm. There are several problems with the text book
+//approach. Such as, not supporting vertical lines. Coincident points, or points with the same
+//X coordinate. The usual way to alleviate these problems is to skew the data in someway which
+//prevents the algorithm from breaking. We take a different approach and make the algorithm work
+//will the ill-conditioned data. There is a cost to this. I'm not totally sure what it is. 
+//It is something like instead of being (n+k)log n. we are (n+k+m)log n+m. where m is the number
+//of ill conditioned points. This means there is a worst case complexity of this algorithm which is higher
+//than n^2. 
+
+//TODO: I wanted to have these "fuzzy trees" which would insert items into new lists depending on there being within
+//tolerance of the other elements. This seemed to break the stl::map for some unknown reason. Instead, the index
+//values are rounded to some multiple of tol. This guarantees that 2 items within the list are within tol. But items
+//from an immediately adjacent list, could have members within tol of some items. This is not checked for, and should be
+
+//TODO: The minimal x-step is dependant on the slope of the lines in question. Otherwise it is possible to take a step
+//small enough to leave lines still intersecting. There may be another way to handle this.
 
 class MyLine
 {
@@ -83,6 +99,11 @@ enum EventType
 	IntersectionType
 };
 
+double MyRound(double d)
+{
+	return floor(d/tol) * tol;
+}
+
 //By using an std::pair and this comparison function. We can get std::map to group operations in the red black tree 
 //while taking into account geometric tolerance. the first and second parameters have already been perturbed by the
 //tolerance value.
@@ -134,13 +155,13 @@ IntResult Intersects(MyLine* line1, MyLine* line2)
 }
 
 //Storage for the event table
-std::map<std::pair<double,double>,std::vector<std::list<MyLine*> >,IsLessThan> eventtable;
+std::map<double,std::vector<std::list<MyLine*> > > eventtable;
 
 //Put a new event into the table
 void InsertEvent(EventType type, double x, MyLine* line)
 {
 	//Find an existing list, or a place to insert it
-	std::pair<double,double> pos(x-tol,x+tol);
+	double  pos = MyRound(x);
 	if(eventtable[pos].size() == 0)
 		eventtable[pos].resize(4);
 
@@ -150,6 +171,7 @@ void InsertEvent(EventType type, double x, MyLine* line)
 void Intersections(std::vector<MyLine> &lines)
 {
 	tol = wxGetApp().m_geom_tol;
+	eventtable.clear();
 
 	//first pass: build lists ordered by x coordinate
 	for(size_t i=0; i < lines.size(); i++)
@@ -169,7 +191,7 @@ void Intersections(std::vector<MyLine> &lines)
 	}
 
 	//Storage for the sweepline
-	std::map<std::pair<double,double>,std::set<MyLine*>,IsLessThan> sweepline;
+	std::map<double,std::set<MyLine*> > sweepline;
 	IsLessThan ILT;
 
 	//Storage for the located intersections
@@ -179,12 +201,12 @@ void Intersections(std::vector<MyLine> &lines)
 	std::map<MyLine*,std::set<MyLine*> > intersected;
 
 	//Go through the event points in order
-	std::map<std::pair<double,double>,std::vector<std::list<MyLine*> >,IsLessThan >::iterator it;
+	std::map<double,std::vector<std::list<MyLine*> > >::iterator it;
 	for(it = eventtable.begin(); it != eventtable.end(); ++it)
 	{
 		std::list<MyLine*>::iterator it2;
 		MyLine* tline=0;
-		currentX = (*it).first.first + tol;
+		currentX = (*it).first;
 
 		for(it2 = (*it).second[IntersectionType].begin(); it2 != (*it).second[IntersectionType].end(); ++it2)
 		{
@@ -193,12 +215,14 @@ void Intersections(std::vector<MyLine> &lines)
 			double xSave = currentX;
 			currentX = tline->addedAt;
 			double currentY = tline->GetY();
-			std::pair<double,double> loc(currentY-tol,currentY+tol);
+			double loc = MyRound(currentY);
 			sweepline[loc].erase(sweepline[loc].find(tline));
+			if(sweepline[loc].size() == 0)
+				sweepline.erase(sweepline.find(loc));
 			currentX = xSave;
 			tline->addedAt = currentX;
 			currentY = tline->GetY();
-			loc = std::pair<double,double>(currentY-tol,currentY+tol);
+			loc = MyRound(currentY);
 			sweepline[loc].insert(tline);
 		}
 
@@ -210,25 +234,26 @@ void Intersections(std::vector<MyLine> &lines)
 			//No numerical problems here, because if A.X and B.X were within tol. Line would be
 			//in a different list
 			double currentY = tline->GetY();
-			std::pair<double,double> loc(currentY-tol,currentY+tol);
+			double loc = MyRound(currentY);
 			sweepline[loc].insert(tline);
 		}
 
 		//try to break apart coincident point sets. 
-		std::map<std::pair<double,double>,std::set<MyLine*>,IsLessThan>::iterator it3;
+		//TODO: should erase the list in sweepline if it is empty
+		std::map<double,std::set<MyLine*> >::iterator it3;
 		for(it3 = sweepline.begin(); it3 != sweepline.end(); it3++)
 		{
 			std::set<MyLine*> lines = (*it3).second;
 			if(lines.size() <= 1)
 				continue;
-			std::pair<double,double> baseloc = (*it3).first;
+			double baseloc = (*it3).first;
 			std::set<MyLine*>::iterator it4;
 			for(it4 = lines.begin(); it4 != lines.end();)
 			{
 				MyLine* tline = *it4;
 				double currentY = tline->GetY(currentX);
-				std::pair<double,double> newloc(currentY-tol,currentY+tol);
-				if(ILT(newloc,baseloc) || ILT(baseloc,newloc))
+				double newloc = MyRound(currentY);
+				if(newloc!=baseloc)
 				{
 					std::set<MyLine*>::iterator it5 = it4;
 					++it4;
@@ -271,8 +296,10 @@ void Intersections(std::vector<MyLine> &lines)
 			double xSave = currentX;
 			currentX = tline->addedAt;
 			double currentY = tline->GetY();
-			std::pair<double,double> loc(currentY-tol,currentY+tol);
+			double loc = MyRound(currentY);
 			sweepline[loc].erase(sweepline[loc].find(tline));
+			if(sweepline[loc].size() == 0)
+				sweepline.erase(sweepline.find(loc));
 			currentX = xSave;
 		}
 
