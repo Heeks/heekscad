@@ -3,6 +3,7 @@
 // This program is released under the BSD license. See the file COPYING for details.
 
 #include "stdafx.h"
+#include "BentleyOttmann.h"
 
 //This algorithm takes an array of polygon segments and computes the intersection points
 //using a modified Bentley-Ottmann algorithm. There are several problems with the text book
@@ -22,153 +23,16 @@
 //TODO: The minimal x-step is dependant on the slope of the lines in question. Otherwise it is possible to take a step
 //small enough to leave lines still intersecting. There may be another way to handle this.
 
-class MyLine
-{
-public:
-	gp_Pnt A;
-	gp_Pnt B;
-	double addedAt;
-	MyLine(gp_Pnt A,gp_Pnt B){this->A = A; this->B = B;}
-	MyLine(){}
-	void Reverse() {gp_Pnt tmp = A; A = B; B = tmp;}
-	double GetY()
-	{
-		double dy = B.Y() - A.Y();
-		double dx = B.X() - A.X();
-
-		double t = (addedAt - A.X()) / dx;
-		return A.Y() + t * dy;
-	}
-
-	double GetY(double ax)
-	{
-		double dy = B.Y() - A.Y();
-		double dx = B.X() - A.X();
-
-		double t = (ax - A.X()) / dx;
-		return A.Y() + t * dy;
-	}
-};
-
-class Intersection
-{
-public:
-	MyLine* line;
-	double X,Y;
-	Intersection(MyLine* line, double X, double Y){this->line = line; this->X = X; this->Y = Y;}
-};
 
 double currentX=0;
-
-class LineCmp
-{
-public:
-	MyLine line;
-	double ofst;
-
-	LineCmp(MyLine* line, double ofst){this->line = *line; this->ofst = ofst;}
-
-	double GetY()
-	{
-		return line.GetY() + ofst;
-	}
-
-	double GetY(double ax)
-	{
-		return line.GetY(ax) + ofst;
-	}
-
-};
 
 //fast storage for the global tolerance paramater
 double tol=0;
 
-//Determine if two doubles are the same within tolerance
-inline bool MyIsEqual(double a, double b)
-{
-	if(a > b - tol && a < b + tol)
-		return true;
-	return false;
-}
-
-enum EventType
-{
-	AddType,
-	RemoveType,
-	AddRemoveType,
-	IntersectionType
-};
-
-double MyRound(double d)
-{
-	return floor(d/tol) * tol;
-}
-
-//By using an std::pair and this comparison function. We can get std::map to group operations in the red black tree 
-//while taking into account geometric tolerance. the first and second parameters have already been perturbed by the
-//tolerance value.
-class IsLessThan
-{
-public:
-	bool operator()(std::pair<double,double> a, std::pair<double,double> b)
-	{
-		return a.second < b.first;
-	}
-
-	bool operator()(std::pair<LineCmp,LineCmp> a, std::pair<LineCmp,LineCmp> b)
-	{
-		return a.second.GetY() < b.first.GetY();
-	}
-
-	bool operator()(std::pair<LineCmp,LineCmp> a, std::pair<LineCmp,LineCmp> b, double ax)
-	{
-		return a.second.GetY(ax) < b.first.GetY(ax);
-	}
-
-};
-
-class IntResult
-{
-public:
-	bool exists;
-	double atX;
-	IntResult(bool exists, double atX){this->exists = exists; this->atX = atX;}
-};
-
-IntResult Intersects(MyLine* line1, MyLine* line2)
-{
-	//Checks if these lines intersect somewhere besides the start and end points
-	if(line1->A.IsEqual(line2->A,tol) || line1->B.IsEqual(line2->B,tol))
-		return IntResult(false,0);
-
-	double ua = (line2->B.X()-line2->A.X())*(line1->A.Y()-line2->A.Y()) - (line2->B.Y()-line2->A.Y())*(line1->A.X()-line2->A.X());
-	ua /= (line2->B.Y()-line2->A.Y())*(line1->B.X()-line1->A.X())-(line2->B.X()-line2->A.X())*(line1->B.Y()-line1->A.Y());
-	double ub = (line1->B.X()-line1->A.X())*(line1->A.Y()-line2->A.Y()) - (line1->B.Y()-line1->A.Y())*(line1->A.X()-line2->A.X());
-	ub /= (line2->B.Y()-line2->A.Y())*(line1->B.X()-line1->A.X())-(line2->B.X()-line2->A.X())*(line1->B.Y()-line1->A.Y());
-
-	if(ua > 0 && ua < 1 && ub > 0 && ub < 1)
-	{
-		double atX = line1->A.X() + ua * (line1->B.X() - line1->A.X());
-		return IntResult(true,atX);
-	}
-	return IntResult(false,0);
-}
-
 //Storage for the event table
 std::map<double,std::vector<std::list<MyLine*> > > eventtable;
 
-//Put a new event into the table
-void InsertEvent(EventType type, double x, MyLine* line)
-{
-	//Find an existing list, or a place to insert it
-	double  pos = MyRound(x);
-	if(eventtable[pos].size() == 0)
-		eventtable[pos].resize(4);
-
-	eventtable[pos][type].push_back(line);
-}
-
-void Intersections(std::vector<MyLine> &lines)
+std::map<MyLine*, std::vector<Intersection> > Intersections(std::vector<MyLine> &lines)
 {
 	tol = wxGetApp().m_geom_tol;
 	eventtable.clear();
@@ -192,10 +56,9 @@ void Intersections(std::vector<MyLine> &lines)
 
 	//Storage for the sweepline
 	std::map<double,std::set<MyLine*> > sweepline;
-	IsLessThan ILT;
 
 	//Storage for the located intersections
-	std::vector<Intersection> intersections;
+	std::map<MyLine*, std::vector<Intersection> >intersections;
 
 	//Storage for the already intersected code
 	std::map<MyLine*,std::set<MyLine*> > intersected;
@@ -280,7 +143,7 @@ void Intersections(std::vector<MyLine> &lines)
 			for(it4 = lines.begin(); it4 != lines.end(); ++it4)
 			{
 				tline = *it4;
-				intersections.push_back(Intersection(tline,currentX,tline->GetY(currentX)));
+				intersections[tline].push_back(Intersection(tline,currentX,tline->GetY(currentX)));
 			}
 		}
 
@@ -348,6 +211,7 @@ void Intersections(std::vector<MyLine> &lines)
 			}
 		}
 	}
+	return intersections;
 }
 
 void Test()
@@ -358,4 +222,49 @@ void Test()
 	lines.push_back(MyLine(gp_Pnt(0,1,0),gp_Pnt(4,1,0)));
 //	lines.push_back(MyLine(gp_Pnt(1,1,0),gp_Pnt(1,2,0)));
 	Intersections(lines);
+}
+
+//Put a new event into the table
+void InsertEvent(EventType type, double x, MyLine* line)
+{
+	//Find an existing list, or a place to insert it
+	double  pos = MyRound(x);
+	if(eventtable[pos].size() == 0)
+		eventtable[pos].resize(4);
+
+	eventtable[pos][type].push_back(line);
+}
+
+IntResult Intersects(MyLine* line1, MyLine* line2)
+{
+	//Checks if these lines intersect somewhere besides the start and end points
+	if(line1->A.IsEqual(line2->A,tol) || line1->B.IsEqual(line2->B,tol))
+		return IntResult(false,0);
+
+	double ua = (line2->B.X()-line2->A.X())*(line1->A.Y()-line2->A.Y()) - (line2->B.Y()-line2->A.Y())*(line1->A.X()-line2->A.X());
+	ua /= (line2->B.Y()-line2->A.Y())*(line1->B.X()-line1->A.X())-(line2->B.X()-line2->A.X())*(line1->B.Y()-line1->A.Y());
+	double ub = (line1->B.X()-line1->A.X())*(line1->A.Y()-line2->A.Y()) - (line1->B.Y()-line1->A.Y())*(line1->A.X()-line2->A.X());
+	ub /= (line2->B.Y()-line2->A.Y())*(line1->B.X()-line1->A.X())-(line2->B.X()-line2->A.X())*(line1->B.Y()-line1->A.Y());
+
+	if(ua > 0 && ua < 1 && ub > 0 && ub < 1)
+	{
+		double atX = line1->A.X() + ua * (line1->B.X() - line1->A.X());
+		return IntResult(true,atX);
+	}
+	return IntResult(false,0);
+}
+
+//Determine if two doubles are the same within tolerance
+inline bool MyIsEqual(double a, double b)
+{
+	if(a > b - tol && a < b + tol)
+		return true;
+	return false;
+}
+
+//Round double to the nearest multiple of tol
+//TODO: is this right? maybe use fmod(d,tol)?
+double MyRound(double d)
+{
+	return floor(d/tol) * tol;
 }
