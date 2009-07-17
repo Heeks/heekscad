@@ -26,8 +26,8 @@ EndedObject::~EndedObject(){
 const EndedObject& EndedObject::operator=(const EndedObject &b){
 	ConstrainedObject::operator=(b);
 	std::list<HeeksObj*>::iterator it = m_objects.begin();
-	A = (HPoint*)*(it++);
-	B = (HPoint*)*(it);
+	A = (HPoint*)(*it++);
+	B = (HPoint*)(*it);
 	return *this;
 }
 
