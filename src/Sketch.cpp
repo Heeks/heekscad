@@ -504,11 +504,15 @@ static gp_Vec GetSegmentVector(HeeksObj* object, double fraction)
 
 double CSketch::GetAngleAtJunction(HeeksObj* prev_object, HeeksObj* object)
 {
-	gp_Vec prev_end_vector = GetSegmentVector(prev_object, 1.0);
-	gp_Vec start_vector = GetSegmentVector(object, 0.0);
+	EndedObject *obj1 = (EndedObject*)prev_object;
+	EndedObject *obj2 = (EndedObject*)object;
+	gp_Vec prev_end_vector(obj1->B->m_p.XYZ() - obj1->A->m_p.XYZ());
+	gp_Vec start_vector(obj2->B->m_p.XYZ() - obj2->A->m_p.XYZ());
+	prev_end_vector.Normalize();
+	start_vector.Normalize();
 
-	double prev_segment_curvature = GetSegmentCurvature(prev_object);
-	double segment_curvature = GetSegmentCurvature(object);
+	double prev_segment_curvature = 0;//GetSegmentCurvature(prev_object);
+	double segment_curvature = 0;//GetSegmentCurvature(object);
 
 	return GetAngleBetweenVectors(prev_end_vector, start_vector, prev_segment_curvature, segment_curvature);
 }
@@ -576,7 +580,7 @@ int CSketch::GetClosedSketchTurningNumber()
 		// internal angle
 		if(object->GetType() == ArcType)
 		{
-			gp_Vec v0 = ((HArc*)object)->GetSegmentVector(0.0);
+/*			gp_Vec v0 = ((HArc*)object)->GetSegmentVector(0.0);
 			gp_Vec v1 = ((HArc*)object)->GetSegmentVector(1.0);
 			double start_angle = atan2(v0.Y(), v0.X());
 			double end_angle = atan2(v1.Y(), v1.X());
@@ -589,7 +593,7 @@ int CSketch::GetClosedSketchTurningNumber()
 			{
 				if(end_angle < start_angle)end_angle += 6.2831853071795;
 			}
-			turning_angle += end_angle - start_angle;
+			turning_angle += end_angle - start_angle; */
 		}
 
 		if(prev_object)
