@@ -63,5 +63,22 @@ void MultiPoly(std::list<CSketch*> sketches)
 	//Create a new tree of boundedcurves, that is much smaller. follow all chains and attempt to remove
 	//segments that are connected to only 2 other curves. This will yield a non-orientable graph
 	//so our definition of polygons better be very graph theoretical
+
+	std::map<double, std::map<double, std::vector<BoundedCurve> > >::iterator it3;
+	for(it3 = bcurves.begin(); it3 != bcurves.end(); ++it3)
+	{
+		std::map<double, std::vector<BoundedCurve> >::iterator it4;
+		for(it4 = (*it3).second.begin(); it4 != (*it3).second.end(); ++it4)
+		{
+			//TODO: should check the 4 adjacent nodes
+			if((*it4).second.size() != 2)
+				continue;
+	
+			//Check if either one is a curve group.
+			
+			//create a new curvegroup, using the pointed to points as ends
+		}
+	}	
+
 }
 

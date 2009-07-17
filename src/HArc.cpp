@@ -40,9 +40,10 @@ const HArc& HArc::operator=(const HArc &b){
 	m_radius = b.m_radius;
 	m_axis = b.m_axis;
 	color = b.color;
-	C = new HPoint(*b.C);
-	C->m_draw_unselected = false;
-	Add(C,NULL);
+	std::list<HeeksObj*>::iterator it = m_objects.begin();
+	for(int i=0; i < 2; i++)
+		it++;
+	C = (HPoint*)*it;
 	return *this;
 }
 
@@ -600,5 +601,7 @@ void HArc::Reverse()
 	A = B;
 	B = temp;
 	m_axis.Reverse();
+	m_objects.assign(0,A);
+	m_objects.assign(1,B);
 }
 

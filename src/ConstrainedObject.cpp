@@ -43,7 +43,7 @@ ConstrainedObject::~ConstrainedObject(){
 }
 
 const ConstrainedObject& ConstrainedObject::operator=(const ConstrainedObject &b){
-	HeeksObj::operator=(b);
+	ObjList::operator=(b);
 	//TODO: copy constraints
 	return *this;
 }
