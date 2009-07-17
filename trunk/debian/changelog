@@ -1,8 +1,8 @@
-heekscad (0.8.2-svn271) intrepid; urgency=low
+heekscad (0.8.2-svn274) intrepid; urgency=low
 
-  * rebuild for svn r671
+  * rebuild for svn r674
 
- -- Joachim Steiger <ubuntu@hyte.de>  Fri, 17 Jul 2009 23:22:35 +0200
+ -- Joachim Steiger <ubuntu@hyte.de>  Fri, 17 Jul 2009 23:26:41 +0200
 
 heekscad (0.8.2-svn643) intrepid; urgency=low
 
