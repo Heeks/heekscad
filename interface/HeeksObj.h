@@ -14,6 +14,7 @@ class MarkedObject;
 class TiXmlNode;
 class TiXmlElement;
 class GripData;
+class TopoDS_Shape;
 
 enum{
 	UnknownType,
@@ -72,7 +73,6 @@ public:
 	unsigned int m_id;
 	unsigned int m_layer;
 	bool m_visible;
-	
 
 	HeeksObj(void);
 	HeeksObj(const HeeksObj& ho);
@@ -149,4 +149,5 @@ public:
 	virtual void RemoveOwner(HeeksObj*);
 	virtual HeeksObj* GetFirstOwner();
 	virtual HeeksObj* GetNextOwner();
+	virtual const TopoDS_Shape *GetShape() { return(NULL); }
 };
