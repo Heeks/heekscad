@@ -359,5 +359,7 @@ void HLine::Reverse()
 	HPoint* temp = A;
 	A = B;
 	B = temp;
+	m_objects.assign(0,A);
+	m_objects.assign(1,B);
 }
 
