@@ -398,6 +398,7 @@ void CSketch::ReverseSketch(bool undoably)
 	if(m_objects.size() == 0)return;
 
 	std::list<HeeksObj*> new_list;
+	std::list<HeeksObj*> old_list = m_objects;
 
 	for(std::list<HeeksObj*>::iterator It=m_objects.begin(); It!=m_objects.end() ;It++)
 	{
@@ -435,6 +436,9 @@ void CSketch::ReverseSketch(bool undoably)
 			Add(object, NULL);
 		}
 	}
+	//TODO: this is a hack. Must call remove before add, or else add has no effect. Why are we calling this here?
+	wxGetApp().ObserversOnChange(NULL,&old_list,NULL);
+	wxGetApp().ObserversOnChange(&new_list,NULL,NULL);
 }
 
 void CSketch::ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketches)

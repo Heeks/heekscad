@@ -25,12 +25,9 @@ EndedObject::~EndedObject(){
 
 const EndedObject& EndedObject::operator=(const EndedObject &b){
 	ConstrainedObject::operator=(b);
-	A = new HPoint(*b.A);
-	B = new HPoint(*b.B);
-	A->m_draw_unselected = false;
-	B->m_draw_unselected = false;
-	Add(A,NULL);
-	Add(B,NULL);
+	std::list<HeeksObj*>::iterator it = m_objects.begin();
+	A = (HPoint*)*(it++);
+	B = (HPoint*)*(it);
 	return *this;
 }
 
