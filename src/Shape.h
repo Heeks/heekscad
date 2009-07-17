@@ -77,6 +77,7 @@ public:
 	bool UsesID(){return true;}
 
 	const TopoDS_Shape &Shape(){return m_shape;}
+	const TopoDS_Shape *GetShape(){return &m_shape;}
 
 	CFace* find(const TopoDS_Face &face);
 	bool GetExtents(double* extents, const double* orig, const double* xdir, const double* ydir, const double* zdir);
