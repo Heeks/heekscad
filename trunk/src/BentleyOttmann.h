@@ -42,14 +42,6 @@ public:
 	}
 };
 
-class BoundedCurve
-{
-public:
-	MyLine* line;
-	double startu,endu;
-	BoundedCurve(MyLine *line, double startu, double endu){this->line = line; this->startu = startu; this->endu = endu;}
-};
-
 class Intersection
 {
 public:
@@ -75,6 +67,7 @@ public:
 };
 
 inline bool MyIsEqual(double a, double b);
+bool MyIsEqual(MyLine* line1, MyLine* line2, double at);
 double MyRound(double d);
 IntResult Intersects(MyLine* line1, MyLine* line2);
 void InsertEvent(EventType type, double x, MyLine* line);

@@ -9,6 +9,7 @@
 #include "HArc.h"
 #include "Sketch.h"
 #include "SolveSketch.h"
+#include "MultiPoly.h"
 
 class SetLinesPerpendicular:public Tool{
 	// set world coordinate system active again
@@ -278,6 +279,19 @@ public:
 	const wxChar* GetToolTip(){return _("Set this point on arc");}
 };
 
+class RunTest:public Tool{
+public:
+	void Run(){
+		std::list<CSketch*> list;
+		list.push_back((CSketch*)(*wxGetApp().m_marked_list->list().begin())->Owner());
+		MultiPoly(list);
+	}
+	const wxChar* GetTitle(){return _T("Run Test");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Run Test");}
+};
+
+
 static SetEqualRadius set_equal_radius;
 static SetConcentric set_concentric;
 static SetLinesParallel set_lines_parallel;
@@ -290,6 +304,7 @@ static SetPointOnMidpoint set_point_on_midpoint;
 static SetPointsCoincident set_points_coincident;
 static SetPointOnArc set_point_on_arc;
 static SetPointOnArcMidpoint set_point_on_arc_midpoint;
+static RunTest run_test;
 
 void GetConstraintMenuTools(std::list<Tool*>* t_list){
 	int line_count = 0;
@@ -318,6 +333,8 @@ void GetConstraintMenuTools(std::list<Tool*>* t_list){
 				return;
 		}
 	}
+
+	t_list->push_back(&run_test);
 
 	int total_count = line_count + arc_count + point_count + circle_count;
 

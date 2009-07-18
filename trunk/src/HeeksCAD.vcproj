@@ -464,6 +464,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\BentleyOttmann.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\BentleyOttmann.h"
+			>
+		</File>
+		<File
 			RelativePath=".\BezierCurve.cpp"
 			>
 		</File>
@@ -1005,6 +1013,14 @@
 		</File>
 		<File
 			RelativePath="..\interface\Material.h"
+			>
+		</File>
+		<File
+			RelativePath=".\MultiPoly.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\MultiPoly.h"
 			>
 		</File>
 		<File
