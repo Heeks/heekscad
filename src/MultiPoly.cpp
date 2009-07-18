@@ -5,7 +5,9 @@
 #include "stdafx.h"
 #include "Sketch.h"
 #include "EndedObject.h"
-#include "BentleyOttmann.h"
+#include "MultiPoly.h"
+#include <algorithm>
+
 //This algorithm takes an array of complex sketches (CSketch* constaining multiple closed paths)
 //And creates a new set of paths that are no longer self intersecting
 //these lists are returns an array of trees of objects
@@ -41,7 +43,7 @@ void MultiPoly(std::list<CSketch*> sketches)
 	//Get a list of all the intersection points
 	std::map<MyLine*, std::vector<Intersection> > intersections = Intersections(shapes);
 
-	std::map<double, std::map<double, std::vector<BoundedCurve> > >bcurves;
+	std::map<double, std::map<double, std::vector<CompoundSegment*> > >bcurves;
 
 	//Create a new list of bounded segment objects. Whose endpoints are locatable via hash
 	//with the exception that the hash requires a search of the 4 adjacent elements(if they exist)
@@ -54,8 +56,9 @@ void MultiPoly(std::list<CSketch*> sketches)
 		for(int i=1; i < inter.size(); i++)
 		{
 			double newu=tline->GetU(inter[i].X,inter[i].Y);
-			bcurves[MyRound(inter[i-1].X)][MyRound(inter[i-1].Y)].push_back(BoundedCurve(tline,startu,newu));
-			bcurves[MyRound(inter[i].X)][MyRound(inter[i].Y)].push_back(BoundedCurve(tline,startu,newu));
+			CompoundSegment* segment = new CompoundSegment(tline,startu,newu);
+			bcurves[MyRound(inter[i-1].X)][MyRound(inter[i-1].Y)].push_back(segment);
+			bcurves[MyRound(inter[i].X)][MyRound(inter[i].Y)].push_back(segment);
 			startu = newu;
 		}
 	}
@@ -64,21 +67,47 @@ void MultiPoly(std::list<CSketch*> sketches)
 	//segments that are connected to only 2 other curves. This will yield a non-orientable graph
 	//so our definition of polygons better be very graph theoretical
 
-	std::map<double, std::map<double, std::vector<BoundedCurve> > >::iterator it3;
+	std::map<double, std::map<double, std::vector<CompoundSegment*> > >::iterator it3;
 	for(it3 = bcurves.begin(); it3 != bcurves.end(); ++it3)
 	{
-		std::map<double, std::vector<BoundedCurve> >::iterator it4;
-		for(it4 = (*it3).second.begin(); it4 != (*it3).second.end(); ++it4)
+		std::map<double, std::vector<CompoundSegment*> >::iterator it4;
+		for(it4 = (*it3).second.begin(); it4 != (*it3).second.end();)
 		{
 			//TODO: should check the 4 adjacent nodes
 			if((*it4).second.size() != 2)
+			{
+				++it4;
 				continue;
-	
-			//Check if either one is a curve group.
-			
-			//create a new curvegroup, using the pointed to points as ends
+			}
+
+			//Concatenate the 2 groups and remove *it4 from the map
+			CompoundSegment* seg1 = (*it4).second[0];
+			CompoundSegment* seg2 = (*it4).second[1];
+
+			seg1->Add(seg2,(*it3).first,(*it4).first);
+
+			//Must find the pointer at the end of seg2 and change it
+			gp_Pnt begin = seg2->Begin();
+			if(MyIsEqual(begin.X(),(*it3).first) && MyIsEqual(begin.Y(),(*it4).first))
+			{
+				gp_Pnt end = seg2->End();
+				std::replace(bcurves[MyRound(end.X())][MyRound(end.Y())].begin(),bcurves[MyRound(end.X())][MyRound(end.Y())].end(),seg2,seg1);
+			}
+			else
+			{
+				std::replace(bcurves[MyRound(begin.X())][MyRound(begin.Y())].begin(),bcurves[MyRound(begin.X())][MyRound(begin.Y())].end(),seg2,seg1);
+
+			}
+			//remove from the map
+			std::map<double, std::vector<CompoundSegment*> >::iterator it5=it4++;
+			//TODO: this isn't right
+			bcurves[(*it3).first].erase(it5);
 		}
-	}	
+	}
+
+	//Now we have a graph of CompoundSegment*. These should be fast to traverse. 
+	//TODO: something happens to non self intersecting shapes. They either dissapear, or become a single CompoundSegment
+	//we should probably know which one. 
 
 }
 
