@@ -333,8 +333,9 @@ void GetConstraintMenuTools(std::list<Tool*>* t_list){
 				return;
 		}
 	}
-
+#ifdef MULTIPOLYTEST
 	t_list->push_back(&run_test);
+#endif
 
 	int total_count = line_count + arc_count + point_count + circle_count;
 
