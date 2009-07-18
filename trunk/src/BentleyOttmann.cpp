@@ -170,7 +170,7 @@ std::map<MyLine*, std::vector<Intersection> > Intersections(std::vector<MyLine> 
 					for(it4 = lines.begin(); it4 != lines.end(); ++it4)
 					{
 						tline = *it4;
-						if(MyIsEqual(oline,tline,currentX))
+						if(MyIsEqual2(oline,tline,currentX))
 						{
 							intersections[tline].push_back(Intersection(tline,currentX,tline->GetY(currentX)));
 							intersections[oline].push_back(Intersection(oline,currentX,oline->GetY(currentX)));
@@ -290,7 +290,7 @@ IntResult Intersects(MyLine* line1, MyLine* line2)
 	return IntResult(false,0);
 }
 
-bool MyIsEqual(MyLine* line1, MyLine* line2, double at)
+bool MyIsEqual2(MyLine* line1, MyLine* line2, double at)
 {
 	if(line1->A.IsEqual(line2->A,tol) || line1->A.IsEqual(line2->B,tol))
 		return true;
