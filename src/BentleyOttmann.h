@@ -67,7 +67,7 @@ public:
 };
 
 inline bool MyIsEqual(double a, double b);
-bool MyIsEqual(MyLine* line1, MyLine* line2, double at);
+bool MyIsEqual2(MyLine* line1, MyLine* line2, double at);
 double MyRound(double d);
 IntResult Intersects(MyLine* line1, MyLine* line2);
 void InsertEvent(EventType type, double x, MyLine* line);

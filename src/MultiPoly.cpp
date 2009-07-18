@@ -16,9 +16,10 @@
 //all sketches must only contain closed shapes
 
 std::vector<MyLine> shapes;
-
+extern double tol;
 void MultiPoly(std::list<CSketch*> sketches)
 {
+	tol = wxGetApp().m_geom_tol;
 	shapes.clear();
 	//first pass: build lists of closed shapes
 	std::list<CSketch*>::iterator it;
@@ -63,12 +64,52 @@ void MultiPoly(std::list<CSketch*> sketches)
 		}
 	}
 
+	//Fix up that 4 adjacent elements problem
+	std::map<double, std::map<double, std::vector<CompoundSegment*> > >::iterator it3;
+	std::map<double, std::vector<CompoundSegment*> > *last_x=NULL;
+	double last_x_coord;
+	for(it3 = bcurves.begin(); it3 != bcurves.end();it3++)
+	{
+		std::map<double, std::vector<CompoundSegment*> > *this_x=&(*it3).second;
+		std::map<double, std::vector<CompoundSegment*> >::iterator it4;
+		std::vector<CompoundSegment*> *last_y = NULL;
+		double this_x_coord = (*it3).first;
+		double last_y_coord;
+		for(it4 = (*it3).second.begin(); it4 != (*it3).second.end();)
+		{
+			std::map<double, std::vector<CompoundSegment*> >::iterator it5 = it4++;
+			std::vector<CompoundSegment*> *this_y = &(*it4).second;
+			double this_y_coord = (*it3).first;
+			bool erasedy=false;
+			if(last_x && this_x - last_x < 1.6 * tol)
+			{
+				for(int i=0; i < bcurves[this_x_coord][this_y_coord].size(); i++)
+					bcurves[last_x_coord][this_y_coord].push_back(bcurves[this_x_coord][this_y_coord][i]);
+				bcurves[this_x_coord].erase(it5);
+				erasedy=true;
+			}
+			else if(last_y && this_y - last_y < 1.5 * tol)
+			{
+				for(int i=0; i < bcurves[this_x_coord][this_y_coord].size(); i++)
+					bcurves[this_x_coord][last_y_coord].push_back(bcurves[this_x_coord][this_y_coord][i]);
+				bcurves[this_x_coord].erase(it5);
+				erasedy=true;
+			}
+			last_y = 0;
+			if(!erasedy)
+			{
+				last_y = &(*it4).second;
+				last_y_coord = (*it4).first;
+			}
+		}
+		last_x = &(*it3).second;
+		last_x_coord = (*it3).first;
+	}
 	//Create a new tree of boundedcurves, that is much smaller. follow all chains and attempt to remove
 	//segments that are connected to only 2 other curves. This will yield a non-orientable graph
 	//so our definition of polygons better be very graph theoretical
 
-	std::map<double, std::map<double, std::vector<CompoundSegment*> > >::iterator it3;
-	for(it3 = bcurves.begin(); it3 != bcurves.end(); ++it3)
+	for(it3 = bcurves.begin(); it3 != bcurves.end();)
 	{
 		std::map<double, std::vector<CompoundSegment*> >::iterator it4;
 		for(it4 = (*it3).second.begin(); it4 != (*it3).second.end();)
@@ -100,9 +141,15 @@ void MultiPoly(std::list<CSketch*> sketches)
 			}
 			//remove from the map
 			std::map<double, std::vector<CompoundSegment*> >::iterator it5=it4++;
-			//TODO: this isn't right
 			bcurves[(*it3).first].erase(it5);
 		}
+		if(bcurves[(*it3).first].size() == 0)
+		{
+			std::map<double, std::map<double, std::vector<CompoundSegment*> > >::iterator it5 = it3++;
+			bcurves.erase(it5);
+		}
+		else
+			++it3;
 	}
 
 	//Now we have a graph of CompoundSegment*. These should be fast to traverse. 
