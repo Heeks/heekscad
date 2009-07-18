@@ -89,26 +89,18 @@ std::map<MyLine*, std::vector<Intersection> > Intersections(std::vector<MyLine> 
 			sweepline[loc].insert(tline);
 		}
 
-		for(it2 = (*it).second[AddType].begin(); it2 != (*it).second[AddType].end(); ++it2)
-		{
-			//Add these new items to the sweepline
-			tline = *it2;
-			tline->addedAt = currentX;
-			//No numerical problems here, because if A.X and B.X were within tol. Line would be
-			//in a different list
-			double currentY = tline->GetY();
-			double loc = MyRound(currentY);
-			sweepline[loc].insert(tline);
-		}
-
 		//try to break apart coincident point sets. 
 		//TODO: should erase the list in sweepline if it is empty
 		std::map<double,std::set<MyLine*> >::iterator it3;
-		for(it3 = sweepline.begin(); it3 != sweepline.end(); it3++)
+		for(it3 = sweepline.begin(); it3 != sweepline.end();)
 		{
+			bool donotinc=false;
 			std::set<MyLine*> lines = (*it3).second;
 			if(lines.size() <= 1)
+			{
+				++it3;
 				continue;
+			}
 			double baseloc = (*it3).first;
 			std::set<MyLine*>::iterator it4;
 			for(it4 = lines.begin(); it4 != lines.end();)
@@ -126,25 +118,69 @@ std::map<MyLine*, std::vector<Intersection> > Intersections(std::vector<MyLine> 
 					currentX = oldx;
 					tline->addedAt = currentX;
 					sweepline[newloc].insert(tline);
+					if((*it3).second.size() == 0)
+					{
+						std::map<double,std::set<MyLine*> >::iterator it5 = it3++;
+						sweepline.erase(it5);
+						donotinc=true;
+					}
 					continue;
 				}
 				++it4;
 			}
+			if(!donotinc)
+				++it3;
 		}
 
-		//TODO: all sets in sweepline represent intersections
+		for(it2 = (*it).second[AddType].begin(); it2 != (*it).second[AddType].end(); ++it2)
+		{
+			//Add these new items to the sweepline
+			tline = *it2;
+			tline->addedAt = tline->A.X();
+			//No numerical problems here, because if A.X and B.X were within tol. Line would be
+			//in a different list
+			double currentY = tline->GetY();
+			double loc = MyRound(currentY);
+			sweepline[loc].insert(tline);
+		}
+
+		//all sets in sweepline represent intersections, adjacent sets are possible intersecting
+		std::set<MyLine*>* prev_lines=0;
+		double prev_coord;
 		for(it3 = sweepline.begin(); it3 != sweepline.end(); it3++)
 		{
 			std::set<MyLine*> lines = (*it3).second;
-			if(lines.size() <= 1)
-				continue;
-			//All the elements of lines are intersecting at this X
 			std::set<MyLine*>::iterator it4;
-			for(it4 = lines.begin(); it4 != lines.end(); ++it4)
+			if(lines.size() > 1)
 			{
-				tline = *it4;
-				intersections[tline].push_back(Intersection(tline,currentX,tline->GetY(currentX)));
+				//All the elements of lines are intersecting at this X
+				for(it4 = lines.begin(); it4 != lines.end(); ++it4)
+				{
+					tline = *it4;
+					intersections[tline].push_back(Intersection(tline,currentX,tline->GetY(currentX)));
+				}
 			}
+			//All items in an adjacent set, potentially intersect
+			if(prev_lines && (*it3).first - prev_coord < tol * 1.5)
+			{
+				std::set<MyLine*>::iterator it5;
+				for(it5 = prev_lines->begin(); it5 != prev_lines->end(); it5++)
+				{
+					MyLine* oline = *it5;
+					for(it4 = lines.begin(); it4 != lines.end(); ++it4)
+					{
+						tline = *it4;
+						if(MyIsEqual(oline,tline,currentX))
+						{
+							intersections[tline].push_back(Intersection(tline,currentX,tline->GetY(currentX)));
+							intersections[oline].push_back(Intersection(oline,currentX,oline->GetY(currentX)));
+						}
+					}
+					
+				}
+			}
+			prev_coord = (*it3).first;
+			prev_lines = &((*it3).second);
 		}
 
 		for(it2 = (*it).second[AddRemoveType].begin(); it2 != (*it).second[AddRemoveType].end(); ++it2)
@@ -237,21 +273,31 @@ void InsertEvent(EventType type, double x, MyLine* line)
 
 IntResult Intersects(MyLine* line1, MyLine* line2)
 {
-	//Checks if these lines intersect somewhere besides the start and end points
-	if(line1->A.IsEqual(line2->A,tol) || line1->B.IsEqual(line2->B,tol))
-		return IntResult(false,0);
+	//Checks if these lines intersect somewhere besides the start point. End point is reported.
+	//if(line1->A.IsEqual(line2->A,tol) || line1->B.IsEqual(line2->B,tol))
+	//	return IntResult(false,0);
 
 	double ua = (line2->B.X()-line2->A.X())*(line1->A.Y()-line2->A.Y()) - (line2->B.Y()-line2->A.Y())*(line1->A.X()-line2->A.X());
 	ua /= (line2->B.Y()-line2->A.Y())*(line1->B.X()-line1->A.X())-(line2->B.X()-line2->A.X())*(line1->B.Y()-line1->A.Y());
 	double ub = (line1->B.X()-line1->A.X())*(line1->A.Y()-line2->A.Y()) - (line1->B.Y()-line1->A.Y())*(line1->A.X()-line2->A.X());
 	ub /= (line2->B.Y()-line2->A.Y())*(line1->B.X()-line1->A.X())-(line2->B.X()-line2->A.X())*(line1->B.Y()-line1->A.Y());
 
-	if(ua > 0 && ua < 1 && ub > 0 && ub < 1)
+	if(ua > -tol && ua < 1+tol && ub > -tol && ub < 1+tol)
 	{
 		double atX = line1->A.X() + ua * (line1->B.X() - line1->A.X());
 		return IntResult(true,atX);
 	}
 	return IntResult(false,0);
+}
+
+bool MyIsEqual(MyLine* line1, MyLine* line2, double at)
+{
+	if(line1->A.IsEqual(line2->A,tol) || line1->A.IsEqual(line2->B,tol))
+		return true;
+	if(line1->B.IsEqual(line2->A,tol) || line1->B.IsEqual(line2->B,tol))
+		return true;
+
+	return Intersects(line1,line2).exists;
 }
 
 //Determine if two doubles are the same within tolerance
@@ -263,8 +309,7 @@ inline bool MyIsEqual(double a, double b)
 }
 
 //Round double to the nearest multiple of tol
-//TODO: is this right? maybe use fmod(d,tol)?
 double MyRound(double d)
 {
-	return floor(d/tol) * tol;
+	return d - fmod(d,tol);
 }
