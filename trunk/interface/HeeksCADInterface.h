@@ -17,6 +17,12 @@ class HeeksColor;
 class wxMenuBar;
 class wxMenu;
 class wxToolBar;
+class wxString;
+class wxCommandEvent;
+class wxUpdateUIEvent;
+class wxSizeEvent;
+class wxMouseEvent;
+class wxToolBarBase;
 
 #include "SketchOrder.h"
 
