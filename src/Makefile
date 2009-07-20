@@ -423,6 +423,4 @@ uninstall:
 all-before: stdafx.h.gch
 
 .PHONY: all
-all:
-	all-before
-	executable
+all: all-before	executable
