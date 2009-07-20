@@ -301,7 +301,7 @@ bool MyIsEqual2(MyLine* line1, MyLine* line2, double at)
 }
 
 //Determine if two doubles are the same within tolerance
-inline bool MyIsEqual(double a, double b)
+bool MyIsEqual(double a, double b)
 {
 	if(a > b - tol && a < b + tol)
 		return true;
