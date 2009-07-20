@@ -35,8 +35,7 @@ endif
 OCCLIBS=-lTKVRML -lTKSTL -lTKBRep -lTKIGES -lTKShHealing -lTKSTEP -lTKSTEP209 -lTKSTEPAttr -lTKSTEPBase -lTKXSBase -lTKShapeSchema -lFWOSPlugin -lTKBool -lTKCAF -lTKCDF -lTKernel -lTKFeat -lTKFillet -lTKG2d -lTKG3d -lTKGeomAlgo -lTKGeomBase -lTKHLR -lTKMath -lTKOffset -lTKPrim -lTKPShape -lTKService -lTKTopAlgo -lTKV2d -lTKV3d -lTKMesh -lTKAdvTools -lTKBO -lTKXDESTEP -lTKXCAF -lTKXCAFSchema -lTKLCAF -lTKPLCAF ${CASLIBPATH}
 
 .PHONY: executable
-executable:
-	${EXECUTABLE}: ${OBJECTS}
+executable: ${OBJECTS}
 	$(CC) -o ${EXECUTABLE} ${OBJECTS} -lstdc++ -lGLU ${PYTHONLIBS} -lGL -g ${WXLIBS} ${OCCLIBS}
 
 stdafx.h.gch: stdafx.h
