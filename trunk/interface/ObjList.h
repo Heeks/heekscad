@@ -6,6 +6,10 @@
 
 #include "HeeksObj.h"
 
+#include <list>
+#include <vector>
+#include <set>
+
 class ObjList : public HeeksObj
 {
 protected:

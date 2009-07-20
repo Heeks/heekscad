@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include <string.h>	// for memcpy() prototype
+#include <math.h>	// for sqrt() prototype
+
 class CBox{
 public:
 	double m_x[6];
