@@ -3,31 +3,6 @@
 // This program is released under the BSD license. See the file COPYING for details.
 #include "stdafx.h"
 #include "Face.h"
-#include "Loop.h"
-#include "Shape.h"
-#include "Solid.h"
-#include "Sketch.h"
-#include "CoordinateSystem.h"
-#include "ConversionTools.h"
-#include "MarkedList.h"
-#include <BRepMesh.hxx>
-#include <StdPrs_ToolShadedShape.hxx>
-#include <Poly_Connect.hxx>
-#include <Poly_Triangulation.hxx>
-#include <TColgp_Array1OfDir.hxx>
-#include <BRepTools.hxx>
-#include <GeomLProp_SLProps.hxx>
-#include <GProp_GProps.hxx>
-#include <BRepGProp.hxx>
-#include <BRepBuilderAPI_Transform.hxx>
-#include <BRepOffsetAPI_MakeOffset.hxx>
-#include "../interface/PropertyString.h"
-#include <TopTools_ListIteratorOfListOfShape.hxx>
-#include <BRepAdaptor_Surface.hxx>
-#include <GeomAPI_ProjectPointOnSurf.hxx>
-#include <gp_Sphere.hxx>
-#include <gp_Cone.hxx>
-#include <BRepExtrema_DistShapeShape.hxx>
 
 CFace::CFace(const TopoDS_Face &face):m_topods_face(face), m_temp_attr(0){
 #if _DEBUG
