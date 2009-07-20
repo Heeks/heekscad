@@ -66,7 +66,7 @@ public:
 	IntResult(bool exists, double atX){this->exists = exists; this->atX = atX;}
 };
 
-inline bool MyIsEqual(double a, double b);
+bool MyIsEqual(double a, double b);
 bool MyIsEqual2(MyLine* line1, MyLine* line2, double at);
 double MyRound(double d);
 IntResult Intersects(MyLine* line1, MyLine* line2);
