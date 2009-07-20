@@ -14,6 +14,9 @@ class wxPoint;
 class CInputMode;
 class TiXmlElement;
 class HeeksColor;
+class wxMenuBar;
+class wxMenu;
+class wxToolBar;
 
 #include "SketchOrder.h"
 

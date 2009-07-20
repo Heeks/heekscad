@@ -7,6 +7,8 @@
 #include "Box.h"
 #include "wx/dc.h"
 
+#include <list>
+
 class HeeksColor;
 class Property;
 class Tool;
