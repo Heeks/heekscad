@@ -1,11 +1,7 @@
 // ViewZooming.h
 // Copyright (c) 2009, Dan Heeks
 // This program is released under the BSD license. See the file COPYING for details.
-#if !defined ViewZoomingHEADER
-#define ViewZoomingHEADER
-
-#include "stdafx.h"
-#include "../interface/InputMode.h"
+#pragma once
 
 class ViewZooming: public CInputMode{
 	wxPoint button_down_point;
@@ -19,5 +15,3 @@ public:
 	const wxChar* GetHelpText();
 	void OnMouse( wxMouseEvent& event );
 };
-
-#endif
