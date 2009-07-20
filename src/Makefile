@@ -40,7 +40,7 @@ executable:
 	$(CC) -o ${EXECUTABLE} ${OBJECTS} -lstdc++ -lGLU ${PYTHONLIBS} -lGL -g ${WXLIBS} ${OCCLIBS}
 
 stdafx.h.gch: stdafx.h
- 	$(CC) -c $? ${CCFLAGS} -o $@
+	$(CC) -c $? ${CCFLAGS} -o $@
  
 AboutBox.o: AboutBox.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
