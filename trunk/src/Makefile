@@ -34,9 +34,14 @@ endif
 
 OCCLIBS=-lTKVRML -lTKSTL -lTKBRep -lTKIGES -lTKShHealing -lTKSTEP -lTKSTEP209 -lTKSTEPAttr -lTKSTEPBase -lTKXSBase -lTKShapeSchema -lFWOSPlugin -lTKBool -lTKCAF -lTKCDF -lTKernel -lTKFeat -lTKFillet -lTKG2d -lTKG3d -lTKGeomAlgo -lTKGeomBase -lTKHLR -lTKMath -lTKOffset -lTKPrim -lTKPShape -lTKService -lTKTopAlgo -lTKV2d -lTKV3d -lTKMesh -lTKAdvTools -lTKBO -lTKXDESTEP -lTKXCAF -lTKXCAFSchema -lTKLCAF -lTKPLCAF ${CASLIBPATH}
 
-${EXECUTABLE}: ${OBJECTS}
+.PHONY: executable
+executable:
+	${EXECUTABLE}: ${OBJECTS}
 	$(CC) -o ${EXECUTABLE} ${OBJECTS} -lstdc++ -lGLU ${PYTHONLIBS} -lGL -g ${WXLIBS} ${OCCLIBS}
 
+stdafx.h.gch: stdafx.h
+ 	$(CC) -c $? $(CCFLAGS) -o $@
+ 
 AboutBox.o: AboutBox.cpp
 	$(CC) -c $? ${CCFLAGS} -o $@
 
@@ -414,3 +419,11 @@ uninstall:
 	-rm $(DESTDIR)$(BINDIR)/HeeksCAD
 	-rm $(DESTDIR)$(PIXMAPSDIR)/HeeksCAD.png
 	-rm $(DESTDIR)$(APPSDIR)/HeeksCAD.desktop
+
+.PHONY: all-before
+all-before: stdafx.h.gch
+
+.PHONY: all
+all:
+   all-before
+   executable
