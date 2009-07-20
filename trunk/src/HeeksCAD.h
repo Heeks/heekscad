@@ -8,7 +8,6 @@
 #include "../interface/ObjList.h"
 #include "glfont2.h"
 
-class Tool;
 class MagDragWindow;
 class ViewRotating;
 class ViewZooming;
