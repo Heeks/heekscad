@@ -5,7 +5,6 @@
 #pragma once
 
 #include "ConstrainedObject.h"
-#include <gp_Circ.hxx>
 
 class HCircle: public ConstrainedObject{
 private:

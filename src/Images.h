@@ -5,7 +5,6 @@
 #if !defined Images_HEADER
 #define Images_HEADER
 
-#include <wx/imaglist.h>
 
 class Images{
 protected:

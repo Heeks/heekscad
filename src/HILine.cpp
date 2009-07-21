@@ -10,7 +10,6 @@
 #include "../interface/PropertyDouble.h"
 #include "../interface/PropertyLength.h"
 #include "../interface/PropertyVertex.h"
-#include "../tinyxml/tinyxml.h"
 #include "Gripper.h"
 
 HILine::HILine(const HILine &line):EndedObject(&line.color){

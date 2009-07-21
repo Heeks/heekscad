@@ -5,7 +5,6 @@
 #pragma once
 
 #include "../interface/HeeksObj.h"
-#include "../tinyxml/tinyxml.h"
 
 class HXml: public HeeksObj{
 private:

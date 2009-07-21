@@ -5,7 +5,6 @@
 #pragma once
 
 #include "../interface/Material.h"
-#include <TopoDS_Solid.hxx>
 #include "ShapeData.h"
 
 class CFace;

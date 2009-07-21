@@ -9,11 +9,7 @@
  * details.
  */
 
-#include <stdio.h>
 #include "../interface/Box.h"
-
-#include <list>
-#include <string>
 
 /**
 	The CCorrelation class stores a reference to a single object.  When another NC operation (such as

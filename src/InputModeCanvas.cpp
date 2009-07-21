@@ -4,7 +4,6 @@
 
 #include "stdafx.h"
 #include "InputModeCanvas.h"
-#include "wx/dcmirror.h"
 #include "../interface/InputMode.h"
 #include "../interface/Property.h"
 #include "../interface/PropertyString.h"

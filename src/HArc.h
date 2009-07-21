@@ -5,7 +5,6 @@
 #pragma once
 
 #include "EndedObject.h"
-#include <gp_Circ.hxx>
 
 class HArc: public EndedObject{
 private:

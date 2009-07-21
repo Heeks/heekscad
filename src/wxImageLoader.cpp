@@ -5,10 +5,6 @@
 
 #include "stdafx.h"
 #include "wxImageLoader.h"
-#include <cmath>
- 
-#include "wx/image.h"
-#include "wx/wx.h"
  
  
 GLuint* loadImage(wxString path, int* imageWidth, int* imageHeight, int* textureWidth, int* textureHeight)

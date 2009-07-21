@@ -4,14 +4,11 @@
 
 #include "stdafx.h"
 #include "Sphere.h"
-#include <BRepPrimAPI_MakeSphere.hxx>
-#include <gp_Trsf.hxx>
 #include "../interface/PropertyVertex.h"
 #include "../interface/PropertyDouble.h"
 #include "../interface/PropertyLength.h"
 #include "Gripper.h"
 #include "MarkedList.h"
-#include "../tinyxml/tinyxml.h"
 
 CSphere::CSphere(const gp_Pnt& pos, double radius, const wxChar* title, const HeeksColor& col):CSolid(BRepPrimAPI_MakeSphere(pos, radius), title, col), m_pos(pos), m_radius(radius)
 {

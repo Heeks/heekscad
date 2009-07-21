@@ -3,7 +3,6 @@
 // This program is released under the BSD license. See the file COPYING for details.
 
 #include "Shape.h"
-#include <TopoDS_Wire.hxx>
 
 class CWire:public CShape{
 private:

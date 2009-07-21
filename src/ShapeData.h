@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "../tinyxml/tinyxml.h"
 
 class CShape;
 

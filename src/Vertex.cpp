@@ -5,9 +5,6 @@
 #include "Vertex.h"
 #include "Face.h"
 #include "Solid.h"
-#include <BRep_Tool.hxx>
-#include <TopoDS_Vertex.hxx>
-#include <TopExp.hxx>
 #include "Gripper.h"
 
 CVertex::CVertex(const TopoDS_Vertex &vertex):m_topods_vertex(vertex){

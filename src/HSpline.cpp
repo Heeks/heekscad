@@ -12,8 +12,6 @@
 #include "HILine.h"
 #include "HArc.h"
 #include "Gripper.h"
-#include <TColStd_Array1OfReal.hxx>
-#include <TColStd_Array1OfInteger.hxx>
 
 HSpline::HSpline(const HSpline &s){
 	operator=(s);

@@ -4,9 +4,6 @@
 
 #include "stdafx.h"
 #include "Plugins.h"
-#include  "wx/sizer.h"
-#include  "wx/menuitem.h"
-#include  "wx/checklst.h"
 #include "HeeksConfig.h"
 
 enum

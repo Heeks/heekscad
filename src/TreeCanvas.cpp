@@ -3,7 +3,6 @@
 // This program is released under the BSD license. See the file COPYING for details.
 
 #include "stdafx.h"
-#include "wx/dcmirror.h"
 #include "TreeCanvas.h"
 #include "../interface/MarkedObject.h"
 #include "MarkedList.h"
