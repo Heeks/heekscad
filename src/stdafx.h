@@ -84,6 +84,8 @@
 #pragma warning(  default : 4244 )        // Issue warning 4244
 #endif
 
+#include <Standard.hxx>
+
 #include <BRepAdaptor_Curve.hxx>
 #include <BRepAdaptor_Surface.hxx>
 #include <BRepAlgoAPI_Common.hxx>
@@ -151,7 +153,6 @@
 #include <Poly_PolygonOnTriangulation.hxx>
 #include <Poly_Triangulation.hxx>
 #include <Precision.hxx>
-#include <Standard.hxx>
 #include <Standard_ErrorHandler.hxx>
 #include <StdPrs_ToolShadedShape.hxx>
 #include <STEPControl_Controller.hxx>
