@@ -399,6 +399,7 @@ BentleyOttmann.o: BentleyOttmann.cpp
 
 clean:
 	-rm ${EXECUTABLE} ${OBJECTS}
+	-rm stdafx.h.gch
 
 install:
 	test -z "$(DESTDIR)$(HEEKSCADDIR)" || $(mkdir_p) "$(DESTDIR)$(BINDIR)"
