@@ -6,7 +6,6 @@
 
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"
-#include <Geom_BSplineCurve.hxx>
 //#include <Handle_Geom_Geometry.hxx>
 
 class HSpline: public HeeksObj{

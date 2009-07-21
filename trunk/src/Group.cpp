@@ -5,7 +5,6 @@
 #include "stdafx.h"
 #include "Group.h"
 #include "Shape.h"
-#include "../tinyxml/tinyxml.h"
 
 void CGroup::WriteXML(TiXmlNode *root)
 {

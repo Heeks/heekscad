@@ -15,10 +15,6 @@
 #include "HeeksFrame.h"
 #include "ConversionTools.h"
 #include "ConstraintTools.h"
-#include <wx/clipbrd.h>
-#include "../tinyxml/tinyxml.h"
-#include <wx/stdpaths.h>
-#include <fstream>
 using namespace std;
 
 MarkedList::MarkedList(){

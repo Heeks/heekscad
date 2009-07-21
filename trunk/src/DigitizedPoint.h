@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <GeomConvert_CompCurveToBSplineCurve.hxx>
 
 enum DigitizeType{
 	DigitizeNoItemType,

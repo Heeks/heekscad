@@ -4,9 +4,6 @@
 
 #pragma once
 
-#include <gp_Vec.hxx>
-#include <gp_Pnt.hxx>
-
 class CViewPoint{
 private:
 	wxPoint m_initial_point;

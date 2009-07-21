@@ -4,9 +4,7 @@
 
 #include "stdafx.h"
 #include "HImage.h"
-#include <wx/stdpaths.h>
 #include "wxImageLoader.h"
-#include "../tinyxml/tinyxml.h"
 #include "Gripper.h"
 
 HImage::HImage(const wxChar* file_path)

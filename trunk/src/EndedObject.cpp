@@ -7,7 +7,6 @@
 #include "../interface/PropertyDouble.h"
 #include "../interface/PropertyLength.h"
 #include "../interface/PropertyVertex.h"
-#include "../tinyxml/tinyxml.h"
 #include "HPoint.h"
 #include "MarkedList.h"
 

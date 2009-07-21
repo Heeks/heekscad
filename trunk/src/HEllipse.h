@@ -6,7 +6,6 @@
 
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"
-#include <gp_Elips.hxx>
 
 class HEllipse: public HeeksObj{
 private:

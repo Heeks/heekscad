@@ -5,8 +5,6 @@
 #pragma once
 
 #include "../sketchsolve/src/solve.h"
-#include "math_BFGS.hxx"
-#include "math_MultipleVarFunctionWithGradient.hxx"
 
 class OCCSolver: public SolveImpl, public math_MultipleVarFunctionWithGradient
 {

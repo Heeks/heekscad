@@ -4,13 +4,11 @@
 
 #include "stdafx.h"
 #include "Cylinder.h"
-#include <BRepPrimAPI_MakeCylinder.hxx>
 #include "../interface/PropertyVertex.h"
 #include "../interface/PropertyDouble.h"
 #include "../interface/PropertyLength.h"
 #include "Gripper.h"
 #include "MarkedList.h"
-#include "../tinyxml/tinyxml.h"
 
 CCylinder::CCylinder(const gp_Ax2& pos, double radius, double height, const wxChar* title, const HeeksColor& col):CSolid(BRepPrimAPI_MakeCylinder(pos, radius, height), title, col), m_pos(pos), m_radius(radius), m_height(height)
 {

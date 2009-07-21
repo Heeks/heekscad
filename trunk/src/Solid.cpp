@@ -3,7 +3,6 @@
 // This program is released under the BSD license. See the file COPYING for details.
 #include "stdafx.h"
 #include "Solid.h"
-#include "BRepBuilderAPI_Transform.hxx"
 #include "MarkedList.h"
 
 CSolid::CSolid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col):CShape(solid, title, col)
