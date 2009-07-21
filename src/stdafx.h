@@ -5,15 +5,40 @@
 #pragma warning(disable : 4996)
 #endif
 
+#include <algorithm>
 #include <list>
 #include <vector>
 #include <map>
 #include <set>
 #include <fstream>
 #include <iomanip>
+#include <cmath>
+#include <sstream>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
 
 #include <wx/wx.h>
-
+#include <wx/aui/aui.h>
+#include <wx/clipbrd.h>
+#include <wx/checklst.h>
+#include <wx/cmdline.h>
+#include <wx/dc.h>
+#include <wx/dcmirror.h>
+#include <wx/filedlg.h>
+#include <wx/filename.h>
+#include <wx/image.h>
+#include <wx/imaglist.h>
+#include <wx/menuitem.h>
+#include <wx/print.h>
+#include <wx/printdlg.h>
+#include <wx/stdpaths.h>
+#include <wx/sizer.h>
+#include <wx/toolbar.h>
+#include <wx/treectrl.h>
+#include "../tinyxml/tinyxml.h"
 #ifdef WIN32
 #pragma warning(disable:4100)
 #pragma warning(  disable : 4244 )        // Issue warning 4244
@@ -23,45 +48,93 @@
 #pragma warning(  default : 4244 )        // Issue warning 4244
 #endif
 
-#include <Standard.hxx>
-
+#include <BRepAdaptor_Curve.hxx>
 #include <BRepAdaptor_Surface.hxx>
+#include <BRepAlgoAPI_Common.hxx>
+#include <BRepAlgoAPI_Cut.hxx>
+#include <BRepAlgoAPI_Fuse.hxx>
+#include <BRepBuilderAPI_MakeEdge.hxx>
+#include <BRepBuilderAPI_MakeFace.hxx>
+#include <BRepBuilderAPI_MakePolygon.hxx>
+#include <BRepBuilderAPI_MakeShape.hxx>
+#include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
 #include <BRepExtrema_DistShapeShape.hxx>
+#include <BRepFilletAPI_MakeChamfer.hxx>
+#include <BRepFilletAPI_MakeFillet.hxx>
 #include <BRepGProp.hxx>
 #include <BRepMesh.hxx>
+#include <BRepOffsetAPI_DraftAngle.hxx>
 #include <BRepOffsetAPI_MakeEvolved.hxx>
 #include <BRepOffsetAPI_MakeOffset.hxx>
+#include <BRepOffsetAPI_MakeOffsetShape.hxx>
 #include <BRepOffsetAPI_MakePipe.hxx>
+#include <BRepOffsetAPI_Sewing.hxx>
 #include <BRepOffsetAPI_ThruSections.hxx>
-#include <BRepBuilderAPI_MakePolygon.hxx>
-#include <BRepOffsetAPI_DraftAngle.hxx>
+#include <BRepPrimAPI_MakeBox.hxx>
+#include <BRepPrimAPI_MakeCone.hxx>
+#include <BRepPrimAPI_MakeCylinder.hxx>
+#include <BRepPrimAPI_MakePrism.hxx>
 #include <BRepPrimAPI_MakeRevol.hxx>
 #include <BRep_Tool.hxx>
 #include <BRepTools.hxx>
+#include <BRepTools_WireExplorer.hxx>
+#include <GCPnts_AbscissaPoint.hxx>
 #include <Geom_Axis1Placement.hxx>
 #include <Geom_BezierCurve.hxx>
+#include <Geom_BSplineCurve.hxx>
+#include <Geom_Curve.hxx>
+#include <Geom_Line.hxx>
 #include <Geom_Plane.hxx>
+#include <GeomAPI_IntCS.hxx>
+#include <GeomAPI_IntSS.hxx>
 #include <GeomAPI_ProjectPointOnSurf.hxx>
+#include <GeomConvert_CompCurveToBSplineCurve.hxx>
 #include <GeomLProp_SLProps.hxx>
 #include <GProp_GProps.hxx>
 #include <gp.hxx>
 #include <gp_Circ.hxx>
 #include <gp_Cone.hxx>
 #include <gp_Cylinder.hxx>
+#include <gp_Elips.hxx>
+#include <gp_Dir.hxx>
+#include <gp_Lin.hxx>
 #include <gp_Pln.hxx>
+#include <gp_Pnt.hxx>
+#include <gp_Vec.hxx>
 #include <gp_Sphere.hxx>
+#include <gp_Trsf.hxx>
+#include <IGESControl_Controller.hxx>
+#include <IGESControl_Reader.hxx>
+#include <IGESControl_Writer.hxx>
+#include "math_BFGS.hxx"
+#include "math_MultipleVarFunctionWithGradient.hxx"
 #include <Poly_Connect.hxx>
+#include <Poly_Polygon3D.hxx>
+#include <Poly_PolygonOnTriangulation.hxx>
 #include <Poly_Triangulation.hxx>
 #include <Precision.hxx>
+#include <Standard.hxx>
 #include <Standard_ErrorHandler.hxx>
 #include <StdPrs_ToolShadedShape.hxx>
+#include <STEPControl_Controller.hxx>
+#include <STEPControl_Reader.hxx>
+#include <STEPControl_Writer.hxx>
 #include <TColgp_Array1OfDir.hxx>
 #include <TColgp_Array1OfPnt.hxx>
+#include <TColStd_Array1OfInteger.hxx>
+#include <TColStd_Array1OfReal.hxx>
+#include <TopExp.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Face.hxx>
+#include <TopoDS_Shape.hxx>
+#include <TopoDS_Vertex.hxx>
+#include <TopoDS_Wire.hxx>
+#include <TopTools_IndexedDataMapOfShapeListOfShape.hxx>
 #include <TopTools_ListIteratorOfListOfShape.hxx>
+#include <TopTools_MapIteratorOfMapOfShape.hxx>
+#include <TopTools_MapOfShape.hxx>
 #include <UnitsAPI.hxx>
 
 
