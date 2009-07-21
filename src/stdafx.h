@@ -5,76 +5,6 @@
 #pragma warning(disable : 4996)
 #endif
 
-#include <algorithm>
-#include <list>
-#include <vector>
-#include <map>
-#include <set>
-#include <fstream>
-#include <iomanip>
-#include <cmath>
-#include <sstream>
-#include <ctime>
-#include <iostream>
-
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-
-#include <wx/wx.h>
-#include <wx/aui/aui.h>
-#include "wx/brush.h"
-#include "wx/button.h"
-#include <wx/clipbrd.h>
-#include <wx/checklst.h>
-#include "wx/choice.h"
-#include <wx/cmdline.h>
-#include "wx/combobox.h"
-#include <wx/confbase.h>
-#include <wx/config.h>
-#include "wx/cursor.h"
-#include <wx/dc.h>
-#include "wx/dcclient.h"
-#include <wx/dcmirror.h>
-#include "wx/defs.h"
-#include "wx/dirdlg.h"
-#include "wx/dnd.h"
-#include <wx/dynlib.h>
-#include "wx/event.h"
-#include <wx/fileconf.h>
-#include <wx/filedlg.h>
-#include <wx/filename.h>
-#include <wx/glcanvas.h>
-#include "wx/hash.h"
-#include <wx/image.h>
-#include <wx/imaglist.h>
-#include "wx/intl.h"
-#include "wx/layout.h"
-#include "wx/log.h"
-#include <wx/menuitem.h>
-#include "wx/msgdlg.h"
-#include "wx/object.h"
-#include "wx/panel.h"
-#include "wx/pen.h"
-#include <wx/print.h>
-#include <wx/printdlg.h>
-#include "wx/settings.h"
-#include "wx/scrolwin.h"
-#include "wx/sizer.h"
-#include "wx/stattext.h"
-#include <wx/stdpaths.h>
-#include "wx/string.h"
-#include <wx/sizer.h>
-#include <wx/toolbar.h>
-#include "wx/textctrl.h"
-#include "wx/textdlg.h"
-#include <wx/treectrl.h>
-#include "wx/window.h"
-
-#include "../tinyxml/tinyxml.h"
-
 #ifdef WIN32
 #pragma warning(disable:4100)
 #pragma warning(  disable : 4244 )        // Issue warning 4244
@@ -177,6 +107,75 @@
 #include <TopTools_MapOfShape.hxx>
 #include <UnitsAPI.hxx>
 
+#include <algorithm>
+#include <list>
+#include <vector>
+#include <map>
+#include <set>
+#include <fstream>
+#include <iomanip>
+#include <cmath>
+#include <sstream>
+#include <ctime>
+#include <iostream>
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+
+#include <wx/wx.h>
+#include <wx/aui/aui.h>
+#include "wx/brush.h"
+#include "wx/button.h"
+#include <wx/clipbrd.h>
+#include <wx/checklst.h>
+#include "wx/choice.h"
+#include <wx/cmdline.h>
+#include "wx/combobox.h"
+#include <wx/confbase.h>
+#include <wx/config.h>
+#include "wx/cursor.h"
+#include <wx/dc.h>
+#include "wx/dcclient.h"
+#include <wx/dcmirror.h>
+#include "wx/defs.h"
+#include "wx/dirdlg.h"
+#include "wx/dnd.h"
+#include <wx/dynlib.h>
+#include "wx/event.h"
+#include <wx/fileconf.h>
+#include <wx/filedlg.h>
+#include <wx/filename.h>
+#include <wx/glcanvas.h>
+#include "wx/hash.h"
+#include <wx/image.h>
+#include <wx/imaglist.h>
+#include "wx/intl.h"
+#include "wx/layout.h"
+#include "wx/log.h"
+#include <wx/menuitem.h>
+#include "wx/msgdlg.h"
+#include "wx/object.h"
+#include "wx/panel.h"
+#include "wx/pen.h"
+#include <wx/print.h>
+#include <wx/printdlg.h>
+#include "wx/settings.h"
+#include "wx/scrolwin.h"
+#include "wx/sizer.h"
+#include "wx/stattext.h"
+#include <wx/stdpaths.h>
+#include "wx/string.h"
+#include <wx/sizer.h>
+#include <wx/toolbar.h>
+#include "wx/textctrl.h"
+#include "wx/textdlg.h"
+#include <wx/treectrl.h>
+#include "wx/window.h"
+
+#include "../tinyxml/tinyxml.h"
 
 extern "C" {
 #include <GL/gl.h>
