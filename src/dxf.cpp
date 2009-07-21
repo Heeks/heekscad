@@ -11,8 +11,6 @@
 #include "HSpline.h"
 #include "Sketch.h"
 
-#include <sstream>
-
 CDxfWrite::CDxfWrite(const wxChar* filepath)
 {
 	// start the file

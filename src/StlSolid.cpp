@@ -4,10 +4,6 @@
 #include "stdafx.h"
 #include "StlSolid.h"
 
-#include "../tinyxml/tinyxml.h"
-
-#include <fstream>
-
 using namespace std;
 
 CStlTri::CStlTri(const float* t)

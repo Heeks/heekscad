@@ -11,7 +11,6 @@
 #include "../interface/PropertyInt.h"
 #include "../interface/PropertyChoice.h"
 #include "../interface/Tool.h"
-#include "../tinyxml/tinyxml.h"
 
 std::string CSketch::m_sketch_order_str[MaxSketchOrderTypes] = {
 	std::string("unknown"),

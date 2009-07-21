@@ -4,7 +4,6 @@
 #include "stdafx.h"
 #include "Wire.h"
 #include "../interface/Tool.h"
-#include "BRepOffsetAPI_MakeOffset.hxx"
 
 CWire::CWire(const TopoDS_Wire &wire, const wxChar* title):CShape(wire, title, false){
 }

@@ -5,7 +5,6 @@
 #pragma once
 
 #include "../interface/HeeksObj.h"
-#include <TopoDS_Vertex.hxx>
 
 class CFace;
 class CEdge;

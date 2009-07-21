@@ -5,10 +5,6 @@
 #include "stdafx.h"
 #include "Geom.h"
 #include "Gripper.h"
-#include <Geom_Curve.hxx>
-#include <Geom_Line.hxx>
-#include <GeomAPI_IntCS.hxx>
-#include <GeomAPI_IntSS.hxx>
 
 void ClosestPointsOnLines(const gp_Lin& lin, const gp_Lin& lin2, gp_Pnt &p1, gp_Pnt &p2)
 {

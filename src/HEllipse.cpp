@@ -7,7 +7,6 @@
 #include "../interface/PropertyDouble.h"
 #include "../interface/PropertyLength.h"
 #include "../interface/PropertyChoice.h"
-#include "../tinyxml/tinyxml.h"
 #include "../interface/PropertyVertex.h"
 #include "HLine.h"
 #include "HILine.h"

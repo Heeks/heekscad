@@ -6,7 +6,6 @@
 #include "Sketch.h"
 #include "EndedObject.h"
 #include "MultiPoly.h"
-#include <algorithm>
 
 //This algorithm takes an array of complex sketches (CSketch* constaining multiple closed paths)
 //And creates a new set of paths that are no longer self intersecting

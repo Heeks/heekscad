@@ -30,12 +30,6 @@
 #include "TransformTools.h"
 #include "SelectMode.h"
 #include "CoordinateSystem.h"
-#include "wx/dnd.h"
-#include "wx/filename.h"
-#include <fstream>
-#include "wx/print.h"
-#include "wx/printdlg.h"
-#include <wx/aui/aui.h>
 #include "HeeksPrintout.h"
 #include "../interface/HeeksCADInterface.h"
 #include "Plugins.h"

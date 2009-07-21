@@ -9,7 +9,6 @@
 #include "../interface/Tool.h"
 #include "HeeksFrame.h"
 #include "ObjPropsCanvas.h"
-#include "../tinyxml/tinyxml.h"
 
 double CoordinateSystem::size = 30;
 bool CoordinateSystem::size_is_pixels = true;

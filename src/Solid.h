@@ -5,7 +5,6 @@
 #pragma once
 
 #include "Shape.h"
-#include <TopoDS_Solid.hxx>
 
 class CSolid:public CShape{
 protected:

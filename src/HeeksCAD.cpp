@@ -3,13 +3,6 @@
 // This program is released under the BSD license. See the file COPYING for details.
 #include "stdafx.h"
 #include "HeeksCAD.h"
-#include <wx/filedlg.h>
-#include <wx/stdpaths.h>
-#include <wx/filename.h>
-#include <wx/cmdline.h>
-#include <wx/clipbrd.h>
-#include <wx/aui/aui.h>
-#include <wx/toolbar.h>
 #include "../interface/Tool.h"
 #include "../interface/Material.h"
 #include "../interface/ToolList.h"
@@ -57,7 +50,6 @@
 #include "HXml.h"
 #include "RemoveOrAddTool.h"
 #include "Sketch.h"
-#include "../tinyxml/tinyxml.h"
 #include "BezierCurve.h"
 #include "StlSolid.h"
 #include "dxf.h"
@@ -67,7 +59,6 @@
 #include "HeeksPrintout.h"
 #include "HeeksConfig.h"
 #include "Group.h"
-#include <fstream>
 using namespace std;
 
 IMPLEMENT_APP(HeeksCADapp)
