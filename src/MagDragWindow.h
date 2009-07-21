@@ -4,7 +4,6 @@
 #if !defined MagDragWindowHEADER
 #define MagDragWindowHEADER
 
-#include "stdafx.h"
 #include "../interface/InputMode.h"
 
 class MagDragWindow: public CInputMode{
