@@ -85,6 +85,7 @@
 #endif
 
 #include <Standard.hxx>
+#include <Standard_TypeDef.hxx>
 
 #include <BRepAdaptor_Curve.hxx>
 #include <BRepAdaptor_Surface.hxx>
