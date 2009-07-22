@@ -14,6 +14,10 @@
 #pragma warning(  default : 4244 )        // Issue warning 4244
 #endif
 
+#ifdef WIN32
+#include "windows.h"
+#endif
+
 #include <Standard.hxx>
 #include <Standard_TypeDef.hxx>
 
