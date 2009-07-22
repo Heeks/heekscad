@@ -42,7 +42,7 @@ executable: ${OBJECTS}
 stdafx.h.gch: stdafx.h
 	$(CC) ${CCFLAGS} -c $? -o $@
  
-AboutBox.o: AboutBox.cpp
+AboutBox.o: AboutBox.cpp	stdafx.h.gch
 	$(CC) ${CCFLAGS} -c $? -o $@
 
 advprops.o: advprops.cpp
