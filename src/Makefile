@@ -36,13 +36,13 @@ endif
 OCCLIBS=-lTKVRML -lTKSTL -lTKBRep -lTKIGES -lTKShHealing -lTKSTEP -lTKSTEP209 -lTKSTEPAttr -lTKSTEPBase -lTKXSBase -lTKShapeSchema -lFWOSPlugin -lTKBool -lTKCAF -lTKCDF -lTKernel -lTKFeat -lTKFillet -lTKG2d -lTKG3d -lTKGeomAlgo -lTKGeomBase -lTKHLR -lTKMath -lTKOffset -lTKPrim -lTKPShape -lTKService -lTKTopAlgo -lTKV2d -lTKV3d -lTKMesh -lTKAdvTools -lTKBO -lTKXDESTEP -lTKXCAF -lTKXCAFSchema -lTKLCAF -lTKPLCAF ${CASLIBPATH}
 
 .PHONY: executable
-executable: ${OBJECTS}
+executable: stdafx.h.gch	${OBJECTS}
 	$(CC) -o ${EXECUTABLE} ${OBJECTS} -lstdc++ -lGLU ${PYTHONLIBS} -lGL -g ${WXLIBS} ${OCCLIBS}
 
 stdafx.h.gch: stdafx.h
 	$(CC) ${CCFLAGS} -c $? -o $@
  
-AboutBox.o: AboutBox.cpp	stdafx.h.gch
+AboutBox.o: AboutBox.cpp
 	$(CC) ${CCFLAGS} -c $? -o $@
 
 advprops.o: advprops.cpp
