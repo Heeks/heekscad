@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include <vector>
+#include <wx/string.h>
+
 #ifdef UNICODE
 extern const char* Ttc(const wchar_t* str);
 extern const wchar_t* Ctt(const char* str);
@@ -11,3 +14,7 @@ extern const wchar_t* Ctt(const char* str);
 #define Ttc(x) x
 #define Ctt(x) x
 #endif
+
+std::vector<wxString> Tokens( const wxString & wxLine, const wxString & wxDelimiters );
+bool AllNumeric( const wxString & wxLine );
+
