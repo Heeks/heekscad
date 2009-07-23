@@ -53,7 +53,7 @@ void MultiPoly(std::list<CSketch*> sketches)
 		MyLine *tline = (*it2).first;
 		std::vector<Intersection> inter = (*it2).second;
 		double startu=tline->GetU(inter[0].X,inter[0].Y);
-		for(int i=1; i < inter.size(); i++)
+		for(unsigned i=1; i < inter.size(); i++)
 		{
 			double newu=tline->GetU(inter[i].X,inter[i].Y);
 			CompoundSegment* segment = new CompoundSegment(tline,startu,newu);
@@ -82,14 +82,14 @@ void MultiPoly(std::list<CSketch*> sketches)
 			bool erasedy=false;
 			if(last_x && this_x - last_x < 1.6 * tol)
 			{
-				for(int i=0; i < bcurves[this_x_coord][this_y_coord].size(); i++)
+				for(unsigned i=0; i < bcurves[this_x_coord][this_y_coord].size(); i++)
 					bcurves[last_x_coord][this_y_coord].push_back(bcurves[this_x_coord][this_y_coord][i]);
 				bcurves[this_x_coord].erase(it5);
 				erasedy=true;
 			}
 			else if(last_y && this_y - last_y < 1.5 * tol)
 			{
-				for(int i=0; i < bcurves[this_x_coord][this_y_coord].size(); i++)
+				for(unsigned i=0; i < bcurves[this_x_coord][this_y_coord].size(); i++)
 					bcurves[this_x_coord][last_y_coord].push_back(bcurves[this_x_coord][this_y_coord][i]);
 				bcurves[this_x_coord].erase(it5);
 				erasedy=true;
