@@ -202,7 +202,7 @@ extern "C" {
 #include "Loop.h"
 #include "Gripper.h"
 #include "Geom.h"
-#include "Loop.h"
+//#include "Loop.h"
 #include "MarkedList.h"
 #include "Shape.h"
 #include "Sketch.h"
