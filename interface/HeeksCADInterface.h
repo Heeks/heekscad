@@ -82,6 +82,7 @@ public:
 	virtual void DrawObjectsOnFront(const std::list<HeeksObj*> &list);
 	virtual HeeksObj* NewSketch();
 	virtual HeeksObj* NewLine(const double* s, const double* e);
+	virtual HeeksObj* NewPoint(const double* p);
 	virtual HeeksObj* NewArc(const double* s, const double* e, const double* c, const double* up); // set up to (0, 0, -1) for a clockwise arc
 	virtual HeeksObj* NewArc(const double* c, const double* u, double r, double s, double e); // set up to (0, 0, -1) for a clockwise arc
 	virtual HeeksObj* NewCircle(const double *c, double r);

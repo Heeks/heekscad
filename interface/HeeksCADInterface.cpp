@@ -319,6 +319,15 @@ HeeksObj* CHeeksCADInterface::NewSketch()
 	return new CSketch;
 }
 
+HeeksObj* CHeeksCADInterface::NewPoint(const double* p)
+{
+    // I needed this for HeeksPython- it's just a point    
+	return new HPoint(make_point(p),&wxGetApp().current_color);
+
+}
+
+
+
 HeeksObj* CHeeksCADInterface::NewLine(const double* s, const double* e)
 {
 	return new HLine(make_point(s), make_point(e), &wxGetApp().current_color);
@@ -388,6 +397,12 @@ void CHeeksCADInterface::RotateObject(HeeksObj* obj, const double*c,const double
 	extract(t,m);
 	obj->ModifyByMatrix(m);
 }
+
+
+
+
+
+
 
 HeeksObj* CHeeksCADInterface::NewArc(const double* s, const double* e, const double* c, const double* up)
 {
