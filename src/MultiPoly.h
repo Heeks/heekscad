@@ -117,7 +117,7 @@ public:
 			if(MyIsEqual(lastline->GetBX(),atx) && MyIsEqual(lastline->GetBY(),aty))
 				return LastEnd;
 		}
-
+		return FirstEnd; //added to remove warning. I assume this should never happen should we be returning an error value
 	}
 
 	gp_Pnt Begin()
