@@ -458,6 +458,12 @@ void CHeeksCADInterface::RegisterHideableWindow(wxWindow* w)
 	wxGetApp().RegisterHideableWindow(w);
 }
 
+void CHeeksCADInterface::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, bool for_clipboard)
+{
+	wxGetApp().SaveXMLFile( objects, filepath, for_clipboard );
+}
+
+
 HeeksObj* CHeeksCADInterface::ReadXMLElement(TiXmlElement* pElem)
 {
 	return wxGetApp().ReadXMLElement(pElem);
