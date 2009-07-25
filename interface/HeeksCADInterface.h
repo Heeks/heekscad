@@ -106,6 +106,8 @@ public:
 	virtual void ObjectReadBaseXML(HeeksObj* object, TiXmlElement* element);
 	virtual HeeksObj* GetIDObject(int type, int id);
 	virtual void SetObjectID(HeeksObj* object, int id); // check for existing id using GetIDObject and call DeleteUndoably first
+	virtual void SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, bool for_clipboard);
+
 	virtual int GetNextID(int type);
 	virtual bool InOpenFile();
 	virtual void RemoveID(HeeksObj* object); // only call this from ObjList::Remove()
