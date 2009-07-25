@@ -4,6 +4,7 @@
 
 #pragma once
 
+class wxString;
 class wxBitmap;
 
 #include "ToolImage.h"
