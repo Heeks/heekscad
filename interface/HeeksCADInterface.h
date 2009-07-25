@@ -89,6 +89,7 @@ public:
 	virtual HeeksObj* NewCuboid(const double *c, double x, double y, double z);
 	virtual HeeksObj* NewCylinder(const double*c, double r, double h);
 	virtual HeeksObj* NewCone(const double*c, double r1, double r2, double h);
+	virtual HeeksObj* NewSphere(const double*pos, double radius);    
 	virtual HeeksObj* NewGroup();
 	virtual HeeksObj* NewSolid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
 	virtual HeeksObj* Fuse(const std::list<HeeksObj*> objects);
