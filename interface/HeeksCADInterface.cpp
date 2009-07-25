@@ -16,6 +16,7 @@
 #include "Cylinder.h"
 #include "Cuboid.h"
 #include "Cone.h"
+#include "Sphere.h"
 #include "Wire.h"
 #include "ObjPropsCanvas.h"
 #include "OptionsCanvas.h"
@@ -36,6 +37,7 @@
 #include "HeeksConfig.h"
 #include <gp_Sphere.hxx>
 #include <gp_Cone.hxx>
+#include <gp_Sphere.hxx>
 #include <TopoDS_Wire.hxx>
 
 double CHeeksCADInterface::GetTolerance()
@@ -362,6 +364,12 @@ HeeksObj* CHeeksCADInterface::NewCone(const double* c, double r1, double r2, dou
 	return new CCone(gp_Ax2(make_point(c),up),r1,r2,h,_T("Cone"),wxGetApp().current_color);
 }
 
+//added by DF for heekspython
+HeeksObj* CHeeksCADInterface::NewSphere(const double* pos, double radius)
+{
+   return new CSphere(gp_Pnt(make_point(pos)), radius,_T("Sphere"), wxGetApp().current_color);
+} 
+
 HeeksObj* CHeeksCADInterface::NewSolid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col)
 {
 	return(new CSolid( solid, title, col ) );
@@ -397,11 +405,6 @@ void CHeeksCADInterface::RotateObject(HeeksObj* obj, const double*c,const double
 	extract(t,m);
 	obj->ModifyByMatrix(m);
 }
-
-
-
-
-
 
 
 HeeksObj* CHeeksCADInterface::NewArc(const double* s, const double* e, const double* c, const double* up)
