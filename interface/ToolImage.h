@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <wx/image.h>
+
 class ToolImage: public wxImage{
 public:
 #ifdef HEEKSCAD
