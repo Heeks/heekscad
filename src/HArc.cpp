@@ -22,7 +22,7 @@ HArc::HArc(const HArc &line):EndedObject(&line.color){
 	operator=(line);
 }
 
-HArc::HArc(const gp_Pnt &a, const gp_Pnt &b, const gp_Circ &c, const HeeksColor* col):color(*col), EndedObject(col){
+HArc::HArc(const gp_Pnt &a, const gp_Pnt &b, const gp_Circ &c, const HeeksColor* col):EndedObject(col),color(*col){ //:color(*col), EndedObject(col){
 	A->m_p = a;
 	B->m_p = b;
 	C = new HPoint(c.Location(),col);
