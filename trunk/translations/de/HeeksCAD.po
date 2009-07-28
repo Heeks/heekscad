@@ -1673,7 +1673,7 @@ msgid "Python"
 msgstr "Python"
 
 msgid "PostProcess"
-msgstr "Umwandeln in G-Code"
+msgstr "G-Code erstellen"
 
 msgid "OpenNC"
 msgstr "Öffne G-Code"
@@ -1758,7 +1758,7 @@ msgid "Make Python Script"
 msgstr "Erstelle Python Script"
 
 msgid "Post-Process"
-msgstr "Umwandeln nach G-Code"
+msgstr "G-Code erstellen"
 
 msgid "Machining"
 msgstr "CNC"
@@ -2195,4 +2195,73 @@ msgstr "2 Punkte"
 
 msgid "centre and radius"
 msgstr "Mittelpunkt + Radius"
+
+msgid "cutting tool"
+msgstr "Werkzeug"
+
+msgid "Chamfering Bit"
+msgstr "Fräser incl. Fasen"
+
+msgid "New Fixture..."
+msgstr "Korrektur des Koordinatensystems"
+
+msgid "A axis (around X) rotation"
+msgstr "Korrektur X Achse"
+
+msgid "B axis (around Y) rotation"
+msgstr "Korrektur Y Achse"
+
+msgid "C axis (around Z) rotation"
+msgstr "Korrektur Z Achse"
+
+msgid "Pivot Point"
+msgstr "'Drehpunkt' der Korrektur"
+
+msgid "Pick roll on point"
+msgstr "Fräser Einstiegspunkt"
+
+msgid "Pick roll off point"
+msgstr "Fräser Ausstiegspunkt"
+
+msgid "Brinell hardness of raw material"
+msgstr "Material-Härte nach Brinell"
+
+msgid "Raw Material"
+msgstr "Werkstück Material"
+
+msgid "Surface Speed (m/min)"
+msgstr "Spindel RPM (m/min)während der Werkzeugfahrt(Drehen)"
+
+msgid "Surface Speed (ft/min)"
+msgstr "Spindel RPM (ft/min)während der Werkzeugfahrt(Drehen)"
+
+msgid "Raw Material Name"
+msgstr "Material des Werkstücks"
+
+msgid "Maximum Material Removal Rate (mm^3/min)"
+msgstr "Maximaler Materialabtrag(mm^3/min)"
+
+msgid "Maximum Material Removal Rate (inches^3/min)"
+msgstr "Maximaler Materialabtrag(inches^3/min)"
+
+msgid "New Speed Reference..."
+msgstr "Spindeldrehzahl kalkulieren"
+
+msgid "New Cutting Rate Reference..."
+msgstr "Vorschub kalkulieren"
+
+msgid "Feeds and Speeds"
+msgstr "Spindeldrehzahl/Vorschub"
+
+msgid "Fixtures"
+msgstr "Koordinatensystem (anpassen)"
+
+msgid "output file name follows data file name"
+msgstr "Ausgabedateiname = Datendateiname"
+
+msgid "Number of sample points"
+msgstr "Anzahl der Vergleichspunkte"
+
+msgid "face to sketch deviaton"
+msgstr "Oberfläche/Zeichnung Abweichung"
 
