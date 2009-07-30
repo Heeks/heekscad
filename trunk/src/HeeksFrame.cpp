@@ -1265,11 +1265,11 @@ void CHeeksFrame::MakeMenus()
 {
 	// File Menu
 	wxMenu *file_menu = new wxMenu;
-	AddMenuItem(file_menu, _("New"), ToolImage(_T("new")), OnNewButton);
-	AddMenuItem(file_menu, _("Open"), ToolImage(_T("open")), OnOpenButton);
-	AddMenuItem(file_menu, _("Save"), ToolImage(_T("save")), OnSaveButton);
+	AddMenuItem(file_menu, _("New\tCtrl+N"), ToolImage(_T("new")), OnNewButton);
+	AddMenuItem(file_menu, _("Open\tCtrl+O"), ToolImage(_T("open")), OnOpenButton);
+	AddMenuItem(file_menu, _("Save\tCtrl+S"), ToolImage(_T("save")), OnSaveButton);
 	file_menu->AppendSeparator();
-	AddMenuItem(file_menu, _("Print"), ToolImage(_T("print")), OnPrint);
+	AddMenuItem(file_menu, _("Print\tCtrl+P"), ToolImage(_T("print")), OnPrint);
  	AddMenuItem(file_menu, _("Page Setup"), ToolImage(_T("psetup")), OnPageSetup);
 	AddMenuItem(file_menu, _("Print Preview"), ToolImage(_T("ppreview")), OnPrintPreview);
     m_recent_files_menu = new wxMenu;
@@ -1280,17 +1280,17 @@ void CHeeksFrame::MakeMenus()
 	file_menu->AppendSeparator();
 	AddMenuItem(file_menu, _("Plugins"), ToolImage(_T("plugin")), OnPlugins);
 	file_menu->AppendSeparator();
-	AddMenuItem(file_menu, _("Exit"), ToolImage(_T("exit")), OnQuit);
+	AddMenuItem(file_menu, _("Exit\tCtrl+Q"), ToolImage(_T("exit")), OnQuit);
 
 	// Edit Menu
 	wxMenu *edit_menu = new wxMenu;
 	AddMenuItem(edit_menu, _("Undo\tCtrl+Z"), ToolImage(_T("undo")), OnUndoButton);
 	AddMenuItem(edit_menu, _("Redo\tCtrl+Shift+Z"), ToolImage(_T("redo")), OnRedoButton);
 	edit_menu->AppendSeparator();
-	AddMenuItem(edit_menu, _("Cut"), ToolImage(_T("cut")), OnCutButton, OnUpdateCut);
-	AddMenuItem(edit_menu, _("Copy"), ToolImage(_T("copy")), OnCopyButton, OnUpdateCopy);
-	AddMenuItem(edit_menu, _("Paste"), ToolImage(_T("paste")), OnPasteButton, OnUpdatePaste);
-	AddMenuItem(edit_menu, _("Delete"), ToolImage(_T("delete")), OnDeleteButton, OnUpdateDelete);
+	AddMenuItem(edit_menu, _("Cut\tCtrl+X"), ToolImage(_T("cut")), OnCutButton, OnUpdateCut);
+	AddMenuItem(edit_menu, _("Copy\tCtrl+C"), ToolImage(_T("copy")), OnCopyButton, OnUpdateCopy);
+	AddMenuItem(edit_menu, _("Paste\tCtrl+V"), ToolImage(_T("paste")), OnPasteButton, OnUpdatePaste);
+	AddMenuItem(edit_menu, _("Delete\tDel"), ToolImage(_T("delete")), OnDeleteButton, OnUpdateDelete);
 	edit_menu->AppendSeparator();
 	AddMenuItem(edit_menu, _("Select Mode"), ToolImage(_T("select")), OnSelectModeButton);
 
