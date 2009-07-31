@@ -629,7 +629,7 @@ HeeksObj* CShape::FuseShapes(const std::list<HeeksObj*> &list_in)
 	return s1;
 }
 
-void CShape::CommonShapes(const std::list<HeeksObj*> &list_in)
+HeeksObj* CShape::CommonShapes(const std::list<HeeksObj*> &list_in)
 {
 	// find common solid ( intersect ) with the first one in the list all the others
 	wxGetApp().StartHistory();
