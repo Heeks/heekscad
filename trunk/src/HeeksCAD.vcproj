@@ -245,7 +245,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/EHsc "
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;&quot;$(CASROOT)\inc&quot;;&quot;$(WXWIN)\include&quot;;&quot;$(WXWIN)&quot;;&quot;$(WXWIN)\include\msvc&quot;"
+				AdditionalIncludeDirectories=".\;&quot;$(CASROOT)\inc&quot;;&quot;$(WXWIN)\include&quot;;&quot;$(WXWIN)&quot;;&quot;$(WXWIN)\lib\vc_dll\mswud&quot;;&quot;$(WXWIN)\include\msvc&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXDEBUG__;_WINDOWS;NOPCH;WNT;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;HEEKSCAD;STRICT"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
