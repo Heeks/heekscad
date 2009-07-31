@@ -84,7 +84,7 @@ public:
 
 	static HeeksObj* CutShapes(const std::list<HeeksObj*> &list,bool dodelete=true);
 	static HeeksObj* FuseShapes(const std::list<HeeksObj*> &list);
-	static void CommonShapes(const std::list<HeeksObj*> &list);
+	static HeeksObj* CommonShapes(const std::list<HeeksObj*> &list);
 	static void FilletOrChamferEdges(const std::list<HeeksObj*> &list, double radius, bool chamfer_not_fillet = false);
 	static bool ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<int, CShapeData> *index_map = NULL, HeeksObj* paste_into = NULL);
 	static bool ExportSolidsFile(const std::list<HeeksObj*>& objects, const wxChar* filepath, std::map<int, CShapeData> *index_map = NULL);
