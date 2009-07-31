@@ -387,6 +387,11 @@ HeeksObj* CHeeksCADInterface::Cut(const std::list<HeeksObj*> objects)
 	return CShape::CutShapes(objects);
 }
 
+HeeksObj* CHeeksCADInterface::Common(const std::list<HeeksObj*> objects)
+{
+	return CShape::CommonShapes(objects);
+}
+
 void CHeeksCADInterface::TranslateObject(HeeksObj* obj, const double*c)
 {
 	gp_Pnt zp(0,0,0);
