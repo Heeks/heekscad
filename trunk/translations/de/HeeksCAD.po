@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: HeeksCAD 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 13:41+0200\n"
-"PO-Revision-Date: 2009-05-27 23:31+0200\n"
+"PO-Revision-Date: 2009-07-30 23:17+0200\n"
 "Last-Translator: Hans <fungunner2@freenet.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1027,7 +1027,7 @@ msgid "Paste items from the clipboard to the drawing"
 msgstr "Füge Items aus der Zwischenablage hinzu"
 
 msgid "Apply any changes made to the properties"
-msgstr "Aktualisiere alle aenderungen an den Einstellungen"
+msgstr "Einstellungen/Aenderungen übernehmen"
 
 msgid "Stop editing the object"
 msgstr "Stoppe die Bearbeitung des Objekts"
@@ -2023,7 +2023,7 @@ msgid "bad"
 msgstr ""
 
 msgid "re-order"
-msgstr ""
+msgstr "Neu ordnen"
 
 msgid "clockwise\n"
 msgstr "rechts\n"
@@ -2124,7 +2124,7 @@ msgstr "Werkzeuge"
 msgid "type"
 msgstr "Fräsertyp"
 
-msgid "Drill bit"
+msgid "Drill Bit"
 msgstr "Bohrer"
 
 msgid "Slot Cutter"
@@ -2142,7 +2142,7 @@ msgstr "Schaft Fräser"
 msgid "CounterBore"
 msgstr "Senkung"
 
-msgid "Centre Drill bit"
+msgid "Centre Drill Bit"
 msgstr "Zentrier Bohrer"
 
 msgid "flat_radius"
@@ -2264,4 +2264,37 @@ msgstr "Anzahl der Vergleichspunkte"
 
 msgid "face to sketch deviaton"
 msgstr "Oberfläche/Zeichnung Abweichung"
+
+msgid "Brinell Hardness of raw material"
+msgstr "Brinell-Härtegrad des Materials"
+
+msgid "Carbide "
+msgstr "Karbid "
+
+msgid "Estimate when possible"
+msgstr "Wenn möglich berechnen"
+
+msgid "Use default values"
+msgstr "Vorgegebene Werte benutzen"
+
+msgid " degreee "
+msgstr " Grad "
+
+msgid "Turning Tool"
+msgstr "Drehstahl"
+
+msgid "New Special Adaptive Roughing Operation..."
+msgstr "Adaptiver Schruppzyklus "
+
+msgid "New Drill Cycle Operation..."
+msgstr "G81/82/83 Bohrlöcher setzen"
+
+msgid "New CounterBore Cycle Operation..."
+msgstr "Einsatz des Flachsenkers"
+
+msgid "Add Speed Reference..."
+msgstr "Spindeldrehzahl kalkulieren"
+
+msgid "Add Cutting Rate Reference..."
+msgstr "Vorschub kalkulieren"
 
