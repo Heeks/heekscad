@@ -94,6 +94,7 @@ public:
 	virtual HeeksObj* NewSolid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
 	virtual HeeksObj* Fuse(const std::list<HeeksObj*> objects);
 	virtual HeeksObj* Cut(const std::list<HeeksObj*> objects);
+	virtual HeeksObj* Common(const std::list<HeeksObj*> objects);    
 	virtual void RotateObject(HeeksObj*, const double*p,const double*u,double r);
 	virtual void TranslateObject(HeeksObj*,const double* c);
 	virtual void RegisterObserver(Observer* observer);
