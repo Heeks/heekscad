@@ -509,17 +509,17 @@ msgstr "Abbrechen"
 msgid "Cancel operation"
 msgstr "Operation abbrechen"
 
-msgid "New"
-msgstr "Neu"
+msgid "New\tCtrl+N"
+msgstr "Neu\tCtrl+N"
 
-msgid "Open"
-msgstr "Öffnen"
+msgid "Open\tCtrl+O"
+msgstr "Öffnen\tCtrl+O"
 
-msgid "Save"
-msgstr "Speichern"
+msgid "Save\tCtrl+S"
+msgstr "Speichern\tCtrl+S"
 
-msgid "Print"
-msgstr "Drucken"
+msgid "Print\tCtrl+P"
+msgstr "Drucken\tCtrl+P"
 
 msgid "Page Setup"
 msgstr "Seiten Layout"
