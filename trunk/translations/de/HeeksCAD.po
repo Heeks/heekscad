@@ -2128,16 +2128,16 @@ msgid "Drill Bit"
 msgstr "Bohrer"
 
 msgid "Slot Cutter"
-msgstr "Taschen Fräser"
+msgstr "Taschen Fraeser"
 
 msgid "Ball End Mill"
-msgstr "Kugelfräser"
+msgstr "Kugelfraeser"
 
 msgid "Chamfering bit"
-msgstr "Fräser incl. Fasen"
+msgstr "V-Nut Fraeser(Fasen)"
 
 msgid "End Mill"
-msgstr "Schaft Fräser"
+msgstr "Schaft Fraeser"
 
 msgid "CounterBore"
 msgstr "Senkung"
