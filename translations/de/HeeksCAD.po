@@ -639,7 +639,7 @@ msgid "Fillet"
 msgstr "Kanten abrunden"
 
 msgid "Chamfer"
-msgstr "Kanten abschraegen(Fasen)"
+msgstr "V-Nutfräser(Fasen)"
 
 msgid "Move Translate"
 msgstr "Objekt verschieben"
@@ -2271,6 +2271,13 @@ msgstr "Brinell-Härtegrad des Materials"
 msgid "Carbide "
 msgstr "Karbid "
 
+msgid "Carbide"
+msgstr "Karbid "
+
+msgid "High Speed Steel"
+msgstr "HSS"
+
+
 msgid "Estimate when possible"
 msgstr "Wenn möglich berechnen"
 
@@ -2297,4 +2304,13 @@ msgstr "Spindeldrehzahl kalkulieren"
 
 msgid "Add Cutting Rate Reference..."
 msgstr "Vorschub kalkulieren"
+
+msgid "Leave manually assigned title"
+msgstr "AUS"
+
+msgid "Automatically generate title"
+msgstr "EIN"
+
+msgid "Automatic Title"
+msgstr "Autom. Werkzeugbeschreibung"
 
