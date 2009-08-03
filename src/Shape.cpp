@@ -649,6 +649,8 @@ HeeksObj* CShape::CommonShapes(const std::list<HeeksObj*> &list_in)
 
 	wxGetApp().EndHistory();
 	wxGetApp().Repaint();
+
+	return s1;
 }
 
 void CShape::FilletOrChamferEdges(const std::list<HeeksObj*> &list, double radius, bool chamfer_not_fillet)
