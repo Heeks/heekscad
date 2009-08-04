@@ -7,9 +7,9 @@
 #include "PropertyLength.h"
 
 #ifdef HEEKSCAD
-	#define VIEW_UNITS wxGetApp().m_view_units
+	#define VIEW_UNITS (wxGetApp().m_view_units)
 #else
-	#define VIEW_UNITS heeksCAD->GetViewUnits()
+	#define VIEW_UNITS (heeksCAD->GetViewUnits())
 #endif
 
 PropertyLength::PropertyLength(const wxChar* t, double initial_value, HeeksObj* object, void(*callbackfunc)(double, HeeksObj*)):PropertyDouble(t, initial_value/VIEW_UNITS, object, callbackfunc){
