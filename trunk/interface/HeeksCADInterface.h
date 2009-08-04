@@ -23,6 +23,7 @@ class wxUpdateUIEvent;
 class wxSizeEvent;
 class wxMouseEvent;
 class wxToolBarBase;
+class CNurbSurfaceParams;
 
 #include "SketchOrder.h"
 
@@ -150,6 +151,7 @@ public:
 	virtual void FaceGetCylinderParams(HeeksObj* face, double *pos, double *dir, double *radius);
 	virtual void FaceGetSphereParams(HeeksObj* face, double *pos, double *radius);
 	virtual void FaceGetConeParams(HeeksObj* face, double *pos, double *dir, double *radius, double* half_angle);
+	virtual bool FaceGetNurbSurfaceParams(HeeksObj* face, CNurbSurfaceParams* params);
 	virtual int FaceGetEdgeCount(HeeksObj* face);
 	virtual HeeksObj* FaceGetFirstEdge(HeeksObj* face);
 	virtual HeeksObj* FaceGetNextEdge(HeeksObj* face);

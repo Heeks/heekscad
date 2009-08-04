@@ -3,6 +3,7 @@
 // This program is released under the BSD license. See the file COPYING for details.
 #include "stdafx.h"
 #include "Face.h"
+#include "../interface/NurbSurfaceParams.h"
 
 CFace::CFace(const TopoDS_Face &face):m_topods_face(face), m_temp_attr(0){
 #if _DEBUG
@@ -459,6 +460,46 @@ void CFace::GetConeParams(gp_Cone &c)
 {
 	BRepAdaptor_Surface surface(m_topods_face, Standard_True);
 	c = surface.Cone();
+}
+
+bool CFace::GetNurbSurfaceParams(CNurbSurfaceParams* params)
+{
+	BRepAdaptor_Surface surface(m_topods_face, Standard_True);
+
+#if 0
+	int u_order;			/// U curve order
+	int v_order;			/// V curve order
+	int n_u_vertices;		/// U direction
+	int n_v_vertices;		/// V direction
+	int vertex_size;		/// = 3 for non-rational  = 4 for rational
+	bool rational;
+	std::vector<double> vertex;			/// double array which holds the vertices
+	int form;				/// 
+	int n_u_knots;			/// Number of Knot values in U direction
+	int n_v_knots;			/// Number of Knot values in U direction
+	std::vector<double> u_knot;			/// Knot vectors in U direction
+	std::vector<double> v_knot;			/// Knot vectors in V direction
+	int u_knot_type;
+	int v_knot_type;
+	bool is_u_periodic;		/// true if surface is periodic in U direction.
+	bool is_v_periodic;		/// true if surface is periodic in V direction.
+	bool is_u_closed;
+	bool is_v_closed;
+	int self_intersecting;
+	int convexity;
+#endif
+	params->u_order = surface.UDegree();
+	params->v_order = surface.VDegree();
+	params->n_u_vertices = surface.NbUPoles();
+	params->n_v_vertices = surface.NbVPoles();
+	params->vertex_size = surface.IsURational();
+	params->rational = surface.IsURational() != 0;
+	params->is_u_periodic = surface.IsUPeriodic() != 0;
+	params->is_v_periodic = surface.IsVPeriodic() != 0;
+	params->is_u_closed = surface.IsUClosed() != 0;
+	params->is_v_closed = surface.IsVClosed() != 0;
+
+	return true;
 }
 
 CEdge* CFace::GetFirstEdge()

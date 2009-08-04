@@ -7,6 +7,7 @@
 class CEdge;
 class CLoop;
 class CShape;
+class CNurbSurfaceParams;
 
 class CFace:public HeeksObj{
 private:
@@ -57,6 +58,7 @@ public:
 	void GetCylinderParams(gp_Cylinder &c);
 	void GetSphereParams(gp_Sphere &s);
 	void GetConeParams(gp_Cone &c);
+	bool GetNurbSurfaceParams(CNurbSurfaceParams* params);
 	int GetSurfaceType();
 	wxString GetSurfaceTypeStr();
 	CEdge* GetFirstEdge();

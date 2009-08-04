@@ -679,6 +679,11 @@ void CHeeksCADInterface::FaceGetConeParams(HeeksObj* face, double *pos, double *
 	if(half_angle)*half_angle = c.SemiAngle();
 }
 
+bool CHeeksCADInterface::FaceGetNurbSurfaceParams(HeeksObj* face, CNurbSurfaceParams* params)
+{
+	return ((CFace*)face)->GetNurbSurfaceParams(params);
+}
+
 int CHeeksCADInterface::FaceGetEdgeCount(HeeksObj* face)
 {
 	return ((CFace*)face)->m_edges.size();
