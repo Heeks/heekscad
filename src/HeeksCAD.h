@@ -256,6 +256,7 @@ public:
 	bool IsPasteReady();
 	void Paste(HeeksObj* paste_into);
 	bool CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num, int type, const wxString& msg, const wxString& caption);
+	bool CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num, int type1, int type2, const wxString& msg, const wxString& caption);
 	void render_text(const wxChar* str);
 	bool get_text_size(const wxChar* str, float* width, float* height);
 	void render_screen_text(const wxChar* str1, const wxChar* str2);

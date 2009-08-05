@@ -687,7 +687,7 @@ static void OnUpdatePaste( wxUpdateUIEvent& event )
 
 static void OnSubtractButton( wxCommandEvent& event )
 {
-	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 2, SolidType, _("Pick two or more solids, the first one will be cut by the others"), _("Subtract Solids")))return;
+	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 2, SolidType, FaceType, _("Pick two or more faces or solids, the first one will be cut by the others"), _("Subtract Solids")))return;
 	CShape::CutShapes(wxGetApp().m_marked_list->list());
 }
 

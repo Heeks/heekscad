@@ -2908,6 +2908,23 @@ bool HeeksCADapp::CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num,
 	return true;
 }
 
+bool HeeksCADapp::CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num, int type1, int type2, const wxString& msg, const wxString& caption)
+{
+	int num_of_type = 0;
+	for(std::list<HeeksObj*>::const_iterator It = list.begin(); It != list.end(); It++){
+		HeeksObj* object = *It;
+		if(object->GetType() == type1 || object->GetType() == type2)num_of_type++;
+	}
+
+	if(num_of_type < min_num)
+	{
+		wxMessageBox(msg, caption);
+		return false;
+	}
+
+	return true;
+}
+
 void HeeksCADapp::create_font()
 {
 	if(m_gl_font_initialized)
