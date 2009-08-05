@@ -13,9 +13,9 @@ std::map<MyLine*, std::vector<Intersection> > SimpleIntersector::Intersect(std::
 	tol = wxGetApp().m_geom_tol;
 	std::map<MyLine*, std::vector<Intersection> > intersections;
 
-	for(int i=0; i < lines.size(); i++)
+	for(unsigned i=0; i < lines.size(); i++)
 	{
-		for(int j=i+1; j < lines.size(); j++)
+		for(unsigned j=i+1; j < lines.size(); j++)
 		{
 			IntResult ir = Intersects(&lines[i],&lines[j]);
 			if(ir.exists)
