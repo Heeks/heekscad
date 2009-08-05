@@ -32,7 +32,7 @@ double tol=0;
 //Storage for the event table
 std::map<double,std::vector<std::list<MyLine*> > > eventtable;
 
-std::map<MyLine*, std::vector<Intersection> > Intersections(std::vector<MyLine> &lines)
+std::map<MyLine*, std::vector<Intersection> > BentleyOttmann::Intersect(std::vector<MyLine> &lines)
 {
 	tol = wxGetApp().m_geom_tol;
 	eventtable.clear();
@@ -257,7 +257,8 @@ void Test()
 	lines.push_back(MyLine(gp_Pnt(0,0,0),gp_Pnt(2,5,0)));
 	lines.push_back(MyLine(gp_Pnt(0,1,0),gp_Pnt(4,1,0)));
 //	lines.push_back(MyLine(gp_Pnt(1,1,0),gp_Pnt(1,2,0)));
-	Intersections(lines);
+	BentleyOttmann bo;
+	bo.Intersect(lines);
 }
 
 //Put a new event into the table
@@ -285,9 +286,11 @@ IntResult Intersects(MyLine* line1, MyLine* line2)
 	if(ua > -tol && ua < 1+tol && ub > -tol && ub < 1+tol)
 	{
 		double atX = line1->A.X() + ua * (line1->B.X() - line1->A.X());
-		return IntResult(true,atX);
+		double atY = line1->A.Y() + ua * (line1->B.Y() - line1->A.Y());
+
+		return IntResult(true,atX,atY);
 	}
-	return IntResult(false,0);
+	return IntResult(false,0,0);
 }
 
 bool MyIsEqual2(MyLine* line1, MyLine* line2, double at)
@@ -311,5 +314,5 @@ bool MyIsEqual(double a, double b)
 //Round double to the nearest multiple of tol
 double MyRound(double d)
 {
-	return d - fmod(d,tol);
+	return d;//d - fmod(d,tol);
 }

@@ -54,13 +54,13 @@ void RemoveOrAddTool::Add()
 
 void RemoveOrAddTool::Remove()
 {
-	if (m_object->Owner())
+	while (m_object->Owner())
 	{
 		m_owner = m_object->Owner();
 		m_object->Owner()->Remove(m_object);
 		wxGetApp().WasRemoved(m_object);
 		wxGetApp().WasModified(m_owner);
-		m_object->RemoveOwners();
+		m_object->RemoveOwner(m_object->Owner());
 	}
 	m_belongs_to_owner = false;
 }
