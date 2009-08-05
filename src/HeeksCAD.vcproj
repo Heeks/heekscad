@@ -924,6 +924,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Intersector.h"
+			>
+		</File>
+		<File
 			RelativePath="..\interface\LeftAndRight.cpp"
 			>
 		</File>
@@ -1013,6 +1017,14 @@
 		</File>
 		<File
 			RelativePath="..\interface\Material.h"
+			>
+		</File>
+		<File
+			RelativePath=".\matrix.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\MatrixFactorization.cpp"
 			>
 		</File>
 		<File
@@ -1349,6 +1361,14 @@
 		</File>
 		<File
 			RelativePath=".\ShapeData.h"
+			>
+		</File>
+		<File
+			RelativePath=".\SimpleIntersector.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\SimpleIntersector.h"
 			>
 		</File>
 		<File

@@ -5,6 +5,8 @@
 #include "stdafx.h"
 #include "Sketch.h"
 #include "EndedObject.h"
+#include "BentleyOttmann.h"
+#include "SimpleIntersector.h"
 #include "MultiPoly.h"
 
 //This algorithm takes an array of complex sketches (CSketch* constaining multiple closed paths)
@@ -41,7 +43,8 @@ void MultiPoly(std::list<CSketch*> sketches)
 		 }
 	}
 	//Get a list of all the intersection points
-	std::map<MyLine*, std::vector<Intersection> > intersections = Intersections(shapes);
+	Intersector *m_int = new SimpleIntersector();
+	std::map<MyLine*, std::vector<Intersection> > intersections = m_int->Intersect(shapes);
 
 	std::map<double, std::map<double, std::vector<CompoundSegment*> > >bcurves;
 
@@ -65,8 +68,9 @@ void MultiPoly(std::list<CSketch*> sketches)
 
 	//Fix up that 4 adjacent elements problem
 	std::map<double, std::map<double, std::vector<CompoundSegment*> > >::iterator it3;
-	std::map<double, std::vector<CompoundSegment*> > *last_x=NULL;
+	std::map<double, std::vector<CompoundSegment*> > *last_x=	NULL;
 	double last_x_coord;
+#if FOO
 	for(it3 = bcurves.begin(); it3 != bcurves.end();it3++)
 	{
 		std::map<double, std::vector<CompoundSegment*> > *this_x=&(*it3).second;
@@ -104,6 +108,7 @@ void MultiPoly(std::list<CSketch*> sketches)
 		last_x = &(*it3).second;
 		last_x_coord = (*it3).first;
 	}
+#endif
 	//Create a new tree of boundedcurves, that is much smaller. follow all chains and attempt to remove
 	//segments that are connected to only 2 other curves. This will yield a non-orientable graph
 	//so our definition of polygons better be very graph theoretical
@@ -123,6 +128,9 @@ void MultiPoly(std::list<CSketch*> sketches)
 			//Concatenate the 2 groups and remove *it4 from the map
 			CompoundSegment* seg1 = (*it4).second[0];
 			CompoundSegment* seg2 = (*it4).second[1];
+
+			if(seg1 == seg2)
+				continue;
 
 			seg1->Add(seg2,(*it3).first,(*it4).first);
 
