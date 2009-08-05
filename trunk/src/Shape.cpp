@@ -585,6 +585,12 @@ HeeksObj* CShape::CutShapes(const std::list<HeeksObj*> &list_in, bool dodelete)
 			if(first_solid == NULL)first_solid = object;
 			delete_list.push_back(object);
 		}
+		else if(object->GetType() == FaceType)
+		{
+			shapes.push_back(((CFace*)object)->Face());
+			if(first_solid == NULL)first_solid = object;
+			delete_list.push_back(object);
+		}
 	}
 
 	TopoDS_Shape new_shape;
