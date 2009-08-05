@@ -3,12 +3,11 @@
 
 class Matrix
 {
-	double* m_data;
+	std::vector<double> m_data;
 	int m_n;
 	int m_m;
-	bool m_temp;
 public:
-	Matrix(int n, int m);
+	Matrix(int n, int m, double init=0);
 	~Matrix();
 	double& operator() (unsigned row, unsigned col); 
 	double  operator() (unsigned row, unsigned col) const;
@@ -28,4 +27,9 @@ public:
 	void Subtract(double s);
 	void Divide(double s);
 	Matrix Divided(double s);
+	void Transpose();
+	Matrix Transposed();
+	int GetN(){return m_n;}
+	int GetM(){return m_m;}
+	void Randomize();
 };
