@@ -467,29 +467,6 @@ void CFace::GetConeParams(gp_Cone &c)
 bool CFace::GetNurbSurfaceParams(CNurbSurfaceParams* params)
 {
 	BRepAdaptor_Surface surface(m_topods_face, Standard_True);
-
-#if 0
-	int u_order;			/// U curve order
-	int v_order;			/// V curve order
-	int n_u_vertices;		/// U direction
-	int n_v_vertices;		/// V direction
-	int vertex_size;		/// = 3 for non-rational  = 4 for rational
-	bool rational;
-	std::vector<double> vertex;			/// double array which holds the vertices
-	int form;				/// 
-	int n_u_knots;			/// Number of Knot values in U direction
-	int n_v_knots;			/// Number of Knot values in U direction
-	std::vector<double> u_knot;			/// Knot vectors in U direction
-	std::vector<double> v_knot;			/// Knot vectors in V direction
-	int u_knot_type;
-	int v_knot_type;
-	bool is_u_periodic;		/// true if surface is periodic in U direction.
-	bool is_v_periodic;		/// true if surface is periodic in V direction.
-	bool is_u_closed;
-	bool is_v_closed;
-	int self_intersecting;
-	int convexity;
-#endif
 	params->u_order = surface.UDegree();
 	params->v_order = surface.VDegree();
 	params->n_u_vertices = surface.NbUPoles();
@@ -623,6 +600,13 @@ void CFace::GetUVBox(double *uv_box)
 	uv_box[1] = surface.LastUParameter();
 	uv_box[2] = surface.FirstVParameter();
 	uv_box[3] = surface.LastVParameter();
+}
+
+void CFace::GetSurfaceUVPeriod(double *uv)
+{
+	BRepAdaptor_Surface surface(m_topods_face, Standard_True);
+	uv[0] = surface.UPeriod();
+	uv[1] = surface.VPeriod();
 }
 
 CShape* CFace::GetParentBody()

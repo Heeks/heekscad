@@ -144,6 +144,7 @@ public:
 	virtual int FaceGetTempAttribute(HeeksObj* face);
 	virtual int FaceGetSurfaceType(HeeksObj* face);
 	virtual void FaceGetUVBox(HeeksObj* face, double *uv_box);// 4 doubles
+	virtual void FaceGetSurfaceUVPeriod(HeeksObj* face, double *uv);// 2 doubles
 	virtual void FaceGetPointAndNormalAtUV(HeeksObj* face, double u, double v, double* p, double* norm);
 	virtual bool FaceGetUVAtPoint(HeeksObj* face, const double *pos, double *u, double *v);
 	virtual bool FaceGetClosestPoint(HeeksObj* face, const double *pos, double *closest_pnt);
@@ -165,6 +166,8 @@ public:
 	virtual int EdgeGetFaceCount(HeeksObj* edge);
 	virtual HeeksObj* EdgeGetFirstFace(HeeksObj* edge);
 	virtual HeeksObj* EdgeGetNextFace(HeeksObj* edge);
+	virtual HeeksObj* EdgeGetVertex0(HeeksObj* edge);
+	virtual HeeksObj* EdgeGetVertex1(HeeksObj* edge);
 	virtual void EdgeGetCurveParams(HeeksObj* edge, double* start, double* end, double* uStart, double* uEnd, int* Reversed);
 	virtual void EdgeGetCurveParams2(HeeksObj* edge, double *uStart, double *uEnd, int *isClosed, int *isPeriodic);
 	virtual bool EdgeInFaceSense(HeeksObj* edge, HeeksObj* face);

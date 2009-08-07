@@ -4,13 +4,14 @@
 #include "stdafx.h"
 #include "Edge.h"
 #include "Face.h"
+#include "Vertex.h"
 #include "Solid.h"
 #include "../interface/Tool.h"
 #include "HeeksConfig.h"
 #include "Gripper.h"
 #include "../interface/PropertyLength.h"
 
-CEdge::CEdge(const TopoDS_Edge &edge):m_topods_edge(edge), m_midpoint_calculated(false), m_temp_attr(0){
+CEdge::CEdge(const TopoDS_Edge &edge):m_topods_edge(edge), m_midpoint_calculated(false), m_temp_attr(0), m_vertex0(NULL), m_vertex1(NULL){
 	GetCurveParams2(&m_start_u, &m_end_u, &m_isClosed, &m_isPeriodic);
 	Evaluate(m_start_u, &m_start_x, &m_start_tangent_x);
 	double t[3];
@@ -330,3 +331,47 @@ double CEdge::Length2(double uStart, double uEnd)
 	double len = GCPnts_AbscissaPoint::Length( c, uStart, uEnd );
 	return len;
 }
+
+void CEdge::FindVertices()
+{
+	CShape* body = GetParentBody();
+	if(body)
+	{
+		int i = 0;
+		for (TopExp_Explorer expVertex(m_topods_edge, TopAbs_VERTEX); expVertex.More() && i<2; expVertex.Next(), i++)
+		{
+			const TopoDS_Shape &V = expVertex.Current();
+			for(HeeksObj* object = body->m_vertices->GetFirstChild(); object; object = body->m_vertices->GetNextChild())
+			{
+				CVertex* v = (CVertex*)object;
+				if(v->Vertex().IsSame(V))
+				{
+					if(i == 0)m_vertex0 = v;
+					else m_vertex1 = v;
+					break;
+				}
+			}
+		}
+	}
+}
+
+CVertex* CEdge::GetVertex0()
+{
+	if(m_vertex0 == NULL)FindVertices();
+	return m_vertex0;
+}
+
+CVertex* CEdge::GetVertex1()
+{
+	if(m_vertex1 == NULL)FindVertices();
+	return m_vertex1;
+}
+
+CShape* CEdge::GetParentBody()
+{
+	if(Owner() == NULL)return NULL;
+	if(Owner()->Owner() == NULL)return NULL;
+	if(Owner()->Owner()->GetType() != SolidType)return NULL;
+	return (CShape*)(Owner()->Owner());
+}
+
