@@ -616,6 +616,11 @@ void CHeeksCADInterface::FaceGetUVBox(HeeksObj* face, double *uv_box)
 	return ((CFace*)face)->GetUVBox(uv_box);
 }
 
+void CHeeksCADInterface::FaceGetSurfaceUVPeriod(HeeksObj* face, double *uv)
+{
+	return ((CFace*)face)->GetSurfaceUVPeriod(uv);
+}
+
 void CHeeksCADInterface::FaceGetPointAndNormalAtUV(HeeksObj* face, double u, double v, double* p, double* norm)
 {
 	gp_Pnt pos;
@@ -772,6 +777,16 @@ HeeksObj* CHeeksCADInterface::EdgeGetFirstFace(HeeksObj* edge)
 HeeksObj* CHeeksCADInterface::EdgeGetNextFace(HeeksObj* edge)
 {
 	return ((CEdge*)edge)->GetNextFace();
+}
+
+HeeksObj* CHeeksCADInterface::EdgeGetVertex0(HeeksObj* edge)
+{
+	return ((CEdge*)edge)->GetVertex0();
+}
+
+HeeksObj* CHeeksCADInterface::EdgeGetVertex1(HeeksObj* edge)
+{
+	return ((CEdge*)edge)->GetVertex1();
 }
 
 void CHeeksCADInterface::EdgeGetCurveParams(HeeksObj* edge, double* start, double* end, double* uStart, double* uEnd, int* Reversed)
