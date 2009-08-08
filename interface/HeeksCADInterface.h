@@ -28,6 +28,9 @@ class CNurbSurfaceParams;
 #include "SketchOrder.h"
 
 class TopoDS_Solid;
+class gp_Lin;
+class gp_Pnt;
+class gp_Circ;
 
 class CHeeksCADInterface{
 public:
@@ -214,4 +217,11 @@ public:
 	virtual bool InputDouble(const wxChar* prompt, const wxChar* value_name, double &value);
 	virtual double GetViewUnits();
 	virtual void SetViewUnits(double units, bool write_to_config);
+
+	// Geometry functions
+	virtual bool intersect(const gp_Lin& lin, const gp_Lin& lin2, gp_Pnt &pnt);
+	virtual bool intersect(const gp_Pnt& pnt, const gp_Lin& lin);
+	virtual bool intersect(const gp_Pnt& pnt, const gp_Circ& cir);
+	virtual void intersect(const gp_Lin& line, const gp_Circ& circle, std::list<gp_Pnt> &list);
+	virtual void intersect(const gp_Circ& c1, const gp_Circ& c2, std::list<gp_Pnt> &list);
 };

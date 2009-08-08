@@ -39,6 +39,7 @@
 #include <gp_Cone.hxx>
 #include <gp_Sphere.hxx>
 #include <TopoDS_Wire.hxx>
+#include "Geom.h"
 
 double CHeeksCADInterface::GetTolerance()
 {
@@ -1001,4 +1002,36 @@ void CHeeksCADInterface::SetViewUnits(double units, bool write_to_config)
 		config.Write(_T("ViewUnits"), wxGetApp().m_view_units);
 	}
 }
+
+bool CHeeksCADInterface::intersect(const gp_Lin& lin, const gp_Lin& lin2, gp_Pnt &pnt)
+{
+	// Call the one in the Geom module.
+	return( intersect( lin, lin2, pnt ) );
+}
+
+bool CHeeksCADInterface::intersect(const gp_Pnt& pnt, const gp_Lin& lin)
+{
+	// Call the one in the Geom module.
+	return( intersect( pnt, lin ) );
+}
+
+bool CHeeksCADInterface::intersect(const gp_Pnt& pnt, const gp_Circ& cir)
+{
+	// Call the one in the Geom module.
+	return( intersect( pnt, cir ) );
+}
+
+void CHeeksCADInterface::intersect(const gp_Lin& line, const gp_Circ& circle, std::list<gp_Pnt> &list)
+{
+	// Call the one in the Geom module.
+	intersect( line, circle, list );
+}
+
+void CHeeksCADInterface::intersect(const gp_Circ& c1, const gp_Circ& c2, std::list<gp_Pnt> &list)
+{
+	// Call the one in the Geom module.
+	intersect( c1, c2, list );
+}
+
+
 
