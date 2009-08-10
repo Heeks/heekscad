@@ -219,9 +219,9 @@ public:
 	virtual void SetViewUnits(double units, bool write_to_config);
 
 	// Geometry functions
-	virtual bool intersect(const gp_Lin& lin, const gp_Lin& lin2, gp_Pnt &pnt);
-	virtual bool intersect(const gp_Pnt& pnt, const gp_Lin& lin);
-	virtual bool intersect(const gp_Pnt& pnt, const gp_Circ& cir);
-	virtual void intersect(const gp_Lin& line, const gp_Circ& circle, std::list<gp_Pnt> &list);
-	virtual void intersect(const gp_Circ& c1, const gp_Circ& c2, std::list<gp_Pnt> &list);
+	virtual bool Intersect(const gp_Lin& lin, const gp_Lin& lin2, gp_Pnt &pnt);
+	virtual bool Intersect(const gp_Pnt& pnt, const gp_Lin& lin);
+	virtual bool Intersect(const gp_Pnt& pnt, const gp_Circ& cir);
+	virtual void Intersect(const gp_Lin& line, const gp_Circ& circle, std::list<gp_Pnt> &list);
+	virtual void Intersect(const gp_Circ& c1, const gp_Circ& c2, std::list<gp_Pnt> &list);
 };
