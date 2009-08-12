@@ -544,7 +544,7 @@ int Solver::solveI(double  **xin, int xLength, constraint * cons, int consLength
 double calc(constraint * cons, int consLength)
 {
         double error=0;
-        double temp,dx,dy,m,n,Ex,Ey,rad1,rad2,t,dx2,dy2,hyp1,hyp2,temp2;
+        double temp,dx,dy,Ex,Ey,rad1,t,dx2,dy2,hyp1,hyp2,temp2;
         for(int i=0;i<consLength;i++)
         {
 			switch(cons[i].type)
@@ -780,6 +780,7 @@ double calc(constraint * cons, int consLength)
                         else error =+ intError;
                 }
 				break;
+				default: break;
 				}
         }
         return error;

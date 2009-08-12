@@ -166,6 +166,7 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 								case equalRadiusCircArc: c.type = concentricCircArc; break;
 								case equalRadiusArcs: c.type = concentricArcs; break;
 								case equalRadiusCircles: c.type = concentricCircles; break;
+								default: break;
 							}
 						}
 						cons.insert(con);
@@ -244,11 +245,13 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 							case PerpendicularLineConstraint: c.type = perpendicular; break;
 							case EqualLengthConstraint: c.type = equalLegnth; break;
 							case ColinearConstraint: c.type = colinear; break;
+							default: break;
 						}
 						constraints.push_back(c);
 						cons.insert(con);
 					}
 					break;
+					default: break;
 				}
 			}
 		}
