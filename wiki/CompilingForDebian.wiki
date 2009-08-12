@@ -43,7 +43,7 @@ cd ../
 svn checkout http://libactp.googlecode.com/svn/trunk/ libactp
 cd libactp/PythonLib
 make
-cp .libs/actp.so ../heekscad/HeeksCNC/
+cp .libs/actp.so ../../heekscad/HeeksCNC/
 }}}
 
 Then run HeeksCAD and add the HeeksCNC plugin (if you built it)
