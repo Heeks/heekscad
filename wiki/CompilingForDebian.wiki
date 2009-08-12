@@ -1,6 +1,6 @@
-#summary How to compile HeeksCAD on Debian in one easy step
+#summary How to compile HeeksCAD and HeeksCNC on Debian
 
-copypasta this into your nearest terminal:
+Copypasta this into your nearest terminal:
 {{{
 sudo apt-get update
 sudo apt-get install -y subversion libopencascade-dev libwxgtk2.8-dev libgtkglext1-dev                
@@ -10,9 +10,9 @@ cd heekscad/src/
 RUNINPLACE=yes make
 }}}
 
-if you want to use make install, remove 'RUNINPLACE=yes'
+If you want to use make install, remove 'RUNINPLACE=yes'
 
-take a nap for a few minutes.
+Wait a few minutes.
 
 
 to add CAM capability:
@@ -24,7 +24,35 @@ mkdir PyCam/trunk
 svn co https://pycam.svn.sourceforge.net/svnroot/pycam/trunk/pycam PyCam/trunk/pycam
 cd src
 RUNINPLACE=yes make
-cd ../../
+cd ../kurve
+make
+}}}
+
+You probably will want to continue by building libarea and libactp for HeeksCNC
+
+{{{
+cd ../../../
+svn checkout http://libarea.googlecode.com/svn/trunk/ libarea
+cd libarea
+make
+cp .libs/area.so ../heekscad/HeeksCNC/
+}}}
+
+{{{
+cd ../
+svn checkout http://libactp.googlecode.com/svn/trunk/ libactp
+cd libactp/PythonLib
+make
+cp .libs/actp.so ../heekscad/HeeksCNC/
+}}}
+
+Then run HeeksCAD and add the HeeksCNC plugin (if you built it)
+
+{{{
+cd ../../heekscad/
 ./HeeksCAD
 }}}
-now do File->Plugins and click "..." and find libheekscnc.so.0.5.1.*
+
+Now do File->Plugins and click "..." and find libheekscnc.so.0.5.1.* under HeeksCNC/
+
+Restart HeeksCAD to load the plugin.
