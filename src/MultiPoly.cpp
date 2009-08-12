@@ -68,8 +68,6 @@ void MultiPoly(std::list<CSketch*> sketches)
 
 	//Fix up that 4 adjacent elements problem
 	std::map<double, std::map<double, std::vector<CompoundSegment*> > >::iterator it3;
-	std::map<double, std::vector<CompoundSegment*> > *last_x=	NULL;
-	double last_x_coord;
 #if FOO
 	for(it3 = bcurves.begin(); it3 != bcurves.end();it3++)
 	{

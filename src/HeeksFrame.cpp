@@ -551,6 +551,7 @@ static void OnCircles3pButton( wxCommandEvent& WXUNUSED( event ) )
 	wxGetApp().SetInputMode(&line_strip);
 }
 
+#if 0
 static void OnCircles2pButton( wxCommandEvent& WXUNUSED( event ) )
 {
 	line_strip.drawing_mode = CircleDrawingMode;
@@ -564,6 +565,7 @@ static void OnCirclesprButton( wxCommandEvent& WXUNUSED( event ) )
 	line_strip.circle_mode = CentreAndPointCircleMode;
 	wxGetApp().SetInputMode(&line_strip);
 }
+#endif
 
 static void OnILineButton( wxCommandEvent& WXUNUSED( event ) )
 {
