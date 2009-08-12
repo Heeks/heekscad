@@ -8,14 +8,11 @@ sudo apt-get install -y subversion libopencascade-dev libwxgtk2.8-dev libgtkglex
 svn checkout http://heekscad.googlecode.com/svn/trunk/ heekscad
 cd heekscad/src/
 RUNINPLACE=yes make
-echo -e "\007" | sudo tee /dev/tty10
 }}}
 
 if you want to use make install, remove 'RUNINPLACE=yes'
 
-take a nap for a half hour.
-
-come back to inspect that beeping noise
+take a nap for a few minutes.
 
 
 to add CAM capability:
@@ -26,7 +23,7 @@ cd HeeksCNC
 mkdir PyCam/trunk
 svn co https://pycam.svn.sourceforge.net/svnroot/pycam/trunk/pycam PyCam/trunk/pycam
 cd src
-make
+RUNINPLACE=yes make
 cd ../../
 ./HeeksCAD
 }}}
