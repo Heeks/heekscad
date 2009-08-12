@@ -28,12 +28,14 @@ cd src
 RUNINPLACE=yes make
 cd ../kurve
 make
+cd ..
+ln -s kurve/.libs/kurve.so .
 }}}
 
 You probably will want to continue by building libarea and libactp for HeeksCNC
 
 {{{
-cd ../../../
+cd ../../
 svn checkout http://libarea.googlecode.com/svn/trunk/ libarea
 cd libarea
 make
