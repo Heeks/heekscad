@@ -488,19 +488,6 @@ void CSketch::ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketche
 	if(re_ordered_sketch)delete re_ordered_sketch;
 }
 
-static gp_Vec GetSegmentVector(HeeksObj* object, double fraction)
-{
-	switch(object->GetType())
-	{
-	case LineType:
-		return ((HLine*)object)->GetSegmentVector(fraction);
-	case ArcType:
-		return ((HArc*)object)->GetSegmentVector(fraction);
-	default:
-		return gp_Vec(0, 0, 0);
-	}
-}
-
 double CSketch::GetAngleAtJunction(HeeksObj* prev_object, HeeksObj* object)
 {
 	EndedObject *obj1 = (EndedObject*)prev_object;

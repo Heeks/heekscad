@@ -285,9 +285,11 @@ bool HEllipse::Stretch(const double *p, const double* shift, void* data){
 	gp_Pnt min_s(c.XYZ() + y_axis.XYZ() * min_r);
 
 	gp_Pnt np = vp.XYZ() + vshift.XYZ();
+#if 0
+	// these cause compiler warnings, so I have commented them out
     double d = c.Distance(np);
     double f = DistanceToFoci(np,m_ellipse)/2;
-
+#endif
 	if(data == (void*)3){
 		m_ellipse.SetLocation(np);
 	}
