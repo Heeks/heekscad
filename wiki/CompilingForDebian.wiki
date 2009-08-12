@@ -1,5 +1,7 @@
 #summary How to compile HeeksCAD and HeeksCNC on Debian
 
+This is mainly for people who want to edit the source code and test the software frequently.
+
 Copypasta this into your nearest terminal:
 {{{
 sudo apt-get update
@@ -35,7 +37,7 @@ cd ../../../
 svn checkout http://libarea.googlecode.com/svn/trunk/ libarea
 cd libarea
 make
-cp .libs/area.so ../heekscad/heekscnc/
+ln -s .libs/area.so ../heekscad/heekscnc/area.so
 }}}
 
 {{{
@@ -43,7 +45,7 @@ cd ../
 svn checkout http://libactp.googlecode.com/svn/trunk/ libactp
 cd libactp/PythonLib
 make
-cp .libs/actp.so ../../heekscad/heekscnc/
+ln -s .libs/actp.so ../../heekscad/heekscnc/actp.so
 }}}
 
 Then run HeeksCAD and add the HeeksCNC plugin (if you built it)
