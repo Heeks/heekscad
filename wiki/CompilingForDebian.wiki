@@ -7,9 +7,12 @@ sudo apt-get install -y subversion libopencascade-dev libwxgtk2.8-dev libgtkglex
 #press enter
 svn checkout http://heekscad.googlecode.com/svn/trunk/ heekscad
 cd heekscad/src/
-make
+RUNINPLACE=yes make
 echo -e "\007" | sudo tee /dev/tty10
 }}}
+
+if you want to use make install, remove 'RUNINPLACE=yes'
+
 take a nap for a half hour.
 
 come back to inspect that beeping noise
