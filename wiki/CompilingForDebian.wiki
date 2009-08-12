@@ -10,7 +10,7 @@ cd heekscad/src/
 RUNINPLACE=yes make
 }}}
 
-If you want to use make install, remove 'RUNINPLACE=yes'
+If you want to use make install, remove 'RUNINPLACE=yes' and run make install after every 'make', and ignore the .so copy commands.
 
 Wait a few minutes.
 
@@ -50,9 +50,11 @@ Then run HeeksCAD and add the HeeksCNC plugin (if you built it)
 
 {{{
 cd ../../heekscad/
-./HeeksCAD
+PYTHONPATH="/your/absolute/path/to/heekscad/heekscnc/" ./HeeksCAD
 }}}
 
-Now do File->Plugins and click "..." and find libheekscnc.so.0.5.1.* under HeeksCNC/
+If you did use make install, run it directly with 'HeeksCAD'.
+
+Now do File->Plugins and click "..." and find libheekscnc.so.0.5.1 under heekscnc/
 
 Restart HeeksCAD to load the plugin.
