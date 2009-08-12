@@ -18,8 +18,8 @@ Wait a few minutes.
 to add CAM capability:
 {{{
 cd ..
-svn checkout http://heekscnc.googlecode.com/svn/trunk/ HeeksCNC
-cd HeeksCNC
+svn checkout http://heekscnc.googlecode.com/svn/trunk/ heekscnc
+cd heekscnc
 mkdir PyCam/trunk
 svn co https://pycam.svn.sourceforge.net/svnroot/pycam/trunk/pycam PyCam/trunk/pycam
 cd src
@@ -35,7 +35,7 @@ cd ../../../
 svn checkout http://libarea.googlecode.com/svn/trunk/ libarea
 cd libarea
 make
-cp .libs/area.so ../heekscad/HeeksCNC/
+cp .libs/area.so ../heekscad/heekscnc/
 }}}
 
 {{{
@@ -43,7 +43,7 @@ cd ../
 svn checkout http://libactp.googlecode.com/svn/trunk/ libactp
 cd libactp/PythonLib
 make
-cp .libs/actp.so ../../heekscad/HeeksCNC/
+cp .libs/actp.so ../../heekscad/heekscnc/
 }}}
 
 Then run HeeksCAD and add the HeeksCNC plugin (if you built it)
