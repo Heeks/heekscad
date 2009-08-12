@@ -23,10 +23,11 @@ to add CAM capability:
 cd ..
 svn checkout http://heekscnc.googlecode.com/svn/trunk/ HeeksCNC
 cd HeeksCNC
-svn co https://pycam.svn.sourceforge.net/svnroot/pycam/ PyCam
+mkdir PyCam/trunk
+svn co https://pycam.svn.sourceforge.net/svnroot/pycam/trunk/pycam PyCam/trunk/pycam
 cd src
 make
 cd ../../
 ./HeeksCAD
 }}}
-now do File->Plugins and click "..." and find HeeksCNC.so.*
+now do File->Plugins and click "..." and find libheekscnc.so.0.5.1.*
