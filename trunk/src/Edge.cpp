@@ -11,7 +11,7 @@
 #include "Gripper.h"
 #include "../interface/PropertyLength.h"
 
-CEdge::CEdge(const TopoDS_Edge &edge):m_topods_edge(edge), m_midpoint_calculated(false), m_temp_attr(0), m_vertex0(NULL), m_vertex1(NULL){
+CEdge::CEdge(const TopoDS_Edge &edge):m_topods_edge(edge), m_vertex0(NULL), m_vertex1(NULL), m_midpoint_calculated(false), m_temp_attr(0){
 	GetCurveParams2(&m_start_u, &m_end_u, &m_isClosed, &m_isPeriodic);
 	Evaluate(m_start_u, &m_start_x, &m_start_tangent_x);
 	double t[3];
