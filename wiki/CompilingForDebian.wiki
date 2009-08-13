@@ -1,23 +1,23 @@
 #summary How to compile HeeksCAD and HeeksCNC on Debian
 
-This is mainly for people who want to edit the source code and test the software frequently.
+This is mainly for people who want to edit the source code and test the software frequently, which means make install will not be used.
+
+If you want to use make install, remove 'RUNINPLACE=yes' and run make install after every 'make', and ignore the ln -s .so commands. Or something like that. You should also check http://code.google.com/p/heekscad/wiki/CompilingForUbuntu
 
 Copypasta this into your nearest terminal:
 {{{
 sudo apt-get update
-sudo apt-get install -y subversion libopencascade-dev libwxgtk2.8-dev libgtkglext1-dev                
+sudo apt-get install -y subversion libopencascade-dev libwxgtk2.8-dev libgtkglext1-dev python2.5-dev
 #press enter
 svn checkout http://heekscad.googlecode.com/svn/trunk/ heekscad
 cd heekscad/src/
 RUNINPLACE=yes make
 }}}
 
-If you want to use make install, remove 'RUNINPLACE=yes' and run make install after every 'make', and ignore the .so copy commands.
-
 Wait a few minutes.
 
 
-to add CAM capability:
+to add CAM capability (HeeksCNC plugin):
 {{{
 cd ..
 svn checkout http://heekscnc.googlecode.com/svn/trunk/ heekscnc
@@ -52,12 +52,21 @@ ln -s .libs/actp.so ../../heekscad/heekscnc/actp.so
 
 Then run HeeksCAD and add the HeeksCNC plugin (if you built it)
 
+HeeksCNC won't work without PYTHONPATH="/your/absolute/path/to/heekscad/heekscnc/" because without it, it isn't able to find the area.so etc python modules.
+
+Another way of making it find them is copying (or linking) kurve.so, area.so and actp.so to /usr/local/lib/python-<version>/site-packages/ instead of heekscad/
+
 {{{
 cd ../../heekscad/
 PYTHONPATH="/your/absolute/path/to/heekscad/heekscnc/" ./HeeksCAD
 }}}
 
-If you did use make install, run it directly with 'HeeksCAD'.
+You could also make a small script for starting HeeksCAD:
+{{{
+echo -e '#!/bin/sh\nPYTHONPATH="/your/path/to/heekscad/heekscnc" `dirname $0`/HeeksCAD' > startcad.sh
+chmod +x startcad.sh
+./startcad.sh
+}}}
 
 Now do File->Plugins and click "..." and find libheekscnc.so.0.5.1 under heekscnc/
 
