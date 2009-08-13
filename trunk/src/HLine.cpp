@@ -326,7 +326,7 @@ void HLine::WriteXML(TiXmlNode *root)
 // static member function
 HeeksObj* HLine::ReadFromXMLElement(TiXmlElement* pElem)
 {
-	gp_Pnt p0, p1;
+	gp_Pnt p0(0, 0, 0), p1(0, 0, 0);
 	HeeksColor c;
 
 	// get the attributes
@@ -342,14 +342,6 @@ HeeksObj* HLine::ReadFromXMLElement(TiXmlElement* pElem)
 		else if(name == "ez"){p1.SetZ(a->DoubleValue());}
 	}
 
-	// The OpenCascade libraries throw an exception when one tries to
-	// create a gp_Lin() object using a vector that doesn't point
-	// anywhere.  If this is a zero-length line then we're in
-	// trouble.  Don't bother with it.
-	if ((p0.X() == p1.X()) &&
-	    (p0.Y() == p1.Y()) &&
-	    (p0.Z() == p1.Z())) return(NULL);
-
 	HLine* new_object = new HLine(p0, p1, &c);
 	new_object->ReadBaseXML(pElem);
 	
@@ -364,6 +356,18 @@ HeeksObj* HLine::ReadFromXMLElement(TiXmlElement* pElem)
 		new_object->B = (HPoint*)new_object->GetNextChild();
 		new_object->A->m_draw_unselected = false;
 		new_object->B->m_draw_unselected = false;
+	}
+
+	// The OpenCascade libraries throw an exception when one tries to
+	// create a gp_Lin() object using a vector that doesn't point
+	// anywhere.  If this is a zero-length line then we're in
+	// trouble.  Don't bother with it.
+	if (new_object->A == NULL || new_object->B == NULL || ((new_object->A->m_p.X() == new_object->B->m_p.X()) &&
+		(new_object->A->m_p.Y() == new_object->B->m_p.Y()) &&
+		(new_object->A->m_p.Z() == new_object->B->m_p.Z())))
+	{
+		delete new_object;
+		return(NULL);
 	}
 
 	return new_object;
