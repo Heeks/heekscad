@@ -21,6 +21,7 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 	bool lines_or_arcs_etc_in_marked_list = false;
 	int sketches_in_marked_list = 0;
 	bool group_in_marked_list = false;
+	bool edges_in_marked_list = false;
 
 	// check to see what types have been marked
 	std::list<HeeksObj*>::const_iterator It;
@@ -40,6 +41,8 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 			case GroupType:
 				group_in_marked_list = true;
 				break;
+			case EdgeType:
+				edges_in_marked_list = true;
 		}
 	}
 
@@ -59,6 +62,7 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 
 	if(wxGetApp().m_marked_list->list().size() > 1)t_list->push_back(new GroupSelected);
 	if(group_in_marked_list)t_list->push_back(new UngroupSelected);
+	if(edges_in_marked_list)t_list->push_back(new MakeEdgesToSketch);
 }
 
 bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wire &wire)
@@ -343,6 +347,26 @@ void MakeLineArcsToSketch::Run(){
 
 	wxGetApp().AddUndoably(sketch, NULL, NULL);
 	wxGetApp().DeleteUndoably(objects_to_delete);
+}
+
+void MakeEdgesToSketch::Run(){
+	CSketch* sketch = new CSketch();
+
+	std::list<HeeksObj*>::const_iterator It;
+	for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+		HeeksObj* object = *It;
+		switch(object->GetType()){
+			case EdgeType:
+				{
+					ConvertEdgeToSketch2(((CEdge*)object)->Edge(), sketch, FaceToSketchTool::deviation);
+				}
+				break;
+			default:
+				break;
+		}
+	}
+
+	wxGetApp().AddUndoably(sketch, NULL, NULL);
 }
 
 static CSketch* sketch_for_arcs_to_lines = NULL;
