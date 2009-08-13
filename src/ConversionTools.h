@@ -37,6 +37,15 @@ public:
 	const wxChar* GetToolTip(){return _("Make selected lines and arcs into a new sketch");}
 };
 
+class MakeEdgesToSketch: public Tool
+{
+public:
+	void Run();
+	const wxChar* GetTitle(){return _("Make To Sketch");}
+	wxString BitmapPath(){return _T("makesketch");}
+	const wxChar* GetToolTip(){return _("Make selected edges into a new sketch");}
+};
+
 class CombineSketches: public Tool
 {
 public:

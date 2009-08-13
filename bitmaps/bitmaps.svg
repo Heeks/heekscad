@@ -8050,5 +8050,24 @@
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\downarrow.png"
        inkscape:export-xdpi="271.18655"
        inkscape:export-ydpi="271.18655" />
+    <g
+       id="g3640"
+       transform="translate(93,-84)"
+       inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\edge2sketch.png"
+       inkscape:export-xdpi="247.79289"
+       inkscape:export-ydpi="247.79289">
+      <path
+         id="path3620"
+         d="M 225.11111,871.59252 L 243.77778,865.36643 L 246.88889,884.04471 L 228.22222,882.48819"
+         style="fill:none;fill-rule:evenodd;stroke:#0000ff;stroke-width:1.55603945px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         inkscape:export-ydpi="271.42096"
+         inkscape:export-xdpi="271.42096"
+         inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\lines.png"
+         sodipodi:nodetypes="ccssssccssssc"
+         id="path3638"
+         d="M 230.37818,895.23518 L 232.6838,895.97935 L 235.8541,889.11665 C 236.39616,887.54989 239.49996,888.06759 238.67923,890.08681 L 236.95486,893.83747 C 234.66725,899.7501 243.60959,900.49208 244.74786,896.19043 L 247.62181,889.50364 L 245.23151,888.72428 L 242.14589,895.5518 C 241.34819,897.37723 238.57668,896.585 239.40543,894.68719 L 241.12979,890.7958 C 243.06523,886.39106 236.34131,883.30108 233.25212,888.54839 L 230.37818,895.23518 z"
+         style="fill:#d0d0d0;fill-opacity:1;fill-rule:evenodd;stroke:#606060;stroke-width:1.04792106;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
   </g>
 </svg>
