@@ -204,6 +204,7 @@ void ManyChangeOwnerTool::Run()
 
 	for(std::list<HeeksObj*>::iterator It = m_objects.begin(); It != m_objects.end(); It++){
 		HeeksObj* object = *It;
+		object->RemoveOwner(object->Owner());
 		m_new_owner->Add(object, NULL);
 	}
 
