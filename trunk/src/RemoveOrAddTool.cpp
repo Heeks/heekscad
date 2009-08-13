@@ -175,12 +175,31 @@ void RemoveObjectsTool::RollBack()
 
 void ChangeOwnerTool::Run()
 {
-	// to do
+	m_object->Owner()->Remove(m_object);
+	wxGetApp().m_marked_list->Remove(m_object, false);
+
+	wxGetApp().WasRemoved(m_object);
+	wxGetApp().WasModified(m_prev_owner);
+
+	m_object->RemoveOwner(m_object->Owner());
+	m_new_owner->Add(m_object, NULL);
+
+	wxGetApp().WasAdded(m_object);
+	wxGetApp().WasModified(m_new_owner);
 }
 
 void ChangeOwnerTool::RollBack()
 {
-	// to do
+	m_new_owner->Remove(m_object);
+	wxGetApp().m_marked_list->Remove(m_object, false);
+
+	wxGetApp().WasRemoved(m_object);
+	wxGetApp().WasModified(m_new_owner);
+
+	m_prev_owner->Add(m_object, NULL);
+
+	wxGetApp().WasAdded(m_object);
+	wxGetApp().WasModified(m_prev_owner);
 }
 
 ManyChangeOwnerTool::ManyChangeOwnerTool(const std::list<HeeksObj*> &list, HeeksObj* new_owner): m_objects(list), m_new_owner(new_owner)
