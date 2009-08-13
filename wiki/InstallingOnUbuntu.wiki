@@ -8,6 +8,8 @@
 
  there are packages provided on http://yamato.hyte.de/packages/heeks/
 
+ or for some more recent, automatically built packages http://celer.oni.biz/~celeron55/automation/heeks/
+
  please make sure you download the right version of packages for your ubuntu release or you _will_ run into trouble with python
 
 == dependencies ==
