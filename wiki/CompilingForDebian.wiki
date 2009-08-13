@@ -54,7 +54,7 @@ Then run HeeksCAD and add the HeeksCNC plugin (if you built it)
 
 HeeksCNC won't work without PYTHONPATH="/your/absolute/path/to/heekscad/heekscnc/" because without it, it isn't able to find the area.so etc python modules.
 
-Another way of making it find them is copying (or linking) kurve.so, area.so and actp.so to /usr/local/lib/python-<version>/site-packages/ instead of heekscad/
+Another way of making it find them is copying (or linking) kurve.so, area.so and actp.so to /usr/local/lib/python-(version)/site-packages/ instead of heekscad/
 
 {{{
 cd ../../heekscad/
