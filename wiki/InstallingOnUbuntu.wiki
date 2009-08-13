@@ -1,4 +1,6 @@
 #summary How to install HeeksCAD on Ubuntu
+For some generic automatically built binary packages for linux, check http://celer.oni.biz/~celeron55/automation/heeks/
+
 = Installing on Ubuntu =
 
 == distros ==
@@ -7,8 +9,6 @@
  * 9.04 jaunty
 
  there are packages provided on http://yamato.hyte.de/packages/heeks/
-
- or for some more recent, automatically built packages http://celer.oni.biz/~celeron55/automation/heeks/
 
  please make sure you download the right version of packages for your ubuntu release or you _will_ run into trouble with python
 
