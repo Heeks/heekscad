@@ -10,7 +10,7 @@ public:
 	unsigned char green;
 	unsigned char blue;
 
-	HeeksColor(void){}
+	HeeksColor(void){red = 0; green = 0; blue = 0;}
 	HeeksColor(unsigned char a, unsigned char b, unsigned char c);
 	HeeksColor(long color);
 	long COLORREF_color(void)const;
