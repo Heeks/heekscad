@@ -716,7 +716,7 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, bool undoably, HeeksObj* p
 		}
 	}
 
-	CGroup::MoveSolidsToGroupsById(this);
+	CGroup::MoveSolidsToGroupsById(this, undoably);
 }
 
 void HeeksCADapp::OpenSVGFile(const wxChar *filepath, bool undoably)
