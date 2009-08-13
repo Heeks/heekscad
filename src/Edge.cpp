@@ -132,13 +132,11 @@ void CEdge::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
 	}
 }
 
+static CEdge* edge_for_tools = NULL;
+
 class BlendTool:public Tool
 {
 public:
-	CEdge* m_edge;
-
-	BlendTool(CEdge* edge):m_edge(edge){}
-
 	const wxChar* GetTitle(){return _("Blend");}
 	wxString BitmapPath(){return _T("edgeblend");}
 	const wxChar* GetToolTip(){return _T("Blend edge");}
@@ -148,18 +146,33 @@ public:
 		config.Read(_T("EdgeBlendRadius"), &rad);
 		if(wxGetApp().InputDouble(_("Enter Blend Radius"), _("Radius"), rad))
 		{
-			m_edge->Blend(rad);
+			edge_for_tools->Blend(rad);
 			config.Write(_T("EdgeBlendRadius"), rad);
 		}
 	}
 };
 
-static BlendTool blend_tool(NULL);
+static BlendTool blend_tool;
+
+class EdgeToSketchTool:public Tool
+{
+public:
+	const wxChar* GetTitle(){return _("Make Sketch");}
+	wxString BitmapPath(){return _T("edge2sketch");}
+	const wxChar* GetToolTip(){return _T("Make a sketch from edge");}
+	void Run(){
+		CSketch* new_object = new CSketch();
+		ConvertEdgeToSketch2(edge_for_tools->Edge(), new_object, FaceToSketchTool::deviation);
+		wxGetApp().AddUndoably(new_object, NULL, NULL);
+	}
+};
+
+static EdgeToSketchTool make_sketch_tool;
 
 void CEdge::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
-	if(Owner() && Owner()->Owner() && Owner()->Owner()->GetType() == SolidType)
-		blend_tool.m_edge = this;
-		t_list->push_back(&blend_tool);
+	edge_for_tools = this;
+	if(GetParentBody())t_list->push_back(&blend_tool);
+	t_list->push_back(&make_sketch_tool);
 }
 
 void CEdge::Blend(double radius){

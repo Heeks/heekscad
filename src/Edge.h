@@ -58,7 +58,7 @@ public:
 	void GetProperties(std::list<Property *> *list);
 	bool UsesID(){return true;}
 
-	const TopoDS_Shape &Edge(){return m_topods_edge;}
+	const TopoDS_Edge &Edge(){return m_topods_edge;}
 	void Blend(double radius);
 	CFace* GetFirstFace();
 	CFace* GetNextFace();
