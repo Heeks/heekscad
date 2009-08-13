@@ -279,6 +279,7 @@ bool HeeksCADapp::OnInit()
 	OnNewOrOpen(false);
 	SetLikeNewFile();
 	SetFrameTitle();
+	SetStatusText();
 
 #ifdef __WXMSW__
 	// to do, make this compile in Linux
@@ -366,6 +367,19 @@ int HeeksCADapp::OnExit(){
 
 	int result = wxApp::OnExit();
 	return result;
+}
+
+void HeeksCADapp::SetStatusText()
+{
+	wxString status_text;
+
+	status_text.Append(_("units"));
+	status_text.Append(_T(" = "));
+	if(fabs(m_view_units - 1.0) < 0.0000000001)status_text.Append(_("mm"));
+	else if(fabs(m_view_units - 25.4) < 0.000000001)status_text.Append(_("inch"));
+	else status_text.Append(wxString::Format(_T("%g"), m_view_units));
+
+	m_frame->SetStatusText( status_text );
 }
 
 bool HeeksCADapp::EndSketchMode()
@@ -1992,6 +2006,7 @@ static void on_set_units(int value, HeeksObj* object)
 	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll(false);
 	wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
 	wxGetApp().m_ruler->KillGLLists();
+	wxGetApp().SetStatusText();
 	wxGetApp().Repaint();
 }
 
