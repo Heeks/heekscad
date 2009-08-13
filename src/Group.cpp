@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "Group.h"
 #include "Shape.h"
+#include "RemoveOrAddTool.h"
 
 void CGroup::WriteXML(TiXmlNode *root)
 {
@@ -59,7 +60,7 @@ HeeksObj* CGroup::ReadFromXMLElement(TiXmlElement* element)
 }
 
 // static
-void CGroup::MoveSolidsToGroupsById(HeeksObj* object)
+void CGroup::MoveSolidsToGroupsById(HeeksObj* object, bool undoably)
 {
 	std::list<HeeksObj*> objects;
 	for(HeeksObj* o = object->GetFirstChild(); o; o = object->GetNextChild())
@@ -75,14 +76,22 @@ void CGroup::MoveSolidsToGroupsById(HeeksObj* object)
 		{
 			int id = *It;
 			HeeksObj* o = wxGetApp().GetIDObject(SolidType, id);
-			o->Owner()->Remove(o);
-			group->Add(o, NULL);
+			if(undoably)
+			{
+				wxGetApp().DoToolUndoably(new ChangeOwnerTool(o, o->Owner(), group));
+			}
+			else
+			{
+				o->Owner()->Remove(o);
+				o->RemoveOwner(o->Owner());
+				group->Add(o, NULL);
+			}
 		}
 	}
 
 	for(std::list<HeeksObj*>::iterator It = objects.begin(); It != objects.end(); It++)
 	{
 		HeeksObj* object = *It;
-		MoveSolidsToGroupsById(object);
+		MoveSolidsToGroupsById(object, undoably);
 	}
 }
