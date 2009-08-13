@@ -269,6 +269,7 @@ public:
 	void create_font();
 	CSketch* GetContainer(bool undoably);
 	bool EndSketchMode();
+	void SetStatusText();
 };
 
 DECLARE_APP(HeeksCADapp)

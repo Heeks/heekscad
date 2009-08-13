@@ -135,7 +135,6 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
     m_properties = new CObjPropsCanvas(this);
 
 	m_statusBar = CreateStatusBar();
-	SetStatusText( _T( "" ) );
 
 	wxString exe_folder = wxGetApp().GetExeFolder();
 
