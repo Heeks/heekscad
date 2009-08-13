@@ -287,10 +287,6 @@ HeeksObj* Constraint::ReadFromXMLElement(TiXmlElement* pElem)
 		obj2->constraints.push_back(c);
 	}
 
-	obj1->Add(c,NULL);
-	if(obj2)
-		obj2->Add(c,NULL);
-
 	//Don't let the xml reader try to insert us in the tree
 	return NULL;
 }
