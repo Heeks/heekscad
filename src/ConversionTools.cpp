@@ -190,7 +190,7 @@ bool ConvertSketchToFace2(HeeksObj* object, TopoDS_Face& face)
 bool ConvertFaceToSketch2(const TopoDS_Face& face, HeeksObj* sketch, double deviation)
 {
 	// given a face, this adds lines and arcs to the given sketch
-	// loop through all the loops 
+	// loop through all the loops
 	TopoDS_Wire outerWire=BRepTools::OuterWire(face);
 
 	for (TopExp_Explorer expWire(face, TopAbs_WIRE); expWire.More(); expWire.Next())
@@ -475,8 +475,8 @@ void UngroupSelected::Run(){
 			{
 				list.push_back(o);
 			}
-			wxGetApp().DeleteUndoably(object);
 			wxGetApp().DoToolUndoably(new ManyChangeOwnerTool(list, &(wxGetApp())));
+			wxGetApp().DeleteUndoably(object);
 		}
 	}
 	wxGetApp().EndHistory();

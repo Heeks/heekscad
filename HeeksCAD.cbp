@@ -93,10 +93,14 @@
 		<Unit filename="interface/ToolList.h" />
 		<Unit filename="interface/strconv.cpp" />
 		<Unit filename="interface/strconv.h" />
+		<Unit filename="sketchsolve/src/errorfuncs.cpp" />
 		<Unit filename="sketchsolve/src/solve.cpp" />
 		<Unit filename="sketchsolve/src/solve.h" />
+		<Unit filename="sketchsolve/src/solveimpl.cpp" />
 		<Unit filename="src/AboutBox.cpp" />
 		<Unit filename="src/AboutBox.h" />
+		<Unit filename="src/BentleyOttmann.cpp" />
+		<Unit filename="src/BentleyOttmann.h" />
 		<Unit filename="src/BezierCurve.cpp" />
 		<Unit filename="src/BezierCurve.h" />
 		<Unit filename="src/Cone.cpp" />
@@ -189,6 +193,10 @@
 		<Unit filename="src/MagDragWindow.h" />
 		<Unit filename="src/MarkedList.cpp" />
 		<Unit filename="src/MarkedList.h" />
+		<Unit filename="src/MultiPoly.cpp" />
+		<Unit filename="src/MultiPoly.h" />
+		<Unit filename="src/OCCSolver.cpp" />
+		<Unit filename="src/OCCSolver.h" />
 		<Unit filename="src/ObjPropsCanvas.cpp" />
 		<Unit filename="src/ObjPropsCanvas.h" />
 		<Unit filename="src/OptionsCanvas.cpp" />
@@ -217,6 +225,8 @@
 		<Unit filename="src/Shape.h" />
 		<Unit filename="src/ShapeData.cpp" />
 		<Unit filename="src/ShapeData.h" />
+		<Unit filename="src/SimpleIntersector.cpp" />
+		<Unit filename="src/SimpleIntersector.h" />
 		<Unit filename="src/Sketch.cpp" />
 		<Unit filename="src/Sketch.h" />
 		<Unit filename="src/Solid.cpp" />
@@ -261,6 +271,7 @@
 		<Unit filename="src/propgrid.cpp" />
 		<Unit filename="src/propgrid.h" />
 		<Unit filename="src/props.cpp" />
+		<Unit filename="src/sketchinterface.cpp" />
 		<Unit filename="src/stdafx.cpp" />
 		<Unit filename="src/stdafx.h" />
 		<Unit filename="src/svg.cpp" />
