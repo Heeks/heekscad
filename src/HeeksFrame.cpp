@@ -1094,7 +1094,7 @@ class ToolBarForGettingToolsFrom: public wxToolBar
 public:
 	void GetToolsIdList(std::list<int> &list)
 	{
-		wxToolBarToolsList::Node *node;
+		wxToolBarToolsList::compatibility_iterator node;
 		for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
 		{
 			wxToolBarToolBase *tool = node->GetData();
