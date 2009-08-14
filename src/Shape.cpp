@@ -737,6 +737,8 @@ void CShape::FilletOrChamferEdges(const std::list<HeeksObj*> &list, double radiu
 
 bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<int, CShapeData> *index_map, HeeksObj* paste_into)
 {
+	// only allow paste of solids at top level or to groups
+	if(paste_into && paste_into->GetType() != GroupType)return false;
 
 	// returns true, if suffix handled
 	wxString wf(filepath);
