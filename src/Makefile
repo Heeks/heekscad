@@ -7,8 +7,6 @@ APPSDIR=$(DATADIR)/applications
 mkdir_p= mkdir -p
 CC = g++
 
-DOWNLOAD_AND_BUILD_STATIC_WX=false
-WX_VERSION=2.8.9
 
 PYTHONCFLAGS=$(shell python-config --includes)
 
@@ -21,7 +19,7 @@ endif
 
 FLAGS_64BIT=$(shell if [ x`getconf LONG_BIT` = x64 ] ; then echo "-D_OCC64 -m64" ; fi )
 
-CCFLAGS=$(CFLAGS) -Wall -g -I "./" -I "/usr/include/opencascade" $(FLAGS_64BIT) -DUNICODE -DHEEKSCAD -DHAVE_LIMITS -DWXUSINGDLL -DHAVE_LIMITS -DTIXML_USE_STL ${RIP} $(PYTHONCFLAGS)  `if [ "$(DOWNLOAD_AND_BUILD_STATIC_WX)" = "true" ] ; then ./wx-config --static=yes --cflags; else wx-config --cflags ; fi`
+CCFLAGS=$(CFLAGS) -Wall -g -I "./" -I "/usr/include/opencascade" $(FLAGS_64BIT) -DUNICODE -DHEEKSCAD -DHAVE_LIMITS -DWXUSINGDLL -DHAVE_LIMITS -DTIXML_USE_STL ${RIP} $(PYTHONCFLAGS)  `wx-config  --cflags`
 
 
 OBJECTS=AboutBox.o advprops.o BezierCurve.o Cone.o ConversionTools.o CoordinateSystem.o Cuboid.o Cylinder.o DigitizedPoint.o DigitizeMode.o DimensionDrawing.o Drawing.o dxf.o svg.o Edge.o Face.o Geom.o glfont2.o GLList.o GraphicsCanvas.o Grid.o Gripper.o GripperSelTransform.o Group.o HArc.o HCircle.o HDimension.o HeeksCAD.o HeeksFrame.o HeeksPrintout.o HILine.o HEllipse.o HImage.o History.o HLine.o HPoint.o HSpline.o HText.o HXml.o Images.o InputModeCanvas.o LineArcDrawing.o Loop.o MagDragWindow.o manager.o MarkedList.o ObjPropsCanvas.o odcombo.o OptionsCanvas.o Plugins.o PointDrawing.o PointOrWindow.o PropertiesCanvas.o PropertyTrsf.o ../interface/PropertyVertex.o propgrid.o props.o RegularShapesDrawing.o RemoveOrAddTool.o RuledSurface.o Ruler.o SelectMode.o Shape.o ShapeData.o Sketch.o Solid.o Sphere.o StlSolid.o StretchTool.o TransformTool.o TransformTools.o TreeCanvas.o Vertex.o ViewPoint.o ViewRotating.o ViewZooming.o Window.o Wire.o wxImageLoader.o ../interface/HeeksCADInterface.o ../interface/HeeksColor.o ../interface/HeeksObj.o ../interface/LeftAndRight.o ../interface/MarkedObject.o ../interface/ObjList.o ../interface/PropertyCheck.o ../interface/PropertyChoice.o ../interface/PropertyColor.o ../interface/PropertyDouble.o ../interface/PropertyLength.o ../interface/PropertyInt.o ../interface/PropertyList.o ../interface/PropertyString.o ../interface/strconv.o ../interface/ToolImage.o ../interface/ToolList.o ../tinyxml/tinyxml.o ../tinyxml/tinyxmlerror.o ../tinyxml/tinyxmlparser.o Constraint.o ConstrainedObject.o ConstraintTools.o EndedObject.o SolveSketch.o ../sketchsolve/src/solve.o CorrelationTool.o sketchinterface.o ../sketchsolve/src/solveimpl.o ../sketchsolve/src/errorfuncs.o OCCSolver.o MultiPoly.o BentleyOttmann.o SimpleIntersector.o
@@ -41,26 +39,21 @@ OCCLIBS=-lTKVRML -lTKSTL -lTKBRep -lTKIGES -lTKShHealing -lTKSTEP -lTKSTEP209 -l
 
 
 .PHONY: all
-all: wx-config stdafx.h executable
+all: stdafx.h executable
 
 stdafx.h.gch: stdafx.h
 	$(CC) ${CCFLAGS} -c $? -o $@
 
-wx-config:
-	if [ "$(DOWNLOAD_AND_BUILD_STATIC_WX)" = "true" ] && [ ! -e ./wx-config ] ; then mkdir static-wx; cd static-wx; wget "http://downloads.sourceforge.net/wxwindows/wxWidgets-$(WX_VERSION).tar.gz" ; tar xvzf wxWidgets-$(WX_VERSION).tar.gz ; cd wxWidgets-$(WX_VERSION) ; ./configure --enable-optimise --enable-stl --enable-unicode --enable-threads --enable-static --disable-shared --enable-monolithic --with-opengl --with-gtk ; make ; cd ../.. ; ln -s static-wx/wxWidgets-$(WX_VERSION)/wx-config wx-config ;  else touch wx-config ; fi
 
 .PHONY: executable
 executable: stdafx.h.gch	${OBJECTS}
-	$(CC) -o ${EXECUTABLE} ${OBJECTS} -lstdc++ -lGLU ${PYTHONLIBS} -lGL -g ${OCCLIBS} `if [ "$(DOWNLOAD_AND_BUILD_STATIC_WX)" = "true" ] ; then ./wx-config --libs --gl-libs --static=yes; else wx-config --libs --gl-libs ; fi`
+	$(CC) -o ${EXECUTABLE} ${OBJECTS} -lstdc++ -lGLU ${PYTHONLIBS} -lGL -g ${OCCLIBS} `wx-config --libs --gl-libs`
 
 %.o:%.cpp
 	$(CC) ${CCFLAGS} -c $? -o $@
 
 clean:
 	-rm -rf ${EXECUTABLE} ${OBJECTS} stdafx.h.gch
-
-deepclean:
-	-rm -rf ${EXECUTABLE} ${OBJECTS} stdafx.h.gch static-wx wx-config
 
 
 install:
