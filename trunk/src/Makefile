@@ -7,7 +7,7 @@ APPSDIR=$(DATADIR)/applications
 mkdir_p= mkdir -p
 CC = g++
 
-DOWNLOAD_AND_BUILD_STATIC_WX=true
+DOWNLOAD_AND_BUILD_STATIC_WX=false
 WX_VERSION=2.8.9
 
 PYTHONCFLAGS=$(shell python-config --includes)
