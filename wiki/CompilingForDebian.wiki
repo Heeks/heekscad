@@ -4,12 +4,12 @@ This is mainly for people who want to edit the source code and test the software
 
 If you want to use make install, remove 'RUNINPLACE=yes' and run make install after every 'make', and ignore the ln -s .so commands. Or something like that. You should also check http://code.google.com/p/heekscad/wiki/CompilingForUbuntu
 
-As of r756 the default is to download, build and link statically to wxWidgets when HeeksCAD is compiled.  This allows static linkage to wxWidgets which makes packages more portable, as well as eliminating errors on systems where the default wxWidgets was not compiled with the necessary options.  This is done automatically when you enter the code below, but it also requires you to wait for a 17MB file to download and for the library to compile.  This only must be done once -- even if you "make clean" you only need to build the wxWidgets library once.  If the default wxWidgets library is appropriate you can run "make DOWNLOAD_AND_BUILD_STATIC_WX=false" instead of just "make" to eliminate this step and link dynamically to the default wxWidgets library installed on your system.
+
 
 Copy paste this into your nearest terminal:
 {{{
 sudo apt-get update
-sudo apt-get install -y subversion libopencascade-dev libwxgtk2.8-dev libgtkglext1-dev python2.5-dev wget
+sudo apt-get install -y subversion libopencascade-dev libwxgtk2.8-dev libgtkglext1-dev python2.5-dev 
 #press enter
 svn checkout http://heekscad.googlecode.com/svn/trunk/ heekscad
 cd heekscad/src/
