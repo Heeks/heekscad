@@ -276,7 +276,7 @@ class ResetRulerTool:public Tool{
 public:
 	void Run(){
 		wxGetApp().m_ruler->m_trsf = gp_Trsf();
-		wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll(false);
+		wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("ResetRuler");}
@@ -307,7 +307,7 @@ static void on_set_empty_length(double value, HeeksObj* object){
 static void on_set_use_view_units(bool value, HeeksObj* object)
 {
 	((HRuler*)object)->m_use_view_units = value;
-	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll(false);
+	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
 	((HRuler*)object)->KillGLLists();
 	wxGetApp().Repaint();
 }

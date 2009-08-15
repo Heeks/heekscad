@@ -35,6 +35,7 @@ CObjPropsCanvas::CObjPropsCanvas(wxWindow* parent)
         : CPropertiesCanvas(parent)
 {
 	m_toolBar = NULL;
+	m_make_initial_properties_in_refresh = false;
 	AddToolBar();
 }
 
@@ -88,7 +89,7 @@ void CObjPropsCanvas::ClearInitialProperties()
 	m_initial_properties.clear();
 }
 
-void CObjPropsCanvas::RefreshByRemovingAndAddingAll(bool make_initial_properties){
+void CObjPropsCanvas::RefreshByRemovingAndAddingAll2(){
 	ClearProperties();
 	wxGetApp().m_frame->ClearToolBar(m_toolBar);
 
@@ -98,7 +99,7 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll(bool make_initial_properties
 		marked_object = (*wxGetApp().m_marked_list->list().begin());
 	}
 
-	if(make_initial_properties)ClearInitialProperties();
+	if(m_make_initial_properties_in_refresh)ClearInitialProperties();
 
 	if(wxGetApp().m_marked_list->size() > 0)
 	{
@@ -107,7 +108,7 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll(bool make_initial_properties
 		for(std::list<Property*>::iterator It = list.begin(); It != list.end(); It++)
 		{
 			Property* property = *It;
-			if(make_initial_properties)m_initial_properties.push_back(property->MakeACopy());
+			if(m_make_initial_properties_in_refresh)m_initial_properties.push_back(property->MakeACopy());
 			AddProperty(property);
 		}
 
@@ -177,16 +178,18 @@ void CObjPropsCanvas::OnCancel2()
 	in_OnCancel2 = false;
 }
 
-void CObjPropsCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)
+void CObjPropsCanvas::WhenMarkedListChanges(bool selection_cleared, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)
 {
 	if(in_OnCancel2)return;
 	
-	RefreshByRemovingAndAddingAll(true);
+	m_make_initial_properties_in_refresh = true;
+	RefreshByRemovingAndAddingAll();
+	m_make_initial_properties_in_refresh = false;
 }
 
 void CObjPropsCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified)
 {
 	if(in_OnCancel2)return;
 	
-	RefreshByRemovingAndAddingAll(false);
+	RefreshByRemovingAndAddingAll();
 }

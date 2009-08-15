@@ -147,16 +147,9 @@ void CTreeCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<H
 	}
 }
 
-void CTreeCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)
+void CTreeCanvas::WhenMarkedListChanges(bool selection_cleared, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)
 {
-	if(all_added){
-		wxTreeItemId item = m_treeCtrl->GetFirstVisibleItem();
-		while(item.IsOk() && m_treeCtrl->IsVisible(item)){
-			m_treeCtrl->SelectItem(item);
-			item = m_treeCtrl->GetNextVisible(item);
-		}
-	}
-	else if(all_removed){
+	if(selection_cleared){
 		wxTreeItemId item = m_treeCtrl->GetFirstVisibleItem();
 		while(item.IsOk() && m_treeCtrl->IsVisible(item)){
 			m_treeCtrl->SelectItem(item, false);
@@ -189,6 +182,16 @@ void CTreeCanvas::Clear()
 	m_treeCtrl->DeleteAllItems();
 	tree_map.clear();
 	m_root = m_treeCtrl->AddRoot(_T("root"), -1, -1, NULL);
+}
+
+void CTreeCanvas::Freeze()
+{
+	m_treeCtrl->Freeze();
+}
+
+void CTreeCanvas::Thaw()
+{
+	m_treeCtrl->Thaw();
 }
 
 bool CTreeCanvas::CanAdd(HeeksObj* object)

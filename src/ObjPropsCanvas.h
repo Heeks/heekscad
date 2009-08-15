@@ -11,6 +11,7 @@ class CObjPropsCanvas: public CPropertiesCanvas
 private:
 	wxToolBar *m_toolBar;
 	std::list<Property *> m_initial_properties;
+	bool m_make_initial_properties_in_refresh;
 
 	void ClearInitialProperties();
 
@@ -23,15 +24,16 @@ public:
     void OnPropertyGridChange( wxPropertyGridEvent& event );
 
 // Observer's virtual functions
-    void WhenMarkedListChanges(bool all_added, bool all_removed, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list);
+    void WhenMarkedListChanges(bool selection_cleared, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list);
 	void OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified);
 
 	// CPropertiesCanvas's virtual functions
+	void RefreshByRemovingAndAddingAll2();
+
 	void AddToolBar();
 	bool OnApply2();
 	void OnCancel2();
 
-	void RefreshByRemovingAndAddingAll(bool make_initial_properties);
 
     DECLARE_NO_COPY_CLASS(CObjPropsCanvas)
     DECLARE_EVENT_TABLE()

@@ -34,7 +34,7 @@ void ViewZooming::OnMouse( wxMouseEvent& event )
 			wxGetApp().m_frame->m_graphics->m_view_point.Shift(dm, wxPoint(event.GetX(), event.GetY()));
 		}
 
-		wxGetApp().m_frame->m_graphics->Refresh(0);
+		wxGetApp().m_frame->m_graphics->Refresh();
 		CurrentPoint = wxPoint(event.GetX(), event.GetY());
 	}
 	if(event.GetWheelRotation() != 0)wxGetApp().m_select_mode->OnMouse(event);

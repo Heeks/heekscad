@@ -27,7 +27,7 @@ BEGIN_EVENT_TABLE(CGraphicsCanvas, wxGLCanvas)
 END_EVENT_TABLE()
 
 CGraphicsCanvas::CGraphicsCanvas(wxWindow* parent, int *attribList)
-        : wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("some text"), attribList)
+        : wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("some text"), attribList),m_frozen(false), m_refresh_wanted_on_thaw(false)
 {
 	m_render_on_front_done = false;
 
@@ -238,17 +238,57 @@ void CGraphicsCanvas::OnMenuEvent(wxCommandEvent& event)
 
 void CGraphicsCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified)
 {
-	Refresh(0);
+	Refresh();
 }
 
-void CGraphicsCanvas::WhenMarkedListChanges(bool all_added, bool all_removed, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)
+void CGraphicsCanvas::WhenMarkedListChanges(bool selection_cleared, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)
 {
-	Refresh(0);
+	Refresh();
 }
 
 void CGraphicsCanvas::Clear()
 {
-	Refresh(0);
+	Refresh();
+}
+
+void CGraphicsCanvas::Freeze()
+{
+	m_frozen = true;
+}
+
+void CGraphicsCanvas::Thaw()
+{
+	m_frozen = false;
+	if(m_refresh_wanted_on_thaw)
+	{
+		Refresh();
+		m_refresh_wanted_on_thaw = false;
+	}
+}
+
+void CGraphicsCanvas::Refresh()
+{
+	if(m_frozen)
+	{
+		m_refresh_wanted_on_thaw = true;
+	}
+	else
+	{
+		wxGLCanvas::Refresh(false);
+	}
+}
+
+void CGraphicsCanvas::RefreshSoon()
+{
+	if(m_frozen)
+	{
+		m_refresh_wanted_on_thaw = true;
+	}
+	else if(wxGetApp().m_frame->IsShown())
+	{
+		wxGLCanvas::Refresh(false);
+		Update();
+	}
 }
 
 void CGraphicsCanvas::OnMagExtents(bool rotate, bool recalculate_gl_lists) 
@@ -266,13 +306,13 @@ void CGraphicsCanvas::OnMagExtents(bool rotate, bool recalculate_gl_lists)
 	if(recalculate_gl_lists)
 		wxGetApp().RecalculateGLLists();
 
-	Refresh(0);
+	Refresh();
 }
 
 void CGraphicsCanvas::OnMagPrevious()
 {
 	RestorePreviousViewPoint();
-	Refresh(0);
+	Refresh();
 }
 
 void CGraphicsCanvas::SetViewPoint(void){
@@ -362,7 +402,7 @@ bool CGraphicsCanvas::UsePreviousViewPoint(void){
 	}
 	else{
 		RestorePreviousViewPoint();
-		Refresh(false);
+		Refresh();
 		return true;
 	}
 }
@@ -370,7 +410,7 @@ bool CGraphicsCanvas::UsePreviousViewPoint(void){
 void CGraphicsCanvas::WindowMag(wxRect &window_box){
 	StoreViewPoint();
 	m_view_point.WindowMag(window_box);
-	Refresh(false);
+	Refresh();
 }
 
 void CGraphicsCanvas::FindMarkedObject(const wxPoint &point, MarkedObject* marked_object){
