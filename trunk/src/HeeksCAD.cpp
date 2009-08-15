@@ -1158,17 +1158,8 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 
 void HeeksCADapp::Repaint(bool soon)
 {
-	if(soon && m_frame->IsShown()){
-//#ifdef __WXMSW__
-//		::SendMessage((HWND)(m_frame->m_graphics->GetHandle()), WM_PAINT, 0, 0);
-//#else
-		m_frame->m_graphics->Refresh(0);
-		m_frame->m_graphics->Update();
-//#endif
-	}
-	else{
-		m_frame->m_graphics->Refresh(0);
-	}
+	if(soon)m_frame->m_graphics->RefreshSoon();
+	else m_frame->m_graphics->Refresh();
 }
 
 void HeeksCADapp::RecalculateGLLists()
@@ -1499,12 +1490,13 @@ bool HeeksCADapp::RollForward(void)
 
 void HeeksCADapp::StartHistory()
 {
+	if(!history->IsNested())ObserversFreeze();
 	history->StartHistory();
 }
 
 void HeeksCADapp::EndHistory(void)
 {
-	history->EndHistory();
+	if(!history->EndHistory() && !history->IsNested())ObserversThaw();
 }
 
 void HeeksCADapp::ClearRollingForward(void)
@@ -1531,11 +1523,29 @@ void HeeksCADapp::ObserversOnChange(const std::list<HeeksObj*>* added, const std
 	}
 }
 
-void HeeksCADapp::ObserversMarkedListChanged(bool all_marked, bool none_marked, const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed){
+void HeeksCADapp::ObserversMarkedListChanged(bool selection_cleared, const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed){
 	std::set<Observer*>::iterator It;
 	for(It = observers.begin(); It != observers.end(); It++){
 		Observer *ov = *It;
-		ov->WhenMarkedListChanges(all_marked, none_marked,  added, removed);
+		ov->WhenMarkedListChanges(selection_cleared, added, removed);
+	}
+}
+
+void HeeksCADapp::ObserversFreeze()
+{
+	std::set<Observer*>::iterator It;
+	for(It = observers.begin(); It != observers.end(); It++){
+		Observer *ov = *It;
+		ov->Freeze();
+	}
+}
+
+void HeeksCADapp::ObserversThaw()
+{
+	std::set<Observer*>::iterator It;
+	for(It = observers.begin(); It != observers.end(); It++){
+		Observer *ov = *It;
+		ov->Thaw();
 	}
 }
 
@@ -2003,7 +2013,7 @@ static void on_set_units(int value, HeeksObj* object)
 	wxGetApp().m_view_units = (value == 0) ? 1.0:25.4;
 	HeeksConfig config;
 	config.Write(_T("ViewUnits"), wxGetApp().m_view_units);
-	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll(false);
+	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
 	wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
 	wxGetApp().m_ruler->KillGLLists();
 	wxGetApp().SetStatusText();

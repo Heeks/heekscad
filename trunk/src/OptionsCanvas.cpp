@@ -43,7 +43,7 @@ void COptionsCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 	CPropertiesCanvas::OnPropertyGridChange(event);
 }
 
-void COptionsCanvas::RefreshByRemovingAndAddingAll(){
+void COptionsCanvas::RefreshByRemovingAndAddingAll2(){
 	ClearProperties();
 
 	std::list<Property *> list;

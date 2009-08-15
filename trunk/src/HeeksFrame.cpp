@@ -1244,7 +1244,7 @@ void CHeeksFrame::OnChangeBitmapSize()
 	m_input_canvas->AddToolBar();
 	m_input_canvas->RefreshByRemovingAndAddingAll();
 	m_properties->AddToolBar();
-	m_properties->RefreshByRemovingAndAddingAll(false);
+	m_properties->RefreshByRemovingAndAddingAll();
 }
 
 void CHeeksFrame::SetToolBarsSize()

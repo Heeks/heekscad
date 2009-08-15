@@ -15,7 +15,7 @@ public:
     void OnPropertyGridChange( wxPropertyGridEvent& event );
 
 public:
-	void RefreshByRemovingAndAddingAll();
+	void RefreshByRemovingAndAddingAll2();
 
     DECLARE_NO_COPY_CLASS(COptionsCanvas)
     DECLARE_EVENT_TABLE()

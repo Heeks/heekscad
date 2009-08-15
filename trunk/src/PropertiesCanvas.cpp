@@ -30,7 +30,7 @@ END_EVENT_TABLE()
 
 CPropertiesCanvas::CPropertiesCanvas(wxWindow* parent)
 : wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-				   wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE)
+				   wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE),m_frozen(false), m_refresh_wanted_on_thaw(false)
 {
 	// Assumes code is in frame/dialog constructor
 
@@ -348,4 +348,31 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 void CPropertiesCanvas::DeselectProperties()
 {
 	m_pg->DoSelectProperty(NULL);
+}
+
+void CPropertiesCanvas::RefreshByRemovingAndAddingAll()
+{
+	if(m_frozen)
+	{
+		m_refresh_wanted_on_thaw = true;
+	}
+	else
+	{
+		RefreshByRemovingAndAddingAll2();
+	}
+}
+
+void CPropertiesCanvas::Freeze()
+{
+	m_frozen = true;
+}
+
+void CPropertiesCanvas::Thaw()
+{
+	m_frozen = false;
+	if(m_refresh_wanted_on_thaw)
+	{
+		RefreshByRemovingAndAddingAll2();
+		m_refresh_wanted_on_thaw = false;
+	}
 }

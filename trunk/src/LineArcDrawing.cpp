@@ -716,14 +716,14 @@ static void on_set_drawing_mode(int drawing_mode, HeeksObj* object)
 {
 	line_drawing_for_GetProperties->drawing_mode = (EnumDrawingMode)drawing_mode;
 	line_drawing_for_GetProperties->m_save_drawing_mode.clear();
-	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll(false);
+	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
 	wxGetApp().Repaint();
 }
 
 static void on_set_circle_mode(int circle_mode, HeeksObj* object)
 {
 	line_drawing_for_GetProperties->circle_mode = (EnumCircleDrawingMode)circle_mode;
-	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll(false);
+	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
 	wxGetApp().Repaint();
 }
 

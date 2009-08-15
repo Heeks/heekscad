@@ -39,6 +39,7 @@ public:
 	void Clear(std::list<Tool *>::iterator FromIt);
 	void ClearFromFront(void);
 	void ClearFromCurPos(void);
+	bool IsNested(){return sub_history != NULL;}
 };
 
 class MainHistory: public History{
