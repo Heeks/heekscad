@@ -216,7 +216,9 @@ public:
 	void RegisterObserver(Observer* observer);
 	void RemoveObserver(Observer* observer);
 	void ObserversOnChange(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified);
-	void ObserversMarkedListChanged(bool all_marked, bool none_marked, const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed);
+	void ObserversMarkedListChanged(bool selection_cleared, const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed);
+	void ObserversFreeze();
+	void ObserversThaw();
 	const wxChar* GetKnownFilesWildCardString(bool open = true)const;
 	const wxChar* GetKnownFilesCommaSeparatedList(bool open = true)const;
 	void GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool from_graphics_canvas, bool control_pressed);

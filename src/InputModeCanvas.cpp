@@ -66,7 +66,7 @@ void CInputModeCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 	CPropertiesCanvas::OnPropertyGridChange(event);
 }
 
-void CInputModeCanvas::RefreshByRemovingAndAddingAll(){
+void CInputModeCanvas::RefreshByRemovingAndAddingAll2(){
 	ClearProperties();
 
 	std::list<Property *> list;

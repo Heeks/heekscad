@@ -20,6 +20,9 @@ class wxPropertyGridEvent;
 
 class CPropertiesCanvas: public wxScrolledWindow, public Observer
 {
+	bool m_frozen;
+	bool m_refresh_wanted_on_thaw;
+
 public:
     CPropertiesCanvas(wxWindow* parent);
     virtual ~CPropertiesCanvas();
@@ -27,6 +30,10 @@ public:
     //virtual void OnDraw(wxDC& dc);
     void OnSize(wxSizeEvent& event);
     void OnPropertyGridChange( wxPropertyGridEvent& event );
+
+	// Observer's virtual functions
+	void Freeze();
+	void Thaw();
 
 protected:
     std::map<wxPGProperty*, Property*> pmap;
@@ -41,6 +48,8 @@ protected:
 
 public:
 	void DeselectProperties();
+	void RefreshByRemovingAndAddingAll();
+	virtual void RefreshByRemovingAndAddingAll2(){}
 
     DECLARE_NO_COPY_CLASS(CPropertiesCanvas)
     DECLARE_EVENT_TABLE()

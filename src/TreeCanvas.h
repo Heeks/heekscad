@@ -79,8 +79,10 @@ class CTreeCanvas: public wxScrolledWindow, public Observer
 private:
 // Observer's virtual functions
     void OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified);
-    void WhenMarkedListChanges(bool all_added, bool all_removed, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list);
+    void WhenMarkedListChanges(bool selection_cleared, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list);
 	void Clear();
+	void Freeze();
+	void Thaw();
 
     void Resize();
     void CreateTreeWithDefStyle();

@@ -13,6 +13,8 @@ private:
 	bool m_render_on_front_done;
 	int m_save_buffer_for_XOR;
 	std::list<CViewPoint> m_view_points;
+	bool m_frozen;
+	bool m_refresh_wanted_on_thaw;
 
 	void update_mode(void);
 
@@ -54,8 +56,12 @@ public:
 
 	// Observer's virtual functions
 	void OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified);
-	void WhenMarkedListChanges(bool all_added, bool all_removed, const std::list<HeeksObj*>* added_list, const std::list<HeeksObj*>* removed_list);
+	void WhenMarkedListChanges(bool selection_cleared, const std::list<HeeksObj*>* added_list, const std::list<HeeksObj*>* removed_list);
 	void Clear();
+	void Freeze();
+	void Thaw();
+	void Refresh();
+	void RefreshSoon(); // for dragging the view, for example
 
 private:
     DECLARE_EVENT_TABLE()

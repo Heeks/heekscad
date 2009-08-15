@@ -298,7 +298,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 				wxGetApp().m_frame->m_graphics->m_view_point.Shift(dm, wxPoint(event.GetX(), event.GetY()));
 			}
 			wxGetApp().m_frame->m_graphics->Update();
-			wxGetApp().m_frame->m_graphics->Refresh(0);
+			wxGetApp().m_frame->m_graphics->Refresh();
 		}
 		else if(event.LeftIsDown())
 		{
@@ -425,7 +425,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 			wxGetApp().m_frame->m_graphics->m_view_point.Shift(gp_Vec(offset_x, offset_y, 0));
 		}
 
-		wxGetApp().m_frame->m_graphics->Refresh(0);
+		wxGetApp().m_frame->m_graphics->Refresh();
 	}
 
 }

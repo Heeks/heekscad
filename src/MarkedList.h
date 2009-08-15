@@ -47,7 +47,7 @@ public:
 	void FindMarkedObject(const wxPoint &point, MarkedObject* marked_object);
 	void ObjectsInWindow( wxRect box, MarkedObject* marked_object, bool single_picking = true);
 	void GrippersGLCommands(bool select, bool no_color);
-	void OnChanged(bool all_marked, bool none_marked, const std::list<HeeksObj *>* added, const std::list<HeeksObj *>* removed);
+	void OnChanged(bool selection_cleared, const std::list<HeeksObj *>* added, const std::list<HeeksObj *>* removed);
 	void set_ignore_onoff(HeeksObj* object, bool b);
 	bool get_ignore(HeeksObj* object);
 	void GetProperties(std::list<Property *> *list);
