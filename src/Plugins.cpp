@@ -212,23 +212,15 @@ void ReadPluginsList(std::list<PluginData> &plugins)
 
 		entry_found = plugins_config.GetNextEntry(key, Index);
 	}
-#ifdef ADDWIREPLUGIN_DEBUG
+
+	// add code to always start your dll here.
+#ifdef MY_OWN_HARDCODED_PLUGIN
 	{
 		PluginData pd;
 		pd.enabled = true;
 		pd.hard_coded = true;
-		pd.name = _T("WireHeeksCAD");
-		pd.path = _T("$(SLDWORKSPATH)/p4c/bin/WireHeeksCADd.dll");
-		plugins.push_back(pd);
-	}
-#endif
-#ifdef ADDWIREPLUGIN
-	{
-		PluginData pd;
-		pd.enabled = true;
-		pd.hard_coded = true;
-		pd.name = _T("WireHeeksCAD");
-		pd.path = _T("..\Release\p2c\bin\WireHeeksCAD.dll");
+		pd.name = _T("MyPlugin");
+		pd.path = _T("$(MYEXEPATH)/mypluing/PluginForHeeksCAD.dll");
 		plugins.push_back(pd);
 	}
 #endif
