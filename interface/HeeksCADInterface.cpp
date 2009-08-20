@@ -537,6 +537,11 @@ void CHeeksCADInterface::SetViewBox(const double* b)
 	v.m_extra_depth_box.Insert(b[3], b[4], b[5]);
 }
 
+void CHeeksCADInterface::ViewExtents(bool rotate)
+{
+	wxGetApp().m_frame->m_graphics->OnMagExtents(rotate, false);
+}
+
 void CHeeksCADInterface::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath)
 {
 	wxGetApp().SaveSTLFile(objects, filepath);
