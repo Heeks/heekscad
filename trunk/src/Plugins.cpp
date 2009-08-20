@@ -41,7 +41,16 @@ CPluginItemDialog::CPluginItemDialog(wxWindow *parent, const wxString& title, Pl
 	gridsizer->Add(new wxStaticText(m_panel, wxID_ANY, _("File Path")), wxSizerFlags().Align(wxALIGN_CENTER_VERTICAL));
 	m_path_text_ctrl = new wxTextCtrl(m_panel, wxID_ANY, pd.path, wxDefaultPosition, wxSize(400, 0));
 	gridsizer->Add(m_path_text_ctrl, wxSizerFlags().Align(wxALIGN_CENTER_VERTICAL).Expand());
-    gridsizer->Add(new wxButton(m_panel, ID_BUTTON_PLUGIN_BROWSE, _T("...")), wxSizerFlags().Align(wxALIGN_CENTER_VERTICAL));
+	wxButton* browse_button = new wxButton(m_panel, ID_BUTTON_PLUGIN_BROWSE, _T("..."));
+    gridsizer->Add(browse_button, wxSizerFlags().Align(wxALIGN_CENTER_VERTICAL));
+
+	if(pd.hard_coded)
+	{
+		// don't allow editing of hard coded plugins
+		m_name_text_ctrl->Enable(false);
+		m_path_text_ctrl->Enable(false);
+		browse_button->Enable(false);
+	}
 
 	gridsizer->AddGrowableCol(1, 1);
 
@@ -203,6 +212,26 @@ void ReadPluginsList(std::list<PluginData> &plugins)
 
 		entry_found = plugins_config.GetNextEntry(key, Index);
 	}
+#ifdef ADDWIREPLUGIN_DEBUG
+	{
+		PluginData pd;
+		pd.enabled = true;
+		pd.hard_coded = true;
+		pd.name = _T("WireHeeksCAD");
+		pd.path = _T("$(SLDWORKSPATH)/p4c/bin/WireHeeksCADd.dll");
+		plugins.push_back(pd);
+	}
+#endif
+#ifdef ADDWIREPLUGIN
+	{
+		PluginData pd;
+		pd.enabled = true;
+		pd.hard_coded = true;
+		pd.name = _T("WireHeeksCAD");
+		pd.path = _T("..\Release\p2c\bin\WireHeeksCAD.dll");
+		plugins.push_back(pd);
+	}
+#endif
 }
 
 void CPluginsDialog::CreateCheckListbox(long flags)
@@ -317,6 +346,7 @@ void CPluginsDialog::OnButtonOK(wxCommandEvent& event)
 	for ( std::list<PluginData>::iterator It = m_plugins.begin(); It != m_plugins.end(); It++, ui++ )
 	{
 		PluginData &pd = *It;
+		if(pd.hard_coded)continue;
 		pd.enabled = m_pListBox->IsChecked(ui);
 		wxString value = pd.path;
 		if(!(pd.enabled))value.Prepend(_T("#"));
