@@ -7,8 +7,9 @@ public:
 	wxString name;
 	wxString path;
 	bool enabled;
+	bool hard_coded;
 
-	PluginData():enabled(true){}
+	PluginData():enabled(true), hard_coded(false){}
 };
 
 class CPluginItemDialog: public wxDialog{
