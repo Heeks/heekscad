@@ -119,6 +119,7 @@ public:
 	virtual void RemoveID(HeeksObj* object); // only call this from ObjList::Remove()
 	virtual const wxChar* GetFileFullPath(); // returns NULL for untitled
 	virtual void SetViewBox(const double* b);
+	virtual void ViewExtents(bool rotate);
 	virtual void SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath);
 
 	// sketches
