@@ -95,21 +95,25 @@ void OneDNearMap::remove(double at, void* pData)
 
 void OneDNearMap::remap(double at, void* pOld, void* pNew)
 {
-	//Check if a vector exists for this *exact* double
-	std::map<double, std::vector<void*>* >::iterator it = m_map.find(at);
-	if(it != m_map.end())
+	//check for occurances of pOld around at and replace
+	std::vector<void**> my_vec;
+	find(at,my_vec);
+	for(int i=0; i < my_vec.size(); i++)
 	{
-		//We got a vector
-		std::vector<void*>* vec = (*it).second;
-
-		//TODO: We could do something faster to find the pointer
-		std::vector<void*>::iterator it2 = std::find(vec->begin(),vec->end(),pOld);
-		*it2 = pNew;
+		if(*my_vec[i] == pOld)
+			*my_vec[i] = pNew;
 	}
-
 }
 
 void OneDNearMap::find(double at, std::vector<void*>& pRet)
+{
+	std::vector<void**> my_vec;
+	find(at,my_vec);
+	for(int i=0; i < my_vec.size(); i++)
+		pRet.push_back(*my_vec[i]);
+}
+
+void OneDNearMap::find(double at, std::vector<void**>& pRet)
 {
 	//Get 2 interators using the std binary search code
 
@@ -131,7 +135,7 @@ void OneDNearMap::find(double at, std::vector<void*>& pRet)
 		{
 			void* pFound = (*(*it1).second)[i];
 			if(pFound)
-				pRet.push_back(pFound);
+				pRet.push_back(&(*(*it1).second)[i]);
 		}
 		it1++;
 	}
@@ -230,20 +234,26 @@ void TwoDNearMap::remove(double atX, double atY, void* pData)
 
 void TwoDNearMap::remap(double atX, double atY, void* pOld, void* pNew)
 {
-	//Check if a vector exists for this *exact* double
-	std::map<double, std::vector<void*>* >::iterator it = m_map.find(atX);
-	if(it != m_map.end())
+	//Find all Y vectors near this X and pass the remap down
+	std::vector<void*> my_vec;
+	OneDNearMap::find(atX,my_vec);
+	for(int i=0; i < my_vec.size(); i++)
 	{
-		//We got a vector
-		std::vector<void*>* vec = (*it).second;
-
-		OneDNearMap* pMap = (OneDNearMap*)(*vec)[0];
+		OneDNearMap* pMap = (OneDNearMap*)my_vec[i];
 		pMap->remap(atY,pOld,pNew);
 	}
 
 }
 
 void TwoDNearMap::find(double atX, double atY, std::vector<void*>& pRet)
+{
+	std::vector<void**> my_vec;
+	find(atX,atY,my_vec);
+	for(int i=0; i < my_vec.size(); i++)
+		pRet.push_back(*my_vec[i]);
+}
+
+void TwoDNearMap::find(double atX, double atY, std::vector<void**>& pRet)
 {
 	//Get 2 interators using the std binary search code
 

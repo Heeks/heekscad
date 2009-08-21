@@ -24,6 +24,7 @@ public:
 	void remove(double, void*);
 	void remap(double, void*, void*);
 	void find(double, std::vector<void*>&);
+	void find(double, std::vector<void**>&);
 	virtual int GetVecCount();
 	virtual double GetCoord(int vec);
 	bool IsValid(int vec);
@@ -40,6 +41,7 @@ public:
 	void remove(double, double, void*);
 	void remap(double, double, void*, void*);
 	void find(double, double, std::vector<void*>&);
+	void find(double, double, std::vector<void**>&);
 	int GetVecCount();
 	OneDNearMap* GetElement(int vec);
 	double GetCoord(int vec);
