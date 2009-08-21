@@ -24,9 +24,9 @@
 // function returns, so it is no big deal. On the other hand it will make the constants in the
 // log N searches somewhat larger. 
 
-OneDNearMap::OneDNearMap(double tol, int n_vectors)
+OneDNearMap::OneDNearMap(double tol)
 {
-	init(tol,n_vectors);
+	init(tol);
 }
 
 OneDNearMap::OneDNearMap()
@@ -36,15 +36,14 @@ OneDNearMap::OneDNearMap()
 
 OneDNearMap::~OneDNearMap()
 {
-
+	for(int i=0; i < m_data.size(); i++)
+		delete m_data[i].second;
 }
 
-void OneDNearMap::init(double tol, int n_vectors)
+void OneDNearMap::init(double tol)
 {
 	m_tol = tol;
 	n_vecs = 0;
-	//Peg and prevent movement on realloc
-	m_vectors.resize(n_vectors);
 }
 
 void OneDNearMap::insert(double at, void * p_data)
@@ -60,9 +59,10 @@ void OneDNearMap::insert(double at, void * p_data)
 	}
 
 	//Allocate a new vector
-	m_vectors[n_vecs].push_back(p_data);
-	m_map[at] = &m_vectors[n_vecs];
-	m_data.push_back(std::pair<double,std::vector<void*>*>(at,&m_vectors[n_vecs]));
+	std::vector<void*>* new_vec = new std::vector<void*>();
+	new_vec->push_back(p_data);
+	m_map[at] = new_vec;
+	m_data.push_back(std::pair<double,std::vector<void*>*>(at,new_vec));
 	n_vecs++;
 }
 
@@ -137,9 +137,28 @@ void OneDNearMap::find(double at, std::vector<void*>& pRet)
 	}
 }
 
+int OneDNearMap::GetVecCount()
+{
+	return n_vecs;
+}
+
+double OneDNearMap::GetCoord(int vec)
+{
+	return m_data[vec].first;
+}
+
+bool OneDNearMap::IsValid(int vec)
+{
+	std::vector<void*>::iterator it;
+	for(it = (*m_data[vec].second).begin(); it != (*m_data[vec].second).end(); it++)
+		if(*it)
+			return true;
+	return false;
+}
+
 void Test1DNearMap()
 {
-	OneDNearMap map(.01,100);
+	OneDNearMap map(.01);
 	map.insert(1,(void*)1000);
 	map.insert(2,(void*)2000);
 	map.insert(3,(void*)3000);
@@ -163,11 +182,8 @@ void Test1DNearMap()
 //Basically we create a 1d Near Map of 1d Near maps. We need to do some funny stuff to get things in the
 //correct branch. More or less we reimplement insert to get different allocation behavior
 
-TwoDNearMap::TwoDNearMap(double tol, int x_vectors, int y_vectors) : OneDNearMap(tol,x_vectors)
+TwoDNearMap::TwoDNearMap(double tol) : OneDNearMap(tol)
 {
-	m_nearmaps.resize(x_vectors);
-	for(int i=0; i < x_vectors; i++)
-		m_nearmaps[i].init(tol,y_vectors);
 }
 
 TwoDNearMap::~TwoDNearMap()
@@ -188,19 +204,22 @@ void TwoDNearMap::insert(double atX, double atY, void * p_data)
 	}
 
 	//Allocate a new vector
-	m_nearmaps[n_vecs].insert(atY,p_data);
-	m_vectors[n_vecs].push_back(&m_nearmaps[n_vecs]);
-	m_map[atX] = &m_vectors[n_vecs];
-	m_data.push_back(std::pair<double,std::vector<void*>*>(atX,&m_vectors[n_vecs]));
+	std::vector<void*>* new_vec = new std::vector<void*>();
+	OneDNearMap *new_nearmap = new OneDNearMap(m_tol);
+	new_nearmap->insert(atY,p_data);
+	new_vec->push_back(new_nearmap);
+	m_map[atX] = new_vec;
+	m_data.push_back(std::pair<double,std::vector<void*>*>(atX,new_vec));
 	n_vecs++;
+
 }
 
 void TwoDNearMap::sort()
 {
 	OneDNearMap::sort();
-	for(int i=0; i < n_vecs; i++)
+	for(size_t i=0; i < m_data.size(); i++)
 	{
-		m_nearmaps[i].sort();
+		((OneDNearMap*)(*m_data[i].second)[0])->sort();
 	}
 }
 
@@ -237,7 +256,7 @@ void TwoDNearMap::find(double atX, double atY, std::vector<void*>& pRet)
 	it2--;
 
 	//Check the it1 is less than it2, otherwise we have a null solution
-	while((*it1).first <= (*it2).first)
+	while((*it1).first <= (*it2).first && it1 < m_data.end())
 	{
 		OneDNearMap* pFound = (OneDNearMap*)(*(*it1).second)[0];
 		pFound->find(atY,pRet);
@@ -247,7 +266,7 @@ void TwoDNearMap::find(double atX, double atY, std::vector<void*>& pRet)
 
 void Test2DNearMap()
 {
-	TwoDNearMap map(.01,100,100);
+	TwoDNearMap map(.01);
 	map.insert(1,1,(void*)1000);
 	map.insert(2,1,(void*)2000);
 	map.insert(3,2,(void*)3000);
@@ -265,4 +284,19 @@ void Test2DNearMap()
 
 	map.find(2,1,myvec);
 
+}
+
+int TwoDNearMap::GetVecCount()
+{
+	return OneDNearMap::GetVecCount();
+}
+
+OneDNearMap* TwoDNearMap::GetElement(int vec)
+{
+	return (OneDNearMap*)(*m_data[vec].second)[0];
+}
+
+double TwoDNearMap::GetCoord(int vec)
+{
+	return OneDNearMap::GetCoord(vec);
 }
