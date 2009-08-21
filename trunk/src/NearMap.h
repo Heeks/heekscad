@@ -12,28 +12,27 @@ protected:
 
 	std::vector< std::pair<double,std::vector<void*>* > > m_data;
 	std::map<double, std::vector<void*>* > m_map;
-	std::vector<std::vector<void*> > m_vectors;
 
 public:
-	OneDNearMap(double tol, int n_vectors);
+	OneDNearMap(double tol);
 	OneDNearMap();
 	~OneDNearMap();
 
-	void init(double tol, int n_vectors);
+	void init(double tol);
 	void insert(double, void*);
 	virtual void sort();
 	void remove(double, void*);
 	void remap(double, void*, void*);
 	void find(double, std::vector<void*>&);
-
+	virtual int GetVecCount();
+	virtual double GetCoord(int vec);
+	bool IsValid(int vec);
 };
 
 class TwoDNearMap : private OneDNearMap
 {
-	std::vector<OneDNearMap> m_nearmaps;
-	
 public:
-	TwoDNearMap(double tol, int x_vectors, int y_vectors);
+	TwoDNearMap(double tol);
 	~TwoDNearMap();
 
 	void insert(double, double, void*);
@@ -41,6 +40,8 @@ public:
 	void remove(double, double, void*);
 	void remap(double, double, void*, void*);
 	void find(double, double, std::vector<void*>&);
-
+	int GetVecCount();
+	OneDNearMap* GetElement(int vec);
+	double GetCoord(int vec);
 };
 
