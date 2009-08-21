@@ -73,14 +73,17 @@ public:
 	BoundedCurve *lastline;
 	WhichPoint lastpoint;
 	std::list<BoundedCurve*> lines;
+	std::vector<WhichPoint> points;
+	double m_tol;
 	CompoundSegment(){}
-	CompoundSegment(MyLine *line, double startu, double endu)
+	CompoundSegment(MyLine *line, double tol, double startu, double endu)
 	{
 		firstline = new BoundedCurve(line,startu,endu);
 		lastline=firstline;
 		lines.push_back(firstline);
 		firstpoint = PointA;
 		lastpoint = PointB;
+		m_tol = tol;
 	}
 	~CompoundSegment(){}
 	void Reverse() 
@@ -136,6 +139,60 @@ public:
 			return lastline->End();
 	}
 
+	double GetDot(BoundedCurve* c1, WhichPoint dir1, BoundedCurve* c2, WhichPoint dir2)
+	{
+		gp_Dir gDir1 = c1->End().XYZ() - c1->Begin().XYZ();
+		if(dir1 == PointB)
+			gDir1.Reverse();
+
+		gp_Dir gDir2 = c2->End().XYZ() - c2->Begin().XYZ();
+		if(dir2 == PointB)
+			gDir2.Reverse();
+
+		return gDir1.Dot(gDir2);
+	}
+
+	double GetWindingNumber()
+	{
+		double total = 0;
+		std::list<BoundedCurve*>::iterator it=lines.begin();
+		std::list<BoundedCurve*>::iterator it2=lines.begin();
+		int idx = 0;
+		for(it2++; it2 != lines.end(); ++it2)
+		{
+			total += GetDot(*it,points[idx],*it2,points[idx+1]);
+			idx++;
+		}
+		total+=GetDot(*it,points[idx],*lines.begin(),points[0]);
+		return total;
+	}
+
+	double GetWindingNumber(gp_Pnt pnt)
+	{
+		//TODO: we probably need an ordering of all lines in the segment to do this
+		return 0;
+	}
+
+	void Order()
+	{
+		//TODO: is it possible that the segments are not in a logical order?
+		gp_Pnt lastpoint = Begin();
+		std::list<BoundedCurve*>::iterator it;
+		for(it = lines.begin(); it!= lines.end(); ++it)
+		{
+			if((*it)->Begin().Distance(lastpoint) <= m_tol)
+			{
+				points.push_back(PointA);
+				lastpoint = (*it)->End();
+			}
+			else
+			{
+				points.push_back(PointB);
+				lastpoint = (*it)->Begin();
+			}
+		}
+	}
+
 	void Add(CompoundSegment* seg, double atx, double aty)
 	{
 		std::list<BoundedCurve*>::iterator it;
@@ -175,6 +232,5 @@ public:
 		}
 	}
 };
-
 
 
