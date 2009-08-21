@@ -279,7 +279,7 @@ public:
 	const wxChar* GetToolTip(){return _("Set this point on arc");}
 };
 
-void TestMatrixFac();
+void Test2DNearMap();
 
 class RunTest:public Tool{
 public:
@@ -287,6 +287,7 @@ public:
 		std::list<CSketch*> list;
 		list.push_back((CSketch*)(*wxGetApp().m_marked_list->list().begin())->Owner());
 		MultiPoly(list);
+	//	Test2DNearMap();
 	//	TestMatrixFac();
 	}
 	const wxChar* GetTitle(){return _T("Run Test");}
