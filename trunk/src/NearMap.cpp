@@ -68,7 +68,7 @@ void OneDNearMap::insert(double at, void * p_data)
 
 struct SAscending
 {
-     bool operator()(std::pair<double,std::vector<void*>* > &pStart, std::pair<double,std::vector<void*>* >& pEnd)
+     bool operator()(const std::pair<double,std::vector<void*>* > &pStart, const std::pair<double,std::vector<void*>* >& pEnd)
      {
 		 return pStart.first < pEnd.first;
      }
