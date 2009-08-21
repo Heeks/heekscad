@@ -1036,6 +1036,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\NearMap.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\NearMap.h"
+			>
+		</File>
+		<File
 			RelativePath="..\interface\ObjList.cpp"
 			>
 		</File>

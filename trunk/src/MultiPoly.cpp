@@ -8,6 +8,7 @@
 #include "BentleyOttmann.h"
 #include "SimpleIntersector.h"
 #include "MultiPoly.h"
+#include "NearMap.h"
 
 //This algorithm takes an array of complex sketches (CSketch* constaining multiple closed paths)
 //And creates a new set of paths that are no longer self intersecting
@@ -46,7 +47,8 @@ void MultiPoly(std::list<CSketch*> sketches)
 	Intersector *m_int = new SimpleIntersector();
 	std::map<MyLine*, std::vector<Intersection> > intersections = m_int->Intersect(shapes);
 
-	std::map<double, std::map<double, std::vector<CompoundSegment*> > >bcurves;
+	//TODO: either calculate reasonable values for x_vectors and y_vectors, or fix NearMap to not require it
+	TwoDNearMap bcurves(tol);
 
 	//Create a new list of bounded segment objects. Whose endpoints are locatable via hash
 	//with the exception that the hash requires a search of the 4 adjacent elements(if they exist)
@@ -59,107 +61,124 @@ void MultiPoly(std::list<CSketch*> sketches)
 		for(unsigned i=1; i < inter.size(); i++)
 		{
 			double newu=tline->GetU(inter[i].X,inter[i].Y);
-			CompoundSegment* segment = new CompoundSegment(tline,startu,newu);
-			bcurves[MyRound(inter[i-1].X)][MyRound(inter[i-1].Y)].push_back(segment);
-			bcurves[MyRound(inter[i].X)][MyRound(inter[i].Y)].push_back(segment);
+			CompoundSegment* segment = new CompoundSegment(tline,tol,startu,newu);
+			bcurves.insert(inter[i-1].X,inter[i-1].Y,segment);
+			bcurves.insert(inter[i].X,inter[i].Y,segment);
 			startu = newu;
 		}
 	}
 
-	//Fix up that 4 adjacent elements problem
-	std::map<double, std::map<double, std::vector<CompoundSegment*> > >::iterator it3;
-#if FOO
-	for(it3 = bcurves.begin(); it3 != bcurves.end();it3++)
-	{
-		std::map<double, std::vector<CompoundSegment*> > *this_x=&(*it3).second;
-		std::map<double, std::vector<CompoundSegment*> >::iterator it4;
-		std::vector<CompoundSegment*> *last_y = NULL;
-		double this_x_coord = (*it3).first;
-		double last_y_coord;
-		for(it4 = (*it3).second.begin(); it4 != (*it3).second.end();)
-		{
-			std::map<double, std::vector<CompoundSegment*> >::iterator it5 = it4++;
-			std::vector<CompoundSegment*> *this_y = &(*it4).second;
-			double this_y_coord = (*it3).first;
-			bool erasedy=false;
-			if(last_x && this_x - last_x < 1.6 * tol)
-			{
-				for(unsigned i=0; i < bcurves[this_x_coord][this_y_coord].size(); i++)
-					bcurves[last_x_coord][this_y_coord].push_back(bcurves[this_x_coord][this_y_coord][i]);
-				bcurves[this_x_coord].erase(it5);
-				erasedy=true;
-			}
-			else if(last_y && this_y - last_y < 1.5 * tol)
-			{
-				for(unsigned i=0; i < bcurves[this_x_coord][this_y_coord].size(); i++)
-					bcurves[this_x_coord][last_y_coord].push_back(bcurves[this_x_coord][this_y_coord][i]);
-				bcurves[this_x_coord].erase(it5);
-				erasedy=true;
-			}
-			last_y = 0;
-			if(!erasedy)
-			{
-				last_y = &(*it4).second;
-				last_y_coord = (*it4).first;
-			}
-		}
-		last_x = &(*it3).second;
-		last_x_coord = (*it3).first;
-	}
-#endif
+	bcurves.sort();
+
+	std::vector<CompoundSegment*> closed_shapes;
+
 	//Create a new tree of boundedcurves, that is much smaller. follow all chains and attempt to remove
 	//segments that are connected to only 2 other curves. This will yield a non-orientable graph
 	//so our definition of polygons better be very graph theoretical
+	std::vector<void*> returnvec; 
 
-	for(it3 = bcurves.begin(); it3 != bcurves.end();)
+	for(int i=0; i < bcurves.GetVecCount(); i++)
 	{
-		std::map<double, std::vector<CompoundSegment*> >::iterator it4;
-		for(it4 = (*it3).second.begin(); it4 != (*it3).second.end();)
+		OneDNearMap* ptMap = bcurves.GetElement(i);
+		double x_coord = bcurves.GetCoord(i);
+		for(int j=0; j < ptMap->GetVecCount(); j++)
 		{
-			//TODO: should check the 4 adjacent nodes
-			if((*it4).second.size() != 2)
+			double y_coord = ptMap->GetCoord(j);
+			if(!ptMap->IsValid(j))
+				continue;
+
+			returnvec.clear();
+			bcurves.find(x_coord,y_coord,returnvec);
+
+			if(returnvec.size() == 1)
 			{
-				++it4;
+				//TODO: this means the current segment is part of an unclosed shape. However it is not clear that
+				//this shape is fully concatenated or does not intersect a closed shape. these should probably be removed
+				//prior to this loop
 				continue;
 			}
 
-			//Concatenate the 2 groups and remove *it4 from the map
-			CompoundSegment* seg1 = (*it4).second[0];
-			CompoundSegment* seg2 = (*it4).second[1];
-
-			if(seg1 == seg2)
+			if(returnvec.size() != 2)
 				continue;
 
-			seg1->Add(seg2,(*it3).first,(*it4).first);
+			//Concatenate the 2 groups and remove *it4 from the map
+			CompoundSegment* seg1 = (CompoundSegment*)returnvec[0];
+			CompoundSegment* seg2 = (CompoundSegment*)returnvec[1];
+
+			if(seg1 == seg2)
+			{
+				//this means we have found a closed shape. Remove it from the bcurves and add it to a list of closed shapes
+				//remove from the map
+				bcurves.remove(x_coord,y_coord,seg1);
+				bcurves.remove(x_coord,y_coord,seg2);
+				closed_shapes.push_back(seg1);
+				continue;
+			}
+
+			seg1->Add(seg2,x_coord,y_coord);
 
 			//Must find the pointer at the end of seg2 and change it
 			gp_Pnt begin = seg2->Begin();
-			if(MyIsEqual(begin.X(),(*it3).first) && MyIsEqual(begin.Y(),(*it4).first))
+			if(MyIsEqual(begin.X(),x_coord) && MyIsEqual(begin.Y(),y_coord))
 			{
 				gp_Pnt end = seg2->End();
-				std::replace(bcurves[MyRound(end.X())][MyRound(end.Y())].begin(),bcurves[MyRound(end.X())][MyRound(end.Y())].end(),seg2,seg1);
+				bcurves.remap(end.X(),end.Y(),seg2,seg1);
 			}
 			else
 			{
-				std::replace(bcurves[MyRound(begin.X())][MyRound(begin.Y())].begin(),bcurves[MyRound(begin.X())][MyRound(begin.Y())].end(),seg2,seg1);
-
+				bcurves.remap(begin.X(),begin.Y(),seg2,seg1);
 			}
 			//remove from the map
-			std::map<double, std::vector<CompoundSegment*> >::iterator it5=it4++;
-			bcurves[(*it3).first].erase(it5);
+			bcurves.remove(x_coord,y_coord,seg1);
+			bcurves.remove(x_coord,y_coord,seg2);
 		}
-		if(bcurves[(*it3).first].size() == 0)
-		{
-			std::map<double, std::map<double, std::vector<CompoundSegment*> > >::iterator it5 = it3++;
-			bcurves.erase(it5);
-		}
-		else
-			++it3;
 	}
 
 	//Now we have a graph of CompoundSegment*. These should be fast to traverse. 
-	//TODO: something happens to non self intersecting shapes. They either dissapear, or become a single CompoundSegment
-	//we should probably know which one. 
+	//Non self intersecting shapes are already in closed_shapes
+	//We could speed this up by regenerating near_map to get rid of removed references
 
+	for(int i=0; i < bcurves.GetVecCount(); i++)
+	{
+		OneDNearMap* ptMap = bcurves.GetElement(i);
+		double x_coord = bcurves.GetCoord(i);
+		for(int j=0; j < ptMap->GetVecCount(); j++)
+		{
+			double y_coord = ptMap->GetCoord(j);
+			if(!ptMap->IsValid(j))
+				continue;
+
+			returnvec.clear();
+			bcurves.find(x_coord,y_coord,returnvec);
+
+			CompoundSegment *segment = (CompoundSegment*)returnvec[0];
+
+			//We've got something to look at now. What to do, What to do.
+		}
+	}
+
+	//Now that we have all closed shapes, we need to define the relationships. Since we know that they are not intersecting
+	//3 kinds of things can happen. A shape is either inside, enclosing, adjacent, or unrelated to another.
+
+	//Get the closed shapes well ordered
+	for(int i=0; i < closed_shapes.size(); i++)
+	{
+		closed_shapes[i]->Order();
+		double wnumber = closed_shapes[i]->GetWindingNumber();
+
+		int x=0;
+		x++;
+	}
+
+	for(int i=0; i < closed_shapes.size(); i++)
+	{
+		for(int j=i+1; j < closed_shapes.size(); j++)
+		{
+			//We can determine if a shape is inside or outside by finding the winding number of just 1 point with the
+			//entire other polygon
+
+			closed_shapes[i]->GetWindingNumber(closed_shapes[j]->Begin());
+		}
+	}
 }
 
