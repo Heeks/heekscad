@@ -916,4 +916,416 @@ bool UnionPolygons(std::list<Polygon> &polygons_list, std::list<Polygon> &result
 	return UnionPolygons(lines_vector, result_list);
 }
 
+/*
+This is an old version of the UnionPolygons algorithm. It worked
+with many test cases but failed with real-life data, for some unknown reason.
+*/
+
+bool UnionPolygons_old(std::list<Polygon> & polygons_list,
+		std::list<Polygon> & result_list)
+{
+	std::list< std::list<Polygon>::const_iterator > used_polygons;
+	int polygon_total_count = polygons_list.size();
+	int polygon_use_count = 0;
+	
+	for(std::list<Polygon>::iterator ipoly = polygons_list.begin();
+			ipoly != polygons_list.end(); ipoly++)
+	{
+		if(ipoly->Direction() != PolyCW){
+			if(DEBUG)std::cout<<"UnionPolygons: Works only with clockwise polygons."<<std::endl;
+			//alternatively, you could just turn them here...
+			return false;
+		}
+	}
+	
+	for(std::list<Polygon>::const_iterator ipoly = polygons_list.begin();
+			ipoly != polygons_list.end(); ipoly++)
+	{
+		//if(DEBUG)std::cout<<"loop level 1"<<std::endl;
+		if(std::find(used_polygons.begin(), used_polygons.end(), ipoly) != used_polygons.end())
+		{
+			continue;
+		}
+		if(DEBUG)std::cout<<"----------------------"<<std::endl;
+		if(DEBUG)std::cout<<"starting with ipoly = ";
+		ipoly->Print();
+
+		std::list< std::list<Polygon>::const_iterator > union_used_polygons;
+		std::list<gp_Pnt> union_points;
+		std::list<gp_Pnt> intersection_points;
+		std::list<gp_Pnt>::const_iterator ipoint;
+		gp_Pnt a1, a2, b1, b2;
+		bool recently_intersected = false;
+		Intersection last_intersection; //valid only if recently_intersected
+		bool first_point_of_union = true;
+		
+		if(DEBUG)std::cout<<"adding to union_used_polygons"<<std::endl;
+		union_used_polygons.push_back(ipoly);
+
+		//get an iterator to the polygon's points
+		ipoint = ipoly->begin();
+
+		while(true){
+			if(DEBUG)std::cout<<std::endl;
+			/*if(DEBUG)std::cout<<"current ipoly = ";
+			ipoly->Print();*/
+			
+			//get the current point
+			a1 = *ipoint;
+
+			std::list<gp_Pnt>::const_iterator ia1 = ipoint;
+
+			if(DEBUG)std::cout<<"a1=("<<a1.X()<<","<<a1.Y()<<")";
+			if(recently_intersected)
+			{
+				if(DEBUG)std::cout<<" (is before the last intersection)"<<std::endl;
+			}
+			else
+			{
+				if(DEBUG)std::cout<<std::endl;
+			}
+			
+			if(!recently_intersected){
+				//check if we have made a loop
+				if(union_points.size() >= 2){
+					std::list<gp_Pnt>::iterator findresult;
+					for(findresult = union_points.begin(); findresult != union_points.end(); findresult++)
+					{
+						if(findresult->IsEqual(a1, 0.0000000001)) break;
+					}
+					std::list<gp_Pnt>::iterator itemp = union_points.end();
+					itemp--;
+					if(findresult != union_points.end() && findresult != itemp)
+					{
+						if(DEBUG)std::cout<<"a1 found on union_points -> got a union"<<std::endl;
+						//we have a union
+						used_polygons.insert(used_polygons.end(), union_used_polygons.begin(),
+								union_used_polygons.end());
+						polygon_use_count += union_used_polygons.size();
+						std::stringstream ss_name;
+						ss_name<<"from "<<(*union_used_polygons.begin())->name;
+						union_used_polygons.clear();
+						if(DEBUG)std::cout<<"collected points: ";
+						for(std::list<gp_Pnt>::iterator ipoint = union_points.begin();
+								ipoint != union_points.end(); ipoint++)
+						{
+							if(DEBUG)std::cout<<"("<<ipoint->X()<<","<<ipoint->Y()<<"), ";
+						}
+						if(DEBUG)std::cout<<std::endl;
+						std::list<gp_Pnt> points_stripped;
+						points_stripped.insert(points_stripped.end(), findresult, union_points.end());
+						Polygon polygon(points_stripped);
+						//Polygon polygon(union_points);
+						polygon.name = ss_name.str();
+						if(DEBUG)std::cout<<"adding polygon: "<<polygon.str()<<std::endl;
+						result_list.push_back(polygon);
+						if(polygon_use_count == polygon_total_count){
+							//done it all!
+							return true;
+						}
+						//get a next one
+						break;
+					}
+				}
+				if(!first_point_of_union)
+				{
+					//add the first point of line to union_points to keep track of where we're going
+					if(DEBUG)std::cout<<"adding a1 to union_points"<<std::endl;
+					union_points.push_back(a1);
+				}
+				else
+				{
+					if(DEBUG)std::cout<<"because a1 is the first point of this union, "
+							"not adding it to union_points"<<std::endl;
+				}
+			}
+			first_point_of_union = false;
+			//get the second point
+			ipoint++;
+			//if a1 was the last one, jump to the first one
+			if(ipoint == ipoly->end())
+			{
+				ipoint = ipoly->begin();
+			}
+			a2 = *ipoint;
+			if(DEBUG)std::cout<<"collecting intersections with line: "<<"("<<a1.X()<<", "<<a1.Y()
+					<<") -> ("<<a2.X()<<", "<<a2.Y()<<") ..."<<std::endl;
+
+			//collect intersections
+
+			std::list<Intersection*> is_list;
+
+			//loop through every polygon
+			for(std::list<Polygon>::const_iterator b_ipoly = polygons_list.begin();
+					b_ipoly != polygons_list.end(); b_ipoly++)
+			{
+				//skip the already used ones
+				if(std::find(used_polygons.begin(), used_polygons.end(), b_ipoly) !=used_polygons.end())
+				{
+					//if(DEBUG)std::cout<<"already used  b_ipoly = ";
+					//b_ipoly->Print();
+					continue;
+				}
+				if(b_ipoly == ipoly) continue;
+				if(DEBUG)std::cout<<"\tchecking points of "<<b_ipoly->str()
+						<<"=b_ipoly"<<std::endl;
+
+				//now we have an another polygon
+				//we should check if any of its lines intersects with our current one
+				
+				//get the points of the polygon
+				std::list<gp_Pnt>::const_iterator b_ipoint;
+				b_ipoint = b_ipoly->begin();
+				
+				//and loop through them
+				bool endwent = false;
+				while(!endwent)
+				{
+					//if(DEBUG)std::cout<<"loop level 3"<<std::endl;
+
+					//the first point for our line
+					b1 = *b_ipoint;
+
+					std::list<gp_Pnt>::const_iterator ib1 = b_ipoint;
+
+					//and the second point. if we just got the last one, get the first one for this.
+					b_ipoint++;
+					if(b_ipoint == b_ipoly->end())
+					{
+						b_ipoint = b_ipoly->begin();
+						endwent = true;
+					}
+					b2 = *b_ipoint;
+					
+					/*if(DEBUG)std::cout<<"checking line ("<<a1.X()<<", "<<a1.Y()<<")->("<<a2.X()<<", "<<a2.Y()
+							<<") with line ("
+							<<b1.X()<<", "<<b1.Y()<<")->("<<b2.X()<<", "<<b2.Y()<<")"<<std::endl;*/
+					//check if it intersects with our current line
+					gp_Pnt p;
+					if(LineIntersect(a1,a2,b1,b2,p)==true)
+					{
+						double distance_from_a1 = p.Distance(a1);
+						//double distance_from_last = -1.0;
+						if(recently_intersected)
+						{
+							//distance_from_last = p.SquareDistance(last_intersection.p);
+							double a1x = a1.X();
+							double a1y = a1.Y();
+							double px = p.X();
+							double py = p.Y();
+							double lx = last_intersection.p.X();
+							double ly = last_intersection.p.Y();
+							//check that last intersection was on the current line a1->a2
+							gp_Lin lin(a1, gp_Vec(a1, a2));
+							if(lin.SquareDistance(last_intersection.p) < 0.00000001){
+								//if(DEBUG)std::cout<<"last intersection at ("<<lx<<","<<ly<<")"<<std::endl;
+								//skip if intersection point is between the last intersection and a1
+								if(!((a1x-px)*(px-lx)<0.0) && !((a1y-py)*(py-ly)<0.0))
+								{
+									if(DEBUG)std::cout<<"\t("<<p.X()<<", "<<p.Y()
+											<<") is between last_intersection("
+											<<lx<<","<<ly<<") and a1 -> skipping"
+											<<std::endl;
+									continue;
+								}
+							}
+						}
+						
+						if(DEBUG)std::cout<<"\tintersection at ("<<p.X()<<", "<<p.Y()<<"), d="
+								<<distance_from_a1<<std::endl;
+						
+						std::list<Intersection*>::iterator is_it = is_list.begin();
+						if((*is_it)->d < distance_from_a1){
+							for(; is_it != is_list.end(); is_it++)
+							{
+								if((*is_it)->d < distance_from_a1)
+								{
+									is_it++;
+									break;
+								}
+							}
+						}
+						is_list.insert(is_it, new Intersection(ipoly, b_ipoly, ia1, ib1, p, distance_from_a1));
+					} //if(LineIntersect())
+				} //while(!endwent)
+			} //for polygons_list
+			
+			if(is_list.empty()){ if(DEBUG)std::cout<<"did not find intersections"<<std::endl;}
+			else if(DEBUG)std::cout<<"found some, looping through them..."<<std::endl;
+
+			bool found_intersection = false;
+			//std::list<Intersection>::const_iterator is_it
+			for(std::list<Intersection*>::const_iterator is_it = is_list.begin();
+					is_it != is_list.end(); is_it++)
+			{
+				if(DEBUG)std::cout<<"\tintersection at ("<<(*is_it)->p.X()<<", "
+						<<(*is_it)->p.Y()<<"), d="<<(*is_it)->d<<std::endl;
+
+				std::list<gp_Pnt>::const_iterator ipoint_b = (*is_it)->ipoint_b;
+				gp_Pnt p1 = *ipoint_b;
+				ipoint_b++;
+				if(ipoint_b == ((*is_it)->ipoly_b)->end()) ipoint_b = ((*is_it)->ipoly_b)->begin();
+				gp_Pnt p2 = *ipoint_b;
+				if(DEBUG)std::cout<<"\t is line ("<<p1.X()<<", "<<p1.Y()<<")->("<<p2.X()<<", "<<p2.Y()<<")"<<std::endl;
+
+				gp_Vec v1(a1, a2);
+				gp_Vec v2(p1, p2);
+				//double angle = v1.Angle(v2);
+				double v1a = atan2(v1.Y(), v1.X());
+				double v2a = atan2(v2.Y(), v2.X());
+				double angle = v2a - v1a;
+				if(angle <= -PI) angle += PI*2;
+				else if(angle > PI) angle -= PI*2;
+				if(DEBUG)std::cout<<"\t angle="<<angle<<std::endl;
+				
+				//if the end of the intersecting line is equal to the
+				//intersection point, the line is not useful now
+				if(p2.IsEqual((*is_it)->p, 0.0000000001)){
+					if(DEBUG)std::cout<<"\t (p2.IsEqual((*is_it)->p, 0.0000000001))"<<std::endl;
+					if(DEBUG)std::cout<<"\t -> intersection not useful"<<std::endl;
+					continue;
+				}
+				
+				if(angle < 0.0000000001){
+					if(DEBUG)std::cout<<"\t line not useful: turns to right or doesn't turn"<<std::endl;
+					continue;
+				}
+				//if the start of the intersecting line is equal to the
+				//intersection point
+				if(p1.IsEqual((*is_it)->p, 0.0000000001)){
+					if(DEBUG)std::cout<<"\t (p1.IsEqual((*is_it)->p, 0.0000000001))"<<std::endl;
+					if(a2.IsEqual((*is_it)->p, 0.0000000001)){
+						std::list<gp_Pnt>::const_iterator ipoint_a = ipoint;
+						ipoint_a++;
+						if(ipoint_a == ipoly->end()) ipoint_a = ipoly->begin();
+						gp_Pnt a3 = *ipoint_a;
+						gp_Vec v3(a2, a3);
+						double v3a = atan2(v3.Y(), v3.X());
+						double angle = v3a - v2a;
+						if(angle <= -PI) angle += PI*2;
+						else if(angle > PI) angle -= PI*2;
+						if(DEBUG)std::cout<<"\t angle="<<angle<<std::endl;
+						if(angle < 0.0000000001){
+							if(DEBUG)std::cout<<"\t line not useful: turns to right or doesn't turn"<<std::endl;
+							continue;
+						}
+					}
+					else{
+					}
+				}
+				
+				if(found_intersection) continue; //for printing all of them
+
+				//check if we already have this intersection point
+
+				std::list<gp_Pnt>::iterator findresult;
+				for(findresult = intersection_points.begin(); findresult != intersection_points.end(); findresult++)
+				{
+					if(findresult->IsEqual((*is_it)->p, 0.0000000001)) break;
+				}
+				if(findresult != intersection_points.end())
+				{
+					if(DEBUG)std::cout<<"\tintersection point already on intersection_points"
+							<<std::endl;
+					//check if we have made a loop
+					if(union_points.size() >= 2){
+						std::list<gp_Pnt>::iterator findresult;
+						for(findresult = union_points.begin(); findresult != union_points.end(); findresult++)
+						{
+							if(findresult->IsEqual((*is_it)->p, 0.0000000001)) break;
+						}
+						std::list<gp_Pnt>::iterator itemp = union_points.end();
+						itemp--;
+						if(findresult != union_points.end() && findresult != itemp)
+						{
+							//we have a union
+							if(DEBUG)std::cout<<"\t:: p found on union_points -> got a union"<<std::endl;
+							if(DEBUG)std::cout<<"\t-> adding it to union_points"<<std::endl;
+							union_points.push_back((*is_it)->p);
+							used_polygons.insert(used_polygons.end(), union_used_polygons.begin(),
+									union_used_polygons.end());
+							polygon_use_count += union_used_polygons.size();
+							std::stringstream ss_name;
+							ss_name<<"from "<<(*union_used_polygons.begin())->name;
+union_used_polygons.clear();
+							if(DEBUG)std::cout<<"collected points: ";
+							for(std::list<gp_Pnt>::iterator ipoint = union_points.begin();
+									ipoint != union_points.end(); ipoint++)
+							{
+								if(DEBUG)std::cout<<"("<<ipoint->X()<<","<<ipoint->Y()<<"), ";
+							}
+							if(DEBUG)std::cout<<std::endl;
+							std::list<gp_Pnt> points_stripped;
+							points_stripped.insert(points_stripped.end(), findresult, union_points.end());
+							if(DEBUG)std::cout<<"adding polygon = ";
+							Polygon polygon(points_stripped);
+							//Polygon polygon(union_points);
+							polygon.name = ss_name.str();
+							if(DEBUG)std::cout<<"adding polygon: "<<polygon.str()<<std::endl;
+							result_list.push_back(polygon);
+							if(polygon_use_count == polygon_total_count){
+								//done it all!
+								return true;
+							}
+							//get a next one
+							goto unionpoly1;
+						}
+						else
+						{
+							if(DEBUG)std::cout<<"\t:: p not found on union_points -> "
+									"didn't get a union"<<std::endl;
+							continue;
+						}
+					}
+					else if(DEBUG)std::cout<<"\t!(union_points.size() >= 2)"<<std::endl;
+				}
+
+				if(DEBUG)std::cout<<"\t\t!! Selected intersection"<<std::endl;
+				
+				if(DEBUG)std::cout<<"\t\t-> adding it to union_points and intersection_points"
+						<<std::endl;
+				union_points.push_back((*is_it)->p);
+				intersection_points.push_back((*is_it)->p);
+				
+				/*if(DEBUG)std::cout<<"\tchanging ipoly = ";
+				(*is_it)->ipoly_b->Print();*/
+				ipoly = (*is_it)->ipoly_b;
+				ipoint = (*is_it)->ipoint_b;
+				recently_intersected = true;
+				last_intersection = *(*is_it);
+				
+				//add to union_used_polygons if it isn't there
+				if(std::find(union_used_polygons.begin(),
+						union_used_polygons.end(), ipoly) == union_used_polygons.end())
+				{
+					if(DEBUG)std::cout<<"\t\t-> adding polygon to union_used_polygons"<<std::endl;
+					union_used_polygons.push_back(ipoly);
+				}
+				found_intersection = true;
+				//commented for printing all intersections
+				//break;
+			}
+
+			for(std::list<Intersection*>::const_iterator is_it = is_list.begin();
+					is_it != is_list.end(); is_it++)
+			{
+				delete (*is_it);
+			}
+			
+			if(found_intersection)
+			{
+				if(DEBUG)std::cout<<std::endl<<"changed to "<<ipoly->str()<<"=ipoly"<<std::endl;
+				continue;
+			}
+			if(DEBUG)std::cout<<"recently_intersected = false;"<<std::endl;
+			recently_intersected = false;
+		} //while(true)
+unionpoly1:
+		continue;
+	} //for polygons_list
+
+	return true;
+}
+
+
 
