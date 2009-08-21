@@ -2,6 +2,12 @@
 // Copyright (c) 2009, Perttu "celero55" Ahola
 // This program is released under the BSD license. See the file COPYING for details.
 
+/*
+This is quite random code right now, and the LineTreeNode binary search
+tree isn't used atm. And the UnionPolygons code is just a draft of something
+that will never work.
+*/
+
 #ifndef UNITTEST_NO_HEEKS
 	#include "stdafx.h"
 #endif
