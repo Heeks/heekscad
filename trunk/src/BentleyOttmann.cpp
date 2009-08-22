@@ -288,9 +288,9 @@ IntResult Intersects(MyLine* line1, MyLine* line2)
 		double atX = line1->A.X() + ua * (line1->B.X() - line1->A.X());
 		double atY = line1->A.Y() + ua * (line1->B.Y() - line1->A.Y());
 
-		return IntResult(true,atX,atY);
+		return IntResult(true,ua,ub,atX,atY);
 	}
-	return IntResult(false,0,0);
+	return IntResult(false,0,0,0,0);
 }
 
 bool MyIsEqual2(MyLine* line1, MyLine* line2, double at)

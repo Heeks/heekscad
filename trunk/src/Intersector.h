@@ -64,5 +64,7 @@ public:
 	bool exists;
 	double atX;
 	double atY;
-	IntResult(bool exists, double atX, double atY){this->exists = exists; this->atX = atX;this->atY = atY;}
+	double uA;
+	double uB;
+	IntResult(bool exists, double uA, double uB, double atX, double atY){this->exists = exists; this->atX = atX;this->atY = atY; this->uA = uA; this->uB = uB;}
 };
