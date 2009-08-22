@@ -139,20 +139,20 @@ public:
 			return lastline->End();
 	}
 
-	double GetDot(BoundedCurve* c1, WhichPoint dir1, BoundedCurve* c2, WhichPoint dir2)
+	double GetArea(BoundedCurve* c1, WhichPoint dir1, BoundedCurve* c2, WhichPoint dir2)
 	{
-		gp_Dir gDir1 = c1->End().XYZ() - c1->Begin().XYZ();
+		gp_Pnt gPnt1 = c1->Begin();
 		if(dir1 == PointB)
-			gDir1.Reverse();
+			gPnt1 = c1->End();
 
-		gp_Dir gDir2 = c2->End().XYZ() - c2->Begin().XYZ();
+		gp_Pnt gPnt2 = c2->Begin();
 		if(dir2 == PointB)
-			gDir2.Reverse();
+			gPnt2 = c2->End();
 
-		return gDir1.Dot(gDir2);
+		return gPnt1.X()*gPnt2.Y()-gPnt2.X()*gPnt1.Y();
 	}
 
-	double GetWindingNumber()
+	double GetArea()
 	{
 		double total = 0;
 		std::list<BoundedCurve*>::iterator it=lines.begin();
@@ -160,11 +160,11 @@ public:
 		int idx = 0;
 		for(it2++; it2 != lines.end(); ++it2)
 		{
-			total += GetDot(*it,points[idx],*it2,points[idx+1]);
+			total += GetArea(*it++,points[idx],*it2,points[idx+1]);
 			idx++;
 		}
-		total+=GetDot(*it,points[idx],*lines.begin(),points[0]);
-		return total;
+		total+=GetArea(*it,points[idx],*lines.begin(),points[0]);
+		return total*.5;
 	}
 
 	double GetWindingNumber(gp_Pnt pnt)
@@ -196,10 +196,6 @@ public:
 	void Add(CompoundSegment* seg, double atx, double aty)
 	{
 		std::list<BoundedCurve*>::iterator it;
-		for(it = seg->lines.begin(); it!= seg->lines.end(); ++it)
-		{
-			lines.push_back(*it);
-		}
 
 		WhichEnd myend = GetWhichEnd(atx,aty);
 		WhichEnd oend = seg->GetWhichEnd(atx,aty);
@@ -210,12 +206,19 @@ public:
 			{
 				firstline = seg->lastline;
 				firstpoint = seg->lastpoint;
+				seg->lines.reverse();
 			}
 			else
 			{
 				firstline = seg->firstline;
 				firstpoint = seg->firstpoint;
 			}
+
+			for(it = seg->lines.begin(); it!= seg->lines.end(); ++it)
+			{
+				lines.push_front(*it);
+			}
+
 		}
 		else
 		{
@@ -227,7 +230,13 @@ public:
 			else
 			{
 				lastline = seg->firstline;
-				lastpoint = seg->lastpoint;
+				lastpoint = seg->firstpoint;
+
+				seg->lines.reverse();
+			}
+			for(it = seg->lines.begin(); it!= seg->lines.end(); ++it)
+			{
+				lines.push_back(*it);
 			}
 		}
 	}

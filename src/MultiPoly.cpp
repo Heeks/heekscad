@@ -164,7 +164,7 @@ void MultiPoly(std::list<CSketch*> sketches)
 	for(int i=0; i < closed_shapes.size(); i++)
 	{
 		closed_shapes[i]->Order();
-		double wnumber = closed_shapes[i]->GetWindingNumber();
+		double area = closed_shapes[i]->GetArea();
 
 		int x=0;
 		x++;
