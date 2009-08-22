@@ -10,7 +10,9 @@
 #include "ObjPropsCanvas.h"
 #include "../interface/PropertyInt.h"
 #include "../interface/PropertyChoice.h"
+#include "../interface/PropertyCheck.h"
 #include "../interface/Tool.h"
+#include "Multipoly.h"
 
 std::string CSketch::m_sketch_order_str[MaxSketchOrderTypes] = {
 	std::string("unknown"),
@@ -27,6 +29,7 @@ std::string CSketch::m_sketch_order_str[MaxSketchOrderTypes] = {
 CSketch::CSketch():m_order(SketchOrderTypeUnknown)
 {
 	m_title = _("Sketch");
+	m_solidify = false;
 }
 
 CSketch::CSketch(const CSketch& c)
@@ -46,6 +49,7 @@ const CSketch& CSketch::operator=(const CSketch& c)
 	color = c.color;
 	m_order = c.m_order;
 	m_title = c.m_title;
+	m_solidify = c.m_solidify;
 
 	return *this;
 }
@@ -63,6 +67,12 @@ static void on_set_order_type(int value, HeeksObj* object)
 			wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
 		}
 	}
+}
+
+static void on_set_solidify(bool value, HeeksObj* object)
+{
+	((CSketch*)object)->m_solidify = value;
+	wxGetApp().Repaint();
 }
 
 static bool SketchOrderAvailable(SketchOrderType old_order, SketchOrderType new_order)
@@ -119,6 +129,72 @@ static bool SketchOrderAvailable(SketchOrderType old_order, SketchOrderType new_
 	return false;
 }
 
+void CSketch::glCommands(bool select, bool marked, bool no_color)
+{
+	ObjList::glCommands(select,marked,no_color);
+	if(!m_solidify)
+		return;
+
+	//TODO: we should really only be doing this when geometry changes
+
+	std::list<CSketch*> sketches;
+	sketches.push_back(this);
+	std::vector<TopoDS_Face> faces = MultiPoly(sketches);
+
+	for(int i=0; i < faces.size(); i++)
+	{
+		double pixels_per_mm = wxGetApp().GetPixelScale();
+		BRepTools::Clean(faces[i]);
+		BRepMesh::Mesh(faces[i], 1/pixels_per_mm);
+
+		glBegin(GL_TRIANGLES);
+
+		StdPrs_ToolShadedShape SST;
+
+		// Get triangulation
+		TopLoc_Location L;
+		Handle_Poly_Triangulation facing = BRep_Tool::Triangulation(faces[i],L);
+		gp_Trsf tr = L;
+
+		if(!facing.IsNull()){
+			Poly_Connect pc(facing);	
+			const TColgp_Array1OfPnt& Nodes = facing->Nodes();
+			const Poly_Array1OfTriangle& triangles = facing->Triangles();
+			TColgp_Array1OfDir myNormal(Nodes.Lower(), Nodes.Upper());
+
+			SST.Normal(faces[i], pc, myNormal);
+			double Umin, Umax, Vmin, Vmax;
+			BRepTools::UVBounds(faces[i],Umin, Umax, Vmin, Vmax);
+
+			Standard_Integer nnn = facing->NbTriangles();					// nnn : nombre de triangles
+			Standard_Integer nt, n1, n2, n3 = 0;						// nt  : triangle courant
+			// ni  : sommet i du triangle courant
+			for (nt = 1; nt <= nnn; nt++)					
+			{
+				if (SST.Orientation(faces[i]) == TopAbs_REVERSED)			// si la face est "reversed"
+					triangles(nt).Get(n1,n3,n2);						// le triangle est n1,n3,n2
+				else 
+					triangles(nt).Get(n1,n2,n3);						// le triangle est n1,n2,n3
+
+				if (true)//TriangleIsValid (Nodes(n1),Nodes(n2),Nodes(n3)) )
+				{
+					gp_Pnt v1 = Nodes(n1).Transformed(tr);
+					gp_Pnt v2 = Nodes(n2).Transformed(tr);
+					gp_Pnt v3 = Nodes(n3).Transformed(tr);
+
+					glNormal3f((float)(myNormal(n1).X()), (float)(myNormal(n1).Y()), (float)(myNormal(n1).Z()));
+					glVertex3f((float)(v1.X()), (float)(v1.Y()), (float)(v1.Z()));
+					glNormal3f((float)(myNormal(n2).X()), (float)(myNormal(n2).Y()), (float)(myNormal(n2).Z()));
+					glVertex3f((float)(v2.X()), (float)(v2.Y()), (float)(v2.Z()));
+					glNormal3f((float)(myNormal(n3).X()), (float)(myNormal(n3).Y()), (float)(myNormal(n3).Z()));
+					glVertex3f((float)(v3.X()), (float)(v3.Y()), (float)(v3.Z()));
+				}
+			}
+		}
+		glEnd();
+	}
+}
+
 void CSketch::GetProperties(std::list<Property *> *list)
 {
 	list->push_back(new PropertyInt(_("Number of elements"), ObjList::GetNumChildren(), this));
@@ -141,6 +217,8 @@ void CSketch::GetProperties(std::list<Property *> *list)
 	}
 		
 	list->push_back ( new PropertyChoice ( _("order"), choices, initial_index, this, on_set_order_type ) );
+
+	list->push_back ( new PropertyCheck( _("solidify"), m_solidify, this, on_set_solidify) );
 
 	ObjList::GetProperties(list);
 }

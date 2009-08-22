@@ -23,6 +23,7 @@ class CSketch:public ObjList
 public:
 	static std::string m_sketch_order_str[MaxSketchOrderTypes];
 	SketchOrderType m_order;
+	bool m_solidify;
 
 	CSketch();
 	CSketch(const CSketch& c);
@@ -47,6 +48,7 @@ public:
 	void OnEditString(const wxChar* str);
 	bool Add(HeeksObj* object, HeeksObj* prev_object);
 	void Remove(HeeksObj* object);
+	void glCommands(bool select, bool marked, bool no_color);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 

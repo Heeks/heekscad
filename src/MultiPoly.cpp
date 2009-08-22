@@ -19,7 +19,7 @@
 
 std::vector<MyLine> shapes;
 extern double tol;
-void MultiPoly(std::list<CSketch*> sketches)
+std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 {
 	tol = wxGetApp().m_geom_tol;
 	shapes.clear();
@@ -208,8 +208,7 @@ void MultiPoly(std::list<CSketch*> sketches)
 	std::vector<std::pair<CompoundSegment*,std::vector<CompoundSegment*> > > gold;
 	find_level(true,gold,closed_shapes,inside_of,std::vector<CompoundSegment*>());
 
-	int y=0;
-	y++;
+	return TopoDSFaceAdaptor(gold);
 }
 
 //This is a recursive function that will analyze the graph for islands and such
@@ -256,4 +255,53 @@ std::vector<CompoundSegment*> find_level(bool odd,
 			retValue.push_back(closed_shapes[i]);
 	}
 	return retValue;
+}
+
+TopoDS_Wire TopoDSWireAdaptor(CompoundSegment* poly)
+{
+	std::list<TopoDS_Edge> edges;
+	poly->GetEdges(edges);
+
+	BRepBuilderAPI_MakeWire wire_maker;
+	std::list<TopoDS_Edge>::iterator It;
+	for(It = edges.begin(); It != edges.end(); It++)
+	{
+		TopoDS_Edge &edge = *It;
+		wire_maker.Add(edge);
+	}
+	return wire_maker.Wire();
+}
+
+std::vector<std::pair<TopoDS_Wire,std::vector<TopoDS_Wire> > > TopoDSWireAdaptor(
+	std::vector<std::pair<CompoundSegment*,std::vector<CompoundSegment*> > > &data)
+{
+	std::vector<std::pair<TopoDS_Wire,std::vector<TopoDS_Wire> > > ret;
+	for(int i=0; i < data.size(); i++)
+	{
+		TopoDS_Wire outside = TopoDSWireAdaptor(data[i].first);
+		std::vector<TopoDS_Wire> insides;
+		for(int j=0; j < data[i].second.size(); j++)
+			insides.push_back(TopoDSWireAdaptor(data[i].second[j]));
+		ret.push_back(std::pair<TopoDS_Wire,std::vector<TopoDS_Wire> >(outside,insides));
+	}
+	return ret;
+}
+
+std::vector<TopoDS_Face> TopoDSFaceAdaptor(
+	std::vector<std::pair<CompoundSegment*,std::vector<CompoundSegment*> > > &data)
+{
+	std::vector<TopoDS_Face> faces;
+	std::vector<std::pair<TopoDS_Wire,std::vector<TopoDS_Wire> > > wires;
+	wires = TopoDSWireAdaptor(data);
+
+	for(int i=0; i < wires.size(); i++)
+	{
+		BRepBuilderAPI_MakeFace makeFace(wires[i].first);
+		for(int j=0; j < wires[i].second.size(); j++)
+			makeFace.Add(wires[i].second[j]);
+
+		faces.push_back(makeFace.Face());
+	}
+
+	return faces;
 }
