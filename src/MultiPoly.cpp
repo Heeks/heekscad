@@ -47,11 +47,11 @@ void MultiPoly(std::list<CSketch*> sketches)
 	Intersector *m_int = new SimpleIntersector();
 	std::map<MyLine*, std::vector<Intersection> > intersections = m_int->Intersect(shapes);
 
-	//TODO: either calculate reasonable values for x_vectors and y_vectors, or fix NearMap to not require it
+	//Make our flashy double hashmap
 	TwoDNearMap bcurves(tol);
 
 	//Create a new list of bounded segment objects. Whose endpoints are locatable via hash
-	//with the exception that the hash requires a search of the 4 adjacent elements(if they exist)
+	//with the exception that the hash returns values within tolerance of the specified point
 	std::map<MyLine*, std::vector<Intersection> >::iterator it2;
 	for(it2 = intersections.begin(); it2 != intersections.end(); ++it2)
 	{
@@ -68,6 +68,7 @@ void MultiPoly(std::list<CSketch*> sketches)
 		}
 	}
 
+	//This gets the hashtable working
 	bcurves.sort();
 
 	std::vector<CompoundSegment*> closed_shapes;
@@ -131,6 +132,8 @@ void MultiPoly(std::list<CSketch*> sketches)
 			//remove from the map
 			bcurves.remove(x_coord,y_coord,seg1);
 			bcurves.remove(x_coord,y_coord,seg2);
+
+			delete seg2;
 		}
 	}
 
@@ -157,10 +160,8 @@ void MultiPoly(std::list<CSketch*> sketches)
 		}
 	}
 
-	//Now that we have all closed shapes, we need to define the relationships. Since we know that they are not intersecting
-	//3 kinds of things can happen. A shape is either inside, enclosing, adjacent, or unrelated to another.
-
-	//Get the closed shapes well ordered
+	//This could be used to reverse the ordering of a closed shape. Getting it to be CW or CCW
+	//Not sure if this is necessary yet. Useful for debugging. Funny areas mean bad polygons
 	for(int i=0; i < closed_shapes.size(); i++)
 	{
 		closed_shapes[i]->Order();
@@ -169,6 +170,12 @@ void MultiPoly(std::list<CSketch*> sketches)
 		int x=0;
 		x++;
 	}
+
+	//Now that we have all closed shapes, we need to define the relationships. Since we know that they are not intersecting
+	//3 kinds of things can happen. A shape is either inside, enclosing, adjacent, or unrelated to another.
+
+	std::vector<std::vector<CompoundSegment*> > inside_of;
+	inside_of.resize(closed_shapes.size());
 
 	for(int i=0; i < closed_shapes.size(); i++)
 	{
@@ -184,10 +191,68 @@ void MultiPoly(std::list<CSketch*> sketches)
 			if(rays%2)
 			{
 				//Polygon J is inside of polygon I
+				inside_of[j].push_back(closed_shapes[i]);
 				int x=0; 
 				x++;
 			}
 		}
 	}
+
+	//Sort these lists for easy comparison
+	for(int i=0; i < inside_of.size(); i++)
+	{
+		std::sort(inside_of[i].begin(),inside_of[i].end());
+	}
+
+	//Now we want to descend into this thing. First find all shapes that are inside of nothing else
+	std::vector<std::pair<CompoundSegment*,std::vector<CompoundSegment*> > > gold;
+	find_level(true,gold,closed_shapes,inside_of,std::vector<CompoundSegment*>());
+
+
 }
 
+//This is a recursive function that will analyze the graph for islands and such
+//It could be sped up by removing elements from closed_shapes and inside_of as the get consumed
+
+std::vector<CompoundSegment*> find_level(bool odd, 
+				std::vector<std::pair<CompoundSegment*,std::vector<CompoundSegment*> > > pRet,
+				std::vector<CompoundSegment*>& closed_shapes, 
+				std::vector<std::vector<CompoundSegment*> >& inside_of, 
+				std::vector<CompoundSegment*> parents)
+{
+	std::vector<CompoundSegment*> retValue;
+
+	for(int i=0; i < closed_shapes.size(); i++)
+	{
+		if(inside_of[i].size() != parents.size())
+			continue;
+
+		bool no_match = false;
+		for(int j=0; j < inside_of[i].size(); j++)
+		{
+			if(inside_of[i][j] != parents[j])
+			{
+				no_match = true;
+				break;
+			}
+		}
+		if(no_match)
+			continue;
+
+		//this closed shape is good to go
+		
+		std::vector<CompoundSegment*> nparents = parents;
+		nparents.push_back(closed_shapes[i]);
+		std::sort(nparents.begin(), nparents.end());
+		
+		std::vector<CompoundSegment*> deletions = find_level(!odd,pRet,closed_shapes,inside_of,nparents);
+
+		if(odd)
+		{
+			pRet.push_back(std::pair<CompoundSegment*,std::vector<CompoundSegment*> >(closed_shapes[i],deletions));
+		}
+		else
+			retValue.push_back(closed_shapes[i]);
+	}
+	return retValue;
+}
