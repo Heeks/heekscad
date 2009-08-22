@@ -271,4 +271,8 @@ public:
 	}
 };
 
-
+std::vector<CompoundSegment*> find_level(bool odd, 
+				std::vector<std::pair<CompoundSegment*,std::vector<CompoundSegment*> > > pRet,
+				std::vector<CompoundSegment*>& closed_shapes, 
+				std::vector<std::vector<CompoundSegment*> >& inside_of, 
+				std::vector<CompoundSegment*> parents);
