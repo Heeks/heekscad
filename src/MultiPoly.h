@@ -18,26 +18,47 @@ public:
 
 	double GetAX()
 	{
-		double dx = line->B.X() - line->A.X();
-		return startu * dx + line->A.X();
+		return GetX(startu);
 	}
 
 	double GetAY()
 	{
+		return GetY(startu);
+	}
+
+	double GetX(double u)
+	{
+		double dx = line->B.X() - line->A.X();
+		return u * dx + line->A.X();
+	}
+
+	double GetY(double u)
+	{
 		double dy = line->B.Y() - line->A.Y();
-		return startu * dy + line->A.Y();
+		return u * dy + line->A.Y();
 	}
 	
 	double GetBX()
 	{
-		double dx = line->B.X() - line->A.X();
-		return endu * dx + line->A.X();
+		return GetX(endu);
 	}
 
 	double GetBY()
 	{
-		double dy = line->B.Y() - line->A.Y();
-		return endu * dy + line->A.Y();
+		return GetY(endu);
+	}
+
+	bool RayIntersects(gp_Pnt pnt)
+	{
+		if((pnt.Y() < GetBY() && pnt.Y() > GetAY())||
+			(pnt.Y() > GetBY() && pnt.Y() < GetAY()))
+		{
+			double u = line->GetU(pnt.X(),pnt.Y());
+			double x = GetX(u);
+			if(x < pnt.X())
+				return true;
+		}
+		return false;
 	}
 
 	gp_Pnt Begin()
@@ -167,10 +188,18 @@ public:
 		return total*.5;
 	}
 
-	double GetWindingNumber(gp_Pnt pnt)
+	int GetRayIntersectionCount(gp_Pnt pnt)
 	{
-		//TODO: we probably need an ordering of all lines in the segment to do this
-		return 0;
+		int intersections=0;
+		std::list<BoundedCurve*>::iterator it;
+		for(it = lines.begin(); it!= lines.end(); ++it)
+		{
+			BoundedCurve* curve = (*it);
+			if(curve->RayIntersects(pnt))
+				intersections++;
+
+		}
+		return intersections;
 	}
 
 	void Order()
