@@ -7,7 +7,7 @@
 
 #include "BentleyOttmann.h"
 
-void MultiPoly(std::list<CSketch*> sketches);
+std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches);
 
 class BoundedCurve
 {
@@ -173,6 +173,16 @@ public:
 		return gPnt1.X()*gPnt2.Y()-gPnt2.X()*gPnt1.Y();
 	}
 
+	void GetEdges(std::list<TopoDS_Edge>& edges)
+	{
+		std::list<BoundedCurve*>::iterator it;
+		for(it = lines.begin(); it!= lines.end(); ++it)
+		{
+			BoundedCurve* curve = (*it);
+			edges.push_back(BRepBuilderAPI_MakeEdge(curve->Begin(), curve->End()));
+		}
+	}
+
 	double GetArea()
 	{
 		double total = 0;
@@ -276,3 +286,6 @@ std::vector<CompoundSegment*> find_level(bool odd,
 				std::vector<CompoundSegment*>& closed_shapes, 
 				std::vector<std::vector<CompoundSegment*> >& inside_of, 
 				std::vector<CompoundSegment*> parents);
+
+std::vector<TopoDS_Face> TopoDSFaceAdaptor(
+	std::vector<std::pair<CompoundSegment*,std::vector<CompoundSegment*> > > &data);
