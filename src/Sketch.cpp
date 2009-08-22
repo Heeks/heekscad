@@ -12,7 +12,7 @@
 #include "../interface/PropertyChoice.h"
 #include "../interface/PropertyCheck.h"
 #include "../interface/Tool.h"
-#include "Multipoly.h"
+#include "MultiPoly.h"
 
 std::string CSketch::m_sketch_order_str[MaxSketchOrderTypes] = {
 	std::string("unknown"),
