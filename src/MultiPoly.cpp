@@ -162,7 +162,7 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 
 	//This could be used to reverse the ordering of a closed shape. Getting it to be CW or CCW
 	//Not sure if this is necessary yet. Useful for debugging. Funny areas mean bad polygons
-	for(int i=0; i < closed_shapes.size(); i++)
+	for(unsigned i=0; i < closed_shapes.size(); i++)
 	{
 		closed_shapes[i]->Order();
 		double area = closed_shapes[i]->GetArea();
@@ -177,7 +177,7 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 	std::vector<std::vector<CompoundSegment*> > inside_of;
 	inside_of.resize(closed_shapes.size());
 
-	for(int i=0; i < closed_shapes.size(); i++)
+	for(unsigned i=0; i < closed_shapes.size(); i++)
 	{
 		for(int j=0; j < closed_shapes.size(); j++)
 		{
@@ -199,7 +199,7 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 	}
 
 	//Sort these lists for easy comparison
-	for(int i=0; i < inside_of.size(); i++)
+	for(unsigned i=0; i < inside_of.size(); i++)
 	{
 		std::sort(inside_of[i].begin(),inside_of[i].end());
 	}
@@ -222,13 +222,13 @@ std::vector<CompoundSegment*> find_level(bool odd,
 {
 	std::vector<CompoundSegment*> retValue;
 
-	for(int i=0; i < closed_shapes.size(); i++)
+	for(unsigned i=0; i < closed_shapes.size(); i++)
 	{
 		if(inside_of[i].size() != parents.size())
 			continue;
 
 		bool no_match = false;
-		for(int j=0; j < inside_of[i].size(); j++)
+		for(unsigned j=0; j < inside_of[i].size(); j++)
 		{
 			if(inside_of[i][j] != parents[j])
 			{
@@ -276,11 +276,11 @@ std::vector<std::pair<TopoDS_Wire,std::vector<TopoDS_Wire> > > TopoDSWireAdaptor
 	std::vector<std::pair<CompoundSegment*,std::vector<CompoundSegment*> > > &data)
 {
 	std::vector<std::pair<TopoDS_Wire,std::vector<TopoDS_Wire> > > ret;
-	for(int i=0; i < data.size(); i++)
+	for(unsigned i=0; i < data.size(); i++)
 	{
 		TopoDS_Wire outside = TopoDSWireAdaptor(data[i].first);
 		std::vector<TopoDS_Wire> insides;
-		for(int j=0; j < data[i].second.size(); j++)
+		for(unsigned j=0; j < data[i].second.size(); j++)
 			insides.push_back(TopoDSWireAdaptor(data[i].second[j]));
 		ret.push_back(std::pair<TopoDS_Wire,std::vector<TopoDS_Wire> >(outside,insides));
 	}
@@ -305,3 +305,4 @@ std::vector<TopoDS_Face> TopoDSFaceAdaptor(
 
 	return faces;
 }
+
