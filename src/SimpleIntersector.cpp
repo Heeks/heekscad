@@ -8,6 +8,14 @@
 
 extern double tol; 
 
+struct IntersectionSort
+{
+     bool operator()(const Intersection &pStart, const Intersection& pEnd)
+     {
+		 return pStart.line->GetU(pStart.X,pStart.Y) < pEnd.line->GetU(pEnd.X,pEnd.Y);
+     }
+};
+
 std::map<MyLine*, std::vector<Intersection> > SimpleIntersector::Intersect(std::vector<MyLine> &lines)
 {
 	tol = wxGetApp().m_geom_tol;
@@ -24,6 +32,13 @@ std::map<MyLine*, std::vector<Intersection> > SimpleIntersector::Intersect(std::
 				intersections[&lines[j]].push_back(Intersection(&lines[i],ir.atX,ir.atY));
 			}
 		}
+	}
+
+	//Sort the intersections by U
+	std::map<MyLine*, std::vector<Intersection> >::iterator it;
+	for(it = intersections.begin(); it != intersections.end(); ++it)
+	{
+		std::sort((*it).second.begin(),(*it).second.end(),IntersectionSort());
 	}
 
 	return intersections;
@@ -44,7 +59,7 @@ IntResult SimpleIntersector::Intersects(MyLine* line1, MyLine* line2)
 	{
 		double atX = line1->A.X() + ua * (line1->B.X() - line1->A.X());
 		double atY = line1->A.Y() + ua * (line1->B.Y() - line1->A.Y());
-		return IntResult(true,atX,atY);
+		return IntResult(true,ua,ub,atX,atY);
 	}
-	return IntResult(false,0,0);
+	return IntResult(false,0,0,0,0);
 }
