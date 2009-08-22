@@ -141,7 +141,7 @@ void CSketch::glCommands(bool select, bool marked, bool no_color)
 	sketches.push_back(this);
 	std::vector<TopoDS_Face> faces = MultiPoly(sketches);
 
-	for(int i=0; i < faces.size(); i++)
+	for(unsigned i=0; i < faces.size(); i++)
 	{
 		double pixels_per_mm = wxGetApp().GetPixelScale();
 		BRepTools::Clean(faces[i]);
