@@ -116,6 +116,7 @@ public:
 		WhichPoint tpoint = firstpoint;
 		firstpoint = lastpoint;
 		lastpoint = tpoint;
+		lines.reverse();
 	}
 
 	WhichEnd GetWhichEnd(double atx, double aty)
@@ -218,6 +219,7 @@ public:
 		//TODO: is it possible that the segments are not in a logical order?
 		gp_Pnt lastpoint = Begin();
 		std::list<BoundedCurve*>::iterator it;
+		points.empty();
 		for(it = lines.begin(); it!= lines.end(); ++it)
 		{
 			if((*it)->Begin().Distance(lastpoint) <= m_tol)
@@ -227,8 +229,17 @@ public:
 			}
 			else
 			{
-				points.push_back(PointB);
-				lastpoint = (*it)->Begin();
+				if((*it)->End().Distance(lastpoint) <= m_tol)
+				{
+					points.push_back(PointB);
+					lastpoint = (*it)->Begin();
+				}
+				else
+				{
+					//Kaboom
+					int x=0;
+					x++;
+				}
 			}
 		}
 	}
@@ -246,12 +257,12 @@ public:
 			{
 				firstline = seg->lastline;
 				firstpoint = seg->lastpoint;
-				seg->lines.reverse();
 			}
 			else
 			{
 				firstline = seg->firstline;
 				firstpoint = seg->firstpoint;
+				seg->lines.reverse();
 			}
 
 			for(it = seg->lines.begin(); it!= seg->lines.end(); ++it)

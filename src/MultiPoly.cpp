@@ -184,16 +184,18 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 	//This could be used to reverse the ordering of a closed shape. Getting it to be CW or CCW
 	//Not sure if this is necessary yet. Useful for debugging. Funny areas mean bad polygons
 
-#ifdef FORCEPOLYGONORDERING
+//#ifdef FORCEPOLYGONORDERING
 	for(unsigned i=0; i < closed_shapes.size(); i++)
 	{
 		closed_shapes[i]->Order();
 		double area = closed_shapes[i]->GetArea();
-
-		int x=0;
-		x++;
+		if(area<0)
+		{
+			closed_shapes[i]->Reverse();
+			closed_shapes[i]->Order();
+		}
 	}
-#endif
+//#endif
 
 	//Now that we have all closed shapes, we need to define the relationships. Since we know that they are not intersecting
 	//3 kinds of things can happen. A shape is either inside, enclosing, adjacent, or unrelated to another.
@@ -301,6 +303,10 @@ void ConcatSegments(double x_coord, double y_coord, CompoundSegment* seg1, Compo
 	bcurves.remove(x_coord,y_coord,seg2);
 
 	delete seg2;
+
+//#ifdef TESTORDERING
+	seg1->Order();
+//#endif
 }
 
 TopoDS_Wire TopoDSWireAdaptor(CompoundSegment* poly)
@@ -373,3 +379,4 @@ void AnalyzeNearMap(TwoDNearMap &bcurves)
 		}
 	}
 }
+
