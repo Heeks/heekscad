@@ -179,7 +179,7 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 
 	for(unsigned i=0; i < closed_shapes.size(); i++)
 	{
-		for(int j=0; j < closed_shapes.size(); j++)
+		for(unsigned j=0; j < closed_shapes.size(); j++)
 		{
 			//We can determine if a shape is inside or outside by finding the winding number of just 1 point with the
 			//entire other polygon
@@ -294,10 +294,10 @@ std::vector<TopoDS_Face> TopoDSFaceAdaptor(
 	std::vector<std::pair<TopoDS_Wire,std::vector<TopoDS_Wire> > > wires;
 	wires = TopoDSWireAdaptor(data);
 
-	for(int i=0; i < wires.size(); i++)
+	for(unsigned i=0; i < wires.size(); i++)
 	{
 		BRepBuilderAPI_MakeFace makeFace(wires[i].first);
-		for(int j=0; j < wires[i].second.size(); j++)
+		for(unsigned j=0; j < wires[i].second.size(); j++)
 			makeFace.Add(wires[i].second[j]);
 
 		faces.push_back(makeFace.Face());
