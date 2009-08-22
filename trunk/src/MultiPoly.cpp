@@ -208,14 +208,15 @@ void MultiPoly(std::list<CSketch*> sketches)
 	std::vector<std::pair<CompoundSegment*,std::vector<CompoundSegment*> > > gold;
 	find_level(true,gold,closed_shapes,inside_of,std::vector<CompoundSegment*>());
 
-
+	int y=0;
+	y++;
 }
 
 //This is a recursive function that will analyze the graph for islands and such
 //It could be sped up by removing elements from closed_shapes and inside_of as the get consumed
 
 std::vector<CompoundSegment*> find_level(bool odd, 
-				std::vector<std::pair<CompoundSegment*,std::vector<CompoundSegment*> > > pRet,
+				std::vector<std::pair<CompoundSegment*,std::vector<CompoundSegment*> > > &pRet,
 				std::vector<CompoundSegment*>& closed_shapes, 
 				std::vector<std::vector<CompoundSegment*> >& inside_of, 
 				std::vector<CompoundSegment*> parents)
