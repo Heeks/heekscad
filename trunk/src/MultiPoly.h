@@ -289,3 +289,4 @@ std::vector<CompoundSegment*> find_level(bool odd,
 
 std::vector<TopoDS_Face> TopoDSFaceAdaptor(
 	std::vector<std::pair<CompoundSegment*,std::vector<CompoundSegment*> > > &data);
+
