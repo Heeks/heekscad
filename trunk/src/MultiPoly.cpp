@@ -172,12 +172,21 @@ void MultiPoly(std::list<CSketch*> sketches)
 
 	for(int i=0; i < closed_shapes.size(); i++)
 	{
-		for(int j=i+1; j < closed_shapes.size(); j++)
+		for(int j=0; j < closed_shapes.size(); j++)
 		{
 			//We can determine if a shape is inside or outside by finding the winding number of just 1 point with the
 			//entire other polygon
 
-			closed_shapes[i]->GetWindingNumber(closed_shapes[j]->Begin());
+			if(i==j)
+				continue;
+
+			int rays = closed_shapes[i]->GetRayIntersectionCount(closed_shapes[j]->Begin());
+			if(rays%2)
+			{
+				//Polygon J is inside of polygon I
+				int x=0; 
+				x++;
+			}
 		}
 	}
 }
