@@ -8,7 +8,6 @@
 #include "BentleyOttmann.h"
 #include "SimpleIntersector.h"
 #include "MultiPoly.h"
-#include "NearMap.h"
 
 //This algorithm takes an array of complex sketches (CSketch* constaining multiple closed paths)
 //And creates a new set of paths that are no longer self intersecting
@@ -57,19 +56,21 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 	{
 		MyLine *tline = (*it2).first;
 		std::vector<Intersection> inter = (*it2).second;
-		double startu=tline->GetU(inter[0].X,inter[0].Y);
-		for(unsigned i=1; i < inter.size(); i++)
+		for(unsigned i=0; i < inter.size()-1; i++)
 		{
-			double newu=tline->GetU(inter[i].X,inter[i].Y);
+			double startu=tline->GetU(inter[i].X,inter[i].Y);
+			double newu=tline->GetU(inter[i+1].X,inter[i+1].Y);
 			CompoundSegment* segment = new CompoundSegment(tline,tol,startu,newu);
-			bcurves.insert(inter[i-1].X,inter[i-1].Y,segment);
 			bcurves.insert(inter[i].X,inter[i].Y,segment);
+			bcurves.insert(inter[i+1].X,inter[i+1].Y,segment);
 			startu = newu;
 		}
 	}
 
 	//This gets the hashtable working
 	bcurves.sort();
+
+	AnalyzeNearMap(bcurves);
 
 	std::vector<CompoundSegment*> closed_shapes;
 
@@ -115,25 +116,8 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 				closed_shapes.push_back(seg1);
 				continue;
 			}
-
-			seg1->Add(seg2,x_coord,y_coord);
-
-			//Must find the pointer at the end of seg2 and change it
-			gp_Pnt begin = seg2->Begin();
-			if(MyIsEqual(begin.X(),x_coord) && MyIsEqual(begin.Y(),y_coord))
-			{
-				gp_Pnt end = seg2->End();
-				bcurves.remap(end.X(),end.Y(),seg2,seg1);
-			}
-			else
-			{
-				bcurves.remap(begin.X(),begin.Y(),seg2,seg1);
-			}
-			//remove from the map
-			bcurves.remove(x_coord,y_coord,seg1);
-			bcurves.remove(x_coord,y_coord,seg2);
-
-			delete seg2;
+			
+			ConcatSegments(x_coord,y_coord,seg1,seg2,bcurves);
 		}
 	}
 
@@ -141,24 +125,60 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 	//Non self intersecting shapes are already in closed_shapes
 	//We could speed this up by regenerating near_map to get rid of removed references
 
-	for(int i=0; i < bcurves.GetVecCount(); i++)
+	bool done=false;
+	while(!done)
 	{
-		OneDNearMap* ptMap = bcurves.GetElement(i);
-		double x_coord = bcurves.GetCoord(i);
-		for(int j=0; j < ptMap->GetVecCount(); j++)
+		bool found=false;
+		for(int i=0; i < bcurves.GetVecCount(); i++)
 		{
-			double y_coord = ptMap->GetCoord(j);
-			if(!ptMap->IsValid(j))
-				continue;
+			OneDNearMap* ptMap = bcurves.GetElement(i);
+			double x_coord = bcurves.GetCoord(i);
+			for(int j=0; j < ptMap->GetVecCount(); j++)
+			{
+				double y_coord = ptMap->GetCoord(j);
+				if(!ptMap->IsValid(j))
+					continue;
 
-			returnvec.clear();
-			bcurves.find(x_coord,y_coord,returnvec);
+				returnvec.clear();
+				bcurves.find(x_coord,y_coord,returnvec);
 
-			//CompoundSegment *segment = (CompoundSegment*)returnvec[0];
+				//for most cases, returnvec should have 4 elements. more complicated cases have an even number > 4
+				//check for elements that are the same, which mean this polygon could terminate here, so terminate it
+				//and merge the other CompoundSegments if there are only two remaining
+				int nfound=0;
+				for(size_t k=0; k < returnvec.size(); k++)
+				{
+					for(size_t l=k+1; l < returnvec.size(); l++)
+					{
+						if(returnvec[k] == returnvec[l])
+						{
+							//this means we have found a closed shape. Remove it from the bcurves and add it to a list of closed shapes
+							//remove from the map
+							bcurves.remove(x_coord,y_coord,returnvec[k]);
+							bcurves.remove(x_coord,y_coord,returnvec[l]);
+							closed_shapes.push_back((CompoundSegment*)returnvec[k]);
+							nfound+=2;
+							found=true;
+						}
+					}
+				}
 
-			//We've got something to look at now. What to do, What to do.
-			//for most cases, returnvec should have 4 elements. more complicated cases have an even number > 4
+				//now we know that no 2 elements in returnvec are equal. 				
+				//make sure there are the right number of elements for our next op
+				if(returnvec.size() - nfound != 2)
+					continue;
+
+				//Quick and dirty way to get the pointers
+				returnvec.clear();
+				bcurves.find(x_coord,y_coord,returnvec);
+
+				//Merge the segments and get them out of this coordinate
+				ConcatSegments(x_coord,y_coord,(CompoundSegment*)returnvec[0],(CompoundSegment*)returnvec[1],bcurves);
+				found=true;
+			}
 		}
+		if(!found)
+			done = true;
 	}
 
 	//This could be used to reverse the ordering of a closed shape. Getting it to be CW or CCW
@@ -261,6 +281,28 @@ std::vector<CompoundSegment*> find_level(bool odd,
 	return retValue;
 }
 
+void ConcatSegments(double x_coord, double y_coord, CompoundSegment* seg1, CompoundSegment* seg2, TwoDNearMap &bcurves)
+{
+	seg1->Add(seg2,x_coord,y_coord);
+
+	//Must find the pointer at the end of seg2 and change it
+	gp_Pnt begin = seg2->Begin();
+	if(MyIsEqual(begin.X(),x_coord) && MyIsEqual(begin.Y(),y_coord))
+	{
+		gp_Pnt end = seg2->End();
+		bcurves.remap(end.X(),end.Y(),seg2,seg1);
+	}
+	else
+	{
+		bcurves.remap(begin.X(),begin.Y(),seg2,seg1);
+	}
+	//remove from the map
+	bcurves.remove(x_coord,y_coord,seg1);
+	bcurves.remove(x_coord,y_coord,seg2);
+
+	delete seg2;
+}
+
 TopoDS_Wire TopoDSWireAdaptor(CompoundSegment* poly)
 {
 	std::list<TopoDS_Edge> edges;
@@ -310,3 +352,24 @@ std::vector<TopoDS_Face> TopoDSFaceAdaptor(
 	return faces;
 }
 
+void AnalyzeNearMap(TwoDNearMap &bcurves)
+{
+	std::vector<void*> returnvec; 
+	for(int i=0; i < bcurves.GetVecCount(); i++)
+	{
+		OneDNearMap* ptMap = bcurves.GetElement(i);
+		double x_coord = bcurves.GetCoord(i);
+		for(int j=0; j < ptMap->GetVecCount(); j++)
+		{
+			double y_coord = ptMap->GetCoord(j);
+			if(!ptMap->IsValid(j))
+				continue;
+
+			returnvec.clear();
+			bcurves.find(x_coord,y_coord,returnvec);
+
+			int x=0;
+			x++;
+		}
+	}
+}
