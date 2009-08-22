@@ -36,7 +36,7 @@ OneDNearMap::OneDNearMap()
 
 OneDNearMap::~OneDNearMap()
 {
-	for(int i=0; i < m_data.size(); i++)
+	for(unsigned i=0; i < m_data.size(); i++)
 		delete m_data[i].second;
 }
 
@@ -98,7 +98,7 @@ void OneDNearMap::remap(double at, void* pOld, void* pNew)
 	//check for occurances of pOld around at and replace
 	std::vector<void**> my_vec;
 	find(at,my_vec);
-	for(int i=0; i < my_vec.size(); i++)
+	for(unsigned i=0; i < my_vec.size(); i++)
 	{
 		if(*my_vec[i] == pOld)
 			*my_vec[i] = pNew;
@@ -109,7 +109,7 @@ void OneDNearMap::find(double at, std::vector<void*>& pRet)
 {
 	std::vector<void**> my_vec;
 	find(at,my_vec);
-	for(int i=0; i < my_vec.size(); i++)
+	for(unsigned i=0; i < my_vec.size(); i++)
 		pRet.push_back(*my_vec[i]);
 }
 
@@ -237,7 +237,7 @@ void TwoDNearMap::remap(double atX, double atY, void* pOld, void* pNew)
 	//Find all Y vectors near this X and pass the remap down
 	std::vector<void*> my_vec;
 	OneDNearMap::find(atX,my_vec);
-	for(int i=0; i < my_vec.size(); i++)
+	for(unsigned i=0; i < my_vec.size(); i++)
 	{
 		OneDNearMap* pMap = (OneDNearMap*)my_vec[i];
 		pMap->remap(atY,pOld,pNew);
@@ -249,7 +249,7 @@ void TwoDNearMap::find(double atX, double atY, std::vector<void*>& pRet)
 {
 	std::vector<void**> my_vec;
 	find(atX,atY,my_vec);
-	for(int i=0; i < my_vec.size(); i++)
+	for(unsigned i=0; i < my_vec.size(); i++)
 		pRet.push_back(*my_vec[i]);
 }
 
@@ -310,3 +310,4 @@ double TwoDNearMap::GetCoord(int vec)
 {
 	return OneDNearMap::GetCoord(vec);
 }
+
