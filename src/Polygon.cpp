@@ -43,7 +43,7 @@ double VecAngle(gp_Vec v1, gp_Vec v2)
 }
 
 
-PolygonDirection Polygon::Direction()
+PolygonDirection CPolygon::Direction()
 {
 	if(m_dir != PolyUndefinedW) return m_dir;
 	if(points.size() == 0){
@@ -1168,7 +1168,7 @@ bool PointsCCW(std::list<IntersectionPoint> &points)
 }
 
 bool UnionPolygons(std::vector<LineSegment> &lines_vector,
-		std::list<Polygon> &result_list)
+		std::list<CPolygon> &result_list)
 {
 	std::cout<<"UnionPolygons(): "<<lines_vector.size()<<" lines"<<std::endl;
 
@@ -1195,10 +1195,10 @@ bool UnionPolygons(std::vector<LineSegment> &lines_vector,
 	return true;
 }
 
-bool UnionPolygons(std::list<Polygon> &polygons_list, std::list<Polygon> &result_list)
+bool UnionPolygons(std::list<CPolygon> &polygons_list, std::list<CPolygon> &result_list)
 {
 	std::vector<LineSegment> lines_vector;
-	for(std::list<Polygon>::const_iterator i = polygons_list.begin();
+	for(std::list<CPolygon>::const_iterator i = polygons_list.begin();
 			i != polygons_list.end(); i++)
 	{
 		for(std::list<gp_Pnt>::const_iterator j = i->begin();
@@ -1220,8 +1220,8 @@ with many test cases but failed with real-life data, for some unknown reason.
 class Intersection
 {
 public:
-	std::list<Polygon>::const_iterator ipoly_a;
-	std::list<Polygon>::const_iterator ipoly_b;
+	std::list<CPolygon>::const_iterator ipoly_a;
+	std::list<CPolygon>::const_iterator ipoly_b;
 	//first points of the lines intersecting, from the two polygons
 	std::list<gp_Pnt>::const_iterator ipoint_a;
 	std::list<gp_Pnt>::const_iterator ipoint_b;
@@ -1237,8 +1237,8 @@ public:
 		p = i.p;
 		d = i.d;
 	}
-	Intersection(std::list<Polygon>::const_iterator p_ipoly_a,
-			std::list<Polygon>::const_iterator p_ipoly_b,
+	Intersection(std::list<CPolygon>::const_iterator p_ipoly_a,
+			std::list<CPolygon>::const_iterator p_ipoly_b,
 			std::list<gp_Pnt>::const_iterator p_ipoint_a,
 			std::list<gp_Pnt>::const_iterator p_ipoint_b,
 			gp_Pnt p_p,
@@ -1256,14 +1256,14 @@ public:
 
 //TODO: make this use the new SweepLine
 
-bool UnionPolygons_old(std::list<Polygon> & polygons_list,
-		std::list<Polygon> & result_list)
+bool UnionPolygons_old(std::list<CPolygon> & polygons_list,
+		std::list<CPolygon> & result_list)
 {
-	std::list< std::list<Polygon>::const_iterator > used_polygons;
+	std::list< std::list<CPolygon>::const_iterator > used_polygons;
 	int polygon_total_count = polygons_list.size();
 	int polygon_use_count = 0;
 	
-	for(std::list<Polygon>::iterator ipoly = polygons_list.begin();
+	for(std::list<CPolygon>::iterator ipoly = polygons_list.begin();
 			ipoly != polygons_list.end(); ipoly++)
 	{
 		if(ipoly->Direction() != PolyCW){
@@ -1273,7 +1273,7 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 		}
 	}
 	
-	for(std::list<Polygon>::const_iterator ipoly = polygons_list.begin();
+	for(std::list<CPolygon>::const_iterator ipoly = polygons_list.begin();
 			ipoly != polygons_list.end(); ipoly++)
 	{
 		//if(UPODEBUG)std::cout<<"loop level 1"<<std::endl;
@@ -1285,7 +1285,7 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 		if(UPODEBUG)std::cout<<"starting with ipoly = ";
 		ipoly->Print();
 
-		std::list< std::list<Polygon>::const_iterator > union_used_polygons;
+		std::list< std::list<CPolygon>::const_iterator > union_used_polygons;
 		std::list<gp_Pnt> union_points;
 		std::list<gp_Pnt> intersection_points;
 		std::list<gp_Pnt>::const_iterator ipoint;
@@ -1349,7 +1349,7 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 						if(UPODEBUG)std::cout<<std::endl;
 						std::list<gp_Pnt> points_stripped;
 						points_stripped.insert(points_stripped.end(), findresult, union_points.end());
-						Polygon polygon(points_stripped);
+						CPolygon polygon(points_stripped);
 						//Polygon polygon(union_points);
 						polygon.name = ss_name.str();
 						if(UPODEBUG)std::cout<<"adding polygon: "<<polygon.str()<<std::endl;
@@ -1391,7 +1391,7 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 			std::list<Intersection*> is_list;
 
 			//loop through every polygon
-			for(std::list<Polygon>::const_iterator b_ipoly = polygons_list.begin();
+			for(std::list<CPolygon>::const_iterator b_ipoly = polygons_list.begin();
 					b_ipoly != polygons_list.end(); b_ipoly++)
 			{
 				//skip the already used ones
@@ -1601,7 +1601,7 @@ union_used_polygons.clear();
 							std::list<gp_Pnt> points_stripped;
 							points_stripped.insert(points_stripped.end(), findresult, union_points.end());
 							if(UPODEBUG)std::cout<<"adding polygon = ";
-							Polygon polygon(points_stripped);
+							CPolygon polygon(points_stripped);
 							//Polygon polygon(union_points);
 							polygon.name = ss_name.str();
 							if(UPODEBUG)std::cout<<"adding polygon: "<<polygon.str()<<std::endl;
