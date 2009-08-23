@@ -109,7 +109,7 @@ class RS274X
 		}; // End Aperture class defintion.
 		
 	public:
-		typedef Polygon Polygon_t;
+		typedef CPolygon Polygon_t;
 	private:
 
 		/**

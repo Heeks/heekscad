@@ -142,11 +142,11 @@ bool RS274X::Read( const char *p_szFileName, bool undoably )
 
 		delete [] memblock;
 
-		std::cout<<"collecting Polygons from polygons and traces"<<std::endl;
+		//std::cout<<"collecting Polygons from polygons and traces"<<std::endl;
 
-		std::list<Polygon> polygons_list;
+		std::list<CPolygon> polygons_list;
 
-		for (std::list<Polygon>::iterator it_poly = m_polygons.begin(); it_poly != m_polygons.end(); it_poly++)
+		for (std::list<CPolygon>::iterator it_poly = m_polygons.begin(); it_poly != m_polygons.end(); it_poly++)
 		{
 			//std::cout<<"\t"<<it_poly->str()<<": "<<PDstr(it_poly->Direction())<<std::endl;
 			//at least the last polygon should be empty, so skip it
@@ -172,10 +172,11 @@ bool RS274X::Read( const char *p_szFileName, bool undoably )
 
 		for (Traces_t::iterator l_itTrace = m_traces.begin(); l_itTrace != m_traces.end(); l_itTrace++ )
 		{
-			Polygon polygon;
+			CPolygon polygon;
 			l_itTrace->MakePolygon(polygon);
 			if(polygon.Direction() == PolyCCW)
 			{
+
 				std::cout<<"\treversing polygon"<<std::endl;
 				polygon.reverse();
 			}
@@ -197,14 +198,14 @@ bool RS274X::Read( const char *p_szFileName, bool undoably )
 			polygons_list.push_back(polygon);
 		}
 
-		const char *polygon_names[] =
+		/*const char *polygon_names[] =
 		{
 			"kalle","ike","happo","taateli","aku","hessu","iines","roope","mikki",
 			"minni","kakka","kirje","biltema","sp-ele","paristo","teippi","ampuu"
 		};
 		int polygon_name_count = sizeof(polygon_names)/sizeof(char*);
 		int i = 0;
-		for(std::list<Polygon>::iterator ipoly = polygons_list.begin();
+		for(std::list<CPolygon>::iterator ipoly = polygons_list.begin();
 				ipoly != polygons_list.end(); ipoly++)
 		{
 			if(i < polygon_name_count) ipoly->name = polygon_names[i];
@@ -215,26 +216,26 @@ bool RS274X::Read( const char *p_szFileName, bool undoably )
 				ipoly->name = ss.str();
 			}
 			i++;
-		}
+		}*/
 
-		std::list<Polygon> result_list;
+		std::list<CPolygon> result_list;
 		//bool union_succeeded = UnionPolygons(polygons_list, result_list);
 		bool union_succeeded = UnionPolygons_old(polygons_list, result_list);
 
-		std::cout<<"polygons_list:"<<std::endl;
-		for(std::list<Polygon>::iterator i=polygons_list.begin(); i!=polygons_list.end(); i++)
+		/*std::cout<<"polygons_list:"<<std::endl;
+		for(std::list<CPolygon>::iterator i=polygons_list.begin(); i!=polygons_list.end(); i++)
 		{
 			std::cout<<"\t"<<i->str()<<": "<<PDstr(i->Direction())<<std::endl;
 		}
 
 		std::cout<<"result_list:"<<std::endl;
-		for(std::list<Polygon>::iterator i=result_list.begin(); i!=result_list.end(); i++)
+		for(std::list<CPolygon>::iterator i=result_list.begin(); i!=result_list.end(); i++)
 		{
 			std::cout<<"\t"<<i->str()<<": "<<PDstr(i->Direction())<<std::endl;
-		}
+		}*/
 
 
-		for (std::list<Polygon>::iterator ipoly = result_list.begin(); ipoly != result_list.end(); ipoly++)
+		for (std::list<CPolygon>::iterator ipoly = result_list.begin(); ipoly != result_list.end(); ipoly++)
 		{
 			if(ipoly->empty()) continue;
 			CSketch *sketch = ipoly->MakeSketch();
@@ -244,7 +245,7 @@ bool RS274X::Read( const char *p_szFileName, bool undoably )
 			else wxGetApp().Add(sketch, NULL);
 		}
 
-		/*for (std::list<Polygon>::iterator ipoly = polygons_list.begin(); ipoly != polygons_list.end(); ipoly++)
+		/*for (std::list<CPolygon>::iterator ipoly = polygons_list.begin(); ipoly != polygons_list.end(); ipoly++)
 		{
 			if(ipoly->empty()) continue;
 			ipoly->Move(gp_Vec(50., 0., 0.));
