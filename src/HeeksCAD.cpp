@@ -139,6 +139,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_min_correlation_factor = 0.75;
 	m_max_scale_threshold = 1.5;
 	m_number_of_sample_points = 10;
+	m_property_grid_validation = false;
 }
 
 HeeksCADapp::~HeeksCADapp()
