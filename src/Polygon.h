@@ -406,16 +406,16 @@ private:
 	Direction m_dir;
 };
 
-class Polygon
+class CPolygon
 {
 public:
 	std::string name; //for use of UnionPolygons
 
-	Polygon()
+	CPolygon()
 	{
 		m_dir = PolyUndefinedW;
 	}
-	Polygon(std::list<gp_Pnt> &p_points)
+	CPolygon(std::list<gp_Pnt> &p_points)
 	{
 		points = p_points;
 		m_dir = PolyUndefinedW;
@@ -528,11 +528,11 @@ private:
 unsigned int SweepLine(std::vector<LineSegment> &lines_vector);
 
 bool UnionPolygons(std::vector<LineSegment> &lines_vector,
-		std::list<Polygon> & result_list);
+		std::list<CPolygon> & result_list);
 
-bool UnionPolygons(std::list<Polygon> & polygons_list,
-		std::list<Polygon> & result_list);
+bool UnionPolygons(std::list<CPolygon> & polygons_list,
+		std::list<CPolygon> & result_list);
 
-bool UnionPolygons_old(std::list<Polygon> & polygons_list,
-		std::list<Polygon> & result_list);
+bool UnionPolygons_old(std::list<CPolygon> & polygons_list,
+		std::list<CPolygon> & result_list);
 
