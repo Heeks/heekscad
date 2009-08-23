@@ -14,9 +14,15 @@ that will never work.
 
 #include "Polygon.h"
 
+//UnionPolygons_old debug
+#ifndef UPODEBUG
+	#define UPODEBUG 0
+#endif
+//general debug
 #ifndef DEBUG
 	#define DEBUG 1
 #endif
+//SweepLine debug
 #ifndef SLDEBUG
 	#define SLDEBUG 0
 #endif
@@ -82,6 +88,398 @@ PolygonDirection Polygon::Direction()
 	if(angle_sum < 0.0) m_dir = PolyCW;
 	else m_dir = PolyCCW;
 	return m_dir;
+}
+
+class LineTreeNode;
+std::string NodeInfo(LineTreeNode *n);
+
+class LineTreeNode
+{
+public:
+	LineTreeNode(LineTreeNode *p_parent)
+			: m_ptr(NULL), m_left(NULL), m_right(NULL), m_parent(p_parent)
+	{
+		//std::cout<<"created new LineTreeNode with parent="<<p_parent<<std::endl;
+	}
+	/*~LineTreeNode()
+	{
+		//This is a very bad idea when deleting single nodes which have children
+		Clear();
+	}*/
+	LineTreeNode * Insert(LineSegment *p_ptr, double x)
+	{
+		//std::cout<<"LineTreeNode::Insert(): current node: m_ptr="<<m_ptr<<std::endl;
+		if(m_ptr == NULL)
+		{
+			m_ptr = p_ptr;
+			return this;
+		}
+		if(m_ptr == p_ptr)
+		{
+			return this;
+		}
+		if(p_ptr->IsUpperOrEqualAfterX(*m_ptr, x))
+		//if(p_ptr->IsUpperOrEqual(*m_ptr))
+		//if(m_ptr->y_value_at(x) >= p_ptr->y_value_at(x))
+		//if(IsUpperOrEqual(m_ptr->left(), m_ptr->right(), p_ptr->left()))
+		{
+			if(m_right == NULL) m_right = new LineTreeNode(this);
+			return m_right->Insert(p_ptr, x);
+		}
+		else{
+			if(m_left == NULL) m_left = new LineTreeNode(this);
+			return m_left->Insert(p_ptr, x);
+		}
+	}
+	LineTreeNode * Search(LineSegment *p_ptr, double x)
+	{
+		if(m_ptr == NULL)
+		{
+			//std::cout<<"LineTreeNode::Search("<<p_ptr->str()<<"): returning NULL"<<std::endl;
+			return NULL;
+		}
+		if(m_ptr == p_ptr)
+		{
+			//std::cout<<"LineTreeNode::Search("<<p_ptr->str()<<"): returning this"<<std::endl;
+			return this;
+		}
+		if(p_ptr->IsUpperOrEqualAfterX(*m_ptr, x))
+		//if(p_ptr->IsUpperOrEqual(*m_ptr))
+		//if(m_ptr->y_value_at(lastx) >= p_ptr->y_value_at(lastx))
+		//if(IsUpperOrEqual(m_ptr->left(), m_ptr->right(), p_ptr->left()))
+		{
+			if(m_right == NULL){
+				/*std::cout<<"LineTreeNode::Search("<<p_ptr->str()
+						<<"): returning NULL (m_right == NULL)"<<std::endl;*/
+				return NULL;
+			}
+			/*std::cout<<"LineTreeNode::Search("<<p_ptr->str()
+					<<"): returning m_right->Search("<<p_ptr->str()<<")"<<std::endl;*/
+			return m_right->Search(p_ptr, x);
+		}
+		else{
+			if(m_left == NULL){
+				/*std::cout<<"LineTreeNode::Search("<<p_ptr->str()
+						<<"): returning NULL (m_left == NULL)"<<std::endl;*/
+				return NULL;
+			}
+			/*std::cout<<"LineTreeNode::Search("<<p_ptr->str()
+					<<"): returning m_left->Search("<<p_ptr->str()<<")"<<std::endl;*/
+			return m_left->Search(p_ptr, x);
+		}
+	}
+	void SearchRightPoint(const gp_Pnt &p, std::list<LineTreeNode*> &result)
+	{
+		if(m_ptr == NULL)
+		{
+			return;
+		}
+		if(m_ptr->right().IsEqual(p, TOLERANCE))
+		{
+			result.push_back(this);
+		}
+		if(m_left != NULL){
+			m_left->SearchRightPoint(p, result);
+		}
+		if(m_right != NULL){
+			m_right->SearchRightPoint(p, result);
+		}
+	}
+	void SearchInteriorPoint(const gp_Pnt &p, std::list<LineTreeNode*> &result)
+	{
+		/*if(SLDEBUG)std::cout<<" SearchInteriorPoint(p=("<<p.X()<<","<<p.Y()
+				<<"), result): m_ptr="<<(m_ptr?m_ptr->str():"NULL")<<std::endl;*/
+		if(m_ptr == NULL)
+		{
+			return;
+		}
+		if(m_ptr->HasPointInterior(p))
+		{
+			result.push_back(this);
+		}
+		if(m_left != NULL){
+			m_left->SearchInteriorPoint(p, result);
+		}
+		if(m_right != NULL){
+			m_right->SearchInteriorPoint(p, result);
+		}
+	}
+	LineTreeNode *Lower()
+	{
+		//std::cout<<"LineTreeNode::Lower()"<<std::endl;
+		LineTreeNode *n;
+		//The nearest lower one is one to the left and then as far to the
+		//right as is possible.
+		if(m_left)
+		{
+			n = m_left;
+			while(n->m_right) n = n->m_right;
+			return n;
+		}
+		else if(m_parent == NULL) return NULL;
+		//The next lower one is, when going towards the root, the first one,
+		//which has the child node as its right child.
+		n = this;
+		for(;;)
+		{
+			if(n->m_parent == NULL) return NULL;
+			if(n == n->m_parent->m_right) return n->m_parent;
+			n = n->m_parent;
+		}
+	}
+	LineTreeNode *Higher()
+	{
+		//std::cout<<"LineTreeNode::Higher()"<<std::endl;
+		LineTreeNode *n;
+		//The nearest higher one is one to the right and then as far to the
+		//left as is possible.
+		if(m_right)
+		{
+			n = m_right;
+			while(n->m_left) n = n->m_left;
+			return n;
+		}
+		else if(m_parent == NULL) return NULL;
+		//The next higher one is, when going towards the root, the first one,
+		//which has the child node as its left child.
+		n = this;
+		for(;;)
+		{
+			if(n->m_parent == NULL) return NULL;
+			if(n == n->m_parent->m_left) return n->m_parent;
+			n = n->m_parent;
+		}
+	}
+	LineTreeNode * Lowest()
+	{
+		if(m_left == NULL){
+			if(m_ptr == NULL) return NULL;
+			return this;
+		}
+		return m_left->Lowest();
+	}
+	LineTreeNode * Highest()
+	{
+		if(m_right == NULL){
+			if(m_ptr == NULL) return NULL;
+			return this;
+		}
+		return m_right->Highest();
+	}
+	void Clear()
+	{
+		if(m_left != NULL)
+		{
+			m_left->Clear();
+			delete m_left;
+		}
+		if(m_right != NULL)
+		{
+			m_right->Clear();
+			delete m_right;
+		}
+	}
+	void Print()
+	{
+		Print(0);
+		/*if(m_ptr != NULL) std::cout<<m_ptr->str()<<std::endl;
+		if(m_left != NULL)
+		{
+			//std::cout<<"Print going left:"<<std::endl;
+			m_left->Print();
+		}
+		if(m_right != NULL)
+		{
+			//std::cout<<"Print going right:"<<std::endl;
+			m_right->Print();
+		}*/
+	}
+	void Print(int level)
+	{
+		if(level==0) std::cout<<"------------------------"<<std::endl;
+		if(m_right != NULL)
+		{
+			if(m_ptr == NULL) std::cout<<"\tshouldn't be: "
+					"m_ptr == NULL && m_right != NULL"<<std::endl;
+			//std::cout<<"Print going right:"<<std::endl;
+			if(m_right->m_parent != this) std::cout<<"\tshouldn't be:"
+					" m_right->m_parent == "<<NodeInfo(m_right->m_parent)
+					<<" != this"<<std::endl;
+			m_right->Print(level+1);
+		}
+		if(m_ptr != NULL)
+		{
+			//for(int i=0; i<level; i++) std::cout<<" ";
+			if(level==0)
+			{
+				if(m_parent != NULL) std::cout<<"\tshoudn't be:"
+						" m_parent == "<<NodeInfo(m_parent)
+						<<" != NULL"<<std::endl;
+			}
+			if(m_ptr == NULL) std::cout<<"\tshouldn't be: "
+					"m_ptr == NULL"<<std::endl;
+			std::cout<<level;
+			for(int i=0; i<level; i++) std::cout<<"  ";
+			if(m_parent == NULL) std::cout<<" P";
+			else if(m_parent->m_left == this) std::cout<<"'L";
+			else if(m_parent->m_right == this) std::cout<<".R";
+			else std::cout<<"EE";
+			std::cout<<" ";
+			for(int i=0; i<(7-level); i++) std::cout<<"- ";
+			//std::cout<<m_ptr->str()<<std::endl;
+			std::cout<<m_ptr->str()<<" this="<<int(this)<<std::endl;
+		}
+		else
+		{
+			if(level==0) std::cout<<"0   ";
+			std::cout<<"NULL"<<std::endl;
+		}
+		if(m_left != NULL)
+		{
+			if(m_ptr == NULL) std::cout<<"\tshouldn't be: "
+					"m_ptr == NULL && m_left != NULL"<<std::endl;
+			//std::cout<<"Print going left:"<<std::endl;
+			if(m_left->m_parent != this) std::cout<<"\tshoudn't be:"
+					" m_left->m_parent == "<<NodeInfo(m_left->m_parent)
+					<<" != this"<<std::endl;
+			m_left->Print(level+1);
+		}
+		if(level==0) std::cout<<"------------------------"<<std::endl;
+	}
+	LineSegment * m_ptr;
+		LineTreeNode * m_left;
+	LineTreeNode * m_right;
+	LineTreeNode * m_parent;
+};
+
+std::string NodeInfo(LineTreeNode *n)
+{
+	std::stringstream ss;
+	if(n==NULL) ss<<"[NULL]";
+	else{
+		ss<<n->m_ptr->str();
+	}
+	return ss.str();
+}
+
+void RemoveLineTreeNode(LineTreeNode * & tree, LineTreeNode * n)
+{
+	//std::cout<<"RemoveLineTreeNode(tree="<<int(tree)<<",n="<<int(n)<<")"<<std::endl;
+	//std::cout<<"RemoveLineTreeNode(tree="<<NodeInfo(tree)<<",n="<<NodeInfo(n)<<")"<<std::endl;
+	if(n->m_left == NULL && n->m_right == NULL)
+	{
+		//it has no children
+		if(n->m_parent)
+		{
+			//set parent to know it no longer exists
+			if(n->m_parent->m_right == n) n->m_parent->m_right = NULL;
+			if(n->m_parent->m_left == n) n->m_parent->m_left = NULL;
+			//delete it
+			delete n;
+		}
+		else
+		{
+			//it is the root node, so it doesn't have a parent.
+			//just change it's value to nothing
+			n->m_ptr = NULL;
+		}
+	}
+	else if(n->m_left != NULL && n->m_right == NULL)
+	{
+		if(n->m_parent)
+		{
+			//set its parent's pointer to point to the left child of it
+			if(n->m_parent->m_left == n) n->m_parent->m_left = n->m_left;
+			if(n->m_parent->m_right == n) n->m_parent->m_right = n->m_left;
+		}
+		//set the child to know who its parent is now
+		n->m_left->m_parent = n->m_parent;
+		if(n == tree)
+		{
+			tree = n->m_left;
+		}
+		delete n;
+	}
+	else if(n->m_right != NULL && n->m_left == NULL)
+	{
+		if(n->m_parent)
+		{
+			//set its parent's pointer to point to the right child of it
+			if(n->m_parent->m_right == n) n->m_parent->m_right = n->m_right;
+			if(n->m_parent->m_left == n) n->m_parent->m_left = n->m_right;
+		}
+		//set the child to know who its parent is now
+		n->m_right->m_parent = n->m_parent;
+		if(n == tree)
+		{
+			tree = n->m_right;
+		}
+		delete n;
+	}
+	else
+	{
+		//it has both children
+		//find the lowest value of the right subtree (=nearest higher)
+		LineTreeNode * m = n->m_right;
+		while(m->m_left != NULL) m = m->m_left;
+		//set the pointers right
+		if(n->m_parent)
+		{
+			if(n->m_parent->m_left == n) n->m_parent->m_left = m;
+			if(n->m_parent->m_right == n) n->m_parent->m_right = m;
+		}
+		if(m->m_parent)
+		{
+			if(m->m_parent != n){
+				//if m is the left child of it's parent
+				if(m->m_parent->m_left == m)
+				{
+					//if m doesn't have a right child, m can be completely
+					//removed (it doesn't have a left one either)
+					if(m->m_right == NULL)
+					{
+						m->m_parent->m_left = NULL;
+					}
+					//because m doesn't have a left child, the right child can
+					//be easily moved to the old place of m
+					if(m->m_right) m->m_right->m_parent = m->m_parent;
+					m->m_parent->m_left = m->m_right;
+				}
+				//if m is the right child of it's parent
+				if(m->m_parent->m_right == m)
+				{
+					//if m doesn't have a right child, m can be completely
+					//removed (it doesn't have a left one either)
+					if(m->m_right == NULL)
+					{
+						m->m_parent->m_right = NULL;
+					}
+					//because m doesn't have a left child, the right child can
+					//be easily moved to the old place of m
+					if(m->m_right) m->m_right->m_parent = m->m_parent;
+					m->m_parent->m_right = m->m_right;
+				}
+			}
+		}
+		else std::cout<<"RemoveLineTreeNode(): shouldn't happen: m->m_parent==NULL"<<std::endl;
+		/*//TODO: what if m->m_parent has a right child?
+		//- then m->m_right should be added at the first NULL point at path
+		//  m->m_parent->m_right->m_left->m_left->m_left...
+		if(m->m_right) m->m_right->m_parent = m->m_parent;*/
+		if(n == tree) tree = m;
+		n->m_left->m_parent = m;
+		m->m_left = n->m_left;
+		if(n->m_right != m) m->m_right = n->m_right;
+		m->m_parent = n->m_parent;
+		if(n->m_left && n->m_left != m) n->m_left->m_parent = m;
+		if(n->m_right && n->m_right != m) n->m_right->m_parent = m;
+		//delete the current one
+		delete n;
+	}
+	/*if(SLDEBUG){
+		std::cout<<"tree:"<<std::endl;
+		tree->Print();
+	}*/
 }
 
 enum SweepEventType
@@ -159,7 +557,7 @@ public:
 	gp_Pnt ip;
 };
 
-void InsertToStatus(std::list<LineSegment*> &status, LineSegment *s, gp_Pnt &p)
+/*void InsertToStatus(std::list<LineSegment*> &status, LineSegment *s, gp_Pnt &p)
 {
 	//status has all the lines going underneath the sweep line,
 	//the highest y first
@@ -200,7 +598,7 @@ void InsertToStatus(std::list<LineSegment*> &status, LineSegment *s, gp_Pnt &p)
 	{
 		if(SLDEBUG)std::cout<<"\t\t"<<(*i)->str()<<std::endl;
 	}
-}
+}*/
 
 void FindNewEvent(std::vector<LineSegment> &lines_vector,
 		std::set<SweepEvent> &event_queue,
@@ -208,9 +606,6 @@ void FindNewEvent(std::vector<LineSegment> &lines_vector,
 {
 	IntersectionInfo info = s1->intersects(*s2);
 	if(info.t == NoIntersection) return;
-	//TODO: "or on it and below the current event point"
-	//      means info.p.Y()<p.Y() or what?
-	//if(!(info.p.X() > p.X() || (info.p.X() == p.X() && info.p.Y() < p.Y())))
 	if(!(info.p.X() > p.X() || (dabs(info.p.X() - p.X()) < TOLERANCE
 			&& info.p.Y() < p.Y())))
 		return;
@@ -226,42 +621,63 @@ void FindNewEvent(std::vector<LineSegment> &lines_vector,
 
 void HandleEvent(std::vector<LineSegment> &lines_vector,
 		std::set<SweepEvent> &event_queue,
-		std::list<LineSegment*> &status, const SweepEvent &ep)
+		LineTreeNode * & status, const SweepEvent &ep, double oldx,
+		unsigned int &num_intersection_points)
 {
 	gp_Pnt p;
 	ep.GetPoint(p);
 	if(SLDEBUG)std::cout<<"HandleEvent(): "<<ep.str()<<std::endl;
-	std::list<LineSegment*> left, right;
+	//if(SLDEBUG)std::cout<<"\tstatus="<<int(status)<<std::endl;
+	std::list<LineSegment*> left, right, contain;
 	
 	if(SLDEBUG)std::cout<<"\tstatus:"<<std::endl;
-	for(std::list<LineSegment*>::iterator i = status.begin();
+	if(SLDEBUG)status->Print();
+	/*for(std::list<LineSegment*>::iterator i = status.begin();
 			i != status.end(); i++)
 	{
 		if(SLDEBUG)std::cout<<"\t\t"<<(*i)->str()<<std::endl;
-	}
-
+	}*/
+	
+	//find the lines whose left points are at this point
 	for(std::vector<LineSegment>::iterator i = lines_vector.begin();
 			i != lines_vector.end(); i++)
 	{
-		//if(i->left().X() == p.X() && i->left().Y() == p.Y())
 		if(i->left().IsEqual(p, TOLERANCE)){
-			std::list<LineSegment*>::iterator
+			/*std::list<LineSegment*>::iterator
 				j = find(status.begin(), status.end(), &(*i));
-			if(j != status.end()){
+			if(j != status.end()){*/
+			LineTreeNode *node = status->Search(&(*i), oldx);
+			if(node != NULL){
 				if(SLDEBUG)std::cout<<"EE\t\tline.left==p but line is already in status"
 						<<std::endl;
 				continue;
 			}
 			left.push_back(&(*i));
 		}
-		//TODO: maybe for vertical segments, the right endpoint shouldn't exist
-		//if(i->right().X() == p.X() && i->right().Y() == p.Y())
-		if(i->right().IsEqual(p, TOLERANCE))
-			right.push_back(&(*i));
+		/*if(i->right().IsEqual(p, TOLERANCE))
+			right.push_back(&(*i));*/
+	}
+
+	//Find the lines whose left points are at this point.
+	//They are all found in status.
+	std::list<LineTreeNode*> right_nodes;
+	status->SearchRightPoint(p, right_nodes);
+	for(std::list<LineTreeNode*>::iterator i = right_nodes.begin();
+			i != right_nodes.end(); i++)
+	{
+		right.push_back((*i)->m_ptr);
 	}
 	
 	//search all the segments in status that contain p and add them to contain
-	std::list<LineSegment*> contain;
+	std::list<LineTreeNode*> contain_nodes;
+	status->SearchInteriorPoint(p, contain_nodes);
+	for(std::list<LineTreeNode*>::iterator i = contain_nodes.begin();
+			i != contain_nodes.end(); i++)
+	{
+		contain.push_back((*i)->m_ptr);
+	}
+
+	/*std::list<LineSegment*> contain;
 	for(std::list<LineSegment*>::iterator i = status.begin();
 			i != status.end(); i++)
 	{
@@ -271,18 +687,7 @@ void HandleEvent(std::vector<LineSegment> &lines_vector,
 		{
 			contain.push_back(*i);
 		}
-		
-		/*//don't take those that have it 
-		j = find(left.begin(), left.end(), (*i));
-		if(j != left.end()) continue;
-		j = find(right.begin(), right.end(), (*i));
-		if(j != right.end()) continue;
-
-		if((*i)->HasPoint(p))
-		{
-			contain.push_back(*i);
-		}*/
-	}
+	}*/
 
 	if(ep.t == IntersectionEvent && contain.size() < 2)
 	{
@@ -315,6 +720,7 @@ void HandleEvent(std::vector<LineSegment> &lines_vector,
 	if(left.size() + right.size() + contain.size() > 1)
 	{
 		//here be intersections!
+		num_intersection_points++;
 		if(SLDEBUG)std::cout<<"\tthere are intersections at this point."<<std::endl;
 		std::list<LineSegment*> all_at_point;
 		all_at_point.insert(all_at_point.end(), left.begin(), left.end());
@@ -339,37 +745,59 @@ void HandleEvent(std::vector<LineSegment> &lines_vector,
 	if(SLDEBUG)std::cout<<"\tremoving right and contain from status"<<std::endl;
 
 	//remove (right U contain) from status
+	//right
 	for(std::list<LineSegment*>::iterator i = right.begin();
 			i != right.end(); i++)
 	{
+		/*
 		std::list<LineSegment*>::iterator
 				j = find(status.begin(), status.end(), *i);
 		if(j != status.end()) status.erase(j);
 		else if(SLDEBUG)std::cout<<"\t\tdid not find "<<(*i)->str()<<std::endl;
 		
 		j = find(status.begin(), status.end(), *i);
-		if(j != status.end()) if(SLDEBUG)std::cout<<"EE\t\tthere are multiple copies of"
+		if(j != status.end()) if(SLDEBUG)
+				if(SLDEBUG)std::cout<<"EE\t\tthere are multiple copies of"
+				" the same line in status"<<std::endl;
+		*/
+		LineTreeNode *n = status->Search(*i, oldx);
+		if(n != NULL) RemoveLineTreeNode(status, n);
+		else if(SLDEBUG)std::cout<<"\t\tdid not find "<<(*i)->str()<<std::endl;
+		n = status->Search(*i, oldx);
+		if(n != NULL) if(SLDEBUG)std::cout<<"EE\t\tthere are multiple copies of"
 				" the same line in status"<<std::endl;
 	}
+	//contain
 	for(std::list<LineSegment*>::iterator i = contain.begin();
 			i != contain.end(); i++)
 	{
+		/*
 		std::list<LineSegment*>::iterator
 				j = find(status.begin(), status.end(), *i);
 		if(j != status.end()) status.erase(j);
 		else if(SLDEBUG)std::cout<<"\t\tdid not find "<<(*i)->str()<<std::endl;
 
 		j = find(status.begin(), status.end(), *i);
-		if(j != status.end()) if(SLDEBUG)std::cout<<"EE\t\tthere are multiple copies of"
+		if(j != status.end()) if(SLDEBUG)
+				if(SLDEBUG)std::cout<<"EE\t\tthere are multiple copies of"
+				" the same line in status"<<std::endl;
+		*/
+		LineTreeNode *n = status->Search(*i, oldx);
+		if(n != NULL) RemoveLineTreeNode(status, n);
+		else if(SLDEBUG)std::cout<<"\t\tdid not find "<<(*i)->str()<<std::endl;
+		n = status->Search(*i, oldx);
+		if(n != NULL) if(SLDEBUG)std::cout<<"EE\t\tthere are multiple copies of"
 				" the same line in status"<<std::endl;
 	}
 
+	//if(SLDEBUG)std::cout<<"\tstatus="<<int(status)<<std::endl;
 	if(SLDEBUG)std::cout<<"\tstatus:"<<std::endl;
-	for(std::list<LineSegment*>::iterator i = status.begin();
+	if(SLDEBUG)status->Print();
+	/*for(std::list<LineSegment*>::iterator i = status.begin();
 			i != status.end(); i++)
 	{
 		if(SLDEBUG)std::cout<<"\t\t"<<(*i)->str()<<std::endl;
-	}
+	}*/
 
 	std::set<LineSegment*> left_and_contain;
 
@@ -392,9 +820,13 @@ void HandleEvent(std::vector<LineSegment> &lines_vector,
 	for(std::set<LineSegment*>::iterator i = left_and_contain.begin();
 			i != left_and_contain.end(); i++)
 	{
-		InsertToStatus(status, *i, p);
+		//InsertToStatus(status, *i, p);
+		status->Insert(*i, p.X());
 	}
 	
+	if(SLDEBUG)std::cout<<"\tstatus:"<<std::endl;
+	if(SLDEBUG)status->Print();
+
 	//checking intersections of new vertical lines
 	for(std::list<LineSegment*>::iterator i = left.begin();
 			i != left.end(); i++)
@@ -404,40 +836,46 @@ void HandleEvent(std::vector<LineSegment> &lines_vector,
 				<<std::endl;
 		double u = (*i)->upper().Y();
 		double l = (*i)->lower().Y();
-		for(std::list<LineSegment*>::iterator j = status.begin();
-				j != status.end(); j++)
+
+		LineTreeNode *j = status->Highest();
+
+		/*for(std::list<LineSegment*>::iterator j = status.begin();
+				j != status.end(); j++)*/
+		for(; j != NULL; j = j->Lower())
 		{
-			if(*j == *i) continue;
+			//if(SLDEBUG)std::cout<<"j->m_ptr="<<j->m_ptr->str()<<std::endl;
+
+			if(j->m_ptr == *i) continue;
 
 			IntersectionInfo info;
 			info.t = SomeIntersection;
 
-			if((*j)->is_vertical()){
-				double u2 = (*j)->upper().Y();
-				double l2 = (*j)->lower().Y();
+			if((j->m_ptr)->is_vertical()){
+				double u2 = (j->m_ptr)->upper().Y();
+				double l2 = (j->m_ptr)->lower().Y();
 				if(l2 > u) continue;
 				if(u2 < l) continue;
 				if(dabs(u2-u) < TOLERANCE) continue;
 				if(dabs(l2-u) < TOLERANCE) continue;
 				if(dabs(u2-l) < TOLERANCE) continue;
 				if(dabs(l2-l) < TOLERANCE) continue;
-				if(SLDEBUG)std::cout<<"\t\tfound at with vertical line "<<(*j)->str()<<std::endl;
+				if(SLDEBUG)std::cout<<"\t\tfound at with vertical line "<<(j->m_ptr)->str()<<std::endl;
 				info.p = gp_Pnt(p.X(), u>u2?u:u2, 0);
 			}
 			else{
-				double y = (*j)->y_value_at(p.X());
+				double y = (j->m_ptr)->y_value_at(p.X());
 				if(y > u) continue;
 				if(y < l) break;
 				if(dabs(y-u) < TOLERANCE) continue;
 				if(dabs(y-l) < TOLERANCE) break;
-				if(SLDEBUG)std::cout<<"\t\tfound at y="<<y<<" with "<<(*j)->str()<<std::endl;
+				if(SLDEBUG)std::cout<<"\t\tfound at y="<<y<<" with "<<(j->m_ptr)->str()<<std::endl;
 				info.p = gp_Pnt(p.X(), y, 0);
 			}
 			
-			info.i = (*j)->m_index;
+			info.i = (j->m_ptr)->m_index;
 			(*i)->m_intersections_set.insert(info);
 			info.i = (*i)->m_index;
-			(*j)->m_intersections_set.insert(info);
+			(j->m_ptr)->m_intersections_set.insert(info);
 		}
 	}
 	
@@ -455,7 +893,7 @@ void HandleEvent(std::vector<LineSegment> &lines_vector,
 	{
 		if(SLDEBUG)std::cout<<"\tleft_and_contain is empty"<<std::endl;
 		LineSegment *su = NULL, *sl = NULL;
-		std::list<LineSegment*>::iterator i = status.begin();
+		/*std::list<LineSegment*>::iterator i = status.begin();
 		for(; i != status.end(); i++)
 		{
 			if(!((*i)->y_value_at(p.X()) < p.Y()))
@@ -476,6 +914,29 @@ void HandleEvent(std::vector<LineSegment> &lines_vector,
 				su = (*i);
 				break;
 			}
+		}*/
+		LineTreeNode *highest = status->Highest();
+		LineTreeNode *i = highest;
+		for(; i != NULL; i = i->Lower())
+		{
+			if(!(i->m_ptr->y_value_at(p.X()) < p.Y()))
+			{
+				if(i != highest)
+				{
+					i = i->Higher();
+					sl = i->m_ptr;
+					i = i->Lower();
+				}
+				break;
+			}
+		}
+		for(; i != NULL; i = i->Lower())
+		{
+			if(i->m_ptr->y_value_at(p.X()) > p.Y())
+			{
+				su = i->m_ptr;
+				break;
+			}
 		}
 		if(sl == NULL){ if(SLDEBUG)std::cout<<"\t\tno lower neighbour"<<std::endl; }
 		else if(su == NULL){ if(SLDEBUG)std::cout<<"\t\tno upper neighbour"<<std::endl; }
@@ -490,11 +951,9 @@ void HandleEvent(std::vector<LineSegment> &lines_vector,
 		if(SLDEBUG)std::cout<<"\tleft_and_contain is not empty"<<std::endl;
 		LineSegment *su2 = NULL; //the uppermost segment of left_and_contain in status
 		LineSegment *su = NULL; //the upper neighbor of su2 in status
-		for(std::list<LineSegment*>::reverse_iterator i = status.rbegin();
+		/*for(std::list<LineSegment*>::reverse_iterator i = status.rbegin();
 				i != status.rend(); i++)
 		{
-			//std::list<LineSegment*>::iterator
-				//j = find(left_and_contain.begin(), left_and_contain.end(), *i);
 			std::set<LineSegment*>::iterator
 				j = left_and_contain.find(*i);
 			if(j != left_and_contain.end())
@@ -503,6 +962,23 @@ void HandleEvent(std::vector<LineSegment> &lines_vector,
 				if(i != status.rbegin()){
 					i--;
 					su = *i;
+				}
+				break;
+			}
+		}*/
+		LineTreeNode *i;
+		LineTreeNode *lowest = status->Lowest();
+		i = lowest;
+		for(; i != NULL; i = i->Higher())
+		{
+			std::set<LineSegment*>::iterator
+				j = left_and_contain.find(i->m_ptr);
+			if(j != left_and_contain.end())
+			{
+				su2 = i->m_ptr;
+				if(i != lowest){
+					i = i->Lower();
+					su = i->m_ptr;
 				}
 				break;
 			}
@@ -516,11 +992,9 @@ void HandleEvent(std::vector<LineSegment> &lines_vector,
 
 		LineSegment *sl2 = NULL; //the lowermost segment of left_and_contain in status
 		LineSegment *sl = NULL; //the lower neighbor of sl2 in status
-		for(std::list<LineSegment*>::iterator i = status.begin();
+		/*for(std::list<LineSegment*>::iterator i = status.begin();
 				i != status.end(); i++)
 		{
-			//std::list<LineSegment*>::iterator
-				//j = find(left_and_contain.begin(), left_and_contain.end(), *i);
 			std::set<LineSegment*>::iterator
 				j = left_and_contain.find(*i);
 			if(j != left_and_contain.end())
@@ -531,6 +1005,30 @@ void HandleEvent(std::vector<LineSegment> &lines_vector,
 					sl = *i;
 				}
 				break;
+			}
+		}*/
+		LineTreeNode *highest = status->Highest();
+		/*if(SLDEBUG)std::cout<<"looping status from highest to lowest, finding the first"
+				" which is also in left_and_contain"<<std::endl;*/
+		if(highest==NULL) if(SLDEBUG)std::cout<<"highest == NULL"<<std::endl;
+		i = highest;
+		for(; i != NULL; i = i->Lower())
+		{
+			//if(SLDEBUG)std::cout<<"i->m_ptr="<<i->m_ptr->str()<<std::endl;
+			std::set<LineSegment*>::iterator
+				j = left_and_contain.find(i->m_ptr);
+			if(j != left_and_contain.end())
+			{
+				//if(SLDEBUG)std::cout<<"is in left_and_contain"<<std::endl;
+				sl2 = i->m_ptr;
+				if(i != highest){
+					i = i->Higher();
+					sl = i->m_ptr;
+				}
+				break;
+			}
+			else{
+				//if(SLDEBUG)std::cout<<"is not in left_and_contain"<<std::endl;
 			}
 		}
 		if(sl2 == NULL) if(SLDEBUG)std::cout<<"EE\t\tsl2 == NULL"<<std::endl;
@@ -546,15 +1044,21 @@ void HandleEvent(std::vector<LineSegment> &lines_vector,
 	{
 		if(SLDEBUG)std::cout<<"\t\t"<<(*i)->str()<<std::endl;
 	}*/
-
+	//if(SLDEBUG)std::cout<<"\tstatus="<<int(status)<<std::endl;
 }
 
-void SweepLine(std::vector<LineSegment> &lines_vector)
+unsigned int SweepLine(std::vector<LineSegment> &lines_vector)
 {
+	unsigned int num_intersection_points = 0;
+
 	std::set<SweepEvent> event_queue;
+
 	//status has all the lines going underneath the sweep line,
 	//the highest y first
-	std::list<LineSegment*> status;
+	LineTreeNode *status = new LineTreeNode(NULL);
+	//if(SLDEBUG)std::cout<<"status="<<int(status)<<std::endl;
+	//std::list<LineSegment*> status;
+
 	if(SLDEBUG)std::cout<<"SweepLine(): lines_vector:"<<std::endl;
 	for(unsigned int i=0; i<lines_vector.size(); i++)
 	{
@@ -563,6 +1067,9 @@ void SweepLine(std::vector<LineSegment> &lines_vector)
 		event_queue.insert(SweepEvent(Endpoint(&lines_vector[i], Left)));
 		event_queue.insert(SweepEvent(Endpoint(&lines_vector[i], Right)));
 	}
+	//As status is initially empty, it doesn't really matter what is the value
+	//of this, but set it as low as possible just to be sure.
+	double oldx = -1.7e+308;
 	while(!event_queue.empty())
 	{
 		if(SLDEBUG)std::cout<<"event_queue:"<<std::endl;
@@ -572,8 +1079,11 @@ void SweepLine(std::vector<LineSegment> &lines_vector)
 			if(SLDEBUG)std::cout<<"\t"<<i->str()<<std::endl;
 		}
 
-		HandleEvent(lines_vector, event_queue, status, *event_queue.begin());
+		HandleEvent(lines_vector, event_queue, status, *event_queue.begin(),
+				oldx, num_intersection_points);
+		oldx = event_queue.begin()->x();
 		event_queue.erase(event_queue.begin());
+
 		/*if(SLDEBUG)std::cout<<"SweepLine(): status:"<<std::endl;
 		for(std::list<LineSegment*>::iterator i = status.begin();
 				i != status.end(); i++)
@@ -581,6 +1091,9 @@ void SweepLine(std::vector<LineSegment> &lines_vector)
 			if(SLDEBUG)std::cout<<"\t"<<(*i)->str()<<std::endl;
 		}*/
 	}
+	
+	delete status;
+
 	if(SLDEBUG)std::cout<<"SweepLine(): lines_vector:"<<std::endl;
 	for(unsigned int i=0; i<lines_vector.size(); i++)
 	{
@@ -596,15 +1109,11 @@ void SweepLine(std::vector<LineSegment> &lines_vector)
 			if(SLDEBUG)std::cout<<"\t\t"<<it->str()<<"  \t"<<lines_vector[it->i].str()<<std::endl;
 		}
 	}
+
+	return num_intersection_points;
 }
 
-class NewWayIntersection
-{
-public:
-	LineSegment *s;
-	Direction d;
-	gp_Pnt p;
-};
+//Not used
 
 class IntersectionPoint
 {
@@ -624,6 +1133,8 @@ public:
 	//the intersection point
 	gp_Pnt p;
 };
+
+//Not used
 
 bool PointsCCW(std::list<IntersectionPoint> &points)
 {
@@ -662,190 +1173,14 @@ bool PointsCCW(std::list<IntersectionPoint> &points)
 	return true;
 }
 
-bool FindNextPoint(std::vector<LineSegment> &lines_vector,
-		std::list<Polygon> &result_list,
-		std::list<IntersectionPoint> &used_points)
-{
-	std::cout<<"FindNextPoint()"<<std::endl;
-	
-	IntersectionPoint lastpoint = used_points.back();
-	
-	std::cout<<"lastpoint.p=("<<lastpoint.p.X()<<","<<lastpoint.p.Y()
-			<<") lastpoint.from="<<lastpoint.from->str()
-			<<", dir="<<(lastpoint.dir==Left?"Left":"Right")
-			<<" -> ("
-			<<lastpoint.from->endpoint(lastpoint.dir).X()<<","
-			<<lastpoint.from->endpoint(lastpoint.dir).Y()<<")"<<std::endl;
-	
-	if(lastpoint.from->endpoint(lastpoint.dir).IsEqual(lastpoint.p, TOLERANCE))
-	{
-		std::cout<<"EE we are coming from the same point as where we are going."<<std::endl;
-		return false;
-	}
-
-	double lastsegment_angle;
-	
-	{
-		gp_Pnt from = lastpoint.p;
-		gp_Pnt to = lastpoint.from->endpoint(lastpoint.dir);
-		lastsegment_angle = atan2(to.Y() - from.Y(), to.X() - from.X());
-	}
-	
-	std::cout<<"lastsegment_angle="<<lastsegment_angle<<std::endl;
-
-	//TODO: at some point we should probably check that we aren't making a
-	//      polygon we already made
-
-	//This list will contain the segments intersecting lastpoint.from at
-	//lastpoint, the one turning the most to left first.
-	//Segments, that contain the point in their interior (not endpoint), will
-	//be contained in this list two times, one instance going the other way and
-	//the other instance the other
-	//TODO: Change NewWayIntersection to IntersectionPoint if the from field
-	//      in IntersectionPoint won't be used
-	std::list<NewWayIntersection> intersections_sorted_list;
-
-	/*std::set<IntersectionInfo>
-			intersections_at_point(lastpoint.from->m_intersections_set);*/
-			
-	std::list<IntersectionInfo> intersections_at_point;
-
-	//add intersections at this point to list
-	for(std::set<IntersectionInfo>::iterator
-			i = lastpoint.from->m_intersections_set.begin();
-			i != lastpoint.from->m_intersections_set.end(); i++)
-	{
-		if(!i->p.IsEqual(lastpoint.p, TOLERANCE)) continue;
-		intersections_at_point.push_back(*i);
-	}
-
-	while(!intersections_at_point.empty())
-	{
-		double max_diff_angle = -PI;
-		std::list<IntersectionInfo>::iterator max_i;
-		Direction max_d;
-		for(std::list<IntersectionInfo>::iterator
-				i = intersections_at_point.begin();
-				i != intersections_at_point.end(); i++)
-		{
-			gp_Pnt from = i->p;
-			LineSegment *nextsegment = &lines_vector[i->i];
-			gp_Pnt to_l = nextsegment->endpoint(Left);
-			if(!to_l.IsEqual(from, TOLERANCE)){
-				double nextsegment_angle_l = atan2(to_l.Y() - from.Y(), to_l.X() - from.X());
-				double diff_angle = -(lastsegment_angle - nextsegment_angle_l);
-				/*std::cout<<"nextsegment_angle_l="<<nextsegment_angle_l
-						<<" diff_angle="<<diff_angle<<std::endl;*/
-				if(diff_angle >= max_diff_angle){
-					//std::cout<<"is more than diff_angle="<<diff_angle<<std::endl;
-					max_diff_angle = diff_angle;
-					max_d = Left;
-					max_i = i;
-				}
-			}
-			gp_Pnt to_r = nextsegment->endpoint(Right);
-			if(!to_r.IsEqual(from, TOLERANCE)){
-				double nextsegment_angle_r = atan2(to_r.Y() - from.Y(), to_r.X() - from.X());
-				double diff_angle = -(lastsegment_angle - nextsegment_angle_r);
-				/*std::cout<<"nextsegment_angle_r="<<nextsegment_angle_r
-						<<" diff_angle="<<diff_angle<<std::endl;*/
-				if(diff_angle >= max_diff_angle){
-					//std::cout<<"is more than diff_angle="<<diff_angle<<std::endl;
-					max_diff_angle = diff_angle;
-					max_d = Right;
-					max_i = i;
-				}
-			}
-		}
-		NewWayIntersection nwi;
-		nwi.s = &lines_vector[max_i->i];
-		nwi.d = max_d;
-		nwi.p = max_i->p;
-		intersections_sorted_list.push_back(nwi);
-		intersections_at_point.erase(max_i);
-	}
-
-	std::cout<<"sorted intersections at lastpoint.p=("<<lastpoint.p.X()
-			<<","<<lastpoint.p.Y()<<")"<<std::endl;
-	for(std::list<NewWayIntersection>::iterator
-			i = intersections_sorted_list.begin();
-			i != intersections_sorted_list.end(); i++)
-	{
-		/*std::cout<<"\ti->p=("<<i->p.X()<<","<<i->p.Y()<<") i->s="<<i->s->str()
-				<<" i->d="<<(i->d==Left?"Left":"Right")<<std::endl;*/
-	}
-
-	for(std::list<NewWayIntersection>::iterator
-			i = intersections_sorted_list.begin();
-			i != intersections_sorted_list.end(); i++)
-	{
-		//get the point we're going to now
-		IntersectionPoint newpoint;
-		//newpoint.from = lastpoint.from;
-		newpoint.p = i->p;
-		newpoint.from = i->s;
-		newpoint.dir = i->d;
-
-		std::cout<<"Going towards: ("<<newpoint.p.X()<<","<<newpoint.p.Y()
-				<<")"<<std::endl;
-
-		//check what is the latest occurrence of newpoint in used_points
-		std::list<IntersectionPoint>::iterator latest_newpoint;
-		latest_newpoint = used_points.end();
-		bool found = false;
-		do{
-			latest_newpoint--;
-			if(*latest_newpoint == newpoint){
-				found = true;
-				break;
-			}
-		}
-		while(latest_newpoint != used_points.begin());
-
-		//if newpoint was found in used_points
-		if(found)
-		{
-			std::cout<<"newpoint found in used_points"<<std::endl;
-			//if the points make a counter-clockwise polygon, we have failed
-			//to find a valid one
-			if(PointsCCW(used_points)){
-				return false;
-			}
-			//used_points should be a valid polygon now
-			Polygon p;
-			//add the points starting from the latest occurrence of newpoint
-			for(std::list<IntersectionPoint>::iterator i = latest_newpoint;
-					i != used_points.end(); i++)
-			{
-				p.push_back(i->p);
-			}
-			result_list.push_back(p);
-		}
-		//if newpoint wasn't found in used_points
-		else{
-			//add it to there and start finding the next point
-			used_points.push_back(newpoint);
-			if(FindNextPoint(lines_vector, result_list, used_points))
-			{
-				//a polygon was made, we're not needed anymore
-				return true;
-			}
-			//now a new point, if an another alternative still exists, will be
-			//tried
-		}
-	}
-	//couldn't find a valid polygon
-	return false;
-}
-
 bool UnionPolygons(std::vector<LineSegment> &lines_vector,
 		std::list<Polygon> &result_list)
 {
 	std::cout<<"UnionPolygons(): "<<lines_vector.size()<<" lines"<<std::endl;
 
-	SweepLine(lines_vector);
+	int num = SweepLine(lines_vector);
 	
-	std::cout<<"UnionPolygons(): lines_vector:"<<std::endl;
+	std::cout<<"lines_vector:"<<std::endl;
 	for(unsigned int i=0; i<lines_vector.size(); i++)
 	{
 		std::cout<<"\t"<<lines_vector[i].str();
@@ -860,43 +1195,9 @@ bool UnionPolygons(std::vector<LineSegment> &lines_vector,
 			std::cout<<"\t\t"<<it->str()<<"  \t"<<lines_vector[it->i].str()<<std::endl;
 		}
 	}
-#if 0
-	std::cout<<"handling lines_vector:"<<std::endl;
-	for(std::vector<LineSegment>::iterator i = lines_vector.begin();
-			i != lines_vector.end(); i++)
-	{
-		/*std::cout<<"-----------------"<<std::endl;
-		std::cout<<i->str()<<std::endl;
-		std::list<IntersectionPoint> used_points;
-		IntersectionPoint ip;
-		ip.p = i->a;
-		ip.from = &(*i);
-		used_points.push_back(ip);
-		bool ret = FindNextPoint(lines_vector, result_list, used_points);
-		std::cout<<"FindNextPoint() returned "<<ret<<std::endl;*/
 
-		if(i->m_intersections_set.empty())
-		{
-			std::cout<<"a separate line found: "<<i->str()<<std::endl;
-		}
-		//we'll be turning always as much left as possible
-		std::set<IntersectionInfo>::const_iterator j;
-		for(j = i->m_intersections_set.begin();
-				j != i->m_intersections_set.end(); j++)
-		{
-			std::cout<<"-----------------"<<std::endl;
-			std::cout<<i->str()<<std::endl;
-			std::list<IntersectionPoint> used_points;
-			IntersectionPoint ip;
-			ip.p = j->p;
-			ip.from = &(*i);
-			ip.dir = Right;
-			used_points.push_back(ip);
-			bool ret = FindNextPoint(lines_vector, result_list, used_points);
-			std::cout<<"FindNextPoint() returned "<<ret<<std::endl;
-		}
-	}
-#endif
+	std::cout<<num<<" intersection points"<<std::endl;
+
 	return true;
 }
 
@@ -916,10 +1217,50 @@ bool UnionPolygons(std::list<Polygon> &polygons_list, std::list<Polygon> &result
 	return UnionPolygons(lines_vector, result_list);
 }
 
+
 /*
 This is an old version of the UnionPolygons algorithm. It worked
 with many test cases but failed with real-life data, for some unknown reason.
 */
+
+class Intersection
+{
+public:
+	std::list<Polygon>::const_iterator ipoly_a;
+	std::list<Polygon>::const_iterator ipoly_b;
+	//first points of the lines intersecting, from the two polygons
+	std::list<gp_Pnt>::const_iterator ipoint_a;
+	std::list<gp_Pnt>::const_iterator ipoint_b;
+	gp_Pnt p;
+	double d;
+
+	Intersection(const Intersection & i)
+	{
+		ipoly_a = i.ipoly_a;
+		ipoly_b = i.ipoly_b;
+		ipoint_a = i.ipoint_a;
+		ipoint_b = i.ipoint_b;
+		p = i.p;
+		d = i.d;
+	}
+	Intersection(std::list<Polygon>::const_iterator p_ipoly_a,
+			std::list<Polygon>::const_iterator p_ipoly_b,
+			std::list<gp_Pnt>::const_iterator p_ipoint_a,
+			std::list<gp_Pnt>::const_iterator p_ipoint_b,
+			gp_Pnt p_p,
+			double p_d)
+	{
+		ipoly_a = p_ipoly_a;
+		ipoly_b = p_ipoly_b;
+		ipoint_a = p_ipoint_a;
+		ipoint_b = p_ipoint_b;
+		p = p_p;
+		d = p_d;
+	}
+	Intersection() {}
+};
+
+//TODO: make this use the new SweepLine
 
 bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 		std::list<Polygon> & result_list)
@@ -932,7 +1273,7 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 			ipoly != polygons_list.end(); ipoly++)
 	{
 		if(ipoly->Direction() != PolyCW){
-			if(DEBUG)std::cout<<"UnionPolygons: Works only with clockwise polygons."<<std::endl;
+			if(UPODEBUG)std::cout<<"UnionPolygons: Works only with clockwise polygons."<<std::endl;
 			//alternatively, you could just turn them here...
 			return false;
 		}
@@ -941,13 +1282,13 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 	for(std::list<Polygon>::const_iterator ipoly = polygons_list.begin();
 			ipoly != polygons_list.end(); ipoly++)
 	{
-		//if(DEBUG)std::cout<<"loop level 1"<<std::endl;
+		//if(UPODEBUG)std::cout<<"loop level 1"<<std::endl;
 		if(std::find(used_polygons.begin(), used_polygons.end(), ipoly) != used_polygons.end())
 		{
 			continue;
 		}
-		if(DEBUG)std::cout<<"----------------------"<<std::endl;
-		if(DEBUG)std::cout<<"starting with ipoly = ";
+		if(UPODEBUG)std::cout<<"----------------------"<<std::endl;
+		if(UPODEBUG)std::cout<<"starting with ipoly = ";
 		ipoly->Print();
 
 		std::list< std::list<Polygon>::const_iterator > union_used_polygons;
@@ -959,15 +1300,15 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 		Intersection last_intersection; //valid only if recently_intersected
 		bool first_point_of_union = true;
 		
-		if(DEBUG)std::cout<<"adding to union_used_polygons"<<std::endl;
+		if(UPODEBUG)std::cout<<"adding to union_used_polygons"<<std::endl;
 		union_used_polygons.push_back(ipoly);
 
 		//get an iterator to the polygon's points
 		ipoint = ipoly->begin();
 
 		while(true){
-			if(DEBUG)std::cout<<std::endl;
-			/*if(DEBUG)std::cout<<"current ipoly = ";
+			if(UPODEBUG)std::cout<<std::endl;
+			/*if(UPODEBUG)std::cout<<"current ipoly = ";
 			ipoly->Print();*/
 			
 			//get the current point
@@ -975,14 +1316,14 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 
 			std::list<gp_Pnt>::const_iterator ia1 = ipoint;
 
-			if(DEBUG)std::cout<<"a1=("<<a1.X()<<","<<a1.Y()<<")";
+			if(UPODEBUG)std::cout<<"a1=("<<a1.X()<<","<<a1.Y()<<")";
 			if(recently_intersected)
 			{
-				if(DEBUG)std::cout<<" (is before the last intersection)"<<std::endl;
+				if(UPODEBUG)std::cout<<" (is before the last intersection)"<<std::endl;
 			}
 			else
 			{
-				if(DEBUG)std::cout<<std::endl;
+				if(UPODEBUG)std::cout<<std::endl;
 			}
 			
 			if(!recently_intersected){
@@ -997,7 +1338,7 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 					itemp--;
 					if(findresult != union_points.end() && findresult != itemp)
 					{
-						if(DEBUG)std::cout<<"a1 found on union_points -> got a union"<<std::endl;
+						if(UPODEBUG)std::cout<<"a1 found on union_points -> got a union"<<std::endl;
 						//we have a union
 						used_polygons.insert(used_polygons.end(), union_used_polygons.begin(),
 								union_used_polygons.end());
@@ -1005,19 +1346,19 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 						std::stringstream ss_name;
 						ss_name<<"from "<<(*union_used_polygons.begin())->name;
 						union_used_polygons.clear();
-						if(DEBUG)std::cout<<"collected points: ";
+						if(UPODEBUG)std::cout<<"collected points: ";
 						for(std::list<gp_Pnt>::iterator ipoint = union_points.begin();
 								ipoint != union_points.end(); ipoint++)
 						{
-							if(DEBUG)std::cout<<"("<<ipoint->X()<<","<<ipoint->Y()<<"), ";
+							if(UPODEBUG)std::cout<<"("<<ipoint->X()<<","<<ipoint->Y()<<"), ";
 						}
-						if(DEBUG)std::cout<<std::endl;
+						if(UPODEBUG)std::cout<<std::endl;
 						std::list<gp_Pnt> points_stripped;
 						points_stripped.insert(points_stripped.end(), findresult, union_points.end());
 						Polygon polygon(points_stripped);
 						//Polygon polygon(union_points);
 						polygon.name = ss_name.str();
-						if(DEBUG)std::cout<<"adding polygon: "<<polygon.str()<<std::endl;
+						if(UPODEBUG)std::cout<<"adding polygon: "<<polygon.str()<<std::endl;
 						result_list.push_back(polygon);
 						if(polygon_use_count == polygon_total_count){
 							//done it all!
@@ -1030,12 +1371,12 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 				if(!first_point_of_union)
 				{
 					//add the first point of line to union_points to keep track of where we're going
-					if(DEBUG)std::cout<<"adding a1 to union_points"<<std::endl;
+					if(UPODEBUG)std::cout<<"adding a1 to union_points"<<std::endl;
 					union_points.push_back(a1);
 				}
 				else
 				{
-					if(DEBUG)std::cout<<"because a1 is the first point of this union, "
+					if(UPODEBUG)std::cout<<"because a1 is the first point of this union, "
 							"not adding it to union_points"<<std::endl;
 				}
 			}
@@ -1048,7 +1389,7 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 				ipoint = ipoly->begin();
 			}
 			a2 = *ipoint;
-			if(DEBUG)std::cout<<"collecting intersections with line: "<<"("<<a1.X()<<", "<<a1.Y()
+			if(UPODEBUG)std::cout<<"collecting intersections with line: "<<"("<<a1.X()<<", "<<a1.Y()
 					<<") -> ("<<a2.X()<<", "<<a2.Y()<<") ..."<<std::endl;
 
 			//collect intersections
@@ -1062,12 +1403,12 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 				//skip the already used ones
 				if(std::find(used_polygons.begin(), used_polygons.end(), b_ipoly) !=used_polygons.end())
 				{
-					//if(DEBUG)std::cout<<"already used  b_ipoly = ";
+					//if(UPODEBUG)std::cout<<"already used  b_ipoly = ";
 					//b_ipoly->Print();
 					continue;
 				}
 				if(b_ipoly == ipoly) continue;
-				if(DEBUG)std::cout<<"\tchecking points of "<<b_ipoly->str()
+				if(UPODEBUG)std::cout<<"\tchecking points of "<<b_ipoly->str()
 						<<"=b_ipoly"<<std::endl;
 
 				//now we have an another polygon
@@ -1081,7 +1422,7 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 				bool endwent = false;
 				while(!endwent)
 				{
-					//if(DEBUG)std::cout<<"loop level 3"<<std::endl;
+					//if(UPODEBUG)std::cout<<"loop level 3"<<std::endl;
 
 					//the first point for our line
 					b1 = *b_ipoint;
@@ -1097,12 +1438,20 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 					}
 					b2 = *b_ipoint;
 					
-					/*if(DEBUG)std::cout<<"checking line ("<<a1.X()<<", "<<a1.Y()<<")->("<<a2.X()<<", "<<a2.Y()
+					/*if(UPODEBUG)std::cout<<"checking line ("<<a1.X()<<", "<<a1.Y()<<")->("<<a2.X()<<", "<<a2.Y()
 							<<") with line ("
 							<<b1.X()<<", "<<b1.Y()<<")->("<<b2.X()<<", "<<b2.Y()<<")"<<std::endl;*/
 					//check if it intersects with our current line
-					gp_Pnt p;
-					if(LineIntersect(a1,a2,b1,b2,p)==true)
+					LineSegment s1;
+					s1.a = a1;
+					s1.b = a2;
+					LineSegment s2;
+					s2.a = b1;
+					s2.b = b2;
+					IntersectionInfo info = s1.intersects(s2);
+					gp_Pnt p = info.p;
+					//if(LineIntersect(a1,a2,b1,b2,p)==true)
+					if(info.t != NoIntersection)
 					{
 						double distance_from_a1 = p.Distance(a1);
 						//double distance_from_last = -1.0;
@@ -1118,11 +1467,11 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 							//check that last intersection was on the current line a1->a2
 							gp_Lin lin(a1, gp_Vec(a1, a2));
 							if(lin.SquareDistance(last_intersection.p) < 0.00000001){
-								//if(DEBUG)std::cout<<"last intersection at ("<<lx<<","<<ly<<")"<<std::endl;
+								//if(UPODEBUG)std::cout<<"last intersection at ("<<lx<<","<<ly<<")"<<std::endl;
 								//skip if intersection point is between the last intersection and a1
 								if(!((a1x-px)*(px-lx)<0.0) && !((a1y-py)*(py-ly)<0.0))
 								{
-									if(DEBUG)std::cout<<"\t("<<p.X()<<", "<<p.Y()
+									if(UPODEBUG)std::cout<<"\t("<<p.X()<<", "<<p.Y()
 											<<") is between last_intersection("
 											<<lx<<","<<ly<<") and a1 -> skipping"
 											<<std::endl;
@@ -1131,7 +1480,7 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 							}
 						}
 						
-						if(DEBUG)std::cout<<"\tintersection at ("<<p.X()<<", "<<p.Y()<<"), d="
+						if(UPODEBUG)std::cout<<"\tintersection at ("<<p.X()<<", "<<p.Y()<<"), d="
 								<<distance_from_a1<<std::endl;
 						
 						std::list<Intersection*>::iterator is_it = is_list.begin();
@@ -1150,15 +1499,15 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 				} //while(!endwent)
 			} //for polygons_list
 			
-			if(is_list.empty()){ if(DEBUG)std::cout<<"did not find intersections"<<std::endl;}
-			else if(DEBUG)std::cout<<"found some, looping through them..."<<std::endl;
+			if(is_list.empty()){ if(UPODEBUG)std::cout<<"did not find intersections"<<std::endl;}
+			else if(UPODEBUG)std::cout<<"found some, looping through them..."<<std::endl;
 
 			bool found_intersection = false;
 			//std::list<Intersection>::const_iterator is_it
 			for(std::list<Intersection*>::const_iterator is_it = is_list.begin();
 					is_it != is_list.end(); is_it++)
 			{
-				if(DEBUG)std::cout<<"\tintersection at ("<<(*is_it)->p.X()<<", "
+				if(UPODEBUG)std::cout<<"\tintersection at ("<<(*is_it)->p.X()<<", "
 						<<(*is_it)->p.Y()<<"), d="<<(*is_it)->d<<std::endl;
 
 				std::list<gp_Pnt>::const_iterator ipoint_b = (*is_it)->ipoint_b;
@@ -1166,7 +1515,7 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 				ipoint_b++;
 				if(ipoint_b == ((*is_it)->ipoly_b)->end()) ipoint_b = ((*is_it)->ipoly_b)->begin();
 				gp_Pnt p2 = *ipoint_b;
-				if(DEBUG)std::cout<<"\t is line ("<<p1.X()<<", "<<p1.Y()<<")->("<<p2.X()<<", "<<p2.Y()<<")"<<std::endl;
+				if(UPODEBUG)std::cout<<"\t is line ("<<p1.X()<<", "<<p1.Y()<<")->("<<p2.X()<<", "<<p2.Y()<<")"<<std::endl;
 
 				gp_Vec v1(a1, a2);
 				gp_Vec v2(p1, p2);
@@ -1176,24 +1525,24 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 				double angle = v2a - v1a;
 				if(angle <= -PI) angle += PI*2;
 				else if(angle > PI) angle -= PI*2;
-				if(DEBUG)std::cout<<"\t angle="<<angle<<std::endl;
+				if(UPODEBUG)std::cout<<"\t angle="<<angle<<std::endl;
 				
 				//if the end of the intersecting line is equal to the
 				//intersection point, the line is not useful now
 				if(p2.IsEqual((*is_it)->p, 0.0000000001)){
-					if(DEBUG)std::cout<<"\t (p2.IsEqual((*is_it)->p, 0.0000000001))"<<std::endl;
-					if(DEBUG)std::cout<<"\t -> intersection not useful"<<std::endl;
+					if(UPODEBUG)std::cout<<"\t (p2.IsEqual((*is_it)->p, 0.0000000001))"<<std::endl;
+					if(UPODEBUG)std::cout<<"\t -> intersection not useful"<<std::endl;
 					continue;
 				}
 				
 				if(angle < 0.0000000001){
-					if(DEBUG)std::cout<<"\t line not useful: turns to right or doesn't turn"<<std::endl;
+					if(UPODEBUG)std::cout<<"\t line not useful: turns to right or doesn't turn"<<std::endl;
 					continue;
 				}
 				//if the start of the intersecting line is equal to the
 				//intersection point
 				if(p1.IsEqual((*is_it)->p, 0.0000000001)){
-					if(DEBUG)std::cout<<"\t (p1.IsEqual((*is_it)->p, 0.0000000001))"<<std::endl;
+					if(UPODEBUG)std::cout<<"\t (p1.IsEqual((*is_it)->p, 0.0000000001))"<<std::endl;
 					if(a2.IsEqual((*is_it)->p, 0.0000000001)){
 						std::list<gp_Pnt>::const_iterator ipoint_a = ipoint;
 						ipoint_a++;
@@ -1204,9 +1553,9 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 						double angle = v3a - v2a;
 						if(angle <= -PI) angle += PI*2;
 						else if(angle > PI) angle -= PI*2;
-						if(DEBUG)std::cout<<"\t angle="<<angle<<std::endl;
+						if(UPODEBUG)std::cout<<"\t angle="<<angle<<std::endl;
 						if(angle < 0.0000000001){
-							if(DEBUG)std::cout<<"\t line not useful: turns to right or doesn't turn"<<std::endl;
+							if(UPODEBUG)std::cout<<"\t line not useful: turns to right or doesn't turn"<<std::endl;
 							continue;
 						}
 					}
@@ -1225,7 +1574,7 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 				}
 				if(findresult != intersection_points.end())
 				{
-					if(DEBUG)std::cout<<"\tintersection point already on intersection_points"
+					if(UPODEBUG)std::cout<<"\tintersection point already on intersection_points"
 							<<std::endl;
 					//check if we have made a loop
 					if(union_points.size() >= 2){
@@ -1239,8 +1588,8 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 						if(findresult != union_points.end() && findresult != itemp)
 						{
 							//we have a union
-							if(DEBUG)std::cout<<"\t:: p found on union_points -> got a union"<<std::endl;
-							if(DEBUG)std::cout<<"\t-> adding it to union_points"<<std::endl;
+							if(UPODEBUG)std::cout<<"\t:: p found on union_points -> got a union"<<std::endl;
+							if(UPODEBUG)std::cout<<"\t-> adding it to union_points"<<std::endl;
 							union_points.push_back((*is_it)->p);
 							used_polygons.insert(used_polygons.end(), union_used_polygons.begin(),
 									union_used_polygons.end());
@@ -1248,20 +1597,20 @@ bool UnionPolygons_old(std::list<Polygon> & polygons_list,
 							std::stringstream ss_name;
 							ss_name<<"from "<<(*union_used_polygons.begin())->name;
 union_used_polygons.clear();
-							if(DEBUG)std::cout<<"collected points: ";
+							if(UPODEBUG)std::cout<<"collected points: ";
 							for(std::list<gp_Pnt>::iterator ipoint = union_points.begin();
 									ipoint != union_points.end(); ipoint++)
 							{
-								if(DEBUG)std::cout<<"("<<ipoint->X()<<","<<ipoint->Y()<<"), ";
+								if(UPODEBUG)std::cout<<"("<<ipoint->X()<<","<<ipoint->Y()<<"), ";
 							}
-							if(DEBUG)std::cout<<std::endl;
+							if(UPODEBUG)std::cout<<std::endl;
 							std::list<gp_Pnt> points_stripped;
 							points_stripped.insert(points_stripped.end(), findresult, union_points.end());
-							if(DEBUG)std::cout<<"adding polygon = ";
+							if(UPODEBUG)std::cout<<"adding polygon = ";
 							Polygon polygon(points_stripped);
 							//Polygon polygon(union_points);
 							polygon.name = ss_name.str();
-							if(DEBUG)std::cout<<"adding polygon: "<<polygon.str()<<std::endl;
+							if(UPODEBUG)std::cout<<"adding polygon: "<<polygon.str()<<std::endl;
 							result_list.push_back(polygon);
 							if(polygon_use_count == polygon_total_count){
 								//done it all!
@@ -1272,22 +1621,22 @@ union_used_polygons.clear();
 						}
 						else
 						{
-							if(DEBUG)std::cout<<"\t:: p not found on union_points -> "
+							if(UPODEBUG)std::cout<<"\t:: p not found on union_points -> "
 									"didn't get a union"<<std::endl;
 							continue;
 						}
 					}
-					else if(DEBUG)std::cout<<"\t!(union_points.size() >= 2)"<<std::endl;
+					else if(UPODEBUG)std::cout<<"\t!(union_points.size() >= 2)"<<std::endl;
 				}
 
-				if(DEBUG)std::cout<<"\t\t!! Selected intersection"<<std::endl;
+				if(UPODEBUG)std::cout<<"\t\t!! Selected intersection"<<std::endl;
 				
-				if(DEBUG)std::cout<<"\t\t-> adding it to union_points and intersection_points"
+				if(UPODEBUG)std::cout<<"\t\t-> adding it to union_points and intersection_points"
 						<<std::endl;
 				union_points.push_back((*is_it)->p);
 				intersection_points.push_back((*is_it)->p);
 				
-				/*if(DEBUG)std::cout<<"\tchanging ipoly = ";
+				/*if(UPODEBUG)std::cout<<"\tchanging ipoly = ";
 				(*is_it)->ipoly_b->Print();*/
 				ipoly = (*is_it)->ipoly_b;
 				ipoint = (*is_it)->ipoint_b;
@@ -1298,7 +1647,7 @@ union_used_polygons.clear();
 				if(std::find(union_used_polygons.begin(),
 						union_used_polygons.end(), ipoly) == union_used_polygons.end())
 				{
-					if(DEBUG)std::cout<<"\t\t-> adding polygon to union_used_polygons"<<std::endl;
+					if(UPODEBUG)std::cout<<"\t\t-> adding polygon to union_used_polygons"<<std::endl;
 					union_used_polygons.push_back(ipoly);
 				}
 				found_intersection = true;
@@ -1314,10 +1663,10 @@ union_used_polygons.clear();
 			
 			if(found_intersection)
 			{
-				if(DEBUG)std::cout<<std::endl<<"changed to "<<ipoly->str()<<"=ipoly"<<std::endl;
+				if(UPODEBUG)std::cout<<std::endl<<"changed to "<<ipoly->str()<<"=ipoly"<<std::endl;
 				continue;
 			}
-			if(DEBUG)std::cout<<"recently_intersected = false;"<<std::endl;
+			if(UPODEBUG)std::cout<<"recently_intersected = false;"<<std::endl;
 			recently_intersected = false;
 		} //while(true)
 unionpoly1:
