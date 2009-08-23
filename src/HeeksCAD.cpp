@@ -756,7 +756,7 @@ void HeeksCADapp::OpenDXFFile(const wxChar *filepath, bool undoably)
 void HeeksCADapp::OpenRS274XFile(const wxChar *filepath, bool undoably)
 {
 	RS274X gerber;
-	gerber.Read(wxString(filepath).fn_str(), undoably);
+	gerber.Read(wxString(filepath).mb_str(), undoably);
 }
 
 bool HeeksCADapp::OpenImageFile(const wxChar *filepath, bool undoably)
