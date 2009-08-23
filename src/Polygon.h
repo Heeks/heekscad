@@ -448,7 +448,7 @@ public:
 		if(points.size() < 2) return NULL;
 
 		CSketch *sketch = new CSketch();
-		sketch->SetString(wxString(name.c_str(), wxConvUTF8));
+		//sketch->SetString(wxString(name.c_str(), wxConvUTF8));
 
 		gp_Pnt oldp = *(points.begin());
 		
@@ -525,7 +525,7 @@ private:
 	PolygonDirection m_dir;
 }; //End Polygon class definition
 
-void SweepLine(std::vector<LineSegment> &lines_vector);
+unsigned int SweepLine(std::vector<LineSegment> &lines_vector);
 
 bool UnionPolygons(std::vector<LineSegment> &lines_vector,
 		std::list<Polygon> & result_list);
@@ -533,4 +533,6 @@ bool UnionPolygons(std::vector<LineSegment> &lines_vector,
 bool UnionPolygons(std::list<Polygon> & polygons_list,
 		std::list<Polygon> & result_list);
 
+bool UnionPolygons_old(std::list<Polygon> & polygons_list,
+		std::list<Polygon> & result_list);
 
