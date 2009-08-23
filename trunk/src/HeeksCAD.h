@@ -145,6 +145,7 @@ public:
 	double m_min_correlation_factor;
 	double m_max_scale_threshold;
 	int m_number_of_sample_points;
+	bool m_property_grid_validation;
 
 	//WxApp override
 	int OnRun();
