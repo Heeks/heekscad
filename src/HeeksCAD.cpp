@@ -59,6 +59,7 @@
 #include "HeeksPrintout.h"
 #include "HeeksConfig.h"
 #include "Group.h"
+#include "RS274X.h"
 using namespace std;
 
 IMPLEMENT_APP(HeeksCADapp)
@@ -752,6 +753,12 @@ void HeeksCADapp::OpenDXFFile(const wxChar *filepath, bool undoably)
 	dxf_file.DoRead(undoably);
 }
 
+void HeeksCADapp::OpenRS274XFile(const wxChar *filepath, bool undoably)
+{
+	RS274X gerber;
+	gerber.Read(wxString(filepath).fn_str(), undoably);
+}
+
 bool HeeksCADapp::OpenImageFile(const wxChar *filepath, bool undoably)
 {
 	wxString wf(filepath);
@@ -807,6 +814,11 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 	{
 		m_file_open_or_import_type = FileOpenOrImportTypeDxf;
 		OpenDXFFile(filepath, import_not_open);
+	}
+	else if(wf.EndsWith(_T(".gbr")) || wf.EndsWith(_T(".GBR"))
+			|| wf.EndsWith(_T(".rs274x")) || wf.EndsWith(_T(".RS274X")))
+	{
+		OpenRS274XFile(filepath, import_not_open);
 	}
 
 	// check for images
@@ -2213,7 +2225,7 @@ const wxChar* HeeksCADapp::GetKnownFilesWildCardString(bool open)const
 			imageExtStr2.Append(_T("*."));
 			imageExtStr2.Append(ext);
 		}
-		known_file_ext = wxString(_("Known Files")) + _T(" |*.heeks;*.HEEKS;*.igs;*.IGS;*.iges;*.IGES;*.stp;*.STP;*.step;*.STEP;*.stl;*.STL;*.svg;*.SVG;*.dxf;*.DXF;") + imageExtStr + _T("|") + _("Heeks files") + _T(" (*.heeks)|*.heeks;*.HEEKS|") + _("IGES files") + _T(" (*.igs *.iges)|*.igs;*.IGS;*.iges;*.IGES|") + _("STEP files") + _T(" (*.stp *.step)|*.stp;*.STP;*.step;*.STEP|") + _("STL files") + _T(" (*.stl)|*.stl;*.STL|") + _("Scalar Vector Graphics files") + _T(" (*.svg)|*.svg;*.SVG|") + _("DXF files") + _T(" (*.dxf)|*.dxf;*.DXF|") + _("Picture files") + _T(" (") + imageExtStr2 + _T(")|") + imageExtStr;
+		known_file_ext = wxString(_("Known Files")) + _T(" |*.heeks;*.HEEKS;*.igs;*.IGS;*.iges;*.IGES;*.stp;*.STP;*.step;*.STEP;*.stl;*.STL;*.svg;*.SVG;*.dxf;*.DXF;*.gbr;*.GBR,*.rs274x;*.RS274X;") + imageExtStr + _T("|") + _("Heeks files") + _T(" (*.heeks)|*.heeks;*.HEEKS|") + _("IGES files") + _T(" (*.igs *.iges)|*.igs;*.IGS;*.iges;*.IGES|") + _("STEP files") + _T(" (*.stp *.step)|*.stp;*.STP;*.step;*.STEP|") + _("STL files") + _T(" (*.stl)|*.stl;*.STL|") + _("Scalar Vector Graphics files") + _T(" (*.svg)|*.svg;*.SVG|") + _("DXF files") + _T(" (*.dxf)|*.dxf;*.DXF|") + _("RX274X/Gerber files") + _T(" (*.gbr,*.rs274x)|*.gbr;*.GBR;*.rs274x;*.RS274X|") + _("Picture files") + _T(" (") + imageExtStr2 + _T(")|") + imageExtStr;
 		return known_file_ext.c_str();
 	}
 	else{

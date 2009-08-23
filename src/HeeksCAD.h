@@ -190,6 +190,7 @@ public:
 	void OpenSVGFile(const wxChar *filepath, bool undoably = false);
 	void OpenSTLFile(const wxChar *filepath, bool undoably = false);
 	void OpenDXFFile(const wxChar *filepath, bool undoably = false);
+	void OpenRS274XFile(const wxChar *filepath, bool undoably = false);
 	bool OpenImageFile(const wxChar *filepath, bool undoably = false);
 	bool OpenFile(const wxChar *filepath, bool import_not_open = false, HeeksObj* paste_into = NULL);
 	void SaveDXFFile(const wxChar *filepath);
