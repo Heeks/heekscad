@@ -1144,6 +1144,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Polygon.cpp"
+			>
+		</File>
+		<File
 			RelativePath=".\propdev.h"
 			>
 		</File>
@@ -1297,6 +1301,10 @@
 		</File>
 		<File
 			RelativePath=".\RemoveOrAddTool.h"
+			>
+		</File>
+		<File
+			RelativePath=".\RS274X.cpp"
 			>
 		</File>
 		<File
