@@ -9,6 +9,8 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+#include "stdafx.h"
+
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma implementation "propgrid.h"
 #endif
@@ -7639,13 +7641,16 @@ bool wxPropertyGrid::DoEditorValidate()
         // went fine. This trick is necessary since focus events
         // may be triggered while in Validate.
         m_iFlags |= wxPG_FL_VALIDATION_FAILED;
+
         if ( !validator->Validate(this) )
         {
-            // If you dpm't want to display message multiple times per change,
+            // If you don't want to display message multiple times per change,
             // comment the following line.
             m_iFlags &= ~(wxPG_FL_VALIDATION_FAILED);
+			wxGetApp().m_property_grid_validation = true;
             return false;
         }
+		wxGetApp().m_property_grid_validation = false;
         m_iFlags &= ~(wxPG_FL_VALIDATION_FAILED);
     }
 #endif
