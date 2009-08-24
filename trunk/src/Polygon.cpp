@@ -2,9 +2,9 @@
 // Copyright (c) 2009, Perttu "celero55" Ahola
 // This program is released under the BSD license. See the file COPYING for details.
 
-//#ifndef UNITTEST_NO_HEEKS
+#ifndef UNITTEST_NO_HEEKS
 	#include "stdafx.h"
-//#endif
+#endif
 
 #include "Polygon.h"
 
@@ -321,7 +321,6 @@ public:
 			std::cout<<" ";
 			for(int i=0; i<(7-level); i++) std::cout<<"- ";
 			//std::cout<<m_ptr->str()<<std::endl;
-			std::cout<<m_ptr->str()<<" this="<<int(this)<<std::endl;
 		}
 		else
 		{
