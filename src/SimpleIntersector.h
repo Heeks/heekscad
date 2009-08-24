@@ -5,5 +5,7 @@
 class SimpleIntersector: public Intersector{
 public:
 	std::map<FastCurve*, std::vector<Intersection> > Intersect(std::vector<FastCurve*> &lines);
-	IntResult Intersects(FastLine* line1, FastLine* line2);
+	IntResult LinesIntersect(FastLine* line1, FastLine* line2);
+	IntResult LineArcIntersect(FastLine* line, FastArc* arc);
+	IntResult Intersects(FastCurve* curve1, FastCurve* curve2);
 };

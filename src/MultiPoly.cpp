@@ -8,6 +8,7 @@
 #include "BentleyOttmann.h"
 #include "SimpleIntersector.h"
 #include "MultiPoly.h"
+#include "HArc.h"
 
 //This algorithm takes an array of complex sketches (CSketch* constaining multiple closed paths)
 //And creates a new set of paths that are no longer self intersecting
@@ -36,7 +37,13 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 		    EndedObject* eobj = dynamic_cast<EndedObject*>(obj);
 			if(eobj)
 			{
-				shapes.push_back(new FastLine(eobj->A->m_p,eobj->B->m_p));
+				HArc* arc = dynamic_cast<HArc*>(obj);
+				if(arc)
+				{
+					shapes.push_back(new FastArc(arc->A->m_p,arc->B->m_p,arc->C->m_p,arc->m_axis.Direction().Z() > 0));
+				}
+				else
+					shapes.push_back(new FastLine(eobj->A->m_p,eobj->B->m_p));
 			}
 			obj = sketch->GetNextChild();
 		 }
