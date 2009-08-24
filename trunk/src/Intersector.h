@@ -5,6 +5,9 @@
 
 #pragma once
 
+//TODO: get this value from somewhere else
+#define TOLERANCE .001
+
 class FastCurve
 {
 public:
@@ -30,11 +33,7 @@ public:
 	void Reverse() {gp_Pnt tmp = A; A = B; B = tmp;}
 	double GetY()
 	{
-		double dy = B.Y() - A.Y();
-		double dx = B.X() - A.X();
-
-		double t = (addedAt - A.X()) / dx;
-		return A.Y() + t * dy;
+		return GetY(addedAt);
 	}
 
 	double GetY(double ax)
@@ -68,6 +67,78 @@ public:
 	}
 };
 
+class FastArc: public FastCurve
+{
+public:
+	gp_Pnt A;
+	gp_Pnt B;
+	gp_Pnt C;
+	double a1;
+	double a2;
+	double da;
+	double rad;
+	bool cw;
+	FastArc(gp_Pnt A,gp_Pnt B, gp_Pnt C, bool cw)
+	{
+		this->A = A; 
+		this->B = B; 
+		this->C = C; 
+		this->cw = cw;
+
+		a1 = atan2(A.Y() - C.Y(),A.X() - C.X());
+		a2 = atan2(B.Y() - C.Y(),B.X() - C.X());
+		rad = C.Distance(A);
+
+		//TODO: compute how far apart the angles are signed!
+		da = fmod(a1-a2,2*Pi);
+	}
+	FastArc(){}
+	void Reverse() 
+	{
+		gp_Pnt tmp = A; 
+		A = B; 
+		B = tmp;
+
+		double temp = a1;
+		a1 = a2;
+		a2 = temp;
+
+		da = -da;
+
+		cw=!cw;
+	}
+	double GetY()
+	{
+		return GetY(addedAt);
+	}
+
+	double GetY(double ax)
+	{
+		double y = sqrt(rad*rad - (ax - C.X()) * (ax - C.X()));
+		if(A.Y() - C.Y() > TOLERANCE || B.Y() - C.Y() > TOLERANCE)
+			return y + C.Y();
+		return C.Y() - y;
+	}
+
+	double GetU(double x, double y)
+	{
+		double ang = atan2(y-C.Y(),x-C.X());
+
+		return fmod(a1-ang,2*Pi);
+	}
+
+	double GetXatU(double u)
+	{
+		double angle = a1 + u*da;
+		return rad * cos(angle);
+	}
+
+	double GetYatU(double u)
+	{
+		double angle = a1 + u*da;
+		return rad * sin(angle);
+	}
+};
 class Intersection
 {
 public:
