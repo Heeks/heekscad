@@ -30,9 +30,9 @@ double currentX=0;
 double tol=0;
 
 //Storage for the event table
-std::map<double,std::vector<std::list<MyLine*> > > eventtable;
+std::map<double,std::vector<std::list<FastLine*> > > eventtable;
 
-std::map<MyLine*, std::vector<Intersection> > BentleyOttmann::Intersect(std::vector<MyLine> &lines)
+std::map<FastCurve*, std::vector<Intersection> > BentleyOttmann::Intersect(std::vector<FastCurve*> &lines)
 {
 	tol = wxGetApp().m_geom_tol;
 	eventtable.clear();
@@ -41,34 +41,34 @@ std::map<MyLine*, std::vector<Intersection> > BentleyOttmann::Intersect(std::vec
 	for(size_t i=0; i < lines.size(); i++)
 	{
 		//We must do a binary search on the list, as we want to enfore a geom_tol
-		if(MyIsEqual(lines[i].A.X(),lines[i].B.X()))
+		if(MyIsEqual(((FastLine*)lines[i])->A.X(),((FastLine*)lines[i])->B.X()))
 		{
-			InsertEvent(AddRemoveType,lines[i].A.X(),&lines[i]); //For vertical lines
+			InsertEvent(AddRemoveType,((FastLine*)lines[i])->A.X(),(FastLine*)lines[i]); //For vertical lines
 		}
 		else
 		{
-			if(lines[i].A.X() > lines[i].B.X())
-				lines[i].Reverse();
-			InsertEvent(AddType,lines[i].A.X(),&lines[i]);
-			InsertEvent(RemoveType,lines[i].B.X(),&lines[i]);
+			if(((FastLine*)lines[i])->A.X() > ((FastLine*)lines[i])->B.X())
+				lines[i]->Reverse();
+			InsertEvent(AddType,((FastLine*)lines[i])->A.X(),(FastLine*)lines[i]);
+			InsertEvent(RemoveType,((FastLine*)lines[i])->B.X(),(FastLine*)lines[i]);
 		}
 	}
 
 	//Storage for the sweepline
-	std::map<double,std::set<MyLine*> > sweepline;
+	std::map<double,std::set<FastLine*> > sweepline;
 
 	//Storage for the located intersections
-	std::map<MyLine*, std::vector<Intersection> >intersections;
+	std::map<FastCurve*, std::vector<Intersection> > intersections;
 
 	//Storage for the already intersected code
-	std::map<MyLine*,std::set<MyLine*> > intersected;
+	std::map<FastLine*,std::set<FastLine*> > intersected;
 
 	//Go through the event points in order
-	std::map<double,std::vector<std::list<MyLine*> > >::iterator it;
+	std::map<double,std::vector<std::list<FastLine*> > >::iterator it;
 	for(it = eventtable.begin(); it != eventtable.end(); ++it)
 	{
-		std::list<MyLine*>::iterator it2;
-		MyLine* tline=0;
+		std::list<FastLine*>::iterator it2;
+		FastLine* tline=0;
 		currentX = (*it).first;
 
 		for(it2 = (*it).second[IntersectionType].begin(); it2 != (*it).second[IntersectionType].end(); ++it2)
@@ -91,26 +91,26 @@ std::map<MyLine*, std::vector<Intersection> > BentleyOttmann::Intersect(std::vec
 
 		//try to break apart coincident point sets. 
 		//TODO: should erase the list in sweepline if it is empty
-		std::map<double,std::set<MyLine*> >::iterator it3;
+		std::map<double,std::set<FastLine*> >::iterator it3;
 		for(it3 = sweepline.begin(); it3 != sweepline.end();)
 		{
 			bool donotinc=false;
-			std::set<MyLine*> lines = (*it3).second;
+			std::set<FastLine*> lines = (*it3).second;
 			if(lines.size() <= 1)
 			{
 				++it3;
 				continue;
 			}
 			double baseloc = (*it3).first;
-			std::set<MyLine*>::iterator it4;
+			std::set<FastLine*>::iterator it4;
 			for(it4 = lines.begin(); it4 != lines.end();)
 			{
-				MyLine* tline = *it4;
+				FastLine* tline = *it4;
 				double currentY = tline->GetY(currentX);
 				double newloc = MyRound(currentY);
 				if(newloc!=baseloc)
 				{
-					std::set<MyLine*>::iterator it5 = it4;
+					std::set<FastLine*>::iterator it5 = it4;
 					++it4;
 					double oldx = currentX;
 					currentX = tline->addedAt;
@@ -120,7 +120,7 @@ std::map<MyLine*, std::vector<Intersection> > BentleyOttmann::Intersect(std::vec
 					sweepline[newloc].insert(tline);
 					if((*it3).second.size() == 0)
 					{
-						std::map<double,std::set<MyLine*> >::iterator it5 = it3++;
+						std::map<double,std::set<FastLine*> >::iterator it5 = it3++;
 						sweepline.erase(it5);
 						donotinc=true;
 					}
@@ -145,12 +145,12 @@ std::map<MyLine*, std::vector<Intersection> > BentleyOttmann::Intersect(std::vec
 		}
 
 		//all sets in sweepline represent intersections, adjacent sets are possible intersecting
-		std::set<MyLine*>* prev_lines=0;
+		std::set<FastLine*>* prev_lines=0;
 		double prev_coord;
 		for(it3 = sweepline.begin(); it3 != sweepline.end(); it3++)
 		{
-			std::set<MyLine*> lines = (*it3).second;
-			std::set<MyLine*>::iterator it4;
+			std::set<FastLine*> lines = (*it3).second;
+			std::set<FastLine*>::iterator it4;
 			if(lines.size() > 1)
 			{
 				//All the elements of lines are intersecting at this X
@@ -163,10 +163,10 @@ std::map<MyLine*, std::vector<Intersection> > BentleyOttmann::Intersect(std::vec
 			//All items in an adjacent set, potentially intersect
 			if(prev_lines && (*it3).first - prev_coord < tol * 1.5)
 			{
-				std::set<MyLine*>::iterator it5;
+				std::set<FastLine*>::iterator it5;
 				for(it5 = prev_lines->begin(); it5 != prev_lines->end(); it5++)
 				{
-					MyLine* oline = *it5;
+					FastLine* oline = *it5;
 					for(it4 = lines.begin(); it4 != lines.end(); ++it4)
 					{
 						tline = *it4;
@@ -205,16 +205,16 @@ std::map<MyLine*, std::vector<Intersection> > BentleyOttmann::Intersect(std::vec
 		//TODO::Run intersection tests for between all adjacent sets. Then add these to the event tree
 		for(it3 = sweepline.begin(); it3 != sweepline.end();)
 		{
-			std::set<MyLine*> lines = (*it3++).second;
+			std::set<FastLine*> lines = (*it3++).second;
 			if(it3 == sweepline.end())
 				break;
-			std::set<MyLine*> nlines = (*it3).second;
+			std::set<FastLine*> nlines = (*it3).second;
 
 			//Compare all lines in lines to each other and to all lines in nlines
-			std::set<MyLine*>::iterator it4;
+			std::set<FastLine*>::iterator it4;
 			for(it4 = lines.begin(); it4 != lines.end(); ++it4)
 			{
-				std::set<MyLine*>::iterator it5;
+				std::set<FastLine*>::iterator it5;
 				for(it5 = nlines.begin(); it5 != nlines.end(); ++it5)
 				{
 					//Do the comparisons
@@ -252,17 +252,17 @@ std::map<MyLine*, std::vector<Intersection> > BentleyOttmann::Intersect(std::vec
 
 void Test()
 {
-	std::vector<MyLine> lines;
-	lines.push_back(MyLine(gp_Pnt(0,0,0),gp_Pnt(5,5,0)));
-	lines.push_back(MyLine(gp_Pnt(0,0,0),gp_Pnt(2,5,0)));
-	lines.push_back(MyLine(gp_Pnt(0,1,0),gp_Pnt(4,1,0)));
-//	lines.push_back(MyLine(gp_Pnt(1,1,0),gp_Pnt(1,2,0)));
+	std::vector<FastCurve*> lines;
+	lines.push_back(new FastLine(gp_Pnt(0,0,0),gp_Pnt(5,5,0)));
+	lines.push_back(new FastLine(gp_Pnt(0,0,0),gp_Pnt(2,5,0)));
+	lines.push_back(new FastLine(gp_Pnt(0,1,0),gp_Pnt(4,1,0)));
+//	lines.push_back(new FastLine(gp_Pnt(1,1,0),gp_Pnt(1,2,0)));
 	BentleyOttmann bo;
 	bo.Intersect(lines);
 }
 
 //Put a new event into the table
-void InsertEvent(EventType type, double x, MyLine* line)
+void InsertEvent(EventType type, double x, FastLine* line)
 {
 	//Find an existing list, or a place to insert it
 	double  pos = MyRound(x);
@@ -272,7 +272,7 @@ void InsertEvent(EventType type, double x, MyLine* line)
 	eventtable[pos][type].push_back(line);
 }
 
-IntResult Intersects(MyLine* line1, MyLine* line2)
+IntResult Intersects(FastLine* line1, FastLine* line2)
 {
 	//Checks if these lines intersect somewhere besides the start point. End point is reported.
 	//if(line1->A.IsEqual(line2->A,tol) || line1->B.IsEqual(line2->B,tol))
@@ -293,7 +293,7 @@ IntResult Intersects(MyLine* line1, MyLine* line2)
 	return IntResult(false,0,0,0,0);
 }
 
-bool MyIsEqual2(MyLine* line1, MyLine* line2, double at)
+bool MyIsEqual2(FastLine* line1, FastLine* line2, double at)
 {
 	if(line1->A.IsEqual(line2->A,tol) || line1->A.IsEqual(line2->B,tol))
 		return true;
