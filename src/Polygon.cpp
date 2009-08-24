@@ -3,7 +3,7 @@
 // This program is released under the BSD license. See the file COPYING for details.
 
 //#ifndef UNITTEST_NO_HEEKS
-	#include "stdafx.h"
+	#include <stdafx.h>
 //#endif // I was getting error, building in Windows ( VS 2008 ): 1>.\Polygon.cpp(7) : fatal error C1020: unexpected #endif
 // Changed "stdafx.h" to <stdafx.h> and created an empty file to the unittest directory, to make unittest/Polygontest to build.
 
