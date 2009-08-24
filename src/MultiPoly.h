@@ -13,9 +13,9 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches);
 class BoundedCurve
 {
 public:
-	MyLine* line;
+	FastCurve* line;
 	double startu,endu;
-	BoundedCurve(MyLine *line, double startu, double endu){this->line = line; this->startu = startu; this->endu = endu;}
+	BoundedCurve(FastCurve *line, double startu, double endu){this->line = line; this->startu = startu; this->endu = endu;}
 
 	double GetAX()
 	{
@@ -29,14 +29,12 @@ public:
 
 	double GetX(double u)
 	{
-		double dx = line->B.X() - line->A.X();
-		return u * dx + line->A.X();
+		return line->GetXatU(u);
 	}
 
 	double GetY(double u)
 	{
-		double dy = line->B.Y() - line->A.Y();
-		return u * dy + line->A.Y();
+		return line->GetYatU(u);
 	}
 	
 	double GetBX()
@@ -98,7 +96,7 @@ public:
 	std::vector<WhichPoint> points;
 	double m_tol;
 	CompoundSegment(){}
-	CompoundSegment(MyLine *line, double tol, double startu, double endu)
+	CompoundSegment(FastCurve *line, double tol, double startu, double endu)
 	{
 		firstline = new BoundedCurve(line,startu,endu);
 		lastline=firstline;

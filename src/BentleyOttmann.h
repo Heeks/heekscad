@@ -9,7 +9,7 @@
 
 class BentleyOttmann: public Intersector{
 public:
-	std::map<MyLine*, std::vector<Intersection> > Intersect(std::vector<MyLine> &lines);
+	std::map<FastCurve*, std::vector<Intersection> > Intersect(std::vector<FastCurve*> &lines);
 };
 
 enum EventType
@@ -21,8 +21,8 @@ enum EventType
 };
 
 bool MyIsEqual(double a, double b);
-bool MyIsEqual2(MyLine* line1, MyLine* line2, double at);
+bool MyIsEqual2(FastLine* line1, FastLine* line2, double at);
 double MyRound(double d);
-IntResult Intersects(MyLine* line1, MyLine* line2);
-void InsertEvent(EventType type, double x, MyLine* line);
+IntResult Intersects(FastLine* line1, FastLine* line2);
+void InsertEvent(EventType type, double x, FastLine* line);
 

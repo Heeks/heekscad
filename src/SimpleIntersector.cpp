@@ -12,30 +12,31 @@ struct IntersectionSort
 {
      bool operator()(const Intersection &pStart, const Intersection& pEnd)
      {
-		 return pStart.line->GetU(pStart.X,pStart.Y) < pEnd.line->GetU(pEnd.X,pEnd.Y);
+		 return pStart.curve->GetU(pStart.X,pStart.Y) < pEnd.curve->GetU(pEnd.X,pEnd.Y);
      }
 };
 
-std::map<MyLine*, std::vector<Intersection> > SimpleIntersector::Intersect(std::vector<MyLine> &lines)
+std::map<FastCurve*, std::vector<Intersection> > SimpleIntersector::Intersect(std::vector<FastCurve*> &lines)
 {
 	tol = wxGetApp().m_geom_tol;
-	std::map<MyLine*, std::vector<Intersection> > intersections;
+	std::map<FastCurve*, std::vector<Intersection> > intersections;
 
 	for(unsigned i=0; i < lines.size(); i++)
 	{
 		for(unsigned j=i+1; j < lines.size(); j++)
 		{
-			IntResult ir = Intersects(&lines[i],&lines[j]);
+			//TODO: switch intersector based on curve type
+			IntResult ir = Intersects((FastLine*)lines[i],(FastLine*)lines[j]);
 			if(ir.exists)
 			{
-				intersections[&lines[i]].push_back(Intersection(&lines[j],ir.atX,ir.atY));
-				intersections[&lines[j]].push_back(Intersection(&lines[i],ir.atX,ir.atY));
+				intersections[lines[i]].push_back(Intersection(lines[j],ir.atX,ir.atY));
+				intersections[lines[j]].push_back(Intersection(lines[i],ir.atX,ir.atY));
 			}
 		}
 	}
 
 	//Sort the intersections by U
-	std::map<MyLine*, std::vector<Intersection> >::iterator it;
+	std::map<FastCurve*, std::vector<Intersection> >::iterator it;
 	for(it = intersections.begin(); it != intersections.end(); ++it)
 	{
 		std::sort((*it).second.begin(),(*it).second.end(),IntersectionSort());
@@ -44,7 +45,7 @@ std::map<MyLine*, std::vector<Intersection> > SimpleIntersector::Intersect(std::
 	return intersections;
 }
 
-IntResult SimpleIntersector::Intersects(MyLine* line1, MyLine* line2)
+IntResult SimpleIntersector::Intersects(FastLine* line1, FastLine* line2)
 {
 	//Checks if these lines intersect somewhere besides the start point. End point is reported.
 	//if(line1->A.IsEqual(line2->A,tol) || line1->B.IsEqual(line2->B,tol))
