@@ -1,16 +1,11 @@
+// Polygon.cpp
+// Copyright (c) 2009, Perttu "celero55" Ahola
+// This program is released under the BSD license. See the file COPYING for details.
+
 #define UNITTEST_NO_HEEKS
 
 #include "../src/Polygon.h"
 #include <stdlib.h>
-
-template <class T>
-void PrintPolygons(T first, T last)
-{
-    for(T ipoly = first; ipoly != last; ipoly++)
-	{
-		ipoly->Print();
-	}
-}
 
 int main(int argc, char *argv[])
 {
