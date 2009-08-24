@@ -16,7 +16,7 @@
 //
 //all sketches must only contain closed shapes
 
-std::vector<MyLine> shapes;
+std::vector<FastCurve*> shapes;
 extern double tol;
 std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 {
@@ -36,25 +36,24 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 		    EndedObject* eobj = dynamic_cast<EndedObject*>(obj);
 			if(eobj)
 			{
-				MyLine ntobj(eobj->A->m_p,eobj->B->m_p);
-				shapes.push_back(ntobj);
+				shapes.push_back(new FastLine(eobj->A->m_p,eobj->B->m_p));
 			}
 			obj = sketch->GetNextChild();
 		 }
 	}
 	//Get a list of all the intersection points
 	Intersector *m_int = new SimpleIntersector();
-	std::map<MyLine*, std::vector<Intersection> > intersections = m_int->Intersect(shapes);
+	std::map<FastCurve*, std::vector<Intersection> > intersections = m_int->Intersect(shapes);
 
 	//Make our flashy double hashmap
 	TwoDNearMap bcurves(tol);
 
 	//Create a new list of bounded segment objects. Whose endpoints are locatable via hash
 	//with the exception that the hash returns values within tolerance of the specified point
-	std::map<MyLine*, std::vector<Intersection> >::iterator it2;
+	std::map<FastCurve*, std::vector<Intersection> >::iterator it2;
 	for(it2 = intersections.begin(); it2 != intersections.end(); ++it2)
 	{
-		MyLine *tline = (*it2).first;
+		FastCurve *tline = (*it2).first;
 		std::vector<Intersection> inter = (*it2).second;
 		for(unsigned i=0; i < inter.size()-1; i++)
 		{
