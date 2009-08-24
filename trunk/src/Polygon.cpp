@@ -2,9 +2,9 @@
 // Copyright (c) 2009, Perttu "celero55" Ahola
 // This program is released under the BSD license. See the file COPYING for details.
 
-#ifndef UNITTEST_NO_HEEKS
+//#ifndef UNITTEST_NO_HEEKS
 	#include "stdafx.h"
-#endif
+//#endif // I was getting error, building in Windows ( VS 2008 ): 1>.\Polygon.cpp(7) : fatal error C1020: unexpected #endif
 
 #include "Polygon.h"
 
