@@ -259,6 +259,42 @@ class RS274X
 				return( HeeksObject()->Intersects( rhs.HeeksObject(), &points ) > 0);
 			} // End Intersects() method*/
 
+			double Length() const
+			{
+				switch (Interpolation())
+				{
+					case eLinear:
+						return(Start().Distance(End()));
+						break;
+
+					default:
+					case eCircular:
+						if ((m_i_term < m_tolerance) && (m_j_term < m_tolerance) && (Radius() > m_tolerance))
+						{
+							// It's a full circle.
+							return(2.0 * PI * Radius());
+						} // End if - then
+						else
+						{
+							gp_Vec vx(1.0, 0.0, 0.0);
+							gp_Vec vy(0.0, 1.0, 0.0);
+
+							gp_Vec start_vector( Centre(), Start() );
+							gp_Vec end_vector( Centre(), End() );
+
+							double start_angle = start_vector.Angle( vx );
+							if (start_angle < 0.0) start_angle += (2.0 * PI);
+
+							double end_angle = end_vector.Angle( vx );
+							if (end_angle < 0.0) end_angle += (2.0 * PI);
+
+							double arc_angle = end_angle - start_angle;
+							double arc_length = (arc_angle / (2.0 * PI)) * (2.0 * PI * Radius());
+							return(abs(arc_length));
+						} // End if - else
+						break;
+				} // End switch
+			} // End Length() method
 
 			bool operator==( const Trace & rhs ) const
 			{
@@ -367,6 +403,54 @@ class RS274X
 							gp_Dir dir(up[0], up[1], up[2]);
 							gp_Pnt pc = make_point(centre);
 							gp_Circ circle(gp_Ax2(pc, dir), p1.Distance(pc));
+
+							gp_Vec vx(1.0, 0.0, 0.0);
+							gp_Vec vy(0.0, 1.0, 0.0);
+
+							double start_angle = vx.Angle( gp_Vec( Centre(), Start() ));
+							if (start_angle < 0) start_angle += (2.0 * PI);
+							
+							double end_angle = vx.Angle( gp_Vec( Centre(), End() ));
+							if (end_angle < 0) end_angle += (2.0 * PI);
+
+							if (start_angle > end_angle)
+							{
+								// Swap them.
+								double temp = start_angle;
+								start_angle = end_angle;
+								end_angle = temp;
+							} // End if - then
+
+							double number_of_segments = Length() / (0.05 * 25.4);
+							double angle_increment = (end_angle - start_angle) / number_of_segments;
+
+							double radius = Radius() + (m_aperture.OutsideDiameter()*0.5);
+							for (double angle = start_angle; angle <= end_angle; angle += angle_increment)
+							{
+								if (angle > m_tolerance)
+								{
+									polygon.push_back(Centre().Translated(vx*radius*cos(angle)+vy*radius*sin(angle)));
+								} // End if - then
+							} // End for
+							if (end_angle > m_tolerance)
+							{
+								polygon.push_back(Centre().Translated(vx*radius*cos(end_angle)+vy*radius*sin(end_angle)));
+							} // End if - then
+
+							radius = Radius() - (m_aperture.OutsideDiameter()*0.5);
+							for (double angle = end_angle; angle >= start_angle; angle -= angle_increment)
+							{
+								if (angle > m_tolerance)
+								{
+									polygon.push_back(Centre().Translated(vx*radius*cos(angle)+vy*radius*sin(angle)));
+								} // End if - then
+							} // End for
+							if (start_angle > m_tolerance)
+							{
+								polygon.push_back(Centre().Translated(vx*radius*cos(start_angle)+vy*radius*sin(start_angle)));
+							} // End if - then
+
+							return(true);
 						}
 						break;
 					}
