@@ -44,5 +44,8 @@ public:
 	void LoadFromDoubles();
 	void LoadToDoubles();
 
+	void Draw(wxDC& dc);
+
+
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 };

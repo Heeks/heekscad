@@ -159,3 +159,15 @@ HeeksObj* HPoint::ReadFromXMLElement(TiXmlElement* pElem)
 	return new_object;
 }
 
+void HPoint::Draw(wxDC& dc)
+{
+	wxGetApp().PlotSetColor(color);
+	double s[3], e[3];
+	double line_length = 1.5;
+	extract(m_p, s);
+	extract(m_p, e); e[0] -= line_length; e[1] -= line_length; wxGetApp().PlotLine(s, e);
+	extract(m_p, e); e[0] += line_length; e[1] -= line_length; wxGetApp().PlotLine(s, e);
+	extract(m_p, e); e[0] -= line_length; e[1] += line_length; wxGetApp().PlotLine(s, e);
+	extract(m_p, e); e[0] += line_length; e[1] += line_length; wxGetApp().PlotLine(s, e);
+}
+
