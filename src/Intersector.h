@@ -124,19 +124,19 @@ public:
 	{
 		double ang = atan2(y-C.Y(),x-C.X());
 
-		return fmod(a1-ang,2*Pi);
+		return fmod((a1-ang)/da,2*Pi);
 	}
 
 	double GetXatU(double u)
 	{
 		double angle = a1 + u*da;
-		return rad * cos(angle);
+		return rad * cos(angle) + C.X();
 	}
 
 	double GetYatU(double u)
 	{
 		double angle = a1 + u*da;
-		return rad * sin(angle);
+		return rad * sin(angle) + C.Y();
 	}
 };
 class Intersection
@@ -164,4 +164,10 @@ public:
 	double uA;
 	double uB;
 	IntResult(bool exists, double uA, double uB, double atX, double atY){this->exists = exists; this->atX = atX;this->atY = atY; this->uA = uA; this->uB = uB;}
+	void Swap()
+	{
+		double temp = uA;
+		uA = uB;
+		uB = temp;
+	}	
 };
