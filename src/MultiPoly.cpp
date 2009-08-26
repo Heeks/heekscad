@@ -40,7 +40,7 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 				HArc* arc = dynamic_cast<HArc*>(obj);
 				if(arc)
 				{
-					shapes.push_back(new FastArc(arc->A->m_p,arc->B->m_p,arc->C->m_p,arc->m_axis.Direction().Z() > 0));
+					shapes.push_back(new FastArc(arc->A->m_p,arc->B->m_p,arc->C->m_p,arc->m_axis.Direction().Z() > 0, arc->GetCircle()));
 				}
 				else
 					shapes.push_back(new FastLine(eobj->A->m_p,eobj->B->m_p));
@@ -295,14 +295,19 @@ void ConcatSegments(double x_coord, double y_coord, CompoundSegment* seg1, Compo
 
 	//Must find the pointer at the end of seg2 and change it
 	gp_Pnt begin = seg2->Begin();
+	gp_Pnt end = seg2->End();
 	if(MyIsEqual(begin.X(),x_coord) && MyIsEqual(begin.Y(),y_coord))
-	{
-		gp_Pnt end = seg2->End();
 		bcurves.remap(end.X(),end.Y(),seg2,seg1);
-	}
 	else
 	{
-		bcurves.remap(begin.X(),begin.Y(),seg2,seg1);
+		if(MyIsEqual(end.X(),x_coord) && MyIsEqual(end.Y(),y_coord))
+			bcurves.remap(begin.X(),begin.Y(),seg2,seg1);
+		else
+		{
+			//kaboom
+			int x=0;
+			x++;
+		}
 	}
 	//remove from the map
 	bcurves.remove(x_coord,y_coord,seg1);
