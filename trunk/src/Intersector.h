@@ -78,21 +78,44 @@ public:
 	double da;
 	double rad;
 	bool cw;
-	FastArc(gp_Pnt A,gp_Pnt B, gp_Pnt C, bool cw)
+	gp_Circ m_circ; 
+
+	FastArc(gp_Pnt A,gp_Pnt B, gp_Pnt C, bool cw, gp_Circ circ)
 	{
 		this->A = A; 
 		this->B = B; 
 		this->C = C; 
 		this->cw = cw;
+		this->m_circ = circ;
 
 		a1 = atan2(A.Y() - C.Y(),A.X() - C.X());
 		a2 = atan2(B.Y() - C.Y(),B.X() - C.X());
 		rad = C.Distance(A);
 
-		//TODO: compute how far apart the angles are signed!
-		da = fmod(a1-a2,2*Pi);
+		//TODO: compute how far apart the angles are, signed!
+		da = fmod(a2-a1,2*Pi);
+
+#ifdef CHECKFASTARC
+		double tax = GetXatU(0);
+		double tay = GetYatU(0);
+		double tbx = GetXatU(1);
+		double tby = GetYatU(1);
+
+		if(tax != A.X() || tay != A.Y() || tbx != B.X() || tby != B.Y())
+		{
+			int x=0;
+			x++;
+		}
+#endif
 	}
+
 	FastArc(){}
+
+	gp_Circ GetCircle()
+	{
+		return m_circ;
+	}
+
 	void Reverse() 
 	{
 		gp_Pnt tmp = A; 
@@ -124,7 +147,7 @@ public:
 	{
 		double ang = atan2(y-C.Y(),x-C.X());
 
-		return fmod((a1-ang)/da,2*Pi);
+		return fmod((a2-ang)/da,2*Pi);
 	}
 
 	double GetXatU(double u)

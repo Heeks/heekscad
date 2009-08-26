@@ -179,7 +179,13 @@ public:
 		for(it = lines.begin(); it!= lines.end(); ++it)
 		{
 			BoundedCurve* curve = (*it);
-			edges.push_back(BRepBuilderAPI_MakeEdge(curve->Begin(), curve->End()));
+			FastArc* arc = dynamic_cast<FastArc*>(curve->line);
+			if(arc)
+			{
+				edges.push_back(BRepBuilderAPI_MakeEdge(arc->GetCircle(), curve->Begin(), curve->End()));
+			}
+			else
+				edges.push_back(BRepBuilderAPI_MakeEdge(curve->Begin(), curve->End()));
 		}
 	}
 
