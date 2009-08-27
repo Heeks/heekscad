@@ -1388,7 +1388,8 @@ void CoordinateSystem::AxesToAngles(const gp_Dir &x, const gp_Dir &y, double &v_
 }
 
 //static
-void CoordinateSystem::AnglesToAxes(const double &v_angle, const double &h_angle, const double &t_angle, gp_Dir &x, gp_Dir &y)
+void CoordinateSystem::AnglesToAxes(const double &v_angle, const double
+&h_angle, const double &t_angle, gp_Dir &x, gp_Dir &y)
 {
 	gp_Trsf zmat1;
 	zmat1.SetRotation(gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)), t_angle);
@@ -1397,13 +1398,14 @@ void CoordinateSystem::AnglesToAxes(const double &v_angle, const double &h_angle
 	xmat.SetRotation(gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(1, 0, 0)), v_angle);
 
 	gp_Trsf zmat2;
-	zmat2.SetRotation(gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)), h_angle);
+	zmat2.SetRotation(gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(0, 1, 0)), h_angle);
+	//zmat2.SetRotation(gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)), h_angle);
 
 	gp_Trsf mat = zmat2 * xmat * zmat1;
 
 	x = gp_Dir(1, 0, 0).Transformed(mat);
 	y = gp_Dir(0, 1, 0).Transformed(mat);
-}
+} 
 
 static double origin[3];
 static double x_axis_pos[3];
