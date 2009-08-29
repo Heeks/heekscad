@@ -182,6 +182,8 @@ std::vector<IntResult> SimpleIntersector::ArcsIntersect(FastArc* arc1, FastArc* 
 
 	double a = (arc1->rad * arc1->rad - arc2->rad * arc2->rad + d * d) / (2 * d);
 	double h = sqrt(arc1->rad * arc1->rad - a * a);
+	if(h!=h)
+		h=0;
 
 	double xl = arc1->C.X() + a * ( arc2->C.X() - arc1->C.X()) / d;
 	double yl = arc1->C.Y() + a * ( arc2->C.Y() - arc1->C.Y()) / d;
