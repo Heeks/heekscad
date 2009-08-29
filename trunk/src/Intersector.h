@@ -179,6 +179,11 @@ public:
 			ang += 2*Pi;
 
 		double u =  fmod((a2-ang)/da,2*Pi);
+		if(u!=u)
+		{
+			int x=0;
+			x++;
+		}
 		return u;
 	}
 
