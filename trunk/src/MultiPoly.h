@@ -176,21 +176,30 @@ public:
 	void GetEdges(std::list<TopoDS_Edge>& edges)
 	{
 		std::list<BoundedCurve*>::iterator it;
+		int i=0;
 		for(it = lines.begin(); it!= lines.end(); ++it)
 		{
 			BoundedCurve* curve = (*it);
 			FastArc* arc = dynamic_cast<FastArc*>(curve->line);
 			if(arc)
 			{
-				edges.push_back(BRepBuilderAPI_MakeEdge(arc->GetCircle(), curve->Begin(), curve->End()));
+				gp_Circ cir = arc->GetCircle();
+				if(points[i] == PointB)
+				{
+					cir.SetAxis(cir.Axis().Reversed());
+					edges.push_back(BRepBuilderAPI_MakeEdge(cir, curve->End(), curve->Begin()));
+				}
+				else
+					edges.push_back(BRepBuilderAPI_MakeEdge(cir, curve->Begin(), curve->End()));
 			}
 			else
 				edges.push_back(BRepBuilderAPI_MakeEdge(curve->Begin(), curve->End()));
+			i++;
 		}
 	}
 
 	double GetArea()
-	{
+	{ 
 		double total = 0;
 		std::list<BoundedCurve*>::iterator it=lines.begin();
 		std::list<BoundedCurve*>::iterator it2=lines.begin();
