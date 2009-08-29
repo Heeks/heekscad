@@ -125,8 +125,11 @@ std::vector<IntResult> SimpleIntersector::LineArcIntersect(FastLine* line, FastA
 	double c = arc->C.X() * arc->C.X() + arc->C.Y() * arc->C.Y() + line->A.X()*line->A.X() + line->A.Y()*line->A.Y() - 2*(arc->C.X() * line->A.X() + arc->C.Y() * line->A.Y()) - arc->rad * arc->rad;
 
 	double det = b * b - 4 * a * c;
-	if(det<0)
+	if(det<-tol)
 		return ret;
+
+	if(det<0)
+		det = 0;
 
 	if(det > -tol && det < tol)
 	{
