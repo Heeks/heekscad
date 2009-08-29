@@ -82,6 +82,7 @@ std::vector<IntResult> SimpleIntersector::Intersects(FastCurve* curve1, FastCurv
 			else
 			{
 				FastArc* arc2 = dynamic_cast<FastArc*>(curve2);
+				ret = ArcsIntersect(arc1,arc2);
 			}
 		}
 	}
@@ -164,3 +165,59 @@ IntResult SimpleIntersector::LineArcIntersect(FastLine* line, FastArc* arc, doub
 
 	return IntResult(true,u,arcu,x,y);
 }
+
+std::vector<IntResult> SimpleIntersector::ArcsIntersect(FastArc* arc1, FastArc* arc2)
+{
+	std::vector<IntResult> ret;
+
+	double d = arc1->C.Distance(arc2->C);
+
+	if(d - tol > arc1->rad + arc2->rad)
+		return ret;
+	if(d + tol < fabs(arc1->rad - arc2->rad))
+		return ret;
+
+	if(d < tol && d > -tol && fabs(arc1->rad -arc2->rad) < tol)
+		return ret; //coincident
+
+	double a = (arc1->rad * arc1->rad - arc2->rad * arc2->rad + d * d) / (2 * d);
+	double h = sqrt(arc1->rad * arc1->rad - a * a);
+
+	double xl = arc1->C.X() + a * ( arc2->C.X() - arc1->C.X()) / d;
+	double yl = arc1->C.Y() + a * ( arc2->C.Y() - arc1->C.Y()) / d;
+
+	double x1 = xl + h * ( arc2->C.Y() - arc1->C.Y() ) / d;
+	double y1 = yl - h * ( arc2->C.X() - arc1->C.X() ) / d;
+
+	double x2 = xl - h * ( arc2->C.Y() - arc1->C.Y() ) / d;
+	double y2 = yl + h * ( arc2->C.X() - arc1->C.X() ) / d;
+
+	if(d > arc1->rad + arc2->rad - tol && d < arc1->rad + arc2->rad + tol)
+	{
+		//single solution
+		ret.push_back(ArcsIntersect(arc1,arc2,x1,y1));
+		return ret;
+	}
+
+	ret.push_back(ArcsIntersect(arc1,arc2,x1,y1));
+	ret.push_back(ArcsIntersect(arc1,arc2,x2,y2));
+
+	return ret;
+
+}
+
+IntResult SimpleIntersector::ArcsIntersect(FastArc* arc1, FastArc* arc2, double x, double y)
+{
+	double arc1u = arc1->GetU(x,y);
+
+	if(arc1u < -tol || arc1u > 1 + tol)
+		return IntResult(false,0,0,0,0);
+
+	double arc2u = arc1->GetU(x,y);
+
+	if(arc2u < -tol || arc2u > 1 + tol)
+		return IntResult(false,0,0,0,0);
+
+	return IntResult(true,arc1u,arc2u,x,y);
+}
+
