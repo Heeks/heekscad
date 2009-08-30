@@ -129,7 +129,7 @@ void OneDNearMap::find(double at, std::vector<void**>& pRet)
 	if(it1 >= m_data.end() || it2 < m_data.begin())
 		return;
 
-	while((*it1).first <= (*it2).first && it1 < m_data.end())
+	while(it1 < m_data.end() && (*it1).first <= (*it2).first)
 	{
 		for(size_t i=0; i < (*it1).second->size(); i++)
 		{
@@ -266,7 +266,7 @@ void TwoDNearMap::find(double atX, double atY, std::vector<void**>& pRet)
 	it2--;
 
 	//Check the it1 is less than it2, otherwise we have a null solution
-	while((*it1).first <= (*it2).first && it1 < m_data.end())
+	while(it1 < m_data.end() && (*it1).first <= (*it2).first)
 	{
 		OneDNearMap* pFound = (OneDNearMap*)(*(*it1).second)[0];
 		pFound->find(atY,pRet);
