@@ -71,8 +71,8 @@ public:
 	std::vector<double> RayIntersects(gp_Pnt pnt)
 	{
 		std::vector<double> ret;
-		if((pnt.Y() < B.Y() && pnt.Y() > A.Y())||
-			(pnt.Y() > B.Y() && pnt.Y() < A.Y()))
+		if((pnt.Y() <= B.Y() && pnt.Y() > A.Y())||
+			(pnt.Y() > B.Y() && pnt.Y() <= A.Y()))
 		{
 			if(fabs(A.Y() - B.Y()) < TOLERANCE)
 				return ret;
@@ -249,7 +249,7 @@ public:
 		if(x1 < p.X())
 			ret.push_back(GetU(x1,p.Y()));
 		if(x2 < p.X())
-				ret.push_back(GetU(x2,p.Y()));
+			ret.push_back(GetU(x2,p.Y()));
 		return ret;
 	}
 
