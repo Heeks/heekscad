@@ -25,7 +25,7 @@ int OCCSolver::solve(double  **x,int xLength, constraint * cons, int consLength,
 	for(int i=1; i <= GetVectorSize(); i++)
 		(*vector)(i) = GetInitialValue(i-1);
 
-	math_BFGS bfgs(*this,*vector,10e-6);
+	math_BFGS bfgs(*this,*vector,10e-7);
 	Unload();
 	return 0;
 }

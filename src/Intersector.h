@@ -6,7 +6,7 @@
 #pragma once
 
 //TODO: get this value from somewhere else
-#define TOLERANCE .001
+#define TOLERANCE .0001
 
 class FastCurve
 {
@@ -21,6 +21,7 @@ public:
 	virtual	double GetU(double x, double y)=0;
 	virtual double GetYatU(double u)=0;
 	virtual double GetXatU(double u)=0;
+	virtual std::vector<double> RayIntersects(gp_Pnt p)=0;
 };
 
 class FastLine: public FastCurve
@@ -51,6 +52,7 @@ public:
 		double dy = A.Y() - B.Y();
 
 		double t=(A.X()*dx-x*dx+A.Y()*dy-y*dy)/(dx*dx+dy*dy);
+
 		return t;
 	}
 
@@ -64,6 +66,21 @@ public:
 	{
 		double dy = B.Y() - A.Y();
 		return u * dy + A.Y();
+	}
+
+	std::vector<double> RayIntersects(gp_Pnt pnt)
+	{
+		std::vector<double> ret;
+		if((pnt.Y() < B.Y() && pnt.Y() > A.Y())||
+			(pnt.Y() > B.Y() && pnt.Y() < A.Y()))
+		{
+			double u = GetU(pnt.X(),pnt.Y());
+			double x = GetXatU(u);
+			if(x < pnt.X())
+				ret.push_back(u);
+		}
+		return ret;
+
 	}
 };
 
@@ -184,6 +201,12 @@ public:
 			int x=0;
 			x++;
 		}
+		if(u > TOLERANCE && u < 1 - TOLERANCE)
+		{
+			int x=0;
+			x++;
+		}
+
 		return u;
 	}
 
@@ -207,6 +230,25 @@ public:
 	double TransformX(double x)
 	{
 		return x;
+	}
+
+	std::vector<double> RayIntersects(gp_Pnt p)
+	{
+		std::vector<double> ret;
+
+		double y = p.Y() - C.Y();
+		if(fabs(y) > rad)
+			return ret;
+
+		double x1 = sqrt(rad*rad - y*y);
+		double x2 = x1+C.X();
+		x1 = C.X()-x1;
+		
+		if(x1 < p.X())
+			ret.push_back(GetU(x1,p.Y()));
+		if(x2 < p.X())
+			ret.push_back(GetU(x2,p.Y()));
+		return ret;
 	}
 
 };

@@ -83,7 +83,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 #endif
 
 	m_version_number = _T("0 8 2");
-	m_geom_tol = 0.001;
+	m_geom_tol = 0.0001;
 	m_view_units = 1.0;
 	background_color = HeeksColor(0, 0, 0);
 	current_color = HeeksColor(0, 0, 0);
