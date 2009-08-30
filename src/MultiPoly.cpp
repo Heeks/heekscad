@@ -198,14 +198,14 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 	for(unsigned i=0; i < closed_shapes.size(); i++)
 	{
 		closed_shapes[i]->Order();
-#ifdef FORCEPOLYGONORDERING
+//#ifdef FORCEPOLYGONORDERING
 		double area = closed_shapes[i]->GetArea();
 		if(area<0)
 		{
 			closed_shapes[i]->Reverse();
 			closed_shapes[i]->Order();
 		}
-#endif
+//#endif
 	}
 
 	//Now that we have all closed shapes, we need to define the relationships. Since we know that they are not intersecting
@@ -341,7 +341,8 @@ TopoDS_Wire TopoDSWireAdaptor(CompoundSegment* poly, bool inside)
 	//if(inside)
 	//	wire = TopoDS::Wire(wire.Oriented(TopAbs_REVERSED));
 	//else
-		wire = TopoDS::Wire(wire.Oriented(TopAbs_FORWARD));
+	wire.Compose(TopAbs_FORWARD);
+		//wire = TopoDS::Wire(wire.Oriented(TopAbs_FORWARD));
 	return wire;
 }
 
