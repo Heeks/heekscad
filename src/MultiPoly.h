@@ -67,7 +67,7 @@ public:
 		int count=0;
 		//TODO: add tolerance
 		for(int i=0; i < vec.size(); i++)
-			if(vec[i] > startu && vec[i] < endu)
+			if((vec[i] > startu && vec[i] < endu)||(vec[i] < startu && vec[i] > endu))
 				count++;
 		return count;
 	}
@@ -198,6 +198,7 @@ public:
 	void GetEdges(std::list<TopoDS_Edge>& edges)
 	{
 		std::list<BoundedCurve*>::iterator it;
+		lines.reverse();
 		int i=0;
 		for(it = lines.begin(); it!= lines.end(); ++it)
 		{
@@ -206,18 +207,95 @@ public:
 			if(arc)
 			{
 				gp_Circ cir = arc->GetCircle();
-			//	if(points[i] == PointB)
-			//	{
-			//		cir.SetAxis(cir.Axis().Reversed());
-			//		edges.push_back(BRepBuilderAPI_MakeEdge(cir, curve->End(), curve->Begin()));
-			//	}
-			//	else
+				if(points[i] == PointB)
+				{
+					cir.SetAxis(cir.Axis().Reversed());
+#ifdef DEBUGEDGES
+					DrawDebugLine(curve->End(), curve->Begin(),i);
+#endif
+					edges.push_back(BRepBuilderAPI_MakeEdge(cir, curve->End(), curve->Begin()));
+				}
+				else
+				{
 					edges.push_back(BRepBuilderAPI_MakeEdge(cir, curve->Begin(), curve->End()));
+#ifdef DEBUGEDGES
+					DrawDebugLine(curve->Begin(), curve->End(),i);
+#endif 
+				}
 			}
 			else
-				edges.push_back(BRepBuilderAPI_MakeEdge(curve->Begin(), curve->End()));
+				if(points[i] == PointB)
+				{
+#ifdef DEBUGEDGES
+					DrawDebugLine(curve->End(), curve->Begin(),i);
+#endif
+					edges.push_back(BRepBuilderAPI_MakeEdge(curve->End(), curve->Begin()));
+				}
+				else 
+				{
+//#ifdef DEBUGEDGES
+					DrawDebugLine(curve->Begin(), curve->End(),i);
+//#endif 
+					edges.push_back(BRepBuilderAPI_MakeEdge(curve->Begin(), curve->End()));
+				}
 			i++;
 		}
+	}
+
+	void DrawDebugLine(gp_Pnt A, gp_Pnt B, int i)
+	{
+		gp_Pnt mpnt = A.XYZ() + (B.XYZ()-A.XYZ())/2;
+
+		double theta = atan2(B.Y() - A.Y(),B.X() - A.X());
+
+		gp_Pnt lpnt1(mpnt.X() + cos(theta+Pi/4),mpnt.Y() + sin(theta+Pi/4),0);
+		gp_Pnt lpnt2(mpnt.X() + cos(theta-Pi/4),mpnt.Y() + sin(theta-Pi/4),0);
+		gp_Pnt tpnt1(mpnt.X() + cos(theta-Pi/2)*2,mpnt.Y() + sin(theta-Pi/2)*2,0);
+		gp_Pnt tpnt2(mpnt.X() + cos(theta+Pi/2)*2,mpnt.Y() + sin(theta+Pi/2)*2,0);
+
+
+		glBegin(GL_LINES);
+		glVertex3d(mpnt.X(),mpnt.Y(),mpnt.Z());
+		glVertex3d(lpnt1.X(),lpnt1.Y(),lpnt1.Z());
+		glVertex3d(mpnt.X(),mpnt.Y(),mpnt.Z());
+		glVertex3d(lpnt2.X(),lpnt2.Y(),lpnt2.Z());
+		glEnd();
+
+		wxChar str[100];
+		wxSprintf(str,_("%d"),i);
+
+		glPushMatrix();
+		glTranslatef(tpnt1.X(),tpnt1.Y(),tpnt1.Z());
+		render_text(str);
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(tpnt2.X(),tpnt2.Y(),tpnt2.Z());
+		render_text(str);
+		glPopMatrix();
+	}
+
+	void render_text(const wxChar* str)
+	{
+		wxGetApp().create_font();
+		//glColor4ub(0, 0, 0, 255);
+		glEnable(GL_BLEND);
+		glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+		glEnable(GL_TEXTURE_2D);
+		glDepthMask(0);
+		glDisable(GL_POLYGON_OFFSET_FILL);
+		wxGetApp().m_gl_font.Begin();
+
+		//Draws text with a glFont
+		float scale = 0.08f;
+		std::pair<int,int> size;
+		wxGetApp().m_gl_font.GetStringSize(str,&size);
+		wxGetApp().m_gl_font.DrawString(str, scale, -size.first/2.0f*scale, size.second/2.0f*scale);
+
+		glDepthMask(1);
+		glEnable(GL_POLYGON_OFFSET_FILL);
+		glDisable(GL_TEXTURE_2D);
+		glDisable(GL_BLEND);
 	}
 
 	double GetArea()
@@ -280,7 +358,7 @@ public:
 		//TODO: is it possible that the segments are not in a logical order?
 		gp_Pnt lastpoint = Begin();
 		std::list<BoundedCurve*>::iterator it;
-		points.empty();
+		points.clear();
 		for(it = lines.begin(); it!= lines.end(); ++it)
 		{
 			if((*it)->Begin().Distance(lastpoint) <= m_tol)

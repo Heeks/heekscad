@@ -341,7 +341,7 @@ TopoDS_Wire TopoDSWireAdaptor(CompoundSegment* poly, bool inside)
 	//if(inside)
 	//	wire = TopoDS::Wire(wire.Oriented(TopAbs_REVERSED));
 	//else
-	wire.Compose(TopAbs_FORWARD);
+	//wire.Compose(TopAbs_FORWARD);
 		//wire = TopoDS::Wire(wire.Oriented(TopAbs_FORWARD));
 	return wire;
 }
