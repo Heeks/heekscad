@@ -17,6 +17,14 @@ public:
 	double startu,endu;
 	BoundedCurve(FastCurve *line, double startu, double endu){this->line = line; this->startu = startu; this->endu = endu;}
 
+	void Reverse()
+	{
+		double temp = endu;
+		endu = startu;
+		startu = temp;
+		line->Reverse();
+	}
+
 	double GetAX()
 	{
 		return GetX(startu);
@@ -112,6 +120,16 @@ public:
 		firstpoint = lastpoint;
 		lastpoint = tpoint;
 		lines.reverse();
+
+#ifndef OLDLINES
+		firstpoint = (firstpoint == PointA)?PointB:PointA;
+		lastpoint = (lastpoint == PointA)?PointB:PointA;
+		std::list<BoundedCurve*>::iterator it;
+		for(it = lines.begin(); it!=lines.end(); it++)
+		{
+			(*it)->Reverse();
+		}
+#endif	
 	}
 
 	WhichEnd GetWhichEnd(double atx, double aty)
