@@ -181,12 +181,12 @@ public:
 			if(arc)
 			{
 				gp_Circ cir = arc->GetCircle();
-				if(points[i] == PointB)
-				{
-					cir.SetAxis(cir.Axis().Reversed());
-					edges.push_back(BRepBuilderAPI_MakeEdge(cir, curve->End(), curve->Begin()));
-				}
-				else
+			//	if(points[i] == PointB)
+			//	{
+			//		cir.SetAxis(cir.Axis().Reversed());
+			//		edges.push_back(BRepBuilderAPI_MakeEdge(cir, curve->End(), curve->Begin()));
+			//	}
+			//	else
 					edges.push_back(BRepBuilderAPI_MakeEdge(cir, curve->Begin(), curve->End()));
 			}
 			else

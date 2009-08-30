@@ -74,7 +74,9 @@ public:
 		if((pnt.Y() < B.Y() && pnt.Y() > A.Y())||
 			(pnt.Y() > B.Y() && pnt.Y() < A.Y()))
 		{
-			double u = GetU(pnt.X(),pnt.Y());
+			if(fabs(A.Y() - B.Y()) < TOLERANCE)
+				return ret;
+			double u = (pnt.Y() - A.Y())/(B.Y()-A.Y());
 			double x = GetXatU(u);
 			if(x < pnt.X())
 				ret.push_back(u);

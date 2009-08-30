@@ -325,7 +325,7 @@ void ConcatSegments(double x_coord, double y_coord, CompoundSegment* seg1, Compo
 #endif
 }
 
-TopoDS_Wire TopoDSWireAdaptor(CompoundSegment* poly)
+TopoDS_Wire TopoDSWireAdaptor(CompoundSegment* poly, bool inside)
 {
 	std::list<TopoDS_Edge> edges;
 	poly->GetEdges(edges);
@@ -337,7 +337,12 @@ TopoDS_Wire TopoDSWireAdaptor(CompoundSegment* poly)
 		TopoDS_Edge &edge = *It;
 		wire_maker.Add(edge);
 	}
-	return wire_maker.Wire();
+	TopoDS_Wire wire = wire_maker.Wire();
+	//if(inside)
+	//	wire = TopoDS::Wire(wire.Oriented(TopAbs_REVERSED));
+	//else
+		wire = TopoDS::Wire(wire.Oriented(TopAbs_FORWARD));
+	return wire;
 }
 
 std::vector<std::pair<TopoDS_Wire,std::vector<TopoDS_Wire> > > TopoDSWireAdaptor(
@@ -346,10 +351,10 @@ std::vector<std::pair<TopoDS_Wire,std::vector<TopoDS_Wire> > > TopoDSWireAdaptor
 	std::vector<std::pair<TopoDS_Wire,std::vector<TopoDS_Wire> > > ret;
 	for(unsigned i=0; i < data.size(); i++)
 	{
-		TopoDS_Wire outside = TopoDSWireAdaptor(data[i].first);
+		TopoDS_Wire outside = TopoDSWireAdaptor(data[i].first,false);
 		std::vector<TopoDS_Wire> insides;
 		for(unsigned j=0; j < data[i].second.size(); j++)
-			insides.push_back(TopoDSWireAdaptor(data[i].second[j]));
+			insides.push_back(TopoDSWireAdaptor(data[i].second[j],true));
 		ret.push_back(std::pair<TopoDS_Wire,std::vector<TopoDS_Wire> >(outside,insides));
 	}
 	return ret;
