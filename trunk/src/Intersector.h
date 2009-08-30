@@ -53,6 +53,11 @@ public:
 
 		double t=(A.X()*dx-x*dx+A.Y()*dy-y*dy)/(dx*dx+dy*dy);
 
+		if(t > -TOLERANCE && t < TOLERANCE)
+			t = 0;
+		if(t > 1 - TOLERANCE && t < 1 + TOLERANCE)
+			t = 1;
+
 		return t;
 	}
 
@@ -208,6 +213,12 @@ public:
 			int x=0;
 			x++;
 		}
+
+		if(u > -TOLERANCE && u < TOLERANCE)
+			u = 0;
+		if(u > 1 - TOLERANCE && u < 1 + TOLERANCE)
+			u = 1;
+
 
 		return u;
 	}
