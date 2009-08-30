@@ -249,7 +249,7 @@ public:
 		if(x1 < p.X())
 			ret.push_back(GetU(x1,p.Y()));
 		if(x2 < p.X())
-			ret.push_back(GetU(x2,p.Y()));
+				ret.push_back(GetU(x2,p.Y()));
 		return ret;
 	}
 
