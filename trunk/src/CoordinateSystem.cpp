@@ -1398,8 +1398,7 @@ void CoordinateSystem::AnglesToAxes(const double &v_angle, const double
 	xmat.SetRotation(gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(1, 0, 0)), v_angle);
 
 	gp_Trsf zmat2;
-	zmat2.SetRotation(gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(0, 1, 0)), h_angle);
-	//zmat2.SetRotation(gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)), h_angle);
+	zmat2.SetRotation(gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)), h_angle);
 
 	gp_Trsf mat = zmat2 * xmat * zmat1;
 
