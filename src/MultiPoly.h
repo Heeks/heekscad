@@ -49,14 +49,11 @@ public:
 
 	bool RayIntersects(gp_Pnt pnt)
 	{
-		if((pnt.Y() < GetBY() && pnt.Y() > GetAY())||
-			(pnt.Y() > GetBY() && pnt.Y() < GetAY()))
-		{
-			double u = line->GetU(pnt.X(),pnt.Y());
-			double x = GetX(u);
-			if(x < pnt.X())
+		std::vector<double> vec = line->RayIntersects(pnt);
+		//TODO: add tolerance
+		for(int i=0; i < vec.size(); i++)
+			if(vec[i] > startu && vec[i] < endu)
 				return true;
-		}
 		return false;
 	}
 
