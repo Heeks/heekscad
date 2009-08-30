@@ -31,7 +31,7 @@ public:
 	gp_Pnt B;
 	FastLine(gp_Pnt A,gp_Pnt B){this->A = A; this->B = B;}
 	FastLine(){}
-	void Reverse() {gp_Pnt tmp = A; A = B; B = tmp;}
+	void Reverse() {};//gp_Pnt tmp = A; A = B; B = tmp;}
 	double GetY()
 	{
 		return GetY(addedAt);
@@ -157,13 +157,13 @@ public:
 
 	void Reverse() 
 	{
-		gp_Pnt tmp = A; 
+/*		gp_Pnt tmp = A; 
 		A = B; 
 		B = tmp;
 
 		double temp = a1;
 		a1 = a2;
-		a2 = temp;
+		a2 = temp;*/
 
 //		a1 = fmod(a1,2*Pi);
 //		a2 = fmod(a2,2*Pi);
@@ -171,7 +171,7 @@ public:
 //		if(a1>a2);
 //			a2+=2*Pi;
 
-		da = -da;
+/*		da = -da; */
 
 		m_circ.SetAxis(m_circ.Axis().Reversed());
 
