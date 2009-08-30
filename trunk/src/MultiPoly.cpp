@@ -199,8 +199,8 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 	{
 		closed_shapes[i]->Order();
 //#ifdef FORCEPOLYGONORDERING
-		double area = closed_shapes[i]->GetArea();
-		if(area<0)
+		bool cw = closed_shapes[i]->GetCW();
+		if(!cw)
 		{
 			closed_shapes[i]->Reverse();
 			closed_shapes[i]->Order();

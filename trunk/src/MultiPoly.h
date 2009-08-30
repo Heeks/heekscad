@@ -55,14 +55,21 @@ public:
 		return GetY(endu);
 	}
 
-	bool RayIntersects(gp_Pnt pnt)
+	gp_Pnt GetMidPoint()
+	{
+		double mu = startu + (endu - startu)/2;
+		return gp_Pnt(GetX(mu),GetY(mu),0);
+	}
+
+	int RayIntersects(gp_Pnt pnt)
 	{
 		std::vector<double> vec = line->RayIntersects(pnt);
+		int count=0;
 		//TODO: add tolerance
 		for(int i=0; i < vec.size(); i++)
 			if(vec[i] > startu && vec[i] < endu)
-				return true;
-		return false;
+				count++;
+		return count;
 	}
 
 	gp_Pnt Begin()
@@ -227,20 +234,46 @@ public:
 		total+=GetArea(*it,points[idx],*lines.begin(),points[0]);
 		return total*.5;
 	}
-
 	int GetRayIntersectionCount(gp_Pnt pnt)
+	{
+		return GetRayIntersectionCount(pnt,NULL);
+	}
+
+	int GetRayIntersectionCount(gp_Pnt pnt, BoundedCurve* without)
 	{
 		int intersections=0;
 		std::list<BoundedCurve*>::iterator it;
 		for(it = lines.begin(); it!= lines.end(); ++it)
 		{
 			BoundedCurve* curve = (*it);
-			if(curve->RayIntersects(pnt))
-				intersections++;
-
+			if(curve == without)
+				continue;
+			intersections+=curve->RayIntersects(pnt);
 		}
 		return intersections;
 	}
+
+	bool GetCW()
+	{
+		std::list<BoundedCurve*>::iterator it;
+		for(it = lines.begin(); it!=lines.end(); it++)
+		{
+			gp_Pnt mpnt = (*it)->GetMidPoint();
+			int count = GetRayIntersectionCount(mpnt,*it);
+			if(count%2)
+			{
+				gp_Pnt begin = (*it)->Begin();
+				gp_Pnt end = (*it)->End();
+				if(begin.Y() > end.Y())
+					return false;
+				if(begin.Y() == end.Y() && begin.X() > end.X())
+					return false;
+				return true;
+			}	
+		}
+		return true;
+	}
+
 
 	void Order()
 	{
