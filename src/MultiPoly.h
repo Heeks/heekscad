@@ -66,7 +66,7 @@ public:
 		std::vector<double> vec = line->RayIntersects(pnt);
 		int count=0;
 		//TODO: add tolerance
-		for(int i=0; i < vec.size(); i++)
+		for(unsigned int i=0; i < vec.size(); i++)
 			if((vec[i] > startu && vec[i] < endu)||(vec[i] < startu && vec[i] > endu))
 				count++;
 		return count;
