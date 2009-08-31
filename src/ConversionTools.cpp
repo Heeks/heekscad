@@ -16,6 +16,8 @@
 #include "Shape.h"
 #include "Sketch.h"
 #include "Group.h"
+#include "MultiPoly.h"
+#include "Polygon.h"
 
 void GetConversionMenuTools(std::list<Tool*>* t_list){
 	bool lines_or_arcs_etc_in_marked_list = false;
@@ -58,6 +60,9 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 
 	if(sketches_in_marked_list > 1){
 		t_list->push_back(new CombineSketches);
+#ifdef UNITE_SKETCHES
+		t_list->push_back(new UniteSketches);
+#endif
 	}
 
 	if(wxGetApp().m_marked_list->list().size() > 1)t_list->push_back(new GroupSelected);
@@ -442,6 +447,61 @@ void CombineSketches::Run(){
 	}
 
 	wxGetApp().Repaint();
+}
+
+void UniteSketches::Run(){
+#if 1 // use MultiPoly, doesn't work yet
+	CSketch* sketch1 = NULL;
+	std::list<HeeksObj*>::const_iterator It;
+	std::list<HeeksObj*> copy_of_marked_list = wxGetApp().m_marked_list->list();
+
+	std::list<CSketch*> sketches;
+
+	for(It = copy_of_marked_list.begin(); It != copy_of_marked_list.end(); It++){
+		HeeksObj* object = *It;
+		if(object->GetType() == SketchType){
+			sketches.push_back((CSketch*)object);
+		}
+	}
+
+	std::vector<TopoDS_Face> faces = MultiPoly(sketches);
+
+	for(std::vector<TopoDS_Face>::iterator It = faces.begin(); It != faces.end(); It++)
+	{
+		TopoDS_Face &face = *It;
+		HeeksObj* new_object = CShape::MakeObject(face, _("Test Face, Sketches United"), SOLID_TYPE_UNKNOWN, HeeksColor(64, 51, 51));
+		wxGetApp().AddUndoably(new_object, NULL, NULL);
+	}
+
+	wxGetApp().Repaint();
+#else // use Polygon
+//bool UnionPolygons(std::vector<LineSegment> &lines_vector,
+//		std::list<CPolygon> & result_list);
+	std::list<HeeksObj*>::const_iterator It;
+	std::list<HeeksObj*> copy_of_marked_list = wxGetApp().m_marked_list->list();
+
+	for(It = copy_of_marked_list.begin(); It != copy_of_marked_list.end(); It++){
+		HeeksObj* object = *It;
+		if(object->GetType() == SketchType){
+			std::vector<LineSegment> lines;
+			lines.resize(object->GetNumChildren());
+			unsigned int i = 0;
+			for(HeeksObj* sub_object = object->GetFirstChild(); sub_object != NULL; sub_object = object->GetNextChild(), i++)
+			{
+				LineSegment line;
+				double pos[3];
+				sub_object->GetStartPoint(pos);
+				line.a = make_point(pos);
+				sub_object->GetEndPoint(pos);
+				line.b = make_point(pos);
+				lines[i] = line;
+			}
+
+			UnionPolygons(lines, result_list);
+			
+		}
+	}
+#endif
 }
 
 void GroupSelected::Run(){

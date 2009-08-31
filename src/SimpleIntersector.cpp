@@ -27,7 +27,7 @@ std::map<FastCurve*, std::vector<Intersection> > SimpleIntersector::Intersect(st
 		{
 			std::vector<IntResult> results = Intersects(lines[i],lines[j]);
 			
-			for(int k=0; k < results.size(); k++)
+			for(unsigned int k=0; k < results.size(); k++)
 			{
 				IntResult ir = results[k];
 				if(ir.exists)
@@ -89,7 +89,7 @@ std::vector<IntResult> SimpleIntersector::Intersects(FastCurve* curve1, FastCurv
 
 	if(swap)
 	{
-		for(int i=0; i < ret.size(); i++)
+		for(unsigned int i=0; i < ret.size(); i++)
 		{
 			ret[i].Swap();
 		}

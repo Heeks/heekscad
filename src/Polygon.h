@@ -19,7 +19,7 @@
 #include <gp_Lin.hxx>
 #include <gp_Vec.hxx>
 
-#define TOLERANCE 0.000000001
+#define POLYGON_TOLERANCE 0.000000001
 
 #define dabs(x) ((x)>0?(x):-(x))
 
@@ -33,10 +33,10 @@ enum PolygonDirection
 {
 	PolyCW,
 	PolyCCW,
-	PolyUndefinedW,
+	PolyUndefinedW
 };
 
-enum IntersectionType
+enum PolyIntersectionType
 {
 	NoIntersection,
 	NormalIntersection,
@@ -74,7 +74,7 @@ public:
 	//Index number of the other line in the std::vector<LineSegment> parameter
 	//of SweepLine
 	int i;
-	IntersectionType t;
+	PolyIntersectionType t;
 	gp_Pnt p;
 };
 
@@ -155,11 +155,11 @@ public:
 	}
 	bool is_vertical() const
 	{
-		return (dabs(a.X() - b.X()) < TOLERANCE);
+		return (dabs(a.X() - b.X()) < POLYGON_TOLERANCE);
 	}
 	bool is_horizontal() const
 	{
-		return (dabs(a.Y() - b.Y()) < TOLERANCE);
+		return (dabs(a.Y() - b.Y()) < POLYGON_TOLERANCE);
 	}
 	//This is used to compare the item being added to the items already on the
 	//vertical sequence.
@@ -195,7 +195,7 @@ public:
 			double b2 = (s.right().Y()-s.left().Y())/(s.right().X()-s.left().X());
 			std::cout<<"LineSegment::IsUpperOrEqual(): s has this line's left"
 					" endpoint; b1="<<b1<<" b2="<<b2<<std::endl;
-			return b1 >= b2 - TOLERANCE;
+			return b1 >= b2 - POLYGON_TOLERANCE;
 		}
 		return PointsCCW(right(), left(), s.left());
 	}
@@ -213,14 +213,14 @@ public:
 			return true;
 		}
 
-		if(dabs(y_value_at(x) - s.y_value_at(x)) < TOLERANCE)
+		if(dabs(y_value_at(x) - s.y_value_at(x)) < POLYGON_TOLERANCE)
 		{
 			double b1 = (b.Y()-a.Y())/(b.X()-a.X());
 			double b2 = (s.b.Y()-s.a.Y())/(s.b.X()-s.a.X());
-			return b1 >= b2 - TOLERANCE;
+			return b1 >= b2 - POLYGON_TOLERANCE;
 		}
 
-		return (y_value_at(x) >= s.y_value_at(x) - TOLERANCE);
+		return (y_value_at(x) >= s.y_value_at(x) - POLYGON_TOLERANCE);
 	}
 	bool HasPoint(gp_Pnt p) const
 	{
@@ -228,22 +228,22 @@ public:
 			//line is vertical
 			double upper = a.Y() > b.Y() ? a.Y() : b.Y();
 			double lower = a.Y() < b.Y() ? a.Y() : b.Y();
-			if(p.Y() >= lower - TOLERANCE && p.Y() <= upper + TOLERANCE
-					&& dabs(p.X() - (a.X()+b.X())/2) < TOLERANCE) return true;
+			if(p.Y() >= lower - POLYGON_TOLERANCE && p.Y() <= upper + POLYGON_TOLERANCE
+					&& dabs(p.X() - (a.X()+b.X())/2) < POLYGON_TOLERANCE) return true;
 			return false;
 		}
-		if(p.X() < left().X() - TOLERANCE
-				|| p.X() > right().X() + TOLERANCE) return false;
-		return (dabs(y_value_at(p.X()) - p.Y()) < TOLERANCE);
+		if(p.X() < left().X() - POLYGON_TOLERANCE
+				|| p.X() > right().X() + POLYGON_TOLERANCE) return false;
+		return (dabs(y_value_at(p.X()) - p.Y()) < POLYGON_TOLERANCE);
 		/*double b1 = (right().Y() - left().Y()) / (right().X() - left().X());
 		double y = left().Y() + b1 * (p.X() - left().X());
-		return (dabs(y-p.Y()) < TOLERANCE);*/
+		return (dabs(y-p.Y()) < POLYGON_TOLERANCE);*/
 	}
 	bool HasPointInterior(gp_Pnt p) const
 	{
 		/*std::cout<<str()<<".HasPointInterior(("<<p.X()<<","<<p.Y()
 				<<")"<<std::endl;*/
-		if(a.IsEqual(p, TOLERANCE) || b.IsEqual(p, TOLERANCE)){
+		if(a.IsEqual(p, POLYGON_TOLERANCE) || b.IsEqual(p, POLYGON_TOLERANCE)){
 			//std::cout<<"\tis endpoint; returning false"<<std::endl;
 			return false;
 		}
@@ -253,7 +253,7 @@ public:
 					<<") upper="<<upper().X()<<","<<upper().Y()
 					<<")"<<std::endl;*/
 			if(p.Y() > lower().Y() && p.Y() < upper().Y()
-					&& dabs(p.X() - (a.X()+b.X())/2) < TOLERANCE)
+					&& dabs(p.X() - (a.X()+b.X())/2) < POLYGON_TOLERANCE)
 			{
 				//std::cout<<"\treturning true"<<std::endl;
 				return true;
@@ -269,13 +269,13 @@ public:
 			//std::cout<<"\tpoint out of Y range -> returning false"<<std::endl;
 			return false;
 		}
-		bool b = (dabs(y_value_at(p.X()) - p.Y()) < TOLERANCE);
+		bool b = (dabs(y_value_at(p.X()) - p.Y()) < POLYGON_TOLERANCE);
 		/*std::cout<<"\ty_value_at("<<p.X()<<") = "<<y_value_at(p.X())<<" -> "
 				"returning "<<(b?"true":"false")<<std::endl;*/
 		return b;
 		/*double b1 = (right().Y() - left().Y()) / (right().X() - left().X());
 		double y = left().Y() + b1 * (p.X() - left().X());
-		return (dabs(y-p.Y()) < TOLERANCE);*/
+		return (dabs(y-p.Y()) < POLYGON_TOLERANCE);*/
 	}
 	IntersectionInfo intersects(const LineSegment &s) const
 	{
@@ -286,25 +286,25 @@ public:
 		{
 			//if one of the lines has no length, return the point
 			//if(a.X() == b.X() && a.Y() == b.Y())
-			if(a.IsEqual(b, TOLERANCE))
+			if(a.IsEqual(b, POLYGON_TOLERANCE))
 			{
 				i.p = a;
 				i.t = NormalIntersection;
 			}
 			//else if(s.a.X() == s.b.X() && s.a.Y() == s.b.Y())
-			else if(s.a.IsEqual(s.b, TOLERANCE))
+			else if(s.a.IsEqual(s.b, POLYGON_TOLERANCE))
 			{
 				i.p = s.a;
 				i.t = NormalIntersection;
 			}
 			//if both of the lines are vertical
-			else if(dabs(b.X() - a.X()) < TOLERANCE 
-					&& dabs(s.b.X() - s.a.X()) < TOLERANCE)
+			else if(dabs(b.X() - a.X()) < POLYGON_TOLERANCE 
+					&& dabs(s.b.X() - s.a.X()) < POLYGON_TOLERANCE)
 			{
 				i.t = ParallelIntersection;
 			}
 			//if this line is vertical
-			else if(dabs(b.X() - a.X()) < TOLERANCE)
+			else if(dabs(b.X() - a.X()) < POLYGON_TOLERANCE)
 			{
 				double b2 = (s.b.Y()-s.a.Y())/(s.b.X()-s.a.X());
 				double a2 = s.a.Y()-b2*s.a.X();
@@ -313,7 +313,7 @@ public:
 				i.t = NormalIntersection;
 			}
 			//if the other line is vertical
-			else if(dabs(s.b.X() - s.a.X()) < TOLERANCE)
+			else if(dabs(s.b.X() - s.a.X()) < POLYGON_TOLERANCE)
 			{
 				double b1 = (b.Y()-a.Y())/(b.X()-a.X());
 				double a1 = a.Y()-b1*a.X();
@@ -326,7 +326,7 @@ public:
 			{
 				double b1 = (b.Y()-a.Y())/(b.X()-a.X());
 				double b2 = (s.b.Y()-s.a.Y())/(s.b.X()-s.a.X());
-				if(dabs(b1 - b2) < TOLERANCE)
+				if(dabs(b1 - b2) < POLYGON_TOLERANCE)
 				{
 					i.t = ParallelIntersection;
 				}
@@ -368,7 +368,7 @@ public:
 	{}
 	bool operator < (const Endpoint &e) const
 	{
-		if(dabs(value().X() - e.value().X()) < TOLERANCE && dir()==Left) return true;
+		if(dabs(value().X() - e.value().X()) < POLYGON_TOLERANCE && dir()==Left) return true;
 		return (value().X() < e.value().X());
 	}
 	bool operator == (const Endpoint &e) const
@@ -382,7 +382,7 @@ public:
 	}
 	bool dir() const
 	{
-		return m_dir;
+		return m_dir != Left;
 	}
 	LineSegment * line_ptr() const
 	{
