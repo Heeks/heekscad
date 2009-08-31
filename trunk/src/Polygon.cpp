@@ -169,7 +169,7 @@ public:
 		{
 			return;
 		}
-		if(m_ptr->right().IsEqual(p, TOLERANCE))
+		if(m_ptr->right().IsEqual(p, POLYGON_TOLERANCE))
 		{
 			result.push_back(this);
 		}
@@ -514,7 +514,7 @@ public:
 	bool operator < (const SweepEvent &e) const
 	{
 		if(x() < e.x()) return true;
-		if(dabs(x() - e.x()) < TOLERANCE)
+		if(dabs(x() - e.x()) < POLYGON_TOLERANCE)
 			if(y() > e.y()) return true;
 		return false;
 	}
@@ -600,7 +600,7 @@ void FindNewEvent(std::vector<LineSegment> &lines_vector,
 {
 	IntersectionInfo info = s1->intersects(*s2);
 	if(info.t == NoIntersection) return;
-	if(!(info.p.X() > p.X() || (dabs(info.p.X() - p.X()) < TOLERANCE
+	if(!(info.p.X() > p.X() || (dabs(info.p.X() - p.X()) < POLYGON_TOLERANCE
 			&& info.p.Y() < p.Y())))
 		return;
 	SweepEvent event(s1, s2, info.p);
@@ -636,7 +636,7 @@ void HandleEvent(std::vector<LineSegment> &lines_vector,
 	for(std::vector<LineSegment>::iterator i = lines_vector.begin();
 			i != lines_vector.end(); i++)
 	{
-		if(i->left().IsEqual(p, TOLERANCE)){
+		if(i->left().IsEqual(p, POLYGON_TOLERANCE)){
 			/*std::list<LineSegment*>::iterator
 				j = find(status.begin(), status.end(), &(*i));
 			if(j != status.end()){*/
@@ -648,7 +648,7 @@ void HandleEvent(std::vector<LineSegment> &lines_vector,
 			}
 			left.push_back(&(*i));
 		}
-		/*if(i->right().IsEqual(p, TOLERANCE))
+		/*if(i->right().IsEqual(p, POLYGON_TOLERANCE))
 			right.push_back(&(*i));*/
 	}
 
@@ -849,10 +849,10 @@ void HandleEvent(std::vector<LineSegment> &lines_vector,
 				double l2 = (j->m_ptr)->lower().Y();
 				if(l2 > u) continue;
 				if(u2 < l) continue;
-				if(dabs(u2-u) < TOLERANCE) continue;
-				if(dabs(l2-u) < TOLERANCE) continue;
-				if(dabs(u2-l) < TOLERANCE) continue;
-				if(dabs(l2-l) < TOLERANCE) continue;
+				if(dabs(u2-u) < POLYGON_TOLERANCE) continue;
+				if(dabs(l2-u) < POLYGON_TOLERANCE) continue;
+				if(dabs(u2-l) < POLYGON_TOLERANCE) continue;
+				if(dabs(l2-l) < POLYGON_TOLERANCE) continue;
 				if(SLDEBUG)std::cout<<"\t\tfound at with vertical line "<<(j->m_ptr)->str()<<std::endl;
 				info.p = gp_Pnt(p.X(), u>u2?u:u2, 0);
 			}
@@ -860,8 +860,8 @@ void HandleEvent(std::vector<LineSegment> &lines_vector,
 				double y = (j->m_ptr)->y_value_at(p.X());
 				if(y > u) continue;
 				if(y < l) break;
-				if(dabs(y-u) < TOLERANCE) continue;
-				if(dabs(y-l) < TOLERANCE) break;
+				if(dabs(y-u) < POLYGON_TOLERANCE) continue;
+				if(dabs(y-l) < POLYGON_TOLERANCE) break;
 				if(SLDEBUG)std::cout<<"\t\tfound at y="<<y<<" with "<<(j->m_ptr)->str()<<std::endl;
 				info.p = gp_Pnt(p.X(), y, 0);
 			}
@@ -1114,11 +1114,11 @@ class IntersectionPoint
 public:
 	bool operator == (gp_Pnt &i)
 	{
-		return (i.IsEqual(p, TOLERANCE));
+		return (i.IsEqual(p, POLYGON_TOLERANCE) != Standard_False);
 	}
 	bool operator == (IntersectionPoint &i)
 	{
-		return (i.p.IsEqual(p, TOLERANCE));
+		return (i.p.IsEqual(p, POLYGON_TOLERANCE) != Standard_False);
 	}
 	//from which line segment one came to this intersection
 	LineSegment *from;
@@ -1144,20 +1144,20 @@ bool PointsCCW(std::list<IntersectionPoint> &points)
 	ip++;
 	for(; ip != points.end(); ip++)
 	{
-		if(p1.IsEqual(ip->p, TOLERANCE)) continue;
+		if(p1.IsEqual(ip->p, POLYGON_TOLERANCE)) continue;
 		gp_Vec v_current(p1, ip->p);
 		angle_sum += VecAngle(v_last, v_current);
 		v_last = v_current;
 		p1 = ip->p;
 	}
 	ip = points.begin();
-	if(!p1.IsEqual(ip->p, TOLERANCE)){
+	if(!p1.IsEqual(ip->p, POLYGON_TOLERANCE)){
 		gp_Vec v_current(p1, ip->p);
 		angle_sum += VecAngle(v_last, v_current);
 		v_last = v_current;
 		p1 = ip->p;
 		ip++;
-		if(!p1.IsEqual(ip->p, TOLERANCE)){
+		if(!p1.IsEqual(ip->p, POLYGON_TOLERANCE)){
 			v_current = gp_Vec(p1, ip->p);
 			angle_sum += VecAngle(v_last, v_current);
 		}

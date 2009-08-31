@@ -55,6 +55,15 @@ public:
 	const wxChar* GetToolTip(){return _("Combine selected sketches");}
 };
 
+class UniteSketches: public Tool
+{
+public:
+	void Run();
+	const wxChar* GetTitle(){return _("Unite sketches");}
+	wxString BitmapPath(){return _T("sketchunite");}
+	const wxChar* GetToolTip(){return _("Unite selected sketches");}
+};
+
 class GroupSelected: public Tool
 {
 public:
