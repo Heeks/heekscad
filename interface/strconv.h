@@ -15,6 +15,9 @@ extern const wchar_t* Ctt(const char* str);
 #define Ctt(x) x
 #endif
 
+wxString ss_to_wxstring( const std::string & text );
+wxString ws_to_wxstring( const std::wstring & text );
+
 std::vector<wxString> Tokens( const wxString & wxLine, const wxString & wxDelimiters );
 bool AllNumeric( const wxString & wxLine );
 

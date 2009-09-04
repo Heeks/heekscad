@@ -31,6 +31,41 @@ const wchar_t* Ctt(const char* str)
 }
 #endif
 
+wxString ss_to_wxstring( const std::string & text )
+{
+	wxString result;
+	for (std::string::const_iterator l_itChar = text.begin(); l_itChar != text.end(); l_itChar++)
+	{
+		result.Append( *l_itChar, 1 );
+	} // End for
+	return(result);
+}
+
+wxString ws_to_wxstring( const std::wstring & text )
+{
+	wxString result;
+	for (std::wstring::const_iterator l_itChar = text.begin(); l_itChar != text.end(); l_itChar++)
+	{
+		result.Append( *l_itChar, 1 );
+	} // End for
+	return(result);
+}
+
+static wxString::size_type find_first_of( const wxString & line, const wxString & delimiters )
+{
+	wxString::size_type offset = -1;
+	for (wxString::size_type delimiter = 0; delimiter < delimiters.Length(); delimiter++)
+	{
+		wxString::size_type here = line.Find( delimiters[delimiter] );
+		if (here >= 0)
+		{
+			if (offset < 0) offset = here;
+			if (here < offset) offset = here;
+		}
+	} // End for
+
+	return(offset);
+}
 
 /**
 	Breakup the line of text based on the delimiting characters passed
@@ -38,46 +73,37 @@ const wchar_t* Ctt(const char* str)
  */
 std::vector<wxString> Tokens( const wxString & wxLine, const wxString & wxDelimiters )
 {
-#ifdef UNICODE
-	std::wstring delimiters;
-	std::wstring line;
-	std::wstring::size_type offset;
-#else
-	std::string delimiters;
-	std::string line;
-	std::string::size_type offset;
-#endif
-
-	delimiters = wxDelimiters.c_str();
-	line = wxLine.c_str();
-
 	std::vector<wxString> tokens;
-	while ((offset = line.find_first_of( delimiters )) != line.npos)
+	wxString line(wxLine);	// non-const copy
+
+	wxString::size_type offset = -1;
+	while ((offset = find_first_of( line, wxDelimiters )) != line.npos)
 	{
 		if (offset > 0)
 		{
-			tokens.push_back( line.substr(0, offset).c_str() );
+			tokens.push_back( line.substr(0, offset) );
 		} // End if - then
 
-		line.erase(0, offset+1);
+		line.Remove(0, offset+1);
 	} // End while
 
-	return(tokens);	
+	if (line.size() > 0)
+	{
+		tokens.push_back( line );
+	} // End if - then
+
+	return(tokens);
+
 } // End Tokens() method
 
 
 bool AllNumeric( const wxString & wxLine )
 {
-#ifdef UNICODE
-	std::wstring line;
-	std::wstring::size_type offset;
-#else
-	std::string line;
-	std::string::size_type offset;
-#endif
+	if (wxLine.Length() == 0) return(false);
 
-	line = wxLine.c_str();
-	if (line.size() == 0) return(false);
+	wxString line( wxLine );	// non-const copy
+	wxString::size_type offset = -1;
+
 	for (offset=0; offset<line.size(); offset++)
 	{
 		if ((((line[offset] >= _T('0')) &&
