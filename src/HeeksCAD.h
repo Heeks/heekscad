@@ -85,6 +85,7 @@ public:
 	double digitizing_radius; // for ambiguous arcs and circles
 	bool draw_to_grid;
 	bool autosolve_constraints;
+	bool allow3DRotaion;
 	double digitizing_grid;
 	bool mouse_wheel_forward_away; // true for forwards/backwards = zoom out / zoom in, false for reverse
 	bool ctrl_does_rotate; // true - rotate on Ctrl, pan when not Ctrl      false - rotate when not Ctrl, pan when Ctrl

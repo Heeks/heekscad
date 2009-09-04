@@ -121,6 +121,10 @@ void TransformTools::Translate(bool copy)
 //static
 void TransformTools::Rotate(bool copy)
 {
+	//rotation axis - Z axis by default
+	gp_Dir axis_Dir = gp_Dir(0,0,1);
+	gp_Pnt line_Pos = gp_Pnt(0,0,0);
+
 	// pick items
 	if(wxGetApp().m_marked_list->size() == 0){
 		wxGetApp().PickObjects(_("Pick objects to rotate"));
@@ -146,8 +150,41 @@ void TransformTools::Rotate(bool copy)
 	std::list<HeeksObj *> selected_items = wxGetApp().m_marked_list->list();
 	wxGetApp().m_marked_list->Clear(true);
 
-	// pick "centre" position
-	if(!wxGetApp().PickPosition(_("Click centre position to rotate about"), centre))return;
+
+
+	if(wxGetApp().allow3DRotaion)
+	{
+		// pick a line to use as rotation axis
+		bool line_found = false;
+		gp_Lin line;
+		int save_filter = wxGetApp().m_marked_list->m_filter;
+		wxGetApp().m_marked_list->m_filter = MARKING_FILTER_LINE | MARKING_FILTER_ILINE;
+		wxGetApp().PickObjects(_("Pick line for rotation axis"), true);
+		wxGetApp().m_marked_list->m_filter = save_filter;
+		for(std::list<HeeksObj *>::const_iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
+		{
+			HeeksObj* object = *It;
+			if(object->GetType() == LineType)
+			{
+				line = ((HLine*)object)->GetLine();
+				line_found = true;
+			}
+			else if(object->GetType() == ILineType)
+			{
+				line = ((HILine*)object)->GetLine();
+				line_found = true;
+			}
+		}
+		if(!line_found)return;
+		axis_Dir=line.Direction();
+		line_Pos= line.Location();
+	}
+	else
+	{
+		// pick "centre" position
+		if(!wxGetApp().PickPosition(_("Click centre position to rotate about"), centre))return;
+		line_Pos.SetXYZ(gp_XYZ(centre[0],centre[1],centre[2]));
+	}
 
 	// enter angle
 	double angle = 45.0;
@@ -160,7 +197,7 @@ void TransformTools::Rotate(bool copy)
 		for(int i = 0; i<ncopies; i++)
 		{
 			gp_Trsf mat;
-			mat.SetRotation(gp_Ax1(make_point(centre), gp_Dir(0, 0, 1)), angle * Pi/180 * (i+1));
+			mat.SetRotation(gp_Ax1(line_Pos, axis_Dir), angle * Pi/180 * (i+1));
 			double m[16];
 			extract(mat, m);
 			for(std::list<HeeksObj*>::iterator It = selected_items.begin(); It != selected_items.end(); It++)
@@ -177,7 +214,7 @@ void TransformTools::Rotate(bool copy)
 	else
 	{
 		gp_Trsf mat;
-		mat.SetRotation(gp_Ax1(make_point(centre), gp_Dir(0, 0, 1)), angle * Pi/180);
+		mat.SetRotation(gp_Ax1(line_Pos, axis_Dir), angle * Pi/180);
 		double m[16];
 		extract(mat, m);
 		wxGetApp().TransformUndoably(selected_items, m);
