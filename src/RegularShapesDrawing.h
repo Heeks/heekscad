@@ -13,6 +13,12 @@ enum RegularShapeMode
 	ObroundRegularShapeMode
 };
 
+enum PolygonMode
+{
+	ExcribedMode,
+	InscribedMode
+};
+
 class RegularShapesDrawing: public Drawing{
 private:
 	std::list<HeeksObj*> temp_object_in_list;
@@ -32,6 +38,7 @@ private:
 
 public:
 	RegularShapeMode m_mode;
+	PolygonMode p_mode;
 	int m_number_of_side_for_polygon;
 	double m_rect_radius;
 	double m_obround_radius;
