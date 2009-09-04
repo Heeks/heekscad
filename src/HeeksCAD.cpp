@@ -200,6 +200,7 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("DrawScreen"), &digitize_screen, false);
 	config.Read(_T("DrawToGrid"), &draw_to_grid, true);
 	config.Read(_T("AutoSolveConstraints"), &autosolve_constraints, false);
+	config.Read(_T("Allow3DRotaion"), &allow3DRotaion, false);
 	config.Read(_T("DrawGrid"), &digitizing_grid);
 	config.Read(_T("DrawRadius"), &digitizing_radius);
 	{
@@ -326,6 +327,7 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("DrawScreen"), digitize_screen);
 	config.Write(_T("DrawToGrid"), draw_to_grid);
 	config.Write(_T("AutoSolveConstraints"), autosolve_constraints);
+	config.Write(_T("Allow3DRotaion"), allow3DRotaion);
 	config.Write(_T("DrawGrid"), digitizing_grid);
 	config.Write(_T("DrawRadius"), digitizing_radius);
 	config.Write(_T("BackgroundColor"), wxString::Format(_T("%d %d %d"), background_color.red, background_color.green, background_color.blue));
@@ -1778,6 +1780,12 @@ void on_autosolve(bool onoff, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+void on_Allow3DRotation(bool onoff, HeeksObj* object)
+{
+	wxGetApp().allow3DRotaion = onoff;
+	wxGetApp().Repaint();
+}
+
 void on_set_min_correlation_factor(double value, HeeksObj* object)
 {
 	wxGetApp().m_min_correlation_factor = value;
@@ -2127,6 +2135,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	drawing->m_list.push_back ( new PropertyColor ( _("construction color"),  construction_color, NULL, on_set_construction_color ) );
 	drawing->m_list.push_back(new PropertyLength(_("geometry tolerance"), m_geom_tol, NULL, on_set_geom_tol));
 	drawing->m_list.push_back(new PropertyLength(_("face to sketch deviaton"), FaceToSketchTool::deviation, NULL, on_set_face_to_sketch_deviation));
+	drawing->m_list.push_back(new PropertyCheck(_("Use 3D rotation"), allow3DRotaion, NULL, on_Allow3DRotation));
 	list->push_back(drawing);
 
 	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
