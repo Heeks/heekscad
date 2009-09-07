@@ -376,20 +376,23 @@ public:
 		std::list<BoundedCurve*>::iterator it;
 		for(it = lines.begin(); it!=lines.end(); it++)
 		{
+			//Find a non horizontal starting point
+			gp_Pnt begin = (*it)->Begin();
+			gp_Pnt end = (*it)->End();
+			if(begin.Y() < end.Y() + m_tol/4 && begin.Y() > end.Y() - m_tol/4)
+				continue;
 			gp_Pnt mpnt = (*it)->GetMidPoint();
 			int count = GetRayIntersectionCount(mpnt,*it);
 			if(count%2)
 			{
-				gp_Pnt begin = (*it)->Begin();
-				gp_Pnt end = (*it)->End();
 				if(begin.Y() > end.Y())
-					return false;
+					return true;
 				if(begin.Y() == end.Y() && begin.X() > end.X())
-					return false;
-				return true;
+					return true;
+				return false;
 			}	
 		}
-		return true;
+		return false;
 	}
 
 

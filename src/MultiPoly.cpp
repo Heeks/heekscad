@@ -328,21 +328,23 @@ void ConcatSegments(double x_coord, double y_coord, CompoundSegment* seg1, Compo
 TopoDS_Wire TopoDSWireAdaptor(CompoundSegment* poly, bool inside)
 {
 	std::list<TopoDS_Edge> edges;
-//	if(inside)
-//		poly->Reverse();
+	//if(inside)
+	//	poly->Reverse();
 	poly->GetEdges(edges);
 
-	BRepBuilderAPI_MakeWire wire_maker;
+	BRepLib_MakeWire wire_maker;
 	std::list<TopoDS_Edge>::iterator It;
 	for(It = edges.begin(); It != edges.end(); It++)
 	{
 		TopoDS_Edge &edge = *It;
+	//	BRepLib_BuildCurve3d( edge );
 		wire_maker.Add(edge);
 	}
 	TopoDS_Wire wire = wire_maker.Wire();
-	if(inside)
-		wire = TopoDS::Wire(wire.Oriented(TopAbs_REVERSED));
-	else
+
+//	if(inside)
+//		wire = TopoDS::Wire(wire.Oriented(TopAbs_REVERSED));
+//	else
 		wire = TopoDS::Wire(wire.Oriented(TopAbs_FORWARD));
 	return wire;
 }
