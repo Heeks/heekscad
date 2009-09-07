@@ -8,6 +8,17 @@
 //TODO: get this value from somewhere else
 #define TOLERANCE .0001
 
+class RayIntersection
+{
+public:
+	double u;
+	gp_Pnt pnt;
+	bool bounded;
+	bool lower;
+	RayIntersection(double u, gp_Pnt pnt, bool bounded, bool lower){this->u = u; this->pnt = pnt; this->bounded=bounded; this->lower=lower;};
+	~RayIntersection(){};
+};
+
 class FastCurve
 {
 public:
@@ -21,7 +32,7 @@ public:
 	virtual	double GetU(double x, double y)=0;
 	virtual double GetYatU(double u)=0;
 	virtual double GetXatU(double u)=0;
-	virtual std::vector<double> RayIntersects(gp_Pnt p)=0;
+	virtual std::vector<RayIntersection> RayIntersects(gp_Pnt p)=0;
 };
 
 class FastLine: public FastCurve
@@ -52,12 +63,12 @@ public:
 		double dy = A.Y() - B.Y();
 
 		double t=(A.X()*dx-x*dx+A.Y()*dy-y*dy)/(dx*dx+dy*dy);
-
+#ifdef ROUNDU
 		if(t > -TOLERANCE && t < TOLERANCE)
 			t = 0;
 		if(t > 1 - TOLERANCE && t < 1 + TOLERANCE)
 			t = 1;
-
+#endif
 		return t;
 	}
 
@@ -73,18 +84,18 @@ public:
 		return u * dy + A.Y();
 	}
 
-	std::vector<double> RayIntersects(gp_Pnt pnt)
+	std::vector<RayIntersection> RayIntersects(gp_Pnt pnt)
 	{
-		std::vector<double> ret;
-		if((pnt.Y() <= B.Y() && pnt.Y() > A.Y())||
-			(pnt.Y() > B.Y() && pnt.Y() <= A.Y()))
+		std::vector<RayIntersection> ret;
+		if((pnt.Y() < B.Y() + TOLERANCE && pnt.Y() > A.Y() - TOLERANCE)||
+			(pnt.Y() > B.Y() - TOLERANCE && pnt.Y() < A.Y() + TOLERANCE))
 		{
 			if(fabs(A.Y() - B.Y()) < TOLERANCE)
 				return ret;
 			double u = (pnt.Y() - A.Y())/(B.Y()-A.Y());
 			double x = GetXatU(u);
 			if(x < pnt.X())
-				ret.push_back(u);
+				ret.push_back(RayIntersection(u,gp_Pnt(x,pnt.Y(),0),false,false));
 		}
 		return ret;
 
@@ -213,12 +224,12 @@ public:
 			int x=0;
 			x++;
 		}
-
-		if(u > -TOLERANCE && u < TOLERANCE)
+#ifdef ROUNDU
+		if(u > -TOLERANCE && ut < TOLERANCE)
 			u = 0;
 		if(u > 1 - TOLERANCE && u < 1 + TOLERANCE)
 			u = 1;
-
+#endif
 
 		return u;
 	}
@@ -245,9 +256,9 @@ public:
 		return x;
 	}
 
-	std::vector<double> RayIntersects(gp_Pnt p)
+	std::vector<RayIntersection> RayIntersects(gp_Pnt p)
 	{
-		std::vector<double> ret;
+		std::vector<RayIntersection> ret;
 
 		double y = p.Y() - C.Y();
 		if(fabs(y) > rad)
@@ -258,9 +269,9 @@ public:
 		x1 = C.X()-x1;
 		
 		if(x1 < p.X())
-			ret.push_back(GetU(x1,p.Y()));
+			ret.push_back(RayIntersection(GetU(x1,p.Y()),gp_Pnt(x1,p.Y(),0),false,false));
 		if(x2 < p.X())
-			ret.push_back(GetU(x2,p.Y()));
+			ret.push_back(RayIntersection(GetU(x2,p.Y()),gp_Pnt(x2,p.Y(),0),false,false));
 		return ret;
 	}
 
