@@ -91,6 +91,56 @@ class RS274X
 				void DegreeOfRotation( const double value ) { m_degree_of_rotation = value; }
 				double DegreeOfRotation() const { return(m_degree_of_rotation); }
 
+				bool MakePolygon(CPolygon & polygon, const gp_Pnt & location) const
+				{
+					switch (m_type)
+					{
+						case eCircular:
+						{
+							double radius = OutsideDiameter() / 2.0;
+							gp_Vec vx(1.0, 0.0, 0.0);
+							gp_Vec vy(0.0, 1.0, 0.0);
+		
+							for(int i=0; i<8; i++){
+								double angle = -PI*2.0*(double)i/8.0;
+								polygon.push_back(location.Translated(vx*radius*cos(angle)+vy*radius*sin(angle)));
+							}
+
+							return(true);
+						}
+
+						case eRectangular:
+						{
+							gp_Pnt top_left( location );
+							gp_Pnt top_right( location );
+							gp_Pnt bottom_left( location );
+							gp_Pnt bottom_right( location );
+
+							top_left.SetX( top_left.X() - (XAxisHoleDimension() / 2.0));
+							bottom_left.SetX( top_left.X() - (XAxisHoleDimension() / 2.0));
+
+							top_right.SetX( top_left.X() + (XAxisHoleDimension() / 2.0));
+							bottom_right.SetX( top_left.X() + (XAxisHoleDimension() / 2.0));
+
+							top_left.SetY( top_left.Y() - (YAxisHoleDimension() / 2.0));
+							bottom_left.SetY( top_left.Y() - (YAxisHoleDimension() / 2.0));
+
+							top_right.SetY( top_left.Y() + (YAxisHoleDimension() / 2.0));
+							bottom_right.SetY( top_left.Y() + (YAxisHoleDimension() / 2.0));
+
+							polygon.push_back( top_left );
+							polygon.push_back( bottom_left );
+							polygon.push_back( bottom_right );
+							polygon.push_back( top_right );
+							polygon.push_back( top_left );
+							return(true);
+						}
+
+						default:
+							printf("Unsupported aperture shape found\n");
+							return(false);
+					} // End switch
+				} // End MakePolygon() method
 
 			private:
 				eType_t m_type;
@@ -121,7 +171,7 @@ class RS274X
 		class Trace
 		{
 		public:
-			typedef enum { eLinear = 0, eCircular } eInterpolation_t;
+			typedef enum { eLinear = 0, eCircular, eFlash } eInterpolation_t;
 
 			Trace( const Aperture & aperture, const eInterpolation_t interpolation ) : m_aperture(aperture), m_interpolation( interpolation )
 			{ 
@@ -136,7 +186,14 @@ class RS274X
 				m_i_term = 0.0;
 				m_j_term = 0.0;
 
-				m_radius = 0.0;
+				if (m_interpolation == eFlash)
+				{
+					m_radius = m_aperture.OutsideDiameter() / 2.0;
+				}
+				else
+				{
+					m_radius = 0.0;
+				}
 
 				m_clockwise = true;
 
@@ -188,44 +245,56 @@ class RS274X
 					return(m_start);
 				} // End if - then
 
-				if (Interpolation() == eLinear)
+				switch (Interpolation())
 				{
-					return(gp_Pnt(  ((Start().X() - End().X())/2) + Start().X(),
-									((Start().Y() - End().Y())/2) + Start().Y(),
-									((Start().Z() - End().Z())/2) + Start().Z() ));
-				} // End if - then
-
-				// It must be an arc.
-				// The i and j parameters are unsigned in the RS274 standard as the
-				// sign can be inferred from the start and end position.  The radius
-				// will be the pythagorean distance of i (x axis component) and
-				// j (y axis component).  The sign of i and j can be determined based
-				// on the distance between the centre point and each of the start
-				// and end points.  i.e. both distances must be equal to the radius.
-
-				double radius = Radius();
-
-				// There are four possible centre points based on the ± sign applied
-				// to each of the i and j terms.  The correct one will have a distance
-				// of radius between it and each of the two endpoints.
-
-				std::list<gp_Pnt> possible_centres;
-
-				possible_centres.push_back( gp_Pnt( m_start.X() - m_i_term, m_start.Y() - m_j_term, m_start.Z() ) );
-				possible_centres.push_back( gp_Pnt( m_start.X() + m_i_term, m_start.Y() - m_j_term, m_start.Z() ) );
-				possible_centres.push_back( gp_Pnt( m_start.X() - m_i_term, m_start.Y() + m_j_term, m_start.Z() ) );
-				possible_centres.push_back( gp_Pnt( m_start.X() + m_i_term, m_start.Y() + m_j_term, m_start.Z() ) );
-
-				for (std::list<gp_Pnt>::iterator l_itPoint = possible_centres.begin(); l_itPoint != possible_centres.end(); l_itPoint++)
-				{
-					if (((l_itPoint->Distance( m_start ) - radius) < m_tolerance) &&
-						((l_itPoint->Distance( m_end   ) - radius) < m_tolerance))
+					case eLinear:
 					{
-						return( *l_itPoint );
-					}
-				} // End for
+						return(gp_Pnt(  ((Start().X() - End().X())/2) + Start().X(),
+										((Start().Y() - End().Y())/2) + Start().Y(),
+										((Start().Z() - End().Z())/2) + Start().Z() ));
+					} // End if - then
 
-				return(gp_Pnt(0,0,0));	// It shouldn't get here.
+
+					case eCircular:
+					{
+						// It must be an arc.
+						// The i and j parameters are unsigned in the RS274 standard as the
+						// sign can be inferred from the start and end position.  The radius
+						// will be the pythagorean distance of i (x axis component) and
+						// j (y axis component).  The sign of i and j can be determined based
+						// on the distance between the centre point and each of the start
+						// and end points.  i.e. both distances must be equal to the radius.
+
+						double radius = Radius();
+
+						// There are four possible centre points based on the ± sign applied
+						// to each of the i and j terms.  The correct one will have a distance
+						// of radius between it and each of the two endpoints.
+
+						std::list<gp_Pnt> possible_centres;
+
+						possible_centres.push_back( gp_Pnt( m_start.X() - m_i_term, m_start.Y() - m_j_term, m_start.Z() ) );
+						possible_centres.push_back( gp_Pnt( m_start.X() + m_i_term, m_start.Y() - m_j_term, m_start.Z() ) );
+						possible_centres.push_back( gp_Pnt( m_start.X() - m_i_term, m_start.Y() + m_j_term, m_start.Z() ) );
+						possible_centres.push_back( gp_Pnt( m_start.X() + m_i_term, m_start.Y() + m_j_term, m_start.Z() ) );
+
+						for (std::list<gp_Pnt>::iterator l_itPoint = possible_centres.begin(); l_itPoint != possible_centres.end(); l_itPoint++)
+						{
+							if (((l_itPoint->Distance( m_start ) - radius) < m_tolerance) &&
+								((l_itPoint->Distance( m_end   ) - radius) < m_tolerance))
+							{
+								return( *l_itPoint );
+							}
+						} // End for
+				
+						return(gp_Pnt(0,0,0));	// It shouldn't get here.
+					}
+
+					case eFlash:
+					default:
+						return(m_start);
+
+				} // End switch
 			}
 
 			gp_Dir Direction() const
@@ -238,6 +307,9 @@ class RS274X
 
 					case eLinear:
 						return( gp_Dir( m_end.X() - m_start.X(), m_end.Y() - m_start.Y(), m_end.Z() - m_start.Z() ));
+
+					case eFlash:
+						return(gp_Dir(0,0,1));	// It doesn't matter.
 				}
 			}
 
@@ -267,7 +339,6 @@ class RS274X
 						return(Start().Distance(End()));
 						break;
 
-					default:
 					case eCircular:
 						if ((m_i_term < m_tolerance) && (m_j_term < m_tolerance) && (Radius() > m_tolerance))
 						{
@@ -293,6 +364,10 @@ class RS274X
 							return(abs(arc_length));
 						} // End if - else
 						break;
+
+					case eFlash:
+					default:
+						return( 2.0 * PI * Radius() );
 				} // End switch
 			} // End Length() method
 
@@ -328,6 +403,7 @@ class RS274X
 						gp_Vec n(-v.Y(), v.X(), 0);
 						float d = m_aperture.OutsideDiameter();
 						//first line is on the right side of the original
+
 						polygon.push_back(End().Translated(-n*d*.5));
 						polygon.push_back(Start().Translated(-n*d*.5));
 						polygon.push_back(Start().Translated(-n*d*sin(PI/4)/2- v*d*sin(PI/4)/2));
@@ -338,6 +414,7 @@ class RS274X
 						polygon.push_back(End().Translated(n*d*sin(PI/4)/2 + v*d*sin(PI/4)/2));
 						polygon.push_back(End().Translated(v*d*0.5));
 						polygon.push_back(End().Translated(-n*d*sin(PI/4)/2 + v*d*sin(PI/4)/2));
+
 						return true;
 					}
 
@@ -453,6 +530,21 @@ class RS274X
 							return(true);
 						}
 						break;
+					}
+
+					case eFlash:
+					{
+						return(m_aperture.MakePolygon(polygon, m_start));
+
+						/*
+						gp_Vec vx(1.0, 0.0, 0.0);
+						gp_Vec vy(0.0, 1.0, 0.0);
+			
+						for(int i=0; i<8; i++){
+							double angle = -PI*2.0*(double)i/8.0;
+							polygon.push_back(m_start.Translated(vx*Radius()*cos(angle)+vy*Radius()*sin(angle)));
+						}
+						*/
 					}
 				} // End switch
 				return false;
