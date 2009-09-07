@@ -191,23 +191,6 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 			done = true;
 	}
 
-	//This could be used to reverse the ordering of a closed shape. Getting it to be CW or CCW
-	//Not sure if this is necessary yet. Useful for debugging. Funny areas mean bad polygons
-
-
-	for(unsigned i=0; i < closed_shapes.size(); i++)
-	{
-		closed_shapes[i]->Order();
-//#ifdef FORCEPOLYGONORDERING
-		bool cw = closed_shapes[i]->GetCW();
-		if(!cw)
-		{
-			closed_shapes[i]->Reverse();
-			closed_shapes[i]->Order();
-		}
-//#endif
-	}
-
 	//Now that we have all closed shapes, we need to define the relationships. Since we know that they are not intersecting
 	//3 kinds of things can happen. A shape is either inside, enclosing, adjacent, or unrelated to another.
 
@@ -234,6 +217,23 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 			}
 		}
 	}
+
+	//This is used to reverse the ordering of a closed shape. Getting it to be CW or CCW
+	//OCC is picky about the ordering when the polygon has holes
+
+	for(unsigned i=0; i < closed_shapes.size(); i++)
+	{
+		closed_shapes[i]->Order();
+//#ifdef FORCEPOLYGONORDERING
+		bool cw = closed_shapes[i]->GetCW();
+		if(!cw)
+		{
+			closed_shapes[i]->Reverse();
+			closed_shapes[i]->Order();
+		}
+//#endif
+	}
+
 
 	//Sort these lists for easy comparison
 	for(unsigned i=0; i < inside_of.size(); i++)
@@ -328,6 +328,8 @@ void ConcatSegments(double x_coord, double y_coord, CompoundSegment* seg1, Compo
 TopoDS_Wire TopoDSWireAdaptor(CompoundSegment* poly, bool inside)
 {
 	std::list<TopoDS_Edge> edges;
+	if(inside)
+		poly->Reverse();
 	poly->GetEdges(edges);
 
 	BRepBuilderAPI_MakeWire wire_maker;
@@ -338,11 +340,10 @@ TopoDS_Wire TopoDSWireAdaptor(CompoundSegment* poly, bool inside)
 		wire_maker.Add(edge);
 	}
 	TopoDS_Wire wire = wire_maker.Wire();
-	//if(inside)
-	//	wire = TopoDS::Wire(wire.Oriented(TopAbs_REVERSED));
-	//else
-	//wire.Compose(TopAbs_FORWARD);
-		//wire = TopoDS::Wire(wire.Oriented(TopAbs_FORWARD));
+	if(inside)
+		wire = TopoDS::Wire(wire.Oriented(TopAbs_REVERSED));
+	else
+		wire = TopoDS::Wire(wire.Oriented(TopAbs_FORWARD));
 	return wire;
 }
 

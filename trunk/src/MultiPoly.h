@@ -15,7 +15,8 @@ class BoundedCurve
 public:
 	FastCurve* line;
 	double startu,endu;
-	BoundedCurve(FastCurve *line, double startu, double endu){this->line = line; this->startu = startu; this->endu = endu;}
+	double m_tol;
+	BoundedCurve(FastCurve *line, double startu, double endu, double tol){this->line = line; this->startu = startu; this->endu = endu; this->m_tol = tol;}
 
 	void Reverse()
 	{
@@ -61,15 +62,36 @@ public:
 		return gp_Pnt(GetX(mu),GetY(mu),0);
 	}
 
-	int RayIntersects(gp_Pnt pnt)
+	std::vector<RayIntersection> RayIntersects(gp_Pnt pnt)
 	{
-		std::vector<double> vec = line->RayIntersects(pnt);
+		std::vector<RayIntersection> vec = line->RayIntersects(pnt);
+		std::vector<RayIntersection> points;
 		int count=0;
-		//TODO: add tolerance
+
 		for(unsigned int i=0; i < vec.size(); i++)
-			if((vec[i] > startu && vec[i] < endu)||(vec[i] < startu && vec[i] > endu))
+			if((vec[i].u >= startu && vec[i].u <= endu)||(vec[i].u <= startu && vec[i].u >= endu))
+			{
+				if(vec[i].u > startu - TOLERANCE && vec[i].u < startu + TOLERANCE)
+				{
+					//Bounded on startu
+					vec[i].bounded = true;
+					if(End().Y() < pnt.Y())
+						vec[i].lower = true;
+				}
+
+				if(vec[i].u > endu - TOLERANCE && vec[i].u < endu + TOLERANCE)
+				{
+					//Bounded on startu
+					vec[i].bounded = true;
+					if(Begin().Y() < pnt.Y())
+						vec[i].lower = true;
+				}
+				points.push_back(vec[i]);
+
 				count++;
-		return count;
+			}
+
+		return points;
 	}
 
 	gp_Pnt Begin()
@@ -110,7 +132,7 @@ public:
 	CompoundSegment(){}
 	CompoundSegment(FastCurve *line, double tol, double startu, double endu)
 	{
-		firstline = new BoundedCurve(line,startu,endu);
+		firstline = new BoundedCurve(line,startu,endu,tol);
 		lastline=firstline;
 		lines.push_back(firstline);
 		firstpoint = PointA;
@@ -233,9 +255,9 @@ public:
 				}
 				else 
 				{
-//#ifdef DEBUGEDGES
+#ifdef DEBUGEDGES
 					DrawDebugLine(curve->Begin(), curve->End(),i);
-//#endif 
+#endif 
 					edges.push_back(BRepBuilderAPI_MakeEdge(curve->Begin(), curve->End()));
 				}
 			i++;
@@ -321,13 +343,31 @@ public:
 	{
 		int intersections=0;
 		std::list<BoundedCurve*>::iterator it;
+		std::vector<RayIntersection> points;
 		for(it = lines.begin(); it!= lines.end(); ++it)
 		{
 			BoundedCurve* curve = (*it);
 			if(curve == without)
 				continue;
-			intersections+=curve->RayIntersects(pnt);
+			std::vector<RayIntersection> npoints = curve->RayIntersects(pnt);
+			for(int i=0; i < npoints.size(); i++)
+				points.push_back(npoints[i]);
+			intersections+=npoints.size();
 		}
+
+		//Remove duplicates
+		for(int i=0; i < points.size(); i++)
+		{
+			for(int j=i+1; j < points.size(); j++)
+				if(points[i].pnt.Distance(points[j].pnt) < m_tol)
+				{
+					intersections--;
+					//If these point just intersect the ray without crossing it, then remove the point all togeather
+					if(points[i].bounded && points[j].bounded && points[i].lower == points[j].lower)
+						intersections--;
+				}
+		}
+
 		return intersections;
 	}
 
