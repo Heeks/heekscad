@@ -87,6 +87,12 @@ public:
 	std::vector<RayIntersection> RayIntersects(gp_Pnt pnt)
 	{
 		std::vector<RayIntersection> ret;
+
+		//If this line is significantly horizontal, there is nothing good
+		//we can do here
+		if(B.Y() < A.Y() + TOLERANCE/4 && B.Y() > A.Y() - TOLERANCE/4)
+			return ret;
+
 		if((pnt.Y() < B.Y() + TOLERANCE && pnt.Y() > A.Y() - TOLERANCE)||
 			(pnt.Y() > B.Y() - TOLERANCE && pnt.Y() < A.Y() + TOLERANCE))
 		{
