@@ -350,19 +350,19 @@ public:
 			if(curve == without)
 				continue;
 			std::vector<RayIntersection> npoints = curve->RayIntersects(pnt);
-			for(int i=0; i < npoints.size(); i++)
+			for(size_t i=0; i < npoints.size(); i++)
 				points.push_back(npoints[i]);
 			intersections+=npoints.size();
 		}
 
 		//Remove duplicates
-		for(int i=0; i < points.size(); i++)
+		for(size_t i=0; i < points.size(); i++)
 		{
-			for(int j=i+1; j < points.size(); j++)
+			for(size_t j=i+1; j < points.size(); j++)
 				if(points[i].pnt.Distance(points[j].pnt) < m_tol)
 				{
 					intersections--;
-					//If these point just intersect the ray without crossing it, then remove the point all togeather
+					//If these points just intersect the ray without crossing it, then remove the point all togeather
 					if(points[i].bounded && points[j].bounded && points[i].lower == points[j].lower)
 						intersections--;
 				}
