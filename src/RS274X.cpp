@@ -802,9 +802,14 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 
 				if(m_area_fill)
 				{
-					Polygons_t::iterator l_itPolygon = m_polygons.end();
-					l_itPolygon--;
-					l_itPolygon->push_back(m_current_position);
+					// Polygons_t::iterator l_itPolygon = m_polygons.end();
+					// l_itPolygon--;
+					// l_itPolygon->push_back(m_current_position);
+
+					Trace trace( m_aperture_table[m_active_aperture], Trace::eLinear );
+					trace.Start( m_current_position );
+					trace.End( position );
+					m_traces.push_back( trace );
 				}
 				else
 				{
@@ -837,11 +842,14 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 			} // End if - then
 
 			Aperture aperture = m_aperture_table[ m_active_aperture ];
-			/*Trace trace( aperture, Trace::eCircular );
+			if (aperture.OutsideDiameter() < 0.0001) printf("WARNING: D03 found without radius information\n");
+			Trace trace( aperture, Trace::eFlash );
 			trace.Start( position );
-			trace.End( position );
-			trace.Radius( aperture.OutsideDiameter() / 2 );*/
+			// trace.End( position );
+			// trace.Radius( aperture.OutsideDiameter() / 2.0 );
+			m_traces.push_back( trace );
 
+			/*
 			double radius = aperture.OutsideDiameter() / 2;
 
 			Polygons_t::iterator l_itPolygon = m_polygons.end();
@@ -854,10 +862,10 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 				double angle = -PI*2.0*(double)i/8.0;
 				l_itPolygon->push_back(position.Translated(vx*radius*cos(angle)+vy*radius*sin(angle)));
 			}
+			*/
 
 			//add a new polygon
 			AddPolygonIfNeeded();
-			if (aperture.OutsideDiameter() < 0.0001) printf("WARNING: D03 found without radius information\n");
 		}
 		else if (_data.substr(0,3) == "G54")
 		{
