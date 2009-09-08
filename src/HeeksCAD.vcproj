@@ -664,6 +664,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\FastCurves.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\FastCurves.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Geom.cpp"
 			>
 		</File>
@@ -1833,6 +1841,14 @@
 		</File>
 		<File
 			RelativePath=".\Wire.h"
+			>
+		</File>
+		<File
+			RelativePath=".\WrappedCurves.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\WrappedCurves.h"
 			>
 		</File>
 		<File
