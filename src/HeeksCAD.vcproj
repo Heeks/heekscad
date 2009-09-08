@@ -1392,6 +1392,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\SketchTools.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\SketchTools.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Solid.cpp"
 			>
 		</File>
