@@ -27,7 +27,7 @@
 double currentX=0;
 
 //fast storage for the global tolerance paramater
-double tol=0;
+double tol=0.001;
 
 //Storage for the event table
 std::map<double,std::vector<std::list<FastLine*> > > eventtable;
