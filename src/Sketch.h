@@ -31,6 +31,8 @@ public:
 
 	const CSketch& operator=(const CSketch& c);
 
+	std::vector<TopoDS_Face> GetFaces();
+
 	int GetType()const{return SketchType;}
 	long GetMarkingMask()const{return MARKING_FILTER_SKETCH;}
 	const wxChar* GetTypeString(void)const{return _("Sketch");}

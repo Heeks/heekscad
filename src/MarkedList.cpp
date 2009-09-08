@@ -15,6 +15,7 @@
 #include "HeeksFrame.h"
 #include "ConversionTools.h"
 #include "ConstraintTools.h"
+#include "SketchTools.h"
 using namespace std;
 
 MarkedList::MarkedList(){
@@ -342,6 +343,7 @@ void MarkedList::GetTools(MarkedObject* clicked_object, std::list<Tool*>& t_list
 
 	GetConversionMenuTools(&t_list);
 	GetConstraintMenuTools(&t_list);
+	GetSketchMenuTools(&t_list);
 
 	// cut and copy tools
 	for(std::list<HeeksObj*>::iterator It = m_list.begin(); It != m_list.end(); It++)

@@ -5,7 +5,59 @@
 #include "stdafx.h"
 #include "Pad.h"
 #include "Shape.h"
+#include "RuledSurface.h"
 #include "RemoveOrAddTool.h"
+#include "../interface/PropertyDouble.h"
+
+CPad::CPad(double length)
+{
+	m_length = length;
+}
+
+CPad::CPad()
+{
+	m_length = 0;
+}
+
+void CPad::glCommands(bool select, bool marked, bool no_color)
+{
+	//Draw everything else
+	ObjList::glCommands(select,marked,no_color);
+
+	//TODO: only do this when the sketch is dirty
+
+	//Get the sketch
+	CSketch* sketch = dynamic_cast<CSketch*>(GetFirstChild());
+	if(!sketch)
+		return;
+
+	std::vector<TopoDS_Face> faces = sketch->GetFaces();
+	std::list<TopoDS_Face> facelist(faces.begin(),faces.end());
+	std::list<TopoDS_Shape> new_shapes;
+	CreateExtrusions(facelist, new_shapes, gp_Vec(0, 0, m_length).Transformed(wxGetApp().GetDrawMatrix(false)));
+
+	//This is a pretty ugly hack
+	std::list<TopoDS_Shape>::iterator it;
+	for(it = new_shapes.begin(); it != new_shapes.end(); ++it)
+	{
+		CShape shape(*it,_("Argh"),wxGetApp().current_color);
+		shape.glCommands(select,marked,no_color);
+	}
+
+}
+
+void OnSetHeight(double b, HeeksObj* o)
+{
+	((CPad*)o)->m_length = b;
+	wxGetApp().Repaint();
+}
+
+void CPad::GetProperties(std::list<Property *> *list)
+{
+	list->push_back(new PropertyDouble(_("Height"), m_length, this,OnSetHeight));
+
+	ObjList::GetProperties(list);
+}
 
 void CPad::WriteXML(TiXmlNode *root)
 {
@@ -60,3 +112,32 @@ HeeksObj* CPad::ReadFromXMLElement(TiXmlElement* element)
 	return (ObjList*)new_object;
 }
 
+// static
+void CPad::PadSketch(CSketch* sketch, double length, bool undoably)
+{
+	CPad *pad = new CPad(length);
+	if(undoably)
+	{
+		wxGetApp().DoToolUndoably(new AddObjectTool(pad, sketch->Owner(),NULL));
+
+		wxGetApp().DoToolUndoably(new RemoveObjectTool(sketch));
+
+		wxGetApp().DoToolUndoably(new AddObjectTool(sketch, pad,NULL));
+
+		//The Add/Remove tools are fubar, so we need to mark all the sketches children as modified to get it to show up in the tree
+		HeeksObj* child = sketch->GetFirstChild();
+		while(child)
+		{
+			wxGetApp().WasModified(child);
+			child = sketch->GetNextChild();
+		}
+	}
+	else
+	{
+		sketch->Owner()->Add(pad,NULL);
+
+		sketch->Owner()->Remove(sketch);
+		sketch->RemoveOwner(sketch->Owner());
+		pad->Add(sketch,NULL);
+	}
+}

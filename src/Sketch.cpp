@@ -130,6 +130,13 @@ static bool SketchOrderAvailable(SketchOrderType old_order, SketchOrderType new_
 	return false;
 }
 
+std::vector<TopoDS_Face> CSketch::GetFaces()
+{
+	std::list<CSketch*> sketches;
+	sketches.push_back(this);
+	return MultiPoly(sketches);
+}
+
 void CSketch::glCommands(bool select, bool marked, bool no_color)
 {
 	ObjList::glCommands(select,marked,no_color);
@@ -137,10 +144,7 @@ void CSketch::glCommands(bool select, bool marked, bool no_color)
 		return;
 
 	//TODO: we should really only be doing this when geometry changes
-
-	std::list<CSketch*> sketches;
-	sketches.push_back(this);
-	std::vector<TopoDS_Face> faces = MultiPoly(sketches);
+	std::vector<TopoDS_Face> faces = GetFaces();
 
 	double pixels_per_mm = wxGetApp().GetPixelScale();
 
