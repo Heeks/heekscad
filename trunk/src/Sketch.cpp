@@ -13,6 +13,7 @@
 #include "../interface/PropertyCheck.h"
 #include "../interface/Tool.h"
 #include "MultiPoly.h"
+#include "FaceTools.h"
 
 std::string CSketch::m_sketch_order_str[MaxSketchOrderTypes] = {
 	std::string("unknown"),
@@ -141,57 +142,12 @@ void CSketch::glCommands(bool select, bool marked, bool no_color)
 	sketches.push_back(this);
 	std::vector<TopoDS_Face> faces = MultiPoly(sketches);
 
+	double pixels_per_mm = wxGetApp().GetPixelScale();
+
 	for(unsigned i=0; i < faces.size(); i++)
 	{
-		double pixels_per_mm = wxGetApp().GetPixelScale();
-		BRepTools::Clean(faces[i]);
-		BRepMesh::Mesh(faces[i], 1/pixels_per_mm);
-
-		glBegin(GL_TRIANGLES);
-
-		StdPrs_ToolShadedShape SST;
-
-		// Get triangulation
-		TopLoc_Location L;
-		Handle_Poly_Triangulation facing = BRep_Tool::Triangulation(faces[i],L);
-		gp_Trsf tr = L;
-
-		if(!facing.IsNull()){
-			Poly_Connect pc(facing);	
-			const TColgp_Array1OfPnt& Nodes = facing->Nodes();
-			const Poly_Array1OfTriangle& triangles = facing->Triangles();
-			TColgp_Array1OfDir myNormal(Nodes.Lower(), Nodes.Upper());
-
-			SST.Normal(faces[i], pc, myNormal);
-			double Umin, Umax, Vmin, Vmax;
-			BRepTools::UVBounds(faces[i],Umin, Umax, Vmin, Vmax);
-
-			Standard_Integer nnn = facing->NbTriangles();					// nnn : nombre de triangles
-			Standard_Integer nt, n1, n2, n3 = 0;						// nt  : triangle courant
-			// ni  : sommet i du triangle courant
-			for (nt = 1; nt <= nnn; nt++)					
-			{
-				if (SST.Orientation(faces[i]) == TopAbs_REVERSED)			// si la face est "reversed"
-					triangles(nt).Get(n1,n3,n2);						// le triangle est n1,n3,n2
-				else 
-					triangles(nt).Get(n1,n2,n3);						// le triangle est n1,n2,n3
-
-				if (true)//TriangleIsValid (Nodes(n1),Nodes(n2),Nodes(n3)) )
-				{
-					gp_Pnt v1 = Nodes(n1).Transformed(tr);
-					gp_Pnt v2 = Nodes(n2).Transformed(tr);
-					gp_Pnt v3 = Nodes(n3).Transformed(tr);
-
-					glNormal3f((float)(myNormal(n1).X()), (float)(myNormal(n1).Y()), (float)(myNormal(n1).Z()));
-					glVertex3f((float)(v1.X()), (float)(v1.Y()), (float)(v1.Z()));
-					glNormal3f((float)(myNormal(n2).X()), (float)(myNormal(n2).Y()), (float)(myNormal(n2).Z()));
-					glVertex3f((float)(v2.X()), (float)(v2.Y()), (float)(v2.Z()));
-					glNormal3f((float)(myNormal(n3).X()), (float)(myNormal(n3).Y()), (float)(myNormal(n3).Z()));
-					glVertex3f((float)(v3.X()), (float)(v3.Y()), (float)(v3.Z()));
-				}
-			}
-		}
-		glEnd();
+		MeshFace(faces[i],pixels_per_mm);
+		DrawFace(faces[i]);
 	}
 }
 
