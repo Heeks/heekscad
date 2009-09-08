@@ -656,6 +656,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\FaceTools.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\FaceTools.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Geom.cpp"
 			>
 		</File>
@@ -1117,6 +1125,14 @@
 		</File>
 		<File
 			RelativePath=".\OptionsCanvas.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Pad.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Pad.h"
 			>
 		</File>
 		<File

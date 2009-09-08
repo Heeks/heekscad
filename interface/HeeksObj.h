@@ -46,7 +46,8 @@ enum{
 	GroupType,
 	CorrelationToolType,
 	ObjectMaximumType,
-	ConstraintType
+	ConstraintType,
+	PadType
 };
 
 #define MARKING_FILTER_LINE					0x00000001
