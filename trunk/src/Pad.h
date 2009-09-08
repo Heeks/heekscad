@@ -8,12 +8,20 @@
 
 class CPad: public ObjList{
 public:
+	double m_length;
+
+	CPad(double length);
+	CPad();
+
 	const wxChar* GetTypeString(void)const{return _("Pad");}
 	int GetType()const{return PadType;}
 	HeeksObj *MakeACopy(void)const{ return new CPad(*this);}
 	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/group");}
+	void glCommands(bool select, bool marked, bool no_color);
+	void GetProperties(std::list<Property *> *list);
 	void WriteXML(TiXmlNode *root);
 	bool UsesID(){return true;}
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
+	static void PadSketch(CSketch*,double length, bool undoably);
 };
 
