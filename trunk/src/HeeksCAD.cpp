@@ -60,6 +60,8 @@
 #include "HeeksConfig.h"
 #include "Group.h"
 #include "RS274X.h"
+#include "CxfFont.h"
+
 using namespace std;
 
 IMPLEMENT_APP(HeeksCADapp)
@@ -96,7 +98,8 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	magnification = new MagDragWindow();
 	viewrotating = new ViewRotating;
 	viewzooming = new ViewZooming;
-	m_select_mode = new CSelectMode(false);	// Set this to 'true' for 'select similar' mode.  I'm not there yet.
+	m_select_mode = new CSelectMode(false);
+	// Set this to 'true' for 'select similar' mode.  I'm not there yet.
 	m_digitizing = new DigitizeMode();
 	digitize_end = false;
 	digitize_inters = false;
@@ -141,6 +144,11 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_max_scale_threshold = 1.5;
 	m_number_of_sample_points = 10;
 	m_property_grid_validation = false;
+
+	GetAvailableFonts();
+
+	
+	m_pCxfFont = NULL;	// Default to internal (OpenGL) font.
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -158,6 +166,9 @@ HeeksCADapp::~HeeksCADapp()
 	delete m_ruler;
 	if(m_printData)delete m_printData;
 	if(m_pageSetupData)delete m_pageSetupData;
+
+	m_pCxfFont = NULL;	// Don't free this here.  This memory will be released via ~CxfFonts() instead.
+	if (m_pCxfFonts.get() != NULL) delete m_pCxfFonts.release();
 }
 
 bool HeeksCADapp::OnInit()
@@ -2041,6 +2052,24 @@ static void on_set_units(int value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+static void on_set_font(int zero_based_choice, HeeksObj *obj)
+{
+	if (zero_based_choice == 0)
+	{
+		wxGetApp().m_pCxfFont = NULL;
+		return;
+	} // End if - then
+
+	std::set<wxString> names = wxGetApp().GetAvailableFonts()->FontNames();
+	std::vector<wxString> vector_names;
+	vector_names.push_back(_("OpenGL"));	// Keep the zero-based offset.
+	std::copy( names.begin(), names.end(), std::inserter( vector_names, vector_names.end() ) );
+	if (zero_based_choice < int(vector_names.size()))
+	{
+		wxGetApp().m_pCxfFont = wxGetApp().GetAvailableFonts()->Font( CxfFont::Name_t(vector_names[zero_based_choice].c_str()) );
+	}
+}
+
 void HeeksCADapp::GetOptions(std::list<Property *> *list)
 {
 	PropertyList* view_options = new PropertyList(_("view options"));
@@ -2171,6 +2200,28 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	dxf_options->m_list.push_back(new PropertyCheck(_("make sketch"), HeeksDxfRead::m_make_as_sketch, NULL, on_dxf_make_sketch));
 	file_options->m_list.push_back(dxf_options);
 	list->push_back(file_options);
+
+	// Font options
+	PropertyList* font_options = new PropertyList(_("font options"));
+	if (m_pCxfFonts.get() != NULL)
+	{
+		std::list<wxString> choices;
+
+		choices.push_back( wxString(_("OpenGL (default) font")) );
+		int choice = 0;
+
+		int option = 0;
+		std::set<CxfFont::Name_t> font_names = m_pCxfFonts->FontNames();
+		for (std::set<CxfFont::Name_t>::const_iterator l_itFontName = font_names.begin();
+			l_itFontName != font_names.end(); l_itFontName++)
+		{
+			option++;
+			choices.push_back( *l_itFontName );
+			if ((m_pCxfFont != NULL) && (m_pCxfFont->Name() == *l_itFontName)) choice = option;
+		} // End for
+		font_options->m_list.push_back ( new PropertyChoice ( _("Active font"),  choices, choice, this, on_set_font ) );
+	}
+	list->push_back(font_options);
 }
 
 void HeeksCADapp::DeleteMarkedItems()
@@ -3107,3 +3158,16 @@ void HeeksCADapp::InitialiseLocale()
 		m_locale.AddCatalog(wxT("HeeksCAD"));
 	}
 }
+
+
+std::auto_ptr<CxfFonts>	& HeeksCADapp::GetAvailableFonts()
+{
+	if (m_pCxfFonts.get() == NULL)
+	{
+		m_pCxfFonts = std::auto_ptr<CxfFonts>(new CxfFonts(_("/usr/share/qcad/fonts")));
+	} // End if - then
+
+	return(m_pCxfFonts);
+
+} // End GetAvailableFonts() method
+

@@ -530,7 +530,7 @@ static void OnRegularShapesButton( wxCommandEvent& WXUNUSED( event ) )
 static void OnTextButton( wxCommandEvent& WXUNUSED( event ) )
 {
 	gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
-	HText* new_object = new HText(mat, _T("text"), &(wxGetApp().current_color));
+	HText* new_object = new HText(mat, _T("text"), &(wxGetApp().current_color), wxGetApp().m_pCxfFont );
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().m_marked_list->Clear(true);
 	wxGetApp().m_marked_list->Add(new_object, true);
