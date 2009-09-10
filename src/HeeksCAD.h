@@ -7,6 +7,9 @@
 #include "../interface/HeeksColor.h"
 #include "../interface/ObjList.h"
 #include "glfont2.h"
+#include "CxfFont.h"
+
+#include <memory>
 
 class MagDragWindow;
 class ViewRotating;
@@ -148,6 +151,9 @@ public:
 	int m_number_of_sample_points;
 	bool m_property_grid_validation;
 
+	std::auto_ptr<CxfFonts>	m_pCxfFonts;	// QCAD format fonts that have been loaded.
+	CxfFont   *m_pCxfFont;	// which font are we using? (NULL indicates the internal (OpenGL) font)
+
 	//WxApp override
 	int OnRun();
 	bool OnExceptionInMainLoop();
@@ -275,6 +281,8 @@ public:
 	CSketch* GetContainer(bool undoably);
 	bool EndSketchMode();
 	void SetStatusText();
+
+	std::auto_ptr<CxfFonts>	& GetAvailableFonts();
 };
 
 DECLARE_APP(HeeksCADapp)

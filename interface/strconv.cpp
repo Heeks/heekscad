@@ -53,13 +53,14 @@ wxString ws_to_wxstring( const std::wstring & text )
 
 static wxString::size_type find_first_of( const wxString & line, const wxString & delimiters )
 {
-	wxString::size_type offset = -1;
+	wxString::size_type offset = 0;
+	bool offset_value_set = false;
 	for (wxString::size_type delimiter = 0; delimiter < delimiters.Length(); delimiter++)
 	{
 		wxString::size_type here = line.Find( delimiters[delimiter] );
 		if (here >= 0)
 		{
-			if (offset < 0) offset = here;
+			if (offset_value_set == false) { offset = here; offset_value_set = true; }
 			if (here < offset) offset = here;
 		}
 	} // End for
@@ -76,7 +77,7 @@ std::vector<wxString> Tokens( const wxString & wxLine, const wxString & wxDelimi
 	std::vector<wxString> tokens;
 	wxString line(wxLine);	// non-const copy
 
-	wxString::size_type offset = -1;
+	wxString::size_type offset;
 	while ((offset = find_first_of( line, wxDelimiters )) != line.npos)
 	{
 		if (offset > 0)
@@ -102,7 +103,7 @@ bool AllNumeric( const wxString & wxLine )
 	if (wxLine.Length() == 0) return(false);
 
 	wxString line( wxLine );	// non-const copy
-	wxString::size_type offset = -1;
+	wxString::size_type offset;
 
 	for (offset=0; offset<line.size(); offset++)
 	{
