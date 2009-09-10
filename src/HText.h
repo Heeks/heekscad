@@ -6,6 +6,7 @@
 
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"
+#include "CxfFont.h"
 
 class HText: public HeeksObj{
 private:
@@ -15,8 +16,9 @@ private:
 public:
 	gp_Trsf m_trsf; // matrix defining position, orientation, scale, compared with default text size
 	wxString m_text;
+	CxfFont *m_pFont;	// NULL for internal (normal) fonts
 
-	HText(const gp_Trsf &trsf, const wxString &text, const HeeksColor* col);
+	HText(const gp_Trsf &trsf, const wxString &text, const HeeksColor* col, CxfFont *pCxfFont );
 	HText(const HText &b);
 	~HText(void);
 
@@ -44,4 +46,7 @@ public:
 	void OnEditString(const wxChar* str);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
+	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
+
+	bool GetTextSize( const wxString & text, float *pWidth, float *pHeight ) const;
 };
