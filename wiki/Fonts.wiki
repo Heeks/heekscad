@@ -1,0 +1,21 @@
+#summary Installing and using various fonts for text
+
+= Introduction =
+
+HeeksCAD supports the use of the same font files as are delivered by the QCAD product.  On Ubuntu Linux, these fonts may be delivered within the qcad-data product.
+
+The QCAD fonts are vector fonts so that the text which uses them may be converted into Sketch objects via the 'Make a Sketch' menu option (beneath the right mouse click).
+
+The HeeksCAD product also uses one of the OpenGL font files by default.  This OpenGL font is a raster font and cannot, therefore, be converted into Sketch objects.
+
+== Properties ==
+
+The main properties for HeeksCAD includes a section for Font Options.  This section includes properties for;
+
+=== Active Font ===
+
+When a text object is created, this is the font that will be used by default.  The default value here is the OpenGL (raster) font.
+
+=== Font Paths ===
+
+This is a semi-colon separated list of directories that hold supported font files.  At the moment it looks for files whose name ends in '.CXF'.  By default this value is set to /usr/share/qcad/fonts
