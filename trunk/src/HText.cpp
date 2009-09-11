@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "HText.h"
 #include "../interface/PropertyDouble.h"
+#include "../interface/PropertyChoice.h"
 #include "PropertyTrsf.h"
 #include "Gripper.h"
 #include "CxfFont.h"
@@ -130,9 +131,47 @@ static void on_set_trsf(const gp_Trsf &trsf, HeeksObj* object){
 	wxGetApp().Repaint();
 }
 
+static void on_set_font(int zero_based_choice, HeeksObj *obj)
+{
+	if (zero_based_choice == 0)
+	{
+		((HText*)obj)->m_pFont = NULL;
+		return;
+	} // End if - then
+
+	std::set<wxString> names = wxGetApp().GetAvailableFonts()->FontNames();
+	std::vector<wxString> vector_names;
+	vector_names.push_back(_("OpenGL"));	// Keep the zero-based offset.
+	std::copy( names.begin(), names.end(), std::inserter( vector_names, vector_names.end() ) );
+	if (zero_based_choice < int(vector_names.size()))
+	{
+		((HText*)obj)->m_pFont = wxGetApp().GetAvailableFonts()->Font( CxfFont::Name_t(vector_names[zero_based_choice].c_str()) );
+	}
+	wxGetApp().WasModified((HText*)obj);
+}
+
 void HText::GetProperties(std::list<Property *> *list)
 {
 	list->push_back(new PropertyTrsf(_("orientation"), m_trsf, this, on_set_trsf));
+
+	if (wxGetApp().m_pCxfFonts.get() != NULL)
+	{
+		std::list<wxString> choices;
+
+		choices.push_back( wxString(_("OpenGL (default) font")) );
+		int choice = 0;
+
+		int option = 0;
+		std::set<CxfFont::Name_t> font_names = wxGetApp().m_pCxfFonts->FontNames();
+		for (std::set<CxfFont::Name_t>::const_iterator l_itFontName = font_names.begin();
+			l_itFontName != font_names.end(); l_itFontName++)
+		{
+			option++;
+			choices.push_back( *l_itFontName );
+			if ((m_pFont != NULL) && (m_pFont->Name() == *l_itFontName)) choice = option;
+		} // End for
+		list->push_back ( new PropertyChoice ( _("Font"),  choices, choice, this, on_set_font ) );
+	}
 
 	HeeksObj::GetProperties(list);
 }
@@ -215,7 +254,7 @@ HeeksObj* HText::ReadFromXMLElement(TiXmlElement* pElem)
 	CxfFont *pCxfFont = NULL;
 	if (wxGetApp().GetAvailableFonts().get() != NULL)
 	{
-		wxGetApp().GetAvailableFonts()->Font( font_name );
+		pCxfFont = wxGetApp().GetAvailableFonts()->Font( font_name );
 	}
 
 	HText* new_object = new HText(make_matrix(m), text, &c, pCxfFont );

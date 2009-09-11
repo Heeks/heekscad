@@ -145,8 +145,8 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_number_of_sample_points = 10;
 	m_property_grid_validation = false;
 
+	m_font_paths = _("/usr/share/qcad/fonts");
 	GetAvailableFonts();
-
 	
 	m_pCxfFont = NULL;	// Default to internal (OpenGL) font.
 }
@@ -274,6 +274,8 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("MinCorrelationFactor"), &m_min_correlation_factor);
 	config.Read(_T("MaxScaleThreshold"), &m_max_scale_threshold);
 	config.Read(_T("NumberOfSamplePoints"), &m_number_of_sample_points);
+	
+	config.Read(_T("FontPaths"), &m_font_paths, _T("/usr/share/qcad/fonts"));
 
 	m_ruler->ReadFromConfig(config);
 
@@ -369,6 +371,8 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("MinCorrelationFactor"), m_min_correlation_factor);
 	config.Write(_T("MaxScaleThreshold"), m_max_scale_threshold);
 	config.Write(_T("NumberOfSamplePoints"), m_number_of_sample_points);
+	config.Write(_T("FontPaths"), m_font_paths);
+
 
 	m_ruler->WriteToConfig(config);
 
@@ -2070,6 +2074,18 @@ static void on_set_font(int zero_based_choice, HeeksObj *obj)
 	}
 }
 
+
+static void on_edit_font_paths(const wxChar* value, HeeksObj* object)
+{
+	wxGetApp().m_font_paths.assign(value);
+	if (wxGetApp().m_pCxfFonts.get()) delete wxGetApp().m_pCxfFonts.release();
+	wxGetApp().GetAvailableFonts();
+
+	HeeksConfig config;
+	config.Write(_T("FontPaths"), wxGetApp().m_font_paths);
+}
+
+
 void HeeksCADapp::GetOptions(std::list<Property *> *list)
 {
 	PropertyList* view_options = new PropertyList(_("view options"));
@@ -2221,6 +2237,8 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 		} // End for
 		font_options->m_list.push_back ( new PropertyChoice ( _("Active font"),  choices, choice, this, on_set_font ) );
 	}
+
+	font_options->m_list.push_back( new PropertyString(_("Paths (semicolon delimited)"), m_font_paths, this, on_edit_font_paths));
 	list->push_back(font_options);
 }
 
@@ -3164,7 +3182,18 @@ std::auto_ptr<CxfFonts>	& HeeksCADapp::GetAvailableFonts()
 {
 	if (m_pCxfFonts.get() == NULL)
 	{
-		m_pCxfFonts = std::auto_ptr<CxfFonts>(new CxfFonts(_("/usr/share/qcad/fonts")));
+		std::vector<wxString> paths = Tokens( m_font_paths, _(";") );
+		for (std::vector<wxString>::const_iterator l_itPath = paths.begin(); l_itPath != paths.end(); l_itPath++)
+		{
+			if (m_pCxfFonts.get() == NULL)
+			{
+				m_pCxfFonts = std::auto_ptr<CxfFonts>(new CxfFonts(*l_itPath));
+			} // End if - then
+			else
+			{
+				m_pCxfFonts->Add( *l_itPath );
+			} // End if - else
+		} // End for
 	} // End if - then
 
 	return(m_pCxfFonts);
