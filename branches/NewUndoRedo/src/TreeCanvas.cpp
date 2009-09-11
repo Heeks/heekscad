@@ -80,101 +80,72 @@ void CTreeCanvas::CreateTree(long style)
     Resize();
 }
 
+void CTreeCanvas::Add(ObjList* objects)
+{
+	wxTreeItemId owner;
+	if(objects == (ObjList*)&wxGetApp())
+		owner = m_root;
+	else
+		owner = Find(objects);
+
+	HeeksObj* object = objects->GetFirstChild();
+	while(object)
+	{
+		Add(object, owner);
+
+		ObjList* new_list = dynamic_cast<ObjList*>(object);
+		if(new_list)
+			Add(new_list);
+
+		object = objects->GetNextChild();
+	}
+}
+
+void CTreeCanvas::Reload()
+{
+	Clear();
+	Add((ObjList*)&wxGetApp());
+	WhenMarkedListChanges(false,NULL,NULL);
+}
+
 void CTreeCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified)
 {
-	if(added){
-		std::list<HeeksObj*>::const_iterator It;
-		for(It = added->begin(); It != added->end(); It++){
-			HeeksObj* object = *It;
-			bool can_add = false;
-			if(!object->HasOwner() || object->HasOwner(&wxGetApp())){
-				can_add = true;
-			}
-			else{
-				can_add = (Find(object->Owner()) != wxTreeItemId());
-			}
-			if(can_add){
-				HeeksObj* owner_object = object->Owner();
-				wxTreeItemId owner = Find(owner_object);
-				if(owner && owner_object){
-					int count = 0;
-					for(HeeksObj* temp_child = owner_object->GetFirstChild(); temp_child; temp_child = owner_object->GetNextChild()){
-						count++;
-					}
-
-					int child_count = 0;
-					if(m_treeCtrl->ItemHasChildren(owner)){
-						wxTreeItemIdValue cookie;
-						wxTreeItemId hNextItem;
-						wxTreeItemId hChildItem = m_treeCtrl->GetFirstChild(owner, cookie);
-						while (hChildItem != wxTreeItemId())
-						{
-							hNextItem = m_treeCtrl->GetNextChild(owner, cookie);
-							child_count++;
-							hChildItem = hNextItem;
-						}
-					}
-					if(count > child_count){					
-						Add(object, owner);
-					}
-				}
-				else{
-					wxTreeItemId item = Add(object, m_root);
-				}
-			}
-		}
-	}
-	if(removed){
-		std::list<HeeksObj*>::const_iterator It;
-		for(It = removed->begin(); It != removed->end(); It++){
-			HeeksObj* object = *It;
-			wxTreeItemId item = Find(object);
-			if(item)Remove(object, item, false);
-		}
-	}
-	if(modified){
-		std::list<HeeksObj*>::const_iterator It;
-		for(It = modified->begin(); It != modified->end(); It++){
-			HeeksObj* object = *It;
-			wxTreeItemId item = Find(object);
-			if(item)
-			{
-				m_treeCtrl->SetItemText(item, object->GetShortStringOrTypeString());
-				int image = m_treeCtrl->GetImage(object);
-				m_treeCtrl->SetItemImage(item, image);
-			}
-		}
-	}
+	Reload();
 }
 
 void CTreeCanvas::WhenMarkedListChanges(bool selection_cleared, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)
 {
 	if(selection_cleared){
-		wxTreeItemId item = m_treeCtrl->GetFirstVisibleItem();
-		while(item.IsOk() && m_treeCtrl->IsVisible(item)){
-			m_treeCtrl->SelectItem(item, false);
-			item = m_treeCtrl->GetNextVisible(item);
-		}
+		 wxTreeItemId item = m_treeCtrl->GetFirstVisibleItem();
+         while(item.IsOk()){
+              UnselectItem(item);
+              item = m_treeCtrl->GetNextVisible(item);
+         }
 	}
 	else{
-		if(added_list){
-			std::list<HeeksObj *>::const_iterator It;
-			for(It = added_list->begin(); It != added_list->end(); It++){
-				HeeksObj* object = *It;
-				wxTreeItemId item = Find(object);
-				m_treeCtrl->SelectItem(item);
-			}
-		}
-		if(removed_list){
-			std::list<HeeksObj *>::const_iterator It;
-			for(It = removed_list->begin(); It != removed_list->end(); It++){
-				HeeksObj* object = *It;
-				wxTreeItemId item = Find(object);
-				m_treeCtrl->SelectItem(item, false);
-			}
+		std::list<HeeksObj*>::iterator it;
+		for(it = wxGetApp().m_marked_list->list().begin(); it != wxGetApp().m_marked_list->list().end(); it++)
+		{
+			wxTreeItemId item = Find(*it);
+			if(item.IsOk())
+				SelectItem(item);
 		}
 	}
-	Refresh();
+	m_treeCtrl->Refresh();
+}
+
+void CTreeCanvas::SelectItem(wxTreeItemId item)
+{
+	m_treeCtrl->SelectItem(item);
+	//Selection doesn't work well with focus, so we set the background color
+//	m_treeCtrl->SetItemBackgroundColour(item,m_treeCtrl->Get());
+}
+
+void CTreeCanvas::UnselectItem(wxTreeItemId item)
+{
+	m_treeCtrl->SelectItem(item,false);
+	//Selection doesn't work well with focus, so we set the background color
+//	m_treeCtrl->SetItemBackgroundColour(item,m_treeCtrl->GetBackgroundColour());
 }
 
 void CTreeCanvas::Clear()
@@ -270,7 +241,7 @@ wxTreeItemId CTreeCanvas::Find(HeeksObj *object){
 	return FindIt->second;
 }
 
-#if USE_GENERIC_TREECTRL
+#ifdef USE_GENERIC_TREECTRL
 BEGIN_EVENT_TABLE(MyTreeCtrl, wxGenericTreeCtrl)
 #else
 BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
@@ -301,14 +272,14 @@ BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
 END_EVENT_TABLE()
 
 // MyTreeCtrl implementation
-#if USE_GENERIC_TREECTRL
+#ifdef USE_GENERIC_TREECTRL
 IMPLEMENT_DYNAMIC_CLASS(MyTreeCtrl, wxGenericTreeCtrl)
 #else
 IMPLEMENT_DYNAMIC_CLASS(MyTreeCtrl, wxTreeCtrl)
 #endif
 
 MyTreeCtrl::MyTreeCtrl(wxWindow *parent, long style)
-          : wxTreeCtrl(parent, ID_TREE_CTRL, wxDefaultPosition, wxDefaultSize, style)
+          : wxGenericTreeCtrl(parent, ID_TREE_CTRL, wxDefaultPosition, wxDefaultSize, style)
 {
     m_reverseSort = false;
     CreateImageList();
@@ -339,11 +310,11 @@ int MyTreeCtrl::OnCompareItems(const wxTreeItemId& item1,
 {
     if ( m_reverseSort )
     {
-        return wxTreeCtrl::OnCompareItems(item2, item1);
+        return wxGenericTreeCtrl::OnCompareItems(item2, item1);
     }
     else
     {
-        return wxTreeCtrl::OnCompareItems(item1, item2);
+        return wxGenericTreeCtrl::OnCompareItems(item1, item2);
     }
 }
 

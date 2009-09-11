@@ -202,6 +202,8 @@ public:
 	void SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, bool for_clipboard = false);
 	void SaveXMLFile(const wxChar *filepath){SaveXMLFile(m_objects, filepath);}
 	bool SaveFile(const wxChar *filepath, bool use_dialog = false, bool update_recent_file_list = true, bool set_app_caption = true);
+	void CreateUndoPoint();
+	void Changed();
 	void WasModified(HeeksObj *object);
 	void WasAdded(HeeksObj *object);
 	void WasRemoved(HeeksObj *object);

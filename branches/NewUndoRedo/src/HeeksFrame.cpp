@@ -746,7 +746,9 @@ static void OnSphereButton( wxCommandEvent& event )
 {
 	gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
 	CSphere* new_object = new CSphere(gp_Pnt(0, 0, 0).Transformed(mat), 5, _("Sphere"), HeeksColor(240, 191, 191));
+	wxGetApp().CreateUndoPoint();
 	wxGetApp().Add(new_object,NULL);
+	wxGetApp().Changed();
 	wxGetApp().m_marked_list->Clear(true);
 	wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().SetInputMode(wxGetApp().m_select_mode);

@@ -39,8 +39,12 @@ bool CSphere::ModifyByMatrix(const double* m){
 	CSphere* new_object = new CSphere(new_pos, new_radius, m_title.c_str(), m_color);
 	new_object->CopyIDsFrom(this);
 	Owner()->Add(new_object, NULL);
-	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
-	wxGetApp().Remove(this);
+	Owner()->Remove(this);
+	if(wxGetApp().m_marked_list->ObjectMarked(this))
+	{
+		wxGetApp().m_marked_list->Remove(this,false);
+		wxGetApp().m_marked_list->Add(new_object, true);
+	}
 	return true;
 }
 
@@ -64,9 +68,15 @@ void CSphere::OnApplyProperties()
 {
 	CSphere* new_object = new CSphere(m_pos, m_radius, m_title.c_str(), m_color);
 	new_object->CopyIDsFrom(this);
+	wxGetApp().CreateUndoPoint();
 	wxGetApp().Add(new_object, NULL);
-	wxGetApp().m_marked_list->Clear(true);
-	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
+	wxGetApp().Remove(this);
+	wxGetApp().Changed();
+	if(wxGetApp().m_marked_list->ObjectMarked(this))
+	{
+		wxGetApp().m_marked_list->Remove(this,false);
+		wxGetApp().m_marked_list->Add(new_object, true);
+	}
 	wxGetApp().Repaint();
 }
 

@@ -82,9 +82,9 @@ void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
 
 void GripperSelTransform::OnGripperReleased ( const double* from, const double* to )
 {
+	wxGetApp().CreateUndoPoint();
 	if ( m_gripper_type > GripperTypeScale )
 	{
-		wxGetApp().StartHistory();
 		double shift[3] = {to[0] - m_initial_grip_pos[0], to[1] - m_initial_grip_pos[1], to[2] - m_initial_grip_pos[2]};
 		{
 			std::list<HeeksObj *>::iterator It;
@@ -98,7 +98,6 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 				}
 			}
 		}
-		wxGetApp().EndHistory();
 		position = position.XYZ() + make_vector( shift ).XYZ();
 	}
 	else
@@ -142,6 +141,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 		}
 	}
 	wxGetApp().m_marked_list->gripping = false;
+	wxGetApp().Changed();
 }
 
 void GripperSelTransform::MakeMatrix ( const double* from, const double* to, const double* object_m, gp_Trsf& mat )

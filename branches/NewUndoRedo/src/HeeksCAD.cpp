@@ -1529,6 +1529,16 @@ void HeeksCADapp::ObserversOnChange(const std::list<HeeksObj*>* added, const std
 	}
 }
 
+void HeeksCADapp::CreateUndoPoint()
+{
+
+}
+
+void HeeksCADapp::Changed()
+{
+	ObserversOnChange(NULL,NULL,NULL);
+}
+
 void HeeksCADapp::ObserversMarkedListChanged(bool selection_cleared, const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed){
 	std::set<Observer*>::iterator It;
 	for(It = observers.begin(); It != observers.end(); It++){
