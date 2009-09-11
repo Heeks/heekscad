@@ -54,13 +54,43 @@ private:
 		{
 		public:
 			Line( const double x1, const double y1, const double x2, const double y2 ) :
-			  m_x1(x1), m_y1(y1), m_x2(x2), m_y2(y2) { }
+			  m_x1(x1), m_y1(y1), m_x2(x2), m_y2(y2) 
+			{ 
+				// Setup the bounding box values.
+				double point[3];
+				point[0] = m_x1;
+				point[1] = m_y1;
+				point[2] = 0.0;
 
-			Line() : m_x1(0.0), m_y1(0.0), m_x2(0.0), m_y2(0.0) { }
+				m_bounding_box.Insert( point );
+
+				point[0] = m_x2;
+				point[1] = m_y2;
+				point[2] = 0.0;
+
+				m_bounding_box.Insert( point );
+			}
+
+			Line() : m_x1(0.0), m_y1(0.0), m_x2(0.0), m_y2(0.0) 
+			{
+				// Setup the bounding box values.
+				double point[3];
+				point[0] = m_x1;
+				point[1] = m_y1;
+				point[2] = 0.0;
+
+				m_bounding_box.Insert( point );
+
+				point[0] = m_x2;
+				point[1] = m_y2;
+				point[2] = 0.0;
+
+				m_bounding_box.Insert( point );
+			}
 
 		    HeeksObj *Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const;
 			void glCommands( const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const;
-			CBox BoundingBox() const;
+			CBox BoundingBox() const { return(m_bounding_box); }
 			Graphics *Duplicate() { return(new Line(*this)); }
 
 		private:
@@ -68,6 +98,8 @@ private:
 			double m_y1;
 			double m_x2;
 			double m_y2;
+
+			CBox m_bounding_box;
 		};
 
 		class Arc : public Graphics
@@ -78,8 +110,20 @@ private:
 				m_start_angle((start_angle / 360.0) * (2 * PI)), 
 				m_end_angle((end_angle / 360.0) * (2 * PI)) 
 			  {
-				  if (m_start_angle < 0) m_start_angle += (2 * PI);
-				  if (m_end_angle < 0) m_end_angle += (2 * PI);
+				if (m_start_angle < 0) m_start_angle += (2 * PI);
+				if (m_end_angle < 0) m_end_angle += (2 * PI);
+
+				std::list<gp_Pnt> points = Interpolate(gp_Pnt(0.0, 0.0, 0.0), 20 );
+				for (std::list<gp_Pnt>::const_iterator l_itPoint = points.begin();
+					l_itPoint != points.end(); l_itPoint++)
+				{
+					double point[3];
+					point[0] = l_itPoint->X();
+					point[1] = l_itPoint->Y();
+					point[2] = l_itPoint->Z();
+
+					m_bounding_box.Insert( point );
+				} // End for
 			  }
 
 			Arc() : m_xcentre(0.0), m_ycentre(0.0), m_radius(0.0), m_start_angle(0.0), m_end_angle(0.0) { }
@@ -87,7 +131,7 @@ private:
 
 			HeeksObj *Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const;
 			void glCommands( const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const;
-			CBox BoundingBox() const;
+			CBox BoundingBox() const { return(m_bounding_box); }
 
 			std::list<gp_Pnt> Interpolate(const gp_Pnt & location, const unsigned int number_of_points ) const;
 
@@ -98,6 +142,8 @@ private:
 			double m_radius;
 			double m_start_angle;
 			double m_end_angle;
+
+			CBox	m_bounding_box;
 		}; // End Arc class defintion.
 		
 
@@ -108,13 +154,16 @@ private:
 		~Glyph();
 
 		HeeksObj *Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const;
+		std::list< HeeksObj * > GetGraphics( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const;
 		void glCommands( const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const;
 		void get_text_size( float *pWidth, float *pHeight ) const;
+		CBox BoundingBox() const { return(m_bounding_box); }
 
 	private:
 		typedef std::list< Graphics * > GraphicsList_t;
 
 		GraphicsList_t	m_graphics_list;
+		CBox	m_bounding_box;
 	}; // End Glyph class definition
 
 public:
@@ -129,6 +178,7 @@ public:
 	HeeksObj *Sketch( const wxString & string, const gp_Trsf & transformation_matrix ) const;
 	bool get_text_size( const wxString & text, float *pWidth, float *pHeight ) const;
 	void glCommands(const wxString & text, const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const;
+	CBox BoundingBox() const { return(m_bounding_box); }
 
 private:
 	typedef std::map< wxChar, Glyph > Glyphs_t;
@@ -137,6 +187,7 @@ private:
 	double m_word_spacing;
 	double m_line_spacing_factor;
 	Name_t m_name;
+	CBox	m_bounding_box;		// box surrounding the largest character.
 
 }; // End CxfFont class definition
 
@@ -149,6 +200,8 @@ public:
 
 	CxfFonts(const CxfFont::Name_t &directory);
 	~CxfFonts();
+
+	void Add( const CxfFont::Name_t &directory );
 
 	static std::list<wxString> GetFileNames( const wxString & Root );
 	static bool ValidExtension( const wxString & file_name );

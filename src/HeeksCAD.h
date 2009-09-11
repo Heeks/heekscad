@@ -153,6 +153,7 @@ public:
 
 	std::auto_ptr<CxfFonts>	m_pCxfFonts;	// QCAD format fonts that have been loaded.
 	CxfFont   *m_pCxfFont;	// which font are we using? (NULL indicates the internal (OpenGL) font)
+	wxString m_font_paths;	// SemiColon delimited list of directories that hold font files to load.
 
 	//WxApp override
 	int OnRun();
