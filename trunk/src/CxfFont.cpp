@@ -87,13 +87,20 @@ std::list<gp_Pnt> CxfFont::Glyph::Arc::Interpolate(const gp_Pnt & location, cons
 	origin.SetX( origin.X() + m_xcentre );
 	origin.SetY( origin.Y() + m_ycentre );
 
-	double increment = (m_end_angle - m_start_angle) / number_of_points;
-	if (m_start_angle > m_end_angle) increment *= -1;	
+	double start_angle = m_start_angle;
+	double end_angle = m_end_angle;
 
-	for (double angle = m_start_angle; angle <= m_end_angle; angle += increment)
+	if (start_angle > end_angle)
+	{
+		end_angle += (2 * PI);
+	}
+
+	double increment = (end_angle - start_angle) / number_of_points;
+
+	gp_Dir z_direction( 0, 0, 1 );
+	for (double angle = start_angle; angle <= end_angle; angle += increment)
 	{
 		gp_Pnt point( location.X() + m_xcentre + m_radius, location.Y() + m_ycentre, location.Z() );
-		gp_Dir z_direction( 0, 0, 1 );
 		gp_Trsf rotation_matrix;
 		rotation_matrix.SetRotation( gp_Ax1(origin, z_direction), angle );
 		point.Transform(rotation_matrix);
