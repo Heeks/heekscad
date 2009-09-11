@@ -190,10 +190,12 @@ CxfFont::Glyph::Glyph( const std::list<std::string> &definition )
 			}
 			else
 			{
-				m_graphics_list.push_back( new Line( strtod( Ttc(tokens[1].c_str()), NULL ),
+				Line *line = new Line( strtod( Ttc(tokens[1].c_str()), NULL ),
 												 strtod( Ttc(tokens[2].c_str()), NULL ),
 												 strtod( Ttc(tokens[3].c_str()), NULL ),
-												 strtod( Ttc(tokens[4].c_str()), NULL ) ));
+												 strtod( Ttc(tokens[4].c_str()), NULL ) );
+				m_graphics_list.push_back( line );
+				m_bounding_box.Insert( line->BoundingBox() );
 			}
 			break;
 
@@ -210,19 +212,23 @@ CxfFont::Glyph::Glyph( const std::list<std::string> &definition )
 				if ((tokens[0].size() == 2) && (tokens[0][1] == 'R'))
 				{
 					// Reverse the starting and ending points.
-					m_graphics_list.push_back( new Arc( strtod( Ttc(tokens[1].c_str()), NULL ),
+					Arc *arc = new Arc( strtod( Ttc(tokens[1].c_str()), NULL ),
 													 strtod( Ttc(tokens[2].c_str()), NULL ),
 													 strtod( Ttc(tokens[3].c_str()), NULL ),
 													 strtod( Ttc(tokens[5].c_str()), NULL ),
-													 strtod( Ttc(tokens[4].c_str()), NULL ) ));
+													 strtod( Ttc(tokens[4].c_str()), NULL ) );
+					m_graphics_list.push_back( arc );
+					m_bounding_box.Insert( arc->BoundingBox() );
 				} // End if - then
 				else
 				{
-					m_graphics_list.push_back( new Arc( strtod( Ttc(tokens[1].c_str()), NULL ),
+					Arc *arc = new Arc( strtod( Ttc(tokens[1].c_str()), NULL ),
 												 strtod( Ttc(tokens[2].c_str()), NULL ),
 												 strtod( Ttc(tokens[3].c_str()), NULL ),
 												 strtod( Ttc(tokens[4].c_str()), NULL ),
-												 strtod( Ttc(tokens[5].c_str()), NULL ) ));
+												 strtod( Ttc(tokens[5].c_str()), NULL ) );
+					m_graphics_list.push_back( arc );
+					m_bounding_box.Insert( arc->BoundingBox() );
 				}
 			}
 			break;
@@ -269,15 +275,27 @@ CxfFont::Glyph & CxfFont::Glyph::operator= ( const CxfFont::Glyph & rhs )
 		{
 			m_graphics_list.push_back( (*l_itGraphic)->Duplicate() );
 		} // End for
+
+		m_bounding_box = rhs.m_bounding_box;
 	} // End if - then
 
 	return(*this);	
 }
 
-
+/**
+	The location is relative both to (0,0,0) and, from there, to the point along the text string
+	for this character.  The transformation matrix is both a translation (movement) and a
+	rotation function that is maintained by the HText class based on where the operator has
+	placed the text.  i.e. the location is in 'internal' coordinates and those are then
+	transformed (moved and/or rotated) by the rotation matrix to determine the final
+	coordinates.  This is handled differently to the glCommands() method because the OpenGL
+	libraries will have had the transformation matrix pushed onto the stack so that all
+	OpenGL coordinates will be implicitly transformed.
+ */
 HeeksObj *CxfFont::Glyph::Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const
 {
 	HeeksObj *sketch = heekscad_interface.NewSketch();
+	
 	for (GraphicsList_t::const_iterator l_itGraphic = m_graphics_list.begin(); l_itGraphic != m_graphics_list.end(); l_itGraphic++)
 	{
 		heekscad_interface.AddUndoably( (*l_itGraphic)->Sketch( location, transformation_matrix ), sketch );
@@ -285,6 +303,19 @@ HeeksObj *CxfFont::Glyph::Sketch( const gp_Pnt & location, const gp_Trsf & trans
 
 	return(sketch);
 } // End Sketch() method
+
+std::list<HeeksObj *> CxfFont::Glyph::GetGraphics( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const
+{
+	std::list<HeeksObj *> results;
+	
+	for (GraphicsList_t::const_iterator l_itGraphic = m_graphics_list.begin(); l_itGraphic != m_graphics_list.end(); l_itGraphic++)
+	{
+		results.push_back( (*l_itGraphic)->Sketch( location, transformation_matrix ) );
+	} // End for
+
+	return(results);
+} // End Graphics() method
+
 
 void CxfFont::Glyph::glCommands( const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const
 {
@@ -373,6 +404,7 @@ CxfFont::CxfFont( const wxChar *p_szFile )
 					else
 					{
 						m_glyphs.insert(std::make_pair(symbol[0], Glyph(lines)));
+						m_bounding_box.Insert( Glyph(lines).BoundingBox() );
 					}
 
 					lines.clear();
@@ -421,6 +453,7 @@ CxfFont::CxfFont( const wxChar *p_szFile )
 			m_glyphs.insert(std::make_pair(symbol[0], Glyph(lines)));
 			lines.clear();
 			symbol.Clear();
+			m_bounding_box.Insert( Glyph(lines).BoundingBox() );
 		}
 
 //		printf("File '%s' contained %d glyphs\n", Ttc(p_szFile), m_glyphs.size() );
@@ -436,6 +469,7 @@ CxfFont::CxfFont( const wxChar *p_szFile )
 HeeksObj *CxfFont::Sketch( const wxString & text, const gp_Trsf & transformation_matrix ) const
 {
 	HeeksObj *sketch = heekscad_interface.NewSketch();
+	sketch->OnEditString(text.c_str());
 
 	gp_Pnt location( 0.0, 0.0, 0.0 );	// The transformation matrix will put it in the right place.
 	for (wxString::size_type offset = 0; offset < text.Length(); offset++)
@@ -443,95 +477,111 @@ HeeksObj *CxfFont::Sketch( const wxString & text, const gp_Trsf & transformation
 		if (text[offset] == ' ')
 		{
 			// It's a space.  Just move on.  Nothing to see here.
-			location.SetX( location.X()+ LetterSpacing());
+			location.SetX( location.X()+ BoundingBox().Width() + WordSpacing() );
 		}
 		else if (text[offset] == '\n')
 		{
-			location.SetY(location.Y() + LineSpacingFactor());
+			location.SetX(0.0);
+			location.SetY(location.Y() - LineSpacingFactor() - BoundingBox().Height());
 		}
 		else if (m_glyphs.find(text[offset]) == m_glyphs.end())
 		{
 			// We don't have a glyph for this symbol.  Draw a square around where
-			// it would have been instead.
+			// it would have been instead.  The BoundingBox() for this font is
+			// the size of the largest glyph (graphics for character) in this font.
+			// Make the square that big.
+
+			CBox largest_glyph( BoundingBox() );
+
+			gp_Pnt top_left( location );
+			gp_Pnt top_right( location );
+			gp_Pnt bottom_left( location );
+			gp_Pnt bottom_right( location );
+
+			top_left.SetX( top_left.X() );
+			top_left.SetY( top_left.Y() + (largest_glyph.Height()/2.0) );
+
+			top_right.SetX( top_left.X() + largest_glyph.Width() );
+			top_right.SetY( top_left.Y() + (largest_glyph.Height()/2.0) );
+
+			bottom_left.SetX( top_left.X() );
+			bottom_left.SetY( top_left.Y() - (largest_glyph.Height()/2.0) );
+
+			bottom_right.SetX( top_left.X() + largest_glyph.Width() );
+			bottom_right.SetY( top_left.Y() - (largest_glyph.Height()/2.0) );
+
+			top_left.Transform( transformation_matrix );
+			top_right.Transform( transformation_matrix );
+			bottom_left.Transform( transformation_matrix );
+			bottom_right.Transform( transformation_matrix );
+
+			double top_left_point[3];
+			double top_right_point[3];
+			double bottom_left_point[3];
+			double bottom_right_point[3];
+
+			top_left_point[0] = top_left.X();
+			top_left_point[1] = top_left.Y();
+			top_left_point[2] = top_left.Z();
+
+			top_right_point[0] = top_right.X();
+			top_right_point[1] = top_right.Y();
+			top_right_point[2] = top_right.Z();
+
+			bottom_left_point[0] = bottom_left.X();
+			bottom_left_point[1] = bottom_left.Y();
+			bottom_left_point[2] = bottom_left.Z();
+
+			bottom_right_point[0] = bottom_right.X();
+			bottom_right_point[1] = bottom_right.Y();
+			bottom_right_point[2] = bottom_right.Z();
+
+			HeeksObj *line = heekscad_interface.NewLine( top_left_point, top_right_point );
+			heekscad_interface.AddUndoably( line, sketch );
+
+			line = heekscad_interface.NewLine( top_right_point, bottom_right_point );
+			heekscad_interface.AddUndoably( line, sketch );
+
+			line = heekscad_interface.NewLine( bottom_right_point, bottom_left_point );
+			heekscad_interface.AddUndoably( line, sketch );
+
+			line = heekscad_interface.NewLine( bottom_left_point, top_left_point );
+			heekscad_interface.AddUndoably( line, sketch );
+
+			location.SetX( location.X() + BoundingBox().Width() );
 		} // End if - then
 		else
 		{
 			Glyphs_t::const_iterator l_itGlyph = m_glyphs.find( text[offset] );
 			if (l_itGlyph != m_glyphs.end())
 			{
-				HeeksObj *graphics = l_itGlyph->second.Sketch( location, transformation_matrix );
+				// Get the lines and arcs that represent the character (glyph)
+				std::list<HeeksObj *> graphics = l_itGlyph->second.GetGraphics( location, transformation_matrix );
+				for (std::list<HeeksObj *>::iterator l_itGraphic = graphics.begin(); l_itGraphic != graphics.end(); l_itGraphic++)
+				{
+					// label this piece of graphics with the character it's representing
+					(*l_itGraphic)->OnEditString(text.Mid(offset,1).c_str()); 
 
-				float width, height;
-				l_itGlyph->second.get_text_size( &width, &height );
-				location.SetX( location.X() + width );
+					// And add it to the sketch that represents the whole text string.
+					heekscad_interface.AddUndoably( *l_itGraphic, sketch );
+				} // End for
 
-				heekscad_interface.AddUndoably( graphics, sketch );
+				location.SetX( location.X() + l_itGlyph->second.BoundingBox().Width() );
 			} // End if - then
 		} // End if - else
 
 		location.SetX(location.X() + LetterSpacing());
 	} // End for
 
+	((CSketch *) sketch)->ReOrderSketch( SketchOrderTypeMultipleCurves, true );
 	return(sketch);
 }
 
 
-CBox CxfFont::Glyph::Line::BoundingBox() const
-{
-	CBox bounding_box;
-	double start[3];
-	double end[3];
-
-	start[0] = m_x1;
-	start[1] = m_y1;
-	start[2] = 0.0;
-
-	bounding_box.Insert( start );
-
-	end[0] = m_x2;
-	end[1] = m_y2;
-	end[2] = 0.0;
-
-	bounding_box.Insert( end );
-
-	return(bounding_box);
-} // End BoundingBox() method
-
-
-CBox CxfFont::Glyph::Arc::BoundingBox() const
-{
-	// TODO: Fix this up to handle the start and end angles as well.
-	
-	CBox bounding_box;
-	double bottom_left[3];
-	double top_right[3];
-
-	bottom_left[0] = m_xcentre - m_radius;
-	bottom_left[1] = m_ycentre - m_radius;
-	bottom_left[2] = 0.0;
-
-	bounding_box.Insert( bottom_left );
-
-	top_right[0] = m_xcentre + m_radius;
-	top_right[1] = m_ycentre + m_radius;
-	top_right[2] = 0.0;
-
-	bounding_box.Insert( top_right );
-
-	return(bounding_box);
-} // End BoundingBox() method
-
 void CxfFont::Glyph::get_text_size( float *pWidth, float *pHeight ) const
 {
-	CBox bounding_box;
-	for (GraphicsList_t::const_iterator l_itGraphics = m_graphics_list.begin();
-			l_itGraphics != m_graphics_list.end(); l_itGraphics++)
-	{
-		bounding_box.Insert( (*l_itGraphics)->BoundingBox() );
-	} // End for
-
-	*pWidth = bounding_box.Width();
-	*pHeight = bounding_box.Height();
+	*pWidth = m_bounding_box.Width();
+	*pHeight = m_bounding_box.Height();
 } // End get_text_size() method
 
 
@@ -570,17 +620,48 @@ void CxfFont::glCommands(const wxString & text, const gp_Pnt &start_point, const
 		if (text[offset] == ' ')
 		{
 			// It's a space.  Just move on.  Nothing to see here.
-			location.SetX( location.X()+ LetterSpacing());
+			location.SetX( location.X()+ BoundingBox().Width() + WordSpacing() );
 		}
 		else if (text[offset] == '\n')
 		{
-			location.SetX(start_point.X());
-			location.SetY(location.Y() + LineSpacingFactor());
+			location.SetX(0.0);
+			location.SetY(location.Y() - LineSpacingFactor() - BoundingBox().Height());
 		}
 		else if (m_glyphs.find(text[offset]) == m_glyphs.end())
 		{
 			// We don't have a glyph for this symbol.  Draw a square around where
-			// it would have been instead.
+			// it would have been instead.  The BoundingBox() for this font is
+			// the size of the largest glyph (graphics for character) in this font.
+			// Make the square that big.
+
+			CBox largest_glyph( BoundingBox() );
+
+			gp_Pnt top_left( location );
+			gp_Pnt top_right( location );
+			gp_Pnt bottom_left( location );
+			gp_Pnt bottom_right( location );
+
+			top_left.SetX( top_left.X() );
+			top_left.SetY( top_left.Y() + (largest_glyph.Height()/2.0) );
+
+			top_right.SetX( top_left.X() + largest_glyph.Width() );
+			top_right.SetY( top_left.Y() + (largest_glyph.Height()/2.0) );
+
+			bottom_left.SetX( top_left.X() );
+			bottom_left.SetY( top_left.Y() - (largest_glyph.Height()/2.0) );
+
+			bottom_right.SetX( top_left.X() + largest_glyph.Width() );
+			bottom_right.SetY( top_left.Y() - (largest_glyph.Height()/2.0) );
+
+			glBegin(GL_LINES);
+			glVertex3d(top_left.X(), top_left.Y(), top_left.Z());
+			glVertex3d(top_right.X(), top_right.Y(), top_right.Z());
+			glVertex3d(top_left.X(), bottom_right.Y(), bottom_right.Z());
+			glVertex3d(top_right.X(), bottom_left.Y(), bottom_left.Z());
+			glVertex3d(top_left.X(), top_left.Y(), top_left.Z());
+			glEnd();
+
+			location.SetX( location.X() + BoundingBox().Width() );
 		} // End if - then
 		else
 		{
@@ -588,10 +669,7 @@ void CxfFont::glCommands(const wxString & text, const gp_Pnt &start_point, const
 			if (l_itGlyph != m_glyphs.end())
 			{
 				l_itGlyph->second.glCommands(location, select, marked, no_color);
-
-				float width, height;
-				l_itGlyph->second.get_text_size( &width, &height );
-				location.SetX( location.X() + width );
+				location.SetX( location.X() + l_itGlyph->second.BoundingBox().Width() );
 			} // End if - then
 		} // End if - else
 
@@ -614,9 +692,12 @@ void CxfFont::glCommands(const wxString & text, const gp_Pnt &start_point, const
 	return(false);
 }
 
-
-
 CxfFonts::CxfFonts( const CxfFont::Name_t & directory )
+{
+	Add( directory );
+}
+
+void CxfFonts::Add( const CxfFont::Name_t & directory )
 {
 	std::list<wxString> files = GetFileNames( directory.c_str() );
 	for (std::list<wxString>::const_iterator l_itFile = files.begin(); l_itFile != files.end(); l_itFile++)
@@ -638,7 +719,7 @@ CxfFonts::CxfFonts( const CxfFont::Name_t & directory )
 	} // End for
 
 	printf("Read %d Cxf-format font files\n", m_fonts.size());
-} // End constructor
+} // End Add() method
 
 CxfFonts::~CxfFonts()
 {
