@@ -59,3 +59,4 @@ void DrawFace(TopoDS_Face face)
 	}
 	glEnd();
 }
+

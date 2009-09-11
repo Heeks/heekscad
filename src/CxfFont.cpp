@@ -725,7 +725,7 @@ void CxfFonts::Add( const CxfFont::Name_t & directory )
 		} // End catch
 	} // End for
 
-	printf("Read %d Cxf-format font files\n", m_fonts.size());
+	printf("Read %d Cxf-format font files\n", (unsigned)m_fonts.size());
 } // End Add() method
 
 CxfFonts::~CxfFonts()
