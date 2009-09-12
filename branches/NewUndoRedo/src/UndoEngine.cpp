@@ -160,6 +160,9 @@ void UndoEngine::Undo()
 	std::vector<UndoEvent> events = GetModifications();	
 	if(events.size() > 0)
 	{
+		m_events.resize(m_level+1);
+		m_events[m_level] = events;
+
 		UndoEvents(events, &m_tree);
 		return;
 	}
@@ -173,7 +176,12 @@ void UndoEngine::Undo()
 
 void UndoEngine::Redo()
 {
+	if(m_level >= m_events.size())
+		return;
 
+	DoEvents(m_events[m_level],&m_oldtree);
+	DoEvents(m_events[m_level],&m_tree);
+	m_level++;
 }
 
 void UndoEngine::CreateUndoPoint()
@@ -184,7 +192,6 @@ void UndoEngine::CreateUndoPoint()
 
 	m_events.resize(m_level+1);
 	m_events[m_level] = events;
-	if(m_level>0)
-		DoEvents(m_events[m_level-1],&m_oldtree);
+	DoEvents(m_events[m_level],&m_oldtree);
 	m_level++;
 }
