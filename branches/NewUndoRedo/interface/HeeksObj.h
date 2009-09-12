@@ -125,6 +125,7 @@ public:
 	virtual bool CanAddTo(HeeksObj* owner){return true;}
 	virtual bool OneOfAKind(){return false;} // if true, then, instead of pasting, find the first object of the same type and copy object to it.
 	virtual bool Add(HeeksObj* object, HeeksObj* prev_object) {object->AddOwner(this); object->OnAdd(); return true;}
+	virtual bool IsDifferent(HeeksObj* other){return false;}
 	virtual void Remove(HeeksObj* object){object->OnRemove();}
 	virtual void OnAdd(){}
 	virtual void OnRemove();

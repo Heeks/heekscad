@@ -27,6 +27,7 @@ public:
 	void OnApplyProperties();
 	bool GetCentrePoint(double* pos);
 	bool GetScaleAboutMatrix(double *m);
+	bool IsDifferent(HeeksObj* other);
 
 	// CShape's virtual functions
 	void SetXMLElement(TiXmlElement* element);

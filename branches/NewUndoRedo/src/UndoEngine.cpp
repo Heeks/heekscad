@@ -16,6 +16,14 @@ UndoEvent::UndoEvent(EventType type, ObjList* parent, HeeksObj* object)
 	m_object = object;
 }
 
+UndoEvent::UndoEvent(EventType type, ObjList* parent, HeeksObj* object, HeeksObj* oldobject)
+{
+	m_type = type;
+	m_parent = parent;
+	m_object = object;
+	m_oldobject = oldobject;
+}
+
 UndoEngine::UndoEngine(ObjList* tree)
 {
 	m_tree.m_tree = tree;
@@ -50,19 +58,41 @@ std::vector<UndoEvent> UndoEngine::GetModifications()
 	return ret;
 }
 
+void UndoEngine::RecalculateMaps()
+{
+	m_tree.m_treemap.clear();
+	m_oldtree.m_treemap.clear();
+
+	m_tree.m_treemap[GetHeeksObjId(m_tree.m_tree)] = m_tree.m_tree;
+	m_oldtree.m_treemap[GetHeeksObjId(m_tree.m_tree)] = m_oldtree.m_tree;
+
+	HeeksObj *new_obj = m_tree.m_tree->GetFirstChild();
+	while(new_obj)
+	{
+		HeeksObjId id = GetHeeksObjId(new_obj);
+		m_tree.m_treemap[id] = new_obj;
+		new_obj = m_tree.m_tree->GetNextChild();
+	}
+
+	HeeksObj *old_obj = m_oldtree.m_tree->GetFirstChild();
+	while(old_obj)
+	{
+		HeeksObjId id = GetHeeksObjId(old_obj);
+		m_oldtree.m_treemap[id] = old_obj;
+		old_obj = m_oldtree.m_tree->GetNextChild();
+	}
+
+}
+
 void UndoEngine::GetModifications(std::vector<UndoEvent> &ret,ObjList* newtree, ObjList* oldtree)
 {
 	std::set<HeeksObjId> new_children;
 	std::set<HeeksObjId> old_children;
 	std::map<HeeksObjId,HeeksObj*> new_children_map;
 	std::map<HeeksObjId,HeeksObj*> old_children_map;
-	m_tree.m_treemap.clear();
-	m_oldtree.m_treemap.clear();
 
 	//Add the parents to the map really quick
-	m_tree.m_treemap[GetHeeksObjId(newtree)] = newtree;
-	m_oldtree.m_treemap[GetHeeksObjId(newtree)] = oldtree;
-
+	RecalculateMaps();
 
 	HeeksObj *new_obj = newtree->GetFirstChild();
 	while(new_obj)
@@ -97,6 +127,12 @@ void UndoEngine::GetModifications(std::vector<UndoEvent> &ret,ObjList* newtree, 
 		else
 		{
 			//TODO: check if item is modified, if it is an objlist, descend
+			if(obj->IsDifferent(old_children_map[*it]))
+			{
+				HeeksObj* copy = obj->MakeACopyWithID();
+				ret.push_back(UndoEvent(EventTypeModified,newtree,copy,old_children_map[*it]));
+				m_oldtree.m_treemap[*it] = copy;
+			}
 		}
 		m_tree.m_treemap[*it] = obj;
 	}
@@ -126,10 +162,16 @@ void UndoEngine::UndoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
 			case EventTypeAdd:
 				tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Remove(tree->m_treemap[GetHeeksObjId(evt.m_object)]);
 				break;
+			case EventTypeModified:
+				tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Remove(tree->m_treemap[GetHeeksObjId(evt.m_object)]);
+				tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Add(evt.m_oldobject->MakeACopyWithID(),NULL);
+				break;
 			default:
 				break;
 		}
 	}
+
+	RecalculateMaps();
 }
 
 void UndoEngine::DoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
@@ -142,10 +184,16 @@ void UndoEngine::DoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
 			case EventTypeAdd:
 				tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Add(evt.m_object->MakeACopyWithID(),NULL);
 				break;
+			case EventTypeModified:
+				tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Remove(tree->m_treemap[GetHeeksObjId(evt.m_oldobject)]);
+				tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Add(evt.m_object->MakeACopyWithID(),NULL);
+				break;
 			default:
 				break;
 		}
 	}
+
+	RecalculateMaps();
 }
 
 
@@ -176,7 +224,7 @@ void UndoEngine::Undo()
 
 void UndoEngine::Redo()
 {
-	if(m_level >= m_events.size())
+	if((unsigned)m_level >= m_events.size())
 		return;
 
 	DoEvents(m_events[m_level],&m_oldtree);
