@@ -28,7 +28,7 @@ bool CSphere::IsDifferent(HeeksObj *other)
 	CSphere* sphere = (CSphere*)other;
 	if(sphere->m_pos.Distance(m_pos) < wxGetApp().m_geom_tol && sphere->m_radius == m_radius)
 		return false;
-	return true;
+	return CShape::IsDifferent(other);
 }
 
 static void on_set_centre(const double *pos, HeeksObj* object){

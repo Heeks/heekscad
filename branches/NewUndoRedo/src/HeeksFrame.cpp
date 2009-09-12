@@ -673,7 +673,10 @@ static void OnPasteButton( wxCommandEvent& event )
 
 static void OnDeleteButton( wxCommandEvent& event )
 {
+	wxGetApp().CreateUndoPoint();
 	wxGetApp().Remove(wxGetApp().m_marked_list->list());
+	wxGetApp().m_marked_list->Clear(true);
+	wxGetApp().Changed();
 }
 
 static void OnUpdateDelete( wxUpdateUIEvent& event )

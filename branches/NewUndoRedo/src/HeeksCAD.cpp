@@ -1474,12 +1474,14 @@ void HeeksCADapp::Undo(void)
 {
 	history->Undo();
 	Changed();
+	m_marked_list->Clear(true);
 }
 
 void HeeksCADapp::Redo(void)
 {
 	history->Redo();
 	Changed();
+	m_marked_list->Clear(true);
 }
 
 void HeeksCADapp::RegisterObserver(Observer* observer)
