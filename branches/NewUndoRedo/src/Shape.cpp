@@ -366,7 +366,7 @@ bool CShape::ModifyByMatrix(const double* m){
 
 void CShape::OnEditString(const wxChar* str){
 	m_title.assign(str);
-	wxGetApp().WasModified(this);
+	wxGetApp().Changed();
 }
 
 // static member function
@@ -611,7 +611,6 @@ HeeksObj* CShape::CutShapes(std::list<HeeksObj*> &list_in, bool dodelete)
 HeeksObj* CShape::FuseShapes(std::list<HeeksObj*> &list_in)
 {
 	// fuse with the first one in the list all the others
-	wxGetApp().StartHistory();
 	HeeksObj* s1 = NULL;
 	std::list<HeeksObj*> list = list_in;
 
@@ -626,7 +625,6 @@ HeeksObj* CShape::FuseShapes(std::list<HeeksObj*> &list_in)
 		}
 	}
 
-	wxGetApp().EndHistory();
 	wxGetApp().Repaint();
 
 	return s1;
@@ -635,7 +633,6 @@ HeeksObj* CShape::FuseShapes(std::list<HeeksObj*> &list_in)
 HeeksObj* CShape::CommonShapes(std::list<HeeksObj*> &list_in)
 {
 	// find common solid ( intersect ) with the first one in the list all the others
-	wxGetApp().StartHistory();
 	HeeksObj* s1 = NULL;
 	std::list<HeeksObj*> list = list_in;
 
@@ -650,7 +647,6 @@ HeeksObj* CShape::CommonShapes(std::list<HeeksObj*> &list_in)
 		}
 	}
 
-	wxGetApp().EndHistory();
 	wxGetApp().Repaint();
 
 	return s1;
@@ -658,8 +654,6 @@ HeeksObj* CShape::CommonShapes(std::list<HeeksObj*> &list_in)
 
 void CShape::FilletOrChamferEdges(std::list<HeeksObj*> &list, double radius, bool chamfer_not_fillet)
 {
-	wxGetApp().StartHistory();
-
 	// make a map with a list of edges for each solid
 	std::map< HeeksObj*, std::list< HeeksObj* > > solid_edge_map;
 
@@ -728,7 +722,6 @@ void CShape::FilletOrChamferEdges(std::list<HeeksObj*> &list, double radius, boo
 		}
 	}
 
-	wxGetApp().EndHistory();
 	wxGetApp().Repaint();
 }
 

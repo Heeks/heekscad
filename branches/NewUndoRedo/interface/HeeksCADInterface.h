@@ -73,11 +73,6 @@ public:
 	virtual void ClearMarkedList();
 	virtual CInputMode* GetSelectMode();
 	virtual void SetInputMode(CInputMode* input_mode);
-	virtual void WasModified(HeeksObj* object);
-	virtual void WasAdded(HeeksObj* object);
-	virtual void WasRemoved(HeeksObj* object);
-	virtual void WereAdded(const std::list<HeeksObj*> &list);
-	virtual void WereRemoved(const std::list<HeeksObj*> &list);
 	virtual int PickObjects(const wxChar* str, long marking_filter = -1, bool m_just_one = false);
 	virtual bool PickPosition(const wxChar* str, double* pos);
 	virtual bool Digitize(const wxPoint &point, double* pos);
@@ -209,8 +204,6 @@ public:
 	virtual void PropertiesOnApply2();// don't need to press tick to make changes
 	virtual void AddToAboutBox(const wxChar* str);
 	virtual void SetDefaultLayout(const wxString& str);
-	virtual void StartHistory();
-	virtual void EndHistory(void);
 	virtual HeeksObj* NewSTLSolid();
 	virtual void STLSolidAddTriangle(HeeksObj* stl_solid, float* t);
 	virtual const HeeksColor& GetBackgroundColor();

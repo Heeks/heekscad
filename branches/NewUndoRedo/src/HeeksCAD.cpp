@@ -31,7 +31,7 @@
 #include "Face.h"
 #include "ViewPoint.h"
 #include "MarkedList.h"
-#include "History.h"
+#include "UndoEngine.h"
 #include "../interface/Observer.h"
 #include "TransformTool.h"
 #include "Grid.h"
@@ -114,7 +114,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_antialiasing = false;
 	m_light_push_matrix = true;
 	m_marked_list = new MarkedList;
-	history = new MainHistory;
+	history = new UndoEngine(this);
 	m_doing_rollback = false;
 	mouse_wheel_forward_away = true;
 	ctrl_does_rotate = false;
@@ -147,7 +147,6 @@ HeeksCADapp::~HeeksCADapp()
 	delete m_marked_list;
 	m_marked_list = NULL;
 	observers.clear();
-	EndHistory();
 	delete history;
 	delete magnification;
 	delete m_select_mode;
@@ -477,9 +476,8 @@ void HeeksCADapp::Reset(){
 		ov->Clear();
 	}
 	Clear();
-	EndHistory();
 	delete history;
-	history = new MainHistory;
+	history = new UndoEngine(this);
 	m_current_coordinate_system = NULL;
 	m_doing_rollback = false;
 	gp_Vec vy(0, 1, 0), vz(0, 0, 1);
@@ -786,8 +784,6 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 
 	bool open_failed = false;
 
-	if(import_not_open)StartHistory();
-
 	if(wf.EndsWith(_T(".heeks")) || wf.EndsWith(_T(".HEEKS")))
 	{
 		m_file_open_or_import_type = FileOpenTypeHeeks;
@@ -831,13 +827,11 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 		open_failed = true;
 	}
 
-	if(import_not_open)EndHistory();
-
 	if(!open_failed)
 	{
 		if(!import_not_open)
 		{
-			WereAdded(m_objects);
+			Changed();
 			m_filepath.assign(filepath);
 			InsertRecentFileItem(filepath);
 			SetFrameTitle();
@@ -1388,16 +1382,12 @@ bool HeeksCADapp::IsModified(void){
 	return history->IsModified();
 }
 
-void HeeksCADapp::SetAsModified(){
-	history->SetAsModified();
-}
-
 void HeeksCADapp::SetLikeNewFile(void){
 	history->SetLikeNewFile();
 }
 
 void HeeksCADapp::ClearHistory(void){
-	history->ClearFromFront();
+	history->ClearHistory();
 	history->SetLikeNewFile();
 }
 
@@ -1475,39 +1465,21 @@ void HeeksCADapp::on_menu_event(wxCommandEvent& event)
 
 void HeeksCADapp::DoToolUndoably(Tool *t)
 {
-	history->DoToolUndoably(t);
+	CreateUndoPoint();
+	t->Run();
+	Changed();
 }
 
-bool HeeksCADapp::RollBack(void)
+void HeeksCADapp::Undo(void)
 {
-	m_doing_rollback = true;
-	bool result = history->InternalRollBack();
-	m_doing_rollback = false;
-	return result;
+	history->Undo();
+	Changed();
 }
 
-bool HeeksCADapp::RollForward(void)
+void HeeksCADapp::Redo(void)
 {
-	m_doing_rollback = true;
-	bool result = history->InternalRollForward();
-	m_doing_rollback = false;
-	return result;
-}
-
-void HeeksCADapp::StartHistory()
-{
-	if(!history->IsNested())ObserversFreeze();
-	history->StartHistory();
-}
-
-void HeeksCADapp::EndHistory(void)
-{
-	if(!history->EndHistory() && !history->IsNested())ObserversThaw();
-}
-
-void HeeksCADapp::ClearRollingForward(void)
-{
-	history->ClearFromCurPos();
+	history->Redo();
+	Changed();
 }
 
 void HeeksCADapp::RegisterObserver(Observer* observer)
@@ -1531,7 +1503,7 @@ void HeeksCADapp::ObserversOnChange(const std::list<HeeksObj*>* added, const std
 
 void HeeksCADapp::CreateUndoPoint()
 {
-
+	history->CreateUndoPoint();
 }
 
 void HeeksCADapp::Changed()
@@ -1605,63 +1577,6 @@ void HeeksCADapp::Transform(std::list<HeeksObj*> objects,double *m)
 	{
 		(*it)->ModifyByMatrix(m);
 	}
-}
-
-void HeeksCADapp::WasModified(HeeksObj *object)
-{
-	std::list<HeeksObj*> list;
-	list.push_back(object);
-	WereModified(list);
-}
-
-void HeeksCADapp::WasAdded(HeeksObj *object)
-{
-	std::list<HeeksObj*> list;
-	list.push_back(object);
-	WereAdded(list);
-}
-
-void HeeksCADapp::WasRemoved(HeeksObj *object)
-{
-	std::list<HeeksObj*> list;
-	list.push_back(object);
-	WereRemoved(list);
-}
-
-void HeeksCADapp::WereModified(const std::list<HeeksObj*>& list)
-{
-	if (list.size() == 0) return;
-	HeeksObj* object = *(list.begin());
-	if (object == NULL) return;
-	ObserversOnChange(NULL, NULL, &list);
-	SetAsModified();
-}
-
-void HeeksCADapp::WereAdded(const std::list<HeeksObj*>& list)
-{
-	if (list.size() == 0) return;
-	HeeksObj* object = *(list.begin());
-	if (object == NULL) return;
-	ObserversOnChange(&list, NULL, NULL);
-	SetAsModified();
-}
-
-void HeeksCADapp::WereRemoved(const std::list<HeeksObj*>& list)
-{
-	if (list.size() == 0) return;
-	HeeksObj* object = *(list.begin());
-	if (object == NULL) return;
-
-	std::list<HeeksObj*> marked_remove;
-	for(std::list<HeeksObj*>::const_iterator It = list.begin(); It != list.end(); It++)
-	{
-		object = *It;
-		if(m_marked_list->ObjectMarked(object))marked_remove.push_back(object);
-	}
-	if(marked_remove.size() > 0)m_marked_list->Remove(marked_remove, false);
-
-	ObserversOnChange(NULL, &list, NULL);
-	SetAsModified();
 }
 
 gp_Trsf HeeksCADapp::GetDrawMatrix(bool get_the_appropriate_orthogonal)

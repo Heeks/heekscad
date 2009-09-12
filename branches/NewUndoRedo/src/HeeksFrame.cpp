@@ -624,13 +624,13 @@ static void OnSaveButton( wxCommandEvent& event )
 
 static void OnUndoButton( wxCommandEvent& event )
 {
-	wxGetApp().RollBack();
+	wxGetApp().Undo();
 	wxGetApp().Repaint();
 }
 
 static void OnRedoButton( wxCommandEvent& event )
 {
-	wxGetApp().RollForward();
+	wxGetApp().Redo();
 	wxGetApp().Repaint();
 }
 

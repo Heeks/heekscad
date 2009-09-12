@@ -257,31 +257,6 @@ void CHeeksCADInterface::SetInputMode(CInputMode* input_mode)
 	wxGetApp().SetInputMode(input_mode);
 }
 
-void CHeeksCADInterface::WasModified(HeeksObj* object)
-{
-	wxGetApp().WasModified(object);
-}
-
-void CHeeksCADInterface::WasAdded(HeeksObj* object)
-{
-	wxGetApp().WasAdded(object);
-}
-
-void CHeeksCADInterface::WasRemoved(HeeksObj* object)
-{
-	wxGetApp().WasRemoved(object);
-}
-
-void CHeeksCADInterface::WereAdded(const std::list<HeeksObj*> &list)
-{
-	wxGetApp().WereAdded(list);
-}
-
-void CHeeksCADInterface::WereRemoved(const std::list<HeeksObj*> &list)
-{
-	wxGetApp().WereRemoved(list);
-}
-
 int CHeeksCADInterface::PickObjects(const wxChar* str, long marking_filter, bool m_just_one)
 {
 	return wxGetApp().PickObjects(str, marking_filter, m_just_one);
@@ -954,16 +929,6 @@ void CHeeksCADInterface::AddToAboutBox(const wxChar* str)
 void CHeeksCADInterface::SetDefaultLayout(const wxString& str)
 {
 	wxGetApp().m_frame->SetDefaultLayout(str);
-}
-
-void CHeeksCADInterface::StartHistory()
-{
-	wxGetApp().StartHistory();
-}
-
-void CHeeksCADInterface::EndHistory(void)
-{
-	wxGetApp().EndHistory();
 }
 
 HeeksObj* CHeeksCADInterface::NewSTLSolid()

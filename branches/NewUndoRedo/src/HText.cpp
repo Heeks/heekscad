@@ -117,7 +117,7 @@ bool HText::Stretch(const double *p, const double* shift, void* data)
 
 void HText::OnEditString(const wxChar* str){
 	m_text.assign(str);
-	wxGetApp().WasModified(this);
+	wxGetApp().Changed();
 }
 
 void HText::WriteXML(TiXmlNode *root)

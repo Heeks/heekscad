@@ -99,6 +99,7 @@ public:
 	virtual void OnEditString(const wxChar* str){}
 	virtual void KillGLLists(void){};
 	virtual HeeksObj *MakeACopy()const = 0;
+	virtual HeeksObj *MakeACopyWithID();
 	virtual void CopyFrom(const HeeksObj* object){}
 	virtual void SetColor(const HeeksColor &col){}
 	virtual const HeeksColor* GetColor()const{return NULL;}

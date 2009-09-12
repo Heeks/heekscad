@@ -48,7 +48,6 @@ void PickCreateRuledSurface()
 			wxGetApp().Repaint();
 		}
 
-		wxGetApp().EndHistory();
 	}
 }
 

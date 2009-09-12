@@ -1800,6 +1800,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\UndoEngine.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Vertex.cpp"
 			>
 		</File>

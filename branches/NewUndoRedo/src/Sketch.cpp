@@ -256,7 +256,7 @@ const HeeksColor* CSketch::GetColor()const
 
 void CSketch::OnEditString(const wxChar* str){
 	m_title.assign(str);
-	wxGetApp().WasModified(this);
+	wxGetApp().Changed();
 }
 
 SketchOrderType CSketch::GetSketchOrder()

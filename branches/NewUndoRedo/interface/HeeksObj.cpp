@@ -38,6 +38,13 @@ HeeksObj::~HeeksObj()
 	}
 }
 
+HeeksObj* HeeksObj::MakeACopyWithID()
+{
+	HeeksObj* ret = MakeACopy();
+	ret->m_id = m_id;
+	return ret;
+}
+
 void on_edit_string(const wxChar* value, HeeksObj* object)
 {
 	object->OnEditString(value);

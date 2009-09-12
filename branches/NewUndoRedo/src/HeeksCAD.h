@@ -20,7 +20,7 @@ class HeeksObj;
 class MarkedObject;
 class Gripper;
 class CViewPoint;
-class MainHistory;
+class UndoEngine;
 class Observer;
 class CHeeksFrame;
 class wxDynamicLibrary;
@@ -51,7 +51,7 @@ class HeeksCADapp : public wxApp, public ObjList
 {
 private:
 	std::set<Observer*> observers;
-	MainHistory *history;
+	UndoEngine *history;
 	std::map< int, std::map<int, HeeksObj*> > used_ids; // map of group type ( usually same as object type ) to "map of ID to object"
 	std::map< int, int > next_id_map;
 	std::map< std::string, HeeksObj*(*)(TiXmlElement* pElem) > xml_read_fn_map;
@@ -168,18 +168,14 @@ public:
 	void RecalculateGLLists();
 	void SetLikeNewFile(void);
 	bool IsModified(void);
-	void SetAsModified();
 	void ClearHistory(void);
 	void glCommandsAll(bool select, const CViewPoint &view_point);
 	double GetPixelScale(void);
 	void DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool from_graphics_canvas, bool control_pressed);
 	void on_menu_event(wxCommandEvent& event);
 	void DoToolUndoably(Tool *);
-	bool RollBack(void);
-	bool RollForward(void);
-	void StartHistory();
-	void EndHistory(void);
-	void ClearRollingForward(void);
+	void Undo(void);
+	void Redo(void);
 	bool Add(HeeksObj* object, HeeksObj* prev_object);
 	void Remove(HeeksObj* object);
 	void Remove(std::list<HeeksObj*> objects);
@@ -204,12 +200,6 @@ public:
 	bool SaveFile(const wxChar *filepath, bool use_dialog = false, bool update_recent_file_list = true, bool set_app_caption = true);
 	void CreateUndoPoint();
 	void Changed();
-	void WasModified(HeeksObj *object);
-	void WasAdded(HeeksObj *object);
-	void WasRemoved(HeeksObj *object);
-	void WereModified(const std::list<HeeksObj*>& list);
-	void WereAdded(const std::list<HeeksObj*>& list);
-	void WereRemoved(const std::list<HeeksObj*>& list);
 	gp_Trsf GetDrawMatrix(bool get_the_appropriate_orthogonal);
 	void GetOptions(std::list<Property *> *list);
 	void DeleteMarkedItems();
