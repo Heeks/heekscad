@@ -90,17 +90,15 @@ private:
     void Resize();
     void CreateTreeWithDefStyle();
     void CreateTree(long style);
-    bool CanAdd(HeeksObj* object);
-    const wxTreeItemId Add(HeeksObj* object, const wxTreeItemId &owner);
+    const wxTreeItemId AddInt(HeeksObj* object, const wxTreeItemId &owner);
     void AddSubstitute(HeeksObj* object, const wxTreeItemId &item);
-    void AddChildren(HeeksObj* object, const wxTreeItemId &item);
-	void Add(ObjList* objects);
+	void Add(ObjList* objects, wxTreeItemId owner);
 	void Reload();
     void Remove(HeeksObj *object, const wxTreeItemId &item, bool set_not_marked);
     bool RemoveChildren(const wxTreeItemId &item);
 
     MyTreeCtrl *m_treeCtrl;
-    std::map<HeeksObj*, wxTreeItemId> tree_map;
+	std::map<HeeksObj*, std::vector<wxTreeItemId> > tree_map;
     wxTreeItemId m_root;
 
 public:
@@ -109,7 +107,7 @@ public:
 
     void OnSize(wxSizeEvent& event);
 	void OnMouseWheel(wxMouseEvent& event);
-    wxTreeItemId Find(HeeksObj *object);
+	std::vector<wxTreeItemId> Find(HeeksObj *object);
 	void OnKeyDown(wxKeyEvent& event);
 	void OnKeyUp(wxKeyEvent& event);
  
