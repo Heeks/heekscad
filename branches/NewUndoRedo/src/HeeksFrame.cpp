@@ -745,10 +745,8 @@ static void OnExtrudeButton( wxCommandEvent& event )
 	PickCreateExtrusion();
 }
 
-static void OnSphereButton( wxCommandEvent& event )
+static void AddObjectFromButton(HeeksObj* new_object)
 {
-	gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
-	CSphere* new_object = new CSphere(gp_Pnt(0, 0, 0).Transformed(mat), 5, _("Sphere"), HeeksColor(240, 191, 191));
 	wxGetApp().CreateUndoPoint();
 	wxGetApp().Add(new_object,NULL);
 	wxGetApp().Changed();
@@ -756,41 +754,34 @@ static void OnSphereButton( wxCommandEvent& event )
 	wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().SetInputMode(wxGetApp().m_select_mode);
 	wxGetApp().Repaint();
+}
+
+static void OnSphereButton( wxCommandEvent& event )
+{
+	gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
+	CSphere* new_object = new CSphere(gp_Pnt(0, 0, 0).Transformed(mat), 5, _("Sphere"), HeeksColor(240, 191, 191));
+	AddObjectFromButton(new_object);
 }
 
 static void OnCubeButton( wxCommandEvent& event )
 {
 	gp_Trsf mat = wxGetApp().GetDrawMatrix(false);
 	CCuboid* new_object = new CCuboid(gp_Ax2(gp_Pnt(0, 0, 0).Transformed(mat), gp_Dir(0, 0, 1).Transformed(mat), gp_Dir(1, 0, 0).Transformed(mat)), 10, 10, 10, _("Cuboid"), HeeksColor(191, 240, 191));
-	wxGetApp().CreateUndoPoint();
-	wxGetApp().Add(new_object,NULL);
-	wxGetApp().Changed();
-	wxGetApp().m_marked_list->Clear(true);
-	wxGetApp().m_marked_list->Add(new_object, true);
-	wxGetApp().SetInputMode(wxGetApp().m_select_mode);
-	wxGetApp().Repaint();
+	AddObjectFromButton(new_object);
 }
 
 static void OnCylButton( wxCommandEvent& event )
 {
 	gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
 	CCylinder* new_object = new CCylinder(gp_Ax2(gp_Pnt(0, 0, 0).Transformed(mat), gp_Dir(0, 0, 1).Transformed(mat), gp_Dir(1, 0, 0).Transformed(mat)), 5, 10, _("Cylinder"), HeeksColor(191, 191, 240));
-	wxGetApp().Add(new_object, NULL);
-	wxGetApp().m_marked_list->Clear(true);
-	wxGetApp().m_marked_list->Add(new_object, true);
-	wxGetApp().SetInputMode(wxGetApp().m_select_mode);
-	wxGetApp().Repaint();
+	AddObjectFromButton(new_object);
 }
 
 static void OnConeButton( wxCommandEvent& event )
 {
 	gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
 	CCone* new_object = new CCone(gp_Ax2(gp_Pnt(0, 0, 0).Transformed(mat), gp_Dir(0, 0, 1).Transformed(mat), gp_Dir(1, 0, 0).Transformed(mat)), 10, 5, 20, _("Cone"), HeeksColor(240, 240, 191));
-	wxGetApp().Add(new_object, NULL);
-	wxGetApp().m_marked_list->Clear(true);
-	wxGetApp().m_marked_list->Add(new_object, true);
-	wxGetApp().SetInputMode(wxGetApp().m_select_mode);
-	wxGetApp().Repaint();
+	AddObjectFromButton(new_object);
 }
 
 #if 0

@@ -48,10 +48,6 @@ HeeksObj* HeeksObj::MakeACopyWithID()
 void on_edit_string(const wxChar* value, HeeksObj* object)
 {
 	object->OnEditString(value);
-
-	// to do , reconnect these two
-//	wxGetApp().WasModified(object_for_properties);
-//	wxGetApp().Repaint();
 }
 
 static void on_set_color(HeeksColor value, HeeksObj* object)

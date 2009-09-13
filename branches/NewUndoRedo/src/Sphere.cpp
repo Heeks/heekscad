@@ -26,8 +26,8 @@ HeeksObj *CSphere::MakeACopy(void)const
 bool CSphere::IsDifferent(HeeksObj *other)
 {
 	CSphere* sphere = (CSphere*)other;
-	if(sphere->m_pos.Distance(m_pos) < wxGetApp().m_geom_tol && sphere->m_radius == m_radius)
-		return false;
+	if(sphere->m_pos.Distance(m_pos) > wxGetApp().m_geom_tol || sphere->m_radius != m_radius)
+		return true;
 	return CShape::IsDifferent(other);
 }
 
@@ -76,10 +76,8 @@ void CSphere::OnApplyProperties()
 {
 	CSphere* new_object = new CSphere(m_pos, m_radius, m_title.c_str(), m_color);
 	new_object->CopyIDsFrom(this);
-	wxGetApp().CreateUndoPoint();
 	wxGetApp().Add(new_object, NULL);
 	wxGetApp().Remove(this);
-	wxGetApp().Changed();
 	if(wxGetApp().m_marked_list->ObjectMarked(this))
 	{
 		wxGetApp().m_marked_list->Remove(this,false);

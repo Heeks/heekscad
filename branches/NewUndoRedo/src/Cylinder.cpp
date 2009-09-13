@@ -23,6 +23,18 @@ HeeksObj *CCylinder::MakeACopy(void)const
 	return new CCylinder(*this);
 }
 
+bool CCylinder::IsDifferent(HeeksObj* other)
+{
+	CCylinder* cyl = (CCylinder*)other;
+	if(cyl->m_radius != m_radius || cyl->m_height != m_height)
+		return true;
+
+	if(!IsEqual(cyl->m_pos,m_pos))
+		return true;
+	
+	return CShape::IsDifferent(other);
+}
+
 static void on_set_centre(const double *vt, HeeksObj* object){
 	gp_Trsf mat;
 	mat.SetTranslation ( gp_Vec ( ((CCylinder*)object)->m_pos.Location(), make_point(vt) ) );
@@ -46,8 +58,12 @@ bool CCylinder::ModifyByMatrix(const double* m){
 	CCylinder* new_object = new CCylinder(new_pos, new_radius, new_height, m_title.c_str(), m_color);
 	new_object->CopyIDsFrom(this);
 	Owner()->Add(new_object, NULL);
-	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
-	wxGetApp().Remove(this);
+	Owner()->Remove(this);
+	if(wxGetApp().m_marked_list->ObjectMarked(this))
+	{
+		wxGetApp().m_marked_list->Remove(this,false);
+		wxGetApp().m_marked_list->Add(new_object, true);
+	}
 	return true;
 }
 
@@ -83,8 +99,11 @@ void CCylinder::OnApplyProperties()
 	new_object->CopyIDsFrom(this);
 	wxGetApp().Add(new_object, NULL);
 	wxGetApp().Remove(this);
-	wxGetApp().m_marked_list->Clear(true);
-	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
+	if(wxGetApp().m_marked_list->ObjectMarked(this))
+	{
+		wxGetApp().m_marked_list->Remove(this,false);
+		wxGetApp().m_marked_list->Add(new_object, true);
+	}
 	wxGetApp().Repaint();
 }
 

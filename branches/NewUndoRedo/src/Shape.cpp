@@ -65,6 +65,14 @@ const CShape& CShape::operator=(const CShape& s)
 	return *this;
 }
 
+bool CShape::IsDifferent(HeeksObj* other)
+{
+	CShape* shape = (CShape*)other;
+	if(shape->m_color.COLORREF_color() != m_color.COLORREF_color() || shape->m_title.CompareTo(m_title))
+		return true;
+	return ObjList::IsDifferent(other);
+}
+
 void CShape::Init()
 {
 	m_faces = new CFaceList;
@@ -366,7 +374,6 @@ bool CShape::ModifyByMatrix(const double* m){
 
 void CShape::OnEditString(const wxChar* str){
 	m_title.assign(str);
-	wxGetApp().Changed();
 }
 
 // static member function

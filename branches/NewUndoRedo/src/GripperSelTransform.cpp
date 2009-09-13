@@ -21,6 +21,8 @@ GripperSelTransform::GripperSelTransform(const gp_Pnt& pos, EnumGripperType grip
 }
 
 bool GripperSelTransform::OnGripperGrabbed(const std::list<HeeksObj*>& list, bool show_grippers_on_drag, double* from){
+	wxGetApp().CreateUndoPoint();
+
 	extract(position, m_initial_grip_pos);
 	memcpy(m_from, from, 3*sizeof(double));
 	memcpy(m_last_from, from, 3*sizeof(double));
@@ -82,7 +84,6 @@ void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
 
 void GripperSelTransform::OnGripperReleased ( const double* from, const double* to )
 {
-	wxGetApp().CreateUndoPoint();
 	if ( m_gripper_type > GripperTypeScale )
 	{
 		double shift[3] = {to[0] - m_initial_grip_pos[0], to[1] - m_initial_grip_pos[1], to[2] - m_initial_grip_pos[2]};

@@ -23,6 +23,18 @@ HeeksObj *CCuboid::MakeACopy(void)const
 	return new CCuboid(*this);
 }
 
+bool CCuboid::IsDifferent(HeeksObj* other)
+{
+	CCuboid* cube = (CCuboid*)other;
+	if(cube->m_x != m_x || cube->m_y != m_y || cube->m_z != m_z)
+		return true;
+
+	if(!IsEqual(cube->m_pos,m_pos))
+		return true;
+
+	return CShape::IsDifferent(other);
+}
+
 static void on_set_centre(const double *vt, HeeksObj* object){
 	gp_Trsf mat;
 	mat.SetTranslation ( gp_Vec ( ((CCuboid*)object)->m_pos.Location(), make_point(vt) ) );
@@ -103,10 +115,8 @@ void CCuboid::OnApplyProperties()
 {
 	CCuboid* new_object = new CCuboid(m_pos, m_x, m_y, m_z, m_title.c_str(), m_color);
 	new_object->CopyIDsFrom(this);
-	wxGetApp().CreateUndoPoint();
 	wxGetApp().Add(new_object, NULL);
 	wxGetApp().Remove(this);
-	wxGetApp().Changed();
 	if(wxGetApp().m_marked_list->ObjectMarked(this))
 	{
 		wxGetApp().m_marked_list->Remove(this, false);

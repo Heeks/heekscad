@@ -59,6 +59,7 @@ public:
 	virtual const CShape& operator=(const CShape& s);
 
 	// HeeksObj's virtual functions
+	bool IsDifferent(HeeksObj* obj);
 	int GetType()const{return SolidType;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
