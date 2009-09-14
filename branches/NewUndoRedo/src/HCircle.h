@@ -42,6 +42,8 @@ public:
 	bool GetCentrePoint(double* pos);
 	void WriteXML(TiXmlNode *root);
 	int Intersects(const HeeksObj *object, std::list< double > *rl)const;
+	bool DescendForUndo(){return false;}
+	bool IsDifferent(HeeksObj* other);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 	static bool GetLineTangentPoints(const gp_Circ& c1, const gp_Circ& c2, const gp_Pnt& a, const gp_Pnt& b, gp_Pnt& p1, gp_Pnt& p2);

@@ -38,6 +38,8 @@ public:
 	void CopyFrom(const HeeksObj* object){operator=(*((HLine*)object));}
 	void WriteXML(TiXmlNode *root);
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
+	bool DescendForUndo(){return false;}
+	bool IsDifferent(HeeksObj* other);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
     bool UsesID(){return true;} 

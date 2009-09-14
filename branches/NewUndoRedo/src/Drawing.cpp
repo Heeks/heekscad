@@ -277,11 +277,15 @@ public:
 };
 
 void Drawing::SetDrawStepUndoable(int s){
-	wxGetApp().DoToolUndoably(new SetDrawingDrawStep(this, s));
+//	wxGetApp().DoToolUndoably(new SetDrawingDrawStep(this, s));
+	SetDrawingDrawStep sds(this, s);
+	sds.Run();
 }
 
 void Drawing::SetStartPosUndoable(const DigitizedPoint& pos){
-	wxGetApp().DoToolUndoably(new SetDrawingPosition(this, pos));
+//	wxGetApp().DoToolUndoably(new SetDrawingPosition(this, pos));
+	SetDrawingPosition sdp(this, pos);
+	sdp.Run();
 }
 
 void Drawing::OnFrontRender(){

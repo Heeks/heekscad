@@ -77,6 +77,21 @@ void ObjList::ClearUndoably(void)
 
 HeeksObj* ObjList::MakeACopy(void) const { return new ObjList(*this); }
 
+HeeksObj* ObjList::MakeACopyWithID(void)  
+{ 
+	ObjList* pnew = (ObjList*)HeeksObj::MakeACopyWithID();
+
+	std::list<HeeksObj*>::const_iterator it1=m_objects.begin();
+	std::list<HeeksObj*>::const_iterator it2=pnew->m_objects.begin();
+	for (;it1!=m_objects.end();it1++)
+	{
+		(*it2)->SetID((*it1)->m_id);
+		it2++;
+	}
+
+	return pnew;
+}
+
 void ObjList::GetBox(CBox &box)
 {
 	std::list<HeeksObj*>::iterator It;

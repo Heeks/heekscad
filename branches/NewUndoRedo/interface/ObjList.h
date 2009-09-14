@@ -39,6 +39,7 @@ public:
 	HeeksObj* GetFirstChild();
 	HeeksObj* GetNextChild();
 	HeeksObj* GetAtIndex(int index);
+	HeeksObj* MakeACopyWithID();
 	int GetNumChildren();
 	bool CanAdd(HeeksObj* object){return true;}
 	virtual bool Add(HeeksObj* object, HeeksObj* prev_object);

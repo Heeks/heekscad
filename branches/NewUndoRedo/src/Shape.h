@@ -76,6 +76,7 @@ public:
 	void SetClickMarkPoint(MarkedObject* marked_object, const double* ray_start, const double* ray_direction);
 	bool UsesID(){return true;}
 	bool CanAddTo(HeeksObj* owner){return owner->GetType() == GroupType;}
+	bool DescendForUndo(){return true;}
 
 	const TopoDS_Shape &Shape(){return m_shape;}
 	const TopoDS_Shape *GetShape(){return &m_shape;}

@@ -513,17 +513,21 @@ static void OnSelectModeButton( wxCommandEvent& WXUNUSED( event ) )
 
 static void OnLinesButton( wxCommandEvent& WXUNUSED( event ) )
 {
+	wxGetApp().CreateUndoPoint();
 	line_strip.drawing_mode = LineDrawingMode;
+	wxGetApp().CreateUndoPoint();
 	wxGetApp().SetInputMode(&line_strip);
 }
 
 static void OnPointsButton( wxCommandEvent& WXUNUSED( event ) )
 {
+	wxGetApp().CreateUndoPoint();
 	wxGetApp().SetInputMode(&point_drawing);
 }
 
 static void OnRegularShapesButton( wxCommandEvent& WXUNUSED( event ) )
 {
+	wxGetApp().CreateUndoPoint();
 	wxGetApp().SetInputMode(&regular_shapes_drawing);
 }
 
@@ -531,20 +535,24 @@ static void OnTextButton( wxCommandEvent& WXUNUSED( event ) )
 {
 	gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
 	HText* new_object = new HText(mat, _T("text"), &(wxGetApp().current_color));
+	wxGetApp().CreateUndoPoint();
 	wxGetApp().Add(new_object, NULL);
 	wxGetApp().m_marked_list->Clear(true);
 	wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().SetInputMode(wxGetApp().m_select_mode);
+	wxGetApp().Changed();
 	wxGetApp().Repaint();
 }
 
 static void OnDimensioningButton( wxCommandEvent& WXUNUSED( event ) )
 {
+	wxGetApp().CreateUndoPoint();
 	wxGetApp().SetInputMode(&dimension_drawing);
 }
 
 static void OnCircles3pButton( wxCommandEvent& WXUNUSED( event ) )
 {
+	wxGetApp().CreateUndoPoint();
 	line_strip.drawing_mode = CircleDrawingMode;
 	line_strip.circle_mode = ThreePointsCircleMode;
 	wxGetApp().SetInputMode(&line_strip);
@@ -692,19 +700,25 @@ static void OnUpdatePaste( wxUpdateUIEvent& event )
 static void OnSubtractButton( wxCommandEvent& event )
 {
 	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 2, SolidType, FaceType, _("Pick two or more faces or solids, the first one will be cut by the others"), _("Subtract Solids")))return;
+	wxGetApp().CreateUndoPoint();
 	CShape::CutShapes(wxGetApp().m_marked_list->list());
+	wxGetApp().Changed();
 }
 
 static void OnFuseButton( wxCommandEvent& event )
 {
 	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 2, SolidType, _("Pick two or more solids to be fused together"), _("Fuse Solids")))return;
+	wxGetApp().CreateUndoPoint();
 	CShape::FuseShapes(wxGetApp().m_marked_list->list());
+	wxGetApp().Changed();
 }
 
 static void OnCommonButton( wxCommandEvent& event )
 {
 	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 2, SolidType, _("Pick two or more solids, only the shape that is contained by all of them will remain"), _("Intersection of Solids")))return;
+	wxGetApp().CreateUndoPoint();
 	CShape::CommonShapes(wxGetApp().m_marked_list->list());
+	wxGetApp().Changed();
 }
 
 static void OnFilletButton( wxCommandEvent& event )
@@ -715,8 +729,10 @@ static void OnFilletButton( wxCommandEvent& event )
 	config.Read(_T("EdgeBlendRadius"), &rad);
 	if(wxGetApp().InputDouble(_("Enter Blend Radius"), _("Radius"), rad))
 	{
+		wxGetApp().CreateUndoPoint();
 		CShape::FilletOrChamferEdges(wxGetApp().m_marked_list->list(), rad);
 		config.Write(_T("EdgeBlendRadius"), rad);
+		wxGetApp().Changed();
 	}
 }
 
@@ -728,21 +744,27 @@ static void OnChamferButton( wxCommandEvent& event )
 	config.Read(_T("EdgeChamferDist"), &rad);
 	if(wxGetApp().InputDouble(_("Enter chamfer distance"), _("Distance"), rad))
 	{
+		wxGetApp().CreateUndoPoint();
 		CShape::FilletOrChamferEdges(wxGetApp().m_marked_list->list(), rad, true);
 		config.Write(_T("EdgeChamferDist"), rad);
+		wxGetApp().Changed();
 	}
 }
 
 static void OnRuledSurfaceButton( wxCommandEvent& event )
 {
 	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 2, SketchType, _("Pick two or more sketches, to create a lofted solid between\n( hold down Ctrl key to select more than one solid )"), _("Lofted Body")))return;
+	wxGetApp().CreateUndoPoint();
 	PickCreateRuledSurface();
+	wxGetApp().Changed();
 }
 
 static void OnExtrudeButton( wxCommandEvent& event )
 {
 	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 1, SketchType, _("Pick one or more sketches, to create extruded body from\n( hold down Ctrl key to select more than one solid )"), _("Extrude")))return;
+	wxGetApp().CreateUndoPoint();
 	PickCreateExtrusion();
+	wxGetApp().Changed();
 }
 
 static void AddObjectFromButton(HeeksObj* new_object)

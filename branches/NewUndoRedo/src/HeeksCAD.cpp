@@ -1455,10 +1455,9 @@ void HeeksCADapp::on_menu_event(wxCommandEvent& event)
 	int id = event.GetId();
 	if(id){
 		Tool *t = tool_index_list[id - ID_FIRST_POP_UP_MENU_TOOL].m_tool;
-		if(t->Undoable())DoToolUndoably(t);
-		else{
-			t->Run();
-		}
+		CreateUndoPoint();
+		t->Run();
+		Changed();
 		Repaint();
 	}
 }
@@ -1558,12 +1557,15 @@ bool HeeksCADapp::Add(HeeksObj *object, HeeksObj* prev_object)
 
 void HeeksCADapp::Remove(HeeksObj* object)
 {
-	if(object->Owner() != this)
+	HeeksObj* owner = object->GetFirstOwner();
+	while(owner)
 	{
-		object->Owner()->Remove(object);
-		return;
+		if(owner != this)
+			object->Owner()->Remove(object);
+		else
+			ObjList::Remove(object);
+		owner = object->GetNextOwner();
 	}
-	ObjList::Remove(object);
 	if(object == m_current_coordinate_system)m_current_coordinate_system = NULL;
 }
 

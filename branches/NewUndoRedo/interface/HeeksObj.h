@@ -123,6 +123,7 @@ public:
 	virtual void SetClickMarkPoint(MarkedObject* marked_object, const double* ray_start, const double* ray_direction){}
 	virtual bool CanAdd(HeeksObj* object){return false;}
 	virtual bool CanAddTo(HeeksObj* owner){return true;}
+	virtual bool DescendForUndo(){return true;}
 	virtual bool OneOfAKind(){return false;} // if true, then, instead of pasting, find the first object of the same type and copy object to it.
 	virtual bool Add(HeeksObj* object, HeeksObj* prev_object) {object->AddOwner(this); object->OnAdd(); return true;}
 	virtual bool IsDifferent(HeeksObj* other){return false;}

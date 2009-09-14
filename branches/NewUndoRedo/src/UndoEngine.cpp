@@ -86,13 +86,19 @@ void UndoEngine::RecalculateMaps()
 
 void UndoEngine::GetModifications(std::vector<UndoEvent> &ret,ObjList* newtree, ObjList* oldtree)
 {
+	//Add the parents to the map really quick
+	RecalculateMaps();
+	GetModificationsRecursive(ret,newtree,oldtree);
+}
+
+
+void UndoEngine::GetModificationsRecursive(std::vector<UndoEvent> &ret,ObjList* newtree, ObjList* oldtree)
+{
 	std::set<HeeksObjId> new_children;
 	std::set<HeeksObjId> old_children;
 	std::map<HeeksObjId,HeeksObj*> new_children_map;
 	std::map<HeeksObjId,HeeksObj*> old_children_map;
 
-	//Add the parents to the map really quick
-	RecalculateMaps();
 
 	HeeksObj *new_obj = newtree->GetFirstChild();
 	while(new_obj)
@@ -116,6 +122,7 @@ void UndoEngine::GetModifications(std::vector<UndoEvent> &ret,ObjList* newtree, 
 	for(it = new_children.begin(); it != new_children.end(); it++)
 	{
 		HeeksObj* obj = new_children_map[*it];
+		m_tree.m_treemap[*it] = obj;
 		if(old_children.find(*it) == old_children.end())
 		{
 			//TODO, this is actually tricky, when an item is added, it may be added in multiple places in the tree
@@ -133,8 +140,16 @@ void UndoEngine::GetModifications(std::vector<UndoEvent> &ret,ObjList* newtree, 
 				ret.push_back(UndoEvent(EventTypeModified,newtree,copy,old_children_map[*it]));
 				m_oldtree.m_treemap[*it] = copy;
 			}
+			else
+			{
+				ObjList* newlist = dynamic_cast<ObjList*>(obj);
+				ObjList* oldlist = dynamic_cast<ObjList*>(old_children_map[*it]);
+				if(newlist && newlist->DescendForUndo())
+				{
+					GetModificationsRecursive(ret,newlist,oldlist);
+				}
+			}
 		}
-		m_tree.m_treemap[*it] = obj;
 	}
 
 	for(it = old_children.begin(); it != old_children.end(); it++)

@@ -872,14 +872,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\History.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\History.h"
-			>
-		</File>
-		<File
 			RelativePath=".\HLine.cpp"
 			>
 		</File>
