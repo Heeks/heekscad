@@ -374,7 +374,7 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("MaxScaleThreshold"), m_max_scale_threshold);
 	config.Write(_T("NumberOfSamplePoints"), m_number_of_sample_points);
 	config.Write(_T("FontPaths"), m_font_paths);
-	config.Write(_T("STLFacetTolerance"), &m_stl_facet_tolerance);
+	config.Write(_T("STLFacetTolerance"), m_stl_facet_tolerance);
 
 	m_ruler->WriteToConfig(config);
 
