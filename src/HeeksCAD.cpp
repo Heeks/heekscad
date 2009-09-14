@@ -146,6 +146,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_property_grid_validation = false;
 
 	m_font_paths = _("/usr/share/qcad/fonts");
+	m_stl_facet_tolerance = 0.1;
 	GetAvailableFonts();
 	
 	m_pCxfFont = NULL;	// Default to internal (OpenGL) font.
@@ -276,6 +277,7 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("NumberOfSamplePoints"), &m_number_of_sample_points);
 	
 	config.Read(_T("FontPaths"), &m_font_paths, _T("/usr/share/qcad/fonts"));
+	config.Read(_T("STLFacetTolerance"), &m_stl_facet_tolerance, 0.1);
 
 	m_ruler->ReadFromConfig(config);
 
@@ -372,7 +374,7 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("MaxScaleThreshold"), m_max_scale_threshold);
 	config.Write(_T("NumberOfSamplePoints"), m_number_of_sample_points);
 	config.Write(_T("FontPaths"), m_font_paths);
-
+	config.Write(_T("STLFacetTolerance"), &m_stl_facet_tolerance);
 
 	m_ruler->WriteToConfig(config);
 
@@ -993,7 +995,7 @@ void HeeksCADapp::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar 
 	for(std::list<HeeksObj*>::iterator It = m_objects.begin(); It != m_objects.end(); It++)
 	{
 		HeeksObj* object = *It;
-		object->GetTriangles(write_stl_triangle, 0.1);
+		object->GetTriangles(write_stl_triangle, m_stl_facet_tolerance);
 	}
 
 	ofs<<"endsolid"<<endl;
@@ -2044,6 +2046,10 @@ void on_dxf_make_sketch(bool value, HeeksObj* object){
 	HeeksDxfRead::m_make_as_sketch = value;
 }
 
+void on_stl_facet_tolerance(double value, HeeksObj* object){
+	wxGetApp().m_stl_facet_tolerance = value;
+}
+
 static void on_set_units(int value, HeeksObj* object)
 {
 	wxGetApp().m_view_units = (value == 0) ? 1.0:25.4;
@@ -2084,7 +2090,6 @@ static void on_edit_font_paths(const wxChar* value, HeeksObj* object)
 	HeeksConfig config;
 	config.Write(_T("FontPaths"), wxGetApp().m_font_paths);
 }
-
 
 void HeeksCADapp::GetOptions(std::list<Property *> *list)
 {
@@ -2215,6 +2220,9 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	PropertyList* dxf_options = new PropertyList(_("DXF"));
 	dxf_options->m_list.push_back(new PropertyCheck(_("make sketch"), HeeksDxfRead::m_make_as_sketch, NULL, on_dxf_make_sketch));
 	file_options->m_list.push_back(dxf_options);
+	PropertyList* stl_options = new PropertyList(_("STL"));
+	stl_options->m_list.push_back(new PropertyDouble(_("stl save facet tolerance"), m_stl_facet_tolerance, NULL, on_stl_facet_tolerance));
+	file_options->m_list.push_back(stl_options);
 	list->push_back(file_options);
 
 	// Font options
