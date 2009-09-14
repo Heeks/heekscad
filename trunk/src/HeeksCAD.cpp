@@ -642,7 +642,7 @@ void HeeksCADapp::InitializeXMLFunctions()
 void HeeksCADapp::RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem))
 {
 	if(xml_read_fn_map.find(type_name) != xml_read_fn_map.end()){
-		wxMessageBox(_T("Error - trying to register an XML read function for an exisiting type"));
+		wxMessageBox(_T("Error - trying to register an XML read function for an existing type"));
 		return;
 	}
 	xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( type_name, read_xml_function ) );
