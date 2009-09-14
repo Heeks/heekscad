@@ -548,6 +548,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\CxfFont.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\CxfFont.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Cylinder.cpp"
 			>
 		</File>
