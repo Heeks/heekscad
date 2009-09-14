@@ -71,7 +71,7 @@ void CxfFont::Glyph::Line::glCommands( const gp_Pnt & starting_point, const bool
 	to.SetY( starting_point.Y() + m_y2);
 	to.SetZ( starting_point.Z() );
 
-	glBegin(GL_LINES);
+	glBegin(GL_LINE_STRIP);
 	glVertex3d(from.X(), from.Y(), from.Z());
 	glVertex3d(to.X(), to.Y(), to.Z());
 	glEnd();
@@ -389,6 +389,7 @@ CxfFont::CxfFont( const wxChar *p_szFile )
 	m_word_spacing = 6.75;
 	m_line_spacing_factor = 1.0;
 	m_name = _("");
+	wxChar	character_name;
 
 	std::ifstream file(Ttc(p_szFile));
 	if (file.is_open())
@@ -407,10 +408,25 @@ CxfFont::CxfFont( const wxChar *p_szFile )
 					{
 						// It must be a multi-byte character.  I don't know how to do these yet.
 						// printf("Ignoring multi-byte character '%s' for now\n", Ttc(symbol.c_str()));
+						if (((symbol[0] == '<') && (symbol[symbol.Length()-1] == '>')) ||
+							(symbol[0] == '#'))
+						{
+							std::vector<wxString> tokens = Tokens( symbol, _("#<> \t") );
+							if (tokens.size() > 0)
+							{
+								long lCharacterName = tokens[0][0];
+								tokens[0].ToLong( &lCharacterName, 16 );
+								character_name = wxChar(lCharacterName);
+							}
+						}
+						else
+						{
+							character_name = symbol[0];
+						}
 					}
 					else
 					{
-						m_glyphs.insert(std::make_pair(symbol[0], Glyph(lines)));
+						m_glyphs.insert(std::make_pair(character_name, Glyph(lines)));
 						m_bounding_box.Insert( Glyph(lines).BoundingBox() );
 					}
 
@@ -421,6 +437,21 @@ CxfFont::CxfFont( const wxChar *p_szFile )
 					if (tokens.size() >= 2)
 					{
 						symbol = tokens[0];
+						if (((symbol[0] == '<') && (symbol[symbol.Length()-1] == '>')) ||
+							(symbol[0] == '#'))
+						{
+							std::vector<wxString> tokens = Tokens( symbol, _("#<> \t") );
+							if (tokens.size() > 0)
+							{
+								long lCharacterName = tokens[0][0];
+								tokens[0].ToLong( &lCharacterName, 16 );
+								character_name = wxChar(lCharacterName);
+							}
+						}
+						else
+						{
+							character_name = symbol[0];
+						}
 					}
 				}
 				else if (line[0] == '#')
@@ -439,7 +470,20 @@ CxfFont::CxfFont( const wxChar *p_szFile )
 						tokens.rbegin()->ToDouble(&m_line_spacing_factor);
 					} else if (line.find("Name") != line.npos)
 					{
-						m_name = *(tokens.rbegin());
+						// We want all tokens except the first.
+						m_name.Clear();
+						for (std::vector<wxString>::iterator l_itToken = tokens.begin();
+							l_itToken != tokens.end(); l_itToken++)
+						{
+							if (l_itToken != tokens.begin())
+							{
+								if (m_name.Length() > 0)
+								{
+									m_name.Append(_(" "));
+								}
+								m_name.Append( *l_itToken );
+							}
+						}
 					}
 				}
 				else if ((line.size() > 0) && ((line[0] == 'L') || (line[0] == 'A')))
@@ -457,7 +501,7 @@ CxfFont::CxfFont( const wxChar *p_szFile )
 		}
 		else
 		{
-			m_glyphs.insert(std::make_pair(symbol[0], Glyph(lines)));
+			m_glyphs.insert(std::make_pair(character_name, Glyph(lines)));
 			lines.clear();
 			symbol.Clear();
 			m_bounding_box.Insert( Glyph(lines).BoundingBox() );
@@ -505,17 +549,17 @@ HeeksObj *CxfFont::Sketch( const wxString & text, const gp_Trsf & transformation
 			gp_Pnt bottom_left( location );
 			gp_Pnt bottom_right( location );
 
-			top_left.SetX( top_left.X() );
-			top_left.SetY( top_left.Y() + (largest_glyph.Height()/2.0) );
+			top_left.SetX( location.X() + largest_glyph.MinX() );
+			top_left.SetY( location.Y() + largest_glyph.MaxY() );
 
-			top_right.SetX( top_left.X() + largest_glyph.Width() );
-			top_right.SetY( top_left.Y() + (largest_glyph.Height()/2.0) );
+			top_right.SetX( location.X() + largest_glyph.MaxX() );
+			top_right.SetY( location.Y() + largest_glyph.MaxY() );
 
-			bottom_left.SetX( top_left.X() );
-			bottom_left.SetY( top_left.Y() - (largest_glyph.Height()/2.0) );
+			bottom_left.SetX( location.X() + largest_glyph.MinX() );
+			bottom_left.SetY( location.Y() + largest_glyph.MinY() );
 
-			bottom_right.SetX( top_left.X() + largest_glyph.Width() );
-			bottom_right.SetY( top_left.Y() - (largest_glyph.Height()/2.0) );
+			bottom_right.SetX( location.X() + largest_glyph.MaxX() );
+			bottom_right.SetY( location.Y() + largest_glyph.MinY() );
 
 			top_left.Transform( transformation_matrix );
 			top_right.Transform( transformation_matrix );
@@ -648,23 +692,23 @@ void CxfFont::glCommands(const wxString & text, const gp_Pnt &start_point, const
 			gp_Pnt bottom_left( location );
 			gp_Pnt bottom_right( location );
 
-			top_left.SetX( top_left.X() );
-			top_left.SetY( top_left.Y() + (largest_glyph.Height()/2.0) );
+			top_left.SetX( location.X() + largest_glyph.MinX() );
+			top_left.SetY( location.Y() + largest_glyph.MaxY() );
 
-			top_right.SetX( top_left.X() + largest_glyph.Width() );
-			top_right.SetY( top_left.Y() + (largest_glyph.Height()/2.0) );
+			top_right.SetX( location.X() + largest_glyph.MaxX() );
+			top_right.SetY( location.Y() + largest_glyph.MaxY() );
 
-			bottom_left.SetX( top_left.X() );
-			bottom_left.SetY( top_left.Y() - (largest_glyph.Height()/2.0) );
+			bottom_left.SetX( location.X() + largest_glyph.MinX() );
+			bottom_left.SetY( location.Y() + largest_glyph.MinY() );
 
-			bottom_right.SetX( top_left.X() + largest_glyph.Width() );
-			bottom_right.SetY( top_left.Y() - (largest_glyph.Height()/2.0) );
+			bottom_right.SetX( location.X() + largest_glyph.MaxX() );
+			bottom_right.SetY( location.Y() + largest_glyph.MinY() );
 
-			glBegin(GL_LINES);
+			glBegin(GL_LINE_STRIP);
 			glVertex3d(top_left.X(), top_left.Y(), top_left.Z());
 			glVertex3d(top_right.X(), top_right.Y(), top_right.Z());
-			glVertex3d(top_left.X(), bottom_right.Y(), bottom_right.Z());
-			glVertex3d(top_right.X(), bottom_left.Y(), bottom_left.Z());
+			glVertex3d(bottom_right.X(), bottom_right.Y(), bottom_right.Z());
+			glVertex3d(bottom_left.X(), bottom_left.Y(), bottom_left.Z());
 			glVertex3d(top_left.X(), top_left.Y(), top_left.Z());
 			glEnd();
 
