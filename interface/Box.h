@@ -65,6 +65,10 @@ public:
 	double Height() const {if(m_valid)return m_x[4] - m_x[1]; else return 0.0;}
 	double Depth() const {if(m_valid)return m_x[5] - m_x[2]; else return 0.0;}
 	double Radius() const {return sqrt(Width() * Width() + Height() * Height() + Depth() * Depth()) /2;}
+	double MinX() const { return(m_x[0]); }
+	double MaxX() const { return(m_x[3]); }
+	double MinY() const { return(m_x[1]); }
+	double MaxY() const { return(m_x[4]); }
 	double MinZ() const { return(m_x[2]); }
 	double MaxZ() const { return(m_x[5]); }
 	void vert(int index, double* p) const {
