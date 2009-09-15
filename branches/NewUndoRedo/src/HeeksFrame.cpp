@@ -515,7 +515,6 @@ static void OnLinesButton( wxCommandEvent& WXUNUSED( event ) )
 {
 	wxGetApp().CreateUndoPoint();
 	line_strip.drawing_mode = LineDrawingMode;
-	wxGetApp().CreateUndoPoint();
 	wxGetApp().SetInputMode(&line_strip);
 }
 

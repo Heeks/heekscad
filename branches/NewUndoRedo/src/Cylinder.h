@@ -29,6 +29,7 @@ public:
 	void OnApplyProperties();
 	bool GetScaleAboutMatrix(double *m);
 	bool Stretch(const double *p, const double* shift, void* data);
+	bool DescendForUndo(){return false;}
 
 	// CShape's virtual functions
 	void SetXMLElement(TiXmlElement* element);

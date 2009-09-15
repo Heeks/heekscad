@@ -156,7 +156,7 @@ void UndoEngine::GetModificationsRecursive(std::vector<UndoEvent> &ret,ObjList* 
 	{
 		HeeksObj* obj = old_children_map[*it];
 		if(new_children.find(*it) == new_children.end())
-			ret.push_back(UndoEvent(EventTypeRemove,newtree,obj));
+			ret.push_back(UndoEvent(EventTypeRemove,newtree,obj->MakeACopyWithID()));
 		m_oldtree.m_treemap[*it] = obj;
 	}
 }
@@ -169,6 +169,7 @@ bool UndoEngine::IsModified()
 
 void UndoEngine::UndoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
 {
+	RecalculateMaps();
 	for(size_t i=0; i < events.size(); i++)
 	{
 		UndoEvent evt = events[i];
@@ -186,12 +187,11 @@ void UndoEngine::UndoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
 				break;
 		}
 	}
-
-	RecalculateMaps();
 }
 
 void UndoEngine::DoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
 {
+	RecalculateMaps();
 	for(size_t i=0; i < events.size(); i++)
 	{
 		UndoEvent evt = events[i];
@@ -209,8 +209,6 @@ void UndoEngine::DoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
 				break;
 		}
 	}
-
-	RecalculateMaps();
 }
 
 
@@ -225,28 +223,34 @@ void UndoEngine::Undo()
 	std::vector<UndoEvent> events = GetModifications();	
 	if(events.size() > 0)
 	{
+		if(m_level < 0)
+			m_level = 0;
 		m_events.resize(m_level+1);
-		m_events[m_level] = events;
+		m_events[m_level--] = events;
 
 		UndoEvents(events, &m_tree);
+		PrintTrees();
 		return;
 	}
 
-	if(m_level>0)
+	if(m_level>=0)
 	{
-		UndoEvents(m_events[--m_level],&m_tree);
-		UndoEvents(m_events[m_level],&m_oldtree);
+		UndoEvents(m_events[m_level],&m_tree);
+		UndoEvents(m_events[m_level--],&m_oldtree);
+		PrintTrees();
 	}
 }
 
 void UndoEngine::Redo()
 {
-	if((unsigned)m_level >= m_events.size())
+	if(m_level != -1 && (unsigned)m_level + 1 >= m_events.size())
 		return;
 
+	m_level++;
 	DoEvents(m_events[m_level],&m_oldtree);
 	DoEvents(m_events[m_level],&m_tree);
-	m_level++;
+
+	PrintTrees();
 }
 
 void UndoEngine::CreateUndoPoint()
@@ -255,8 +259,51 @@ void UndoEngine::CreateUndoPoint()
 	if(events.size() == 0)
 		return;
 
+	if(m_level < 0)
+		m_level = 0;
+
 	m_events.resize(m_level+1);
 	m_events[m_level] = events;
 	DoEvents(m_events[m_level],&m_oldtree);
 	m_level++;
+
+	PrintTrees();
+}
+
+void debugprint(std::string s);
+
+void UndoEngine::PrintTrees()
+{
+	std::stringstream cstr;
+    cstr << "OldTree: " << endl;
+	PrintTree(m_oldtree.m_tree,cstr,0);
+    cstr << "NewTree: " << endl;
+	PrintTree(m_tree.m_tree,cstr,0);
+    debugprint(cstr.str());
+    cstr.clear();
+}
+
+void tab(std::stringstream &cstr, int tabs)
+{
+	for(int i=0; i < tabs; i++)
+		cstr << "     ";
+}
+
+void UndoEngine::PrintTree(HeeksObj *tree, std::stringstream &cstr,int level)
+{
+	tab(cstr,level);
+    cstr << "ID: " << tree->m_id << endl;
+	tab(cstr,level);
+	cstr << "Type: " << tree->GetTypeString() << endl;
+
+	ObjList* list = dynamic_cast<ObjList*>(tree);
+	if(list&&list->DescendForUndo())
+	{
+		HeeksObj* child = list->GetFirstChild();
+		while(child)
+		{
+			PrintTree(child,cstr,level+1);
+			child = list->GetNextChild();
+		}
+	}
 }
