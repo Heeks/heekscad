@@ -10,7 +10,19 @@
 #include "Gripper.h"
 #include "MarkedList.h"
 
-CCylinder::CCylinder(const gp_Ax2& pos, double radius, double height, const wxChar* title, const HeeksColor& col):CSolid(BRepPrimAPI_MakeCylinder(pos, radius, height), title, col), m_pos(pos), m_radius(radius), m_height(height)
+static TopoDS_Solid MakeCylinder(const gp_Ax2& pos, double radius, double height)
+{
+	gp_Ax2 pos2 = pos;
+	if(height<0)
+	{
+		pos2 = gp_Ax2(pos.Location(), -(pos.Direction()));
+		height = fabs(height);
+	}
+
+	return BRepPrimAPI_MakeCylinder(pos2, radius, height);
+}
+
+CCylinder::CCylinder(const gp_Ax2& pos, double radius, double height, const wxChar* title, const HeeksColor& col):CSolid(MakeCylinder(pos, radius, height), title, col), m_pos(pos), m_radius(radius), m_height(height)
 {
 }
 
