@@ -29,7 +29,7 @@ UndoEngine::UndoEngine(ObjList* tree)
 	m_tree.m_tree = tree;
 	m_oldtree.m_tree = new ObjList();
 	m_oldtree.m_tree->m_id = tree->m_id;
-	m_level = 0;
+	m_level = -1;
 }
 
 UndoEngine::~UndoEngine()
@@ -58,6 +58,22 @@ std::vector<UndoEvent> UndoEngine::GetModifications()
 	return ret;
 }
 
+void UndoEngine::RecalculateMapsRecursive(std::map<HeeksObjId,HeeksObj*> &treemap, ObjList* obj)
+{
+	HeeksObj *new_obj = obj->GetFirstChild();
+	while(new_obj)
+	{
+		HeeksObjId id = GetHeeksObjId(new_obj);
+		treemap[id] = new_obj;
+
+		ObjList* new_list = dynamic_cast<ObjList*>(new_obj);
+		if(new_list && new_list->DescendForUndo())
+			RecalculateMapsRecursive(treemap,new_list);
+		new_obj = obj->GetNextChild();
+	}
+
+}
+
 void UndoEngine::RecalculateMaps()
 {
 	m_tree.m_treemap.clear();
@@ -66,22 +82,8 @@ void UndoEngine::RecalculateMaps()
 	m_tree.m_treemap[GetHeeksObjId(m_tree.m_tree)] = m_tree.m_tree;
 	m_oldtree.m_treemap[GetHeeksObjId(m_tree.m_tree)] = m_oldtree.m_tree;
 
-	HeeksObj *new_obj = m_tree.m_tree->GetFirstChild();
-	while(new_obj)
-	{
-		HeeksObjId id = GetHeeksObjId(new_obj);
-		m_tree.m_treemap[id] = new_obj;
-		new_obj = m_tree.m_tree->GetNextChild();
-	}
-
-	HeeksObj *old_obj = m_oldtree.m_tree->GetFirstChild();
-	while(old_obj)
-	{
-		HeeksObjId id = GetHeeksObjId(old_obj);
-		m_oldtree.m_treemap[id] = old_obj;
-		old_obj = m_oldtree.m_tree->GetNextChild();
-	}
-
+	RecalculateMapsRecursive(m_tree.m_treemap,m_tree.m_tree);
+	RecalculateMapsRecursive(m_oldtree.m_treemap,m_oldtree.m_tree);
 }
 
 void UndoEngine::GetModifications(std::vector<UndoEvent> &ret,ObjList* newtree, ObjList* oldtree)
@@ -235,6 +237,8 @@ void UndoEngine::Undo()
 
 	if(m_level>=0)
 	{
+		if(m_level >= m_events.size())
+			m_level = m_events.size()-1;
 		UndoEvents(m_events[m_level],&m_tree);
 		UndoEvents(m_events[m_level--],&m_oldtree);
 		PrintTrees();
@@ -243,7 +247,7 @@ void UndoEngine::Undo()
 
 void UndoEngine::Redo()
 {
-	if(m_level != -1 && (unsigned)m_level + 1 >= m_events.size())
+	if(m_level != -1 && (unsigned)(m_level + 1) >= m_events.size())
 		return;
 
 	m_level++;
