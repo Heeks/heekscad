@@ -785,35 +785,6 @@ static void OnConeButton( wxCommandEvent& event )
 	wxGetApp().Repaint();
 }
 
-#if 1
-// experimenting with flyout toolbars
-static void OnSphereDropButton( wxCommandEvent& event )
-{
-	// make a vertical drop menu under button
-
-	int id = event.GetId();
-
-	wxToolBarToolBase* tool = wxGetApp().m_frame->m_solidBar->FindById(id);
-	if(tool)
-	{
-		//wxRect rect = tool->GetScreenRect();
-		//wxPoint pt(rect.x, rect.y);
-		//wxPoint client_pt = wxGetApp().m_frame->m_solidBar->ScreenToClient(pt);
-		wxPoint client_pt(1 * wxGetApp().m_frame->m_solidBar->GetToolSize().x, 0);
-		client_pt = wxGetApp().m_frame->m_solidBar->ClientToScreen(client_pt);
-		client_pt = wxGetApp().m_frame->ScreenToClient(client_pt);
-
-		wxToolBar* dropBar = new wxToolBar(wxGetApp().m_frame, -1, client_pt, wxDefaultSize, wxTB_VERTICAL | wxTB_BOTTOM);
-		dropBar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
-		wxGetApp().m_frame->AddToolBarTool(dropBar, _T("Cube"), ToolImage(_T("cube")), _("Add a cube"), OnCubeButton);
-		wxGetApp().m_frame->AddToolBarTool(dropBar, _T("Cylinder"), ToolImage(_T("cyl")), _("Add a cylinder"), OnCylButton);
-		dropBar->Realize();
-		dropBar->Move(client_pt);
-		dropBar->SetFocus();
-	}
-}
-#endif
-
 static void OnRedrawButton( wxCommandEvent& event )
 {
 	wxGetApp().RecalculateGLLists();
