@@ -41,12 +41,22 @@ public:
 	void(*m_onButtonFunction)(wxCommandEvent&);
 
 	CFlyOutItem(const wxString& title_and_bitmap, const wxString& tooltip, void(*onButtonFunction)(wxCommandEvent&));
+
+	virtual bool IsAList(){return false;}
 };
 
-class CFlyOutButton : public wxBitmapButton
+class CFlyOutList: public CFlyOutItem
 {
 public:
+	std::list<CFlyOutItem> m_list;
 
+	CFlyOutList(const wxString& title_and_bitmap, const wxString& tooltip);
+
+	// CFlyOutItem's virtual functions
+	bool IsAList(){return true;}
+
+	// Get the item that should appear on the main toolbar
+	const CFlyOutItem* GetMainItem()const;
 };
 
 class CHeeksFrame : public wxFrame
@@ -54,8 +64,6 @@ class CHeeksFrame : public wxFrame
 private:
 	int m_next_id_for_button;
 	std::map<int, SExternalButtonFunctions > m_external_buttons;
-
-	int MakeNextIDForTool(void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&));
 
 public:
 	wxLogWindow* m_logger;
@@ -90,10 +98,11 @@ public:
 	void OnMove( wxMoveEvent& evt );
 	void OnKeyDown(wxKeyEvent& event);
 	void OnKeyUp(wxKeyEvent& event);
-	int AddToolBarTool(wxToolBar* toolbar, const wxString& title, const wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
+	wxToolBarToolBase* AddToolBarTool(wxToolBar* toolbar, const wxString& title, const wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
 	void AddToolBarTool(wxToolBar* toolbar, Tool* tool);
-	void AddToolBarFlyout(wxToolBar* toolbar, const wxString& title, const std::list<CFlyOutItem> &flyout_list);
-
+	void AddToolBarFlyout(wxToolBar* toolbar, const wxString& title, const CFlyOutList& flyout);
+	int MakeNextIDForTool(void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&));
+	void SetToolFunctions(int Id, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&));
 	void ClearToolBar(wxToolBar* m_toolBar);
 	int AddMenuItem(wxMenu* menu, const wxString& text, const wxBitmap& bitmap, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL, wxMenu* submenu = NULL, bool check_item = false);
     void Draw(wxDC& dc);
