@@ -24,5 +24,6 @@ public:
 	long GetMarkingMask()const{return MARKING_FILTER_PAD;}
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 	static void PadSketch(CSketch*,double length);
+	bool IsDifferent(HeeksObj* other);
 };
 

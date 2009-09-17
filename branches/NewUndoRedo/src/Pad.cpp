@@ -19,6 +19,15 @@ CPad::CPad()
 	m_length = 0;
 }
 
+bool CPad::IsDifferent(HeeksObj* other)
+{
+	CPad* pad = (CPad*)other;
+	if(pad->m_length != m_length)
+		return true;
+
+	return HeeksObj::IsDifferent(other);
+}
+
 void CPad::glCommands(bool select, bool marked, bool no_color)
 {
 	//Draw everything else

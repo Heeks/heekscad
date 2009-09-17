@@ -29,7 +29,6 @@ UndoEngine::UndoEngine(ObjList* tree)
 	m_tree.m_tree = tree;
 	m_oldtree.m_tree = new ObjList();
 	m_oldtree.m_tree->m_id = tree->m_id;
-	m_level = -1;
 }
 
 UndoEngine::~UndoEngine()
@@ -42,8 +41,8 @@ void UndoEngine::ClearHistory()
 	delete m_oldtree.m_tree;
 	m_oldtree.m_tree = new ObjList();
 	m_oldtree.m_tree->m_id = m_tree.m_tree->m_id;
-	m_events.clear();
-	m_level = 0;
+	m_undo_events.clear();
+	m_redo_events.clear();
 }
 
 HeeksObjId UndoEngine::GetHeeksObjId(HeeksObj* obj)
@@ -181,11 +180,19 @@ void UndoEngine::UndoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
 				tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Remove(tree->m_treemap[GetHeeksObjId(evt.m_object)]);
 				break;
 			case EventTypeModified:
-				tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Remove(tree->m_treemap[GetHeeksObjId(evt.m_object)]);
-				tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Add(evt.m_oldobject->MakeACopyWithID(),NULL);
+				{
+					tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Remove(tree->m_treemap[GetHeeksObjId(evt.m_object)]);
+					HeeksObj* new_obj = evt.m_oldobject->MakeACopyWithID();
+					tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Add(new_obj,NULL);
+					tree->m_treemap[GetHeeksObjId(new_obj)] = new_obj;
+				}
 				break;
 			case EventTypeRemove:
-				tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Add(evt.m_object->MakeACopyWithID(),NULL);
+				{
+					HeeksObj* new_obj = evt.m_object->MakeACopyWithID();
+					tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Add(new_obj,NULL);
+					tree->m_treemap[GetHeeksObjId(new_obj)] = new_obj;
+				}
 				break;
 		}
 	}
@@ -200,11 +207,19 @@ void UndoEngine::DoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
 		switch(evt.m_type)
 		{
 			case EventTypeAdd:
-				tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Add(evt.m_object->MakeACopyWithID(),NULL);
+				{
+					HeeksObj* new_obj = evt.m_object->MakeACopyWithID();
+					tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Add(new_obj,NULL);
+					tree->m_treemap[GetHeeksObjId(new_obj)] = new_obj;
+				}
 				break;
 			case EventTypeModified:
-				tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Remove(tree->m_treemap[GetHeeksObjId(evt.m_oldobject)]);
-				tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Add(evt.m_object->MakeACopyWithID(),NULL);
+				{
+					tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Remove(tree->m_treemap[GetHeeksObjId(evt.m_oldobject)]);
+					HeeksObj* new_obj = evt.m_object->MakeACopyWithID();
+					tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Add(new_obj,NULL);
+					tree->m_treemap[GetHeeksObjId(new_obj)] = new_obj;
+				}
 				break;
 			case EventTypeRemove:
 				tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Remove(tree->m_treemap[GetHeeksObjId(evt.m_object)]);
@@ -225,34 +240,33 @@ void UndoEngine::Undo()
 	std::vector<UndoEvent> events = GetModifications();	
 	if(events.size() > 0)
 	{
-		if(m_level < 0)
-			m_level = 0;
-		m_events.resize(m_level+1);
-		m_events[m_level--] = events;
-
 		UndoEvents(events, &m_tree);
+		m_redo_events.push_back(events);
 		PrintTrees();
 		return;
 	}
 
-	if(m_level>=0)
+	if(m_undo_events.size())
 	{
-		if(m_level >= m_events.size())
-			m_level = m_events.size()-1;
-		UndoEvents(m_events[m_level],&m_tree);
-		UndoEvents(m_events[m_level--],&m_oldtree);
+		events = m_undo_events.back();
+		m_undo_events.pop_back();
+		UndoEvents(events,&m_tree);
+		UndoEvents(events,&m_oldtree);
+		m_redo_events.push_back(events);
 		PrintTrees();
 	}
 }
 
 void UndoEngine::Redo()
 {
-	if(m_level != -1 && (unsigned)(m_level + 1) >= m_events.size())
+	if(!m_redo_events.size())
 		return;
 
-	m_level++;
-	DoEvents(m_events[m_level],&m_oldtree);
-	DoEvents(m_events[m_level],&m_tree);
+	DoEvents(m_redo_events.back(),&m_oldtree);
+	DoEvents(m_redo_events.back(),&m_tree);
+
+	m_undo_events.push_back(m_redo_events.back());
+	m_redo_events.pop_back();
 
 	PrintTrees();
 }
@@ -263,13 +277,9 @@ void UndoEngine::CreateUndoPoint()
 	if(events.size() == 0)
 		return;
 
-	if(m_level < 0)
-		m_level = 0;
-
-	m_events.resize(m_level+1);
-	m_events[m_level] = events;
-	DoEvents(m_events[m_level],&m_oldtree);
-	m_level++;
+	m_undo_events.push_back(events);
+	m_redo_events.clear();
+	DoEvents(events,&m_oldtree);
 
 	PrintTrees();
 }

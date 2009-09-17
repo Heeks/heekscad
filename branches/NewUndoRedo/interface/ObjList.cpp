@@ -81,12 +81,18 @@ HeeksObj* ObjList::MakeACopyWithID(void)
 { 
 	ObjList* pnew = (ObjList*)HeeksObj::MakeACopyWithID();
 
+	std::list<HeeksObj*>::iterator it2=pnew->m_objects.begin();
+	for(; it2 != pnew->m_objects.end(); )
+	{
+		HeeksObj* obj = *(it2++);
+		delete obj;
+	}
+	pnew->m_objects.clear();
+
 	std::list<HeeksObj*>::const_iterator it1=m_objects.begin();
-	std::list<HeeksObj*>::const_iterator it2=pnew->m_objects.begin();
 	for (;it1!=m_objects.end();it1++)
 	{
-		(*it2)->SetID((*it1)->m_id);
-		it2++;
+		pnew->m_objects.push_back((*it1)->MakeACopyWithID());
 	}
 
 	return pnew;

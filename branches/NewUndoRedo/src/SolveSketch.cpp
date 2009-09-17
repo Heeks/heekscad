@@ -272,9 +272,9 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 		}
 	}
 
-//	if(constraints.size() == 0)
+	if(constraints.size() == 0)
 		// no contraints //still might be arcs
-//		return;
+		return;
 
 	if(solvewpoints(&params[0],params.size(),&constraints[0],constraints.size(),rough))
 		//No result

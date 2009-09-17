@@ -30,6 +30,14 @@ const EndedObject& EndedObject::operator=(const EndedObject &b){
 	return *this;
 }
 
+HeeksObj* EndedObject::MakeACopyWithID()
+{
+	EndedObject* pnew = (EndedObject*)ConstrainedObject::MakeACopyWithID();
+	pnew->A = (HPoint*)pnew->GetFirstChild();
+	pnew->B = (HPoint*)pnew->GetNextChild();
+	return pnew;
+}
+
 void EndedObject::LoadToDoubles()
 {
 	A->LoadToDoubles();

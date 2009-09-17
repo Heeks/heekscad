@@ -14,37 +14,22 @@ ConstrainedObject::ConstrainedObject(){
 
 
 ConstrainedObject::~ConstrainedObject(){
-/*	if(absoluteangleconstraint)
-		delete absoluteangleconstraint;
-	if(linelengthconstraint)
-		delete linelengthconstraint;
-	if(radiusconstraint)
-		delete radiusconstraint;
-	std::list<Constraint*>::iterator it;
-	for(it = constraints.begin(); it!= constraints.end(); ++it)
-	{
-		Constraint * c = *it;
-		if(c->m_obj1 && c->m_obj1!= this)
-		{
-			ConstrainedObject *obj = dynamic_cast<ConstrainedObject*>(c->m_obj1);
-			if(obj)
-				obj->constraints.remove(c);
-		}
-
-		if(c->m_obj2 && c->m_obj2!= this)
-		{
-			ConstrainedObject *obj = dynamic_cast<ConstrainedObject*>(c->m_obj2);
-			if(obj)
-				obj->constraints.remove(c);
-		}
-
-		delete c;
-	} */
 }
 
 const ConstrainedObject& ConstrainedObject::operator=(const ConstrainedObject &b){
 	ObjList::operator=(b);
-	//TODO: copy constraints
+	if(b.absoluteangleconstraint)
+		absoluteangleconstraint = (Constraint*)b.absoluteangleconstraint->MakeACopy();
+	if(b.linelengthconstraint)
+		linelengthconstraint = (Constraint*)b.linelengthconstraint->MakeACopy();
+	if(b.radiusconstraint)
+		radiusconstraint = (Constraint*)b.radiusconstraint->MakeACopy();
+
+	std::list<Constraint*>::const_iterator it;
+	for(it = b.constraints.begin(); it != b.constraints.end(); ++it)
+	{
+		constraints.push_back((Constraint*)(*it)->MakeACopy());
+	}
 	return *this;
 }
 
