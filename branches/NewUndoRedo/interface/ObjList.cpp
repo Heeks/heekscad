@@ -81,6 +81,9 @@ HeeksObj* ObjList::MakeACopyWithID(void)
 { 
 	ObjList* pnew = (ObjList*)HeeksObj::MakeACopyWithID();
 
+	if(!DescendForUndo())
+		return pnew;
+
 	std::list<HeeksObj*>::iterator it2=pnew->m_objects.begin();
 	for(; it2 != pnew->m_objects.end(); )
 	{

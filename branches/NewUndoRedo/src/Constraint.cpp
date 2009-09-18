@@ -274,18 +274,8 @@ HeeksObj* Constraint::ReadFromXMLElement(TiXmlElement* pElem)
 
 	Constraint *c = new Constraint(etype,eangle,length,obj1,obj2);
 
-	//Set up the quick pointers
-	if(etype == AbsoluteAngleConstraint)
-		obj1->absoluteangleconstraint = c;
-	else if(etype == RadiusConstraint)
-		obj1->radiusconstraint = c;
-	else if(etype == LineLengthConstraint)
-		obj1->linelengthconstraint = c;
-	else
-	{
-		obj1->constraints.push_back(c);
-		obj2->constraints.push_back(c);
-	}
+	obj1->constraints.push_back(c);
+	obj2->constraints.push_back(c);
 
 	//Don't let the xml reader try to insert us in the tree
 	return NULL;

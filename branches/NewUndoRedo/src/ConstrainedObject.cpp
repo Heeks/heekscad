@@ -7,9 +7,6 @@
 #include "HPoint.h"
 
 ConstrainedObject::ConstrainedObject(){
-	absoluteangleconstraint = NULL;
-	linelengthconstraint = NULL;
-	radiusconstraint = NULL;
 }
 
 
@@ -18,13 +15,6 @@ ConstrainedObject::~ConstrainedObject(){
 
 const ConstrainedObject& ConstrainedObject::operator=(const ConstrainedObject &b){
 	ObjList::operator=(b);
-	if(b.absoluteangleconstraint)
-		absoluteangleconstraint = (Constraint*)b.absoluteangleconstraint->MakeACopy();
-	if(b.linelengthconstraint)
-		linelengthconstraint = (Constraint*)b.linelengthconstraint->MakeACopy();
-	if(b.radiusconstraint)
-		radiusconstraint = (Constraint*)b.radiusconstraint->MakeACopy();
-
 	std::list<Constraint*>::const_iterator it;
 	for(it = b.constraints.begin(); it != b.constraints.end(); ++it)
 	{
@@ -43,6 +33,19 @@ void ConstrainedObject::LoadFromDoubles()
 
 }
 
+Constraint* ConstrainedObject::GetExisting(EnumConstraintType type)
+{
+	std::list<Constraint*>::iterator it;
+	for(it = constraints.begin(); it!= constraints.end(); ++it)
+	{
+		Constraint *c = *it;
+		if(c->m_type == type)
+		{
+			return c;
+		}
+	}
+	return NULL;
+}
 
 bool ConstrainedObject::RemoveExisting(HeeksObj* obj, EnumConstraintType type)
 {
@@ -122,29 +125,24 @@ bool ConstrainedObject::SetColinearConstraint(ConstrainedObject* obj){
 
 void ConstrainedObject::SetAbsoluteAngleConstraint(EnumAbsoluteAngle angle)
 {
-	if(absoluteangleconstraint)
+	Constraint* c = GetExisting(AbsoluteAngleConstraint);
+	if(c)
 	{
-		if(absoluteangleconstraint->m_angle == angle)
+		if(c->m_angle == angle)
 		{
-			delete absoluteangleconstraint;
-			absoluteangleconstraint=NULL;
+			constraints.remove(c);
+			delete c;
 		}
 		else
-			absoluteangleconstraint->m_angle = angle;
+			c->m_angle = angle;
 
 	}
 	else
-		absoluteangleconstraint = new Constraint(AbsoluteAngleConstraint,angle,this);
+		constraints.push_back(new Constraint(AbsoluteAngleConstraint,angle,this));
 }
 
 void ConstrainedObject::glCommands(HeeksColor color, gp_Ax1 mid_point)
 {
-	if(absoluteangleconstraint)
-		absoluteangleconstraint->glCommands(color,mid_point);
-
-	if(linelengthconstraint)
-		linelengthconstraint->glCommands(color,mid_point);
-
 	std::list<Constraint*>::iterator it;
 	for(it = constraints.begin(); it != constraints.end(); ++it)
 	{
@@ -155,7 +153,7 @@ void ConstrainedObject::glCommands(HeeksColor color, gp_Ax1 mid_point)
 
 bool ConstrainedObject::HasConstraints()
 {
-	return absoluteangleconstraint || !constraints.empty() || linelengthconstraint || radiusconstraint;
+	return !constraints.empty();
 }
 
 bool ConstrainedObject::HasPointConstraint(ConstrainedObject* obj)
@@ -194,24 +192,24 @@ void ConstrainedObject::SetCoincidentPoint(ConstrainedObject* obj, bool remove)
 
 void ConstrainedObject::SetLineLengthConstraint(double length)
 {
-	if(linelengthconstraint)
+	Constraint *c = GetExisting(LineLengthConstraint);
+	if(c)
 	{
-		delete linelengthconstraint;
-		linelengthconstraint = NULL;
+		constraints.remove(c);
 	}
 	else
-		linelengthconstraint = new Constraint(LineLengthConstraint,length,this);
+		constraints.push_back(new Constraint(LineLengthConstraint,length,this));
 }
 
 void ConstrainedObject::SetRadiusConstraint(double length)
 {
-	if(radiusconstraint)
+	Constraint *c = GetExisting(RadiusConstraint);
+	if(c)
 	{
-		delete radiusconstraint;
-		radiusconstraint = NULL;
+		constraints.remove(c);
 	}
 	else
-		radiusconstraint = new Constraint(RadiusConstraint,length,this);
+		constraints.push_back(new Constraint(RadiusConstraint,length,this));
 }
 
 
@@ -225,7 +223,6 @@ void ConstrainedObject::SetTangentConstraint(ConstrainedObject* obj)
 		if(c->m_type == LineTangentConstraint && (ConstrainedObject*)c->m_obj2 == obj)
 		{
 			constraints.remove(c);
-			delete c;
 			return;
 		}
 	}
@@ -236,17 +233,19 @@ void ConstrainedObject::SetTangentConstraint(ConstrainedObject* obj)
 
 void ConstrainedObject::SetLineLength(double length)
 {
-	if(linelengthconstraint)
+	Constraint *c = GetExisting(LineLengthConstraint);
+	if(c)
 	{
-		linelengthconstraint->m_length = length;
+		c->m_length = length;
 	}
 }
 
 void ConstrainedObject::SetRadius(double radius)
 {
-	if(radiusconstraint)
+	Constraint *c = GetExisting(RadiusConstraint);
+	if(c)
 	{
-		radiusconstraint->m_length = radius;
+		c->m_length = radius;
 	}
 }
 

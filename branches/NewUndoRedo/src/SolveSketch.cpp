@@ -77,37 +77,6 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 				constraints.push_back(c);
 			}
 
-			if(cobj->absoluteangleconstraint)
-			{
-				line l = GetLineFromEndedObject(eobj);
-				constraint c;
-				c.line1 = l;
-				c.type = vertical;
-				if(cobj->absoluteangleconstraint->m_angle == AbsoluteAngleHorizontal)
-					c.type = horizontal;
-				constraints.push_back(c);
-			}
-
-			if(cobj->linelengthconstraint)
-			{
-				line l = GetLineFromEndedObject(eobj);
-				constraint c;
-				c.line1 = l;
-				c.type = lineLength;
-				c.parameter = &cobj->linelengthconstraint->m_length;
-				constraints.push_back(c);
-			}
-
-			if(cobj->radiusconstraint)
-			{
-				arc a = GetArc((HArc*)obj);
-				constraint c;
-				c.arc1 = a;
-				c.type = arcRadius;
-				c.parameter = &cobj->radiusconstraint->m_length;
-				constraints.push_back(c);
-			}
-
 			if(eobj)
 			{
 				if(eobj->A)
@@ -127,6 +96,38 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 
 				switch(con->m_type)
 				{
+					case AbsoluteAngleConstraint:		
+					{
+						line l = GetLineFromEndedObject(eobj);
+						constraint c;
+						c.line1 = l;
+						c.type = vertical;
+						if(con->m_angle == AbsoluteAngleHorizontal)
+							c.type = horizontal;
+						constraints.push_back(c);
+					}
+					break;
+					case LineLengthConstraint:
+					{
+						line l = GetLineFromEndedObject(eobj);
+						constraint c;
+						c.line1 = l;
+						c.type = lineLength;
+						c.parameter = &con->m_length;
+						constraints.push_back(c);
+					}
+					break;
+					case RadiusConstraint:
+					{
+						arc a = GetArc((HArc*)obj);
+						constraint c;
+						c.arc1 = a;
+						c.type = arcRadius;
+						c.parameter = &con->m_length;
+						constraints.push_back(c);
+					}
+					break;
+
 					case EqualRadiusConstraint:
 					case ConcentricConstraint:
 					{ 

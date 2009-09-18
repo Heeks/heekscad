@@ -13,9 +13,6 @@ class HPoint;
 class ConstrainedObject: public ObjList{
 public:
 	std::list<Constraint*> constraints;
-	Constraint* absoluteangleconstraint;
-	Constraint*  linelengthconstraint;
-	Constraint* radiusconstraint;
 
 	ConstrainedObject();
 	~ConstrainedObject(void);
@@ -35,6 +32,7 @@ public:
 	bool SetEqualRadiusConstraint(ConstrainedObject* obj);
 	void glCommands(HeeksColor color, gp_Ax1 mid_point);
 	bool RemoveExisting(HeeksObj* obj, EnumConstraintType type);
+	Constraint* GetExisting(EnumConstraintType type);
 	bool HasConstraints();
 	void SetCoincidentPoint(ConstrainedObject* obj, bool remove);
 	bool HasPointConstraint(ConstrainedObject* obj);
