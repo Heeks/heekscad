@@ -53,6 +53,8 @@ public:
 
 	~Constraint(void);
 
+	void ReloadPointers();
+	bool IsTransient(){return true;}
 	HeeksObj *MakeACopy(void)const;
 	int GetType()const{return ConstraintType;}
 	const wxChar* GetTypeString(void)const{return _("Constraint");}

@@ -34,6 +34,7 @@ public:
 	bool RemoveExisting(HeeksObj* obj, EnumConstraintType type);
 	Constraint* GetExisting(EnumConstraintType type);
 	bool HasConstraints();
+	void ReloadPointers();
 	void SetCoincidentPoint(ConstrainedObject* obj, bool remove);
 	bool HasPointConstraint(ConstrainedObject* obj);
 	void SetLineLengthConstraint(double length);

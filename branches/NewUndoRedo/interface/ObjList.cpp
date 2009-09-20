@@ -10,6 +10,8 @@
 #endif
 #include "../tinyxml/tinyxml.h"
 
+#include "TransientObject.h"
+
 
 ObjList::ObjList(const ObjList& objlist): HeeksObj(objlist), m_index_list_valid(true) {operator=(objlist);}
 
@@ -47,10 +49,18 @@ const ObjList& ObjList::operator=(const ObjList& objlist)
 {
 	HeeksObj::operator=(objlist);
 	Clear();
+
 	std::list<HeeksObj*>::const_iterator It;
 	for (It=objlist.m_objects.begin();It!=objlist.m_objects.end();It++)
 	{
-		HeeksObj* new_op = (*It)->MakeACopy();
+		HeeksObj* new_op;
+		if(objlist.m_preserving_id)
+			if((*It)->IsTransient())
+				new_op = new TransientObject(*It);
+			else
+				new_op = (*It)->MakeACopyWithID();
+		else
+			new_op = (*It)->MakeACopy();
 		if(new_op)Add(new_op, NULL);
 	}
 	return *this;
@@ -76,30 +86,6 @@ void ObjList::ClearUndoably(void)
 }
 
 HeeksObj* ObjList::MakeACopy(void) const { return new ObjList(*this); }
-
-HeeksObj* ObjList::MakeACopyWithID(void)  
-{ 
-	ObjList* pnew = (ObjList*)HeeksObj::MakeACopyWithID();
-
-	if(!DescendForUndo())
-		return pnew;
-
-	std::list<HeeksObj*>::iterator it2=pnew->m_objects.begin();
-	for(; it2 != pnew->m_objects.end(); )
-	{
-		HeeksObj* obj = *(it2++);
-		delete obj;
-	}
-	pnew->m_objects.clear();
-
-	std::list<HeeksObj*>::const_iterator it1=m_objects.begin();
-	for (;it1!=m_objects.end();it1++)
-	{
-		pnew->m_objects.push_back((*it1)->MakeACopyWithID());
-	}
-
-	return pnew;
-}
 
 void ObjList::GetBox(CBox &box)
 {

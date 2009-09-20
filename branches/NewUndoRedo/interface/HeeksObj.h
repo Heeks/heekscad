@@ -77,6 +77,7 @@ public:
 	unsigned int m_id;
 	unsigned int m_layer;
 	bool m_visible;
+	bool m_preserving_id;
 
 	HeeksObj(void);
 	HeeksObj(const HeeksObj& ho);
@@ -100,6 +101,7 @@ public:
 	virtual void KillGLLists(void){};
 	virtual HeeksObj *MakeACopy()const = 0;
 	virtual HeeksObj *MakeACopyWithID();
+	virtual void ReloadPointers(){}
 	virtual void CopyFrom(const HeeksObj* object){}
 	virtual void SetColor(const HeeksColor &col){}
 	virtual const HeeksColor* GetColor()const{return NULL;}
@@ -157,4 +159,5 @@ public:
 	virtual HeeksObj* GetFirstOwner();
 	virtual HeeksObj* GetNextOwner();
 	virtual const TopoDS_Shape *GetShape() { return(NULL); }
+	virtual bool IsTransient(){return false;}
 };

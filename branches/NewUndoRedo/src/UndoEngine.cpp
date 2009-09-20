@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "../interface/ObjList.h"
 #include "UndoEngine.h"
+#include "TransientObject.h"
 
 //This code attempt to determine what can be undone/redone by analyzing the heekscad graph and an 
 //internal graph of the previous state. 
@@ -66,7 +67,9 @@ void UndoEngine::RecalculateMapsRecursive(std::map<HeeksObjId,HeeksObj*> &treema
 		treemap[id] = new_obj;
 
 		ObjList* new_list = dynamic_cast<ObjList*>(new_obj);
-		if(new_list && new_list->DescendForUndo())
+
+		//Always descend when generating the map
+		if(new_list)
 			RecalculateMapsRecursive(treemap,new_list);
 		new_obj = obj->GetNextChild();
 	}
@@ -160,6 +163,54 @@ void UndoEngine::GetModificationsRecursive(std::vector<UndoEvent> &ret,ObjList* 
 			ret.push_back(UndoEvent(EventTypeRemove,newtree,obj->MakeACopyWithID()));
 		m_oldtree.m_treemap[*it] = obj;
 	}
+
+	DealWithTransients();
+}
+
+void UndoEngine::DealWithTransients()
+{
+	std::map<HeeksObj*,HeeksObj*>& map = wxGetApp().GetTransients();
+	
+	std::map<HeeksObj*,HeeksObj*>::iterator it;
+	std::map<std::pair<int,unsigned int>,HeeksObj*> newmap;
+	for(it = map.begin(); it!= map.end(); it++)
+	{
+		TransientObject *tobj = (TransientObject*)(*it).first;
+		HeeksObj* obj = (HeeksObj*)(*it).second;
+		std::map<std::pair<int,unsigned int>,HeeksObj*>::iterator it2 = newmap.find(std::pair<int,unsigned int>(obj->GetType(),obj->m_id));
+		if(it2 == newmap.end())
+		{
+			HeeksObj* nobj = obj->MakeACopyWithID();
+			nobj->RemoveOwners();
+			newmap[std::pair<int,unsigned int>(nobj->GetType(),nobj->m_id)] = nobj;
+			tobj->Owner()->Add(nobj,NULL);
+
+		}
+		else
+		{
+			tobj->Owner()->Add((*it2).second, NULL);
+		}
+
+		tobj->Owner()->Remove(tobj);
+		//delete tobj;
+	}
+
+	wxGetApp().ClearTransients();
+
+	//Deal with the quick pointer problem
+	std::map<std::pair<int,unsigned int>,HeeksObj*>::iterator it2;
+	for(it2 = newmap.begin(); it2 != newmap.end(); it2++)
+	{
+		HeeksObj *obj = (*it2).second;
+		HeeksObj *owner = obj->GetFirstOwner();
+		while(owner)
+		{
+			owner->ReloadPointers();
+			owner = obj->GetNextOwner();
+		}
+		obj->ReloadPointers();
+	}
+	
 }
 
 bool UndoEngine::IsModified()
@@ -196,6 +247,8 @@ void UndoEngine::UndoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
 				break;
 		}
 	}
+
+	DealWithTransients();
 }
 
 void UndoEngine::DoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
@@ -226,6 +279,7 @@ void UndoEngine::DoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
 				break;
 		}
 	}
+	DealWithTransients();
 }
 
 
@@ -308,10 +362,12 @@ void UndoEngine::PrintTree(HeeksObj *tree, std::stringstream &cstr,int level)
 	tab(cstr,level);
     cstr << "ID: " << tree->m_id << endl;
 	tab(cstr,level);
-	cstr << "Type: " << tree->GetTypeString() << endl;
+	cstr << "Type: " << wxString(tree->GetTypeString()).mb_str() << endl;
+	tab(cstr,level);
+	cstr << "Location: " << tree << endl;
 
 	ObjList* list = dynamic_cast<ObjList*>(tree);
-	if(list&&list->DescendForUndo())
+	if(list)//&&list->DescendForUndo())
 	{
 		HeeksObj* child = list->GetFirstChild();
 		while(child)

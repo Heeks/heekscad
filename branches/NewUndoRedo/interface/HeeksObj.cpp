@@ -16,15 +16,18 @@
 #include "../src/ObjPropsCanvas.h"
 #endif
 
-HeeksObj::HeeksObj(void): m_id(0), m_layer(0), m_visible(true){}
+HeeksObj::HeeksObj(void): m_id(0), m_layer(0), m_visible(true), m_preserving_id(false){}
 
-HeeksObj::HeeksObj(const HeeksObj& ho): m_id(0), m_layer(0), m_visible(true){operator=(ho);}
+HeeksObj::HeeksObj(const HeeksObj& ho): m_id(0), m_layer(0), m_visible(true),m_preserving_id(false){operator=(ho);}
 
 const HeeksObj& HeeksObj::operator=(const HeeksObj &ho)
 {
 	// don't copy the ID or the owner
 	m_layer = ho.m_layer;
 	m_visible = ho.m_visible;
+
+	if(ho.m_preserving_id)
+		m_id = ho.m_id;
 
 	return *this;
 }
@@ -40,8 +43,9 @@ HeeksObj::~HeeksObj()
 
 HeeksObj* HeeksObj::MakeACopyWithID()
 {
+	m_preserving_id = true;
 	HeeksObj* ret = MakeACopy();
-	ret->m_id = m_id;
+	m_preserving_id = false;
 	return ret;
 }
 

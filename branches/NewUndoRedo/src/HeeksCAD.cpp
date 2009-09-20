@@ -1483,6 +1483,21 @@ void HeeksCADapp::Redo(void)
 	m_marked_list->Clear(true);
 }
 
+void HeeksCADapp::WentTransient(HeeksObj* obj, TransientObject *tobj)
+{
+	m_transient_objects[(HeeksObj*)tobj]=obj;
+}
+
+void HeeksCADapp::ClearTransients()
+{
+	m_transient_objects.clear();
+}
+
+std::map<HeeksObj*,HeeksObj*>& HeeksCADapp::GetTransients()
+{
+	return m_transient_objects;
+}
+
 void HeeksCADapp::RegisterObserver(Observer* observer)
 {
 	if (observer==NULL) return;

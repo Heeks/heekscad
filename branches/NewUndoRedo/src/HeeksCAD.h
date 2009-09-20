@@ -8,6 +8,7 @@
 #include "../interface/ObjList.h"
 #include "glfont2.h"
 
+class TransientObject;
 class MagDragWindow;
 class ViewRotating;
 class ViewZooming;
@@ -52,6 +53,7 @@ class HeeksCADapp : public wxApp, public ObjList
 private:
 	std::set<Observer*> observers;
 	UndoEngine *history;
+	std::map<HeeksObj*,HeeksObj*> m_transient_objects;
 	std::map< int, std::map<int, HeeksObj*> > used_ids; // map of group type ( usually same as object type ) to "map of ID to object"
 	std::map< int, int > next_id_map;
 	std::map< std::string, HeeksObj*(*)(TiXmlElement* pElem) > xml_read_fn_map;
@@ -176,6 +178,9 @@ public:
 	void DoToolUndoably(Tool *);
 	void Undo(void);
 	void Redo(void);
+	void WentTransient(HeeksObj* obj, TransientObject* tobj);
+	void ClearTransients();
+	std::map<HeeksObj*,HeeksObj*>& GetTransients();
 	bool Add(HeeksObj* object, HeeksObj* prev_object);
 	void Remove(HeeksObj* object);
 	void Remove(std::list<HeeksObj*> objects);

@@ -15,12 +15,20 @@ ConstrainedObject::~ConstrainedObject(){
 
 const ConstrainedObject& ConstrainedObject::operator=(const ConstrainedObject &b){
 	ObjList::operator=(b);
-	std::list<Constraint*>::const_iterator it;
-	for(it = b.constraints.begin(); it != b.constraints.end(); ++it)
-	{
-		constraints.push_back((Constraint*)(*it)->MakeACopy());
-	}
 	return *this;
+}
+
+void ConstrainedObject::ReloadPointers()
+{
+	std::list<HeeksObj*>::iterator it;
+	constraints.clear();
+
+	for(it = m_objects.begin(); it!= m_objects.end(); it++)
+	{
+		Constraint* c = dynamic_cast<Constraint*>(*it);
+		if(c)
+			constraints.push_back(c);
+	}
 }
 
 void ConstrainedObject::LoadToDoubles()

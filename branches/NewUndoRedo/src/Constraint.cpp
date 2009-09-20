@@ -110,6 +110,14 @@ Constraint::~Constraint()
 */
 }
 
+void Constraint::ReloadPointers()
+{
+	if(m_obj1)
+		m_obj1 = (ConstrainedObject*)GetFirstOwner();
+	if(m_obj2)
+		m_obj2 = (ConstrainedObject*)GetNextOwner();
+}
+
 void Constraint::render_text(const wxChar* str)
 {
 	wxGetApp().create_font();
@@ -177,7 +185,7 @@ void Constraint::glCommands(HeeksColor color, gp_Ax1 axis)
 
 HeeksObj *Constraint::MakeACopy(void)const
 {
-	return new Constraint(this);
+	return new Constraint(*this);
 }
 
 static std::list<Constraint*> obj_to_save;
