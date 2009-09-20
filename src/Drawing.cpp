@@ -15,6 +15,7 @@
 #include "HeeksFrame.h"
 #include "GraphicsCanvas.h"
 #include "InputModeCanvas.h"
+#include "PropertiesCanvas.h"
 
 Drawing::Drawing(void): m_getting_position(false), m_inhibit_coordinate_change(false){
 	null_view = new ViewSpecific(0);
