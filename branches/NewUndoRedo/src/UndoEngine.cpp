@@ -164,30 +164,33 @@ void UndoEngine::GetModificationsRecursive(std::vector<UndoEvent> &ret,ObjList* 
 		m_oldtree.m_treemap[*it] = obj;
 	}
 
-	DealWithTransients();
+	//DealWithTransients();
+	wxGetApp().ClearTransients();
 }
 
-void UndoEngine::DealWithTransients()
+void UndoEngine::DealWithTransients(std::map<HeeksObjId,HeeksObj*> &treemap)
 {
 	std::map<HeeksObj*,HeeksObj*>& map = wxGetApp().GetTransients();
 	
 	std::map<HeeksObj*,HeeksObj*>::iterator it;
-	std::map<std::pair<int,unsigned int>,HeeksObj*> newmap;
+	std::list<HeeksObj*> needupdate;
 	for(it = map.begin(); it!= map.end(); it++)
 	{
 		TransientObject *tobj = (TransientObject*)(*it).first;
 		HeeksObj* obj = (HeeksObj*)(*it).second;
-		std::map<std::pair<int,unsigned int>,HeeksObj*>::iterator it2 = newmap.find(std::pair<int,unsigned int>(obj->GetType(),obj->m_id));
-		if(it2 == newmap.end())
+		std::map<HeeksObjId,HeeksObj*>::iterator it2 = treemap.find(GetHeeksObjId(obj));
+		if(it2 == treemap.end())
 		{
 			HeeksObj* nobj = obj->MakeACopyWithID();
 			nobj->RemoveOwners();
-			newmap[std::pair<int,unsigned int>(nobj->GetType(),nobj->m_id)] = nobj;
+			needupdate.push_back(nobj);
+			treemap[GetHeeksObjId(nobj)] = nobj;
 			tobj->Owner()->Add(nobj,NULL);
 
 		}
 		else
 		{
+			needupdate.push_back((*it2).second);
 			tobj->Owner()->Add((*it2).second, NULL);
 		}
 
@@ -198,10 +201,10 @@ void UndoEngine::DealWithTransients()
 	wxGetApp().ClearTransients();
 
 	//Deal with the quick pointer problem
-	std::map<std::pair<int,unsigned int>,HeeksObj*>::iterator it2;
-	for(it2 = newmap.begin(); it2 != newmap.end(); it2++)
+	std::list<HeeksObj*>::iterator it2;
+	for(it2 = needupdate.begin(); it2 != needupdate.end(); it2++)
 	{
-		HeeksObj *obj = (*it2).second;
+		HeeksObj *obj = *it2;
 		HeeksObj *owner = obj->GetFirstOwner();
 		while(owner)
 		{
@@ -248,7 +251,7 @@ void UndoEngine::UndoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
 		}
 	}
 
-	DealWithTransients();
+	DealWithTransients(tree->m_treemap);
 }
 
 void UndoEngine::DoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
@@ -279,7 +282,7 @@ void UndoEngine::DoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
 				break;
 		}
 	}
-	DealWithTransients();
+	DealWithTransients(tree->m_treemap);
 }
 
 

@@ -59,6 +59,7 @@ public:
 	int GetType()const{return ConstraintType;}
 	const wxChar* GetTypeString(void)const{return _("Constraint");}
 	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/line");}
+	void Disconnect(std::list<HeeksObj*> parents);
 	void WriteXML(TiXmlNode *root);
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 	static void BeginSave();

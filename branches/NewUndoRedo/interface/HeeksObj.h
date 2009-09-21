@@ -102,6 +102,7 @@ public:
 	virtual HeeksObj *MakeACopy()const = 0;
 	virtual HeeksObj *MakeACopyWithID();
 	virtual void ReloadPointers(){}
+	virtual void Disconnect(std::list<HeeksObj*>parents){}
 	virtual void CopyFrom(const HeeksObj* object){}
 	virtual void SetColor(const HeeksColor &col){}
 	virtual const HeeksColor* GetColor()const{return NULL;}

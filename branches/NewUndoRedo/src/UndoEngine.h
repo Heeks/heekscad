@@ -63,5 +63,5 @@ protected:
 
 	void PrintTrees();
 	void PrintTree(HeeksObj* tree, std::stringstream &cstr, int level);
-	void DealWithTransients();
+	void DealWithTransients(std::map<HeeksObjId,HeeksObj*> &treemap);
 };

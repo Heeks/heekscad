@@ -5,10 +5,9 @@
 #pragma once
 
 class TransientObject: public HeeksObj{
-private:
+public:
 	HeeksObj* m_object;
 
-public:
 	TransientObject(HeeksObj* object);
 
 	// HeeksObj's virtual functions

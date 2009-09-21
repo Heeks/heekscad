@@ -10,8 +10,9 @@ TransientObject::TransientObject(HeeksObj* obj)
 	wxGetApp().WentTransient(obj,this);
 }
 
-//Transient objects can never be copied
 HeeksObj* TransientObject::MakeACopy()const
 {
-	return NULL;
+	TransientObject *tobj = new TransientObject(*this);
+	wxGetApp().WentTransient(m_object,tobj);
+	return tobj;
 }
