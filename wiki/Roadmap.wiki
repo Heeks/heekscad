@@ -12,26 +12,24 @@ It isn't clear to me if we should start milestoning before or after 1.0. The fol
 
   # Verify current dxf import capabilities. Elliptic arcs may not work.
   # Dxf export is seriously behind import.
-  # Svg import not working for some users under linux.
-  # Get the new drawing functions to work. Possibly via flyout toolbars.
-  # Sketch mode needs to be more accessible/exitable
-  # Many of the drawing functions and editing functions do not work properly in other coordinate systems.
+  # Svg import not working for some users under linux. (is this a fluke, probably need some sort of testing)
+  # Get the new drawing functions to work. Flyout toolbars are done, just need more buttons.
+  # Many of the drawing functions and editing functions do not work properly in other coordinate systems. Sketches need to have a plane defined, and all points being moved around should be projected onto that plane. 
   # Set some kind of maximum undo depth.
+  # Garbage collector for HeeksObj's. Should be tied into the UndoEngine somehow as this is the only way objects every get deleted. 
   # Ellipses and Elliptic arcs should be different entities
-  # Cut, paste, undo, redo all require a graph copy to be implemented to work with constraints.
   # Pretty symbolism for constraints.
   # New dimension object with 3 modes (horizontal,vertical,pythagorean) which can be reference to 2 HPoint objects and will follow them around.
   # Angle between lines dimension object
-  # Allow extrusion of multiple sketches/ or sketches with multiple paths
+
+= M2 = 
+
+  # Start making a new set of 3d primitives that have sketches instead of faces. Eventually we will work on converting the imported geometry into this form.
 
 = Wishlist = 
 
   # Svg export
   # Linewidth and color from dxf and svg
-  # Filled polygons 
   # Block and reference objects.
-  # Much cooler undo engine. (takes larger and larger time steps in the past and is able to save just the modified portions of the graph)
-  # extrude multiple, self intersecting, and multipath sketches into objects with holes
   # Constraint inference engine. (Infers constraints when loading non native file formats)
   # Allow transformations by non orthogonal matrices. Start with 2d stuff, then move to 3d
-  # Start making a new set of 3d primitives that have sketches instead of faces. Eventually we will work on converting the imported geometry into this form.
