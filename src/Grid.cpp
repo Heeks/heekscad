@@ -190,7 +190,7 @@ static void RenderGrid(const CViewPoint *view_point, int plane)
 	switch(wxGetApp().grid_mode){
 	case 1:
 		{
-			const HeeksColor& bg = wxGetApp().background_color;
+			const HeeksColor& bg = wxGetApp().background_color[0];
 			HeeksColor cc = bg.best_black_or_white();
 			gp_Vec v_bg((double)bg.red, (double)bg.green, (double)bg.blue);
 			gp_Vec v_cc((double)cc.red, (double)cc.green, (double)cc.blue);
@@ -239,7 +239,7 @@ static void RenderGrid(const CViewPoint *view_point, int plane)
 	case 2:
 	case 3:
 		{
-			const HeeksColor& bg = wxGetApp().background_color;
+			const HeeksColor& bg = wxGetApp().background_color[0];
 			HeeksColor cc = bg.best_black_or_white();
 			bool light_color = cc.red + cc.green + cc.blue > 384;
 			if(!wxGetApp().m_antialiasing)

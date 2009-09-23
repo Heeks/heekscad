@@ -62,14 +62,64 @@ void CGraphicsCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 	}
 
 	m_view_point.SetViewport();
+
+	if(wxGetApp().m_background_mode != BackgroundModeOneColor)
+	{
+		// draw graduated background
+
+		glClear(GL_DEPTH_BUFFER_BIT);
+		glMatrixMode (GL_PROJECTION);
+		glLoadIdentity ();
+		gluOrtho2D (0.0, 1.0, 0.0, 1.0);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+
+		// set up which colors to use
+		HeeksColor c[4];
+		for(int i = 0; i<4; i++)c[i] = wxGetApp().background_color[i];
+		switch(wxGetApp().m_background_mode)
+		{
+		case BackgroundModeTwoColors:
+			c[2] = c[0];
+			c[3] = c[1];
+			break;
+		case BackgroundModeTwoColorsLeftToRight:
+			c[1] = c[0];
+			c[3] = c[2];
+			break;
+		default:
+			break;
+		}
+
+		glShadeModel(GL_SMOOTH);
+		glBegin(GL_QUADS);
+		c[0].glColor();
+		glVertex2f (0.0, 1.0);
+		c[1].glColor();
+		glVertex2f (0.0, 0.0);
+		c[3].glColor();
+		glVertex2f (1.0, 0.0);
+		c[2].glColor();
+		glVertex2f (1.0, 1.0);
+
+
+		glEnd();
+		glShadeModel(GL_FLAT);
+	}
+
 	m_view_point.SetProjection(true);
 	m_view_point.SetModelview();
 
-
-	wxGetApp().background_color.glClearColor(wxGetApp().m_antialiasing ? 0.0f : 1.0f);
-
-	// clear the buffer
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	if(wxGetApp().m_background_mode == BackgroundModeOneColor)
+	{
+		// clear the back buffer
+		wxGetApp().background_color[0].glClearColor(wxGetApp().m_antialiasing ? 0.0f : 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+	else
+	{
+		glClear(GL_DEPTH_BUFFER_BIT);
+	}
 
 	// render everything
 	wxGetApp().glCommandsAll(false, m_view_point);

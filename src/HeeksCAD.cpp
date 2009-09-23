@@ -87,7 +87,11 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_version_number = _T("0 8 2");
 	m_geom_tol = 0.000001;
 	m_view_units = 1.0;
-	background_color = HeeksColor(0, 0, 0);
+	background_color[0] = HeeksColor(255, 175, 96);
+	background_color[1] = HeeksColor(198, 217, 119);
+	background_color[2] = HeeksColor(247, 198, 243);
+	background_color[3] = HeeksColor(193, 235, 236);
+	m_background_mode = BackgroundModeTwoColors;
 	current_color = HeeksColor(0, 0, 0);
 	construction_color = HeeksColor(0, 0, 255);
 	input_mode_object = NULL;
@@ -216,16 +220,23 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("DrawGrid"), &digitizing_grid);
 	config.Read(_T("DrawRadius"), &digitizing_radius);
 	{
-		wxString str;
-		config.Read(_T("BackgroundColor"), &str, _T("242 204 162"));
-		int r = 0, g = 0, b = 0;
-#if wxUSE_UNICODE
-		swscanf(str, _T("%d %d %d"), &r, &g, &b);
-#else
-		sscanf(str, _T("%d %d %d"), &r, &g, &b);
-#endif
-		background_color = HeeksColor((unsigned char)r, (unsigned char)g, (unsigned char)b);
+		int color0 = 0;
+		int color1 = 0;
+		int color2 = 0;
+		int color3 = 0;
+		config.Read(_T("BackgroundColor0"), &color0);
+		config.Read(_T("BackgroundColor1"), &color1);
+		config.Read(_T("BackgroundColor2"), &color2);
+		config.Read(_T("BackgroundColor3"), &color3);
+		background_color[0] = HeeksColor(color0);
+		background_color[1] = HeeksColor(color1);
+		background_color[2] = HeeksColor(color2);
+		background_color[3] = HeeksColor(color3);
+		int mode;
+		config.Read(_T("BackgroundMode"), &mode);
+		m_background_mode = (BackgroundMode)mode;
 	}
+
 	{
 		wxString str;
 		config.Read(_T("CurrentColor"), &str, _T("0 0 0"));
@@ -345,7 +356,11 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("Allow3DRotaion"), allow3DRotaion);
 	config.Write(_T("DrawGrid"), digitizing_grid);
 	config.Write(_T("DrawRadius"), digitizing_radius);
-	config.Write(_T("BackgroundColor"), wxString::Format(_T("%d %d %d"), background_color.red, background_color.green, background_color.blue));
+	config.Write(_T("BackgroundColor0"), background_color[0].COLORREF_color());
+	config.Write(_T("BackgroundColor1"), background_color[1].COLORREF_color());
+	config.Write(_T("BackgroundColor2"), background_color[2].COLORREF_color());
+	config.Write(_T("BackgroundColor3"), background_color[3].COLORREF_color());
+	config.Write(_T("BackgroundMode"), (int)m_background_mode);
 	config.Write(_T("CurrentColor"), wxString::Format( _T("%d %d %d"), current_color.red, current_color.green, current_color.blue));
 	config.Write(_T("ConstructionColor"), wxString::Format(_T("%d %d %d"), construction_color.red, construction_color.green, construction_color.blue));
 	config.Write(_T("RotateMode"), m_rotate_mode);
@@ -1726,10 +1741,35 @@ gp_Trsf HeeksCADapp::GetDrawMatrix(bool get_the_appropriate_orthogonal)
 	return mat;
 }
 
-void on_set_background_color(HeeksColor value, HeeksObj* object)
+void on_set_background_color0(HeeksColor value, HeeksObj* object)
 {
-	wxGetApp().background_color = value;
+	wxGetApp().background_color[0] = value;
 	wxGetApp().Repaint();
+}
+
+void on_set_background_color1(HeeksColor value, HeeksObj* object)
+{
+	wxGetApp().background_color[1] = value;
+	wxGetApp().Repaint();
+}
+
+void on_set_background_color2(HeeksColor value, HeeksObj* object)
+{
+	wxGetApp().background_color[2] = value;
+	wxGetApp().Repaint();
+}
+
+void on_set_background_color3(HeeksColor value, HeeksObj* object)
+{
+	wxGetApp().background_color[3] = value;
+	wxGetApp().Repaint();
+}
+
+void on_set_background_mode(int value, HeeksObj* object)
+{
+	wxGetApp().m_background_mode = (BackgroundMode)value;
+	wxGetApp().Repaint();
+	wxGetApp().m_frame->m_options->RefreshByRemovingAndAddingAll();
 }
 
 void on_set_current_color(HeeksColor value, HeeksObj* object)
@@ -2120,7 +2160,37 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	view_options->m_list.push_back(new PropertyDouble(_("datum size"), CoordinateSystem::size, NULL, on_set_datum_size));
 	view_options->m_list.push_back(new PropertyCheck(_("datum size is pixels not mm"), CoordinateSystem::size_is_pixels, NULL, on_set_size_is_pixels));
 	view_options->m_list.push_back(new PropertyCheck(_("show ruler"), m_show_ruler, NULL, on_set_show_ruler));
-	view_options->m_list.push_back ( new PropertyColor ( _("background color"),  background_color, NULL, on_set_background_color ) );
+	{
+		std::list< wxString > choices;
+		choices.push_back ( wxString ( _("single color") ) );
+		choices.push_back ( wxString ( _("top color and bottom color") ) );
+		choices.push_back ( wxString ( _("left color and right color") ) );
+		choices.push_back ( wxString ( _("four corner colors") ) );
+		view_options->m_list.push_back ( new PropertyChoice ( _("background mode"),  choices, (int)m_background_mode, NULL, on_set_background_mode ) );
+	}
+	switch(m_background_mode)
+	{
+	case BackgroundModeOneColor:
+		view_options->m_list.push_back ( new PropertyColor ( _("background color"),  background_color[0], NULL, on_set_background_color0 ) );
+		break;
+
+	case BackgroundModeTwoColors:
+		view_options->m_list.push_back ( new PropertyColor ( _("top background color"),  background_color[0], NULL, on_set_background_color0 ) );
+		view_options->m_list.push_back ( new PropertyColor ( _("bottom background color"),  background_color[1], NULL, on_set_background_color1 ) );
+		break;
+
+	case BackgroundModeTwoColorsLeftToRight:
+		view_options->m_list.push_back ( new PropertyColor ( _("left background color"),  background_color[0], NULL, on_set_background_color0 ) );
+		view_options->m_list.push_back ( new PropertyColor ( _("right background color"),  background_color[2], NULL, on_set_background_color2 ) );
+		break;
+
+	case BackgroundModeFourColors:
+		view_options->m_list.push_back ( new PropertyColor ( _("top left background color"),  background_color[0], NULL, on_set_background_color0 ) );
+		view_options->m_list.push_back ( new PropertyColor ( _("bottom left background color"),  background_color[1], NULL, on_set_background_color1 ) );
+		view_options->m_list.push_back ( new PropertyColor ( _("top right background color"),  background_color[2], NULL, on_set_background_color2 ) );
+		view_options->m_list.push_back ( new PropertyColor ( _("bottom right background color"),  background_color[3], NULL, on_set_background_color3 ) );
+		break;
+	}
 	{
 		std::list< wxString > choices;
 		choices.push_back ( wxString ( _("no grid") ) );
@@ -2288,7 +2358,7 @@ void HeeksCADapp::AddUndoably(const std::list<HeeksObj*> &list, HeeksObj* owner)
 
 void HeeksCADapp::glColorEnsuringContrast(const HeeksColor &c)
 {
-	if(c == background_color)background_color.best_black_or_white().glColor();
+	if(c == background_color[0])background_color[0].best_black_or_white().glColor();
 	else c.glColor();
 }
 
@@ -3127,7 +3197,7 @@ void HeeksCADapp::render_screen_text(const wxChar* str1, const wxChar* str2)
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	m_frame->m_graphics->SetIdentityProjection();
-	background_color.best_black_or_white().glColor();
+	background_color[0].best_black_or_white().glColor();
 	int w, h;
 	m_frame->m_graphics->GetClientSize(&w, &h);
 	glTranslated(2.0, h - 1.0, 0.0);
