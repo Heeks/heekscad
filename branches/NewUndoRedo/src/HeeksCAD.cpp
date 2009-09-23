@@ -1578,7 +1578,10 @@ void HeeksCADapp::Remove(HeeksObj* object)
 	while(owner)
 	{
 		if(owner != this)
-			object->Owner()->Remove(object);
+		{
+			owner->Remove(object);
+			owner->ReloadPointers();
+		}
 		else
 			ObjList::Remove(object);
 		owner = object->GetNextOwner();
