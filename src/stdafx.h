@@ -164,6 +164,7 @@
 #include "wx/object.h"
 #include "wx/panel.h"
 #include "wx/pen.h"
+#include "wx/popupwin.h"
 #include <wx/print.h>
 #include <wx/printdlg.h>
 #include "wx/settings.h"
@@ -173,9 +174,10 @@
 #include <wx/stdpaths.h>
 #include "wx/string.h"
 #include <wx/sizer.h>
-#include <wx/toolbar.h>
 #include "wx/textctrl.h"
 #include "wx/textdlg.h"
+#include <wx/toolbar.h>
+#include <wx/tooltip.h>
 #include <wx/treectrl.h>
 #include "wx/window.h"
 

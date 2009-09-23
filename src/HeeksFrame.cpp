@@ -1028,11 +1028,73 @@ void CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, Tool* tool)
 	}
 }
 
+class ToolBarPopup: public wxPopupTransientWindow
+{
+public:
+	wxToolBar *m_toolBar;
+
+public:
+	ToolBarPopup( wxWindow *parent, const CFlyOutList &flyout_list):wxPopupTransientWindow( parent )
+	{
+		m_panel = new wxScrolledWindow( this, wxID_ANY );
+		m_panel->SetBackgroundColour( *wxLIGHT_GREY );
+
+ 		m_toolBar = new wxToolBar(m_panel, -1, wxDefaultPosition, wxDefaultSize, wxTB_VERTICAL | wxTB_NODIVIDER | wxTB_FLAT);
+		m_toolBar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
+
+		int id_to_use = ID_FIRST_POP_UP_MENU_TOOL;
+
+		int i = 0;
+		for(std::list<CFlyOutItem>::const_iterator It = flyout_list.m_list.begin(); It != flyout_list.m_list.end(); It++, i++)
+		{
+			const CFlyOutItem &fo = *It;
+			int id_to_use = i+ID_FIRST_POP_UP_MENU_TOOL;
+			m_toolBar->AddTool(id_to_use, fo.m_title_and_bitmap, ToolImage(fo.m_title_and_bitmap), fo.m_tooltip);
+		}
+		m_toolBar->Realize();
+
+		wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
+		topSizer->Add( m_toolBar, 0, wxALL, 5 );
+
+		m_panel->SetAutoLayout( true );
+		m_panel->SetSizer( topSizer );
+		topSizer->Fit(m_panel);
+		topSizer->Fit(this);
+	}
+
+private:
+    wxScrolledWindow *m_panel;
+    wxButton *m_button;
+    wxStaticText *m_mouseText;
+
+	void OnMouse( wxMouseEvent &event )
+	{
+		if(event.Moving())
+		{
+			wxPoint pos = event.GetPosition();
+			wxToolBarToolBase* tool = m_toolBar->FindToolForPosition(event.GetPosition().x, event.GetPosition().y);
+			if(tool)
+			{
+				wxToolTip::Enable(true);
+			}
+		}
+		event.Skip();
+	}
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(ToolBarPopup, wxPopupTransientWindow)
+    EVT_MOUSE_EVENTS( ToolBarPopup::OnMouse )
+END_EVENT_TABLE()
+
 class CFlyOutButton: public wxBitmapButton
 {
 	CFlyOutList m_flyout_list;
 	wxToolBarToolBase* m_toolbar_tool;
-	std::list<wxMenuItem*> menu_items;
+	wxToolBar *m_toolBar;
+	ToolBarPopup* m_toolbarPopup;
 
 public:
     CFlyOutButton(const CFlyOutList &flyout_list,
@@ -1045,39 +1107,36 @@ public:
 		:wxBitmapButton(parent, id, bitmap, pos, size, wxBU_AUTODRAW | wxBU_EXACTFIT)
 		,m_flyout_list(flyout_list)
 		,m_toolbar_tool(toolbar_tool)
+		,m_toolBar(NULL)
+		,m_toolbarPopup(NULL)
 	{
 	}
     void OnMouse( wxMouseEvent& event )
 	{
 		if(event.LeftDown())
 		{
-			// make a popup menu
-			wxMenu *menu = new wxMenu;
+			// delete previous popup
+			delete m_toolbarPopup;
 
-			int i = 0;
-			menu_items.clear();
-			for(std::list<CFlyOutItem>::const_iterator It = m_flyout_list.m_list.begin(); It != m_flyout_list.m_list.end(); It++, i++)
-			{
-				const CFlyOutItem &fo = *It;
-				int id_to_use = i+ID_FIRST_POP_UP_MENU_TOOL;
-				wxMenuItem* menu_item = menu->Append(id_to_use, fo.m_tooltip);
-				wxBitmap* bitmap = NULL;
-				if(fo.m_title_and_bitmap.Len() > 0)bitmap = new wxBitmap(ToolImage(fo.m_title_and_bitmap));
-				if(bitmap)menu_item->SetBitmap(*bitmap);
-				menu_items.push_back(menu_item);
-			}
-
-			this->PopupMenu(menu);
+			// make a new popup toolbar
+			m_toolbarPopup = new ToolBarPopup( this, m_flyout_list );
+			wxWindow *btn = (wxWindow*) event.GetEventObject();
+			wxPoint pos = btn->ClientToScreen( wxPoint(0,0) );
+			wxSize sz = btn->GetSize();
+			m_toolbarPopup->Position( wxPoint(pos.x - sz.GetWidth() - m_toolbar_tool->GetToolBar()->GetToolBitmapSize().GetWidth() - m_toolbar_tool->GetToolBar()->GetMargins().GetWidth(), pos.y), sz );
+			m_toolbarPopup->Popup();
 		}
 	}
 	void OnMenuEvent(wxCommandEvent& event)
 	{
 		int i = 0;
-		std::list<wxMenuItem*>::iterator MIt = menu_items.begin();
-		for(std::list<CFlyOutItem>::const_iterator It = m_flyout_list.m_list.begin(); It != m_flyout_list.m_list.end(); It++, i++, MIt++)
+		for(std::list<CFlyOutItem>::const_iterator It = m_flyout_list.m_list.begin(); It != m_flyout_list.m_list.end(); It++, i++)
 		{
 			if( i+ID_FIRST_POP_UP_MENU_TOOL == event.GetId())
 			{
+				// hide the popup
+				m_toolbarPopup->Hide();
+
 				// call the OnButtonFunction
 				const CFlyOutItem &fo = *It;
 				(*fo.m_onButtonFunction)(event);
