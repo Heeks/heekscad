@@ -153,7 +153,7 @@ void UndoEngine::GetModificationsRecursive(std::vector<UndoEvent> &ret,ObjList* 
 		else
 		{
 			//TODO: check if item is modified, if it is an objlist, descend
-			if(obj->IsDifferent(old_children_map[*it]))
+			if(!obj->GetSkipForUndo() && obj->IsDifferent(old_children_map[*it]))
 			{
 				HeeksObj* copy = obj->MakeACopyWithID();
 				ret.push_back(UndoEvent(EventTypeModified,newtree,copy,old_children_map[*it]));
@@ -163,7 +163,7 @@ void UndoEngine::GetModificationsRecursive(std::vector<UndoEvent> &ret,ObjList* 
 			{
 				ObjList* newlist = dynamic_cast<ObjList*>(obj);
 				ObjList* oldlist = dynamic_cast<ObjList*>(old_children_map[*it]);
-				if(newlist && newlist->DescendForUndo())
+				if(newlist)
 				{
 					GetModificationsRecursive(ret,newlist,oldlist);
 				}
@@ -251,6 +251,7 @@ void UndoEngine::UndoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
 		{
 			case EventTypeAdd:
 				tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Remove(tree->m_treemap[GetHeeksObjId(evt.m_object)]);
+				tree->m_treemap[GetHeeksObjId(evt.m_parent)]->ReloadPointers();
 				break;
 			case EventTypeModified:
 				{
@@ -265,6 +266,8 @@ void UndoEngine::UndoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
 					HeeksObj* new_obj = evt.m_object->MakeACopyWithID();
 					tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Add(new_obj,NULL);
 					tree->m_treemap[GetHeeksObjId(new_obj)] = new_obj;
+					new_obj->ReloadPointers();
+					new_obj->Owner()->ReloadPointers();
 				}
 				break;
 		}
@@ -285,6 +288,8 @@ void UndoEngine::DoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
 					HeeksObj* new_obj = evt.m_object->MakeACopyWithID();
 					tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Add(new_obj,NULL);
 					tree->m_treemap[GetHeeksObjId(new_obj)] = new_obj;
+					new_obj->ReloadPointers();
+					new_obj->Owner()->ReloadPointers();
 				}
 				break;
 			case EventTypeModified:
@@ -297,6 +302,7 @@ void UndoEngine::DoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
 				break;
 			case EventTypeRemove:
 				tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Remove(tree->m_treemap[GetHeeksObjId(evt.m_object)]);
+				tree->m_treemap[GetHeeksObjId(evt.m_parent)]->ReloadPointers();
 				break;
 		}
 		DealWithTransients(tree->m_treemap);

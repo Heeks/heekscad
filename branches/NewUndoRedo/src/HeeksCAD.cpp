@@ -1474,6 +1474,7 @@ void HeeksCADapp::Undo(void)
 	history->Undo();
 	Changed();
 	m_marked_list->Clear(true);
+	Repaint();
 }
 
 void HeeksCADapp::Redo(void)
@@ -1481,6 +1482,7 @@ void HeeksCADapp::Redo(void)
 	history->Redo();
 	Changed();
 	m_marked_list->Clear(true);
+	Repaint();
 }
 
 void HeeksCADapp::WentTransient(HeeksObj* obj, TransientObject *tobj)

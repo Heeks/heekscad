@@ -41,6 +41,10 @@ Constraint::Constraint(const Constraint* obj){
 	m_length = obj->m_length;
 	m_obj1 = obj->m_obj1;
 	m_obj2 = obj->m_obj2;
+	m_obj1->Add(this,NULL);
+	if(m_obj2)
+		m_obj2->Add(this,NULL);
+
 }
 
 Constraint::Constraint(EnumConstraintType type,EnumAbsoluteAngle angle, ConstrainedObject* obj)
@@ -84,6 +88,7 @@ Constraint::Constraint(EnumConstraintType type,double length,ConstrainedObject* 
 	m_obj1 = obj1;
 	m_obj2 = 0;
 	m_length = length;
+	obj1->Add(this,NULL);
 }
 
 const Constraint& Constraint::operator=(const Constraint &b){
@@ -130,6 +135,35 @@ void Constraint::ReloadPointers()
 		int x=0;
 		x++;
 	}
+}
+
+bool Constraint::IsDifferent(HeeksObj* o)
+{
+	Constraint* other = (Constraint*)o;
+	if(m_type != other->m_type || m_angle != other->m_angle || m_length != other->m_length)
+		return true;
+
+	int id1_1=0;
+	int id1_2=0;
+	int id2_1=0;
+	int id2_2=0;
+
+	if(m_obj1)
+		id1_1 = m_obj1->m_id;
+	if(other->m_obj1)
+		id1_2 = other->m_obj1->m_id;
+	if(m_obj2)
+		id2_1 = m_obj2->m_id;
+	if(other->m_obj2)
+		id2_2 = other->m_obj2->m_id;
+
+	if(id1_1 != id1_2 && id1_1 != id2_2)
+		return true;
+
+	if(id2_1 != id2_2 && id2_1 != id1_2)
+		return true;
+
+	return false;
 }
 
 void Constraint::render_text(const wxChar* str)

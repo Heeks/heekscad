@@ -15,6 +15,8 @@ EndedObject::EndedObject(const HeeksColor* color){
 	B = new HPoint(gp_Pnt(),color);
 	A->m_draw_unselected = false;
 	B->m_draw_unselected = false;
+	A->SetSkipForUndo(true);
+	B->SetSkipForUndo(true);
 	Add(A,NULL);
 	Add(B,NULL);
 }
