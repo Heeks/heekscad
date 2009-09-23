@@ -451,7 +451,6 @@ void CombineSketches::Run(){
 
 void UniteSketches::Run(){
 #if 1 // use MultiPoly, doesn't work yet
-	CSketch* sketch1 = NULL;
 	std::list<HeeksObj*>::const_iterator It;
 	std::list<HeeksObj*> copy_of_marked_list = wxGetApp().m_marked_list->list();
 
