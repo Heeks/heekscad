@@ -87,11 +87,11 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_version_number = _T("0 8 2");
 	m_geom_tol = 0.000001;
 	m_view_units = 1.0;
-	background_color[0] = HeeksColor(255, 175, 96);
-	background_color[1] = HeeksColor(198, 217, 119);
-	background_color[2] = HeeksColor(247, 198, 243);
+	background_color[0] = HeeksColor(0, 0, 0);
+	background_color[1] = HeeksColor(0, 0, 0);
+	background_color[2] = HeeksColor(0, 0, 0);
 	background_color[3] = HeeksColor(193, 235, 236);
-	m_background_mode = BackgroundModeTwoColors;
+	m_background_mode = BackgroundModeOneColor;
 	current_color = HeeksColor(0, 0, 0);
 	construction_color = HeeksColor(0, 0, 255);
 	input_mode_object = NULL;
@@ -220,10 +220,10 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("DrawGrid"), &digitizing_grid);
 	config.Read(_T("DrawRadius"), &digitizing_radius);
 	{
-		int color0 = 0;
-		int color1 = 0;
-		int color2 = 0;
-		int color3 = 0;
+		int color0 = HeeksColor(255, 175, 96).COLORREF_color();
+		int color1 = HeeksColor(198, 217, 119).COLORREF_color();
+		int color2 = HeeksColor(247, 198, 243).COLORREF_color();
+		int color3 = HeeksColor(193, 235, 236).COLORREF_color();
 		config.Read(_T("BackgroundColor0"), &color0);
 		config.Read(_T("BackgroundColor1"), &color1);
 		config.Read(_T("BackgroundColor2"), &color2);
@@ -232,7 +232,7 @@ bool HeeksCADapp::OnInit()
 		background_color[1] = HeeksColor(color1);
 		background_color[2] = HeeksColor(color2);
 		background_color[3] = HeeksColor(color3);
-		int mode;
+		int mode = (int)BackgroundModeTwoColors;
 		config.Read(_T("BackgroundMode"), &mode);
 		m_background_mode = (BackgroundMode)mode;
 	}
