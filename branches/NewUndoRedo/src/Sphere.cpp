@@ -18,6 +18,11 @@ CSphere::CSphere(const TopoDS_Solid &solid, const wxChar* title, const HeeksColo
 {
 }
 
+const CSphere& CSphere::operator=(const CSphere &b){
+	CSolid::operator=(b);
+	return *this;
+}
+
 HeeksObj *CSphere::MakeACopy(void)const
 {
 	return new CSphere(*this);

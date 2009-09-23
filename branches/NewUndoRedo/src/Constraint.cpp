@@ -123,10 +123,13 @@ void Constraint::Disconnect(std::list<HeeksObj*> parents)
 
 void Constraint::ReloadPointers()
 {
-	if(m_obj1)
-		m_obj1 = (ConstrainedObject*)GetFirstOwner();
-	if(m_obj2)
-		m_obj2 = (ConstrainedObject*)GetNextOwner();
+	m_obj1 = (ConstrainedObject*)GetFirstOwner();
+	m_obj2 = (ConstrainedObject*)GetNextOwner();
+	if(!m_obj2)
+	{
+		int x=0;
+		x++;
+	}
 }
 
 void Constraint::render_text(const wxChar* str)

@@ -314,6 +314,10 @@ void AddPointConstraints(HPoint* point)
 			continue;
 		if(con->m_type == CoincidantPointConstraint)
 		{
+			if(!con->m_obj1 || !con->m_obj2)
+				continue;
+
+
 			constraint c;
 			c.type = pointOnPoint;
 			//TODO: owner() could be an harc, but m_obj is the center point

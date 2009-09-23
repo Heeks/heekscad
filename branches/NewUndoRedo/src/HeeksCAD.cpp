@@ -1485,7 +1485,7 @@ void HeeksCADapp::Redo(void)
 
 void HeeksCADapp::WentTransient(HeeksObj* obj, TransientObject *tobj)
 {
-	m_transient_objects[(HeeksObj*)tobj]=obj;
+	m_transient_objects[(HeeksObj*)tobj].push_back(obj);
 }
 
 void HeeksCADapp::ClearTransients()
@@ -1493,7 +1493,7 @@ void HeeksCADapp::ClearTransients()
 	m_transient_objects.clear();
 }
 
-std::map<HeeksObj*,HeeksObj*>& HeeksCADapp::GetTransients()
+std::map<HeeksObj*,std::list<HeeksObj*> >& HeeksCADapp::GetTransients()
 {
 	return m_transient_objects;
 }

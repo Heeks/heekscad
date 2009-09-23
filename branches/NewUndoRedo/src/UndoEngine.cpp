@@ -63,9 +63,24 @@ void UndoEngine::RecalculateMapsRecursive(std::map<HeeksObjId,HeeksObj*> &treema
 	HeeksObj *new_obj = obj->GetFirstChild();
 	while(new_obj)
 	{
+		//Check the owner for debugging
+		//TODO: This is fubar, WTF is causing objects to get copied with no owners
+		//only happens when they objects are > 2 levels deep. 
+		bool found=false;
+		HeeksObj* owner = new_obj->GetFirstOwner();
+		while(owner)
+		{
+			if(owner == obj)
+				found=true;
+			owner = new_obj->GetNextOwner();
+		}
+		if(!found)
+		{
+			new_obj->AddOwner(obj);
+		}
+
 		HeeksObjId id = GetHeeksObjId(new_obj);
 		treemap[id] = new_obj;
-
 		ObjList* new_list = dynamic_cast<ObjList*>(new_obj);
 
 		//Always descend when generating the map
@@ -170,35 +185,38 @@ void UndoEngine::GetModificationsRecursive(std::vector<UndoEvent> &ret,ObjList* 
 
 void UndoEngine::DealWithTransients(std::map<HeeksObjId,HeeksObj*> &treemap)
 {
-	std::map<HeeksObj*,HeeksObj*>& map = wxGetApp().GetTransients();
+	std::map<HeeksObj*,std::list<HeeksObj*> >& map = wxGetApp().GetTransients();
 	
-	std::map<HeeksObj*,HeeksObj*>::iterator it;
+	std::map<HeeksObj*,std::list<HeeksObj*> >::iterator it;
 	std::list<HeeksObj*> needupdate;
 	for(it = map.begin(); it!= map.end(); it++)
 	{
 		TransientObject *tobj = (TransientObject*)(*it).first;
-		HeeksObj* obj = (HeeksObj*)(*it).second;
-		std::map<HeeksObjId,HeeksObj*>::iterator it2 = treemap.find(GetHeeksObjId(obj));
-		if(it2 == treemap.end())
-		{
-			HeeksObj* nobj = obj->MakeACopyWithID();
-			nobj->RemoveOwners();
-			needupdate.push_back(nobj);
-			treemap[GetHeeksObjId(nobj)] = nobj;
-			tobj->Owner()->Add(nobj,NULL);
 
-		}
-		else
+		std::list<HeeksObj*>::iterator it2;
+		for(it2 = (*it).second.begin(); it2 != (*it).second.end(); it2++)
 		{
-			needupdate.push_back((*it2).second);
-			tobj->Owner()->Add((*it2).second, NULL);
+			HeeksObj* obj = (HeeksObj*)(*it2);
+			std::map<HeeksObjId,HeeksObj*>::iterator it3 = treemap.find(GetHeeksObjId(obj));
+			if(it3 == treemap.end())
+			{
+				HeeksObj* nobj = obj->MakeACopyWithID();
+				nobj->RemoveOwners();
+				needupdate.push_back(nobj);
+				treemap[GetHeeksObjId(nobj)] = nobj;
+				tobj->Owner()->Add(nobj,NULL);
+
+			}
+			else
+			{
+				needupdate.push_back((*it3).second);
+				tobj->Owner()->Add((*it3).second, NULL);
+			}
 		}
 
 		tobj->Owner()->Remove(tobj);
 		//delete tobj;
 	}
-
-	wxGetApp().ClearTransients();
 
 	//Deal with the quick pointer problem
 	std::list<HeeksObj*>::iterator it2;
@@ -213,7 +231,8 @@ void UndoEngine::DealWithTransients(std::map<HeeksObjId,HeeksObj*> &treemap)
 		}
 		obj->ReloadPointers();
 	}
-	
+
+	wxGetApp().ClearTransients();	
 }
 
 bool UndoEngine::IsModified()
@@ -249,9 +268,8 @@ void UndoEngine::UndoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
 				}
 				break;
 		}
+		DealWithTransients(tree->m_treemap);
 	}
-
-	DealWithTransients(tree->m_treemap);
 }
 
 void UndoEngine::DoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
@@ -281,8 +299,8 @@ void UndoEngine::DoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
 				tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Remove(tree->m_treemap[GetHeeksObjId(evt.m_object)]);
 				break;
 		}
+		DealWithTransients(tree->m_treemap);
 	}
-	DealWithTransients(tree->m_treemap);
 }
 
 

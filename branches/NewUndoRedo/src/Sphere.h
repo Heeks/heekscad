@@ -17,6 +17,8 @@ public:
 	CSphere(const gp_Pnt& pos, double radius, const wxChar* title, const HeeksColor& col);
 	CSphere(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
 
+	virtual const CSphere& operator=(const CSphere& s);
+
 	// HeeksObj's virtual functions
 	const wxChar* GetTypeString(void)const{return _("Sphere");}
 	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/sphere");}

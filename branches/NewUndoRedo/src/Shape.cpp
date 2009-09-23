@@ -53,12 +53,16 @@ CShape::~CShape()
 
 const CShape& CShape::operator=(const CShape& s)
 {
+	//ObjList::operator = (s);
+	HeeksObj::operator = (s);
+
 	// don't copy id
 	delete_faces_and_edges();
 	m_box = s.m_box;
 	m_shape = s.m_shape;
 	m_title = s.m_title;
 	m_color = s.m_color;
+
 	create_faces_and_edges();
 	KillGLLists();
 
