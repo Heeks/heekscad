@@ -979,7 +979,7 @@ void CHeeksCADInterface::STLSolidAddTriangle(HeeksObj* stl_solid, float* t)
 
 const HeeksColor& CHeeksCADInterface::GetBackgroundColor()
 {
-	return wxGetApp().background_color;
+	return wxGetApp().background_color[0];
 }
 
 void CHeeksCADInterface::SetColor(int r, int b, int g)

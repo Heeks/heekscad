@@ -50,6 +50,14 @@ enum FileOpenOrImportType
 	FileOpenOrImportTypeDxf
 };
 
+enum BackgroundMode
+{
+	BackgroundModeOneColor,
+	BackgroundModeTwoColors,
+	BackgroundModeTwoColorsLeftToRight,
+	BackgroundModeFourColors
+};
+
 class HeeksCADapp : public wxApp, public ObjList
 {
 private:
@@ -73,7 +81,8 @@ public:
 	wxPoint cur_mouse_pos;
 	HeeksColor current_color;
 	HeeksColor construction_color;
-	HeeksColor background_color;
+	HeeksColor background_color[4];
+	BackgroundMode m_background_mode;
 	bool m_gl_font_initialized;
 	int m_rotate_mode;
 	bool m_antialiasing;
