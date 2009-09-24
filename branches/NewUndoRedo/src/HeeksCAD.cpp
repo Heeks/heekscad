@@ -59,6 +59,8 @@
 #include "HeeksConfig.h"
 #include "Group.h"
 #include "RS274X.h"
+#include "CxfFont.h"
+
 using namespace std;
 
 IMPLEMENT_APP(HeeksCADapp)
@@ -81,10 +83,14 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	_CrtSetAllocHook(MyAllocHook);
 #endif
 
-	m_version_number = _T("0 8 2");
+	m_version_number = _T("0 9 0");
 	m_geom_tol = 0.000001;
 	m_view_units = 1.0;
-	background_color = HeeksColor(0, 0, 0);
+	background_color[0] = HeeksColor(0, 0, 0);
+	background_color[1] = HeeksColor(0, 0, 0);
+	background_color[2] = HeeksColor(0, 0, 0);
+	background_color[3] = HeeksColor(193, 235, 236);
+	m_background_mode = BackgroundModeOneColor;
 	current_color = HeeksColor(0, 0, 0);
 	construction_color = HeeksColor(0, 0, 255);
 	input_mode_object = NULL;
@@ -140,6 +146,12 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_max_scale_threshold = 1.5;
 	m_number_of_sample_points = 10;
 	m_property_grid_validation = false;
+
+	m_font_paths = _("/usr/share/qcad/fonts");
+	m_stl_facet_tolerance = 0.1;
+	GetAvailableFonts();
+	
+	m_pCxfFont = NULL;	// Default to internal (OpenGL) font.
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -156,6 +168,9 @@ HeeksCADapp::~HeeksCADapp()
 	delete m_ruler;
 	if(m_printData)delete m_printData;
 	if(m_pageSetupData)delete m_pageSetupData;
+
+	m_pCxfFont = NULL;	// Don't free this here.  This memory will be released via ~CxfFonts() instead.
+	if (m_pCxfFonts.get() != NULL) delete m_pCxfFonts.release();
 }
 
 bool HeeksCADapp::OnInit()
@@ -202,16 +217,23 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("DrawGrid"), &digitizing_grid);
 	config.Read(_T("DrawRadius"), &digitizing_radius);
 	{
-		wxString str;
-		config.Read(_T("BackgroundColor"), &str, _T("242 204 162"));
-		int r = 0, g = 0, b = 0;
-#if wxUSE_UNICODE
-		swscanf(str, _T("%d %d %d"), &r, &g, &b);
-#else
-		sscanf(str, _T("%d %d %d"), &r, &g, &b);
-#endif
-		background_color = HeeksColor((unsigned char)r, (unsigned char)g, (unsigned char)b);
+		int color0 = HeeksColor(255, 175, 96).COLORREF_color();
+		int color1 = HeeksColor(198, 217, 119).COLORREF_color();
+		int color2 = HeeksColor(247, 198, 243).COLORREF_color();
+		int color3 = HeeksColor(193, 235, 236).COLORREF_color();
+		config.Read(_T("BackgroundColor0"), &color0);
+		config.Read(_T("BackgroundColor1"), &color1);
+		config.Read(_T("BackgroundColor2"), &color2);
+		config.Read(_T("BackgroundColor3"), &color3);
+		background_color[0] = HeeksColor(color0);
+		background_color[1] = HeeksColor(color1);
+		background_color[2] = HeeksColor(color2);
+		background_color[3] = HeeksColor(color3);
+		int mode = (int)BackgroundModeTwoColors;
+		config.Read(_T("BackgroundMode"), &mode);
+		m_background_mode = (BackgroundMode)mode;
 	}
+
 	{
 		wxString str;
 		config.Read(_T("CurrentColor"), &str, _T("0 0 0"));
@@ -261,6 +283,9 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("MinCorrelationFactor"), &m_min_correlation_factor);
 	config.Read(_T("MaxScaleThreshold"), &m_max_scale_threshold);
 	config.Read(_T("NumberOfSamplePoints"), &m_number_of_sample_points);
+	
+	config.Read(_T("FontPaths"), &m_font_paths, _T("/usr/share/qcad/fonts"));
+	config.Read(_T("STLFacetTolerance"), &m_stl_facet_tolerance, 0.1);
 
 	m_ruler->ReadFromConfig(config);
 
@@ -328,7 +353,11 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("Allow3DRotaion"), allow3DRotaion);
 	config.Write(_T("DrawGrid"), digitizing_grid);
 	config.Write(_T("DrawRadius"), digitizing_radius);
-	config.Write(_T("BackgroundColor"), wxString::Format(_T("%d %d %d"), background_color.red, background_color.green, background_color.blue));
+	config.Write(_T("BackgroundColor0"), background_color[0].COLORREF_color());
+	config.Write(_T("BackgroundColor1"), background_color[1].COLORREF_color());
+	config.Write(_T("BackgroundColor2"), background_color[2].COLORREF_color());
+	config.Write(_T("BackgroundColor3"), background_color[3].COLORREF_color());
+	config.Write(_T("BackgroundMode"), (int)m_background_mode);
 	config.Write(_T("CurrentColor"), wxString::Format( _T("%d %d %d"), current_color.red, current_color.green, current_color.blue));
 	config.Write(_T("ConstructionColor"), wxString::Format(_T("%d %d %d"), construction_color.red, construction_color.green, construction_color.blue));
 	config.Write(_T("RotateMode"), m_rotate_mode);
@@ -356,6 +385,8 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("MinCorrelationFactor"), m_min_correlation_factor);
 	config.Write(_T("MaxScaleThreshold"), m_max_scale_threshold);
 	config.Write(_T("NumberOfSamplePoints"), m_number_of_sample_points);
+	config.Write(_T("FontPaths"), m_font_paths);
+	config.Write(_T("STLFacetTolerance"), m_stl_facet_tolerance);
 
 	m_ruler->WriteToConfig(config);
 
@@ -620,7 +651,7 @@ void HeeksCADapp::InitializeXMLFunctions()
 void HeeksCADapp::RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem))
 {
 	if(xml_read_fn_map.find(type_name) != xml_read_fn_map.end()){
-		wxMessageBox(_T("Error - trying to register an XML read function for an exisiting type"));
+		wxMessageBox(_T("Error - trying to register an XML read function for an existing type"));
 		return;
 	}
 	xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( type_name, read_xml_function ) );
@@ -967,7 +998,7 @@ void HeeksCADapp::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar 
 	for(std::list<HeeksObj*>::iterator It = m_objects.begin(); It != m_objects.end(); It++)
 	{
 		HeeksObj* object = *It;
-		object->GetTriangles(write_stl_triangle, 0.1);
+		object->GetTriangles(write_stl_triangle, m_stl_facet_tolerance);
 	}
 
 	ofs<<"endsolid"<<endl;
@@ -1625,10 +1656,35 @@ gp_Trsf HeeksCADapp::GetDrawMatrix(bool get_the_appropriate_orthogonal)
 	return mat;
 }
 
-void on_set_background_color(HeeksColor value, HeeksObj* object)
+void on_set_background_color0(HeeksColor value, HeeksObj* object)
 {
-	wxGetApp().background_color = value;
+	wxGetApp().background_color[0] = value;
 	wxGetApp().Repaint();
+}
+
+void on_set_background_color1(HeeksColor value, HeeksObj* object)
+{
+	wxGetApp().background_color[1] = value;
+	wxGetApp().Repaint();
+}
+
+void on_set_background_color2(HeeksColor value, HeeksObj* object)
+{
+	wxGetApp().background_color[2] = value;
+	wxGetApp().Repaint();
+}
+
+void on_set_background_color3(HeeksColor value, HeeksObj* object)
+{
+	wxGetApp().background_color[3] = value;
+	wxGetApp().Repaint();
+}
+
+void on_set_background_mode(int value, HeeksObj* object)
+{
+	wxGetApp().m_background_mode = (BackgroundMode)value;
+	wxGetApp().Repaint();
+	wxGetApp().m_frame->m_options->RefreshByRemovingAndAddingAll();
 }
 
 void on_set_current_color(HeeksColor value, HeeksObj* object)
@@ -1949,6 +2005,10 @@ void on_dxf_make_sketch(bool value, HeeksObj* object){
 	HeeksDxfRead::m_make_as_sketch = value;
 }
 
+void on_stl_facet_tolerance(double value, HeeksObj* object){
+	wxGetApp().m_stl_facet_tolerance = value;
+}
+
 static void on_set_units(int value, HeeksObj* object)
 {
 	wxGetApp().m_view_units = (value == 0) ? 1.0:25.4;
@@ -1959,6 +2019,35 @@ static void on_set_units(int value, HeeksObj* object)
 	wxGetApp().m_ruler->KillGLLists();
 	wxGetApp().SetStatusText();
 	wxGetApp().Repaint();
+}
+
+static void on_set_font(int zero_based_choice, HeeksObj *obj)
+{
+	if (zero_based_choice == 0)
+	{
+		wxGetApp().m_pCxfFont = NULL;
+		return;
+	} // End if - then
+
+	std::set<wxString> names = wxGetApp().GetAvailableFonts()->FontNames();
+	std::vector<wxString> vector_names;
+	vector_names.push_back(_("OpenGL"));	// Keep the zero-based offset.
+	std::copy( names.begin(), names.end(), std::inserter( vector_names, vector_names.end() ) );
+	if (zero_based_choice < int(vector_names.size()))
+	{
+		wxGetApp().m_pCxfFont = wxGetApp().GetAvailableFonts()->Font( CxfFont::Name_t(vector_names[zero_based_choice].c_str()) );
+	}
+}
+
+
+static void on_edit_font_paths(const wxChar* value, HeeksObj* object)
+{
+	wxGetApp().m_font_paths.assign(value);
+	if (wxGetApp().m_pCxfFonts.get()) delete wxGetApp().m_pCxfFonts.release();
+	wxGetApp().GetAvailableFonts();
+
+	HeeksConfig config;
+	config.Write(_T("FontPaths"), wxGetApp().m_font_paths);
 }
 
 void HeeksCADapp::GetOptions(std::list<Property *> *list)
@@ -1990,7 +2079,37 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	view_options->m_list.push_back(new PropertyDouble(_("datum size"), CoordinateSystem::size, NULL, on_set_datum_size));
 	view_options->m_list.push_back(new PropertyCheck(_("datum size is pixels not mm"), CoordinateSystem::size_is_pixels, NULL, on_set_size_is_pixels));
 	view_options->m_list.push_back(new PropertyCheck(_("show ruler"), m_show_ruler, NULL, on_set_show_ruler));
-	view_options->m_list.push_back ( new PropertyColor ( _("background color"),  background_color, NULL, on_set_background_color ) );
+	{
+		std::list< wxString > choices;
+		choices.push_back ( wxString ( _("single color") ) );
+		choices.push_back ( wxString ( _("top color and bottom color") ) );
+		choices.push_back ( wxString ( _("left color and right color") ) );
+		choices.push_back ( wxString ( _("four corner colors") ) );
+		view_options->m_list.push_back ( new PropertyChoice ( _("background mode"),  choices, (int)m_background_mode, NULL, on_set_background_mode ) );
+	}
+	switch(m_background_mode)
+	{
+	case BackgroundModeOneColor:
+		view_options->m_list.push_back ( new PropertyColor ( _("background color"),  background_color[0], NULL, on_set_background_color0 ) );
+		break;
+
+	case BackgroundModeTwoColors:
+		view_options->m_list.push_back ( new PropertyColor ( _("top background color"),  background_color[0], NULL, on_set_background_color0 ) );
+		view_options->m_list.push_back ( new PropertyColor ( _("bottom background color"),  background_color[1], NULL, on_set_background_color1 ) );
+		break;
+
+	case BackgroundModeTwoColorsLeftToRight:
+		view_options->m_list.push_back ( new PropertyColor ( _("left background color"),  background_color[0], NULL, on_set_background_color0 ) );
+		view_options->m_list.push_back ( new PropertyColor ( _("right background color"),  background_color[2], NULL, on_set_background_color2 ) );
+		break;
+
+	case BackgroundModeFourColors:
+		view_options->m_list.push_back ( new PropertyColor ( _("top left background color"),  background_color[0], NULL, on_set_background_color0 ) );
+		view_options->m_list.push_back ( new PropertyColor ( _("bottom left background color"),  background_color[1], NULL, on_set_background_color1 ) );
+		view_options->m_list.push_back ( new PropertyColor ( _("top right background color"),  background_color[2], NULL, on_set_background_color2 ) );
+		view_options->m_list.push_back ( new PropertyColor ( _("bottom right background color"),  background_color[3], NULL, on_set_background_color3 ) );
+		break;
+	}
 	{
 		std::list< wxString > choices;
 		choices.push_back ( wxString ( _("no grid") ) );
@@ -2091,7 +2210,34 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	PropertyList* dxf_options = new PropertyList(_("DXF"));
 	dxf_options->m_list.push_back(new PropertyCheck(_("make sketch"), HeeksDxfRead::m_make_as_sketch, NULL, on_dxf_make_sketch));
 	file_options->m_list.push_back(dxf_options);
+	PropertyList* stl_options = new PropertyList(_("STL"));
+	stl_options->m_list.push_back(new PropertyDouble(_("stl save facet tolerance"), m_stl_facet_tolerance, NULL, on_stl_facet_tolerance));
+	file_options->m_list.push_back(stl_options);
 	list->push_back(file_options);
+
+	// Font options
+	PropertyList* font_options = new PropertyList(_("font options"));
+	if (m_pCxfFonts.get() != NULL)
+	{
+		std::list<wxString> choices;
+
+		choices.push_back( wxString(_("OpenGL (default) font")) );
+		int choice = 0;
+
+		int option = 0;
+		std::set<CxfFont::Name_t> font_names = m_pCxfFonts->FontNames();
+		for (std::set<CxfFont::Name_t>::const_iterator l_itFontName = font_names.begin();
+			l_itFontName != font_names.end(); l_itFontName++)
+		{
+			option++;
+			choices.push_back( *l_itFontName );
+			if ((m_pCxfFont != NULL) && (m_pCxfFont->Name() == *l_itFontName)) choice = option;
+		} // End for
+		font_options->m_list.push_back ( new PropertyChoice ( _("Active font"),  choices, choice, this, on_set_font ) );
+	}
+
+	font_options->m_list.push_back( new PropertyString(_("Paths (semicolon delimited)"), m_font_paths, this, on_edit_font_paths));
+	list->push_back(font_options);
 }
 
 void HeeksCADapp::DeleteMarkedItems()
@@ -2112,7 +2258,7 @@ void HeeksCADapp::DeleteMarkedItems()
 
 void HeeksCADapp::glColorEnsuringContrast(const HeeksColor &c)
 {
-	if(c == background_color)background_color.best_black_or_white().glColor();
+	if(c == background_color[0])background_color[0].best_black_or_white().glColor();
 	else c.glColor();
 }
 
@@ -2952,7 +3098,7 @@ void HeeksCADapp::render_screen_text(const wxChar* str1, const wxChar* str2)
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	m_frame->m_graphics->SetIdentityProjection();
-	background_color.best_black_or_white().glColor();
+	background_color[0].best_black_or_white().glColor();
 	int w, h;
 	m_frame->m_graphics->GetClientSize(&w, &h);
 	glTranslated(2.0, h - 1.0, 0.0);
@@ -3009,3 +3155,27 @@ void HeeksCADapp::InitialiseLocale()
 		m_locale.AddCatalog(wxT("HeeksCAD"));
 	}
 }
+
+
+std::auto_ptr<CxfFonts>	& HeeksCADapp::GetAvailableFonts()
+{
+	if (m_pCxfFonts.get() == NULL)
+	{
+		std::vector<wxString> paths = Tokens( m_font_paths, _(";") );
+		for (std::vector<wxString>::const_iterator l_itPath = paths.begin(); l_itPath != paths.end(); l_itPath++)
+		{
+			if (m_pCxfFonts.get() == NULL)
+			{
+				m_pCxfFonts = std::auto_ptr<CxfFonts>(new CxfFonts(*l_itPath));
+			} // End if - then
+			else
+			{
+				m_pCxfFonts->Add( *l_itPath );
+			} // End if - else
+		} // End for
+	} // End if - then
+
+	return(m_pCxfFonts);
+
+} // End GetAvailableFonts() method
+

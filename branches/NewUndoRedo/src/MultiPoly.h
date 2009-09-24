@@ -22,3 +22,4 @@ std::vector<TopoDS_Face> TopoDSFaceAdaptor(
 
 void ConcatSegments(double x_coord, double y_coord, CompoundSegment* seg1, CompoundSegment* seg2, TwoDNearMap &bcurves);
 void AnalyzeNearMap(TwoDNearMap &bcurves);
+

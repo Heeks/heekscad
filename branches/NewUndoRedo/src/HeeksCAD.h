@@ -7,7 +7,9 @@
 #include "../interface/HeeksColor.h"
 #include "../interface/ObjList.h"
 #include "glfont2.h"
+#include "CxfFont.h"
 
+#include <memory>
 class TransientObject;
 class MagDragWindow;
 class ViewRotating;
@@ -48,6 +50,14 @@ enum FileOpenOrImportType
 	FileOpenOrImportTypeDxf
 };
 
+enum BackgroundMode
+{
+	BackgroundModeOneColor,
+	BackgroundModeTwoColors,
+	BackgroundModeTwoColorsLeftToRight,
+	BackgroundModeFourColors
+};
+
 class HeeksCADapp : public wxApp, public ObjList
 {
 private:
@@ -72,7 +82,8 @@ public:
 	wxPoint cur_mouse_pos;
 	HeeksColor current_color;
 	HeeksColor construction_color;
-	HeeksColor background_color;
+	HeeksColor background_color[4];
+	BackgroundMode m_background_mode;
 	bool m_gl_font_initialized;
 	int m_rotate_mode;
 	bool m_antialiasing;
@@ -149,6 +160,11 @@ public:
 	double m_max_scale_threshold;
 	int m_number_of_sample_points;
 	bool m_property_grid_validation;
+
+	std::auto_ptr<CxfFonts>	m_pCxfFonts;	// QCAD format fonts that have been loaded.
+	CxfFont   *m_pCxfFont;	// which font are we using? (NULL indicates the internal (OpenGL) font)
+	wxString m_font_paths;	// SemiColon delimited list of directories that hold font files to load.
+	double m_stl_facet_tolerance;
 
 	//WxApp override
 	int OnRun();
@@ -268,6 +284,8 @@ public:
 	CSketch* GetContainer();
 	bool EndSketchMode();
 	void SetStatusText();
+
+	std::auto_ptr<CxfFonts>	& GetAvailableFonts();
 };
 
 DECLARE_APP(HeeksCADapp)
