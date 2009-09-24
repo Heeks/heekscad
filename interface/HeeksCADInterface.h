@@ -24,6 +24,7 @@ class wxSizeEvent;
 class wxMouseEvent;
 class wxToolBarBase;
 class CNurbSurfaceParams;
+class TransientObject;
 
 #include "SketchOrder.h"
 
@@ -110,7 +111,7 @@ public:
 	virtual void Remove(HeeksObj* obj);
 	virtual void Add(HeeksObj* object, HeeksObj* other);
 	virtual void CreateUndoPoint();
-
+	virtual void WentTransient(HeeksObj* obj, TransientObject *tobj);
 
 	virtual int GetNextID(int type);
 	virtual bool InOpenFile();
