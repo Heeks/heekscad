@@ -19,13 +19,17 @@ Matrix::~Matrix()
 {
 }
 
+#ifndef WIN32
 inline
+#endif
 double Matrix::GetElement(unsigned row, unsigned col)
 {
 	return m_data[m_m*row + col];
 }
 
+#ifndef WIN32
 inline
+#endif
 double& Matrix::operator() (unsigned row, unsigned col)
 {
    return m_data[m_m*row + col];
