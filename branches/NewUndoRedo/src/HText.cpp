@@ -147,8 +147,7 @@ static void on_set_font(int zero_based_choice, HeeksObj *obj)
 	{
 		((HText*)obj)->m_pFont = wxGetApp().GetAvailableFonts()->Font( CxfFont::Name_t(vector_names[zero_based_choice].c_str()) );
 	}
-	//TODO: what was this supposed to do. Maybe repaint and update for IsDifferent?
-	//wxGetApp().WasModified((HText*)obj);
+	wxGetApp().Changed();
 }
 
 void HText::GetProperties(std::list<Property *> *list)

@@ -1788,11 +1788,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\TransientObject.cpp"
+			RelativePath="..\interface\TransientObject.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\TransientObject.h"
+			RelativePath="..\interface\TransientObject.h"
 			>
 		</File>
 		<File

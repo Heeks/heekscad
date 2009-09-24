@@ -144,19 +144,28 @@ wxString CHeeksCADInterface::GetExeFolder()
 	return wxGetApp().GetExeFolder();
 }
 
-void CHeeksCADInterface::AddUndoably(HeeksObj* object, HeeksObj* owner)
-{
-	owner->Add(object, NULL);
-}
-
 HeeksObj* CHeeksCADInterface::GetMainObject()
 {
 	return &(wxGetApp());
 }
 
-void CHeeksCADInterface::DeleteUndoably(HeeksObj* object)
+void CHeeksCADInterface::Remove(HeeksObj* object)
 {
 	wxGetApp().Remove(object);
+}
+
+void CHeeksCADInterface::Add(HeeksObj* object,HeeksObj* prev)
+{
+	wxGetApp().Add(object,prev);
+}
+
+void CHeeksCADInterface::CreateUndoPoint()
+{
+	wxGetApp().CreateUndoPoint();
+}
+void CHeeksCADInterface::Changed()
+{
+	wxGetApp().Changed();
 }
 
 const std::list<HeeksObj*>& CHeeksCADInterface::GetMarkedList(void)

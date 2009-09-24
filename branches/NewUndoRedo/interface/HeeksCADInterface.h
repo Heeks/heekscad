@@ -56,9 +56,7 @@ public:
 	virtual int GetToolImageBitmapSize();
 	virtual int AddMenuItem(wxMenu* menu, const wxString& title, const wxBitmap& bitmap, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL, wxMenu* submenu = NULL, bool check_item = false);
 	virtual wxString GetExeFolder();
-	virtual void AddUndoably(HeeksObj* object, HeeksObj* owner);
 	virtual HeeksObj* GetMainObject();
-	virtual void DeleteUndoably(HeeksObj* object);
 	virtual const std::list<HeeksObj*>& GetMarkedList();
 	virtual bool GetArcCentre(HeeksObj* object, double* c);
 	virtual bool GetArcAxis(HeeksObj* object, double* a);
@@ -108,6 +106,11 @@ public:
 	virtual HeeksObj* GetIDObject(int type, int id);
 	virtual void SetObjectID(HeeksObj* object, int id); // check for existing id using GetIDObject and call DeleteUndoably first
 	virtual void SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, bool for_clipboard);
+	virtual void Changed();
+	virtual void Remove(HeeksObj* obj);
+	virtual void Add(HeeksObj* object, HeeksObj* other);
+	virtual void CreateUndoPoint();
+
 
 	virtual int GetNextID(int type);
 	virtual bool InOpenFile();
