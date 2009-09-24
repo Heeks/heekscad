@@ -34,18 +34,6 @@ const HLine& HLine::operator=(const HLine &b){
 	return *this;
 }
 
-bool HLine::IsDifferent(HeeksObj *other)
-{
-	HLine* line = (HLine*)other;
-	if(line->A->m_p.Distance(A->m_p) > wxGetApp().m_geom_tol)
-		return true;
-
-	if(line->B->m_p.Distance(B->m_p) > wxGetApp().m_geom_tol)
-		return true;
-
-	return HeeksObj::IsDifferent(other);
-}
-
 HLine* line_for_tool = NULL;
 
 class SetLineHorizontal:public Tool{

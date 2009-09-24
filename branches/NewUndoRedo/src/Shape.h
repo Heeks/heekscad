@@ -37,6 +37,7 @@ protected:
 	CBox m_box;
 	TopoDS_Shape m_shape;
 	static wxIcon* m_icon;
+	wxLongLong m_creation_time;
 
 	void create_faces_and_edges();
 	void delete_faces_and_edges();

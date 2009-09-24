@@ -81,8 +81,8 @@ void CSphere::OnApplyProperties()
 {
 	CSphere* new_object = new CSphere(m_pos, m_radius, m_title.c_str(), m_color);
 	new_object->CopyIDsFrom(this);
-	wxGetApp().Add(new_object, NULL);
-	wxGetApp().Remove(this);
+	Owner()->Add(new_object, NULL);
+	Owner()->Remove(this);
 	if(wxGetApp().m_marked_list->ObjectMarked(this))
 	{
 		wxGetApp().m_marked_list->Remove(this,false);

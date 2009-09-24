@@ -126,6 +126,18 @@ HeeksObj *CCone::MakeACopy(void)const
 	return new CCone(*this);
 }
 
+bool CCone::IsDifferent(HeeksObj* o)
+{
+	CCone* other = (CCone*)o;
+	if(other->m_r1 != m_r1 || other->m_r2 != m_r2 || other->m_height != other->m_height)
+		return true;
+
+	if(!IsEqual(other->m_pos,m_pos))
+		return true;
+
+	return HeeksObj::IsDifferent(o);
+}
+
 static void on_set_centre(const double *vt, HeeksObj* object){
 	gp_Trsf mat;
 	mat.SetTranslation ( gp_Vec ( ((CCone*)object)->m_pos.Location(), make_point(vt) ) );
@@ -198,8 +210,8 @@ void CCone::OnApplyProperties()
 {
 	CCone* new_object = new CCone(m_pos, m_r1, m_r2, m_height, m_title.c_str(), m_color);
 	new_object->CopyIDsFrom(this);
-	wxGetApp().Add(new_object, NULL);
-	wxGetApp().Remove(this);
+	Owner()->Add(new_object, NULL);
+	Owner()->Remove(this);
 	wxGetApp().m_marked_list->Clear(true);
 	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().Repaint();
@@ -280,8 +292,8 @@ bool CCone::Stretch(const double *p, const double* shift, void* data)
 	{
 		CCone* new_object = new CCone(new_pos, new_r1, new_r2, new_height, m_title.c_str(), m_color);
 		new_object->CopyIDsFrom(this);
-		wxGetApp().Add(new_object, NULL);
-		wxGetApp().Remove(this);
+		Owner()->Add(new_object, NULL);
+		Owner()->Remove(this);
 		wxGetApp().m_marked_list->Clear(true);
 		wxGetApp().m_marked_list->Add(new_object, true);
 	}

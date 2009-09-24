@@ -62,6 +62,7 @@ const CShape& CShape::operator=(const CShape& s)
 	m_shape = s.m_shape;
 	m_title = s.m_title;
 	m_color = s.m_color;
+	m_creation_time = s.m_creation_time;
 
 	create_faces_and_edges();
 	KillGLLists();
@@ -74,11 +75,16 @@ bool CShape::IsDifferent(HeeksObj* other)
 	CShape* shape = (CShape*)other;
 	if(shape->m_color.COLORREF_color() != m_color.COLORREF_color() || shape->m_title.CompareTo(m_title))
 		return true;
+
+	if(m_creation_time != shape->m_creation_time)
+		return true;
+
 	return ObjList::IsDifferent(other);
 }
 
 void CShape::Init()
 {
+	m_creation_time = wxGetLocalTimeMillis();
 	m_faces = new CFaceList;
 	m_edges = new CEdgeList;
 	m_vertices = new CVertexList;
@@ -347,8 +353,8 @@ public:
 #endif
 
 			HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of 'Offset Shape'"), SOLID_TYPE_UNKNOWN, m_shape->m_color);
-			wxGetApp().Add(new_object, NULL);
-			wxGetApp().Remove(m_shape);
+			m_shape->Owner()->Add(new_object, NULL);
+			m_shape->Owner()->Remove(m_shape);
 			config.Write(_T("OffsetShapeValue"), offset_value);
 		}
 	}

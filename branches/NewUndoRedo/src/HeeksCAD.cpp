@@ -775,6 +775,8 @@ bool HeeksCADapp::OpenImageFile(const wxChar *filepath)
 
 bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksObj* paste_into)
 {
+	CreateUndoPoint();
+
 	m_in_OpenFile = true;
 	m_file_open_or_import_type = FileOpenOrImportTypeOther;
 
@@ -831,11 +833,13 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 	{
 		if(!import_not_open)
 		{
-			Changed();
 			m_filepath.assign(filepath);
 			InsertRecentFileItem(filepath);
 			SetFrameTitle();
+			SetLikeNewFile();
 		}
+		Changed();
+
 	}
 
 	m_in_OpenFile = false;

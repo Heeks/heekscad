@@ -194,9 +194,9 @@ public:
 		for(std::list<HeeksObj*>::iterator It = new_sketches.begin(); It != new_sketches.end(); It++)
 		{
 			HeeksObj* new_object = *It;
-			wxGetApp().Add(new_object, NULL);
+			m_sketch->Owner()->Add(new_object, NULL);
 		}
-		wxGetApp().Remove(m_sketch);
+		m_sketch->Owner()->Remove(m_sketch);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Split Sketch");}

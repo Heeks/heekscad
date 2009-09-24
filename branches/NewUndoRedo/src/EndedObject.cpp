@@ -40,6 +40,18 @@ HeeksObj* EndedObject::MakeACopyWithID()
 	return pnew;
 }
 
+bool EndedObject::IsDifferent(HeeksObj *other)
+{
+	EndedObject* eobj = (EndedObject*)other;
+	if(eobj->A->m_p.Distance(A->m_p) > wxGetApp().m_geom_tol)
+		return true;
+
+	if(eobj->B->m_p.Distance(B->m_p) > wxGetApp().m_geom_tol)
+		return true;
+
+	return HeeksObj::IsDifferent(other);
+}
+
 void EndedObject::LoadToDoubles()
 {
 	A->LoadToDoubles();

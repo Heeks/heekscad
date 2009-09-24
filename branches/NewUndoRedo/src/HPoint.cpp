@@ -35,6 +35,15 @@ const HPoint& HPoint::operator=(const HPoint &b)
 	return *this;
 }
 
+bool HPoint::IsDifferent(HeeksObj* o)
+{
+	HPoint* other = (HPoint*)o;
+	if(m_p.Distance(other->m_p) > wxGetApp().m_geom_tol)
+		return true;
+
+	return HeeksObj::IsDifferent(o);
+}
+
 void HPoint::LoadFromDoubles()
 {
 	m_p.SetX(mx);

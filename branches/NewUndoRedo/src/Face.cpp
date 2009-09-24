@@ -117,8 +117,8 @@ bool CFace::ModifyByMatrix(const double *m){
 		gp_Trsf mat = make_matrix(m);
 		BRepBuilderAPI_Transform myBRepTransformation(m_topods_face,mat);
 		TopoDS_Shape new_shape = myBRepTransformation.Shape();
-		wxGetApp().Add(new CFace(*((TopoDS_Face*)(&new_shape))), NULL);
-		wxGetApp().Remove(this);
+		Owner()->Add(new CFace(*((TopoDS_Face*)(&new_shape))), NULL);
+		Owner()->Remove(this);
 	}
 	return true;
 }

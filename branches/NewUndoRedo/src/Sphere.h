@@ -30,6 +30,7 @@ public:
 	bool GetCentrePoint(double* pos);
 	bool GetScaleAboutMatrix(double *m);
 	bool IsDifferent(HeeksObj* other);
+	bool DescendForUndo(){return false;}
 
 	// CShape's virtual functions
 	void SetXMLElement(TiXmlElement* element);

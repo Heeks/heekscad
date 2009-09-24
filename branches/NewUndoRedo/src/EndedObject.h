@@ -30,6 +30,7 @@ public:
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	void glCommands(bool select, bool marked, bool no_color);
 	HeeksObj* MakeACopyWithID();
+	bool IsDifferent(HeeksObj* other);
 //	void WriteBaseXML(TiXmlElement *element);
 	
 };

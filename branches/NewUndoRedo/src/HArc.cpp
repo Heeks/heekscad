@@ -38,13 +38,11 @@ HArc::~HArc(){
 bool HArc::IsDifferent(HeeksObj* other)
 {
 	HArc* arc = (HArc*)other;
-	if(arc->A->m_p.Distance(A->m_p) > wxGetApp().m_geom_tol || arc->B->m_p.Distance(B->m_p) > wxGetApp().m_geom_tol)
-		return true;
 
 	if(arc->C->m_p.Distance(C->m_p) > wxGetApp().m_geom_tol || arc->m_radius != m_radius)
 		return true;
 
-	return HeeksObj::IsDifferent(other);
+	return EndedObject::IsDifferent(other);
 }
 
 const HArc& HArc::operator=(const HArc &b){

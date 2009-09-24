@@ -102,15 +102,8 @@ const Constraint& Constraint::operator=(const Constraint &b){
 }
 
 Constraint::~Constraint()
-	{
-	//TODO: objlist will get us removed from obj1's list and obj2's list, however we may want to get out
-	//of constrained objects constraint list as well
-	if(m_obj1 && !m_obj1->constraints.empty())
-	{
-		m_obj1->constraints.remove(this);
-	}
-	if(m_obj2 && !m_obj2->constraints.empty())
-		m_obj2->constraints.remove(this);
+{
+
 }
 
 void Constraint::Disconnect(std::list<HeeksObj*> parents)

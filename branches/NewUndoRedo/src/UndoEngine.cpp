@@ -163,7 +163,7 @@ void UndoEngine::GetModificationsRecursive(std::vector<UndoEvent> &ret,ObjList* 
 			{
 				ObjList* newlist = dynamic_cast<ObjList*>(obj);
 				ObjList* oldlist = dynamic_cast<ObjList*>(old_children_map[*it]);
-				if(newlist)
+				if(newlist&&newlist->DescendForUndo())
 				{
 					GetModificationsRecursive(ret,newlist,oldlist);
 				}
@@ -238,7 +238,7 @@ void UndoEngine::DealWithTransients(std::map<HeeksObjId,HeeksObj*> &treemap)
 bool UndoEngine::IsModified()
 {
 	std::vector<UndoEvent> events = GetModifications();
-	return events.size()>0;
+	return events.size()>0 || m_undo_events.size() > 0;
 }
 
 void UndoEngine::UndoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
@@ -312,7 +312,9 @@ void UndoEngine::DoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
 
 void UndoEngine::SetLikeNewFile()
 {
-	//TODO: find all modifications, then set minimum undo level to current level
+	CreateUndoPoint();
+	m_undo_events.clear();
+	m_redo_events.clear();
 }
 
 void UndoEngine::Undo()
@@ -394,7 +396,7 @@ void UndoEngine::PrintTree(HeeksObj *tree, std::stringstream &cstr,int level)
 	cstr << "Location: " << tree << endl;
 
 	ObjList* list = dynamic_cast<ObjList*>(tree);
-	if(list)//&&list->DescendForUndo())
+	if(list&&list->DescendForUndo())
 	{
 		HeeksObj* child = list->GetFirstChild();
 		while(child)
