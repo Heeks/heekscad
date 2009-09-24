@@ -51,7 +51,7 @@ CSvgRead::CSvgRead()
 {
 }
 
-void CSvgRead::Read(const wxChar* filepath, bool undoably)
+void CSvgRead::Read(const wxChar* filepath)
 {
 	// start the file
 	m_fail = false;
@@ -90,7 +90,7 @@ void CSvgRead::Read(const wxChar* filepath, bool undoably)
 	// loop through all the objects
 	for(pElem = hRoot.FirstChildElement().Element(); pElem;	pElem = pElem->NextSiblingElement())
 	{
-		ReadSVGElement(pElem, undoably);
+		ReadSVGElement(pElem);
 	}
 
 }
@@ -109,7 +109,7 @@ std::string CSvgRead::RemoveCommas(std::string input)
 	return input;
 }
 
-void CSvgRead::ReadSVGElement(TiXmlElement* pElem, bool undoably)
+void CSvgRead::ReadSVGElement(TiXmlElement* pElem)
 {
 	std::string name(pElem->Value());
 	m_transform_stack.push_back(m_transform);
@@ -121,43 +121,43 @@ void CSvgRead::ReadSVGElement(TiXmlElement* pElem, bool undoably)
 		// loop through all the child elements, looking for path
 		for(pElem = TiXmlHandle(pElem).FirstChildElement().Element(); pElem; pElem = pElem->NextSiblingElement())
 		{
-			ReadSVGElement(pElem, undoably);
+			ReadSVGElement(pElem);
 		}
 	}
 
 	if(name == "path")
 	{
-		ReadPath(pElem,undoably);
+		ReadPath(pElem);
 	}
 
 	if(name == "rect")
 	{
-		ReadRect(pElem,undoably);
+		ReadRect(pElem);
 	}
 
 	if(name == "circle")
 	{
-		ReadCircle(pElem,undoably);
+		ReadCircle(pElem);
 	}
 
 	if(name == "ellipse")
 	{
-		ReadEllipse(pElem,undoably);
+		ReadEllipse(pElem);
 	}
 	
 	if(name == "line")
 	{
-		ReadLine(pElem,undoably);
+		ReadLine(pElem);
 	}
 
 	if(name == "polyline")
 	{
-		ReadPolyline(pElem,false,undoably);
+		ReadPolyline(pElem,false);
 	}
 
 	if(name == "polygon")
 	{
-		ReadPolyline(pElem,true,undoably);
+		ReadPolyline(pElem,true);
 	}
 
 	m_transform = m_transform_stack.back();
@@ -265,7 +265,7 @@ void CSvgRead::ReadTransform(TiXmlElement *pElem)
 
 }
 
-void CSvgRead::ReadRect(TiXmlElement *pElem, bool undoably)
+void CSvgRead::ReadRect(TiXmlElement *pElem)
 {
 	double x,y,width,height;
 	double rx=0; 
@@ -291,13 +291,13 @@ void CSvgRead::ReadRect(TiXmlElement *pElem, bool undoably)
 
 	//TODO: add rounded rectangle support
 
-	OnReadLine(p1,p2,undoably);
-	OnReadLine(p2,p3,undoably);
-	OnReadLine(p3,p4,undoably);
-	OnReadLine(p4,p1,undoably);
+	OnReadLine(p1,p2);
+	OnReadLine(p2,p3);
+	OnReadLine(p3,p4);
+	OnReadLine(p4,p1);
 }
 
-void CSvgRead::ReadEllipse(TiXmlElement *pElem, bool undoably)
+void CSvgRead::ReadEllipse(TiXmlElement *pElem)
 {
 	double x=0;
 	double y=0;
@@ -323,10 +323,10 @@ void CSvgRead::ReadEllipse(TiXmlElement *pElem, bool undoably)
 		ry = temp;
 		rot = Pi/2;
 	}
-	OnReadEllipse(gp_Pnt(x,y,0),rx,ry,rot,0,2*Pi,undoably);
+	OnReadEllipse(gp_Pnt(x,y,0),rx,ry,rot,0,2*Pi);
 }
 
-void CSvgRead::ReadLine(TiXmlElement *pElem, bool undoably)
+void CSvgRead::ReadLine(TiXmlElement *pElem)
 {
 	double x1=0;
 	double y1=0;
@@ -344,10 +344,10 @@ void CSvgRead::ReadLine(TiXmlElement *pElem, bool undoably)
 
 	y1=-y1; y2=-y2;
 
-	OnReadLine(gp_Pnt(x1,y1,0),gp_Pnt(x2,y2,0),undoably);
+	OnReadLine(gp_Pnt(x1,y1,0),gp_Pnt(x2,y2,0));
 }
 
-void CSvgRead::ReadPolyline(TiXmlElement *pElem, bool close, bool undoably)
+void CSvgRead::ReadPolyline(TiXmlElement *pElem, bool close)
 {
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
@@ -363,7 +363,7 @@ void CSvgRead::ReadPolyline(TiXmlElement *pElem, bool close, bool undoably)
 			while(1){
 				if(d[pos] == 0){
 					if(has_point && close)
-						OnReadLine(ppnt,spnt,undoably);
+						OnReadLine(ppnt,spnt);
 					break;
 				}
 				if(isdigit(d[pos])){
@@ -373,7 +373,7 @@ void CSvgRead::ReadPolyline(TiXmlElement *pElem, bool close, bool undoably)
 					y=-y;
 					gp_Pnt cpnt(x,y,0);
 					if(has_point)
-						OnReadLine(ppnt,cpnt,undoably);
+						OnReadLine(ppnt,cpnt);
 					else
 					{
 						has_point = true;
@@ -391,7 +391,7 @@ void CSvgRead::ReadPolyline(TiXmlElement *pElem, bool close, bool undoably)
 }
 
 
-void CSvgRead::ReadCircle(TiXmlElement *pElem, bool undoably)
+void CSvgRead::ReadCircle(TiXmlElement *pElem)
 {
 	double x,y,r;
 	// get the attributes
@@ -405,10 +405,10 @@ void CSvgRead::ReadCircle(TiXmlElement *pElem, bool undoably)
 	y=-y;
 
 	gp_Pnt cp(x,y,0);
-	OnReadCircle(cp,r,undoably);
+	OnReadCircle(cp,r);
 }
 
-gp_Pnt CSvgRead::ReadStart(const char *text,gp_Pnt ppnt,bool isupper,bool undoably)
+gp_Pnt CSvgRead::ReadStart(const char *text,gp_Pnt ppnt,bool isupper)
 {
 	double x, y;
 	sscanf(text, "%lf%lf", &x, &y);
@@ -419,11 +419,11 @@ gp_Pnt CSvgRead::ReadStart(const char *text,gp_Pnt ppnt,bool isupper,bool undoab
 		npt.SetX(x+ppnt.X());
 		npt.SetY(y+ppnt.Y());
 	}
-	OnReadStart(undoably);
+	OnReadStart();
 	return npt;
 }
 
-gp_Pnt CSvgRead::ReadLine(const char *text,gp_Pnt ppnt,bool isupper,bool undoably)
+gp_Pnt CSvgRead::ReadLine(const char *text,gp_Pnt ppnt,bool isupper)
 {
 	double x, y;
 	sscanf(text, "%lf%lf", &x, &y);
@@ -434,27 +434,27 @@ gp_Pnt CSvgRead::ReadLine(const char *text,gp_Pnt ppnt,bool isupper,bool undoabl
 		npt.SetX(x+ppnt.X());
 		npt.SetY(y+ppnt.Y());
 	}
-	OnReadLine(ppnt,npt,undoably);
+	OnReadLine(ppnt,npt);
 	return npt;
 }
 
-void CSvgRead::ReadClose(gp_Pnt ppnt,gp_Pnt spnt,bool undoably)
+void CSvgRead::ReadClose(gp_Pnt ppnt,gp_Pnt spnt)
 {
-	OnReadLine(ppnt,spnt,undoably);
+	OnReadLine(ppnt,spnt);
 }
 
-gp_Pnt CSvgRead::ReadHorizontal(const char *text,gp_Pnt ppnt,bool isupper,bool undoably)
+gp_Pnt CSvgRead::ReadHorizontal(const char *text,gp_Pnt ppnt,bool isupper)
 {
 	double x;
 	sscanf(text, "%lf", &x);
 	gp_Pnt npt(x,ppnt.Y(),0);
 	if(!isupper)
 		npt.SetX(x+ppnt.X());
-	OnReadLine(ppnt,npt,undoably);
+	OnReadLine(ppnt,npt);
 	return npt;
 }
 
-gp_Pnt CSvgRead::ReadVertical(const char *text,gp_Pnt ppnt,bool isupper,bool undoably)
+gp_Pnt CSvgRead::ReadVertical(const char *text,gp_Pnt ppnt,bool isupper)
 {
 	double y;
 	sscanf(text, "%lf", &y);
@@ -462,12 +462,12 @@ gp_Pnt CSvgRead::ReadVertical(const char *text,gp_Pnt ppnt,bool isupper,bool und
 	gp_Pnt npt(ppnt.X(),y,0);
 	if(!isupper)
 		npt.SetY(y+ppnt.Y());
-	OnReadLine(ppnt,npt,undoably);
+	OnReadLine(ppnt,npt);
 	return npt;
 }
 
 
-struct TwoPoints CSvgRead::ReadCubic(const char *text,gp_Pnt ppnt,bool isupper,bool undoably)
+struct TwoPoints CSvgRead::ReadCubic(const char *text,gp_Pnt ppnt,bool isupper)
 {
 	struct TwoPoints retpts;
 	double x1, y1, x2, y2, x3, y3;
@@ -485,11 +485,11 @@ struct TwoPoints CSvgRead::ReadCubic(const char *text,gp_Pnt ppnt,bool isupper,b
 	retpts.pcpnt = gp_Pnt(x2,y2,0);
 	retpts.ppnt = gp_Pnt(x3,y3,0);
 
-	OnReadCubic(ppnt,pnt1,retpts.pcpnt,retpts.ppnt,undoably);
+	OnReadCubic(ppnt,pnt1,retpts.pcpnt,retpts.ppnt);
 	return retpts;
 }
 
-struct TwoPoints CSvgRead::ReadCubic(const char *text,gp_Pnt ppnt, gp_Pnt pcpnt, bool isupper,bool undoably)
+struct TwoPoints CSvgRead::ReadCubic(const char *text,gp_Pnt ppnt, gp_Pnt pcpnt, bool isupper)
 {
 	struct TwoPoints retpts;
 	double x2, y2, x3, y3;
@@ -508,12 +508,12 @@ struct TwoPoints CSvgRead::ReadCubic(const char *text,gp_Pnt ppnt, gp_Pnt pcpnt,
 	retpts.pcpnt = gp_Pnt(x2,y2,0);
 	retpts.ppnt = gp_Pnt(x3,y3,0);
 
-	OnReadCubic(ppnt,pnt1,retpts.pcpnt,retpts.ppnt,undoably);
+	OnReadCubic(ppnt,pnt1,retpts.pcpnt,retpts.ppnt);
 
 	return retpts;
 }
 
-struct TwoPoints CSvgRead::ReadQuadratic(const char *text,gp_Pnt ppnt,bool isupper,bool undoably)
+struct TwoPoints CSvgRead::ReadQuadratic(const char *text,gp_Pnt ppnt,bool isupper)
 {
 	struct TwoPoints retpts;
 	double x1, y1, x2, y2;
@@ -529,11 +529,11 @@ struct TwoPoints CSvgRead::ReadQuadratic(const char *text,gp_Pnt ppnt,bool isupp
 	retpts.pcpnt = gp_Pnt(x1,y1,0);
 	retpts.ppnt = gp_Pnt(x2,y2,0);
 
-	OnReadQuadratic(ppnt,retpts.pcpnt,retpts.ppnt,undoably);
+	OnReadQuadratic(ppnt,retpts.pcpnt,retpts.ppnt);
 	return retpts;
 }
 
-struct TwoPoints CSvgRead::ReadQuadratic(const char *text,gp_Pnt ppnt, gp_Pnt pcpnt, bool isupper,bool undoably)
+struct TwoPoints CSvgRead::ReadQuadratic(const char *text,gp_Pnt ppnt, gp_Pnt pcpnt, bool isupper)
 {
 	struct TwoPoints retpts;
 	double x2, y2;
@@ -551,11 +551,11 @@ struct TwoPoints CSvgRead::ReadQuadratic(const char *text,gp_Pnt ppnt, gp_Pnt pc
 	retpts.pcpnt = pnt1;
 	retpts.ppnt = gp_Pnt(x2,y2,0);
 
-	OnReadQuadratic(ppnt,retpts.pcpnt,retpts.ppnt,undoably);
+	OnReadQuadratic(ppnt,retpts.pcpnt,retpts.ppnt);
 	return retpts;
 }
 
-gp_Pnt CSvgRead::ReadEllipse(const char *text,gp_Pnt ppnt,bool isupper,bool undoably)
+gp_Pnt CSvgRead::ReadEllipse(const char *text,gp_Pnt ppnt,bool isupper)
 {
 	int large_arc_flag, sweep_flag;
 	double rx, ry, xrot, x, y;
@@ -628,11 +628,11 @@ gp_Pnt CSvgRead::ReadEllipse(const char *text,gp_Pnt ppnt,bool isupper,bool undo
 		end_angle = temp;
 	}
 
-	OnReadEllipse(cpnt,rx,ry,xrot,start_angle,end_angle,undoably);
+	OnReadEllipse(cpnt,rx,ry,xrot,start_angle,end_angle);
 	return ept;
 }
 
-void CSvgRead::ReadPath(TiXmlElement* pElem, bool undoably)
+void CSvgRead::ReadPath(TiXmlElement* pElem)
 {
 	// get the attributes
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
@@ -652,61 +652,61 @@ void CSvgRead::ReadPath(TiXmlElement* pElem, bool undoably)
 			while(1){
 				if(toupper(d[pos]) == 'M'){
 					// make a sketch
-					spnt = ReadStart(&d[pos+1],ppnt,isupper(d[pos])!=0,undoably);
+					spnt = ReadStart(&d[pos+1],ppnt,isupper(d[pos])!=0);
 					ppnt = spnt;
 					pos++;
 				}
 				else if(toupper(d[pos]) == 'L'){
 					// add a line
-					ppnt = ReadLine(&d[pos+1],ppnt,isupper(d[pos])!=0,undoably);
+					ppnt = ReadLine(&d[pos+1],ppnt,isupper(d[pos])!=0);
 					pos++;
 				}
 				else if(toupper(d[pos]) == 'H'){
 					//horizontal line
-					ppnt = ReadHorizontal(&d[pos+1],ppnt,isupper(d[pos])!=0,undoably);
+					ppnt = ReadHorizontal(&d[pos+1],ppnt,isupper(d[pos])!=0);
 					pos++;
 				}
 				else if(toupper(d[pos]) == 'V'){
 					//vertical line
-					ppnt = ReadVertical(&d[pos+1],ppnt,isupper(d[pos])!=0,undoably);
+					ppnt = ReadVertical(&d[pos+1],ppnt,isupper(d[pos])!=0);
 					pos++;
 				}
 				else if(toupper(d[pos]) == 'C'){
 					// add a cubic bezier curve ( just split into lines for now )
-					struct TwoPoints ret = ReadCubic(&d[pos+1],ppnt,isupper(d[pos])!=0,undoably);
+					struct TwoPoints ret = ReadCubic(&d[pos+1],ppnt,isupper(d[pos])!=0);
 					ppnt = ret.ppnt;
 					pcpnt = ret.pcpnt;
 					pos++;
 				}
 				else if(toupper(d[pos]) == 'S'){
                     // add a cubic bezier curve ( short hand)
-					struct TwoPoints ret = ReadCubic(&d[pos+1],ppnt,pcpnt,isupper(d[pos])!=0,undoably);
+					struct TwoPoints ret = ReadCubic(&d[pos+1],ppnt,pcpnt,isupper(d[pos])!=0);
 					ppnt = ret.ppnt;
 					pcpnt = ret.pcpnt;
 					pos++;
 				}
 				else if(toupper(d[pos]) == 'Q'){
 					// add a quadratic bezier curve 
-					struct TwoPoints ret = ReadQuadratic(&d[pos+1],ppnt,isupper(d[pos])!=0,undoably);
+					struct TwoPoints ret = ReadQuadratic(&d[pos+1],ppnt,isupper(d[pos])!=0);
 					ppnt = ret.ppnt;
 					pcpnt = ret.pcpnt;
 					pos++;
 				}
 				else if(toupper(d[pos]) == 'T'){
                		// add a quadratic bezier curve 
-					struct TwoPoints ret = ReadQuadratic(&d[pos+1],ppnt,pcpnt,isupper(d[pos])!=0,undoably);
+					struct TwoPoints ret = ReadQuadratic(&d[pos+1],ppnt,pcpnt,isupper(d[pos])!=0);
 					ppnt = ret.ppnt;
 					pcpnt = ret.pcpnt;
 					pos++;
 				}
 				else if(toupper(d[pos]) == 'A'){
 					// add an elliptic arc
-					ppnt = ReadEllipse(&d[pos+1],ppnt,isupper(d[pos])!=0,undoably);
+					ppnt = ReadEllipse(&d[pos+1],ppnt,isupper(d[pos])!=0);
 					pos++;
 				}
 				else if(toupper(d[pos]) == 'Z'){
 					// join to end
-					ReadClose(ppnt,spnt,undoably);
+					ReadClose(ppnt,spnt);
 					pos++;
 					ppnt = spnt;
 				}
@@ -721,12 +721,11 @@ void CSvgRead::ReadPath(TiXmlElement* pElem, bool undoably)
 	}
 }
 
-HeeksSvgRead::HeeksSvgRead(const wxChar* filepath, bool undoably, bool usehspline)
+HeeksSvgRead::HeeksSvgRead(const wxChar* filepath, bool usehspline)
 {
 	m_usehspline=usehspline;
-	m_undoably=undoably;
 	m_sketch = 0;
-	Read(filepath,undoably);
+	Read(filepath);
 }
 
 void HeeksSvgRead::ModifyByMatrix(HeeksObj* object)
@@ -736,14 +735,13 @@ void HeeksSvgRead::ModifyByMatrix(HeeksObj* object)
 	object->ModifyByMatrix(m);
 }
 
-void HeeksSvgRead::OnReadStart(bool undoably)
+void HeeksSvgRead::OnReadStart()
 {
 		m_sketch = new CSketch();
-		if(undoably)wxGetApp().AddUndoably(m_sketch, NULL, NULL);
-		else wxGetApp().Add(m_sketch, NULL);
+		wxGetApp().Add(m_sketch, NULL);
 }
 
-void HeeksSvgRead::OnReadCubic(gp_Pnt s, gp_Pnt c1, gp_Pnt c2, gp_Pnt e,bool undoably)
+void HeeksSvgRead::OnReadCubic(gp_Pnt s, gp_Pnt c1, gp_Pnt c2, gp_Pnt e)
 {
 	TColgp_Array1OfPnt poles(1,4);
 	poles.SetValue(1,s); poles.SetValue(2,c1); poles.SetValue(3,c2); poles.SetValue(4,e);
@@ -754,11 +752,11 @@ void HeeksSvgRead::OnReadCubic(gp_Pnt s, gp_Pnt c1, gp_Pnt c2, gp_Pnt e,bool und
 //	Geom_BSplineCurve pspline = *((Geom_BSplineCurve*)spline.Access());
 	HSpline* new_object = new HSpline(spline, &wxGetApp().current_color);
 	ModifyByMatrix(new_object);
-	AddSketchIfNeeded(undoably);
+	AddSketchIfNeeded();
 	m_sketch->Add(new_object, NULL);
 }
 
-void HeeksSvgRead::OnReadQuadratic(gp_Pnt s, gp_Pnt c, gp_Pnt e,bool undoably)
+void HeeksSvgRead::OnReadQuadratic(gp_Pnt s, gp_Pnt c, gp_Pnt e)
 {
 	TColgp_Array1OfPnt poles(1,3);
 	poles.SetValue(1,s); poles.SetValue(2,c); poles.SetValue(3,e);
@@ -769,44 +767,43 @@ void HeeksSvgRead::OnReadQuadratic(gp_Pnt s, gp_Pnt c, gp_Pnt e,bool undoably)
 //	Geom_BSplineCurve pspline = *((Geom_BSplineCurve*)spline.Access());
 	HSpline* new_object = new HSpline(spline, &wxGetApp().current_color);
 	ModifyByMatrix(new_object);
-	AddSketchIfNeeded(undoably);
+	AddSketchIfNeeded();
 	m_sketch->Add(new_object, NULL);}
 
-void HeeksSvgRead::OnReadLine(gp_Pnt p1, gp_Pnt p2,bool undoably)
+void HeeksSvgRead::OnReadLine(gp_Pnt p1, gp_Pnt p2)
 {
 	HLine *line = new HLine(p1,p2,&wxGetApp().current_color);
 	ModifyByMatrix(line);
-	AddSketchIfNeeded(undoably);
+	AddSketchIfNeeded();
 	m_sketch->Add(line, NULL);
 }
 
-void HeeksSvgRead::OnReadEllipse(gp_Pnt c, double maj_r, double min_r, double rot, double start, double end,bool undoably)
+void HeeksSvgRead::OnReadEllipse(gp_Pnt c, double maj_r, double min_r, double rot, double start, double end)
 {
 	gp_Dir up(0,0,1);
 	gp_Elips elip(gp_Ax2(c,gp_Dir(0,0,1)),maj_r,min_r);
 	elip.Rotate(gp_Ax1(c,up),rot);
 	HEllipse *new_object = new HEllipse(elip,start,end,&wxGetApp().current_color);
 	ModifyByMatrix(new_object);
-	AddSketchIfNeeded(undoably);
+	AddSketchIfNeeded();
 	m_sketch->Add(new_object, NULL);
 }
 
-void HeeksSvgRead::OnReadCircle(gp_Pnt c, double r, bool undoably)
+void HeeksSvgRead::OnReadCircle(gp_Pnt c, double r)
 {
 	gp_Dir up(0,0,1);
 	gp_Circ cir(gp_Ax2(c,up),r);
 	HCircle *new_object = new HCircle(cir,&wxGetApp().current_color);
 	ModifyByMatrix(new_object);
-	AddSketchIfNeeded(undoably);
+	AddSketchIfNeeded();
 	m_sketch->Add(new_object, NULL);
 }
 
-void HeeksSvgRead::AddSketchIfNeeded(bool undoably)
+void HeeksSvgRead::AddSketchIfNeeded()
 {
 	if(m_sketch == NULL)
 	{
 		m_sketch = new CSketch();
-		if(undoably)wxGetApp().AddUndoably(m_sketch, NULL, NULL);
-		else wxGetApp().Add(m_sketch, NULL);
+		wxGetApp().Add(m_sketch, NULL);
 	}
 }

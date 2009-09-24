@@ -168,7 +168,7 @@ CDxfRead::~CDxfRead()
 	delete m_ifs;
 }
 
-bool CDxfRead::ReadLine(bool undoably)
+bool CDxfRead::ReadLine()
 {
 	double s[3] = {0, 0, 0};
 	double e[3] = {0, 0, 0};
@@ -183,7 +183,7 @@ bool CDxfRead::ReadLine(bool undoably)
 		switch(n){
 			case 0:
 				// next item found, so finish with line
-				OnReadLine(s, e, undoably);
+				OnReadLine(s, e);
 				return true;
 			case 10:
 				// start x
@@ -231,11 +231,11 @@ bool CDxfRead::ReadLine(bool undoably)
 
 	}
 
-	OnReadLine(s, e, undoably);
+	OnReadLine(s, e);
 	return false;
 }
 
-bool CDxfRead::ReadArc(bool undoably)
+bool CDxfRead::ReadArc()
 {
 	double start_angle = 0.0;// in degrees
 	double end_angle = 0.0;
@@ -252,7 +252,7 @@ bool CDxfRead::ReadArc(bool undoably)
 		switch(n){
 			case 0:
 				// next item found, so finish with arc
-				OnReadArc(start_angle, end_angle, radius, c, undoably);
+				OnReadArc(start_angle, end_angle, radius, c);
 				return true;
 			case 10:
 				// centre x
@@ -298,11 +298,11 @@ bool CDxfRead::ReadArc(bool undoably)
 				break;
 		}
 	}
-	OnReadArc(start_angle, end_angle, radius, c, undoably);
+	OnReadArc(start_angle, end_angle, radius, c);
 	return false;
 }
 
-bool CDxfRead::ReadSpline(bool undoably)
+bool CDxfRead::ReadSpline()
 {
 	struct SplineData sd;
 	sd.norm[0] = 0;
@@ -325,7 +325,7 @@ bool CDxfRead::ReadSpline(bool undoably)
 		switch(n){
 			case 0:
 				// next item found, so finish with Spline
-				OnReadSpline(sd, undoably);
+				OnReadSpline(sd);
 				return true;
 			case 210:
 				// normal x
@@ -463,12 +463,12 @@ bool CDxfRead::ReadSpline(bool undoably)
 				break;
 		}
 	}
-	OnReadSpline(sd, undoably);
+	OnReadSpline(sd);
 	return false;
 }
 
 
-bool CDxfRead::ReadCircle(bool undoably)
+bool CDxfRead::ReadCircle()
 {
 	double radius = 0.0;
 	double c[3]; // centre
@@ -483,7 +483,7 @@ bool CDxfRead::ReadCircle(bool undoably)
 		switch(n){
 			case 0:
 				// next item found, so finish with Circle
-				OnReadCircle(c, radius, undoably);
+				OnReadCircle(c, radius);
 				return true;
 			case 10:
 				// centre x
@@ -519,11 +519,11 @@ bool CDxfRead::ReadCircle(bool undoably)
 				break;
 		}
 	}
-	OnReadCircle(c, radius, undoably);
+	OnReadCircle(c, radius);
 	return false;
 }
 
-bool CDxfRead::ReadEllipse(bool undoably)
+bool CDxfRead::ReadEllipse()
 {
 	double c[3]; // centre
 	double m[3]; //major axis point
@@ -541,7 +541,7 @@ bool CDxfRead::ReadEllipse(bool undoably)
 		switch(n){
 			case 0:
 				// next item found, so finish with Ellipse
-				OnReadEllipse(c, m, ratio, start, end, undoably);
+				OnReadEllipse(c, m, ratio, start, end);
 				return true;
 			case 10:
 				// centre x
@@ -601,7 +601,7 @@ bool CDxfRead::ReadEllipse(bool undoably)
 				break;
 		}
 	}
-	OnReadEllipse(c, m, ratio, start, end, undoably);
+	OnReadEllipse(c, m, ratio, start, end);
 	return false;
 }
 
@@ -615,7 +615,7 @@ static bool poly_first_found = false;
 static double poly_first_x;
 static double poly_first_y;
 
-static void AddPolyLinePoint(CDxfRead* dxf_read, double x, double y, bool bulge_found, double bulge, bool undoably)
+static void AddPolyLinePoint(CDxfRead* dxf_read, double x, double y, bool bulge_found, double bulge)
 {
 	if(poly_prev_found)
 	{
@@ -651,7 +651,7 @@ static void AddPolyLinePoint(CDxfRead* dxf_read, double x, double y, bool bulge_
 				double pc[3];
 				extract(off,pc);
 				
-				dxf_read->OnReadArc(ps, pe, pc, poly_prev_bulge >= 0, undoably);
+				dxf_read->OnReadArc(ps, pe, pc, poly_prev_bulge >= 0);
 				arc_done = true;
 			
 		}
@@ -660,7 +660,7 @@ static void AddPolyLinePoint(CDxfRead* dxf_read, double x, double y, bool bulge_
 		{
 			double s[3] = {poly_prev_x, poly_prev_y, 0};
 			double e[3] = {x, y, 0};
-			dxf_read->OnReadLine(s, e, undoably);
+			dxf_read->OnReadLine(s, e);
 		}
 	}
 
@@ -683,7 +683,7 @@ static void PolyLineStart()
 	poly_first_found = false;
 }
 
-bool CDxfRead::ReadLwPolyLine(bool undoably)
+bool CDxfRead::ReadLwPolyLine()
 {
 	PolyLineStart();
 
@@ -709,7 +709,7 @@ bool CDxfRead::ReadLwPolyLine(bool undoably)
 				// next item found
 				if(x_found && y_found){
 					// add point
-					AddPolyLinePoint(this, x, y, bulge_found, bulge, undoably);
+					AddPolyLinePoint(this, x, y, bulge_found, bulge);
 					bulge_found = false;
 					x_found = false;
 					y_found = false;
@@ -721,7 +721,7 @@ bool CDxfRead::ReadLwPolyLine(bool undoably)
 				get_line();
 				if(x_found && y_found){
 					// add point
-					AddPolyLinePoint(this, x, y, bulge_found, bulge, undoably);
+					AddPolyLinePoint(this, x, y, bulge_found, bulge);
 					bulge_found = false;
 					x_found = false;
 					y_found = false;
@@ -759,7 +759,7 @@ bool CDxfRead::ReadLwPolyLine(bool undoably)
 		if(closed && poly_first_found)
 		{
 			// repeat the first point
-			AddPolyLinePoint(this, poly_first_x, poly_first_y, false, 0.0, undoably);
+			AddPolyLinePoint(this, poly_first_x, poly_first_y, false, 0.0);
 		}
 		return true;
 	}
@@ -767,7 +767,7 @@ bool CDxfRead::ReadLwPolyLine(bool undoably)
 	return false;
 }
 
-void CDxfRead::OnReadArc(double start_angle, double end_angle, double radius, const double* c, bool undoably){
+void CDxfRead::OnReadArc(double start_angle, double end_angle, double radius, const double* c){
 	double s[3], e[3];
 	s[0] = c[0] + radius * cos(start_angle * Pi/180);
 	s[1] = c[1] + radius * sin(start_angle * Pi/180);
@@ -776,20 +776,20 @@ void CDxfRead::OnReadArc(double start_angle, double end_angle, double radius, co
 	e[1] = c[1] + radius * sin(end_angle * Pi/180);
 	e[2] = c[2];
 
-	OnReadArc(s, e, c, true, undoably);
+	OnReadArc(s, e, c, true);
 }
 
-void CDxfRead::OnReadCircle(const double* c, double radius, bool undoably){
+void CDxfRead::OnReadCircle(const double* c, double radius){
 	double s[3];
     double start_angle = 0;
 	s[0] = c[0] + radius * cos(start_angle * Pi/180);
 	s[1] = c[1] + radius * sin(start_angle * Pi/180);
 	s[2] = c[2];
 
-	OnReadCircle(s, c, false, undoably); //false to change direction because otherwise the arc length is zero
+	OnReadCircle(s, c, false); //false to change direction because otherwise the arc length is zero
 }
 
-void CDxfRead::OnReadEllipse(const double* c, const double* m, double ratio, double start_angle, double end_angle, bool undoably){
+void CDxfRead::OnReadEllipse(const double* c, const double* m, double ratio, double start_angle, double end_angle){
 	double major_radius = sqrt(m[0]*m[0] + m[1]*m[1] + m[2]*m[2]);
 	double minor_radius = major_radius * ratio;
 
@@ -799,10 +799,10 @@ void CDxfRead::OnReadEllipse(const double* c, const double* m, double ratio, dou
 	double rotation = atan2(m[1]/major_radius,m[0]/major_radius);
 
 
-	OnReadEllipse(c, major_radius, minor_radius, rotation, start_angle, end_angle, true, undoably); 
+	OnReadEllipse(c, major_radius, minor_radius, rotation, start_angle, end_angle, true); 
 }
 
-void CDxfRead::OnReadSpline(struct SplineData& sd, bool undoably)
+void CDxfRead::OnReadSpline(struct SplineData& sd)
 {
 	TColgp_Array1OfPnt control (1,sd.controlx.size());
 	TColStd_Array1OfReal weight (1,sd.controlx.size());
@@ -862,7 +862,7 @@ void CDxfRead::OnReadSpline(struct SplineData& sd, bool undoably)
 		++i;
 	}
 
-    OnReadSpline(control, weight, knot, mult, sd.degree, (sd.flag & 2) != 0, (sd.flag & 4) != 0, undoably);
+    OnReadSpline(control, weight, knot, mult, sd.degree, (sd.flag & 2) != 0, (sd.flag & 4) != 0);
 }
 
 void CDxfRead::get_line()
@@ -888,7 +888,7 @@ void CDxfRead::get_line()
 	strcpy(m_str, str);
 }
 
-void CDxfRead::DoRead(bool undoably)
+void CDxfRead::DoRead()
 {
 	if(m_fail)return;
 
@@ -901,27 +901,27 @@ void CDxfRead::DoRead(bool undoably)
 			get_line();
 
 			if(!strcmp(m_str, "LINE")){
-				if(!ReadLine(undoably))return;
+				if(!ReadLine())return;
 				continue;
 			}
 			else if(!strcmp(m_str, "ARC")){
-				if(!ReadArc(undoably))return;
+				if(!ReadArc())return;
 				continue;
 			}
 			else if(!strcmp(m_str, "CIRCLE")){
-				if(!ReadCircle(undoably))return;
+				if(!ReadCircle())return;
 				continue;
 			}
 			else if(!strcmp(m_str, "ELLIPSE")){
-				if(!ReadEllipse(undoably))return;
+				if(!ReadEllipse())return;
 				continue;
 			}
 			else if(!strcmp(m_str, "SPLINE")){
-				if(!ReadSpline(undoably))return;
+				if(!ReadSpline())return;
 				continue;
 			}
 			else if(!strcmp(m_str, "LWPOLYLINE")){
-				if(!ReadLwPolyLine(undoably))return;
+				if(!ReadLwPolyLine())return;
 				continue;
 			}
 		}
@@ -933,16 +933,15 @@ void CDxfRead::DoRead(bool undoably)
 // static
 bool HeeksDxfRead::m_make_as_sketch = false;
 
-void HeeksDxfRead::OnReadLine(const double* s, const double* e, bool undoably)
+void HeeksDxfRead::OnReadLine(const double* s, const double* e)
 {
 	HLine* new_object = new HLine(make_point(s), make_point(e), &(wxGetApp().current_color));
-	AddSketchIfNeeded(undoably);
-	if(undoably)wxGetApp().AddUndoably(new_object, m_sketch, NULL);
-	else if(m_sketch)m_sketch->Add(new_object, NULL);
+	AddSketchIfNeeded();
+	if(m_sketch)m_sketch->Add(new_object, NULL);
 	else wxGetApp().Add(new_object, NULL);
 }
 
-void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, bool dir, bool undoably)
+void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, bool dir)
 {
 	gp_Pnt p0 = make_point(s);
 	gp_Pnt p1 = make_point(e);
@@ -951,13 +950,12 @@ void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, 
 	gp_Pnt pc = make_point(c);
 	gp_Circ circle(gp_Ax2(pc, up), p1.Distance(pc));
 	HArc* new_object = new HArc(p0, p1, circle, &wxGetApp().current_color);
-	AddSketchIfNeeded(undoably);
-	if(undoably)wxGetApp().AddUndoably(new_object, m_sketch, NULL);
-	else if(m_sketch)m_sketch->Add(new_object, NULL);
+	AddSketchIfNeeded();
+	if(m_sketch)m_sketch->Add(new_object, NULL);
 	else wxGetApp().Add(new_object, NULL);
 }
 
-void HeeksDxfRead::OnReadCircle(const double* s, const double* c, bool dir, bool undoably)
+void HeeksDxfRead::OnReadCircle(const double* s, const double* c, bool dir)
 {
 	gp_Pnt p0 = make_point(s);
 	//gp_Pnt p1 = make_point(e);
@@ -966,23 +964,20 @@ void HeeksDxfRead::OnReadCircle(const double* s, const double* c, bool dir, bool
 	gp_Pnt pc = make_point(c);
 	gp_Circ circle(gp_Ax2(pc, up), p0.Distance(pc));
 	HCircle* new_object = new HCircle(circle, &wxGetApp().current_color);
-	AddSketchIfNeeded(undoably);
-	if(undoably)wxGetApp().AddUndoably(new_object, m_sketch, NULL);
-	else if(m_sketch)m_sketch->Add(new_object, NULL);
+	if(m_sketch)m_sketch->Add(new_object, NULL);
 	else wxGetApp().Add(new_object, NULL);
 }
 
-void HeeksDxfRead::OnReadSpline(TColgp_Array1OfPnt &control, TColStd_Array1OfReal &weight, TColStd_Array1OfReal &knot,TColStd_Array1OfInteger &mult, int degree, bool periodic, bool rational, bool undoably)
+void HeeksDxfRead::OnReadSpline(TColgp_Array1OfPnt &control, TColStd_Array1OfReal &weight, TColStd_Array1OfReal &knot,TColStd_Array1OfInteger &mult, int degree, bool periodic, bool rational)
 {
 	Geom_BSplineCurve spline(control,weight,knot,mult,degree,periodic,rational);
 	HSpline* new_object = new HSpline(spline, &wxGetApp().current_color);
-	AddSketchIfNeeded(undoably);
-	if(undoably)wxGetApp().AddUndoably(new_object, m_sketch, NULL);
-	else if(m_sketch)m_sketch->Add(new_object, NULL);
+	AddSketchIfNeeded();
+	if(m_sketch)m_sketch->Add(new_object, NULL);
 	else wxGetApp().Add(new_object, NULL);
 }
 
-void HeeksDxfRead::OnReadEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir, bool undoably)
+void HeeksDxfRead::OnReadEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir)
 {
 	gp_Dir up(0, 0, 1);
 	if(!dir)up = -up;
@@ -990,18 +985,16 @@ void HeeksDxfRead::OnReadEllipse(const double* c, double major_radius, double mi
 	gp_Elips ellipse(gp_Ax2(pc, up), major_radius, minor_radius);
 	ellipse.Rotate(gp_Ax1(pc,up),rotation);
 	HEllipse* new_object = new HEllipse(ellipse, &wxGetApp().current_color);
-	AddSketchIfNeeded(undoably);
-	if(undoably)wxGetApp().AddUndoably(new_object, m_sketch, NULL);
-	else if(m_sketch)m_sketch->Add(new_object, NULL);
+	AddSketchIfNeeded();
+	if(m_sketch)m_sketch->Add(new_object, NULL);
 	else wxGetApp().Add(new_object, NULL);
 }
 
-void HeeksDxfRead::AddSketchIfNeeded(bool undoably)
+void HeeksDxfRead::AddSketchIfNeeded()
 {
 	if(m_make_as_sketch && m_sketch == NULL)
 	{
 		m_sketch = new CSketch();
-		if(undoably)wxGetApp().AddUndoably(m_sketch, NULL, NULL);
-		else wxGetApp().Add(m_sketch, NULL);
+		wxGetApp().Add(m_sketch, NULL);
 	}
 }

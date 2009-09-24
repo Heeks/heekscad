@@ -43,5 +43,6 @@ public:
 	void WriteXML(TiXmlNode *root);
 	int Intersects(const HeeksObj *object, std::list< double > *rl)const;
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
+	bool IsDifferent(HeeksObj* other);
 
 };

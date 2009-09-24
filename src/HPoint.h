@@ -43,6 +43,7 @@ public:
 	void WriteXML(TiXmlNode *root);
 	void LoadFromDoubles();
 	void LoadToDoubles();
+	bool IsDifferent(HeeksObj* other);
 
 	void Draw(wxDC& dc);
 

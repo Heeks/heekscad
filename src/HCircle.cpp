@@ -37,7 +37,20 @@ const HCircle& HCircle::operator=(const HCircle &c){
 	return *this;
 }
 
+bool HCircle::IsDifferent(HeeksObj* other)
+{
+	HCircle* cir = (HCircle*)other;
+	if(cir->C->m_p.Distance(C->m_p) > wxGetApp().m_geom_tol)
+		return true;
 
+	if(!IsEqual(cir->m_axis,m_axis))
+		return true;
+
+	if(cir->m_radius != m_radius)
+		return true;
+
+	return HeeksObj::IsDifferent(other);
+}
 
 //segments - number of segments per full revolution!
 void HCircle::GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point)const

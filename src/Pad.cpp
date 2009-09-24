@@ -6,8 +6,8 @@
 #include "Pad.h"
 #include "Shape.h"
 #include "RuledSurface.h"
-#include "RemoveOrAddTool.h"
 #include "../interface/PropertyDouble.h"
+#include "FaceTools.h"
 
 CPad::CPad(double length)
 {
@@ -17,6 +17,15 @@ CPad::CPad(double length)
 CPad::CPad()
 {
 	m_length = 0;
+}
+
+bool CPad::IsDifferent(HeeksObj* other)
+{
+	CPad* pad = (CPad*)other;
+	if(pad->m_length != m_length)
+		return true;
+
+	return HeeksObj::IsDifferent(other);
 }
 
 void CPad::glCommands(bool select, bool marked, bool no_color)
@@ -31,19 +40,30 @@ void CPad::glCommands(bool select, bool marked, bool no_color)
 	if(!sketch)
 		return;
 
+	glEnable(GL_LIGHTING);
+	glShadeModel(GL_SMOOTH);
+
+
 	std::vector<TopoDS_Face> faces = sketch->GetFaces();
 	std::list<TopoDS_Face> facelist(faces.begin(),faces.end());
 	std::list<TopoDS_Shape> new_shapes;
 	CreateExtrusions(facelist, new_shapes, gp_Vec(0, 0, m_length).Transformed(wxGetApp().GetDrawMatrix(false)));
 
-	//This is a pretty ugly hack
+	double pixels_per_mm = wxGetApp().GetPixelScale();
+
 	std::list<TopoDS_Shape>::iterator it;
 	for(it = new_shapes.begin(); it != new_shapes.end(); ++it)
 	{
-		CShape shape(*it,_("Argh"),wxGetApp().current_color);
-		shape.glCommands(select,marked,no_color);
+		for (TopExp_Explorer expFace(*it, TopAbs_FACE); expFace.More(); expFace.Next())
+		{
+			TopoDS_Face F = TopoDS::Face(expFace.Current());
+			MeshFace(F,pixels_per_mm);
+			DrawFace(F);
+		}
 	}
 
+	glDisable(GL_LIGHTING);
+	glShadeModel(GL_FLAT);
 }
 
 void OnSetHeight(double b, HeeksObj* o)
@@ -113,31 +133,12 @@ HeeksObj* CPad::ReadFromXMLElement(TiXmlElement* element)
 }
 
 // static
-void CPad::PadSketch(CSketch* sketch, double length, bool undoably)
+void CPad::PadSketch(CSketch* sketch, double length)
 {
 	CPad *pad = new CPad(length);
-	if(undoably)
-	{
-		wxGetApp().DoToolUndoably(new AddObjectTool(pad, sketch->Owner(),NULL));
+	sketch->Owner()->Add(pad,NULL);
 
-		wxGetApp().DoToolUndoably(new RemoveObjectTool(sketch));
-
-		wxGetApp().DoToolUndoably(new AddObjectTool(sketch, pad,NULL));
-
-		//The Add/Remove tools are fubar, so we need to mark all the sketches children as modified to get it to show up in the tree
-		HeeksObj* child = sketch->GetFirstChild();
-		while(child)
-		{
-			wxGetApp().WasModified(child);
-			child = sketch->GetNextChild();
-		}
-	}
-	else
-	{
-		sketch->Owner()->Add(pad,NULL);
-
-		sketch->Owner()->Remove(sketch);
-		sketch->RemoveOwner(sketch->Owner());
-		pad->Add(sketch,NULL);
-	}
+	sketch->Owner()->Remove(sketch);
+	sketch->RemoveOwner(sketch->Owner());
+	pad->Add(sketch,NULL);
 }

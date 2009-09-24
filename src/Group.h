@@ -17,7 +17,7 @@ public:
 	void WriteXML(TiXmlNode *root);
 	bool UsesID(){return true;}
 
-	static void MoveSolidsToGroupsById(HeeksObj* object, bool undoably);
+	static void MoveSolidsToGroupsById(HeeksObj* object);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 };

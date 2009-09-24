@@ -69,6 +69,7 @@ public:
 	{
 		drawing->m_previous_direction = new_direction;
 		drawing->m_previous_direction_set = true;
+		wxGetApp().Changed();
 	}
 	void RollBack()
 	{
@@ -85,13 +86,15 @@ void LineArcDrawing::set_previous_direction(){
 		double s[3], e[3];
 		if(temp_object->GetStartPoint(s) && temp_object->GetEndPoint(e))
 		{
-			wxGetApp().DoToolUndoably(new SetPreviousDirection(this, make_vector(make_point(s), make_point(e))));
+			SetPreviousDirection spd(this, make_vector(make_point(s), make_point(e)));
+			spd.Run();
 		}
 	}
 	else if(temp_object->GetType() == ArcType){
 		gp_Vec circlev(((HArc*)temp_object)->m_axis.Direction());
 		gp_Vec endv(((HArc*)temp_object)->C->m_p, ((HArc*)temp_object)->B->m_p);
-		wxGetApp().DoToolUndoably(new SetPreviousDirection(this, (circlev ^ endv).Normalized()));
+		SetPreviousDirection spd(this, (circlev ^ endv).Normalized());
+		spd.Run();
 	}
 }
 
@@ -519,7 +522,7 @@ HeeksObj* LineArcDrawing::GetOwnerForDrawingObjects()
 			{
 				if(m_container == NULL)
 				{
-					m_container = wxGetApp().GetContainer(true);
+					m_container = wxGetApp().GetContainer();
 				}
 				return m_container;
 			}
@@ -530,10 +533,10 @@ HeeksObj* LineArcDrawing::GetOwnerForDrawingObjects()
 	}
 	if(wxGetApp().m_sketch_mode)
 	{
-		m_container = wxGetApp().GetContainer(true);
+		m_container = wxGetApp().GetContainer();
 		return m_container;
 	}
-	return NULL;
+	return &wxGetApp(); //Object always needs to be added somewhere
 }
 
 void LineArcDrawing::clear_drawing_objects(int mode)

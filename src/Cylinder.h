@@ -19,6 +19,7 @@ public:
 	CCylinder(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
 
 	// HeeksObj's virtual functions
+	bool IsDifferent(HeeksObj* other);
 	const wxChar* GetTypeString(void)const{return _("Cylinder");}
 	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/cyl");}
 	HeeksObj *MakeACopy(void)const;
@@ -28,6 +29,7 @@ public:
 	void OnApplyProperties();
 	bool GetScaleAboutMatrix(double *m);
 	bool Stretch(const double *p, const double* shift, void* data);
+	bool DescendForUndo(){return false;}
 
 	// CShape's virtual functions
 	void SetXMLElement(TiXmlElement* element);

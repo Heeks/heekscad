@@ -43,7 +43,7 @@ public:
 	bool ObjectMarked(HeeksObj *object);
 	void Clear(bool call_OnChanged);
 	int size(void){return m_list.size();}
-	const std::list<HeeksObj *> &list(void){return m_list;}
+	std::list<HeeksObj *> &list(void){return m_list;}
 	void FindMarkedObject(const wxPoint &point, MarkedObject* marked_object);
 	void ObjectsInWindow( wxRect box, MarkedObject* marked_object, bool single_picking = true);
 	void GrippersGLCommands(bool select, bool no_color);

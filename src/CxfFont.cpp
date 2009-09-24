@@ -305,7 +305,7 @@ HeeksObj *CxfFont::Glyph::Sketch( const gp_Pnt & location, const gp_Trsf & trans
 	
 	for (GraphicsList_t::const_iterator l_itGraphic = m_graphics_list.begin(); l_itGraphic != m_graphics_list.end(); l_itGraphic++)
 	{
-		heekscad_interface.AddUndoably( (*l_itGraphic)->Sketch( location, transformation_matrix ), sketch );
+		sketch->Add((*l_itGraphic)->Sketch( location, transformation_matrix ), NULL);
 	} // End for
 
 	return(sketch);
@@ -588,16 +588,16 @@ HeeksObj *CxfFont::Sketch( const wxString & text, const gp_Trsf & transformation
 			bottom_right_point[2] = bottom_right.Z();
 
 			HeeksObj *line = heekscad_interface.NewLine( top_left_point, top_right_point );
-			heekscad_interface.AddUndoably( line, sketch );
+			sketch->Add( line, NULL);
 
 			line = heekscad_interface.NewLine( top_right_point, bottom_right_point );
-			heekscad_interface.AddUndoably( line, sketch );
+			sketch->Add( line, NULL );
 
 			line = heekscad_interface.NewLine( bottom_right_point, bottom_left_point );
-			heekscad_interface.AddUndoably( line, sketch );
+			sketch->Add( line, NULL );
 
 			line = heekscad_interface.NewLine( bottom_left_point, top_left_point );
-			heekscad_interface.AddUndoably( line, sketch );
+			sketch->Add( line, NULL );
 
 			location.SetX( location.X() + BoundingBox().Width() );
 		} // End if - then
@@ -614,7 +614,7 @@ HeeksObj *CxfFont::Sketch( const wxString & text, const gp_Trsf & transformation
 					(*l_itGraphic)->OnEditString(text.Mid(offset,1).c_str()); 
 
 					// And add it to the sketch that represents the whole text string.
-					heekscad_interface.AddUndoably( *l_itGraphic, sketch );
+					sketch->Add( *l_itGraphic, NULL );
 				} // End for
 
 				location.SetX( location.X() + l_itGlyph->second.BoundingBox().Width() );
@@ -624,7 +624,7 @@ HeeksObj *CxfFont::Sketch( const wxString & text, const gp_Trsf & transformation
 		location.SetX(location.X() + LetterSpacing());
 	} // End for
 
-	((CSketch *) sketch)->ReOrderSketch( SketchOrderTypeMultipleCurves, true );
+	((CSketch *) sketch)->ReOrderSketch( SketchOrderTypeMultipleCurves );
 	return(sketch);
 }
 

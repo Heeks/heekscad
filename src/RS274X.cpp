@@ -101,7 +101,7 @@ std::string RS274X::ReadBlock( const char *data, int *pos, const int max_pos )
 	return(l_ossBlock.str());	
 } // End ReadBlock() method
 
-bool RS274X::Read( const char *p_szFileName, bool undoably )
+bool RS274X::Read( const char *p_szFileName)
 {
 	printf("RS274X::Read(%s)\n", p_szFileName );
 
@@ -241,8 +241,7 @@ bool RS274X::Read( const char *p_szFileName, bool undoably )
 			CSketch *sketch = ipoly->MakeSketch();
 			if(sketch==NULL) continue;
 			//if(sketch->GetSketchOrder() == SketchOrderTypeCloseCCW) sketch->ReverseSketch(false);
-			if(undoably)wxGetApp().AddUndoably(sketch, NULL, NULL);
-			else wxGetApp().Add(sketch, NULL);
+			wxGetApp().Add(sketch, NULL);
 		}
 
 		/*for (std::list<CPolygon>::iterator ipoly = polygons_list.begin(); ipoly != polygons_list.end(); ipoly++)
@@ -802,14 +801,9 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 
 				if(m_area_fill)
 				{
-					// Polygons_t::iterator l_itPolygon = m_polygons.end();
-					// l_itPolygon--;
-					// l_itPolygon->push_back(m_current_position);
-
-					Trace trace( m_aperture_table[m_active_aperture], Trace::eLinear );
-					trace.Start( m_current_position );
-					trace.End( position );
-					m_traces.push_back( trace );
+					Polygons_t::iterator l_itPolygon = m_polygons.end();
+					l_itPolygon--;
+					l_itPolygon->push_back(m_current_position);
 				}
 				else
 				{
@@ -842,14 +836,11 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 			} // End if - then
 
 			Aperture aperture = m_aperture_table[ m_active_aperture ];
-			if (aperture.OutsideDiameter() < 0.0001) printf("WARNING: D03 found without radius information\n");
-			Trace trace( aperture, Trace::eFlash );
+			/*Trace trace( aperture, Trace::eCircular );
 			trace.Start( position );
-			// trace.End( position );
-			// trace.Radius( aperture.OutsideDiameter() / 2.0 );
-			m_traces.push_back( trace );
+			trace.End( position );
+			trace.Radius( aperture.OutsideDiameter() / 2 );*/
 
-			/*
 			double radius = aperture.OutsideDiameter() / 2;
 
 			Polygons_t::iterator l_itPolygon = m_polygons.end();
@@ -862,10 +853,10 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 				double angle = -PI*2.0*(double)i/8.0;
 				l_itPolygon->push_back(position.Translated(vx*radius*cos(angle)+vy*radius*sin(angle)));
 			}
-			*/
 
 			//add a new polygon
 			AddPolygonIfNeeded();
+			if (aperture.OutsideDiameter() < 0.0001) printf("WARNING: D03 found without radius information\n");
 		}
 		else if (_data.substr(0,3) == "G54")
 		{

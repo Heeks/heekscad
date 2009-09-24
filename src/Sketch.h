@@ -56,9 +56,9 @@ public:
 
 	void CalculateSketchOrder();
 	SketchOrderType GetSketchOrder();
-	bool ReOrderSketch(SketchOrderType new_order, bool undoably); // returns true if done
-	void ReLinkSketch(bool undoably);
-	void ReverseSketch(bool undoably);
+	bool ReOrderSketch(SketchOrderType new_order); // returns true if done
+	void ReLinkSketch();
+	void ReverseSketch();
 	void ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketches);
 
 	int Intersects(const HeeksObj *object, std::list< double > *rl) const;

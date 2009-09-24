@@ -35,6 +35,16 @@ HArc::HArc(const gp_Pnt &a, const gp_Pnt &b, const gp_Circ &c, const HeeksColor*
 HArc::~HArc(){
 }
 
+bool HArc::IsDifferent(HeeksObj* other)
+{
+	HArc* arc = (HArc*)other;
+
+	if(arc->C->m_p.Distance(C->m_p) > wxGetApp().m_geom_tol || arc->m_radius != m_radius)
+		return true;
+
+	return EndedObject::IsDifferent(other);
+}
+
 const HArc& HArc::operator=(const HArc &b){
 	EndedObject::operator=(b);
 	m_radius = b.m_radius;
@@ -45,6 +55,16 @@ const HArc& HArc::operator=(const HArc &b){
 		it++;
 	C = (HPoint*)*it;
 	return *this;
+}
+
+HeeksObj* HArc::MakeACopyWithID()
+{
+	HArc* pnew = (HArc*)EndedObject::MakeACopyWithID();
+	
+	pnew->GetFirstChild();
+	pnew->GetNextChild();
+	pnew->C = (HPoint*)pnew->GetNextChild();
+	return pnew;
 }
 
 HArc* arc_for_tool = NULL;
