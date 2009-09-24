@@ -28,11 +28,20 @@ HPoint::HPoint(const HPoint &p)
 
 const HPoint& HPoint::operator=(const HPoint &b)
 {
-	HeeksObj::operator=(b);
+	ConstrainedObject::operator=(b);
 	m_p = b.m_p;
 	color = b.color;
 	m_draw_unselected = b.m_draw_unselected;
 	return *this;
+}
+
+bool HPoint::IsDifferent(HeeksObj* o)
+{
+	HPoint* other = (HPoint*)o;
+	if(m_p.Distance(other->m_p) > wxGetApp().m_geom_tol)
+		return true;
+
+	return HeeksObj::IsDifferent(o);
 }
 
 void HPoint::LoadFromDoubles()
@@ -79,8 +88,7 @@ void HPoint::GetBox(CBox &box)
 
 HeeksObj *HPoint::MakeACopy(void)const
 {
-	HPoint *new_object = new HPoint(*this);
-	return new_object;
+	return new HPoint(*this);
 }
 
 bool HPoint::ModifyByMatrix(const double *m)

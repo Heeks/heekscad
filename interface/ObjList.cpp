@@ -10,6 +10,8 @@
 #endif
 #include "../tinyxml/tinyxml.h"
 
+#include "TransientObject.h"
+
 
 ObjList::ObjList(const ObjList& objlist): HeeksObj(objlist), m_index_list_valid(true) {operator=(objlist);}
 
@@ -19,7 +21,8 @@ void ObjList::Clear()
 	for(It=m_objects.begin(); It!=m_objects.end() ;It++)
 	{
 		(*It)->RemoveOwner(this);
-		delete *It;
+		if(!(*It)->GetFirstOwner())
+			delete *It;
 	}
 	m_objects.clear();
 	m_index_list.clear();
@@ -47,10 +50,27 @@ const ObjList& ObjList::operator=(const ObjList& objlist)
 {
 	HeeksObj::operator=(objlist);
 	Clear();
+
 	std::list<HeeksObj*>::const_iterator It;
 	for (It=objlist.m_objects.begin();It!=objlist.m_objects.end();It++)
 	{
-		HeeksObj* new_op = (*It)->MakeACopy();
+		HeeksObj* new_op;
+		if(objlist.m_preserving_id)
+		{
+			if(dynamic_cast<TransientObject*>(*It))
+			{
+				TransientObject* tobj = (TransientObject*)(*It)->MakeACopyWithID();
+				//wxGetApp().WentTransient(tobj->m_object,tobj);
+				new_op = tobj;
+			}
+			else
+				if((*It)->IsTransient())
+					new_op = new TransientObject((*It)->MakeACopyWithID());
+				else
+					new_op = (*It)->MakeACopyWithID();
+		}
+		else
+			new_op = (*It)->MakeACopy();
 		if(new_op)Add(new_op, NULL);
 	}
 	return *this;
@@ -64,7 +84,7 @@ void ObjList::ClearUndoably(void)
 	for (It=objects_to_delete.begin();It!=objects_to_delete.end();It++)
 	{
 #ifdef HEEKSCAD
-		wxGetApp().DeleteUndoably(*It);
+		wxGetApp().Remove(*It);
 #else
 		heeksCAD->DeleteUndoably(*It);
 #endif
@@ -167,6 +187,24 @@ int ObjList::GetNumChildren()
 	return m_objects.size();
 }
 
+void ObjList::Add(std::list<HeeksObj*> objects)
+{
+	std::list<HeeksObj*>::iterator it;
+	for(it = objects.begin(); it != objects.end(); it++)
+	{
+		Add(*it,NULL);
+	}
+}
+
+void ObjList::Remove(std::list<HeeksObj*> objects)
+{
+	std::list<HeeksObj*>::iterator it;
+	for(it = objects.begin(); it != objects.end(); it++)
+	{
+		Remove(*it);
+	}
+}
+
 bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 {
 	if (object==NULL) return false;
@@ -200,6 +238,13 @@ bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 	return true;
 }
 
+void ObjList::Disconnect(std::list<HeeksObj*> parents)
+{
+	parents.push_back(this);
+	for(LoopIt = m_objects.begin(); LoopIt != m_objects.end(); LoopIt++){
+		(*LoopIt)->Disconnect(parents);
+	}
+}
 
 void ObjList::Remove(HeeksObj* object)
 {
@@ -213,6 +258,10 @@ void ObjList::Remove(HeeksObj* object)
 	}
 	m_index_list_valid = false;
 	HeeksObj::Remove(object);
+
+	std::list<HeeksObj*> parents;
+	parents.push_back(this);
+	object->Disconnect(parents);
 
 #ifdef HEEKSCAD
 	if((!wxGetApp().m_in_OpenFile || wxGetApp().m_file_open_or_import_type != FileOpenTypeHeeks) && object->UsesID() && (object->m_id == 0 || (wxGetApp().m_file_open_or_import_type == FileImportTypeHeeks && wxGetApp().m_in_OpenFile)))

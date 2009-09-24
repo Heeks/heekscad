@@ -16,15 +16,19 @@
 #include "../src/ObjPropsCanvas.h"
 #endif
 
-HeeksObj::HeeksObj(void): m_id(0), m_layer(0), m_visible(true){}
+HeeksObj::HeeksObj(void): m_id(0), m_layer(0), m_visible(true), m_preserving_id(false), m_skip_for_undo(false){}
 
-HeeksObj::HeeksObj(const HeeksObj& ho): m_id(0), m_layer(0), m_visible(true){operator=(ho);}
+HeeksObj::HeeksObj(const HeeksObj& ho): m_id(0), m_layer(0), m_visible(true),m_preserving_id(false),m_skip_for_undo(false){operator=(ho);}
 
 const HeeksObj& HeeksObj::operator=(const HeeksObj &ho)
 {
 	// don't copy the ID or the owner
 	m_layer = ho.m_layer;
 	m_visible = ho.m_visible;
+	m_skip_for_undo = ho.m_skip_for_undo;
+
+	if(ho.m_preserving_id)
+		m_id = ho.m_id;
 
 	return *this;
 }
@@ -38,13 +42,17 @@ HeeksObj::~HeeksObj()
 	}
 }
 
+HeeksObj* HeeksObj::MakeACopyWithID()
+{
+	m_preserving_id = true;
+	HeeksObj* ret = MakeACopy();
+	m_preserving_id = false;
+	return ret;
+}
+
 void on_edit_string(const wxChar* value, HeeksObj* object)
 {
 	object->OnEditString(value);
-
-	// to do , reconnect these two
-//	wxGetApp().WasModified(object_for_properties);
-//	wxGetApp().Repaint();
 }
 
 static void on_set_color(HeeksColor value, HeeksObj* object)

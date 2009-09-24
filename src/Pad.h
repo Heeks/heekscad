@@ -21,7 +21,9 @@ public:
 	void GetProperties(std::list<Property *> *list);
 	void WriteXML(TiXmlNode *root);
 	bool UsesID(){return true;}
+	long GetMarkingMask()const{return MARKING_FILTER_PAD;}
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
-	static void PadSketch(CSketch*,double length, bool undoably);
+	static void PadSketch(CSketch*,double length);
+	bool IsDifferent(HeeksObj* other);
 };
 

@@ -4,6 +4,7 @@
 
 #include "../interface/Observer.h"
 #include "Images.h"
+#include "wx/generic/treectlg.h"
 
 class HeeksObj;
 
@@ -18,7 +19,7 @@ private:
     wxString m_desc;
 };
 
-class MyTreeCtrl : public wxTreeCtrl, public Images
+class MyTreeCtrl : public wxGenericTreeCtrl, public Images
 {
 public:
     MyTreeCtrl() { }
@@ -47,7 +48,7 @@ public:
     void CreateButtonsImageList(int size = 11);
 
     void DoSortChildren(const wxTreeItemId& item, bool reverse = false)
-        { m_reverseSort = reverse; wxTreeCtrl::SortChildren(item); }
+        { m_reverseSort = reverse; wxGenericTreeCtrl::SortChildren(item); }
     void DoEnsureVisible() { if (m_lastItem.IsOk()) EnsureVisible(m_lastItem); }
 
     int ImageSize(void) const { return m_imageSize; }
@@ -83,19 +84,21 @@ private:
 	void Clear();
 	void Freeze();
 	void Thaw();
+	void SelectItem(wxTreeItemId item);
+	void UnselectItem(wxTreeItemId item);
 
     void Resize();
     void CreateTreeWithDefStyle();
     void CreateTree(long style);
-    bool CanAdd(HeeksObj* object);
-    const wxTreeItemId Add(HeeksObj* object, const wxTreeItemId &owner);
+    const wxTreeItemId AddInt(HeeksObj* object, const wxTreeItemId &owner);
     void AddSubstitute(HeeksObj* object, const wxTreeItemId &item);
-    void AddChildren(HeeksObj* object, const wxTreeItemId &item);
+	void Add(ObjList* objects, wxTreeItemId owner);
+	void Reload();
     void Remove(HeeksObj *object, const wxTreeItemId &item, bool set_not_marked);
     bool RemoveChildren(const wxTreeItemId &item);
 
     MyTreeCtrl *m_treeCtrl;
-    std::map<HeeksObj*, wxTreeItemId> tree_map;
+	std::map<HeeksObj*, std::vector<wxTreeItemId> > tree_map;
     wxTreeItemId m_root;
 
 public:
@@ -104,7 +107,7 @@ public:
 
     void OnSize(wxSizeEvent& event);
 	void OnMouseWheel(wxMouseEvent& event);
-    wxTreeItemId Find(HeeksObj *object);
+	std::vector<wxTreeItemId> Find(HeeksObj *object);
 	void OnKeyDown(wxKeyEvent& event);
 	void OnKeyUp(wxKeyEvent& event);
  

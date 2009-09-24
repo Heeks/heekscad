@@ -41,6 +41,10 @@ Constraint::Constraint(const Constraint* obj){
 	m_length = obj->m_length;
 	m_obj1 = obj->m_obj1;
 	m_obj2 = obj->m_obj2;
+	m_obj1->Add(this,NULL);
+	if(m_obj2)
+		m_obj2->Add(this,NULL);
+
 }
 
 Constraint::Constraint(EnumConstraintType type,EnumAbsoluteAngle angle, ConstrainedObject* obj)
@@ -84,6 +88,7 @@ Constraint::Constraint(EnumConstraintType type,double length,ConstrainedObject* 
 	m_obj1 = obj1;
 	m_obj2 = 0;
 	m_length = length;
+	obj1->Add(this,NULL);
 }
 
 const Constraint& Constraint::operator=(const Constraint &b){
@@ -97,17 +102,61 @@ const Constraint& Constraint::operator=(const Constraint &b){
 }
 
 Constraint::~Constraint()
+{
+
+}
+
+void Constraint::Disconnect(std::list<HeeksObj*> parents)
+{
+	HeeksObj* owner = GetFirstOwner();
+	if(parents.back() == owner)
 	{
-	//TODO: objlist will get us removed from obj1's list and obj2's list, however we may want to get out
-	//of constrained objects constraint list as well
-	//the 3 boolean like constraints should be handled as well
-/*	if(m_obj1 && !m_obj1->constraints.empty())
-	{
-		m_obj1->constraints.remove(this);
+		this->RemoveOwner(owner);
+		return;
 	}
-	if(m_obj2 && !m_obj2->constraints.empty())
-		m_obj2->constraints.remove(this);
-*/
+	owner = GetNextOwner();
+	if(parents.back() == owner)
+		RemoveOwner(owner);
+}
+
+void Constraint::ReloadPointers()
+{
+	m_obj1 = (ConstrainedObject*)GetFirstOwner();
+	m_obj2 = (ConstrainedObject*)GetNextOwner();
+	if(!m_obj2)
+	{
+		int x=0;
+		x++;
+	}
+}
+
+bool Constraint::IsDifferent(HeeksObj* o)
+{
+	Constraint* other = (Constraint*)o;
+	if(m_type != other->m_type || m_angle != other->m_angle || m_length != other->m_length)
+		return true;
+
+	int id1_1=0;
+	int id1_2=0;
+	int id2_1=0;
+	int id2_2=0;
+
+	if(m_obj1)
+		id1_1 = m_obj1->m_id;
+	if(other->m_obj1)
+		id1_2 = other->m_obj1->m_id;
+	if(m_obj2)
+		id2_1 = m_obj2->m_id;
+	if(other->m_obj2)
+		id2_2 = other->m_obj2->m_id;
+
+	if(id1_1 != id1_2 && id1_1 != id2_2)
+		return true;
+
+	if(id2_1 != id2_2 && id2_1 != id1_2)
+		return true;
+
+	return false;
 }
 
 void Constraint::render_text(const wxChar* str)
@@ -177,7 +226,7 @@ void Constraint::glCommands(HeeksColor color, gp_Ax1 axis)
 
 HeeksObj *Constraint::MakeACopy(void)const
 {
-	return new Constraint(this);
+	return new Constraint(*this);
 }
 
 static std::list<Constraint*> obj_to_save;
@@ -274,18 +323,8 @@ HeeksObj* Constraint::ReadFromXMLElement(TiXmlElement* pElem)
 
 	Constraint *c = new Constraint(etype,eangle,length,obj1,obj2);
 
-	//Set up the quick pointers
-	if(etype == AbsoluteAngleConstraint)
-		obj1->absoluteangleconstraint = c;
-	else if(etype == RadiusConstraint)
-		obj1->radiusconstraint = c;
-	else if(etype == LineLengthConstraint)
-		obj1->linelengthconstraint = c;
-	else
-	{
-		obj1->constraints.push_back(c);
-		obj2->constraints.push_back(c);
-	}
+	obj1->constraints.push_back(c);
+	obj2->constraints.push_back(c);
 
 	//Don't let the xml reader try to insert us in the tree
 	return NULL;

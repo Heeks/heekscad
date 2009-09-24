@@ -33,6 +33,7 @@ const HLine& HLine::operator=(const HLine &b){
 	color = b.color;
 	return *this;
 }
+
 HLine* line_for_tool = NULL;
 
 class SetLineHorizontal:public Tool{
@@ -356,6 +357,8 @@ HeeksObj* HLine::ReadFromXMLElement(TiXmlElement* pElem)
 		new_object->B = (HPoint*)new_object->GetNextChild();
 		new_object->A->m_draw_unselected = false;
 		new_object->B->m_draw_unselected = false;
+		new_object->A->SetSkipForUndo(true);
+		new_object->B->SetSkipForUndo(true);
 	}
 
 	// The OpenCascade libraries throw an exception when one tries to

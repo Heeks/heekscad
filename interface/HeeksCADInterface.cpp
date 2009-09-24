@@ -144,19 +144,28 @@ wxString CHeeksCADInterface::GetExeFolder()
 	return wxGetApp().GetExeFolder();
 }
 
-void CHeeksCADInterface::AddUndoably(HeeksObj* object, HeeksObj* owner)
-{
-	wxGetApp().AddUndoably(object, owner, NULL);
-}
-
 HeeksObj* CHeeksCADInterface::GetMainObject()
 {
 	return &(wxGetApp());
 }
 
-void CHeeksCADInterface::DeleteUndoably(HeeksObj* object)
+void CHeeksCADInterface::Remove(HeeksObj* object)
 {
-	wxGetApp().DeleteUndoably(object);
+	wxGetApp().Remove(object);
+}
+
+void CHeeksCADInterface::Add(HeeksObj* object,HeeksObj* prev)
+{
+	wxGetApp().Add(object,prev);
+}
+
+void CHeeksCADInterface::CreateUndoPoint()
+{
+	wxGetApp().CreateUndoPoint();
+}
+void CHeeksCADInterface::Changed()
+{
+	wxGetApp().Changed();
 }
 
 const std::list<HeeksObj*>& CHeeksCADInterface::GetMarkedList(void)
@@ -257,31 +266,6 @@ void CHeeksCADInterface::SetInputMode(CInputMode* input_mode)
 	wxGetApp().SetInputMode(input_mode);
 }
 
-void CHeeksCADInterface::WasModified(HeeksObj* object)
-{
-	wxGetApp().WasModified(object);
-}
-
-void CHeeksCADInterface::WasAdded(HeeksObj* object)
-{
-	wxGetApp().WasAdded(object);
-}
-
-void CHeeksCADInterface::WasRemoved(HeeksObj* object)
-{
-	wxGetApp().WasRemoved(object);
-}
-
-void CHeeksCADInterface::WereAdded(const std::list<HeeksObj*> &list)
-{
-	wxGetApp().WereAdded(list);
-}
-
-void CHeeksCADInterface::WereRemoved(const std::list<HeeksObj*> &list)
-{
-	wxGetApp().WereRemoved(list);
-}
-
 int CHeeksCADInterface::PickObjects(const wxChar* str, long marking_filter, bool m_just_one)
 {
 	return wxGetApp().PickObjects(str, marking_filter, m_just_one);
@@ -378,17 +362,17 @@ HeeksObj* CHeeksCADInterface::NewSolid(const TopoDS_Solid &solid, const wxChar* 
 } // End NewSolid() method
 
 
-HeeksObj* CHeeksCADInterface::Fuse(const std::list<HeeksObj*> objects)
+HeeksObj* CHeeksCADInterface::Fuse(std::list<HeeksObj*> objects)
 {
 	return CShape::FuseShapes(objects);
 }
 
-HeeksObj* CHeeksCADInterface::Cut(const std::list<HeeksObj*> objects)
+HeeksObj* CHeeksCADInterface::Cut(std::list<HeeksObj*> objects)
 {
 	return CShape::CutShapes(objects);
 }
 
-HeeksObj* CHeeksCADInterface::Common(const std::list<HeeksObj*> objects)
+HeeksObj* CHeeksCADInterface::Common(std::list<HeeksObj*> objects)
 {
 	return CShape::CommonShapes(objects);
 }
@@ -483,9 +467,9 @@ void CHeeksCADInterface::RegisterReadXMLfunction(const char* type_name, HeeksObj
 	wxGetApp().RegisterReadXMLfunction(type_name, read_xml_function);
 }
 
-void CHeeksCADInterface::OpenXMLFile(const wxChar *filepath, bool undoably, HeeksObj* paste_into)
+void CHeeksCADInterface::OpenXMLFile(const wxChar *filepath,HeeksObj* paste_into)
 {
-	wxGetApp().OpenXMLFile(filepath, undoably, paste_into);
+	wxGetApp().OpenXMLFile(filepath, paste_into);
 }
 
 void CHeeksCADInterface::ObjectWriteBaseXML(HeeksObj* object, TiXmlElement* element)
@@ -564,9 +548,9 @@ HeeksObj* CHeeksCADInterface::MakePipe(HeeksObj* spine, HeeksObj* profile)
 	return CreatePipeFromProfile(spine,profile);
 }
 
-bool CHeeksCADInterface::ReOrderSketch(HeeksObj* sketch, SketchOrderType new_order, bool undoably)
+bool CHeeksCADInterface::ReOrderSketch(HeeksObj* sketch, SketchOrderType new_order)
 {
-	return ((CSketch*)sketch)->ReOrderSketch(new_order, undoably);
+	return ((CSketch*)sketch)->ReOrderSketch(new_order);
 }
 
 HeeksObj* CHeeksCADInterface::ExtrudeSketch(HeeksObj* sketch, double height)
@@ -954,16 +938,6 @@ void CHeeksCADInterface::AddToAboutBox(const wxChar* str)
 void CHeeksCADInterface::SetDefaultLayout(const wxString& str)
 {
 	wxGetApp().m_frame->SetDefaultLayout(str);
-}
-
-void CHeeksCADInterface::StartHistory()
-{
-	wxGetApp().StartHistory();
-}
-
-void CHeeksCADInterface::EndHistory(void)
-{
-	wxGetApp().EndHistory();
 }
 
 HeeksObj* CHeeksCADInterface::NewSTLSolid()

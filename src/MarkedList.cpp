@@ -366,10 +366,8 @@ void MarkedList::GetTools(MarkedObject* clicked_object, std::list<Tool*>& t_list
 
 void MarkedList::CutSelectedItems()
 {
-	wxGetApp().StartHistory();
 	CopySelectedItems();
-	wxGetApp().DeleteUndoably(m_list);
-	wxGetApp().EndHistory();
+	wxGetApp().Remove(m_list);
 }
 
 void MarkedList::CopySelectedItems()

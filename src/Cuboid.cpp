@@ -23,6 +23,18 @@ HeeksObj *CCuboid::MakeACopy(void)const
 	return new CCuboid(*this);
 }
 
+bool CCuboid::IsDifferent(HeeksObj* other)
+{
+	CCuboid* cube = (CCuboid*)other;
+	if(cube->m_x != m_x || cube->m_y != m_y || cube->m_z != m_z)
+		return true;
+
+	if(!IsEqual(cube->m_pos,m_pos))
+		return true;
+
+	return CShape::IsDifferent(other);
+}
+
 static void on_set_centre(const double *vt, HeeksObj* object){
 	gp_Trsf mat;
 	mat.SetTranslation ( gp_Vec ( ((CCuboid*)object)->m_pos.Location(), make_point(vt) ) );
@@ -50,9 +62,13 @@ bool CCuboid::ModifyByMatrix(const double* m){
 	double new_z = fabs(m_z * scale);
 	CCuboid* new_object = new CCuboid(new_pos, new_x, new_y, new_z, m_title.c_str(), m_color);
 	new_object->CopyIDsFrom(this);
-	wxGetApp().AddUndoably(new_object, Owner(), NULL);
-	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
-	wxGetApp().DeleteUndoably(this);
+	Owner()->Add(new_object, NULL);
+	Owner()->Remove(this);
+	if(wxGetApp().m_marked_list->ObjectMarked(this))
+	{
+		wxGetApp().m_marked_list->Remove(this, false);
+		wxGetApp().m_marked_list->Add(new_object, true);
+	}
 	return true;
 }
 
@@ -99,12 +115,13 @@ void CCuboid::OnApplyProperties()
 {
 	CCuboid* new_object = new CCuboid(m_pos, m_x, m_y, m_z, m_title.c_str(), m_color);
 	new_object->CopyIDsFrom(this);
-	wxGetApp().StartHistory();
-	wxGetApp().AddUndoably(new_object, NULL, NULL);
-	wxGetApp().DeleteUndoably(this);
-	wxGetApp().EndHistory();
-	wxGetApp().m_marked_list->Clear(true);
-	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
+	Owner()->Add(new_object, NULL);
+	Owner()->Remove(this);
+	if(wxGetApp().m_marked_list->ObjectMarked(this))
+	{
+		wxGetApp().m_marked_list->Remove(this, false);
+		wxGetApp().m_marked_list->Add(new_object, true);
+	}
 	wxGetApp().Repaint();
 }
 
@@ -158,11 +175,9 @@ bool CCuboid::Stretch(const double *p, const double* shift, void* data)
 	{
 		CCuboid* new_object = new CCuboid(m_pos, m_x, m_y, m_z, m_title.c_str(), m_color);
 		new_object->CopyIDsFrom(this);
-		wxGetApp().StartHistory();
-		wxGetApp().AddUndoably(new_object, NULL, NULL);
-		wxGetApp().DeleteUndoably(this);
-		wxGetApp().EndHistory();
-		wxGetApp().m_marked_list->Clear(true);
+		Owner()->Add(new_object, NULL);
+		Owner()->Remove(this);
+		wxGetApp().m_marked_list->Clear(false);
 		wxGetApp().m_marked_list->Add(new_object, true);
 	}
 

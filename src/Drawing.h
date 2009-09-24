@@ -41,7 +41,7 @@ protected:
 	virtual int step_to_go_to_after_last_step(){return 0;}
 	virtual bool is_an_add_level(int level){return false;}
 	virtual bool is_a_draw_level(int level){return is_an_add_level(level);}
-	virtual HeeksObj* GetOwnerForDrawingObjects(){return NULL;}
+	virtual HeeksObj* GetOwnerForDrawingObjects(){return &wxGetApp();}
 
 	void SetView(int);
 	int GetView();

@@ -56,15 +56,13 @@ void Drawing::AddPoint()
 
 	if(wxGetApp().m_digitizing->digitized_point.m_type == DigitizeNoItemType)return;
 
-	wxGetApp().StartHistory();
-
 	bool calculated = false;
 	if(is_an_add_level(GetDrawStep())){
 		calculated = calculate_item(wxGetApp().m_digitizing->digitized_point);
 		if(calculated){
 			before_add_item();
 			const std::list<HeeksObj*>& drawing_objects = GetObjectsMade();
-			wxGetApp().AddUndoably(drawing_objects, GetOwnerForDrawingObjects());
+			((ObjList*)GetOwnerForDrawingObjects())->Add(drawing_objects);
 			if(DragDoneWithXOR())wxGetApp().m_frame->m_graphics->DrawObjectsOnFront(drawing_objects, true);
 			else wxGetApp().Repaint();
 			set_previous_direction();
@@ -79,7 +77,6 @@ void Drawing::AddPoint()
 		next_step = step_to_go_to_after_last_step();
 	}
 	SetDrawStepUndoable(next_step);
-	wxGetApp().EndHistory();
 	m_getting_position = false;
 	m_inhibit_coordinate_change = false;
 	wxGetApp().OnInputModeTitleChanged();
@@ -281,11 +278,15 @@ public:
 };
 
 void Drawing::SetDrawStepUndoable(int s){
-	wxGetApp().DoToolUndoably(new SetDrawingDrawStep(this, s));
+//	wxGetApp().DoToolUndoably(new SetDrawingDrawStep(this, s));
+	SetDrawingDrawStep sds(this, s);
+	sds.Run();
 }
 
 void Drawing::SetStartPosUndoable(const DigitizedPoint& pos){
-	wxGetApp().DoToolUndoably(new SetDrawingPosition(this, pos));
+//	wxGetApp().DoToolUndoably(new SetDrawingPosition(this, pos));
+	SetDrawingPosition sdp(this, pos);
+	sdp.Run();
 }
 
 void Drawing::OnFrontRender(){

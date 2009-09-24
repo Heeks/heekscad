@@ -163,7 +163,7 @@ public:
 	void Run(){
 		CSketch* new_object = new CSketch();
 		ConvertEdgeToSketch2(edge_for_tools->Edge(), new_object, FaceToSketchTool::deviation);
-		wxGetApp().AddUndoably(new_object, NULL, NULL);
+		wxGetApp().Add(new_object, NULL);
 	}
 };
 
@@ -181,10 +181,8 @@ void CEdge::Blend(double radius){
 			BRepFilletAPI_MakeFillet fillet(((CShape*)(Owner()->Owner()))->Shape());
 			fillet.Add(radius, m_topods_edge);
 			TopoDS_Shape new_shape = fillet.Shape();
-			wxGetApp().StartHistory();
-			wxGetApp().AddUndoably(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(Owner()->Owner()->GetColor())), NULL, NULL);
-			wxGetApp().DeleteUndoably(Owner()->Owner());
-			wxGetApp().EndHistory();
+			wxGetApp().Add(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(Owner()->Owner()->GetColor())), NULL);
+			wxGetApp().Remove(Owner()->Owner());
 		}
 	}
 	catch(wxChar *message)

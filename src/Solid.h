@@ -17,7 +17,7 @@ public:
 	CSolid(const HeeksColor& col);
 	~CSolid();
 
-	virtual const CSolid& operator=(const CSolid& s){ return *this;}
+	virtual const CSolid& operator=(const CSolid& s){ CShape::operator =(s); return *this;}
 
 	int GetType()const{return SolidType;}
 	long GetMarkingMask()const{return MARKING_FILTER_SOLID;}

@@ -61,7 +61,7 @@ void TransformObjectsTool::Run(){
 		}
 	}
 
-	wxGetApp().WereModified(m_list);
+	wxGetApp().Changed();
 }
 
 void TransformObjectsTool::RollBack(){
@@ -73,5 +73,5 @@ void TransformObjectsTool::RollBack(){
 		}
 	}
 
-	wxGetApp().WereModified(m_list);
+	wxGetApp().Changed();
 }

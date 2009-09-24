@@ -49,6 +49,9 @@ public:
 	void WriteXML(TiXmlNode *root);
 	int Intersects(const HeeksObj *object, std::list< double > *rl)const;
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
+	bool DescendForUndo(){return false;}
+	bool IsDifferent(HeeksObj* other);
+	HeeksObj* MakeACopyWithID();
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 

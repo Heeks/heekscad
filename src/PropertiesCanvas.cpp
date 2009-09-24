@@ -240,6 +240,8 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 	Property* property = GetProperty(p);
 	if(property == NULL)return;
 
+	wxGetApp().CreateUndoPoint();
+
 	switch(property->get_property_type()){
 	case StringPropertyType:
 		{
@@ -343,6 +345,8 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 		}
 		break;
 	}
+
+	wxGetApp().Changed();
 }
 
 void CPropertiesCanvas::DeselectProperties()

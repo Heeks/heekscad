@@ -117,8 +117,8 @@ bool CFace::ModifyByMatrix(const double *m){
 		gp_Trsf mat = make_matrix(m);
 		BRepBuilderAPI_Transform myBRepTransformation(m_topods_face,mat);
 		TopoDS_Shape new_shape = myBRepTransformation.Shape();
-		wxGetApp().Add(new CFace(*((TopoDS_Face*)(&new_shape))), NULL);
-		wxGetApp().DeleteUndoably(this);
+		Owner()->Add(new CFace(*((TopoDS_Face*)(&new_shape))), NULL);
+		Owner()->Remove(this);
 	}
 	return true;
 }
@@ -292,7 +292,7 @@ static CFace* face_for_tools = NULL;
 void FaceToSketchTool::Run(){
 	CSketch* new_object = new CSketch();
 	ConvertFaceToSketch2(face_for_tools->Face(), new_object, deviation);
-	wxGetApp().AddUndoably(new_object, NULL, NULL);
+	wxGetApp().Add(new_object, NULL);
 }
 
 double FaceToSketchTool::deviation = 0.1;
@@ -309,7 +309,7 @@ public:
 		gp_Pln plane;
 		face_for_tools->GetPlaneParams(plane);
 		CoordinateSystem* new_object = new CoordinateSystem(_("Face Coordinate System"), plane.Location(), plane.XAxis().Direction(), plane.YAxis().Direction());
-		wxGetApp().AddUndoably(new_object, NULL, NULL);
+		wxGetApp().Add(new_object, NULL);
 		wxGetApp().m_marked_list->Clear(true);
 		wxGetApp().m_marked_list->Add(new_object, true);
 		wxGetApp().Repaint();

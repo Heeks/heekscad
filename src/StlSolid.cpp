@@ -240,7 +240,7 @@ void CStlSolid::CopyFrom(const HeeksObj* object)
 
 void CStlSolid::OnEditString(const wxChar* str){
 	m_title.assign(str);
-	wxGetApp().WasModified(this);
+	wxGetApp().Changed();
 }
 
 void CStlSolid::GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal){

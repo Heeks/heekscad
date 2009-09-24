@@ -68,14 +68,17 @@ enum{
 #define MARKING_FILTER_RULER				0x00004000
 #define MARKING_FILTER_LOOP					0x00008000
 #define MARKING_FILTER_VERTEX				0x00010000
+#define MARKING_FILTER_PAD					0x00020000
 
 class HeeksObj{
 	std::list<HeeksObj*> m_owners;
 	std::list<HeeksObj*>::iterator m_owners_it;
 public:
+	bool m_skip_for_undo;
 	unsigned int m_id;
 	unsigned int m_layer;
 	bool m_visible;
+	bool m_preserving_id;
 
 	HeeksObj(void);
 	HeeksObj(const HeeksObj& ho);
@@ -98,6 +101,9 @@ public:
 	virtual void OnEditString(const wxChar* str){}
 	virtual void KillGLLists(void){};
 	virtual HeeksObj *MakeACopy()const = 0;
+	virtual HeeksObj *MakeACopyWithID();
+	virtual void ReloadPointers(){}
+	virtual void Disconnect(std::list<HeeksObj*>parents){}
 	virtual void CopyFrom(const HeeksObj* object){}
 	virtual void SetColor(const HeeksColor &col){}
 	virtual const HeeksColor* GetColor()const{return NULL;}
@@ -121,8 +127,12 @@ public:
 	virtual void SetClickMarkPoint(MarkedObject* marked_object, const double* ray_start, const double* ray_direction){}
 	virtual bool CanAdd(HeeksObj* object){return false;}
 	virtual bool CanAddTo(HeeksObj* owner){return true;}
+	virtual bool DescendForUndo(){return true;}
+	virtual bool GetSkipForUndo(){return m_skip_for_undo;}
+	virtual void SetSkipForUndo(bool val){m_skip_for_undo = val;}
 	virtual bool OneOfAKind(){return false;} // if true, then, instead of pasting, find the first object of the same type and copy object to it.
 	virtual bool Add(HeeksObj* object, HeeksObj* prev_object) {object->AddOwner(this); object->OnAdd(); return true;}
+	virtual bool IsDifferent(HeeksObj* other){return false;}
 	virtual void Remove(HeeksObj* object){object->OnRemove();}
 	virtual void OnAdd(){}
 	virtual void OnRemove();
@@ -153,4 +163,5 @@ public:
 	virtual HeeksObj* GetFirstOwner();
 	virtual HeeksObj* GetNextOwner();
 	virtual const TopoDS_Shape *GetShape() { return(NULL); }
+	virtual bool IsTransient(){return false;}
 };

@@ -147,7 +147,7 @@ static void on_set_font(int zero_based_choice, HeeksObj *obj)
 	{
 		((HText*)obj)->m_pFont = wxGetApp().GetAvailableFonts()->Font( CxfFont::Name_t(vector_names[zero_based_choice].c_str()) );
 	}
-	wxGetApp().WasModified((HText*)obj);
+	wxGetApp().Changed();
 }
 
 void HText::GetProperties(std::list<Property *> *list)
@@ -183,7 +183,7 @@ bool HText::Stretch(const double *p, const double* shift, void* data)
 
 void HText::OnEditString(const wxChar* str){
 	m_text.assign(str);
-	wxGetApp().WasModified(this);
+	wxGetApp().Changed();
 }
 
 void HText::WriteXML(TiXmlNode *root)
@@ -269,8 +269,8 @@ class TextToSketch:public Tool{
 public:
 	void Run(){
 		HeeksObj *sketch = pTextForSketchTool->m_pFont->Sketch( pTextForSketchTool->m_text, pTextForSketchTool->m_trsf );
-		wxGetApp().AddUndoably( sketch, NULL, NULL );
-		wxGetApp().DeleteUndoably( pTextForSketchTool );
+		wxGetApp().Add( sketch, NULL);
+		wxGetApp().Remove( pTextForSketchTool );
 		pTextForSketchTool = NULL;
 	}
 	const wxChar* GetTitle(){return _T("Make a Sketch");}
