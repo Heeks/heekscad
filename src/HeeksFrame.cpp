@@ -1024,7 +1024,7 @@ void CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, Tool* tool)
 	if(bitmap)
 	{
 		wxToolBarToolBase* button_added = wxGetApp().m_frame->AddToolBarTool(toolbar, tool->GetTitle(), *bitmap, tool->GetToolTip(), OnTool);
-		tool_map_for_OnTool.insert( std::pair<int, Tool*> ( button_added->GetId(), tool ) );
+		if(button_added)tool_map_for_OnTool.insert( std::pair<int, Tool*> ( button_added->GetId(), tool ) );
 	}
 }
 
