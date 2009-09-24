@@ -163,6 +163,12 @@ void CHeeksCADInterface::CreateUndoPoint()
 {
 	wxGetApp().CreateUndoPoint();
 }
+
+void CHeeksCADInterface::WentTransient(HeeksObj* obj, TransientObject *tobj)
+{
+	wxGetApp().WentTransient(obj, tobj);
+}
+
 void CHeeksCADInterface::Changed()
 {
 	wxGetApp().Changed();
