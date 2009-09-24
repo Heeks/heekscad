@@ -86,7 +86,7 @@ void ObjList::ClearUndoably(void)
 #ifdef HEEKSCAD
 		wxGetApp().Remove(*It);
 #else
-		heeksCAD->DeleteUndoably(*It);
+		heeksCAD->Remove(*It);
 #endif
 	}
 	m_objects.clear();
