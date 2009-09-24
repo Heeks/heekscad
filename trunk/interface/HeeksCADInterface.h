@@ -56,9 +56,7 @@ public:
 	virtual int GetToolImageBitmapSize();
 	virtual int AddMenuItem(wxMenu* menu, const wxString& title, const wxBitmap& bitmap, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL, wxMenu* submenu = NULL, bool check_item = false);
 	virtual wxString GetExeFolder();
-	virtual void AddUndoably(HeeksObj* object, HeeksObj* owner);
 	virtual HeeksObj* GetMainObject();
-	virtual void DeleteUndoably(HeeksObj* object);
 	virtual const std::list<HeeksObj*>& GetMarkedList();
 	virtual bool GetArcCentre(HeeksObj* object, double* c);
 	virtual bool GetArcAxis(HeeksObj* object, double* a);
@@ -73,11 +71,6 @@ public:
 	virtual void ClearMarkedList();
 	virtual CInputMode* GetSelectMode();
 	virtual void SetInputMode(CInputMode* input_mode);
-	virtual void WasModified(HeeksObj* object);
-	virtual void WasAdded(HeeksObj* object);
-	virtual void WasRemoved(HeeksObj* object);
-	virtual void WereAdded(const std::list<HeeksObj*> &list);
-	virtual void WereRemoved(const std::list<HeeksObj*> &list);
 	virtual int PickObjects(const wxChar* str, long marking_filter = -1, bool m_just_one = false);
 	virtual bool PickPosition(const wxChar* str, double* pos);
 	virtual bool Digitize(const wxPoint &point, double* pos);
@@ -96,9 +89,9 @@ public:
 	virtual HeeksObj* NewSphere(const double*pos, double radius);    
 	virtual HeeksObj* NewGroup();
 	virtual HeeksObj* NewSolid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
-	virtual HeeksObj* Fuse(const std::list<HeeksObj*> objects);
-	virtual HeeksObj* Cut(const std::list<HeeksObj*> objects);
-	virtual HeeksObj* Common(const std::list<HeeksObj*> objects);    
+	virtual HeeksObj* Fuse(std::list<HeeksObj*> objects);
+	virtual HeeksObj* Cut(std::list<HeeksObj*> objects);
+	virtual HeeksObj* Common(std::list<HeeksObj*> objects);    
 	virtual void RotateObject(HeeksObj*, const double*p,const double*u,double r);
 	virtual void TranslateObject(HeeksObj*,const double* c);
 	virtual void RegisterObserver(Observer* observer);
@@ -107,12 +100,17 @@ public:
 	virtual void RegisterHideableWindow(wxWindow* w);
 	virtual HeeksObj* ReadXMLElement(TiXmlElement* pElem);
 	virtual void RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem));
-	virtual void OpenXMLFile(const wxChar *filepath, bool undoably = false, HeeksObj* paste_into = NULL);
+	virtual void OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into = NULL);
 	virtual void ObjectWriteBaseXML(HeeksObj* object, TiXmlElement* element);
 	virtual void ObjectReadBaseXML(HeeksObj* object, TiXmlElement* element);
 	virtual HeeksObj* GetIDObject(int type, int id);
 	virtual void SetObjectID(HeeksObj* object, int id); // check for existing id using GetIDObject and call DeleteUndoably first
 	virtual void SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, bool for_clipboard);
+	virtual void Changed();
+	virtual void Remove(HeeksObj* obj);
+	virtual void Add(HeeksObj* object, HeeksObj* other);
+	virtual void CreateUndoPoint();
+
 
 	virtual int GetNextID(int type);
 	virtual bool InOpenFile();
@@ -124,7 +122,7 @@ public:
 
 	// sketches
 	virtual SketchOrderType GetSketchOrder(HeeksObj* sketch);
-	virtual bool ReOrderSketch(HeeksObj* sketch, SketchOrderType new_order, bool undoably); // returns true if done
+	virtual bool ReOrderSketch(HeeksObj* sketch, SketchOrderType new_order); // returns true if done
 	virtual void ExtractSeparateSketches(HeeksObj* sketch, std::list<HeeksObj*> &new_separate_sketches);
 	virtual HeeksObj* ExtrudeSketch(HeeksObj* sketch, double height);
 	virtual HeeksObj* LineArcsToWire(std::list<HeeksObj*> list);
@@ -209,8 +207,6 @@ public:
 	virtual void PropertiesOnApply2();// don't need to press tick to make changes
 	virtual void AddToAboutBox(const wxChar* str);
 	virtual void SetDefaultLayout(const wxString& str);
-	virtual void StartHistory();
-	virtual void EndHistory(void);
 	virtual HeeksObj* NewSTLSolid();
 	virtual void STLSolidAddTriangle(HeeksObj* stl_solid, float* t);
 	virtual const HeeksColor& GetBackgroundColor();

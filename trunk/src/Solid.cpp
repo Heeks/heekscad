@@ -43,9 +43,13 @@ bool CSolid::ModifyByMatrix(const double* m){
 	TopoDS_Shape new_shape = myBRepTransformation.Shape();
 	CSolid* new_object = new CSolid(*((TopoDS_Solid*)(&new_shape)), m_title.c_str(), m_color);
 	new_object->CopyIDsFrom(this);
-	wxGetApp().AddUndoably(new_object, Owner(), NULL);
-	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
-	wxGetApp().DeleteUndoably(this);
+	Owner()->Add(new_object, NULL);
+	if(wxGetApp().m_marked_list->ObjectMarked(this))
+	{
+		wxGetApp().m_marked_list->Remove(this,false);
+		wxGetApp().m_marked_list->Add(new_object, true);
+	}
+	Owner()->Remove(this);
 	return true;
 }
 
@@ -53,10 +57,8 @@ void CSolid::OnApplyProperties()
 {
 	CSolid* new_object = new CSolid(*((TopoDS_Solid*)(&m_shape)), m_title.c_str(), m_color);
 	new_object->CopyIDsFrom(this);
-	wxGetApp().StartHistory();
-	wxGetApp().AddUndoably(new_object, NULL, NULL);
-	wxGetApp().DeleteUndoably(this);
-	wxGetApp().EndHistory();
+	Owner()->Add(new_object, NULL);
+	Owner()->Remove(this);
 	wxGetApp().m_marked_list->Clear(true);
 	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().Repaint();

@@ -53,14 +53,18 @@ public:
 
 	~Constraint(void);
 
+	void ReloadPointers();
+	bool IsTransient(){return true;}
 	HeeksObj *MakeACopy(void)const;
 	int GetType()const{return ConstraintType;}
 	const wxChar* GetTypeString(void)const{return _("Constraint");}
 	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/line");}
+	void Disconnect(std::list<HeeksObj*> parents);
 	void WriteXML(TiXmlNode *root);
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 	static void BeginSave();
 	static void EndSave(TiXmlNode *root);
+	bool IsDifferent(HeeksObj* other);
 
 	bool operator==(const Constraint &other) const {
 		return m_type == other.m_type && m_angle==other.m_angle && m_obj1 == other.m_obj1 && m_obj2 == other.m_obj2 && m_length == other.m_length;

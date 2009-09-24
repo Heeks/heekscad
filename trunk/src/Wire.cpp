@@ -46,8 +46,8 @@ public:
 		if(make_operation.IsDeleted(make_operation.Shape())){
 			wxMessageBox(_("Is Deleted"));
 		}
-		wxGetApp().AddUndoably(new_object, NULL, NULL);
-		wxGetApp().DeleteUndoably(m_wire);
+		wxGetApp().Add(new_object, NULL);
+		wxGetApp().Remove(m_wire);
 	}
 	const wxChar* GetTitle(){
 		wxString str = wxString(_("Offset Wire")) + wxString::Format(_T(" %lf"), m_offset);

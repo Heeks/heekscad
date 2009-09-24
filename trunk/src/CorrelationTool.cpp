@@ -177,7 +177,7 @@ CCorrelationTool::CorrelationData_t CCorrelationTool::CorrelationData(      cons
 				results.insert( std::make_pair( angle, empty ) );
 			} // End if - else
 
-			heekscad_interface.DeleteUndoably(verification_line);
+			wxGetApp().Remove(verification_line);
 			verification_line = NULL;
 		} // End if - then
 	} // End for

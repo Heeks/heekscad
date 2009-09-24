@@ -143,7 +143,7 @@ bool HDimension::Stretch(const double *p, const double* shift, void* data)
 
 void HDimension::OnEditString(const wxChar* str){
 	m_text.assign(str);
-	wxGetApp().WasModified(this);
+	wxGetApp().Changed();
 }
 
 void HDimension::WriteXML(TiXmlNode *root)

@@ -3,7 +3,6 @@
 // This program is released under the BSD license. See the file COPYING for details.
 #include "stdafx.h"
 #include "ConversionTools.h"
-#include "RemoveOrAddTool.h"
 #include "MarkedList.h"
 #include "HLine.h"
 #include "HArc.h"
@@ -318,7 +317,7 @@ void ConvertSketchToFace::Run(){
 			TopoDS_Face face;
 			if(ConvertSketchToFace2(object, face))
 			{
-				wxGetApp().AddUndoably(new CFace(face), NULL, NULL);
+				wxGetApp().Add(new CFace(face), NULL);
 				wxGetApp().Repaint();
 			}
 		}
@@ -350,8 +349,8 @@ void MakeLineArcsToSketch::Run(){
 		}
 	}
 
-	wxGetApp().AddUndoably(sketch, NULL, NULL);
-	wxGetApp().DeleteUndoably(objects_to_delete);
+	wxGetApp().Add(sketch, NULL);
+	wxGetApp().Remove(objects_to_delete);
 }
 
 void MakeEdgesToSketch::Run(){
@@ -371,7 +370,7 @@ void MakeEdgesToSketch::Run(){
 		}
 	}
 
-	wxGetApp().AddUndoably(sketch, NULL, NULL);
+	wxGetApp().Add(sketch, NULL);
 }
 
 static CSketch* sketch_for_arcs_to_lines = NULL;
@@ -403,7 +402,6 @@ HeeksObj* SplitArcsIntoLittleLines(HeeksObj* sketch)
 }
 
 void SketchArcsToLines::Run(){
-	wxGetApp().StartHistory();
 	std::list<HeeksObj*> copy_of_marked_list = wxGetApp().m_marked_list->list();
 	std::list<HeeksObj*> objects_to_delete;
 	std::list<HeeksObj*> new_objects;
@@ -416,9 +414,7 @@ void SketchArcsToLines::Run(){
 		}
 	}
 
-	wxGetApp().AddUndoably(new_objects, NULL);
-	wxGetApp().DeleteUndoably(objects_to_delete);
-	wxGetApp().EndHistory();
+	wxGetApp().Remove(objects_to_delete);
 }
 
 void CombineSketches::Run(){
@@ -436,8 +432,8 @@ void CombineSketches::Run(){
 				{
 					new_lines_and_arcs.push_back(o->MakeACopy());
 				}
-				wxGetApp().DeleteUndoably(object);
-				wxGetApp().AddUndoably(new_lines_and_arcs, sketch1);
+				wxGetApp().Remove(object);
+				((ObjList*)sketch1)->Add(new_lines_and_arcs);
 			}
 			else
 			{
@@ -469,7 +465,7 @@ void UniteSketches::Run(){
 	{
 		TopoDS_Face &face = *It;
 		HeeksObj* new_object = CShape::MakeObject(face, _("Test Face, Sketches United"), SOLID_TYPE_UNKNOWN, HeeksColor(64, 51, 51));
-		wxGetApp().AddUndoably(new_object, NULL, NULL);
+		wxGetApp().Add(new_object, NULL);
 	}
 
 	wxGetApp().Repaint();
@@ -512,10 +508,14 @@ void GroupSelected::Run(){
 	CGroup* new_group = new CGroup;
 	std::list<HeeksObj*> copy_of_marked_list = wxGetApp().m_marked_list->list();
 
-	wxGetApp().StartHistory();
-	wxGetApp().DoToolUndoably(new ManyChangeOwnerTool(copy_of_marked_list, new_group));
-	wxGetApp().AddUndoably(new_group, NULL, NULL);
-	wxGetApp().EndHistory();
+	wxGetApp().Remove(copy_of_marked_list);
+
+	std::list<HeeksObj*>::iterator it;
+	for(it = copy_of_marked_list.begin(); it != copy_of_marked_list.end(); it++)
+		(*it)->RemoveOwners();
+
+	new_group->Add(copy_of_marked_list);
+	wxGetApp().Add(new_group, NULL);
 	wxGetApp().m_marked_list->Clear(true);
 	wxGetApp().Repaint();
 }
@@ -523,7 +523,6 @@ void GroupSelected::Run(){
 void UngroupSelected::Run(){
 	if(wxGetApp().m_marked_list->list().size() == 0)return;
 
-	wxGetApp().StartHistory();
 	std::list<HeeksObj*> copy_of_marked_list = wxGetApp().m_marked_list->list();
 	for(std::list<HeeksObj*>::const_iterator It = copy_of_marked_list.begin(); It != copy_of_marked_list.end(); It++){
 		HeeksObj* object = *It;
@@ -534,11 +533,11 @@ void UngroupSelected::Run(){
 			{
 				list.push_back(o);
 			}
-			wxGetApp().DoToolUndoably(new ManyChangeOwnerTool(list, &(wxGetApp())));
-			wxGetApp().DeleteUndoably(object);
+			wxGetApp().Remove(list);
+			((ObjList*)&wxGetApp())->Add(list);
+			wxGetApp().Remove(object);
 		}
 	}
-	wxGetApp().EndHistory();
 
 	wxGetApp().m_marked_list->Clear(true);
 	wxGetApp().Repaint();

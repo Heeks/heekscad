@@ -35,7 +35,17 @@ const HSpline& HSpline::operator=(const HSpline &s){
 	return *this;
 }
 
-
+bool HSpline::IsDifferent(HeeksObj* o)
+{
+	HSpline* other = (HSpline*)o;
+	for(int i=1; i <= m_spline->NbPoles(); i++)
+	{
+		if(m_spline->Pole(i).Distance(other->m_spline->Pole(i))>wxGetApp().m_geom_tol)
+			return true;
+	}
+	
+	return HeeksObj::IsDifferent(o);
+}
 
 //segments - number of segments per full revolution!
 void HSpline::GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point)const

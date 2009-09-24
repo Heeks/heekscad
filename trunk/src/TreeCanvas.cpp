@@ -80,101 +80,70 @@ void CTreeCanvas::CreateTree(long style)
     Resize();
 }
 
+void CTreeCanvas::Add(ObjList* objects, wxTreeItemId owner)
+{
+	HeeksObj* object = objects->GetFirstChild();
+	while(object)
+	{
+		wxTreeItemId new_owner = AddInt(object, owner);
+
+		ObjList* new_list = dynamic_cast<ObjList*>(object);
+		if(new_list)
+			Add(new_list, new_owner);
+
+		object = objects->GetNextChild();
+	}
+}
+
+void CTreeCanvas::Reload()
+{
+	Clear();
+	Add((ObjList*)&wxGetApp(),m_root);
+	WhenMarkedListChanges(false,NULL,NULL);
+}
+
 void CTreeCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified)
 {
-	if(added){
-		std::list<HeeksObj*>::const_iterator It;
-		for(It = added->begin(); It != added->end(); It++){
-			HeeksObj* object = *It;
-			bool can_add = false;
-			if(!object->HasOwner() || object->HasOwner(&wxGetApp())){
-				can_add = true;
-			}
-			else{
-				can_add = (Find(object->Owner()) != wxTreeItemId());
-			}
-			if(can_add){
-				HeeksObj* owner_object = object->Owner();
-				wxTreeItemId owner = Find(owner_object);
-				if(owner && owner_object){
-					int count = 0;
-					for(HeeksObj* temp_child = owner_object->GetFirstChild(); temp_child; temp_child = owner_object->GetNextChild()){
-						count++;
-					}
-
-					int child_count = 0;
-					if(m_treeCtrl->ItemHasChildren(owner)){
-						wxTreeItemIdValue cookie;
-						wxTreeItemId hNextItem;
-						wxTreeItemId hChildItem = m_treeCtrl->GetFirstChild(owner, cookie);
-						while (hChildItem != wxTreeItemId())
-						{
-							hNextItem = m_treeCtrl->GetNextChild(owner, cookie);
-							child_count++;
-							hChildItem = hNextItem;
-						}
-					}
-					if(count > child_count){					
-						Add(object, owner);
-					}
-				}
-				else{
-					wxTreeItemId item = Add(object, m_root);
-				}
-			}
-		}
-	}
-	if(removed){
-		std::list<HeeksObj*>::const_iterator It;
-		for(It = removed->begin(); It != removed->end(); It++){
-			HeeksObj* object = *It;
-			wxTreeItemId item = Find(object);
-			if(item)Remove(object, item, false);
-		}
-	}
-	if(modified){
-		std::list<HeeksObj*>::const_iterator It;
-		for(It = modified->begin(); It != modified->end(); It++){
-			HeeksObj* object = *It;
-			wxTreeItemId item = Find(object);
-			if(item)
-			{
-				m_treeCtrl->SetItemText(item, object->GetShortStringOrTypeString());
-				int image = m_treeCtrl->GetImage(object);
-				m_treeCtrl->SetItemImage(item, image);
-			}
-		}
-	}
+	Reload();
 }
 
 void CTreeCanvas::WhenMarkedListChanges(bool selection_cleared, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)
 {
 	if(selection_cleared){
-		wxTreeItemId item = m_treeCtrl->GetFirstVisibleItem();
-		while(item.IsOk() && m_treeCtrl->IsVisible(item)){
-			m_treeCtrl->SelectItem(item, false);
-			item = m_treeCtrl->GetNextVisible(item);
-		}
+		 wxTreeItemId item = m_treeCtrl->GetFirstVisibleItem();
+         while(item.IsOk()){
+              UnselectItem(item);
+              item = m_treeCtrl->GetNextVisible(item);
+         }
 	}
 	else{
-		if(added_list){
-			std::list<HeeksObj *>::const_iterator It;
-			for(It = added_list->begin(); It != added_list->end(); It++){
-				HeeksObj* object = *It;
-				wxTreeItemId item = Find(object);
-				m_treeCtrl->SelectItem(item);
-			}
-		}
-		if(removed_list){
-			std::list<HeeksObj *>::const_iterator It;
-			for(It = removed_list->begin(); It != removed_list->end(); It++){
-				HeeksObj* object = *It;
-				wxTreeItemId item = Find(object);
-				m_treeCtrl->SelectItem(item, false);
+		std::list<HeeksObj*>::iterator it;
+		for(it = wxGetApp().m_marked_list->list().begin(); it != wxGetApp().m_marked_list->list().end(); it++)
+		{
+			std::vector<wxTreeItemId> items = Find(*it);
+			for(size_t i=0; i < items.size(); i++)
+			{
+				wxTreeItemId item = items[i];
+				if(item.IsOk())
+					SelectItem(item);
 			}
 		}
 	}
-	Refresh();
+	m_treeCtrl->Refresh();
+}
+
+void CTreeCanvas::SelectItem(wxTreeItemId item)
+{
+	m_treeCtrl->SelectItem(item);
+	//Selection doesn't work well with focus, so we set the background color
+//	m_treeCtrl->SetItemBackgroundColour(item,m_treeCtrl->Get());
+}
+
+void CTreeCanvas::UnselectItem(wxTreeItemId item)
+{
+	m_treeCtrl->SelectItem(item,false);
+	//Selection doesn't work well with focus, so we set the background color
+//	m_treeCtrl->SetItemBackgroundColour(item,m_treeCtrl->GetBackgroundColour());
 }
 
 void CTreeCanvas::Clear()
@@ -194,32 +163,13 @@ void CTreeCanvas::Thaw()
 	m_treeCtrl->Thaw();
 }
 
-bool CTreeCanvas::CanAdd(HeeksObj* object)
+const wxTreeItemId CTreeCanvas::AddInt(HeeksObj* object, const wxTreeItemId &owner)
 {
-	if (object == NULL) return false;
-	if (tree_map.find(object) != tree_map.end()) return false;
-
-	return true;
-}
-
-const wxTreeItemId CTreeCanvas::Add(HeeksObj* object, const wxTreeItemId &owner)
-{
-	if (!CanAdd(object)) return wxTreeItemId();
 	int image = m_treeCtrl->GetImage(object);
 	wxTreeItemId item = m_treeCtrl->AppendItem(owner, object->GetShortStringOrTypeString(), image, -1, new DanObjectTreeData(object));
-	tree_map.insert(std::pair<HeeksObj*, wxTreeItemId>(object, item));
-
-	AddChildren(object, item);
-	if(object->Owner() && object->Owner()->AutoExpand())m_treeCtrl->Expand(owner);
+	tree_map[object].push_back(item);
 
 	return item;
-}
-
-void CTreeCanvas::AddChildren(HeeksObj* object, const wxTreeItemId &item)
-{
-	for(HeeksObj* child = object->GetFirstChild(); child; child = object->GetNextChild()){
-		Add(child, item);
-	}
 }
 
 void CTreeCanvas::Remove(HeeksObj *object, const wxTreeItemId &item, bool set_not_marked){
@@ -264,13 +214,14 @@ void CTreeCanvas::OnKeyUp(wxKeyEvent& event)
 	event.Skip();
 }
 
-wxTreeItemId CTreeCanvas::Find(HeeksObj *object){
-	std::map<HeeksObj*, wxTreeItemId>::iterator FindIt = tree_map.find(object);
-	if(FindIt == tree_map.end())return wxTreeItemId();
+std::vector<wxTreeItemId> CTreeCanvas::Find(HeeksObj *object){
+	std::vector<wxTreeItemId> ret;
+	std::map<HeeksObj*, std::vector<wxTreeItemId> >::iterator FindIt = tree_map.find(object);
+	if(FindIt == tree_map.end())return ret;
 	return FindIt->second;
 }
 
-#if USE_GENERIC_TREECTRL
+#ifdef USE_GENERIC_TREECTRL
 BEGIN_EVENT_TABLE(MyTreeCtrl, wxGenericTreeCtrl)
 #else
 BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
@@ -301,14 +252,14 @@ BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
 END_EVENT_TABLE()
 
 // MyTreeCtrl implementation
-#if USE_GENERIC_TREECTRL
+#ifdef USE_GENERIC_TREECTRL
 IMPLEMENT_DYNAMIC_CLASS(MyTreeCtrl, wxGenericTreeCtrl)
 #else
 IMPLEMENT_DYNAMIC_CLASS(MyTreeCtrl, wxTreeCtrl)
 #endif
 
 MyTreeCtrl::MyTreeCtrl(wxWindow *parent, long style)
-          : wxTreeCtrl(parent, ID_TREE_CTRL, wxDefaultPosition, wxDefaultSize, style)
+          : wxGenericTreeCtrl(parent, ID_TREE_CTRL, wxDefaultPosition, wxDefaultSize, style)
 {
     m_reverseSort = false;
     CreateImageList();
@@ -339,11 +290,11 @@ int MyTreeCtrl::OnCompareItems(const wxTreeItemId& item1,
 {
     if ( m_reverseSort )
     {
-        return wxTreeCtrl::OnCompareItems(item2, item1);
+        return wxGenericTreeCtrl::OnCompareItems(item2, item1);
     }
     else
     {
-        return wxTreeCtrl::OnCompareItems(item1, item2);
+        return wxGenericTreeCtrl::OnCompareItems(item1, item2);
     }
 }
 
@@ -447,34 +398,38 @@ void MyTreeCtrl::OnLMouseUp(wxMouseEvent& event)
 			if(wxGetApp().m_marked_list->size() > 0)
 			{
 				most_recently_marked = wxGetApp().m_marked_list->list().back();
-				wxTreeItemId recent_id = ((CTreeCanvas*)GetParent())->Find(most_recently_marked);
+				std::vector<wxTreeItemId> recent_ids = ((CTreeCanvas*)GetParent())->Find(most_recently_marked);
 
 				std::list<HeeksObj*> objects_to_add;
-				if(After(recent_id, id))
+				for(size_t i = 0; i < recent_ids.size(); i++)
 				{
-					wxTreeItemId loop_id = recent_id;
-					while(loop_id.IsOk() && IsVisible(loop_id))
+					wxTreeItemId recent_id = recent_ids[i];
+					if(After(recent_id, id))
 					{
-						MyTreeItemData *loop_item = (MyTreeItemData *)GetItemData(loop_id);
-						if(!wxGetApp().m_marked_list->ObjectMarked(loop_item->m_object))objects_to_add.push_back(loop_item->m_object);
-						if(loop_id == id)break;
-						loop_id = GetNextVisible(loop_id);
+						wxTreeItemId loop_id = recent_id;
+						while(loop_id.IsOk() && IsVisible(loop_id))
+						{
+							MyTreeItemData *loop_item = (MyTreeItemData *)GetItemData(loop_id);
+							if(!wxGetApp().m_marked_list->ObjectMarked(loop_item->m_object))objects_to_add.push_back(loop_item->m_object);
+							if(loop_id == id)break;
+							loop_id = GetNextVisible(loop_id);
+						}
 					}
-				}
-				else if(After(id, recent_id))
-				{
-					wxTreeItemId loop_id = recent_id;
-					while(loop_id.IsOk() && IsVisible(loop_id))
+					else if(After(id, recent_id))
 					{
-						MyTreeItemData *loop_item = (MyTreeItemData *)GetItemData(loop_id);
-						if(!wxGetApp().m_marked_list->ObjectMarked(loop_item->m_object))objects_to_add.push_back(loop_item->m_object);
-						if(loop_id == id)break;
-						loop_id = GetPrevVisible(loop_id);
+						wxTreeItemId loop_id = recent_id;
+						while(loop_id.IsOk() && IsVisible(loop_id))
+						{
+							MyTreeItemData *loop_item = (MyTreeItemData *)GetItemData(loop_id);
+							if(!wxGetApp().m_marked_list->ObjectMarked(loop_item->m_object))objects_to_add.push_back(loop_item->m_object);
+							if(loop_id == id)break;
+							loop_id = GetPrevVisible(loop_id);
+						}
 					}
-				}
 
-				if(objects_to_add.size() > 0)wxGetApp().m_marked_list->Add(objects_to_add, true);
-				selection_selected = true;
+					if(objects_to_add.size() > 0)wxGetApp().m_marked_list->Add(objects_to_add, true);
+					selection_selected = true;
+				}
 			}
 		}
 		
@@ -484,7 +439,7 @@ void MyTreeCtrl::OnLMouseUp(wxMouseEvent& event)
 			{
 				if(wxGetApp().m_marked_list->ObjectMarked(item->m_object))
 				{
-					wxGetApp().m_marked_list->Remove(item->m_object, true);
+					wxGetApp().m_marked_list->Remove(item->m_object, false);
 				}
 				else
 				{
@@ -494,7 +449,7 @@ void MyTreeCtrl::OnLMouseUp(wxMouseEvent& event)
 			}
 			else
 			{
-				wxGetApp().m_marked_list->Clear(true);
+				wxGetApp().m_marked_list->Clear(false);
 				wxGetApp().m_marked_list->Add(item->m_object, true);
 				wxGetApp().Repaint();
 			}

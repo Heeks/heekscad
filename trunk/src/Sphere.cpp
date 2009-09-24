@@ -18,9 +18,22 @@ CSphere::CSphere(const TopoDS_Solid &solid, const wxChar* title, const HeeksColo
 {
 }
 
+const CSphere& CSphere::operator=(const CSphere &b){
+	CSolid::operator=(b);
+	return *this;
+}
+
 HeeksObj *CSphere::MakeACopy(void)const
 {
 	return new CSphere(*this);
+}
+
+bool CSphere::IsDifferent(HeeksObj *other)
+{
+	CSphere* sphere = (CSphere*)other;
+	if(sphere->m_pos.Distance(m_pos) > wxGetApp().m_geom_tol || sphere->m_radius != m_radius)
+		return true;
+	return CShape::IsDifferent(other);
 }
 
 static void on_set_centre(const double *pos, HeeksObj* object){
@@ -38,9 +51,13 @@ bool CSphere::ModifyByMatrix(const double* m){
 	double new_radius = fabs(m_radius * scale);
 	CSphere* new_object = new CSphere(new_pos, new_radius, m_title.c_str(), m_color);
 	new_object->CopyIDsFrom(this);
-	wxGetApp().AddUndoably(new_object, Owner(), NULL);
-	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
-	wxGetApp().DeleteUndoably(this);
+	Owner()->Add(new_object, NULL);
+	Owner()->Remove(this);
+	if(wxGetApp().m_marked_list->ObjectMarked(this))
+	{
+		wxGetApp().m_marked_list->Remove(this,false);
+		wxGetApp().m_marked_list->Add(new_object, true);
+	}
 	return true;
 }
 
@@ -64,12 +81,13 @@ void CSphere::OnApplyProperties()
 {
 	CSphere* new_object = new CSphere(m_pos, m_radius, m_title.c_str(), m_color);
 	new_object->CopyIDsFrom(this);
-	wxGetApp().StartHistory();
-	wxGetApp().AddUndoably(new_object, NULL, NULL);
-	wxGetApp().DeleteUndoably(this);
-	wxGetApp().EndHistory();
-	wxGetApp().m_marked_list->Clear(true);
-	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
+	Owner()->Add(new_object, NULL);
+	Owner()->Remove(this);
+	if(wxGetApp().m_marked_list->ObjectMarked(this))
+	{
+		wxGetApp().m_marked_list->Remove(this,false);
+		wxGetApp().m_marked_list->Add(new_object, true);
+	}
 	wxGetApp().Repaint();
 }
 

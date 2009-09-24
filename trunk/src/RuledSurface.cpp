@@ -38,18 +38,16 @@ void PickCreateRuledSurface()
 			}
 		}
 
-		wxGetApp().StartHistory();
-		wxGetApp().DeleteUndoably(sketches_to_delete);
+		wxGetApp().Remove(sketches_to_delete);
 
 		TopoDS_Shape shape;
 		if(CreateRuledSurface(wire_list, shape))
 		{
 			HeeksObj* new_object = CShape::MakeObject(shape, _("Ruled Surface"), SOLID_TYPE_UNKNOWN, HeeksColor(51, 45, 51));
-			wxGetApp().AddUndoably(new_object, NULL, NULL);
+			wxGetApp().Add(new_object, NULL);
 			wxGetApp().Repaint();
 		}
 
-		wxGetApp().EndHistory();
 	}
 }
 
@@ -74,9 +72,7 @@ HeeksObj* CreateExtrusion(std::list<HeeksObj*> list, double height)
 		}
 	}
 
-	wxGetApp().StartHistory();
-
-	wxGetApp().DeleteUndoably(sketches_to_delete);
+	wxGetApp().Remove(sketches_to_delete);
 
 	std::list<TopoDS_Shape> new_shapes;
 	CreateExtrusions(faces, new_shapes, gp_Vec(0, 0, height).Transformed(wxGetApp().GetDrawMatrix(false)));
@@ -86,12 +82,10 @@ HeeksObj* CreateExtrusion(std::list<HeeksObj*> list, double height)
 		for(std::list<TopoDS_Shape>::iterator It = new_shapes.begin(); It != new_shapes.end(); It++){
 			TopoDS_Shape& shape = *It;
 			new_object = CShape::MakeObject(shape, _("Extruded Solid"), SOLID_TYPE_UNKNOWN, wxGetApp().current_color);
-			wxGetApp().AddUndoably(new_object, NULL, NULL);
+			wxGetApp().Add(new_object, NULL);
 		}
 		wxGetApp().Repaint();
 	}
-
-	wxGetApp().EndHistory();
 	return new_object;
 }
 
@@ -102,9 +96,7 @@ HeeksObj* CreatePipeFromProfile(HeeksObj* spine, HeeksObj* profile)
 	TopoDS_Face face;
 	ConvertSketchToFace2(profile, face);
 	
-	wxGetApp().StartHistory();
-
-	wxGetApp().DeleteUndoably(profile);
+	wxGetApp().Remove(profile);
 
 	const TopoDS_Wire wire = ((CWire*)spine)->Wire();
 
@@ -114,10 +106,9 @@ HeeksObj* CreatePipeFromProfile(HeeksObj* spine, HeeksObj* profile)
 	TopoDS_Shape shape = makePipe.Shape(); 
 
 	HeeksObj* new_object = CShape::MakeObject(shape, _("Pipe"), SOLID_TYPE_UNKNOWN, wxGetApp().current_color);
-	wxGetApp().AddUndoably(new_object, NULL, NULL);
+	wxGetApp().Add(new_object, NULL);
 	wxGetApp().Repaint();
 
-	wxGetApp().EndHistory();
 	return new_object;
 }
 

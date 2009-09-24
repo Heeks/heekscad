@@ -246,7 +246,7 @@
 				AdditionalOptions="/EHsc "
 				Optimization="0"
 				AdditionalIncludeDirectories=".\;&quot;$(CASROOT)\inc&quot;;&quot;$(WXWIN)\include&quot;;&quot;$(WXWIN)&quot;;&quot;$(WXWIN)\lib\vc_dll\mswud&quot;;&quot;$(WXWIN)\include\msvc&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXDEBUG__;_WINDOWS;NOPCH;WNT;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;HEEKSCAD;STRICT"
+				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXDEBUG__;_WINDOWS;NOPCH;WNT;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;HEEKSCAD;STRICT;USE_GENERIC_TREECTRL"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="true"
@@ -880,14 +880,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\History.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\History.h"
-			>
-		</File>
-		<File
 			RelativePath=".\HLine.cpp"
 			>
 		</File>
@@ -1325,14 +1317,6 @@
 		</File>
 		<File
 			RelativePath=".\RegularShapesDrawing.h"
-			>
-		</File>
-		<File
-			RelativePath=".\RemoveOrAddTool.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\RemoveOrAddTool.h"
 			>
 		</File>
 		<File
@@ -1804,6 +1788,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\interface\TransientObject.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\interface\TransientObject.h"
+			>
+		</File>
+		<File
 			RelativePath=".\TreeCanvas.cpp"
 			>
 		</File>
@@ -1813,6 +1805,10 @@
 		</File>
 		<File
 			RelativePath=".\UndoEngine.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\UndoEngine.h"
 			>
 		</File>
 		<File

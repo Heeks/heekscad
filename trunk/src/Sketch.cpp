@@ -63,7 +63,7 @@ static void on_set_order_type(int value, HeeksObj* object)
 	if(FindIt != order_map_for_properties.end())
 	{
 		int order = FindIt->second;
-		if(((CSketch*)object)->ReOrderSketch((SketchOrderType)order, false))
+		if(((CSketch*)object)->ReOrderSketch((SketchOrderType)order))
 		{
 			wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
 		}
@@ -191,14 +191,12 @@ public:
 		if(m_sketch == NULL)return;
 		std::list<HeeksObj*> new_sketches;
 		m_sketch->ExtractSeparateSketches(new_sketches);
-		wxGetApp().StartHistory();
 		for(std::list<HeeksObj*>::iterator It = new_sketches.begin(); It != new_sketches.end(); It++)
 		{
 			HeeksObj* new_object = *It;
-			wxGetApp().AddUndoably(new_object, NULL, NULL);
+			m_sketch->Owner()->Add(new_object, NULL);
 		}
-		wxGetApp().DeleteUndoably(m_sketch);
-		wxGetApp().EndHistory();
+		m_sketch->Owner()->Remove(m_sketch);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Split Sketch");}
@@ -258,7 +256,7 @@ const HeeksColor* CSketch::GetColor()const
 
 void CSketch::OnEditString(const wxChar* str){
 	m_title.assign(str);
-	wxGetApp().WasModified(this);
+	wxGetApp().Changed();
 }
 
 SketchOrderType CSketch::GetSketchOrder()
@@ -330,7 +328,7 @@ void CSketch::CalculateSketchOrder()
 	m_order = SketchOrderTypeBad; // although it might still be multiple, but will have to wait until ReOrderSketch is done.
 }
 
-bool CSketch::ReOrderSketch(SketchOrderType new_order, bool undoably)
+bool CSketch::ReOrderSketch(SketchOrderType new_order)
 {
 	SketchOrderType old_order = GetSketchOrder();
 	bool done = false;
@@ -341,7 +339,7 @@ bool CSketch::ReOrderSketch(SketchOrderType new_order, bool undoably)
 		switch(new_order)
 		{
 		case SketchOrderTypeReverse:
-			ReverseSketch(undoably);
+			ReverseSketch();
 			done = true;
 			break;
 		default:
@@ -355,7 +353,7 @@ bool CSketch::ReOrderSketch(SketchOrderType new_order, bool undoably)
 		case SketchOrderTypeBad:
 			break;
 		default:
-			ReLinkSketch(undoably);
+			ReLinkSketch();
 			done = true;
 			break;
 		}
@@ -365,7 +363,7 @@ bool CSketch::ReOrderSketch(SketchOrderType new_order, bool undoably)
 		switch(new_order)
 		{
 		case SketchOrderTypeCloseCCW:
-			ReverseSketch(undoably);
+			ReverseSketch();
 			done = true;
 			break;
 		default:
@@ -377,7 +375,7 @@ bool CSketch::ReOrderSketch(SketchOrderType new_order, bool undoably)
 		switch(new_order)
 		{
 		case SketchOrderTypeCloseCW:
-			ReverseSketch(undoably);
+			ReverseSketch();
 			done = true;
 			break;
 		default:
@@ -392,33 +390,21 @@ bool CSketch::ReOrderSketch(SketchOrderType new_order, bool undoably)
 	return done;
 }
 
-void CSketch::ReLinkSketch(bool undoably)
+void CSketch::ReLinkSketch()
 {
 	CSketchRelinker relinker(m_objects);
 
 	relinker.Do();
 
-	if(undoably)
-	{
-		wxGetApp().StartHistory();
-		wxGetApp().DeleteUndoably(m_objects);
-	}
-	else
-	{
-		Clear();
-	}
+	Clear();
 
 	for(std::list< std::list<HeeksObj*> >::iterator It = relinker.m_new_lists.begin(); It != relinker.m_new_lists.end(); It++)
 	{
-		if(undoably)wxGetApp().AddUndoably(*It, this);
-		else{
-			for(std::list<HeeksObj*>::iterator It2 = It->begin(); It2 != It->end(); It2++)
-			{
-				Add(*It2, NULL);
-			}
+		for(std::list<HeeksObj*>::iterator It2 = It->begin(); It2 != It->end(); It2++)
+		{
+			Add(*It2, NULL);
 		}
 	}
-	if(undoably)wxGetApp().EndHistory();
 
 	if(relinker.m_new_lists.size() > 1)
 	{
@@ -430,7 +416,7 @@ void CSketch::ReLinkSketch(bool undoably)
 	}
 }
 
-void CSketch::ReverseSketch(bool undoably)
+void CSketch::ReverseSketch()
 {
 	if(m_objects.size() == 0)return;
 
@@ -457,21 +443,11 @@ void CSketch::ReverseSketch(bool undoably)
 		new_list.push_front(copy);
 	}
 
-	if(undoably)
+	Clear();
+	for(std::list<HeeksObj*>::iterator It = new_list.begin(); It != new_list.end(); It++)
 	{
-		wxGetApp().StartHistory();
-		wxGetApp().DeleteUndoably(m_objects);
-		wxGetApp().AddUndoably(new_list, this);
-		wxGetApp().EndHistory();
-	}
-	else
-	{
-		Clear();
-		for(std::list<HeeksObj*>::iterator It = new_list.begin(); It != new_list.end(); It++)
-		{
-			HeeksObj* object = *It;
-			Add(object, NULL);
-		}
+		HeeksObj* object = *It;
+		Add(object, NULL);
 	}
 	//TODO: this is a hack. Must call remove before add, or else add has no effect. Why are we calling this here?
 	wxGetApp().ObserversOnChange(NULL,&old_list,NULL);
@@ -499,7 +475,7 @@ void CSketch::ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketche
 	if(GetSketchOrder() == SketchOrderTypeBad)
 	{
 		re_ordered_sketch = (CSketch*)(this->MakeACopy());
-		re_ordered_sketch->ReOrderSketch(SketchOrderTypeReOrder, false);
+		re_ordered_sketch->ReOrderSketch(SketchOrderTypeReOrder);
 		sketch = re_ordered_sketch;
 	}
 	if(sketch->GetSketchOrder() == SketchOrderTypeMultipleCurves)

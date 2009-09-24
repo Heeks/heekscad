@@ -14,7 +14,7 @@ public:
 		wxGetApp().InputDouble(_("Input extrusion height"), _("height"), height);
 		CSketch* sketch = (CSketch*)(*wxGetApp().m_marked_list->list().begin());
 
-		CPad::PadSketch(sketch,height,true);
+		CPad::PadSketch(sketch,height);
 	}
 	const wxChar* GetTitle(){return _T("Pad Sketch");}
 	wxString BitmapPath(){return _T("new");}

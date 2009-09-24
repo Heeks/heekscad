@@ -10,7 +10,7 @@
 #include "CxfFont.h"
 
 #include <memory>
-
+class TransientObject;
 class MagDragWindow;
 class ViewRotating;
 class ViewZooming;
@@ -23,7 +23,7 @@ class HeeksObj;
 class MarkedObject;
 class Gripper;
 class CViewPoint;
-class MainHistory;
+class UndoEngine;
 class Observer;
 class CHeeksFrame;
 class wxDynamicLibrary;
@@ -62,7 +62,8 @@ class HeeksCADapp : public wxApp, public ObjList
 {
 private:
 	std::set<Observer*> observers;
-	MainHistory *history;
+	UndoEngine *history;
+	std::map<HeeksObj*,std::list<HeeksObj*> > m_transient_objects;
 	std::map< int, std::map<int, HeeksObj*> > used_ids; // map of group type ( usually same as object type ) to "map of ID to object"
 	std::map< int, int > next_id_map;
 	std::map< std::string, HeeksObj*(*)(TiXmlElement* pElem) > xml_read_fn_map;
@@ -185,31 +186,32 @@ public:
 	void RecalculateGLLists();
 	void SetLikeNewFile(void);
 	bool IsModified(void);
-	void SetAsModified();
 	void ClearHistory(void);
 	void glCommandsAll(bool select, const CViewPoint &view_point);
 	double GetPixelScale(void);
 	void DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool from_graphics_canvas, bool control_pressed);
 	void on_menu_event(wxCommandEvent& event);
 	void DoToolUndoably(Tool *);
-	bool RollBack(void);
-	bool RollForward(void);
-	void StartHistory();
-	void EndHistory(void);
-	void ClearRollingForward(void);
+	void Undo(void);
+	void Redo(void);
+	void WentTransient(HeeksObj* obj, TransientObject* tobj);
+	void ClearTransients();
+	std::map<HeeksObj*,std::list<HeeksObj*> >& GetTransients();
 	bool Add(HeeksObj* object, HeeksObj* prev_object);
 	void Remove(HeeksObj* object);
+	void Remove(std::list<HeeksObj*> objects);
+	void Transform(std::list<HeeksObj*> objects, double *m);
 	void Reset();
 	HeeksObj* ReadXMLElement(TiXmlElement* pElem);
 	void ObjectWriteBaseXML(HeeksObj *object, TiXmlElement *element);
 	void ObjectReadBaseXML(HeeksObj *object, TiXmlElement* element);
 	void InitializeXMLFunctions();
-	void OpenXMLFile(const wxChar *filepath, bool undoably = false, HeeksObj* paste_into = NULL);
-	void OpenSVGFile(const wxChar *filepath, bool undoably = false);
-	void OpenSTLFile(const wxChar *filepath, bool undoably = false);
-	void OpenDXFFile(const wxChar *filepath, bool undoably = false);
-	void OpenRS274XFile(const wxChar *filepath, bool undoably = false);
-	bool OpenImageFile(const wxChar *filepath, bool undoably = false);
+	void OpenXMLFile(const wxChar *filepath,HeeksObj* paste_into = NULL);
+	void OpenSVGFile(const wxChar *filepath);
+	void OpenSTLFile(const wxChar *filepath);
+	void OpenDXFFile(const wxChar *filepath);
+	void OpenRS274XFile(const wxChar *filepath);
+	bool OpenImageFile(const wxChar *filepath);
 	bool OpenFile(const wxChar *filepath, bool import_not_open = false, HeeksObj* paste_into = NULL);
 	void SaveDXFFile(const wxChar *filepath);
 	void SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath);
@@ -217,21 +219,11 @@ public:
 	void SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, bool for_clipboard = false);
 	void SaveXMLFile(const wxChar *filepath){SaveXMLFile(m_objects, filepath);}
 	bool SaveFile(const wxChar *filepath, bool use_dialog = false, bool update_recent_file_list = true, bool set_app_caption = true);
-	void DeleteUndoably(HeeksObj* object);
-	void DeleteUndoably(const std::list<HeeksObj*>& list);
-	void TransformUndoably(HeeksObj *object, double *m);
-	void TransformUndoably(const std::list<HeeksObj*>& list, double* m);
-	void WasModified(HeeksObj *object);
-	void WasAdded(HeeksObj *object);
-	void WasRemoved(HeeksObj *object);
-	void WereModified(const std::list<HeeksObj*>& list);
-	void WereAdded(const std::list<HeeksObj*>& list);
-	void WereRemoved(const std::list<HeeksObj*>& list);
+	void CreateUndoPoint();
+	void Changed();
 	gp_Trsf GetDrawMatrix(bool get_the_appropriate_orthogonal);
 	void GetOptions(std::list<Property *> *list);
 	void DeleteMarkedItems();
-	void AddUndoably(HeeksObj *object, HeeksObj* owner, HeeksObj* prev_object);
-	void AddUndoably(const std::list<HeeksObj*>& list, HeeksObj* owner);
 	void glColorEnsuringContrast(const HeeksColor &c);
 	void RegisterObserver(Observer* observer);
 	void RemoveObserver(Observer* observer);
@@ -289,7 +281,7 @@ public:
 	void PlotArc(const double* s, const double* e, const double* c);
 	void InitialiseLocale();
 	void create_font();
-	CSketch* GetContainer(bool undoably);
+	CSketch* GetContainer();
 	bool EndSketchMode();
 	void SetStatusText();
 

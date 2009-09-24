@@ -41,11 +41,14 @@ public:
 	HeeksObj* GetAtIndex(int index);
 	int GetNumChildren();
 	bool CanAdd(HeeksObj* object){return true;}
-	bool Add(HeeksObj* object, HeeksObj* prev_object);
-	void Remove(HeeksObj* object);
+	virtual bool Add(HeeksObj* object, HeeksObj* prev_object);
+	virtual void Add(std::list<HeeksObj*> objects);
+	virtual void Remove(HeeksObj* object);
+	virtual void Remove(std::list<HeeksObj*> objects);
 	void KillGLLists(void);
 	void WriteBaseXML(TiXmlElement *element);
 	void ReadBaseXML(TiXmlElement* element);
 	bool ModifyByMatrix(const double *m);
 	void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true);
+	void Disconnect(std::list<HeeksObj*>parents);
 };

@@ -1250,3 +1250,24 @@ int convert_gripdata_to_pnts(const std::list<GripData> &dlist, std::list<gp_Pnt>
 	return nump;
 }
 
+bool IsEqual(gp_Ax2 ax1, gp_Ax2 ax2)
+{
+	if(!IsEqual(ax1.Axis(),ax2.Axis()))
+		return false;
+
+	if(!ax1.XDirection().IsEqual(ax2.XDirection(),wxGetApp().m_geom_tol))
+		return false;
+
+	return true;
+}
+
+bool IsEqual(gp_Ax1 ax1, gp_Ax1 ax2)
+{
+	if(ax1.Location().Distance(ax2.Location()) > wxGetApp().m_geom_tol)
+		return false;
+
+	if(!ax1.Direction().IsEqual(ax2.Direction(),wxGetApp().m_geom_tol))
+		return false;
+
+	return true;
+}
