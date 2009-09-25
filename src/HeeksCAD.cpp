@@ -1492,6 +1492,9 @@ void HeeksCADapp::on_menu_event(wxCommandEvent& event)
 		Tool *t = tool_index_list[id - ID_FIRST_POP_UP_MENU_TOOL].m_tool;
 		CreateUndoPoint();
 		t->Run();
+		//TODO: this should be handled better. While TreeView is parsing the tree it should be able to remove
+		//non existant items from MarkedList.
+		m_marked_list->Clear(false);
 		Changed();
 		Repaint();
 	}

@@ -719,6 +719,7 @@ static void OnCommonButton( wxCommandEvent& event )
 	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 2, SolidType, _("Pick two or more solids, only the shape that is contained by all of them will remain"), _("Intersection of Solids")))return;
 	wxGetApp().CreateUndoPoint();
 	CShape::CommonShapes(wxGetApp().m_marked_list->list());
+	wxGetApp().m_marked_list->Clear(true);
 	wxGetApp().Changed();
 }
 
@@ -733,6 +734,7 @@ static void OnFilletButton( wxCommandEvent& event )
 		wxGetApp().CreateUndoPoint();
 		CShape::FilletOrChamferEdges(wxGetApp().m_marked_list->list(), rad);
 		config.Write(_T("EdgeBlendRadius"), rad);
+		wxGetApp().m_marked_list->Clear(true);
 		wxGetApp().Changed();
 	}
 }
@@ -748,6 +750,7 @@ static void OnChamferButton( wxCommandEvent& event )
 		wxGetApp().CreateUndoPoint();
 		CShape::FilletOrChamferEdges(wxGetApp().m_marked_list->list(), rad, true);
 		config.Write(_T("EdgeChamferDist"), rad);
+		wxGetApp().m_marked_list->Clear(true);
 		wxGetApp().Changed();
 	}
 }
