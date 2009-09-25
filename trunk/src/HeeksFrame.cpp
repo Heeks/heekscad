@@ -1070,8 +1070,6 @@ public:
  		m_toolBar = new wxToolBar(m_panel, -1, wxDefaultPosition, wxDefaultSize, wxTB_VERTICAL | wxTB_NODIVIDER | wxTB_FLAT);
 		m_toolBar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
 
-		int id_to_use = ID_FIRST_POP_UP_MENU_TOOL;
-
 		int i = 0;
 		for(std::list<CFlyOutItem>::const_iterator It = flyout_list.m_list.begin(); It != flyout_list.m_list.end(); It++, i++)
 		{
