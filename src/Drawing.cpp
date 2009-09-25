@@ -66,6 +66,7 @@ void Drawing::AddPoint()
 			if(DragDoneWithXOR())wxGetApp().m_frame->m_graphics->DrawObjectsOnFront(drawing_objects, true);
 			else wxGetApp().Repaint();
 			set_previous_direction();
+			wxGetApp().Changed();
 		}
 	}
 	
