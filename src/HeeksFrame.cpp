@@ -882,6 +882,7 @@ static void OnMoveScaleButton( wxCommandEvent& event )
 
 void CHeeksFrame::OnExternalButton( wxCommandEvent& event )
 {
+	wxGetApp().CreateUndoPoint();
 	int id = event.GetId();
 
 	std::map<int, SExternalButtonFunctions >::iterator FindIt = m_external_buttons.find(id);
@@ -889,6 +890,8 @@ void CHeeksFrame::OnExternalButton( wxCommandEvent& event )
 		SExternalButtonFunctions& ebf = FindIt->second;
 		(*(ebf.on_button))(event);
 	}
+
+	wxGetApp().Changed();
 }
 
 void CHeeksFrame::OnRecentFile( wxCommandEvent& event )
