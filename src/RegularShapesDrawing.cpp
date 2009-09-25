@@ -298,65 +298,65 @@ void RegularShapesDrawing::CalculatePolygon(const gp_Pnt& p0, const gp_Pnt& p1, 
 {
 	if(p0.IsEqual(p1, wxGetApp().m_geom_tol))return;
 
-	if(temp_object->GetNumChildren() != m_number_of_side_for_polygon)ClearSketch();
+	if(temp_object->GetNumChildren() != m_number_of_side_for_polygon)
+		ClearSketch();
+	HLine** lines = (HLine**)malloc(m_number_of_side_for_polygon * sizeof(HLine*));
+
+	if(temp_object->GetNumChildren() > 0)
 	{
-		HLine** lines = (HLine**)malloc(m_number_of_side_for_polygon * sizeof(HLine*));
-
-		if(temp_object->GetNumChildren() > 0)
+		HeeksObj* object = temp_object->GetFirstChild();
+		for(int i = 0; i<m_number_of_side_for_polygon; i++)
 		{
-			HeeksObj* object = temp_object->GetFirstChild();
-			for(int i = 0; i<m_number_of_side_for_polygon; i++)
-			{
-				lines[i] = (HLine*)object;
-				object = temp_object->GetNextChild();
-			}
+			lines[i] = (HLine*)object;
+			object = temp_object->GetNextChild();
 		}
-		else
-		{
-			for(int i = 0; i<m_number_of_side_for_polygon; i++)
-			{
-				lines[i] = new HLine(gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), &(wxGetApp().current_color));
-				temp_object->Add(lines[i], NULL);
-			}
-		}
-
-        double radius = p0.Distance(p1);
-        double sideAngle=0;
-        double angle0;
-        double angle1;
-
-        switch (p_mode)
-        {
-            case InscribedMode:
-                //inscribed circle
-                sideAngle =2.0 * Pi / m_number_of_side_for_polygon;
-                radius = radius/cos((sideAngle/2));
-                for(int i = 0; i<m_number_of_side_for_polygon; i++)
-                {
-                    gp_Dir xdir(make_vector(p0, p1));
-                    gp_Dir ydir = zdir ^ xdir;
-                    angle0 = (sideAngle * i)+(sideAngle/2);
-                    angle1 = (sideAngle * (i+1))+(sideAngle/2);
-                    lines[i]->A->m_p = p0.XYZ() + xdir.XYZ() * ( cos(angle0) * radius ) + ydir.XYZ() * ( sin(angle0) * radius );
-                    if(i == m_number_of_side_for_polygon - 1)lines[i]->B = lines[0]->A;
-                    lines[i]->B->m_p = p0.XYZ() + xdir.XYZ() * ( cos(angle1) * radius ) + ydir .XYZ()* ( sin(angle1) * radius );
-                }
-            break;
-            case ExcribedMode:
-                //excribed circle
-                for(int i = 0; i<m_number_of_side_for_polygon; i++)
-                {
-                    gp_Dir xdir(make_vector(p0, p1));
-                    gp_Dir ydir = zdir ^ xdir;
-                    angle0 = 2.0 * Pi / m_number_of_side_for_polygon * i;
-                    angle1 = 2.0 * Pi / m_number_of_side_for_polygon * (i+1);
-                    lines[i]->A->m_p = p0.XYZ() + xdir.XYZ() * ( cos(angle0) * radius ) + ydir.XYZ() * ( sin(angle0) * radius );
-                    if(i == m_number_of_side_for_polygon - 1)lines[i]->B = lines[0]->A;
-                    lines[i]->B->m_p = p0.XYZ() + xdir.XYZ() * ( cos(angle1) * radius ) + ydir .XYZ()* ( sin(angle1) * radius );
-                }
-            break;
-        }
 	}
+	else
+	{
+		for(int i = 0; i<m_number_of_side_for_polygon; i++)
+		{
+			lines[i] = new HLine(gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), &(wxGetApp().current_color));
+			temp_object->Add(lines[i], NULL);
+		}
+	}
+
+    double radius = p0.Distance(p1);
+    double sideAngle=0;
+    double angle0;
+    double angle1;
+
+    switch (p_mode)
+    {
+        case InscribedMode:
+            //inscribed circle
+            sideAngle =2.0 * Pi / m_number_of_side_for_polygon;
+            radius = radius/cos((sideAngle/2));
+            for(int i = 0; i<m_number_of_side_for_polygon; i++)
+            {
+                gp_Dir xdir(make_vector(p0, p1));
+                gp_Dir ydir = zdir ^ xdir;
+                angle0 = (sideAngle * i)+(sideAngle/2);
+                angle1 = (sideAngle * (i+1))+(sideAngle/2);
+                lines[i]->A->m_p = p0.XYZ() + xdir.XYZ() * ( cos(angle0) * radius ) + ydir.XYZ() * ( sin(angle0) * radius );
+                if(i == m_number_of_side_for_polygon - 1)lines[i]->B->m_p = lines[0]->A->m_p;
+                lines[i]->B->m_p = p0.XYZ() + xdir.XYZ() * ( cos(angle1) * radius ) + ydir .XYZ()* ( sin(angle1) * radius );
+            }
+        break;
+        case ExcribedMode:
+            //excribed circle
+            for(int i = 0; i<m_number_of_side_for_polygon; i++)
+            {
+                gp_Dir xdir(make_vector(p0, p1));
+                gp_Dir ydir = zdir ^ xdir;
+                angle0 = 2.0 * Pi / m_number_of_side_for_polygon * i;
+                angle1 = 2.0 * Pi / m_number_of_side_for_polygon * (i+1);
+                lines[i]->A->m_p = p0.XYZ() + xdir.XYZ() * ( cos(angle0) * radius ) + ydir.XYZ() * ( sin(angle0) * radius );
+                if(i == m_number_of_side_for_polygon - 1)lines[i]->B->m_p = lines[0]->A->m_p;
+                lines[i]->B->m_p = p0.XYZ() + xdir.XYZ() * ( cos(angle1) * radius ) + ydir .XYZ()* ( sin(angle1) * radius );
+            }
+        break;
+    }
+	free(lines);
 }
 
 void RegularShapesDrawing::CalculateObround(const gp_Pnt& p0, const gp_Pnt& p1, const gp_Dir& xdir, const gp_Dir& zdir)

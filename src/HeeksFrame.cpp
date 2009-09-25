@@ -517,18 +517,21 @@ static void OnLinesButton( wxCommandEvent& WXUNUSED( event ) )
 	wxGetApp().CreateUndoPoint();
 	line_strip.drawing_mode = LineDrawingMode;
 	wxGetApp().SetInputMode(&line_strip);
+	wxGetApp().Changed();
 }
 
 static void OnPointsButton( wxCommandEvent& WXUNUSED( event ) )
 {
 	wxGetApp().CreateUndoPoint();
 	wxGetApp().SetInputMode(&point_drawing);
+	wxGetApp().Changed();
 }
 
 static void OnRegularShapesButton( wxCommandEvent& WXUNUSED( event ) )
 {
 	wxGetApp().CreateUndoPoint();
 	wxGetApp().SetInputMode(&regular_shapes_drawing);
+	wxGetApp().Changed();
 }
 
 static void OnTextButton( wxCommandEvent& WXUNUSED( event ) )
