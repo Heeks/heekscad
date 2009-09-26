@@ -74,3 +74,11 @@ Some objects have pointers to there child objects as members. I'm calling these 
 = Heeks Objects, the more complicated kind =
 
 Some HeeksObj's have numerous children that are not particularly related to there state. An example would be a CShape. The state of this object is wholly determined by the TopoDS_Shape that it contains, yet it has numerous faces, edges, and vertices as children. Not only would searching the faces and edges for changes be time consuming, but replacing them would be pointless as it would not update the TopoDS_Shape that they represent. 
+
+*DescendForUndo*
+
+Implementing this function will prevent the undo engine from examining children. Instead the entire tree, with this node at the top, will be copied whenever IsDifferent returns true. 
+
+*IsDifferent*
+
+Analyzing a TopoDS_Shape or ToolPath for changes would be time consuming and is not necessary. Instead you can use a creation time field. Just initialize this in constructors to the current time and copy it in the = operator. Then use IsDifferent to just check for a difference in creation time. Any operations that regenerate a tool path or some such thing, if they do not create a new object, must update this time. 
