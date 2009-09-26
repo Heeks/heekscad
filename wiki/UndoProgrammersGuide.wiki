@@ -13,9 +13,9 @@ So in code, the process is this
 
 OnButton()
 {
-   CreateUndoPoint()
+   CreateUndoPoint();
    tool->Run();
-   Changed()
+   Changed();
 }
 
 These methods are part of HeeksCADapp and are accessible by either wxGetApp() or the application pointer in a plugin. If you are experiencing weird things like new objects not being put in the treeview, extra undo points, or your changes being grouped in with other changes, it is best to set a breakpoint in your algorithm at look at the call stack. No more than 3 calls above you should see code that look substantially like the above. If not, find a good place to put it, keeping in mind your algorithm is not a good place for the undo code. Only code that explicitly deals with a UI event should call undo. Later on someone may use you algorithm as part of some large scripted sequence and the individual parts of that algorithm should not be undoable. 
@@ -30,12 +30,12 @@ This is a pure virtual function of HeeksObj, so normally the compiler will barf 
 
 Make sure it is implemented like this example:
 
-HeeksObj *HLine::MakeACopy(void)const{
-	HLine *new_object = new HLine(*this);
+HeeksObj `*`HLine::MakeACopy(void)const{
+	HLine `*`new_object = new HLine(`*`this);
 	return new_object;
 }
 
-Notice the *this. I've found a couple of cases where the * was omitted, which compiled because there was a constructor taking a HLine*, but did not work as the = operator is not called in this case. 
+Notice the `*`this. I've found a couple of cases where the * was omitted, which compiled because there was a constructor taking a HLine`*`, but did not work as the = operator is not called in this case. 
 
 *= Operator*
 
@@ -44,10 +44,10 @@ This operator must be implemented for your class to work properly. Do not count 
 const HLine& HLine::operator=(const HLine &b){
 	EndedObject::operator=(b);
 	color = b.color;
-	return *this;
+	return `*`this;
 }
 
-Notice the calling of the base classes = operator, this is imperitive, even if just inheriting from HeeksObj. All state variables declared by the class must be copied. Do not copy any base classes members. 
+Notice the calling of the base classes = operator, this is imperative, even if just inheriting from HeeksObj. All state variables declared by the class must be copied. Do not copy any base classes members. 
 
 *IsDifferent*
 
@@ -55,9 +55,9 @@ This method tells the undo engine if an object has been modified. This method wi
 
 All state variables declared by this class should be checked for equality, If not return true. The base classes IsDifferent should be returned if the objects appear to be equal. Here is an example:
 
-bool EndedObject::IsDifferent(HeeksObj *other)
+bool EndedObject::IsDifferent(HeeksObj `*`other)
 {
-	EndedObject* eobj = (EndedObject*)other;
+	EndedObject`*` eobj = (EndedObject`*`)other;
 	if(eobj->A->m_p.Distance(A->m_p) > wxGetApp().m_geom_tol)
 		return true;
 
