@@ -7,7 +7,7 @@ HeeksCAD has a smart and automatic undo/redo engine designed to relieve programm
 
 = UI Methods =
 
-Currently all UI for algorithms is done via buttons or menu items, this is unlikely to change, but it might. Whenever a button or menu item is clicked, heekscad looks up what code to run. Before running it, it calls CreateUndoPoint(). This function analyzes the tree for any changes and stores the relevant information for undoing/redoing it later. Then the algorithm itself it called. Finally, Changed() is called to force an update of the treeview. 
+Currently all UI for algorithms is done via buttons or menu items, this is unlikely to change, but it might. Whenever a button or menu item is clicked, heekscad looks up what code to run. Before running it, it calls CreateUndoPoint(). This function analyzes the tree for any changes and stores the relevant information for undoing/redoing it later. Then the algorithm itself is called. Finally, Changed() is called to force an update of the treeview. 
 
 So in code, the process is this
 
@@ -35,7 +35,7 @@ HeeksObj `*`HLine::MakeACopy(void)const{
 	return new_object;
 }
 
-Notice the `*`this. I've found a couple of cases where the * was omitted, which compiled because there was a constructor taking a HLine`*`, but did not work as the = operator is not called in this case. 
+Notice the `*`this. I've found a couple of cases where the `*` was omitted, which compiled because there was a constructor taking a HLine`*`, but did not work as the = operator is not called in this case. 
 
 *= Operator*
 
