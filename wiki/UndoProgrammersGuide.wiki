@@ -82,3 +82,11 @@ Implementing this function will prevent the undo engine from examining children.
 *IsDifferent*
 
 Analyzing a TopoDS_Shape or ToolPath for changes would be time consuming and is not necessary. Instead you can use a creation time field. Just initialize this in constructors to the current time and copy it in the = operator. Then use IsDifferent to just check for a difference in creation time. Any operations that regenerate a tool path or some such thing, if they do not create a new object, must update this time. 
+
+= Heeks Objects, the really complicated kind =
+
+Some objects in HeeksCAD have multiple parents. The only objects currently doing this are geometric constraints. It is supported if you need or want to do it. The undo engine supports copying subtrees with dangling edges and the reintegration of such graphs into the main tree. This is done by storing the edges of the graph rather than the nodes themselves. That way the appropriate connectivity is known and can be used to setup the graph after a full or partial copy. 
+
+*IsTransient*
+
+Implement this and return true if this node has multiple parents, or can in certain situations. This will cause the undo engine to use the edge rather than node analysis. In theory this could be used on all objects, multiparented or not. This code is not as well debugged, probably best to use when needed. 
