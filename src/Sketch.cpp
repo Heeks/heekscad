@@ -151,7 +151,7 @@ void CSketch::glCommands(bool select, bool marked, bool no_color)
 	for(unsigned i=0; i < faces.size(); i++)
 	{
 		MeshFace(faces[i],pixels_per_mm);
-		DrawFace(faces[i]);
+		DrawFaceWithCommands(faces[i]);
 	}
 }
 

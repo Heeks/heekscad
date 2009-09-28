@@ -11,7 +11,6 @@ class CNurbSurfaceParams;
 
 class CFace:public HeeksObj{
 private:
-	CBox m_box;
 	TopoDS_Face m_topods_face;
 	static wxIcon* m_icon;
 #if _DEBUG
@@ -25,6 +24,7 @@ private:
 #endif
 
 public:
+	CBox m_box;
 	int m_temp_attr; // not saved with the model
 	std::list<CEdge*>::iterator m_edgeIt;
 	std::list<CEdge*> m_edges;
