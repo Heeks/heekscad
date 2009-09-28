@@ -58,7 +58,7 @@ void CPad::glCommands(bool select, bool marked, bool no_color)
 		{
 			TopoDS_Face F = TopoDS::Face(expFace.Current());
 			MeshFace(F,pixels_per_mm);
-			DrawFace(F);
+			DrawFaceWithCommands(F);
 		}
 	}
 
