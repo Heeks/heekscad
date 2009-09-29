@@ -19,7 +19,7 @@
 
 HeeksObj::HeeksObj(void): m_skip_for_undo(false), m_id(0), m_layer(0), m_visible(true), m_preserving_id(false){}
 
-HeeksObj::HeeksObj(const HeeksObj& ho): m_id(0), m_layer(0), m_visible(true),m_preserving_id(false),m_skip_for_undo(false){operator=(ho);}
+HeeksObj::HeeksObj(const HeeksObj& ho): m_skip_for_undo(false), m_id(0), m_layer(0), m_visible(true),m_preserving_id(false){operator=(ho);}
 
 const HeeksObj& HeeksObj::operator=(const HeeksObj &ho)
 {
