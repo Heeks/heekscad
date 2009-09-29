@@ -14,6 +14,7 @@
 #include "../interface/Tool.h"
 #include "MultiPoly.h"
 #include "FaceTools.h"
+#include "CoordinateSystem.h"
 
 std::string CSketch::m_sketch_order_str[MaxSketchOrderTypes] = {
 	std::string("unknown"),
@@ -31,6 +32,7 @@ CSketch::CSketch():m_order(SketchOrderTypeUnknown)
 {
 	m_title = _("Sketch");
 	m_solidify = false;
+	m_coordinate_system = NULL;
 }
 
 CSketch::CSketch(const CSketch& c)
@@ -51,8 +53,25 @@ const CSketch& CSketch::operator=(const CSketch& c)
 	m_order = c.m_order;
 	m_title = c.m_title;
 	m_solidify = c.m_solidify;
+	m_coordinate_system = c.m_coordinate_system;
 
 	return *this;
+}
+
+void CSketch::ReloadPointers()
+{
+	HeeksObj* child = GetFirstChild();
+	while(child)
+	{
+		CoordinateSystem *system = dynamic_cast<CoordinateSystem*>(child);
+		if(system)
+		{
+			m_coordinate_system = system;
+		}
+		child = GetNextChild();
+	}
+
+	ObjList::ReloadPointers();
 }
 
 static std::map<int, int> order_map_for_properties; // maps drop-down index to SketchOrderType
@@ -139,20 +158,30 @@ std::vector<TopoDS_Face> CSketch::GetFaces()
 
 void CSketch::glCommands(bool select, bool marked, bool no_color)
 {
-	ObjList::glCommands(select,marked,no_color);
-	if(!m_solidify)
-		return;
-
-	//TODO: we should really only be doing this when geometry changes
-	std::vector<TopoDS_Face> faces = GetFaces();
-
-	double pixels_per_mm = wxGetApp().GetPixelScale();
-
-	for(unsigned i=0; i < faces.size(); i++)
+	if(m_coordinate_system)
 	{
-		MeshFace(faces[i],pixels_per_mm);
-		DrawFaceWithCommands(faces[i]);
+		glPushMatrix();
+		m_coordinate_system->ApplyMatrix();
 	}
+
+	ObjList::glCommands(select,marked,no_color);
+
+	if(m_solidify)
+	{
+		//TODO: we should really only be doing this when geometry changes
+		std::vector<TopoDS_Face> faces = GetFaces();
+
+		double pixels_per_mm = wxGetApp().GetPixelScale();
+
+		for(unsigned i=0; i < faces.size(); i++)
+		{
+			MeshFace(faces[i],pixels_per_mm);
+			DrawFaceWithCommands(faces[i]);
+		}
+	}
+
+	if(m_coordinate_system)
+		glPopMatrix();
 }
 
 void CSketch::GetProperties(std::list<Property *> *list)
@@ -234,6 +263,8 @@ HeeksObj* CSketch::ReadFromXMLElement(TiXmlElement* pElem)
 	const char* title = pElem->Attribute("title");
 	if(title)new_object->m_title = wxString(Ctt(title));
 	new_object->ReadBaseXML(pElem);
+
+	new_object->ReloadPointers();
 
 	return (ObjList*)new_object;
 }

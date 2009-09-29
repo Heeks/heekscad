@@ -472,8 +472,7 @@ void MyTreeCtrl::OnLMouseDClick(wxMouseEvent& event)
 		CSketch *sketch = dynamic_cast<CSketch*>(item->m_object);
 		if(sketch)
 		{
-			wxGetApp().m_sketch = sketch;
-			wxGetApp().m_sketch_mode = true;
+			wxGetApp().EnterSketchMode(sketch);
 		}
 	}
     event.Skip();

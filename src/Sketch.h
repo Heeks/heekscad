@@ -8,6 +8,8 @@
 #include "../interface/HeeksColor.h"
 #include "../interface/SketchOrder.h"
 
+class CoordinateSystem;
+
 class CSketch:public ObjList
 {
 	HeeksColor color;
@@ -24,6 +26,8 @@ public:
 	static std::string m_sketch_order_str[MaxSketchOrderTypes];
 	SketchOrderType m_order;
 	bool m_solidify;
+	CoordinateSystem* m_coordinate_system;
+
 
 	CSketch();
 	CSketch(const CSketch& c);
@@ -51,6 +55,7 @@ public:
 	bool Add(HeeksObj* object, HeeksObj* prev_object);
 	void Remove(HeeksObj* object);
 	void glCommands(bool select, bool marked, bool no_color);
+	void ReloadPointers();
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 

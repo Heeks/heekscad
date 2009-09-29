@@ -1155,6 +1155,13 @@ void CoordinateSystem::RenderDatum(bool bright, bool solid)
 	}
 }
 
+void CoordinateSystem::ApplyMatrix()
+{
+	double m[16];
+	extract_transposed(GetMatrix(), m);
+	glMultMatrixd(m);
+}
+
 void CoordinateSystem::glCommands(bool select, bool marked, bool no_color)
 {
 	if(!rendering_current && this == wxGetApp().m_current_coordinate_system)return; // will get rendered in HeeksCADapp::glCommandsAll

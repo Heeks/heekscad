@@ -7,6 +7,7 @@
 #include <Geom_BSplineSurface.hxx>
 #include <TColgp_Array2OfPnt.hxx>
 #include "FaceTools.h"
+#include "Sketch.h"
 
 CFace::CFace(const TopoDS_Face &face):m_topods_face(face), m_temp_attr(0){
 #if _DEBUG
@@ -215,10 +216,35 @@ public:
 
 static MakeCoordSystem make_coordsys;
 
+class SketchOnFace:public Tool
+{
+	// only use this if GetSurfaceType() == GeomAbs_Plane
+public:
+	const wxChar* GetTitle(){return _("Sketch On Face");}
+	wxString BitmapPath(){return _T("coordsys");}
+	void Run(){
+		gp_Pln plane;
+		face_for_tools->GetPlaneParams(plane);
+		CoordinateSystem* coord_sys = new CoordinateSystem(_("Face Coordinate System"), plane.Location(), plane.XAxis().Direction(), plane.YAxis().Direction());
+		CSketch* sketch = new CSketch();
+		sketch->Add(coord_sys,NULL);
+		sketch->ReloadPointers();
+		//TODO: should be faces solids parent
+		wxGetApp().Add(sketch, NULL);
+		wxGetApp().m_marked_list->Clear(true);
+		wxGetApp().m_marked_list->Add(sketch, true);
+		wxGetApp().EnterSketchMode(sketch);
+		wxGetApp().Repaint();
+	}
+};
+
+static SketchOnFace sketch_on_face;
+
 void CFace::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 	face_for_tools = this;
 	t_list->push_back(&make_sketch_tool);
 	if(GetSurfaceType() == GeomAbs_Plane)t_list->push_back(&make_coordsys);
+	if(GetSurfaceType() == GeomAbs_Plane)t_list->push_back(&sketch_on_face);
 }
 
 int CFace::GetSurfaceType()
