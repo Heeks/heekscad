@@ -84,6 +84,8 @@ void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
 
 void GripperSelTransform::OnGripperReleased ( const double* from, const double* to )
 {
+	wxGetApp().DestroyTransformGLList();
+
 	if ( m_gripper_type > GripperTypeScale )
 	{
 		double shift[3] = {to[0] - m_initial_grip_pos[0], to[1] - m_initial_grip_pos[1], to[2] - m_initial_grip_pos[2]};
@@ -122,7 +124,6 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 	}
 
 	m_items_marked_at_grab.clear();
-	wxGetApp().DestroyTransformGLList();
 
 	if ( m_gripper_type <= GripperTypeObjectScaleXY )
 	{
