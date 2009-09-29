@@ -47,6 +47,7 @@ public:
 	void WriteXML(TiXmlNode *root);
 
 	gp_Trsf GetMatrix();
+	void ApplyMatrix();
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 	static void RenderArrow();

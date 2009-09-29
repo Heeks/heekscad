@@ -426,6 +426,14 @@ bool HeeksCADapp::EndSketchMode()
 	return false;
 }
 
+void HeeksCADapp::EnterSketchMode(CSketch* sketch)
+{
+	m_sketch_mode = true;
+	m_sketch = sketch;
+	if(sketch->m_coordinate_system)
+		m_current_coordinate_system = sketch->m_coordinate_system;
+}
+
 CSketch* HeeksCADapp::GetContainer()
 {
 	if(m_sketch_mode)
@@ -1643,7 +1651,7 @@ void HeeksCADapp::Transform(std::list<HeeksObj*> objects,double *m)
 
 gp_Trsf HeeksCADapp::GetDrawMatrix(bool get_the_appropriate_orthogonal)
 {
-	if(get_the_appropriate_orthogonal){
+/*	if(get_the_appropriate_orthogonal){
 		// choose from the three orthoganal possibilities, the one where it's z-axis closest to the camera direction
 		gp_Vec vx, vy;
 		m_frame->m_graphics->m_view_point.GetTwoAxes(vx, vy, false, 0);
@@ -1652,7 +1660,7 @@ gp_Trsf HeeksCADapp::GetDrawMatrix(bool get_the_appropriate_orthogonal)
 			if(m_current_coordinate_system)o.Transform(m_current_coordinate_system->GetMatrix());
 			return make_matrix(o, vx, vy);
 		}
-	}
+	} */
 
 	gp_Trsf mat;
 	if(m_current_coordinate_system)mat = m_current_coordinate_system->GetMatrix();

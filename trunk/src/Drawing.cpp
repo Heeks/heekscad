@@ -294,10 +294,21 @@ void Drawing::OnFrontRender(){
 	if(DragDoneWithXOR() && GetDrawStep()){
 		std::list<HeeksObj*>::const_iterator It;
 		const std::list<HeeksObj*>& drawing_objects = GetObjectsMade();
+
+		HeeksObj *owner = GetOwnerForDrawingObjects();
+		CSketch *sketch = dynamic_cast<CSketch*>(owner);
+		glPushMatrix();
+		if(sketch && sketch->m_coordinate_system)
+		{
+			sketch->m_coordinate_system->ApplyMatrix();
+		}
+
 		for(It = drawing_objects.begin(); It != drawing_objects.end(); It++){
 			HeeksObj *object = *It;
 			object->glCommands(false, false, true);
 		}
+
+		glPopMatrix();
 	}
 
 	wxGetApp().m_digitizing->OnFrontRender();
@@ -307,10 +318,21 @@ void Drawing::OnRender(){
 	if(!DragDoneWithXOR() && GetDrawStep()){
 		std::list<HeeksObj*>::const_iterator It;
 		const std::list<HeeksObj*>& drawing_objects = GetObjectsMade();
+		
+		HeeksObj *owner = GetOwnerForDrawingObjects();
+		CSketch *sketch = dynamic_cast<CSketch*>(owner);
+		glPushMatrix();
+		if(sketch && sketch->m_coordinate_system)
+		{
+			sketch->m_coordinate_system->ApplyMatrix();
+		}
+
 		for(It = drawing_objects.begin(); It != drawing_objects.end(); It++){
 			HeeksObj *object = *It;
 			object->glCommands(false, false, false);
 		}
+
+		glPopMatrix();
 	}
 }
 

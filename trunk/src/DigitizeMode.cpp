@@ -112,7 +112,7 @@ DigitizedPoint DigitizeMode::digitize1(const wxPoint &input_point){
 			HeeksObj* object = marked_object.GetFirstOfBottomOnly();
 			while(object){
 				std::list<GripData> vl;
-				object->GetGripperPositions(&vl, true);
+				object->GetGripperPositionsTransformed(&vl, true);
 				std::list<gp_Pnt> plist;
 				convert_gripdata_to_pnts(vl, plist);
 				for(std::list<gp_Pnt>::iterator It = plist.begin(); It != plist.end(); It++)
@@ -278,7 +278,10 @@ DigitizedPoint DigitizeMode::Digitize(const gp_Lin &ray){
 		double extra2 = d > -0.00000001 ? 0.5:-0.5;
 		d = (int)(d / wxGetApp().digitizing_grid + extra2) * wxGetApp().digitizing_grid;
 
-		point.m_point = datum.XYZ() + plane_vx.XYZ() * c + plane_vy.XYZ() * d;
+		if(wxGetApp().m_sketch_mode)
+			point.m_point = gp_XYZ(1,0,0) * c + gp_XYZ(0,1,0) * d;
+		else
+			point.m_point = datum.XYZ() + plane_vx.XYZ() * c + plane_vy.XYZ() * d;
 	}
 
 	return point;

@@ -283,6 +283,7 @@ public:
 	void create_font();
 	CSketch* GetContainer();
 	bool EndSketchMode();
+	void EnterSketchMode(CSketch* sketch);
 	void SetStatusText();
 
 	std::auto_ptr<CxfFonts>	& GetAvailableFonts();
