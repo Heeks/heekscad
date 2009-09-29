@@ -29,7 +29,7 @@ protected:
 	std::map<int, ViewSpecific*> view_map;
 	ViewSpecific *current_view_stuff;
 	ViewSpecific *null_view;
-	wxPoint button_down_point;
+	DigitizedPoint button_down_point;
 
 	// Drawing's virtual functions
 	virtual void set_digitize_plane(){}
