@@ -14,4 +14,6 @@ public:
 	const wxChar* GetTitle(){return _("View Zoom");}
 	const wxChar* GetHelpText();
 	void OnMouse( wxMouseEvent& event );
+	bool OnModeChange(void);
+	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 };

@@ -14,4 +14,6 @@ public:
 	// virtual functions for InputMode
 	const wxChar* GetTitle(){return _("View Rotate");}
 	void OnMouse( wxMouseEvent& event );
+	bool OnModeChange(void);
+	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 };
