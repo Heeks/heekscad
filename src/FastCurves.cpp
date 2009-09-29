@@ -183,12 +183,12 @@ double FastArc::GetU(double x, double y)
 		int x=0;
 		x++;
 	}
-#ifdef ROUNDU
-	if(u > -TOLERANCE && ut < TOLERANCE)
+//#ifdef ROUNDU
+	if(u > -TOLERANCE && u < TOLERANCE)
 		u = 0;
 	if(u > 1 - TOLERANCE && u < 1 + TOLERANCE)
 		u = 1;
-#endif
+//#endif
 
 	return u;
 }

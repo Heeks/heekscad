@@ -14,6 +14,7 @@
 #include "../src/Gripper.h"
 #include "../src/HeeksFrame.h"
 #include "../src/ObjPropsCanvas.h"
+#include "../src/Sketch.h"
 #endif
 
 HeeksObj::HeeksObj(void): m_skip_for_undo(false), m_id(0), m_layer(0), m_visible(true), m_preserving_id(false){}
@@ -114,12 +115,81 @@ bool HeeksObj::GetScaleAboutMatrix(double *m)
 #endif
 }
 
+bool HeeksObj::StretchTransformed(const double *p, const double* shift, void* data)
+{
+#ifdef HEEKSCAD
+	gp_Trsf mat;
+
+	HeeksObj* owner = Owner();
+	CSketch *sketch = dynamic_cast<CSketch*>(owner);
+	
+	if(sketch && sketch->m_coordinate_system)
+		mat = sketch->m_coordinate_system->GetMatrix();
+
+	//mat.Invert();
+
+	gp_Pnt vp = make_point(p);
+	gp_Vec vshift = make_vector(shift);
+
+	//vp.Transform(mat);
+	//vshift.Transform(mat);
+
+	double np[3];
+	double nshift[3];
+	extract(vp,np);
+	extract(vshift,nshift);
+
+	return Stretch(np,nshift,data);
+#else
+	return Stretch(p,shift,data);
+#endif
+
+}
+
+void HeeksObj::GetGripperPositionsTransformed(std::list<GripData> *list, bool just_for_endof)
+{
+#ifdef HEEKSCAD
+
+	//TODO: We want to transform these coords by whatever has happened to the draw matrix on the way down to our level
+	//For right now we are just grabbing the sketches coord system, but this isn't right and won't work when parts or 
+	//assemblies come around. 
+	std::list<GripData> newlist;
+	GetGripperPositions(&newlist,just_for_endof);
+
+	gp_Trsf mat;
+
+	HeeksObj* owner = Owner();
+	CSketch *sketch = dynamic_cast<CSketch*>(owner);
+	
+	if(sketch && sketch->m_coordinate_system)
+		mat = sketch->m_coordinate_system->GetMatrix();
+
+	std::list<GripData>::iterator it;
+	for(it = newlist.begin(); it != newlist.end(); ++it)
+	{
+		GripData gd = *it;
+
+		gp_Pnt pnt(gd.m_x,gd.m_y,gd.m_z);
+		pnt.Transform(mat);
+		gd.m_x = pnt.X();
+		gd.m_y = pnt.Y();
+		gd.m_z = pnt.Z();
+		list->push_back(gd);
+	}
+#else
+	GetGripperPositions(list,just_for_endof);
+#endif
+}
+
 void HeeksObj::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
 {
 #ifdef HEEKSCAD
 	CBox box;
 	GetBox(box);
 	if(!box.m_valid)return;
+
+	//TODO: This is a tab bit of a strange thing to do. Especially for planar objects like faces
+	//ones that are on a plane like y-z or x-z will have all gripper merged togeather. 
 	list->push_back(GripData(GripperTypeTranslate,box.m_x[0],box.m_x[1],box.m_x[2],NULL));
 	list->push_back(GripData(GripperTypeRotateObject,box.m_x[3],box.m_x[1],box.m_x[2],NULL));
 	list->push_back(GripData(GripperTypeRotateObject,box.m_x[0],box.m_x[4],box.m_x[2],NULL));

@@ -54,8 +54,9 @@ void MarkedList::create_move_grips(){
 		if(object->GetType() == GripperType)continue;
 		std::list<GripData> vl;
 		std::list<GripData>::iterator It;
-		object->GetGripperPositions(&vl, false);
-		for(It = vl.begin(); It != vl.end() && number_of_grips_made<100; It++){
+		object->GetGripperPositionsTransformed(&vl, false);
+		for(It = vl.begin(); It != vl.end() && number_of_grips_made<100; It++)
+		{
 			pos[0] = (*It).m_x;
 			pos[1] = (*It).m_y;
 			pos[2] = (*It).m_z;
@@ -77,7 +78,7 @@ void MarkedList::update_move_grips(){
 		if(object->GetType() == GripperType)continue;
 		std::list<GripData> vl;
 		std::list<GripData>::iterator It;
-		object->GetGripperPositions(&vl, false);
+		object->GetGripperPositionsTransformed(&vl, false);
 		for(It = vl.begin(); It != vl.end(); It++){
 			pos[0] = (*It).m_x;
 			pos[1] = (*It).m_y;
