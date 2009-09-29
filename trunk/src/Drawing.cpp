@@ -103,7 +103,7 @@ void Drawing::OnMouse( wxMouseEvent& event )
 			if(event.LeftDown()){
 				if(!m_inhibit_coordinate_change)
 				{
-					button_down_point = wxPoint(event.GetX(), event.GetY());
+					button_down_point = wxGetApp().m_digitizing->digitize(wxPoint(event.GetX(), event.GetY()));
 				}
 			}
 			else if(event.LeftUp()){
@@ -112,7 +112,7 @@ void Drawing::OnMouse( wxMouseEvent& event )
 				}
 				else{
 					set_digitize_plane();
-					wxGetApp().m_digitizing->digitize(button_down_point);
+					wxGetApp().m_digitizing->digitized_point = button_down_point;
 					if(m_getting_position){
 						m_inhibit_coordinate_change = true;
 						m_getting_position = false;
