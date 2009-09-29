@@ -46,3 +46,27 @@ const wxChar* ViewZooming::GetHelpText(){
 	str_for_GetHelpText = wxString(_("Drag with the left mouse button")) + _T("\n") + (m_reversed ? _("Forward to zoom in, Back to zoom out"):_("Back to zoom in, Forward to zoom out")) + _T("\n") + _("Hold middle mouse button down to pan");
 	return str_for_GetHelpText;
 }
+
+class EndZooming:public Tool{
+public:
+	CInputMode* m_saved_mode;
+
+	void Run(){
+		wxGetApp().input_mode_object = m_saved_mode;
+	}
+	const wxChar* GetTitle(){return _("Stop zooming");}
+	wxString BitmapPath(){return _T("endpick");}
+};
+
+static EndZooming end_zooming;
+
+bool ViewZooming::OnModeChange(void)
+{
+	end_zooming.m_saved_mode = wxGetApp().input_mode_object;
+	return true;
+}
+
+void ViewZooming::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
+{
+	t_list->push_back(&end_zooming);
+}

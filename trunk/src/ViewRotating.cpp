@@ -45,3 +45,27 @@ void ViewRotating::OnMouse( wxMouseEvent& event )
 	if(event.GetWheelRotation() != 0)wxGetApp().m_select_mode->OnMouse(event);
 
 }
+
+class EndRotating:public Tool{
+public:
+	CInputMode* m_saved_mode;
+
+	void Run(){
+		wxGetApp().input_mode_object = m_saved_mode;
+	}
+	const wxChar* GetTitle(){return _("Stop rotating");}
+	wxString BitmapPath(){return _T("endpick");}
+};
+
+static EndRotating end_rotating;
+
+bool ViewRotating::OnModeChange(void)
+{
+	end_rotating.m_saved_mode = wxGetApp().input_mode_object;
+	return true;
+}
+
+void ViewRotating::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
+{
+	t_list->push_back(&end_rotating);
+}
