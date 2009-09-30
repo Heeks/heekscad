@@ -44,9 +44,12 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 	gp_Dir ydir = gp_Dir(0, 1, 0).Transformed(m_trsf);
 	gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(m_trsf);
 	if(m_mode == TwoPointsDimensionMode)
-	{
+	{	
 		xdir = make_vector(m_p0, m_p1);
-		ydir = zdir ^ xdir;
+		if(xdir.IsParallel(zdir,wxGetApp().m_geom_tol))
+			zdir = xdir ^ ydir;
+		else
+			ydir = zdir ^ xdir;
 	}
 
 	float width, height;

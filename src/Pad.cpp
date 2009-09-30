@@ -42,6 +42,21 @@ void CPad::ReloadPointers()
 		}
 		child = GetNextChild();
 	}
+
+	Update();
+}
+
+void CPad::Update()
+{
+	if(m_sketch)
+	{
+		std::vector<TopoDS_Face> faces = m_sketch->GetFaces();
+		std::list<TopoDS_Face> facelist(faces.begin(),faces.end());
+		std::list<TopoDS_Shape> new_shapes;
+		CreateExtrusions(facelist, new_shapes, gp_Vec(0, 0, m_length));
+
+		SetShapes(new_shapes);
+	}
 }
 
 void CPad::glCommands(bool select, bool marked, bool no_color)
@@ -50,13 +65,7 @@ void CPad::glCommands(bool select, bool marked, bool no_color)
 
 	if(m_sketch)
 	{
-		std::vector<TopoDS_Face> faces = m_sketch->GetFaces();
-		std::list<TopoDS_Face> facelist(faces.begin(),faces.end());
-		std::list<TopoDS_Shape> new_shapes;
-		CreateExtrusions(facelist, new_shapes, gp_Vec(0, 0, m_length).Transformed(wxGetApp().GetDrawMatrix(false)));
-
-		SetShapes(new_shapes);
-
+		Update();
 		DrawShapes();
 	}
 
