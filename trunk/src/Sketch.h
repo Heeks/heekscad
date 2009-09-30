@@ -26,6 +26,7 @@ public:
 	static std::string m_sketch_order_str[MaxSketchOrderTypes];
 	SketchOrderType m_order;
 	bool m_solidify;
+	bool m_draw_with_transform;
 	CoordinateSystem* m_coordinate_system;
 
 

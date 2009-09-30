@@ -63,14 +63,17 @@ void CPad::glCommands(bool select, bool marked, bool no_color)
 {
 	//TODO: only do this when the sketch is dirty
 
+	glPushMatrix();
 	if(m_sketch)
 	{
 		Update();
+		m_sketch->m_coordinate_system->ApplyMatrix();
 		DrawShapes();
 	}
 
 	//Draw everything else
 	ObjList::glCommands(select,marked,no_color);
+	glPopMatrix();
 
 }
 
@@ -148,6 +151,7 @@ void CPad::PadSketch(CSketch* sketch, double length)
 
 	sketch->Owner()->Remove(sketch);
 	sketch->RemoveOwner(sketch->Owner());
+	sketch->m_draw_with_transform = false;
 	pad->Add(sketch,NULL);
 	pad->ReloadPointers();
 }
