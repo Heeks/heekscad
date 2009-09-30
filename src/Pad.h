@@ -4,11 +4,12 @@
 
 #pragma once
 
-#include "../interface/ObjList.h"
+#include "DynamicSolid.h"
 
-class CPad: public ObjList{
+class CPad: public DynamicSolid{
 public:
 	double m_length;
+	CSketch* m_sketch;
 
 	CPad(double length);
 	CPad();
@@ -25,5 +26,6 @@ public:
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 	static void PadSketch(CSketch*,double length);
 	bool IsDifferent(HeeksObj* other);
+	void ReloadPointers();
 };
 
