@@ -33,6 +33,7 @@ CSketch::CSketch():m_order(SketchOrderTypeUnknown)
 	m_title = _("Sketch");
 	m_solidify = false;
 	m_coordinate_system = NULL;
+	m_draw_with_transform = true;
 }
 
 CSketch::CSketch(const CSketch& c)
@@ -54,6 +55,7 @@ const CSketch& CSketch::operator=(const CSketch& c)
 	m_title = c.m_title;
 	m_solidify = c.m_solidify;
 	m_coordinate_system = c.m_coordinate_system;
+	m_draw_with_transform = c.m_draw_with_transform;
 
 	return *this;
 }
@@ -158,7 +160,7 @@ std::vector<TopoDS_Face> CSketch::GetFaces()
 
 void CSketch::glCommands(bool select, bool marked, bool no_color)
 {
-	if(m_coordinate_system)
+	if(m_coordinate_system && m_draw_with_transform)
 	{
 		glPushMatrix();
 		m_coordinate_system->ApplyMatrix();
@@ -180,7 +182,7 @@ void CSketch::glCommands(bool select, bool marked, bool no_color)
 		}
 	}
 
-	if(m_coordinate_system)
+	if(m_coordinate_system && m_draw_with_transform)
 		glPopMatrix();
 }
 
