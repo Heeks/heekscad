@@ -81,11 +81,13 @@ void UndoEngine::RecalculateMapsRecursive(std::map<HeeksObjId,HeeksObj*> &treema
 
 		HeeksObjId id = GetHeeksObjId(new_obj);
 		treemap[id] = new_obj;
-		ObjList* new_list = dynamic_cast<ObjList*>(new_obj);
+		if(new_obj->IsList())
+		{
+			ObjList* new_list = (ObjList*)new_obj;
 
-		//Always descend when generating the map
-		if(new_list)
+			//Always descend when generating the map
 			RecalculateMapsRecursive(treemap,new_list);
+		}
 		new_obj = obj->GetNextChild();
 	}
 
@@ -161,11 +163,14 @@ void UndoEngine::GetModificationsRecursive(std::vector<UndoEvent> &ret,ObjList* 
 			}
 			else
 			{
-				ObjList* newlist = dynamic_cast<ObjList*>(obj);
-				ObjList* oldlist = dynamic_cast<ObjList*>(old_children_map[*it]);
-				if(newlist&&newlist->DescendForUndo())
+				if(obj->IsList())
 				{
-					GetModificationsRecursive(ret,newlist,oldlist);
+					ObjList* newlist = (ObjList*)obj;
+					ObjList* oldlist = (ObjList*)old_children_map[*it];
+					if(newlist->DescendForUndo())
+					{
+						GetModificationsRecursive(ret,newlist,oldlist);
+					}
 				}
 			}
 		}
@@ -395,14 +400,17 @@ void UndoEngine::PrintTree(HeeksObj *tree, std::stringstream &cstr,int level)
 	tab(cstr,level);
 	cstr << "Location: " << tree << endl;
 
-	ObjList* list = dynamic_cast<ObjList*>(tree);
-	if(list&&list->DescendForUndo())
+	if(tree->IsList())
 	{
-		HeeksObj* child = list->GetFirstChild();
-		while(child)
+		ObjList* list = (ObjList*)tree;
+		if(list->DescendForUndo())
 		{
-			PrintTree(child,cstr,level+1);
-			child = list->GetNextChild();
+			HeeksObj* child = list->GetFirstChild();
+			while(child)
+			{
+				PrintTree(child,cstr,level+1);
+				child = list->GetNextChild();
+			}
 		}
 	}
 }

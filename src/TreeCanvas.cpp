@@ -87,9 +87,11 @@ void CTreeCanvas::Add(ObjList* objects, wxTreeItemId owner)
 	{
 		wxTreeItemId new_owner = AddInt(object, owner);
 
-		ObjList* new_list = dynamic_cast<ObjList*>(object);
-		if(new_list)
+		if(object->IsList())
+		{
+			ObjList* new_list = (ObjList*)object;
 			Add(new_list, new_owner);
+		}
 
 		object = objects->GetNextChild();
 	}

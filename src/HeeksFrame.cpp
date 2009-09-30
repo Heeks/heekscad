@@ -182,7 +182,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 				::wxSetWorkingDirectory(path);
 
-				wxDynamicLibrary* shared_library = new wxDynamicLibrary(fn.GetFullPath());
+				wxDynamicLibrary* shared_library = new wxDynamicLibrary(fn.GetFullPath(),wxDL_NOW|wxDL_GLOBAL );
 				if(shared_library->IsLoaded()){
 					bool success;
 					void(*OnStartUp)(CHeeksCADInterface*, const wxString&) = (void (*)(CHeeksCADInterface*, const wxString&))(shared_library->GetSymbol(_T("OnStartUp"), &success));
