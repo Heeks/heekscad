@@ -51,4 +51,5 @@ public:
 	bool ModifyByMatrix(const double *m);
 	void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true);
 	void Disconnect(std::list<HeeksObj*>parents);
+	bool IsList(){return true;}
 };

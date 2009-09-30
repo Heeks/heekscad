@@ -165,6 +165,7 @@ public:
 	virtual HeeksObj* GetNextOwner();
 	virtual const TopoDS_Shape *GetShape() { return(NULL); }
 	virtual bool IsTransient(){return false;}
+	virtual bool IsList(){return false;}
 protected:
 	virtual void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 };

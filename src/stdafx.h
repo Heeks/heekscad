@@ -18,6 +18,30 @@
 #include "windows.h"
 #endif
 
+#include <algorithm>
+#include <list>
+#include <vector>
+#include <map>
+#include <set>
+#include <fstream>
+#include <iomanip>
+#include <cmath>
+#include <sstream>
+#include <ctime>
+#include <iostream>
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+
+#define HAVE_IOSTREAM
+#define CHAR_BIT 8
+#define INT_MAX 2147483647
+#define INT_MIN  -2147483647
+
+
 #include <Standard.hxx>
 #include <Standard_TypeDef.hxx>
 
@@ -110,24 +134,6 @@
 #include <TopTools_MapIteratorOfMapOfShape.hxx>
 #include <TopTools_MapOfShape.hxx>
 #include <UnitsAPI.hxx>
-
-#include <algorithm>
-#include <list>
-#include <vector>
-#include <map>
-#include <set>
-#include <fstream>
-#include <iomanip>
-#include <cmath>
-#include <sstream>
-#include <ctime>
-#include <iostream>
-
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
 
 #include <wx/wx.h>
 #include <wx/aui/aui.h>
