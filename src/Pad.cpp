@@ -7,7 +7,6 @@
 #include "Shape.h"
 #include "RuledSurface.h"
 #include "../interface/PropertyDouble.h"
-#include "FaceTools.h"
 
 CPad::CPad(double length)
 {
@@ -28,42 +27,42 @@ bool CPad::IsDifferent(HeeksObj* other)
 	return HeeksObj::IsDifferent(other);
 }
 
+void CPad::ReloadPointers()
+{
+	DynamicSolid::ReloadPointers();
+
+	HeeksObj *child = GetFirstChild();
+	while(child)
+	{
+		CSketch* sketch = dynamic_cast<CSketch*>(child);
+		if(sketch)
+		{
+			m_sketch = sketch;
+			break;
+		}
+		child = GetNextChild();
+	}
+}
+
 void CPad::glCommands(bool select, bool marked, bool no_color)
 {
+	//TODO: only do this when the sketch is dirty
+
+	if(m_sketch)
+	{
+		std::vector<TopoDS_Face> faces = m_sketch->GetFaces();
+		std::list<TopoDS_Face> facelist(faces.begin(),faces.end());
+		std::list<TopoDS_Shape> new_shapes;
+		CreateExtrusions(facelist, new_shapes, gp_Vec(0, 0, m_length).Transformed(wxGetApp().GetDrawMatrix(false)));
+
+		SetShapes(new_shapes);
+
+		DrawShapes();
+	}
+
 	//Draw everything else
 	ObjList::glCommands(select,marked,no_color);
 
-	//TODO: only do this when the sketch is dirty
-
-	//Get the sketch
-	CSketch* sketch = dynamic_cast<CSketch*>(GetFirstChild());
-	if(!sketch)
-		return;
-
-	glEnable(GL_LIGHTING);
-	glShadeModel(GL_SMOOTH);
-
-
-	std::vector<TopoDS_Face> faces = sketch->GetFaces();
-	std::list<TopoDS_Face> facelist(faces.begin(),faces.end());
-	std::list<TopoDS_Shape> new_shapes;
-	CreateExtrusions(facelist, new_shapes, gp_Vec(0, 0, m_length).Transformed(wxGetApp().GetDrawMatrix(false)));
-
-	double pixels_per_mm = wxGetApp().GetPixelScale();
-
-	std::list<TopoDS_Shape>::iterator it;
-	for(it = new_shapes.begin(); it != new_shapes.end(); ++it)
-	{
-		for (TopExp_Explorer expFace(*it, TopAbs_FACE); expFace.More(); expFace.Next())
-		{
-			TopoDS_Face F = TopoDS::Face(expFace.Current());
-			MeshFace(F,pixels_per_mm);
-			DrawFaceWithCommands(F);
-		}
-	}
-
-	glDisable(GL_LIGHTING);
-	glShadeModel(GL_FLAT);
 }
 
 void OnSetHeight(double b, HeeksObj* o)
@@ -141,4 +140,5 @@ void CPad::PadSketch(CSketch* sketch, double length)
 	sketch->Owner()->Remove(sketch);
 	sketch->RemoveOwner(sketch->Owner());
 	pad->Add(sketch,NULL);
+	pad->ReloadPointers();
 }
