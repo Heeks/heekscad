@@ -27,5 +27,7 @@ public:
 	static void PadSketch(CSketch*,double length);
 	bool IsDifferent(HeeksObj* other);
 	void ReloadPointers();
+
+	void Update();
 };
 

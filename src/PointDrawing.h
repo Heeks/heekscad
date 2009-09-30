@@ -18,6 +18,7 @@ private:
 	int number_of_steps(){return 1;}
 	int step_to_go_to_after_last_step(){return 0;}
 	bool is_an_add_level(int level){return true;}
+	HeeksObj* GetOwnerForDrawingObjects();
 
 public:
 	PointDrawing(void);
