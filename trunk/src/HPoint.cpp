@@ -74,6 +74,7 @@ void HPoint::glCommands(bool select, bool marked, bool no_color)
 		return;
 	}
 
+
 	glRasterPos3d(m_p.X(), m_p.Y(), m_p.Z());
 	glBitmap(16, 16, 8, 8, 10.0, 0.0, marked ? cross16_selected : cross16);
 	if(marked){
