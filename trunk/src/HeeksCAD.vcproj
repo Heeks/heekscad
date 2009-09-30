@@ -604,6 +604,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\DynamicSolid.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\DynamicSolid.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Edge.cpp"
 			>
 		</File>
@@ -1361,6 +1369,14 @@
 		</File>
 		<File
 			RelativePath=".\ShapeData.h"
+			>
+		</File>
+		<File
+			RelativePath=".\ShapeTools.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ShapeTools.h"
 			>
 		</File>
 		<File
