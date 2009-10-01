@@ -7,15 +7,7 @@
 
 #include "../interface/HeeksObj.h"
 #include "../interface/GripperTypes.h"
-
-class GripData{
-public:
-	double m_x,m_y,m_z;
-	void* m_data;
-	EnumGripperType m_type;
-
-	GripData(EnumGripperType,double x, double y, double z, void* data);
-};
+#include "../interface/GripData.h"
 
 class Gripper: public HeeksObj{
 private:
