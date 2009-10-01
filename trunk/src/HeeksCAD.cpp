@@ -86,10 +86,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_version_number = _T("0 9 0");
 	m_geom_tol = 0.000001;
 	m_view_units = 1.0;
-	background_color[0] = HeeksColor(0, 0, 0);
-	background_color[1] = HeeksColor(0, 0, 0);
-	background_color[2] = HeeksColor(0, 0, 0);
-	background_color[3] = HeeksColor(193, 235, 236);
+	for(int i = 0; i<NUM_BACKGROUND_COLORS; i++)background_color[i] = HeeksColor(0, 0, 0);
 	m_background_mode = BackgroundModeOneColor;
 	current_color = HeeksColor(0, 0, 0);
 	construction_color = HeeksColor(0, 0, 255);
@@ -217,18 +214,26 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("DrawGrid"), &digitizing_grid);
 	config.Read(_T("DrawRadius"), &digitizing_radius);
 	{
-		int color0 = HeeksColor(255, 175, 96).COLORREF_color();
-		int color1 = HeeksColor(198, 217, 119).COLORREF_color();
-		int color2 = HeeksColor(247, 198, 243).COLORREF_color();
-		int color3 = HeeksColor(193, 235, 236).COLORREF_color();
-		config.Read(_T("BackgroundColor0"), &color0);
-		config.Read(_T("BackgroundColor1"), &color1);
-		config.Read(_T("BackgroundColor2"), &color2);
-		config.Read(_T("BackgroundColor3"), &color3);
-		background_color[0] = HeeksColor(color0);
-		background_color[1] = HeeksColor(color1);
-		background_color[2] = HeeksColor(color2);
-		background_color[3] = HeeksColor(color3);
+		int default_color[NUM_BACKGROUND_COLORS] = {
+			HeeksColor(255, 175, 96).COLORREF_color(),
+			HeeksColor(198, 217, 119).COLORREF_color(),
+			HeeksColor(247, 198, 243).COLORREF_color(),
+			HeeksColor(193, 235, 236).COLORREF_color(),
+			HeeksColor(255, 255, 255).COLORREF_color(),
+			HeeksColor(255, 255, 255).COLORREF_color(),
+			HeeksColor(255, 255, 255).COLORREF_color(),
+			HeeksColor(255, 255, 255).COLORREF_color(),
+			HeeksColor(255, 255, 255).COLORREF_color(),
+			HeeksColor(255, 255, 255).COLORREF_color()
+		};
+
+		for(int i = 0; i<NUM_BACKGROUND_COLORS; i++)
+		{
+			wxString key = wxString::Format(_T("BackgroundColor%d"), i);
+			int color = default_color[i];
+			config.Read(key, &color);
+			background_color[i] = HeeksColor(color);
+		}
 		int mode = (int)BackgroundModeTwoColors;
 		config.Read(_T("BackgroundMode"), &mode);
 		m_background_mode = (BackgroundMode)mode;
@@ -353,10 +358,11 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("Allow3DRotaion"), allow3DRotaion);
 	config.Write(_T("DrawGrid"), digitizing_grid);
 	config.Write(_T("DrawRadius"), digitizing_radius);
-	config.Write(_T("BackgroundColor0"), background_color[0].COLORREF_color());
-	config.Write(_T("BackgroundColor1"), background_color[1].COLORREF_color());
-	config.Write(_T("BackgroundColor2"), background_color[2].COLORREF_color());
-	config.Write(_T("BackgroundColor3"), background_color[3].COLORREF_color());
+	for(int i = 0; i<NUM_BACKGROUND_COLORS; i++)
+	{
+		wxString key = wxString::Format(_T("BackgroundColor%d"), i);
+		config.Write(key, background_color[i].COLORREF_color());
+	}
 	config.Write(_T("BackgroundMode"), (int)m_background_mode);
 	config.Write(_T("CurrentColor"), wxString::Format( _T("%d %d %d"), current_color.red, current_color.green, current_color.blue));
 	config.Write(_T("ConstructionColor"), wxString::Format(_T("%d %d %d"), construction_color.red, construction_color.green, construction_color.blue));
@@ -1691,6 +1697,42 @@ void on_set_background_color3(HeeksColor value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+void on_set_background_color4(HeeksColor value, HeeksObj* object)
+{
+	wxGetApp().background_color[4] = value;
+	wxGetApp().Repaint();
+}
+
+void on_set_background_color5(HeeksColor value, HeeksObj* object)
+{
+	wxGetApp().background_color[5] = value;
+	wxGetApp().Repaint();
+}
+
+void on_set_background_color6(HeeksColor value, HeeksObj* object)
+{
+	wxGetApp().background_color[6] = value;
+	wxGetApp().Repaint();
+}
+
+void on_set_background_color7(HeeksColor value, HeeksObj* object)
+{
+	wxGetApp().background_color[7] = value;
+	wxGetApp().Repaint();
+}
+
+void on_set_background_color8(HeeksColor value, HeeksObj* object)
+{
+	wxGetApp().background_color[8] = value;
+	wxGetApp().Repaint();
+}
+
+void on_set_background_color9(HeeksColor value, HeeksObj* object)
+{
+	wxGetApp().background_color[9] = value;
+	wxGetApp().Repaint();
+}
+
 void on_set_background_mode(int value, HeeksObj* object)
 {
 	wxGetApp().m_background_mode = (BackgroundMode)value;
@@ -2106,6 +2148,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 		choices.push_back ( wxString ( _("top color and bottom color") ) );
 		choices.push_back ( wxString ( _("left color and right color") ) );
 		choices.push_back ( wxString ( _("four corner colors") ) );
+		choices.push_back ( wxString ( _("sky and ground") ) );
 		view_options->m_list.push_back ( new PropertyChoice ( _("background mode"),  choices, (int)m_background_mode, NULL, on_set_background_mode ) );
 	}
 	switch(m_background_mode)
@@ -2130,6 +2173,16 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 		view_options->m_list.push_back ( new PropertyColor ( _("top right background color"),  background_color[2], NULL, on_set_background_color2 ) );
 		view_options->m_list.push_back ( new PropertyColor ( _("bottom right background color"),  background_color[3], NULL, on_set_background_color3 ) );
 		break;
+
+	case BackgroundModeSkyDome:
+		view_options->m_list.push_back ( new PropertyColor ( _("sky top color"),  background_color[4], NULL, on_set_background_color4 ) );
+		view_options->m_list.push_back ( new PropertyColor ( _("sky middle color"),  background_color[5], NULL, on_set_background_color5 ) );
+		view_options->m_list.push_back ( new PropertyColor ( _("sky bottom color"),  background_color[6], NULL, on_set_background_color6 ) );
+		view_options->m_list.push_back ( new PropertyColor ( _("ground top color"),  background_color[7], NULL, on_set_background_color7 ) );
+		view_options->m_list.push_back ( new PropertyColor ( _("ground middle color"),  background_color[8], NULL, on_set_background_color8 ) );
+		view_options->m_list.push_back ( new PropertyColor ( _("ground bottom color"),  background_color[9], NULL, on_set_background_color9 ) );
+		break;
+
 	}
 	{
 		std::list< wxString > choices;

@@ -55,7 +55,8 @@ enum BackgroundMode
 	BackgroundModeOneColor,
 	BackgroundModeTwoColors,
 	BackgroundModeTwoColorsLeftToRight,
-	BackgroundModeFourColors
+	BackgroundModeFourColors,
+	BackgroundModeSkyDome
 };
 
 class HeeksCADapp : public wxApp, public ObjList
@@ -82,7 +83,8 @@ public:
 	wxPoint cur_mouse_pos;
 	HeeksColor current_color;
 	HeeksColor construction_color;
-	HeeksColor background_color[4];
+#define NUM_BACKGROUND_COLORS 10
+	HeeksColor background_color[NUM_BACKGROUND_COLORS];
 	BackgroundMode m_background_mode;
 	bool m_gl_font_initialized;
 	int m_rotate_mode;
