@@ -279,7 +279,7 @@ HeeksObj* HSpline::ReadFromXMLElement(TiXmlElement* pElem)
 	{
 		double c[3];
 		double weight;
-		int index;
+		int index = 0;
 		// get the attributes
 		for(TiXmlAttribute* a = pPole->FirstAttribute(); a; a = a->Next())
 		{
@@ -301,7 +301,7 @@ HeeksObj* HSpline::ReadFromXMLElement(TiXmlElement* pElem)
 	{
 		double knot;
 		int mult;
-		int index;
+		int index = 0;
 		// get the attributes
 		for(TiXmlAttribute* a = pKnot->FirstAttribute(); a; a = a->Next())
 		{
