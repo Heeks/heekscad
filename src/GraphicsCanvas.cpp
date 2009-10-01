@@ -63,62 +63,151 @@ void CGraphicsCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 
 	m_view_point.SetViewport();
 
-	if(wxGetApp().m_background_mode != BackgroundModeOneColor)
+	switch(wxGetApp().m_background_mode)
 	{
-		// draw graduated background
-
-		glClear(GL_DEPTH_BUFFER_BIT);
-		glMatrixMode (GL_PROJECTION);
-		glLoadIdentity ();
-		gluOrtho2D (0.0, 1.0, 0.0, 1.0);
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-
-		// set up which colors to use
-		HeeksColor c[4];
-		for(int i = 0; i<4; i++)c[i] = wxGetApp().background_color[i];
-		switch(wxGetApp().m_background_mode)
+	case BackgroundModeTwoColors:
+	case BackgroundModeTwoColorsLeftToRight:
+	case BackgroundModeFourColors:
 		{
-		case BackgroundModeTwoColors:
-			c[2] = c[0];
-			c[3] = c[1];
-			break;
-		case BackgroundModeTwoColorsLeftToRight:
-			c[1] = c[0];
-			c[3] = c[2];
-			break;
-		default:
-			break;
+			// draw graduated background
+
+			glClear(GL_DEPTH_BUFFER_BIT);
+			glMatrixMode (GL_PROJECTION);
+			glLoadIdentity ();
+			gluOrtho2D (0.0, 1.0, 0.0, 1.0);
+			glMatrixMode(GL_MODELVIEW);
+			glLoadIdentity();
+
+			// set up which colors to use
+			HeeksColor c[4];
+			for(int i = 0; i<4; i++)c[i] = wxGetApp().background_color[i];
+			switch(wxGetApp().m_background_mode)
+			{
+			case BackgroundModeTwoColors:
+				c[2] = c[0];
+				c[3] = c[1];
+				break;
+			case BackgroundModeTwoColorsLeftToRight:
+				c[1] = c[0];
+				c[3] = c[2];
+				break;
+			default:
+				break;
+			}
+
+			glShadeModel(GL_SMOOTH);
+			glBegin(GL_QUADS);
+			c[0].glColor();
+			glVertex2f (0.0, 1.0);
+			c[1].glColor();
+			glVertex2f (0.0, 0.0);
+			c[3].glColor();
+			glVertex2f (1.0, 0.0);
+			c[2].glColor();
+			glVertex2f (1.0, 1.0);
+
+
+			glEnd();
+			glShadeModel(GL_FLAT);
 		}
+		break;
 
-		glShadeModel(GL_SMOOTH);
-		glBegin(GL_QUADS);
-		c[0].glColor();
-		glVertex2f (0.0, 1.0);
-		c[1].glColor();
-		glVertex2f (0.0, 0.0);
-		c[3].glColor();
-		glVertex2f (1.0, 0.0);
-		c[2].glColor();
-		glVertex2f (1.0, 1.0);
-
-
-		glEnd();
-		glShadeModel(GL_FLAT);
+	default:
+		break;
 	}
 
 	m_view_point.SetProjection(true);
 	m_view_point.SetModelview();
 
-	if(wxGetApp().m_background_mode == BackgroundModeOneColor)
+	switch(wxGetApp().m_background_mode)
 	{
-		// clear the back buffer
-		wxGetApp().background_color[0].glClearColor(wxGetApp().m_antialiasing ? 0.0f : 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	}
-	else
-	{
-		glClear(GL_DEPTH_BUFFER_BIT);
+	case BackgroundModeOneColor:
+		{
+			// clear the back buffer
+			wxGetApp().background_color[0].glClearColor(wxGetApp().m_antialiasing ? 0.0f : 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		}
+		break;
+	case BackgroundModeTwoColors:
+	case BackgroundModeTwoColorsLeftToRight:
+	case BackgroundModeFourColors:
+		{
+			glClear(GL_DEPTH_BUFFER_BIT);
+		}
+		break;
+	case BackgroundModeSkyDome:
+		{
+			// draw sky dome
+			glClear(GL_DEPTH_BUFFER_BIT);
+			double radius = m_view_point.m_far_plane * 0.5;
+			gp_Vec x(1, 0, 0);
+			gp_Vec y(0, 1, 0);
+			gp_Vec z(0, 0, 1);
+			glShadeModel(GL_SMOOTH);
+			glBegin(GL_TRIANGLES);
+			glEnable(GL_CULL_FACE);
+			for(int sector = 0; sector<4; sector++)
+			{
+				double ang0 = 0.7853981633974 - 1.5707963267948 * sector;
+				double ang1 = 0.7853981633974 - 1.5707963267948 * (sector + 1);
+
+				for(int panel = 0; panel<4; panel++)// vertical sections
+				{
+					double vang0 = -1.5707963267948 + 0.7853981633974 * panel;
+					double vang1 = -1.5707963267948 + 0.7853981633974 * (panel + 1);
+					gp_Pnt p0 = m_view_point.m_lens_point.XYZ() + (radius * x * cos(ang0) * cos(vang0)).XYZ() + (radius * y * sin(ang0) * cos(vang0)).XYZ() + (radius * z * sin(vang0)).XYZ();
+					gp_Pnt p1 = m_view_point.m_lens_point.XYZ() + (radius * x * cos(ang1) * cos(vang0)).XYZ() + (radius * y * sin(ang1) * cos(vang0)).XYZ() + (radius * z * sin(vang0)).XYZ();
+					gp_Pnt p2 = m_view_point.m_lens_point.XYZ() + (radius * x * cos(ang0) * cos(vang1)).XYZ() + (radius * y * sin(ang0) * cos(vang1)).XYZ() + (radius * z * sin(vang1)).XYZ();
+					gp_Pnt p3 = m_view_point.m_lens_point.XYZ() + (radius * x * cos(ang1) * cos(vang1)).XYZ() + (radius * y * sin(ang1) * cos(vang1)).XYZ() + (radius * z * sin(vang1)).XYZ();
+					HeeksColor c0, c1;
+					switch(panel)
+					{
+					case 0:
+						c0 = wxGetApp().background_color[9];
+						c1 = wxGetApp().background_color[8];
+						break;
+					case 1:
+						c0 = wxGetApp().background_color[8];
+						c1 = wxGetApp().background_color[7];
+						break;
+					case 2:
+						c0 = wxGetApp().background_color[6];
+						c1 = wxGetApp().background_color[5];
+						break;
+					case 3:
+						c0 = wxGetApp().background_color[5];
+						c1 = wxGetApp().background_color[4];
+						break;
+					default:
+						break;
+					}
+					
+					if(panel != 4)
+					{
+						c0.glColor();
+						glVertex3d(p0.X(), p0.Y(), p0.Z());
+						c1.glColor();
+						glVertex3d(p3.X(), p3.Y(), p3.Z());
+						glVertex3d(p2.X(), p2.Y(), p2.Z());
+					}
+					if(panel != 0)
+					{
+						c0.glColor();
+						glVertex3d(p0.X(), p0.Y(), p0.Z());
+						glVertex3d(p1.X(), p1.Y(), p1.Z());
+						c1.glColor();
+						glVertex3d(p3.X(), p3.Y(), p3.Z());
+					}
+					
+
+				}
+			}
+			glEnd();
+			glShadeModel(GL_FLAT);
+			glDisable(GL_CULL_FACE);
+			glClear(GL_DEPTH_BUFFER_BIT);
+		}
+		break;
 	}
 
 	// render everything
