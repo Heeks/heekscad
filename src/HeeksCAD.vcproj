@@ -1152,11 +1152,27 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Part.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Part.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Plugins.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\Plugins.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Pocket.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Pocket.h"
 			>
 		</File>
 		<File

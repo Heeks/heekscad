@@ -1,34 +1,35 @@
-// Pad.cpp
+// Pocket.cpp
 // Copyright (c) 2009, Dan Heeks
 // This program is released under the BSD license. See the file COPYING for details.
 
 #include "stdafx.h"
-#include "Pad.h"
+#include "Pocket.h"
 #include "Shape.h"
 #include "RuledSurface.h"
 #include "../interface/PropertyDouble.h"
 #include "Part.h"
 
-CPad::CPad(double length)
+CPocket::CPocket(double length)
 {
 	m_length = length;
+	m_faces->m_visible=false;
 }
 
-CPad::CPad()
+CPocket::CPocket()
 {
 	m_length = 0;
 }
 
-bool CPad::IsDifferent(HeeksObj* other)
+bool CPocket::IsDifferent(HeeksObj* other)
 {
-	CPad* pad = (CPad*)other;
-	if(pad->m_length != m_length)
+	CPocket* pocket = (CPocket*)other;
+	if(pocket->m_length != m_length)
 		return true;
 
 	return HeeksObj::IsDifferent(other);
 }
 
-void CPad::ReloadPointers()
+void CPocket::ReloadPointers()
 {
 	DynamicSolid::ReloadPointers();
 
@@ -47,7 +48,14 @@ void CPad::ReloadPointers()
 	Update();
 }
 
-void CPad::Update()
+gp_Trsf CPocket::GetTransform()
+{
+	if(m_sketch && m_sketch->m_coordinate_system)
+		return m_sketch->m_coordinate_system->GetMatrix();
+	return gp_Trsf();
+}
+
+void CPocket::Update()
 {
 	if(m_sketch)
 	{
@@ -64,7 +72,7 @@ void CPad::Update()
 		solid->Update();
 }
 
-void CPad::glCommands(bool select, bool marked, bool no_color)
+void CPocket::glCommands(bool select, bool marked, bool no_color)
 {
 	//TODO: only do this when the sketch is dirty
 
@@ -74,7 +82,7 @@ void CPad::glCommands(bool select, bool marked, bool no_color)
 		Update();
 		if(m_sketch->m_coordinate_system)
 			m_sketch->m_coordinate_system->ApplyMatrix();
-	//	DrawShapes();
+//		DrawShapes();
 	}
 
 	//Draw everything else
@@ -83,27 +91,20 @@ void CPad::glCommands(bool select, bool marked, bool no_color)
 
 }
 
-gp_Trsf CPad::GetTransform()
+void OnPocketSetHeight(double b, HeeksObj* o)
 {
-	if(m_sketch && m_sketch->m_coordinate_system)
-		return m_sketch->m_coordinate_system->GetMatrix();
-	return gp_Trsf();
-}
-
-void OnSetHeight(double b, HeeksObj* o)
-{
-	((CPad*)o)->m_length = b;
+	((CPocket*)o)->m_length = b;
 	wxGetApp().Repaint();
 }
 
-void CPad::GetProperties(std::list<Property *> *list)
+void CPocket::GetProperties(std::list<Property *> *list)
 {
-	list->push_back(new PropertyDouble(_("Height"), m_length, this,OnSetHeight));
+	list->push_back(new PropertyDouble(_("Height"), m_length, this,OnPocketSetHeight));
 
 	ObjList::GetProperties(list);
 }
 
-void CPad::WriteXML(TiXmlNode *root)
+void CPocket::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element = new TiXmlElement( "Pad" );  
 	return;
@@ -127,9 +128,9 @@ void CPad::WriteXML(TiXmlNode *root)
 }
 
 // static member function
-HeeksObj* CPad::ReadFromXMLElement(TiXmlElement* element)
+HeeksObj* CPocket::ReadFromXMLElement(TiXmlElement* element)
 {
-	CPad* new_object = new CPad;
+	CPocket* new_object = new CPocket;
 	return new_object;
 
 	// instead of ( ObjList:: ) new_object->ReadBaseXML(pElem);
@@ -157,9 +158,9 @@ HeeksObj* CPad::ReadFromXMLElement(TiXmlElement* element)
 }
 
 // static
-void CPad::PadSketch(CSketch* sketch, double length)
+void CPocket::PocketSketch(CSketch* sketch, double length)
 {
-	CPad *pad = new CPad(length);
+	CPocket *pad = new CPocket(length);
 	sketch->Owner()->Add(pad,NULL);
 
 	sketch->Owner()->Remove(sketch);
