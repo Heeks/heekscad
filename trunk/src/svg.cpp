@@ -267,7 +267,7 @@ void CSvgRead::ReadTransform(TiXmlElement *pElem)
 
 void CSvgRead::ReadRect(TiXmlElement *pElem)
 {
-	double x,y,width,height;
+	double x = 0,y = 0,width = 0,height = 0;
 	double rx=0; 
 	double ry=0;
 	// get the attributes
@@ -393,7 +393,7 @@ void CSvgRead::ReadPolyline(TiXmlElement *pElem, bool close)
 
 void CSvgRead::ReadCircle(TiXmlElement *pElem)
 {
-	double x,y,r;
+	double x = 0,y = 0,r = 0;
 	// get the attributes
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
