@@ -112,6 +112,8 @@ void ObjList::GetBox(CBox &box)
 
 void ObjList::glCommands(bool select, bool marked, bool no_color)
 {
+	if(!m_visible)
+		return;
 	HeeksObj::glCommands(select, marked, no_color);
 	std::list<HeeksObj*>::iterator It;
 	for(It=m_objects.begin(); It!=m_objects.end() ;It++)

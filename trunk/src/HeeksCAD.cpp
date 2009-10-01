@@ -2012,6 +2012,16 @@ void on_sel_filter_pad(bool value, HeeksObj* object){
 	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_PAD;
 }
 
+void on_sel_filter_part(bool value, HeeksObj* object){
+	if(value)wxGetApp().m_marked_list->m_filter |= MARKING_FILTER_PART;
+	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_PART;
+}
+
+void on_sel_filter_pocket(bool value, HeeksObj* object){
+	if(value)wxGetApp().m_marked_list->m_filter |= MARKING_FILTER_POCKETSOLID;
+	else wxGetApp().m_marked_list->m_filter &= ~MARKING_FILTER_POCKETSOLID;
+}
+
 void on_dxf_make_sketch(bool value, HeeksObj* object){
 	HeeksDxfRead::m_make_as_sketch = value;
 }
@@ -2215,6 +2225,8 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	selection_filter->m_list.push_back(new PropertyCheck(_("dimension"), (m_marked_list->m_filter & MARKING_FILTER_DIMENSION) != 0, NULL, on_sel_filter_dimension));
 	selection_filter->m_list.push_back(new PropertyCheck(_("ruler"), (m_marked_list->m_filter & MARKING_FILTER_RULER) != 0, NULL, on_sel_filter_ruler));
 	selection_filter->m_list.push_back(new PropertyCheck(_("pad"), (m_marked_list->m_filter & MARKING_FILTER_PAD) != 0, NULL, on_sel_filter_pad));
+	selection_filter->m_list.push_back(new PropertyCheck(_("part"), (m_marked_list->m_filter & MARKING_FILTER_PART) != 0, NULL, on_sel_filter_part));
+	selection_filter->m_list.push_back(new PropertyCheck(_("pocket"), (m_marked_list->m_filter & MARKING_FILTER_POCKETSOLID) != 0, NULL, on_sel_filter_pocket));
 	list->push_back(selection_filter);
 
 	PropertyList* file_options = new PropertyList(_("file options"));

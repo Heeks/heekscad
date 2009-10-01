@@ -1,4 +1,4 @@
-// Pad.h
+// Pocket.h
 // Copyright (c) 2009, Dan Heeks
 // This program is released under the BSD license. See the file COPYING for details.
 
@@ -6,25 +6,25 @@
 
 #include "DynamicSolid.h"
 
-class CPad: public DynamicSolid{
+class CPocket: public DynamicSolid{
 public:
 	double m_length;
 	CSketch* m_sketch;
 
-	CPad(double length);
-	CPad();
+	CPocket(double length);
+	CPocket();
 
-	const wxChar* GetTypeString(void)const{return _("Pad");}
-	int GetType()const{return PadType;}
-	HeeksObj *MakeACopy(void)const{ return new CPad(*this);}
+	const wxChar* GetTypeString(void)const{return _("Pocket");}
+	int GetType()const{return PocketSolidType;}
+	HeeksObj *MakeACopy(void)const{ return new CPocket(*this);}
 	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/group");}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetProperties(std::list<Property *> *list);
 	void WriteXML(TiXmlNode *root);
 	bool UsesID(){return true;}
-	long GetMarkingMask()const{return MARKING_FILTER_PAD;}
+	long GetMarkingMask()const{return MARKING_FILTER_POCKETSOLID;}
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
-	static void PadSketch(CSketch*,double length);
+	static void PocketSketch(CSketch*,double length);
 	bool IsDifferent(HeeksObj* other);
 	void ReloadPointers();
 	gp_Trsf GetTransform();
