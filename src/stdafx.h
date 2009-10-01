@@ -36,10 +36,15 @@
 #include <string.h>
 #include <math.h>
 
+//Following is required to be defined on Ubuntu with OCC 6.3.1
 #define HAVE_IOSTREAM
 #define CHAR_BIT 8
-#define INT_MAX 2147483647
-#define INT_MIN  -2147483647
+#ifndef INT_MAX
+	#define INT_MAX 2147483647
+#endif
+#ifndef INT_MIN
+	#define INT_MIN  (-2147483647 - 1)
+#endif
 
 
 #include <Standard.hxx>
