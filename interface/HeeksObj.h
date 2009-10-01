@@ -47,7 +47,9 @@ enum{
 	CorrelationToolType,
 	ObjectMaximumType,
 	ConstraintType,
-	PadType
+	PadType,
+	PartType,
+	PocketSolidType
 };
 
 #define MARKING_FILTER_LINE					0x00000001
@@ -69,6 +71,9 @@ enum{
 #define MARKING_FILTER_LOOP					0x00008000
 #define MARKING_FILTER_VERTEX				0x00010000
 #define MARKING_FILTER_PAD					0x00020000
+#define MARKING_FILTER_PART					0x00040000
+#define MARKING_FILTER_POCKETSOLID			0x00080000
+
 
 class HeeksObj{
 	std::list<HeeksObj*> m_owners;

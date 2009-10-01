@@ -9,12 +9,12 @@
 class DynamicSolid:public ObjList{
 protected:
 	static wxIcon* m_icon;
-	std::list<TopoDS_Shape> m_shapes;
-
+	
 public:
 	CFaceList* m_faces;
 	CEdgeList* m_edges;
 	CVertexList* m_vertices;
+	std::list<TopoDS_Shape> m_shapes;
 
 	DynamicSolid();
 	~DynamicSolid();
@@ -29,7 +29,9 @@ public:
 	void ReloadPointers(); 
 
 	virtual SolidTypeEnum GetSolidType(){return SOLID_TYPE_UNKNOWN;}
-
+	virtual gp_Trsf GetTransform(){return gp_Trsf();}
+		
 	void SetShapes(std::list<TopoDS_Shape>);
 	void DrawShapes();
+	virtual void Update(){}
 };

@@ -174,7 +174,7 @@ void MarkedList::ObjectsInWindow( wxRect window, MarkedObject* marked_object, bo
 						ignore_coords_only_found = true;
 					}
 					else{
-						if(object->GetType() == GripperType || (object->GetMarkingMask() == 0) || (object->GetMarkingMask() & m_filter)){
+						if((object->GetType() == GripperType || (object->GetMarkingMask() & m_filter)) && object->GetMarkingMask() != 0){
 							int window_size = window.width;
 							current_found_object = current_found_object->Add(object, min_depth, window_size);
 							added = true;

@@ -169,7 +169,7 @@ void HeeksObj::GetGripperPositionsTransformed(std::list<GripData> *list, bool ju
 	CPad *pad = dynamic_cast<CPad*>(owner);
 	if(!pad && owner)
 		pad = dynamic_cast<CPad*>(owner->Owner());
-	if(pad)
+	if(pad && pad->m_sketch->m_coordinate_system)
 		mat = pad->m_sketch->m_coordinate_system->GetMatrix();
 
 	std::list<GripData>::iterator it;
