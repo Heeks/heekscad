@@ -389,7 +389,7 @@ CxfFont::CxfFont( const wxChar *p_szFile )
 	m_word_spacing = 6.75;
 	m_line_spacing_factor = 1.0;
 	m_name = _("");
-	wxChar	character_name;
+	wxChar character_name = 0;
 
 	std::ifstream file(Ttc(p_szFile));
 	if (file.is_open())

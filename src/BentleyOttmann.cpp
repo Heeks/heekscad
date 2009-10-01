@@ -146,7 +146,7 @@ std::map<FastCurve*, std::vector<Intersection> > BentleyOttmann::Intersect(std::
 
 		//all sets in sweepline represent intersections, adjacent sets are possible intersecting
 		std::set<FastLine*>* prev_lines=0;
-		double prev_coord;
+		double prev_coord = 0;
 		for(it3 = sweepline.begin(); it3 != sweepline.end(); it3++)
 		{
 			std::set<FastLine*> lines = (*it3).second;
