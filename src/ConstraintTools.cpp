@@ -10,6 +10,7 @@
 #include "Sketch.h"
 #include "SolveSketch.h"
 #include "MultiPoly.h"
+#include "DimensionDrawing.h"
 
 class SetLinesPerpendicular:public Tool{
 	// set world coordinate system active again
@@ -183,6 +184,31 @@ public:
 	const wxChar* GetToolTip(){return _("Set these points to be coincident");}
 };
 
+class AddDimension:public Tool{
+public:
+	void Run(){
+		std::list<HeeksObj*>::const_iterator It;
+		HPoint* last=NULL;
+		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+			HPoint* obj = (HPoint*)*It;
+			if(last)
+			{
+				HDimension* dimension = new HDimension(gp_Trsf(), wxString(), last->m_p, obj->m_p, gp_Pnt(), TwoPointsDimensionMode, &wxGetApp().current_color);
+				last->SetCoincidentPoint(dimension->m_p0,true);
+				obj->SetCoincidentPoint(dimension->m_p1,true);
+				dimension_drawing.StartOnStep3(dimension);
+				break;
+			}
+			last=obj;
+		}
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Add Dimension");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Add a dimension object");}
+};
+
+
 class SetPointOnLine:public Tool{
 public:
 	void Run(){
@@ -306,6 +332,7 @@ static SetLineTangent set_line_tangent;
 static SetPointOnLine set_point_on_line;
 static SetPointOnMidpoint set_point_on_midpoint;
 static SetPointsCoincident set_points_coincident;
+static AddDimension add_dimension;
 static SetPointOnArc set_point_on_arc;
 static SetPointOnArcMidpoint set_point_on_arc_midpoint;
 static RunTest run_test;
@@ -357,7 +384,10 @@ void GetConstraintMenuTools(std::list<Tool*>* t_list){
 	}
 
 	if(line_count == 0 && arc_count == 0 && circle_count == 0)
+	{
 		t_list->push_back(&set_points_coincident);
+		t_list->push_back(&add_dimension);
+	}
 
 	if(line_count == 1 && point_count == 1 && arc_count == 0 && circle_count == 0)
 	{

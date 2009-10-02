@@ -36,6 +36,8 @@ public:
 	// Drawing's virtual functions
 	void clear_drawing_objects(int mode);
 	bool DragDoneWithXOR(){return false;}
+
+	void StartOnStep3(HDimension* object);
 };
 
 extern DimensionDrawing dimension_drawing;
