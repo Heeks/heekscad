@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "HDimension.h"
 #include "../interface/PropertyDouble.h"
+#include "../interface/PropertyChoice.h"
 #include "PropertyTrsf.h"
 #include "Gripper.h"
 #include "HPoint.h"
@@ -87,10 +88,10 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 			string = wxString::Format(_T("%lg mm"), A->m_p.Distance(B->m_p));
 			break;
 		case HorizontalDimensionTextMode:
-			string = wxString::Format(_T("%lg mm"), fabs(A->m_p.X() - B->m_p.X()));
+			string = wxString::Format(_T("%lg mm H"), fabs(A->m_p.X() - B->m_p.X()));
 			break;
 		case VerticalDimensionTextMode:
-			string = wxString::Format(_T("%lg mm"), fabs(A->m_p.Y() - B->m_p.Y()));
+			string = wxString::Format(_T("%lg mm V"), fabs(A->m_p.Y() - B->m_p.Y()));
 			break;
 	}
 
@@ -187,6 +188,9 @@ void HDimension::GetGripperPositions(std::list<GripData> *list, bool just_for_en
 	list->push_back(GripData(GripperTypeRotateObject,point[1].X(),point[1].Y(),point[1].Z(),NULL));
 	list->push_back(GripData(GripperTypeRotateObject,point[2].X(),point[2].Y(),point[2].Z(),NULL));
 	list->push_back(GripData(GripperTypeScale,point[3].X(),point[3].Y(),point[3].Z(),NULL));
+
+	EndedObject::GetGripperPositions(list,just_for_endof);
+	list->push_back(GripData(GripperTypeStretch,m_p2->m_p.X(),m_p2->m_p.Y(),m_p2->m_p.Z(),&m_p2));
 }
 
 static void on_set_trsf(const gp_Trsf &trsf, HeeksObj* object){
@@ -194,15 +198,48 @@ static void on_set_trsf(const gp_Trsf &trsf, HeeksObj* object){
 	wxGetApp().Repaint();
 }
 
+static void on_set_mode(int value, HeeksObj* object)
+{
+	HDimension* dimension = (HDimension*)object;
+	dimension->m_mode = (DimensionMode)value;
+	wxGetApp().Repaint();
+}
+
+static void on_set_text_mode(int value, HeeksObj* object)
+{
+	HDimension* dimension = (HDimension*)object;
+	dimension->m_text_mode = (DimensionTextMode)value;
+	wxGetApp().Repaint();
+}
+
 void HDimension::GetProperties(std::list<Property *> *list)
 {
 	list->push_back(new PropertyTrsf(_("orientation"), m_trsf, this, on_set_trsf));
 
-	HeeksObj::GetProperties(list);
+		std::list< wxString > choices;
+	choices.push_back ( wxString ( _("between two points") ) );
+	choices.push_back ( wxString ( _("orthogonal") ) );
+	list->push_back ( new PropertyChoice ( _("mode"),  choices, m_mode, this, on_set_mode ) );
+
+	choices.clear();
+	choices.push_back ( wxString ( _("string") ) );
+	choices.push_back ( wxString ( _("pythagorean") ) );
+	choices.push_back ( wxString ( _("horizontal") ) );
+	choices.push_back ( wxString ( _("vertical") ) );
+	list->push_back ( new PropertyChoice ( _("text mode"),  choices, m_text_mode, this, on_set_text_mode ) );
+
+	EndedObject::GetProperties(list);
 }
 
 bool HDimension::Stretch(const double *p, const double* shift, void* data)
 {
+	EndedObject::Stretch(p,shift,data);
+	gp_Pnt vp = make_point(p);
+	gp_Vec vshift = make_vector(shift);
+
+	if(data == &m_p2){
+		m_p2->m_p = vp.XYZ() + vshift.XYZ();
+	}
 	return false;
 }
 
