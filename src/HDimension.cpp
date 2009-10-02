@@ -6,9 +6,22 @@
 #include "../interface/PropertyDouble.h"
 #include "PropertyTrsf.h"
 #include "Gripper.h"
+#include "HPoint.h"
 
-HDimension::HDimension(const gp_Trsf &trsf, const wxString &text, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, DimensionMode mode, const HeeksColor* col): m_color(*col), m_trsf(trsf), m_text(text), m_p0(p0), m_p1(p1), m_p2(p2), m_mode(mode), m_scale(1.0)
+HDimension::HDimension(const gp_Trsf &trsf, const wxString &text, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, DimensionMode mode, const HeeksColor* col): m_color(*col), m_trsf(trsf), m_text(text), m_mode(mode), m_scale(1.0)
 {
+	m_p0 = new HPoint(p0,col);
+	m_p1 = new HPoint(p1,col);
+	m_p2 = new HPoint(p1,col);
+	m_p0->m_draw_unselected = false;
+	m_p1->m_draw_unselected = false;
+	m_p2->m_draw_unselected = false;
+	m_p0->SetSkipForUndo(true);
+	m_p1->SetSkipForUndo(true);
+	m_p2->SetSkipForUndo(true);
+	Add(m_p0,NULL);
+	Add(m_p1,NULL);
+	Add(m_p2,NULL);
 }
 
 HDimension::HDimension(const HDimension &b)
@@ -22,21 +35,24 @@ HDimension::~HDimension(void)
 
 const HDimension& HDimension::operator=(const HDimension &b)
 {
-	HeeksObj::operator=(b);
+	ConstrainedObject::operator=(b);
 	m_trsf = b.m_trsf;
 	m_text = b.m_text;
 	m_color = b.m_color;
-	m_p0 = b.m_p0;
-	m_p1 = b.m_p1;
-	m_p2 = b.m_p2;
 	m_mode = b.m_mode;
 	m_scale = b.m_scale;
+
+	std::list<HeeksObj*>::iterator it = m_objects.begin();
+	m_p0 = (HPoint*)(*it++);
+	m_p1 = (HPoint*)(*it++);
+	m_p2 = (HPoint*)(*it);
+
 	return *this;
 }
 
 void HDimension::glCommands(bool select, bool marked, bool no_color)
 {
-	if(m_p0.IsEqual(m_p1, wxGetApp().m_geom_tol))return;
+	if(m_p0->m_p.IsEqual(m_p1->m_p, wxGetApp().m_geom_tol))return;
 
 	if(!no_color)wxGetApp().glColorEnsuringContrast(m_color);
 
@@ -45,7 +61,7 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 	gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(m_trsf);
 	if(m_mode == TwoPointsDimensionMode)
 	{	
-		xdir = make_vector(m_p0, m_p1);
+		xdir = make_vector(m_p0->m_p, m_p1->m_p);
 		if(xdir.IsParallel(zdir,wxGetApp().m_geom_tol))
 			zdir = xdir ^ ydir;
 		else
@@ -56,10 +72,10 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 	if(!wxGetApp().get_text_size(m_text, &width, &height))return;
 
 	// draw arrow line
-	draw_arrow_line(m_mode, m_p0, m_p1, m_p2, xdir, ydir, width, m_scale);
+	draw_arrow_line(m_mode, m_p0->m_p, m_p1->m_p, m_p2->m_p, xdir, ydir, width, m_scale);
 
 	// make a matrix at top left of text
-	gp_Pnt text_top_left( m_p2.XYZ() + ydir.XYZ() * (m_scale * height) );
+	gp_Pnt text_top_left( m_p2->m_p.XYZ() + ydir.XYZ() * (m_scale * height) );
 	gp_Trsf text_matrix = make_matrix(text_top_left, xdir, ydir);
 
 	glPushMatrix();
@@ -70,6 +86,41 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 	wxGetApp().render_text(m_text);
 
 	glPopMatrix();
+
+
+	//This was copied out of EndedObject.cpp, not quite sure why it is there either, shouldn't ObjList be able to do this?
+	HeeksObj::glCommands(select, marked, no_color);
+	std::list<HeeksObj*>::iterator It;
+	for(It=m_objects.begin(); It!=m_objects.end() ;It++)
+	{
+		HeeksObj* object = *It;
+		if(object->OnVisibleLayer() && object->m_visible)
+		{
+			bool object_marked = wxGetApp().m_marked_list->ObjectMarked(object);
+			if(object->GetType() == PointType && !select && !object_marked)continue; // don't show points unless the point object is selected.
+			if(select)glPushName((unsigned long)object);
+#ifdef HEEKSCAD
+			(*It)->glCommands(select, marked || wxGetApp().m_marked_list->ObjectMarked(object), no_color);
+#else
+			(*It)->glCommands(select, marked || heeksCAD->ObjectMarked(object), no_color);
+#endif
+			if(select)glPopName();
+		}
+	}
+}
+
+void HDimension::LoadToDoubles()
+{
+	m_p0->LoadToDoubles();
+	m_p1->LoadToDoubles();
+	m_p2->LoadToDoubles();
+}
+
+void HDimension::LoadFromDoubles()
+{
+	m_p0->LoadFromDoubles();
+	m_p1->LoadFromDoubles();
+	m_p2->LoadFromDoubles();
 }
 
 void HDimension::GetBox(CBox &box)
@@ -172,6 +223,7 @@ void HDimension::WriteXML(TiXmlNode *root)
 	element->SetDoubleAttribute("m9", m[9] );
 	element->SetDoubleAttribute("ma", m[10]);
 	element->SetDoubleAttribute("mb", m[11]);
+#ifdef OLDLINES
 	element->SetDoubleAttribute("sx", m_p0.X());
 	element->SetDoubleAttribute("sy", m_p0.Y());
 	element->SetDoubleAttribute("sz", m_p0.Z());
@@ -181,6 +233,7 @@ void HDimension::WriteXML(TiXmlNode *root)
 	element->SetDoubleAttribute("cx", m_p2.X());
 	element->SetDoubleAttribute("cy", m_p2.Y());
 	element->SetDoubleAttribute("cz", m_p2.Z());
+#endif
 	element->SetAttribute("mode", m_mode);
 
 	WriteBaseXML(element);
@@ -230,6 +283,27 @@ HeeksObj* HDimension::ReadFromXMLElement(TiXmlElement* pElem)
 
 	HDimension* new_object = new HDimension(make_matrix(m), text, make_point(p0), make_point(p1), make_point(p2), mode, &c);
 	new_object->ReadBaseXML(pElem);
+
+	if(new_object->GetNumChildren()>3)
+	{
+		//This is a new style line, with children points
+		new_object->Remove(new_object->m_p0);
+		new_object->Remove(new_object->m_p1);
+		new_object->Remove(new_object->m_p2);
+		delete new_object->m_p0;
+		delete new_object->m_p1;
+		delete new_object->m_p2;
+		new_object->m_p0 = (HPoint*)new_object->GetFirstChild();
+		new_object->m_p1 = (HPoint*)new_object->GetNextChild();
+		new_object->m_p2 = (HPoint*)new_object->GetNextChild();
+		new_object->m_p0->m_draw_unselected = false;
+		new_object->m_p1->m_draw_unselected = false;
+		new_object->m_p2->m_draw_unselected = false;
+		new_object->m_p0->SetSkipForUndo(true);
+		new_object->m_p1->SetSkipForUndo(true);
+		new_object->m_p2->SetSkipForUndo(true);
+	}
+
 
 	return new_object;
 }
