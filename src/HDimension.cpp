@@ -7,24 +7,19 @@
 #include "PropertyTrsf.h"
 #include "Gripper.h"
 #include "HPoint.h"
+#include "SolveSketch.h"
 
-HDimension::HDimension(const gp_Trsf &trsf, const wxString &text, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, DimensionMode mode, const HeeksColor* col): m_color(*col), m_trsf(trsf), m_text(text), m_mode(mode), m_scale(1.0)
+HDimension::HDimension(const gp_Trsf &trsf, const wxString &text, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, DimensionMode mode, DimensionTextMode text_mode, const HeeksColor* col): m_color(*col), m_trsf(trsf), m_text(text), m_mode(mode), m_text_mode(text_mode), m_scale(1.0), EndedObject(col)
 {
-	m_p0 = new HPoint(p0,col);
-	m_p1 = new HPoint(p1,col);
-	m_p2 = new HPoint(p1,col);
-	m_p0->m_draw_unselected = false;
-	m_p1->m_draw_unselected = false;
+	m_p2 = new HPoint(p2,col);
 	m_p2->m_draw_unselected = false;
-	m_p0->SetSkipForUndo(true);
-	m_p1->SetSkipForUndo(true);
 	m_p2->SetSkipForUndo(true);
-	Add(m_p0,NULL);
-	Add(m_p1,NULL);
 	Add(m_p2,NULL);
+	A->m_p = p0;
+	B->m_p = p1;
 }
 
-HDimension::HDimension(const HDimension &b)
+HDimension::HDimension(const HDimension &b):EndedObject(&b.m_color)
 {
 	operator=(b);
 }
@@ -35,7 +30,7 @@ HDimension::~HDimension(void)
 
 const HDimension& HDimension::operator=(const HDimension &b)
 {
-	ConstrainedObject::operator=(b);
+	EndedObject::operator=(b);
 	m_trsf = b.m_trsf;
 	m_text = b.m_text;
 	m_color = b.m_color;
@@ -43,8 +38,7 @@ const HDimension& HDimension::operator=(const HDimension &b)
 	m_scale = b.m_scale;
 
 	std::list<HeeksObj*>::iterator it = m_objects.begin();
-	m_p0 = (HPoint*)(*it++);
-	m_p1 = (HPoint*)(*it++);
+	it++;it++;
 	m_p2 = (HPoint*)(*it);
 
 	return *this;
@@ -52,7 +46,7 @@ const HDimension& HDimension::operator=(const HDimension &b)
 
 void HDimension::glCommands(bool select, bool marked, bool no_color)
 {
-	if(m_p0->m_p.IsEqual(m_p1->m_p, wxGetApp().m_geom_tol))return;
+	if(A->m_p.IsEqual(B->m_p, wxGetApp().m_geom_tol))return;
 
 	if(!no_color)wxGetApp().glColorEnsuringContrast(m_color);
 
@@ -61,7 +55,7 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 	gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(m_trsf);
 	if(m_mode == TwoPointsDimensionMode)
 	{	
-		xdir = make_vector(m_p0->m_p, m_p1->m_p);
+		xdir = make_vector(A->m_p, B->m_p);
 		if(xdir.IsParallel(zdir,wxGetApp().m_geom_tol))
 			zdir = xdir ^ ydir;
 		else
@@ -72,7 +66,7 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 	if(!wxGetApp().get_text_size(m_text, &width, &height))return;
 
 	// draw arrow line
-	draw_arrow_line(m_mode, m_p0->m_p, m_p1->m_p, m_p2->m_p, xdir, ydir, width, m_scale);
+	draw_arrow_line(m_mode, A->m_p, B->m_p, m_p2->m_p, xdir, ydir, width, m_scale);
 
 	// make a matrix at top left of text
 	gp_Pnt text_top_left( m_p2->m_p.XYZ() + ydir.XYZ() * (m_scale * height) );
@@ -83,44 +77,61 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 	extract_transposed(text_matrix, m);
 	glMultMatrixd(m);
 
-	wxGetApp().render_text(m_text);
+	wxString string;
+	switch(m_text_mode)
+	{
+		case StringDimensionTextMode:
+			string = m_text;
+			break;
+		case PythagoreanDimensionTextMode:
+			string = wxString::Format(_T("%lg mm"), A->m_p.Distance(B->m_p));
+			break;
+		case HorizontalDimensionTextMode:
+			string = wxString::Format(_T("%lg mm"), fabs(A->m_p.X() - B->m_p.X()));
+			break;
+		case VerticalDimensionTextMode:
+			string = wxString::Format(_T("%lg mm"), fabs(A->m_p.Y() - B->m_p.Y()));
+			break;
+	}
+
+	wxGetApp().render_text(string);
 
 	glPopMatrix();
 
-
-	//This was copied out of EndedObject.cpp, not quite sure why it is there either, shouldn't ObjList be able to do this?
-	HeeksObj::glCommands(select, marked, no_color);
-	std::list<HeeksObj*>::iterator It;
-	for(It=m_objects.begin(); It!=m_objects.end() ;It++)
-	{
-		HeeksObj* object = *It;
-		if(object->OnVisibleLayer() && object->m_visible)
-		{
-			bool object_marked = wxGetApp().m_marked_list->ObjectMarked(object);
-			if(object->GetType() == PointType && !select && !object_marked)continue; // don't show points unless the point object is selected.
-			if(select)glPushName((unsigned long)object);
-#ifdef HEEKSCAD
-			(*It)->glCommands(select, marked || wxGetApp().m_marked_list->ObjectMarked(object), no_color);
-#else
-			(*It)->glCommands(select, marked || heeksCAD->ObjectMarked(object), no_color);
-#endif
-			if(select)glPopName();
-		}
-	}
+	EndedObject::glCommands(select,marked,no_color);
 }
 
 void HDimension::LoadToDoubles()
 {
-	m_p0->LoadToDoubles();
-	m_p1->LoadToDoubles();
+	EndedObject::LoadToDoubles();
 	m_p2->LoadToDoubles();
 }
 
 void HDimension::LoadFromDoubles()
 {
-	m_p0->LoadFromDoubles();
-	m_p1->LoadFromDoubles();
+	EndedObject::LoadFromDoubles();
 	m_p2->LoadFromDoubles();
+}
+
+HDimension* dimension_for_tool = NULL;
+
+class ConstrainDimension:public Tool{
+public:
+	void Run(){
+		dimension_for_tool->SetLineLengthConstraint(dimension_for_tool->A->m_p.Distance(dimension_for_tool->B->m_p));
+		SolveSketch((CSketch*)dimension_for_tool->Owner());
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Toggle Dimension Constraint");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Set this dimension as constrained");}
+};
+static ConstrainDimension constrain_dimension;
+
+void HDimension::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
+{
+	dimension_for_tool = this;
+	t_list->push_back(&constrain_dimension);
 }
 
 void HDimension::GetBox(CBox &box)
@@ -235,6 +246,7 @@ void HDimension::WriteXML(TiXmlNode *root)
 	element->SetDoubleAttribute("cz", m_p2.Z());
 #endif
 	element->SetAttribute("mode", m_mode);
+	element->SetAttribute("textmode", m_text_mode);
 
 	WriteBaseXML(element);
 }
@@ -250,6 +262,7 @@ HeeksObj* HDimension::ReadFromXMLElement(TiXmlElement* pElem)
 	double p2[3] = {0, 0, 0};
 
 	DimensionMode mode = TwoPointsDimensionMode;
+	DimensionTextMode text_mode = StringDimensionTextMode;
 
 	// get the attributes
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
@@ -279,28 +292,29 @@ HeeksObj* HDimension::ReadFromXMLElement(TiXmlElement* pElem)
 		else if(name == "cy"){p2[1]= a->DoubleValue();}
 		else if(name == "cz"){p2[2]= a->DoubleValue();}
 		else if(name == "mode"){mode = (DimensionMode)(a->IntValue());}
+		else if(name == "textmode"){text_mode = (DimensionTextMode)(a->IntValue());}
 	}
 
-	HDimension* new_object = new HDimension(make_matrix(m), text, make_point(p0), make_point(p1), make_point(p2), mode, &c);
+	HDimension* new_object = new HDimension(make_matrix(m), text, make_point(p0), make_point(p1), make_point(p2), mode, text_mode, &c);
 	new_object->ReadBaseXML(pElem);
 
 	if(new_object->GetNumChildren()>3)
 	{
 		//This is a new style line, with children points
-		new_object->Remove(new_object->m_p0);
-		new_object->Remove(new_object->m_p1);
+		new_object->Remove(new_object->A);
+		new_object->Remove(new_object->B);
 		new_object->Remove(new_object->m_p2);
-		delete new_object->m_p0;
-		delete new_object->m_p1;
+		delete new_object->A;
+		delete new_object->B;
 		delete new_object->m_p2;
-		new_object->m_p0 = (HPoint*)new_object->GetFirstChild();
-		new_object->m_p1 = (HPoint*)new_object->GetNextChild();
+		new_object->A = (HPoint*)new_object->GetFirstChild();
+		new_object->B = (HPoint*)new_object->GetNextChild();
 		new_object->m_p2 = (HPoint*)new_object->GetNextChild();
-		new_object->m_p0->m_draw_unselected = false;
-		new_object->m_p1->m_draw_unselected = false;
+		new_object->A->m_draw_unselected = false;
+		new_object->B->m_draw_unselected = false;
 		new_object->m_p2->m_draw_unselected = false;
-		new_object->m_p0->SetSkipForUndo(true);
-		new_object->m_p1->SetSkipForUndo(true);
+		new_object->A->SetSkipForUndo(true);
+		new_object->B->SetSkipForUndo(true);
 		new_object->m_p2->SetSkipForUndo(true);
 	}
 

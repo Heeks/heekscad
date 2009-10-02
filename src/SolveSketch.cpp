@@ -81,8 +81,6 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 
 			if(dobj)
 			{
-				AddPointConstraints(dobj->m_p0);
-				AddPointConstraints(dobj->m_p1);
 				AddPointConstraints(dobj->m_p2);
 			}
 

@@ -19,6 +19,7 @@ DimensionDrawing::DimensionDrawing(void)
 {
 	temp_object = NULL;
 	m_mode = TwoPointsDimensionMode;
+	m_text_mode = StringDimensionTextMode;
 }
 
 DimensionDrawing::~DimensionDrawing(void)
@@ -39,7 +40,7 @@ bool DimensionDrawing::calculate_item(DigitizedPoint &end)
 
 	// make sure dimension exists
 	if(!temp_object){
-		temp_object = new HDimension(mat, _T(""), gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), m_mode, &(wxGetApp().current_color));
+		temp_object = new HDimension(mat, _T(""), gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), m_mode, m_text_mode, &(wxGetApp().current_color));
 		if(temp_object)temp_object_in_list.push_back(temp_object);
 	}
 
@@ -68,10 +69,11 @@ bool DimensionDrawing::calculate_item(DigitizedPoint &end)
 
 	((HDimension*)temp_object)->m_trsf = mat;
 	((HDimension*)temp_object)->m_text = str;
-	((HDimension*)temp_object)->m_p0->m_p = p0;
-	((HDimension*)temp_object)->m_p1->m_p = p1;
+	((HDimension*)temp_object)->A->m_p = p0;
+	((HDimension*)temp_object)->B->m_p = p1;
 	((HDimension*)temp_object)->m_p2->m_p = p2;
 	((HDimension*)temp_object)->m_mode = m_mode;
+	((HDimension*)temp_object)->m_text_mode = m_text_mode;
 
 	return true;
 }
@@ -91,14 +93,23 @@ static void on_set_mode(int value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+static void on_set_text_mode(int value, HeeksObj* object)
+{
+	DimensionDrawing_for_GetProperties->m_text_mode = (DimensionTextMode)value;
+	wxGetApp().Repaint();
+}
+
 void DimensionDrawing::StartOnStep3(HDimension* object)
 {
 	wxGetApp().SetInputMode(this);
 	temp_object = object;
 	temp_object_in_list.push_back(object);
 	set_draw_step_not_undoable(2);
-	current_view_stuff->before_start_pos.m_point = object->m_p0->m_p;
-	current_view_stuff->start_pos.m_point = object->m_p1->m_p;
+	current_view_stuff->before_start_pos.m_point = object->A->m_p;
+	current_view_stuff->start_pos.m_point = object->B->m_p;
+
+	m_mode = object->m_mode;
+	m_text_mode = object->m_text_mode;
 }
 
 void DimensionDrawing::GetProperties(std::list<Property *> *list){
@@ -108,6 +119,15 @@ void DimensionDrawing::GetProperties(std::list<Property *> *list){
 	choices.push_back ( wxString ( _("orthogonal") ) );
 	DimensionDrawing_for_GetProperties = this;
 	list->push_back ( new PropertyChoice ( _("mode"),  choices, m_mode, NULL, on_set_mode ) );
+
+	choices.clear();
+	choices.push_back ( wxString ( _("string") ) );
+	choices.push_back ( wxString ( _("pythagorean") ) );
+	choices.push_back ( wxString ( _("horizontal") ) );
+	choices.push_back ( wxString ( _("vertical") ) );
+	DimensionDrawing_for_GetProperties = this;
+	list->push_back ( new PropertyChoice ( _("text mode"),  choices, m_text_mode, NULL, on_set_text_mode ) );
+
 
 	Drawing::GetProperties(list);
 }
