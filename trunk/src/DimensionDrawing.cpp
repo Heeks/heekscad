@@ -125,7 +125,6 @@ void DimensionDrawing::GetProperties(std::list<Property *> *list){
 	choices.push_back ( wxString ( _("pythagorean") ) );
 	choices.push_back ( wxString ( _("horizontal") ) );
 	choices.push_back ( wxString ( _("vertical") ) );
-	DimensionDrawing_for_GetProperties = this;
 	list->push_back ( new PropertyChoice ( _("text mode"),  choices, m_text_mode, NULL, on_set_text_mode ) );
 
 
