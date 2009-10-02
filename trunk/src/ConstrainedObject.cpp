@@ -293,3 +293,11 @@ void ConstrainedObject::SetPointOnArcConstraint(HPoint* obj)
 	obj->constraints.push_back(c);
 }
 
+void ConstrainedObject::SetPointOnCircleConstraint(HPoint* obj)
+{
+	if(RemoveExisting(obj,PointOnCircleConstraint)) return;
+
+	Constraint *c = new Constraint(PointOnCircleConstraint,this,obj);
+	constraints.push_back(c);
+	obj->constraints.push_back(c);
+}

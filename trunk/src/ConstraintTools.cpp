@@ -7,6 +7,7 @@
 #include "MarkedList.h"
 #include "HLine.h"
 #include "HArc.h"
+#include "HCircle.h"
 #include "Sketch.h"
 #include "SolveSketch.h"
 #include "MultiPoly.h"
@@ -208,6 +209,35 @@ public:
 	const wxChar* GetToolTip(){return _("Add a dimension object");}
 };
 
+class AddRadiusDimension:public Tool{
+public:
+	void Run(){
+		HCircle *circle = (HCircle*)*wxGetApp().m_marked_list->list().begin();
+		HDimension* dimension = new HDimension(gp_Trsf(), wxString(), circle->C->m_p, circle->C->m_p.XYZ() + circle->m_radius * gp_XYZ(1,0,0), gp_Pnt(), TwoPointsDimensionMode, PythagoreanDimensionTextMode, &wxGetApp().current_color);
+		circle->C->SetCoincidentPoint(dimension->A,true);
+		circle->SetPointOnCircleConstraint(dimension->B);
+		dimension_drawing.StartOnStep3(dimension);
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Add Dimension");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Add a dimension object");}
+};
+
+class AddArcRadiusDimension:public Tool{
+public:
+	void Run(){
+		HArc *arc = (HArc*)*wxGetApp().m_marked_list->list().begin();
+		HDimension* dimension = new HDimension(gp_Trsf(), wxString(), arc->C->m_p, arc->C->m_p.XYZ() + arc->m_radius * gp_XYZ(1,0,0), gp_Pnt(), TwoPointsDimensionMode, PythagoreanDimensionTextMode, &wxGetApp().current_color);
+		arc->C->SetCoincidentPoint(dimension->A,true);
+		arc->SetPointOnArcConstraint(dimension->B);
+		dimension_drawing.StartOnStep3(dimension);
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Add Dimension");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Add a dimension object");}
+};
 
 class SetPointOnLine:public Tool{
 public:
@@ -305,6 +335,31 @@ public:
 	const wxChar* GetToolTip(){return _("Set this point on arc");}
 };
 
+class SetPointOnCircle:public Tool{
+public:
+	void Run(){
+		std::list<HeeksObj*>::const_iterator It;
+		HCircle* circle=NULL;
+		HPoint* point=NULL;
+		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+			HCircle* obj = dynamic_cast<HCircle*>(*It);
+			if(obj)
+				circle=obj;
+			HPoint* pobj = dynamic_cast<HPoint*>(*It);
+			if(pobj)
+				point=pobj;
+		}
+		circle->SetPointOnCircleConstraint(point);
+
+		SolveSketch((CSketch*)circle->Owner());
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Set Point On Circle");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Set this point on circle");}
+};
+
+
 void Test2DNearMap();
 
 class RunTest:public Tool{
@@ -333,7 +388,10 @@ static SetPointOnLine set_point_on_line;
 static SetPointOnMidpoint set_point_on_midpoint;
 static SetPointsCoincident set_points_coincident;
 static AddDimension add_dimension;
+static AddRadiusDimension add_radius_dimension;
+static AddArcRadiusDimension add_arc_radius_dimension;
 static SetPointOnArc set_point_on_arc;
+static SetPointOnCircle set_point_on_circle;
 static SetPointOnArcMidpoint set_point_on_arc_midpoint;
 static RunTest run_test;
 
@@ -370,6 +428,13 @@ void GetConstraintMenuTools(std::list<Tool*>* t_list){
 
 	int total_count = line_count + arc_count + point_count + circle_count;
 
+	if(total_count == 1 && circle_count == 1)
+		t_list->push_back(&add_radius_dimension);
+
+	if(total_count == 1 && arc_count == 1)
+		t_list->push_back(&add_arc_radius_dimension);
+
+
 	if(total_count < 2)
 		return;
 
@@ -399,6 +464,11 @@ void GetConstraintMenuTools(std::list<Tool*>* t_list){
 	{
 		t_list->push_back(&set_point_on_arc);
 		t_list->push_back(&set_point_on_arc_midpoint);
+	}
+
+	if(line_count == 0 && point_count == 1 && arc_count == 0 && circle_count == 1)
+	{
+		t_list->push_back(&set_point_on_circle);
 	}
 
 	if(line_count == 0 && point_count == 0 && (arc_count + circle_count == 2))
