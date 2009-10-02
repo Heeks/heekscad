@@ -79,21 +79,24 @@ double P2PDistanceError(std::vector<double> &parms)
 	double dx = parms[0] - parms[2];
 	double dy = parms[1] - parms[3];
 	double d = parms[4];
-    return dx*dx+dy*dy - d * d;
+    double err = dx*dx+dy*dy - d * d;
+	return err*err;
 }
 
 double P2PDistanceHorzError(std::vector<double> &parms)
 {
 	double dx = parms[0] - parms[2];
 	double d = parms[4];
-    return dx*dx - d * d;
+    double err = dx*dx - d * d;
+	return err*err;
 }
 
 double P2PDistanceVertError(std::vector<double> &parms)
 {
 	double dy = parms[1] - parms[3];
 	double d = parms[4];
-    return dy*dy - d * d;
+    double err = dy*dy - d * d;
+	return err * err;
 }
 
 double PointOnLineError(std::vector<double> &parms)

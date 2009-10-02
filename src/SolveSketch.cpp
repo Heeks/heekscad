@@ -196,6 +196,17 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 					}
 					break;
 
+					case PointOnCircleConstraint:
+					{ 
+						constraint c;
+						c.circle1 = GetCircle((HCircle*)con->m_obj1);
+						c.point1 = GetPoint((HPoint*)con->m_obj2);
+						c.type = pointOnCircle;
+						cons.insert(con);
+						constraints.push_back(c);
+					}
+					break;
+
 					case LineTangentConstraint:
 					{
 						constraint c;
