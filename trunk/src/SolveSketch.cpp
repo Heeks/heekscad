@@ -11,6 +11,7 @@
 #include "HArc.h"
 #include "HCircle.h"
 #include "../sketchsolve/src/solve.h"
+#include "HDimension.h"
 
 //This file traverses the tree associated with a sketch and creates and linear
 //data structure suitable for use by sketch solve. If the solver is succesful,
@@ -65,6 +66,7 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 	{
 		ConstrainedObject* cobj = (dynamic_cast<ConstrainedObject*>(obj));
 		EndedObject *eobj = (dynamic_cast<EndedObject*>(obj));
+		HDimension* dobj = dynamic_cast<HDimension*>(obj);
 		if(cobj)
 		{
 			cobj->LoadToDoubles();
@@ -75,6 +77,13 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 				c.type = arcRules;
 				c.arc1 = a;
 				constraints.push_back(c);
+			}
+
+			if(dobj)
+			{
+				AddPointConstraints(dobj->m_p0);
+				AddPointConstraints(dobj->m_p1);
+				AddPointConstraints(dobj->m_p2);
 			}
 
 			if(eobj)

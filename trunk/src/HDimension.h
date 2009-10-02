@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "../interface/HeeksObj.h"
+#include "ConstrainedObject.h"
 #include "../interface/HeeksColor.h"
 
 enum DimensionMode
@@ -13,7 +13,17 @@ enum DimensionMode
 	OrthogonalDimensionMode,
 };
 
-class HDimension: public HeeksObj{
+enum DimensionTextMode
+{
+	StringDimensionTextMode,
+	PythagoreanDimensionTextMode,
+	HorizontalDimensionTextMode,
+	VerticalDimensionTextMode
+};
+
+
+
+class HDimension: public ConstrainedObject{
 private:
 	HeeksColor m_color;
 	static wxIcon* m_icon;
@@ -21,9 +31,9 @@ private:
 public:
 	gp_Trsf m_trsf; // draw matrix at time of creation
 	wxString m_text;
-	gp_Pnt m_p0;
-	gp_Pnt m_p1;
-	gp_Pnt m_p2;
+	HPoint* m_p0;
+	HPoint* m_p1;
+	HPoint* m_p2;
 	DimensionMode m_mode;
 	double m_scale; // to do - text, gaps, and arrow heads will be scaled by this factor
 
@@ -53,6 +63,8 @@ public:
 	const wxChar* GetShortString(void)const{return m_text.c_str();}
 	bool CanEditString(void)const{return true;}
 	void OnEditString(const wxChar* str);
+	void LoadToDoubles();
+	void LoadFromDoubles();
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 
