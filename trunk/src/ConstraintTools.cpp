@@ -193,9 +193,9 @@ public:
 			HPoint* obj = (HPoint*)*It;
 			if(last)
 			{
-				HDimension* dimension = new HDimension(gp_Trsf(), wxString(), last->m_p, obj->m_p, gp_Pnt(), TwoPointsDimensionMode, &wxGetApp().current_color);
-				last->SetCoincidentPoint(dimension->m_p0,true);
-				obj->SetCoincidentPoint(dimension->m_p1,true);
+				HDimension* dimension = new HDimension(gp_Trsf(), wxString(), last->m_p, obj->m_p, gp_Pnt(), TwoPointsDimensionMode, PythagoreanDimensionTextMode, &wxGetApp().current_color);
+				last->SetCoincidentPoint(dimension->A,true);
+				obj->SetCoincidentPoint(dimension->B,true);
 				dimension_drawing.StartOnStep3(dimension);
 				break;
 			}
