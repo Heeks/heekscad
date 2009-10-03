@@ -51,8 +51,7 @@ const HArc& HArc::operator=(const HArc &b){
 	m_axis = b.m_axis;
 	color = b.color;
 	std::list<HeeksObj*>::iterator it = m_objects.begin();
-	for(int i=0; i < 2; i++)
-		it++;
+	it++;it++;
 	C = (HPoint*)*it;
 	return *this;
 }
@@ -60,11 +59,15 @@ const HArc& HArc::operator=(const HArc &b){
 HeeksObj* HArc::MakeACopyWithID()
 {
 	HArc* pnew = (HArc*)EndedObject::MakeACopyWithID();
-	
-	pnew->GetFirstChild();
-	pnew->GetNextChild();
-	pnew->C = (HPoint*)pnew->GetNextChild();
 	return pnew;
+}
+
+void HArc::ReloadPointers()
+{
+	EndedObject::ReloadPointers();
+	std::list<HeeksObj*>::iterator it = m_objects.begin();
+	it++;it++;
+	C = (HPoint*)*it;
 }
 
 HArc* arc_for_tool = NULL;
