@@ -9,6 +9,8 @@
 #include "Gripper.h"
 #include "HPoint.h"
 #include "SolveSketch.h"
+#include "HeeksFrame.h"
+#include "GraphicsCanvas.h"
 
 HDimension::HDimension(const gp_Trsf &trsf, const wxString &text, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, DimensionMode mode, DimensionTextMode text_mode, const HeeksColor* col): m_color(*col), m_trsf(trsf), m_text(text), m_mode(mode), m_text_mode(text_mode), m_scale(1.0), EndedObject(col)
 {
@@ -95,9 +97,30 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 			break;
 	}
 
-	wxGetApp().render_text(string);
+	//Try and draw this ortho.  must find the origin point in screen coordinates
+	double x, y, z;
+
+	// arrays to hold matrix information
+
+	double model_view[16];
+	glGetDoublev(GL_MODELVIEW_MATRIX, model_view);
+
+	double projection[16];
+	glGetDoublev(GL_PROJECTION_MATRIX, projection);
+
+	int viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+	
+	// get 3D coordinates based on window coordinates
+
+	gluProject(0,0,0,
+		model_view, projection, viewport,
+		&x, &y, &z);
+
+	wxGetApp().render_screen_text_at(string,m_scale*8,x,y,atan2(xdir.Y(),xdir.X()) * 180 / PI);
 
 	glPopMatrix();
+
 
 	EndedObject::glCommands(select,marked,no_color);
 }
@@ -212,6 +235,14 @@ static void on_set_text_mode(int value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+static void on_set_scale(double value, HeeksObj* object)
+{
+	HDimension* dimension = (HDimension*)object;
+	dimension->m_scale = value;
+	wxGetApp().Repaint();
+}
+
+
 void HDimension::GetProperties(std::list<Property *> *list)
 {
 	list->push_back(new PropertyTrsf(_("orientation"), m_trsf, this, on_set_trsf));
@@ -227,6 +258,8 @@ void HDimension::GetProperties(std::list<Property *> *list)
 	choices.push_back ( wxString ( _("horizontal") ) );
 	choices.push_back ( wxString ( _("vertical") ) );
 	list->push_back ( new PropertyChoice ( _("text mode"),  choices, m_text_mode, this, on_set_text_mode ) );
+
+	list->push_back ( new PropertyDouble ( _("scale"),  m_scale, this, on_set_scale ) );
 
 	EndedObject::GetProperties(list);
 }
@@ -282,6 +315,7 @@ void HDimension::WriteXML(TiXmlNode *root)
 	element->SetDoubleAttribute("cy", m_p2.Y());
 	element->SetDoubleAttribute("cz", m_p2.Z());
 #endif
+	element->SetAttribute("scale",m_scale);
 	element->SetAttribute("mode", m_mode);
 	element->SetAttribute("textmode", m_text_mode);
 
@@ -297,6 +331,7 @@ HeeksObj* HDimension::ReadFromXMLElement(TiXmlElement* pElem)
 	double p0[3] = {0, 0, 0};
 	double p1[3] = {0, 0, 0};
 	double p2[3] = {0, 0, 0};
+	double scale=1;
 
 	DimensionMode mode = TwoPointsDimensionMode;
 	DimensionTextMode text_mode = StringDimensionTextMode;
@@ -328,12 +363,14 @@ HeeksObj* HDimension::ReadFromXMLElement(TiXmlElement* pElem)
 		else if(name == "cx"){p2[0]= a->DoubleValue();}
 		else if(name == "cy"){p2[1]= a->DoubleValue();}
 		else if(name == "cz"){p2[2]= a->DoubleValue();}
+		else if(name == "scale"){scale= a->DoubleValue();}
 		else if(name == "mode"){mode = (DimensionMode)(a->IntValue());}
 		else if(name == "textmode"){text_mode = (DimensionTextMode)(a->IntValue());}
 	}
 
 	HDimension* new_object = new HDimension(make_matrix(m), text, make_point(p0), make_point(p1), make_point(p2), mode, text_mode, &c);
 	new_object->ReadBaseXML(pElem);
+	new_object->m_scale = scale;
 
 	if(new_object->GetNumChildren()>3)
 	{

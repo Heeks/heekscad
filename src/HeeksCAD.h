@@ -276,6 +276,7 @@ public:
 	void render_text(const wxChar* str);
 	bool get_text_size(const wxChar* str, float* width, float* height);
 	void render_screen_text(const wxChar* str1, const wxChar* str2);
+	void render_screen_text_at(const wxChar* str1, double scale, double x, double y, double theta);
 	void OnInputModeTitleChanged();
 	void OnInputModeHelpTextChanged();
 	void PlotSetColor(const HeeksColor &c);
