@@ -3185,9 +3185,35 @@ void HeeksCADapp::render_screen_text(const wxChar* str1, const wxChar* str2)
 	glScaled(0.612, 0.612, 0);
 	render_screen_text2(str2);
 
+//Even though this is in reverse order, the different matrices have different stacks, and we want to exit here in the modelview
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
+}
+
+void HeeksCADapp::render_screen_text_at(const wxChar* str1, double scale, double x, double y, double theta)
+{
 	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	m_frame->m_graphics->SetIdentityProjection();
+	background_color[0].best_black_or_white().glColor();
+	int w, h;
+	m_frame->m_graphics->GetClientSize(&w, &h);
+	glTranslated(x,y, 0.0);
+
+	glScaled(scale, scale, 0);
+	glRotated(theta,0,0,1);
+	render_screen_text2(str1);
+
+//Even though this is in reverse order, the different matrices have different stacks, and we want to exit here in the modelview
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+
+	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
 }
 
