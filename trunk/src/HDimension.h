@@ -65,6 +65,7 @@ public:
 	void LoadToDoubles();
 	void LoadFromDoubles();
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
+	bool IsDifferent(HeeksObj* other);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 
