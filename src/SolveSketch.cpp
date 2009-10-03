@@ -347,6 +347,31 @@ void AddPointConstraints(HPoint* point)
 					c.type = pointOnArcStart;
 				else
 					c.type = pointOnArcEnd;
+
+				//Check if this is an arc to arc constraint
+				if(dynamic_cast<HArc*>(con->m_obj2->Owner()) && con->m_obj2 != ((HArc*)con->m_obj2->Owner())->C)
+				{
+					c.arc2 = GetArc((HArc*)con->m_obj2->Owner());
+					if(((HArc*)con->m_obj2->Owner())->A == con->m_obj2)
+					{
+						if(c.type == pointOnArcStart)
+							c.type = arcStartToArcStart;
+						else
+						{
+							c.type = arcStartToArcEnd;
+							arc temp = c.arc1;
+							c.arc1 = c.arc2;
+							c.arc2 = temp;
+						}
+					}
+					else
+					{
+						if(c.type == pointOnArcStart)
+							c.type = arcStartToArcEnd;
+						else
+							c.type = arcEndToArcEnd;
+					}
+				}
 			}else if(dynamic_cast<HArc*>(con->m_obj2->Owner()) && con->m_obj2 != ((HArc*)con->m_obj2->Owner())->C)
 			{
 				c.arc1 = GetArc((HArc*)con->m_obj2->Owner());
