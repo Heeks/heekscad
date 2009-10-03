@@ -52,6 +52,7 @@ public:
 	bool DescendForUndo(){return false;}
 	bool IsDifferent(HeeksObj* other);
 	HeeksObj* MakeACopyWithID();
+	void ReloadPointers();
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 
