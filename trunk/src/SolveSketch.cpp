@@ -338,9 +338,8 @@ void AddPointConstraints(HPoint* point)
 
 			constraint c;
 			c.type = pointOnPoint;
-			//TODO: owner() could be an harc, but m_obj is the center point
-			//in which case the following code does not work correctly
-			if(dynamic_cast<HArc*>(con->m_obj1->Owner()))
+			//Do not retype the constraints if point is the center
+			if(dynamic_cast<HArc*>(con->m_obj1->Owner()) && con->m_obj1 != ((HArc*)con->m_obj1->Owner())->C)
 			{
 				c.arc1 = GetArc((HArc*)con->m_obj1->Owner());
 				c.point1 = GetPoint((HPoint*)con->m_obj2);
@@ -348,7 +347,7 @@ void AddPointConstraints(HPoint* point)
 					c.type = pointOnArcStart;
 				else
 					c.type = pointOnArcEnd;
-			}else if(dynamic_cast<HArc*>(con->m_obj2->Owner()))
+			}else if(dynamic_cast<HArc*>(con->m_obj2->Owner()) && con->m_obj2 != ((HArc*)con->m_obj2->Owner())->C)
 			{
 				c.arc1 = GetArc((HArc*)con->m_obj2->Owner());
 				c.point1 = GetPoint((HPoint*)con->m_obj1);
