@@ -75,7 +75,7 @@ pointOnArcStart,
 pointOnArcEnd,        
 arcStartToArcEnd,     
 arcStartToArcStart,   
-arcEndtoArcEnd,       
+arcEndToArcEnd,       
 arcTangentToArc,       
 circleTangentToCircle, 
 circleTangentToArc     

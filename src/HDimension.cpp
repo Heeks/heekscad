@@ -36,6 +36,7 @@ const HDimension& HDimension::operator=(const HDimension &b)
 	EndedObject::operator=(b);
 	m_trsf = b.m_trsf;
 	m_text = b.m_text;
+	m_text_mode = b.m_text_mode;
 	m_color = b.m_color;
 	m_mode = b.m_mode;
 	m_scale = b.m_scale;
@@ -45,6 +46,22 @@ const HDimension& HDimension::operator=(const HDimension &b)
 	m_p2 = (HPoint*)(*it);
 
 	return *this;
+}
+
+bool HDimension::IsDifferent(HeeksObj* other)
+{
+	HDimension* dim = (HDimension*)other;
+
+	if(m_color.COLORREF_color() != dim->m_color.COLORREF_color() || m_mode != dim->m_mode || m_scale != dim->m_scale || m_text_mode != dim->m_text_mode)
+		return true;
+
+	if(wxStrcmp(m_text,dim->m_text))
+		return true;
+	
+	if(m_p2->m_p.Distance(dim->m_p2->m_p) > wxGetApp().m_geom_tol)
+		return true;
+
+	return EndedObject::IsDifferent(other);
 }
 
 void HDimension::glCommands(bool select, bool marked, bool no_color)
