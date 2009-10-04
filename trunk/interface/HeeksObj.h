@@ -94,7 +94,7 @@ public:
 
 	// virtual functions
 	virtual int GetType()const{return UnknownType;}
-	virtual long GetMarkingMask()const{return 0;}
+	virtual long GetMarkingMask()const{return MARKING_FILTER_UNKNOWN;}
 	virtual int GetIDGroupType()const{return GetType();}
 	virtual void glCommands(bool select, bool marked, bool no_color){};
 	virtual void Draw(wxDC& dc){} // for printing
