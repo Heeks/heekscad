@@ -51,8 +51,10 @@ bool CSphere::ModifyByMatrix(const double* m){
 	double new_radius = fabs(m_radius * scale);
 	CSphere* new_object = new CSphere(new_pos, new_radius, m_title.c_str(), m_color);
 	new_object->CopyIDsFrom(this);
-	Owner()->Add(new_object, NULL);
-	Owner()->Remove(this);
+	HeeksObj* owner = Owner();
+	if(owner == NULL)owner = &wxGetApp();
+	owner->Add(new_object, NULL);
+	owner->Remove(this);
 	if(wxGetApp().m_marked_list->ObjectMarked(this))
 	{
 		wxGetApp().m_marked_list->Remove(this,false);

@@ -69,8 +69,10 @@ bool CCylinder::ModifyByMatrix(const double* m){
 	double new_height = fabs(m_height * scale);
 	CCylinder* new_object = new CCylinder(new_pos, new_radius, new_height, m_title.c_str(), m_color);
 	new_object->CopyIDsFrom(this);
-	Owner()->Add(new_object, NULL);
-	Owner()->Remove(this);
+	HeeksObj* owner = Owner();
+	if(owner == NULL)owner = &wxGetApp();
+	owner->Add(new_object, NULL);
+	owner->Remove(this);
 	if(wxGetApp().m_marked_list->ObjectMarked(this))
 	{
 		wxGetApp().m_marked_list->Remove(this,false);

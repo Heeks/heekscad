@@ -84,8 +84,10 @@ bool CFace::ModifyByMatrix(const double *m){
 		gp_Trsf mat = make_matrix(m);
 		BRepBuilderAPI_Transform myBRepTransformation(m_topods_face,mat);
 		TopoDS_Shape new_shape = myBRepTransformation.Shape();
-		Owner()->Add(new CFace(*((TopoDS_Face*)(&new_shape))), NULL);
-		Owner()->Remove(this);
+		HeeksObj* owner = Owner();
+		if(owner == NULL)owner = &wxGetApp();
+		owner->Add(new CFace(*((TopoDS_Face*)(&new_shape))), NULL);
+		owner->Remove(this);
 	}
 	return true;
 }
