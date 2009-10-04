@@ -16,6 +16,9 @@
 #include "../src/ObjPropsCanvas.h"
 #include "../src/Sketch.h"
 #include "../src/Pad.h"
+#else
+#include "GripperTypes.h"
+#include "GripData.h"
 #endif
 
 HeeksObj::HeeksObj(void): m_skip_for_undo(false), m_id(0), m_layer(0), m_visible(true), m_preserving_id(false){}
@@ -191,7 +194,7 @@ void HeeksObj::GetGripperPositionsTransformed(std::list<GripData> *list, bool ju
 
 void HeeksObj::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
 {
-#ifdef HEEKSCAD
+//#ifdef HEEKSCAD
 	CBox box;
 	GetBox(box);
 	if(!box.m_valid)return;
@@ -202,7 +205,7 @@ void HeeksObj::GetGripperPositions(std::list<GripData> *list, bool just_for_endo
 	list->push_back(GripData(GripperTypeRotateObject,box.m_x[3],box.m_x[1],box.m_x[2],NULL));
 	list->push_back(GripData(GripperTypeRotateObject,box.m_x[0],box.m_x[4],box.m_x[2],NULL));
 	list->push_back(GripData(GripperTypeScale,box.m_x[3],box.m_x[4],box.m_x[2],NULL));
-#endif
+//#endif
 }
 
 void HeeksObj::OnRemove()
