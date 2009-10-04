@@ -13,6 +13,7 @@ public:
 	HeeksObj *MakeACopy(void)const{ return new CFaceList(*this);}
 	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/faces");}
 	bool DescendForUndo(){return false;}
+	long GetMarkingMask()const{return 0;}// not pickable
 };
 
 class CEdgeList: public ObjList{
@@ -21,6 +22,7 @@ public:
 	HeeksObj *MakeACopy(void)const{ return new CEdgeList(*this);}
 	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/edges");}
 	bool DescendForUndo(){return false;}
+	long GetMarkingMask()const{return 0;}// not pickable
 };
 
 class CVertexList: public ObjList{
@@ -29,6 +31,7 @@ public:
 	HeeksObj *MakeACopy(void)const{ return new CVertexList(*this);}
 	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/vertices");}
 	bool DescendForUndo(){return false;}
+	long GetMarkingMask()const{return 0;}// not pickable
 };
 
 void CreateFacesAndEdges(TopoDS_Shape shape, CFaceList* faces, CEdgeList* edges, CVertexList* vertices);
