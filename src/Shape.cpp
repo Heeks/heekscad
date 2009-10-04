@@ -206,8 +206,10 @@ bool CShape::ModifyByMatrix(const double* m){
 	TopoDS_Shape new_shape = myBRepTransformation.Shape();
 	HeeksObj* new_object = MakeObject(new_shape, m_title.c_str(), SOLID_TYPE_UNKNOWN, m_color);
 	((CShape*)new_object)->CopyIDsFrom(this);
-	Owner()->Add(new_object, NULL);
-	wxGetApp().Remove(this);
+	HeeksObj* owner = Owner();
+	if(owner == NULL)owner = &wxGetApp();
+	owner->Add(new_object, NULL);
+	owner->Remove(this);
 	return true;
 }
 
