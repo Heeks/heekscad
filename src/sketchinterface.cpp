@@ -150,23 +150,61 @@ int solvewpoints(double  **parms,int nparms, constraint * cons, int consLength, 
 	{
 		if(cons[i].type == pointOnPoint)
 		{
-			int idx = parmdata.size();
-			//create some new doubles to point at. initialized to the midpoint
-			parmdata.push_back(*cons[i].point1.x/2 + *cons[i].point2.x/2);
-			parmdata.push_back(*cons[i].point1.y/2 + *cons[i].point2.y/2);
-			//push some pointers to the new doubles
-			newparms.push_back(&parmdata[idx]);
-			newparms.push_back(&parmdata[idx+1]);
-			//create associatation between old pointer and the new doubles
-			parmmap[cons[i].point1.x] = &parmdata[idx];
-			parmmap[cons[i].point1.y] = &parmdata[idx+1]; 
-			parmmap[cons[i].point2.x] = &parmdata[idx];
-			parmmap[cons[i].point2.y] = &parmdata[idx+1];
-			//create association between new doubles and the old pointer
-			rparmmap[&parmdata[idx]].push_back(cons[i].point1.x);
-			rparmmap[&parmdata[idx+1]].push_back(cons[i].point1.y);
-			rparmmap[&parmdata[idx]].push_back(cons[i].point2.x);
-			rparmmap[&parmdata[idx+1]].push_back(cons[i].point2.y);
+			//check to see if there is an existing pointonpoint constraint related to this one
+			//TODO: this will blow up if there are more than 3 coincident points and the constraints 
+			//are not ordered so that this always returns true
+			if(parmmap[cons[i].point1.x] || parmmap[cons[i].point2.x])
+			{
+				if(parmmap[cons[i].point1.x] && parmmap[cons[i].point2.x])
+				{
+					//BOOM, need to merge the maps, maybe somehow delete the pointers from parmdata, probably 
+					//another pass is required
+				}
+				//figure out which point has been used before
+				if(parmmap[cons[i].point1.x])
+				{
+					//Associate the new doubles with the same pointers
+					parmmap[cons[i].point2.x] = parmmap[cons[i].point1.x];
+					parmmap[cons[i].point2.y] = parmmap[cons[i].point1.y];
+					rparmmap[parmmap[cons[i].point2.x]].push_back(cons[i].point2.x);
+					rparmmap[parmmap[cons[i].point2.y]].push_back(cons[i].point2.y);
+
+					//Try and average out the value a bit
+					*parmmap[cons[i].point2.x] = *parmmap[cons[i].point2.x] * 2.0 / 3.0 + *cons[i].point2.x / 3.0;
+					*parmmap[cons[i].point2.y] = *parmmap[cons[i].point2.y] * 2.0 / 3.0 + *cons[i].point2.y / 3.0;
+
+				}
+				else
+				{
+					parmmap[cons[i].point1.x] = parmmap[cons[i].point2.x];
+					parmmap[cons[i].point1.y] = parmmap[cons[i].point2.y];
+					rparmmap[parmmap[cons[i].point2.x]].push_back(cons[i].point1.x);
+					rparmmap[parmmap[cons[i].point2.y]].push_back(cons[i].point1.y);
+
+					*parmmap[cons[i].point2.x] = *parmmap[cons[i].point2.x] * 2.0 / 3.0 + *cons[i].point1.x / 3.0;
+					*parmmap[cons[i].point2.y] = *parmmap[cons[i].point2.y] * 2.0 / 3.0 + *cons[i].point1.y / 3.0;
+				}
+			}
+			else
+			{
+				int idx = parmdata.size();
+				//create some new doubles to point at. initialized to the midpoint
+				parmdata.push_back(*cons[i].point1.x/2 + *cons[i].point2.x/2);
+				parmdata.push_back(*cons[i].point1.y/2 + *cons[i].point2.y/2);
+				//push some pointers to the new doubles
+				newparms.push_back(&parmdata[idx]);
+				newparms.push_back(&parmdata[idx+1]);
+				//create associatation between old pointer and the new doubles
+				parmmap[cons[i].point1.x] = &parmdata[idx];
+				parmmap[cons[i].point1.y] = &parmdata[idx+1]; 
+				parmmap[cons[i].point2.x] = &parmdata[idx];
+				parmmap[cons[i].point2.y] = &parmdata[idx+1];
+				//create association between new doubles and the old pointer
+				rparmmap[&parmdata[idx]].push_back(cons[i].point1.x);
+				rparmmap[&parmdata[idx+1]].push_back(cons[i].point1.y);
+				rparmmap[&parmdata[idx]].push_back(cons[i].point2.x);
+				rparmmap[&parmdata[idx+1]].push_back(cons[i].point2.y);
+			}
 		}
 		else
 #ifdef NEWARC
