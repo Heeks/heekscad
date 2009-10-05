@@ -37,8 +37,14 @@
 #include <math.h>
 
 //Following is required to be defined on Ubuntu with OCC 6.3.1
+#ifndef HAVE_IOSTREAM
 #define HAVE_IOSTREAM
+#endif
+
+#ifndef CHAR_BIT
 #define CHAR_BIT 8
+#endif
+
 #ifndef INT_MAX
 	#define INT_MAX 2147483647
 #endif
