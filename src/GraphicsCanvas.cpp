@@ -217,6 +217,9 @@ void CGraphicsCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 	m_render_on_front_done = false;
 
     SwapBuffers();
+
+	// draw any xor items wanted on the front buffer
+	DrawFront();
 }
 
 void CGraphicsCanvas::OnSize(wxSizeEvent& event)
