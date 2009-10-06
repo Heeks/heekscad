@@ -25,6 +25,7 @@ public:
 
 	gp_Circ GetCircle() const;
 	void SetCircle(gp_Circ c);
+	bool IsIncluded(gp_Pnt pnt);
 
 	// HeeksObj's virtual functions
 	int GetType()const{return ArcType;}

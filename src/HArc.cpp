@@ -200,6 +200,39 @@ bool HArc::ModifyByMatrix(const double* m){
 void HArc::GetBox(CBox &box){
 	box.Insert(A->m_p.X(), A->m_p.Y(), A->m_p.Z());
 	box.Insert(B->m_p.X(), B->m_p.Y(), B->m_p.Z());
+
+	if(IsIncluded(gp_Pnt(0,m_radius,0)))
+		box.Insert(C->m_p.X(),C->m_p.Y()+m_radius,C->m_p.Z());
+	if(IsIncluded(gp_Pnt(0,-m_radius,0)))
+		box.Insert(C->m_p.X(),C->m_p.Y()-m_radius,C->m_p.Z());
+	if(IsIncluded(gp_Pnt(m_radius,0,0)))
+		box.Insert(C->m_p.X()+m_radius,C->m_p.Y(),C->m_p.Z());
+	if(IsIncluded(gp_Pnt(-m_radius,0,0)))
+		box.Insert(C->m_p.X()-m_radius,C->m_p.Y(),C->m_p.Z());
+
+}
+
+bool HArc::IsIncluded(gp_Pnt pnt)
+{
+	gp_Ax2 axis(C->m_p,m_axis.Direction());
+	gp_Dir x_axis = axis.XDirection();
+	gp_Dir y_axis = axis.YDirection();
+	gp_Pnt centre = C->m_p;
+
+	double ax = gp_Vec(A->m_p.XYZ() - centre.XYZ()) * x_axis;
+	double ay = gp_Vec(A->m_p.XYZ() - centre.XYZ()) * y_axis;
+	double bx = gp_Vec(B->m_p.XYZ() - centre.XYZ()) * x_axis;
+	double by = gp_Vec(B->m_p.XYZ() - centre.XYZ()) * y_axis;
+
+	double start_angle = atan2(ay, ax);
+	double end_angle = atan2(by, bx);
+
+	if(start_angle > end_angle)end_angle += 6.28318530717958;
+
+	double pnt_angle = atan2(gp_Vec(pnt.XYZ()) * y_axis, gp_Vec(pnt.XYZ()) * x_axis);
+	if(pnt_angle >= start_angle && pnt_angle <= end_angle)
+		return true;
+	return false;
 }
 
 void HArc::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
