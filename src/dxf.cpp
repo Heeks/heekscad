@@ -155,6 +155,8 @@ CDxfRead::CDxfRead(const wxChar* filepath)
 {
 	// start the file
 	m_fail = false;
+	m_eUnits = eMillimeters;
+
 	m_ifs = new ifstream(Ttc(filepath));
 	if(!(*m_ifs)){
 		m_fail = true;
@@ -168,6 +170,36 @@ CDxfRead::~CDxfRead()
 	delete m_ifs;
 }
 
+double CDxfRead::mm( const double & value ) const
+{
+	switch(m_eUnits)
+	{
+		case eUnspecified:	return(value * 1.0);	// We don't know any better.
+		case eInches:		return(value * 25.4);
+		case eFeet:		return(value * 25.4 * 12);
+		case eMiles:		return(value *  1609344.0);
+		case eMillimeters:	return(value * 1.0);
+		case eCentimeters:	return(value * 10.0);
+		case eMeters:		return(value * 1000.0);
+		case eKilometers:	return(value * 1000000.0);
+		case eMicroinches:	return(value * 25.4 / 1000.0);
+		case eMils:		return(value * 25.4 / 1000.0);
+		case eYards:		return(value * 3 * 12 * 25.4);
+		case eAngstroms:	return(value * 0.0000001);
+		case eNanometers:	return(value * 0.000001);
+		case eMicrons:		return(value * 0.001);
+		case eDecimeters:	return(value * 100.0);
+		case eDekameters:	return(value * 10000.0);
+		case eHectometers:	return(value * 100000.0);
+		case eGigameters:	return(value * 1000000000000.0);
+		case eAstronomicalUnits: return(value * 149597870690000.0);
+		case eLightYears:	return(value * 9454254955500000000.0);
+		case eParsecs:		return(value * 30856774879000000000.0);
+		default:		return(value * 1.0);	// We don't know any better.
+	} // End switch
+} // End mm() method
+
+
 bool CDxfRead::ReadLine()
 {
 	double s[3] = {0, 0, 0};
@@ -177,6 +209,8 @@ bool CDxfRead::ReadLine()
 	{
 		get_line();
 		int n;
+
+
 		if(sscanf(m_str, "%d", &n) != 1)return false;
 		std::istringstream ss;
 		ss.imbue(std::locale("C"));
@@ -188,32 +222,32 @@ bool CDxfRead::ReadLine()
 			case 10:
 				// start x
 				get_line();
-				ss.str(m_str); ss >> s[0]; if(ss.fail()) return false;
+				ss.str(m_str); ss >> s[0]; s[0] = mm(s[0]); if(ss.fail()) return false;
 				break;
 			case 20:
 				// start y
 				get_line();
-				ss.str(m_str); ss >> s[1]; if(ss.fail()) return false;
+				ss.str(m_str); ss >> s[1]; s[1] = mm(s[1]); if(ss.fail()) return false;
 				break;
 			case 30:
 				// start z
 				get_line();
-				ss.str(m_str); ss >> s[2]; if(ss.fail()) return false;
+				ss.str(m_str); ss >> s[2]; s[2] = mm(s[2]); if(ss.fail()) return false;
 				break;
 			case 11:
 				// end x
 				get_line();
-				ss.str(m_str); ss >> e[0]; if(ss.fail()) return false;
+				ss.str(m_str); ss >> e[0]; e[0] = mm(e[0]); if(ss.fail()) return false;
 				break;
 			case 21:
 				// end y
 				get_line();
-				ss.str(m_str); ss >> e[1]; if(ss.fail()) return false;
+				ss.str(m_str); ss >> e[1]; e[1] = mm(e[1]); if(ss.fail()) return false;
 				break;
 			case 31:
 				// end z
 				get_line();
-				ss.str(m_str); ss >> e[2]; if(ss.fail()) return false;
+				ss.str(m_str); ss >> e[2]; e[2] = mm(e[2]); if(ss.fail()) return false;
 				break;
 			case 100:
 			case 39:
@@ -257,22 +291,22 @@ bool CDxfRead::ReadArc()
 			case 10:
 				// centre x
 				get_line();
-				ss.str(m_str); ss >> c[0]; if(ss.fail()) return false;
+				ss.str(m_str); ss >> c[0]; c[0] = mm(c[0]); if(ss.fail()) return false;
 				break;
 			case 20:
 				// centre y
 				get_line();
-				ss.str(m_str); ss >> c[1]; if(ss.fail()) return false;
+				ss.str(m_str); ss >> c[1]; c[1] = mm(c[1]); if(ss.fail()) return false;
 				break;
 			case 30:
 				// centre z
 				get_line();
-				ss.str(m_str); ss >> c[2]; if(ss.fail()) return false;
+				ss.str(m_str); ss >> c[2]; c[2] = mm(c[2]); if(ss.fail()) return false;
 				break;
 			case 40:
 				// radius
 				get_line();
-				ss.str(m_str); ss >> radius; if(ss.fail()) return false;
+				ss.str(m_str); ss >> radius; radius = mm(radius); if(ss.fail()) return false;
 				break;
 			case 50:
 				// start angle
@@ -330,17 +364,17 @@ bool CDxfRead::ReadSpline()
 			case 210:
 				// normal x
 				get_line();
-				ss.str(m_str); ss >> sd.norm[0]; if(ss.fail()) return false;
+				ss.str(m_str); ss >> sd.norm[0]; sd.norm[0] = mm(sd.norm[0]); if(ss.fail()) return false;
 				break;
 			case 220:
 				// normal y
 				get_line();
-				ss.str(m_str); ss >> sd.norm[1]; if(ss.fail()) return false;
+				ss.str(m_str); ss >> sd.norm[1]; sd.norm[1] = mm(sd.norm[1]); if(ss.fail()) return false;
 				break;
 			case 230:
 				// normal z
 				get_line();
-				ss.str(m_str); ss >> sd.norm[2]; if(ss.fail()) return false;
+				ss.str(m_str); ss >> sd.norm[2]; sd.norm[2] = mm(sd.norm[2]); if(ss.fail()) return false;
 				break;
 			case 70:
 				// flag
@@ -488,22 +522,22 @@ bool CDxfRead::ReadCircle()
 			case 10:
 				// centre x
 				get_line();
-				ss.str(m_str); ss >> c[0]; if(ss.fail()) return false;
+				ss.str(m_str); ss >> c[0]; c[0] = mm(c[0]); if(ss.fail()) return false;
 				break;
 			case 20:
 				// centre y
 				get_line();
-				ss.str(m_str); ss >> c[1]; if(ss.fail()) return false;
+				ss.str(m_str); ss >> c[1]; c[1] = mm(c[1]); if(ss.fail()) return false;
 				break;
 			case 30:
 				// centre z
 				get_line();
-				ss.str(m_str); ss >> c[2]; if(ss.fail()) return false;
+				ss.str(m_str); ss >> c[2]; c[2] = mm(c[2]); if(ss.fail()) return false;
 				break;
 			case 40:
 				// radius
 				get_line();
-				ss.str(m_str); ss >> radius; if(ss.fail()) return false;
+				ss.str(m_str); ss >> radius; radius = mm(radius); if(ss.fail()) return false;
 				break;
 			case 100:
 			case 39:
@@ -546,32 +580,32 @@ bool CDxfRead::ReadEllipse()
 			case 10:
 				// centre x
 				get_line();
-				ss.str(m_str); ss >> c[0]; if(ss.fail()) return false;
+				ss.str(m_str); ss >> c[0]; c[0] = mm(c[0]); if(ss.fail()) return false;
 				break;
 			case 20:
 				// centre y
 				get_line();
-				ss.str(m_str); ss >> c[1]; if(ss.fail()) return false;
+				ss.str(m_str); ss >> c[1]; c[1] = mm(c[1]); if(ss.fail()) return false;
 				break;
 			case 30:
 				// centre z
 				get_line();
-				ss.str(m_str); ss >> c[2]; if(ss.fail()) return false;
+				ss.str(m_str); ss >> c[2]; c[2] = mm(c[2]); if(ss.fail()) return false;
 				break;
 			case 11:
 				// major x
 				get_line();
-				ss.str(m_str); ss >> m[0]; if(ss.fail()) return false;
+				ss.str(m_str); ss >> m[0]; m[0] = mm(m[0]); if(ss.fail()) return false;
 				break;
 			case 21:
 				// major y
 				get_line();
-				ss.str(m_str); ss >> m[1]; if(ss.fail()) return false;
+				ss.str(m_str); ss >> m[1]; m[1] = mm(m[1]); if(ss.fail()) return false;
 				break;
 			case 31:
 				// major z
 				get_line();
-				ss.str(m_str); ss >> m[2]; if(ss.fail()) return false;
+				ss.str(m_str); ss >> m[2]; m[2] = mm(m[2]); if(ss.fail()) return false;
 				break;
 			case 40:
 				// ratio
@@ -726,13 +760,13 @@ bool CDxfRead::ReadLwPolyLine()
 					x_found = false;
 					y_found = false;
 				}
-				ss.str(m_str); ss >> x; if(ss.fail()) return false;
+				ss.str(m_str); ss >> x; x = mm(x); if(ss.fail()) return false;
 				x_found = true;
 				break;
 			case 20:
 				// y
 				get_line();
-				ss.str(m_str); ss >> y; if(ss.fail()) return false;
+				ss.str(m_str); ss >> y; y = mm(y); if(ss.fail()) return false;
 				y_found = true;
 				break;
 			case 42:
@@ -888,6 +922,22 @@ void CDxfRead::get_line()
 	strcpy(m_str, str);
 }
 
+bool CDxfRead::ReadUnits()
+{
+	get_line();	// Skip to next line.
+	get_line();	// Skip to next line.
+	int n = 0;
+	if(sscanf(m_str, "%d", &n) == 1)
+	{
+		m_eUnits = eDxfUnits_t( n );
+		return(true);
+	} // End if - then
+	else
+	{
+		return(false);
+	}
+}
+
 void CDxfRead::DoRead()
 {
 	if(m_fail)return;
@@ -896,7 +946,11 @@ void CDxfRead::DoRead()
 
 	while(!((*m_ifs).eof()))
 	{
-		if(!strcmp(m_str, "0"))
+		if (!strcmp( m_str, "$INSUNITS" )){
+			if (!ReadUnits())return;
+			continue;
+		} // End if - then
+		else if(!strcmp(m_str, "0"))
 		{
 			get_line();
 

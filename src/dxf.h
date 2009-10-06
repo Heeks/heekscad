@@ -2,6 +2,33 @@
 // Copyright (c) 2009, Dan Heeks
 // This program is released under the BSD license. See the file COPYING for details.
 #pragma once
+
+typedef enum
+{
+	eUnspecified = 0,	// Unspecified (No units)
+	eInches,
+	eFeet,
+	eMiles,
+	eMillimeters,
+	eCentimeters,
+	eMeters,
+	eKilometers,
+	eMicroinches,
+	eMils,
+	eYards,
+	eAngstroms,
+	eNanometers,
+	eMicrons,
+	eDecimeters,
+	eDekameters,
+	eHectometers,
+	eGigameters,
+	eAstronomicalUnits,
+	eLightYears,
+	eParsecs
+} eDxfUnits_t;
+
+
 struct SplineData
 {
 	double norm[3];
@@ -50,7 +77,9 @@ private:
 
 	bool m_fail;
 	char m_str[1024];
+	eDxfUnits_t m_eUnits;
 
+	bool ReadUnits();
 	bool ReadLine();
 	bool ReadArc();
 	bool ReadCircle();
@@ -63,12 +92,15 @@ private:
 	void OnReadSpline(struct SplineData& sd);
 	void get_line();
 
+
 public:
 	CDxfRead(const wxChar* filepath); // this opens the file
 	~CDxfRead(); // this closes the file
 
 	bool Failed(){return m_fail;}
 	void DoRead(); // this reads the file and calls the following functions
+
+	double mm( const double & value ) const;
 
 	virtual void OnReadLine(const double* s, const double* e){}
 	virtual void OnReadArc(const double* s, const double* e, const double* c, bool dir){}
