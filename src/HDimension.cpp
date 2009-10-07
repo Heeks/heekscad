@@ -11,6 +11,9 @@
 #include "SolveSketch.h"
 #include "HeeksFrame.h"
 #include "GraphicsCanvas.h"
+#include "HeeksConfig.h"
+
+bool HDimension::DrawFlat = true;
 
 HDimension::HDimension(const gp_Trsf &trsf, const wxString &text, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, DimensionMode mode, DimensionTextMode text_mode, const HeeksColor* col): m_color(*col), m_trsf(trsf), m_text(text), m_mode(mode), m_text_mode(text_mode), m_scale(1.0), EndedObject(col)
 {
@@ -114,27 +117,34 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 			break;
 	}
 
-	//Try and draw this ortho.  must find the origin point in screen coordinates
-	double x, y, z;
+	if(DrawFlat)
+	{
+		//Try and draw this ortho.  must find the origin point in screen coordinates
+		double x, y, z;
 
-	// arrays to hold matrix information
+		// arrays to hold matrix information
 
-	double model_view[16];
-	glGetDoublev(GL_MODELVIEW_MATRIX, model_view);
+		double model_view[16];
+		glGetDoublev(GL_MODELVIEW_MATRIX, model_view);
 
-	double projection[16];
-	glGetDoublev(GL_PROJECTION_MATRIX, projection);
+		double projection[16];
+		glGetDoublev(GL_PROJECTION_MATRIX, projection);
 
-	int viewport[4];
-	glGetIntegerv(GL_VIEWPORT, viewport);
-	
-	// get 3D coordinates based on window coordinates
+		int viewport[4];
+		glGetIntegerv(GL_VIEWPORT, viewport);
 
-	gluProject(0,0,0,
-		model_view, projection, viewport,
-		&x, &y, &z);
+		// get 3D coordinates based on window coordinates
 
-	wxGetApp().render_screen_text_at(string,m_scale*8,x,y,atan2(xdir.Y(),xdir.X()) * 180 / PI);
+		gluProject(0,0,0,
+			model_view, projection, viewport,
+			&x, &y, &z);
+
+		wxGetApp().render_screen_text_at(string,m_scale*8,x,y,atan2(xdir.Y(),xdir.X()) * 180 / PI);
+	}
+	else
+	{
+		wxGetApp().render_text(string);
+	}
 
 	glPopMatrix();
 
@@ -523,3 +533,14 @@ void HDimension::draw_arrow_line(DimensionMode mode, const gp_Pnt &p0, const gp_
 	}
 }
 
+// static
+void HDimension::WriteToConfig(HeeksConfig& config)
+{
+	config.Write(_T("DimensionDrawFlat"), DrawFlat);
+}
+
+// static
+void HDimension::ReadFromConfig(HeeksConfig& config)
+{
+	config.Read(_T("DimensionDrawFlat"), &DrawFlat, false);
+}
