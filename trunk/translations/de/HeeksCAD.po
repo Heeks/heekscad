@@ -639,7 +639,7 @@ msgid "Fillet"
 msgstr "Kanten abrunden"
 
 msgid "Chamfer"
-msgstr "V-Nutfräser(Fasen)"
+msgstr "V-Nutfraeser(Fasen)"
 
 msgid "Move Translate"
 msgstr "Objekt verschieben"
@@ -2122,7 +2122,7 @@ msgid "Tools"
 msgstr "Werkzeuge"
 
 msgid "type"
-msgstr "Fräsertyp"
+msgstr "Fraesertyp"
 
 msgid "Drill Bit"
 msgstr "Bohrer"
@@ -2152,10 +2152,10 @@ msgid "corner_radius"
 msgstr "Radius zum Schaft"
 
 msgid "cutting_edge_angle"
-msgstr "Winkel Fräskante unten"
+msgstr "Winkel Fraeskante unten"
 
 msgid "cutting_edge_height"
-msgstr "Höhe der Fräskante unten"
+msgstr "Höhe der Fraeskante unten"
 
 msgid "sort_locations"
 msgstr "Reihenfolge optimieren"
@@ -2200,7 +2200,7 @@ msgid "cutting tool"
 msgstr "Werkzeug"
 
 msgid "Chamfering Bit"
-msgstr "Fräser incl. Fasen"
+msgstr "V-Nutfraeser(Fasen)"
 
 msgid "New Fixture..."
 msgstr "Korrektur des Koordinatensystems"
@@ -2218,22 +2218,22 @@ msgid "Pivot Point"
 msgstr "'Drehpunkt' der Korrektur"
 
 msgid "Pick roll on point"
-msgstr "Fräser Einstiegspunkt"
+msgstr "Fraeser Einstiegspunkt"
 
 msgid "Pick roll off point"
-msgstr "Fräser Ausstiegspunkt"
+msgstr "Fraeser Ausstiegspunkt"
 
 msgid "Brinell hardness of raw material"
-msgstr "Material-Härte nach Brinell"
+msgstr "Material-Haerte nach Brinell"
 
 msgid "Raw Material"
 msgstr "Werkstück Material"
 
 msgid "Surface Speed (m/min)"
-msgstr "Spindel RPM (m/min)während der Werkzeugfahrt(Drehen)"
+msgstr "Spindel RPM (m/min)waehrend der Werkzeugfahrt(Drehen)"
 
 msgid "Surface Speed (ft/min)"
-msgstr "Spindel RPM (ft/min)während der Werkzeugfahrt(Drehen)"
+msgstr "Spindel RPM (ft/min)waehrend der Werkzeugfahrt(Drehen)"
 
 msgid "Raw Material Name"
 msgstr "Material des Werkstücks"
@@ -2263,10 +2263,10 @@ msgid "Number of sample points"
 msgstr "Anzahl der Vergleichspunkte"
 
 msgid "face to sketch deviaton"
-msgstr "Oberfläche/Zeichnung Abweichung"
+msgstr "Oberflaeche/Zeichnung Abweichung"
 
 msgid "Brinell Hardness of raw material"
-msgstr "Brinell-Härtegrad des Materials"
+msgstr "Brinell-Haertegrad des Materials"
 
 msgid "Carbide "
 msgstr "Karbid "
@@ -2277,7 +2277,6 @@ msgstr "Karbid "
 msgid "High Speed Steel"
 msgstr "HSS"
 
-
 msgid "Estimate when possible"
 msgstr "Wenn möglich berechnen"
 
@@ -2285,6 +2284,9 @@ msgid "Use default values"
 msgstr "Vorgegebene Werte benutzen"
 
 msgid " degreee "
+msgstr " Grad "
+
+msgid " degree "
 msgstr " Grad "
 
 msgid "Turning Tool"
@@ -2313,4 +2315,43 @@ msgstr "EIN"
 
 msgid "Automatic Title"
 msgstr "Autom. Werkzeugbeschreibung"
+
+msgid "New Drill..."
+msgstr "Neuer Bohrer"
+
+msgid "New End Mill..."
+msgstr "Neuer Fraeser"
+
+msgid "New Centre Drill..."
+msgstr "Neuer Zentrier-Bohrer"
+
+msgid "New Slot Drill..."
+msgstr "Neuer Taschen-Fraeser"
+
+msgid "New Ball End Mill..."
+msgstr "Neuer Kugelfraeser"
+
+msgid "New Chamfer Mill..."
+msgstr "Neuer Fasen-Fraeser"
+
+msgid "New Turning Tool..."
+msgstr "Neuer Drehstahl"
+
+msgid "Draw circles through 3 points"
+msgstr "Erstelle Kreis durch Angabe von 3 Punkten"
+
+msgid "Draw circles, centre and point"
+msgstr "Erstelle Kreis durch Angabe von Mitte und einem Punkt auf der Kreisbahn"
+
+msgid "Draw circles, centre and radius"
+msgstr "Erstelle Kreis durch Angabe von Mitte und Radius"
+
+msgid "font options"
+msgstr "Schriftarten"
+
+msgid "Active font"
+msgstr "Aktuelle Schrift"
+
+msgid "Paths (semicolon delimited)"
+msgstr "Schriftverzeichnisse (durch Semikolon getrennt)"
 
