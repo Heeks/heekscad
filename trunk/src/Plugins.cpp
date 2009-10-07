@@ -265,12 +265,15 @@ void CPluginsDialog::EditSelected(unsigned int selection)
 		if(ui == selection)
 		{
 			PluginData &pd = *It;
+			bool enabled = m_pListBox->IsChecked(ui);
+
 			CPluginItemDialog dlg(this, _("Add New Plugin"), pd);
 			if(dlg.ShowModal() == wxID_OK)
 			{
 				// updata the check list
 				delete m_pListBox;
 				CreateCheckListbox();
+				m_pListBox->Check(ui, enabled);
 			}
 		}
 	}

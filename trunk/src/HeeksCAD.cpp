@@ -292,6 +292,8 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("FontPaths"), &m_font_paths, _T("/usr/share/qcad/fonts"));
 	config.Read(_T("STLFacetTolerance"), &m_stl_facet_tolerance, 0.1);
 
+	HDimension::ReadFromConfig(config);
+
 	m_ruler->ReadFromConfig(config);
 
 	GetRecentFilesProfileString();
@@ -393,6 +395,8 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("NumberOfSamplePoints"), m_number_of_sample_points);
 	config.Write(_T("FontPaths"), m_font_paths);
 	config.Write(_T("STLFacetTolerance"), m_stl_facet_tolerance);
+
+	HDimension::WriteToConfig(config);
 
 	m_ruler->WriteToConfig(config);
 
@@ -2084,6 +2088,12 @@ static void on_set_units(int value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+static void on_dimension_draw_flat(bool value, HeeksObj* object)
+{
+	HDimension::DrawFlat = value;
+	wxGetApp().Repaint();
+}
+
 static void on_set_font(int zero_based_choice, HeeksObj *obj)
 {
 	if (zero_based_choice == 0)
@@ -2220,6 +2230,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 		if(m_view_units > 25.0)choice = 1;
 		view_options->m_list.push_back ( new PropertyChoice ( _("units"),  choices, choice, this, on_set_units ) );
 	}
+	view_options->m_list.push_back(new PropertyCheck(_("flat on screen dimension text"), HDimension::DrawFlat, NULL, on_dimension_draw_flat));
 	list->push_back(view_options);
 
 	PropertyList* digitizing = new PropertyList(_("digitizing"));
