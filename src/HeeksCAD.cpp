@@ -1492,9 +1492,8 @@ void HeeksCADapp::DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObje
 	AddToolListWithSeparator(f_list, temp_f_list);
 	temp_f_list.clear();
 
-	if(point.x>=0 && point.y>=0)temp_f_list.push_back(new CFullScreenTool);
-
-
+	// exit full screen
+	if(wxGetApp().m_frame->IsFullScreen() && point.x>=0 && point.y>=0)temp_f_list.push_back(new CFullScreenTool);
 
 	AddToolListWithSeparator(f_list, temp_f_list);
 	std::list<Tool*>::iterator FIt;
