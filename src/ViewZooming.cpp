@@ -37,6 +37,10 @@ void ViewZooming::OnMouse( wxMouseEvent& event )
 		wxGetApp().m_frame->m_graphics->Refresh();
 		CurrentPoint = wxPoint(event.GetX(), event.GetY());
 	}
+	else if(event.RightUp()){
+		// do context menu same as select mode
+		wxGetApp().m_select_mode->OnMouse(event);
+	}
 	if(event.GetWheelRotation() != 0)wxGetApp().m_select_mode->OnMouse(event);
 }
 

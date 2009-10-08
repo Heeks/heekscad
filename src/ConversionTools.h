@@ -12,7 +12,7 @@ extern bool ConvertFaceToSketch2(const TopoDS_Face& face, HeeksObj* sketch, doub
 extern bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double deviation);
 extern HeeksObj* SplitArcsIntoLittleLines(HeeksObj* sketch);
 
-class ConvertSketchToFace: public Tool
+class ConvertSketchesToFace: public Tool
 {
 public:
 	void Run();
@@ -20,7 +20,7 @@ public:
 	wxString BitmapPath(){return _T("la2face");}
 };
 
-class SketchArcsToLines: public Tool
+class SketchesArcsToLines: public Tool
 {
 public:
 	void Run();
