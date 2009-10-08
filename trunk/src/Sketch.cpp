@@ -214,20 +214,20 @@ void CSketch::GetProperties(std::list<Property *> *list)
 	ObjList::GetProperties(list);
 }
 
+static CSketch* sketch_for_tools = NULL;
+
 class SplitSketch:public Tool{
 public:
-	CSketch* m_sketch;
-	SplitSketch():m_sketch(NULL){}
 	void Run(){
-		if(m_sketch == NULL)return;
+		if(sketch_for_tools == NULL)return;
 		std::list<HeeksObj*> new_sketches;
-		m_sketch->ExtractSeparateSketches(new_sketches);
+		sketch_for_tools->ExtractSeparateSketches(new_sketches);
 		for(std::list<HeeksObj*>::iterator It = new_sketches.begin(); It != new_sketches.end(); It++)
 		{
 			HeeksObj* new_object = *It;
-			m_sketch->Owner()->Add(new_object, NULL);
+			sketch_for_tools->Owner()->Add(new_object, NULL);
 		}
-		m_sketch->Owner()->Remove(m_sketch);
+		sketch_for_tools->Owner()->Remove(sketch_for_tools);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Split Sketch");}
@@ -236,13 +236,50 @@ public:
 
 static SplitSketch split_sketch;
 
+class ConvertSketchToFace: public Tool
+{
+public:
+	void Run()
+	{
+		TopoDS_Face face;
+		if(ConvertSketchToFace2(sketch_for_tools, face))
+		{
+			wxGetApp().Add(new CFace(face), NULL);
+			wxGetApp().Repaint();
+		}
+	}
+	const wxChar* GetTitle(){return _("Convert sketch to face");}
+	wxString BitmapPath(){return _T("la2face");}
+};
+
+static ConvertSketchToFace convert_sketch_to_face;
+
+class SketchArcsToLines: public Tool
+{
+public:
+	void Run()
+	{
+		HeeksObj* new_object = SplitArcsIntoLittleLines(sketch_for_tools);
+		wxGetApp().Remove(sketch_for_tools);
+		sketch_for_tools = NULL;
+		wxGetApp().Add(new_object, NULL);
+	}
+
+	const wxChar* GetTitle(){return _("Split arcs to little lines");}
+	wxString BitmapPath(){return _T("splitarcs");}
+};
+
+static SketchArcsToLines sketch_arcs_to_lines;
+
 void CSketch::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
+	sketch_for_tools = this;
 	if(GetSketchOrder() == SketchOrderTypeBad || GetSketchOrder() == SketchOrderTypeMultipleCurves)
 	{
-		split_sketch.m_sketch = this;
 		t_list->push_back(&split_sketch);
 	}
+	t_list->push_back(&convert_sketch_to_face);
+	t_list->push_back(&sketch_arcs_to_lines);
 }
 
 HeeksObj *CSketch::MakeACopy(void)const

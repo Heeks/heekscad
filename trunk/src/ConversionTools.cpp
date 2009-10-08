@@ -19,6 +19,7 @@
 #include "Polygon.h"
 
 void GetConversionMenuTools(std::list<Tool*>* t_list){
+	// Tools for multiple selected items.
 	bool lines_or_arcs_etc_in_marked_list = false;
 	int sketches_in_marked_list = 0;
 	bool group_in_marked_list = false;
@@ -52,12 +53,9 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 		t_list->push_back(new MakeLineArcsToSketch);
 	}
 
-	if(sketches_in_marked_list > 0){
-		t_list->push_back(new ConvertSketchToFace);
-		t_list->push_back(new SketchArcsToLines);
-	}
-
 	if(sketches_in_marked_list > 1){
+		t_list->push_back(new ConvertSketchesToFace);
+		t_list->push_back(new SketchesArcsToLines);
 		t_list->push_back(new CombineSketches);
 #ifdef UNITE_SKETCHES
 		t_list->push_back(new UniteSketches);
@@ -309,7 +307,7 @@ bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double devi
 	return true;
 }
 
-void ConvertSketchToFace::Run(){
+void ConvertSketchesToFace::Run(){
 	std::list<HeeksObj*>::const_iterator It;
 	for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
 		HeeksObj* object = *It;
@@ -401,7 +399,7 @@ HeeksObj* SplitArcsIntoLittleLines(HeeksObj* sketch)
 	return new_sketch;
 }
 
-void SketchArcsToLines::Run(){
+void SketchesArcsToLines::Run(){
 	std::list<HeeksObj*> copy_of_marked_list = wxGetApp().m_marked_list->list();
 	std::list<HeeksObj*> objects_to_delete;
 	std::list<HeeksObj*> new_objects;
