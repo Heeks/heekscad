@@ -91,6 +91,7 @@
 		<Unit filename="interface/ToolImage.h" />
 		<Unit filename="interface/ToolList.cpp" />
 		<Unit filename="interface/ToolList.h" />
+		<Unit filename="interface/TransientObject.cpp" />
 		<Unit filename="interface/strconv.cpp" />
 		<Unit filename="interface/strconv.h" />
 		<Unit filename="sketchsolve/src/errorfuncs.cpp" />
@@ -131,6 +132,7 @@
 		<Unit filename="src/DimensionDrawing.h" />
 		<Unit filename="src/Drawing.cpp" />
 		<Unit filename="src/Drawing.h" />
+		<Unit filename="src/DynamicSolid.cpp" />
 		<Unit filename="src/Edge.cpp" />
 		<Unit filename="src/Edge.h" />
 		<Unit filename="src/EdgeBlend.h" />
@@ -156,6 +158,7 @@
 		<Unit filename="src/GripperSelTransform.h" />
 		<Unit filename="src/Group.cpp" />
 		<Unit filename="src/Group.h" />
+		<Unit filename="src/HAngularDimension.cpp" />
 		<Unit filename="src/HArc.cpp" />
 		<Unit filename="src/HArc.h" />
 		<Unit filename="src/HCircle.cpp" />
@@ -185,7 +188,6 @@
 		<Unit filename="src/HeeksFrame.h" />
 		<Unit filename="src/HeeksPrintout.cpp" />
 		<Unit filename="src/HeeksPrintout.h" />
-		<Unit filename="src/History.cpp" />
 		<Unit filename="src/History.h" />
 		<Unit filename="src/Images.cpp" />
 		<Unit filename="src/Images.h" />
@@ -211,8 +213,10 @@
 		<Unit filename="src/OptionsCanvas.h" />
 		<Unit filename="src/Pad.cpp" />
 		<Unit filename="src/Pad.h" />
+		<Unit filename="src/Part.cpp" />
 		<Unit filename="src/Plugins.cpp" />
 		<Unit filename="src/Plugins.h" />
+		<Unit filename="src/Pocket.cpp" />
 		<Unit filename="src/PointDrawing.cpp" />
 		<Unit filename="src/PointDrawing.h" />
 		<Unit filename="src/PointOrWindow.cpp" />
@@ -227,7 +231,6 @@
 		<Unit filename="src/RS274X.h" />
 		<Unit filename="src/RegularShapesDrawing.cpp" />
 		<Unit filename="src/RegularShapesDrawing.h" />
-		<Unit filename="src/RemoveOrAddTool.cpp" />
 		<Unit filename="src/RemoveOrAddTool.h" />
 		<Unit filename="src/RuledSurface.cpp" />
 		<Unit filename="src/RuledSurface.h" />
@@ -239,6 +242,7 @@
 		<Unit filename="src/Shape.h" />
 		<Unit filename="src/ShapeData.cpp" />
 		<Unit filename="src/ShapeData.h" />
+		<Unit filename="src/ShapeTools.cpp" />
 		<Unit filename="src/SimpleIntersector.cpp" />
 		<Unit filename="src/SimpleIntersector.h" />
 		<Unit filename="src/Sketch.cpp" />
@@ -261,6 +265,7 @@
 		<Unit filename="src/TransformTools.h" />
 		<Unit filename="src/TreeCanvas.cpp" />
 		<Unit filename="src/TreeCanvas.h" />
+		<Unit filename="src/UndoEngine.cpp" />
 		<Unit filename="src/Vertex.cpp" />
 		<Unit filename="src/Vertex.h" />
 		<Unit filename="src/ViewPoint.cpp" />
