@@ -107,6 +107,9 @@ void HAngularDimension::glCommands(bool select, bool marked, bool no_color)
 		//Find the distance our gripper is from said thing
 		double r = m_p4->m_p.Distance(pnt);
 
+		//Save the angle of the control point
+		double ca = atan2(m_p4->m_p.Y()-pnt.Y(),m_p4->m_p.X()-pnt.X());
+
 		//find the angle of the lines
 
 		double l1d1 = m_p0->m_p.Distance(pnt);
@@ -114,6 +117,7 @@ void HAngularDimension::glCommands(bool select, bool marked, bool no_color)
 
 		double a1=0;
 		
+		//Avoid singularity and instabillity
 		if(l1d1 > l1d2)
 			a1 = atan2(m_p0->m_p.Y()-pnt.Y(),m_p0->m_p.X()-pnt.X());
 		else
@@ -124,16 +128,29 @@ void HAngularDimension::glCommands(bool select, bool marked, bool no_color)
 
 		double a2=0;
 		
+		//Avoid singularity and instabillity
 		if(l2d1 > l2d2)
 			a2 = atan2(m_p2->m_p.Y()-pnt.Y(),m_p2->m_p.X()-pnt.X());
 		else
 			a2 = atan2(m_p3->m_p.Y()-pnt.Y(),m_p3->m_p.X()-pnt.X());
 
-		//Find the mid angle. Need to find DA and compensate for the 2*Pi period of atan2
+
+		//Figure out if which way the lines should be pointing
+		while(a1 - ca > PI)
+			a1 -= PI;
+		while(a1 - ca < -PI)
+			a1 += PI;
+		while(a2 - ca > PI)
+			a2 -= PI;
+		while(a2 - ca < -PI)
+			a2 += PI;
+
+
+		//Need to find DA and compensate for the 2*Pi period of atan2
 		double da = a2 - a1;
-		if(da > PI)
+		while(da > PI)
 			da -= 2*Pi;
-		if(da < -PI)
+		while(da < -PI)
 			da += 2*Pi;
 
 		double ma = a1 + da/2;
@@ -156,8 +173,7 @@ void HAngularDimension::glCommands(bool select, bool marked, bool no_color)
 			DrawLine(m_p3->m_p,pnt2);
 
 		//Figure out if the control point is inside the included part
-		double ca = atan2(m_p4->m_p.Y()-pnt.Y(),m_p4->m_p.X()-pnt.X());
-
+		
 		if((ca >= a1 && ca <= a1 + da) || (ca <= a1 && ca >= a1 + da))
 		{
 			DrawArc(pnt,r,a1,a1+da);
@@ -227,25 +243,25 @@ void HAngularDimension::LoadFromDoubles()
 	m_p4->LoadFromDoubles();
 }
 
-HAngularDimension* dimension_for_tool = NULL;
+HAngularDimension* angular_dimension_for_tool = NULL;
 
-class ConstrainDimension:public Tool{
+class ConstrainAngularDimension:public Tool{
 public:
 	void Run(){
 //		dimension_for_tool->SetLineLengthConstraint(dimension_for_tool->A->m_p.Distance(dimension_for_tool->B->m_p));
-		SolveSketch((CSketch*)dimension_for_tool->Owner());
+		SolveSketch((CSketch*)angular_dimension_for_tool->Owner());
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _T("Toggle Dimension Constraint");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Set this dimension as constrained");}
 };
-static ConstrainDimension constrain_dimension;
+static ConstrainAngularDimension constrain_angular_dimension;
 
 void HAngularDimension::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
-	dimension_for_tool = this;
-	t_list->push_back(&constrain_dimension);
+	angular_dimension_for_tool = this;
+	t_list->push_back(&constrain_angular_dimension);
 }
 
 void HAngularDimension::GetBox(CBox &box)
