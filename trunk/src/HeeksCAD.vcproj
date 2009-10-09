@@ -786,6 +786,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\HAngularDimension.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\HAngularDimension.h"
+			>
+		</File>
+		<File
 			RelativePath=".\HArc.cpp"
 			>
 		</File>
