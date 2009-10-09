@@ -12,6 +12,7 @@
 #include "SolveSketch.h"
 #include "MultiPoly.h"
 #include "DimensionDrawing.h"
+#include "HAngularDimension.h"
 
 class SetLinesPerpendicular:public Tool{
 	// set world coordinate system active again
@@ -209,6 +210,35 @@ public:
 	const wxChar* GetToolTip(){return _("Add a dimension object");}
 };
 
+class AddAngularDimension:public Tool{
+public:
+	void Run(){
+		std::list<HeeksObj*>::const_iterator It;
+		HLine* line1=NULL;
+		for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+			HLine* line2 = (HLine*)*It;
+			if(line1)
+			{
+				HAngularDimension* dimension = new HAngularDimension(wxString(), line1->A->m_p, line1->B->m_p, line2->A->m_p, line2->B->m_p, gp_Pnt(1,1,0), DegreesAngularDimensionTextMode, &wxGetApp().current_color);
+				line1->A->SetCoincidentPoint(dimension->m_p0,true);
+				line1->B->SetCoincidentPoint(dimension->m_p1,true);
+				line2->A->SetCoincidentPoint(dimension->m_p2,true);
+				line2->B->SetCoincidentPoint(dimension->m_p3,true);
+				
+				//dimension_drawing.StartOnStep3(dimension);
+				line1->Owner()->Add(dimension,NULL);
+				break;
+			}
+			line1=line2;
+		}
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Add Angular Dimension");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Add an angular dimension object");}
+};
+
+
 class AddRadiusDimension:public Tool{
 public:
 	void Run(){
@@ -388,6 +418,7 @@ static SetPointOnLine set_point_on_line;
 static SetPointOnMidpoint set_point_on_midpoint;
 static SetPointsCoincident set_points_coincident;
 static AddDimension add_dimension;
+static AddAngularDimension add_angular_dimension;
 static AddRadiusDimension add_radius_dimension;
 static AddArcRadiusDimension add_arc_radius_dimension;
 static SetPointOnArc set_point_on_arc;
@@ -439,7 +470,10 @@ void GetConstraintMenuTools(std::list<Tool*>* t_list){
 		return;
 
 	if(line_count == 2 && arc_count == 0 && point_count == 0 && circle_count == 0)
+	{
 		t_list->push_back(&set_lines_perpendicular);
+		t_list->push_back(&add_angular_dimension);
+	}
 
 	if(arc_count == 0 && point_count == 0 && circle_count == 0)
 	{
