@@ -38,8 +38,12 @@ public:
 	void SetCoincidentPoint(ConstrainedObject* obj, bool remove);
 	bool HasPointConstraint(ConstrainedObject* obj);
 	void SetLineLengthConstraint(double length);
+	void SetLineVerticalLengthConstraint(double length);
+	void SetLineHorizontalLengthConstraint(double length);
 	void SetRadiusConstraint(double radius);
 	void SetLineLength(double length);
+	void SetLineVerticalLength(double length);
+	void SetLineHorizontalLength(double length);
 	void SetRadius(double radius);
 	void SetTangentConstraint(ConstrainedObject* obj);
 	void SetPointOnLineConstraint(HPoint* obj);

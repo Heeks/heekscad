@@ -270,6 +270,8 @@ public:
 	void CreateTransformGLList(const std::list<HeeksObj*>& list, bool show_grippers_on_drag);
 	void DestroyTransformGLList();
 	bool IsPasteReady();
+	void EnableBlend();
+	void DisableBlend();
 	void Paste(HeeksObj* paste_into);
 	bool CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num, int type, const wxString& msg, const wxString& caption);
 	bool CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num, int type1, int type2, const wxString& msg, const wxString& caption);

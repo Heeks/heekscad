@@ -3123,8 +3123,7 @@ void HeeksCADapp::render_text(const wxChar* str)
 	//Needs to be called before text output
 	create_font();
 	//glColor4ub(0, 0, 0, 255);
-	glEnable(GL_BLEND);
-	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+	EnableBlend();
 	glEnable(GL_TEXTURE_2D);
 	glDepthMask(0);
 	glDisable(GL_POLYGON_OFFSET_FILL);
@@ -3136,7 +3135,7 @@ void HeeksCADapp::render_text(const wxChar* str)
 	glDepthMask(1);
 	glEnable(GL_POLYGON_OFFSET_FILL);
 	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_BLEND);
+	DisableBlend();
 }
 
 bool HeeksCADapp::get_text_size(const wxChar* str, float* width, float* height)
@@ -3201,6 +3200,20 @@ void HeeksCADapp::render_screen_text(const wxChar* str1, const wxChar* str2)
 
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
+}
+
+void HeeksCADapp::EnableBlend()
+{
+	if(!m_antialiasing)
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+}
+
+void HeeksCADapp::DisableBlend()
+{
+	if(!m_antialiasing)glDisable(GL_BLEND);
 }
 
 void HeeksCADapp::render_screen_text_at(const wxChar* str1, double scale, double x, double y, double theta)
