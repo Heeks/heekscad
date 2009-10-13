@@ -57,7 +57,7 @@ public:
 	bool Stretch(const double *p, const double* shift, void* data);
 	void CopyFrom(const HeeksObj* object){operator=(*((HAngularDimension*)object));}
 	void WriteXML(TiXmlNode *root);
-	const wxChar* GetShortString(void)const{return m_text.c_str();}
+	//const wxChar* GetShortString(void)const{return m_text.c_str();}
 	bool CanEditString(void)const{return true;}
 	void OnEditString(const wxChar* str);
 	void LoadToDoubles();

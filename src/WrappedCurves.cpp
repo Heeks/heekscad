@@ -270,8 +270,7 @@ void CompoundSegment::render_text(const wxChar* str)
 {
 	wxGetApp().create_font();
 	//glColor4ub(0, 0, 0, 255);
-	glEnable(GL_BLEND);
-	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+	wxGetApp().EnableBlend();
 	glEnable(GL_TEXTURE_2D);
 	glDepthMask(0);
 	glDisable(GL_POLYGON_OFFSET_FILL);
@@ -285,7 +284,7 @@ void CompoundSegment::render_text(const wxChar* str)
 	glDepthMask(1);
 	glEnable(GL_POLYGON_OFFSET_FILL);
 	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_BLEND);
+	wxGetApp().DisableBlend();
 }
 
 double CompoundSegment::GetArea()
