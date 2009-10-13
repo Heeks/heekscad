@@ -366,7 +366,7 @@ void HAngularDimension::OnEditString(const wxChar* str){
 void HAngularDimension::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element;
-	element = new TiXmlElement( "Dimension" );
+	element = new TiXmlElement( "AngularDimension" );
 	root->LinkEndChild( element );  
 	element->SetAttribute("text", Ttc(m_text.c_str()));
 

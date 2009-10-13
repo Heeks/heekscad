@@ -44,6 +44,7 @@ public:
 	void LoadFromDoubles();
 	void LoadToDoubles();
 	bool IsDifferent(HeeksObj* other);
+	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 
 	void Draw(wxDC& dc);
 

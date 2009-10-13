@@ -29,7 +29,8 @@ enum EnumConstraintType{
 	PointOnArcConstraint,
 	PointOnCircleConstraint,
 	LineHorizontalLengthConstraint,
-	LineVerticalLengthConstraint
+	LineVerticalLengthConstraint,
+	FixedPointConstraint
 };
 
 enum EnumAbsoluteAngle{
@@ -51,6 +52,7 @@ public:
 	Constraint(const Constraint* obj);
 	Constraint(EnumConstraintType,EnumAbsoluteAngle,ConstrainedObject* obj);
 	Constraint(EnumConstraintType,double length,ConstrainedObject* obj);
+	Constraint(EnumConstraintType,ConstrainedObject* obj);
 	Constraint(EnumConstraintType,ConstrainedObject* obj1, ConstrainedObject* obj2);
 	Constraint(EnumConstraintType,EnumAbsoluteAngle,double length,ConstrainedObject* obj1, ConstrainedObject* obj2);
 

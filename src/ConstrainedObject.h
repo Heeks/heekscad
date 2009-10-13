@@ -51,4 +51,5 @@ public:
 	void SetPointOnArcConstraint(HPoint* obj);
 	void SetPointOnArcMidpointConstraint(HPoint* obj);
 	void SetPointOnCircleConstraint(HPoint* obj);
+	void SetPointFixedConstraint();
 };

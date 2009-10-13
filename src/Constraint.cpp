@@ -57,6 +57,17 @@ Constraint::Constraint(EnumConstraintType type,EnumAbsoluteAngle angle, Constrai
 	m_obj1->Add(this,NULL);
 }
 
+Constraint::Constraint(EnumConstraintType type,ConstrainedObject* obj)
+{
+    m_type = type;
+	m_angle = (EnumAbsoluteAngle)0;
+	m_obj1 = obj;
+	m_obj2 = NULL;
+	m_length = 0;
+	m_obj1->Add(this,NULL);
+}
+
+
 Constraint::Constraint(EnumConstraintType type,EnumAbsoluteAngle angle, double length, ConstrainedObject* obj1, ConstrainedObject* obj2)
 {
     m_type = type;

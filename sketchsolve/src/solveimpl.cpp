@@ -68,6 +68,14 @@ void SolveImpl::LoadCircle(std::vector<std::pair<varLocation,void*> > &mylist,ci
 	LoadDouble(mylist,c.rad,con);
 }
 
+void SolveImpl::LoadEllipse(std::vector<std::pair<varLocation,void*> > &mylist,ellipse e, int con)
+{
+	LoadPoint(mylist,e.center,con);
+	LoadDouble(mylist,e.majrad,con);
+	LoadDouble(mylist,e.minrad,con);
+	LoadDouble(mylist,e.rot,con);
+}
+
 SolveImpl::SolveImpl()
 {
 	next_vector=0;
@@ -360,6 +368,20 @@ void SolveImpl::Load(constraint &c)
 			case circle2_center: LoadPoint(mylist,c.circle2.center,count); break;
 			case circle2_center_x: LoadDouble(mylist,c.circle2.center.x,count); break;
 			case circle2_center_y: LoadDouble(mylist,c.circle2.center.y,count); break;
+			case ellipse1: LoadEllipse(mylist,c.ellipse1,count); break;
+			case ellipse2: LoadEllipse(mylist,c.ellipse2,count); break;
+			case ellipse1_center: LoadPoint(mylist,c.ellipse1.center,count); break;
+			case ellipse2_center: LoadPoint(mylist,c.ellipse2.center,count); break;
+			case ellipse1_center_x: LoadDouble(mylist,c.ellipse1.center.x,count); break;
+			case ellipse1_center_y: LoadDouble(mylist,c.ellipse1.center.y,count); break;
+			case ellipse2_center_x: LoadDouble(mylist,c.ellipse2.center.x,count); break;
+			case ellipse2_center_y: LoadDouble(mylist,c.ellipse2.center.y,count); break;
+			case ellipse1_majr: LoadDouble(mylist,c.ellipse1.majrad,count); break;
+			case ellipse1_minr: LoadDouble(mylist,c.ellipse1.minrad,count); break;
+			case ellipse1_rot: LoadDouble(mylist,c.ellipse1.rot,count); break;
+			case ellipse2_majr: LoadDouble(mylist,c.ellipse2.majrad,count); break;
+			case ellipse2_minr: LoadDouble(mylist,c.ellipse2.minrad,count); break;
+			case ellipse2_rot: LoadDouble(mylist,c.ellipse2.rot,count); break;
 		}
 	}
 	constraintvars.push_back(mylist);
