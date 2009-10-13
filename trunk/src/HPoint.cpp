@@ -6,6 +6,7 @@
 #include "HPoint.h"
 #include "../interface/PropertyVertex.h"
 #include "Gripper.h"
+#include "SolveSketch.h"
 
 static unsigned char cross16[32] = {0x80, 0x01, 0x40, 0x02, 0x20, 0x04, 0x10, 0x08, 0x08, 0x10, 0x04, 0x20, 0x02, 0x40, 0x01, 0x80, 0x01, 0x80, 0x02, 0x40, 0x04, 0x20, 0x08, 0x10, 0x10, 0x08, 0x20, 0x04, 0x40, 0x02, 0x80, 0x01};
 static unsigned char cross16_selected[32] = {0xc0, 0x03, 0xe0, 0x07, 0x70, 0x0e, 0x38, 0x1c, 0x1c, 0x38, 0x0e, 0x70, 0x07, 0xe0, 0x03, 0xc0, 0x03, 0xc0, 0x07, 0xe0, 0x0e, 0x70, 0x1c, 0x38, 0x38, 0x1c, 0x70, 0x0e, 0xe0, 0x07, 0xc0, 0x03};
@@ -119,6 +120,27 @@ void HPoint::GetProperties(std::list<Property *> *list)
 	list->push_back(new PropertyVertex(_("position"), p, this, on_set_point));
 
 	HeeksObj::GetProperties(list);
+}
+
+HPoint* point_for_tool = NULL;
+
+class SetPointFixed:public Tool{
+public:
+	void Run(){
+		point_for_tool->SetPointFixedConstraint();
+		SolveSketch((CSketch*)point_for_tool->Owner());
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _T("Toggle Fixed");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Set this point as fixed");}
+};
+static SetPointFixed set_point_fixed;
+
+void HPoint::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
+{
+	point_for_tool = this;
+	t_list->push_back(&set_point_fixed);
 }
 
 bool HPoint::GetStartPoint(double* pos)

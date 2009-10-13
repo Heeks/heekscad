@@ -102,81 +102,6 @@ circleTangentToArc
 #define succsess 0
 #define noSolution 1
 
-///////////////////////////////////////////////////////////////////////
-/// constraint defines (these make writing constraint equations easier
-///////////////////////////////////////////////////////////////////////
-#define P1_x               *cons[i].point1.x
-#define P1_y           *cons[i].point1.y
-#define P2_x           *cons[i].point2.x
-#define P2_y           *cons[i].point2.y
-#define L1_P1_x        *cons[i].line1.p1.x
-#define L1_P1_y        *cons[i].line1.p1.y
-#define L1_P2_x        *cons[i].line1.p2.x
-#define L1_P2_y        *cons[i].line1.p2.y
-#define L2_P1_x        *cons[i].line2.p1.x
-#define L2_P1_y        *cons[i].line2.p1.y
-#define L2_P2_x        *cons[i].line2.p2.x
-#define L2_P2_y        *cons[i].line2.p2.y
-#define C1_Center_x    *cons[i].circle1.center.x
-#define C1_Center_y    *cons[i].circle1.center.y
-#define C1_rad         *cons[i].circle1.rad
-#define C2_Center_x    *cons[i].circle2.center.x
-#define C2_Center_y    *cons[i].circle2.center.y
-#define C2_rad         *cons[i].circle2.rad
-#define radiusP        *cons[i].parameter
-
-#ifndef NEWARC
-
-        #define A1_Start_x     *cons[i].arc1.start.x
-        #define A1_Start_y     *cons[i].arc1.start.y
-        #define A1_End_x       *cons[i].arc1.end.x
-        #define A1_End_y       *cons[i].arc1.end.y
-        #define A1_Center_x    *cons[i].arc1.center.x
-        #define A1_Center_y    *cons[i].arc1.center.y
-        #define A2_Start_x     *cons[i].arc2.start.x
-        #define A2_Start_y     *cons[i].arc2.start.y
-        #define A2_End_x       *cons[i].arc2.end.x
-        #define A2_End_y       *cons[i].arc2.end.y
-        #define A2_Center_x    *cons[i].arc2.center.x
-        #define A2_Center_y    *cons[i].arc2.center.y
-
-        #define A1_radius     sqrt((A1_Start_x-A1_Center_x)*(A1_Start_x-A1_Center_x)+(A1_Start_y-A1_Center_y)*(A1_Start_y-A1_Center_y))
-        #define A2_radius     sqrt((A2_Start_x-A2_Center_x)*(A2_Start_x-A2_Center_x)+(A2_Start_y-A2_Center_y)*(A2_Start_y-A2_Center_y))
-
-#else
-        #define A1_startA          *cons[i].arc1.startAngle
-        #define A1_endA            *cons[i].arc1.endAngle
-        #define A1_radius             *cons[i].arc1.rad
-        #define A1_Center_x        *cons[i].arc1.center.x
-        #define A1_Center_y        *cons[i].arc1.center.y
-        #define A2_startA          *cons[i].arc2.startAngle
-        #define A2_endA            *cons[i].arc2.endAngle
-        #define A2_radius             *cons[i].arc2.rad
-        #define A2_Center_x        *cons[i].arc2.center.x
-        #define A2_Center_y        *cons[i].arc2.center.y
-
-        #define A1_Start_x     (A1_Center_x+A1_radius*sin(A1_startA))
-        #define A1_Start_y     (A1_Center_y+A1_radius*cos(A1_startA))
-        #define A1_End_x       (A1_Center_x+A1_radius*sin(A1_endA))
-        #define A1_End_y     (A1_Center_y+A1_radius*cos(A1_endA))
-        #define A2_Start_x     (A1_Center_x+A2_radius*sin(A2_startA))
-        #define A2_Start_y     (A1_Center_y+A2_radius*cos(A2_startA))
-        #define A2_End_x       (A1_Center_x+A2_radius*sin(A2_endA))
-        #define A2_End_y     (A1_Center_y+A2_radius*cos(A2_endA))
-
-#endif
-
-#define length             *cons[i].parameter
-#define distance           *cons[i].parameter
-#define radius             *cons[i].parameter
-#define angleP             *cons[i].parameter
-#define quadIndex      *cons[i].parameter
-#define Sym_P1_x       *cons[i].SymLine.p1.x
-#define Sym_P1_y       *cons[i].SymLine.p1.y
-#define Sym_P2_x       *cons[i].SymLine.p2.x
-#define Sym_P2_y       *cons[i].SymLine.p2.y
-
-
 class point
 {
 public:
@@ -193,31 +118,18 @@ public:
         point p2;
 };
 
-#ifndef NEWARC
-        class arc
-        {
-        public:
-                arc(){}
-                point start;
-                point end;
-                point center;
-        };
 
-
-#else
-
-        class arc
-        {
-        public:
-                arc(){startAngle=0;endAngle=0;rad=0;}
-                double *startAngle;
-                double *endAngle;
-                double *rad;//This is called parameter in the constraint class.
-                point start;
-                point end;
-                point center;
-        };
-#endif
+class arc
+{
+	public:
+	arc(){startAngle=0;endAngle=0;rad=0;}
+	double *startAngle;
+	double *endAngle;
+	double *rad;//This is called parameter in the constraint class.
+	point start;
+	point end;
+	point center;
+};
 
 class circle
 {
@@ -225,6 +137,16 @@ public:
         circle(){rad = 0;}
         point center;
         double *rad;
+};
+
+class ellipse
+{
+public:
+        ellipse(){majrad = 0;minrad=0;rot=0;}
+        point center;
+        double *majrad;
+		double *minrad;
+		double *rot;
 };
 
 class constraint
@@ -239,6 +161,8 @@ public:
         line SymLine;
         circle circle1;
         circle circle2;
+		ellipse ellipse1;
+		ellipse ellipse2;
         arc arc1;
         arc arc2;
         double *parameter; //radius, length, angle etc...
@@ -296,7 +220,21 @@ enum dependencyType
    arc1_startAngle,
    arc1_endAngle,
    arc2_startAngle,
-   arc2_endAngle
+   arc2_endAngle,
+   ellipse1,
+   ellipse2,
+   ellipse1_center,
+   ellipse2_center,
+   ellipse1_center_x,
+   ellipse1_center_y,
+   ellipse2_center_x,
+   ellipse2_center_y,
+   ellipse1_majr,
+   ellipse2_majr,
+   ellipse1_minr,
+   ellipse2_minr,
+   ellipse1_rot,
+   ellipse2_rot
 };
 
 class SolveImpl;
@@ -320,6 +258,7 @@ class SolveImpl
 	void LoadLine(std::vector<std::pair<varLocation,void*> > &mylist,line l, int c);
 	void LoadArc(std::vector<std::pair<varLocation,void*> > &mylist,arc a, int c);
 	void LoadCircle(std::vector<std::pair<varLocation,void*> > &mylist,circle c, int con);
+	void LoadEllipse(std::vector<std::pair<varLocation,void*> > &mylist,ellipse e, int con);
 	void registerconstraint(constraintType,double(*)(std::vector<double>&));
 	void registerdependency(constraintType,dependencyType);
 	double GetErrorForGrad(int i);

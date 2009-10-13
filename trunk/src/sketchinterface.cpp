@@ -126,7 +126,7 @@ line mapline(line l)
 	return l;
 }
 
-int solvewpoints(double  **parms,int nparms, constraint * cons, int consLength, int isFine)
+int solvewpoints(double  **parms,int nparms, constraint * cons, int consLength, std::set<double*>fixed, int isFine)
 {
 	parmdata.clear();
 	newparms.clear();
@@ -239,10 +239,36 @@ int solvewpoints(double  **parms,int nparms, constraint * cons, int consLength, 
 	}
 
 
-    
+	std::set<double *> toremove;
+	//Find any parms that are coincident with a fixed parm
+	std::set<double*>::iterator it;
+	for(it = fixed.begin(); it != fixed.end(); ++it)
+	{
+		double *v = *it;
+		toremove.insert(v);
+
+		if(parmmap[v])
+		{
+			std::list<double*> plist = rparmmap[parmmap[v]];
+			std::list<double*>::iterator it2;
+			for(it2 = plist.begin(); it2 != plist.end(); it2++)
+			{
+				if(*it2 != v)
+					toremove.insert(*it2);
+			}
+		}
+	}
+
+	std::vector<double*> evennewerparms;
+	for(size_t i=0; i < usedparms.size(); i++)
+	{
+		if(toremove.find(usedparms[i]) == toremove.end())
+			evennewerparms.push_back(usedparms[i]);
+	}
+	    
 	int ret = 0;
 	if(newcons.size())
-		ret = solve.solve(&usedparms[0],usedparms.size(),&newcons[0],newcons.size(),isFine);
+		ret = solve.solve(&evennewerparms[0],evennewerparms.size(),&newcons[0],newcons.size(),isFine);
 
 
 	//loop through all remapped pointers

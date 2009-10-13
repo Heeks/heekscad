@@ -341,3 +341,11 @@ void ConstrainedObject::SetPointOnCircleConstraint(HPoint* obj)
 	constraints.push_back(c);
 	obj->constraints.push_back(c);
 }
+
+void ConstrainedObject::SetPointFixedConstraint()
+{
+	if(RemoveExisting(NULL,FixedPointConstraint)) return;
+
+	Constraint *c = new Constraint(FixedPointConstraint,this);
+	constraints.push_back(c);
+}
