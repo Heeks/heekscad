@@ -100,20 +100,18 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 	extract_transposed(text_matrix, m);
 	glMultMatrixd(m);
 
-	wxString string;
 	switch(m_text_mode)
 	{
 		case StringDimensionTextMode:
-			string = m_text;
 			break;
 		case PythagoreanDimensionTextMode:
-			string = wxString::Format(_T("%lg mm"), A->m_p.Distance(B->m_p));
+			m_text = wxString::Format(_T("%lg mm"), A->m_p.Distance(B->m_p));
 			break;
 		case HorizontalDimensionTextMode:
-			string = wxString::Format(_T("%lg mm H"), fabs(A->m_p.X() - B->m_p.X()));
+			m_text = wxString::Format(_T("%lg mm H"), fabs(A->m_p.X() - B->m_p.X()));
 			break;
 		case VerticalDimensionTextMode:
-			string = wxString::Format(_T("%lg mm V"), fabs(A->m_p.Y() - B->m_p.Y()));
+			m_text = wxString::Format(_T("%lg mm V"), fabs(A->m_p.Y() - B->m_p.Y()));
 			break;
 	}
 
@@ -139,11 +137,11 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 			model_view, projection, viewport,
 			&x, &y, &z);
 
-		wxGetApp().render_screen_text_at(string,m_scale*8,x,y,atan2(xdir.Y(),xdir.X()) * 180 / PI);
+		wxGetApp().render_screen_text_at(m_text,m_scale*8,x,y,atan2(xdir.Y(),xdir.X()) * 180 / PI);
 	}
 	else
 	{
-		wxGetApp().render_text(string);
+		wxGetApp().render_text(m_text);
 	}
 
 	glPopMatrix();
@@ -169,7 +167,20 @@ HDimension* dimension_for_tool = NULL;
 class ConstrainDimension:public Tool{
 public:
 	void Run(){
-		dimension_for_tool->SetLineLengthConstraint(dimension_for_tool->A->m_p.Distance(dimension_for_tool->B->m_p));
+		switch(dimension_for_tool->m_text_mode)
+		{
+			case StringDimensionTextMode:
+			break;
+			case PythagoreanDimensionTextMode:
+				dimension_for_tool->SetLineLengthConstraint(dimension_for_tool->A->m_p.Distance(dimension_for_tool->B->m_p));
+			break;
+			case HorizontalDimensionTextMode:
+				dimension_for_tool->SetLineHorizontalLengthConstraint(fabs(dimension_for_tool->A->m_p.X() - dimension_for_tool->B->m_p.X()));
+			break;
+			case VerticalDimensionTextMode:
+				dimension_for_tool->SetLineVerticalLengthConstraint(fabs(dimension_for_tool->A->m_p.Y() - dimension_for_tool->B->m_p.Y()));
+			break;
+		}
 		SolveSketch((CSketch*)dimension_for_tool->Owner());
 		wxGetApp().Repaint();
 	}
@@ -259,6 +270,7 @@ static void on_set_text_mode(int value, HeeksObj* object)
 {
 	HDimension* dimension = (HDimension*)object;
 	dimension->m_text_mode = (DimensionTextMode)value;
+	//TODO: remove constraints on change
 	wxGetApp().Repaint();
 }
 
@@ -269,6 +281,58 @@ static void on_set_scale(double value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+static void on_edit_dimension(const wxChar *value, HeeksObj* object)
+{
+	HDimension* dimension = (HDimension*)object;
+
+	if(dimension->m_text_mode == StringDimensionTextMode)
+	{
+		dimension->m_text = wxString(value);
+		wxGetApp().Repaint();
+		return;
+	}
+
+	bool constrained=true;
+
+	double length=0;
+	wxSscanf(wxString(value),_("%lf"),&length);
+
+	if(!dimension->IsConstrained())
+	{
+		constrain_dimension.Run();
+		constrained = false;
+	}
+
+	switch(dimension->m_text_mode)
+	{
+		case PythagoreanDimensionTextMode:
+			dimension->SetLineLength(length);
+		break;
+		case HorizontalDimensionTextMode:
+			dimension->SetLineHorizontalLength(length);
+		break;
+		case VerticalDimensionTextMode:
+			dimension->SetLineVerticalLength(length);
+		break;
+		default:
+			break;
+	}
+
+	SolveSketch((CSketch*)dimension_for_tool->Owner());
+	
+	if(!constrained)
+	{
+		//Remove the constraint by running the tool again
+		constrain_dimension.Run();
+	}
+
+	wxGetApp().Repaint();
+}
+
+bool HDimension::IsConstrained()
+{
+	return GetExisting(LineLengthConstraint) || GetExisting(LineHorizontalLengthConstraint) || GetExisting(LineVerticalLengthConstraint);
+}
 
 void HDimension::GetProperties(std::list<Property *> *list)
 {
@@ -287,6 +351,8 @@ void HDimension::GetProperties(std::list<Property *> *list)
 	list->push_back ( new PropertyChoice ( _("text mode"),  choices, m_text_mode, this, on_set_text_mode ) );
 
 	list->push_back ( new PropertyDouble ( _("scale"),  m_scale, this, on_set_scale ) );
+
+	list->push_back(new PropertyString(_("dimension value"), m_text, this, on_edit_dimension));
 
 	EndedObject::GetProperties(list);
 }

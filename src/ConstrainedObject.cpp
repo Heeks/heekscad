@@ -209,6 +209,28 @@ void ConstrainedObject::SetLineLengthConstraint(double length)
 		constraints.push_back(new Constraint(LineLengthConstraint,length,this));
 }
 
+void ConstrainedObject::SetLineHorizontalLengthConstraint(double length)
+{
+	Constraint *c = GetExisting(LineHorizontalLengthConstraint);
+	if(c)
+	{
+		constraints.remove(c);
+	}
+	else
+		constraints.push_back(new Constraint(LineHorizontalLengthConstraint,length,this));
+}
+
+void ConstrainedObject::SetLineVerticalLengthConstraint(double length)
+{
+	Constraint *c = GetExisting(LineVerticalLengthConstraint);
+	if(c)
+	{
+		constraints.remove(c);
+	}
+	else
+		constraints.push_back(new Constraint(LineVerticalLengthConstraint,length,this));
+}
+
 void ConstrainedObject::SetRadiusConstraint(double length)
 {
 	Constraint *c = GetExisting(RadiusConstraint);
@@ -242,6 +264,24 @@ void ConstrainedObject::SetTangentConstraint(ConstrainedObject* obj)
 void ConstrainedObject::SetLineLength(double length)
 {
 	Constraint *c = GetExisting(LineLengthConstraint);
+	if(c)
+	{
+		c->m_length = length;
+	}
+}
+
+void ConstrainedObject::SetLineVerticalLength(double length)
+{
+	Constraint *c = GetExisting(LineVerticalLengthConstraint);
+	if(c)
+	{
+		c->m_length = length;
+	}
+}
+
+void ConstrainedObject::SetLineHorizontalLength(double length)
+{
+	Constraint *c = GetExisting(LineHorizontalLengthConstraint);
 	if(c)
 	{
 		c->m_length = length;

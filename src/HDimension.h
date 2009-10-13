@@ -43,6 +43,8 @@ public:
 
 	const HDimension& operator=(const HDimension &b);
 
+	bool IsConstrained();
+
 	// HeeksObj's virtual functions
 	int GetType()const{return DimensionType;}
 	long GetMarkingMask()const{return MARKING_FILTER_DIMENSION;}
@@ -60,7 +62,7 @@ public:
 	bool Stretch(const double *p, const double* shift, void* data);
 	void CopyFrom(const HeeksObj* object){operator=(*((HDimension*)object));}
 	void WriteXML(TiXmlNode *root);
-	const wxChar* GetShortString(void)const{return m_text.c_str();}
+	//const wxChar* GetShortString(void)const{return m_text.c_str();}
 	bool CanEditString(void)const{return true;}
 	void OnEditString(const wxChar* str);
 	void LoadToDoubles();

@@ -114,6 +114,20 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 						constraints.push_back(c);
 					}
 					break;
+					case LineVerticalLengthConstraint:
+					case LineHorizontalLengthConstraint:
+					{
+						constraint c;
+						c.point1 = GetPoint(eobj->A);
+						c.point2 = GetPoint(eobj->B);
+						c.type = P2PDistanceVert;
+						if(con->m_type == LineHorizontalLengthConstraint)
+							c.type = P2PDistanceHorz;
+						c.parameter = &con->m_length;
+						constraints.push_back(c);
+					}
+					break;
+
 					case LineLengthConstraint:
 					{
 						line l = GetLineFromEndedObject(eobj);

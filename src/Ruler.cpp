@@ -188,8 +188,7 @@ void HRuler::glCommands(bool select, bool marked, bool no_color)
 		glDisable(GL_POLYGON_OFFSET_FILL);
 		glPolygonOffset(1.0, 0.0);
 		glColor4ub(255, 255, 255, 120); // white
-		glEnable(GL_BLEND);
-		glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+		wxGetApp().EnableBlend();
 		glDepthMask(0);
 		gp_Pnt point[4];
 		GetFourCorners(point);
@@ -201,7 +200,7 @@ void HRuler::glCommands(bool select, bool marked, bool no_color)
 		glVertex3d(point[2].X(), point[2].Y(), point[2].Z());
 		glVertex3d(point[3].X(), point[3].Y(), point[3].Z());
 		glEnd();
-		glDisable(GL_BLEND);
+		wxGetApp().DisableBlend();
 		glDepthMask(1);
 
 		// draw a black rectangle border

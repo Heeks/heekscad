@@ -242,15 +242,11 @@ static void RenderGrid(const CViewPoint *view_point, int plane)
 			const HeeksColor& bg = wxGetApp().background_color[0];
 			HeeksColor cc = bg.best_black_or_white();
 			bool light_color = cc.red + cc.green + cc.blue > 384;
-			if(!wxGetApp().m_antialiasing)
-			{
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			}
+			wxGetApp().EnableBlend();
 			RenderGrid(view_point, 200, false, true, &bg, &cc, light_color ? 40:10, plane);
 			RenderGrid(view_point, 20, true, false, &bg, &cc, light_color ? 80:20, plane);
 			RenderGrid(view_point, 20, false, false, &bg, &cc, light_color ? 120:30, plane);
-			if(!wxGetApp().m_antialiasing)glDisable(GL_BLEND);
+			wxGetApp().DisableBlend();
 		}
 		break;
 	}
