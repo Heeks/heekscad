@@ -23,10 +23,11 @@ circle GetCircle(HCircle* a);
 line GetLineFromEndedObject(EndedObject* eobj);
 point GetPoint(HPoint* point);
 void AddPointConstraints(HPoint* point);
-int solvewpoints(double  **parms,int nparms, constraint * cons, int consLength, int isFine);
+int solvewpoints(double  **parms,int nparms, constraint * cons, int consLength, std::set<double*> fixed, int isFine);
 
 std::vector<double*> params;
 std::set<double*> paramset;
+std::set<double*> fixedset;
 std::vector<constraint> constraints;
 std::set<Constraint*> cons;
 std::map<HeeksObj*,HeeksObj*> pointonpoint;
@@ -48,6 +49,7 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 	constraints.clear();
 	cons.clear();
 	pointonpoint.clear();
+	fixedset.clear();
 
 	//Try going up the tree until we get a sketch
 	HeeksObj* psketch = dragged;
@@ -309,7 +311,7 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 		// no contraints //still might be arcs
 		return;
 
-	if(solvewpoints(&params[0],params.size(),&constraints[0],constraints.size(),rough))
+	if(solvewpoints(&params[0],params.size(),&constraints[0],constraints.size(),fixedset,rough))
 		//No result
 	{return;}
 
@@ -344,6 +346,13 @@ void AddPointConstraints(HPoint* point)
 		Constraint* con = *it;
 		if(cons.find(con) != cons.end())
 			continue;
+
+		if(con->m_type == FixedPointConstraint)
+		{
+			fixedset.insert(&point->mx);
+			fixedset.insert(&point->my);
+		}
+
 		if(con->m_type == CoincidantPointConstraint)
 		{
 			if(!con->m_obj1 || !con->m_obj2)
