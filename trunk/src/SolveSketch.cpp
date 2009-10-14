@@ -10,6 +10,7 @@
 #include "EndedObject.h"
 #include "HArc.h"
 #include "HCircle.h"
+#include "HEllipse.h"
 #include "../sketchsolve/src/solve.h"
 #include "HDimension.h"
 
@@ -69,6 +70,8 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 		ConstrainedObject* cobj = (dynamic_cast<ConstrainedObject*>(obj));
 		EndedObject *eobj = (dynamic_cast<EndedObject*>(obj));
 		HDimension* dobj = dynamic_cast<HDimension*>(obj);
+		HCircle* cirobj = dynamic_cast<HCircle*>(obj);
+		HEllipse* ellipobj = dynamic_cast<HEllipse*>(obj);
 		if(cobj)
 		{
 			cobj->LoadToDoubles();
@@ -82,9 +85,14 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 			}
 
 			if(dobj)
-			{
 				AddPointConstraints(dobj->m_p2);
-			}
+
+			if(cirobj)
+				AddPointConstraints(cirobj->C);
+
+			if(ellipobj)
+				AddPointConstraints(ellipobj->C);
+
 
 			if(eobj)
 			{

@@ -396,7 +396,7 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 		{
 			gp_Elips elip;
 			DigitizedPoint::GetEllipse(GetBeforeStartPos(), GetStartPos(), end,elip);
-			((HEllipse*)temp_object)->m_ellipse = elip;
+			((HEllipse*)temp_object)->SetEllipse(elip);
 		}
 		return true;	
 

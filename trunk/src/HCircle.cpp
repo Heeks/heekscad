@@ -21,6 +21,7 @@ HCircle::HCircle(const gp_Circ &c, const HeeksColor* col):color(*col){
 	m_axis = c.Axis();
 	m_radius = c.Radius();
 	C = new HPoint(c.Location(),col);
+	C->SetSkipForUndo(true);
 	Add(C,NULL);
 }
 
@@ -33,6 +34,7 @@ const HCircle& HCircle::operator=(const HCircle &c){
 	m_radius = c.m_radius;
 	color = c.color;
 	C = new HPoint(c.C->m_p,&color);
+	C->SetSkipForUndo(true);
 	Add(C,NULL);
 	return *this;
 }

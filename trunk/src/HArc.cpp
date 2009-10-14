@@ -27,6 +27,7 @@ HArc::HArc(const gp_Pnt &a, const gp_Pnt &b, const gp_Circ &c, const HeeksColor*
 	B->m_p = b;
 	C = new HPoint(c.Location(),col);
 	C->m_draw_unselected = false;
+	C->SetSkipForUndo(true);
 	Add(C,NULL);
 	m_axis = c.Axis();
 	m_radius = c.Radius();
@@ -53,6 +54,7 @@ const HArc& HArc::operator=(const HArc &b){
 	std::list<HeeksObj*>::iterator it = m_objects.begin();
 	it++;it++;
 	C = (HPoint*)*it;
+	C->SetSkipForUndo(true);
 	return *this;
 }
 
@@ -646,6 +648,9 @@ HeeksObj* HArc::ReadFromXMLElement(TiXmlElement* pElem)
 		new_object->A->m_draw_unselected = false;
 		new_object->B->m_draw_unselected = false;
 		new_object->C->m_draw_unselected = false;
+		new_object->A->SetSkipForUndo(true);
+		new_object->B->SetSkipForUndo(true);
+		new_object->C->SetSkipForUndo(true);
 		new_object->m_radius = new_object->C->m_p.Distance(new_object->A->m_p);
 	}
 	return new_object;
