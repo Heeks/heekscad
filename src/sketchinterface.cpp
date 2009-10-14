@@ -249,6 +249,8 @@ int solvewpoints(double  **parms,int nparms, constraint * cons, int consLength, 
 
 		if(parmmap[v])
 		{
+			toremove.insert(parmmap[v]);
+
 			std::list<double*> plist = rparmmap[parmmap[v]];
 			std::list<double*>::iterator it2;
 			for(it2 = plist.begin(); it2 != plist.end(); it2++)

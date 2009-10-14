@@ -924,10 +924,10 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file)
                 {
 			HEllipse* e = (HEllipse*)object;
 			double c[3];
-			extract(e->m_ellipse.Location(), c);
-			bool dir = e->m_ellipse.Axis().Direction().Z() > 0;
-			double maj_r = e->m_ellipse.MajorRadius();
-			double min_r = e->m_ellipse.MinorRadius();
+			extract(e->C->m_p, c);
+			bool dir = e->m_zdir.Z() > 0;
+			double maj_r = e->m_majr;
+			double min_r = e->m_minr;
 			double rot = e->GetRotation();
 			dxf_file.WriteEllipse(c, maj_r, min_r, rot, 0, 2 * Pi, dir);
                 }

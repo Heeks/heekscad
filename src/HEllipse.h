@@ -4,17 +4,20 @@
 
 #pragma once
 
-#include "../interface/HeeksObj.h"
-#include "../interface/HeeksColor.h"
+#include "ConstrainedObject.h"
 
-class HEllipse: public HeeksObj{
+class HEllipse: public ConstrainedObject{
 private:
 	HeeksColor color;
 	static wxIcon* m_icon;
 
 public:
-	gp_Elips m_ellipse;
+	HPoint* C;
+	double rot;
 	double m_start; double m_end;
+	double m_majr; double m_minr;
+	gp_Dir m_zdir;
+	gp_Dir m_xdir;
 
 	~HEllipse(void);
 	HEllipse(const gp_Elips &c, const HeeksColor* col);
@@ -22,6 +25,12 @@ public:
 	HEllipse(const HEllipse &c);
 
 	const HEllipse& operator=(const HEllipse &c);
+
+	double GetRotation()const;
+	void SetRotation(double rot);
+	void SetEllipse(gp_Elips e);
+	gp_Elips GetEllipse() const;
+
 
 	// HeeksObj's virtual functions
 	int GetType()const{return EllipseType;}
@@ -43,9 +52,7 @@ public:
 	bool GetCentrePoint(double* pos);
 	void WriteXML(TiXmlNode *root);
 	int Intersects(const HeeksObj *object, std::list< double > *rl)const;
-	double GetRotation()const;
-	void SetRotation(double rot);
-
+	void ReloadPointers();
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 
 };

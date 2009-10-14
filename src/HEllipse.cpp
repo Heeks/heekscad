@@ -17,23 +17,38 @@ HEllipse::HEllipse(const HEllipse &e){
 	operator=(e);
 }
 
-HEllipse::HEllipse(const gp_Elips &e, const HeeksColor* col):color(*col), m_ellipse(e){
+HEllipse::HEllipse(const gp_Elips &e, const HeeksColor* col):color(*col){
+	C = new HPoint(e.Location(),col);
+	C->m_draw_unselected = false;
+	C->SetSkipForUndo(true);
+	Add(C,NULL);
+
 	m_start = 0;
 	m_end = 2*Pi;
+	SetEllipse(e);
 }
 
-HEllipse::HEllipse(const gp_Elips &e, double start, double end, const HeeksColor* col):color(*col), m_ellipse(e){
+HEllipse::HEllipse(const gp_Elips &e, double start, double end, const HeeksColor* col):color(*col){
 	m_start = start; m_end = end;
+	C = new HPoint(e.Location(),col);
+	C->m_draw_unselected = false;
+	C->SetSkipForUndo(true);
+	Add(C,NULL);
+
+	SetEllipse(e);
 }
 
 HEllipse::~HEllipse(){
 }
 
 const HEllipse& HEllipse::operator=(const HEllipse &e){
-	HeeksObj::operator=(e);
-	m_ellipse = e.m_ellipse;
+	ConstrainedObject::operator=(e);
 	m_start = e.m_start; m_end = e.m_end;
 	color = e.color;
+	C = (HPoint*)GetFirstChild();
+	C->SetSkipForUndo(true);
+	SetEllipse(e.GetEllipse());
+
 	return *this;
 }
 
@@ -42,12 +57,12 @@ const HEllipse& HEllipse::operator=(const HEllipse &e){
 //segments - number of segments per full revolution!
 void HEllipse::GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point)const
 {
-	gp_Dir x_axis = m_ellipse.XAxis().Direction();
-	gp_Dir y_axis = m_ellipse.YAxis().Direction();
-	gp_Pnt centre = m_ellipse.Location();
+	gp_Dir x_axis = m_xdir;
+	gp_Dir y_axis = m_zdir ^ m_xdir;
+	gp_Pnt centre = C->m_p;
 
-	double radius = m_ellipse.MajorRadius();
-	double min_radius = m_ellipse.MinorRadius();
+	double radius = m_majr;
+	double min_radius = m_minr;
 
 	double ratio = min_radius/radius;
 
@@ -66,6 +81,8 @@ void HEllipse::GetSegments(void(*callbackfunc)(const double *p), double pixels_p
 		d_angle += 2*Pi;
 
 	int segments = (int)(fabs(pixels_per_mm * radius * d_angle / (2*Pi) + 1));
+	if(segments > 1000)
+		segments = 1000;
 
     double theta = d_angle / (double)segments;
     double tangetial_factor = tan(theta);
@@ -132,11 +149,12 @@ HeeksObj *HEllipse::MakeACopy(void)const{
 
 bool HEllipse::ModifyByMatrix(const double* m){
 	gp_Trsf mat = make_matrix(m);
-	m_ellipse.Transform(mat);
+	SetEllipse(GetEllipse().Transformed(mat));
 	return false;
 }
 
 void HEllipse::GetBox(CBox &box){
+	gp_Elips m_ellipse = GetEllipse();
 	gp_Dir x_axis = m_ellipse.XAxis().Direction();
 	gp_Dir y_axis = m_ellipse.YAxis().Direction();
 	gp_XYZ c = m_ellipse.Location().XYZ();
@@ -158,6 +176,7 @@ void HEllipse::GetBox(CBox &box){
 }
 
 void HEllipse::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
+	gp_Elips m_ellipse = GetEllipse();
 	if(!just_for_endof)
 	{
 		gp_Dir x_axis = m_ellipse.XAxis().Direction();
@@ -169,11 +188,11 @@ void HEllipse::GetGripperPositions(std::list<GripData> *list, bool just_for_endo
 		gp_Pnt min_s(c + y_axis.XYZ() * min_r);
 		gp_Pnt rot(c+x_axis.XYZ() * maj_r * -1);
 
-		list->push_back(GripData(GripperTypeStretch,maj_s.X(),maj_s.Y(),maj_s.Z(),(void*)1));
+		list->push_back(GripData(GripperTypeStretch,maj_s.X(),maj_s.Y(),maj_s.Z(),&m_majr));
 
-		list->push_back(GripData(GripperTypeStretch,min_s.X(),min_s.Y(),min_s.Z(),(void*)2));
+		list->push_back(GripData(GripperTypeStretch,min_s.X(),min_s.Y(),min_s.Z(),&m_minr));
 
-		list->push_back(GripData(GripperTypeStretch,c.X(),c.Y(),c.Z(),(void*)3));
+		list->push_back(GripData(GripperTypeStretch,c.X(),c.Y(),c.Z(),(void*)&C));
 
 	    list->push_back(GripData(GripperTypeRotate,rot.X(),rot.Y(),rot.Z(),NULL));
 
@@ -181,24 +200,26 @@ void HEllipse::GetGripperPositions(std::list<GripData> *list, bool just_for_endo
 }
 
 static void on_set_centre(const double *vt, HeeksObj* object){
-	((HEllipse*)object)->m_ellipse.SetLocation(make_point(vt));
+	((HEllipse*)object)->C->m_p = make_point(vt);
 	wxGetApp().Repaint();
 }
 
 static void on_set_axis(const double *vt, HeeksObj* object){
-	gp_Ax1 a = ((HEllipse*)object)->m_ellipse.Axis();
+	HEllipse *e = (HEllipse*)object;
+	gp_Ax2 a(e->C->m_p,e->m_zdir,e->m_xdir);
 	a.SetDirection(make_vector(vt));
-	((HEllipse*)object)->m_ellipse.SetAxis(a);
+	e->m_zdir = a.Direction();
+	e->m_xdir = a.XDirection();
 	wxGetApp().Repaint(); 
 }
 
 static void on_set_major_radius(double value, HeeksObj* object){
-	((HEllipse*)object)->m_ellipse.SetMajorRadius(value);
+	((HEllipse*)object)->m_majr = value;
 	wxGetApp().Repaint(); 
 }
 
 static void on_set_minor_radius(double value, HeeksObj* object){
-	((HEllipse*)object)->m_ellipse.SetMinorRadius(value);
+	((HEllipse*)object)->m_minr = value;
 	wxGetApp().Repaint(); 
 }
 
@@ -222,23 +243,27 @@ void HEllipse::SetRotation(double value)
 	gp_Dir up(0, 0, 1);
 	gp_Pnt zp(0,0,0);
     double rot = GetRotation();
-	m_ellipse.Rotate(gp_Ax1(m_ellipse.Location(),up),value-rot);
+
+	gp_Ax2 a(C->m_p,m_zdir,m_xdir);
+	a.Rotate(gp_Ax1(C->m_p,up),value-rot);
+	m_zdir = a.Direction();
+	m_xdir = a.XDirection();
 }
 
 double HEllipse::GetRotation()const
 {
-	return GetEllipseRotation(m_ellipse);
+	return GetEllipseRotation(GetEllipse());
 }
 
 void HEllipse::GetProperties(std::list<Property *> *list){
 	double c[3], a[3];
-	extract(m_ellipse.Location(), c);
-	extract(m_ellipse.Axis().Direction(), a);
+	extract(C->m_p, c);
+	extract(m_zdir, a);
 	double rot = GetRotation();
 	list->push_back(new PropertyVertex(_("centre"), c, this, on_set_centre));
 	list->push_back(new PropertyVector(_("axis"), a, this, on_set_axis));
-	list->push_back(new PropertyLength(_("major radius"), m_ellipse.MajorRadius(), this, on_set_major_radius));
-	list->push_back(new PropertyLength(_("minor radius"), m_ellipse.MinorRadius(), this, on_set_minor_radius));
+	list->push_back(new PropertyLength(_("major radius"), m_majr, this, on_set_major_radius));
+	list->push_back(new PropertyLength(_("minor radius"), m_minr, this, on_set_minor_radius));
 	list->push_back(new PropertyDouble(_("rotation"), rot, this, on_set_rotation));
 	list->push_back(new PropertyDouble(_("start angle"), m_start, this, on_set_start_angle));
 	list->push_back(new PropertyDouble(_("end angle"), m_end, this, on_set_end_angle));
@@ -248,7 +273,7 @@ void HEllipse::GetProperties(std::list<Property *> *list){
 bool HEllipse::FindNearPoint(const double* ray_start, const double* ray_direction, double *point){
 	gp_Lin ray(make_point(ray_start), make_vector(ray_direction));
 	std::list< gp_Pnt > rl;
-	ClosestPointsLineAndEllipse(ray, m_ellipse, rl);
+	ClosestPointsLineAndEllipse(ray, GetEllipse(), rl);
 	if(rl.size()>0)
 	{
 		extract(rl.front(), point);
@@ -276,11 +301,11 @@ bool HEllipse::Stretch(const double *p, const double* shift, void* data){
 
 	double rot = GetRotation();
 
-	gp_Dir x_axis = m_ellipse.XAxis().Direction();
-	gp_Dir y_axis = m_ellipse.YAxis().Direction();
-	gp_Pnt c = m_ellipse.Location();
-	double maj_r = m_ellipse.MajorRadius();
-	double min_r = m_ellipse.MinorRadius();
+	gp_Dir x_axis = m_xdir;
+	gp_Dir y_axis = m_zdir ^ m_xdir;
+	gp_Pnt c = C->m_p;
+	double maj_r = m_majr;
+	double min_r = m_minr;
 	gp_Pnt maj_s(c.XYZ() + x_axis.XYZ() * maj_r);
 	gp_Pnt min_s(c.XYZ() + y_axis.XYZ() * min_r);
 
@@ -290,10 +315,10 @@ bool HEllipse::Stretch(const double *p, const double* shift, void* data){
     double d = c.Distance(np);
     double f = DistanceToFoci(np,m_ellipse)/2;
 #endif
-	if(data == (void*)3){
-		m_ellipse.SetLocation(np);
+	if(data == &C){
+		C->m_p = np;
 	}
-    else if(data == (void*)1 || data == (void*)2)
+    else if(data == &m_majr || data == &m_minr)
 	{
 		//We have to rotate the incoming vector to be in our coordinate system
 		gp_Pnt cir = np.XYZ() - c.XYZ();
@@ -307,11 +332,11 @@ bool HEllipse::Stretch(const double *p, const double* shift, void* data){
 				nradius = 1 / wxGetApp().m_geom_tol;
 
 			if(nradius > min_r)
-				m_ellipse.SetMajorRadius(nradius); 
+				m_majr = nradius; 
 			else
 			{
-				m_ellipse.SetMajorRadius(min_r);
-				m_ellipse.SetMinorRadius(nradius);
+				m_majr = min_r;
+				m_minr = nradius;
 				SetRotation(GetRotation()-Pi/2);
 				m_start += Pi/2;
 				m_end += Pi/2;
@@ -323,11 +348,11 @@ bool HEllipse::Stretch(const double *p, const double* shift, void* data){
 			if(nradius > 1 / wxGetApp().m_geom_tol || nradius != nradius)
 				nradius = 1 / wxGetApp().m_geom_tol;
 			if(nradius < maj_r)
-				m_ellipse.SetMinorRadius(nradius); 
+				m_minr = nradius; 
 			else
 			{
-				m_ellipse.SetMinorRadius(maj_r);
-				m_ellipse.SetMajorRadius(nradius);
+				m_minr = maj_r;
+				m_majr = nradius;
 				SetRotation(GetRotation()+Pi/2);
 				m_start-=Pi/2;
 				m_end-=Pi/2;
@@ -339,7 +364,7 @@ bool HEllipse::Stretch(const double *p, const double* shift, void* data){
 
 bool HEllipse::GetCentrePoint(double* pos)
 {
-	extract(m_ellipse.Location(), pos);
+	extract(C->m_p, pos);
 	return true;
 }
 
@@ -349,14 +374,10 @@ void HEllipse::WriteXML(TiXmlNode *root)
 	element = new TiXmlElement( "Ellipse" );
 	root->LinkEndChild( element );  
 	element->SetAttribute("col", color.COLORREF_color());
-	element->SetDoubleAttribute("maj", m_ellipse.MajorRadius());
-	element->SetDoubleAttribute("min", m_ellipse.MinorRadius());
+	element->SetDoubleAttribute("maj", m_majr);
+	element->SetDoubleAttribute("min", m_minr);
 	element->SetDoubleAttribute("rot", GetRotation());
-	gp_Pnt C = m_ellipse.Location();
-	gp_Dir D = m_ellipse.Axis().Direction();
-	element->SetDoubleAttribute("cx", C.X());
-	element->SetDoubleAttribute("cy", C.Y());
-	element->SetDoubleAttribute("cz", C.Z());
+	gp_Dir D = m_zdir;
 	element->SetDoubleAttribute("ax", D.X());
 	element->SetDoubleAttribute("ay", D.Y());
 	element->SetDoubleAttribute("az", D.Z());
@@ -401,12 +422,40 @@ HeeksObj* HEllipse::ReadFromXMLElement(TiXmlElement* pElem)
 	new_object->SetRotation(rot);
 	new_object->ReadBaseXML(pElem);
 
+	if(new_object->GetNumChildren() > 0)
+	{
+		new_object->Remove(new_object->C);
+		new_object->ReloadPointers();
+		new_object->C->SetSkipForUndo(true);
+	}
+
 	return new_object; 
+}
+
+void HEllipse::ReloadPointers()
+{
+	C = (HPoint*)GetFirstChild();
+	ConstrainedObject::ReloadPointers();
+}
+
+void HEllipse::SetEllipse(gp_Elips e)
+{
+	C->m_p = e.Location();
+	m_zdir = e.Axis().Direction();
+	m_xdir = e.XAxis().Direction();
+	m_majr = e.MajorRadius();
+	m_minr = e.MinorRadius();
+}
+
+gp_Elips HEllipse::GetEllipse() const
+{
+	return gp_Elips(gp_Ax2(C->m_p,m_zdir,m_xdir),m_majr,m_minr);
 }
 
 int HEllipse::Intersects(const HeeksObj *object, std::list< double > *rl)const
 {
 	int numi = 0;
+	gp_Elips m_ellipse = GetEllipse();
 
 	switch(object->GetType())
 	{

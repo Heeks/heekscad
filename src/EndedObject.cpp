@@ -29,6 +29,8 @@ const EndedObject& EndedObject::operator=(const EndedObject &b){
 	std::list<HeeksObj*>::iterator it = m_objects.begin();
 	A = (HPoint*)(*it++);
 	B = (HPoint*)(*it);
+	A->SetSkipForUndo(true);
+	B->SetSkipForUndo(true);
 	return *this;
 }
 
