@@ -154,7 +154,7 @@ bool ConvertSketchToFace2(HeeksObj* object, TopoDS_Face& face)
 			case EllipseType:
 				{
 					HEllipse* ellipse = (HEllipse*)object;
-					edges.push_back(BRepBuilderAPI_MakeEdge(ellipse->m_ellipse));
+					edges.push_back(BRepBuilderAPI_MakeEdge(ellipse->GetEllipse()));
 				}
 				break;
 			case SplineType:

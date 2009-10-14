@@ -520,6 +520,14 @@ static void OnLinesButton( wxCommandEvent& WXUNUSED( event ) )
 	wxGetApp().Changed();
 }
 
+
+static void OnEllipseButton( wxCommandEvent& WXUNUSED( event ) )
+{
+	wxGetApp().CreateUndoPoint();
+	line_strip.drawing_mode = EllipseDrawingMode;
+	wxGetApp().SetInputMode(&line_strip);
+	wxGetApp().Changed();
+}
 static void OnPointsButton( wxCommandEvent& WXUNUSED( event ) )
 {
 	wxGetApp().CreateUndoPoint();
@@ -1417,6 +1425,7 @@ void CHeeksFrame::MakeMenus()
 	wxMenu *geometry_menu = new wxMenu;
 	AddMenuItem(geometry_menu, _("Draw a sketch"), ToolImage(_T("lines")), OnLinesButton);
 	//AddMenuItem(geometry_menu, _("Draw Circles"), ToolImage(_T("circles")), OnCirclesButton);
+	AddMenuItem(geometry_menu, _("Draw Ellipses"), ToolImage(_T("circles")), OnEllipseButton);
 	AddMenuItem(geometry_menu, _("Draw Infinite Lines"), ToolImage(_T("iline")), OnILineButton);
 	AddMenuItem(geometry_menu, _("Draw Points"), ToolImage(_T("point")), OnPointsButton);
 	AddMenuItem(geometry_menu, _("Draw Regular Shapes"), ToolImage(_T("regshapes")), OnRegularShapesButton);
@@ -1530,6 +1539,7 @@ void CHeeksFrame::AddToolBars()
 		AddToolBarFlyout(m_geometryBar, _T("circles"), flyout_list);
 	}
 
+	AddToolBarTool(m_geometryBar, _T("Ellipses"), ToolImage(_T("circles")), _("Draw  ellipses"), OnEllipseButton);
 	AddToolBarTool(m_geometryBar, _T("ILine"), ToolImage(_T("iline")), _("Start Drawing Infinite Lines"), OnILineButton);
 	AddToolBarTool(m_geometryBar, _T("Points"), ToolImage(_T("point")), _("Start Drawing Points"), OnPointsButton);
 	AddToolBarTool(m_geometryBar, _T("Regular Shapes"), ToolImage(_T("regshapes")), _("Draw regular shapes; rectangles, polygons, obrounds"), OnRegularShapesButton);
