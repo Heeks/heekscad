@@ -66,7 +66,8 @@ char RS274X::ReadChar( const char *data, int *pos, const int max_pos )
 		if (*pos < max_pos)
 		{
 			return(data[(*pos)++]);
-		} // End if - then
+		} // End if - then>	HeeksCAD.exe!RS274X::ReadBlock(const char * data=0x060625f8, int * pos=0x0012f488, const int max_pos=15861)  Line 98 + 0x14 bytes	C++
+
 		else
 		{
 			return(-1);
@@ -78,28 +79,29 @@ char RS274X::ReadChar( const char *data, int *pos, const int max_pos )
 	} // End if - else
 } // End ReadChar() method
 
-std::string RS274X::ReadBlock( const char *data, int *pos, const int max_pos ) 
+std::string RS274X::ReadBlock( const char *data, int *pos, const int max_pos )
 {
-	char delimiter;
-	std::ostringstream l_ossBlock;
+        char delimiter;
+        std::ostringstream l_ossBlock;
 
-	// Read first char to determine if it's a parameter or not.
-	char c = ReadChar(data,pos,max_pos);
+        // Read first char to determine if it's a parameter or not.
+        char c = ReadChar(data,pos,max_pos);
 
-	if (c < 0) return(std::string(""));
+        if (c < 0) return(std::string(""));
 
-	if (c == '%') delimiter = '%';
-	else delimiter = '*';
+        if (c == '%') delimiter = '%';
+        else delimiter = '*';
 
-	l_ossBlock << c;
+        l_ossBlock << c;
 
-	while (((c = ReadChar(data,pos,max_pos)) > 0) && (c != delimiter)) 
-	{
-		l_ossBlock << c;
-	} // End while
+        while (((c = ReadChar(data,pos,max_pos)) > 0) && (c != delimiter))
+        {
+                l_ossBlock << c;
+        } // End while
 
-	return(l_ossBlock.str());	
+        return(l_ossBlock.str());
 } // End ReadBlock() method
+
 
 bool RS274X::Read( const char *p_szFileName)
 {
@@ -350,12 +352,30 @@ bool RS274X::ReadParameters( const std::string & parameters )
 
 			case 'R':	// Rectangle
 				printf("Rectangular apertures are not yet supported\n");
-				return(false);
+
+				//TODO: just use a circle for now
+				{
+				// Push a circle within an outside diameter of modifier onto the list of apertures
+				Aperture aperture;
+
+				aperture.Type( Aperture::eCircular );
+				aperture.OutsideDiameter( modifier * m_units );
+				m_aperture_table.insert( std::make_pair( tool_number, aperture ) );
+				}
+				break;
 
 			case 'O':	// Obround
 				printf("ObRound apertures are not yet supported\n");
-				return(false);
+				//TODO: just use a circle for now
+				{
+				// Push a circle within an outside diameter of modifier onto the list of apertures
+				Aperture aperture;
 
+				aperture.Type( Aperture::eCircular );
+				aperture.OutsideDiameter( modifier * m_units );
+				m_aperture_table.insert( std::make_pair( tool_number, aperture ) );
+				}
+				break;
 			case 'P':	// Rectangular Polygon (diamond)
 				printf("Polygon apertures are not yet supported\n");
 				return(false);

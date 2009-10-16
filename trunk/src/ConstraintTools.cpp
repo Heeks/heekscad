@@ -431,6 +431,7 @@ void GetConstraintMenuTools(std::list<Tool*>* t_list){
 	int arc_count = 0;
 	int point_count = 0;
 	int circle_count = 0;
+	int ellipse_count = 0;
 
 	// check to see what types have been marked
 	std::list<HeeksObj*>::const_iterator It;
@@ -449,6 +450,9 @@ void GetConstraintMenuTools(std::list<Tool*>* t_list){
 			case CircleType:
 				circle_count++;
 				break;
+			case EllipseType:
+				ellipse_count++;
+				break;
 			default:
 				return;
 		}
@@ -457,7 +461,7 @@ void GetConstraintMenuTools(std::list<Tool*>* t_list){
 	t_list->push_back(&run_test);
 #endif
 
-	int total_count = line_count + arc_count + point_count + circle_count;
+	int total_count = line_count + arc_count + point_count + circle_count + ellipse_count;
 
 	if(total_count == 1 && circle_count == 1)
 		t_list->push_back(&add_radius_dimension);
@@ -469,49 +473,49 @@ void GetConstraintMenuTools(std::list<Tool*>* t_list){
 	if(total_count < 2)
 		return;
 
-	if(line_count == 2 && arc_count == 0 && point_count == 0 && circle_count == 0)
+	if(line_count == 2 && total_count == 2)
 	{
 		t_list->push_back(&set_lines_perpendicular);
 		t_list->push_back(&add_angular_dimension);
 	}
 
-	if(arc_count == 0 && point_count == 0 && circle_count == 0)
+	if(line_count == total_count)
 	{
 		t_list->push_back(&set_lines_parallel);
 		t_list->push_back(&set_lines_equal_length);
 		t_list->push_back(&set_lines_colinear);
 	}
 
-	if(line_count == 0 && arc_count == 0 && circle_count == 0)
+	if(point_count == total_count)
 	{
 		t_list->push_back(&set_points_coincident);
 		t_list->push_back(&add_dimension);
 	}
 
-	if(line_count == 1 && point_count == 1 && arc_count == 0 && circle_count == 0)
+	if(line_count == 1 && point_count == 1 && total_count == 2)
 	{
 		t_list->push_back(&set_point_on_line);
 		t_list->push_back(&set_point_on_midpoint);
 	}
 
-	if(line_count == 0 && point_count == 1 && arc_count == 1 && circle_count == 0)
+	if(point_count == 1 && arc_count == 1 && total_count == 2)
 	{
 		t_list->push_back(&set_point_on_arc);
 		t_list->push_back(&set_point_on_arc_midpoint);
 	}
 
-	if(line_count == 0 && point_count == 1 && arc_count == 0 && circle_count == 1)
+	if(point_count == 1 && circle_count == 1 && total_count == 2)
 	{
 		t_list->push_back(&set_point_on_circle);
 	}
 
-	if(line_count == 0 && point_count == 0 && (arc_count + circle_count == 2))
+	if((arc_count + circle_count == 2) && total_count == 2)
 	{
 		t_list->push_back(&set_concentric);
 		t_list->push_back(&set_equal_radius);
 	}
 
-	if(line_count == 1 && (circle_count + arc_count == 1))
+	if(line_count == 1 && (circle_count + arc_count  + ellipse_count == 1) && total_count == 2)
 	{
 		t_list->push_back(&set_line_tangent);
 	}

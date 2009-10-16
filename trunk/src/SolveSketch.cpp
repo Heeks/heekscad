@@ -21,6 +21,7 @@
 
 arc GetArc(HArc* a);
 circle GetCircle(HCircle* a);
+ellipse GetEllipse(HEllipse* a);
 line GetLineFromEndedObject(EndedObject* eobj);
 point GetPoint(HPoint* point);
 void AddPointConstraints(HPoint* point);
@@ -249,8 +250,16 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 						}
 						else
 						{
-							c.circle1 = GetCircle((HCircle*)con->m_obj1);
-							c.type = tangentToCircle;
+							if(dynamic_cast<HCircle*>(con->m_obj1))
+							{
+								c.circle1 = GetCircle((HCircle*)con->m_obj1);
+								c.type = tangentToCircle;
+							}
+							else
+							{
+								c.ellipse1 = GetEllipse((HEllipse*)con->m_obj1);
+								c.type = tangentToEllipse;
+							}
 						}
 						c.line1 = GetLineFromEndedObject((EndedObject*)con->m_obj2);
 						cons.insert(con);
@@ -327,10 +336,9 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 	while(obj)
 	{
 		ConstrainedObject* cobj = (dynamic_cast<ConstrainedObject*>(obj));
-		EndedObject *eobj = (EndedObject*)obj;
 		if(cobj)
 		{
-			eobj->LoadFromDoubles();
+			cobj->LoadFromDoubles();
 		}
 		obj = sketch->GetNextChild();
 	}
@@ -477,3 +485,16 @@ circle GetCircle(HCircle* a)
 	return ret;
 }
 
+ellipse GetEllipse(HEllipse* a)
+{
+	ellipse ret;
+	ret.center = GetPoint(a->C);
+	ret.radone = &a->m_majr;
+	PushBack(ret.radone);
+	ret.radtwo = &a->m_minr;
+	PushBack(ret.radtwo);
+	ret.rot = &a->m_rot;
+	PushBack(ret.rot);
+
+	return ret;
+}
