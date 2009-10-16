@@ -142,8 +142,8 @@ double P2LDistanceError(std::vector<double> &parms)
 
 double EllipseTangentError(std::vector<double> &parms)                      
 {
-	double ldx = parms[0] - parms[2];
-	double ldy = parms[1] - parms[3];
+	//double ldx = parms[0] - parms[2];
+	//double ldy = parms[1] - parms[3];
 
 	double ex = parms[4];
 	double ey = parms[5];
@@ -160,7 +160,30 @@ double EllipseTangentError(std::vector<double> &parms)
 		rot += M_PI/2;
 	}
 
-	//calculate the eccentricity
+	double t = majr;
+	majr = minr;
+	minr = t;
+
+	//majr*=2;
+	//minr*=2;
+
+	rot = -rot;
+
+	//rotate the line around the ellipse
+	double lx1 = cos(rot)*(parms[0]-ex) - sin(rot)*(parms[1]-ey);
+	double ly1 = sin(rot)*(parms[0]-ex) + cos(rot)*(parms[1]-ey);
+	double lx2 = cos(rot)*(parms[2]-ex) - sin(rot)*(parms[3]-ey);
+	double ly2 = sin(rot)*(parms[2]-ex) + cos(rot)*(parms[3]-ey);
+
+	double ldx = lx1 - lx2;
+	double ldy = ly1 - ly2;
+
+	double g = (2 * ldx * lx1)/majr/majr+(2 * ldy * ly1)/minr / minr;
+	double det = g*g-4 * (ldx*ldx/majr/majr+ldy*ldy/minr/minr) * (lx1*lx1/majr/majr+ly1*ly1/minr/minr-1);
+
+	return det * det * 10;
+
+/*	//calculate the eccentricity
 	double e = sqrt(majr * majr - minr * minr);
 
 	//Find the focal points
@@ -173,7 +196,7 @@ double EllipseTangentError(std::vector<double> &parms)
 	double d2 = P2LDistanceE(parms[0],parms[1],ldx,ldy,f2x,f2y);
 
 	double err = d1 + d2 - 2 * majr;
-	return err * err * 1000;
+	return err * err * 1000;*/
 }
 
 

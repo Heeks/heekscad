@@ -114,6 +114,15 @@ circle mapcircle(circle c)
 	return c;
 }
 
+ellipse mapellipse(ellipse e)
+{
+	e.center = mappoint(e.center);
+	e.radone = mapdouble(e.radone);
+	e.radtwo = mapdouble(e.radtwo);
+	e.rot = mapdouble(e.rot);
+	return e;
+}
+
 line mapline(line l)
 {
 	l.p1 = mappoint(l.p1);
@@ -216,6 +225,8 @@ int solvewpoints(double  **parms,int nparms, constraint * cons, int consLength, 
 		//map all pointers
 		newcons[i].arc1 = maparc(newcons[i].arc1);
 		newcons[i].arc2 = maparc(newcons[i].arc2);
+		newcons[i].ellipse1 = mapellipse(newcons[i].ellipse1);
+		newcons[i].ellipse2 = mapellipse(newcons[i].ellipse2);
 		newcons[i].circle1 = mapcircle(newcons[i].circle1);
 		newcons[i].circle2 = mapcircle(newcons[i].circle2);
 		newcons[i].line1 = mapline(newcons[i].line1);
