@@ -1478,17 +1478,20 @@ bool UnionPolygons_old(std::list<CPolygon> & polygons_list,
 								<<distance_from_a1<<std::endl;
 						
 						std::list<Intersection*>::iterator is_it = is_list.begin();
-						if((*is_it)->d < distance_from_a1){
-							for(; is_it != is_list.end(); is_it++)
-							{
-								if((*is_it)->d < distance_from_a1)
+						if(is_it != is_list.end())
+						{
+							if((*is_it)->d < distance_from_a1){
+								for(; is_it != is_list.end(); is_it++)
 								{
-									is_it++;
-									break;
+									if((*is_it)->d < distance_from_a1)
+									{
+										is_it++;
+										break;
+									}
 								}
 							}
+							is_list.insert(is_it, new Intersection(ipoly, b_ipoly, ia1, ib1, p, distance_from_a1));
 						}
-						is_list.insert(is_it, new Intersection(ipoly, b_ipoly, ia1, ib1, p, distance_from_a1));
 					} //if(LineIntersect())
 				} //while(!endwent)
 			} //for polygons_list

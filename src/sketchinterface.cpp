@@ -57,10 +57,6 @@ point mappoint(point p)
 arc maparc(arc a)
 {
 	a.center = mappoint(a.center);
-#ifndef NEWARC
-	a.end = mappoint(a.end);
-	a.start = mappoint(a.start);
-#else
 	if(!a.end.x)
 		return a;
 	//push back some new parms for the radius/startangle/endangle
@@ -96,7 +92,6 @@ arc maparc(arc a)
 	parmmap[a.start.x] = a.rad;
 	parmmap[a.start.y] = a.startAngle;
 	parmmap[a.end.x] = a.endAngle;
-#endif
 	return a;
 }
 

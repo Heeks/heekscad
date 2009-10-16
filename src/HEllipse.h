@@ -13,7 +13,7 @@ private:
 
 public:
 	HPoint* C;
-	double rot;
+	double m_rot;
 	double m_start; double m_end;
 	double m_majr; double m_minr;
 	gp_Dir m_zdir;
@@ -54,6 +54,8 @@ public:
 	int Intersects(const HeeksObj *object, std::list< double > *rl)const;
 	void ReloadPointers();
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
+	void LoadToDoubles();
+	void LoadFromDoubles();
 
 };
 
