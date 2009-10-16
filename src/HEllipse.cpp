@@ -516,7 +516,15 @@ int HEllipse::Intersects(const HeeksObj *object, std::list< double > *rl)const
 void HEllipse::LoadFromDoubles()
 {
 	C->LoadFromDoubles();
-	SetRotation(m_rot);
+	if(m_minr > m_majr)
+	{
+		double t = m_majr;
+		m_majr = m_minr;
+		m_minr = t;
+		SetRotation(m_rot+PI/2);
+	}
+	else
+		SetRotation(m_rot);
 }
 
 void HEllipse::LoadToDoubles()
