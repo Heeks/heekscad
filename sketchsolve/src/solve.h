@@ -78,7 +78,8 @@ arcStartToArcStart,
 arcEndToArcEnd,       
 arcTangentToArc,       
 circleTangentToCircle, 
-circleTangentToArc     
+circleTangentToArc,
+tangentToEllipse
 };
 
 ///////////////////////////////////////
@@ -142,10 +143,10 @@ public:
 class ellipse
 {
 public:
-        ellipse(){majrad = 0;minrad=0;rot=0;}
+        ellipse(){radone = 0;radtwo=0;rot=0;}
         point center;
-        double *majrad;
-		double *minrad;
+        double *radone;
+		double *radtwo;
 		double *rot;
 };
 
@@ -229,10 +230,10 @@ enum dependencyType
    ellipse1_center_y,
    ellipse2_center_x,
    ellipse2_center_y,
-   ellipse1_majr,
-   ellipse2_majr,
-   ellipse1_minr,
-   ellipse2_minr,
+   ellipse1_rad1,
+   ellipse2_rad1,
+   ellipse1_rad2,
+   ellipse2_rad2,
    ellipse1_rot,
    ellipse2_rot
 };
@@ -339,5 +340,6 @@ double PerpendicularError(std::vector<double> &parms);
 double ArcAngleOnArcAngleError(std::vector<double> &parms);
 double ColinearError(std::vector<double>& parms);
 double LinePerpToAngleError(std::vector<double>& parms);
+double EllipseTangentError(std::vector<double>& parms);
 
 #endif /* SOLVE_H_ */

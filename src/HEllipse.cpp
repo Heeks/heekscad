@@ -513,3 +513,14 @@ int HEllipse::Intersects(const HeeksObj *object, std::list< double > *rl)const
 	return numi; 
 }
 
+void HEllipse::LoadFromDoubles()
+{
+	C->LoadFromDoubles();
+	SetRotation(m_rot);
+}
+
+void HEllipse::LoadToDoubles()
+{
+	C->LoadToDoubles();
+	m_rot = GetRotation();
+}

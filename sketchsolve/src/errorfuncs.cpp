@@ -121,18 +121,61 @@ double PointOnLineError(std::vector<double> &parms)
     }
 }
 
+double P2LDistanceE(double lx, double ly, double dx, double dy, double px, double py)
+{
+	double t=-(lx*dx-px*dx+ly*dy-py*dy)/(dx*dx+dy*dy);
+	double Xint=lx+dx*t;
+	double Yint=ly+dy*t;
+	double temp= sqrt((px - Xint)*(px - Xint)+(py - Yint)*(py - Yint));
+	return temp;
+}
+
 double P2LDistanceError(std::vector<double> &parms)                      
 {
 	double dx = parms[0] - parms[2];
 	double dy = parms[1] - parms[3];
 
-    double radsq = parms[6] * parms[6];
-    double t=-(parms[0]*dx-parms[4]*dx+parms[1]*dy-parms[5]*dy)/(dx*dx+dy*dy);
-    double Xint=parms[0]+dx*t;
-    double Yint=parms[1]+dy*t;
-    double temp= sqrt((parms[4] - Xint)*(parms[4] - Xint)+(parms[5] - Yint)*(parms[5] - Yint)) - sqrt(radsq);
+	double radsq = parms[6] * parms[6];
+    double temp= P2LDistanceE(parms[0],parms[1],dx,dy,parms[4],parms[5]) - sqrt(radsq);
     return temp*temp*100;
 }
+
+double EllipseTangentError(std::vector<double> &parms)                      
+{
+	double ldx = parms[0] - parms[2];
+	double ldy = parms[1] - parms[3];
+
+	double ex = parms[4];
+	double ey = parms[5];
+	double majr = parms[6];
+	double minr = parms[7];
+	double rot = parms[8];
+
+	//find the major and minor axis
+	if(minr > majr)
+	{
+		double temp = majr;
+		majr = minr;
+		minr = temp;
+		rot += M_PI/2;
+	}
+
+	//calculate the eccentricity
+	double e = sqrt(majr * majr - minr * minr);
+
+	//Find the focal points
+	double f1x = ex + cos(rot) * e;
+	double f1y = ey + sin(rot) * e;
+	double f2x = ex - cos(rot) * e;
+	double f2y = ey - sin(rot) * e;
+
+	double d1 = P2LDistanceE(parms[0],parms[1],ldx,ldy,f1x,f1y);
+	double d2 = P2LDistanceE(parms[0],parms[1],ldx,ldy,f2x,f2y);
+
+	double err = d1 + d2 - 2 * majr;
+	return err * err * 1000;
+}
+
 
 double P2LDistanceVertError(std::vector<double> &parms)
 {
