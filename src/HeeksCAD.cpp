@@ -83,7 +83,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	_CrtSetAllocHook(MyAllocHook);
 #endif
 
-	m_version_number = _T("0 9 0");
+	m_version_number = _T("0 10 0");
 	m_geom_tol = 0.000001;
 	m_view_units = 1.0;
 	for(int i = 0; i<NUM_BACKGROUND_COLORS; i++)background_color[i] = HeeksColor(0, 0, 0);
@@ -211,6 +211,7 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("DrawToGrid"), &draw_to_grid, true);
 	config.Read(_T("AutoSolveConstraints"), &autosolve_constraints, false);
 	config.Read(_T("Allow3DRotaion"), &allow3DRotaion, false);
+	config.Read(_T("UseOldFuse"), &useOldFuse, true);
 	config.Read(_T("DrawGrid"), &digitizing_grid);
 	config.Read(_T("DrawRadius"), &digitizing_radius);
 	{
@@ -358,6 +359,7 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("DrawToGrid"), draw_to_grid);
 	config.Write(_T("AutoSolveConstraints"), autosolve_constraints);
 	config.Write(_T("Allow3DRotaion"), allow3DRotaion);
+	config.Write(_T("UseOldFuse"), useOldFuse);
 	config.Write(_T("DrawGrid"), digitizing_grid);
 	config.Write(_T("DrawRadius"), digitizing_radius);
 	for(int i = 0; i<NUM_BACKGROUND_COLORS; i++)
@@ -401,6 +403,9 @@ int HeeksCADapp::OnExit(){
 	m_ruler->WriteToConfig(config);
 
 	WriteRecentFilesProfileString(config);
+
+	delete history;
+	history = NULL;
 
 	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
 		wxDynamicLibrary* shared_library = *It;
@@ -1814,6 +1819,11 @@ void on_Allow3DRotation(bool onoff, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+void on_useOldFuse(bool onoff, HeeksObj* object)
+{
+	wxGetApp().useOldFuse = onoff;
+}
+
 void on_set_min_correlation_factor(double value, HeeksObj* object)
 {
 	wxGetApp().m_min_correlation_factor = value;
@@ -2259,6 +2269,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	drawing->m_list.push_back(new PropertyLength(_("geometry tolerance"), m_geom_tol, NULL, on_set_geom_tol));
 	drawing->m_list.push_back(new PropertyLength(_("face to sketch deviaton"), FaceToSketchTool::deviation, NULL, on_set_face_to_sketch_deviation));
 	drawing->m_list.push_back(new PropertyCheck(_("Use 3D rotation"), allow3DRotaion, NULL, on_Allow3DRotation));
+	drawing->m_list.push_back(new PropertyCheck(_("Use old solid fuse ( to prevent coplanar faces )"), useOldFuse, NULL, on_useOldFuse));
 	list->push_back(drawing);
 
 	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
