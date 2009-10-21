@@ -156,8 +156,7 @@ void TransformTools::Rotate(bool copy)
 		bool line_found = false;
 		gp_Lin line;
 		int save_filter = wxGetApp().m_marked_list->m_filter;
-		wxGetApp().m_marked_list->m_filter = MARKING_FILTER_LINE | MARKING_FILTER_ILINE;
-		wxGetApp().PickObjects(_("Pick line for rotation axis"), true);
+		wxGetApp().PickObjects(_("Pick line for rotation axis"), MARKING_FILTER_LINE | MARKING_FILTER_ILINE, true);
 		wxGetApp().m_marked_list->m_filter = save_filter;
 		for(std::list<HeeksObj *>::const_iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
 		{
@@ -247,8 +246,7 @@ void TransformTools::Mirror(bool copy)
 	bool line_found = false;
 	gp_Lin line;
 	int save_filter = wxGetApp().m_marked_list->m_filter;
-	wxGetApp().m_marked_list->m_filter = MARKING_FILTER_LINE | MARKING_FILTER_ILINE;
-	wxGetApp().PickObjects(_("Pick line to mirror about"), true);
+	wxGetApp().PickObjects(_("Pick line to mirror about"), MARKING_FILTER_LINE | MARKING_FILTER_ILINE, true);
 	wxGetApp().m_marked_list->m_filter = save_filter;
 	for(std::list<HeeksObj *>::const_iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
 	{
