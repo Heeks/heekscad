@@ -200,6 +200,8 @@ void TransformTools::Rotate(bool copy)
 			for(std::list<HeeksObj*>::iterator It = selected_items.begin(); It != selected_items.end(); It++)
 			{
 				HeeksObj* object = *It;
+				HeeksObj* new_object = object->MakeACopy();
+				object->Owner()->Add(new_object, NULL);
 				object->ModifyByMatrix(m);
 			}
 		}
