@@ -283,7 +283,10 @@ static bool Cut(const std::list<TopoDS_Shape> &shapes, TopoDS_Shape& new_shape){
 
 static HeeksObj* Fuse(HeeksObj* s1, HeeksObj* s2){
 	TopoDS_Shape sh1, sh2;
-	TopoDS_Shape new_shape = BRepAlgoAPI_Fuse(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
+	TopoDS_Shape new_shape;
+	
+	if(wxGetApp().useOldFuse)new_shape = BRepAlgo_Fuse(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
+	else new_shape = BRepAlgoAPI_Fuse(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
 
 	HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of Fuse Operation"), SOLID_TYPE_UNKNOWN, ((CShape*)s1)->m_color);
 	wxGetApp().Add(new_object, NULL);
