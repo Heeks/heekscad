@@ -60,6 +60,7 @@
 #include "Group.h"
 #include "RS274X.h"
 #include "CxfFont.h"
+#include "AutoSave.h"
 
 using namespace std;
 
@@ -98,7 +99,8 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	magnification = new MagDragWindow();
 	viewrotating = new ViewRotating;
 	viewzooming = new ViewZooming;
-	m_select_mode = new CSelectMode(false);	// Set this to 'true' for 'select similar' mode.  I'm not there yet.
+	m_select_mode = new CSelectMode(false);
+	// Set this to 'true' for 'select similar' mode.  I'm not there yet.
 	m_digitizing = new DigitizeMode();
 	digitize_end = false;
 	digitize_inters = false;
@@ -343,10 +345,24 @@ bool HeeksCADapp::OnInit()
 	}
 #endif
 
+	m_auto_save_interval = 0;	// Minutes
+	config.Read(_T("AutoSaveInterval"), (int *) &m_auto_save_interval, 0);
+	if (m_auto_save_interval > 0)
+	{
+		m_pAutoSave = std::auto_ptr<CAutoSave>(new CAutoSave(m_auto_save_interval));
+	} // End if - then
+
 	return TRUE;
 }
 
 int HeeksCADapp::OnExit(){
+
+	if (m_pAutoSave.get() != NULL)
+	{
+		delete m_pAutoSave.release();
+		m_pAutoSave = std::auto_ptr<CAutoSave>(NULL);
+	}
+
 	HeeksConfig config;
 	config.Write(_T("DrawEnd"), digitize_end);
 	config.Write(_T("DrawInters"), digitize_inters);
@@ -397,6 +413,7 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("NumberOfSamplePoints"), m_number_of_sample_points);
 	config.Write(_T("FontPaths"), m_font_paths);
 	config.Write(_T("STLFacetTolerance"), m_stl_facet_tolerance);
+	config.Write(_T("AutoSaveInterval"), m_auto_save_interval);
 
 	HDimension::WriteToConfig(config);
 
@@ -827,7 +844,7 @@ bool HeeksCADapp::OpenImageFile(const wxChar *filepath)
 	return false;
 }
 
-bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksObj* paste_into)
+bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksObj* paste_into, bool retain_filename /* = true */ )
 {
 	CreateUndoPoint();
 
@@ -885,7 +902,7 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 
 	if(!open_failed)
 	{
-		if(!import_not_open)
+		if((!import_not_open) && (retain_filename))
 		{
 			m_filepath.assign(filepath);
 			InsertRecentFileItem(filepath);
@@ -2085,6 +2102,32 @@ void on_stl_facet_tolerance(double value, HeeksObj* object){
 	wxGetApp().m_stl_facet_tolerance = value;
 }
 
+void on_set_auto_save_interval(int value, HeeksObj* object){
+	wxGetApp().m_auto_save_interval = value;
+
+	if (wxGetApp().m_auto_save_interval > 0)
+	{
+		if (wxGetApp().m_pAutoSave.get() == NULL)
+		{
+			wxGetApp().m_pAutoSave = std::auto_ptr<CAutoSave>(new CAutoSave( wxGetApp().m_auto_save_interval, true ));
+		}
+		else
+		{
+			wxGetApp().m_pAutoSave->Start( wxGetApp().m_auto_save_interval * 60 * 1000, false );
+		}
+	}
+	else
+	{
+		if (wxGetApp().m_pAutoSave.get() != NULL)
+		{
+			delete wxGetApp().m_pAutoSave.release();
+			wxGetApp().m_pAutoSave = std::auto_ptr<CAutoSave>(NULL);
+		}
+	}
+	HeeksConfig config;
+	config.Write(_T("AutoSaveInterval"), wxGetApp().m_auto_save_interval);
+}
+
 static void on_set_units(int value, HeeksObj* object)
 {
 	wxGetApp().m_view_units = (value == 0) ? 1.0:25.4;
@@ -2310,6 +2353,10 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	PropertyList* stl_options = new PropertyList(_("STL"));
 	stl_options->m_list.push_back(new PropertyDouble(_("stl save facet tolerance"), m_stl_facet_tolerance, NULL, on_stl_facet_tolerance));
 	file_options->m_list.push_back(stl_options);
+
+	HeeksConfig config;
+	config.Read(_T("AutoSaveInterval"), (int *) &m_auto_save_interval, 0);
+	file_options->m_list.push_back(new PropertyInt(_("auto save interval (in minutes)"), m_auto_save_interval, NULL, on_set_auto_save_interval));
 	list->push_back(file_options);
 
 	// Font options
