@@ -144,7 +144,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_number_of_sample_points = 10;
 	m_property_grid_validation = false;
 
-	m_font_paths = _("/usr/share/qcad/fonts");
+	m_font_paths = _T("/usr/share/qcad/fonts");
 	m_stl_facet_tolerance = 0.1;
 	GetAvailableFonts();
 	
@@ -2113,7 +2113,7 @@ static void on_set_font(int zero_based_choice, HeeksObj *obj)
 
 	std::set<wxString> names = wxGetApp().GetAvailableFonts()->FontNames();
 	std::vector<wxString> vector_names;
-	vector_names.push_back(_("OpenGL"));	// Keep the zero-based offset.
+	vector_names.push_back(_T("OpenGL"));	// Keep the zero-based offset.
 	std::copy( names.begin(), names.end(), std::inserter( vector_names, vector_names.end() ) );
 	if (zero_based_choice < int(vector_names.size()))
 	{
@@ -3297,7 +3297,7 @@ std::auto_ptr<CxfFonts>	& HeeksCADapp::GetAvailableFonts()
 {
 	if (m_pCxfFonts.get() == NULL)
 	{
-		std::vector<wxString> paths = Tokens( m_font_paths, _(";") );
+		std::vector<wxString> paths = Tokens( m_font_paths, _T(";") );
 		for (std::vector<wxString>::const_iterator l_itPath = paths.begin(); l_itPath != paths.end(); l_itPath++)
 		{
 			if (m_pCxfFonts.get() == NULL)

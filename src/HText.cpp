@@ -141,7 +141,7 @@ static void on_set_font(int zero_based_choice, HeeksObj *obj)
 
 	std::set<wxString> names = wxGetApp().GetAvailableFonts()->FontNames();
 	std::vector<wxString> vector_names;
-	vector_names.push_back(_("OpenGL"));	// Keep the zero-based offset.
+	vector_names.push_back(_T("OpenGL"));	// Keep the zero-based offset.
 	std::copy( names.begin(), names.end(), std::inserter( vector_names, vector_names.end() ) );
 	if (zero_based_choice < int(vector_names.size()))
 	{
@@ -195,7 +195,7 @@ void HText::WriteXML(TiXmlNode *root)
 
 	if (m_pFont == NULL)
 	{
-		element->SetAttribute("font", Ttc(_("OpenGL")));
+		element->SetAttribute("font", "OpenGL");
 	} // End if - then
 	else
 	{

@@ -10,7 +10,7 @@ BEGIN_EVENT_TABLE( CAboutBox, wxDialog )
 EVT_BUTTON( wxID_OK, CAboutBox::OnButtonOK )
 END_EVENT_TABLE()
 
-CAboutBox::CAboutBox(wxWindow *parent):wxDialog(parent, wxID_ANY, _(""), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE)
+CAboutBox::CAboutBox(wxWindow *parent):wxDialog(parent, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE)
 {
     wxPanel *panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
 
