@@ -1539,7 +1539,7 @@ void CHeeksFrame::AddToolBars()
 		AddToolBarFlyout(m_geometryBar, _T("circles"), flyout_list);
 	}
 
-	AddToolBarTool(m_geometryBar, _T("Ellipses"), ToolImage(_T("circles")), _("Draw  ellipses"), OnEllipseButton);
+	AddToolBarTool(m_geometryBar, _T("Ellipses"), ToolImage(_T("circles")), _("Draw ellipses"), OnEllipseButton);
 	AddToolBarTool(m_geometryBar, _T("ILine"), ToolImage(_T("iline")), _("Start Drawing Infinite Lines"), OnILineButton);
 	AddToolBarTool(m_geometryBar, _T("Points"), ToolImage(_T("point")), _("Start Drawing Points"), OnPointsButton);
 	AddToolBarTool(m_geometryBar, _T("Regular Shapes"), ToolImage(_T("regshapes")), _("Draw regular shapes; rectangles, polygons, obrounds"), OnRegularShapesButton);

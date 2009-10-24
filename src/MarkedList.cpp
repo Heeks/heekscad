@@ -45,7 +45,7 @@ void MarkedList::delete_move_grips(bool check_app_grippers){
 }
 
 void MarkedList::create_move_grips(){
-	delete_move_grips();
+	delete_move_grips(true);
 	double pos[3];
 	int number_of_grips_made = 0;
 	std::list<HeeksObj*>::iterator Iter ;
@@ -410,6 +410,6 @@ void MarkedList::CopySelectedItems()
 
 void MarkedList::Reset()
 {
-	delete_move_grips();
+	delete_move_grips(true);
 }
 
