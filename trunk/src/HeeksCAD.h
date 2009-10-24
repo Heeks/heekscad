@@ -32,6 +32,7 @@ class HRuler;
 class wxConfigBase;
 class wxAuiManager;
 class CSketch;
+class CAutoSave;
 
 #define MAX_RECENT_FILES 20
 
@@ -169,6 +170,9 @@ public:
 	wxString m_font_paths;	// SemiColon delimited list of directories that hold font files to load.
 	double m_stl_facet_tolerance;
 
+	int m_auto_save_interval;	// In minutes
+	std::auto_ptr<CAutoSave> m_pAutoSave;
+
 	//WxApp override
 	int OnRun();
 	bool OnExceptionInMainLoop();
@@ -215,7 +219,7 @@ public:
 	void OpenDXFFile(const wxChar *filepath);
 	void OpenRS274XFile(const wxChar *filepath);
 	bool OpenImageFile(const wxChar *filepath);
-	bool OpenFile(const wxChar *filepath, bool import_not_open = false, HeeksObj* paste_into = NULL);
+	bool OpenFile(const wxChar *filepath, bool import_not_open = false, HeeksObj* paste_into = NULL, bool retain_filename = true );
 	void SaveDXFFile(const wxChar *filepath);
 	void SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath);
 	void SaveCPPFile(const std::list<HeeksObj*>& objects, const wxChar *filepath);
