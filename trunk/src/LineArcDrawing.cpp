@@ -586,7 +586,8 @@ const wxChar* LineArcDrawing::GetTitle()
 		if(GetDrawStep() == 0)str_for_GetTitle.Append(wxString(_("click on center point")));
 		else if(GetDrawStep() == 1) 
 		{
-			str_for_GetTitle.Append(wxString(_("click on point on ellipse\n")));
+			str_for_GetTitle.Append(wxString(_("click on point on ellipse")));
+			str_for_GetTitle.Append(wxString(_T("\n  ")));
 			str_for_GetTitle.Append(wxString(_("(colinear or orthogonal to axis)")));
 		}
 		else str_for_GetTitle.Append(wxString(_("click on another point on ellipse")));

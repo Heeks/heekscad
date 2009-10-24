@@ -295,7 +295,7 @@ static void on_edit_dimension(const wxChar *value, HeeksObj* object)
 	bool constrained=true;
 
 	double length=0;
-	wxSscanf(wxString(value),_("%lf"),&length);
+	wxSscanf(wxString(value),_T("%lf"),&length);
 
 	if(!dimension->IsConstrained())
 	{

@@ -254,7 +254,7 @@ void CompoundSegment::DrawDebugLine(gp_Pnt A, gp_Pnt B, int i)
 	glVertex3d(lpnt2.X(),lpnt2.Y(),lpnt2.Z());
 	glEnd();
 	wxChar str[100];
-	wxSprintf(str,_("%d"),i);
+	wxSprintf(str,_T("%d"),i);
 	glPushMatrix();
 	glTranslatef(tpnt1.X(),tpnt1.Y(),tpnt1.Z());
 	render_text(str);

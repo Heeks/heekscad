@@ -218,7 +218,7 @@ void Constraint::glCommands(HeeksColor color, gp_Ax1 axis)
 			break;
 		case LineLengthConstraint:
 			wxChar str[100];
-			wxSprintf(str,_("%f"),m_length);
+			wxSprintf(str,_T("%f"),m_length);
 			render_text(str);
 			break;
 		case ParallelLineConstraint:

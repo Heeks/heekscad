@@ -175,7 +175,7 @@ CxfFont::Glyph::Glyph( const std::list<std::string> &definition )
 	for (std::list<std::string>::const_iterator l_itLine = definition.begin(); l_itLine != definition.end(); l_itLine++)
 	{
 		wxString line( Ctt(l_itLine->c_str()) );
-		wxString delimiters( _(" \t\r\n,") );
+		wxString delimiters( _T(" \t\r\n,") );
 
 		std::vector<wxString> tokens = Tokens( line, delimiters );
 		if (tokens.size() == 0)
@@ -388,7 +388,7 @@ CxfFont::CxfFont( const wxChar *p_szFile )
 	m_letter_spacing = 3.0;
 	m_word_spacing = 6.75;
 	m_line_spacing_factor = 1.0;
-	m_name = _("");
+	m_name = _T("");
 	wxChar character_name = 0;
 
 	std::ifstream file(Ttc(p_szFile));
@@ -411,7 +411,7 @@ CxfFont::CxfFont( const wxChar *p_szFile )
 						if (((symbol[0] == '<') && (symbol[symbol.Length()-1] == '>')) ||
 							(symbol[0] == '#'))
 						{
-							std::vector<wxString> tokens = Tokens( symbol, _("#<> \t") );
+							std::vector<wxString> tokens = Tokens( symbol, _T("#<> \t") );
 							if (tokens.size() > 0)
 							{
 								long lCharacterName = tokens[0][0];
@@ -433,14 +433,14 @@ CxfFont::CxfFont( const wxChar *p_szFile )
 					lines.clear();
 					symbol.Clear();
 
-					std::vector<wxString> tokens = Tokens( ss_to_wxstring(line), wxString(_("[] \r\n\t")) );
+					std::vector<wxString> tokens = Tokens( ss_to_wxstring(line), wxString(_T("[] \r\n\t")) );
 					if (tokens.size() >= 2)
 					{
 						symbol = tokens[0];
 						if (((symbol[0] == '<') && (symbol[symbol.Length()-1] == '>')) ||
 							(symbol[0] == '#'))
 						{
-							std::vector<wxString> tokens = Tokens( symbol, _("#<> \t") );
+							std::vector<wxString> tokens = Tokens( symbol, _T("#<> \t") );
 							if (tokens.size() > 0)
 							{
 								long lCharacterName = tokens[0][0];
@@ -458,7 +458,7 @@ CxfFont::CxfFont( const wxChar *p_szFile )
 				{
 					// It's a comment.  See if it's one of the special comments we're interested in.
 
-					std::vector<wxString> tokens = Tokens( ss_to_wxstring(line), _("# \r\t\n:") );
+					std::vector<wxString> tokens = Tokens( ss_to_wxstring(line), _T("# \r\t\n:") );
 					if (line.find("LetterSpacing") != line.npos)
 					{
 						tokens.rbegin()->ToDouble(&m_letter_spacing);
@@ -479,7 +479,7 @@ CxfFont::CxfFont( const wxChar *p_szFile )
 							{
 								if (m_name.Length() > 0)
 								{
-									m_name.Append(_(" "));
+									m_name.Append(_T(" "));
 								}
 								m_name.Append( *l_itToken );
 							}
@@ -739,7 +739,7 @@ void CxfFont::glCommands(const wxString & text, const gp_Pnt &start_point, const
 
 	wxString _extension( file_name.Mid( _file.Length() - 3 ) );
 
-	if (_extension.MakeUpper() == wxString(_("CXF"))) return(true);
+	if (_extension.MakeUpper() == wxString(_T("CXF"))) return(true);
 	return(false);
 }
 
@@ -757,7 +757,7 @@ void CxfFonts::Add( const CxfFont::Name_t & directory )
 			if (ValidExtension( *l_itFile ))
 			{
 				wxString path( directory );
-				path = path + _("/");
+				path = path + _T("/");
 				path = path + l_itFile->c_str();
 				CxfFont *pFont = new CxfFont( path.c_str() );
 				m_fonts.insert( std::make_pair( pFont->Name(), pFont ) );
