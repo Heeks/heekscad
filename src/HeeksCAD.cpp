@@ -295,6 +295,12 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("FontPaths"), &m_font_paths, _T("/usr/share/qcad/fonts"));
 	config.Read(_T("STLFacetTolerance"), &m_stl_facet_tolerance, 0.1);
 
+	config.Read(_T("AutoSaveInterval"), (int *) &m_auto_save_interval, 0);
+	if (m_auto_save_interval > 0)
+	{
+		m_pAutoSave = std::auto_ptr<CAutoSave>(new CAutoSave(m_auto_save_interval));
+	} // End if - then
+
 	HDimension::ReadFromConfig(config);
 
 	m_ruler->ReadFromConfig(config);
@@ -308,6 +314,10 @@ bool HeeksCADapp::OnInit()
 	// to do, make this compile in Linux
 	m_frame->SetIcon(wxICON(HeeksCAD));
 #endif
+
+	// NOTE: A side-effect of calling the SetInputMode() method is
+	// that the GetOptions() method is called.  To that end, all
+	// configuration settings should be read BEFORE this point.
 	SetInputMode(m_select_mode);
 	m_frame->Show(TRUE);
 	SetTopWindow(m_frame);
@@ -345,12 +355,6 @@ bool HeeksCADapp::OnInit()
 	}
 #endif
 
-	m_auto_save_interval = 0;	// Minutes
-	config.Read(_T("AutoSaveInterval"), (int *) &m_auto_save_interval, 0);
-	if (m_auto_save_interval > 0)
-	{
-		m_pAutoSave = std::auto_ptr<CAutoSave>(new CAutoSave(m_auto_save_interval));
-	} // End if - then
 
 	return TRUE;
 }
@@ -2353,9 +2357,6 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	PropertyList* stl_options = new PropertyList(_("STL"));
 	stl_options->m_list.push_back(new PropertyDouble(_("stl save facet tolerance"), m_stl_facet_tolerance, NULL, on_stl_facet_tolerance));
 	file_options->m_list.push_back(stl_options);
-
-	HeeksConfig config;
-	config.Read(_T("AutoSaveInterval"), (int *) &m_auto_save_interval, 0);
 	file_options->m_list.push_back(new PropertyInt(_("auto save interval (in minutes)"), m_auto_save_interval, NULL, on_set_auto_save_interval));
 	list->push_back(file_options);
 
