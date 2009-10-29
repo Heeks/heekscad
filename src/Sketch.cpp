@@ -170,16 +170,22 @@ void CSketch::glCommands(bool select, bool marked, bool no_color)
 
 	if(m_solidify)
 	{
-		//TODO: we should really only be doing this when geometry changes
-		std::vector<TopoDS_Face> faces = GetFaces();
+	    try
+	    {
+            //TODO: we should really only be doing this when geometry changes
+            std::vector<TopoDS_Face> faces = GetFaces();
 
-		double pixels_per_mm = wxGetApp().GetPixelScale();
+            double pixels_per_mm = wxGetApp().GetPixelScale();
 
-		for(unsigned i=0; i < faces.size(); i++)
-		{
-			MeshFace(faces[i],pixels_per_mm);
-			DrawFaceWithCommands(faces[i]);
-		}
+            for(unsigned i=0; i < faces.size(); i++)
+            {
+                MeshFace(faces[i],pixels_per_mm);
+                DrawFaceWithCommands(faces[i]);
+            }
+	    }catch(...)
+	    {
+
+	    }
 	}
 
 	if(m_coordinate_system && m_draw_with_transform)
@@ -206,7 +212,7 @@ void CSketch::GetProperties(std::list<Property *> *list)
 			j++;
 		}
 	}
-		
+
 	list->push_back ( new PropertyChoice ( _("order"), choices, initial_index, this, on_set_order_type ) );
 
 	list->push_back ( new PropertyCheck( _("solidify"), m_solidify, this, on_set_solidify) );
@@ -289,7 +295,7 @@ HeeksObj *CSketch::MakeACopy(void)const
 
 void CSketch::WriteXML(TiXmlNode *root)
 {
-	TiXmlElement * element = new TiXmlElement( "Sketch" );  
+	TiXmlElement * element = new TiXmlElement( "Sketch" );
 	root->LinkEndChild( element );
 	element->SetAttribute("title", Ttc(m_title.c_str()));
 	WriteBaseXML(element);
