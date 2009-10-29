@@ -7,17 +7,18 @@
 
 //TODO: get this value from somewhere else
 #define TOLERANCE .0001
+#define ROUNDU
 
 FastLine::FastLine(gp_Pnt A,gp_Pnt B)
 {
-	this->A = A; 
+	this->A = A;
 	this->B = B;
 }
 
 FastLine::FastLine(){}
-	
+
 void FastLine::Reverse() {}//gp_Pnt tmp = A; A = B; B = tmp;}
-	
+
 double FastLine::GetY()
 {
 	return GetY(addedAt);
@@ -37,12 +38,12 @@ double FastLine::GetU(double x, double y)
 	double dx = A.X() - B.X();
 	double dy = A.Y() - B.Y();
 	double t=(A.X()*dx-x*dx+A.Y()*dy-y*dy)/(dx*dx+dy*dy);
-#ifdef ROUNDU
+//#ifdef ROUNDU
 	if(t > -TOLERANCE && t < TOLERANCE)
 		t = 0;
 	if(t > 1 - TOLERANCE && t < 1 + TOLERANCE)
 		t = 1;
-#endif
+//#endif
 	return t;
 }
 
@@ -90,9 +91,9 @@ FastArc::FastArc(gp_Pnt A,gp_Pnt B, gp_Pnt C, bool cw, gp_Circ circ)
 	}
 
 
-	this->A = A; 
-	this->B = B; 
-	this->C = C; 
+	this->A = A;
+	this->B = B;
+	this->C = C;
 	this->cw = cw;
 	this->m_circ = circ;
 	this->m_flipped = false;
@@ -130,10 +131,10 @@ gp_Circ FastArc::GetCircle()
 	return m_circ;
 }
 
-void FastArc::Reverse() 
+void FastArc::Reverse()
 {
-/*	gp_Pnt tmp = A; 
-	A = B; 
+/*	gp_Pnt tmp = A;
+	A = B;
 	B = tmp;
 
 	double temp = a1;
@@ -183,12 +184,12 @@ double FastArc::GetU(double x, double y)
 		int x=0;
 		x++;
 	}
-//#ifdef ROUNDU
+#ifdef ROUNDU
 	if(u > -TOLERANCE && u < TOLERANCE)
 		u = 0;
 	if(u > 1 - TOLERANCE && u < 1 + TOLERANCE)
 		u = 1;
-//#endif
+#endif
 
 	return u;
 }
@@ -226,7 +227,7 @@ std::vector<RayIntersection> FastArc::RayIntersects(gp_Pnt p)
 	double x1 = sqrt(rad*rad - y*y);
 	double x2 = x1+C.X();
 	x1 = C.X()-x1;
-	
+
 	if(x1 < p.X())
 		ret.push_back(RayIntersection(GetU(x1,p.Y()),gp_Pnt(x1,p.Y(),0),false,false));
 	if(x2 < p.X())

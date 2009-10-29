@@ -87,7 +87,7 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 	//Create a new tree of boundedcurves, that is much smaller. follow all chains and attempt to remove
 	//segments that are connected to only 2 other curves. This will yield a non-orientable graph
 	//so our definition of polygons better be very graph theoretical
-	std::vector<void*> returnvec; 
+	std::vector<void*> returnvec;
 
 	for(int i=0; i < bcurves.GetVecCount(); i++)
 	{
@@ -126,12 +126,12 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 				closed_shapes.push_back(seg1);
 				continue;
 			}
-			
+
 			ConcatSegments(x_coord,y_coord,seg1,seg2,bcurves);
 		}
 	}
 
-	//Now we have a graph of CompoundSegment*. These should be fast to traverse. 
+	//Now we have a graph of CompoundSegment*. These should be fast to traverse.
 	//Non self intersecting shapes are already in closed_shapes
 	//We could speed this up by regenerating near_map to get rid of removed references
 
@@ -173,7 +173,7 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 					}
 				}
 
-				//now we know that no 2 elements in returnvec are equal. 				
+				//now we know that no 2 elements in returnvec are equal.
 				//make sure there are the right number of elements for our next op
 				if(returnvec.size() - nfound != 2)
 					continue;
@@ -212,7 +212,7 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 			{
 				//Polygon J is inside of polygon I
 				inside_of[j].push_back(closed_shapes[i]);
-				int x=0; 
+				int x=0;
 				x++;
 			}
 		}
@@ -224,14 +224,14 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 	for(unsigned i=0; i < closed_shapes.size(); i++)
 	{
 		closed_shapes[i]->Order();
-//#ifdef FORCEPOLYGONORDERING
+#ifdef FORCEPOLYGONORDERING
 		bool cw = closed_shapes[i]->GetCW();
 		if(!cw)
 		{
 			closed_shapes[i]->Reverse();
 			closed_shapes[i]->Order();
 		}
-//#endif
+#endif
 	}
 
 
@@ -251,10 +251,10 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 //This is a recursive function that will analyze the graph for islands and such
 //It could be sped up by removing elements from closed_shapes and inside_of as the get consumed
 
-std::vector<CompoundSegment*> find_level(bool odd, 
+std::vector<CompoundSegment*> find_level(bool odd,
 				std::vector<std::pair<CompoundSegment*,std::vector<CompoundSegment*> > > &pRet,
-				std::vector<CompoundSegment*>& closed_shapes, 
-				std::vector<std::vector<CompoundSegment*> >& inside_of, 
+				std::vector<CompoundSegment*>& closed_shapes,
+				std::vector<std::vector<CompoundSegment*> >& inside_of,
 				std::vector<CompoundSegment*> parents)
 {
 	std::vector<CompoundSegment*> retValue;
@@ -277,11 +277,11 @@ std::vector<CompoundSegment*> find_level(bool odd,
 			continue;
 
 		//this closed shape is good to go
-		
+
 		std::vector<CompoundSegment*> nparents = parents;
 		nparents.push_back(closed_shapes[i]);
 		std::sort(nparents.begin(), nparents.end());
-		
+
 		std::vector<CompoundSegment*> deletions = find_level(!odd,pRet,closed_shapes,inside_of,nparents);
 
 		if(odd)
@@ -318,7 +318,7 @@ void ConcatSegments(double x_coord, double y_coord, CompoundSegment* seg1, Compo
 	bcurves.remove(x_coord,y_coord,seg1);
 	bcurves.remove(x_coord,y_coord,seg2);
 
-	delete seg2;
+	//delete seg2;
 
 #ifdef TESTORDERING
 	seg1->Order();
@@ -329,7 +329,7 @@ TopoDS_Wire TopoDSWireAdaptor(CompoundSegment* poly, bool inside)
 {
 	std::list<TopoDS_Edge> edges;
 	//if(inside)
-	//	poly->Reverse();
+		//poly->();
 	poly->GetEdges(edges);
 
 	BRepLib_MakeWire wire_maker;
@@ -385,7 +385,7 @@ std::vector<TopoDS_Face> TopoDSFaceAdaptor(
 
 void AnalyzeNearMap(TwoDNearMap &bcurves)
 {
-	std::vector<void*> returnvec; 
+	std::vector<void*> returnvec;
 	for(int i=0; i < bcurves.GetVecCount(); i++)
 	{
 		OneDNearMap* ptMap = bcurves.GetElement(i);

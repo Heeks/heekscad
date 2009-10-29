@@ -7,11 +7,13 @@
 #include "WrappedCurves.h"
 #include "BentleyOttmann.h"
 
+#define DEBUGEDGES
+
 BoundedCurve::BoundedCurve(FastCurve *line, double startu, double endu, double tol)
 {
-	this->line = line; 
-	this->startu = startu; 
-	this->endu = endu; 
+	this->line = line;
+	this->startu = startu;
+	this->endu = endu;
 	this->m_tol = tol;
 }
 
@@ -42,7 +44,7 @@ double BoundedCurve::GetY(double u)
 {
 	return line->GetYatU(u);
 }
-	
+
 double BoundedCurve::GetBX()
 {
 	return GetX(endu);
@@ -116,9 +118,9 @@ CompoundSegment::~CompoundSegment()
 {
 }
 
-void CompoundSegment::Reverse() 
+void CompoundSegment::Reverse()
 {
-	BoundedCurve* tline=firstline; 
+	BoundedCurve* tline=firstline;
 	firstline=lastline;
 	lastline=tline;
 	WhichPoint tpoint = firstpoint;
@@ -133,7 +135,7 @@ void CompoundSegment::Reverse()
 	{
 		(*it)->Reverse();
 	}
-#endif	
+#endif
 }
 
 WhichEnd CompoundSegment::GetWhichEnd(double atx, double aty)
@@ -146,11 +148,11 @@ WhichEnd CompoundSegment::GetWhichEnd(double atx, double aty)
 	else
 	{
 		if(MyIsEqual(firstline->GetBX(),atx) && MyIsEqual(firstline->GetBY(),aty))
-			return FirstEnd;  
+			return FirstEnd;
 	}
 		if(lastpoint == PointA)
 	{
-	
+
 		if(MyIsEqual(lastline->GetAX(),atx) && MyIsEqual(lastline->GetAY(),aty))
 			return LastEnd;
 	}
@@ -195,9 +197,39 @@ void CompoundSegment::GetEdges(std::list<TopoDS_Edge>& edges)
 	std::list<BoundedCurve*>::iterator it;
 	lines.reverse();
 	int i=0;
+	gp_Pnt startpoint;
+	gp_Pnt lastpoint;
+    bool isend=false;;
 	for(it = lines.begin(); it!= lines.end(); ++it)
 	{
-		BoundedCurve* curve = (*it);
+	    //Figure out if this is the last element of the curve
+        std::list<BoundedCurve*>::iterator it2 = it;
+        it2++;
+        if(it2 == lines.end())
+            isend = true;
+
+        BoundedCurve* curve = (*it);
+        gp_Pnt begin = curve->Begin();
+        gp_Pnt end = curve->End();
+        if(points[i] == PointB)
+        {
+            begin = curve->End();
+            end = curve->Begin();
+        }
+
+        if(it == lines.begin())
+        {
+            startpoint = begin;
+        }
+        else
+        {
+            begin = lastpoint;
+        }
+
+        lastpoint = end;
+        if(isend)
+            end = startpoint;
+
 		FastArc* arc = dynamic_cast<FastArc*>(curve->line);
 		if(arc)
 		{
@@ -205,35 +237,22 @@ void CompoundSegment::GetEdges(std::list<TopoDS_Edge>& edges)
 			if(points[i] == PointB)
 			{
 				cir.SetAxis(cir.Axis().Reversed());
+			}
+
+			cir.SetRadius(cir.Location().Distance(begin)/2 + cir.Location().Distance(end)/2);
+			edges.push_back(BRepBuilderAPI_MakeEdge(cir, curve->Begin(), curve->End()));
 #ifdef DEBUGEDGES
-				DrawDebugLine(curve->End(), curve->Begin(),i);
+			DrawDebugLine(curve->Begin(), curve->End(),i);
 #endif
-				edges.push_back(BRepBuilderAPI_MakeEdge(cir, curve->End(), curve->Begin()));
-			}
-			else
-			{
-				edges.push_back(BRepBuilderAPI_MakeEdge(cir, curve->Begin(), curve->End()));
-#ifdef DEBUGEDGES
-				DrawDebugLine(curve->Begin(), curve->End(),i);
-#endif 
-			}
 		}
 		else
-			if(points[i] == PointB)
-			{
+		{
 #ifdef DEBUGEDGES
-				DrawDebugLine(curve->End(), curve->Begin(),i);
+			DrawDebugLine(curve->Begin(), curve->End(),i);
 #endif
-				edges.push_back(BRepBuilderAPI_MakeEdge(curve->End(), curve->Begin()));
-			}
-			else 
-			{
-#ifdef DEBUGEDGES
-				DrawDebugLine(curve->Begin(), curve->End(),i);
-#endif 
-				edges.push_back(BRepBuilderAPI_MakeEdge(curve->Begin(), curve->End()));
-			}
-			i++;
+			edges.push_back(BRepBuilderAPI_MakeEdge(curve->Begin(), curve->End()));
+		}
+		i++;
 	}
 }
 
@@ -288,7 +307,7 @@ void CompoundSegment::render_text(const wxChar* str)
 }
 
 double CompoundSegment::GetArea()
-{ 
+{
 	double total = 0;
 	std::list<BoundedCurve*>::iterator it=lines.begin();
 	std::list<BoundedCurve*>::iterator it2=lines.begin();
@@ -358,7 +377,7 @@ bool CompoundSegment::GetCW()
 			if(begin.Y() == end.Y() && begin.X() > end.X())
 				return true;
 			return false;
-		}	
+		}
 	}
 	return false;
 }
@@ -367,22 +386,25 @@ bool CompoundSegment::GetCW()
 void CompoundSegment::Order()
 {
 	//TODO: is it possible that the segments are not in a logical order?
-	gp_Pnt lastpoint = Begin();
+	gp_Pnt m_lastpoint = Begin();
+	firstpoint = PointA;
 	std::list<BoundedCurve*>::iterator it;
 	points.clear();
 	for(it = lines.begin(); it!= lines.end(); ++it)
 	{
-		if((*it)->Begin().Distance(lastpoint) <= m_tol)
+		if((*it)->Begin().Distance(m_lastpoint) <= m_tol)
 		{
 			points.push_back(PointA);
-			lastpoint = (*it)->End();
+			m_lastpoint = (*it)->End();
+			lastpoint = PointB;
 		}
 		else
 		{
-			if((*it)->End().Distance(lastpoint) <= m_tol)
+			if((*it)->End().Distance(m_lastpoint) <= m_tol)
 			{
 				points.push_back(PointB);
-				lastpoint = (*it)->Begin();
+				m_lastpoint = (*it)->Begin();
+				lastpoint = PointA;
 			}
 			else
 			{

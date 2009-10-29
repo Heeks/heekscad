@@ -133,6 +133,7 @@
 		<Unit filename="src/Drawing.cpp" />
 		<Unit filename="src/Drawing.h" />
 		<Unit filename="src/DynamicSolid.cpp" />
+		<Unit filename="src/DynamicSolid.h" />
 		<Unit filename="src/Edge.cpp" />
 		<Unit filename="src/Edge.h" />
 		<Unit filename="src/EdgeBlend.h" />
@@ -159,6 +160,7 @@
 		<Unit filename="src/Group.cpp" />
 		<Unit filename="src/Group.h" />
 		<Unit filename="src/HAngularDimension.cpp" />
+		<Unit filename="src/HAngularDimension.h" />
 		<Unit filename="src/HArc.cpp" />
 		<Unit filename="src/HArc.h" />
 		<Unit filename="src/HCircle.cpp" />
@@ -193,14 +195,17 @@
 		<Unit filename="src/Images.h" />
 		<Unit filename="src/InputModeCanvas.cpp" />
 		<Unit filename="src/InputModeCanvas.h" />
+		<Unit filename="src/Intersector.h" />
 		<Unit filename="src/LineArcDrawing.cpp" />
 		<Unit filename="src/LineArcDrawing.h" />
 		<Unit filename="src/Loop.cpp" />
 		<Unit filename="src/Loop.h" />
 		<Unit filename="src/MagDragWindow.cpp" />
 		<Unit filename="src/MagDragWindow.h" />
+		<Unit filename="src/Makefile" />
 		<Unit filename="src/MarkedList.cpp" />
 		<Unit filename="src/MarkedList.h" />
+		<Unit filename="src/MatrixFactorization.cpp" />
 		<Unit filename="src/MultiPoly.cpp" />
 		<Unit filename="src/MultiPoly.h" />
 		<Unit filename="src/NearMap.cpp" />
@@ -214,9 +219,11 @@
 		<Unit filename="src/Pad.cpp" />
 		<Unit filename="src/Pad.h" />
 		<Unit filename="src/Part.cpp" />
+		<Unit filename="src/Part.h" />
 		<Unit filename="src/Plugins.cpp" />
 		<Unit filename="src/Plugins.h" />
 		<Unit filename="src/Pocket.cpp" />
+		<Unit filename="src/Pocket.h" />
 		<Unit filename="src/PointDrawing.cpp" />
 		<Unit filename="src/PointDrawing.h" />
 		<Unit filename="src/PointOrWindow.cpp" />
@@ -243,6 +250,7 @@
 		<Unit filename="src/ShapeData.cpp" />
 		<Unit filename="src/ShapeData.h" />
 		<Unit filename="src/ShapeTools.cpp" />
+		<Unit filename="src/ShapeTools.h" />
 		<Unit filename="src/SimpleIntersector.cpp" />
 		<Unit filename="src/SimpleIntersector.h" />
 		<Unit filename="src/Sketch.cpp" />
@@ -266,6 +274,7 @@
 		<Unit filename="src/TreeCanvas.cpp" />
 		<Unit filename="src/TreeCanvas.h" />
 		<Unit filename="src/UndoEngine.cpp" />
+		<Unit filename="src/UndoEngine.h" />
 		<Unit filename="src/Vertex.cpp" />
 		<Unit filename="src/Vertex.h" />
 		<Unit filename="src/ViewPoint.cpp" />
@@ -286,8 +295,11 @@
 		<Unit filename="src/dxf.h" />
 		<Unit filename="src/glfont.h" />
 		<Unit filename="src/glfont2.cpp" />
+		<Unit filename="src/glfont2.h" />
 		<Unit filename="src/manager.cpp" />
 		<Unit filename="src/manager.h" />
+		<Unit filename="src/matrix.cpp" />
+		<Unit filename="src/matrix.h" />
 		<Unit filename="src/odcombo.cpp" />
 		<Unit filename="src/odcombo.h" />
 		<Unit filename="src/propdev.h" />
