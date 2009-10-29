@@ -568,6 +568,26 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 			// Ignore data block.
 			return(true);
 		}
+		else if (_data.substr(0,3) == "G70")
+		{
+			_data.erase(0,3);
+			m_units = 25.4;
+		}
+		else if (_data.substr(0,3) == "G71")
+		{
+			_data.erase(0,3);
+			m_units = 1.0;
+		}
+		else if (_data.substr(0,3) == "G90")
+		{
+			_data.erase(0,3);
+			m_absoluteCoordinatesMode = true;
+		}
+		else if (_data.substr(0,3) == "G91")
+		{
+			_data.erase(0,3);
+			m_absoluteCoordinatesMode = false;
+		}
 		else if (_data.substr(0,3) == "G75")
 		{
 			_data.erase(0,3);
