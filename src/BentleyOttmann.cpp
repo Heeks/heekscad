@@ -43,14 +43,14 @@ std::map<FastCurve*, std::vector<Intersection> > BentleyOttmann::Intersect(std::
 		//We must do a binary search on the list, as we want to enfore a geom_tol
 		if(MyIsEqual(((FastLine*)lines[i])->A.X(),((FastLine*)lines[i])->B.X()))
 		{
-			InsertEvent(AddRemoveType,((FastLine*)lines[i])->A.X(),(FastLine*)lines[i]); //For vertical lines
+			InsertEvent(BentleyOttmann::AddRemoveType,((FastLine*)lines[i])->A.X(),(FastLine*)lines[i]); //For vertical lines
 		}
 		else
 		{
 			if(((FastLine*)lines[i])->A.X() > ((FastLine*)lines[i])->B.X())
 				lines[i]->Reverse();
-			InsertEvent(AddType,((FastLine*)lines[i])->A.X(),(FastLine*)lines[i]);
-			InsertEvent(RemoveType,((FastLine*)lines[i])->B.X(),(FastLine*)lines[i]);
+			InsertEvent(BentleyOttmann::AddType,((FastLine*)lines[i])->A.X(),(FastLine*)lines[i]);
+			InsertEvent(BentleyOttmann::RemoveType,((FastLine*)lines[i])->B.X(),(FastLine*)lines[i]);
 		}
 	}
 
@@ -132,7 +132,7 @@ std::map<FastCurve*, std::vector<Intersection> > BentleyOttmann::Intersect(std::
 				++it3;
 		}
 
-		for(it2 = (*it).second[AddType].begin(); it2 != (*it).second[AddType].end(); ++it2)
+		for(it2 = (*it).second[BentleyOttmann::AddType].begin(); it2 != (*it).second[BentleyOttmann::AddType].end(); ++it2)
 		{
 			//Add these new items to the sweepline
 			tline = *it2;
@@ -183,12 +183,12 @@ std::map<FastCurve*, std::vector<Intersection> > BentleyOttmann::Intersect(std::
 			prev_lines = &((*it3).second);
 		}
 
-		for(it2 = (*it).second[AddRemoveType].begin(); it2 != (*it).second[AddRemoveType].end(); ++it2)
+		for(it2 = (*it).second[BentleyOttmann::AddRemoveType].begin(); it2 != (*it).second[BentleyOttmann::AddRemoveType].end(); ++it2)
 		{
 			//TODO: These intersect with all things between y1 and y2
 		}
 
-		for(it2 = (*it).second[RemoveType].begin(); it2 != (*it).second[RemoveType].end(); ++it2)
+		for(it2 = (*it).second[BentleyOttmann::RemoveType].begin(); it2 != (*it).second[BentleyOttmann::RemoveType].end(); ++it2)
 		{
 			//Remove these from the sweepline
 			tline = *it2;
@@ -262,7 +262,7 @@ void Test()
 }
 
 //Put a new event into the table
-void InsertEvent(EventType type, double x, FastLine* line)
+void InsertEvent(BentleyOttmann::EventType type, double x, FastLine* line)
 {
 	//Find an existing list, or a place to insert it
 	double  pos = MyRound(x);
