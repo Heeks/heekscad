@@ -55,7 +55,7 @@ HeeksObj* CreateExtrusion(std::list<HeeksObj*> list, double height)
 {
 	std::list<TopoDS_Face> faces;
 
-	std::list<HeeksObj*> sketches_to_delete;
+	std::list<HeeksObj*> sketches_or_faces_to_delete;
 
 	for(std::list<HeeksObj *>::const_iterator It = list.begin(); It != list.end(); It++)
 	{
@@ -63,16 +63,27 @@ HeeksObj* CreateExtrusion(std::list<HeeksObj*> list, double height)
 		switch(object->GetType())
 		{
 		case SketchType:
-			TopoDS_Face face;
-			if(ConvertSketchToFace2(object, face))
 			{
-				faces.push_back(face);
-				if(wxGetApp().m_extrude_removes_sketches)sketches_to_delete.push_back(object);
+				TopoDS_Face face;
+				if(ConvertSketchToFace2(object, face))
+				{
+					faces.push_back(face);
+					if(wxGetApp().m_extrude_removes_sketches)sketches_or_faces_to_delete.push_back(object);
+				}
 			}
+			break;
+
+		case FaceType:
+			faces.push_back(((CFace*)object)->Face());
+			if(wxGetApp().m_extrude_removes_sketches)sketches_or_faces_to_delete.push_back(object);
+			break;
+
+		default:
+			break;
 		}
 	}
 
-	wxGetApp().Remove(sketches_to_delete);
+	wxGetApp().Remove(sketches_or_faces_to_delete);
 
 	std::list<TopoDS_Shape> new_shapes;
 	CreateExtrusions(faces, new_shapes, gp_Vec(0, 0, height).Transformed(wxGetApp().GetDrawMatrix(false)));
@@ -116,10 +127,10 @@ void PickCreateExtrusion()
 {
 	if(wxGetApp().m_marked_list->size() == 0)
 	{
-		wxGetApp().PickObjects(_("pick sketches"));
+		wxGetApp().PickObjects(_("pick sketches or faces"), MARKING_FILTER_SKETCH | MARKING_FILTER_FACE);
 	}
 
-	double height = 10;
+	double height = 10; // to do, this should get written to config file
 	wxGetApp().InputDouble(_("Input extrusion height"), _("height"), height);
 
 	if(wxGetApp().m_marked_list->size() > 0)

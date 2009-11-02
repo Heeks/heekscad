@@ -8,6 +8,7 @@
 #include <TColgp_Array2OfPnt.hxx>
 #include "FaceTools.h"
 #include "Sketch.h"
+#include "RuledSurface.h"
 
 CFace::CFace(const TopoDS_Face &face):m_topods_face(face), m_temp_attr(0){
 #if _DEBUG
@@ -242,11 +243,26 @@ public:
 
 static SketchOnFace sketch_on_face;
 
+class ExtrudeFace:public Tool
+{
+public:
+	const wxChar* GetTitle(){return _("Extrude Face");}
+	wxString BitmapPath(){return _T("extface");}
+	void Run(){
+		wxGetApp().m_marked_list->Clear(false);
+		wxGetApp().m_marked_list->Add(face_for_tools, false);
+		PickCreateExtrusion();
+	}
+};
+
+static ExtrudeFace extrude_face;
+
 void CFace::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 	face_for_tools = this;
 	t_list->push_back(&make_sketch_tool);
 	if(GetSurfaceType() == GeomAbs_Plane)t_list->push_back(&make_coordsys);
 	if(GetSurfaceType() == GeomAbs_Plane)t_list->push_back(&sketch_on_face);
+	t_list->push_back(&extrude_face);
 }
 
 int CFace::GetSurfaceType()
