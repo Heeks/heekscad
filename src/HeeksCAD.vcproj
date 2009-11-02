@@ -466,6 +466,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\AutoSave.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\AutoSave.h"
+			>
+		</File>
+		<File
 			RelativePath=".\BentleyOttmann.cpp"
 			>
 		</File>
