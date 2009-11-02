@@ -503,7 +503,6 @@ public:
 
 static PickAnything pick_anything;
 
-
 class PickEdges:public Tool{
 public:
 	void Run(){
@@ -516,9 +515,22 @@ public:
 
 static PickEdges pick_edges;
 
+class PickFaces:public Tool{
+public:
+	void Run(){
+		wxGetApp().m_marked_list->m_filter = MARKING_FILTER_FACE;
+	}
+	const wxChar* GetTitle(){return _("Pick Faces");}
+	wxString BitmapPath(){return _T("pickfaces");}
+	const wxChar* GetToolTip(){return _("Set the selection filter to only faces");}
+};
+
+static PickFaces pick_faces;
+
 void CSelectMode::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	if(m_doing_a_main_loop)t_list->push_back(&end_picking);
-	t_list->push_back(&pick_anything);
-	t_list->push_back(&pick_edges);
+	if(wxGetApp().m_marked_list->m_filter != -1)t_list->push_back(&pick_anything);
+	if(wxGetApp().m_marked_list->m_filter != MARKING_FILTER_EDGE)t_list->push_back(&pick_edges);
+	if(wxGetApp().m_marked_list->m_filter != MARKING_FILTER_FACE)t_list->push_back(&pick_faces);
 }
