@@ -67,7 +67,7 @@ public:
 	CLoop* GetNextLoop();
 	bool Orientation();
 	void GetUVBox(double *uv_box);
-	void GetSurfaceUVPeriod(double *uv);
+	void GetSurfaceUVPeriod(double *uv, bool *isUPeriodic, bool *isVPeriodic);
 	CShape* GetParentBody();
 };
 

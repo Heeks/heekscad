@@ -147,7 +147,7 @@ public:
 	virtual int FaceGetTempAttribute(HeeksObj* face);
 	virtual int FaceGetSurfaceType(HeeksObj* face);
 	virtual void FaceGetUVBox(HeeksObj* face, double *uv_box);// 4 doubles
-	virtual void FaceGetSurfaceUVPeriod(HeeksObj* face, double *uv);// 2 doubles
+	virtual void FaceGetSurfaceUVPeriod(HeeksObj* face, double *uv, bool *isUPeriodic, bool *isVPeriodic);// 2 doubles
 	virtual void FaceGetPointAndNormalAtUV(HeeksObj* face, double u, double v, double* p, double* norm);
 	virtual bool FaceGetUVAtPoint(HeeksObj* face, const double *pos, double *u, double *v);
 	virtual bool FaceGetClosestPoint(HeeksObj* face, const double *pos, double *closest_pnt);
