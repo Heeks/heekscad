@@ -612,9 +612,9 @@ void CHeeksCADInterface::FaceGetUVBox(HeeksObj* face, double *uv_box)
 	return ((CFace*)face)->GetUVBox(uv_box);
 }
 
-void CHeeksCADInterface::FaceGetSurfaceUVPeriod(HeeksObj* face, double *uv)
+void CHeeksCADInterface::FaceGetSurfaceUVPeriod(HeeksObj* face, double *uv, bool *isUPeriodic, bool *isVPeriodic)
 {
-	return ((CFace*)face)->GetSurfaceUVPeriod(uv);
+	return ((CFace*)face)->GetSurfaceUVPeriod(uv, isUPeriodic, isVPeriodic);
 }
 
 void CHeeksCADInterface::FaceGetPointAndNormalAtUV(HeeksObj* face, double u, double v, double* p, double* norm)
