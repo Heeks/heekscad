@@ -1,19 +1,20 @@
-# translation of HeeksCAD.po to italiano
-# This file is distributed under the same license as the HeeksCAD package.
-# FIRST AUTHOR Andrea Florio <andrea@opensuse.org>, 2009.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: HeeksCAD\n"
+"Project-Id-Version: Heekscad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-28 13:02+0200\n"
-"PO-Revision-Date: 2009-05-22 11:18+0200\n"
-"Last-Translator: Andrea Florio <andrea@opensuse.org>\n"
-"Language-Team: italiano <translations@opensuse.org>\n"
+"POT-Creation-Date: 2009-10-25 17:15+0000\n"
+"PO-Revision-Date: 2009-11-02 18:54+0100\n"
+"Last-Translator: Luigi Barbati <barbati.luigi@gmail.com>\n"
+"Language-Team: Italiano <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+
 
 #: C:\Users\Dan\HeeksCAD\src\AboutBox.cpp:17
 msgid "OK"
@@ -21,11 +22,11 @@ msgstr "OK"
 
 #: C:\Users\Dan\HeeksCAD\src\advprops.cpp:495
 msgid "Point Size"
-msgstr "misura punto"
+msgstr "Misura Punto"
 
 #: C:\Users\Dan\HeeksCAD\src\advprops.cpp:497
 msgid "Family"
-msgstr "famiglia"
+msgstr "Famiglia"
 
 #: C:\Users\Dan\HeeksCAD\src\advprops.cpp:507
 msgid "Face Name"
@@ -38,7 +39,7 @@ msgstr "Stile"
 #: C:\Users\Dan\HeeksCAD\src\advprops.cpp:517
 #: C:\Users\Dan\HeeksCAD\src\HSpline.cpp:170
 msgid "Weight"
-msgstr "Weight"
+msgstr "Quantit√†"
 
 #: C:\Users\Dan\HeeksCAD\src\advprops.cpp:520
 msgid "Underlined"
@@ -46,7 +47,7 @@ msgstr "Sottolineato"
 
 #: C:\Users\Dan\HeeksCAD\src\advprops.cpp:1327
 msgid "files"
-msgstr "files"
+msgstr "i file"
 
 #: C:\Users\Dan\HeeksCAD\src\advprops.cpp:1335
 #: C:\Users\Dan\HeeksCAD\src\props.cpp:1509
@@ -55,20 +56,25 @@ msgstr "Tutti i file"
 
 #: C:\Users\Dan\HeeksCAD\src\advprops.cpp:1587
 msgid "Make a selection:"
-msgstr "Effettuare una selezione"
+msgstr "Crea una selezione"
+
+#: C:\Users\Dan\HeeksCAD\src\AutoSave.cpp:13
+msgid ".HeeksCAD_Backup_Data_File.heeks"
+msgstr ".HeeksCAD_Backup_Data_File.heeks"
 
 #: C:\Users\Dan\HeeksCAD\src\Cone.cpp:183
 #: C:\Users\Dan\HeeksCAD\src\Cylinder.cpp:88
 msgid "centre pos"
-msgstr "Centra posizione"
+msgstr "Centra Posizione"
 
 #: C:\Users\Dan\HeeksCAD\src\Cone.cpp:184
+#: C:\Users\Dan\HeeksCNC\src\ZigZag.cpp:101
 msgid "direction"
 msgstr "direzione"
 
 #: C:\Users\Dan\HeeksCAD\src\Cone.cpp:185
 msgid "x direction"
-msgstr "X direzione"
+msgstr "direzione x"
 
 #: C:\Users\Dan\HeeksCAD\src\Cone.cpp:186
 msgid "r1"
@@ -88,7 +94,7 @@ msgstr "altezza"
 
 #: C:\Users\Dan\HeeksCAD\src\Cone.cpp:226
 msgid "cone must not have both radiuses the same"
-msgstr "Un cono non puÚ avere entrambi i raggi uguali"
+msgstr "Un cono non pu√≤ avere entrambi i raggi uguali"
 
 #: C:\Users\Dan\HeeksCAD\src\Constraint.cpp:211
 msgid "H"
@@ -108,77 +114,77 @@ msgstr "P"
 
 #: C:\Users\Dan\HeeksCAD\src\ConstraintTools.cpp:34
 msgid "Set these lines to be perpendicular"
-msgstr "Set these lines to be perpendicular"
+msgstr "Imposta le Linee perpendicolari"
 
 #: C:\Users\Dan\HeeksCAD\src\ConstraintTools.cpp:58
 msgid "Set line tangent to arc"
-msgstr "Set line tangent to arc"
+msgstr "Imposta le linee tangenti all'arco"
 
 #: C:\Users\Dan\HeeksCAD\src\ConstraintTools.cpp:80
 msgid "Set these lines to be parallel"
-msgstr "Set these lines to be parallel"
+msgstr "Imposta le linee parallele"
 
 #: C:\Users\Dan\HeeksCAD\src\ConstraintTools.cpp:101
 msgid "Set these lines to be equal length"
-msgstr "Set these lines to be equal length"
+msgstr "Imposta linee di lunghezza uguale"
 
 #: C:\Users\Dan\HeeksCAD\src\ConstraintTools.cpp:122
 msgid "Set these lines to be colinear"
-msgstr "Set these lines to be colinear"
+msgstr "Imposta linee come allineate"
 
 #: C:\Users\Dan\HeeksCAD\src\ConstraintTools.cpp:143
 msgid "Set these arcs to have equal radii"
-msgstr "Set these arcs to have equal radii"
+msgstr "Imposta gli archi ad avere raggio uguale"
 
 #: C:\Users\Dan\HeeksCAD\src\ConstraintTools.cpp:164
 msgid "Set these arcs to be concentric"
-msgstr "Set these arcs to be concentric"
+msgstr "Imposta gli archi ad essere concentrici"
 
 #: C:\Users\Dan\HeeksCAD\src\ConstraintTools.cpp:186
 msgid "Set these points to be coincident"
-msgstr "Set these points to be coincident"
+msgstr "Imposta i punti ad essere coincidenti"
 
 #: C:\Users\Dan\HeeksCAD\src\ConstraintTools.cpp:210
 #: C:\Users\Dan\HeeksCAD\src\ConstraintTools.cpp:254
 #: C:\Users\Dan\HeeksCAD\src\ConstraintTools.cpp:269
 msgid "Add a dimension object"
-msgstr "Add a dimension object"
+msgstr "Aggiungi dimensione oggetto"
 
 #: C:\Users\Dan\HeeksCAD\src\ConstraintTools.cpp:238
 msgid "Add an angular dimension object"
-msgstr "Add an angular dimension object"
+msgstr "Aggiungi angolazione all'oggetto"
 
 #: C:\Users\Dan\HeeksCAD\src\ConstraintTools.cpp:293
 msgid "Set this point on line"
-msgstr "Set this point on line"
+msgstr "Imposta questo punto nella linea"
 
 #: C:\Users\Dan\HeeksCAD\src\ConstraintTools.cpp:317
 msgid "Set this point on the midpoint of line"
-msgstr "Set this point on the midpoint of line"
+msgstr "Imposta questo punto al centro della linea"
 
 #: C:\Users\Dan\HeeksCAD\src\ConstraintTools.cpp:341
 msgid "Set this point on the midpoint of arc"
-msgstr "Set this point on the midpoint of arc"
+msgstr "Imposta questo punto al centro dell'arco"
 
 #: C:\Users\Dan\HeeksCAD\src\ConstraintTools.cpp:365
 msgid "Set this point on arc"
-msgstr "Set this point on arc"
+msgstr "Imposta questo punto sull'arco "
 
 #: C:\Users\Dan\HeeksCAD\src\ConstraintTools.cpp:389
 msgid "Set this point on circle"
-msgstr "Set this point on circle"
+msgstr "Imposta questo punto sulla circonferenza"
 
 #: C:\Users\Dan\HeeksCAD\src\ConstraintTools.cpp:406
 msgid "Run Test"
-msgstr ""
+msgstr "Avvia Test"
 
 #: C:\Users\Dan\HeeksCAD\src\ConversionTools.cpp:184
 msgid "Fatal Error converting sketch to face"
-msgstr "Errore fatale convertendo da sketch a face"
+msgstr "Errore fatale nel convertire il profilo in faccia"
 
 #: C:\Users\Dan\HeeksCAD\src\ConversionTools.cpp:465
 msgid "Test Face, Sketches United"
-msgstr "Test Face, Sketches United"
+msgstr "Test faccia, profili uniti"
 
 #: C:\Users\Dan\HeeksCAD\src\CoordinateSystem.cpp:1242
 msgid "Set position and orientation by picking 3 points"
@@ -186,24 +192,24 @@ msgstr "Imposta la posizione e l'orientamento scegliendo 3 punti"
 
 #: C:\Users\Dan\HeeksCAD\src\CoordinateSystem.cpp:1257
 msgid "Set this coordinate system as the active one"
-msgstr "Imposta le coordinate del sistema su quelle attive"
+msgstr "Imposta questo sistema di coordinate come attivo"
 
 #: C:\Users\Dan\HeeksCAD\src\CoordinateSystem.cpp:1272
 msgid "Set world coordinate system active"
-msgstr "Imposta come attive le coordinate di tutto il sistema"
+msgstr "Attiva coordinate di sistema"
 
 #: C:\Users\Dan\HeeksCAD\src\CoordinateSystem.cpp:1290
 #: C:\Users\Dan\HeeksCAD\src\HPoint.cpp:120
 msgid "position"
-msgstr "Posizione"
+msgstr "posizione"
 
 #: C:\Users\Dan\HeeksCAD\src\CoordinateSystem.cpp:1291
 msgid "x axis"
-msgstr "Asse X"
+msgstr "asse x"
 
 #: C:\Users\Dan\HeeksCAD\src\CoordinateSystem.cpp:1292
 msgid "y axis"
-msgstr "Asse Y"
+msgstr "asse y"
 
 #: C:\Users\Dan\HeeksCAD\src\CoordinateSystem.cpp:1294
 msgid "Vertical Angle"
@@ -215,55 +221,57 @@ msgstr "Angolo Orizzontale"
 
 #: C:\Users\Dan\HeeksCAD\src\CoordinateSystem.cpp:1296
 msgid "Twist Angle"
-msgstr "Distorci Angolo"
+msgstr "Distorsione Angolo"
 
 #: C:\Users\Dan\HeeksCAD\src\CoordinateSystem.cpp:1426
 msgid "Pick the location"
-msgstr "Scegli la localit‡"
+msgstr "Seleziona la posizione"
 
 #: C:\Users\Dan\HeeksCAD\src\CoordinateSystem.cpp:1427
 msgid "Pick a point on the x-axis"
-msgstr "Scegli un punto nell'asse x"
+msgstr "Seleziona un punto sull'asse x"
 
 #: C:\Users\Dan\HeeksCAD\src\CoordinateSystem.cpp:1428
 msgid "Pick a point where y > 0"
-msgstr "Scegli un punto dove Y>0"
+msgstr "Seleziona un punto sull'asse y,dove Y>0"
 
 #: C:\Users\Dan\HeeksCAD\src\Cuboid.cpp:81
 msgid "datum corner"
-msgstr "Dato angolo"
+msgstr "dati angolo"
 
 #: C:\Users\Dan\HeeksCAD\src\Cuboid.cpp:82
 msgid "width ( x )"
-msgstr "altezza X"
+msgstr "larghezza (x)"
 
 #: C:\Users\Dan\HeeksCAD\src\Cuboid.cpp:83
 msgid "height( y )"
-msgstr "altezza Y"
+msgstr "altezza (y)"
 
 #: C:\Users\Dan\HeeksCAD\src\Cuboid.cpp:84
 msgid "depth ( z )"
-msgstr "profondit‡ Z"
+msgstr "Profondit√† (z)"
 
 #: C:\Users\Dan\HeeksCAD\src\Cylinder.cpp:89
 #: C:\Users\Dan\HeeksCAD\src\HArc.cpp:287
 #: C:\Users\Dan\HeeksCAD\src\HCircle.cpp:197
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:769
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:770
 #: C:\Users\Dan\HeeksCAD\src\RegularShapesDrawing.cpp:497
 #: C:\Users\Dan\HeeksCAD\src\RegularShapesDrawing.cpp:498
 #: C:\Users\Dan\HeeksCAD\src\Sphere.cpp:71
 msgid "radius"
-msgstr "Raggio"
+msgstr "raggio"
 
 #: C:\Users\Dan\HeeksCAD\src\DigitizeMode.cpp:35
 msgid "Digitize Mode"
-msgstr "Modo di digitalizzazione"
+msgstr "Modo digitazione"
 
 #: C:\Users\Dan\HeeksCAD\src\DigitizeMode.cpp:304
+#: C:\Users\Dan\HeeksCNC\src\ZigZag.cpp:99
 msgid "X"
 msgstr "X"
 
 #: C:\Users\Dan\HeeksCAD\src\DigitizeMode.cpp:305
+#: C:\Users\Dan\HeeksCNC\src\ZigZag.cpp:100
 msgid "Y"
 msgstr "Y"
 
@@ -273,17 +281,17 @@ msgstr "Z"
 
 #: C:\Users\Dan\HeeksCAD\src\DigitizeMode.cpp:317
 msgid "Error! The 'Stop Picking' button shouldn't have been available!"
-msgstr "Errore! Il pulsante 'Stop Picking' non sarebbe dovuto essere disponibile!"
+msgstr "Errore! Il pulsante 'Stop selezione' non sarebbe dovuto essere disponibile!"
 
 #: C:\Users\Dan\HeeksCAD\src\DigitizeMode.cpp:320
 #: C:\Users\Dan\HeeksCAD\src\SelectMode.cpp:487
 msgid "Stop Picking"
-msgstr "Stop∑Picking"
+msgstr "Stop selezione"
 
 #: C:\Users\Dan\HeeksCAD\src\DigitizeMode.cpp:322
 #: C:\Users\Dan\HeeksCAD\src\SelectMode.cpp:489
 msgid "Finish picking"
-msgstr "Finish picking"
+msgstr "Fine selezione"
 
 #: C:\Users\Dan\HeeksCAD\src\DimensionDrawing.cpp:118
 #: C:\Users\Dan\HeeksCAD\src\HDimension.cpp:342
@@ -304,13 +312,13 @@ msgstr "modo"
 #: C:\Users\Dan\HeeksCAD\src\HAngularDimension.cpp:338
 #: C:\Users\Dan\HeeksCAD\src\HDimension.cpp:347
 msgid "string"
-msgstr "string"
+msgstr "Serie"
 
 #: C:\Users\Dan\HeeksCAD\src\DimensionDrawing.cpp:125
 #: C:\Users\Dan\HeeksCAD\src\HAngularDimension.cpp:339
 #: C:\Users\Dan\HeeksCAD\src\HDimension.cpp:348
 msgid "pythagorean"
-msgstr "pythagorean"
+msgstr "pitagorico"
 
 #: C:\Users\Dan\HeeksCAD\src\DimensionDrawing.cpp:126
 #: C:\Users\Dan\HeeksCAD\src\HAngularDimension.cpp:340
@@ -328,7 +336,7 @@ msgstr "verticale"
 #: C:\Users\Dan\HeeksCAD\src\HAngularDimension.cpp:342
 #: C:\Users\Dan\HeeksCAD\src\HDimension.cpp:351
 msgid "text mode"
-msgstr "text mode"
+msgstr "Modo Testo"
 
 #: C:\Users\Dan\HeeksCAD\src\Drawing.cpp:172
 msgid "Stop drawing"
@@ -344,15 +352,15 @@ msgstr "Aggiungi punto"
 
 #: C:\Users\Dan\HeeksCAD\src\Drawing.cpp:192
 msgid "Add a point to drawing"
-msgstr "Aggiungi un punto nel"
+msgstr "Aggiungi punto nel disegno"
 
 #: C:\Users\Dan\HeeksCAD\src\Drawing.cpp:207
 msgid "Get Position"
-msgstr "Ottieni Positione"
+msgstr "Ottieni posizione"
 
 #: C:\Users\Dan\HeeksCAD\src\Drawing.cpp:209
 msgid "Pick position without adding to the drawing"
-msgstr "Seleziona posizione senza aggiungerla al disegno"
+msgstr "Seleziona posizione senza aggiungerla nel disegno"
 
 #: C:\Users\Dan\HeeksCAD\src\Edge.cpp:140
 msgid "Blend"
@@ -368,7 +376,8 @@ msgstr "Inserire raggio di fusione"
 msgid "Radius"
 msgstr "Raggio"
 
-#: C:\Users\Dan\HeeksCAD\src\Edge.cpp:160 C:\Users\Dan\HeeksCAD/src/Face.h:77
+#: C:\Users\Dan\HeeksCAD\src\Edge.cpp:160
+#: C:\Users\Dan\HeeksCAD/src/Face.h:77
 msgid "Make Sketch"
 msgstr "Crea profilo"
 
@@ -383,7 +392,7 @@ msgstr "Solido con bordo sfumato"
 #: C:\Users\Dan\HeeksCAD\src\Shape.cpp:568
 #: C:\Users\Dan\HeeksCAD\src\Shape.cpp:572
 msgid "A fatal error happened during Blend"
-msgstr "Un errore fatale, avvenuto nel corso della fusione o sfumatura"
+msgstr "Un errore fatale √® avvenuto nel corso della fusione"
 
 #: C:\Users\Dan\HeeksCAD\src\Edge.cpp:200
 #: C:\Users\Dan\HeeksCAD\src\HArc.cpp:286
@@ -393,25 +402,25 @@ msgstr "lunghezza"
 
 #: C:\Users\Dan\HeeksCAD\src\Face.cpp:185
 msgid "surface type"
-msgstr "superfice tipo"
+msgstr "Tipo di superfice"
 
 #: C:\Users\Dan\HeeksCAD\src\Face.cpp:206
 msgid "Make Coordinate System"
-msgstr "Make Coordinate System"
+msgstr "Crea coordinate di sistema"
 
 #: C:\Users\Dan\HeeksCAD\src\Face.cpp:211
 #: C:\Users\Dan\HeeksCAD\src\Face.cpp:230
 msgid "Face Coordinate System"
-msgstr "Face Coordinate System"
+msgstr "Coordinate di sistema frontali"
 
 #: C:\Users\Dan\HeeksCAD\src\Face.cpp:225
 msgid "Sketch On Face"
-msgstr "Sketch On Face"
+msgstr "Profilo su faccia"
 
 #: C:\Users\Dan\HeeksCAD\src\Face.cpp:274
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:671
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:672
 msgid "unknown"
-msgstr "incognito"
+msgstr "sconosciuto"
 
 #: C:\Users\Dan\HeeksCAD\src\Face.cpp:278
 msgid "plane"
@@ -451,21 +460,21 @@ msgstr "estrusione"
 
 #: C:\Users\Dan\HeeksCAD\src\Face.cpp:314
 msgid "offset"
-msgstr "Offset compensazione"
+msgstr "offset"
 
 #: C:\Users\Dan\HeeksCAD\src\HAngularDimension.cpp:257
 #: C:\Users\Dan\HeeksCAD\src\HDimension.cpp:189
 msgid "Set this dimension as constrained"
-msgstr ""
+msgstr "Imposta dimensione limitata"
 
 #: C:\Users\Dan\HeeksCAD\src\HAngularDimension.cpp:344
 #: C:\Users\Dan\HeeksCAD\src\HDimension.cpp:353
 msgid "scale"
-msgstr "scale"
+msgstr "scala"
 
 #: C:\Users\Dan\HeeksCAD\src\HArc.cpp:86
 msgid "Set this arcs radius as constrained"
-msgstr "Set this arcs radius as constrained"
+msgstr "Imposta questo arco di cerchio come vincolato"
 
 #: C:\Users\Dan\HeeksCAD\src\HArc.cpp:281
 #: C:\Users\Dan\HeeksCAD\src\HILine.cpp:106
@@ -474,7 +483,7 @@ msgid "start"
 msgstr "inizio"
 
 #: C:\Users\Dan\HeeksCAD\src\HArc.cpp:282
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2247
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2293
 #: C:\Users\Dan\HeeksCAD\src\HILine.cpp:107
 #: C:\Users\Dan\HeeksCAD\src\HLine.cpp:164
 msgid "end"
@@ -482,7 +491,7 @@ msgstr "fine"
 
 #: C:\Users\Dan\HeeksCAD\src\HArc.cpp:283
 #: C:\Users\Dan\HeeksCAD\src\HCircle.cpp:195
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2249
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2295
 #: C:\Users\Dan\HeeksCAD\src\HEllipse.cpp:263
 #: C:\Users\Dan\HeeksCAD\src\Sphere.cpp:70
 msgid "centre"
@@ -496,556 +505,566 @@ msgstr "asse"
 
 #: C:\Users\Dan\HeeksCAD\src\HDimension.cpp:339
 #: C:\Users\Dan\HeeksCAD\src\HText.cpp:155
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:525
 msgid "orientation"
 msgstr "orientamento"
 
 #: C:\Users\Dan\HeeksCAD\src\HDimension.cpp:355
 msgid "dimension value"
-msgstr "dimension value"
+msgstr "valore dimensione"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:129
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:540
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:130
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:560
 msgid "Untitled"
 msgstr "senza titolo"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:425
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2241
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:445
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2287
 #: C:\Users\Dan\HeeksCAD\src\Ruler.cpp:330
 msgid "units"
-msgstr "unit‡"
+msgstr "unit√†"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:427
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2237
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:447
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2283
 #: C:\Users\Dan\HeeksCAD\src\Ruler.cpp:326
+#: C:\Users\Dan\HeeksCNC\src\Program.cpp:139
 msgid "mm"
 msgstr "mm"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:428
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2238
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:448
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2284
 #: C:\Users\Dan\HeeksCAD\src\Ruler.cpp:327
+#: C:\Users\Dan\HeeksCNC\src\Program.cpp:140
 msgid "inch"
 msgstr "inch"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:882
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:1204
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:902
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:1224
 msgid "Invalid file type chosen"
-msgstr "Tipo di file scelto non valido"
+msgstr "Tipo di file non valido"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:882
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:1204
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:902
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:1224
 msgid "expecting"
-msgstr "attendere"
+msgstr "era atteso:"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:966
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:1012
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:1040
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:986
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:1032
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:1060
 msgid "couldn't open file"
 msgstr "Impossibile aprire il file"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:1167
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:1187
 msgid "Save graphical data file"
-msgstr "Salvere il file grafico"
+msgstr "Salvare il file grafico"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:1471
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:1491
 msgid "Exit Full Screen Mode"
 msgstr "Uscita schermo intero"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:1472
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:1492
 msgid "Show Full Screen"
-msgstr "vedi a schermo intero"
+msgstr "Vedi a schermo intero"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2138
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2184
 #: C:\Users\Dan\HeeksCAD\src\SelectMode.cpp:57
 msgid "view options"
-msgstr "visualizza opzioni"
+msgstr "Visualizza opzioni"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2142
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2188
 msgid "stay upright"
 msgstr "mantenere posizione verticale"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2143
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2189
 msgid "free"
 msgstr "libero"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2144
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2190
 msgid "rotate mode"
-msgstr "modalit‡ di rotazione"
+msgstr "Modo rotazione"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2148
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2194
 msgid "none"
 msgstr "non"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2149
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2195
 msgid "input mode title"
-msgstr "modalit‡ ingresso titolo"
+msgstr "Modalit√† inserimento titolo"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2150
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2196
 msgid "full help"
-msgstr "guida completa"
+msgstr "Aiuto completo"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2151
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2197
 #: C:\Users\Dan\HeeksCAD\src\SelectMode.cpp:57
 msgid "screen text"
-msgstr "OSD"
+msgstr "Schermata di testo"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2153
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2199
 msgid "antialiasing"
 msgstr "riduzione deformazione"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2155
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2201
 msgid "fixed light"
-msgstr "illuminazione fissata"
+msgstr "punto luce"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2157
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2203
 msgid "reverse mouse wheel"
-msgstr "ruotellina mouse inversa"
+msgstr "inverte rotella del mouse"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2158
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2204
 msgid "reverse zooming mode"
-msgstr "invertire la modalit‡ zoom"
+msgstr "inverte modalit√† zoom"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2159
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2205
 msgid "Ctrl key does rotate"
-msgstr "to Ctrl fa ruotare"
+msgstr "Tasto Ctrl per ruotare"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2160
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2206
 msgid "show datum"
-msgstr "mostra data"
+msgstr "mostra coordinate di orientamento"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2161
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2207
 msgid "datum is solid"
-msgstr "riferimento solido"
+msgstr "icona coordinate di sistema"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2162
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2208
 msgid "datum size"
-msgstr "dimensione dati"
+msgstr "dimensione icona coordinate"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2163
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2209
 msgid "datum size is pixels not mm"
-msgstr "dimensione dati in Pixel non mm"
+msgstr "dimensioni  espressi in pixel e non mm"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2164
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2210
 msgid "show ruler"
-msgstr "mostra righello"
+msgstr "Mostra righello"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2167
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2213
 msgid "single color"
-msgstr "single color"
+msgstr "Singolo colore"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2168
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2214
 msgid "top color and bottom color"
-msgstr "top color and bottom color"
+msgstr "colore superiore ed inferiore"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2169
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2215
 msgid "left color and right color"
-msgstr "left color and right color"
+msgstr "colore laterale dx e sx"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2170
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2216
 msgid "four corner colors"
-msgstr "four corner colors"
+msgstr "colore quattro angoli"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2171
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2217
 msgid "sky and ground"
-msgstr "sky and ground"
+msgstr "cielo e sfondo"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2172
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2218
 msgid "background mode"
-msgstr "modo di sfondo"
+msgstr "Modo sfondo"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2177
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2223
 msgid "background color"
 msgstr "colore di sfondo"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2181
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2227
 msgid "top background color"
-msgstr "top background color"
+msgstr "colore sfondo superiore"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2182
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2228
 msgid "bottom background color"
-msgstr "bottom background color"
+msgstr "colore di sfondo inferiore"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2186
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2232
 msgid "left background color"
-msgstr "left background color"
+msgstr "colore di sfondo sx"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2187
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2233
 msgid "right background color"
-msgstr "right background color"
+msgstr "colore di sfondo dx"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2191
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2237
 msgid "top left background color"
-msgstr "top left background color"
+msgstr "colore di sfondo superiore sx"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2192
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2238
 msgid "bottom left background color"
-msgstr "bottom left background color"
+msgstr "colore di sfondo inferiore sx"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2193
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2239
 msgid "top right background color"
-msgstr "top right background color"
+msgstr "colore di sfondo superiore dx"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2194
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2240
 msgid "bottom right background color"
-msgstr "bottom right background color"
+msgstr "colore di sfondo inferiore dx"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2198
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2244
 msgid "sky top color"
-msgstr "sky top color"
+msgstr "colore cielo superiore"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2199
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2245
 msgid "sky middle color"
-msgstr "sky middle color"
+msgstr "colore centrale cielo"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2200
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2246
 msgid "sky bottom color"
-msgstr "sky bottom color"
+msgstr "colore inferiore cielo"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2201
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2247
 msgid "ground top color"
-msgstr "ground top color"
+msgstr "colore di sfondo superiore"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2202
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2248
 msgid "ground middle color"
-msgstr "ground middle color"
+msgstr "colore di sfondo centrale"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2203
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2249
 msgid "ground bottom color"
-msgstr "ground bottom color"
+msgstr "colore sfondo inferiore"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2209
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2255
 msgid "no grid"
 msgstr "senza griglia"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2210
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2256
 msgid "faint color"
 msgstr "colore tenue"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2211
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2257
 msgid "alpha blending"
-msgstr "sfumatura alpha"
+msgstr "Sfumatura alpha"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2212
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2258
 msgid "colored alpha blending"
 msgstr "colore sfumatura alpha"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2213
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2259
 msgid "grid mode"
 msgstr "modo griglia"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2215
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2261
 msgid "perspective"
-msgstr "Prospettiva"
+msgstr "prospettiva"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2232
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2278
 msgid "tool icon size"
-msgstr "strumento dimensiona icone"
+msgstr "dimensione  icone barra strumenti"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2243
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2289
 msgid "flat on screen dimension text"
-msgstr "flat on screen dimension text"
+msgstr "dimensione testo sullo schermo"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2246
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2292
 msgid "digitizing"
 msgstr "convertire"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2248
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2294
 msgid "intersection"
-msgstr "intersezzione"
+msgstr "intersezione"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2250
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2296
 msgid "midpoint"
 msgstr "punto centrale"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2251
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2297
 msgid "nearest"
 msgstr "vicino"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2252
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2298
 msgid "tangent"
 msgstr "tangente"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2253
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2299
 msgid "radius for undefined circles"
-msgstr "Raggio per cerchi indefiniti"
+msgstr "raggio per cerchi indefiniti"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2254
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2300
 msgid "coordinates"
 msgstr "coordinate"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2255
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2301
 msgid "screen"
 msgstr "schermo"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2256
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2302
 msgid "grid size"
 msgstr "dimensione griglia"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2257
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2303
 msgid "snap to grid"
 msgstr "aggancia alla griglia"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2258
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2304
 msgid "autosolve constraints"
-msgstr "autosolve constraints"
+msgstr "autorisoluzione limitata"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2261
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2307
 msgid "correlation"
-msgstr "correlation"
+msgstr "correlazione"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2262
-msgid ""
-"Minimum correlation factor (0.0 (nothing like it) -> 1.0 (perfect match))"
-msgstr ""
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2308
+msgid "Minimum correlation factor (0.0 (nothing like it) -> 1.0 (perfect match))"
+msgstr "Minimo fattore di correlazione (0.0 (niente di simile) -> 1.0 (accostamento perfetto"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2263
-msgid ""
-"Maximum scale threshold (1.0 - must be same size, 1.5 (can be half as big "
-"again or 2/3 size)"
-msgstr ""
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2309
+msgid "Maximum scale threshold (1.0 - must be same size, 1.5 (can be half as bigagain or 2/3 size)"
+msgstr "Soglia scala massima (1,0 - stessa dimensione, 1,5 (pu√≤ essere un mezzo cos√¨ grande"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2264
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2310
 msgid "Number of sample points"
-msgstr "Number of sample points"
+msgstr "Numero di punti di campionamento"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2267
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2313
 msgid "drawing"
 msgstr "disegno"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2268
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2314
 msgid "current color"
 msgstr "colore corrente"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2269
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2315
 msgid "construction color"
 msgstr "costruzione colore"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2270
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2316
 msgid "geometry tolerance"
 msgstr "tolleranza geometria"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2271
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2317
 msgid "face to sketch deviaton"
-msgstr "face to sketch deviaton"
+msgstr "deviazione faccia a profilo"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2272
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2318
 msgid "Use 3D rotation"
-msgstr "Use 3D rotation"
+msgstr "Usa rotazione 3D"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2273
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2319
 msgid "Use old solid fuse ( to prevent coplanar faces )"
-msgstr "Use old solid fuse ( to prevent coplanar faces )"
+msgstr "Utilizzare vecchia fusione solida (per evitare facciate complanari)"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2284
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2330
 msgid "selection filter"
-msgstr "selectione filtro"
+msgstr "seleziona filtro"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2285
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2331
 msgid "point"
 msgstr "punto"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2286
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2332
 msgid "line"
 msgstr "linea"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2287
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2333
 msgid "arc"
 msgstr "arco"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2288
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:748
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2334
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:749
 msgid "infinite line"
 msgstr "linea infinita"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2289
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2335
 msgid "circle"
 msgstr "cerchio"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2290
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2336
 msgid "edge"
 msgstr "bordo"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2291
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2337
 msgid "face"
 msgstr "faccia"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2292
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2338
 msgid "vertex"
 msgstr "vertice"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2293
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2339
 msgid "solid"
-msgstr "Solido 3D"
+msgstr "solido"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2294
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2340
 msgid "stl_solid"
-msgstr "STL solido 3D"
+msgstr "Solido_stl"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2295
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2341
 msgid "wire"
 msgstr "filo"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2296
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2342
 msgid "sketch"
-msgstr "schizzo/bozza"
+msgstr "profilo"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2297
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2343
 msgid "image"
 msgstr "immagine"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2298
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2344
 msgid "coordinate system"
-msgstr "sistemadi sistema"
+msgstr "coordinate di sistema"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2299
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2345
 msgid "text"
-msgstr "Testo"
+msgstr "testo"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2300
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2346
 msgid "dimension"
 msgstr "dimensione"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2301
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2347
 msgid "ruler"
 msgstr "righello"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2302
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2348
 msgid "pad"
-msgstr "pad"
+msgstr "blocco"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2303
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2349
 msgid "part"
-msgstr "part"
+msgstr "pezzo"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2304
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2350
 msgid "pocket"
 msgstr "Tasca"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2307
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2353
 msgid "file options"
 msgstr "opzioni file"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2308
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2354
 msgid "DXF"
 msgstr "DXF"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2309
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2355
 msgid "make sketch"
-msgstr "fare schizzo (sketch)"
+msgstr "Crea Profilo"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2311
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2357
 msgid "STL"
 msgstr "STL"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2312
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2358
 msgid "stl save facet tolerance"
-msgstr "fare schizzo (sketch)"
+msgstr "Salva tolleranza sfaccettatura stl"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2317
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2360
+msgid "auto save interval (in minutes)"
+msgstr "intervallo autosalvataggio (in minuti)"
+
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2364
 msgid "font options"
-msgstr "fare schizzo (sketch)"
+msgstr "Opzione Caratteri"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2322
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2369
 #: C:\Users\Dan\HeeksCAD\src\HText.cpp:161
 msgid "OpenGL (default) font"
-msgstr "OpenGL (default) font"
+msgstr "OpenGL carattere di default"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2334
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2381
 msgid "Active font"
-msgstr "Active font"
+msgstr "Carattere attivo"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2337
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2384
 msgid "Paths (semicolon delimited)"
-msgstr "Paths (semicolon delimited)"
+msgstr "Percorso (delimitato da punto e virgola)"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2382
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2387
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2429
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2434
+#: C:\Users\Dan\HeeksCNC\src\Fixture.cpp:700
+#: C:\Users\Dan\HeeksCNC\src\SpeedReferences.cpp:32
+#: C:\Users\Dan\HeeksCNC\src\SpeedReferences.cpp:66
+#: C:\Users\Dan\HeeksCNC\src\Tools.cpp:43
+#: C:\Users\Dan\HeeksCNC\src\Tools.cpp:77
 msgid "Known Files"
 msgstr "file riconosciuto"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2382
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2387
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2429
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2434
 msgid "Heeks files"
-msgstr "Heeks file"
+msgstr "file Heeks"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2382
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2387
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2429
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2434
 msgid "IGES files"
-msgstr "IGES file"
+msgstr "file IGES"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2382
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2387
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2429
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2434
 msgid "STEP files"
-msgstr "STEP file"
+msgstr "file STEP"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2382
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2387
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2429
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2434
 msgid "STL files"
-msgstr "STL file"
+msgstr "file STL"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2382
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2429
 msgid "Scalar Vector Graphics files"
-msgstr "SVG file"
+msgstr "SVG Scalar Vector Graphics file"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2382
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2387
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2429
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2434
 msgid "DXF files"
-msgstr "DXF file"
+msgstr "file DXF"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2382
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2429
 msgid "RX274X/Gerber files"
-msgstr "RX274X/Gerber file"
+msgstr "file RX274X/Gerber"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2382
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2429
 msgid "Picture files"
-msgstr "Picture files"
+msgstr "file immagine"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2425
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2472
 msgid "Unmark"
-msgstr "non marcato"
+msgstr "Smarca"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2428
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2475
 msgid "Mark"
-msgstr "marcato"
+msgstr "Marca"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2431
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2478
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:148
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1487
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1605
 msgid "Properties"
-msgstr "Propriet‡"
+msgstr "Propriet√†"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2790
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2837
 msgid "Save changes to file"
-msgstr "Salvare le modifiche al file"
+msgstr "Salva le modifiche al file"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2891
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2938
 #: C:\Users\Dan\HeeksCAD\src\ObjPropsCanvas.cpp:117
 msgid "Apply"
 msgstr "Applica"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2893
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2940
 msgid "Accept value and continue"
-msgstr "accetta il valore e continua"
+msgstr "Accetta il valore e continua"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2901
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2948
 #: C:\Users\Dan\HeeksCAD\src\ObjPropsCanvas.cpp:118
 #: C:\Users\Dan\HeeksCAD\src\props.cpp:1853
 #: C:\Users\Dan\HeeksCAD\src\props.cpp:2085
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:823
 msgid "Cancel"
 msgstr "Cancella"
 
-#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2903
+#: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2950
 msgid "Cancel operation"
-msgstr "cancella operazione"
+msgstr "Cancella operazione"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:91
 msgid "Trace Log"
-msgstr "Trace Log"
+msgstr "Traccia il Log"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:144
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1601
 msgid "Graphics"
-msgstr "Graphics"
+msgstr "Grafico"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:145
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1483
@@ -1063,20 +1082,21 @@ msgstr "Opzioni"
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1486
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1604
 msgid "Input"
-msgstr "Ingresso"
+msgstr "Input"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:204
 msgid "Reset Layout"
-msgstr "Ripristina Layout"
+msgstr "Resetta Layout"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:205
 msgid "Set toolbars to left"
-msgstr "Sposta barre a sinistra"
+msgstr "Imposta toolbar a sinistra"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:598
 #: C:\Users\Dan\HeeksCAD/src/CoordinateSystem.h:40
+#: C:\Users\Dan\HeeksCNC\src\Fixture.cpp:192
 msgid "Coordinate System"
-msgstr "Sistema di coordinate"
+msgstr "Systema di coordinate"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:611
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1524
@@ -1089,25 +1109,23 @@ msgstr "Importa file"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:711
 msgid "Pick two or more faces or solids, the first one will be cut by the others"
-msgstr "Selezionare due o pi˘ solidi, il primo verr‡ tagliato da i successivi"
+msgstr "Selezionare due o piu facce o solidi, il primo taglia gli altri"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:711
 msgid "Subtract Solids"
-msgstr "Subtract∑Solids"
+msgstr "Sottrarre solidi"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:719
 msgid "Pick two or more solids to be fused together"
-msgstr "Selezionare due o pi˘ solidi per essere fusi insieme"
+msgstr "Selezionare due o pi√π solidi per la loro fusione"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:719
 msgid "Fuse Solids"
-msgstr "Fondi i solidi"
+msgstr "Fusione solidi"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:727
-msgid ""
-"Pick two or more solids, only the shape that is contained by all of them "
-"will remain"
-msgstr "Selezionare due o pi˘ solidi,la forma finale sar‡ il contorno di tutti i solidi selezionati"
+msgid "Pick two or more solids, only the shape that is contained by all of them will remain"
+msgstr "Selezionare due o pi√π solidi, rimmar√† la forma di tutti i solidi contenuti"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:727
 msgid "Intersection of Solids"
@@ -1115,43 +1133,48 @@ msgstr "Intersezione dei solidi"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:736
 msgid "Pick one or more edges to add a fillet to"
-msgstr "Selezionare uno o pi˘ bordi per aggiungere una carenatura"
+msgstr "Selezionare uno o pi√π bordi per aggiungere una carenatura"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:736
 msgid "Edge Fillet"
-msgstr "Bordo carenatura"
+msgstr "Carenatura borbo"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:752
 msgid "Pick one or more edges to add a chamfer to"
-msgstr "Selezionare uno o pi˘ bordi per aggiungere una smussatura"
+msgstr "Selezionare uno o pi√π bordi per aggiungere uno smusso"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:752
 msgid "Edge Chamfer"
-msgstr "Bordo smussatura"
+msgstr "Smussatura bordo"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:756
 msgid "Enter chamfer distance"
-msgstr "Inserisci distanza di smussatura"
+msgstr "Inserire estensione smussatura"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:756
+#: C:\Users\Dan\HeeksCNC\src\Probing.cpp:497
 msgid "Distance"
-msgstr "Distanza"
+msgstr "Estensione"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:768
 msgid ""
 "Pick two or more sketches, to create a lofted solid between\n"
 "( hold down Ctrl key to select more than one solid )"
 msgstr ""
-"Selezionare due o pi˘ figure, per creare un solido inclinato nel mezzo\n"
-"( tenere premuto Ctrl per selezionare pi˘ di un solido )"
+"Selezionare due o pi√π figure, per creare un solido inclinato nel mezzo\n"
+"( tenere premuto Ctrl per selezionare pi√π di un solido )"
+
+#: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:768
+msgid "Lofted Body"
+msgstr "Corpo inclinato"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:776
 msgid ""
 "Pick one or more sketches, to create extruded body from\n"
 "( hold down Ctrl key to select more than one solid )"
 msgstr ""
-"Selezionare due o pi˘ figure,per creare un estrusione al corpo\n"
-"( tenere premuto Ctrl per selezionare pi˘ di un solido )"
+"Selezionare due o pi√π figure,per creare un estrusione al corpo\n"
+"( tenere premuto Ctrl per selezionare pi√π di un solido )"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:776
 msgid "Extrude"
@@ -1182,8 +1205,8 @@ msgid ""
 "There was a problem printing.\n"
 "Perhaps your current printer is not set correctly?"
 msgstr ""
-"C'Ë stato un problema di stampa.\n"
-"Forse la vostra stampante corrente non Ë impostata correttamente?"
+"C'√® stato un problema di stampa.\n"
+"Forse la vostra stampante corrente non √® impostata correttamente?"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1294
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1296
@@ -1199,8 +1222,8 @@ msgid ""
 "There was a problem previewing.\n"
 "Perhaps your current printer is not set correctly?"
 msgstr ""
-"C'Ë stato un problema di visualizzazione in anteprima di stampa.\n"
-"Forse la vostra stampante corrente non Ë impostata correttamente?"
+"C'√® stato un problema di visualizzazione in anteprima di stampa.\n"
+"Forse la vostra stampante corrente non √® impostata correttamente?"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1315
 msgid "Previewing"
@@ -1216,7 +1239,7 @@ msgstr "Nuovo\tCtrl+N"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1396
 msgid "Open\tCtrl+O"
-msgstr "Apri\tCtrl+O"
+msgstr "Apri\tCtrl+O "
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1397
 msgid "Save\tCtrl+S"
@@ -1228,31 +1251,33 @@ msgstr "Stampa\tCtrl+P"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1400
 msgid "Page Setup"
-msgstr "Imposta pagina"
+msgstr "Imposta Pagina"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1401
 msgid "Print Preview"
-msgstr "Anteprima di stampa"
+msgstr "Anteprima di Stampa"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1404
 msgid "Open Recent"
 msgstr "Apri recenti"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1405
+#: C:\Users\Dan\HeeksCNC\src\SpeedReferences.cpp:59
+#: C:\Users\Dan\HeeksCNC\src\Tools.cpp:70
 msgid "Import"
 msgstr "Importa"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1406
 msgid "About"
-msgstr "Altro su Heekscad"
+msgstr "Altro"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1408
 msgid "Plugins"
-msgstr "Plugins"
+msgstr "Plugin"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1410
 msgid "Exit\tCtrl+Q"
-msgstr "Esci\tCtrl+Q"
+msgstr "Uscita\tCtrl+Q"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1414
 msgid "Undo\tCtrl+Z"
@@ -1282,28 +1307,28 @@ msgstr "Cancella\tDel"
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1531
 #: C:\Users\Dan\HeeksCAD\src\SelectMode.cpp:32
 msgid "Select Mode"
-msgstr "Modo di Select"
+msgstr "Modo selezione"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1426
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1532
 msgid "Draw a sketch"
-msgstr "Disegna schizzo (sketch)"
+msgstr "Disegna profilo"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1428
 msgid "Draw Ellipses"
-msgstr "Disegna ellissi"
+msgstr "Disegna ellisse"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1429
 msgid "Draw Infinite Lines"
-msgstr "Disegna linee infinite"
+msgstr "Disegna linea infinita"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1430
 msgid "Draw Points"
-msgstr "Disegna punto"
+msgstr "disegna punto"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1431
 msgid "Draw Regular Shapes"
-msgstr "Disegna figura"
+msgstr "Disegna figura regolare"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1433
 msgid "Add Text"
@@ -1311,7 +1336,7 @@ msgstr "Aggiungi Testo"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1434
 msgid "Add Dimension"
-msgstr "Aggiungi Dimensione"
+msgstr "Aggiungi dimensioni"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1436
 msgid "Add Coordinate System"
@@ -1323,15 +1348,15 @@ msgstr "Vista precedente"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1442
 msgid "Zoom window"
-msgstr "Finesta di ingrandimento"
+msgstr "finestre di Zoom"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1443
 msgid "Fit view to extents"
-msgstr "Addatta vista"
+msgstr "Adatta Vista alle misure"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1444
 msgid "Fit view to extents, but no rotation"
-msgstr "Addatta vista senza ruotare"
+msgstr "Adatta Vista alle misure,ma senza ruotare"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1446
 msgid "View rotate"
@@ -1339,7 +1364,7 @@ msgstr "Vista ruotata"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1447
 msgid "View zoom"
-msgstr "Vista zoom"
+msgstr "Vista Zoom"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1448
 msgid "Full screen"
@@ -1348,7 +1373,7 @@ msgstr "Schermo intero"
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1450
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1571
 msgid "Redraw"
-msgstr "Redraw"
+msgstr "Ridisegna"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1454
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1551
@@ -1363,7 +1388,7 @@ msgstr "Aggiungi cubo"
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1456
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1553
 msgid "Add a cylinder"
-msgstr "aggiungi cilindro"
+msgstr "Aggiungi cilindro"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1457
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1554
@@ -1372,43 +1397,44 @@ msgstr "Aggiungi cono"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1459
 msgid "Loft two sketches"
-msgstr "Inclina lo schizzo(sketches)"
+msgstr "Inclina il profilo (sketches)"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1460
 msgid "Extrude a sketch"
-msgstr "Estrudi schizzo"
+msgstr "Estrudi profilo"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1462
 msgid "Cut"
-msgstr "Taglio"
+msgstr "Taglia"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1463
 msgid "Fuse"
-msgstr "Unisci"
+msgstr "Fondi/Unisci"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1464
 msgid "Common"
-msgstr "Comune"
+msgstr "Parte comune"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1465
 msgid "Fillet"
 msgstr "Carenatura"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1466
+#: C:\Users\Dan\HeeksCNC/src/CuttingTool.h:53
 msgid "Chamfer"
 msgstr "Smussatura"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1470
 msgid "Move Translate"
-msgstr "Muovi oggetto"
+msgstr ""
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1471
 msgid "Copy Translate"
-msgstr "Copia ogetto"
+msgstr ""
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1473
 msgid "Move Rotate"
-msgstr "Ruota oggetto"
+msgstr "Muovi rotazione"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1474
 msgid "Copy Rotate"
@@ -1424,31 +1450,31 @@ msgstr "Copia rispecchiato"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1479
 msgid "Move Scale"
-msgstr "muovi scala"
+msgstr "Muovi scala"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1484
 msgid "Log"
-msgstr "Log"
+msgstr "log"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1488
 msgid "Tool Bar"
-msgstr "barra degli stumenti"
+msgstr "toolbar"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1489
 msgid "Solids Tool Bar"
-msgstr "barra stumenti 3D"
+msgstr "toolbar dei solidi"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1490
 msgid "Geometry Tool Bar"
-msgstr "barra strumenti geometria"
+msgstr "toolbar della geometria"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1491
 msgid "Viewing Tool Bar"
-msgstr "Vista barre strumenti"
+msgstr "toolbar vista"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1492
 msgid "Transformations Tool Bar"
-msgstr "barra stumenti trasformazione"
+msgstr "toolbar trasformazione"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1493
 msgid "Status Bar"
@@ -1476,11 +1502,11 @@ msgstr "&Solidi 3D"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1502
 msgid "&Transform"
-msgstr "&Transformazione"
+msgstr "&Trasformazione"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1503
 msgid "&Window"
-msgstr "Fi&nestre"
+msgstr "&Finestre"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1523
 msgid "New file"
@@ -1488,11 +1514,11 @@ msgstr "Nuovo file"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1525
 msgid "Save file"
-msgstr "salva file"
+msgstr "Salva file"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1526
 msgid "Cut selected items to the clipboard"
-msgstr "Taglia gli elementi selezionati negli appunti"
+msgstr "Taglia oggetti selezionati negli appunti"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1527
 msgid "Copy selected items to the clipboard"
@@ -1500,7 +1526,7 @@ msgstr "Copia gli elementi selezionati negli appunti"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1528
 msgid "Paste items from the clipboard"
-msgstr "Incolla elememti dagli appunti"
+msgstr "Incolla elementi dagli appunti"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1529
 msgid "Undo the previous command"
@@ -1512,31 +1538,35 @@ msgstr "Passa al comando successivo"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1536
 msgid "Draw circles through 3 points"
-msgstr "Draw circles through 3 points"
+msgstr "Disegna cerchio, a 3 punti"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1537
 msgid "Draw circles, centre and point"
-msgstr "Draw circles, centre and point"
+msgstr "Disegna cerchio, centro e punto "
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1538
 msgid "Draw circles, centre and radius"
-msgstr "Draw circles, centre and radius"
+msgstr "Disegna cerchio, centro e raggio"
+
+#: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1542
+msgid "Draw ellipses"
+msgstr "Disegna ellisse"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1543
 msgid "Start Drawing Infinite Lines"
-msgstr "Inizio disegno linea infinita"
+msgstr "Iniziare a disegnare  linee infinite"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1544
 msgid "Start Drawing Points"
-msgstr "Inizio disegno punto"
+msgstr "Iniziare a disegnare Punti"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1545
-msgid "Draw regular shapes; rectangles, polygons, obrounds"
-msgstr "Disegna forme regolari, rettangoli, poligoni, tondi"
+msgid "Draw regular shapes; rectangles, polygons obrounds"
+msgstr "Disegna figure regolari, rettangoli, poligoni, ecc"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1546
 msgid "Add a text object"
-msgstr "Agginge ogetto di Testo"
+msgstr "Aggiunge oggetto di Testo"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1547
 msgid "Add a dimension"
@@ -1552,15 +1582,15 @@ msgstr "Crea una faccia inclinata"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1558
 msgid "Extrude a wire or face"
-msgstr "Estrudere un filo o una faccia"
+msgstr "Estrudere un bordo o una faccia"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1559
 msgid "Cut one solid from another"
-msgstr "Tagliare una solida da un altro"
+msgstr "Tagliare un solido da un altro"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1560
 msgid "Fuse one solid to another"
-msgstr "Unire uno solido ad un altro"
+msgstr "Unire un solido ad un altro"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1561
 msgid "Find common solid between two solids"
@@ -1568,7 +1598,7 @@ msgstr "Trova un solido comune tra due solidi"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1562
 msgid "Make a fillet on selected edges"
-msgstr "Crea una caranetura sui bordi selezionati"
+msgstr "Crea una carenatura sui bordi selezionati"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1563
 msgid "Make a chamfer on selected edges"
@@ -1576,29 +1606,27 @@ msgstr "Crea una smussatura sui bordi selezionati"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1564
 msgid "Go back to previous view"
-msgstr "Torna indietro alla precedente vista"
+msgstr "Torna indietro alla Vista precedente"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1565
 msgid "Zoom in to a dragged window"
-msgstr "Zommare la finestra tracciata"
+msgstr "Zoomare la finestra tracciata"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1566
 msgid "Zoom in to fit the extents of the drawing into the graphics window"
 msgstr "Zoom per adattare le estensioni del disegno nella finestra grafica"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1567
-msgid ""
-"Zoom in to fit the extents of the drawing into the graphics window, but "
-"without rotating the view"
+msgid "Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"
 msgstr "Zoom per adattare le estensioni del disegno nella finestra grafica, ma senza rotazione dell'oggetto"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1568
 msgid "Enter view rotating mode"
-msgstr "Inserisce modalit‡ ruotazione vista"
+msgstr "Inserisce modalit√† rotazione vista"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1569
 msgid "Drag to zoom in and out"
-msgstr "Trascinare per zommare avanti indietro"
+msgstr "Trascinare per zoomare avanti indietro"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1570
 msgid "Switch to full screen view ( press escape to return )"
@@ -1606,11 +1634,11 @@ msgstr "Apre vista schermo intero (premere Esc per ripristinare)"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1572
 msgid "Translate selected items"
-msgstr "traduci il pezzo selezionato????"
+msgstr "Trasferisci il pezzo selezionato"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1573
 msgid "Copy and translate selected items"
-msgstr "Copia e traduce il pezzo selezionato"
+msgstr "Copia e trasferisce il pezzo selezionato"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1574
 msgid "Rotate selected items"
@@ -1626,7 +1654,7 @@ msgstr "Rispecchia il pezzo selezionato"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1577
 msgid "Copy and mirror selected items"
-msgstr "Copia e rispeccia il pezzo selezionato"
+msgstr "Copia e rispecchia il pezzo selezionato"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1578
 msgid "Scale selected items"
@@ -1635,39 +1663,39 @@ msgstr "Scala il pezzo selezionato"
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1584
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1606
 msgid "General Tools"
-msgstr "Atrezzi generali"
+msgstr "Attrezzi generali"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1585
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1607
 msgid "Geometry Tools"
-msgstr "Atrezzi per la Geometria"
+msgstr "Attrezzi per la Geometria"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1586
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1608
 msgid "Solid Tools"
-msgstr "atrezzi solidi 3D"
+msgstr "Attrezzi solidi 3D"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1587
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1609
 msgid "Viewing Tools"
-msgstr "Atrezzi di visualizzazione"
+msgstr "Attrezzi di visualizzazione"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1588
 #: C:\Users\Dan\HeeksCAD\src\HeeksFrame.cpp:1610
 msgid "Transformation Tools"
-msgstr "Atrezzi di trasformazione"
+msgstr "Attrezzi di trasformazione"
 
 #: C:\Users\Dan\HeeksCAD\src\HEllipse.cpp:265
 msgid "major radius"
-msgstr "raggio maggiore"
+msgstr "Raggio maggiore"
 
 #: C:\Users\Dan\HeeksCAD\src\HEllipse.cpp:266
 msgid "minor radius"
-msgstr "raggio minore"
+msgstr "Raggio minore"
 
 #: C:\Users\Dan\HeeksCAD\src\HEllipse.cpp:267
 msgid "rotation"
-msgstr "rotazione"
+msgstr "Rotazione"
 
 #: C:\Users\Dan\HeeksCAD\src\HEllipse.cpp:268
 msgid "start angle"
@@ -1680,27 +1708,27 @@ msgstr "angolo finale"
 #: C:\Users\Dan\HeeksCAD\src\HILine.cpp:109
 #: C:\Users\Dan\HeeksCAD\src\HLine.cpp:166
 msgid "Length"
-msgstr "L‰nge"
+msgstr "lunghezza"
 
 #: C:\Users\Dan\HeeksCAD\src\HImage.cpp:148
 msgid "Picture - "
-msgstr "Immagine - "
+msgstr "Immagine"
 
 #: C:\Users\Dan\HeeksCAD\src\HLine.cpp:48
 msgid "Set this line to be horizontal"
-msgstr "Set this line to be horizontal"
+msgstr "Imposta questa linea come orizzontale"
 
 #: C:\Users\Dan\HeeksCAD\src\HLine.cpp:61
 msgid "Set this line to be vertical"
-msgstr "Set this line to be vertical"
+msgstr "Imposta questa linea come verticale"
 
 #: C:\Users\Dan\HeeksCAD\src\HLine.cpp:74
 msgid "Set this lines length as constrained"
-msgstr "Set this lines length as constrained"
+msgstr "Imposta questa linea a lunghezza limitata"
 
 #: C:\Users\Dan\HeeksCAD\src\HPoint.cpp:136
 msgid "Set this point as fixed"
-msgstr "Set this point as fixed"
+msgstr "Imposta questo punto come fisso"
 
 #: C:\Users\Dan\HeeksCAD\src\HSpline.cpp:157
 msgid "Knot"
@@ -1712,25 +1740,25 @@ msgstr "Polo"
 
 #: C:\Users\Dan\HeeksCAD\src\HText.cpp:173
 msgid "Font"
-msgstr "Font"
+msgstr "Carattere"
 
 #: C:\Users\Dan\HeeksCAD\src\HText.cpp:278
 msgid "Convert the lines and arcs that make up this text into a sketch object."
-msgstr "Convert the lines and arcs that make up this text into a sketch object."
+msgstr "Converte linee e gli archi che compongono questo testo in un oggetto (disegno)"
 
 #: C:\Users\Dan\HeeksCAD\src\InputModeCanvas.cpp:75
 msgid "Input Mode"
-msgstr "Modalit‡ di ingresso"
+msgstr "Modo inserimento"
 
 #: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:560
 msgid "Line drawing mode"
-msgstr "Modalit‡ disegno linee"
+msgstr "Modo disegno linee"
 
 #: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:562
 #: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:569
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:605
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:613
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:620
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:606
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:614
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:621
 msgid "click on start point"
 msgstr "clicca per partire da un punto"
 
@@ -1740,7 +1768,7 @@ msgstr "clicca per terminare una linea"
 
 #: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:567
 msgid "Arc drawing mode"
-msgstr "Modalit‡ disegno archi"
+msgstr "Modo disegno archi"
 
 #: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:570
 msgid "click on end of arc"
@@ -1748,160 +1776,160 @@ msgstr "clicca per terminare un arco"
 
 #: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:574
 msgid "Infinite line drawing"
-msgstr "Disegno linne infinite"
+msgstr "Disegno linee infinite"
 
 #: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:576
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:647
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:656
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:648
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:657
 msgid "click on first point"
 msgstr "clicca sul primo punto"
 
 #: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:577
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:648
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:657
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:649
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:658
 msgid "click on second point"
 msgstr "clicca sul secondo punto"
 
 #: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:581
 msgid "Ellipse drawing mode"
-msgstr "Modalit‡ disegno ellissi"
+msgstr "Modo disegno ellissi"
 
 #: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:584
 msgid "center and 2 points mode"
-msgstr ""
+msgstr "Modalita centro e 2 punti"
 
 #: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:586
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:639
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:640
 msgid "click on center point"
 msgstr "clicca sul punto centrale"
 
 #: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:589
 msgid "click on point on ellipse"
-msgstr "clicca un punto nella circonferenza"
+msgstr "clicca sul punto nell'ellisse"
 
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:590
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:591
 msgid "(colinear or orthogonal to axis)"
-msgstr "(colinear or orthogonal to axis)"
+msgstr "Collineare o  ortogonale all'asse"
 
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:592
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:593
 msgid "click on another point on ellipse"
-msgstr "click on another point on ellipse"
+msgstr "Fare clic su un altro punto sull' ellisse"
 
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:598
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:599
 msgid "Spline drawing mode"
-msgstr "Spline drawing mode"
+msgstr "Modo disegno Spline"
 
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:603
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:604
 msgid "cubic spline mode"
-msgstr "cubic spline mode"
-
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:606
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:614
-msgid "click on end point"
-msgstr "click on end point"
+msgstr "Modo Spline cubiche"
 
 #: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:607
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:621
-msgid "click on first control point"
-msgstr "click on first control point"
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:615
+msgid "click on end point"
+msgstr "Fare clic sul punto finale"
 
 #: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:608
 #: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:622
-msgid "click on second control point"
-msgstr "click on second control point"
+msgid "click on first control point"
+msgstr "Fare clic sul primo punto di controllo"
 
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:611
-msgid "quartic spline mode"
-msgstr "quartic spline mode"
-
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:615
-msgid "click on control point"
-msgstr "click on control point"
-
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:618
-msgid "rational spline mode"
-msgstr "rational spline mode"
-
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:609
 #: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:623
+msgid "click on second control point"
+msgstr "Fare clic sul secondo punto di controllo"
+
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:612
+msgid "quartic spline mode"
+msgstr "Modo Spline di 4¬∞grado"
+
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:616
+msgid "click on control point"
+msgstr "Fare clic sul punto di controllo"
+
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:619
+msgid "rational spline mode"
+msgstr "Modo Spline razionale"
+
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:624
 msgid "click on next control point or endpoint"
-msgstr "click on next control point or endpoint"
+msgstr "Fare clic sul prossimo ponto di controllo o punto finale"
 
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:631
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:632
 msgid "Circle drawing mode"
-msgstr "Modalit‡ disegno cerchi"
+msgstr "Modalit√† disegno cerchi"
 
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:637
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:638
 msgid "center and point mode"
-msgstr "Modalita punto e centro"
+msgstr "Modalit√† punto e centro"
 
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:640
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:641
 msgid "click on point on circle"
 msgstr "clicca un punto nella circonferenza"
 
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:645
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:646
 msgid "three points mode"
-msgstr ""
+msgstr "Modo tre punti"
 
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:649
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:650
 msgid "click on third point"
-msgstr "modo tre punti"
+msgstr "clicca sul terzo punto"
 
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:654
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:655
 msgid "two points mode"
-msgstr "two points mode"
+msgstr "Modo due punti"
 
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:662
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:663
 msgid "centre with radius mode"
-msgstr "centre with radius mode"
+msgstr "Modo centro con raggio"
 
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:664
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:665
 msgid "click on centre point"
-msgstr "clicca sul punto centrale"
-
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:746
-msgid "draw lines"
-msgstr "trascina linee"
+msgstr "Fare clic sul punto centrale"
 
 #: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:747
-msgid "draw tangential arcs"
-msgstr "trascina circonferenza dell'arco"
+msgid "draw lines"
+msgstr "Trascina linee"
 
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:749
-msgid "draw circles"
-msgstr "trascina cerchio"
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:748
+msgid "draw tangential arcs"
+msgstr "Trascina circonferenza dell'arco"
 
 #: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:750
+msgid "draw circles"
+msgstr "Trascina cerchio"
+
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:751
 #: C:\Users\Dan\HeeksCAD\src\RegularShapesDrawing.cpp:494
 msgid "drawing mode"
 msgstr "Modo trascinamento"
 
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:757
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:758
 msgid "(press 'a' for arcs)"
-msgstr "(Premi'a'per creare un arco)"
-
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:764
-msgid "centre and point"
-msgstr "punto e centro"
+msgstr "Premi 'a' per creare un arco)"
 
 #: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:765
+msgid "centre and point"
+msgstr "centro e punto"
+
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:766
 msgid "three points"
 msgstr "tre punti"
 
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:766
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:767
 msgid "two points"
 msgstr "due punti"
 
-#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:767
-msgid "centre and radius"
-msgstr "centre and radius"
-
 #: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:768
+msgid "centre and radius"
+msgstr "centro e raggio"
+
+#: C:\Users\Dan\HeeksCAD\src\LineArcDrawing.cpp:769
 msgid "circle mode"
-msgstr "circle mode"
+msgstr "Modo cerchio"
 
 #: C:\Users\Dan\HeeksCAD\src\manager.cpp:1293
 msgid "Categorized Mode"
-msgstr "Modo di classificazione"
+msgstr "Modo classificazione"
 
 #: C:\Users\Dan\HeeksCAD\src\manager.cpp:1294
 msgid "Alphabetic Mode"
@@ -1919,11 +1947,11 @@ msgstr "Espandi >>"
 
 #: C:\Users\Dan\HeeksCAD\src\MarkedList.cpp:290
 msgid "Number of items selected"
-msgstr "Numero di ogetti selezionati"
+msgstr "Numero di oggetti selezionati"
 
 #: C:\Users\Dan\HeeksCAD\src\MarkedList.cpp:297
 msgid "Delete Marked Items"
-msgstr "Cancella ogetti Selezionati"
+msgstr "Cancella oggetti Selezionati"
 
 #: C:\Users\Dan\HeeksCAD\src\MarkedList.cpp:306
 msgid "Copy"
@@ -1931,7 +1959,7 @@ msgstr "Copia"
 
 #: C:\Users\Dan\HeeksCAD\src\MarkedList.cpp:308
 msgid "Copies the selected items to the clipboard"
-msgstr "Copia gli ogetti selezionati negli appunti"
+msgstr "Copia gli oggetti selezionati negli appunti"
 
 #: C:\Users\Dan\HeeksCAD\src\MarkedList.cpp:323
 msgid "Paste Into"
@@ -1943,11 +1971,11 @@ msgstr "Incolla"
 
 #: C:\Users\Dan\HeeksCAD\src\MarkedList.cpp:325
 msgid "Paste items from the clipboard to the drawing"
-msgstr "Incolla ogetti dagli appunti nel disegno"
+msgstr "Incolla oggetti dagli appunti nel disegno"
 
 #: C:\Users\Dan\HeeksCAD\src\ObjPropsCanvas.cpp:117
 msgid "Apply any changes made to the properties"
-msgstr "Applica qualsiasi cambiamento effettuato nelle propriet‡"
+msgstr "Applica qualsiasi cambiamento effettuato nelle propriet√†"
 
 #: C:\Users\Dan\HeeksCAD\src\ObjPropsCanvas.cpp:118
 msgid "Stop editing the object"
@@ -1956,7 +1984,7 @@ msgstr "Fine modifica all'oggetto"
 #: C:\Users\Dan\HeeksCAD\src\Pad.cpp:101
 #: C:\Users\Dan\HeeksCAD\src\Pocket.cpp:102
 msgid "Height"
-msgstr "Altezza"
+msgstr "altezza"
 
 #: C:\Users\Dan\HeeksCAD\src\Plugins.cpp:37
 msgid "Name"
@@ -2037,6 +2065,10 @@ msgstr "Falso"
 
 #: C:\Users\Dan\HeeksCAD\src\propgrid.cpp:632
 #: C:\Users\Dan\HeeksCAD\src\props.cpp:570
+#: C:\Users\Dan\HeeksCNC\src\CounterBore.cpp:69
+#: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:124
+#: C:\Users\Dan\HeeksCNC\src\Locating.cpp:71
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:163
 msgid "True"
 msgstr "Vero"
 
@@ -2047,7 +2079,7 @@ msgstr "Non specificato"
 
 #: C:\Users\Dan\HeeksCAD\src\props.cpp:480
 msgid "is not a floating-point number"
-msgstr "non Ë un numero a virgola mobile"
+msgstr "non √® un numero a virgola mobile"
 
 #: C:\Users\Dan\HeeksCAD\src\props.cpp:581
 #: C:\Users\Dan\HeeksCAD\src\props.cpp:602
@@ -2060,11 +2092,11 @@ msgstr "falso"
 
 #: C:\Users\Dan\HeeksCAD\src\props.cpp:1470
 msgid "Choose a directory:"
-msgstr "scegli cartella"
+msgstr "Scegliere una directory"
 
 #: C:\Users\Dan\HeeksCAD\src\props.cpp:1685
 msgid "Choose a file"
-msgstr "scegli file"
+msgstr "Scegliere un file"
 
 #: C:\Users\Dan\HeeksCAD\src\props.cpp:1851
 #: C:\Users\Dan\HeeksCAD\src\props.cpp:2083
@@ -2085,11 +2117,11 @@ msgstr "Rimuovi"
 
 #: C:\Users\Dan\HeeksCAD\src\props.cpp:2063
 msgid "Up"
-msgstr "sopra"
+msgstr "Sopra"
 
 #: C:\Users\Dan\HeeksCAD\src\props.cpp:2066
 msgid "Down"
-msgstr "sotto"
+msgstr "Sotto"
 
 #: C:\Users\Dan\HeeksCAD\src\RegularShapesDrawing.cpp:490
 msgid "draw rectangles"
@@ -2101,7 +2133,7 @@ msgstr "Trascina poligono"
 
 #: C:\Users\Dan\HeeksCAD\src\RegularShapesDrawing.cpp:492
 msgid "draw slots"
-msgstr "Trascina scanalutura"
+msgstr "Trascina scanalatura"
 
 #: C:\Users\Dan\HeeksCAD\src\RegularShapesDrawing.cpp:501
 msgid "number of sides for polygon"
@@ -2109,40 +2141,40 @@ msgstr "Numero di lati del poligono"
 
 #: C:\Users\Dan\HeeksCAD\src\RegularShapesDrawing.cpp:504
 msgid "excribed circle"
-msgstr "Numero di lati del poligono"
+msgstr ""
 
 #: C:\Users\Dan\HeeksCAD\src\RegularShapesDrawing.cpp:505
 msgid "inscribed circle"
-msgstr "inscribed circle"
+msgstr ""
 
 #: C:\Users\Dan\HeeksCAD\src\RegularShapesDrawing.cpp:506
 msgid "polygon mode"
-msgstr "polygon mode"
+msgstr "Modo poligono"
 
 #: C:\Users\Dan\HeeksCAD\src\RuledSurface.cpp:16
 msgid "pick some sketches"
-msgstr "Scegliere alcuni sketches"
+msgstr "Scegliere alcuni profili (sketches)"
 
 #: C:\Users\Dan\HeeksCAD\src\RuledSurface.cpp:46
 msgid "Ruled Surface"
-msgstr "superfice rigata"
+msgstr "Superficie rigata"
 
 #: C:\Users\Dan\HeeksCAD\src\RuledSurface.cpp:84
 msgid "Extruded Solid"
-msgstr "Estrudi solido 3D"
+msgstr "Solido estruso"
 
 #: C:\Users\Dan\HeeksCAD\src\RuledSurface.cpp:108
 msgid "Pipe"
-msgstr "Pipe"
+msgstr ""
 
 #: C:\Users\Dan\HeeksCAD\src\RuledSurface.cpp:119
 msgid "pick sketches"
-msgstr "Selezionare i disegni"
+msgstr "Selezionare i profili"
 
 #: C:\Users\Dan\HeeksCAD\src\RuledSurface.cpp:123
 #: C:\Users\Dan\HeeksCAD\src\SketchTools.cpp:16
 msgid "Input extrusion height"
-msgstr "inserire altezza estrusione"
+msgstr "Inserire altezza estrusione"
 
 #: C:\Users\Dan\HeeksCAD\src\RuledSurface.cpp:148
 msgid "Fatal error making ruled solid"
@@ -2150,7 +2182,7 @@ msgstr "Errore fatale nel creare solido rigato"
 
 #: C:\Users\Dan\HeeksCAD\src\RuledSurface.cpp:170
 msgid "Fatal error making extruded solid"
-msgstr "errore fatale nel creare il solido estruso"
+msgstr "Errore fatale nel creare il solido estruso"
 
 #: C:\Users\Dan\HeeksCAD\src\Ruler.cpp:283
 msgid "Reset the ruler"
@@ -2158,27 +2190,28 @@ msgstr "Ripristina righello"
 
 #: C:\Users\Dan\HeeksCAD\src\Ruler.cpp:323
 msgid "use view units"
-msgstr "use view units"
+msgstr "Utilizzare visualizzazione unit√†"
 
 #: C:\Users\Dan\HeeksCAD\src\Ruler.cpp:332
+#: C:\Users\Dan\HeeksCNC\src\BOM.cpp:469
 msgid "width"
-msgstr "altezza"
+msgstr "larghezza"
 
 #: C:\Users\Dan\HeeksCAD\src\Ruler.cpp:334
 msgid "empty_length"
-msgstr "empty_length"
+msgstr "tratto_riempimento"
 
 #: C:\Users\Dan\HeeksCAD\src\SelectMode.cpp:39
 msgid "Left button for selecting objects"
-msgstr "tasto sinistro per selezionare gli oggetti"
+msgstr "Tasto sinistro per selezionare gli oggetti"
 
 #: C:\Users\Dan\HeeksCAD\src\SelectMode.cpp:40
 msgid "( with Ctrl key for extra objects)"
-msgstr "(con il tasto Ctrl per selezionare oggetti extra)"
+msgstr "( con il tasto Ctrl per selezionare oggetti extra )"
 
 #: C:\Users\Dan\HeeksCAD\src\SelectMode.cpp:41
 msgid "( with Shift key for similar objects)"
-msgstr "( with Shift key for similar objects)"
+msgstr "( con il tasto Shift per selezionare oggetti Simili )."
 
 #: C:\Users\Dan\HeeksCAD\src\SelectMode.cpp:42
 msgid "Drag with left button to window select"
@@ -2186,11 +2219,11 @@ msgstr "Trascinare con il tasto sinistro per selezionare la finestra"
 
 #: C:\Users\Dan\HeeksCAD\src\SelectMode.cpp:43
 msgid "or to move object if on an object"
-msgstr "o per spostare oggetti, se su un oggetto"
+msgstr "o per spostare oggetti, se su un oggetto."
 
 #: C:\Users\Dan\HeeksCAD\src\SelectMode.cpp:44
 msgid "Mouse wheel to zoom in and out"
-msgstr "La rotella del mouse per eseguire lo zoom in e out"
+msgstr "La rotella del mouse per eseguire lo zoom in e out."
 
 #: C:\Users\Dan\HeeksCAD\src\SelectMode.cpp:47
 msgid "Middle button to pan view"
@@ -2198,23 +2231,23 @@ msgstr "Tasto centrale per vista panoramica"
 
 #: C:\Users\Dan\HeeksCAD\src\SelectMode.cpp:48
 msgid "( with Ctrl key to rotate view )"
-msgstr "(con il tasto Ctrl si rouota la panoramica)"
+msgstr "( con il tasto Ctrl si ruota la panoramica )."
 
 #: C:\Users\Dan\HeeksCAD\src\SelectMode.cpp:51
 msgid "Middle button to rotate view"
-msgstr "Tasto centrale per ruota la visione"
+msgstr "Tasto centrale per ruotare la visione"
 
 #: C:\Users\Dan\HeeksCAD\src\SelectMode.cpp:52
 msgid "( with Ctrl key to pan view )"
-msgstr "(con il tasto Ctrl per vista panoramica)"
+msgstr "( con il tasto Ctrl per vista panoramica )."
 
 #: C:\Users\Dan\HeeksCAD\src\SelectMode.cpp:55
 msgid "Right button for object menu"
-msgstr "Tasto destro per il menu oggetti"
+msgstr "Tasto destro per il menu oggetti."
 
 #: C:\Users\Dan\HeeksCAD\src\SelectMode.cpp:56
 msgid "See options window to hide this help"
-msgstr ""
+msgstr "Vedere la finestra delle opzioni per nascondere questo aiuto"
 
 #: C:\Users\Dan\HeeksCAD\src\SelectMode.cpp:499
 msgid "Pick Anything"
@@ -2234,7 +2267,7 @@ msgstr "Impostare il filtro di selezione ai soli bordi"
 
 #: C:\Users\Dan\HeeksCAD\src\Shape.cpp:174
 msgid "Enter Offset Value, + for making bigger, - for making smaller"
-msgstr "Inserisci il valore di offset, + per renderlo pi˘ grande, - per renderlo pi˘ piccolo"
+msgstr "Insere valore  offset, + per renderlo piu' grande, - per renderlo piu' piccolo"
 
 #: C:\Users\Dan\HeeksCAD\src\Shape.cpp:174
 msgid "Offset value"
@@ -2267,29 +2300,29 @@ msgstr "Risultato dell'operazione di Taglio"
 #: C:\Users\Dan\HeeksCAD\src\Shape.cpp:614
 #: C:\Users\Dan\HeeksCAD\src\Shape.cpp:624
 msgid "STEP solid"
-msgstr "STEP solido 3D"
+msgstr "Passo solido"
 
 #: C:\Users\Dan\HeeksCAD\src\Shape.cpp:631
 #: C:\Users\Dan\HeeksCAD\src\Shape.cpp:707
 msgid "STEP import not done!"
-msgstr "importazione STEP non effettuato!"
+msgstr "Importazione passo non effettuato"
 
 #: C:\Users\Dan\HeeksCAD\src\Shape.cpp:676
 msgid "sewed IGES solid"
-msgstr "Riparazione IGES 3D"
+msgstr "Chiudere solido IGES"
 
 #: C:\Users\Dan\HeeksCAD\src\Shape.cpp:685
 msgid "IGES import not done!"
-msgstr "Importazione IGES non effettuato!"
+msgstr "Importazione IGES non effettuata"
 
 #: C:\Users\Dan\HeeksCAD\src\Shape.cpp:703
 msgid "BREP solid"
-msgstr "BREP solido 3D"
+msgstr "Solido BREP"
 
 #: C:\Users\Dan\HeeksCAD\src\Sketch.cpp:33
 #: C:\Users\Dan\HeeksCAD/src/Sketch.h:43
 msgid "Sketch"
-msgstr "schizzo/bozza"
+msgstr "Disegno"
 
 #: C:\Users\Dan\HeeksCAD\src\Sketch.cpp:191
 msgid "Number of elements"
@@ -2297,41 +2330,41 @@ msgstr "Numero di elementi"
 
 #: C:\Users\Dan\HeeksCAD\src\Sketch.cpp:210
 msgid "order"
-msgstr "ordine"
+msgstr "Ordine"
 
 #: C:\Users\Dan\HeeksCAD\src\Sketch.cpp:212
 msgid "solidify"
-msgstr "solidify"
+msgstr "Solidificare"
 
 #: C:\Users\Dan\HeeksCAD\src\Sketch.cpp:251
 #: C:\Users\Dan\HeeksCAD/src/ConversionTools.h:19
 msgid "Convert sketch to face"
-msgstr "Converti schizzo in faccia"
+msgstr "Converti disegno in faccia"
 
 #: C:\Users\Dan\HeeksCAD\src\Sketch.cpp:268
 #: C:\Users\Dan\HeeksCAD/src/ConversionTools.h:27
 msgid "Split arcs to little lines"
-msgstr "Split arcs to little lines"
+msgstr "Porzione di arco in piccola linea"
 
 #: C:\Users\Dan\HeeksCAD\src\SketchTools.cpp:23
 msgid "Pad Sketch"
-msgstr "Pad Sketch"
+msgstr "Riempire disegno"
 
 #: C:\Users\Dan\HeeksCAD\src\SketchTools.cpp:30
 msgid "Input pad depth"
-msgstr "Input pad depth"
+msgstr "Inserire profondita di riempimento"
 
 #: C:\Users\Dan\HeeksCAD\src\SketchTools.cpp:37
 msgid "Pocket Sketch"
-msgstr "Pocket Sketch"
+msgstr "Disegno tasca"
 
 #: C:\Users\Dan\HeeksCAD\src\SketchTools.cpp:53
 msgid "Make To Part"
-msgstr "Make To Part"
+msgstr "Mettere da parte"
 
 #: C:\Users\Dan\HeeksCAD\src\SketchTools.cpp:77
 msgid "Add To Part"
-msgstr "Add To Part"
+msgstr "Aggiunge Parte"
 
 #: C:\Users\Dan\HeeksCAD\src\TransformTool.cpp:22
 msgid "Transform"
@@ -2343,14 +2376,14 @@ msgstr "Trasformare oggetto"
 
 #: C:\Users\Dan\HeeksCAD\src\TransformTools.cpp:40
 msgid "Pick objects to move"
-msgstr "Selezionare oggetto da muovere"
+msgstr "Seleziona oggetto da muovere"
 
 #: C:\Users\Dan\HeeksCAD\src\TransformTools.cpp:54
 #: C:\Users\Dan\HeeksCAD\src\TransformTools.cpp:142
 #: C:\Users\Dan\HeeksCAD\src\TransformTools.cpp:236
 #: C:\Users\Dan\HeeksCAD\src\TransformTools.cpp:308
 msgid "Enter number of copies"
-msgstr "inserire numero di copie"
+msgstr "Inserire numero di copie"
 
 #: C:\Users\Dan\HeeksCAD\src\TransformTools.cpp:54
 #: C:\Users\Dan\HeeksCAD\src\TransformTools.cpp:142
@@ -2361,31 +2394,31 @@ msgstr "Numero di copie"
 
 #: C:\Users\Dan\HeeksCAD\src\TransformTools.cpp:64
 msgid "Click position to move from"
-msgstr "Clicca per passare da questa posizione"
+msgstr "Clicca su una punto per passare da li"
 
 #: C:\Users\Dan\HeeksCAD\src\TransformTools.cpp:78
 msgid "Click position to move to"
-msgstr "Clicca per muovere verso questa posizione"
+msgstr "Clicca su un punto per arrivare su questo "
 
 #: C:\Users\Dan\HeeksCAD\src\TransformTools.cpp:128
 msgid "Pick objects to rotate"
-msgstr "Seleziona oggetto da ruotare"
+msgstr "Selezionare oggetto da ruotare"
 
 #: C:\Users\Dan\HeeksCAD\src\TransformTools.cpp:159
 msgid "Pick line for rotation axis"
-msgstr "Pick line for rotation axis"
+msgstr "Selezionare linea per ruotazione assi"
 
 #: C:\Users\Dan\HeeksCAD\src\TransformTools.cpp:182
 msgid "Click centre position to rotate about"
-msgstr "Clicca una posizione centrale per ruotare intorno ad essa"
+msgstr "Clicca su posizione centrale per ruotare intorno ad essa"
 
 #: C:\Users\Dan\HeeksCAD\src\TransformTools.cpp:188
 msgid "Enter angle to rotate by"
-msgstr "Inserire angolo di rotazione"
+msgstr "inserire angolo di rotazione"
 
 #: C:\Users\Dan\HeeksCAD\src\TransformTools.cpp:188
 msgid "angle"
-msgstr "angolo"
+msgstr "Angolo"
 
 #: C:\Users\Dan\HeeksCAD\src\TransformTools.cpp:224
 msgid "Pick objects to mirror"
@@ -2393,15 +2426,15 @@ msgstr "Selezionare oggetto da rispecchiare"
 
 #: C:\Users\Dan\HeeksCAD\src\TransformTools.cpp:249
 msgid "Pick line to mirror about"
-msgstr "Selezionare linea da rispecchiare"
+msgstr ""
 
 #: C:\Users\Dan\HeeksCAD\src\TransformTools.cpp:294
 msgid "Pick objects to scale"
-msgstr "Selezionare oggetto da scalare"
+msgstr "Selezione oggetti in scala"
 
 #: C:\Users\Dan\HeeksCAD\src\TransformTools.cpp:318
 msgid "Click centre position to scale about"
-msgstr "Clicca posizione centrale per scalare ogetti adiacenti"
+msgstr "Clicca poszione centrale per scalare"
 
 #: C:\Users\Dan\HeeksCAD\src\TransformTools.cpp:322
 msgid "Enter scale factor"
@@ -2409,35 +2442,35 @@ msgstr "Inserire fattore di scala"
 
 #: C:\Users\Dan\HeeksCAD\src\TransformTools.cpp:322
 msgid "scale factor"
-msgstr "Fattore di scala"
+msgstr "fattore di scala"
 
 #: C:\Users\Dan\HeeksCAD\src\ViewRotating.cpp:60
 msgid "Stop rotating"
-msgstr "Fattore di scala"
+msgstr "Stop di rotazione"
 
 #: C:\Users\Dan\HeeksCAD\src\ViewZooming.cpp:50
 msgid "Drag with the left mouse button"
-msgstr "Trascina con il tasto sinistro del mouse"
+msgstr "Trascinare con il tasto sinistrode mause"
 
 #: C:\Users\Dan\HeeksCAD\src\ViewZooming.cpp:50
 msgid "Forward to zoom in, Back to zoom out"
-msgstr "Avanti per zoom in, Indietro per zoom out"
+msgstr "Avanti per zoom in. Indietro per zoom out"
 
 #: C:\Users\Dan\HeeksCAD\src\ViewZooming.cpp:50
 msgid "Back to zoom in, Forward to zoom out"
-msgstr "Indietro per zoom in, Avanti per zoom out"
+msgstr "Indietro per zoom in, avanti per zoom out"
 
 #: C:\Users\Dan\HeeksCAD\src\ViewZooming.cpp:50
 msgid "Hold middle mouse button down to pan"
-msgstr "Tenere premuto il tasto centale del mouse per panoramica"
+msgstr "Tenere premuto il tasto centrale del mouse fino a Pan"
 
 #: C:\Users\Dan\HeeksCAD\src\ViewZooming.cpp:61
 msgid "Stop zooming"
-msgstr "Stop zooming"
+msgstr "Stop zoom"
 
 #: C:\Users\Dan\HeeksCAD\src\Wire.cpp:27
 msgid "Result of Wire Offset"
-msgstr "risultato linea di offset"
+msgstr "Risultato del filo di offset"
 
 #: C:\Users\Dan\HeeksCAD\src\Wire.cpp:29
 msgid "Generated"
@@ -2453,57 +2486,57 @@ msgstr "Modificato"
 
 #: C:\Users\Dan\HeeksCAD\src\Wire.cpp:47
 msgid "Is Deleted"
-msgstr "Cancellato"
+msgstr "E' cancellato"
 
 #: C:\Users\Dan\HeeksCAD\src\Wire.cpp:53
 msgid "Offset Wire"
-msgstr "offset filo"
+msgstr "filo di offset"
 
 #: C:\Users\Dan\HeeksCAD\src\wxImageLoader.cpp:21
 msgid "Failed to load resource image"
-msgstr "Impossibile caricare l'immagine"
+msgstr "Impossibile caricare la risorsa 'immagine"
 
 #: C:\Users\Dan\HeeksCAD/src/Constraint.h:65
 msgid "Constraint"
-msgstr "Constraint"
+msgstr "Regolazione"
 
 #: C:\Users\Dan\HeeksCAD/src/ConversionTools.h:35
 #: C:\Users\Dan\HeeksCAD/src/ConversionTools.h:44
 msgid "Make To Sketch"
-msgstr "crea uno schizzo sketch"
+msgstr "Crea nel disegno"
 
 #: C:\Users\Dan\HeeksCAD/src/ConversionTools.h:37
 msgid "Make selected lines and arcs into a new sketch"
-msgstr "Crea un nuovo disegno con le linee e gli archi selezionati"
+msgstr "Crea, delle linee e/o archi selezionati, un nuovo disegno"
 
 #: C:\Users\Dan\HeeksCAD/src/ConversionTools.h:46
 msgid "Make selected edges into a new sketch"
-msgstr "Make selected edges into a new sketch"
+msgstr "Crea, dei bordi selezionati, un nuovo disegno"
 
 #: C:\Users\Dan\HeeksCAD/src/ConversionTools.h:53
 msgid "Combine sketches"
-msgstr "Unisci disegni"
+msgstr "Combina disegni"
 
 #: C:\Users\Dan\HeeksCAD/src/ConversionTools.h:55
 msgid "Combine selected sketches"
-msgstr "Unisci i disegni selezionati"
+msgstr "combina disegni selezionati"
 
 #: C:\Users\Dan\HeeksCAD/src/ConversionTools.h:62
 msgid "Unite sketches"
-msgstr "Unite sketches"
+msgstr "Unisci disegni"
 
 #: C:\Users\Dan\HeeksCAD/src/ConversionTools.h:64
 msgid "Unite selected sketches"
-msgstr "Unite selected sketches"
+msgstr "Unisci disegni selezionati"
 
 #: C:\Users\Dan\HeeksCAD/src/ConversionTools.h:71
 #: C:\Users\Dan\HeeksCAD/src/Group.h:13
 msgid "Group"
-msgstr "Gruppo"
+msgstr "raggruppa"
 
 #: C:\Users\Dan\HeeksCAD/src/ConversionTools.h:73
 msgid "Group selected items"
-msgstr "Gruppo di elementi selezionati"
+msgstr "Raggrappa per voce"
 
 #: C:\Users\Dan\HeeksCAD/src/ConversionTools.h:80
 msgid "Ungroup"
@@ -2511,11 +2544,11 @@ msgstr "Separa"
 
 #: C:\Users\Dan\HeeksCAD/src/ConversionTools.h:82
 msgid "Ungroup selected items"
-msgstr "Separa elementi selezionati"
+msgstr "Separa per voce"
 
 #: C:\Users\Dan\HeeksCAD/src/DimensionDrawing.h:33
 msgid "Dimension drawing"
-msgstr "Dimensione Disegno"
+msgstr "Dimensine disegno"
 
 #: C:\Users\Dan\HeeksCAD/src/Drawing.h:65
 msgid "Drawing"
@@ -2524,9 +2557,11 @@ msgstr "Disegno"
 #: C:\Users\Dan\HeeksCAD/src/DynamicSolid.h:26
 #: C:\Users\Dan\HeeksCAD/src/Solid.h:24
 msgid "Solid"
-msgstr "Solido 3D"
+msgstr "Solido"
 
 #: C:\Users\Dan\HeeksCAD/src/Edge.h:55
+#: C:\Users\Dan\HeeksCNC\src\Probing.cpp:477
+#: C:\Users\Dan\HeeksCNC\src\Probing.cpp:496
 msgid "Edge"
 msgstr "Bordo"
 
@@ -2536,12 +2571,12 @@ msgstr "Faccia"
 
 #: C:\Users\Dan\HeeksCAD/src/Gripper.h:26
 msgid "Gripper"
-msgstr "Stringi"
+msgstr "Pinza"
 
 #: C:\Users\Dan\HeeksCAD/src/HAngularDimension.h:49
 #: C:\Users\Dan\HeeksCAD/src/HDimension.h:54
 msgid "Dimension"
-msgstr "Dimensione"
+msgstr "Dimensioni"
 
 #: C:\Users\Dan\HeeksCAD/src/HArc.h:37
 msgid "Arc"
@@ -2553,11 +2588,11 @@ msgstr "Cerchio"
 
 #: C:\Users\Dan\HeeksCAD/src/HEllipse.h:40
 msgid "Ellipse"
-msgstr "Elisse"
+msgstr "Ellisse"
 
 #: C:\Users\Dan\HeeksCAD/src/HILine.h:26
 msgid "Infinite Line"
-msgstr "Linea infinita"
+msgstr "Linee Infinite"
 
 #: C:\Users\Dan\HeeksCAD/src/HImage.h:43
 msgid "Image"
@@ -2585,19 +2620,20 @@ msgstr "Xml"
 
 #: C:\Users\Dan\HeeksCAD/src/MagDragWindow.h:20
 msgid "Magnifying by dragging a window"
-msgstr "Ingrandimento trascinando una finestra"
+msgstr "Ingrandimento per trascinamento finestra"
 
 #: C:\Users\Dan\HeeksCAD/src/Pad.h:17
 msgid "Pad"
-msgstr "Pad"
+msgstr ""
 
 #: C:\Users\Dan\HeeksCAD/src/Part.h:15
 msgid "Part"
-msgstr "Part"
+msgstr "Particolare"
 
 #: C:\Users\Dan\HeeksCAD/src/Pocket.h:17
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:816
 msgid "Pocket"
-msgstr "Pocket"
+msgstr "Tasca"
 
 #: C:\Users\Dan\HeeksCAD/src/PointDrawing.h:28
 msgid "Point drawing"
@@ -2609,7 +2645,7 @@ msgstr "Trascinamento di una finestra o selezionando un punto"
 
 #: C:\Users\Dan\HeeksCAD/src/RegularShapesDrawing.h:50
 msgid "Regular shapes drawing"
-msgstr "Regolare le forme di disegno"
+msgstr "forme di disegno regolari"
 
 #: C:\Users\Dan\HeeksCAD/src/Ruler.h:50
 msgid "Ruler"
@@ -2621,7 +2657,7 @@ msgstr "Facce"
 
 #: C:\Users\Dan\HeeksCAD/src/ShapeTools.h:21
 msgid "Edges"
-msgstr "Bordi/lati"
+msgstr "Bordi"
 
 #: C:\Users\Dan\HeeksCAD/src/ShapeTools.h:30
 msgid "Vertices"
@@ -2629,11 +2665,11 @@ msgstr "Vertici"
 
 #: C:\Users\Dan\HeeksCAD/src/StlSolid.h:38
 msgid "STL Solid"
-msgstr "STL solido 3D"
+msgstr "Solido STL"
 
 #: C:\Users\Dan\HeeksCAD/src/Vertex.h:31
 msgid "Vertex"
-msgstr "Vertice "
+msgstr "Vertice"
 
 #: C:\Users\Dan\HeeksCAD/src/ViewRotating.h:15
 msgid "View Rotate"
@@ -2641,11 +2677,11 @@ msgstr "Vista ruotata"
 
 #: C:\Users\Dan\HeeksCAD/src/ViewZooming.h:14
 msgid "View Zoom"
-msgstr "Vista zoom"
+msgstr "Vista Zoom"
 
 #: C:\Users\Dan\HeeksCAD/src/Window.h:19
 msgid "Dragging a window"
-msgstr "Trascinare in una finestra"
+msgstr "Trascinamento di una finestra"
 
 #: C:\Users\Dan\HeeksCAD/src/Wire.h:17
 msgid "Wire"
@@ -2653,11 +2689,11 @@ msgstr "filo"
 
 #: C:\Users\Dan\HeeksCAD\interface\HeeksObj.cpp:95
 msgid "object type"
-msgstr "Tipo di oggetto"
+msgstr "Tipo oggetto"
 
 #: C:\Users\Dan\HeeksCAD\interface\HeeksObj.cpp:96
 msgid "object title"
-msgstr "Titolo oggetto"
+msgstr "titolo oggetto"
 
 #: C:\Users\Dan\HeeksCAD\interface\HeeksObj.cpp:97
 msgid "ID"
@@ -2669,7 +2705,7 @@ msgstr "colore"
 
 #: C:\Users\Dan\HeeksCAD\interface\HeeksObj.cpp:103
 msgid "visible"
-msgstr "Visibile"
+msgstr "visibile"
 
 #: C:\Users\Dan\HeeksCAD\interface\HeeksObj.h:105
 msgid "Unknown"
@@ -2677,476 +2713,1350 @@ msgstr "Sconosciuto"
 
 #: C:\Users\Dan\HeeksCAD\interface\Property.h:37
 msgid "Unknown Property"
-msgstr "Proprietario sconosciuto"
+msgstr "Propriat√† sconosciute"
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:248
 msgid "leadoffdz"
-msgstr "direzione_off_z"
+msgstr "comando_offdz"
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:249
 msgid "leadofflen"
-msgstr "dir_off_?"
+msgstr "comando_offlen"
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:250
 msgid "leadoffrad"
-msgstr "dir_off_?"
+msgstr "comando_offrad"
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:251
 msgid "retractzheight"
-msgstr "Rit_alt_z"
+msgstr "altezza_sicurezza_z"
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:252
 msgid "leadoffsamplestep"
-msgstr "dir_off_esempio_passo"
+msgstr "comando_offsamplestep"
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:253
 msgid "toolcornerrad"
-msgstr "attrezzi angoli"
+msgstr ""
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:254
 msgid "toolflatrad"
-msgstr "attrezzi rad"
+msgstr ""
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:255
 msgid "samplestep"
-msgstr ""
+msgstr "sample step"
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:256
 msgid "stepdown"
+msgstr "Passo inferiore"
+
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:257
+msgid "clearcuspheight"
 msgstr ""
 
-msgid "clearcuspheight"
-msgstr "cancella altezza punta"
-
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:258
 msgid "triangleweaveres"
-msgstr "armatura triang residua"
+msgstr ""
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:259
 msgid "flatradweaveres"
 msgstr ""
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:260
 msgid "dchangright"
 msgstr ""
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:261
 msgid "dchangrightoncontour"
 msgstr ""
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:262
 msgid "dchangleft"
 msgstr ""
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:263
 msgid "dchangefreespace"
 msgstr ""
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:264
 msgid "sidecutdisplch"
 msgstr ""
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:265
 msgid "fcut"
 msgstr ""
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:266
 msgid "fretract"
 msgstr ""
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:267
 msgid "thintol"
 msgstr ""
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:268
 msgid "startpoint_x"
-msgstr ""
+msgstr "startpoint_x"
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:269
 msgid "startpoint_y"
-msgstr ""
+msgstr "startpoint_y"
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:270
 msgid "startvel_x"
-msgstr ""
+msgstr "startvel_x"
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:271
 msgid "startvel_y"
-msgstr ""
+msgstr "startvel_y"
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:272
 msgid "minz"
-msgstr ""
+msgstr "min_z"
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:273
 msgid "boundaryclear"
-msgstr "cancella limite"
+msgstr "cancella limiti"
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:275
 msgid "boundary_x0"
 msgstr "limite_x0"
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:276
 msgid "boundary_x1"
 msgstr "limite_x1"
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:277
 msgid "boundary_y0"
 msgstr "limite_y0"
 
+#: C:\Users\Dan\HeeksCNC\src\Adaptive.cpp:278
 msgid "boundary_y1"
 msgstr "limite_y1"
 
-msgid "tool number"
-msgstr "Fresa numero"
+#: C:\Users\Dan\HeeksCNC\src\BOM.cpp:442
+msgid "output.nc"
+msgstr "Output.nc"
 
-msgid "tool diameter"
-msgstr "diametro fresa"
+#: C:\Users\Dan\HeeksCNC\src\BOM.cpp:464
+msgid "Pack BOM"
+msgstr ""
 
+#: C:\Users\Dan\HeeksCNC\src\BOM.cpp:469
+msgid "Enter width of panel in inches"
+msgstr ""
+
+#: C:\Users\Dan\HeeksCNC\src\BOM.cpp:470
+msgid "Enter gap in millimeters"
+msgstr "inserire scarto in millimetri"
+
+#: C:\Users\Dan\HeeksCNC\src\BOM.cpp:470
+msgid "gap"
+msgstr "Scarto"
+
+#: C:\Users\Dan\HeeksCNC\src\BOM.cpp:478
+msgid "Output NC"
+msgstr "Output NC"
+
+#: C:\Users\Dan\HeeksCNC\src\CounterBore.cpp:63
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:531
+msgid "diameter"
+msgstr "diametro"
+
+#: C:\Users\Dan\HeeksCNC\src\CounterBore.cpp:68
+#: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:123
+#: C:\Users\Dan\HeeksCNC\src\Locating.cpp:70
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:162
+msgid "Respect existing order"
+msgstr "Rispetta ordine esistente"
+
+#: C:\Users\Dan\HeeksCNC\src\CounterBore.cpp:72
+#: C:\Users\Dan\HeeksCNC\src\Locating.cpp:74
+msgid "sort_locations"
+msgstr "Ordina_luoghi"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingRate.cpp:60
+#: C:\Users\Dan\HeeksCNC\src\SpeedReference.cpp:85
+msgid "Brinell hardness of raw material"
+msgstr "durezza Brinell del materiale"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingRate.cpp:65
+msgid "Maximum Material Removal Rate (mm^3/min)"
+msgstr "rapporto di rimozione Massimo  del materiale (mm^3/min)"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingRate.cpp:72
+msgid "Maximum Material Removal Rate (inches^3/min)"
+msgstr "rapporto di rimozione Massimo  del materiale (inches^3/min)"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:462
+msgid "Leave manually assigned title"
+msgstr "Assegnazione manuale titolo"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:463
+msgid "Automatically generate title"
+msgstr "Genera automaticamente il titolo"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:465
+msgid "Automatic Title"
+msgstr "Titolo Automatico"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:480
+#: C:\Users\Dan\HeeksCNC\src\SpeedReference.cpp:82
+msgid "Material"
+msgstr "Materiale"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:495
+msgid "Type"
+msgstr "tipo"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:500
+msgid "max_advance_per_revolution"
+msgstr "avanzamento_massimo_per_giro"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:507
+msgid "x_offset"
+msgstr "x_offset"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:508
+msgid "front_angle"
+msgstr "angolo_frontale"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:509
+msgid "tool_angle"
+msgstr "Strumenti_angoli"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:510
+msgid "back_angle"
+msgstr "angolo posteriore"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:514
+msgid "(0) Unused"
+msgstr "(0) non ancora usato"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:515
+msgid "(1) Turning/Back Facing"
+msgstr "(1) Tornitura Posteriore"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:516
+msgid "(2) Turning/Facing"
+msgstr "(2) Tornitura Frontale"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:517
+msgid "(3) Boring/Facing"
+msgstr "(2) Perforazione Frontale"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:518
+msgid "(4) Boring/Back Facing"
+msgstr "(4) Perforazione posteriore"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:519
+msgid "(5) Back Facing"
+msgstr "(5) Spianamento posteriore"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:520
+msgid "(6) Turning"
+msgstr "(6) Tornitura"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:521
+msgid "(7) Facing"
+msgstr "(7)Spianamento"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:522
+msgid "(8) Boring"
+msgstr "(8) Perforazione"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:523
+msgid "(9) Centre"
+msgstr "(9) Centro"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:532
+msgid "tool_length_offset"
+msgstr "Lunghezza utensile"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:536
+msgid "flat_radius"
+msgstr ""
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:537
+msgid "corner_radius"
+msgstr ""
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:538
+msgid "cutting_edge_angle"
+msgstr ""
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:539
+msgid "cutting_edge_height"
+msgstr ""
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:687
+msgid "tool_number"
+msgstr "Attrezzo_numero"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:949
+msgid "Carbide "
+msgstr "Carburo"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:956
+#: C:\Users\Dan\HeeksCNC/src/CuttingTool.h:48
+msgid "Drill Bit"
+msgstr "punta dritta"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:959
+#: C:\Users\Dan\HeeksCNC/src/CuttingTool.h:49
+msgid "Centre Drill Bit"
+msgstr "punta dritta centro ridotto"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:962
+#: C:\Users\Dan\HeeksCNC/src/CuttingTool.h:50
+msgid "End Mill"
+msgstr "Punta piatta"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:965
+#: C:\Users\Dan\HeeksCNC/src/CuttingTool.h:51
+msgid "Slot Cutter"
+msgstr "punta per incavi"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:968
+#: C:\Users\Dan\HeeksCNC/src/CuttingTool.h:52
+msgid "Ball End Mill"
+msgstr "punta a palla"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:973
+msgid "Chamfering Bit"
+msgstr "punta smussante"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:976
+#: C:\Users\Dan\HeeksCNC/src/CuttingTool.h:54
+msgid "Turning Tool"
+msgstr "Attrezzi di tornitura"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:979
+#: C:\Users\Dan\HeeksCNC/src/CuttingTool.h:55
+msgid "Touch Probe"
+msgstr "Sonda tastatrice"
+
+#: C:\Users\Dan\HeeksCNC\src\CuttingTool.cpp:982
+#: C:\Users\Dan\HeeksCNC/src/CuttingTool.h:56
+msgid "Tool Length Switch"
+msgstr ""
+
+#: C:\Users\Dan\HeeksCNC\src\DepthOp.cpp:74
 msgid "clearance height"
-msgstr "altezza fresa"
+msgstr "Spazio libero in altezza"
 
-
+#: C:\Users\Dan\HeeksCNC\src\DepthOp.cpp:75
 msgid "step down"
-msgstr "Profondit‡ per passo"
+msgstr "Passo Z"
 
+#: C:\Users\Dan\HeeksCNC\src\DepthOp.cpp:76
 msgid "start depth"
-msgstr "profondit‡ iniziale"
+msgstr "altezza Z iniziale"
 
+#: C:\Users\Dan\HeeksCNC\src\DepthOp.cpp:77
 msgid "final depth"
-msgstr "profondit‡ finale"
+msgstr "altezza Z finale"
 
+#: C:\Users\Dan\HeeksCNC\src\DepthOp.cpp:78
 msgid "rapid down to height"
-msgstr "rapido verso il basso fino all'altezza"
+msgstr "rapido fino all'altezza"
 
-msgid "horizontal feed rate"
-msgstr "velocit‡ di avanzamento orizzontale"
+#: C:\Users\Dan\HeeksCNC\src\DepthOp.cpp:254
+#: C:\Users\Dan\HeeksCNC\src\DepthOp.cpp:268
+#: C:\Users\Dan\HeeksCNC\src\DepthOp.cpp:280
+#: C:\Users\Dan\HeeksCNC\src\DepthOp.cpp:292
+#: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:750
+msgid "WARNING"
+msgstr "Attenzione"
 
-msgid "vertical feed rate"
-msgstr "velocit‡ di avanzamento verticale"
+#: C:\Users\Dan\HeeksCNC\src\DepthOp.cpp:254
+#: C:\Users\Dan\HeeksCNC\src\DepthOp.cpp:268
+#: C:\Users\Dan\HeeksCNC\src\DepthOp.cpp:280
+#: C:\Users\Dan\HeeksCNC\src\DepthOp.cpp:292
+#: C:\Users\Dan\HeeksCNC\src\DepthOp.cpp:297
+msgid "Depth Operation"
+msgstr "Operazioni profondit√†"
 
-msgid "spindle speed"
-msgstr "Velocit‡ Elettromandrino"
+#: C:\Users\Dan\HeeksCNC\src\DepthOp.cpp:254
+msgid "does not have a cutting tool assigned"
+msgstr "Non √® stato assegnato un utensili di taglio"
 
+#: C:\Users\Dan\HeeksCNC\src\DepthOp.cpp:254
+msgid "It can not produce GCode without a cutting tool assignment"
+msgstr "Non si pu√≤ produrre GCode senza caricare un utensile da taglio"
+
+#: C:\Users\Dan\HeeksCNC\src\DepthOp.cpp:268
+msgid "is set to cut deeper than the assigned cutting tool will allow"
+msgstr "Impostazione per tagliare pi√π in profondit√† rispetto a quanto permette la punta assegnata"
+
+#: C:\Users\Dan\HeeksCNC\src\DepthOp.cpp:280
+msgid "has poor start and final depths"
+msgstr "Profondit√† iniziale e finale insufficiente"
+
+#: C:\Users\Dan\HeeksCNC\src\DepthOp.cpp:280
+msgid "Can't change this setting automatically"
+msgstr "Non √® possibile modificare questa impostazione automaticamente"
+
+#: C:\Users\Dan\HeeksCNC\src\DepthOp.cpp:292
+msgid "Clearance height is below start depth"
+msgstr "Non posso modificare questa impostazione automaticamente"
+
+#: C:\Users\Dan\HeeksCNC\src\DepthOp.cpp:297
+msgid "Raising clearance height up to start depth (+5 mm)"
+msgstr "Alzare l'altezza di sicurezza (5 millimetri)"
+
+#: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:116
+#: C:\Users\Dan\HeeksCNC\src\Locating.cpp:66
+msgid "standoff"
+msgstr "rettificare"
+
+#: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:117
+msgid "dwell"
+msgstr "soffermarsi"
+
+#: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:118
+msgid "depth"
+msgstr "Profondit√†"
+
+#: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:119
+msgid "peck_depth"
+msgstr "peck_profondit√†"
+
+#: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:127
+msgid "sort_drilling_locations"
+msgstr "ordina_i_luoghi_di_perforazione"
+
+#: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:696
+#: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:707
+msgid "Chamfering bit for drilling op"
+msgstr "Punta per smussatura per operrazione di foratura"
+
+#: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:696
+msgid "is too big for previously drilled hole"
+msgstr "il foro in precedenza esercitato √® troppo grande"
+
+#: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:707
+msgid "is too small for previously drilled hole"
+msgstr "foro in precedenza esercitato √® troppo piccolo "
+
+#: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:735
+#: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:773
+msgid "Adjusting depth of drill cycle"
+msgstr "Regolazione profondit√† ciclo di perforazione"
+
+#: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:735
+#: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:773
+#: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:478
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:1280
+msgid "from"
+msgstr "a partire"
+
+#: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:736
+#: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:774
+#: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:479
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:1281
+msgid "to"
+msgstr "a"
+
+#: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:750
+msgid "Drilling"
+msgstr "Foratura"
+
+#: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:750
+msgid "Can't drill hole"
+msgstr "Non e possibile praticare il foro"
+
+#: C:\Users\Dan\HeeksCNC\src\Fixture.cpp:93
+msgid "YZ plane (around X) rotation"
+msgstr "piano YZ ruotato ad X"
+
+#: C:\Users\Dan\HeeksCNC\src\Fixture.cpp:94
+msgid "XZ plane (around Y) rotation"
+msgstr "piano XZ ruotato ad Y"
+
+#: C:\Users\Dan\HeeksCNC\src\Fixture.cpp:95
+msgid "XY plane (around Z) rotation"
+msgstr "piano XY ruotato intorno Z"
+
+#: C:\Users\Dan\HeeksCNC\src\Fixture.cpp:102
+msgid "Pivot Point"
+msgstr "Unto di fulcro"
+
+#: C:\Users\Dan\HeeksCNC\src\Fixture.cpp:694
+msgid "Import probe data"
+msgstr "Importare i dati della sonda"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:149
 msgid "You must select some sketches, first!"
-msgstr "E' neccessario selezionare prima un disegno"
+msgstr "√à necessario selezionare alcuni schizzi, prima!"
 
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:255
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:300
 msgid "There are no solids!"
-msgstr "Non ci sono solidi!"
+msgstr "Non ci sono solidi"
 
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:306
 msgid "You must select some sketches first!"
-msgstr "E' neccessario selezionare prima un disegno"
+msgstr "√à necessario selezionare alcuni schizzi prima"
 
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:361
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:553
+msgid "You must select some points, circles or other intersecting elements first!"
+msgstr "√à necessario selezionare alcuni punti, cerchi o altri elementi che si intersecano prima"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:367
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:559
+msgid "You haven't selected a cutting tool for this hole.  By default no 'tool definition' or 'select tool' code will be generated for this drilling cycle."
+msgstr "Non hai selezionato un utensile da taglio per questo foro. Per questo ciclo di perforazione: per impostazione predefinita  ' strumento di definizione' o 'strumento di selezione' non verr√† generato codice "
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:372
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:564
+msgid "You may only select a single cutting tool for each drilling operation.!"
+msgstr "√à possibile selezionare solo un unico strumento di taglio per ogni operazione di foratura."
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:701
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:728
 msgid "NC files"
-msgstr "G-Code file"
+msgstr "File NC"
 
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:702
 msgid "Open NC file"
-msgstr "apri file G-Code"
+msgstr "Apri file NC"
 
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:714
+msgid "BOM files"
+msgstr "file BOM"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:715
+msgid "Open BOM file"
+msgstr "Apri file BOM"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:729
 msgid "Save NC file"
-msgstr "Salva file G-Code"
+msgstr "Salva file NC"
 
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:738
+#: C:\Users\Dan\HeeksCNC\src\PythonStuff.cpp:91
 msgid "Couldn't open file"
 msgstr "Impossibile aprire il file"
 
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:766
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:890
+msgid "New Drill..."
+msgstr "Nuova Punta"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:767
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:891
+msgid "New Centre Drill..."
+msgstr "Nuova Punta con riduzione centrale"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:768
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:892
+msgid "New End Mill..."
+msgstr "Nuova Punta piatta"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:769
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:893
+msgid "New Slot Drill..."
+msgstr "nuova Punta da incavo"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:770
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:894
+msgid "New Ball End Mill..."
+msgstr "Nuova fresa a palla"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:771
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:895
+msgid "New Chamfer Mill..."
+msgstr "Nuova fresa per smussatura"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:772
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:896
+msgid "New Turning Tool..."
+msgstr "Nuovo attrezzo di tornitura"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:773
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:897
+msgid "New Touch Probe..."
+msgstr "Nuova sonda tastatrice"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:774
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:898
+msgid "New Tool Length Switch..."
+msgstr "Nuovo Attrezzo cambio altezza"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:789
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:815
+msgid "New Profile Operation..."
+msgstr "Nuova Operazione di Profilatura"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:790
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:816
+msgid "New Pocket Operation..."
+msgstr "Nuova Operazione di Tasca"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:791
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:817
+msgid "New ZigZag Operation..."
+msgstr "Nuova Operazione di ZigZag"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:792
+msgid "New Adaptive Roughing Operation..."
+msgstr "Nuova Operazione di Sgrossatura di addattamento"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:793
+msgid "New Drilling Operation..."
+msgstr "Nuova Operazione di Foratura"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:794
+msgid "New CounterBore Operation..."
+msgstr "Nuova Operazione di Svasatura"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:795
+msgid "New Rough Turning Operation..."
+msgstr "Nuova Operazione di sgrossatura al tornio"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:815
 msgid "Profile"
 msgstr "Profilo"
 
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:817
 msgid "ZigZag"
 msgstr "ZigZag"
 
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:818
 msgid "Adaptive"
-msgstr "Adattabile"
+msgstr "adattativo"
 
-msgid "Python"
-msgstr "Python"
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:818
+msgid "New Special Adaptive Roughing Operation..."
+msgstr "Nuova Operazione di sgossatura di adattamento"
 
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:819
+msgid "Drill"
+msgstr "Punta"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:819
+msgid "New Drill Cycle Operation..."
+msgstr "Nuova operazione ciclo di foratura"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:820
+msgid "CounterBore"
+msgstr "Svasatura"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:820
+msgid "New CounterBore Cycle Operation..."
+msgstr "Nuovo operazione ciclo svasatura"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:821
+msgid "Cutting Tool"
+msgstr "Attrezzi di taglio"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:821
+msgid "New Cutting Tool Definition..."
+msgstr "nuova definizione attrezzi da taglio"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:822
+msgid "Fixture"
+msgstr "Attrezzatura"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:822
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:902
+msgid "New Fixture..."
+msgstr "Nuova attrezzatura"
+
+# non rinominare
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:823
+msgid "Design Rules Check"
+msgstr ""
+
+# non rinominare
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:823
+msgid "design_rules_check"
+msgstr ""
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:823
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:880
+msgid "Design Rules Check..."
+msgstr "Test Regole Disegno"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:824
+msgid "Design Rules Adjustment"
+msgstr "Regole di adeguamento Disegno"
+
+# non rinominare
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:824
+msgid "design_rules_adjustment"
+msgstr ""
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:824
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:881
+msgid "Design Rules Adjustment..."
+msgstr "Regole di adeguamento Disegno"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:825
+msgid "Speed Reference"
+msgstr "Referenze Velocit√†"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:825
+msgid "Add Speed Reference..."
+msgstr "Aggiungi referenza velocit√†"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:826
+msgid "Cutting Rate"
+msgstr "Porzione di taglio"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:826
+msgid "Add Cutting Rate Reference..."
+msgstr "Aggiungi referenza porzione taglio"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:827
+msgid "Locating"
+msgstr "Localizzazione"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:827
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:884
+msgid "New Locating Operation..."
+msgstr "Nuova operazione di localizzazione"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:828
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:829
+msgid "Probing"
+msgstr "Esplorazione"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:828
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:885
+msgid "New Probe Centre Operation..."
+msgstr "Nuova operazione Sonda centrale"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:829
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:886
+msgid "New Probe Edge Operation..."
+msgstr "Nuova operazione Sonda bordi"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:830
 msgid "PostProcess"
-msgstr "postprocessore G-Code"
+msgstr "postproccessore"
 
-msgid "OpenNC"
-msgstr "Apri G-Code"
-
-msgid "SaveNC"
-msgstr "salva G-Code"
-
-msgid "HeeksCNC is the free machining add-on to HeeksCAD"
-msgstr ""
-
-msgid " http://code.google.com/p/heekscnc/"
-msgstr ""
-
-msgid "Written by Dan Heeks, Hirutso Enni, Perttu Ahola"
-msgstr ""
-
-msgid "With help from archivist, crotchet1, DanielFalck, fenn, Sliptonic"
-msgstr ""
-
-msgid "geometry code, donated by Geoff Hawkesford, Camtek GmbH http://www.peps.de/"
-msgstr ""
-
-msgid ""
-"pocketing code from http://code.google.com/p/libarea/ , derived from the "
-"kbool library written by Klaas Holwerda http://boolean.klaasholwerda.nl/bool."
-"html"
-msgstr ""
-
-msgid "Zig zag code from pycam http://sourceforge.net/svn/?group_id=237831"
-msgstr ""
-
-msgid ""
-"Adaptive Roughing code from http://code.google.com/p/libactp/, using code "
-"written in 2004"
-msgstr ""
-
-msgid ""
-"For a more modern version of adaptive roughing, see Julian Todd and Martin "
-"Dunschen of http://www.freesteel.co.uk/"
-msgstr ""
-
-msgid ""
-"This HeeksCNC software installation is restricted by the GPL license http://"
-"www.gnu.org/licenses/gpl-3.0.txt"
-msgstr ""
-
-msgid " which means it is free and open source, and must stay that way"
-msgstr ""
-
-msgid "New Profile Operation..."
-msgstr "Nuovo profilo ..."
-
-msgid "New Pocket Operation..."
-msgstr "Nuove tasche..."
-
-msgid "New ZigZag Operation..."
-msgstr "Nuovo ZigZag..."
-
-msgid "New Adaptive Roughing Operation..."
-msgstr "Nuovo sgrossatura"
-
-msgid "Operations"
-msgstr "Operazione"
-
-msgid "Make Python Script"
-msgstr "Esegui Python Script"
-
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:830
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:911
 msgid "Post-Process"
 msgstr "Postprocessore"
 
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:831
+msgid "OpenNC"
+msgstr "Apri NC"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:831
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:912
+msgid "Open NC File"
+msgstr "Apri file NC"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:832
+msgid "SaveNC"
+msgstr "Salve NC"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:832
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:913
+msgid "Save NC File"
+msgstr "Salva file NC"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:833
+msgid "Cancel Python Script"
+msgstr "Cancella Script Python"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:850
+msgid "HeeksCNC is the free machining add-on to HeeksCAD"
+msgstr ""
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:852
+msgid "Written by Dan Heeks, Hirutso Enni, Perttu Ahola, David Nicholls"
+msgstr ""
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:853
+msgid "With help from archivist, crotchet1, DanielFalck, fenn, Sliptonic"
+msgstr ""
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:854
+msgid "geometry code, donated by Geoff Hawkesford, Camtek GmbH http://www.peps.de/"
+msgstr ""
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:855
+msgid "pocketing code from http://code.google.com/p/libarea/ , derived from the kbool library written by Klaas Holwerda http://boolean.klaasholwerda.nl/bool.html"
+msgstr ""
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:856
+msgid "Zig zag code from pycam http://sourceforge.net/svn/?group_id=237831"
+msgstr ""
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:857
+msgid "Adaptive Roughing code from http://code.google.com/p/libactp/, using code written in 2004"
+msgstr ""
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:858
+msgid "For a more modern version of adaptive roughing, see Julian Todd and Martin Dunschen of http://www.freesteel.co.uk/"
+msgstr ""
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:859
+msgid "This HeeksCNC software installation is restricted by the GPL license http://www.gnu.org/licenses/gpl-3.0.txt"
+msgstr ""
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:860
+msgid "  which means it is free and open source, and must stay that way"
+msgstr ""
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:882
+msgid "New Speed Reference..."
+msgstr "Nuova referenza velocit√†"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:883
+msgid "New Cutting Rate Reference..."
+msgstr "Nuova referenza taglio parziale"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:906
+#: C:\Users\Dan\HeeksCNC/src/Operations.h:16
+msgid "Operations"
+msgstr "Operazioni"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:907
+#: C:\Users\Dan\HeeksCNC/src/Tools.h:16
+msgid "Tools"
+msgstr "Attrezzi"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:908
+#: C:\Users\Dan\HeeksCNC/src/Fixtures.h:15
+msgid "Fixtures"
+msgstr "Attrezzatura"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:909
+msgid "Make Python Script"
+msgstr "Crea Script Python"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:910
+msgid "Run Python Script"
+msgstr "Avvia Script Python"
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:914
+msgid "Open BOM File"
+msgstr "Apri file BOM "
+
+#: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:915
 msgid "Machining"
-msgstr "CNC"
+msgstr "Macchina"
 
+#: C:\Users\Dan\HeeksCNC\src\NCCode.cpp:597
 msgid "nc options"
-msgstr "Opzioni G-Code"
+msgstr "Opzioni di visualizzazione file nc"
 
+#: C:\Users\Dan\HeeksCNC\src\NCCode.cpp:599
 msgid "text colors"
-msgstr "colore Testo"
+msgstr "colore testo"
 
+#: C:\Users\Dan\HeeksCNC\src\NCCode.cpp:600
 msgid "default color"
-msgstr "default color"
+msgstr "colore di default"
 
+#: C:\Users\Dan\HeeksCNC\src\NCCode.cpp:601
 msgid "block color"
-msgstr "blocco colore"
+msgstr "colore blocco"
 
+#: C:\Users\Dan\HeeksCNC\src\NCCode.cpp:602
 msgid "misc color"
-msgstr "miscela colori"
+msgstr "colori misc"
 
+#: C:\Users\Dan\HeeksCNC\src\NCCode.cpp:603
 msgid "program color\t"
-msgstr "program color\t"
+msgstr "colori programma\t"
 
+#: C:\Users\Dan\HeeksCNC\src\NCCode.cpp:604
 msgid "tool color"
-msgstr "atrezzi colori"
+msgstr "colore atrezzo fresa"
 
+#: C:\Users\Dan\HeeksCNC\src\NCCode.cpp:605
 msgid "comment color\t"
-msgstr "comment color\t"
+msgstr "colore commento\t"
 
+#: C:\Users\Dan\HeeksCNC\src\NCCode.cpp:606
 msgid "variable color"
-msgstr "variable color"
+msgstr "colore variabili"
 
+#: C:\Users\Dan\HeeksCNC\src\NCCode.cpp:607
 msgid "prep color"
-msgstr "prep color"
+msgstr "colore prep"
 
+#: C:\Users\Dan\HeeksCNC\src\NCCode.cpp:608
 msgid "axis color"
-msgstr "axis color"
+msgstr "colore asse"
 
+#: C:\Users\Dan\HeeksCNC\src\NCCode.cpp:609
 msgid "rapid color"
-msgstr "rapid color"
+msgstr "colore rapidi"
 
+#: C:\Users\Dan\HeeksCNC\src\NCCode.cpp:610
 msgid "feed color"
-msgstr "alimentazione colore"
+msgstr "colore avanzamento"
 
+#: C:\Users\Dan\HeeksCNC\src\NCCode.cpp:701
+msgid "Arc Interpolation Count"
+msgstr "Considera Interpolazione Archi"
+
+#: C:\Users\Dan\HeeksCNC\src\NCCode.cpp:713
+msgid "Apply NC Code to solids. NOTE: This is not ready yet."
+msgstr "Applica codice NC al solido.Nota:Questo non √® ancora pronto."
+
+#: C:\Users\Dan\HeeksCNC\src\Op.cpp:91
 msgid "comment"
-msgstr "commento"
+msgstr "Commento"
 
+#: C:\Users\Dan\HeeksCNC\src\Op.cpp:92
 msgid "active"
-msgstr "attivo"
+msgstr "Attivo"
 
+#: C:\Users\Dan\HeeksCNC\src\Op.cpp:93
+msgid "execution_order"
+msgstr "ordine di esecuzione"
+
+#: C:\Users\Dan\HeeksCNC\src\Op.cpp:110
+msgid "cutting tool"
+msgstr "utensile da taglio"
+
+#: C:\Users\Dan\HeeksCNC\src\Operations.cpp:38
+msgid "Set All Operations Active"
+msgstr "Imposta tutte le operazioni Attive"
+
+#: C:\Users\Dan\HeeksCNC\src\Operations.cpp:57
+msgid "Set All Operations Inactive"
+msgstr "Imposta tutte le operazioni Inattive"
+
+#: C:\Users\Dan\HeeksCNC\src\Operations.cpp:76
+#: C:\Users\Dan\HeeksCNC\src\Operations.cpp:79
+msgid "Import Excellon Drill File"
+msgstr "Importa  file foratura Exellon "
+
+#: C:\Users\Dan\HeeksCNC\src\Operations.cpp:81
+msgid "Excellon Drill Files"
+msgstr "File di foratura Excellon"
+
+#: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:61
 msgid "step over"
-msgstr "Passo avanti"
+msgstr "passo orizzontale"
 
+#: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:62
 msgid "material allowance"
 msgstr "Materiale permesso"
 
+#: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:63
 msgid "round corner factor"
-msgstr "Fattore angolo"
+msgstr "Fattore di arrotondamento angolo"
 
+#: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:64
 msgid "for 90 degree corners"
 msgstr "per angoli di 90 gradi"
 
+#: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:64
 msgid "1.5 for square, 1.0 for round"
-msgstr "1.5 squadri,1.0 tondi"
+msgstr "1,5 per quadrati, 1,0 per rotondi"
 
+#: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:67
 msgid "Boundary"
-msgstr "Limite"
+msgstr "Limite o confine"
 
+#: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:68
 msgid "Center"
 msgstr "Centro"
 
+#: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:69
 msgid "starting_place"
-msgstr "Posizione iniziale"
+msgstr "zona iniziale"
 
+#: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:241
+#, c-format
 msgid "Pocket operation - Sketch doesn't exist - %d"
-msgstr "operazione Tasca - disegno inesistente - %d"
+msgstr "Operazione Tasche-Il profilo non esiste-%d"
 
+#: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:265
+#, c-format
 msgid "Pocket operation - Sketch must be a closed shape - sketch %d"
-msgstr "operazione Tasca - il disegno deve avere forma chiusa - sketch∑%d"
+msgstr "Operazione Tasche -Il disegno deve avere una forma chiusa -% disegno d"
 
+#: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:273
+#, c-format
 msgid "Pocket operation - Badly ordered sketch - sketch %d"
-msgstr "operazione Tasca - disegno non in ordine - sketch∑%d"
+msgstr "Operazione Tasche - Il profile non √® ordinato - disegno %d"
 
+#: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:429
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:1235
+msgid "Invalid reference to sketch"
+msgstr "riferimento invalido al disegno "
+
+#: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:429
+msgid "in pocket operations"
+msgstr "nelle operazioni di tasca"
+
+#: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:459
+msgid "No valid sketches upon which to act for pocket operations"
+msgstr "schizzi su cui agire per le operazioni di tasca non validi"
+
+#: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:478
+msgid "Adjusting depth of pocket"
+msgstr "Regolazione profondit√† di tasca"
+
+#: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:480
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:1282
+msgid "due to cutting edge length of selected tool"
+msgstr "a causa della lunghezza di taglio bordo dello strumento selezionato"
+
+#: C:\Users\Dan\HeeksCNC\src\Probing.cpp:496
+msgid "Depth"
+msgstr "Profondit√†"
+
+#: C:\Users\Dan\HeeksCNC\src\Probing.cpp:524
+#: C:\Users\Dan\HeeksCNC\src\Probing.cpp:602
+msgid "Two"
+msgstr "Due"
+
+#: C:\Users\Dan\HeeksCNC\src\Probing.cpp:525
+msgid "Four"
+msgstr "Quattro"
+
+#: C:\Users\Dan\HeeksCNC\src\Probing.cpp:530
+msgid "Number of points"
+msgstr "Numero di punti"
+
+#: C:\Users\Dan\HeeksCNC\src\Probing.cpp:547
+msgid "Direction"
+msgstr "Direzione"
+
+#: C:\Users\Dan\HeeksCNC\src\Probing.cpp:565
+msgid "Alignment"
+msgstr "Allineamento"
+
+#: C:\Users\Dan\HeeksCNC\src\Probing.cpp:596
+msgid "Retract"
+msgstr "tirare indietro"
+
+#: C:\Users\Dan\HeeksCNC\src\Probing.cpp:601
+msgid "One"
+msgstr "Uno"
+
+#: C:\Users\Dan\HeeksCNC\src\Probing.cpp:605
+msgid "Number of edges"
+msgstr "Numero di lati"
+
+#: C:\Users\Dan\HeeksCNC\src\Probing.cpp:834
+#: C:\Users\Dan\HeeksCNC\src\Probing.cpp:886
+msgid "Generate GCode"
+msgstr "Genera GCode"
+
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:105
+#: C:\Users\Dan\HeeksCNC/src/Probing.h:183
 msgid "Left"
 msgstr "Sinistra"
 
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:106
+#: C:\Users\Dan\HeeksCNC/src/Probing.h:187
 msgid "Right"
 msgstr "Destra"
 
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:111
+#: C:\Users\Dan\HeeksCNC/src/Probing.h:216
+msgid "Outside"
+msgstr "Esterno"
+
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:112
+#: C:\Users\Dan\HeeksCNC/src/Probing.h:212
+msgid "Inside"
+msgstr "Interno"
+
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:116
+msgid "Outside or Left"
+msgstr "Al di fuori o Sinistra"
+
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:117
+msgid "Inside or Right"
+msgstr "Dentro o Destra"
+
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:120
 msgid "On"
-msgstr "Sulla linea"
+msgstr "Acceso"
 
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:135
 msgid "tool on side"
-msgstr "strumento al lato"
+msgstr "strumento sul lato"
 
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:140
+msgid "Conventional"
+msgstr "Convenzionale"
+
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:141
+msgid "Climb"
+msgstr "Arrivo"
+
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:142
+msgid "cut mode"
+msgstr "Modo taglio"
+
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:147
 msgid "auto roll on"
-msgstr "Rotazione automatica"
+msgstr "Autorotazione on"
 
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:148
 msgid "roll on point"
-msgstr "Rotazione sul punto"
+msgstr "Rotazione interna al punto"
 
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:149
 msgid "auto roll off"
-msgstr "rotazione manuale"
+msgstr "Autorotazione off"
 
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:150
 msgid "roll off point"
-msgstr "rotazione fuori punto"
+msgstr "Rotazione esterna al punto "
 
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:151
+msgid "roll radius"
+msgstr "Rotazione raggio"
+
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:152
 msgid "use start point"
-msgstr "usa punto iniziale"
+msgstr "Usa punto iniziale"
 
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:153
 msgid "start point"
-msgstr "punto iniziale"
+msgstr "Punto iniziale"
 
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:154
 msgid "use end point"
-msgstr "usa punto finale"
+msgstr "Usa punto finale"
 
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:155
 msgid "end point"
-msgstr "fine punto"
+msgstr "Punto finale"
 
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:166
+msgid "sort_sketches"
+msgstr "Genere_schizzo"
+
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:1061
 msgid "Pick Start"
-msgstr "seleziona inizio"
+msgstr "Seleziona inizio"
 
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:1062
 msgid "Pick new start point"
-msgstr "seleziona nuovo punto di inizio"
+msgstr "Seleziona nuovo punto iniziale"
 
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:1070
 msgid "Pick End"
-msgstr "seleziona fine"
+msgstr "Fine selezione"
 
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:1071
 msgid "Pick new end point"
-msgstr "seleziona nuovo punto finale"
+msgstr "Seleziona nuovo punto di arrivo"
 
-msgid "Set All Operations Active"
-msgstr "Impostare tutte le operazioni attive"
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:1079
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:1080
+msgid "Pick roll on point"
+msgstr "Seleziona intorno un punto (interno)"
 
-msgid "Set All Operations Inactive"
-msgstr "Impostare tutte le operazioni inattive"
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:1088
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:1089
+msgid "Pick roll off point"
+msgstr "Seleziona intorno un punto (esterno)"
 
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:1235
+msgid "in profile operations"
+msgstr "nelle operazioni di profilo"
+
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:1265
+msgid "No valid sketches upon which to act for profile operations"
+msgstr "schizzi su cui agire per le operazioni di profilo non validi"
+
+#: C:\Users\Dan\HeeksCNC\src\Profile.cpp:1280
+msgid "Adjusting depth of profile"
+msgstr "Regolazione profondit√† del profilo"
+
+#: C:\Users\Dan\HeeksCNC\src\Program.cpp:120
 msgid "machine"
-msgstr "macchina"
+msgstr "Macchina"
 
+#: C:\Users\Dan\HeeksCNC\src\Program.cpp:129
+msgid "output file name follows data file name"
+msgstr "al nome del file di output segue il nome del file di dati"
+
+#: C:\Users\Dan\HeeksCNC\src\Program.cpp:134
 msgid "output file"
-msgstr "output file"
+msgstr "file di output"
 
+#: C:\Users\Dan\HeeksCNC\src\Program.cpp:143
+msgid "units for nc output"
+msgstr "unit√† d'uscita per i file nc"
+
+#: C:\Users\Dan\HeeksCNC\src\Program.cpp:168
+msgid "Maximum Spindle Speed (RPM)"
+msgstr "Massima Velocit√† di rotazione (RPM)"
+
+#: C:\Users\Dan\HeeksCNC\src\RawMaterial.cpp:102
+msgid "Raw Material"
+msgstr "Materiale grezzo"
+
+#: C:\Users\Dan\HeeksCNC\src\RawMaterial.cpp:127
+msgid "Brinell Hardness of raw material"
+msgstr "Durezza del materiale (numero di Brinell)"
+
+#: C:\Users\Dan\HeeksCNC\src\SpeedOp.cpp:174
+#: C:\Users\Dan\HeeksCNC\src\ZigZag.cpp:94
+msgid "horizontal feed rate"
+msgstr "velocit√† di avanzamento orizzontale"
+
+#: C:\Users\Dan\HeeksCNC\src\SpeedOp.cpp:175
+#: C:\Users\Dan\HeeksCNC\src\ZigZag.cpp:95
+msgid "vertical feed rate"
+msgstr "velocit√† di avanzamento verticale"
+
+#: C:\Users\Dan\HeeksCNC\src\SpeedOp.cpp:176
+#: C:\Users\Dan\HeeksCNC\src\ZigZag.cpp:96
+msgid "spindle speed"
+msgstr "Velocit√† elettromandrino"
+
+#: C:\Users\Dan\HeeksCNC\src\SpeedOp.cpp:272
+msgid "speeds"
+msgstr "Velocit√†"
+
+#: C:\Users\Dan\HeeksCNC\src\SpeedOp.cpp:273
+msgid "auto set speeds for new operation"
+msgstr "Auto Impostare la velocit√† per nuova operazione"
+
+#: C:\Users\Dan\HeeksCNC\src\SpeedReference.cpp:90
+msgid "Surface Speed (m/min)"
+msgstr "Velocit√† di superficie (m/min)"
+
+#: C:\Users\Dan\HeeksCNC\src\SpeedReference.cpp:96
+msgid "Surface Speed (ft/min)"
+msgstr "Velocit√† di superficie (ft/min)"
+
+#: C:\Users\Dan\HeeksCNC\src\SpeedReference.cpp:99
+msgid "Raw Material Name"
+msgstr "Nome materiale grezzo"
+
+#: C:\Users\Dan\HeeksCNC\src\SpeedReferences.cpp:25
+#: C:\Users\Dan\HeeksCNC\src\Tools.cpp:36
+msgid "Export"
+msgstr "Esporta"
+
+#: C:\Users\Dan\HeeksCNC\src\SpeedReferences.cpp:147
+msgid "Estimate when possible"
+msgstr "Considerare, quando possibile"
+
+#: C:\Users\Dan\HeeksCNC\src\SpeedReferences.cpp:148
+msgid "Use default values"
+msgstr "Utilizzare i valori di default"
+
+#: C:\Users\Dan\HeeksCNC\src\SpeedReferences.cpp:159
+#: C:\Users\Dan\HeeksCNC/src/SpeedReferences.h:32
+msgid "Feeds and Speeds"
+msgstr "Materiali e velocit√†"
+
+#: C:\Users\Dan\HeeksCNC\src\ZigZag.cpp:77
+msgid "tool diameter"
+msgstr "Diametro utensile"
+
+#: C:\Users\Dan\HeeksCNC\src\ZigZag.cpp:80
 msgid "spherical"
 msgstr "sferico"
 
+#: C:\Users\Dan\HeeksCNC\src\ZigZag.cpp:81
 msgid "cylindrical"
 msgstr "cilindrico"
 
+#: C:\Users\Dan\HeeksCNC\src\ZigZag.cpp:82
 msgid "toroidal"
 msgstr "toroidale"
 
+#: C:\Users\Dan\HeeksCNC\src\ZigZag.cpp:83
 msgid "tool type"
-msgstr "tipo atrezzi"
+msgstr "Tipi di strumenti"
 
+#: C:\Users\Dan\HeeksCNC\src\ZigZag.cpp:85
 msgid "corner radius"
 msgstr "angolo raggio"
 
+#: C:\Users\Dan\HeeksCNC\src\ZigZag.cpp:86
 msgid "minimum x"
-msgstr "Minimum x"
+msgstr "x minimo"
 
+#: C:\Users\Dan\HeeksCNC\src\ZigZag.cpp:87
 msgid "maximum x"
-msgstr "Maximum x"
+msgstr "x massimo"
 
+#: C:\Users\Dan\HeeksCNC\src\ZigZag.cpp:88
 msgid "minimum y"
-msgstr "Minimum y"
+msgstr "y minimo"
 
+#: C:\Users\Dan\HeeksCNC\src\ZigZag.cpp:89
 msgid "maximum y"
-msgstr "Maximum y"
+msgstr "y massimo"
 
+#: C:\Users\Dan\HeeksCNC\src\ZigZag.cpp:90
 msgid "z0"
 msgstr "z0"
 
+#: C:\Users\Dan\HeeksCNC\src\ZigZag.cpp:91
 msgid "z1"
 msgstr "z1"
 
+#: C:\Users\Dan\HeeksCNC\src\ZigZag.cpp:92
 msgid "dx"
 msgstr "dx"
 
+#: C:\Users\Dan\HeeksCNC\src\ZigZag.cpp:93
 msgid "dy"
 msgstr "dy"
 
-msgid "Simple Mesh"
-msgstr "semplice reticolo"
+#: C:\Users\Dan\HeeksCNC/src/CuttingTool.h:76
+msgid "High Speed Steel"
+msgstr "Acciaio rapido"
 
-msgid "HeeksArt is a free random add-on to HeeksCAD"
-msgstr ""
+#: C:\Users\Dan\HeeksCNC/src/CuttingTool.h:77
+msgid "Carbide"
+msgstr "Carburo"
 
-msgid " http://code.google.com/p/heeksart/"
-msgstr ""
+#: C:\Users\Dan\HeeksCNC/src/Probing.h:137
+msgid "Bottom Left"
+msgstr "Inferiore sinistro"
 
-msgid "Written by Dan Heeks"
-msgstr ""
+#: C:\Users\Dan\HeeksCNC/src/Probing.h:141
+msgid "Bottom Right"
+msgstr "Inferiore destro"
 
-msgid "Add a simple mesh"
-msgstr "aggiungi semplice reticolo"
+#: C:\Users\Dan\HeeksCNC/src/Probing.h:145
+msgid "Top Left"
+msgstr "Superiore sinistro"
 
-msgid "Mesh"
-msgstr "reticolo"
+#: C:\Users\Dan\HeeksCNC/src/Probing.h:149
+msgid "Top Right"
+msgstr "Superiore destro"
 
-msgid "mesh options"
-msgstr "opzioni reticolo"
+#: C:\Users\Dan\HeeksCNC/src/Probing.h:175
+msgid "Bottom"
+msgstr "Inferiore"
 
-msgid "number of splits"
-msgstr "numero parti"
+#: C:\Users\Dan\HeeksCNC/src/Probing.h:179
+msgid "Top"
+msgstr "Superiore"
 
-msgid "Edge cannot have more than 2 faces!"
-msgstr "un bordo non puÚ avere pi˘ di 2 facce!"
+#: C:\Users\Dan\HeeksCNC/src/Probing.h:241
+msgid "X Axis"
+msgstr "Asse X"
 
-msgid "Convert Mesh To Triangles"
-msgstr "Converti reticolo in triangolo"
+#: C:\Users\Dan\HeeksCNC/src/Probing.h:245
+msgid "Y Axis"
+msgstr "Asse Y"
 
-msgid "Normalize All Vertices"
-msgstr "Normalizza tutti i vertici"
+#: C:\Users\Dan\HeeksCNC/src/Probing.h:267
+msgid "Probe Centre"
+msgstr "Sonda il centro"
 
-msgid "Set All Vertex Normals"
-msgstr "imposta tutti i vertici come normali"
+#: C:\Users\Dan\HeeksCNC/src/Probing.h:314
+msgid "Probe Edge"
+msgstr "Sonda il bordo"
 
-msgid "At least one vertex could not be normalized!"
-msgstr "Almeno un vertice non poteva essere normalizzato"
-
-msgid "Recalculate All Face Centres"
-msgstr "ricalcolare tutti i centri delle facce"
-
-msgid "Mirror all x<1"
-msgstr "rispecchia ogni x<1"
-
-msgid "Split Edge"
-msgstr "parte estrema"
-
-msgid "Recalculate a Good Centre Point"
-msgstr "ricalcolare un buon punto centrale"
-
-msgid "Normalize All Edge Directions"
-msgstr "normalizzare tutte le direzioni dei bordi"
-
-msgid "Set Normal From Edges"
-msgstr "impostazioni normali dai bordi"
-
-msgid "Mesh Edge"
-msgstr "reticolo bordo"
-
-msgid "Mesh Face"
-msgstr "reticolo faccia"
-
-msgid "Mesh Vertex"
-msgstr "reticolo vertice"
