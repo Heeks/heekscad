@@ -84,7 +84,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	_CrtSetAllocHook(MyAllocHook);
 #endif
 
-	m_version_number = _T("0 10 1");
+	m_version_number = _T("0 10 2");
 	m_geom_tol = 0.000001;
 	m_view_units = 1.0;
 	for(int i = 0; i<NUM_BACKGROUND_COLORS; i++)background_color[i] = HeeksColor(0, 0, 0);
@@ -1511,7 +1511,7 @@ void HeeksCADapp::DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObje
 
 	GetTools(marked_object, f_list, new_point, from_graphics_canvas, control_pressed);
 
-	m_marked_list->GetTools(marked_object, f_list, &new_point);
+	m_marked_list->GetTools(marked_object, f_list, &new_point, true);
 
 	temp_f_list.clear();
 	if(input_mode_object)input_mode_object->GetTools(&temp_f_list, &new_point);

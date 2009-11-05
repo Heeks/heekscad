@@ -119,7 +119,7 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll2(){
 
 		std::list<Tool*> t_list;
 		MarkedObjectOneOfEach mo(0, marked_object, 1);
-		wxGetApp().m_marked_list->GetTools(&mo, t_list, NULL);
+		wxGetApp().m_marked_list->GetTools(&mo, t_list, NULL, false);
 		for(std::list<Tool*>::iterator It = t_list.begin(); It != t_list.end(); It++)
 		{
 			Tool* tool = *It;
