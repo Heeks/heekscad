@@ -330,7 +330,7 @@ void PasteTool::Run()
 	wxGetApp().Paste(m_paste_into);
 }
 
-void MarkedList::GetTools(MarkedObject* clicked_object, std::list<Tool*>& t_list, const wxPoint* p){
+void MarkedList::GetTools(MarkedObject* clicked_object, std::list<Tool*>& t_list, const wxPoint* p, bool copy_and_paste_tools){
 	if (m_list.size() > 1)
 	{
 		t_list.push_back(&delete_marked_list_tool);
@@ -346,22 +346,25 @@ void MarkedList::GetTools(MarkedObject* clicked_object, std::list<Tool*>& t_list
 	GetConstraintMenuTools(&t_list);
 	GetSketchMenuTools(&t_list);
 
-	// cut and copy tools
-	for(std::list<HeeksObj*>::iterator It = m_list.begin(); It != m_list.end(); It++)
+	if(copy_and_paste_tools)
 	{
-		HeeksObj* object = *It;
-		if(object->CanBeCopied())
+		// cut and copy tools
+		for(std::list<HeeksObj*>::iterator It = m_list.begin(); It != m_list.end(); It++)
 		{
-			t_list.push_back(&copy_marked_list);
-			break;
+			HeeksObj* object = *It;
+			if(object->CanBeCopied())
+			{
+				t_list.push_back(&copy_marked_list);
+				break;
+			}
 		}
-	}
 
-	// paste
-	if (wxGetApp().IsPasteReady())
-	{
-		paste_tool.m_paste_into = clicked_object->GetObject();
-		t_list.push_back(&paste_tool);
+		// paste
+		if (wxGetApp().IsPasteReady())
+		{
+			paste_tool.m_paste_into = clicked_object->GetObject();
+			t_list.push_back(&paste_tool);
+		}
 	}
 }
 

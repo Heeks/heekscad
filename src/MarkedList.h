@@ -51,7 +51,7 @@ public:
 	void set_ignore_onoff(HeeksObj* object, bool b);
 	bool get_ignore(HeeksObj* object);
 	void GetProperties(std::list<Property *> *list);
-	void GetTools(MarkedObject* clicked_object, std::list<Tool*>& t_list, const wxPoint* p);
+	void GetTools(MarkedObject* clicked_object, std::list<Tool*>& t_list, const wxPoint* p, bool copy_and_paste_tools);
 	void CutSelectedItems();
 	void CopySelectedItems();
 	void Reset();
