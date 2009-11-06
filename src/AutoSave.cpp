@@ -4,13 +4,19 @@
 #include "AutoSave.h"
 #include <sys/stat.h>
 #include <wx/msgdlg.h>
+#include <wx/stdpaths.h>
 
 CAutoSave::CAutoSave(const int interval, const bool skip_recovery /* = false */ )
 {
 	// We need to see if our backup file already exists.  If so, we should
 	// prompt the user to see if they want to use its contents or ignore it.
 
-	m_backup_file_name = _(".HeeksCAD_Backup_Data_File.heeks");
+	wxStandardPaths standard_paths;
+	m_backup_file_name = standard_paths.GetTempDir();
+	m_backup_file_name << _T("/");
+	m_backup_file_name << _(".HeeksCAD_Backup_Data_File.heeks");
+
+	printf("Using backup file path '%s'\n", Ttc(m_backup_file_name.c_str()));
 
 	m_save_interval = interval;	// Minutes
 
