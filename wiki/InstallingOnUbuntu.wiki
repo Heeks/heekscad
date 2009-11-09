@@ -7,6 +7,7 @@ For some generic automatically built binary tarballs for linux (you probably don
  * 8.04 hardy
  * 8.10 intrepid
  * 9.04 jaunty
+ * 9.10 karmic
 
  there are packages provided on http://yamato.hyte.de/packages/heeks/
 
@@ -26,6 +27,8 @@ For some generic automatically built binary tarballs for linux (you probably don
     Then use {{{ sudo apt-get -s install libopencascade-foundation-6.3.0 }}}
   * 8.10/9.04:
   just use libopencascade6.2 from the stock feeds. no need for the extra repo.
+  * 9.10
+  opencascade6.3 packages are in stock feeds.
 
  * Python
 
