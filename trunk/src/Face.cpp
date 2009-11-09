@@ -13,7 +13,7 @@
 CFace::CFace(const TopoDS_Face &face):m_topods_face(face), m_temp_attr(0){
 #if _DEBUG
 	gp_Pnt pos;
-	gp_Dir norm = GetNormalAtUV(0, 0, &pos);
+	gp_Dir norm = GetMiddleNormal(&pos);
 	m_pos_x = pos.X();
 	m_pos_y = pos.Y();
 	m_pos_z = pos.Z();
