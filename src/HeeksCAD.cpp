@@ -349,7 +349,11 @@ bool HeeksCADapp::OnInit()
 		{
 			if(parser.GetParamCount() > 0)
 			{
-				OpenFile(parser.GetParam(0));
+				wxString param = parser.GetParam(0);
+				if(!(param.Lower().EndsWith(_T(".dll"))))
+				{				
+					OpenFile(parser.GetParam(0));
+				}
 			}
 		}
 	}
@@ -859,30 +863,29 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 	wxString wf(filepath);
 	wf.LowerCase();
 
-	bool open_failed = false;
+	bool open_succeeded = true;
 
-	if(wf.EndsWith(_T(".heeks")) || wf.EndsWith(_T(".HEEKS")))
+	if(wf.EndsWith(_T(".heeks")))
 	{
 		m_file_open_or_import_type = FileOpenTypeHeeks;
 		if(import_not_open)
 			m_file_open_or_import_type = FileImportTypeHeeks;
 		OpenXMLFile(filepath, paste_into);
 	}
-	else if(wf.EndsWith(_T(".svg")) || wf.EndsWith(_T(".SVG")))
+	else if(wf.EndsWith(_T(".svg")))
 	{
 		OpenSVGFile(filepath);
 	}
-	else if(wf.EndsWith(_T(".stl")) || wf.EndsWith(_T(".STL")))
+	else if(wf.EndsWith(_T(".stl")))
 	{
 		OpenSTLFile(filepath);
 	}
-	else if(wf.EndsWith(_T(".dxf")) || wf.EndsWith(_T(".DXF")))
+	else if(wf.EndsWith(_T(".dxf")))
 	{
 		m_file_open_or_import_type = FileOpenOrImportTypeDxf;
 		OpenDXFFile(filepath);
 	}
-	else if(wf.EndsWith(_T(".gbr")) || wf.EndsWith(_T(".GBR"))
-			|| wf.EndsWith(_T(".rs274x")) || wf.EndsWith(_T(".RS274X")))
+	else if(wf.EndsWith(_T(".gbr"))	|| wf.EndsWith(_T(".rs274x")))
 	{
 		OpenRS274XFile(filepath);
 	}
@@ -896,15 +899,19 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 	else if(CShape::ImportSolidsFile(filepath))
 	{
 	}
+	else if(wf.EndsWith(_T(".dll")))
+	{
+		// add a plugin
+	}
 	else
 	{
 		// error
 		wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + GetKnownFilesCommaSeparatedList();
 		wxMessageBox(str);
-		open_failed = true;
+		open_succeeded = false;
 	}
 
-	if(!open_failed)
+	if(open_succeeded)
 	{
 		if((!import_not_open) && (retain_filename))
 		{
@@ -914,12 +921,11 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 			SetLikeNewFile();
 		}
 		Changed();
-
 	}
 
 	m_in_OpenFile = false;
 
-	return true;
+	return open_succeeded;
 }
 
 static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file)
@@ -3367,3 +3373,37 @@ std::auto_ptr<CxfFonts>	& HeeksCADapp::GetAvailableFonts()
 
 } // End GetAvailableFonts() method
 
+void HeeksCADapp::GetPluginsFromCommandLineParams(std::list<wxString> &plugins)
+{
+#ifdef __WXMSW__
+	// to do, make this compile in Linux
+	{
+		// Open the file passed in the command line argument
+		wxCmdLineEntryDesc cmdLineDesc[2];
+		cmdLineDesc[0].kind = wxCMD_LINE_PARAM;
+		cmdLineDesc[0].shortName = NULL;
+		cmdLineDesc[0].longName = NULL;
+		cmdLineDesc[0].description = wxT("input files");
+		cmdLineDesc[0].type = wxCMD_LINE_VAL_STRING;
+		cmdLineDesc[0].flags = wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_PARAM_MULTIPLE;
+
+		cmdLineDesc[1].kind = wxCMD_LINE_NONE;
+
+		//gets the passed files from cmd line
+		wxCmdLineParser parser (cmdLineDesc, argc, argv);
+
+		// get filenames from the commandline
+		if (parser.Parse() == 0)
+		{
+			if(parser.GetParamCount() > 0)
+			{
+				wxString param = parser.GetParam(0);
+				if(param.Lower().EndsWith(_T(".dll")))
+				{				
+					plugins.push_back(param);
+				}
+			}
+		}
+	}
+#endif
+}

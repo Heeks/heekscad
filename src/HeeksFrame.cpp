@@ -616,7 +616,11 @@ static void OnOpenButton( wxCommandEvent& event )
 		if(wxGetApp().CheckForModifiedDoc())
 		{
 			wxGetApp().Reset();
-			wxGetApp().OpenFile(dialog.GetPath().c_str());
+			if(!wxGetApp().OpenFile(dialog.GetPath().c_str()))
+			{
+				wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + wxGetApp().GetKnownFilesCommaSeparatedList();
+				wxMessageBox(str);
+			}
 			wxGetApp().OnNewOrOpen(true);
 			wxGetApp().SetLikeNewFile();
 		}
