@@ -141,6 +141,7 @@ public:
 	virtual HeeksObj* BodyGetFirstVertex(HeeksObj* body);
 	virtual HeeksObj* BodyGetNextVertex(HeeksObj* body);
 	virtual bool BodyGetExtents(HeeksObj* body, double* extents, const double* orig = NULL, const double* xdir = NULL, const double* ydir = NULL, const double* zdir = NULL);
+	virtual long BodyGetColor(HeeksObj* body);
 
 	// face functions
 	virtual void FaceSetTempAttribute(HeeksObj* face, int attr);
