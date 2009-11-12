@@ -295,8 +295,8 @@ public:
 	bool EndSketchMode();
 	void EnterSketchMode(CSketch* sketch);
 	void SetStatusText();
-
 	std::auto_ptr<CxfFonts>	& GetAvailableFonts();
+	void GetPluginsFromCommandLineParams(std::list<wxString> &plugins);
 };
 
 DECLARE_APP(HeeksCADapp)

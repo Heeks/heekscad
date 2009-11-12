@@ -213,6 +213,19 @@ void ReadPluginsList(std::list<PluginData> &plugins)
 		entry_found = plugins_config.GetNextEntry(key, Index);
 	}
 
+	// add plugins from the command line
+	std::list<wxString> command_line_plugins;
+	wxGetApp().GetPluginsFromCommandLineParams(command_line_plugins);
+	for(std::list<wxString>::iterator It = command_line_plugins.begin(); It != command_line_plugins.end(); It++)
+	{
+		PluginData pd;
+		pd.enabled = true;
+		pd.hard_coded = true;
+		pd.name = _T("CommandLinePlugin");
+		pd.path = *It;
+		plugins.push_back(pd);
+	}
+
 	// add code to always start your dll here.
 #ifdef MY_OWN_HARDCODED_PLUGIN
 	{
