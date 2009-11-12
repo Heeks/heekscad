@@ -755,6 +755,12 @@ bool CHeeksCADInterface::BodyGetExtents(HeeksObj* body, double* extents, const d
 	return ((CShape*)body)->GetExtents(extents, orig, xdir, ydir, zdir);
 }
 
+long CHeeksCADInterface::BodyGetColor(HeeksObj* body)
+{
+	// returns a COLORREF style long for the color of the body
+	return ((CShape*)body)->m_color.COLORREF_color();
+}
+
 int CHeeksCADInterface::EdgeGetCurveType(HeeksObj* edge)
 {
 	return ((CEdge*)edge)->GetCurveType();
