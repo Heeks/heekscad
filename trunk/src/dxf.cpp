@@ -1024,11 +1024,16 @@ void HeeksDxfRead::OnReadCircle(const double* s, const double* c, bool dir)
 
 void HeeksDxfRead::OnReadSpline(TColgp_Array1OfPnt &control, TColStd_Array1OfReal &weight, TColStd_Array1OfReal &knot,TColStd_Array1OfInteger &mult, int degree, bool periodic, bool rational)
 {
-	Geom_BSplineCurve spline(control,weight,knot,mult,degree,periodic,rational);
-	HSpline* new_object = new HSpline(spline, &wxGetApp().current_color);
-	AddSketchIfNeeded();
-	if(m_sketch)m_sketch->Add(new_object, NULL);
-	else wxGetApp().Add(new_object, NULL);
+	try{
+		Geom_BSplineCurve spline(control,weight,knot,mult,degree,periodic,rational);
+		HSpline* new_object = new HSpline(spline, &wxGetApp().current_color);
+		AddSketchIfNeeded();
+		if(m_sketch)m_sketch->Add(new_object, NULL);
+		else wxGetApp().Add(new_object, NULL);
+	}
+	catch(...)
+	{
+	}
 }
 
 void HeeksDxfRead::OnReadEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir)
