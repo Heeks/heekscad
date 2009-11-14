@@ -13,6 +13,37 @@
 #include "HArc.h"
 #include "Gripper.h"
 
+CTangentialArc::CTangentialArc(const gp_Pnt &p0, const gp_Vec &v0, const gp_Pnt &p1):m_p0(p0), m_v0(v0), m_p1(p1)
+{
+	// calculate a tangential arc that goes through p0 and p1, with a direction of v0 at p0
+	m_is_a_line = !HArc::TangentialArc(m_p0, m_v0, m_p1, m_c, m_a);
+}
+
+bool CTangentialArc::radius_equal(const gp_Pnt &p, double tolerance)const
+{
+	if(m_is_a_line)return 0.0;
+
+	double point_radius = gp_Vec(m_c.XYZ() - p.XYZ()).Magnitude();
+	double diff =  fabs(point_radius - radius());
+
+	return diff <= tolerance;
+}
+
+double CTangentialArc::radius()const
+{
+	double r0 = gp_Vec(m_p0.XYZ() - m_c.XYZ()).Magnitude();
+	double r1 = gp_Vec(m_p1.XYZ() - m_c.XYZ()).Magnitude();
+	double r = (r0 + r1)/2;
+	return r;
+}
+
+HeeksObj* CTangentialArc::MakeHArc()const
+{
+	gp_Circ c(gp_Ax2(m_c, m_a), radius());
+	HArc* new_object = new HArc(m_p0, m_p1, c, &(wxGetApp().current_color));
+	return new_object;
+}
+
 HSpline::HSpline(const HSpline &s){
 	operator=(s);
 }
@@ -383,3 +414,84 @@ int HSpline::Intersects(const HeeksObj *object, std::list< double > *rl)const
 	return 0; //return numi; 
 }
 
+static bool calculate_biarc_points(const gp_Pnt &p0, gp_Vec v_start, const gp_Pnt &p4, gp_Vec v_end, gp_Pnt &p1, gp_Pnt &p2, gp_Pnt &p3)
+{
+	v_start.Normalize();
+    v_end.Normalize();
+
+    gp_Vec v = p0.XYZ() - p4.XYZ();
+
+    double a = 2*(v_start*v_end-1);
+    double c = v*v;
+    double b = (v*2)*(v_start+v_end);
+
+	if(fabs(a) < 0.000000000000001)return false;
+
+    double d = b*b-4*a*c;
+
+    if(d < 0.0)return false;
+
+	double sd = sqrt(d);
+
+    double e1 = (-b - sd) / (2.0 * a);
+    double e2 = (-b + sd) / (2.0 * a);
+
+    if(e1 > 0 && e2 > 0)return false;
+
+	double e = e1;
+	if(e2 > e)e = e2;
+
+    if(e < 0)return false;
+
+    p1 = p0.XYZ() + v_start.XYZ() * e;
+    p3 = p4.XYZ() - v_end.XYZ() * e;
+    p2 = p1.XYZ() * 0.5 + p3.XYZ() * 0.5;
+
+	return true;
+}
+
+static std::list<HeeksObj*>* new_spans_for_CreateArcs = NULL;
+static double tolerance_for_CreateArcs = 1.0;
+
+void HSpline::CreateArcs(const gp_Pnt &p_start, const gp_Vec &v_start, double t_start, double t_end, gp_Pnt &p_end, gp_Vec &v_end)
+{
+	m_spline->D1(t_end, p_end, v_end);
+
+	gp_Pnt p1, p2, p3;
+    if(!calculate_biarc_points(p_start, v_start, p_end, v_end, p1, p2, p3))return;
+
+	CTangentialArc arc1(p_start, v_start, p2);
+	CTangentialArc arc2(p2, gp_Vec(p3.XYZ() - p2.XYZ()), p_end);
+
+    gp_Pnt p_middle1, p_middle2;
+	m_spline->D0(t_start + ((t_end - t_start) * 0.25), p_middle1);
+	m_spline->D0(t_start + ((t_end - t_start) * 0.75), p_middle2);
+
+	if(!arc1.radius_equal(p_middle1, tolerance_for_CreateArcs) || !arc2.radius_equal(p_middle2, tolerance_for_CreateArcs)){
+		double t_middle = t_start + ((t_end - t_start) * 0.5);
+		gp_Pnt p_middle;
+		gp_Vec v_middle;
+		CreateArcs(p_start, v_start, t_start, t_middle, p_middle, v_middle);// recursive
+		gp_Pnt new_p_end;
+		gp_Vec new_v_end;
+		CreateArcs(p_middle, v_middle, t_middle, t_end, new_p_end, new_v_end);
+	}
+	else
+	{
+		new_spans_for_CreateArcs->push_back(arc1.MakeHArc());
+		new_spans_for_CreateArcs->push_back(arc2.MakeHArc());
+	}
+}
+
+void HSpline::ToBiarcs(std::list<HeeksObj*> &new_spans, double tolerance)
+{
+	new_spans_for_CreateArcs = &new_spans;
+	if(tolerance < 0.000000000000001)tolerance = 0.000000000000001;
+	tolerance_for_CreateArcs = tolerance;
+	gp_Pnt p_start;
+	gp_Vec v_start;
+	gp_Pnt p_end;
+	gp_Vec v_end;
+	m_spline->D1(0.0, p_start, v_start);
+	CreateArcs(p_start, v_start, 0.0, 1.0, p_end, v_end);
+}

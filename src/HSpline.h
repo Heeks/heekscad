@@ -8,10 +8,28 @@
 #include "../interface/HeeksColor.h"
 //#include <Handle_Geom_Geometry.hxx>
 
+// CTangentialArc is used to calculate an arc given desired start ( p0 ), end ( p1 ) and start direction ( v0 )
+class CTangentialArc
+{
+public:
+	gp_Pnt m_p0; // start point
+	gp_Vec m_v0; // start direction
+	gp_Pnt m_p1; // end point
+	gp_Pnt m_c; // centre point
+	gp_Dir m_a; // axis
+	bool m_is_a_line;
+	CTangentialArc(const gp_Pnt &p0, const gp_Vec &v0, const gp_Pnt &p1);
+	bool radius_equal(const gp_Pnt &p, double tolerance)const;
+	double radius()const;
+	HeeksObj* MakeHArc()const;
+};
+
 class HSpline: public HeeksObj{
 private:
 	HeeksColor color;
 	static wxIcon* m_icon;
+
+	void CreateArcs(const gp_Pnt &p_start, const gp_Vec &v_start, double t_start, double t_end, gp_Pnt &p_end, gp_Vec &v_end);
 
 public:
 	Handle(Geom_BSplineCurve) m_spline;
@@ -45,4 +63,5 @@ public:
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 	bool IsDifferent(HeeksObj* other);
 
+	void ToBiarcs(std::list<HeeksObj*> &new_spans, double tolerance);
 };
