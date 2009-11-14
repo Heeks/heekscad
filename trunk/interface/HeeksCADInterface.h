@@ -216,6 +216,7 @@ public:
 	virtual bool InputDouble(const wxChar* prompt, const wxChar* value_name, double &value);
 	virtual double GetViewUnits();
 	virtual void SetViewUnits(double units, bool write_to_config);
+	virtual void SplineToBiarcs(HeeksObj* spline, std::list<HeeksObj*> &new_spans, double tolerance);
 
 	// Geometry functions
 	virtual bool Intersect(const gp_Lin& lin, const gp_Lin& lin2, gp_Pnt &pnt);

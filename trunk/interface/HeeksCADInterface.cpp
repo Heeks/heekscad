@@ -12,6 +12,7 @@
 #include "HLine.h"
 #include "HArc.h"
 #include "HCircle.h"
+#include "HSpline.h"
 #include "Group.h"
 #include "Cylinder.h"
 #include "Cuboid.h"
@@ -992,6 +993,11 @@ void CHeeksCADInterface::SetViewUnits(double units, bool write_to_config)
 		HeeksConfig config;
 		config.Write(_T("ViewUnits"), wxGetApp().m_view_units);
 	}
+}
+
+void CHeeksCADInterface::SplineToBiarcs(HeeksObj* spline, std::list<HeeksObj*> &new_spans, double tolerance)
+{
+	((HSpline*)spline)->ToBiarcs(new_spans, tolerance);
 }
 
 bool CHeeksCADInterface::Intersect(const gp_Lin& lin, const gp_Lin& lin2, gp_Pnt &pnt)
