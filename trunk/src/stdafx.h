@@ -62,6 +62,7 @@
 #include <BRepAlgoAPI_Cut.hxx>
 #include <BRepAlgoAPI_Fuse.hxx>
 #include <BRepAlgo_Fuse.hxx>
+#include <BRepBuilderAPI_GTransform.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepBuilderAPI_MakePolygon.hxx>
@@ -106,14 +107,15 @@
 #include <gp_Circ.hxx>
 #include <gp_Cone.hxx>
 #include <gp_Cylinder.hxx>
-#include <gp_Elips.hxx>
 #include <gp_Dir.hxx>
+#include <gp_Elips.hxx>
+#include <gp_GTrsf.hxx>
 #include <gp_Lin.hxx>
 #include <gp_Pln.hxx>
 #include <gp_Pnt.hxx>
-#include <gp_Vec.hxx>
 #include <gp_Sphere.hxx>
 #include <gp_Trsf.hxx>
+#include <gp_Vec.hxx>
 #include <IGESControl_Controller.hxx>
 #include <IGESControl_Reader.hxx>
 #include <IGESControl_Writer.hxx>
