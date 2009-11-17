@@ -7,9 +7,13 @@
 #include "Solid.h"
 
 class CCone: public CSolid{
-private:
+protected:
 	static wxIcon* m_icon;
 	bool m_render_without_OpenCASCADE;
+
+	// CShape's virtual functions
+	CShape* MakeTransformedShape(const gp_Trsf &mat);
+	wxString StretchedName();
 
 public:
 	gp_Ax2 m_pos;
@@ -27,7 +31,6 @@ public:
 	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/cone");}
 	void glCommands(bool select, bool marked, bool no_color);
 	HeeksObj *MakeACopy(void)const;
-	bool ModifyByMatrix(const double* m);
 	void GetProperties(std::list<Property *> *list);
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	void OnApplyProperties();

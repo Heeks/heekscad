@@ -119,7 +119,7 @@ bool HeeksObj::GetScaleAboutMatrix(double *m)
 #endif
 }
 
-bool HeeksObj::StretchTransformed(const double *p, const double* shift, void* data)
+bool HeeksObj::StretchTemporaryTransformed(const double *p, const double* shift, void* data)
 {
 #ifdef HEEKSCAD
 	gp_Trsf mat;
@@ -143,11 +143,10 @@ bool HeeksObj::StretchTransformed(const double *p, const double* shift, void* da
 	extract(vp,np);
 	extract(vshift,nshift);
 
-	return Stretch(np,nshift,data);
+	return StretchTemporary(np,nshift,data);
 #else
-	return Stretch(p,shift,data);
+	return StretchTemporary(p,shift,data);
 #endif
-
 }
 
 void HeeksObj::GetGripperPositionsTransformed(std::list<GripData> *list, bool just_for_endof)

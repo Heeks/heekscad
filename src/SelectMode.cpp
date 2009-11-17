@@ -59,7 +59,7 @@ const wxChar* CSelectMode::GetHelpText()
 	return str_for_GetHelpText;
 }
 
-static GripperSelTransform drag_object_gripper(gp_Pnt(0, 0, 0), GripperTypeTranslate,0);
+static GripperSelTransform drag_object_gripper(gp_Pnt(0, 0, 0), GripperTypeTranslate,0, NULL);
 
 void CSelectMode::OnMouse( wxMouseEvent& event )
 {

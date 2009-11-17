@@ -53,26 +53,17 @@ static void on_set_z(double value, HeeksObj* object){
 	((CCuboid*)object)->m_z = value;
 }
 
-bool CCuboid::ModifyByMatrix(const double* m){
-	gp_Trsf mat = make_matrix(m);
+CShape* CCuboid::MakeTransformedShape(const gp_Trsf &mat)
+{
 	gp_Ax2 new_pos = m_pos.Transformed(mat);
 	double scale = gp_Vec(1, 0, 0).Transformed(mat).Magnitude();
 	double new_x = fabs(m_x * scale);
 	double new_y = fabs(m_y * scale);
 	double new_z = fabs(m_z * scale);
-	CCuboid* new_object = new CCuboid(new_pos, new_x, new_y, new_z, m_title.c_str(), m_color);
-	new_object->CopyIDsFrom(this);
-	HeeksObj* owner = Owner();
-	if(owner == NULL)owner = &wxGetApp();
-	owner->Add(new_object, NULL);
-	owner->Remove(this);
-	if(wxGetApp().m_marked_list->ObjectMarked(this))
-	{
-		wxGetApp().m_marked_list->Remove(this, false);
-		wxGetApp().m_marked_list->Add(new_object, true);
-	}
-	return true;
+	return new CCuboid(new_pos, new_x, new_y, new_z, m_title.c_str(), m_color);
 }
+
+wxString CCuboid::StretchedName(){ return _("Stretched Cuboid");}
 
 void CCuboid::GetProperties(std::list<Property *> *list)
 {
