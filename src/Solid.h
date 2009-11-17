@@ -10,6 +10,9 @@ class CSolid:public CShape{
 protected:
 	static wxIcon* m_icon;
 
+	// CShape's virtual functions
+	CShape* MakeTransformedShape(const gp_Trsf &mat);
+
 public:
 	SolidTypeEnum m_type; // so the solid can be stretched in specific ways, if it's still a primitive solid
 
@@ -26,7 +29,6 @@ public:
 	HeeksObj *MakeACopy(void)const;
 	void SetColor(const HeeksColor &col){m_color = col;}
 	const HeeksColor* GetColor()const{return &m_color;}
-	bool ModifyByMatrix(const double* m);
 	void OnApplyProperties();
 
 	// CShape's virtual functions

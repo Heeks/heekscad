@@ -37,22 +37,11 @@ void CSolid::SetFromXMLElement(TiXmlElement* pElem)
 	}
 }
 
-bool CSolid::ModifyByMatrix(const double* m){
-	gp_Trsf mat = make_matrix(m);
+CShape* CSolid::MakeTransformedShape(const gp_Trsf &mat)
+{
 	BRepBuilderAPI_Transform myBRepTransformation(m_shape,mat);
 	TopoDS_Shape new_shape = myBRepTransformation.Shape();
-	CSolid* new_object = new CSolid(*((TopoDS_Solid*)(&new_shape)), m_title.c_str(), m_color);
-	new_object->CopyIDsFrom(this);
-	HeeksObj* owner = Owner();
-	if(owner == NULL)owner = &wxGetApp();
-	owner->Add(new_object, NULL);
-	if(wxGetApp().m_marked_list->ObjectMarked(this))
-	{
-		wxGetApp().m_marked_list->Remove(this,false);
-		wxGetApp().m_marked_list->Add(new_object, true);
-	}
-	owner->Remove(this);
-	return true;
+	return new CSolid(*((TopoDS_Solid*)(&new_shape)), m_title.c_str(), m_color);
 }
 
 void CSolid::OnApplyProperties()

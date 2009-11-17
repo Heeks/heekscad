@@ -44,24 +44,15 @@ static void on_set_radius(double value, HeeksObj* object){
 	((CSphere*)object)->m_radius = value;
 }
 
-bool CSphere::ModifyByMatrix(const double* m){
-	gp_Trsf mat = make_matrix(m);
+CShape* CSphere::MakeTransformedShape(const gp_Trsf &mat)
+{
 	gp_Pnt new_pos = m_pos.Transformed(mat);
 	double scale = gp_Vec(1, 0, 0).Transformed(mat).Magnitude();
 	double new_radius = fabs(m_radius * scale);
-	CSphere* new_object = new CSphere(new_pos, new_radius, m_title.c_str(), m_color);
-	new_object->CopyIDsFrom(this);
-	HeeksObj* owner = Owner();
-	if(owner == NULL)owner = &wxGetApp();
-	owner->Add(new_object, NULL);
-	owner->Remove(this);
-	if(wxGetApp().m_marked_list->ObjectMarked(this))
-	{
-		wxGetApp().m_marked_list->Remove(this,false);
-		wxGetApp().m_marked_list->Add(new_object, true);
-	}
-	return true;
+	return new CSphere(new_pos, new_radius, m_title.c_str(), m_color);
 }
+
+wxString CSphere::StretchedName(){ return _("Ellipsoid");}
 
 void CSphere::GetProperties(std::list<Property *> *list)
 {

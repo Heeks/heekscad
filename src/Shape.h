@@ -18,6 +18,8 @@ protected:
 
 	void create_faces_and_edges();
 	void delete_faces_and_edges();
+	virtual CShape* MakeTransformedShape(const gp_Trsf &mat);
+	virtual wxString StretchedName();
 
 public:
 	static bool m_solids_found; // a flag for xml writing
@@ -71,6 +73,7 @@ public:
 	static bool ExportSolidsFile(const std::list<HeeksObj*>& objects, const wxChar* filepath, std::map<int, CShapeData> *index_map = NULL);
 	static HeeksObj* MakeObject(const TopoDS_Shape &shape, const wxChar* title, SolidTypeEnum solid_type, const HeeksColor& col);
 	static bool IsTypeAShape(int t);
+	static bool IsMatrixDifferentialScale(const gp_Trsf& trsf);
 
 	virtual void SetXMLElement(TiXmlElement* element){}
 	virtual void SetFromXMLElement(TiXmlElement* pElem){}

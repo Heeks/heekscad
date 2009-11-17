@@ -7,8 +7,12 @@
 #include "Solid.h"
 
 class CSphere: public CSolid{
-private:
+protected:
 	static wxIcon* m_icon;
+
+	// CShape's virtual functions
+	CShape* MakeTransformedShape(const gp_Trsf &mat);
+	wxString StretchedName();
 
 public:
 	gp_Pnt m_pos;
@@ -23,7 +27,6 @@ public:
 	const wxChar* GetTypeString(void)const{return _("Sphere");}
 	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/sphere");}
 	HeeksObj *MakeACopy(void)const;
-	bool ModifyByMatrix(const double* m);
 	void GetProperties(std::list<Property *> *list);
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	void OnApplyProperties();

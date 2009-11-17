@@ -501,8 +501,8 @@ void CFace::GetSurfaceUVPeriod(double *uv, bool *isUPeriodic, bool *isVPeriodic)
 	BRepAdaptor_Surface surface(m_topods_face, Standard_True);
 	uv[0] = surface.UPeriod();
 	uv[1] = surface.VPeriod();
-	if(isUPeriodic)*isUPeriodic = surface.IsUPeriodic();
-	if(isVPeriodic)*isVPeriodic = surface.IsVPeriodic();
+	if(isUPeriodic)*isUPeriodic = (surface.IsUPeriodic() != Standard_False);
+	if(isVPeriodic)*isVPeriodic = (surface.IsVPeriodic() != Standard_False);
 }
 
 CShape* CFace::GetParentBody()
