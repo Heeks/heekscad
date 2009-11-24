@@ -62,7 +62,7 @@ public:
 	const TopoDS_Shape *GetShape(){return &m_shape;}
 
 	CFace* find(const TopoDS_Face &face);
-	bool GetExtents(double* extents, const double* orig, const double* xdir, const double* ydir, const double* zdir);
+	bool GetExtents(double* extents, const double* orig = NULL, const double* xdir = NULL, const double* ydir = NULL, const double* zdir = NULL);
 	void CopyIDsFrom(const CShape* shape_from);
 
 	static HeeksObj* CutShapes(std::list<HeeksObj*> &list,bool dodelete=true);
