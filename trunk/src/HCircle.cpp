@@ -99,10 +99,11 @@ static void glVertexFunction(const double *p){glVertex3d(p[0], p[1], p[2]);}
 void HCircle::glCommands(bool select, bool marked, bool no_color){
 	if(!no_color){
 		wxGetApp().glColorEnsuringContrast(color);
-		#ifdef WIN32
+		if (wxGetApp().m_allow_opengl_stippling)
+		{
 			glEnable(GL_LINE_STIPPLE);
 			glLineStipple(3, 0xaaaa);
-		#endif // WIN32
+		}
 	}
 	GLfloat save_depth_range[2];
 	if(marked){
@@ -120,12 +121,13 @@ void HCircle::glCommands(bool select, bool marked, bool no_color){
 		glDepthRange(save_depth_range[0], save_depth_range[1]);
 	}
 
-	#ifdef WIN32
-		if(!no_color)
+	if(!no_color)
+	{
+		if (wxGetApp().m_allow_opengl_stippling)
 		{
 			glDisable(GL_LINE_STIPPLE);
 		}
-	#endif // WIN32
+	}
 }
 
 HeeksObj *HCircle::MakeACopy(void)const{

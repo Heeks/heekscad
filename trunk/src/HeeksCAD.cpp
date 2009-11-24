@@ -283,6 +283,7 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("ExtrudeRemovesSketches"), &m_extrude_removes_sketches, true);
 	config.Read(_T("LoftRemovesSketches"), &m_loft_removes_sketches, true);
 	config.Read(_T("GraphicsTextMode"), (int*)(&m_graphics_text_mode), GraphicsTextModeWithHelp);
+	config.Read(_T("AllowOpenGLStippling"), &m_allow_opengl_stippling, true);
 
 	config.Read(_T("DxfMakeSketch"), &HeeksDxfRead::m_make_as_sketch, true);
 	config.Read(_T("ViewUnits"), &m_view_units);
@@ -413,6 +414,7 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("ExtrudeRemovesSketches"), m_extrude_removes_sketches);
 	config.Write(_T("LoftRemovesSketches"), m_loft_removes_sketches);
 	config.Write(_T("GraphicsTextMode"), m_graphics_text_mode);
+	config.Write(_T("AllowOpenGLStippling"), m_allow_opengl_stippling);
 	config.Write(_T("DxfMakeSketch"), HeeksDxfRead::m_make_as_sketch);
 	config.Write(_T("FaceToSketchDeviation"), FaceToSketchTool::deviation);
 
@@ -2188,6 +2190,14 @@ static void on_edit_font_paths(const wxChar* value, HeeksObj* object)
 	config.Write(_T("FontPaths"), wxGetApp().m_font_paths);
 }
 
+
+void on_set_allow_opengl_stippling(bool value, HeeksObj* object)
+{
+	wxGetApp().m_allow_opengl_stippling = value;
+	wxGetApp().Repaint();
+}
+
+
 void HeeksCADapp::GetOptions(std::list<Property *> *list)
 {
 	PropertyList* view_options = new PropertyList(_("view options"));
@@ -2296,7 +2306,11 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 		view_options->m_list.push_back ( new PropertyChoice ( _("units"),  choices, choice, this, on_set_units ) );
 	}
 	view_options->m_list.push_back(new PropertyCheck(_("flat on screen dimension text"), HDimension::DrawFlat, NULL, on_dimension_draw_flat));
+	view_options->m_list.push_back(new PropertyCheck(_("Allow OpenGL stippling"), m_allow_opengl_stippling, NULL, on_set_allow_opengl_stippling));
+
 	list->push_back(view_options);
+
+
 
 	PropertyList* digitizing = new PropertyList(_("digitizing"));
 	digitizing->m_list.push_back(new PropertyCheck(_("end"), digitize_end, NULL, on_end_of));
