@@ -106,6 +106,7 @@ public:
 	double digitizing_grid;
 	bool mouse_wheel_forward_away; // true for forwards/backwards = zoom out / zoom in, false for reverse
 	bool ctrl_does_rotate; // true - rotate on Ctrl, pan when not Ctrl      false - rotate when not Ctrl, pan when Ctrl
+	bool m_allow_opengl_stippling;
 	//gp_Trsf digitizing_matrix;
 	CoordinateSystem *m_current_coordinate_system;
 	CInputMode *input_mode_object;
