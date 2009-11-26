@@ -13,12 +13,17 @@ CAutoSave::CAutoSave(const int interval, const bool skip_recovery /* = false */ 
 
 	wxStandardPaths standard_paths;
 	m_backup_file_name = standard_paths.GetTempDir();
-	m_backup_file_name << _T("/");
+	#ifdef WIN32
+		m_backup_file_name << _T("\\");
+	#else
+		m_backup_file_name << _T("/");
+	#endif // WIN32
 	m_backup_file_name << _(".HeeksCAD_Backup_Data_File.heeks");
 
 	printf("Using backup file path '%s'\n", Ttc(m_backup_file_name.c_str()));
 
 	m_save_interval = interval;	// Minutes
+	m_auto_recover_requested = false;
 
 	struct stat statbuf;
 	if ((stat(Ttc(m_backup_file_name.c_str()), &statbuf) != -1) && (! skip_recovery))
@@ -30,9 +35,10 @@ CAutoSave::CAutoSave(const int interval, const bool skip_recovery /* = false */ 
 						_T("Confirm"), wxYES_NO );
 			if (answer == wxYES) 
 			{
-				printf("Recovering from backup file %s\n", Ttc(m_backup_file_name.c_str()));
-				// wxGetApp().OpenXMLFile(m_backup_file_name.c_str());
-				wxGetApp().OpenFile(m_backup_file_name.c_str(), false, NULL, false );
+				// We need to recover but it must be deferred until the rest of
+				// HeeksCAD has finished initializing.
+
+				m_auto_recover_requested = true;
 			}
 		}
 	}
@@ -65,4 +71,9 @@ void CAutoSave::Notify()
 } // End Notify() method
 
 
+void CAutoSave::Recover() const
+{
+	printf("Recovering from backup file %s\n", Ttc(m_backup_file_name.c_str()));
+	wxGetApp().OpenFile(m_backup_file_name.c_str(), false, NULL, false );
+}
 
