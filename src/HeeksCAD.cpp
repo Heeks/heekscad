@@ -328,8 +328,11 @@ bool HeeksCADapp::OnInit()
 	SetFrameTitle();
 	SetStatusText();
 
-#ifdef __WXMSW__
-	// to do, make this compile in Linux
+	if ((m_pAutoSave.get() != NULL) && (m_pAutoSave->AutoRecoverRequested()))
+	{
+		m_pAutoSave->Recover();
+	}
+	else
 	{
 		// Open the file passed in the command line argument
 		wxCmdLineEntryDesc cmdLineDesc[2];
@@ -358,7 +361,6 @@ bool HeeksCADapp::OnInit()
 			}
 		}
 	}
-#endif
 
 
 	return TRUE;

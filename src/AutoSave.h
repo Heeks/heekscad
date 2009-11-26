@@ -28,10 +28,14 @@ public:
 public:
 	// This overloads the wxTimer::Notify() method
 	void Notify();
+	wxString BackupFileName() const { return(m_backup_file_name); }
+	bool AutoRecoverRequested() const { return(m_auto_recover_requested); }
+	void Recover() const;
 
 private:
 	wxString m_backup_file_name;
 	int m_save_interval;	// in minutes
+	bool m_auto_recover_requested;
 
 }; // End CAutoSafe class definition.
 
