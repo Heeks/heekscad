@@ -271,6 +271,7 @@ void CGraphicsCanvas::SetIdentityProjection(void){
 }
 
 void CGraphicsCanvas::SetXOR(void){
+	SetCurrent();
 	glGetIntegerv(GL_DRAW_BUFFER, &m_save_buffer_for_XOR);
 	glDrawBuffer(GL_FRONT);
 	glDepthMask(0);
