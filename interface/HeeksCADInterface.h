@@ -224,4 +224,7 @@ public:
 	virtual bool Intersect(const gp_Pnt& pnt, const gp_Circ& cir);
 	virtual void Intersect(const gp_Lin& line, const gp_Circ& circle, std::list<gp_Pnt> &list);
 	virtual void Intersect(const gp_Circ& c1, const gp_Circ& c2, std::list<gp_Pnt> &list);
+
+	virtual void RegisterOnBuildTexture( void(*callbackfunc)() );
+	virtual int LoadIconsTexture(const wxChar *filepath);
 };

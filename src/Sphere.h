@@ -25,7 +25,7 @@ public:
 
 	// HeeksObj's virtual functions
 	const wxChar* GetTypeString(void)const{return _("Sphere");}
-	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/sphere");}
+	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(12, 1);}
 	HeeksObj *MakeACopy(void)const;
 	void GetProperties(std::list<Property *> *list);
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);

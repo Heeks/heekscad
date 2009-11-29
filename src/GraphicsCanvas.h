@@ -18,8 +18,6 @@ private:
 	bool m_frozen;
 	bool m_refresh_wanted_on_thaw;
 
-	void update_mode(void);
-
 public:
 	CViewPoint m_view_point;
 	bool m_orthogonal;

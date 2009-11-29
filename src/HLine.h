@@ -26,7 +26,7 @@ public:
 	void GetBox(CBox &box);
 	const wxChar* GetTypeString(void)const{return _("Line");}
 	HeeksObj *MakeACopy(void)const;
-	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/line");}
+	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(7, 1);}
 	void SetColor(const HeeksColor &col){color = col;}
 	const HeeksColor* GetColor()const{return &color;}
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);

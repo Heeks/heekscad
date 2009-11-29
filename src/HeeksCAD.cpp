@@ -151,6 +151,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	GetAvailableFonts();
 	
 	m_pCxfFont = NULL;	// Default to internal (OpenGL) font.
+	m_icon_texture_number = 0;
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -3422,4 +3423,9 @@ void HeeksCADapp::GetPluginsFromCommandLineParams(std::list<wxString> &plugins)
 		}
 	}
 #endif
+}
+
+void HeeksCADapp::RegisterOnBuildTexture(void(*callbackfunc)())
+{
+	m_on_build_texture_callbacks.push_back(callbackfunc);
 }

@@ -145,6 +145,7 @@ public:
 	std::list< void(*)(wxMouseEvent&) > m_lbutton_up_callbacks;
 	std::list< void(*)(bool) > m_on_save_callbacks;
 	std::list< bool(*)() > m_is_modified_callbacks;
+	std::list< void(*)() > m_on_build_texture_callbacks;
 	int m_transform_gl_list;
 	gp_Trsf m_drag_matrix;
 	bool m_extrude_removes_sketches;
@@ -173,6 +174,8 @@ public:
 
 	int m_auto_save_interval;	// In minutes
 	std::auto_ptr<CAutoSave> m_pAutoSave;
+
+	int m_icon_texture_number;
 
 	//WxApp override
 	int OnRun();
@@ -298,6 +301,7 @@ public:
 	void SetStatusText();
 	std::auto_ptr<CxfFonts>	& GetAvailableFonts();
 	void GetPluginsFromCommandLineParams(std::list<wxString> &plugins);
+	void RegisterOnBuildTexture(void(*callbackfunc)());
 };
 
 DECLARE_APP(HeeksCADapp)

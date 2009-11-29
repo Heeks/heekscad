@@ -12,9 +12,6 @@
 
 extern CHeeksCADInterface heekscad_interface;
 
-#define wxID_TEST1 10001
-#define wxID_TEST2 10002
-
 BEGIN_EVENT_TABLE(CGraphicsCanvas, wxGLCanvas)
     EVT_SIZE(CGraphicsCanvas::OnSize)
 	EVT_ERASE_BACKGROUND(CGraphicsCanvas::OnEraseBackground)
