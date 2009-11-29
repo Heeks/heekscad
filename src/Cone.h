@@ -28,7 +28,7 @@ public:
 
 	// HeeksObj's virtual functions
 	const wxChar* GetTypeString(void)const{return _("Cone");}
-	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/cone");}
+	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(12, 0);}
 	void glCommands(bool select, bool marked, bool no_color);
 	HeeksObj *MakeACopy(void)const;
 	void GetProperties(std::list<Property *> *list);

@@ -5221,6 +5221,13 @@
        y1="244.34225"
        x2="33.810226"
        y2="270.39337" />
+    <inkscape:perspective
+       id="perspective3699"
+       inkscape:persp3d-origin="110 : 128.33333 : 1"
+       inkscape:vp_z="220 : 192.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 192.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -8179,6 +8186,29 @@
          id="path3645"
          d="M 397.88913,803.97384 L 398.53771,790.75153 L 416.69786,787.81325 L 415.4007,801.62321 L 397.88913,803.97384 z"
          style="fill:#004beb;fill-opacity:1;fill-rule:evenodd;stroke:#0000aa;stroke-width:1.74617589;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <g
+       id="g4509"
+       transform="matrix(0.9383394,0,0,0.9383562,-65.464717,9.3459562)"
+       inkscape:export-filename="C:\Users\Dan\HeeksCAD\icons\unknown.png"
+       inkscape:export-xdpi="42.043797"
+       inkscape:export-ydpi="42.043797">
+      <text
+         transform="scale(1.1068033,0.9035029)"
+         style="font-size:39.97782516px;font-family:Times New Roman"
+         x="322.77643"
+         font-size="500"
+         y="201.00896"
+         id="text3692">?</text>
+      <path
+         d="M 385,169.86218 A 17.5,17.5 0 1 1 350,169.86218 A 17.5,17.5 0 1 1 385,169.86218 z"
+         sodipodi:ry="17.5"
+         sodipodi:rx="17.5"
+         sodipodi:cy="169.86218"
+         sodipodi:cx="367.5"
+         id="path3731"
+         style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#d8ce00;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         sodipodi:type="arc" />
     </g>
   </g>
 </svg>

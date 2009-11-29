@@ -36,7 +36,7 @@ public:
 	void GetBox(CBox &box);
 	const wxChar* GetTypeString(void)const{return _("Arc");}
 	HeeksObj *MakeACopy(void)const;
-	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/arc");}
+	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(10, 0);}
 	bool ModifyByMatrix(const double *mat);
 	void SetColor(const HeeksColor &col){color = col;}
 	const HeeksColor* GetColor()const{return &color;}

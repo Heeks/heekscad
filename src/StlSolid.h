@@ -36,7 +36,7 @@ public:
 	long GetMarkingMask()const{return MARKING_FILTER_STL_SOLID;}
 	int GetIDGroupType()const{return SolidType;}
 	const wxChar* GetTypeString(void)const{return _("STL Solid");}
-	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/stlsolid");}
+	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(13, 1);}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
 	void KillGLLists(void);

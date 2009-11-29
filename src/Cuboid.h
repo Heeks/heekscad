@@ -26,7 +26,7 @@ public:
 	// HeeksObj's virtual functions
 	bool IsDifferent(HeeksObj* other);
 	const wxChar* GetTypeString(void)const{return _("Cuboid");}
-	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/cube");}
+	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(14, 0);}
 	HeeksObj *MakeACopy(void)const;
 	void GetProperties(std::list<Property *> *list);
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);

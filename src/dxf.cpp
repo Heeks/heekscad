@@ -838,7 +838,24 @@ void CDxfRead::OnReadEllipse(const double* c, const double* m, double ratio, dou
 
 void CDxfRead::OnReadSpline(struct SplineData& sd)
 {
-	TColgp_Array1OfPnt control (1,sd.controlx.size());
+	bool closed = (sd.flag & 1) != 0;
+	bool periodic = (sd.flag & 2) != 0;
+	bool rational = (sd.flag & 4) != 0;
+	bool planar = (sd.flag & 8) != 0;
+	bool linear = (sd.flag & 16) != 0;
+
+	SplineData sd_copy = sd;
+
+	if(closed)
+	{
+		// add some more control points
+		sd_copy.control_points += 3;
+
+		//for(int i = 0; i<3; i++
+		//sd_copy.controlx
+	}
+
+	TColgp_Array1OfPnt control (1,/*closed ? sd.controlx.size() + 1:*/sd.controlx.size());
 	TColStd_Array1OfReal weight (1,sd.controlx.size());
 
 	std::list<double> knoto;
@@ -883,20 +900,23 @@ void CDxfRead::OnReadSpline(struct SplineData& sd)
 		}
 		last_knot = *it;
 	}
-	TColStd_Array1OfReal knot (1,knoto.size());
-	TColStd_Array1OfInteger mult (1,knoto.size());
+
+	TColStd_Array1OfReal knot (1, knoto.size());
+	TColStd_Array1OfInteger mult (1, knoto.size());
 
 	std::list<int>::iterator itm = multo.begin();
 	i = 1;
 	for(std::list<double>::iterator it = knoto.begin(); it!=knoto.end(); ++it)
 	{
 		knot.SetValue(i,*it);
-		mult.SetValue(i,*itm);
+		int m = *itm;
+		if(closed && (i == 1 || i == knoto.size()))m = 1;
+		mult.SetValue(i, m);
 		++itm;
 		++i;
 	}
 
-    OnReadSpline(control, weight, knot, mult, sd.degree, (sd.flag & 2) != 0, (sd.flag & 4) != 0);
+    OnReadSpline(control, weight, knot, mult, sd.degree, periodic, rational);
 }
 
 void CDxfRead::get_line()

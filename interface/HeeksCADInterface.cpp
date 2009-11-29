@@ -41,6 +41,7 @@
 #include <gp_Sphere.hxx>
 #include <TopoDS_Wire.hxx>
 #include "Geom.h"
+#include "wxImageLoader.h"
 
 double CHeeksCADInterface::GetTolerance()
 {
@@ -1031,5 +1032,14 @@ void CHeeksCADInterface::Intersect(const gp_Circ& c1, const gp_Circ& c2, std::li
 	intersect( c1, c2, list );
 }
 
+void CHeeksCADInterface::RegisterOnBuildTexture( void(*callbackfunc)() )
+{
+	wxGetApp().RegisterOnBuildTexture(callbackfunc);
+}
 
-
+int CHeeksCADInterface::LoadIconsTexture(const wxChar *filepath){
+    int width, height, textureWidth, textureHeight;
+	unsigned int* t = loadImage(filepath, &width, &height, &textureWidth, &textureHeight);
+	if(t)return *t;
+	return 0;
+}

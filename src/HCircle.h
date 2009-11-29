@@ -29,7 +29,7 @@ public:
 	void GetBox(CBox &box);
 	const wxChar* GetTypeString(void)const{return _("Circle");}
 	HeeksObj *MakeACopy(void)const;
-	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/circle");}
+	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(11, 0);}
 	bool ModifyByMatrix(const double *mat);
 	void SetColor(const HeeksColor &col){color = col;}
 	const HeeksColor* GetColor()const{return &color;}
