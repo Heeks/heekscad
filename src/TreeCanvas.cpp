@@ -303,10 +303,17 @@ void CTreeCanvas::RenderIcon(int texture_number, int x, int y)
 		int xpos16 = m_xpos * 16;
 		int ypos16 = render_height - m_ypos * 18;
 
+#ifdef WIN32
 		float texture_left = ((float)(icon_x) + 0.5f)/256;
 		float texture_right = ((float)(icon_x) + 16.5f)/256;
 		float texture_top = ((float)(icon_y) - 0.5f)/256;
 		float texture_bottom = ((float)(icon_y) + 15.5f)/256;
+#else
+		float texture_left = ((float)(icon_x))/256;
+		float texture_right = ((float)(icon_x) + 16.0f)/256;
+		float texture_top = ((float)(icon_y))/256;
+		float texture_bottom = ((float)(icon_y) + 16.0f)/256;
+#endif
 
 		glColor4ub(255, 255, 255, 255);
 		glEnable(GL_TEXTURE_2D);
@@ -458,10 +465,17 @@ int CTreeCanvas::RenderChar(char c)
 	int posy = text_start_posy[c];
 	int shift = text_start_posd[c];
 
+#ifdef WIN32
 	float texture_left = ((float)(posx) + 0.5f)/256;
 	float texture_right = ((float)(posx) + 0.5f + shift)/256;
 	float texture_top = ((float)(posy) - 0.5f)/256;
 	float texture_bottom = ((float)(posy) + 17.5f)/256;
+#else
+	float texture_left = ((float)(posx))/256;
+	float texture_right = ((float)(posx) + shift)/256;
+	float texture_top = ((float)(posy))/256;
+	float texture_bottom = ((float)(posy) + 18.0f)/256;
+#endif
 
 	if(wxGetApp().m_icon_texture_number){
 		int xpos16 = m_xpos * 16 + text_pos;
