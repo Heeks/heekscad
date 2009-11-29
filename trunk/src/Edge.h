@@ -51,7 +51,7 @@ public:
 	void GetBox(CBox &box);
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	HeeksObj *MakeACopy(void)const{ return new CEdge(*this);}
-	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/edge");}
+	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(1, 1);}
 	const wxChar* GetTypeString(void)const{return _("Edge");}
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	void WriteXML(TiXmlNode *root);

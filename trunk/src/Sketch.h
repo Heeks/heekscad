@@ -41,7 +41,7 @@ public:
 	int GetType()const{return SketchType;}
 	long GetMarkingMask()const{return MARKING_FILTER_SKETCH;}
 	const wxChar* GetTypeString(void)const{return _("Sketch");}
-	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/linedrawing");}
+	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(8, 1);}
 	void GetProperties(std::list<Property *> *list);
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	HeeksObj *MakeACopy(void)const;

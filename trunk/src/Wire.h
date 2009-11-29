@@ -16,7 +16,7 @@ public:
 	long GetMarkingMask()const{return MARKING_FILTER_WIRE;}
 	const wxChar* GetTypeString(void)const{return _("Wire");}
 	HeeksObj *MakeACopy(void)const{ return new CWire(*this);}
-	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/wire");}
+	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(3, 2);}
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 
 	const TopoDS_Wire &Wire()const;

@@ -63,7 +63,7 @@ public:
 	HeeksObj *MakeACopy(void)const;
 	int GetType()const{return ConstraintType;}
 	const wxChar* GetTypeString(void)const{return _("Constraint");}
-	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/line");}
+	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(7, 1);}
 	void Disconnect(std::list<HeeksObj*> parents);
 	void WriteXML(TiXmlNode *root);
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);

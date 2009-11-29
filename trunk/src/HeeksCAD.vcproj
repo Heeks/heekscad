@@ -946,14 +946,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Images.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Images.h"
-			>
-		</File>
-		<File
 			RelativePath="..\interface\InputMode.h"
 			>
 		</File>

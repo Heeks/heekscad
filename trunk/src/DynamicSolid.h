@@ -24,7 +24,7 @@ public:
 	int GetType()const{return SolidType;}
 	long GetMarkingMask()const{return MARKING_FILTER_SOLID;}
 	const wxChar* GetTypeString(void)const{return _("Solid");}
-	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/solid");}
+	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(11, 1);}
 	//HeeksObj *MakeACopy(void)const;
 	void ReloadPointers(); 
 

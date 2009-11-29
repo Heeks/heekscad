@@ -13,7 +13,7 @@ public:
 	const wxChar* GetTypeString(void)const{return _("Group");}
 	int GetType()const{return GroupType;}
 	HeeksObj *MakeACopy(void)const{ return new CGroup(*this);}
-	wxString GetIcon(){return wxGetApp().GetResFolder() + _T("/icons/group");}
+	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(5, 1);}
 	void WriteXML(TiXmlNode *root);
 	bool UsesID(){return true;}
 

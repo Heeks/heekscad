@@ -1,214 +1,196 @@
 // TreeCanvas.cpp
 // Copyright (c) 2009, Dan Heeks
 // This program is released under the BSD license. See the file COPYING for details.
-
 #include "stdafx.h"
 #include "TreeCanvas.h"
-#include "../interface/MarkedObject.h"
-#include "MarkedList.h"
 #include "HeeksFrame.h"
-#include "../interface/InputMode.h"
-#include "Sketch.h"
+#include "wxImageLoader.h"
+#include "../interface/MarkedObject.h"
 
-class DanObjectTreeData : public wxTreeItemData{
-	public:
-	HeeksObj* m_object;
-	DanObjectTreeData(HeeksObj* object) : wxTreeItemData(){ m_object = object; }
-	virtual ~DanObjectTreeData(){}
-};
-
-
-BEGIN_EVENT_TABLE(CTreeCanvas, wxScrolledWindow)
+BEGIN_EVENT_TABLE(CTreeCanvas, wxGLCanvas)
     EVT_SIZE(CTreeCanvas::OnSize)
-	EVT_MOUSEWHEEL(CTreeCanvas::OnMouseWheel)
+	EVT_ERASE_BACKGROUND(CTreeCanvas::OnEraseBackground)
+    EVT_PAINT(CTreeCanvas::OnPaint)
+    EVT_MOUSE_EVENTS(CTreeCanvas::OnMouse)
+    EVT_MENU_RANGE(ID_FIRST_POP_UP_MENU_TOOL, ID_FIRST_POP_UP_MENU_TOOL + 1000, CTreeCanvas::OnMenuEvent)
 	EVT_KEY_DOWN(CTreeCanvas::OnKeyDown)
 	EVT_KEY_UP(CTreeCanvas::OnKeyUp)
+	EVT_CHAR(CTreeCanvas::OnCharEvent)
 END_EVENT_TABLE()
 
-
-CTreeCanvas::CTreeCanvas(wxWindow* parent)
-        : wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                           wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE), m_treeCtrl(NULL)
+CTreeCanvas::CTreeCanvas(wxWindow* parent, int *attribList)
+        : wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("some text"), attribList),m_frozen(false), m_refresh_wanted_on_thaw(false),
+		width(0), height(0), textureWidth(0), textureHeight(0), m_texture_built(false), m_xpos(0), m_ypos(0), scroll_y_pos(0)
 {
-    CreateTreeWithDefStyle();
+	wxGetApp().RegisterObserver(this);
 }
 
-CTreeCanvas::~CTreeCanvas()
+void CTreeCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
-}
+    /* must always be here */
+    wxPaintDC dc(this);
 
-void CTreeCanvas::CreateTreeWithDefStyle()
-{
-    long style = wxTR_DEFAULT_STYLE | wxTR_HIDE_ROOT |
-#ifndef NO_VARIABLE_HEIGHT
-                 wxTR_HAS_VARIABLE_ROW_HEIGHT |
+#ifndef __WXMOTIF__
+    if (!GetContext()) return;
 #endif
-                 wxTR_MULTIPLE;
 
-    CreateTree(style | wxSUNKEN_BORDER);
+    SetCurrent();
 
+	glDrawBuffer(GL_BACK);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	// clear the back buffer
+	HeeksColor(255, 255, 255).glClearColor(1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    int w, h;
+    GetClientSize(&w, &h);
+	glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(- 0.5, w - 0.5, -0.5, h - 0.5, 0,10);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	// render everything
+	Render();
+
+    SwapBuffers();
 }
 
 void CTreeCanvas::OnSize(wxSizeEvent& event)
 {
-    if ( m_treeCtrl  )
-    {
-        Resize();
-    }
-
-    event.Skip();
+    // this is also necessary to update the context on some platforms
+    wxGLCanvas::OnSize(event);
+	Refresh();
 }
 
-void CTreeCanvas::OnMouseWheel(wxMouseEvent& event)
+void CTreeCanvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 {
-	wxGetApp().PassMouseWheelToGraphics(event);
+	// Do nothing, to avoid flashing on MSW
 }
 
-void CTreeCanvas::Resize()
+HeeksObj* clicked_object = NULL;
+
+void CTreeCanvas::OnMouse( wxMouseEvent& event )
 {
-    wxSize size = GetClientSize();
-    m_treeCtrl->SetSize(0, 0, size.x, size.y );
-}
+	if(wxGetApp().m_property_grid_validation)return;
 
-void CTreeCanvas::CreateTree(long style)
-{
-    m_treeCtrl = new MyTreeCtrl(this, style);
+	if(event.Entering()){
+	    SetCurrent();
+		SetFocus(); // so middle wheel works
+	}
 
-	m_root = m_treeCtrl->AddRoot(_T("root"), -1, -1, NULL);
-
-    wxGetApp().RegisterObserver(this);
-    Resize();
-}
-
-void CTreeCanvas::Add(ObjList* objects, wxTreeItemId owner)
-{
-	HeeksObj* object = objects->GetFirstChild();
-	while(object)
+	if(event.LeftDown() || event.RightDown())
 	{
-		wxTreeItemId new_owner = AddInt(object, owner);
+		int x = event.GetX();
+		int y = event.GetY();
+		bool button_found = false;
 
-		if(object->IsList())
+		for(std::list<CTreeButton>::iterator It = m_tree_buttons.begin(); It != m_tree_buttons.end(); It++)
 		{
-			ObjList* new_list = (ObjList*)object;
-			Add(new_list, new_owner);
-		}
-
-		object = objects->GetNextChild();
-	}
-}
-
-void CTreeCanvas::Reload()
-{
-	Clear();
-	Add((ObjList*)&wxGetApp(),m_root);
-	WhenMarkedListChanges(false,NULL,NULL);
-}
-
-void CTreeCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified)
-{
-	Reload();
-}
-
-void CTreeCanvas::WhenMarkedListChanges(bool selection_cleared, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)
-{
-	if(selection_cleared){
-		 wxTreeItemId item = m_treeCtrl->GetFirstVisibleItem();
-         while(item.IsOk()){
-              UnselectItem(item);
-              item = m_treeCtrl->GetNextVisible(item);
-         }
-	}
-	else{
-		std::list<HeeksObj*>::iterator it;
-		for(it = wxGetApp().m_marked_list->list().begin(); it != wxGetApp().m_marked_list->list().end(); it++)
-		{
-			std::vector<wxTreeItemId> items = Find(*it);
-			for(size_t i=0; i < items.size(); i++)
+			CTreeButton& b = *It;
+			if(b.rect.Inside(x, y))
 			{
-				wxTreeItemId item = items[i];
-				if(item.IsOk())
-					SelectItem(item);
+				switch(b.type)
+				{
+				case 0:
+				case 1:
+					SetExpanded(b.obj, b.type == 0);
+					this->Refresh();
+					break;
+
+				case 2:
+				default:
+					OnLabelLeftDown(b.obj, event);
+					clicked_object = b.obj;
+					break;
+				}
+
+				button_found = true;
+				break;
 			}
 		}
-	}
-	m_treeCtrl->Refresh();
-}
 
-void CTreeCanvas::SelectItem(wxTreeItemId item)
-{
-	m_treeCtrl->SelectItem(item);
-	//Selection doesn't work well with focus, so we set the background color
-//	m_treeCtrl->SetItemBackgroundColour(item,m_treeCtrl->Get());
-}
-
-void CTreeCanvas::UnselectItem(wxTreeItemId item)
-{
-	m_treeCtrl->SelectItem(item,false);
-	//Selection doesn't work well with focus, so we set the background color
-//	m_treeCtrl->SetItemBackgroundColour(item,m_treeCtrl->GetBackgroundColour());
-}
-
-void CTreeCanvas::Clear()
-{
-	m_treeCtrl->DeleteAllItems();
-	tree_map.clear();
-	m_root = m_treeCtrl->AddRoot(_T("root"), -1, -1, NULL);
-}
-
-void CTreeCanvas::Freeze()
-{
-	m_treeCtrl->Freeze();
-}
-
-void CTreeCanvas::Thaw()
-{
-	m_treeCtrl->Thaw();
-}
-
-const wxTreeItemId CTreeCanvas::AddInt(HeeksObj* object, const wxTreeItemId &owner)
-{
-	int image = m_treeCtrl->GetImage(object);
-	wxTreeItemId item = m_treeCtrl->AppendItem(owner, object->GetShortStringOrTypeString(), image, -1, new DanObjectTreeData(object));
-	tree_map[object].push_back(item);
-
-	return item;
-}
-
-void CTreeCanvas::Remove(HeeksObj *object, const wxTreeItemId &item, bool set_not_marked){
-	if(object == NULL)return;
-	if(tree_map.find(object) == tree_map.end())return;
-	if(item == wxTreeItemId())return;
-	RemoveChildren(item);
-	if(item){
-		m_treeCtrl->Delete(item);
-		tree_map.erase(object);
-	}
-}
-
-bool CTreeCanvas::RemoveChildren(const wxTreeItemId &item)
-{
-	wxTreeItemIdValue cookie;
-	wxTreeItemId child = m_treeCtrl->GetFirstChild(item, cookie);
-	if(child){
-		std::list<wxTreeItemId> child_list;
-		while(child){
-			child_list.push_back(child);
-			child = m_treeCtrl->GetNextChild(item, cookie);
-		}
-		std::list<wxTreeItemId>::iterator It;
-		for(It = child_list.begin(); It != child_list.end(); It++){
-			HeeksObj *child_object = (HeeksObj *)(m_treeCtrl->GetItemData( *It ));
-			Remove(child_object, *It, false);
+		if(!button_found)
+		{
+			wxGetApp().m_marked_list->Clear(true);
+			clicked_object = NULL;
 		}
 	}
-	return false;
+
+	if(event.RightUp())
+	{
+		// do a context menu
+		MarkedObjectOneOfEach marked_object(0, clicked_object, 1);
+		wxGetApp().DoDropDownMenu(this, event.GetPosition(), &marked_object, true, false, false);
+	}
+
+	if(event.GetWheelRotation() != 0)
+	{
+		double wheel_value = (double)(event.GetWheelRotation());
+		scroll_y_pos -= (wheel_value / 100);
+		if(scroll_y_pos < 0)scroll_y_pos = 0;
+		Refresh();
+	}
+
+	event.Skip();
 }
 
 void CTreeCanvas::OnKeyDown(wxKeyEvent& event)
 {
-	wxGetApp().input_mode_object->OnKeyDown(event);
+	if(event.GetKeyCode() == WXK_ESCAPE && wxGetApp().EndSketchMode())
+	{}
+	else wxGetApp().input_mode_object->OnKeyDown(event);
+
 	event.Skip();
 }
+
+void CTreeCanvas::OnCharEvent(wxKeyEvent& event)
+{
+	const int ControlA = 1;
+	const int ControlC = 3;
+	const int ControlV = 22;
+
+	// printf("Key event is '%d'\n", event.GetKeyCode());
+	switch (event.GetKeyCode())
+	{
+		case ControlA:
+			{
+				// Select all
+				std::list<HeeksObj*> obj_list;
+				for(HeeksObj* object = wxGetApp().GetFirstChild(); object != NULL; object = wxGetApp().GetNextChild())
+				{
+					if(object->GetType() != GripperType)
+					{
+						obj_list.push_back(object);
+					} // End if - then
+				} // End for
+				wxGetApp().m_marked_list->Add(obj_list, true);
+				wxGetApp().Repaint();
+				event.Skip();
+				break;
+			} // End ControlA scope
+
+		case ControlC:
+			// Copy
+			wxGetApp().m_marked_list->CopySelectedItems();
+			wxGetApp().Repaint();
+			event.Skip();
+			break;
+
+		case ControlV:
+			// Paste
+			wxGetApp().Paste(NULL);
+			wxGetApp().Repaint();
+			event.Skip();
+			break;
+
+		default:
+			break;
+	} // End switch
+} // End OnCharEvent() method
+
 
 void CTreeCanvas::OnKeyUp(wxKeyEvent& event)
 {
@@ -216,303 +198,439 @@ void CTreeCanvas::OnKeyUp(wxKeyEvent& event)
 	event.Skip();
 }
 
-std::vector<wxTreeItemId> CTreeCanvas::Find(HeeksObj *object){
-	std::vector<wxTreeItemId> ret;
-	std::map<HeeksObj*, std::vector<wxTreeItemId> >::iterator FindIt = tree_map.find(object);
-	if(FindIt == tree_map.end())return ret;
-	return FindIt->second;
-}
-
-#ifdef USE_GENERIC_TREECTRL
-BEGIN_EVENT_TABLE(MyTreeCtrl, wxGenericTreeCtrl)
-#else
-BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
-#endif
-    EVT_TREE_DELETE_ITEM(ID_TREE_CTRL, MyTreeCtrl::OnDeleteItem)
-    EVT_TREE_SET_INFO(ID_TREE_CTRL, MyTreeCtrl::OnSetInfo)
-    EVT_TREE_SEL_CHANGED(ID_TREE_CTRL, MyTreeCtrl::OnSelChanged)
-    EVT_TREE_SEL_CHANGING(ID_TREE_CTRL, MyTreeCtrl::OnSelChanging)
-    EVT_TREE_ITEM_ACTIVATED(ID_TREE_CTRL, MyTreeCtrl::OnItemActivated)
-
-    // so many differents ways to handle right mouse button clicks...
-    EVT_CONTEXT_MENU(MyTreeCtrl::OnContextMenu)
-    // EVT_TREE_ITEM_MENU is the preferred event for creating context menus
-    // on a tree control, because it includes the point of the click or item,
-    // meaning that no additional placement calculations are required.
-//    EVT_TREE_ITEM_MENU(ID_TREE_CTRL, MyTreeCtrl::OnItemMenu)
-//    EVT_TREE_ITEm_graphics_CLICK(ID_TREE_CTRL, MyTreeCtrl::OnItemRClick)
-   EVT_MENU_RANGE(ID_FIRST_POP_UP_MENU_TOOL, ID_FIRST_POP_UP_MENU_TOOL + 1000, MyTreeCtrl::OnMenuEvent)
-
-    EVT_LEFT_DOWN(MyTreeCtrl::OnLMouseDown)
-    EVT_LEFT_UP(MyTreeCtrl::OnLMouseUp)
-    EVT_LEFT_DCLICK(MyTreeCtrl::OnLMouseDClick)
-//    EVT_RIGHT_DOWN(MyTreeCtrl::OnRMouseDown)
-//    EVT_RIGHT_UP(MyTreeCtrl::OnRMouseUp)
-//    EVT_RIGHT_DCLICK(MyTreeCtrl::OnRMouseDClick)
-	EVT_KEY_DOWN(MyTreeCtrl::OnKeyDown)
-	EVT_KEY_UP(MyTreeCtrl::OnKeyUp)
-END_EVENT_TABLE()
-
-// MyTreeCtrl implementation
-#ifdef USE_GENERIC_TREECTRL
-IMPLEMENT_DYNAMIC_CLASS(MyTreeCtrl, wxGenericTreeCtrl)
-#else
-IMPLEMENT_DYNAMIC_CLASS(MyTreeCtrl, wxTreeCtrl)
-#endif
-
-MyTreeCtrl::MyTreeCtrl(wxWindow *parent, long style)
-          : wxGenericTreeCtrl(parent, ID_TREE_CTRL, wxDefaultPosition, wxDefaultSize, style)
-{
-    m_reverseSort = false;
-    CreateImageList();
-}
-
-void MyTreeCtrl::CreateImageList(int size)
-{
-    if ( size == -1 )
-    {
-        SetImageList(NULL);
-        return;
-    }
-    if ( size == 0 )
-        size = m_imageSize;
-    else
-        m_imageSize = size;
-
-	InitializeImageList(size, size);
-    AssignImageList(m_image_list);
-}
-
-void MyTreeCtrl::CreateButtonsImageList(int WXUNUSED(size))
-{
-}
-
-int MyTreeCtrl::OnCompareItems(const wxTreeItemId& item1,
-                               const wxTreeItemId& item2)
-{
-    if ( m_reverseSort )
-    {
-        return wxGenericTreeCtrl::OnCompareItems(item2, item1);
-    }
-    else
-    {
-        return wxGenericTreeCtrl::OnCompareItems(item1, item2);
-    }
-}
-
-// avoid repetition
-#define TREE_EVENT_HANDLER(name)                                 \
-void MyTreeCtrl::name(wxTreeEvent& event)                        \
-{                                                                \
-    event.Skip();                                                \
-}
-
-TREE_EVENT_HANDLER(OnDeleteItem)
-TREE_EVENT_HANDLER(OnGetInfo)
-TREE_EVENT_HANDLER(OnSetInfo)
-
-#undef TREE_EVENT_HANDLER
-
-void MyTreeCtrl::OnSelChanged(wxTreeEvent& event) 
-{ 
-	event.Skip();
-}
-
-void MyTreeCtrl::OnSelChanging(wxTreeEvent& event) 
-{ 
-	event.Skip();
-}
-
-void MyTreeCtrl::OnKeyDown(wxKeyEvent& event)
-{
-	wxGetApp().input_mode_object->OnKeyDown(event);
-	event.Skip();
-}
-
-void MyTreeCtrl::OnKeyUp(wxKeyEvent& event)
-{
-	wxGetApp().input_mode_object->OnKeyUp(event);
-	event.Skip();
-}
-
-void MyTreeCtrl::OnItemActivated(wxTreeEvent& event)
-{
-    // show some info about this item
-    wxTreeItemId itemId = event.GetItem();
-    (MyTreeItemData *)GetItemData(itemId);
-}
-
-void MyTreeCtrl::OnItemMenu(wxTreeEvent& event)
-{
-    event.Skip();
-}
-
-void MyTreeCtrl::OnMenuEvent(wxCommandEvent& event)
+void CTreeCanvas::OnMenuEvent(wxCommandEvent& event)
 {
 	wxGetApp().on_menu_event(event);
-    event.Skip();
 }
 
-void MyTreeCtrl::OnContextMenu(wxContextMenuEvent& event)
+void CTreeCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified)
 {
-    wxPoint point = event.GetPosition();
-	point = ScreenToClient(point);
-	int flags;
-    wxTreeItemId itemId = HitTest(point, flags);
+	Refresh();
+}
 
-	HeeksObj* object = NULL;
+void CTreeCanvas::WhenMarkedListChanges(bool selection_cleared, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)
+{
+	Refresh();
+}
 
-	if(itemId)
+void CTreeCanvas::Clear()
+{
+	Refresh();
+}
+
+void CTreeCanvas::Freeze()
+{
+	m_frozen = true;
+}
+
+void CTreeCanvas::Thaw()
+{
+	m_frozen = false;
+	if(m_refresh_wanted_on_thaw)
 	{
-		MyTreeItemData *item = itemId.IsOk() ? (MyTreeItemData *)GetItemData(itemId) : NULL;
-		if(item)object = item->m_object;
+		Refresh();
+		m_refresh_wanted_on_thaw = false;
+	}
+}
+
+void CTreeCanvas::Refresh()
+{
+	if(m_frozen)
+	{
+		m_refresh_wanted_on_thaw = true;
+	}
+	else
+	{
+		wxGLCanvas::Refresh(false);
+	}
+}
+
+void CTreeCanvas::RefreshSoon()
+{
+	if(m_frozen)
+	{
+		m_refresh_wanted_on_thaw = true;
+	}
+	else if(wxGetApp().m_frame->IsShown())
+	{
+		wxGLCanvas::Refresh(false);
+		Update();
+	}
+}
+
+void CTreeCanvas::BuildTexture()
+{
+	wxString filepath = wxGetApp().GetResFolder() + _T("/icons/iconimage.png");
+	unsigned int* t = loadImage(filepath.c_str(), &width, &height, &textureWidth, &textureHeight);
+	if(t)wxGetApp().m_icon_texture_number= *t;
+
+	// build external textures
+	for(std::list< void(*)() >::iterator It = wxGetApp().m_on_build_texture_callbacks.begin(); It != wxGetApp().m_on_build_texture_callbacks.end(); It++)
+	{
+		void(*callbackfunc)() = *It;
+		(*callbackfunc)();
 	}
 
-    MarkedObjectOneOfEach marked_object(0, object, 1);
-	wxGetApp().DoDropDownMenu(this, point, &marked_object, true, false, false);
+	m_texture_built = true;
 }
 
-void MyTreeCtrl::OnItemRClick(wxTreeEvent& event)
+bool CTreeCanvas::IsExpanded(HeeksObj* object)
 {
-    event.Skip();
+	return m_expanded.find(object) != m_expanded.end();
 }
 
-void MyTreeCtrl::OnLMouseDown(wxMouseEvent& event)
+void CTreeCanvas::SetExpanded(HeeksObj* object, bool bExpanded)
 {
-    event.Skip();
-}
-
-void MyTreeCtrl::OnLMouseUp(wxMouseEvent& event)
-{
-    wxTreeItemId id = HitTest(event.GetPosition());
-    if ( !id )
+	if(bExpanded)
 	{
+		m_expanded.insert(object);
 	}
-    else
-    {
-        MyTreeItemData *item = (MyTreeItemData *)GetItemData(id);
+	else
+	{
+		m_expanded.erase(object);
+	}
+}
 
-		bool selection_selected = false;
+static int render_width = 0, render_height = 0;
+static bool render_marked = false;
 
-		if(event.ShiftDown())
+void CTreeCanvas::RenderIcon(int texture_number, int x, int y)
+{
+	unsigned int icon_x = x * 16;
+	unsigned int icon_y = y * 16;
+
+	if(texture_number){
+		int xpos16 = m_xpos * 16;
+		int ypos16 = render_height - m_ypos * 18;
+
+		float texture_left = ((float)(icon_x) + 0.5f)/256;
+		float texture_right = ((float)(icon_x) + 16.5f)/256;
+		float texture_top = ((float)(icon_y) - 0.5f)/256;
+		float texture_bottom = ((float)(icon_y) + 15.5f)/256;
+
+		glColor4ub(255, 255, 255, 255);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, texture_number);
+		glBegin(GL_QUADS);
+		glTexCoord2f(texture_left, texture_top);
+		glVertex2i(xpos16, ypos16);
+		glTexCoord2f(texture_left, texture_bottom);
+		glVertex2i(xpos16, ypos16 - 16);
+		glTexCoord2f(texture_right, texture_bottom);
+		glVertex2i(xpos16 + 16, ypos16 - 16);
+		glTexCoord2f(texture_right, texture_top);
+		glVertex2i(xpos16 + 16, ypos16);
+		glEnd();
+
+		glDisable(GL_TEXTURE_2D);
+	}
+}
+
+void CTreeCanvas::AddPlusOrMinusButton(HeeksObj* object, bool plus)
+{
+	CTreeButton b;
+	b.type = plus ? 0 : 1;
+	b.rect.x = m_xpos * 16;
+	b.rect.y = m_ypos * 18;
+	b.rect.width = 16;
+	b.rect.height = 18;
+	b.obj = object;
+	m_tree_buttons.push_back(b);
+}
+
+void CTreeCanvas::AddLabelButton(HeeksObj* object, int label_start_x, int label_end_x)
+{
+	CTreeButton b;
+	b.type = 2;
+	b.rect.x = label_start_x;
+	b.rect.y = m_ypos * 18;
+	b.rect.width = label_end_x - label_start_x;
+	b.rect.height = 18;
+	b.obj = object;
+	m_tree_buttons.push_back(b);
+}
+
+void CTreeCanvas::OnLabelLeftDown(HeeksObj* object, wxMouseEvent& event)
+{
+	if(event.ShiftDown())
+	{
+		// mark a list of siblings
+		HeeksObj* parent = object->Owner();
+		std::set<HeeksObj*> sibling_set;
+		std::list<HeeksObj*> sibling_list;
+		for(HeeksObj* sibling = parent->GetFirstChild(); sibling; sibling = parent->GetNextChild())
 		{
-			HeeksObj* most_recently_marked = NULL;
-			if(wxGetApp().m_marked_list->size() > 0)
+			sibling_set.insert(sibling);
+			sibling_list.push_back(sibling);
+		}
+		// find most recently marked sibling
+		std::list<HeeksObj*> &marked = wxGetApp().m_marked_list->list();
+		HeeksObj* recently_marked_sibling = NULL;
+		bool recent_first = false;
+		for(std::list<HeeksObj*>::reverse_iterator It = marked.rbegin(); It != marked.rend(); It++)
+		{
+			if(*It == object)recent_first = true;
+			if(sibling_set.find(*It) != sibling_set.end())
 			{
-				most_recently_marked = wxGetApp().m_marked_list->list().back();
-				std::vector<wxTreeItemId> recent_ids = ((CTreeCanvas*)GetParent())->Find(most_recently_marked);
-
-				std::list<HeeksObj*> objects_to_add;
-				for(size_t i = 0; i < recent_ids.size(); i++)
-				{
-					wxTreeItemId recent_id = recent_ids[i];
-					if(After(recent_id, id))
-					{
-						wxTreeItemId loop_id = recent_id;
-						while(loop_id.IsOk() && IsVisible(loop_id))
-						{
-							MyTreeItemData *loop_item = (MyTreeItemData *)GetItemData(loop_id);
-							if(!wxGetApp().m_marked_list->ObjectMarked(loop_item->m_object))objects_to_add.push_back(loop_item->m_object);
-							if(loop_id == id)break;
-							loop_id = GetNextVisible(loop_id);
-						}
-					}
-					else if(After(id, recent_id))
-					{
-						wxTreeItemId loop_id = recent_id;
-						while(loop_id.IsOk() && IsVisible(loop_id))
-						{
-							MyTreeItemData *loop_item = (MyTreeItemData *)GetItemData(loop_id);
-							if(!wxGetApp().m_marked_list->ObjectMarked(loop_item->m_object))objects_to_add.push_back(loop_item->m_object);
-							if(loop_id == id)break;
-							loop_id = GetPrevVisible(loop_id);
-						}
-					}
-
-					if(objects_to_add.size() > 0)wxGetApp().m_marked_list->Add(objects_to_add, true);
-					selection_selected = true;
-				}
+				recently_marked_sibling = *It;
+				break;
 			}
 		}
-		
-		if(!selection_selected)
+
+		if(recently_marked_sibling)
+		{
+			if(!event.ControlDown())
+			{
+				wxGetApp().m_marked_list->Clear(false);
+			}
+
+			bool marking = false;
+			std::list<HeeksObj*> list_to_mark;
+			bool finish_marking = false;
+			for(std::list<HeeksObj*>::iterator It = sibling_list.begin(); !finish_marking && It != sibling_list.end(); It++)
+			{
+				HeeksObj* sibling = *It;
+				if(sibling == object || sibling == recently_marked_sibling)
+				{
+					if(marking)finish_marking = true;
+					else marking = true;
+				}
+
+				if(marking)
+				{
+					list_to_mark.push_back(sibling);
+				}
+			}
+
+			wxGetApp().m_marked_list->Add(list_to_mark, true);
+		}
+		else
 		{
 			if(event.ControlDown())
 			{
-				if(wxGetApp().m_marked_list->ObjectMarked(item->m_object))
+				if(wxGetApp().m_marked_list->ObjectMarked(object))
 				{
-					wxGetApp().m_marked_list->Remove(item->m_object, false);
+					wxGetApp().m_marked_list->Remove(object, true);
 				}
-				else
-				{
-					wxGetApp().m_marked_list->Add(item->m_object, true);
+				else{
+					wxGetApp().m_marked_list->Add(object, true);
 				}
-				wxGetApp().Repaint();
 			}
 			else
 			{
 				wxGetApp().m_marked_list->Clear(false);
-				wxGetApp().m_marked_list->Add(item->m_object, true);
-				wxGetApp().Repaint();
+				wxGetApp().m_marked_list->Add(object, true);
 			}
 		}
 	}
-
-	event.Skip();
-}
-
-void MyTreeCtrl::OnLMouseDClick(wxMouseEvent& event)
-{
-	//Switch to sketch mode on double click of a sketch
-	wxTreeItemId id = HitTest(event.GetPosition());
-    if ( !id )
+	else
 	{
-	}
-    else
-    {
-        MyTreeItemData *item = (MyTreeItemData *)GetItemData(id);
-		CSketch *sketch = dynamic_cast<CSketch*>(item->m_object);
-		if(sketch)
+		// shift not down
+		if(event.ControlDown())
 		{
-			wxGetApp().EnterSketchMode(sketch);
+			if(wxGetApp().m_marked_list->ObjectMarked(object))
+			{
+				wxGetApp().m_marked_list->Remove(object, true);
+			}
+			else{
+				wxGetApp().m_marked_list->Add(object, true);
+			}
+		}
+		else
+		{
+			wxGetApp().m_marked_list->Clear(false);
+			wxGetApp().m_marked_list->Add(object, true);
 		}
 	}
-    event.Skip();
 }
 
-void MyTreeCtrl::OnRMouseDown(wxMouseEvent& event)
-{
-    event.Skip();
-}
+static int text_start_posx[127] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0  ,6  ,11 ,19 ,34 ,45 ,62 ,75 ,80 ,86 ,93 ,103,117,123,131,135,142,154,164,175,186,197,208,219,230,241,253,0  ,7  ,22 ,37 ,51 ,61 ,78 ,92 ,103,117,131,142,151,166,180,183,192,204,214,230,243,0  ,10 ,25 ,37 ,47 ,61 ,73 ,86 ,105,117,130,143,149,157,164,177,188,196,207,217,226,236,247,2  ,14 ,25 ,28 ,35 ,45 ,50 ,67 ,77 ,89 ,99 ,111,118,126,134,144,156,171,182,193,203,214,220,231};
+static int text_start_posy[127] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238};
+static int text_start_posd[127] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6  ,5  ,8  ,15 ,11 ,17 ,13 ,5  ,6  ,7  ,10 ,14 ,16 ,8  ,4  ,7  ,12 ,10 ,11 ,11 ,11 ,11 ,11 ,11 ,11 ,12 ,5  ,7  ,15 ,15 ,14 ,10 ,17 ,14 ,11 ,14 ,14 ,11 ,9  ,15 ,14 ,3  ,9  ,12 ,10 ,16 ,13 ,15 ,10 ,15 ,12 ,10 ,14 ,12 ,13 ,19 ,12 ,13 ,13 ,6  ,8  ,7  ,13 ,10 ,9  ,11 ,10 ,9  ,10 ,11 ,7  ,12 ,11 ,3  ,7  ,10 ,5  ,17 ,10 ,12 ,10 ,12 ,7  ,8  ,8  ,10 ,12 ,15 ,11 ,11 ,10 ,11 ,6  ,11 ,15 };
+static int text_pos = 0;
 
-void MyTreeCtrl::OnRMouseUp(wxMouseEvent& event)
+int CTreeCanvas::RenderChar(char c)
 {
-    event.Skip();
-}
+	// renders the character at the current xpos * 16 + text_pos, ypos
+	if(c<32 || c>126)return 0;
 
-void MyTreeCtrl::OnRMouseDClick(wxMouseEvent& event)
-{
-    event.Skip();
-}
+	int posx = text_start_posx[c];
+	int posy = text_start_posy[c];
+	int shift = text_start_posd[c];
 
-void MyTreeCtrl::AddIcon(wxIcon icon)
-{
-	GetImageList()->Add(icon);
-}
+	float texture_left = ((float)(posx) + 0.5f)/256;
+	float texture_right = ((float)(posx) + 0.5f + shift)/256;
+	float texture_top = ((float)(posy) - 0.5f)/256;
+	float texture_bottom = ((float)(posy) + 17.5f)/256;
 
-bool MyTreeCtrl::After(const wxTreeItemId& id1, const wxTreeItemId& id2)
-{
-	wxTreeItemId id = id1;
-	while(id.IsOk() && IsVisible(id))
-	{
-		if(id == id2)return true;
-		id = GetNextVisible(id);
+	if(wxGetApp().m_icon_texture_number){
+		int xpos16 = m_xpos * 16 + text_pos;
+		int ypos16 = render_height - m_ypos * 18;
+		if(render_marked)glColor4ub(128, 128, 255, 255);
+		else glColor4ub(255, 255, 255, 255);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, wxGetApp().m_icon_texture_number);
+		glBegin(GL_QUADS);
+		glTexCoord2f(texture_left, texture_top);
+		glVertex2i(xpos16, ypos16);
+		glTexCoord2f(texture_left, texture_bottom);
+		glVertex2i(xpos16, ypos16 - 18);
+		glTexCoord2f(texture_right, texture_bottom);
+		glVertex2i(xpos16 + shift, ypos16 - 18);
+		glTexCoord2f(texture_right, texture_top);
+		glVertex2i(xpos16 + shift, ypos16);
+		glEnd();
+
+		glDisable(GL_TEXTURE_2D);
 	}
 
-	return false;
+	return shift;
 }
 
-static inline const wxChar *Bool2String(bool b)
+int CTreeCanvas::RenderText(const char* str)
 {
-    return b ? wxT("") : wxT("not ");
+	int l = strlen(str);
+	for(int i = 0; i<l; i++)
+	{
+		text_pos += RenderChar(str[i]);
+	}
+
+	return text_pos;
+}
+
+int GetCharLength(char c)
+{
+	if(c<32 || c>126)return 0;
+	return text_start_posd[c];
+}
+
+int GetTextLength(const char* str)
+{
+	int text_length = 0;
+	int l = strlen(str);
+	for(int i = 0; i<l; i++)
+	{
+		text_pos += GetCharLength(str[i]);
+	}
+
+	return text_length;
+}
+
+void CTreeCanvas::RenderBranchIcon(HeeksObj* object, HeeksObj* next_object, bool expanded, int level)
+{
+	int num_children = object->GetNumChildren();
+	if(num_children > 0)
+	{
+		if(level)
+		{
+			// with branches
+			if(expanded)
+			{
+				RenderIcon(wxGetApp().m_icon_texture_number, 2, 0); // -
+				AddPlusOrMinusButton(object, false);
+			}
+			else
+			{
+				RenderIcon(wxGetApp().m_icon_texture_number, 1, 0);// +
+				AddPlusOrMinusButton(object, true);
+			}
+		}
+		else
+		{
+			// without branches
+			if(expanded)
+			{
+				RenderIcon(wxGetApp().m_icon_texture_number, 6, 0); // -
+				AddPlusOrMinusButton(object, false);
+			}
+			else
+			{
+				RenderIcon(wxGetApp().m_icon_texture_number, 5, 0); // +
+				AddPlusOrMinusButton(object, true);
+			}
+		}
+	}
+	else
+	{
+		if(level)
+		{
+			// just branches
+			if(next_object)RenderIcon(wxGetApp().m_icon_texture_number, 3, 0);
+			else RenderIcon(wxGetApp().m_icon_texture_number, 4, 0);
+		}
+	}
+}
+
+void CTreeCanvas::RenderBranchIcons(HeeksObj* object, HeeksObj* next_object, bool expanded, int level)
+{
+	// render initial branches
+	for(int i = 0; i<level; i++)
+	{
+		if(i > 0)RenderIcon(wxGetApp().m_icon_texture_number, 7, 0);
+		m_xpos++;
+	}
+
+	// render + or -
+	RenderBranchIcon(object, next_object, expanded, level);
+	m_xpos++;
+}
+
+void CTreeCanvas::RenderObject(HeeksObj* object, HeeksObj* next_object, int level)
+{
+	bool expanded = IsExpanded(object);
+
+	m_xpos = 0;
+	RenderBranchIcons(object, next_object, expanded, level);
+
+	int label_start_x = m_xpos * 16;
+	// find icon info
+	int texture_number = wxGetApp().m_icon_texture_number;
+	int x = 9; // unknown icon
+	int y = 0;
+	object->GetIcon(texture_number, x, y);
+	RenderIcon(texture_number, x, y);
+	m_xpos++;
+
+	text_pos = 8; // leave a gap before the text
+	const char* str = Ttc(object->GetShortStringOrTypeString());
+	render_marked = wxGetApp().m_marked_list->ObjectMarked(object);
+	RenderText(str);
+	int label_end_x = m_xpos * 16 + text_pos;
+	AddLabelButton(object, label_start_x, label_end_x);
+	m_xpos--;
+	m_ypos++;
+
+	if(expanded)
+	{
+		HeeksObj* child = object->GetFirstChild();
+
+		while(child)
+		{
+			HeeksObj* next_child = object->GetNextChild();
+			RenderObject(child, next_child, level + 1);
+			child = next_child;
+		}
+	}
+
+	m_xpos--;
+}
+
+void CTreeCanvas::Render()
+{
+	if(!m_texture_built)BuildTexture();
+
+    GetClientSize(&render_width, &render_height);
+
+	m_xpos = 0; // start at the left
+	m_ypos = -scroll_y_pos; // start at the top
+	m_tree_buttons.clear();
+
+	HeeksObj* object = wxGetApp().GetFirstChild();
+
+	while(object)
+	{
+		HeeksObj* next_object = wxGetApp().GetNextChild();
+		RenderObject(object, next_object, 0);
+		object = next_object;
+	}
 }
