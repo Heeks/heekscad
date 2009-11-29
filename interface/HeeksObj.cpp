@@ -254,7 +254,7 @@ HeeksObj* HeeksObj::Owner()
 void HeeksObj::SetOwner(HeeksObj *obj)
 {
 	m_owners.clear();
-	AddOwner(obj);
+	if(obj)AddOwner(obj);
 }
 
 bool HeeksObj::HasOwner(HeeksObj *obj)
