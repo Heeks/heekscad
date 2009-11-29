@@ -129,7 +129,6 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_graphics->m_view_point.SetPerspective(perspective);
 
 	m_tree_canvas = new CTreeCanvas(this, graphics_attrib_list);
-    m_tree_canvas->SetCursor(wxCursor(wxCURSOR_MAGNIFIER));
 
     m_options = new COptionsCanvas(this);
 	m_input_canvas = new CInputModeCanvas(this);
