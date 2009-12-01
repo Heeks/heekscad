@@ -1195,9 +1195,16 @@ public:
 
     CFlyOutButton(const CFlyOutList &flyout_list,
 				wxToolBar *toolbar,
+				int id_to_use,
 				const wxPoint& pos = wxDefaultPosition,
 				const wxSize& size = wxDefaultSize)
-				:wxBitmapButton(toolbar, wxID_ANY, ToolImage(flyout_list.GetMainItem()->m_title_and_bitmap), pos, size, wxBORDER_SIMPLE)
+				:wxBitmapButton(toolbar, id_to_use, ToolImage(flyout_list.GetMainItem()->m_title_and_bitmap), pos, size,
+#ifdef WIN32
+				wxBORDER_SIMPLE
+#else
+				wxBORDER_NONE
+#endif
+				)
 		,m_flyout_list(flyout_list)
 		,m_toolBar(toolbar)
 		,m_toolbarPopup(NULL)
@@ -1206,7 +1213,7 @@ public:
 
     void OnMouse( wxMouseEvent& event )
 	{
-		if(event.Moving())
+		if(event.Entering())
 		{
 			// delete previous popup
 			delete m_toolbarPopup;
@@ -1278,7 +1285,8 @@ void PanelForToolBar::OnMouse( wxMouseEvent& event )
 void CHeeksFrame::AddToolBarFlyout(wxToolBar* toolbar, const wxString& title, const CFlyOutList& flyout_list)
 {
 	if(flyout_list.m_list.size() == 0)return;
-	wxBitmapButton* button = new CFlyOutButton(flyout_list, toolbar, wxDefaultPosition, wxDefaultSize );
+	int id_to_use = MakeNextIDForTool(NULL, NULL);
+	wxBitmapButton* button = new CFlyOutButton(flyout_list, toolbar, id_to_use, wxDefaultPosition, wxDefaultSize );
 	toolbar->AddControl(button);
 }
 
