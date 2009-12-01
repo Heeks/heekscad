@@ -57,6 +57,7 @@ public:
 
 	// Get the item that should appear on the main toolbar
 	const CFlyOutItem* GetMainItem()const;
+	void SetMainItem(const CFlyOutItem* item);
 };
 
 class CHeeksFrame : public wxFrame
