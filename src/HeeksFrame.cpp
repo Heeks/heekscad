@@ -128,7 +128,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	config.Read(_T("Perspective"), &perspective);
 	m_graphics->m_view_point.SetPerspective(perspective);
 
-	m_tree_canvas = new CTreeCanvas(this, graphics_attrib_list);
+	m_tree_canvas = new CTreeCanvas(this, m_graphics, graphics_attrib_list);
 
     m_options = new COptionsCanvas(this);
 	m_input_canvas = new CInputModeCanvas(this);
@@ -1105,31 +1105,72 @@ void CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, Tool* tool)
 	}
 }
 
+class CFlyOutButton;
+
+class PanelForToolBar : public wxScrolledWindow
+{
+public:
+	PanelForToolBar(wxWindow *parent):wxScrolledWindow(parent, wxID_ANY){}
+
+	void OnMouse( wxMouseEvent& event );
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(PanelForToolBar, wxScrolledWindow)
+    EVT_MOUSE_EVENTS( PanelForToolBar::OnMouse )
+END_EVENT_TABLE()
+
+#define FLYOUT_PANEL_BORDER 5
+
 class ToolBarPopup: public wxPopupTransientWindow
 {
 public:
 	wxToolBar *m_toolBar;
+    PanelForToolBar *m_panel;
 
 public:
 	ToolBarPopup( wxWindow *parent, const CFlyOutList &flyout_list):wxPopupTransientWindow( parent )
 	{
-		m_panel = new wxScrolledWindow( this, wxID_ANY );
+		m_panel = new PanelForToolBar( this );
 		m_panel->SetBackgroundColour( *wxLIGHT_GREY );
 
  		m_toolBar = new wxToolBar(m_panel, -1, wxDefaultPosition, wxDefaultSize, wxTB_VERTICAL | wxTB_NODIVIDER | wxTB_FLAT);
 		m_toolBar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
 
+		const CFlyOutItem* main_fo = flyout_list.GetMainItem();
+		std::list<const CFlyOutItem*> items_to_add;
+		std::list<int> ids_to_add;
 		int i = 0;
 		for(std::list<CFlyOutItem>::const_iterator It = flyout_list.m_list.begin(); It != flyout_list.m_list.end(); It++, i++)
 		{
 			const CFlyOutItem &fo = *It;
 			int id_to_use = i+ID_FIRST_POP_UP_MENU_TOOL;
-			m_toolBar->AddTool(id_to_use, fo.m_title_and_bitmap, ToolImage(fo.m_title_and_bitmap), fo.m_tooltip);
+			if(&fo == main_fo)
+			{
+				items_to_add.push_front(&fo);
+				ids_to_add.push_front(id_to_use);
+			}
+			else
+			{
+				items_to_add.push_back(&fo);
+				ids_to_add.push_back(id_to_use);
+			}
+		}
+
+		std::list<const CFlyOutItem*>::iterator ItemsIt = items_to_add.begin();
+		std::list<int>::iterator IdIt = ids_to_add.begin();
+		for(; ItemsIt != items_to_add.end(); ItemsIt++, IdIt++)
+		{
+			const CFlyOutItem *fo = *ItemsIt;
+			int id_to_use = *IdIt;
+			m_toolBar->AddTool(id_to_use, fo->m_title_and_bitmap, ToolImage(fo->m_title_and_bitmap), fo->m_tooltip);
 		}
 		m_toolBar->Realize();
 
 		wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
-		topSizer->Add( m_toolBar, 0, wxALL, 5 );
+		topSizer->Add( m_toolBar, 0, wxALL, FLYOUT_PANEL_BORDER );
 
 		m_panel->SetAutoLayout( true );
 		m_panel->SetSizer( topSizer );
@@ -1138,57 +1179,34 @@ public:
 	}
 
 private:
-    wxScrolledWindow *m_panel;
     wxButton *m_button;
     wxStaticText *m_mouseText;
-
-	void OnMouse( wxMouseEvent &event )
-	{
-		if(event.Moving())
-		{
-			wxPoint pos = event.GetPosition();
-			wxToolBarToolBase* tool = m_toolBar->FindToolForPosition(event.GetPosition().x, event.GetPosition().y);
-			if(tool)
-			{
-				wxToolTip::Enable(true);
-			}
-		}
-		event.Skip();
-	}
-
-private:
-    DECLARE_EVENT_TABLE()
 };
-
-BEGIN_EVENT_TABLE(ToolBarPopup, wxPopupTransientWindow)
-    EVT_MOUSE_EVENTS( ToolBarPopup::OnMouse )
-END_EVENT_TABLE()
 
 class CFlyOutButton: public wxBitmapButton
 {
 	CFlyOutList m_flyout_list;
-	wxToolBarToolBase* m_toolbar_tool;
 	wxToolBar *m_toolBar;
-	ToolBarPopup* m_toolbarPopup;
+	wxBitmap m_current_bitmap;
+	wxTimer m_timer;
 
 public:
+	ToolBarPopup* m_toolbarPopup;
+
     CFlyOutButton(const CFlyOutList &flyout_list,
-				wxToolBarToolBase* toolbar_tool,
-				wxWindow *parent,
-				wxWindowID id,
-				const wxBitmap& bitmap,
+				wxToolBar *toolbar,
 				const wxPoint& pos = wxDefaultPosition,
 				const wxSize& size = wxDefaultSize)
-		:wxBitmapButton(parent, id, bitmap, pos, size, wxBU_AUTODRAW | wxBU_EXACTFIT)
+				:wxBitmapButton(toolbar, wxID_ANY, ToolImage(flyout_list.GetMainItem()->m_title_and_bitmap), pos, size, wxBORDER_SIMPLE)
 		,m_flyout_list(flyout_list)
-		,m_toolbar_tool(toolbar_tool)
-		,m_toolBar(NULL)
+		,m_toolBar(toolbar)
 		,m_toolbarPopup(NULL)
 	{
 	}
+
     void OnMouse( wxMouseEvent& event )
 	{
-		if(event.LeftDown())
+		if(event.Moving())
 		{
 			// delete previous popup
 			delete m_toolbarPopup;
@@ -1198,10 +1216,11 @@ public:
 			wxWindow *btn = (wxWindow*) event.GetEventObject();
 			wxPoint pos = btn->ClientToScreen( wxPoint(0,0) );
 			wxSize sz = btn->GetSize();
-			m_toolbarPopup->Position( wxPoint(pos.x - sz.GetWidth() - m_toolbar_tool->GetToolBar()->GetToolBitmapSize().GetWidth() - m_toolbar_tool->GetToolBar()->GetMargins().GetWidth(), pos.y), sz );
+			m_toolbarPopup->Move(pos.x - FLYOUT_PANEL_BORDER, pos.y - FLYOUT_PANEL_BORDER);
 			m_toolbarPopup->Popup();
 		}
 	}
+
 	void OnMenuEvent(wxCommandEvent& event)
 	{
 		int i = 0;
@@ -1217,16 +1236,22 @@ public:
 				(*fo.m_onButtonFunction)(event);
 
 				// change the toolbar tool
-				// I don't seem to be able to set the tool's bitmap after it is created!
-#if 0
-				wxGetApp().m_frame->SetToolFunctions(m_toolbar_tool->GetId(), fo.m_onButtonFunction, NULL);
-				wxMenuItem* menu_item = *MIt;
-				const wxBitmap& bitmap = menu_item->GetBitmap();
-				m_toolbar_tool->SetNormalBitmap(bitmap);
-				m_toolbar_tool->SetDisabledBitmap(bitmap);
-				m_toolbar_tool->GetToolBar()->Refresh();
-#endif
+				m_flyout_list.SetMainItem(&fo);
+				this->SetBitmapLabel(ToolImage(fo.m_title_and_bitmap));
+				m_toolBar->Refresh();
 				break;
+			}
+		}
+	}
+
+	void OnIdle(wxIdleEvent& event)	{
+		if(m_toolbarPopup)
+		{
+			wxWindow* w = ::wxFindWindowAtPoint(::wxGetMousePosition());
+			if(w != this && w != this->m_toolbarPopup && w != this->m_toolbarPopup->m_panel && w != this->m_toolbarPopup->m_toolBar)
+			{
+				delete m_toolbarPopup;
+				m_toolbarPopup = NULL;
 			}
 		}
 	}
@@ -1238,20 +1263,22 @@ private:
 BEGIN_EVENT_TABLE(CFlyOutButton, wxBitmapButton)
     EVT_MOUSE_EVENTS(CFlyOutButton::OnMouse)
     EVT_MENU_RANGE(ID_FIRST_POP_UP_MENU_TOOL, ID_FIRST_POP_UP_MENU_TOOL + 1000, CFlyOutButton::OnMenuEvent)
+    EVT_IDLE(CFlyOutButton::OnIdle)
 END_EVENT_TABLE()
+
+void PanelForToolBar::OnMouse( wxMouseEvent& event )
+{
+	if(event.Leaving())
+	{
+		//((CFlyOutButton*)(this->GetParent()->GetParent()))->m_toolbarPopup = NULL;
+		//delete this->GetParent();
+	}
+}
 
 void CHeeksFrame::AddToolBarFlyout(wxToolBar* toolbar, const wxString& title, const CFlyOutList& flyout_list)
 {
 	if(flyout_list.m_list.size() == 0)return;
-
-	const CFlyOutItem* main_fo = flyout_list.GetMainItem();
-
-	// add the main tool
-	wxToolBarToolBase* toolbar_tool = AddToolBarTool(toolbar, main_fo->m_title_and_bitmap, ToolImage(main_fo->m_title_and_bitmap), main_fo->m_tooltip, main_fo->m_onButtonFunction);
-
-	// add the down arrow button
-	int id_to_use = MakeNextIDForTool(main_fo->m_onButtonFunction, NULL);
-	wxBitmapButton* button = new CFlyOutButton(flyout_list, toolbar_tool, toolbar, id_to_use, ToolImage(_T("downarrow")), wxDefaultPosition, wxSize(ToolImage::GetBitmapSize() / 4, ToolImage::GetBitmapSize()) );
+	wxBitmapButton* button = new CFlyOutButton(flyout_list, toolbar, wxDefaultPosition, wxDefaultSize );
 	toolbar->AddControl(button);
 }
 
@@ -1573,7 +1600,7 @@ void CHeeksFrame::AddToolBars()
 	AddToolBarTool(m_geometryBar, _T("Lines"), ToolImage(_T("lines")), _("Draw a sketch"), OnLinesButton);
 
 	{
-		CFlyOutList flyout_list(_T(""), _T(""));
+		CFlyOutList flyout_list(_T("Circles"), _T("Circle Drawing"));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("circ3p"), _("Draw circles through 3 points"), OnCircles3pButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("circ2p"), _("Draw circles, centre and point"), OnCircles2pButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("circpr"), _("Draw circles, centre and radius"), OnCirclesprButton));
@@ -1588,7 +1615,7 @@ void CHeeksFrame::AddToolBars()
 	AddToolBarTool(m_geometryBar, _T("Dimensioning"), ToolImage(_T("dimension")), _("Add a dimension"), OnDimensioningButton);
 	AddToolBarTool(m_geometryBar, _T("CoordSys"), ToolImage(_T("coordsys")), _("Create a Coordinate System"), OnCoordinateSystem);
 	{
-		CFlyOutList flyout_list(_T(""), _T(""));
+		CFlyOutList flyout_list(_T("SolidPrimitives"), _T("Solid Primitives"));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("sphere"), _("Add a sphere"), OnSphereButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("cube"), _("Add a cube"), OnCubeButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("cyl"), _("Add a cylinder"), OnCylButton));
@@ -1709,4 +1736,12 @@ const CFlyOutItem* CFlyOutList::GetMainItem()const
 	}
 
 	return main_fo;
+}
+
+void CFlyOutList::SetMainItem(const CFlyOutItem* item)
+{
+	wxString config_string = GetFlyoutConfigString(m_title_and_bitmap) + _T("ActiveTool");
+	HeeksConfig config;
+	wxString active_tool_str = item->m_title_and_bitmap;
+	config.Write(config_string, active_tool_str);
 }
