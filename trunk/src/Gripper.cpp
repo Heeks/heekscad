@@ -20,7 +20,7 @@ Gripper::Gripper(const gp_Pnt& pos, const wxChar* str, EnumGripperType gripper_t
 	position = pos;
 	prompt = wxString(str);
 	m_gripper_type = gripper_type;
-	SetOwner(parent);
+	m_gripper_parent = parent;
 }
 
 void Gripper::glCommands(bool select, bool marked, bool no_color){

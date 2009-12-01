@@ -16,6 +16,7 @@ public:
 	gp_Pnt position;
 	wxString prompt;
 	EnumGripperType m_gripper_type;
+	HeeksObj* m_gripper_parent;
 
 	Gripper(const gp_Pnt& pos, const wxChar* str, EnumGripperType gripper_type, HeeksObj* parent);
 	virtual ~Gripper(){}
