@@ -97,7 +97,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 	for ( std::list<HeeksObj *>::iterator It = m_items_marked_at_grab.begin(); It != m_items_marked_at_grab.end(); It++ )
 	{
 		HeeksObj* object = *It;
-		if ( object == this->Owner() && m_gripper_type > GripperTypeScale )
+		if ( object == m_gripper_parent && m_gripper_type > GripperTypeScale )
 		{
 			double shift[3] = {to[0] - m_initial_grip_pos[0], to[1] - m_initial_grip_pos[1], to[2] - m_initial_grip_pos[2]};
 			{
