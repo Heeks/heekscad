@@ -9,6 +9,7 @@
 #include "../interface/Material.h"
 #include "HeeksFrame.h"
 #include "../interface/HeeksCADInterface.h"
+#include "TreeCanvas.h"
 
 extern CHeeksCADInterface heekscad_interface;
 
@@ -212,6 +213,23 @@ void CGraphicsCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 
 	// mark various XOR drawn items as not drawn
 	m_render_on_front_done = false;
+
+	// test for OpenGL tree in graphics
+#if 0
+	if(wxGetApp().m_frame->m_tree_canvas->TextureBuilt())
+	{
+		glClear(GL_DEPTH_BUFFER_BIT);
+		int w, h;
+		GetClientSize(&w, &h);
+		glViewport(0, 0, w, h);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(- 0.5, w - 0.5, -0.5, h - 0.5, 0,10);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		wxGetApp().m_frame->m_tree_canvas->Render(w, h);
+	}
+#endif
 
     SwapBuffers();
 
