@@ -18,8 +18,8 @@ BEGIN_EVENT_TABLE(CTreeCanvas, wxGLCanvas)
 	EVT_CHAR(CTreeCanvas::OnCharEvent)
 END_EVENT_TABLE()
 
-CTreeCanvas::CTreeCanvas(wxWindow* parent, int *attribList)
-        : wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("some text"), attribList),m_frozen(false), m_refresh_wanted_on_thaw(false),
+CTreeCanvas::CTreeCanvas(wxWindow* parent, wxGLCanvas* shared, int *attribList)
+        : wxGLCanvas(parent, shared, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("some text"), attribList),m_frozen(false), m_refresh_wanted_on_thaw(false),
 		width(0), height(0), textureWidth(0), textureHeight(0), m_texture_built(false), m_xpos(0), m_ypos(0), scroll_y_pos(0)
 {
 	wxGetApp().RegisterObserver(this);
@@ -53,7 +53,7 @@ void CTreeCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 	glLoadIdentity();
 
 	// render everything
-	Render();
+	Render(w, h);
 
     SwapBuffers();
 }
@@ -629,11 +629,12 @@ void CTreeCanvas::RenderObject(HeeksObj* object, HeeksObj* next_object, int leve
 	m_xpos--;
 }
 
-void CTreeCanvas::Render()
+void CTreeCanvas::Render(int width, int height)
 {
 	if(!m_texture_built)BuildTexture();
 
-    GetClientSize(&render_width, &render_height);
+	render_width = width;
+	render_height = height;
 
 	m_xpos = 0; // start at the left
 	m_ypos = -scroll_y_pos; // start at the top

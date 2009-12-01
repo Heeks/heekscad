@@ -42,7 +42,7 @@ private:
 	void OnLabelLeftDown(HeeksObj* object, wxMouseEvent& event);
 
 public:
-	CTreeCanvas(wxWindow* parent, int *attribList = (int*) NULL);
+	CTreeCanvas(wxWindow* parent, wxGLCanvas* shared, int *attribList = (int*) NULL);
     virtual ~CTreeCanvas(){};
 
     void OnPaint(wxPaintEvent& event);
@@ -53,7 +53,8 @@ public:
 	void OnCharEvent(wxKeyEvent& event);
 	void OnKeyDown(wxKeyEvent& event);
 	void OnKeyUp(wxKeyEvent& event);
-	void Render(); // OpenGL commands for all the objects
+	void Render(int width, int height); // OpenGL commands for all the objects
+	bool TextureBuilt(){return m_texture_built;}
 
 	// Observer's virtual functions
 	void OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified);
