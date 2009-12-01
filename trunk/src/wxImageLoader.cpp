@@ -18,7 +18,9 @@ GLuint* loadImage(wxString path, int* imageWidth, int* imageHeight, int* texture
 	// check the file exists
 	if(!wxFileExists(path))
 	{
-		wxMessageBox( _("Failed to load resource image") );
+		wxString message;
+		message << _("Failed to load resource image from ") << path;
+		wxMessageBox( message.c_str() );
 		exit(1);	
 	}
     
