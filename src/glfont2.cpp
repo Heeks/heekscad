@@ -22,6 +22,16 @@ using namespace std;
 #include "glfont2.h"
 using namespace glfont;
 
+#ifdef __BIG_ENDIAN__
+inline void endian_swap(int& x)
+{
+    x = (x>>24) | 
+        ((x<<8) & 0x00FF0000) |
+        ((x>>8) & 0x0000FF00) |
+        (x<<24);
+}
+#endif
+
 //*******************************************************************
 //GLFont Class Implementation
 //*******************************************************************
@@ -66,6 +76,10 @@ bool GLFont::Create (const char *file_name, int tex)
 	header.tex = tex;
 
 	//Allocate space for character array
+#ifdef __BIG_ENDIAN__
+	endian_swap(header.end_char);
+	endian_swap(header.start_char);
+#endif
 	num_chars = header.end_char - header.start_char + 1;
 	if ((header.chars = new GLFontChar[num_chars]) == NULL)
 		return false;
