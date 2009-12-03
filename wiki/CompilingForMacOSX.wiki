@@ -5,9 +5,45 @@
 You definitely have to install XCode. And there are some other necessary things. OpenCASCADE needs a X11 Tcl and HeeksCAD needs a X11 wxWidgets like wxGTK. Both can easily be installed from [http://fink.sf.net Fink].
 
 
-= Details =
+= OpenCASCADE =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+Download and unpack [http://www.opencascade.org/getocc/download/loadocc/ OpenCASCADE].
+
+Youn need to patch the DRAWEXE Makefile
+
+--- adm/make/DRAWEXE/Makefile.am.orig 2008-09-06 14:15:14.000000000 +0200
++++ adm/make/DRAWEXE/Makefile.am 2008-09-06 14:33:58.000000000 +0200
+@@ -22,4 +22,4 @@
+../TKMath/libTKMath.la \
+../TKG3d/libTKG3d.la \
+../TKernel/libTKernel.la \
+- $(STLPort_LIB) $(CSF_TclLibs_LIB) $(CSF_TclTkLibs_LIB) $(CSF_gdi32_LIB) $(CSF_advapi32_LIB) $(CSF_user32_LIB) $(CSF_SOCKETLibs_LIB) $(CSF_FPELibs_LIB) $(CSF_ThreadLibs_LIB) $(CSF_kernel32_LIB) 
++ $(STLPort_LIB) $(CSF_TclLibs_LIB) $(CSF_TclTkLibs_LIB) $(CSF_gdi32_LIB) $(CSF_advapi32_LIB) $(CSF_user32_LIB) $(CSF_SOCKETLibs_LIB) $(CSF_FPELibs_LIB) $(CSF_ThreadLibs_LIB) $(CSF_kernel32_LIB) $(CSF_XwLibs_LIB) 
+
+The configure script and the ltmain.sh are too old. The latter was provided by fink and the former was solved by running the whole GNU auto magic:
+
+export CASROOT=/WhereeverYouPut/OpenCASCADE6.3.0/ros
+cd ${CASROOT}
+aclocal
+automake
+autoconf
+cp /sw/share/libtool/ltmain.sh make/
+export TCLHOME=/sw
+#configure does not honor --with-gl-include
+export CPPFLAGS=-I/usr/X11R6/include
+flags="--with-gl-include=/usr/X11R6/include --with-gl-library=/usr/X11R6/lib"
+flags="$flags --with-xmu-include=/usr/X11R6/include/X11"
+flags="$flags --with-xmu-library=/usr/X11R6/lib"
+flags="$flags --with-tcl=${TCLHOME}/lib"
+flags="$flags --with-tk=${TCLHOME}/lib "
+flags="$flags --with-java-include=/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/ "
+flags="$flags --disable-debug --enable-production"
+flags="$flags --enable-wrappers=yes"
+flags="$flags --enable-wok=yes"
+flags="$flags --enable-draw=yes"
+./configure --prefix=${CASROOT}/mac $flags
+make
+make install
+
+= HeeksCAD =
+
