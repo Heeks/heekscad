@@ -11,18 +11,18 @@ Download and unpack [http://www.opencascade.org/getocc/download/loadocc/ OpenCAS
 
 Youn need to patch the DRAWEXE Makefile
 
---- adm/make/DRAWEXE/Makefile.am.orig 2008-09-06 14:15:14.000000000 +0200
+`--- adm/make/DRAWEXE/Makefile.am.orig 2008-09-06 14:15:14.000000000 +0200
 +++ adm/make/DRAWEXE/Makefile.am 2008-09-06 14:33:58.000000000 +0200
 @@ -22,4 +22,4 @@
 ../TKMath/libTKMath.la \
 ../TKG3d/libTKG3d.la \
 ../TKernel/libTKernel.la \
 - $(STLPort_LIB) $(CSF_TclLibs_LIB) $(CSF_TclTkLibs_LIB) $(CSF_gdi32_LIB) $(CSF_advapi32_LIB) $(CSF_user32_LIB) $(CSF_SOCKETLibs_LIB) $(CSF_FPELibs_LIB) $(CSF_ThreadLibs_LIB) $(CSF_kernel32_LIB) 
-+ $(STLPort_LIB) $(CSF_TclLibs_LIB) $(CSF_TclTkLibs_LIB) $(CSF_gdi32_LIB) $(CSF_advapi32_LIB) $(CSF_user32_LIB) $(CSF_SOCKETLibs_LIB) $(CSF_FPELibs_LIB) $(CSF_ThreadLibs_LIB) $(CSF_kernel32_LIB) $(CSF_XwLibs_LIB) 
++ $(STLPort_LIB) $(CSF_TclLibs_LIB) $(CSF_TclTkLibs_LIB) $(CSF_gdi32_LIB) $(CSF_advapi32_LIB) $(CSF_user32_LIB) $(CSF_SOCKETLibs_LIB) $(CSF_FPELibs_LIB) $(CSF_ThreadLibs_LIB) $(CSF_kernel32_LIB) $(CSF_XwLibs_LIB) `
 
 The configure script and the ltmain.sh are too old. The latter was provided by fink and the former was solved by running the whole GNU auto magic:
 
-export CASROOT=/WhereeverYouPut/OpenCASCADE6.3.0/ros
+`export CASROOT=/WhereeverYouPut/OpenCASCADE6.3.0/ros
 cd ${CASROOT}
 aclocal
 automake
@@ -43,7 +43,6 @@ flags="$flags --enable-wok=yes"
 flags="$flags --enable-draw=yes"
 ./configure --prefix=${CASROOT}/mac $flags
 make
-make install
+make install`
 
 = HeeksCAD =
-
