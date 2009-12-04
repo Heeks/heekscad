@@ -23,7 +23,8 @@ private:
 	int scroll_y_pos;
 
 	int m_xpos, m_ypos;
-	class CTreeButton{public:	int type;/* 0 - plus, 1 - minus, 2 - label*/ wxRect rect; HeeksObj* obj;};
+	enum TreeButtonType{ ButtonTypePlus, ButtonTypeMinus, ButtonTypeLabel };
+	class CTreeButton{public:	TreeButtonType type; wxRect rect; HeeksObj* obj;};
 	std::list<CTreeButton> m_tree_buttons;
 
 	void BuildTexture();
@@ -40,6 +41,7 @@ private:
 	void AddPlusOrMinusButton(HeeksObj* object, bool plus);
 	void AddLabelButton(HeeksObj* object, int label_start_x, int label_end_x);
 	void OnLabelLeftDown(HeeksObj* object, wxMouseEvent& event);
+	void OnLabelRightDown(HeeksObj* object, wxMouseEvent& event);
 
 public:
 	CTreeCanvas(wxWindow* parent, wxGLCanvas* shared, int *attribList = (int*) NULL);
@@ -55,6 +57,7 @@ public:
 	void OnKeyUp(wxKeyEvent& event);
 	void Render(int width, int height); // OpenGL commands for all the objects
 	bool TextureBuilt(){return m_texture_built;}
+	const CTreeButton* HitTest( const wxPoint& pt );
 
 	// Observer's virtual functions
 	void OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified);
