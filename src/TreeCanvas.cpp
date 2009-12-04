@@ -70,7 +70,20 @@ void CTreeCanvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 	// Do nothing, to avoid flashing on MSW
 }
 
-HeeksObj* clicked_object = NULL;
+const CTreeCanvas::CTreeButton* CTreeCanvas::HitTest( const wxPoint& pt )
+{
+	for(std::list<CTreeButton>::iterator It = m_tree_buttons.begin(); It != m_tree_buttons.end(); It++)
+	{
+		CTreeButton& b = *It;
+		if(b.rect.Inside(pt))
+		{
+			return &b;
+		}
+	}
+	return NULL;
+}
+
+static HeeksObj* clicked_object = NULL;
 
 void CTreeCanvas::OnMouse( wxMouseEvent& event )
 {
@@ -81,41 +94,41 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 		SetFocus(); // so middle wheel works
 	}
 
-	if(event.LeftDown() || event.RightDown())
+	if(event.LeftDown())
 	{
-		int x = event.GetX();
-		int y = event.GetY();
-		bool button_found = false;
+		const CTreeButton* button = HitTest(event.GetPosition());
 
-		for(std::list<CTreeButton>::iterator It = m_tree_buttons.begin(); It != m_tree_buttons.end(); It++)
+		if(button)
 		{
-			CTreeButton& b = *It;
-			if(b.rect.Inside(x, y))
+			switch(button->type)
 			{
-				switch(b.type)
-				{
-				case 0:
-				case 1:
-					SetExpanded(b.obj, b.type == 0);
-					this->Refresh();
-					break;
+			case ButtonTypePlus:
+			case ButtonTypeMinus:
+				SetExpanded(button->obj, button->type == 0);
+				this->Refresh();
+				break;
 
-				case 2:
-				default:
-					OnLabelLeftDown(b.obj, event);
-					clicked_object = b.obj;
-					break;
-				}
-
-				button_found = true;
+			case ButtonTypeLabel:
+			default:
+				OnLabelLeftDown(button->obj, event);
+				clicked_object = button->obj;
 				break;
 			}
 		}
-
-		if(!button_found)
+		else
 		{
 			wxGetApp().m_marked_list->Clear(true);
-			clicked_object = NULL;
+		}
+	}
+
+	if(event.RightDown())
+	{
+		const CTreeButton* button = HitTest(event.GetPosition());
+		clicked_object = NULL;
+		if(button && button->type == ButtonTypeLabel)
+		{
+			clicked_object = button->obj;
+			OnLabelRightDown(button->obj, event);
 		}
 	}
 
@@ -336,7 +349,7 @@ void CTreeCanvas::RenderIcon(int texture_number, int x, int y)
 void CTreeCanvas::AddPlusOrMinusButton(HeeksObj* object, bool plus)
 {
 	CTreeButton b;
-	b.type = plus ? 0 : 1;
+	b.type = plus ? ButtonTypePlus : ButtonTypeMinus;
 	b.rect.x = m_xpos * 16;
 	b.rect.y = m_ypos * 18;
 	b.rect.width = 16;
@@ -348,7 +361,7 @@ void CTreeCanvas::AddPlusOrMinusButton(HeeksObj* object, bool plus)
 void CTreeCanvas::AddLabelButton(HeeksObj* object, int label_start_x, int label_end_x)
 {
 	CTreeButton b;
-	b.type = 2;
+	b.type = ButtonTypeLabel;
 	b.rect.x = label_start_x;
 	b.rect.y = m_ypos * 18;
 	b.rect.width = label_end_x - label_start_x;
@@ -448,6 +461,15 @@ void CTreeCanvas::OnLabelLeftDown(HeeksObj* object, wxMouseEvent& event)
 			wxGetApp().m_marked_list->Clear(false);
 			wxGetApp().m_marked_list->Add(object, true);
 		}
+	}
+}
+
+void CTreeCanvas::OnLabelRightDown(HeeksObj* object, wxMouseEvent& event)
+{
+	if(!wxGetApp().m_marked_list->ObjectMarked(object))
+	{
+		wxGetApp().m_marked_list->Clear(false);
+		wxGetApp().m_marked_list->Add(object, true);
 	}
 }
 
