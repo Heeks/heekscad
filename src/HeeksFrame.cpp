@@ -77,7 +77,7 @@ bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
 }
 
 #ifdef WIN32
-static wxString default_layout_string = _T("layout2|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=279;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=580;floaty=59;floatw=306;floath=71|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=290;prop=100000;bestw=254;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=299;floaty=128;floatw=281;floath=71|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=0;pos=814;prop=100000;bestw=254;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=290;floaty=152;floatw=281;floath=71|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=0;pos=555;prop=100000;bestw=248;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=308;floaty=190;floatw=275;floath=71|name=TransformBar;caption=Transformation Tools;state=2108159;dir=1;layer=10;row=0;pos=812;prop=100000;bestw=217;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=1114;floaty=171;floatw=244;floath=71|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=504|dock_size(4,1,0)=234|dock_size(1,10,0)=33|");
+static wxString default_layout_string = _T("layout2|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=279;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=290;prop=100000;bestw=147;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=0;pos=448;prop=100000;bestw=116;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=485;floaty=209;floatw=143;floath=71|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=0;pos=575;prop=100000;bestw=89;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=479;floaty=236;floatw=116;floath=71|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=204;floaty=327;floatw=318;floath=440|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=504|dock_size(4,1,0)=205|dock_size(1,10,0)=33|");
 #else
 static wxString default_layout_string = _T("layout2|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=326;besth=38;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=337;prop=100000;bestw=296;besth=38;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=530;floaty=129;floatw=313;floath=62|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=1;pos=0;prop=100000;bestw=296;besth=38;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=235;floaty=513;floatw=313;floath=62|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=1;pos=307;prop=100000;bestw=290;besth=38;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=628;floaty=117;floatw=307;floath=62|name=TransformBar;caption=Transformation Tools;state=2108159;dir=4;layer=10;row=0;pos=348;prop=100000;bestw=254;besth=38;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=626;floaty=210;floatw=271;floath=62|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=504|dock_size(4,1,0)=234|dock_size(1,10,0)=40|dock_size(1,10,1)=40|");
 #endif
@@ -434,20 +434,6 @@ static void OnUpdateViewViewingBar( wxUpdateUIEvent& event )
 	event.Check(wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_viewingBar).IsShown());
 }
 
-static void OnViewTransformBar( wxCommandEvent& event )
-{
-	wxAuiPaneInfo& pane_info = wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_transformBar);
-	if(pane_info.IsOk()){
-		pane_info.Show(event.IsChecked());
-		wxGetApp().m_frame->m_aui_manager->Update();
-	}
-}
-
-static void OnUpdateViewTransformBar( wxUpdateUIEvent& event )
-{
-	event.Check(wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_transformBar).IsShown());
-}
-
 static void OnViewStatusBar( wxCommandEvent& event )
 {
 	wxGetApp().m_frame->m_statusBar->Show(event.IsChecked());
@@ -535,9 +521,26 @@ static void OnPointsButton( wxCommandEvent& WXUNUSED( event ) )
 	wxGetApp().Changed();
 }
 
-static void OnRegularShapesButton( wxCommandEvent& WXUNUSED( event ) )
+static void OnRectanglesButton( wxCommandEvent& WXUNUSED( event ) )
 {
 	wxGetApp().CreateUndoPoint();
+	regular_shapes_drawing.m_mode = RectanglesRegularShapeMode;
+	wxGetApp().SetInputMode(&regular_shapes_drawing);
+	wxGetApp().Changed();
+}
+
+static void OnObroundsButton( wxCommandEvent& WXUNUSED( event ) )
+{
+	wxGetApp().CreateUndoPoint();
+	regular_shapes_drawing.m_mode = ObroundRegularShapeMode;
+	wxGetApp().SetInputMode(&regular_shapes_drawing);
+	wxGetApp().Changed();
+}
+
+static void OnPolygonsButton( wxCommandEvent& WXUNUSED( event ) )
+{
+	wxGetApp().CreateUndoPoint();
+	regular_shapes_drawing.m_mode = PolygonsRegularShapeMode;
 	wxGetApp().SetInputMode(&regular_shapes_drawing);
 	wxGetApp().Changed();
 }
@@ -1165,7 +1168,7 @@ public:
 		{
 			const CFlyOutItem *fo = *ItemsIt;
 			int id_to_use = *IdIt;
-			m_toolBar->AddTool(id_to_use, fo->m_title_and_bitmap, ToolImage(fo->m_title_and_bitmap), fo->m_tooltip);
+			m_toolBar->AddTool(id_to_use, fo->m_title, fo->m_bitmap, fo->m_tooltip);
 		}
 		m_toolBar->Realize();
 
@@ -1198,7 +1201,7 @@ public:
 				int id_to_use,
 				const wxPoint& pos = wxDefaultPosition,
 				const wxSize& size = wxDefaultSize)
-				:wxBitmapButton(toolbar, id_to_use, ToolImage(flyout_list.GetMainItem()->m_title_and_bitmap), pos, size,
+				:wxBitmapButton(toolbar, id_to_use, flyout_list.GetMainItem()->m_bitmap, pos, size,
 #ifdef WIN32
 				wxBORDER_SIMPLE
 #else
@@ -1223,7 +1226,11 @@ public:
 			wxWindow *btn = (wxWindow*) event.GetEventObject();
 			wxPoint pos = btn->ClientToScreen( wxPoint(0,0) );
 			wxSize sz = btn->GetSize();
+#ifdef WIN32
+			m_toolbarPopup->Move(pos.x - FLYOUT_PANEL_BORDER, pos.y - 3 - FLYOUT_PANEL_BORDER);
+#else
 			m_toolbarPopup->Move(pos.x - FLYOUT_PANEL_BORDER, pos.y - FLYOUT_PANEL_BORDER);
+#endif
 			m_toolbarPopup->Popup();
 		}
 	}
@@ -1244,7 +1251,7 @@ public:
 
 				// change the toolbar tool
 				m_flyout_list.SetMainItem(&fo);
-				this->SetBitmapLabel(ToolImage(fo.m_title_and_bitmap));
+				this->SetBitmapLabel(fo.m_bitmap);
 				m_toolBar->Refresh();
 				break;
 			}
@@ -1282,11 +1289,17 @@ void PanelForToolBar::OnMouse( wxMouseEvent& event )
 	}
 }
 
-void CHeeksFrame::AddToolBarFlyout(wxToolBar* toolbar, const wxString& title, const CFlyOutList& flyout_list)
+void CHeeksFrame::AddToolBarFlyout(wxToolBar* toolbar, const CFlyOutList& flyout_list)
 {
 	if(flyout_list.m_list.size() == 0)return;
 	int id_to_use = MakeNextIDForTool(NULL, NULL);
-	wxBitmapButton* button = new CFlyOutButton(flyout_list, toolbar, id_to_use, wxDefaultPosition, wxDefaultSize );
+	wxBitmapButton* button = new CFlyOutButton(flyout_list, toolbar, id_to_use, wxDefaultPosition,
+#ifdef WIN32
+		wxSize(ToolImage::GetBitmapSize() + FLYOUT_PANEL_BORDER, ToolImage::GetBitmapSize()
+#else
+		wxDefaultSize
+#endif
+		) );
 	toolbar->AddControl(button);
 }
 
@@ -1415,7 +1428,6 @@ void CHeeksFrame::OnChangeBitmapSize()
 	m_aui_manager->DetachPane(m_geometryBar);
 	m_aui_manager->DetachPane(m_solidBar);
 	m_aui_manager->DetachPane(m_viewingBar);
-	m_aui_manager->DetachPane(m_transformBar);
 	for(std::list< wxToolBarBase* >::iterator It = wxGetApp().m_external_toolbars.begin(); It != wxGetApp().m_external_toolbars.end(); It++)
 	{
 		wxToolBarBase* toolbar = *It;
@@ -1426,7 +1438,6 @@ void CHeeksFrame::OnChangeBitmapSize()
 	wxGetApp().RemoveHideableWindow(m_geometryBar);
 	wxGetApp().RemoveHideableWindow(m_solidBar);
 	wxGetApp().RemoveHideableWindow(m_viewingBar);
-	wxGetApp().RemoveHideableWindow(m_transformBar);
 	for(std::list< wxToolBarBase* >::iterator It = wxGetApp().m_external_toolbars.begin(); It != wxGetApp().m_external_toolbars.end(); It++)
 	{
 		wxToolBarBase* toolbar = *It;
@@ -1437,7 +1448,6 @@ void CHeeksFrame::OnChangeBitmapSize()
 	delete m_geometryBar;
 	delete m_solidBar;
 	delete m_viewingBar;
-	delete m_transformBar;
 
 	wxGetApp().m_external_toolbars.clear();
 
@@ -1455,7 +1465,6 @@ void CHeeksFrame::SetToolBarsSize()
 	m_geometryBar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
 	m_solidBar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
 	m_viewingBar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
-	m_transformBar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
 
 	for(std::list< wxToolBarBase* >::iterator It = wxGetApp().m_external_toolbars.begin(); It != wxGetApp().m_external_toolbars.end(); It++)
 	{
@@ -1504,7 +1513,6 @@ void CHeeksFrame::MakeMenus()
 	AddMenuItem(geometry_menu, _("Draw Ellipses"), ToolImage(_T("circles")), OnEllipseButton);
 	AddMenuItem(geometry_menu, _("Draw Infinite Lines"), ToolImage(_T("iline")), OnILineButton);
 	AddMenuItem(geometry_menu, _("Draw Points"), ToolImage(_T("point")), OnPointsButton);
-	AddMenuItem(geometry_menu, _("Draw Regular Shapes"), ToolImage(_T("regshapes")), OnRegularShapesButton);
 	geometry_menu->AppendSeparator();
 	AddMenuItem(geometry_menu, _("Add Text"), ToolImage(_T("text")), OnTextButton);
 	AddMenuItem(geometry_menu, _("Add Dimension"), ToolImage(_T("dimension")), OnDimensioningButton);
@@ -1565,7 +1573,6 @@ void CHeeksFrame::MakeMenus()
 	AddMenuItem(m_menuWindow, _("Solids Tool Bar"), wxBitmap(), OnViewSolidBar, OnUpdateViewSolidBar, NULL, true);
 	AddMenuItem(m_menuWindow, _("Geometry Tool Bar"), wxBitmap(), OnViewGeometryBar, OnUpdateViewGeometryBar, NULL, true);
 	AddMenuItem(m_menuWindow, _("Viewing Tool Bar"), wxBitmap(), OnViewViewingBar, OnUpdateViewViewingBar, NULL, true);
-	AddMenuItem(m_menuWindow, _("Transformations Tool Bar"), wxBitmap(), OnViewTransformBar, OnUpdateViewTransformBar, NULL, true);
 	AddMenuItem(m_menuWindow, _("Status Bar"), wxBitmap(), OnViewStatusBar, OnUpdateViewStatusBar, NULL, true);
 
 	// Add them to the main menu
@@ -1586,7 +1593,6 @@ void CHeeksFrame::AddToolBars()
 	m_geometryBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
 	m_solidBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
 	m_viewingBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
-	m_transformBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize, wxTB_NODIVIDER | wxTB_FLAT);
 
 	for(std::list< void(*)() >::iterator It = wxGetApp().m_AddToolBars_list.begin(); It != wxGetApp().m_AddToolBars_list.end(); It++)
 	{
@@ -1605,68 +1611,113 @@ void CHeeksFrame::AddToolBars()
 	AddToolBarTool(m_toolBar, _T("Undo"), ToolImage(_T("undo")), _("Undo the previous command"), OnUndoButton);
 	AddToolBarTool(m_toolBar, _T("Redo"), ToolImage(_T("redo")), _("Redo the next command"), OnRedoButton);
 	AddToolBarTool(m_toolBar, _T("Select"), ToolImage(_T("select")), _("Select Mode"), OnSelectModeButton);
-	AddToolBarTool(m_geometryBar, _T("Lines"), ToolImage(_T("lines")), _("Draw a sketch"), OnLinesButton);
 
 	{
-		CFlyOutList flyout_list(_T("Circles"), _T("Circle Drawing"));
-		flyout_list.m_list.push_back(CFlyOutItem(_T("circ3p"), _("Draw circles through 3 points"), OnCircles3pButton));
-		flyout_list.m_list.push_back(CFlyOutItem(_T("circ2p"), _("Draw circles, centre and point"), OnCircles2pButton));
-		flyout_list.m_list.push_back(CFlyOutItem(_T("circpr"), _("Draw circles, centre and radius"), OnCirclesprButton));
-		AddToolBarFlyout(m_geometryBar, _T("circles"), flyout_list);
+		CFlyOutList flyout_list(_T("Sketches"));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Lines"), ToolImage(_T("lines")), _("Draw a sketch"), OnLinesButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Rectangles"), ToolImage(_T("rect")), _("Start drawing rectangles"), OnRectanglesButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Obrounds"), ToolImage(_T("obround")), _("Start drawing obrounds"), OnObroundsButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Polygons"), ToolImage(_T("pentagon")), _("Start drawing polygons"), OnPolygonsButton));
+		AddToolBarFlyout(m_geometryBar, flyout_list);
 	}
 
-	AddToolBarTool(m_geometryBar, _T("Ellipses"), ToolImage(_T("circles")), _("Draw ellipses"), OnEllipseButton);
-	AddToolBarTool(m_geometryBar, _T("ILine"), ToolImage(_T("iline")), _("Start Drawing Infinite Lines"), OnILineButton);
-	AddToolBarTool(m_geometryBar, _T("Points"), ToolImage(_T("point")), _("Start Drawing Points"), OnPointsButton);
-	AddToolBarTool(m_geometryBar, _T("Regular Shapes"), ToolImage(_T("regshapes")), _("Draw regular shapes; rectangles, polygons, obrounds"), OnRegularShapesButton);
-	AddToolBarTool(m_geometryBar, _T("Text"), ToolImage(_T("text")), _("Add a text object"), OnTextButton);
-	AddToolBarTool(m_geometryBar, _T("Dimensioning"), ToolImage(_T("dimension")), _("Add a dimension"), OnDimensioningButton);
-	AddToolBarTool(m_geometryBar, _T("CoordSys"), ToolImage(_T("coordsys")), _("Create a Coordinate System"), OnCoordinateSystem);
 	{
-		CFlyOutList flyout_list(_T("SolidPrimitives"), _T("Solid Primitives"));
-		flyout_list.m_list.push_back(CFlyOutItem(_T("sphere"), _("Add a sphere"), OnSphereButton));
-		flyout_list.m_list.push_back(CFlyOutItem(_T("cube"), _("Add a cube"), OnCubeButton));
-		flyout_list.m_list.push_back(CFlyOutItem(_T("cyl"), _("Add a cylinder"), OnCylButton));
-		flyout_list.m_list.push_back(CFlyOutItem(_T("cone"), _("Add a cone"), OnConeButton));
-		AddToolBarFlyout(m_solidBar, _T("Solid Primitives"), flyout_list);
+		CFlyOutList flyout_list(_T("Circles"));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("circ3p"), ToolImage(_T("circ3p")), _("Draw circles through 3 points"), OnCircles3pButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("circ2p"), ToolImage(_T("circ2p")), _("Draw circles, centre and point"), OnCircles2pButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("circpr"), ToolImage(_T("circpr")), _("Draw circles, centre and radius"), OnCirclesprButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Ellipses"), ToolImage(_T("ellipse")), _("Draw ellipses"), OnEllipseButton));
+		AddToolBarFlyout(m_geometryBar, flyout_list);
 	}
-	AddToolBarTool(m_solidBar, _T("Ruled Surface"), ToolImage(_T("ruled")), _("Create a lofted face"), OnRuledSurfaceButton);
-	AddToolBarTool(m_solidBar, _T("Extrude"), ToolImage(_T("extrude")), _("Extrude a wire or face"), OnExtrudeButton);
-	AddToolBarTool(m_solidBar, _T("Cut"), ToolImage(_T("subtract")), _("Cut one solid from another"), OnSubtractButton);
-	AddToolBarTool(m_solidBar, _T("Fuse"), ToolImage(_T("fuse")), _("Fuse one solid to another"), OnFuseButton);
-	AddToolBarTool(m_solidBar, _T("Common"), ToolImage(_T("common")), _("Find common solid between two solids"), OnCommonButton);
-	AddToolBarTool(m_solidBar, _T("Fillet"), ToolImage(_T("fillet")), _("Make a fillet on selected edges"), OnFilletButton);
-	AddToolBarTool(m_solidBar, _T("Chamfer"), ToolImage(_T("chamfer")), _("Make a chamfer on selected edges"), OnChamferButton);
-	AddToolBarTool(m_viewingBar, _T("View Back"), ToolImage(_T("magprev")), _("Go back to previous view"), OnMagPreviousButton);
-	AddToolBarTool(m_viewingBar, _T("Zoom Window"), ToolImage(_T("mag")), _("Zoom in to a dragged window"), OnMagButton);
-	AddToolBarTool(m_viewingBar, _T("Mag Extents"), ToolImage(_T("magextents")), _("Zoom in to fit the extents of the drawing into the graphics window"), OnMagExtentsButton);
-	AddToolBarTool(m_viewingBar, _T("Mag No Rotation"), ToolImage(_T("magnorot")), _("Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"), OnMagNoRotButton);
-	AddToolBarTool(m_viewingBar, _T("View Rotate"), ToolImage(_T("viewrot")), _("Enter view rotating mode"), OnViewRotateButton);
-	AddToolBarTool(m_viewingBar, _T("View Zoom"), ToolImage(_T("zoom")), _("Drag to zoom in and out"), OnViewZoomButton);
-	AddToolBarTool(m_viewingBar, _T("FullScreen"), ToolImage(_T("fullscreen")), _("Switch to full screen view ( press escape to return )"), OnFullScreenButton);
+
+	{
+		CFlyOutList flyout_list(_T("OtherDrawing"));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("ILine"), ToolImage(_T("iline")), _("Start Drawing Infinite Lines"), OnILineButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Points"), ToolImage(_T("point")), _("Start Drawing Points"), OnPointsButton));
+		AddToolBarFlyout(m_geometryBar, flyout_list);
+	}
+
+	{
+		CFlyOutList flyout_list(_T("Text"));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Text"), ToolImage(_T("text")), _("Add a text object"), OnTextButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Dimensioning"), ToolImage(_T("dimension")), _("Add a dimension"), OnDimensioningButton));
+		AddToolBarFlyout(m_geometryBar, flyout_list);
+	}
+
+	{
+		CFlyOutList flyout_list(_T("Transformations"));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Move Translate"), ToolImage(_T("movet")), _("Translate selected items"), OnMoveTranslateButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Copy Translate"), ToolImage(_T("copyt")), _("Copy and translate selected items"), OnCopyTranslateButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Move Rotate"), ToolImage(_T("mover")), _("Rotate selected items"), OnMoveRotateButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Copy Rotate"), ToolImage(_T("copyr")), _("Copy and rotate selected items"), OnCopyRotateButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Move Mirror"), ToolImage(_T("movem")), _("Mirror selected items"), OnMoveMirrorButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Copy Mirror"), ToolImage(_T("copym")), _("Copy and mirror selected items"), OnCopyMirrorButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Move Scale"), ToolImage(_T("moves")), _("Scale selected items"), OnMoveScaleButton));
+		AddToolBarFlyout(m_geometryBar, flyout_list);
+	}
+
+	{
+		CFlyOutList flyout_list(_T("SolidPrimitives"));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("sphere"), ToolImage(_T("sphere")), _("Add a sphere"), OnSphereButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("cube"), ToolImage(_T("cube")), _("Add a cube"), OnCubeButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("cyl"), ToolImage(_T("cyl")), _("Add a cylinder"), OnCylButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("cone"), ToolImage(_T("cone")), _("Add a cone"), OnConeButton));
+		AddToolBarFlyout(m_solidBar, flyout_list);
+	}
+
+	{
+		CFlyOutList flyout_list(_T("SolidMake"));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Ruled Surface"), ToolImage(_T("ruled")), _("Create a lofted face"), OnRuledSurfaceButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Extrude"), ToolImage(_T("extrude")), _("Extrude a wire or face"), OnExtrudeButton));
+		AddToolBarFlyout(m_solidBar, flyout_list);
+	}
+
+	{
+		CFlyOutList flyout_list(_T("SolidBooleans"));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Cut"), ToolImage(_T("subtract")), _("Cut one solid from another"), OnSubtractButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Fuse"), ToolImage(_T("fuse")), _("Fuse one solid to another"), OnFuseButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Common"), ToolImage(_T("common")), _("Find common solid between two solids"), OnCommonButton));
+		AddToolBarFlyout(m_solidBar, flyout_list);
+	}
+
+	{
+		CFlyOutList flyout_list(_T("SolidChamfers"));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Fillet"), ToolImage(_T("fillet")), _("Make a fillet on selected edges"), OnFilletButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Chamfer"), ToolImage(_T("chamfer")), _("Make a chamfer on selected edges"), OnChamferButton));
+		AddToolBarFlyout(m_solidBar, flyout_list);
+	}
+
+	{
+		CFlyOutList flyout_list(_T("ViewMag"));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Mag Extents"), ToolImage(_T("magextents")), _("Zoom in to fit the extents of the drawing into the graphics window"), OnMagExtentsButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Mag No Rotation"), ToolImage(_T("magnorot")), _("Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"), OnMagNoRotButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Zoom Window"), ToolImage(_T("mag")), _("Zoom in to a dragged window"), OnMagButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("View Back"), ToolImage(_T("magprev")), _("Go back to previous view"), OnMagPreviousButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("FullScreen"), ToolImage(_T("fullscreen")), _("Switch to full screen view ( press escape to return )"), OnFullScreenButton));
+		AddToolBarFlyout(m_viewingBar, flyout_list);
+	}
+
+	{
+		CFlyOutList flyout_list(_T("ViewMag"));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("View Rotate"), ToolImage(_T("viewrot")), _("Enter view rotating mode"), OnViewRotateButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("View Zoom"), ToolImage(_T("zoom")), _("Drag to zoom in and out"), OnViewZoomButton));
+		AddToolBarFlyout(m_viewingBar, flyout_list);
+	}
+
 	AddToolBarTool(m_viewingBar, _T("Redraw"), ToolImage(_T("redraw")), _("Redraw"), OnRedrawButton);
-	AddToolBarTool(m_transformBar, _T("Move Translate"), ToolImage(_T("movet")), _("Translate selected items"), OnMoveTranslateButton);
-	AddToolBarTool(m_transformBar, _T("Copy Translate"), ToolImage(_T("copyt")), _("Copy and translate selected items"), OnCopyTranslateButton);
-	AddToolBarTool(m_transformBar, _T("Move Rotate"), ToolImage(_T("mover")), _("Rotate selected items"), OnMoveRotateButton);
-	AddToolBarTool(m_transformBar, _T("Copy Rotate"), ToolImage(_T("copyr")), _("Copy and rotate selected items"), OnCopyRotateButton);
-	AddToolBarTool(m_transformBar, _T("Move Mirror"), ToolImage(_T("movem")), _("Mirror selected items"), OnMoveMirrorButton);
-	AddToolBarTool(m_transformBar, _T("Copy Mirror"), ToolImage(_T("copym")), _("Copy and mirror selected items"), OnCopyMirrorButton);
-	AddToolBarTool(m_transformBar, _T("Move Scale"), ToolImage(_T("moves")), _("Scale selected items"), OnMoveScaleButton);
+
 	m_toolBar->Realize();
 	m_geometryBar->Realize();
 	m_solidBar->Realize();
 	m_viewingBar->Realize();
-	m_transformBar->Realize();
 	m_aui_manager->AddPane(m_toolBar, wxAuiPaneInfo().Name(_T("ToolBar")).Caption(_("General Tools")).ToolbarPane().Top());
 	m_aui_manager->AddPane(m_geometryBar, wxAuiPaneInfo().Name(_T("GeomBar")).Caption(_("Geometry Tools")).ToolbarPane().Top());
 	m_aui_manager->AddPane(m_solidBar, wxAuiPaneInfo().Name(_T("SolidBar")).Caption(_("Solid Tools")).ToolbarPane().Top());
 	m_aui_manager->AddPane(m_viewingBar, wxAuiPaneInfo().Name(_T("ViewingBar")).Caption(_("Viewing Tools")).ToolbarPane().Top());
-	m_aui_manager->AddPane(m_transformBar, wxAuiPaneInfo().Name(_T("TransformBar")).Caption(_("Transformation Tools")).ToolbarPane().Top());
 	wxGetApp().RegisterHideableWindow(m_toolBar);
 	wxGetApp().RegisterHideableWindow(m_geometryBar);
 	wxGetApp().RegisterHideableWindow(m_solidBar);
 	wxGetApp().RegisterHideableWindow(m_viewingBar);
-	wxGetApp().RegisterHideableWindow(m_transformBar);
 }
 
 void CHeeksFrame::LoadPerspective(const wxString& str)
@@ -1683,7 +1734,6 @@ void CHeeksFrame::LoadPerspective(const wxString& str)
 	m_aui_manager->GetPane(m_geometryBar).Caption(_("Geometry Tools"));
 	m_aui_manager->GetPane(m_solidBar).Caption(_("Solid Tools"));
 	m_aui_manager->GetPane(m_viewingBar).Caption(_("Viewing Tools"));
-	m_aui_manager->GetPane(m_transformBar).Caption(_("Transformation Tools"));
 
 	SetToolBarsSize();
 }
@@ -1699,7 +1749,6 @@ void CHeeksFrame::SetToolBarsToLeft()
 	m_aui_manager->GetPane(m_geometryBar).Left();
 	m_aui_manager->GetPane(m_solidBar).Left();
 	m_aui_manager->GetPane(m_viewingBar).Left();
-	m_aui_manager->GetPane(m_transformBar).Left();
 
 	for(std::list< wxToolBarBase* >::iterator It = wxGetApp().m_external_toolbars.begin(); It != wxGetApp().m_external_toolbars.end(); It++)
 	{
@@ -1708,11 +1757,11 @@ void CHeeksFrame::SetToolBarsToLeft()
 	}
 }
 
-CFlyOutItem::CFlyOutItem(const wxString& title_and_bitmap, const wxString& tooltip, void(*onButtonFunction)(wxCommandEvent&)):m_title_and_bitmap(title_and_bitmap), m_tooltip(tooltip), m_onButtonFunction(onButtonFunction)
+CFlyOutItem::CFlyOutItem(const wxString& title, const wxBitmap& bitmap, const wxString& tooltip, void(*onButtonFunction)(wxCommandEvent&)):m_title(title), m_bitmap(bitmap), m_tooltip(tooltip), m_onButtonFunction(onButtonFunction)
 {
 }
 
-CFlyOutList::CFlyOutList(const wxString& title_and_bitmap, const wxString& tooltip):CFlyOutItem(title_and_bitmap, tooltip, NULL)
+CFlyOutList::CFlyOutList(const wxString& title):CFlyOutItem(title, wxBitmap(), _T(""), NULL)
 {
 }
 
@@ -1727,16 +1776,16 @@ const CFlyOutItem* CFlyOutList::GetMainItem()const
 	// get the item to show on toolbar
 	const CFlyOutItem &first_fo = m_list.front();
 
-	wxString config_string = GetFlyoutConfigString(m_title_and_bitmap) + _T("ActiveTool");
+	wxString config_string = GetFlyoutConfigString(m_title) + _T("ActiveTool");
 	HeeksConfig config;
 	wxString active_tool_str;
-	config.Read(config_string, &active_tool_str, first_fo.m_title_and_bitmap);
+	config.Read(config_string, &active_tool_str, first_fo.m_title);
 
 	const CFlyOutItem *main_fo = &first_fo;
 	for(std::list<CFlyOutItem>::const_iterator It = m_list.begin(); It != m_list.end(); It++)
 	{
 		const CFlyOutItem &fo = *It;
-		if(fo.m_title_and_bitmap == active_tool_str)
+		if(fo.m_title == active_tool_str)
 		{
 			main_fo = &fo;
 			break;
@@ -1748,8 +1797,8 @@ const CFlyOutItem* CFlyOutList::GetMainItem()const
 
 void CFlyOutList::SetMainItem(const CFlyOutItem* item)
 {
-	wxString config_string = GetFlyoutConfigString(m_title_and_bitmap) + _T("ActiveTool");
+	wxString config_string = GetFlyoutConfigString(m_title) + _T("ActiveTool");
 	HeeksConfig config;
-	wxString active_tool_str = item->m_title_and_bitmap;
+	wxString active_tool_str = item->m_title;
 	config.Write(config_string, active_tool_str);
 }

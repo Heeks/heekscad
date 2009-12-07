@@ -126,6 +126,32 @@ void CHeeksCADInterface::AddToolBarButton(wxToolBar* toolbar, const wxString& ti
 	wxGetApp().m_frame->AddToolBarTool(toolbar, title, bitmap, caption, onButtonFunction, onUpdateButtonFunction);
 }
 
+static CFlyOutList* toolbar_flyout = NULL;
+
+void CHeeksCADInterface::StartToolBarFlyout(const wxString& title_and_bitmap)
+{
+	if(toolbar_flyout)delete toolbar_flyout;
+	toolbar_flyout = new CFlyOutList(title_and_bitmap);
+}
+
+void CHeeksCADInterface::AddFlyoutButton(const wxString& title, const wxBitmap& bitmap, const wxString& tooltip, void(*onButtonFunction)(wxCommandEvent&))
+{
+	if(toolbar_flyout)
+	{
+		toolbar_flyout->m_list.push_back(CFlyOutItem(title, bitmap, tooltip, onButtonFunction));
+	}
+}
+
+void CHeeksCADInterface::EndToolBarFlyout(wxToolBar* toolbar)
+{
+	if(toolbar_flyout)
+	{
+		wxGetApp().m_frame->AddToolBarFlyout(toolbar, *toolbar_flyout);
+		delete toolbar_flyout;
+		toolbar_flyout = NULL;
+	}
+}
+
 float CHeeksCADInterface::GetToolImageButtonScale()
 {
 	return ToolImage::m_button_scale;
