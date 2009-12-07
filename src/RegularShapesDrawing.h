@@ -47,7 +47,7 @@ public:
 	virtual ~RegularShapesDrawing(void);
 
 	// InputMode's virtual functions
-	const wxChar* GetTitle(){return _("Regular shapes drawing");}
+	const wxChar* GetTitle();
 	void GetTools(std::list<Tool*> *f_list, const wxPoint *p);
 	void GetProperties(std::list<Property *> *list);
 

@@ -36,11 +36,12 @@ public:
 
 class CFlyOutItem{
 public:
-	wxString m_title_and_bitmap;
+	wxString m_title;
+	wxBitmap m_bitmap;
 	wxString m_tooltip;
 	void(*m_onButtonFunction)(wxCommandEvent&);
 
-	CFlyOutItem(const wxString& title_and_bitmap, const wxString& tooltip, void(*onButtonFunction)(wxCommandEvent&));
+	CFlyOutItem(const wxString& title, const wxBitmap& bitmap, const wxString& tooltip, void(*onButtonFunction)(wxCommandEvent&));
 
 	virtual bool IsAList(){return false;}
 };
@@ -50,7 +51,7 @@ class CFlyOutList: public CFlyOutItem
 public:
 	std::list<CFlyOutItem> m_list;
 
-	CFlyOutList(const wxString& title_and_bitmap, const wxString& tooltip);
+	CFlyOutList(const wxString& title);
 
 	// CFlyOutItem's virtual functions
 	bool IsAList(){return true;}
@@ -78,7 +79,6 @@ public:
 	wxToolBar *m_geometryBar;
 	wxToolBar *m_solidBar;
 	wxToolBar *m_viewingBar;
-	wxToolBar *m_transformBar;
 	wxStatusBar* m_statusBar;
 	wxMenuBar *m_menuBar;
 	wxMenu* m_recent_files_menu;
@@ -101,7 +101,7 @@ public:
 	void OnKeyUp(wxKeyEvent& event);
 	wxToolBarToolBase* AddToolBarTool(wxToolBar* toolbar, const wxString& title, const wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
 	void AddToolBarTool(wxToolBar* toolbar, Tool* tool);
-	void AddToolBarFlyout(wxToolBar* toolbar, const wxString& title, const CFlyOutList& flyout);
+	void AddToolBarFlyout(wxToolBar* toolbar, const CFlyOutList& flyout);
 	int MakeNextIDForTool(void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&));
 	void SetToolFunctions(int Id, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&));
 	void ClearToolBar(wxToolBar* m_toolBar);

@@ -53,6 +53,9 @@ public:
 	virtual wxMenu* GetWindowMenu();
 	virtual wxAuiManager* GetAuiManager();
 	virtual void AddToolBarButton(wxToolBar* toolbar, const wxString& title, const wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
+	virtual void StartToolBarFlyout(const wxString& title_and_bitmap);
+	virtual void AddFlyoutButton(const wxString& title, const wxBitmap& bitmap, const wxString& tooltip, void(*onButtonFunction)(wxCommandEvent&));
+	virtual void EndToolBarFlyout(wxToolBar* toolbar);
 	virtual float GetToolImageButtonScale();
 	virtual int GetToolImageBitmapSize();
 	virtual int AddMenuItem(wxMenu* menu, const wxString& title, const wxBitmap& bitmap, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL, wxMenu* submenu = NULL, bool check_item = false);

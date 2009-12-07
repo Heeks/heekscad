@@ -484,6 +484,24 @@ static void on_set_num_sides(int value, HeeksObj* object)
 	RegularShapesDrawing_for_GetProperties->m_number_of_side_for_polygon = value;
 }
 
+const wxChar* RegularShapesDrawing::GetTitle()
+{
+	switch(m_mode)
+	{
+	case RectanglesRegularShapeMode:
+		return _("Rectangle drawing");
+
+	case PolygonsRegularShapeMode:
+		return _("Polygon drawing");
+
+	case ObroundRegularShapeMode:
+		return _("Obround drawing");
+
+	default:
+		return _("Regular shapes drawing");
+	}
+}
+
 void RegularShapesDrawing::GetProperties(std::list<Property *> *list){
 	// add drawing mode
 	std::list< wxString > choices;

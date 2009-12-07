@@ -8210,5 +8210,36 @@
          style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#d8ce00;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          sodipodi:type="arc" />
     </g>
+    <path
+       id="path3643"
+       style="opacity:1;fill:#8080ff;fill-opacity:1;stroke:#0000a0;stroke-width:2.35689592;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 168.51015,293.79059 L 169.21914,289.72785 C 166.62654,290.00737 163.63996,291.31456 160.96888,292.85469 L 162.47778,296.06059 C 164.42087,294.84065 166.4887,294.06502 168.51015,293.79059 z M 157.50976,300.73507 L 154.22999,299.20315 C 152.35412,301.74652 151.37805,304.40721 150.76813,307.11555 L 154.97632,306.50299 C 155.31729,304.59993 156.1612,302.6188 157.50976,300.73507 z M 155.54471,311.92919 L 151.53997,314.42311 C 152.46957,316.63826 154.23938,318.06994 156.31769,319.21171 L 159.04395,315.40353 C 157.41175,314.70484 156.36226,313.41576 155.54471,311.92919 z M 178.82393,310.69855 L 175.5485,309.16055 C 176.80263,307.31575 177.59607,305.37174 178.07249,303.40877 L 182.26503,302.8831 C 181.77267,305.50906 180.64296,308.15761 178.82393,310.69855 z M 181.52789,295.5084 L 177.53394,298.04266 C 176.86223,296.54148 175.68396,295.27192 174.01432,294.49208 C 174.01432,294.49208 175.68396,295.27192 174.01432,294.49208 L 176.73621,290.68999 L 176.73184,290.6961 C 178.98905,291.7585 180.59166,293.42144 181.52789,295.5084 z M 170.53821,313.8648 L 172.08069,317.05311 C 169.47017,318.70673 166.63835,319.78393 163.86409,320.17013 L 164.57456,316.10729 C 166.56292,315.82273 168.65157,315.01957 170.53821,313.8648 z"
+       sodipodi:nodetypes="cccccccccccccccccccccccccccccccc"
+       inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\ellipse.png"
+       inkscape:export-xdpi="255.18919"
+       inkscape:export-ydpi="255.18919" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 200,322.36218 L 230,322.36218 L 230,292.36218 L 200,292.36218 L 200,322.36218 z"
+       id="path4695"
+       inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\rect.png"
+       inkscape:export-xdpi="269.94592"
+       inkscape:export-ydpi="269.94592" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 260,317.36218 C 260,317.36218 260,307.26334 260,297.16449 C 260,287.06565 245.56215,287.06565 245.56215,297.16449 C 245.56215,307.26334 245.56215,307.26334 245.56215,317.36218 C 245.56215,327.46103 260,327.46103 260,317.36218 z"
+       id="path4697"
+       sodipodi:nodetypes="csssc"
+       inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\obround.png"
+       inkscape:export-xdpi="229.95706"
+       inkscape:export-ydpi="229.95706" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 277.15158,317.99795 L 295.19605,317.99795 L 300.75234,304.13896 L 286.37824,293.0511 L 272.00414,303.25194 L 277.15158,317.99795 z"
+       id="path4699"
+       sodipodi:nodetypes="cccccc"
+       inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\pentagon.png"
+       inkscape:export-xdpi="229.95706"
+       inkscape:export-ydpi="229.95706" />
   </g>
 </svg>
