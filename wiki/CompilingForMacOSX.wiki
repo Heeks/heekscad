@@ -51,16 +51,10 @@ make install
 
 = HeeksCAD =
 
-You have to change some variables in the Heekscad Makefile:
+Copy buildenv_mac.example to buildenv_mac. Change the variables to your needs. You might just change the OpenCASCADE installation path. 
 
 {{{
-PREFIX=/Users/totty/Projects/heekscad
-
-PYTHONCFLAGS=$(shell /sw/bin/python2.5-config --includes)
-
-CCFLAGS=$(CFLAGS) -Wall -g -gdwarf-2 -O0 -I "./" -I "/usr/X11/include/" -I "${CASROOT}/inc/" $(FLAGS_64BIT) -DUSE_GENERIC_TREECTRL -DUNICODE -DHEEKSCAD -DHAVE_LIMITS -DWXUSINGDLL -DHAVE_LIMITS -DTIXML_USE_STL ${RIP} $(PYTHONCFLAGS)  `wx-config  --cflags`
-
-PYTHONLIBS=$(shell /sw/bin/python2.5-config --ldflags)
+source buildenv_mac
+cd src
+make
 }}}
-
-I would suggest a RUNINPLACE build.
