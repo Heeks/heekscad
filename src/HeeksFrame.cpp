@@ -1295,11 +1295,11 @@ void CHeeksFrame::AddToolBarFlyout(wxToolBar* toolbar, const CFlyOutList& flyout
 	int id_to_use = MakeNextIDForTool(NULL, NULL);
 	wxBitmapButton* button = new CFlyOutButton(flyout_list, toolbar, id_to_use, wxDefaultPosition,
 #ifdef WIN32
-		wxSize(ToolImage::GetBitmapSize() + FLYOUT_PANEL_BORDER, ToolImage::GetBitmapSize()
+		wxSize(ToolImage::GetBitmapSize() + FLYOUT_PANEL_BORDER, ToolImage::GetBitmapSize())
 #else
 		wxDefaultSize
 #endif
-		) );
+		);
 	toolbar->AddControl(button);
 }
 
