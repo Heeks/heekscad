@@ -41,7 +41,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="`wx-config --cxxflags`" />
-			<Add option='-Wall -g -I &quot;./&quot; -I &quot;/usr/include/opencascade&quot; $(WXCFLAGS) -DUNICODE -D__WXGTK__ -DHEEKSCAD -DHAVE_LIMITS -DWXUSINGDLL -DHAVE_LIMITS -DTIXML_USE_STL -DRUNINPLACE -DCODEBLOCKS' />
+			<Add option='-Wall -g -I &quot;./&quot; -I &quot;/usr/include/opencascade&quot; $(WXCFLAGS) -DUNICODE -D__WXGTK__ -DHEEKSCAD -DHAVE_LIMITS -DWXUSINGDLL -DHAVE_LIMITS -DTIXML_USE_STL -DRUNINPLACE -DCODEBLOCKS -DUSE_GENERIC_TREECTRL' />
 			<Add directory="/usr/include/opencascade" />
 		</Compiler>
 		<Linker>
@@ -100,6 +100,8 @@
 		<Unit filename="sketchsolve/src/solveimpl.cpp" />
 		<Unit filename="src/AboutBox.cpp" />
 		<Unit filename="src/AboutBox.h" />
+		<Unit filename="src/AutoSave.cpp" />
+		<Unit filename="src/AutoSave.h" />
 		<Unit filename="src/BentleyOttmann.cpp" />
 		<Unit filename="src/BentleyOttmann.h" />
 		<Unit filename="src/BezierCurve.cpp" />
@@ -191,7 +193,6 @@
 		<Unit filename="src/HeeksPrintout.cpp" />
 		<Unit filename="src/HeeksPrintout.h" />
 		<Unit filename="src/History.h" />
-		<Unit filename="src/Images.cpp" />
 		<Unit filename="src/Images.h" />
 		<Unit filename="src/InputModeCanvas.cpp" />
 		<Unit filename="src/InputModeCanvas.h" />
