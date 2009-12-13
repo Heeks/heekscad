@@ -890,7 +890,7 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 		m_file_open_or_import_type = FileOpenOrImportTypeDxf;
 		OpenDXFFile(filepath);
 	}
-	else if(wf.EndsWith(_T(".gbr"))	|| wf.EndsWith(_T(".rs274x")))
+	else if(wf.EndsWith(_T(".gbr"))	|| wf.EndsWith(_T(".rs274x")) || wf.EndsWith(_T(".pho")))
 	{
 		OpenRS274XFile(filepath);
 	}
@@ -2452,7 +2452,7 @@ const wxChar* HeeksCADapp::GetKnownFilesWildCardString(bool open)const
 			imageExtStr2.Append(_T("*."));
 			imageExtStr2.Append(ext);
 		}
-		known_file_ext = wxString(_("Known Files")) + _T(" |*.heeks;*.HEEKS;*.igs;*.IGS;*.iges;*.IGES;*.stp;*.STP;*.step;*.STEP;*.stl;*.STL;*.svg;*.SVG;*.dxf;*.DXF;*.gbr;*.GBR,*.rs274x;*.RS274X;") + imageExtStr + _T("|") + _("Heeks files") + _T(" (*.heeks)|*.heeks;*.HEEKS|") + _("IGES files") + _T(" (*.igs *.iges)|*.igs;*.IGS;*.iges;*.IGES|") + _("STEP files") + _T(" (*.stp *.step)|*.stp;*.STP;*.step;*.STEP|") + _("STL files") + _T(" (*.stl)|*.stl;*.STL|") + _("Scalar Vector Graphics files") + _T(" (*.svg)|*.svg;*.SVG|") + _("DXF files") + _T(" (*.dxf)|*.dxf;*.DXF|") + _("RX274X/Gerber files") + _T(" (*.gbr,*.rs274x)|*.gbr;*.GBR;*.rs274x;*.RS274X|") + _("Picture files") + _T(" (") + imageExtStr2 + _T(")|") + imageExtStr;
+		known_file_ext = wxString(_("Known Files")) + _T(" |*.heeks;*.HEEKS;*.igs;*.IGS;*.iges;*.IGES;*.stp;*.STP;*.step;*.STEP;*.stl;*.STL;*.svg;*.SVG;*.dxf;*.DXF;*.gbr;*.GBR,*.rs274x;*.RS274X;*.pho;*.PHO") + imageExtStr + _T("|") + _("Heeks files") + _T(" (*.heeks)|*.heeks;*.HEEKS|") + _("IGES files") + _T(" (*.igs *.iges)|*.igs;*.IGS;*.iges;*.IGES|") + _("STEP files") + _T(" (*.stp *.step)|*.stp;*.STP;*.step;*.STEP|") + _("STL files") + _T(" (*.stl)|*.stl;*.STL|") + _("Scalar Vector Graphics files") + _T(" (*.svg)|*.svg;*.SVG|") + _("DXF files") + _T(" (*.dxf)|*.dxf;*.DXF|") + _("RX274X/Gerber files") + _T(" (*.gbr,*.rs274x)|*.gbr;*.GBR;*.rs274x;*.RS274X;*.pho;*.PHO|") + _("Picture files") + _T(" (") + imageExtStr2 + _T(")|") + imageExtStr;
 		return known_file_ext.c_str();
 	}
 	else{
