@@ -91,6 +91,8 @@
 #include <BRepTools.hxx>
 #include <BRepTools_WireExplorer.hxx>
 #include <GCPnts_AbscissaPoint.hxx>
+#include <GC_MakeSegment.hxx>
+#include <GC_MakeArcOfCircle.hxx>
 #include <Geom_Axis1Placement.hxx>
 #include <Geom_BezierCurve.hxx>
 #include <Geom_BSplineCurve.hxx>
@@ -116,9 +118,11 @@
 #include <gp_Sphere.hxx>
 #include <gp_Trsf.hxx>
 #include <gp_Vec.hxx>
+#include <Handle_Geom_TrimmedCurve.hxx>
 #include <IGESControl_Controller.hxx>
 #include <IGESControl_Reader.hxx>
 #include <IGESControl_Writer.hxx>
+#include <IntTools_FaceFace.hxx>
 #include "math_BFGS.hxx"
 #include "math_MultipleVarFunctionWithGradient.hxx"
 #include <Poly_Connect.hxx>
@@ -148,6 +152,9 @@
 #include <TopTools_MapIteratorOfMapOfShape.hxx>
 #include <TopTools_MapOfShape.hxx>
 #include <UnitsAPI.hxx>
+#include <TopOpeBRep_FacesIntersector.hxx>
+#include <TopOpeBRepBuild_FuseFace.hxx>
+
 
 #include <wx/wx.h>
 #include <wx/aui/aui.h>
