@@ -64,11 +64,11 @@ void HCircle::GetSegments(void(*callbackfunc)(const double *p), double pixels_pe
 
 	double radius = m_radius;
 	int segments = (int)(fabs(pixels_per_mm * radius + 1));
-    
+
     double theta = 6.28318530717958 / (double)segments;
     double tangetial_factor = tan(theta);
     double radial_factor = 1 - cos(theta);
-    
+
     double x = radius;
     double y = 0.0;
 
@@ -79,16 +79,16 @@ void HCircle::GetSegments(void(*callbackfunc)(const double *p), double pixels_pe
 		gp_Pnt p = centre.XYZ() + x * x_axis.XYZ() + y * y_axis.XYZ();
 		extract(p, pp);
 		(*callbackfunc)(pp);
-        
+
         double tx = -y;
         double ty = x;
-        
+
         x += tx * tangetial_factor;
         y += ty * tangetial_factor;
-        
+
         double rx = - x;
         double ry = - y;
-        
+
         x += rx * radial_factor;
         y += ry * radial_factor;
     }
@@ -255,7 +255,7 @@ void HCircle::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element;
 	element = new TiXmlElement( "Circle" );
-	root->LinkEndChild( element );  
+	root->LinkEndChild( element );
 	element->SetAttribute("col", color.COLORREF_color());
 	element->SetDoubleAttribute("r", m_radius);
 	gp_Dir D = m_axis.Direction();
@@ -304,6 +304,9 @@ int HCircle::Intersects(const HeeksObj *object, std::list< double > *rl)const
 
 	switch(object->GetType())
 	{
+    case SketchType:
+        return( ((CSketch *)object)->Intersects( this, rl ));
+
 	case LineType:
 		{
 			std::list<gp_Pnt> plist;
@@ -701,7 +704,7 @@ bool HCircle::GetArcTangentPoint(const gp_Lin& l, const gp_Pnt& a, const gp_Pnt&
 	if(final_direction)
 	{
 		if((*final_direction) * gp_Vec(sideways.XYZ()) >= 0)// b on correct side compared with final direction
-		{			
+		{
 			gp_Lin final_dir_line(b, gp_Dir(final_direction->XYZ()));
 			if(!l.Direction().IsEqual(gp_Dir(final_direction->XYZ()), 0.00000001) && !l.Direction().IsEqual(-gp_Dir(final_direction->XYZ()), 0.00000001))
 			{

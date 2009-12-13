@@ -140,6 +140,9 @@ int HILine::Intersects(const HeeksObj *object, std::list< double > *rl)const{
 
 	switch(object->GetType())
 	{
+    case SketchType:
+        return( ((CSketch *)object)->Intersects( this, rl ));
+
 	case LineType:
 		{
 			gp_Pnt pnt;
@@ -209,7 +212,7 @@ void HILine::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element;
 	element = new TiXmlElement( "InfiniteLine" );
-	root->LinkEndChild( element );  
+	root->LinkEndChild( element );
 	element->SetAttribute("col", color.COLORREF_color());
 //	element->SetDoubleAttribute("sx", A->m_p.X());
 //	element->SetDoubleAttribute("sy", A->m_p.Y());

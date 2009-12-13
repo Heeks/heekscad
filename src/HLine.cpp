@@ -203,6 +203,9 @@ int HLine::Intersects(const HeeksObj *object, std::list< double > *rl)const{
 
 	switch(object->GetType())
 	{
+    case SketchType:
+        return( ((CSketch *)object)->Intersects( this, rl ));
+
 	case LineType:
 		{
 			// The OpenCascade libraries throw an exception when one tries to
@@ -310,7 +313,7 @@ void HLine::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element;
 	element = new TiXmlElement( "Line" );
-	root->LinkEndChild( element );  
+	root->LinkEndChild( element );
 	element->SetAttribute("col", color.COLORREF_color());
 
 #ifdef OLDLINES
@@ -345,7 +348,7 @@ HeeksObj* HLine::ReadFromXMLElement(TiXmlElement* pElem)
 
 	HLine* new_object = new HLine(p0, p1, &c);
 	new_object->ReadBaseXML(pElem);
-	
+
 	if(new_object->GetNumChildren()>2)
 	{
 		//This is a new style line, with children points

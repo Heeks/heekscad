@@ -71,7 +71,7 @@ void HEllipse::GetSegments(void(*callbackfunc)(const double *p), double pixels_p
 
 	double end_angle = m_end;
 	double start_angle = m_start;
-	
+
 	double d_angle = end_angle - start_angle;
 
 	if(fabs(d_angle) < wxGetApp().m_geom_tol)
@@ -87,7 +87,7 @@ void HEllipse::GetSegments(void(*callbackfunc)(const double *p), double pixels_p
     double theta = d_angle / (double)segments;
     double tangetial_factor = tan(theta);
     double radial_factor = 1 - cos(theta);
-    
+
     double x = radius * cos(start_angle);
     double y = radius * sin(start_angle);
 
@@ -98,19 +98,19 @@ void HEllipse::GetSegments(void(*callbackfunc)(const double *p), double pixels_p
 		gp_Pnt p = centre.XYZ() + x * x_axis.XYZ() + y * y_axis.XYZ()  * ratio;
 		extract(p, pp);
 		(*callbackfunc)(pp);
-        
+
         double tx = -y;
         double ty = x;
-        
+
         x += tx * tangetial_factor;
         y += ty * tangetial_factor;
-        
+
         double rx = - x;
         double ry = - y;
-        
+
         x += rx * radial_factor;
         y += ry * radial_factor;
-    } 
+    }
 }
 
 static void glVertexFunction(const double *p){glVertex3d(p[0], p[1], p[2]);}
@@ -178,7 +178,7 @@ void HEllipse::GetBox(CBox &box){
 		double pp[3];
 		extract(p[i], pp);
 		box.Insert(pp);
-	} 
+	}
 }
 
 void HEllipse::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
@@ -202,7 +202,7 @@ void HEllipse::GetGripperPositions(std::list<GripData> *list, bool just_for_endo
 
 	    list->push_back(GripData(GripperTypeRotate,rot.X(),rot.Y(),rot.Z(),NULL));
 
-	} 
+	}
 }
 
 static void on_set_centre(const double *vt, HeeksObj* object){
@@ -216,32 +216,32 @@ static void on_set_axis(const double *vt, HeeksObj* object){
 	a.SetDirection(make_vector(vt));
 	e->m_zdir = a.Direction();
 	e->m_xdir = a.XDirection();
-	wxGetApp().Repaint(); 
+	wxGetApp().Repaint();
 }
 
 static void on_set_major_radius(double value, HeeksObj* object){
 	((HEllipse*)object)->m_majr = value;
-	wxGetApp().Repaint(); 
+	wxGetApp().Repaint();
 }
 
 static void on_set_minor_radius(double value, HeeksObj* object){
 	((HEllipse*)object)->m_minr = value;
-	wxGetApp().Repaint(); 
+	wxGetApp().Repaint();
 }
 
 static void on_set_rotation(double value, HeeksObj* object){
     ((HEllipse*)object)->SetRotation(value);
-	wxGetApp().Repaint(); 
+	wxGetApp().Repaint();
 }
 
 static void on_set_start_angle(double value, HeeksObj* object){
     ((HEllipse*)object)->m_start = value;
-	wxGetApp().Repaint(); 
+	wxGetApp().Repaint();
 }
 
 static void on_set_end_angle(double value, HeeksObj* object){
     ((HEllipse*)object)->m_end = value;
-	wxGetApp().Repaint(); 
+	wxGetApp().Repaint();
 }
 
 void HEllipse::SetRotation(double value)
@@ -286,7 +286,7 @@ bool HEllipse::FindNearPoint(const double* ray_start, const double* ray_directio
 		return true;
 	}
 
-	return false; 
+	return false;
 }
 
 bool HEllipse::FindPossTangentPoint(const double* ray_start, const double* ray_direction, double *point){
@@ -296,7 +296,7 @@ bool HEllipse::FindPossTangentPoint(const double* ray_start, const double* ray_d
 
 bool HEllipse::Stretch(const double *p, const double* shift, void* data){
 
-	//TODO: 
+	//TODO:
         // 1. When the major and minor axis swap, the unused handle switches sides.
 	// 2. The handle switches to the other radius if you go past Pi/4
 
@@ -338,7 +338,7 @@ bool HEllipse::Stretch(const double *p, const double* shift, void* data){
 				nradius = 1 / wxGetApp().m_geom_tol;
 
 			if(nradius > min_r)
-				m_majr = nradius; 
+				m_majr = nradius;
 			else
 			{
 				m_majr = min_r;
@@ -354,7 +354,7 @@ bool HEllipse::Stretch(const double *p, const double* shift, void* data){
 			if(nradius > 1 / wxGetApp().m_geom_tol || nradius != nradius)
 				nradius = 1 / wxGetApp().m_geom_tol;
 			if(nradius < maj_r)
-				m_minr = nradius; 
+				m_minr = nradius;
 			else
 			{
 				m_minr = maj_r;
@@ -365,7 +365,7 @@ bool HEllipse::Stretch(const double *p, const double* shift, void* data){
 			}
 		}
 	}
-	return false; 
+	return false;
 }
 
 bool HEllipse::GetCentrePoint(double* pos)
@@ -378,7 +378,7 @@ void HEllipse::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element;
 	element = new TiXmlElement( "Ellipse" );
-	root->LinkEndChild( element );  
+	root->LinkEndChild( element );
 	element->SetAttribute("col", color.COLORREF_color());
 	element->SetDoubleAttribute("maj", m_majr);
 	element->SetDoubleAttribute("min", m_minr);
@@ -389,7 +389,7 @@ void HEllipse::WriteXML(TiXmlNode *root)
 	element->SetDoubleAttribute("az", D.Z());
 	element->SetDoubleAttribute("start", m_start);
 	element->SetDoubleAttribute("end", m_end);
-	WriteBaseXML(element); 
+	WriteBaseXML(element);
 }
 
 // static member function
@@ -435,7 +435,7 @@ HeeksObj* HEllipse::ReadFromXMLElement(TiXmlElement* pElem)
 		new_object->C->SetSkipForUndo(true);
 	}
 
-	return new_object; 
+	return new_object;
 }
 
 void HEllipse::ReloadPointers()
@@ -465,6 +465,9 @@ int HEllipse::Intersects(const HeeksObj *object, std::list< double > *rl)const
 
 	switch(object->GetType())
 	{
+    case SketchType:
+        return( ((CSketch *)object)->Intersects( this, rl ));
+
 	case LineType:
 		{
 			std::list<gp_Pnt> plist;
@@ -516,7 +519,7 @@ int HEllipse::Intersects(const HeeksObj *object, std::list< double > *rl)const
 		break; */
 	}
 
-	return numi; 
+	return numi;
 }
 
 void HEllipse::LoadFromDoubles()

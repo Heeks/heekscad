@@ -121,11 +121,11 @@ void HArc::GetSegments(void(*callbackfunc)(const double *p), double pixels_per_m
 	double radius = m_radius;
 	double d_angle = end_angle - start_angle;
 	int segments = (int)(fabs(pixels_per_mm * radius * d_angle / 6.28318530717958 + 1));
-    
+
     double theta = d_angle / (double)segments;
     double tangetial_factor = tan(theta);
     double radial_factor = 1 - cos(theta);
-    
+
     double x = radius * cos(start_angle);
     double y = radius * sin(start_angle);
 
@@ -136,16 +136,16 @@ void HArc::GetSegments(void(*callbackfunc)(const double *p), double pixels_per_m
 		gp_Pnt p = centre.XYZ() + x * x_axis.XYZ() + y * y_axis.XYZ();
 		extract(p, pp);
 		(*callbackfunc)(pp);
-        
+
         double tx = -y;
         double ty = x;
-        
+
         x += tx * tangetial_factor;
         y += ty * tangetial_factor;
-        
+
         double rx = - x;
         double ry = - y;
-        
+
         x += rx * radial_factor;
         y += ry * radial_factor;
     }
@@ -295,6 +295,9 @@ int HArc::Intersects(const HeeksObj *object, std::list< double > *rl)const
 
 	switch(object->GetType())
 	{
+    case SketchType:
+        return( ((CSketch *)object)->Intersects( this, rl ));
+
 	case LineType:
 		{
 			std::list<gp_Pnt> plist;
@@ -436,7 +439,7 @@ void HArc::LoadFromDoubles()
 {
 	EndedObject::LoadFromDoubles();
 	C->LoadFromDoubles();
-	m_radius = C->m_p.Distance(A->m_p);	
+	m_radius = C->m_p.Distance(A->m_p);
 }
 
 void HArc::LoadToDoubles()
@@ -560,7 +563,7 @@ gp_Pnt HArc::GetPointAtFraction(double fraction)
 //static
 bool HArc::TangentialArc(const gp_Pnt &p0, const gp_Vec &v0, const gp_Pnt &p1, gp_Pnt &centre, gp_Dir &axis)
 {
-	// returns false if a straight line is needed 
+	// returns false if a straight line is needed
 	// else returns true and sets centre and axis
 	if(p0.Distance(p1) > 0.0000000001 && v0.Magnitude() > 0.0000000001){
 		gp_Vec v1(p0, p1);
@@ -584,7 +587,7 @@ bool HArc::TangentialArc(const gp_Pnt &p0, const gp_Vec &v0, const gp_Pnt &p1, g
 void HArc::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement *element = new TiXmlElement( "Arc" );
-	root->LinkEndChild( element );  
+	root->LinkEndChild( element );
 	element->SetAttribute("col", color.COLORREF_color());
 //	element->SetDoubleAttribute("sx", A->m_p.X());
 //	element->SetDoubleAttribute("sy", A->m_p.Y());
