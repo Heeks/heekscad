@@ -812,7 +812,7 @@ static void OnChamferButton( wxCommandEvent& event )
 
 static void OnRuledSurfaceButton( wxCommandEvent& event )
 {
-	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 2, SketchType, _("Pick two or more sketches, to create a lofted solid between\n( hold down Ctrl key to select more than one solid )"), _("Lofted Body")))return;
+	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 2, SketchType, wxString(_("Pick two or more sketches, to create a lofted solid between")) + _T("\n( ") + _( "hold down Ctrl key to select more than one solid") + _T(" )"), _("Lofted Body")))return;
 	wxGetApp().CreateUndoPoint();
 	PickCreateRuledSurface();
 	wxGetApp().Changed();
@@ -820,9 +820,17 @@ static void OnRuledSurfaceButton( wxCommandEvent& event )
 
 static void OnExtrudeButton( wxCommandEvent& event )
 {
-	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 1, SketchType, FaceType, CircleType, _("Pick one or more sketches, faces or circles, to create extruded body from\n( hold down Ctrl key to select more than one solid )"), _("Extrude")))return;
+	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 1, SketchType, FaceType, CircleType, wxString(_("Pick one or more sketches, faces or circles, to create an extruded body from")) + _T("\n( ") + _( "hold down Ctrl key to select more than one solid") + _T(" )"), _("Extrude")))return;
 	wxGetApp().CreateUndoPoint();
 	PickCreateExtrusion();
+	wxGetApp().Changed();
+}
+
+static void OnRevolveButton( wxCommandEvent& event )
+{
+	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 1, SketchType, FaceType, CircleType, wxString(_("Pick one or more sketches, faces or circles, to create a revolved body from")) + _T("\n( ") + _( "hold down Ctrl key to select more than one solid") + _T(" )"), _("Extrude")))return;
+	wxGetApp().CreateUndoPoint();
+	PickCreateRevolution();
 	wxGetApp().Changed();
 }
 
@@ -1545,6 +1553,7 @@ void CHeeksFrame::MakeMenus()
 	solids_menu->AppendSeparator();
 	AddMenuItem(solids_menu, _("Loft two sketches"), ToolImage(_T("ruled")), OnRuledSurfaceButton);
 	AddMenuItem(solids_menu, _("Extrude a sketch"), ToolImage(_T("extrude")), OnExtrudeButton);
+	AddMenuItem(solids_menu, _("Revolve a sketch"), ToolImage(_T("revolve")), OnRevolveButton);
 	solids_menu->AppendSeparator();
 	AddMenuItem(solids_menu, _("Cut"), ToolImage(_T("subtract")), OnSubtractButton);
 	AddMenuItem(solids_menu, _("Fuse"), ToolImage(_T("fuse")), OnFuseButton);
@@ -1672,6 +1681,7 @@ void CHeeksFrame::AddToolBars()
 		CFlyOutList flyout_list(_T("SolidMake"));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("Ruled Surface"), ToolImage(_T("ruled")), _("Create a lofted face"), OnRuledSurfaceButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("Extrude"), ToolImage(_T("extrude")), _("Extrude a wire or face"), OnExtrudeButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Revolve"), ToolImage(_T("revolve")), _("Revolve a wire or face"), OnRevolveButton));
 		AddToolBarFlyout(m_solidBar, flyout_list);
 	}
 
