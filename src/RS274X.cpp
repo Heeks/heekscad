@@ -12,6 +12,8 @@
 #include "RS274X.h"
 #include "Geom.h"
 #include "ConversionTools.h"
+#include "Sketch.h"
+#include "CNCPoint.h"
 
 #include <sstream>
 #include <fstream>
@@ -22,6 +24,8 @@
 #include <list>
 #include <map>
 #include <vector>
+
+extern CHeeksCADInterface heekscad_interface;
 
 RS274X::RS274X()
 {
@@ -58,7 +62,7 @@ char RS274X::ReadChar( const char *data, int *pos, const int max_pos )
 {
 	if (*pos < max_pos)
 	{
-		while ( ((*pos) < max_pos) && ((data[*pos] == '\r') || (data[*pos] == '\n')) )
+		while ( ((*pos) < max_pos) && ((data[*pos] == ' ') || (data[*pos] == '\r') || (data[*pos] == '\n')) )
 		{
 			if(data[*pos] == '\n') m_current_line++;
 			(*pos)++;
@@ -66,8 +70,7 @@ char RS274X::ReadChar( const char *data, int *pos, const int max_pos )
 		if (*pos < max_pos)
 		{
 			return(data[(*pos)++]);
-		} // End if - then>	HeeksCAD.exe!RS274X::ReadBlock(const char * data=0x060625f8, int * pos=0x0012f488, const int max_pos=15861)  Line 98 + 0x14 bytes	C++
-
+		} // End if - then
 		else
 		{
 			return(-1);
@@ -81,27 +84,26 @@ char RS274X::ReadChar( const char *data, int *pos, const int max_pos )
 
 std::string RS274X::ReadBlock( const char *data, int *pos, const int max_pos )
 {
-        char delimiter;
-        std::ostringstream l_ossBlock;
+	char delimiter;
+	std::ostringstream l_ossBlock;
 
-        // Read first char to determine if it's a parameter or not.
-        char c = ReadChar(data,pos,max_pos);
+	// Read first char to determine if it's a parameter or not.
+	char c = ReadChar(data,pos,max_pos);
 
-        if (c < 0) return(std::string(""));
+	if (c < 0) return(std::string(""));
 
-        if (c == '%') delimiter = '%';
-        else delimiter = '*';
+	if (c == '%') delimiter = '%';
+	else delimiter = '*';
 
-        l_ossBlock << c;
+	l_ossBlock << c;
 
-        while (((c = ReadChar(data,pos,max_pos)) > 0) && (c != delimiter))
-        {
-                l_ossBlock << c;
-        } // End while
+	while (((c = ReadChar(data,pos,max_pos)) > 0) && (c != delimiter))
+	{
+		l_ossBlock << c;
+	} // End while
 
-        return(l_ossBlock.str());
+	return(l_ossBlock.str());
 } // End ReadBlock() method
-
 
 bool RS274X::Read( const char *p_szFileName)
 {
@@ -120,15 +122,17 @@ bool RS274X::Read( const char *p_szFileName)
 
 		m_current_line = 0;
 
-		Polygon_t temppolygon;
-		m_polygons.push_back(temppolygon);
-
 		int pos = 0;
 		while (pos < size)
 		{
 			std::string block = ReadBlock( memblock, &pos, size );
 			if (block.size() > 0)
 			{
+			    while (block[0] == ' ') block.erase( block.begin() );
+			    while (block[0] == '\t') block.erase( block.begin() );
+			    while (*(block.rbegin()) == ' ') block.erase( block.size()-1 );
+			    while (*(block.rbegin()) == '\t') block.erase( block.size()-1 );
+
 				if (block[0] == '%')
 				{
 					// We're reading a parameter.
@@ -144,121 +148,30 @@ bool RS274X::Read( const char *p_szFileName)
 
 		delete [] memblock;
 
-		//std::cout<<"collecting Polygons from polygons and traces"<<std::endl;
+        // Generate and add the sketch objects that represent the boundaries of the traces.
+		int number_of_networks = FormNetworks();
+		printf("Found %d separate networks\n", number_of_networks);
 
-		std::list<CPolygon> polygons_list;
+		// Generate a raster image (bitmap) that represents the traces.
+		Bitmap pcb = RenderToBitmap();
 
-		for (std::list<CPolygon>::iterator it_poly = m_polygons.begin(); it_poly != m_polygons.end(); it_poly++)
-		{
-			//std::cout<<"\t"<<it_poly->str()<<": "<<PDstr(it_poly->Direction())<<std::endl;
-			//at least the last polygon should be empty, so skip it
-			if(it_poly->empty()) continue;
-			if(it_poly->Direction() == PolyUndefinedW)
-			{
-				std::cout<<"\tshould not happen: direction undefinable, not adding: "<<it_poly->str()<<std::endl;
-				continue;
-			}
-			if(it_poly->Direction() != PolyCW)
-			{
-				std::cout<<"\treversing polygon"<<std::endl;
-				it_poly->reverse();
-				std::cout<<"\t->"<<it_poly->str()<<": "<<PDstr(it_poly->Direction())<<std::endl;
-			}
-			if(it_poly->Direction() != PolyCW)
-			{
-				std::cout<<"\tpolygon direction not cw"<<std::endl;
-				continue;
-			}
-			polygons_list.push_back(*it_poly);
-		}
-
-		for (Traces_t::iterator l_itTrace = m_traces.begin(); l_itTrace != m_traces.end(); l_itTrace++ )
-		{
-			CPolygon polygon;
-			l_itTrace->MakePolygon(polygon);
-			if(polygon.Direction() == PolyCCW)
-			{
-
-				std::cout<<"\treversing polygon"<<std::endl;
-				polygon.reverse();
-			}
-			if(polygon.empty())
-			{
-				std::cout<<"\tl_itTrace->MakePolygon() gave an empty polygon"<<std::endl;
-				continue;
-			}
-			if(polygon.Direction() == PolyUndefinedW)
-			{
-				std::cout<<"\tshould not happen: direction undefinable, not adding: "<<polygon.str()<<std::endl;
-				continue;
-			}
-			/*if(polygon.Direction() != PolyCW)
-			{
-				std::cout<<"\tpolygon direction not cw"<<std::endl;
-				continue;
-			}*/
-			polygons_list.push_back(polygon);
-		}
-
-		/*const char *polygon_names[] =
-		{
-			"kalle","ike","happo","taateli","aku","hessu","iines","roope","mikki",
-			"minni","kakka","kirje","biltema","sp-ele","paristo","teippi","ampuu"
-		};
-		int polygon_name_count = sizeof(polygon_names)/sizeof(char*);
-		int i = 0;
-		for(std::list<CPolygon>::iterator ipoly = polygons_list.begin();
-				ipoly != polygons_list.end(); ipoly++)
-		{
-			if(i < polygon_name_count) ipoly->name = polygon_names[i];
-			else{
-				int num = (i / polygon_name_count)+1;
-				std::stringstream ss;
-				ss<<polygon_names[i%polygon_name_count]<<num;
-				ipoly->name = ss.str();
-			}
-			i++;
-		}*/
-
-		std::list<CPolygon> result_list;
-		//bool union_succeeded = UnionPolygons(polygons_list, result_list);
-		bool union_succeeded = UnionPolygons_old(polygons_list, result_list);
-
-		/*std::cout<<"polygons_list:"<<std::endl;
-		for(std::list<CPolygon>::iterator i=polygons_list.begin(); i!=polygons_list.end(); i++)
-		{
-			std::cout<<"\t"<<i->str()<<": "<<PDstr(i->Direction())<<std::endl;
-		}
-
-		std::cout<<"result_list:"<<std::endl;
-		for(std::list<CPolygon>::iterator i=result_list.begin(); i!=result_list.end(); i++)
-		{
-			std::cout<<"\t"<<i->str()<<": "<<PDstr(i->Direction())<<std::endl;
-		}*/
+		// Save the PCB bitmap to a RAW raster file for debugging purposes.
+        // use the following command to convert this RAW image into a GIF file for viewing
+        // (substitute the width and height integers based on the boards dimensions - that
+        // appear in the file's name)
+        //
+        // eg: If file name is "pcb_width_3312_height_5678.raw" then the command would be;
+        // rawtoppm < /home/david/_width_3312_height_5678.raw 3312 5678 | ppmtogif > pcb.gif
+        {
+            std::ostringstream l_ossFileName;
+            l_ossFileName << "pcb" << "_width_" << pcb.PixelsPerRow() << "_height_" << pcb.PixelsPerColumn() << ".raw";
+            pcb.Save( l_ossFileName.str().c_str() );
+        }
 
 
-		for (std::list<CPolygon>::iterator ipoly = result_list.begin(); ipoly != result_list.end(); ipoly++)
-		{
-			if(ipoly->empty()) continue;
-			CSketch *sketch = ipoly->MakeSketch();
-			if(sketch==NULL) continue;
-			//if(sketch->GetSketchOrder() == SketchOrderTypeCloseCCW) sketch->ReverseSketch(false);
-			wxGetApp().Add(sketch, NULL);
-		}
-
-		/*for (std::list<CPolygon>::iterator ipoly = polygons_list.begin(); ipoly != polygons_list.end(); ipoly++)
-		{
-			if(ipoly->empty()) continue;
-			ipoly->Move(gp_Vec(50., 0., 0.));
-			CSketch *sketch = ipoly->MakeSketch();
-			if(sketch==NULL) continue;
-			//if(sketch->GetSketchOrder() == SketchOrderTypeCloseCCW) sketch->ReverseSketch(false);
-			if(undoably)wxGetApp().AddUndoably(sketch, NULL, NULL);
-			else wxGetApp().Add(sketch, NULL);
-		}*/
 
 
-		return union_succeeded;
+		return true;
 
 	} // End if - then
 	else
@@ -277,8 +190,16 @@ bool RS274X::ReadParameters( const std::string & parameters )
 	while ((offset = _params.find('%')) != _params.npos) _params.erase(offset,1);
 	while ((offset = _params.find('*')) != _params.npos) _params.erase(offset,1);
 
-	if (_params.substr(0,4) == "MOIN") m_units = 25.4;
-	else if (_params.substr(0,4) == "MOMM") m_units = 1.0;
+	if (_params.substr(0,4) == "MOIN")
+	{
+	    m_units = 25.4;
+	    return(true);
+	}
+	else if (_params.substr(0,4) == "MOMM")
+	{
+	    m_units = 1.0;
+	    return(true);
+	}
 	else if (_params.substr(0,2) == "AD")
 	{
 		// Aperture Definition.
@@ -345,21 +266,25 @@ bool RS274X::ReadParameters( const std::string & parameters )
 					_params.erase(0, end - _params.c_str());
 				} // End if - then
 
-				
 				m_aperture_table.insert( std::make_pair( tool_number, aperture ) );
 				}
 				break;
 
 			case 'R':	// Rectangle
-				printf("Rectangular apertures are not yet supported\n");
-
-				//TODO: just use a circle for now
 				{
 				// Push a circle within an outside diameter of modifier onto the list of apertures
 				Aperture aperture;
 
-				aperture.Type( Aperture::eCircular );
-				aperture.OutsideDiameter( modifier * m_units );
+				aperture.Type( Aperture::eRectangular );
+				aperture.XAxisOutsideDimension( modifier * m_units );
+
+				if ((_params.size() > 0) && (_params[0] == 'X'))
+				{
+					_params.erase(0,1); // Remove the 'X'
+					aperture.YAxisOutsideDimension( double(strtod( _params.c_str(), &end )) * m_units );
+					_params.erase(0, end - _params.c_str());
+				} // End if - then
+
 				m_aperture_table.insert( std::make_pair( tool_number, aperture ) );
 				}
 				break;
@@ -597,15 +522,20 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 		{
 			_data.erase(0,3);
 			m_area_fill = true;
+			m_filled_area_traces.clear();
 		}
 		else if (_data.substr(0,3) == "G37")
 		{
 			_data.erase(0,3);
-			Polygons_t::iterator l_itPolygon = m_polygons.end();
-			l_itPolygon--;
-			//add a new polygon if needed
-			AddPolygonIfNeeded();
+
 			m_area_fill = false;
+			// Convert the list of traces that bound the filled area into a single
+			// face object.
+			if (m_filled_area_traces.size() > 0)
+			{
+				m_filled_areas.push_back( m_filled_area_traces );
+				m_filled_area_traces.clear();
+			} // End if - then
 		}
 		else if (_data.substr(0,1) == "I")
 		{
@@ -633,10 +563,10 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 			} // End if - then
 			std::string i_param = sign + _data.substr(0, end - _data.c_str());
 			_data.erase(0, end - _data.c_str());
-			i_term = InterpretCoord( i_param.c_str(), 
-							m_YDigitsLeftOfPoint, 
-							m_YDigitsRightOfPoint, 
-							m_leadingZeroSuppression, 
+			i_term = InterpretCoord( i_param.c_str(),
+							m_YDigitsLeftOfPoint,
+							m_YDigitsRightOfPoint,
+							m_leadingZeroSuppression,
 							m_trailingZeroSuppression );
 		}
 		else if (_data.substr(0,1) == "J")
@@ -665,10 +595,10 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 			} // End if - then
 			std::string j_param = sign + _data.substr(0, end - _data.c_str());
 			_data.erase(0, end - _data.c_str());
-			j_term = InterpretCoord( j_param.c_str(), 
-							m_YDigitsLeftOfPoint, 
-							m_YDigitsRightOfPoint, 
-							m_leadingZeroSuppression, 
+			j_term = InterpretCoord( j_param.c_str(),
+							m_YDigitsLeftOfPoint,
+							m_YDigitsRightOfPoint,
+							m_leadingZeroSuppression,
 							m_trailingZeroSuppression );
 		}
 		else if (_data.substr(0,3) == "M00")
@@ -692,6 +622,7 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 			_data.erase(0,3);
 			m_part_circular_interpolation = false;
 			m_cw_circular_interpolation = false;
+			m_full_circular_interpolation = false;
 		}
 		else if (_data.substr(0,3) == "G02")
 		{
@@ -731,10 +662,10 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 			} // End if - then
 			std::string x = sign + _data.substr(0, end - _data.c_str());
 			_data.erase(0, end - _data.c_str());
-			position.SetX( InterpretCoord( x.c_str(), 
-							m_YDigitsLeftOfPoint, 
-							m_YDigitsRightOfPoint, 
-							m_leadingZeroSuppression, 
+			position.SetX( InterpretCoord( x.c_str(),
+							m_YDigitsLeftOfPoint,
+							m_YDigitsRightOfPoint,
+							m_leadingZeroSuppression,
 							m_trailingZeroSuppression ) );
 			if (m_mirror_image) position.SetX( position.X() * -1.0 ); // mirror about Y axis
 		}
@@ -764,10 +695,10 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 			} // End if - then
 			std::string y = sign + _data.substr(0, end - _data.c_str());
 			_data.erase(0, end - _data.c_str());
-			position.SetY( InterpretCoord( y.c_str(), 
-							m_YDigitsLeftOfPoint, 
-							m_YDigitsRightOfPoint, 
-							m_leadingZeroSuppression, 
+			position.SetY( InterpretCoord( y.c_str(),
+							m_YDigitsLeftOfPoint,
+							m_YDigitsRightOfPoint,
+							m_leadingZeroSuppression,
 							m_trailingZeroSuppression ));
 		}
 		else if (_data.substr(0,3) == "D01")
@@ -783,23 +714,27 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 			{
 				// arc
 				// circular interpolation.
-				
+
+				Trace trace( m_aperture_table[m_active_aperture], Trace::eCircular );
+				trace.Start( m_current_position );
+				trace.End( position );
+				trace.Clockwise( m_cw_circular_interpolation );
+				trace.I( i_term );
+				trace.J( j_term );
+
 				if(m_area_fill)
 				{
-					Polygons_t::iterator l_itPolygon = m_polygons.end();
-					l_itPolygon--;
-					//TODO: create arc
-					//l_itPolygon->push_back(trace);
+					m_filled_area_traces.push_back( trace );
 				}
 				else
 				{
-					Trace trace( m_aperture_table[m_active_aperture], Trace::eCircular );
-					trace.Start( m_current_position );
-					trace.End( position );
-					trace.Clockwise( m_cw_circular_interpolation );
-					trace.I( i_term );
-					trace.J( j_term );
 					m_traces.push_back( trace );
+				}
+
+				{
+					std::list<HeeksObj *> objects;
+					objects.push_back( RS274X::Sketch( trace.Face() ) );
+					heekscad_interface.SaveXMLFile( objects, _T("/home/david/pcb.heeks"), false );
 				}
 
 				m_current_position = position;
@@ -809,28 +744,27 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 				// full circle
 				// circular interpolation.
 				double radius = sqrt((i_term * i_term) + (j_term * j_term));
-			
+
+				Trace trace( m_aperture_table[m_active_aperture], Trace::eCircular );
+				trace.Radius(radius);
+				trace.Start( position );
+				trace.End( position );
+				trace.Clockwise( m_cw_circular_interpolation );
+
 				if(m_area_fill)
 				{
-					Polygons_t::iterator l_itPolygon = m_polygons.end();
-					l_itPolygon--;
-					
-					gp_Vec vx(1.0, 0.0, 0.0);
-					gp_Vec vy(0.0, 1.0, 0.0);
-					
-					for(int i=0; i<8; i++){
-						double angle = -PI*2.0*8.0*(double)i;
-						l_itPolygon->push_back(position.Translated(vx*radius*cos(angle)+vy*radius*sin(angle)));
-					}
+					m_filled_area_traces.push_back( trace );
 				}
 				else
 				{
-					Trace trace( m_aperture_table[m_active_aperture], Trace::eCircular );
-					trace.Radius(radius);
-					trace.Start( position );
-					trace.End( position );
-					trace.Clockwise( m_cw_circular_interpolation );
 					m_traces.push_back( trace );
+				}
+
+				// if (m_cw_circular_interpolation == false)
+				{
+					std::list<HeeksObj *> objects;
+					objects.push_back( RS274X::Sketch( trace.Face() ) );
+					heekscad_interface.SaveXMLFile( objects, _T("/home/david/pcb.heeks"), false );
 				}
 
 				m_current_position = position;
@@ -839,17 +773,16 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 			{
 				// linear interpolation.
 
+				Trace trace( m_aperture_table[m_active_aperture], Trace::eLinear );
+				trace.Start( m_current_position );
+				trace.End( position );
+
 				if(m_area_fill)
 				{
-					Polygons_t::iterator l_itPolygon = m_polygons.end();
-					l_itPolygon--;
-					l_itPolygon->push_back(m_current_position);
+					m_filled_area_traces.push_back( trace );
 				}
 				else
 				{
-					Trace trace( m_aperture_table[m_active_aperture], Trace::eLinear );
-					trace.Start( m_current_position );
-					trace.End( position );
 					m_traces.push_back( trace );
 				}
 
@@ -859,8 +792,9 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 		else if (_data.substr(0,3) == "D02")
 		{
 			_data.erase(0,3);
-			if(m_area_fill){
-				AddPolygonIfNeeded();
+			if((m_area_fill) && (m_filled_area_traces.size() > 0)) {
+				m_filled_areas.push_back( m_filled_area_traces );
+				m_filled_area_traces.clear();
 			}
 			m_current_position = position;
 		}
@@ -876,27 +810,10 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 			} // End if - then
 
 			Aperture aperture = m_aperture_table[ m_active_aperture ];
-			/*Trace trace( aperture, Trace::eCircular );
+			if ((aperture.Type() == Aperture::eCircular) && (aperture.OutsideDiameter() < 0.0001)) printf("WARNING: D03 found without radius information\n");
+			Trace trace( aperture, Trace::eFlash );
 			trace.Start( position );
-			trace.End( position );
-			trace.Radius( aperture.OutsideDiameter() / 2 );*/
-
-			double radius = aperture.OutsideDiameter() / 2;
-
-			Polygons_t::iterator l_itPolygon = m_polygons.end();
-			l_itPolygon--;
-
-			gp_Vec vx(1.0, 0.0, 0.0);
-			gp_Vec vy(0.0, 1.0, 0.0);
-			
-			for(int i=0; i<8; i++){
-				double angle = -PI*2.0*(double)i/8.0;
-				l_itPolygon->push_back(position.Translated(vx*radius*cos(angle)+vy*radius*sin(angle)));
-			}
-
-			//add a new polygon
-			AddPolygonIfNeeded();
-			if (aperture.OutsideDiameter() < 0.0001) printf("WARNING: D03 found without radius information\n");
+			m_traces.push_back( trace );
 		}
 		else if (_data.substr(0,3) == "G54")
 		{
@@ -907,9 +824,9 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 				printf("Expected aperture number argument 'D' in G54 command\n");
 				return(false);
 			} // End if - then
-		
+
 			_data.erase(0,1);	// Erase 'D'
-	
+
 			char *end = NULL;
 			int aperture_number = strtoul( _data.c_str(), &end, 10 );
 			if ((end == NULL) || (end == _data.c_str()))
@@ -918,7 +835,7 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 				return(false);
 			} // End if - then
 			_data.erase(0, end - _data.c_str());
-	
+
 			m_active_aperture = aperture_number;
 			return(true);
 		}
@@ -931,4 +848,1281 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 
 	return(true);
 } // End ReadDataBlock() method
+
+
+
+bool RS274X::AggregateFaces( const TopoDS_Face lhs, const TopoDS_Face rhs, TopoDS_Face *pResult ) const
+{
+    const bool l_bSuccess = true;
+    const bool l_bFailure = false;
+
+    TopoDS_Face empty;
+
+	if ((Trace::Area(lhs) < 0.00001) || (Trace::Area(rhs) < 0.00001))
+	{
+        return(l_bFailure);
+	}
+
+	Bnd_Box lhs_bounding_box, rhs_bounding_box;
+    BRepBndLib::Add(lhs, lhs_bounding_box);
+    BRepBndLib::Add(rhs, rhs_bounding_box);
+
+    Standard_Real lhs_box[6];
+    Standard_Real rhs_box[6];
+
+    lhs_bounding_box.Get( lhs_box[0], lhs_box[1], lhs_box[2], lhs_box[3], lhs_box[4], lhs_box[5] );
+    rhs_bounding_box.Get( rhs_box[0], rhs_box[1], rhs_box[2], rhs_box[3], rhs_box[4], rhs_box[5] );
+
+    if ((Trace::Area(lhs) - Trace::Area(rhs)) < 0.00001)
+	{
+	    bool matches = true;
+	    for (unsigned int i=0; i<(sizeof(lhs_box)/sizeof(lhs_box[0])); i++)
+	    {
+	        if ((lhs_box[i] - rhs_box[i]) < 0.00001) matches = false;
+	    }
+
+	    if (matches)
+	    {
+            // They're the same (conincident).
+            *pResult = rhs;
+            return(l_bSuccess);
+	    }
+	}
+
+    TopoDS_Shape shape;
+    TopoDS_Shape lhs_shape = BRepPrimAPI_MakePrism(lhs, gp_Vec(0,0,1));
+    TopoDS_Shape rhs_shape = BRepPrimAPI_MakePrism(rhs, gp_Vec(0,0,1));
+
+
+    try {
+        BRepAlgo_Fuse fused( lhs_shape, rhs_shape );
+        fused.Build();
+        if (fused.IsDone())
+        {
+            shape = fused.Shape();
+
+            for (TopExp_Explorer expFace(shape, TopAbs_FACE); expFace.More(); expFace.Next())
+            {
+                TopoDS_Face aFace = TopoDS::Face(expFace.Current());
+                Handle(Geom_Surface) aSurface = BRep_Tool::Surface(aFace);
+                if(aSurface->DynamicType() == STANDARD_TYPE(Geom_Plane))
+                {
+                    bool bottom_surface = true;
+                    TopoDS_Wire wire=BRepTools::OuterWire(aFace);
+                    BRepTools_WireExplorer explorer;
+                    for (explorer.Init(TopoDS::Wire(wire)) ; bottom_surface && explorer.More(); explorer.Next())
+                    {
+                        Standard_Real start_u, end_u;
+
+                        Handle(Geom_Curve) curve = BRep_Tool::Curve(explorer.Current(),start_u,end_u);
+                        BRepAdaptor_Curve adaptor = BRepAdaptor_Curve(explorer.Current());
+
+                        if ((curve->Value(start_u).Z() > 0.0001) ||
+                            (curve->Value(end_u).Z() > 0.0001))
+                        {
+                            bottom_surface = false;
+                        }
+                    }
+
+                    if (bottom_surface)
+                    {
+                        *pResult = aFace;
+                        return(l_bSuccess);
+                    }
+                }
+            }
+        } // End if - then
+    }
+    catch(Standard_Failure & failure)
+    {
+		(void) failure;	// Avoid the compiler warning.
+        printf("Caught Standard_Failure exception\n");
+        return(l_bFailure);
+    }
+
+    return(l_bFailure);
+}
+
+
+bool RS274X::AggregateFilledArea( const RS274X::Traces_t & traces, TopoDS_Face *pResult ) const
+{
+	// Aggregate the face objects from all the component traces and find the outer-most
+	// edge to form one large (all encompasing) face.
+
+    const bool l_bSuccess = true;
+    const bool l_bFailure = false;
+
+	if (traces.size() == 0)
+	{
+		return(l_bFailure);
+	}
+
+	TopoDS_Shape shape;
+	BRepBuilderAPI_MakeWire wire;
+
+	for (Traces_t::const_iterator l_itTrace = traces.begin(); l_itTrace != traces.end(); l_itTrace++)
+	{
+		if (Trace::Area(l_itTrace->Face()) < 0.00001)
+		{
+		    printf("Discarding trace due to face size of %lf\n", Trace::Area(l_itTrace->Face()));
+		    continue;
+		}
+		if (l_itTrace->Length() < 0.00001)
+		{
+		    printf("Discarding trace due to length of %lf\n", l_itTrace->Length());
+		    continue;
+		}
+
+		TopoDS_Edge edge = BRepBuilderAPI_MakeEdge(l_itTrace->Start(), l_itTrace->End());
+		wire.Add(edge);
+	}
+	// Now add a block to fill in the centre of the filled area.
+	TopoDS_Face face = BRepBuilderAPI_MakeFace(wire.Wire());
+	shape = BRepPrimAPI_MakePrism(face, gp_Vec(0,0,1));
+
+
+	for (Traces_t::const_iterator l_itTrace = traces.begin(); l_itTrace != traces.end(); l_itTrace++)
+	{
+		if (Trace::Area(l_itTrace->Face()) < 0.00001)
+		{
+		    printf("Discarding trace due to face size of %lf\n", Trace::Area(l_itTrace->Face()));
+		    continue;
+		}
+		if (l_itTrace->Length() < 0.00001)
+		{
+		    printf("Discarding trace due to length of %lf\n", l_itTrace->Length());
+		    continue;
+		}
+
+        TopoDS_Shape extra_shape = BRepPrimAPI_MakePrism(l_itTrace->Face(), gp_Vec(0,0,1));
+        BRepAlgo_Fuse fused( shape, extra_shape );
+        fused.Build();
+        if (fused.IsDone())
+        {
+            shape = fused.Shape();
+        } // End if - then
+
+	}
+
+	for (TopExp_Explorer expFace(shape, TopAbs_FACE); expFace.More(); expFace.Next())
+	{
+		TopoDS_Face aFace = TopoDS::Face(expFace.Current());
+		Handle(Geom_Surface) aSurface = BRep_Tool::Surface(aFace);
+		if(aSurface->DynamicType() == STANDARD_TYPE(Geom_Plane))
+		{
+			Handle(Geom_Plane) aPlane = Handle(Geom_Plane)::DownCast(aSurface);
+			gp_Pnt aPnt = aPlane->Location();
+			if ((aPnt.Z() < 0.00001) && (Trace::Area(aFace) > 0.00001))
+			{
+			    *pResult = aFace;
+			    return(l_bSuccess);
+			}
+		}
+	}
+
+	return(l_bFailure);
+}
+
+
+
+
+
+
+
+
+
+/* static */ bool RS274X::FacesIntersect( const TopoDS_Face lhs, const TopoDS_Face rhs )
+{
+    Bnd_Box lhs_bounding_box, rhs_bounding_box;
+    BRepBndLib::Add(lhs, lhs_bounding_box);
+    BRepBndLib::Add(rhs, rhs_bounding_box);
+
+    if (lhs_bounding_box.IsOut(rhs_bounding_box)) return(false);
+
+    IntTools_FaceFace intersect;
+    intersect.Perform( lhs, rhs );
+    if (intersect.IsDone())
+    {
+        // The OpenCascade routine BRepAlgo_Fuse() can't handle fusing two
+        // shapes that touch each other but don't overlap each other.  We need
+        // to find out if this is the case for these two faces.
+
+        HeeksObj *lhs_sketch = Sketch( lhs );
+        HeeksObj *rhs_sketch = Sketch( rhs );
+
+        std::list< double > intersections;
+        ((CSketch *) lhs_sketch)->Intersects( rhs_sketch, &intersections );
+
+		delete lhs_sketch; lhs_sketch = (HeeksObj *) NULL;
+		delete rhs_sketch; rhs_sketch = (HeeksObj *) NULL;
+
+        std::set<CNCPoint> points;
+        while (intersections.size() > 2)
+        {
+            CNCPoint point;
+            point.SetX( *(intersections.begin()) ); intersections.erase( intersections.begin() );
+            point.SetY( *(intersections.begin()) ); intersections.erase( intersections.begin() );
+            point.SetZ( *(intersections.begin()) ); intersections.erase( intersections.begin() );
+
+            points.insert(point);
+        }
+
+
+        for (std::list<double>::const_iterator it = intersections.begin(); it != intersections.end(); it++)
+        {
+            printf("%lf\n", *it );
+        }
+
+
+        return( points.size() > 1);
+    }
+    else
+    {
+        return(false);
+    }
+}
+
+
+bool RS274X::Trace::Intersects( const Trace & rhs ) const
+{
+    return(FacesIntersect( Face(), rhs.Face() ));
+} // End Intersects() method
+
+
+/* static */ HeeksObj *RS274X::Sketch( const TopoDS_Face face )
+{
+
+    CSketch *sketch = new CSketch();
+
+    TopoDS_Wire wire=BRepTools::OuterWire(face);
+    BRepTools_WireExplorer explorer;
+    for (explorer.Init(TopoDS::Wire(wire)) ; explorer.More(); explorer.Next())
+    {
+        Standard_Real start_u, end_u;
+
+        Handle(Geom_Curve) curve = BRep_Tool::Curve(explorer.Current(),start_u,end_u);
+        BRepAdaptor_Curve adaptor = BRepAdaptor_Curve(explorer.Current());
+
+        switch (adaptor.GetType())
+        {
+        case GeomAbs_Circle:
+            {
+                HArc *arc = new HArc(curve->Value(start_u),
+                        curve->Value(end_u),
+                        adaptor.Circle(),
+                        &wxGetApp().current_color );
+                sketch->Add( arc, NULL );
+            }
+            break;
+
+        case GeomAbs_Line:
+            {
+                HLine *line = new HLine( curve->Value(start_u), curve->Value(end_u), &wxGetApp().current_color );
+                sketch->Add( line, NULL );
+            }
+            break;
+
+        case GeomAbs_Ellipse:
+        case GeomAbs_Hyperbola:
+        case GeomAbs_Parabola:
+        case GeomAbs_BezierCurve:
+        case GeomAbs_BSplineCurve:
+        case GeomAbs_OtherCurve:
+            // The routines that produce these curves don't use these
+            // last few curve types.  These are only listed within the
+            // switch stastement to avoid the compiler warning.
+            break;
+        } // End switch
+
+    } // End for
+
+    return(sketch);
+}
+
+
+
+RS274X::Bitmap RS274X::RenderToBitmap()
+{
+    // Define a blank bitmap to represent the printed circuit board.
+	Bitmap pcb( BoundingBox() );
+
+    // Expose the PCB to the traces and aperture flashes defined by the traces.
+	for (Traces_t::iterator l_itTrace = m_traces.begin(); l_itTrace != m_traces.end(); l_itTrace++ )
+	{
+	    l_itTrace->ExposeFilm( pcb );
+	}
+
+    // Expose the PCB to the filled areas made up by the boundary of traces.
+	for (FilledAreas_t::iterator l_itArea = m_filled_areas.begin(); l_itArea != m_filled_areas.end(); l_itArea++)
+	{
+		// TODO Fill in the filled area.
+		for (Traces_t::iterator l_itTrace = l_itArea->begin(); l_itTrace != l_itArea->end(); l_itTrace++)
+		{
+		    l_itTrace->ExposeFilm( pcb );
+		}
+	}
+
+
+
+	return(pcb);
+}
+
+
+
+int RS274X::FormNetworks()
+{
+	// Now aggregate the traces based on how they intersect each other.  We want all traces
+	// that touch to become one large object.
+    Faces_t faces;
+    int number_of_networks = 0;
+
+    static std::list<HeeksObj *> objects;
+
+    for (Traces_t::iterator l_itTrace = m_traces.begin(); l_itTrace != m_traces.end(); l_itTrace++ )
+	{
+        faces.push_back(l_itTrace->Face());
+	}
+
+	for (FilledAreas_t::const_iterator l_itArea = m_filled_areas.begin(); l_itArea != m_filled_areas.end(); l_itArea++)
+	{
+	    TopoDS_Face face;
+	    if (AggregateFilledArea( *l_itArea, &face ))
+	    {
+                faces.push_back( face );
+	    }
+	}
+
+    // We have a list of faces that represent all the copper areas we want.  We now need to intersect
+	// all the touching faces to produce a single (larger) face.  The ones that intersect each other
+	// should be replaced by the larger (combined) face.  We should repeat this until we find no
+	// further intersecting faces.
+
+
+    while (faces.size() > 1)
+    {
+        // Join all other faces to the first one.  Keep joining until we can't find any to join.
+        bool joins_made = false;
+        std::list<Faces_t::iterator> already_joined;
+        Faces_t::iterator itFace = faces.begin(); itFace++;
+        for ( ; (! joins_made) && (itFace != faces.end()); itFace++)
+        {
+            if (FacesIntersect( *(faces.begin()), *itFace ))
+            {
+                TopoDS_Face combination;
+                if (AggregateFaces(*(faces.begin()), *itFace, &combination))
+                {
+                    *(faces.begin()) = combination;
+                    joins_made = true;
+                    already_joined.push_back(itFace);
+                }
+            } // End if - then
+        } // End for
+
+        for (std::list<Faces_t::iterator>::iterator itRemove = already_joined.begin(); itRemove != already_joined.end(); itRemove++)
+        {
+            faces.erase( *itRemove );
+        }
+
+        if (joins_made == false)
+        {
+            // This is as big as it's ever going to get.
+            HeeksObj *sketch = this->Sketch( *(faces.begin()) );
+            for (int i=0; (((CSketch *)sketch)->GetSketchOrder() != SketchOrderTypeCloseCCW) && (i<4); i++)
+            {
+                ((CSketch *)sketch)->ReOrderSketch( SketchOrderTypeCloseCCW );  // At least try to make them all consistently oriented.
+            }
+            heekscad_interface.Add( sketch, NULL );
+            number_of_networks++;
+
+            faces.erase( faces.begin() );
+        }
+    } // End while
+
+	if (faces.size() > 0)
+	{
+	    HeeksObj *sketch = this->Sketch( *(faces.begin()) );
+	    for (int i=0; (((CSketch *)sketch)->GetSketchOrder() != SketchOrderTypeCloseCCW) && (i<4); i++)
+	    {
+            ((CSketch *)sketch)->ReOrderSketch( SketchOrderTypeCloseCCW );  // At least try to make them all consistently oriented.
+	    }
+
+		heekscad_interface.Add( sketch, NULL );
+		number_of_networks++;
+        faces.erase( faces.begin() );
+	}
+
+    return(number_of_networks);
+
+} // End FormNetworks() method
+
+
+TopoDS_Shape RS274X::Aperture::Shape( const gp_Pnt & location ) const
+{
+	return(BRepPrimAPI_MakePrism(Face(location), gp_Vec(0,0,1)));
+}
+
+TopoDS_Shape RS274X::Trace::Shape() const
+{
+	return(BRepPrimAPI_MakePrism(Face(), gp_Vec(0,0,1)));
+}
+
+TopoDS_Face RS274X::Aperture::Face(const gp_Pnt & location) const
+{
+	switch (m_type)
+	{
+		case eCircular:
+		{
+			gp_Pnt left( location ); left.SetX( left.X() - (OutsideDiameter()/2.0) );
+			gp_Pnt right( location ); right.SetX( right.X() + (OutsideDiameter()/2.0) );
+			gp_Circ circ(gp_Ax2(location,gp_Dir(0,0,-1)), (OutsideDiameter()/2.0));
+
+			Handle(Geom_TrimmedCurve) left_half = GC_MakeArcOfCircle(circ, left, right, true );
+			Handle(Geom_TrimmedCurve) right_half = GC_MakeArcOfCircle(circ, right, left, true );
+
+			TopoDS_Edge left_edge = BRepBuilderAPI_MakeEdge(left_half);
+			TopoDS_Edge right_edge = BRepBuilderAPI_MakeEdge(right_half);
+
+			BRepBuilderAPI_MakeWire wire_maker;
+
+			wire_maker.Add(left_edge);
+			wire_maker.Add(right_edge);
+
+			TopoDS_Face face = BRepBuilderAPI_MakeFace(wire_maker.Wire());
+			return(face);
+		}
+
+		case eRectangular:
+		{
+			gp_Pnt top_left( location );
+			gp_Pnt top_right( location );
+			gp_Pnt bottom_left( location );
+			gp_Pnt bottom_right( location );
+
+			top_left.SetX( location.X() - (XAxisOutsideDimension() / 2.0));
+			bottom_left.SetX( location.X() - (XAxisOutsideDimension() / 2.0));
+
+			top_right.SetX( location.X() + (XAxisOutsideDimension() / 2.0));
+			bottom_right.SetX( location.X() + (XAxisOutsideDimension() / 2.0));
+
+			top_left.SetY( location.Y() + (YAxisOutsideDimension() / 2.0));
+			bottom_left.SetY( location.Y() - (YAxisOutsideDimension() / 2.0));
+
+			top_right.SetY( location.Y() + (YAxisOutsideDimension() / 2.0));
+			bottom_right.SetY( location.Y() - (YAxisOutsideDimension() / 2.0));
+
+			Handle(Geom_TrimmedCurve) seg1 = GC_MakeSegment(top_left, bottom_left);
+			Handle(Geom_TrimmedCurve) seg2 = GC_MakeSegment(bottom_left, bottom_right);
+			Handle(Geom_TrimmedCurve) seg3 = GC_MakeSegment(bottom_right, top_right);
+			Handle(Geom_TrimmedCurve) seg4 = GC_MakeSegment(top_right, top_left);
+
+			TopoDS_Edge edge1 = BRepBuilderAPI_MakeEdge(seg1);
+			TopoDS_Edge edge2 = BRepBuilderAPI_MakeEdge(seg2);
+			TopoDS_Edge edge3 = BRepBuilderAPI_MakeEdge(seg3);
+			TopoDS_Edge edge4 = BRepBuilderAPI_MakeEdge(seg4);
+
+			BRepBuilderAPI_MakeWire wire_maker;
+
+			wire_maker.Add(edge1);
+			wire_maker.Add(edge2);
+			wire_maker.Add(edge3);
+			wire_maker.Add(edge4);
+
+			TopoDS_Face face1 = BRepBuilderAPI_MakeFace(wire_maker.Wire());
+			return(face1);
+		}
+
+
+		default:
+			printf("Unsupported aperture shape found\n");
+			TopoDS_Face empty;
+			return(empty);
+	} // End switch
+} // End MakePolygon() method
+
+
+RS274X::Trace::Trace( const Aperture & aperture, const eInterpolation_t interpolation ) : m_aperture(aperture), m_interpolation( interpolation )
+{
+	m_start.SetX(0.0);
+	m_start.SetY(0.0);
+	m_start.SetZ(0.0);
+
+	m_end.SetX(0.0);
+	m_end.SetY(0.0);
+	m_end.SetZ(0.0);
+
+	m_i_term = 0.0;
+	m_j_term = 0.0;
+
+	if (m_interpolation == eFlash)
+	{
+		m_radius = m_aperture.OutsideDiameter() / 2.0;
+	}
+	else
+	{
+		m_radius = 0.0;
+	}
+
+	m_clockwise = true;
+
+	m_tolerance = wxGetApp().m_geom_tol;
+
+	m_pHeeksObject = NULL;
+}
+
+
+double RS274X::Trace::Radius() const
+{
+	if (m_radius < m_tolerance)
+	{
+		m_radius = sqrt( ( m_i_term * m_i_term ) + ( m_j_term * m_j_term ) );
+	}
+
+	return(m_radius);
+}
+void RS274X::Trace::Radius( const double value ) { m_radius = value; }
+
+gp_Pnt RS274X::Trace::Centre() const
+{
+	if ((Interpolation() == eCircular) && (abs(m_i_term) < m_tolerance) && (abs(m_j_term) < m_tolerance))
+	{
+		// It's a full circle.  Set the centre to the start/end points.
+		return(m_start);
+	} // End if - then
+
+	switch (Interpolation())
+	{
+		case eLinear:
+		{
+			return(gp_Pnt(  ((Start().X() - End().X())/2) + Start().X(),
+							((Start().Y() - End().Y())/2) + Start().Y(),
+							((Start().Z() - End().Z())/2) + Start().Z() ));
+		} // End if - then
+
+
+		case eCircular:
+		{
+			// It must be an arc.
+			// The i and j parameters are unsigned in the RS274 standard as the
+			// sign can be inferred from the start and end position.  The radius
+			// will be the pythagorean distance of i (x axis component) and
+			// j (y axis component).  The sign of i and j can be determined based
+			// on the distance between the centre point and each of the start
+			// and end points.  i.e. both distances must be equal to the radius.
+
+			double radius = Radius();
+
+			// There are four possible centre points based on the ± sign applied
+			// to each of the i and j terms.  The correct one will have a distance
+			// of radius between it and each of the two endpoints.
+
+			std::list<gp_Pnt> possible_centres;
+
+			possible_centres.push_back( gp_Pnt( m_start.X() - m_i_term, m_start.Y() - m_j_term, m_start.Z() ) );
+			possible_centres.push_back( gp_Pnt( m_start.X() + m_i_term, m_start.Y() - m_j_term, m_start.Z() ) );
+			possible_centres.push_back( gp_Pnt( m_start.X() - m_i_term, m_start.Y() + m_j_term, m_start.Z() ) );
+			possible_centres.push_back( gp_Pnt( m_start.X() + m_i_term, m_start.Y() + m_j_term, m_start.Z() ) );
+
+			for (std::list<gp_Pnt>::iterator l_itPoint = possible_centres.begin(); l_itPoint != possible_centres.end(); l_itPoint++)
+			{
+				if (((l_itPoint->Distance( m_start ) - radius) < m_tolerance) &&
+					((l_itPoint->Distance( m_end   ) - radius) < m_tolerance))
+				{
+					return( *l_itPoint );
+				}
+			} // End for
+
+			return(gp_Pnt(0,0,0));	// It shouldn't get here.
+		}
+
+		case eFlash:
+		default:
+			return(m_start);
+
+	} // End switch
+}
+
+gp_Dir RS274X::Trace::Direction() const
+{
+	switch(Interpolation())
+	{
+		case eCircular:
+			if (m_clockwise) return(gp_Dir(0,0,-1));
+			else	return(gp_Dir(0,0,1));
+
+		case eLinear:
+			return( gp_Dir( m_end.X() - m_start.X(), m_end.Y() - m_start.Y(), m_end.Z() - m_start.Z() ));
+
+		default:
+		case eFlash:
+			return(gp_Dir(0,0,1));	// It doesn't matter.
+	}
+}
+
+// Get gp_Circle for arc
+gp_Circ RS274X::Trace::Circle() const
+{
+	gp_Ax1 axis( Centre(), Direction() );
+	return gp_Circ(gp_Ax2(Centre(),Direction()), Radius());
+}
+
+gp_Lin RS274X::Trace::Line() const
+{
+	return(gp_Lin(Start(),Direction()));
+}
+
+			/*bool Intersects( const Trace & rhs ) const
+			{
+				std::list<double> points;
+				return( HeeksObject()->Intersects( rhs.HeeksObject(), &points ) > 0);
+			} // End Intersects() method*/
+
+double RS274X::Trace::Length() const
+{
+	switch (Interpolation())
+	{
+		case eLinear:
+			return(Start().Distance(End()));
+			break;
+
+		case eCircular:
+			if ((abs(m_i_term) < m_tolerance) && (abs(m_j_term) < m_tolerance) && (Radius() > m_tolerance))
+			{
+				// It's a full circle.
+				return(2.0 * PI * Radius());
+			} // End if - then
+			else
+			{
+				if ((Start().Distance(End()) < 0.000001) && (Radius() < 0.00001)) return(0.0);
+
+				gp_Vec vx(1.0, 0.0, 0.0);
+				gp_Vec vy(0.0, 1.0, 0.0);
+
+				gp_Vec start_vector( Centre(), Start() );
+				gp_Vec end_vector( Centre(), End() );
+
+				double start_angle = start_vector.Angle( vx );
+				if (start_angle < 0.0) start_angle += (2.0 * PI);
+
+				double end_angle = end_vector.Angle( vx );
+				if (end_angle < 0.0) end_angle += (2.0 * PI);
+
+				double arc_angle = end_angle - start_angle;
+				double arc_length = (arc_angle / (2.0 * PI)) * (2.0 * PI * Radius());
+				return(abs(arc_length));
+			} // End if - else
+			break;
+
+		case eFlash:
+		default:
+			return( 2.0 * PI * Radius() );
+	} // End switch
+} // End Length() method
+
+bool RS274X::Trace::operator==( const Trace & rhs ) const
+{
+	if (Interpolation() != rhs.Interpolation()) return(false);
+	if (Start().X() != rhs.Start().X()) return(false);
+	if (Start().Y() != rhs.Start().Y()) return(false);
+	if (Start().Z() != rhs.Start().Z()) return(false);
+
+	if (End().X() != rhs.End().X()) return(false);
+	if (End().Y() != rhs.End().Y()) return(false);
+	if (End().Z() != rhs.End().Z()) return(false);
+
+	if (I() != rhs.I()) return(false);
+	if (J() != rhs.J()) return(false);
+
+	if (Clockwise() != rhs.Clockwise()) return(false);
+
+	return(true);	// They're equal
+} // End equivalence operator
+
+/* static */ double RS274X::Trace::Area( const TopoDS_Face & face )
+{
+	GProp_GProps properties;
+	BRepGProp::LinearProperties(face, properties);
+
+	return(properties.Mass());
+} // End Area() method
+
+
+TopoDS_Face RS274X::Trace::Face() const
+{
+	BRepBuilderAPI_MakeWire make_wire;
+	TopoDS_Wire wire;
+
+
+
+	switch (Interpolation())
+	{
+		case eLinear:
+		{
+			//it's a line
+			if (Length() < 0.00001)
+            {
+                TopoDS_Face empty;
+                return(empty);
+            }
+
+			gp_Vec v(Start(), End());
+			v = v.Normalized();
+			//vector in 90 degree angle to the left
+			gp_Vec n(-v.Y(), v.X(), 0);
+			double d = m_aperture.OutsideDiameter();
+			//first line is on the right side of the original
+
+			if (Length() > 0)
+			{
+				// Draw a closed shape consisting of two straight lines and two half circles (to
+				// tap the ends with).  Ideally we would add a m_aperture.Face(Start()) face to
+				// a square ended straight (wide) line so that we would inerit whatever shape
+				// the aperture is.  Unfortunately, I still can't figure out how to union faces
+				// in OpenCascade so, for now, we will just assume a round aperture was used to
+				// paint this line.
+
+				gp_Circ arc_at_start(gp_Ax2(Start(),gp_Dir(0,0,-1)), (m_aperture.OutsideDiameter()/2.0));
+				gp_Circ arc_at_end(gp_Ax2(End(),gp_Dir(0,0,-1)), (m_aperture.OutsideDiameter()/2.0));
+
+				Handle(Geom_TrimmedCurve) seg1 = GC_MakeSegment(End().Translated(-n*d*.5), Start().Translated(-n*d*.5));
+				Handle(Geom_TrimmedCurve) seg2 = GC_MakeArcOfCircle(arc_at_start, Start().Translated(-n*d*.5), Start().Translated( n*d*.5), true );
+				Handle(Geom_TrimmedCurve) seg3 = GC_MakeSegment(Start().Translated(n*d*.5),    End().Translated( n*d*.5));
+				Handle(Geom_TrimmedCurve) seg4 = GC_MakeArcOfCircle(arc_at_end, End().Translated( n*d*.5),   End().Translated(-n*d*.5), true );
+
+				TopoDS_Edge edge1 = BRepBuilderAPI_MakeEdge(seg1);
+				TopoDS_Edge edge2 = BRepBuilderAPI_MakeEdge(seg2);
+				TopoDS_Edge edge3 = BRepBuilderAPI_MakeEdge(seg3);
+				TopoDS_Edge edge4 = BRepBuilderAPI_MakeEdge(seg4);
+
+				BRepBuilderAPI_MakeWire wire_maker;
+
+				wire_maker.Add(edge1);
+				wire_maker.Add(edge2);
+				wire_maker.Add(edge3);
+				wire_maker.Add(edge4);
+
+				TopoDS_Face face1 = BRepBuilderAPI_MakeFace(wire_maker.Wire());
+				return(face1);
+			}
+		}
+
+		case eCircular:
+		{
+		    if (Length() < 0.00001)
+            {
+                TopoDS_Face empty;
+                return(empty);
+            }
+
+			if ((abs(m_i_term) < m_tolerance) && (abs(m_j_term) < m_tolerance) && (Radius() > m_tolerance))
+			{
+				// It's a full circle.
+				gp_Pnt left( Start() ); left.SetX( left.X() - (m_aperture.OutsideDiameter()/2.0) );
+				gp_Pnt right( Start() ); right.SetX( right.X() + (m_aperture.OutsideDiameter()/2.0) );
+				gp_Circ circ(gp_Ax2(Start(),gp_Dir(0,0,-1)), (m_aperture.OutsideDiameter()/2.0));
+
+				Handle(Geom_TrimmedCurve) left_half = GC_MakeArcOfCircle(circ, left, right, true );
+				Handle(Geom_TrimmedCurve) right_half = GC_MakeArcOfCircle(circ, right, left, true );
+
+				TopoDS_Edge left_edge = BRepBuilderAPI_MakeEdge(left_half);
+				TopoDS_Edge right_edge = BRepBuilderAPI_MakeEdge(right_half);
+
+				BRepBuilderAPI_MakeWire wire_maker;
+
+				wire_maker.Add(left_edge);
+				wire_maker.Add(right_edge);
+
+				TopoDS_Face face = BRepBuilderAPI_MakeFace(wire_maker.Wire());
+				return(face);
+			}
+			else
+			{
+				// It's an arc
+				gp_Vec vx(1.0, 0.0, 0.0);
+				gp_Vec vy(0.0, 1.0, 0.0);
+
+				double start_angle = vx.Angle( gp_Vec( Centre(), Start() ));
+				if (start_angle < 0) start_angle += (2.0 * PI);
+
+				double end_angle = vx.Angle( gp_Vec( Centre(), End() ));
+				if (end_angle < 0) end_angle += (2.0 * PI);
+
+				while (start_angle > end_angle)
+				{
+					end_angle += (2.0 * PI);
+				} // End if - then
+
+				double radius = (m_aperture.OutsideDiameter()/2.0);
+				gp_Pnt p1 = Start().Translated(vx*radius*cos(start_angle)+vy*radius*sin(start_angle));
+
+				radius = (m_aperture.OutsideDiameter()/2.0);
+				gp_Pnt p2 = Start().Translated(vx*radius*cos(start_angle + PI)+vy*radius*sin(start_angle + PI));
+
+				radius = (m_aperture.OutsideDiameter()/2.0);
+				gp_Pnt p3 = End().Translated(vx*radius*cos(end_angle)+vy*radius*sin(end_angle));
+
+				radius = (m_aperture.OutsideDiameter()/2.0);
+				gp_Pnt p4 = End().Translated(vx*radius*cos(end_angle + PI)+vy*radius*sin(end_angle + PI));
+
+				gp_Dir dir1, dir2;
+
+				gp_Circ arc_at_start;
+				gp_Circ arc_at_end;
+
+				if (Clockwise())
+				{
+					dir1 = gp_Dir(0,0,-1);
+					dir2 = gp_Dir(0,0,+1);
+
+					arc_at_start = gp_Circ(gp_Ax2(Start(),dir2), (m_aperture.OutsideDiameter()/2.0));
+					arc_at_end = gp_Circ(gp_Ax2(End(),dir1), (m_aperture.OutsideDiameter()/2.0));
+				}
+				else
+				{
+					dir1 = gp_Dir(0,0,+1);
+					dir2 = gp_Dir(0,0,-1);
+
+					arc_at_start = gp_Circ(gp_Ax2(Start(),dir1), (m_aperture.OutsideDiameter()/2.0));
+					arc_at_end = gp_Circ(gp_Ax2(End(),dir1), (m_aperture.OutsideDiameter()/2.0));
+				}
+
+				gp_Circ inside_arc(gp_Ax2(Centre(),dir1), Radius() - (m_aperture.OutsideDiameter()/2.0));
+				gp_Circ outside_arc(gp_Ax2(Centre(),dir2), Radius() + (m_aperture.OutsideDiameter()/2.0));
+
+				Handle(Geom_TrimmedCurve) seg1 = GC_MakeArcOfCircle(arc_at_start, p1, p2, true );
+				Handle(Geom_TrimmedCurve) seg2 = GC_MakeArcOfCircle(inside_arc, p2, p3, true );
+				Handle(Geom_TrimmedCurve) seg3 = GC_MakeArcOfCircle(arc_at_end, p3, p4, true );
+				Handle(Geom_TrimmedCurve) seg4 = GC_MakeArcOfCircle(outside_arc, p4, p1, true );
+
+				TopoDS_Edge edge1 = BRepBuilderAPI_MakeEdge(seg1);
+				TopoDS_Edge edge2 = BRepBuilderAPI_MakeEdge(seg2);
+				TopoDS_Edge edge3 = BRepBuilderAPI_MakeEdge(seg3);
+				TopoDS_Edge edge4 = BRepBuilderAPI_MakeEdge(seg4);
+
+				BRepBuilderAPI_MakeWire wire_maker;
+
+				wire_maker.Add(edge1);
+				wire_maker.Add(edge2);
+				wire_maker.Add(edge3);
+				wire_maker.Add(edge4);
+
+				TopoDS_Face face = BRepBuilderAPI_MakeFace(wire_maker.Wire());
+				return(face);
+			}
+			break;
+		}
+
+		case eFlash:
+		{
+			return(m_aperture.Face(m_start));
+		}
+	} // End switch
+	return(TopoDS_Face());
+}
+
+
+void RS274X::Trace::ExposeFilm( RS274X::Bitmap & pcb )
+{
+	switch (Interpolation())
+	{
+		case eLinear:
+		{
+			//it's a line.  Expose the aperture at one-pixel spacing along the line's path.
+			unsigned int number_of_points = (unsigned int) (floor(Length() * Bitmap::PixelsPerMM() * 2.0));
+			for (unsigned int i=0; i<number_of_points; i++)
+			{
+			    double x = (double(double(i) / double(number_of_points)) * (End().X() - Start().X())) + Start().X();
+			    double y = (double(double(i) / double(number_of_points)) * (End().Y() - Start().Y())) + Start().Y();
+
+				pcb.ExposeFilm( *(m_aperture.GetBitmap()), gp_Pnt( x, y, 0.0 ) );
+			} // End for
+
+			return;
+		}
+
+		case eCircular:
+		{
+			if ((abs(m_i_term) < m_tolerance) && (abs(m_j_term) < m_tolerance) && (Radius() > m_tolerance))
+			{
+				// It's a full circle.
+				unsigned int i = 0;
+				unsigned int number_of_points = (unsigned int) (floor(Length() * Bitmap::PixelsPerMM() * 2.0));
+				double alpha = 3.1415926 * 2 / number_of_points;
+				while( i++ < number_of_points )
+				{
+					double theta = alpha * i;
+
+					double x = (cos( theta ) * Radius()) + Centre().X();
+					double y = (sin( theta ) * Radius()) + Centre().Y();
+
+					pcb.ExposeFilm( *(m_aperture.GetBitmap()), gp_Pnt( x, y, 0 ));
+				} // End while
+				return;
+			}
+			else
+			{
+				// It's an arc
+				gp_Vec vx(1.0, 0.0, 0.0);
+				gp_Vec vy(0.0, 1.0, 0.0);
+
+				double start_angle = vx.AngleWithRef( gp_Vec( Centre(), Start() ), gp_Vec( gp_Pnt(0,0,0), gp_Pnt(0, 0, 1)) );
+				double end_angle = vx.AngleWithRef( gp_Vec( Centre(), End() ), gp_Vec( gp_Pnt(0,0,0), gp_Pnt(0, 0, 1)) );
+
+                gp_Pnt start(Start());
+                gp_Pnt end(End());
+                gp_Pnt centre(Centre());
+
+				if (Clockwise())
+				{
+				    // We're turning clockwise so we want the end_angle to be smaller than the start_angle.
+				    while (end_angle < 0) end_angle += (2 * PI);
+				    while (start_angle < 0) start_angle += (2 * PI);
+				    while (start_angle < end_angle) start_angle += (2 * PI);
+
+					double increment = (start_angle - end_angle) / (Length() * Bitmap::PixelsPerMM() * 2.0);
+					for (double angle = end_angle; angle <= start_angle; angle += increment)
+					{
+						double x = (cos( angle ) * Radius()) + Centre().X();
+						double y = (sin( angle ) * Radius()) + Centre().Y();
+
+						pcb.ExposeFilm( *(m_aperture.GetBitmap()), gp_Pnt( x, y, 0 ));
+					} // End for
+					return;
+				} // End if - then
+				else
+				{
+					// Counter-Clockwise
+					// We're turning clockwise so we want the start_angle to be smaller than the end_angle.
+				    while (end_angle < 0) end_angle += (2 * PI);
+				    while (start_angle < 0) start_angle += (2 * PI);
+				    while (start_angle > end_angle) end_angle += (2 * PI);
+
+					double increment = (end_angle - start_angle) / (Length() * Bitmap::PixelsPerMM());
+					for (double angle = start_angle; angle <= end_angle; angle += increment)
+					{
+						double x = (cos( angle ) * Radius()) + Centre().X();
+						double y = (sin( angle ) * Radius()) + Centre().Y();
+
+						pcb.ExposeFilm( *(m_aperture.GetBitmap()), gp_Pnt( x, y, 0 ));
+					} // End for
+				} // End if - else
+				return;
+			}
+			break;
+		}
+
+		case eFlash:
+		{
+			gp_Pnt point(Start());
+
+			pcb.ExposeFilm( *(m_aperture.GetBitmap()), point );
+			return;
+		}
+	} // End switch
+
+} // End Expose() method.
+
+
+
+const RS274X::Bitmap *RS274X::Aperture::GetBitmap()
+{
+	if (m_pBitmap.get() != NULL)
+	{
+		return(m_pBitmap.get());
+	}
+
+	switch (m_type)
+	{
+		case eCircular:
+		{
+			m_pBitmap = std::auto_ptr<Bitmap>(new Bitmap( BoundingBox() ));
+
+			// We need to fill in a solid circle.  Start from the centre and a small radius
+			// and run around the circle marking pixels black.  Then increase the radius
+			// and repeat.  This goes all the way up to the final radius.  The number of
+			// steps around the circle and the increase in radius is all down to the resolution
+			// of the bitmap.
+
+			for (double radius = Bitmap::MMPerPixel(); radius <= OutsideDiameter()/2.0; radius += Bitmap::MMPerPixel()/2.0)
+			{
+				// Figure out how many points we need to colour in around this size circle.
+				double circumference = 2.0 * PI * radius;
+
+				unsigned int numPoints = (unsigned int) (floor(circumference * Bitmap::PixelsPerMM() * 2.0));
+				double alpha = 3.1415926 * 2 / numPoints;
+
+				unsigned int i = 0;
+				while( i++ < numPoints )
+				{
+					double theta = alpha * i;
+
+					double x = cos( theta ) * radius;
+					double y = sin( theta ) * radius;
+
+					m_pBitmap->operator ()(x, y) = ~0;	// black.
+				} // End while
+			} // End for
+
+			return(m_pBitmap.get());
+		}
+
+		case eRectangular:
+		{
+			m_pBitmap = std::auto_ptr<Bitmap>(new Bitmap( BoundingBox() ));
+
+			for (double x=-1.0 * XAxisOutsideDimension() / 2.0; x< +1.0 * XAxisOutsideDimension() / 2.0; x += Bitmap::MMPerPixel())
+			{
+				for (double y=-1.0 * YAxisOutsideDimension() / 2.0; y<+1.0 * YAxisOutsideDimension() / 2.0; y += Bitmap::MMPerPixel())
+				{
+					m_pBitmap->operator ()( x, y ) = ~0;	// Black.
+				} // End for
+			} // End for
+
+			return(m_pBitmap.get());
+		}
+
+
+		default:
+			printf("Unsupported aperture shape found\n");
+			m_pBitmap = std::auto_ptr<Bitmap>(new Bitmap( BoundingBox() ));
+			return(m_pBitmap.get());
+	} // End switch
+}
+
+
+CBox RS274X::Aperture::BoundingBox() const
+{
+	switch (m_type)
+	{
+		case eCircular:
+		{
+			CBox bounding_box;
+			bounding_box.Insert(0,0,0);
+			bounding_box.Insert(OutsideDiameter(), OutsideDiameter(), 0);
+			return(bounding_box);
+		}
+
+		case eRectangular:
+		{
+			CBox bounding_box;
+			bounding_box.Insert(0,0,0);
+			bounding_box.Insert(XAxisOutsideDimension(), YAxisOutsideDimension(), 0);
+			return(bounding_box);
+		}
+
+
+		default:
+			printf("Unsupported aperture shape found\n");
+			return(CBox());
+	} // End switch
+} // End BoundingBox() method
+
+
+CBox RS274X::Trace::BoundingBox() const
+{
+	switch (Interpolation())
+	{
+		case eLinear:
+		{
+			CBox bounding_box;
+			bounding_box.Insert( Start().X() - m_aperture.BoundingBox().Width(),
+								 Start().Y() - m_aperture.BoundingBox().Height(),
+								 0.0 );
+
+			bounding_box.Insert( Start().X() + m_aperture.BoundingBox().Width(),
+								 Start().Y() + m_aperture.BoundingBox().Height(),
+								 0.0 );
+
+			bounding_box.Insert( End().X() + m_aperture.BoundingBox().Width(),
+								 End().Y() + m_aperture.BoundingBox().Height(),
+								 0.0 );
+
+			bounding_box.Insert( End().X() - m_aperture.BoundingBox().Width(),
+								 End().Y() - m_aperture.BoundingBox().Height(),
+								 0.0 );
+
+			return(bounding_box);
+		}
+
+		case eCircular:
+		{
+			CBox bounding_box;
+			bounding_box.Insert(0,0,0);
+
+			if ((abs(m_i_term) < m_tolerance) && (abs(m_j_term) < m_tolerance) && (Radius() > m_tolerance))
+			{
+				// It's a full circle.
+				unsigned int i = 0;
+				unsigned int number_of_points = (unsigned int) (floor(Length() * Bitmap::PixelsPerMM()));
+				double alpha = 3.1415926 * 2 / number_of_points;
+				while( i++ < number_of_points )
+				{
+					double theta = alpha * i;
+					double x = cos( theta ) * Radius();
+					double y = sin( theta ) * Radius();
+					bounding_box.Insert( x + m_aperture.BoundingBox().Width(), y + m_aperture.BoundingBox().Height(), 0);
+					bounding_box.Insert( x - m_aperture.BoundingBox().Width(), y - m_aperture.BoundingBox().Height(), 0);
+				} // End while
+			}
+			else
+			{
+				// It's an arc
+				gp_Vec vx(1.0, 0.0, 0.0);
+				gp_Vec vy(0.0, 1.0, 0.0);
+
+				double start_angle = vx.Angle( gp_Vec( Centre(), Start() ));
+				if (start_angle < 0) start_angle += (2.0 * PI);
+
+				double end_angle = vx.Angle( gp_Vec( Centre(), End() ));
+				if (end_angle < 0) end_angle += (2.0 * PI);
+
+				while (start_angle > end_angle)
+				{
+					end_angle += (2.0 * PI);
+				} // End if - then
+
+				if (Clockwise())
+				{
+					double increment = (end_angle - start_angle) / (Length() * Bitmap::PixelsPerMM());
+					for (double angle = end_angle; angle <= start_angle; angle -= increment)
+					{
+						double x = cos( angle ) * Radius();
+						double y = sin( angle ) * Radius();
+						bounding_box.Insert( x + m_aperture.BoundingBox().Width(), y + m_aperture.BoundingBox().Height(), 0);
+						bounding_box.Insert( x - m_aperture.BoundingBox().Width(), y - m_aperture.BoundingBox().Height(), 0);
+					} // End for
+				} // End if - then
+				else
+				{
+					// Counter-Clockwise
+					double increment = (end_angle - start_angle) / (Length() * Bitmap::PixelsPerMM());
+					for (double angle = start_angle; angle <= end_angle; angle += increment)
+					{
+						double x = cos( angle ) * Radius();
+						double y = sin( angle ) * Radius();
+						bounding_box.Insert( x + m_aperture.BoundingBox().Width(), y + m_aperture.BoundingBox().Height(), 0);
+						bounding_box.Insert( x - m_aperture.BoundingBox().Width(), y - m_aperture.BoundingBox().Height(), 0);
+					} // End for
+				} // End if - else
+
+				return(bounding_box);
+			}
+			break;
+		}
+
+		case eFlash:
+		default:
+		{
+			return(m_aperture.BoundingBox());
+		}
+	} // End switch
+
+	return(m_aperture.BoundingBox());
+
+} // End BoundingBox() method
+
+CBox RS274X::BoundingBox() const
+{
+    CBox bounding_box;
+
+    for (Traces_t::const_iterator l_itTrace = m_traces.begin(); l_itTrace != m_traces.end(); l_itTrace++ )
+	{
+        bounding_box.Insert( l_itTrace->BoundingBox() );
+	}
+
+	for (FilledAreas_t::const_iterator l_itArea = m_filled_areas.begin(); l_itArea != m_filled_areas.end(); l_itArea++)
+	{
+		for (Traces_t::const_iterator l_itTrace = l_itArea->begin(); l_itTrace != l_itArea->end(); l_itTrace++)
+		{
+			bounding_box.Insert( l_itTrace->BoundingBox() );
+		}
+	}
+
+	return(bounding_box);
+}
+
+
+
+bool RS274X::Bitmap::Save( const char *file_name ) const
+{
+	const bool success = true;
+	const bool failure = false;
+
+	FILE *fp = fopen(file_name,"w");
+	if (! fp)
+	{
+		printf("Could not open '%s' for writing\n", file_name);
+		return(failure);
+	}
+
+	for (int row=PixelsPerColumn(); row>=0; row--)  // Raster images have positive Y from the top down where we use bottom up.
+	{
+	    for (int col=0; col < PixelsPerRow(); col++)
+	    {
+	        fputc( m_bitmap[ (row * PixelsPerRow()) + col ], fp );	// Red
+	        fputc( m_bitmap[ (row * PixelsPerRow()) + col ], fp );	// Green
+	        fputc( m_bitmap[ (row * PixelsPerRow()) + col ], fp );	// Blue
+	    }
+	}
+
+	fclose(fp);
+	return(success);
+
+} // End Save() method
+
+
+static double proportion( const double width, const int total_pixels, const int pixel )
+{
+    double _total_pixels(total_pixels);
+    double _pixel(pixel);
+
+    return(((_total_pixels - _pixel) / _total_pixels) * width);
+}
+
+
+
+bool RS274X::Bitmap::ExposeFilm( const Bitmap & pattern, const gp_Pnt & location )
+{
+    const bool success = true;
+    const bool failure = false;
+
+    if ((pattern.Width() >= Width()) || (pattern.Height() >= Height()))
+    {
+        printf("Pattern is smaller than this bitmap\n");
+        return(failure);
+    }
+
+    // The real-world coordinates of 'this' bitmap have the 0,0 point at the bottom left
+    // corner while the 0,0 point of the rhs map is in the centre.  This assumes that the
+    // rhs bitmap represents an aperture while 'this' one represents the PCB.
+
+    for (int pattern_row = 0; pattern_row < pattern.PixelsPerRow(); pattern_row++)
+    {
+        for (int pattern_col = 0; pattern_col < pattern.PixelsPerColumn(); pattern_col++)
+        {
+            double pattern_offset_x = proportion( pattern.Width(), pattern.PixelsPerRow(), pattern_row ) - (0.5 * pattern.Width());
+            double pattern_offset_y = proportion( pattern.Height(), pattern.PixelsPerColumn(), pattern_col) - (0.5 * pattern.Height());
+
+            int row = int(floor(double((location.Y() + pattern_offset_y - m_box.MinY()) * PixelsPerMM()))) + Boarder();
+            int col = int(floor(double((location.X() + pattern_offset_x - m_box.MinX()) * PixelsPerMM()))) + Boarder();
+
+            int pixel = int(floor(double((PixelsPerRow() * row) + col)));
+            if ((pixel < 0) || (pixel > Size()-1))
+            {
+                printf("Pixel is out of range for bitmap\n");
+                return(false);
+            }
+
+            int pattern_pixel = (pattern.PixelsPerRow() * pattern_row) + pattern_col;
+            if ((pattern_pixel < 0) || (pattern_pixel > Size()-1))
+            {
+                printf("Pixel is out of range for pattern's bitmap\n");
+                return(false);
+            }
+
+            m_bitmap[pixel] |= pattern.m_bitmap[ pattern_pixel ];
+        }
+    }
+
+    return(success);
+}
 
