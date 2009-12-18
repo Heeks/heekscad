@@ -16,6 +16,7 @@
 #include "../interface/PropertyCheck.h"
 #include "../interface/PropertyString.h"
 #include "../interface/PropertyList.h"
+#include "../interface/DoubleInput.h"
 #include "HeeksFrame.h"
 #include "GraphicsCanvas.h"
 #include "OptionsCanvas.h"
@@ -152,6 +153,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	
 	m_pCxfFont = NULL;	// Default to internal (OpenGL) font.
 	m_icon_texture_number = 0;
+	m_extrude_to_solid = true;
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -302,6 +304,7 @@ bool HeeksCADapp::OnInit()
 	{
 		m_pAutoSave = std::auto_ptr<CAutoSave>(new CAutoSave(m_auto_save_interval));
 	} // End if - then
+	config.Read(_T("ExtrudeToSolid"), &m_extrude_to_solid);
 
 	HDimension::ReadFromConfig(config);
 
@@ -1859,6 +1862,11 @@ void on_useOldFuse(bool onoff, HeeksObj* object)
 	wxGetApp().useOldFuse = onoff;
 }
 
+static void on_extrude_to_solid(bool onoff, HeeksObj* object)
+{
+	wxGetApp().m_extrude_to_solid = onoff;
+}
+
 void on_set_min_correlation_factor(double value, HeeksObj* object)
 {
 	wxGetApp().m_min_correlation_factor = value;
@@ -2343,6 +2351,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	drawing->m_list.push_back(new PropertyLength(_("face to sketch deviaton"), FaceToSketchTool::deviation, NULL, on_set_face_to_sketch_deviation));
 	drawing->m_list.push_back(new PropertyCheck(_("Use 3D rotation"), allow3DRotaion, NULL, on_Allow3DRotation));
 	drawing->m_list.push_back(new PropertyCheck(_("Use old solid fuse ( to prevent coplanar faces )"), useOldFuse, NULL, on_useOldFuse));
+	drawing->m_list.push_back(new PropertyCheck(_("Extrude makes a solid"), m_extrude_to_solid, NULL, on_extrude_to_solid));
 	list->push_back(drawing);
 
 	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
@@ -2951,85 +2960,19 @@ void HeeksCADapp::ResetIDs()
 	next_id_map.clear();
 }
 
-static double* value_for_set_value = NULL;
-static void set_value(double value, HeeksObj* object){*value_for_set_value = value;}
-
-static bool *success_for_double_input = NULL;
-
-class CInputApply:public Tool{
-public:
-	void Run(){
-		*success_for_double_input = true;
-		wxGetApp().ExitMainLoop();
-	}
-	const wxChar* GetTitle(){return _("Apply");}
-	wxString BitmapPath(){return _T("apply");}
-	const wxChar* GetToolTip(){return _("Accept value and continue");}
-};
-
-CInputApply input_apply;
-
-class CInputCancel:public Tool{
-public:
-	void Run(){wxGetApp().ExitMainLoop();}
-	const wxChar* GetTitle(){return _("Cancel");}
-	wxString BitmapPath(){return _T("cancel");}
-	const wxChar* GetToolTip(){return _("Cancel operation");}
-};
-
-CInputCancel input_cancel;
-
-class CDoubleInput: public CInputMode, CLeftAndRight
-{
-public:
-	wxString m_title;
-	wxString m_value_title;
-	double m_value;
-	bool m_success;
-
-	CDoubleInput(const wxChar* prompt, const wxChar* value_name, double initial_value)
-	{
-		m_title.assign(prompt);
-		m_value_title.assign(value_name);
-		m_value = initial_value;
-		m_success = false;
-	}
-	virtual ~CDoubleInput(){}
-
-	// virtual functions for InputMode
-	const wxChar* GetTitle(){return m_title.c_str();}
-	void OnMouse( wxMouseEvent& event ){
-		bool event_used = false;
-		if(LeftAndRightPressed(event, event_used))
-			wxGetApp().ExitMainLoop();
-	}
-	void GetProperties(std::list<Property *> *list)
-	{
-		value_for_set_value = &m_value;
-		list->push_back(new PropertyDouble(m_value_title.c_str(), m_value, NULL, set_value));
-	}
-	void GetTools(std::list<Tool*>* t_list, const wxPoint* p)
-	{
-		// add a do it now button
-		t_list->push_back(&input_apply);
-		t_list->push_back(&input_cancel);
-	}
-};
-
 bool HeeksCADapp::InputDouble(const wxChar* prompt, const wxChar* value_name, double &value)
 {
 	CInputMode* save_mode = input_mode_object;
 	CDoubleInput double_input(prompt, value_name, value);
-	success_for_double_input = &(double_input.m_success);
 	SetInputMode(&double_input);
 
 	OnRun();
 
 	SetInputMode(save_mode);
 
-	if(double_input.m_success)value = double_input.m_value;
+	if(CDoubleInput::m_success)value = double_input.m_value;
 
-	return double_input.m_success;
+	return CDoubleInput::m_success;
 }
 
 void HeeksCADapp::RegisterOnGLCommands( void(*callbackfunc)() )
@@ -3181,6 +3124,23 @@ bool HeeksCADapp::CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num,
 	for(std::list<HeeksObj*>::const_iterator It = list.begin(); It != list.end(); It++){
 		HeeksObj* object = *It;
 		if(object->GetType() == type1 || object->GetType() == type2)num_of_type++;
+	}
+
+	if(num_of_type < min_num)
+	{
+		wxMessageBox(msg, caption);
+		return false;
+	}
+
+	return true;
+}
+
+bool HeeksCADapp::CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num, int type1, int type2, int type3, const wxString& msg, const wxString& caption)
+{
+	int num_of_type = 0;
+	for(std::list<HeeksObj*>::const_iterator It = list.begin(); It != list.end(); It++){
+		HeeksObj* object = *It;
+		if(object->GetType() == type1 || object->GetType() == type2 || object->GetType() == type3)num_of_type++;
 	}
 
 	if(num_of_type < min_num)

@@ -52,7 +52,7 @@ void CPad::Update()
 	if(m_sketch)
 	{
 		std::vector<TopoDS_Face> faces = m_sketch->GetFaces();
-		std::list<TopoDS_Face> facelist(faces.begin(),faces.end());
+		std::list<TopoDS_Shape> facelist(faces.begin(),faces.end());
 		std::list<TopoDS_Shape> new_shapes;
 		CreateExtrusions(facelist, new_shapes, gp_Vec(0, 0, m_length));
 

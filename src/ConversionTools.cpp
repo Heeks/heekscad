@@ -119,14 +119,21 @@ bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wire &wire
 	return false;
 }
 
-bool ConvertSketchToFace2(HeeksObj* object, TopoDS_Face& face)
+bool ConvertSketchToFaceOrWire(HeeksObj* object, TopoDS_Shape& face_or_wire, bool face_not_wire)
 {
-	if(object->GetType() != SketchType)return false;
+	if(object->GetType() != SketchType && object->GetType() != CircleType)return false;
 	std::list<HeeksObj*> line_arc_list;
 
-	for(HeeksObj* child = object->GetFirstChild(); child; child = object->GetNextChild())
+	if(object->GetType() == SketchType)
 	{
-		line_arc_list.push_back(child);
+		for(HeeksObj* child = object->GetFirstChild(); child; child = object->GetNextChild())
+		{
+			line_arc_list.push_back(child);
+		}
+	}
+	else
+	{
+		line_arc_list.push_back(object);
 	}
 
 	std::list<TopoDS_Edge> edges;
@@ -177,7 +184,14 @@ bool ConvertSketchToFace2(HeeksObj* object, TopoDS_Face& face)
 				wire_maker.Add(edge);
 			}
 
-			face = BRepBuilderAPI_MakeFace(wire_maker.Wire());
+			if(face_not_wire)
+			{
+				face_or_wire = BRepBuilderAPI_MakeFace(wire_maker.Wire());
+			}
+			else
+			{
+				face_or_wire = wire_maker.Wire();
+			}
 		}
 		catch(...)
 		{
@@ -313,7 +327,7 @@ void ConvertSketchesToFace::Run(){
 		HeeksObj* object = *It;
 		if(object->GetType() == SketchType){
 			TopoDS_Face face;
-			if(ConvertSketchToFace2(object, face))
+			if(ConvertSketchToFaceOrWire(object, face, true))
 			{
 				wxGetApp().Add(new CFace(face), NULL);
 				wxGetApp().Repaint();

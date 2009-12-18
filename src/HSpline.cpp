@@ -489,6 +489,22 @@ void HSpline::CreateArcs(const gp_Pnt &p_start, const gp_Vec &v_start, double t_
 	}
 }
 
+bool HSpline::GetStartPoint(double* pos)
+{
+	gp_Pnt p;
+	m_spline->D0(0.0, p);
+	extract(p, pos);
+	return true;
+}
+
+bool HSpline::GetEndPoint(double* pos)
+{
+	gp_Pnt p;
+	m_spline->D0(1.0, p);
+	extract(p, pos);
+	return true;
+}
+
 void HSpline::ToBiarcs(std::list<HeeksObj*> &new_spans, double tolerance)
 {
 	new_spans_for_CreateArcs = &new_spans;
@@ -500,4 +516,9 @@ void HSpline::ToBiarcs(std::list<HeeksObj*> &new_spans, double tolerance)
 	gp_Vec v_end;
 	m_spline->D1(0.0, p_start, v_start);
 	CreateArcs(p_start, v_start, 0.0, 1.0, p_end, v_end);
+}
+
+void HSpline::Reverse()
+{
+	m_spline->Reverse();
 }

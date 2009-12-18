@@ -176,6 +176,7 @@ public:
 	std::auto_ptr<CAutoSave> m_pAutoSave;
 
 	int m_icon_texture_number;
+	bool m_extrude_to_solid;
 
 	//WxApp override
 	int OnRun();
@@ -284,6 +285,7 @@ public:
 	void Paste(HeeksObj* paste_into);
 	bool CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num, int type, const wxString& msg, const wxString& caption);
 	bool CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num, int type1, int type2, const wxString& msg, const wxString& caption);
+	bool CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num, int type1, int type2, int type3, const wxString& msg, const wxString& caption);
 	void render_text(const wxChar* str);
 	bool get_text_size(const wxChar* str, float* width, float* height);
 	void render_screen_text(const wxChar* str1, const wxChar* str2);
