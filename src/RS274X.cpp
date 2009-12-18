@@ -13,7 +13,6 @@
 #include "Geom.h"
 #include "ConversionTools.h"
 #include "Sketch.h"
-#include "CNCPoint.h"
 
 #include <sstream>
 #include <fstream>
@@ -1056,10 +1055,10 @@ bool RS274X::AggregateFilledArea( const RS274X::Traces_t & traces, TopoDS_Face *
 		delete lhs_sketch; lhs_sketch = (HeeksObj *) NULL;
 		delete rhs_sketch; rhs_sketch = (HeeksObj *) NULL;
 
-        std::set<CNCPoint> points;
+        std::set<RS274X::Point> points;
         while (intersections.size() > 2)
         {
-            CNCPoint point;
+            RS274X::Point point;
             point.SetX( *(intersections.begin()) ); intersections.erase( intersections.begin() );
             point.SetY( *(intersections.begin()) ); intersections.erase( intersections.begin() );
             point.SetZ( *(intersections.begin()) ); intersections.erase( intersections.begin() );
