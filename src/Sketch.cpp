@@ -588,6 +588,8 @@ double CSketch::GetAngleAtJunction(HeeksObj* prev_object, HeeksObj* object)
 	EndedObject *obj2 = (EndedObject*)object;
 	gp_Vec prev_end_vector(obj1->B->m_p.XYZ() - obj1->A->m_p.XYZ());
 	gp_Vec start_vector(obj2->B->m_p.XYZ() - obj2->A->m_p.XYZ());
+	if(prev_end_vector.Magnitude() < 0.00000000000001)return 0;
+	if(start_vector.Magnitude() < 0.00000000000001)return 0;
 	prev_end_vector.Normalize();
 	start_vector.Normalize();
 

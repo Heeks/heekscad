@@ -54,7 +54,7 @@ void PickCreateRuledSurface()
 	}
 }
 
-HeeksObj* CreateExtrusion(std::list<HeeksObj*> list, double height, bool solid_if_possible)
+HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_or_angle, bool solid_if_possible, bool revolution_not_extrusion)
 {
 	std::list<TopoDS_Shape> faces_or_wires;
 
@@ -90,7 +90,15 @@ HeeksObj* CreateExtrusion(std::list<HeeksObj*> list, double height, bool solid_i
 	wxGetApp().Remove(sketches_or_faces_to_delete);
 
 	std::list<TopoDS_Shape> new_shapes;
-	CreateExtrusions(faces_or_wires, new_shapes, gp_Vec(0, 0, height).Transformed(wxGetApp().GetDrawMatrix(false)));
+	gp_Trsf trsf = wxGetApp().GetDrawMatrix(false);
+	if(revolution_not_extrusion)
+	{
+		CreateRevolutions(faces_or_wires, new_shapes, gp_Ax1(gp_Pnt(0, 0, 0).Transformed(trsf), gp_Vec(0, 0, 1).Transformed(trsf)), height_or_angle);
+	}
+	else
+	{
+		CreateExtrusions(faces_or_wires, new_shapes, gp_Vec(0, 0, height_or_angle).Transformed(trsf));
+	}
 	HeeksObj* new_object = 0;
 	if(new_shapes.size() > 0)
 	{
@@ -176,7 +184,45 @@ void PickCreateExtrusion()
 	{
 		if(wxGetApp().m_marked_list->size() > 0)
 		{
-			CreateExtrusion(wxGetApp().m_marked_list->list(),height, wxGetApp().m_extrude_to_solid);
+			CreateExtrusionOrRevolution(wxGetApp().m_marked_list->list(),height, wxGetApp().m_extrude_to_solid, false);
+		}
+	}
+}
+
+static void on_revolve_angle(double value, HeeksObj* object)
+{
+	wxGetApp().m_revolve_angle = value;
+	HeeksConfig config;
+	config.Write(_T("RevolveAngle"), wxGetApp().m_revolve_angle);
+}
+
+class CRevolutionInput:public CDoubleInput
+{
+public:
+	CRevolutionInput(double &value):CDoubleInput(_("Input revolution angle"), _("angle"), value){}
+
+	// virtual functions for InputMode
+	void GetProperties(std::list<Property *> *list)
+	{
+		CDoubleInput::GetProperties(list);
+		list->push_back(new PropertyCheck(_("Extrude makes a solid"), wxGetApp().m_extrude_to_solid, NULL, on_extrude_to_solid));
+	}
+};
+
+void PickCreateRevolution()
+{
+	if(wxGetApp().m_marked_list->size() == 0)
+	{
+		wxGetApp().PickObjects(_("pick sketches, faces or circles"), MARKING_FILTER_CIRCLE | MARKING_FILTER_SKETCH | MARKING_FILTER_FACE);
+	}
+
+	double angle = 360.0; // to do, this should get written to config file
+
+	if(wxGetApp().InputDouble(_("Input revolution angle"), _("angle"), angle))
+	{
+		if(wxGetApp().m_marked_list->size() > 0)
+		{
+			CreateExtrusionOrRevolution(wxGetApp().m_marked_list->list(), angle, true, true);
 		}
 	}
 }
@@ -221,6 +267,33 @@ void CreateExtrusions(const std::list<TopoDS_Shape> &faces_or_wires, std::list<T
 	catch(...)
 	{
 		wxMessageBox(_("Fatal error making extruded solid"));
+	}
+	
+}
+
+void CreateRevolutions(const std::list<TopoDS_Shape> &faces_or_wires, std::list<TopoDS_Shape>& new_shapes, const gp_Ax1& axis, double angle)
+{
+	try{
+		for(std::list<TopoDS_Shape>::const_iterator It = faces_or_wires.begin(); It != faces_or_wires.end(); It++)
+		{
+			const TopoDS_Shape& face_or_wire = *It;
+			if(fabs(angle - 360.0) < 0.00001)
+			{
+				BRepPrimAPI_MakeRevol generator( face_or_wire, axis );
+				generator.Build();
+				new_shapes.push_back(generator.Shape());
+			}
+			else
+			{
+				BRepPrimAPI_MakeRevol generator( face_or_wire, axis, angle * Pi/180 );
+				generator.Build();
+				new_shapes.push_back(generator.Shape());
+			}
+		}
+	}
+	catch(...)
+	{
+		wxMessageBox(_("Fatal error making revolved solid"));
 	}
 	
 }

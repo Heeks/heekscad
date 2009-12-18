@@ -44,23 +44,27 @@ HeeksObj* CTangentialArc::MakeHArc()const
 	return new_object;
 }
 
-HSpline::HSpline(const HSpline &s){
+HSpline::HSpline(const HSpline &s):EndedObject(&s.color){
 	operator=(s);
 }
 
-HSpline::HSpline(const Geom_BSplineCurve &s, const HeeksColor* col):color(*col){
+HSpline::HSpline(const Geom_BSplineCurve &s, const HeeksColor* col):EndedObject(col),color(*col){
 	m_spline = Handle(Geom_BSplineCurve)::DownCast(s.Copy());	
+	m_spline->D0(0.0, A->m_p);
+	m_spline->D0(1.0, B->m_p);
 }
 
-HSpline::HSpline(Handle_Geom_BSplineCurve s, const HeeksColor* col):color(*col){
+HSpline::HSpline(Handle_Geom_BSplineCurve s, const HeeksColor* col):EndedObject(col),color(*col){
 	m_spline = s;//Handle(Geom_BSplineCurve)::DownCast(s->Copy());
+	m_spline->D0(0.0, A->m_p);
+	m_spline->D0(1.0, B->m_p);
 }
 
 HSpline::~HSpline(){
 }
 
 const HSpline& HSpline::operator=(const HSpline &s){
-	HeeksObj::operator=(s);
+	EndedObject::operator=(s);
 	m_spline = Handle(Geom_BSplineCurve)::DownCast((s.m_spline)->Copy());;
 	color = s.color;
 	return *this;
@@ -75,7 +79,7 @@ bool HSpline::IsDifferent(HeeksObj* o)
 			return true;
 	}
 	
-	return HeeksObj::IsDifferent(o);
+	return EndedObject::IsDifferent(o);
 }
 
 //segments - number of segments per full revolution!
@@ -207,7 +211,7 @@ void HSpline::GetProperties(std::list<Property *> *list){
 		wxSprintf(str,_T("%s %d"), _("Weight"), i);
 		list->push_back(new PropertyDouble(str,m_spline->Weight(i),this,OnSetWeight,i));
 	}
-	HeeksObj::GetProperties(list); 
+	EndedObject::GetProperties(list); 
 }
 
 bool HSpline::FindNearPoint(const double* ray_start, const double* ray_direction, double *point){
