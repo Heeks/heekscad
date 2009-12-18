@@ -34,6 +34,56 @@ class RS274X
 
 		bool Read( const char *p_szFileName );
 
+    private:
+
+        /**
+            This is simply a wrapper around the gp_Pnt class from the OpenCascade library
+            that allows objects of this class to be used with methods such as std::sort() etc.
+         */
+        class Point : public gp_Pnt {
+        public:
+            Point() : gp_Pnt(0.0, 0.0, 0.0) { }
+            Point( const double *xyz ) : gp_Pnt(xyz[0], xyz[1], xyz[2]) { }
+            Point( const double &x, const double &y, const double &z ) : gp_Pnt(x,y,z) { }
+            Point( const gp_Pnt & rhs ) : gp_Pnt(rhs) { }
+
+            bool operator==( const Point & rhs ) const
+            {
+                if (X() != rhs.X()) return(false);
+                if (Y() != rhs.Y()) return(false);
+                if (Z() != rhs.Z()) return(false);
+
+                return(true);
+            } // End equivalence operator
+
+            bool operator!=( const Point & rhs ) const
+            {
+                return(! (*this == rhs));
+            } // End not-equal operator
+
+            bool operator<( const Point & rhs ) const
+            {
+                if (X() > rhs.X()) return(false);
+                if (X() < rhs.X()) return(true);
+                if (Y() > rhs.Y()) return(false);
+                if (Y() < rhs.Y()) return(true);
+                if (Z() > rhs.Z()) return(false);
+                if (Z() < rhs.Z()) return(true);
+
+                return(false);	// They're equal
+            } // End equivalence operator
+
+            void ToDoubleArray( double *pArrayOfThree ) const
+            {
+                pArrayOfThree[0] = X();
+                pArrayOfThree[1] = Y();
+                pArrayOfThree[2] = Z();
+            } // End ToDoubleArray() method
+        }; // End Point class definition.
+
+
+
+
 	private:
 		/**
 			The Bitmap class defines an array of colour values surrounding a CENTRAL
