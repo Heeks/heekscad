@@ -8,6 +8,9 @@
 #include "Face.h"
 #include "ConversionTools.h"
 #include "MarkedList.h"
+#include "HeeksConfig.h"
+#include "../interface/DoubleInput.h"
+#include "../interface/PropertyCheck.h"
 
 void PickCreateRuledSurface()
 {
@@ -51,9 +54,9 @@ void PickCreateRuledSurface()
 	}
 }
 
-HeeksObj* CreateExtrusion(std::list<HeeksObj*> list, double height)
+HeeksObj* CreateExtrusion(std::list<HeeksObj*> list, double height, bool solid_if_possible)
 {
-	std::list<TopoDS_Face> faces;
+	std::list<TopoDS_Shape> faces_or_wires;
 
 	std::list<HeeksObj*> sketches_or_faces_to_delete;
 
@@ -63,18 +66,19 @@ HeeksObj* CreateExtrusion(std::list<HeeksObj*> list, double height)
 		switch(object->GetType())
 		{
 		case SketchType:
+		case CircleType:
 			{
-				TopoDS_Face face;
-				if(ConvertSketchToFace2(object, face))
+				TopoDS_Shape face_or_wire;
+				if(ConvertSketchToFaceOrWire(object, face_or_wire, solid_if_possible))
 				{
-					faces.push_back(face);
+					faces_or_wires.push_back(face_or_wire);
 					if(wxGetApp().m_extrude_removes_sketches)sketches_or_faces_to_delete.push_back(object);
 				}
 			}
 			break;
 
 		case FaceType:
-			faces.push_back(((CFace*)object)->Face());
+			faces_or_wires.push_back(((CFace*)object)->Face());
 			if(wxGetApp().m_extrude_removes_sketches)sketches_or_faces_to_delete.push_back(object);
 			break;
 
@@ -86,7 +90,7 @@ HeeksObj* CreateExtrusion(std::list<HeeksObj*> list, double height)
 	wxGetApp().Remove(sketches_or_faces_to_delete);
 
 	std::list<TopoDS_Shape> new_shapes;
-	CreateExtrusions(faces, new_shapes, gp_Vec(0, 0, height).Transformed(wxGetApp().GetDrawMatrix(false)));
+	CreateExtrusions(faces_or_wires, new_shapes, gp_Vec(0, 0, height).Transformed(wxGetApp().GetDrawMatrix(false)));
 	HeeksObj* new_object = 0;
 	if(new_shapes.size() > 0)
 	{
@@ -105,7 +109,7 @@ HeeksObj* CreatePipeFromProfile(HeeksObj* spine, HeeksObj* profile)
 	std::list<TopoDS_Face> faces;
 
 	TopoDS_Face face;
-	ConvertSketchToFace2(profile, face);
+	ConvertSketchToFaceOrWire(profile, face, true);
 	
 	wxGetApp().Remove(profile);
 
@@ -123,19 +127,57 @@ HeeksObj* CreatePipeFromProfile(HeeksObj* spine, HeeksObj* profile)
 	return new_object;
 }
 
+static void on_extrude_to_solid(bool onoff, HeeksObj* object)
+{
+	wxGetApp().m_extrude_to_solid = onoff;
+	HeeksConfig config;
+	config.Write(_T("ExtrudeToSolid"), wxGetApp().m_extrude_to_solid);
+}
+
+class CExtrusionInput:public CDoubleInput
+{
+public:
+	CExtrusionInput(double &value):CDoubleInput(_("Input extrusion height"), _("height"), value){}
+
+	// virtual functions for InputMode
+	void GetProperties(std::list<Property *> *list)
+	{
+		CDoubleInput::GetProperties(list);
+		list->push_back(new PropertyCheck(_("Extrude makes a solid"), wxGetApp().m_extrude_to_solid, NULL, on_extrude_to_solid));
+	}
+};
+
+bool InputExtrusionHeight(double &value)
+{
+	CInputMode* save_mode = wxGetApp().input_mode_object;
+	CExtrusionInput extrusion_input(value);
+	wxGetApp().SetInputMode(&extrusion_input);
+
+	wxGetApp().OnRun();
+
+	wxGetApp().SetInputMode(save_mode);
+
+	if(CDoubleInput::m_success)value = extrusion_input.m_value;
+
+	return CDoubleInput::m_success;
+}
+
 void PickCreateExtrusion()
 {
 	if(wxGetApp().m_marked_list->size() == 0)
 	{
-		wxGetApp().PickObjects(_("pick sketches or faces"), MARKING_FILTER_SKETCH | MARKING_FILTER_FACE);
+		wxGetApp().PickObjects(_("pick sketches, faces or circles"), MARKING_FILTER_CIRCLE | MARKING_FILTER_SKETCH | MARKING_FILTER_FACE);
 	}
 
 	double height = 10; // to do, this should get written to config file
-	wxGetApp().InputDouble(_("Input extrusion height"), _("height"), height);
 
-	if(wxGetApp().m_marked_list->size() > 0)
+
+	if(InputExtrusionHeight(height))
 	{
-		CreateExtrusion(wxGetApp().m_marked_list->list(),height);
+		if(wxGetApp().m_marked_list->size() > 0)
+		{
+			CreateExtrusion(wxGetApp().m_marked_list->list(),height, wxGetApp().m_extrude_to_solid);
+		}
 	}
 }
 
@@ -165,13 +207,13 @@ bool CreateRuledSurface(const std::list<TopoDS_Wire> &wire_list, TopoDS_Shape& s
 	return false;
 }
 
-void CreateExtrusions(const std::list<TopoDS_Face> &faces, std::list<TopoDS_Shape>& new_shapes, const gp_Vec& extrude_vector)
+void CreateExtrusions(const std::list<TopoDS_Shape> &faces_or_wires, std::list<TopoDS_Shape>& new_shapes, const gp_Vec& extrude_vector)
 {
 	try{
-		for(std::list<TopoDS_Face>::const_iterator It = faces.begin(); It != faces.end(); It++)
+		for(std::list<TopoDS_Shape>::const_iterator It = faces_or_wires.begin(); It != faces_or_wires.end(); It++)
 		{
-			const TopoDS_Face& face = *It;
-			BRepPrimAPI_MakePrism generator( face, extrude_vector );
+			const TopoDS_Shape& face_or_wire = *It;
+			BRepPrimAPI_MakePrism generator( face_or_wire, extrude_vector );
 			generator.Build();
 			new_shapes.push_back(generator.Shape());
 		}

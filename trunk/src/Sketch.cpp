@@ -6,6 +6,7 @@
 #include "Sketch.h"
 #include "HLine.h"
 #include "HArc.h"
+#include "HSpline.h"
 #include "HeeksFrame.h"
 #include "ObjPropsCanvas.h"
 #include "../interface/PropertyInt.h"
@@ -248,7 +249,7 @@ public:
 	void Run()
 	{
 		TopoDS_Face face;
-		if(ConvertSketchToFace2(sketch_for_tools, face))
+		if(ConvertSketchToFaceOrWire(sketch_for_tools, face, true))
 		{
 			wxGetApp().Add(new CFace(face), NULL);
 			wxGetApp().Repaint();
@@ -512,6 +513,9 @@ void CSketch::ReverseSketch()
 			case ArcType:
 				((HArc*)copy)->Reverse();
 				break;
+			case SplineType:
+				((HSpline*)copy)->Reverse();
+				break;
 			default:
 				break;
 		}
@@ -742,6 +746,9 @@ bool CSketchRelinker::TryAdd(HeeksObj* object)
 				break;
 			case ArcType:
 				((HArc*)new_object)->Reverse();
+				break;
+			case SplineType:
+				((HSpline*)new_object)->Reverse();
 				break;
 			default:
 				break;
