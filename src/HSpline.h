@@ -62,6 +62,9 @@ public:
 	int Intersects(const HeeksObj *object, std::list< double > *rl)const;
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 	bool IsDifferent(HeeksObj* other);
+	bool GetStartPoint(double* pos);
+	bool GetEndPoint(double* pos);
 
 	void ToBiarcs(std::list<HeeksObj*> &new_spans, double tolerance);
+	void Reverse();
 };

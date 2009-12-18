@@ -820,7 +820,7 @@ static void OnRuledSurfaceButton( wxCommandEvent& event )
 
 static void OnExtrudeButton( wxCommandEvent& event )
 {
-	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 1, SketchType, FaceType, _("Pick one or more sketches or faces, to create extruded body from\n( hold down Ctrl key to select more than one solid )"), _("Extrude")))return;
+	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 1, SketchType, FaceType, CircleType, _("Pick one or more sketches, faces or circles, to create extruded body from\n( hold down Ctrl key to select more than one solid )"), _("Extrude")))return;
 	wxGetApp().CreateUndoPoint();
 	PickCreateExtrusion();
 	wxGetApp().Changed();

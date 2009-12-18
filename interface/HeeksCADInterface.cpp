@@ -591,9 +591,8 @@ HeeksObj* CHeeksCADInterface::ExtrudeSketch(HeeksObj* sketch, double height)
 {
 	std::list<HeeksObj*>list;
 	list.push_back(sketch);
-	return CreateExtrusion(list,height);
+	return CreateExtrusion(list,height, true);
 }
-
 
 void CHeeksCADInterface::ExtractSeparateSketches(HeeksObj* sketch, std::list<HeeksObj*> &new_separate_sketches)
 {
