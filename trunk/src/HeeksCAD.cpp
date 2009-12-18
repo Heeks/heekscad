@@ -154,6 +154,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_pCxfFont = NULL;	// Default to internal (OpenGL) font.
 	m_icon_texture_number = 0;
 	m_extrude_to_solid = true;
+	m_revolve_angle = 360.0;
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -305,6 +306,7 @@ bool HeeksCADapp::OnInit()
 		m_pAutoSave = std::auto_ptr<CAutoSave>(new CAutoSave(m_auto_save_interval));
 	} // End if - then
 	config.Read(_T("ExtrudeToSolid"), &m_extrude_to_solid);
+	config.Read(_T("RevolveAngle"), &m_revolve_angle);
 
 	HDimension::ReadFromConfig(config);
 
@@ -430,6 +432,8 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("FontPaths"), m_font_paths);
 	config.Write(_T("STLFacetTolerance"), m_stl_facet_tolerance);
 	config.Write(_T("AutoSaveInterval"), m_auto_save_interval);
+	config.Write(_T("ExtrudeToSolid"), m_extrude_to_solid);
+	config.Write(_T("RevolveAngle"), m_revolve_angle);
 
 	HDimension::WriteToConfig(config);
 
@@ -1867,6 +1871,11 @@ static void on_extrude_to_solid(bool onoff, HeeksObj* object)
 	wxGetApp().m_extrude_to_solid = onoff;
 }
 
+static void on_revolve_angle(double value, HeeksObj* object)
+{
+	wxGetApp().m_revolve_angle = value;
+}
+
 void on_set_min_correlation_factor(double value, HeeksObj* object)
 {
 	wxGetApp().m_min_correlation_factor = value;
@@ -2352,6 +2361,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	drawing->m_list.push_back(new PropertyCheck(_("Use 3D rotation"), allow3DRotaion, NULL, on_Allow3DRotation));
 	drawing->m_list.push_back(new PropertyCheck(_("Use old solid fuse ( to prevent coplanar faces )"), useOldFuse, NULL, on_useOldFuse));
 	drawing->m_list.push_back(new PropertyCheck(_("Extrude makes a solid"), m_extrude_to_solid, NULL, on_extrude_to_solid));
+	drawing->m_list.push_back(new PropertyDouble(_("Solid revolution angle"), m_revolve_angle, NULL, on_revolve_angle));
 	list->push_back(drawing);
 
 	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){

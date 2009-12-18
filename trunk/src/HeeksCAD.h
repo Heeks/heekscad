@@ -177,6 +177,7 @@ public:
 
 	int m_icon_texture_number;
 	bool m_extrude_to_solid;
+	double m_revolve_angle;
 
 	//WxApp override
 	int OnRun();

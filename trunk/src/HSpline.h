@@ -4,9 +4,7 @@
 
 #pragma once
 
-#include "../interface/HeeksObj.h"
-#include "../interface/HeeksColor.h"
-//#include <Handle_Geom_Geometry.hxx>
+#include "EndedObject.h"
 
 // CTangentialArc is used to calculate an arc given desired start ( p0 ), end ( p1 ) and start direction ( v0 )
 class CTangentialArc
@@ -24,7 +22,7 @@ public:
 	HeeksObj* MakeHArc()const;
 };
 
-class HSpline: public HeeksObj{
+class HSpline: public EndedObject{
 private:
 	HeeksColor color;
 	static wxIcon* m_icon;
