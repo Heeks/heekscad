@@ -9,8 +9,6 @@ for isolation milling.
 
 #pragma once
 
-#include "stdafx.h"
-
 #include <string>
 #include <list>
 #include <map>
@@ -23,7 +21,7 @@ for isolation milling.
 #include "HEllipse.h"
 #include "HSpline.h"
 #include "Sketch.h"
-#include "interface/Box.h"
+#include "../interface/Box.h"
 
 class RS274X
 {
