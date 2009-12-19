@@ -185,9 +185,9 @@ void CEdge::Blend(double radius){
 			wxGetApp().Remove(Owner()->Owner());
 		}
 	}
-	catch(wxChar *message)
-	{
-		wxMessageBox(wxString(_("A fatal error happened during Blend")) + _T(" -\n") + wxString(message));
+	catch (Standard_Failure) {
+		Handle_Standard_Failure e = Standard_Failure::Caught();
+		wxMessageBox(wxString(_("Error making fillet")) + _T(": ") + Ctt(e->GetMessageString()));
 	}
 	catch(...)
 	{
