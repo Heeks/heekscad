@@ -89,7 +89,7 @@ CHeeksCADInterface heekscad_interface;
 
 CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSize& size )
 	: wxFrame((wxWindow *)NULL, -1, title, pos, size)
-{ 
+{
 	wxGetApp().m_frame = this;
 
 	m_logger = new wxLogWindow(NULL,_("Trace Log"),false,true);
@@ -165,7 +165,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 		wxConfig plugins_config(_T("HeeksCAD"));
 		plugins_config.SetPath(_T("/plugins"));
-		plugins_config.Write(_T("HeeksCNC"), _T("HeeksCNC/libheekscnc.so.0.5.1"));	
+		plugins_config.Write(_T("HeeksCNC"), _T("HeeksCNC/libheekscnc.so.0.5.1"));
 	}
 #endif
 
@@ -244,7 +244,7 @@ CHeeksFrame::~CHeeksFrame()
 	HeeksConfig config;
 	config.Write(_T("AuiPerspective"), str);
 	config.Write(_T("ToolImageSize"), ToolImage::GetBitmapSize());
-	config.Write(_T("Perspective"), m_graphics->m_view_point.GetPerspective());	
+	config.Write(_T("Perspective"), m_graphics->m_view_point.GetPerspective());
 
 	delete m_aui_manager;
 	delete wxLog::SetActiveTarget(new wxLogStderr(NULL));
@@ -569,10 +569,48 @@ static void OnDimensioningButton( wxCommandEvent& WXUNUSED( event ) )
 
 static void OnCircles3pButton( wxCommandEvent& WXUNUSED( event ) )
 {
-	wxGetApp().CreateUndoPoint();
-	line_strip.drawing_mode = CircleDrawingMode;
-	line_strip.circle_mode = ThreePointsCircleMode;
-	wxGetApp().SetInputMode(&line_strip);
+    // See if the operator has already selected objects.  If we can find three points
+    // from the selected items then we can go ahead with the circle's construction
+    // without prompting for more.  If there is a different number of points found then
+    // prompt the user as usual.
+
+    std::list<HeeksObj *> selected_objects = wxGetApp().m_marked_list->list();
+    std::vector<DigitizedPoint>   points;
+    for (std::list<HeeksObj *>::const_iterator l_itObject = selected_objects.begin();
+            l_itObject != selected_objects.end(); l_itObject++)
+    {
+        switch ((*l_itObject)->GetType())
+        {
+            case PointType:
+            {
+                points.push_back( DigitizedPoint( ((HPoint *)*l_itObject)->m_p, DigitizeCoordsType, *l_itObject ) );
+            }
+            break;
+        } // End switch
+    } // End if - then
+
+
+    if (points.size() == 3)
+    {
+        gp_Circ c;
+        if(DigitizedPoint::GetTangentCircle(points[0], points[1], points[2], c))
+        {
+            double centre[3];
+            centre[0] = c.Location().Coord().X();
+            centre[1] = c.Location().Coord().Y();
+            centre[2] = c.Location().Coord().Z();
+
+            heekscad_interface.Add( heekscad_interface.NewCircle( centre, c.Radius() ), NULL );
+            heekscad_interface.Repaint();
+        }
+    }
+    else
+    {
+        wxGetApp().CreateUndoPoint();
+        line_strip.drawing_mode = CircleDrawingMode;
+        line_strip.circle_mode = ThreePointsCircleMode;
+        wxGetApp().SetInputMode(&line_strip);
+    }
 }
 
 static void OnCircles2pButton( wxCommandEvent& WXUNUSED( event ) )
@@ -1529,7 +1567,7 @@ void CHeeksFrame::MakeMenus()
 	AddMenuItem(geometry_menu, _("Add Dimension"), ToolImage(_T("dimension")), OnDimensioningButton);
 	geometry_menu->AppendSeparator();
 	AddMenuItem(geometry_menu, _("Add Coordinate System"), ToolImage(_T("coordsys")), OnCoordinateSystem);
-	
+
 	// View Menu
 	wxMenu *view_menu = new wxMenu;
 	AddMenuItem(view_menu, _("Previous view"), ToolImage(_T("magprev")), OnMagPreviousButton);
@@ -1543,7 +1581,7 @@ void CHeeksFrame::MakeMenus()
 	AddMenuItem(view_menu, _("Full screen"), ToolImage(_T("fullscreen")), OnFullScreenButton);
 	view_menu->AppendSeparator();
 	AddMenuItem(view_menu, _("Redraw"), ToolImage(_T("redraw")), OnRedrawButton);
-	
+
 	// Solids Menu
 	wxMenu *solids_menu = new wxMenu;
 	AddMenuItem(solids_menu, _("Add a sphere"), ToolImage(_T("sphere")), OnSphereButton);
