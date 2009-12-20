@@ -1310,8 +1310,8 @@ public:
 	void OnIdle(wxIdleEvent& event)	{
 		if(m_toolbarPopup)
 		{
-			wxWindow* w = ::wxFindWindowAtPoint(::wxGetMousePosition());
-			if(w != this && w != this->m_toolbarPopup && w != this->m_toolbarPopup->m_panel && w != this->m_toolbarPopup->m_toolBar)
+			const wxPoint & pt = ::wxGetMousePosition();
+			if(!m_toolbarPopup->GetRect().Contains(pt))
 			{
 				delete m_toolbarPopup;
 				m_toolbarPopup = NULL;
