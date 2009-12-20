@@ -150,7 +150,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_font_paths = _T("/usr/share/qcad/fonts");
 	m_stl_facet_tolerance = 0.1;
 	GetAvailableFonts();
-	
+
 	m_pCxfFont = NULL;	// Default to internal (OpenGL) font.
 	m_icon_texture_number = 0;
 	m_extrude_to_solid = true;
@@ -296,7 +296,7 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("MinCorrelationFactor"), &m_min_correlation_factor);
 	config.Read(_T("MaxScaleThreshold"), &m_max_scale_threshold);
 	config.Read(_T("NumberOfSamplePoints"), &m_number_of_sample_points);
-	
+
 	config.Read(_T("FontPaths"), &m_font_paths, _T("/usr/share/qcad/fonts"));
 	config.Read(_T("STLFacetTolerance"), &m_stl_facet_tolerance, 0.1);
 
@@ -361,7 +361,7 @@ bool HeeksCADapp::OnInit()
 			{
 				wxString param = parser.GetParam(0);
 				if(!(param.Lower().EndsWith(_T(".dll"))))
-				{				
+				{
 					OpenFile(parser.GetParam(0));
 				}
 			}
@@ -839,7 +839,8 @@ void HeeksCADapp::OpenDXFFile(const wxChar *filepath )
 void HeeksCADapp::OpenRS274XFile(const wxChar *filepath)
 {
 	RS274X gerber;
-	gerber.Read(wxString(filepath).mb_str());
+	gerber.Read(wxString(filepath).mb_str(), RS274X::IsolationRouting );
+	// gerber.Read(wxString(filepath).mb_str(), RS274X::CentreLines );
 }
 
 bool HeeksCADapp::OpenImageFile(const wxChar *filepath)
@@ -3386,7 +3387,7 @@ void HeeksCADapp::GetPluginsFromCommandLineParams(std::list<wxString> &plugins)
 			{
 				wxString param = parser.GetParam(0);
 				if(param.Lower().EndsWith(_T(".dll")))
-				{				
+				{
 					plugins.push_back(param);
 				}
 			}
