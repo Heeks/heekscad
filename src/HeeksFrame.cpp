@@ -600,8 +600,9 @@ static void OnCircles3pButton( wxCommandEvent& WXUNUSED( event ) )
             centre[1] = c.Location().Coord().Y();
             centre[2] = c.Location().Coord().Z();
 
+			wxGetApp().CreateUndoPoint();
             heekscad_interface.Add( heekscad_interface.NewCircle( centre, c.Radius() ), NULL );
-            heekscad_interface.Repaint();
+			wxGetApp().Changed();
         }
     }
     else
@@ -1311,7 +1312,7 @@ public:
 		if(m_toolbarPopup)
 		{
 			const wxPoint & pt = ::wxGetMousePosition();
-			if(!m_toolbarPopup->GetRect().Contains(pt))
+			if(!m_toolbarPopup->GetScreenRect().Contains(pt))
 			{
 				delete m_toolbarPopup;
 				m_toolbarPopup = NULL;
