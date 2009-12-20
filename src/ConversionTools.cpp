@@ -143,7 +143,10 @@ bool ConvertSketchToFaceOrWire(HeeksObj* object, TopoDS_Shape& face_or_wire, boo
 			case LineType:
 				{
 					HLine* line = (HLine*)object;
-					edges.push_back(BRepBuilderAPI_MakeEdge(line->A->m_p, line->B->m_p));
+					if(!(line->A->m_p.IsEqual(line->B->m_p, wxGetApp().m_geom_tol)))
+					{
+						edges.push_back(BRepBuilderAPI_MakeEdge(line->A->m_p, line->B->m_p));
+					}
 				}
 				break;
 			case ArcType:
