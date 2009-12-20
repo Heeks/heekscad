@@ -123,16 +123,24 @@ HeeksObj* CreatePipeFromProfile(HeeksObj* spine, HeeksObj* profile)
 
 	const TopoDS_Wire wire = ((CWire*)spine)->Wire();
 
-	// pipe profile algong spine
-	BRepOffsetAPI_MakePipe makePipe(wire, face);
-	makePipe.Build();
-	TopoDS_Shape shape = makePipe.Shape(); 
+	try
+	{
+		// pipe profile algong spine
+		BRepOffsetAPI_MakePipe makePipe(wire, face);
+		makePipe.Build();
+		TopoDS_Shape shape = makePipe.Shape(); 
 
-	HeeksObj* new_object = CShape::MakeObject(shape, _("Pipe"), SOLID_TYPE_UNKNOWN, wxGetApp().current_color);
-	wxGetApp().Add(new_object, NULL);
-	wxGetApp().Repaint();
+		HeeksObj* new_object = CShape::MakeObject(shape, _("Pipe"), SOLID_TYPE_UNKNOWN, wxGetApp().current_color);
+		wxGetApp().Add(new_object, NULL);
+		wxGetApp().Repaint();
 
-	return new_object;
+		return new_object;
+	}
+	catch (Standard_Failure) {
+		Handle_Standard_Failure e = Standard_Failure::Caught();
+		wxMessageBox(wxString(_("Error making pipe")) + _T(": ") + Ctt(e->GetMessageString()));
+	}
+	return NULL;
 }
 
 static void on_extrude_to_solid(bool onoff, HeeksObj* object)
@@ -242,6 +250,11 @@ bool CreateRuledSurface(const std::list<TopoDS_Wire> &wire_list, TopoDS_Shape& s
 			generator.Build();
 			shape = generator.Shape();
 		}
+		catch (Standard_Failure) {
+			Handle_Standard_Failure e = Standard_Failure::Caught();
+			wxMessageBox(wxString(_("Error making ruled solid")) + _T(": ") + Ctt(e->GetMessageString()));
+			return false;
+		}
 		catch(...)
 		{
 			wxMessageBox(_("Fatal error making ruled solid"));
@@ -263,6 +276,10 @@ void CreateExtrusions(const std::list<TopoDS_Shape> &faces_or_wires, std::list<T
 			generator.Build();
 			new_shapes.push_back(generator.Shape());
 		}
+	}
+	catch (Standard_Failure) {
+		Handle_Standard_Failure e = Standard_Failure::Caught();
+		wxMessageBox(wxString(_("Error making extruded solid")) + _T(": ") + Ctt(e->GetMessageString()));
 	}
 	catch(...)
 	{
@@ -290,6 +307,10 @@ void CreateRevolutions(const std::list<TopoDS_Shape> &faces_or_wires, std::list<
 				new_shapes.push_back(generator.Shape());
 			}
 		}
+	}
+	catch (Standard_Failure) {
+		Handle_Standard_Failure e = Standard_Failure::Caught();
+		wxMessageBox(wxString(_("Error making revolved solid")) + _T(": ") + Ctt(e->GetMessageString()));
 	}
 	catch(...)
 	{
