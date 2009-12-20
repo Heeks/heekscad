@@ -104,7 +104,7 @@ std::string RS274X::ReadBlock( const char *data, int *pos, const int max_pos )
 	return(l_ossBlock.str());
 } // End ReadBlock() method
 
-bool RS274X::Read( const char *p_szFileName)
+bool RS274X::Read( const char *p_szFileName, const FileInterpretation_t file_interpretation )
 {
 	printf("RS274X::Read(%s)\n", p_szFileName );
 
@@ -147,27 +147,33 @@ bool RS274X::Read( const char *p_szFileName)
 
 		delete [] memblock;
 
-        // Generate and add the sketch objects that represent the boundaries of the traces.
-		int number_of_networks = FormNetworks();
-		printf("Found %d separate networks\n", number_of_networks);
-
-		// Generate a raster image (bitmap) that represents the traces.
-		Bitmap pcb = RenderToBitmap();
-
-		// Save the PCB bitmap to a RAW raster file for debugging purposes.
-        // use the following command to convert this RAW image into a GIF file for viewing
-        // (substitute the width and height integers based on the boards dimensions - that
-        // appear in the file's name)
-        //
-        // eg: If file name is "pcb_width_3312_height_5678.raw" then the command would be;
-        // rawtoppm < /home/david/_width_3312_height_5678.raw 3312 5678 | ppmtogif > pcb.gif
+        if ((file_interpretation == IsolationRouting) || (file_interpretation == Both))
         {
-            std::ostringstream l_ossFileName;
-            l_ossFileName << "pcb" << "_width_" << pcb.PixelsPerRow() << "_height_" << pcb.PixelsPerColumn() << ".raw";
-            pcb.Save( l_ossFileName.str().c_str() );
-        }
+            // Generate and add the sketch objects that represent the boundaries of the traces.
+            int number_of_networks = FormNetworks();
+            printf("Found %d separate networks\n", number_of_networks);
 
+            // Generate a raster image (bitmap) that represents the traces.
+            Bitmap pcb = RenderToBitmap();
 
+            // Save the PCB bitmap to a RAW raster file for debugging purposes.
+            // use the following command to convert this RAW image into a GIF file for viewing
+            // (substitute the width and height integers based on the boards dimensions - that
+            // appear in the file's name)
+            //
+            // eg: If file name is "pcb_width_3312_height_5678.raw" then the command would be;
+            // rawtoppm < /home/david/_width_3312_height_5678.raw 3312 5678 | ppmtogif > pcb.gif
+            {
+                wxString file_name;
+                file_name << _("pcb") << _("_width_") << pcb.PixelsPerRow() << _("_height_") << pcb.PixelsPerColumn() << _T(".raw");
+                pcb.Save( file_name );
+            }
+        } // End if - then
+
+        if (file_interpretation == CentreLines)
+        {
+            DrawCentrelines();
+        } // End if - then
 
 
 		return true;
@@ -892,7 +898,6 @@ bool RS274X::AggregateFaces( const TopoDS_Face lhs, const TopoDS_Face rhs, TopoD
     TopoDS_Shape lhs_shape = BRepPrimAPI_MakePrism(lhs, gp_Vec(0,0,1));
     TopoDS_Shape rhs_shape = BRepPrimAPI_MakePrism(rhs, gp_Vec(0,0,1));
 
-
     try {
         BRepAlgo_Fuse fused( lhs_shape, rhs_shape );
         fused.Build();
@@ -1066,12 +1071,10 @@ bool RS274X::AggregateFilledArea( const RS274X::Traces_t & traces, TopoDS_Face *
             points.insert(point);
         }
 
-
         for (std::list<double>::const_iterator it = intersections.begin(); it != intersections.end(); it++)
         {
             printf("%lf\n", *it );
         }
-
 
         return( points.size() > 1);
     }
@@ -1166,6 +1169,85 @@ RS274X::Bitmap RS274X::RenderToBitmap()
 	return(pcb);
 }
 
+
+
+void RS274X::DrawCentrelines()
+{
+   	// Now aggregate the traces based on how they intersect each other.  We want all traces
+	// that touch to become one large object.
+
+    typedef std::list<HeeksObj *> Objects_t;
+    Objects_t objects;
+
+    for (Traces_t::iterator l_itTrace = m_traces.begin(); l_itTrace != m_traces.end(); l_itTrace++ )
+	{
+	    HeeksObj *object = l_itTrace->CentrelineGraphics();
+	    if (object != NULL)
+	    {
+            objects.push_back( object );
+	    }
+	}
+
+	for (FilledAreas_t::iterator l_itArea = m_filled_areas.begin(); l_itArea != m_filled_areas.end(); l_itArea++)
+	{
+	    for (Traces_t::iterator l_itTrace = l_itArea->begin(); l_itTrace != l_itArea->end(); l_itTrace++ )
+	    {
+	        HeeksObj *object = l_itTrace->CentrelineGraphics();
+            if (object != NULL)
+            {
+                objects.push_back( object );
+            }
+	    }
+	}
+
+
+    while (objects.size() > 1)
+    {
+        // Join all other sketches to the first one.  Keep joining until we can't find any to join.
+        if ((*(objects.begin()))->GetType() != SketchType)
+        {
+            // We're going to aggregate all elements with this first one.  If we haven't already,convert
+            // the first element into a sketch including itself.  This way we can just add to the
+            // sketch parent object when aggregating them.
+
+            HeeksObj *sketch = heekscad_interface.NewSketch();
+            ((CSketch *)sketch)->Add( *(objects.begin()), NULL );
+            *(objects.begin()) = sketch;
+        }
+
+        bool joins_made = false;
+        std::list<Objects_t::iterator> already_joined;
+        Objects_t::iterator itObject = objects.begin(); itObject++;
+        for ( ; (! joins_made) && (itObject != objects.end()); itObject++)
+        {
+            std::list<double> intersections;
+            if ((*itObject)->Intersects( *(objects.begin()),  &intersections) > 0)
+            {
+                ((CSketch *)*(objects.begin()))->Add( *itObject, NULL );
+                joins_made = true;
+                already_joined.push_back(itObject);
+            } // End if - then
+        } // End for
+
+        for (std::list<Objects_t::iterator>::iterator itRemove = already_joined.begin(); itRemove != already_joined.end(); itRemove++)
+        {
+            objects.erase( *itRemove );
+        }
+
+        if (joins_made == false)
+        {
+            // This is as big as it's ever going to get.
+            heekscad_interface.Add( *(objects.begin()), NULL );
+            objects.erase( objects.begin() );
+        }
+    } // End while
+
+	if (objects.size() > 0)
+	{
+		heekscad_interface.Add( *(objects.begin()), NULL );
+        objects.erase( objects.begin() );
+	}
+}
 
 
 int RS274X::FormNetworks()
@@ -1544,6 +1626,81 @@ bool RS274X::Trace::operator==( const Trace & rhs ) const
 	return(properties.Mass());
 } // End Area() method
 
+
+HeeksObj *RS274X::Trace::CentrelineGraphics() const
+{
+	switch (Interpolation())
+	{
+		case eLinear:
+		{
+			//it's a line
+			if (Length() < 0.00001)
+            {
+                return(NULL);
+            }
+
+			if (Length() > 0)
+			{
+
+                double start[3]; Point(Start()).ToDoubleArray(start);
+                double end[3];   Point(End()).ToDoubleArray(end);
+                return( heekscad_interface.NewLine( start, end ) );
+			}
+		}
+
+		case eCircular:
+		{
+		    if (Length() < 0.00001)
+            {
+               return(NULL);
+            }
+
+			if ((abs(m_i_term) < m_tolerance) && (abs(m_j_term) < m_tolerance) && (Radius() > m_tolerance))
+			{
+				// It's a full circle.
+				gp_Circ circ(gp_Ax2(Start(),gp_Dir(0,0,-1)), (m_aperture.OutsideDiameter()/2.0));
+				return( new HCircle( circ, &wxGetApp().current_color ) );
+			}
+			else
+			{
+				// It's an arc
+				gp_Vec vx(1.0, 0.0, 0.0);
+
+				double start_angle = vx.AngleWithRef( gp_Vec( Centre(), Start() ), gp_Vec( gp_Pnt(0,0,0), gp_Pnt(0, 0, 1)) );
+				double end_angle = vx.AngleWithRef( gp_Vec( Centre(), End() ), gp_Vec( gp_Pnt(0,0,0), gp_Pnt(0, 0, 1)) );
+
+				if (start_angle < 0) start_angle += (2.0 * PI);
+				if (end_angle < 0) end_angle += (2.0 * PI);
+
+				while (start_angle > end_angle)
+				{
+					end_angle += (2.0 * PI);
+				} // End if - then
+
+                double start[3]; Point(Start()).ToDoubleArray(start);
+                double end[3];   Point(End()).ToDoubleArray(end);
+                double centre[3]; Point(Centre()).ToDoubleArray(centre);
+                double up[3];
+
+                up[0] = 0;
+                up[1] = 0;
+                up[2] = (Clockwise()?-1:+1);
+
+                // return(heekscad_interface.NewArc(centre, up, Radius(), start_angle, end_angle ));
+
+				return(heekscad_interface.NewArc(start, end, centre, up ));
+			}
+			break;
+		}
+
+		case eFlash:
+		{
+			return(NULL);   // We don't want to draw the outlines of aperture flashes for a centre-line drawing.
+		}
+	} // End switch
+
+	return(NULL);
+}
 
 TopoDS_Face RS274X::Trace::Face() const
 {
@@ -2041,15 +2198,15 @@ CBox RS274X::BoundingBox() const
 
 
 
-bool RS274X::Bitmap::Save( const char *file_name ) const
+bool RS274X::Bitmap::Save( const wxString file_name ) const
 {
 	const bool success = true;
 	const bool failure = false;
 
-	FILE *fp = fopen(file_name,"w");
+	FILE *fp = fopen(Ttc(file_name.c_str()),"w");
 	if (! fp)
 	{
-		printf("Could not open '%s' for writing\n", file_name);
+		printf("Could not open '%s' for writing\n", Ttc(file_name));
 		return(failure);
 	}
 
@@ -2064,6 +2221,30 @@ bool RS274X::Bitmap::Save( const char *file_name ) const
 	}
 
 	fclose(fp);
+
+	wxString output_file_name(file_name.BeforeLast('.'));
+	if (output_file_name.length() == 0)
+	{
+	    output_file_name = file_name;
+	}
+	output_file_name << _T(".gif");
+
+	// Now generate a script that can be used to convert this file into a GIF format file for viewing.
+    fp = fopen(Ttc(output_file_name.c_str()),"w");
+    if (fp != NULL)
+    {
+        wxString contents;
+
+        contents << _T("#!/bin/bash\n\n");
+        contents << _("# This file converts the RAW image file generated by the HeeksCAD import of\n");
+        contents << _("# a GERBER format data file into a GIF format file.   This just makes it\n");
+        contents << _("# more convenient for viewing\n\n");
+        contents << _T("rawtoppm < \"") << file_name << _T("\" ") << PixelsPerRow() << _T(" ") << PixelsPerColumn() << _T(" | ppmtogif > \"") << output_file_name << _T("\"\n");
+
+        fprintf(fp,"%s\n", Ttc(contents.c_str()));
+    }
+
+    fclose(fp);
 	return(success);
 
 } // End Save() method
