@@ -25,12 +25,19 @@ for isolation milling.
 
 class RS274X
 {
+    public:
+        typedef enum
+        {
+            IsolationRouting = 0,   // Produce graphics for the boundaries of the wide traces.
+            CentreLines,            // Produce graphics for the centrelines of the traces.
+            Both
+        } FileInterpretation_t;
 
 	public:
 		RS274X();
 		~RS274X() { }
 
-		bool Read( const char *p_szFileName );
+		bool Read( const char *p_szFileName, const FileInterpretation_t interpretation );
 
     private:
 
@@ -186,7 +193,7 @@ class RS274X
 			}
 
 			bool ExposeFilm( const Bitmap & pattern, const gp_Pnt & location );
-			bool Save( const char *file_name ) const;
+			bool Save( const wxString file_name ) const;
 
 		private:
 			CBox m_box;
@@ -350,6 +357,7 @@ class RS274X
 			static double Area( const TopoDS_Face & face );
 			TopoDS_Face Face() const;
 			TopoDS_Shape Shape() const;
+			HeeksObj *CentrelineGraphics() const;       // Centreline only.
 			bool Valid() const;
 
 			bool Intersects( const Trace & rhs ) const;
@@ -425,6 +433,7 @@ class RS274X
 		static bool FacesIntersect( const TopoDS_Face lhs, const TopoDS_Face rhs );
 
 		int FormNetworks();
+		void DrawCentrelines();
 		Bitmap RenderToBitmap();
 		CBox BoundingBox() const;
 
