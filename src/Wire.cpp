@@ -22,32 +22,40 @@ public:
 
 	// Tool's virtual functions
 	void Run(){
-		BRepOffsetAPI_MakeOffset make_operation(m_wire->Wire());
-		make_operation.Perform(m_offset);
-		HeeksObj* new_object = CShape::MakeObject(make_operation.Shape(), _("Result of Wire Offset"), SOLID_TYPE_UNKNOWN, HeeksColor(234, 123, 89));
-		if(make_operation.Generated(make_operation.Shape()).Extent() > 0){
-			wxMessageBox(_("Generated"));
-		}
-
-		// ask about generation for each edge
-		TopExp_Explorer ex;
-		for ( ex.Init( m_wire->Shape(), TopAbs_EDGE ) ; ex.More(); ex.Next() )
+		try
 		{
-			TopoDS_Edge E = TopoDS::Edge(ex.Current());
-			if(int extent = make_operation.Generated(E).Extent() > 0){
-				wxString str = wxString(_("Generated from edge")) + _T(" = ") + wxString::Format(_T("%d"), extent);
-				wxMessageBox(str);
+			BRepOffsetAPI_MakeOffset make_operation(m_wire->Wire());
+			make_operation.Perform(m_offset);
+			HeeksObj* new_object = CShape::MakeObject(make_operation.Shape(), _("Result of Wire Offset"), SOLID_TYPE_UNKNOWN, HeeksColor(234, 123, 89));
+			if(make_operation.Generated(make_operation.Shape()).Extent() > 0){
+				wxMessageBox(_("Generated"));
 			}
+
+			// ask about generation for each edge
+			TopExp_Explorer ex;
+			for ( ex.Init( m_wire->Shape(), TopAbs_EDGE ) ; ex.More(); ex.Next() )
+			{
+				TopoDS_Edge E = TopoDS::Edge(ex.Current());
+				if(int extent = make_operation.Generated(E).Extent() > 0){
+					wxString str = wxString(_("Generated from edge")) + _T(" = ") + wxString::Format(_T("%d"), extent);
+					wxMessageBox(str);
+				}
+			}
+
+			if(make_operation.Modified(make_operation.Shape()).Extent() > 0){
+				wxMessageBox(_("Modified"));
+			}
+			if(make_operation.IsDeleted(make_operation.Shape())){
+				wxMessageBox(_("Is Deleted"));
+			}
+			wxGetApp().Add(new_object, NULL);
+			wxGetApp().Remove(m_wire);
+		}
+		catch (Standard_Failure) {
+			Handle_Standard_Failure e = Standard_Failure::Caught();
+			wxMessageBox(wxString(_("Error making offset")) + _T(": ") + Ctt(e->GetMessageString()));
 		}
 
-		if(make_operation.Modified(make_operation.Shape()).Extent() > 0){
-			wxMessageBox(_("Modified"));
-		}
-		if(make_operation.IsDeleted(make_operation.Shape())){
-			wxMessageBox(_("Is Deleted"));
-		}
-		wxGetApp().Add(new_object, NULL);
-		wxGetApp().Remove(m_wire);
 	}
 	const wxChar* GetTitle(){
 		wxString str = wxString(_("Offset Wire")) + wxString::Format(_T(" %lf"), m_offset);
