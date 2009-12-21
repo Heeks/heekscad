@@ -196,9 +196,15 @@ bool ConvertSketchToFaceOrWire(HeeksObj* object, TopoDS_Shape& face_or_wire, boo
 				face_or_wire = wire_maker.Wire();
 			}
 		}
+		catch (Standard_Failure) {
+			Handle_Standard_Failure e = Standard_Failure::Caught();
+			wxMessageBox(wxString(_("Error converting sketch to face")) + _T(": ") + Ctt(e->GetMessageString()));
+			return false;
+		}
 		catch(...)
 		{
 			wxMessageBox(_("Fatal Error converting sketch to face"));
+			return false;
 		}
 		return true;
 	}
