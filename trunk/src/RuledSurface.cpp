@@ -104,7 +104,7 @@ HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_o
 	{
 		for(std::list<TopoDS_Shape>::iterator It = new_shapes.begin(); It != new_shapes.end(); It++){
 			TopoDS_Shape& shape = *It;
-			new_object = CShape::MakeObject(shape, _("Extruded Solid"), SOLID_TYPE_UNKNOWN, wxGetApp().current_color);
+			new_object = CShape::MakeObject(shape, revolution_not_extrusion ? _("Revolved Solid") : _("Extruded Solid"), SOLID_TYPE_UNKNOWN, wxGetApp().current_color);
 			wxGetApp().Add(new_object, NULL);
 		}
 		wxGetApp().Repaint();
