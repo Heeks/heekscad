@@ -352,6 +352,9 @@ class RS274X
 			gp_Circ Circle() const;
 			gp_Lin Line() const;
 
+			double StartAngle() const;
+			double EndAngle() const;
+
 			double Length() const;
 			bool operator==( const Trace & rhs ) const;
 			static double Area( const TopoDS_Face & face );
@@ -436,6 +439,11 @@ class RS274X
 		void DrawCentrelines();
 		Bitmap RenderToBitmap();
 		CBox BoundingBox() const;
+		static double AngleBetweenVectors(  const gp_Pnt & vector_1_start_point,
+                                            const gp_Pnt & vector_1_end_point,
+                                            const gp_Pnt & vector_2_start_point,
+                                            const gp_Pnt & vector_2_end_point,
+                                            const double minimum_angle );
 
 		struct traces_intersect : std::unary_function< const Trace &, bool >
 		{

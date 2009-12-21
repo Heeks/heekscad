@@ -451,7 +451,7 @@ double RS274X::InterpretCoord(
 
 	if (leading_zero_suppression)
 	{
-		while (_coord.size() < (unsigned int) digits_right_of_point) _coord.push_back('0');
+		while (_coord.size() < (unsigned int) digits_right_of_point) _coord.insert(0,"0");
 
 		// use the end of the string as the reference point.
 		result = atof( _coord.substr( 0, _coord.size() - digits_right_of_point ).c_str() );
@@ -459,7 +459,7 @@ double RS274X::InterpretCoord(
 	} // End if - then
 	else
 	{
-		while (_coord.size() < (unsigned int) digits_left_of_point) _coord.insert(0,"0");
+		while (_coord.size() < (unsigned int) digits_left_of_point) _coord.push_back('0');
 
 		// use the beginning of the string as the reference point.
 		result = atof( _coord.substr( 0, digits_left_of_point ).c_str() );
@@ -726,6 +726,7 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 				trace.Clockwise( m_cw_circular_interpolation );
 				trace.I( i_term );
 				trace.J( j_term );
+				trace.Radius( sqrt((i_term * i_term) + (j_term * j_term)) );
 
 				if(m_area_fill)
 				{
@@ -937,10 +938,8 @@ bool RS274X::AggregateFaces( const TopoDS_Face lhs, const TopoDS_Face rhs, TopoD
             }
         } // End if - then
     }
-    catch(Standard_Failure & failure)
-    {
-		(void) failure;	// Avoid the compiler warning.
-        printf("Caught Standard_Failure exception\n");
+    catch (Standard_Failure) {
+        Handle_Standard_Failure e = Standard_Failure::Caught();
         return(l_bFailure);
     }
 
@@ -1069,11 +1068,6 @@ bool RS274X::AggregateFilledArea( const RS274X::Traces_t & traces, TopoDS_Face *
             point.SetZ( *(intersections.begin()) ); intersections.erase( intersections.begin() );
 
             points.insert(point);
-        }
-
-        for (std::list<double>::const_iterator it = intersections.begin(); it != intersections.end(); it++)
-        {
-            printf("%lf\n", *it );
         }
 
         return( points.size() > 1);
@@ -1557,6 +1551,52 @@ gp_Lin RS274X::Trace::Line() const
 				return( HeeksObject()->Intersects( rhs.HeeksObject(), &points ) > 0);
 			} // End Intersects() method*/
 
+
+/* static */ double RS274X::AngleBetweenVectors(
+        const gp_Pnt & vector_1_start_point,
+        const gp_Pnt & vector_1_end_point,
+        const gp_Pnt & vector_2_start_point,
+        const gp_Pnt & vector_2_end_point,
+        const double minimum_angle )
+{
+    gp_Vec vector1( vector_1_start_point, vector_1_end_point );
+    gp_Vec vector2( vector_2_start_point, vector_2_end_point );
+    gp_Vec reference( 0, 0, 1 );    // Looking from the top down.
+
+    double angle = vector1.AngleWithRef( vector2, reference );
+    while (angle < minimum_angle) angle += (2 * PI);
+    return(angle);
+}
+
+
+double RS274X::Trace::StartAngle() const
+{
+    if (Clockwise())
+    {
+        double end_angle = RS274X::AngleBetweenVectors( Centre(), End(), gp_Pnt(0,0,0), gp_Pnt(1,0,0), 0.0 );
+        double start_angle = RS274X::AngleBetweenVectors( Centre(), Start(), gp_Pnt(0,0,0), gp_Pnt(1,0,0), end_angle );
+        return(start_angle);
+    }
+    else
+    {
+        return(RS274X::AngleBetweenVectors( Centre(), Start(), gp_Pnt(0,0,0), gp_Pnt(1,0,0), 0.0 ));
+     }
+}
+
+double RS274X::Trace::EndAngle() const
+{
+    if (Clockwise())
+    {
+        return(RS274X::AngleBetweenVectors( Centre(), End(), gp_Pnt(0,0,0), gp_Pnt(1,0,0), 0.0 ));
+    }
+    else
+    {
+        double start_angle = RS274X::AngleBetweenVectors( Centre(), Start(), gp_Pnt(0,0,0), gp_Pnt(1,0,0), 0.0 );
+        double end_angle = RS274X::AngleBetweenVectors( Centre(), End(), gp_Pnt(0,0,0), gp_Pnt(1,0,0), start_angle );
+        return(end_angle);
+     }
+}
+
 double RS274X::Trace::Length() const
 {
 	switch (Interpolation())
@@ -1575,19 +1615,7 @@ double RS274X::Trace::Length() const
 			{
 				if ((Start().Distance(End()) < 0.000001) && (Radius() < 0.00001)) return(0.0);
 
-				gp_Vec vx(1.0, 0.0, 0.0);
-				gp_Vec vy(0.0, 1.0, 0.0);
-
-				gp_Vec start_vector( Centre(), Start() );
-				gp_Vec end_vector( Centre(), End() );
-
-				double start_angle = start_vector.Angle( vx );
-				if (start_angle < 0.0) start_angle += (2.0 * PI);
-
-				double end_angle = end_vector.Angle( vx );
-				if (end_angle < 0.0) end_angle += (2.0 * PI);
-
-				double arc_angle = end_angle - start_angle;
+				double arc_angle = EndAngle() - StartAngle();
 				double arc_length = (arc_angle / (2.0 * PI)) * (2.0 * PI * Radius());
 				return(abs(arc_length));
 			} // End if - else
@@ -1664,19 +1692,6 @@ HeeksObj *RS274X::Trace::CentrelineGraphics() const
 			else
 			{
 				// It's an arc
-				gp_Vec vx(1.0, 0.0, 0.0);
-
-				double start_angle = vx.AngleWithRef( gp_Vec( Centre(), Start() ), gp_Vec( gp_Pnt(0,0,0), gp_Pnt(0, 0, 1)) );
-				double end_angle = vx.AngleWithRef( gp_Vec( Centre(), End() ), gp_Vec( gp_Pnt(0,0,0), gp_Pnt(0, 0, 1)) );
-
-				if (start_angle < 0) start_angle += (2.0 * PI);
-				if (end_angle < 0) end_angle += (2.0 * PI);
-
-				while (start_angle > end_angle)
-				{
-					end_angle += (2.0 * PI);
-				} // End if - then
-
                 double start[3]; Point(Start()).ToDoubleArray(start);
                 double end[3];   Point(End()).ToDoubleArray(end);
                 double centre[3]; Point(Centre()).ToDoubleArray(centre);
@@ -1685,8 +1700,6 @@ HeeksObj *RS274X::Trace::CentrelineGraphics() const
                 up[0] = 0;
                 up[1] = 0;
                 up[2] = (Clockwise()?-1:+1);
-
-                // return(heekscad_interface.NewArc(centre, up, Radius(), start_angle, end_angle ));
 
 				return(heekscad_interface.NewArc(start, end, centre, up ));
 			}
@@ -1796,28 +1809,17 @@ TopoDS_Face RS274X::Trace::Face() const
 				gp_Vec vx(1.0, 0.0, 0.0);
 				gp_Vec vy(0.0, 1.0, 0.0);
 
-				double start_angle = vx.Angle( gp_Vec( Centre(), Start() ));
-				if (start_angle < 0) start_angle += (2.0 * PI);
-
-				double end_angle = vx.Angle( gp_Vec( Centre(), End() ));
-				if (end_angle < 0) end_angle += (2.0 * PI);
-
-				while (start_angle > end_angle)
-				{
-					end_angle += (2.0 * PI);
-				} // End if - then
-
 				double radius = (m_aperture.OutsideDiameter()/2.0);
-				gp_Pnt p1 = Start().Translated(vx*radius*cos(start_angle)+vy*radius*sin(start_angle));
+				gp_Pnt p1 = Start().Translated(vx*radius*cos(StartAngle())+vy*radius*sin(StartAngle()));
 
 				radius = (m_aperture.OutsideDiameter()/2.0);
-				gp_Pnt p2 = Start().Translated(vx*radius*cos(start_angle + PI)+vy*radius*sin(start_angle + PI));
+				gp_Pnt p2 = Start().Translated(vx*radius*cos(StartAngle() + PI)+vy*radius*sin(StartAngle() + PI));
 
 				radius = (m_aperture.OutsideDiameter()/2.0);
-				gp_Pnt p3 = End().Translated(vx*radius*cos(end_angle)+vy*radius*sin(end_angle));
+				gp_Pnt p3 = End().Translated(vx*radius*cos(EndAngle())+vy*radius*sin(EndAngle()));
 
 				radius = (m_aperture.OutsideDiameter()/2.0);
-				gp_Pnt p4 = End().Translated(vx*radius*cos(end_angle + PI)+vy*radius*sin(end_angle + PI));
+				gp_Pnt p4 = End().Translated(vx*radius*cos(EndAngle() + PI)+vy*radius*sin(EndAngle() + PI));
 
 				gp_Dir dir1, dir2;
 
@@ -1917,25 +1919,11 @@ void RS274X::Trace::ExposeFilm( RS274X::Bitmap & pcb )
 			else
 			{
 				// It's an arc
-				gp_Vec vx(1.0, 0.0, 0.0);
-				gp_Vec vy(0.0, 1.0, 0.0);
-
-				double start_angle = vx.AngleWithRef( gp_Vec( Centre(), Start() ), gp_Vec( gp_Pnt(0,0,0), gp_Pnt(0, 0, 1)) );
-				double end_angle = vx.AngleWithRef( gp_Vec( Centre(), End() ), gp_Vec( gp_Pnt(0,0,0), gp_Pnt(0, 0, 1)) );
-
-                gp_Pnt start(Start());
-                gp_Pnt end(End());
-                gp_Pnt centre(Centre());
-
 				if (Clockwise())
 				{
 				    // We're turning clockwise so we want the end_angle to be smaller than the start_angle.
-				    while (end_angle < 0) end_angle += (2 * PI);
-				    while (start_angle < 0) start_angle += (2 * PI);
-				    while (start_angle < end_angle) start_angle += (2 * PI);
-
-					double increment = (start_angle - end_angle) / (Length() * Bitmap::PixelsPerMM() * 2.0);
-					for (double angle = end_angle; angle <= start_angle; angle += increment)
+					double increment = (StartAngle() - EndAngle()) / (Length() * Bitmap::PixelsPerMM() * 2.0);
+					for (double angle = EndAngle(); angle <= StartAngle(); angle += increment)
 					{
 						double x = (cos( angle ) * Radius()) + Centre().X();
 						double y = (sin( angle ) * Radius()) + Centre().Y();
@@ -1948,12 +1936,8 @@ void RS274X::Trace::ExposeFilm( RS274X::Bitmap & pcb )
 				{
 					// Counter-Clockwise
 					// We're turning clockwise so we want the start_angle to be smaller than the end_angle.
-				    while (end_angle < 0) end_angle += (2 * PI);
-				    while (start_angle < 0) start_angle += (2 * PI);
-				    while (start_angle > end_angle) end_angle += (2 * PI);
-
-					double increment = (end_angle - start_angle) / (Length() * Bitmap::PixelsPerMM());
-					for (double angle = start_angle; angle <= end_angle; angle += increment)
+					double increment = (EndAngle() - StartAngle()) / (Length() * Bitmap::PixelsPerMM());
+					for (double angle = StartAngle(); angle <= EndAngle(); angle += increment)
 					{
 						double x = (cos( angle ) * Radius()) + Centre().X();
 						double y = (sin( angle ) * Radius()) + Centre().Y();
@@ -2122,24 +2106,10 @@ CBox RS274X::Trace::BoundingBox() const
 			else
 			{
 				// It's an arc
-				gp_Vec vx(1.0, 0.0, 0.0);
-				gp_Vec vy(0.0, 1.0, 0.0);
-
-				double start_angle = vx.Angle( gp_Vec( Centre(), Start() ));
-				if (start_angle < 0) start_angle += (2.0 * PI);
-
-				double end_angle = vx.Angle( gp_Vec( Centre(), End() ));
-				if (end_angle < 0) end_angle += (2.0 * PI);
-
-				while (start_angle > end_angle)
-				{
-					end_angle += (2.0 * PI);
-				} // End if - then
-
 				if (Clockwise())
 				{
-					double increment = (end_angle - start_angle) / (Length() * Bitmap::PixelsPerMM());
-					for (double angle = end_angle; angle <= start_angle; angle -= increment)
+					double increment = (EndAngle() - StartAngle()) / (Length() * Bitmap::PixelsPerMM());
+					for (double angle = EndAngle(); angle <= StartAngle(); angle -= increment)
 					{
 						double x = cos( angle ) * Radius();
 						double y = sin( angle ) * Radius();
@@ -2150,8 +2120,8 @@ CBox RS274X::Trace::BoundingBox() const
 				else
 				{
 					// Counter-Clockwise
-					double increment = (end_angle - start_angle) / (Length() * Bitmap::PixelsPerMM());
-					for (double angle = start_angle; angle <= end_angle; angle += increment)
+					double increment = (EndAngle() - StartAngle()) / (Length() * Bitmap::PixelsPerMM());
+					for (double angle = StartAngle(); angle <= EndAngle(); angle += increment)
 					{
 						double x = cos( angle ) * Radius();
 						double y = sin( angle ) * Radius();

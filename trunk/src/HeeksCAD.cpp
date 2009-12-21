@@ -841,6 +841,7 @@ void HeeksCADapp::OpenRS274XFile(const wxChar *filepath)
 	RS274X gerber;
 	gerber.Read(wxString(filepath).mb_str(), RS274X::IsolationRouting );
 	// gerber.Read(wxString(filepath).mb_str(), RS274X::CentreLines );
+	// gerber.Read(wxString(filepath).mb_str(), RS274X::Both );
 }
 
 bool HeeksCADapp::OpenImageFile(const wxChar *filepath)
