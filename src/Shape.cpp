@@ -173,18 +173,25 @@ public:
 		config.Read(_T("OffsetShapeValue"), &offset_value);
 		if(wxGetApp().InputDouble(_("Enter Offset Value, + for making bigger, - for making smaller"), _("Offset value"), offset_value))
 		{
-			TopoDS_Shape new_shape = BRepOffsetAPI_MakeOffsetShape(m_shape->Shape(), offset_value, wxGetApp().m_geom_tol);
+			try
+			{
+				TopoDS_Shape new_shape = BRepOffsetAPI_MakeOffsetShape(m_shape->Shape(), offset_value, wxGetApp().m_geom_tol);
 
 #ifdef TESTNEWSHAPE
-			//This will end up throwing 90% of the exceptions caused by a bad offset
-			BRepTools::Clean(new_shape);
-			BRepMesh::Mesh(new_shape, 1.0);
+				//This will end up throwing 90% of the exceptions caused by a bad offset
+				BRepTools::Clean(new_shape);
+				BRepMesh::Mesh(new_shape, 1.0);
 #endif
 
-			HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of 'Offset Shape'"), SOLID_TYPE_UNKNOWN, m_shape->m_color);
-			m_shape->Owner()->Add(new_object, NULL);
-			m_shape->Owner()->Remove(m_shape);
-			config.Write(_T("OffsetShapeValue"), offset_value);
+				HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of 'Offset Shape'"), SOLID_TYPE_UNKNOWN, m_shape->m_color);
+				m_shape->Owner()->Add(new_object, NULL);
+				m_shape->Owner()->Remove(m_shape);
+				config.Write(_T("OffsetShapeValue"), offset_value);
+			}
+			catch (Standard_Failure) {
+				Handle_Standard_Failure e = Standard_Failure::Caught();
+				wxMessageBox(wxString(_("Error making offset")) + _T(": ") + Ctt(e->GetMessageString()));
+			}
 		}
 	}
 	const wxChar* GetTitle(){ return _("Offset Shape");}
@@ -295,43 +302,66 @@ HeeksObj* CShape::MakeObject(const TopoDS_Shape &shape, const wxChar* title, Sol
 static bool Cut(const std::list<TopoDS_Shape> &shapes, TopoDS_Shape& new_shape){
 	if(shapes.size() < 2)return false;
 
-	std::list<TopoDS_Shape>::const_iterator It = shapes.begin();
-	TopoDS_Shape current_shape = *It;
-	It++;
-	while(It != shapes.end())
+	try
 	{
-		const TopoDS_Shape &cutting_shape = *It;
-		current_shape = BRepAlgoAPI_Cut(current_shape, cutting_shape);
+		std::list<TopoDS_Shape>::const_iterator It = shapes.begin();
+		TopoDS_Shape current_shape = *It;
 		It++;
-	}
+		while(It != shapes.end())
+		{
+			const TopoDS_Shape &cutting_shape = *It;
+			current_shape = BRepAlgoAPI_Cut(current_shape, cutting_shape);
+			It++;
+		}
 
-	new_shape = current_shape;
-	return true;
+		new_shape = current_shape;
+		return true;
+	}
+	catch (Standard_Failure) {
+		Handle_Standard_Failure e = Standard_Failure::Caught();
+		wxMessageBox(wxString(_("Error with cut operation")) + _T(": ") + Ctt(e->GetMessageString()));
+		return false;
+	}
 }
 
 static HeeksObj* Fuse(HeeksObj* s1, HeeksObj* s2){
-	TopoDS_Shape sh1, sh2;
-	TopoDS_Shape new_shape;
-	
-	if(wxGetApp().useOldFuse)new_shape = BRepAlgo_Fuse(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
-	else new_shape = BRepAlgoAPI_Fuse(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
+	try
+	{
+		TopoDS_Shape sh1, sh2;
+		TopoDS_Shape new_shape;
+		if(wxGetApp().useOldFuse)new_shape = BRepAlgo_Fuse(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
+		else new_shape = BRepAlgoAPI_Fuse(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
 
-	HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of Fuse Operation"), SOLID_TYPE_UNKNOWN, ((CShape*)s1)->m_color);
-	wxGetApp().Add(new_object, NULL);
-	wxGetApp().Remove(s1);
-	wxGetApp().Remove(s2);
-	return new_object;
+		HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of Fuse Operation"), SOLID_TYPE_UNKNOWN, ((CShape*)s1)->m_color);
+		wxGetApp().Add(new_object, NULL);
+		wxGetApp().Remove(s1);
+		wxGetApp().Remove(s2);
+		return new_object;
+	}
+	catch (Standard_Failure) {
+		Handle_Standard_Failure e = Standard_Failure::Caught();
+		wxMessageBox(wxString(_("Error with fuse operation")) + _T(": ") + Ctt(e->GetMessageString()));
+		return NULL;
+	}
 }
 
 static HeeksObj* Common(HeeksObj* s1, HeeksObj* s2){
-	TopoDS_Shape sh1, sh2;
-	TopoDS_Shape new_shape = BRepAlgoAPI_Common(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
+	try
+	{
+		TopoDS_Shape sh1, sh2;
+		TopoDS_Shape new_shape = BRepAlgoAPI_Common(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
 
-	HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of Common Operation"), SOLID_TYPE_UNKNOWN, ((CShape*)s1)->m_color);
-	wxGetApp().Add(new_object, NULL);
-	wxGetApp().Remove(s1);
-	wxGetApp().Remove(s2);
-	return new_object;
+		HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of Common Operation"), SOLID_TYPE_UNKNOWN, ((CShape*)s1)->m_color);
+		wxGetApp().Add(new_object, NULL);
+		wxGetApp().Remove(s1);
+		wxGetApp().Remove(s2);
+		return new_object;
+	}
+	catch (Standard_Failure) {
+		Handle_Standard_Failure e = Standard_Failure::Caught();
+		wxMessageBox(wxString(_("Error with common operation")) + _T(": ") + Ctt(e->GetMessageString()));
+		return NULL;
+	}
 }
 
 CFace* CShape::find(const TopoDS_Face &face)
