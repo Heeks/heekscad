@@ -89,7 +89,7 @@ void CDxfWrite::WriteArc(const double* s, const double* e, const double* c, bool
 	(*m_ofs) << c[1]		<< endl;	// Y in WCS coordinates
 	(*m_ofs) << 30			<< endl;
 	(*m_ofs) << c[2]		<< endl;	// Z in WCS coordinates
-	(*m_ofs) << 40			<< endl;	// 
+	(*m_ofs) << 40			<< endl;	//
 	(*m_ofs) << radius		<< endl;	// Radius
 	(*m_ofs) << 50			<< endl;
 	(*m_ofs) << start_angle	<< endl;	// Start angle
@@ -109,7 +109,7 @@ void CDxfWrite::WriteCircle(const double* c, double radius)
 	(*m_ofs) << c[1]		<< endl;	// Y in WCS coordinates
 	(*m_ofs) << 30			<< endl;
 	(*m_ofs) << c[2]		<< endl;	// Z in WCS coordinates
-	(*m_ofs) << 40			<< endl;	// 
+	(*m_ofs) << 40			<< endl;	//
 	(*m_ofs) << radius		<< endl;	// Radius
 }
 
@@ -137,14 +137,14 @@ void CDxfWrite::WriteEllipse(const double* c, double major_radius, double minor_
 	(*m_ofs) << c[1]		<< endl;	// Y in WCS coordinates
 	(*m_ofs) << 30			<< endl;
 	(*m_ofs) << c[2]		<< endl;	// Z in WCS coordinates
-	(*m_ofs) << 40			<< endl;	// 
+	(*m_ofs) << 40			<< endl;	//
 	(*m_ofs) << ratio		<< endl;	// Ratio
-	(*m_ofs) << 11			<< endl;	// 
-	(*m_ofs) << m[0]		<< endl;	// Major X 
+	(*m_ofs) << 11			<< endl;	//
+	(*m_ofs) << m[0]		<< endl;	// Major X
 	(*m_ofs) << 21			<< endl;
-	(*m_ofs) << m[1]		<< endl;	// Major Y 
+	(*m_ofs) << m[1]		<< endl;	// Major Y
 	(*m_ofs) << 31			<< endl;
-	(*m_ofs) << m[2]		<< endl;	// Major Z 
+	(*m_ofs) << m[2]		<< endl;	// Major Z
 	(*m_ofs) << 41		<< endl;
 	(*m_ofs) << start_angle	<< endl;	// Start angle
 	(*m_ofs) << 42		<< endl;
@@ -156,6 +156,7 @@ CDxfRead::CDxfRead(const wxChar* filepath)
 	// start the file
 	m_fail = false;
 	m_eUnits = eMillimeters;
+	m_layer_name = _T("0");	// Default layer name
 
 	m_ifs = new ifstream(Ttc(filepath));
 	if(!(*m_ifs)){
@@ -219,6 +220,12 @@ bool CDxfRead::ReadLine()
 				// next item found, so finish with line
 				OnReadLine(s, e);
 				return true;
+
+			case 8: // Layer name follows
+				get_line();
+				m_layer_name = Ctt(m_str);
+				break;
+
 			case 10:
 				// start x
 				get_line();
@@ -288,6 +295,12 @@ bool CDxfRead::ReadArc()
 				// next item found, so finish with arc
 				OnReadArc(start_angle, end_angle, radius, c);
 				return true;
+
+			case 8: // Layer name follows
+				get_line();
+				m_layer_name = Ctt(m_str);
+				break;
+
 			case 10:
 				// centre x
 				get_line();
@@ -361,6 +374,11 @@ bool CDxfRead::ReadSpline()
 				// next item found, so finish with Spline
 				OnReadSpline(sd);
 				return true;
+			case 8: // Layer name follows
+				get_line();
+				m_layer_name = Ctt(m_str);
+				break;
+
 			case 210:
 				// normal x
 				get_line();
@@ -519,6 +537,11 @@ bool CDxfRead::ReadCircle()
 				// next item found, so finish with Circle
 				OnReadCircle(c, radius);
 				return true;
+			case 8: // Layer name follows
+				get_line();
+				m_layer_name = Ctt(m_str);
+				break;
+
 			case 10:
 				// centre x
 				get_line();
@@ -577,6 +600,11 @@ bool CDxfRead::ReadEllipse()
 				// next item found, so finish with Ellipse
 				OnReadEllipse(c, m, ratio, start, end);
 				return true;
+			case 8: // Layer name follows
+				get_line();
+				m_layer_name = Ctt(m_str);
+				break;
+
 			case 10:
 				// centre x
 				get_line();
@@ -621,7 +649,7 @@ bool CDxfRead::ReadEllipse()
 				// end
 				get_line();
 				ss.str(m_str); ss >> end; if(ss.fail()) return false;
-				break;	
+				break;
 			case 100:
 			case 210:
 			case 220:
@@ -666,28 +694,28 @@ static void AddPolyLinePoint(CDxfRead* dxf_read, double x, double y, bool bulge_
 				double r = (c/2) / cos((Pi-a)/2);
 
 				double d = sqrt(r*r - (c/2)*(c/2));
-				
+
 				double ps[3] = {poly_prev_x, poly_prev_y, 0};
 				double pe[3] = {x, y, 0};
 				gp_Pnt pPnt = make_point(ps);
 				gp_Pnt nPnt = make_point(pe);
 				gp_Dir dir(nPnt.XYZ()-pPnt.XYZ());
-				
+
 				gp_Pnt mid = pPnt.XYZ() + dir.XYZ() * c / 2;
-				
+
 				dir.Rotate(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,0,1)),Pi/2);
 				gp_Pnt off;
 				if(poly_prev_bulge >= 0)
-					off = mid.XYZ() + dir.XYZ() * (d); 
+					off = mid.XYZ() + dir.XYZ() * (d);
 				else
-					off = mid.XYZ() + dir.XYZ() * (-d); 
-			
+					off = mid.XYZ() + dir.XYZ() * (-d);
+
 				double pc[3];
 				extract(off,pc);
-				
+
 				dxf_read->OnReadArc(ps, pe, pc, poly_prev_bulge >= 0);
 				arc_done = true;
-			
+
 		}
 
 		if(!arc_done)
@@ -750,6 +778,11 @@ bool CDxfRead::ReadLwPolyLine()
 				}
 				next_item_found = true;
 				break;
+			case 8: // Layer name follows
+				get_line();
+				m_layer_name = Ctt(m_str);
+				break;
+
 			case 10:
 				// x
 				get_line();
@@ -829,11 +862,11 @@ void CDxfRead::OnReadEllipse(const double* c, const double* m, double ratio, dou
 
 	//Since we only support 2d stuff, we can calculate the rotation from the major axis x and y value only,
 	//since z is zero, major_radius is the vector length
-	
+
 	double rotation = atan2(m[1]/major_radius,m[0]/major_radius);
 
 
-	OnReadEllipse(c, major_radius, minor_radius, rotation, start_angle, end_angle, true); 
+	OnReadEllipse(c, major_radius, minor_radius, rotation, start_angle, end_angle, true);
 }
 
 void CDxfRead::OnReadSpline(struct SplineData& sd)
@@ -861,8 +894,8 @@ void CDxfRead::OnReadSpline(struct SplineData& sd)
 	std::list<double> knoto;
 	std::list<int> multo;
 
-	std::list<double>::iterator ity = sd.controly.begin(); 
-	std::list<double>::iterator itz = sd.controlz.begin(); 
+	std::list<double>::iterator ity = sd.controly.begin();
+	std::list<double>::iterator itz = sd.controlz.begin();
 	std::list<double>::iterator itw = sd.weight.begin();
 
 	int i=1;
@@ -885,7 +918,7 @@ void CDxfRead::OnReadSpline(struct SplineData& sd)
 	i=1;
 	double last_knot = -1;
 	for(std::list<double>::iterator it = sd.knot.begin(); it!=sd.knot.end(); ++it)
-	{	
+	{
 		if(*it != last_knot)
 		{
 			knoto.push_back(*it);
@@ -1002,6 +1035,8 @@ void CDxfRead::DoRead()
 
 		get_line();
 	}
+
+    AddGraphics();
 }
 
 // static
@@ -1010,9 +1045,7 @@ bool HeeksDxfRead::m_make_as_sketch = false;
 void HeeksDxfRead::OnReadLine(const double* s, const double* e)
 {
 	HLine* new_object = new HLine(make_point(s), make_point(e), &(wxGetApp().current_color));
-	AddSketchIfNeeded();
-	if(m_sketch)m_sketch->Add(new_object, NULL);
-	else wxGetApp().Add(new_object, NULL);
+	AddObject(new_object);
 }
 
 void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, bool dir)
@@ -1024,9 +1057,7 @@ void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, 
 	gp_Pnt pc = make_point(c);
 	gp_Circ circle(gp_Ax2(pc, up), p1.Distance(pc));
 	HArc* new_object = new HArc(p0, p1, circle, &wxGetApp().current_color);
-	AddSketchIfNeeded();
-	if(m_sketch)m_sketch->Add(new_object, NULL);
-	else wxGetApp().Add(new_object, NULL);
+	AddObject(new_object);
 }
 
 void HeeksDxfRead::OnReadCircle(const double* s, const double* c, bool dir)
@@ -1038,8 +1069,7 @@ void HeeksDxfRead::OnReadCircle(const double* s, const double* c, bool dir)
 	gp_Pnt pc = make_point(c);
 	gp_Circ circle(gp_Ax2(pc, up), p0.Distance(pc));
 	HCircle* new_object = new HCircle(circle, &wxGetApp().current_color);
-	if(m_sketch)m_sketch->Add(new_object, NULL);
-	else wxGetApp().Add(new_object, NULL);
+	AddObject(new_object);
 }
 
 void HeeksDxfRead::OnReadSpline(TColgp_Array1OfPnt &control, TColStd_Array1OfReal &weight, TColStd_Array1OfReal &knot,TColStd_Array1OfInteger &mult, int degree, bool periodic, bool rational)
@@ -1047,9 +1077,7 @@ void HeeksDxfRead::OnReadSpline(TColgp_Array1OfPnt &control, TColStd_Array1OfRea
 	try{
 		Geom_BSplineCurve spline(control,weight,knot,mult,degree,periodic,rational);
 		HSpline* new_object = new HSpline(spline, &wxGetApp().current_color);
-		AddSketchIfNeeded();
-		if(m_sketch)m_sketch->Add(new_object, NULL);
-		else wxGetApp().Add(new_object, NULL);
+		AddObject(new_object);
 	}
 	catch(...)
 	{
@@ -1064,16 +1092,37 @@ void HeeksDxfRead::OnReadEllipse(const double* c, double major_radius, double mi
 	gp_Elips ellipse(gp_Ax2(pc, up), major_radius, minor_radius);
 	ellipse.Rotate(gp_Ax1(pc,up),rotation);
 	HEllipse* new_object = new HEllipse(ellipse, &wxGetApp().current_color);
-	AddSketchIfNeeded();
-	if(m_sketch)m_sketch->Add(new_object, NULL);
-	else wxGetApp().Add(new_object, NULL);
+	AddObject(new_object);
 }
 
-void HeeksDxfRead::AddSketchIfNeeded()
+void HeeksDxfRead::AddObject(HeeksObj *object)
 {
-	if(m_make_as_sketch && m_sketch == NULL)
+	if(m_make_as_sketch)
 	{
-		m_sketch = new CSketch();
-		wxGetApp().Add(m_sketch, NULL);
+		// Check to see if we've already added a sketch for the current layer name.  If not
+		// then add one now.
+
+		if (m_sketches.find( LayerName() ) == m_sketches.end())
+		{
+			m_sketches.insert( std::make_pair( LayerName(), new CSketch() ) );
+		}
+
+		m_sketches[LayerName()]->Add( object, NULL );
 	}
+	else
+	{
+        wxGetApp().Add( object, NULL );
+	}
+}
+
+void HeeksDxfRead::AddGraphics() const
+{
+    if (m_make_as_sketch)
+    {
+        for (Sketches_t::const_iterator l_itSketch = m_sketches.begin(); l_itSketch != m_sketches.end(); l_itSketch++)
+        {
+            ((CSketch *)l_itSketch->second)->OnEditString( l_itSketch->first.c_str() );
+            wxGetApp().Add( l_itSketch->second, NULL );
+        }
+    }
 }
