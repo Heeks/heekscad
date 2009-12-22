@@ -68,10 +68,8 @@ HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_o
 		case SketchType:
 		case CircleType:
 			{
-				TopoDS_Shape face_or_wire;
-				if(ConvertSketchToFaceOrWire(object, face_or_wire, solid_if_possible))
+				if(ConvertSketchToFaceOrWire(object, faces_or_wires, solid_if_possible))
 				{
-					faces_or_wires.push_back(face_or_wire);
 					if(wxGetApp().m_extrude_removes_sketches)sketches_or_faces_to_delete.push_back(object);
 				}
 			}
@@ -114,32 +112,44 @@ HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_o
 
 HeeksObj* CreatePipeFromProfile(HeeksObj* spine, HeeksObj* profile)
 {
-	std::list<TopoDS_Face> faces;
-
-	TopoDS_Face face;
-	ConvertSketchToFaceOrWire(profile, face, true);
-	
-	wxGetApp().Remove(profile);
-
 	const TopoDS_Wire wire = ((CWire*)spine)->Wire();
-
-	try
+	std::list<TopoDS_Shape> faces;
+	std::list<HeeksObj*> pipe_shapes;
+	if(ConvertSketchToFaceOrWire(profile, faces, true))
 	{
-		// pipe profile algong spine
-		BRepOffsetAPI_MakePipe makePipe(wire, face);
-		makePipe.Build();
-		TopoDS_Shape shape = makePipe.Shape(); 
+		for(std::list<TopoDS_Shape>::iterator It2 = faces.begin(); It2 != faces.end(); It2++)
+		{
+			TopoDS_Shape& face = *It2;
 
-		HeeksObj* new_object = CShape::MakeObject(shape, _("Pipe"), SOLID_TYPE_UNKNOWN, wxGetApp().current_color);
-		wxGetApp().Add(new_object, NULL);
-		wxGetApp().Repaint();
+			try
+			{
+				// pipe profile algong spine
+				BRepOffsetAPI_MakePipe makePipe(wire, face);
+				makePipe.Build();
+				TopoDS_Shape shape = makePipe.Shape(); 
 
-		return new_object;
+				HeeksObj* new_object = CShape::MakeObject(shape, _("Pipe"), SOLID_TYPE_UNKNOWN, wxGetApp().current_color);
+				if(new_object)pipe_shapes.push_back(new_object);
+			}
+			catch (Standard_Failure) {
+				Handle_Standard_Failure e = Standard_Failure::Caught();
+				wxMessageBox(wxString(_("Error making pipe")) + _T(": ") + Ctt(e->GetMessageString()));
+			}
+		}
+		if(pipe_shapes.size() > 0)
+		{
+			wxGetApp().CreateUndoPoint();
+			for(std::list<HeeksObj*>::iterator It = pipe_shapes.begin(); It != pipe_shapes.end(); It++)
+			{
+				HeeksObj* object = *It;
+				wxGetApp().Add(object, NULL);
+			}
+			wxGetApp().Remove(profile);
+			wxGetApp().Changed();
+			return pipe_shapes.front();
+		}
 	}
-	catch (Standard_Failure) {
-		Handle_Standard_Failure e = Standard_Failure::Caught();
-		wxMessageBox(wxString(_("Error making pipe")) + _T(": ") + Ctt(e->GetMessageString()));
-	}
+
 	return NULL;
 }
 
