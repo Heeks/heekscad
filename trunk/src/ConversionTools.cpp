@@ -119,16 +119,31 @@ bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wire &wire
 	return false;
 }
 
-bool ConvertSketchToFaceOrWire(HeeksObj* object, TopoDS_Shape& face_or_wire, bool face_not_wire)
+bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_or_wire, bool face_not_wire)
 {
 	if(object->GetType() != SketchType && object->GetType() != CircleType)return false;
 	std::list<HeeksObj*> line_arc_list;
 
 	if(object->GetType() == SketchType)
 	{
-		for(HeeksObj* child = object->GetFirstChild(); child; child = object->GetNextChild())
+		std::list<HeeksObj*> new_separate_sketches;
+		((CSketch*)object)->ExtractSeparateSketches(new_separate_sketches);
+		if(new_separate_sketches.size() > 1)
 		{
-			line_arc_list.push_back(child);
+			// call again with each separate sketch
+			for(std::list<HeeksObj*>::iterator It = new_separate_sketches.begin(); It != new_separate_sketches.end(); It++)
+			{
+				HeeksObj* sketch = *It;
+				if(!ConvertSketchToFaceOrWire(sketch, face_or_wire, face_not_wire))return false;
+			}
+			return true;
+		}
+		else
+		{
+			for(HeeksObj* child = object->GetFirstChild(); child; child = object->GetNextChild())
+			{
+				line_arc_list.push_back(child);
+			}
 		}
 	}
 	else
@@ -189,11 +204,11 @@ bool ConvertSketchToFaceOrWire(HeeksObj* object, TopoDS_Shape& face_or_wire, boo
 
 			if(face_not_wire)
 			{
-				face_or_wire = BRepBuilderAPI_MakeFace(wire_maker.Wire());
+				face_or_wire.push_back(BRepBuilderAPI_MakeFace(wire_maker.Wire()));
 			}
 			else
 			{
-				face_or_wire = wire_maker.Wire();
+				face_or_wire.push_back(wire_maker.Wire());
 			}
 		}
 		catch (Standard_Failure) {
@@ -335,11 +350,16 @@ void ConvertSketchesToFace::Run(){
 	for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
 		HeeksObj* object = *It;
 		if(object->GetType() == SketchType){
-			TopoDS_Face face;
-			if(ConvertSketchToFaceOrWire(object, face, true))
+			std::list<TopoDS_Shape> faces;
+			if(ConvertSketchToFaceOrWire(object, faces, true))
 			{
-				wxGetApp().Add(new CFace(face), NULL);
-				wxGetApp().Repaint();
+				wxGetApp().CreateUndoPoint();
+				for(std::list<TopoDS_Shape>::iterator It2 = faces.begin(); It2 != faces.end(); It2++)
+				{
+					TopoDS_Shape& face = *It2;
+					wxGetApp().Add(new CFace(TopoDS::Face(face)), NULL);
+				}
+				wxGetApp().Changed();
 			}
 		}
 	}

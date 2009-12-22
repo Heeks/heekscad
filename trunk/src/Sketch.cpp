@@ -248,11 +248,16 @@ class ConvertSketchToFace: public Tool
 public:
 	void Run()
 	{
-		TopoDS_Face face;
-		if(ConvertSketchToFaceOrWire(sketch_for_tools, face, true))
+		std::list<TopoDS_Shape> faces;
+		if(ConvertSketchToFaceOrWire(sketch_for_tools, faces, true))
 		{
-			wxGetApp().Add(new CFace(face), NULL);
-			wxGetApp().Repaint();
+			wxGetApp().CreateUndoPoint();
+			for(std::list<TopoDS_Shape>::iterator It2 = faces.begin(); It2 != faces.end(); It2++)
+			{
+				TopoDS_Shape& face = *It2;
+				wxGetApp().Add(new CFace(TopoDS::Face(face)), NULL);
+			}
+			wxGetApp().Changed();
 		}
 	}
 	const wxChar* GetTitle(){return _("Convert sketch to face");}
