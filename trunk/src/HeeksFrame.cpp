@@ -1692,6 +1692,7 @@ void CHeeksFrame::AddToolBars()
 		CFlyOutList flyout_list(_T("Text"));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("Text"), ToolImage(_T("text")), _("Add a text object"), OnTextButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("Dimensioning"), ToolImage(_T("dimension")), _("Add a dimension"), OnDimensioningButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("CoordinateSys"), ToolImage(_T("coordsys")), _("Add Coordinate System"), OnCoordinateSystem));
 		AddToolBarFlyout(m_geometryBar, flyout_list);
 	}
 
