@@ -7,7 +7,7 @@
 #include "../interface/Tool.h"
 
 extern bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wire& wire);
-extern bool ConvertSketchToFaceOrWire(HeeksObj* object, TopoDS_Shape& face_or_wire, bool face_not_wire);
+extern bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_or_wire, bool face_not_wire);
 extern bool ConvertFaceToSketch2(const TopoDS_Face& face, HeeksObj* sketch, double deviation);
 extern bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double deviation);
 extern HeeksObj* SplitArcsIntoLittleLines(HeeksObj* sketch);
