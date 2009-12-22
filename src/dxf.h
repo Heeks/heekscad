@@ -78,6 +78,9 @@ private:
 	bool m_fail;
 	char m_str[1024];
 	eDxfUnits_t m_eUnits;
+	wxString m_layer_name;
+
+
 
 	bool ReadUnits();
 	bool ReadLine();
@@ -91,7 +94,6 @@ private:
     void OnReadEllipse(const double* c, const double* m, double ratio, double start_angle, double end_angle);
 	void OnReadSpline(struct SplineData& sd);
 	void get_line();
-
 
 public:
 	CDxfRead(const wxChar* filepath); // this opens the file
@@ -107,15 +109,22 @@ public:
 	virtual void OnReadCircle(const double* s, const double* c, bool dir){}
 	virtual void OnReadEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir){}
 	virtual void OnReadSpline(TColgp_Array1OfPnt &control, TColStd_Array1OfReal &weight, TColStd_Array1OfReal &knot,TColStd_Array1OfInteger &mult, int degree, bool periodic, bool rational){}
+	virtual void AddGraphics() const { }
+
+    wxString LayerName() const { return(m_layer_name); }
 
 };
 
 class CSketch;
 
 class HeeksDxfRead : public CDxfRead{
+private:
+    typedef wxString LayerName_t;
+	typedef std::map< LayerName_t, CSketch * > Sketches_t;
+	Sketches_t m_sketches;
+
 public:
-	CSketch* m_sketch;
-	HeeksDxfRead(const wxChar* filepath):CDxfRead(filepath), m_sketch(NULL){}
+	HeeksDxfRead(const wxChar* filepath):CDxfRead(filepath){}
 
 	static bool m_make_as_sketch;
 
@@ -126,5 +135,6 @@ public:
     void OnReadEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir);
 	void OnReadSpline(TColgp_Array1OfPnt &control, TColStd_Array1OfReal &weight, TColStd_Array1OfReal &knot,TColStd_Array1OfInteger &mult, int degree, bool periodic, bool rational);
 
-	void AddSketchIfNeeded();
+	void AddObject(HeeksObj *object);
+	void AddGraphics() const;
 };
