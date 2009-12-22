@@ -965,12 +965,22 @@ static void OnCopyTranslateButton( wxCommandEvent& event )
 
 static void OnMoveRotateButton( wxCommandEvent& event )
 {
-	TransformTools::Rotate(false);
+	TransformTools::Rotate(false, false);
 }
 
 static void OnCopyRotateButton( wxCommandEvent& event )
 {
-	TransformTools::Rotate(true);
+	TransformTools::Rotate(true, false);
+}
+
+static void OnMoveRotate3DButton( wxCommandEvent& event )
+{
+	TransformTools::Rotate(false, true);
+}
+
+static void OnCopyRotate3DButton( wxCommandEvent& event )
+{
+	TransformTools::Rotate(true, true);
 }
 
 static void OnMoveMirrorButton( wxCommandEvent& event )
@@ -1608,6 +1618,9 @@ void CHeeksFrame::MakeMenus()
 	AddMenuItem(transform_menu, _("Move Rotate"), ToolImage(_T("mover")), OnMoveRotateButton);
 	AddMenuItem(transform_menu, _("Copy Rotate"), ToolImage(_T("copyr")), OnCopyRotateButton);
 	transform_menu->AppendSeparator();
+	AddMenuItem(transform_menu, _("3D Move Rotate"), ToolImage(_T("move3dr")), OnMoveRotate3DButton);
+	AddMenuItem(transform_menu, _("3D Copy Rotate"), ToolImage(_T("copy3dr")), OnCopyRotate3DButton);
+	transform_menu->AppendSeparator();
 	AddMenuItem(transform_menu, _("Move Mirror"), ToolImage(_T("movem")), OnMoveMirrorButton);
 	AddMenuItem(transform_menu, _("Copy Mirror"), ToolImage(_T("copym")), OnCopyMirrorButton);
 	transform_menu->AppendSeparator();
@@ -1702,6 +1715,8 @@ void CHeeksFrame::AddToolBars()
 		flyout_list.m_list.push_back(CFlyOutItem(_T("Copy Translate"), ToolImage(_T("copyt")), _("Copy and translate selected items"), OnCopyTranslateButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("Move Rotate"), ToolImage(_T("mover")), _("Rotate selected items"), OnMoveRotateButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("Copy Rotate"), ToolImage(_T("copyr")), _("Copy and rotate selected items"), OnCopyRotateButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("3D Move Rotate"), ToolImage(_T("move3dr")), _("3D Rotate selected items"), OnMoveRotate3DButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("3D Copy Rotate"), ToolImage(_T("copy3dr")), _("3D Copy and rotate selected items"), OnCopyRotate3DButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("Move Mirror"), ToolImage(_T("movem")), _("Mirror selected items"), OnMoveMirrorButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("Copy Mirror"), ToolImage(_T("copym")), _("Copy and mirror selected items"), OnCopyMirrorButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("Move Scale"), ToolImage(_T("moves")), _("Scale selected items"), OnMoveScaleButton));

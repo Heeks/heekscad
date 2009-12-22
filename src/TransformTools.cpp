@@ -117,7 +117,7 @@ void TransformTools::Translate(bool copy)
 }
 
 //static
-void TransformTools::Rotate(bool copy)
+void TransformTools::Rotate(bool copy, bool allow3DRotation)
 {
 	//rotation axis - Z axis by default
 	gp_Dir axis_Dir = gp_Dir(0,0,1);
@@ -150,7 +150,7 @@ void TransformTools::Rotate(bool copy)
 
 
 
-	if(wxGetApp().allow3DRotaion)
+	if(allow3DRotation)
 	{
 		// pick a line to use as rotation axis
 		bool line_found = false;
