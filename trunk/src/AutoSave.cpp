@@ -1,6 +1,5 @@
 
 #include "stdafx.h"
-#include "HeeksCAD.h"
 #include "AutoSave.h"
 #include <sys/stat.h>
 #include <wx/msgdlg.h>
@@ -33,7 +32,7 @@ CAutoSave::CAutoSave(const int interval, const bool skip_recovery /* = false */ 
 		{
 			int answer = wxMessageBox(_T("Do you want to recover using the automatic backup file?"),
 						_T("Confirm"), wxYES_NO );
-			if (answer == wxYES) 
+			if (answer == wxYES)
 			{
 				// We need to recover but it must be deferred until the rest of
 				// HeeksCAD has finished initializing.
