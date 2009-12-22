@@ -209,7 +209,15 @@ public:
 	void Run(){
 		gp_Pln plane;
 		face_for_tools->GetPlaneParams(plane);
-		CoordinateSystem* new_object = new CoordinateSystem(_("Face Coordinate System"), plane.Location(), plane.XAxis().Direction(), plane.YAxis().Direction());
+		gp_Dir x_direction = plane.XAxis().Direction();
+		gp_Dir y_direction = plane.YAxis().Direction();
+		if(face_for_tools->Face().Orientation()==TopAbs_REVERSED)
+		{
+			// swap the axes to invert the normal
+			y_direction = plane.XAxis().Direction();
+			x_direction = plane.YAxis().Direction();
+		}
+		CoordinateSystem* new_object = new CoordinateSystem(_("Face Coordinate System"), plane.Location(), x_direction, y_direction);
 		wxGetApp().Add(new_object, NULL);
 		wxGetApp().m_marked_list->Clear(true);
 		wxGetApp().m_marked_list->Add(new_object, true);
@@ -228,7 +236,15 @@ public:
 	void Run(){
 		gp_Pln plane;
 		face_for_tools->GetPlaneParams(plane);
-		CoordinateSystem* coord_sys = new CoordinateSystem(_("Face Coordinate System"), plane.Location(), plane.XAxis().Direction(), plane.YAxis().Direction());
+		gp_Dir x_direction = plane.XAxis().Direction();
+		gp_Dir y_direction = plane.YAxis().Direction();
+		if(face_for_tools->Face().Orientation()==TopAbs_REVERSED)
+		{
+			// swap the axes to invert the normal
+			y_direction = plane.XAxis().Direction();
+			x_direction = plane.YAxis().Direction();
+		}
+		CoordinateSystem* coord_sys = new CoordinateSystem(_("Face Coordinate System"), plane.Location(), x_direction, y_direction);
 		CSketch* sketch = new CSketch();
 		sketch->Add(coord_sys,NULL);
 		sketch->ReloadPointers();
