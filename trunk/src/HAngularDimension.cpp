@@ -75,7 +75,7 @@ bool HAngularDimension::IsDifferent(HeeksObj* other)
 
 	if(wxStrcmp(m_text,dim->m_text))
 		return true;
-	
+
 	if(m_p0->m_p.Distance(dim->m_p0->m_p) > wxGetApp().m_geom_tol)
 		return true;
 
@@ -99,7 +99,7 @@ bool HAngularDimension::IsDifferent(HeeksObj* other)
 
 void HAngularDimension::glCommands(bool select, bool marked, bool no_color)
 {
-	//Find the point where the 2 lines meet. 
+	//Find the point where the 2 lines meet.
 
 	gp_Pnt pnt;
 	if(intersect(gp_Lin(m_p0->m_p,m_p1->m_p.XYZ()-m_p0->m_p.XYZ()),gp_Lin(m_p2->m_p,m_p3->m_p.XYZ()-m_p2->m_p.XYZ()),pnt))
@@ -116,7 +116,7 @@ void HAngularDimension::glCommands(bool select, bool marked, bool no_color)
 		double l1d2 = m_p1->m_p.Distance(pnt);
 
 		double a1=0;
-		
+
 		//Avoid singularity and instabillity
 		if(l1d1 > l1d2)
 			a1 = atan2(m_p0->m_p.Y()-pnt.Y(),m_p0->m_p.X()-pnt.X());
@@ -127,7 +127,7 @@ void HAngularDimension::glCommands(bool select, bool marked, bool no_color)
 		double l2d2 = m_p3->m_p.Distance(pnt);
 
 		double a2=0;
-		
+
 		//Avoid singularity and instabillity
 		if(l2d1 > l2d2)
 			a2 = atan2(m_p2->m_p.Y()-pnt.Y(),m_p2->m_p.X()-pnt.X());
@@ -153,7 +153,7 @@ void HAngularDimension::glCommands(bool select, bool marked, bool no_color)
 		while(da < -PI)
 			da += 2*Pi;
 
-		double ma = a1 + da/2;
+		// double ma = a1 + da/2;
 
 		//Project the line to our circle
 		gp_Pnt pnt2(cos(a1)*r + pnt.X(),sin(a1)*r + pnt.Y(),0);
@@ -173,7 +173,7 @@ void HAngularDimension::glCommands(bool select, bool marked, bool no_color)
 			DrawLine(m_p3->m_p,pnt2);
 
 		//Figure out if the control point is inside the included part
-		
+
 		if((ca >= a1 && ca <= a1 + da) || (ca <= a1 && ca >= a1 + da))
 		{
 			DrawArc(pnt,r,a1,a1+da);
@@ -381,7 +381,7 @@ void HAngularDimension::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element;
 	element = new TiXmlElement( "AngularDimension" );
-	root->LinkEndChild( element );  
+	root->LinkEndChild( element );
 	element->SetAttribute("text", Ttc(m_text.c_str()));
 
 	element->SetAttribute("col", m_color.COLORREF_color());
