@@ -195,7 +195,7 @@ public:
 			HPoint* obj = (HPoint*)*It;
 			if(last)
 			{
-				HDimension* dimension = new HDimension(gp_Trsf(), wxString(), last->m_p, obj->m_p, gp_Pnt(), TwoPointsDimensionMode, PythagoreanDimensionTextMode, &wxGetApp().current_color);
+				HDimension* dimension = new HDimension(gp_Trsf(), last->m_p, obj->m_p, gp_Pnt(), TwoPointsDimensionMode, PythagoreanDimensionTextMode, DimensionUnitsGlobal, &wxGetApp().current_color);
 				last->SetCoincidentPoint(dimension->A,true);
 				obj->SetCoincidentPoint(dimension->B,true);
 				dimension_drawing.StartOnStep3(dimension);
@@ -243,7 +243,7 @@ class AddRadiusDimension:public Tool{
 public:
 	void Run(){
 		HCircle *circle = (HCircle*)*wxGetApp().m_marked_list->list().begin();
-		HDimension* dimension = new HDimension(gp_Trsf(), wxString(), circle->C->m_p, circle->C->m_p.XYZ() + circle->m_radius * gp_XYZ(1,0,0), gp_Pnt(), TwoPointsDimensionMode, PythagoreanDimensionTextMode, &wxGetApp().current_color);
+		HDimension* dimension = new HDimension(gp_Trsf(), circle->C->m_p, circle->C->m_p.XYZ() + circle->m_radius * gp_XYZ(1,0,0), gp_Pnt(), TwoPointsDimensionMode, PythagoreanDimensionTextMode, DimensionUnitsGlobal, &wxGetApp().current_color);
 		circle->C->SetCoincidentPoint(dimension->A,true);
 		circle->SetPointOnCircleConstraint(dimension->B);
 		dimension_drawing.StartOnStep3(dimension);
@@ -258,7 +258,7 @@ class AddArcRadiusDimension:public Tool{
 public:
 	void Run(){
 		HArc *arc = (HArc*)*wxGetApp().m_marked_list->list().begin();
-		HDimension* dimension = new HDimension(gp_Trsf(), wxString(), arc->C->m_p, arc->C->m_p.XYZ() + arc->m_radius * gp_XYZ(1,0,0), gp_Pnt(), TwoPointsDimensionMode, PythagoreanDimensionTextMode, &wxGetApp().current_color);
+		HDimension* dimension = new HDimension(gp_Trsf(), arc->C->m_p, arc->C->m_p.XYZ() + arc->m_radius * gp_XYZ(1,0,0), gp_Pnt(), TwoPointsDimensionMode, PythagoreanDimensionTextMode, DimensionUnitsGlobal, &wxGetApp().current_color);
 		arc->C->SetCoincidentPoint(dimension->A,true);
 		arc->SetPointOnArcConstraint(dimension->B);
 		dimension_drawing.StartOnStep3(dimension);
