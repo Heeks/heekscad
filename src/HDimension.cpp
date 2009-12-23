@@ -15,7 +15,7 @@
 
 bool HDimension::DrawFlat = true;
 
-HDimension::HDimension(const gp_Trsf &trsf, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, DimensionMode mode, DimensionTextMode text_mode, DimensionUnits units, const HeeksColor* col): m_color(*col), m_trsf(trsf), m_units(units), m_mode(mode), m_text_mode(text_mode), m_scale(1.0), EndedObject(col)
+HDimension::HDimension(const gp_Trsf &trsf, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, DimensionMode mode, DimensionTextMode text_mode, DimensionUnits units, const HeeksColor* col): EndedObject(col), m_color(*col), m_trsf(trsf), m_mode(mode), m_text_mode(text_mode),  m_units(units),  m_scale(1.0)
 {
 	m_p2 = new HPoint(p2,col);
 	m_p2->m_draw_unselected = false;
@@ -57,7 +57,7 @@ bool HDimension::IsDifferent(HeeksObj* other)
 
 	if(m_color.COLORREF_color() != dim->m_color.COLORREF_color() || m_mode != dim->m_mode || m_scale != dim->m_scale || m_text_mode != dim->m_text_mode || m_units != dim->m_units)
 		return true;
-	
+
 	if(m_p2->m_p.Distance(dim->m_p2->m_p) > wxGetApp().m_geom_tol)
 		return true;
 
@@ -77,6 +77,9 @@ wxString HDimension::MakeText()
 	case DimensionUnitsMM:
 		units_factor = 1.0;
 		break;
+    case DimensionUnitsGlobal:
+        units_factor = wxGetApp().m_view_units;
+        break;
 	}
 
 	wxString units_str(_T(""));
@@ -109,7 +112,7 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 	gp_Dir ydir = gp_Dir(0, 1, 0).Transformed(m_trsf);
 	gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(m_trsf);
 	if(m_mode == TwoPointsDimensionMode)
-	{	
+	{
 		xdir = make_vector(A->m_p, B->m_p);
 		if(xdir.IsParallel(zdir,wxGetApp().m_geom_tol))
 			zdir = xdir ^ ydir;
@@ -338,7 +341,7 @@ static void on_edit_dimension(const wxChar *value, HeeksObj* object)
 	}
 
 	SolveSketch((CSketch*)dimension_for_tool->Owner());
-	
+
 	if(!constrained)
 	{
 		//Remove the constraint by running the tool again
@@ -400,7 +403,7 @@ void HDimension::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element;
 	element = new TiXmlElement( "Dimension" );
-	root->LinkEndChild( element );  
+	root->LinkEndChild( element );
 
 	double m[16];
 	extract(m_trsf, m);

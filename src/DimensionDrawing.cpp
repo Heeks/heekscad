@@ -62,7 +62,7 @@ bool DimensionDrawing::calculate_item(DigitizedPoint &end)
 		return false;
 	}
 
-	double distance = p0.Distance(p1);
+	// double distance = p0.Distance(p1);
 
 	((HDimension*)temp_object)->m_trsf = mat;
 	((HDimension*)temp_object)->A->m_p = p0;

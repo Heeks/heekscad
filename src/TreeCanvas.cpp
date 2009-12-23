@@ -20,7 +20,7 @@ END_EVENT_TABLE()
 
 CTreeCanvas::CTreeCanvas(wxWindow* parent, wxGLCanvas* shared, int *attribList)
         : wxGLCanvas(parent, shared, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("some text"), attribList),m_frozen(false), m_refresh_wanted_on_thaw(false),
-		width(0), height(0), textureWidth(0), textureHeight(0), m_texture_built(false), m_xpos(0), m_ypos(0), scroll_y_pos(0)
+		width(0), height(0), textureWidth(0), textureHeight(0), m_texture_built(false), scroll_y_pos(0), m_xpos(0), m_ypos(0)
 {
 	wxGetApp().RegisterObserver(this);
 }
