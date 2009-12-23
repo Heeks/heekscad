@@ -477,6 +477,7 @@ static int text_start_posx[127] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 static int text_start_posy[127] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238};
 static int text_start_posd[127] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6  ,5  ,8  ,15 ,11 ,17 ,13 ,5  ,6  ,7  ,10 ,14 ,16 ,8  ,4  ,7  ,12 ,10 ,11 ,11 ,11 ,11 ,11 ,11 ,11 ,12 ,5  ,7  ,15 ,15 ,14 ,10 ,17 ,14 ,11 ,14 ,14 ,11 ,9  ,15 ,14 ,3  ,9  ,12 ,10 ,16 ,13 ,15 ,10 ,15 ,12 ,10 ,14 ,12 ,13 ,19 ,12 ,13 ,13 ,6  ,8  ,7  ,13 ,10 ,9  ,11 ,10 ,9  ,10 ,11 ,7  ,12 ,11 ,3  ,7  ,10 ,5  ,17 ,10 ,12 ,10 ,12 ,7  ,8  ,8  ,10 ,12 ,15 ,11 ,11 ,10 ,11 ,6  ,11 ,15 };
 static int text_pos = 0;
+static std::list<bool> end_child_list;
 
 int CTreeCanvas::RenderChar(char c)
 {
@@ -600,9 +601,14 @@ void CTreeCanvas::RenderBranchIcon(HeeksObj* object, HeeksObj* next_object, bool
 void CTreeCanvas::RenderBranchIcons(HeeksObj* object, HeeksObj* next_object, bool expanded, int level)
 {
 	// render initial branches
-	for(int i = 0; i<level; i++)
+	std::list<bool>::iterator It = end_child_list.begin();
+	for(int i = 0; i<level; i++, It++)
 	{
-		if(i > 0)RenderIcon(wxGetApp().m_icon_texture_number, 7, 0);
+		if(i > 0)
+		{
+			bool end_child = *It;
+			if(!end_child)RenderIcon(wxGetApp().m_icon_texture_number, 7, 0);
+		}
 		m_xpos++;
 	}
 
@@ -636,6 +642,9 @@ void CTreeCanvas::RenderObject(HeeksObj* object, HeeksObj* next_object, int leve
 	m_xpos--;
 	m_ypos++;
 
+	bool end_object = (next_object == NULL);
+	end_child_list.push_back(end_object);
+
 	if(expanded)
 	{
 		HeeksObj* child = object->GetFirstChild();
@@ -647,6 +656,8 @@ void CTreeCanvas::RenderObject(HeeksObj* object, HeeksObj* next_object, int leve
 			child = next_child;
 		}
 	}
+
+	end_child_list.pop_back();
 
 	m_xpos--;
 }
