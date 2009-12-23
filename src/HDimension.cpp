@@ -15,7 +15,7 @@
 
 bool HDimension::DrawFlat = true;
 
-HDimension::HDimension(const gp_Trsf &trsf, const wxString &text, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, DimensionMode mode, DimensionTextMode text_mode, const HeeksColor* col): m_color(*col), m_trsf(trsf), m_text(text), m_mode(mode), m_text_mode(text_mode), m_scale(1.0), EndedObject(col)
+HDimension::HDimension(const gp_Trsf &trsf, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, DimensionMode mode, DimensionTextMode text_mode, DimensionUnits units, const HeeksColor* col): m_color(*col), m_trsf(trsf), m_units(units), m_mode(mode), m_text_mode(text_mode), m_scale(1.0), EndedObject(col)
 {
 	m_p2 = new HPoint(p2,col);
 	m_p2->m_draw_unselected = false;
@@ -38,8 +38,8 @@ const HDimension& HDimension::operator=(const HDimension &b)
 {
 	EndedObject::operator=(b);
 	m_trsf = b.m_trsf;
-	m_text = b.m_text;
 	m_text_mode = b.m_text_mode;
+	m_units = b.m_units;
 	m_color = b.m_color;
 	m_mode = b.m_mode;
 	m_scale = b.m_scale;
@@ -55,16 +55,48 @@ bool HDimension::IsDifferent(HeeksObj* other)
 {
 	HDimension* dim = (HDimension*)other;
 
-	if(m_color.COLORREF_color() != dim->m_color.COLORREF_color() || m_mode != dim->m_mode || m_scale != dim->m_scale || m_text_mode != dim->m_text_mode)
-		return true;
-
-	if(wxStrcmp(m_text,dim->m_text))
+	if(m_color.COLORREF_color() != dim->m_color.COLORREF_color() || m_mode != dim->m_mode || m_scale != dim->m_scale || m_text_mode != dim->m_text_mode || m_units != dim->m_units)
 		return true;
 	
 	if(m_p2->m_p.Distance(dim->m_p2->m_p) > wxGetApp().m_geom_tol)
 		return true;
 
 	return EndedObject::IsDifferent(other);
+}
+
+wxString HDimension::MakeText()
+{
+	wxString text;
+
+	double units_factor = wxGetApp().m_view_units;
+	switch(m_units)
+	{
+	case DimensionUnitsInches:
+		units_factor = 25.4;
+		break;
+	case DimensionUnitsMM:
+		units_factor = 1.0;
+		break;
+	}
+
+	wxString units_str(_T(""));
+	if(fabs(units_factor - 1.0) < 0.0000000001)units_str += wxString(_T(" ")) + _("mm");
+	else if(fabs(units_factor - 25.4) < 0.000000001)units_str += wxString(_T(" ")) + _("inch");
+
+	switch(m_text_mode)
+	{
+		case PythagoreanDimensionTextMode:
+			text = wxString::Format(_T("%lg %s"), A->m_p.Distance(B->m_p)/units_factor, units_str.c_str());
+			break;
+		case HorizontalDimensionTextMode:
+			text = wxString::Format(_T("%lg %s H"), fabs(A->m_p.X() - B->m_p.X())/units_factor, units_str.c_str());
+			break;
+		case VerticalDimensionTextMode:
+			text = wxString::Format(_T("%lg %s V"), fabs(A->m_p.Y() - B->m_p.Y())/units_factor, units_str.c_str());
+			break;
+	}
+
+	return text;
 }
 
 void HDimension::glCommands(bool select, bool marked, bool no_color)
@@ -85,8 +117,10 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 			ydir = zdir ^ xdir;
 	}
 
+	wxString text = MakeText();
+
 	float width, height;
-	if(!wxGetApp().get_text_size(m_text, &width, &height))return;
+	if(!wxGetApp().get_text_size(text, &width, &height))return;
 
 	// draw arrow line
 	draw_arrow_line(m_mode, A->m_p, B->m_p, m_p2->m_p, xdir, ydir, width, m_scale);
@@ -99,21 +133,6 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 	double m[16];
 	extract_transposed(text_matrix, m);
 	glMultMatrixd(m);
-
-	switch(m_text_mode)
-	{
-		case StringDimensionTextMode:
-			break;
-		case PythagoreanDimensionTextMode:
-			m_text = wxString::Format(_T("%lg mm"), A->m_p.Distance(B->m_p));
-			break;
-		case HorizontalDimensionTextMode:
-			m_text = wxString::Format(_T("%lg mm H"), fabs(A->m_p.X() - B->m_p.X()));
-			break;
-		case VerticalDimensionTextMode:
-			m_text = wxString::Format(_T("%lg mm V"), fabs(A->m_p.Y() - B->m_p.Y()));
-			break;
-	}
 
 	if(DrawFlat)
 	{
@@ -137,11 +156,11 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 			model_view, projection, viewport,
 			&x, &y, &z);
 
-		wxGetApp().render_screen_text_at(m_text,m_scale*8,x,y,atan2(xdir.Y(),xdir.X()) * 180 / PI);
+		wxGetApp().render_screen_text_at(text,m_scale*8,x,y,atan2(xdir.Y(),xdir.X()) * 180 / PI);
 	}
 	else
 	{
-		wxGetApp().render_text(m_text);
+		wxGetApp().render_text(text);
 	}
 
 	glPopMatrix();
@@ -169,8 +188,6 @@ public:
 	void Run(){
 		switch(dimension_for_tool->m_text_mode)
 		{
-			case StringDimensionTextMode:
-			break;
 			case PythagoreanDimensionTextMode:
 				dimension_for_tool->SetLineLengthConstraint(dimension_for_tool->A->m_p.Distance(dimension_for_tool->B->m_p));
 			break;
@@ -204,8 +221,9 @@ void HDimension::GetBox(CBox &box)
 	extract(vt, p);
 	box.Insert(p);
 
+	wxString text = MakeText();
 	float width, height;
-	if(!wxGetApp().get_text_size(m_text, &width, &height))return;
+	if(!wxGetApp().get_text_size(text, &width, &height))return;
 
 	gp_Pnt point[3];
 	point[0] = gp_Pnt(width, 0, 0);
@@ -234,8 +252,9 @@ bool HDimension::ModifyByMatrix(const double *m)
 
 void HDimension::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
 {
+	wxString text = MakeText();
 	float width, height;
-	if(!wxGetApp().get_text_size(m_text, &width, &height))return;
+	if(!wxGetApp().get_text_size(text, &width, &height))return;
 
 	gp_Pnt point[4];
 	point[0] = gp_Pnt(0, 0, 0);
@@ -266,6 +285,13 @@ static void on_set_mode(int value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+static void on_set_units(int value, HeeksObj* object)
+{
+	HDimension* dimension = (HDimension*)object;
+	dimension->m_units = (DimensionUnits)value;
+	wxGetApp().Repaint();
+}
+
 static void on_set_text_mode(int value, HeeksObj* object)
 {
 	HDimension* dimension = (HDimension*)object;
@@ -284,13 +310,6 @@ static void on_set_scale(double value, HeeksObj* object)
 static void on_edit_dimension(const wxChar *value, HeeksObj* object)
 {
 	HDimension* dimension = (HDimension*)object;
-
-	if(dimension->m_text_mode == StringDimensionTextMode)
-	{
-		dimension->m_text = wxString(value);
-		wxGetApp().Repaint();
-		return;
-	}
 
 	bool constrained=true;
 
@@ -344,7 +363,6 @@ void HDimension::GetProperties(std::list<Property *> *list)
 	list->push_back ( new PropertyChoice ( _("mode"),  choices, m_mode, this, on_set_mode ) );
 
 	choices.clear();
-	choices.push_back ( wxString ( _("string") ) );
 	choices.push_back ( wxString ( _("pythagorean") ) );
 	choices.push_back ( wxString ( _("horizontal") ) );
 	choices.push_back ( wxString ( _("vertical") ) );
@@ -352,7 +370,16 @@ void HDimension::GetProperties(std::list<Property *> *list)
 
 	list->push_back ( new PropertyDouble ( _("scale"),  m_scale, this, on_set_scale ) );
 
-	list->push_back(new PropertyString(_("dimension value"), m_text, this, on_edit_dimension));
+	{
+		std::list< wxString > choices;
+		choices.push_back ( wxString ( _("use view units") ) );
+		choices.push_back ( wxString ( _("inches") ) );
+		choices.push_back ( wxString ( _("mm") ) );
+		list->push_back ( new PropertyChoice ( _("units"),  choices, m_units, this, on_set_units ) );
+	}
+
+	wxString text = MakeText();
+	list->push_back(new PropertyString(_("dimension value"), text, this, on_edit_dimension));
 
 	EndedObject::GetProperties(list);
 }
@@ -369,17 +396,11 @@ bool HDimension::Stretch(const double *p, const double* shift, void* data)
 	return false;
 }
 
-void HDimension::OnEditString(const wxChar* str){
-	m_text.assign(str);
-	wxGetApp().Changed();
-}
-
 void HDimension::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element;
 	element = new TiXmlElement( "Dimension" );
 	root->LinkEndChild( element );  
-	element->SetAttribute("text", Ttc(m_text.c_str()));
 
 	double m[16];
 	extract(m_trsf, m);
@@ -411,6 +432,18 @@ void HDimension::WriteXML(TiXmlNode *root)
 	element->SetAttribute("scale",m_scale);
 	element->SetAttribute("mode", m_mode);
 	element->SetAttribute("textmode", m_text_mode);
+	switch(m_units)
+	{
+	case DimensionUnitsMM:
+		element->SetAttribute("units", "mm");
+		break;
+	case DimensionUnitsInches:
+		element->SetAttribute("units", "inches");
+		break;
+	default:
+		element->SetAttribute("units", "global");
+		break;
+	}
 
 	WriteBaseXML(element);
 }
@@ -427,14 +460,14 @@ HeeksObj* HDimension::ReadFromXMLElement(TiXmlElement* pElem)
 	double scale=1;
 
 	DimensionMode mode = TwoPointsDimensionMode;
-	DimensionTextMode text_mode = StringDimensionTextMode;
+	DimensionTextMode text_mode = PythagoreanDimensionTextMode;
+	DimensionUnits units = DimensionUnitsGlobal;
 
 	// get the attributes
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
 		std::string name(a->Name());
 		if(name == "col"){c = HeeksColor(a->IntValue());}
-		else if(name == "text"){text.assign(Ctt(a->Value()));}
 		else if(name == "m0"){m[0] = a->DoubleValue();}
 		else if(name == "m1"){m[1] = a->DoubleValue();}
 		else if(name == "m2"){m[2] = a->DoubleValue();}
@@ -459,9 +492,21 @@ HeeksObj* HDimension::ReadFromXMLElement(TiXmlElement* pElem)
 		else if(name == "scale"){scale= a->DoubleValue();}
 		else if(name == "mode"){mode = (DimensionMode)(a->IntValue());}
 		else if(name == "textmode"){text_mode = (DimensionTextMode)(a->IntValue());}
+		else if(name == "units"){
+			const char* str = a->Value();
+			switch(str[0])
+			{
+			case 'm':
+				units = DimensionUnitsMM;
+				break;
+			case 'i':
+				units = DimensionUnitsInches;
+				break;
+			}
+		}
 	}
 
-	HDimension* new_object = new HDimension(make_matrix(m), text, make_point(p0), make_point(p1), make_point(p2), mode, text_mode, &c);
+	HDimension* new_object = new HDimension(make_matrix(m), make_point(p0), make_point(p1), make_point(p2), mode, text_mode, units, &c);
 	new_object->ReadBaseXML(pElem);
 	new_object->m_scale = scale;
 
