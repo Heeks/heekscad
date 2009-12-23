@@ -15,10 +15,16 @@ enum DimensionMode
 
 enum DimensionTextMode
 {
-	StringDimensionTextMode,
 	PythagoreanDimensionTextMode,
 	HorizontalDimensionTextMode,
 	VerticalDimensionTextMode
+};
+
+enum DimensionUnits
+{
+	DimensionUnitsGlobal,
+	DimensionUnitsInches,
+	DimensionUnitsMM
 };
 
 class HeeksConfig;
@@ -30,14 +36,14 @@ private:
 
 public:
 	gp_Trsf m_trsf; // draw matrix at time of creation
-	wxString m_text;
 	HPoint* m_p2;
 	DimensionMode m_mode;
 	DimensionTextMode m_text_mode;
+	DimensionUnits m_units;
 	double m_scale; // to do - text, gaps, and arrow heads will be scaled by this factor
 	static bool DrawFlat;
 
-	HDimension(const gp_Trsf &trsf, const wxString &text, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, DimensionMode mode, DimensionTextMode text_mode, const HeeksColor* col);
+	HDimension(const gp_Trsf &trsf, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, DimensionMode mode, DimensionTextMode text_mode, DimensionUnits units, const HeeksColor* col);
 	HDimension(const HDimension &b);
 	~HDimension(void);
 
@@ -63,12 +69,12 @@ public:
 	void CopyFrom(const HeeksObj* object){operator=(*((HDimension*)object));}
 	void WriteXML(TiXmlNode *root);
 	//const wxChar* GetShortString(void)const{return m_text.c_str();}
-	bool CanEditString(void)const{return true;}
-	void OnEditString(const wxChar* str);
 	void LoadToDoubles();
 	void LoadFromDoubles();
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	bool IsDifferent(HeeksObj* other);
+
+	wxString MakeText();
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 

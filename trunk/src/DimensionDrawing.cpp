@@ -19,7 +19,7 @@ DimensionDrawing::DimensionDrawing(void)
 {
 	temp_object = NULL;
 	m_mode = TwoPointsDimensionMode;
-	m_text_mode = StringDimensionTextMode;
+	m_text_mode = PythagoreanDimensionTextMode;
 }
 
 DimensionDrawing::~DimensionDrawing(void)
@@ -40,7 +40,7 @@ bool DimensionDrawing::calculate_item(DigitizedPoint &end)
 
 	// make sure dimension exists
 	if(!temp_object){
-		temp_object = new HDimension(mat, _T(""), gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), m_mode, m_text_mode, &(wxGetApp().current_color));
+		temp_object = new HDimension(mat, gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), m_mode, m_text_mode, DimensionUnitsGlobal, &(wxGetApp().current_color));
 		if(temp_object)temp_object_in_list.push_back(temp_object);
 	}
 
@@ -64,11 +64,7 @@ bool DimensionDrawing::calculate_item(DigitizedPoint &end)
 
 	double distance = p0.Distance(p1);
 
-	wxString str;
-	str = wxString::Format(_T("%lg mm"), distance);
-
 	((HDimension*)temp_object)->m_trsf = mat;
-	((HDimension*)temp_object)->m_text = str;
 	((HDimension*)temp_object)->A->m_p = p0;
 	((HDimension*)temp_object)->B->m_p = p1;
 	((HDimension*)temp_object)->m_p2->m_p = p2;
@@ -121,7 +117,6 @@ void DimensionDrawing::GetProperties(std::list<Property *> *list){
 	list->push_back ( new PropertyChoice ( _("mode"),  choices, m_mode, NULL, on_set_mode ) );
 
 	choices.clear();
-	choices.push_back ( wxString ( _("string") ) );
 	choices.push_back ( wxString ( _("pythagorean") ) );
 	choices.push_back ( wxString ( _("horizontal") ) );
 	choices.push_back ( wxString ( _("vertical") ) );
