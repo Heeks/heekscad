@@ -981,49 +981,8 @@ bool RS274X::AggregateFilledArea( const RS274X::Traces_t & traces, TopoDS_Face *
 	}
 	// Now add a block to fill in the centre of the filled area.
 	TopoDS_Face face = BRepBuilderAPI_MakeFace(wire.Wire());
-	shape = BRepPrimAPI_MakePrism(face, gp_Vec(0,0,1));
-
-
-	for (Traces_t::const_iterator l_itTrace = traces.begin(); l_itTrace != traces.end(); l_itTrace++)
-	{
-		if (Trace::Area(l_itTrace->Face()) < 0.00001)
-		{
-		    printf("Discarding trace due to face size of %lf\n", Trace::Area(l_itTrace->Face()));
-		    continue;
-		}
-		if (l_itTrace->Length() < 0.00001)
-		{
-		    printf("Discarding trace due to length of %lf\n", l_itTrace->Length());
-		    continue;
-		}
-
-        TopoDS_Shape extra_shape = BRepPrimAPI_MakePrism(l_itTrace->Face(), gp_Vec(0,0,1));
-        BRepAlgo_Fuse fused( shape, extra_shape );
-        fused.Build();
-        if (fused.IsDone())
-        {
-            shape = fused.Shape();
-        } // End if - then
-
-	}
-
-	for (TopExp_Explorer expFace(shape, TopAbs_FACE); expFace.More(); expFace.Next())
-	{
-		TopoDS_Face aFace = TopoDS::Face(expFace.Current());
-		Handle(Geom_Surface) aSurface = BRep_Tool::Surface(aFace);
-		if(aSurface->DynamicType() == STANDARD_TYPE(Geom_Plane))
-		{
-			Handle(Geom_Plane) aPlane = Handle(Geom_Plane)::DownCast(aSurface);
-			gp_Pnt aPnt = aPlane->Location();
-			if ((aPnt.Z() < 0.00001) && (Trace::Area(aFace) > 0.00001))
-			{
-			    *pResult = aFace;
-			    return(l_bSuccess);
-			}
-		}
-	}
-
-	return(l_bFailure);
+	*pResult = face;
+	return(l_bSuccess);
 }
 
 
