@@ -544,67 +544,65 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 		}
 		else if (_data.substr(0,1) == "I")
 		{
-			_data.erase(0,1);
+		    _data.erase(0,1);	// Erase I
 			char *end = NULL;
-			std::string sign;
 
-			if (_data[0] == '-')
-			{
-				sign = "-";
-				_data.erase(0,1);
-			} // End if - then
-
-			if (_data[0] == '+')
-			{
-				sign = "+";
-				_data.erase(0,1);
-			} // End if - then
-
-			strtoul( _data.c_str(), &end, 10 );
+			double _value = strtod( _data.c_str(), &end );
 			if ((end == NULL) || (end == _data.c_str()))
 			{
-				printf("Expected value for I parameter\n");
+				printf("Expected number following 'I'\n");
 				return(false);
 			} // End if - then
-			std::string i_param = sign + _data.substr(0, end - _data.c_str());
+			std::string _string = _data.substr(0, end - _data.c_str());
 			_data.erase(0, end - _data.c_str());
-			i_term = InterpretCoord( i_param.c_str(),
-							m_YDigitsLeftOfPoint,
-							m_YDigitsRightOfPoint,
-							m_leadingZeroSuppression,
-							m_trailingZeroSuppression );
+
+            if (_string.find('.') == std::string::npos)
+            {
+
+                i_term = InterpretCoord( _string.c_str(),
+                                m_YDigitsLeftOfPoint,
+                                m_YDigitsRightOfPoint,
+                                m_leadingZeroSuppression,
+                                m_trailingZeroSuppression );
+
+            }
+            else
+            {
+                // The number had a decimal point explicitly defined within it.  Read it as a correctly
+                // represented number as is.
+                i_term = _value;
+            }
 		}
 		else if (_data.substr(0,1) == "J")
 		{
-			_data.erase(0,1);
+			_data.erase(0,1);	// Erase J
 			char *end = NULL;
-			std::string sign;
 
-			if (_data[0] == '-')
-			{
-				sign = "-";
-				_data.erase(0,1);
-			} // End if - then
-
-			if (_data[0] == '+')
-			{
-				sign = "+";
-				_data.erase(0,1);
-			} // End if - then
-
-			strtoul( _data.c_str(), &end, 10 );
+			double _value = strtod( _data.c_str(), &end );
 			if ((end == NULL) || (end == _data.c_str()))
 			{
-				printf("Expected value for J parameter\n");
+				printf("Expected number following 'I'\n");
 				return(false);
 			} // End if - then
-			std::string j_param = sign + _data.substr(0, end - _data.c_str());
+			std::string _string = _data.substr(0, end - _data.c_str());
 			_data.erase(0, end - _data.c_str());
-			j_term = InterpretCoord( j_param.c_str(),
-							m_YDigitsLeftOfPoint,
-							m_YDigitsRightOfPoint,
-							m_leadingZeroSuppression,
-							m_trailingZeroSuppression );
+
+            if (_string.find('.') == std::string::npos)
+            {
+
+                j_term = InterpretCoord( _string.c_str(),
+                                m_YDigitsLeftOfPoint,
+                                m_YDigitsRightOfPoint,
+                                m_leadingZeroSuppression,
+                                m_trailingZeroSuppression );
+
+            }
+            else
+            {
+                // The number had a decimal point explicitly defined within it.  Read it as a correctly
+                // represented number as is.
+                j_term = _value;
+            }
 		}
 		else if (_data.substr(0,3) == "M00")
 		{
@@ -645,66 +643,96 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 		{
 			_data.erase(0,1);	// Erase X
 			char *end = NULL;
-			std::string sign;
 
-			if (_data[0] == '-')
-			{
-				sign = "-";
-				_data.erase(0,1);
-			} // End if - then
-
-			if (_data[0] == '+')
-			{
-				sign = "+";
-				_data.erase(0,1);
-			} // End if - then
-
-			strtoul( _data.c_str(), &end, 10 );
+			double x = strtod( _data.c_str(), &end );
 			if ((end == NULL) || (end == _data.c_str()))
 			{
-				printf("Expected aperture number following 'D'\n");
+				printf("Expected number following 'X'\n");
 				return(false);
 			} // End if - then
-			std::string x = sign + _data.substr(0, end - _data.c_str());
+			std::string x_string = _data.substr(0, end - _data.c_str());
 			_data.erase(0, end - _data.c_str());
-			position.SetX( InterpretCoord( x.c_str(),
-							m_YDigitsLeftOfPoint,
-							m_YDigitsRightOfPoint,
-							m_leadingZeroSuppression,
-							m_trailingZeroSuppression ) );
-			if (m_mirror_image) position.SetX( position.X() * -1.0 ); // mirror about Y axis
+
+            if (x_string.find('.') == std::string::npos)
+            {
+
+                double x = InterpretCoord( x_string.c_str(),
+                                m_YDigitsLeftOfPoint,
+                                m_YDigitsRightOfPoint,
+                                m_leadingZeroSuppression,
+                                m_trailingZeroSuppression );
+
+                if (m_absoluteCoordinatesMode)
+                {
+                    position.SetX( x );
+                }
+                else
+                {
+                    // Incremental position.
+                    position.SetX( position.X() + x );
+                }
+            }
+            else
+            {
+                // The number had a decimal point explicitly defined within it.  Read it as a correctly
+                // represented number as is.
+                if (m_absoluteCoordinatesMode)
+                {
+                    position.SetX( x );
+                }
+                else
+                {
+                    // Incremental position.
+                    position.SetX( position.X() + x );
+                }
+            }
 		}
 		else if (_data.substr(0,1) == "Y")
 		{
 			_data.erase(0,1);	// Erase Y
 			char *end = NULL;
-			std::string sign;
 
-			if (_data[0] == '-')
-			{
-				sign = "-";
-				_data.erase(0,1);
-			} // End if - then
-
-			if (_data[0] == '+')
-			{
-				sign = "+";
-				_data.erase(0,1);
-			} // End if - then
-
-			strtoul( _data.c_str(), &end, 10 );
+			double y = strtod( _data.c_str(), &end );
 			if ((end == NULL) || (end == _data.c_str()))
 			{
-				printf("Expected aperture number following 'D'\n");
+				printf("Expected number following 'Y'\n");
 				return(false);
 			} // End if - then
-			std::string y = sign + _data.substr(0, end - _data.c_str());
+			std::string y_string = _data.substr(0, end - _data.c_str());
 			_data.erase(0, end - _data.c_str());
-			position.SetY( InterpretCoord( y.c_str(),
-							m_YDigitsLeftOfPoint,
-							m_YDigitsRightOfPoint,
-							m_leadingZeroSuppression,
-							m_trailingZeroSuppression ));
+
+            if (y_string.find('.') == std::string::npos)
+            {
+                double y = InterpretCoord( y_string.c_str(),
+                                m_YDigitsLeftOfPoint,
+                                m_YDigitsRightOfPoint,
+                                m_leadingZeroSuppression,
+                                m_trailingZeroSuppression );
+
+                if (m_absoluteCoordinatesMode)
+                {
+                    position.SetY( y );
+                }
+                else
+                {
+                    // Incremental position.
+                    position.SetY( position.Y() + y );
+                }
+            }
+            else
+            {
+                    // The number already has a decimal point explicitly defined within it.
+
+                    if (m_absoluteCoordinatesMode)
+                    {
+                        position.SetY( y );
+                    }
+                    else
+                    {
+                        // Incremental position.
+                        position.SetY( position.Y() + y );
+                    }
+            }
 		}
 		else if (_data.substr(0,3) == "D01")
 		{
