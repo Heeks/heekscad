@@ -153,6 +153,11 @@ bool RS274X::Read( const char *p_szFileName, const FileInterpretation_t file_int
             int number_of_networks = FormNetworks();
             printf("Found %d separate networks\n", number_of_networks);
 
+            /*
+            We're not using the raster image at the moment.  As long as the OpenCascade
+            intersection functionality continues to work, we won't go down the path
+            of performing an edge detection algorithm on the raster image.
+
             // Generate a raster image (bitmap) that represents the traces.
             Bitmap pcb = RenderToBitmap();
 
@@ -168,6 +173,7 @@ bool RS274X::Read( const char *p_szFileName, const FileInterpretation_t file_int
                 file_name << _("pcb") << _("_width_") << pcb.PixelsPerRow() << _("_height_") << pcb.PixelsPerColumn() << _T(".raw");
                 pcb.Save( file_name );
             }
+            */
         } // End if - then
 
         if (file_interpretation == CentreLines)
