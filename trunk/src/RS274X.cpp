@@ -56,12 +56,12 @@ RS274X::RS274X()
 } // End constructor
 
 
-// Filter out '\r' and '\n' characters.
+// Filter out spaces
 char RS274X::ReadChar( const char *data, int *pos, const int max_pos )
 {
 	if (*pos < max_pos)
 	{
-		while ( ((*pos) < max_pos) && ((data[*pos] == ' ') || (data[*pos] == '\r') || (data[*pos] == '\n')) )
+		while ( ((*pos) < max_pos) && ((data[*pos] == ' ')) )
 		{
 			if(data[*pos] == '\n') m_current_line++;
 			(*pos)++;
@@ -87,7 +87,8 @@ std::string RS274X::ReadBlock( const char *data, int *pos, const int max_pos )
 	std::ostringstream l_ossBlock;
 
 	// Read first char to determine if it's a parameter or not.
-	char c = ReadChar(data,pos,max_pos);
+	char c;
+	while (((c = ReadChar(data,pos,max_pos)) > 0) && ((c == '\n') || (c == '\r'))) { }
 
 	if (c < 0) return(std::string(""));
 
@@ -96,7 +97,7 @@ std::string RS274X::ReadBlock( const char *data, int *pos, const int max_pos )
 
 	l_ossBlock << c;
 
-	while (((c = ReadChar(data,pos,max_pos)) > 0) && (c != delimiter))
+	while (((c = ReadChar(data,pos,max_pos)) > 0) && (c != delimiter) && ((c != '\r') && (c != '\n')))
 	{
 		l_ossBlock << c;
 	} // End while
@@ -135,12 +136,18 @@ bool RS274X::Read( const char *p_szFileName, const FileInterpretation_t file_int
 				if (block[0] == '%')
 				{
 					// We're reading a parameter.
-					if (! ReadParameters( block )) return(false);
+					if (! ReadParameters( block ))
+					{
+					    return(false);
+					}
 				} // End if - then
 				else
 				{
 					// It's a normal data block.
-					if (! ReadDataBlock( block )) return(false);
+					if (! ReadDataBlock( block ))
+					{
+					    return(false);
+					}
 				} // End if - else
 			} // End if - then
 		} // End while
@@ -256,6 +263,8 @@ bool RS274X::ReadParameters( const std::string & parameters )
 				if ((_params.size() > 0) && (_params[0] == 'X'))
 				{
 					// It has a hole in it. (either circular or rectangular)
+					_params.erase(0,1); // Erase the X
+
 					aperture.XAxisHoleDimension( double(strtod( _params.c_str(), &end )) * m_units );
 					if ((end == NULL) || (end == _params.c_str()))
 					{
@@ -268,6 +277,7 @@ bool RS274X::ReadParameters( const std::string & parameters )
 				if ((_params.size() > 0) && (_params[0] == 'X'))
 				{
 					// It has a rectangular hole in it.
+					_params.erase(0,1); // Erase the X
 					aperture.YAxisHoleDimension( double(strtod( _params.c_str(), &end )) * m_units );
 					if ((end == NULL) || (end == _params.c_str()))
 					{

@@ -194,8 +194,6 @@
 		<Unit filename="src/HeeksFrame.h" />
 		<Unit filename="src/HeeksPrintout.cpp" />
 		<Unit filename="src/HeeksPrintout.h" />
-		<Unit filename="src/History.h" />
-		<Unit filename="src/Images.h" />
 		<Unit filename="src/InputModeCanvas.cpp" />
 		<Unit filename="src/InputModeCanvas.h" />
 		<Unit filename="src/Intersector.h" />
