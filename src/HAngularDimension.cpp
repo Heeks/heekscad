@@ -181,7 +181,7 @@ void HAngularDimension::glCommands(bool select, bool marked, bool no_color)
 		else
 		{
 			double offset = da > 0? PI/20 : -PI/20;
-			if(ca < a1 ^ da < 0)
+			if((ca < a1) ^ (da < 0))
 			{
 				DrawArc(pnt,r,ca,a1);
 				DrawArc(pnt,r,a1+da,a1+da+offset);
