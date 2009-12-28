@@ -836,10 +836,27 @@ void HeeksCADapp::OpenDXFFile(const wxChar *filepath )
 
 void HeeksCADapp::OpenRS274XFile(const wxChar *filepath)
 {
-	RS274X gerber;
-	gerber.Read(wxString(filepath).mb_str(), RS274X::IsolationRouting );
-	// gerber.Read(wxString(filepath).mb_str(), RS274X::CentreLines );
-	// gerber.Read(wxString(filepath).mb_str(), RS274X::Both );
+    wxString message(_("Select how the file is to be interpreted"));
+    wxString caption(_("RS274X file interpretation"));
+
+    wxArrayString choices;
+
+    choices.Add(_("Produce trace isolation sketches"));
+    choices.Add(_("Produce trace centre-line sketches"));
+
+    wxString choice = ::wxGetSingleChoice( message, caption, choices );
+
+    RS274X gerber;
+
+    if (choice == choices[0])
+    {
+        gerber.Read(wxString(filepath).mb_str(), RS274X::IsolationRouting );
+    }
+
+    if (choice == choices[1])
+    {
+        gerber.Read(wxString(filepath).mb_str(), RS274X::CentreLines );
+    }
 }
 
 bool HeeksCADapp::OpenImageFile(const wxChar *filepath)
