@@ -940,7 +940,7 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 	return open_succeeded;
 }
 
-static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file)
+static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString layer_name)
 {
 	switch(object->GetType())
 	{
@@ -950,7 +950,7 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file)
 			double s[3], e[3];
 			extract(l->A->m_p, s);
 			extract(l->B->m_p, e);
-			dxf_file.WriteLine(s, e);
+			dxf_file.WriteLine(s, e, layer_name);
 		}
 		break;
 	case ArcType:
@@ -961,7 +961,7 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file)
 			extract(a->B->m_p, e);
 			extract(a->C->m_p, c);
 			bool dir = a->m_axis.Direction().Z() > 0;
-			dxf_file.WriteArc(s, e, c, dir);
+			dxf_file.WriteArc(s, e, c, dir, layer_name);
 		}
 		break;
       case EllipseType:
@@ -973,7 +973,7 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file)
 			double maj_r = e->m_majr;
 			double min_r = e->m_minr;
 			double rot = e->GetRotation();
-			dxf_file.WriteEllipse(c, maj_r, min_r, rot, 0, 2 * Pi, dir);
+			dxf_file.WriteEllipse(c, maj_r, min_r, rot, 0, 2 * Pi, dir, layer_name);
                 }
 		break;
         case CircleType:
@@ -982,15 +982,27 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file)
 			double c[3];
 			extract(cir->C->m_p, c);
 			double radius = cir->m_radius;
-			dxf_file.WriteCircle(c, radius);
+			dxf_file.WriteCircle(c, radius, layer_name);
                 }
 		break;
 	default:
 		{
+		    wxString child_layer_name;
+
+		    if ((object->GetShortString() != NULL) && (wxString(object->GetTypeString()) != wxString(object->GetShortString())))
+		    {
+		        child_layer_name << object->GetShortString();
+		    }
+		    else
+		    {
+		        child_layer_name << object->m_id;   // Use the ID as a layer name so that it's unique.
+		    }
+
 			for(HeeksObj* child = object->GetFirstChild(); child; child = object->GetNextChild())
 			{
+
 				// recursive
-				WriteDXFEntity(child, dxf_file);
+				WriteDXFEntity(child, dxf_file, child_layer_name);
 			}
 		}
 	}
@@ -1010,7 +1022,9 @@ void HeeksCADapp::SaveDXFFile(const wxChar *filepath)
 	for(std::list<HeeksObj*>::iterator It = m_objects.begin(); It != m_objects.end(); It++)
 	{
 		HeeksObj* object = *It;
-		WriteDXFEntity(object, dxf_file);
+		// At this level, don't assign each element to its own layer.  We only want sketch objects
+		// to be located on their own layer.  This will be done from within the WriteDXFEntity() method.
+		WriteDXFEntity(object, dxf_file, _T("0"));
 	}
 
 	// when dxf_file goes out of scope it writes the file, see ~CDxfWrite
