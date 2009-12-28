@@ -44,12 +44,12 @@ CDxfWrite::~CDxfWrite()
 	delete m_ofs;
 }
 
-void CDxfWrite::WriteLine(const double* s, const double* e)
+void CDxfWrite::WriteLine(const double* s, const double* e, const wxString layer_name)
 {
 	(*m_ofs) << 0			<< endl;
 	(*m_ofs) << "LINE"		<< endl;
 	(*m_ofs) << 8			<< endl;	// Group code for layer name
-	(*m_ofs) << 0			<< endl;	// Layer number
+	(*m_ofs) << Ttc(layer_name.c_str())	<< endl;	// Layer number
 	(*m_ofs) << 10			<< endl;	// Start point of line
 	(*m_ofs) << s[0]		<< endl;	// X in WCS coordinates
 	(*m_ofs) << 20			<< endl;
@@ -64,7 +64,7 @@ void CDxfWrite::WriteLine(const double* s, const double* e)
 	(*m_ofs) << e[2]		<< endl;	// Z in WCS coordinates
 }
 
-void CDxfWrite::WriteArc(const double* s, const double* e, const double* c, bool dir)
+void CDxfWrite::WriteArc(const double* s, const double* e, const double* c, bool dir, const wxString layer_name)
 {
 	double ax = s[0] - c[0];
 	double ay = s[1] - c[1];
@@ -82,7 +82,7 @@ void CDxfWrite::WriteArc(const double* s, const double* e, const double* c, bool
 	(*m_ofs) << 0			<< endl;
 	(*m_ofs) << "ARC"		<< endl;
 	(*m_ofs) << 8			<< endl;	// Group code for layer name
-	(*m_ofs) << 0			<< endl;	// Layer number
+	(*m_ofs) << Ttc(layer_name.c_str())	<< endl;	// Layer number
 	(*m_ofs) << 10			<< endl;	// Centre X
 	(*m_ofs) << c[0]		<< endl;	// X in WCS coordinates
 	(*m_ofs) << 20			<< endl;
@@ -97,12 +97,12 @@ void CDxfWrite::WriteArc(const double* s, const double* e, const double* c, bool
 	(*m_ofs) << end_angle	<< endl;	// End angle
 }
 
-void CDxfWrite::WriteCircle(const double* c, double radius)
+void CDxfWrite::WriteCircle(const double* c, double radius, const wxString layer_name)
 {
 	(*m_ofs) << 0			<< endl;
 	(*m_ofs) << "CIRCLE"		<< endl;
 	(*m_ofs) << 8			<< endl;	// Group code for layer name
-	(*m_ofs) << 0			<< endl;	// Layer number
+	(*m_ofs) << Ttc(layer_name.c_str())	<< endl;	// Layer number
 	(*m_ofs) << 10			<< endl;	// Centre X
 	(*m_ofs) << c[0]		<< endl;	// X in WCS coordinates
 	(*m_ofs) << 20			<< endl;
@@ -113,7 +113,7 @@ void CDxfWrite::WriteCircle(const double* c, double radius)
 	(*m_ofs) << radius		<< endl;	// Radius
 }
 
-void CDxfWrite::WriteEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir)
+void CDxfWrite::WriteEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir, const wxString layer_name )
 {
 	double m[3];
 	m[2]=0;
@@ -130,7 +130,7 @@ void CDxfWrite::WriteEllipse(const double* c, double major_radius, double minor_
 	(*m_ofs) << 0			<< endl;
 	(*m_ofs) << "ELLIPSE"		<< endl;
 	(*m_ofs) << 8			<< endl;	// Group code for layer name
-	(*m_ofs) << 0			<< endl;	// Layer number
+	(*m_ofs) << Ttc(layer_name.c_str())	<< endl;	// Layer number
 	(*m_ofs) << 10			<< endl;	// Centre X
 	(*m_ofs) << c[0]		<< endl;	// X in WCS coordinates
 	(*m_ofs) << 20			<< endl;
@@ -874,8 +874,8 @@ void CDxfRead::OnReadSpline(struct SplineData& sd)
 	bool closed = (sd.flag & 1) != 0;
 	bool periodic = (sd.flag & 2) != 0;
 	bool rational = (sd.flag & 4) != 0;
-	bool planar = (sd.flag & 8) != 0;
-	bool linear = (sd.flag & 16) != 0;
+	// bool planar = (sd.flag & 8) != 0;
+	// bool linear = (sd.flag & 16) != 0;
 
 	SplineData sd_copy = sd;
 
