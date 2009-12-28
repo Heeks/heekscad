@@ -165,6 +165,7 @@
 #include <wx/clipbrd.h>
 #include <wx/checklst.h>
 #include "wx/choice.h"
+#include <wx/choicdlg.h>
 #include <wx/cmdline.h>
 #include "wx/combobox.h"
 #include <wx/confbase.h>
