@@ -940,8 +940,19 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 	return open_succeeded;
 }
 
-static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString layer_name)
+static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString parent_layer_name)
 {
+    wxString layer_name;
+
+    if (parent_layer_name.Len() == 0)
+    {
+        layer_name << object->m_id;
+    }
+    else
+    {
+        layer_name = parent_layer_name;
+    }
+
 	switch(object->GetType())
 	{
 	case LineType:
@@ -987,22 +998,28 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
 		break;
 	default:
 		{
-		    wxString child_layer_name;
-
-		    if ((object->GetShortString() != NULL) && (wxString(object->GetTypeString()) != wxString(object->GetShortString())))
+		    if (parent_layer_name.Len() == 0)
 		    {
-		        child_layer_name << object->GetShortString();
+		        layer_name.Clear();
+                if ((object->GetShortString() != NULL) && (wxString(object->GetTypeString()) != wxString(object->GetShortString())))
+                {
+                    layer_name << object->GetShortString();
+                }
+                else
+                {
+                    layer_name << object->m_id;   // Use the ID as a layer name so that it's unique.
+                }
 		    }
 		    else
 		    {
-		        child_layer_name << object->m_id;   // Use the ID as a layer name so that it's unique.
+		        layer_name = parent_layer_name;
 		    }
 
 			for(HeeksObj* child = object->GetFirstChild(); child; child = object->GetNextChild())
 			{
 
 				// recursive
-				WriteDXFEntity(child, dxf_file, child_layer_name);
+				WriteDXFEntity(child, dxf_file, layer_name);
 			}
 		}
 	}
@@ -1024,7 +1041,7 @@ void HeeksCADapp::SaveDXFFile(const wxChar *filepath)
 		HeeksObj* object = *It;
 		// At this level, don't assign each element to its own layer.  We only want sketch objects
 		// to be located on their own layer.  This will be done from within the WriteDXFEntity() method.
-		WriteDXFEntity(object, dxf_file, _T("0"));
+		WriteDXFEntity(object, dxf_file, _T(""));
 	}
 
 	// when dxf_file goes out of scope it writes the file, see ~CDxfWrite
