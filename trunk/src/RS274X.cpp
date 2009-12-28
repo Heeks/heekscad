@@ -781,12 +781,6 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 					m_traces.push_back( trace );
 				}
 
-				{
-					std::list<HeeksObj *> objects;
-					objects.push_back( RS274X::Sketch( trace.Face() ) );
-					heekscad_interface.SaveXMLFile( objects, _T("/home/david/pcb.heeks"), false );
-				}
-
 				m_current_position = position;
 			} // End if - then
 			else if (m_full_circular_interpolation)
@@ -808,13 +802,6 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 				else
 				{
 					m_traces.push_back( trace );
-				}
-
-				// if (m_cw_circular_interpolation == false)
-				{
-					std::list<HeeksObj *> objects;
-					objects.push_back( RS274X::Sketch( trace.Face() ) );
-					heekscad_interface.SaveXMLFile( objects, _T("/home/david/pcb.heeks"), false );
 				}
 
 				m_current_position = position;
