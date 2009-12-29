@@ -342,7 +342,7 @@ HeeksObj* CHeeksCADInterface::NewSketch()
 
 HeeksObj* CHeeksCADInterface::NewPoint(const double* p)
 {
-    // I needed this for HeeksPython- it's just a point    
+    // I needed this for HeeksPython- it's just a point
 	return new HPoint(make_point(p),&wxGetApp().current_color);
 
 }
@@ -387,7 +387,7 @@ HeeksObj* CHeeksCADInterface::NewCone(const double* c, double r1, double r2, dou
 HeeksObj* CHeeksCADInterface::NewSphere(const double* pos, double radius)
 {
    return new CSphere(gp_Pnt(make_point(pos)), radius,_T("Sphere"), wxGetApp().current_color);
-} 
+}
 
 HeeksObj* CHeeksCADInterface::NewSolid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col)
 {
@@ -452,7 +452,7 @@ HeeksObj* CHeeksCADInterface::NewArc(const double* c, const double* u, double r,
 	gp_Pnt p1 =pc.XYZ() + circle.XAxis().Direction().XYZ()*r;
 	p0.Rotate(circle.Axis(),s);
 	p1.Rotate(circle.Axis(),e);
-	
+
 	return new HArc(p0, p1, circle, &wxGetApp().current_color);
 
 }
@@ -1067,4 +1067,20 @@ int CHeeksCADInterface::LoadIconsTexture(const wxChar *filepath){
 	unsigned int* t = loadImage(filepath, &width, &height, &textureWidth, &textureHeight);
 	if(t)return *t;
 	return 0;
+}
+
+
+/**
+    This method accepts a file pointer that will handle all the file open and import calls to
+    a file whose extension is within the list provided.  If a handler is already registered for one
+    of these extensions then the registration fails and a 'false' status is returned.
+ */
+bool CHeeksCADInterface::RegisterFileOpenHandler( const std::list<wxString> file_extensions, void (*fileopen_handler)(const wxChar *path) )
+{
+    return( wxGetApp().RegisterFileOpenHandler( file_extensions, fileopen_handler ));
+}
+
+bool CHeeksCADInterface::UnregisterFileOpenHandler( void (*fileopen_handler)(const wxChar *path) )
+{
+    return(wxGetApp().UnregisterFileOpenHandler( fileopen_handler ));
 }

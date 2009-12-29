@@ -155,6 +155,26 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_icon_texture_number = 0;
 	m_extrude_to_solid = true;
 	m_revolve_angle = 360.0;
+
+
+    {
+        std::list<wxString> extensions;
+        extensions.push_back(_T("svg"));
+        RegisterFileOpenHandler( extensions, OpenSVGFile );
+    }
+    {
+        std::list<wxString> extensions;
+        extensions.push_back(_T("stl"));
+        RegisterFileOpenHandler( extensions, OpenSTLFile );
+    }
+    {
+        std::list<wxString> extensions;
+        extensions.push_back(_T("gbr"));
+        extensions.push_back(_T("rs274x"));
+        extensions.push_back(_T("pho"));
+        RegisterFileOpenHandler( extensions, OpenRS274XFile );
+    }
+
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -817,24 +837,24 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into)
 	CGroup::MoveSolidsToGroupsById(this);
 }
 
-void HeeksCADapp::OpenSVGFile(const wxChar *filepath)
+/* static */ void HeeksCADapp::OpenSVGFile(const wxChar *filepath)
 {
 	HeeksSvgRead svgread(filepath,true);
 }
 
-void HeeksCADapp::OpenSTLFile(const wxChar *filepath)
+/* static */ void HeeksCADapp::OpenSTLFile(const wxChar *filepath)
 {
-	CStlSolid* new_object = new CStlSolid(filepath, &current_color);
-	Add(new_object, NULL);
+	CStlSolid* new_object = new CStlSolid(filepath, &(wxGetApp().current_color));
+	wxGetApp().Add(new_object, NULL);
 }
 
-void HeeksCADapp::OpenDXFFile(const wxChar *filepath )
+/* static */ void HeeksCADapp::OpenDXFFile(const wxChar *filepath )
 {
 	HeeksDxfRead dxf_file(filepath);
 	dxf_file.DoRead();
 }
 
-void HeeksCADapp::OpenRS274XFile(const wxChar *filepath)
+/* static */ void HeeksCADapp::OpenRS274XFile(const wxChar *filepath)
 {
     wxString message(_("Select how the file is to be interpreted"));
     wxString caption(_("RS274X file interpretation"));
@@ -892,6 +912,11 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 	wxString wf(filepath);
 	wf.LowerCase();
 
+	wxString extension(filepath);
+	int offset = extension.Find('.',true);
+	if (offset > 0) extension.Remove(0, offset+1);
+	extension.LowerCase();
+
 	bool open_succeeded = true;
 
 	if(wf.EndsWith(_T(".heeks")))
@@ -901,24 +926,15 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 			m_file_open_or_import_type = FileImportTypeHeeks;
 		OpenXMLFile(filepath, paste_into);
 	}
-	else if(wf.EndsWith(_T(".svg")))
+	else if(m_fileopen_handlers.find(extension) != m_fileopen_handlers.end())
 	{
-		OpenSVGFile(filepath);
-	}
-	else if(wf.EndsWith(_T(".stl")))
-	{
-		OpenSTLFile(filepath);
+		(m_fileopen_handlers[extension])(filepath);
 	}
 	else if(wf.EndsWith(_T(".dxf")))
 	{
 		m_file_open_or_import_type = FileOpenOrImportTypeDxf;
 		OpenDXFFile(filepath);
 	}
-	else if(wf.EndsWith(_T(".gbr"))	|| wf.EndsWith(_T(".rs274x")) || wf.EndsWith(_T(".pho")))
-	{
-		OpenRS274XFile(filepath);
-	}
-
 	// check for images
 	else if(OpenImageFile(filepath))
 	{
@@ -2512,7 +2528,14 @@ const wxChar* HeeksCADapp::GetKnownFilesWildCardString(bool open)const
 			imageExtStr2.Append(_T("*."));
 			imageExtStr2.Append(ext);
 		}
-		known_file_ext = wxString(_("Known Files")) + _T(" |*.heeks;*.HEEKS;*.igs;*.IGS;*.iges;*.IGES;*.stp;*.STP;*.step;*.STEP;*.stl;*.STL;*.svg;*.SVG;*.dxf;*.DXF;*.gbr;*.GBR,*.rs274x;*.RS274X;*.pho;*.PHO") + imageExtStr + _T("|") + _("Heeks files") + _T(" (*.heeks)|*.heeks;*.HEEKS|") + _("IGES files") + _T(" (*.igs *.iges)|*.igs;*.IGS;*.iges;*.IGES|") + _("STEP files") + _T(" (*.stp *.step)|*.stp;*.STP;*.step;*.STEP|") + _("STL files") + _T(" (*.stl)|*.stl;*.STL|") + _("Scalar Vector Graphics files") + _T(" (*.svg)|*.svg;*.SVG|") + _("DXF files") + _T(" (*.dxf)|*.dxf;*.DXF|") + _("RX274X/Gerber files") + _T(" (*.gbr,*.rs274x)|*.gbr;*.GBR;*.rs274x;*.RS274X;*.pho;*.PHO|") + _("Picture files") + _T(" (") + imageExtStr2 + _T(")|") + imageExtStr;
+
+		wxString registeredExtensions;
+		for (FileOpenHandlers_t::const_iterator itHandler = m_fileopen_handlers.begin(); itHandler != m_fileopen_handlers.end(); itHandler++)
+		{
+		    registeredExtensions << _T(";*.") << itHandler->first;
+		}
+
+		known_file_ext = wxString(_("Known Files")) + _T(" |*.heeks;*.HEEKS;*.igs;*.IGS;*.iges;*.IGES;*.stp;*.STP;*.step;*.STEP;*.dxf;*.DXF") + imageExtStr + registeredExtensions + _T("|") + _("Heeks files") + _T(" (*.heeks)|*.heeks;*.HEEKS|") + _("IGES files") + _T(" (*.igs *.iges)|*.igs;*.IGS;*.iges;*.IGES|") + _("STEP files") + _T(" (*.stp *.step)|*.stp;*.STP;*.step;*.STEP|") + _("STL files") + _T(" (*.stl)|*.stl;*.STL|") + _("Scalar Vector Graphics files") + _T(" (*.svg)|*.svg;*.SVG|") + _("DXF files") + _T(" (*.dxf)|*.dxf;*.DXF|") + _("RX274X/Gerber files") + _T(" (*.gbr,*.rs274x)|*.gbr;*.GBR;*.rs274x;*.RS274X;*.pho;*.PHO|") + _("Picture files") + _T(" (") + imageExtStr2 + _T(")|") + imageExtStr;
 		return known_file_ext.c_str();
 	}
 	else{
@@ -2526,7 +2549,7 @@ const wxChar* HeeksCADapp::GetKnownFilesCommaSeparatedList(bool open)const
 {
 	if(open){
 		wxList handlers = wxImage::GetHandlers();
-		wxString known_ext_str = _T("heeks, HEEKS, igs, iges, stp, step, stl, svg, dxf");
+		wxString known_ext_str = _T("heeks, HEEKS, igs, iges, stp, step, dxf");
 		for(wxList::iterator It = handlers.begin(); It != handlers.end(); It++)
 		{
 			wxImageHandler* handler = (wxImageHandler*)(*It);
@@ -2534,6 +2557,12 @@ const wxChar* HeeksCADapp::GetKnownFilesCommaSeparatedList(bool open)const
 			known_ext_str.Append(_T(", "));
 			known_ext_str.Append(ext);
 		}
+
+		for (FileOpenHandlers_t::const_iterator itHandler = m_fileopen_handlers.begin(); itHandler != m_fileopen_handlers.end(); itHandler++)
+		{
+		    known_ext_str << _T(", ") << itHandler->first;
+		}
+
 
 		return known_ext_str;
 	}
@@ -3439,4 +3468,68 @@ void HeeksCADapp::GetPluginsFromCommandLineParams(std::list<wxString> &plugins)
 void HeeksCADapp::RegisterOnBuildTexture(void(*callbackfunc)())
 {
 	m_on_build_texture_callbacks.push_back(callbackfunc);
+}
+
+
+bool HeeksCADapp::RegisterFileOpenHandler( const std::list<wxString> file_extensions, FileOpenHandler_t fileopen_handler )
+{
+    std::set<wxString> valid_extensions;
+
+    // For Linux, where the file system supports case-sensitive file names, we should expand
+    // the extensions to include uppercase and lowercase and add them to our set.
+
+    for (std::list<wxString>::const_iterator l_itExtension = file_extensions.begin(); l_itExtension != file_extensions.end(); l_itExtension++)
+    {
+        wxString extension(*l_itExtension);
+
+        // Make sure the calling routine didn't add the '.'
+        if (extension.StartsWith(_T(".")))
+        {
+            extension.Remove(0,1);
+        }
+
+        #ifndef WIN32
+            extension.LowerCase();
+            valid_extensions.insert( extension );
+
+            extension.UpperCase();
+            valid_extensions.insert( extension );
+        #else
+            extension.LowerCase();
+            valid_extensions.insert( extension );
+        #endif // WIN32
+    } // End for
+
+    for (std::set<wxString>::iterator itExtension = valid_extensions.begin(); itExtension != valid_extensions.end(); itExtension++)
+    {
+        if (m_fileopen_handlers.find( *itExtension ) != m_fileopen_handlers.end())
+        {
+            printf("Aborting file-open handler registration for extension %s as it has already been registered\n", Ttc( *itExtension ));
+            return(false);
+        }
+    }
+
+    // We must not have seen these extensions before.  Go ahead and register them.
+    for (std::set<wxString>::iterator itExtension = valid_extensions.begin(); itExtension != valid_extensions.end(); itExtension++)
+    {
+        m_fileopen_handlers.insert( std::make_pair( *itExtension, fileopen_handler ) );
+    }
+
+    return(true);
+}
+
+bool HeeksCADapp::UnregisterFileOpenHandler( void (*fileopen_handler)(const wxChar *path) )
+{
+    std::list<FileOpenHandlers_t::iterator> remove;
+    for (FileOpenHandlers_t::iterator itHandler = m_fileopen_handlers.begin(); itHandler != m_fileopen_handlers.end(); itHandler++)
+    {
+        if (itHandler->second == fileopen_handler) remove.push_back(itHandler);
+    }
+
+    for (std::list<FileOpenHandlers_t::iterator>::iterator itRemove = remove.begin(); itRemove != remove.end(); itRemove++)
+    {
+        m_fileopen_handlers.erase( *itRemove );
+    }
+
+    return(remove.size() > 0);
 }
