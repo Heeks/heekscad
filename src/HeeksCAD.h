@@ -178,6 +178,14 @@ public:
 	bool m_extrude_to_solid;
 	double m_revolve_angle;
 
+	typedef void(*FileOpenHandler_t)(const wxChar *path);
+	typedef std::map<wxString, FileOpenHandler_t> FileOpenHandlers_t;
+
+	FileOpenHandlers_t  m_fileopen_handlers;
+
+	bool RegisterFileOpenHandler( const std::list<wxString> file_extensions, FileOpenHandler_t );
+	bool UnregisterFileOpenHandler( void (*fileopen_handler)(const wxChar *path) );
+
 	//WxApp override
 	int OnRun();
 	bool OnExceptionInMainLoop();
@@ -219,10 +227,10 @@ public:
 	void ObjectReadBaseXML(HeeksObj *object, TiXmlElement* element);
 	void InitializeXMLFunctions();
 	void OpenXMLFile(const wxChar *filepath,HeeksObj* paste_into = NULL);
-	void OpenSVGFile(const wxChar *filepath);
-	void OpenSTLFile(const wxChar *filepath);
-	void OpenDXFFile(const wxChar *filepath);
-	void OpenRS274XFile(const wxChar *filepath);
+	static void OpenSVGFile(const wxChar *filepath);
+	static void OpenSTLFile(const wxChar *filepath);
+	static void OpenDXFFile(const wxChar *filepath);
+	static void OpenRS274XFile(const wxChar *filepath);
 	bool OpenImageFile(const wxChar *filepath);
 	bool OpenFile(const wxChar *filepath, bool import_not_open = false, HeeksObj* paste_into = NULL, bool retain_filename = true );
 	void SaveDXFFile(const wxChar *filepath);

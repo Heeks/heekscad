@@ -90,12 +90,12 @@ public:
 	virtual HeeksObj* NewCuboid(const double *c, double x, double y, double z);
 	virtual HeeksObj* NewCylinder(const double*c, double r, double h);
 	virtual HeeksObj* NewCone(const double*c, double r1, double r2, double h);
-	virtual HeeksObj* NewSphere(const double*pos, double radius);    
+	virtual HeeksObj* NewSphere(const double*pos, double radius);
 	virtual HeeksObj* NewGroup();
 	virtual HeeksObj* NewSolid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
 	virtual HeeksObj* Fuse(std::list<HeeksObj*> objects);
 	virtual HeeksObj* Cut(std::list<HeeksObj*> objects);
-	virtual HeeksObj* Common(std::list<HeeksObj*> objects);    
+	virtual HeeksObj* Common(std::list<HeeksObj*> objects);
 	virtual void RotateObject(HeeksObj*, const double*p,const double*u,double r);
 	virtual void TranslateObject(HeeksObj*,const double* c);
 	virtual void RegisterObserver(Observer* observer);
@@ -189,14 +189,14 @@ public:
 	// loop functions
 	virtual long LoopGetEdgeCount(HeeksObj* loop);
 	virtual HeeksObj* LoopGetFirstEdge(HeeksObj* loop);
-	virtual HeeksObj* LoopGetNextEdge(HeeksObj* loop); 
+	virtual HeeksObj* LoopGetNextEdge(HeeksObj* loop);
 	virtual HeeksObj* LoopGetEdge(HeeksObj* loop, int index);
 	virtual bool LoopIsOuter(HeeksObj* loop);
 
 	// vertex functions
 	virtual void VertexGetPoint(HeeksObj* vertex, double *d3);
 	virtual HeeksObj* VertexGetFirstEdge(HeeksObj* vertex);
-	virtual HeeksObj* VertexGetNextEdge(HeeksObj* vertex); 
+	virtual HeeksObj* VertexGetNextEdge(HeeksObj* vertex);
 
 	virtual const wxChar* GetRevisionNumber();
 	virtual void RegisterOnGLCommands( void(*callbackfunc)() );
@@ -230,4 +230,7 @@ public:
 
 	virtual void RegisterOnBuildTexture( void(*callbackfunc)() );
 	virtual int LoadIconsTexture(const wxChar *filepath);
+
+	virtual bool RegisterFileOpenHandler( const std::list<wxString> file_extensions, void (*fileopen_handler)(const wxChar *path) );
+	virtual bool UnregisterFileOpenHandler( void (*fileopen_handler)(const wxChar *path) );
 };
