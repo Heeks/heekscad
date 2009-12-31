@@ -18,7 +18,8 @@ enum{
 	ColorPropertyType,
 	CheckPropertyType,
 	ListOfPropertyType,
-	TrsfPropertyType
+	TrsfPropertyType,
+	FilePropertyType
 };
 
 #include <vector>
