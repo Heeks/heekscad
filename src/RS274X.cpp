@@ -183,7 +183,7 @@ bool RS274X::Read( const char *p_szFileName, const FileInterpretation_t file_int
             */
         } // End if - then
 
-        if (file_interpretation == CentreLines)
+        if ((file_interpretation == CentreLines) || (file_interpretation == Both))
         {
             DrawCentrelines();
         } // End if - then
