@@ -958,10 +958,11 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 
 	if(open_succeeded)
 	{
+	    InsertRecentFileItem(filepath);
+
 		if((!import_not_open) && (retain_filename))
 		{
 			m_filepath.assign(filepath);
-			InsertRecentFileItem(filepath);
 			SetFrameTitle();
 			SetLikeNewFile();
 		}
