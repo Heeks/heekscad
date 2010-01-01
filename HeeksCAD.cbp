@@ -77,6 +77,8 @@
 		<Unit filename="interface/PropertyColor.h" />
 		<Unit filename="interface/PropertyDouble.cpp" />
 		<Unit filename="interface/PropertyDouble.h" />
+		<Unit filename="interface/PropertyFile.cpp" />
+		<Unit filename="interface/PropertyFile.h" />
 		<Unit filename="interface/PropertyInt.cpp" />
 		<Unit filename="interface/PropertyInt.h" />
 		<Unit filename="interface/PropertyLength.cpp" />
