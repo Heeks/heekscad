@@ -29,7 +29,7 @@
 extern CHeeksCADInterface heekscad_interface;
 
 
-HeeksObj *CxfFont::Glyph::Line::Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const
+HeeksObj *VectorFont::Glyph::Line::Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const
 {
 	gp_Pnt start_point( location );
 	gp_Pnt end_point( location );
@@ -58,7 +58,7 @@ HeeksObj *CxfFont::Glyph::Line::Sketch( const gp_Pnt & location, const gp_Trsf &
 	return(line);
 } // End Sketch() method
 
-void CxfFont::Glyph::Line::glCommands( const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const
+void VectorFont::Glyph::Line::glCommands( const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const
 {
 	gp_Pnt from( starting_point );
 	gp_Pnt to( starting_point );
@@ -79,7 +79,7 @@ void CxfFont::Glyph::Line::glCommands( const gp_Pnt & starting_point, const bool
 
 
 
-std::list<gp_Pnt> CxfFont::Glyph::Arc::Interpolate(const gp_Pnt & location, const unsigned int number_of_points ) const
+std::list<gp_Pnt> VectorFont::Glyph::Arc::Interpolate(const gp_Pnt & location, const unsigned int number_of_points ) const
 {
 	std::list<gp_Pnt> points;
 
@@ -111,7 +111,7 @@ std::list<gp_Pnt> CxfFont::Glyph::Arc::Interpolate(const gp_Pnt & location, cons
 }
 
 
-HeeksObj *CxfFont::Glyph::Arc::Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const
+HeeksObj *VectorFont::Glyph::Arc::Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const
 {
 	double start[3];
 	double end[3];
@@ -120,7 +120,7 @@ HeeksObj *CxfFont::Glyph::Arc::Sketch( const gp_Pnt & location, const gp_Trsf & 
 
 	gp_Pnt centre_point( location.X() + m_xcentre, location.Y() + m_ycentre, location.Z() );
 	gp_Pnt start_point( centre_point.X() + m_radius, centre_point.Y(), centre_point.Z() );
-	gp_Pnt end_point( centre_point.X() + m_radius, centre_point.Y(), centre_point.Z() );	
+	gp_Pnt end_point( centre_point.X() + m_radius, centre_point.Y(), centre_point.Z() );
 
 	gp_Dir z_direction( 0, 0, 1 );
 
@@ -159,7 +159,7 @@ HeeksObj *CxfFont::Glyph::Arc::Sketch( const gp_Pnt & location, const gp_Trsf & 
 	return(arc);
 } // End Sketch() method
 
-void CxfFont::Glyph::Arc::glCommands( const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const
+void VectorFont::Glyph::Arc::glCommands( const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const
 {
 	glBegin(GL_LINE_STRIP);
 	std::list<gp_Pnt> vertices = Interpolate( starting_point, 20 );
@@ -170,9 +170,9 @@ void CxfFont::Glyph::Arc::glCommands( const gp_Pnt & starting_point, const bool 
 	glEnd();
 } // End glCommands() method
 
-CxfFont::Glyph::Glyph( const std::list<std::string> &definition )
+VectorFont::Glyph::Glyph( const std::list<std::string> &cxf_glyph_definition )
 {
-	for (std::list<std::string>::const_iterator l_itLine = definition.begin(); l_itLine != definition.end(); l_itLine++)
+	for (std::list<std::string>::const_iterator l_itLine = cxf_glyph_definition.begin(); l_itLine != cxf_glyph_definition.end(); l_itLine++)
 	{
 		wxString line( Ctt(l_itLine->c_str()) );
 		wxString delimiters( _T(" \t\r\n,") );
@@ -191,7 +191,7 @@ CxfFont::Glyph::Glyph( const std::list<std::string> &definition )
 			if (tokens.size() != 5)
 			{
 				std::ostringstream l_ossError;
-				l_ossError << "Expected 5 tokens when defining a line.  We got " 
+				l_ossError << "Expected 5 tokens when defining a line.  We got "
 							<< tokens.size() << " tokens from '" << l_itLine->c_str() << "\n";
 				throw(std::runtime_error(l_ossError.str().c_str()));
 			}
@@ -207,7 +207,7 @@ CxfFont::Glyph::Glyph( const std::list<std::string> &definition )
 			break;
 
 		case 'A':
-			
+
 			if (tokens.size() != 6)
 			{
 				std::ostringstream l_ossError;
@@ -248,7 +248,51 @@ CxfFont::Glyph::Glyph( const std::list<std::string> &definition )
 	} // End for
 } // End constructor
 
-CxfFont::Glyph::~Glyph()
+VectorFont::Glyph::Glyph( const std::string &hershey_glyph_definition )
+{
+	std::string definition(hershey_glyph_definition);
+
+	if (definition.size() >= 2)
+	{
+	    double left_edge = double(definition[0] - 'R');
+	    double right_edge = double( definition[1] - 'R');
+	    definition.erase(0,2);
+
+		double x = double(definition[0] - 'R');
+		double y = double(definition[1] - 'R') * -1.0;
+		definition.erase(0,2);
+
+		while (definition.size() > 0)
+		{
+			if (definition.size() >= 2)
+			{
+			    if ((definition[0] == ' ') && (definition[1] == 'R'))
+			    {
+			        // This is a 'pen up' item.  Set the new coordinates but don't draw anything.
+			        definition.erase(0,2);
+			        x = double(definition[0] - 'R');
+			        y = double(definition[1] - 'R') * -1.0;
+			    }
+			    else
+			    {
+			        double to_x = double(definition[0] - 'R');
+                    double to_y = double(definition[1] - 'R') * -1.0;
+
+                    Line *line = new Line( x, y, to_x, to_y );
+                    m_graphics_list.push_back( line );
+                    m_bounding_box.Insert( line->BoundingBox() );
+                    x = to_x;
+                    y = to_y;
+			    }
+
+			}
+
+			definition.erase(0,2);
+		}
+	} // End if - then
+} // End constructor
+
+VectorFont::Glyph::~Glyph()
 {
 	for (GraphicsList_t::iterator l_itGraphic = m_graphics_list.begin();
 		l_itGraphic != m_graphics_list.end(); l_itGraphic++)
@@ -260,12 +304,12 @@ CxfFont::Glyph::~Glyph()
 } // End destructor
 
 
-CxfFont::Glyph::Glyph( const CxfFont::Glyph & rhs )
+VectorFont::Glyph::Glyph( const VectorFont::Glyph & rhs )
 {
 	*this = rhs;	// call the assignment operator
 }
 
-CxfFont::Glyph & CxfFont::Glyph::operator= ( const CxfFont::Glyph & rhs )
+VectorFont::Glyph & VectorFont::Glyph::operator= ( const VectorFont::Glyph & rhs )
 {
 	if (this != &rhs)
 	{
@@ -286,7 +330,7 @@ CxfFont::Glyph & CxfFont::Glyph::operator= ( const CxfFont::Glyph & rhs )
 		m_bounding_box = rhs.m_bounding_box;
 	} // End if - then
 
-	return(*this);	
+	return(*this);
 }
 
 /**
@@ -299,10 +343,10 @@ CxfFont::Glyph & CxfFont::Glyph::operator= ( const CxfFont::Glyph & rhs )
 	libraries will have had the transformation matrix pushed onto the stack so that all
 	OpenGL coordinates will be implicitly transformed.
  */
-HeeksObj *CxfFont::Glyph::Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const
+HeeksObj *VectorFont::Glyph::Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const
 {
 	HeeksObj *sketch = heekscad_interface.NewSketch();
-	
+
 	for (GraphicsList_t::const_iterator l_itGraphic = m_graphics_list.begin(); l_itGraphic != m_graphics_list.end(); l_itGraphic++)
 	{
 		sketch->Add((*l_itGraphic)->Sketch( location, transformation_matrix ), NULL);
@@ -311,10 +355,10 @@ HeeksObj *CxfFont::Glyph::Sketch( const gp_Pnt & location, const gp_Trsf & trans
 	return(sketch);
 } // End Sketch() method
 
-std::list<HeeksObj *> CxfFont::Glyph::GetGraphics( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const
+std::list<HeeksObj *> VectorFont::Glyph::GetGraphics( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const
 {
 	std::list<HeeksObj *> results;
-	
+
 	for (GraphicsList_t::const_iterator l_itGraphic = m_graphics_list.begin(); l_itGraphic != m_graphics_list.end(); l_itGraphic++)
 	{
 		results.push_back( (*l_itGraphic)->Sketch( location, transformation_matrix ) );
@@ -324,7 +368,7 @@ std::list<HeeksObj *> CxfFont::Glyph::GetGraphics( const gp_Pnt & location, cons
 } // End Graphics() method
 
 
-void CxfFont::Glyph::glCommands( const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const
+void VectorFont::Glyph::glCommands( const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const
 {
 	for (GraphicsList_t::const_iterator l_itGraphic = m_graphics_list.begin(); l_itGraphic != m_graphics_list.end(); l_itGraphic++)
 	{
@@ -332,9 +376,9 @@ void CxfFont::Glyph::glCommands( const gp_Pnt & starting_point, const bool selec
 	} // End for
 } // End glCommands() method
 
- 
 
-/* static */ std::list<wxString> CxfFonts::GetFileNames( const wxString & Root )
+
+/* static */ std::list<wxString> VectorFonts::GetFileNames( const wxString & Root )
 #ifdef WIN32
 {
 	std::list<wxString>	results;
@@ -346,12 +390,12 @@ void CxfFont::Glyph::glCommands( const gp_Pnt & starting_point, const bool selec
 	hFind = FindFirstFile(Ctt(pattern.c_str()), &file_data);
 
 	// Now recurse down until we find document files within 'current' directories.
-	if (hFind != INVALID_HANDLE_VALUE) 
+	if (hFind != INVALID_HANDLE_VALUE)
 	{
 		do
 		{
 			if ((file_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY) continue;
-						
+
 			results.push_back( file_data.cFileName );
 		} while (FindNextFile( hFind, &file_data));
 
@@ -368,7 +412,7 @@ void CxfFont::Glyph::glCommands( const gp_Pnt & starting_point, const bool selec
 
 	DIR *pdir = opendir(Ttc(Root.c_str()));
 				// whose names begin with "default."
-	if (pdir != NULL) 
+	if (pdir != NULL)
 	{
 		struct dirent *pent = NULL;
 		while ((pent=readdir(pdir)))
@@ -517,7 +561,74 @@ CxfFont::CxfFont( const wxChar *p_szFile )
 	}
 }
 
-HeeksObj *CxfFont::Sketch( const wxString & text, const gp_Trsf & transformation_matrix ) const
+
+
+HersheyFont::HersheyFont( const wxChar *p_szFile )
+{
+	m_letter_spacing = 3.0;
+	m_word_spacing = 6.75;
+	m_line_spacing_factor = 1.0;
+	m_name = _T("Hershey");
+	wxChar character_name = ' ';
+
+	wxString name = p_szFile;
+	int offset = -1;
+	for (offset = name.Find('/'); offset >= 0; offset = name.Find('/'))
+	{
+        if (offset >= 0)	name.Remove(0, offset+1);
+	}
+
+	for (offset = name.Find('\\'); offset >= 0; offset = name.Find('/'))
+	{
+        if (offset >= 0)	name.Remove(0, offset+1);
+	}
+
+	offset = name.Find('.');
+	if (offset >= 0) name.erase( offset, name.Length() - offset );
+
+	m_name = _T("Hershey ") + name;
+
+	std::ifstream file(Ttc(p_szFile));
+	if (file.is_open())
+	{
+
+		while (! file.eof() )
+		{
+		    std::string line;
+			std::getline (file,line);
+			if (line.size() >= 5)
+			{
+				line.erase(0,5);	// Ignore the first five characters.
+
+				// the next three characters represent the number of vertices in the character.
+				int number_of_vertices = strtoul( line.substr(0,3).c_str(), NULL, 10 );
+				line.erase(0,3);
+
+				while ((! file.eof()) && (line.size() < std::string::size_type(number_of_vertices * 2)))
+				{
+					std::string extra;
+					std::getline( file, extra );
+					line += extra;
+				} // End while
+
+				m_glyphs.insert(std::make_pair(character_name, Glyph(line)));
+				m_bounding_box.Insert( Glyph(line).BoundingBox() );
+				character_name += 1;
+			}
+		}
+		file.close();
+	}
+	else
+	{
+		std::ostringstream l_ossError;
+		l_ossError << "Unable to open file";
+		throw(std::runtime_error(l_ossError.str().c_str()));
+	}
+}
+
+
+
+HeeksObj *VectorFont::Sketch( const wxString & text, const gp_Trsf & transformation_matrix ) const
 {
 	HeeksObj *sketch = heekscad_interface.NewSketch();
 	sketch->OnEditString(text.c_str());
@@ -611,7 +722,7 @@ HeeksObj *CxfFont::Sketch( const wxString & text, const gp_Trsf & transformation
 				for (std::list<HeeksObj *>::iterator l_itGraphic = graphics.begin(); l_itGraphic != graphics.end(); l_itGraphic++)
 				{
 					// label this piece of graphics with the character it's representing
-					(*l_itGraphic)->OnEditString(text.Mid(offset,1).c_str()); 
+					(*l_itGraphic)->OnEditString(text.Mid(offset,1).c_str());
 
 					// And add it to the sketch that represents the whole text string.
 					sketch->Add( *l_itGraphic, NULL );
@@ -629,7 +740,7 @@ HeeksObj *CxfFont::Sketch( const wxString & text, const gp_Trsf & transformation
 }
 
 
-void CxfFont::Glyph::get_text_size( float *pWidth, float *pHeight ) const
+void VectorFont::Glyph::get_text_size( float *pWidth, float *pHeight ) const
 {
 	*pWidth = m_bounding_box.Width();
 	*pHeight = m_bounding_box.Height();
@@ -637,18 +748,18 @@ void CxfFont::Glyph::get_text_size( float *pWidth, float *pHeight ) const
 
 
 
-bool CxfFont::get_text_size( const wxString & text, float *pWidth, float *pHeight ) const
+bool VectorFont::get_text_size( const wxString & text, float *pWidth, float *pHeight ) const
 {
 	*pWidth = 0.0;
 	*pHeight = m_line_spacing_factor;
 
 	for (wxString::size_type offset = 0; offset < text.Length(); offset++)
 	{
-		if (text[offset] == '\n') 
+		if (text[offset] == '\n')
 		{
 			*pHeight += m_line_spacing_factor;
 		}
-		else 
+		else
 		{
 			if (m_glyphs.find( text[offset] ) != m_glyphs.end())
 			{
@@ -663,7 +774,7 @@ bool CxfFont::get_text_size( const wxString & text, float *pWidth, float *pHeigh
 } // End get_text_size() method
 
 
-void CxfFont::glCommands(const wxString & text, const gp_Pnt &start_point, const bool select, const bool marked, const bool no_color) const
+void VectorFont::glCommands(const wxString & text, const gp_Pnt &start_point, const bool select, const bool marked, const bool no_color) const
 {
 	gp_Pnt location( start_point );
 	for (wxString::size_type offset = 0; offset < text.Length(); offset++)
@@ -732,7 +843,7 @@ void CxfFont::glCommands(const wxString & text, const gp_Pnt &start_point, const
 
 
 
-/* static */ bool CxfFonts::ValidExtension( const wxString &file_name )
+/* static */ bool CxfFont::ValidExtension( const wxString &file_name )
 {
 	wxString _file( file_name );	// Take a copy so we can convert it to uppercase.
 	if (_file.Length() < 4) return(false);	// too short to have a '.cxf' extension
@@ -743,23 +854,47 @@ void CxfFont::glCommands(const wxString & text, const gp_Pnt &start_point, const
 	return(false);
 }
 
-CxfFonts::CxfFonts( const CxfFont::Name_t & directory )
+/* static */ bool HersheyFont::ValidExtension( const wxString &file_name )
+{
+	wxString _file( file_name );	// Take a copy so we can convert it to uppercase.
+	if (_file.Length() < 4) return(false);	// too short to have a '.jhf' extension
+
+	wxString _extension( file_name.Mid( _file.Length() - 3 ) );
+
+	if (_extension.MakeUpper() == wxString(_T("JHF"))) return(true);
+	return(false);
+}
+
+
+VectorFonts::VectorFonts( const VectorFont::Name_t & directory )
 {
 	Add( directory );
 }
 
-void CxfFonts::Add( const CxfFont::Name_t & directory )
+void VectorFonts::Add( const VectorFont::Name_t & directory )
 {
+    printf("Within directory %s\n", Ttc( directory.c_str()));
+
 	std::list<wxString> files = GetFileNames( directory.c_str() );
 	for (std::list<wxString>::const_iterator l_itFile = files.begin(); l_itFile != files.end(); l_itFile++)
 	{
+	    printf("Looking at %s\n", Ttc(l_itFile->c_str()));
+
 		try {
-			if (ValidExtension( *l_itFile ))
+			if (CxfFont::ValidExtension( *l_itFile ))
 			{
 				wxString path( directory );
 				path = path + _T("/");
 				path = path + l_itFile->c_str();
 				CxfFont *pFont = new CxfFont( path.c_str() );
+				m_fonts.insert( std::make_pair( pFont->Name(), pFont ) );
+			} // End if - then
+			else if (HersheyFont::ValidExtension( *l_itFile ))
+			{
+				wxString path( directory );
+				path = path + _T("/");
+				path = path + l_itFile->c_str();
+				HersheyFont *pFont = new HersheyFont( path.c_str() );
 				m_fonts.insert( std::make_pair( pFont->Name(), pFont ) );
 			} // End if - then
 		} // End try
@@ -769,10 +904,10 @@ void CxfFonts::Add( const CxfFont::Name_t & directory )
 		} // End catch
 	} // End for
 
-	printf("Read %d Cxf-format font files\n", (unsigned)m_fonts.size());
+	printf("Read %d vector font files\n", (unsigned)m_fonts.size());
 } // End Add() method
 
-CxfFonts::~CxfFonts()
+VectorFonts::~VectorFonts()
 {
 	for (Fonts_t::iterator l_itFont = m_fonts.begin(); l_itFont != m_fonts.end(); l_itFont++)
 	{
@@ -781,9 +916,9 @@ CxfFonts::~CxfFonts()
 	m_fonts.clear();
 }
 
-std::set<CxfFont::Name_t> CxfFonts::FontNames() const
+std::set<VectorFont::Name_t> VectorFonts::FontNames() const
 {
-	std::set<CxfFont::Name_t> names;
+	std::set<VectorFont::Name_t> names;
 	for (Fonts_t::const_iterator l_itFont = m_fonts.begin(); l_itFont != m_fonts.end(); l_itFont++)
 	{
 		names.insert(l_itFont->first.c_str());
@@ -793,7 +928,7 @@ std::set<CxfFont::Name_t> CxfFonts::FontNames() const
 } // End FontNames() method
 
 
-CxfFont *CxfFonts::Font( const CxfFont::Name_t & name ) const
+VectorFont *VectorFonts::Font( const VectorFont::Name_t & name ) const
 {
 	for (Fonts_t::const_iterator l_itFont = m_fonts.begin(); l_itFont != m_fonts.end(); l_itFont++)
 	{

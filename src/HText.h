@@ -16,9 +16,9 @@ private:
 public:
 	gp_Trsf m_trsf; // matrix defining position, orientation, scale, compared with default text size
 	wxString m_text;
-	CxfFont *m_pFont;	// NULL for internal (normal) fonts
+	VectorFont *m_pFont;	// NULL for internal (normal) fonts
 
-	HText(const gp_Trsf &trsf, const wxString &text, const HeeksColor* col, CxfFont *pCxfFont );
+	HText(const gp_Trsf &trsf, const wxString &text, const HeeksColor* col, VectorFont *pVectorFont );
 	HText(const HText &b);
 	~HText(void);
 
