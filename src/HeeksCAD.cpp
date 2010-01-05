@@ -149,9 +149,9 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 
 	m_font_paths = _T("/usr/share/qcad/fonts");
 	m_stl_facet_tolerance = 0.1;
-	GetAvailableFonts();
+	// GetAvailableFonts();
 
-	m_pCxfFont = NULL;	// Default to internal (OpenGL) font.
+	m_pVectorFont = NULL;	// Default to internal (OpenGL) font.
 	m_icon_texture_number = 0;
 	m_extrude_to_solid = true;
 	m_revolve_angle = 360.0;
@@ -192,8 +192,8 @@ HeeksCADapp::~HeeksCADapp()
 	if(m_printData)delete m_printData;
 	if(m_pageSetupData)delete m_pageSetupData;
 
-	m_pCxfFont = NULL;	// Don't free this here.  This memory will be released via ~CxfFonts() instead.
-	if (m_pCxfFonts.get() != NULL) delete m_pCxfFonts.release();
+	m_pVectorFont = NULL;	// Don't free this here.  This memory will be released via ~CxfFonts() instead.
+	if (m_pVectorFonts.get() != NULL) delete m_pVectorFonts.release();
 }
 
 bool HeeksCADapp::OnInit()
@@ -332,6 +332,7 @@ bool HeeksCADapp::OnInit()
 	m_ruler->ReadFromConfig(config);
 
 	GetRecentFilesProfileString();
+	GetAvailableFonts();
 
 	wxImage::AddHandler(new wxPNGHandler);
 	m_frame = new CHeeksFrame( wxT( "HeeksCAD free Solid Modelling software based on Open CASCADE" ), wxPoint(posx, posy), wxSize(width, height));
@@ -2244,7 +2245,7 @@ static void on_set_font(int zero_based_choice, HeeksObj *obj)
 {
 	if (zero_based_choice == 0)
 	{
-		wxGetApp().m_pCxfFont = NULL;
+		wxGetApp().m_pVectorFont = NULL;
 		return;
 	} // End if - then
 
@@ -2254,7 +2255,7 @@ static void on_set_font(int zero_based_choice, HeeksObj *obj)
 	std::copy( names.begin(), names.end(), std::inserter( vector_names, vector_names.end() ) );
 	if (zero_based_choice < int(vector_names.size()))
 	{
-		wxGetApp().m_pCxfFont = wxGetApp().GetAvailableFonts()->Font( CxfFont::Name_t(vector_names[zero_based_choice].c_str()) );
+		wxGetApp().m_pVectorFont = wxGetApp().GetAvailableFonts()->Font( VectorFont::Name_t(vector_names[zero_based_choice].c_str()) );
 	}
 }
 
@@ -2262,7 +2263,7 @@ static void on_set_font(int zero_based_choice, HeeksObj *obj)
 static void on_edit_font_paths(const wxChar* value, HeeksObj* object)
 {
 	wxGetApp().m_font_paths.assign(value);
-	if (wxGetApp().m_pCxfFonts.get()) delete wxGetApp().m_pCxfFonts.release();
+	if (wxGetApp().m_pVectorFonts.get()) delete wxGetApp().m_pVectorFonts.release();
 	wxGetApp().GetAvailableFonts();
 
 	HeeksConfig config;
@@ -2465,7 +2466,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 
 	// Font options
 	PropertyList* font_options = new PropertyList(_("font options"));
-	if (m_pCxfFonts.get() != NULL)
+	if (m_pVectorFonts.get() != NULL)
 	{
 		std::list<wxString> choices;
 
@@ -2473,13 +2474,13 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 		int choice = 0;
 
 		int option = 0;
-		std::set<CxfFont::Name_t> font_names = m_pCxfFonts->FontNames();
-		for (std::set<CxfFont::Name_t>::const_iterator l_itFontName = font_names.begin();
+		std::set<VectorFont::Name_t> font_names = m_pVectorFonts->FontNames();
+		for (std::set<VectorFont::Name_t>::const_iterator l_itFontName = font_names.begin();
 			l_itFontName != font_names.end(); l_itFontName++)
 		{
 			option++;
 			choices.push_back( *l_itFontName );
-			if ((m_pCxfFont != NULL) && (m_pCxfFont->Name() == *l_itFontName)) choice = option;
+			if ((m_pVectorFont != NULL) && (m_pVectorFont->Name() == *l_itFontName)) choice = option;
 		} // End for
 		font_options->m_list.push_back ( new PropertyChoice ( _("Active font"),  choices, choice, this, on_set_font ) );
 	}
@@ -3409,26 +3410,25 @@ void HeeksCADapp::InitialiseLocale()
 }
 
 
-std::auto_ptr<CxfFonts>	& HeeksCADapp::GetAvailableFonts()
+std::auto_ptr<VectorFonts>	& HeeksCADapp::GetAvailableFonts()
 {
-	if (m_pCxfFonts.get() == NULL)
+	if (m_pVectorFonts.get() == NULL)
 	{
 		std::vector<wxString> paths = Tokens( m_font_paths, _T(";") );
 		for (std::vector<wxString>::const_iterator l_itPath = paths.begin(); l_itPath != paths.end(); l_itPath++)
 		{
-			if (m_pCxfFonts.get() == NULL)
+			if (m_pVectorFonts.get() == NULL)
 			{
-				m_pCxfFonts = std::auto_ptr<CxfFonts>(new CxfFonts(*l_itPath));
+				m_pVectorFonts = std::auto_ptr<VectorFonts>(new VectorFonts(*l_itPath));
 			} // End if - then
 			else
 			{
-				m_pCxfFonts->Add( *l_itPath );
+				m_pVectorFonts->Add( *l_itPath );
 			} // End if - else
 		} // End for
 	} // End if - then
 
-	return(m_pCxfFonts);
-
+	return(m_pVectorFonts);
 } // End GetAvailableFonts() method
 
 void HeeksCADapp::GetPluginsFromCommandLineParams(std::list<wxString> &plugins)

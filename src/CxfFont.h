@@ -27,12 +27,12 @@
 /**
  	The CxfFont class holds enough information to draw a single font.
  */
-class CxfFont
+class VectorFont
 {
 public:
 	typedef wxString Name_t;
 
-private:
+protected:
 	/**
 	 	A Glyph is the term used to describe the graphics required to draw a single character
 		in a font.  It includes a list of Graphics classes.  The Graphics class is just an
@@ -148,7 +148,8 @@ private:
 		
 
 	public:
-		Glyph( const std::list<std::string> &definition );
+		Glyph( const std::list<std::string> &cxf_glyph_definition );
+		Glyph( const std::string & hershey_glyph_definition );
 		Glyph( const Glyph & rhs );
 		Glyph & operator= ( const Glyph & rhs );
 		~Glyph();
@@ -167,7 +168,7 @@ private:
 	}; // End Glyph class definition
 
 public:
-	CxfFont( const wxChar *p_szFile );
+	VectorFont() { }
 
 	unsigned int NumGlyphs() const { return((unsigned int) m_glyphs.size()); }
 	double LetterSpacing() const { return(m_letter_spacing); }
@@ -180,7 +181,7 @@ public:
 	void glCommands(const wxString & text, const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const;
 	CBox BoundingBox() const { return(m_bounding_box); }
 
-private:
+protected:
 	typedef std::map< wxChar, Glyph > Glyphs_t;
 	Glyphs_t m_glyphs;
 	double m_letter_spacing;
@@ -189,25 +190,41 @@ private:
 	Name_t m_name;
 	CBox	m_bounding_box;		// box surrounding the largest character.
 
+}; // End VectorFont class definition
+
+
+class CxfFont : public VectorFont
+{
+public:
+	CxfFont( const wxChar *p_szFile );
+	static bool ValidExtension( const wxString &file_name );
+
 }; // End CxfFont class definition
 
 
-
-class CxfFonts 
+class HersheyFont : public VectorFont
 {
 public:
-	typedef std::map< CxfFont::Name_t, CxfFont * > Fonts_t;
+	HersheyFont( const wxChar *p_szFile );
+	static bool ValidExtension( const wxString &file_name );
 
-	CxfFonts(const CxfFont::Name_t &directory);
-	~CxfFonts();
+}; // End CxfFont class definition
 
-	void Add( const CxfFont::Name_t &directory );
+
+class VectorFonts 
+{
+public:
+	typedef std::map< VectorFont::Name_t, VectorFont * > Fonts_t;
+
+	VectorFonts(const VectorFont::Name_t &directory);
+	~VectorFonts();
+
+	void Add( const VectorFont::Name_t &directory );
 
 	static std::list<wxString> GetFileNames( const wxString & Root );
-	static bool ValidExtension( const wxString & file_name );
 
-	std::set<CxfFont::Name_t> FontNames() const;
-	CxfFont *Font( const CxfFont::Name_t & name ) const;
+	std::set<VectorFont::Name_t> FontNames() const;
+	VectorFont *Font( const VectorFont::Name_t & name ) const;
 
 private:
 	Fonts_t	m_fonts;
