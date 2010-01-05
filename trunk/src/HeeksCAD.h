@@ -166,8 +166,8 @@ public:
 	int m_number_of_sample_points;
 	bool m_property_grid_validation;
 
-	std::auto_ptr<CxfFonts>	m_pCxfFonts;	// QCAD format fonts that have been loaded.
-	CxfFont   *m_pCxfFont;	// which font are we using? (NULL indicates the internal (OpenGL) font)
+	std::auto_ptr<VectorFonts>	m_pVectorFonts;	// QCAD format fonts that have been loaded.
+	VectorFont   *m_pVectorFont;	// which font are we using? (NULL indicates the internal (OpenGL) font)
 	wxString m_font_paths;	// SemiColon delimited list of directories that hold font files to load.
 	double m_stl_facet_tolerance;
 
@@ -309,7 +309,7 @@ public:
 	bool EndSketchMode();
 	void EnterSketchMode(CSketch* sketch);
 	void SetStatusText();
-	std::auto_ptr<CxfFonts>	& GetAvailableFonts();
+	std::auto_ptr<VectorFonts>	& GetAvailableFonts();
 	void GetPluginsFromCommandLineParams(std::list<wxString> &plugins);
 	void RegisterOnBuildTexture(void(*callbackfunc)());
 };
