@@ -258,6 +258,9 @@ VectorFont::Glyph::Glyph( const std::string &hershey_glyph_definition )
 	    double right_edge = double( definition[1] - 'R');
 	    definition.erase(0,2);
 
+        m_bounding_box.Insert( left_edge, 0, 0 );
+        m_bounding_box.Insert( right_edge, 0, 0 );
+
 		double x = double(definition[0] - 'R');
 		double y = double(definition[1] - 'R') * -1.0;
 		definition.erase(0,2);
