@@ -41,7 +41,7 @@ protected:
 	class Glyph
 	{
 	public:
-		class Graphics 
+		class Graphics
 		{
 		public:
 			virtual HeeksObj *Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const = 0;
@@ -54,8 +54,8 @@ protected:
 		{
 		public:
 			Line( const double x1, const double y1, const double x2, const double y2 ) :
-			  m_x1(x1), m_y1(y1), m_x2(x2), m_y2(y2) 
-			{ 
+			  m_x1(x1), m_y1(y1), m_x2(x2), m_y2(y2)
+			{
 				// Setup the bounding box values.
 				double point[3];
 				point[0] = m_x1;
@@ -71,7 +71,7 @@ protected:
 				m_bounding_box.Insert( point );
 			}
 
-			Line() : m_x1(0.0), m_y1(0.0), m_x2(0.0), m_y2(0.0) 
+			Line() : m_x1(0.0), m_y1(0.0), m_x2(0.0), m_y2(0.0)
 			{
 				// Setup the bounding box values.
 				double point[3];
@@ -106,9 +106,9 @@ protected:
 		{
 		public:
 			Arc( const double xcentre, const double ycentre, const double radius, const double start_angle, const double end_angle ) :
-			  m_xcentre(xcentre), m_ycentre(ycentre), m_radius(radius), 
-				m_start_angle((start_angle / 360.0) * (2 * PI)), 
-				m_end_angle((end_angle / 360.0) * (2 * PI)) 
+			  m_xcentre(xcentre), m_ycentre(ycentre), m_radius(radius),
+				m_start_angle((start_angle / 360.0) * (2 * PI)),
+				m_end_angle((end_angle / 360.0) * (2 * PI))
 			  {
 				if (m_start_angle < 0) m_start_angle += (2 * PI);
 				if (m_end_angle < 0) m_end_angle += (2 * PI);
@@ -145,7 +145,7 @@ protected:
 
 			CBox	m_bounding_box;
 		}; // End Arc class defintion.
-		
+
 
 	public:
 		Glyph( const std::list<std::string> &cxf_glyph_definition );
@@ -211,7 +211,7 @@ public:
 }; // End CxfFont class definition
 
 
-class VectorFonts 
+class VectorFonts
 {
 public:
 	typedef std::map< VectorFont::Name_t, VectorFont * > Fonts_t;
