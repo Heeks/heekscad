@@ -261,36 +261,39 @@ VectorFont::Glyph::Glyph( const std::string &hershey_glyph_definition )
         m_bounding_box.Insert( left_edge, 0, 0 );
         m_bounding_box.Insert( right_edge, 0, 0 );
 
-		double x = double(definition[0] - 'R');
-		double y = double(definition[1] - 'R') * -1.0;
-		definition.erase(0,2);
-
-		while (definition.size() > 0)
+		if (definition.size() >= 2)
 		{
-			if (definition.size() >= 2)
-			{
-			    if ((definition[0] == ' ') && (definition[1] == 'R'))
-			    {
-			        // This is a 'pen up' item.  Set the new coordinates but don't draw anything.
-			        definition.erase(0,2);
-			        x = double(definition[0] - 'R');
-			        y = double(definition[1] - 'R') * -1.0;
-			    }
-			    else
-			    {
-			        double to_x = double(definition[0] - 'R');
-                    double to_y = double(definition[1] - 'R') * -1.0;
-
-                    Line *line = new Line( x, y, to_x, to_y );
-                    m_graphics_list.push_back( line );
-                    m_bounding_box.Insert( line->BoundingBox() );
-                    x = to_x;
-                    y = to_y;
-			    }
-
-			}
-
+			double x = double(definition[0] - 'R');
+			double y = double(definition[1] - 'R') * -1.0;
 			definition.erase(0,2);
+
+			while (definition.size() > 0)
+			{
+				if (definition.size() >= 2)
+				{
+					if ((definition[0] == ' ') && (definition[1] == 'R'))
+					{
+						// This is a 'pen up' item.  Set the new coordinates but don't draw anything.
+						definition.erase(0,2);
+						x = double(definition[0] - 'R');
+						y = double(definition[1] - 'R') * -1.0;
+					}
+					else
+					{
+						double to_x = double(definition[0] - 'R');
+						double to_y = double(definition[1] - 'R') * -1.0;
+
+						Line *line = new Line( x, y, to_x, to_y );
+						m_graphics_list.push_back( line );
+						m_bounding_box.Insert( line->BoundingBox() );
+						x = to_x;
+						y = to_y;
+					}
+
+				}
+
+				definition.erase(0,2);
+			}
 		}
 	} // End if - then
 } // End constructor
@@ -564,7 +567,15 @@ CxfFont::CxfFont( const wxChar *p_szFile )
 	}
 }
 
-
+struct LineEnding : public std::unary_function< char, bool >
+{
+	bool operator()( const char character )
+	{
+		if (character == '\n') return(true);
+		if (character == '\r') return(true);
+		return(false);
+	}
+};
 
 HersheyFont::HersheyFont( const wxChar *p_szFile )
 {
@@ -594,11 +605,15 @@ HersheyFont::HersheyFont( const wxChar *p_szFile )
 	std::ifstream file(Ttc(p_szFile));
 	if (file.is_open())
 	{
+		LineEnding lineending;
 
 		while (! file.eof() )
 		{
 		    std::string line;
 			std::getline (file,line);
+			// Remove newline and carriage return characters.
+			std::remove_if( line.begin(), line.end(), lineending );
+
 			if (line.size() >= 5)
 			{
 				line.erase(0,5);	// Ignore the first five characters.
@@ -606,11 +621,15 @@ HersheyFont::HersheyFont( const wxChar *p_szFile )
 				// the next three characters represent the number of vertices in the character.
 				int number_of_vertices = strtoul( line.substr(0,3).c_str(), NULL, 10 );
 				line.erase(0,3);
-
+				
 				while ((! file.eof()) && (line.size() < std::string::size_type(number_of_vertices * 2)))
 				{
 					std::string extra;
 					std::getline( file, extra );
+
+					// Remove newline and carriage return characters.
+					std::remove_if( extra.begin(), extra.end(), lineending );
+
 					line += extra;
 				} // End while
 
@@ -769,6 +788,7 @@ bool VectorFont::get_text_size( const wxString & text, float *pWidth, float *pHe
 				float width = 0.0; float height = 0.0;
 				m_glyphs.find( text[offset] )->second.get_text_size( &width, &height );
 				*pWidth += width;
+				*pWidth += this->LetterSpacing();
 			}
 		}
 	} // End for
