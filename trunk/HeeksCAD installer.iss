@@ -7,19 +7,22 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{A8D3AD0D-D36E-4970-BE77-76A840EA2831}
 AppName=HeeksCAD
-AppVerName=HeeksCAD 0.10.1
+AppVerName=HeeksCAD 0.11.0
 AppPublisher=Heeks Software
 AppPublisherURL=http://code.google.com/p/heekscad/
 AppSupportURL=http://code.google.com/p/heekscad/
 AppUpdatesURL=http://code.google.com/p/heekscad/
 DefaultDirName={pf}\HeeksCAD
 DefaultGroupName=HeeksCAD
-OutputBaseFilename=HeeksCAD 0.10.1
+OutputBaseFilename=HeeksCAD 0.11.0
 Compression=lzma
 SolidCompression=yes
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
+Name: de; MessagesFile: "compiler:Languages\German.isl"
+Name: fr; MessagesFile: "compiler:Languages\French.isl"
+Name: it; MessagesFile: "compiler:Languages\Italian.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
@@ -32,6 +35,7 @@ Source: "C:\Users\Dan\HeeksCAD\icons\*.png"; DestDir: "{app}\icons"; Flags: igno
 Source: "C:\Users\Dan\OCC dlls for HeeksCAD\*"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\Dan\HeeksCAD\de\*"; DestDir: "{app}\de"; Flags: ignoreversion
 Source: "C:\Users\Dan\HeeksCAD\it\*"; DestDir: "{app}\it"; Flags: ignoreversion
+Source: "C:\Users\Dan\HeeksCAD\fr\*"; DestDir: "{app}\fr"; Flags: ignoreversion
 Source: "C:\Users\Dan\HeeksCAD\wxmsw28u_gl_vc_custom.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\Dan\HeeksCAD\wxmsw28u_core_vc_custom.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\Dan\HeeksCAD\wxmsw28u_aui_vc_custom.dll"; DestDir: "{app}"; Flags: ignoreversion
