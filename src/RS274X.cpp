@@ -229,8 +229,8 @@ bool RS274X::ReadParameters( const std::string & parameters )
 			return(false);
 		} // End if - then
 		_params.erase(0,1);	// Remove 'D'
-		char *end = NULL;
-		int tool_number = strtoul( _params.c_str(), &end, 10 );
+		const char *end = NULL;
+		int tool_number = strtoul( _params.c_str(), (char **) &end, 10 );
 		if ((end == NULL) || (end == _params.c_str()))
 		{
 			printf("Expected Aperture Type character\n");
@@ -242,7 +242,7 @@ bool RS274X::ReadParameters( const std::string & parameters )
 		_params.erase(0,1);	// Remove aperture type character.
 		if (_params[0] == ',') _params.erase(0,1);	// Remove comma
 
-		double modifier = strtod( _params.c_str(), &end );
+		double modifier = special_strtod( _params.c_str(), &end );
 		if ((end == NULL) || (end == _params.c_str()))
 		{
 			printf("Expected modifier\n");
@@ -265,7 +265,7 @@ bool RS274X::ReadParameters( const std::string & parameters )
 					// It has a hole in it. (either circular or rectangular)
 					_params.erase(0,1); // Erase the X
 
-					aperture.XAxisHoleDimension( double(strtod( _params.c_str(), &end )) * m_units );
+					aperture.XAxisHoleDimension( double(special_strtod( _params.c_str(), &end )) * m_units );
 					if ((end == NULL) || (end == _params.c_str()))
 					{
 						printf("Expected modifier\n");
@@ -278,7 +278,7 @@ bool RS274X::ReadParameters( const std::string & parameters )
 				{
 					// It has a rectangular hole in it.
 					_params.erase(0,1); // Erase the X
-					aperture.YAxisHoleDimension( double(strtod( _params.c_str(), &end )) * m_units );
+					aperture.YAxisHoleDimension( double(special_strtod( _params.c_str(), &end )) * m_units );
 					if ((end == NULL) || (end == _params.c_str()))
 					{
 						printf("Expected modifier\n");
@@ -302,7 +302,7 @@ bool RS274X::ReadParameters( const std::string & parameters )
 				if ((_params.size() > 0) && (_params[0] == 'X'))
 				{
 					_params.erase(0,1); // Remove the 'X'
-					aperture.YAxisOutsideDimension( double(strtod( _params.c_str(), &end )) * m_units );
+					aperture.YAxisOutsideDimension( double(special_strtod( _params.c_str(), &end )) * m_units );
 					_params.erase(0, end - _params.c_str());
 				} // End if - then
 
@@ -489,6 +489,32 @@ double RS274X::InterpretCoord(
 } // End InterpretCoord() method
 
 
+/**
+	This routine is the same as the normal strtod() routine except that it
+	doesn't accept 'd' or 'D' as radix values.  Some locale configurations
+	use 'd' or 'D' as radix values just as 'e' or 'E' might be used.  This
+	confuses subsequent commands held on the same line as the coordinate.
+ */
+double RS274X::special_strtod( const char *value, const char **end ) const
+{
+	std::string _value(value);
+	char *_end = NULL;
+
+	std::string::size_type offset = _value.find_first_of( "dD" );
+	if (offset != std::string::npos)
+	{
+		_value.erase(offset);
+	}
+
+	double dval = strtod( _value.c_str(), &_end );
+	if (end)
+	{
+		*end = value + (_end - _value.c_str());
+	}
+	return(dval);
+}
+
+
 bool RS274X::ReadDataBlock( const std::string & data_block )
 {
 	// printf("RS274X::ReadDataBlock('%s')\n", data_block.c_str() );
@@ -561,9 +587,9 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 		else if (_data.substr(0,1) == "I")
 		{
 		    _data.erase(0,1);	// Erase I
-			char *end = NULL;
+			const char *end = NULL;
 
-			double _value = strtod( _data.c_str(), &end );
+			double _value = special_strtod( _data.c_str(), &end );
 			if ((end == NULL) || (end == _data.c_str()))
 			{
 				printf("Expected number following 'I'\n");
@@ -592,9 +618,9 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 		else if (_data.substr(0,1) == "J")
 		{
 			_data.erase(0,1);	// Erase J
-			char *end = NULL;
+			const char *end = NULL;
 
-			double _value = strtod( _data.c_str(), &end );
+			double _value = special_strtod( _data.c_str(), &end );
 			if ((end == NULL) || (end == _data.c_str()))
 			{
 				printf("Expected number following 'I'\n");
@@ -658,9 +684,9 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 		else if (_data.substr(0,1) == "X")
 		{
 			_data.erase(0,1);	// Erase X
-			char *end = NULL;
+			const char *end = NULL;
 
-			double x = strtod( _data.c_str(), &end );
+			double x = special_strtod( _data.c_str(), &end );
 			if ((end == NULL) || (end == _data.c_str()))
 			{
 				printf("Expected number following 'X'\n");
@@ -706,14 +732,15 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 		else if (_data.substr(0,1) == "Y")
 		{
 			_data.erase(0,1);	// Erase Y
-			char *end = NULL;
+			const char *end = NULL;
 
-			double y = strtod( _data.c_str(), &end );
+			double y = special_strtod( _data.c_str(), &end );
 			if ((end == NULL) || (end == _data.c_str()))
 			{
 				printf("Expected number following 'Y'\n");
 				return(false);
 			} // End if - then
+
 			std::string y_string = _data.substr(0, end - _data.c_str());
 			_data.erase(0, end - _data.c_str());
 
