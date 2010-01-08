@@ -81,3 +81,4 @@ void DynamicSolid::ReloadPointers()
 		child = GetNextChild();
 	}
 }
+

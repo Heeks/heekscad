@@ -80,3 +80,4 @@ void CPart::Update()
 	shapes.push_back(shape);
 	SetShapes(shapes);
 }
+
