@@ -75,7 +75,7 @@ const CTreeCanvas::CTreeButton* CTreeCanvas::HitTest( const wxPoint& pt )
 	for(std::list<CTreeButton>::iterator It = m_tree_buttons.begin(); It != m_tree_buttons.end(); It++)
 	{
 		CTreeButton& b = *It;
-		if(b.rect.Inside(pt))
+		if(b.rect.Contains(pt)) //if(b.rect.Inside(pt))
 		{
 			return &b;
 		}
@@ -484,9 +484,9 @@ int CTreeCanvas::RenderChar(char c)
 	// renders the character at the current xpos * 16 + text_pos, ypos
 	if(c<32 || c>126)return 0;
 
-	int posx = text_start_posx[c];
-	int posy = text_start_posy[c];
-	int shift = text_start_posd[c];
+	int posx = text_start_posx[int(c)];
+	int posy = text_start_posy[int(c)];
+	int shift = text_start_posd[int(c)];
 
 #ifdef WIN32
 	float texture_left = ((float)(posx) + 0.5f)/256;
@@ -538,7 +538,7 @@ int CTreeCanvas::RenderText(const char* str)
 int GetCharLength(char c)
 {
 	if(c<32 || c>126)return 0;
-	return text_start_posd[c];
+	return text_start_posd[int(c)];
 }
 
 int GetTextLength(const char* str)
