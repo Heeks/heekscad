@@ -40,6 +40,7 @@ class RS274X
 		bool Read( const char *p_szFileName, const FileInterpretation_t interpretation );
 
     private:
+		double special_strtod( const char *value, const char **end ) const;
 
         /**
             This is simply a wrapper around the gp_Pnt class from the OpenCascade library
