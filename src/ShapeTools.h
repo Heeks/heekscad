@@ -35,3 +35,4 @@ public:
 };
 
 void CreateFacesAndEdges(TopoDS_Shape shape, CFaceList* faces, CEdgeList* edges, CVertexList* vertices);
+
