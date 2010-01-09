@@ -117,20 +117,21 @@ DIST_SOURCES = $(HeeksCAD_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/mdupont/2010/01/heekscad/heekscad-read-only/missing --run aclocal-1.11
-AMTAR = ${SHELL} /home/mdupont/2010/01/heekscad/heekscad-read-only/missing --run tar
-AUTOCONF = ${SHELL} /home/mdupont/2010/01/heekscad/heekscad-read-only/missing --run autoconf
-AUTOHEADER = ${SHELL} /home/mdupont/2010/01/heekscad/heekscad-read-only/missing --run autoheader
-AUTOMAKE = ${SHELL} /home/mdupont/2010/01/heekscad/heekscad-read-only/missing --run automake-1.11
+ACLOCAL = ${SHELL} /home/mdupont/2010/01/heekscad/heekscad/branches/autotools/missing --run aclocal-1.11
+AMTAR = ${SHELL} /home/mdupont/2010/01/heekscad/heekscad/branches/autotools/missing --run tar
+AUTOCONF = ${SHELL} /home/mdupont/2010/01/heekscad/heekscad/branches/autotools/missing --run autoconf
+AUTOHEADER = ${SHELL} /home/mdupont/2010/01/heekscad/heekscad/branches/autotools/missing --run autoheader
+AUTOMAKE = ${SHELL} /home/mdupont/2010/01/heekscad/heekscad/branches/autotools/missing --run automake-1.11
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -g -O2 -pthread
 CPP = gcc -E
-CPPFLAGS =  -I/usr/lib/wx/include/gtk2-unicode-release-2.8 -I/usr/include/wx-2.8 -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES -D__WXGTK__
+CPPFLAGS =  -I/usr/include/opencascade -I/usr/lib/wx/include/gtk2-unicode-release-2.8 -I/usr/include/wx-2.8 -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES -D__WXGTK__
 CXX = g++
+CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g -O2 
+CXXFLAGS = -g -O2 -I/usr/include/opencascade 
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -150,7 +151,7 @@ LIBOBJS =
 LIBS = -lTKernel -lTKXSBase -lTKXDESTEP -lTKXCAFSchema -lTKXCAF -lTKVRML -lTKV3d -lTKV2d -lTKTopAlgo -lTKShapeSchema -lTKShHealing -lTKService -lTKSTL -lTKSTEPBase -lTKSTEPAttr -lTKSTEP209 -lTKSTEP -lTKPrim -lTKPShape -lTKPLCAF -lTKOffset -lTKMesh -lTKMath -lTKLCAF -lTKIGES -lTKHLR -lTKGeomBase -lTKGeomAlgo -lTKG3d -lTKG2d -lTKFillet -lTKFeat -lTKCDF -lTKCAF -lTKBool -lTKBRep -lTKBO -lTKAdvTools -lFWOSPlugin  -pthread -Wl,-Bsymbolic-functions  -lwx_gtk2u_richtext-2.8 -lwx_gtk2u_aui-2.8 -lwx_gtk2u_xrc-2.8 -lwx_gtk2u_qa-2.8 -lwx_gtk2u_html-2.8 -lwx_gtk2u_adv-2.8 -lwx_gtk2u_core-2.8 -lwx_baseu_xml-2.8 -lwx_baseu_net-2.8 -lwx_baseu-2.8 
 LN_S = ln -s
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /home/mdupont/2010/01/heekscad/heekscad-read-only/missing --run makeinfo
+MAKEINFO = ${SHELL} /home/mdupont/2010/01/heekscad/heekscad/branches/autotools/missing --run makeinfo
 MKDIR_P = /bin/mkdir -p
 OBJEXT = o
 PACKAGE = heekscad
@@ -164,7 +165,7 @@ PATH_SEPARATOR = :
 POW_LIB = 
 RANLIB = ranlib
 SET_MAKE = 
-SHELL = /bin/bash
+SHELL = /bin/sh
 STRIP = 
 VERSION = 0.6.0
 WX_CFLAGS = -I/usr/lib/wx/include/gtk2-unicode-release-2.8 -I/usr/include/wx-2.8 -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES -D__WXGTK__ -pthread
@@ -177,10 +178,10 @@ WX_LIBS = -pthread -Wl,-Bsymbolic-functions  -lwx_gtk2u_richtext-2.8 -lwx_gtk2u_
 WX_LIBS_STATIC = 
 WX_RESCOMP = 
 WX_VERSION = 2.8.10
-abs_builddir = /home/mdupont/2010/01/heekscad/heekscad-read-only/src
-abs_srcdir = /home/mdupont/2010/01/heekscad/heekscad-read-only/src
-abs_top_builddir = /home/mdupont/2010/01/heekscad/heekscad-read-only
-abs_top_srcdir = /home/mdupont/2010/01/heekscad/heekscad-read-only
+abs_builddir = /home/mdupont/2010/01/heekscad/heekscad/branches/autotools/src
+abs_srcdir = /home/mdupont/2010/01/heekscad/heekscad/branches/autotools/src
+abs_top_builddir = /home/mdupont/2010/01/heekscad/heekscad/branches/autotools
+abs_top_srcdir = /home/mdupont/2010/01/heekscad/heekscad/branches/autotools
 ac_ct_CC = gcc
 ac_ct_CXX = g++
 am__include = include
@@ -200,7 +201,7 @@ host_alias =
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/mdupont/2010/01/heekscad/heekscad-read-only/install-sh
+install_sh = ${SHELL} /home/mdupont/2010/01/heekscad/heekscad/branches/autotools/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -221,28 +222,40 @@ top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
 AM_CXXFLAGS = \
-	 -Wall -g -I "./" -I /usr/include/opencascade  -I ${CASINCPATH} $(GLINCLUDES) $(FLAGS_64BIT) -DUSE_GENERIC_TREECTRL -DUNICODE -DHEEKSCAD -DHAVE_LIMITS -DWXUSINGDLL -DHAVE_LIMITS -DTIXML_USE_STL ${RIP} $(PYTHONCFLAGS)  `wx-config  --cflags`
+	 -Wall -g -I "./" \
+	-I ${OCC_INCLUDE}  \
+	-I ${CASINCPATH} \
+	$(GLINCLUDES) \
+	$(FLAGS_64BIT) \
+	-DUSE_GENERIC_TREECTRL -DUNICODE \
+	-DHEEKSCAD -DHAVE_LIMITS -DWXUSINGDLL \
+	-DTIXML_USE_STL \
+	${RIP} \
+	$(PYTHONCFLAGS)  \
+	`wx-config  --cflags`
 
 AM_LDFLAGS = -pthread -Wl,-Bsymbolic-functions -lwx_gtk2u_richtext-2.8 -lwx_gtk2u_aui-2.8 -lwx_gtk2u_xrc-2.8 -lwx_gtk2u_qa-2.8 -lwx_gtk2u_html-2.8 -lwx_gtk2u_adv-2.8 -lwx_gtk2u_core-2.8 -lwx_baseu_xml-2.8 -lwx_baseu_net-2.8 -lwx_baseu-2.8 -lstdc++ -lGLU ${PYTHONLIBS} -lGL -g ${OCCLIBS} `wx-config --libs --gl-libs`
+HeeksCAD_PCH_HEADER = stdafx.h
 
 #EXECUTABLE=../
 #                 translations/Makefile
 #                 unittest/Makefile
-HeeksCAD_SOURCES = AboutBox.cpp advprops.cpp BezierCurve.cpp Cone.cpp \
-	ConversionTools.cpp CoordinateSystem.cpp Cuboid.cpp \
-	Cylinder.cpp DigitizedPoint.cpp DigitizeMode.cpp \
-	DimensionDrawing.cpp Drawing.cpp dxf.cpp svg.cpp Edge.cpp \
-	Face.cpp Geom.cpp glfont2.cpp GLList.cpp GraphicsCanvas.cpp \
-	Grid.cpp Gripper.cpp GripperSelTransform.cpp Group.cpp \
-	HArc.cpp HCircle.cpp HDimension.cpp HeeksCAD.cpp \
-	HeeksFrame.cpp HeeksPrintout.cpp HILine.cpp HEllipse.cpp \
-	HImage.cpp HLine.cpp HPoint.cpp HSpline.cpp HText.cpp HXml.cpp \
-	InputModeCanvas.cpp LineArcDrawing.cpp Loop.cpp \
-	MagDragWindow.cpp manager.cpp MarkedList.cpp \
-	ObjPropsCanvas.cpp odcombo.cpp OptionsCanvas.cpp Plugins.cpp \
-	PointDrawing.cpp PointOrWindow.cpp PropertiesCanvas.cpp \
-	PropertyTrsf.cpp ../interface/PropertyVertex.cpp propgrid.cpp \
-	props.cpp RegularShapesDrawing.cpp RuledSurface.cpp Ruler.cpp \
+HeeksCAD_SOURCES = ${HeeksCAD_PCH_HEADER}.gch AboutBox.cpp \
+	advprops.cpp BezierCurve.cpp Cone.cpp ConversionTools.cpp \
+	CoordinateSystem.cpp Cuboid.cpp Cylinder.cpp \
+	DigitizedPoint.cpp DigitizeMode.cpp DimensionDrawing.cpp \
+	Drawing.cpp dxf.cpp svg.cpp Edge.cpp Face.cpp Geom.cpp \
+	glfont2.cpp GLList.cpp GraphicsCanvas.cpp Grid.cpp Gripper.cpp \
+	GripperSelTransform.cpp Group.cpp HArc.cpp HCircle.cpp \
+	HDimension.cpp HeeksCAD.cpp HeeksFrame.cpp HeeksPrintout.cpp \
+	HILine.cpp HEllipse.cpp HImage.cpp HLine.cpp HPoint.cpp \
+	HSpline.cpp HText.cpp HXml.cpp InputModeCanvas.cpp \
+	LineArcDrawing.cpp Loop.cpp MagDragWindow.cpp manager.cpp \
+	MarkedList.cpp ObjPropsCanvas.cpp odcombo.cpp \
+	OptionsCanvas.cpp Plugins.cpp PointDrawing.cpp \
+	PointOrWindow.cpp PropertiesCanvas.cpp PropertyTrsf.cpp \
+	../interface/PropertyVertex.cpp propgrid.cpp props.cpp \
+	RegularShapesDrawing.cpp RuledSurface.cpp Ruler.cpp \
 	SelectMode.cpp Shape.cpp ShapeData.cpp Sketch.cpp Solid.cpp \
 	Sphere.cpp StlSolid.cpp StretchTool.cpp TransformTool.cpp \
 	TransformTools.cpp TreeCanvas.cpp UndoEngine.cpp Vertex.cpp \

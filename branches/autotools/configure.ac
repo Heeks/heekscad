@@ -15,6 +15,78 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_RANLIB
 
+AC_LANG(C++)
+
+#OCC_INCLUDE=/user/include/opencascade
+#CPPFLAGS="$CPPFLAGS -I${OCC_INCLUDE}"
+#CXXFLAGS="$CXXFLAGS -I${OCC_INCLUDE}"
+
+AC_MSG_CHECKING(for extraneous occ header directories)
+	  found_occ_dir=""
+	  for occ_dir in /usr/include/opencascade /usr/local/include/opencascade $prefix/include
+	  do
+
+	  echo checking dir $occ_dir
+
+	  if test -d $occ_dir ; then
+
+	     echo FOUND OCC dir $occ_dir
+	     OCC_INCLUDE=$occ_dir
+	     CPPFLAGS="$CPPFLAGS -I${OCC_INCLUDE}"
+	     CXXFLAGS="$CXXFLAGS -I${OCC_INCLUDE}"
+
+	     AC_CHECK_HEADER([Standard.hxx],[
+	      	echo found Standard.hxx
+		AC_DEFINE(HAVE_OPENCASCADE_H, 1,[Define to 1 if you have <Standard.hxx.h>.]) ],[
+		AC_MSG_ERROR([echo did nor find Standard.hxx])],)
+
+	     found_occ_dir=" $found_occ_dir -I$occ_dir"
+
+	    else
+		echo did not find anything in $occ_dir
+	    fi
+	  done
+	  if test "$found_occ_dir" != "" ; then
+	    AC_MSG_RESULT(found the OCC DIR $found_occ_dir and added to CFLAGS)
+	  else
+	    AC_MSG_ERROR(opencascade not found)
+	  fi
+
+
+dnl AC_CHECK_HEADER([opencascade/Standard.hxx],[
+dnl 	echo found Standard.hxx
+dnl 	AC_DEFINE(HAVE_OPENCASCADE_H, 1,[Define to 1 if you have <Standard.hxx.h>.]) ],[
+dnl 	AC_MSG_WARN([echo did nor find Standard.hxx])],)
+dnl OCC_INCLUDE=/usr/local/include/opencascade
+dnl CPPFLAGS="$CPPFLAGS -I${OCC_INCLUDE}"
+dnl CXXFLAGS="$CXXFLAGS -I${OCC_INCLUDE}"
+dnl AC_CHECK_HEADER([opencascade/Standard.hxx],[
+dnl 	echo found Standard.hxx
+dnl 	AC_DEFINE(HAVE_OPENCASCADE_H, 1,[Define to 1 if you have <Standard.hxx.h>.]) ],[
+dnl 	AC_MSG_ERROR([echo did nor find Standard.hxx])],)
+
+
+dnl AC_ARG_WITH(occ-prefix, 
+dnl [ --with-occ-prefix=DIR   Prefix where open cascade is installed],[
+dnl   OCC_PREFIX=$withval;
+dnl   OCC_INCLUDE=${OCC_PREFIX}/include/opencascade
+dnl   CPPFLAGS="$CPPFLAGS -I${OCC_INCLUDE}"
+dnl   CXXFLAGS="$CXXFLAGS -I${OCC_INCLUDE}"
+dnl   echo "using "$OCC_PREFIX" for occ-prefix";
+dnl   echo "using "$CPPFLAGS" for CPPFLAGS";
+dnl   AC_LANG_PUSH(C++)
+dnl #
+dnl   AC_CHECK_HEADER([Standard.hxx],[echo found Standard.hxx],[echo did nor find Standard.hxx],)
+dnl  # AC_CHECK_HEADER([Standard_PrimitiveTypes.hxx],[echo found Standard_PrimitiveTypes.hxx],[echo did nor find Standard_PrimitiveTypes.hxx],)
+dnl #  AC_CHECK_HEADER([BRepAdaptor_Curve.hxx],[echo found BRepAdaptor_Curve.hxx],[echo did nor find BRepAdaptor_Curve.hxx],)
+dnl #  AC_CHECK_HEADER([opencascade/BRepAdaptor_Curve.hxx])
+dnl #  AC_CHECK_HEADER([/usr/include/opencascade/BRepAdaptor_Curve.hxx])
+dnl ],[
+dnl   OCC_PREFIX=/usr/;
+dnl   OCC_INCLUDE=${OCC_PREFIX}/include/opencascade
+dnl ]
+dnl )
+
 m4_include(m4/wxwin.m4)	
 
 AM_OPTIONS_WXCONFIG
@@ -40,11 +112,11 @@ LIBS="$LIBS $WX_LIBS"
 
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lFWOSPlugin':
-AC_CHECK_LIB([FWOSPlugin], [main])
+AC_CHECK_LIB([FWOSPlugin], [_ZNK18Standard_Transient4ThisEv])
 # FIXME: Replace `main' with a function in `-lTKAdvTools':
-AC_CHECK_LIB([TKAdvTools], [main])
+AC_CHECK_LIB([TKAdvTools], [_ZNK18Materials_Material4DumpERSo])
 # FIXME: Replace `main' with a function in `-lTKBO':
-AC_CHECK_LIB([TKBO], [main])
+AC_CHECK_LIB([TKBO], [_ZN27TColStd_IndexedMapOfInteger3AddERKi])
 # FIXME: Replace `main' with a function in `-lTKBRep':
 AC_CHECK_LIB([TKBRep], [main])
 # FIXME: Replace `main' with a function in `-lTKBool':
@@ -131,6 +203,14 @@ AC_CHECK_TYPES([ptrdiff_t])
 AC_FUNC_MALLOC
 AC_FUNC_STRTOD
 AC_CHECK_FUNCS([floor memmove memset pow setlocale sqrt strchr strtoul])
+
+
+dnl **************************
+dnl check for open cascade
+dnl **************************
+# taken from freeengineer/freedraft ftp://ftp.freeengineer.org/pub/freedraft/snapshots/freedraft20020309.tar.gz
+
+
 
 AC_CONFIG_FILES([Makefile
                  src/Makefile

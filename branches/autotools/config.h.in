@@ -139,6 +139,9 @@
 /* Define to 1 if you have the `memset' function. */
 #undef HAVE_MEMSET
 
+/* Define to 1 if you have <Standard.hxx.h>. */
+#undef HAVE_OPENCASCADE_H
+
 /* Define to 1 if you have the `pow' function. */
 #undef HAVE_POW
 
