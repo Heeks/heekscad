@@ -230,32 +230,32 @@ AM_CXXFLAGS = \
 	-DUSE_GENERIC_TREECTRL -DUNICODE \
 	-DHEEKSCAD -DHAVE_LIMITS -DWXUSINGDLL \
 	-DTIXML_USE_STL \
+	-Winvalid-pch \
 	${RIP} \
 	$(PYTHONCFLAGS)  \
 	`wx-config  --cflags`
 
 AM_LDFLAGS = -pthread -Wl,-Bsymbolic-functions -lwx_gtk2u_richtext-2.8 -lwx_gtk2u_aui-2.8 -lwx_gtk2u_xrc-2.8 -lwx_gtk2u_qa-2.8 -lwx_gtk2u_html-2.8 -lwx_gtk2u_adv-2.8 -lwx_gtk2u_core-2.8 -lwx_baseu_xml-2.8 -lwx_baseu_net-2.8 -lwx_baseu-2.8 -lstdc++ -lGLU ${PYTHONLIBS} -lGL -g ${OCCLIBS} `wx-config --libs --gl-libs`
-HeeksCAD_PCH_HEADER = stdafx.h
+BUILT_SOURCES = stdafx.h.gch
 
 #EXECUTABLE=../
 #                 translations/Makefile
 #                 unittest/Makefile
-HeeksCAD_SOURCES = ${HeeksCAD_PCH_HEADER}.gch AboutBox.cpp \
-	advprops.cpp BezierCurve.cpp Cone.cpp ConversionTools.cpp \
-	CoordinateSystem.cpp Cuboid.cpp Cylinder.cpp \
-	DigitizedPoint.cpp DigitizeMode.cpp DimensionDrawing.cpp \
-	Drawing.cpp dxf.cpp svg.cpp Edge.cpp Face.cpp Geom.cpp \
-	glfont2.cpp GLList.cpp GraphicsCanvas.cpp Grid.cpp Gripper.cpp \
-	GripperSelTransform.cpp Group.cpp HArc.cpp HCircle.cpp \
-	HDimension.cpp HeeksCAD.cpp HeeksFrame.cpp HeeksPrintout.cpp \
-	HILine.cpp HEllipse.cpp HImage.cpp HLine.cpp HPoint.cpp \
-	HSpline.cpp HText.cpp HXml.cpp InputModeCanvas.cpp \
-	LineArcDrawing.cpp Loop.cpp MagDragWindow.cpp manager.cpp \
-	MarkedList.cpp ObjPropsCanvas.cpp odcombo.cpp \
-	OptionsCanvas.cpp Plugins.cpp PointDrawing.cpp \
-	PointOrWindow.cpp PropertiesCanvas.cpp PropertyTrsf.cpp \
-	../interface/PropertyVertex.cpp propgrid.cpp props.cpp \
-	RegularShapesDrawing.cpp RuledSurface.cpp Ruler.cpp \
+HeeksCAD_SOURCES = AboutBox.cpp advprops.cpp BezierCurve.cpp Cone.cpp \
+	ConversionTools.cpp CoordinateSystem.cpp Cuboid.cpp \
+	Cylinder.cpp DigitizedPoint.cpp DigitizeMode.cpp \
+	DimensionDrawing.cpp Drawing.cpp dxf.cpp svg.cpp Edge.cpp \
+	Face.cpp Geom.cpp glfont2.cpp GLList.cpp GraphicsCanvas.cpp \
+	Grid.cpp Gripper.cpp GripperSelTransform.cpp Group.cpp \
+	HArc.cpp HCircle.cpp HDimension.cpp HeeksCAD.cpp \
+	HeeksFrame.cpp HeeksPrintout.cpp HILine.cpp HEllipse.cpp \
+	HImage.cpp HLine.cpp HPoint.cpp HSpline.cpp HText.cpp HXml.cpp \
+	InputModeCanvas.cpp LineArcDrawing.cpp Loop.cpp \
+	MagDragWindow.cpp manager.cpp MarkedList.cpp \
+	ObjPropsCanvas.cpp odcombo.cpp OptionsCanvas.cpp Plugins.cpp \
+	PointDrawing.cpp PointOrWindow.cpp PropertiesCanvas.cpp \
+	PropertyTrsf.cpp ../interface/PropertyVertex.cpp propgrid.cpp \
+	props.cpp RegularShapesDrawing.cpp RuledSurface.cpp Ruler.cpp \
 	SelectMode.cpp Shape.cpp ShapeData.cpp Sketch.cpp Solid.cpp \
 	Sphere.cpp StlSolid.cpp StretchTool.cpp TransformTool.cpp \
 	TransformTools.cpp TreeCanvas.cpp UndoEngine.cpp Vertex.cpp \
@@ -306,7 +306,8 @@ nodist_HeeksCAD_SOURCES = AboutBox.h Geom.h Loop.h ShapeData.h \
 	WrappedCurves.h Face.h InputModeCanvas.h RuledSurface.h \
 	wxImageLoader.h FaceTools.h Intersector.h Ruler.h FastCurves.h \
 	LineArcDrawing.h SelectMode.h
-all: all-am
+all: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
 .SUFFIXES: .cpp .o .obj
@@ -977,13 +978,15 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
-check: check-am
+check: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) check-am
 all-am: Makefile $(PROGRAMS)
 installdirs:
 	for dir in "$(DESTDIR)$(bindir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: install-am
+install: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -1008,6 +1011,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 clean: clean-am
 
 clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
@@ -1077,7 +1081,7 @@ ps-am:
 
 uninstall-am: uninstall-binPROGRAMS
 
-.MAKE: install-am install-strip
+.MAKE: all check install install-am install-strip
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-binPROGRAMS \
 	clean-generic ctags distclean distclean-compile \
@@ -1092,6 +1096,14 @@ uninstall-am: uninstall-binPROGRAMS
 	mostlyclean-generic pdf pdf-am ps ps-am tags uninstall \
 	uninstall-am uninstall-binPROGRAMS
 
+
+#HeeksCAD_PCH_HEADER=stdafx.h
+
+%.h.gch: %.h
+	$(CXXCOMPILE) -c $<
+
+%.hxx.gch: %.hxx
+	$(CXXCOMPILE) -c -x c++-header -o /dev/null $< || true
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
