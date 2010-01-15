@@ -108,6 +108,15 @@ void CEdge::glCommands(bool select, bool marked, bool no_color){
 }
 
 void CEdge::GetBox(CBox &box){
+	// just use the vertices for speed
+	for (TopExp_Explorer expVertex(m_topods_edge, TopAbs_VERTEX); expVertex.More(); expVertex.Next())
+	{
+		const TopoDS_Shape &V = expVertex.Current();
+		gp_Pnt pos = BRep_Tool::Pnt(TopoDS::Vertex(V));
+		double p[3];
+		extract(pos, p);
+		box.Insert(p);
+	}
 }
 
 void CEdge::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
