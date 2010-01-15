@@ -4,6 +4,7 @@
 
 You definitely have to install XCode. And there are some other necessary things. OpenCASCADE needs a X11 Tcl and HeeksCAD needs a X11 wxWidgets like wxGTK and Python. All three can easily be installed from [http://fink.sf.net Fink].
 
+Actually, the only version of wxwidgets known to work is wxGTK (from fink) (the native mac version at least is known to NOT work (it shares the same Handle name with OCC in the code or something)). You also need gtkglext for opengl support. --celeron55
 
 = OpenCASCADE =
 
