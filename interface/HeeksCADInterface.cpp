@@ -10,6 +10,7 @@
 #include "PropertiesCanvas.h"
 #include "MarkedList.h"
 #include "HLine.h"
+#include "HILine.h"
 #include "HArc.h"
 #include "HCircle.h"
 #include "HSpline.h"
@@ -347,11 +348,14 @@ HeeksObj* CHeeksCADInterface::NewPoint(const double* p)
 
 }
 
-
-
 HeeksObj* CHeeksCADInterface::NewLine(const double* s, const double* e)
 {
 	return new HLine(make_point(s), make_point(e), &wxGetApp().current_color);
+}
+
+HeeksObj* CHeeksCADInterface::NewILine(const double* s, const double* e)
+{
+	return new HILine(make_point(s), make_point(e), &wxGetApp().current_color);
 }
 
 HeeksObj* CHeeksCADInterface::NewCircle(const double* c, double r)
@@ -786,6 +790,20 @@ long CHeeksCADInterface::BodyGetColor(HeeksObj* body)
 {
 	// returns a COLORREF style long for the color of the body
 	return ((CShape*)body)->m_color.COLORREF_color();
+}
+
+int CHeeksCADInterface::BodyGetShapeType(HeeksObj* body)
+{
+	// 0 - TopAbs_COMPOUND
+	// 1 - TopAbs_COMPSOLID
+	// 2 - TopAbs_SOLID
+	// 3 - TopAbs_SHELL
+	// 4 - TopAbs_FACE
+	// 5 - TopAbs_WIRE
+	// 6 - TopAbs_EDGE
+	// 7 - TopAbs_VERTEX
+	// 8 - TopAbs_SHAPE
+	return ((CShape*)body)->Shape().ShapeType();
 }
 
 int CHeeksCADInterface::EdgeGetCurveType(HeeksObj* edge)

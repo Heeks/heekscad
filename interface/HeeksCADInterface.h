@@ -83,6 +83,7 @@ public:
 	virtual void DrawObjectsOnFront(const std::list<HeeksObj*> &list);
 	virtual HeeksObj* NewSketch();
 	virtual HeeksObj* NewLine(const double* s, const double* e);
+	virtual HeeksObj* NewILine(const double* s, const double* e);
 	virtual HeeksObj* NewPoint(const double* p);
 	virtual HeeksObj* NewArc(const double* s, const double* e, const double* c, const double* up); // set up to (0, 0, -1) for a clockwise arc
 	virtual HeeksObj* NewArc(const double* c, const double* u, double r, double s, double e); // set up to (0, 0, -1) for a clockwise arc
@@ -145,6 +146,7 @@ public:
 	virtual HeeksObj* BodyGetNextVertex(HeeksObj* body);
 	virtual bool BodyGetExtents(HeeksObj* body, double* extents, const double* orig = NULL, const double* xdir = NULL, const double* ydir = NULL, const double* zdir = NULL);
 	virtual long BodyGetColor(HeeksObj* body);
+	virtual int BodyGetShapeType(HeeksObj* body);
 
 	// face functions
 	virtual void FaceSetTempAttribute(HeeksObj* face, int attr);
