@@ -68,6 +68,7 @@ public:
 	void ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketches);
 
 	int Intersects(const HeeksObj *object, std::list< double > *rl) const;
+	HeeksObj *Parallel( const double distance );
 };
 
 class CSketchRelinker{

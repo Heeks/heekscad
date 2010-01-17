@@ -4,6 +4,10 @@
 #include "stdafx.h"
 #include "Wire.h"
 #include "../interface/Tool.h"
+#include "ConversionTools.h"
+#include "../interface/HeeksCADInterface.h"
+
+extern CHeeksCADInterface heekscad_interface;
 
 CWire::CWire(const TopoDS_Wire &wire, const wxChar* title):CShape(wire, title, false){
 }
@@ -78,4 +82,18 @@ void CWire::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 const TopoDS_Wire &CWire::Wire()const{
 	return *((TopoDS_Wire*)(&m_shape));
 }
+
+/* static */ HeeksObj *CWire::Sketch( const TopoDS_Wire & wire )
+{
+    const double deviation = heekscad_interface.GetTolerance();
+    HeeksObj *sketch = heekscad_interface.NewSketch();
+    for(BRepTools_WireExplorer expEdge(TopoDS::Wire(wire)); expEdge.More(); expEdge.Next())
+    {
+        const TopoDS_Shape &E = expEdge.Current();
+        if(!ConvertEdgeToSketch2(TopoDS::Edge(E), sketch, deviation))return NULL;
+    }
+
+    return(sketch);
+}
+
 
