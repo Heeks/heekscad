@@ -16,6 +16,9 @@
 #include "MultiPoly.h"
 #include "FaceTools.h"
 #include "CoordinateSystem.h"
+#include "Wire.h"
+
+extern CHeeksCADInterface heekscad_interface;
 
 std::string CSketch::m_sketch_order_str[MaxSketchOrderTypes] = {
 	std::string("unknown"),
@@ -266,6 +269,83 @@ public:
 
 static ConvertSketchToFace convert_sketch_to_face;
 
+
+class ConvertSketchToWire: public Tool
+{
+public:
+	void Run()
+	{
+		std::list<TopoDS_Shape> wires;
+		if(ConvertSketchToFaceOrWire(sketch_for_tools, wires, false))
+		{
+			wxGetApp().CreateUndoPoint();
+			for(std::list<TopoDS_Shape>::iterator It2 = wires.begin(); It2 != wires.end(); It2++)
+			{
+				TopoDS_Shape& wire = *It2;
+				wxGetApp().Add(new CWire(TopoDS::Wire(wire), _T("Wire from sketch")), NULL);
+			}
+			wxGetApp().Changed();
+		}
+	}
+	const wxChar* GetTitle(){return _("Convert sketch to wire");}
+	wxString BitmapPath(){return _T("la2face");}
+};
+
+static ConvertSketchToWire convert_sketch_to_wire;
+
+
+HeeksObj *CSketch::Parallel( const double distance )
+{
+    try {
+            double deviation = heekscad_interface.GetTolerance();
+            std::list<TopoDS_Shape> wires;
+            if(ConvertSketchToFaceOrWire(this, wires, false))
+            {
+                HeeksObj *sketch = heekscad_interface.NewSketch();
+                for(std::list<TopoDS_Shape>::iterator It2 = wires.begin(); It2 != wires.end(); It2++)
+                {
+                    TopoDS_Shape& wire = *It2;
+                    BRepOffsetAPI_MakeOffset offset_wire(TopoDS::Wire(wire));
+                    offset_wire.Perform(distance);
+                    ConvertWireToSketch(TopoDS::Wire(offset_wire.Shape()), sketch, deviation);
+                }
+                return(sketch);
+            }
+        }
+		catch (Standard_Failure) {
+			Handle_Standard_Failure e = Standard_Failure::Caught();
+			// wxMessageBox(wxString(_("Error making offset")) + _T(": ") + Ctt(e->GetMessageString()));
+			return(NULL);
+		}
+
+		return(NULL);
+}
+
+class CopyParallel: public Tool
+{
+public:
+	void Run()
+	{
+	    const double distance = 5.0;   // Hardcoded until I can come up with a decent user interface for it. (Can be positive or negative)
+	    HeeksObj *parallel_sketch = sketch_for_tools->Parallel(distance);
+	    if (parallel_sketch != NULL)
+	    {
+            wxGetApp().CreateUndoPoint();
+            wxGetApp().Add(parallel_sketch, NULL);
+            wxGetApp().Changed();
+        }
+		else
+		{
+			wxMessageBox(wxString(_("Error making offset")));
+		}
+	}
+	const wxChar* GetTitle(){return _("Copy Parallel");}
+	wxString BitmapPath(){return _T("la2face");}
+};
+
+static CopyParallel copy_parallel;
+
+
 class SketchArcsToLines: public Tool
 {
 public:
@@ -291,7 +371,9 @@ void CSketch::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 		t_list->push_back(&split_sketch);
 	}
 	t_list->push_back(&convert_sketch_to_face);
+	// t_list->push_back(&convert_sketch_to_wire);
 	t_list->push_back(&sketch_arcs_to_lines);
+	t_list->push_back(&copy_parallel);
 }
 
 HeeksObj *CSketch::MakeACopy(void)const

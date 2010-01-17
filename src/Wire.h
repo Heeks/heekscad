@@ -20,5 +20,6 @@ public:
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 
 	const TopoDS_Wire &Wire()const;
+	static HeeksObj *Sketch( const TopoDS_Wire & wire );
 };
 

@@ -246,6 +246,21 @@ bool ConvertFaceToSketch2(const TopoDS_Face& face, HeeksObj* sketch, double devi
 	return true; // success
 }
 
+
+bool ConvertWireToSketch(const TopoDS_Wire& wire, HeeksObj* sketch, double deviation)
+{
+    const TopoDS_Shape &W = wire;
+    for(BRepTools_WireExplorer expEdge(TopoDS::Wire(W)); expEdge.More(); expEdge.Next())
+    {
+        const TopoDS_Shape &E = expEdge.Current();
+        if(!ConvertEdgeToSketch2(TopoDS::Edge(E), sketch, deviation))return false;
+    }
+
+	return true; // success
+}
+
+
+
 bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double deviation)
 {
 	// enum GeomAbs_CurveType
@@ -534,7 +549,7 @@ void UniteSketches::Run(){
 			}
 
 			UnionPolygons(lines, result_list);
-			
+
 		}
 	}
 #endif
