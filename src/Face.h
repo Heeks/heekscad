@@ -58,6 +58,7 @@ public:
 	void GetCylinderParams(gp_Cylinder &c);
 	void GetSphereParams(gp_Sphere &s);
 	void GetConeParams(gp_Cone &c);
+	void GetTorusParams(gp_Torus &t);
 	bool GetNurbSurfaceParams(CNurbSurfaceParams* params);
 	int GetSurfaceType();
 	wxString GetSurfaceTypeStr();

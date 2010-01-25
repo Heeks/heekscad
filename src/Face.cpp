@@ -4,8 +4,6 @@
 #include "stdafx.h"
 #include "Face.h"
 #include "../interface/NurbSurfaceParams.h"
-#include <Geom_BSplineSurface.hxx>
-#include <TColgp_Array2OfPnt.hxx>
 #include "FaceTools.h"
 #include "Sketch.h"
 #include "RuledSurface.h"
@@ -374,93 +372,153 @@ void CFace::GetConeParams(gp_Cone &c)
 	c = surface.Cone();
 }
 
-bool CFace::GetNurbSurfaceParams(CNurbSurfaceParams* params)
+void CFace::GetTorusParams(gp_Torus &t)
 {
 	BRepAdaptor_Surface surface(m_topods_face, Standard_True);
-	params->u_order = surface.UDegree();
-	params->v_order = surface.VDegree();
-	params->n_u_vertices = surface.NbUPoles();
-	params->n_v_vertices = surface.NbVPoles();
-	params->rational = surface.IsURational() != 0;
-	params->is_u_periodic = surface.IsUPeriodic() != 0;
-	params->is_v_periodic = surface.IsVPeriodic() != 0;
-	params->is_u_closed = surface.IsUClosed() != 0;
-	params->is_v_closed = surface.IsVClosed() != 0;
+	t = surface.Torus();
+}
 
-	Handle(Geom_Surface) aGeomSurface = BRep_Tool::Surface(m_topods_face);
-	if(aGeomSurface->DynamicType() != STANDARD_TYPE(Geom_BSplineSurface))
-		return false;
-
-	Handle(Geom_BSplineSurface) aBSplineSurface = Handle(Geom_BSplineSurface)::DownCast(aGeomSurface);
-
-	int myNbUPoles = aBSplineSurface->NbUPoles();
-	int myNbVPoles = aBSplineSurface->NbVPoles();
-
-	TColgp_Array2OfPnt aPoles(1, myNbVPoles, 1, myNbUPoles);
-
-	TColStd_Array1OfReal aVKnots(1, aBSplineSurface->NbVKnots());
-	TColStd_Array1OfReal aUKnots(1, aBSplineSurface->NbUKnots());
-
-	aBSplineSurface->Poles(aPoles);
-	aBSplineSurface->UKnots(aUKnots);
-	aBSplineSurface->VKnots(aVKnots);
-
-	//Push the nurbs in Coin3d
-
-	// Control Point
-	Standard_Integer i, j, aCounter;
-	params->vertex_size = 4;
-	int nVertexDoubles = myNbVPoles*myNbUPoles*params->vertex_size; //Create array of control points and their weights
-	params->vertex = new double[nVertexDoubles];
-
-	aCounter = -1;
-
-	for(j = 1; j <= myNbVPoles; j++) {
-		for(i = 1; i <= myNbUPoles; i++) {
-			const gp_Pnt& aPoint = aBSplineSurface->Pole(i, j); //Control point (U,V)
-			params->vertex[++aCounter] = aPoint.X();
-			params->vertex[++aCounter] = aPoint.Y();
-			params->vertex[++aCounter] = aPoint.Z();
-			params->vertex[++aCounter] = aBSplineSurface->Weight(i, j);
-		}
-	}
-
-	std::list<double> knot_list;
-
+bool CFace::GetNurbSurfaceParams(CNurbSurfaceParams* params)
+{
 	try {
-		//Fill the knot`s array taking into account multiplicities
-		// VKnots
-		for(i = aVKnots.Lower(); i<=aVKnots.Upper(); i++) {
-			for(j = 1; j<= aBSplineSurface->VMultiplicity(i); j++)
-				knot_list.push_back(aVKnots(i));
-		}
-
-		params->v_knot = new double[knot_list.size()];
-
-		aCounter = -1;
-		for(std::list<double>::iterator It = knot_list.begin(); It != knot_list.end(); It++)
+		BRepAdaptor_Surface surface(m_topods_face, Standard_True);
+		params->rational = surface.IsURational() != 0;
+		params->is_u_periodic = surface.IsUPeriodic() != 0;
+		params->is_v_periodic = surface.IsVPeriodic() != 0;
+		params->is_u_closed = surface.IsUClosed() != 0;
+		params->is_v_closed = surface.IsVClosed() != 0;
+		switch(surface.GetType())
 		{
-			params->v_knot[++aCounter] = *It;
+		case GeomAbs_BSplineSurface:
+		case GeomAbs_BezierSurface:
+		case GeomAbs_SurfaceOfExtrusion:
+			params->u_order = surface.UDegree();
+			params->v_order = surface.VDegree();
+			params->n_u_vertices = surface.NbUPoles();
+			params->n_v_vertices = surface.NbVPoles();
+			break;
+		default:
+			params->u_order = 0;
+			params->v_order = 0;
+			params->n_u_vertices = 0;
+			params->n_v_vertices = 0;
+			break;
 		}
-		params->n_v_knots = aCounter+1;
 
-		// UKnots
-		knot_list.clear();
-		for(i = aUKnots.Lower(); i<=aUKnots.Upper(); i++) {
-			for(j = 1; j<= aBSplineSurface->UMultiplicity(i); j++)
-				knot_list.push_back(aUKnots(i));
-		}
-
-		params->u_knot = new double[knot_list.size()];
-
-		aCounter = -1;
-		for(std::list<double>::iterator It = knot_list.begin(); It != knot_list.end(); It++)
+		switch(surface.GetType())
 		{
-			params->u_knot[++aCounter] = *It;
+		case GeomAbs_BSplineSurface:
+			{
+				Handle(Geom_Surface) aGeomSurface = BRep_Tool::Surface(m_topods_face);
+				Handle(Geom_BSplineSurface) aBSplineSurface = Handle(Geom_BSplineSurface)::DownCast(aGeomSurface);
+
+				int myNbUPoles = aBSplineSurface->NbUPoles();
+				int myNbVPoles = aBSplineSurface->NbVPoles();
+
+				TColgp_Array2OfPnt aPoles(1, myNbVPoles, 1, myNbUPoles);
+
+				TColStd_Array1OfReal aVKnots(1, aBSplineSurface->NbVKnots());
+				TColStd_Array1OfReal aUKnots(1, aBSplineSurface->NbUKnots());
+
+				aBSplineSurface->Poles(aPoles);
+				aBSplineSurface->UKnots(aUKnots);
+				aBSplineSurface->VKnots(aVKnots);
+
+				//Push the nurbs in Coin3d
+
+				// Control Point
+				Standard_Integer i, j, aCounter;
+				params->vertex_size = 4;
+				int nVertexDoubles = myNbVPoles*myNbUPoles*params->vertex_size; //Create array of control points and their weights
+				params->vertex = new double[nVertexDoubles];
+
+				aCounter = -1;
+
+				for(j = 1; j <= myNbVPoles; j++) {
+					for(i = 1; i <= myNbUPoles; i++) {
+						const gp_Pnt& aPoint = aBSplineSurface->Pole(i, j); //Control point (U,V)
+						params->vertex[++aCounter] = aPoint.X();
+						params->vertex[++aCounter] = aPoint.Y();
+						params->vertex[++aCounter] = aPoint.Z();
+						params->vertex[++aCounter] = aBSplineSurface->Weight(i, j);
+					}
+				}
+
+				std::list<double> knot_list;
+
+				//Fill the knot`s array taking into account multiplicities
+				// VKnots
+				for(i = aVKnots.Lower(); i<=aVKnots.Upper(); i++) {
+					for(j = 1; j<= aBSplineSurface->VMultiplicity(i); j++)
+						knot_list.push_back(aVKnots(i));
+				}
+
+				params->v_knot = new double[knot_list.size()];
+
+				aCounter = -1;
+				for(std::list<double>::iterator It = knot_list.begin(); It != knot_list.end(); It++)
+				{
+					params->v_knot[++aCounter] = *It;
+				}
+				params->n_v_knots = aCounter+1;
+
+				// UKnots
+				knot_list.clear();
+				for(i = aUKnots.Lower(); i<=aUKnots.Upper(); i++) {
+					for(j = 1; j<= aBSplineSurface->UMultiplicity(i); j++)
+						knot_list.push_back(aUKnots(i));
+				}
+
+				params->u_knot = new double[knot_list.size()];
+
+				aCounter = -1;
+				for(std::list<double>::iterator It = knot_list.begin(); It != knot_list.end(); It++)
+				{
+					params->u_knot[++aCounter] = *It;
+				}
+				params->n_u_knots = aCounter+1;
+			}
+			break;
+
+		case GeomAbs_BezierSurface:
+			{
+				Handle(Geom_Surface) aGeomSurface = BRep_Tool::Surface(m_topods_face);
+				Handle(Geom_BezierSurface) aBSplineSurface = Handle(Geom_BezierSurface)::DownCast(aGeomSurface);
+
+				int myNbUPoles = aBSplineSurface->NbUPoles();
+				int myNbVPoles = aBSplineSurface->NbVPoles();
+
+				TColgp_Array2OfPnt aPoles(1, myNbVPoles, 1, myNbUPoles);
+
+				aBSplineSurface->Poles(aPoles);
+				//Push the nurbs in Coin3d
+
+				// Control Point
+				Standard_Integer i, j, aCounter;
+				params->vertex_size = 4;
+				int nVertexDoubles = myNbVPoles*myNbUPoles*params->vertex_size; //Create array of control points and their weights
+				params->vertex = new double[nVertexDoubles];
+
+				aCounter = -1;
+
+				for(j = 1; j <= myNbVPoles; j++) {
+					for(i = 1; i <= myNbUPoles; i++) {
+						const gp_Pnt& aPoint = aBSplineSurface->Pole(i, j); //Control point (U,V)
+						params->vertex[++aCounter] = aPoint.X();
+						params->vertex[++aCounter] = aPoint.Y();
+						params->vertex[++aCounter] = aPoint.Z();
+						params->vertex[++aCounter] = aBSplineSurface->Weight(i, j);
+					}
+				}
+
+			}
+			break;
 		}
-		params->n_u_knots = aCounter+1;
+
 	}
 	catch(Standard_Failure) {
+		Handle_Standard_Failure e = Standard_Failure::Caught();
+		wxMessageBox(wxString(_("Error in CFace::GetNurbSurfaceParams")) + _T(": ") + Ctt(e->GetMessageString()));
 		return false;
 	}
 

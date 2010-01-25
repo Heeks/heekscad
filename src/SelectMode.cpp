@@ -19,12 +19,45 @@
 
 bool CSelectMode::m_can_grip_objects = true;
 
+CClickPoint::CClickPoint(const wxPoint& point, unsigned long depth)
+{
+	m_point = point;
+	m_depth = depth;
+	m_valid = false;
+}
+
+bool CClickPoint::GetPos(double *pos)
+{
+	if(!m_valid)
+	{
+		wxGetApp().m_frame->m_graphics->m_view_point.SetViewport();
+		wxGetApp().m_frame->m_graphics->m_view_point.SetProjection(true);
+		wxGetApp().m_frame->m_graphics->m_view_point.SetModelview();
+
+		gp_Pnt screen_pos(m_point.x, wxGetApp().m_frame->m_graphics->GetClientSize().GetHeight() - m_point.y, (double)m_depth/4294967295);
+		gp_Pnt world_pos = wxGetApp().m_frame->m_graphics->m_view_point.glUnproject(screen_pos);
+		extract(world_pos, m_pos);
+		m_valid = true;
+	}
+	if(m_valid)
+	{
+		memcpy(pos, m_pos, 3*sizeof(double));
+	}
+
+	return m_valid;
+}
+
 CSelectMode::CSelectMode( const bool include_similar_objects /* = false */ ){
 	control_key_initially_pressed = false;
 	window_box_exists = false;
 	m_doing_a_main_loop = false;
 	m_just_one = false;
 	m_include_similar_objects = include_similar_objects;
+}
+
+bool CSelectMode::GetLastClickPosition(double *pos)
+{
+	return m_last_click_point.GetPos(pos);
 }
 
 const wxChar* CSelectMode::GetTitle()
@@ -209,6 +242,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 		else
 		{
 			// select one object
+			m_last_click_point = CClickPoint();
 			MarkedObjectOneOfEach marked_object;
 			wxGetApp().FindMarkedObject(wxPoint(event.GetX(), event.GetY()), &marked_object);
 			if(marked_object.m_map.size()>0){
@@ -218,6 +252,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 					previously_marked = *(wxGetApp().m_marked_list->list().begin());
 				}
 				HeeksObj* o = marked_object.GetFirstOfTopOnly();
+				unsigned long depth = marked_object.GetDepth();
 				HeeksObj* object = o;
 
 				while(o)
@@ -247,6 +282,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 				else
 				{
 					wxGetApp().m_marked_list->Add(object, true);
+					m_last_click_point = CClickPoint(wxPoint(event.GetX(), event.GetY()), depth);
 					gp_Lin ray = wxGetApp().m_frame->m_graphics->m_view_point.SightLine(wxPoint(event.GetX(), event.GetY()));
 					double ray_start[3], ray_direction[3];
 					extract(ray.Location(), ray_start);

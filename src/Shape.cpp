@@ -845,6 +845,18 @@ bool CShape::ExportSolidsFile(const std::list<HeeksObj*>& objects, const wxChar*
 	}
 	else if(wf.EndsWith(_T(".brep")))
 	{
+#ifdef __WXMSW__
+		ofstream ofs(filepath);
+#else
+		ofstream ofs(Ttc(filepath));
+#endif
+		for(std::list<HeeksObj*>::const_iterator It = objects.begin(); It != objects.end(); It++)
+		{
+			HeeksObj* object = *It;
+			if(CShape::IsTypeAShape(object->GetType())){
+				BRepTools::Write(((CShape*)object)->Shape(), ofs);
+			}
+		}
 	}
 
 	return false;
