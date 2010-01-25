@@ -12,11 +12,13 @@ class CEdge;
 class CVertex:public HeeksObj{
 private:
 	TopoDS_Vertex m_topods_vertex;
+	std::list<CEdge*> m_edges;
+	std::list<CEdge*>::iterator m_edgeIt;
+
+	void FindEdges();
 
 public:
 	std::list<CFace*> m_faces;
-	std::list<CEdge*> m_edges;
-	std::list<CEdge*>::iterator m_edgeIt;
 	double m_point[3];
 
 	CVertex(const TopoDS_Vertex &vertex);
@@ -34,5 +36,6 @@ public:
 	const TopoDS_Shape &Vertex(){return m_topods_vertex;}
 	CEdge* GetFirstEdge();
 	CEdge* GetNextEdge();
+	CShape* GetParentBody();
 };
 

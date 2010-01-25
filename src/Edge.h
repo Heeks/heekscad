@@ -67,6 +67,7 @@ public:
 	void GetCurveParams2(double *uStart, double *uEnd, int *isClosed, int *isPeriodic);
 	bool InFaceSense(CFace* face);
 	void Evaluate(double u, double *p, double *tangent);
+	bool GetClosestPoint(const gp_Pnt &pos, gp_Pnt &closest_pnt, double &u)const;
 	bool GetLineParams(double *d6);
 	bool GetCircleParams(double *d7);
 	bool Orientation();

@@ -298,6 +298,20 @@ void CEdge::Evaluate(double u, double *p, double *tangent)
 	if(tangent)extract(V, tangent);
 }
 
+bool CEdge::GetClosestPoint(const gp_Pnt &pos, gp_Pnt &closest_pnt, double &u)const{
+    Standard_Real start_u, end_u;
+	Handle(Geom_Curve) curve = BRep_Tool::Curve(m_topods_edge, start_u, end_u);
+	GeomAPI_ProjectPointOnCurve projection(pos, curve);
+
+	if(projection.NbPoints() > 0)
+	{               
+		closest_pnt = projection.NearestPoint();
+		u = projection.LowerDistanceParameter();
+		return true;
+	}     
+	return false;
+}
+
 bool CEdge::GetLineParams(double *d6)
 {
 	BRepAdaptor_Curve curve(m_topods_edge);
