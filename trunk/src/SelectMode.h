@@ -7,6 +7,20 @@
 #include "../interface/InputMode.h"
 #include "../interface/LeftAndRight.h"
 
+class CClickPoint
+{
+	bool m_valid;
+	double m_pos[3];
+	wxPoint m_point;
+	unsigned long m_depth;
+
+public:
+	CClickPoint(): m_valid(false){}
+	CClickPoint(const wxPoint& point, unsigned long depth);
+
+	bool GetPos(double *pos);
+};
+
 class CSelectMode: public CInputMode, CLeftAndRight{
 public:
 	wxPoint CurrentPoint;
@@ -18,11 +32,14 @@ public:
 	bool m_just_one;
 	wxString m_prompt_when_doing_a_main_loop;
 	bool m_include_similar_objects;		// Use the CCorrelationTool class as well?
+	CClickPoint m_last_click_point;
 
 	static bool m_can_grip_objects;
 
 	CSelectMode( const bool include_similar_objects = false );
 	virtual ~CSelectMode(void){}
+
+	bool GetLastClickPosition(double *pos);
 
 	// virtual functions for InputMode
 	const wxChar* GetTitle();

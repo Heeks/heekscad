@@ -78,6 +78,7 @@ public:
 	virtual int PickObjects(const wxChar* str, long marking_filter = -1, bool m_just_one = false);
 	virtual bool PickPosition(const wxChar* str, double* pos);
 	virtual bool Digitize(const wxPoint &point, double* pos);
+	virtual bool GetLastClickPosition(double *pos);
 	virtual HeeksObj* GetFirstObject();
 	virtual HeeksObj* GetNextObject();
 	virtual void DrawObjectsOnFront(const std::list<HeeksObj*> &list);
@@ -161,6 +162,7 @@ public:
 	virtual void FaceGetCylinderParams(HeeksObj* face, double *pos, double *dir, double *radius);
 	virtual void FaceGetSphereParams(HeeksObj* face, double *pos, double *radius);
 	virtual void FaceGetConeParams(HeeksObj* face, double *pos, double *dir, double *radius, double* half_angle);
+	virtual void FaceGetTorusParams(HeeksObj* face, double *pos, double *dir, double *majorRadius, double *minorRadius);
 	virtual bool FaceGetNurbSurfaceParams(HeeksObj* face, CNurbSurfaceParams* params);
 	virtual int FaceGetEdgeCount(HeeksObj* face);
 	virtual HeeksObj* FaceGetFirstEdge(HeeksObj* face);
@@ -187,6 +189,7 @@ public:
 	virtual int EdgeGetTempAttribute(HeeksObj* edge);
 	virtual double EdgeGetLength(HeeksObj* edge);
 	virtual double EdgeGetLength2(HeeksObj* edge, double uStart, double uEnd);
+	virtual bool EdgeGetClosestPoint(HeeksObj* edge, const double *pos, double *closest_pnt, double &u);
 
 	// loop functions
 	virtual long LoopGetEdgeCount(HeeksObj* loop);

@@ -321,6 +321,11 @@ bool CHeeksCADInterface::Digitize(const wxPoint &point, double* pos)
 	return true;
 }
 
+bool CHeeksCADInterface::GetLastClickPosition(double *pos)
+{
+	return wxGetApp().m_select_mode->GetLastClickPosition(pos);
+}
+
 HeeksObj* CHeeksCADInterface::GetFirstObject()
 {
 	return wxGetApp().GetFirstChild();
@@ -711,6 +716,17 @@ void CHeeksCADInterface::FaceGetConeParams(HeeksObj* face, double *pos, double *
 	if(half_angle)*half_angle = c.SemiAngle();
 }
 
+void CHeeksCADInterface::FaceGetTorusParams(HeeksObj* face, double *pos, double *dir, double *majorRadius, double *minorRadius)
+{
+	gp_Torus t;
+	((CFace*)face)->GetTorusParams(t);
+
+	if(pos)extract(t.Location(), pos);
+	if(dir)extract(t.Axis().Direction(), dir);
+	if(majorRadius)*majorRadius = t.MajorRadius();
+	if(minorRadius)*minorRadius = t.MinorRadius();
+}
+
 bool CHeeksCADInterface::FaceGetNurbSurfaceParams(HeeksObj* face, CNurbSurfaceParams* params)
 {
 	return ((CFace*)face)->GetNurbSurfaceParams(params);
@@ -884,6 +900,17 @@ double CHeeksCADInterface::EdgeGetLength(HeeksObj* edge)
 double CHeeksCADInterface::EdgeGetLength2(HeeksObj* edge, double uStart, double uEnd)
 {
 	return ((CEdge*)edge)->Length2(uStart, uEnd);
+}
+
+bool CHeeksCADInterface::EdgeGetClosestPoint(HeeksObj* edge, const double *pos, double *closest_pnt, double &u)
+{
+	gp_Pnt cp;
+	if(((CEdge*)edge)->GetClosestPoint(make_point(pos), cp, u))
+	{
+		extract(cp, closest_pnt);
+		return true;
+	}
+	return false;
 }
 
 long CHeeksCADInterface::LoopGetEdgeCount(HeeksObj* loop)
