@@ -1413,23 +1413,77 @@ void CoordinateSystem::AnglesToAxes(const double &v_angle, const double
 	y = gp_Dir(0, 1, 0).Transformed(mat);
 } 
 
-static double origin[3];
-static double x_axis_pos[3];
-static double y_axis_pos[3];
+static CoordinateSystem* coordinate_system_for_PickFrom3Points = NULL;
+static gp_Vec y_for_PickFrom3Points(0, 1, 0);
+static gp_Vec z_for_PickFrom3Points(0, 0, 1);
+static const double unit_vec_tol = 0.0000000001;
 
-static void on_set_origin(const double* pos){ memcpy(origin, pos, 3*sizeof(double));}
-static void on_set_x(const double* pos){ memcpy(x_axis_pos, pos, 3*sizeof(double));}
-static void on_set_y(const double* pos){ memcpy(y_axis_pos, pos, 3*sizeof(double));}
+static void on_set_origin(const double* pos)
+{
+	coordinate_system_for_PickFrom3Points->m_o = make_point(pos);
+	wxGetApp().Repaint();
+}
+
+static void on_set_x(const double* pos){
+	gp_Pnt p = make_point(pos);
+	if(!p.IsEqual(coordinate_system_for_PickFrom3Points->m_o, wxGetApp().m_geom_tol))
+	{
+		coordinate_system_for_PickFrom3Points->m_x = make_vector(coordinate_system_for_PickFrom3Points->m_o, p);
+		if(coordinate_system_for_PickFrom3Points->m_x.IsEqual(z_for_PickFrom3Points, unit_vec_tol) || coordinate_system_for_PickFrom3Points->m_x.IsEqual(-z_for_PickFrom3Points, unit_vec_tol))
+		{
+			coordinate_system_for_PickFrom3Points->m_y = y_for_PickFrom3Points ^ coordinate_system_for_PickFrom3Points->m_x;
+		}
+		else
+		{
+			coordinate_system_for_PickFrom3Points->m_y = z_for_PickFrom3Points ^ coordinate_system_for_PickFrom3Points->m_x;
+		}
+		wxGetApp().Repaint();
+	}
+}
+
+static void on_set_y(const double* pos){
+	gp_Pnt p = make_point(pos);
+	if(!p.IsEqual(coordinate_system_for_PickFrom3Points->m_o, wxGetApp().m_geom_tol))
+	{
+		gp_Dir y = make_vector(coordinate_system_for_PickFrom3Points->m_o, p);
+		if(!y.IsEqual(coordinate_system_for_PickFrom3Points->m_x, unit_vec_tol) && !y.IsEqual(-coordinate_system_for_PickFrom3Points->m_x, unit_vec_tol))
+		{
+			gp_Vec z = coordinate_system_for_PickFrom3Points->m_x ^ y;
+			coordinate_system_for_PickFrom3Points->m_y = z ^ coordinate_system_for_PickFrom3Points->m_x;
+			wxGetApp().Repaint();
+		}
+	}
+
+}
+
+static void OnGlCommandsForPickFrom3Points()
+{
+	CoordinateSystem::rendering_current = true;
+	coordinate_system_for_PickFrom3Points->glCommands(false, true, false);
+	CoordinateSystem::rendering_current = false;
+}
 
 void CoordinateSystem::PickFrom3Points()
 {
-	if(!wxGetApp().PickPosition(_("Pick the location"), origin, on_set_origin))return;
-	if(!wxGetApp().PickPosition(_("Pick a point on the x-axis"), x_axis_pos, on_set_x))return;
-	if(!wxGetApp().PickPosition(_("Pick a point where y > 0"), y_axis_pos, on_set_y))return;
+	CoordinateSystem temp = *this;
+	coordinate_system_for_PickFrom3Points = &temp;
+	y_for_PickFrom3Points = m_y;
+	z_for_PickFrom3Points = m_x ^ m_y;
+	m_visible = false;
+	wxGetApp().RegisterOnGLCommands(OnGlCommandsForPickFrom3Points);
 
-	coord_system_for_Tool->m_o = make_point(origin);
-	coord_system_for_Tool->m_x = make_vector(coord_system_for_Tool->m_o, make_point(x_axis_pos));
-	coord_system_for_Tool->m_y = make_vector(coord_system_for_Tool->m_o, make_point(y_axis_pos));
+	double pos[3];
+
+	if(wxGetApp().PickPosition(_("Pick the location"), pos, on_set_origin))
+	{
+		if(wxGetApp().PickPosition(_("Pick a point on the x-axis"), pos, on_set_x))
+		{
+			wxGetApp().PickPosition(_("Pick a point where y > 0"), pos, on_set_y);
+		}
+	}
+
+	*this = temp;
+	wxGetApp().RemoveOnGLCommands(OnGlCommandsForPickFrom3Points);
 
 	wxGetApp().Repaint();
 }

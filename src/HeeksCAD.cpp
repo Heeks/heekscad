@@ -2751,6 +2751,7 @@ int HeeksCADapp::PickObjects(const wxChar* str, long marking_filter, bool just_o
 	CInputMode* save_mode = input_mode_object;
 	m_select_mode->m_prompt_when_doing_a_main_loop.assign(str);
 	m_select_mode->m_doing_a_main_loop = true;
+	bool save_just_one = m_select_mode->m_just_one;
 	m_select_mode->m_just_one = just_one;
 	SetInputMode(m_select_mode);
 
@@ -2764,6 +2765,7 @@ int HeeksCADapp::PickObjects(const wxChar* str, long marking_filter, bool just_o
 	// restore marking filter
 	m_marked_list->m_filter = save_filter;
 
+	m_select_mode->m_just_one = save_just_one;
 	m_select_mode->m_doing_a_main_loop = false;
 	SetInputMode(save_mode); // update tool bar
 	return 1;
