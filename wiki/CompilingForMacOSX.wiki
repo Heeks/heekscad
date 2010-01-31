@@ -14,7 +14,7 @@ Install wxgtk,gtkglext:
 {{{
 "fink install wxgtk2.8"
 "fink install wxgtk2.8-shlibs"
-"fink install gtkglext"
+"fink install gtkglext1"
 }}}
 fink will ask to install a ton of dependencies- answer 'yes' 
 
