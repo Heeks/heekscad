@@ -4,13 +4,29 @@
 
 You definitely have to install XCode. And there are some other necessary things. OpenCASCADE needs a X11 Tcl and HeeksCAD needs a X11 wxWidgets like wxGTK and Python. All three can easily be installed from [http://fink.sf.net Fink].
 
-Actually, the only version of wxwidgets known to work is wxGTK (wxgtk2.8 from fink) (the native mac version at least is known to NOT work (the mac libraries shares the same Handle name with OCC in the code or something)). You also need gtkglext for opengl support. --celeron55
+Actually, the only version of wxwidgets known to work is wxGTK (wxgtk2.8 from fink http://www.finkproject.org/) (the native mac version at least is known to NOT work (the mac libraries shares the same Handle name with OCC in the code or something)). You also need gtkglext for opengl support. --celeron55
+
+{{{
+
+For OSX 10.6 you need to do a source install (though it is relatively easy: http://www.finkproject.org/download/srcdist.php)
+Previous versions can use the links at http://www.finkproject.org/download/index.php?phpLang=en
+
+Install wxgtk,gtkglext:
+"fink install wxgtk2.8"
+"fink install wxgtk2.8-shlibs"
+"fink install gtkglext"
+
+fink will ask to install a ton of dependencies- answer 'yes' 
+
+}}}
+
+
 
 = OpenCASCADE =
 
 Download and unpack [http://www.opencascade.org/getocc/download/loadocc/ OpenCASCADE].
 
-Youn need to patch the DRAWEXE Makefile
+You need to patch the DRAWEXE Makefile
 
 {{{
 --- adm/make/DRAWEXE/Makefile.am.orig 2008-09-06 14:15:14.000000000 +0200
