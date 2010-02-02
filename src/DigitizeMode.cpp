@@ -84,7 +84,7 @@ static const gp_Trsf& digitizing_matrix(bool calculate = false){
 			global_matrix_relative_to_screen = make_matrix(origin, gp_Vec(po, x1).Normalized(), gp_Vec(po, y1).Normalized());
 		}
 		else{
-			wxGetApp().m_frame->m_graphics->m_view_point.Set90PlaneDrawMatrix(global_matrix_relative_to_screen);
+			global_matrix_relative_to_screen = wxGetApp().GetDrawMatrix(!wxGetApp().m_sketch_mode);
 		}
 	}
 	return global_matrix_relative_to_screen;

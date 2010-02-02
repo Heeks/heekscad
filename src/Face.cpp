@@ -7,6 +7,8 @@
 #include "FaceTools.h"
 #include "Sketch.h"
 #include "RuledSurface.h"
+#include "HeeksFrame.h"
+#include "InputModeCanvas.h"
 
 CFace::CFace(const TopoDS_Face &face):m_topods_face(face), m_temp_attr(0){
 #if _DEBUG
@@ -230,7 +232,7 @@ class SketchOnFace:public Tool
 	// only use this if GetSurfaceType() == GeomAbs_Plane
 public:
 	const wxChar* GetTitle(){return _("Sketch On Face");}
-	wxString BitmapPath(){return _T("coordsys");}
+	wxString BitmapPath(){return _T("sketchmode");}
 	void Run(){
 		gp_Pln plane;
 		face_for_tools->GetPlaneParams(plane);
@@ -252,6 +254,7 @@ public:
 		wxGetApp().m_marked_list->Add(sketch, true);
 		wxGetApp().EnterSketchMode(sketch);
 		wxGetApp().Repaint();
+		wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
 	}
 };
 
