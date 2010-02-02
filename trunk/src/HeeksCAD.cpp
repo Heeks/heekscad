@@ -1502,24 +1502,33 @@ void HeeksCADapp::OnInputModeHelpTextChanged()
 void HeeksCADapp::glCommands(bool select, bool marked, bool no_color)
 {
 	// this is called when select is true
-	std::list<HeeksObj*>::iterator It;
-	for(It=m_objects.begin(); It!=m_objects.end() ;It++)
+
+	// for sketch mode, only allow items in the sketch to be selected
+	if(m_sketch_mode)
 	{
-		HeeksObj* object = *It;
-		if(object->OnVisibleLayer() && object->m_visible)
+		m_sketch->glCommands(select, marked || wxGetApp().m_marked_list->ObjectMarked(m_sketch), no_color);
+	}
+	else
+	{
+		std::list<HeeksObj*>::iterator It;
+		for(It=m_objects.begin(); It!=m_objects.end() ;It++)
 		{
-			if(select)glPushName((unsigned long)object);
-			(*It)->glCommands(select, marked || wxGetApp().m_marked_list->ObjectMarked(object), no_color);
+			HeeksObj* object = *It;
+			if(object->OnVisibleLayer() && object->m_visible)
+			{
+				if(select)glPushName((unsigned long)object);
+				object->glCommands(select, marked || wxGetApp().m_marked_list->ObjectMarked(object), no_color);
+				if(select)glPopName();
+			}
+		}
+
+		// draw the ruler
+		if(m_show_ruler)
+		{
+			if(select)glPushName((unsigned long)m_ruler);
+			m_ruler->glCommands(select, false, false);
 			if(select)glPopName();
 		}
-	}
-
-	// draw the ruler
-	if(m_show_ruler)
-	{
-		if(select)glPushName((unsigned long)m_ruler);
-		m_ruler->glCommands(select, false, false);
-		if(select)glPopName();
 	}
 }
 
@@ -1773,7 +1782,7 @@ void HeeksCADapp::Transform(std::list<HeeksObj*> objects,double *m)
 
 gp_Trsf HeeksCADapp::GetDrawMatrix(bool get_the_appropriate_orthogonal)
 {
-/*	if(get_the_appropriate_orthogonal){
+	if(get_the_appropriate_orthogonal){
 		// choose from the three orthoganal possibilities, the one where it's z-axis closest to the camera direction
 		gp_Vec vx, vy;
 		m_frame->m_graphics->m_view_point.GetTwoAxes(vx, vy, false, 0);
@@ -1782,7 +1791,7 @@ gp_Trsf HeeksCADapp::GetDrawMatrix(bool get_the_appropriate_orthogonal)
 			if(m_current_coordinate_system)o.Transform(m_current_coordinate_system->GetMatrix());
 			return make_matrix(o, vx, vy);
 		}
-	} */
+	}
 
 	gp_Trsf mat;
 	if(m_current_coordinate_system)mat = m_current_coordinate_system->GetMatrix();
