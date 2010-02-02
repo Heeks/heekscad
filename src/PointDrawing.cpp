@@ -44,12 +44,3 @@ void PointDrawing::clear_drawing_objects(int mode)
 	temp_object = NULL;
 	temp_object_in_list.clear();
 }
-
-HeeksObj* PointDrawing::GetOwnerForDrawingObjects()
-{
-	if(wxGetApp().m_sketch_mode)
-	{
-		return wxGetApp().GetContainer();
-	}
-	return &wxGetApp(); //Object always needs to be added somewhere
-}

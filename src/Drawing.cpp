@@ -220,6 +220,16 @@ void Drawing::GetTools(std::list<Tool*> *f_list, const wxPoint *p){
 	f_list->push_back(&get_pos_tool);
 }
 
+
+HeeksObj* Drawing::GetOwnerForDrawingObjects()
+{
+	if(wxGetApp().m_sketch_mode)
+	{
+		return wxGetApp().GetContainer();
+	}
+	return &wxGetApp(); //Object always needs to be added somewhere
+}
+
 void Drawing::SetView(int v){
 	if(v == 0){
 		current_view_stuff = null_view;

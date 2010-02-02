@@ -363,6 +363,16 @@ public:
 
 static SketchArcsToLines sketch_arcs_to_lines;
 
+class SketchEnterSketchMode: public Tool
+{
+public:
+	void Run(){wxGetApp().EnterSketchMode(sketch_for_tools);}
+	const wxChar* GetTitle(){return _("Enter Sketch Mode");}
+	wxString BitmapPath(){return _T("sketchmode");}
+};
+
+static SketchEnterSketchMode enter_sketch_mode;
+
 void CSketch::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	sketch_for_tools = this;
@@ -374,6 +384,7 @@ void CSketch::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 	// t_list->push_back(&convert_sketch_to_wire);
 	t_list->push_back(&sketch_arcs_to_lines);
 	t_list->push_back(&copy_parallel);
+	t_list->push_back(&enter_sketch_mode);
 }
 
 HeeksObj *CSketch::MakeACopy(void)const
@@ -939,3 +950,11 @@ int CSketch::Intersects(const HeeksObj *object, std::list< double > *rl) const
 	return(number_of_intersections);
 } // End Intersects() method
 
+bool CSketch::ModifyByMatrix(const double *m)
+{
+	if(m_coordinate_system && m_draw_with_transform)
+	{
+		return m_coordinate_system->ModifyByMatrix(m);
+	}
+	return ObjList::ModifyByMatrix(m);
+}

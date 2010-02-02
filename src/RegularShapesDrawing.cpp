@@ -50,7 +50,8 @@ bool RegularShapesDrawing::calculate_item(DigitizedPoint &end)
 		if(temp_object)temp_object_in_list.push_back(temp_object);
 	}
 
-	gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
+	gp_Trsf mat;
+	if(!wxGetApp().m_sketch_mode)mat = wxGetApp().GetDrawMatrix(true);
 	gp_Dir xdir = gp_Dir(1, 0, 0).Transformed(mat);
 	gp_Dir ydir = gp_Dir(0, 1, 0).Transformed(mat);
 	gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(mat);

@@ -87,6 +87,12 @@ void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
 	if(m_items_marked_at_grab.size() > 0)m_items_marked_at_grab.front()->GetScaleAboutMatrix(object_m);
 
 	MakeMatrix ( from, to, object_m, wxGetApp().m_drag_matrix );
+
+	if(wxGetApp().m_sketch_mode && wxGetApp().m_sketch->m_coordinate_system)
+	{
+		wxGetApp().m_drag_matrix = wxGetApp().m_sketch->m_coordinate_system->GetMatrix() * wxGetApp().m_drag_matrix;
+	}
+
 	wxGetApp().Repaint();
 }
 

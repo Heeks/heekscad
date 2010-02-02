@@ -129,12 +129,3 @@ void DimensionDrawing::GetProperties(std::list<Property *> *list){
 void DimensionDrawing::GetTools(std::list<Tool*> *f_list, const wxPoint *p){
 	Drawing::GetTools(f_list, p);
 }
-
-HeeksObj* DimensionDrawing::GetOwnerForDrawingObjects()
-{
-	if(wxGetApp().m_sketch_mode)
-	{
-		return wxGetApp().GetContainer();
-	}
-	return &wxGetApp(); //Object always needs to be added somewhere
-}
