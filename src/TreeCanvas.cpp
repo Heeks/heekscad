@@ -316,7 +316,7 @@ void CTreeCanvas::RenderIcon(int texture_number, int x, int y)
 		int xpos16 = m_xpos * 16;
 		int ypos16 = render_height - m_ypos * 18;
 
-#ifdef WIN32
+#if defined WIN32 || defined __APPLE__
 		float texture_left = ((float)(icon_x) + 0.5f)/256;
 		float texture_right = ((float)(icon_x) + 16.5f)/256;
 		float texture_top = ((float)(icon_y) - 0.5f)/256;
@@ -488,7 +488,7 @@ int CTreeCanvas::RenderChar(char c)
 	int posy = text_start_posy[int(c)];
 	int shift = text_start_posd[int(c)];
 
-#ifdef WIN32
+#if defined WIN32 || defined __APPLE__
 	float texture_left = ((float)(posx) + 0.5f)/256;
 	float texture_right = ((float)(posx) + 0.5f + shift)/256;
 	float texture_top = ((float)(posy) - 0.5f)/256;
