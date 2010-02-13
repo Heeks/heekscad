@@ -28,6 +28,7 @@ class TransientObject;
 
 #include "SketchOrder.h"
 
+class TopoDS_Shape;
 class TopoDS_Solid;
 class gp_Lin;
 class gp_Pnt;
@@ -133,6 +134,7 @@ public:
 	virtual HeeksObj* ExtrudeSketch(HeeksObj* sketch, double height);
 	virtual HeeksObj* LineArcsToWire(std::list<HeeksObj*> list);
 	virtual HeeksObj* MakePipe(HeeksObj* spine, HeeksObj* profile);
+	virtual bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_or_wire, bool face_not_wire);
 
 	// body functions
 	virtual long BodyGetNumFaces(HeeksObj* body);
