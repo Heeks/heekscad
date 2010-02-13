@@ -1,6 +1,6 @@
 #summary HeeksCAD tutorial : a pump housing.
 
-*HeeksCAD tutorial : a pump housing.*
+*Creating a pump housing with HeeksCAD.*
 
 = Introduction =
 An illustrated tutorial by André Pascual, introducing some of the
@@ -15,8 +15,6 @@ with just images.
   *  [http://www.linuxgraphic.org/forums/viewtopic.php?f=12&t=6073 Part 2 ]
   *  [http://www.linuxgraphic.org/forums/viewtopic.php?f=12&t=6074 Part 3 ]
   *  [http://www.linuxgraphic.org/forums/viewtopic.php?f=12&t=6075 Part 4 ]
-
-
 
 
 
