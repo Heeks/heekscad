@@ -586,6 +586,12 @@ HeeksObj* CHeeksCADInterface::LineArcsToWire(std::list<HeeksObj*> list)
 	return new CWire(wire,_T("Wire"));
 }
 
+bool CHeeksCADInterface::ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_or_wire, bool face_not_wire)
+{
+	return(::ConvertSketchToFaceOrWire( object, face_or_wire, face_not_wire ));
+}
+
+
 HeeksObj* CHeeksCADInterface::MakePipe(HeeksObj* spine, HeeksObj* profile)
 {
 	return CreatePipeFromProfile(spine,profile);
