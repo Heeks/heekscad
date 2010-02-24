@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Exec=/usr/bin/HeeksCAD
+Icon=HeeksCAD
+Terminal=false
+Name=HeeksCAD
+GenericName=HeeksCAD
+Comment=HeeksCAD is a free, open source, CAD application
+Categories=Graphics;3DGraphics;

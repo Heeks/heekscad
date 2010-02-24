@@ -1,0 +1,10 @@
+#!/bin/sh
+# Copy and edit to taste
+# 
+export MACOSX_DEPLOYMENT_TARGET=10.5
+export PREFIX=/usr/local/heekscad
+export PYTHONCFLAGS=`/sw/bin/python2.5-config --includes`
+export PYTHONLIBS=`/sw/bin/python2.5-config --ldflags`
+export RUNINPLACE=yes
+export CASROOT=/PathToMy/OpenCASCADE6.3.0/ros/mac
+export GLINCLUDES=" -I/usr/X11/include/ "
