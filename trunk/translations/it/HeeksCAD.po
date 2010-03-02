@@ -8,13 +8,12 @@ msgstr ""
 "Project-Id-Version: Heekscad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-10-25 17:15+0000\n"
-"PO-Revision-Date: 2009-11-02 18:54+0100\n"
+"PO-Revision-Date: 2010-03-02 13:08+0100\n"
 "Last-Translator: Luigi Barbati <barbati.luigi@gmail.com>\n"
 "Language-Team: Italiano <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
 
 #: C:\Users\Dan\HeeksCAD\src\AboutBox.cpp:17
 msgid "OK"
@@ -522,7 +521,7 @@ msgstr "senza titolo"
 #: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2287
 #: C:\Users\Dan\HeeksCAD\src\Ruler.cpp:330
 msgid "units"
-msgstr "unità"
+msgstr "unità di misura"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:447
 #: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2283
@@ -585,11 +584,11 @@ msgstr "Modo rotazione"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2194
 msgid "none"
-msgstr "non"
+msgstr "nessun aiuto"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2195
 msgid "input mode title"
-msgstr "Modalità inserimento titolo"
+msgstr "Modalità solo titolo"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2196
 msgid "full help"
@@ -598,7 +597,7 @@ msgstr "Aiuto completo"
 #: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2197
 #: C:\Users\Dan\HeeksCAD\src\SelectMode.cpp:57
 msgid "screen text"
-msgstr "Schermata di testo"
+msgstr "Schermata testuale di aiuto"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2199
 msgid "antialiasing"
@@ -610,11 +609,11 @@ msgstr "punto luce"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2203
 msgid "reverse mouse wheel"
-msgstr "inverte rotella del mouse"
+msgstr "inversione rotella del mouse"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2204
 msgid "reverse zooming mode"
-msgstr "inverte modalità zoom"
+msgstr "inversione modalità zoom"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2205
 msgid "Ctrl key does rotate"
@@ -662,7 +661,7 @@ msgstr "cielo e sfondo"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2218
 msgid "background mode"
-msgstr "Modo sfondo"
+msgstr "Preferenze sfondo"
 
 #: C:\Users\Dan\HeeksCAD\src\HeeksCAD.cpp:2223
 msgid "background color"
@@ -2334,7 +2333,7 @@ msgstr "Ordine"
 
 #: C:\Users\Dan\HeeksCAD\src\Sketch.cpp:212
 msgid "solidify"
-msgstr "Solidificare"
+msgstr "Solidifica"
 
 #: C:\Users\Dan\HeeksCAD\src\Sketch.cpp:251
 #: C:\Users\Dan\HeeksCAD/src/ConversionTools.h:19
@@ -2849,11 +2848,11 @@ msgstr ""
 
 #: C:\Users\Dan\HeeksCNC\src\BOM.cpp:470
 msgid "Enter gap in millimeters"
-msgstr "inserire scarto in millimetri"
+msgstr "inserire salto in millimetri"
 
 #: C:\Users\Dan\HeeksCNC\src\BOM.cpp:470
 msgid "gap"
-msgstr "Scarto"
+msgstr "Salto"
 
 #: C:\Users\Dan\HeeksCNC\src\BOM.cpp:478
 msgid "Output NC"
@@ -3109,7 +3108,7 @@ msgstr "Alzare l'altezza di sicurezza (5 millimetri)"
 #: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:116
 #: C:\Users\Dan\HeeksCNC\src\Locating.cpp:66
 msgid "standoff"
-msgstr "rettificare"
+msgstr "altezza inizio foratura"
 
 #: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:117
 msgid "dwell"
@@ -3121,7 +3120,7 @@ msgstr "Profondità"
 
 #: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:119
 msgid "peck_depth"
-msgstr "peck_profondità"
+msgstr "escursione_profondità (0-3)"
 
 #: C:\Users\Dan\HeeksCNC\src\Drilling.cpp:127
 msgid "sort_drilling_locations"
@@ -3189,7 +3188,7 @@ msgstr "Importare i dati della sonda"
 
 #: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:149
 msgid "You must select some sketches, first!"
-msgstr "È necessario selezionare alcuni schizzi, prima!"
+msgstr "È necessario selezionare almeno un disegno, prima!"
 
 #: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:255
 #: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:300
@@ -3198,7 +3197,7 @@ msgstr "Non ci sono solidi"
 
 #: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:306
 msgid "You must select some sketches first!"
-msgstr "È necessario selezionare alcuni schizzi prima"
+msgstr "È necessario selezionare almeno un disegno, prima!"
 
 #: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:361
 #: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:553
@@ -3327,7 +3326,7 @@ msgstr "ZigZag"
 
 #: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:818
 msgid "Adaptive"
-msgstr "adattativo"
+msgstr "Adattamento"
 
 #: C:\Users\Dan\HeeksCNC\src\HeeksCNC.cpp:818
 msgid "New Special Adaptive Roughing Operation..."
@@ -3640,11 +3639,11 @@ msgstr "File di foratura Excellon"
 
 #: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:61
 msgid "step over"
-msgstr "passo orizzontale"
+msgstr "passo orizzontale percorso"
 
 #: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:62
 msgid "material allowance"
-msgstr "Materiale permesso"
+msgstr "distanza percorso utensile dal bordo"
 
 #: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:63
 msgid "round corner factor"
@@ -3660,11 +3659,11 @@ msgstr "1,5 per quadrati, 1,0 per rotondi"
 
 #: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:67
 msgid "Boundary"
-msgstr "Limite o confine"
+msgstr "limite"
 
 #: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:68
 msgid "Center"
-msgstr "Centro"
+msgstr "centro"
 
 #: C:\Users\Dan\HeeksCNC\src\Pocket.cpp:69
 msgid "starting_place"
@@ -3771,19 +3770,19 @@ msgstr "Interno"
 
 #: C:\Users\Dan\HeeksCNC\src\Profile.cpp:116
 msgid "Outside or Left"
-msgstr "Al di fuori o Sinistra"
+msgstr "Esterno o Sinistra"
 
 #: C:\Users\Dan\HeeksCNC\src\Profile.cpp:117
 msgid "Inside or Right"
-msgstr "Dentro o Destra"
+msgstr "Interno o Destra"
 
 #: C:\Users\Dan\HeeksCNC\src\Profile.cpp:120
 msgid "On"
-msgstr "Acceso"
+msgstr "Sul perimetro"
 
 #: C:\Users\Dan\HeeksCNC\src\Profile.cpp:135
 msgid "tool on side"
-msgstr "strumento sul lato"
+msgstr "Posizione strumento di taglio"
 
 #: C:\Users\Dan\HeeksCNC\src\Profile.cpp:140
 msgid "Conventional"
