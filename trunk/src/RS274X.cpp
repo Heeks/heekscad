@@ -311,17 +311,24 @@ bool RS274X::ReadParameters( const std::string & parameters )
 				break;
 
 			case 'O':	// Obround
-				printf("ObRound apertures are not yet supported\n");
-				//TODO: just use a circle for now
 				{
 				// Push a circle within an outside diameter of modifier onto the list of apertures
 				Aperture aperture;
 
-				aperture.Type( Aperture::eCircular );
-				aperture.OutsideDiameter( modifier * m_units );
+				aperture.Type( Aperture::eObRound );
+				aperture.XAxisOutsideDimension( modifier * m_units );
+
+				if ((_params.size() > 0) && (_params[0] == 'X'))
+				{
+					_params.erase(0,1); // Remove the 'X'
+					aperture.YAxisOutsideDimension( double(special_strtod( _params.c_str(), &end )) * m_units );
+					_params.erase(0, end - _params.c_str());
+				} // End if - then
+
 				m_aperture_table.insert( std::make_pair( tool_number, aperture ) );
 				}
 				break;
+
 			case 'P':	// Rectangular Polygon (diamond)
 				printf("Polygon apertures are not yet supported\n");
 				return(false);
@@ -1381,6 +1388,112 @@ TopoDS_Face RS274X::Aperture::Face(const gp_Pnt & location) const
 
 			TopoDS_Face face = BRepBuilderAPI_MakeFace(wire_maker.Wire());
 			return(face);
+		}
+
+		case eObRound:
+		{
+		    if (XAxisOutsideDimension() > YAxisOutsideDimension())
+		    {
+		        // It's horozontal in orientation.  i.e. the two half circles are
+		        // at the left and right end while horozontal lines join them together.
+
+                gp_Pnt top_left( location ); top_left.SetX( top_left.X() - (XAxisOutsideDimension() / 2.0) + (YAxisOutsideDimension() / 2.0) );
+                top_left.SetY( top_left.Y() + (YAxisOutsideDimension()/2.0) );
+
+                gp_Pnt top_right( location ); top_right.SetX( top_right.X() + (XAxisOutsideDimension() / 2.0) - (YAxisOutsideDimension() / 2.0) );
+                top_right.SetY( top_right.Y() + (YAxisOutsideDimension()/2.0) );
+
+                gp_Pnt bottom_left( location ); bottom_left.SetX( bottom_left.X() - (XAxisOutsideDimension() / 2.0) + (YAxisOutsideDimension() / 2.0) );
+                bottom_left.SetY( bottom_left.Y() - (YAxisOutsideDimension()/2.0) );
+
+                gp_Pnt bottom_right( location ); bottom_right.SetX( bottom_right.X() + (XAxisOutsideDimension() / 2.0) - (YAxisOutsideDimension() / 2.0) );
+                bottom_right.SetY( bottom_right.Y() - (YAxisOutsideDimension()/2.0) );
+
+                gp_Pnt left_centre( location ); left_centre.SetX(left_centre.X() - (XAxisOutsideDimension() / 2.0) );
+                gp_Pnt right_centre( location ); right_centre.SetX(right_centre.X() + (XAxisOutsideDimension() / 2.0) );
+
+                Handle(Geom_TrimmedCurve) left_half_circle = GC_MakeArcOfCircle(top_left, left_centre, bottom_left );
+                Handle(Geom_TrimmedCurve) bottom_segment = GC_MakeSegment(bottom_left, bottom_right);
+                Handle(Geom_TrimmedCurve) right_half_circle = GC_MakeArcOfCircle(bottom_right, right_centre, top_right );
+                Handle(Geom_TrimmedCurve) top_segment = GC_MakeSegment(top_right, top_left);
+
+                TopoDS_Edge edge1 = BRepBuilderAPI_MakeEdge(left_half_circle);
+                TopoDS_Edge edge2 = BRepBuilderAPI_MakeEdge(bottom_segment);
+                TopoDS_Edge edge3 = BRepBuilderAPI_MakeEdge(right_half_circle);
+                TopoDS_Edge edge4 = BRepBuilderAPI_MakeEdge(top_segment);
+
+                BRepBuilderAPI_MakeWire wire_maker;
+
+                wire_maker.Add(edge1);
+                wire_maker.Add(edge2);
+                wire_maker.Add(edge3);
+                wire_maker.Add(edge4);
+
+                TopoDS_Face face = BRepBuilderAPI_MakeFace(wire_maker.Wire());
+                return(face);
+		    }
+		    else if (XAxisOutsideDimension() < YAxisOutsideDimension())
+		    {
+		        // It's vertical in orientation.  i.e. the two half circles are at
+		        // the top and bottom while vertical lines join them together.
+
+		        gp_Pnt top_left( location ); top_left.SetX( top_left.X() - (XAxisOutsideDimension() / 2.0) );
+                top_left.SetY( top_left.Y() + (YAxisOutsideDimension()/2.0) - (XAxisOutsideDimension() / 2.0) );
+
+                gp_Pnt top_right( location ); top_right.SetX( top_right.X() + (XAxisOutsideDimension() / 2.0) );
+                top_right.SetY( top_right.Y() + (YAxisOutsideDimension()/2.0) - (XAxisOutsideDimension() / 2.0) );
+
+                gp_Pnt bottom_left( location ); bottom_left.SetX( bottom_left.X() - (XAxisOutsideDimension() / 2.0) );
+                bottom_left.SetY( bottom_left.Y() - (YAxisOutsideDimension()/2.0) + (XAxisOutsideDimension() / 2.0));
+
+                gp_Pnt bottom_right( location ); bottom_right.SetX( bottom_right.X() + (XAxisOutsideDimension() / 2.0) );
+                bottom_right.SetY( bottom_right.Y() - (YAxisOutsideDimension()/2.0) + (XAxisOutsideDimension() / 2.0));
+
+                gp_Pnt top_centre( location ); top_centre.SetY(top_centre.Y() + (YAxisOutsideDimension() / 2.0) );
+                gp_Pnt bottom_centre( location ); bottom_centre.SetY(bottom_centre.Y() - (YAxisOutsideDimension() / 2.0) );
+
+                Handle(Geom_TrimmedCurve) top_half_circle = GC_MakeArcOfCircle(top_left, top_centre, top_right );
+                Handle(Geom_TrimmedCurve) right_segment = GC_MakeSegment(top_right, bottom_right);
+                Handle(Geom_TrimmedCurve) bottom_half_circle = GC_MakeArcOfCircle(bottom_right, bottom_centre, bottom_left );
+                Handle(Geom_TrimmedCurve) left_segment = GC_MakeSegment(bottom_left, top_left);
+
+                TopoDS_Edge edge1 = BRepBuilderAPI_MakeEdge(top_half_circle);
+                TopoDS_Edge edge2 = BRepBuilderAPI_MakeEdge(right_segment);
+                TopoDS_Edge edge3 = BRepBuilderAPI_MakeEdge(bottom_half_circle);
+                TopoDS_Edge edge4 = BRepBuilderAPI_MakeEdge(left_segment);
+
+                BRepBuilderAPI_MakeWire wire_maker;
+
+                wire_maker.Add(edge1);
+                wire_maker.Add(edge2);
+                wire_maker.Add(edge3);
+                wire_maker.Add(edge4);
+
+                TopoDS_Face face = BRepBuilderAPI_MakeFace(wire_maker.Wire());
+                return(face);
+		    }
+		    else
+		    {
+                    // It's a circle rather than an obround.
+
+                    gp_Pnt left( location ); left.SetX( left.X() - (OutsideDiameter()/2.0) );
+                    gp_Pnt right( location ); right.SetX( right.X() + (OutsideDiameter()/2.0) );
+                    gp_Circ circ(gp_Ax2(location,gp_Dir(0,0,-1)), (OutsideDiameter()/2.0));
+
+                    Handle(Geom_TrimmedCurve) left_half = GC_MakeArcOfCircle(circ, left, right, true );
+                    Handle(Geom_TrimmedCurve) right_half = GC_MakeArcOfCircle(circ, right, left, true );
+
+                    TopoDS_Edge left_edge = BRepBuilderAPI_MakeEdge(left_half);
+                    TopoDS_Edge right_edge = BRepBuilderAPI_MakeEdge(right_half);
+
+                    BRepBuilderAPI_MakeWire wire_maker;
+
+                    wire_maker.Add(left_edge);
+                    wire_maker.Add(right_edge);
+
+                    TopoDS_Face face = BRepBuilderAPI_MakeFace(wire_maker.Wire());
+                    return(face);
+		    }
 		}
 
 		case eRectangular:
