@@ -102,6 +102,12 @@ void CShape::KillGLLists()
 		m_gl_list = 0;
 		m_box = CBox();
 	}
+
+	for(HeeksObj* object = m_faces->GetFirstChild(); object; object = m_faces->GetNextChild())
+	{
+		CFace* f = (CFace*)object;
+		f->KillMarkingGLList();
+	}
 }
 
 void CShape::create_faces_and_edges()
@@ -119,13 +125,17 @@ void CShape::glCommands(bool select, bool marked, bool no_color)
 {
 	Material(m_color).glMaterial(1.0);
 
-	if(m_gl_list)
+	for(HeeksObj* object = m_faces->GetFirstChild(); object; object = m_faces->GetNextChild())
 	{
-		glCallList(m_gl_list);
+		CFace* f = (CFace*)object;
+		f->MakeSureMarkingGLListExists();
 	}
-	else{
+
+	if(!m_gl_list)
+	{
+		// make the display list
 		m_gl_list = glGenLists(1);
-		glNewList(m_gl_list, GL_COMPILE_AND_EXECUTE);
+		glNewList(m_gl_list, GL_COMPILE);
 
 		double pixels_per_mm = wxGetApp().GetPixelScale();
 
@@ -147,6 +157,19 @@ void CShape::glCommands(bool select, bool marked, bool no_color)
 
 		glEndList();
 	}
+
+	// update faces marking display list
+	for(HeeksObj* object = m_faces->GetFirstChild(); object; object = m_faces->GetNextChild())
+	{
+		CFace* f = (CFace*)object;
+		f->UpdateMarkingGLList(wxGetApp().m_marked_list->ObjectMarked(f));
+	}
+
+	if(m_gl_list)
+	{
+		// draw the display list
+		glCallList(m_gl_list);
+	}
 }
 
 void CShape::GetBox(CBox &box)
@@ -161,11 +184,10 @@ void CShape::GetBox(CBox &box)
 	box.Insert(m_box);
 }
 
+static CShape* shape_for_tools = NULL;
+
 class OffsetShapeTool:public Tool{
 public:
-	CShape* m_shape;
-	OffsetShapeTool(CShape* shape):m_shape(shape){}
-
 	// Tool's virtual functions
 	void Run(){
 		double offset_value = 2.0;
@@ -175,7 +197,7 @@ public:
 		{
 			try
 			{
-				TopoDS_Shape new_shape = BRepOffsetAPI_MakeOffsetShape(m_shape->Shape(), offset_value, wxGetApp().m_geom_tol);
+				TopoDS_Shape new_shape = BRepOffsetAPI_MakeOffsetShape(shape_for_tools->Shape(), offset_value, wxGetApp().m_geom_tol);
 
 #ifdef TESTNEWSHAPE
 				//This will end up throwing 90% of the exceptions caused by a bad offset
@@ -183,9 +205,9 @@ public:
 				BRepMesh::Mesh(new_shape, 1.0);
 #endif
 
-				HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of 'Offset Shape'"), SOLID_TYPE_UNKNOWN, m_shape->m_color);
-				m_shape->Owner()->Add(new_object, NULL);
-				m_shape->Owner()->Remove(m_shape);
+				HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of 'Offset Shape'"), SOLID_TYPE_UNKNOWN, shape_for_tools->m_color);
+				shape_for_tools->Owner()->Add(new_object, NULL);
+				shape_for_tools->Owner()->Remove(shape_for_tools);
 				config.Write(_T("OffsetShapeValue"), offset_value);
 			}
 			catch (Standard_Failure) {
@@ -196,14 +218,13 @@ public:
 	}
 	const wxChar* GetTitle(){ return _("Offset Shape");}
 	wxString BitmapPath(){return _T("offsetsolid");}
-	const wxChar* GetToolTip(){return _("Offset the shape");}
 };
 
-static OffsetShapeTool offset_shape_tool(NULL);
+static OffsetShapeTool offset_shape_tool;
 
 void CShape::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
-	offset_shape_tool.m_shape = this;
+	shape_for_tools = this;
 	t_list->push_back(&offset_shape_tool);
 }
 

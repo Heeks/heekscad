@@ -22,6 +22,7 @@ private:
 	double m_normal_z;
 	bool m_orientation;
 #endif
+	int m_marking_gl_list; // simply has material commands, inserted in the parent body's display list
 
 public:
 	CBox m_box;
@@ -48,6 +49,7 @@ public:
 	void GetProperties(std::list<Property *> *list);
 	bool UsesID(){return true;}
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
+	void GetGripperPositionsTransformed(std::list<GripData> *list, bool just_for_endof);
 
 	const TopoDS_Face &Face(){return m_topods_face;}
 	gp_Dir GetMiddleNormal(gp_Pnt *pos = NULL)const;
@@ -70,6 +72,9 @@ public:
 	void GetUVBox(double *uv_box);
 	void GetSurfaceUVPeriod(double *uv, bool *isUPeriodic, bool *isVPeriodic);
 	CShape* GetParentBody();
+	void MakeSureMarkingGLListExists();
+	void KillMarkingGLList();
+	void UpdateMarkingGLList(bool marked);
 };
 
 class FaceToSketchTool:public Tool
