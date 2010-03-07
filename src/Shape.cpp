@@ -159,10 +159,14 @@ void CShape::glCommands(bool select, bool marked, bool no_color)
 	}
 
 	// update faces marking display list
-	for(HeeksObj* object = m_faces->GetFirstChild(); object; object = m_faces->GetNextChild())
-	{
-		CFace* f = (CFace*)object;
-		f->UpdateMarkingGLList(wxGetApp().m_marked_list->ObjectMarked(f));
+	GLint currentListIndex;
+    glGetIntegerv(GL_LIST_INDEX, &currentListIndex);
+    if(currentListIndex == 0){
+		for(HeeksObj* object = m_faces->GetFirstChild(); object; object = m_faces->GetNextChild())
+		{
+			CFace* f = (CFace*)object;
+			f->UpdateMarkingGLList(wxGetApp().m_marked_list->ObjectMarked(f));
+		}
 	}
 
 	if(m_gl_list)
