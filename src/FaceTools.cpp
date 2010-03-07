@@ -48,6 +48,17 @@ void DrawFaceWithCommands(TopoDS_Face face)
 	glEnd();
 }
 
+gp_Dir GetFaceNormalAtUV(const TopoDS_Face &face, double u, double v, gp_Pnt *pos){
+	if(face.IsNull()) return gp_Dir(0, 0, 1);
+	Handle(Geom_Surface) surf=BRep_Tool::Surface(face);          // get surface properties
+	GeomLProp_SLProps props(surf, u, v, 1, 0.01);          // get surface normal
+	if(!props.IsNormalDefined())return gp_Dir(0, 0, 1);
+	gp_Dir norm=props.Normal();                         // check orientation
+	if(pos)*pos = props.Value();
+	if(face.Orientation()==TopAbs_REVERSED) norm.Reverse();
+	return norm;
+}
+
 void DrawFace(TopoDS_Face face,void(*callbackfunc)(const double* x, const double* n), bool just_one_average_normal)
 {
 	double x[9], n[9];
@@ -59,7 +70,80 @@ void DrawFace(TopoDS_Face face,void(*callbackfunc)(const double* x, const double
 	Handle_Poly_Triangulation facing = BRep_Tool::Triangulation(face,L);
 	gp_Trsf tr = L;
 
-	if(!facing.IsNull()){
+	if(facing.IsNull()){
+#if 0
+		BRepAdaptor_Surface surface(face, Standard_True);
+		double u0 = surface.FirstUParameter();
+		double u1 = surface.LastUParameter();
+		double v0 = surface.FirstVParameter();
+		double v1 = surface.LastVParameter();
+
+		const int numi = 10;
+		const int numj = 10;
+
+		for(int i = 0; i<numi; i++)
+		{
+			for(int j = 0; j<numj; j++)
+			{
+				double uA = -1.2 + 2.5 *(double)i / numi;
+				double uB = -1.2 + 2.5 *(double)(i+1) / numi;
+				double vA = 10* (double)j / numj;
+				double vB = 10*(double)(j+1) / numj;
+				gp_Pnt p0, p1, p2, p3;
+				gp_Dir n0 = GetFaceNormalAtUV(face, uA, vA, &p0);
+				gp_Dir n1 = GetFaceNormalAtUV(face, uB, vA, &p1);
+				gp_Dir n2 = GetFaceNormalAtUV(face, uB, vB, &p2);
+				gp_Dir n3 = GetFaceNormalAtUV(face, uA, vB, &p3);
+
+				x[0] = p0.X();
+				x[1] = p0.Y();
+				x[2] = p0.Z();
+				x[3] = p1.X();
+				x[4] = p1.Y();
+				x[5] = p1.Z();
+				x[6] = p2.X();
+				x[7] = p2.Y();
+				x[8] = p2.Z();
+
+				n[0] = n0.X();
+				n[1] = n0.Y();
+				n[2] = n0.Z();
+				n[3] = n1.X();
+				n[4] = n1.Y();
+				n[5] = n1.Z();
+				n[6] = n2.X();
+				n[7] = n2.Y();
+				n[8] = n2.Z();
+
+				(*callbackfunc)(x, n);
+
+				x[0] = p0.X();
+				x[1] = p0.Y();
+				x[2] = p0.Z();
+				x[3] = p2.X();
+				x[4] = p2.Y();
+				x[5] = p2.Z();
+				x[6] = p3.X();
+				x[7] = p3.Y();
+				x[8] = p3.Z();
+
+				n[0] = n0.X();
+				n[1] = n0.Y();
+				n[2] = n0.Z();
+				n[3] = n2.X();
+				n[4] = n2.Y();
+				n[5] = n2.Z();
+				n[6] = n3.X();
+				n[7] = n3.Y();
+				n[8] = n3.Z();
+
+				(*callbackfunc)(x, n);
+			}
+		}
+#endif
+	}
+	else
+	{
 		Poly_Connect pc(facing);	
 		const TColgp_Array1OfPnt& Nodes = facing->Nodes();
 		const Poly_Array1OfTriangle& triangles = facing->Triangles();

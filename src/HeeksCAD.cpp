@@ -92,6 +92,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_background_mode = BackgroundModeOneColor;
 	current_color = HeeksColor(0, 0, 0);
 	construction_color = HeeksColor(0, 0, 255);
+	face_selection_color = HeeksColor(0, 0, 0);
 	input_mode_object = NULL;
 	cur_mouse_pos.x = 0;
 	cur_mouse_pos.y = 0;
@@ -287,6 +288,11 @@ bool HeeksCADapp::OnInit()
 #endif
 		construction_color = HeeksColor((unsigned char)r, (unsigned char)g, (unsigned char)b);
 	}
+	{
+		int color = HeeksColor(0, 255, 0).COLORREF_color();
+		config.Read(_T("FaceSelectionColor"), &color);
+		face_selection_color = HeeksColor(color);
+	}
 	config.Read(_T("RotateMode"), &m_rotate_mode);
 	config.Read(_T("Antialiasing"), &m_antialiasing);
 	config.Read(_T("GridMode"), &grid_mode);
@@ -420,6 +426,7 @@ int HeeksCADapp::OnExit(){
 		config.Write(key, background_color[i].COLORREF_color());
 	}
 	config.Write(_T("BackgroundMode"), (int)m_background_mode);
+	config.Write(_T("FaceSelectionColor"), face_selection_color.COLORREF_color());
 	config.Write(_T("CurrentColor"), wxString::Format( _T("%d %d %d"), current_color.red, current_color.green, current_color.blue));
 	config.Write(_T("ConstructionColor"), wxString::Format(_T("%d %d %d"), construction_color.red, construction_color.green, construction_color.blue));
 	config.Write(_T("RotateMode"), m_rotate_mode);
@@ -1865,6 +1872,12 @@ void on_set_background_mode(int value, HeeksObj* object)
 	wxGetApp().m_frame->m_options->RefreshByRemovingAndAddingAll();
 }
 
+void on_set_face_color(HeeksColor value, HeeksObj* object)
+{
+	wxGetApp().face_selection_color = value;
+	wxGetApp().Repaint();
+}
+
 void on_set_current_color(HeeksColor value, HeeksObj* object)
 {
 	wxGetApp().current_color = value;
@@ -2366,6 +2379,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 		choices.push_back ( wxString ( _("colored alpha blending") ) );
 		view_options->m_list.push_back ( new PropertyChoice ( _("grid mode"),  choices, grid_mode, NULL, on_set_grid_mode ) );
 	}
+	view_options->m_list.push_back ( new PropertyColor ( _("face selection color"), face_selection_color, NULL, on_set_face_color ) );
 	view_options->m_list.push_back( new PropertyCheck(_("perspective"), m_frame->m_graphics->m_view_point.GetPerspective(), NULL, on_set_perspective));
 
 	{

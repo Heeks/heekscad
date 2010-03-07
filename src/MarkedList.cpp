@@ -191,15 +191,6 @@ void MarkedList::ObjectsInWindow( wxRect window, MarkedObject* marked_object, bo
 	free(data);
 }
 
-void MarkedList::glCommands(){
-	std::list<HeeksObj*>::iterator Iter ;
-	int object_count = 0;
-	for(Iter = m_list.begin(); Iter != m_list.end(); Iter++, object_count++){
-		HeeksObj *object = (*Iter);
-		object->glCommands(true, false, false);
-	}
-}
-
 void MarkedList::Add(std::list<HeeksObj *> &list, bool call_OnChanged){
 	std::list<HeeksObj *>::iterator It;
 	for(It = list.begin(); It != list.end(); It++){
