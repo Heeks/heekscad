@@ -87,6 +87,7 @@ public:
 #define NUM_BACKGROUND_COLORS 10
 	HeeksColor background_color[NUM_BACKGROUND_COLORS];
 	BackgroundMode m_background_mode;
+	HeeksColor face_selection_color;
 	bool m_gl_font_initialized;
 	int m_rotate_mode;
 	bool m_antialiasing;
