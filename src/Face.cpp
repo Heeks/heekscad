@@ -22,6 +22,7 @@ CFace::CFace(const TopoDS_Face &face):m_topods_face(face), m_temp_attr(0){
 	m_normal_z = norm.Z();
 	m_orientation = Orientation();
 #endif
+	m_marking_gl_list = 0;
 }
 
 CFace::~CFace(){
@@ -29,10 +30,16 @@ CFace::~CFace(){
 
 void CFace::glCommands(bool select, bool marked, bool no_color){
 	bool owned_by_solid = false;
-	if(GetParentBody()) {
+	if(CShape* parent_body = GetParentBody()) {
 		// using existing BRepMesh::Mesh
 		// use solid's colour
 		owned_by_solid = true;
+
+		// add a marking display list
+		if(m_marking_gl_list)
+		{
+			glCallList(m_marking_gl_list);
+		}
 	}
 	else {
 		// clean mesh
@@ -133,14 +140,7 @@ gp_Dir CFace::GetMiddleNormal(gp_Pnt *pos)const{
 }
 
 gp_Dir CFace::GetNormalAtUV(double u, double v, gp_Pnt *pos)const{
-	if(m_topods_face.IsNull()) return gp_Dir(0, 0, 1);
-	Handle(Geom_Surface) surf=BRep_Tool::Surface(m_topods_face);          // get surface properties
-	GeomLProp_SLProps props(surf, u, v, 1, 0.01);          // get surface normal
-	if(!props.IsNormalDefined())return gp_Dir(0, 0, 1);
-	gp_Dir norm=props.Normal();                         // check orientation
-	if(pos)*pos = props.Value();
-	if(m_topods_face.Orientation()==TopAbs_REVERSED) norm.Reverse();
-	return norm;
+	return GetFaceNormalAtUV(m_topods_face, u, v, pos);
 }
 
 bool CFace::GetUVAtPoint(const gp_Pnt &pos, double *u, double *v)const{
@@ -280,6 +280,14 @@ void CFace::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 	if(GetSurfaceType() == GeomAbs_Plane)t_list->push_back(&make_coordsys);
 	if(GetSurfaceType() == GeomAbs_Plane)t_list->push_back(&sketch_on_face);
 	t_list->push_back(&extrude_face);
+}
+
+void CFace::GetGripperPositionsTransformed(std::list<GripData> *list, bool just_for_endof)
+{
+	if(GetParentBody() == NULL)
+	{
+		HeeksObj::GetGripperPositionsTransformed(list, just_for_endof);
+	}
 }
 
 int CFace::GetSurfaceType()
@@ -590,3 +598,52 @@ CShape* CFace::GetParentBody()
 	return (CShape*)(Owner()->Owner());
 }
 
+void CFace::MakeSureMarkingGLListExists()
+{
+	// create a marking display list
+	if(!m_marking_gl_list)
+	{
+		CShape* parent_body = GetParentBody();
+		if(parent_body)
+		{
+			m_marking_gl_list = glGenLists(1);
+			glNewList(m_marking_gl_list, GL_COMPILE_AND_EXECUTE);
+
+			// use the parent body's colour
+			Material(parent_body->m_color).glMaterial(1.0);
+
+			glEndList();
+		}
+	}
+}
+
+void CFace::KillMarkingGLList()
+{
+	if (m_marking_gl_list)
+	{
+		glDeleteLists(m_marking_gl_list, 1);
+		m_marking_gl_list = 0;
+	}
+}
+
+void CFace::UpdateMarkingGLList(bool marked)
+{
+	if(m_marking_gl_list)
+	{
+		glNewList(m_marking_gl_list, GL_COMPILE);
+
+		if(marked)
+		{
+			Material(wxGetApp().face_selection_color).glMaterial(1.0);
+		}
+		else
+		{
+			// use the parent body's colour
+			CShape* parent_body = GetParentBody();
+			if(parent_body)Material(parent_body->m_color).glMaterial(1.0);
+			else Material().glMaterial(1.0);
+		}
+
+		glEndList();
+	}
+}
