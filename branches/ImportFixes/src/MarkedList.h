@@ -35,7 +35,6 @@ public:
 	virtual ~MarkedList(void);
 
 	void create_grippers();
-	void glCommands();
 	void Add(std::list<HeeksObj *> &obj_list, bool call_OnChanged);
 	void Add(HeeksObj *object, bool call_OnChanged);
 	void Remove(const std::list<HeeksObj *> &obj_list, bool call_OnChanged);
