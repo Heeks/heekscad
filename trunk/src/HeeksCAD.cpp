@@ -143,6 +143,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_printData = NULL;
 	m_pageSetupData = NULL;
 	m_file_open_or_import_type = FileOpenOrImportTypeOther;
+	m_file_open_matrix = NULL;
 	m_min_correlation_factor = 0.75;
 	m_max_scale_threshold = 1.5;
 	m_number_of_sample_points = 10;
@@ -915,6 +916,12 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 
 	m_in_OpenFile = true;
 	m_file_open_or_import_type = FileOpenOrImportTypeOther;
+	double file_open_matrix[16];
+	if(import_not_open && wxGetApp().m_current_coordinate_system)
+	{
+		extract(wxGetApp().m_current_coordinate_system->GetMatrix(), file_open_matrix);
+		m_file_open_matrix = file_open_matrix;
+	}
 
 	// returns true if file open was successful
 	wxString wf(filepath);
@@ -977,6 +984,7 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 		Changed();
 	}
 
+	m_file_open_matrix = NULL;
 	m_in_OpenFile = false;
 
 	return open_succeeded;
