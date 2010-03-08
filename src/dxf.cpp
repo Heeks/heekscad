@@ -1097,6 +1097,11 @@ void HeeksDxfRead::OnReadEllipse(const double* c, double major_radius, double mi
 
 void HeeksDxfRead::AddObject(HeeksObj *object)
 {
+	if(wxGetApp().m_in_OpenFile && wxGetApp().m_file_open_matrix)
+	{
+		object->ModifyByMatrix(wxGetApp().m_file_open_matrix);
+	}
+
 	if(m_make_as_sketch)
 	{
 		// Check to see if we've already added a sketch for the current layer name.  If not
