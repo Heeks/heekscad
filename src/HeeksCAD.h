@@ -160,6 +160,7 @@ public:
 	wxPrintData *m_printData;
 	wxPageSetupDialogData* m_pageSetupData;
 	FileOpenOrImportType m_file_open_or_import_type;
+	double* m_file_open_matrix;
 	double m_view_units; // units to display to the user ( but everything is stored as mm ), 1.0 for mm, 25.4 for inches
 
 	double m_min_correlation_factor;
