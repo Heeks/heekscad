@@ -154,6 +154,7 @@ void CDxfWrite::WriteEllipse(const double* c, double major_radius, double minor_
 CDxfRead::CDxfRead(const wxChar* filepath)
 {
 	// start the file
+	memset( m_unused_line, '\0', sizeof(m_unused_line) );
 	m_fail = false;
 	m_eUnits = eMillimeters;
 	m_layer_name = _T("0");	// Default layer name
@@ -164,6 +165,7 @@ CDxfRead::CDxfRead(const wxChar* filepath)
 		return;
 	}
 	m_ifs->imbue(std::locale("C"));
+
 }
 
 CDxfRead::~CDxfRead()
@@ -211,8 +213,12 @@ bool CDxfRead::ReadLine()
 		get_line();
 		int n;
 
+		if(sscanf(m_str, "%d", &n) != 1)
+		{
+		    printf("CDxfRead::ReadLine() Failed to read integer from '%s'\n", m_str );
+		    return false;
+		}
 
-		if(sscanf(m_str, "%d", &n) != 1)return false;
 		std::istringstream ss;
 		ss.imbue(std::locale("C"));
 		switch(n){
@@ -287,7 +293,12 @@ bool CDxfRead::ReadArc()
 	{
 		get_line();
 		int n;
-		if(sscanf(m_str, "%d", &n) != 1)return false;
+		if(sscanf(m_str, "%d", &n) != 1)
+		{
+		    printf("CDxfRead::ReadArc() Failed to read integer from '%s'\n", m_str);
+		    return false;
+		}
+
 		std::istringstream ss;
 		ss.imbue(std::locale("C"));
 		switch(n){
@@ -366,7 +377,11 @@ bool CDxfRead::ReadSpline()
 	{
 		get_line();
 		int n;
-		if(sscanf(m_str, "%d", &n) != 1)return false;
+		if(sscanf(m_str, "%d", &n) != 1)
+		{
+		    printf("CDxfRead::ReadSpline() Failed to read integer from '%s'\n", m_str);
+		    return false;
+		}
 		std::istringstream ss;
 		ss.imbue(std::locale("C"));
 		switch(n){
@@ -529,7 +544,11 @@ bool CDxfRead::ReadCircle()
 	{
 		get_line();
 		int n;
-		if(sscanf(m_str, "%d", &n) != 1)return false;
+		if(sscanf(m_str, "%d", &n) != 1)
+		{
+		    printf("CDxfRead::ReadCircle() Failed to read integer from '%s'\n", m_str);
+		    return false;
+		}
 		std::istringstream ss;
 		ss.imbue(std::locale("C"));
 		switch(n){
@@ -592,7 +611,11 @@ bool CDxfRead::ReadEllipse()
 	{
 		get_line();
 		int n;
-		if(sscanf(m_str, "%d", &n) != 1)return false;
+		if(sscanf(m_str, "%d", &n) != 1)
+		{
+		    printf("CDxfRead::ReadEllipse() Failed to read integer from '%s'\n", m_str);
+		    return false;
+		}
 		std::istringstream ss;
 		ss.imbue(std::locale("C"));
 		switch(n){
@@ -671,13 +694,15 @@ bool CDxfRead::ReadEllipse()
 static bool poly_prev_found = false;
 static double poly_prev_x;
 static double poly_prev_y;
+static double poly_prev_z;
 static double poly_prev_bulge_found;
 static double poly_prev_bulge;
 static bool poly_first_found = false;
 static double poly_first_x;
 static double poly_first_y;
+static double poly_first_z;
 
-static void AddPolyLinePoint(CDxfRead* dxf_read, double x, double y, bool bulge_found, double bulge)
+static void AddPolyLinePoint(CDxfRead* dxf_read, double x, double y, double z, bool bulge_found, double bulge)
 {
 	if(poly_prev_found)
 	{
@@ -695,8 +720,8 @@ static void AddPolyLinePoint(CDxfRead* dxf_read, double x, double y, bool bulge_
 
 				double d = sqrt(r*r - (c/2)*(c/2));
 
-				double ps[3] = {poly_prev_x, poly_prev_y, 0};
-				double pe[3] = {x, y, 0};
+				double ps[3] = {poly_prev_x, poly_prev_y, poly_prev_z};
+				double pe[3] = {x, y, z};
 				gp_Pnt pPnt = make_point(ps);
 				gp_Pnt nPnt = make_point(pe);
 				gp_Dir dir(nPnt.XYZ()-pPnt.XYZ());
@@ -720,8 +745,8 @@ static void AddPolyLinePoint(CDxfRead* dxf_read, double x, double y, bool bulge_
 
 		if(!arc_done)
 		{
-			double s[3] = {poly_prev_x, poly_prev_y, 0};
-			double e[3] = {x, y, 0};
+			double s[3] = {poly_prev_x, poly_prev_y, poly_prev_z};
+			double e[3] = {x, y, z};
 			dxf_read->OnReadLine(s, e);
 		}
 	}
@@ -729,10 +754,12 @@ static void AddPolyLinePoint(CDxfRead* dxf_read, double x, double y, bool bulge_
 	poly_prev_found = true;
 	poly_prev_x = x;
 	poly_prev_y = y;
+	poly_prev_z = z;
 	if(!poly_first_found)
 	{
 		poly_first_x = x;
 		poly_first_y = y;
+		poly_first_z = z;
 		poly_first_found = true;
 	}
 	poly_prev_bulge_found = bulge_found;
@@ -753,6 +780,7 @@ bool CDxfRead::ReadLwPolyLine()
 	bool y_found = false;
 	double x = 0.0;
 	double y = 0.0;
+	double z = 0.0;
 	bool bulge_found = false;
 	double bulge = 0.0;
 	bool closed = false;
@@ -763,7 +791,11 @@ bool CDxfRead::ReadLwPolyLine()
 	{
 		get_line();
 		int n;
-		if(sscanf(m_str, "%d", &n) != 1)return false;
+		if(sscanf(m_str, "%d", &n) != 1)
+		{
+		    printf("CDxfRead::ReadLwPolyLine() Failed to read integer from '%s'\n", m_str);
+		    return false;
+		}
 		std::istringstream ss;
 		ss.imbue(std::locale("C"));
 		switch(n){
@@ -771,7 +803,7 @@ bool CDxfRead::ReadLwPolyLine()
 				// next item found
 				if(x_found && y_found){
 					// add point
-					AddPolyLinePoint(this, x, y, bulge_found, bulge);
+					AddPolyLinePoint(this, x, y, z, bulge_found, bulge);
 					bulge_found = false;
 					x_found = false;
 					y_found = false;
@@ -788,7 +820,7 @@ bool CDxfRead::ReadLwPolyLine()
 				get_line();
 				if(x_found && y_found){
 					// add point
-					AddPolyLinePoint(this, x, y, bulge_found, bulge);
+					AddPolyLinePoint(this, x, y, z, bulge_found, bulge);
 					bulge_found = false;
 					x_found = false;
 					y_found = false;
@@ -826,9 +858,142 @@ bool CDxfRead::ReadLwPolyLine()
 		if(closed && poly_first_found)
 		{
 			// repeat the first point
-			AddPolyLinePoint(this, poly_first_x, poly_first_y, false, 0.0);
+			AddPolyLinePoint(this, poly_first_x, poly_first_y, poly_first_z, false, 0.0);
 		}
 		return true;
+	}
+
+	return false;
+}
+
+
+bool CDxfRead::ReadVertex(gp_Pnt *pVertex)
+{
+	bool x_found = false;
+	bool y_found = false;
+
+	double x = 0.0;
+	double y = 0.0;
+	double z = 0.0;
+
+    pVertex->SetX(0.0);
+    pVertex->SetY(0.0);
+    pVertex->SetZ(0.0);
+
+	while(!(*m_ifs).eof())
+	{
+		get_line();
+		int n;
+		if(sscanf(m_str, "%d", &n) != 1)
+		{
+		    printf("CDxfRead::ReadVertex() Failed to read integer from '%s'\n", m_str);
+		    return false;
+		}
+		std::istringstream ss;
+		ss.imbue(std::locale("C"));
+		switch(n){
+			case 0:
+                put_line(m_str);    // read one line too many.  put it back.
+				return(x_found && y_found);
+				break;
+
+			case 8: // Layer name follows
+				get_line();
+				m_layer_name = Ctt(m_str);
+				break;
+
+			case 10:
+				// x
+				get_line();
+				ss.str(m_str); ss >> x; pVertex->SetX(mm(x)); if(ss.fail()) return false;
+				x_found = true;
+				break;
+			case 20:
+				// y
+				get_line();
+				ss.str(m_str); ss >> y; pVertex->SetY(mm(y)); if(ss.fail()) return false;
+				y_found = true;
+				break;
+            case 30:
+				// z
+				get_line();
+				ss.str(m_str); ss >> z; pVertex->SetZ(mm(z)); if(ss.fail()) return false;
+				break;
+			default:
+				// skip the next line
+				get_line();
+				break;
+		}
+	}
+
+	return false;
+}
+
+
+
+bool CDxfRead::ReadPolyLine()
+{
+	PolyLineStart();
+
+	bool x_found = false;
+	bool y_found = false;
+	bool bulge_found = false;
+	double bulge = 0.0;
+	bool closed = false;
+	int flags;
+	bool first_vertex_section_found = false;
+
+	while(!(*m_ifs).eof())
+	{
+		get_line();
+		int n;
+		if(sscanf(m_str, "%d", &n) != 1)
+		{
+		    printf("CDxfRead::ReadLwPolyLine() Failed to read integer from '%s'\n", m_str);
+		    return false;
+		}
+		std::istringstream ss;
+		ss.imbue(std::locale("C"));
+		switch(n){
+			case 0:
+				// next item found
+				get_line();
+				if (! strcmp(m_str,"VERTEX"))
+				{
+				    gp_Pnt vertex;
+				    if (CDxfRead::ReadVertex(&vertex))
+				    {
+				        AddPolyLinePoint(this, vertex.X(), vertex.Y(), vertex.Z(), bulge_found, bulge);
+                        bulge_found = false;
+                        break;
+				    }
+				}
+				if (! strcmp(m_str,"SEQEND"))
+				{
+				    first_vertex_section_found = false;
+				    x_found = false;
+					y_found = false;
+					PolyLineStart();
+				    return(true);
+				}
+				break;
+			case 42:
+				// bulge
+				get_line();
+				ss.str(m_str); ss >> bulge; if(ss.fail()) return false;
+				bulge_found = true;
+				break;
+			case 70:
+				// flags
+				get_line();
+				if(sscanf(m_str, "%d", &flags) != 1)return false;
+				closed = ((flags & 1) != 0);
+				break;
+			default:
+				// skip the next line
+				get_line();
+				break;
+		}
 	}
 
 	return false;
@@ -954,6 +1119,13 @@ void CDxfRead::OnReadSpline(struct SplineData& sd)
 
 void CDxfRead::get_line()
 {
+    if (m_unused_line[0] != '\0')
+    {
+        strcpy(m_str, m_unused_line);
+        memset( m_unused_line, '\0', sizeof(m_unused_line));
+        return;
+    }
+
 	m_ifs->getline(m_str, 1024);
 
 	char str[1024];
@@ -975,6 +1147,12 @@ void CDxfRead::get_line()
 	strcpy(m_str, str);
 }
 
+void CDxfRead::put_line(const char *value)
+{
+	strcpy( m_unused_line, value );
+}
+
+
 bool CDxfRead::ReadUnits()
 {
 	get_line();	// Skip to next line.
@@ -987,6 +1165,7 @@ bool CDxfRead::ReadUnits()
 	} // End if - then
 	else
 	{
+	    printf("CDxfRead::ReadUnits() Failed to get integer from '%s'\n", m_str);
 		return(false);
 	}
 }
@@ -1008,27 +1187,59 @@ void CDxfRead::DoRead()
 			get_line();
 
 			if(!strcmp(m_str, "LINE")){
-				if(!ReadLine())return;
+				if(!ReadLine())
+				{
+				    printf("CDxfRead::DoRead() Failed to read line\n");
+				    return;
+				}
 				continue;
 			}
 			else if(!strcmp(m_str, "ARC")){
-				if(!ReadArc())return;
+				if(!ReadArc())
+				{
+				    printf("CDxfRead::DoRead() Failed to read arc\n");
+				    return;
+				}
 				continue;
 			}
 			else if(!strcmp(m_str, "CIRCLE")){
-				if(!ReadCircle())return;
+				if(!ReadCircle())
+				{
+				    printf("CDxfRead::DoRead() Failed to read circle\n");
+				    return;
+				}
 				continue;
 			}
 			else if(!strcmp(m_str, "ELLIPSE")){
-				if(!ReadEllipse())return;
+				if(!ReadEllipse())
+				{
+				    printf("CDxfRead::DoRead() Failed to read ellipse\n");
+				    return;
+				}
 				continue;
 			}
 			else if(!strcmp(m_str, "SPLINE")){
-				if(!ReadSpline())return;
+				if(!ReadSpline())
+				{
+				    printf("CDxfRead::DoRead() Failed to read spline\n");
+				    return;
+				}
 				continue;
 			}
-			else if(!strcmp(m_str, "LWPOLYLINE")){
-				if(!ReadLwPolyLine())return;
+			else if (!strcmp(m_str, "LWPOLYLINE")) {
+				if(!ReadLwPolyLine())
+				{
+				    printf("CDxfRead::DoRead() Failed to read LW Polyline\n");
+				    return;
+				}
+				continue;
+			}
+			else if (!strcmp(m_str, "POLYLINE")) {
+				if(!ReadPolyLine())
+				{
+				    printf("CDxfRead::DoRead() Failed to read Polyline\n");
+				    return;
+				}
 				continue;
 			}
 		}
@@ -1097,11 +1308,6 @@ void HeeksDxfRead::OnReadEllipse(const double* c, double major_radius, double mi
 
 void HeeksDxfRead::AddObject(HeeksObj *object)
 {
-	if(wxGetApp().m_in_OpenFile && wxGetApp().m_file_open_matrix)
-	{
-		object->ModifyByMatrix(wxGetApp().m_file_open_matrix);
-	}
-
 	if(m_make_as_sketch)
 	{
 		// Check to see if we've already added a sketch for the current layer name.  If not
