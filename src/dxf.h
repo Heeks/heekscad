@@ -3,6 +3,8 @@
 // This program is released under the BSD license. See the file COPYING for details.
 #pragma once
 
+class gp_Pnt;   // Forward declaration.
+
 typedef enum
 {
 	eUnspecified = 0,	// Unspecified (No units)
@@ -77,10 +79,9 @@ private:
 
 	bool m_fail;
 	char m_str[1024];
+	char m_unused_line[1024];
 	eDxfUnits_t m_eUnits;
 	wxString m_layer_name;
-
-
 
 	bool ReadUnits();
 	bool ReadLine();
@@ -89,11 +90,15 @@ private:
 	bool ReadEllipse();
 	bool ReadSpline();
 	bool ReadLwPolyLine();
+	bool ReadPolyLine();
+	bool ReadVertex(gp_Pnt *pVertex);
 	void OnReadArc(double start_angle, double end_angle, double radius, const double* c);
 	void OnReadCircle(const double* c, double radius);
     void OnReadEllipse(const double* c, const double* m, double ratio, double start_angle, double end_angle);
 	void OnReadSpline(struct SplineData& sd);
+
 	void get_line();
+	void put_line(const char *value);
 
 public:
 	CDxfRead(const wxChar* filepath); // this opens the file
