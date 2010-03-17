@@ -66,7 +66,14 @@ private:
 	std::set<Observer*> observers;
 	UndoEngine *history;
 	std::map<HeeksObj*,std::list<HeeksObj*> > m_transient_objects;
-	std::map< int, std::map<int, HeeksObj*> > used_ids; // map of group type ( usually same as object type ) to "map of ID to object"
+
+	typedef std::multimap< int, HeeksObj* > IdsToObjects_t;
+	typedef int GroupId_t;
+	typedef std::map< GroupId_t, IdsToObjects_t > UsedIds_t;
+
+	UsedIds_t	used_ids;
+
+	// std::map< int, std::map<int, HeeksObj*> > used_ids; // map of group type ( usually same as object type ) to "map of ID to object"
 	std::map< int, int > next_id_map;
 	std::map< std::string, HeeksObj*(*)(TiXmlElement* pElem) > xml_read_fn_map;
 
@@ -314,6 +321,13 @@ public:
 	std::auto_ptr<VectorFonts>	& GetAvailableFonts();
 	void GetPluginsFromCommandLineParams(std::list<wxString> &plugins);
 	void RegisterOnBuildTexture(void(*callbackfunc)());
+
+	typedef int ObjectType_t;
+	typedef int ObjectId_t;
+	typedef std::pair< ObjectType_t, ObjectId_t > ObjectReference_t;
+	typedef std::map< ObjectReference_t, HeeksObj * > ObjectReferences_t;
+
+	HeeksObj *MergeCommonObjects( ObjectReferences_t & unique_set, HeeksObj *object ) const;
 };
 
 DECLARE_APP(HeeksCADapp)

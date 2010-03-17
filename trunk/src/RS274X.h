@@ -30,6 +30,7 @@ class RS274X
         {
             IsolationRouting = 0,   // Produce graphics for the boundaries of the wide traces.
             CentreLines,            // Produce graphics for the centrelines of the traces.
+			RasterImage,			// Produce RAW image file.  For debug purposes only at the moment.
             Both
         } FileInterpretation_t;
 
@@ -100,13 +101,17 @@ class RS274X
 		public:
 			static double PixelsPerMM()
 			{
-				const double pixels_per_inch = 1000;	// 1 pixels per thousdands of an inch
+				const double pixels_per_inch = 1 * 1000;	// 1 pixels per thousdands of an inch
 				const double inches_per_mm = 1.0 / 25.4;
 				const double pixels_per_mm = pixels_per_inch * inches_per_mm;
 				return( pixels_per_mm );
 			}
 
-			static double MMPerPixel() { return( 1.0 / PixelsPerMM()); }
+			static double MMPerPixel() 
+			{
+				static double mm_per_pixel = ( 1.0 / PixelsPerMM());
+				return(mm_per_pixel);
+			}
 
 			const int PixelsPerRow() const
 			{
@@ -155,6 +160,12 @@ class RS274X
 					{
 						m_bitmap = new char[ Size() ];
 						memset( m_bitmap, 0, Size() );
+
+						if ((rhs.m_box.Width() <= m_box.Width()) &&
+							(rhs.m_box.Height() <= m_box.Height()))
+						{
+							memcpy( m_bitmap, rhs.m_bitmap, rhs.Size() );
+						}
 					}
 					else
 					{
@@ -167,6 +178,7 @@ class RS274X
 
 			Bitmap( const Bitmap & rhs )
 			{
+				m_bitmap = NULL;
 				*this = rhs;	// Call the assignment operator.
 			}
 
@@ -187,7 +199,7 @@ class RS274X
 			// that the real-world 0,0 point is in the centre of the bitmap array.
 			char & operator() ( const double x, const double y ) const
 			{
-				int pixel_x = int(floor((x - m_box.MinX()) * PixelsPerMM()) + ((m_box.Width() * PixelsPerMM()) / 2.0)) + Boarder();
+				int pixel_x = int(floor((x - m_box.MinX()) * PixelsPerMM()) + ((m_box.Width()  * PixelsPerMM()) / 2.0)) + Boarder();
 				int pixel_y = int(floor((y - m_box.MinY()) * PixelsPerMM()) + ((m_box.Height() * PixelsPerMM()) / 2.0)) + Boarder();
 
 				return(m_bitmap[(PixelsPerRow() * pixel_y) + pixel_x]);

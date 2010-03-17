@@ -211,7 +211,7 @@ bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 {
 	if (object==NULL) return false;
 	if (!CanAdd(object)) return false;
-	if (m_objects.size()==0 || prev_object==NULL)
+	if (m_objects.size()==0)
 	{
 		m_objects.push_back(object);
 		LoopIt = m_objects.end();
@@ -219,6 +219,16 @@ bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 	}
 	else
 	{
+		// Make sure this child isn't already in the list.
+		for(LoopIt = m_objects.begin(); LoopIt != m_objects.end(); LoopIt++)
+		{
+			if (*LoopIt == object)
+			{
+				// It's already there.  No need to add it again.
+				return(true);
+			}
+		}
+
 		for(LoopIt = m_objects.begin(); LoopIt != m_objects.end(); LoopIt++) { if (*LoopIt==prev_object) break; }
 		m_objects.insert(LoopIt, object);
 	}
@@ -266,7 +276,10 @@ void ObjList::Remove(HeeksObj* object)
 	object->Disconnect(parents);
 
 #ifdef HEEKSCAD
-	if((!wxGetApp().m_in_OpenFile || wxGetApp().m_file_open_or_import_type != FileOpenTypeHeeks) && object->UsesID() && (object->m_id == 0 || (wxGetApp().m_file_open_or_import_type == FileImportTypeHeeks && wxGetApp().m_in_OpenFile)))
+	if( (!wxGetApp().m_in_OpenFile || wxGetApp().m_file_open_or_import_type != FileOpenTypeHeeks) &&
+		object->UsesID() &&
+		(object->m_id == 0 || (wxGetApp().m_file_open_or_import_type == FileImportTypeHeeks && wxGetApp().m_in_OpenFile))
+		)
 	{
 		wxGetApp().RemoveID(object);
 	}
@@ -323,4 +336,49 @@ void ObjList::GetTriangles(void(*callbackfunc)(const double* x, const double* n)
 {
 	for(std::list<HeeksObj*>::iterator It=m_objects.begin(); It!=m_objects.end() ;It++) (*It)->GetTriangles(callbackfunc, cusp, just_one_average_normal);
 }
+
+/**
+	This is the overload for the corresponding method in the HeeksObj class.  It looks for an existing
+	object anywhere in this or the child elements (or their children's children.... or their
+	children's children's children....you get the idea)
+
+	The idea is to search for pre-existing objects when we're importing a new set of data.  If none
+	can be found then a NULL should be returned.
+ */
+HeeksObj *ObjList::Find( const int type, const int id )
+{
+	if ((type == this->GetType()) && (this->m_id == id)) return(this);
+	for(std::list<HeeksObj*>::const_iterator It=m_objects.begin(); It!=m_objects.end() ;It++)
+	{
+		HeeksObj *object = (*It)->Find( type, id );
+		if (object != NULL) return(object);
+	} // End for
+	return(NULL);
+}
+
+void ObjList::GetProperties(std::list<Property *> *list)
+{
+	HeeksObj::GetProperties(list);
+}
+
+/* virtual */ void ObjList::SetIdPreservation(const bool flag)
+{
+	for(std::list<HeeksObj*>::const_iterator It=m_objects.begin(); It!=m_objects.end() ;It++)
+	{
+		(*It)->SetIdPreservation(flag);
+	}
+
+	HeeksObj::SetIdPreservation(flag);
+}
+
+void ObjList::ReloadPointers()
+{
+	for (std::list<HeeksObj*>::iterator itObject = m_objects.begin(); itObject != m_objects.end(); itObject++)
+	{
+		(*itObject)->ReloadPointers();
+	}
+
+	HeeksObj::ReloadPointers();
+}
+
 

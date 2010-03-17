@@ -167,10 +167,12 @@ public:
 	virtual bool UsesID(){return true;} // most objects don't use the m_id variable
 	bool OnVisibleLayer();
 	virtual HeeksObj* Owner();
+	virtual std::list<HeeksObj*> Owners();
 	virtual void SetOwner(HeeksObj*);
 	virtual bool HasOwner();
 	virtual bool HasOwner(HeeksObj* obj);
 	virtual void AddOwner(HeeksObj*);
+	virtual void AddOwners(std::list<HeeksObj *> owners);
 	virtual void RemoveOwners();
 	virtual void RemoveOwner(HeeksObj*);
 	virtual HeeksObj* GetFirstOwner();
@@ -178,6 +180,8 @@ public:
 	virtual const TopoDS_Shape *GetShape() { return(NULL); }
 	virtual bool IsTransient(){return false;}
 	virtual bool IsList(){return false;}
+	virtual HeeksObj *Find( const int type, const int id );
+	virtual void SetIdPreservation(const bool flag) { m_preserving_id = flag; }
 protected:
 	virtual void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 };
