@@ -52,4 +52,9 @@ public:
 	void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true);
 	void Disconnect(std::list<HeeksObj*>parents);
 	bool IsList(){return true;}
+	void GetProperties(std::list<Property *> *list);
+	void ReloadPointers();
+
+	HeeksObj *Find( const int type, const int id );	// Search for an object by type/id from this or any child objects.
+	/* virtual */ void SetIdPreservation(const bool flag);
 };
