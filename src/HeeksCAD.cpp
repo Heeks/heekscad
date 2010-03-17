@@ -779,6 +779,57 @@ void HeeksCADapp::ObjectReadBaseXML(HeeksObj *object, TiXmlElement* element)
 	}
 }
 
+
+/**
+	This method traverses the list of HeeksObj pointers recursively and looks for
+	duplicate objects based on the type/id pairs.  When a duplicate is found, the
+	duplicate is deleted and both pointers are reset to point at a common object.
+	The object's owner pointers are also updated appropriately.
+ */
+
+HeeksObj *HeeksCADapp::MergeCommonObjects( ObjectReferences_t & unique_set, HeeksObj *object ) const
+{
+	if (object->GetFirstChild() != NULL)
+	{
+		// This is also an ObjList pointer.  Recursively check the children for duplicates.
+		for (HeeksObj *child = object->GetFirstChild(); child != NULL; child = object->GetNextChild())
+		{
+			HeeksObj * replacement = MergeCommonObjects( unique_set, child );
+			if (replacement != child)
+			{
+				object->Remove(child);
+				object->Add( replacement, NULL );
+			}
+		}
+	}
+
+	HeeksObj *unique_reference = object;
+	ObjectReference_t object_reference(object->GetType(),object->m_id);
+
+	if (unique_set.find(object_reference) == unique_set.end())
+	{
+		unique_set.insert( std::make_pair( object_reference, object ) );
+		unique_reference = object;
+	}
+	else
+	{
+		// We've seen an object like this one before.  Use the old one.
+		unique_reference = unique_set[ object_reference ];
+		std::list<HeeksObj *> owners = object->Owners();
+		for (std::list<HeeksObj *>::iterator itOwner = owners.begin(); itOwner != owners.end(); itOwner++)
+		{
+			(*itOwner)->Remove(object);
+			(*itOwner)->Add( unique_reference, NULL );
+		}
+
+		unique_set[ object_reference ] = unique_reference;
+		object = unique_reference;
+	}
+
+	return(object);
+}
+
+
 void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into)
 {
 	TiXmlDocument doc(Ttc(filepath));
@@ -805,11 +856,21 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into)
 		root = pElem;
 	}
 
+	ObjectReferences_t unique_set;
+
 	std::list<HeeksObj*> objects;
 	for(pElem = root->FirstChildElement(); pElem;	pElem = pElem->NextSiblingElement())
 	{
 		HeeksObj* object = ReadXMLElement(pElem);
-		if(object)objects.push_back(object);
+		if(object)
+		{
+			objects.push_back(object);
+		}
+	}
+
+	for (std::list<HeeksObj *>::iterator itObject = objects.begin(); itObject != objects.end(); itObject++)
+	{
+		*itObject = MergeCommonObjects( unique_set, *itObject );
 	}
 
 	if(objects.size() > 0)
@@ -819,6 +880,8 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into)
 		for(std::list<HeeksObj*>::const_iterator It = objects.begin(); It != objects.end(); It++)
 		{
 			HeeksObj* object = *It;
+			object->ReloadPointers();
+
 			if(add_to->CanAdd(object) && object->CanAddTo(add_to))
 			{
 				if(object->OneOfAKind())
@@ -833,7 +896,10 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into)
 							break;
 						}
 					}
-					if(!one_found)add_to->Add(object, NULL);
+					if(!one_found)
+					{
+						add_to->Add(object, NULL);
+					}
 				}
 				else
 				{
@@ -3006,40 +3072,65 @@ void HeeksCADapp::SetFrameTitle()
 
 HeeksObj* HeeksCADapp::GetIDObject(int type, int id)
 {
-	std::map< int, std::map<int, HeeksObj*> >::iterator FindIt1 = used_ids.find(type);
-	if(FindIt1 == used_ids.end())return NULL;
-	std::map<int, HeeksObj*> &map = FindIt1->second;
-	std::map<int, HeeksObj*>::iterator FindIt2 = map.find(id);
-	if(FindIt2 == map.end())return NULL;
-	return FindIt2->second;
+	UsedIds_t::iterator FindIt1 = used_ids.find(type);
+	if (FindIt1 == used_ids.end()) return(NULL);
+
+	IdsToObjects_t &ids = FindIt1->second;
+	if (ids.find(id) == ids.end()) return(NULL);
+	else return(ids.lower_bound(id)->second);
+
 }
 
 void HeeksCADapp::SetObjectID(HeeksObj* object, int id)
 {
 	if(object->UsesID())
 	{
-		int id_group_type = object->GetIDGroupType();
+		GroupId_t id_group_type = object->GetIDGroupType();
 
-		std::map< int, std::map<int, HeeksObj*> >::iterator FindIt1 = used_ids.find(id_group_type);
+		UsedIds_t::iterator FindIt1 = used_ids.find(id_group_type);
 		if(FindIt1 == used_ids.end())
 		{
 			// add a new map
-			std::map<int, HeeksObj*> empty_map;
+			object->m_id = id;
+			IdsToObjects_t empty_map;
+			empty_map.insert( std::make_pair( id, object ) );
 			FindIt1 = used_ids.insert( std::make_pair( id_group_type, empty_map )).first;
+			return;
 		}
-		std::map<int, HeeksObj*> &map = FindIt1->second;
-		map.erase(id);
-		map.insert( std::pair<int, HeeksObj*> (id, object) );
+
+		IdsToObjects_t &map = FindIt1->second;
+		bool found = false;
+		for (IdsToObjects_t::iterator itIdsToObjects = map.lower_bound( id ); itIdsToObjects != map.upper_bound( id ); itIdsToObjects++)
+		{
+			if (itIdsToObjects->second == object)
+			{
+				found = true;
+				break;
+			}
+		} // End for
+
+		if (found)
+		{
+			// It's already there.
+			object->m_id = id;
+			return;
+		}
+
+		// It's not there yet.
+		map.insert( std::make_pair(id, object) );
 		object->m_id = id;
+		return;
 	}
 }
 
 int HeeksCADapp::GetNextID(int id_group_type)
 {
-	std::map< int, std::map<int, HeeksObj*> >::iterator FindIt1 = used_ids.find(id_group_type);
+	UsedIds_t::iterator FindIt1 = used_ids.find(id_group_type);
 	if(FindIt1 == used_ids.end())return 1;
+
 	std::map< int, int >::iterator FindIt2 = next_id_map.find(id_group_type);
-	std::map<int, HeeksObj*> &map = FindIt1->second;
+
+	IdsToObjects_t &map = FindIt1->second;
 
 	if(FindIt2 == next_id_map.end())
 	{
@@ -3057,16 +3148,27 @@ int HeeksCADapp::GetNextID(int id_group_type)
 void HeeksCADapp::RemoveID(HeeksObj* object)
 {
 	int id_group_type = object->GetIDGroupType();
-	std::map< int, std::map<int, HeeksObj*> >::iterator FindIt1 = used_ids.find(id_group_type);
+
+	UsedIds_t::iterator FindIt1 = used_ids.find(id_group_type);
 	if(FindIt1 == used_ids.end())return;
 	std::map< int, int >::iterator FindIt2 = next_id_map.find(id_group_type);
-	std::map<int, HeeksObj*> &map = FindIt1->second;
-	if(FindIt2 != next_id_map.end())
+
+	IdsToObjects_t &map = FindIt1->second;
+	if (FindIt2 != next_id_map.end())
 	{
-		int &next_id = FindIt2->second;
-		next_id = object->m_id; // this id has now become available
-		map.erase(next_id);
-	}
+		for ( IdsToObjects_t::iterator it = map.lower_bound( object->m_id ); it != map.upper_bound( object->m_id ); /* increment within loop */)
+		{
+			if (it->second == object)
+			{
+				map.erase(it);
+				return;
+			}
+			else
+			{
+				it++;
+			}
+		} // End for
+	} // End if - then
 }
 
 void HeeksCADapp::ResetIDs()

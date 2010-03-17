@@ -158,13 +158,16 @@ bool RS274X::Read( const char *p_szFileName, const FileInterpretation_t file_int
         {
             // Generate and add the sketch objects that represent the boundaries of the traces.
             int number_of_networks = FormNetworks();
-            printf("Found %d separate networks\n", number_of_networks);
+//             printf("Found %d separate networks\n", number_of_networks);
+        } // End if - then
 
-            /*
-            We're not using the raster image at the moment.  As long as the OpenCascade
-            intersection functionality continues to work, we won't go down the path
-            of performing an edge detection algorithm on the raster image.
+        if ((file_interpretation == CentreLines) || (file_interpretation == Both))
+        {
+            DrawCentrelines();
+        } // End if - then
 
+		if (file_interpretation == RasterImage)
+        {
             // Generate a raster image (bitmap) that represents the traces.
             Bitmap pcb = RenderToBitmap();
 
@@ -180,14 +183,7 @@ bool RS274X::Read( const char *p_szFileName, const FileInterpretation_t file_int
                 file_name << _("pcb") << _("_width_") << pcb.PixelsPerRow() << _("_height_") << pcb.PixelsPerColumn() << _T(".raw");
                 pcb.Save( file_name );
             }
-            */
         } // End if - then
-
-        if ((file_interpretation == CentreLines) || (file_interpretation == Both))
-        {
-            DrawCentrelines();
-        } // End if - then
-
 
 		return true;
 
@@ -1182,8 +1178,6 @@ RS274X::Bitmap RS274X::RenderToBitmap()
 		}
 	}
 
-
-
 	return(pcb);
 }
 
@@ -2015,7 +2009,7 @@ void RS274X::Trace::ExposeFilm( RS274X::Bitmap & pcb )
 		case eLinear:
 		{
 			//it's a line.  Expose the aperture at one-pixel spacing along the line's path.
-			unsigned int number_of_points = (unsigned int) (floor(Length() * Bitmap::PixelsPerMM() * 2.0));
+			unsigned int number_of_points = (unsigned int) (floor(Length() * Bitmap::PixelsPerMM()));
 			for (unsigned int i=0; i<number_of_points; i++)
 			{
 			    double x = (double(double(i) / double(number_of_points)) * (End().X() - Start().X())) + Start().X();
@@ -2033,7 +2027,7 @@ void RS274X::Trace::ExposeFilm( RS274X::Bitmap & pcb )
 			{
 				// It's a full circle.
 				unsigned int i = 0;
-				unsigned int number_of_points = (unsigned int) (floor(Length() * Bitmap::PixelsPerMM() * 2.0));
+				unsigned int number_of_points = (unsigned int) (floor(Length() * Bitmap::PixelsPerMM()));
 				double alpha = 3.1415926 * 2 / number_of_points;
 				while( i++ < number_of_points )
 				{
@@ -2052,7 +2046,7 @@ void RS274X::Trace::ExposeFilm( RS274X::Bitmap & pcb )
 				if (Clockwise())
 				{
 				    // We're turning clockwise so we want the end_angle to be smaller than the start_angle.
-					double increment = (StartAngle() - EndAngle()) / (Length() * Bitmap::PixelsPerMM() * 2.0);
+					double increment = (StartAngle() - EndAngle()) / (Length() * Bitmap::PixelsPerMM());
 					for (double angle = EndAngle(); angle <= StartAngle(); angle += increment)
 					{
 						double x = (cos( angle ) * Radius()) + Centre().X();
@@ -2112,24 +2106,17 @@ const RS274X::Bitmap *RS274X::Aperture::GetBitmap()
 			// steps around the circle and the increase in radius is all down to the resolution
 			// of the bitmap.
 
-			for (double radius = Bitmap::MMPerPixel(); radius <= OutsideDiameter()/2.0; radius += Bitmap::MMPerPixel()/2.0)
+			double radius = OutsideDiameter() / 2.0;
+			for (double x=-1.0 * radius; x<= radius; x += Bitmap::MMPerPixel())
 			{
-				// Figure out how many points we need to colour in around this size circle.
-				double circumference = 2.0 * PI * radius;
-
-				unsigned int numPoints = (unsigned int) (floor(circumference * Bitmap::PixelsPerMM() * 2.0));
-				double alpha = 3.1415926 * 2 / numPoints;
-
-				unsigned int i = 0;
-				while( i++ < numPoints )
+				for (double y=-1.0 * radius; y<= radius; y += Bitmap::MMPerPixel())
 				{
-					double theta = alpha * i;
-
-					double x = cos( theta ) * radius;
-					double y = sin( theta ) * radius;
-
-					m_pBitmap->operator ()(x, y) = ~0;	// black.
-				} // End while
+					double distance = (double) sqrt( double(double(x * x) + double(y * y)) );
+					if (distance <= OutsideDiameter() / 2.0)
+					{
+						m_pBitmap->operator ()(x, y) = ~0;	// black.
+					} // End if - then
+				} // End for
 			} // End for
 
 			return(m_pBitmap.get());
@@ -2149,7 +2136,6 @@ const RS274X::Bitmap *RS274X::Aperture::GetBitmap()
 
 			return(m_pBitmap.get());
 		}
-
 
 		default:
 			printf("Unsupported aperture shape found\n");
@@ -2327,10 +2313,13 @@ bool RS274X::Bitmap::Save( const wxString file_name ) const
 	{
 	    output_file_name = file_name;
 	}
-	output_file_name << _T(".gif");
+	// output_file_name << _T(".gif");
+
+	wxString script_file_name;
+	script_file_name << output_file_name << _T(".gif");
 
 	// Now generate a script that can be used to convert this file into a GIF format file for viewing.
-    fp = fopen(Ttc(output_file_name.c_str()),"w");
+    fp = fopen(Ttc(script_file_name.c_str()),"w");
     if (fp != NULL)
     {
         wxString contents;
@@ -2339,7 +2328,7 @@ bool RS274X::Bitmap::Save( const wxString file_name ) const
         contents << _("# This file converts the RAW image file generated by the HeeksCAD import of\n");
         contents << _("# a GERBER format data file into a GIF format file.   This just makes it\n");
         contents << _("# more convenient for viewing\n\n");
-        contents << _T("rawtoppm < \"") << file_name << _T("\" ") << PixelsPerRow() << _T(" ") << PixelsPerColumn() << _T(" | ppmtogif > \"") << output_file_name << _T("\"\n");
+        contents << _T("rawtoppm < \"") << file_name << _T("\" ") << PixelsPerRow() << _T(" ") << PixelsPerColumn() << _T(" | ppmtogif > \"") << output_file_name << _T(".gif") << _T("\"\n");
 
         fprintf(fp,"%s\n", Ttc(contents.c_str()));
     }

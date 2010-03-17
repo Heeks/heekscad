@@ -251,6 +251,13 @@ HeeksObj* HeeksObj::Owner()
 	return *m_owners.begin();
 }
 
+std::list<HeeksObj*> HeeksObj::Owners()
+{
+	std::list<HeeksObj *> copy;
+	std::copy( m_owners.begin(), m_owners.end(), std::inserter( copy, copy.begin() ) );
+	return(copy);
+}
+
 void HeeksObj::SetOwner(HeeksObj *obj)
 {
 	m_owners.clear();
@@ -285,7 +292,21 @@ void HeeksObj::RemoveOwner(HeeksObj* obj)
 
 void HeeksObj::AddOwner(HeeksObj *obj)
 {
+	// Make sure we don't add duplicates.
+	for (std::list<HeeksObj*>::iterator itOwner = m_owners.begin(); itOwner != m_owners.end(); itOwner++)
+	{
+		if (*itOwner == obj) return;	// It's already here.
+	}
+
 	m_owners.push_back(obj);
+}
+
+void HeeksObj::AddOwners(std::list<HeeksObj*> owners)
+{
+	for (std::list<HeeksObj*>::iterator itOwner = m_owners.begin(); itOwner != m_owners.end(); itOwner++)
+	{
+		AddOwner( *itOwner );
+	}
 }
 
 HeeksObj* HeeksObj::GetFirstOwner()
@@ -301,3 +322,8 @@ HeeksObj* HeeksObj::GetNextOwner()
 	return NULL;
 }
 
+HeeksObj *HeeksObj::Find( const int type, const int id )
+{
+	if ((type == this->GetType()) && (this->m_id == id)) return(this);
+	return(NULL);
+}
