@@ -346,6 +346,29 @@ bool CEdge::GetCircleParams(double *d7)
 	return true;
 }
 
+bool CEdge::GetEllipseParams(double *d11)
+{
+	// centerptX, centerptY, centerptZ, majorRad, majorAxisX, majorAxisY, majorAxisZ, minorRad, minorAxisX, minorAxisY, minorAxisZ
+	BRepAdaptor_Curve curve(m_topods_edge);
+	if(curve.GetType() != GeomAbs_Ellipse)return false;
+	gp_Elips e = curve.Ellipse();
+	const gp_Pnt& pos = e.Axis().Location();
+	const gp_Dir& major = e.XAxis().Direction();
+	const gp_Dir& minor = e.YAxis().Direction();
+	d11[0] = pos.X();
+	d11[1] = pos.Y();
+	d11[2] = pos.Z();
+	d11[3] = e.MajorRadius();
+	d11[4] = major.X();
+	d11[5] = major.Y();
+	d11[6] = major.Z();
+	d11[7] = e.MinorRadius();
+	d11[8] = minor.X();
+	d11[9] = minor.Y();
+	d11[10] = minor.Z();
+	return true;
+}
+
 bool CEdge::Orientation()
 {
 	TopAbs_Orientation o = m_topods_edge.Orientation();
