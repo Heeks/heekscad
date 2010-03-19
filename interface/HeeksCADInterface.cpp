@@ -888,6 +888,11 @@ bool CHeeksCADInterface::EdgeGetCircleParams(HeeksObj* edge, double* d6)
 	return ((CEdge*)edge)->GetCircleParams(d6);
 }
 
+bool CHeeksCADInterface::EdgeGetEllipseParams(HeeksObj* edge, double* d11)
+{
+	return ((CEdge*)edge)->GetEllipseParams(d11);
+}
+
 void CHeeksCADInterface::EdgeSetTempAttribute(HeeksObj* edge, int attr)
 {
 	((CEdge*)edge)->m_temp_attr = attr;

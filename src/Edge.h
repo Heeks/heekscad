@@ -70,6 +70,7 @@ public:
 	bool GetClosestPoint(const gp_Pnt &pos, gp_Pnt &closest_pnt, double &u)const;
 	bool GetLineParams(double *d6);
 	bool GetCircleParams(double *d7);
+	bool GetEllipseParams(double *d11);
 	bool Orientation();
 	double Length();
 	double Length2(double uStart, double uEnd);
