@@ -157,8 +157,7 @@ bool RS274X::Read( const char *p_szFileName, const FileInterpretation_t file_int
         if ((file_interpretation == IsolationRouting) || (file_interpretation == Both))
         {
             // Generate and add the sketch objects that represent the boundaries of the traces.
-            int number_of_networks = FormNetworks();
-//             printf("Found %d separate networks\n", number_of_networks);
+            FormNetworks();
         } // End if - then
 
         if ((file_interpretation == CentreLines) || (file_interpretation == Both))

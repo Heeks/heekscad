@@ -154,7 +154,12 @@ void HText::GetProperties(std::list<Property *> *list)
 {
 	list->push_back(new PropertyTrsf(_("orientation"), m_trsf, this, on_set_trsf));
 
-	if (wxGetApp().m_pVectorFonts.get() != NULL)
+    if (wxGetApp().m_pVectorFonts.get() == NULL)
+    {
+        wxGetApp().GetAvailableFonts();
+    }
+
+    if (wxGetApp().m_pVectorFonts.get() != NULL)
 	{
 		std::list<wxString> choices;
 
@@ -190,7 +195,7 @@ void HText::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element;
 	element = new TiXmlElement( "Text" );
-	root->LinkEndChild( element );  
+	root->LinkEndChild( element );
 	element->SetAttribute("text", Ttc(m_text.c_str()));
 
 	if (m_pFont == NULL)
@@ -233,7 +238,7 @@ HeeksObj* HText::ReadFromXMLElement(TiXmlElement* pElem)
 	// get the attributes
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
-		std::string name(a->Name());	
+		std::string name(a->Name());
 		if(name == "col"){c = HeeksColor(a->IntValue());}
 		else if(name == "text"){text.assign(Ctt(a->Value()));}
 		else if(name == "m0"){m[0] = a->DoubleValue();}
