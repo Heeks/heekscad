@@ -62,6 +62,7 @@
 #include "RS274X.h"
 #include "CxfFont.h"
 #include "AutoSave.h"
+#include <wx/progdlg.h>
 
 using namespace std;
 
@@ -151,7 +152,6 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 
 	m_font_paths = _T("/usr/share/qcad/fonts");
 	m_stl_facet_tolerance = 0.1;
-	// GetAvailableFonts();
 
 	m_pVectorFont = NULL;	// Default to internal (OpenGL) font.
 	m_icon_texture_number = 0;
@@ -339,7 +339,6 @@ bool HeeksCADapp::OnInit()
 	m_ruler->ReadFromConfig(config);
 
 	GetRecentFilesProfileString();
-	GetAvailableFonts();
 
 	wxImage::AddHandler(new wxPNGHandler);
 	m_frame = new CHeeksFrame( wxT( "HeeksCAD free Solid Modelling software based on Open CASCADE" ), wxPoint(posx, posy), wxSize(width, height));
@@ -2337,30 +2336,12 @@ static void on_dimension_draw_flat(bool value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
-static void on_set_font(int zero_based_choice, HeeksObj *obj)
-{
-	if (zero_based_choice == 0)
-	{
-		wxGetApp().m_pVectorFont = NULL;
-		return;
-	} // End if - then
-
-	std::set<wxString> names = wxGetApp().GetAvailableFonts()->FontNames();
-	std::vector<wxString> vector_names;
-	vector_names.push_back(_T("OpenGL"));	// Keep the zero-based offset.
-	std::copy( names.begin(), names.end(), std::inserter( vector_names, vector_names.end() ) );
-	if (zero_based_choice < int(vector_names.size()))
-	{
-		wxGetApp().m_pVectorFont = wxGetApp().GetAvailableFonts()->Font( VectorFont::Name_t(vector_names[zero_based_choice].c_str()) );
-	}
-}
-
 
 static void on_edit_font_paths(const wxChar* value, HeeksObj* object)
 {
 	wxGetApp().m_font_paths.assign(value);
 	if (wxGetApp().m_pVectorFonts.get()) delete wxGetApp().m_pVectorFonts.release();
-	wxGetApp().GetAvailableFonts();
+	wxGetApp().GetAvailableFonts(true);
 
 	HeeksConfig config;
 	config.Write(_T("FontPaths"), wxGetApp().m_font_paths);
@@ -2563,25 +2544,6 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 
 	// Font options
 	PropertyList* font_options = new PropertyList(_("font options"));
-	if (m_pVectorFonts.get() != NULL)
-	{
-		std::list<wxString> choices;
-
-		choices.push_back( wxString(_("OpenGL (default) font")) );
-		int choice = 0;
-
-		int option = 0;
-		std::set<VectorFont::Name_t> font_names = m_pVectorFonts->FontNames();
-		for (std::set<VectorFont::Name_t>::const_iterator l_itFontName = font_names.begin();
-			l_itFontName != font_names.end(); l_itFontName++)
-		{
-			option++;
-			choices.push_back( *l_itFontName );
-			if ((m_pVectorFont != NULL) && (m_pVectorFont->Name() == *l_itFontName)) choice = option;
-		} // End for
-		font_options->m_list.push_back ( new PropertyChoice ( _("Active font"),  choices, choice, this, on_set_font ) );
-	}
-
 	font_options->m_list.push_back( new PropertyString(_("Paths (semicolon delimited)"), m_font_paths, this, on_edit_font_paths));
 	list->push_back(font_options);
 }
@@ -3545,23 +3507,40 @@ void HeeksCADapp::InitialiseLocale()
 }
 
 
-std::auto_ptr<VectorFonts>	& HeeksCADapp::GetAvailableFonts()
+std::auto_ptr<VectorFonts>	& HeeksCADapp::GetAvailableFonts(const bool force_read /* = false */ )
 {
-	if (m_pVectorFonts.get() == NULL)
-	{
-		std::vector<wxString> paths = Tokens( m_font_paths, _T(";") );
-		for (std::vector<wxString>::const_iterator l_itPath = paths.begin(); l_itPath != paths.end(); l_itPath++)
-		{
-			if (m_pVectorFonts.get() == NULL)
-			{
-				m_pVectorFonts = std::auto_ptr<VectorFonts>(new VectorFonts(*l_itPath));
-			} // End if - then
-			else
-			{
-				m_pVectorFonts->Add( *l_itPath );
-			} // End if - else
-		} // End for
-	} // End if - then
+    static bool already_searched_for_vector_fonts = false;
+
+    if ((already_searched_for_vector_fonts == false) || (force_read == true))
+    {
+        if (m_pVectorFonts.get() == NULL)
+        {
+            std::vector<wxString> paths = Tokens( m_font_paths, _T(";") );
+
+            wxProgressDialog progress(	wxString(_T("Reading Vector Font Definition Files")),
+							wxString(_T("Reading Vector Font Definition Files")),
+							paths.size(),
+							NULL,
+							wxPD_APP_MODAL | wxPD_ELAPSED_TIME | wxPD_ESTIMATED_TIME | wxPD_REMAINING_TIME | wxPD_AUTO_HIDE );
+
+            int i=0;
+            for (std::vector<wxString>::const_iterator l_itPath = paths.begin(); l_itPath != paths.end(); l_itPath++)
+            {
+                progress.Update(i++);
+
+                if (m_pVectorFonts.get() == NULL)
+                {
+                    m_pVectorFonts = std::auto_ptr<VectorFonts>(new VectorFonts(*l_itPath));
+                } // End if - then
+                else
+                {
+                    m_pVectorFonts->Add( *l_itPath );
+                } // End if - else
+            } // End for
+        } // End if - then
+
+        already_searched_for_vector_fonts = true; // Don't keep looking for something that may not be there
+    }
 
 	return(m_pVectorFonts);
 } // End GetAvailableFonts() method
