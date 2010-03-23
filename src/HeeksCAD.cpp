@@ -3039,7 +3039,16 @@ HeeksObj* HeeksCADapp::GetIDObject(int type, int id)
 
 	IdsToObjects_t &ids = FindIt1->second;
 	if (ids.find(id) == ids.end()) return(NULL);
-	else return(ids.lower_bound(id)->second);
+	else
+	{
+		IdsToObjects_t::iterator It = ids.upper_bound(id);
+		It--;
+		HeeksObj* object = It->second;
+		return object;
+
+		// this was returning the first one in "ids", but I think we always want the last one
+		//return(ids.lower_bound(id)->second);
+	}
 
 }
 
