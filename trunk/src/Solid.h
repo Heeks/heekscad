@@ -18,6 +18,8 @@ public:
 
 	CSolid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
 	CSolid(const HeeksColor& col);
+	CSolid( const CSolid & rhs );
+
 	~CSolid();
 
 	virtual const CSolid& operator=(const CSolid& s){ CShape::operator =(s); return *this;}

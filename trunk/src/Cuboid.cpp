@@ -23,6 +23,28 @@ HeeksObj *CCuboid::MakeACopy(void)const
 	return new CCuboid(*this);
 }
 
+CCuboid::CCuboid( const CCuboid & rhs ) : CSolid(rhs)
+{
+    *this = rhs;    // Call the assignment operator.
+}
+
+CCuboid & CCuboid::operator= ( const CCuboid & rhs )
+{
+    if (this != &rhs)
+    {
+        // static wxIcon* m_icon;
+
+        m_pos = rhs.m_pos;
+        m_x = rhs.m_x;
+        m_y = rhs.m_y;
+        m_z = rhs.m_z;
+
+        CSolid::operator=( rhs );
+    }
+
+    return(*this);
+}
+
 bool CCuboid::IsDifferent(HeeksObj* other)
 {
 	CCuboid* cube = (CCuboid*)other;
