@@ -20,8 +20,8 @@ public:
 
 	CSphere(const gp_Pnt& pos, double radius, const wxChar* title, const HeeksColor& col);
 	CSphere(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
-
-	virtual const CSphere& operator=(const CSphere& s);
+	CSphere(const CSphere & rhs);
+	CSphere & operator= ( const CSphere &rhs );
 
 	// HeeksObj's virtual functions
 	const wxChar* GetTypeString(void)const{return _("Sphere");}
