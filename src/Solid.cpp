@@ -13,6 +13,10 @@ CSolid::CSolid(const HeeksColor& col):CShape(col)
 {
 }
 
+CSolid::CSolid( const CSolid & rhs ) : CShape(rhs)
+{
+    *this = rhs;    // Call the assignment operator.
+}
 
 CSolid::~CSolid()
 {
