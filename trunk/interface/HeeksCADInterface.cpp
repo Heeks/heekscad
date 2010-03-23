@@ -530,6 +530,11 @@ HeeksObj* CHeeksCADInterface::GetIDObject(int type, int id)
 	return wxGetApp().GetIDObject(type, id);
 }
 
+std::list<HeeksObj*> CHeeksCADInterface::GetIDObjects(int type, int id)
+{
+    return wxGetApp().GetIDObjects(type,id);
+}
+
 void CHeeksCADInterface::SetObjectID(HeeksObj* object, int id)
 {
 	wxGetApp().SetObjectID(object, id);
