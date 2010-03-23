@@ -280,6 +280,7 @@ public:
 	bool CheckForModifiedDoc(); // returns true, if OK to continue with file open etc.
 	void SetFrameTitle();
 	HeeksObj* GetIDObject(int type, int id);
+	std::list<HeeksObj*> GetIDObjects(int type, int id);
 	void SetObjectID(HeeksObj* object, int id);
 	int GetNextID(int type);
 	void RemoveID(HeeksObj* object); // only call this from ObjList::Remove()

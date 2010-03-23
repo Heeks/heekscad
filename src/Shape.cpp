@@ -53,8 +53,7 @@ CShape::~CShape()
 
 const CShape& CShape::operator=(const CShape& s)
 {
-	//ObjList::operator = (s);
-	HeeksObj::operator = (s);
+    ObjList::operator = (s);
 
 	// don't copy id
 	delete_faces_and_edges();
@@ -419,7 +418,7 @@ bool CShape::GetExtents(double* extents, const double* orig, const double* xdir,
 
 	gp_Vec v_orig(p_orig.XYZ());
 
-	TopoDS_Solid shape[6] = 
+	TopoDS_Solid shape[6] =
 	{
 		cuboid_minus_x,
 		cuboid_minus_y,
@@ -429,7 +428,7 @@ bool CShape::GetExtents(double* extents, const double* orig, const double* xdir,
 		cuboid_plus_z
 	};
 
-	gp_Vec vector[6] = 
+	gp_Vec vector[6] =
 	{
 		v_x,
 		v_y,
@@ -500,7 +499,7 @@ HeeksObj* CShape::CutShapes(std::list<HeeksObj*> &list_in, bool dodelete)
 			newgroup->Add(newshape,NULL);
 			++iter;
 		}
-	
+
 		group->Owner()->Remove(group);
 		wxGetApp().Remove(list_in);
 		return newgroup;
@@ -686,7 +685,7 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 			{
 				Handle_Standard_Transient root = Reader.RootForTransfer(i);
 				Reader.TransferEntity(root);
-				TopoDS_Shape rShape = Reader.Shape(i);      
+				TopoDS_Shape rShape = Reader.Shape(i);
 				if(index_map)
 				{
 					// change the id ( and any other data ), to the one in the step file index
@@ -713,7 +712,7 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 		else{
 			wxMessageBox(_("STEP import not done!"));
 		}
-		
+
 		setlocale(LC_NUMERIC, oldlocale);
 
 		return true;
@@ -726,7 +725,7 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 		Standard_CString aFileName = (Standard_CString) (Ttc(filepath));
 		IGESControl_Reader Reader;
 		int status = Reader.ReadFile( aFileName );
-	
+
 		if ( status == IFSelect_RetDone )
 		{
 			Reader.TransferRoots();
@@ -737,7 +736,7 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 				int shapes_added_for_sewing = 0;
 				for(int j = 1; j<= num_shapes; j++)
 				{
-					TopoDS_Shape rShape = Reader.Shape(j); 
+					TopoDS_Shape rShape = Reader.Shape(j);
 					if(rShape.ShapeType() == TopAbs_EDGE)
 					{
 						HeeksObj* new_object = new CEdge(TopoDS::Edge(rShape));
@@ -767,7 +766,7 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 		else{
 			wxMessageBox(_("IGES import not done!"));
 		}
-		
+
 		setlocale(LC_NUMERIC, oldlocale);
 
 		return true;
@@ -836,7 +835,7 @@ bool CShape::ExportSolidsFile(const std::list<HeeksObj*>& objects, const wxChar*
 			WriteShapeOrGroup(writer, object, index_map, i);
 		}
 		writer.Write(aFileName);
-		
+
 		setlocale(LC_NUMERIC, oldlocale);
 
 		return true;
@@ -863,7 +862,7 @@ bool CShape::ExportSolidsFile(const std::list<HeeksObj*>& objects, const wxChar*
 			}
 		}
 		writer.Write(aFileName);
-		
+
 		setlocale(LC_NUMERIC, oldlocale);
 
 		return true;

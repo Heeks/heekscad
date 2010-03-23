@@ -22,6 +22,8 @@ public:
 
 	CCuboid(const gp_Ax2& pos, double x, double y, double z, const wxChar* title, const HeeksColor& col);
 	CCuboid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
+	CCuboid(const CCuboid & rhs);
+	CCuboid & operator= ( const CCuboid &rhs );
 
 	// HeeksObj's virtual functions
 	bool IsDifferent(HeeksObj* other);

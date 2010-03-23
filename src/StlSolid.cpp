@@ -143,6 +143,13 @@ const CStlSolid& CStlSolid::operator=(const CStlSolid& s)
 	m_title = s.m_title;
 	KillGLLists();
 
+	// static wxIcon* m_icon;
+	color = s.color;
+	// int m_gl_list;
+
+	m_list.clear();
+	std::copy( s.m_list.begin(), s.m_list.end(), std::inserter( m_list, m_list.begin() ));
+
 	return *this;
 }
 
@@ -228,6 +235,11 @@ bool CStlSolid::ModifyByMatrix(const double* m){
 	return false;
 }
 
+CStlSolid::CStlSolid( const CStlSolid & rhs )
+{
+    *this = rhs;    // Call the assignment operator.
+}
+
 HeeksObj *CStlSolid::MakeACopy(void)const{
 	CStlSolid *new_object = new CStlSolid(*this);
 	return new_object;
@@ -278,7 +290,7 @@ void CStlSolid::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element;
 	element = new TiXmlElement( "STLSolid" );
-	root->LinkEndChild( element );  
+	root->LinkEndChild( element );
 	element->SetAttribute("col", color.COLORREF_color());
 
 	for(std::list<CStlTri>::iterator It = m_list.begin(); It != m_list.end(); It++)
@@ -286,7 +298,7 @@ void CStlSolid::WriteXML(TiXmlNode *root)
 		CStlTri &t = *It;
 		TiXmlElement * child_element;
 		child_element = new TiXmlElement( "tri" );
-		element->LinkEndChild( child_element );  
+		element->LinkEndChild( child_element );
 		child_element->SetDoubleAttribute("nx", t.n[0]);
 		child_element->SetDoubleAttribute("ny", t.n[1]);
 		child_element->SetDoubleAttribute("nz", t.n[2]);

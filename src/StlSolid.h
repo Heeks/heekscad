@@ -28,6 +28,7 @@ public:
 
 	CStlSolid(const HeeksColor* col);
 	CStlSolid(const wxChar* filepath, const HeeksColor* col);
+	CStlSolid( const CStlSolid & rhs );
 	~CStlSolid();
 
 	virtual const CStlSolid& operator=(const CStlSolid& s);

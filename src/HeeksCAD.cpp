@@ -3043,6 +3043,25 @@ HeeksObj* HeeksCADapp::GetIDObject(int type, int id)
 
 }
 
+std::list<HeeksObj*> HeeksCADapp::GetIDObjects(int type, int id)
+{
+    std::list<HeeksObj *> results;
+
+	UsedIds_t::iterator FindIt1 = used_ids.find(type);
+	if (FindIt1 == used_ids.end()) return(results);
+
+	IdsToObjects_t &ids = FindIt1->second;
+	if (ids.find(id) == ids.end()) return(results);
+	else
+	{
+	    for (IdsToObjects_t::iterator l_itObject = ids.lower_bound(id); l_itObject != ids.upper_bound(id); l_itObject++)
+	    {
+	        results.push_back( l_itObject->second );
+	    }
+	    return(results);
+	}
+}
+
 void HeeksCADapp::SetObjectID(HeeksObj* object, int id)
 {
 	if(object->UsesID())

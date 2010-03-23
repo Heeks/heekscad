@@ -394,10 +394,13 @@ HeeksObj *CSketch::MakeACopy(void)const
 
 void CSketch::WriteXML(TiXmlNode *root)
 {
-	TiXmlElement * element = new TiXmlElement( "Sketch" );
-	root->LinkEndChild( element );
-	element->SetAttribute("title", Ttc(m_title.c_str()));
-	WriteBaseXML(element);
+    if (GetNumChildren() > 0)
+    {
+        TiXmlElement * element = new TiXmlElement( "Sketch" );
+        root->LinkEndChild( element );
+        element->SetAttribute("title", Ttc(m_title.c_str()));
+        WriteBaseXML(element);
+    }
 }
 
 // static member function
