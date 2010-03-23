@@ -53,7 +53,7 @@ CShape::~CShape()
 
 const CShape& CShape::operator=(const CShape& s)
 {
-    ObjList::operator = (s);
+    HeeksObj::operator = (s);
 
 	// don't copy id
 	delete_faces_and_edges();
