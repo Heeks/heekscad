@@ -34,6 +34,8 @@ class gp_Lin;
 class gp_Pnt;
 class gp_Circ;
 
+#include <list>
+
 class CHeeksCADInterface{
 public:
 	CHeeksCADInterface(){}
@@ -110,6 +112,7 @@ public:
 	virtual void OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into = NULL);
 	virtual void ObjectWriteBaseXML(HeeksObj* object, TiXmlElement* element);
 	virtual void ObjectReadBaseXML(HeeksObj* object, TiXmlElement* element);
+	virtual std::list<HeeksObj*> GetIDObjects(int type, int id);
 	virtual HeeksObj* GetIDObject(int type, int id);
 	virtual void SetObjectID(HeeksObj* object, int id); // check for existing id using GetIDObject and call DeleteUndoably first
 	virtual void SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, bool for_clipboard);
