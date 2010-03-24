@@ -62,7 +62,7 @@ void CSphere::MakeTransformedShape(const gp_Trsf &mat)
 	m_pos.Transform(mat);
 	double scale = gp_Vec(1, 0, 0).Transformed(mat).Magnitude();
 	m_radius = fabs(m_radius * scale);
-	m_shape = BRepPrimAPI_MakeSphere(m_pos, m_radius);
+	m_shape = BRepPrimAPI_MakeSphere(m_pos, m_radius).Shape();
 }
 
 wxString CSphere::StretchedName(){ return _("Ellipsoid");}

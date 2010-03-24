@@ -82,7 +82,7 @@ void CCuboid::MakeTransformedShape(const gp_Trsf &mat)
 	m_x = fabs(m_x * scale);
 	m_y = fabs(m_y * scale);
 	m_z = fabs(m_z * scale);
-	m_shape = BRepPrimAPI_MakeBox(m_pos, m_x, m_y, m_z);
+	m_shape = BRepPrimAPI_MakeBox(m_pos, m_x, m_y, m_z).Shape();
 }
 
 wxString CCuboid::StretchedName(){ return _("Stretched Cuboid");}
