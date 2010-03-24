@@ -163,7 +163,7 @@ void CCone::MakeTransformedShape(const gp_Trsf &mat)
 	m_r1 = fabs(m_r1 * scale);
 	m_r2 = fabs(m_r2 * scale);
 	m_height = fabs(m_height * scale);
-	m_shape = BRepPrimAPI_MakeCone(m_pos, m_r1, m_r2, m_height);
+	m_shape = BRepPrimAPI_MakeCone(m_pos, m_r1, m_r2, m_height).Shape();
 }
 
 wxString CCone::StretchedName(){ return _("Stretched Cone");}
