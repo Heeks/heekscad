@@ -86,18 +86,13 @@ void CFace::GetBox(CBox &box){
 	box.Insert(m_box);
 }
 
-bool CFace::ModifyByMatrix(const double *m){
+void CFace::ModifyByMatrix(const double *m){
 	if(GetParentBody() == NULL)
 	{
 		gp_Trsf mat = make_matrix(m);
 		BRepBuilderAPI_Transform myBRepTransformation(m_topods_face,mat);
-		TopoDS_Shape new_shape = myBRepTransformation.Shape();
-		HeeksObj* owner = Owner();
-		if(owner == NULL)owner = &wxGetApp();
-		owner->Add(new CFace(*((TopoDS_Face*)(&new_shape))), NULL);
-		owner->Remove(this);
+		m_topods_face = TopoDS::Face(myBRepTransformation.Shape());
 	}
-	return true;
 }
 
 void CFace::GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal){

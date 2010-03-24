@@ -57,12 +57,12 @@ static void on_set_radius(double value, HeeksObj* object){
 	((CSphere*)object)->m_radius = value;
 }
 
-CShape* CSphere::MakeTransformedShape(const gp_Trsf &mat)
+void CSphere::MakeTransformedShape(const gp_Trsf &mat)
 {
-	gp_Pnt new_pos = m_pos.Transformed(mat);
+	m_pos.Transform(mat);
 	double scale = gp_Vec(1, 0, 0).Transformed(mat).Magnitude();
-	double new_radius = fabs(m_radius * scale);
-	return new CSphere(new_pos, new_radius, m_title.c_str(), m_color);
+	m_radius = fabs(m_radius * scale);
+	m_shape = BRepPrimAPI_MakeSphere(m_pos, m_radius);
 }
 
 wxString CSphere::StretchedName(){ return _("Ellipsoid");}

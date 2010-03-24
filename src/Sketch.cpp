@@ -953,11 +953,12 @@ int CSketch::Intersects(const HeeksObj *object, std::list< double > *rl) const
 	return(number_of_intersections);
 } // End Intersects() method
 
-bool CSketch::ModifyByMatrix(const double *m)
+void CSketch::ModifyByMatrix(const double *m)
 {
 	if(m_coordinate_system && m_draw_with_transform)
 	{
-		return m_coordinate_system->ModifyByMatrix(m);
+		m_coordinate_system->ModifyByMatrix(m);
 	}
-	return ObjList::ModifyByMatrix(m);
+	else
+		ObjList::ModifyByMatrix(m);
 }

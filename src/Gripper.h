@@ -25,7 +25,7 @@ public:
 	int GetType()const{return GripperType;}
 	void glCommands(bool select, bool marked, bool no_color);
 	const wxChar* GetTypeString(void)const{return _("Gripper");}
-	bool ModifyByMatrix(const double* m);
+	void ModifyByMatrix(const double* m);
 
 	//Gripper's virtual functions
 	virtual wxCursor* get_gripper_cursor(){return NULL;}

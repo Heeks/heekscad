@@ -75,14 +75,14 @@ static void on_set_z(double value, HeeksObj* object){
 	((CCuboid*)object)->m_z = value;
 }
 
-CShape* CCuboid::MakeTransformedShape(const gp_Trsf &mat)
+void CCuboid::MakeTransformedShape(const gp_Trsf &mat)
 {
-	gp_Ax2 new_pos = m_pos.Transformed(mat);
+	m_pos.Transform(mat);
 	double scale = gp_Vec(1, 0, 0).Transformed(mat).Magnitude();
-	double new_x = fabs(m_x * scale);
-	double new_y = fabs(m_y * scale);
-	double new_z = fabs(m_z * scale);
-	return new CCuboid(new_pos, new_x, new_y, new_z, m_title.c_str(), m_color);
+	m_x = fabs(m_x * scale);
+	m_y = fabs(m_y * scale);
+	m_z = fabs(m_z * scale);
+	m_shape = BRepPrimAPI_MakeBox(m_pos, m_x, m_y, m_z);
 }
 
 wxString CCuboid::StretchedName(){ return _("Stretched Cuboid");}

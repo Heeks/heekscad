@@ -100,11 +100,10 @@ HeeksObj *HText::MakeACopy(void)const
 	return new HText(*this);
 }
 
-bool HText::ModifyByMatrix(const double *m)
+void HText::ModifyByMatrix(const double *m)
 {
 	gp_Trsf mat = make_matrix(m);
 	m_trsf = mat * m_trsf;
-	return false;
 }
 
 void HText::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)

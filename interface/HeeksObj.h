@@ -119,7 +119,7 @@ public:
 	virtual void CopyFrom(const HeeksObj* object){}
 	virtual void SetColor(const HeeksColor &col){}
 	virtual const HeeksColor* GetColor()const{return NULL;}
-	virtual bool ModifyByMatrix(const double *m){return false;} // transform the object, returns true if objects created new to move them
+	virtual void ModifyByMatrix(const double *m){} // transform the object
 	virtual bool GetStartPoint(double* pos){return false;}
 	virtual bool GetEndPoint(double* pos){return false;}
 	virtual bool GetCentrePoint(double* pos){return false;}

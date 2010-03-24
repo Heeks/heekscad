@@ -41,11 +41,10 @@ void CSolid::SetFromXMLElement(TiXmlElement* pElem)
 	}
 }
 
-CShape* CSolid::MakeTransformedShape(const gp_Trsf &mat)
+void CSolid::MakeTransformedShape(const gp_Trsf &mat)
 {
 	BRepBuilderAPI_Transform myBRepTransformation(m_shape,mat);
-	TopoDS_Shape new_shape = myBRepTransformation.Shape();
-	return new CSolid(*((TopoDS_Solid*)(&new_shape)), m_title.c_str(), m_color);
+	m_shape = myBRepTransformation.Shape();
 }
 
 void CSolid::OnApplyProperties()

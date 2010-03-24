@@ -18,7 +18,7 @@ protected:
 
 	void create_faces_and_edges();
 	void delete_faces_and_edges();
-	virtual CShape* MakeTransformedShape(const gp_Trsf &mat);
+	virtual void MakeTransformedShape(const gp_Trsf &mat);
 	virtual wxString StretchedName();
 
 public:
@@ -44,7 +44,7 @@ public:
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
 	void KillGLLists(void);
-	bool ModifyByMatrix(const double* m);
+	void ModifyByMatrix(const double* m);
 	const wxChar* GetShortString(void)const{return m_title.c_str();}
 	bool CanEditString(void)const{return true;}
 	void OnEditString(const wxChar* str);

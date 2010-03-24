@@ -302,10 +302,9 @@ HeeksObj *HAngularDimension::MakeACopy(void)const
 	return new HAngularDimension(*this);
 }
 
-bool HAngularDimension::ModifyByMatrix(const double *m)
+void HAngularDimension::ModifyByMatrix(const double *m)
 {
 	gp_Trsf mat = make_matrix(m);
-	return false;
 }
 
 void HAngularDimension::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
