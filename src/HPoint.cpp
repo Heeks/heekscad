@@ -93,11 +93,10 @@ HeeksObj *HPoint::MakeACopy(void)const
 	return new HPoint(*this);
 }
 
-bool HPoint::ModifyByMatrix(const double *m)
+void HPoint::ModifyByMatrix(const double *m)
 {
 	gp_Trsf mat = make_matrix(m);
 	m_p.Transform(mat);
-	return false;
 }
 
 void HPoint::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)

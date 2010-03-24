@@ -11,7 +11,7 @@ protected:
 	static wxIcon* m_icon;
 
 	// CShape's virtual functions
-	CShape* MakeTransformedShape(const gp_Trsf &mat);
+	void MakeTransformedShape(const gp_Trsf &mat);
 	wxString StretchedName();
 
 public:

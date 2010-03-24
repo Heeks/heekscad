@@ -320,16 +320,13 @@ void ObjList::ReadBaseXML(TiXmlElement* element)
 	HeeksObj::ReadBaseXML(element);
 }
 
-bool ObjList::ModifyByMatrix(const double *m)
+void ObjList::ModifyByMatrix(const double *m)
 {
-	bool done_with_add_and_remove = false;
 	std::list<HeeksObj*> copy_list = m_objects;
 	for(std::list<HeeksObj*>::iterator It=copy_list.begin(); It!=copy_list.end() ;It++)
 	{
-		if((*It)->ModifyByMatrix(m))done_with_add_and_remove = true;
+		(*It)->ModifyByMatrix(m);
 	}
-
-	return done_with_add_and_remove;
 }
 
 void ObjList::GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal)

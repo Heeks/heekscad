@@ -145,10 +145,9 @@ HeeksObj *HSpline::MakeACopy(void)const{
 		return new_object;
 }
 
-bool HSpline::ModifyByMatrix(const double* m){
+void HSpline::ModifyByMatrix(const double* m){
 	gp_Trsf mat = make_matrix(m);
 	m_spline->Transform(mat);
-	return false;
 }
 
 void HSpline::GetBox(CBox &box){

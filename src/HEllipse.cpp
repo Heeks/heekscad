@@ -153,10 +153,9 @@ HeeksObj *HEllipse::MakeACopy(void)const{
 		return new_object;
 }
 
-bool HEllipse::ModifyByMatrix(const double* m){
+void HEllipse::ModifyByMatrix(const double* m){
 	gp_Trsf mat = make_matrix(m);
 	SetEllipse(GetEllipse().Transformed(mat));
-	return false;
 }
 
 void HEllipse::GetBox(CBox &box){

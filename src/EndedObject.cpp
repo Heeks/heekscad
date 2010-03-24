@@ -66,11 +66,10 @@ void EndedObject::LoadFromDoubles()
 	B->LoadFromDoubles();
 }
 
-bool EndedObject::ModifyByMatrix(const double* m){
+void EndedObject::ModifyByMatrix(const double* m){
 	gp_Trsf mat = make_matrix(m);
 	A->m_p.Transform(mat);
 	B->m_p.Transform(mat);
-	return false;
 }
 
 bool EndedObject::Stretch(const double *p, const double* shift, void* data){

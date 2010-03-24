@@ -11,7 +11,7 @@ protected:
 	static wxIcon* m_icon;
 
 	// CShape's virtual functions
-	CShape* MakeTransformedShape(const gp_Trsf &mat);
+	void MakeTransformedShape(const gp_Trsf &mat);
 
 public:
 	SolidTypeEnum m_type; // so the solid can be stretched in specific ways, if it's still a primitive solid

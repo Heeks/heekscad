@@ -1193,13 +1193,12 @@ HeeksObj *CoordinateSystem::MakeACopy(void)const
 	return new CoordinateSystem(*this);
 }
 
-bool CoordinateSystem::ModifyByMatrix(const double *m)
+void CoordinateSystem::ModifyByMatrix(const double *m)
 {
 	gp_Trsf mat = make_matrix(m);
 	m_o.Transform(mat);
 	m_x.Transform(mat);
 	m_y.Transform(mat);
-	return false;
 }
 
 static void on_set_pos(const double *pos, HeeksObj* object)

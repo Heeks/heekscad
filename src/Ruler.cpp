@@ -253,10 +253,9 @@ void HRuler::GetBox(CBox &box)
 
 HeeksObj *HRuler::MakeACopy(void)const{ return new HRuler(*this);}
 
-bool HRuler::ModifyByMatrix(const double *mat)
+void HRuler::ModifyByMatrix(const double *mat)
 {
 	m_trsf = make_matrix(mat) * m_trsf;
-	return false;
 }
 
 void HRuler::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)

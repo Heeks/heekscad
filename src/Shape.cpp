@@ -231,11 +231,10 @@ void CShape::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 	t_list->push_back(&offset_shape_tool);
 }
 
-CShape* CShape::MakeTransformedShape(const gp_Trsf &mat)
+void CShape::MakeTransformedShape(const gp_Trsf &mat)
 {
 	BRepBuilderAPI_Transform myBRepTransformation(m_shape,mat);
-	TopoDS_Shape new_shape = myBRepTransformation.Shape();
-	return (CShape*)(MakeObject(new_shape, m_title.c_str(), SOLID_TYPE_UNKNOWN, m_color));
+	m_shape = myBRepTransformation.Shape();
 }
 
 wxString CShape::StretchedName()
@@ -243,33 +242,22 @@ wxString CShape::StretchedName()
 	return _("Stretched Shape");
 }
 
-bool CShape::ModifyByMatrix(const double* m){
+void CShape::ModifyByMatrix(const double* m){
 	gp_Trsf mat = make_matrix(m);
-
-	CShape* new_object = NULL;
 
 	if(IsMatrixDifferentialScale(mat))
 	{
         gp_GTrsf gm(mat);
 		BRepBuilderAPI_GTransform t(m_shape, gm);
-        TopoDS_Shape s = t.Shape();
-		new_object = (CShape*)(CShape::MakeObject(s, StretchedName(), SOLID_TYPE_UNKNOWN, m_color));
+        m_shape = t.Shape();
 	}
 	else
 	{
-		new_object = MakeTransformedShape(mat);
+		MakeTransformedShape(mat);
 	}
-	new_object->CopyIDsFrom(this);
-	HeeksObj* owner = Owner();
-	if(owner == NULL)owner = &wxGetApp();
-	owner->Add(new_object, NULL);
-	if(wxGetApp().m_marked_list->ObjectMarked(this))
-	{
-		wxGetApp().m_marked_list->Remove(this,false);
-		wxGetApp().m_marked_list->Add(new_object, true);
-	}
-	owner->Remove(this);
-	return true;
+	delete_faces_and_edges();
+	KillGLLists();
+	create_faces_and_edges();
 }
 
 void CShape::OnEditString(const wxChar* str){

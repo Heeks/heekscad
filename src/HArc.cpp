@@ -190,13 +190,12 @@ HeeksObj *HArc::MakeACopy(void)const{
 		return new_object;
 }
 
-bool HArc::ModifyByMatrix(const double* m){
+void HArc::ModifyByMatrix(const double* m){
 	EndedObject::ModifyByMatrix(m);
 	gp_Trsf mat = make_matrix(m);
 	m_axis.Transform(mat);
 	C->m_p.Transform(mat);
 	m_radius = C->m_p.Distance(A->m_p);
-	return false;
 }
 
 void HArc::GetBox(CBox &box){
