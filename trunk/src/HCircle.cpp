@@ -135,12 +135,11 @@ HeeksObj *HCircle::MakeACopy(void)const{
 		return new_object;
 }
 
-bool HCircle::ModifyByMatrix(const double* m){
+void HCircle::ModifyByMatrix(const double* m){
 	gp_Trsf mat = make_matrix(m);
 	m_axis.Transform(mat);
 	C->m_p.Transform(mat);
 	m_radius *= mat.ScaleFactor();
-	return false;
 }
 
 void HCircle::GetBox(CBox &box){

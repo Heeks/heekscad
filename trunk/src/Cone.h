@@ -12,7 +12,7 @@ protected:
 	bool m_render_without_OpenCASCADE;
 
 	// CShape's virtual functions
-	CShape* MakeTransformedShape(const gp_Trsf &mat);
+	void MakeTransformedShape(const gp_Trsf &mat);
 	wxString StretchedName();
 
 public:

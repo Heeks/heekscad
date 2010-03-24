@@ -6,7 +6,6 @@
 #include "../interface/HeeksObj.h"
 
 TransformTool::TransformTool(HeeksObj *o, const gp_Trsf &t, const gp_Trsf &i){
-	m_done_with_add_and_remove = false;
 	object = o;
 	extract(t, modify_matrix);
 	extract(i, revert_matrix);
@@ -24,15 +23,11 @@ const wxChar* TransformTool::GetTitle(){
 }
 
 void TransformTool::Run(){
-	if(!m_done_with_add_and_remove){
-		m_done_with_add_and_remove = object->ModifyByMatrix(modify_matrix);
-	}
+	object->ModifyByMatrix(modify_matrix);
 }
 
 void TransformTool::RollBack(){
-	if(!m_done_with_add_and_remove){
-		object->ModifyByMatrix(revert_matrix);
-	}
+	object->ModifyByMatrix(revert_matrix);
 }
 
 TransformObjectsTool::TransformObjectsTool(const std::list<HeeksObj*> &list, const gp_Trsf &t, const gp_Trsf &i){
@@ -53,12 +48,7 @@ void TransformObjectsTool::Run(){
 	std::list<HeeksObj*>::iterator It;
 	for(It = m_list.begin(); It != m_list.end(); It++){
 		HeeksObj* object = *It;
-		if(m_done_with_add_and_remove.find(object) == m_done_with_add_and_remove.end()){
-			if(object->ModifyByMatrix(modify_matrix))
-			{
-				m_done_with_add_and_remove.insert(object);
-			}
-		}
+		object->ModifyByMatrix(modify_matrix);
 	}
 
 	wxGetApp().Changed();
@@ -68,9 +58,7 @@ void TransformObjectsTool::RollBack(){
 	std::list<HeeksObj*>::const_iterator It;
 	for(It = m_list.begin(); It != m_list.end(); It++){
 		HeeksObj* object = *It;
-		if(m_done_with_add_and_remove.find(object) == m_done_with_add_and_remove.end()){
-			object->ModifyByMatrix(revert_matrix);
-		}
+		object->ModifyByMatrix(revert_matrix);
 	}
 
 	wxGetApp().Changed();

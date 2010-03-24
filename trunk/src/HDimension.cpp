@@ -246,11 +246,10 @@ HeeksObj *HDimension::MakeACopy(void)const
 	return new HDimension(*this);
 }
 
-bool HDimension::ModifyByMatrix(const double *m)
+void HDimension::ModifyByMatrix(const double *m)
 {
 	gp_Trsf mat = make_matrix(m);
 	m_trsf = mat * m_trsf;
-	return false;
 }
 
 void HDimension::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)

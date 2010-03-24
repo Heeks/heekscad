@@ -62,13 +62,13 @@ static void on_set_height(double value, HeeksObj* object){
 }
 
 
-CShape* CCylinder::MakeTransformedShape(const gp_Trsf &mat)
+void CCylinder::MakeTransformedShape(const gp_Trsf &mat)
 {
-	gp_Ax2 new_pos = m_pos.Transformed(mat);
+	m_pos.Transform(mat);
 	double scale = gp_Vec(1, 0, 0).Transformed(mat).Magnitude();
-	double new_radius = fabs(m_radius * scale);
-	double new_height = fabs(m_height * scale);
-	return new CCylinder(new_pos, new_radius, new_height, m_title.c_str(), m_color);
+	m_radius = fabs(m_radius * scale);
+	m_height = fabs(m_height * scale);
+	m_shape = MakeCylinder(m_pos, m_radius, m_height);
 }
 
 wxString CCylinder::StretchedName(){ return _("Stretched Cylinder");}

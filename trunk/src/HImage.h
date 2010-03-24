@@ -42,7 +42,7 @@ public:
 	const wxChar* GetShortString(void)const;
 	const wxChar* GetTypeString(void)const{return _("Image");}
 	HeeksObj *MakeACopy(void)const;
-	bool ModifyByMatrix(const double *mat);
+	void ModifyByMatrix(const double *mat);
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	void GetProperties(std::list<Property *> *list);
 	bool Stretch(const double *p, const double* shift, void* data);

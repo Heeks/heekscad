@@ -156,14 +156,14 @@ static void on_set_height(double value, HeeksObj* object){
 	((CCone*)object)->m_height = value;
 }
 
-CShape* CCone::MakeTransformedShape(const gp_Trsf &mat)
+void CCone::MakeTransformedShape(const gp_Trsf &mat)
 {
-	gp_Ax2 new_pos = m_pos.Transformed(mat);
+	m_pos.Transform(mat);
 	double scale = gp_Vec(1, 0, 0).Transformed(mat).Magnitude();
-	double new_r1 = fabs(m_r1 * scale);
-	double new_r2 = fabs(m_r2 * scale);
-	double new_height = fabs(m_height * scale);
-	return new CCone(new_pos, new_r1, new_r2, new_height, m_title.c_str(), m_color);
+	m_r1 = fabs(m_r1 * scale);
+	m_r2 = fabs(m_r2 * scale);
+	m_height = fabs(m_height * scale);
+	m_shape = BRepPrimAPI_MakeCone(m_pos, m_r1, m_r2, m_height);
 }
 
 wxString CCone::StretchedName(){ return _("Stretched Cone");}

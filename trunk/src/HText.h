@@ -33,7 +33,7 @@ public:
 	const wxChar* GetTypeString(void)const{return _("Text");}
 	HeeksObj *MakeACopy(void)const;
 	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(14, 1);}
-	bool ModifyByMatrix(const double *mat);
+	void ModifyByMatrix(const double *mat);
 	void SetColor(const HeeksColor &col){m_color = col;}
 	const HeeksColor* GetColor()const{return &m_color;}
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
