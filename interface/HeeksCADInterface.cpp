@@ -271,6 +271,11 @@ void CHeeksCADInterface::Mark(HeeksObj* object)
 	wxGetApp().m_marked_list->Add(object, true);
 }
 
+void CHeeksCADInterface::Unmark(HeeksObj* object)
+{
+	wxGetApp().m_marked_list->Remove(object, true);
+}
+
 bool CHeeksCADInterface::ObjectMarked(HeeksObj* object)
 {
 	return wxGetApp().m_marked_list->ObjectMarked(object);
@@ -574,9 +579,9 @@ void CHeeksCADInterface::ViewExtents(bool rotate)
 	wxGetApp().m_frame->m_graphics->OnMagExtents(rotate, false);
 }
 
-void CHeeksCADInterface::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath)
+void CHeeksCADInterface::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance)
 {
-	wxGetApp().SaveSTLFile(objects, filepath);
+	wxGetApp().SaveSTLFile(objects, filepath, facet_tolerance);
 }
 
 SketchOrderType CHeeksCADInterface::GetSketchOrder(HeeksObj* sketch)
