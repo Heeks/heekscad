@@ -72,6 +72,7 @@ public:
 	virtual bool GetSegmentVector(HeeksObj* object, double fraction, double* v);
 	virtual double GetPixelScale();
 	virtual void Mark(HeeksObj* object);
+	virtual void Unmark(HeeksObj* object);
 	virtual bool ObjectMarked(HeeksObj* object);
 	virtual void SetMarkingFilter(long filter);
 	virtual long GetMarkingFilter();
@@ -128,7 +129,7 @@ public:
 	virtual const wxChar* GetFileFullPath(); // returns NULL for untitled
 	virtual void SetViewBox(const double* b);
 	virtual void ViewExtents(bool rotate);
-	virtual void SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath);
+	virtual void SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance = -1);
 
 	// sketches
 	virtual SketchOrderType GetSketchOrder(HeeksObj* sketch);

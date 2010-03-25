@@ -1184,7 +1184,7 @@ static void write_cpp_triangle(const double* x, const double* n)
 	}
 }
 
-void HeeksCADapp::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath)
+void HeeksCADapp::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance)
 {
 #ifdef __WXMSW__
 	ofstream ofs(filepath);
@@ -1206,13 +1206,13 @@ void HeeksCADapp::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar 
 	for(std::list<HeeksObj*>::iterator It = m_objects.begin(); It != m_objects.end(); It++)
 	{
 		HeeksObj* object = *It;
-		object->GetTriangles(write_stl_triangle, m_stl_facet_tolerance);
+		object->GetTriangles(write_stl_triangle, facet_tolerance < 0 ? m_stl_facet_tolerance : facet_tolerance);
 	}
 
 	ofs<<"endsolid"<<endl;
 }
 
-void HeeksCADapp::SaveCPPFile(const std::list<HeeksObj*>& objects, const wxChar *filepath)
+void HeeksCADapp::SaveCPPFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance)
 {
 #ifdef __WXMSW__
 	ofstream ofs(filepath);
@@ -1234,7 +1234,7 @@ void HeeksCADapp::SaveCPPFile(const std::list<HeeksObj*>& objects, const wxChar 
 	for(std::list<HeeksObj*>::iterator It = m_objects.begin(); It != m_objects.end(); It++)
 	{
 		HeeksObj* object = *It;
-		object->GetTriangles(write_cpp_triangle, 0.1, false);
+		object->GetTriangles(write_cpp_triangle, facet_tolerance < 0 ? m_stl_facet_tolerance : facet_tolerance, false);
 	}
 
 	ofs<<"glEnd();"<<endl;
@@ -3041,13 +3041,13 @@ HeeksObj* HeeksCADapp::GetIDObject(int type, int id)
 	if (ids.find(id) == ids.end()) return(NULL);
 	else
 	{
-		IdsToObjects_t::iterator It = ids.upper_bound(id);
-		It--;
-		HeeksObj* object = It->second;
-		return object;
+		//IdsToObjects_t::iterator It = ids.upper_bound(id);
+		//It--;
+		//HeeksObj* object = It->second;
+		//return object;
 
 		// this was returning the first one in "ids", but I think we always want the last one
-		//return(ids.lower_bound(id)->second);
+		return(ids.lower_bound(id)->second);
 	}
 
 }
