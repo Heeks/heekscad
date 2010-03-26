@@ -927,6 +927,41 @@ static void OnMagExtentsButton( wxCommandEvent& event )
 {
 	wxGetApp().m_frame->m_graphics->OnMagExtents(true, true);
 }
+ 
+static void OnMagXYButton( wxCommandEvent& event )
+{
+	wxGetApp().m_frame->m_graphics->OnMagXY(true);
+}
+ 
+static void OnMagXYMButton( wxCommandEvent& event )
+{
+	wxGetApp().m_frame->m_graphics->OnMagXYM(true);
+}
+ 
+static void OnMagXZButton( wxCommandEvent& event )
+{
+	wxGetApp().m_frame->m_graphics->OnMagXZ(true);
+}
+ 
+static void OnMagXZMButton( wxCommandEvent& event )
+{
+	wxGetApp().m_frame->m_graphics->OnMagXZM(true);
+}
+ 
+static void OnMagYZButton( wxCommandEvent& event )
+{
+	wxGetApp().m_frame->m_graphics->OnMagYZ(true);
+}
+ 
+static void OnMagYZMButton( wxCommandEvent& event )
+{
+	wxGetApp().m_frame->m_graphics->OnMagYZM(true);
+}
+ 
+static void OnMagXYZButton( wxCommandEvent& event )
+{
+	wxGetApp().m_frame->m_graphics->OnMagXYZ(true);
+}
 
 static void OnMagNoRotButton( wxCommandEvent& event )
 {
@@ -1586,6 +1621,13 @@ void CHeeksFrame::MakeMenus()
 	AddMenuItem(view_menu, _("Zoom window"), ToolImage(_T("mag")), OnMagButton);
 	AddMenuItem(view_menu, _("Fit view to extents"), ToolImage(_T("magextents")), OnMagExtentsButton);
 	AddMenuItem(view_menu, _("Fit view to extents, but no rotation"), ToolImage(_T("magnorot")), OnMagNoRotButton);
+	AddMenuItem(view_menu, _("View XY Front"), ToolImage(_T("magxy")),       OnMagXYButton );
+	AddMenuItem(view_menu, _("View XY Back"), ToolImage(_T("magxym")),       OnMagXYMButton);
+	AddMenuItem(view_menu, _("View XZ Top"), ToolImage(_T("magxz")),         OnMagXZButton );
+	AddMenuItem(view_menu, _("View XZ Bottom"), ToolImage(_T("magxzm")),     OnMagXZMButton);
+	AddMenuItem(view_menu, _("View YZ Right"), ToolImage(_T("magyz")),       OnMagYZButton );
+	AddMenuItem(view_menu, _("View XZ Left"), ToolImage(_T("magyzm")),       OnMagYZMButton);
+	AddMenuItem(view_menu, _("View XZY Isometric"), ToolImage(_T("magxyz")), OnMagXYZButton);
 	view_menu->AppendSeparator();
 	AddMenuItem(view_menu, _("View rotate"), ToolImage(_T("viewrot")), OnViewRotateButton);
 	AddMenuItem(view_menu, _("View zoom"), ToolImage(_T("zoom")), OnViewZoomButton);
@@ -1759,6 +1801,13 @@ void CHeeksFrame::AddToolBars()
 		CFlyOutList flyout_list(_T("ViewMag"));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("Mag Extents"), ToolImage(_T("magextents")), _("Zoom in to fit the extents of the drawing into the graphics window"), OnMagExtentsButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("Mag No Rotation"), ToolImage(_T("magnorot")), _("Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"), OnMagNoRotButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("View XY Front"), ToolImage(_T("magxy")), _("View XY Front"), OnMagXYButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("View XY Back"), ToolImage(_T("magxym")), _("View XY Back"), OnMagXYMButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("View XY Top"), ToolImage(_T("magxz")), _("View XY Top"), OnMagXZButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("View XY Bottom"), ToolImage(_T("magxzm")), _("View XY Bottom"), OnMagXZMButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("View XY Right"), ToolImage(_T("magyz")), _("View XY Right"), OnMagYZButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("View XY Left"), ToolImage(_T("magyzm")), _("View XY Left"), OnMagYZMButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("View XY Isometric"), ToolImage(_T("magxyz")), _("View XY Isometric"), OnMagXYZButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("Zoom Window"), ToolImage(_T("mag")), _("Zoom in to a dragged window"), OnMagButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("View Back"), ToolImage(_T("magprev")), _("Go back to previous view"), OnMagPreviousButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("FullScreen"), ToolImage(_T("fullscreen")), _("Switch to full screen view ( press escape to return )"), OnFullScreenButton));

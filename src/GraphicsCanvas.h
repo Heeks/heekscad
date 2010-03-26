@@ -28,6 +28,14 @@ public:
 	void OnKeyDown(wxKeyEvent& event);
 	void OnKeyUp(wxKeyEvent& event);
 	void OnMagExtents(bool rotate, bool recalculate_gl_lists);
+	void OnMag(gp_Vec &unitY, gp_Vec &unitZ, bool recalculate_gl_lists);
+	void OnMagXY (bool recalculate_gl_lists);
+	void OnMagXYM(bool recalculate_gl_lists);
+	void OnMagXZ (bool recalculate_gl_lists);
+	void OnMagXZM(bool recalculate_gl_lists);
+	void OnMagYZ (bool recalculate_gl_lists);
+	void OnMagYZM(bool recalculate_gl_lists);
+	void OnMagXYZ(bool recalculate_gl_lists);
 	void OnMagPrevious();
 	void SetViewPoint(void);
 	void StoreViewPoint(void);
