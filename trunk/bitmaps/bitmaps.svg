@@ -5586,6 +5586,76 @@
          offset="1"
          id="stop3381" />
     </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient13821"
+       id="radialGradient3777"
+       gradientUnits="userSpaceOnUse"
+       cx="55.363636"
+       cy="337.7258"
+       fx="55.363636"
+       fy="337.7258"
+       r="6" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient13821"
+       id="radialGradient3813"
+       gradientUnits="userSpaceOnUse"
+       cx="55.363636"
+       cy="337.7258"
+       fx="55.363636"
+       fy="337.7258"
+       r="6" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient13821"
+       id="radialGradient3837"
+       gradientUnits="userSpaceOnUse"
+       cx="55.363636"
+       cy="337.7258"
+       fx="55.363636"
+       fy="337.7258"
+       r="6" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient13821"
+       id="radialGradient3893"
+       gradientUnits="userSpaceOnUse"
+       cx="55.363636"
+       cy="337.7258"
+       fx="55.363636"
+       fy="337.7258"
+       r="6" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient13821"
+       id="radialGradient3895"
+       gradientUnits="userSpaceOnUse"
+       cx="55.363636"
+       cy="337.7258"
+       fx="55.363636"
+       fy="337.7258"
+       r="6" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient13821"
+       id="radialGradient3897"
+       gradientUnits="userSpaceOnUse"
+       cx="55.363636"
+       cy="337.7258"
+       fx="55.363636"
+       fy="337.7258"
+       r="6" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient13821"
+       id="radialGradient4751"
+       gradientUnits="userSpaceOnUse"
+       cx="55.363636"
+       cy="337.7258"
+       fx="55.363636"
+       fy="337.7258"
+       r="6" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -8976,6 +9046,456 @@
          id="path3768"
          d="M 491.74937,313.33222 C 495.06077,314.95752 498.37217,316.53348 501.68356,320.19651 C 503.8237,311.2485 510.47905,304.65349 516.58486,299.60366 C 510.78991,301.66294 503.98965,306.22296 500.02787,314.70508 C 496.99241,313.1892 494.78482,313.56417 491.74937,313.33222 z"
          style="fill:#80e080;fill-opacity:1;fill-rule:evenodd;stroke:#006000;stroke-width:1.50765944;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <g
+       id="g3827"
+       transform="translate(9.2781742,-31.319804)"
+       inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\magxy.png"
+       inkscape:export-xdpi="194.48567"
+       inkscape:export-ydpi="194.48567">
+      <g
+         transform="translate(427.32748,125.69187)"
+         inkscape:export-ydpi="275.72485"
+         inkscape:export-xdpi="275.72485"
+         inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\magextents.png"
+         id="g3750">
+        <rect
+           style="fill:none;fill-opacity:1;stroke:#900000;stroke-width:1.99999988;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect3752"
+           width="23.572149"
+           height="23.569534"
+           x="88.226234"
+           y="335.58856" />
+        <g
+           id="g3755">
+          <path
+             id="path3757"
+             d="M 106.95052,351.33961 L 103.95052,354.33961 L 111.95052,362.33961 L 114.95052,359.33961 L 106.95052,351.33961 z"
+             style="fill:#80e0ff;fill-opacity:1;fill-rule:evenodd;stroke:#0060a0;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+          <path
+             transform="translate(42.950523,7.9774341)"
+             d="M 65,339.86218 A 7.5,7.5 0 1 1 50,339.86218 A 7.5,7.5 0 1 1 65,339.86218 z"
+             sodipodi:ry="7.5"
+             sodipodi:rx="7.5"
+             sodipodi:cy="339.86218"
+             sodipodi:cx="57.5"
+             id="path3759"
+             style="fill:#80e0ff;fill-opacity:1;stroke:#0060a0;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             sodipodi:type="arc" />
+          <path
+             transform="matrix(0.9166665,0,0,0.9166667,48.200532,36.757616)"
+             d="M 63,339.36218 A 6,6 0 1 1 51,339.36218 A 6,6 0 1 1 63,339.36218 z"
+             sodipodi:ry="6"
+             sodipodi:rx="6"
+             sodipodi:cy="339.36218"
+             sodipodi:cx="57"
+             id="path3761"
+             style="fill:url(#radialGradient3837);fill-opacity:1;stroke:none;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             sodipodi:type="arc" />
+        </g>
+      </g>
+      <text
+         transform="scale(0.9522665,1.0501262)"
+         id="text3793"
+         y="462.09927"
+         x="530.9538"
+         style="font-size:35.2686348px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="462.09927"
+           x="530.9538"
+           id="tspan3795"
+           sodipodi:role="line">XY</tspan></text>
+    </g>
+    <g
+       id="g4723"
+       inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\magxz.png"
+       inkscape:export-xdpi="191.86897"
+       inkscape:export-ydpi="191.86897">
+      <g
+         transform="translate(375.00158,93.872067)"
+         inkscape:export-ydpi="275.72485"
+         inkscape:export-xdpi="275.72485"
+         inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\magextents.png"
+         id="g3765">
+        <rect
+           style="fill:none;fill-opacity:1;stroke:#900000;stroke-width:1.99999988;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect3767"
+           width="23.572149"
+           height="23.569534"
+           x="88.226234"
+           y="335.58856" />
+        <g
+           id="g3769">
+          <path
+             id="path3771"
+             d="M 106.95052,351.33961 L 103.95052,354.33961 L 111.95052,362.33961 L 114.95052,359.33961 L 106.95052,351.33961 z"
+             style="fill:#80e0ff;fill-opacity:1;fill-rule:evenodd;stroke:#0060a0;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+          <path
+             transform="translate(42.950523,7.9774341)"
+             d="M 65,339.86218 A 7.5,7.5 0 1 1 50,339.86218 A 7.5,7.5 0 1 1 65,339.86218 z"
+             sodipodi:ry="7.5"
+             sodipodi:rx="7.5"
+             sodipodi:cy="339.86218"
+             sodipodi:cx="57.5"
+             id="path3773"
+             style="fill:#80e0ff;fill-opacity:1;stroke:#0060a0;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             sodipodi:type="arc" />
+          <path
+             transform="matrix(0.9166665,0,0,0.9166667,48.200532,36.757616)"
+             d="M 63,339.36218 A 6,6 0 1 1 51,339.36218 A 6,6 0 1 1 63,339.36218 z"
+             sodipodi:ry="6"
+             sodipodi:rx="6"
+             sodipodi:cy="339.36218"
+             sodipodi:cx="57"
+             id="path3775"
+             style="fill:url(#radialGradient3777);fill-opacity:1;stroke:none;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             sodipodi:type="arc" />
+        </g>
+      </g>
+      <text
+         inkscape:export-ydpi="191.86897"
+         inkscape:export-xdpi="191.86897"
+         inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\magxz.png"
+         transform="scale(0.9998608,1.0001392)"
+         id="text3797"
+         y="454.08661"
+         x="452.62878"
+         style="font-size:36.04367447px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="454.08661"
+           x="452.62878"
+           id="tspan3799"
+           sodipodi:role="line">XZ</tspan></text>
+    </g>
+    <g
+       id="g3816"
+       inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\magyz.png"
+       inkscape:export-xdpi="201.07979"
+       inkscape:export-ydpi="201.07979"
+       transform="translate(16.142136,3.3786796)">
+      <g
+         transform="translate(65.053822,2.1213203)"
+         id="g3805">
+        <g
+           id="g3779"
+           inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\magextents.png"
+           inkscape:export-xdpi="275.72485"
+           inkscape:export-ydpi="275.72485"
+           transform="translate(414.59956,93.872067)">
+          <rect
+             y="335.58856"
+             x="88.226234"
+             height="23.569534"
+             width="23.572149"
+             id="rect3781"
+             style="fill:none;fill-opacity:1;stroke:#900000;stroke-width:1.99999988;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+          <g
+             id="g3783">
+            <path
+               style="fill:#80e0ff;fill-opacity:1;fill-rule:evenodd;stroke:#0060a0;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+               d="M 106.95052,351.33961 L 103.95052,354.33961 L 111.95052,362.33961 L 114.95052,359.33961 L 106.95052,351.33961 z"
+               id="path3785" />
+            <path
+               sodipodi:type="arc"
+               style="fill:#80e0ff;fill-opacity:1;stroke:#0060a0;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+               id="path3787"
+               sodipodi:cx="57.5"
+               sodipodi:cy="339.86218"
+               sodipodi:rx="7.5"
+               sodipodi:ry="7.5"
+               d="M 65,339.86218 A 7.5,7.5 0 1 1 50,339.86218 A 7.5,7.5 0 1 1 65,339.86218 z"
+               transform="translate(42.950523,7.9774341)" />
+            <path
+               sodipodi:type="arc"
+               style="fill:url(#radialGradient3813);fill-opacity:1;stroke:none;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+               id="path3789"
+               sodipodi:cx="57"
+               sodipodi:cy="339.36218"
+               sodipodi:rx="6"
+               sodipodi:ry="6"
+               d="M 63,339.36218 A 6,6 0 1 1 51,339.36218 A 6,6 0 1 1 63,339.36218 z"
+               transform="matrix(0.9166665,0,0,0.9166667,48.200532,36.757616)" />
+          </g>
+        </g>
+      </g>
+      <text
+         transform="scale(0.9504233,1.0521627)"
+         id="text3801"
+         y="432.97867"
+         x="586.28259"
+         style="font-size:36.13922501px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="432.97867"
+           x="586.28259"
+           id="tspan3803"
+           sodipodi:role="line">YZ</tspan></text>
+    </g>
+    <g
+       id="g4683"
+       inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\magxzm.png"
+       inkscape:export-xdpi="191.86897"
+       inkscape:export-ydpi="191.86897"
+       transform="translate(3.9999999,-1)">
+      <g
+         transform="translate(376.70562,56.806575)"
+         inkscape:export-ydpi="275.72485"
+         inkscape:export-xdpi="275.72485"
+         inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\magextents.png"
+         id="g3839">
+        <rect
+           style="fill:none;fill-opacity:1;stroke:#900000;stroke-width:1.99999988;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect3841"
+           width="23.572149"
+           height="23.569534"
+           x="88.226234"
+           y="335.58856" />
+        <g
+           id="g3843">
+          <path
+             id="path3845"
+             d="M 106.95052,351.33961 L 103.95052,354.33961 L 111.95052,362.33961 L 114.95052,359.33961 L 106.95052,351.33961 z"
+             style="fill:#80e0ff;fill-opacity:1;fill-rule:evenodd;stroke:#0060a0;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+          <path
+             transform="translate(42.950523,7.9774341)"
+             d="M 65,339.86218 A 7.5,7.5 0 1 1 50,339.86218 A 7.5,7.5 0 1 1 65,339.86218 z"
+             sodipodi:ry="7.5"
+             sodipodi:rx="7.5"
+             sodipodi:cy="339.86218"
+             sodipodi:cx="57.5"
+             id="path3847"
+             style="fill:#80e0ff;fill-opacity:1;stroke:#0060a0;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             sodipodi:type="arc" />
+          <path
+             transform="matrix(0.9166665,0,0,0.9166667,48.200532,36.757616)"
+             d="M 63,339.36218 A 6,6 0 1 1 51,339.36218 A 6,6 0 1 1 63,339.36218 z"
+             sodipodi:ry="6"
+             sodipodi:rx="6"
+             sodipodi:cy="339.36218"
+             sodipodi:cx="57"
+             id="path3849"
+             style="fill:url(#radialGradient3893);fill-opacity:1;stroke:none;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             sodipodi:type="arc" />
+        </g>
+      </g>
+      <text
+         inkscape:export-ydpi="191.86897"
+         inkscape:export-xdpi="191.86897"
+         inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\magxz.png"
+         transform="scale(0.9998608,1.0001392)"
+         id="text3869"
+         y="417.02628"
+         x="454.33307"
+         style="font-size:36.04367447px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="417.02628"
+           x="454.33307"
+           id="tspan3871"
+           sodipodi:role="line">XZ</tspan></text>
+      <path
+         id="path3901"
+         d="M 473.14175,404.28969 L 481.1412,404.28969"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.26765132;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <g
+       id="g4694"
+       inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\magxym.png"
+       inkscape:export-xdpi="194.48567"
+       inkscape:export-ydpi="194.48567"
+       transform="translate(3.4999999,-2.4999999)">
+      <g
+         inkscape:export-ydpi="194.48567"
+         inkscape:export-xdpi="194.48567"
+         inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\magxy.png"
+         transform="translate(9.4822202,-68.885297)"
+         id="g3851">
+        <g
+           id="g3853"
+           inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\magextents.png"
+           inkscape:export-xdpi="275.72485"
+           inkscape:export-ydpi="275.72485"
+           transform="translate(427.32748,125.69187)">
+          <rect
+             y="335.58856"
+             x="88.226234"
+             height="23.569534"
+             width="23.572149"
+             id="rect3855"
+             style="fill:none;fill-opacity:1;stroke:#900000;stroke-width:1.99999988;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+          <g
+             id="g3857">
+            <path
+               style="fill:#80e0ff;fill-opacity:1;fill-rule:evenodd;stroke:#0060a0;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+               d="M 106.95052,351.33961 L 103.95052,354.33961 L 111.95052,362.33961 L 114.95052,359.33961 L 106.95052,351.33961 z"
+               id="path3859" />
+            <path
+               sodipodi:type="arc"
+               style="fill:#80e0ff;fill-opacity:1;stroke:#0060a0;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+               id="path3861"
+               sodipodi:cx="57.5"
+               sodipodi:cy="339.86218"
+               sodipodi:rx="7.5"
+               sodipodi:ry="7.5"
+               d="M 65,339.86218 A 7.5,7.5 0 1 1 50,339.86218 A 7.5,7.5 0 1 1 65,339.86218 z"
+               transform="translate(42.950523,7.9774341)" />
+            <path
+               sodipodi:type="arc"
+               style="fill:url(#radialGradient3895);fill-opacity:1;stroke:none;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+               id="path3863"
+               sodipodi:cx="57"
+               sodipodi:cy="339.36218"
+               sodipodi:rx="6"
+               sodipodi:ry="6"
+               d="M 63,339.36218 A 6,6 0 1 1 51,339.36218 A 6,6 0 1 1 63,339.36218 z"
+               transform="matrix(0.9166665,0,0,0.9166667,48.200532,36.757616)" />
+          </g>
+        </g>
+        <text
+           xml:space="preserve"
+           style="font-size:35.2686348px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+           x="530.9538"
+           y="462.09927"
+           id="text3865"
+           transform="scale(0.9522665,1.0501262)"><tspan
+             sodipodi:role="line"
+             id="tspan3867"
+             x="530.9538"
+             y="462.09927">XY</tspan></text>
+      </g>
+      <path
+         id="path4679"
+         d="M 533.00026,404.3622 L 540.99971,404.3622"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.26765132;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <g
+       id="g4706"
+       inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\magyzm.png"
+       inkscape:export-xdpi="201.07979"
+       inkscape:export-ydpi="201.07979">
+      <g
+         transform="translate(15.846182,-39.186813)"
+         inkscape:export-ydpi="201.07979"
+         inkscape:export-xdpi="201.07979"
+         inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\magyz.png"
+         id="g3873">
+        <g
+           id="g3875"
+           transform="translate(65.053822,2.1213203)">
+          <g
+             transform="translate(414.59956,93.872067)"
+             inkscape:export-ydpi="275.72485"
+             inkscape:export-xdpi="275.72485"
+             inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\magextents.png"
+             id="g3877">
+            <rect
+               style="fill:none;fill-opacity:1;stroke:#900000;stroke-width:1.99999988;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+               id="rect3879"
+               width="23.572149"
+               height="23.569534"
+               x="88.226234"
+               y="335.58856" />
+            <g
+               id="g3881">
+              <path
+                 id="path3883"
+                 d="M 106.95052,351.33961 L 103.95052,354.33961 L 111.95052,362.33961 L 114.95052,359.33961 L 106.95052,351.33961 z"
+                 style="fill:#80e0ff;fill-opacity:1;fill-rule:evenodd;stroke:#0060a0;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+              <path
+                 transform="translate(42.950523,7.9774341)"
+                 d="M 65,339.86218 A 7.5,7.5 0 1 1 50,339.86218 A 7.5,7.5 0 1 1 65,339.86218 z"
+                 sodipodi:ry="7.5"
+                 sodipodi:rx="7.5"
+                 sodipodi:cy="339.86218"
+                 sodipodi:cx="57.5"
+                 id="path3885"
+                 style="fill:#80e0ff;fill-opacity:1;stroke:#0060a0;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+                 sodipodi:type="arc" />
+              <path
+                 transform="matrix(0.9166665,0,0,0.9166667,48.200532,36.757616)"
+                 d="M 63,339.36218 A 6,6 0 1 1 51,339.36218 A 6,6 0 1 1 63,339.36218 z"
+                 sodipodi:ry="6"
+                 sodipodi:rx="6"
+                 sodipodi:cy="339.36218"
+                 sodipodi:cx="57"
+                 id="path3887"
+                 style="fill:url(#radialGradient3897);fill-opacity:1;stroke:none;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+                 sodipodi:type="arc" />
+            </g>
+          </g>
+        </g>
+        <text
+           xml:space="preserve"
+           style="font-size:36.13922501px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+           x="586.28259"
+           y="432.97867"
+           id="text3889"
+           transform="scale(0.9504233,1.0521627)"><tspan
+             sodipodi:role="line"
+             id="tspan3891"
+             x="586.28259"
+             y="432.97867">YZ</tspan></text>
+      </g>
+      <path
+         id="path4681"
+         d="M 591.50026,404.3622 L 599.49971,404.3622"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.26765132;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <g
+       id="g4765"
+       inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\magxyz.png"
+       inkscape:export-xdpi="200.00362"
+       inkscape:export-ydpi="200.00362">
+      <g
+         transform="translate(452.85792,144.6628)"
+         inkscape:export-ydpi="275.72485"
+         inkscape:export-xdpi="275.72485"
+         inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\magextents.png"
+         id="g4735">
+        <rect
+           style="fill:none;fill-opacity:1;stroke:#900000;stroke-width:1.99999988;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect4737"
+           width="23.572149"
+           height="23.569534"
+           x="88.226234"
+           y="335.58856" />
+        <g
+           id="g4739">
+          <path
+             id="path4741"
+             d="M 106.95052,351.33961 L 103.95052,354.33961 L 111.95052,362.33961 L 114.95052,359.33961 L 106.95052,351.33961 z"
+             style="fill:#80e0ff;fill-opacity:1;fill-rule:evenodd;stroke:#0060a0;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+          <path
+             transform="translate(42.950523,7.9774341)"
+             d="M 65,339.86218 A 7.5,7.5 0 1 1 50,339.86218 A 7.5,7.5 0 1 1 65,339.86218 z"
+             sodipodi:ry="7.5"
+             sodipodi:rx="7.5"
+             sodipodi:cy="339.86218"
+             sodipodi:cx="57.5"
+             id="path4743"
+             style="fill:#80e0ff;fill-opacity:1;stroke:#0060a0;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             sodipodi:type="arc" />
+          <path
+             transform="matrix(0.9166665,0,0,0.9166667,48.200532,36.757616)"
+             d="M 63,339.36218 A 6,6 0 1 1 51,339.36218 A 6,6 0 1 1 63,339.36218 z"
+             sodipodi:ry="6"
+             sodipodi:rx="6"
+             sodipodi:cy="339.36218"
+             sodipodi:cx="57"
+             id="path4745"
+             style="fill:url(#radialGradient4751);fill-opacity:1;stroke:none;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             sodipodi:type="arc" />
+        </g>
+      </g>
+      <text
+         transform="scale(0.6976624,1.433358)"
+         id="text4761"
+         y="354.66519"
+         x="761.22308"
+         style="font-size:32.29234695px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="354.66519"
+           x="761.22308"
+           id="tspan4763"
+           sodipodi:role="line">XYZ</tspan></text>
     </g>
   </g>
 </svg>
