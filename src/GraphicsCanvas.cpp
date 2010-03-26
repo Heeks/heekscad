@@ -469,6 +469,52 @@ void CGraphicsCanvas::OnMagExtents(bool rotate, bool recalculate_gl_lists)
 	Refresh();
 }
 
+void CGraphicsCanvas::OnMag(gp_Vec &unitY, gp_Vec &unitZ, bool recalculate_gl_lists)
+{
+	m_view_points.clear();
+	m_view_point.SetView(unitY, unitZ);
+	StoreViewPoint();
+	if(recalculate_gl_lists)
+		wxGetApp().RecalculateGLLists();
+	Refresh();
+}
+
+void CGraphicsCanvas::OnMagXY (bool recalculate_gl_lists)
+{
+	OnMag(gp_Vec(0, 1, 0), gp_Vec(0, 0, 1), recalculate_gl_lists);
+}
+
+void CGraphicsCanvas::OnMagXYM(bool recalculate_gl_lists)
+{
+	OnMag(gp_Vec(0, 1, 0), gp_Vec(0, 0, -1), recalculate_gl_lists);
+}
+
+void CGraphicsCanvas::OnMagXZ (bool recalculate_gl_lists)
+{
+	OnMag(gp_Vec(0, 0, -1), gp_Vec(0, 1, 0), recalculate_gl_lists);
+}
+
+void CGraphicsCanvas::OnMagXZM(bool recalculate_gl_lists)
+{
+	OnMag(gp_Vec(0, 0, 1), gp_Vec(0, -1, 0), recalculate_gl_lists);
+}
+
+void CGraphicsCanvas::OnMagYZ (bool recalculate_gl_lists)
+{
+	OnMag(gp_Vec(0, 1, 0), gp_Vec(1, 0, 0), recalculate_gl_lists);
+}
+
+void CGraphicsCanvas::OnMagYZM(bool recalculate_gl_lists)
+{
+	OnMag(gp_Vec(0, 1, 0), gp_Vec(-1, 0, 0), recalculate_gl_lists);
+}
+
+void CGraphicsCanvas::OnMagXYZ(bool recalculate_gl_lists)
+{
+	// to do; these vectors are just a guess for now
+	OnMag(gp_Vec(0.57184507186049449, -0.58257306273863141, -0.57758275628709399), gp_Vec(-0.58324980008792315, -0.55873314853774103, 0.58960744518917019), recalculate_gl_lists);
+}
+
 void CGraphicsCanvas::OnMagPrevious()
 {
 	RestorePreviousViewPoint();
