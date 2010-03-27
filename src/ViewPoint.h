@@ -49,7 +49,7 @@ public:
 	void SetProjection(bool use_depth_testing);
 	void SetPickProjection(wxRect &pick_box);
 	void SetModelview(void);
-	void SetView(gp_Vec &unity, gp_Vec &unitz);
+	void SetView(const gp_Vec &unity, const gp_Vec &unitz);
 	gp_Pnt glUnproject(const gp_Pnt &v)const;
 	gp_Pnt glProject(const gp_Pnt &v)const;
 	void SetPolygonOffset(void)const;
