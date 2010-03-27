@@ -28,7 +28,7 @@ public:
 	void OnKeyDown(wxKeyEvent& event);
 	void OnKeyUp(wxKeyEvent& event);
 	void OnMagExtents(bool rotate, bool recalculate_gl_lists);
-	void OnMag(gp_Vec &unitY, gp_Vec &unitZ, bool recalculate_gl_lists);
+	void OnMag(const gp_Vec &unitY, const gp_Vec &unitZ, bool recalculate_gl_lists);
 	void OnMagXY (bool recalculate_gl_lists);
 	void OnMagXYM(bool recalculate_gl_lists);
 	void OnMagXZ (bool recalculate_gl_lists);

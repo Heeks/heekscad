@@ -469,7 +469,7 @@ void CGraphicsCanvas::OnMagExtents(bool rotate, bool recalculate_gl_lists)
 	Refresh();
 }
 
-void CGraphicsCanvas::OnMag(gp_Vec &unitY, gp_Vec &unitZ, bool recalculate_gl_lists)
+void CGraphicsCanvas::OnMag(const gp_Vec &unitY, const gp_Vec &unitZ, bool recalculate_gl_lists)
 {
 	m_view_points.clear();
 	m_view_point.SetView(unitY, unitZ);
@@ -511,8 +511,8 @@ void CGraphicsCanvas::OnMagYZM(bool recalculate_gl_lists)
 
 void CGraphicsCanvas::OnMagXYZ(bool recalculate_gl_lists)
 {
-	// to do; these vectors are just a guess for now
-	OnMag(gp_Vec(0.57184507186049449, -0.58257306273863141, -0.57758275628709399), gp_Vec(-0.58324980008792315, -0.55873314853774103, 0.58960744518917019), recalculate_gl_lists);
+	double s = 0.5773502691896257;
+	OnMag(gp_Vec(-s, s, s), gp_Vec(s, -s, s), recalculate_gl_lists);
 }
 
 void CGraphicsCanvas::OnMagPrevious()

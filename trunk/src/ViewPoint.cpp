@@ -306,7 +306,7 @@ void CViewPoint::SetViewport(void)const{
 	glViewport(0, 0, size.GetWidth(), size.GetHeight());
 }
 
-void CViewPoint::SetView(gp_Vec &unity, gp_Vec &unitz){
+void CViewPoint::SetView(const gp_Vec &unity, const gp_Vec &unitz){
 	m_target_point = gp_Pnt(0, 0, 0);
 	m_lens_point = m_target_point.XYZ() + unitz.XYZ();
 	m_vertical = unity;
