@@ -519,6 +519,8 @@ bool CFace::GetNurbSurfaceParams(CNurbSurfaceParams* params)
 
 			}
 			break;
+		default:
+			break;
 		}
 
 	}
