@@ -24,10 +24,10 @@ GLuint* loadImage(wxString path, int* imageWidth, int* imageHeight, int* texture
 		exit(1);	
 	}
     
-	wxImage* img=new wxImage( path );
+	wxImage img( path );
 	
-	(*imageWidth)=img->GetWidth();
-	(*imageHeight)=img->GetHeight();
+	(*imageWidth)=img.GetWidth();
+	(*imageHeight)=img.GetHeight();
 	
 	glPixelStorei(GL_UNPACK_ALIGNMENT,   1   );
 	
@@ -48,13 +48,13 @@ GLuint* loadImage(wxString path, int* imageWidth, int* imageHeight, int* texture
 		// if yes, everything is fine
 		glTexImage2D(GL_TEXTURE_2D,
 					 0,
-					 img->HasAlpha() ?  4 : 3, 
+					 img.HasAlpha() ?  4 : 3, 
 					 *imageWidth,
 					 *imageHeight,
 					 0, 
-					 img->HasAlpha() ?  GL_RGBA : GL_RGB,
+					 img.HasAlpha() ?  GL_RGBA : GL_RGB,
 					 GL_UNSIGNED_BYTE,
-					 img->GetData());
+					 img.GetData());
 		
 		(*textureWidth)  = (*imageWidth);
 		(*textureHeight) = (*imageHeight);
@@ -68,12 +68,12 @@ GLuint* loadImage(wxString path, int* imageWidth, int* imageHeight, int* texture
 		
 		//printf("Unsupported image size. Recommand values: %i %i\n",newWidth,newHeight);   
 		
-		GLubyte	*bitmapData=img->GetData();
-		GLubyte        *alphaData=img->GetAlpha();
+		GLubyte	*bitmapData=img.GetData();
+		GLubyte        *alphaData=img.GetAlpha();
 		GLubyte	*imageData;
 		
 		int old_bytesPerPixel = 3;
-		int bytesPerPixel = img->HasAlpha() ?  4 : 3;
+		int bytesPerPixel = img.HasAlpha() ?  4 : 3;
 		
 		int imageSize = newWidth * newHeight * bytesPerPixel;
 		imageData=(GLubyte *)malloc(imageSize);
@@ -114,11 +114,11 @@ GLuint* loadImage(wxString path, int* imageWidth, int* imageHeight, int* texture
 		
 		glTexImage2D(GL_TEXTURE_2D,
 					 0,
-					 img->HasAlpha() ?  4 : 3,
+					 img.HasAlpha() ?  4 : 3,
 					 newWidth,
 					 newHeight,
 					 0, 
-					 img->HasAlpha() ?  GL_RGBA : GL_RGB, 
+					 img.HasAlpha() ?  GL_RGBA : GL_RGB, 
 					 GL_UNSIGNED_BYTE,
 					 imageData);
 		
@@ -127,7 +127,7 @@ GLuint* loadImage(wxString path, int* imageWidth, int* imageHeight, int* texture
 		
 		free(imageData);
 	}
-	
+
 	// set texture parameters as you wish
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // GL_LINEAR
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // GL_LINEAR
@@ -136,6 +136,5 @@ GLuint* loadImage(wxString path, int* imageWidth, int* imageHeight, int* texture
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	
 	return ID;
-	
 }
 
