@@ -180,7 +180,7 @@ public:
 	virtual const TopoDS_Shape *GetShape() { return(NULL); }
 	virtual bool IsTransient(){return false;}
 	virtual bool IsList(){return false;}
-	virtual HeeksObj *Find( const int type, const int id );
+	virtual HeeksObj *Find( const int type, const unsigned int id );
 	virtual void SetIdPreservation(const bool flag) { m_preserving_id = flag; }
 protected:
 	virtual void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);

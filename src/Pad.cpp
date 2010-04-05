@@ -133,7 +133,7 @@ HeeksObj* CPad::ReadFromXMLElement(TiXmlElement* element)
 	return new_object;
 
 	// instead of ( ObjList:: ) new_object->ReadBaseXML(pElem);
-
+#if 0
 	// loop through all the objects
 	for(TiXmlElement* pElem = TiXmlHandle(element).FirstChildElement().Element(); pElem; pElem = pElem->NextSiblingElement())
 	{
@@ -154,6 +154,7 @@ HeeksObj* CPad::ReadFromXMLElement(TiXmlElement* element)
 	new_object->HeeksObj::ReadBaseXML(element);
 
 	return (ObjList*)new_object;
+#endif
 }
 
 // static
