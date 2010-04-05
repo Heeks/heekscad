@@ -27,6 +27,7 @@
 #include "MagDragWindow.h"
 #include "ViewRotating.h"
 #include "ViewZooming.h"
+#include "ViewPanning.h"
 #include "DigitizeMode.h"
 #include "Shape.h"
 #include "Face.h"
@@ -102,6 +103,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	magnification = new MagDragWindow();
 	viewrotating = new ViewRotating;
 	viewzooming = new ViewZooming;
+	viewpanning = new ViewPanning;
 	m_select_mode = new CSelectMode(false);
 	// Set this to 'true' for 'select similar' mode.  I'm not there yet.
 	m_digitizing = new DigitizeMode();
@@ -190,6 +192,7 @@ HeeksCADapp::~HeeksCADapp()
 	delete m_digitizing;
 	delete viewrotating;
 	delete viewzooming;
+	delete viewpanning;
 	delete m_ruler;
 	if(m_printData)delete m_printData;
 	if(m_pageSetupData)delete m_pageSetupData;
