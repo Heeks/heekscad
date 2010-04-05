@@ -20,7 +20,7 @@ struct ToolIndex{
 };
 
 enum{
-	ID_RECENT_FIRST = 1,
+	ID_RECENT_FIRST = wxID_HIGHEST + 1,
 	Menu_View_ResetLayout = ID_RECENT_FIRST + MAX_RECENT_FILES,
 	Menu_View_SetToolBarsToLeft,
 	ID_TREE_CTRL,
