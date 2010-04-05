@@ -1870,6 +1870,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\ViewPanning.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ViewPanning.h"
+			>
+		</File>
+		<File
 			RelativePath=".\ViewPoint.cpp"
 			>
 		</File>

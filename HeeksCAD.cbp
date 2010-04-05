@@ -286,6 +286,8 @@
 		<Unit filename="src/ViewRotating.h" />
 		<Unit filename="src/ViewZooming.cpp" />
 		<Unit filename="src/ViewZooming.h" />
+		<Unit filename="src/ViewPanning.cpp" />
+		<Unit filename="src/ViewPanning.h" />
 		<Unit filename="src/Window.cpp" />
 		<Unit filename="src/Window.h" />
 		<Unit filename="src/Wire.cpp" />

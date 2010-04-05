@@ -5656,6 +5656,26 @@
        fx="55.363636"
        fy="337.7258"
        r="6" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient13821"
+       id="radialGradient3850"
+       gradientUnits="userSpaceOnUse"
+       cx="55.363636"
+       cy="337.7258"
+       fx="55.363636"
+       fy="337.7258"
+       r="6" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient13821"
+       id="radialGradient4638"
+       gradientUnits="userSpaceOnUse"
+       cx="55.363636"
+       cy="337.7258"
+       fx="55.363636"
+       fy="337.7258"
+       r="6" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -5668,11 +5688,11 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4142136"
-     inkscape:cx="459.22968"
-     inkscape:cy="365.38597"
+     inkscape:cx="562.21017"
+     inkscape:cy="496.09664"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     showgrid="false"
+     showgrid="true"
      inkscape:window-width="1620"
      inkscape:window-height="1002"
      inkscape:window-x="112"
@@ -7255,13 +7275,6 @@
          id="path7739"
          sodipodi:nodetypes="ccccccccc" />
     </g>
-    <rect
-       style="opacity:1;fill:#e0e0e0;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect4200"
-       width="30"
-       height="30"
-       x="300"
-       y="422.36218" />
     <rect
        style="opacity:1;fill:#e0e0e0;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4202"
@@ -9496,6 +9509,49 @@
            x="761.22308"
            id="tspan4763"
            sodipodi:role="line">XYZ</tspan></text>
+    </g>
+    <g
+       id="g4630"
+       transform="translate(-265.70711,-165.81803)"
+       inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\pan.png"
+       inkscape:export-xdpi="261.37656"
+       inkscape:export-ydpi="261.37656">
+      <g
+         transform="translate(373.70711,257.31805)"
+         id="g3830">
+        <g
+           id="g3832"
+           transform="translate(105.04948,-0.4774454)">
+          <path
+             id="path3834"
+             d="M 106.95052,351.33961 L 103.95052,354.33961 L 111.95052,362.33961 L 114.95052,359.33961 L 106.95052,351.33961 z"
+             style="fill:#80e0ff;fill-opacity:1;fill-rule:evenodd;stroke:#0060a0;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+          <path
+             transform="translate(42.950523,7.9774341)"
+             d="M 65,339.86218 A 7.5,7.5 0 1 1 50,339.86218 A 7.5,7.5 0 1 1 65,339.86218 z"
+             sodipodi:ry="7.5"
+             sodipodi:rx="7.5"
+             sodipodi:cy="339.86218"
+             sodipodi:cx="57.5"
+             id="path3836"
+             style="fill:#80e0ff;fill-opacity:1;stroke:#0060a0;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             sodipodi:type="arc" />
+          <path
+             transform="matrix(0.9166665,0,0,0.9166667,48.200532,36.757616)"
+             d="M 63,339.36218 A 6,6 0 1 1 51,339.36218 A 6,6 0 1 1 63,339.36218 z"
+             sodipodi:ry="6"
+             sodipodi:rx="6"
+             sodipodi:cy="339.36218"
+             sodipodi:cx="57"
+             id="path3838"
+             style="fill:url(#radialGradient4638);fill-opacity:1;stroke:none;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             sodipodi:type="arc" />
+        </g>
+      </g>
+      <path
+         id="path3852"
+         d="M 576.98553,606.80699 L 576.98553,615.69664 L 574.81645,615.69664 L 579.1546,620.14147 L 583.49276,615.69664 L 581.32368,615.69664 L 581.32368,606.80699 L 590,606.80699 L 590,609.02941 L 594.33816,604.58459 L 590,600.13976 L 590,602.36218 L 581.32368,602.36218 L 581.32368,593.47253 L 583.49276,593.47253 L 579.1546,589.0277 L 574.81645,593.47253 L 576.98553,593.47253 L 576.98553,602.36218 L 568.30921,602.36218 L 568.30921,600.13976 L 563.97105,604.58459 L 568.30921,609.02941 L 568.30921,606.80699 L 576.98553,606.80699 z"
+         style="fill:#80e080;fill-opacity:1;fill-rule:evenodd;stroke:#006000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     </g>
   </g>
 </svg>
