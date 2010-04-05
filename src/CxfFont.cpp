@@ -122,12 +122,11 @@ HeeksObj *VectorFont::Glyph::Arc::Sketch( const gp_Pnt & location, const gp_Trsf
 	gp_Pnt start_point( centre_point.X() + m_radius, centre_point.Y(), centre_point.Z() );
 	gp_Pnt end_point( centre_point.X() + m_radius, centre_point.Y(), centre_point.Z() );
 
-	gp_Dir z_direction( 0, 0, 1 );
+    gp_Dir z_direction( 0, 0, 1 );
 
 	gp_Trsf start_rotation_matrix;
 	start_rotation_matrix.SetRotation( gp_Ax1(centre_point, z_direction), m_start_angle );
 	start_point.Transform(start_rotation_matrix);	// Rotate to start_angle
-	start_point.Transform(transformation_matrix);	// Move it as well as rotate it.
 
 	start[0] = start_point.X();
 	start[1] = start_point.Y();
@@ -136,19 +135,16 @@ HeeksObj *VectorFont::Glyph::Arc::Sketch( const gp_Pnt & location, const gp_Trsf
 	gp_Trsf end_rotation_matrix;
 	end_rotation_matrix.SetRotation( gp_Ax1(centre_point, z_direction), m_end_angle );
 	end_point.Transform(end_rotation_matrix);	// Rotate to start_angle
-	end_point.Transform(transformation_matrix);	// Move it as well as rotate it.
 
 	end[0] = end_point.X();
 	end[1] = end_point.Y();
 	end[2] = end_point.Z();
 
-	centre_point.Transform(transformation_matrix);
 	centre[0] = centre_point.X();
 	centre[1] = centre_point.Y();
 	centre[2] = centre_point.Z();
 
 	gp_Pnt up_point( 0.0, 0.0, 1.0 );
-	up_point.Transform( transformation_matrix );
 
 	// For counter-clockwise (always in this font format)
 	up[0] = up_point.X();
@@ -156,6 +152,9 @@ HeeksObj *VectorFont::Glyph::Arc::Sketch( const gp_Pnt & location, const gp_Trsf
 	up[2] = up_point.Z();
 
 	HeeksObj *arc = heekscad_interface.NewArc( start, end, centre, up );
+	double m[16];
+	extract(transformation_matrix,m);
+	arc->ModifyByMatrix(m);
 	return(arc);
 } // End Sketch() method
 
@@ -621,7 +620,7 @@ HersheyFont::HersheyFont( const wxChar *p_szFile )
 				// the next three characters represent the number of vertices in the character.
 				int number_of_vertices = strtoul( line.substr(0,3).c_str(), NULL, 10 );
 				line.erase(0,3);
-				
+
 				while ((! file.eof()) && (line.size() < std::string::size_type(number_of_vertices * 2)))
 				{
 					std::string extra;
