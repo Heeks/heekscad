@@ -322,7 +322,7 @@ HeeksObj* HeeksObj::GetNextOwner()
 	return NULL;
 }
 
-HeeksObj *HeeksObj::Find( const int type, const int id )
+HeeksObj *HeeksObj::Find( const int type, const unsigned int id )
 {
 	if ((type == this->GetType()) && (this->m_id == id)) return(this);
 	return(NULL);

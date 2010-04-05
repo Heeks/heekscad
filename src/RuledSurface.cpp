@@ -207,13 +207,6 @@ void PickCreateExtrusion()
 	}
 }
 
-static void on_revolve_angle(double value, HeeksObj* object)
-{
-	wxGetApp().m_revolve_angle = value;
-	HeeksConfig config;
-	config.Write(_T("RevolveAngle"), wxGetApp().m_revolve_angle);
-}
-
 class CRevolutionInput:public CDoubleInput
 {
 public:
