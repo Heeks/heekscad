@@ -238,7 +238,7 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("DrawScreen"), &digitize_screen, false);
 	config.Read(_T("DrawToGrid"), &draw_to_grid, true);
 	config.Read(_T("AutoSolveConstraints"), &autosolve_constraints, false);
-	config.Read(_T("UseOldFuse"), &useOldFuse, true);
+	config.Read(_T("UseOldFuse"), &useOldFuse, false);
 	config.Read(_T("DrawGrid"), &digitizing_grid);
 	config.Read(_T("DrawRadius"), &digitizing_radius);
 	{
