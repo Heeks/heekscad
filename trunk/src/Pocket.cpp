@@ -133,6 +133,7 @@ HeeksObj* CPocket::ReadFromXMLElement(TiXmlElement* element)
 	CPocket* new_object = new CPocket;
 	return new_object;
 
+#if 0
 	// instead of ( ObjList:: ) new_object->ReadBaseXML(pElem);
 
 	// loop through all the objects
@@ -155,6 +156,7 @@ HeeksObj* CPocket::ReadFromXMLElement(TiXmlElement* element)
 	new_object->HeeksObj::ReadBaseXML(element);
 
 	return (ObjList*)new_object;
+#endif
 }
 
 // static

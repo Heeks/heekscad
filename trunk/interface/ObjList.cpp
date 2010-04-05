@@ -342,7 +342,7 @@ void ObjList::GetTriangles(void(*callbackfunc)(const double* x, const double* n)
 	The idea is to search for pre-existing objects when we're importing a new set of data.  If none
 	can be found then a NULL should be returned.
  */
-HeeksObj *ObjList::Find( const int type, const int id )
+HeeksObj *ObjList::Find( const int type, const unsigned int id )
 {
 	if ((type == this->GetType()) && (this->m_id == id)) return(this);
 	for(std::list<HeeksObj*>::const_iterator It=m_objects.begin(); It!=m_objects.end() ;It++)
