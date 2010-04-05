@@ -14,6 +14,7 @@ class TransientObject;
 class MagDragWindow;
 class ViewRotating;
 class ViewZooming;
+class ViewPanning;
 class CInputMode;
 class CSelectMode;
 class DigitizeMode;
@@ -120,6 +121,7 @@ public:
 	MagDragWindow *magnification;
 	ViewRotating *viewrotating;
 	ViewZooming *viewzooming;
+	ViewPanning *viewpanning;
 	CSelectMode *m_select_mode;
 	DigitizeMode *m_digitizing;
 	GripperMode* gripper_mode;
