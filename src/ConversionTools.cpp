@@ -153,42 +153,96 @@ bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_o
 
 	std::list<TopoDS_Edge> edges;
 	for(std::list<HeeksObj*>::const_iterator It = line_arc_list.begin(); It != line_arc_list.end(); It++){
-		HeeksObj* object = *It;
-		switch(object->GetType()){
-			case LineType:
-				{
-					HLine* line = (HLine*)object;
-					if(!(line->A->m_p.IsEqual(line->B->m_p, wxGetApp().m_geom_tol)))
-					{
-						edges.push_back(BRepBuilderAPI_MakeEdge(line->A->m_p, line->B->m_p));
-					}
-				}
-				break;
-			case ArcType:
-				{
-					HArc* arc = (HArc*)object;
-					edges.push_back(BRepBuilderAPI_MakeEdge(arc->GetCircle(), arc->A->m_p, arc->B->m_p));
-				}
-				break;
-			case CircleType:
-				{
-					HCircle* circle = (HCircle*)object;
-					edges.push_back(BRepBuilderAPI_MakeEdge(circle->GetCircle()));
-				}
-				break;
-			case EllipseType:
-				{
-					HEllipse* ellipse = (HEllipse*)object;
-					edges.push_back(BRepBuilderAPI_MakeEdge(ellipse->GetEllipse()));
-				}
-				break;
-			case SplineType:
-				{
-					HSpline* spline = (HSpline*)object;
-					edges.push_back(BRepBuilderAPI_MakeEdge(spline->m_spline));
-				}
-				break;
-		}
+	    try {
+            HeeksObj* object = *It;
+            switch(object->GetType()){
+                case LineType:
+                    {
+                        HLine* line = (HLine*)object;
+                        if(!(line->A->m_p.IsEqual(line->B->m_p, wxGetApp().m_geom_tol)))
+                        {
+                            edges.push_back(BRepBuilderAPI_MakeEdge(line->A->m_p, line->B->m_p));
+                        }
+                    }
+                    break;
+                case ArcType:
+                    {
+                        HArc* arc = (HArc*)object;
+
+                        BRepBuilderAPI_MakeEdge edge(arc->GetCircle(), arc->A->m_p, arc->B->m_p);
+                        if (! edge.IsDone())
+                        {
+							/*
+                            BRepBuilderAPI_EdgeError error = edge.Error();
+                            switch(error)
+                            {
+                                case  BRepBuilderAPI_EdgeDone:
+                                break;
+
+                                case BRepBuilderAPI_PointProjectionFailed:
+                                wxMessageBox(wxString(_("BRepBuilderAPI_PointProjectionFailed")) );
+                                break;
+
+                                case BRepBuilderAPI_ParameterOutOfRange:
+                                wxMessageBox(wxString(_("BRepBuilderAPI_ParameterOutOfRange")) );
+                                break;
+
+                                case BRepBuilderAPI_DifferentPointsOnClosedCurve:
+                                wxMessageBox(wxString(_("BRepBuilderAPI_DifferentPointsOnClosedCurve")) );
+                                break;
+
+                                case BRepBuilderAPI_PointWithInfiniteParameter:
+                                wxMessageBox(wxString(_("BRepBuilderAPI_PointWithInfiniteParameter")) );
+                                break;
+
+                                case BRepBuilderAPI_DifferentsPointAndParameter:
+                                wxMessageBox(wxString(_("BRepBuilderAPI_DifferentsPointAndParameter")) );
+                                break;
+
+                                case BRepBuilderAPI_LineThroughIdenticPoints:
+                                wxMessageBox(wxString(_("BRepBuilderAPI_LineThroughIdenticPoints")) );
+                                break;
+
+                                default:
+                                wxMessageBox(wxString(_("Unknown error")) );
+                                break;
+                            }
+							*/
+
+							return(false);
+                        }
+                        else
+                        {
+                            edges.push_back(edge.Edge());
+                        }
+                    }
+                    break;
+                case CircleType:
+                    {
+                        HCircle* circle = (HCircle*)object;
+                        edges.push_back(BRepBuilderAPI_MakeEdge(circle->GetCircle()));
+                    }
+                    break;
+                case EllipseType:
+                    {
+                        HEllipse* ellipse = (HEllipse*)object;
+                        edges.push_back(BRepBuilderAPI_MakeEdge(ellipse->GetEllipse()));
+                    }
+                    break;
+                case SplineType:
+                    {
+                        HSpline* spline = (HSpline*)object;
+                        edges.push_back(BRepBuilderAPI_MakeEdge(spline->m_spline));
+                    }
+                    break;
+            }
+	    } // End try
+	    catch(Standard_Failure)
+	    {
+	        Handle_Standard_Failure e = Standard_Failure::Caught();
+			wxMessageBox(wxString(_("Error converting sketch to face")) + _T(": ") + Ctt(e->GetMessageString()));
+			return false;
+	    }
 	}
 
 	if(edges.size() > 0){
