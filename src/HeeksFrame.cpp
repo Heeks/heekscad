@@ -21,6 +21,7 @@
 #include "MagDragWindow.h"
 #include "ViewRotating.h"
 #include "ViewZooming.h"
+#include "ViewPanning.h"
 #include "HArc.h"
 #include "RuledSurface.h"
 #include "Sphere.h"
@@ -983,6 +984,11 @@ static void OnViewZoomButton( wxCommandEvent& event )
 	wxGetApp().SetInputMode(wxGetApp().viewzooming);
 }
 
+static void OnViewPanButton( wxCommandEvent& event )
+{
+	wxGetApp().SetInputMode(wxGetApp().viewpanning);
+}
+
 static void OnFullScreenButton( wxCommandEvent& event )
 {
 	wxGetApp().m_frame->ShowFullScreen(true);
@@ -1631,6 +1637,7 @@ void CHeeksFrame::MakeMenus()
 	view_menu->AppendSeparator();
 	AddMenuItem(view_menu, _("View rotate"), ToolImage(_T("viewrot")), OnViewRotateButton);
 	AddMenuItem(view_menu, _("View zoom"), ToolImage(_T("zoom")), OnViewZoomButton);
+	AddMenuItem(view_menu, _("View pan"), ToolImage(_T("pan")), OnViewPanButton);
 	AddMenuItem(view_menu, _("Full screen"), ToolImage(_T("fullscreen")), OnFullScreenButton);
 	view_menu->AppendSeparator();
 	AddMenuItem(view_menu, _("Redraw"), ToolImage(_T("redraw")), OnRedrawButton);
@@ -1818,6 +1825,7 @@ void CHeeksFrame::AddToolBars()
 		CFlyOutList flyout_list(_T("ViewMag"));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("View Rotate"), ToolImage(_T("viewrot")), _("Enter view rotating mode"), OnViewRotateButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("View Zoom"), ToolImage(_T("zoom")), _("Drag to zoom in and out"), OnViewZoomButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("View Pan"), ToolImage(_T("pan")), _("Drag to move view"), OnViewPanButton));
 		AddToolBarFlyout(m_viewingBar, flyout_list);
 	}
 
