@@ -1476,6 +1476,86 @@ msgstr "Dessiner des oblongs"
 msgid "Start drawing polygons"
 msgstr "Dessiner des polygones"
 
+#Ajout 344 HeekscAD.cpp
+msgid "Select how the file is to be interpreted"
+msgstr "Choisir comment le fichier est interprété"
+
+#Ajout 345 HeekscAD.cpp
+msgid "RS274X file interpretation"
+msgstr "Interprétation du fichier RS274X"
+
+#Ajout 346 HeekscAD.cpp Traduction hypothétique
+msgid "Produce trace isolation sketches"
+msgstr "Isoler le tracé d'esquisses"
+
+#Ajout 347 HeekscAD.cpp Traduction hypothétique
+msgid "Produce trace centre-line sketches"
+msgstr "Tracé d'esquisses centre-lignes"
+
+#Ajout 348 HeekscAD.cpp
+msgid "Solid revolution angle"
+msgstr "Angle de révolution du solide"
+
+#Ajout 349 HeekscAD.cpp 
+msgid "Use old solid fuse ( to prevent coplanar faces )"
+msgstr "Utiliser ancien objet fusionné pour faces coplanes"
+
+#Ajout 350 HText.cpp 
+msgid "Make a Sketch"
+msgstr "Créer une Esquisse"
+
+#Ajout 351 Shape.cpp 
+msgid "Error making fillet"
+msgstr "Erreur en créant le congé"
+
+#Ajout 352 
+msgid "command not done"
+msgstr "échec de la commande"
+
+#Ajout 353  HeeksFrame.cpp
+msgid "View XY Front"
+msgstr "Vue de Face XY"
+
+#Ajout 354  HeeksFrame.cpp
+msgid "View XY Back"
+msgstr "Vue Arrière XY"
+
+#Ajout 355  HeeksFrame.cpp
+msgid "View XZ Top"
+msgstr "Vue de Dessus XZ"
+
+#Ajout 356  HeeksFrame.cpp
+msgid "View XZ Bottom"
+msgstr "Vue de Dessous XZ"
+
+#Ajout 357  HeeksFrame.cpp
+msgid "View YZ Right"
+msgstr "Vue de Droite YZ"
+
+#Ajout 358  HeeksFrame.cpp
+msgid "View XZ Left"
+msgstr "Vue de Gauche YZ"
+
+#Ajout 359  HeeksFrame.cpp
+msgid "View XZY Isometric"
+msgstr "Vue Isométrique XZY"
+
+#Ajout 360 Sketch.cpp Aucun effet
+msgid "Copy Parallel"
+msgstr "Copie Parallèle"
+
+#Ajout 361 Sketch.cpp  Aucun effet
+msgid "Enter Sketch Mode"
+msgstr "Entrer Mode Esquisse"
+
+#Ajout 362 HeeksFrame.cpp
+msgid "View pan"
+msgstr "Panoramique"
+
+#Ajout 363 HeeksFrame.cpp
+msgid "View Pan"
+msgstr "Panoramique"
+
 #===============================
 
 msgid "OK"
@@ -1734,9 +1814,11 @@ msgstr "Format de fichier invalide"
 msgid "expecting"
 msgstr "En attente"
 
+#HeeksCAD.cpp
 msgid "couldn't open file"
 msgstr "Ouverture de fichier impossible"
 
+#HeeksCAD.cpp
 msgid "Save graphical data file"
 msgstr "Enregistrer fichier graphique"
 
@@ -1873,6 +1955,7 @@ msgstr "Couleur de construction"
 msgid "geometry tolerance"
 msgstr "Tolérance géométrique"
 
+#HeeksCAD.cpp
 msgid "selection filter"
 msgstr "Filtre de sélection"
 
@@ -2376,7 +2459,7 @@ msgstr "Extruder un maillage ou une face"
 
 msgid "Cut one solid from another"
 msgstr ""
-"Couper un objet 3D avec un autre"
+"Soustraire un objet 3D à un autre"
 
 msgid "Fuse one solid to another"
 msgstr "Fusionner un objet 3D avec un autre"
@@ -2616,7 +2699,7 @@ msgstr "Désigner quelques esquisses"
 
 #RuledSurface.cpp
 msgid "Ruled Surface"
-msgstr "Surface réglée"
+msgstr "Surface lissée"
 
 msgid "pick sketches"
 msgstr "Choisir des Esquisses"
@@ -3805,9 +3888,11 @@ msgstr "Origines"
 msgid "output file name follows data file name"
 msgstr "Nom du fichier de sortie = nom de fichier de données"
 
+#HeeksCAD.cpp
 msgid "Number of sample points"
 msgstr "Nombre de points exemples"
 
+#HeeksCAD.cpp
 msgid "face to sketch deviaton"
 msgstr "Écart Face-Esquisse"
 
