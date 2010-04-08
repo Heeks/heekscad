@@ -671,20 +671,20 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 			{
 				wxStandardPaths sp;
 				sp.GetTempDir();
-				wxString temp_file = sp.GetTempDir() + _T("/temp_HeeksCAD_STEP_file.step");
+				wxFileName temp_file(sp.GetTempDir().c_str(), _T("temp_HeeksCAD_STEP_file.step") );
 				{
 #if wxUSE_UNICODE
 #ifdef __WXMSW__
-					wofstream ofs(temp_file);
+					wofstream ofs(temp_file.GetFullPath());
 #else
-					wofstream ofs(Ttc(temp_file.c_str()));
+					wofstream ofs(Ttc(temp_file.GetFullPath().c_str()));
 #endif
 #else
-					ofstream ofs(temp_file);
+					ofstream ofs(temp_file.GetFullPath());
 #endif
 					ofs<<file_text;
 				}
-				CShape::ImportSolidsFile(temp_file, &index_map, paste_into_for_ReadSTEPFileFromXMLElement);
+				CShape::ImportSolidsFile(temp_file.GetFullPath(), &index_map, paste_into_for_ReadSTEPFileFromXMLElement);
 			}
 		}
 	}
@@ -697,16 +697,16 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 		{
 			wxStandardPaths sp;
 			sp.GetTempDir();
-			wxString temp_file = sp.GetTempDir() + _T("/temp_HeeksCAD_STEP_file.step");
+			wxFileName temp_file( sp.GetTempDir().c_str(), _T("temp_HeeksCAD_STEP_file.step") );
 			{
 #ifdef __WXMSW__
-				ofstream ofs(temp_file);
+				ofstream ofs(temp_file.GetFullPath());
 #else
-				ofstream ofs(Ttc(temp_file.c_str()));
+				ofstream ofs(Ttc(temp_file.GetFullPath().c_str()));
 #endif
 				ofs<<a->Value();
 			}
-			CShape::ImportSolidsFile(temp_file,&index_map, paste_into_for_ReadSTEPFileFromXMLElement);
+			CShape::ImportSolidsFile(temp_file.GetFullPath(),&index_map, paste_into_for_ReadSTEPFileFromXMLElement);
 		}
 	}
 
@@ -1273,9 +1273,9 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 	if(CShape::m_solids_found){
 		wxStandardPaths sp;
 		sp.GetTempDir();
-		wxString temp_file = sp.GetTempDir() + _T("/temp_HeeksCAD_STEP_file.step");
+		wxFileName temp_file( sp.GetTempDir().c_str(), _T("temp_HeeksCAD_STEP_file.step") );
 		std::map<int, CShapeData> index_map;
-		CShape::ExportSolidsFile(objects, temp_file, &index_map);
+		CShape::ExportSolidsFile(objects, temp_file.GetFullPath(), &index_map);
 
 		TiXmlElement *step_file_element = new TiXmlElement( "STEP_file" );
 		root->LinkEndChild( step_file_element );
@@ -1323,9 +1323,9 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 
 		// write the step file as a string attribute of step_file
 #ifdef __WXMSW__
-		ifstream ifs(temp_file);
+		ifstream ifs(temp_file.GetFullPath());
 #else
-		ifstream ifs(Ttc(temp_file.c_str()));
+		ifstream ifs(Ttc(temp_file.GetFullPath().c_str()));
 #endif
 		if(!(!ifs)){
 			std::string fstr;
@@ -3290,24 +3290,24 @@ void HeeksCADapp::Paste(HeeksObj* paste_into)
 	// write a temporary file
 	wxStandardPaths sp;
 	sp.GetTempDir();
-	wxString temp_file = sp.GetTempDir() + _T("/temp_Heeks_clipboard_file.heeks");
+	wxFileName temp_file( sp.GetTempDir().c_str(), _T("temp_Heeks_clipboard_file.heeks"));
 
 	{
 #if wxUSE_UNICODE
 #ifdef __WXMSW__
-		wofstream ofs(temp_file);
+		wofstream ofs(temp_file.GetFullPath());
 #else
-		wofstream ofs(Ttc(temp_file.c_str()));
+		wofstream ofs(Ttc(temp_file.GetFullPath().c_str()));
 #endif
 #else
-		ofstream ofs(temp_file);
+		ofstream ofs(temp_file.GetFullPath());
 #endif
 		ofs<<fstr.c_str();
 	}
 
 	m_marked_list->Clear(true);
 	m_mark_newly_added_objects = true;
-	OpenFile(temp_file, true, paste_into);
+	OpenFile(temp_file.GetFullPath(), true, paste_into);
 	m_mark_newly_added_objects = false;
 }
 

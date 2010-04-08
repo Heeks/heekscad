@@ -148,7 +148,7 @@ void MarkedList::ObjectsInWindow( wxRect window, MarkedObject* marked_object, bo
 			wxGetApp().glCommands(true, false, false);
 			GrippersGLCommands(true, false);
 			glFlush();
-			num_hits = glRenderMode(GL_RENDER); 
+			num_hits = glRenderMode(GL_RENDER);
 			if(num_hits<0){
 				free(data);
 				buffer_length *= 10;
@@ -187,7 +187,7 @@ void MarkedList::ObjectsInWindow( wxRect window, MarkedObject* marked_object, bo
 		if(!single_picking)break;
 		if(window_mode > 2)break;
 	}
-	
+
 	free(data);
 }
 
@@ -225,7 +225,7 @@ void MarkedList::Remove(const std::list<HeeksObj *> &obj_list, bool call_OnChang
 	if(call_OnChanged)OnChanged(false, NULL, &obj_list);
 }
 
-void MarkedList::Clear(bool call_OnChanged){ 
+void MarkedList::Clear(bool call_OnChanged){
 	m_list.clear();
 	m_set.clear();
 	if(call_OnChanged)OnChanged(true, NULL, NULL);
@@ -369,18 +369,18 @@ void MarkedList::CopySelectedItems()
 {
 	wxStandardPaths sp;
 	sp.GetTempDir();
-	wxString temp_file = sp.GetTempDir() + _T("/temp_Heeks_clipboard_file.xml");
+	wxFileName temp_file(sp.GetTempDir().c_str(), _T("temp_Heeks_clipboard_file.xml"));
 
-	wxGetApp().SaveXMLFile(m_list, temp_file, true);
+	wxGetApp().SaveXMLFile(m_list, temp_file.GetFullPath().c_str(), true);
 
 #if wxUSE_UNICODE
 #ifdef __WXMSW__
-	wifstream ifs(temp_file);
+	wifstream ifs(temp_file.GetFullPath());
 #else
-	wifstream ifs(Ttc(temp_file.c_str()));
+	wifstream ifs(Ttc(temp_file.GetFullPath().c_str()));
 #endif
 #else
-	ifstream ifs(temp_file);
+	ifstream ifs(temp_file.GetFullPath());
 #endif
 	if(!ifs)return;
 
@@ -395,7 +395,7 @@ void MarkedList::CopySelectedItems()
 
 	if (wxTheClipboard->Open())
 	{
-		// This data object is held by the clipboard, 
+		// This data object is held by the clipboard,
 		// so do not delete them in the app.
 		wxTheClipboard->SetData( new wxTextDataObject(fstr));
 		wxTheClipboard->Close();
