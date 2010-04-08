@@ -4,6 +4,7 @@
 #include <sys/stat.h>
 #include <wx/msgdlg.h>
 #include <wx/stdpaths.h>
+#include <wx/filename.h>
 
 CAutoSave::CAutoSave(const int interval, const bool skip_recovery /* = false */ )
 {
@@ -11,13 +12,8 @@ CAutoSave::CAutoSave(const int interval, const bool skip_recovery /* = false */ 
 	// prompt the user to see if they want to use its contents or ignore it.
 
 	wxStandardPaths standard_paths;
-	m_backup_file_name = standard_paths.GetTempDir();
-	#ifdef WIN32
-		m_backup_file_name << _T("\\");
-	#else
-		m_backup_file_name << _T("/");
-	#endif // WIN32
-	m_backup_file_name << _(".HeeksCAD_Backup_Data_File.heeks");
+	wxFileName path( standard_paths.GetTempDir().c_str(), _(".HeeksCAD_Backup_Data_File.heeks"));
+	m_backup_file_name = path.GetFullPath();
 
 	printf("Using backup file path '%s'\n", Ttc(m_backup_file_name.c_str()));
 
