@@ -10,7 +10,8 @@
 
 class CShape:public ObjList{
 protected:
-	int m_gl_list;
+	int m_face_gl_list;
+	int m_edge_gl_list;
 	CBox m_box;
 	TopoDS_Shape m_shape;
 	static wxIcon* m_icon;
@@ -18,6 +19,7 @@ protected:
 
 	void create_faces_and_edges();
 	void delete_faces_and_edges();
+	void CallMesh();
 	virtual void MakeTransformedShape(const gp_Trsf &mat);
 	virtual wxString StretchedName();
 

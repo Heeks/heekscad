@@ -61,6 +61,13 @@ enum BackgroundMode
 	BackgroundModeSkyDome
 };
 
+enum SolidViewMode
+{
+	SolidViewFacesAndEdges,
+	SolidViewEdgesOnly,
+	SolidViewFacesOnly,
+};
+
 class HeeksCADapp : public wxApp, public ObjList
 {
 private:
@@ -115,6 +122,7 @@ public:
 	bool mouse_wheel_forward_away; // true for forwards/backwards = zoom out / zoom in, false for reverse
 	bool ctrl_does_rotate; // true - rotate on Ctrl, pan when not Ctrl      false - rotate when not Ctrl, pan when Ctrl
 	bool m_allow_opengl_stippling;
+	SolidViewMode m_solid_view_mode;
 	//gp_Trsf digitizing_matrix;
 	CoordinateSystem *m_current_coordinate_system;
 	CInputMode *input_mode_object;
