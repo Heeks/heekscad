@@ -151,6 +151,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_max_scale_threshold = 1.5;
 	m_number_of_sample_points = 10;
 	m_property_grid_validation = false;
+	m_solid_view_mode = SolidViewFacesAndEdges;
 
 	m_font_paths = _T("/usr/share/qcad/fonts");
 	m_stl_facet_tolerance = 0.1;
@@ -336,6 +337,7 @@ bool HeeksCADapp::OnInit()
 	} // End if - then
 	config.Read(_T("ExtrudeToSolid"), &m_extrude_to_solid);
 	config.Read(_T("RevolveAngle"), &m_revolve_angle);
+	config.Read(_T("SolidViewMode"), (int*)(&m_solid_view_mode), 0);
 
 	HDimension::ReadFromConfig(config);
 
@@ -463,6 +465,7 @@ int HeeksCADapp::OnExit(){
 	config.Write(_T("AutoSaveInterval"), m_auto_save_interval);
 	config.Write(_T("ExtrudeToSolid"), m_extrude_to_solid);
 	config.Write(_T("RevolveAngle"), m_revolve_angle);
+	config.Write(_T("SolidViewMode"), m_solid_view_mode);
 
 	HDimension::WriteToConfig(config);
 
@@ -2357,6 +2360,10 @@ void on_set_allow_opengl_stippling(bool value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+void on_set_solid_view_mode(int value, HeeksObj* object)
+{
+	wxGetApp().m_solid_view_mode = (SolidViewMode)value;
+}
 
 void HeeksCADapp::GetOptions(std::list<Property *> *list)
 {
@@ -2468,6 +2475,13 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	}
 	view_options->m_list.push_back(new PropertyCheck(_("flat on screen dimension text"), HDimension::DrawFlat, NULL, on_dimension_draw_flat));
 	view_options->m_list.push_back(new PropertyCheck(_("Allow OpenGL stippling"), m_allow_opengl_stippling, NULL, on_set_allow_opengl_stippling));
+	{
+		std::list< wxString > choices;
+		choices.push_back ( wxString ( _("faces and edges") ) );
+		choices.push_back ( wxString ( _("edges only") ) );
+		choices.push_back ( wxString ( _("faces only") ) );
+		view_options->m_list.push_back ( new PropertyChoice ( _("solid view mode"),  choices, m_solid_view_mode, this, on_set_solid_view_mode ) );
+	}
 
 	list->push_back(view_options);
 
