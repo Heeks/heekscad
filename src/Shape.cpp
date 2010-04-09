@@ -24,17 +24,17 @@
 // static member variable
 bool CShape::m_solids_found = false;
 
-CShape::CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor& col):m_gl_list(0), m_shape(shape), m_title(title), m_color(col), m_picked_face(NULL)
+CShape::CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor& col):m_face_gl_list(0), m_edge_gl_list(0), m_shape(shape), m_title(title), m_color(col), m_picked_face(NULL)
 {
 	Init();
 }
 
-CShape::CShape(const HeeksColor& col):m_gl_list(0), m_color(col), m_picked_face(NULL)
+CShape::CShape(const HeeksColor& col):m_face_gl_list(0), m_edge_gl_list(0), m_color(col), m_picked_face(NULL)
 {
 }
 
 
-CShape::CShape(const CShape& s):m_gl_list(0), m_picked_face(NULL)
+CShape::CShape(const CShape& s):m_face_gl_list(0), m_edge_gl_list(0), m_picked_face(NULL)
 {
 	m_faces = new CFaceList;
 	m_edges = new CEdgeList;
@@ -95,12 +95,19 @@ void CShape::Init()
 
 void CShape::KillGLLists()
 {
-	if (m_gl_list)
+	if (m_face_gl_list)
 	{
-		glDeleteLists(m_gl_list, 1);
-		m_gl_list = 0;
-		m_box = CBox();
+		glDeleteLists(m_face_gl_list, 1);
+		m_face_gl_list = 0;
 	}
+
+	if (m_edge_gl_list)
+	{
+		glDeleteLists(m_edge_gl_list, 1);
+		m_edge_gl_list = 0;
+	}
+
+	m_box = CBox();
 
 	for(HeeksObj* object = m_faces->GetFirstChild(); object; object = m_faces->GetNextChild())
 	{
@@ -120,33 +127,70 @@ void CShape::delete_faces_and_edges()
 	m_edges->Clear();
 }
 
+void CShape::CallMesh()
+{
+	double pixels_per_mm = wxGetApp().GetPixelScale();
+	BRepTools::Clean(m_shape);
+	BRepMesh::Mesh(m_shape, 1/pixels_per_mm);
+}
+
 void CShape::glCommands(bool select, bool marked, bool no_color)
 {
 	Material(m_color).glMaterial(1.0);
 
-	for(HeeksObj* object = m_faces->GetFirstChild(); object; object = m_faces->GetNextChild())
+	bool mesh_called = false;
+	bool draw_faces = (wxGetApp().m_solid_view_mode == SolidViewFacesAndEdges || wxGetApp().m_solid_view_mode == SolidViewFacesOnly);
+	bool draw_edges = (wxGetApp().m_solid_view_mode == SolidViewFacesAndEdges || wxGetApp().m_solid_view_mode == SolidViewEdgesOnly);
+
+	if(draw_faces)
 	{
-		CFace* f = (CFace*)object;
-		f->MakeSureMarkingGLListExists();
+		for(HeeksObj* object = m_faces->GetFirstChild(); object; object = m_faces->GetNextChild())
+		{
+			CFace* f = (CFace*)object;
+			f->MakeSureMarkingGLListExists();
+		}
+
+		if(!m_face_gl_list)
+		{
+			if(!mesh_called)
+			{
+				CallMesh();
+				mesh_called = true;
+			}
+
+			// make the display list
+			m_face_gl_list = glGenLists(1);
+			glNewList(m_face_gl_list, GL_COMPILE);
+
+			// render all the faces
+			m_faces->glCommands(true, marked, no_color);
+
+			glEndList();
+		}
+
+		// update faces marking display list
+		GLint currentListIndex;
+		glGetIntegerv(GL_LIST_INDEX, &currentListIndex);
+		if(currentListIndex == 0){
+			for(HeeksObj* object = m_faces->GetFirstChild(); object; object = m_faces->GetNextChild())
+			{
+				CFace* f = (CFace*)object;
+				f->UpdateMarkingGLList(wxGetApp().m_marked_list->ObjectMarked(f));
+			}
+		}
 	}
 
-	if(!m_gl_list)
+	if(draw_edges && !m_edge_gl_list)
 	{
+		if(!mesh_called)
+		{
+			CallMesh();
+			mesh_called = true;
+		}
+
 		// make the display list
-		m_gl_list = glGenLists(1);
-		glNewList(m_gl_list, GL_COMPILE);
-
-		double pixels_per_mm = wxGetApp().GetPixelScale();
-
-		BRepTools::Clean(m_shape);
-		BRepMesh::Mesh(m_shape, 1/pixels_per_mm);
-
-		// render all the faces
-		glEnable(GL_LIGHTING);
-		glShadeModel(GL_SMOOTH);
-		m_faces->glCommands(true, marked, no_color);
-		glDisable(GL_LIGHTING);
-		glShadeModel(GL_FLAT);
+		m_edge_gl_list = glGenLists(1);
+		glNewList(m_edge_gl_list, GL_COMPILE);
 
 		// render all the edges
 		m_edges->glCommands(true, marked, no_color);
@@ -157,21 +201,20 @@ void CShape::glCommands(bool select, bool marked, bool no_color)
 		glEndList();
 	}
 
-	// update faces marking display list
-	GLint currentListIndex;
-    glGetIntegerv(GL_LIST_INDEX, &currentListIndex);
-    if(currentListIndex == 0){
-		for(HeeksObj* object = m_faces->GetFirstChild(); object; object = m_faces->GetNextChild())
-		{
-			CFace* f = (CFace*)object;
-			f->UpdateMarkingGLList(wxGetApp().m_marked_list->ObjectMarked(f));
-		}
+	if(draw_faces && m_face_gl_list)
+	{
+		// draw the face display list
+		glEnable(GL_LIGHTING);
+		glShadeModel(GL_SMOOTH);
+		glCallList(m_face_gl_list);
+		glDisable(GL_LIGHTING);
+		glShadeModel(GL_FLAT);
 	}
 
-	if(m_gl_list)
+	if(draw_edges && m_edge_gl_list)
 	{
-		// draw the display list
-		glCallList(m_gl_list);
+		// draw the edge display list
+		glCallList(m_edge_gl_list);
 	}
 }
 
