@@ -81,6 +81,19 @@ int MyAllocHook( int allocType, void *userData, size_t size, int blockType, long
 }
 #endif
 
+static unsigned int DecimalPlaces( const double value )
+{
+	double decimal_places = 1 / value;
+	unsigned int required = 0;
+	while (decimal_places >= 1.0)
+	{
+		required++;
+		decimal_places /= 10.0;
+	}
+
+	return(required + 1);   // Always use 1 more decimal point than our accuracy requires.
+}
+
 HeeksCADapp::HeeksCADapp(): ObjList()
 {
 #if 0
@@ -89,6 +102,8 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 
 	m_version_number = _T("0 12 0");
 	m_geom_tol = 0.000001;
+	TiXmlBase::SetRequiredDecimalPlaces( DecimalPlaces(m_geom_tol) );	 // Ensure we write XML in enough accuracy to be useful when re-read.
+
 	m_view_units = 1.0;
 	for(int i = 0; i<NUM_BACKGROUND_COLORS; i++)background_color[i] = HeeksColor(0, 0, 0);
 	m_background_mode = BackgroundModeOneColor;
@@ -2062,10 +2077,15 @@ void on_grid_edit(double grid_value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+
+
+
 void on_set_geom_tol(double value, HeeksObj* object)
 {
 	wxGetApp().m_geom_tol = value;
 	wxGetApp().Repaint();
+
+	TiXmlBase::SetRequiredDecimalPlaces( DecimalPlaces(value) );
 }
 
 void on_set_face_to_sketch_deviation(double value, HeeksObj* object)
