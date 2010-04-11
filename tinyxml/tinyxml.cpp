@@ -33,6 +33,7 @@ distribution.
 
 
 bool TiXmlBase::condenseWhiteSpace = true;
+unsigned int TiXmlBase::required_decimal_places = 7+1; // Need 7 for OpenCascade default accuracy plus 1 to make sure we're within tolerance.
 
 // Microsoft compiler security
 FILE* TiXmlFOpen( const char* filename, const char* mode )
@@ -224,7 +225,7 @@ TiXmlNode* TiXmlNode::InsertEndChild( const TiXmlNode& addThis )
 
 
 TiXmlNode* TiXmlNode::InsertBeforeChild( TiXmlNode* beforeThis, const TiXmlNode& addThis )
-{	
+{
 	if ( !beforeThis || beforeThis->parent != this ) {
 		return 0;
 	}
@@ -318,7 +319,7 @@ TiXmlNode* TiXmlNode::ReplaceChild( TiXmlNode* replaceThis, const TiXmlNode& wit
 bool TiXmlNode::RemoveChild( TiXmlNode* removeThis )
 {
 	if ( removeThis->parent != this )
-	{	
+	{
 		assert( 0 );
 		return false;
 	}
@@ -389,7 +390,7 @@ const TiXmlNode* TiXmlNode::IterateChildren( const char * val, const TiXmlNode* 
 }
 
 
-const TiXmlNode* TiXmlNode::NextSibling( const char * _value ) const 
+const TiXmlNode* TiXmlNode::NextSibling( const char * _value ) const
 {
 	const TiXmlNode* node;
 	for ( node = next; node; node = node->next )
@@ -615,6 +616,7 @@ const char* TiXmlElement::Attribute( const char* name, double* d ) const
 #if TIXML_USE_STL
 			std::istringstream ss(s);
 			ss.imbue(std::locale("C"));
+			ss.precision(TiXmlBase::Precision(*d));
 			ss >> *d;
 #else
 			*d = atof( s );
@@ -637,6 +639,7 @@ const std::string* TiXmlElement::Attribute( const std::string& name, double* d )
 		if ( s ) {
 			std::istringstream ss(s->c_str());
 			ss.imbue(std::locale("C"));
+			ss.precision(TiXmlBase::Precision(*d));
 			ss >> *d;
 		}
 		else {
@@ -715,14 +718,15 @@ void TiXmlElement::SetDoubleAttribute( const char * name, double val )
 #if TIXML_USE_STL
     std::ostringstream ss;
     ss.imbue(std::locale("C"));
+    ss.precision(TiXmlBase::Precision(val));
     ss << val;
 	SetAttribute( name, ss.str() );
 #else
 	char buf[256];
-	#if defined(TIXML_SNPRINTF)		
-		TIXML_SNPRINTF( buf, sizeof(buf), "%f", val );
+	#if defined(TIXML_SNPRINTF)
+		TIXML_SNPRINTF( buf, sizeof(buf), TiXmlBase::Format(val).c_str(), val );
 	#else
-		sprintf( buf, "%f", val );
+		sprintf( buf, TiXmlBase::Format(val).c_str(), val );
 	#endif
 	SetAttribute( name, buf );
 #endif
@@ -1088,7 +1092,7 @@ bool TiXmlDocument::LoadFile( FILE* file, TiXmlEncoding encoding )
 	// Handle any left over characters.
 	if ( p-lastPos ) {
 		data.append( lastPos, p-lastPos );
-	}		
+	}
 	delete [] buf;
 	buf = 0;
 
@@ -1283,14 +1287,15 @@ void TiXmlAttribute::SetDoubleValue( double _value )
 #if TIXML_USE_STL
     std::ostringstream ss;
     ss.imbue(std::locale("C"));
+    ss.precision(TiXmlBase::Precision(_value));
     ss << _value;
 	SetValue( ss.str() );
 #else
 	char buf [256];
-	#if defined(TIXML_SNPRINTF)		
-		TIXML_SNPRINTF( buf, sizeof(buf), "%lf", _value);
+	#if defined(TIXML_SNPRINTF)
+		TIXML_SNPRINTF( buf, sizeof(buf), TiXmlBase::Format(_value).c_str(), _value);
 	#else
-		sprintf (buf, "%lf", _value);
+		sprintf (buf, TiXmlBase::Format(_value).c_str(), _value);
 	#endif
 	SetValue (buf);
 #endif
@@ -1841,7 +1846,7 @@ bool TiXmlPrinter::VisitExit( const TiXmlElement& element )
 	{
 		// nothing.
 	}
-	else 
+	else
 	{
 		if ( simpleTextPrint )
 		{
@@ -1916,5 +1921,38 @@ bool TiXmlPrinter::Visit( const TiXmlUnknown& unknown )
 	buffer += ">";
 	DoLineBreak();
 	return true;
+}
+
+const unsigned int TiXmlBase::Precision( const double value ) const
+{
+    unsigned int lhs = 0;
+
+    lhs = 0;
+    double temp(value);
+    while (temp >= 1.0)
+    {
+        lhs++;
+        temp /= 10.0;
+    }
+
+    return( lhs + required_decimal_places );
+}
+
+/**
+    Return the printf format string that will ensure that the double value
+    passed in will be stored with 'required_decimal_places' worth of decimal
+    points as well as enough digits for the left hand side of the decimal point.
+ */
+TIXML_STRING TiXmlBase::Format( const double value ) const
+{
+	char buf[ 32 ];
+			
+	#if defined(TIXML_SNPRINTF)		
+		TIXML_SNPRINTF( buf, sizeof(buf), "%%%d.%dlf", Precision(value), required_decimal_places);
+	#else
+		sprintf( buf, "%%%d.%dlf", Precision(value), required_decimal_places);
+	#endif
+
+    return(TIXML_STRING(buf));
 }
 

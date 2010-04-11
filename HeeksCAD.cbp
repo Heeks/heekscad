@@ -14,6 +14,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-DTIXML_USE_STL" />
 					<Add directory="interface" />
 					<Add directory="src" />
 					<Add directory="tinyxml" />
@@ -280,14 +281,14 @@
 		<Unit filename="src/UndoEngine.h" />
 		<Unit filename="src/Vertex.cpp" />
 		<Unit filename="src/Vertex.h" />
+		<Unit filename="src/ViewPanning.cpp" />
+		<Unit filename="src/ViewPanning.h" />
 		<Unit filename="src/ViewPoint.cpp" />
 		<Unit filename="src/ViewPoint.h" />
 		<Unit filename="src/ViewRotating.cpp" />
 		<Unit filename="src/ViewRotating.h" />
 		<Unit filename="src/ViewZooming.cpp" />
 		<Unit filename="src/ViewZooming.h" />
-		<Unit filename="src/ViewPanning.cpp" />
-		<Unit filename="src/ViewPanning.h" />
 		<Unit filename="src/Window.cpp" />
 		<Unit filename="src/Window.h" />
 		<Unit filename="src/Wire.cpp" />
