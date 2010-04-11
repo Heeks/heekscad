@@ -18,6 +18,12 @@
 #include "MultiPoly.h"
 #include "Polygon.h"
 
+#include <sstream>
+#include <vector>
+#include <algorithm>
+#include <functional>
+
+
 void GetConversionMenuTools(std::list<Tool*>* t_list){
 	// Tools for multiple selected items.
 	bool lines_or_arcs_etc_in_marked_list = false;
@@ -66,6 +72,113 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 	if(group_in_marked_list)t_list->push_back(new UngroupSelected);
 	if(edges_in_marked_list)t_list->push_back(new MakeEdgesToSketch);
 }
+
+
+static gp_Pnt GetStart(const TopoDS_Edge &edge)
+{
+    BRepAdaptor_Curve curve(edge);
+    double uStart = curve.FirstParameter();
+    gp_Pnt PS;
+    gp_Vec VS;
+    curve.D1(uStart, PS, VS);
+
+    return(PS);
+}
+
+static gp_Pnt GetEnd(const TopoDS_Edge &edge)
+{
+    BRepAdaptor_Curve curve(edge);
+    double uEnd = curve.LastParameter();
+    gp_Pnt PE;
+    gp_Vec VE;
+    curve.D1(uEnd, PE, VE);
+
+    return(PE);
+}
+
+struct EdgeComparison : public std::binary_function<const TopoDS_Edge &, const TopoDS_Edge &, bool >
+{
+    EdgeComparison( const TopoDS_Edge & edge )
+    {
+        m_reference_edge = edge;
+    }
+
+    bool operator()( const TopoDS_Edge & lhs, const TopoDS_Edge & rhs ) const
+    {
+
+        std::vector<double> lhs_distances;
+        lhs_distances.push_back( GetStart(m_reference_edge).Distance( GetStart(lhs) ) );
+        lhs_distances.push_back( GetStart(m_reference_edge).Distance( GetEnd(lhs) ) );
+        lhs_distances.push_back( GetEnd(m_reference_edge).Distance( GetStart(lhs) ) );
+        lhs_distances.push_back( GetEnd(m_reference_edge).Distance( GetEnd(lhs) ) );
+        std::sort(lhs_distances.begin(), lhs_distances.end());
+
+        std::vector<double> rhs_distances;
+        rhs_distances.push_back( GetStart(m_reference_edge).Distance( GetStart(rhs) ) );
+        rhs_distances.push_back( GetStart(m_reference_edge).Distance( GetEnd(rhs) ) );
+        rhs_distances.push_back( GetEnd(m_reference_edge).Distance( GetStart(rhs) ) );
+        rhs_distances.push_back( GetEnd(m_reference_edge).Distance( GetEnd(rhs) ) );
+        std::sort(rhs_distances.begin(), rhs_distances.end());
+
+        return(*(lhs_distances.begin()) < *(rhs_distances.begin()));
+    }
+
+    TopoDS_Edge m_reference_edge;
+};
+
+static void SortEdges( std::vector<TopoDS_Edge> & edges )
+{
+	for (std::vector<TopoDS_Edge>::iterator l_itEdge = edges.begin(); l_itEdge != edges.end(); l_itEdge++)
+    {
+        if (l_itEdge == edges.begin())
+        {
+            // It's the first edge.  Find the edge whose endpoint is closest to gp_Pnt(0,0,0) so that
+            // the resutls of this sorting are consistent.  When we just use the first edge in the
+            // wire, we end up with different results every time.  We want consistency so that, if we
+            // use this Contour operation as a location for drilling a relief hole (one day), we want
+            // to be sure the machining will begin from a consistently known location.
+
+            std::vector<TopoDS_Edge>::iterator l_itStartingEdge = edges.begin();
+            gp_Pnt closest_point = GetStart(*l_itStartingEdge);
+            if (GetEnd(*l_itStartingEdge).Distance(gp_Pnt(0,0,0)) < closest_point.Distance(gp_Pnt(0,0,0)))
+            {
+                closest_point = GetEnd(*l_itStartingEdge);
+            }
+            for (std::vector<TopoDS_Edge>::iterator l_itCheck = edges.begin(); l_itCheck != edges.end(); l_itCheck++)
+            {
+                if (GetStart(*l_itCheck).Distance(gp_Pnt(0,0,0)) < closest_point.Distance(gp_Pnt(0,0,0)))
+                {
+                    closest_point = GetStart(*l_itCheck);
+                    l_itStartingEdge = l_itCheck;
+                }
+
+                if (GetEnd(*l_itCheck).Distance(gp_Pnt(0,0,0)) < closest_point.Distance(gp_Pnt(0,0,0)))
+                {
+                    closest_point = GetEnd(*l_itCheck);
+                    l_itStartingEdge = l_itCheck;
+                }
+            }
+
+            EdgeComparison compare( *l_itStartingEdge );
+            std::sort( edges.begin(), edges.end(), compare );
+        } // End if - then
+        else
+        {
+            // We've already begun.  Just sort based on the previous point's location.
+            std::vector<TopoDS_Edge>::iterator l_itNextEdge = l_itEdge;
+            l_itNextEdge++;
+
+            if (l_itNextEdge != edges.end())
+            {
+                EdgeComparison compare( *l_itEdge );
+                std::sort( l_itNextEdge, edges.end(), compare );
+            } // End if - then
+        } // End if - else
+    } // End for
+
+} // End SortEdges() method
+
+
 
 bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wire &wire)
 {
@@ -151,7 +264,7 @@ bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_o
 		line_arc_list.push_back(object);
 	}
 
-	std::list<TopoDS_Edge> edges;
+	std::vector<TopoDS_Edge> edges;
 	for(std::list<HeeksObj*>::const_iterator It = line_arc_list.begin(); It != line_arc_list.end(); It++){
 	    try {
             HeeksObj* object = *It;
@@ -161,7 +274,61 @@ bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_o
                         HLine* line = (HLine*)object;
                         if(!(line->A->m_p.IsEqual(line->B->m_p, wxGetApp().m_geom_tol)))
                         {
-                            edges.push_back(BRepBuilderAPI_MakeEdge(line->A->m_p, line->B->m_p));
+                            BRep_Builder aBuilder;
+                            TopoDS_Vertex start, end;
+
+                            aBuilder.MakeVertex (start, line->A->m_p, wxGetApp().m_geom_tol);
+                            start.Orientation (TopAbs_REVERSED);
+
+                            aBuilder.MakeVertex (end, line->B->m_p, wxGetApp().m_geom_tol);
+                            end.Orientation (TopAbs_FORWARD);
+
+                            BRepBuilderAPI_MakeEdge edge(start, end);
+                            if (! edge.IsDone())
+                            {
+								/*
+                                BRepBuilderAPI_EdgeError error = edge.Error();
+                                switch(error)
+                                {
+                                    case  BRepBuilderAPI_EdgeDone:
+                                    break;
+
+                                    case BRepBuilderAPI_PointProjectionFailed:
+                                    wxMessageBox(wxString(_("BRepBuilderAPI_PointProjectionFailed")) );
+                                    break;
+
+                                    case BRepBuilderAPI_ParameterOutOfRange:
+                                    wxMessageBox(wxString(_("BRepBuilderAPI_ParameterOutOfRange")) );
+                                    break;
+
+                                    case BRepBuilderAPI_DifferentPointsOnClosedCurve:
+                                    wxMessageBox(wxString(_("BRepBuilderAPI_DifferentPointsOnClosedCurve")) );
+                                    break;
+
+                                    case BRepBuilderAPI_PointWithInfiniteParameter:
+                                    wxMessageBox(wxString(_("BRepBuilderAPI_PointWithInfiniteParameter")) );
+                                    break;
+
+                                    case BRepBuilderAPI_DifferentsPointAndParameter:
+                                    wxMessageBox(wxString(_("BRepBuilderAPI_DifferentsPointAndParameter")) );
+                                    break;
+
+                                    case BRepBuilderAPI_LineThroughIdenticPoints:
+                                    wxMessageBox(wxString(_("BRepBuilderAPI_LineThroughIdenticPoints")) );
+                                    break;
+
+                                    default:
+                                    wxMessageBox(wxString(_("Unknown error")) );
+                                    break;
+                                }
+								*/
+
+                                return(false);
+                            }
+                            else
+                            {
+                                edges.push_back(edge.Edge());
+                            }
                         }
                     }
                     break;
@@ -169,7 +336,16 @@ bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_o
                     {
                         HArc* arc = (HArc*)object;
 
-                        BRepBuilderAPI_MakeEdge edge(arc->GetCircle(), arc->A->m_p, arc->B->m_p);
+                        BRep_Builder aBuilder;
+                        TopoDS_Vertex start, end;
+
+                        aBuilder.MakeVertex (start, arc->A->m_p, wxGetApp().m_geom_tol);
+                        start.Orientation (TopAbs_REVERSED);
+
+                        aBuilder.MakeVertex (end, arc->B->m_p, wxGetApp().m_geom_tol);
+                        end.Orientation (TopAbs_FORWARD);
+
+                        BRepBuilderAPI_MakeEdge edge(arc->GetCircle(), start, end);
                         if (! edge.IsDone())
                         {
 							/*
@@ -246,10 +422,17 @@ bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_o
 	}
 
 	if(edges.size() > 0){
+	    // It's not enough to add the edges to the wire in an arbitrary order.  If the adjacent edges
+	    // don't connect then the wire ends up losing one of the edges.  We must sort the edge objects
+	    // so that they're connected (or best we can) before constructing the TopoDS_Wire object from
+	    // them.
+
+	    SortEdges(edges);
+
 		try
 		{
 			BRepBuilderAPI_MakeWire wire_maker;
-			std::list<TopoDS_Edge>::iterator It;
+			std::vector<TopoDS_Edge>::iterator It;
 			for(It = edges.begin(); It != edges.end(); It++)
 			{
 				TopoDS_Edge &edge = *It;
