@@ -601,6 +601,12 @@ bool CHeeksCADInterface::ConvertSketchToFaceOrWire(HeeksObj* object, std::list<T
 	return(::ConvertSketchToFaceOrWire( object, face_or_wire, face_not_wire ));
 }
 
+bool CHeeksCADInterface::ConvertWireToSketch(const TopoDS_Wire& wire, HeeksObj* sketch, double deviation)
+{
+	return(::ConvertWireToSketch( wire, sketch, deviation ));
+}
+
+
 
 HeeksObj* CHeeksCADInterface::MakePipe(HeeksObj* spine, HeeksObj* profile)
 {
