@@ -403,12 +403,12 @@ bool HeeksCADapp::OnInit()
 		// get filenames from the commandline
 		if (parser.Parse() == 0)
 		{
-			if(parser.GetParamCount() > 0)
+			for(unsigned int i = 0; i<parser.GetParamCount(); i++)
 			{
-				wxString param = parser.GetParam(0);
-				if(!(param.Lower().EndsWith(_T(".dll"))))
+				wxString param = parser.GetParam(i);
+				if(!(param.Lower().EndsWith(_T(".dll")) || param.Lower().EndsWith(_T(".pyd"))))
 				{
-					OpenFile(parser.GetParam(0));
+					OpenFile(parser.GetParam(i));
 				}
 			}
 		}
@@ -1045,7 +1045,7 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 	else if(CShape::ImportSolidsFile(filepath))
 	{
 	}
-	else if(wf.EndsWith(_T(".dll")))
+	else if(wf.EndsWith(_T(".dll")) || wf.EndsWith(_T(".pyd")))
 	{
 		// add a plugin
 	}
@@ -3632,10 +3632,10 @@ void HeeksCADapp::GetPluginsFromCommandLineParams(std::list<wxString> &plugins)
 		// get filenames from the commandline
 		if (parser.Parse() == 0)
 		{
-			if(parser.GetParamCount() > 0)
+			for(unsigned int i = 0; i<parser.GetParamCount(); i++)
 			{
-				wxString param = parser.GetParam(0);
-				if(param.Lower().EndsWith(_T(".dll")))
+				wxString param = parser.GetParam(i);
+				if(param.Lower().EndsWith(_T(".dll")) || param.Lower().EndsWith(_T(".pyd")))
 				{
 					plugins.push_back(param);
 				}

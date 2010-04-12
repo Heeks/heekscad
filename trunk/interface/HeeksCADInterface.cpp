@@ -606,8 +606,6 @@ bool CHeeksCADInterface::ConvertWireToSketch(const TopoDS_Wire& wire, HeeksObj* 
 	return(::ConvertWireToSketch( wire, sketch, deviation ));
 }
 
-
-
 HeeksObj* CHeeksCADInterface::MakePipe(HeeksObj* spine, HeeksObj* profile)
 {
 	return CreatePipeFromProfile(spine,profile);
@@ -628,6 +626,20 @@ HeeksObj* CHeeksCADInterface::ExtrudeSketch(HeeksObj* sketch, double height)
 void CHeeksCADInterface::ExtractSeparateSketches(HeeksObj* sketch, std::list<HeeksObj*> &new_separate_sketches)
 {
 	((CSketch*)sketch)->ExtractSeparateSketches(new_separate_sketches);
+}
+
+HeeksObj* CHeeksCADInterface::GetSketchFromName(const wxChar* name)
+{
+	for(HeeksObj* object = wxGetApp().GetFirstChild(); object; object = wxGetApp().GetNextChild())
+	{
+		if(object->GetType() == SketchType)
+		{
+			const wxChar* n = object->GetShortString();
+			if(wxString(n).CmpNoCase(name))return object;
+		}
+	}
+
+	return NULL;
 }
 
 long CHeeksCADInterface::BodyGetNumFaces(HeeksObj* body)
