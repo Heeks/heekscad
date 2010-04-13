@@ -44,7 +44,7 @@ void PickCreateRuledSurface()
 		wxGetApp().Remove(sketches_to_delete);
 
 		TopoDS_Shape shape;
-		if(CreateRuledSurface(wire_list, shape))
+		if(CreateRuledSurface(wire_list, shape, true))
 		{
 			HeeksObj* new_object = CShape::MakeObject(shape, _("Ruled Surface"), SOLID_TYPE_UNKNOWN, HeeksColor(51, 45, 51));
 			wxGetApp().Add(new_object, NULL);
@@ -153,6 +153,32 @@ HeeksObj* CreatePipeFromProfile(HeeksObj* spine, HeeksObj* profile)
 	return NULL;
 }
 
+HeeksObj* CreateRuledFromSketches(std::list<HeeksObj*> list, bool make_solid)
+{
+	std::list<TopoDS_Wire> wire_list;
+	for(std::list<HeeksObj *>::iterator It = list.begin(); It != list.end(); It++)
+	{
+		HeeksObj* object = *It;
+		if(object->GetType() == SketchType)
+		{
+			std::list<HeeksObj*> s;
+			s.push_back(object);
+			TopoDS_Wire wire;
+			if(ConvertLineArcsToWire2(s, wire))
+			{
+				wire_list.push_back(wire);
+			}
+		}
+	}
+
+	TopoDS_Shape shape;
+	if(CreateRuledSurface(wire_list, shape, make_solid))
+	{
+		return CShape::MakeObject(shape, _("Ruled Surface"), SOLID_TYPE_UNKNOWN, HeeksColor(51, 45, 51));
+	}
+	return NULL;
+}
+
 static void on_extrude_to_solid(bool onoff, HeeksObj* object)
 {
 	wxGetApp().m_extrude_to_solid = onoff;
@@ -238,11 +264,11 @@ void PickCreateRevolution()
 	}
 }
 
-bool CreateRuledSurface(const std::list<TopoDS_Wire> &wire_list, TopoDS_Shape& shape)
+bool CreateRuledSurface(const std::list<TopoDS_Wire> &wire_list, TopoDS_Shape& shape, bool make_solid)
 {
 	if(wire_list.size() > 0)
 	{
-			BRepOffsetAPI_ThruSections generator( Standard_True, Standard_False );
+			BRepOffsetAPI_ThruSections generator( make_solid ? Standard_True : Standard_False, Standard_False );
 			for(std::list<TopoDS_Wire>::const_iterator It = wire_list.begin(); It != wire_list.end(); It++)
 			{
 				const TopoDS_Wire &wire = *It;

@@ -611,6 +611,11 @@ HeeksObj* CHeeksCADInterface::MakePipe(HeeksObj* spine, HeeksObj* profile)
 	return CreatePipeFromProfile(spine,profile);
 }
 
+HeeksObj* CHeeksCADInterface::MakeRuled(std::list<HeeksObj*> list, bool make_solid)
+{
+	return CreateRuledFromSketches(list, make_solid);
+}
+
 bool CHeeksCADInterface::ReOrderSketch(HeeksObj* sketch, SketchOrderType new_order)
 {
 	return ((CSketch*)sketch)->ReOrderSketch(new_order);
@@ -635,7 +640,7 @@ HeeksObj* CHeeksCADInterface::GetSketchFromName(const wxChar* name)
 		if(object->GetType() == SketchType)
 		{
 			const wxChar* n = object->GetShortString();
-			if(wxString(n).CmpNoCase(name))return object;
+			if(!wxString(n).CmpNoCase(name))return object;
 		}
 	}
 
