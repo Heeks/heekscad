@@ -30,7 +30,7 @@ CFace::~CFace(){
 
 void CFace::glCommands(bool select, bool marked, bool no_color){
 	bool owned_by_solid = false;
-	if(CShape* parent_body = GetParentBody()) {
+	if(GetParentBody()) {
 		// using existing BRepMesh::Mesh
 		// use solid's colour
 		owned_by_solid = true;
@@ -53,7 +53,7 @@ void CFace::glCommands(bool select, bool marked, bool no_color){
 	}
 
 	DrawFaceWithCommands(m_topods_face);
-	
+
 	if(!owned_by_solid)
 	{
 		glDisable(GL_LIGHTING);
@@ -130,7 +130,7 @@ void best_triangle_for_face(double *x, double *n)
 gp_Dir CFace::GetMiddleNormal(gp_Pnt *pos)const{
 	// get bounds of face
 	Standard_Real umin, umax, vmin, vmax;
-	BRepTools::UVBounds(m_topods_face, umin, umax, vmin, vmax); 
+	BRepTools::UVBounds(m_topods_face, umin, umax, vmin, vmax);
 	return GetNormalAtUV((umin + umax)/2, (vmin + vmax)/2, pos);
 }
 
@@ -143,20 +143,20 @@ bool CFace::GetUVAtPoint(const gp_Pnt &pos, double *u, double *v)const{
 	GeomAPI_ProjectPointOnSurf projection( pos, surface);
 
 	if(projection.NbPoints() > 0)
-	{               
+	{
 		if(projection.LowerDistance() < 0.01 )
 		{
 			projection.LowerDistanceParameters(*u, *v);
 			return true;
 		}
-	}     
+	}
 	return false;
 }
 
 bool CFace::GetClosestPoint(const gp_Pnt &pos, gp_Pnt &closest_pnt)const{
 	BRepPrimAPI_MakeBox cuboid(gp_Ax2(pos, gp_Vec(1, 0, 0), gp_Vec(0, 1, 0)), 0.0001, 0.0001, 0.0001);
 
-	BRepExtrema_DistShapeShape extrema(m_topods_face, cuboid);
+	BRepExtrema_DistShapeShape extrema(m_topods_face, cuboid.Shape());
 	if(extrema.Perform() != Standard_True)return false;
 	closest_pnt = extrema.PointOnShape1(1);
 
@@ -168,10 +168,10 @@ bool CFace::GetClosestSurfacePoint(const gp_Pnt &pos, gp_Pnt &closest_pnt)const{
 	GeomAPI_ProjectPointOnSurf projection( pos, surface);
 
 	if(projection.NbPoints() > 0)
-	{               
+	{
 		closest_pnt = projection.NearestPoint();
 		return true;
-	}     
+	}
 	return false;
 }
 
