@@ -35,7 +35,7 @@ bool CClickPoint::GetPos(double *pos)
 		wxGetApp().m_frame->m_graphics->m_view_point.SetProjection(true);
 		wxGetApp().m_frame->m_graphics->m_view_point.SetModelview();
 
-		gp_Pnt screen_pos(m_point.x, wxGetApp().m_frame->m_graphics->GetClientSize().GetHeight() - m_point.y, (double)m_depth/4294967295);
+		gp_Pnt screen_pos(m_point.x, wxGetApp().m_frame->m_graphics->GetClientSize().GetHeight() - m_point.y, (double)m_depth/4294967295.0);
 		gp_Pnt world_pos = wxGetApp().m_frame->m_graphics->m_view_point.glUnproject(screen_pos);
 		extract(world_pos, m_pos);
 		m_valid = true;
@@ -174,7 +174,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 			wxGetApp().m_digitizing->digitize(wxPoint(event.GetX(), event.GetY()));
 			extract(wxGetApp().m_digitizing->digitized_point.m_point, to);
 			wxGetApp().grip_to = wxGetApp().m_digitizing->digitized_point.m_point;
-			extract(wxGetApp().grip_from, from);	
+			extract(wxGetApp().grip_from, from);
 			wxGetApp().drag_gripper->OnGripperReleased(from, to);
 			wxGetApp().m_digitizing->SetOnlyCoords(wxGetApp().drag_gripper, false);
 			wxGetApp().drag_gripper = NULL;
