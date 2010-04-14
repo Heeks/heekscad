@@ -716,6 +716,17 @@ bool CHeeksCADInterface::FaceGetClosestPoint(HeeksObj* face, const double *pos, 
 	return false;
 }
 
+bool CHeeksCADInterface::FaceGetSurfaceClosestPoint(HeeksObj* face, const double *pos, double *closest_pnt)
+{
+	gp_Pnt cp;
+	if(((CFace*)face)->GetClosestSurfacePoint(make_point(pos), cp))
+	{
+		extract(cp, closest_pnt);
+		return true;
+	}
+	return false;
+}
+
 void CHeeksCADInterface::FaceGetPlaneParams(HeeksObj* face, double *d, double *norm)
 {
 	gp_Pln p;

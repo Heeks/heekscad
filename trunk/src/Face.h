@@ -56,6 +56,7 @@ public:
 	gp_Dir GetNormalAtUV(double u, double v, gp_Pnt *pos = NULL)const;
 	bool GetUVAtPoint(const gp_Pnt &pos, double *u, double *v)const;
 	bool GetClosestPoint(const gp_Pnt &pos, gp_Pnt &closest_pnt)const;
+	bool GetClosestSurfacePoint(const gp_Pnt &pos, gp_Pnt &closest_pnt)const;
 	void GetPlaneParams(gp_Pln &p);
 	void GetCylinderParams(gp_Cylinder &c);
 	void GetSphereParams(gp_Sphere &s);
