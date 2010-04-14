@@ -154,6 +154,16 @@ bool CFace::GetUVAtPoint(const gp_Pnt &pos, double *u, double *v)const{
 }
 
 bool CFace::GetClosestPoint(const gp_Pnt &pos, gp_Pnt &closest_pnt)const{
+	BRepPrimAPI_MakeBox cuboid(gp_Ax2(pos, gp_Vec(1, 0, 0), gp_Vec(0, 1, 0)), 0.0001, 0.0001, 0.0001);
+
+	BRepExtrema_DistShapeShape extrema(m_topods_face, cuboid);
+	if(extrema.Perform() != Standard_True)return false;
+	closest_pnt = extrema.PointOnShape1(1);
+
+	return true;
+}
+
+bool CFace::GetClosestSurfacePoint(const gp_Pnt &pos, gp_Pnt &closest_pnt)const{
 	Handle(Geom_Surface) surface = BRep_Tool::Surface(m_topods_face);
 	GeomAPI_ProjectPointOnSurf projection( pos, surface);
 
