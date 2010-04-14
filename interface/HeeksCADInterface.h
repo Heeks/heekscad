@@ -168,6 +168,7 @@ public:
 	virtual void FaceGetPointAndNormalAtUV(HeeksObj* face, double u, double v, double* p, double* norm);
 	virtual bool FaceGetUVAtPoint(HeeksObj* face, const double *pos, double *u, double *v);
 	virtual bool FaceGetClosestPoint(HeeksObj* face, const double *pos, double *closest_pnt);
+	virtual bool FaceGetSurfaceClosestPoint(HeeksObj* face, const double *pos, double *closest_pnt);
 	virtual void FaceGetPlaneParams(HeeksObj* face, double *d, double *norm);
 	virtual void FaceGetCylinderParams(HeeksObj* face, double *pos, double *dir, double *radius);
 	virtual void FaceGetSphereParams(HeeksObj* face, double *pos, double *radius);
