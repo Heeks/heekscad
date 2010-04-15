@@ -305,7 +305,7 @@ bool CHeeksFrame::ShowFullScreen(bool show, long style){
 
 void CHeeksFrame::OnClose( wxCloseEvent& event )
 {
-	if ( event.CanVeto() && !wxGetApp().CheckForModifiedDoc() )
+	if ( event.CanVeto() && wxGetApp().CheckForModifiedDoc() == wxCANCEL )
 	{
 		event.Veto();
 		return;
@@ -315,8 +315,8 @@ void CHeeksFrame::OnClose( wxCloseEvent& event )
 }
 
 static void OnQuit( wxCommandEvent& WXUNUSED( event ) )
-{
-	if(!wxGetApp().CheckForModifiedDoc())
+{	/// wxCANCEL means go on
+	if(wxGetApp().CheckForModifiedDoc() == wxCANCEL)
 		return;
 	wxGetApp().m_frame->Close(TRUE);
 }
@@ -677,7 +677,8 @@ static void OnOpenButton( wxCommandEvent& event )
 
     if (dialog.ShowModal() == wxID_OK)
     {
-		if(wxGetApp().CheckForModifiedDoc())
+		int res = wxGetApp().CheckForModifiedDoc();
+		if(res != wxCANCEL)
 		{
 			wxGetApp().Reset();
 			if(!wxGetApp().OpenFile(dialog.GetPath().c_str()))
@@ -685,7 +686,7 @@ static void OnOpenButton( wxCommandEvent& event )
 				wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + wxGetApp().GetKnownFilesCommaSeparatedList();
 				wxMessageBox(str);
 			}
-			wxGetApp().OnNewOrOpen(true);
+			wxGetApp().OnNewOrOpen(true, res);
 			wxGetApp().SetLikeNewFile();
 		}
     }
@@ -745,10 +746,11 @@ static void OnRedoButton( wxCommandEvent& event )
 
 static void OnNewButton( wxCommandEvent& event )
 {
-	if(wxGetApp().CheckForModifiedDoc())
+	int res = wxGetApp().CheckForModifiedDoc();
+	if(res != wxCANCEL)
 	{
 		wxGetApp().Reset();
-		wxGetApp().OnNewOrOpen(false);
+		wxGetApp().OnNewOrOpen(false, res);
 		wxGetApp().SetLikeNewFile();
 		wxGetApp().SetFrameTitle();
 		wxGetApp().Repaint();
@@ -1068,11 +1070,12 @@ void CHeeksFrame::OnRecentFile( wxCommandEvent& event )
 		if(recent_id != id)continue;
 		wxString& filepath = *It;
 
-		if(wxGetApp().CheckForModifiedDoc())
+		int res = wxGetApp().CheckForModifiedDoc();
+		if(res != wxCANCEL)
 		{
 			wxGetApp().Reset();
 			wxGetApp().OpenFile(filepath.c_str());
-			wxGetApp().OnNewOrOpen(true);
+			wxGetApp().OnNewOrOpen(true, res);
 			wxGetApp().SetLikeNewFile();
 		}
 		break;

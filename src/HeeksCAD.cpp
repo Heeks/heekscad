@@ -375,7 +375,7 @@ bool HeeksCADapp::OnInit()
 	m_frame->Show(TRUE);
 	SetTopWindow(m_frame);
 
-	OnNewOrOpen(false);
+	OnNewOrOpen(false,wxNO);
 	SetLikeNewFile();
 	SetFrameTitle();
 	SetStatusText();
@@ -2994,14 +2994,14 @@ void HeeksCADapp::glSphere(double radius, const double* pos)
 	glPopMatrix();
 }
 
-void HeeksCADapp::OnNewOrOpen(bool open)
+void HeeksCADapp::OnNewOrOpen(bool open, int res)
 {
 	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
 		wxDynamicLibrary* shared_library = *It;
 		bool success;
-		void(*fnOnNewOrOpen)(int) = (void(*)(int))(shared_library->GetSymbol(_T("OnNewOrOpen"), &success));
+		void(*fnOnNewOrOpen)(int,int) = (void(*)(int,int))(shared_library->GetSymbol(_T("OnNewOrOpen"), &success));
 		if(fnOnNewOrOpen){
-			(*fnOnNewOrOpen)(open ? 1:0);
+			(*fnOnNewOrOpen)(open ? 1:0, res);
 		}
 	}
 }
@@ -3052,21 +3052,20 @@ void HeeksCADapp::InsertRecentFileItem(const wxChar* filepath)
 	if(m_recent_files.size() > MAX_RECENT_FILES)m_recent_files.pop_back();
 }
 
-bool HeeksCADapp::CheckForModifiedDoc()
+int HeeksCADapp::CheckForModifiedDoc()
 {
-	// returns true if OK to continue opening file
+	// returns wxCANCEL if not OK to continue opening file
 	if(IsModified())
 	{
 		wxString str = wxString(_("Save changes to file")) + _T(" ") + m_filepath;
 		int res = wxMessageBox(str, wxMessageBoxCaptionStr, wxCANCEL|wxYES_NO|wxCENTRE);
-		if(res == wxCANCEL)return false;
+		if(res == wxCANCEL || res == wxNO) return res;
 		if(res == wxYES)
 		{
-			return SaveFile(m_filepath.c_str(), true);
+			return (int) SaveFile(m_filepath.c_str(), true);
 		}
 	}
-
-	return true;
+	return wxOK;
 }
 
 void HeeksCADapp::SetFrameTitle()
