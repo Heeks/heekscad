@@ -281,14 +281,14 @@ public:
 	int PickObjects(const wxChar* str, long marking_filter = -1, bool just_one = false);
 	bool PickPosition(const wxChar* str, double* pos, void(*callback)(const double*) = NULL);
 	void glSphere(double radius, const double* pos = NULL);
-	void OnNewOrOpen(bool open);
+	void OnNewOrOpen(bool open, int res);
 	void RegisterHideableWindow(wxWindow* w);
 	void RemoveHideableWindow(wxWindow* w);
 	void RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem));
 	void GetRecentFilesProfileString();
 	void WriteRecentFilesProfileString(wxConfigBase &config);
 	void InsertRecentFileItem(const wxChar* filepath);
-	bool CheckForModifiedDoc(); // returns true, if OK to continue with file open etc.
+	int CheckForModifiedDoc(); // returns wxCANCEL, if NOT OK to continue with file open etc.
 	void SetFrameTitle();
 	HeeksObj* GetIDObject(int type, int id);
 	std::list<HeeksObj*> GetIDObjects(int type, int id);
