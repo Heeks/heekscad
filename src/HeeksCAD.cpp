@@ -418,15 +418,10 @@ bool HeeksCADapp::OnInit()
 	return TRUE;
 }
 
-int HeeksCADapp::OnExit(){
 
-	if (m_pAutoSave.get() != NULL)
-	{
-		delete m_pAutoSave.release();
-		m_pAutoSave = std::auto_ptr<CAutoSave>(NULL);
-	}
-
-	HeeksConfig config;
+void HeeksCADapp::WriteConfig()
+{
+    HeeksConfig config;
 	config.Write(_T("DrawEnd"), digitize_end);
 	config.Write(_T("DrawInters"), digitize_inters);
 	config.Write(_T("DrawCentre"), digitize_centre);
@@ -487,6 +482,18 @@ int HeeksCADapp::OnExit(){
 	m_ruler->WriteToConfig(config);
 
 	WriteRecentFilesProfileString(config);
+
+}
+
+int HeeksCADapp::OnExit(){
+
+	if (m_pAutoSave.get() != NULL)
+	{
+		delete m_pAutoSave.release();
+		m_pAutoSave = std::auto_ptr<CAutoSave>(NULL);
+	}
+
+    WriteConfig();
 
 	delete history;
 	history = NULL;

@@ -726,6 +726,11 @@ static void OnSaveButton( wxCommandEvent& event )
     wxGetApp().SaveFile( wxGetApp().m_filepath.c_str(), true );
 }
 
+static void OnSaveSettingsButton( wxCommandEvent& event )
+{
+    wxGetApp().WriteConfig();
+}
+
 static void OnUndoButton( wxCommandEvent& event )
 {
 	wxGetApp().Undo();
@@ -928,37 +933,37 @@ static void OnMagExtentsButton( wxCommandEvent& event )
 {
 	wxGetApp().m_frame->m_graphics->OnMagExtents(true, true);
 }
- 
+
 static void OnMagXYButton( wxCommandEvent& event )
 {
 	wxGetApp().m_frame->m_graphics->OnMagXY(true);
 }
- 
+
 static void OnMagXYMButton( wxCommandEvent& event )
 {
 	wxGetApp().m_frame->m_graphics->OnMagXYM(true);
 }
- 
+
 static void OnMagXZButton( wxCommandEvent& event )
 {
 	wxGetApp().m_frame->m_graphics->OnMagXZ(true);
 }
- 
+
 static void OnMagXZMButton( wxCommandEvent& event )
 {
 	wxGetApp().m_frame->m_graphics->OnMagXZM(true);
 }
- 
+
 static void OnMagYZButton( wxCommandEvent& event )
 {
 	wxGetApp().m_frame->m_graphics->OnMagYZ(true);
 }
- 
+
 static void OnMagYZMButton( wxCommandEvent& event )
 {
 	wxGetApp().m_frame->m_graphics->OnMagYZM(true);
 }
- 
+
 static void OnMagXYZButton( wxCommandEvent& event )
 {
 	wxGetApp().m_frame->m_graphics->OnMagXYZ(true);
@@ -1592,6 +1597,8 @@ void CHeeksFrame::MakeMenus()
 	AddMenuItem(file_menu, _("About"), ToolImage(_T("about")), OnAbout);
 	file_menu->AppendSeparator();
 	AddMenuItem(file_menu, _("Plugins"), ToolImage(_T("plugin")), OnPlugins);
+	file_menu->AppendSeparator();
+	AddMenuItem(file_menu, _("Save Settings"), ToolImage(_T("save")), OnSaveSettingsButton);
 	file_menu->AppendSeparator();
 	AddMenuItem(file_menu, _("Exit\tCtrl+Q"), ToolImage(_T("exit")), OnQuit);
 

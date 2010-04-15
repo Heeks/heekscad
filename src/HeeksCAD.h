@@ -217,6 +217,7 @@ public:
 
 	virtual bool OnInit();
 	int OnExit();
+	void WriteConfig();
 	void CreateLights(void);
 	void DestroyLights(void);
 	void FindMarkedObject(const wxPoint &point, MarkedObject* marked_object);
