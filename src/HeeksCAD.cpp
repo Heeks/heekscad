@@ -1384,6 +1384,7 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 
 	wxString wf(filepath);
 	wf.LowerCase();
+	m_filepath.assign(filepath);
 
 	if(wf.EndsWith(_T(".heeks")))
 	{
@@ -1418,7 +1419,6 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 		return false;
 	}
 
-	m_filepath.assign(filepath);
 	if(update_recent_file_list)InsertRecentFileItem(filepath);
 	if(set_app_caption)SetFrameTitle();
 	SetLikeNewFile();
