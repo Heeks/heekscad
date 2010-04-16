@@ -9,21 +9,19 @@ using namespace std;
 CStlTri::CStlTri(const float* t)
 {
 	memcpy(x[0], t, 9*sizeof(float));
-	gp_Pnt p0(x[0][0], x[0][1], x[0][2]);
-	gp_Pnt p1(x[1][0], x[1][1], x[1][2]);
-	gp_Pnt p2(x[2][0], x[2][1], x[2][2]);
-	gp_Vec v1(p0, p1);
-	gp_Vec v2(p0, p2);
-	gp_Vec norm = (v1 ^ v2).Normalized();
-	n[0] = (float)(norm.X());
-	n[1] = (float)(norm.Y());
-	n[2] = (float)(norm.Z());
 }
 
-CStlTri::CStlTri(const float* t, const float* N)
+CStlTri::CStlTri(const double* t)
 {
-	memcpy(x[0], t, 9*sizeof(float));
-	memcpy(n, N, 3*sizeof(float));
+	x[0][0] = t[0];
+	x[0][1] = t[1];
+	x[0][2] = t[2];
+	x[1][0] = t[3];
+	x[1][1] = t[4];
+	x[1][2] = t[5];
+	x[2][0] = t[6];
+	x[2][1] = t[7];
+	x[2][2] = t[8];
 }
 
 CStlSolid::CStlSolid(const HeeksColor* col):color(*col), m_gl_list(0){
@@ -59,7 +57,8 @@ void CStlSolid::read_from_file(const wxChar* filepath)
 		for(unsigned int i = 0; i<num_facets; i++)
 		{
 			CStlTri tri;
-			ifs.read((char*)(tri.n), 12);
+			float n[3];
+			ifs.read((char*)(n), 12);
 			ifs.read((char*)(tri.x[0]), 36);
 			short attr;
 			ifs.read((char*)(&attr), 2);
@@ -109,15 +108,6 @@ void CStlSolid::read_from_file(const wxChar* filepath)
 				}
 				else if(!strcmp(five_chars, "facet"))
 				{
-#ifdef WIN32
-					sscanf(str, " facet normal %f %f %f", &(t.n[0]), &(t.n[1]), &(t.n[2]));
-#else
-					std::istringstream ss(str);
-					ss.imbue(std::locale("C"));
-					while(ss.peek() == ' ') ss.seekg(1, ios_base::cur);
-					ss.seekg(std::string("facet normal").size(), ios_base::cur);
-					ss >> t.n[0] >> t.n[1] >> t.n[2];
-#endif
 					vertex = 0;
 				}
 				else if(!strcmp(five_chars, "endfa"))
@@ -174,12 +164,22 @@ void CStlSolid::glCommands(bool select, bool marked, bool no_color){
 		m_gl_list = glGenLists(1);
 		glNewList(m_gl_list, GL_COMPILE_AND_EXECUTE);
 
-		// to do , render all the triangles
+		// render all the triangles
 		glBegin(GL_TRIANGLES);
 		for(std::list<CStlTri>::iterator It = m_list.begin(); It != m_list.end(); It++)
 		{
 			CStlTri &t = *It;
-			glNormal3fv(t.n);
+	gp_Pnt p0(t.x[0][0], t.x[0][1], t.x[0][2]);
+	gp_Pnt p1(t.x[1][0], t.x[1][1], t.x[1][2]);
+	gp_Pnt p2(t.x[2][0], t.x[2][1], t.x[2][2]);
+	gp_Vec v1(p0, p1);
+	gp_Vec v2(p0, p2);
+	gp_Vec norm = (v1 ^ v2).Normalized();
+	float n[3];
+	n[0] = (float)(norm.X());
+	n[1] = (float)(norm.Y());
+	n[2] = (float)(norm.Z());
+			glNormal3fv(n);
 			glVertex3fv(t.x[0]);
 			glVertex3fv(t.x[1]);
 			glVertex3fv(t.x[2]);
@@ -213,13 +213,6 @@ void CStlSolid::ModifyByMatrix(const double* m){
 	for(std::list<CStlTri>::iterator It = m_list.begin(); It != m_list.end(); It++)
 	{
 		CStlTri &t = *It;
-
-		gp_Vec vn(t.n[0], t.n[1], t.n[2]);
-		vn.Transform(mat);
-		t.n[0] = (float)vn.X();
-		t.n[1] = (float)vn.Y();
-		t.n[2] = (float)vn.Z();
-
 		for(int i = 0; i<3; i++){
 			gp_Pnt vx;
 			vx = gp_Pnt(t.x[i][0], t.x[i][1], t.x[i][2]);
@@ -268,17 +261,23 @@ void CStlSolid::GetTriangles(void(*callbackfunc)(const double* x, const double* 
 		x[6] = t.x[2][0];
 		x[7] = t.x[2][1];
 		x[8] = t.x[2][2];
-		n[0] = t.n[0];
-		n[1] = t.n[1];
-		n[2] = t.n[2];
+	gp_Pnt p0(t.x[0][0], t.x[0][1], t.x[0][2]);
+	gp_Pnt p1(t.x[1][0], t.x[1][1], t.x[1][2]);
+	gp_Pnt p2(t.x[2][0], t.x[2][1], t.x[2][2]);
+	gp_Vec v1(p0, p1);
+	gp_Vec v2(p0, p2);
+	gp_Vec norm = (v1 ^ v2).Normalized();
+	n[0] = norm.X();
+	n[1] = norm.Y();
+	n[2] = norm.Z();
 		if(!just_one_average_normal)
 		{
-			n[3] = t.n[0];
-			n[4] = t.n[1];
-			n[5] = t.n[2];
-			n[6] = t.n[0];
-			n[7] = t.n[1];
-			n[8] = t.n[2];
+			n[3] = n[0];
+			n[4] = n[1];
+			n[5] = n[2];
+			n[6] = n[0];
+			n[7] = n[1];
+			n[8] = n[2];
 		}
 		(*callbackfunc)(x, n);
 	}
@@ -297,9 +296,6 @@ void CStlSolid::WriteXML(TiXmlNode *root)
 		TiXmlElement * child_element;
 		child_element = new TiXmlElement( "tri" );
 		element->LinkEndChild( child_element );
-		child_element->SetDoubleAttribute("nx", t.n[0]);
-		child_element->SetDoubleAttribute("ny", t.n[1]);
-		child_element->SetDoubleAttribute("nz", t.n[2]);
 		child_element->SetDoubleAttribute("p1x", t.x[0][0]);
 		child_element->SetDoubleAttribute("p1y", t.x[0][1]);
 		child_element->SetDoubleAttribute("p1z", t.x[0][2]);
@@ -331,26 +327,21 @@ HeeksObj* CStlSolid::ReadFromXMLElement(TiXmlElement* pElem)
 	CStlSolid* new_object = new CStlSolid(&c);
 
 	// loop through all the "tri" objects
+	double x[3][3];
+
 	for(TiXmlElement* pTriElem = TiXmlHandle(pElem).FirstChildElement().Element(); pTriElem;	pTriElem = pTriElem->NextSiblingElement())
 	{
 		// get the attributes
-		for(TiXmlAttribute* a = pTriElem->FirstAttribute(); a; a = a->Next())
-		{
-			std::string name(a->Name());
-			if(name == "nx"){t.n[0] = (float)a->DoubleValue();}
-			else if(name == "ny"){t.n[1] = (float)a->DoubleValue();}
-			else if(name == "nz"){t.n[2] = (float)a->DoubleValue();}
-			else if(name == "p1x"){t.x[0][0] = (float)a->DoubleValue();}
-			else if(name == "p1y"){t.x[0][1] = (float)a->DoubleValue();}
-			else if(name == "p1z"){t.x[0][2] = (float)a->DoubleValue();}
-			else if(name == "p2x"){t.x[1][0] = (float)a->DoubleValue();}
-			else if(name == "p2y"){t.x[1][1] = (float)a->DoubleValue();}
-			else if(name == "p2z"){t.x[1][2] = (float)a->DoubleValue();}
-			else if(name == "p3x"){t.x[2][0] = (float)a->DoubleValue();}
-			else if(name == "p3y"){t.x[2][1] = (float)a->DoubleValue();}
-			else if(name == "p3z"){t.x[2][2] = (float)a->DoubleValue();}
-		}
-		new_object->m_list.push_back(t);
+		pTriElem->Attribute("p1x", &x[0][0]);
+		pTriElem->Attribute("p1y", &x[0][1]);
+		pTriElem->Attribute("p1z", &x[0][2]);
+		pTriElem->Attribute("p2x", &x[1][0]);
+		pTriElem->Attribute("p2y", &x[1][1]);
+		pTriElem->Attribute("p2z", &x[1][2]);
+		pTriElem->Attribute("p3x", &x[2][0]);
+		pTriElem->Attribute("p3y", &x[2][1]);
+		pTriElem->Attribute("p3z", &x[2][2]);
+		new_object->m_list.push_back(CStlTri(&x[0][0]));
 	}
 
 	new_object->ReadBaseXML(pElem);
