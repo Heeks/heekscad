@@ -1,8 +1,7 @@
 # Traduction française de HeeksCAD.
 # Copyright (C) 2009 THE HeeksCAD'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the HeeksCAD package.
-# Pierre JARILLON <jarillon@abul.org>, 2009
-# André PASCUAL <andre.pascual@linuxgraphic.org>, 2009.
+# André PASCUAL <andre.pascual@linuxgraphic.org>, 2009-2010.
 # 
 msgid ""
 msgstr ""
@@ -1018,31 +1017,31 @@ msgstr "Fichiers CN"
 
 #Ajout 237. HeeksCNC.cpp
 msgid "opprofile"
-msgstr "contournage"
+msgstr "Contournage"
 
 #Ajout 238. HeeksCNC.cpp
 msgid "pocket"
-msgstr "poche"
+msgstr "Poche"
 
 #Ajout 239. HeeksCNC.cpp
 msgid "zigzag"
-msgstr "zigzag"
+msgstr "Zigzag"
 
 #Ajout 240. HeeksCNC.cpp
 msgid "adapt"
-msgstr "ébauche"
+msgstr "Ébauche"
 
 #Ajout 241. HeeksCNC.cpp
 msgid "drilling"
-msgstr "perçage"
+msgstr "Perçage"
 
 #Ajout 242. HeeksCNC.cpp
 msgid "turnrough"
-msgstr "ébauche_tournage"
+msgstr "Ébauche_tournage"
 
 #Ajout 243. HeeksCNC.cpp
 msgid "drill"
-msgstr "foret"
+msgstr "Foret"
 
 #Ajout 244. HeeksCNC.cpp
 msgid "Machining tools"
@@ -1066,35 +1065,35 @@ msgstr "Déclare contrainte cette dimension"
 
 #Ajout249  HAngularDimension.cpp
 msgid "string"
-msgstr "chaîne"
+msgstr "Chaîne"
 
 #Ajout250 HAngularDimension.cpp
 msgid "pythagorean"
-msgstr "pythagorien"
+msgstr "Pythagorien"
 
 #Ajout250 HAngularDimension.cpp
 msgid "horizontal"
-msgstr "horizontal"
+msgstr "Horizontal"
 
 #Ajout250 HAngularDimension.cpp
 msgid "vertical"
-msgstr "vertical"
+msgstr "Vertical"
 
 #Ajout251 HAngularDimension.cpp
 msgid "text mode"
-msgstr "mode texte"
+msgstr "Mode texte"
 
 #Ajout252 HAngularDimension.cpp
 msgid "scale"
-msgstr "échelle"
+msgstr "Échelle"
 
 #Ajout253 HAngularDimension.cpp
 msgid "textmode"
-msgstr "mode_texte"
+msgstr "Mode_texte"
 
 #Ajout254 HAngularDimension.cpp
 msgid "dimension value"
-msgstr "valeur de dimension"
+msgstr "Valeur de dimension"
 
 #Ajout255 HAngularDimension.cpp
 msgid "DimensionDrawFlat"
@@ -1286,11 +1285,11 @@ msgstr "Choisir des faces"
 
 #Ajout 298 HeeksCAD.cpp
 msgid "pad"
-msgstr "tirer"
+msgstr "Tirer"
 
 #Ajout 299 HeeksCAD.cpp
 msgid "part"
-msgstr "pièce"
+msgstr "Pièce"
 
 #Ajout 300 HeeksCAD.cpp
 msgid "auto save interval (in minutes)"
@@ -1402,7 +1401,7 @@ msgstr "choisir esquisses, faces ou cercles"
 
 #Ajout 326 RuledSurface.cpp
 msgid "Extrude makes a solid"
-msgstr "extrude créé un objet 3D"
+msgstr "Extrusion Solide/Surface"
 
 #Ajout 327 RuledSurface.cpp
 msgid "Error making revolved solid"
@@ -1555,6 +1554,35 @@ msgstr "Panoramique"
 #Ajout 363 HeeksFrame.cpp
 msgid "View Pan"
 msgstr "Panoramique"
+
+#Ajout 364 HeeksFrame.cpp
+msgid "Save Settings"
+msgstr "Sauver Réglages"
+
+#Ajout 365 HeeksCAD.cpp
+msgid "Allow OpenGL stippling"
+msgstr "Pointillés OpenGL"
+
+#Ajout 366 HeeksCAD.cpp
+msgid "solid view mode"
+msgstr "Types visuels"
+
+#Ajout 367 HeeksCAD.cpp
+msgid "faces and edges"
+msgstr "Faces et arêtes"
+
+#Ajout 368 HeeksCAD.cpp
+msgid "edges only"
+msgstr "Arêtes seules"
+
+#Ajout 369 HeeksCAD.cpp
+msgid "faces only"
+msgstr "Faces seules"
+
+#Ajout 370 HeeksCAD.cpp
+msgid "face selection color"
+msgstr "Face sélectionnée"
+
 
 #===============================
 
@@ -1929,7 +1957,7 @@ msgid "tangent"
 msgstr "Tangent"
 
 msgid "radius for undefined circles"
-msgstr "Rayon pour cercles quelconques"
+msgstr "Rayon par défaut"
 
 msgid "coordinates"
 msgstr "Coordonnées"
@@ -3742,7 +3770,7 @@ msgid "vertex"
 msgstr "Sommet de polygone"
 
 msgid "autosolve constraints"
-msgstr "Résolution automatique des contraintes"
+msgstr "Contraintes auto-résolues"
 
 msgid "units for nc output"
 msgstr "Unités pour la sortie du code CN"
