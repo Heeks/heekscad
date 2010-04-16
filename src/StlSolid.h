@@ -6,11 +6,10 @@
 
 class CStlTri{
 public:
-	float n[3];
 	float x[3][3];
 	CStlTri(){}
 	CStlTri(const float* t);
-	CStlTri(const float* t, const float* n);
+	CStlTri(const double* t);
 };
 
 class CStlSolid:public HeeksObj{
