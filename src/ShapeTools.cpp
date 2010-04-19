@@ -31,14 +31,12 @@ void CreateFacesAndEdges(TopoDS_Shape shape, CFaceList* faces, CEdgeList* edges,
 		vertices->Add(new_object, NULL);
 	}
 
-	TopTools_MapIteratorOfMapOfShape It(edgeMap);
-	std::map<const TopoDS_Shape*, CEdge*> edge_finder;
-	for (;It.More(); It.Next())
+	// create the edge objects
+	for (TopExp_Explorer expEdge(shape, TopAbs_EDGE); expEdge.More(); expEdge.Next())
 	{
-		const TopoDS_Shape &E = It.Key();
-		CEdge* new_object = new CEdge(TopoDS::Edge(E));
+		TopoDS_Edge E = TopoDS::Edge(expEdge.Current());
+		CEdge* new_object = new CEdge(E);
 		edges->Add(new_object, NULL);
-		edge_finder.insert( std::pair<const TopoDS_Shape*, CEdge*>(&E, new_object) );
 	}
 
 	// make an edge map for each face
@@ -180,7 +178,4 @@ void CreateFacesAndEdges(TopoDS_Shape shape, CFaceList* faces, CEdgeList* edges,
 	}
 #endif
 }
-
-
-
 
