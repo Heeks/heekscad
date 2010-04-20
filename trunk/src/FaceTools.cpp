@@ -50,13 +50,32 @@ void DrawFaceWithCommands(TopoDS_Face face)
 
 gp_Dir GetFaceNormalAtUV(const TopoDS_Face &face, double u, double v, gp_Pnt *pos){
 	if(face.IsNull()) return gp_Dir(0, 0, 1);
-	Handle(Geom_Surface) surf=BRep_Tool::Surface(face);          // get surface properties
-	GeomLProp_SLProps props(surf, u, v, 1, 0.01);          // get surface normal
-	if(!props.IsNormalDefined())return gp_Dir(0, 0, 1);
-	gp_Dir norm=props.Normal();                         // check orientation
-	if(pos)*pos = props.Value();
-	if(face.Orientation()==TopAbs_REVERSED) norm.Reverse();
-	return norm;
+
+	try
+	{
+		Handle(Geom_Surface) surf=BRep_Tool::Surface(face);          // get surface properties
+		GeomLProp_SLProps props(surf, u, v, 1, 0.01);          // get surface normal
+		if(!props.IsNormalDefined())return gp_Dir(0, 0, 1);
+		gp_Dir norm=props.Normal();                         // check orientation
+		if(pos)*pos = props.Value();
+		if(face.Orientation()==TopAbs_REVERSED) norm.Reverse();
+		return norm;
+	}
+	catch (Standard_Failure) {
+		Handle_Standard_Failure e = Standard_Failure::Caught();
+		wxMessageBox(wxString(_("Error in GetFaceNormalAtUV")) + _T(": ") + Ctt(e->GetMessageString()));
+		return gp_Dir(0, 0, 1);
+	}
+	catch (const char* str)
+	{
+		wxMessageBox(wxString(_("Error in GetFaceNormalAtUV")) + _T(": ") + Ctt(str));
+		return gp_Dir(0, 0, 1);
+	}
+	catch (...)
+	{
+		wxMessageBox(_("Error in GetFaceNormalAtUV"));
+		return gp_Dir(0, 0, 1);
+	}
 }
 
 void DrawFace(TopoDS_Face face,void(*callbackfunc)(const double* x, const double* n), bool just_one_average_normal)
