@@ -143,13 +143,10 @@ bool CFace::GetUVAtPoint(const gp_Pnt &pos, double *u, double *v)const{
 	GeomAPI_ProjectPointOnSurf projection( pos, surface);
 
 	if(projection.NbPoints() > 0)
-	{
-		if(projection.LowerDistance() < 0.01 )
-		{
-			projection.LowerDistanceParameters(*u, *v);
-			return true;
-		}
-	}
+	{               
+		projection.LowerDistanceParameters(*u, *v);
+		return true;
+	}     
 	return false;
 }
 
