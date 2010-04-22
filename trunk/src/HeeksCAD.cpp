@@ -946,7 +946,8 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into)
 
 /* static */ void HeeksCADapp::OpenSTLFile(const wxChar *filepath)
 {
-	CStlSolid* new_object = new CStlSolid(filepath, &(wxGetApp().current_color));
+	HeeksColor c(128, 128, 128);
+	CStlSolid* new_object = new CStlSolid(filepath, &c);
 	wxGetApp().Add(new_object, NULL);
 }
 
