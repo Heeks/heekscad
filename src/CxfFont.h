@@ -165,6 +165,8 @@ protected:
 
 		GraphicsList_t	m_graphics_list;
 		CBox	m_bounding_box;
+
+		wxString PrepareStringForConversion( wxString &value ) const;
 	}; // End Glyph class definition
 
 public:
