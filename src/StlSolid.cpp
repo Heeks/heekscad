@@ -30,6 +30,11 @@ CStlSolid::CStlSolid(const HeeksColor* col):color(*col), m_gl_list(0){
 
 CStlSolid::CStlSolid(const wxChar* filepath, const HeeksColor* col):color(*col), m_gl_list(0){
 	read_from_file(filepath);
+
+	if(wxGetApp().m_in_OpenFile && wxGetApp().m_file_open_matrix)
+	{
+		ModifyByMatrix(wxGetApp().m_file_open_matrix);
+	}
 }
 
 void CStlSolid::read_from_file(const wxChar* filepath)
@@ -155,6 +160,7 @@ void CStlSolid::KillGLLists()
 
 void CStlSolid::glCommands(bool select, bool marked, bool no_color){
 	glEnable(GL_LIGHTING);
+	Material(color).glMaterial(1.0);
 
 	if(m_gl_list)
 	{
