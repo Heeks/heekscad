@@ -169,6 +169,53 @@ void VectorFont::Glyph::Arc::glCommands( const gp_Pnt & starting_point, const bo
 	glEnd();
 } // End glCommands() method
 
+
+/**
+    If the locale settings indicate that floating point numbers use a comma (,) as
+    a decimal point then we're going to have a problem reading in the CXF font files.
+    The CXF font files use commas as field separators and dots (.) as decimal
+    points.  In order that the strtod() conversion work correctly, convert all the
+    dot characters in the attached string into a comma so that the conversion
+    to a floating point number works correctly.
+    NOTE: This routine must not be called with a comma-separated list of
+    values.  This list of values should be separated and each individual value
+    passed in here separately.
+ */
+wxString VectorFont::Glyph::PrepareStringForConversion( wxString &value ) const
+{
+    typedef enum
+    {
+        eUnknown = 0,
+        eConvertDotToComma,
+        eNoConversionRequired
+    } FloatingPointConversion_t;
+
+    static FloatingPointConversion_t   floating_point_conversion = eUnknown;
+
+    if (floating_point_conversion == eUnknown)
+    {
+        // We need to figure out if the local computer's locale settings use a comma
+        // as a decimal point.
+        wxString test;
+        test << 3.1415;
+        if (test.Find(',') != -1)
+        {
+            floating_point_conversion = eConvertDotToComma;
+        }
+        else
+        {
+            floating_point_conversion = eNoConversionRequired;
+        }
+    }
+
+    if (floating_point_conversion == eConvertDotToComma)
+    {
+        value.Replace(_T("."), _T(","));
+    }
+
+    return(value);
+}
+
 VectorFont::Glyph::Glyph( const std::list<std::string> &cxf_glyph_definition )
 {
 	for (std::list<std::string>::const_iterator l_itLine = cxf_glyph_definition.begin(); l_itLine != cxf_glyph_definition.end(); l_itLine++)
@@ -182,6 +229,12 @@ VectorFont::Glyph::Glyph( const std::list<std::string> &cxf_glyph_definition )
 			std::ostringstream l_ossError;
 			l_ossError << "Expected tokens in glyph definition";
 			throw(std::runtime_error(l_ossError.str().c_str()));
+		}
+
+        // Replace dot (.) for comma (,) if the locale settings require it.
+		for (std::vector<wxString>::iterator token = tokens.begin(); token != tokens.end(); token++)
+		{
+            *token = PrepareStringForConversion( *token );
 		}
 
 		switch (tokens[0][0])
