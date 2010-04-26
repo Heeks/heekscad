@@ -297,6 +297,7 @@ public:
 	void RemoveID(HeeksObj* object); // only call this from ObjList::Remove()
 	void ResetIDs();
 	bool InputDouble(const wxChar* prompt, const wxChar* value_name, double &value);
+	bool InputLength(const wxChar* prompt, const wxChar* value_name, double &value);
 	void RegisterOnGLCommands( void(*callbackfunc)() );
 	void RemoveOnGLCommands( void(*callbackfunc)() );
 	void RegisterOnGraphicsSize( void(*callbackfunc)(wxSizeEvent&) );

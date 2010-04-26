@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "DoubleInput.h"
 #include "PropertyDouble.h"
+#include "PropertyLength.h"
 
 static double* value_for_set_value = NULL;
 static void set_value(double value, HeeksObj* object){*value_for_set_value = value;}
@@ -32,7 +33,7 @@ public:
 
 CInputCancel input_cancel;
 
-// static 
+// static
 bool CDoubleInput::m_success = false;
 
 CDoubleInput::CDoubleInput(const wxChar* prompt, const wxChar* value_name, double initial_value)
@@ -61,10 +62,21 @@ void CDoubleInput::GetProperties(std::list<Property *> *list)
 	list->push_back(new PropertyDouble(m_value_title.c_str(), m_value, NULL, set_value));
 }
 
+
 void CDoubleInput::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	// add a do it now button
 	t_list->push_back(&input_apply);
 	t_list->push_back(&input_cancel);
+}
+
+
+CLengthInput::CLengthInput(const wxChar* prompt, const wxChar* value_name, double initial_value)
+    : CDoubleInput(prompt, value_name, initial_value) { }
+
+void CLengthInput::GetProperties(std::list<Property *> *list)
+{
+	value_for_set_value = &m_value;
+	list->push_back(new PropertyLength(m_value_title.c_str(), m_value, NULL, set_value));
 }
 
