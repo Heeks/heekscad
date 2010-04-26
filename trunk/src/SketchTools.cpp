@@ -8,12 +8,21 @@
 #include "Pad.h"
 #include "Part.h"
 #include "Pocket.h"
+#include "ConversionTools.h"
+#include "../interface/HeeksCADInterface.h"
+#include "../interface/PropertyList.h"
+#include "../interface/PropertyCheck.h"
+#include "../interface/PropertyLength.h"
+#include "HeeksConfig.h"
+
+extern CHeeksCADInterface heekscad_interface;
+
 
 class PadSketch:public Tool{
 public:
 	void Run(){
 		double height = 10;
-		wxGetApp().InputDouble(_("Input extrusion height"), _("height"), height);
+		wxGetApp().InputLength(_("Input extrusion height"), _("height"), height);
 		CSketch* sketch = (CSketch*)(*wxGetApp().m_marked_list->list().begin());
 
 		CPad::PadSketch(sketch,height);
@@ -27,7 +36,7 @@ class PocketSketch:public Tool{
 public:
 	void Run(){
 		double height = 10;
-		wxGetApp().InputDouble(_("Input pad depth"), _("height"), height);
+		wxGetApp().InputLength(_("Input pad depth"), _("height"), height);
 		CSketch* sketch = (CSketch*)(*wxGetApp().m_marked_list->list().begin());
 
 		CPocket::PocketSketch(sketch,height);

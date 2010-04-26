@@ -21,7 +21,17 @@ public:
 	// virtual functions for InputMode
 	const wxChar* GetTitle();
 	void OnMouse( wxMouseEvent& event );
-	void GetProperties(std::list<Property *> *list);
+	virtual void GetProperties(std::list<Property *> *list);
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
+};
+
+class CLengthInput: public CDoubleInput
+{
+public:
+	CLengthInput(const wxChar* prompt, const wxChar* value_name, double initial_value);
+	virtual ~CLengthInput(){}
+
+	// virtual functions for InputMode
+	virtual void GetProperties(std::list<Property *> *list);
 };
 

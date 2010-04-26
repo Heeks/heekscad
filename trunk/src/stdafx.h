@@ -136,6 +136,7 @@
 #include <Poly_PolygonOnTriangulation.hxx>
 #include <Poly_Triangulation.hxx>
 #include <Precision.hxx>
+#include <ShapeFix_Wire.hxx>
 #include <Standard_ErrorHandler.hxx>
 #include <StdPrs_ToolShadedShape.hxx>
 #include <STEPControl_Controller.hxx>

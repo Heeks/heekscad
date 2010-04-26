@@ -831,7 +831,7 @@ static void OnFilletButton( wxCommandEvent& event )
 	double rad = 2.0;
 	HeeksConfig config;
 	config.Read(_T("EdgeBlendRadius"), &rad);
-	if(wxGetApp().InputDouble(_("Enter Blend Radius"), _("Radius"), rad))
+	if(wxGetApp().InputLength(_("Enter Blend Radius"), _("Radius"), rad))
 	{
 		wxGetApp().CreateUndoPoint();
 		CShape::FilletOrChamferEdges(wxGetApp().m_marked_list->list(), rad);
@@ -847,7 +847,7 @@ static void OnChamferButton( wxCommandEvent& event )
 	double rad = 2.0;
 	HeeksConfig config;
 	config.Read(_T("EdgeChamferDist"), &rad);
-	if(wxGetApp().InputDouble(_("Enter chamfer distance"), _("Distance"), rad))
+	if(wxGetApp().InputLength(_("Enter chamfer distance"), _("Distance"), rad))
 	{
 		wxGetApp().CreateUndoPoint();
 		CShape::FilletOrChamferEdges(wxGetApp().m_marked_list->list(), rad, true);

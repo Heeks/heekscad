@@ -153,7 +153,7 @@ public:
 		double rad = 2.0;
 		HeeksConfig config;
 		config.Read(_T("EdgeBlendRadius"), &rad);
-		if(wxGetApp().InputDouble(_("Enter Blend Radius"), _("Radius"), rad))
+		if(wxGetApp().InputLength(_("Enter Blend Radius"), _("Radius"), rad))
 		{
 			edge_for_tools->Blend(rad);
 			config.Write(_T("EdgeBlendRadius"), rad);
@@ -304,11 +304,11 @@ bool CEdge::GetClosestPoint(const gp_Pnt &pos, gp_Pnt &closest_pnt, double &u)co
 	GeomAPI_ProjectPointOnCurve projection(pos, curve);
 
 	if(projection.NbPoints() > 0)
-	{               
+	{
 		closest_pnt = projection.NearestPoint();
 		u = projection.LowerDistanceParameter();
 		return true;
-	}     
+	}
 	return false;
 }
 
@@ -330,7 +330,7 @@ bool CEdge::GetLineParams(double *d6)
 
 bool CEdge::GetCircleParams(double *d7)
 {
-	//center.x, center.y, center.z, axis.x, axis.y, axis.z, radius 
+	//center.x, center.y, center.z, axis.x, axis.y, axis.z, radius
 	BRepAdaptor_Curve curve(m_topods_edge);
 	if(curve.GetType() != GeomAbs_Circle)return false;
 	gp_Circ c = curve.Circle();
