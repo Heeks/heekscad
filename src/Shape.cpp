@@ -239,7 +239,7 @@ public:
 		double offset_value = 2.0;
 		HeeksConfig config;
 		config.Read(_T("OffsetShapeValue"), &offset_value);
-		if(wxGetApp().InputDouble(_("Enter Offset Value, + for making bigger, - for making smaller"), _("Offset value"), offset_value))
+		if(wxGetApp().InputLength(_("Enter Offset Value, + for making bigger, - for making smaller"), _("Offset value"), offset_value))
 		{
 			try
 			{

@@ -126,7 +126,7 @@ HeeksObj* CreatePipeFromProfile(HeeksObj* spine, HeeksObj* profile)
 				// pipe profile algong spine
 				BRepOffsetAPI_MakePipe makePipe(wire, face);
 				makePipe.Build();
-				TopoDS_Shape shape = makePipe.Shape(); 
+				TopoDS_Shape shape = makePipe.Shape();
 
 				HeeksObj* new_object = CShape::MakeObject(shape, _("Pipe"), SOLID_TYPE_UNKNOWN, wxGetApp().current_color);
 				if(new_object)pipe_shapes.push_back(new_object);
@@ -186,15 +186,15 @@ static void on_extrude_to_solid(bool onoff, HeeksObj* object)
 	config.Write(_T("ExtrudeToSolid"), wxGetApp().m_extrude_to_solid);
 }
 
-class CExtrusionInput:public CDoubleInput
+class CExtrusionInput:public CLengthInput
 {
 public:
-	CExtrusionInput(double &value):CDoubleInput(_("Input extrusion height"), _("height"), value){}
+	CExtrusionInput(double &value):CLengthInput(_("Input extrusion height"), _("height"), value){}
 
 	// virtual functions for InputMode
 	void GetProperties(std::list<Property *> *list)
 	{
-		CDoubleInput::GetProperties(list);
+		CLengthInput::GetProperties(list);
 		list->push_back(new PropertyCheck(_("Extrude makes a solid"), wxGetApp().m_extrude_to_solid, NULL, on_extrude_to_solid));
 	}
 };
@@ -209,9 +209,9 @@ bool InputExtrusionHeight(double &value)
 
 	wxGetApp().SetInputMode(save_mode);
 
-	if(CDoubleInput::m_success)value = extrusion_input.m_value;
+	if(CLengthInput::m_success)value = extrusion_input.m_value;
 
-	return CDoubleInput::m_success;
+	return CLengthInput::m_success;
 }
 
 void PickCreateExtrusion()
@@ -289,7 +289,7 @@ bool CreateRuledSurface(const std::list<TopoDS_Wire> &wire_list, TopoDS_Shape& s
 			wxMessageBox(_("Fatal error making ruled solid"));
 			return false;
 		}
-			
+
 		return true;
 	}
 	return false;
@@ -314,7 +314,7 @@ void CreateExtrusions(const std::list<TopoDS_Shape> &faces_or_wires, std::list<T
 	{
 		wxMessageBox(_("Fatal error making extruded solid"));
 	}
-	
+
 }
 
 void CreateRevolutions(const std::list<TopoDS_Shape> &faces_or_wires, std::list<TopoDS_Shape>& new_shapes, const gp_Ax1& axis, double angle)
@@ -345,6 +345,6 @@ void CreateRevolutions(const std::list<TopoDS_Shape> &faces_or_wires, std::list<
 	{
 		wxMessageBox(_("Fatal error making revolved solid"));
 	}
-	
+
 }
 

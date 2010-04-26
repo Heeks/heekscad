@@ -1106,6 +1106,11 @@ bool CHeeksCADInterface::InputDouble(const wxChar* prompt, const wxChar* value_n
 	return wxGetApp().InputDouble(prompt, value_name, value);
 }
 
+bool CHeeksCADInterface::InputLength(const wxChar* prompt, const wxChar* value_name, double &value)
+{
+	return wxGetApp().InputLength(prompt, value_name, value);
+}
+
 double CHeeksCADInterface::GetViewUnits()
 {
 	return wxGetApp().m_view_units;

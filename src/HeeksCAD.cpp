@@ -69,6 +69,7 @@ using namespace std;
 
 IMPLEMENT_APP(HeeksCADapp)
 
+
 #if 0
 int MyAllocHook( int allocType, void *userData, size_t size, int blockType, long requestNumber, const unsigned char *filename, int lineNumber)
 {
@@ -2591,6 +2592,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	PropertyList* font_options = new PropertyList(_("font options"));
 	font_options->m_list.push_back( new PropertyString(_("Paths (semicolon delimited)"), m_font_paths, this, on_edit_font_paths));
 	list->push_back(font_options);
+
 }
 
 void HeeksCADapp::DeleteMarkedItems()
@@ -3224,6 +3226,21 @@ bool HeeksCADapp::InputDouble(const wxChar* prompt, const wxChar* value_name, do
 	if(CDoubleInput::m_success)value = double_input.m_value;
 
 	return CDoubleInput::m_success;
+}
+
+bool HeeksCADapp::InputLength(const wxChar* prompt, const wxChar* value_name, double &value)
+{
+	CInputMode* save_mode = input_mode_object;
+	CLengthInput length_input(prompt, value_name, value);
+	SetInputMode(&length_input);
+
+	OnRun();
+
+	SetInputMode(save_mode);
+
+	if(CLengthInput::m_success)value = length_input.m_value;
+
+	return CLengthInput::m_success;
 }
 
 void HeeksCADapp::RegisterOnGLCommands( void(*callbackfunc)() )
