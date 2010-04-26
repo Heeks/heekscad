@@ -205,6 +205,14 @@ public:
 	bool RegisterFileOpenHandler( const std::list<wxString> file_extensions, FileOpenHandler_t );
 	bool UnregisterFileOpenHandler( void (*fileopen_handler)(const wxChar *path) );
 
+	typedef void(*UnitsChangedHandler_t)(const double value);
+	typedef std::list<UnitsChangedHandler_t> UnitsChangedHandlers_t;
+
+	UnitsChangedHandlers_t m_units_changed_handlers;
+
+	void RegisterUnitsChangeHandler( UnitsChangedHandler_t );
+	void UnregisterUnitsChangeHandler( UnitsChangedHandler_t );
+
 	//WxApp override
 	int OnRun();
 	bool OnExceptionInMainLoop();

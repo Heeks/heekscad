@@ -2356,6 +2356,14 @@ void on_set_auto_save_interval(int value, HeeksObj* object){
 static void on_set_units(int value, HeeksObj* object)
 {
 	wxGetApp().m_view_units = (value == 0) ? 1.0:25.4;
+
+	// Notify any registered handler routines.
+	for (HeeksCADapp::UnitsChangedHandlers_t::iterator itHandler = wxGetApp().m_units_changed_handlers.begin();
+            itHandler != wxGetApp().m_units_changed_handlers.end(); itHandler++)
+    {
+            (*(*itHandler))(wxGetApp().m_view_units);
+    }
+
 	HeeksConfig config;
 	config.Write(_T("ViewUnits"), wxGetApp().m_view_units);
 	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
@@ -3737,3 +3745,26 @@ bool HeeksCADapp::UnregisterFileOpenHandler( void (*fileopen_handler)(const wxCh
 
     return(remove.size() > 0);
 }
+
+
+void HeeksCADapp::RegisterUnitsChangeHandler( void (*units_changed_handler)(const double value) )
+{
+    m_units_changed_handlers.push_back( units_changed_handler );
+}
+
+void HeeksCADapp::UnregisterUnitsChangeHandler( void (*units_changed_handler)(const double value) )
+{
+    for (UnitsChangedHandlers_t::iterator itHandler = m_units_changed_handlers.begin(); itHandler != m_units_changed_handlers.end(); /* increment within loop */ )
+    {
+        if (units_changed_handler == *itHandler)
+        {
+            itHandler = m_units_changed_handlers.erase(itHandler);
+        }
+        else
+        {
+            itHandler++;
+        }
+    }
+}
+
+

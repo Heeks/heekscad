@@ -251,4 +251,7 @@ public:
 
 	virtual bool RegisterFileOpenHandler( const std::list<wxString> file_extensions, void (*fileopen_handler)(const wxChar *path) );
 	virtual bool UnregisterFileOpenHandler( void (*fileopen_handler)(const wxChar *path) );
+
+	virtual void RegisterUnitsChangeHandler( void (*units_changed_handler)(const double value) );
+	virtual void UnregisterUnitsChangeHandler( void (*units_changed_handler)(const double value) );
 };

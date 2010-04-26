@@ -1189,3 +1189,15 @@ bool CHeeksCADInterface::UnregisterFileOpenHandler( void (*fileopen_handler)(con
 {
     return(wxGetApp().UnregisterFileOpenHandler( fileopen_handler ));
 }
+
+
+void CHeeksCADInterface::RegisterUnitsChangeHandler( void (*units_changed_handler)(const double value) )
+{
+    return( wxGetApp().RegisterUnitsChangeHandler( units_changed_handler ));
+}
+
+void CHeeksCADInterface::UnregisterUnitsChangeHandler( void (*units_changed_handler)(const double value) )
+{
+    return( wxGetApp().UnregisterUnitsChangeHandler( units_changed_handler ));
+}
+
