@@ -336,6 +336,8 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("AllowOpenGLStippling"), &m_allow_opengl_stippling, true);
 
 	config.Read(_T("DxfMakeSketch"), &HeeksDxfRead::m_make_as_sketch, true);
+	config.Read(_T("DxfIgnoreErrors"), &HeeksDxfRead::m_ignore_errors, false);
+
 	config.Read(_T("ViewUnits"), &m_view_units);
 	config.Read(_T("FaceToSketchDeviation"), &(FaceToSketchTool::deviation));
 
@@ -466,6 +468,7 @@ void HeeksCADapp::WriteConfig()
 	config.Write(_T("GraphicsTextMode"), m_graphics_text_mode);
 	config.Write(_T("AllowOpenGLStippling"), m_allow_opengl_stippling);
 	config.Write(_T("DxfMakeSketch"), HeeksDxfRead::m_make_as_sketch);
+	config.Write(_T("DxfIgnoreErrors"), HeeksDxfRead::m_ignore_errors);
 	config.Write(_T("FaceToSketchDeviation"), FaceToSketchTool::deviation);
 
 	config.Write(_T("MinCorrelationFactor"), m_min_correlation_factor);
@@ -954,8 +957,29 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into)
 
 /* static */ void HeeksCADapp::OpenDXFFile(const wxChar *filepath )
 {
-	HeeksDxfRead dxf_file(filepath);
-	dxf_file.DoRead();
+	bool try_again = false;
+	try {
+		HeeksDxfRead dxf_file(filepath);
+		dxf_file.DoRead(HeeksDxfRead::m_ignore_errors);
+	} catch(Standard_Failure)
+	{
+		int response = wxMessageBox(_("OpenCascade failures occured during DXF read processing.  Would you like to import again and ignore the errors?"), _("DXF Read"), wxYES_NO);
+		if (response == wxYES)
+		{
+			try_again = true;
+		}
+	}
+
+	if (try_again)
+	{
+		try {
+			HeeksDxfRead dxf_file(filepath);
+			dxf_file.DoRead(true);
+		} catch(...)
+		{
+			wxMessageBox(_("OpenCascade failure occured during DXF read processing"));
+		}
+	}
 }
 
 /* static */ void HeeksCADapp::OpenRS274XFile(const wxChar *filepath)
@@ -2323,6 +2347,10 @@ void on_dxf_make_sketch(bool value, HeeksObj* object){
 	HeeksDxfRead::m_make_as_sketch = value;
 }
 
+void on_sel_dxf_read_errors(bool value, HeeksObj* object){
+	HeeksDxfRead::m_ignore_errors = value;	
+}
+
 void on_stl_facet_tolerance(double value, HeeksObj* object){
 	wxGetApp().m_stl_facet_tolerance = value;
 }
@@ -2589,6 +2617,8 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	PropertyList* file_options = new PropertyList(_("file options"));
 	PropertyList* dxf_options = new PropertyList(_("DXF"));
 	dxf_options->m_list.push_back(new PropertyCheck(_("make sketch"), HeeksDxfRead::m_make_as_sketch, NULL, on_dxf_make_sketch));
+	dxf_options->m_list.push_back(new PropertyCheck(_("ignore errors where possible"), HeeksDxfRead::m_ignore_errors, NULL, on_sel_dxf_read_errors));
+
 	file_options->m_list.push_back(dxf_options);
 	PropertyList* stl_options = new PropertyList(_("STL"));
 	stl_options->m_list.push_back(new PropertyDouble(_("stl save facet tolerance"), m_stl_facet_tolerance, NULL, on_stl_facet_tolerance));
