@@ -263,7 +263,7 @@ public:
 	bool OpenImageFile(const wxChar *filepath);
 	bool OpenFile(const wxChar *filepath, bool import_not_open = false, HeeksObj* paste_into = NULL, bool retain_filename = true );
 	void SaveDXFFile(const wxChar *filepath);
-	void SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance = -1.0);
+	void SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance = -1.0, double* scale = NULL);
 	void SaveCPPFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance = -1.0);
 	void SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, bool for_clipboard = false);
 	void SaveXMLFile(const wxChar *filepath){SaveXMLFile(m_objects, filepath);}

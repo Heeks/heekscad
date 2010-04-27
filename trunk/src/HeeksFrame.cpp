@@ -1219,33 +1219,18 @@ void CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, Tool* tool)
 
 class CFlyOutButton;
 
-class PanelForToolBar : public wxScrolledWindow
-{
-public:
-	PanelForToolBar(wxWindow *parent):wxScrolledWindow(parent, wxID_ANY){}
-
-	void OnMouse( wxMouseEvent& event );
-
-private:
-    DECLARE_EVENT_TABLE()
-};
-
-BEGIN_EVENT_TABLE(PanelForToolBar, wxScrolledWindow)
-    EVT_MOUSE_EVENTS( PanelForToolBar::OnMouse )
-END_EVENT_TABLE()
-
 #define FLYOUT_PANEL_BORDER 5
 
 class ToolBarPopup: public wxPopupTransientWindow
 {
 public:
 	wxToolBar *m_toolBar;
-    PanelForToolBar *m_panel;
+    wxScrolledWindow *m_panel;
 
 public:
 	ToolBarPopup( wxWindow *parent, const CFlyOutList &flyout_list):wxPopupTransientWindow( parent )
 	{
-		m_panel = new PanelForToolBar( this );
+		m_panel = new wxScrolledWindow( this );
 		m_panel->SetBackgroundColour( *wxLIGHT_GREY );
 
  		m_toolBar = new wxToolBar(m_panel, -1, wxDefaultPosition, wxDefaultSize, wxTB_VERTICAL | wxTB_NODIVIDER | wxTB_FLAT);
@@ -1341,7 +1326,9 @@ public:
 			m_toolbarPopup->Move(pos.x - FLYOUT_PANEL_BORDER, pos.y - FLYOUT_PANEL_BORDER);
 #endif
 			m_toolbarPopup->Popup();
+			m_toolbarPopup->m_toolBar->SetFocus();
 		}
+		event.Skip();
 	}
 
 	void OnMenuEvent(wxCommandEvent& event)
@@ -1353,6 +1340,7 @@ public:
 			{
 				// hide the popup
 				m_toolbarPopup->Hide();
+printf(" Hide ");
 
 				// call the OnButtonFunction
 				const CFlyOutItem &fo = *It;
@@ -1373,10 +1361,12 @@ public:
 			const wxPoint & pt = ::wxGetMousePosition();
 			if(!m_toolbarPopup->GetScreenRect().Contains(pt))
 			{
+				printf("delete toolbar");
 				delete m_toolbarPopup;
 				m_toolbarPopup = NULL;
 			}
 		}
+		event.Skip();
 	}
 
 private:
@@ -1388,15 +1378,6 @@ BEGIN_EVENT_TABLE(CFlyOutButton, wxBitmapButton)
     EVT_MENU_RANGE(ID_FIRST_POP_UP_MENU_TOOL, ID_FIRST_POP_UP_MENU_TOOL + 1000, CFlyOutButton::OnMenuEvent)
     EVT_IDLE(CFlyOutButton::OnIdle)
 END_EVENT_TABLE()
-
-void PanelForToolBar::OnMouse( wxMouseEvent& event )
-{
-	if(event.Leaving())
-	{
-		//((CFlyOutButton*)(this->GetParent()->GetParent()))->m_toolbarPopup = NULL;
-		//delete this->GetParent();
-	}
-}
 
 void CHeeksFrame::AddToolBarFlyout(wxToolBar* toolbar, const CFlyOutList& flyout_list)
 {
@@ -1650,7 +1631,7 @@ void CHeeksFrame::MakeMenus()
 	AddMenuItem(view_menu, _("View pan"), ToolImage(_T("pan")), OnViewPanButton);
 	AddMenuItem(view_menu, _("Full screen"), ToolImage(_T("fullscreen")), OnFullScreenButton);
 	view_menu->AppendSeparator();
-	AddMenuItem(view_menu, _("Redraw"), ToolImage(_T("redraw")), OnRedrawButton);
+	//AddMenuItem(view_menu, _("Redraw"), ToolImage(_T("redraw")), OnRedrawButton);
 
 	// Solids Menu
 	wxMenu *solids_menu = new wxMenu;
