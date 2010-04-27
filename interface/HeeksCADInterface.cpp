@@ -579,9 +579,9 @@ void CHeeksCADInterface::ViewExtents(bool rotate)
 	wxGetApp().m_frame->m_graphics->OnMagExtents(rotate, false);
 }
 
-void CHeeksCADInterface::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance)
+void CHeeksCADInterface::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance, double *scale)
 {
-	wxGetApp().SaveSTLFile(objects, filepath, facet_tolerance);
+	wxGetApp().SaveSTLFile(objects, filepath, facet_tolerance, scale);
 }
 
 SketchOrderType CHeeksCADInterface::GetSketchOrder(HeeksObj* sketch)

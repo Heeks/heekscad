@@ -1217,16 +1217,28 @@ void HeeksCADapp::SaveDXFFile(const wxChar *filepath)
 }
 
 static ofstream* ofs_for_write_stl_triangle = NULL;
+static double* scale_for_write_triangle = NULL;
 
 static void write_stl_triangle(const double* x, const double* n)
 {
 	(*ofs_for_write_stl_triangle) << " facet normal " << n[0] << " " << n[1] << " " << n[2] << endl;
 	(*ofs_for_write_stl_triangle) << "   outer loop" << endl;
-	(*ofs_for_write_stl_triangle) << "     vertex " << x[0] << " " << x[1] << " " << x[2] << endl;
-	(*ofs_for_write_stl_triangle) << "     vertex " << x[3] << " " << x[4] << " " << x[5] << endl;
-	(*ofs_for_write_stl_triangle) << "     vertex " << x[6] << " " << x[7] << " " << x[8] << endl;
-	(*ofs_for_write_stl_triangle) << "   endloop" << endl;
-	(*ofs_for_write_stl_triangle) << " endfacet" << endl;
+	if(scale_for_write_triangle)
+	{
+		(*ofs_for_write_stl_triangle) << "     vertex " << x[0]*(*scale_for_write_triangle) << " " << x[1]*(*scale_for_write_triangle) << " " << x[2]*(*scale_for_write_triangle) << endl;
+		(*ofs_for_write_stl_triangle) << "     vertex " << x[3]*(*scale_for_write_triangle) << " " << x[4]*(*scale_for_write_triangle) << " " << x[5]*(*scale_for_write_triangle) << endl;
+		(*ofs_for_write_stl_triangle) << "     vertex " << x[6]*(*scale_for_write_triangle) << " " << x[7]*(*scale_for_write_triangle) << " " << x[8]*(*scale_for_write_triangle) << endl;
+		(*ofs_for_write_stl_triangle) << "   endloop" << endl;
+		(*ofs_for_write_stl_triangle) << " endfacet" << endl;
+	}
+	else
+	{
+		(*ofs_for_write_stl_triangle) << "     vertex " << x[0] << " " << x[1] << " " << x[2] << endl;
+		(*ofs_for_write_stl_triangle) << "     vertex " << x[3] << " " << x[4] << " " << x[5] << endl;
+		(*ofs_for_write_stl_triangle) << "     vertex " << x[6] << " " << x[7] << " " << x[8] << endl;
+		(*ofs_for_write_stl_triangle) << "   endloop" << endl;
+		(*ofs_for_write_stl_triangle) << " endfacet" << endl;
+	}
 }
 
 static void write_cpp_triangle(const double* x, const double* n)
@@ -1238,7 +1250,7 @@ static void write_cpp_triangle(const double* x, const double* n)
 	}
 }
 
-void HeeksCADapp::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance)
+void HeeksCADapp::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance, double* scale)
 {
 #ifdef __WXMSW__
 	ofstream ofs(filepath);
@@ -1257,11 +1269,13 @@ void HeeksCADapp::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar 
 
 	// write all the objects
 	ofs_for_write_stl_triangle = &ofs;
+	scale_for_write_triangle = scale;
 	for(std::list<HeeksObj*>::iterator It = m_objects.begin(); It != m_objects.end(); It++)
 	{
 		HeeksObj* object = *It;
 		object->GetTriangles(write_stl_triangle, facet_tolerance < 0 ? m_stl_facet_tolerance : facet_tolerance);
 	}
+	scale_for_write_triangle = NULL;
 
 	ofs<<"endsolid"<<endl;
 }
