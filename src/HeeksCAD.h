@@ -123,6 +123,7 @@ public:
 	bool ctrl_does_rotate; // true - rotate on Ctrl, pan when not Ctrl      false - rotate when not Ctrl, pan when Ctrl
 	bool m_allow_opengl_stippling;
 	SolidViewMode m_solid_view_mode;
+
 	//gp_Trsf digitizing_matrix;
 	CoordinateSystem *m_current_coordinate_system;
 	CInputMode *input_mode_object;

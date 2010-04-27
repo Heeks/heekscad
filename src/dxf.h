@@ -82,6 +82,7 @@ private:
 	char m_unused_line[1024];
 	eDxfUnits_t m_eUnits;
 	wxString m_layer_name;
+	bool m_ignore_errors;
 
 	bool ReadUnits();
 	bool ReadLine();
@@ -105,9 +106,11 @@ public:
 	~CDxfRead(); // this closes the file
 
 	bool Failed(){return m_fail;}
-	void DoRead(); // this reads the file and calls the following functions
+	void DoRead(const bool ignore_errors = false); // this reads the file and calls the following functions
 
 	double mm( const double & value ) const;
+
+	bool IgnoreErrors() const { return(m_ignore_errors); }
 
 	virtual void OnReadLine(const double* s, const double* e){}
 	virtual void OnReadArc(const double* s, const double* e, const double* c, bool dir){}
@@ -132,6 +135,7 @@ public:
 	HeeksDxfRead(const wxChar* filepath):CDxfRead(filepath){}
 
 	static bool m_make_as_sketch;
+	static bool m_ignore_errors;
 
 	// CDxfRead's virtual functions
 	void OnReadLine(const double* s, const double* e);
