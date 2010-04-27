@@ -158,6 +158,7 @@ CDxfRead::CDxfRead(const wxChar* filepath)
 	m_fail = false;
 	m_eUnits = eMillimeters;
 	m_layer_name = _T("0");	// Default layer name
+	m_ignore_errors = true;
 
 	m_ifs = new ifstream(Ttc(filepath));
 	if(!(*m_ifs)){
@@ -278,7 +279,14 @@ bool CDxfRead::ReadLine()
 
 	}
 
-	OnReadLine(s, e);
+	try {
+		OnReadLine(s, e);
+	}
+	catch(Standard_Failure)
+	{
+		if (! IgnoreErrors()) throw;	// Re-throw the exception.
+	}
+
 	return false;
 }
 
@@ -704,66 +712,80 @@ static double poly_first_z;
 
 static void AddPolyLinePoint(CDxfRead* dxf_read, double x, double y, double z, bool bulge_found, double bulge)
 {
-	if(poly_prev_found)
-	{
-		bool arc_done = false;
-		if(poly_prev_bulge_found)
+	try {
+		if(poly_prev_found)
 		{
-				double dx = x - poly_prev_x;
-				double dy = y - poly_prev_y;
-				double c = sqrt(dx*dx + dy*dy);
+			bool arc_done = false;
+			if(poly_prev_bulge_found)
+			{
+					double dx = x - poly_prev_x;
+					double dy = y - poly_prev_y;
+					double c = sqrt(dx*dx + dy*dy);
 
-				double a = atan(fabs(poly_prev_bulge))*4;
+					double a = atan(fabs(poly_prev_bulge))*4;
 
-				//find radius of circle that for arc of angle a, has chord length c
-				double r = (c/2) / cos((Pi-a)/2);
+					//find radius of circle that for arc of angle a, has chord length c
+					double r = (c/2) / cos((Pi-a)/2);
 
-				double d = sqrt(r*r - (c/2)*(c/2));
+					double d = sqrt(r*r - (c/2)*(c/2));
 
-				double ps[3] = {poly_prev_x, poly_prev_y, poly_prev_z};
-				double pe[3] = {x, y, z};
-				gp_Pnt pPnt = make_point(ps);
-				gp_Pnt nPnt = make_point(pe);
-				gp_Dir dir(nPnt.XYZ()-pPnt.XYZ());
+					double ps[3] = {poly_prev_x, poly_prev_y, poly_prev_z};
+					double pe[3] = {x, y, z};
+					gp_Pnt pPnt = make_point(ps);
+					gp_Pnt nPnt = make_point(pe);
 
-				gp_Pnt mid = pPnt.XYZ() + dir.XYZ() * c / 2;
+					// A Standard_Failure exception is thrown when a gp_Dir is created
+					// with two identical points.  Rather than check for this single
+					// condition, just ignore this point and catch the more general
+					// exception.
+					// if (pPnt.Distance(nPnt) < 0.000001) return;
 
-				dir.Rotate(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,0,1)),Pi/2);
-				gp_Pnt off;
-				if(poly_prev_bulge >= 0)
-					off = mid.XYZ() + dir.XYZ() * (d);
-				else
-					off = mid.XYZ() + dir.XYZ() * (-d);
+					gp_Dir dir(nPnt.XYZ()-pPnt.XYZ());
 
-				double pc[3];
-				extract(off,pc);
+					gp_Pnt mid = pPnt.XYZ() + dir.XYZ() * c / 2;
 
-				dxf_read->OnReadArc(ps, pe, pc, poly_prev_bulge >= 0);
-				arc_done = true;
+					dir.Rotate(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,0,1)),Pi/2);
+					gp_Pnt off;
+					if(poly_prev_bulge >= 0)
+						off = mid.XYZ() + dir.XYZ() * (d);
+					else
+						off = mid.XYZ() + dir.XYZ() * (-d);
 
+					double pc[3];
+					extract(off,pc);
+
+					dxf_read->OnReadArc(ps, pe, pc, poly_prev_bulge >= 0);
+					arc_done = true;
+
+			}
+
+			if(!arc_done)
+			{
+				double s[3] = {poly_prev_x, poly_prev_y, poly_prev_z};
+				double e[3] = {x, y, z};
+				dxf_read->OnReadLine(s, e);
+			}
 		}
 
-		if(!arc_done)
+		poly_prev_found = true;
+		poly_prev_x = x;
+		poly_prev_y = y;
+		poly_prev_z = z;
+		if(!poly_first_found)
 		{
-			double s[3] = {poly_prev_x, poly_prev_y, poly_prev_z};
-			double e[3] = {x, y, z};
-			dxf_read->OnReadLine(s, e);
+			poly_first_x = x;
+			poly_first_y = y;
+			poly_first_z = z;
+			poly_first_found = true;
 		}
+		poly_prev_bulge_found = bulge_found;
+		poly_prev_bulge = bulge;
 	}
-
-	poly_prev_found = true;
-	poly_prev_x = x;
-	poly_prev_y = y;
-	poly_prev_z = z;
-	if(!poly_first_found)
+	catch(Standard_Failure & unused)
 	{
-		poly_first_x = x;
-		poly_first_y = y;
-		poly_first_z = z;
-		poly_first_found = true;
+		(void) unused;	// Avoid the compiler warning.
+		if (! dxf_read->IgnoreErrors())	throw;	// Re-throw it.
 	}
-	poly_prev_bulge_found = bulge_found;
-	poly_prev_bulge = bulge;
 }
 
 static void PolyLineStart()
@@ -793,8 +815,8 @@ bool CDxfRead::ReadLwPolyLine()
 		int n;
 		if(sscanf(m_str, "%d", &n) != 1)
 		{
-		    printf("CDxfRead::ReadLwPolyLine() Failed to read integer from '%s'\n", m_str);
-		    return false;
+			printf("CDxfRead::ReadLwPolyLine() Failed to read integer from '%s'\n", m_str);
+			return false;
 		}
 		std::istringstream ss;
 		ss.imbue(std::locale("C"));
@@ -1170,8 +1192,9 @@ bool CDxfRead::ReadUnits()
 	}
 }
 
-void CDxfRead::DoRead()
+void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 {
+	m_ignore_errors = ignore_errors;
 	if(m_fail)return;
 
 	get_line();
@@ -1252,6 +1275,7 @@ void CDxfRead::DoRead()
 
 // static
 bool HeeksDxfRead::m_make_as_sketch = false;
+bool HeeksDxfRead::m_ignore_errors = false;
 
 void HeeksDxfRead::OnReadLine(const double* s, const double* e)
 {
@@ -1290,8 +1314,9 @@ void HeeksDxfRead::OnReadSpline(TColgp_Array1OfPnt &control, TColStd_Array1OfRea
 		HSpline* new_object = new HSpline(spline, &wxGetApp().current_color);
 		AddObject(new_object);
 	}
-	catch(...)
+	catch(Standard_Failure)
 	{
+		if (! IgnoreErrors()) throw;	// Re-throw the exception.
 	}
 }
 
