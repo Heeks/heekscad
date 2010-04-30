@@ -184,8 +184,6 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 				fn.Normalize();
 				wxString path = fn.GetPath();
 
-				::wxSetWorkingDirectory(path);
-
 				wxDynamicLibrary* shared_library = new wxDynamicLibrary(fn.GetFullPath(),wxDL_NOW|wxDL_GLOBAL );
 				if(shared_library->IsLoaded()){
 					bool success;
