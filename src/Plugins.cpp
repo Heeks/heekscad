@@ -178,7 +178,6 @@ void ReadPluginsList(std::list<PluginData> &plugins)
 {
 	plugins.clear();
 
-	::wxSetWorkingDirectory(wxGetApp().GetExeFolder());
 	HeeksConfig plugins_config;
 	plugins_config.SetPath(_T("/plugins"));
 
