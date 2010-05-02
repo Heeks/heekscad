@@ -53,6 +53,12 @@ const HEllipse& HEllipse::operator=(const HEllipse &e){
 }
 
 
+const wxBitmap &HEllipse::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/ellipse.png")));
+	return *icon;
+}
 
 //segments - number of segments per full revolution!
 void HEllipse::GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point)const

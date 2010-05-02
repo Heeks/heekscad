@@ -31,6 +31,13 @@ const HILine& HILine::operator=(const HILine &b){
 	return *this;
 }
 
+const wxBitmap &HILine::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/iline.png")));
+	return *icon;
+}
+
 void HILine::glCommands(bool select, bool marked, bool no_color)
 {
 	if(!no_color)

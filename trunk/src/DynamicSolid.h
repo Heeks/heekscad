@@ -7,9 +7,6 @@
 #include "../interface/ObjList.h"
 
 class DynamicSolid:public ObjList{
-protected:
-	static wxIcon* m_icon;
-	
 public:
 	CFaceList* m_faces;
 	CEdgeList* m_edges;
@@ -24,8 +21,6 @@ public:
 	int GetType()const{return SolidType;}
 	long GetMarkingMask()const{return MARKING_FILTER_SOLID;}
 	const wxChar* GetTypeString(void)const{return _("Solid");}
-	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(11, 1);}
-	//HeeksObj *MakeACopy(void)const;
 	void ReloadPointers(); 
 
 	virtual SolidTypeEnum GetSolidType(){return SOLID_TYPE_UNKNOWN;}

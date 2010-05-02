@@ -9,7 +9,6 @@
 class HLine: public EndedObject{
 private:
 	HeeksColor color;
-	static wxIcon* m_icon;
 
 public:
 	~HLine(void);
@@ -26,7 +25,7 @@ public:
 	void GetBox(CBox &box);
 	const wxChar* GetTypeString(void)const{return _("Line");}
 	HeeksObj *MakeACopy(void)const;
-	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(7, 1);}
+	const wxBitmap &GetIcon();
 	void SetColor(const HeeksColor &col){color = col;}
 	const HeeksColor* GetColor()const{return &color;}
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);

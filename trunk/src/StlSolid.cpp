@@ -138,9 +138,7 @@ const CStlSolid& CStlSolid::operator=(const CStlSolid& s)
 	m_title = s.m_title;
 	KillGLLists();
 
-	// static wxIcon* m_icon;
 	color = s.color;
-	// int m_gl_list;
 
 	m_list.clear();
 	std::copy( s.m_list.begin(), s.m_list.end(), std::inserter( m_list, m_list.begin() ));
@@ -156,6 +154,13 @@ void CStlSolid::KillGLLists()
 		m_gl_list = 0;
 		m_box = CBox();
 	}
+}
+
+const wxBitmap &CStlSolid::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/stlsolid.png")));
+	return *icon;
 }
 
 void CStlSolid::glCommands(bool select, bool marked, bool no_color){

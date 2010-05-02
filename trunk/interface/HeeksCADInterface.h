@@ -64,6 +64,7 @@ public:
 	virtual int GetToolImageBitmapSize();
 	virtual int AddMenuItem(wxMenu* menu, const wxString& title, const wxBitmap& bitmap, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL, wxMenu* submenu = NULL, bool check_item = false);
 	virtual wxString GetExeFolder();
+	virtual wxString GetResFolder();
 	virtual HeeksObj* GetMainObject();
 	virtual const std::list<HeeksObj*>& GetMarkedList();
 	virtual bool GetArcCentre(HeeksObj* object, double* c);

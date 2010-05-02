@@ -128,7 +128,7 @@ public:
 	virtual void GetProperties(std::list<Property *> *list);
 	virtual void OnApplyProperties(){}
 	virtual bool ValidateProperties(){return true;}
-	virtual void GetIcon(int& texture_number, int& x, int& y){}
+	virtual const wxBitmap &GetIcon();
 	virtual int Intersects(const HeeksObj *object, std::list< double > *rl)const{return 0;}
 	virtual bool FindNearPoint(const double* ray_start, const double* ray_direction, double *point){return false;}
 	virtual bool FindPossTangentPoint(const double* ray_start, const double* ray_direction, double *point){return false;}

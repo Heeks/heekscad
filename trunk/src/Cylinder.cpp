@@ -30,6 +30,13 @@ CCylinder::CCylinder(const TopoDS_Solid &solid, const wxChar* title, const Heeks
 {
 }
 
+const wxBitmap &CCylinder::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/cyl.png")));
+	return *icon;
+}
+
 HeeksObj *CCylinder::MakeACopy(void)const
 {
 	return new CCylinder(*this);

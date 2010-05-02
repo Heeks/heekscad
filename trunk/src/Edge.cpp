@@ -22,6 +22,13 @@ CEdge::CEdge(const TopoDS_Edge &edge):m_topods_edge(edge), m_vertex0(NULL), m_ve
 CEdge::~CEdge(){
 }
 
+const wxBitmap &CEdge::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/edge.png")));
+	return *icon;
+}
+
 void CEdge::glCommands(bool select, bool marked, bool no_color){
 	if(!no_color){
 		wxGetApp().glColorEnsuringContrast(HeeksColor(0, 0, 0));

@@ -7,7 +7,7 @@
 #include "wxImageLoader.h"
 #include "../interface/MarkedObject.h"
 
-BEGIN_EVENT_TABLE(CTreeCanvas, wxGLCanvas)
+BEGIN_EVENT_TABLE(CTreeCanvas, wxScrolledWindow)
     EVT_SIZE(CTreeCanvas::OnSize)
 	EVT_ERASE_BACKGROUND(CTreeCanvas::OnEraseBackground)
     EVT_PAINT(CTreeCanvas::OnPaint)
@@ -18,56 +18,49 @@ BEGIN_EVENT_TABLE(CTreeCanvas, wxGLCanvas)
 	EVT_CHAR(CTreeCanvas::OnCharEvent)
 END_EVENT_TABLE()
 
-CTreeCanvas::CTreeCanvas(wxWindow* parent, wxGLCanvas* shared, int *attribList)
-        : wxGLCanvas(parent, shared, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("some text"), attribList),m_frozen(false), m_refresh_wanted_on_thaw(false),
-		width(0), height(0), textureWidth(0), textureHeight(0), m_texture_built(false), scroll_y_pos(0), m_xpos(0), m_ypos(0)
+static wxBitmap* bmp_branch_plus = NULL;
+static wxBitmap* bmp_branch_minus = NULL;
+static wxBitmap* bmp_branch_end_plus = NULL;
+static wxBitmap* bmp_branch_end_minus = NULL;
+static wxBitmap* bmp_branch_split = NULL;
+static wxBitmap* bmp_branch_end = NULL;
+static wxBitmap* bmp_plus = NULL;
+static wxBitmap* bmp_minus = NULL;
+static wxBitmap* bmp_branch_trunk = NULL;
+
+CTreeCanvas::CTreeCanvas(wxWindow* parent)
+        : wxScrolledWindow(parent),m_frozen(false), m_refresh_wanted_on_thaw(false),
+		width(0), height(0), textureWidth(0), textureHeight(0), m_xpos(0), m_ypos(0), m_max_xpos(0)
 {
 	wxGetApp().RegisterObserver(this);
+
+	bmp_branch_plus = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/branch_plus.png")));
+	bmp_branch_minus = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/branch_minus.png")));
+	bmp_branch_end_plus = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/branch_end_plus.png")));
+	bmp_branch_end_minus = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/branch_end_minus.png")));
+	bmp_branch_split = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/branch_split.png")));
+	bmp_branch_end = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/branch_end.png")));
+	bmp_plus = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/plus.png")));
+	bmp_minus = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/minus.png")));
+	bmp_branch_trunk = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/branch_trunk.png")));
+    SetScrollRate( 10, 10 );
+    SetVirtualSize( 92, 97 );
 }
+
+wxPaintDC* CTreeCanvas::m_dc = NULL;
 
 void CTreeCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
     /* must always be here */
     wxPaintDC dc(this);
+    PrepareDC(dc);
 
-#ifndef __WXMOTIF__
-    if (!GetContext()) return;
-#endif
-
-    SetCurrent();
-
-	glDrawBuffer(GL_BACK);
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-	// clear the back buffer
-	HeeksColor(255, 255, 255).glClearColor(1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    int w, h;
-    GetClientSize(&w, &h);
-	glViewport(0, 0, w, h);
-    glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(- 0.5, w - 0.5, -0.5, h - 0.5, 0,10);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	m_dc = &dc;
 
 	// render everything
-	Render(w, h);
+	Render();
 
-    SwapBuffers();
-}
-
-void CTreeCanvas::OnSize(wxSizeEvent& event)
-{
-    // this is also necessary to update the context on some platforms
-    wxGLCanvas::OnSize(event);
-	Refresh();
-}
-
-void CTreeCanvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
-{
-	// Do nothing, to avoid flashing on MSW
+	m_dc = NULL;
 }
 
 const CTreeCanvas::CTreeButton* CTreeCanvas::HitTest( const wxPoint& pt )
@@ -75,7 +68,8 @@ const CTreeCanvas::CTreeButton* CTreeCanvas::HitTest( const wxPoint& pt )
 	for(std::list<CTreeButton>::iterator It = m_tree_buttons.begin(); It != m_tree_buttons.end(); It++)
 	{
 		CTreeButton& b = *It;
-		if(b.rect.Contains(pt)) //if(b.rect.Inside(pt))
+		wxPoint unscrolled_pt = this->CalcUnscrolledPosition(pt);
+		if(b.rect.Contains(unscrolled_pt)) //if(b.rect.Inside(pt))
 		{
 			return &b;
 		}
@@ -90,7 +84,6 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 	if(wxGetApp().m_property_grid_validation)return;
 
 	if(event.Entering()){
-	    SetCurrent();
 		SetFocus(); // so middle wheel works
 	}
 
@@ -105,6 +98,7 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 			case ButtonTypePlus:
 			case ButtonTypeMinus:
 				SetExpanded(button->obj, button->type == 0);
+				SetVirtualSize(GetRenderSize());
 				this->Refresh();
 				break;
 
@@ -139,13 +133,13 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 		wxGetApp().DoDropDownMenu(this, event.GetPosition(), &marked_object, true, false, false);
 	}
 
-	if(event.GetWheelRotation() != 0)
-	{
-		double wheel_value = (double)(event.GetWheelRotation());
-		scroll_y_pos -= (wheel_value / 100);
-		if(scroll_y_pos < 0)scroll_y_pos = 0;
-		Refresh();
-	}
+	//if(event.GetWheelRotation() != 0)
+	//{
+		//double wheel_value = (double)(event.GetWheelRotation());
+		//scroll_y_pos -= wheel_value / 8;
+		//if(scroll_y_pos < 0)scroll_y_pos = 0;
+		//Refresh();
+	//}
 
 	event.Skip();
 }
@@ -218,6 +212,7 @@ void CTreeCanvas::OnMenuEvent(wxCommandEvent& event)
 
 void CTreeCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified)
 {
+	SetVirtualSize(GetRenderSize());
 	Refresh();
 }
 
@@ -254,7 +249,7 @@ void CTreeCanvas::Refresh()
 	}
 	else
 	{
-		wxGLCanvas::Refresh(false);
+		wxScrolledWindow::Refresh(false);
 	}
 }
 
@@ -266,25 +261,9 @@ void CTreeCanvas::RefreshSoon()
 	}
 	else if(wxGetApp().m_frame->IsShown())
 	{
-		wxGLCanvas::Refresh(false);
+		wxScrolledWindow::Refresh(false);
 		Update();
 	}
-}
-
-void CTreeCanvas::BuildTexture()
-{
-	wxString filepath = wxGetApp().GetResFolder() + _T("/icons/iconimage.png");
-	unsigned int* t = loadImage(filepath.c_str(), &width, &height, &textureWidth, &textureHeight);
-	if(t)wxGetApp().m_icon_texture_number= *t;
-
-	// build external textures
-	for(std::list< void(*)() >::iterator It = wxGetApp().m_on_build_texture_callbacks.begin(); It != wxGetApp().m_on_build_texture_callbacks.end(); It++)
-	{
-		void(*callbackfunc)() = *It;
-		(*callbackfunc)();
-	}
-
-	m_texture_built = true;
 }
 
 bool CTreeCanvas::IsExpanded(HeeksObj* object)
@@ -304,54 +283,14 @@ void CTreeCanvas::SetExpanded(HeeksObj* object, bool bExpanded)
 	}
 }
 
-static int render_width = 0, render_height = 0;
-static bool render_marked = false;
-
-void CTreeCanvas::RenderIcon(int texture_number, int x, int y)
-{
-	unsigned int icon_x = x * 16;
-	unsigned int icon_y = y * 16;
-
-	if(texture_number){
-		int xpos16 = m_xpos * 16;
-		int ypos16 = render_height - m_ypos * 18;
-
-#if defined WIN32 || defined __APPLE__
-		float texture_left = ((float)(icon_x) + 0.5f)/256;
-		float texture_right = ((float)(icon_x) + 16.5f)/256;
-		float texture_top = ((float)(icon_y) - 0.5f)/256;
-		float texture_bottom = ((float)(icon_y) + 15.5f)/256;
-#else
-		float texture_left = ((float)(icon_x))/256;
-		float texture_right = ((float)(icon_x) + 16.0f)/256;
-		float texture_top = ((float)(icon_y))/256;
-		float texture_bottom = ((float)(icon_y) + 16.0f)/256;
-#endif
-
-		glColor4ub(255, 255, 255, 255);
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, texture_number);
-		glBegin(GL_QUADS);
-		glTexCoord2f(texture_left, texture_top);
-		glVertex2i(xpos16, ypos16);
-		glTexCoord2f(texture_left, texture_bottom);
-		glVertex2i(xpos16, ypos16 - 16);
-		glTexCoord2f(texture_right, texture_bottom);
-		glVertex2i(xpos16 + 16, ypos16 - 16);
-		glTexCoord2f(texture_right, texture_top);
-		glVertex2i(xpos16 + 16, ypos16);
-		glEnd();
-
-		glDisable(GL_TEXTURE_2D);
-	}
-}
+static bool render_just_for_calculation = false;
 
 void CTreeCanvas::AddPlusOrMinusButton(HeeksObj* object, bool plus)
 {
 	CTreeButton b;
 	b.type = plus ? ButtonTypePlus : ButtonTypeMinus;
-	b.rect.x = m_xpos * 16;
-	b.rect.y = m_ypos * 18;
+	b.rect.x = m_xpos;
+	b.rect.y = m_ypos;
 	b.rect.width = 16;
 	b.rect.height = 18;
 	b.obj = object;
@@ -363,7 +302,7 @@ void CTreeCanvas::AddLabelButton(HeeksObj* object, int label_start_x, int label_
 	CTreeButton b;
 	b.type = ButtonTypeLabel;
 	b.rect.x = label_start_x;
-	b.rect.y = m_ypos * 18;
+	b.rect.y = m_ypos;
 	b.rect.width = label_end_x - label_start_x;
 	b.rect.height = 18;
 	b.obj = object;
@@ -473,86 +412,6 @@ void CTreeCanvas::OnLabelRightDown(HeeksObj* object, wxMouseEvent& event)
 	}
 }
 
-static int text_start_posx[127] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0  ,6  ,11 ,19 ,34 ,45 ,62 ,75 ,80 ,86 ,93 ,103,117,123,131,135,142,154,164,175,186,197,208,219,230,241,253,0  ,7  ,22 ,37 ,51 ,61 ,78 ,92 ,103,117,131,142,151,166,180,183,192,204,214,230,243,0  ,10 ,25 ,37 ,47 ,61 ,73 ,86 ,105,117,130,143,149,157,164,177,188,196,207,217,226,236,247,2  ,14 ,25 ,28 ,35 ,45 ,50 ,67 ,77 ,89 ,99 ,111,118,126,134,144,156,171,182,193,203,214,220,231};
-static int text_start_posy[127] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,184,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,220,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238};
-static int text_start_posd[127] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6  ,5  ,8  ,15 ,11 ,17 ,13 ,5  ,6  ,7  ,10 ,14 ,16 ,8  ,4  ,7  ,12 ,10 ,11 ,11 ,11 ,11 ,11 ,11 ,11 ,12 ,5  ,7  ,15 ,15 ,14 ,10 ,17 ,14 ,11 ,14 ,14 ,11 ,9  ,15 ,14 ,3  ,9  ,12 ,10 ,16 ,13 ,15 ,10 ,15 ,12 ,10 ,14 ,12 ,13 ,19 ,12 ,13 ,13 ,6  ,8  ,7  ,13 ,10 ,9  ,11 ,10 ,9  ,10 ,11 ,7  ,12 ,11 ,3  ,7  ,10 ,5  ,17 ,10 ,12 ,10 ,12 ,7  ,8  ,8  ,10 ,12 ,15 ,11 ,11 ,10 ,11 ,6  ,11 ,15 };
-static int text_pos = 0;
-static std::list<bool> end_child_list;
-
-int CTreeCanvas::RenderChar(char c)
-{
-	// renders the character at the current xpos * 16 + text_pos, ypos
-	if(c<32 || c>126)return 0;
-
-	int posx = text_start_posx[int(c)];
-	int posy = text_start_posy[int(c)];
-	int shift = text_start_posd[int(c)];
-
-#if defined WIN32 || defined __APPLE__
-	float texture_left = ((float)(posx) + 0.5f)/256;
-	float texture_right = ((float)(posx) + 0.5f + shift)/256;
-	float texture_top = ((float)(posy) - 0.5f)/256;
-	float texture_bottom = ((float)(posy) + 17.5f)/256;
-#else
-	float texture_left = ((float)(posx))/256;
-	float texture_right = ((float)(posx) + shift)/256;
-	float texture_top = ((float)(posy))/256;
-	float texture_bottom = ((float)(posy) + 18.0f)/256;
-#endif
-
-	if(wxGetApp().m_icon_texture_number){
-		int xpos16 = m_xpos * 16 + text_pos;
-		int ypos16 = render_height - m_ypos * 18;
-		if(render_marked)glColor4ub(128, 128, 255, 255);
-		else glColor4ub(255, 255, 255, 255);
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, wxGetApp().m_icon_texture_number);
-		glBegin(GL_QUADS);
-		glTexCoord2f(texture_left, texture_top);
-		glVertex2i(xpos16, ypos16);
-		glTexCoord2f(texture_left, texture_bottom);
-		glVertex2i(xpos16, ypos16 - 18);
-		glTexCoord2f(texture_right, texture_bottom);
-		glVertex2i(xpos16 + shift, ypos16 - 18);
-		glTexCoord2f(texture_right, texture_top);
-		glVertex2i(xpos16 + shift, ypos16);
-		glEnd();
-
-		glDisable(GL_TEXTURE_2D);
-	}
-
-	return shift;
-}
-
-int CTreeCanvas::RenderText(const char* str)
-{
-	int l = strlen(str);
-	for(int i = 0; i<l; i++)
-	{
-		text_pos += RenderChar(str[i]);
-	}
-
-	return text_pos;
-}
-
-int GetCharLength(char c)
-{
-	if(c<32 || c>126)return 0;
-	return text_start_posd[int(c)];
-}
-
-int GetTextLength(const char* str)
-{
-	int text_length = 0;
-	int l = strlen(str);
-	for(int i = 0; i<l; i++)
-	{
-		text_pos += GetCharLength(str[i]);
-	}
-
-	return text_length;
-}
-
 void CTreeCanvas::RenderBranchIcon(HeeksObj* object, HeeksObj* next_object, bool expanded, int level)
 {
 	int num_children = object->GetNumChildren();
@@ -561,15 +420,33 @@ void CTreeCanvas::RenderBranchIcon(HeeksObj* object, HeeksObj* next_object, bool
 		if(level)
 		{
 			// with branches
-			if(expanded)
+			if(next_object)
 			{
-				RenderIcon(wxGetApp().m_icon_texture_number, 2, 0); // -
-				AddPlusOrMinusButton(object, false);
+				// not at end
+				if(expanded)
+				{
+					m_dc->DrawBitmap(*bmp_branch_minus, m_xpos, m_ypos);
+					AddPlusOrMinusButton(object, false);
+				}
+				else
+				{
+					m_dc->DrawBitmap(*bmp_branch_plus, m_xpos, m_ypos);
+					AddPlusOrMinusButton(object, true);
+				}
 			}
 			else
 			{
-				RenderIcon(wxGetApp().m_icon_texture_number, 1, 0);// +
-				AddPlusOrMinusButton(object, true);
+				// not at end
+				if(expanded)
+				{
+					m_dc->DrawBitmap(*bmp_branch_end_minus, m_xpos, m_ypos);
+					AddPlusOrMinusButton(object, false);
+				}
+				else
+				{
+					m_dc->DrawBitmap(*bmp_branch_end_plus, m_xpos, m_ypos);
+					AddPlusOrMinusButton(object, true);
+				}
 			}
 		}
 		else
@@ -577,12 +454,12 @@ void CTreeCanvas::RenderBranchIcon(HeeksObj* object, HeeksObj* next_object, bool
 			// without branches
 			if(expanded)
 			{
-				RenderIcon(wxGetApp().m_icon_texture_number, 6, 0); // -
+				m_dc->DrawBitmap(*bmp_minus, m_xpos, m_ypos);
 				AddPlusOrMinusButton(object, false);
 			}
 			else
 			{
-				RenderIcon(wxGetApp().m_icon_texture_number, 5, 0); // +
+				m_dc->DrawBitmap(*bmp_plus, m_xpos, m_ypos);
 				AddPlusOrMinusButton(object, true);
 			}
 		}
@@ -592,11 +469,13 @@ void CTreeCanvas::RenderBranchIcon(HeeksObj* object, HeeksObj* next_object, bool
 		if(level)
 		{
 			// just branches
-			if(next_object)RenderIcon(wxGetApp().m_icon_texture_number, 3, 0);
-			else RenderIcon(wxGetApp().m_icon_texture_number, 4, 0);
+			if(next_object)m_dc->DrawBitmap(*bmp_branch_split, m_xpos, m_ypos);
+			else m_dc->DrawBitmap(*bmp_branch_end, m_xpos, m_ypos);
 		}
 	}
 }
+
+static std::list<bool> end_child_list;
 
 void CTreeCanvas::RenderBranchIcons(HeeksObj* object, HeeksObj* next_object, bool expanded, int level)
 {
@@ -604,17 +483,17 @@ void CTreeCanvas::RenderBranchIcons(HeeksObj* object, HeeksObj* next_object, boo
 	std::list<bool>::iterator It = end_child_list.begin();
 	for(int i = 0; i<level; i++, It++)
 	{
-		if(i > 0)
+		if(!render_just_for_calculation && i > 0)
 		{
 			bool end_child = *It;
-			if(!end_child)RenderIcon(wxGetApp().m_icon_texture_number, 7, 0);
+			if(!end_child)m_dc->DrawBitmap(*bmp_branch_trunk, m_xpos, m_ypos);
 		}
-		m_xpos++;
+		m_xpos += 16;
 	}
 
 	// render + or -
-	RenderBranchIcon(object, next_object, expanded, level);
-	m_xpos++;
+	if(!render_just_for_calculation)RenderBranchIcon(object, next_object, expanded, level);
+	m_xpos += 16;
 }
 
 void CTreeCanvas::RenderObject(HeeksObj* object, HeeksObj* next_object, int level)
@@ -624,23 +503,43 @@ void CTreeCanvas::RenderObject(HeeksObj* object, HeeksObj* next_object, int leve
 	m_xpos = 0;
 	RenderBranchIcons(object, next_object, expanded, level);
 
-	int label_start_x = m_xpos * 16;
+	int label_start_x = m_xpos;
 	// find icon info
-	int texture_number = wxGetApp().m_icon_texture_number;
-	int x = 9; // unknown icon
-	int y = 0;
-	object->GetIcon(texture_number, x, y);
-	RenderIcon(texture_number, x, y);
-	m_xpos++;
+	if(!render_just_for_calculation)m_dc->DrawBitmap(object->GetIcon(), m_xpos, m_ypos);
+	m_xpos += 16;
 
-	text_pos = 8; // leave a gap before the text
-	const char* str = Ttc(object->GetShortStringOrTypeString());
-	render_marked = wxGetApp().m_marked_list->ObjectMarked(object);
-	RenderText(str);
-	int label_end_x = m_xpos * 16 + text_pos;
-	AddLabelButton(object, label_start_x, label_end_x);
-	m_xpos--;
-	m_ypos++;
+	wxString str(object->GetShortStringOrTypeString());
+	if(!render_just_for_calculation)
+	{
+		if(wxGetApp().m_marked_list->ObjectMarked(object))
+		{
+			m_dc->SetTextBackground(*wxBLUE);
+			m_dc->SetTextForeground(*wxWHITE);
+		}
+		else
+		{
+			m_dc->SetTextBackground(*wxWHITE);
+			m_dc->SetTextForeground(*wxBLACK);
+		}
+		m_dc->DrawText(str, m_xpos, m_ypos);
+	}
+	int text_width = 0;
+	if(render_just_for_calculation)
+	{
+		// just make a guess, we don't have a valid m_dc
+		text_width = 10 * str.Len();
+	}
+	else
+	{
+		wxSize text_size = m_dc->GetTextExtent(str);
+		text_width = text_size.GetWidth();
+	}
+	int label_end_x = m_xpos + 8 + text_width;
+	if(!render_just_for_calculation)AddLabelButton(object, label_start_x, label_end_x);
+	if(label_end_x > m_max_xpos)m_max_xpos = label_end_x;
+	m_xpos -= 16;
+
+	m_ypos += 18;
 
 	bool end_object = (next_object == NULL);
 	end_child_list.push_back(end_object);
@@ -659,19 +558,32 @@ void CTreeCanvas::RenderObject(HeeksObj* object, HeeksObj* next_object, int leve
 
 	end_child_list.pop_back();
 
-	m_xpos--;
+	m_xpos -= 16;
 }
 
-void CTreeCanvas::Render(int width, int height)
+void CTreeCanvas::Render(bool just_for_calculation)
 {
-	if(!m_texture_built)BuildTexture();
+	render_just_for_calculation = just_for_calculation;
+	if(!just_for_calculation)
+	{
+		//wxSize render_size = GetRenderSize();
+		//render_just_for_calculation = just_for_calculation;
 
-	render_width = width;
-	render_height = height;
+		// set background
+		m_dc->SetBackgroundMode(wxSOLID);
+		m_dc->SetBackground(wxBrush(wxT("white"), wxSOLID));
+		m_dc->Clear();
+
+		m_tree_buttons.clear();
+
+		//m_dc->SetBrush(wxBrush(wxT("white")));
+		//m_dc->SetPen(wxPen(wxT("white")));
+		//m_dc->DrawRectangle(wxPoint(0, 0), render_size);
+	}
 
 	m_xpos = 0; // start at the left
-	m_ypos = -scroll_y_pos; // start at the top
-	m_tree_buttons.clear();
+	m_ypos = 0;//-scroll_y_pos; // start at the top
+	m_max_xpos = 0;
 
 	HeeksObj* object = wxGetApp().GetFirstChild();
 
@@ -681,4 +593,11 @@ void CTreeCanvas::Render(int width, int height)
 		RenderObject(object, next_object, 0);
 		object = next_object;
 	}
+}
+
+wxSize CTreeCanvas::GetRenderSize()
+{
+	bool just_for_calculation = true;
+	Render(just_for_calculation);
+	return wxSize(m_max_xpos, m_ypos);
 }
