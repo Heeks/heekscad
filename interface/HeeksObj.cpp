@@ -89,6 +89,17 @@ static void on_set_visible(bool value, HeeksObj* object)
 #endif
 }
 
+const wxBitmap &HeeksObj::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+#ifdef HEEKSCAD
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/unknown.png")));
+#else
+	if(icon == NULL)icon = new wxBitmap(wxImage(heeksCAD->GetResFolder() + _T("/icons/unknown.png")));
+#endif
+	return *icon;
+}
+
 void HeeksObj::GetProperties(std::list<Property *> *list)
 {
 	bool editable = CanEditString();

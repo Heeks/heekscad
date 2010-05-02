@@ -14,7 +14,6 @@ public:
 
 class CStlSolid:public HeeksObj{
 private:
-	static wxIcon* m_icon;
 	HeeksColor color;
 	int m_gl_list;
 	CBox m_box;
@@ -36,7 +35,7 @@ public:
 	long GetMarkingMask()const{return MARKING_FILTER_STL_SOLID;}
 	int GetIDGroupType()const{return SolidType;}
 	const wxChar* GetTypeString(void)const{return _("STL Solid");}
-	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(13, 1);}
+	const wxBitmap &GetIcon();
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
 	void KillGLLists(void);

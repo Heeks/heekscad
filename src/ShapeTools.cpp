@@ -6,6 +6,27 @@
 #include "ShapeTools.h"
 #include "Vertex.h"
 
+const wxBitmap &CFaceList::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/faces.png")));
+	return *icon;
+}
+
+const wxBitmap &CEdgeList::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/edges.png")));
+	return *icon;
+}
+
+const wxBitmap &CVertexList::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/vertices.png")));
+	return *icon;
+}
+
 void CreateFacesAndEdges(TopoDS_Shape shape, CFaceList* faces, CEdgeList* edges, CVertexList* vertices)
 {
 	// create the face objects

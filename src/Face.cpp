@@ -70,6 +70,13 @@ void box_callback(const double* x, const double* n)
 	FaceForBoxCallback->m_box.Insert(x[6],x[7],x[8]);
 }
 
+const wxBitmap &CFace::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/face.png")));
+	return *icon;
+}
+
 void CFace::GetBox(CBox &box){
 //	if(!m_box.m_valid)
 	{

@@ -8,7 +8,6 @@
 #include "../interface/ToolList.h"
 #include "GraphicsCanvas.h"
 #include "TreeCanvas.h"
-#include "TreeCanvas.h"
 #include "ObjPropsCanvas.h"
 #include "OptionsCanvas.h"
 #include "InputModeCanvas.h"
@@ -132,7 +131,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	config.Read(_T("Perspective"), &perspective);
 	m_graphics->m_view_point.SetPerspective(perspective);
 
-	m_tree_canvas = new CTreeCanvas(this, m_graphics, graphics_attrib_list);
+	m_tree_canvas = new CTreeCanvas(this);
 
     m_options = new COptionsCanvas(this);
 	m_input_canvas = new CInputModeCanvas(this);

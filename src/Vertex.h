@@ -29,7 +29,7 @@ public:
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	HeeksObj *MakeACopy(void)const{ return new CVertex(*this);}
-	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(5, 1);}
+	const wxBitmap &GetIcon();
 	const wxChar* GetTypeString(void)const{return _("Vertex");}
 	bool UsesID(){return true;}
 

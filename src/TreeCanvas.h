@@ -10,7 +10,7 @@
 
 #include "../interface/Observer.h"
 
-class CTreeCanvas: public wxGLCanvas, Observer
+class CTreeCanvas: public wxScrolledWindow, Observer
 {
 private:
 	bool m_LButton;
@@ -18,23 +18,17 @@ private:
 	bool m_frozen;
 	bool m_refresh_wanted_on_thaw;
     int width, height, textureWidth, textureHeight;
-	bool m_texture_built;
 	std::set<HeeksObj*> m_expanded;
-	int scroll_y_pos;
+	//int scroll_y_pos;
+	static wxPaintDC* m_dc; // temporary for each OnPaint
 
-	int m_xpos, m_ypos;
+	int m_xpos, m_ypos, m_max_xpos;
 	enum TreeButtonType{ ButtonTypePlus, ButtonTypeMinus, ButtonTypeLabel };
 	class CTreeButton{public:	TreeButtonType type; wxRect rect; HeeksObj* obj;};
 	std::list<CTreeButton> m_tree_buttons;
 
-	void BuildTexture();
 	bool IsExpanded(HeeksObj* object);
 	void SetExpanded(HeeksObj* object, bool bExpanded);
-	void RenderIcon(int texture_number, int x, int y);
-	int RenderChar(char c);
-	int RenderText(const char* str);
-	int GetCharLength(char c);
-	int GetTextLength(const char* str);
 	void RenderBranchIcon(HeeksObj* object, HeeksObj* next_object, bool expanded, int level);
 	void RenderBranchIcons(HeeksObj* object, HeeksObj* next_object, bool expanded, int level);
 	void RenderObject(HeeksObj* object, HeeksObj* next_object, int level);
@@ -44,20 +38,18 @@ private:
 	void OnLabelRightDown(HeeksObj* object, wxMouseEvent& event);
 
 public:
-	CTreeCanvas(wxWindow* parent, wxGLCanvas* shared, int *attribList = (int*) NULL);
+	CTreeCanvas(wxWindow* parent);
     virtual ~CTreeCanvas(){};
 
     void OnPaint(wxPaintEvent& event);
-    void OnSize(wxSizeEvent& event);
-	void OnEraseBackground(wxEraseEvent& event);
     void OnMouse( wxMouseEvent& event );
 	void OnMenuEvent(wxCommandEvent& WXUNUSED(event));
 	void OnCharEvent(wxKeyEvent& event);
 	void OnKeyDown(wxKeyEvent& event);
 	void OnKeyUp(wxKeyEvent& event);
-	void Render(int width, int height); // OpenGL commands for all the objects
-	bool TextureBuilt(){return m_texture_built;}
+	void Render(bool just_for_calculation = false); // drawing commands for all the objects
 	const CTreeButton* HitTest( const wxPoint& pt );
+	wxSize GetRenderSize();
 
 	// Observer's virtual functions
 	void OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified);

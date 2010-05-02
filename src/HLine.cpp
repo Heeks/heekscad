@@ -75,6 +75,12 @@ public:
 };
 static SetLineLength line_length_toggle;
 
+const wxBitmap &HLine::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/line.png")));
+	return *icon;
+}
 
 void HLine::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {

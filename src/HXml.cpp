@@ -26,6 +26,13 @@ void HXml::GetProperties(std::list<Property *> *list){
 	HeeksObj::GetProperties(list);
 }
 
+const wxBitmap &HXml::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/xml.png")));
+	return *icon;
+}
+
 void HXml::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element = new TiXmlElement( m_element );

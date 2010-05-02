@@ -64,6 +64,13 @@ const CSketch& CSketch::operator=(const CSketch& c)
 	return *this;
 }
 
+const wxBitmap &CSketch::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/sketch.png")));
+	return *icon;
+}
+
 void CSketch::ReloadPointers()
 {
 	HeeksObj* child = GetFirstChild();

@@ -173,6 +173,11 @@ wxString CHeeksCADInterface::GetExeFolder()
 	return wxGetApp().GetExeFolder();
 }
 
+wxString CHeeksCADInterface::GetResFolder()
+{
+	return wxGetApp().GetResFolder();
+}
+
 HeeksObj* CHeeksCADInterface::GetMainObject()
 {
 	return &(wxGetApp());

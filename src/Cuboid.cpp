@@ -18,6 +18,13 @@ CCuboid::CCuboid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColo
 {
 }
 
+const wxBitmap &CCuboid::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/cube.png")));
+	return *icon;
+}
+
 HeeksObj *CCuboid::MakeACopy(void)const
 {
 	return new CCuboid(*this);
@@ -32,8 +39,6 @@ CCuboid & CCuboid::operator= ( const CCuboid & rhs )
 {
     if (this != &rhs)
     {
-        // static wxIcon* m_icon;
-
         m_pos = rhs.m_pos;
         m_x = rhs.m_x;
         m_y = rhs.m_y;

@@ -44,6 +44,13 @@ CoordinateSystem::~CoordinateSystem(void)
 {
 }
 
+const wxBitmap &CoordinateSystem::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/coordsys.png")));
+	return *icon;
+}
+
 // static
 void CoordinateSystem::RenderArrow()
 {

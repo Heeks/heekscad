@@ -15,7 +15,6 @@ private:
 	int m_frame_when_loaded;// for movies only. only valid if m_texture_number != 0
     int width, height, textureWidth, textureHeight;
 	bool m_rectangle_intialized;
-	static wxIcon* m_icon;
 
 	void destroy_texture();
 	const wxChar* GetTextureFileName(const wxString &file_path, int is_a_movie);
@@ -38,7 +37,7 @@ public:
 	long GetMarkingMask()const{return MARKING_FILTER_IMAGE;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
-	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(9, 1);}
+	const wxBitmap &GetIcon();
 	const wxChar* GetShortString(void)const;
 	const wxChar* GetTypeString(void)const{return _("Image");}
 	HeeksObj *MakeACopy(void)const;

@@ -51,6 +51,13 @@ const HDimension& HDimension::operator=(const HDimension &b)
 	return *this;
 }
 
+const wxBitmap &HDimension::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/dimension.png")));
+	return *icon;
+}
+
 bool HDimension::IsDifferent(HeeksObj* other)
 {
 	HDimension* dim = (HDimension*)other;

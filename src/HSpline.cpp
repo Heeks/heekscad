@@ -70,6 +70,13 @@ const HSpline& HSpline::operator=(const HSpline &s){
 	return *this;
 }
 
+const wxBitmap &HSpline::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/spline.png")));
+	return *icon;
+}
+
 bool HSpline::IsDifferent(HeeksObj* o)
 {
 	HSpline* other = (HSpline*)o;

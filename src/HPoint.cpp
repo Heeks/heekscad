@@ -36,6 +36,13 @@ const HPoint& HPoint::operator=(const HPoint &b)
 	return *this;
 }
 
+const wxBitmap &HPoint::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/point.png")));
+	return *icon;
+}
+
 bool HPoint::IsDifferent(HeeksObj* o)
 {
 	HPoint* other = (HPoint*)o;

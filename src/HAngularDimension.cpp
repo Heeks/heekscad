@@ -66,6 +66,13 @@ const HAngularDimension& HAngularDimension::operator=(const HAngularDimension &b
 	return *this;
 }
 
+const wxBitmap &HAngularDimension::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/dimension.png")));
+	return *icon;
+}
+
 bool HAngularDimension::IsDifferent(HeeksObj* other)
 {
 	HAngularDimension* dim = (HAngularDimension*)other;
