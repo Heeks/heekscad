@@ -30,6 +30,13 @@ void CVertex::FindEdges()
 	}
 }
 
+const wxBitmap &CVertex::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/vertex.png")));
+	return *icon;
+}
+
 void CVertex::glCommands(bool select, bool marked, bool no_color){
 	// don't render anything, but put a point for selection
 	glRasterPos3dv(m_point);

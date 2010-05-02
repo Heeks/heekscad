@@ -36,6 +36,13 @@ HArc::HArc(const gp_Pnt &a, const gp_Pnt &b, const gp_Circ &c, const HeeksColor*
 HArc::~HArc(){
 }
 
+const wxBitmap &HArc::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/arc.png")));
+	return *icon;
+}
+
 bool HArc::IsDifferent(HeeksObj* other)
 {
 	HArc* arc = (HArc*)other;

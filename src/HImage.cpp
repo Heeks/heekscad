@@ -66,6 +66,13 @@ void HImage::do_vertex_for_lots_of_quads( double x, double y ){
 	glVertex3dv( vt );
 }
 
+const wxBitmap &HImage::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/picture.png")));
+	return *icon;
+}
+
 void HImage::glCommands(bool select, bool marked, bool no_color)
 {
 	if(m_texture_number == 0){

@@ -8,9 +8,6 @@
 
 class CoordinateSystem: public HeeksObj
 {
-private:
-	static wxIcon* m_icon;
-
 public:
 	gp_Pnt m_o;
 	gp_Dir m_x;
@@ -39,7 +36,7 @@ public:
 	void GetBox(CBox &box);
 	const wxChar* GetTypeString(void)const{return _("Coordinate System");}
 	HeeksObj *MakeACopy(void)const;
-	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(13, 0);}
+	const wxBitmap &GetIcon();
 	void ModifyByMatrix(const double *mat);
 	void GetProperties(std::list<Property *> *list);
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof){}

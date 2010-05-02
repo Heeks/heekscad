@@ -39,6 +39,13 @@ const HCircle& HCircle::operator=(const HCircle &c){
 	return *this;
 }
 
+const wxBitmap &HCircle::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/circle.png")));
+	return *icon;
+}
+
 bool HCircle::IsDifferent(HeeksObj* other)
 {
 	HCircle* cir = (HCircle*)other;

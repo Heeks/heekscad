@@ -13,7 +13,6 @@ class CoordinateSystem;
 class CSketch:public ObjList
 {
 	HeeksColor color;
-	static wxIcon* m_icon;
 	wxString m_title;
 
 	int GetClosedSketchTurningNumber(); //only use this for closed sketches
@@ -41,7 +40,7 @@ public:
 	int GetType()const{return SketchType;}
 	long GetMarkingMask()const{return MARKING_FILTER_SKETCH;}
 	const wxChar* GetTypeString(void)const{return _("Sketch");}
-	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(8, 1);}
+	const wxBitmap &GetIcon();
 	void GetProperties(std::list<Property *> *list);
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	HeeksObj *MakeACopy(void)const;

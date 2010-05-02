@@ -8,7 +8,6 @@
 
 class CCone: public CSolid{
 protected:
-	static wxIcon* m_icon;
 	bool m_render_without_OpenCASCADE;
 
 	// CShape's virtual functions
@@ -28,7 +27,7 @@ public:
 
 	// HeeksObj's virtual functions
 	const wxChar* GetTypeString(void)const{return _("Cone");}
-	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(12, 0);}
+	const wxBitmap &GetIcon();
 	void glCommands(bool select, bool marked, bool no_color);
 	HeeksObj *MakeACopy(void)const;
 	void GetProperties(std::list<Property *> *list);

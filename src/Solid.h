@@ -8,8 +8,6 @@
 
 class CSolid:public CShape{
 protected:
-	static wxIcon* m_icon;
-
 	// CShape's virtual functions
 	void MakeTransformedShape(const gp_Trsf &mat);
 
@@ -27,7 +25,7 @@ public:
 	int GetType()const{return SolidType;}
 	long GetMarkingMask()const{return MARKING_FILTER_SOLID;}
 	const wxChar* GetTypeString(void)const{return _("Solid");}
-	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(11, 1);}
+	const wxBitmap &GetIcon();
 	HeeksObj *MakeACopy(void)const;
 	void SetColor(const HeeksColor &col){m_color = col;}
 	const HeeksColor* GetColor()const{return &m_color;}

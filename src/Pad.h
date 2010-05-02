@@ -17,7 +17,6 @@ public:
 	const wxChar* GetTypeString(void)const{return _("Pad");}
 	int GetType()const{return PadType;}
 	HeeksObj *MakeACopy(void)const{ return new CPad(*this);}
-	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(5, 1);}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetProperties(std::list<Property *> *list);
 	void WriteXML(TiXmlNode *root);

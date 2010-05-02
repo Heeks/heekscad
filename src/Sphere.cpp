@@ -41,6 +41,13 @@ HeeksObj *CSphere::MakeACopy(void)const
 	return new CSphere(*this);
 }
 
+const wxBitmap &CSphere::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/sphere.png")));
+	return *icon;
+}
+
 bool CSphere::IsDifferent(HeeksObj *other)
 {
 	CSphere* sphere = (CSphere*)other;

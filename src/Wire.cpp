@@ -71,6 +71,13 @@ public:
 static OffsetWireTool offset_wire_out(NULL, 2.0);
 static OffsetWireTool offset_wire_in(NULL, -2.0);
 
+const wxBitmap &CWire::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/wire.png")));
+	return *icon;
+}
+
 void CWire::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	offset_wire_out.m_wire = this;

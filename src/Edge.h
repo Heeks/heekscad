@@ -13,7 +13,6 @@ class CEdge:public HeeksObj{
 private:
 	CBox m_box;
 	TopoDS_Edge m_topods_edge;
-	static wxIcon* m_icon;
 	double m_start_x;
 	double m_start_y;
 	double m_start_z;
@@ -51,7 +50,7 @@ public:
 	void GetBox(CBox &box);
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	HeeksObj *MakeACopy(void)const{ return new CEdge(*this);}
-	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(1, 1);}
+	const wxBitmap &GetIcon();
 	const wxChar* GetTypeString(void)const{return _("Edge");}
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	void WriteXML(TiXmlNode *root);

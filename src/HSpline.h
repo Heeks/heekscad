@@ -25,7 +25,6 @@ public:
 class HSpline: public EndedObject{
 private:
 	HeeksColor color;
-	static wxIcon* m_icon;
 
 	void CreateArcs(const gp_Pnt &p_start, const gp_Vec &v_start, double t_start, double t_end, gp_Pnt &p_end, gp_Vec &v_end);
 
@@ -46,7 +45,7 @@ public:
 	void GetBox(CBox &box);
 	const wxChar* GetTypeString(void)const{return _("Spline");}
 	HeeksObj *MakeACopy(void)const;
-	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(11, 0);}
+	const wxBitmap &GetIcon();
 	void ModifyByMatrix(const double *mat);
 	void SetColor(const HeeksColor &col){color = col;}
 	const HeeksColor* GetColor()const{return &color;}

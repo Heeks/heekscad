@@ -12,7 +12,6 @@ class CNurbSurfaceParams;
 class CFace:public HeeksObj{
 private:
 	TopoDS_Face m_topods_face;
-	static wxIcon* m_icon;
 #if _DEBUG
 	double m_pos_x;
 	double m_pos_y;
@@ -39,7 +38,7 @@ public:
 	long GetMarkingMask()const{return MARKING_FILTER_FACE;}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
-	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(3, 1);}
+	const wxBitmap &GetIcon();
 	HeeksObj *MakeACopy(void)const{ return new CFace(*this);}
 	const wxChar* GetTypeString(void)const{return _("Face");}
 	void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = false);

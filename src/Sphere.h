@@ -8,8 +8,6 @@
 
 class CSphere: public CSolid{
 protected:
-	static wxIcon* m_icon;
-
 	// CShape's virtual functions
 	void MakeTransformedShape(const gp_Trsf &mat);
 	wxString StretchedName();
@@ -25,7 +23,7 @@ public:
 
 	// HeeksObj's virtual functions
 	const wxChar* GetTypeString(void)const{return _("Sphere");}
-	void GetIcon(int& texture_number, int& x, int& y){GET_ICON(12, 1);}
+	const wxBitmap &GetIcon();
 	HeeksObj *MakeACopy(void)const;
 	void GetProperties(std::list<Property *> *list);
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);

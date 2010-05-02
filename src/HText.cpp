@@ -32,6 +32,13 @@ const HText& HText::operator=(const HText &b)
 	return *this;
 }
 
+const wxBitmap &HText::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/text.png")));
+	return *icon;
+}
+
 void HText::glCommands(bool select, bool marked, bool no_color)
 {
 	glPushMatrix();

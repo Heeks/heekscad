@@ -18,6 +18,13 @@ CCone::CCone(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& c
 {
 }
 
+const wxBitmap &CCone::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/cone.png")));
+	return *icon;
+}
+
 void CCone::glCommands(bool select, bool marked, bool no_color)
 {
 	if(!m_render_without_OpenCASCADE)

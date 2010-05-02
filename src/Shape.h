@@ -14,7 +14,6 @@ protected:
 	int m_edge_gl_list;
 	CBox m_box;
 	TopoDS_Shape m_shape;
-	static wxIcon* m_icon;
 	wxLongLong m_creation_time;
 
 	void create_faces_and_edges();

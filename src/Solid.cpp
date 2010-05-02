@@ -41,6 +41,13 @@ void CSolid::SetFromXMLElement(TiXmlElement* pElem)
 	}
 }
 
+const wxBitmap &CSolid::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/solid.png")));
+	return *icon;
+}
+
 void CSolid::MakeTransformedShape(const gp_Trsf &mat)
 {
 	BRepBuilderAPI_Transform myBRepTransformation(m_shape,mat);
