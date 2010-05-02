@@ -8,8 +8,6 @@
 #include "../interface/MarkedObject.h"
 
 BEGIN_EVENT_TABLE(CTreeCanvas, wxScrolledWindow)
-    EVT_SIZE(CTreeCanvas::OnSize)
-	EVT_ERASE_BACKGROUND(CTreeCanvas::OnEraseBackground)
     EVT_PAINT(CTreeCanvas::OnPaint)
     EVT_MOUSE_EVENTS(CTreeCanvas::OnMouse)
     EVT_MENU_RANGE(ID_FIRST_POP_UP_MENU_TOOL, ID_FIRST_POP_UP_MENU_TOOL + 1000, CTreeCanvas::OnMenuEvent)
