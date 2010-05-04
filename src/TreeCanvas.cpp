@@ -28,7 +28,7 @@ static wxBitmap* bmp_branch_trunk = NULL;
 
 CTreeCanvas::CTreeCanvas(wxWindow* parent)
         : wxScrolledWindow(parent),m_frozen(false), m_refresh_wanted_on_thaw(false),
-		width(0), height(0), textureWidth(0), textureHeight(0), m_xpos(0), m_ypos(0), m_max_xpos(0)
+		width(0), height(0), textureWidth(0), textureHeight(0), m_xpos(0), m_ypos(0), m_max_xpos(0), m_dragging(false)
 {
 	wxGetApp().RegisterObserver(this);
 
@@ -111,6 +111,18 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 		{
 			wxGetApp().m_marked_list->Clear(true);
 		}
+
+		m_button_down_point = event.GetPosition();
+	}
+
+	if(event.LeftUp())
+	{
+		if(m_dragging)
+		{
+			// to do - move the objects
+			m_dragging = false;
+			Refresh();
+		}
 	}
 
 	if(event.RightDown())
@@ -131,13 +143,24 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 		wxGetApp().DoDropDownMenu(this, event.GetPosition(), &marked_object, true, false, false);
 	}
 
-	//if(event.GetWheelRotation() != 0)
-	//{
-		//double wheel_value = (double)(event.GetWheelRotation());
-		//scroll_y_pos -= wheel_value / 8;
-		//if(scroll_y_pos < 0)scroll_y_pos = 0;
-		//Refresh();
-	//}
+	if(event.Dragging())
+	{
+		if(event.LeftIsDown())
+		{
+			if(m_dragging)
+			{
+				m_drag_position = event.GetPosition();
+				Refresh();
+			}
+			else if(abs(m_button_down_point.x - event.GetX())>2 || abs(m_button_down_point.y - event.GetY())>2)
+			{
+				m_dragging = true;
+				m_dragged_list = wxGetApp().m_marked_list->list();
+				m_drag_position = event.GetPosition();
+				Refresh();
+			}
+		}
+	}
 
 	event.Skip();
 }
@@ -564,8 +587,16 @@ void CTreeCanvas::Render(bool just_for_calculation)
 	render_just_for_calculation = just_for_calculation;
 	if(!just_for_calculation)
 	{
-		//wxSize render_size = GetRenderSize();
-		//render_just_for_calculation = just_for_calculation;
+#ifdef WIN32
+		// draw a white background rectangle
+		int w, h;
+		GetClientSize(&w, &h);
+		wxPoint pTopLeft = CalcUnscrolledPosition(wxPoint(0, 0));
+		wxPoint pBottomRight = CalcUnscrolledPosition(wxPoint(w, h));
+		m_dc->SetBrush(wxBrush(wxT("white")));
+		m_dc->SetPen(wxPen(wxT("white")));
+		m_dc->DrawRectangle(wxRect(pTopLeft, pBottomRight));
+#endif
 
 		// set background
 		m_dc->SetBackgroundMode(wxSOLID);
@@ -573,10 +604,6 @@ void CTreeCanvas::Render(bool just_for_calculation)
 		m_dc->Clear();
 
 		m_tree_buttons.clear();
-
-		//m_dc->SetBrush(wxBrush(wxT("white")));
-		//m_dc->SetPen(wxPen(wxT("white")));
-		//m_dc->DrawRectangle(wxPoint(0, 0), render_size);
 	}
 
 	m_xpos = 0; // start at the left
@@ -591,11 +618,44 @@ void CTreeCanvas::Render(bool just_for_calculation)
 		RenderObject(object, next_object, 0);
 		object = next_object;
 	}
+
+	// draw the dragged objects
+	if(m_dragging)
+	{
+		//m_dc->SetBrush(wxBrush(wxT("orange")));
+		//m_dc->SetPen(wxPen(wxT("blue")));
+		//m_dc->DrawRectangle(m_drag_position, wxSize(50, 50));
+	}
 }
 
 wxSize CTreeCanvas::GetRenderSize()
 {
 	bool just_for_calculation = true;
 	Render(just_for_calculation);
+	return wxSize(m_max_xpos, m_ypos);
+}
+
+void CTreeCanvas::RenderDraggedList(bool just_for_calculation)
+{
+	m_xpos = 0; // start at the left
+	m_ypos = 0;//-scroll_y_pos; // start at the top
+	m_max_xpos = 0;
+
+	std::list<HeeksObj*>::iterator It = m_dragged_list.begin(); 
+	HeeksObj* object = *It;
+	for(;It != m_dragged_list.end();)
+	{
+		It++;
+		HeeksObj* next_object = NULL;
+		if(It != m_dragged_list.end())next_object = *It;
+		RenderObject(object, next_object, 0);
+		object = next_object;
+	}
+}
+
+wxSize CTreeCanvas::GetDraggedListSize()
+{
+	bool just_for_calculation = true;
+	RenderDraggedList(just_for_calculation);
 	return wxSize(m_max_xpos, m_ypos);
 }
