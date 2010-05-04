@@ -21,6 +21,10 @@ private:
 	std::set<HeeksObj*> m_expanded;
 	//int scroll_y_pos;
 	static wxPaintDC* m_dc; // temporary for each OnPaint
+	std::list<HeeksObj*> m_dragged_list;
+	bool m_dragging;
+	wxPoint m_button_down_point;
+	wxPoint m_drag_position;
 
 	int m_xpos, m_ypos, m_max_xpos;
 	enum TreeButtonType{ ButtonTypePlus, ButtonTypeMinus, ButtonTypeLabel };
@@ -32,10 +36,15 @@ private:
 	void RenderBranchIcon(HeeksObj* object, HeeksObj* next_object, bool expanded, int level);
 	void RenderBranchIcons(HeeksObj* object, HeeksObj* next_object, bool expanded, int level);
 	void RenderObject(HeeksObj* object, HeeksObj* next_object, int level);
+	void Render(bool just_for_calculation = false); // drawing commands for all the objects
+	const CTreeButton* HitTest( const wxPoint& pt );
+	wxSize GetRenderSize();
 	void AddPlusOrMinusButton(HeeksObj* object, bool plus);
 	void AddLabelButton(HeeksObj* object, int label_start_x, int label_end_x);
 	void OnLabelLeftDown(HeeksObj* object, wxMouseEvent& event);
 	void OnLabelRightDown(HeeksObj* object, wxMouseEvent& event);
+	void RenderDraggedList(bool just_for_calculation = false);
+	wxSize GetDraggedListSize();
 
 public:
 	CTreeCanvas(wxWindow* parent);
@@ -47,9 +56,6 @@ public:
 	void OnCharEvent(wxKeyEvent& event);
 	void OnKeyDown(wxKeyEvent& event);
 	void OnKeyUp(wxKeyEvent& event);
-	void Render(bool just_for_calculation = false); // drawing commands for all the objects
-	const CTreeButton* HitTest( const wxPoint& pt );
-	wxSize GetRenderSize();
 
 	// Observer's virtual functions
 	void OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified);

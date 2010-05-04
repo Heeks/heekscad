@@ -20,7 +20,7 @@ CAboutBox::CAboutBox(wxWindow *parent):wxDialog(parent, wxID_ANY, _T(""), wxDefa
 
 	wxTextCtrl* text_ctrl = new wxTextCtrl( this, wxID_ANY, _T(""),	wxDefaultPosition, wxSize(800,600), wxTE_READONLY | wxTE_MULTILINE);
 
-	wxString str = wxString(_T("HeeksCAD\n see http://code.google.com/p/heekscad/\n\nusing Open CASCADE solid modeller - http://www.opencascade.org"))
+	wxString str = wxString(_T("HeeksCAD\n see http://heeks.net, or for source code: http://code.google.com/p/heekscad/\n\nusing Open CASCADE solid modeller - http://www.opencascade.org"))
 		+ wxString(_T("\n\nwindows made with wxWidgets 2.8.9 - http://wxwidgets.org"))
 		+ wxString(_T("\n\ntext uses glFont Copyright (c) 1998 Brad Fish E-mail: bhf5@email.byu.edu Web: http://students.cs.byu.edu/~bfish/"))
 		+ wxString(_T("\n\nWritten by:\n Dan Heeks\n Jon Pry\n Jonathan George\n David Nicholls"))
