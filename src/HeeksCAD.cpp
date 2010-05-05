@@ -69,6 +69,7 @@ using namespace std;
 
 IMPLEMENT_APP(HeeksCADapp)
 
+extern void SketchTools_GetOptions(std::list<Property *> *list);
 
 #if 0
 int MyAllocHook( int allocType, void *userData, size_t size, int blockType, long requestNumber, const unsigned char *filename, int lineNumber)
@@ -2362,7 +2363,7 @@ void on_dxf_make_sketch(bool value, HeeksObj* object){
 }
 
 void on_sel_dxf_read_errors(bool value, HeeksObj* object){
-	HeeksDxfRead::m_ignore_errors = value;	
+	HeeksDxfRead::m_ignore_errors = value;
 }
 
 void on_stl_facet_tolerance(double value, HeeksObj* object){
@@ -2644,6 +2645,8 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	PropertyList* font_options = new PropertyList(_("font options"));
 	font_options->m_list.push_back( new PropertyString(_("Paths (semicolon delimited)"), m_font_paths, this, on_edit_font_paths));
 	list->push_back(font_options);
+
+	SketchTools_GetOptions(list);
 
 }
 
