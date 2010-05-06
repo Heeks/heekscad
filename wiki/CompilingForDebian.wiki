@@ -2,6 +2,8 @@
 
 This is mainly for people who want to edit the source code and test the software frequently, which means make install will not be used.
 
+There's a good chance you'll have problems following these. You might want to join #cam @ Freenode (IRC).
+
 If you want to use make install, remove 'RUNINPLACE=yes' and run make install after every 'make', and ignore the ln -s .so commands. Or something like that. You should also check http://code.google.com/p/heekscad/wiki/CompilingForUbuntu
 
 
