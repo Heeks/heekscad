@@ -1,5 +1,4 @@
 #summary How to install HeeksCAD on Ubuntu
-For some generic automatically built binary tarballs for linux (you probably don't want to use these), check http://celer.oni.biz/~celeron55/automation/heeks/
 
 = Installing on Ubuntu =
 
