@@ -3,6 +3,7 @@
 
 Download Ubuntu ( 8.04, or later ) and install it on your computer.
 
+There's a good chance you'll have problems following these. You might want to join #cam @ Freenode (IRC).
 
 On the menu, go to System->Administration->"Synaptic Package Manager"
 
