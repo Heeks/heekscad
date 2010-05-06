@@ -31,7 +31,7 @@ RUNINPLACE=yes make
 cd ../kurve
 make
 cd ..
-ln -s kurve/.libs/kurve.so .
+cp kurve/.libs/kurve.so .
 }}}
 
 You probably will want to continue by building libarea and libactp for HeeksCNC
@@ -41,7 +41,7 @@ cd ../../
 svn checkout http://libarea.googlecode.com/svn/trunk/ libarea
 cd libarea
 make
-ln -s .libs/area.so ../heekscad/heekscnc/area.so
+cp .libs/area.so ../heekscad/heekscnc/area.so
 }}}
 
 {{{
@@ -49,7 +49,7 @@ cd ../
 svn checkout http://libactp.googlecode.com/svn/trunk/ libactp
 cd libactp/PythonLib
 make
-ln -s .libs/actp.so ../../heekscad/heekscnc/actp.so
+cp .libs/actp.so ../../heekscad/heekscnc/actp.so
 }}}
 
 Then run HeeksCAD and add the HeeksCNC plugin (if you built it)
