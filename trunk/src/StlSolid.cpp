@@ -29,6 +29,7 @@ CStlSolid::CStlSolid(const HeeksColor* col):color(*col), m_gl_list(0){
 }
 
 CStlSolid::CStlSolid(const wxChar* filepath, const HeeksColor* col):color(*col), m_gl_list(0){
+	m_title.assign(GetTypeString());
 	read_from_file(filepath);
 
 	if(wxGetApp().m_in_OpenFile && wxGetApp().m_file_open_matrix)
@@ -180,20 +181,26 @@ void CStlSolid::glCommands(bool select, bool marked, bool no_color){
 		for(std::list<CStlTri>::iterator It = m_list.begin(); It != m_list.end(); It++)
 		{
 			CStlTri &t = *It;
-	gp_Pnt p0(t.x[0][0], t.x[0][1], t.x[0][2]);
-	gp_Pnt p1(t.x[1][0], t.x[1][1], t.x[1][2]);
-	gp_Pnt p2(t.x[2][0], t.x[2][1], t.x[2][2]);
-	gp_Vec v1(p0, p1);
-	gp_Vec v2(p0, p2);
-	gp_Vec norm = (v1 ^ v2).Normalized();
-	float n[3];
-	n[0] = (float)(norm.X());
-	n[1] = (float)(norm.Y());
-	n[2] = (float)(norm.Z());
-			glNormal3fv(n);
-			glVertex3fv(t.x[0]);
-			glVertex3fv(t.x[1]);
-			glVertex3fv(t.x[2]);
+			gp_Pnt p0(t.x[0][0], t.x[0][1], t.x[0][2]);
+			gp_Pnt p1(t.x[1][0], t.x[1][1], t.x[1][2]);
+			gp_Pnt p2(t.x[2][0], t.x[2][1], t.x[2][2]);
+			gp_Vec v1(p0, p1);
+			gp_Vec v2(p0, p2);
+			try
+			{
+				gp_Vec norm = (v1 ^ v2).Normalized();
+				float n[3];
+				n[0] = (float)(norm.X());
+				n[1] = (float)(norm.Y());
+				n[2] = (float)(norm.Z());
+				glNormal3fv(n);
+				glVertex3fv(t.x[0]);
+				glVertex3fv(t.x[1]);
+				glVertex3fv(t.x[2]);
+			}
+			catch(...)
+			{
+			}
 		}
 		glEnd();
 
@@ -272,25 +279,31 @@ void CStlSolid::GetTriangles(void(*callbackfunc)(const double* x, const double* 
 		x[6] = t.x[2][0];
 		x[7] = t.x[2][1];
 		x[8] = t.x[2][2];
-	gp_Pnt p0(t.x[0][0], t.x[0][1], t.x[0][2]);
-	gp_Pnt p1(t.x[1][0], t.x[1][1], t.x[1][2]);
-	gp_Pnt p2(t.x[2][0], t.x[2][1], t.x[2][2]);
-	gp_Vec v1(p0, p1);
-	gp_Vec v2(p0, p2);
-	gp_Vec norm = (v1 ^ v2).Normalized();
-	n[0] = norm.X();
-	n[1] = norm.Y();
-	n[2] = norm.Z();
-		if(!just_one_average_normal)
+		gp_Pnt p0(t.x[0][0], t.x[0][1], t.x[0][2]);
+		gp_Pnt p1(t.x[1][0], t.x[1][1], t.x[1][2]);
+		gp_Pnt p2(t.x[2][0], t.x[2][1], t.x[2][2]);
+		gp_Vec v1(p0, p1);
+		gp_Vec v2(p0, p2);
+		try
 		{
-			n[3] = n[0];
-			n[4] = n[1];
-			n[5] = n[2];
-			n[6] = n[0];
-			n[7] = n[1];
-			n[8] = n[2];
+			gp_Vec norm = (v1 ^ v2).Normalized();
+			n[0] = norm.X();
+			n[1] = norm.Y();
+			n[2] = norm.Z();
+			if(!just_one_average_normal)
+			{
+				n[3] = n[0];
+				n[4] = n[1];
+				n[5] = n[2];
+				n[6] = n[0];
+				n[7] = n[1];
+				n[8] = n[2];
+			}
+			(*callbackfunc)(x, n);
 		}
-		(*callbackfunc)(x, n);
+		catch(...)
+		{
+		}
 	}
 }
 
