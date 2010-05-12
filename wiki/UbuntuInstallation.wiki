@@ -1,0 +1,138 @@
+HeeksCAD is still under heavy development so any packages you find are likely to be out of date.  To get the most current version, you need to compile the current source version from SVN.
+
+This installation procedure was tested on Ubuntu 10.04 (Lucid Lynx) 
+
+
+=Install the dependencies=
+
+The following command will install the required packages.  apt-get will prompt you to accept a large number of additional dependencies.  Accept them as well.
+
+{{{
+sudo apt-get install subversion libwxbase2.8-dev g++ build-essential libopencascade-dev libwxgtk2.8-dev libgtkglext1-dev python-dev cmake libboost-python-dev
+}}}
+
+Get a cup of coffee while all this downloads and installs.
+
+=Install HeeksCAD=
+
+The following bit of script will download the source files, compile, and install HeeksCAD.
+It will create a HeeksCAD directory in your home directory.  If you don't want it there, modify the script appropriately.
+
+{{{
+#Get the source files from the SVN repository, build and install
+cd ~
+svn checkout http://heekscad.googlecode.com/svn/trunk/ HeeksCAD
+cd ~/HeeksCAD/src
+make clean
+make
+sudo make install
+}}} 
+
+At this point, HeeksCAD is installed and will run if launched from a command line.  The application launcher in in the menu, however, will give an error because it's looking in the wrong place for the binary.  The following commands will create symbolic links to resolve this.
+
+{{{
+sudo ln -s /usr/local/bin/HeeksCAD /usr/bin/HeeksCAD
+}}}
+
+Make HeeksCAD find the program icons
+
+{{{
+sudo ln -s /usr/local/share/heekscad/ /usr/share/heekscad
+}}}
+
+=Install HeeksCNC=
+
+
+{{{
+#Get the HeeksCNC files from the SVN repository, build, and install
+cd ~/HeeksCAD/
+svn checkout http://heekscnc.googlecode.com/svn/trunk/ HeeksCNC
+cd ~/HeeksCAD/HeeksCNC/src
+make clean
+make
+sudo make install
+}}}
+
+==Install the helper libraries==
+HeeksCNC uses a number of libraries to perform various operations.  Install all of them or only the ones you plan to use.
+
+===Install Kurve===
+
+kurve.so is required for profile operations.  The code was downloaded with HeeksCNC but It requires a separate compile step.
+
+{{{
+#Get the Kurve files from the SVN repository, build, and install
+cd ~/HeeksCAD/HeeksCNC/kurve
+make clean
+make
+sudo make install
+sudo ln -s .libs/kurve.so ~/HeeksCAD/HeeksCNC/kurve.so
+}}}
+
+===Install libarea===
+
+area.so is required for pocket operations.
+
+{{{
+#Get the libarea files from the SVN repository, build, and install
+cd ~/HeeksCAD/HeeksCNC/
+svn checkout http://libarea.googlecode.com/svn/trunk/ libarea
+cd ~/HeeksCAD/HeeksCNC/libarea/
+make clean
+make
+sudo make install
+sudo ln -s .libs/area.so ~/HeeksCAD/HeeksCNC/area.so
+}}}
+
+===Install libactp===
+
+actp.so is required for adaptive roughing operations.
+
+{{{
+#Get the libactp (adaptive roughing) files from the SVN repository, build, and install
+cd ~/HeeksCAD/HeeksCNC/
+svn checkout http://libactp.googlecode.com/svn/trunk/ libactp
+cd ~/HeeksCAD/HeeksCNC/libactp/PythonLib
+make clean
+make
+sudo make install
+sudo ln -s .libs/actp.so ~/HeeksCAD/HeeksCNC/actp.so
+}}}
+
+===Install opencamlib===
+
+opencamlib is the replacement for pycam.  It's required for zigzag operations.
+
+{{{
+#Get the opencamlib files from the SVN repository, build, and install
+cd ~/HeeksCAD/HeeksCNC/
+svn checkout http://opencamlib.googlecode.com/svn/trunk/ opencamlib
+cd ~/HeeksCAD/HeeksCNC/opencamlib/src
+make clean
+cmake .
+make
+sudo make install
+}}}
+
+==Activate the HeeksCNC plugin==
+
+Launch HeeksCAD.
+
+Under the 'File' menu click 'plugins'
+
+When the dialog box appears, click 'new' 
+Name it HeeksCNC and click "..." 
+find libheekscnc.so.0.5.1 under /usr/local/lib/heekscnc/
+Click 'ok' out and restart HeeksCAD.  You should now have a 'Machining' menu and a new toolbar with the machining icons.
+
+
+=Other Notes=
+==use with default theme 'ambience'==
+If you are using the default Lucid theme (Ambience).
+The following bug and work-around affect the appearance of HeeksCAD in the default theme:
+
+http://code.google.com/p/heekscad/issues/detail?id=270
+
+==Making it go fast==
+As noted above, HeeksCAD is changing all the time.  The bits of script above can be combined into one script and executed together with sudo.  It isn't very efficient since it will recompile the code even if no changes were made.  But it's nice because you can launch it, get another cup of coffee, and come back to a fresh build of everything at the current SVN version.
+
