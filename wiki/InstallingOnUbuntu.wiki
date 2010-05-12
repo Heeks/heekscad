@@ -1,3 +1,4 @@
+=This page is outdated and pending deletion.  Please refer to UbuntuInstallation=
 #summary How to install HeeksCAD on Ubuntu
 
 = Installing on Ubuntu =
