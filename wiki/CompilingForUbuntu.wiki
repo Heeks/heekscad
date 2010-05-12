@@ -1,3 +1,5 @@
+=This page is outdated and pending deletion.  Please refer to UbuntuInstallation=
+
 #summary How to compile HeeksCAD on Ubuntu
 (For a more unixy version that should also work in Ubuntu Intrepid/Jaunty, see CompilingForDebian)
 
