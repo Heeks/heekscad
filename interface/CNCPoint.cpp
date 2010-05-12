@@ -13,7 +13,6 @@
 	extern CHeeksCADInterface heekscad_interface;
 #else
 	#include "interface/HeeksCADInterface.h"
-	#include "heekscnc/src/Program.h"
 	extern CHeeksCADInterface* heeksCAD;
 #endif
 
@@ -46,7 +45,7 @@ double CNCPoint::Units() const
 #ifdef HEEKSCAD
 	return(wxGetApp().m_view_units);
 #else
-	return(theApp.m_program->m_units);
+	return heeksCAD->GetViewUnits();
 #endif
 }
 
