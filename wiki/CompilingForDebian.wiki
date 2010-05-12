@@ -1,3 +1,5 @@
+=This page is outdated and pending deletion.  Please refer to UbuntuInstallation=
+
 #summary How to compile HeeksCAD and HeeksCNC on Debian
 
 This is mainly for people who want to edit the source code and test the software frequently, which means make install will not be used.
