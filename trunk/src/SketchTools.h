@@ -5,16 +5,44 @@
 #pragma once
 
 #include "../interface/Tool.h"
-#include "../interface/CNCPoint.h"
 
+#include <list>
 #include <sstream>
 #include <iomanip>
 #include <vector>
 #include <algorithm>
 
+#include "gp_Pnt.hxx"
+
+
 void GetSketchMenuTools(std::list<Tool*>* t_list);
 
 class SimplifySketchTool: public Tool{
+    private:
+        /**
+            This is simply a wrapper around the gp_Pnt class from the OpenCascade library
+            that allows objects of this class to be used with methods such as std::sort() etc.
+         */
+        class CNCPoint : public gp_Pnt {
+        public:
+            CNCPoint();
+            CNCPoint( const double *xyz );
+            CNCPoint( const double &x, const double &y, const double &z );
+            CNCPoint( const gp_Pnt & rhs );
+
+            CNCPoint & operator+= ( const CNCPoint & rhs );
+            CNCPoint operator- ( const CNCPoint & rhs ) const;
+
+            bool operator==( const CNCPoint & rhs ) const;
+            bool operator!=( const CNCPoint & rhs ) const;
+            bool operator<( const CNCPoint & rhs ) const;
+
+            void ToDoubleArray( double *pArrayOfThree ) const;
+
+        private:
+            double Tolerance() const;
+        }; // End CNCPoint class definition.
+
 private:
 	HeeksObj *m_object;
 	double	m_deviation;

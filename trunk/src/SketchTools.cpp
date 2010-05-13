@@ -14,7 +14,6 @@
 #include "../interface/PropertyCheck.h"
 #include "../interface/PropertyLength.h"
 #include "HeeksConfig.h"
-#include "../interface/CNCPoint.h"
 #include "SketchTools.h"
 
 extern CHeeksCADInterface heekscad_interface;
@@ -266,6 +265,12 @@ void GetSketchMenuTools(std::list<Tool*>* t_list){
 		count++;
 	}
 
+    if (gotsketch)
+    {
+        t_list->push_back(&simplify_sketch_tool);
+        // t_list->push_back(&fix_wire);    /* This is not ready yet */
+    }
+
 	if(count == 2 && gotsketch && gotpart)
 		t_list->push_back(&add_to_part);
 
@@ -275,8 +280,6 @@ void GetSketchMenuTools(std::list<Tool*>* t_list){
 	t_list->push_back(&pad_sketch);
 	t_list->push_back(&pocket_sketch);
 	t_list->push_back(&make_to_part);
-	// t_list->push_back(&fix_wire);    /* This is not ready yet */
-	t_list->push_back(&simplify_sketch_tool);
 }
 
 void on_set_sketchtool_option(bool value, HeeksObj* object){
@@ -475,7 +478,7 @@ SimplifySketchTool::SimplifySketchTool()
 {
 	m_object = NULL;
 	// m_deviation = 0.0254;		// one thousanth of an inch
-	m_deviation = 1.0;
+	m_deviation = 0.5;
 }
 
 SimplifySketchTool::~SimplifySketchTool(void)
@@ -483,7 +486,7 @@ SimplifySketchTool::~SimplifySketchTool(void)
 }
 
 
-std::list<CNCPoint> SimplifySketchTool::GetPoints( TopoDS_Wire wire, const double deviation )
+std::list<SimplifySketchTool::CNCPoint> SimplifySketchTool::GetPoints( TopoDS_Wire wire, const double deviation )
 {
 	std::list<CNCPoint> points;
 
@@ -559,7 +562,7 @@ std::list<CNCPoint> SimplifySketchTool::GetPoints( TopoDS_Wire wire, const doubl
 			}
 			break;
 
-            
+
 			default:
 			{
 				// make lots of small lines
@@ -635,15 +638,19 @@ void SimplifySketchTool::Run()
 		if (object->GetType() == SketchType)
 		{
 			std::list<TopoDS_Shape> wires;
-			heekscad_interface.ConvertSketchToFaceOrWire(object, wires, false);
+			try {
+				heekscad_interface.ConvertSketchToFaceOrWire(object, wires, false);
+			} // End try
+			catch(...)
+			{
+				continue;
+			}
 			for (std::list<TopoDS_Shape>::iterator itWire = wires.begin(); itWire != wires.end(); itWire++)
 			{
 				std::list<CNCPoint> points = GetPoints( TopoDS::Wire(*itWire), m_deviation );
-				// printf("We got %d points\n", points.size());
 
 				// Now keep removing points from this list as long as the midpoints are within deviation of
 				// the line between the two neighbour points.
-
 				bool points_removed = false;
 				do {
 					points_removed = false;
@@ -681,12 +688,17 @@ void SimplifySketchTool::Run()
 
 								// Now draw a line between p1 and p3.  Measure the distance between p2 and the nearest point
 								// along that line.  If this distance is less than the max deviation then discard p2.
-								
-
+								gp_Lin line(*itP1, gp_Dir(itP3->X() - itP1->X(), itP3->Y() - itP1->Y(), itP3->Z() - itP1->Z()));
+								if (line.SquareDistance(*itP2) < m_deviation)
+								{
+									// Discard p2
+									points.erase(itP2);
+									points_removed = true;
+									continue;
+								}
 							}
 						}
 					} // End for
-
 				} while (points_removed == true);
 
 				if (points.size() >= 2)
@@ -706,14 +718,98 @@ void SimplifySketchTool::Run()
 					} // End for
 
 					heekscad_interface.Add(sketch, NULL);
-				}
-
-				// printf("Now we have %d points\n", points.size());
+				} // End if - then
 			} // End for
 		} // End if - then
-
-		
-
 	} // End for
 
 } // End Run() method
+
+
+
+SimplifySketchTool::CNCPoint::CNCPoint() : gp_Pnt(0.0, 0.0, 0.0)
+{
+}
+
+SimplifySketchTool::CNCPoint::CNCPoint( const double *xyz ) : gp_Pnt(xyz[0], xyz[1], xyz[2])
+{
+}
+
+SimplifySketchTool::CNCPoint::CNCPoint( const double &x, const double &y, const double &z ) : gp_Pnt(x,y,z)
+{
+}
+SimplifySketchTool::CNCPoint::CNCPoint( const gp_Pnt & rhs ) : gp_Pnt(rhs)
+{
+}
+
+double SimplifySketchTool::CNCPoint::Tolerance() const
+{
+	return(heekscad_interface.GetTolerance());
+}
+
+
+SimplifySketchTool::CNCPoint & SimplifySketchTool::CNCPoint::operator+= ( const CNCPoint & rhs )
+{
+    SetX( X() + rhs.X() );
+    SetY( Y() + rhs.Y() );
+    SetZ( Z() + rhs.Z() );
+
+    return(*this);
+}
+
+SimplifySketchTool::CNCPoint SimplifySketchTool::CNCPoint::operator- ( const SimplifySketchTool::CNCPoint & rhs ) const
+{
+    CNCPoint result(*this);
+    result.SetX( X() - rhs.X() );
+    result.SetY( Y() - rhs.Y() );
+    result.SetZ( Z() - rhs.Z() );
+
+    return(result);
+}
+
+bool SimplifySketchTool::CNCPoint::operator==( const SimplifySketchTool::CNCPoint & rhs ) const
+{
+    // We use the sum of both point's tolerance values.
+    return(Distance(rhs) < (Tolerance() + rhs.Tolerance()));
+} // End equivalence operator
+
+bool SimplifySketchTool::CNCPoint::operator!=( const SimplifySketchTool::CNCPoint & rhs ) const
+{
+    return(! (*this == rhs));
+} // End not-equal operator
+
+bool SimplifySketchTool::CNCPoint::operator<( const SimplifySketchTool::CNCPoint & rhs ) const
+{
+    if (*this == rhs) return(false);
+
+    if (fabs(X() - rhs.X()) > Tolerance())
+    {
+        if (X() > rhs.X()) return(false);
+        if (X() < rhs.X()) return(true);
+    }
+
+    if (fabs(Y() - rhs.Y()) > Tolerance())
+    {
+        if (Y() > rhs.Y()) return(false);
+        if (Y() < rhs.Y()) return(true);
+    }
+
+    if (fabs(Z() - rhs.Z()) > Tolerance())
+    {
+        if (Z() > rhs.Z()) return(false);
+        if (Z() < rhs.Z()) return(true);
+    }
+
+    return(false);	// They're equal
+} // End equivalence operator
+
+void SimplifySketchTool::CNCPoint::ToDoubleArray( double *pArrayOfThree ) const
+{
+    pArrayOfThree[0] = X();
+    pArrayOfThree[1] = Y();
+    pArrayOfThree[2] = Z();
+} // End ToDoubleArray() method
+
+
+
+
