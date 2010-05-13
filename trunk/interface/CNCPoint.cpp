@@ -13,8 +13,6 @@
 	extern CHeeksCADInterface heekscad_interface;
 #else
 	#include "interface/HeeksCADInterface.h"
-	#include "Program.h"
-
 	extern CHeeksCADInterface* heeksCAD;
 #endif
 
@@ -42,15 +40,13 @@ double CNCPoint::Tolerance() const
 #endif
 }
 
+// you will need to define your own version of this method, somewhere in your own shared library
+#ifdef HEEKSCAD
 double CNCPoint::Units() const
 {
-#ifdef HEEKSCAD
 	return(wxGetApp().m_view_units);
-#else
-	return(theApp.m_program->m_units);
-#endif
 }
-
+#endif
 
 double CNCPoint::X(const bool in_drawing_units /* = false */) const
 {
