@@ -1325,7 +1325,7 @@ public:
 		if(event.Entering())
 		{
 			// delete previous popup
-			delete m_toolbarPopup;
+			if(m_toolbarPopup)m_toolbarPopup->Close();
 
 			// make a new popup toolbar
 			m_toolbarPopup = new ToolBarPopup( this, m_flyout_list );
