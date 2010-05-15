@@ -104,6 +104,27 @@ void CCuboid::GetProperties(std::list<Property *> *list)
 	CSolid::GetProperties(list);
 }
 
+class CCuboidCanvas: public ObjectCanvas
+{
+public:
+	CCuboidCanvas::CCuboidCanvas(wxWindow* parent) : ObjectCanvas(parent)
+	{
+		// just draw a picture of a cube with some text
+		PictureFrame* picture = new PictureFrame(this, wxImage(wxGetApp().GetResFolder() + _T("/bitmaps/dlgcuboid.png")));
+		wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+		sizer->Add(picture, 1, wxGROW);
+		SetSizer(sizer);
+	}
+};
+
+static CCuboidCanvas* object_canvas = NULL;
+
+ObjectCanvas* CCuboid::GetDialog(wxWindow* parent)
+{
+	if(object_canvas == NULL)object_canvas = new CCuboidCanvas(parent);
+	return object_canvas;
+}
+
 void CCuboid::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
 {
 	gp_Pnt o = m_pos.Location();
