@@ -10,6 +10,7 @@
 #include "HeeksFrame.h"
 #include "MarkedList.h"
 #include "../interface/MarkedObject.h"
+#include "../interface/ObjectCanvas.h"
 
 BEGIN_EVENT_TABLE(CObjPropsCanvas, wxScrolledWindow)
 	EVT_SIZE(CObjPropsCanvas::OnSize)
@@ -36,6 +37,7 @@ CObjPropsCanvas::CObjPropsCanvas(wxWindow* parent)
 {
 	m_toolBar = NULL;
 	m_make_initial_properties_in_refresh = false;
+	m_object_canvas = NULL;
 	AddToolBar();
 }
 
@@ -58,18 +60,7 @@ void CObjPropsCanvas::OnSize(wxSizeEvent& event)
 {
 	wxScrolledWindow::OnSize(event);
 
-	wxSize size = GetClientSize();
-	if(m_toolBar->GetToolsCount() > 0){
-		wxSize toolbar_size = m_toolBar->GetClientSize();
-		int toolbar_height = ToolImage::GetBitmapSize() + EXTRA_TOOLBAR_HEIGHT;
-		m_pg->SetSize(0, 0, size.x, size.y - toolbar_height );
-		m_toolBar->SetSize(0, size.y - toolbar_height , size.x, toolbar_height );
-		m_toolBar->Show();
-	}
-	else{
-		m_pg->SetSize(0, 0, size.x, size.y );
-		m_toolBar->Show(false);
-	}
+	Resize();
 
     event.Skip();
 }
@@ -101,8 +92,26 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll2(){
 
 	if(m_make_initial_properties_in_refresh)ClearInitialProperties();
 
+	ObjectCanvas* object_canvas = NULL;
+	if(wxGetApp().m_marked_list->size() == 1)
+		object_canvas = wxGetApp().m_marked_list->list().front()->GetDialog(this);
+	if(m_object_canvas && object_canvas != m_object_canvas)
+		m_object_canvas->Show(false); // hide the previous object canvas
+
+	m_object_canvas = object_canvas;
+
+	if(m_object_canvas)
+		m_object_canvas->Show(); // show the next object canvas
+
 	if(wxGetApp().m_marked_list->size() > 0)
 	{
+
+		if(m_object_canvas)
+		{
+			m_object_canvas->SetWithObject(wxGetApp().m_marked_list->list().front());
+		}
+
+		// use the property list too
 		std::list<Property *> list;
 		wxGetApp().m_marked_list->GetProperties(&list);
 		for(std::list<Property*>::iterator It = list.begin(); It != list.end(); It++)
@@ -127,21 +136,46 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll2(){
 		}
 
 		m_toolBar->Realize();
-
-		// resize property grid and toolbar
-		wxSize size = GetClientSize();
-		if(m_toolBar->GetToolsCount() > 0){
-			wxSize toolbar_size = m_toolBar->GetClientSize();
-			int toolbar_height = ToolImage::GetBitmapSize() + EXTRA_TOOLBAR_HEIGHT;
-			m_pg->SetSize(0, 0, size.x, size.y - toolbar_height );
-			m_toolBar->SetSize(0, size.y - toolbar_height , size.x, toolbar_height );
-			m_toolBar->Show();
-		}
-		else{
-			m_pg->SetSize(0, 0, size.x, size.y );
-			m_toolBar->Show(false);
-		}
 	}
+
+	Resize();
+}
+
+void CObjPropsCanvas::Resize()
+{
+	// resize property grid and toolbar
+
+	// change size for toolbar
+	wxSize size = GetClientSize();
+	wxSize pg_size = size;
+
+	if(m_toolBar->GetToolsCount() > 0){
+		wxSize toolbar_size = m_toolBar->GetClientSize();
+		int toolbar_height = ToolImage::GetBitmapSize() + EXTRA_TOOLBAR_HEIGHT;
+		pg_size = wxSize(size.x, size.y - toolbar_height);
+		m_toolBar->SetSize(0, pg_size.y , size.x, toolbar_height );
+		m_toolBar->Show();
+	}
+	else
+	{
+		m_toolBar->Show(false);
+	}
+
+	if(m_object_canvas)
+	{
+		if(pmap.size() > 0)
+		{
+			double tb_y = size.y - pg_size.y;
+			wxSize half_size = wxSize(pg_size.x, pg_size.y / 2);
+			pg_size = wxSize(size.x, pg_size.y - half_size.y);
+			m_object_canvas->SetSize(0, pg_size.y, size.x, half_size.y);
+		}
+		else
+			m_object_canvas->SetSize(pg_size);
+	}
+
+	// change size for property grid
+	m_pg->SetSize(pg_size);
 }
 
 bool CObjPropsCanvas::OnApply2()
