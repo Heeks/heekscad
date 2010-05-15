@@ -17,6 +17,7 @@ class TiXmlNode;
 class TiXmlElement;
 class GripData;
 class TopoDS_Shape;
+class ObjectCanvas;
 
 enum{
 	UnknownType,
@@ -125,7 +126,8 @@ public:
 	virtual bool GetCentrePoint(double* pos){return false;}
 	virtual bool GetMidPoint(double* pos){return false;}
 	virtual bool GetScaleAboutMatrix(double *m);
-	virtual void GetProperties(std::list<Property *> *list);
+	virtual void GetProperties(std::list<Property *> *list); // use GetDialog instead of this, if you have time to code one.
+	virtual ObjectCanvas* GetDialog(wxWindow* parent){return NULL;} // returns a window for editing the values of this object.
 	virtual void OnApplyProperties(){}
 	virtual bool ValidateProperties(){return true;}
 	virtual const wxBitmap &GetIcon();

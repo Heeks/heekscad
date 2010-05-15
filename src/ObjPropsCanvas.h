@@ -12,6 +12,7 @@ private:
 	wxToolBar *m_toolBar;
 	std::list<Property *> m_initial_properties;
 	bool m_make_initial_properties_in_refresh;
+	ObjectCanvas* m_object_canvas;
 
 	void ClearInitialProperties();
 
@@ -34,6 +35,7 @@ public:
 	bool OnApply2();
 	void OnCancel2();
 
+	void Resize();
 
     DECLARE_NO_COPY_CLASS(CObjPropsCanvas)
     DECLARE_EVENT_TABLE()

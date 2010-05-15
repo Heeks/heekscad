@@ -1178,6 +1178,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\interface\PictureFrame.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\interface\PictureFrame.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Plugins.cpp"
 			>
 		</File>
