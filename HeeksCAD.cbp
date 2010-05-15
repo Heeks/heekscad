@@ -51,8 +51,6 @@
 			<Add option="-lTKVRML -lTKSTL -lTKBRep -lTKIGES -lTKShHealing -lTKSTEP -lTKSTEP209 -lTKSTEPAttr -lTKSTEPBase -lTKXSBase -lTKShapeSchema -lFWOSPlugin -lTKBool -lTKCAF -lTKCDF -lTKernel -lTKFeat -lTKFillet -lTKG2d -lTKG3d -lTKGeomAlgo -lTKGeomBase -lTKHLR -lTKMath -lTKOffset -lTKPrim -lTKPShape -lTKService -lTKTopAlgo -lTKV2d -lTKV3d -lTKMesh -lTKAdvTools -lTKBO -lTKXDESTEP -lTKXCAF -lTKXCAFSchema -lTKLCAF -lTKPLCAF -lstdc++ -lGLU -lGL ${WXLIBS}" />
 		</Linker>
 		<Unit filename="interface/Box.h" />
-		<Unit filename="interface/CNCPoint.cpp" />
-		<Unit filename="interface/CNCPoint.h" />
 		<Unit filename="interface/DoubleInput.cpp" />
 		<Unit filename="interface/DoubleInput.h" />
 		<Unit filename="interface/GripperTypes.h" />
