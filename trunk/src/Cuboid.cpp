@@ -107,7 +107,7 @@ void CCuboid::GetProperties(std::list<Property *> *list)
 class CCuboidCanvas: public ObjectCanvas
 {
 public:
-	CCuboidCanvas::CCuboidCanvas(wxWindow* parent) : ObjectCanvas(parent)
+	CCuboidCanvas(wxWindow* parent) : ObjectCanvas(parent)
 	{
 		// just draw a picture of a cube with some text
 		PictureFrame* picture = new PictureFrame(this, wxImage(wxGetApp().GetResFolder() + _T("/bitmaps/dlgcuboid.png")));
