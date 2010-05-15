@@ -486,12 +486,12 @@ SimplifySketchTool::~SimplifySketchTool(void)
 }
 
 
-std::list<SimplifySketchTool::CNCPoint> SimplifySketchTool::GetPoints( TopoDS_Wire wire, const double deviation )
+std::list<SimplifySketchTool::SortPoint> SimplifySketchTool::GetPoints( TopoDS_Wire wire, const double deviation )
 {
-	std::list<CNCPoint> points;
+	std::list<SortPoint> points;
 
 	std::vector<TopoDS_Edge> edges = SortEdges(wire);
-	CNCPoint last_position(0.0, 0.0, 0.0);
+	SortPoint last_position(0.0, 0.0, 0.0);
 
     for (std::vector<TopoDS_Edge>::size_type i=0; i<edges.size(); i++)
 	{
@@ -524,23 +524,23 @@ std::list<SimplifySketchTool::CNCPoint> SimplifySketchTool::GetPoints( TopoDS_Wi
 				gp_Vec VE;
 				curve.D1(uEnd, PE, VE);
 
-				if (last_position == CNCPoint(PS))
+				if (last_position == SortPoint(PS))
 				{
 					// We're heading towards the PE point.
-					CNCPoint point(PE);
+					SortPoint point(PE);
 					points.push_back(point);
 					last_position = point;
 				} // End if - then
-				else if (last_position == CNCPoint(PE))
+				else if (last_position == SortPoint(PE))
 				{
-					CNCPoint point(PS);
+					SortPoint point(PS);
 					points.push_back(point);
 					last_position = point;
 				}
 				else
 				{
-					CNCPoint start(PS);
-					CNCPoint end(PE);
+					SortPoint start(PS);
+					SortPoint end(PE);
 
 					if (i < (edges.size()-1))
 					{
@@ -549,7 +549,7 @@ std::list<SimplifySketchTool::CNCPoint> SimplifySketchTool::GetPoints( TopoDS_Wi
                             // The next edge is closer to this edge's start point.  reverse direction
                             // so that the next movement is better.
 
-                            CNCPoint temp = start;
+                            SortPoint temp = start;
                             start = end;
                             end = temp;
                         }
@@ -585,9 +585,9 @@ std::list<SimplifySketchTool::CNCPoint> SimplifySketchTool::GetPoints( TopoDS_Wi
 					const TColgp_Array1OfPnt& Points = Polyg->Nodes();
 					Standard_Integer po;
 					int i = 0;
-					std::list<CNCPoint> interpolated_points;
+					std::list<SortPoint> interpolated_points;
 					for (po = Points.Lower(); po <= Points.Upper(); po++, i++) {
-						CNCPoint p = (Points.Value(po)).Transformed(L);
+						SortPoint p = (Points.Value(po)).Transformed(L);
 						interpolated_points.push_back(p);
 					} // End for
 
@@ -606,14 +606,14 @@ std::list<SimplifySketchTool::CNCPoint> SimplifySketchTool::GetPoints( TopoDS_Wi
 						// point to start this off.
 
 						// We need to move to the start BEFORE machining this line.
-						CNCPoint start(last_position);
-						CNCPoint end(*interpolated_points.begin());
+						SortPoint start(last_position);
+						SortPoint end(*interpolated_points.begin());
 
 						points.push_back(end);
 						last_position = end;
 					}
 
-					for (std::list<CNCPoint>::iterator itPoint = interpolated_points.begin(); itPoint != interpolated_points.end(); itPoint++)
+					for (std::list<SortPoint>::iterator itPoint = interpolated_points.begin(); itPoint != interpolated_points.end(); itPoint++)
 					{
 						if (*itPoint != last_position)
 						{
@@ -647,7 +647,7 @@ void SimplifySketchTool::Run()
 			}
 			for (std::list<TopoDS_Shape>::iterator itWire = wires.begin(); itWire != wires.end(); itWire++)
 			{
-				std::list<CNCPoint> points = GetPoints( TopoDS::Wire(*itWire), m_deviation );
+				std::list<SortPoint> points = GetPoints( TopoDS::Wire(*itWire), m_deviation );
 
 				// Now keep removing points from this list as long as the midpoints are within deviation of
 				// the line between the two neighbour points.
@@ -655,11 +655,11 @@ void SimplifySketchTool::Run()
 				do {
 					points_removed = false;
 
-					for (std::list<CNCPoint>::iterator itPoint = points.begin(); itPoint != points.end(); itPoint++ )
+					for (std::list<SortPoint>::iterator itPoint = points.begin(); itPoint != points.end(); itPoint++ )
 					{
-						std::list<CNCPoint>::iterator itP1 = itPoint;
-						std::list<CNCPoint>::iterator itP2 = itPoint;
-						std::list<CNCPoint>::iterator itP3 = itPoint;
+						std::list<SortPoint>::iterator itP1 = itPoint;
+						std::list<SortPoint>::iterator itP2 = itPoint;
+						std::list<SortPoint>::iterator itP3 = itPoint;
 
 						itP2++;
 						if (itP2 != points.end())
@@ -704,9 +704,9 @@ void SimplifySketchTool::Run()
 				if (points.size() >= 2)
 				{
 					HeeksObj *sketch = heekscad_interface.NewSketch();
-					for (std::list<CNCPoint>::iterator itPoint = points.begin(); itPoint != points.end(); itPoint++)
+					for (std::list<SortPoint>::iterator itPoint = points.begin(); itPoint != points.end(); itPoint++)
 					{
-						std::list<CNCPoint>::iterator itNext = itPoint;
+						std::list<SortPoint>::iterator itNext = itPoint;
 						itNext++;
 						if (itNext == points.end()) continue;
 
@@ -727,28 +727,28 @@ void SimplifySketchTool::Run()
 
 
 
-SimplifySketchTool::CNCPoint::CNCPoint() : gp_Pnt(0.0, 0.0, 0.0)
+SimplifySketchTool::SortPoint::SortPoint() : gp_Pnt(0.0, 0.0, 0.0)
 {
 }
 
-SimplifySketchTool::CNCPoint::CNCPoint( const double *xyz ) : gp_Pnt(xyz[0], xyz[1], xyz[2])
+SimplifySketchTool::SortPoint::SortPoint( const double *xyz ) : gp_Pnt(xyz[0], xyz[1], xyz[2])
 {
 }
 
-SimplifySketchTool::CNCPoint::CNCPoint( const double &x, const double &y, const double &z ) : gp_Pnt(x,y,z)
+SimplifySketchTool::SortPoint::SortPoint( const double &x, const double &y, const double &z ) : gp_Pnt(x,y,z)
 {
 }
-SimplifySketchTool::CNCPoint::CNCPoint( const gp_Pnt & rhs ) : gp_Pnt(rhs)
+SimplifySketchTool::SortPoint::SortPoint( const gp_Pnt & rhs ) : gp_Pnt(rhs)
 {
 }
 
-double SimplifySketchTool::CNCPoint::Tolerance() const
+double SimplifySketchTool::SortPoint::Tolerance() const
 {
 	return(heekscad_interface.GetTolerance());
 }
 
 
-SimplifySketchTool::CNCPoint & SimplifySketchTool::CNCPoint::operator+= ( const CNCPoint & rhs )
+SimplifySketchTool::SortPoint & SimplifySketchTool::SortPoint::operator+= ( const SortPoint & rhs )
 {
     SetX( X() + rhs.X() );
     SetY( Y() + rhs.Y() );
@@ -757,9 +757,9 @@ SimplifySketchTool::CNCPoint & SimplifySketchTool::CNCPoint::operator+= ( const 
     return(*this);
 }
 
-SimplifySketchTool::CNCPoint SimplifySketchTool::CNCPoint::operator- ( const SimplifySketchTool::CNCPoint & rhs ) const
+SimplifySketchTool::SortPoint SimplifySketchTool::SortPoint::operator- ( const SimplifySketchTool::SortPoint & rhs ) const
 {
-    CNCPoint result(*this);
+    SortPoint result(*this);
     result.SetX( X() - rhs.X() );
     result.SetY( Y() - rhs.Y() );
     result.SetZ( Z() - rhs.Z() );
@@ -767,18 +767,18 @@ SimplifySketchTool::CNCPoint SimplifySketchTool::CNCPoint::operator- ( const Sim
     return(result);
 }
 
-bool SimplifySketchTool::CNCPoint::operator==( const SimplifySketchTool::CNCPoint & rhs ) const
+bool SimplifySketchTool::SortPoint::operator==( const SimplifySketchTool::SortPoint & rhs ) const
 {
     // We use the sum of both point's tolerance values.
     return(Distance(rhs) < (Tolerance() + rhs.Tolerance()));
 } // End equivalence operator
 
-bool SimplifySketchTool::CNCPoint::operator!=( const SimplifySketchTool::CNCPoint & rhs ) const
+bool SimplifySketchTool::SortPoint::operator!=( const SimplifySketchTool::SortPoint & rhs ) const
 {
     return(! (*this == rhs));
 } // End not-equal operator
 
-bool SimplifySketchTool::CNCPoint::operator<( const SimplifySketchTool::CNCPoint & rhs ) const
+bool SimplifySketchTool::SortPoint::operator<( const SimplifySketchTool::SortPoint & rhs ) const
 {
     if (*this == rhs) return(false);
 
@@ -803,7 +803,7 @@ bool SimplifySketchTool::CNCPoint::operator<( const SimplifySketchTool::CNCPoint
     return(false);	// They're equal
 } // End equivalence operator
 
-void SimplifySketchTool::CNCPoint::ToDoubleArray( double *pArrayOfThree ) const
+void SimplifySketchTool::SortPoint::ToDoubleArray( double *pArrayOfThree ) const
 {
     pArrayOfThree[0] = X();
     pArrayOfThree[1] = Y();

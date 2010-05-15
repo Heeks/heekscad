@@ -23,32 +23,32 @@ class SimplifySketchTool: public Tool{
             This is simply a wrapper around the gp_Pnt class from the OpenCascade library
             that allows objects of this class to be used with methods such as std::sort() etc.
          */
-        class CNCPoint : public gp_Pnt {
+        class SortPoint : public gp_Pnt {
         public:
-            CNCPoint();
-            CNCPoint( const double *xyz );
-            CNCPoint( const double &x, const double &y, const double &z );
-            CNCPoint( const gp_Pnt & rhs );
+            SortPoint();
+            SortPoint( const double *xyz );
+            SortPoint( const double &x, const double &y, const double &z );
+            SortPoint( const gp_Pnt & rhs );
 
-            CNCPoint & operator+= ( const CNCPoint & rhs );
-            CNCPoint operator- ( const CNCPoint & rhs ) const;
+            SortPoint & operator+= ( const SortPoint & rhs );
+            SortPoint operator- ( const SortPoint & rhs ) const;
 
-            bool operator==( const CNCPoint & rhs ) const;
-            bool operator!=( const CNCPoint & rhs ) const;
-            bool operator<( const CNCPoint & rhs ) const;
+            bool operator==( const SortPoint & rhs ) const;
+            bool operator!=( const SortPoint & rhs ) const;
+            bool operator<( const SortPoint & rhs ) const;
 
             void ToDoubleArray( double *pArrayOfThree ) const;
 
         private:
             double Tolerance() const;
-        }; // End CNCPoint class definition.
+        }; // End SortPoint class definition.
 
 private:
 	HeeksObj *m_object;
 	double	m_deviation;
 
 private:
-	std::list<CNCPoint> GetPoints( TopoDS_Wire wire, const double deviation );
+	std::list<SortPoint> GetPoints( TopoDS_Wire wire, const double deviation );
 
 public:
 	static gp_Pnt GetStart(const TopoDS_Edge &edge);
