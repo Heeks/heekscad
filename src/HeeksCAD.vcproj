@@ -494,14 +494,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\interface\CNCPoint.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\interface\CNCPoint.h"
-			>
-		</File>
-		<File
 			RelativePath=".\Cone.cpp"
 			>
 		</File>
