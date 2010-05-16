@@ -9,7 +9,7 @@
 
 class PropertyLength:public PropertyDouble{
 public:
-	PropertyLength(const wxChar* t, double initial_value, HeeksObj* object, void(*callbackfunc)(double, HeeksObj*) = NULL);
+	PropertyLength(const wxChar* t, double initial_value, HeeksObj* object, void(*callbackfunc)(double, HeeksObj*) = NULL, void(*selectcallback)(HeeksObj*) = NULL);
 
 	// Property's virtual functions
 	int get_property_type(){return LengthPropertyType;}

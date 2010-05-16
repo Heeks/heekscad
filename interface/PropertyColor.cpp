@@ -6,9 +6,8 @@
 
 #include "PropertyColor.h"
 
-PropertyColor::PropertyColor(const wxChar* t, HeeksColor initial_value, HeeksObj* object, void(*callbackfunc)(HeeksColor, HeeksObj*)):Property(){
+PropertyColor::PropertyColor(const wxChar* t, HeeksColor initial_value, HeeksObj* object, void(*callbackfunc)(HeeksColor, HeeksObj*), void(*selectcallback)(HeeksObj*)):Property(object, selectcallback){
 	m_initial_value = initial_value;
-	m_object = object;
 	m_callbackfunc = callbackfunc;
 	title = wxString(t);
 }

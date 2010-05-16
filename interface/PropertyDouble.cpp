@@ -6,16 +6,15 @@
 
 #include "PropertyDouble.h"
 
-PropertyDouble::PropertyDouble(const wxChar* t, double initial_value, HeeksObj* object, void(*callbackfunc)(double, HeeksObj*)):Property(){
+PropertyDouble::PropertyDouble(const wxChar* t, double initial_value, HeeksObj* object, void(*callbackfunc)(double, HeeksObj*), void(*selectcallback)(HeeksObj*)):Property(object, selectcallback){
 	m_initial_value = initial_value;
 	m_callbackfunc = callbackfunc;
 	m_callbackfuncidx = 0;
-	m_object = object;
 	title = wxString(t);
 	has_index = false;
 }
 
-PropertyDouble::PropertyDouble(const wxChar* t, double initial_value, HeeksObj* object, void(*callbackfunc)(double, HeeksObj*, int), int index):Property()
+PropertyDouble::PropertyDouble(const wxChar* t, double initial_value, HeeksObj* object, void(*callbackfunc)(double, HeeksObj*, int), int index, void(*selectcallback)(HeeksObj*)):Property(object, selectcallback)
 {
 	m_initial_value = initial_value;
 	m_callbackfuncidx = callbackfunc;

@@ -363,6 +363,16 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 	wxGetApp().Changed();
 }
 
+void CPropertiesCanvas::OnPropertyGridSelect( wxPropertyGridEvent& event ) {
+	wxPGProperty* p = event.GetPropertyPtr();
+
+	Property* property = GetProperty(p);
+	if(property == NULL)return;
+
+	if(property->m_selectcallback)
+		(*(property->m_selectcallback))(((PropertyChoice*)property)->m_object);
+}
+
 void CPropertiesCanvas::DeselectProperties()
 {
 	m_pg->DoSelectProperty(NULL);

@@ -13,10 +13,9 @@ private:
 
 public:
 	HeeksColor m_initial_value;
-	HeeksObj* m_object;
 	void(*m_callbackfunc)(HeeksColor, HeeksObj*);
 
-	PropertyColor(const wxChar* t, HeeksColor initial_value, HeeksObj* object, void(*callbackfunc)(HeeksColor, HeeksObj*) = NULL);
+	PropertyColor(const wxChar* t, HeeksColor initial_value, HeeksObj* object, void(*callbackfunc)(HeeksColor, HeeksObj*) = NULL, void(*selectcallback)(HeeksObj*) = NULL);
 	~PropertyColor();
 
 	// Property's virtual functions

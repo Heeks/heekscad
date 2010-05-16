@@ -15,12 +15,11 @@ public:
 	double m_initial_value;
 	void(*m_callbackfunc)(double, HeeksObj*);
 	void(*m_callbackfuncidx)(double, HeeksObj*,int);
-	HeeksObj* m_object;
 	int m_index;
 	bool has_index;
 
-	PropertyDouble(const wxChar* t, double initial_value, HeeksObj* object, void(*callbackfunc)(double, HeeksObj*) = NULL);
-	PropertyDouble(const wxChar* t, double initial_value, HeeksObj* object, void(*callbackfunc)(double, HeeksObj*,int), int index);
+	PropertyDouble(const wxChar* t, double initial_value, HeeksObj* object, void(*callbackfunc)(double, HeeksObj*) = NULL, void(*selectcallback)(HeeksObj*) = NULL);
+	PropertyDouble(const wxChar* t, double initial_value, HeeksObj* object, void(*callbackfunc)(double, HeeksObj*,int), int index, void(*selectcallback)(HeeksObj*) = NULL);
 	~PropertyDouble();
 
 	// Property's virtual functions
