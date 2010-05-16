@@ -104,24 +104,10 @@ void CCuboid::GetProperties(std::list<Property *> *list)
 	CSolid::GetProperties(list);
 }
 
-class CCuboidCanvas: public ObjectCanvas
-{
-public:
-	CCuboidCanvas(wxWindow* parent) : ObjectCanvas(parent)
-	{
-		// just draw a picture of a cube with some text
-		PictureFrame* picture = new PictureFrame(this, wxImage(wxGetApp().GetResFolder() + _T("/bitmaps/dlgcuboid.png")));
-		wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-		sizer->Add(picture, 1, wxGROW);
-		SetSizer(sizer);
-	}
-};
-
-static CCuboidCanvas* object_canvas = NULL;
-
 ObjectCanvas* CCuboid::GetDialog(wxWindow* parent)
 {
-	if(object_canvas == NULL)object_canvas = new CCuboidCanvas(parent);
+	static ObjectCanvas* object_canvas = NULL;
+	if(object_canvas == NULL)object_canvas = new PictureCanvas(parent, wxImage(wxGetApp().GetResFolder() + _T("/bitmaps/dlgcuboid.png")));
 	return object_canvas;
 }
 
