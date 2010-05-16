@@ -19,8 +19,8 @@ public:
 	void(*m_callbackfunc)(const double*, HeeksObj*);
 	void(*m_callbackfuncidx)(const double*, HeeksObj*,int);
 	
-	PropertyVertex(const wxChar *t, const double *initial_vt, HeeksObj* object, void(*callbackfunc)(const double* vt, HeeksObj* m_object) = NULL);
-	PropertyVertex(const wxChar *t, const double *initial_vt, HeeksObj* object, void(*callbackfunc)(const double* vt, HeeksObj* m_object, int), int index);
+	PropertyVertex(const wxChar *t, const double *initial_vt, HeeksObj* object, void(*callbackfunc)(const double* vt, HeeksObj* m_object) = NULL, void(*selectcallback)(HeeksObj*) = NULL);
+	PropertyVertex(const wxChar *t, const double *initial_vt, HeeksObj* object, void(*callbackfunc)(const double* vt, HeeksObj* m_object, int), int index, void(*selectcallback)(HeeksObj*) = NULL);
 	~PropertyVertex();
 
 	// Property's virtual functions

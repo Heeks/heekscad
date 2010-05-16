@@ -13,10 +13,9 @@ private:
 
 public:
 	void (*m_callbackfunc)(bool, HeeksObj*); // onoff
-	HeeksObj* m_object;
 	bool m_initial_value;
 
-	PropertyCheck(const wxChar* t, bool initial_value, HeeksObj* object,  void(*callbackfunc)(bool, HeeksObj*) = NULL);
+	PropertyCheck(const wxChar* t, bool initial_value, HeeksObj* object,  void(*callbackfunc)(bool, HeeksObj*) = NULL, void(*selectcallback)(HeeksObj*) = NULL);
 	~PropertyCheck();
 
 	// Property's virtual functions

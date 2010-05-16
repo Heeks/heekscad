@@ -27,8 +27,11 @@ enum{
 class Property{
 public:
 	bool m_highlighted;
+	HeeksObj* m_object;
 
-	Property(bool highlighted = false):m_highlighted(highlighted){}
+	void(*m_selectcallback)(HeeksObj*);
+
+	Property(HeeksObj* object, void(*selectcallback)(HeeksObj*) = NULL, bool highlighted = false):m_object(object), m_selectcallback(selectcallback), m_highlighted(highlighted){}
 	virtual ~Property(){}
 
 	virtual int get_property_type(){return InvalidPropertyType;}

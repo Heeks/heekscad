@@ -30,6 +30,7 @@ public:
     //virtual void OnDraw(wxDC& dc);
     void OnSize(wxSizeEvent& event);
     void OnPropertyGridChange( wxPropertyGridEvent& event );
+    void OnPropertyGridSelect( wxPropertyGridEvent& event );
 
 	// Observer's virtual functions
 	void Freeze();

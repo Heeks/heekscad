@@ -1086,6 +1086,10 @@
 			>
 		</File>
 		<File
+			RelativePath="..\interface\ObjectCanvas.h"
+			>
+		</File>
+		<File
 			RelativePath="..\interface\ObjList.cpp"
 			>
 		</File>

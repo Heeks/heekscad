@@ -23,6 +23,7 @@ public:
     //virtual void OnDraw(wxDC& dc);
     void OnSize(wxSizeEvent& event);
     void OnPropertyGridChange( wxPropertyGridEvent& event );
+    void OnPropertyGridSelect( wxPropertyGridEvent& event );
 
 // Observer's virtual functions
     void WhenMarkedListChanges(bool selection_cleared, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list);

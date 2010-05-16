@@ -24,12 +24,37 @@ public:
 class PictureCanvas: public ObjectCanvas
 {
 public:
-	PictureCanvas::PictureCanvas(wxWindow* parent, const wxBitmap& bitmap) : ObjectCanvas(parent)
+	PictureFrame* m_picture;
+	wxBoxSizer* m_sizer;
+	PictureFrame* current_picture;
+
+	PictureCanvas(wxWindow* parent, const wxBitmap& bitmap) : ObjectCanvas(parent)
 	{
 		// just draw a picture
-		PictureFrame* picture = new PictureFrame(this, bitmap);
-		wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-		sizer->Add(picture, 1, wxGROW);
-		SetSizer(sizer);
+		m_picture = new PictureFrame(this, bitmap);
+		m_sizer = new wxBoxSizer(wxVERTICAL);
+		m_sizer->Add(m_picture, 1, wxGROW);
+		current_picture = m_picture;
+		SetSizer(m_sizer);
+	}
+
+	void SetPicture(PictureFrame* picture)
+	{
+		if(picture != current_picture)
+		{
+			m_sizer->Remove(current_picture);
+			current_picture->Show(false);
+			m_sizer->Add(picture, 1, wxGROW);
+			picture->Show();
+			current_picture = picture;
+			m_sizer->RecalcSizes();
+			Refresh();
+		}
+	}
+
+	void SetWithObject(HeeksObj* object)
+	{
+		// use the main picture
+		SetPicture(m_picture);
 	}
 };

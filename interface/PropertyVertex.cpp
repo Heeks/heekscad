@@ -5,25 +5,22 @@
 #include "stdafx.h"
 #include "PropertyVertex.h"
 
-PropertyVertex::PropertyVertex(const wxChar *t, const double *initial_vt, HeeksObj* object, void(*callbackfunc)(const double* vt, HeeksObj* m_object)):Property(){
+PropertyVertex::PropertyVertex(const wxChar *t, const double *initial_vt, HeeksObj* object, void(*callbackfunc)(const double* vt, HeeksObj* m_object), void(*selectcallback)(HeeksObj*)):Property(object, selectcallback){
 	m_affected_by_view_units = true;
 	title = wxString(t);
 	memcpy(m_x, initial_vt, 3*sizeof(double));
 	m_callbackfunc = callbackfunc;
 	m_callbackfuncidx = 0;
-	m_object = object;
 	has_index = false;
 }
 
-PropertyVertex::PropertyVertex(const wxChar *t, const double *initial_vt, HeeksObj* object, void(*callbackfunc)(const double* vt, HeeksObj* m_object, int), int index){
+PropertyVertex::PropertyVertex(const wxChar *t, const double *initial_vt, HeeksObj* object, void(*callbackfunc)(const double* vt, HeeksObj* m_object, int), int index, void(*selectcallback)(HeeksObj*)):Property(object, selectcallback){
 	m_affected_by_view_units = true;
 	title = wxString(t);
 	memcpy(m_x, initial_vt, 3*sizeof(double));
 	m_callbackfunc = 0;
 	m_callbackfuncidx = callbackfunc;
-	m_object = object;
 	has_index = true;
-
 }
 
 PropertyVertex::~PropertyVertex(){

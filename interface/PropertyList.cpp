@@ -6,7 +6,7 @@
 
 #include "PropertyList.h"
 
-PropertyList::PropertyList(const wxChar* t):Property(){
+PropertyList::PropertyList(const wxChar* t, void(*selectcallback)(HeeksObj*)):Property(NULL, selectcallback){
 	title = wxString(t);
 }
 

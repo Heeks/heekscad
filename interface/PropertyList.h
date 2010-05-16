@@ -14,7 +14,7 @@ private:
 public:
 	std::list< Property* > m_list;
 
-	PropertyList(const wxChar* t);
+	PropertyList(const wxChar* t, void(*selectcallback)(HeeksObj*) = NULL);
 	~PropertyList();
 
 	// Property's virtual functions
