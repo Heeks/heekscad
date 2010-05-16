@@ -13,10 +13,9 @@ private:
 
 public:
 	wxString m_initial_value;
-	HeeksObj* m_object;
 	void(*m_callbackfunc)(const wxChar*, HeeksObj*);
 
-	PropertyString(const wxChar* t, const wxChar* v, HeeksObj* object, void(*callbackfunc)(const wxChar*, HeeksObj*) = NULL);
+	PropertyString(const wxChar* t, const wxChar* v, HeeksObj* object, void(*callbackfunc)(const wxChar*, HeeksObj*) = NULL, void(*selectcallback)(HeeksObj*) = NULL);
 
 	// Property's virtual functions
 	int get_property_type(){return StringPropertyType;}

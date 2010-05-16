@@ -5,11 +5,10 @@
 #include "stdafx.h"
 #include "PropertyTrsf.h"
 
-PropertyTrsf::PropertyTrsf(const wxChar *t, const gp_Trsf &initial_trsf, HeeksObj* object, void(*callbackfunc)(const gp_Trsf& trsf, HeeksObj* m_object)):Property(){
+PropertyTrsf::PropertyTrsf(const wxChar *t, const gp_Trsf &initial_trsf, HeeksObj* object, void(*callbackfunc)(const gp_Trsf& trsf, HeeksObj* m_object), void(*selectcallback)(HeeksObj*)):Property(object, selectcallback){
 	title = wxString(t);
 	m_trsf = initial_trsf;
 	m_callbackfunc = callbackfunc;
-	m_object = object;
 }
 
 PropertyTrsf::~PropertyTrsf(){

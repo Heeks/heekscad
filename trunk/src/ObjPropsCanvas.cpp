@@ -17,6 +17,7 @@ BEGIN_EVENT_TABLE(CObjPropsCanvas, wxScrolledWindow)
 
         // This occurs when a property value changes
         EVT_PG_CHANGED( -1, CObjPropsCanvas::OnPropertyGridChange )
+        EVT_PG_SELECTED( -1, CObjPropsCanvas::OnPropertyGridSelect )
 END_EVENT_TABLE()
 
 static void OnApply(wxCommandEvent& event)
@@ -67,6 +68,10 @@ void CObjPropsCanvas::OnSize(wxSizeEvent& event)
 
 void CObjPropsCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 	CPropertiesCanvas::OnPropertyGridChange(event);
+}
+
+void CObjPropsCanvas::OnPropertyGridSelect( wxPropertyGridEvent& event ) {
+	CPropertiesCanvas::OnPropertyGridSelect(event);
 }
 
 void CObjPropsCanvas::ClearInitialProperties()

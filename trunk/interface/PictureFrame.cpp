@@ -7,13 +7,17 @@
 
 PictureFrame::PictureFrame(wxWindow* parent, const wxBitmap& b): wxScrolledWindow(parent), m_bitmap(b){
 	SetScrollRate( 10, 10 );
-	SetVirtualSize(m_bitmap.GetWidth(), m_bitmap.GetHeight());
+	int w = m_bitmap.GetWidth();
+	int h = m_bitmap.GetHeight();
+	SetVirtualSize(w, h);
 }
 
 void PictureFrame::OnPaint(wxPaintEvent &event) {
 	wxPaintDC dc(this);
 	PrepareDC(dc);
-	dc.DrawBitmap(m_bitmap, 0,0, true);
+	int w = m_bitmap.GetWidth();
+	int h = m_bitmap.GetHeight();
+	dc.DrawBitmap(m_bitmap, 0,0, false);
 }
 
 BEGIN_EVENT_TABLE(PictureFrame,wxScrolledWindow)

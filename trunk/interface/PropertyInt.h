@@ -13,10 +13,9 @@ private:
 
 public:
 	int m_initial_value;
-	HeeksObj* m_object;
 	void(*m_callbackfunc)(int, HeeksObj*);
 
-	PropertyInt(const wxChar* t, int initial_value, HeeksObj* object, void(*callbackfunc)(int, HeeksObj*) = NULL);
+	PropertyInt(const wxChar* t, int initial_value, HeeksObj* object, void(*callbackfunc)(int, HeeksObj*) = NULL, void(*selectcallback)(HeeksObj*) = NULL);
 	~PropertyInt();
 
 	// Property's virtual functions

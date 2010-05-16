@@ -12,10 +12,9 @@ private:
 
 public:
 	gp_Trsf m_trsf;
-	HeeksObj* m_object;
 	void(*m_callbackfunc)(const gp_Trsf&, HeeksObj*);
 	
-	PropertyTrsf(const wxChar *t, const gp_Trsf &initial_trsf, HeeksObj* object, void(*callbackfunc)(const gp_Trsf& trsf, HeeksObj* m_object) = NULL);
+	PropertyTrsf(const wxChar *t, const gp_Trsf &initial_trsf, HeeksObj* object, void(*callbackfunc)(const gp_Trsf& trsf, HeeksObj* m_object) = NULL, void(*selectcallback)(HeeksObj*) = NULL);
 	~PropertyTrsf();
 
 	// Property's virtual functions
