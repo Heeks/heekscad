@@ -232,7 +232,6 @@ extern "C" {
 #include "../interface/Tool.h"
 #include "../interface/PropertyString.h"
 #include "../interface/ObjectCanvas.h"
-#include "../interface/PictureFrame.h"
 #include "HeeksCAD.h"
 
 #include "ConversionTools.h"
