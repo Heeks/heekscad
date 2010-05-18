@@ -28,7 +28,7 @@ static wxBitmap* bmp_branch_trunk = NULL;
 
 CTreeCanvas::CTreeCanvas(wxWindow* parent)
         : wxScrolledWindow(parent),m_frozen(false), m_refresh_wanted_on_thaw(false),
-		width(0), height(0), textureWidth(0), textureHeight(0), m_xpos(0), m_ypos(0), m_max_xpos(0), m_dragging(false)
+		width(0), height(0), textureWidth(0), textureHeight(0), m_dragging(false), m_xpos(0), m_ypos(0), m_max_xpos(0)
 {
 	wxGetApp().RegisterObserver(this);
 
