@@ -155,7 +155,6 @@ void CObjPropsCanvas::Resize()
 	wxSize pg_size = size;
 
 	if(m_toolBar->GetToolsCount() > 0){
-		wxSize toolbar_size = m_toolBar->GetClientSize();
 		int toolbar_height = ToolImage::GetBitmapSize() + EXTRA_TOOLBAR_HEIGHT;
 		pg_size = wxSize(size.x, size.y - toolbar_height);
 		m_toolBar->SetSize(0, pg_size.y , size.x, toolbar_height );
@@ -170,17 +169,16 @@ void CObjPropsCanvas::Resize()
 	{
 		if(pmap.size() > 0)
 		{
-			double tb_y = size.y - pg_size.y;
 			wxSize half_size = wxSize(pg_size.x, pg_size.y / 2);
 			pg_size = wxSize(size.x, pg_size.y - half_size.y);
 			m_object_canvas->SetSize(0, pg_size.y, size.x, half_size.y);
 		}
 		else
-			m_object_canvas->SetSize(pg_size);
+			m_object_canvas->SetSize(0, 0, pg_size.x, pg_size.y);
 	}
 
 	// change size for property grid
-	m_pg->SetSize(pg_size);
+	m_pg->SetSize(0, 0, pg_size.x, pg_size.y);
 }
 
 bool CObjPropsCanvas::OnApply2()
