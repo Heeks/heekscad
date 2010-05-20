@@ -478,7 +478,8 @@ SimplifySketchTool::SimplifySketchTool()
 {
 	m_object = NULL;
 	// m_deviation = 0.0254;		// one thousanth of an inch
-	m_deviation = 0.5;
+	// m_deviation = 0.5;
+	m_deviation = 0.001;
 }
 
 SimplifySketchTool::~SimplifySketchTool(void)
@@ -686,16 +687,19 @@ void SimplifySketchTool::Run()
 									continue;
 								}
 
-								// Now draw a line between p1 and p3.  Measure the distance between p2 and the nearest point
-								// along that line.  If this distance is less than the max deviation then discard p2.
-								gp_Lin line(*itP1, gp_Dir(itP3->X() - itP1->X(), itP3->Y() - itP1->Y(), itP3->Z() - itP1->Z()));
-								if (line.SquareDistance(*itP2) < m_deviation)
-								{
-									// Discard p2
-									points.erase(itP2);
-									points_removed = true;
-									continue;
-								}
+                                if (itP1->Distance(*itP3) > m_deviation)
+                                {
+                                    // Now draw a line between p1 and p3.  Measure the distance between p2 and the nearest point
+                                    // along that line.  If this distance is less than the max deviation then discard p2.
+                                    gp_Lin line(*itP1, gp_Dir(itP3->X() - itP1->X(), itP3->Y() - itP1->Y(), itP3->Z() - itP1->Z()));
+                                    if (line.SquareDistance(*itP2) < m_deviation)
+                                    {
+                                        // Discard p2
+                                        points.erase(itP2);
+                                        points_removed = true;
+                                        continue;
+                                    }
+                                }
 							}
 						}
 					} // End for
