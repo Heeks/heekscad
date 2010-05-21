@@ -15,8 +15,6 @@ PictureFrame::PictureFrame(wxWindow* parent, const wxBitmap& b): wxScrolledWindo
 void PictureFrame::OnPaint(wxPaintEvent &event) {
 	wxPaintDC dc(this);
 	PrepareDC(dc);
-	int w = m_bitmap.GetWidth();
-	int h = m_bitmap.GetHeight();
 	dc.DrawBitmap(m_bitmap, 0,0, false);
 }
 
