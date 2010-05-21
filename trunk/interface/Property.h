@@ -31,7 +31,7 @@ public:
 
 	void(*m_selectcallback)(HeeksObj*);
 
-	Property(HeeksObj* object, void(*selectcallback)(HeeksObj*) = NULL, bool highlighted = false):m_object(object), m_selectcallback(selectcallback), m_highlighted(highlighted){}
+	Property(HeeksObj* object, void(*selectcallback)(HeeksObj*) = NULL, bool highlighted = false):m_highlighted(highlighted), m_object(object), m_selectcallback(selectcallback) {}
 	virtual ~Property(){}
 
 	virtual int get_property_type(){return InvalidPropertyType;}
