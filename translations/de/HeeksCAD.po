@@ -3,19 +3,19 @@
 # This file is distributed under the same license as the HeeksCAD package.
 # Hans <fungunner2@freenet.de>, 2009.
 # , fuzzy
-# 
-# 
+#
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: HeeksCAD 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 13:41+0200\n"
-"PO-Revision-Date: 2009-07-30 23:17+0200\n"
-"Last-Translator: Hans <fungunner2@freenet.de>\n"
+"PO-Revision-Date: 2010-05-21 11:54+0100\n"
+"Last-Translator: hans <fungunner2@frreenet.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
 
 msgid "OK"
 msgstr "OK"
@@ -201,10 +201,10 @@ msgid "start"
 msgstr "Start"
 
 msgid "end"
-msgstr "Ende"
+msgstr "Endpunkte einer Linie"
 
 msgid "centre"
-msgstr "Mittelpunkt"
+msgstr "Kreis-Mittelpunkt"
 
 msgid "axis"
 msgstr "Achse"
@@ -360,7 +360,7 @@ msgid "units"
 msgstr "Einheiten"
 
 msgid "digitizing"
-msgstr "digitizing"
+msgstr "Einfangen an..."
 
 msgid "intersection"
 msgstr "Kreuzung"
@@ -369,7 +369,7 @@ msgid "midpoint"
 msgstr "Mittelpunkt "
 
 msgid "nearest"
-msgstr "naechste"
+msgstr "Nächst gelegener Punkt des Objekts"
 
 msgid "tangent"
 msgstr "tangent"
@@ -387,7 +387,7 @@ msgid "grid size"
 msgstr "Raster Grösse"
 
 msgid "snap to grid"
-msgstr "Zoom Raster Aus"
+msgstr "Am Raster fangen"
 
 msgid "drawing"
 msgstr "zeichnen"
@@ -548,17 +548,17 @@ msgstr "Rückgaengig\tCtrl+Z"
 msgid "Redo\tCtrl+Shift+Z"
 msgstr "Wiederholen\tCtrl+Shift+Z"
 
-msgid "Cut"
-msgstr "Ausschneiden"
+msgid "Cut\tCtrl+X"
+msgstr "Ausschneiden\tCtrl+X"
 
-msgid "Copy"
-msgstr "Kopieren"
+msgid "Copy\tCtrl+C"
+msgstr "Kopieren\tCtrl+C"
 
-msgid "Paste"
-msgstr "Einfügen"
+msgid "Paste\tCtrl+V"
+msgstr "Einfügen\tCtrl+V"
 
-msgid "Delete"
-msgstr "Löschen"
+msgid "Delete\tDel"
+msgstr "Löschen\tDel"
 
 msgid "Select Mode"
 msgstr "Markiermodus"
@@ -660,7 +660,7 @@ msgid "Copy Mirror"
 msgstr "Obekt als·Kopie über eine Linie spiegeln"
 
 msgid "Move Scale"
-msgstr "Move·Scale"
+msgstr "Verschieben-Skalieren"
 
 msgid "Objects"
 msgstr "Objekte"
@@ -740,19 +740,14 @@ msgstr "Markiere 2 oder mehr 3D-Objekte die verbunden werden sollen"
 msgid "Fuse Solids"
 msgstr "Verbinde 3D Objekte"
 
-msgid ""
-"Pick two or more solids, only the shape that is contained by all of them "
-"will remain"
-msgstr ""
-"Markiere 2 oder mehr 3D-Objekte die sich überschneiden,um die gemeinsame "
-"Schnittmenge zu erzeugen"
+msgid "Pick two or more solids, only the shape that is contained by all of them will remain"
+msgstr "Markiere 2 oder mehr 3D-Objekte die sich überschneiden,um die gemeinsame Schnittmenge zu erzeugen"
 
 msgid "Intersection of Solids"
 msgstr "Durchschnitt der 3D Objekte"
 
 msgid "Pick one or more edges to add a fillet to"
-msgstr ""
-"Mindestens eine Kante waehlen,die durch einen Radius \"gerundet\" werden soll"
+msgstr "Mindestens eine Kante waehlen,die durch einen Radius \"gerundet\" werden soll"
 
 msgid "Edge Fillet"
 msgstr "Kante(n) abrunden"
@@ -877,8 +872,7 @@ msgid "Extrude a wire or face"
 msgstr "2D in 3D verwandeln"
 
 msgid "Cut one solid from another"
-msgstr ""
-"Entferne vom 1.Objekt die Schnittmenge des 2.Objekts und das 2.Objekt selber"
+msgstr "Entferne vom 1.Objekt die Schnittmenge des 2.Objekts und das 2.Objekt selber"
 
 msgid "Fuse one solid to another"
 msgstr "Verbinde 2 oder mehr 3D Objekte miteinander"
@@ -901,9 +895,7 @@ msgstr "Markierten Bereich zoomen"
 msgid "Zoom in to fit the extents of the drawing into the graphics window"
 msgstr "Grösstmöglichen Bereich Zoomen"
 
-msgid ""
-"Zoom in to fit the extents of the drawing into the graphics window, but "
-"without rotating the view"
+msgid "Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"
 msgstr "Größtmöglichen·Bereich·Zoomen ohne das Objekt zu drehen"
 
 msgid "Enter view rotating mode"
@@ -1132,8 +1124,7 @@ msgid "Drag with left button to window select"
 msgstr "Verschiebe mit linker Maustaste ins selektierte Fenster"
 
 msgid "or to move object if on an object"
-msgstr ""
-"oder verschiebe das Objekt falls es sich über einem anderen Objekt befindet"
+msgstr "oder verschiebe das Objekt falls es sich über einem anderen Objekt befindet"
 
 msgid "Mouse wheel to zoom in and out"
 msgstr "Mausrad zum zoomen"
@@ -1693,51 +1684,26 @@ msgstr "Die Authoren sind: Dan·Heeks,·Hirutso·Enni,·Perttu·Ahola"
 msgid "With help from archivist, crotchet1, DanielFalck, fenn, Sliptonic"
 msgstr "Mit Hilfe von archivist,·crotchet1,·DanielFalck,·fenn,·Sliptonic"
 
-msgid ""
-"geometry code, donated by Geoff Hawkesford, Camtek GmbH http://www.peps.de/"
-msgstr ""
-"geometry·code,·donated·by·Geoff·Hawkesford,·Camtek·GmbH·http://www.peps.de/"
+msgid "geometry code, donated by Geoff Hawkesford, Camtek GmbH http://www.peps.de/"
+msgstr "geometry·code,·donated·by·Geoff·Hawkesford,·Camtek·GmbH·http://www.peps.de/"
 
-msgid ""
-"pocketing code from http://code.google.com/p/libarea/ , derived from the "
-"kbool library written by Klaas Holwerda http://boolean.klaasholwerda.nl/bool."
-"html"
-msgstr ""
-"Programmcode fürs Taschenfraesen von http://code.google.com/p/libarea/·,"
-"·abgeleitet·von derkbool·library,·geschrieben·von·Klaas·Holwerda·http://"
-"boolean.klaasholwerda.nl/bool.html"
+msgid "pocketing code from http://code.google.com/p/libarea/ , derived from the kbool library written by Klaas Holwerda http://boolean.klaasholwerda.nl/bool.html"
+msgstr "Programmcode fürs Taschenfraesen von http://code.google.com/p/libarea/·,·abgeleitet·von derkbool·library,·geschrieben·von·Klaas·Holwerda·http://boolean.klaasholwerda.nl/bool.html"
 
 msgid "Zig zag code from pycam http://sourceforge.net/svn/?group_id=237831"
-msgstr ""
-"Zig·zag·Code·von·der pycam·Website: http://sourceforge.net/svn/?"
-"group_id=237831"
+msgstr "Zig·zag·Code·von·der pycam·Website: http://sourceforge.net/svn/?group_id=237831"
 
-msgid ""
-"Adaptive Roughing code from http://code.google.com/p/libactp/, using code "
-"written in 2004"
-msgstr ""
-"Der Code zum Adaptiven·Schruppverfahren·ist zu finden·unter : http://code."
-"google.com/p/libactp/ .Er wurde 2004 geschrieben."
+msgid "Adaptive Roughing code from http://code.google.com/p/libactp/, using code written in 2004"
+msgstr "Der Code zum Adaptiven·Schruppverfahren·ist zu finden·unter : http://code.google.com/p/libactp/ .Er wurde 2004 geschrieben."
 
-msgid ""
-"For a more modern version of adaptive roughing, see Julian Todd and Martin "
-"Dunschen of http://www.freesteel.co.uk/"
-msgstr ""
-"Eine ausführliche Version des adaptiven Schruppverfahrens ist auf der "
-"Website von Julian·Todd·und·Martin·Dunschen zu finden:http://www.freesteel."
-"co.uk/"
+msgid "For a more modern version of adaptive roughing, see Julian Todd and Martin Dunschen of http://www.freesteel.co.uk/"
+msgstr "Eine ausführliche Version des adaptiven Schruppverfahrens ist auf der Website von Julian·Todd·und·Martin·Dunschen zu finden:http://www.freesteel.co.uk/"
 
-msgid ""
-"This HeeksCNC software installation is restricted by the GPL license http://"
-"www.gnu.org/licenses/gpl-3.0.txt"
-msgstr ""
-"Die Software HeeksCNC unterliegt der GPL·license·http://www.gnu.org/licenses/"
-"gpl-3.0.txt"
+msgid "This HeeksCNC software installation is restricted by the GPL license http://www.gnu.org/licenses/gpl-3.0.txt"
+msgstr "Die Software HeeksCNC unterliegt der GPL·license·http://www.gnu.org/licenses/gpl-3.0.txt"
 
 msgid "  which means it is free and open source, and must stay that way"
-msgstr ""
-"welche besagt,das die Software FREI ist und als Open Source gehandhabt "
-"werden muss."
+msgstr "welche besagt,das die Software FREI ist und als Open Source gehandhabt werden muss."
 
 msgid "New Profile Operation..."
 msgstr "Profil fraesen"
@@ -1836,8 +1802,7 @@ msgid "Pocket operation - Sketch doesn't exist - %d"
 msgstr "Taschen Operation - Zeichnung existiert nicht-·%d"
 
 msgid "Pocket operation - Sketch must be a closed shape - sketch %d"
-msgstr ""
-"Taschen Operation - Zeichnung muss eine geschlossene Kontur sein - sketch·%d"
+msgstr "Taschen Operation - Zeichnung muss eine geschlossene Kontur sein - sketch·%d"
 
 msgid "Pocket operation - Badly ordered sketch - sketch %d"
 msgstr "Taschen Operation - Falsch aufgebaute Zeichnung - sketch·%d"
@@ -2076,8 +2041,7 @@ msgstr "Höhe über der Bohrung"
 msgid "Split Sketch"
 msgstr "In einzelne Elemente auflösen"
 
-msgid ""
-"You must select some points, circles or other intersecting elements first!"
+msgid "You must select some points, circles or other intersecting elements first!"
 msgstr "Zuerst Punkte,Kreise oder andere passende Elemente auswaehlen !"
 
 msgid "New CounterBore Operation..."
@@ -2092,8 +2056,7 @@ msgstr "Andere Objekte mit gleicher Größe"
 msgid "Minimum correlation factor (0.0 (nothing like it) -> 1.0 (perfect match))"
 msgstr "Vergleichsfaktor (von 0.0(ziemlich alles) bis 1.0(Genau gleich)) "
 
-msgid "Maximum scale threshold (1.0 - must be same size, 1.5 (can be half as big "
-"again or 2/3 size)"
+msgid "Maximum scale threshold (1.0 - must be same size, 1.5 (can be half as big again or 2/3 size)"
 msgstr "Größenvergleich (von 1.0 (Nur gleiche Größen) bis 1.5 (um die Haelfte größer)"
 
 msgid "orientation"
@@ -2111,12 +2074,8 @@ msgstr "Automatisch Variabeln einschraenken"
 msgid "units for nc output"
 msgstr "Masseinheit für den G-Code"
 
-msgid ""
-"You haven't selected a cutting tool for this hole.  By default no 'tool "
-"definition' or 'select tool' code will be generated for this drilling cycle."
-msgstr ""
-"Für diesen Vorgang wurde noch kein Werkzeug ausgewaehl."
-"Das heisst,es wird im G-Code keine Aufforderung zum Werkzeugwechsel geben !"
+msgid "You haven't selected a cutting tool for this hole.  By default no 'tool definition' or 'select tool' code will be generated for this drilling cycle."
+msgstr "Für diesen Vorgang wurde noch kein Werkzeug ausgewaehl.Das heisst,es wird im G-Code keine Aufforderung zum Werkzeugwechsel geben !"
 
 msgid "Tools"
 msgstr "Werkzeuge"
@@ -2354,4 +2313,52 @@ msgstr "Aktuelle Schrift"
 
 msgid "Paths (semicolon delimited)"
 msgstr "Schriftverzeichnisse (durch Semikolon getrennt)"
+
+msgid "Draw Ellipses"
+msgstr "Elipsen zeichnen"
+
+msgid "View XY Front"
+msgstr "Draufsicht"
+
+msgid "View XY Back"
+msgstr "Rückansicht XY"
+
+msgid "View XZY Isometric"
+msgstr "Isometrisch/3D"
+
+msgid "Save Settings"
+msgstr "Einstellungen speichern"
+
+msgid "View XZ Top"
+msgstr "Draufsicht XZ"
+
+msgid "View XZ Bottom"
+msgstr "Rückansicht XZ"
+
+msgid "View YZ Right"
+msgstr "Anicht YZ Rechts"
+
+msgid "View XZ Left"
+msgstr "Anicht XZ Links"
+
+msgid "View pan"
+msgstr "3D Bearbeitung Aus"
+
+msgid "Cut"
+msgstr "Schnittmenge entfernen"
+
+msgid "Pick two or more faces or solids, the first one will be cut by the others"
+msgstr "Erst mindestens 2 Objekte markieren,beim ersten wird die Schnittmenge der anderen entfernt"
+
+msgid "Revolve a sketch"
+msgstr "Volumenkörper erzeugen"
+
+msgid "Revolved Solid"
+msgstr "Volumenkörper"
+
+msgid "New Chamfer Operation..."
+msgstr "Fasen"
+
+msgid "New Contour Operation..."
+msgstr "Umriss fräsen"
 
