@@ -66,7 +66,6 @@ cd ~/HeeksCAD/HeeksCNC/kurve
 make clean
 make
 sudo make install
-sudo ln -s .libs/kurve.so ~/HeeksCAD/HeeksCNC/kurve.so
 }}}
 
 ===Install libarea===
@@ -81,7 +80,6 @@ cd ~/HeeksCAD/HeeksCNC/libarea/
 make clean
 make
 sudo make install
-sudo ln -s .libs/area.so ~/HeeksCAD/HeeksCNC/area.so
 }}}
 
 ===Install libactp===
@@ -96,7 +94,6 @@ cd ~/HeeksCAD/HeeksCNC/libactp/PythonLib
 make clean
 make
 sudo make install
-sudo ln -s .libs/actp.so ~/HeeksCAD/HeeksCNC/actp.so
 }}}
 
 ===Install opencamlib===
@@ -135,4 +132,3 @@ http://code.google.com/p/heekscad/issues/detail?id=270
 
 ==Making it go fast==
 As noted above, HeeksCAD is changing all the time.  The bits of script above can be combined into one script and executed together with sudo.  It isn't very efficient since it will recompile the code even if no changes were made.  But it's nice because you can launch it, get another cup of coffee, and come back to a fresh build of everything at the current SVN version.
-
