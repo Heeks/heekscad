@@ -1639,7 +1639,7 @@ void CHeeksFrame::MakeMenus()
 	AddMenuItem(view_menu, _("View XZ Top"), ToolImage(_T("magxz")),         OnMagXZButton );
 	AddMenuItem(view_menu, _("View XZ Bottom"), ToolImage(_T("magxzm")),     OnMagXZMButton);
 	AddMenuItem(view_menu, _("View YZ Right"), ToolImage(_T("magyz")),       OnMagYZButton );
-	AddMenuItem(view_menu, _("View XZ Left"), ToolImage(_T("magyzm")),       OnMagYZMButton);
+	AddMenuItem(view_menu, _("View YZ Left"), ToolImage(_T("magyzm")),       OnMagYZMButton);
 	AddMenuItem(view_menu, _("View XZY Isometric"), ToolImage(_T("magxyz")), OnMagXYZButton);
 	view_menu->AppendSeparator();
 	AddMenuItem(view_menu, _("View rotate"), ToolImage(_T("viewrot")), OnViewRotateButton);
@@ -1817,10 +1817,10 @@ void CHeeksFrame::AddToolBars()
 		flyout_list.m_list.push_back(CFlyOutItem(_T("Mag No Rotation"), ToolImage(_T("magnorot")), _("Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"), OnMagNoRotButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("View XY Front"), ToolImage(_T("magxy")), _("View XY Front"), OnMagXYButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("View XY Back"), ToolImage(_T("magxym")), _("View XY Back"), OnMagXYMButton));
-		flyout_list.m_list.push_back(CFlyOutItem(_T("View XY Top"), ToolImage(_T("magxz")), _("View XY Top"), OnMagXZButton));
-		flyout_list.m_list.push_back(CFlyOutItem(_T("View XY Bottom"), ToolImage(_T("magxzm")), _("View XY Bottom"), OnMagXZMButton));
-		flyout_list.m_list.push_back(CFlyOutItem(_T("View XY Right"), ToolImage(_T("magyz")), _("View XY Right"), OnMagYZButton));
-		flyout_list.m_list.push_back(CFlyOutItem(_T("View XY Left"), ToolImage(_T("magyzm")), _("View XY Left"), OnMagYZMButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("View XZ Top"), ToolImage(_T("magxz")), _("View XZ Top"), OnMagXZButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("View XZ Bottom"), ToolImage(_T("magxzm")), _("View XZ Bottom"), OnMagXZMButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("View YZ Right"), ToolImage(_T("magyz")), _("View YZ Right"), OnMagYZButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("View YZ Left"), ToolImage(_T("magyzm")), _("View YZ Left"), OnMagYZMButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("View XY Isometric"), ToolImage(_T("magxyz")), _("View XY Isometric"), OnMagXYZButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("Zoom Window"), ToolImage(_T("mag")), _("Zoom in to a dragged window"), OnMagButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("View Back"), ToolImage(_T("magprev")), _("Go back to previous view"), OnMagPreviousButton));
