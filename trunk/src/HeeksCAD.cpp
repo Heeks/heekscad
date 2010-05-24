@@ -835,27 +835,30 @@ HeeksObj *HeeksCADapp::MergeCommonObjects( ObjectReferences_t & unique_set, Heek
 		}
 	}
 
-	HeeksObj *unique_reference = object;
-	ObjectReference_t object_reference(object->GetType(),object->m_id);
+	if(object->UsesID())
+	{
+		HeeksObj *unique_reference = object;
+		ObjectReference_t object_reference(object->GetType(),object->m_id);
 
-	if (unique_set.find(object_reference) == unique_set.end())
-	{
-		unique_set.insert( std::make_pair( object_reference, object ) );
-		unique_reference = object;
-	}
-	else
-	{
-		// We've seen an object like this one before.  Use the old one.
-		unique_reference = unique_set[ object_reference ];
-		std::list<HeeksObj *> owners = object->Owners();
-		for (std::list<HeeksObj *>::iterator itOwner = owners.begin(); itOwner != owners.end(); itOwner++)
+		if (unique_set.find(object_reference) == unique_set.end())
 		{
-			(*itOwner)->Remove(object);
-			(*itOwner)->Add( unique_reference, NULL );
+			unique_set.insert( std::make_pair( object_reference, object ) );
+			unique_reference = object;
 		}
+		else
+		{
+			// We've seen an object like this one before.  Use the old one.
+			unique_reference = unique_set[ object_reference ];
+			std::list<HeeksObj *> owners = object->Owners();
+			for (std::list<HeeksObj *>::iterator itOwner = owners.begin(); itOwner != owners.end(); itOwner++)
+			{
+				(*itOwner)->Remove(object);
+				(*itOwner)->Add( unique_reference, NULL );
+			}
 
-		unique_set[ object_reference ] = unique_reference;
-		object = unique_reference;
+			unique_set[ object_reference ] = unique_reference;
+			object = unique_reference;
+		}
 	}
 
 	return(object);

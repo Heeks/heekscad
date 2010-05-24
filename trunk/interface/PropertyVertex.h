@@ -12,7 +12,6 @@ protected:
 
 public:
 	double m_x[3];
-	HeeksObj* m_object;
 	int m_index;
 	bool has_index;
 	bool m_affected_by_view_units;
@@ -29,6 +28,16 @@ public:
 	Property *MakeACopy(void)const;
 	void CallSetFunction()const;
 	const wxChar* GetShortString(void)const;
+
+	virtual bool xyOnly()const{return false;}
+};
+
+class PropertyVertex2d: public PropertyVertex{
+public:
+	PropertyVertex2d(const wxChar *t, const double *initial_vt, HeeksObj* object, void(*callbackfunc)(const double* vt, HeeksObj* m_object) = NULL, void(*selectcallback)(HeeksObj*) = NULL):PropertyVertex(t, initial_vt, object, callbackfunc, selectcallback){}
+
+	// PropertyVertex's virtual functions
+	bool xyOnly()const{return true;}
 };
 
 class PropertyVector: public PropertyVertex{
