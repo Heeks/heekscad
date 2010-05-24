@@ -19,6 +19,7 @@ private:
 	bool m_refresh_wanted_on_thaw;
     int width, height, textureWidth, textureHeight;
 	std::set<HeeksObj*> m_expanded;
+	std::set<HeeksObj*> m_collapsed;
 	//int scroll_y_pos;
 	static wxPaintDC* m_dc; // temporary for each OnPaint
 	std::list<HeeksObj*> m_dragged_list;

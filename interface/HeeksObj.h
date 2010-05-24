@@ -158,7 +158,6 @@ public:
 	virtual HeeksObj* GetAtIndex(int index){return NULL;}
 	virtual int GetNumChildren(){return 0;}
 	virtual bool AutoExpand(){return false;}
-	virtual HeeksObj* GetNextAutoExpandChild(){return NULL;}
 	virtual void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true){} // [nine doubles, three doubles],  or [nine doubles, nine doubles] if just_one_average_normal = false
 	virtual double Area()const{return 0.0;}
 	virtual void GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point = true)const{};
@@ -166,7 +165,7 @@ public:
 	virtual void WriteBaseXML(TiXmlElement *element);
 	virtual void ReadBaseXML(TiXmlElement* element);
 	void SetID(int id);
-	virtual bool UsesID(){return true;} // most objects don't use the m_id variable
+	virtual bool UsesID(){return true;}
 	bool OnVisibleLayer();
 	virtual HeeksObj* Owner();
 	virtual std::list<HeeksObj*> Owners();

@@ -289,6 +289,11 @@ void CTreeCanvas::RefreshSoon()
 
 bool CTreeCanvas::IsExpanded(HeeksObj* object)
 {
+	if(object->AutoExpand())
+		// assume it is expanded if it hasn't been collapsed
+		return m_collapsed.find(object) == m_collapsed.end();
+
+	// it is expanded, if it is in the m_expanded set
 	return m_expanded.find(object) != m_expanded.end();
 }
 
@@ -297,10 +302,12 @@ void CTreeCanvas::SetExpanded(HeeksObj* object, bool bExpanded)
 	if(bExpanded)
 	{
 		m_expanded.insert(object);
+		m_collapsed.erase(object);
 	}
 	else
 	{
 		m_expanded.erase(object);
+		m_collapsed.insert(object);
 	}
 }
 
