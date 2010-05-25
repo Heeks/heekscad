@@ -68,6 +68,7 @@ make
 sudo make install
 }}}
 
+
 ===Install libarea===
 
 area.so is required for pocket operations.
@@ -81,6 +82,7 @@ make clean
 make
 sudo make install
 }}}
+
 
 ===Install libactp===
 
@@ -132,3 +134,12 @@ http://code.google.com/p/heekscad/issues/detail?id=270
 
 ==Making it go fast==
 As noted above, HeeksCAD is changing all the time.  The bits of script above can be combined into one script and executed together with sudo.  It isn't very efficient since it will recompile the code even if no changes were made.  But it's nice because you can launch it, get another cup of coffee, and come back to a fresh build of everything at the current SVN version.
+
+
+===Earlier version of Ubuntu===
+This affects at least 8.04(Hardy) and may affect other releases as well.  Earlier releases using Python2.5 will look for the module in a different directory.  Make the following symlinks to enable the modules
+{{{
+sudo ln -s /usr/local/lib/python2.5/dist-packages/kurve.so /usr/local/lib/python2.5/site-packages/kurve.so
+sudo ln -s /usr/local/lib/python2.5/dist-packages/actp.so /usr/local/lib/python2.5/site-packages/actp.so
+sudo ln -s /usr/local/lib/python2.5/dist-packages/libarea.so /usr/local/lib/python2.5/site-packages/libarea.so
+}}}
