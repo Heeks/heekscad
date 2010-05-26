@@ -651,7 +651,7 @@ static void OnCoordinateSystem( wxCommandEvent& WXUNUSED( event ) )
 
 static void OnOpenButton( wxCommandEvent& event )
 {
-	wxString default_directory = wxEmptyString;
+	wxString default_directory = wxGetCwd();
 
 	if (wxGetApp().m_recent_files.size() > 0)
 	{
