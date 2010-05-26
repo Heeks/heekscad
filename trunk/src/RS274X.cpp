@@ -105,9 +105,14 @@ std::string RS274X::ReadBlock( const char *data, int *pos, const int max_pos )
 	return(l_ossBlock.str());
 } // End ReadBlock() method
 
-bool RS274X::Read( const char *p_szFileName, const FileInterpretation_t file_interpretation )
+bool RS274X::Read( const char *p_szFileName, const FileInterpretation_t file_interpretation, const bool force_mirror_on /* = false */ )
 {
 	printf("RS274X::Read(%s)\n", p_szFileName );
+
+	if (force_mirror_on)
+	{
+		m_mirror_image = true;
+	}
 
 	std::ifstream input( p_szFileName, std::ios::in|std::ios::ate );
 	if (input.is_open())
@@ -1106,7 +1111,6 @@ bool RS274X::Trace::Intersects( const Trace & rhs ) const
 
 /* static */ HeeksObj *RS274X::Sketch( const TopoDS_Face face )
 {
-
     CSketch *sketch = new CSketch();
 
     TopoDS_Wire wire=BRepTools::OuterWire(face);
@@ -1195,6 +1199,16 @@ void RS274X::DrawCentrelines()
 	    HeeksObj *object = l_itTrace->CentrelineGraphics();
 	    if (object != NULL)
 	    {
+			if (m_mirror_image)
+			{
+				double mirror[16];
+				gp_Ax1 mirror_axis = gp_Ax1(gp_Pnt(0,0,0), gp_Dir(1,0,0));
+				gp_Trsf rotation;
+				rotation.SetRotation( mirror_axis, PI );
+				extract(rotation, mirror);
+				object->ModifyByMatrix(mirror);
+			}
+
             objects.push_back( object );
 	    }
 	}
@@ -1206,6 +1220,16 @@ void RS274X::DrawCentrelines()
 	        HeeksObj *object = l_itTrace->CentrelineGraphics();
             if (object != NULL)
             {
+				if (m_mirror_image)
+				{
+					double mirror[16];
+					gp_Ax1 mirror_axis = gp_Ax1(gp_Pnt(0,0,0), gp_Dir(1,0,0));
+					gp_Trsf rotation;
+					rotation.SetRotation( mirror_axis, PI );
+					extract(rotation, mirror);
+					object->ModifyByMatrix(mirror);
+				}
+
                 objects.push_back( object );
             }
 	    }
@@ -1318,11 +1342,24 @@ int RS274X::FormNetworks()
         if (joins_made == false)
         {
             // This is as big as it's ever going to get.
-            HeeksObj *sketch = this->Sketch( *(faces.begin()) );
+			TopoDS_Face face(*(faces.begin()));
+
+            HeeksObj *sketch = this->Sketch( face );
             for (int i=0; (((CSketch *)sketch)->GetSketchOrder() != SketchOrderTypeCloseCCW) && (i<4); i++)
             {
                 ((CSketch *)sketch)->ReOrderSketch( SketchOrderTypeCloseCCW );  // At least try to make them all consistently oriented.
             }
+		
+			if (m_mirror_image)
+			{
+				double mirror[16];
+				gp_Ax1 mirror_axis = gp_Ax1(gp_Pnt(0,0,0), gp_Dir(1,0,0));
+				gp_Trsf rotation;
+				rotation.SetRotation( mirror_axis, PI );
+				extract(rotation, mirror);
+				sketch->ModifyByMatrix(mirror);	
+			}
+
             heekscad_interface.Add( sketch, NULL );
             number_of_networks++;
 
@@ -1332,11 +1369,23 @@ int RS274X::FormNetworks()
 
 	if (faces.size() > 0)
 	{
-	    HeeksObj *sketch = this->Sketch( *(faces.begin()) );
+		TopoDS_Face face(*(faces.begin()));
+
+	    HeeksObj *sketch = this->Sketch( face );
 	    for (int i=0; (((CSketch *)sketch)->GetSketchOrder() != SketchOrderTypeCloseCCW) && (i<4); i++)
 	    {
             ((CSketch *)sketch)->ReOrderSketch( SketchOrderTypeCloseCCW );  // At least try to make them all consistently oriented.
 	    }
+
+		if (m_mirror_image)
+		{
+			double mirror[16];
+			gp_Ax1 mirror_axis = gp_Ax1(gp_Pnt(0,0,0), gp_Dir(1,0,0));
+			gp_Trsf rotation;
+			rotation.SetRotation( mirror_axis, PI );
+			extract(rotation, mirror);
+			sketch->ModifyByMatrix(mirror);
+		}
 
 		heekscad_interface.Add( sketch, NULL );
 		number_of_networks++;
