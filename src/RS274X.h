@@ -38,7 +38,7 @@ class RS274X
 		RS274X();
 		~RS274X() { }
 
-		bool Read( const char *p_szFileName, const FileInterpretation_t interpretation );
+		bool Read( const char *p_szFileName, const FileInterpretation_t interpretation, const bool force_mirror_on = false );
 
     private:
 		double special_strtod( const char *value, const char **end ) const;
