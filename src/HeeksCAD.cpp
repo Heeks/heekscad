@@ -995,6 +995,8 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into)
 
     choices.Add(_("Produce trace isolation sketches"));
     choices.Add(_("Produce trace centre-line sketches"));
+	choices.Add(_("Produce mirrored trace isolation sketches"));
+    choices.Add(_("Produce mirrored trace centre-line sketches"));
 
     wxString choice = ::wxGetSingleChoice( message, caption, choices );
 
@@ -1002,12 +1004,22 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into)
 
     if (choice == choices[0])
     {
-        gerber.Read(wxString(filepath).mb_str(), RS274X::IsolationRouting );
+        gerber.Read(wxString(filepath).mb_str(), RS274X::IsolationRouting, false );
     }
 
     if (choice == choices[1])
     {
-        gerber.Read(wxString(filepath).mb_str(), RS274X::CentreLines );
+        gerber.Read(wxString(filepath).mb_str(), RS274X::CentreLines, false );
+    }
+
+	if (choice == choices[2])
+    {
+        gerber.Read(wxString(filepath).mb_str(), RS274X::IsolationRouting, true );
+    }
+
+    if (choice == choices[3])
+    {
+        gerber.Read(wxString(filepath).mb_str(), RS274X::CentreLines, true );
     }
 }
 
