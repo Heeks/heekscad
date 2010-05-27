@@ -143,3 +143,12 @@ sudo ln -s /usr/local/lib/python2.5/dist-packages/kurve.so /usr/local/lib/python
 sudo ln -s /usr/local/lib/python2.5/dist-packages/actp.so /usr/local/lib/python2.5/site-packages/actp.so
 sudo ln -s /usr/local/lib/python2.5/dist-packages/libarea.so /usr/local/lib/python2.5/site-packages/libarea.so
 }}}
+
+==A possible problem==
+If you get this error:
+{{{
+/opt/opencascade-6.3/ros/lin/inc/Standard_Stream.hxx: At global scope:
+/opt/opencascade-6.3/ros/lin/inc/Standard_Stream.hxx:84: error: ‘std::setw’ has not been declared
+/opt/opencascade-6.3/ros/lin/inc/Standard_Stream.hxx:85: error: ‘std::setprecision’ has not been declared
+}}}
+You need to add -DHAVE_IOMANIP to CCFLAGS in src/Makefile of HeeksCAD and HeeksCNC.
