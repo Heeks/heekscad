@@ -69,12 +69,14 @@ public:
 
 	int Intersects(const HeeksObj *object, std::list< double > *rl) const;
 	HeeksObj *Parallel( const double distance );
+	static void ReverseObject(HeeksObj* object);
 };
 
 class CSketchRelinker{
 	const std::list<HeeksObj*> &m_old_list;
 	std::set<HeeksObj*> m_added_from_old_set;
 	std::list<HeeksObj*>::const_iterator m_old_front;
+	HeeksObj* m_new_back;
 	HeeksObj* m_new_front;
 	bool AddNext();
 	bool TryAdd(HeeksObj* object);
@@ -82,7 +84,7 @@ class CSketchRelinker{
 public:
 	std::list< std::list<HeeksObj*> > m_new_lists;
 
-	CSketchRelinker(const std::list<HeeksObj*>& old_list):m_old_list(old_list), m_new_front(NULL){}
+	CSketchRelinker(const std::list<HeeksObj*>& old_list):m_old_list(old_list), m_new_back(NULL), m_new_front(NULL){}
 
 	bool Do(); // makes m_new_lists
 };
