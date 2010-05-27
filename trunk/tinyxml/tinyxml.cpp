@@ -615,6 +615,7 @@ const char* TiXmlElement::Attribute( const char* name, double* d ) const
 		if ( s ) {
 #if TIXML_USE_STL
 			std::istringstream ss(s);
+			ss.imbue(std::locale("C"));
 			ss.precision(TiXmlBase::Precision(*d));
 			ss >> *d;
 #else
@@ -637,6 +638,7 @@ const std::string* TiXmlElement::Attribute( const std::string& name, double* d )
 	{
 		if ( s ) {
 			std::istringstream ss(s->c_str());
+			ss.imbue(std::locale("C"));
 			ss.precision(TiXmlBase::Precision(*d));
 			ss >> *d;
 		}
@@ -715,6 +717,7 @@ void TiXmlElement::SetDoubleAttribute( const char * name, double val )
 {
 #if TIXML_USE_STL
     std::ostringstream ss;
+    ss.imbue(std::locale("C"));
     ss.precision(TiXmlBase::Precision(val));
     ss << val;
 	SetAttribute( name, ss.str() );
@@ -1283,6 +1286,7 @@ void TiXmlAttribute::SetDoubleValue( double _value )
 {
 #if TIXML_USE_STL
     std::ostringstream ss;
+    ss.imbue(std::locale("C"));
     ss.precision(TiXmlBase::Precision(_value));
     ss << _value;
 	SetValue( ss.str() );
@@ -1307,6 +1311,7 @@ double  TiXmlAttribute::DoubleValue() const
 {
 #if TIXML_USE_STL
     std::istringstream ss(value);
+    ss.imbue(std::locale("C"));
     double dval;
     ss >> dval;
     return dval;
