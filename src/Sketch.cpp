@@ -394,6 +394,25 @@ void CSketch::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 	t_list->push_back(&enter_sketch_mode);
 }
 
+// static
+void CSketch::ReverseObject(HeeksObj* object)
+{
+	// reverse object
+	switch(object->GetType()){
+case LineType:
+	((HLine*)object)->Reverse();
+	break;
+case ArcType:
+	((HArc*)object)->Reverse();
+	break;
+case SplineType:
+	((HSpline*)object)->Reverse();
+	break;
+default:
+	break;
+	}
+}
+
 HeeksObj *CSketch::MakeACopy(void)const
 {
 	return (ObjList*)(new CSketch(*this));
@@ -612,22 +631,7 @@ void CSketch::ReverseSketch()
 	{
 		HeeksObj* object = *It;
 		HeeksObj* copy = object->MakeACopy();
-
-		// reverse object
-		switch(object->GetType()){
-			case LineType:
-				((HLine*)copy)->Reverse();
-				break;
-			case ArcType:
-				((HArc*)copy)->Reverse();
-				break;
-			case SplineType:
-				((HSpline*)copy)->Reverse();
-				break;
-			default:
-				break;
-		}
-
+		ReverseObject(copy);
 		new_list.push_front(copy);
 	}
 
@@ -830,7 +834,7 @@ bool CSketchRelinker::TryAdd(HeeksObj* object)
 	{
 		double old_point[3];
 		double new_point[3];
-		m_new_front->GetEndPoint(old_point);
+		m_new_back->GetEndPoint(old_point);
 
 		// try the object, the right way round
 		object->GetStartPoint(new_point);
@@ -838,7 +842,7 @@ bool CSketchRelinker::TryAdd(HeeksObj* object)
 		{
 			HeeksObj* new_object = object->MakeACopy();
 			m_new_lists.back().push_back(new_object);
-			m_new_front = new_object;
+			m_new_back = new_object;
 			m_added_from_old_set.insert(object);
 			return true;
 		}
@@ -848,23 +852,34 @@ bool CSketchRelinker::TryAdd(HeeksObj* object)
 		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_geom_tol))
 		{
 			HeeksObj* new_object = object->MakeACopy();
-
-			// reverse object
-			switch(new_object->GetType()){
-			case LineType:
-				((HLine*)new_object)->Reverse();
-				break;
-			case ArcType:
-				((HArc*)new_object)->Reverse();
-				break;
-			case SplineType:
-				((HSpline*)new_object)->Reverse();
-				break;
-			default:
-				break;
-			}
-
+			CSketch::ReverseObject(new_object);
 			m_new_lists.back().push_back(new_object);
+			m_new_back = new_object;
+			m_added_from_old_set.insert(object);
+			return true;
+		}
+
+		// try at the start
+		m_new_front->GetStartPoint(old_point);
+
+		// try the object, the right way round
+		object->GetEndPoint(new_point);
+		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_geom_tol))
+		{
+			HeeksObj* new_object = object->MakeACopy();
+			m_new_lists.back().push_front(new_object);
+			m_new_front = new_object;
+			m_added_from_old_set.insert(object);
+			return true;
+		}
+
+		// try the object, the wrong way round
+		object->GetStartPoint(new_point);
+		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_geom_tol))
+		{
+			HeeksObj* new_object = object->MakeACopy();
+			CSketch::ReverseObject(new_object);
+			m_new_lists.back().push_front(new_object);
 			m_new_front = new_object;
 			m_added_from_old_set.insert(object);
 			return true;
@@ -878,9 +893,9 @@ bool CSketchRelinker::AddNext()
 {
 	// returns true, if another object was added to m_new_lists
 
-	if(m_new_front)
+	if(m_new_back)
 	{
-		bool added_at_front = false;
+		bool added = false;
 
 		// look through all of the old list, starting at m_old_front
 		std::list<HeeksObj*>::const_iterator It = m_old_front;
@@ -889,14 +904,15 @@ bool CSketchRelinker::AddNext()
 			if(It == m_old_list.end())It = m_old_list.begin();
 			HeeksObj* object = *It;
 
-			added_at_front = TryAdd(object);
+			added = TryAdd(object);
 
-		}while(It != m_old_front && !added_at_front);
+		}while(It != m_old_front && !added);
 
-		if(added_at_front)return true;
+		if(added)return true;
 
 		// nothing fits the current new list
 
+		m_new_back = NULL;
 		m_new_front = NULL;
 
 		if(m_old_list.size() > m_added_from_old_set.size())
@@ -913,6 +929,7 @@ bool CSketchRelinker::AddNext()
 					m_new_lists.back().push_back(new_object);
 					m_added_from_old_set.insert(object);
 					m_old_front = It;
+					m_new_back = new_object;
 					m_new_front = new_object;
 					return true;
 				}
@@ -933,6 +950,7 @@ bool CSketchRelinker::Do()
 		m_new_lists.back().push_back(new_object);
 		m_added_from_old_set.insert(m_old_list.front());
 		m_old_front = m_old_list.begin();
+		m_new_back = new_object;
 		m_new_front = new_object;
 
 		while(AddNext()){}
