@@ -2,6 +2,7 @@ HeeksCAD is still under heavy development so any packages you find are likely to
 
 This installation procedure was tested on Ubuntu 10.04 (Lucid Lynx) 
 
+If you run into problems, check the notes and comments at the end of this page.
 
 =Install the dependencies=
 
