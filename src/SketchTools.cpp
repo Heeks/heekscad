@@ -40,6 +40,7 @@ public:
         config.Read(_T("SketchToolOptions_closed_wire"), &m_closed_wire, true);
         config.Read(_T("SketchToolOptions_preference_pcurve"), &m_preference_pcurve, true);
         config.Read(_T("SketchToolOptions_fix_gaps_by_ranges"), &m_fix_gaps_by_ranges, true);
+        config.Read(_T("SketchToolOptions_max_deviation"), &m_max_deviation, 0.001);
 
   // Standard_Integer& ModifyRemoveLoopMode() ;
 
@@ -61,6 +62,7 @@ public:
         config.Write(_T("SketchToolOptions_closed_wire"), m_closed_wire);
         config.Write(_T("SketchToolOptions_preference_pcurve"), m_preference_pcurve);
         config.Write(_T("SketchToolOptions_fix_gaps_by_ranges"), m_fix_gaps_by_ranges);
+        config.Write(_T("SketchToolOptions_max_deviation"), m_max_deviation);
     }
 
 public:
@@ -76,6 +78,7 @@ public:
     bool m_closed_wire;
     bool m_preference_pcurve;
     bool m_fix_gaps_by_ranges;
+    double m_max_deviation;
 };
 
 static SketchToolOptions sketch_tool_options;
@@ -294,7 +297,14 @@ void on_set_sketchtool_option(double value, HeeksObj* object){
 
 void SketchTools_GetOptions(std::list<Property *> *list)
 {
-    return; // This is not ready yet.
+    PropertyList* sketch_simplify_tools = new PropertyList(_("simplify sketch options"));
+    sketch_simplify_tools->m_list.push_back(new PropertyLength(_("max deviation"), sketch_tool_options.m_max_deviation, (HeeksObj *) (&sketch_tool_options.m_max_deviation), on_set_sketchtool_option));
+
+	list->push_back(sketch_simplify_tools);
+
+
+
+    return; // The rest of this is not ready yet.
 
     PropertyList* sketchtools = new PropertyList(_("fix wire options"));
 	sketchtools->m_list.push_back(new PropertyCheck(_("reorder"), sketch_tool_options.m_reorder, (HeeksObj *) (&sketch_tool_options.m_reorder), on_set_sketchtool_option));
@@ -477,9 +487,7 @@ struct EdgeComparison : public std::binary_function<const TopoDS_Edge &, const T
 SimplifySketchTool::SimplifySketchTool()
 {
 	m_object = NULL;
-	// m_deviation = 0.0254;		// one thousanth of an inch
-	// m_deviation = 0.5;
-	m_deviation = 0.001;
+	m_deviation = sketch_tool_options.m_max_deviation;
 }
 
 SimplifySketchTool::~SimplifySketchTool(void)
