@@ -18,7 +18,7 @@
 void GetSketchMenuTools(std::list<Tool*>* t_list);
 
 class SimplifySketchTool: public Tool{
-    private:
+    public:
         /**
             This is simply a wrapper around the gp_Pnt class from the OpenCascade library
             that allows objects of this class to be used with methods such as std::sort() etc.
@@ -43,12 +43,12 @@ class SimplifySketchTool: public Tool{
             double Tolerance() const;
         }; // End SortPoint class definition.
 
-private:
+protected:
 	HeeksObj *m_object;
 	double	m_deviation;
 
-private:
-	std::list<SortPoint> GetPoints( TopoDS_Wire wire, const double deviation );
+public:
+	static std::list<SortPoint> GetPoints( TopoDS_Wire wire, const double deviation );
 
 public:
 	static gp_Pnt GetStart(const TopoDS_Edge &edge);
@@ -72,10 +72,17 @@ public:
 	~SimplifySketchTool(void);
 
 	// Tool's virtual functions
-	void Run();
-	const wxChar* GetTitle(){return _T("Simplify Sketch");}
+    virtual void Run();
+	virtual const wxChar* GetTitle(){return _T("Simplify Sketch to Lines");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Pad Sketch");}
+};
+
+class SimplifySketchToBSplines: public SimplifySketchTool {
+public:
+
+    virtual void Run();
+	const wxChar* GetTitle(){return _T("Simplify Sketch to BSplines");}
 };
 
 

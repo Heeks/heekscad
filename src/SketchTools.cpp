@@ -13,8 +13,13 @@
 #include "../interface/PropertyList.h"
 #include "../interface/PropertyCheck.h"
 #include "../interface/PropertyLength.h"
+#include "../interface/PropertyInt.h"
+#include "../interface/PropertyChoice.h"
 #include "HeeksConfig.h"
 #include "SketchTools.h"
+#include "HSpline.h"
+
+#include <GeomAPI_PointsToBSpline.hxx>
 
 extern CHeeksCADInterface heekscad_interface;
 
@@ -41,8 +46,10 @@ public:
         config.Read(_T("SketchToolOptions_preference_pcurve"), &m_preference_pcurve, true);
         config.Read(_T("SketchToolOptions_fix_gaps_by_ranges"), &m_fix_gaps_by_ranges, true);
         config.Read(_T("SketchToolOptions_max_deviation"), &m_max_deviation, 0.001);
-        config.Read(_T("SketchToolOptions_cleanup_tolerance"), &m_cleanup_tolerance, 0.1);
-
+        config.Read(_T("SketchToolOptions_cleanup_tolerance"), &m_cleanup_tolerance, 0.000001);
+        config.Read(_T("SketchToolOptions_degree_min"), &m_degree_min, 3);
+        config.Read(_T("SketchToolOptions_degree_max"), &m_degree_max, 8);
+        config.Read(_T("SketchToolOptions_continuity"), &m_continuity, 4);
 
   // Standard_Integer& ModifyRemoveLoopMode() ;
 
@@ -66,6 +73,9 @@ public:
         config.Write(_T("SketchToolOptions_fix_gaps_by_ranges"), m_fix_gaps_by_ranges);
         config.Write(_T("SketchToolOptions_max_deviation"), m_max_deviation);
         config.Write(_T("SketchToolOptions_cleanup_tolerance"), m_cleanup_tolerance);
+        config.Write(_T("SketchToolOptions_degree_min"), m_degree_min);
+        config.Write(_T("SketchToolOptions_degree_max"), m_degree_max);
+        config.Write(_T("SketchToolOptions_continuity"), m_continuity);
     }
 
 public:
@@ -83,6 +93,9 @@ public:
     bool m_fix_gaps_by_ranges;
     double m_max_deviation;
     double m_cleanup_tolerance;
+    int m_degree_min;
+    int m_degree_max;
+    int m_continuity;
 };
 
 static SketchToolOptions sketch_tool_options;
@@ -255,6 +268,8 @@ static AddToPart add_to_part;
 static PocketSketch pocket_sketch;
 static FixWire fix_wire;
 static SimplifySketchTool simplify_sketch_tool;
+static SimplifySketchToBSplines simplify_sketch_to_bsplines_tool;
+
 
 
 void GetSketchMenuTools(std::list<Tool*>* t_list){
@@ -275,6 +290,8 @@ void GetSketchMenuTools(std::list<Tool*>* t_list){
     if (gotsketch)
     {
         t_list->push_back(&simplify_sketch_tool);
+        t_list->push_back(&simplify_sketch_to_bsplines_tool);
+
         // t_list->push_back(&fix_wire);    /* This is not ready yet */
     }
 
@@ -299,11 +316,33 @@ void on_set_sketchtool_option(double value, HeeksObj* object){
 	sketch_tool_options.SaveSettings();
 }
 
+void on_set_sketchtool_option(int value, HeeksObj* object){
+	*((int *) object) = value;
+	sketch_tool_options.SaveSettings();
+}
+
 void SketchTools_GetOptions(std::list<Property *> *list)
 {
     PropertyList* sketch_simplify_tools = new PropertyList(_("simplify sketch options"));
     sketch_simplify_tools->m_list.push_back(new PropertyLength(_("max deviation"), sketch_tool_options.m_max_deviation, (HeeksObj *) (&sketch_tool_options.m_max_deviation), on_set_sketchtool_option));
     sketch_simplify_tools->m_list.push_back(new PropertyLength(_("cleanup tolerance (temporary)"), sketch_tool_options.m_cleanup_tolerance, (HeeksObj *) (&sketch_tool_options.m_cleanup_tolerance), on_set_sketchtool_option));
+    sketch_simplify_tools->m_list.push_back(new PropertyInt(_("bspline min degree (eg: 3)"), sketch_tool_options.m_degree_min, (HeeksObj *) (&sketch_tool_options.m_degree_min), on_set_sketchtool_option));
+    sketch_simplify_tools->m_list.push_back(new PropertyInt(_("bspline max degree (eg: 8)"), sketch_tool_options.m_degree_max, (HeeksObj *) (&sketch_tool_options.m_degree_max), on_set_sketchtool_option));
+
+    { // Begin choice scope
+		std::list< wxString > choices;
+
+		choices.push_back(_T("GeomAbs_C0"));
+		choices.push_back(_T("GeomAbs_G1"));
+		choices.push_back(_T("GeomAbs_C1"));
+		choices.push_back(_T("GeomAbs_G2"));
+		choices.push_back(_T("GeomAbs_C2"));
+		choices.push_back(_T("GeomAbs_C3"));
+		choices.push_back(_T("GeomAbs_CN"));
+
+		int choice = sketch_tool_options.m_continuity;
+		sketch_simplify_tools->m_list.push_back(new PropertyChoice(_("bspline continuity (eg: GeomAbs_C2)"), choices, choice, (HeeksObj *) (&sketch_tool_options.m_continuity), on_set_sketchtool_option));
+	} // End choice scope
 
 	list->push_back(sketch_simplify_tools);
 
@@ -644,8 +683,10 @@ std::list<SimplifySketchTool::SortPoint> SimplifySketchTool::GetPoints( TopoDS_W
 	return(points);
 }
 
-void SimplifySketchTool::Run()
+
+static void SimplifySketch(const double deviation, bool make_bspline )
 {
+
     wxGetApp().CreateUndoPoint();
 
     double original_tolerance = wxGetApp().m_geom_tol;
@@ -672,7 +713,7 @@ void SimplifySketchTool::Run()
 			}
 			for (std::list<TopoDS_Shape>::iterator itWire = wires.begin(); itWire != wires.end(); itWire++)
 			{
-				std::list<SortPoint> points = GetPoints( TopoDS::Wire(*itWire), m_deviation );
+				std::list<SimplifySketchTool::SortPoint> points = SimplifySketchTool::GetPoints( TopoDS::Wire(*itWire), deviation );
 
 				// Now keep removing points from this list as long as the midpoints are within deviation of
 				// the line between the two neighbour points.
@@ -680,11 +721,11 @@ void SimplifySketchTool::Run()
 				do {
 					points_removed = false;
 
-					for (std::list<SortPoint>::iterator itPoint = points.begin(); itPoint != points.end(); itPoint++ )
+					for (std::list<SimplifySketchTool::SortPoint>::iterator itPoint = points.begin(); itPoint != points.end(); itPoint++ )
 					{
-						std::list<SortPoint>::iterator itP1 = itPoint;
-						std::list<SortPoint>::iterator itP2 = itPoint;
-						std::list<SortPoint>::iterator itP3 = itPoint;
+						std::list<SimplifySketchTool::SortPoint>::iterator itP1 = itPoint;
+						std::list<SimplifySketchTool::SortPoint>::iterator itP2 = itPoint;
+						std::list<SimplifySketchTool::SortPoint>::iterator itP3 = itPoint;
 
 						itP2++;
 						if (itP2 != points.end())
@@ -695,7 +736,7 @@ void SimplifySketchTool::Run()
 							if (itP3 != points.end())
 							{
 								// First see if p1 and p2 are too close to each other.
-								if (itP1->Distance(*itP2) < m_deviation)
+								if (itP1->Distance(*itP2) < deviation)
 								{
 									// Discard p2.
 									points.erase(itP2);
@@ -703,7 +744,7 @@ void SimplifySketchTool::Run()
 									continue;
 								}
 
-								if (itP2->Distance(*itP3) < m_deviation)
+								if (itP2->Distance(*itP3) < deviation)
 								{
 									// Discard p2
 									points.erase(itP2);
@@ -711,12 +752,12 @@ void SimplifySketchTool::Run()
 									continue;
 								}
 
-                                if (itP1->Distance(*itP3) > m_deviation)
+                                if (itP1->Distance(*itP3) > deviation)
                                 {
                                     // Now draw a line between p1 and p3.  Measure the distance between p2 and the nearest point
                                     // along that line.  If this distance is less than the max deviation then discard p2.
                                     gp_Lin line(*itP1, gp_Dir(itP3->X() - itP1->X(), itP3->Y() - itP1->Y(), itP3->Z() - itP1->Z()));
-                                    if (line.SquareDistance(*itP2) < m_deviation)
+                                    if (line.SquareDistance(*itP2) < deviation)
                                     {
                                         // Discard p2
                                         points.erase(itP2);
@@ -731,22 +772,55 @@ void SimplifySketchTool::Run()
 
 				if (points.size() >= 2)
 				{
-					HeeksObj *sketch = heekscad_interface.NewSketch();
-					for (std::list<SortPoint>::iterator itPoint = points.begin(); itPoint != points.end(); itPoint++)
-					{
-						std::list<SortPoint>::iterator itNext = itPoint;
-						itNext++;
-						if (itNext == points.end()) continue;
+				    if (make_bspline)
+				    {
+				        try {
+                            TColgp_Array1OfPnt Points(0, points.size()-1);
+                            Standard_Integer i=0;
+                            for (std::list<SimplifySketchTool::SortPoint>::iterator itPoint = points.begin(); itPoint != points.end(); itPoint++, i++)
+                            {
+                                Points.SetValue(i, *itPoint);
+                            }
 
-						double start[3], end[3];
-						itPoint->ToDoubleArray(start);
-						itNext->ToDoubleArray(end);
+                            // GeomAPI_PointsToBSpline bspline(Points);
 
-						sketch->Add(heekscad_interface.NewLine(start, end), NULL);
-					} // End for
+                            GeomAPI_PointsToBSpline bspline(Points,
+                                                            sketch_tool_options.m_degree_min,
+                                                            sketch_tool_options.m_degree_max,
+                                                            GeomAbs_Shape(sketch_tool_options.m_continuity),
+                                                            sketch_tool_options.m_cleanup_tolerance);
 
-					// heekscad_interface.Add(sketch, NULL);
-					new_objects.push_back(sketch);
+                            // Standard_EXPORT GeomAPI_PointsToBSpline(const TColgp_Array1OfPnt& Points,const Standard_Integer DegMin = 3,const Standard_Integer DegMax = 8,const GeomAbs_Shape Continuity = GeomAbs_C2,const Standard_Real Tol3D = 1.0e-3);
+
+                            HSpline *hspline = new HSpline(bspline.Curve(), &(wxGetApp().current_color));
+                            heekscad_interface.Add( hspline, NULL );
+				        }
+				        catch (Standard_Failure) {
+                            Handle_Standard_Failure e = Standard_Failure::Caught();
+                            wxMessageBox(_("Failed to create BSpline curve"));
+                        }
+				    } // End if - then
+				    else
+				    {
+				        // We're making straight lines
+
+                        HeeksObj *sketch = heekscad_interface.NewSketch();
+                        for (std::list<SimplifySketchTool::SortPoint>::iterator itPoint = points.begin(); itPoint != points.end(); itPoint++)
+                        {
+                            std::list<SimplifySketchTool::SortPoint>::iterator itNext = itPoint;
+                            itNext++;
+                            if (itNext == points.end()) continue;
+
+                            double start[3], end[3];
+                            itPoint->ToDoubleArray(start);
+                            itNext->ToDoubleArray(end);
+
+                            sketch->Add(heekscad_interface.NewLine(start, end), NULL);
+                        } // End for
+
+                        // heekscad_interface.Add(sketch, NULL);
+                        new_objects.push_back(sketch);
+				    } // End if - else
 				} // End if - then
 			} // End for
 
@@ -777,9 +851,18 @@ void SimplifySketchTool::Run()
 
     wxGetApp().m_geom_tol = original_tolerance;
     wxGetApp().Changed();
+}
 
+void SimplifySketchTool::Run()
+{
+    SimplifySketch(m_deviation, false);
 } // End Run() method
 
+
+void SimplifySketchToBSplines::Run()
+{
+    SimplifySketch(m_deviation, true);
+} // End Run() method
 
 
 SimplifySketchTool::SortPoint::SortPoint() : gp_Pnt(0.0, 0.0, 0.0)
