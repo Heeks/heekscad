@@ -41,6 +41,8 @@ public:
         config.Read(_T("SketchToolOptions_preference_pcurve"), &m_preference_pcurve, true);
         config.Read(_T("SketchToolOptions_fix_gaps_by_ranges"), &m_fix_gaps_by_ranges, true);
         config.Read(_T("SketchToolOptions_max_deviation"), &m_max_deviation, 0.001);
+        config.Read(_T("SketchToolOptions_cleanup_tolerance"), &m_cleanup_tolerance, 0.1);
+
 
   // Standard_Integer& ModifyRemoveLoopMode() ;
 
@@ -63,6 +65,7 @@ public:
         config.Write(_T("SketchToolOptions_preference_pcurve"), m_preference_pcurve);
         config.Write(_T("SketchToolOptions_fix_gaps_by_ranges"), m_fix_gaps_by_ranges);
         config.Write(_T("SketchToolOptions_max_deviation"), m_max_deviation);
+        config.Write(_T("SketchToolOptions_cleanup_tolerance"), m_cleanup_tolerance);
     }
 
 public:
@@ -79,6 +82,7 @@ public:
     bool m_preference_pcurve;
     bool m_fix_gaps_by_ranges;
     double m_max_deviation;
+    double m_cleanup_tolerance;
 };
 
 static SketchToolOptions sketch_tool_options;
@@ -299,6 +303,7 @@ void SketchTools_GetOptions(std::list<Property *> *list)
 {
     PropertyList* sketch_simplify_tools = new PropertyList(_("simplify sketch options"));
     sketch_simplify_tools->m_list.push_back(new PropertyLength(_("max deviation"), sketch_tool_options.m_max_deviation, (HeeksObj *) (&sketch_tool_options.m_max_deviation), on_set_sketchtool_option));
+    sketch_simplify_tools->m_list.push_back(new PropertyLength(_("cleanup tolerance (temporary)"), sketch_tool_options.m_cleanup_tolerance, (HeeksObj *) (&sketch_tool_options.m_cleanup_tolerance), on_set_sketchtool_option));
 
 	list->push_back(sketch_simplify_tools);
 
@@ -641,9 +646,20 @@ std::list<SimplifySketchTool::SortPoint> SimplifySketchTool::GetPoints( TopoDS_W
 
 void SimplifySketchTool::Run()
 {
+    wxGetApp().CreateUndoPoint();
+
+    double original_tolerance = wxGetApp().m_geom_tol;
+    wxGetApp().m_geom_tol = sketch_tool_options.m_cleanup_tolerance;
+
+    std::list<HeeksObj *> selected_sketches;
+    std::copy( wxGetApp().m_marked_list->list().begin(), wxGetApp().m_marked_list->list().end(),
+                std::inserter( selected_sketches, selected_sketches.begin() ));
+
 	std::list<HeeksObj*>::const_iterator It;
-	for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
+	for(It = selected_sketches.begin(); It != selected_sketches.end(); It++){
 		HeeksObj* object = *It;
+		std::list<HeeksObj *> new_objects;
+
 		if (object->GetType() == SketchType)
 		{
 			std::list<TopoDS_Shape> wires;
@@ -729,11 +745,38 @@ void SimplifySketchTool::Run()
 						sketch->Add(heekscad_interface.NewLine(start, end), NULL);
 					} // End for
 
-					heekscad_interface.Add(sketch, NULL);
+					// heekscad_interface.Add(sketch, NULL);
+					new_objects.push_back(sketch);
 				} // End if - then
 			} // End for
+
+            if (new_objects.size() > 0)
+            {
+                std::list<HeeksObj *> parents = object->Owners();
+                for (std::list<HeeksObj *>::iterator itOwner = parents.begin(); itOwner != parents.end(); itOwner++)
+                {
+                    if ((object->CanEditString()) && (object->GetShortString()))
+                    {
+                        // (*itOwner)->Remove(object);
+
+                        // Mark the old sketches with a name that can be easily recognised so that we can delete the
+                        // old objects if we're satisfied with the replacements.
+                        wxString title;
+                        title << _("Replaced ") << object->GetShortString();
+                        object->OnEditString(title);
+                    } // End if - then
+
+                    for (std::list<HeeksObj *>::iterator itNewChild = new_objects.begin(); itNewChild != new_objects.end(); itNewChild++)
+                    {
+                        (*itOwner)->Add( *itNewChild, NULL );
+                    } // End for
+                } // End for
+            } // End if - then
 		} // End if - then
 	} // End for
+
+    wxGetApp().m_geom_tol = original_tolerance;
+    wxGetApp().Changed();
 
 } // End Run() method
 
