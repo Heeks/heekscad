@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HeeksCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-07 23:25+0100\n"
+"POT-Creation-Date: 2010-05-29 21:01+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Luigi Barbati <barbati.luigi@gmail.com>\n"
 "Language-Team: Heeks <barbati.luigi.gmail.com>\n"
@@ -344,22 +344,22 @@ msgid "Stretched Cuboid"
 msgstr "Allungamento Cubo"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscad\src/Cuboid.cpp:99
+#: and Settings\luigi\Documenti\heeks\heekscad\src/Cuboid.cpp:134
 msgid "datum corner"
 msgstr "dati angolo"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscad\src/Cuboid.cpp:100
+#: and Settings\luigi\Documenti\heeks\heekscad\src/Cuboid.cpp:135
 msgid "width ( x )"
 msgstr "larghezza (x)"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscad\src/Cuboid.cpp:101
+#: and Settings\luigi\Documenti\heeks\heekscad\src/Cuboid.cpp:136
 msgid "height( y )"
 msgstr "altezza (y)"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscad\src/Cuboid.cpp:102
+#: and Settings\luigi\Documenti\heeks\heekscad\src/Cuboid.cpp:137
 msgid "depth ( z )"
 msgstr "Profondita'  (z)"
 
@@ -663,7 +663,7 @@ msgstr "inizio"
 
 #: C:\Documents
 #: and Settings\luigi\Documenti\heeks\heekscad\src/HArc.cpp:288
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2571
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2586
 #: Settings\luigi\Documenti\heeks\heekscad\src/HILine.cpp:120
 #: Settings\luigi\Documenti\heeks\heekscad\src/HLine.cpp:170
 msgid "end"
@@ -672,7 +672,7 @@ msgstr "fine"
 #: C:\Documents
 #: and Settings\luigi\Documenti\heeks\heekscad\src/HArc.cpp:289
 #: Settings\luigi\Documenti\heeks\heekscad\src/HCircle.cpp:208
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2573
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2588
 #: Settings\luigi\Documenti\heeks\heekscad\src/HEllipse.cpp:274
 msgid "centre"
 msgstr "centro"
@@ -689,7 +689,7 @@ msgstr "asse"
 #: Settings\luigi\Documenti\heeks\heekscad\src/HDimension.cpp:93
 #: Settings\luigi\Documenti\heeks\heekscad\src/HDimension.cpp:386
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:522
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2550
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2565
 msgid "mm"
 msgstr "mm"
 
@@ -697,7 +697,7 @@ msgstr "mm"
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HDimension.cpp:94
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:523
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2551
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2566
 msgid "inch"
 msgstr "inch (pollici)"
 
@@ -724,7 +724,7 @@ msgstr "inch (pollici)"
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HDimension.cpp:387
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:520
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2554
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2569
 msgid "units"
 msgstr "unita' di misura"
 
@@ -743,799 +743,811 @@ msgstr "senza titolo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:967
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:970
 msgid "OpenCascade failures occured during DXF read processing.  Would you like to import again and ignore the errors?"
 msgstr "Durante l'elaborazione e la lettura del DXF Opencascade e' fallito. Vuoi importare di nuovo e ignorare gli errori?"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:967
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:970
 msgid "DXF Read"
 msgstr "Lettura DXF"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:981
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:984
 msgid "OpenCascade failure occured during DXF read processing"
 msgstr "Fallimento di OpenCascade durante il processo di lettura del DXF "
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:988
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:991
 msgid "Select how the file is to be interpreted"
 msgstr "Selezionare il file come deve essere interpretato"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:989
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:992
 msgid "RS274X file interpretation"
 msgstr "interpretazione file RS274x"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:993
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:996
 msgid "Produce trace isolation sketches"
 msgstr "Produce disegni di isolamento"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:994
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:997
 msgid "Produce trace centre-line sketches"
 msgstr ""
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:1089
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:1458
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:998
+msgid "Produce mirrored trace isolation sketches"
+msgstr "Produce disegni rispecchiati"
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:999
+msgid "Produce mirrored trace centre-line sketches"
+msgstr "Produce disegni rispecchiati su linea centrale"
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:1104
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:1473
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:683
 msgid "Invalid file type chosen"
 msgstr "Tipo di file scelto non valido"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:1089
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:1458
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:1104
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:1473
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:683
 msgid "expecting"
 msgstr "era atteso"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:1203
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:1263
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:1293
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:1218
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:1278
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:1308
 msgid "couldn't open file"
 msgstr "Impossibile aprire il file"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:1420
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:1435
 msgid "Save graphical data file"
 msgstr "Salvare il file grafico"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:1733
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:1748
 msgid "Exit Full Screen Mode"
 msgstr "Uscita schermo intero"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:1734
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:1749
 msgid "Show Full Screen"
 msgstr "Vedi a schermo intero"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2450
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2465
 msgid "view options"
 msgstr "Visualizza opzioni"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2454
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2469
 msgid "stay upright"
 msgstr "mantenere posizione verticale"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2455
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2470
 msgid "free"
 msgstr "libero"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2456
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2471
 msgid "rotate mode"
 msgstr "Modo rotazione"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2460
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2475
 msgid "none"
 msgstr "nessun aiuto"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2461
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2476
 msgid "input mode title"
 msgstr "Modalita' solo titolo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2462
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2477
 msgid "full help"
 msgstr "Aiuto completo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2463
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2478
 msgid "screen text"
 msgstr "Schermata testuale di aiuto"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2465
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2480
 msgid "antialiasing"
 msgstr "riduzione deformazione"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2467
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2482
 msgid "fixed light"
 msgstr "punto luce"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2469
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2484
 msgid "reverse mouse wheel"
 msgstr "inversione rotella del mouse"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2470
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2485
 msgid "reverse zooming mode"
 msgstr "inversione modalita' zoom"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2471
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2486
 msgid "Ctrl key does rotate"
 msgstr "Tasto Ctrl per ruotare"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2472
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2487
 msgid "show datum"
 msgstr "mostra coordinate di orientamento"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2473
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2488
 msgid "datum is solid"
 msgstr "icona coordinate di sistema"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2474
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2489
 msgid "datum size"
 msgstr "dimensione icona coordinate"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2475
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2490
 msgid "datum size is pixels not mm"
 msgstr "dimensioni  espressi in pixel e non mm"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2476
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2491
 msgid "show ruler"
 msgstr "Mostra righello"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2479
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2494
 msgid "single color"
 msgstr "Singolo colore"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2480
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2495
 msgid "top color and bottom color"
 msgstr "colore superiore ed inferiore"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2481
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2496
 msgid "left color and right color"
 msgstr "colore laterale dx e sx"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2482
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2497
 msgid "four corner colors"
 msgstr "colore quattro angoli"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2483
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2498
 msgid "sky and ground"
 msgstr "cielo e sfondo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2484
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2499
 msgid "background mode"
 msgstr "Preferenze sfondo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2489
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2504
 msgid "background color"
 msgstr "colore di sfondo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2493
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2508
 msgid "top background color"
 msgstr "colore sfondo superiore"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2494
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2509
 msgid "bottom background color"
 msgstr "colore di sfondo inferiore"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2498
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2513
 msgid "left background color"
 msgstr "colore di sfondo sx"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2499
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2514
 msgid "right background color"
 msgstr "colore di sfondo dx"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2503
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2518
 msgid "top left background color"
 msgstr "colore di sfondo superiore sx"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2504
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2519
 msgid "bottom left background color"
 msgstr "colore di sfondo inferiore sx"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2505
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2520
 msgid "top right background color"
 msgstr "colore di sfondo superiore dx"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2506
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2521
 msgid "bottom right background color"
 msgstr "colore di sfondo inferiore dx"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2510
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2525
 msgid "sky top color"
 msgstr "colore cielo superiore"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2511
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2526
 msgid "sky middle color"
 msgstr "colore centrale cielo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2512
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2527
 msgid "sky bottom color"
 msgstr "colore inferiore cielo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2513
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2528
 msgid "ground top color"
 msgstr "colore di sfondo superiore"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2514
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2529
 msgid "ground middle color"
 msgstr "colore di sfondo centrale"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2515
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2530
 msgid "ground bottom color"
 msgstr "colore sfondo inferiore"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2521
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2536
 msgid "no grid"
 msgstr "senza griglia"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2522
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2537
 msgid "faint color"
 msgstr "colore tenue"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2523
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2538
 msgid "alpha blending"
 msgstr "Sfumatura alpha"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2524
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2539
 msgid "colored alpha blending"
 msgstr "colore sfumatura alpha"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2525
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2540
 msgid "grid mode"
 msgstr "modo griglia"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2527
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2542
 msgid "face selection color"
 msgstr "selezionare colore faccia"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2528
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2543
 msgid "perspective"
 msgstr "prospettiva"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2545
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2560
 msgid "tool icon size"
 msgstr "dimensione  icone barra strumenti"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2556
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2571
 msgid "flat on screen dimension text"
 msgstr "dimensione testo sullo schermo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2557
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2572
 msgid "Allow OpenGL stippling"
 msgstr "Consenti  punteggiatura OpenGL"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2560
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2575
 msgid "faces and edges"
 msgstr "facce ed angoli"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2561
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2576
 msgid "edges only"
 msgstr "solo i bordi"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2562
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2577
 msgid "faces only"
 msgstr "solo le facce"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2563
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2578
 msgid "solid view mode"
 msgstr "Modalita' di visualizzazione solido"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2570
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2585
 msgid "digitizing"
 msgstr "convertire"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2572
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2587
 msgid "intersection"
 msgstr "intersezione"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2574
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2589
 msgid "midpoint"
 msgstr "punto centrale"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2575
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2590
 msgid "nearest"
 msgstr "vicino"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2576
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2591
 msgid "tangent"
 msgstr "tangente"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2577
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2592
 msgid "radius for undefined circles"
 msgstr "raggio per cerchi indefiniti"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2578
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2593
 msgid "coordinates"
 msgstr "coordinate"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2579
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2594
 msgid "screen"
 msgstr "schermo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2580
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2595
 msgid "grid size"
 msgstr "dimensione griglia"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2581
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2596
 msgid "snap to grid"
 msgstr "aggancia alla griglia"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2582
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2597
 msgid "autosolve constraints"
 msgstr "autorisoluzione limitata"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2585
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2600
 msgid "correlation"
 msgstr "correlazione"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2586
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2601
 msgid "Minimum correlation factor (0.0 (nothing like it) -> 1.0 (perfect match))"
 msgstr "Minimo fattore di correlazione (0.0 (niente di simile) -> 1.0 (accostamento perfetto"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2587
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2602
 msgid "Maximum scale threshold (1.0 - must be same size, 1.5 (can be half as big again or 2/3 size)"
 msgstr "Limite scala massima (1,0 - stessa dimensione, 1,5 (puo' essere piu' grande di una volta e mezzo o 2/3 )"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2588
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2603
 msgid "Number of sample points"
 msgstr "Numero di punti di campionamento"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2591
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2606
 msgid "drawing"
 msgstr "disegno"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2592
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2607
 msgid "current color"
 msgstr "colore corrente"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2593
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2608
 msgid "construction color"
 msgstr "costruzione colore"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2594
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2609
 msgid "geometry tolerance"
 msgstr "tolleranza geometria"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2595
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2610
 msgid "face to sketch deviaton"
 msgstr "deviazione faccia a profilo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2596
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2611
 msgid "Use old solid fuse ( to prevent coplanar faces )"
 msgstr "Utilizzare vecchia fusione solida (per evitare facciate complanari)"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2597
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2612
 msgid "Extrude makes a solid"
 msgstr "Estrude creando un solido"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2598
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2613
 msgid "Solid revolution angle"
 msgstr "Angolo di rivoluzione solido"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2609
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2624
 msgid "selection filter"
 msgstr "seleziona filtro"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2610
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2625
 msgid "point"
 msgstr "punto"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2611
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2626
 msgid "line"
 msgstr "linea"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2612
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2627
 msgid "arc"
 msgstr "arco"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2613
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2628
 msgid "infinite line"
 msgstr "linea infinita"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2614
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2629
 msgid "circle"
 msgstr "cerchio"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2615
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2630
 msgid "edge"
 msgstr "bordo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2616
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2631
 msgid "face"
 msgstr "faccia"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2617
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2632
 msgid "vertex"
 msgstr "vertice"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2618
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2633
 msgid "solid"
 msgstr "solido"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2619
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2634
 msgid "stl_solid"
 msgstr "Solido_stl"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2620
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2635
 msgid "wire"
 msgstr "filo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2621
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2636
 msgid "sketch"
 msgstr "disegno"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2622
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2637
 msgid "image"
 msgstr "immagine"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2623
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2638
 msgid "coordinate system"
 msgstr "coordinate di sistema"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2624
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2639
 msgid "text"
 msgstr "testo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2625
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2640
 msgid "dimension"
 msgstr "dimensione"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2626
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2641
 msgid "ruler"
 msgstr "righello"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2627
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2642
 msgid "pad"
 msgstr "blocco"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2628
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2643
 msgid "part"
 msgstr "pezzo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2629
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2644
 msgid "pocket"
 msgstr "tasca"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2632
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2647
 msgid "file options"
 msgstr "opzioni file"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2633
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2648
 msgid "DXF"
 msgstr "DXF"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2634
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2649
 msgid "make sketch"
 msgstr "Crea disegno"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2635
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2650
 msgid "ignore errors where possible"
 msgstr "ignora errori se e quando possibile"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2638
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2653
 msgid "STL"
 msgstr "STL"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2639
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2654
 msgid "stl save facet tolerance"
 msgstr "Salva tolleranza sfaccettatura stl"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2641
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2656
 msgid "auto save interval (in minutes)"
 msgstr "intervallo autosalvataggio (in minuti)"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2645
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2660
 msgid "font options"
 msgstr "Opzione Caratteri"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2646
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2661
 msgid "Paths (semicolon delimited)"
 msgstr "Percorso (delimitato da punto e virgola)"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2701
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2706
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2716
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2721
 msgid "Known Files"
 msgstr "file riconosciuto"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2701
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2706
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2716
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2721
 msgid "Heeks files"
 msgstr "file Heeks"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2701
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2706
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2716
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2721
 msgid "IGES files"
 msgstr "file IGES"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2701
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2706
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2716
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2721
 msgid "STEP files"
 msgstr "file STEP"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2701
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2706
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2716
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2721
 msgid "STL files"
 msgstr "file STL"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2701
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2716
 msgid "Scalar Vector Graphics files"
 msgstr "SVG Scalar Vector Graphics file"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2701
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2706
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2716
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2721
 msgid "DXF files"
 msgstr "file DXF"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2701
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2716
 msgid "RX274X/Gerber files"
 msgstr "file RX274X/Gerber"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2701
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2716
 msgid "Picture files"
 msgstr "file immagine"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2750
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2765
 msgid "Unmark"
 msgstr "Smarca"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2753
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2768
 msgid "Mark"
 msgstr "Marca"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2756
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:2771
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:151
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1691
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1864
@@ -1544,7 +1556,7 @@ msgstr "Proprieta'"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:3118
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksCAD.cpp:3133
 msgid "Save changes to file"
 msgstr "Salva le modifiche al file"
 
@@ -1996,26 +2008,30 @@ msgstr "Vista XY posteriore"
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1639
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1820
 msgid "View XZ Top"
 msgstr "Vista XZ da sopra"
 
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1640
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1821
 msgid "View XZ Bottom"
 msgstr "Vista XZ da sotto"
 
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1641
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1822
 msgid "View YZ Right"
 msgstr "Vedi YZ Destra"
 
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1642
-msgid "View XZ Left"
-msgstr "Vedi XZ Sinistra"
+#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1823
+msgid "View YZ Left"
+msgstr "Vedi YZ Sinistra"
 
 #: C:\Documents
 #: and
@@ -2483,30 +2499,6 @@ msgstr "Zoom per adattare le estensioni del disegno nella finestra grafica"
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1817
 msgid "Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"
 msgstr "Zoom per adattare le estensioni del disegno nella finestra grafica, ma senza rotazione dell'oggetto"
-
-#: C:\Documents
-#: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1820
-msgid "View XY Top"
-msgstr "Vista XY da sopra"
-
-#: C:\Documents
-#: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1821
-msgid "View XY Bottom"
-msgstr "Vista XY da sotto"
-
-#: C:\Documents
-#: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1822
-msgid "View XY Right"
-msgstr "Vista XY da destra"
-
-#: C:\Documents
-#: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1823
-msgid "View XY Left"
-msgstr "Vista XY Sinistra"
 
 #: C:\Documents
 #: and
@@ -3000,25 +2992,25 @@ msgstr "Incolla oggetti dagli appunti nel disegno"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/ObjPropsCanvas.cpp:117
+#: Settings\luigi\Documenti\heeks\heekscad\src/ObjPropsCanvas.cpp:131
 msgid "Apply"
 msgstr "Applica"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/ObjPropsCanvas.cpp:117
+#: Settings\luigi\Documenti\heeks\heekscad\src/ObjPropsCanvas.cpp:131
 msgid "Apply any changes made to the properties"
 msgstr "Applica qualsiasi cambiamento effettuato nelle proprieta' "
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/ObjPropsCanvas.cpp:118
+#: Settings\luigi\Documenti\heeks\heekscad\src/ObjPropsCanvas.cpp:132
 msgid "Cancel"
 msgstr "Cancella"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/ObjPropsCanvas.cpp:118
+#: Settings\luigi\Documenti\heeks\heekscad\src/ObjPropsCanvas.cpp:132
 msgid "Stop editing the object"
 msgstr "Fine modifica all'oggetto"
 
@@ -3092,40 +3084,40 @@ msgstr "Aggiungi nuovo Plugin"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/PropertiesCanvas.cpp:157
-#: Settings\luigi\Documenti\heeks\heekscad\src/PropertiesCanvas.cpp:186
+#: Settings\luigi\Documenti\heeks\heekscad\src/PropertiesCanvas.cpp:159
+#: Settings\luigi\Documenti\heeks\heekscad\src/PropertiesCanvas.cpp:191
 msgid "x"
 msgstr "x"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/PropertiesCanvas.cpp:160
-#: Settings\luigi\Documenti\heeks\heekscad\src/PropertiesCanvas.cpp:189
+#: Settings\luigi\Documenti\heeks\heekscad\src/PropertiesCanvas.cpp:162
+#: Settings\luigi\Documenti\heeks\heekscad\src/PropertiesCanvas.cpp:194
 msgid "y"
 msgstr "y"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/PropertiesCanvas.cpp:163
-#: Settings\luigi\Documenti\heeks\heekscad\src/PropertiesCanvas.cpp:192
+#: Settings\luigi\Documenti\heeks\heekscad\src/PropertiesCanvas.cpp:167
+#: Settings\luigi\Documenti\heeks\heekscad\src/PropertiesCanvas.cpp:197
 msgid "z"
 msgstr "z"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/PropertiesCanvas.cpp:195
+#: Settings\luigi\Documenti\heeks\heekscad\src/PropertiesCanvas.cpp:200
 msgid "vertical angle"
 msgstr "Angolo verticale"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/PropertiesCanvas.cpp:198
+#: Settings\luigi\Documenti\heeks\heekscad\src/PropertiesCanvas.cpp:203
 msgid "horizontal angle"
 msgstr "Angolo orizzontale"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/PropertiesCanvas.cpp:201
+#: Settings\luigi\Documenti\heeks\heekscad\src/PropertiesCanvas.cpp:206
 msgid "twist angle"
 msgstr "Angolo di torsione"
 
@@ -3274,35 +3266,35 @@ msgid "polygon mode"
 msgstr "Modo poligono"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscad\src/RS274X.cpp:182
+#: and Settings\luigi\Documenti\heeks\heekscad\src/RS274X.cpp:187
 msgid "pcb"
 msgstr "pcb"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscad\src/RS274X.cpp:182
+#: and Settings\luigi\Documenti\heeks\heekscad\src/RS274X.cpp:187
 msgid "_width_"
 msgstr "_larghezza_"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscad\src/RS274X.cpp:182
+#: and Settings\luigi\Documenti\heeks\heekscad\src/RS274X.cpp:187
 msgid "_height_"
 msgstr "_altezza_"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/RS274X.cpp:2327
+#: Settings\luigi\Documenti\heeks\heekscad\src/RS274X.cpp:2376
 msgid "# This file converts the RAW image file generated by the HeeksCAD import of\n"
 msgstr "# Questo file converte l'immagine RAW generata dalle importazioni di HeeksCAD\n"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/RS274X.cpp:2328
+#: Settings\luigi\Documenti\heeks\heekscad\src/RS274X.cpp:2377
 msgid "# a GERBER format data file into a GIF format file.   This just makes it\n"
 msgstr "# Rende semplicemente un file formato Gerber in un GIF\n"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/RS274X.cpp:2329
+#: Settings\luigi\Documenti\heeks\heekscad\src/RS274X.cpp:2378
 msgid ""
 "# more convenient for viewing\n"
 "\n"
@@ -3673,130 +3665,154 @@ msgstr "Modo disegno inserito"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:95
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:103
 msgid "Pad Sketch"
 msgstr "Riempire disegno"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:102
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:110
 msgid "Input pad depth"
 msgstr "Inserire profondita di riempimento"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:109
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:117
 msgid "Pocket Sketch"
 msgstr "Disegno tasca"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:125
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:133
 msgid "Make To Part"
 msgstr "Creare un Particolare"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:149
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:239
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:157
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:247
 msgid "Add To Part"
 msgstr "Aggiunge al Particolore"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:168
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:176
 msgid "Failed to convert sketch to wire"
 msgstr "Errore fatale nel convertire il disegno in filo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:204
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:212
 msgid "Wire fix failed"
 msgstr "correzione filo fallito"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:213
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:221
 msgid "Failed to convert wire to sketch"
 msgstr "Errore fatale nel convertire il filo in disegno"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:231
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:239
 msgid "Failed to fix wire"
 msgstr " non riesco e corregere il filo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:292
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:304
+msgid "simplify sketch options"
+msgstr "opzioni semplificazione disegni"
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:305
+msgid "max deviation"
+msgstr "deviazione massima"
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:306
+msgid "cleanup tolerance (temporary)"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:314
 msgid "fix wire options"
 msgstr "opzioni correzione filo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:293
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:315
 msgid "reorder"
 msgstr "Riordina"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:294
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:316
 msgid "fix small"
 msgstr "Piccola correzione"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:295
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:317
 msgid "fix small precision"
 msgstr "piccola correzione di precisione"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:296
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:318
 msgid "fix self intersection"
 msgstr "correzione automatica intersezione"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:297
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:319
 msgid "fix lacking"
 msgstr ""
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:298
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:320
 msgid "fix degenerated"
 msgstr ""
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:300
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:322
 msgid "modify topology"
 msgstr "modifica la topologia"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:301
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:323
 msgid "modify geometry"
 msgstr "modifica geomeria"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:302
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:324
 msgid "closed wire"
 msgstr "Filo chiuso"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:303
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:325
 msgid "preference pcurve"
 msgstr "preferenze pcurve"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:304
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:326
 msgid "fix gaps by ranges"
 msgstr "corregge il range della forbice"
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscad\src/SketchTools.cpp:765
+msgid "Replaced "
+msgstr ""
 
 #: C:\Documents
 #: and Settings\luigi\Documenti\heeks\heekscad\src/Sphere.cpp:75
@@ -3992,181 +4008,181 @@ msgstr "Impossibile caricare la risorsa immagine"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:252
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:254
 msgid "leadoffdz"
 msgstr "comando_offdz"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:253
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:255
 msgid "leadofflen"
 msgstr "comando_offlen"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:254
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:256
 msgid "leadoffrad"
 msgstr "comando_offrad"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:255
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:257
 msgid "retractzheight"
 msgstr "altezza_sicurezza_z"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:256
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:258
 msgid "leadoffsamplestep"
 msgstr "comando_offsamplestep"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:257
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:259
 msgid "toolcornerrad"
 msgstr "angolostrumentoradiale"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:258
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:260
 msgid "toolflatrad"
 msgstr ""
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:259
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:261
 msgid "samplestep"
 msgstr "sample step"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:260
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:262
 msgid "stepdown"
 msgstr "Passo inferiore"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:261
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:263
 msgid "clearcuspheight"
 msgstr "Cancella apice altezza"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:262
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:264
 msgid "triangleweaveres"
 msgstr ""
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:263
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:265
 msgid "flatradweaveres"
 msgstr ""
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:264
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:266
 msgid "dchangright"
 msgstr ""
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:265
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:267
 msgid "dchangrightoncontour"
 msgstr ""
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:266
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:268
 msgid "dchangleft"
 msgstr ""
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:267
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:269
 msgid "dchangefreespace"
 msgstr ""
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:268
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:270
 msgid "sidecutdisplch"
 msgstr ""
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:269
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:271
 msgid "fcut"
 msgstr ""
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:270
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:272
 msgid "fretract"
 msgstr ""
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:271
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:273
 msgid "thintol"
 msgstr ""
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:272
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:274
 msgid "startpoint_x"
 msgstr "startpoint_x"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:273
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:275
 msgid "startpoint_y"
 msgstr "startpoint_y"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:274
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:276
 msgid "startvel_x"
 msgstr "startvel_x"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:275
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:277
 msgid "startvel_y"
 msgstr "startvel_y"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:276
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:278
 msgid "minz"
 msgstr "min_z"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:277
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:279
 msgid "boundaryclear"
 msgstr "cancella limiti"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:279
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:281
 msgid "boundary_x0"
 msgstr "limite_x0"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:280
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:282
 msgid "boundary_x1"
 msgstr "limite_x1"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:281
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:283
 msgid "boundary_y0"
 msgstr "limite_y0"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:282
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Adaptive.cpp:284
 msgid "boundary_y1"
 msgstr "limite_y1"
 
@@ -4201,79 +4217,79 @@ msgid "Output NC"
 msgstr "Output NC"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Chamfer.cpp:36
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Chamfer.cpp:37
 msgid "Chamfer Width"
 msgstr "Altezza Smussantura"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Contour.cpp:100
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Contour.cpp:102
 msgid "Left"
 msgstr "Sinistra"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Contour.cpp:101
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Contour.cpp:103
 msgid "Right"
 msgstr "Destra"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Contour.cpp:106
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Contour.cpp:108
 msgid "Outside"
 msgstr "Esterno"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Contour.cpp:107
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Contour.cpp:109
 msgid "Inside"
 msgstr "Interno"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Contour.cpp:111
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Contour.cpp:113
 msgid "Outside or Left"
 msgstr "Esterno o Sinistra"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Contour.cpp:112
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Contour.cpp:114
 msgid "Inside or Right"
 msgstr "Interno o destra"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Contour.cpp:117
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Contour.cpp:119
 msgid "On"
 msgstr "Sul perimetro"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Contour.cpp:132
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Contour.cpp:134
 msgid "tool on side"
 msgstr "Posizione strumento di taglio"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Contour.cpp:923
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Contour.cpp:924
 msgid "Contour spline deviation"
 msgstr ""
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CounterBore.cpp:64
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CounterBore.cpp:65
 msgid "diameter"
 msgstr "diametro"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CounterBore.cpp:69
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CounterBore.cpp:70
 msgid "Respect existing order"
 msgstr "Rispetta ordine esistente"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CounterBore.cpp:73
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CounterBore.cpp:74
 msgid "sort_locations"
 msgstr "Ordina_luoghi"
 
@@ -4297,1101 +4313,1266 @@ msgstr "rapporto di rimozione Massimo  del materiale (inches^3/min)"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:446
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:447
 msgid "Leave manually assigned title"
 msgstr "Assegnazione manuale titolo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:447
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:448
 msgid "Automatically generate title"
 msgstr "Genera automaticamente il titolo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:449
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:450
 msgid "Automatic Title"
 msgstr "Titolo Automatico"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:464
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:465
 msgid "Material"
 msgstr "Materiale"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:479
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:480
 msgid "Type"
 msgstr "tipo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:484
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:485
 msgid "max_advance_per_revolution"
 msgstr "avanzamento_massimo_per_giro"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:491
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:492
 msgid "x_offset"
 msgstr "x_offset"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:492
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:493
 msgid "front_angle"
 msgstr "angolo_frontale"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:493
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:494
 msgid "tool_angle"
 msgstr "Strumenti_angoli"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:494
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:495
 msgid "back_angle"
 msgstr "angolo posteriore"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:498
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:499
 msgid "(0) Unused"
 msgstr "(0) non ancora usato"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:499
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:500
 msgid "(1) Turning/Back Facing"
 msgstr "(1) Tornitura Posteriore"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:500
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:501
 msgid "(2) Turning/Facing"
 msgstr "(2) Tornitura Frontale"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:501
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:502
 msgid "(3) Boring/Facing"
 msgstr "(2) Perforazione Frontale"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:502
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:503
 msgid "(4) Boring/Back Facing"
 msgstr "(4) Perforazione posteriore"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:503
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:504
 msgid "(5) Back Facing"
 msgstr "(5) Spianamento posteriore"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:504
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:505
 msgid "(6) Turning"
 msgstr "(6) Tornitura"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:505
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:506
 msgid "(7) Facing"
 msgstr "(7)Spianamento"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:506
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:507
 msgid "(8) Boring"
 msgstr "(8) Perforazione"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:507
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:508
 msgid "(9) Centre"
 msgstr "(9) Centro"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:516
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:517
 msgid "tool_length_offset"
 msgstr "Lunghezza utensile"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:520
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:521
 msgid "flat_radius"
 msgstr "raggio_a_zero"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:521
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:522
 msgid "corner_radius"
 msgstr " raggio_angolare"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:522
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:523
 msgid "cutting_edge_angle"
 msgstr "bordo_angolo_di_taglio"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:523
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:524
 msgid "cutting_edge_height"
 msgstr "Bordo_lama_di_taglio"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:530
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:531
 msgid "Probe offset X"
 msgstr "offset X sonda tastatrice"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:531
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:532
 msgid "Probe offset Y"
 msgstr "offset Y sonda tastatrice"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:677
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:673
 msgid "tool_number"
 msgstr "Attrezzo_numero"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1006
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1000
 msgid "Carbide "
 msgstr "Carburo "
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1013
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1007
 msgid "Drill Bit"
 msgstr "punta dritta"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1016
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1010
 msgid "Centre Drill Bit"
 msgstr "punta dritta centro ridotto"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1019
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1013
 msgid "End Mill"
 msgstr "punta piatta"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1022
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1016
 msgid "Slot Cutter"
 msgstr "punta per incavi"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1025
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1019
 msgid "Ball End Mill"
 msgstr "punta a palla"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1030
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1024
 msgid "Chamfering Bit"
 msgstr "punta smussante"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1033
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1027
 msgid "Turning Tool"
 msgstr "Attrezzi di tornitura"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1036
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1030
 msgid "Touch Probe"
 msgstr "Sonda tastatrice"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1039
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1033
 msgid "Tool Length Switch"
 msgstr " Attrezzo cambio altezza"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1603
+#: Settings\luigi\Documenti\heeks\heekscnc\src/CuttingTool.cpp:1597
 msgid "Import probe calibration data"
 msgstr "Importa i dati di calibrazione della sonda"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:95
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:96
 msgid "clearance height"
 msgstr "Spazio libero in altezza"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:96
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:97
 msgid "step down"
 msgstr "Passo Z"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:97
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:98
 msgid "start depth"
 msgstr "altezza Z iniziale"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:98
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:99
 msgid "final depth"
 msgstr "altezza Z finale"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:99
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:100
 msgid "rapid down to height"
 msgstr "rapido fino all'altezza"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:286
-#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:300
-#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:312
-#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:324
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:805
+#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:287
+#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:301
+#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:313
+#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:325
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:825
 msgid "WARNING"
 msgstr "Attenzione"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:286
-#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:300
-#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:312
-#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:324
-#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:329
+#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:287
+#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:301
+#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:313
+#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:325
+#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:330
 msgid "Depth Operation"
 msgstr "Operazioni profondita' "
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:286
+#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:287
 msgid "does not have a cutting tool assigned"
 msgstr "Non e' stato assegnato un utensili di taglio"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:286
+#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:287
 msgid "It can not produce GCode without a cutting tool assignment"
 msgstr "Non si puo' produrre GCode senza caricare un utensile da taglio"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:300
+#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:301
 msgid "is set to cut deeper than the assigned cutting tool will allow"
 msgstr "Impostazione per tagliare piu' in profondita'  rispetto a quanto permette la punta assegnata"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:312
+#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:313
 msgid "has poor start and final depths"
 msgstr "Profondita'  iniziale e finale insufficiente"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:312
+#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:313
 msgid "Can't change this setting automatically"
 msgstr "Non e' possibile modificare questa impostazione automaticamente"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:324
+#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:325
 msgid "Clearance height is below start depth"
 msgstr "Non posso modificare questa impostazione automaticamente"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:329
+#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:330
 msgid "Raising clearance height up to start depth (+5 mm)"
 msgstr "Alzare l'altezza di sicurezza (5 millimetri)"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:116
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Locating.cpp:66
+#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:339
+msgid "The step-down value for pocket (id="
+msgstr "Valore Step-down  per la tasca (id="
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:339
+msgid ") must be positive"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:117
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Locating.cpp:67
 msgid "standoff"
 msgstr "altezza inizio foratura"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:117
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:118
 msgid "dwell"
 msgstr "soffermarsi"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:118
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:119
 msgid "depth"
 msgstr "Profondita' "
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:119
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:120
 msgid "peck_depth"
 msgstr "escursione_profondita'  (0-3)"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:127
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:128
 msgid "sort_drilling_locations"
 msgstr "ordina_i_luoghi_di_perforazione"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:751
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:762
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:771
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:782
 msgid "Chamfering bit for drilling op"
 msgstr "Punta per smussatura per operrazione di foratura"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:751
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:771
 msgid "is too big for previously drilled hole"
 msgstr "il foro in precedenza esercitato e' troppo grande"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:762
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:782
 msgid "is too small for previously drilled hole"
 msgstr "foro in precedenza esercitato e' troppo piccolo "
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:790
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:828
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:810
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:848
 msgid "Adjusting depth of drill cycle"
 msgstr "Regolazione profondita'  ciclo di perforazione"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:790
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:828
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:810
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:848
 msgid "from"
 msgstr "a partire"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:791
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:829
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:811
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:849
 msgid "to"
 msgstr "a"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:805
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:825
 msgid "Drilling"
 msgstr "Foratura"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:805
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:825
 msgid "Can't drill hole"
 msgstr "Non e' possibile praticare il foro"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:94
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:127
+msgid "Warning: The 'Z' coordinate is not used for this.  Set the 'z' in the 'safety height' property instead (Don't forget to express it in machine - G53 - coordinates)"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:155
 msgid "YZ plane (around X) rotation"
 msgstr "piano YZ ruotato ad X"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:95
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:156
 msgid "XZ plane (around Y) rotation"
 msgstr "piano XZ ruotato ad Y"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:96
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:157
 msgid "XY plane (around Z) rotation"
 msgstr "piano XY ruotato intorno Z"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:103
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:164
 msgid "Pivot Point"
 msgstr "Punto Pivot"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:711
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:166
+msgid "Safety Height Defined"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:170
+msgid "Safety Height (in G53 - Machine - coordinates)"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:173
+msgid "Touch Off Point Defined"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:182
+msgid "Touch-off Point (in "
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:184
+msgid "Touch-off Description"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:402
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:407
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:412
+msgid " rotated "
+msgstr "ruotare"
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:402
+msgid " degrees in YZ plane"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:407
+msgid " degrees in XZ plane"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:412
+msgid " degrees in XY plane"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:436
+msgid "Changing name to "
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:727
 msgid "Import probe data"
 msgstr "Importare i dati della sonda"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixtures.cpp:38
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Fixtures.cpp:40
 msgid "Export"
 msgstr "Esporta"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:159
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:161
 msgid "You must select some sketches, first!"
 msgstr "E' necessario selezionare almeno un disegno, prima!"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:265
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:310
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:268
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:313
 msgid "There are no solids!"
 msgstr "Non ci sono solidi"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:316
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:319
 msgid "You must select some sketches first!"
 msgstr "E' necessario selezionare almeno un disegno, prima!"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:375
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:447
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:635
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:378
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:450
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:638
 msgid "You must select some points, circles or other intersecting elements first!"
 msgstr "E' necessario selezionare alcuni punti, cerchi o altri elementi che si intersecano prima"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:381
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:641
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:384
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:644
 msgid "You may only select a single cutting tool for each drilling operation.!"
 msgstr "E' possibile selezionare solo un unico strumento di taglio per ogni operazione di foratura."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:415
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:418
 msgid "You may only select a single cutting tool for each chamfer operation.!"
 msgstr "È possibile selezionare solo un unico strumento da taglio per ogni operazione di smussatura.!"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:835
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:862
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:855
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:882
 msgid "NC files"
 msgstr "File NC"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:836
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:856
 msgid "Open NC file"
 msgstr "Apri file NC"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:848
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:868
 msgid "BOM files"
 msgstr "file BOM"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:849
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:869
 msgid "Open BOM file"
 msgstr "Apri file BOM"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:863
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:883
 msgid "Save NC file"
 msgstr "Salva file NC"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:872
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:892
 msgid "Couldn't open file"
 msgstr "Impossibile aprire il file"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:900
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1082
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:920
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1121
 msgid "New Drill..."
 msgstr "Nuova Punta..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:901
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1083
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:921
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1122
 msgid "New Centre Drill..."
 msgstr "Nuova Punta con riduzione centrale..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:902
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1084
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:922
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1123
 msgid "New End Mill..."
 msgstr "Nuova Punta piatta..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:903
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1085
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:923
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1124
 msgid "New Slot Drill..."
 msgstr "nuova Punta da incavo..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:904
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1086
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:924
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1125
 msgid "New Ball End Mill..."
 msgstr "Nuova fresa a palla..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:905
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1087
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:925
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1126
 msgid "New Chamfer Mill..."
 msgstr "Nuova fresa per smussatura..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:906
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1088
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:926
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1127
 msgid "New Turning Tool..."
 msgstr "Nuovo attrezzo di tornitura..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:907
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1089
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:927
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1128
 msgid "New Touch Probe..."
 msgstr "Nuova sonda tastatrice..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:908
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1090
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:928
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1129
 msgid "New Tool Length Switch..."
 msgstr "Nuovo Attrezzo cambio altezza..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:923
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:957
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:943
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:977
 msgid "New Profile Operation..."
 msgstr "Nuova Operazione di Profilatura..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:924
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:958
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:944
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:978
 msgid "New Pocket Operation..."
 msgstr "Nuova Operazione di Tasca..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:925
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:959
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:945
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:979
 msgid "New ZigZag Operation..."
 msgstr "Nuova Operazione di ZigZag..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:926
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:946
 msgid "New Adaptive Roughing Operation..."
 msgstr "Nuova Operazione di Sgrossatura di addattamento..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:927
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:947
 msgid "New Drilling Operation..."
 msgstr "Nuova Operazione di Foratura..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:928
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:948
 msgid "New CounterBore Operation..."
 msgstr "Nuova Operazione di Svasatura..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:929
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:949
 msgid "New Rough Turning Operation..."
 msgstr "Nuova Operazione di Sgrossatura al tornio..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:930
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:969
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:950
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:989
 msgid "New Chamfer Operation..."
 msgstr "Nuova Operazione di Svasatura..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:931
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:963
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:951
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:983
 msgid "New Contour Operation..."
 msgstr "Nuova Operazione di Profilatura..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:932
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:964
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:952
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:984
 msgid "New Inlay Operation..."
 msgstr "Nuova Operazione di Intarsio..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:956
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:976
 msgid "New operations"
 msgstr "Nuova operazione"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:957
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:977
 msgid "Profile"
 msgstr "Profilo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:958
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:978
 msgid "Pocket"
 msgstr "Tasca"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:959
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:979
 msgid "ZigZag"
 msgstr "ZigZag"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:960
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:980
 msgid "Adaptive"
 msgstr "Adattamento"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:960
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:980
 msgid "New Special Adaptive Roughing Operation..."
 msgstr "Nuova Operazione di Sgossatura di Adattamento..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:961
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:981
 msgid "Drill"
 msgstr "Forare"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:961
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:981
 msgid "New Drill Cycle Operation..."
 msgstr "Nuova Operazione Ciclo di Foratura..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:962
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:982
 msgid "CounterBore"
 msgstr "Svasatura"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:962
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:982
 msgid "New CounterBore Cycle Operation..."
 msgstr "Nuovo Operazione Ciclo Svasatura..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:963
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:983
 msgid "Contour"
 msgstr "Sagomatura"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:964
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:984
 msgid "Inlay"
 msgstr "Intarsio"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:965
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:985
 msgid "Locating"
 msgstr "Localizzazione"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:965
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1075
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:985
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1114
 msgid "New Locating Operation..."
 msgstr "Nuova operazione di localizzazione..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:966
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:967
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:968
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:986
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:987
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:988
 msgid "Probing"
 msgstr "Esplorazione"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:966
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1076
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:986
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1115
 msgid "New Probe Centre Operation..."
 msgstr "Nuova operazione Sonda centrale..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:967
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1077
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:987
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1116
 msgid "New Probe Edge Operation..."
 msgstr "Nuova operazione Sonda bordi..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:968
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1078
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:988
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1117
 msgid "New Probe Grid Operation..."
 msgstr "Nuova operazione Sonda Bordi"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:972
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:992
 msgid "Cutting Tool"
 msgstr "Attrezzi di taglio"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:972
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:992
 msgid "New Cutting Tool Definition..."
 msgstr "nuova definizione attrezzi da taglio..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:974
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:994
 msgid "Fixture"
 msgstr "Attrezzatura"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:974
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1094
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:994
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1133
 msgid "New Fixture..."
 msgstr "Nuova attrezzatura..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:976
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:996
 msgid "Design Rules"
 msgstr "Test Regole Disegno"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:977
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:997
 msgid "Design Rules Check"
 msgstr "Test Regole Disegno"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:977
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:997
 msgid "design_rules_check"
 msgstr "design_rules_check"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:977
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1071
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:997
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1110
 msgid "Design Rules Check..."
 msgstr "Test Regole Disegno..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:978
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:998
 msgid "Design Rules Adjustment"
 msgstr "Regole di adeguamento Disegno"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:978
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:998
 msgid "design_rules_adjustment"
 msgstr "design_rules_adjustment"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:978
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1072
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:998
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1111
 msgid "Design Rules Adjustment..."
 msgstr "Regole di adeguamento Disegno..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:981
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1001
 msgid "Speeds"
 msgstr "Velocita'"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:982
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1002
 msgid "Speed Reference"
 msgstr "Referenze Velocita' "
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:982
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1002
 msgid "Add Speed Reference..."
 msgstr "Aggiungi referenza velocita'... "
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:983
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1003
 msgid "Cutting Rate"
 msgstr "Porzione di taglio"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:983
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1003
 msgid "Add Cutting Rate Reference..."
 msgstr "Aggiungi referenza porzione taglio..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:986
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1006
 msgid "Post Processing"
 msgstr "postproccessore"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:987
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1007
 msgid "PostProcess"
 msgstr "postproccessore"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:987
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:990
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1103
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1007
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1010
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1142
 msgid "Post-Process"
 msgstr "Postprocessore"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:988
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1101
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1008
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1140
 msgid "Make Python Script"
 msgstr "Crea Script Python"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:989
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1102
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1009
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1141
 msgid "Run Python Script"
 msgstr "Avvia Script Python"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:991
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1011
 msgid "OpenNC"
 msgstr "Apri NC"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:991
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1104
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1011
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1143
 msgid "Open NC File"
 msgstr "Apri file NC"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:992
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1012
 msgid "SaveNC"
 msgstr "Salve NC"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:992
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1105
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1012
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1144
 msgid "Save NC File"
 msgstr "Salva file NC"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:993
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1013
 msgid "Cancel Python Script"
 msgstr "Cancella Script Python"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1021
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1032
+msgid "Excellon drill file interpretation"
+msgstr "Interpretazione file di foratura Excellon"
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1036
+msgid "Produce drill pattern as described"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1037
+msgid "Produce mirrored drill pattern"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1060
 msgid "Would you like to change the NC code generation units too?"
 msgstr "Volete anche modificare le unita di generazione codice NC?"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1021
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1060
 msgid "Change Units"
 msgstr "Cambia Unita'"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1041
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1080
 msgid "HeeksCNC is the free machining add-on to HeeksCAD"
 msgstr "HeeksCNC e' un plugin libero per la lavorazione aggiungibile ad HeeksCAD"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1043
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1082
 msgid "Written by Dan Heeks, Hirutso Enni, Perttu Ahola, David Nicholls"
 msgstr "Scritto da Dan Heeks, Hirutso Enni, Perttu Ahola, David Nicholls"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1044
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1083
 msgid "With help from archivist, crotchet1, DanielFalck, fenn, Sliptonic"
 msgstr "Con l'aiuto degli archivisti, crotchet1, DanielFalck, fenn, Sliptonic"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1045
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1084
 msgid "geometry code, donated by Geoff Hawkesford, Camtek GmbH http://www.peps.de/"
 msgstr "Codice della geomtria donato da  Geoff Hawkesford, Camtek GmbH http://www.peps.de/"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1046
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1085
 msgid "pocketing code from http://code.google.com/p/libarea/ , derived from the kbool library written by Klaas Holwerda http://boolean.klaasholwerda.nl/bool.html"
 msgstr "Codice tasca da http://code.google.com/p/libarea/ , derived from the kbool library written by Klaas Holwerda http://boolean.klaasholwerda.nl/bool.html"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1047
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1086
 msgid "Zig zag code from opencamlib http://code.google.com/p/opencamlib/"
 msgstr "Codice Zig zag da opencamlib http://code.google.com/p/opencamlib/"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1048
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1087
 msgid "Adaptive Roughing code from http://code.google.com/p/libactp/, using code written in 2004"
 msgstr "Codice di sgrossatura addattiva da  http://code.google.com/p/libactp/, usando codice scritto nel 2004"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1049
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1088
 msgid "For a more modern version of adaptive roughing, see Julian Todd and Martin Dunschen of http://www.freesteel.co.uk/"
 msgstr "Per una versione più moderna di sgrossatura adattiva, vedere Julian Todd e Martin Dunschen di http://www.freesteel.co.uk/"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1050
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1089
 msgid "This HeeksCNC software installation is restricted by the GPL license http://www.gnu.org/licenses/gpl-3.0.txt"
 msgstr "Il software HeeksCNC è' limitato dalla licenza GPL http://www.gnu.org/licenses/gpl-3.0.txt"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1051
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1090
 msgid "  which means it is free and open source, and must stay that way"
 msgstr "il che significa che è gratuito e open source, e deve rimanere così"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1073
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1112
 msgid "New Speed Reference..."
 msgstr "Nuova referenza velocita'..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1074
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1113
 msgid "New Cutting Rate Reference..."
 msgstr "Nuova referenza taglio parziale..."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1098
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1137
 msgid "Operations"
 msgstr "Operazioni"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1099
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1138
 msgid "Tools"
 msgstr "Attrezzi"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1100
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1139
 msgid "Fixtures"
 msgstr "Attrezzatura"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1106
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1145
 msgid "Open BOM File"
 msgstr "Apri file BOM "
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1107
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1146
 msgid "Machining"
 msgstr "Macchina"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1328
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1369
 msgid "default"
 msgstr "default"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1377
+#: Settings\luigi\Documenti\heeks\heekscnc\src/HeeksCNC.cpp:1418
 msgid "machining options"
 msgstr "Opzione di lavorazione"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:95
-msgid "Boarder Width"
-msgstr "Larghezza bordo (Maschio)"
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:139
+msgid "Border Width"
+msgstr "Larghezza Bordo (Maschio)"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:112
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:156
 msgid "Clearance Tool"
 msgstr "Attrezzo pulitore"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:120
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:164
 msgid "Female half"
 msgstr "Meta' femmina"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:121
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:165
 msgid "Male half"
 msgstr "Metà maschio"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:122
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:166
 msgid "Both halves"
 msgstr "Entrambe le metà"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:125
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:168
 msgid "GCode generation"
 msgstr "generazione GCode"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:132
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:175
 msgid "X Axis"
 msgstr "Asse X"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:133
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:176
 msgid "Y Axis"
 msgstr "Asse Y"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:135
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:178
 msgid "Mirror Axis"
 msgstr "Riflessione  Asse"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:1281
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:208
+msgid "Female Op Fixture"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:209
+msgid "Male Op Fixture"
+msgstr "Attrezzo per maschiatura"
+
+#: C:\Documents
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:213
+msgid "Min Cornering Angle (degrees)"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:870
+msgid "sharpen corner"
+msgstr "fuoco angolo"
+
+#: C:\Documents
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:1070
+msgid "Form valley walls"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:1118
+msgid "Form valley pockets"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:1191
+msgid "Form mountain pockets above short mountains"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:1195
+msgid "Form mountains"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:1459
+msgid "Form mountain walls"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Inlay.cpp:1702
 msgid "Inlay spline deviation"
 msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/MachineState.cpp:102
+msgid "Moving to a safety height common to both "
+msgstr "movimento di sicurezza ad altezza comune "
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/MachineState.cpp:102
+msgid " and "
+msgstr "e"
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/MachineState.cpp:138
+msgid "Move above touch-off point for "
+msgstr "Parteza sostata sopra il punto di non tocco"
 
 #: C:\Documents
 #: and Settings\luigi\Documenti\heeks\heekscnc\src/NCCode.cpp:604
@@ -5469,24 +5650,29 @@ msgid "Apply NC Code to solids. NOTE: This is not ready yet."
 msgstr "Applica codice NC al solido.Nota:Questo non e' ancora pronto."
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Op.cpp:99
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Op.cpp:107
 msgid "comment"
 msgstr "Commento"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Op.cpp:100
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Op.cpp:108
 msgid "active"
 msgstr "Attivo"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Op.cpp:101
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Op.cpp:109
 msgid "execution_order"
 msgstr "ordine di esecuzione"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Op.cpp:118
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Op.cpp:126
 msgid "cutting tool"
 msgstr "utensile da taglio"
+
+#: C:\Documents
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Op.cpp:308
+msgid "Add Fixture"
+msgstr "Aggiungere Attrezzatura"
 
 #: C:\Documents
 #: and
@@ -5501,114 +5687,92 @@ msgid "Set All Operations Inactive"
 msgstr "Imposta tutte le operazioni Inattive"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:77
-#: Settings\luigi\Documenti\heeks\heekscnc\src/ZigZag.cpp:40
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:78
 msgid "step over"
 msgstr "passo orizzontale percorso"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:78
-#: Settings\luigi\Documenti\heeks\heekscnc\src/ZigZag.cpp:47
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:79
 msgid "material allowance"
 msgstr "distanza percorso utensile dal bordo"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:79
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:80
 msgid "round corner factor"
 msgstr "Fattore di arrotondamento angolo"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:80
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:81
 msgid "for 90 degree corners"
 msgstr "per angoli di 90 gradi"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:80
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:81
 msgid "1.5 for square, 1.0 for round"
 msgstr "1,5 per quadrati, 1,0 per rotondi"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:83
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:84
 msgid "Boundary"
 msgstr "limite"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:84
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:85
 msgid "Center"
 msgstr "centro"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:85
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:86
 msgid "starting_place"
 msgstr "zona iniziale"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:265
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:267
 msgid "Pocket operation - Sketch doesn't exist"
 msgstr "Operazione Tasche-Il profilo non esiste-%d"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:289
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:291
 #, c-format
 msgid "Pocket operation - Sketch must be a closed shape - sketch %d"
 msgstr "Operazione Tasche -Il disegno deve avere una forma chiusa -% disegno d"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:297
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:299
 #, c-format
 msgid "Pocket operation - Badly ordered sketch - sketch %d"
 msgstr "Operazione Tasche - Il profile non e' ordinato - disegno %d"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:545
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:1442
-msgid "Invalid reference to sketch"
-msgstr "riferimento invalido al disegno "
-
-#: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:545
-msgid "in pocket operations"
-msgstr "nelle operazioni di tasca"
-
-#: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:575
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:552
 msgid "No valid sketches upon which to act for pocket operations"
 msgstr "schizzi su cui agire per le operazioni di tasca non validi"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:595
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:572
 msgid "Adjusting depth of pocket"
 msgstr "Regolazione profondita'  di tasca"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:597
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:1489
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:574
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:1132
 msgid "due to cutting edge length of selected tool"
 msgstr "a causa della lunghezza di taglio bordo dello strumento selezionato"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:610
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:587
 msgid "The step-over distance for pocket (id="
 msgstr "Il passo sulla distanza di tasca (id="
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:612
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:589
 msgid ") is larger than the cutting tool's diameter"
 msgstr "è più grande del diametro dell'utensile da taglio"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:637
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Pocket.cpp:614
 msgid "Pocket spline deviation"
 msgstr ""
-
-#: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:86
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:124
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:167
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:181
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:408
-msgid "This program assumes that the machine operator has jogged"
-msgstr "Il programma presuppone che l'operazione abbia urtato"
 
 #: C:\Documents
 #: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:87
@@ -5616,42 +5780,41 @@ msgstr "Il programma presuppone che l'operazione abbia urtato"
 #: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:168
 #: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:182
 #: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:409
+msgid "This program assumes that the machine operator has jogged"
+msgstr "Il programma presuppone che l'operazione abbia urtato"
+
+#: C:\Documents
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:88
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:126
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:169
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:183
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:410
 msgid "the machine to approximatedly the correct location"
 msgstr "la macchina per approximatedly posizione corretta"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:88
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:169
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:89
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:170
 msgid "immediately above the protrusion we are finding the centre of."
 msgstr "immediatamente sopra la sporgenza cerco il centro."
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:89
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:170
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:90
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:171
 msgid "This program then jogs out and down in two opposite directions"
 msgstr "Il programma di jogging sta' fuori nelle due direzioni opposte"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:90
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:171
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:91
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:172
 msgid "before probing back towards the centre point looking for the"
 msgstr "prima di sondare verso il centro cerca indietro "
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:91
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:172
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:92
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:173
 msgid "protrusion."
 msgstr "protrusione"
-
-#: C:\Documents
-#: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:101
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:115
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:138
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:153
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:194
-msgid "Move back to the intersection points"
-msgstr "rnare ai punti di intersezione"
 
 #: C:\Documents
 #: and
@@ -5660,426 +5823,425 @@ msgstr "rnare ai punti di intersezione"
 #: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:139
 #: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:154
 #: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:195
+msgid "Move back to the intersection points"
+msgstr "rnare ai punti di intersezione"
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:103
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:117
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:140
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:155
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:196
 msgid "NOTE: We set the temporary origin because it was in effect when the values in these variables were established"
 msgstr "NOTA: impostare l'origine temporanea, perché erano in vigore quando i valori di queste variabili sono state stabilite"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:126
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:183
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:127
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:184
 msgid "immediately above the hole we are finding the centre of."
 msgstr "immediatamente sopra il foro, possiamo trovare il centro."
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:127
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:184
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:128
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:185
 msgid "This program then jogs down and probes out in two opposite directions"
 msgstr "Questo programma jogging poi giù e sonde in due direzioni opposte"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:128
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:185
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:129
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:186
 msgid "looking for the workpiece"
 msgstr "alla ricerca del pezzo in lavorazione"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:871
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:872
 msgid "Depth"
 msgstr "Profondita'"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:904
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1054
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:905
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1055
 msgid "Two"
 msgstr "Due"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:905
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:906
 msgid "Four"
 msgstr "Quattro"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:910
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:911
 msgid "Number of points"
 msgstr "Numero di punti"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:927
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:928
 msgid "Direction"
 msgstr "Direzione"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:945
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:946
 msgid "Alignment"
 msgstr "Allineamento"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:976
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:977
 msgid "Num points along X"
 msgstr "Num punti lungo X"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:977
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:978
 msgid "Num points along Y"
 msgstr "Num punti lungo Y"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:981
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:982
 msgid "Point Cloud"
 msgstr "Punto offuscato"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:982
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:983
 msgid "Fixture Measurement"
 msgstr "Apparecchio di misura"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:983
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:984
 msgid "Point Data Format"
 msgstr ""
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1038
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1039
 msgid "Retract"
 msgstr "tirare indietro"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1047
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1048
 msgid "Check Levels"
 msgstr "Controlla i livelli"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1053
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1054
 msgid "One"
 msgstr "Uno"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1057
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1058
 msgid "Number of edges"
 msgstr "Numero di lati"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1075
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1093
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1076
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1094
 msgid "Edge"
 msgstr "Bordo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1099
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1100
 msgid "Corner Coordinate"
 msgstr "coordinate angolari"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1100
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1101
 msgid "Final Coordinate"
 msgstr "Coordinate finali"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1560
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1612
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1667
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1561
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1616
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:1674
 msgid "Generate GCode"
 msgstr "Genera GCode"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2060
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2067
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2123
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2070
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2077
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2133
 msgid "Probe "
 msgstr "Sonda "
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2061
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2071
 msgid " edge"
 msgstr "bordo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2068
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2078
 msgid " corner"
 msgstr "angolo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2081
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2091
 msgid "Probe protrusion along "
 msgstr "Protrusione sonda eccessiva"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2089
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2099
 msgid "Probe hole along "
 msgstr "Sonda lungo i fori"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2100
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2110
 msgid "Probe protrusion"
 msgstr "protrusione Sonda"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2107
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2117
 msgid "Probe hole"
 msgstr "Sonda fori"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2119
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2129
 msgid "Probe Fixture Tilt"
 msgstr "Attrezzo Sonda in Tilt"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2124
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.cpp:2134
 msgid "grid"
 msgstr "griglia"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:155
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:150
 msgid "Conventional"
 msgstr "Convenzionale"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:156
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:151
 msgid "Climb"
 msgstr "Arrivo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:157
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:152
 msgid "cut mode"
 msgstr "Modo taglio"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:162
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:157
 msgid "auto roll on"
 msgstr "Autorotazione on"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:163
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:158
 msgid "roll on point"
 msgstr "Rotazione interna al punto"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:164
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:159
 msgid "auto roll off"
 msgstr "Autorotazione off"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:165
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:160
 msgid "roll off point"
 msgstr "Rotazione esterna al punto "
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:166
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:184
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:161
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:179
 msgid "roll radius"
 msgstr "Rotazione raggio"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:167
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:162
 msgid "use start point"
 msgstr "Usa punto iniziale"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:168
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:163
 msgid "start point"
 msgstr "Punto iniziale"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:169
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:164
 msgid "use end point"
 msgstr "Usa punto finale"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:170
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:165
 msgid "end point"
 msgstr "Punto finale"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:181
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:176
 msgid "sort_sketches"
 msgstr "Genere_schizzo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:187
-msgid "number of tags"
-msgstr "Numero di etichette"
-
-#: C:\Documents
-#: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:190
-msgid "tag width"
-msgstr "larghezza etichetta"
-
-#: C:\Documents
-#: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:191
-msgid "tag angle"
-msgstr "etichetta angolo "
-
-#: C:\Documents
-#: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:192
-msgid "tag at start"
-msgstr "Etichetta alla partenza"
-
-#: C:\Documents
-#: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:194
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:182
 msgid "offset_extra"
 msgstr "offset_extra"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:1212
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:811
 msgid "Pick Start"
 msgstr "Seleziona inizio"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:1213
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:812
 msgid "Pick new start point"
 msgstr "Seleziona nuovo punto iniziale"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:1221
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:820
 msgid "Pick End"
 msgstr "Fine selezione"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:1222
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:821
 msgid "Pick new end point"
 msgstr "Seleziona nuovo punto di arrivo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:1230
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:1231
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:829
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:830
 msgid "Pick roll on point"
 msgstr "Seleziona intorno un punto (interno)"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:1239
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:1240
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:838
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:839
 msgid "Pick roll off point"
 msgstr "Seleziona intorno un punto (esterno)"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:1442
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:851
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Tags.cpp:44
+msgid "Add Tag"
+msgstr "Aggiungi etichetta"
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:1085
+msgid "Invalid reference to sketch"
+msgstr "riferimento invalido al disegno "
+
+#: C:\Documents
+#: and
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:1085
 msgid "in profile operations"
 msgstr "nelle operazioni di profilo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:1472
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:1115
 msgid "No valid sketches upon which to act for profile operations"
 msgstr "schizzi su cui agire per le operazioni di profilo non validi"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:1487
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:1130
 msgid "Adjusting depth of profile"
 msgstr "Regolazione profondita'  del profilo"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:1517
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Profile.cpp:1160
 msgid "Profile spline deviation"
 msgstr ""
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Program.cpp:173
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Program.cpp:175
 msgid "Would you like to change the HeeksCAD view units too?"
 msgstr "Vuoi cambiare anche la vista HeeksCAD?"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Program.cpp:208
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Program.cpp:210
 msgid "machine"
 msgstr "Macchina"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Program.cpp:217
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Program.cpp:219
 msgid "output file name follows data file name"
 msgstr "al nome del file di output segue il nome del file di dati"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Program.cpp:222
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Program.cpp:224
 msgid "output file"
 msgstr "file di output"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Program.cpp:231
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Program.cpp:233
 msgid "units for nc output"
 msgstr "unita' d'uscita per i file nc"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Program.cpp:256
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Program.cpp:249
 msgid "Maximum Spindle Speed (RPM)"
 msgstr "Massima Velocita' di rotazione (RPM)"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Program.cpp:706
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Program.cpp:715
 msgid "The Python program is too long \n"
 msgstr "Il programma Python e' troppo lungo \n"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Program.cpp:707
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Program.cpp:716
 msgid "to display in this window.\n"
 msgstr "per visualizzarlo in questa finestra. \n"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/Program.cpp:708
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Program.cpp:717
 msgid "Please edit the python program directly at \n"
 msgstr "Si prega di modificare il programma python direttamente a \n"
 
@@ -6160,31 +6322,31 @@ msgstr "id disegno"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/SpeedOp.cpp:174
+#: Settings\luigi\Documenti\heeks\heekscnc\src/SpeedOp.cpp:175
 msgid "horizontal feed rate"
 msgstr "velocita' di avanzamento orizzontale"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/SpeedOp.cpp:175
+#: Settings\luigi\Documenti\heeks\heekscnc\src/SpeedOp.cpp:176
 msgid "vertical feed rate"
 msgstr "velocita' di avanzamento verticale"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/SpeedOp.cpp:176
+#: Settings\luigi\Documenti\heeks\heekscnc\src/SpeedOp.cpp:177
 msgid "spindle speed"
 msgstr "Velocita'  elettromandrino"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/SpeedOp.cpp:294
+#: Settings\luigi\Documenti\heeks\heekscnc\src/SpeedOp.cpp:295
 msgid "auto set speeds for new operation"
 msgstr "Auto Impostare la velocita' per nuova operazione"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscnc\src/SpeedOp.cpp:320
+#: Settings\luigi\Documenti\heeks\heekscnc\src/SpeedOp.cpp:321
 msgid "Reset Feeds and Speeds"
 msgstr "Reset Alimentazione e Velocita'"
 
@@ -6225,42 +6387,48 @@ msgid "Feeds and Speeds"
 msgstr "Alimentazione e Velocita'"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/ZigZag.cpp:36
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Tag.cpp:74
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Tag.cpp:77
+msgid "Pick position"
+msgstr "Scelta posizione"
+
+#: C:\Documents
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/ZigZag.cpp:38
 msgid "minimum x"
 msgstr "x minimo"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/ZigZag.cpp:37
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/ZigZag.cpp:39
 msgid "maximum x"
 msgstr "x massimo"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/ZigZag.cpp:38
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/ZigZag.cpp:40
 msgid "minimum y"
 msgstr "y minimo"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/ZigZag.cpp:39
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/ZigZag.cpp:41
 msgid "maximum y"
 msgstr "y massimo"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/ZigZag.cpp:50
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/ZigZag.cpp:52
 msgid "one way"
 msgstr "sola andata"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/ZigZag.cpp:51
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/ZigZag.cpp:53
 msgid "back and forth"
 msgstr "avanti e indietro"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/ZigZag.cpp:52
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/ZigZag.cpp:54
 msgid "style"
 msgstr "Stile"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/ZigZag.cpp:389
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/ZigZag.cpp:392
 msgid "Reset Boundary"
 msgstr "Reset limite"
 
@@ -6409,7 +6577,6 @@ msgstr "Pinza"
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HAngularDimension.h:48
-#: Settings\luigi\Documenti\heeks\heekscad\src/HDimension.h:59
 msgid "Dimension"
 msgstr "Dimensioni"
 
@@ -6570,62 +6737,71 @@ msgid "Program"
 msgstr "Programma"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:181
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:164
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:181
 msgid "Rapid"
 msgstr "Rapido"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:184
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:167
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:184
 msgid "Probe"
 msgstr "Sonda"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:187
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:170
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:187
 msgid "End Of Data"
 msgstr "fine dei dati"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:238
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:212
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:236
 msgid "Bottom Left"
 msgstr "Inferiore sinistro"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:242
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:216
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:240
 msgid "Bottom Right"
 msgstr "Inferiore destro"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:246
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:220
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:244
 msgid "Top Left"
 msgstr "Superiore sinistro"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:250
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:224
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:248
 msgid "Top Right"
 msgstr "Superiore destro"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:302
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:274
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:298
 msgid "Bottom"
 msgstr "Inferiore"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:306
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:278
+#: Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:302
 msgid "Top"
 msgstr "Superiore"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:384
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:380
 msgid "Probe Grid"
 msgstr "Griglia Sonda"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:433
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:429
 msgid "Probe Centre"
 msgstr "Sonda il centro"
 
 #: C:\Documents
-#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:489
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Probing.h:485
 msgid "Probe Edge"
 msgstr "Sonda il bordo"
 
@@ -6640,17 +6816,45 @@ msgid "Re-select solids"
 msgstr "Riseleziona solido"
 
 #: C:\Documents
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Tag.h:23
+msgid "Tag"
+msgstr "Etichetta"
+
+#: C:\Documents
+#: and Settings\luigi\Documenti\heeks\heekscnc\src/Tags.h:19
+msgid "Tags"
+msgstr "Etichette"
+
+#: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\interface/HeeksObj.h:110
+#: Settings\luigi\Documenti\heeks\heekscad\interface/HeeksObj.h:111
 msgid "Unknown"
 msgstr "Sconosciuto"
 
 #: C:\Documents
 #: and
-#: Settings\luigi\Documenti\heeks\heekscad\interface/Property.h:38
+#: Settings\luigi\Documenti\heeks\heekscad\interface/Property.h:41
 msgid "Unknown Property"
 msgstr "PropriatÃÂ  sconosciute"
 
+#~ msgid "View XY Top"
+#~ msgstr "Vista XY da sopra"
+#~ msgid "View XY Bottom"
+#~ msgstr "Vista XY da sotto"
+#~ msgid "View XY Right"
+#~ msgstr "Vista XY da destra"
+#~ msgid "View XY Left"
+#~ msgstr "Vista XY Sinistra"
+#~ msgid "in pocket operations"
+#~ msgstr "nelle operazioni di tasca"
+#~ msgid "number of tags"
+#~ msgstr "Numero di etichette"
+#~ msgid "tag width"
+#~ msgstr "larghezza etichetta"
+#~ msgid "tag angle"
+#~ msgstr "etichetta angolo "
+#~ msgid "tag at start"
+#~ msgstr "Etichetta alla partenza"
 #~ msgid "Use 3D rotation"
 #~ msgstr "Usa rotazione 3D"
 #~ msgid "Active font"
