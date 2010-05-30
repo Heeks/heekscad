@@ -200,8 +200,8 @@ void TransformTools::Rotate(bool copy, bool allow3DRotation)
 			{
 				HeeksObj* object = *It;
 				HeeksObj* new_object = object->MakeACopy();
-				object->Owner()->Add(new_object, NULL);
-				object->ModifyByMatrix(m);
+				new_object->ModifyByMatrix(m);              // Rotate the duplicate object.
+				object->Owner()->Add(new_object, NULL);     // And add it to this object's owner
 			}
 		}
 		wxGetApp().m_marked_list->Clear(true);
