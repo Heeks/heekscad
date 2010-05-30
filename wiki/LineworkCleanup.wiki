@@ -2,7 +2,7 @@
 
 = Introduction =
 
-There are occasions where sketches representing the model contain many more graphical elements than is required.  For example an SVG file may include spline elements that contain 20 or 30 poles but whose overall length is less than 1mm.  In such situations, the bloated size of the graphical model only serves to slow down the computer's processing.
+There are occasions where sketches representing the model contain many more graphical elements than are required.  For example an SVG file may include spline elements that contain 20 or 30 poles but whose overall length is less than 1mm.  In such situations, the bloated size of the graphical model only serves to slow down the computer's processing.
 
 In such situations, it may be preferable to convert the series of many small graphical elements into fewer, and larger, lines or BSplines.
 
