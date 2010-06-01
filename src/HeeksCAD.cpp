@@ -171,6 +171,8 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_solid_view_mode = SolidViewFacesAndEdges;
 
 	m_font_paths = _T("/usr/share/qcad/fonts");
+	m_word_space_percentage = 100.0;
+	m_character_space_percentage = 25.0;
 	m_stl_facet_tolerance = 0.1;
 
 	m_pVectorFont = NULL;	// Default to internal (OpenGL) font.
@@ -2448,6 +2450,32 @@ static void on_edit_font_paths(const wxChar* value, HeeksObj* object)
 	config.Write(_T("FontPaths"), wxGetApp().m_font_paths);
 }
 
+static void on_edit_word_space_percentage(const double value, HeeksObj* object)
+{
+	wxGetApp().m_word_space_percentage = value;
+
+	HeeksConfig config;
+	config.Write(_T("FontWordSpacePercentage"), wxGetApp().m_word_space_percentage);
+
+	if (wxGetApp().m_pVectorFonts.get())
+	{
+	    wxGetApp().m_pVectorFonts->SetWordSpacePercentage(value);
+	}
+}
+
+static void on_edit_character_space_percentage(const double value, HeeksObj* object)
+{
+	wxGetApp().m_character_space_percentage = value;
+
+	HeeksConfig config;
+	config.Write(_T("FontCharacterSpacePercentage"), wxGetApp().m_character_space_percentage);
+
+	if (wxGetApp().m_pVectorFonts.get())
+	{
+	    wxGetApp().m_pVectorFonts->SetCharacterSpacePercentage(value);
+	}
+}
+
 
 void on_set_allow_opengl_stippling(bool value, HeeksObj* object)
 {
@@ -2659,6 +2687,8 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	// Font options
 	PropertyList* font_options = new PropertyList(_("font options"));
 	font_options->m_list.push_back( new PropertyString(_("Paths (semicolon delimited)"), m_font_paths, this, on_edit_font_paths));
+	font_options->m_list.push_back( new PropertyDouble(_("Word Space Percentage"), m_word_space_percentage, this, on_edit_word_space_percentage));
+	font_options->m_list.push_back( new PropertyDouble(_("Character Space Percentage"), m_character_space_percentage, this, on_edit_character_space_percentage));
 	list->push_back(font_options);
 
 	SketchTools_GetOptions(list);
@@ -3689,7 +3719,9 @@ std::auto_ptr<VectorFonts>	& HeeksCADapp::GetAvailableFonts(const bool force_rea
 
                 if (m_pVectorFonts.get() == NULL)
                 {
-                    m_pVectorFonts = std::auto_ptr<VectorFonts>(new VectorFonts(*l_itPath));
+                    m_pVectorFonts = std::auto_ptr<VectorFonts>(new VectorFonts(*l_itPath, m_word_space_percentage, m_character_space_percentage));
+					m_pVectorFonts->SetWordSpacePercentage( m_word_space_percentage );
+					m_pVectorFonts->SetCharacterSpacePercentage( m_character_space_percentage );
                 } // End if - then
                 else
                 {

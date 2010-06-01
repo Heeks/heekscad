@@ -189,6 +189,8 @@ public:
 	std::auto_ptr<VectorFonts>	m_pVectorFonts;	// QCAD format fonts that have been loaded.
 	VectorFont   *m_pVectorFont;	// which font are we using? (NULL indicates the internal (OpenGL) font)
 	wxString m_font_paths;	// SemiColon delimited list of directories that hold font files to load.
+	double m_word_space_percentage;	// Font
+	double m_character_space_percentage; // Font
 	double m_stl_facet_tolerance;
 
 	int m_auto_save_interval;	// In minutes
