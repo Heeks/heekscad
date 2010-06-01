@@ -21,3 +21,7 @@ When a text object is created, this is the font that will be used by default.  T
 === Font Paths ===
 
 This is a semi-colon separated list of directories that hold supported font files.  At the moment it looks for files whose name end in either '.CXF' or '.JHF'.  By default this value is set to /usr/share/qcad/fonts as this is where the qcad-data product puts the fonts by default.  If the Hershey fonts have been downloaded, add the path to their directory in this parameter.  All CXF and Hershey fonts available in the directories specified will be read into memory as HeeksCAD starts up.
+
+=== Word and Character Space ===
+
+These two parameters express the word and character spacing values in terms of a percentage of the maximum character width for the current font.
