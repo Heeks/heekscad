@@ -148,8 +148,8 @@ protected:
 
 
 	public:
-		Glyph( const std::list<std::string> &cxf_glyph_definition );
-		Glyph( const std::string & hershey_glyph_definition );
+		Glyph( const std::list<std::string> &cxf_glyph_definition, const double word_space_percentage, const double character_space_percentage );
+		Glyph( const std::string & hershey_glyph_definition, const double word_space_percentage, const double character_space_percentage );
 		Glyph( const Glyph & rhs );
 		Glyph & operator= ( const Glyph & rhs );
 		~Glyph();
@@ -159,38 +159,49 @@ protected:
 		void glCommands( const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const;
 		void get_text_size( float *pWidth, float *pHeight ) const;
 		CBox BoundingBox() const { return(m_bounding_box); }
+		void SetWordSpacePercentage( const double value );
+        void SetCharacterSpacePercentage( const double value );
 
 	private:
 		typedef std::list< Graphics * > GraphicsList_t;
 
 		GraphicsList_t	m_graphics_list;
 		CBox	m_bounding_box;
+		double m_word_space_percentage;
+		double m_character_space_percentage;
 
 		wxString PrepareStringForConversion( wxString &value ) const;
+		double PointToMM( const double points ) const;
 	}; // End Glyph class definition
 
 public:
-	VectorFont() { }
+	VectorFont(const double word_space_percentage, const double character_space_percentage)
+	{
+		m_word_space_percentage = word_space_percentage;
+		m_character_space_percentage = character_space_percentage;
+	}
 
 	unsigned int NumGlyphs() const { return((unsigned int) m_glyphs.size()); }
-	double LetterSpacing() const { return(m_letter_spacing); }
-	double WordSpacing() const { return(m_word_spacing); }
-	double LineSpacingFactor() const { return(m_line_spacing_factor); }
+	double LetterSpacing() const { return(m_bounding_box.Width() * m_character_space_percentage / 100.0); }
+	double WordSpacing() const { return(m_bounding_box.Width() * m_word_space_percentage / 100.0); }
+	double LineSpacingFactor() const { return(m_bounding_box.Height() * 10.0 / 100.0); }
 	Name_t Name() const { return(m_name); }
 
 	HeeksObj *Sketch( const wxString & string, const gp_Trsf & transformation_matrix ) const;
 	bool get_text_size( const wxString & text, float *pWidth, float *pHeight ) const;
 	void glCommands(const wxString & text, const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const;
 	CBox BoundingBox() const { return(m_bounding_box); }
+	void SetWordSpacePercentage( const double value );
+	void SetCharacterSpacePercentage( const double value );
 
 protected:
 	typedef std::map< wxChar, Glyph > Glyphs_t;
 	Glyphs_t m_glyphs;
-	double m_letter_spacing;
-	double m_word_spacing;
 	double m_line_spacing_factor;
 	Name_t m_name;
 	CBox	m_bounding_box;		// box surrounding the largest character.
+	double m_word_space_percentage;
+	double m_character_space_percentage;
 
 }; // End VectorFont class definition
 
@@ -198,7 +209,7 @@ protected:
 class CxfFont : public VectorFont
 {
 public:
-	CxfFont( const wxChar *p_szFile );
+	CxfFont( const wxChar *p_szFile, const double word_space_percentage, const double character_space_percentage );
 	static bool ValidExtension( const wxString &file_name );
 
 }; // End CxfFont class definition
@@ -207,7 +218,7 @@ public:
 class HersheyFont : public VectorFont
 {
 public:
-	HersheyFont( const wxChar *p_szFile );
+	HersheyFont( const wxChar *p_szFile, const double word_space_percentage, const double character_space_percentage );
 	static bool ValidExtension( const wxString &file_name );
 
 }; // End CxfFont class definition
@@ -218,7 +229,7 @@ class VectorFonts
 public:
 	typedef std::map< VectorFont::Name_t, VectorFont * > Fonts_t;
 
-	VectorFonts(const VectorFont::Name_t &directory);
+	VectorFonts(const VectorFont::Name_t &directory, const double word_space_percentage, const double character_space_percentage);
 	~VectorFonts();
 
 	void Add( const VectorFont::Name_t &directory );
@@ -228,8 +239,13 @@ public:
 	std::set<VectorFont::Name_t> FontNames() const;
 	VectorFont *Font( const VectorFont::Name_t & name ) const;
 
+	void SetWordSpacePercentage( const double value );
+	void SetCharacterSpacePercentage( const double value );
+
 private:
 	Fonts_t	m_fonts;
+	double m_word_space_percentage;
+	double m_character_space_percentage;
 }; // End CxfFonts class definition.
 
 

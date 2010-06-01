@@ -216,8 +216,23 @@ wxString VectorFont::Glyph::PrepareStringForConversion( wxString &value ) const
     return(value);
 }
 
-VectorFont::Glyph::Glyph( const std::list<std::string> &cxf_glyph_definition )
+/**
+	In font terms, one point is 1/72 inches.  If we interpret the values in the
+	source file as 'points' then we need to convert them to mm for HeeksCAD internal
+	use.
+ */
+double VectorFont::Glyph::PointToMM( const double points ) const
 {
+	const double mm_per_point = (1.0 / 72.0) * 25.4;
+	return(points * mm_per_point);
+}
+
+
+VectorFont::Glyph::Glyph( const std::list<std::string> &cxf_glyph_definition, const double word_space_percentage, const double character_space_percentage )
+{
+	m_word_space_percentage = word_space_percentage;
+	m_character_space_percentage = character_space_percentage;
+
 	for (std::list<std::string>::const_iterator l_itLine = cxf_glyph_definition.begin(); l_itLine != cxf_glyph_definition.end(); l_itLine++)
 	{
 		wxString line( Ctt(l_itLine->c_str()) );
@@ -249,10 +264,10 @@ VectorFont::Glyph::Glyph( const std::list<std::string> &cxf_glyph_definition )
 			}
 			else
 			{
-				Line *line = new Line( strtod( Ttc(tokens[1].c_str()), NULL ),
-												 strtod( Ttc(tokens[2].c_str()), NULL ),
-												 strtod( Ttc(tokens[3].c_str()), NULL ),
-												 strtod( Ttc(tokens[4].c_str()), NULL ) );
+				Line *line = new Line(	 PointToMM(strtod( Ttc(tokens[1].c_str()), NULL )),
+										 PointToMM(strtod( Ttc(tokens[2].c_str()), NULL )),
+										 PointToMM(strtod( Ttc(tokens[3].c_str()), NULL )),
+										 PointToMM(strtod( Ttc(tokens[4].c_str()), NULL )) );
 				m_graphics_list.push_back( line );
 				m_bounding_box.Insert( line->BoundingBox() );
 			}
@@ -271,21 +286,21 @@ VectorFont::Glyph::Glyph( const std::list<std::string> &cxf_glyph_definition )
 				if ((tokens[0].size() == 2) && (tokens[0][1] == 'R'))
 				{
 					// Reverse the starting and ending points.
-					Arc *arc = new Arc( strtod( Ttc(tokens[1].c_str()), NULL ),
-													 strtod( Ttc(tokens[2].c_str()), NULL ),
-													 strtod( Ttc(tokens[3].c_str()), NULL ),
-													 strtod( Ttc(tokens[5].c_str()), NULL ),
-													 strtod( Ttc(tokens[4].c_str()), NULL ) );
+					Arc *arc = new Arc( PointToMM(strtod( Ttc(tokens[1].c_str()), NULL )),
+										 PointToMM(strtod( Ttc(tokens[2].c_str()), NULL )),
+										 PointToMM(strtod( Ttc(tokens[3].c_str()), NULL )),
+										 strtod( Ttc(tokens[5].c_str()), NULL) ,
+										 strtod( Ttc(tokens[4].c_str()), NULL ));
 					m_graphics_list.push_back( arc );
 					m_bounding_box.Insert( arc->BoundingBox() );
 				} // End if - then
 				else
 				{
-					Arc *arc = new Arc( strtod( Ttc(tokens[1].c_str()), NULL ),
-												 strtod( Ttc(tokens[2].c_str()), NULL ),
-												 strtod( Ttc(tokens[3].c_str()), NULL ),
-												 strtod( Ttc(tokens[4].c_str()), NULL ),
-												 strtod( Ttc(tokens[5].c_str()), NULL ) );
+					Arc *arc = new Arc( PointToMM(strtod( Ttc(tokens[1].c_str()), NULL )),
+										 PointToMM(strtod( Ttc(tokens[2].c_str()), NULL )),
+										 PointToMM(strtod( Ttc(tokens[3].c_str()), NULL )),
+										 strtod( Ttc(tokens[4].c_str()), NULL ),
+										 strtod( Ttc(tokens[5].c_str()), NULL ) );
 					m_graphics_list.push_back( arc );
 					m_bounding_box.Insert( arc->BoundingBox() );
 				}
@@ -300,14 +315,17 @@ VectorFont::Glyph::Glyph( const std::list<std::string> &cxf_glyph_definition )
 	} // End for
 } // End constructor
 
-VectorFont::Glyph::Glyph( const std::string &hershey_glyph_definition )
+VectorFont::Glyph::Glyph( const std::string &hershey_glyph_definition, const double word_space_percentage, const double character_space_percentage )
 {
+	m_word_space_percentage = word_space_percentage;
+	m_character_space_percentage = character_space_percentage;
+
 	std::string definition(hershey_glyph_definition);
 
 	if (definition.size() >= 2)
 	{
-	    double left_edge = double(definition[0] - 'R');
-	    double right_edge = double( definition[1] - 'R');
+	    double left_edge = PointToMM(double(definition[0] - 'R'));
+	    double right_edge = PointToMM(double( definition[1] - 'R'));
 	    definition.erase(0,2);
 
         m_bounding_box.Insert( left_edge, 0, 0 );
@@ -335,7 +353,7 @@ VectorFont::Glyph::Glyph( const std::string &hershey_glyph_definition )
 						double to_x = double(definition[0] - 'R');
 						double to_y = double(definition[1] - 'R') * -1.0;
 
-						Line *line = new Line( x, y, to_x, to_y );
+						Line *line = new Line( PointToMM(x), PointToMM(y), PointToMM(to_x), PointToMM(to_y) );
 						m_graphics_list.push_back( line );
 						m_bounding_box.Insert( line->BoundingBox() );
 						x = to_x;
@@ -485,10 +503,9 @@ void VectorFont::Glyph::glCommands( const gp_Pnt & starting_point, const bool se
 #endif
 
 
-CxfFont::CxfFont( const wxChar *p_szFile )
+CxfFont::CxfFont( const wxChar *p_szFile, const double word_space_percentage, const double character_space_percentage )
+	: VectorFont(word_space_percentage, character_space_percentage)
 {
-	m_letter_spacing = 3.0;
-	m_word_spacing = 6.75;
 	m_line_spacing_factor = 1.0;
 	m_name = _T("");
 	wxChar character_name = 0;
@@ -528,8 +545,8 @@ CxfFont::CxfFont( const wxChar *p_szFile )
 					}
 					else
 					{
-						m_glyphs.insert(std::make_pair(character_name, Glyph(lines)));
-						m_bounding_box.Insert( Glyph(lines).BoundingBox() );
+						m_glyphs.insert(std::make_pair(character_name, Glyph(lines, m_word_space_percentage, m_character_space_percentage)));
+						m_bounding_box.Insert( Glyph(lines, m_word_space_percentage, m_character_space_percentage).BoundingBox() );
 					}
 
 					lines.clear();
@@ -561,13 +578,7 @@ CxfFont::CxfFont( const wxChar *p_szFile )
 					// It's a comment.  See if it's one of the special comments we're interested in.
 
 					std::vector<wxString> tokens = Tokens( ss_to_wxstring(line), _T("# \r\t\n:") );
-					if (line.find("LetterSpacing") != line.npos)
-					{
-						tokens.rbegin()->ToDouble(&m_letter_spacing);
-					} else if (line.find("WordSpacing") != line.npos)
-					{
-						tokens.rbegin()->ToDouble(&m_word_spacing);
-					} else if (line.find("LineSpacingFactor") != line.npos)
+					if (line.find("LineSpacingFactor") != line.npos)
 					{
 						tokens.rbegin()->ToDouble(&m_line_spacing_factor);
 					} else if (line.find("Name") != line.npos)
@@ -603,10 +614,10 @@ CxfFont::CxfFont( const wxChar *p_szFile )
 		}
 		else
 		{
-			m_glyphs.insert(std::make_pair(character_name, Glyph(lines)));
+			m_glyphs.insert(std::make_pair(character_name, Glyph(lines, m_word_space_percentage, m_character_space_percentage)));
 			lines.clear();
 			symbol.Clear();
-			m_bounding_box.Insert( Glyph(lines).BoundingBox() );
+			m_bounding_box.Insert( Glyph(lines, m_word_space_percentage, m_character_space_percentage).BoundingBox() );
 		}
 
 //		printf("File '%s' contained %d glyphs\n", Ttc(p_szFile), m_glyphs.size() );
@@ -629,10 +640,9 @@ struct LineEnding : public std::unary_function< char, bool >
 	}
 };
 
-HersheyFont::HersheyFont( const wxChar *p_szFile )
+HersheyFont::HersheyFont( const wxChar *p_szFile, const double word_space_percentage, const double character_space_percentage )
+	: VectorFont(word_space_percentage, character_space_percentage)
 {
-	m_letter_spacing = 3.0;
-	m_word_spacing = 6.75;
 	m_line_spacing_factor = 1.0;
 	m_name = _T("Hershey");
 	wxChar character_name = ' ';
@@ -685,8 +695,8 @@ HersheyFont::HersheyFont( const wxChar *p_szFile )
 					line += extra;
 				} // End while
 
-				m_glyphs.insert(std::make_pair(character_name, Glyph(line)));
-				m_bounding_box.Insert( Glyph(line).BoundingBox() );
+				m_glyphs.insert(std::make_pair(character_name, Glyph(line, m_word_space_percentage, m_character_space_percentage)));
+				m_bounding_box.Insert( Glyph(line, m_word_space_percentage, m_character_space_percentage).BoundingBox() );
 				character_name += 1;
 			}
 		}
@@ -941,8 +951,13 @@ void VectorFont::glCommands(const wxString & text, const gp_Pnt &start_point, co
 }
 
 
-VectorFonts::VectorFonts( const VectorFont::Name_t & directory )
+VectorFonts::VectorFonts( const VectorFont::Name_t & directory,
+							const double word_space_percentage,
+							const double character_space_percentage )
 {
+	m_word_space_percentage = word_space_percentage;
+	m_character_space_percentage = character_space_percentage;
+
 	Add( directory );
 }
 
@@ -961,7 +976,7 @@ void VectorFonts::Add( const VectorFont::Name_t & directory )
 				wxString path( directory );
 				path = path + _T("/");
 				path = path + l_itFile->c_str();
-				CxfFont *pFont = new CxfFont( path.c_str() );
+				CxfFont *pFont = new CxfFont( path.c_str(), m_word_space_percentage, m_character_space_percentage );
 				m_fonts.insert( std::make_pair( pFont->Name(), pFont ) );
 			} // End if - then
 			else if (HersheyFont::ValidExtension( *l_itFile ))
@@ -969,7 +984,7 @@ void VectorFonts::Add( const VectorFont::Name_t & directory )
 				wxString path( directory );
 				path = path + _T("/");
 				path = path + l_itFile->c_str();
-				HersheyFont *pFont = new HersheyFont( path.c_str() );
+				HersheyFont *pFont = new HersheyFont( path.c_str(), m_word_space_percentage, m_character_space_percentage );
 				m_fonts.insert( std::make_pair( pFont->Name(), pFont ) );
 			} // End if - then
 		} // End try
@@ -1012,6 +1027,52 @@ VectorFont *VectorFonts::Font( const VectorFont::Name_t & name ) const
 
 	return(NULL);
 } // End Font() method
+
+void VectorFonts::SetWordSpacePercentage( const double value )
+{
+    m_word_space_percentage = value;
+    for (Fonts_t::iterator itFont = m_fonts.begin(); itFont != m_fonts.end(); itFont++)
+    {
+        itFont->second->SetWordSpacePercentage(value);
+    }
+}
+
+void VectorFonts::SetCharacterSpacePercentage( const double value )
+{
+    m_character_space_percentage = value;
+    for (Fonts_t::iterator itFont = m_fonts.begin(); itFont != m_fonts.end(); itFont++)
+    {
+        itFont->second->SetCharacterSpacePercentage(value);
+    }
+}
+
+void VectorFont::SetWordSpacePercentage( const double value )
+{
+    m_word_space_percentage = value;
+    for (Glyphs_t::iterator itGlyph = m_glyphs.begin(); itGlyph != m_glyphs.end(); itGlyph++)
+    {
+        itGlyph->second.SetWordSpacePercentage(value);
+    }
+}
+
+void VectorFont::SetCharacterSpacePercentage( const double value )
+{
+    m_character_space_percentage = value;
+    for (Glyphs_t::iterator itGlyph = m_glyphs.begin(); itGlyph != m_glyphs.end(); itGlyph++)
+    {
+        itGlyph->second.SetCharacterSpacePercentage(value);
+    }
+}
+
+void VectorFont::Glyph::SetWordSpacePercentage( const double value )
+{
+    m_word_space_percentage = value;
+}
+
+void VectorFont::Glyph::SetCharacterSpacePercentage( const double value )
+{
+    m_character_space_percentage = value;
+}
 
 
 
