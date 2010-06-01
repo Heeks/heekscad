@@ -56,6 +56,7 @@ public:
 	void Remove(HeeksObj* object);
 	void glCommands(bool select, bool marked, bool no_color);
 	void ReloadPointers();
+	bool IsTransient(){return true;}
 	void ModifyByMatrix(const double *m);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
