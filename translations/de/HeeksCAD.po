@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: HeeksCAD 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 13:41+0200\n"
-"PO-Revision-Date: 2010-06-02 22:26+0100\n"
+"PO-Revision-Date: 2010-06-03 01:48+0100\n"
 "Last-Translator: hans <fungunner2@frreenet.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -2423,11 +2423,11 @@ msgid "Touch Probe"
 msgstr "Messtaster"
 
 msgid "Tool Length Switch"
-msgstr "Werkzeug-Längen-Taster"
+msgstr "Werkzeug-Laengen-Taster"
 
 msgid "New Touch Probe..."
 msgstr "Neuer Messtaster"
 
 msgid "New Tool Length Switch..."
-msgstr "Neuer W.Z.Längentaster"
+msgstr "Neuer W.Z.Laengentaster"
 
