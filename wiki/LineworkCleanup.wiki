@@ -10,11 +10,11 @@ The 'Simplify Sketch to Lines' and 'Simplify Sketch to BSpline' menu options tak
 
 These simplification routines then iterate through these points removing adjacent points where the distance between them is less than the configured tolerance.
 
-The process then steps through the interpolated points in groups of three.  It draws a line between the two outside points (in memory only) and measures the distance of the centre point to this line.  If the deviation from the centre point to the line is greater than that configured then the centre point is discarded.
+The process then steps through the interpolated points in groups of three.  It draws a line between the two outside points (in memory only) and measures the distance of the centre point to this line.  If the deviation from the centre point to the line is less than that configured then the centre point is discarded.
 
 These two point removal processes continue until none of the interpolated points can be discarded without contradicting either the tolerance or the deviation settings.
 
-With this simplified set of interpolated points, the software then generates either a series of lines or a bspline that intersects all interpolated points.
+With this simplified set of interpolated points, the software then generates either a series of lines or a single bspline that intersects all interpolated points.
 
 If a simplified element can be created, the software adds the word 'Replaced ' to the original element's title before adding the newly created element to the Heeks file.  The idea being that the modified title will make the replaced object easier to identify for manual removal.
 
