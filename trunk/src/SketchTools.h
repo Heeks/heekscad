@@ -43,6 +43,22 @@ class SimplifySketchTool: public Tool{
             double Tolerance() const;
         }; // End SortPoint class definition.
 
+		struct sort_points_by_distance : public std::binary_function< const SortPoint &, const SortPoint &, bool >
+		{
+			sort_points_by_distance( const SortPoint & reference_point )
+			{
+				m_reference_point = reference_point;
+			} // End constructor
+
+			SortPoint m_reference_point;
+
+			// Return true if dist(lhs to ref) < dist(rhs to ref)
+			bool operator()( const SortPoint & lhs, const SortPoint & rhs ) const
+			{
+				return( lhs.Distance( m_reference_point ) < rhs.Distance( m_reference_point ) );
+			} // End operator() overload
+		}; // End sort_points_by_distance structure definition.
+
 protected:
 	HeeksObj *m_object;
 	double	m_deviation;
