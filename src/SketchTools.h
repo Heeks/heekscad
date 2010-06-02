@@ -89,7 +89,7 @@ public:
 
 	// Tool's virtual functions
     virtual void Run();
-	virtual const wxChar* GetTitle(){return _T("Simplify Sketch to Lines");}
+	virtual const wxChar* GetTitle(){return _("Simplify Sketch to Lines");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Pad Sketch");}
 };
@@ -98,7 +98,7 @@ class SimplifySketchToBSplines: public SimplifySketchTool {
 public:
 
     virtual void Run();
-	const wxChar* GetTitle(){return _T("Simplify Sketch to BSplines");}
+	const wxChar* GetTitle(){return _("Simplify Sketch to BSplines");}
 };
 
 

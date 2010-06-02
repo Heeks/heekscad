@@ -43,7 +43,7 @@ public:
 		SolveSketch((CSketch*)line_for_tool->Owner());
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Toggle Horizontal");}
+	const wxChar* GetTitle(){return _("Toggle Horizontal");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Set this line to be horizontal");}
 };
@@ -56,7 +56,7 @@ public:
 		SolveSketch((CSketch*)line_for_tool->Owner());
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Toggle Vertical");}
+	const wxChar* GetTitle(){return _("Toggle Vertical");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Set this line to be vertical");}
 };
@@ -69,7 +69,7 @@ public:
 		SolveSketch((CSketch*)line_for_tool->Owner());
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Toggle Line Length");}
+	const wxChar* GetTitle(){return _("Toggle Line Length");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Set this lines length as constrained");}
 };

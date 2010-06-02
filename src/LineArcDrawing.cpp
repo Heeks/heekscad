@@ -64,7 +64,7 @@ public:
 	}
 
 	// Tool's virtual functions
-	const wxChar* GetTitle(){return _T("set previous direction");}
+	const wxChar* GetTitle(){return _("set previous direction");}
 	void Run()
 	{
 		drawing->m_previous_direction = new_direction;

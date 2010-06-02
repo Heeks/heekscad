@@ -88,7 +88,7 @@ public:
 		SolveSketch((CSketch*)arc_for_tool->Owner());
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Toggle Radius");}
+	const wxChar* GetTitle(){return _("Toggle Radius");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Set this arcs radius as constrained");}
 };

@@ -247,7 +247,7 @@ public:
 		sketch_for_tools->Owner()->Remove(sketch_for_tools);
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Split Sketch");}
+	const wxChar* GetTitle(){return _("Split Sketch");}
 	wxString BitmapPath(){return _T("splitsketch");}
 };
 

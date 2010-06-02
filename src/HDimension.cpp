@@ -211,7 +211,7 @@ public:
 		SolveSketch((CSketch*)dimension_for_tool->Owner());
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Toggle Dimension Constraint");}
+	const wxChar* GetTitle(){return _("Toggle Dimension Constraint");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Set this dimension as constrained");}
 };

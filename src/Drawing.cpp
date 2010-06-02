@@ -262,7 +262,7 @@ public:
 	SetDrawingDrawStep(Drawing *d, int s){drawing = d; old_step = drawing->GetDrawStep(); step = s;}
 
 	// Tool's virtual functions
-	const wxChar* GetTitle(){return _T("set_draw_step");}
+	const wxChar* GetTitle(){return _("set_draw_step");}
 	void Run(){drawing->set_draw_step_not_undoable(step);}
 	void RollBack(){drawing->set_draw_step_not_undoable(old_step);}
 	bool Undoable(){return true;}
@@ -282,7 +282,7 @@ public:
 	}
 
 	// Tool's virtual functions
-	const wxChar* GetTitle(){return _T("set_position");}
+	const wxChar* GetTitle(){return _("set_position");}
 	void Run(){drawing->set_start_pos_not_undoable(next_pos);}
 	void RollBack(){drawing->set_start_pos_not_undoable(prev_pos);}
 	bool Undoable(){return true;}
