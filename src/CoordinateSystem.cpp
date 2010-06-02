@@ -1243,7 +1243,7 @@ public:
 	void Run(){
 		coord_system_for_Tool->PickFrom3Points();
 	}
-	const wxChar* GetTitle(){return _T("CoordSystem3Points");}
+	const wxChar* GetTitle(){return _("coord system 3 points");}
 	wxString BitmapPath(){return _T("coords3");}
 	const wxChar* GetToolTip(){return _("Set position and orientation by picking 3 points");}
 };
@@ -1258,7 +1258,7 @@ public:
 		wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("SetCoordSystemActive");}
+	const wxChar* GetTitle(){return _("set coord system active");}
 	wxString BitmapPath(){return _T("setcoordsys");}
 	const wxChar* GetToolTip(){return _("Set this coordinate system as the active one");}
 };
@@ -1273,7 +1273,7 @@ public:
 		wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("UnsetCoordSystemActive");}
+	const wxChar* GetTitle(){return _("unset coord system active");}
 	wxString BitmapPath(){return _T("unsetcoordsys");}
 	const wxChar* GetToolTip(){return _("Set world coordinate system active");}
 };

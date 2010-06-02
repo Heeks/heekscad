@@ -277,7 +277,7 @@ public:
 		wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("ResetRuler");}
+	const wxChar* GetTitle(){return _("ResetRuler");}
 	wxString BitmapPath(){return _T("resetruler");}
 	const wxChar* GetToolTip(){return _("Reset the ruler");}
 };

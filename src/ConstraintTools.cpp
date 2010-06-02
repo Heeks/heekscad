@@ -29,7 +29,7 @@ public:
 		SolveSketch((CSketch*)last->Owner());
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Set Perpendicular");}
+	const wxChar* GetTitle(){return _("Set Perpendicular");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Set these lines to be perpendicular");}
 };
@@ -53,7 +53,7 @@ public:
 		SolveSketch((CSketch*)last->Owner());
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Toggle Tangent");}
+	const wxChar* GetTitle(){return _("Toggle Tangent");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Set line tangent to arc");}
 };
@@ -75,7 +75,7 @@ public:
 		SolveSketch((CSketch*)last->Owner());
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Set Parallel");}
+	const wxChar* GetTitle(){return _("Set Parallel");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Set these lines to be parallel");}
 };
@@ -96,7 +96,7 @@ public:
 		SolveSketch((CSketch*)last->Owner());
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Set Equal Length");}
+	const wxChar* GetTitle(){return _("Set Equal Length");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Set these lines to be equal length");}
 };
@@ -117,7 +117,7 @@ public:
 		SolveSketch((CSketch*)last->Owner());
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Set Colinear");}
+	const wxChar* GetTitle(){return _("Set Colinear");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Set these lines to be colinear");}
 };
@@ -138,7 +138,7 @@ public:
 		SolveSketch((CSketch*)last->Owner());
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Set Equal Radius");}
+	const wxChar* GetTitle(){return _("Set Equal Radius");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Set these arcs to have equal radii");}
 };
@@ -159,7 +159,7 @@ public:
 		SolveSketch((CSketch*)last->Owner());
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Set Concentric");}
+	const wxChar* GetTitle(){return _("Set Concentric");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Set these arcs to be concentric");}
 };
@@ -181,7 +181,7 @@ public:
 		SolveSketch((CSketch*)last->Owner()->Owner());
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Set Coincident");}
+	const wxChar* GetTitle(){return _("Set Coincident");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Set these points to be coincident");}
 };
@@ -205,7 +205,7 @@ public:
 		}
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Add Dimension");}
+	const wxChar* GetTitle(){return _("Add Dimension");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Add a dimension object");}
 };
@@ -233,7 +233,7 @@ public:
 		}
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Add Angular Dimension");}
+	const wxChar* GetTitle(){return _("Add Angular Dimension");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Add an angular dimension object");}
 };
@@ -249,7 +249,7 @@ public:
 		dimension_drawing.StartOnStep3(dimension);
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Add Dimension");}
+	const wxChar* GetTitle(){return _("Add Dimension");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Add a dimension object");}
 };
@@ -264,7 +264,7 @@ public:
 		dimension_drawing.StartOnStep3(dimension);
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Add Dimension");}
+	const wxChar* GetTitle(){return _("Add Dimension");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Add a dimension object");}
 };
@@ -288,7 +288,7 @@ public:
 		SolveSketch((CSketch*)line->Owner());
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Set Point On Line");}
+	const wxChar* GetTitle(){return _("Set Point On Line");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Set this point on line");}
 };
@@ -312,7 +312,7 @@ public:
 		SolveSketch((CSketch*)line->Owner());
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Set Point On Midpoint");}
+	const wxChar* GetTitle(){return _("Set Point On Midpoint");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Set this point on the midpoint of line");}
 };
@@ -336,7 +336,7 @@ public:
 		SolveSketch((CSketch*)line->Owner());
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Set Point On Midpoint");}
+	const wxChar* GetTitle(){return _("Set Point On Midpoint");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Set this point on the midpoint of arc");}
 };
@@ -360,7 +360,7 @@ public:
 		SolveSketch((CSketch*)line->Owner());
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Set Point On Arc");}
+	const wxChar* GetTitle(){return _("Set Point On Arc");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Set this point on arc");}
 };
@@ -384,7 +384,7 @@ public:
 		SolveSketch((CSketch*)circle->Owner());
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Set Point On Circle");}
+	const wxChar* GetTitle(){return _("Set Point On Circle");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Set this point on circle");}
 };
@@ -401,7 +401,7 @@ public:
 	//	Test2DNearMap();
 	//	TestMatrixFac();
 	}
-	const wxChar* GetTitle(){return _T("Run Test");}
+	const wxChar* GetTitle(){return _("Run Test");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Run Test");}
 };
