@@ -38,3 +38,11 @@ Changing this value is one way of closing gaps in disjointed sketches so that th
 These three parameters are used when a bspline constructed.  The construction process ensures that the bspline intersects all of the simplified interpolated points.  These three parameters help describe the mathematical equations that govern where the bspline goes between these interpolated points.
 
 Typical values are;  min degree = 3, max degree = 8 and continuity = GeomAbs_C2
+
+== Sort Points ==
+
+This True/False flag determines whether the list of interpolated points is sorted before being cleaned up.  The idea is to sort the points list such that each point is physically closest to the previous point.  If the graphics doubles back on itself this can, sometimes, improve the result.  Of course there are also geometrical examples where this sorting option produces erroneous results.  Please consider it just one more tool in the set that may help improve the data.
+
+== Force Closed Shape ==
+
+If this flag is true, the application ensures that the last and first points in the interpolated points list are coincident.  If they are not then an extra point is added to the end of the list so that the shape is closed.
