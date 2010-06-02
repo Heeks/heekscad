@@ -284,7 +284,7 @@ public:
 		wxGetApp().Remove( pTextForSketchTool );
 		pTextForSketchTool = NULL;
 	}
-	const wxChar* GetTitle(){return _T("Make a Sketch");}
+	const wxChar* GetTitle(){return _("Make a Sketch");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Convert the lines and arcs that make up this text into a sketch object.");}
 };

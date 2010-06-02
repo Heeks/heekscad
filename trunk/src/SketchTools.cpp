@@ -117,7 +117,7 @@ public:
 
 		CPad::PadSketch(sketch,height);
 	}
-	const wxChar* GetTitle(){return _T("Pad Sketch");}
+	const wxChar* GetTitle(){return _("Pad Sketch");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Pad Sketch");}
 };
@@ -131,7 +131,7 @@ public:
 
 		CPocket::PocketSketch(sketch,height);
 	}
-	const wxChar* GetTitle(){return _T("Pocket Sketch");}
+	const wxChar* GetTitle(){return _("Pocket Sketch");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Pocket Sketch");}
 };
@@ -147,7 +147,7 @@ public:
 		sketch->RemoveOwners();
 		part->Add(sketch,NULL);
 	}
-	const wxChar* GetTitle(){return _T("Make To Part");}
+	const wxChar* GetTitle(){return _("Make To Part");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Make To Part");}
 };
@@ -171,7 +171,7 @@ public:
 		sketch->RemoveOwners();
 		pad->Add(sketch,NULL);
 	}
-	const wxChar* GetTitle(){return _T("Add To Part");}
+	const wxChar* GetTitle(){return _("Add To Part");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Add To Part");}
 };
@@ -261,7 +261,7 @@ public:
 			}
 		}
 	}
-	const wxChar* GetTitle(){return _T("Fix Wire");}
+	const wxChar* GetTitle(){return _("Fix Wire");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Add To Part");}
 };

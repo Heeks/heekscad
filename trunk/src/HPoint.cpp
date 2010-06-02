@@ -137,7 +137,7 @@ public:
 		SolveSketch((CSketch*)point_for_tool->Owner());
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _T("Toggle Fixed");}
+	const wxChar* GetTitle(){return _("Toggle Fixed");}
 	wxString BitmapPath(){return _T("new");}
 	const wxChar* GetToolTip(){return _("Set this point as fixed");}
 };
