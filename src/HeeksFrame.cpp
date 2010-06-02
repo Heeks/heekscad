@@ -684,6 +684,7 @@ static void OnOpenButton( wxCommandEvent& event )
 				wxMessageBox(str);
 			}
 			wxGetApp().OnNewOrOpen(true, res);
+			wxGetApp().ClearHistory();
 			wxGetApp().SetLikeNewFile();
 		}
     }
@@ -748,6 +749,7 @@ static void OnNewButton( wxCommandEvent& event )
 	{
 		wxGetApp().Reset();
 		wxGetApp().OnNewOrOpen(false, res);
+		wxGetApp().ClearHistory();
 		wxGetApp().SetLikeNewFile();
 		wxGetApp().SetFrameTitle();
 		wxGetApp().Repaint();
@@ -1073,6 +1075,7 @@ void CHeeksFrame::OnRecentFile( wxCommandEvent& event )
 			wxGetApp().Reset();
 			wxGetApp().OpenFile(filepath.c_str());
 			wxGetApp().OnNewOrOpen(true, res);
+			wxGetApp().ClearHistory();
 			wxGetApp().SetLikeNewFile();
 		}
 		break;

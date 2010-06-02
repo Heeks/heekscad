@@ -230,8 +230,6 @@ bool HeeksCADapp::OnInit()
 
 	InitialiseLocale();
 
-	ClearHistory();
-
     m_printData = new wxPrintData;
     m_pageSetupData = new wxPageSetupDialogData;
     // copy over initial paper size from print record
@@ -382,6 +380,7 @@ bool HeeksCADapp::OnInit()
 	SetTopWindow(m_frame);
 
 	OnNewOrOpen(false,wxNO);
+	ClearHistory();
 	SetLikeNewFile();
 	SetFrameTitle();
 	SetStatusText();
@@ -1049,7 +1048,7 @@ bool HeeksCADapp::OpenImageFile(const wxChar *filepath)
 
 bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksObj* paste_into, bool retain_filename /* = true */ )
 {
-	CreateUndoPoint();
+	if(import_not_open)CreateUndoPoint();
 
 	m_in_OpenFile = true;
 	m_file_open_or_import_type = FileOpenOrImportTypeOther;
@@ -1112,13 +1111,18 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 	{
 	    InsertRecentFileItem(filepath);
 
-		if((!import_not_open) && (retain_filename))
+		if(import_not_open)
 		{
-			m_filepath.assign(filepath);
-			SetFrameTitle();
-			SetLikeNewFile();
+			Changed();
 		}
-		Changed();
+		else
+		{
+			if(retain_filename)
+			{
+				m_filepath.assign(filepath);
+				SetFrameTitle();
+			}
+		}
 	}
 
 	m_file_open_matrix = NULL;
