@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: HeeksCAD 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 13:41+0200\n"
-"PO-Revision-Date: 2010-05-21 11:54+0100\n"
+"PO-Revision-Date: 2010-06-02 22:26+0100\n"
 "Last-Translator: hans <fungunner2@frreenet.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -2242,8 +2242,8 @@ msgstr "Wenn möglich berechnen"
 msgid "Use default values"
 msgstr "Vorgegebene Werte benutzen"
 
-msgid " degreee "
-msgstr " Grad "
+msgid "degree"
+msgstr "Grad"
 
 msgid " degree "
 msgstr " Grad "
@@ -2361,4 +2361,73 @@ msgstr "Fasen"
 
 msgid "New Contour Operation..."
 msgstr "Umriss fräsen"
+
+msgid "Open BOM File"
+msgstr "Öffne BOM Datei"
+
+msgid "Profile spline deviation"
+msgstr "Profile Spline Abweichung"
+
+msgid "Pocket spline deviation"
+msgstr "Pocket Spline Abweichung"
+
+msgid "Contour spline deviation"
+msgstr "Kontur Spline Abweichung"
+
+msgid "Inlay spline deviation"
+msgstr "Inlay Spline Abweichung"
+
+msgid "execution_order"
+msgstr "Bearbeitungs_Reihenfolge"
+
+msgid "auto set speeds for new operation"
+msgstr "Automatische Speed Einstellungen"
+
+msgid "ignore errors where possible"
+msgstr "Ignoriert Fehler, soweit möglich"
+
+msgid "auto save interval (in minutes)"
+msgstr "Automatisch speichern nach (Minuten)"
+
+msgid "Word Space Percentage"
+msgstr "Wort-Abstand in Prozent"
+
+msgid "Character Space Percentage"
+msgstr "Buchstaben-Abstand in Prozent"
+
+msgid "simplify sketch options"
+msgstr "Zeichnung-Grundeinstellungen"
+
+msgid "max deviation"
+msgstr "Maximale Abweichung"
+
+msgid "bspline min degree (eg: 3)"
+msgstr "B-Spline min. Grad (z.B. 3)"
+
+msgid "bspline max degree (eg: 8)"
+msgstr "B-Spline max. Grad (z.B. 8)"
+
+msgid "bspline continuity (eg: GeomAbs_C2)"
+msgstr "B-Spline Gleichmässigkeit"
+
+msgid "Force closed shape"
+msgstr "Nur geschlossene Formen"
+
+msgid "Sort Points"
+msgstr "Punkte sortieren"
+
+msgid "machining options"
+msgstr "CNC Einstellungen"
+
+msgid "Touch Probe"
+msgstr "Messtaster"
+
+msgid "Tool Length Switch"
+msgstr "Werkzeug-Längen-Taster"
+
+msgid "New Touch Probe..."
+msgstr "Neuer Messtaster"
+
+msgid "New Tool Length Switch..."
+msgstr "Neuer W.Z.Längentaster"
 
