@@ -50,6 +50,8 @@ public:
         config.Read(_T("SketchToolOptions_degree_min"), &m_degree_min, 3);
         config.Read(_T("SketchToolOptions_degree_max"), &m_degree_max, 8);
         config.Read(_T("SketchToolOptions_continuity"), &m_continuity, 4);
+		config.Read(_T("SketchToolOptions_sort_points"), &m_sort_points, false);
+		config.Read(_T("SketchToolOptions_force_closed_shape"), &m_force_closed_shape, false);
 
   // Standard_Integer& ModifyRemoveLoopMode() ;
 
@@ -76,6 +78,8 @@ public:
         config.Write(_T("SketchToolOptions_degree_min"), m_degree_min);
         config.Write(_T("SketchToolOptions_degree_max"), m_degree_max);
         config.Write(_T("SketchToolOptions_continuity"), m_continuity);
+		config.Write(_T("SketchToolOptions_sort_points"), m_sort_points);
+		config.Read(_T("SketchToolOptions_force_closed_shape"), m_force_closed_shape);
     }
 
 public:
@@ -96,6 +100,8 @@ public:
     int m_degree_min;
     int m_degree_max;
     int m_continuity;
+	bool m_sort_points;
+	bool m_force_closed_shape;
 };
 
 static SketchToolOptions sketch_tool_options;
@@ -321,6 +327,11 @@ void on_set_sketchtool_option(int value, HeeksObj* object){
 	sketch_tool_options.SaveSettings();
 }
 
+void on_set_sketchtool_bool_option(int value, HeeksObj* object){
+	*((bool *) object) = (value!=0);
+	sketch_tool_options.SaveSettings();
+}
+
 void SketchTools_GetOptions(std::list<Property *> *list)
 {
     PropertyList* sketch_simplify_tools = new PropertyList(_("simplify sketch options"));
@@ -342,6 +353,26 @@ void SketchTools_GetOptions(std::list<Property *> *list)
 
 		int choice = sketch_tool_options.m_continuity;
 		sketch_simplify_tools->m_list.push_back(new PropertyChoice(_("bspline continuity (eg: GeomAbs_C2)"), choices, choice, (HeeksObj *) (&sketch_tool_options.m_continuity), on_set_sketchtool_option));
+	} // End choice scope
+
+	{ // Begin choice scope
+		std::list< wxString > choices;
+
+		choices.push_back(_T("False"));
+		choices.push_back(_T("True"));
+
+		int choice = sketch_tool_options.m_sort_points?1:0;
+		sketch_simplify_tools->m_list.push_back(new PropertyChoice(_("Sort Points"), choices, choice, (HeeksObj *) (&sketch_tool_options.m_sort_points), on_set_sketchtool_bool_option));
+	} // End choice scope
+
+	{ // Begin choice scope
+		std::list< wxString > choices;
+
+		choices.push_back(_T("False"));
+		choices.push_back(_T("True"));
+
+		int choice = sketch_tool_options.m_force_closed_shape?1:0;
+		sketch_simplify_tools->m_list.push_back(new PropertyChoice(_("Force closed shape"), choices, choice, (HeeksObj *) (&sketch_tool_options.m_force_closed_shape), on_set_sketchtool_bool_option));
 	} // End choice scope
 
 	list->push_back(sketch_simplify_tools);
@@ -715,6 +746,57 @@ static void SimplifySketch(const double deviation, bool make_bspline )
 			{
 				std::list<SimplifySketchTool::SortPoint> points = SimplifySketchTool::GetPoints( TopoDS::Wire(*itWire), deviation );
 
+				if (sketch_tool_options.m_sort_points)
+				{
+					// The sort points option is turned on.  The idea of this is to detect shapes that include
+					// sections that 'double back' on themselves.  The first example being a shape made up of
+					// a box as well as a single line that layed along one edge of the box.  In this case the extra
+					// line was superfluous.  If we sort the points so that each point is closest to the previous
+					// point then, hopefully, we will reorder these shapes that double back on themselves.  If this
+					// doesn't work then the user can always turn the 'sort points' option off and try again.
+
+					std::vector<SimplifySketchTool::SortPoint> sorted_points;
+					std::copy( points.begin(), points.end(), std::inserter( sorted_points, sorted_points.begin() ));
+
+					for (std::vector<SimplifySketchTool::SortPoint>::iterator l_itPoint = sorted_points.begin(); l_itPoint != sorted_points.end(); l_itPoint++)
+					{
+						// We've already begun.  Just sort based on the previous point's location.
+						std::vector<SimplifySketchTool::SortPoint>::iterator l_itNextPoint = l_itPoint;
+						l_itNextPoint++;
+
+						if (l_itNextPoint != sorted_points.end())
+						{
+							SimplifySketchTool::sort_points_by_distance compare( *l_itPoint );
+							std::sort( l_itNextPoint, sorted_points.end(), compare );
+						} // End if - then
+					} // End for
+
+					points.clear();
+					std::copy( sorted_points.begin(), sorted_points.end(), std::inserter( points, points.begin() ));
+
+					// This sorting process will have resulted in the start and end points being located next to each other
+					// and hence removed.  If the original wire was periodic (closed shape) then make sure the last point
+					// is the same as the first point.
+
+					TopoDS_Wire wire(TopoDS::Wire(*itWire));
+					if (wire.Closed())
+					{
+						if (*(points.begin()) != *(points.rbegin()))
+						{
+							points.push_back(*points.begin());	// Close the shape manually.
+						}
+					}
+				}
+
+				// Whether we sorted or not, we may want to close the shape.
+				if (sketch_tool_options.m_force_closed_shape)
+				{
+					if (*(points.begin()) != *(points.rbegin()))
+					{
+						points.push_back(*points.begin());	// Close the shape manually.
+					}
+				}
+
 				// Now keep removing points from this list as long as the midpoints are within deviation of
 				// the line between the two neighbour points.
 				bool points_removed = false;
@@ -772,6 +854,9 @@ static void SimplifySketch(const double deviation, bool make_bspline )
 
 				if (points.size() >= 2)
 				{
+					
+
+
 				    if (make_bspline)
 				    {
 				        try {
