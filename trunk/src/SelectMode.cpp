@@ -48,12 +48,11 @@ bool CClickPoint::GetPos(double *pos)
 	return m_valid;
 }
 
-CSelectMode::CSelectMode( const bool include_similar_objects /* = false */ ){
+CSelectMode::CSelectMode(){
 	control_key_initially_pressed = false;
 	window_box_exists = false;
 	m_doing_a_main_loop = false;
 	m_just_one = false;
-	m_include_similar_objects = include_similar_objects;
 }
 
 bool CSelectMode::GetLastClickPosition(double *pos)
@@ -117,7 +116,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 		{
 			HeeksObj* object = marked_object.GetFirstOfTopOnly();
 
-			if (m_include_similar_objects)
+			if (event.ShiftDown())
 			{
 				// Augment the marked_object list with objects that 'look' like
 				// the one selected.
@@ -129,9 +128,11 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 				for (l_itSymbol = similar_symbols.begin(); l_itSymbol != similar_symbols.end(); l_itSymbol++)
 				{
 					HeeksObj *ob = wxGetApp().GetIDObject( l_itSymbol->first, l_itSymbol->second );
-					wxGetApp().m_marked_list->Add(ob, true);
+					if (! wxGetApp().m_marked_list->ObjectMarked(ob))
+					{
+                        wxGetApp().m_marked_list->Add(ob, true);
+					}
 				} // End for
-
 			} // End if - then
 
 			while(object)
@@ -276,9 +277,12 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 				{
 					wxGetApp().m_marked_list->Clear(true);
 				}
-				if(wxGetApp().m_marked_list->ObjectMarked(object))
+				if (wxGetApp().m_marked_list->ObjectMarked(object))
 				{
-					wxGetApp().m_marked_list->Remove(object, true);
+				    if (!event.ShiftDown())
+				    {
+                        wxGetApp().m_marked_list->Remove(object, true);
+				    }
 				}
 				else
 				{
@@ -473,10 +477,6 @@ void CSelectMode::OnKeyDown(wxKeyEvent& event)
 	case WXK_DELETE:
 		wxGetApp().DeleteMarkedItems();
 		return;
-
-	case WXK_SHIFT:
-		m_include_similar_objects = true;
-		return;
 	}
 
 	CInputMode::OnKeyDown(event);
@@ -486,10 +486,6 @@ void CSelectMode::OnKeyUp(wxKeyEvent& event)
 {
 	switch(event.GetKeyCode()){
 	case WXK_DELETE:
-		return;
-
-	case WXK_SHIFT:
-		m_include_similar_objects = false;
 		return;
 	}
 
