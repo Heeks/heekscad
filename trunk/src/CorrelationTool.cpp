@@ -33,9 +33,9 @@ extern CHeeksCADInterface heekscad_interface;
 	It also returns the scale factor required to be applied to the sample bounding box to make
 	it the same size as the reference object.
  */
-bool CCorrelationTool::SimilarScale( 
-	const CBox &reference_box, 
-	const CBox &sample_box, 
+bool CCorrelationTool::SimilarScale(
+	const CBox &reference_box,
+	const CBox &sample_box,
 	const double max_scale_threshold,
 	double *pRequiredScaling ) const
 {
@@ -70,8 +70,8 @@ bool CCorrelationTool::SimilarScale(
 /**
 	Get a set of correlation points that represent a single object.
  */
-CCorrelationTool::CorrelationData_t CCorrelationTool::CorrelationData(      const CCorrelationTool::Symbol_t & sample_symbol,
-                                                const CCorrelationTool::Symbol_t & reference_symbol,
+CCorrelationTool::CorrelationData_t CCorrelationTool::CorrelationData(      HeeksObj *sample_object,
+                                                HeeksObj *reference_object,
                                                 const int number_of_sample_points,
                                                 const double max_scale_threshold ) const
 {
@@ -79,20 +79,6 @@ CCorrelationTool::CorrelationData_t CCorrelationTool::CorrelationData(      cons
 	double required_scaling = 1.0;	// How much do we need to scale the sample object to make it the same
 					// size as the reference object?  We need this value so that we can
 					// scale the distance values as well.
-
-	HeeksObj *sample_object = heekscad_interface.GetIDObject( sample_symbol.first, sample_symbol.second );
-	if (! sample_object)
-	{
-		// Couldn't find sample.  Return an empty set.
-		return(results);
-	} // End if - then
-
-	HeeksObj *reference_object = heekscad_interface.GetIDObject( reference_symbol.first, reference_symbol.second );
-	if (! reference_object)
-	{
-		// Couldn't find reference.  Return an empty set.
-		return(results);
-	} // End if - then
 
 	// Get each symbol's bounding box.
 	CBox reference_box, sample_box;
@@ -115,7 +101,7 @@ CCorrelationTool::CorrelationData_t CCorrelationTool::CorrelationData(      cons
 		// We want to draw a line from the centre of the bounding box out at this
 		// sample's angle for a length that is long enough to overlap the bounding box's edge.
 		double angle = (double(sample) / 360.0);
-	
+
 		double radius = ((max_scale_threshold * reference_box.Width()) + (max_scale_threshold * reference_box.Height()));
 		double alpha = 3.1415926 * 2 / number_of_sample_points;
 		double theta = alpha * sample;
@@ -127,8 +113,8 @@ CCorrelationTool::CorrelationData_t CCorrelationTool::CorrelationData(      cons
 		// smarter.
 
 		// sample_centroid[2] = 0.0;
-		double verification_line_end[3] = { 	(cos( theta ) * radius) + sample_centroid[0], 
-							(sin( theta ) * radius) + sample_centroid[1], 
+		double verification_line_end[3] = { 	(cos( theta ) * radius) + sample_centroid[0],
+							(sin( theta ) * radius) + sample_centroid[1],
 							sample_centroid[2] };
 
 		// Now find all intersection points between this verification line and the sample object.
@@ -151,10 +137,10 @@ CCorrelationTool::CorrelationData_t CCorrelationTool::CorrelationData(      cons
 
 					intersection.z = *(intersections.begin());
 					intersections.erase(intersections.begin());
-				
+
 					correlation_sample.m_intersection_points.insert( intersection );
-				
-					// pythagorus	
+
+					// pythagorus
 					double distance = sqrt( ((intersection.x - sample_centroid[0]) * (intersection.x - sample_centroid[0])) +
 								((intersection.y - sample_centroid[1]) * (intersection.y - sample_centroid[1])) );
 
@@ -248,8 +234,8 @@ double CCorrelationTool::Score( const CCorrelationTool::CorrelationData_t & samp
 	CorrelationData_t::const_iterator l_itSample;
 	CorrelationData_t::const_iterator l_itReference;
 
-	for (	l_itSample = sample.begin(), l_itReference = reference.begin(); 
-		(l_itSample != sample.end()) && (l_itReference != reference.end()); 
+	for (	l_itSample = sample.begin(), l_itReference = reference.begin();
+		(l_itSample != sample.end()) && (l_itReference != reference.end());
 		l_itSample++, l_itReference++)
 	{
 		if ((l_itSample->second.m_intersection_points.size() == 0) && (l_itReference->second.m_intersection_points.size() > 0))
@@ -343,6 +329,40 @@ double CCorrelationTool::Score( const CCorrelationTool::CorrelationData_t & samp
 
 
 /**
+    Recursively retrieve all objects for this parent.
+ */
+std::list<HeeksObj *> CCorrelationTool::ListAllChildren( HeeksObj *parent ) const
+{
+    std::list<HeeksObj *> results;
+
+    std::list<HeeksObj *> children;
+    for (HeeksObj *child = parent->GetFirstChild(); child != NULL; child = parent->GetNextChild())
+    {
+        children.push_back(child);
+    }
+
+    for (std::list<HeeksObj *>::iterator itChild = children.begin(); itChild != children.end(); itChild++)
+    {
+        std::list<HeeksObj *> their_children = ListAllChildren(*itChild);
+        for (std::list<HeeksObj *>::iterator itObj = their_children.begin(); itObj != their_children.end(); itObj++)
+        {
+            if (std::find(results.begin(), results.end(), *itObj) == results.end())
+            {
+                results.push_back(*itObj);
+            }
+        }
+    }
+
+    if (std::find(results.begin(), results.end(), parent) == results.end())
+    {
+        results.push_back(parent);
+    }
+
+    return(results);
+}
+
+
+/**
 	- obtain the bounding box for both the reference and the sample objects.
 	- scale the reference object up/down (with a maximum of m_max_scale_threshold) until
 	  both objects are of a similar scale.  If this scaling cannot make their bounding boxes similar
@@ -355,19 +375,25 @@ double CCorrelationTool::Score( const CCorrelationTool::CorrelationData_t & samp
 	  produce a correlation factor (score).  If this factor is within the m_min_correlation_factor
 	  then the sample object's centroid is added to this object's reference points.
  */
-CCorrelationTool::Symbols_t CCorrelationTool::SimilarSymbols( const CCorrelationTool::Symbol_t & reference_symbol ) const
+std::list<HeeksObj *> CCorrelationTool::SimilarSymbols( HeeksObj *pReference ) const
 {
-	CCorrelationTool::Symbols_t result_set;
+	std::list<HeeksObj *> result_set;
 	std::set<CCorrelationTool::Point3d> reference_points;
 
-	HeeksObj *pReference = heekscad_interface.GetIDObject( reference_symbol.first, reference_symbol.second );
-	if (! pReference)
-	{
-		// Can't find the reference object.  Return an empty set.
-		return(result_set);
-	} // End if - then
+	std::list<HeeksObj *> all_objects;
+	for (HeeksObj *ob = heekscad_interface.GetFirstObject(); ob != NULL; ob = heekscad_interface.GetNextObject())
+    {
+        std::list<HeeksObj *> these_objects = CCorrelationTool::ListAllChildren( ob );
+        for (std::list<HeeksObj *>::iterator itThisObj = these_objects.begin(); itThisObj != these_objects.end(); itThisObj++)
+        {
+            if (std::find(all_objects.begin(), all_objects.end(), *itThisObj) == all_objects.end())
+            {
+                all_objects.push_back(*itThisObj);
+            }
+        } // End for
+    } // End for
 
-	if (reference_symbol.first == PointType)
+	if (pReference->GetType() == PointType)
 	{
 		// The operator has selected a 'point' object to use as a reference.  The bounding box
 		// and line intersection functionality isn't relevant for a point feature.  By the same
@@ -375,33 +401,35 @@ CCorrelationTool::Symbols_t CCorrelationTool::SimilarSymbols( const CCorrelation
 		// be considered equal to another point.  To that end, select all point objects in the
 		// data model.
 
-		
-		for (HeeksObj *ob = heekscad_interface.GetFirstObject(); ob != NULL; ob = heekscad_interface.GetNextObject())
+		for (std::list<HeeksObj *>::iterator itObject = all_objects.begin(); itObject != all_objects.end(); itObject++)
 		{
+		    HeeksObj *ob = *itObject;
 			if (ob->GetType() == PointType)
 			{
-				result_set.push_back( CCorrelationTool::Symbol_t( ob->GetType(), ob->m_id ) );
+				result_set.push_back( ob );
 			} // End if - then
 		} // End for
 
 		return(result_set);
 	} // End if - then
 
-	CorrelationData_t reference_correlation_data = CorrelationData( reference_symbol, reference_symbol, m_number_of_sample_points, m_max_scale_threshold );
+	CorrelationData_t reference_correlation_data = CorrelationData( pReference, pReference, m_number_of_sample_points, m_max_scale_threshold );
 
 	// Scan through all objects looking for something that's like this one.
-	for (HeeksObj *ob = heekscad_interface.GetFirstObject(); ob != NULL; ob = heekscad_interface.GetNextObject())
-	{
-		if ((ob->GetType() == m_reference_symbol.first) && (ob->m_id == m_reference_symbol.second))
+	for (std::list<HeeksObj *>::iterator itObject = all_objects.begin(); itObject != all_objects.end(); itObject++)
+    {
+        HeeksObj *ob = *itObject;
+
+		if ((ob->GetType() == pReference->GetType()) && (ob->m_id == pReference->m_id))
 		{
 			// Include this in the result set.  Otherwise we would be selecting everything except what
 			// we pointed to.
-			result_set.push_back( m_reference_symbol );
+			result_set.push_back( pReference );
 			continue;	// It's the reference object.  They're identicle.
 		} // End if - then
 
-		CorrelationData_t sample_correlation_data = CorrelationData(Symbol_t( ob->GetType(), ob->m_id ),
-																	reference_symbol,
+		CorrelationData_t sample_correlation_data = CorrelationData( ob,
+																	pReference,
 																	m_number_of_sample_points,
 																	m_max_scale_threshold );
 
@@ -410,7 +438,7 @@ CCorrelationTool::Symbols_t CCorrelationTool::SimilarSymbols( const CCorrelation
 
 		if (Score( sample_correlation_data, reference_correlation_data ) >= m_min_correlation_factor)
 		{
-			result_set.push_back( Symbol_t( ob->GetType(), ob->m_id ) );
+			result_set.push_back( ob );
 		} // End if - then
 	} // End for
 
@@ -420,15 +448,4 @@ CCorrelationTool::Symbols_t CCorrelationTool::SimilarSymbols( const CCorrelation
 
 
 
-
-
-/**
- * 	Return the centroid of all identified symbols.
- */
-std::set<CCorrelationTool::Point3d> CCorrelationTool::FindAllLocations() const
-{
-	Symbols_t similar_symbols = SimilarSymbols( m_reference_symbol );
-	return(ReferencePoints( similar_symbols ));
-
-} // End FindAllLocations() method
 
