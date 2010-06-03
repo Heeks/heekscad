@@ -121,8 +121,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	viewrotating = new ViewRotating;
 	viewzooming = new ViewZooming;
 	viewpanning = new ViewPanning;
-	m_select_mode = new CSelectMode(false);
-	// Set this to 'true' for 'select similar' mode.  I'm not there yet.
+	m_select_mode = new CSelectMode();
 	m_digitizing = new DigitizeMode();
 	digitize_end = false;
 	digitize_inters = false;

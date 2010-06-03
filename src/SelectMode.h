@@ -31,12 +31,11 @@ public:
 	bool m_doing_a_main_loop;
 	bool m_just_one;
 	wxString m_prompt_when_doing_a_main_loop;
-	bool m_include_similar_objects;		// Use the CCorrelationTool class as well?
 	CClickPoint m_last_click_point;
 
 	static bool m_can_grip_objects;
 
-	CSelectMode( const bool include_similar_objects = false );
+	CSelectMode();
 	virtual ~CSelectMode(void){}
 
 	bool GetLastClickPosition(double *pos);
