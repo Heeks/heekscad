@@ -12,7 +12,7 @@ The HeeksCAD product also uses one of the OpenGL font files by default.  This Op
 
 == Properties ==
 
-The main properties for HeeksCAD includes a section for Font Options.  This section includes properties for;
+The 'Options' panel for HeeksCAD includes a section for Font Options.  This section includes properties for;
 
 === Active Font ===
 
