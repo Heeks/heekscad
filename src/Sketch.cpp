@@ -17,6 +17,7 @@
 #include "FaceTools.h"
 #include "CoordinateSystem.h"
 #include "Wire.h"
+#include <wx/numdlg.h>
 
 extern CHeeksCADInterface heekscad_interface;
 
@@ -333,8 +334,17 @@ class CopyParallel: public Tool
 public:
 	void Run()
 	{
-	    const double distance = 5.0;   // Hardcoded until I can come up with a decent user interface for it. (Can be positive or negative)
-	    HeeksObj *parallel_sketch = sketch_for_tools->Parallel(distance);
+	    static long distance = 5;
+	    const long min_distance = -5000;
+	    const long max_distance = +5000;
+
+	    wxString message(_("Use negative for smaller and Positive for larger)"));
+	    wxString prompt(_("Enter the distance"));
+	    wxString caption(_("Distance"));
+
+        distance = ::wxGetNumberFromUser( message, prompt, caption, distance, min_distance, max_distance);
+
+	    HeeksObj *parallel_sketch = sketch_for_tools->Parallel( double(distance) );
 	    if (parallel_sketch != NULL)
 	    {
             wxGetApp().CreateUndoPoint();
@@ -383,10 +393,12 @@ static SketchEnterSketchMode enter_sketch_mode;
 void CSketch::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	sketch_for_tools = this;
-	if(GetSketchOrder() == SketchOrderTypeBad || GetSketchOrder() == SketchOrderTypeMultipleCurves)
+
+	if (GetNumChildren() > 1)
 	{
-		t_list->push_back(&split_sketch);
+        t_list->push_back(&split_sketch);
 	}
+
 	t_list->push_back(&convert_sketch_to_face);
 	// t_list->push_back(&convert_sketch_to_wire);
 	t_list->push_back(&sketch_arcs_to_lines);
