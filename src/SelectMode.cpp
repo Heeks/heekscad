@@ -122,12 +122,12 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 				// the one selected.
 
 				CCorrelationTool correlate(wxGetApp().m_min_correlation_factor, wxGetApp().m_max_scale_threshold, wxGetApp().m_number_of_sample_points );
-				CCorrelationTool::Symbols_t similar_symbols = correlate.SimilarSymbols( CCorrelationTool::Symbol_t(object->GetType(), object->m_id ));
-				CCorrelationTool::Symbols_t::const_iterator l_itSymbol;
+				std::list<HeeksObj *> similar_objects = correlate.SimilarSymbols( object );
+				std::list<HeeksObj *>::const_iterator l_itSymbol;
 
-				for (l_itSymbol = similar_symbols.begin(); l_itSymbol != similar_symbols.end(); l_itSymbol++)
+				for (l_itSymbol = similar_objects.begin(); l_itSymbol != similar_objects.end(); l_itSymbol++)
 				{
-					HeeksObj *ob = wxGetApp().GetIDObject( l_itSymbol->first, l_itSymbol->second );
+					HeeksObj *ob = *l_itSymbol;
 					if (! wxGetApp().m_marked_list->ObjectMarked(ob))
 					{
                         wxGetApp().m_marked_list->Add(ob, true);

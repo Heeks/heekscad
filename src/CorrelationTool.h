@@ -60,7 +60,6 @@ public:
 	double m_min_correlation_factor;// How similar do other objects need to be before we include them in our 'selection set'?
 	double m_max_scale_threshold;	// How much scaling will we allow before obtaining a correlation factor?
 	int m_number_of_sample_points;	// How many points will we compare when determining correlation factor?
-	Symbol_t m_reference_symbol;
 
 	/**
                 There are all types of 3d point classes around but most of them seem to be in the HeeksCAD code
@@ -109,7 +108,7 @@ public:
 
 	typedef std::map< Angle_t, CorrelationSample_t >	CorrelationData_t;
 
-	Symbols_t SimilarSymbols( const Symbol_t & reference_symbol ) const;
+	std::list<HeeksObj *> SimilarSymbols( HeeksObj *reference_object ) const;
 
 	//	Constructors.
         CCorrelationTool( const double min_correlation_factor,
@@ -121,8 +120,8 @@ public:
 	} // End constructor
 
 	// Obtain a single set of correlation data for the sample_symbol.
-	CorrelationData_t CorrelationData( 	const Symbol_t & sample_symbol, 
-						const Symbol_t & reference_symbol,
+	CorrelationData_t CorrelationData( 	HeeksObj *sample_object,
+                                        HeeksObj *reference_object,
 						const int number_of_sample_points,
 						const double max_scale_threshold ) const;
 
@@ -131,7 +130,7 @@ public:
 	bool SimilarScale( const CBox &reference_box, const CBox &sample_box, const double max_scale_threshold, double *pRequiredScaling ) const;
 	double Score( const CorrelationData_t & sample, const CorrelationData_t & reference ) const;
 
-	std::set<Point3d> FindAllLocations() const;
+	std::list<HeeksObj *> ListAllChildren( HeeksObj *parent ) const;
 
 }; // End CCorrelationTool class definition.
 
