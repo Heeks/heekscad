@@ -1205,11 +1205,33 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			if (!ReadUnits())return;
 			continue;
 		} // End if - then
+
+		else if (!strcmp( m_str, "AcDbBlockBegin" )){
+			get_line();
+
+			if (! strcmp(m_str,"2"))
+			{
+			    get_line();
+
+			    m_block_name = Ctt(m_str);
+			}
+		} // End if - then
 		else if(!strcmp(m_str, "0"))
 		{
 			get_line();
 
-			if(!strcmp(m_str, "LINE")){
+			if (!strcmp( m_str, "SECTION" )){
+                get_line();
+                get_line();
+
+                m_section_name = Ctt(m_str);
+                m_block_name.Clear();
+            } // End if - then
+            else if (!strcmp( m_str, "ENDSEC" )){
+                    m_section_name.Clear();
+                    m_block_name.Clear();
+            } // End if - then
+			else if(!strcmp(m_str, "LINE")){
 				if(!ReadLine())
 				{
 				    printf("CDxfRead::DoRead() Failed to read line\n");
@@ -1366,4 +1388,27 @@ void HeeksDxfRead::AddGraphics() const
             wxGetApp().Add( l_itSketch->second, NULL );
         }
     }
+}
+
+
+wxString CDxfRead::LayerName() const
+{
+    wxString result;
+
+    if (m_section_name.Len() > 0)
+    {
+        result << m_section_name;
+    }
+
+    if (m_block_name.Len() > 0)
+    {
+        result << _T(" ") << m_block_name;
+    }
+
+    if (m_layer_name.Len() > 0)
+    {
+        result << _T(" ") << m_layer_name;
+    }
+
+    return(result);
 }

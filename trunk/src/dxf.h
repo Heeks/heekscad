@@ -82,6 +82,8 @@ private:
 	char m_unused_line[1024];
 	eDxfUnits_t m_eUnits;
 	wxString m_layer_name;
+	wxString m_section_name;
+	wxString m_block_name;
 	bool m_ignore_errors;
 
 	bool ReadUnits();
@@ -119,7 +121,7 @@ public:
 	virtual void OnReadSpline(TColgp_Array1OfPnt &control, TColStd_Array1OfReal &weight, TColStd_Array1OfReal &knot,TColStd_Array1OfInteger &mult, int degree, bool periodic, bool rational){}
 	virtual void AddGraphics() const { }
 
-    wxString LayerName() const { return(m_layer_name); }
+    wxString LayerName() const;
 
 };
 
