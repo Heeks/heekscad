@@ -33,7 +33,7 @@ msgstr "Nouvelle ébauche de Tournage"
 
 #Ajout5
 msgid "( with Shift key for similar objects)"
-msgstr "(·avec Shiftl pour des objets similaires·)"
+msgstr "(·avec Shift pour des objets similaires·)"
 
 #Ajout6  : HeeksCNC.cpp
 msgid "New Locating Operation..."
@@ -1583,6 +1583,66 @@ msgstr "Faces seules"
 msgid "face selection color"
 msgstr "Face sélectionnée"
 
+#Ajout 371 RegularShapesDrawing.cpp
+msgid "Rectangle drawing"
+msgstr "Dessin de Rectangles"
+
+#Ajout 372 RegularShapesDrawing.cpp
+msgid "Polygon drawing"
+msgstr "Dessin de Polygones"
+
+#Ajout 373 RegularShapesDrawing.cpp
+msgid "Obround drawing"
+msgstr "Dessin d'Oblongs"
+
+#Ajout 374 RegularShapesDrawing.cpp
+msgid "Regular shapes drawing"
+msgstr "Dessin de formes regulieres"
+
+#Ajout 375 HeeksFrame.cpp
+msgid "Draw Ellipses"
+msgstr "Dessiner des ellipses"
+
+#Ajout 376 SketchTools.cpp
+msgid "simplify sketch options"
+msgstr "Simplifier l'esquisse"
+
+#Ajout 377 SketchTools.cpp
+msgid "max deviation"
+msgstr "Déviation maxi"
+
+#Ajout 378 SketchTools.cpp
+msgid "cleanup tolerance (temporary)"
+msgstr "Décimale de simplification"
+
+#Ajout 379 SketchTools.cpp
+msgid "bspline min degree (eg: 3)"
+msgstr "Degré min bspline Ex: 3)"
+
+#Ajout 380 SketchTools.cpp
+msgid "bspline max degree (eg: 8)"
+msgstr "Degré max BSpline (Ex: 8)"
+
+#Ajout 381 SketchTools.cpp
+msgid "bspline continuity (eg: GeomAbs_C2)"
+msgstr "Continuité BSpline (Ex: GeomAbs_C2)"
+
+#Ajout 382 SketchTools.cpp
+msgid "Sort Points"
+msgstr "Tri de Points"
+
+#Ajout 383 SketchTools.cpp
+msgid "Force closed shape"
+msgstr "Forme close forcée"
+
+#Ajout 384
+msgid "Simplify Sketch to Lines"
+msgstr "Esquisse en Segments"
+
+#Ajout 385
+msgid "Simplify Sketch to BSplines"
+msgstr "Esquisse en Courbes de Bézier"
+
 
 #===============================
 
@@ -3105,9 +3165,6 @@ msgstr "Point de dessin"
 
 msgid "Dragging a window or picking a point"
 msgstr "Tracer une fenêtre ou choisir un point"
-
-msgid "Regular shapes drawing"
-msgstr "Formes régulières"
 
 msgid "ChangeOwner"
 msgstr "ChangePropriétaire"
