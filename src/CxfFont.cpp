@@ -581,7 +581,13 @@ CxfFont::CxfFont( const wxChar *p_szFile, const double word_space_percentage, co
 					if (line.find("LineSpacingFactor") != line.npos)
 					{
 						tokens.rbegin()->ToDouble(&m_line_spacing_factor);
-					} else if (line.find("Name") != line.npos)
+					}
+					else if (line.find("LetterSpacing") != line.npos)
+					{
+						// tokens.rbegin()->ToDouble(&m_letter_spacing);
+						// m_letter_spacing = PointToMM(m_letter_spacing);
+					}
+					else if (line.find("Name") != line.npos)
 					{
 						// We want all tokens except the first.
 						m_name.Clear();
@@ -723,7 +729,7 @@ HeeksObj *VectorFont::Sketch( const wxString & text, const gp_Trsf & transformat
 		if (text[offset] == ' ')
 		{
 			// It's a space.  Just move on.  Nothing to see here.
-			location.SetX( location.X()+ BoundingBox().Width() + WordSpacing() );
+			location.SetX( location.X() + WordSpacing() );
 		}
 		else if (text[offset] == '\n')
 		{
@@ -801,6 +807,11 @@ HeeksObj *VectorFont::Sketch( const wxString & text, const gp_Trsf & transformat
 			Glyphs_t::const_iterator l_itGlyph = m_glyphs.find( text[offset] );
 			if (l_itGlyph != m_glyphs.end())
 			{
+			    gp_Pnt original_location(location);
+
+                // Adjust this glyph left or right so that it's bottom left hand corner is at the x=0 mark.
+			    location.SetX( location.X() + (l_itGlyph->second.BoundingBox().MinX() * -1.0) );
+
 				// Get the lines and arcs that represent the character (glyph)
 				std::list<HeeksObj *> graphics = l_itGlyph->second.GetGraphics( location, transformation_matrix );
 				for (std::list<HeeksObj *>::iterator l_itGraphic = graphics.begin(); l_itGraphic != graphics.end(); l_itGraphic++)
@@ -812,11 +823,17 @@ HeeksObj *VectorFont::Sketch( const wxString & text, const gp_Trsf & transformat
 					sketch->Add( *l_itGraphic, NULL );
 				} // End for
 
-				location.SetX( location.X() + l_itGlyph->second.BoundingBox().Width() );
+				double offset = l_itGlyph->second.BoundingBox().MaxX();
+                if (offset < heekscad_interface.GetTolerance())
+                {
+                    offset += ((BoundingBox().Width() * m_character_space_percentage / 100.0) / 2.0);
+                }
+
+                offset += (BoundingBox().Width() * m_character_space_percentage / 100.0);
+
+                location.SetX( original_location.X() + offset );
 			} // End if - then
 		} // End if - else
-
-		location.SetX(location.X() + LetterSpacing());
 	} // End for
 
 	((CSketch *) sketch)->ReOrderSketch( SketchOrderTypeMultipleCurves );
@@ -867,7 +884,7 @@ void VectorFont::glCommands(const wxString & text, const gp_Pnt &start_point, co
 		if (text[offset] == ' ')
 		{
 			// It's a space.  Just move on.  Nothing to see here.
-			location.SetX( location.X()+ BoundingBox().Width() + WordSpacing() );
+			location.SetX( location.X() + WordSpacing() );
 		}
 		else if (text[offset] == '\n')
 		{
@@ -908,19 +925,30 @@ void VectorFont::glCommands(const wxString & text, const gp_Pnt &start_point, co
 			glVertex3d(top_left.X(), top_left.Y(), top_left.Z());
 			glEnd();
 
-			location.SetX( location.X() + BoundingBox().Width() );
+			location.SetX( location.X() + BoundingBox().MaxX() );
 		} // End if - then
 		else
 		{
 			Glyphs_t::const_iterator l_itGlyph = m_glyphs.find( text[offset] );
 			if (l_itGlyph != m_glyphs.end())
 			{
+			    gp_Pnt original_location(location);
+
+                // Adjust this glyph left or right so that it's bottom left hand corner is at the x=0 mark.
+			    location.SetX( location.X() + (l_itGlyph->second.BoundingBox().MinX() * -1.0) );
 				l_itGlyph->second.glCommands(location, select, marked, no_color);
-				location.SetX( location.X() + l_itGlyph->second.BoundingBox().Width() );
+
+                double offset = l_itGlyph->second.BoundingBox().MaxX();
+                if (offset < heekscad_interface.GetTolerance())
+                {
+                    offset += ((BoundingBox().Width() * m_character_space_percentage / 100.0) / 2.0);
+                }
+
+                offset += (BoundingBox().Width() * m_character_space_percentage / 100.0);
+
+                location.SetX( original_location.X() + offset );
 			} // End if - then
 		} // End if - else
-
-		location.SetX(location.X() + LetterSpacing());
 	} // End for
 
 } // End glCommands() method
