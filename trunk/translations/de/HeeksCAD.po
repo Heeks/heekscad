@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: HeeksCAD 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 13:41+0200\n"
-"PO-Revision-Date: 2010-06-03 01:48+0100\n"
+"PO-Revision-Date: 2010-06-05 01:28+0100\n"
 "Last-Translator: hans <fungunner2@frreenet.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -2338,6 +2338,12 @@ msgstr "Rückansicht XZ"
 msgid "View YZ Right"
 msgstr "Anicht YZ Rechts"
 
+msgid "View YZ Left"
+msgstr "Anicht YZ Links"
+
+msgid "View XY Isometric"
+msgstr "Isometrisch/3D"
+
 msgid "View XZ Left"
 msgstr "Anicht XZ Links"
 
@@ -2430,4 +2436,46 @@ msgstr "Neuer Messtaster"
 
 msgid "New Tool Length Switch..."
 msgstr "Neuer W.Z.Laengentaster"
+
+msgid "Female half"
+msgstr "Aussenteil"
+
+msgid "Male half"
+msgstr "Innenteil"
+
+msgid "Both halves"
+msgstr "Innen und aussen"
+
+msgid "GCode generation"
+msgstr "Auswahl"
+
+msgid "Border Width"
+msgstr "Randbreite"
+
+msgid "Clearance Tool"
+msgstr "Clearance Tool"
+
+msgid "Mirror Axis"
+msgstr "Über Achse spiegeln"
+
+msgid "X Axis"
+msgstr "X Achse"
+
+msgid "Y Axis"
+msgstr "Y Achse"
+
+msgid "Enter Sketch Mode"
+msgstr "Zeichenmodus"
+
+msgid "Pad Sketch"
+msgstr "3D MIT Oberflächen"
+
+msgid "Pocket Sketch"
+msgstr "3D OHNE Oberflächen"
+
+msgid "Copy Parallel"
+msgstr "In/Outline Modus"
+
+msgid "solidify"
+msgstr "+Oberfläche"
 
