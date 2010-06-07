@@ -1262,6 +1262,11 @@ static void write_stl_triangle(const double* x, const double* n)
 	}
 }
 
+static void write_py_triangle(const double* x, const double* n)
+{
+	(*ofs_for_write_stl_triangle) << "s.addTriangle(ocl.Triangle(ocl.Point(" << x[0] << ", " << x[1] << ", " << x[2] << "), ocl.Point(" << x[3] << ", " << x[4] << ", " << x[5] << "), ocl.Point(" << x[6] << ", " << x[7] << ", " << x[8] << ")))" << endl;
+}
+
 static void write_cpp_triangle(const double* x, const double* n)
 {
 	for(int i = 0; i<3; i++)
@@ -1327,6 +1332,32 @@ void HeeksCADapp::SaveCPPFile(const std::list<HeeksObj*>& objects, const wxChar 
 	}
 
 	ofs<<"glEnd();"<<endl;
+}
+
+void HeeksCADapp::SavePyFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance)
+{
+#ifdef __WXMSW__
+	ofstream ofs(filepath);
+#else
+	ofstream ofs(Ttc(filepath));
+#endif
+	if(!ofs)
+	{
+		wxString str = wxString(_("couldn't open file")) + _T(" - ") + filepath;
+		wxMessageBox(str);
+		return;
+	}
+	ofs.imbue(std::locale("C"));
+
+	ofs<<"s = ocl.STLSurf()"<<endl;
+
+	// write all the objects
+	ofs_for_write_stl_triangle = &ofs;
+	for(std::list<HeeksObj*>::iterator It = m_objects.begin(); It != m_objects.end(); It++)
+	{
+		HeeksObj* object = *It;
+		object->GetTriangles(write_py_triangle, facet_tolerance < 0 ? m_stl_facet_tolerance : facet_tolerance, false);
+	}
 }
 
 void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, bool for_clipboard)
@@ -1469,6 +1500,10 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 	else if(wf.EndsWith(_T(".cpp")))
 	{
 		SaveCPPFile(m_objects, filepath);
+	}
+	else if(wf.EndsWith(_T(".py")))
+	{
+		SavePyFile(m_objects, filepath);
 	}
 	else if(CShape::ExportSolidsFile(m_objects, filepath))
 	{
@@ -2751,7 +2786,7 @@ const wxChar* HeeksCADapp::GetKnownFilesWildCardString(bool open)const
 	}
 	else{
 		// file save
-		known_file_ext = wxString(_("Known Files")) + _T(" |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl;*.dxf|") + _("Heeks files") + _T(" (*.heeks)|*.heeks|") + _("IGES files") + _T(" (*.igs *.iges)|*.igs;*.iges|") + _("STEP files") + _T(" (*.stp *.step)|*.stp;*.step|") + _("STL files") + _T(" (*.stl)|*.stl|") + _("DXF files") + _T(" (*.dxf)|*.dxf");
+		known_file_ext = wxString(_("Known Files")) + _T(" |*.heeks;*.igs;*.iges;*.stp;*.step;*.stl;*.dxf;*.cpp;*.py|") + _("Heeks files") + _T(" (*.heeks)|*.heeks|") + _("IGES files") + _T(" (*.igs *.iges)|*.igs;*.iges|") + _("STEP files") + _T(" (*.stp *.step)|*.stp;*.step|") + _("STL files") + _T(" (*.stl)|*.stl|") + _("DXF files") + _T(" (*.dxf)|*.dxf") + _("CPP files") + _T(" (*.cpp)|*.cpp") + _("OpenCAMLib python files") + _T(" (*.py)|*.py");
 		return known_file_ext.c_str();
 	}
 }
