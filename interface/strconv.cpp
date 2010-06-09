@@ -33,21 +33,13 @@ const wchar_t* Ctt(const char* str)
 
 wxString ss_to_wxstring( const std::string & text )
 {
-	wxString result;
-	for (std::string::const_iterator l_itChar = text.begin(); l_itChar != text.end(); l_itChar++)
-	{
-		result.Append( *l_itChar, 1 );
-	} // End for
-	return(result);
+    return(wxString::From8BitData(text.c_str()));
 }
 
 wxString ws_to_wxstring( const std::wstring & text )
 {
 	wxString result;
-	for (std::wstring::const_iterator l_itChar = text.begin(); l_itChar != text.end(); l_itChar++)
-	{
-		result.Append( *l_itChar, 1 );
-	} // End for
+	result << text;
 	return(result);
 }
 
