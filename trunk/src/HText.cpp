@@ -246,7 +246,7 @@ HeeksObj* HText::ReadFromXMLElement(TiXmlElement* pElem)
 	{
 		std::string name(a->Name());
 		if(name == "col"){c = HeeksColor(a->IntValue());}
-		else if(name == "text"){text.assign(Ctt(a->Value()));}
+		else if(name == "text")	{ text.assign( wxString::From8BitData(a->Value()) ); }
 		else if(name == "m0"){m[0] = a->DoubleValue();}
 		else if(name == "m1"){m[1] = a->DoubleValue();}
 		else if(name == "m2"){m[2] = a->DoubleValue();}
@@ -259,7 +259,7 @@ HeeksObj* HText::ReadFromXMLElement(TiXmlElement* pElem)
 		else if(name == "m9"){m[9] = a->DoubleValue();}
 		else if(name == "ma"){m[10]= a->DoubleValue();}
 		else if(name == "mb"){m[11]= a->DoubleValue();}
-		else if(name == "font") { font_name.assign( Ctt(a->Value()) ); }
+		else if(name == "font") { font_name.assign( wxString::From8BitData(a->Value()) ); }
 	}
 
 	VectorFont *pVectorFont = NULL;
