@@ -69,6 +69,8 @@
 		<Unit filename="interface/ObjList.cpp" />
 		<Unit filename="interface/ObjList.h" />
 		<Unit filename="interface/Observer.h" />
+		<Unit filename="interface/PictureFrame.cpp" />
+		<Unit filename="interface/PictureFrame.h" />
 		<Unit filename="interface/Property.h" />
 		<Unit filename="interface/PropertyCheck.cpp" />
 		<Unit filename="interface/PropertyCheck.h" />
