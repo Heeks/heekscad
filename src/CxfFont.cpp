@@ -4,6 +4,7 @@
 #include <math.h>
 #include <wx/string.h>
 #include <wx/window.h>
+#include <wx/strconv.h>
 
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -513,7 +514,6 @@ CxfFont::CxfFont( const wxChar *p_szFile, const double word_space_percentage, co
 	std::ifstream file(Ttc(p_szFile));
 	if (file.is_open())
 	{
-		wxString symbol;
 		std::list<std::string> lines;
 		std::string line;
 		while (! file.eof() )
@@ -523,19 +523,36 @@ CxfFont::CxfFont( const wxChar *p_szFile, const double word_space_percentage, co
 			{
 				if (line[0] == '[')
 				{
-					if (symbol.Length() > 1)
+				    if ((lines.size() > 0) && (character_name != 0))
+				    {
+				        // Write out the last glyph read in before we start reading this new one.
+				        Glyph glyph(lines, m_word_space_percentage, m_character_space_percentage);
+                        m_glyphs.insert(std::make_pair(character_name, glyph));
+						m_bounding_box.Insert( glyph.BoundingBox() );
+						lines.clear();
+                        character_name = 0;
+					}
+
+                    // Start reading the new glyph.
+                    wxString symbol;
+                    std::vector<wxString> tokens = Tokens( wxString::From8BitData(line.c_str()), _T("[] \r\n\t") );
+                    if (tokens.size() > 0)
+                    {
+                        symbol = tokens[0];
+                    }
+
+					if (symbol.Length() > 0)
 					{
-						// It must be a multi-byte character.  I don't know how to do these yet.
-						// printf("Ignoring multi-byte character '%s' for now\n", Ttc(symbol.c_str()));
+						// It must be a multi-byte character.
 						if (((symbol[0] == '<') && (symbol[symbol.Length()-1] == '>')) ||
 							(symbol[0] == '#'))
 						{
 							std::vector<wxString> tokens = Tokens( symbol, _T("#<> \t") );
 							if (tokens.size() > 0)
 							{
-								long lCharacterName = tokens[0][0];
-								tokens[0].ToLong( &lCharacterName, 16 );
-								character_name = wxChar(lCharacterName);
+								unsigned long lCharacterName;
+								tokens[0].ToULong( &lCharacterName, 16 );
+								character_name = lCharacterName;
 							}
 						}
 						else
@@ -543,41 +560,11 @@ CxfFont::CxfFont( const wxChar *p_szFile, const double word_space_percentage, co
 							character_name = symbol[0];
 						}
 					}
-					else
-					{
-						m_glyphs.insert(std::make_pair(character_name, Glyph(lines, m_word_space_percentage, m_character_space_percentage)));
-						m_bounding_box.Insert( Glyph(lines, m_word_space_percentage, m_character_space_percentage).BoundingBox() );
-					}
-
-					lines.clear();
-					symbol.Clear();
-
-					std::vector<wxString> tokens = Tokens( ss_to_wxstring(line), wxString(_T("[] \r\n\t")) );
-					if (tokens.size() >= 2)
-					{
-						symbol = tokens[0];
-						if (((symbol[0] == '<') && (symbol[symbol.Length()-1] == '>')) ||
-							(symbol[0] == '#'))
-						{
-							std::vector<wxString> tokens = Tokens( symbol, _T("#<> \t") );
-							if (tokens.size() > 0)
-							{
-								long lCharacterName = tokens[0][0];
-								tokens[0].ToLong( &lCharacterName, 16 );
-								character_name = wxChar(lCharacterName);
-							}
-						}
-						else
-						{
-							character_name = symbol[0];
-						}
-					}
-				}
+                }
 				else if (line[0] == '#')
 				{
 					// It's a comment.  See if it's one of the special comments we're interested in.
-
-					std::vector<wxString> tokens = Tokens( ss_to_wxstring(line), _T("# \r\t\n:") );
+					std::vector<wxString> tokens = Tokens( wxString::From8BitData(line.c_str()), _T("# \r\t\n:") );
 					if (line.find("LineSpacingFactor") != line.npos)
 					{
 						tokens.rbegin()->ToDouble(&m_line_spacing_factor);
@@ -613,18 +600,14 @@ CxfFont::CxfFont( const wxChar *p_szFile, const double word_space_percentage, co
 		}
 		file.close();
 
-		if (symbol.Length() > 1)
-		{
-			// It must be a multi-byte character.  I don't know how to do these yet.
-			// printf("Ignoring multi-byte character '%s' for now\n", Ttc(symbol.c_str()));
-		}
-		else
-		{
-			m_glyphs.insert(std::make_pair(character_name, Glyph(lines, m_word_space_percentage, m_character_space_percentage)));
-			lines.clear();
-			symbol.Clear();
-			m_bounding_box.Insert( Glyph(lines, m_word_space_percentage, m_character_space_percentage).BoundingBox() );
-		}
+        if ((lines.size() > 0) && (character_name != 0))
+        {
+            Glyph glyph(lines, m_word_space_percentage, m_character_space_percentage);
+            m_glyphs.insert(std::make_pair(character_name, glyph));
+            m_bounding_box.Insert( glyph.BoundingBox() );
+            lines.clear();
+            character_name = 0;
+        }
 
 //		printf("File '%s' contained %d glyphs\n", Ttc(p_szFile), m_glyphs.size() );
 	}

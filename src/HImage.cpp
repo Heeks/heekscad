@@ -204,7 +204,7 @@ void HImage::WriteXML(TiXmlNode *root)
 	TiXmlElement * element;
 	element = new TiXmlElement( "Image" );
 	root->LinkEndChild( element );  
-	element->SetAttribute("filepath", Ttc(m_file_path.c_str()));
+	element->SetAttribute("filepath", m_file_path.utf8_str());
 
 	element->SetDoubleAttribute("x00", m_x[0][0]);
 	element->SetDoubleAttribute("x01", m_x[0][1]);

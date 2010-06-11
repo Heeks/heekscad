@@ -388,7 +388,7 @@ void HAngularDimension::WriteXML(TiXmlNode *root)
 	TiXmlElement * element;
 	element = new TiXmlElement( "AngularDimension" );
 	root->LinkEndChild( element );
-	element->SetAttribute("text", Ttc(m_text.c_str()));
+	element->SetAttribute("text", m_text.utf8_str());
 
 	element->SetAttribute("col", m_color.COLORREF_color());
 	element->SetAttribute("scale",m_scale);

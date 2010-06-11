@@ -436,7 +436,7 @@ void CSketch::WriteXML(TiXmlNode *root)
     {
         TiXmlElement * element = new TiXmlElement( "Sketch" );
         root->LinkEndChild( element );
-        element->SetAttribute("title", Ttc(m_title.c_str()));
+        element->SetAttribute("title", m_title.utf8_str());
         WriteBaseXML(element);
     }
 }
@@ -445,8 +445,7 @@ void CSketch::WriteXML(TiXmlNode *root)
 HeeksObj* CSketch::ReadFromXMLElement(TiXmlElement* pElem)
 {
 	CSketch* new_object = new CSketch;
-	const char* title = pElem->Attribute("title");
-	if(title)new_object->m_title = wxString(Ctt(title));
+	if(pElem->Attribute("title"))new_object->m_title = Ctt(pElem->Attribute("title"));
 	new_object->ReadBaseXML(pElem);
 
 	new_object->ReloadPointers();

@@ -8,16 +8,19 @@
 #include <wx/string.h>
 
 #ifdef UNICODE
-extern const char* Ttc(const wchar_t* str);
-extern const wchar_t* Ctt(const char* str);
+#define Ttc(s) (const char *) wxString(s).mb_str(wxConvUTF8)
+
+inline wxString Ctt(const char String[] = "")
+{
+    return wxString(String, wxConvUTF8);
+}
 #else
 #define Ttc(x) x
 #define Ctt(x) x
 #endif
 
-wxString ss_to_wxstring( const std::string & text );
-wxString ws_to_wxstring( const std::wstring & text );
+std::vector<wxString> Tokens( const wxString wxLine, const wxString wxDelimiters );
+bool AllNumeric( const wxString wxLine );
 
-std::vector<wxString> Tokens( const wxString & wxLine, const wxString & wxDelimiters );
-bool AllNumeric( const wxString & wxLine );
+
 

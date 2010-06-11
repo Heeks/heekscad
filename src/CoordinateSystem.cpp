@@ -1309,7 +1309,7 @@ void CoordinateSystem::WriteXML(TiXmlNode *root)
 	TiXmlElement * element;
 	element = new TiXmlElement( "CoordinateSystem" );
 	root->LinkEndChild( element );  
-	element->SetAttribute("title", Ttc(m_title.c_str()));
+	element->SetAttribute("title", m_title.utf8_str() );
 	element->SetDoubleAttribute("ox", m_o.X());
 	element->SetDoubleAttribute("oy", m_o.Y());
 	element->SetDoubleAttribute("oz", m_o.Z());
