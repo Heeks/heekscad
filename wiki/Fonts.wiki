@@ -12,7 +12,7 @@ The HeeksCAD product also uses one of the OpenGL font files by default.  This Op
 
 == Using True Type fonts in Heeks ==
 
-Ribbonsoft have a utility that converts True Type font files into CXF format.  CXF is the format used by Ribbonsoft's QCAD product for its font files.  The CXF format is also supported by HeeksCAD.  The idea is to use the utility to convert a TrueType font into CXF format.  Manually copy the resultant CXF font file into one of the directories configured in the 'font options->font paths' option and refer to the font's name when placing text.
+Ribbonsoft have a utility that converts True Type font files into CXF format.  It's called 'ttf2cxf'.  CXF is the format used by Ribbonsoft's QCAD product for its font files.  The CXF format is also supported by HeeksCAD.  The idea is to use the utility to convert a TrueType font into CXF format.  Manually copy the resultant CXF font file into one of the directories configured in the 'font options->font paths' option and refer to the font's name when placing text.
 
 == Properties ==
 
