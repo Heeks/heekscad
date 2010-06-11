@@ -706,7 +706,7 @@ HeeksObj *VectorFont::Sketch( const wxString & text, const gp_Trsf & transformat
 	HeeksObj *sketch = heekscad_interface.NewSketch();
 	sketch->OnEditString(text.c_str());
 
-	gp_Pnt location( 0.0, 0.0, 0.0 );	// The transformation matrix will put it in the right place.
+	gp_Pnt location(StartingLocation());	// The transformation matrix will put it in the right place.
 	for (wxString::size_type offset = 0; offset < text.Length(); offset++)
 	{
 		if (text[offset] == ' ')
@@ -806,15 +806,7 @@ HeeksObj *VectorFont::Sketch( const wxString & text, const gp_Trsf & transformat
 					sketch->Add( *l_itGraphic, NULL );
 				} // End for
 
-				double offset = l_itGlyph->second.BoundingBox().MaxX();
-                if (offset < heekscad_interface.GetTolerance())
-                {
-                    offset += ((BoundingBox().Width() * m_character_space_percentage / 100.0) / 2.0);
-                }
-
-                offset += (BoundingBox().Width() * m_character_space_percentage / 100.0);
-
-                location.SetX( original_location.X() + offset );
+                location.SetX( original_location.X() + LetterSpacing( l_itGlyph->second ) );
 			} // End if - then
 		} // End if - else
 	} // End for
@@ -835,23 +827,38 @@ void VectorFont::Glyph::get_text_size( float *pWidth, float *pHeight ) const
 bool VectorFont::get_text_size( const wxString & text, float *pWidth, float *pHeight ) const
 {
 	*pWidth = 0.0;
-	*pHeight = m_line_spacing_factor;
+	*pHeight = 0.0;
 
 	for (wxString::size_type offset = 0; offset < text.Length(); offset++)
 	{
 		if (text[offset] == '\n')
 		{
-			*pHeight += m_line_spacing_factor;
+			*pHeight += LineSpacingFactor();
 		}
 		else
 		{
-			if (m_glyphs.find( text[offset] ) != m_glyphs.end())
-			{
-				float width = 0.0; float height = 0.0;
-				m_glyphs.find( text[offset] )->second.get_text_size( &width, &height );
-				*pWidth += width;
-				*pWidth += this->LetterSpacing();
-			}
+		    if (text[offset] == ' ')
+            {
+                // It's a space.  Just move on.  Nothing to see here.
+                *pWidth += WordSpacing();
+            }
+            else
+            {
+                Glyphs_t::const_iterator l_itGlyph = m_glyphs.find( text[offset] );
+                if (l_itGlyph != m_glyphs.end())
+                {
+                    float width = 0.0; float height = 0.0;
+                    l_itGlyph->second.get_text_size( &width, &height );
+                    *pWidth += LetterSpacing( l_itGlyph->second );
+
+                    if (*pHeight < height) *pHeight = height;
+                }
+                else
+                {
+                    *pWidth += BoundingBox().Width();
+                    if (*pHeight < BoundingBox().Height()) *pHeight = BoundingBox().Height();
+                }
+            } // End if - else
 		}
 	} // End for
 
@@ -859,9 +866,28 @@ bool VectorFont::get_text_size( const wxString & text, float *pWidth, float *pHe
 } // End get_text_size() method
 
 
+double VectorFont::LetterSpacing( const Glyph & glyph ) const
+{
+    double offset = glyph.BoundingBox().MaxX();
+
+    if (offset < heekscad_interface.GetTolerance())
+    {
+        offset += ((BoundingBox().Width() * m_character_space_percentage / 100.0) / 2.0);
+    }
+
+    offset += (BoundingBox().Width() * m_character_space_percentage / 100.0);
+
+    return(offset);
+}
+
+
 void VectorFont::glCommands(const wxString & text, const gp_Pnt &start_point, const bool select, const bool marked, const bool no_color) const
 {
 	gp_Pnt location( start_point );
+	location.SetX( location.X() + StartingLocation().X() );
+	location.SetY( location.Y() + StartingLocation().Y() );
+	location.SetZ( location.Z() + StartingLocation().Z() );
+
 	for (wxString::size_type offset = 0; offset < text.Length(); offset++)
 	{
 		if (text[offset] == ' ')
@@ -921,15 +947,7 @@ void VectorFont::glCommands(const wxString & text, const gp_Pnt &start_point, co
 			    location.SetX( location.X() + (l_itGlyph->second.BoundingBox().MinX() * -1.0) );
 				l_itGlyph->second.glCommands(location, select, marked, no_color);
 
-                double offset = l_itGlyph->second.BoundingBox().MaxX();
-                if (offset < heekscad_interface.GetTolerance())
-                {
-                    offset += ((BoundingBox().Width() * m_character_space_percentage / 100.0) / 2.0);
-                }
-
-                offset += (BoundingBox().Width() * m_character_space_percentage / 100.0);
-
-                location.SetX( original_location.X() + offset );
+                location.SetX( original_location.X() + LetterSpacing( l_itGlyph->second ) );
 			} // End if - then
 		} // End if - else
 	} // End for
