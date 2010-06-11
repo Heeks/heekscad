@@ -6,44 +6,8 @@
 #include <wx/string.h>
 #include <vector>
 
-#ifdef UNICODE
 
-static std::string str_for_Ttc;
-
-const char* Ttc(const wchar_t* str)
-{
-	// convert a wchar_t* string into a char* string
-	str_for_Ttc.clear();
-	while (*str)
-		str_for_Ttc.push_back((char) *str++);
-	return str_for_Ttc.c_str();
-}
-
-static std::wstring wstr_for_Ttc;
-
-const wchar_t* Ctt(const char* str)
-{
-	// convert a char* string into a wchar_t* string
-	wstr_for_Ttc.clear();
-	while (*str)
-		wstr_for_Ttc.push_back((wchar_t) *str++);
-	return wstr_for_Ttc.c_str();
-}
-#endif
-
-wxString ss_to_wxstring( const std::string & text )
-{
-    return(wxString::From8BitData(text.c_str()));
-}
-
-wxString ws_to_wxstring( const std::wstring & text )
-{
-	wxString result;
-	result << text;
-	return(result);
-}
-
-static wxString::size_type find_first_of( const wxString & line, const wxString & delimiters )
+static wxString::size_type find_first_of( const wxString line, const wxString delimiters )
 {
 	wxString::size_type offset = 0;
 	bool offset_value_set = false;
@@ -64,7 +28,7 @@ static wxString::size_type find_first_of( const wxString & line, const wxString 
 	Breakup the line of text based on the delimiting characters passed
 	in and return a vector of 'words'.
  */
-std::vector<wxString> Tokens( const wxString & wxLine, const wxString & wxDelimiters )
+std::vector<wxString> Tokens( const wxString wxLine, const wxString wxDelimiters )
 {
 	std::vector<wxString> tokens;
 	wxString line(wxLine);	// non-const copy
@@ -90,7 +54,8 @@ std::vector<wxString> Tokens( const wxString & wxLine, const wxString & wxDelimi
 } // End Tokens() method
 
 
-bool AllNumeric( const wxString & wxLine )
+
+bool AllNumeric( const wxString wxLine )
 {
 	if (wxLine.Length() == 0) return(false);
 

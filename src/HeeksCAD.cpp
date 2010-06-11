@@ -1364,7 +1364,11 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 {
 	// write an xml file
 	TiXmlDocument doc;
-	TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
+	const char *l_pszVersion = "1.0";
+	const char *l_pszEncoding = "UTF-8";
+	const char *l_pszStandalone = "";
+
+	TiXmlDeclaration* decl = new TiXmlDeclaration( l_pszVersion, l_pszEncoding, l_pszStandalone);
 	doc.LinkEndChild( decl );
 
 	TiXmlNode* root = &doc;
@@ -1409,7 +1413,7 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 				CShapeData& shape_data = It->second;
 				index_pair_element->SetAttribute("index", index);
 				index_pair_element->SetAttribute("id", shape_data.m_id);
-				index_pair_element->SetAttribute("title", Ttc(shape_data.m_title.c_str()));
+				index_pair_element->SetAttribute("title", Ttc(shape_data.m_title));
 				index_pair_element->SetAttribute("vis", shape_data.m_visible ? 1:0);
 				if(shape_data.m_solid_type != SOLID_TYPE_UNKNOWN)index_pair_element->SetAttribute("solid_type", shape_data.m_solid_type);
 				// get the CShapeData attributes
@@ -3461,7 +3465,7 @@ bool HeeksCADapp::IsPasteReady()
 		}
 		wxTheClipboard->Close();
 
-		if(fstr.StartsWith(_T("<?xml version=\"1.0\" ?>")))return true;
+		if(fstr.StartsWith(_T("<?xml version=\"1.0\"")))return true;
 	}
 
 	return false;

@@ -8,7 +8,7 @@
 
 void CGroup::WriteXML(TiXmlNode *root)
 {
-	TiXmlElement * element = new TiXmlElement( "Group" );  
+	TiXmlElement * element = new TiXmlElement( "Group" );
 	root->LinkEndChild( element );
 
 	// instead of ObjList::WriteBaseXML(element), write the id of solids, or the object
@@ -19,7 +19,7 @@ void CGroup::WriteXML(TiXmlNode *root)
 		if(CShape::IsTypeAShape(object->GetType()))
 		{
 			TiXmlElement* solid_element = new TiXmlElement( "solid" );
-			element->LinkEndChild( solid_element );  
+			element->LinkEndChild( solid_element );
 			solid_element->SetAttribute("id", object->m_id);
 		}
 
@@ -75,9 +75,12 @@ void CGroup::MoveSolidsToGroupsById(HeeksObj* object)
 		{
 			int id = *It;
 			HeeksObj* o = wxGetApp().GetIDObject(SolidType, id);
-			o->Owner()->Remove(o);
-			o->RemoveOwner(o->Owner());
-			group->Add(o, NULL);
+			if (o != NULL)
+			{
+                o->Owner()->Remove(o);
+                o->RemoveOwner(o->Owner());
+                group->Add(o, NULL);
+			}
 		}
 	}
 
