@@ -124,6 +124,15 @@ void HText::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
 	point[2] = gp_Pnt(0, -height, 0);
 	point[3] = gp_Pnt(width, -height, 0);
 
+	if (m_pFont != NULL)
+	{
+		// We're using the vector fonts.  These have the opposite meanings for the Y axis values.
+            for (::size_t i=0; i<sizeof(point)/sizeof(point[0]); i++)
+            {
+                point[i].SetY( point[i].Y() * -1.0 );
+            }
+	} // End if - then
+
 	for(int i = 0; i<4; i++)point[i].Transform(m_trsf);
 
 	list->push_back(GripData(GripperTypeTranslate,point[0].X(),point[0].Y(),point[0].Z(),NULL));

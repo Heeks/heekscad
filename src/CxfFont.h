@@ -182,7 +182,7 @@ public:
 	}
 
 	unsigned int NumGlyphs() const { return((unsigned int) m_glyphs.size()); }
-	double LetterSpacing() const { return(m_bounding_box.Width() * m_character_space_percentage / 100.0); }
+	double LetterSpacing(const Glyph & glyph) const;
 	double WordSpacing() const { return(m_bounding_box.Width() * m_word_space_percentage / 100.0); }
 	double LineSpacingFactor() const { return(m_bounding_box.Height() * 10.0 / 100.0); }
 	Name_t Name() const { return(m_name); }
@@ -193,6 +193,7 @@ public:
 	CBox BoundingBox() const { return(m_bounding_box); }
 	void SetWordSpacePercentage( const double value );
 	void SetCharacterSpacePercentage( const double value );
+	virtual gp_Pnt StartingLocation() const { return(gp_Pnt(0.0, 0.0, 0.0)); }
 
 protected:
 	typedef std::map< wxChar, Glyph > Glyphs_t;
@@ -211,6 +212,7 @@ class CxfFont : public VectorFont
 public:
 	CxfFont( const wxChar *p_szFile, const double word_space_percentage, const double character_space_percentage );
 	static bool ValidExtension( const wxString &file_name );
+	/* virtual */ gp_Pnt StartingLocation() const { return(gp_Pnt(0.0, 0.0, 0.0)); }
 
 }; // End CxfFont class definition
 
@@ -220,6 +222,7 @@ class HersheyFont : public VectorFont
 public:
 	HersheyFont( const wxChar *p_szFile, const double word_space_percentage, const double character_space_percentage );
 	static bool ValidExtension( const wxString &file_name );
+	/* virtual */ gp_Pnt StartingLocation() const { return(gp_Pnt(0.0, BoundingBox().Height()/2.0, 0.0)); }
 
 }; // End CxfFont class definition
 
