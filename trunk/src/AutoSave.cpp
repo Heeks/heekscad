@@ -15,7 +15,7 @@ CAutoSave::CAutoSave(const int interval, const bool skip_recovery /* = false */ 
 	wxFileName path( standard_paths.GetTempDir().c_str(), _(".HeeksCAD_Backup_Data_File.heeks"));
 	m_backup_file_name = path.GetFullPath();
 
-	printf("Using backup file path '%s'\n", Ttc(m_backup_file_name.c_str()));
+	printf("Using backup file path '%s'\n", Ttc(m_backup_file_name) );
 
 	m_save_interval = interval;	// Minutes
 	m_auto_recover_requested = false;
@@ -26,7 +26,7 @@ CAutoSave::CAutoSave(const int interval, const bool skip_recovery /* = false */ 
 		// The file was found.  If it still has size then we must have crashed.
 		if (statbuf.st_size > 0)
 		{
-			int answer = wxMessageBox(_T("Do you want to recover using the automatic backup file?"),
+			int answer = wxMessageBox(_("Do you want to recover using the automatic backup file?"),
 						_T("Confirm"), wxYES_NO );
 			if (answer == wxYES)
 			{
