@@ -677,13 +677,14 @@ void CSketch::ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketche
 
 	if(GetSketchOrder() == SketchOrderTypeBad)
 	{
+	    // Duplicate and reorder the sketch to see if it's possible to make separate connected sketches.
 		re_ordered_sketch = (CSketch*)(this->MakeACopy());
 		re_ordered_sketch->ReOrderSketch(SketchOrderTypeReOrder);
 		sketch = re_ordered_sketch;
 	}
 	if(sketch->GetSketchOrder() == SketchOrderTypeMultipleCurves)
 	{
-
+        // Make separate connected sketches from the child elements.
 		CSketchRelinker relinker(sketch->m_objects);
 
 		relinker.Do();
@@ -700,6 +701,16 @@ void CSketch::ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketche
 			}
 			new_separate_sketches.push_back(new_object);
 		}
+	}
+	else
+	{
+        // The sketch does not seem to relink into separate connected shapes.  Just export
+        // all the sketch's children as separate objects instead.
+
+        for (HeeksObj *child = sketch->GetFirstChild(); child != NULL; child = sketch->GetNextChild())
+        {
+            new_separate_sketches.push_back( child->MakeACopy() );
+        }
 	}
 
 	if(re_ordered_sketch)delete re_ordered_sketch;
