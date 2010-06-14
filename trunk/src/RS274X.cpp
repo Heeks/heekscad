@@ -910,6 +910,28 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 			m_active_aperture = aperture_number;
 			return(true);
 		}
+		else if (_data.substr(0,1) == "D")
+		{
+		    // The RS247X format document says that a new aperture is normally selected along
+		    // with a G54 command but the G54 is optional. Accept this is the number matches
+		    // an aperture that is already defined.
+		    _data.erase(0,1);   // Erase the 'D'
+
+		    char *end = NULL;
+            m_active_aperture = strtoul(_data.c_str(), &end, 10 );
+            if ((end == NULL) || (end == _data.c_str()))
+			{
+				printf("Expected aperture number following 'D'\n");
+				return(false);
+			} // End if - then
+			_data.erase(0, end - _data.c_str());
+
+            if (m_aperture_table.find( m_active_aperture ) == m_aperture_table.end())
+			{
+				printf("Aperture selection command selected undefined aperture\n");
+				return(false);
+			} // End if - then
+		}
 		else
 		{
 			printf("Unexpected command '%s'\n", _data.c_str() );
@@ -1349,7 +1371,7 @@ int RS274X::FormNetworks()
             {
                 ((CSketch *)sketch)->ReOrderSketch( SketchOrderTypeCloseCCW );  // At least try to make them all consistently oriented.
             }
-		
+
 			if (m_mirror_image)
 			{
 				double mirror[16];
@@ -1357,7 +1379,7 @@ int RS274X::FormNetworks()
 				gp_Trsf rotation;
 				rotation.SetRotation( mirror_axis, PI );
 				extract(rotation, mirror);
-				sketch->ModifyByMatrix(mirror);	
+				sketch->ModifyByMatrix(mirror);
 			}
 
             heekscad_interface.Add( sketch, NULL );
