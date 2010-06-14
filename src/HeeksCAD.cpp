@@ -998,29 +998,38 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into)
 	choices.Add(_("Produce mirrored trace isolation sketches"));
     choices.Add(_("Produce mirrored trace centre-line sketches"));
 
+    // choices.Add(_("Produce bitmap image only"));
+
     wxString choice = ::wxGetSingleChoice( message, caption, choices );
 
     RS274X gerber;
 
-    if (choice == choices[0])
+    if ((choices.size() > 0) && (choice == choices[0]))
     {
         gerber.Read(wxString(filepath).mb_str(), RS274X::IsolationRouting, false );
     }
 
-    if (choice == choices[1])
+    if ((choices.size() > 1) && (choice == choices[1]))
     {
         gerber.Read(wxString(filepath).mb_str(), RS274X::CentreLines, false );
     }
 
-	if (choice == choices[2])
+	if ((choices.size() > 2) && (choice == choices[2]))
     {
         gerber.Read(wxString(filepath).mb_str(), RS274X::IsolationRouting, true );
     }
 
-    if (choice == choices[3])
+    if ((choices.size() > 3) && (choice == choices[3]))
     {
         gerber.Read(wxString(filepath).mb_str(), RS274X::CentreLines, true );
     }
+
+    if ((choices.size() > 4) && (choice == choices[4]))
+    {
+        gerber.Read(wxString(filepath).mb_str(), RS274X::RasterImage, true );
+    }
+
+
 }
 
 bool HeeksCADapp::OpenImageFile(const wxChar *filepath)
