@@ -8,7 +8,7 @@
 #include <wx/string.h>
 
 #ifdef UNICODE
-#define Ttc(s) (const char *) wxString(s).mb_str(wxConvUTF8)
+extern const char* Ttc(const wchar_t* str);
 
 inline wxString Ctt(const char String[] = "")
 {

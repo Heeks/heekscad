@@ -44,6 +44,7 @@ RS274X::RS274X()
 	m_cw_circular_interpolation = false;	// this flag only makes sense if m_part_circular_interpolation is true.
 
 	m_current_position = gp_Pnt(0.0, 0.0, 0.0);
+	m_lamp_on = false;
 
 	m_LayerName = "";
 
@@ -539,7 +540,7 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 	double i_term = 0.0;
 	double j_term = 0.0;
 	gp_Pnt position( m_current_position );
-
+	
 	while (_data.size() > 0)
 	{
 		if (_data.substr(0,3) == "G04")
@@ -787,92 +788,23 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 		else if (_data.substr(0,3) == "D01")
 		{
 			_data.erase(0,3);
-
-			// We're going from the current position to x,y in
-			// either a linear interpolated path or a circular
-			// interpolated path.  We end up resetting our current
-			// location to x,y
-
-			if (m_part_circular_interpolation)
-			{
-				// arc
-				// circular interpolation.
-
-				Trace trace( m_aperture_table[m_active_aperture], Trace::eCircular );
-				trace.Start( m_current_position );
-				trace.End( position );
-				trace.Clockwise( m_cw_circular_interpolation );
-				trace.I( i_term );
-				trace.J( j_term );
-				trace.Radius( sqrt((i_term * i_term) + (j_term * j_term)) );
-
-				if(m_area_fill)
-				{
-					m_filled_area_traces.push_back( trace );
-				}
-				else
-				{
-					m_traces.push_back( trace );
-				}
-
-				m_current_position = position;
-			} // End if - then
-			else if (m_full_circular_interpolation)
-			{
-				// full circle
-				// circular interpolation.
-				double radius = sqrt((i_term * i_term) + (j_term * j_term));
-
-				Trace trace( m_aperture_table[m_active_aperture], Trace::eCircular );
-				trace.Radius(radius);
-				trace.Start( position );
-				trace.End( position );
-				trace.Clockwise( m_cw_circular_interpolation );
-
-				if(m_area_fill)
-				{
-					m_filled_area_traces.push_back( trace );
-				}
-				else
-				{
-					m_traces.push_back( trace );
-				}
-
-				m_current_position = position;
-			}
-			else
-			{
-				// linear interpolation.
-
-				Trace trace( m_aperture_table[m_active_aperture], Trace::eLinear );
-				trace.Start( m_current_position );
-				trace.End( position );
-
-				if(m_area_fill)
-				{
-					m_filled_area_traces.push_back( trace );
-				}
-				else
-				{
-					m_traces.push_back( trace );
-				}
-
-				m_current_position = position;
-			} // End if - else
+			m_lamp_on = true;
 		}
 		else if (_data.substr(0,3) == "D02")
 		{
 			_data.erase(0,3);
+			
 			if((m_area_fill) && (m_filled_area_traces.size() > 0)) {
 				m_filled_areas.push_back( m_filled_area_traces );
 				m_filled_area_traces.clear();
 			}
 			m_current_position = position;
+			m_lamp_on = false;
 		}
 		else if (_data.substr(0,3) == "D03")
 		{
-			//std::cout<<"d03"<<std::endl;
 			_data.erase(0,3);
+			m_lamp_on = false;
 			m_current_position = position;
 			if (m_aperture_table.find( m_active_aperture ) == m_aperture_table.end())
 			{
@@ -905,7 +837,7 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 				printf("Expected aperture number following 'D'\n");
 				return(false);
 			} // End if - then
-			_data.erase(0, end - _data.c_str());
+			_data.erase(0, end - _data.c_str() + 1);
 
 			m_active_aperture = aperture_number;
 			return(true);
@@ -924,7 +856,7 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 				printf("Expected aperture number following 'D'\n");
 				return(false);
 			} // End if - then
-			_data.erase(0, end - _data.c_str());
+			_data.erase(0, end - _data.c_str() + 1);
 
             if (m_aperture_table.find( m_active_aperture ) == m_aperture_table.end())
 			{
@@ -938,6 +870,81 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 			return(false);
 		} // End if - else
 	} // End while
+
+	if ((position.Distance( m_current_position ) > wxGetApp().m_geom_tol) && (m_lamp_on == true))
+	{
+		// We may have just parsed a modal command.  If the lamp is on then
+		// add the appropriate trace.  If the movement had already been
+		// handled then the m_current_position would already have been
+		// updated.
+
+		if (m_part_circular_interpolation)
+		{
+			// arc
+			// circular interpolation.
+
+			Trace trace( m_aperture_table[m_active_aperture], Trace::eCircular );
+			trace.Start( m_current_position );
+			trace.End( position );
+			trace.Clockwise( m_cw_circular_interpolation );
+			trace.I( i_term );
+			trace.J( j_term );
+			trace.Radius( sqrt((i_term * i_term) + (j_term * j_term)) );
+
+			if(m_area_fill)
+			{
+				m_filled_area_traces.push_back( trace );
+			}
+			else
+			{
+				m_traces.push_back( trace );
+			}
+
+			m_current_position = position;
+		} // End if - then
+		else if (m_full_circular_interpolation)
+		{
+			// full circle
+			// circular interpolation.
+			double radius = sqrt((i_term * i_term) + (j_term * j_term));
+
+			Trace trace( m_aperture_table[m_active_aperture], Trace::eCircular );
+			trace.Radius(radius);
+			trace.Start( position );
+			trace.End( position );
+			trace.Clockwise( m_cw_circular_interpolation );
+
+			if(m_area_fill)
+			{
+				m_filled_area_traces.push_back( trace );
+			}
+			else
+			{
+				m_traces.push_back( trace );
+			}
+
+			m_current_position = position;
+		}
+		else
+		{
+			// linear interpolation.
+
+			Trace trace( m_aperture_table[m_active_aperture], Trace::eLinear );
+			trace.Start( m_current_position );
+			trace.End( position );
+
+			if(m_area_fill)
+			{
+				m_filled_area_traces.push_back( trace );
+			}
+			else
+			{
+				m_traces.push_back( trace );
+			}
+
+			m_current_position = position;
+		} // End if - else
+	}
 
 	return(true);
 } // End ReadDataBlock() method

@@ -130,52 +130,16 @@ static void SortEdges( std::vector<TopoDS_Edge> & edges )
 {
 	for (std::vector<TopoDS_Edge>::iterator l_itEdge = edges.begin(); l_itEdge != edges.end(); l_itEdge++)
     {
-        if (l_itEdge == edges.begin())
-        {
-            // It's the first edge.  Find the edge whose endpoint is closest to gp_Pnt(0,0,0) so that
-            // the resutls of this sorting are consistent.  When we just use the first edge in the
-            // wire, we end up with different results every time.  We want consistency so that, if we
-            // use this Contour operation as a location for drilling a relief hole (one day), we want
-            // to be sure the machining will begin from a consistently known location.
+		// We've already begun.  Just sort based on the previous point's location.
+		std::vector<TopoDS_Edge>::iterator l_itNextEdge = l_itEdge;
+		l_itNextEdge++;
 
-            std::vector<TopoDS_Edge>::iterator l_itStartingEdge = edges.begin();
-            gp_Pnt closest_point = GetStart(*l_itStartingEdge);
-            if (GetEnd(*l_itStartingEdge).Distance(gp_Pnt(0,0,0)) < closest_point.Distance(gp_Pnt(0,0,0)))
-            {
-                closest_point = GetEnd(*l_itStartingEdge);
-            }
-            for (std::vector<TopoDS_Edge>::iterator l_itCheck = edges.begin(); l_itCheck != edges.end(); l_itCheck++)
-            {
-                if (GetStart(*l_itCheck).Distance(gp_Pnt(0,0,0)) < closest_point.Distance(gp_Pnt(0,0,0)))
-                {
-                    closest_point = GetStart(*l_itCheck);
-                    l_itStartingEdge = l_itCheck;
-                }
-
-                if (GetEnd(*l_itCheck).Distance(gp_Pnt(0,0,0)) < closest_point.Distance(gp_Pnt(0,0,0)))
-                {
-                    closest_point = GetEnd(*l_itCheck);
-                    l_itStartingEdge = l_itCheck;
-                }
-            }
-
-            EdgeComparison compare( *l_itStartingEdge );
-            std::sort( edges.begin(), edges.end(), compare );
-        } // End if - then
-        else
-        {
-            // We've already begun.  Just sort based on the previous point's location.
-            std::vector<TopoDS_Edge>::iterator l_itNextEdge = l_itEdge;
-            l_itNextEdge++;
-
-            if (l_itNextEdge != edges.end())
-            {
-                EdgeComparison compare( *l_itEdge );
-                std::sort( l_itNextEdge, edges.end(), compare );
-            } // End if - then
-        } // End if - else
+		if (l_itNextEdge != edges.end())
+		{
+			EdgeComparison compare( *l_itEdge );
+			std::sort( l_itNextEdge, edges.end(), compare );
+		} // End if - then
     } // End for
-
 } // End SortEdges() method
 
 
@@ -234,13 +198,13 @@ bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wire &wire
 
 bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_or_wire, bool face_not_wire)
 {
-	if(object->GetType() != SketchType && object->GetType() != CircleType)return false;
+
 	std::list<HeeksObj*> line_arc_list;
 
 	if(object->GetType() == SketchType)
 	{
 		std::list<HeeksObj*> new_separate_sketches;
-		((CSketch*)object)->ExtractSeparateSketches(new_separate_sketches);
+		((CSketch*)object)->ExtractSeparateSketches(new_separate_sketches, false);
 		if(new_separate_sketches.size() > 1)
 		{
 			// call again with each separate sketch
@@ -264,6 +228,7 @@ bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_o
 		line_arc_list.push_back(object);
 	}
 
+	const double max_tolerance = 10.0;
 	std::vector<TopoDS_Edge> edges;
 	for(std::list<HeeksObj*>::const_iterator It = line_arc_list.begin(); It != line_arc_list.end(); It++){
 	    try {
@@ -271,126 +236,75 @@ bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_o
             switch(object->GetType()){
                 case LineType:
                     {
-                        HLine* line = (HLine*)object;
-                        if(!(line->A->m_p.IsEqual(line->B->m_p, wxGetApp().m_geom_tol)))
-                        {
-                            BRep_Builder aBuilder;
-                            TopoDS_Vertex start, end;
+						bool done = false;
+						double tolerance = wxGetApp().m_geom_tol;
+						while ((! done) && (tolerance < max_tolerance))
+						{
+							HLine* line = (HLine*)object;
+							if(!(line->A->m_p.IsEqual(line->B->m_p, wxGetApp().m_geom_tol)))
+							{
+								BRep_Builder aBuilder;
+								TopoDS_Vertex start, end;
 
-                            aBuilder.MakeVertex (start, line->A->m_p, wxGetApp().m_geom_tol);
-                            start.Orientation (TopAbs_REVERSED);
+								aBuilder.MakeVertex (start, line->A->m_p, wxGetApp().m_geom_tol);
+								start.Orientation (TopAbs_REVERSED);
 
-                            aBuilder.MakeVertex (end, line->B->m_p, wxGetApp().m_geom_tol);
-                            end.Orientation (TopAbs_FORWARD);
+								aBuilder.MakeVertex (end, line->B->m_p, wxGetApp().m_geom_tol);
+								end.Orientation (TopAbs_FORWARD);
 
-                            BRepBuilderAPI_MakeEdge edge(start, end);
-                            if (! edge.IsDone())
-                            {
-								/*
-                                BRepBuilderAPI_EdgeError error = edge.Error();
-                                switch(error)
-                                {
-                                    case  BRepBuilderAPI_EdgeDone:
-                                    break;
+								BRepBuilderAPI_MakeEdge edge(start, end);
+								if (! edge.IsDone())
+								{	// return(false);
+									tolerance *= 10.0;
+								}
+								else
+								{
+									edges.push_back(edge.Edge());
+									done = true;
+								}
+							} // End while
 
-                                    case BRepBuilderAPI_PointProjectionFailed:
-                                    wxMessageBox(wxString(_("BRepBuilderAPI_PointProjectionFailed")) );
-                                    break;
-
-                                    case BRepBuilderAPI_ParameterOutOfRange:
-                                    wxMessageBox(wxString(_("BRepBuilderAPI_ParameterOutOfRange")) );
-                                    break;
-
-                                    case BRepBuilderAPI_DifferentPointsOnClosedCurve:
-                                    wxMessageBox(wxString(_("BRepBuilderAPI_DifferentPointsOnClosedCurve")) );
-                                    break;
-
-                                    case BRepBuilderAPI_PointWithInfiniteParameter:
-                                    wxMessageBox(wxString(_("BRepBuilderAPI_PointWithInfiniteParameter")) );
-                                    break;
-
-                                    case BRepBuilderAPI_DifferentsPointAndParameter:
-                                    wxMessageBox(wxString(_("BRepBuilderAPI_DifferentsPointAndParameter")) );
-                                    break;
-
-                                    case BRepBuilderAPI_LineThroughIdenticPoints:
-                                    wxMessageBox(wxString(_("BRepBuilderAPI_LineThroughIdenticPoints")) );
-                                    break;
-
-                                    default:
-                                    wxMessageBox(wxString(_("Unknown error")) );
-                                    break;
-                                }
-								*/
-
-                                return(false);
-                            }
-                            else
-                            {
-                                edges.push_back(edge.Edge());
-                            }
+							if (! done)
+							{
+								return(false);
+							}
                         }
                     }
                     break;
                 case ArcType:
                     {
-                        HArc* arc = (HArc*)object;
+						bool done = false;
+						double tolerance = wxGetApp().m_geom_tol;
+						while ((! done) && (tolerance < max_tolerance))
+						{
+							HArc* arc = (HArc*)object;
 
-                        BRep_Builder aBuilder;
-                        TopoDS_Vertex start, end;
+							BRep_Builder aBuilder;
+							TopoDS_Vertex start, end;
 
-                        aBuilder.MakeVertex (start, arc->A->m_p, wxGetApp().m_geom_tol);
-                        start.Orientation (TopAbs_REVERSED);
+							aBuilder.MakeVertex (start, arc->A->m_p, wxGetApp().m_geom_tol);
+							start.Orientation (TopAbs_REVERSED);
 
-                        aBuilder.MakeVertex (end, arc->B->m_p, wxGetApp().m_geom_tol);
-                        end.Orientation (TopAbs_FORWARD);
+							aBuilder.MakeVertex (end, arc->B->m_p, wxGetApp().m_geom_tol);
+							end.Orientation (TopAbs_FORWARD);
 
-                        BRepBuilderAPI_MakeEdge edge(arc->GetCircle(), start, end);
-                        if (! edge.IsDone())
-                        {
-							/*
-                            BRepBuilderAPI_EdgeError error = edge.Error();
-                            switch(error)
-                            {
-                                case  BRepBuilderAPI_EdgeDone:
-                                break;
+							BRepBuilderAPI_MakeEdge edge(arc->GetCircle(), start, end);
+							if (! edge.IsDone())
+							{
+								// return(false);
+								tolerance *= 10.0;
+							}
+							else
+							{
+								edges.push_back(edge.Edge());
+								done = true;
+							}
+						} // End while
 
-                                case BRepBuilderAPI_PointProjectionFailed:
-                                wxMessageBox(wxString(_("BRepBuilderAPI_PointProjectionFailed")) );
-                                break;
-
-                                case BRepBuilderAPI_ParameterOutOfRange:
-                                wxMessageBox(wxString(_("BRepBuilderAPI_ParameterOutOfRange")) );
-                                break;
-
-                                case BRepBuilderAPI_DifferentPointsOnClosedCurve:
-                                wxMessageBox(wxString(_("BRepBuilderAPI_DifferentPointsOnClosedCurve")) );
-                                break;
-
-                                case BRepBuilderAPI_PointWithInfiniteParameter:
-                                wxMessageBox(wxString(_("BRepBuilderAPI_PointWithInfiniteParameter")) );
-                                break;
-
-                                case BRepBuilderAPI_DifferentsPointAndParameter:
-                                wxMessageBox(wxString(_("BRepBuilderAPI_DifferentsPointAndParameter")) );
-                                break;
-
-                                case BRepBuilderAPI_LineThroughIdenticPoints:
-                                wxMessageBox(wxString(_("BRepBuilderAPI_LineThroughIdenticPoints")) );
-                                break;
-
-                                default:
-                                wxMessageBox(wxString(_("Unknown error")) );
-                                break;
-                            }
-							*/
-
+						if (! done)
+						{
 							return(false);
-                        }
-                        else
-                        {
-                            edges.push_back(edge.Edge());
-                        }
+						}
                     }
                     break;
                 case CircleType:
@@ -411,6 +325,14 @@ bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_o
                         edges.push_back(BRepBuilderAPI_MakeEdge(spline->m_spline));
                     }
                     break;
+
+				default:
+					{
+						wxString message;
+						message << _("Cannot convert object type ") << object->GetType() << _(" to edge");
+						wxMessageBox(message);
+						return(false);
+					}
             }
 	    } // End try
 	    catch(Standard_Failure)
