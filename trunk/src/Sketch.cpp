@@ -657,7 +657,7 @@ void CSketch::ReverseSketch()
 	wxGetApp().ObserversOnChange(&new_list,NULL,NULL);
 }
 
-void CSketch::ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketches)
+void CSketch::ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketches, const bool allow_individual_objects /* = false */ )
 {
 	CSketch* re_ordered_sketch = NULL;
 	CSketch* sketch = this;
@@ -706,11 +706,13 @@ void CSketch::ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketche
 	{
         // The sketch does not seem to relink into separate connected shapes.  Just export
         // all the sketch's children as separate objects instead.
-
-        for (HeeksObj *child = sketch->GetFirstChild(); child != NULL; child = sketch->GetNextChild())
-        {
-            new_separate_sketches.push_back( child->MakeACopy() );
-        }
+		if (allow_individual_objects)
+		{
+			for (HeeksObj *child = sketch->GetFirstChild(); child != NULL; child = sketch->GetNextChild())
+			{
+				new_separate_sketches.push_back( child->MakeACopy() );
+			}
+		}
 	}
 
 	if(re_ordered_sketch)delete re_ordered_sketch;

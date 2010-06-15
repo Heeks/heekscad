@@ -633,9 +633,9 @@ HeeksObj* CHeeksCADInterface::ExtrudeSketch(HeeksObj* sketch, double height)
 	return CreateExtrusionOrRevolution(list,height, true, false);
 }
 
-void CHeeksCADInterface::ExtractSeparateSketches(HeeksObj* sketch, std::list<HeeksObj*> &new_separate_sketches)
+void CHeeksCADInterface::ExtractSeparateSketches(HeeksObj* sketch, std::list<HeeksObj*> &new_separate_sketches, const bool allow_individual_objects)
 {
-	((CSketch*)sketch)->ExtractSeparateSketches(new_separate_sketches);
+	((CSketch*)sketch)->ExtractSeparateSketches(new_separate_sketches, allow_individual_objects);
 }
 
 HeeksObj* CHeeksCADInterface::GetSketchFromName(const wxChar* name)

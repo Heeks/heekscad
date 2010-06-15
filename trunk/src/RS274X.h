@@ -430,6 +430,7 @@ class RS274X
 		std::string m_LayerName;
 		int	m_active_aperture;
 		gp_Pnt	m_current_position;
+		bool m_lamp_on;	// Is the lamp on or off.  We need to remember for modal movements.
 
 		typedef std::map< unsigned int, Aperture > ApertureTable_t;
 		ApertureTable_t m_aperture_table;

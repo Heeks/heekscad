@@ -6,6 +6,15 @@
 #include <wx/string.h>
 #include <vector>
 
+const char* Ttc(const wchar_t* str)
+{
+    static std::string _str;
+    _str.clear();
+    wxString _wxstr(str);
+
+    _str.append((const char *) _wxstr.mb_str(wxConvUTF8));
+    return(_str.c_str());
+}
 
 static wxString::size_type find_first_of( const wxString line, const wxString delimiters )
 {

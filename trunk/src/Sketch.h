@@ -66,7 +66,7 @@ public:
 	bool ReOrderSketch(SketchOrderType new_order); // returns true if done
 	void ReLinkSketch();
 	void ReverseSketch();
-	void ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketches);
+	void ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketches, const bool allow_individual_objects = false);
 
 	int Intersects(const HeeksObj *object, std::list< double > *rl) const;
 	HeeksObj *Parallel( const double distance );
