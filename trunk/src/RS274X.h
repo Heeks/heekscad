@@ -107,7 +107,7 @@ class RS274X
 				return( pixels_per_mm );
 			}
 
-			static double MMPerPixel() 
+			static double MMPerPixel()
 			{
 				static double mm_per_pixel = ( 1.0 / PixelsPerMM());
 				return(mm_per_pixel);
@@ -277,16 +277,16 @@ class RS274X
 				void OutsideDiameter( const double value ) { m_outside_diameter = value; }
 				double OutsideDiameter() const { return(m_outside_diameter); }
 
-				void XAxisHoleDimension( const double value ) { m_x_axis_hole_dimension = value; m_outside_diameter = value; }
+				void XAxisHoleDimension( const double value ) { m_x_axis_hole_dimension = value; if (m_type != eCircular) m_outside_diameter = value; }
 				double XAxisHoleDimension() const { return(m_x_axis_hole_dimension); }
 
-				void YAxisHoleDimension( const double value ) { m_y_axis_hole_dimension = value; m_outside_diameter = value; }
+				void YAxisHoleDimension( const double value ) { m_y_axis_hole_dimension = value; if (m_type != eCircular) m_outside_diameter = value; }
 				double YAxisHoleDimension() const { return(m_y_axis_hole_dimension); }
 
-				void XAxisOutsideDimension( const double value ) { m_x_axis_outside_dimension = value; m_outside_diameter = value; }
+				void XAxisOutsideDimension( const double value ) { m_x_axis_outside_dimension = value; if (m_type != eCircular) m_outside_diameter = value; }
 				double XAxisOutsideDimension() const { return(m_x_axis_outside_dimension); }
 
-				void YAxisOutsideDimension( const double value ) { m_y_axis_outside_dimension = value; m_outside_diameter = value; }
+				void YAxisOutsideDimension( const double value ) { m_y_axis_outside_dimension = value; if (m_type != eCircular) m_outside_diameter = value; }
 				double YAxisOutsideDimension() const { return(m_y_axis_outside_dimension); }
 
 				void DegreeOfRotation( const double value ) { m_degree_of_rotation = value; }
