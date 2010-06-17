@@ -64,6 +64,7 @@
 #include "CxfFont.h"
 #include "AutoSave.h"
 #include <wx/progdlg.h>
+#include "OrientationModifier.h"
 
 using namespace std;
 
@@ -764,6 +765,7 @@ void HeeksCADapp::InitializeXMLFunctions()
 		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Spline", HSpline::ReadFromXMLElement ) );
 		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Group", CGroup::ReadFromXMLElement ) );
 		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Constraint", Constraint::ReadFromXMLElement ) );
+		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "OrientationModifier", COrientationModifier::ReadFromXMLElement ) );
 	}
 }
 

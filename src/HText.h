@@ -8,7 +8,7 @@
 #include "../interface/HeeksColor.h"
 #include "CxfFont.h"
 
-class HText: public HeeksObj{
+class HText: public ObjList {
 private:
 	HeeksColor m_color;
 
@@ -43,6 +43,7 @@ public:
 	const wxChar* GetShortString(void)const{return m_text.c_str();}
 	bool CanEditString(void)const{return true;}
 	void OnEditString(const wxChar* str);
+	bool CanAdd(HeeksObj* object);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);

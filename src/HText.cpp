@@ -8,6 +8,7 @@
 #include "PropertyTrsf.h"
 #include "Gripper.h"
 #include "CxfFont.h"
+#include "OrientationModifier.h"
 
 HText::HText(const gp_Trsf &trsf, const wxString &text, const HeeksColor* col, VectorFont *pFont):m_color(*col),  m_trsf(trsf), m_text(text), m_pFont(pFont)
 {
@@ -24,7 +25,7 @@ HText::~HText(void)
 
 const HText& HText::operator=(const HText &b)
 {
-	HeeksObj::operator=(b);
+	ObjList::operator=(b);
 	m_trsf = b.m_trsf;
 	m_text = b.m_text;
 	m_color = b.m_color;
@@ -56,10 +57,23 @@ void HText::glCommands(bool select, bool marked, bool no_color)
 	else
 	{
 		// We're using the CxfFonts
-		m_pFont->glCommands( m_text, gp_Pnt(0.0, 0.0, 0.0), select, marked, no_color );
+		// Look to see if we have an OrientationModifier object as a child.  If so, pass it in
+		COrientationModifier *pOrientationModifier = NULL;
+		for (HeeksObj *child = GetFirstChild(); child != NULL; child = GetNextChild())
+		{
+			if ((child) && (child->GetType() == OrientationModifierType))
+			{
+				pOrientationModifier = (COrientationModifier *)child;
+				break;
+			}
+		}
+
+		m_pFont->glCommands( m_text, gp_Pnt(0.0, 0.0, 0.0), select, marked, no_color, pOrientationModifier, m_trsf );
 	} // End if - else
 
 	glPopMatrix();
+
+	ObjList::glCommands(select, marked, no_color);
 }
 
 bool HText::GetTextSize( const wxString & text, float *pWidth, float *pHeight ) const
@@ -193,7 +207,7 @@ void HText::GetProperties(std::list<Property *> *list)
 		list->push_back ( new PropertyChoice ( _("Font"),  choices, choice, this, on_set_font ) );
 	}
 
-	HeeksObj::GetProperties(list);
+	ObjList::GetProperties(list);
 }
 
 bool HText::Stretch(const double *p, const double* shift, void* data)
@@ -283,6 +297,20 @@ HeeksObj* HText::ReadFromXMLElement(TiXmlElement* pElem)
 	return new_object;
 }
 
+bool HText::CanAdd(HeeksObj* object)
+{
+	if (object == NULL) return(false);
+	if (GetNumChildren() > 0)
+	{
+		wxMessageBox(_("Only a single orientation modifier is supported"));
+		return(false);
+	}
+
+	if (object->GetType() == OrientationModifierType) return(true);
+	return(false);
+}
+
+
 HText *pTextForSketchTool = NULL;
 
 class TextToSketch:public Tool{
@@ -299,9 +327,33 @@ public:
 };
 static TextToSketch text_to_sketch;
 
+
+HText *pOrientationForTextTool = NULL;
+
+class AddOrientationModifierTool:public Tool{
+public:
+	void Run(){
+		HeeksObj *orientation = new COrientationModifier();
+		pOrientationForTextTool->Add( orientation, NULL);
+		pOrientationForTextTool = NULL;
+	}
+	const wxChar* GetTitle(){return _("Add Orientation Modifier");}
+	wxString BitmapPath(){return _T("new");}
+	const wxChar* GetToolTip(){return _("Add graphics to orient text");}
+};
+static AddOrientationModifierTool orientation_tool;
+
+
+
 void HText::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	pTextForSketchTool = this;
+	pOrientationForTextTool = this;
+
+	if (GetNumChildren() == 0)
+	{
+	   // t_list->push_back(&orientation_tool); // Not yet.  It produces a mess.  Need to get the Get() method working properly.
+	}
 
 	if (m_pFont != NULL)
 	{
