@@ -79,6 +79,7 @@ OBJECTS=                                 \
     ObjPropsCanvas.o                     \
     odcombo.o                            \
     OptionsCanvas.o                      \
+    OrientationModifier.o                \
     Plugins.o                            \
     PointDrawing.o                       \
     PointOrWindow.o                      \

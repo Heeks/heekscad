@@ -51,7 +51,8 @@ enum{
 	PadType,
 	PartType,
 	PocketSolidType,
-	AngularDimensionType
+	AngularDimensionType,
+	OrientationModifierType
 };
 
 #define MARKING_FILTER_LINE					0x00000001
