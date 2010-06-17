@@ -1166,6 +1166,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\OrientationModifier.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\OrientationModifier.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Pad.cpp"
 			>
 		</File>

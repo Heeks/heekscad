@@ -22,6 +22,7 @@
 
 #include "../interface/HeeksCADInterface.h"
 #include "../interface/Box.h"
+#include "OrientationModifier.h"
 
 
 /**
@@ -45,7 +46,12 @@ protected:
 		{
 		public:
 			virtual HeeksObj *Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const = 0;
-			virtual void glCommands( const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const = 0;
+			virtual void glCommands( const gp_Pnt & starting_point, 
+									 const bool select, 
+									 const bool marked, 
+									 const bool no_color, 
+									 COrientationModifier *pOrientationModifier, 
+									 gp_Trsf transformation) const = 0;
 			virtual CBox BoundingBox() const = 0;
 			virtual Graphics *Duplicate() = 0;
 		}; // End Graphics class defintion.
@@ -89,7 +95,12 @@ protected:
 			}
 
 		    HeeksObj *Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const;
-			void glCommands( const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const;
+			void glCommands( const gp_Pnt & starting_point, 
+							 const bool select, 
+							 const bool marked, 
+							 const bool no_color, 
+							 COrientationModifier *pOrientationModifier, 
+							 gp_Trsf transformation) const;
 			CBox BoundingBox() const { return(m_bounding_box); }
 			Graphics *Duplicate() { return(new Line(*this)); }
 
@@ -130,7 +141,12 @@ protected:
 			Graphics *Duplicate() { return(new Arc(*this)); }
 
 			HeeksObj *Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const;
-			void glCommands( const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const;
+			void glCommands( const gp_Pnt & starting_point, 
+							 const bool select, 
+							 const bool marked, 
+							 const bool no_color, 
+							 COrientationModifier *pOrientationModifier, 
+							 gp_Trsf transformation) const;
 			CBox BoundingBox() const { return(m_bounding_box); }
 
 			std::list<gp_Pnt> Interpolate(const gp_Pnt & location, const unsigned int number_of_points ) const;
@@ -156,7 +172,12 @@ protected:
 
 		HeeksObj *Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const;
 		std::list< HeeksObj * > GetGraphics( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const;
-		void glCommands( const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const;
+		void glCommands( const gp_Pnt & starting_point, 
+						 const bool select, 
+						 const bool marked, 
+						 const bool no_color, 
+						 COrientationModifier *pOrientationModifier, 
+						 gp_Trsf transformation) const;
 		void get_text_size( float *pWidth, float *pHeight ) const;
 		CBox BoundingBox() const { return(m_bounding_box); }
 		void SetWordSpacePercentage( const double value );
@@ -189,7 +210,13 @@ public:
 
 	HeeksObj *Sketch( const wxString & string, const gp_Trsf & transformation_matrix ) const;
 	bool get_text_size( const wxString & text, float *pWidth, float *pHeight ) const;
-	void glCommands(const wxString & text, const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const;
+	void glCommands(const wxString & text, 
+					const gp_Pnt & starting_point, 
+					const bool select, 
+					const bool marked, 
+					const bool no_color, 
+					COrientationModifier *pOrientationModifier, 
+					gp_Trsf transformation ) const;
 	CBox BoundingBox() const { return(m_bounding_box); }
 	void SetWordSpacePercentage( const double value );
 	void SetCharacterSpacePercentage( const double value );

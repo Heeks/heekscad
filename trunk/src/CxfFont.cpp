@@ -59,7 +59,13 @@ HeeksObj *VectorFont::Glyph::Line::Sketch( const gp_Pnt & location, const gp_Trs
 	return(line);
 } // End Sketch() method
 
-void VectorFont::Glyph::Line::glCommands( const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const
+void VectorFont::Glyph::Line::glCommands( 
+	const gp_Pnt & starting_point, 
+	const bool select, 
+	const bool marked, 
+	const bool no_color, 
+	COrientationModifier *pOrientationModifier, 
+	gp_Trsf transformation) const
 {
 	gp_Pnt from( starting_point );
 	gp_Pnt to( starting_point );
@@ -71,6 +77,12 @@ void VectorFont::Glyph::Line::glCommands( const gp_Pnt & starting_point, const b
 	to.SetX( starting_point.X() + m_x2);
 	to.SetY( starting_point.Y() + m_y2);
 	to.SetZ( starting_point.Z() );
+
+	if (pOrientationModifier)
+	{
+		from.Transform(pOrientationModifier->Get(transformation, starting_point.X()));
+		to.Transform(pOrientationModifier->Get(transformation, starting_point.X()));
+	}
 
 	glBegin(GL_LINE_STRIP);
 	glVertex3d(from.X(), from.Y(), from.Z());
@@ -159,12 +171,19 @@ HeeksObj *VectorFont::Glyph::Arc::Sketch( const gp_Pnt & location, const gp_Trsf
 	return(arc);
 } // End Sketch() method
 
-void VectorFont::Glyph::Arc::glCommands( const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const
+void VectorFont::Glyph::Arc::glCommands( 
+	const gp_Pnt & starting_point, 
+	const bool select, 
+	const bool marked, 
+	const bool no_color, 
+	COrientationModifier *pOrientationModifier, 
+	gp_Trsf transformation ) const
 {
 	glBegin(GL_LINE_STRIP);
 	std::list<gp_Pnt> vertices = Interpolate( starting_point, 20 );
-	for (std::list<gp_Pnt>::const_iterator l_itVertex = vertices.begin(); l_itVertex != vertices.end(); l_itVertex++)
+	for (std::list<gp_Pnt>::iterator l_itVertex = vertices.begin(); l_itVertex != vertices.end(); l_itVertex++)
 	{
+		if (pOrientationModifier) l_itVertex->Transform(pOrientationModifier->Get(transformation, starting_point.X()));
 		glVertex3d(l_itVertex->X(), l_itVertex->Y(), l_itVertex->Z());
 	} // End for
 	glEnd();
@@ -445,11 +464,17 @@ std::list<HeeksObj *> VectorFont::Glyph::GetGraphics( const gp_Pnt & location, c
 } // End Graphics() method
 
 
-void VectorFont::Glyph::glCommands( const gp_Pnt & starting_point, const bool select, const bool marked, const bool no_color) const
+void VectorFont::Glyph::glCommands( 
+		const gp_Pnt & starting_point, 
+		const bool select, 
+		const bool marked, 
+		const bool no_color, 
+		COrientationModifier *pOrientationModifier, 
+		gp_Trsf transformation) const
 {
 	for (GraphicsList_t::const_iterator l_itGraphic = m_graphics_list.begin(); l_itGraphic != m_graphics_list.end(); l_itGraphic++)
 	{
-		(*l_itGraphic)->glCommands( starting_point, select, marked, no_color );
+		(*l_itGraphic)->glCommands( starting_point, select, marked, no_color, pOrientationModifier, transformation );
 	} // End for
 } // End glCommands() method
 
@@ -552,7 +577,7 @@ CxfFont::CxfFont( const wxChar *p_szFile, const double word_space_percentage, co
 							{
 								unsigned long lCharacterName;
 								tokens[0].ToULong( &lCharacterName, 16 );
-								character_name = lCharacterName;
+								character_name = (wxChar) lCharacterName;
 							}
 						}
 						else
@@ -818,8 +843,8 @@ HeeksObj *VectorFont::Sketch( const wxString & text, const gp_Trsf & transformat
 
 void VectorFont::Glyph::get_text_size( float *pWidth, float *pHeight ) const
 {
-	*pWidth = m_bounding_box.Width();
-	*pHeight = m_bounding_box.Height();
+	*pWidth = (float) m_bounding_box.Width();
+	*pHeight = (float) m_bounding_box.Height();
 } // End get_text_size() method
 
 
@@ -833,14 +858,14 @@ bool VectorFont::get_text_size( const wxString & text, float *pWidth, float *pHe
 	{
 		if (text[offset] == '\n')
 		{
-			*pHeight += LineSpacingFactor();
+			*pHeight += (float) LineSpacingFactor();
 		}
 		else
 		{
 		    if (text[offset] == ' ')
             {
                 // It's a space.  Just move on.  Nothing to see here.
-                *pWidth += WordSpacing();
+                *pWidth += (float) WordSpacing();
             }
             else
             {
@@ -849,14 +874,14 @@ bool VectorFont::get_text_size( const wxString & text, float *pWidth, float *pHe
                 {
                     float width = 0.0; float height = 0.0;
                     l_itGlyph->second.get_text_size( &width, &height );
-                    *pWidth += LetterSpacing( l_itGlyph->second );
+                    *pWidth += (float) LetterSpacing( l_itGlyph->second );
 
                     if (*pHeight < height) *pHeight = height;
                 }
                 else
                 {
-                    *pWidth += BoundingBox().Width();
-                    if (*pHeight < BoundingBox().Height()) *pHeight = BoundingBox().Height();
+                    *pWidth += (float) BoundingBox().Width();
+                    if (*pHeight < BoundingBox().Height()) *pHeight = (float) BoundingBox().Height();
                 }
             } // End if - else
 		}
@@ -881,7 +906,13 @@ double VectorFont::LetterSpacing( const Glyph & glyph ) const
 }
 
 
-void VectorFont::glCommands(const wxString & text, const gp_Pnt &start_point, const bool select, const bool marked, const bool no_color) const
+void VectorFont::glCommands(const wxString & text, 
+							const gp_Pnt &start_point, 
+							const bool select, 
+							const bool marked, 
+							const bool no_color,
+							COrientationModifier *pOrientationModifier,
+							gp_Trsf transformation ) const
 {
 	gp_Pnt location( start_point );
 	location.SetX( location.X() + StartingLocation().X() );
@@ -926,6 +957,14 @@ void VectorFont::glCommands(const wxString & text, const gp_Pnt &start_point, co
 			bottom_right.SetX( location.X() + largest_glyph.MaxX() );
 			bottom_right.SetY( location.Y() + largest_glyph.MinY() );
 
+			if (pOrientationModifier) 
+			{
+				top_left.Transform(pOrientationModifier->Get(transformation, location.X()));
+				top_right.Transform(pOrientationModifier->Get(transformation, location.X()));
+				bottom_left.Transform(pOrientationModifier->Get(transformation, location.X()));
+				bottom_right.Transform(pOrientationModifier->Get(transformation, location.X()));
+			}
+
 			glBegin(GL_LINE_STRIP);
 			glVertex3d(top_left.X(), top_left.Y(), top_left.Z());
 			glVertex3d(top_right.X(), top_right.Y(), top_right.Z());
@@ -945,7 +984,7 @@ void VectorFont::glCommands(const wxString & text, const gp_Pnt &start_point, co
 
                 // Adjust this glyph left or right so that it's bottom left hand corner is at the x=0 mark.
 			    location.SetX( location.X() + (l_itGlyph->second.BoundingBox().MinX() * -1.0) );
-				l_itGlyph->second.glCommands(location, select, marked, no_color);
+				l_itGlyph->second.glCommands(location, select, marked, no_color,pOrientationModifier, transformation);
 
                 location.SetX( original_location.X() + LetterSpacing( l_itGlyph->second ) );
 			} // End if - then
@@ -962,10 +1001,8 @@ void VectorFont::glCommands(const wxString & text, const gp_Pnt &start_point, co
 	wxString _file( file_name );	// Take a copy so we can convert it to uppercase.
 	if (_file.Length() < 4) return(false);	// too short to have a '.cxf' extension
 
-	wxString _extension( file_name.Mid( _file.Length() - 3 ) );
-
-	if (_extension.MakeUpper() == wxString(_T("CXF"))) return(true);
-	return(false);
+	_file.UpperCase();
+	return(_file.EndsWith(_T("CXF")));
 }
 
 /* static */ bool HersheyFont::ValidExtension( const wxString &file_name )
@@ -973,10 +1010,8 @@ void VectorFont::glCommands(const wxString & text, const gp_Pnt &start_point, co
 	wxString _file( file_name );	// Take a copy so we can convert it to uppercase.
 	if (_file.Length() < 4) return(false);	// too short to have a '.jhf' extension
 
-	wxString _extension( file_name.Mid( _file.Length() - 3 ) );
-
-	if (_extension.MakeUpper() == wxString(_T("JHF"))) return(true);
-	return(false);
+	_file.UpperCase();
+	return(_file.EndsWith(_T("JHF")));
 }
 
 
