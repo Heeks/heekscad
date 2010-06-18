@@ -32,8 +32,6 @@ public:
 	CFace* m_picked_face;
 
 	CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor& col);
-	CShape(const HeeksColor& col);
-
 	CShape(const CShape& s);
 	~CShape();
 

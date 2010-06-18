@@ -29,19 +29,12 @@ CShape::CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor&
 	Init();
 }
 
-CShape::CShape(const HeeksColor& col):m_face_gl_list(0), m_edge_gl_list(0), m_color(col), m_picked_face(NULL)
-{
-}
-
-
 CShape::CShape(const CShape& s):m_face_gl_list(0), m_edge_gl_list(0), m_picked_face(NULL)
 {
-	m_faces = new CFaceList;
-	m_edges = new CEdgeList;
-	m_vertices = new CVertexList;
-	Add(m_faces, NULL);
-	Add(m_edges, NULL);
-	Add(m_vertices, NULL);
+	// the faces, edges, vertices children are not copied, because we don't need them for copies in the undo engine
+	m_faces = NULL;
+	m_edges = NULL;
+	m_vertices = NULL;
 	operator=(s);
 }
 
@@ -63,7 +56,6 @@ const CShape& CShape::operator=(const CShape& s)
 	m_color = s.m_color;
 	m_creation_time = s.m_creation_time;
 
-	create_faces_and_edges();
 	KillGLLists();
 
 	return *this;
@@ -109,22 +101,34 @@ void CShape::KillGLLists()
 
 	m_box = CBox();
 
-	for(HeeksObj* object = m_faces->GetFirstChild(); object; object = m_faces->GetNextChild())
+	if(m_faces)
 	{
-		CFace* f = (CFace*)object;
-		f->KillMarkingGLList();
+		for(HeeksObj* object = m_faces->GetFirstChild(); object; object = m_faces->GetNextChild())
+		{
+			CFace* f = (CFace*)object;
+			f->KillMarkingGLList();
+		}
 	}
 }
 
 void CShape::create_faces_and_edges()
 {
+	if(m_faces == NULL)
+	{
+		m_faces = new CFaceList;
+		m_edges = new CEdgeList;
+		m_vertices = new CVertexList;
+		Add(m_faces, NULL);
+		Add(m_edges, NULL);
+		Add(m_vertices, NULL);
+	}
 	CreateFacesAndEdges(m_shape, m_faces, m_edges, m_vertices);
 }
 
 void CShape::delete_faces_and_edges()
 {
-	m_faces->Clear();
-	m_edges->Clear();
+	if(m_faces)m_faces->Clear();
+	if(m_edges)m_edges->Clear();
 }
 
 void CShape::CallMesh()
@@ -222,9 +226,10 @@ void CShape::GetBox(CBox &box)
 {
 	if(!m_box.m_valid)
 	{
+		if(m_faces == NULL)create_faces_and_edges();
 		BRepTools::Clean(m_shape);
 		BRepMesh::Mesh(m_shape, 1.0);
-		m_faces->GetBox(m_box);
+		if(m_faces)m_faces->GetBox(m_box);
 	}
 
 	box.Insert(m_box);
