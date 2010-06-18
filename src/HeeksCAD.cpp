@@ -150,6 +150,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_show_datum_coords_system = true;
 	m_datum_coords_system_solid_arrows = true;
 	m_filepath = wxString(_("Untitled")) + _T(".heeks");
+	m_untitled = true;
 	m_in_OpenFile = false;
 	m_transform_gl_list = 0;
 	m_current_coordinate_system = NULL;
@@ -634,6 +635,7 @@ void HeeksCADapp::Reset(){
 	gp_Vec vy(0, 1, 0), vz(0, 0, 1);
 	m_frame->m_graphics->m_view_point.SetView(vy, vz);
 	m_filepath = wxString(_("Untitled")) + _T(".heeks");
+	m_untitled = true;
 	m_hidden_for_drag.clear();
 	m_show_grippers_on_drag = true;
 	*m_ruler = HRuler();
@@ -1130,8 +1132,10 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 			if(retain_filename)
 			{
 				m_filepath.assign(filepath);
+				m_untitled = false;
 				SetFrameTitle();
 			}
+			SetLikeNewFile();
 		}
 	}
 
@@ -1491,7 +1495,6 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 
 	wxString wf(filepath);
 	wf.LowerCase();
-	m_filepath.assign(filepath);
 
 	if(wf.EndsWith(_T(".heeks")))
 	{
@@ -1529,6 +1532,9 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 		wxMessageBox(str);
 		return false;
 	}
+
+	m_filepath.assign(filepath);
+	m_untitled = false;
 
 	if(update_recent_file_list)InsertRecentFileItem(filepath);
 	if(set_app_caption)SetFrameTitle();

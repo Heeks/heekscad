@@ -142,6 +142,7 @@ public:
 	MarkedList *m_marked_list;
 	bool m_doing_rollback;
 	wxString m_filepath;
+	bool m_untitled;
 	bool m_light_push_matrix;
 	std::list<HeeksObj*> m_hidden_for_drag;
 	bool m_show_grippers_on_drag;

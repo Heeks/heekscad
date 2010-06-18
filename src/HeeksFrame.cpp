@@ -722,6 +722,18 @@ static void OnImportButton( wxCommandEvent& event )
 
 static void OnSaveButton( wxCommandEvent& event )
 {
+	wxString temp_filepath = wxGetApp().m_filepath;
+	bool use_dialog = wxGetApp().m_untitled;
+    wxGetApp().SaveFile( temp_filepath.c_str(), use_dialog );
+}
+
+static void OnUpdateSave( wxUpdateUIEvent& event )
+{
+	event.Enable(wxGetApp().IsModified());
+}
+
+static void OnSaveAsButton( wxCommandEvent& event )
+{
     wxGetApp().SaveFile( wxGetApp().m_filepath.c_str(), true );
 }
 
@@ -1588,7 +1600,8 @@ void CHeeksFrame::MakeMenus()
 	wxMenu *file_menu = new wxMenu;
 	AddMenuItem(file_menu, _("New\tCtrl+N"), ToolImage(_T("new")), OnNewButton);
 	AddMenuItem(file_menu, _("Open\tCtrl+O"), ToolImage(_T("open")), OnOpenButton);
-	AddMenuItem(file_menu, _("Save\tCtrl+S"), ToolImage(_T("save")), OnSaveButton);
+	AddMenuItem(file_menu, _("Save\tCtrl+S"), ToolImage(_T("save")), OnSaveButton, OnUpdateSave);
+	AddMenuItem(file_menu, _("Save As"), ToolImage(_T("saveas")), OnSaveAsButton);
 	file_menu->AppendSeparator();
 	AddMenuItem(file_menu, _("Print\tCtrl+P"), ToolImage(_T("print")), OnPrint);
  	AddMenuItem(file_menu, _("Page Setup"), ToolImage(_T("psetup")), OnPageSetup);
@@ -1727,7 +1740,7 @@ void CHeeksFrame::AddToolBars()
 
 	AddToolBarTool(m_toolBar, _T("New"), ToolImage(_T("new")), _("New file"), OnNewButton);
 	AddToolBarTool(m_toolBar, _T("Open"), ToolImage(_T("open")), _("Open file"), OnOpenButton);
-	AddToolBarTool(m_toolBar, _T("Save"), ToolImage(_T("save")), _("Save file"), OnSaveButton);
+	AddToolBarTool(m_toolBar, _T("Save"), ToolImage(_T("save")), _("Save file"), OnSaveButton, OnUpdateSave);
 	AddToolBarTool(m_toolBar, _T("Cut"), ToolImage(_T("cut")), _("Cut selected items to the clipboard"), OnCutButton, OnUpdateCut);
 	AddToolBarTool(m_toolBar, _T("Copy"), ToolImage(_T("copy")), _("Copy selected items to the clipboard"), OnCopyButton, OnUpdateCopy);
 	AddToolBarTool(m_toolBar, _T("Paste"), ToolImage(_T("paste")), _("Paste items from the clipboard"), OnPasteButton, OnUpdatePaste);

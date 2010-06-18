@@ -567,6 +567,7 @@ void CHeeksCADInterface::RemoveID(HeeksObj* object)
 
 const wxChar* CHeeksCADInterface::GetFileFullPath()
 {
+	if(wxGetApp().m_untitled)return NULL;
 	return wxGetApp().m_filepath;
 }
 
