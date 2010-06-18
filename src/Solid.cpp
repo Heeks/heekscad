@@ -9,10 +9,6 @@ CSolid::CSolid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor&
 {
 }
 
-CSolid::CSolid(const HeeksColor& col):CShape(col)
-{
-}
-
 CSolid::CSolid( const CSolid & rhs ) : CShape(rhs)
 {
     *this = rhs;    // Call the assignment operator.

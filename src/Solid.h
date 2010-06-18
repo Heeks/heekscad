@@ -15,7 +15,6 @@ public:
 	SolidTypeEnum m_type; // so the solid can be stretched in specific ways, if it's still a primitive solid
 
 	CSolid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
-	CSolid(const HeeksColor& col);
 	CSolid( const CSolid & rhs );
 
 	~CSolid();
