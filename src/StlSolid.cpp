@@ -13,15 +13,15 @@ CStlTri::CStlTri(const float* t)
 
 CStlTri::CStlTri(const double* t)
 {
-	x[0][0] = t[0];
-	x[0][1] = t[1];
-	x[0][2] = t[2];
-	x[1][0] = t[3];
-	x[1][1] = t[4];
-	x[1][2] = t[5];
-	x[2][0] = t[6];
-	x[2][1] = t[7];
-	x[2][2] = t[8];
+	x[0][0] = (float)t[0];
+	x[0][1] = (float)t[1];
+	x[0][2] = (float)t[2];
+	x[1][0] = (float)t[3];
+	x[1][1] = (float)t[4];
+	x[1][2] = (float)t[5];
+	x[2][0] = (float)t[6];
+	x[2][1] = (float)t[7];
+	x[2][2] = (float)t[8];
 }
 
 CStlSolid::CStlSolid(const HeeksColor* col):color(*col), m_gl_list(0){

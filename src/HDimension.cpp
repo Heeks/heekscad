@@ -438,7 +438,7 @@ void HDimension::WriteXML(TiXmlNode *root)
 	element->SetDoubleAttribute("cy", m_p2.Y());
 	element->SetDoubleAttribute("cz", m_p2.Z());
 #endif
-	element->SetAttribute("scale",m_scale);
+	element->SetDoubleAttribute("scale",m_scale);
 	element->SetAttribute("mode", m_mode);
 	element->SetAttribute("textmode", m_text_mode);
 	switch(m_units)
