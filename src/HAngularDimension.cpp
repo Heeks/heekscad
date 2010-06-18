@@ -391,7 +391,7 @@ void HAngularDimension::WriteXML(TiXmlNode *root)
 	element->SetAttribute("text", m_text.utf8_str());
 
 	element->SetAttribute("col", m_color.COLORREF_color());
-	element->SetAttribute("scale",m_scale);
+	element->SetDoubleAttribute("scale",m_scale);
 	element->SetAttribute("textmode", m_text_mode);
 
 	WriteBaseXML(element);
