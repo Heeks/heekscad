@@ -2102,25 +2102,25 @@ msgstr "Modo selezione"
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1622
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1740
 msgid "Draw a sketch"
-msgstr "Disegna profilo"
+msgstr "Disegna linee"
 
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1624
 msgid "Draw Ellipses"
-msgstr "Disegna ellisse"
+msgstr "Disegna ellissi"
 
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1625
 msgid "Draw Infinite Lines"
-msgstr "Disegna linea infinita"
+msgstr "Disegna linee infinite"
 
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1626
 msgid "Draw Points"
-msgstr "Disegna punto"
+msgstr "Disegna punti"
 
 #: C:\Documents
 #: and
@@ -2270,7 +2270,7 @@ msgstr "Aggiungi cono"
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1662
 msgid "Loft two sketches"
-msgstr "Inclina il profilo (sketches)"
+msgstr "Inclina il profilo"
 
 #: C:\Documents
 #: and
@@ -2288,25 +2288,25 @@ msgstr "Ruota profilo"
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1666
 msgid "Cut"
-msgstr "Taglia"
+msgstr "Taglia o Sottrae"
 
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1667
 msgid "Fuse"
-msgstr "Fondi/Unisci"
+msgstr "Unisce Fonde Aggiunge"
 
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1668
 msgid "Common"
-msgstr "Parte comune"
+msgstr "Interseca parte comune"
 
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1669
 msgid "Fillet"
-msgstr "Carenatura"
+msgstr "Carenatura o Raccordo"
 
 #: C:\Documents
 #: and
@@ -2492,55 +2492,55 @@ msgstr "Passa al comando successivo"
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1741
 msgid "Start drawing rectangles"
-msgstr "Inizia a disegnare rettangoli"
+msgstr "Disegna rettangoli"
 
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1742
 msgid "Start drawing obrounds"
-msgstr "Inizia a disegnare punti"
+msgstr "Disegna asole"
 
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1743
 msgid "Start drawing polygons"
-msgstr "inizia a disegnare poligonii"
+msgstr "Disegna poligoni"
 
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1749
 msgid "Draw circles through 3 points"
-msgstr "Disegna cerchio, a 3 punti"
+msgstr "Disegna cerchi, a 3 punti"
 
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1750
 msgid "Draw circles, centre and point"
-msgstr "Disegna cerchio, centro e punto "
+msgstr "Disegna cerchi, con centro e punto "
 
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1751
 msgid "Draw circles, centre and radius"
-msgstr "Disegna cerchio, centro e raggio"
+msgstr "Disegna cerchi, con centro e raggio"
 
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1752
 msgid "Draw ellipses"
-msgstr "Disegna ellisse"
+msgstr "Disegna ellissi"
 
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1758
 msgid "Start Drawing Infinite Lines"
-msgstr "Iniziare a disegnare  linee infinite"
+msgstr "Disegna  linee infinite"
 
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1759
 msgid "Start Drawing Points"
-msgstr "Iniziare a disegnare Punti"
+msgstr "Disegna punti"
 
 #: C:\Documents
 #: and
@@ -2558,7 +2558,7 @@ msgstr "Aggiunge dimensione"
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1773
 msgid "Translate selected items"
-msgstr "Trasferisci il pezzo selezionato"
+msgstr "Trasferise il pezzo selezionato"
 
 #: C:\Documents
 #: and
@@ -2624,31 +2624,31 @@ msgstr "Estrude un bordo o una faccia"
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1798
 msgid "Revolve a wire or face"
-msgstr "ruotare un bordo o una faccia"
+msgstr "Ruota un bordo o una faccia"
 
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1804
 msgid "Cut one solid from another"
-msgstr "Taglia un solido da un altro"
+msgstr "Taglia un solido da un altro (sottrae)"
 
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1805
 msgid "Fuse one solid to another"
-msgstr "Unire un solido ad un altro"
+msgstr "Unisce un solido ad un altro"
 
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1806
 msgid "Find common solid between two solids"
-msgstr "Trova un solido comune tra due solidi"
+msgstr "Trova un solido comune tra due o più solidi (interseca)"
 
 #: C:\Documents
 #: and
 #: Settings\luigi\Documenti\heeks\heekscad\src/HeeksFrame.cpp:1812
 msgid "Make a fillet on selected edges"
-msgstr "Crea una carenatura sui bordi selezionati"
+msgstr "Crea una carenatura o raccordo sui bordi selezionati"
 
 #: C:\Documents
 #: and
@@ -4888,7 +4888,7 @@ msgstr "rapido fino all'altezza"
 #: Settings\luigi\Documenti\heeks\heekscnc\src/DepthOp.cpp:325
 #: Settings\luigi\Documenti\heeks\heekscnc\src/Drilling.cpp:827
 msgid "WARNING"
-msgstr "Attenzione"
+msgstr "ATTENZIONE "
 
 #: C:\Documents
 #: and
@@ -5071,7 +5071,7 @@ msgstr "Altezza di Sicurezza Definita"
 #: and
 #: Settings\luigi\Documenti\heeks\heekscnc\src/Fixture.cpp:162
 msgid "Safety Height (in G53 - Machine - coordinates)"
-msgstr "Altezza di sicurezza (coordinte Macchina in G53)"
+msgstr "Altezza di sicurezza (coordinate Macchina in G53)"
 
 #: C:\Documents
 #: and
