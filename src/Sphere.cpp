@@ -20,7 +20,8 @@ CSphere::CSphere(const TopoDS_Solid &solid, const wxChar* title, const HeeksColo
 
 CSphere::CSphere( const CSphere & rhs ) : CSolid(rhs)
 {
-    *this = rhs;    // Call the assignment operator.
+    m_pos = rhs.m_pos;
+    m_radius = rhs.m_radius;
 }
 
 CSphere & CSphere::operator= ( const CSphere & rhs )
