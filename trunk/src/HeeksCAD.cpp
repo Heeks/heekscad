@@ -907,9 +907,12 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into)
 		}
 	}
 
-	for (std::list<HeeksObj *>::iterator itObject = objects.begin(); itObject != objects.end(); itObject++)
+	if(m_file_open_or_import_type == FileImportTypeHeeks)
 	{
-		*itObject = MergeCommonObjects( unique_set, *itObject );
+		for (std::list<HeeksObj *>::iterator itObject = objects.begin(); itObject != objects.end(); itObject++)
+		{
+			*itObject = MergeCommonObjects( unique_set, *itObject );
+		}
 	}
 
 	if(objects.size() > 0)
