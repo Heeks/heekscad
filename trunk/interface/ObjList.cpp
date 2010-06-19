@@ -13,7 +13,7 @@
 #include "TransientObject.h"
 
 
-ObjList::ObjList(const ObjList& objlist): HeeksObj(objlist), m_index_list_valid(true) {operator=(objlist);}
+ObjList::ObjList(const ObjList& objlist): HeeksObj(objlist), m_index_list_valid(true) {copy_objects(objlist);}
 
 void ObjList::Clear()
 {
@@ -46,9 +46,8 @@ void ObjList::Clear(std::set<HeeksObj*> &to_delete)
 	m_index_list_valid = false;
 }
 
-const ObjList& ObjList::operator=(const ObjList& objlist)
+void ObjList::copy_objects(const ObjList& objlist)
 {
-	HeeksObj::operator=(objlist);
 	Clear();
 
 	std::list<HeeksObj*>::const_iterator It;
@@ -73,6 +72,14 @@ const ObjList& ObjList::operator=(const ObjList& objlist)
 			new_op = (*It)->MakeACopy();
 		if(new_op)Add(new_op, NULL);
 	}
+}
+
+const ObjList& ObjList::operator=(const ObjList& objlist)
+{
+	HeeksObj::operator=(objlist);
+
+	copy_objects(objlist);
+
 	return *this;
 }
 
@@ -211,7 +218,7 @@ bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 {
 	if (object==NULL) return false;
 	if (!CanAdd(object)) return false;
-	if (m_objects.size()==0)
+	if (m_objects.size()==0 || prev_object==NULL)
 	{
 		m_objects.push_back(object);
 		LoopIt = m_objects.end();
@@ -219,16 +226,6 @@ bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 	}
 	else
 	{
-		// Make sure this child isn't already in the list.
-		for(LoopIt = m_objects.begin(); LoopIt != m_objects.end(); LoopIt++)
-		{
-			if (*LoopIt == object)
-			{
-				// It's already there.  No need to add it again.
-				return(true);
-			}
-		}
-
 		for(LoopIt = m_objects.begin(); LoopIt != m_objects.end(); LoopIt++) { if (*LoopIt==prev_object) break; }
 		m_objects.insert(LoopIt, object);
 	}
