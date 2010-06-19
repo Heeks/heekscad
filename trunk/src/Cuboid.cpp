@@ -32,7 +32,10 @@ HeeksObj *CCuboid::MakeACopy(void)const
 
 CCuboid::CCuboid( const CCuboid & rhs ) : CSolid(rhs)
 {
-    *this = rhs;    // Call the assignment operator.
+    m_pos = rhs.m_pos;
+    m_x = rhs.m_x;
+    m_y = rhs.m_y;
+    m_z = rhs.m_z;
 }
 
 CCuboid & CCuboid::operator= ( const CCuboid & rhs )

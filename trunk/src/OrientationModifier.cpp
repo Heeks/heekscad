@@ -59,7 +59,7 @@ void COrientationModifierParams::ReadParametersFromXMLElement(TiXmlElement* pEle
 
 COrientationModifier::COrientationModifier( const COrientationModifier & rhs ) : ObjList(rhs)
 {
-	*this = rhs;	// Call the assignment operator
+	m_params = rhs.m_params;
 }
 
 COrientationModifier & COrientationModifier::operator= ( const COrientationModifier & rhs )
@@ -110,7 +110,7 @@ bool COrientationModifier::CanAdd(HeeksObj* object)
     if (object == NULL) return(false);
 
 	// We only want a single sketch.  Make sure we don't already have one.
-	if (GetNumChildren() > 0) 
+	if (GetNumChildren() > 0)
 	{
 		wxString message;
 		message << _("Only a single sketch is supported");
@@ -209,25 +209,24 @@ gp_Trsf COrientationModifier::Get(gp_Trsf existing_transformation, const double 
 	double distance(_distance);
 	if (distance < 0) distance *= -1.0;
 
+	// The distance in font coordinates is smaller than that used to place the characters.
+	// Scale this distance up by the HText scale factor being applied to the font graphics.
 	distance *= existing_transformation.ScaleFactor();
 
 	if (GetNumChildren() == 0)
 	{
-		double angle = 0.0;
-		gp_Trsf transformation;
-		transformation.SetRotation( gp_Ax1(gp_Pnt(distance,0.0,0.0), gp_Vec(0,0,-1)), angle );
-		return(transformation);
+		// No children so no modification of position.
+		gp_Trsf unchanged;
+		return(unchanged);
 	}
 
 	std::list<TopoDS_Shape> wires;
 	if (! ::ConvertSketchToFaceOrWire( GetFirstChild(), wires, false))
     {
-        double angle = 0.0;
-		gp_Trsf transformation;
-		transformation.SetRotation( gp_Ax1(gp_Pnt(distance,0.0,0.0), gp_Vec(0,0,-1)), angle );
-		return(transformation);
+		gp_Trsf unchanged;
+		return(unchanged);
     } // End if - then
-    
+
 	double distance_remaining = distance;
 	for (std::list<TopoDS_Shape>::iterator itWire = wires.begin(); itWire != wires.end(); itWire++)
 	{
@@ -262,9 +261,12 @@ gp_Trsf COrientationModifier::Get(gp_Trsf existing_transformation, const double 
 					double proportion = distance_remaining / edge_length;
 					Standard_Real U = ((curve.LastParameter() - curve.FirstParameter()) * proportion) + curve.FirstParameter();
 					curve.D1(U, point, vec);
-					double angle = gp_Vec(1,0,0).AngleWithRef(vec, gp_Vec(gp_Pnt(0,0,0), gp_Pnt(1,0,0)));
+					// double angle = gp_Vec(1,0,0).AngleWithRef(vec, gp_Vec(gp_Pnt(0,0,0), gp_Pnt(1,0,0)));
+					double angle = gp_Vec(1,0,0).Angle(vec);
 					gp_Trsf transformation;
-					// transformation.SetRotation( gp_Ax1(gp_Pnt(distance,0.0,0.0), gp_Vec(0,0,-1)), angle );
+					transformation.SetRotation( gp_Ax1(gp_Pnt(distance,0.0,0.0), gp_Vec(0,0,-1)), angle );
+
+					/*
 					gp_Trsf back_to_origin;
 					back_to_origin.SetTranslation(gp_Vec(gp_Pnt(0,0,0), gp_Pnt(-1.0 * distance, 0, 0)));
 					transformation = transformation * back_to_origin;
@@ -273,8 +275,13 @@ gp_Trsf COrientationModifier::Get(gp_Trsf existing_transformation, const double 
 
 					around_sketch.SetTranslation(gp_Pnt(0,0,0), point);
 					transformation = transformation * around_sketch;
+					*/
 
-					transformation = transformation * reverse;
+					gp_Trsf around;
+					around.SetTranslation(gp_Pnt(distance,0,0), point);
+					transformation = transformation * around;
+
+					// transformation = transformation * reverse;
 					return(transformation);
 				}
 
@@ -283,10 +290,8 @@ gp_Trsf COrientationModifier::Get(gp_Trsf existing_transformation, const double 
 		} // End if - then
 	} // End for
 
-	double angle = 0.0;
-	gp_Trsf transformation;
-	transformation.SetRotation( gp_Ax1(gp_Pnt(distance,0.0,0.0), gp_Vec(0,0,-1)), angle );
-	return(transformation);
+	gp_Trsf unchanged;
+	return(unchanged);
 }
 
 
