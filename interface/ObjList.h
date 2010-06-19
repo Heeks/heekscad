@@ -20,6 +20,7 @@ protected:
 	bool m_index_list_valid;
 
 	void recalculate_index_list();
+	void copy_objects(const ObjList& objlist);
 
 public:
 	ObjList():m_index_list_valid(true){}
