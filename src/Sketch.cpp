@@ -52,15 +52,18 @@ CSketch::~CSketch()
 
 const CSketch& CSketch::operator=(const CSketch& c)
 {
-	// just copy all the lines and arcs, not the id
-	ObjList::operator =(c);
+    if (this != &c)
+    {
+        // just copy all the lines and arcs, not the id
+        ObjList::operator =(c);
 
-	color = c.color;
-	m_order = c.m_order;
-	m_title = c.m_title;
-	m_solidify = c.m_solidify;
-	m_coordinate_system = c.m_coordinate_system;
-	m_draw_with_transform = c.m_draw_with_transform;
+        color = c.color;
+        m_order = c.m_order;
+        m_title = c.m_title;
+        m_solidify = c.m_solidify;
+        m_coordinate_system = c.m_coordinate_system;
+        m_draw_with_transform = c.m_draw_with_transform;
+    }
 
 	return *this;
 }
@@ -239,7 +242,7 @@ public:
 	void Run(){
 		if(sketch_for_tools == NULL)return;
 		std::list<HeeksObj*> new_sketches;
-		sketch_for_tools->ExtractSeparateSketches(new_sketches);
+		sketch_for_tools->ExtractSeparateSketches(new_sketches, true);
 		for(std::list<HeeksObj*>::iterator It = new_sketches.begin(); It != new_sketches.end(); It++)
 		{
 			HeeksObj* new_object = *It;
@@ -1010,4 +1013,14 @@ void CSketch::ModifyByMatrix(const double *m)
 	}
 	else
 		ObjList::ModifyByMatrix(m);
+}
+bool CSketch::operator==( const CSketch & rhs ) const
+{
+    if (color != rhs.color) return(false);
+	if (m_title != rhs.m_title) return(false);
+	if (m_order != rhs.m_order) return(false);
+	if (m_solidify != rhs.m_solidify) return(false);
+	if (m_draw_with_transform != rhs.m_draw_with_transform) return(false);
+
+	return(ObjList::operator==(rhs));
 }
