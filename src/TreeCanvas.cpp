@@ -28,7 +28,7 @@ static wxBitmap* bmp_branch_trunk = NULL;
 
 CTreeCanvas::CTreeCanvas(wxWindow* parent)
         : wxScrolledWindow(parent),m_frozen(false), m_refresh_wanted_on_thaw(false),
-		width(0), height(0), textureWidth(0), textureHeight(0), m_dragging(false), m_xpos(0), m_ypos(0), m_max_xpos(0)
+		width(0), height(0), textureWidth(0), textureHeight(0), m_dragging(false), m_waiting_until_left_up(false), m_xpos(0), m_ypos(0), m_max_xpos(0)
 {
 	wxGetApp().RegisterObserver(this);
 
@@ -100,6 +100,7 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 				this->Refresh();
 				break;
 
+			case ButtonTypeLabelBefore:
 			case ButtonTypeLabel:
 			default:
 				OnLabelLeftDown(button->obj, event);
@@ -119,17 +120,42 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 	{
 		if(m_dragging)
 		{
-			// to do - move the objects
 			m_dragging = false;
-			Refresh();
+
+			// find the object to drop on to
+			const CTreeButton* button = HitTest(event.GetPosition());
+
+			wxGetApp().CreateUndoPoint();
+
+			// cut the objects
+			wxGetApp().m_marked_list->CutSelectedItems();
+
+			// paste the objects
+			HeeksObj* paste_into = NULL;
+			HeeksObj* paste_before = NULL;
+			if(button)
+			{
+				paste_into = button->obj;
+				paste_before = button->prev_obj;
+			}
+			wxGetApp().Paste(paste_into, paste_before);
 		}
+		else
+		{
+			if(m_waiting_until_left_up)
+			{
+				wxGetApp().m_marked_list->Clear(false);
+				wxGetApp().m_marked_list->Add(clicked_object, true);
+			}
+		}
+		m_waiting_until_left_up = false;
 	}
 
 	if(event.RightDown())
 	{
 		const CTreeButton* button = HitTest(event.GetPosition());
 		clicked_object = NULL;
-		if(button && button->type == ButtonTypeLabel)
+		if(button && (button->type == ButtonTypeLabelBefore || button->type == ButtonTypeLabel))
 		{
 			clicked_object = button->obj;
 			OnLabelRightDown(button->obj, event);
@@ -147,16 +173,17 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 	{
 		if(event.LeftIsDown())
 		{
-			if(m_dragging)
-			{
-				m_drag_position = event.GetPosition();
-				Refresh();
-			}
-			else if(abs(m_button_down_point.x - event.GetX())>2 || abs(m_button_down_point.y - event.GetY())>2)
+			if(!m_dragging && (abs(m_button_down_point.x - event.GetX())>2 || abs(m_button_down_point.y - event.GetY())>2))
 			{
 				m_dragging = true;
 				m_dragged_list = wxGetApp().m_marked_list->list();
+			}
+			if(m_dragging)
+			{
 				m_drag_position = event.GetPosition();
+				const CTreeButton* button = HitTest(event.GetPosition());
+				m_drag_paste_rect = wxRect(0, 0, 0, 0);
+				if(button && button->type == ButtonTypeLabelBefore)m_drag_paste_rect = button->rect;
 				Refresh();
 			}
 		}
@@ -209,7 +236,7 @@ void CTreeCanvas::OnCharEvent(wxKeyEvent& event)
 
 		case ControlV:
 			// Paste
-			wxGetApp().Paste(NULL);
+			wxGetApp().Paste(NULL, NULL);
 			wxGetApp().Repaint();
 			event.Skip();
 			break;
@@ -312,6 +339,7 @@ void CTreeCanvas::SetExpanded(HeeksObj* object, bool bExpanded)
 }
 
 static bool render_just_for_calculation = false;
+static bool render_drag_list = false;
 
 void CTreeCanvas::AddPlusOrMinusButton(HeeksObj* object, bool plus)
 {
@@ -325,16 +353,42 @@ void CTreeCanvas::AddPlusOrMinusButton(HeeksObj* object, bool plus)
 	m_tree_buttons.push_back(b);
 }
 
-void CTreeCanvas::AddLabelButton(HeeksObj* object, int label_start_x, int label_end_x)
+void CTreeCanvas::AddLabelButton(HeeksObj* prev_object, HeeksObj* object, HeeksObj* next_object, int label_start_x, int label_end_x)
 {
 	CTreeButton b;
-	b.type = ButtonTypeLabel;
 	b.rect.x = label_start_x;
-	b.rect.y = m_ypos;
+	if(prev_object)
+	{
+		b.rect.y = m_ypos - 4;
+		b.rect.height = 8;
+	}
+	else
+	{
+		b.rect.y = m_ypos;
+		b.rect.height = 4;
+	}
 	b.rect.width = label_end_x - label_start_x;
-	b.rect.height = 18;
-	b.obj = object;
+	b.type = ButtonTypeLabelBefore;
+	b.obj = object->Owner();
+	b.prev_obj = object;
 	m_tree_buttons.push_back(b);
+
+	b.type = ButtonTypeLabel;
+	b.rect.y = m_ypos + 4;
+	b.rect.height = 10;
+	b.obj = object;
+	b.prev_obj = NULL;
+	m_tree_buttons.push_back(b);
+
+	if(next_object == NULL)
+	{
+		b.type = ButtonTypeLabelBefore;
+		b.rect.y += b.rect.height;
+		b.rect.height = 4;
+		b.obj = object->Owner();
+		b.prev_obj = NULL;
+		m_tree_buttons.push_back(b);
+	}
 }
 
 void CTreeCanvas::OnLabelLeftDown(HeeksObj* object, wxMouseEvent& event)
@@ -405,8 +459,15 @@ void CTreeCanvas::OnLabelLeftDown(HeeksObj* object, wxMouseEvent& event)
 			}
 			else
 			{
-				wxGetApp().m_marked_list->Clear(false);
-				wxGetApp().m_marked_list->Add(object, true);
+				if(wxGetApp().m_marked_list->ObjectMarked(object))
+				{
+					m_waiting_until_left_up = true;
+				}
+				else
+				{
+					wxGetApp().m_marked_list->Clear(false);
+					wxGetApp().m_marked_list->Add(object, true);
+				}
 			}
 		}
 	}
@@ -425,8 +486,15 @@ void CTreeCanvas::OnLabelLeftDown(HeeksObj* object, wxMouseEvent& event)
 		}
 		else
 		{
-			wxGetApp().m_marked_list->Clear(false);
-			wxGetApp().m_marked_list->Add(object, true);
+			if(wxGetApp().m_marked_list->ObjectMarked(object))
+			{
+				m_waiting_until_left_up = true;
+			}
+			else
+			{
+				wxGetApp().m_marked_list->Clear(false);
+				wxGetApp().m_marked_list->Add(object, true);
+			}
 		}
 	}
 }
@@ -454,12 +522,12 @@ void CTreeCanvas::RenderBranchIcon(HeeksObj* object, HeeksObj* next_object, bool
 				if(expanded)
 				{
 					m_dc->DrawBitmap(*bmp_branch_minus, m_xpos, m_ypos);
-					AddPlusOrMinusButton(object, false);
+					if(!render_drag_list)AddPlusOrMinusButton(object, false);
 				}
 				else
 				{
 					m_dc->DrawBitmap(*bmp_branch_plus, m_xpos, m_ypos);
-					AddPlusOrMinusButton(object, true);
+					if(!render_drag_list)AddPlusOrMinusButton(object, true);
 				}
 			}
 			else
@@ -468,12 +536,12 @@ void CTreeCanvas::RenderBranchIcon(HeeksObj* object, HeeksObj* next_object, bool
 				if(expanded)
 				{
 					m_dc->DrawBitmap(*bmp_branch_end_minus, m_xpos, m_ypos);
-					AddPlusOrMinusButton(object, false);
+					if(!render_drag_list)AddPlusOrMinusButton(object, false);
 				}
 				else
 				{
 					m_dc->DrawBitmap(*bmp_branch_end_plus, m_xpos, m_ypos);
-					AddPlusOrMinusButton(object, true);
+					if(!render_drag_list)AddPlusOrMinusButton(object, true);
 				}
 			}
 		}
@@ -483,12 +551,12 @@ void CTreeCanvas::RenderBranchIcon(HeeksObj* object, HeeksObj* next_object, bool
 			if(expanded)
 			{
 				m_dc->DrawBitmap(*bmp_minus, m_xpos, m_ypos);
-				AddPlusOrMinusButton(object, false);
+				if(!render_drag_list)AddPlusOrMinusButton(object, false);
 			}
 			else
 			{
 				m_dc->DrawBitmap(*bmp_plus, m_xpos, m_ypos);
-				AddPlusOrMinusButton(object, true);
+				if(!render_drag_list)AddPlusOrMinusButton(object, true);
 			}
 		}
 	}
@@ -524,11 +592,12 @@ void CTreeCanvas::RenderBranchIcons(HeeksObj* object, HeeksObj* next_object, boo
 	m_xpos += 16;
 }
 
-void CTreeCanvas::RenderObject(HeeksObj* object, HeeksObj* next_object, int level)
+void CTreeCanvas::RenderObject(HeeksObj* prev_object, HeeksObj* object, HeeksObj* next_object, int level)
 {
 	bool expanded = IsExpanded(object);
 
-	m_xpos = 0;
+	int save_x = m_xpos;
+
 	RenderBranchIcons(object, next_object, expanded, level);
 
 	int label_start_x = m_xpos;
@@ -539,14 +608,15 @@ void CTreeCanvas::RenderObject(HeeksObj* object, HeeksObj* next_object, int leve
 	wxString str(object->GetShortStringOrTypeString());
 	if(!render_just_for_calculation)
 	{
-		if(wxGetApp().m_marked_list->ObjectMarked(object))
+		if(!render_drag_list && wxGetApp().m_marked_list->ObjectMarked(object))
 		{
+			m_dc->SetBackgroundMode(wxSOLID);
 			m_dc->SetTextBackground(*wxBLUE);
 			m_dc->SetTextForeground(*wxWHITE);
 		}
 		else
 		{
-			m_dc->SetTextBackground(*wxWHITE);
+			m_dc->SetBackgroundMode(wxTRANSPARENT);
 			m_dc->SetTextForeground(*wxBLACK);
 		}
 		m_dc->DrawText(str, m_xpos, m_ypos);
@@ -563,30 +633,31 @@ void CTreeCanvas::RenderObject(HeeksObj* object, HeeksObj* next_object, int leve
 		text_width = text_size.GetWidth();
 	}
 	int label_end_x = m_xpos + 8 + text_width;
-	if(!render_just_for_calculation)AddLabelButton(object, label_start_x, label_end_x);
+	if(!render_just_for_calculation && !render_drag_list)AddLabelButton(prev_object, object, next_object, label_start_x, label_end_x);
 	if(label_end_x > m_max_xpos)m_max_xpos = label_end_x;
-	m_xpos -= 16;
 
 	m_ypos += 18;
 
 	bool end_object = (next_object == NULL);
 	end_child_list.push_back(end_object);
 
+	m_xpos = save_x;
+
 	if(expanded)
 	{
+		HeeksObj* prev_child = NULL;
 		HeeksObj* child = object->GetFirstChild();
 
 		while(child)
 		{
 			HeeksObj* next_child = object->GetNextChild();
-			RenderObject(child, next_child, level + 1);
+			RenderObject(prev_child, child, next_child, level + 1);
+			prev_child = child;
 			child = next_child;
 		}
 	}
 
 	end_child_list.pop_back();
-
-	m_xpos -= 16;
 }
 
 void CTreeCanvas::Render(bool just_for_calculation)
@@ -617,21 +688,31 @@ void CTreeCanvas::Render(bool just_for_calculation)
 	m_ypos = 0;//-scroll_y_pos; // start at the top
 	m_max_xpos = 0;
 
+	HeeksObj* prev_object = NULL;
 	HeeksObj* object = wxGetApp().GetFirstChild();
 
 	while(object)
 	{
 		HeeksObj* next_object = wxGetApp().GetNextChild();
-		RenderObject(object, next_object, 0);
+		RenderObject(prev_object, object, next_object, 0);
+		prev_object = object;
 		object = next_object;
 	}
 
 	// draw the dragged objects
 	if(m_dragging)
 	{
-		//m_dc->SetBrush(wxBrush(wxT("orange")));
-		//m_dc->SetPen(wxPen(wxT("blue")));
-		//m_dc->DrawRectangle(m_drag_position, wxSize(50, 50));
+		wxSize drag_size = GetDraggedListSize();
+		m_dc->SetBrush(wxBrush(wxT("orange")));
+		m_dc->SetPen(wxPen(wxT("blue")));
+		m_dc->DrawRectangle(m_drag_position, drag_size);
+		RenderDraggedList();
+		if(m_drag_paste_rect.width > 0)
+		{
+			m_dc->SetPen(wxPen(wxT("black")));
+			m_dc->SetBrush(wxBrush(wxT("black")));
+			m_dc->DrawRectangle(m_drag_paste_rect);
+		}
 	}
 }
 
@@ -644,20 +725,34 @@ wxSize CTreeCanvas::GetRenderSize()
 
 void CTreeCanvas::RenderDraggedList(bool just_for_calculation)
 {
-	m_xpos = 0; // start at the left
-	m_ypos = 0;//-scroll_y_pos; // start at the top
+	render_just_for_calculation = just_for_calculation;
+	render_drag_list = true;
+
+	if(just_for_calculation)
+	{
+		m_xpos = 0;
+		m_ypos = 0;
+	}
+	else
+	{
+		m_xpos = m_drag_position.x;
+		m_ypos = m_drag_position.y;
+	}
 	m_max_xpos = 0;
 
 	std::list<HeeksObj*>::iterator It = m_dragged_list.begin(); 
+	HeeksObj* prev_object = NULL;
 	HeeksObj* object = *It;
 	for(;It != m_dragged_list.end();)
 	{
 		It++;
 		HeeksObj* next_object = NULL;
 		if(It != m_dragged_list.end())next_object = *It;
-		RenderObject(object, next_object, 0);
+		RenderObject(prev_object, object, next_object, 0);
+		prev_object = object;
 		object = next_object;
 	}
+	render_drag_list = false;
 }
 
 wxSize CTreeCanvas::GetDraggedListSize()
