@@ -125,20 +125,24 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 			// find the object to drop on to
 			const CTreeButton* button = HitTest(event.GetPosition());
 
-			wxGetApp().CreateUndoPoint();
-
-			// cut the objects
-			wxGetApp().m_marked_list->CutSelectedItems();
-
-			// paste the objects
-			HeeksObj* paste_into = NULL;
-			HeeksObj* paste_before = NULL;
-			if(button)
+			if(!wxGetApp().m_marked_list->ObjectMarked(button->obj)) // can't drop on to one of the items being dragged
 			{
-				paste_into = button->obj;
-				paste_before = button->prev_obj;
+				wxGetApp().CreateUndoPoint();
+
+				// cut the objects
+				wxGetApp().m_marked_list->CutSelectedItems();
+
+				// paste the objects
+				HeeksObj* paste_into = NULL;
+				HeeksObj* paste_before = NULL;
+				if(button)
+				{
+					paste_into = button->obj;
+					paste_before = button->prev_obj;
+				}
+				wxGetApp().Paste(paste_into, paste_before);
 			}
-			wxGetApp().Paste(paste_into, paste_before);
+			Refresh();
 		}
 		else
 		{
@@ -180,7 +184,7 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 			}
 			if(m_dragging)
 			{
-				m_drag_position = event.GetPosition();
+				m_drag_position = CalcUnscrolledPosition(event.GetPosition());
 				const CTreeButton* button = HitTest(event.GetPosition());
 				m_drag_paste_rect = wxRect(0, 0, 0, 0);
 				if(button && button->type == ButtonTypeLabelBefore)m_drag_paste_rect = button->rect;
@@ -740,17 +744,20 @@ void CTreeCanvas::RenderDraggedList(bool just_for_calculation)
 	}
 	m_max_xpos = 0;
 
-	std::list<HeeksObj*>::iterator It = m_dragged_list.begin(); 
-	HeeksObj* prev_object = NULL;
-	HeeksObj* object = *It;
-	for(;It != m_dragged_list.end();)
+	if(m_dragged_list.size() > 0)
 	{
-		It++;
-		HeeksObj* next_object = NULL;
-		if(It != m_dragged_list.end())next_object = *It;
-		RenderObject(prev_object, object, next_object, 0);
-		prev_object = object;
-		object = next_object;
+		std::list<HeeksObj*>::iterator It = m_dragged_list.begin(); 
+		HeeksObj* prev_object = NULL;
+		HeeksObj* object = *It;
+		for(;It != m_dragged_list.end();)
+		{
+			It++;
+			HeeksObj* next_object = NULL;
+			if(It != m_dragged_list.end())next_object = *It;
+			RenderObject(prev_object, object, next_object, 0);
+			prev_object = object;
+			object = next_object;
+		}
 	}
 	render_drag_list = false;
 }
