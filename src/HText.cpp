@@ -352,7 +352,7 @@ void HText::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 
 	if (GetNumChildren() == 0)
 	{
-	   // t_list->push_back(&orientation_tool); // Not yet.  It produces a mess.  Need to get the Get() method working properly.
+	   t_list->push_back(&orientation_tool); // Not yet.  It produces a mess.  Need to get the Get() method working properly.
 	}
 
 	if (m_pFont != NULL)

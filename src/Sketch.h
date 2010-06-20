@@ -35,6 +35,11 @@ public:
 
 	const CSketch& operator=(const CSketch& c);
 
+	bool operator== ( const CSketch & rhs ) const;
+	bool operator!= ( const CSketch & rhs ) const { return(! (*this == rhs)); }
+
+	bool IsDifferent( HeeksObj *other ) { return(*this != (*(CSketch *)other)); }
+
 	std::vector<TopoDS_Face> GetFaces();
 
 	int GetType()const{return SketchType;}

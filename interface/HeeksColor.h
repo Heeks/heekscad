@@ -19,4 +19,6 @@ public:
 	HeeksColor best_black_or_white(void)const;
 	void glColor(void)const;
 	void glClearColor(GLclampf alpha)const;
+
+	bool operator!= ( const HeeksColor & rhs ) const { return(! (*this == rhs)); }
 };
