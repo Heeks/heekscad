@@ -790,7 +790,7 @@ static void OnUpdateCopy( wxUpdateUIEvent& event )
 
 static void OnPasteButton( wxCommandEvent& event )
 {
-	wxGetApp().Paste(NULL);
+	wxGetApp().Paste(NULL, NULL);
 }
 
 static void OnDeleteButton( wxCommandEvent& event )

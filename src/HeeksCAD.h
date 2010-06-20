@@ -258,13 +258,13 @@ public:
 	void ObjectWriteBaseXML(HeeksObj *object, TiXmlElement *element);
 	void ObjectReadBaseXML(HeeksObj *object, TiXmlElement* element);
 	void InitializeXMLFunctions();
-	void OpenXMLFile(const wxChar *filepath,HeeksObj* paste_into = NULL);
+	void OpenXMLFile(const wxChar *filepath,HeeksObj* paste_into = NULL, HeeksObj* paste_before = NULL);
 	static void OpenSVGFile(const wxChar *filepath);
 	static void OpenSTLFile(const wxChar *filepath);
 	static void OpenDXFFile(const wxChar *filepath);
 	static void OpenRS274XFile(const wxChar *filepath);
 	bool OpenImageFile(const wxChar *filepath);
-	bool OpenFile(const wxChar *filepath, bool import_not_open = false, HeeksObj* paste_into = NULL, bool retain_filename = true );
+	bool OpenFile(const wxChar *filepath, bool import_not_open = false, HeeksObj* paste_into = NULL, HeeksObj* paste_before = NULL, bool retain_filename = true );
 	void SaveDXFFile(const wxChar *filepath);
 	void SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance = -1.0, double* scale = NULL);
 	void SaveCPPFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance = -1.0);
@@ -325,7 +325,7 @@ public:
 	bool IsPasteReady();
 	void EnableBlend();
 	void DisableBlend();
-	void Paste(HeeksObj* paste_into);
+	void Paste(HeeksObj* paste_into, HeeksObj* paste_before);
 	bool CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num, int type, const wxString& msg, const wxString& caption);
 	bool CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num, int type1, int type2, const wxString& msg, const wxString& caption);
 	bool CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num, int type1, int type2, int type3, const wxString& msg, const wxString& caption);
