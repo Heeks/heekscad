@@ -374,7 +374,7 @@ void CGraphicsCanvas::OnCharEvent(wxKeyEvent& event)
 
 		case ControlV:
 			// Paste
-			wxGetApp().Paste(NULL);
+			wxGetApp().Paste(NULL, NULL);
 			wxGetApp().Repaint();
 			event.Skip();
 			break;

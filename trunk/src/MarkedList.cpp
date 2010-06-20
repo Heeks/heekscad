@@ -318,7 +318,7 @@ public:
 
 void PasteTool::Run()
 {
-	wxGetApp().Paste(m_paste_into);
+	wxGetApp().Paste(m_paste_into, NULL);
 }
 
 void MarkedList::GetTools(MarkedObject* clicked_object, std::list<Tool*>& t_list, const wxPoint* p, bool copy_and_paste_tools){

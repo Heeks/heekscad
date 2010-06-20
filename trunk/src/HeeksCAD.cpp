@@ -869,7 +869,7 @@ HeeksObj *HeeksCADapp::MergeCommonObjects( ObjectReferences_t & unique_set, Heek
 }
 
 
-void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into)
+void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, HeeksObj* paste_before)
 {
 	TiXmlDocument doc(Ttc(filepath));
 	if (!doc.LoadFile())
@@ -938,12 +938,12 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into)
 					}
 					if(!one_found)
 					{
-						add_to->Add(object, NULL);
+						add_to->Add(object, paste_before);
 					}
 				}
 				else
 				{
-					add_to->Add(object, NULL);
+					add_to->Add(object, paste_before);
 				}
 			}
 		}
@@ -1059,7 +1059,7 @@ bool HeeksCADapp::OpenImageFile(const wxChar *filepath)
 	return false;
 }
 
-bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksObj* paste_into, bool retain_filename /* = true */ )
+bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksObj* paste_into, HeeksObj* paste_before, bool retain_filename /* = true */ )
 {
 	if(import_not_open)CreateUndoPoint();
 
@@ -1088,7 +1088,7 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 		m_file_open_or_import_type = FileOpenTypeHeeks;
 		if(import_not_open)
 			m_file_open_or_import_type = FileImportTypeHeeks;
-		OpenXMLFile(filepath, paste_into);
+		OpenXMLFile(filepath, paste_into, paste_before);
 	}
 	else if(m_fileopen_handlers.find(extension) != m_fileopen_handlers.end())
 	{
@@ -3489,7 +3489,7 @@ bool HeeksCADapp::IsPasteReady()
 	return false;
 }
 
-void HeeksCADapp::Paste(HeeksObj* paste_into)
+void HeeksCADapp::Paste(HeeksObj* paste_into, HeeksObj* paste_before)
 {
 	// assume the text is the contents of a heeks file
 	wxString fstr;
@@ -3525,7 +3525,7 @@ void HeeksCADapp::Paste(HeeksObj* paste_into)
 
 	m_marked_list->Clear(true);
 	m_mark_newly_added_objects = true;
-	OpenFile(temp_file.GetFullPath(), true, paste_into);
+	OpenFile(temp_file.GetFullPath(), true, paste_into, paste_before);
 	m_mark_newly_added_objects = false;
 }
 
