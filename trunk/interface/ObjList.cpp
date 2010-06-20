@@ -11,6 +11,7 @@
 #include "../tinyxml/tinyxml.h"
 
 #include "TransientObject.h"
+#include <algorithm>
 
 
 ObjList::ObjList(const ObjList& objlist): HeeksObj(objlist), m_index_list_valid(true) {copy_objects(objlist);}
@@ -375,4 +376,27 @@ void ObjList::ReloadPointers()
 	HeeksObj::ReloadPointers();
 }
 
+bool ObjList::operator==( const ObjList & rhs ) const
+{
+	return(true);
+
+
+	if (m_objects.size() != rhs.m_objects.size()) return(false);
+
+	std::list<const HeeksObj *> sorted_lhs;
+	std::copy( m_objects.begin(), m_objects.end(), std::inserter( sorted_lhs, sorted_lhs.begin() ) );
+
+	std::list<const HeeksObj *> sorted_rhs;
+	std::copy( rhs.m_objects.begin(), rhs.m_objects.end(), std::inserter( sorted_rhs, sorted_rhs.begin() ) );
+
+	sorted_lhs.sort();
+	sorted_rhs.sort();
+
+	std::list<const HeeksObj *> difference;
+
+	// std::set_difference( sorted_lhs.begin(), sorted_lhs.end(), sorted_rhs.begin(), sorted_rhs.begin(), difference.begin() );
+	// return(difference.size() == 0);
+
+	return(sorted_lhs == sorted_rhs);
+}
 
