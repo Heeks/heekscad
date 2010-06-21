@@ -1059,7 +1059,7 @@ static void OnMoveScaleButton( wxCommandEvent& event )
 
 void CHeeksFrame::OnExternalButton( wxCommandEvent& event )
 {
-	wxGetApp().CreateUndoPoint();
+	// this might be the undo button! wxGetApp().CreateUndoPoint();
 	int id = event.GetId();
 
 	std::map<int, SExternalButtonFunctions >::iterator FindIt = m_external_buttons.find(id);
@@ -1068,7 +1068,7 @@ void CHeeksFrame::OnExternalButton( wxCommandEvent& event )
 		(*(ebf.on_button))(event);
 	}
 
-	wxGetApp().Changed();
+	// this might be the undo button! wxGetApp().Changed();
 }
 
 void CHeeksFrame::OnRecentFile( wxCommandEvent& event )
