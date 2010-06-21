@@ -125,7 +125,7 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 			// find the object to drop on to
 			const CTreeButton* button = HitTest(event.GetPosition());
 
-			if(!wxGetApp().m_marked_list->ObjectMarked(button->obj)) // can't drop on to one of the items being dragged
+			if(button == NULL || !wxGetApp().m_marked_list->ObjectMarked(button->obj)) // can't drop on to one of the items being dragged
 			{
 				wxGetApp().CreateUndoPoint();
 
