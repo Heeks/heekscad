@@ -141,8 +141,12 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 					paste_before = button->prev_obj;
 				}
 				wxGetApp().Paste(paste_into, paste_before);
+				wxGetApp().Changed();
 			}
-			Refresh();
+			else
+			{
+				Refresh();
+			}
 		}
 		else
 		{
