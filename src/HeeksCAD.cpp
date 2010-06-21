@@ -1061,7 +1061,7 @@ bool HeeksCADapp::OpenImageFile(const wxChar *filepath)
 
 bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksObj* paste_into, HeeksObj* paste_before, bool retain_filename /* = true */ )
 {
-	if(import_not_open)CreateUndoPoint();
+	if(import_not_open && paste_into == NULL)CreateUndoPoint();
 
 	m_in_OpenFile = true;
 	m_file_open_or_import_type = FileOpenOrImportTypeOther;
@@ -1126,7 +1126,7 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 
 		if(import_not_open)
 		{
-			Changed();
+			if(paste_into == NULL)Changed();
 		}
 		else
 		{
@@ -1770,23 +1770,36 @@ double HeeksCADapp::GetPixelScale(void){
 }
 
 bool HeeksCADapp::IsModified(void){
+	if(m_isModifiedValid)return m_isModified;
+
 	for(std::list< bool(*)() >::iterator It = wxGetApp().m_is_modified_callbacks.begin(); It != wxGetApp().m_is_modified_callbacks.end(); It++)
 	{
 		bool(*callbackfunc)() = *It;
 		bool is_modified = (*callbackfunc)();
-		if(is_modified)return true;
+		if(is_modified)
+		{
+			m_isModified = true;
+			m_isModifiedValid = true;
+			return true;
+		}
 	}
 
-	return history->IsModified();
+	m_isModified = history->IsModified();
+	m_isModifiedValid = true;
+	return m_isModified;
 }
 
 void HeeksCADapp::SetLikeNewFile(void){
 	history->SetLikeNewFile();
+	m_isModifiedValid = true;
+	m_isModified = false;
 }
 
 void HeeksCADapp::ClearHistory(void){
 	history->ClearHistory();
 	history->SetLikeNewFile();
+	m_isModifiedValid = true;
+	m_isModified = false;
 }
 
 static void AddToolListWithSeparator(std::list<Tool*> &l, std::list<Tool*> &temp_l)
@@ -1930,6 +1943,7 @@ void HeeksCADapp::CreateUndoPoint()
 void HeeksCADapp::Changed()
 {
 	ObserversOnChange(NULL,NULL,NULL);
+	m_isModifiedValid = false;
 }
 
 void HeeksCADapp::ObserversMarkedListChanged(bool selection_cleared, const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed){
