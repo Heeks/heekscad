@@ -66,7 +66,7 @@ public:
 	void ReloadPointers();
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
-	gp_Trsf Get(gp_Trsf existing_transformation, const double distance);
+	gp_Pnt & Transform(gp_Trsf existing_transformation, const double _distance, gp_Pnt & point );
 
 }; // End COrientationModifier class definition.
 
