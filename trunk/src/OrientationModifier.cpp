@@ -187,44 +187,33 @@ void COrientationModifier::ReloadPointers()
 }
 
 
-/**
-	This method returns a transformation matrix (scale, position and/or rotation) based
-	on the distance (along X) for the text string being rendered.  The idea is to map
-	this position to a location along the child sketch.  The transformation matrix
-	would represent a translation and/or rotation so that the character can be
-	rendered as through it is laying along this sketch.
 
-	The existing_transformation matrix is that applied to the HText object and pushed
-	onto the graphics stack before the HText is displayed.  It's passed in here so that
-	this method may 'undo' some of its transformations so as to compare the 'distance'
-	value (along X) with the distance around the sketch.
- */
-gp_Trsf COrientationModifier::Get(gp_Trsf existing_transformation, const double _distance)
+gp_Pnt & COrientationModifier::Transform(gp_Trsf existing_transformation, const double _distance, gp_Pnt & point )
 {
 	double tolerance = wxGetApp().m_geom_tol;
 
-	gp_Trsf reverse(existing_transformation);
-	reverse.Invert();
+    if (GetNumChildren() == 0)
+	{
+		// No children so no modification of position.
+		return(point);
+	}
+
+	gp_Pnt origin(0.0, 0.0, 0.0);
+	gp_Trsf move_to_origin;
+	move_to_origin.SetTranslation(origin, gp_Pnt(-1.0 * _distance, 0.0, 0.0));
+	point.Transform(move_to_origin);
 
 	double distance(_distance);
 	if (distance < 0) distance *= -1.0;
 
 	// The distance in font coordinates is smaller than that used to place the characters.
 	// Scale this distance up by the HText scale factor being applied to the font graphics.
-	distance *= existing_transformation.ScaleFactor();
-
-	if (GetNumChildren() == 0)
-	{
-		// No children so no modification of position.
-		gp_Trsf unchanged;
-		return(unchanged);
-	}
+	// distance *= existing_transformation.ScaleFactor();
 
 	std::list<TopoDS_Shape> wires;
 	if (! ::ConvertSketchToFaceOrWire( GetFirstChild(), wires, false))
     {
-		gp_Trsf unchanged;
-		return(unchanged);
+		return(point);
     } // End if - then
 
 	double distance_remaining = distance;
@@ -256,33 +245,34 @@ gp_Trsf COrientationModifier::Get(gp_Trsf existing_transformation, const double 
 				{
 					// The point we're after is along this edge somewhere.  Find the point and
 					// the first derivative at that point.
-					gp_Pnt point;
+					gp_Pnt p;
 					gp_Vec vec;
 					double proportion = distance_remaining / edge_length;
 					Standard_Real U = ((curve.LastParameter() - curve.FirstParameter()) * proportion) + curve.FirstParameter();
-					curve.D1(U, point, vec);
-					// double angle = gp_Vec(1,0,0).AngleWithRef(vec, gp_Vec(gp_Pnt(0,0,0), gp_Pnt(1,0,0)));
-					double angle = gp_Vec(1,0,0).Angle(vec);
+					curve.D1(U, p, vec);
+
+					double angle = gp_Vec(0,1,0).Angle(vec);
+					angle += (PI / 2.0);
+					angle *= -1.0;
 					gp_Trsf transformation;
-					transformation.SetRotation( gp_Ax1(gp_Pnt(distance,0.0,0.0), gp_Vec(0,0,-1)), angle );
+					transformation.SetRotation( gp_Ax1(origin, gp_Vec(0,0,-1)), angle );
+					point.Transform( transformation );
 
-					/*
-					gp_Trsf back_to_origin;
-					back_to_origin.SetTranslation(gp_Vec(gp_Pnt(0,0,0), gp_Pnt(-1.0 * distance, 0, 0)));
-					transformation = transformation * back_to_origin;
-
-					gp_Trsf around_sketch;
-
-					around_sketch.SetTranslation(gp_Pnt(0,0,0), point);
-					transformation = transformation * around_sketch;
-					*/
+					static std::set<double> angles;
+					if (angles.find(angle) == angles.end())
+					{
+						double degrees = angle / (2.0 * PI) * 360.0;
+						angles.insert(angle);
+						printf("angle %lf\n", angle);						
+					}
 
 					gp_Trsf around;
-					around.SetTranslation(gp_Pnt(distance,0,0), point);
-					transformation = transformation * around;
+					around.SetTranslation(origin, p);
+					point.Transform(around);
 
-					// transformation = transformation * reverse;
-					return(transformation);
+					point.Transform(existing_transformation);   // Restore the original HText transformation.
+
+					return(point);
 				}
 
 				i++;
@@ -290,8 +280,7 @@ gp_Trsf COrientationModifier::Get(gp_Trsf existing_transformation, const double 
 		} // End if - then
 	} // End for
 
-	gp_Trsf unchanged;
-	return(unchanged);
+	return(point);
 }
 
 
