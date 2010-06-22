@@ -59,12 +59,12 @@ HeeksObj *VectorFont::Glyph::Line::Sketch( const gp_Pnt & location, const gp_Trs
 	return(line);
 } // End Sketch() method
 
-void VectorFont::Glyph::Line::glCommands( 
-	const gp_Pnt & starting_point, 
-	const bool select, 
-	const bool marked, 
-	const bool no_color, 
-	COrientationModifier *pOrientationModifier, 
+void VectorFont::Glyph::Line::glCommands(
+	const gp_Pnt & starting_point,
+	const bool select,
+	const bool marked,
+	const bool no_color,
+	COrientationModifier *pOrientationModifier,
 	gp_Trsf transformation) const
 {
 	gp_Pnt from( starting_point );
@@ -80,8 +80,8 @@ void VectorFont::Glyph::Line::glCommands(
 
 	if (pOrientationModifier)
 	{
-		from.Transform(pOrientationModifier->Get(transformation, starting_point.X()));
-		to.Transform(pOrientationModifier->Get(transformation, starting_point.X()));
+	    from = pOrientationModifier->Transform(transformation, starting_point.X(), from );
+	    to = pOrientationModifier->Transform(transformation, starting_point.X(), to );
 	}
 
 	glBegin(GL_LINE_STRIP);
@@ -171,19 +171,19 @@ HeeksObj *VectorFont::Glyph::Arc::Sketch( const gp_Pnt & location, const gp_Trsf
 	return(arc);
 } // End Sketch() method
 
-void VectorFont::Glyph::Arc::glCommands( 
-	const gp_Pnt & starting_point, 
-	const bool select, 
-	const bool marked, 
-	const bool no_color, 
-	COrientationModifier *pOrientationModifier, 
+void VectorFont::Glyph::Arc::glCommands(
+	const gp_Pnt & starting_point,
+	const bool select,
+	const bool marked,
+	const bool no_color,
+	COrientationModifier *pOrientationModifier,
 	gp_Trsf transformation ) const
 {
 	glBegin(GL_LINE_STRIP);
 	std::list<gp_Pnt> vertices = Interpolate( starting_point, 20 );
 	for (std::list<gp_Pnt>::iterator l_itVertex = vertices.begin(); l_itVertex != vertices.end(); l_itVertex++)
 	{
-		if (pOrientationModifier) l_itVertex->Transform(pOrientationModifier->Get(transformation, starting_point.X()));
+		if (pOrientationModifier) *l_itVertex = pOrientationModifier->Transform(transformation, starting_point.X(), *l_itVertex );
 		glVertex3d(l_itVertex->X(), l_itVertex->Y(), l_itVertex->Z());
 	} // End for
 	glEnd();
@@ -464,12 +464,12 @@ std::list<HeeksObj *> VectorFont::Glyph::GetGraphics( const gp_Pnt & location, c
 } // End Graphics() method
 
 
-void VectorFont::Glyph::glCommands( 
-		const gp_Pnt & starting_point, 
-		const bool select, 
-		const bool marked, 
-		const bool no_color, 
-		COrientationModifier *pOrientationModifier, 
+void VectorFont::Glyph::glCommands(
+		const gp_Pnt & starting_point,
+		const bool select,
+		const bool marked,
+		const bool no_color,
+		COrientationModifier *pOrientationModifier,
 		gp_Trsf transformation) const
 {
 	for (GraphicsList_t::const_iterator l_itGraphic = m_graphics_list.begin(); l_itGraphic != m_graphics_list.end(); l_itGraphic++)
@@ -906,10 +906,10 @@ double VectorFont::LetterSpacing( const Glyph & glyph ) const
 }
 
 
-void VectorFont::glCommands(const wxString & text, 
-							const gp_Pnt &start_point, 
-							const bool select, 
-							const bool marked, 
+void VectorFont::glCommands(const wxString & text,
+							const gp_Pnt &start_point,
+							const bool select,
+							const bool marked,
 							const bool no_color,
 							COrientationModifier *pOrientationModifier,
 							gp_Trsf transformation ) const
@@ -957,12 +957,12 @@ void VectorFont::glCommands(const wxString & text,
 			bottom_right.SetX( location.X() + largest_glyph.MaxX() );
 			bottom_right.SetY( location.Y() + largest_glyph.MinY() );
 
-			if (pOrientationModifier) 
+			if (pOrientationModifier)
 			{
-				top_left.Transform(pOrientationModifier->Get(transformation, location.X()));
-				top_right.Transform(pOrientationModifier->Get(transformation, location.X()));
-				bottom_left.Transform(pOrientationModifier->Get(transformation, location.X()));
-				bottom_right.Transform(pOrientationModifier->Get(transformation, location.X()));
+			    top_left = pOrientationModifier->Transform(transformation, location.X(), top_left );
+			    top_right = pOrientationModifier->Transform(transformation, location.X(), top_right );
+			    bottom_left = pOrientationModifier->Transform(transformation, location.X(), bottom_left );
+			    bottom_right = pOrientationModifier->Transform(transformation, location.X(), bottom_right );
 			}
 
 			glBegin(GL_LINE_STRIP);
