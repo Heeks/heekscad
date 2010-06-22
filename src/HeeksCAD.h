@@ -243,6 +243,7 @@ public:
 	void ClearHistory(void);
 	void glCommandsAll(bool select, const CViewPoint &view_point);
 	double GetPixelScale(void);
+	void DoMoveOrCopyDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, HeeksObj* paste_into, HeeksObj* paste_before);
 	void DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool from_graphics_canvas, bool control_pressed);
 	void on_menu_event(wxCommandEvent& event);
 	void DoToolUndoably(Tool *);

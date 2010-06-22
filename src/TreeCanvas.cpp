@@ -125,7 +125,7 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 			// find the object to drop on to
 			const CTreeButton* button = HitTest(event.GetPosition());
 
-			if(button == NULL || !wxGetApp().m_marked_list->ObjectMarked(button->obj)) // can't drop on to one of the items being dragged
+			if(button == NULL || !wxGetApp().m_marked_list->ObjectMarked(button->obj)) // can only drop on to an item other than one of the items being dragged
 			{
 				wxGetApp().CreateUndoPoint();
 
@@ -174,12 +174,40 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 	{
 		// do a context menu
 		MarkedObjectOneOfEach marked_object(0, clicked_object, 1);
-		wxGetApp().DoDropDownMenu(this, event.GetPosition(), &marked_object, true, false, false);
+		if(m_dragging)
+		{
+			m_dragging = false;
+
+			// find the object to drop on to
+			const CTreeButton* button = HitTest(event.GetPosition());
+
+			if(button == NULL || !wxGetApp().m_marked_list->ObjectMarked(button->obj)) // can only drop on to an item other than one of the items being dragged
+			{
+				// make a Move or Copy context menu
+				HeeksObj* paste_into = NULL;
+				HeeksObj* paste_before = NULL;
+				if(button)
+				{
+					paste_into = button->obj;
+					paste_before = button->prev_obj;
+				}
+				wxGetApp().DoMoveOrCopyDropDownMenu(this, event.GetPosition(), &marked_object, paste_into, paste_before);
+			}
+			else
+			{
+				Refresh();
+			}
+		}
+		else
+		{
+			// do a standard drop down menu
+			wxGetApp().DoDropDownMenu(this, event.GetPosition(), &marked_object, true, false, false);
+		}
 	}
 
 	if(event.Dragging())
 	{
-		if(event.LeftIsDown())
+		if(event.LeftIsDown() || event.RightIsDown())
 		{
 			if(!m_dragging && (abs(m_button_down_point.x - event.GetX())>2 || abs(m_button_down_point.y - event.GetY())>2))
 			{

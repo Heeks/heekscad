@@ -1829,6 +1829,58 @@ public:
 	wxString BitmapPath(){return _T("fullscreen");}
 };
 
+class MoveOrCopyTool: public Tool
+{
+	bool m_move_not_copy;
+public:
+	static HeeksObj* paste_into;
+	static HeeksObj* paste_before;
+
+	MoveOrCopyTool(bool move_not_copy):m_move_not_copy(move_not_copy){}
+	void Run(){
+		wxGetApp().CreateUndoPoint();
+
+		if(m_move_not_copy)
+		{
+			// cut the objects
+			wxGetApp().m_marked_list->CutSelectedItems();
+		}
+		else
+		{
+			// cpyut the objects
+			wxGetApp().m_marked_list->CopySelectedItems();
+		}
+
+		// paste the objects
+		wxGetApp().Paste(paste_into, paste_before);
+		wxGetApp().Changed();
+	}
+	const wxChar* GetTitle(){return m_move_not_copy ? _("Move here") : _("Copy here");}
+	wxString BitmapPath(){return m_move_not_copy ? _T("move") : _T("copy");}
+};
+
+static MoveOrCopyTool move_tool(true);
+static MoveOrCopyTool copy_tool(false);
+HeeksObj* MoveOrCopyTool::paste_into(NULL);
+HeeksObj* MoveOrCopyTool::paste_before(NULL);
+
+void HeeksCADapp::DoMoveOrCopyDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, HeeksObj* paste_into, HeeksObj* paste_before)
+{
+	tool_index_list.clear();
+	wxPoint new_point = point;
+	wxMenu menu;
+	std::list<Tool*> f_list;
+
+	MoveOrCopyTool::paste_into = paste_into;
+	MoveOrCopyTool::paste_before = paste_before;
+	f_list.push_back(&move_tool);
+	f_list.push_back(&copy_tool);
+
+	for (std::list<Tool*>::iterator FIt = f_list.begin(); FIt != f_list.end(); FIt++)
+		m_frame->AddToolToListAndMenu(*FIt, tool_index_list, &menu);
+	wnd->PopupMenu(&menu, point);
+}
+
 void HeeksCADapp::DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool from_graphics_canvas, bool control_pressed)
 {
 	tool_index_list.clear();
