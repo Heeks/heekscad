@@ -230,12 +230,6 @@ void TransformTools::Mirror(bool copy)
 		// check for uncopyable objects
 		RemoveUncopyable();
 		if(wxGetApp().m_marked_list->size() == 0)return;
-
-		// input "number of copies"
-		double number_of_copies = 1.0;
-		wxGetApp().InputDouble(_("Enter number of copies"), _("number of copies"), number_of_copies);
-		int ncopies = (int)(number_of_copies + 0.5);
-		if(ncopies < 1)return;
 	}
 
 	// clear the selection
