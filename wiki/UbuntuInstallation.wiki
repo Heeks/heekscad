@@ -159,7 +159,7 @@ This affects at least 8.04(Hardy) and may affect other releases as well.  Earlie
 {{{
 sudo ln -s /usr/local/lib/python2.5/dist-packages/kurve.so /usr/local/lib/python2.5/site-packages/kurve.so
 sudo ln -s /usr/local/lib/python2.5/dist-packages/actp.so /usr/local/lib/python2.5/site-packages/actp.so
-sudo ln -s /usr/local/lib/python2.5/dist-packages/libarea.so /usr/local/lib/python2.5/site-packages/libarea.so
+sudo ln -s /usr/local/lib/python2.5/dist-packages/area.so /usr/local/lib/python2.5/site-packages/area.so
 }}}
 
 ==A possible problem==
