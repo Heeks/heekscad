@@ -10,7 +10,9 @@ If you run into problems, check the notes and comments at the end of this page.
 The opencascade libraries are not in the ubuntu multiverse for Hardy.  You can get them from opennovation.
 
 First add the following to your /etc/apt/sources.list file
-{{{deb http://www.opennovation.org/ubuntu hardy main contrib non-free}}}
+{{{
+deb http://www.opennovation.org/ubuntu hardy main contrib non-free
+}}}
 
 Download the signing key available here
 [http://www.opennovation.org/ubuntu/opennovation.key]
