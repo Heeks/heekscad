@@ -151,7 +151,111 @@ The following bug and work-around affect the appearance of HeeksCAD in the defau
 http://code.google.com/p/heekscad/issues/detail?id=270
 
 ==Making it go fast==
-As noted above, HeeksCAD is changing all the time.  The bits of script above can be combined into one script and executed together with sudo.  It isn't very efficient since it will recompile the code even if no changes were made.  But it's nice because you can launch it, get another cup of coffee, and come back to a fresh build of everything at the current SVN version.
+As noted above, HeeksCAD is changing all the time.  The bits of script above can be combined into one script and executed together with sudo.  
+
+Here's a complete script as submitted in the comments below.  I've added a 'make clean' for each step.  I'm not sure what effect this has on the efficiency, but without it, you can't be guaranteed a clean rebuild.
+
+{{{
+#!/bin/sh
+# heekscad-install.sh -- Downloads, builds and installs HeeksCAD from svn
+
+BUILDPATH=~             # Location of HeeksCAD build dir
+INSTALLPATH=/usr/local  # Location to install HeeksCAD
+BUILDPREREQS="subversion libwxbase2.8-dev \
+  build-essential libopencascade-dev libwxgtk2.8-dev \
+  libgtkglext1-dev python-dev cmake libboost-python-dev"
+
+# Install build prerequisites
+sudo apt-get install -y $BUILDPREREQS
+
+cd $BUILDPATH
+if [ -d HeeksCAD ]; then
+  cd HeeksCAD
+  svn update
+else
+  svn checkout http://heekscad.googlecode.com/svn/trunk/ HeeksCAD
+fi
+cd ${BUILDPATH}/HeeksCAD/src
+make clean
+make
+sudo make install
+
+# Make menu entry find the binary
+sudo ln -s ${INSTALLPATH}/bin/HeeksCAD /usr/bin/HeeksCAD
+# Make HeeksCAD find the program icons
+sudo ln -s ${INSTALLPATH}/share/heekscad/ /usr/share/heekscad
+
+# Install HeeksCNC
+#Get the HeeksCNC files from the SVN repository, build, and install
+cd ${BUILDPATH}/HeeksCAD/
+if [ -d HeeksCNC ]; then
+  cd HeeksCNC
+  svn update
+else
+  svn checkout http://heekscnc.googlecode.com/svn/trunk/ HeeksCNC
+fi
+cd ${BUILDPATH}/HeeksCAD/HeeksCNC/src
+make clean 
+make
+sudo make install
+
+# build, and install kurve
+cd ${BUILDPATH}/HeeksCAD/HeeksCNC/kurve
+make clean
+make
+sudo make install
+sudo ln -s .libs/kurve.so ${BUILDPATH}/HeeksCAD/HeeksCNC/kurve.so
+
+# Install libarea
+# area.so is required for pocket operations.
+#Get the libarea files from the SVN repository, build, and install
+cd ${BUILDPATH}/HeeksCAD/HeeksCNC/
+if [ -d libarea ]; then
+  cd libarea
+  svn update
+else
+  svn checkout http://libarea.googlecode.com/svn/trunk/ libarea
+fi
+cd ${BUILDPATH}/HeeksCAD/HeeksCNC/libarea/
+make clean
+make
+sudo make install
+sudo ln -s .libs/area.so ${BUILDPATH}/HeeksCAD/HeeksCNC/area.so
+
+# Install libactp
+# actp.so is required for adaptive roughing operations.
+# Get the libactp (adaptive roughing) files from the SVN repository, build, and install
+cd ${BUILDPATH}/HeeksCAD/HeeksCNC/
+if [ -d libactp ]; then
+  cd libactp
+  svn update
+else
+  svn checkout http://libactp.googlecode.com/svn/trunk/ libactp
+fi
+cd ${BUILDPATH}/HeeksCAD/HeeksCNC/libactp/PythonLib
+make clean
+make
+sudo make install
+sudo ln -s .libs/actp.so ${BUILDPATH}/HeeksCAD/HeeksCNC/actp.so
+
+# Install opencamlib
+# opencamlib is the replacement for pycam. It's required for zigzag operations.
+# Get the opencamlib files from the SVN repository, build, and install
+cd ${BUILDPATH}/HeeksCAD/HeeksCNC/
+if [ -d opencamlib ]; then
+  cd opencamlib
+  svn update
+else
+  svn checkout http://opencamlib.googlecode.com/svn/trunk/ opencamlib
+fi
+cd ${BUILDPATH}/HeeksCAD/HeeksCNC/opencamlib/src
+make clean
+cmake .
+make
+make doc        # Creates PDF file needed by make install
+sudo make install
+}}}
+
 
 
 ===Earlier version of Ubuntu===
