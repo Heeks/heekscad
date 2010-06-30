@@ -426,6 +426,7 @@ class RS274X
 		bool m_cw_circular_interpolation;
 		bool m_area_fill;
 		bool m_mirror_image;
+		bool m_bWithinApertureMacroDefinition;
 
 		std::string m_LayerName;
 		int	m_active_aperture;
