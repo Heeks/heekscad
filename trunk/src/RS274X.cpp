@@ -53,6 +53,8 @@ RS274X::RS274X()
 	m_area_fill = false;
 	m_mirror_image = false;
 
+	m_bWithinApertureMacroDefinition = false;
+
 	m_current_line = -1;
 } // End constructor
 
@@ -209,6 +211,18 @@ bool RS274X::ReadParameters( const std::string & parameters )
 	while ((offset = _params.find('%')) != _params.npos) _params.erase(offset,1);
 	while ((offset = _params.find('*')) != _params.npos) _params.erase(offset,1);
 
+    if ((_params.size() == 0) && (m_bWithinApertureMacroDefinition))
+    {
+        m_bWithinApertureMacroDefinition = false;
+        return(true);
+    }
+
+    if (m_bWithinApertureMacroDefinition)
+    {
+        printf("Ignoring aperture macro definition %s\n", _params.c_str());
+        return(true);
+    }
+
 	if (_params.substr(0,4) == "MOIN")
 	{
 	    m_units = 25.4;
@@ -350,11 +364,178 @@ bool RS274X::ReadParameters( const std::string & parameters )
 		m_LayerName = _params;
 		return(true);
 	}
+	else if (_params.substr(0,2) == "AM")
+	{
+		// Aperture Macro
+		_params.erase(0,2);	// Remove AM
+		printf("Ignoring Aperture Macro command\n");
+		m_bWithinApertureMacroDefinition = true;
+		return(true);
+	}
 	else if (_params.substr(0,2) == "MI")
 	{
 		// Mirror Image = on.
 		_params.erase(0,2);	// Remove MI
 		m_mirror_image = true;
+		return(true);
+	}
+	else if (_params.substr(0,2) == "AS")
+	{
+		// Axis Select
+		_params.erase(0,2);	// Remove AS
+		printf("Ignoring Axis Select command\n");
+
+		while ((_params[0] == 'A') || (_params[0] == 'B'))
+		{
+		    if ((_params[0] = '=') && (_params.size() > 1))
+		    {
+		        _params.erase(0,2);
+		    }
+		}
+
+		return(true);
+	}
+	else if (_params.substr(0,2) == "OF")
+	{
+		// Offset
+		_params.erase(0,2);	// Remove OF
+		printf("Ignoring Offset command\n");
+		while ((_params[0] == 'A') || (_params[0] == 'B'))
+		{
+		    const char *end = NULL;
+		    _params.erase(0,1); // Remove 'A' or 'B'
+		    special_strtod( _params.c_str(), &end );
+            _params.erase(0, end - _params.c_str());
+		}
+
+		return(true);
+	}
+	else if (_params.substr(0,2) == "IO")
+	{
+		// Image Offset
+		_params.erase(0,2);	// Remove IO
+		printf("Ignoring Image Offset command\n");
+		while ((_params[0] == 'A') || (_params[0] == 'B'))
+		{
+		    const char *end = NULL;
+		    _params.erase(0,1); // Remove 'A' or 'B'
+		    special_strtod( _params.c_str(), &end );
+            _params.erase(0, end - _params.c_str());
+		}
+
+		return(true);
+	}
+	else if (_params.substr(0,2) == "SR")
+	{
+		// Step and Repeat
+		_params.erase(0,2);	// Remove SR
+		printf("Ignoring Step and Repeat command\n");
+		while ((_params[0] == 'A') || (_params[0] == 'B'))
+		{
+		    const char *end = NULL;
+		    _params.erase(0,1); // Remove 'A' or 'B'
+		    special_strtod( _params.c_str(), &end );
+            _params.erase(0, end - _params.c_str());
+		}
+
+		return(true);
+	}
+	else if (_params.substr(0,2) == "IP")
+	{
+		// Image Polarity
+		_params.erase(0,2);	// Remove IP
+		printf("Ignoring Image Polarity command\n");
+		if (_params.substr(0,3) == "POS") _params.erase(0,3);
+		if (_params.substr(0,3) == "NEG") _params.erase(0,3);
+		if (_params.substr(0,8) == "POSITIVE") _params.erase(0,8);
+		if (_params.substr(0,8) == "NEGATIVE") _params.erase(0,8);
+		return(true);
+	}
+	else if (_params.substr(0,2) == "LP")
+	{
+		// Layer Polarity
+		_params.erase(0,2);	// Remove LP
+		printf("Ignoring Layer Polarity command\n");
+		if (_params.substr(0,3) == "POS") _params.erase(0,3);
+		if (_params.substr(0,3) == "NEG") _params.erase(0,3);
+		if (_params.substr(0,8) == "POSITIVE") _params.erase(0,8);
+		if (_params.substr(0,8) == "NEGATIVE") _params.erase(0,8);
+		return(true);
+	}
+	else if (_params.substr(0,2) == "KO")
+	{
+		// Knock Out
+		_params.erase(0,2);	// Remove KO
+		printf("Ignoring Knock Out command\n");
+		if (_params.substr(0,3) == "OFF") _params.erase(0,3);
+		if (_params.substr(0,3) == "Off") _params.erase(0,3);
+		if (_params.substr(0,2) == "ON") _params.erase(0,2);
+		if (_params.substr(0,2) == "On") _params.erase(0,2);
+		return(true);
+	}
+	else if (_params.substr(0,2) == "IR")
+	{
+		// Image Rotation
+		_params.erase(0,2);	// Remove IR
+		printf("Ignoring Image Rotation command\n");
+		if (_params.size() > 0)
+		{
+            const char *end = NULL;
+            special_strtod( _params.c_str(), &end );
+            _params.erase(0, end - _params.c_str());
+		}
+		return(true);
+	}
+	else if (_params.substr(0,2) == "RO")
+	{
+		// Rotation
+		_params.erase(0,2);	// Remove RO
+		printf("Ignoring Rotation command\n");
+		if (_params.size() > 0)
+		{
+            const char *end = NULL;
+            special_strtod( _params.c_str(), &end );
+            _params.erase(0, end - _params.c_str());
+		}
+		return(true);
+	}
+	else if (_params.substr(0,2) == "PF")
+	{
+		// Plotter Film
+		_params.erase(0,2);	// Remove PF
+		printf("Ignoring Plotter Film command\n");
+
+		return(true);
+	}
+	else if (_params.substr(0,2) == "SF")
+	{
+		// Scale Factor 'A=1.0,B=1.0'
+		_params.erase(0,2);	// Remove OF
+		printf("Ignoring Offset command\n");
+		while ((_params[0] == 'A') || (_params[0] == 'B') || (_params[0] == ','))
+		{
+		    if (_params[0] == ',')
+		    {
+		        _params.erase(0,1);
+		    }
+		    else
+		    {
+		        _params.erase(0,1); // Remove 'A' or 'B'
+		        if (_params.size() > 0) _params.erase(0,1); // Remove '='
+                const char *end = NULL;
+                special_strtod( _params.c_str(), &end );
+                _params.erase(0, end - _params.c_str());
+		    }
+		}
+
+		return(true);
+	}
+	else if (_params.substr(0,2) == "IJ")
+	{
+		// Image Justify
+		_params.erase(0,2);	// Remove IJ
+		printf("Ignoring Image Justify command\n");
+
 		return(true);
 	}
 	else if (_params.substr(0,2) == "FS")
@@ -540,7 +721,19 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 	double i_term = 0.0;
 	double j_term = 0.0;
 	gp_Pnt position( m_current_position );
-	
+
+	if ((_data.size() == 0) && (m_bWithinApertureMacroDefinition))
+    {
+        m_bWithinApertureMacroDefinition = false;
+        return(true);
+    }
+
+    if (m_bWithinApertureMacroDefinition)
+    {
+        printf("Ignoring aperture macro definition %s\n", _data.c_str());
+        return(true);
+    }
+
 	while (_data.size() > 0)
 	{
 		if (_data.substr(0,3) == "G04")
@@ -793,7 +986,7 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 		else if (_data.substr(0,3) == "D02")
 		{
 			_data.erase(0,3);
-			
+
 			if((m_area_fill) && (m_filled_area_traces.size() > 0)) {
 				m_filled_areas.push_back( m_filled_area_traces );
 				m_filled_area_traces.clear();
@@ -880,51 +1073,54 @@ bool RS274X::ReadDataBlock( const std::string & data_block )
 
 		if (m_part_circular_interpolation)
 		{
-			// arc
-			// circular interpolation.
+		    if (m_full_circular_interpolation)
+            {
+                // full circle
+                // circular interpolation.
+                double radius = sqrt((i_term * i_term) + (j_term * j_term));
 
-			Trace trace( m_aperture_table[m_active_aperture], Trace::eCircular );
-			trace.Start( m_current_position );
-			trace.End( position );
-			trace.Clockwise( m_cw_circular_interpolation );
-			trace.I( i_term );
-			trace.J( j_term );
-			trace.Radius( sqrt((i_term * i_term) + (j_term * j_term)) );
+                Trace trace( m_aperture_table[m_active_aperture], Trace::eCircular );
+                trace.Radius(radius);
+                trace.Start( position );
+                trace.End( position );
+                trace.Clockwise( m_cw_circular_interpolation );
 
-			if(m_area_fill)
-			{
-				m_filled_area_traces.push_back( trace );
-			}
-			else
-			{
-				m_traces.push_back( trace );
-			}
+                if(m_area_fill)
+                {
+                    m_filled_area_traces.push_back( trace );
+                }
+                else
+                {
+                    m_traces.push_back( trace );
+                }
 
-			m_current_position = position;
+                m_current_position = position;
+            }
+            else
+            {
+                // arc
+                // circular interpolation.
+
+                Trace trace( m_aperture_table[m_active_aperture], Trace::eCircular );
+                trace.Start( m_current_position );
+                trace.End( position );
+                trace.Clockwise( m_cw_circular_interpolation );
+                trace.I( i_term );
+                trace.J( j_term );
+                trace.Radius( sqrt((i_term * i_term) + (j_term * j_term)) );
+
+                if(m_area_fill)
+                {
+                    m_filled_area_traces.push_back( trace );
+                }
+                else
+                {
+                    m_traces.push_back( trace );
+                }
+
+                m_current_position = position;
+            }
 		} // End if - then
-		else if (m_full_circular_interpolation)
-		{
-			// full circle
-			// circular interpolation.
-			double radius = sqrt((i_term * i_term) + (j_term * j_term));
-
-			Trace trace( m_aperture_table[m_active_aperture], Trace::eCircular );
-			trace.Radius(radius);
-			trace.Start( position );
-			trace.End( position );
-			trace.Clockwise( m_cw_circular_interpolation );
-
-			if(m_area_fill)
-			{
-				m_filled_area_traces.push_back( trace );
-			}
-			else
-			{
-				m_traces.push_back( trace );
-			}
-
-			m_current_position = position;
-		}
 		else
 		{
 			// linear interpolation.
