@@ -6,6 +6,19 @@ This installation procedure was tested on Ubuntu 10.04 (Lucid Lynx)
 
 If you run into problems, check the notes and comments at the end of this page.
 
+=For Ubuntu 8.04 only=
+The opencascade libraries are not in the ubuntu multiverse for Hardy.  You can get them from opennovation.
+
+First add the following to your /etc/apt/sources.list file
+{{{deb http://www.opennovation.org/ubuntu hardy main contrib non-free}}}
+
+Download the signing key available here
+[http://www.opennovation.org/ubuntu/opennovation.key]
+
+Go into synaptic.  Click the Settings -> repositories menu.
+Click the 'authentication' tab and import the key file you just downloaded.
+
+
 =Install the dependencies=
 
 The following command will install the required packages.  apt-get will prompt you to accept a large number of additional dependencies.  Accept them as well.
