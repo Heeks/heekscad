@@ -10,15 +10,11 @@
 #include "../interface/GripData.h"
 
 class Gripper: public HeeksObj{
-private:
-
 public:
-	gp_Pnt position;
-	wxString prompt;
-	EnumGripperType m_gripper_type;
 	HeeksObj* m_gripper_parent;
+	GripData m_data;
 
-	Gripper(const gp_Pnt& pos, const wxChar* str, EnumGripperType gripper_type, HeeksObj* parent);
+	Gripper(const GripData& data, HeeksObj* parent);
 	virtual ~Gripper(){}
 
 	// HeeksObj's virtual functions
@@ -34,9 +30,6 @@ public:
 	virtual bool OnGripperGrabbed(const std::list<HeeksObj*>& list, bool show_grippers_on_drag, double* from){return false;}
 	virtual void OnGripperMoved(double* from, const double* to){}
 	virtual void OnGripperReleased(const double* from, const double* to){}
-
-	// member functions
-	const wxChar* get_gripper_prompt(){return prompt.c_str();}
 };
 
 #endif
