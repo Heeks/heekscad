@@ -58,3 +58,20 @@ public:
 		SetPicture(m_picture);
 	}
 };
+
+// a class which simply has text
+class TextCanvas: public ObjectCanvas
+{
+public:
+	wxString* m_str;
+	wxTextCtrl* m_text;
+	wxBoxSizer* m_sizer;
+
+	TextCanvas(wxWindow* parent, wxString *str);
+	void SetWithObject(HeeksObj* object);
+	void OnTextCtrlEvent(wxCommandEvent& event);
+	void OnKillFocusEvent( wxFocusEvent& event );
+
+    DECLARE_NO_COPY_CLASS(TextCanvas)
+	DECLARE_EVENT_TABLE()
+};
