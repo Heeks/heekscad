@@ -16,14 +16,16 @@
 #include "SolveSketch.h"
 #include "EndedObject.h"
 
-GripperSelTransform::GripperSelTransform(const gp_Pnt& pos, EnumGripperType gripper_type, void* data, HeeksObj* parent):Gripper(pos, _T(""), gripper_type, parent){
-	m_data = data;
+GripperSelTransform::GripperSelTransform(const GripData& data, HeeksObj* parent):Gripper(data, parent){
 }
 
 bool GripperSelTransform::OnGripperGrabbed(const std::list<HeeksObj*>& list, bool show_grippers_on_drag, double* from){
 	wxGetApp().CreateUndoPoint();
 
-	extract(position, m_initial_grip_pos);
+	m_initial_grip_pos[0] = m_data.m_x;
+	m_initial_grip_pos[1] = m_data.m_y;
+	m_initial_grip_pos[2] = m_data.m_z;
+
 	memcpy(m_from, from, 3*sizeof(double));
 	memcpy(m_last_from, from, 3*sizeof(double));
 	wxGetApp().m_marked_list->gripping = true;
@@ -33,7 +35,7 @@ bool GripperSelTransform::OnGripperGrabbed(const std::list<HeeksObj*>& list, boo
 		m_items_marked_at_grab.push_back(*It);
 		wxGetApp().m_marked_list->set_ignore_onoff(*It, true);
 	}
-	if ( m_gripper_type <= GripperTypeObjectScaleXY )
+	if ( m_data.m_type <= GripperTypeObjectScaleXY )
 	{
 		wxGetApp().CreateTransformGLList(list, show_grippers_on_drag);
 		wxGetApp().m_drag_matrix = gp_Trsf();
@@ -48,11 +50,22 @@ bool GripperSelTransform::OnGripperGrabbed(const std::list<HeeksObj*>& list, boo
 
 
 void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
-	if ( m_gripper_type >= GripperTypeStretch && m_gripper_type <= GripperTypeStretch4)
+	if ( m_data.m_type == GripperTypeStretch)
 	{
 		bool stretch_done = false;
 
-		double shift[3] = {to[0] - from[0], to[1] - from[1], to[2] - from[2]};
+		double shift[3];
+		if(m_data.m_move_relative){
+			shift[0] = to[0] - from[0];
+			shift[1] = to[1] - from[1];
+			shift[2] = to[2] - from[2];
+		}
+		else{
+			shift[0] = to[0] - m_initial_grip_pos[0];
+			shift[1] = to[1] - m_initial_grip_pos[1];
+			shift[2] = to[2] - m_initial_grip_pos[2];
+		}
+
 		{
 			std::list<HeeksObj *>::iterator It;
 			for ( It = m_items_marked_at_grab.begin(); It != m_items_marked_at_grab.end(); It++ )
@@ -60,12 +73,11 @@ void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
 				HeeksObj* object = *It;
 				if(object)
 				{
-					double p[3];
-					extract(position, p);
-					bool stretch_done = object->StretchTemporaryTransformed(p, shift,m_data);
+					double p[3] = {m_data.m_x, m_data.m_y, m_data.m_z};
+					bool stretch_done = object->StretchTemporaryTransformed(p, shift,m_data.m_data);
 					if(wxGetApp().autosolve_constraints && (dynamic_cast<ConstrainedObject*>(object)))
 					{
-						SolveSketch((CSketch*)object->Owner(),object,m_data);
+						SolveSketch((CSketch*)object->Owner(),object,m_data.m_data);
 					}
 					if(stretch_done)break;
 				}
@@ -75,7 +87,9 @@ void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
 		if(stretch_done)
 		{
 			extract(gp_Pnt(make_point(from).XYZ() + make_vector( shift ).XYZ()), from);
-			position = position.XYZ() + make_vector( shift ).XYZ();
+			m_data.m_x += shift[0];
+			m_data.m_y += shift[1];
+			m_data.m_z += shift[2];
 		}
 
 		wxGetApp().Repaint(true);
@@ -103,17 +117,30 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 	for ( std::list<HeeksObj *>::iterator It = m_items_marked_at_grab.begin(); It != m_items_marked_at_grab.end(); It++ )
 	{
 		HeeksObj* object = *It;
-		if ( object == m_gripper_parent && m_gripper_type > GripperTypeScale )
+		if ( object == m_gripper_parent && m_data.m_type > GripperTypeScale )
 		{
-			double shift[3] = {to[0] - m_initial_grip_pos[0], to[1] - m_initial_grip_pos[1], to[2] - m_initial_grip_pos[2]};
+			double shift[3];
+			if(m_data.m_move_relative){
+				shift[0] = to[0] - from[0];
+				shift[1] = to[1] - from[1];
+				shift[2] = to[2] - from[2];
+			}
+			else{
+				shift[0] = to[0] - m_initial_grip_pos[0];
+				shift[1] = to[1] - m_initial_grip_pos[1];
+				shift[2] = to[2] - m_initial_grip_pos[2];
+			}
+
 			{
-				if(object)wxGetApp().DoToolUndoably(new StretchTool(object, m_initial_grip_pos, shift, m_data));
+				if(object)wxGetApp().DoToolUndoably(new StretchTool(object, m_initial_grip_pos, shift, m_data.m_data));
 				if(wxGetApp().autosolve_constraints && (dynamic_cast<ConstrainedObject*>(object)))
 				{
 					SolveSketch((CSketch*)object->Owner());
 				}
 			}
-			position = position.XYZ() + make_vector( shift ).XYZ();
+			m_data.m_x += shift[0];
+			m_data.m_y += shift[1];
+			m_data.m_z += shift[2];
 		}
 		else
 		{
@@ -133,7 +160,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 
 	m_items_marked_at_grab.clear();
 
-	if ( m_gripper_type <= GripperTypeObjectScaleXY )
+	if ( m_data.m_type <= GripperTypeObjectScaleXY )
 	{
 		for(std::list<HeeksObj*>::iterator It = wxGetApp().m_hidden_for_drag.begin(); It != wxGetApp().m_hidden_for_drag.end(); It++)
 		{
@@ -157,7 +184,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 void GripperSelTransform::MakeMatrix ( const double* from, const double* to, const double* object_m, gp_Trsf& mat )
 {
 	mat = gp_Trsf();
-	switch ( m_gripper_type )
+	switch ( m_data.m_type )
 	{
 	case GripperTypeTranslate:
 		mat.SetTranslation ( gp_Vec ( make_point ( from ), make_point ( to ) ) );
@@ -245,7 +272,7 @@ void GripperSelTransform::MakeMatrix ( const double* from, const double* to, con
 			gp_Vec rot_dir = vx ^ vy;
 			rot_dir.Normalize();
 
-			if(m_gripper_type == GripperTypeRotateObject){
+			if(m_data.m_type == GripperTypeRotateObject){
 				// choose the closest object axis to use
 				gp_Trsf object_mat = make_matrix(object_m);
 				gp_Vec object_x = gp_Vec(1, 0, 0).Transformed(object_mat).Normalized();

@@ -16,11 +16,7 @@ static unsigned char square[18] = {0xff, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x8
 static unsigned char cross[18] = {0x80, 0x80, 0x41, 0x00, 0x22, 0x00, 0x14, 0x00, 0x08, 0x00, 0x14, 0x00, 0x22, 0x00, 0x41, 0x00, 0x80, 0x80};
 static unsigned char flower[18] = {0x1c, 0x00, 0x22, 0x00, 0x63, 0x00, 0x94, 0x80, 0x88, 0x80, 0x94, 0x80, 0x63, 0x00, 0x22, 0x00, 0x1c, 0x00};
 
-Gripper::Gripper(const gp_Pnt& pos, const wxChar* str, EnumGripperType gripper_type, HeeksObj* parent){
-	position = pos;
-	prompt = wxString(str);
-	m_gripper_type = gripper_type;
-	m_gripper_parent = parent;
+Gripper::Gripper(const GripData& data, HeeksObj* parent):m_data(data), m_gripper_parent(parent){
 }
 
 void Gripper::glCommands(bool select, bool marked, bool no_color){
@@ -42,9 +38,9 @@ void Gripper::glCommands(bool select, bool marked, bool no_color){
 		};
 
 		for(int i = 0; i<8; i++){
-			p[i][0] += position.X();
-			p[i][1] += position.Y();
-			p[i][2] += position.Z();
+			p[i][0] += m_data.m_x;
+			p[i][1] += m_data.m_y;
+			p[i][2] += m_data.m_z;
 		}
 
 		glBegin(GL_TRIANGLES);
@@ -94,8 +90,8 @@ void Gripper::glCommands(bool select, bool marked, bool no_color){
 	}
 	else
 	{
-		glRasterPos3d(position.X(), position.Y(), position.Z());
-		switch(m_gripper_type){
+		glRasterPos3d(m_data.m_x, m_data.m_y, m_data.m_z);
+		switch(m_data.m_type){
 		case GripperTypeTranslate:
 			glBitmap(16, 15, 8, 7, 10.0, 0.0, translation_circle);
 			break;
@@ -112,16 +108,21 @@ void Gripper::glCommands(bool select, bool marked, bool no_color){
 			glBitmap(14, 16, 9, 11, 10.0, 0.0, angle_circle);
 			break;
 		case GripperTypeStretch:
-			glBitmap(9, 9, 4, 4, 10.0, 0.0, circle);
-			break;
-		case GripperTypeStretch2:
-			glBitmap(9, 9, 4, 4, 10.0, 0.0, square);
-			break;
-		case GripperTypeStretch3:
-			glBitmap(9, 9, 4, 4, 10.0, 0.0, cross);
-			break;
-		case GripperTypeStretch4:
-			glBitmap(9, 9, 4, 4, 10.0, 0.0, flower);
+			switch(m_data.m_alternative_icon)
+			{
+			case 1:
+				glBitmap(9, 9, 4, 4, 10.0, 0.0, square);
+				break;
+			case 2:
+				glBitmap(9, 9, 4, 4, 10.0, 0.0, cross);
+				break;
+			case 3:
+				glBitmap(9, 9, 4, 4, 10.0, 0.0, flower);
+				break;
+			default:
+				glBitmap(9, 9, 4, 4, 10.0, 0.0, circle);
+				break;
+			}
 			break;
 		default:
 			glBitmap(9, 9, 4, 4, 10.0, 0.0, circle);
@@ -132,5 +133,9 @@ void Gripper::glCommands(bool select, bool marked, bool no_color){
 
 void Gripper::ModifyByMatrix(const double *m){
 	gp_Trsf mat = make_matrix(m);
+	gp_Pnt position(m_data.m_x, m_data.m_y, m_data.m_z);
 	position.Transform(mat);
+	m_data.m_x = position.X();
+	m_data.m_y = position.Y();
+	m_data.m_z = position.Z();
 }

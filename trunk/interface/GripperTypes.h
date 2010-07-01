@@ -11,7 +11,4 @@ enum EnumGripperType{
 	GripperTypeObjectScaleXY,
 	GripperTypeAngle,
 	GripperTypeStretch,
-	GripperTypeStretch2,
-	GripperTypeStretch3,
-	GripperTypeStretch4
 };
