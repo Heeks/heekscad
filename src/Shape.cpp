@@ -406,6 +406,12 @@ static HeeksObj* Fuse(HeeksObj* s1, HeeksObj* s2){
 }
 
 static HeeksObj* Common(HeeksObj* s1, HeeksObj* s2){
+	if(s1 == NULL)
+	{
+		wxGetApp().Remove(s2);
+		return NULL;
+	}
+
 	try
 	{
 		TopoDS_Shape sh1, sh2;
@@ -602,14 +608,19 @@ HeeksObj* CShape::FuseShapes(std::list<HeeksObj*> &list_in)
 HeeksObj* CShape::CommonShapes(std::list<HeeksObj*> &list_in)
 {
 	// find common solid ( intersect ) with the first one in the list all the others
-	HeeksObj* s1 = NULL;
+	HeeksObj* s1;
+	bool s1_set = false;
 	std::list<HeeksObj*> list = list_in;
 
 	for(std::list<HeeksObj*>::const_iterator It = list.begin(); It != list.end(); It++){
 		HeeksObj* object = *It;
 		if(object->GetType() == SolidType || object->GetType() == FaceType)
 		{
-			if(s1 == NULL)s1 = object;
+			if(!s1_set)
+			{
+				s1 = object;
+				s1_set = true;
+			}
 			else{
 				s1 = Common(s1, object);
 			}
