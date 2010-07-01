@@ -10,7 +10,7 @@ BEGIN_EVENT_TABLE(TextCanvas, ObjectCanvas)
     EVT_KILL_FOCUS(TextCanvas::OnKillFocusEvent)
 END_EVENT_TABLE()
 
-TextCanvas::TextCanvas(wxWindow* parent, wxString *str) : m_str(str), ObjectCanvas(parent)
+TextCanvas::TextCanvas(wxWindow* parent, wxString *str) : ObjectCanvas(parent), m_str(str)
 {
 	m_text = new wxTextCtrl(this, wxID_ANY, *str, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
 	m_sizer = new wxBoxSizer(wxVERTICAL);
