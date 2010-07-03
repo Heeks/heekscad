@@ -11,11 +11,6 @@ HXml::HXml(TiXmlElement* pElem):m_element(*pElem){
 HXml::~HXml(){
 }
 
-const wxChar* HXml::GetShortString(void)const
-{
-	return Ctt(m_element.Value());
-}
-
 HeeksObj *HXml::MakeACopy(void)const{
 	HXml *new_object = new HXml(*this);
 	return new_object;
