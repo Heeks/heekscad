@@ -31,19 +31,19 @@ private:
 
 	int m_xpos, m_ypos, m_max_xpos;
 	enum TreeButtonType{ ButtonTypePlus, ButtonTypeMinus, ButtonTypeLabelBefore, ButtonTypeLabel };
-	class CTreeButton{public:	TreeButtonType type; wxRect rect; HeeksObj* prev_obj; HeeksObj* obj;};
+	class CTreeButton{public:	TreeButtonType type; wxRect rect; HeeksObj* obj; HeeksObj* paste_into; HeeksObj* paste_before;};
 	std::list<CTreeButton> m_tree_buttons;
 
 	bool IsExpanded(HeeksObj* object);
 	void SetExpanded(HeeksObj* object, bool bExpanded);
 	void RenderBranchIcon(HeeksObj* object, HeeksObj* next_object, bool expanded, int level);
 	void RenderBranchIcons(HeeksObj* object, HeeksObj* next_object, bool expanded, int level);
-	void RenderObject(HeeksObj* prev_object, HeeksObj* object, HeeksObj* next_object, int level);
+	void RenderObject(bool expanded, HeeksObj* prev_object, bool prev_object_expanded, HeeksObj* object, HeeksObj* next_object, int level);
 	void Render(bool just_for_calculation = false); // drawing commands for all the objects
 	const CTreeButton* HitTest( const wxPoint& pt );
 	wxSize GetRenderSize();
 	void AddPlusOrMinusButton(HeeksObj* object, bool plus);
-	void AddLabelButton(HeeksObj* prev_object, HeeksObj* object, HeeksObj* next_object, int label_start_x, int label_end_x);
+	void AddLabelButton(bool expanded, HeeksObj* prev_object, bool prev_object_expanded, HeeksObj* object, HeeksObj* next_object, int label_start_x, int label_end_x);
 	void OnLabelLeftDown(HeeksObj* object, wxMouseEvent& event);
 	void OnLabelRightDown(HeeksObj* object, wxMouseEvent& event);
 	void RenderDraggedList(bool just_for_calculation = false);
