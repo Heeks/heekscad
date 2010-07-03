@@ -15,7 +15,6 @@ public:
 
 	// HeeksObj's virtual functions
 	int GetType()const{return XmlType;}
-	const wxChar* GetShortString(void)const;
 	const wxChar* GetTypeString(void)const{return _("Xml");}
 	HeeksObj *MakeACopy(void)const;
 	const wxBitmap &GetIcon();
