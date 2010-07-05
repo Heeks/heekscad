@@ -1643,6 +1643,29 @@ msgstr "Esquisse en Segments"
 msgid "Simplify Sketch to BSplines"
 msgstr "Esquisse en Courbes de Bézier"
 
+#Ajout 386 Heeksframe.cpp
+msgid "Save As"
+msgstr "Sauver comme"
+
+#Ajout 387 HeeksCNC.cpp
+msgid "New Chamfer Operation..."
+msgstr "Nouvelle Opération Chanfrein"
+
+#Ajout 388 HeeksCNC.cpp
+msgid "New Contour Operation..."
+msgstr "Nouvelle Opération Contournage"
+
+#Ajout 389 HeeksCNC.cpp
+msgid "New Inlay Operation..."
+msgstr "Nouvelle Opération..."
+
+#Ajout 390 HeeksCNC.cpp
+msgid "New Script Operation..."
+msgstr "Nouvelle Opération Script"
+
+#Ajout 391 HeeksCNC.cpp
+msgid "New Probe Grid Operation..."
+msgstr "Nouvelle Opération Réseau de Palpage "
 
 #===============================
 
