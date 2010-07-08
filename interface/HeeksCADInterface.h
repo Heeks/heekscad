@@ -29,6 +29,7 @@ class TransientObject;
 #include "SketchOrder.h"
 
 class TopoDS_Shape;
+class TopoDS_Edge;
 class TopoDS_Wire;
 class TopoDS_Solid;
 class gp_Lin;
@@ -144,6 +145,7 @@ public:
 	virtual bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_or_wire, bool face_not_wire);
 	virtual bool ConvertWireToSketch(const TopoDS_Wire& wire, HeeksObj* sketch, double deviation);
 	virtual HeeksObj* GetSketchFromName(const wxChar* name);
+	virtual bool ConvertSketchToEdges(HeeksObj *object, std::vector<TopoDS_Edge> &edges);
 
 	// body functions
 	virtual long BodyGetNumFaces(HeeksObj* body);

@@ -12,6 +12,7 @@ extern bool ConvertFaceToSketch2(const TopoDS_Face& face, HeeksObj* sketch, doub
 extern bool ConvertWireToSketch(const TopoDS_Wire& wire, HeeksObj* sketch, double deviation);
 extern bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double deviation);
 extern HeeksObj* SplitArcsIntoLittleLines(HeeksObj* sketch);
+extern bool ConvertSketchToEdges(HeeksObj *object, std::vector<TopoDS_Edge> &edges);
 
 class ConvertSketchesToFace: public Tool
 {

@@ -196,10 +196,10 @@ bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wire &wire
 	return false;
 }
 
-bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_or_wire, bool face_not_wire)
-{
 
-	std::list<HeeksObj*> line_arc_list;
+bool ConvertSketchToEdges(HeeksObj *object, std::vector<TopoDS_Edge> &edges)
+{
+    std::list<HeeksObj*> line_arc_list;
 
 	if(object->GetType() == SketchType)
 	{
@@ -211,7 +211,9 @@ bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_o
 			for(std::list<HeeksObj*>::iterator It = new_separate_sketches.begin(); It != new_separate_sketches.end(); It++)
 			{
 				HeeksObj* sketch = *It;
-				if(!ConvertSketchToFaceOrWire(sketch, face_or_wire, face_not_wire))return false;
+				std::vector<TopoDS_Edge> these_edges;
+				if(!ConvertSketchToEdges(sketch, these_edges))return false;
+				std::copy(these_edges.begin(), these_edges.end(), std::inserter( edges, edges.end() ));
 			}
 			return true;
 		}
@@ -229,7 +231,6 @@ bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_o
 	}
 
 	const double max_tolerance = 10.0;
-	std::vector<TopoDS_Edge> edges;
 	for(std::list<HeeksObj*>::const_iterator It = line_arc_list.begin(); It != line_arc_list.end(); It++){
 	    try {
             HeeksObj* object = *It;
@@ -343,7 +344,20 @@ bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_o
 	    }
 	}
 
-	if(edges.size() > 0){
+    return(true);
+}
+
+bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_or_wire, bool face_not_wire)
+{
+    std::vector<TopoDS_Edge> edges;
+
+    if (! ConvertSketchToEdges(object, edges))
+    {
+        return(false);
+    }
+
+	if(edges.size() > 0)
+	{
 	    // It's not enough to add the edges to the wire in an arbitrary order.  If the adjacent edges
 	    // don't connect then the wire ends up losing one of the edges.  We must sort the edge objects
 	    // so that they're connected (or best we can) before constructing the TopoDS_Wire object from
