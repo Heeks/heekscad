@@ -44,11 +44,13 @@
 			<Add option="`wx-config --cxxflags`" />
 			<Add option='-Wall -g -I &quot;./&quot; -I &quot;/usr/include/opencascade&quot; $(WXCFLAGS) -DUNICODE -D__WXGTK__ -DHEEKSCAD -DHAVE_LIMITS -DWXUSINGDLL -DHAVE_LIMITS -DTIXML_USE_STL -DRUNINPLACE -DCODEBLOCKS -DUSE_GENERIC_TREECTRL' />
 			<Add directory="/usr/include/opencascade" />
+			<Add directory="/usr/include/python2.6" />
 		</Compiler>
 		<Linker>
 			<Add option="`wx-config --libs`" />
 			<Add option="`wx-config --gl-libs`" />
 			<Add option="-lTKVRML -lTKSTL -lTKBRep -lTKIGES -lTKShHealing -lTKSTEP -lTKSTEP209 -lTKSTEPAttr -lTKSTEPBase -lTKXSBase -lTKShapeSchema -lFWOSPlugin -lTKBool -lTKCAF -lTKCDF -lTKernel -lTKFeat -lTKFillet -lTKG2d -lTKG3d -lTKGeomAlgo -lTKGeomBase -lTKHLR -lTKMath -lTKOffset -lTKPrim -lTKPShape -lTKService -lTKTopAlgo -lTKV2d -lTKV3d -lTKMesh -lTKAdvTools -lTKBO -lTKXDESTEP -lTKXCAF -lTKXCAFSchema -lTKLCAF -lTKPLCAF -lstdc++ -lGLU -lGL ${WXLIBS}" />
+			<Add option="`python-config --libs`" />
 		</Linker>
 		<Unit filename="interface/Box.h" />
 		<Unit filename="interface/DoubleInput.cpp" />
@@ -222,6 +224,8 @@
 		<Unit filename="src/ObjPropsCanvas.h" />
 		<Unit filename="src/OptionsCanvas.cpp" />
 		<Unit filename="src/OptionsCanvas.h" />
+		<Unit filename="src/OrientationModifier.cpp" />
+		<Unit filename="src/OrientationModifier.h" />
 		<Unit filename="src/Pad.cpp" />
 		<Unit filename="src/Pad.h" />
 		<Unit filename="src/Part.cpp" />
