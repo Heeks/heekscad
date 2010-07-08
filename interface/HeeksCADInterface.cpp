@@ -612,6 +612,12 @@ bool CHeeksCADInterface::ConvertWireToSketch(const TopoDS_Wire& wire, HeeksObj* 
 	return(::ConvertWireToSketch( wire, sketch, deviation ));
 }
 
+bool CHeeksCADInterface::ConvertSketchToEdges(HeeksObj *object, std::vector<TopoDS_Edge> &edges)
+{
+    return(::ConvertSketchToEdges(object, edges));
+}
+
+
 HeeksObj* CHeeksCADInterface::MakePipe(HeeksObj* spine, HeeksObj* profile)
 {
 	return CreatePipeFromProfile(spine,profile);

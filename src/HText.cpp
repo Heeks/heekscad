@@ -25,11 +25,15 @@ HText::~HText(void)
 
 const HText& HText::operator=(const HText &b)
 {
-	ObjList::operator=(b);
-	m_trsf = b.m_trsf;
-	m_text = b.m_text;
-	m_color = b.m_color;
-	m_pFont = b.m_pFont;
+    if (this != &b)
+    {
+        ObjList::operator=(b);
+        m_trsf = b.m_trsf;
+        m_text = b.m_text;
+        m_color = b.m_color;
+        m_pFont = b.m_pFont;
+    }
+
 	return *this;
 }
 
