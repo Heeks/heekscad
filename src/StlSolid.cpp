@@ -24,11 +24,11 @@ CStlTri::CStlTri(const double* t)
 	x[2][2] = (float)t[8];
 }
 
-CStlSolid::CStlSolid(const HeeksColor* col):color(*col), m_gl_list(0){
+CStlSolid::CStlSolid(const HeeksColor* col):m_color(*col), m_gl_list(0){
 	m_title.assign(GetTypeString());
 }
 
-CStlSolid::CStlSolid(const wxChar* filepath, const HeeksColor* col):color(*col), m_gl_list(0){
+CStlSolid::CStlSolid(const wxChar* filepath, const HeeksColor* col):m_color(*col), m_gl_list(0){
 	m_title.assign(GetTypeString());
 	read_from_file(filepath);
 
@@ -134,18 +134,30 @@ CStlSolid::~CStlSolid(){
 
 const CStlSolid& CStlSolid::operator=(const CStlSolid& s)
 {
+    HeeksObj::operator = (s);
+
 	// don't copy id
 	m_box = s.m_box;
 	m_title = s.m_title;
 	KillGLLists();
 
-	color = s.color;
+	m_color = s.m_color;
 
 	m_list.clear();
 	std::copy( s.m_list.begin(), s.m_list.end(), std::inserter( m_list, m_list.begin() ));
 
 	return *this;
 }
+
+bool CStlSolid::IsDifferent(HeeksObj* other)
+{
+	CStlSolid* shape = (CStlSolid*)other;
+	if(shape->m_color.COLORREF_color() != m_color.COLORREF_color() || shape->m_title.CompareTo(m_title) || shape->m_box != m_box)
+		return true;
+
+	return HeeksObj::IsDifferent(other);
+}
+
 
 void CStlSolid::KillGLLists()
 {
@@ -166,7 +178,7 @@ const wxBitmap &CStlSolid::GetIcon()
 
 void CStlSolid::glCommands(bool select, bool marked, bool no_color){
 	glEnable(GL_LIGHTING);
-	Material(color).glMaterial(1.0);
+	Material(m_color).glMaterial(1.0);
 
 	if(m_gl_list)
 	{
@@ -312,7 +324,7 @@ void CStlSolid::WriteXML(TiXmlNode *root)
 	TiXmlElement * element;
 	element = new TiXmlElement( "STLSolid" );
 	root->LinkEndChild( element );
-	element->SetAttribute("col", color.COLORREF_color());
+	element->SetAttribute("col", m_color.COLORREF_color());
 
 	for(std::list<CStlTri>::iterator It = m_list.begin(); It != m_list.end(); It++)
 	{
