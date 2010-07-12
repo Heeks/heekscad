@@ -14,7 +14,7 @@ public:
 
 class CStlSolid:public HeeksObj{
 private:
-	HeeksColor color;
+	HeeksColor m_color;
 	int m_gl_list;
 	CBox m_box;
 	wxString m_title;
@@ -47,6 +47,7 @@ public:
 	void CopyFrom(const HeeksObj* object);
 	HeeksObj *MakeACopy()const;
 	void WriteXML(TiXmlNode *root);
+	bool IsDifferent(HeeksObj* obj);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 
