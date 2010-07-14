@@ -261,7 +261,7 @@ gp_Pnt & COrientationModifier::Transform(gp_Trsf existing_transformation, const 
 					static std::set<double> angles;
 					if (angles.find(angle) == angles.end())
 					{
-						double degrees = angle / (2.0 * PI) * 360.0;
+						//double degrees = angle / (2.0 * PI) * 360.0;
 						angles.insert(angle);
 						printf("angle %lf\n", angle);						
 					}

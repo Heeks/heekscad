@@ -4050,7 +4050,7 @@ static wxColour wxPGAdjustColour(const wxColour& src, int ra,
     if ( forceDifferent && (abs((r+g+b)-(r2+g2+b2)) < abs(ra/2)) )
         dst = wxPGAdjustColour(src,-(ra*2));
     else
-        dst = wxColour(r2,g2,b2);
+        dst = wxColour((unsigned char)r2,(unsigned char)g2,(unsigned char)b2);
 
     // Recursion guard (allow 2 max)
     isinside--;
@@ -4304,7 +4304,7 @@ void wxPropertyGrid::SetCaptionForegroundColour( const wxColour& col )
 
 void wxPropertyGrid::SetBackgroundColourIndex( wxPGProperty* p, int index, int flags )
 {
-    unsigned char ind = index;
+    unsigned char ind = (unsigned char)index;
 
     if ( (p->m_bgColIndex == 0) || (flags & (wxPG_RECURSE_STARTS|wxPG_FORCE)) )
         p->m_bgColIndex = ind;
@@ -4367,7 +4367,7 @@ wxColour wxPropertyGrid::GetPropertyBackgroundColour( wxPGId id ) const
 
 void wxPropertyGrid::SetTextColourIndex( wxPGProperty* p, int index, int flags )
 {
-    unsigned char ind = index;
+    unsigned char ind = (unsigned char)index;
 
     if ( (p->m_fgColIndex == 0) || (flags & (wxPG_RECURSE_STARTS|wxPG_FORCE)) )
         p->m_fgColIndex = ind;
@@ -8852,9 +8852,9 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
         {
             if ( m_windowStyle & wxPG_SPLITTER_AUTO_CENTER )
             {
-                float centerX = float(width) * 0.5;
+                float centerX = (float)(width * 0.5);
 
-                float splitterX = m_fSplitterX + (float(widthDiff) * 0.5);
+                float splitterX = (float)(m_fSplitterX + widthDiff * 0.5);
 
                 float deviation = fabs(centerX - splitterX);
                 //wxLogDebug(wxT("deviation: %.1f"),deviation);
@@ -9089,7 +9089,7 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
 
                             m_dragStatus = 1;
 
-                            m_dragOffset = x - m_splitterx;
+                            m_dragOffset = (unsigned char)(x - m_splitterx);
 
                             wxPG_CLIENT_DC_INIT()
 
@@ -12719,7 +12719,7 @@ int wxPropertyGridState::PrepareToAddItem( wxPGProperty* property,
                 pc = wxPropertyGrid::_GetPropertyCategory(scheduledParent);
 
             if ( pc )
-                greyDepth = pc->GetDepth();
+                greyDepth = (unsigned char)pc->GetDepth();
             else
                 greyDepth = scheduledParent->m_depthBgCol;
         }

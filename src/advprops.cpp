@@ -942,7 +942,7 @@ bool wxSystemColourPropertyClass::QueryColourFromUser( wxPropertyGrid* propgrid,
     int i;
     for ( i = 0; i < 16; i++)
     {
-        wxColour colour(i*16, i*16, i*16);
+        wxColour colour((unsigned char)(i*16), (unsigned char)(i*16), (unsigned char)(i*16));
         data.SetCustomColour(i, colour);
     }
 
@@ -1034,7 +1034,7 @@ bool wxSystemColourPropertyClass::SetValueFromString( const wxString& text, int 
 
         int r, g, b;
         wxSscanf(text.c_str(),wxT("(%i,%i,%i)"),&r,&g,&b);
-        val.m_colour.Set(r,g,b);
+        val.m_colour.Set((unsigned char)r,(unsigned char)g,(unsigned char)b);
 
         wxSystemColourPropertyClass::DoSetValue( &val );
 
