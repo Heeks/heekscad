@@ -608,7 +608,7 @@ HeeksObj* CShape::FuseShapes(std::list<HeeksObj*> &list_in)
 HeeksObj* CShape::CommonShapes(std::list<HeeksObj*> &list_in)
 {
 	// find common solid ( intersect ) with the first one in the list all the others
-	HeeksObj* s1;
+	HeeksObj* s1 = NULL;
 	bool s1_set = false;
 	std::list<HeeksObj*> list = list_in;
 

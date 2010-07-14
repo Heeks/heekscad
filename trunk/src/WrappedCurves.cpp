@@ -275,12 +275,12 @@ void CompoundSegment::DrawDebugLine(gp_Pnt A, gp_Pnt B, int i)
 	wxChar str[100];
 	wxSprintf(str,_T("%d"),i);
 	glPushMatrix();
-	glTranslatef(tpnt1.X(),tpnt1.Y(),tpnt1.Z());
+	glTranslatef((float)tpnt1.X(),(float)tpnt1.Y(),(float)tpnt1.Z());
 	render_text(str);
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(tpnt2.X(),tpnt2.Y(),tpnt2.Z());
+	glTranslatef((float)tpnt2.X(),(float)tpnt2.Y(),(float)tpnt2.Z());
 	render_text(str);
 	glPopMatrix();
 }
