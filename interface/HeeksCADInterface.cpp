@@ -1109,7 +1109,7 @@ const HeeksColor& CHeeksCADInterface::GetBackgroundColor()
 
 void CHeeksCADInterface::SetColor(int r, int b, int g)
 {
-	HeeksColor color(r,b,g);
+	HeeksColor color((unsigned char)r,(unsigned char)b,(unsigned char)g);
 	wxGetApp().current_color = color;
 }
 

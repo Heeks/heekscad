@@ -387,7 +387,7 @@ bool RS274X::ReadParameters( const std::string & parameters )
 
 		while ((_params[0] == 'A') || (_params[0] == 'B'))
 		{
-		    if ((_params[0] = '=') && (_params.size() > 1))
+		    if ((_params[0] == '=') && (_params.size() > 1))
 		    {
 		        _params.erase(0,2);
 		    }

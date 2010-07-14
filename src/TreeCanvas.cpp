@@ -736,7 +736,6 @@ void CTreeCanvas::Render(bool just_for_calculation)
 	while(object)
 	{
 		HeeksObj* next_object = wxGetApp().GetNextChild();
-		HeeksObj* first_child = object->GetFirstChild();
 		bool expanded = IsExpanded(object);
 		RenderObject(expanded, prev_object, prev_object_expanded, object, next_object, 0);
 		prev_object = object;
