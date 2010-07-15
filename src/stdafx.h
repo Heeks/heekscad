@@ -247,3 +247,8 @@ extern "C" {
 #include "Sketch.h"
 #include "Solid.h"
 
+// Visual Studio 2010 work arround
+
+#if _MSC_VER == 1600
+	#include <iterator>
+#endif
