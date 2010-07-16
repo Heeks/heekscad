@@ -1007,7 +1007,18 @@ bool CHeeksCADInterface::LoopIsOuter(HeeksObj* loop)
 
 void CHeeksCADInterface::VertexGetPoint(HeeksObj* vertex, double *d3)
 {
-	memcpy(d3, ((CVertex*)vertex)->m_point, 3*sizeof(double));
+	switch (vertex->GetType())
+	{
+	case VertexType:
+		memcpy(d3, ((CVertex*)vertex)->m_point, 3*sizeof(double));
+		break;
+
+	case PointType:
+		d3[0] = ((HPoint *)vertex)->m_p.X();
+		d3[1] = ((HPoint *)vertex)->m_p.Y();
+		d3[2] = ((HPoint *)vertex)->m_p.Z();
+		break;
+	} // End switch
 }
 
 HeeksObj* CHeeksCADInterface::VertexGetFirstEdge(HeeksObj* vertex)
@@ -1109,7 +1120,7 @@ const HeeksColor& CHeeksCADInterface::GetBackgroundColor()
 
 void CHeeksCADInterface::SetColor(int r, int b, int g)
 {
-	HeeksColor color((unsigned char)r,(unsigned char)b,(unsigned char)g);
+	HeeksColor color(r,b,g);
 	wxGetApp().current_color = color;
 }
 
