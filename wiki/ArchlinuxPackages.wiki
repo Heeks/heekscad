@@ -1,6 +1,8 @@
 #Archlinux AUR Packages
 
-= HeeksCAD and some related projects can be found in AUR =
+= Archlinux AUR Packages =
+
+HeeksCAD and some related projects can be found in AUR.
 
 http://aur.archlinux.org/packages.php?ID=35171
 http://aur.archlinux.org/packages.php?ID=38929
