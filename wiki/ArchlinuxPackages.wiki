@@ -1,4 +1,4 @@
-#Archlinux AUR Packages
+#summary Archlinux AUR Packages
 
 = Archlinux AUR Packages =
 
