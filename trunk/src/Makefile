@@ -23,7 +23,7 @@ endif
 FLAGS_64BIT=$(shell if [ x`getconf LONG_BIT` = x64 ] ; then echo "-D_OCC64 -m64" ; fi )
 
 ifneq ($(strip $(CASROOT)),)
-    CASINCPATH=$(CASROOT)/../inc
+    CASINCPATH=$(CASROOT)/inc
 else
     CASINCPATH=/usr/include/opencascade
 endif
