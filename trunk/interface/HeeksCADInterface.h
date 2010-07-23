@@ -211,6 +211,7 @@ public:
 	virtual HeeksObj* LoopGetFirstEdge(HeeksObj* loop);
 	virtual HeeksObj* LoopGetNextEdge(HeeksObj* loop);
 	virtual HeeksObj* LoopGetEdge(HeeksObj* loop, int index);
+	virtual HeeksObj* LoopGetFace(HeeksObj* loop);
 	virtual bool LoopIsOuter(HeeksObj* loop);
 
 	// vertex functions

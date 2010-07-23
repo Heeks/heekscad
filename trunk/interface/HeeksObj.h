@@ -166,6 +166,7 @@ public:
 	virtual void WriteBaseXML(TiXmlElement *element);
 	virtual void ReadBaseXML(TiXmlElement* element);
 	void SetID(int id);
+	virtual unsigned int GetID(){return m_id;}
 	virtual bool UsesID(){return true;}
 	bool OnVisibleLayer();
 	virtual HeeksObj* Owner();
