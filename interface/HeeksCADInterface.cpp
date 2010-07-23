@@ -1000,6 +1000,11 @@ HeeksObj* CHeeksCADInterface::LoopGetEdge(HeeksObj* loop, int index)
 	return ((CLoop*)loop)->GetEdge(index);
 }
 
+HeeksObj* CHeeksCADInterface::LoopGetFace(HeeksObj* loop)
+{
+	return ((CLoop*)loop)->m_pface;
+}
+
 bool CHeeksCADInterface::LoopIsOuter(HeeksObj* loop)
 {
 	return ((CLoop*)loop)->m_is_outer;
