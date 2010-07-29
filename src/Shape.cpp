@@ -136,7 +136,7 @@ void CShape::CallMesh()
 {
 	double pixels_per_mm = wxGetApp().GetPixelScale();
 	BRepTools::Clean(m_shape);
-	BRepMesh::Mesh(m_shape, 10.0);
+	BRepMesh::Mesh(m_shape, 1/pixels_per_mm);
 }
 
 void CShape::glCommands(bool select, bool marked, bool no_color)
