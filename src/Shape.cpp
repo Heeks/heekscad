@@ -70,7 +70,8 @@ bool CShape::IsDifferent(HeeksObj* other)
 	if(m_creation_time != shape->m_creation_time)
 		return true;
 
-	return ObjList::IsDifferent(other);
+	return false;
+	// don't check all the faces and edges ( m_creation_time should be enough ) return ObjList::IsDifferent(other);
 }
 
 void CShape::Init()
@@ -135,7 +136,7 @@ void CShape::CallMesh()
 {
 	double pixels_per_mm = wxGetApp().GetPixelScale();
 	BRepTools::Clean(m_shape);
-	BRepMesh::Mesh(m_shape, 1/pixels_per_mm);
+	BRepMesh::Mesh(m_shape, 10.0);
 }
 
 void CShape::glCommands(bool select, bool marked, bool no_color)
@@ -754,7 +755,6 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 					add_to->Add(new_object, NULL);
 				}
 			}
-			wxGetApp().Repaint();
 		}
 		else{
 			wxMessageBox(_("STEP import not done!"));
@@ -775,6 +775,11 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 
 		if ( status == IFSelect_RetDone )
 		{
+			Reader.TransferRoots();
+			TopoDS_Shape shape = Reader.OneShape();
+			HeeksObj* new_object = MakeObject(shape, _("IGES shape"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191));
+			add_to->Add(new_object, NULL);
+#if 0
 			Reader.TransferRoots();
 			int num_shapes = Reader.NbShapes();
 			if(num_shapes > 0)
@@ -804,10 +809,10 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 					{
 						HeeksObj* new_object = MakeObject(face_sewing.SewedShape(), _("sewed IGES solid"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191));
 						add_to->Add(new_object, NULL);
-						wxGetApp().Repaint();
 					}
 				}
 			}
+#endif
 
 		}
 		else{

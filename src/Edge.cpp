@@ -37,16 +37,10 @@ void CEdge::glCommands(bool select, bool marked, bool no_color){
 	if(Owner() && Owner()->Owner() && Owner()->Owner()->GetType() == SolidType)
 	{
 		// triangulate a face on the edge first
-		TopTools_IndexedDataMapOfShapeListOfShape lface;
-		TopExp::MapShapesAndAncestors(((CShape*)(Owner()->Owner()))->Shape(),TopAbs_EDGE,TopAbs_FACE,lface);
-		const TopTools_ListOfShape& lfac = lface.FindFromKey(m_topods_edge);
-		Standard_Integer nelem= lfac.Extent();
-		if(nelem == 2){
-			TopTools_ListIteratorOfListOfShape It;
-			It.Initialize(lfac);
-			TopoDS_Face Face1 = TopoDS::Face(It.Value());
+		if(this->m_faces.size() > 0)
+		{
 			TopLoc_Location fL;
-			Handle_Poly_Triangulation facing = BRep_Tool::Triangulation(Face1,fL);
+			Handle_Poly_Triangulation facing = BRep_Tool::Triangulation(m_faces.front()->Face(),fL);
 
 			if(!facing.IsNull())
 			{
