@@ -169,8 +169,6 @@ void DrawFace(TopoDS_Face face,void(*callbackfunc)(const double* x, const double
 		TColgp_Array1OfDir myNormal(Nodes.Lower(), Nodes.Upper());
 
 		SST.Normal(face, pc, myNormal);
-		double Umin, Umax, Vmin, Vmax;
-		BRepTools::UVBounds(face,Umin, Umax, Vmin, Vmax);
 
 		Standard_Integer nnn = facing->NbTriangles();					// nnn : nombre de triangles
 		Standard_Integer nt, n1, n2, n3 = 0;						// nt  : triangle courant
