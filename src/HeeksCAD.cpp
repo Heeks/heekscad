@@ -103,7 +103,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	_CrtSetAllocHook(MyAllocHook);
 #endif
 
-	m_version_number = _T("0 13 1");
+	m_version_number = _T("0 14 0");
 	m_geom_tol = 0.000001;
 	TiXmlBase::SetRequiredDecimalPlaces( DecimalPlaces(m_geom_tol) );	 // Ensure we write XML in enough accuracy to be useful when re-read.
 
@@ -2823,7 +2823,12 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 
 void HeeksCADapp::DeleteMarkedItems()
 {
-	std::list<HeeksObj *> list = m_marked_list->list();
+	std::list<HeeksObj *> list;
+	for(std::list<HeeksObj*>::iterator It = m_marked_list->list().begin(); It != m_marked_list->list().end(); It++)
+	{
+		HeeksObj* object = *It;
+		if(object->CanBeRemoved())list.push_back(object);
+	}
 
 	// clear first, so properties cancel happens first
 	m_marked_list->Clear(false);

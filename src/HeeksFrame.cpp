@@ -796,7 +796,12 @@ static void OnPasteButton( wxCommandEvent& event )
 static void OnDeleteButton( wxCommandEvent& event )
 {
 	wxGetApp().CreateUndoPoint();
-	wxGetApp().Remove(wxGetApp().m_marked_list->list());
+	std::list<HeeksObj *> list;
+	for(std::list<HeeksObj*>::iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
+	{
+		HeeksObj* object = *It;
+		if(object->CanBeRemoved())wxGetApp().Remove(object);
+	}
 	wxGetApp().m_marked_list->Clear(true);
 	wxGetApp().Changed();
 }
