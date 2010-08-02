@@ -1159,6 +1159,21 @@ void CHeeksCADInterface::SplineToBiarcs(HeeksObj* spline, std::list<HeeksObj*> &
 	((HSpline*)spline)->ToBiarcs(new_spans, tolerance);
 }
 
+HeeksObj* CHeeksCADInterface::NewSplineFromPoints(unsigned int num_points, const double* d3)
+{
+	std::list<gp_Pnt> points;
+	unsigned int j = 0;
+	for(unsigned int i = 0; i<num_points; i++)
+	{
+		gp_Pnt p(d3[j++], d3[j++], d3[j++]);
+		points.push_back(p);
+	}
+
+	HSpline* new_object = new HSpline(points, &wxGetApp().current_color);
+
+	return new_object;
+}
+
 bool CHeeksCADInterface::Intersect(const gp_Lin& lin, const gp_Lin& lin2, gp_Pnt &pnt)
 {
 	printf("CHeeksCADInterface::intersect(line,line) called\n");

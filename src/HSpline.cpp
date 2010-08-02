@@ -12,6 +12,7 @@
 #include "HILine.h"
 #include "HArc.h"
 #include "Gripper.h"
+#include <TColgp_HArray1OfPnt.hxx>
 
 CTangentialArc::CTangentialArc(const gp_Pnt &p0, const gp_Vec &v0, const gp_Pnt &p1):m_p0(p0), m_v0(v0), m_p1(p1)
 {
@@ -56,6 +57,28 @@ HSpline::HSpline(const Geom_BSplineCurve &s, const HeeksColor* col):EndedObject(
 
 HSpline::HSpline(Handle_Geom_BSplineCurve s, const HeeksColor* col):EndedObject(col),color(*col){
 	m_spline = s;//Handle(Geom_BSplineCurve)::DownCast(s->Copy());
+	m_spline->D0(0.0, A->m_p);
+	m_spline->D0(1.0, B->m_p);
+}
+
+HSpline::HSpline(const std::list<gp_Pnt> &points, const HeeksColor* col):EndedObject(col),color(*col)
+{
+	Standard_Boolean periodicity = points.front().IsEqual(points.back(), wxGetApp().m_geom_tol);
+
+	unsigned int size = points.size();
+	if(periodicity == Standard_True)size--;
+
+	TColgp_HArray1OfPnt *Array = new TColgp_HArray1OfPnt(1, size);
+
+	unsigned int i = 1;
+	for(std::list<gp_Pnt>::const_iterator It = points.begin(); i <= size; It++, i++)
+	{
+		Array->SetValue(i, *It);
+	}
+
+	GeomAPI_Interpolate anInterpolation(Array, periodicity, Precision::Approximation());
+	anInterpolation.Perform();
+	m_spline = anInterpolation.Curve();
 	m_spline->D0(0.0, A->m_p);
 	m_spline->D0(1.0, B->m_p);
 }

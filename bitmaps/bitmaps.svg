@@ -5712,7 +5712,7 @@
      inkscape:cy="933.88937"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     showgrid="true"
+     showgrid="false"
      inkscape:window-width="1620"
      inkscape:window-height="1002"
      inkscape:window-x="204"
@@ -9660,6 +9660,38 @@
            style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.90849227;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
            d="M 644.16693,110.08531 L 658.58983,110.08531"
            id="path3872" />
+      </g>
+    </g>
+    <g
+       id="g4659"
+       inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\splpts.png"
+       inkscape:export-xdpi="251.59641"
+       inkscape:export-ydpi="251.59641">
+      <path
+         id="path3867"
+         d="M 265.1875,339.25 C 256.27191,339.17689 251.01779,348.95639 252.71875,357 C 252.6001,364.41184 259.95104,370.07499 267.0625,368 C 276.14448,367.16385 285.84001,357.26924 281.0625,348.03125 C 277.94976,342.5891 271.38635,339.09562 265.1875,339.25 z M 265.9375,344.21875 C 271.64224,344.30619 279.95372,349.71083 276.53125,356.21875 C 273.67543,361.75808 264.74356,365.84308 259.4375,361.5 C 255.70627,355.66839 257.06501,343.89867 265.9375,344.21875 z"
+         style="fill:#d0d0d0;fill-opacity:1;fill-rule:evenodd;stroke:#606060;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+      <g
+         transform="translate(25.165036,97.792735)"
+         inkscape:export-ydpi="270"
+         inkscape:export-xdpi="270"
+         inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\point.png"
+         id="g3855">
+        <path
+           style="fill:#8080ff;fill-opacity:1;fill-rule:evenodd;stroke:#0000a0;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M 239,262.36218 L 244,265.36218 L 249,262.36218 L 246,267.36218 L 249,272.36218 L 244,269.36218 L 239,272.36218 L 242,267.36218 L 239,262.36218 z"
+           id="path3857"
+           sodipodi:nodetypes="ccccccccc" />
+        <path
+           style="fill:#8080ff;fill-opacity:1;fill-rule:evenodd;stroke:#0000a0;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M 245,242.36218 L 250,245.36218 L 255,242.36218 L 252,247.36218 L 255,252.36218 L 250,249.36218 L 245,252.36218 L 248,247.36218 L 245,242.36218 z"
+           id="path3860"
+           sodipodi:nodetypes="ccccccccc" />
+        <path
+           style="fill:#8080ff;fill-opacity:1;fill-rule:evenodd;stroke:#0000a0;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M 225,250.36218 L 230,253.36218 L 235,250.36218 L 232,255.36218 L 235,260.36218 L 230,257.36218 L 225,260.36218 L 228,255.36218 L 225,250.36218 z"
+           id="path3862"
+           sodipodi:nodetypes="ccccccccc" />
       </g>
     </g>
   </g>

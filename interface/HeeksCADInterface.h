@@ -242,6 +242,7 @@ public:
 	virtual double GetViewUnits();
 	virtual void SetViewUnits(double units, bool write_to_config);
 	virtual void SplineToBiarcs(HeeksObj* spline, std::list<HeeksObj*> &new_spans, double tolerance);
+	virtual HeeksObj* NewSplineFromPoints(unsigned int num_points, const double* d3); // list of 3 doubles
 
 	// Geometry functions
 	virtual bool Intersect(const gp_Lin& lin, const gp_Lin& lin2, gp_Pnt &pnt);
