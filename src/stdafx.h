@@ -104,6 +104,7 @@
 #include <Geom_Line.hxx>
 #include <Geom_Plane.hxx>
 #include <GeomAPI_IntCS.hxx>
+#include <GeomAPI_Interpolate.hxx>
 #include <GeomAPI_IntSS.hxx>
 #include <GeomAPI_ProjectPointOnCurve.hxx>
 #include <GeomAPI_ProjectPointOnSurf.hxx>
@@ -145,6 +146,7 @@
 #include <TColgp_Array1OfDir.hxx>
 #include <TColgp_Array1OfPnt.hxx>
 #include <TColgp_Array2OfPnt.hxx>
+#include <TColgp_HArray1OfPnt.hxx>
 #include <TColStd_Array1OfInteger.hxx>
 #include <TColStd_Array1OfReal.hxx>
 #include <TopExp.hxx>
@@ -155,13 +157,13 @@
 #include <TopoDS_Solid.hxx>
 #include <TopoDS_Vertex.hxx>
 #include <TopoDS_Wire.hxx>
+#include <TopOpeBRep_FacesIntersector.hxx>
+#include <TopOpeBRepBuild_FuseFace.hxx>
 #include <TopTools_IndexedDataMapOfShapeListOfShape.hxx>
 #include <TopTools_ListIteratorOfListOfShape.hxx>
 #include <TopTools_MapIteratorOfMapOfShape.hxx>
 #include <TopTools_MapOfShape.hxx>
 #include <UnitsAPI.hxx>
-#include <TopOpeBRep_FacesIntersector.hxx>
-#include <TopOpeBRepBuild_FuseFace.hxx>
 
 
 #include <wx/wx.h>

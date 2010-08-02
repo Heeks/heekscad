@@ -36,6 +36,7 @@
 #include "Plugins.h"
 #include "HeeksConfig.h"
 #include "AboutBox.h"
+#include "HSpline.h"
 
 using namespace std;
 
@@ -519,6 +520,24 @@ static void OnPointsButton( wxCommandEvent& WXUNUSED( event ) )
 {
 	wxGetApp().CreateUndoPoint();
 	wxGetApp().SetInputMode(&point_drawing);
+	wxGetApp().Changed();
+}
+
+static void OnSplinePointsButton( wxCommandEvent& WXUNUSED( event ) )
+{
+	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 3, PointType, 0, _("Pick three or more points to be splined"), _("Spline Through Points")))return;
+	wxGetApp().CreateUndoPoint();
+	std::list<gp_Pnt> points;
+	for(std::list<HeeksObj*>::iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
+	{
+		HeeksObj* object = *It;
+		if(object->GetType() == PointType)
+		{
+			points.push_back(((HPoint*)object)->m_p);
+		}
+	}
+	HSpline* new_object = new HSpline(points, &wxGetApp().current_color);
+	wxGetApp().Add(new_object, NULL);
 	wxGetApp().Changed();
 }
 
@@ -1642,6 +1661,7 @@ void CHeeksFrame::MakeMenus()
 	AddMenuItem(geometry_menu, _("Draw Ellipses"), ToolImage(_T("circles")), OnEllipseButton);
 	AddMenuItem(geometry_menu, _("Draw Infinite Lines"), ToolImage(_T("iline")), OnILineButton);
 	AddMenuItem(geometry_menu, _("Draw Points"), ToolImage(_T("point")), OnPointsButton);
+	AddMenuItem(geometry_menu, _("Spline Through Points"), ToolImage(_T("splpts")), OnSplinePointsButton);
 	geometry_menu->AppendSeparator();
 	AddMenuItem(geometry_menu, _("Add Text"), ToolImage(_T("text")), OnTextButton);
 	AddMenuItem(geometry_menu, _("Add Dimension"), ToolImage(_T("dimension")), OnDimensioningButton);
@@ -1775,6 +1795,7 @@ void CHeeksFrame::AddToolBars()
 		CFlyOutList flyout_list(_T("OtherDrawing"));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("ILine"), ToolImage(_T("iline")), _("Start Drawing Infinite Lines"), OnILineButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("Points"), ToolImage(_T("point")), _("Start Drawing Points"), OnPointsButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Spline"), ToolImage(_T("splpts")), _("Spline Through Points"), OnSplinePointsButton));
 		AddToolBarFlyout(m_geometryBar, flyout_list);
 	}
 
