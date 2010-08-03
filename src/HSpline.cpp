@@ -117,10 +117,14 @@ void HSpline::GetSegments(void(*callbackfunc)(const double *p), double pixels_pe
 {
 
 	//TODO: calculate length
+	double u0 = m_spline->FirstParameter();
+	double u1 = m_spline->LastParameter();
+	double uw = u1 - u0;
+
 	gp_Pnt p0, phalf, p1;
-	m_spline->D0(0.0, p0);
-	m_spline->D0(0.5, phalf);
-	m_spline->D0(1.0, p1);
+	m_spline->D0(u0, p0);
+	m_spline->D0(u0 + uw*0.5, phalf);
+	m_spline->D0(u1, p1);
 	double approx_length = p0.Distance(phalf) + phalf.Distance(p1);
 
 	int segments = (int)(fabs(pixels_per_mm * approx_length + 1));
@@ -129,7 +133,7 @@ void HSpline::GetSegments(void(*callbackfunc)(const double *p), double pixels_pe
 	for(int i = 0; i <= segments; i++)
     {
 		gp_Pnt p;
-		m_spline->D0(i / (double)segments,p);
+		m_spline->D0(u0 + ((double)i / segments) * uw,p);
 		extract(p, pp);
 		(*callbackfunc)(pp);
     } 
@@ -198,7 +202,7 @@ void HSpline::GetGripperPositions(std::list<GripData> *list, bool just_for_endof
 		for(int i=1; i <= m_spline->NbPoles(); i++)
 		{
 			gp_Pnt pole = m_spline->Pole(i);
-			list->push_back(GripData(GripperTypeStretch,pole.X(),pole.Y(),pole.Z(),NULL));
+			list->push_back(GripData(GripperTypeStretch,pole.X(),pole.Y(),pole.Z(),NULL, true));
 		}
 	} 
 }
