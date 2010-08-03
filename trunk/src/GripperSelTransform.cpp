@@ -74,22 +74,26 @@ void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
 				if(object)
 				{
 					double p[3] = {m_data.m_x, m_data.m_y, m_data.m_z};
-					bool stretch_done = object->StretchTemporaryTransformed(p, shift,m_data.m_data);
+					stretch_done = object->StretchTemporaryTransformed(p, shift,m_data.m_data);
 					if(wxGetApp().autosolve_constraints && (dynamic_cast<ConstrainedObject*>(object)))
 					{
 						SolveSketch((CSketch*)object->Owner(),object,m_data.m_data);
 					}
-					if(stretch_done)break;
 				}
 			}
 		}
 		
 		if(stretch_done)
 		{
-			extract(gp_Pnt(make_point(from).XYZ() + make_vector( shift ).XYZ()), from);
 			m_data.m_x += shift[0];
 			m_data.m_y += shift[1];
 			m_data.m_z += shift[2];
+			from[0] += shift[0];
+			from[1] += shift[1];
+			from[2] += shift[2];
+			m_initial_grip_pos[0] += shift[0];
+			m_initial_grip_pos[1] += shift[1];
+			m_initial_grip_pos[2] += shift[2];
 		}
 
 		wxGetApp().Repaint(true);
