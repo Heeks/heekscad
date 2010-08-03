@@ -213,6 +213,28 @@ const std::list<HeeksObj*>& CHeeksCADInterface::GetMarkedList(void)
 	return wxGetApp().m_marked_list->list();
 }
 
+unsigned long CHeeksCADInterface::GetMarkedListSize()
+{
+	return wxGetApp().m_marked_list->list().size();
+}
+
+std::list<HeeksObj *>::iterator MarkedObjectIt;
+
+HeeksObj* CHeeksCADInterface::GetFirstMarkedObject()
+{
+	if (wxGetApp().m_marked_list->list().size()==0) return NULL;
+	MarkedObjectIt = wxGetApp().m_marked_list->list().begin();
+	return *MarkedObjectIt;
+}
+
+HeeksObj* CHeeksCADInterface::GetNextMarkedObject()
+{
+	if (wxGetApp().m_marked_list->list().size()==0 || MarkedObjectIt==wxGetApp().m_marked_list->list().end()) return NULL;
+	MarkedObjectIt++;
+	if (MarkedObjectIt==wxGetApp().m_marked_list->list().end()) return NULL;
+	return *MarkedObjectIt;
+}
+
 bool CHeeksCADInterface::GetArcCentre(HeeksObj* object, double* c)
 {
 	switch (object->GetType())
