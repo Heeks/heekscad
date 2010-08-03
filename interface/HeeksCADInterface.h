@@ -68,6 +68,9 @@ public:
 	virtual wxString GetResFolder();
 	virtual HeeksObj* GetMainObject();
 	virtual const std::list<HeeksObj*>& GetMarkedList();
+	virtual unsigned long GetMarkedListSize();
+	virtual HeeksObj* GetFirstMarkedObject();
+	virtual HeeksObj* GetNextMarkedObject();
 	virtual bool GetArcCentre(HeeksObj* object, double* c);
 	virtual bool GetArcAxis(HeeksObj* object, double* a);
 	virtual double CircleGetRadius(HeeksObj* object);
