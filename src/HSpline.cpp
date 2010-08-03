@@ -12,7 +12,6 @@
 #include "HILine.h"
 #include "HArc.h"
 #include "Gripper.h"
-#include <TColgp_HArray1OfPnt.hxx>
 
 CTangentialArc::CTangentialArc(const gp_Pnt &p0, const gp_Vec &v0, const gp_Pnt &p1):m_p0(p0), m_v0(v0), m_p1(p1)
 {
@@ -51,14 +50,14 @@ HSpline::HSpline(const HSpline &s):EndedObject(&s.color){
 
 HSpline::HSpline(const Geom_BSplineCurve &s, const HeeksColor* col):EndedObject(col),color(*col){
 	m_spline = Handle(Geom_BSplineCurve)::DownCast(s.Copy());	
-	m_spline->D0(0.0, A->m_p);
-	m_spline->D0(1.0, B->m_p);
+	m_spline->D0(m_spline->FirstParameter(), A->m_p);
+	m_spline->D0(m_spline->LastParameter() , B->m_p);
 }
 
 HSpline::HSpline(Handle_Geom_BSplineCurve s, const HeeksColor* col):EndedObject(col),color(*col){
 	m_spline = s;//Handle(Geom_BSplineCurve)::DownCast(s->Copy());
-	m_spline->D0(0.0, A->m_p);
-	m_spline->D0(1.0, B->m_p);
+	m_spline->D0(m_spline->FirstParameter(), A->m_p);
+	m_spline->D0(m_spline->LastParameter() , B->m_p);
 }
 
 HSpline::HSpline(const std::list<gp_Pnt> &points, const HeeksColor* col):EndedObject(col),color(*col)
@@ -79,8 +78,8 @@ HSpline::HSpline(const std::list<gp_Pnt> &points, const HeeksColor* col):EndedOb
 	GeomAPI_Interpolate anInterpolation(Array, periodicity, Precision::Approximation());
 	anInterpolation.Perform();
 	m_spline = anInterpolation.Curve();
-	m_spline->D0(0.0, A->m_p);
-	m_spline->D0(1.0, B->m_p);
+	m_spline->D0(m_spline->FirstParameter(), A->m_p);
+	m_spline->D0(m_spline->LastParameter() , B->m_p);
 }
 
 HSpline::~HSpline(){
@@ -187,10 +186,14 @@ void HSpline::ModifyByMatrix(const double* m){
 void HSpline::GetBox(CBox &box){
 	//TODO: get rid of magic number
 	double pp[3];
+	double u0 = m_spline->FirstParameter();
+	double u1 = m_spline->LastParameter();
+	double uw = u1 - u0;
+
 	for(int i = 0; i <= 100; i++)
     {
 		gp_Pnt p;
-		m_spline->D0(i * .01,p);
+		m_spline->D0(u0 + uw * .01,p);
 		extract(p, pp);
 		box.Insert(pp);
     } 
@@ -529,7 +532,7 @@ void HSpline::CreateArcs(const gp_Pnt &p_start, const gp_Vec &v_start, double t_
 bool HSpline::GetStartPoint(double* pos)
 {
 	gp_Pnt p;
-	m_spline->D0(0.0, p);
+	m_spline->D0(m_spline->FirstParameter(), p);
 	extract(p, pos);
 	return true;
 }
@@ -537,7 +540,7 @@ bool HSpline::GetStartPoint(double* pos)
 bool HSpline::GetEndPoint(double* pos)
 {
 	gp_Pnt p;
-	m_spline->D0(1.0, p);
+	m_spline->D0(m_spline->LastParameter(), p);
 	extract(p, pos);
 	return true;
 }
@@ -551,8 +554,8 @@ void HSpline::ToBiarcs(std::list<HeeksObj*> &new_spans, double tolerance)
 	gp_Vec v_start;
 	gp_Pnt p_end;
 	gp_Vec v_end;
-	m_spline->D1(0.0, p_start, v_start);
-	CreateArcs(p_start, v_start, 0.0, 1.0, p_end, v_end);
+	m_spline->D1(m_spline->FirstParameter(), p_start, v_start);
+	CreateArcs(p_start, v_start, m_spline->FirstParameter(), m_spline->LastParameter(), p_end, v_end);
 }
 
 void HSpline::Reverse()

@@ -54,7 +54,7 @@ void PickCreateRuledSurface()
 	}
 }
 
-HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_or_angle, bool solid_if_possible, bool revolution_not_extrusion)
+HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_or_angle, bool solid_if_possible, bool revolution_not_extrusion, bool add_new_objects)
 {
 	std::list<TopoDS_Shape> faces_or_wires;
 
@@ -103,7 +103,10 @@ HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_o
 		for(std::list<TopoDS_Shape>::iterator It = new_shapes.begin(); It != new_shapes.end(); It++){
 			TopoDS_Shape& shape = *It;
 			new_object = CShape::MakeObject(shape, revolution_not_extrusion ? _("Revolved Solid") : _("Extruded Solid"), SOLID_TYPE_UNKNOWN, wxGetApp().current_color);
-			wxGetApp().Add(new_object, NULL);
+			if(add_new_objects)
+				wxGetApp().Add(new_object, NULL);
+			else
+				break;
 		}
 		wxGetApp().Repaint();
 	}
