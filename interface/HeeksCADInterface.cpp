@@ -655,11 +655,11 @@ bool CHeeksCADInterface::ReOrderSketch(HeeksObj* sketch, SketchOrderType new_ord
 	return ((CSketch*)sketch)->ReOrderSketch(new_order);
 }
 
-HeeksObj* CHeeksCADInterface::ExtrudeSketch(HeeksObj* sketch, double height)
+HeeksObj* CHeeksCADInterface::ExtrudeSketch(HeeksObj* sketch, double height, bool try_to_make_solid)
 {
 	std::list<HeeksObj*>list;
 	list.push_back(sketch);
-	return CreateExtrusionOrRevolution(list,height, true, false);
+	return CreateExtrusionOrRevolution(list,height, try_to_make_solid, false);
 }
 
 void CHeeksCADInterface::ExtractSeparateSketches(HeeksObj* sketch, std::list<HeeksObj*> &new_separate_sketches, const bool allow_individual_objects)
@@ -1187,7 +1187,10 @@ HeeksObj* CHeeksCADInterface::NewSplineFromPoints(unsigned int num_points, const
 	unsigned int j = 0;
 	for(unsigned int i = 0; i<num_points; i++)
 	{
-		gp_Pnt p(d3[j++], d3[j++], d3[j++]);
+		double x = d3[j++];
+		double y = d3[j++];
+		double z = d3[j++];
+		gp_Pnt p(x, y, z);
 		points.push_back(p);
 	}
 
