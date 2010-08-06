@@ -72,9 +72,9 @@ public:
 	void ReLinkSketch();
 	void ReverseSketch();
 	void ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketches, const bool allow_individual_objects = false);
-
 	int Intersects(const HeeksObj *object, std::list< double > *rl) const;
 	HeeksObj *Parallel( const double distance );
+	bool FilletAtPoint(const gp_Pnt& p, double rad);
 	static void ReverseObject(HeeksObj* object);
 };
 

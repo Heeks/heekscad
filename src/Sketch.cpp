@@ -1024,3 +1024,57 @@ bool CSketch::operator==( const CSketch & rhs ) const
 
 	return(ObjList::operator==(rhs));
 }
+
+static bool FindClosestVertex(const gp_Pnt& p, const TopoDS_Face &face, TopoDS_Vertex &closest_vertex)
+{
+	// find closest vertex
+	TopExp_Explorer ex1;
+	double best_dist = -1;
+
+	for(ex1.Init(face,TopAbs_VERTEX); ex1.More(); ex1.Next())
+	{
+		TopoDS_Vertex Vertex =TopoDS::Vertex(ex1.Current());
+		gp_Pnt pos = BRep_Tool::Pnt(Vertex);
+		double d = pos.Distance(p);
+		if(best_dist < 0 || d < best_dist)
+		{
+			best_dist = d;
+			closest_vertex = Vertex;
+		}
+	}
+
+	return best_dist > -0.1;
+}
+
+bool CSketch::FilletAtPoint(const gp_Pnt& p, double rad)
+{
+	std::list<TopoDS_Shape> faces;
+	bool fillet_done = false;
+
+	if(ConvertSketchToFaceOrWire(this, faces, true))
+	{
+		for(std::list<TopoDS_Shape>::iterator It2 = faces.begin(); It2 != faces.end(); It2++)
+		{
+			TopoDS_Shape& shape = *It2;
+			if(shape.ShapeType() != TopAbs_FACE)continue;
+			const TopoDS_Face& face = TopoDS::Face(shape);
+			BRepFilletAPI_MakeFillet2d fillet(face);
+			TopoDS_Vertex Vertex;
+			if(!FindClosestVertex(p, face, Vertex))continue;
+			fillet.AddFillet(Vertex, rad);
+			if(fillet.Status() != ChFi2d_IsDone)continue;
+			const TopoDS_Shape& new_shape = fillet.Shape();
+			if(new_shape.ShapeType() != TopAbs_FACE)continue;
+			const TopoDS_Face& new_face = TopoDS::Face(new_shape);
+			HeeksObj* new_object = new CSketch();
+			if(ConvertFaceToSketch2(new_face, new_object, FaceToSketchTool::deviation))
+			{
+				*this = *((CSketch*)new_object);
+				delete new_object;
+				fillet_done = true;
+			}
+		}
+	}
+
+	return fillet_done;
+}

@@ -149,6 +149,7 @@ public:
 	virtual bool ConvertWireToSketch(const TopoDS_Wire& wire, HeeksObj* sketch, double deviation);
 	virtual HeeksObj* GetSketchFromName(const wxChar* name);
 	virtual bool ConvertSketchToEdges(HeeksObj *object, std::vector<TopoDS_Edge> &edges);
+	virtual bool FilletSketchAtPoint(HeeksObj* sketch, const double* d3, double rad);
 
 	// body functions
 	virtual long BodyGetNumFaces(HeeksObj* body);
