@@ -659,7 +659,7 @@ HeeksObj* CHeeksCADInterface::ExtrudeSketch(HeeksObj* sketch, double height, boo
 {
 	std::list<HeeksObj*>list;
 	list.push_back(sketch);
-	return CreateExtrusionOrRevolution(list,height, try_to_make_solid, false);
+	return CreateExtrusionOrRevolution(list,height, try_to_make_solid, false, false);
 }
 
 void CHeeksCADInterface::ExtractSeparateSketches(HeeksObj* sketch, std::list<HeeksObj*> &new_separate_sketches, const bool allow_individual_objects)
@@ -679,6 +679,11 @@ HeeksObj* CHeeksCADInterface::GetSketchFromName(const wxChar* name)
 	}
 
 	return NULL;
+}
+
+bool CHeeksCADInterface::FilletSketchAtPoint(HeeksObj* sketch, const double* d3, double rad)
+{
+	return ((CSketch*)sketch)->FilletAtPoint(make_point(d3), rad);
 }
 
 long CHeeksCADInterface::BodyGetNumFaces(HeeksObj* body)
