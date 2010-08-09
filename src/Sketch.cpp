@@ -1046,6 +1046,8 @@ static bool FindClosestVertex(const gp_Pnt& p, const TopoDS_Face &face, TopoDS_V
 	return best_dist > -0.1;
 }
 
+#undef Status
+
 bool CSketch::FilletAtPoint(const gp_Pnt& p, double rad)
 {
 	std::list<TopoDS_Shape> faces;
