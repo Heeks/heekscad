@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: HeeksCAD 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 13:41+0200\n"
-"PO-Revision-Date: 2010-08-10 12:11+0100\n"
+"PO-Revision-Date: 2010-08-11 01:23+0100\n"
 "Last-Translator: hans <fungunner2@frreenet.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -2562,4 +2562,16 @@ msgstr "Punkte mit Splines verbinden"
 
 msgid "Drag to move view"
 msgstr "Mit linker Maustaste veschieben"
+
+msgid "Pick one or more sketches, faces or circles, to create a revolved body from"
+msgstr "Waehle mindestens 1 Zeichnung/Oberflaeche oder Kreis um einen Rotationskoerper zu erstellen"
+
+msgid "hold down Ctrl key to select more than one solid"
+msgstr "( CTRL-Taste um mehrere Objekte zu markieren )"
+
+msgid "Pick two or more sketches, to create a lofted solid between"
+msgstr "Min. 2 Zeichnungen waehlen die miteinander verbunden werden sollen"
+
+msgid "Pick one or more sketches, faces or circles, to create an extruded body from"
+msgstr "Min. 1 Zeichnung/Oberfläche waehlen die in einen 3D Körper umgewandelt werden soll"
 
