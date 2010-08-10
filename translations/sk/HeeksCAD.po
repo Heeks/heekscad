@@ -1,0 +1,2481 @@
+# Slovak translation of HeeksCAD.
+# Copyright (C) 2009 THE HeeksCAD'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the HeeksCAD package.
+# Hans <fungunner2@freenet.de>, 2009.
+# , fuzzy
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: HeeksCAD 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-08-02 13:41+0200\n"
+"PO-Revision-Date: 2010-08-02 01:28+0100\n"
+"Last-Translator: Peter Fodrek <peter.fodrek@rtsystems.sk>\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "centre pos"
+msgstr "pozícia stredu"
+
+msgid "direction"
+msgstr "smer"
+
+msgid "x direction"
+msgstr "smer osi X"
+
+msgid "r1"
+msgstr "r1"
+
+msgid "r2"
+msgstr "r2"
+
+msgid "height"
+msgstr "výška"
+
+msgid "cone must not have both radiuses the same"
+msgstr "Kužel nemôže mať rovnaké oba polomery rezov"
+
+msgid "Fatal Error converting sketch to face"
+msgstr "Fatálna chyba pri transformácii výkresu na plochu"
+
+msgid "Set position and orientation by picking 3 points"
+msgstr "Nastavte pozíciu a orientáciu pomocou vyznačenia troch bodov"
+
+msgid "Set this coordinate system as the active one"
+msgstr "Nastav súradnicový systém ako aktívny"
+
+msgid "Set world coordinate system active"
+msgstr "Nastav hlavný súradnicový systém ako aktívny"
+
+msgid "position"
+msgstr "Pozíca"
+
+msgid "x axis"
+msgstr "os X"
+
+msgid "y axis"
+msgstr "os Y"
+
+msgid "Vertical Angle"
+msgstr "Vertikálny uhol"
+
+msgid "Horizontal Angle"
+msgstr "Horizontálny uhol"
+
+msgid "Twist Angle"
+msgstr "Uhol otočenia"
+
+msgid "Pick the location"
+msgstr "Vyberte miesto"
+
+msgid "Pick a point on the x-axis"
+msgstr "Vyberte miesto na osi X"
+
+msgid "Pick a point where y > 0"
+msgstr "Vyberte miesto, kde platí, že y>0"
+
+msgid "datum corner"
+msgstr "indikátor súradnicovej sústavy"
+
+msgid "width ( x )"
+msgstr "šírka x"
+
+msgid "height( y )"
+msgstr "výška y"
+
+msgid "depth ( z )"
+msgstr "hrúbka z"
+
+msgid "radius"
+msgstr "polomer"
+
+msgid "Digitize Mode"
+msgstr "Režim zmeny na číslicové údaje"
+
+msgid "X"
+msgstr "X"
+
+msgid "Y"
+msgstr "Y"
+
+msgid "Z"
+msgstr "Z"
+
+msgid "Error! The 'Stop Picking' button shouldn't have been available!"
+msgstr "Chyba! Tlačidlo ukončenia označovania by nemalo byt dostupné "
+
+msgid "Stop Picking"
+msgstr "Označovanie pozastavené"
+
+msgid "Finish picking"
+msgstr "Označovanie ukončené"
+
+msgid "between two points"
+msgstr "medzi dvoma bodmi"
+
+msgid "orthogonal"
+msgstr "ortognálne"
+
+msgid "mode"
+msgstr "režim"
+
+msgid "Stop drawing"
+msgstr "Kreslenie prerušené"
+
+msgid "Finish drawing"
+msgstr "Kreslenie ukončené"
+
+msgid "Add point"
+msgstr "Pridá bod"
+
+msgid "Add a point to drawing"
+msgstr "pridá bod do kresby"
+
+msgid "Get Position"
+msgstr "Zistí polohu"
+
+msgid "Pick position without adding to the drawing"
+msgstr "Označte pozíciu, ktorá sa nepridá do kresby"
+
+msgid "Blend"
+msgstr "Vyhladzovanie hrán"
+
+msgid "Enter Blend Radius"
+msgstr "Vložte polomer vyhladzovania hrán"
+
+msgid "Radius"
+msgstr "Polomer"
+
+msgid "Solid with edge blend"
+msgstr "Teleso s vyhladenými hranami"
+
+msgid "A fatal error happened during Blend"
+msgstr "Fatálna chyba počas vyhladzovania: Chybný polomer vyhladzovania"
+
+msgid "surface type"
+msgstr "Typ povrchu"
+
+msgid "Make Sketch"
+msgstr "Vytvor výkres z kresby"
+
+msgid "unknown"
+msgstr "neznámy/neznáma/neznáme"
+
+msgid "plane"
+msgstr "rovina"
+
+msgid "cylinder"
+msgstr "valec/cylinder"
+
+msgid "cone"
+msgstr "kužel"
+
+msgid "sphere"
+msgstr "guľa"
+
+msgid "torus"
+msgstr "skrut"
+
+msgid "bezier"
+msgstr "bezier"
+
+msgid "bspline"
+msgstr "b-splajn"
+
+msgid "revolution"
+msgstr "otočenie"
+
+msgid "extrusion"
+msgstr "vytiahnutie 2D obrazca na 3D teleso"
+
+msgid "offset"
+msgstr "posunutie"
+
+msgid "start"
+msgstr "Štart"
+
+msgid "end"
+msgstr "Koniec čiary"
+
+msgid "centre"
+msgstr "Stred"
+
+msgid "axis"
+msgstr "os"
+
+msgid "length"
+msgstr "dĺžka"
+
+msgid ".orientation"
+msgstr "orientácia"
+
+msgid "major radius"
+msgstr "hlavný/vačší polomer"
+
+msgid "minor radius"
+msgstr "vedľaší menší polomer"
+
+msgid "rotation"
+msgstr "otočenie"
+
+msgid "start angle"
+msgstr "štartovací uhol"
+
+msgid "end angle"
+msgstr "koncový uhol"
+
+msgid "Length"
+msgstr "Dĺžka"
+
+msgid "Picture - "
+msgstr "Obrázok-"
+
+msgid "%s %d"
+msgstr "%s %d"
+
+msgid "Knot"
+msgstr "spojiť"
+
+msgid "Pole"
+msgstr "Tyč"
+
+msgid "Weight"
+msgstr "Hmotnosť"
+
+msgid "Untitled"
+msgstr "Bez mena"
+
+msgid "This is not an SVG document!"
+msgstr "Toto nie je dokument vo formáteSVG"
+
+msgid "Invalid file type chosen"
+msgstr "Zvolili ste nesprávny typ súboru"
+
+msgid "expecting"
+msgstr "čakacia"
+
+msgid "couldn't open file"
+msgstr "Nemôžem otvoriť súbor"
+
+msgid "Save graphical data file"
+msgstr "Uložiť súbor s grafickými dátami"
+
+msgid "Exit Full Screen Mode"
+msgstr "Opustiť celoobrazovkový režim"
+
+msgid "Show Full Screen"
+msgstr "Spustiť celoobrazovkový režim"
+
+msgid "view options"
+msgstr "Voľby pohľadov"
+
+msgid "stay upright"
+msgstr "zostať v kolmej polohe"
+
+msgid "free"
+msgstr "voľný/slobodný"
+
+msgid "rotate mode"
+msgstr "režim otáčania"
+
+msgid "none"
+msgstr "žiadna pomoc"
+
+msgid "input mode title"
+msgstr "meno vkladacieho eržimu"
+
+msgid "full help"
+msgstr "úplny pomocník"
+
+msgid "screen text"
+msgstr "text na obrazovke"
+
+msgid "antialiasing"
+msgstr "antialiasing"
+
+msgid "fixed light"
+msgstr "pevné osvetlenie"
+
+msgid "reverse mouse wheel"
+msgstr "koliesko myši v opačnom smere"
+
+msgid "reverse zooming mode"
+msgstr "oddetailnenie (odzoomovanie)"
+
+msgid "Ctrl key does rotate"
+msgstr "Kláves Ctrl uskutoční rotáciu"
+
+msgid "show datum"
+msgstr "zobraz dátum"
+
+msgid "datum is solid"
+msgstr "Dátum považuj za teleso"
+
+msgid "datum size"
+msgstr "Rozmer úfaja"
+
+msgid "datum size is pixels not mm"
+msgstr "roznmer ňudaja v mm"
+
+msgid "show ruler"
+msgstr "ukáž pravítko"
+
+msgid "background color"
+msgstr "farba pozadia"
+
+msgid "no grid"
+msgstr "žiadna mriežka"
+
+msgid "faint color"
+msgstr "zoslabiť farbu"
+
+msgid "alpha blending"
+msgstr "alfa blending"
+
+msgid "colored alpha blending"
+msgstr "farebný alfa blending"
+
+msgid "grid mode"
+msgstr "režim zobrazenej mriežky"
+
+msgid "perspective"
+msgstr "perspektíva"
+
+msgid "tool icon size"
+msgstr "Veľkosť ikon nástrojov"
+
+msgid "mm"
+msgstr "mm"
+
+msgid "inch"
+msgstr "palec/palcov"
+
+msgid "units"
+msgstr "jednotky"
+
+msgid "digitizing"
+msgstr "Prevod na čísla"
+
+msgid "intersection"
+msgstr "priesečník"
+
+msgid "midpoint"
+msgstr "bod v strede"
+
+msgid "nearest"
+msgstr "najbližší bod objektu"
+
+msgid "tangent"
+msgstr "dotyčnica"
+
+msgid "radius for undefined circles"
+msgstr "polomer nedifinovaných kruhov"
+
+msgid "coordinates"
+msgstr "súradnice"
+
+msgid "screen"
+msgstr "obrazovka"
+
+msgid "grid size"
+msgstr "rozostup mriežky"
+
+msgid "snap to grid"
+msgstr "prichytiť k mriežke"
+
+msgid "drawing"
+msgstr "kreslenie"
+
+msgid "current color"
+msgstr "aktuálne vybraná farba"
+
+msgid "construction color"
+msgstr "definícia farby"
+
+msgid "geometry tolerance"
+msgstr "telerancia presnosti"
+
+msgid "selection filter"
+msgstr "výberový filter"
+
+msgid "point"
+msgstr "bod"
+
+msgid "line"
+msgstr "čiara"
+
+msgid "arc"
+msgstr "oblúk"
+
+msgid "infinite line"
+msgstr "priamka"
+
+msgid "circle"
+msgstr "kruh"
+
+msgid "edge"
+msgstr "hrana"
+
+msgid "face"
+msgstr "plocha"
+
+msgid "solid"
+msgstr "teleso"
+
+msgid "stl_solid"
+msgstr ""
+
+msgid "wire"
+msgstr "drôt/kábel"
+
+msgid "sketch"
+msgstr "výkres"
+
+msgid "image"
+msgstr "obrázok"
+
+msgid "coordinate system"
+msgstr "súradnicový systém"
+
+msgid "text"
+msgstr "text"
+
+msgid "dimension"
+msgstr "rozmer"
+
+msgid "ruler"
+msgstr "pravítko"
+
+msgid "file options"
+msgstr "voľby sňuborov"
+
+msgid "DXF"
+msgstr "DXF"
+
+msgid "make sketch"
+msgstr "vytvor výkrs"
+
+msgid "Known Files"
+msgstr "známe typy súborov"
+
+msgid "Heeks files"
+msgstr "súbory vo formáte Heeks"
+
+msgid "IGES files"
+msgstr "súbory vo formáte IGES"
+
+msgid "STEP files"
+msgstr "súbory vo formáte STEP"
+
+msgid "STL files"
+msgstr "súbory vo formáte STL"
+
+msgid "Scalar Vector Graphics files"
+msgstr "súbory vo formáte SVG"
+
+msgid "DXF files"
+msgstr "súbory vo formáte DXF "
+
+msgid "Picture files"
+msgstr "súbory s obrázkami"
+
+msgid "Unmark"
+msgstr "odznač"
+
+msgid "Mark"
+msgstr "označ"
+
+msgid "Properties"
+msgstr "Vlastnosti"
+
+msgid "Save changes to file"
+msgstr "ulož zmeny do súboru"
+
+msgid "Apply"
+msgstr "Vykonaj"
+
+msgid "Accept value and continue"
+msgstr "Príjmi hodnotu a pokračuj"
+
+msgid "Cancel"
+msgstr "Zrušiť"
+
+msgid "Cancel operation"
+msgstr "zruš operáciu"
+
+msgid "New\tCtrl+N"
+msgstr "Nový\tCtrl+N"
+
+msgid "Open\tCtrl+O"
+msgstr "Otvor\tCtrl+O"
+
+msgid "Save\tCtrl+S"
+msgstr "Ulož\tCtrl+S"
+
+msgid "Print\tCtrl+P"
+msgstr "Tlač\tCtrl+P"
+
+msgid "Page Setup"
+msgstr "Rozloženie na stránke"
+
+msgid "Print Preview"
+msgstr "Náhľad tlače"
+
+msgid "Open Recent"
+msgstr "Otvor nedávne dokumenty"
+
+msgid "Import"
+msgstr "importuj"
+
+msgid "About"
+msgstr "O programe"
+
+msgid "Plugins"
+msgstr "Zásuvné moduly"
+
+msgid "Exit"
+msgstr "Koniec"
+
+msgid "Undo\tCtrl+Z"
+msgstr "Späť\tCtrl+Z"
+
+msgid "Redo\tCtrl+Shift+Z"
+msgstr "Ďalej\tCtrl+Shift+Z"
+
+msgid "Cut\tCtrl+X"
+msgstr "Vystrihni\tCtrl+X"
+
+msgid "Copy\tCtrl+C"
+msgstr "Kopíruj\tCtrl+C"
+
+msgid "Paste\tCtrl+V"
+msgstr "Vlož\tCtrl+V"
+
+msgid "Delete\tDel"
+msgstr "Zruš\tDel"
+
+msgid "Select Mode"
+msgstr "Výber režimu"
+
+msgid "Draw a sketch"
+msgstr "Nakresli výkres"
+
+msgid "Draw Circles"
+msgstr "Nakresli kružnicu"
+
+msgid "Draw Infinite Lines"
+msgstr "Nakresli priamky"
+
+msgid "Draw Points"
+msgstr "Nakresli bod"
+
+msgid "Draw Regular Shapes"
+msgstr "Nakresli pravideľné tvary"
+
+msgid "Add Text"
+msgstr "Pridaj text"
+
+msgid "Add Dimension"
+msgstr "Pridaj rozmer"
+
+msgid "Add Coordinate System"
+msgstr "Pridaj súradnicový systém"
+
+msgid "Previous view"
+msgstr "Predchádzajňuci pohľad"
+
+msgid "Zoom window"
+msgstr "Zobraz detaily/Zoom"
+
+msgid "Fit view to extents"
+msgstr "Napasuj na obrazovku"
+
+msgid "Fit view to extents, but no rotation"
+msgstr "Napasuj na obrazovku, ale bez otáčania"
+
+msgid "View rotate"
+msgstr "Otočenie pohľadu"
+
+msgid "View zoom"
+msgstr "detailný pohľad"
+
+msgid "Full screen"
+msgstr "Zobraz na celej obrazovke"
+
+msgid "Redraw"
+msgstr "Prekresli"
+
+msgid "Add a sphere"
+msgstr "Pridaj guľu"
+
+msgid "Add a cube"
+msgstr "Pridaj kocku"
+
+msgid "Add a cylinder"
+msgstr "Pridaj valec"
+
+msgid "Add a cone"
+msgstr "Pridaj kužeľ"
+
+msgid "Loft two sketches"
+msgstr "Spoj dva výkresy"
+
+msgid "Extrude a sketch"
+msgstr "Vytvor 3D teleso z výkresu"
+
+msgid "Fuse"
+msgstr "Zlúč"
+
+msgid "Common"
+msgstr "Bežné"
+
+msgid "Fillet"
+msgstr "Rez"
+
+msgid "Chamfer"
+msgstr "Úkos"
+
+msgid "Move Translate"
+msgstr "Posuň"
+
+msgid "Copy Translate"
+msgstr "Urob kópiu a posuň"
+
+msgid "Move Rotate"
+msgstr "Posuň otočením"
+
+msgid "Copy Rotate"
+msgstr "Kopíruj a otoč"
+
+msgid "Move Mirror"
+msgstr "Zrkadli"
+
+msgid "Copy Mirror"
+msgstr "Kopíruj a zrkadli"
+
+msgid "Move Scale"
+msgstr "Zmeň rozmery"
+
+msgid "Objects"
+msgstr "Objekty"
+
+msgid "Options"
+msgstr "Voľby"
+
+msgid "Input"
+msgstr "vstup"
+
+msgid "Tool Bar"
+msgstr "Lišta nástrojov"
+
+msgid "Solids Tool Bar"
+msgstr "Lišta nástrojov pre telesá"
+
+msgid "Geometry Tool Bar"
+msgstr "Lišta nástrojov pre tvary"
+
+msgid "Viewing Tool Bar"
+msgstr "Lišta nástrojov pre pohľady"
+
+msgid "Transformations Tool Bar"
+msgstr "Lišta nástrojov pre zmeny"
+
+msgid "Status Bar"
+msgstr "Stavový riadok"
+
+msgid "&File"
+msgstr "&Súbor"
+
+msgid "&Edit"
+msgstr "&Edituj"
+
+msgid "&Geometry"
+msgstr "&Tvar"
+
+msgid "&View"
+msgstr "&Pohľad"
+
+msgid "&Solid"
+msgstr "&Teleso"
+
+msgid "&Transform"
+msgstr "&Zmeny"
+
+msgid "&Window"
+msgstr "&Okno"
+
+msgid "Graphics"
+msgstr "Grafika"
+
+msgid "Reset Layout"
+msgstr "Východzie rozloženie"
+
+msgid "Set toolbars to left"
+msgstr "Zarovnaj panely nástrojov do ľava"
+
+msgid "Coordinate System"
+msgstr "Súradnicový systém"
+
+msgid "Open file"
+msgstr "Otvor súbor"
+
+msgid "Import file"
+msgstr "Importuj súbor"
+
+msgid "Pick two or more solids, the first one will be cut by the others"
+msgstr "Vložte dve alebo viac telies, prvé bude orezané ostatnými"
+
+msgid "Subtract Solids"
+msgstr "Rozdiel telies"
+
+msgid "Pick two or more solids to be fused together"
+msgstr "Vložte dve alebo viac telies, budú spojené do jedného"
+
+msgid "Fuse Solids"
+msgstr "Sjote telesá"
+
+msgid "Pick two or more solids, only the shape that is contained by all of them will remain"
+msgstr "Vložte dva alebo viac telies, výsledkom bude len prienik všetkých"
+
+msgid "Intersection of Solids"
+msgstr "Prienik telies"
+
+msgid "Pick one or more edges to add a fillet to"
+msgstr "Vložte dva alebo viac hrán na vzvrorenie rezu"
+
+msgid "Edge Fillet"
+msgstr "Hrany rezu"
+
+msgid "Pick one or more edges to add a chamfer to"
+msgstr "Vložte dva alebo viac hrán na definícu úkosu"
+
+msgid "Edge Chamfer"
+msgstr "Hrany úkosu"
+
+msgid "Enter chamfer distance"
+msgstr "Vložte vzdialenosť úkosového nástroja"
+
+msgid "Distance"
+msgstr "Vzdialenosť"
+
+msgid ""
+"Pick two or more sketches, to create a lofted solid between\n"
+"( hold down Ctrl key to select more than one solid )"
+msgstr ""
+"Vložte dva alebo viac výkresov na vytvorenie telesa ťahaním\n"
+"medzi nimi Držte stlačený kláves Ctrl na oznčenie vic než \n "
+"jedného telesa"
+
+msgid "Lofted Body"
+msgstr "Teleso vyniknuté ťahaním"
+
+msgid ""
+"Pick one or more sketches, to create extruded body from\n"
+"( hold down Ctrl key to select more than one solid )"
+msgstr ""
+"Vložte dva alebo viac výkresov na vytvorenie telesa pretláčaním\n"
+"Držte stlačený kláves Ctrl na oznčenie vic než jedného telesa"
+
+msgid "Extrude"
+msgstr "preláčanir"
+
+msgid "Sphere"
+msgstr "Guľa"
+
+msgid "Cuboid"
+msgstr "Kváder"
+
+msgid "Cylinder"
+msgstr "Valec"
+
+msgid "Cone"
+msgstr "Kužel"
+
+msgid ""
+"There was a problem printing.\n"
+"Perhaps your current printer is not set correctly?"
+msgstr ""
+"Problém pri tlači\n"
+"Možno nie je vaša tlačiareň nastavená správne"
+
+msgid "Printing"
+msgstr "Tlač"
+
+msgid "You canceled printing"
+msgstr "Zrušili ste tlač"
+
+msgid ""
+"There was a problem previewing.\n"
+"Perhaps your current printer is not set correctly?"
+msgstr ""
+"Problém pri náhľade\n"
+"Možno nie je vaša tlačiareň nastavená správne"
+
+msgid "Previewing"
+msgstr "Náhľad"
+
+msgid "Demo Print Preview"
+msgstr "Demonštračný náhľad tlače"
+
+msgid "New file"
+msgstr "Nový súbor"
+
+msgid "Save file"
+msgstr "Uložiť súbor"
+
+msgid "Cut selected items to the clipboard"
+msgstr "Premiestniť vybrané položky do schránky"
+
+msgid "Copy selected items to the clipboard"
+msgstr "Kopírovať vybrané položky do schránky"
+
+msgid "Paste items from the clipboard"
+msgstr "Vložiť položky zo schránky"
+
+msgid "Undo the previous command"
+msgstr "Späť/zrušť posledný príkaz"
+
+msgid "Redo the next command"
+msgstr "Ďalej/nasledujúci príkaz"
+
+msgid "Start Circle Drawing"
+msgstr "Začni kresliť nákres"
+
+msgid "Start Drawing Infinite Lines"
+msgstr "Začni kresliť priamky"
+
+msgid "Start Drawing Points"
+msgstr "Začni kresliť body"
+
+msgid "Draw regular shapes; rectangles, polygons, obrounds"
+msgstr "Nakresli bežné tvary, prvaouholníky, mnohouhoľníky s alebo bez zaoblenia"
+
+msgid "Add a text object"
+msgstr "Pridaj texový objekt"
+
+msgid "Add a dimension"
+msgstr "pridaj rozmer"
+
+msgid "Create a Coordinate System"
+msgstr "Vytvor súrdnicový systém"
+
+msgid "Create a lofted face"
+msgstr "Vytvor teleso ťahaním plochy"
+
+msgid "Extrude a wire or face"
+msgstr "Vytvor teleso vytlačením vlákna alebo plochy"
+
+msgid "Cut one solid from another"
+msgstr "Vyrež teleso do iného"
+
+msgid "Fuse one solid to another"
+msgstr "Pripoj teleso k inému"
+
+msgid "Find common solid between two solids"
+msgstr "Nájdi bežné teleso medzo dvoma telesami"
+
+msgid "Make a fillet on selected edges"
+msgstr "Vytvor rez z označených hrán"
+
+msgid "Make a chamfer on selected edges"
+msgstr "Vytvor úkos z označených hrán"
+
+msgid "Go back to previous view"
+msgstr "Späť ba predchádzajňuci pohľad"
+
+msgid "Zoom in to a dragged window"
+msgstr "Detail označenej oblasti"
+
+msgid "Zoom in to fit the extents of the drawing into the graphics window"
+msgstr "Detail označenej oblasti tak aby sa celý premietol na obrazovku"
+
+msgid "Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"
+msgstr "Detail označenej oblasti tak aby sa celý premietol na obrazovku, alebo bez otáčania"
+
+msgid "Enter view rotating mode"
+msgstr "Vstup do režimu otáčania pohľadu"
+
+msgid "Drag to zoom in and out"
+msgstr "Uhopte obejkt na priblíženiue aleboi vziadelnie sa"
+
+msgid "Switch to full screen view ( press escape to return )"
+msgstr "Prepni sa do celosobrazovkovéhgo režimu (stačte Escpe na jeho zrušenie)"
+
+msgid "Translate selected items"
+msgstr "Posun vyznačených položiek"
+
+msgid "Copy and translate selected items"
+msgstr "Skopíruj a posuň"
+
+msgid "Rotate selected items"
+msgstr "Otoč vybrané položky"
+
+msgid "Copy and rotate selected items"
+msgstr "Kopírus o otoč vybrané položky"
+
+msgid "Mirror selected items"
+msgstr "Zrkadli vybrané položky"
+
+msgid "Copy and mirror selected items"
+msgstr "Kopíruj a zrkadli vybrané položky"
+
+msgid "Scale selected items"
+msgstr "Zväčši zmenši vybrané položky"
+
+msgid "General Tools"
+msgstr "Všeobené nástroje"
+
+msgid "Geometry Tools"
+msgstr "Nástroje pre zmenu tvarov a rozmerov"
+
+msgid "Solid Tools"
+msgstr "Nástroje na prácu s telesami"
+
+msgid "Viewing Tools"
+msgstr "Nástroje na pohľady"
+
+msgid "Transformation Tools"
+msgstr "Transformačné nástroje"
+
+msgid "Input Mode"
+msgstr "Zadávací režim"
+
+msgid "Line drawing mode"
+msgstr "Režim kreslenia čiar"
+
+msgid "click on start point"
+msgstr "Kliknite na začiatočný bod"
+
+msgid "click on end of line"
+msgstr "Kliknite na koncový bod čiary"
+
+msgid "Arc drawing mode"
+msgstr "Režim kreslenia oblúkov"
+
+msgid "click on end of arc"
+msgstr "Kliknite na koncový bod oblúka"
+
+msgid "Infinite line drawing"
+msgstr "Kreslenie priamok"
+
+msgid "click on first point"
+msgstr "Kliknite na prvý bod"
+
+msgid "click on second point"
+msgstr "Kliknite na druhý bod"
+
+msgid "Circle drawing mode"
+msgstr "Režim kreslenia kruhov/kružníc"
+
+msgid "center and point mode"
+msgstr "Režim zadania stredom a bodom na kružnici"
+
+msgid "click on center point"
+msgstr "Kliknitew na bod stredu"
+
+msgid "click on point on circle"
+msgstr "Kliknite na bod na kuržnici"
+
+msgid "three points mode"
+msgstr "Režim zadania troma bodmi na kružnici"
+
+msgid "click on third point"
+msgstr "Kliknite na tretí bod"
+
+msgid "draw lines"
+msgstr "Kreslenie čiar"
+
+msgid "draw tangential arcs"
+msgstr "Kreslenie elipsoidných oblúkov"
+
+msgid "draw circles"
+msgstr "kresli kruhy/kružnice"
+
+msgid "drawing mode"
+msgstr "Režim kreslenia"
+
+msgid "(press 'a' for arcs)"
+msgstr "Stalčte klávesu a, aby ste kreslili oblúk"
+
+msgid "Number of items selected"
+msgstr "Počet vybraných položiek"
+
+msgid "Delete Marked Items"
+msgstr "Zmaž vyznačené položky"
+
+msgid "Copies the selected items to the clipboard"
+msgstr "Skopíruj vybrané položky do schránky"
+
+msgid "Paste Into"
+msgstr "Vožiť na"
+
+msgid "Paste items from the clipboard to the drawing"
+msgstr "Vlož položky zo schránky do nákresu"
+
+msgid "Apply any changes made to the properties"
+msgstr "Použi všetky zmeny urobené vo vlastanostiach"
+
+msgid "Stop editing the object"
+msgstr "Preuš zmeny vobjekte"
+
+msgid "Name"
+msgstr "Meno"
+
+msgid "File Path"
+msgstr "Cesta k súborom"
+
+msgid "Plugin must have a name!"
+msgstr "Zásuvný modul musí mať meno"
+
+msgid "No file specified!"
+msgstr "Nevybrali ste žiadny súbor"
+
+msgid "shared library files"
+msgstr "súbory zdieľaných knižnňic"
+
+msgid "Choose shared library file"
+msgstr "Vyberet si súbor zdieľanej knižnice"
+
+msgid "HeeksCAD plugin libraries"
+msgstr "Knižncie zásuvných modulov HeeksCADu"
+
+msgid "Edit"
+msgstr "Edituj"
+
+msgid "Add New Plugin"
+msgstr "Pridaj nový zásuvný modul"
+
+msgid "x"
+msgstr "x"
+
+msgid "y"
+msgstr "y"
+
+msgid "z"
+msgstr "z"
+
+msgid "vertical angle"
+msgstr "Vertikálny uhol"
+
+msgid "horizontal angle"
+msgstr "Horizontálny uhol"
+
+msgid "twist angle"
+msgstr "uhol otočenia"
+
+msgid "draw rectangles"
+msgstr "Kresli pravouhoľníky"
+
+msgid "draw polygons"
+msgstr "kresli mnohouhoľníky"
+
+msgid "draw slots"
+msgstr "kresli nastvovací slot"
+
+msgid "number of sides for polygon"
+msgstr "Počet strán mnohouhoľníka"
+
+msgid "Add "
+msgstr "Pridaj"
+
+msgid "Add Objects"
+msgstr "Pridaj objekty"
+
+msgid "Remove Objects"
+msgstr "Odstráň objekty"
+
+msgid "pick some sketches"
+msgstr "pridaj trajektórie"
+
+msgid "Ruled Surface"
+msgstr "Povrch s rozmermy"
+
+msgid "pick sketches"
+msgstr "Pridaj trajektňorie"
+
+msgid "Input extrusion height"
+msgstr "Vlož výsku ťahania"
+  
+msgid "Extruded Solid"
+msgstr "vytiahnuté teleso"
+
+msgid "Fatal error making ruled solid"
+msgstr "Fatálna chyba pri tvorbe telesa s rozmerom"
+
+msgid "Fatal error making extruded solid"
+msgstr "Fatálna chzba pri tvorbe teleska vytlačením"
+
+msgid "Reset the ruler"
+msgstr "Vynuluj pravítko"
+
+msgid "Left button for selecting objects"
+msgstr "Ľavé tlačidlo vyberie objekt"
+
+msgid "( with Ctrl key for extra objects)"
+msgstr "(spolu s kl´vasou Ctrl vybáte viac objektov)"
+
+msgid "Drag with left button to window select"
+msgstr "Uchopte vzbrané okno stlačením ľavého tlačidla"
+
+msgid "or to move object if on an object"
+msgstr "alebo pohzbujte objektom ak ste mzsou na nom"
+
+msgid "Mouse wheel to zoom in and out"
+msgstr "Koliesko myši približje alebo vzďaľuje obejkty"
+
+msgid "Middle button to pan view"
+msgstr "Stredné tlačidlo otvorí panoramatický pohľad"
+
+msgid "( with Ctrl key to rotate view )"
+msgstr "(s klávesou CTRL rotujete pohľad)"
+
+msgid "Middle button to rotate view"
+msgstr "Stredné tlačidlo otočí pohľad"
+
+msgid "( with Ctrl key to pan view )"
+msgstr "(s klávesou Ctrl zobrzí panormatický pohľad)"
+
+msgid "Right button for object menu"
+msgstr "Pravé tlačidlo ukáže meno objektu"
+
+msgid "See options window to hide this help"
+msgstr "Použite menu volieb, ak chcete skyť tohto pomocníka"
+
+msgid "Pick Anything"
+msgstr "Vybrať všetko"
+
+msgid "Set the selection filter to all items"
+msgstr "Použiť výberový filter na všetky položky"
+
+msgid "Pick Edges"
+msgstr "Vybrať hrany"
+
+msgid "Set the selection filter to only edges"
+msgstr "Použiť výberový filter len na hrany"
+
+msgid "Enter Offset Value, + for making bigger, - for making smaller"
+msgstr "Vložte hodnotu offsetu + na zvačšenie, - na zmenšenie"
+
+msgid "Offset value"
+msgstr "Hodnota offsetu"
+
+msgid "Result of 'Offset Shape'"
+msgstr "Výskedok požitia offsetu na tvar"
+
+msgid "Offset Shape"
+msgstr "offsetový tvar"
+
+msgid "Offset the shape"
+msgstr "Posuň tvar"
+
+msgid "Result of Fuse Operation"
+msgstr "Výsledok operácie spojenia"
+
+msgid "Result of Common Operation"
+msgstr "Výsledok bežnej operácie"
+
+msgid "Result of Cut Operation"
+msgstr "Výsledok operácie vystrihnutia"
+
+msgid "STEP solid"
+msgstr "Objekt typu STEP"
+
+msgid "STEP import not done!"
+msgstr "Import objektu tzpu STEP nebol dokončený"
+
+msgid "sewed IGES solid"
+msgstr "Vložený ojekt typu IGES"
+
+msgid "IGES import not done!"
+msgstr "Import objektu tzpu IGES nebol dokončený"
+
+msgid "Number of elements"
+msgstr "Počet častí"
+
+msgid "order"
+msgstr "Poradie"
+
+msgid "Transform"
+msgstr "Transformácia"
+
+msgid "Transform Objects"
+msgstr "Transformácia objektov"
+
+msgid "Pick objects to move"
+msgstr "Chyťte objekty a pohybujte s nimi"
+
+msgid "Enter number of copies"
+msgstr "Vložte počet kópiňi"
+
+msgid "number of copies"
+msgstr "počet kňopií"
+
+msgid "Click position to move from"
+msgstr "Klinite na pozíciu, odkiaľ začne pohyb"
+
+msgid "Click position to move to"
+msgstr "Klinite na pozíciu,kde skončí pohyb"
+
+msgid "Pick objects to rotate"
+msgstr "Označte objet, ktor=ý budete otáčať"
+
+msgid "Click centre position to rotate about"
+msgstr "Kliknite na stred otáčania obejktu"
+
+msgid "Enter angle to rotate by"
+msgstr "Vložte uhol otočenia"
+
+msgid "angle"
+msgstr "uhol"
+
+msgid "Pick objects to mirror"
+msgstr "Označte obejkt ma zrkadlenie"
+
+msgid "Pick line to mirror about"
+msgstr "Označte, čiaru, ktorá bude považovaná za zrkadlo"
+
+msgid "Pick objects to scale"
+msgstr "Označte objekty, ktorým budete meniť veľkosť"
+
+msgid "Click centre position to scale about"
+msgstr "Kliknite na bod, ktorý bude stredom zväčšenia"
+
+msgid "Enter scale factor"
+msgstr "Zložte pomer zvaäčšenia"
+
+msgid "scale factor"
+msgstr "Pomer zväčšenia"
+
+msgid "Drag with the left mouse button"
+msgstr "uchopte stlačením ľavého tlačidla myši"
+
+msgid "Forward to zoom in, Back to zoom out"
+msgstr "Vpred zväčší, vzad zmenší pohľad"
+
+msgid "Back to zoom in, Forward to zoom out"
+msgstr "Vzad zväčší, vpred zmenší pohľad"
+
+msgid "Hold middle mouse button down to pan"
+msgstr "Držte stredn=e tlačidlo stlačené, abz bolo vidieť panorámu"
+
+msgid "Result of Wire Offset"
+msgstr "Výsledok posunitia vlákna"
+
+msgid "Generated"
+msgstr "Vygenerované"
+
+msgid "Generated from edge"
+msgstr "Vygenerované z hrany"
+
+msgid "Modified"
+msgstr "Zmenený/á/é"
+
+msgid "Is Deleted"
+msgstr "Zmazané"
+
+msgid "Offset Wire"
+msgstr "Posunutie vlákna"
+
+msgid "Point Size"
+msgstr "Veľkosť bodu"
+
+msgid "Family"
+msgstr "skupina"
+
+msgid "Face Name"
+msgstr "meno plochy"
+
+msgid "Style"
+msgstr "Štyl"
+
+msgid "Underlined"
+msgstr "Podčiarnutý/á/é"
+
+msgid "files"
+msgstr "súbory"
+
+msgid "All files"
+msgstr "Všetky súbory"
+
+msgid "Make a selection:"
+msgstr "Tvorba výberu:"
+
+msgid "Categorized Mode"
+msgstr "Režim zatriedenia"
+
+msgid "Alphabetic Mode"
+msgstr "Režim zobrazenia podľa abecedy"
+
+msgid "<< Compact"
+msgstr "<< zbaľ"
+
+msgid "Expand >>"
+msgstr "Rozbaľ >>"
+
+msgid "False"
+msgstr "Nepravda"
+
+msgid "True"
+msgstr "Pravda"
+
+msgid "Unspecified"
+msgstr "Nezadané"
+
+msgid "is not a floating-point number"
+msgstr "toto nie je destinné číslo v pohyblivej rádovej čiarke"
+
+msgid "true"
+msgstr "Pravda"
+
+msgid "false"
+msgstr "Nepravda"
+
+msgid "Choose a directory:"
+msgstr "Vyberte adresňar/zložku"
+
+msgid "Choose a file"
+msgstr "Vyberte súbor"
+
+msgid "Ok"
+msgstr "V poriadku"
+
+msgid "Add"
+msgstr "Pridaj"
+
+msgid "Update"
+msgstr "Obnov"
+
+msgid "Remove"
+msgstr "Odstráň"
+
+msgid "Up"
+msgstr "Hore"
+
+msgid "Down"
+msgstr "Dole"
+
+msgid "Failed to load resource image"
+msgstr "Súbor nastavení nemožno načítať"
+
+msgid "Convert sketch to face"
+msgstr "Skonvertuj trajektňoriu na plochu"
+
+msgid "Make To Sketch"
+msgstr "Vytvor trajektóriu"
+
+msgid "Make selected lines and arcs into a new sketch"
+msgstr "Vytvor novú trajektóriu z vybranňých úsečiek a oblúkov"
+
+msgid "Combine sketches"
+msgstr "Spoj trajektórie"
+
+msgid "Combine selected sketches"
+msgstr "Spoj vybrané trajektórie"
+
+msgid "Group"
+msgstr "Spoj do skupiny"
+
+msgid "Group selected items"
+msgstr "Spoj vybrané položky do skupiny"
+
+msgid "Ungroup"
+msgstr "Rozdeľ skupinu na časti"
+
+msgid "Ungroup selected items"
+msgstr "Oddeľ vybrané čadsi zo skupinu"
+
+msgid "Dimension drawing"
+msgstr "kreslenie rozmerov"
+
+msgid "Drawing"
+msgstr "Kreslenie"
+
+msgid "Edge"
+msgstr "hrana"
+
+msgid "Face"
+msgstr "Plocha"
+
+msgid "Gripper"
+msgstr "Držadlo/úchyt"
+
+msgid "Arc"
+msgstr "oblúk"
+
+msgid "Circle"
+msgstr "Kruh/kružnica"
+
+msgid "Dimension"
+msgstr "Rozmer"
+
+msgid "Ellipse"
+msgstr "Elipsa"
+
+msgid "Infinite Line"
+msgstr "priamka"
+
+msgid "Image"
+msgstr "Obrázok"
+
+msgid "Line"
+msgstr "Čiara"
+
+msgid "Point"
+msgstr "Bod"
+
+msgid "Spline"
+msgstr "Spline"
+
+msgid "Text"
+msgstr "Text"
+
+msgid "Xml"
+msgstr "Xml"
+
+msgid "Magnifying by dragging a window"
+msgstr "Zväčši uchytením okna"
+
+msgid "Point drawing"
+msgstr "Krelsnenie bodu"
+
+msgid "Dragging a window or picking a point"
+msgstr "Uchytením okna, alebo označením bodu"
+
+msgid "Regular shapes drawing"
+msgstr "Kreslenie bežných tvarov"
+
+msgid "ChangeOwner"
+msgstr ""
+
+msgid "ManyChangeOwner"
+msgstr ""
+
+msgid "Ruler"
+msgstr "Pravítko"
+
+msgid "Faces"
+msgstr "Plochy"
+
+msgid "Edges"
+msgstr "Hrany"
+
+msgid "Sketch"
+msgstr "Trajektória"
+
+msgid "Solid"
+msgstr "Teleso"
+
+msgid "STL Solid"
+msgstr "teleso typu STL"
+
+msgid "View Rotate"
+msgstr "Otočenie pohľadu"
+
+msgid "View Zoom"
+msgstr "Zväačenie pohľadu/Lupa"
+
+msgid "Dragging a window"
+msgstr "Uchztením okna"
+
+msgid "Wire"
+msgstr "vlákno"
+
+msgid "object type"
+msgstr "typ objektu"
+
+msgid "object title"
+msgstr "Meno objektu"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "color"
+msgstr "Farba"
+
+msgid "visible"
+msgstr "viditeľný"
+
+msgid "Unknown"
+msgstr "Neznámy/a/e"
+
+msgid "Unknown Property"
+msgstr "Neznáma vlastnosť"
+
+msgid "leadoffdz"
+msgstr "dĺžka nábehu"
+
+msgid "leadofflen"
+msgstr "dĺžka rezania"
+
+msgid "leadoffrad"
+msgstr "dĺžka výbehu"
+
+msgid "retractzheight"
+msgstr "výška prebodnutia/prepalu"
+
+msgid "leadoffsamplestep"
+msgstr "veľkosť kroku"
+
+msgid "toolcornerrad"
+msgstr "Polomer rezacieho nástroja"
+
+msgid "toolflatrad"
+msgstr "Hrúbka rezacieho nástroja"
+
+msgid "samplestep"
+msgstr "Periňoda vzorkovania"
+
+msgid "stepdown"
+msgstr "Krok koklesu"
+
+msgid "clearcuspheight"
+msgstr "výska čistacehohrotu"
+
+msgid "triangleweaveres"
+msgstr ""
+
+msgid "flatradweaveres"
+msgstr ""
+
+msgid "dchangright"
+msgstr ""
+
+msgid "dchangrightoncontour"
+msgstr ""
+
+msgid "dchangleft"
+msgstr ""
+
+msgid "dchangefreespace"
+msgstr ""
+
+msgid "sidecutdisplch"
+msgstr ""
+
+msgid "fcut"
+msgstr ""
+
+msgid "fretract"
+msgstr ""
+
+msgid "thintol"
+msgstr ""
+
+msgid "startpoint_x"
+msgstr "Štartovací bod na osi X"
+
+msgid "startpoint_y"
+msgstr "Štartovací bod na osi Y"
+
+msgid "startvel_x"
+msgstr "Štartovacia rýchlosť na osi X"
+
+msgid "startvel_y"
+msgstr "Štartovacia rýchlosť na osi Y"
+
+msgid "minz"
+msgstr ""
+
+msgid "boundaryclear"
+msgstr "bez korekcie"
+
+msgid "boundary_x0"
+msgstr "koreckia_x0"
+
+msgid "boundary_x1"
+msgstr "korekcia_x1"
+
+msgid "boundary_y0"
+msgstr "korekcia_y0"
+
+msgid "boundary_y1"
+msgstr "korekcia_y1"
+
+msgid "tool number"
+msgstr "číslo rezacieho nástroja"
+
+msgid "tool diameter"
+msgstr "priemer nástroja"
+
+msgid "clearance height"
+msgstr "výška pri rýchloposuve"
+
+msgid "step down"
+msgstr "poles"
+
+msgid "start depth"
+msgstr "hĺbka na začiatku"
+
+msgid "final depth"
+msgstr "hĺbka na konci prerezania"
+
+msgid "rapid down to height"
+msgstr " rýchloposuv po osi Y"
+
+msgid "horizontal feed rate"
+msgstr "Horizontálna frekvencia bodov"
+
+msgid "vertical feed rate"
+msgstr "Horizontálna frekvencia bodov"
+
+msgid "spindle speed"
+msgstr "rýchlosť závitnice"
+
+msgid "You must select some sketches, first!"
+msgstr "Musíte si najsôr vybarať trajektňoriu"
+
+msgid "There are no solids!"
+msgstr "Nepracuje sio žiadnym telesom"
+
+msgid "You must select some sketches first!"
+msgstr "Musíte si najsôr vybarať trajektňoriu"
+
+msgid "NC files"
+msgstr "Súbory s NC programom/rezným plánom"
+
+msgid "Open NC file"
+msgstr "Otvoriť súbor s NC programom/rezným plánom"
+
+msgid "Save NC file"
+msgstr "Uložiť súbor s NC programom/rezným plánom"
+
+msgid "Couldn't open file"
+msgstr "Nemôžem otvoriť súbor"
+
+msgid "Profile"
+msgstr "vyrezanie tvaru"
+
+msgid "Pocket"
+msgstr "Vyfrézovanie tvaru"
+
+msgid "ZigZag"
+msgstr "metódou 'cik-cak'"
+
+msgid "Adaptive"
+msgstr "Prispôsobivo"
+
+msgid "Python"
+msgstr "jazyk Python"
+
+msgid "PostProcess"
+msgstr "Vytvorenie NC programu/rezného plánu"
+
+msgid "OpenNC"
+msgstr "Otvoriť NC program/rezný plán"
+
+msgid "SaveNC"
+msgstr "Uložiť NC program/rezný plán "
+
+msgid "HeeksCNC is the free machining add-on to HeeksCAD"
+msgstr "HeeksCNC je doplnok HeeksCAD-u na tvorbu NC programov/rezných plánov,ktorý je zadarmo"
+
+msgid "          http://code.google.com/p/heekscnc/"
+msgstr "	http://code.google.com/p/heekscnc/"
+
+msgid "Written by Dan Heeks, Hirutso Enni, Perttu Ahola"
+msgstr "Autori sú: Dan Heeks,Hirutso Enni, Perttu Ahola"
+
+msgid "With help from archivist, crotchet1, DanielFalck, fenn, Sliptonic"
+msgstr "S pomocou tvorcov inštalátorov!,crotchet1,DanielFalck,fenn,Sliptonic"
+
+msgid "geometry code, donated by Geoff Hawkesford, Camtek GmbH http://www.peps.de/"
+msgstr "Dodávateľ rozmerovo tvarového kódu Geoff Hawkesford, CamtekGmb http://www.peps.de/"
+
+msgid "pocketing code from http://code.google.com/p/libarea/ , derived from the kbool library written by Klaas Holwerda http://boolean.klaasholwerda.nl/bool.html"
+msgstr "Knižnica frézovacieho kódu  http://code.google.com/p/libarea/, odvodené od kódu od ·Klaasa Holwerda http://boolean.klaasholwerda.nl/bool.html"
+
+msgid "Zig zag code from pycam http://sourceforge.net/svn/?group_id=237831"
+msgstr "kód Cik-cak  knižnice pycam  http://sourceforge.net/svn/?group_id=237831"
+
+msgid "Adaptive Roughing code from http://code.google.com/p/libactp/, using code written in 2004"
+msgstr "Kód adaptívneho vyfrézovazovai z: http://code.google.com/p/libactp/ Podˇal verzie z roku 2004"
+
+msgid "For a more modern version of adaptive roughing, see Julian Todd and Martin Dunschen of http://www.freesteel.co.uk/"
+msgstr "Modernejšia verzia vyfrézovacieho kósdu je od autorov Julian Todd a Martin Dunschen z http://www.freesteel.co.uk/"
+
+msgid "This HeeksCNC software installation is restricted by the GPL license http://www.gnu.org/licenses/gpl-3.0.txt"
+msgstr "Sofvňer je licencovaný pod licenčnou zmluvou GPL http://www.gnu.org/licenses/gpl-3.0.txt"
+
+msgid "  which means it is free and open source, and must stay that way"
+msgstr "to znamená, že je open source a takým musňi ostatť."
+
+msgid "New Profile Operation..."
+msgstr "Nový tvar na vzrezanie"
+
+msgid "New Pocket Operation..."
+msgstr "Nové vyfreztovanie"
+
+msgid "New ZigZag Operation..."
+msgstr "Nové použitie metódy 'cik-cak'"
+
+msgid "New Adaptive Roughing Operation..."
+msgstr "Prispôsobivé odfrézovanie"
+
+msgid "Operations"
+msgstr "Úlohy v NC programe /reznom pláne"
+
+msgid "Make Python Script"
+msgstr "Vytvor skript v jazaku Python"
+
+msgid "Post-Process"
+msgstr "Vytvor NC program/ rezný plán"
+
+msgid "Machining"
+msgstr "Tvorba NC programu/rezného plánu"
+
+msgid "nc options"
+msgstr "Možnosti konverzie na rezný plán"
+
+msgid "text colors"
+msgstr "farba textu"
+
+msgid "default color"
+msgstr "prednastavená farba"
+
+msgid "block color"
+msgstr "čierna farba"
+
+msgid "misc color"
+msgstr "rôzne farby"
+
+msgid "program color\t"
+msgstr "Farba prohybu podľa programu\t"
+
+msgid "tool color"
+msgstr "farba nástroja"
+
+msgid "comment color\t"
+msgstr "Farba komentárov\t"
+
+msgid "variable color"
+msgstr "Premenná farba"
+
+msgid "prep color"
+msgstr "farba prípravnňych úkonov"
+
+msgid "axis color"
+msgstr "farba osí"
+
+msgid "rapid color"
+msgstr "fraba rýchloposuvu"
+
+msgid "feed color"
+msgstr "farba nastavnia rýchlosti"
+
+msgid "comment"
+msgstr "Kommentár"
+
+msgid "active"
+msgstr "Aktívny"
+
+msgid "step over"
+msgstr "ďalší krok"
+
+msgid "material allowance"
+msgstr "Dovolén materiálny"
+
+msgid "round corner factor"
+msgstr "miera zaoblôenia rohov"
+
+msgid "for 90 degree corners"
+msgstr "pre 90 stupňové rohy"
+
+msgid "1.5 for square, 1.0 for round"
+msgstr "1.5 štvorec,1.0 oblúk"
+
+msgid "Boundary"
+msgstr "Ohraničenie"
+
+msgid "Center"
+msgstr "Stred"
+
+msgid "starting_place"
+msgstr "Bod počiatku"
+
+msgid "Pocket operation - Sketch doesn't exist - %d"
+msgstr "Odfrézovanie - Neexistuje taká trajektória =tarjektória %d"
+
+msgid "Pocket operation - Sketch must be a closed shape - sketch %d"
+msgstr "Odfrézovanie - Trajektória musi byť uzavretá  trajektória %d"
+
+msgid "Pocket operation - Badly ordered sketch - sketch %d"
+msgstr "Odfrézovanie - Zlé poradie rezania Trajektória-%d"
+
+msgid "Left"
+msgstr "Vľavo-vnútri"
+
+msgid "Right"
+msgstr "Vpravo-vonku"
+
+msgid "On"
+msgstr "Po mietse rezania"
+
+msgid "tool on side"
+msgstr "Nástroj na strane"
+
+msgid "auto roll on"
+msgstr "Automatický nábeh"
+
+msgid "roll on point"
+msgstr "bod nábehu"
+
+msgid "auto roll off"
+msgstr "Automatický výbeh"
+
+msgid "roll off point"
+msgstr "bod výbehu"
+
+msgid "use start point"
+msgstr "Poži počiatočný bod"
+
+msgid "start point"
+msgstr "Počiatočný bod"
+
+msgid "use end point"
+msgstr "Použi koncový bod"
+
+msgid "end point"
+msgstr "koncpový bod"
+
+msgid "Pick Start"
+msgstr "Ukáž začiatočný bod"
+
+msgid "Pick new start point"
+msgstr "Ukáž na nový začiatočný bod"
+
+msgid "Pick End"
+msgstr "Ukáž koncový bod"
+
+msgid "Pick new end point"
+msgstr "Ukáž na nový koncový bod"
+
+msgid "Set All Operations Active"
+msgstr "Nastav všetky operácie ako používané"
+
+msgid "Set All Operations Inactive"
+msgstr "Nastav všetky operácie ako nepoužívané"
+
+msgid "machine"
+msgstr "NC jazyk/jazyk rezného plánu"
+
+msgid "output file"
+msgstr "Výtupný súbor"
+
+msgid "spherical"
+msgstr "sférické súradnice"
+
+msgid "cylindrical"
+msgstr "cylindrické súradnice"
+
+msgid "toroidal"
+msgstr "Toridné súrodncie"
+
+msgid "tool type"
+msgstr "Typ nástroja"
+
+msgid "corner radius"
+msgstr "Polomer rohu"
+
+msgid "minimum x"
+msgstr "minimálne x"
+
+msgid "maximum x"
+msgstr "maximálne x"
+
+msgid "minimum y"
+msgstr "minimálne y"
+
+msgid "maximum y"
+msgstr "maximálne y"
+
+msgid "z0"
+msgstr "z0"
+
+msgid "z1"
+msgstr "z1"
+
+msgid "dx"
+msgstr "dx"
+
+msgid "dy"
+msgstr "dy"
+
+msgid "Simple Mesh"
+msgstr "Jednduchá mriežka"
+
+msgid "HeeksArt is a free random add-on to HeeksCAD"
+msgstr "HeeksArt je doplnokHeeksCADu, ktory je zadarmo"
+
+msgid "          http://code.google.com/p/heeksart/"
+msgstr "http://code.google.com/p/heeksart/"
+
+msgid "Written by Dan Heeks"
+msgstr "Autor Dan Heeks"
+
+msgid "Add a simple mesh"
+msgstr "Pridaj jednoduchú mriežku"
+
+msgid "Mesh"
+msgstr "mrižka"
+
+msgid "mesh options"
+msgstr "Voľby mriežky"
+
+msgid "number of splits"
+msgstr "Počet častí"
+
+msgid "Edge cannot have more than 2 faces!"
+msgstr "Hrana nemôže byť súčasťou viac než dvoch plôch"
+
+msgid "Convert Mesh To Triangles"
+msgstr "Premeň mriežku na trojuholníky"
+
+msgid "Normalize All Vertices"
+msgstr "Normlizuj všetky vrcholy"
+
+msgid "Set All Vertex Normals"
+msgstr "Nastav všetky normály vvrcholov"
+
+msgid "At least one vertex could not be normalized!"
+msgstr "Najmenej jeden vrchol nemôže byť normalizovaný"
+
+msgid "Recalculate All Face Centres"
+msgstr "Prepočítaj všetky stredy plôch"
+
+msgid "Mirror all x<1"
+msgstr "zrkadli všetky hladiny, de x<1"
+
+msgid "Split Edge"
+msgstr "Rozdeľ hranu"
+
+msgid "Recalculate a Good Centre Point"
+msgstr "Prewpočítaj všetky vhodné stredy"
+
+msgid "Normalize All Edge Directions"
+msgstr "Normalizuj všetky smery hrán"
+
+msgid "Set Normal From Edges"
+msgstr "nastav normály z hrán"
+
+msgid "Mesh Edge"
+msgstr "hrana mriežky"
+
+msgid "Mesh Face"
+msgstr "mrižkovaná plocha"
+
+msgid "Mesh Vertex"
+msgstr "bod mriežky"
+
+msgid "Split arcs to little lines"
+msgstr "Rozdeľ oblúky na malé úsečky"
+
+msgid "empty"
+msgstr "prázny"
+
+msgid "open"
+msgstr "otvor"
+
+msgid "reverse"
+msgstr "v opačnom poradí"
+
+msgid "bad"
+msgstr "zle"
+
+msgid "re-order"
+msgstr "zmeň poradie"
+
+msgid "clockwise\n"
+msgstr "v smere hodinových ručičiek\n"
+
+msgid "counter-clockwise"
+msgstr "proti smeru hodinových ručičiek"
+
+msgid "multiple"
+msgstr "násob"
+
+msgid "New Drilling Operation..."
+msgstr "Nová frňezovacia operácia"
+
+msgid "New Cutting Tool Definition..."
+msgstr "definícia nového nástroja"
+
+msgid "tool_number"
+msgstr "číslo nástroja"
+
+msgid "diameter"
+msgstr "priemer"
+
+msgid "tool_length_offset"
+msgstr "posunuti vplyvzm dĺžky nástroja"
+
+msgid "pocket_number"
+msgstr "číslo frézy"
+
+msgid "Open NC File"
+msgstr "Otvor súbor s NC programom /rezným plánom"
+
+msgid "Save NC File"
+msgstr "Ulož súbor s NC programom /rezným plánom"
+
+msgid "cutting_tool_number"
+msgstr "číslo rezacieho nástroja"
+
+msgid "depth"
+msgstr "hĺbka"
+
+msgid "peck_depth"
+msgstr "hĺbka prepishnutria"
+
+msgid "dwell"
+msgstr "čas na prerezanie/prepal"
+
+msgid "standoff"
+msgstr "bod odsunutia"
+
+msgid "Split Sketch"
+msgstr "rozdeľ trajhektórie"
+
+msgid "You must select some points, circles or other intersecting elements first!"
+msgstr "Najskôr musíte vybrať nejaké bbodz kruhz, či iné rôznobežné elementy"
+
+msgid "New CounterBore Operation..."
+msgstr "Nová protivývrtová operáciu "
+
+msgid "fixture offset"
+msgstr "Pevné posunutie"
+
+msgid "correlation"
+msgstr "korelácia"
+
+msgid "Minimum correlation factor (0.0 (nothing like it) -> 1.0 (perfect match))"
+msgstr "Minimálny keoficinet korelácie (o 0.0(skoro všetko) do 1.0(100% zhoda)) "
+
+msgid "Maximum scale threshold (1.0 - must be same size, 1.5 (can be half as big again or 2/3 size)"
+msgstr "majvššia zmena vaeľkosti pre zhodu (o 1.0 (Nmusí byť rovnaký rozmer) do 1.5 (môže byť od 2/3 do 3/2)"
+
+msgid "orientation"
+msgstr "Poloha textu"
+
+msgid "Make Coordinate System"
+msgstr "nový súradnicový systém"
+
+msgid "vertex"
+msgstr "hrana mnohouhoľníka"
+
+msgid "autosolve constraints"
+msgstr "hranice automatického riešenia"
+
+msgid "units for nc output"
+msgstr "Jednotky pre NC program/reznňy plán"
+
+msgid "You haven't selected a cutting tool for this hole.  By default no 'tool definition' or 'select tool' code will be generated for this drilling cycle."
+msgstr "Nevzbrali ste si nástroj na rezanie tejtoi diery. Prednasvené je použitie buď žiadny nástroj alebo vyber si nástroj pre toto vŕtanie"
+
+msgid "Tools"
+msgstr "Nástroje"
+
+msgid "type"
+msgstr "typ"
+
+msgid "Drill Bit"
+msgstr "Hrot vrtáku"
+
+msgid "Slot Cutter"
+msgstr "Vyrezávač drážok"
+
+msgid "Ball End Mill"
+msgstr "Kruhová fréza"
+
+msgid "Chamfering bit"
+msgstr "Hrot úkosu"
+
+msgid "End Mill"
+msgstr "hrot frézy"
+
+msgid "CounterBore"
+msgstr "Spätné vyvŕtanie"
+
+msgid "Centre Drill Bit"
+msgstr "Stred hrotu vrtáka"
+
+msgid "flat_radius"
+msgstr "Polomer na hrote"
+
+msgid "corner_radius"
+msgstr "Polomer v rohu"
+
+msgid "cutting_edge_angle"
+msgstr "uhol reznej hrany"
+
+msgid "cutting_edge_height"
+msgstr "výška reznej hrany"
+
+msgid "sort_locations"
+msgstr "Usporiadať umiestnenia"
+
+msgid "sort_drilling_locations"
+msgstr "Usporiadať umiestnenia vývrtov"
+
+msgid "Respect existing order"
+msgstr "Dodržať toto poradie"
+
+msgid "sort_sketches"
+msgstr "usporiadaj výkresy"
+
+msgid "Designe Rules Check"
+msgstr "Kontrola zadaných parametrov NC Programu/rezného plánu"
+
+msgid "Designe Rules Adjustment"
+msgstr "Ladenie parametrov NC Programu/rezného plánu"
+
+msgid "Design Rules Check..."
+msgstr "Prebieha kontrola zadaných parametrov NC Programu/rezného plánu..."
+
+msgid "Design Rules Adjustment..."
+msgstr "Prebieha ladenie parametrov NC Programu/rezného plánu"
+
+msgid "circle mode"
+msgstr "Režim kruhu"
+
+msgid "three points"
+msgstr "tri body"
+
+msgid "centre and point"
+msgstr "stred a bod na kruhu"
+
+msgid "two points"
+msgstr "dva body"
+
+msgid "centre and radius"
+msgstr "Stred a polomer"
+
+msgid "cutting tool"
+msgstr "rezný nástroj"
+
+msgid "Chamfering Bit"
+msgstr "Ostrie úkosu"
+
+msgid "New Fixture..."
+msgstr "Oprava systému súradníc"
+
+msgid "A axis (around X) rotation"
+msgstr "Otočenie okolo osi X"
+
+msgid "B axis (around Y) rotation"
+msgstr "Otočenie okolo osi Y"
+
+msgid "C axis (around Z) rotation"
+msgstr "Otočenie okolo osi Y"
+
+msgid "Pivot Point"
+msgstr "bod, okolo ktorého sa bude realzovať otočenie"
+
+msgid "Pick roll on point"
+msgstr "Označte bod nábehu" 
+
+msgid "Pick roll off point"
+msgstr "Označte bod výbehu"
+
+msgid "Brinell hardness of raw material"
+msgstr "Material-Haerte nach Brinell"
+
+msgid "Raw Material"
+msgstr "Bežný materiál"
+
+msgid "Surface Speed (m/min)"
+msgstr "Rýchlsoť brúsenia (m/min)"
+
+msgid "Surface Speed (ft/min)"
+msgstr "Rýchlsoť brúsenia (ft/min)"
+
+msgid "Raw Material Name"
+msgstr "Meno bežného materiálu"
+
+msgid "Maximum Material Removal Rate (mm^3/min)"
+msgstr "Maximálna miera odstraňovania materiálu (mm^3/min)"
+
+msgid "Maximum Material Removal Rate (inches^3/min)"
+msgstr "Maximálna miera odstraňovania materiálu (inches^3/min)"
+
+msgid "New Speed Reference..."
+msgstr "Nová žiadaná hodnotu rýchlosti"
+
+msgid "New Cutting Rate Reference..."
+msgstr "Nová žiadaná hodnota miery odstraňovania materiálu"
+
+msgid "Feeds and Speeds"
+msgstr "Periódy vzorkovania a rýchlosti"
+
+msgid "Fixtures"
+msgstr "Súradnicové systémy"
+
+msgid "output file name follows data file name"
+msgstr "meno výstupného súboru je rovnaké ako meno súbrou s dátami"
+
+msgid "Number of sample points"
+msgstr "Počet bodov vzorkovania"
+
+msgid "face to sketch deviaton"
+msgstr "Roziel medzi plochou a nákresom"
+
+msgid "Brinell Hardness of raw material"
+msgstr "Brinellova tvrdosť býného materiálu"
+
+msgid "Carbide "
+msgstr "Karbid"
+
+msgid "Carbide"
+msgstr "Karbid "
+
+msgid "High Speed Steel"
+msgstr "vysokorýchlsotná oceľ"
+
+msgid "Estimate when possible"
+msgstr "Odhadni, keď je to možné"
+
+msgid "Use default values"
+msgstr "Použi prednastavné hodnoty"
+
+msgid "degree"
+msgstr "stupeň"
+
+msgid " degree "
+msgstr " stupeň "
+
+msgid "Turning Tool"
+msgstr "Rezací nástroj"
+
+msgid "New Special Adaptive Roughing Operation..."
+msgstr "Nová špeciálna prispôsobivá operácia zdrsńovania "
+
+msgid "New Drill Cycle Operation..."
+msgstr "Nový cyklus vŕtania"
+
+msgid "New CounterBore Cycle Operation..."
+msgstr "Nová operácia proti spätnému vyvŕtaniu"
+
+msgid "Add Speed Reference..."
+msgstr "Pridaj žiadanú rýchlosť"
+
+msgid "Add Cutting Rate Reference..."
+msgstr "Pridaj novú periódu vzorkovania"
+
+msgid "Leave manually assigned title"
+msgstr "odstráň manuálne priradený popis"
+
+msgid "Automatically generate title"
+msgstr "Automaticky generuh popis"
+
+msgid "Automatic Title"
+msgstr "Automatický popis"
+
+msgid "New Drill..."
+msgstr "Nové vŕtamie"
+
+msgid "New End Mill..."
+msgstr "Nový hrot frézy"
+
+msgid "New Centre Drill..."
+msgstr "Nový hrot kruhopvej frézy"
+
+msgid "New Slot Drill..."
+msgstr "Nová fréza na tvorbu drážok"
+
+msgid "New Ball End Mill..."
+msgstr "Nová guľová fréza"
+
+msgid "New Chamfer Mill..."
+msgstr "Nová úkosná frňeza"
+
+msgid "New Turning Tool..."
+msgstr "Nový sústržiaci nástroj"
+
+msgid "Draw circles through 3 points"
+msgstr "Nakresli kruh cez 3 zadané body"
+
+msgid "Draw circles, centre and point"
+msgstr "Nakresli kruhy pomocou zadania stredu a bodu na kružnici"
+
+msgid "Draw circles, centre and radius"
+msgstr "Nakresli kruhy pomocou zadania stredu a polomeru"
+
+msgid "font options"
+msgstr "nastavenie písem/fontov"
+
+msgid "Active font"
+msgstr "Nastavené písmo/font"
+
+msgid "Paths (semicolon delimited)"
+msgstr "Cesty (oddelené podkočiarkou)"
+
+msgid "Draw Ellipses"
+msgstr "Kresli elipsy"
+
+msgid "View XY Front"
+msgstr "Pohľad zpredu v osiach XY"
+
+msgid "View XY Back"
+msgstr "Pohľad zozadu v osiach XY"
+
+msgid "View XZY Isometric"
+msgstr "Izometrický pohľad v troch osiach"
+
+msgid "Save Settings"
+msgstr "Ulož nastavenia"
+
+msgid "View XZ Top"
+msgstr "Pohľad zhora v osiach XZ"
+
+msgid "View XZ Bottom"
+msgstr "Pohľad zdola v osiach XZ"
+
+msgid "View YZ Right"
+msgstr "Pohľad sprava v osiach YZ"
+
+msgid "View YZ Left"
+msgstr "Pohľad zľava v osiach YZ"
+
+msgid "View XY Isometric"
+msgstr "Izometrický pohľad v osiach XY"
+
+msgid "View XZ Left"
+msgstr "Pohľad zľava v osiach YZ"
+
+msgid "View pan"
+msgstr "Panoramtický pohľad"
+
+msgid "Cut"
+msgstr "Vystrihnúť"
+
+msgid "Pick two or more faces or solids, the first one will be cut by the others"
+msgstr "Označte dve alebo viac plôch, alebo dve alebo viac telies, prvá/prvé bude orezané ostatnými"
+
+msgid "Revolve a sketch"
+msgstr "Otoč výkres"
+
+msgid "Revolved Solid"
+msgstr "OPtočené telesop"
+
+msgid "New Chamfer Operation..."
+msgstr "Nová operácia úkosu"
+
+msgid "New Contour Operation..."
+msgstr "Nová operácia rezania obrysu"
+
+msgid "Open BOM File"
+msgstr "Otvor súbopr vo formáte BOM"
+
+msgid "Profile spline deviation"
+msgstr "Odchýlka trajektórie o splajnu"
+
+msgid "Pocket spline deviation"
+msgstr "Odchýlka trajektórie o splajnu"
+
+msgid "Contour spline deviation"
+msgstr "Odchýlka obrysu o splajnu"
+
+msgid "Inlay spline deviation"
+msgstr "Odchýlka dutiny o splajnu"
+
+msgid "execution_order"
+msgstr "Poradie vakonávania"
+
+msgid "auto set speeds for new operation"
+msgstr "automatické nastavenie rýchlsotí pre novú operáciu"
+
+msgid "ignore errors where possible"
+msgstr "Neber ohľad an chyby, ak je to možné"
+
+msgid "auto save interval (in minutes)"
+msgstr "interval automatického ukladania (v minútach)"
+
+msgid "Word Space Percentage"
+msgstr "Vzdialenosť slov v percentách"
+
+msgid "Character Space Percentage"
+msgstr "Vzdialenosť znakov v percentách"
+
+msgid "simplify sketch options"
+msgstr "Zjednoduš nastavenie výkresu"
+
+msgid "max deviation"
+msgstr "maximálna odchýlka"
+
+msgid "bspline min degree (eg: 3)"
+msgstr "minimálny stupeň b-splajnu (napr.. 3)"
+
+msgid "bspline max degree (eg: 8)"
+msgstr "maximálny stupeň b-splajnu (napr. 8)"
+
+msgid "bspline continuity (eg: GeomAbs_C2)"
+msgstr "spojitosť b-Splajnu"
+
+msgid "Force closed shape"
+msgstr "Vynútť si použitie uzatvoreného tvaru"
+
+msgid "Sort Points"
+msgstr "Usporiadaj body"
+
+msgid "machining options"
+msgstr "Voľby tvorby NC programu/rezného plánu"
+
+msgid "Touch Probe"
+msgstr "Dotykový senzor výšky"
+
+msgid "Tool Length Switch"
+msgstr "Nástroj s nastaviteľnou hrúbkou reznej štrbiny"
+
+msgid "New Touch Probe..."
+msgstr "Nový dotykový senzor výšky"
+
+msgid "New Tool Length Switch..."
+msgstr "Nový nástroj s nastaviteľnou hrúbkou reznej štrbiny"
+
+msgid "Female half"
+msgstr "Vonkajšia časť"
+
+msgid "Male half"
+msgstr "Vnúrorná časť"
+
+msgid "Both halves"
+msgstr "Vonkajšia aj vnútorná časť"
+
+msgid "GCode generation"
+msgstr "Generovanie NC programu rezného plánu (GCode)"
+
+msgid "Border Width"
+msgstr "Šírka reznej štrbiny"
+
+msgid "Clearance Tool"
+msgstr "Nástroj na rezných medzier/hrán"
+
+msgid "Mirror Axis"
+msgstr "Zrkadlenie osí"
+
+msgid "X Axis"
+msgstr "os X"
+
+msgid "Y Axis"
+msgstr "os Y"
+
+msgid "Enter Sketch Mode"
+msgstr "Zmena režimu na kreslnie výkresov"
+
+msgid "Pad Sketch"
+msgstr "3D výkres s podložkou"
+
+msgid "Pocket Sketch"
+msgstr "3D výkres bez podložky"
+
+msgid "Copy Parallel"
+msgstr "Režim práce zvnútra aj zvonku trajektórí"
+
+msgid "solidify"
+msgstr "+podlož/spevni"
+
