@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: HeeksCAD 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 13:41+0200\n"
-"PO-Revision-Date: 2010-06-05 01:28+0100\n"
+"PO-Revision-Date: 2010-08-10 12:11+0100\n"
 "Last-Translator: hans <fungunner2@frreenet.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -539,8 +539,8 @@ msgstr "Über"
 msgid "Plugins"
 msgstr "Plugins"
 
-msgid "Exit"
-msgstr "Beenden"
+msgid "Exit\tCtrl+Q"
+msgstr "Beenden\tCtrl+Q"
 
 msgid "Undo\tCtrl+Z"
 msgstr "Rückgaengig\tCtrl+Z"
@@ -564,7 +564,7 @@ msgid "Select Mode"
 msgstr "Markiermodus"
 
 msgid "Draw a sketch"
-msgstr "Neue Zeichnung"
+msgstr "Freihand"
 
 msgid "Draw Circles"
 msgstr "Kreise zeichnen"
@@ -2317,6 +2317,9 @@ msgstr "Schriftverzeichnisse (durch Semikolon getrennt)"
 msgid "Draw Ellipses"
 msgstr "Elipsen zeichnen"
 
+msgid "Draw ellipses"
+msgstr "Elipsen zeichnen"
+
 msgid "View XY Front"
 msgstr "Draufsicht"
 
@@ -2478,4 +2481,85 @@ msgstr "In/Outline Modus"
 
 msgid "solidify"
 msgstr "+Oberfläche"
+
+msgid "Add New Milling Operation"
+msgstr "Neue CNC Funktion"
+
+msgid "Add New 3D Operation"
+msgstr "Neue 3D Funktion"
+
+msgid "Add Other Operation"
+msgstr "Andere Funktionen"
+
+msgid "Add New Tool"
+msgstr "Neues Werkzeug"
+
+msgid "Run Python Script"
+msgstr "Python Script starten"
+
+msgid "Save As"
+msgstr "Speichern unter"
+
+msgid "Profile Operation..."
+msgstr "Umriss fraesen"
+
+msgid "Pocket Operation..."
+msgstr "Tasche fraesen"
+
+msgid "Adaptive Roughing Operation..."
+msgstr "Adaptives Schruppen"
+
+msgid "Drilling Operation..."
+msgstr "Bohren"
+
+msgid "CounterBore Operation..."
+msgstr "Bohren mit Aushub"
+
+msgid "Chamfer Operation..."
+msgstr "Fasen"
+
+msgid "Inlay Operation..."
+msgstr "Inlay Funktion"
+
+msgid "Drill..."
+msgstr "Bohrer"
+
+msgid "Centre Drill..."
+msgstr "Zentrierbohrer"
+
+msgid "End Mill..."
+msgstr "Schaftfraeser"
+
+msgid "Slot Drill..."
+msgstr "Taschenfraeser"
+
+msgid "Ball End Drill..."
+msgstr "Kugelfraeser"
+
+msgid "Chamfer Mill..."
+msgstr "V-Nutfraeser(Fasen)"
+
+msgid "Turning Tool..."
+msgstr "Drehstahl"
+
+msgid "Touch Probe..."
+msgstr "Messtaster"
+
+msgid "Tool Length Switch..."
+msgstr "Werkzeug-Laengen-Taster"
+
+msgid "Start drawing rectangles"
+msgstr "Rechteck zeichnen"
+
+msgid "Start drawing obrounds"
+msgstr "Rechteck mit angefuegten Kreisboegen"
+
+msgid "Start drawing polygons"
+msgstr "Poligon zeichnen"
+
+msgid "Spline Through Points"
+msgstr "Punkte mit Splines verbinden"
+
+msgid "Drag to move view"
+msgstr "Mit linker Maustaste veschieben"
 
