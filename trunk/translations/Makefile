@@ -4,13 +4,16 @@ LOCALEDIR=$(DATADIR)/locale
 mkdir_p= mkdir -p
 MSGFMT=msgfmt
 
-OBJECTS=de/HeeksCAD.mo it/HeeksCAD.mo
+OBJECTS=de/HeeksCAD.mo it/HeeksCAD.mo sk/HeeksCAD.mo
 all: ${OBJECTS}
 
 de/HeeksCAD.mo: de/HeeksCAD.po
 	$(MSGFMT) -o $@ $?
 
 it/HeeksCAD.mo: it/HeeksCAD.po
+	$(MSGFMT) -o $@ $?
+
+sk/HeeksCAD.mo: sk/HeeksCAD.po
 	$(MSGFMT) -o $@ $?
 
 clean:
