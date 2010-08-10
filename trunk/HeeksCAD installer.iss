@@ -7,14 +7,14 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{A8D3AD0D-D36E-4970-BE77-76A840EA2831}
 AppName=HeeksCAD
-AppVerName=HeeksCAD 0.14.0
+AppVerName=HeeksCAD 0.14.1
 AppPublisher=Heeks Software
 AppPublisherURL=http://heeks.net/
 AppSupportURL=http://code.google.com/p/heekscad/
 AppUpdatesURL=http://code.google.com/p/heekscad/
 DefaultDirName={pf}\HeeksCAD
 DefaultGroupName=HeeksCAD
-OutputBaseFilename=HeeksCAD 0.14.0
+OutputBaseFilename=HeeksCAD 0.14.1
 Compression=lzma
 SolidCompression=yes
 
@@ -36,6 +36,7 @@ Source: "C:\Users\Dan\OCC dlls for HeeksCAD\*"; DestDir: "{app}"; Flags: ignorev
 Source: "C:\Users\Dan\HeeksCAD\de\*"; DestDir: "{app}\de"; Flags: ignoreversion
 Source: "C:\Users\Dan\HeeksCAD\it\*"; DestDir: "{app}\it"; Flags: ignoreversion
 Source: "C:\Users\Dan\HeeksCAD\fr\*"; DestDir: "{app}\fr"; Flags: ignoreversion
+Source: "C:\Users\Dan\HeeksCAD\sk\*"; DestDir: "{app}\sk"; Flags: ignoreversion
 Source: "C:\Users\Dan\HeeksCAD\wxmsw28u_gl_vc_custom.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\Dan\HeeksCAD\wxmsw28u_core_vc_custom.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\Dan\HeeksCAD\wxmsw28u_aui_vc_custom.dll"; DestDir: "{app}"; Flags: ignoreversion
