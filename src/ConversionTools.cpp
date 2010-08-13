@@ -126,7 +126,7 @@ struct EdgeComparison : public std::binary_function<const TopoDS_Edge &, const T
     TopoDS_Edge m_reference_edge;
 };
 
-static void SortEdges( std::vector<TopoDS_Edge> & edges )
+void SortEdges( std::vector<TopoDS_Edge> & edges )
 {
 	for (std::vector<TopoDS_Edge>::iterator l_itEdge = edges.begin(); l_itEdge != edges.end(); l_itEdge++)
     {
@@ -347,6 +347,45 @@ bool ConvertSketchToEdges(HeeksObj *object, std::vector<TopoDS_Edge> &edges)
     return(true);
 }
 
+bool ConvertEdgesToFaceOrWire(const std::vector<TopoDS_Edge> &edges, std::list<TopoDS_Shape> &face_or_wire, bool face_not_wire)
+{
+	// It's not enough to add the edges to the wire in an arbitrary order.  If the adjacent edges
+	// don't connect then the wire ends up losing one of the edges.  We must sort the edge objects
+	// so that they're connected (or best we can) before constructing the TopoDS_Wire object from
+	// them.
+	// So, please call SortEdges before getting to here.
+	try
+	{
+		BRepBuilderAPI_MakeWire wire_maker;
+		for(std::vector<TopoDS_Edge>::const_iterator It = edges.begin(); It != edges.end(); It++)
+		{
+			const TopoDS_Edge &edge = *It;
+			wire_maker.Add(edge);
+		}
+
+		if(face_not_wire)
+		{
+			face_or_wire.push_back(BRepBuilderAPI_MakeFace(wire_maker.Wire()));
+		}
+		else
+		{
+			face_or_wire.push_back(wire_maker.Wire());
+		}
+	}
+	catch (Standard_Failure) {
+		Handle_Standard_Failure e = Standard_Failure::Caught();
+		wxMessageBox(wxString(_("Error converting sketch to face")) + _T(": ") + Ctt(e->GetMessageString()));
+		return false;
+	}
+	catch(...)
+	{
+		wxMessageBox(_("Fatal Error converting sketch to face"));
+		return false;
+	}
+
+	return true;
+}
+
 bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_or_wire, bool face_not_wire)
 {
     std::vector<TopoDS_Edge> edges;
@@ -356,48 +395,11 @@ bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_o
         return(false);
     }
 
-	if(edges.size() > 0)
-	{
-	    // It's not enough to add the edges to the wire in an arbitrary order.  If the adjacent edges
-	    // don't connect then the wire ends up losing one of the edges.  We must sort the edge objects
-	    // so that they're connected (or best we can) before constructing the TopoDS_Wire object from
-	    // them.
+	if(edges.size() == 0)return false;
 
-	    SortEdges(edges);
+	SortEdges(edges);
 
-		try
-		{
-			BRepBuilderAPI_MakeWire wire_maker;
-			std::vector<TopoDS_Edge>::iterator It;
-			for(It = edges.begin(); It != edges.end(); It++)
-			{
-				TopoDS_Edge &edge = *It;
-				wire_maker.Add(edge);
-			}
-
-			if(face_not_wire)
-			{
-				face_or_wire.push_back(BRepBuilderAPI_MakeFace(wire_maker.Wire()));
-			}
-			else
-			{
-				face_or_wire.push_back(wire_maker.Wire());
-			}
-		}
-		catch (Standard_Failure) {
-			Handle_Standard_Failure e = Standard_Failure::Caught();
-			wxMessageBox(wxString(_("Error converting sketch to face")) + _T(": ") + Ctt(e->GetMessageString()));
-			return false;
-		}
-		catch(...)
-		{
-			wxMessageBox(_("Fatal Error converting sketch to face"));
-			return false;
-		}
-		return true;
-	}
-
-	return false;
+	return ConvertEdgesToFaceOrWire(edges, face_or_wire, face_not_wire);
 }
 
 bool ConvertFaceToSketch2(const TopoDS_Face& face, HeeksObj* sketch, double deviation)
@@ -448,6 +450,7 @@ bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double devi
 
 	BRepAdaptor_Curve curve(edge);
 	GeomAbs_CurveType curve_type = curve.GetType();
+	bool sense = (edge.Orientation() == TopAbs_FORWARD);
 
 	switch(curve_type)
 	{
@@ -462,7 +465,7 @@ bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double devi
 			gp_Pnt PE;
 			gp_Vec VE;
 			curve.D1(uEnd, PE, VE);
-			HLine* new_object = new HLine(PS, PE, &wxGetApp().current_color);
+			HLine* new_object = new HLine(sense ? PS:PE, sense ?PE:PS, &wxGetApp().current_color);
 			sketch->Add(new_object, NULL);
 		}
 		break;
@@ -479,6 +482,13 @@ bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double devi
 			gp_Vec VE;
 			curve.D1(uEnd, PE, VE);
 			gp_Circ circle = curve.Circle();
+			gp_Ax1 axis = circle.Axis();
+			if(!sense)
+			{
+				axis.SetDirection(-axis.Direction());
+				circle.SetAxis(axis);
+			}
+
 			if(curve.IsPeriodic())
 			{
 				double period = curve.Period();
@@ -497,7 +507,7 @@ bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double devi
 			}
 			else
 			{
-				HArc* new_object = new HArc(PS, PE, circle, &wxGetApp().current_color);
+				HArc* new_object = new HArc(sense ? PS:PE, sense ?PE:PS, circle, &wxGetApp().current_color);
 				sketch->Add(new_object, NULL);
 			}
 		}
@@ -516,7 +526,7 @@ bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double devi
 				Standard_Integer po;
 				gp_Pnt prev_p;
 				int i = 0;
-				for (po = Points.Lower(); po <= Points.Upper(); po++, i++) {
+				for (po = sense ? Points.Lower():Points.Upper(); (sense && (po <= Points.Upper())) || (!sense && (po >= Points.Lower())); i++) {
 					gp_Pnt p = (Points.Value(po)).Transformed(L);
 					if(i != 0)
 					{
@@ -524,6 +534,8 @@ bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double devi
 						sketch->Add(new_object, NULL);
 					}
 					prev_p = p;
+					if(sense)po++;
+					else po--;
 				}
 			}
 		}
