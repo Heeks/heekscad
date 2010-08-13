@@ -453,7 +453,7 @@ msgid "ruler"
 msgstr "pravítko"
 
 msgid "file options"
-msgstr "voľby sňuborov"
+msgstr "voľby súborov"
 
 msgid "DXF"
 msgstr "DXF"
@@ -561,7 +561,8 @@ msgid "Delete\tDel"
 msgstr "Zruš\tDel"
 
 msgid "Select Mode"
-msgstr "Výber režimu"
+msgstr "Vyber rezimu"
+#msgstr "Výber režimu"
 
 msgid "Draw a sketch"
 msgstr "Nakresli výkres"
@@ -1118,7 +1119,7 @@ msgid "Left button for selecting objects"
 msgstr "Ľavé tlačidlo vyberie objekt"
 
 msgid "( with Ctrl key for extra objects)"
-msgstr "(spolu s kl´vasou Ctrl vybáte viac objektov)"
+msgstr "(spolu s kl´vasou Ctrl vyberáte viac objektov)"
 
 msgid "Drag with left button to window select"
 msgstr "Uchopte vzbrané okno stlačením ľavého tlačidla"
