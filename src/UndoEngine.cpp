@@ -7,6 +7,7 @@
 #include "UndoEngine.h"
 #include "../interface/TransientObject.h"
 
+#ifdef USE_UNDO_ENGINE
 //This code attempt to determine what can be undone/redone by analyzing the heekscad graph and an 
 //internal graph of the previous state. 
 
@@ -414,3 +415,5 @@ void UndoEngine::PrintTree(HeeksObj *tree, std::stringstream &cstr,int level)
 		}
 	}
 }
+
+#endif

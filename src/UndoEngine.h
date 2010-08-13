@@ -4,6 +4,7 @@
 
 #pragma once
 
+#ifdef USE_UNDO_ENGINE
 typedef std::pair<int,int> HeeksObjId;
 typedef std::pair<HeeksObjId,HeeksObjId> HeeksLinkId;
 
@@ -65,3 +66,5 @@ protected:
 	void PrintTree(HeeksObj* tree, std::stringstream &cstr, int level);
 	void DealWithTransients(std::map<HeeksObjId,HeeksObj*> &treemap);
 };
+
+#endif
