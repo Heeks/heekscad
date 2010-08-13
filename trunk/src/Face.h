@@ -63,6 +63,7 @@ public:
 	void GetTorusParams(gp_Torus &t);
 	bool GetNurbSurfaceParams(CNurbSurfaceParams* params);
 	int GetSurfaceType();
+	bool IsAPlane(double* normal3);
 	wxString GetSurfaceTypeStr();
 	CEdge* GetFirstEdge();
 	CEdge* GetNextEdge();

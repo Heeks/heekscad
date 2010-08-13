@@ -319,6 +319,81 @@ int CFace::GetSurfaceType()
 	return surface_type;
 }
 
+bool CFace::IsAPlane(double* normal3)
+{
+	static const int GRID = 5;
+	BRepAdaptor_Surface surface(m_topods_face, Standard_True);
+	GeomAbs_SurfaceType surface_type = surface.GetType();
+	switch(surface_type)
+	{
+	case GeomAbs_Plane:
+		if(normal3)
+		{
+			BRepAdaptor_Surface surface(m_topods_face, Standard_True);
+			gp_Pln p = surface.Plane();
+			gp_Dir d = p.Axis().Direction();
+			normal3[0] = d.X();
+			normal3[1] = d.Y();
+			normal3[2] = d.Z();
+		}
+		return true;
+	case GeomAbs_Cylinder:
+	case GeomAbs_Cone:
+	case GeomAbs_Sphere:
+	case GeomAbs_Torus:
+		return false;
+	default:
+		{
+			double uv_box[4];
+			GetUVBox(uv_box);
+			double u[GRID + 1];
+			double v[GRID + 1];
+			double U = uv_box[1] - uv_box[0];
+			double V = uv_box[3] - uv_box[2];
+			for(int i = 0; i <= GRID; i++)
+			{
+				u[i] = uv_box[0] + U * i / GRID;
+				v[i] = uv_box[2] + V * i / GRID;
+			}
+
+			// define plane from three corners
+			gp_Pnt p00, pN0, pNN;
+			gp_Dir n00 = GetNormalAtUV(u[0], v[0], &p00);
+			gp_Dir nN0 = GetNormalAtUV(u[GRID], v[0], &pN0);
+			gp_Dir nNN = GetNormalAtUV(u[GRID], v[GRID], &pNN);
+			gp_Trsf m = make_matrix(p00, make_vector(p00, pN0), make_vector(p00, pNN));
+			gp_Pln plane(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1));
+			plane.Transform(m);
+
+			// test all the vertices of the grid
+			for(int i = 0; i <= GRID; i++)
+			{
+				for(int j = 0; j <= GRID; j++)
+				{
+					gp_Pnt p;
+					gp_Dir n = GetNormalAtUV(u[i], v[j], &p);
+
+					// check the point lies on the plane
+					double d = fabs(plane.Distance(p));
+					if(d > wxGetApp().m_geom_tol)
+						return false;
+				}
+			}
+
+			if(normal3)
+			{
+				gp_Pnt p;
+				gp_Dir n = GetNormalAtUV(uv_box[0] + U * 0.5, uv_box[2] + V * 0.5, &p);
+				normal3[0] = n.X();
+				normal3[1] = n.Y();
+				normal3[2] = n.Z();
+			}
+
+			return true; // all points tested fitted the plane
+		}
+	}
+}
+
 wxString CFace::GetSurfaceTypeStr()
 {
 	wxString surface_type = _("unknown");
