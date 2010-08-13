@@ -149,6 +149,7 @@ public:
 	virtual bool ConvertWireToSketch(const TopoDS_Wire& wire, HeeksObj* sketch, double deviation);
 	virtual HeeksObj* GetSketchFromName(const wxChar* name);
 	virtual bool ConvertSketchToEdges(HeeksObj *object, std::vector<TopoDS_Edge> &edges);
+	virtual HeeksObj* ConvertEdgesToSketch(const std::list<HeeksObj*> &edges, double deviation);
 	virtual bool FilletSketchAtPoint(HeeksObj* sketch, const double* d3, double rad);
 
 	// body functions
@@ -169,8 +170,9 @@ public:
 	// face functions
 	virtual void FaceSetTempAttribute(HeeksObj* face, int attr);
 	virtual int FaceGetTempAttribute(HeeksObj* face);
-	virtual int FaceGetSurfaceType(HeeksObj* face);
-	virtual void FaceGetUVBox(HeeksObj* face, double *uv_box);// 4 doubles
+	virtual int FaceGetSurfaceType(HeeksObj* face);// 0 - GeomAbs_Plane // 1 - GeomAbs_Cylinder // 2 - GeomAbs_Cone // 3 - GeomAbs_Sphere // 4 - GeomAbs_Torus // 5 - GeomAbs_BezierSurface // 6 - GeomAbs_BSplineSurface // 7 - GeomAbs_SurfaceOfRevolution // 8 - GeomAbs_SurfaceOfExtrusion // 9 - GeomAbs_OffsetSurface // 10- GeomAbs_OtherSurface
+	virtual bool FaceIsAPlane(HeeksObj* face, double* normal3);// returns true if the face is a plane, or approximates to a plane, return the normal in normal3 if normal3 is not NULL
+	virtual void FaceGetUVBox(HeeksObj* face, double *uv_box);// 4 doubles - umin, umax, vmin, vmax
 	virtual void FaceGetSurfaceUVPeriod(HeeksObj* face, double *uv, bool *isUPeriodic, bool *isVPeriodic);// 2 doubles
 	virtual void FaceGetPointAndNormalAtUV(HeeksObj* face, double u, double v, double* p, double* norm);
 	virtual bool FaceGetUVAtPoint(HeeksObj* face, const double *pos, double *u, double *v);
@@ -189,6 +191,7 @@ public:
 	virtual HeeksObj* FaceGetNextLoop(HeeksObj* face);
 	virtual bool FaceOrientation(HeeksObj* face);
 	virtual HeeksObj* FaceGetParentBody(HeeksObj* face);
+	virtual HeeksObj* FaceMakeSketch(HeeksObj* face, double deviation);
 
 	// edge functions
 	virtual int EdgeGetCurveType(HeeksObj* edge);

@@ -639,6 +639,19 @@ bool CHeeksCADInterface::ConvertSketchToEdges(HeeksObj *object, std::vector<Topo
     return(::ConvertSketchToEdges(object, edges));
 }
 
+HeeksObj* CHeeksCADInterface::ConvertEdgesToSketch(const std::list<HeeksObj*> &edges, double deviation)
+{
+	HeeksObj* new_object = new CSketch();
+
+	for(std::list<HeeksObj*>::const_iterator It = edges.begin(); It != edges.end(); It++)
+	{
+		HeeksObj* object = *It;
+		if(object->GetType() != EdgeType)continue;
+		ConvertEdgeToSketch2(((CEdge*)object)->Edge(), new_object, deviation);
+	}
+
+	return new_object;
+}
 
 HeeksObj* CHeeksCADInterface::MakePipe(HeeksObj* spine, HeeksObj* profile)
 {
@@ -719,6 +732,11 @@ int CHeeksCADInterface::FaceGetTempAttribute(HeeksObj* face)
 int CHeeksCADInterface::FaceGetSurfaceType(HeeksObj* face)
 {
 	return ((CFace*)face)->GetSurfaceType();
+}
+
+bool CHeeksCADInterface::FaceIsAPlane(HeeksObj* face, double* normal3)
+{
+	return ((CFace*)face)->IsAPlane(normal3);
 }
 
 void CHeeksCADInterface::FaceGetUVBox(HeeksObj* face, double *uv_box)
@@ -854,6 +872,13 @@ bool CHeeksCADInterface::FaceOrientation(HeeksObj* face)
 HeeksObj* CHeeksCADInterface::FaceGetParentBody(HeeksObj* face)
 {
 	return ((CFace*)face)->GetParentBody();
+}
+
+HeeksObj* CHeeksCADInterface::FaceMakeSketch(HeeksObj* face, double deviation)
+{
+	CSketch* new_object = new CSketch();
+	ConvertFaceToSketch2(((CFace*)face)->Face(), new_object, deviation);
+	return new_object;
 }
 
 long CHeeksCADInterface::BodyGetNumEdges(HeeksObj* body)
