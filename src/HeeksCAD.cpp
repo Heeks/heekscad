@@ -141,7 +141,9 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_antialiasing = false;
 	m_light_push_matrix = true;
 	m_marked_list = new MarkedList;
+#ifdef USE_UNDO_ENGINE
 	history = new UndoEngine(this);
+#endif
 	m_doing_rollback = false;
 	mouse_wheel_forward_away = true;
 	ctrl_does_rotate = false;
@@ -207,7 +209,9 @@ HeeksCADapp::~HeeksCADapp()
 	delete m_marked_list;
 	m_marked_list = NULL;
 	observers.clear();
+#ifdef USE_UNDO_ENGINE
 	delete history;
+#endif
 	delete magnification;
 	delete m_select_mode;
 	delete m_digitizing;
@@ -502,8 +506,10 @@ int HeeksCADapp::OnExit(){
 
     WriteConfig();
 
+#ifdef USE_UNDO_ENGINE
 	delete history;
 	history = NULL;
+#endif
 
 	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
 		wxDynamicLibrary* shared_library = *It;
@@ -628,8 +634,10 @@ void HeeksCADapp::Reset(){
 		ov->Clear();
 	}
 	Clear();
+#ifdef USE_UNDO_ENGINE
 	delete history;
 	history = new UndoEngine(this);
+#endif
 	m_current_coordinate_system = NULL;
 	m_doing_rollback = false;
 	gp_Vec vy(0, 1, 0), vz(0, 0, 1);
@@ -1784,20 +1792,28 @@ bool HeeksCADapp::IsModified(void){
 		}
 	}
 
+#ifdef USE_UNDO_ENGINE
 	m_isModified = history->IsModified();
+#else
+	m_isModified = false;
+#endif
 	m_isModifiedValid = true;
 	return m_isModified;
 }
 
 void HeeksCADapp::SetLikeNewFile(void){
+#ifdef USE_UNDO_ENGINE
 	history->SetLikeNewFile();
+#endif
 	m_isModifiedValid = true;
 	m_isModified = false;
 }
 
 void HeeksCADapp::ClearHistory(void){
+#ifdef USE_UNDO_ENGINE
 	history->ClearHistory();
 	history->SetLikeNewFile();
+#endif
 	m_isModifiedValid = true;
 	m_isModified = false;
 }
@@ -1939,18 +1955,22 @@ void HeeksCADapp::DoToolUndoably(Tool *t)
 
 void HeeksCADapp::Undo(void)
 {
+#ifdef USE_UNDO_ENGINE
 	history->Undo();
 	Changed();
 	m_marked_list->Clear(true);
 	Repaint();
+#endif
 }
 
 void HeeksCADapp::Redo(void)
 {
+#ifdef USE_UNDO_ENGINE
 	history->Redo();
 	Changed();
 	m_marked_list->Clear(true);
 	Repaint();
+#endif
 }
 
 void HeeksCADapp::WentTransient(HeeksObj* obj, TransientObject *tobj)
@@ -1989,7 +2009,9 @@ void HeeksCADapp::ObserversOnChange(const std::list<HeeksObj*>* added, const std
 
 void HeeksCADapp::CreateUndoPoint()
 {
+#ifdef USE_UNDO_ENGINE
 	history->CreateUndoPoint();
+#endif
 }
 
 void HeeksCADapp::Changed()
