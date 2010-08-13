@@ -24,7 +24,9 @@ class HeeksObj;
 class MarkedObject;
 class Gripper;
 class CViewPoint;
+#ifdef USE_UNDO_ENGINE
 class UndoEngine;
+#endif
 class Observer;
 class CHeeksFrame;
 class wxDynamicLibrary;
@@ -72,7 +74,9 @@ class HeeksCADapp : public wxApp, public ObjList
 {
 private:
 	std::set<Observer*> observers;
+#ifdef USE_UNDO_ENGINE
 	UndoEngine *history;
+#endif
 	std::map<HeeksObj*,std::list<HeeksObj*> > m_transient_objects;
 
 	typedef std::multimap< int, HeeksObj* > IdsToObjects_t;

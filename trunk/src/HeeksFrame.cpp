@@ -761,6 +761,7 @@ static void OnSaveSettingsButton( wxCommandEvent& event )
     wxGetApp().WriteConfig();
 }
 
+#ifdef USE_UNDO_ENGINE
 static void OnUndoButton( wxCommandEvent& event )
 {
 	wxGetApp().Undo();
@@ -772,6 +773,7 @@ static void OnRedoButton( wxCommandEvent& event )
 	wxGetApp().Redo();
 	wxGetApp().Repaint();
 }
+#endif
 
 static void OnNewButton( wxCommandEvent& event )
 {
@@ -1644,9 +1646,11 @@ void CHeeksFrame::MakeMenus()
 
 	// Edit Menu
 	wxMenu *edit_menu = new wxMenu;
+#ifdef USE_UNDO_ENGINE
 	AddMenuItem(edit_menu, _("Undo\tCtrl+Z"), ToolImage(_T("undo")), OnUndoButton);
 	AddMenuItem(edit_menu, _("Redo\tCtrl+Shift+Z"), ToolImage(_T("redo")), OnRedoButton);
 	edit_menu->AppendSeparator();
+#endif
 	AddMenuItem(edit_menu, _("Cut\tCtrl+X"), ToolImage(_T("cut")), OnCutButton, OnUpdateCut);
 	AddMenuItem(edit_menu, _("Copy\tCtrl+C"), ToolImage(_T("copy")), OnCopyButton, OnUpdateCopy);
 	AddMenuItem(edit_menu, _("Paste\tCtrl+V"), ToolImage(_T("paste")), OnPasteButton, OnUpdatePaste);
@@ -1769,8 +1773,10 @@ void CHeeksFrame::AddToolBars()
 	AddToolBarTool(m_toolBar, _T("Cut"), ToolImage(_T("cut")), _("Cut selected items to the clipboard"), OnCutButton, OnUpdateCut);
 	AddToolBarTool(m_toolBar, _T("Copy"), ToolImage(_T("copy")), _("Copy selected items to the clipboard"), OnCopyButton, OnUpdateCopy);
 	AddToolBarTool(m_toolBar, _T("Paste"), ToolImage(_T("paste")), _("Paste items from the clipboard"), OnPasteButton, OnUpdatePaste);
+#ifdef USE_UNDO_ENGINE
 	AddToolBarTool(m_toolBar, _T("Undo"), ToolImage(_T("undo")), _("Undo the previous command"), OnUndoButton);
 	AddToolBarTool(m_toolBar, _T("Redo"), ToolImage(_T("redo")), _("Redo the next command"), OnRedoButton);
+#endif
 	AddToolBarTool(m_toolBar, _T("Select"), ToolImage(_T("select")), _("Select Mode"), OnSelectModeButton);
 
 	{
