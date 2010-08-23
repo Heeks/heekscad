@@ -1,6 +1,12 @@
 // stdafx.h
 // Copyright (c) 2009, Dan Heeks
 // This program is released under the BSD license. See the file COPYING for details.
+#if wxUSE_UNICODE
+	#define _UNICODE
+#endif
+#define _DEBUG 1
+#define _WARNINGS 3
+
 #ifdef WIN32
 #pragma warning(disable : 4996)
 #endif
@@ -16,6 +22,11 @@
 
 #ifdef WIN32
 #include "windows.h"
+#endif
+
+#include <wx/wx.h>
+#if wxUSE_UNICODE
+	#define _UNICODE
 #endif
 
 #include <algorithm>
@@ -51,6 +62,7 @@
 #ifndef INT_MIN
 	#define INT_MIN  (-2147483647 - 1)
 #endif
+
 
 
 #include <Standard.hxx>
@@ -166,8 +178,6 @@
 #include <TopTools_MapOfShape.hxx>
 #include <UnitsAPI.hxx>
 
-
-#include <wx/wx.h>
 #include <wx/aui/aui.h>
 #include "wx/brush.h"
 #include "wx/button.h"
@@ -220,7 +230,11 @@
 #include <wx/treectrl.h>
 #include "wx/window.h"
 
+
 #include "../tinyxml/tinyxml.h"
+#if wxUSE_UNICODE
+	#define _UNICODE
+#endif
 
 extern "C" {
 #include <GL/gl.h>

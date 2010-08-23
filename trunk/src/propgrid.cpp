@@ -54,7 +54,11 @@
     #include "wx/intl.h"
     #include "wx/frame.h"
 #endif
-
+//correction of non Unicode include file
+#define GetHwnd()               ((HWND)GetHWND())
+#define GetHwndOf(win)          ((HWND)((win)->GetHWND()))
+// old name
+#define GetWinHwnd              GetHwndOf
 
 #include "wx/timer.h"
 #include "wx/dcbuffer.h"
@@ -79,7 +83,7 @@
 #include "odcombo.h"
 
 #ifdef __WXMSW__
-    #include <wx/msw/private.h>
+		//#include <wx/msw/private.h>
 #endif
 
 
