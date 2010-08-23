@@ -36,7 +36,9 @@
 #include "advprops.h"
 
 #ifdef __WXMSW__
-    #include <wx/msw/private.h>
+	#ifndef _UNICODE
+		#include <wx/msw/private.h>
+	#endif
 #endif
 
 // -----------------------------------------------------------------------

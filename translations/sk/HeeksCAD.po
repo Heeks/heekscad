@@ -561,8 +561,7 @@ msgid "Delete\tDel"
 msgstr "Zruš\tDel"
 
 msgid "Select Mode"
-msgstr "Vyber rezimu"
-#msgstr "Výber režimu"
+msgstr "Výberový režim"
 
 msgid "Draw a sketch"
 msgstr "Nakresli výkres"
@@ -1098,7 +1097,7 @@ msgid "Ruled Surface"
 msgstr "Povrch s rozmermy"
 
 msgid "pick sketches"
-msgstr "Pridaj trajektňorie"
+msgstr "Pridaj trajektórie"
 
 msgid "Input extrusion height"
 msgstr "Vlož výsku ťahania"
@@ -1119,16 +1118,16 @@ msgid "Left button for selecting objects"
 msgstr "Ľavé tlačidlo vyberie objekt"
 
 msgid "( with Ctrl key for extra objects)"
-msgstr "(spolu s kl´vasou Ctrl vyberáte viac objektov)"
+msgstr "(spolu s klávesou Ctrl vyberáte viac objektov)"
 
 msgid "Drag with left button to window select"
-msgstr "Uchopte vzbrané okno stlačením ľavého tlačidla"
+msgstr "Uchopte vybrané okno stlačením ľavého tlačidla"
 
 msgid "or to move object if on an object"
-msgstr "alebo pohzbujte objektom ak ste mzsou na nom"
+msgstr "alebo pohybujte objektom ak ste myšou na ňom"
 
 msgid "Mouse wheel to zoom in and out"
-msgstr "Koliesko myši približje alebo vzďaľuje obejkty"
+msgstr "Koliesko myši približuje alebo vzďaľuje objekty"
 
 msgid "Middle button to pan view"
 msgstr "Stredné tlačidlo otvorí panoramatický pohľad"
@@ -1143,7 +1142,7 @@ msgid "( with Ctrl key to pan view )"
 msgstr "(s klávesou Ctrl zobrzí panormatický pohľad)"
 
 msgid "Right button for object menu"
-msgstr "Pravé tlačidlo ukáže meno objektu"
+msgstr "Pravé tlačidlo ukáže menu objektu"
 
 msgid "See options window to hide this help"
 msgstr "Použite menu volieb, ak chcete skyť tohto pomocníka"
@@ -2085,16 +2084,16 @@ msgid "type"
 msgstr "typ"
 
 msgid "Drill Bit"
-msgstr "Hrot vrtáku"
+msgstr "hrot vrtáka"
 
 msgid "Slot Cutter"
-msgstr "Vyrezávač drážok"
+msgstr "vyrezávač drážok"
 
 msgid "Ball End Mill"
-msgstr "Kruhová fréza"
+msgstr "kruhová fréza"
 
 msgid "Chamfering bit"
-msgstr "Hrot úkosu"
+msgstr "hrot úkosu"
 
 msgid "End Mill"
 msgstr "hrot frézy"
@@ -2103,7 +2102,7 @@ msgid "CounterBore"
 msgstr "Spätné vyvŕtanie"
 
 msgid "Centre Drill Bit"
-msgstr "Stred hrotu vrtáka"
+msgstr "stred hrotu vrtáka"
 
 msgid "flat_radius"
 msgstr "Polomer na hrote"
@@ -2229,10 +2228,10 @@ msgid "Brinell Hardness of raw material"
 msgstr "Brinellova tvrdosť býného materiálu"
 
 msgid "Carbide "
-msgstr "Karbid"
+msgstr "Karbidový/á "
 
 msgid "Carbide"
-msgstr "Karbid "
+msgstr "Karbid"
 
 msgid "High Speed Steel"
 msgstr "vysokorýchlsotná oceľ"
