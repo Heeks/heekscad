@@ -1,5 +1,7 @@
-
 #include "stdafx.h"
+#ifdef wxUSE_UNICODE
+	#define _UNICODE
+#endif
 #include <stdio.h>
 #include <math.h>
 #include <wx/string.h>
@@ -489,7 +491,7 @@ void VectorFont::Glyph::glCommands(
 	HANDLE hFind;
 
 	std::string pattern = std::string(Ttc(Root.c_str())) + "\\*";
-	hFind = FindFirstFile(Ctt(pattern.c_str()), &file_data);
+	hFind = FindFirstFile(LPCSTR(LPCWSTR(Ctt(pattern.c_str()))), &file_data);
 
 	// Now recurse down until we find document files within 'current' directories.
 	if (hFind != INVALID_HANDLE_VALUE)
@@ -498,7 +500,7 @@ void VectorFont::Glyph::glCommands(
 		{
 			if ((file_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY) continue;
 
-			results.push_back( file_data.cFileName );
+			results.push_back((LPCWSTR) ((LPCSTR)(file_data.cFileName)) );
 		} while (FindNextFile( hFind, &file_data));
 
 		FindClose(hFind);

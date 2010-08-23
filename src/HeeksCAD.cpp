@@ -3677,10 +3677,20 @@ void HeeksCADapp::create_font()
 {
 	if(m_gl_font_initialized)
 		return;
-	wxString fstr = GetResFolder() + _T("/bitmaps/font.glf");
-	glGenTextures( 1, &m_font_tex_number );
+	wxString fstr;
+	switch((wxLocale::GetSystemLanguage()))
+	{
+			case wxLANGUAGE_SLOVAK :
+				fstr = GetResFolder() + _T("/bitmaps/slovak.glf");
+				break;
+			default:
+				fstr = GetResFolder() + _T("/bitmaps/font.glf");
+				break;
+	}
+	glGenTextures(2, &m_font_tex_number );
 
 	//Create our glFont from verdana.glf, using texture 1
+	m_gl_font.Create((char*)Ttc(fstr.c_str()), m_font_tex_number);
 	m_gl_font.Create((char*)Ttc(fstr.c_str()), m_font_tex_number);
 	m_gl_font_initialized = true;
 }
@@ -3724,7 +3734,8 @@ void HeeksCADapp::render_screen_text2(const wxChar* str)
 #else
 	size_t n = strlen(str);
 #endif
-	wxChar buffer[1024];
+		wxChar buffer[1024];
+
 
 	int j = 0;
 	const wxChar* newlinestr = _T("\n");
@@ -3737,7 +3748,7 @@ void HeeksCADapp::render_screen_text2(const wxChar* str)
 		if(str[i] == newline || i == n-1 || j == 1023){
 			buffer[j] = 0;
 			render_text(buffer);
-			if(str[i] == newline)glTranslated(0.0, -2.2, 0.0);
+			if(str[i] == newline)glTranslated(0.0, -2.2, 1.0);
 			j = 0;
 		}
 	}
