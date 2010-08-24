@@ -748,7 +748,9 @@ static void OnSaveButton( wxCommandEvent& event )
 
 static void OnUpdateSave( wxUpdateUIEvent& event )
 {
+#ifdef USE_UNDO_ENGINE
 	event.Enable(wxGetApp().IsModified());
+#endif
 }
 
 static void OnSaveAsButton( wxCommandEvent& event )
