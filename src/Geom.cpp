@@ -6,6 +6,12 @@
 #include "Geom.h"
 #include "Gripper.h"
 
+#ifdef HEEKSCAD
+#define GEOM_TOL wxGetApp().m_geom_tol
+#else
+#define GEOM_TOL heeksCAD->GetTolerance()
+#endif
+
 void ClosestPointsOnLines(const gp_Lin& lin, const gp_Lin& lin2, gp_Pnt &p1, gp_Pnt &p2)
 {
 	// they might be the same point
@@ -39,7 +45,7 @@ bool intersect(const gp_Lin& lin, const gp_Lin& lin2, gp_Pnt &pnt)
 {
 	gp_Pnt p1, p2;
 	ClosestPointsOnLines(lin, lin2, p1, p2);
-	if(p1.IsEqual(p2, wxGetApp().m_geom_tol)){
+	if(p1.IsEqual(p2, GEOM_TOL)){
 		pnt = (p1.XYZ() + p2.XYZ()) /2;
 		return true;
 	}
@@ -70,7 +76,7 @@ bool intersect(const gp_Pln& pln, const gp_Pln& pln2, gp_Lin& lin)
 			Handle (Geom_Surface) hs2 = Handle (Geom_Plane)::DownCast(g_p2);
 
 			{
-				GeomAPI_IntSS intf(hs, hs2, wxGetApp().m_geom_tol);
+				GeomAPI_IntSS intf(hs, hs2, GEOM_TOL);
 				if(intf.IsDone()){
 					int nl = intf.NbLines();
 					if(nl>0){
@@ -89,14 +95,14 @@ bool intersect(const gp_Pln& pln, const gp_Pln& pln2, gp_Lin& lin)
 bool intersect(const gp_Pnt& pnt, const gp_Pln& pln)
 {
 	double dist_from_plane = fabs(gp_Vec(pnt.XYZ()) * gp_Vec(pln.Axis().Direction()) - gp_Vec(pln.Location().XYZ()) * gp_Vec(pln.Axis().Direction()));
-	if(dist_from_plane < wxGetApp().m_geom_tol)return true;
+	if(dist_from_plane < GEOM_TOL)return true;
 	return false;
 }
 
 bool intersect(const gp_Pnt& pnt, const gp_Lin& lin)
 {
 	gp_Pnt cp = ClosestPointOnLine(lin, pnt);
-	return pnt.Distance(cp) <= wxGetApp().m_geom_tol;
+	return pnt.Distance(cp) <= GEOM_TOL;
 }
 
 bool intersect(const gp_Pnt& pnt, const gp_Circ& cir)
@@ -104,7 +110,7 @@ bool intersect(const gp_Pnt& pnt, const gp_Circ& cir)
 	gp_Pln pln(cir.Location(), cir.Axis().Direction());
 	if(!intersect(pnt, pln))return false;
 
-	return fabs(pnt.Distance(cir.Location()) - cir.Radius()) <= wxGetApp().m_geom_tol;
+	return fabs(pnt.Distance(cir.Location()) - cir.Radius()) <= GEOM_TOL;
 }
 
 void intersect(const gp_Lin& line, const gp_Circ& circle, std::list<gp_Pnt> &list)
@@ -169,7 +175,7 @@ void ClosestPointsLineAndEllipse(const gp_Lin& line, const gp_Elips& elips, std:
 
 		double dist_to_centre = plane_point.Distance(elips.Location());
 
-		if(dist_to_centre < wxGetApp().m_geom_tol)return;
+		if(dist_to_centre < GEOM_TOL)return;
 
 		// just use the closest point in the direction of the closest point on line
 		gp_Vec plane_vec(elips.Location(), plane_point);
@@ -189,7 +195,7 @@ void ClosestPointsLineAndEllipse(const gp_Lin& line, const gp_Elips& elips, std:
 
 		gp_Pnt to_centre = ClosestPointOnLine(line, elips.Location());
 		double dist_to_foci = DistanceToFoci(to_centre,elips);
-		if(dist_to_foci > 2 * elips.MajorRadius() - wxGetApp().m_geom_tol)
+		if(dist_to_foci > 2 * elips.MajorRadius() - GEOM_TOL)
 		{
 			// just use the closest point in the direction of the closest point on line
 			gp_Vec plane_vec(elips.Location(), to_centre);
@@ -278,7 +284,7 @@ void ClosestPointsLineAndCircle(const gp_Lin& line, const gp_Circ& circle, std::
 
 		double dist_to_centre = plane_point.Distance(circle.Location());
 
-		if(dist_to_centre < wxGetApp().m_geom_tol)return;
+		if(dist_to_centre < GEOM_TOL)return;
 
 		// just use the closest point in the direction of the closest point on line
 		gp_Pnt p(circle.Location().XYZ() + gp_Vec(circle.Location(), plane_point).Normalized().XYZ() * circle.Radius());
@@ -289,7 +295,7 @@ void ClosestPointsLineAndCircle(const gp_Lin& line, const gp_Circ& circle, std::
 
 		gp_Pnt to_centre = ClosestPointOnLine(line, circle.Location());
 		double dist_to_centre = to_centre.Distance(circle.Location());
-		if(dist_to_centre > circle.Radius() - wxGetApp().m_geom_tol)
+		if(dist_to_centre > circle.Radius() - GEOM_TOL)
 		{
 			// just use the closest point in the direction of the closest point on line
 			gp_Pnt p(circle.Location().XYZ() + (gp_Vec(circle.Location(), to_centre).Normalized() * circle.Radius()).XYZ());
@@ -1021,16 +1027,16 @@ void intersect(const gp_Circ& c1, const gp_Circ& c2, std::list<gp_Pnt> &list)
 	if(d < 0.00000000000001)return;
 	double r0 = c1.Radius();
 	double r1 = c2.Radius();
-	if(r0 + r1 - d < -wxGetApp().m_geom_tol)return;// circles too far from each other
-	if(fabs(r0 - r1) > d + wxGetApp().m_geom_tol)return; // one circle is within the other
+	if(r0 + r1 - d < -GEOM_TOL)return;// circles too far from each other
+	if(fabs(r0 - r1) > d + GEOM_TOL)return; // one circle is within the other
 
 	gp_Vec forward = join.Normalized();
 	gp_Vec left = c1.Axis().Direction() ^ join;
 
-	if(r0 + r1 - d <= wxGetApp().m_geom_tol){
+	if(r0 + r1 - d <= GEOM_TOL){
 		list.push_back(c1.Location().XYZ() + forward.XYZ() * r0);
 	}
-	else if(fabs(fabs(r0 - r1) - d) < wxGetApp().m_geom_tol){
+	else if(fabs(fabs(r0 - r1) - d) < GEOM_TOL){
 		if(r0 > r1)list.push_back(c1.Location().XYZ() + forward.XYZ() * r0);
 		else list.push_back(c1.Location().XYZ() - forward.XYZ() * r0);
 	}
@@ -1255,7 +1261,7 @@ bool IsEqual(gp_Ax2 ax1, gp_Ax2 ax2)
 	if(!IsEqual(ax1.Axis(),ax2.Axis()))
 		return false;
 
-	if(!ax1.XDirection().IsEqual(ax2.XDirection(),wxGetApp().m_geom_tol))
+	if(!ax1.XDirection().IsEqual(ax2.XDirection(),GEOM_TOL))
 		return false;
 
 	return true;
@@ -1263,10 +1269,10 @@ bool IsEqual(gp_Ax2 ax1, gp_Ax2 ax2)
 
 bool IsEqual(gp_Ax1 ax1, gp_Ax1 ax2)
 {
-	if(ax1.Location().Distance(ax2.Location()) > wxGetApp().m_geom_tol)
+	if(ax1.Location().Distance(ax2.Location()) > GEOM_TOL)
 		return false;
 
-	if(!ax1.Direction().IsEqual(ax2.Direction(),wxGetApp().m_geom_tol))
+	if(!ax1.Direction().IsEqual(ax2.Direction(),GEOM_TOL))
 		return false;
 
 	return true;
