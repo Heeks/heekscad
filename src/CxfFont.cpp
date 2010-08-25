@@ -491,7 +491,7 @@ void VectorFont::Glyph::glCommands(
 	HANDLE hFind;
 
 	std::string pattern = std::string(Ttc(Root.c_str())) + "\\*";
-	hFind = FindFirstFile(LPCSTR(LPCWSTR(Ctt(pattern.c_str()))), &file_data);
+	hFind = FindFirstFile(Ctt(pattern.c_str()), &file_data);
 
 	// Now recurse down until we find document files within 'current' directories.
 	if (hFind != INVALID_HANDLE_VALUE)
