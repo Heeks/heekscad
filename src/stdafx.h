@@ -4,7 +4,7 @@
 #if wxUSE_UNICODE
 	#define _UNICODE
 #endif
-#define _DEBUG 1
+
 #define _WARNINGS 3
 
 #ifdef WIN32
