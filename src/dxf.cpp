@@ -718,45 +718,14 @@ static void AddPolyLinePoint(CDxfRead* dxf_read, double x, double y, double z, b
 			bool arc_done = false;
 			if(poly_prev_bulge_found)
 			{
-					double dx = x - poly_prev_x;
-					double dy = y - poly_prev_y;
-					double c = sqrt(dx*dx + dy*dy);
-
-					double a = atan(fabs(poly_prev_bulge))*4;
-
-					//find radius of circle that for arc of angle a, has chord length c
-					double r = (c/2) / cos((Pi-a)/2);
-
-					double d = sqrt(r*r - (c/2)*(c/2));
-
-					double ps[3] = {poly_prev_x, poly_prev_y, poly_prev_z};
-					double pe[3] = {x, y, z};
-					gp_Pnt pPnt = make_point(ps);
-					gp_Pnt nPnt = make_point(pe);
-
-					// A Standard_Failure exception is thrown when a gp_Dir is created
-					// with two identical points.  Rather than check for this single
-					// condition, just ignore this point and catch the more general
-					// exception.
-					// if (pPnt.Distance(nPnt) < 0.000001) return;
-
-					gp_Dir dir(nPnt.XYZ()-pPnt.XYZ());
-
-					gp_Pnt mid = pPnt.XYZ() + dir.XYZ() * c / 2;
-
-					dir.Rotate(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,0,1)),Pi/2);
-					gp_Pnt off;
-					if(poly_prev_bulge >= 0)
-						off = mid.XYZ() + dir.XYZ() * (d);
-					else
-						off = mid.XYZ() + dir.XYZ() * (-d);
-
-					double pc[3];
-					extract(off,pc);
-
-					dxf_read->OnReadArc(ps, pe, pc, poly_prev_bulge >= 0);
-					arc_done = true;
-
+				double cot = 0.5 * ((1.0 / poly_prev_bulge) - poly_prev_bulge);
+				double cx = ((poly_prev_x + x) - ((y - poly_prev_y) * cot)) / 2.0;
+				double cy = ((poly_prev_y + y) + ((x - poly_prev_x) * cot)) / 2.0;
+				double ps[3] = {poly_prev_x, poly_prev_y, poly_prev_z};
+				double pe[3] = {x, y, z};
+				double pc[3] = {cx, cy, (poly_prev_z + z)/2.0};
+				dxf_read->OnReadArc(ps, pe, pc, poly_prev_bulge >= 0);
+				arc_done = true;
 			}
 
 			if(!arc_done)
@@ -889,66 +858,72 @@ bool CDxfRead::ReadLwPolyLine()
 }
 
 
-bool CDxfRead::ReadVertex(gp_Pnt *pVertex)
+bool CDxfRead::ReadVertex(gp_Pnt *pVertex, bool *bulge_found, double *bulge)
 {
-	bool x_found = false;
-	bool y_found = false;
+    bool x_found = false;
+    bool y_found = false;
 
-	double x = 0.0;
-	double y = 0.0;
-	double z = 0.0;
+    double x = 0.0;
+    double y = 0.0;
+    double z = 0.0;
+    *bulge = 0.0;
+    *bulge_found = false;
 
     pVertex->SetX(0.0);
     pVertex->SetY(0.0);
     pVertex->SetZ(0.0);
 
-	while(!(*m_ifs).eof())
-	{
-		get_line();
-		int n;
-		if(sscanf(m_str, "%d", &n) != 1)
-		{
-		    printf("CDxfRead::ReadVertex() Failed to read integer from '%s'\n", m_str);
-		    return false;
-		}
-		std::istringstream ss;
-		ss.imbue(std::locale("C"));
-		switch(n){
-			case 0:
-                put_line(m_str);    // read one line too many.  put it back.
-				return(x_found && y_found);
-				break;
+    while(!(*m_ifs).eof()) {
+        get_line();
+        int n;
+        if(sscanf(m_str, "%d", &n) != 1) {
+            printf("CDxfRead::ReadVertex() Failed to read integer from '%s'\n", m_str);
+            return false;
+        }
+        std::istringstream ss;
+        ss.imbue(std::locale("C"));
+        switch(n){
+        case 0:
+            put_line(m_str);    // read one line too many.  put it back.
+            return(x_found && y_found);
+            break;
 
-			case 8: // Layer name follows
-				get_line();
-				m_layer_name = Ctt(m_str);
-				break;
+        case 8: // Layer name follows
+            get_line();
+            m_layer_name = Ctt(m_str);
+            break;
 
-			case 10:
-				// x
-				get_line();
-				ss.str(m_str); ss >> x; pVertex->SetX(mm(x)); if(ss.fail()) return false;
-				x_found = true;
-				break;
-			case 20:
-				// y
-				get_line();
-				ss.str(m_str); ss >> y; pVertex->SetY(mm(y)); if(ss.fail()) return false;
-				y_found = true;
-				break;
-            case 30:
-				// z
-				get_line();
-				ss.str(m_str); ss >> z; pVertex->SetZ(mm(z)); if(ss.fail()) return false;
-				break;
-			default:
-				// skip the next line
-				get_line();
-				break;
-		}
-	}
+        case 10:
+            // x
+            get_line();
+            ss.str(m_str); ss >> x; pVertex->SetX(mm(x)); if(ss.fail()) return false;
+            x_found = true;
+            break;
+        case 20:
+            // y
+            get_line();
+            ss.str(m_str); ss >> y; pVertex->SetY(mm(y)); if(ss.fail()) return false;
+            y_found = true;
+            break;
+        case 30:
+            // z
+            get_line();
+            ss.str(m_str); ss >> z; pVertex->SetZ(mm(z)); if(ss.fail()) return false;
+            break;
 
-	return false;
+        case 42:
+            get_line();
+            *bulge_found = true;
+            ss.str(m_str); ss >> *bulge; if(ss.fail()) return false;
+            break;
+        default:
+            // skip the next line
+            get_line();
+            break;
+        }
+    }
+
+    return false;
 }
 
 
@@ -957,13 +932,12 @@ bool CDxfRead::ReadPolyLine()
 {
 	PolyLineStart();
 
-	bool x_found = false;
-	bool y_found = false;
-	bool bulge_found = false;
-	double bulge = 0.0;
 	bool closed = false;
 	int flags;
 	bool first_vertex_section_found = false;
+	gp_Pnt first_vertex;
+	bool bulge_found;
+	double bulge;
 
 	while(!(*m_ifs).eof())
 	{
@@ -971,7 +945,7 @@ bool CDxfRead::ReadPolyLine()
 		int n;
 		if(sscanf(m_str, "%d", &n) != 1)
 		{
-		    printf("CDxfRead::ReadLwPolyLine() Failed to read integer from '%s'\n", m_str);
+		    printf("CDxfRead::ReadPolyLine() Failed to read integer from '%s'\n", m_str);
 		    return false;
 		}
 		std::istringstream ss;
@@ -983,27 +957,25 @@ bool CDxfRead::ReadPolyLine()
 				if (! strcmp(m_str,"VERTEX"))
 				{
 				    gp_Pnt vertex;
-				    if (CDxfRead::ReadVertex(&vertex))
-				    {
-				        AddPolyLinePoint(this, vertex.X(), vertex.Y(), vertex.Z(), bulge_found, bulge);
-                        bulge_found = false;
-                        break;
-				    }
+					if (CDxfRead::ReadVertex(&vertex, &bulge_found, &bulge))
+					{
+						if(!first_vertex_section_found) {
+							first_vertex_section_found = true;
+							first_vertex = vertex;
+						}
+						AddPolyLinePoint(this, vertex.X(), vertex.Y(), vertex.Z(), bulge_found, bulge);
+						break;
+					}
 				}
 				if (! strcmp(m_str,"SEQEND"))
 				{
-				    first_vertex_section_found = false;
-				    x_found = false;
-					y_found = false;
+                    if(closed && first_vertex_section_found) {
+                        AddPolyLinePoint(this, first_vertex.X(), first_vertex.Y(), first_vertex.Z(), 0, 0);
+                    }
+					first_vertex_section_found = false;
 					PolyLineStart();
 				    return(true);
 				}
-				break;
-			case 42:
-				// bulge
-				get_line();
-				ss.str(m_str); ss >> bulge; if(ss.fail()) return false;
-				bulge_found = true;
 				break;
 			case 70:
 				// flags
