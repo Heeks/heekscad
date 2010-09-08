@@ -94,7 +94,7 @@ private:
 	bool ReadSpline();
 	bool ReadLwPolyLine();
 	bool ReadPolyLine();
-	bool ReadVertex(gp_Pnt *pVertex);
+	bool ReadVertex(gp_Pnt *pVertex, bool *bulge_found, double *bulge);
 	void OnReadArc(double start_angle, double end_angle, double radius, const double* c);
 	void OnReadCircle(const double* c, double radius);
     void OnReadEllipse(const double* c, const double* m, double ratio, double start_angle, double end_angle);
