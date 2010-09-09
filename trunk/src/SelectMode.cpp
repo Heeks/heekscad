@@ -451,23 +451,54 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 	if(event.GetWheelRotation() != 0)
 	{
 		double wheel_value = (double)(event.GetWheelRotation());
-		double multiplier = wheel_value /1000.0;
+		double multiplier = wheel_value /1000.0, multiplier2;
 		if(wxGetApp().mouse_wheel_forward_away)multiplier = -multiplier;
-		double multiplier2 = 1 + multiplier;
-		wxGetApp().m_frame->m_graphics->m_view_point.Scale(multiplier2);
 
-		{
-			// move towards mouse point, when zooming
-			wxSize client_size = wxGetApp().m_frame->m_graphics->GetClientSize();
-			double offset_x = (double)(event.GetX()) - (double)(client_size.GetWidth()) / 2;
-			double offset_y = (double)(event.GetY()) - (double)(client_size.GetHeight()) / 2;
-
-			offset_x *= multiplier / wxGetApp().GetPixelScale() * (multiplier > 0 ? 1.2 : -0.3);
-			offset_y *= -multiplier / wxGetApp().GetPixelScale() * (multiplier > 0 ? 1.2 : -0.3);
-
-			wxGetApp().m_frame->m_graphics->m_view_point.Shift(gp_Vec(offset_x, offset_y, 0));
+		// make sure these are actually inverses, so if you
+		// zoom in and out the same number of steps, you'll be
+		// at the same zoom level again
+		
+		if(multiplier > 0) {
+			multiplier2 = 1 + multiplier;
+		} else {
+			multiplier2 = 1/(1 - multiplier);
 		}
-
+		
+		wxSize client_size = wxGetApp().m_frame->m_graphics->GetClientSize();
+		
+		double pixelscale_before = wxGetApp().GetPixelScale();
+		wxGetApp().m_frame->m_graphics->m_view_point.Scale(multiplier2);
+		double pixelscale_after = wxGetApp().GetPixelScale();
+		
+		double event_x = event.GetX();
+		double event_y = event.GetY();
+		double center_x = client_size.GetWidth() / 2.;
+		double center_y = client_size.GetHeight() / 2.;
+		
+		// how many pixels are we from the center (the center
+		// is the point that doesn't move when you zoom)?
+		double px = event_x - center_x; 
+		double py = event_y - center_y;
+		
+		// that number of pixels represented how many mm
+		// before and after the zoom ...
+		double xbefore = px / pixelscale_before;
+		double ybefore = py / pixelscale_before;
+		double xafter = px / pixelscale_after;
+		double yafter = py / pixelscale_after;
+		
+		// which caused a change in how many mm at that point
+		// on the screen?
+		double xchange = xafter - xbefore;
+		double ychange = yafter - ybefore;
+		
+		// and how many pixels worth of motion is that?
+		double x_moved_by = xchange * pixelscale_after;
+		double y_moved_by = ychange * pixelscale_after;
+		
+		// so move that many pixels to keep the coordinate
+		// under the cursor approximately the same
+		wxGetApp().m_frame->m_graphics->m_view_point.Shift(wxPoint(x_moved_by, y_moved_by), wxPoint(0, 0));
 		wxGetApp().m_frame->m_graphics->Refresh();
 	}
 
