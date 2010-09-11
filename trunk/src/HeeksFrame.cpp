@@ -37,6 +37,7 @@
 #include "HeeksConfig.h"
 #include "AboutBox.h"
 #include "HSpline.h"
+#include "../interface/Plugin.h"
 
 using namespace std;
 
@@ -191,7 +192,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 					if(OnStartUp)
 					{
 						(*OnStartUp)(&heekscad_interface, path);
-						wxGetApp().m_loaded_libraries.push_back(shared_library);
+						wxGetApp().m_loaded_libraries.push_back(Plugin(fn.GetName(), path, shared_library));
 					}
 				}
 				else{
@@ -219,8 +220,8 @@ CHeeksFrame::~CHeeksFrame()
 	wxGetApp().Clear(); // delete all the objects, from the dlls
 
 	// call the shared libraries function OnFrameDelete, so they can write profile strings while aui manager still exists
-	for(std::list<wxDynamicLibrary*>::iterator It = wxGetApp().m_loaded_libraries.begin(); It != wxGetApp().m_loaded_libraries.end(); It++){
-		wxDynamicLibrary* shared_library = *It;
+	for(std::list<Plugin>::iterator It = wxGetApp().m_loaded_libraries.begin(); It != wxGetApp().m_loaded_libraries.end(); It++){
+		wxDynamicLibrary* shared_library = It->dynamic_library;
 		bool success;
 		void(*OnFrameDelete)() = (void(*)())(shared_library->GetSymbol(_T("OnFrameDelete"), &success));
 		if(OnFrameDelete)(*OnFrameDelete)();

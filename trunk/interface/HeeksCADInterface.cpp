@@ -203,6 +203,23 @@ void CHeeksCADInterface::WentTransient(HeeksObj* obj, TransientObject *tobj)
 	wxGetApp().WentTransient(obj, tobj);
 }
 
+static std::list<Plugin>::iterator PluginIt;
+
+const Plugin* CHeeksCADInterface::GetFirstPlugin()
+{
+	if (wxGetApp().m_loaded_libraries.size()==0) return NULL;
+	PluginIt = wxGetApp().m_loaded_libraries.begin();
+	return &(*PluginIt);
+}
+
+const Plugin* CHeeksCADInterface::GetNextPlugin()
+{
+	if (wxGetApp().m_loaded_libraries.size()==0 || PluginIt==wxGetApp().m_loaded_libraries.end()) return NULL;
+	PluginIt++;
+	if (PluginIt==wxGetApp().m_loaded_libraries.end()) return NULL;
+	return &(*PluginIt);
+}
+
 void CHeeksCADInterface::Changed()
 {
 	wxGetApp().Changed();
