@@ -25,7 +25,7 @@ protected:
 public:
 	ObjList():m_index_list_valid(true){}
 	ObjList(const ObjList& objlist);
-	virtual ~ObjList() {Clear();}
+	virtual ~ObjList(){}
 
 	const ObjList& operator=(const ObjList& objlist);
 
