@@ -25,6 +25,7 @@ class wxMouseEvent;
 class wxToolBarBase;
 class CNurbSurfaceParams;
 class TransientObject;
+class Plugin;
 
 #include "SketchOrder.h"
 
@@ -128,6 +129,8 @@ public:
 	virtual void Add(HeeksObj* object, HeeksObj* other);
 	virtual void CreateUndoPoint();
 	virtual void WentTransient(HeeksObj* obj, TransientObject *tobj);
+	virtual const Plugin* GetFirstPlugin();
+	virtual const Plugin* GetNextPlugin();
 
 	virtual int GetNextID(int type);
 	virtual bool InOpenFile();

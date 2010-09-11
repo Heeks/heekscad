@@ -220,7 +220,7 @@ void HeeksObj::GetGripperPositions(std::list<GripData> *list, bool just_for_endo
 
 void HeeksObj::OnRemove()
 {
-	KillGLLists();
+	if(m_owners.size() == 0)KillGLLists();
 }
 
 void HeeksObj::SetID(int id)
