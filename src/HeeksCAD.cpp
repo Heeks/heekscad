@@ -511,8 +511,8 @@ int HeeksCADapp::OnExit(){
 	history = NULL;
 #endif
 
-	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
-		wxDynamicLibrary* shared_library = *It;
+	for(std::list<Plugin>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
+		wxDynamicLibrary* shared_library = It->dynamic_library;
 		delete shared_library;
 	}
 	m_loaded_libraries.clear();
@@ -2789,8 +2789,8 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	drawing->m_list.push_back(new PropertyDouble(_("Solid revolution angle"), m_revolve_angle, NULL, on_revolve_angle));
 	list->push_back(drawing);
 
-	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
-		wxDynamicLibrary* shared_library = *It;
+	for(std::list<Plugin>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
+		wxDynamicLibrary* shared_library = It->dynamic_library;
 		list_for_GetOptions = list;
 		bool success;
 		void(*GetOptions)(void(*)(Property*)) = (void(*)(void(*)(Property*)))(shared_library->GetSymbol(_T("GetOptions"), &success));
@@ -3252,8 +3252,8 @@ void HeeksCADapp::glSphere(double radius, const double* pos)
 
 void HeeksCADapp::OnNewOrOpen(bool open, int res)
 {
-	for(std::list<wxDynamicLibrary*>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
-		wxDynamicLibrary* shared_library = *It;
+	for(std::list<Plugin>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
+		wxDynamicLibrary* shared_library = It->dynamic_library;
 		bool success;
 		void(*fnOnNewOrOpen)(int,int) = (void(*)(int,int))(shared_library->GetSymbol(_T("OnNewOrOpen"), &success));
 		if(fnOnNewOrOpen){
@@ -3340,13 +3340,10 @@ HeeksObj* HeeksCADapp::GetIDObject(int type, int id)
 	if (ids.find(id) == ids.end()) return(NULL);
 	else
 	{
-		//IdsToObjects_t::iterator It = ids.upper_bound(id);
-		//It--;
-		//HeeksObj* object = It->second;
-		//return object;
-
-		// this was returning the first one in "ids", but I think we always want the last one
-		return(ids.lower_bound(id)->second);
+		IdsToObjects_t::iterator It = ids.upper_bound(id);
+		It--;
+		HeeksObj* object = It->second;
+		return object;
 	}
 
 }

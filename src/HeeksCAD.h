@@ -6,6 +6,7 @@
 
 #include "../interface/HeeksColor.h"
 #include "../interface/ObjList.h"
+#include "../interface/Plugin.h"
 #include "glfont2.h"
 #include "CxfFont.h"
 
@@ -151,7 +152,7 @@ public:
 	std::list<HeeksObj*> m_hidden_for_drag;
 	bool m_show_grippers_on_drag;
 	double m_geom_tol;
-	std::list<wxDynamicLibrary*> m_loaded_libraries;
+	std::list<Plugin> m_loaded_libraries;
 	std::list< void(*)() > m_on_glCommands_list;
 	std::list< wxToolBarBase* > m_external_toolbars;
 	std::list< void(*)() > m_AddToolBars_list;
