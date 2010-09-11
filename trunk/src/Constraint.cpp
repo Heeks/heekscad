@@ -329,12 +329,10 @@ HeeksObj* Constraint::ReadFromXMLElement(TiXmlElement* pElem)
 	obj1 = (ConstrainedObject*)wxGetApp().GetIDObject(obj1_type,obj1_id);
 	obj2 = (ConstrainedObject*)wxGetApp().GetIDObject(obj2_type,obj2_id);
 
-	if(obj1 == NULL || obj2 == NULL)return NULL;
-
 	Constraint *c = new Constraint(etype,eangle,length,obj1,obj2);
 
-	obj1->constraints.push_back(c);
-	obj2->constraints.push_back(c);
+	if(obj1)obj1->constraints.push_back(c);
+	if(obj2)obj2->constraints.push_back(c);
 
 	//Don't let the xml reader try to insert us in the tree
 	return NULL;
