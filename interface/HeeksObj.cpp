@@ -338,3 +338,17 @@ HeeksObj *HeeksObj::Find( const int type, const unsigned int id )
 	if ((type == this->GetType()) && (this->m_id == id)) return(this);
 	return(NULL);
 }
+
+void HeeksObj::ToString(char *str, unsigned int* rlen, unsigned int len)
+{
+	unsigned int printed;
+	*rlen = 0;
+
+	printed = snprintf(str,len,"ID: 0x%X, Type: 0x%X, MarkingMask: 0x%X, IDGroup: 0x%X\n",GetID(),GetType(),GetMarkingMask(),GetIDGroupType());
+	if(printed >= len)
+		goto abort;
+	*rlen += printed; len -= printed;
+
+abort:
+	*rlen = 0;
+}
