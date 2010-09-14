@@ -185,6 +185,7 @@ public:
 	virtual bool IsList(){return false;}
 	virtual HeeksObj *Find( const int type, const unsigned int id );
 	virtual void SetIdPreservation(const bool flag) { m_preserving_id = flag; }
+	virtual void ToString(char* buf, unsigned int* rlen, unsigned int len);
 protected:
 	virtual void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 };
