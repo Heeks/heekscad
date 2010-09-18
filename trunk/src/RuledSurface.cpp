@@ -91,7 +91,7 @@ HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_o
 	gp_Trsf trsf = wxGetApp().GetDrawMatrix(false);
 	if(revolution_not_extrusion)
 	{
-		CreateRevolutions(faces_or_wires, new_shapes, gp_Ax1(gp_Pnt(0, 0, 0).Transformed(trsf), gp_Vec(0, 0, 1).Transformed(trsf)), height_or_angle);
+		CreateRevolutions(faces_or_wires, new_shapes, gp_Ax1(gp_Pnt(0, 0, 0).Transformed(trsf), gp_Vec(1, 0, 0).Transformed(trsf)), height_or_angle);
 	}
 	else
 	{
