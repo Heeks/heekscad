@@ -115,6 +115,7 @@ public:
 	virtual void RemoveObserver(Observer* observer);
 	virtual bool TangentialArc(const double* p0, const double* v0, const double* p1, double *c, double *a); // given p0, v0, p1, returns true if an arc found and sets c and a ( centre and axis direction ), false for a straight line
 	virtual void RegisterHideableWindow(wxWindow* w);
+	virtual void RemoveHideableWindow(wxWindow* w);
 	virtual HeeksObj* ReadXMLElement(TiXmlElement* pElem);
 	virtual void RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem));
 	virtual void OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into = NULL);
@@ -239,6 +240,7 @@ public:
 	virtual void RegisterOnSaveFn( void(*callbackfunc)(bool from_changed_prompt) );
 	virtual void RegisterIsModifiedFn( bool(*callbackfunc)() );
 	virtual void RegisterToolBar( wxToolBarBase* );
+	virtual void RemoveToolBar( wxToolBarBase* );
 	virtual void RegisterAddToolBars( void(*callbackfunc)() );
 	virtual void PropertiesOnApply2();// don't need to press tick to make changes
 	virtual void AddToAboutBox(const wxChar* str);

@@ -327,7 +327,6 @@ public:
 	void RemoveOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
 	void RegisterOnSaveFn( void(*callbackfunc)(bool) );
 	void RegisterIsModifiedFn( bool(*callbackfunc)() );
-	void RegisterToolBar( wxToolBarBase* );
 	void CreateTransformGLList(const std::list<HeeksObj*>& list, bool show_grippers_on_drag);
 	void DestroyTransformGLList();
 	bool IsPasteReady();

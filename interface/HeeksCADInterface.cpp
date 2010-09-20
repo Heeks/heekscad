@@ -543,6 +543,11 @@ void CHeeksCADInterface::RegisterHideableWindow(wxWindow* w)
 	wxGetApp().RegisterHideableWindow(w);
 }
 
+void CHeeksCADInterface::RemoveHideableWindow(wxWindow* w)
+{
+	wxGetApp().RemoveHideableWindow(w);
+}
+
 void CHeeksCADInterface::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, bool for_clipboard)
 {
 	wxGetApp().SaveXMLFile( objects, filepath, for_clipboard );
@@ -1155,6 +1160,11 @@ void CHeeksCADInterface::RegisterToolBar( wxToolBarBase* toolbar )
 	wxGetApp().m_external_toolbars.push_back(toolbar);
 }
 
+void CHeeksCADInterface::RemoveToolBar( wxToolBarBase* toolbar )
+{
+	wxGetApp().m_external_toolbars.remove(toolbar);
+}
+
 void CHeeksCADInterface::RegisterAddToolBars( void(*callbackfunc)() )
 {
 	wxGetApp().m_AddToolBars_list.push_back(callbackfunc);
@@ -1194,7 +1204,7 @@ const HeeksColor& CHeeksCADInterface::GetBackgroundColor()
 
 void CHeeksCADInterface::SetColor(int r, int b, int g)
 {
-	HeeksColor color(r,b,g);
+	HeeksColor color((unsigned char)r,(unsigned char)b,(unsigned char)g);
 	wxGetApp().current_color = color;
 }
 
