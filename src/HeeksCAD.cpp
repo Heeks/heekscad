@@ -915,11 +915,13 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, Heek
 		}
 	}
 
+#if 0
 	// where operations are pointing to the same sketch, for example, make sure that they are not duplicated sketches
 	for (std::list<HeeksObj *>::iterator itObject = objects.begin(); itObject != objects.end(); itObject++)
 	{
 		*itObject = MergeCommonObjects( unique_set, *itObject );
 	}
+#endif
 
 	if(objects.size() > 0)
 	{
