@@ -339,6 +339,10 @@ HeeksObj *HeeksObj::Find( const int type, const unsigned int id )
 	return(NULL);
 }
 
+#ifdef WIN32
+#define snprintf _snprintf
+#endif
+
 void HeeksObj::ToString(char *str, unsigned int* rlen, unsigned int len)
 {
 	unsigned int printed;
