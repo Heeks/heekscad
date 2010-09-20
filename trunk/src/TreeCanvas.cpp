@@ -225,6 +225,23 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 		}
 	}
 
+	if(event.LeftDClick())
+	{
+		const CTreeButton* button = HitTest(event.GetPosition());
+		if(button)
+		{
+			if(button->obj)
+			{
+				bool(*callback)(HeeksObj*) = NULL;
+				button->obj->GetOnEdit(&callback);
+				if(callback)
+				{
+					bool result = (*callback)(button->obj);
+				}
+			}
+		}
+	}
+
 	event.Skip();
 }
 

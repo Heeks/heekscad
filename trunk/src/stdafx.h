@@ -241,6 +241,8 @@ extern "C" {
 #include <GL/glu.h>
 }
 
+#define USE_UNDO_ENGINE
+
 #include "../interface/strconv.h"
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"

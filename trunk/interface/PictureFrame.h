@@ -17,3 +17,16 @@ public:
 private:
     DECLARE_EVENT_TABLE()
 };
+
+class PictureWindow: public wxWindow
+{   
+protected:
+	wxBitmap m_bitmap;
+
+public:
+    PictureWindow(wxWindow* parent, const wxBitmap& b);
+    void OnPaint(wxPaintEvent &event);
+
+private:
+    DECLARE_EVENT_TABLE()
+};
