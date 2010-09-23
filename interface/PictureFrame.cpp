@@ -31,6 +31,12 @@ void PictureWindow::OnPaint(wxPaintEvent &event) {
 	dc.DrawBitmap(m_bitmap, 0,0, false);
 }
 
+void PictureWindow::SetPicture(const wxBitmap& b)
+{
+	m_bitmap = b;
+	Refresh();
+}
+
 BEGIN_EVENT_TABLE(PictureWindow,wxWindow)
     EVT_PAINT(PictureWindow::OnPaint)
 END_EVENT_TABLE()

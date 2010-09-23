@@ -26,6 +26,7 @@ protected:
 public:
     PictureWindow(wxWindow* parent, const wxBitmap& b);
     void OnPaint(wxPaintEvent &event);
+	void SetPicture(const wxBitmap& b);
 
 private:
     DECLARE_EVENT_TABLE()
