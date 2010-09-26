@@ -54,4 +54,5 @@ public:
 	void AxesToAngles(){AxesToAngles(m_x, m_y, m_vertical_angle, m_horizontal_angle, m_twist_angle);}
 	void AnglesToAxes(){AnglesToAxes(m_vertical_angle, m_horizontal_angle, m_twist_angle, m_x, m_y);}
 	void PickFrom3Points();
+	void PickFrom1Point();
 };
