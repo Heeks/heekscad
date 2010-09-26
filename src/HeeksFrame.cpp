@@ -669,6 +669,26 @@ static void OnCoordinateSystem( wxCommandEvent& WXUNUSED( event ) )
 	new_object->PickFrom3Points();
 }
 
+static void OnNewOrigin( wxCommandEvent& WXUNUSED( event ) )
+{
+	gp_Trsf mat = wxGetApp().GetDrawMatrix(false);
+	gp_Pnt o = gp_Pnt(0, 0, 0).Transformed(mat);
+	gp_Dir x = gp_Dir(1, 0, 0).Transformed(mat);
+	gp_Dir y = gp_Dir(0, 1, 0).Transformed(mat);
+	CoordinateSystem* new_object = new CoordinateSystem(_("Coordinate System"), o, x, y);
+	wxGetApp().Add(new_object, NULL);
+	wxGetApp().m_marked_list->Clear(true);
+	wxGetApp().m_marked_list->Add(new_object, true);
+	wxGetApp().SetInputMode(wxGetApp().m_select_mode);
+	wxGetApp().Repaint();
+
+	// and pick from three points
+	new_object->PickFrom1Point();
+}
+
+
+
+
 static void OnOpenButton( wxCommandEvent& event )
 {
 	wxString default_directory = wxGetCwd();
@@ -1673,8 +1693,14 @@ void CHeeksFrame::MakeMenus()
 	AddMenuItem(geometry_menu, _("Add Text"), ToolImage(_T("text")), OnTextButton);
 	AddMenuItem(geometry_menu, _("Add Dimension"), ToolImage(_T("dimension")), OnDimensioningButton);
 	geometry_menu->AppendSeparator();
-	AddMenuItem(geometry_menu, _("Add Coordinate System"), ToolImage(_T("coordsys")), OnCoordinateSystem);
 
+	wxMenu *coordinate_menu = new wxMenu;
+	//AddMenuItem(coordinate_menu, _("Add Coordinate System"), ToolImage(_T("coordsys")), coordinate_menu);
+	
+	AddMenuItem(coordinate_menu, _("Pick 3 points"), ToolImage(_T("coordsys")), OnCoordinateSystem);
+	//coordinate_menu->AppendSeparator();
+	AddMenuItem(coordinate_menu, _("Pick 1 point"), ToolImage(_T("coordsys")), OnNewOrigin);
+	
 	// View Menu
 	wxMenu *view_menu = new wxMenu;
 	AddMenuItem(view_menu, _("Previous view"), ToolImage(_T("magprev")), OnMagPreviousButton);
@@ -1747,9 +1773,10 @@ void CHeeksFrame::MakeMenus()
 	m_menuBar = new wxMenuBar;
 	m_menuBar->Append( file_menu, _( "&File" ) );
 	m_menuBar->Append( edit_menu, _( "&Edit" ) );
-	m_menuBar->Append( geometry_menu, _( "&Geometry" ) );
 	m_menuBar->Append( view_menu, _( "&View" ) );
+	m_menuBar->Append( geometry_menu, _( "&Geometry" ) );
 	m_menuBar->Append( solids_menu, _( "&Solid" ) );
+	m_menuBar->Append( coordinate_menu, _( "&Set Origin" ) );
 	m_menuBar->Append( transform_menu, _( "&Transform" ) );
 	m_menuBar->Append( m_menuWindow, _( "&Window" ) );
 	SetMenuBar( m_menuBar );
