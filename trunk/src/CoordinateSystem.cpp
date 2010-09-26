@@ -26,6 +26,8 @@ CoordinateSystem::CoordinateSystem(const wxString& str, const gp_Pnt &o, const g
 	m_y = y;
 }
 
+
+
 CoordinateSystem::CoordinateSystem(const CoordinateSystem &c)
 {
 	operator=(c);
@@ -1493,3 +1495,23 @@ void CoordinateSystem::PickFrom3Points()
 
 	wxGetApp().Repaint();
 }
+
+void CoordinateSystem::PickFrom1Point()
+{
+	CoordinateSystem temp = *this;
+	coordinate_system_for_PickFrom3Points = &temp;
+	y_for_PickFrom3Points = m_y;
+	z_for_PickFrom3Points = m_x ^ m_y;
+	m_visible = false;
+	wxGetApp().RegisterOnGLCommands(OnGlCommandsForPickFrom3Points);
+
+	double pos[3];
+
+	wxGetApp().PickPosition(_("Pick the location"), pos, on_set_origin);
+	
+	*this = temp;
+	wxGetApp().RemoveOnGLCommands(OnGlCommandsForPickFrom3Points);
+
+	wxGetApp().Repaint();
+}
+
