@@ -1665,7 +1665,31 @@ msgstr "Nouvelle Opération Script"
 
 #Ajout 391 HeeksCNC.cpp
 msgid "New Probe Grid Operation..."
-msgstr "Nouvelle Opération Réseau de Palpage "
+msgstr "Nouvelle Opération Réseau de Palpage"
+
+#Ajout 392 HeeksFrame.cpp
+msgid "&Set Origin"
+msgstr "&Fixer l'Origine"
+
+#Ajout 393 HeeksFrame.cpp
+msgid "Pick 3 points"
+msgstr "Indiquer 3 points"
+
+#Ajout 394 HeeksFrame.cpp
+msgid "Pick 1 point"
+msgstr "Indiquer 1 point"
+
+#Ajout 395 HeeksCAD.cpp
+msgid "Word Space Percentage"
+msgstr "% d'espace entre mots"
+
+#Ajput 396 HeeksCAD.cpp
+msgid "Character Space Percentage"
+msgstr "% d'espace entre caractères"
+
+#Ajout 397 HeeksCAD.cpp
+msgid "ignore errors where possible"
+msgstr "Ignore erreurs si possible"
 
 #===============================
 
