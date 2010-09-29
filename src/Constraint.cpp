@@ -331,6 +331,8 @@ HeeksObj* Constraint::ReadFromXMLElement(TiXmlElement* pElem)
 
 	Constraint *c = new Constraint(etype,eangle,length,obj1,obj2);
 
+	c->ReadBaseXML(pElem);
+
 	if(obj1)obj1->constraints.push_back(c);
 	if(obj2)obj2->constraints.push_back(c);
 
