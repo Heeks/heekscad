@@ -222,6 +222,13 @@ void CCone::OnApplyProperties()
 
 bool CCone::ValidateProperties()
 {
+	if(m_r1 <= -wxGetApp().m_geom_tol || m_r2 <= -wxGetApp().m_geom_tol)
+	{
+		wxMessageBox(_("can not enter negative value for radius"));
+		return false;
+	}
+	if(m_r1 < 0)m_r1 = 0;
+	if(m_r2 < 0)m_r2 = 0;
 	if(fabs(m_r1-m_r2) < wxGetApp().m_geom_tol)
 	{
 		wxMessageBox(_("cone must not have both radiuses the same"));
