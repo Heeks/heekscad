@@ -3684,7 +3684,7 @@ void HeeksCADapp::create_font()
 				fstr = GetResFolder() + _T("/bitmaps/font.glf");
 				break;
 	}
-	glGenTextures(2, &m_font_tex_number );
+	glGenTextures(1, &m_font_tex_number );
 
 	//Create our glFont from verdana.glf, using texture 1
 	m_gl_font.Create((char*)Ttc(fstr.c_str()), m_font_tex_number);
