@@ -504,16 +504,37 @@ void HSpline::CreateArcs(const gp_Pnt &p_start, const gp_Vec &v_start, double t_
 	m_spline->D1(t_end, p_end, v_end);
 
 	gp_Pnt p1, p2, p3;
-    if(!calculate_biarc_points(p_start, v_start, p_end, v_end, p1, p2, p3))return;
 
-	CTangentialArc arc1(p_start, v_start, p2);
-	CTangentialArc arc2(p2, gp_Vec(p3.XYZ() - p2.XYZ()), p_end);
+	bool can_do_spline_whole = calculate_biarc_points(p_start, v_start, p_end, v_end, p1, p2, p3);
 
-    gp_Pnt p_middle1, p_middle2;
-	m_spline->D0(t_start + ((t_end - t_start) * 0.25), p_middle1);
-	m_spline->D0(t_start + ((t_end - t_start) * 0.75), p_middle2);
+	HeeksObj* arc_object1 = NULL;
+	HeeksObj* arc_object2 = NULL;
 
-	if(!arc1.radius_equal(p_middle1, tolerance_for_CreateArcs) || !arc2.radius_equal(p_middle2, tolerance_for_CreateArcs)){
+	if(can_do_spline_whole)
+	{
+		CTangentialArc arc1(p_start, v_start, p2);
+		CTangentialArc arc2(p2, gp_Vec(p3.XYZ() - p2.XYZ()), p_end);
+
+		gp_Pnt p_middle1, p_middle2;
+		m_spline->D0(t_start + ((t_end - t_start) * 0.25), p_middle1);
+		m_spline->D0(t_start + ((t_end - t_start) * 0.75), p_middle2);
+
+		if(!arc1.radius_equal(p_middle1, tolerance_for_CreateArcs) || !arc2.radius_equal(p_middle2, tolerance_for_CreateArcs))
+			can_do_spline_whole = false;
+		else
+		{
+			arc_object1 = arc1.MakeHArc();
+			arc_object2 = arc2.MakeHArc();
+		}
+	}
+	
+	if(can_do_spline_whole)
+	{
+		new_spans_for_CreateArcs->push_back(arc_object1);
+		new_spans_for_CreateArcs->push_back(arc_object2);
+	}
+	else
+	{
 		double t_middle = t_start + ((t_end - t_start) * 0.5);
 		gp_Pnt p_middle;
 		gp_Vec v_middle;
@@ -521,11 +542,6 @@ void HSpline::CreateArcs(const gp_Pnt &p_start, const gp_Vec &v_start, double t_
 		gp_Pnt new_p_end;
 		gp_Vec new_v_end;
 		CreateArcs(p_middle, v_middle, t_middle, t_end, new_p_end, new_v_end);
-	}
-	else
-	{
-		new_spans_for_CreateArcs->push_back(arc1.MakeHArc());
-		new_spans_for_CreateArcs->push_back(arc2.MakeHArc());
 	}
 }
 
