@@ -243,8 +243,8 @@ bool HeeksCADapp::OnInit()
     m_pageSetupData->SetMarginTopLeft(wxPoint(15, 15));
     m_pageSetupData->SetMarginBottomRight(wxPoint(15, 15));
 
-	int width = 600;
-	int height = 400;
+	int width = 996;
+	int height = 691;
 	int posx = 200;
 	int posy = 200;
 	HeeksConfig config;
