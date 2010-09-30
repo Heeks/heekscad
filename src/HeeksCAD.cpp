@@ -103,7 +103,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	_CrtSetAllocHook(MyAllocHook);
 #endif
 
-	m_version_number = _T("0 14 0");
+	m_version_number = _T("0 15 1");
 	m_geom_tol = 0.000001;
 	TiXmlBase::SetRequiredDecimalPlaces( DecimalPlaces(m_geom_tol) );	 // Ensure we write XML in enough accuracy to be useful when re-read.
 
