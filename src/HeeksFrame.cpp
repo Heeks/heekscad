@@ -1893,6 +1893,14 @@ void CHeeksFrame::AddToolBars()
 		CFlyOutList flyout_list(_T("ViewMag"));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("Mag Extents"), ToolImage(_T("magextents")), _("Zoom in to fit the extents of the drawing into the graphics window"), OnMagExtentsButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("Mag No Rotation"), ToolImage(_T("magnorot")), _("Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"), OnMagNoRotButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("Zoom Window"), ToolImage(_T("mag")), _("Zoom in to a dragged window"), OnMagButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("View Back"), ToolImage(_T("magprev")), _("Go back to previous view"), OnMagPreviousButton));
+		flyout_list.m_list.push_back(CFlyOutItem(_T("FullScreen"), ToolImage(_T("fullscreen")), _("Switch to full screen view ( press escape to return )"), OnFullScreenButton));
+		AddToolBarFlyout(m_viewingBar, flyout_list);
+	}
+
+	{
+		CFlyOutList flyout_list(_T("ViewSpecific"));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("View XY Front"), ToolImage(_T("magxy")), _("View XY Front"), OnMagXYButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("View XY Back"), ToolImage(_T("magxym")), _("View XY Back"), OnMagXYMButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("View XZ Top"), ToolImage(_T("magxz")), _("View XZ Top"), OnMagXZButton));
@@ -1900,9 +1908,6 @@ void CHeeksFrame::AddToolBars()
 		flyout_list.m_list.push_back(CFlyOutItem(_T("View YZ Right"), ToolImage(_T("magyz")), _("View YZ Right"), OnMagYZButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("View YZ Left"), ToolImage(_T("magyzm")), _("View YZ Left"), OnMagYZMButton));
 		flyout_list.m_list.push_back(CFlyOutItem(_T("View XY Isometric"), ToolImage(_T("magxyz")), _("View XY Isometric"), OnMagXYZButton));
-		flyout_list.m_list.push_back(CFlyOutItem(_T("Zoom Window"), ToolImage(_T("mag")), _("Zoom in to a dragged window"), OnMagButton));
-		flyout_list.m_list.push_back(CFlyOutItem(_T("View Back"), ToolImage(_T("magprev")), _("Go back to previous view"), OnMagPreviousButton));
-		flyout_list.m_list.push_back(CFlyOutItem(_T("FullScreen"), ToolImage(_T("fullscreen")), _("Switch to full screen view ( press escape to return )"), OnFullScreenButton));
 		AddToolBarFlyout(m_viewingBar, flyout_list);
 	}
 
