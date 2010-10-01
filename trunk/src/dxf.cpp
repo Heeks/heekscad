@@ -10,6 +10,7 @@
 #include "HEllipse.h"
 #include "HSpline.h"
 #include "Sketch.h"
+#include "HText.h"
 
 CDxfWrite::CDxfWrite(const wxChar* filepath)
 {
@@ -606,6 +607,78 @@ bool CDxfRead::ReadCircle()
 	OnReadCircle(c, radius);
 	return false;
 }
+
+
+bool CDxfRead::ReadText()
+{
+	double c[3]; // coordinate
+	double height = 0.03082;
+
+	memset( c, 0, sizeof(c) );
+
+	while(!((*m_ifs).eof()))
+	{
+		get_line();
+		int n;
+		if(sscanf(m_str, "%d", &n) != 1)
+		{
+		    printf("CDxfRead::ReadText() Failed to read integer from '%s'\n", m_str);
+		    return false;
+		}
+		std::istringstream ss;
+		ss.imbue(std::locale("C"));
+		switch(n){
+			case 0:
+				return false;
+			case 8: // Layer name follows
+				get_line();
+				m_layer_name = Ctt(m_str);
+				break;
+
+			case 10:
+				// centre x
+				get_line();
+				ss.str(m_str); ss >> c[0]; c[0] = mm(c[0]); if(ss.fail()) return false;
+				break;
+			case 20:
+				// centre y
+				get_line();
+				ss.str(m_str); ss >> c[1]; c[1] = mm(c[1]); if(ss.fail()) return false;
+				break;
+			case 30:
+				// centre z
+				get_line();
+				ss.str(m_str); ss >> c[2]; c[2] = mm(c[2]); if(ss.fail()) return false;
+				break;
+            case 40:
+				// text height
+				get_line();
+				ss.str(m_str); ss >> height; height = mm(height); if(ss.fail()) return false;
+				break;
+            case 1:
+				// text
+				get_line();
+				OnReadText(c, height * 25.4 / 72.0, wxString(Ctt(m_str)));
+				return(true);
+
+			case 100:
+			case 39:
+			case 210:
+			case 220:
+			case 230:
+				// skip the next line
+				get_line();
+				break;
+			default:
+				// skip the next line
+				get_line();
+				break;
+		}
+	}
+
+	return false;
+}
+
 
 bool CDxfRead::ReadEllipse()
 {
@@ -1227,6 +1300,14 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 				}
 				continue;
 			}
+			else if(!strcmp(m_str, "MTEXT")){
+				if(!ReadText())
+				{
+				    printf("CDxfRead::DoRead() Failed to read text\n");
+				    return;
+				}
+				continue;
+			}
 			else if(!strcmp(m_str, "ELLIPSE")){
 				if(!ReadEllipse())
 				{
@@ -1323,6 +1404,25 @@ void HeeksDxfRead::OnReadEllipse(const double* c, double major_radius, double mi
 	ellipse.Rotate(gp_Ax1(pc,up),rotation);
 	HEllipse* new_object = new HEllipse(ellipse, &wxGetApp().current_color);
 	AddObject(new_object);
+}
+
+void HeeksDxfRead::OnReadText(const double *point, const double height, const wxString text)
+{
+    gp_Trsf trsf;
+    trsf.SetTranslation( gp_Vec( gp_Pnt(0,0,0), gp_Pnt(point[0], point[1], point[2]) ) );
+    trsf.SetScaleFactor( height );
+
+    wxString txt(text);
+    txt.Replace(_T("\\P"),_T("\n"),true);
+
+    int offset = 0;
+    while ((txt.Length() > 0) && (txt[0] == _T('\\')) && ((offset = txt.find(_T(';'))) != -1))
+    {
+        txt.Remove(0, offset+1);
+    }
+
+    HText *new_object = new HText(trsf, txt, &wxGetApp().current_color, NULL );
+    AddObject(new_object);
 }
 
 void HeeksDxfRead::AddObject(HeeksObj *object)

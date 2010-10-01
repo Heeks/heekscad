@@ -88,6 +88,7 @@ private:
 
 	bool ReadUnits();
 	bool ReadLine();
+	bool ReadText();
 	bool ReadArc();
 	bool ReadCircle();
 	bool ReadEllipse();
@@ -115,6 +116,7 @@ public:
 	bool IgnoreErrors() const { return(m_ignore_errors); }
 
 	virtual void OnReadLine(const double* s, const double* e){}
+	virtual void OnReadText(const double* point, const double height, const wxString text){}
 	virtual void OnReadArc(const double* s, const double* e, const double* c, bool dir){}
 	virtual void OnReadCircle(const double* s, const double* c, bool dir){}
 	virtual void OnReadEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir){}
@@ -141,6 +143,7 @@ public:
 
 	// CDxfRead's virtual functions
 	void OnReadLine(const double* s, const double* e);
+	void OnReadText(const double* point, const double height, const wxString text);
 	void OnReadArc(const double* s, const double* e, const double* c, bool dir);
 	void OnReadCircle(const double* s, const double* c, bool dir);
     void OnReadEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir);
