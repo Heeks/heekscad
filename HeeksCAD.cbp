@@ -56,6 +56,8 @@
 		<Unit filename="interface/DoubleInput.cpp" />
 		<Unit filename="interface/DoubleInput.h" />
 		<Unit filename="interface/GripperTypes.h" />
+		<Unit filename="interface/HDialogs.cpp" />
+		<Unit filename="interface/HDialogs.h" />
 		<Unit filename="interface/HeeksCADInterface.cpp" />
 		<Unit filename="interface/HeeksCADInterface.h" />
 		<Unit filename="interface/HeeksColor.cpp" />
