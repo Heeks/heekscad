@@ -146,6 +146,7 @@ public:
 	virtual bool ReOrderSketch(HeeksObj* sketch, SketchOrderType new_order); // returns true if done
 	virtual void ExtractSeparateSketches(HeeksObj* sketch, std::list<HeeksObj*> &new_separate_sketches, const bool allow_individual_objects);
 	virtual HeeksObj* ExtrudeSketch(HeeksObj* sketch, double height, bool try_to_make_solid);
+	virtual HeeksObj* RevolveSketch(HeeksObj* sketch, double angle, bool try_to_make_solid);
 	virtual HeeksObj* LineArcsToWire(std::list<HeeksObj*> list);
 	virtual HeeksObj* MakePipe(HeeksObj* spine, HeeksObj* profile);
 	virtual HeeksObj* MakeRuled(std::list<HeeksObj*> list, bool make_solid);
