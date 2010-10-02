@@ -27,7 +27,11 @@ std::string ConstraintTypes[]={
 	"PointOnLineConstraint",
 	"PointOnLineMidpointConstraint",
 	"PointOnArcMidpointConstraint",
-	"PointOnArcConstraint"
+	"PointOnArcConstraint",
+	"PointOnCircleConstraint",
+	"LineHorizontalLengthConstraint",
+	"LineVerticalLengthConstraint",
+	"FixedPointConstraint"
 };
 
 
@@ -331,10 +335,24 @@ HeeksObj* Constraint::ReadFromXMLElement(TiXmlElement* pElem)
 
 	Constraint *c = new Constraint(etype,eangle,length,obj1,obj2);
 
-	c->ReadBaseXML(pElem);
+	unsigned int len;
+	char *str = new char[512];
+	char *cstr = str;
 
-	if(obj1)obj1->constraints.push_back(c);
-	if(obj2)obj2->constraints.push_back(c);
+	printf("Searched for: 0x%X:0x%X, 0x%X:0x%X\n", obj1_type, obj1_id, obj2_type, obj2_id);
+	if(obj1)
+	{
+		obj1->constraints.push_back(c);
+		obj1->ToString(str,&len,512);
+		cstr = str+len;
+	}
+	if(obj2)
+	{
+		obj2->constraints.push_back(c);
+		obj2->ToString(cstr,&len,512);
+		cstr = cstr+len;
+	}
+	printf("%s",str);
 
 	//Don't let the xml reader try to insert us in the tree
 	return NULL;
