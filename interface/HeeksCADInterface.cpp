@@ -43,6 +43,7 @@
 #include <TopoDS_Wire.hxx>
 #include "Geom.h"
 #include "wxImageLoader.h"
+#include "CoordinateSystem.h"
 
 double CHeeksCADInterface::GetTolerance()
 {
@@ -442,7 +443,7 @@ HeeksObj* CHeeksCADInterface::NewCone(const double* c, double r1, double r2, dou
 }
 
 //added by DF for heekspython
-HeeksObj* CHeeksCADInterface::NewSphere(const double* pos, double radius)
+HeeksObj* CHeeksCADInterface::NewSphere(const double* pos , double radius)
 {
    return new CSphere(gp_Pnt(make_point(pos)), radius,_T("Sphere"), wxGetApp().current_color);
 }
@@ -452,6 +453,13 @@ HeeksObj* CHeeksCADInterface::NewSolid(const TopoDS_Solid &solid, const wxChar* 
 	return(new CSolid( solid, title, col ) );
 
 } // End NewSolid() method
+
+// coordinate system
+
+HeeksObj* CHeeksCADInterface::NewCoordinateSystem(const double* pos, const double* x, const double* y)
+{
+	return new CoordinateSystem(_("Coordinate System"), gp_Pnt(make_point(pos)), gp_Dir(make_vector(x)), gp_Dir(make_vector(y)));
+}
 
 
 HeeksObj* CHeeksCADInterface::Fuse(std::list<HeeksObj*> objects)
