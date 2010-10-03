@@ -35,6 +35,7 @@ class TopoDS_Wire;
 class TopoDS_Solid;
 class gp_Lin;
 class gp_Pnt;
+class gp_Dir;
 class gp_Circ;
 
 #include <list>
@@ -106,6 +107,7 @@ public:
 	virtual HeeksObj* NewSphere(const double*pos, double radius);
 	virtual HeeksObj* NewGroup();
 	virtual HeeksObj* NewSolid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
+	virtual HeeksObj* NewCoordinateSystem(const double* pos, const double* x, const double* y);
 	virtual HeeksObj* Fuse(std::list<HeeksObj*> objects);
 	virtual HeeksObj* Cut(std::list<HeeksObj*> objects);
 	virtual HeeksObj* Common(std::list<HeeksObj*> objects);
@@ -263,6 +265,7 @@ public:
 	virtual bool Intersect(const gp_Pnt& pnt, const gp_Circ& cir);
 	virtual void Intersect(const gp_Lin& line, const gp_Circ& circle, std::list<gp_Pnt> &list);
 	virtual void Intersect(const gp_Circ& c1, const gp_Circ& c2, std::list<gp_Pnt> &list);
+
 
 	virtual void RegisterOnBuildTexture( void(*callbackfunc)() );
 	virtual int LoadIconsTexture(const wxChar *filepath);
