@@ -803,33 +803,7 @@ HeeksObj* HeeksCADapp::ReadXMLElement(TiXmlElement* pElem)
 		object = HXml::ReadFromXMLElement(pElem);
 	}
 
-	if (object != NULL)
-	{
-		// Check to see if we already have an object for this type/id pair.  If so, use the existing one instead.
-		// 
-		// NOTE: This would be better if another ObjList pointer was passed in and we checked the objects in that
-		// ObjList for pre-existing elements rather than going to the global one.  This would allow imported data
-		// (i.e. data read from another file and used to augment the current data) to work as well as the scenario
-		// where we are reading into an empty memory block. (new data)
-
-		HeeksObj *existing = NULL;
-
-		existing = wxGetApp().GetIDObject(object->GetType(), object->m_id);
-
-		if ((existing != NULL) && (existing != object))
-		{
-			// There was a pre-existing version of this type/id pair.  Don't replace it with another one.
-			delete object;
-			return(existing);
-		}
-		else
-		{
-			// It's new.  Keep this new copy.
-			return object;
-		}
-	}
-
-	return(object);	//  NULL
+	return object;
 }
 
 void HeeksCADapp::ObjectWriteBaseXML(HeeksObj *object, TiXmlElement *element)
@@ -941,13 +915,11 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, Heek
 		}
 	}
 
-/*
 	// where operations are pointing to the same sketch, for example, make sure that they are not duplicated sketches
 	for (std::list<HeeksObj *>::iterator itObject = objects.begin(); itObject != objects.end(); itObject++)
 	{
 		*itObject = MergeCommonObjects( unique_set, *itObject );
 	}
-*/
 
 	if(objects.size() > 0)
 	{
@@ -1204,6 +1176,14 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
 			extract(l->A->m_p, s);
 			extract(l->B->m_p, e);
 			dxf_file.WriteLine(s, e, layer_name);
+		}
+		break;
+	case PointType:
+		{
+			HPoint* p = (HPoint*)object;
+			double s[3];
+			extract(p->m_p, s);
+			dxf_file.WritePoint(s, layer_name);
 		}
 		break;
 	case ArcType:
@@ -3416,8 +3396,7 @@ void HeeksCADapp::SetObjectID(HeeksObj* object, int id)
 		bool found = false;
 		for (IdsToObjects_t::iterator itIdsToObjects = map.lower_bound( id ); itIdsToObjects != map.upper_bound( id ); itIdsToObjects++)
 		{
-			HeeksObj *existing = itIdsToObjects->second;
-			if ((existing != NULL) && (existing->GetType() == object->GetType()))
+			if (itIdsToObjects->second == object)
 			{
 				found = true;
 				break;
