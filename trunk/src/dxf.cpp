@@ -65,6 +65,20 @@ void CDxfWrite::WriteLine(const double* s, const double* e, const wxString layer
 	(*m_ofs) << e[2]		<< endl;	// Z in WCS coordinates
 }
 
+void CDxfWrite::WritePoint(const double* s, const wxString layer_name)
+{
+	(*m_ofs) << 0			<< endl;
+	(*m_ofs) << "POINT"		<< endl;
+	(*m_ofs) << 8			<< endl;	// Group code for layer name
+	(*m_ofs) << Ttc(layer_name.c_str())	<< endl;	// Layer number
+	(*m_ofs) << 10			<< endl;	// Start point of line
+	(*m_ofs) << s[0]		<< endl;	// X in WCS coordinates
+	(*m_ofs) << 20			<< endl;
+	(*m_ofs) << s[1]		<< endl;	// Y in WCS coordinates
+	(*m_ofs) << 30			<< endl;
+	(*m_ofs) << s[2]		<< endl;	// Z in WCS coordinates
+}
+
 void CDxfWrite::WriteArc(const double* s, const double* e, const double* c, bool dir, const wxString layer_name)
 {
 	double ax = s[0] - c[0];
@@ -282,6 +296,76 @@ bool CDxfRead::ReadLine()
 
 	try {
 		OnReadLine(s, e);
+	}
+	catch(Standard_Failure)
+	{
+		if (! IgnoreErrors()) throw;	// Re-throw the exception.
+	}
+
+	return false;
+}
+
+bool CDxfRead::ReadPoint()
+{
+	double s[3] = {0, 0, 0};
+
+	while(!((*m_ifs).eof()))
+	{
+		get_line();
+		int n;
+
+		if(sscanf(m_str, "%d", &n) != 1)
+		{
+		    printf("CDxfRead::ReadPoint() Failed to read integer from '%s'\n", m_str );
+		    return false;
+		}
+
+		std::istringstream ss;
+		ss.imbue(std::locale("C"));
+		switch(n){
+			case 0:
+				// next item found, so finish with line
+				OnReadPoint(s);
+				return true;
+
+			case 8: // Layer name follows
+				get_line();
+				m_layer_name = Ctt(m_str);
+				break;
+
+			case 10:
+				// start x
+				get_line();
+				ss.str(m_str); ss >> s[0]; s[0] = mm(s[0]); if(ss.fail()) return false;
+				break;
+			case 20:
+				// start y
+				get_line();
+				ss.str(m_str); ss >> s[1]; s[1] = mm(s[1]); if(ss.fail()) return false;
+				break;
+			case 30:
+				// start z
+				get_line();
+				ss.str(m_str); ss >> s[2]; s[2] = mm(s[2]); if(ss.fail()) return false;
+				break;
+			case 100:
+			case 39:
+			case 210:
+			case 220:
+			case 230:
+				// skip the next line
+				get_line();
+				break;
+			default:
+				// skip the next line
+				get_line();
+				break;
+		}
+
+	}
+
+	try {
+		OnReadPoint(s);
 	}
 	catch(Standard_Failure)
 	{
@@ -1340,6 +1424,14 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 				}
 				continue;
 			}
+			else if (!strcmp(m_str, "POINT")) {
+				if(!ReadPoint())
+				{
+				    printf("CDxfRead::DoRead() Failed to read Point\n");
+				    return;
+				}
+				continue;
+			}
 		}
 
 		get_line();
@@ -1355,6 +1447,12 @@ bool HeeksDxfRead::m_ignore_errors = false;
 void HeeksDxfRead::OnReadLine(const double* s, const double* e)
 {
 	HLine* new_object = new HLine(make_point(s), make_point(e), &(wxGetApp().current_color));
+	AddObject(new_object);
+}
+
+void HeeksDxfRead::OnReadPoint(const double* s)
+{
+	HPoint* new_object = new HPoint(make_point(s), &(wxGetApp().current_color));
 	AddObject(new_object);
 }
 
