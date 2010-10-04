@@ -67,6 +67,7 @@ public:
 	bool Failed(){return m_fail;}
 
 	void WriteLine(const double* s, const double* e, const wxString layer_name );
+	void WritePoint(const double*, wxString);
 	void WriteArc(const double* s, const double* e, const double* c, bool dir, const wxString layer_name );
     void WriteEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir, const wxString layer_name );
 	void WriteCircle(const double* c, double radius, const wxString layer_name );
@@ -92,6 +93,7 @@ private:
 	bool ReadArc();
 	bool ReadCircle();
 	bool ReadEllipse();
+	bool ReadPoint();
 	bool ReadSpline();
 	bool ReadLwPolyLine();
 	bool ReadPolyLine();
@@ -116,6 +118,7 @@ public:
 	bool IgnoreErrors() const { return(m_ignore_errors); }
 
 	virtual void OnReadLine(const double* s, const double* e){}
+	virtual void OnReadPoint(const double* s){}
 	virtual void OnReadText(const double* point, const double height, const wxString text){}
 	virtual void OnReadArc(const double* s, const double* e, const double* c, bool dir){}
 	virtual void OnReadCircle(const double* s, const double* c, bool dir){}
@@ -143,6 +146,7 @@ public:
 
 	// CDxfRead's virtual functions
 	void OnReadLine(const double* s, const double* e);
+	void OnReadPoint(const double* s);
 	void OnReadText(const double* point, const double height, const wxString text);
 	void OnReadArc(const double* s, const double* e, const double* c, bool dir);
 	void OnReadCircle(const double* s, const double* c, bool dir);
