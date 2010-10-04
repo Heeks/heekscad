@@ -307,12 +307,37 @@ void ObjList::ReadBaseXML(TiXmlElement* element)
 	// loop through all the objects
 	for(TiXmlElement* pElem = TiXmlHandle(element).FirstChildElement().Element(); pElem;	pElem = pElem->NextSiblingElement())
 	{
+	    HeeksObj *existing = NULL;
+
 #ifdef HEEKSCAD
 		HeeksObj* object = wxGetApp().ReadXMLElement(pElem);
+
+		if ((object != NULL) && (object->GetType() != 0) && (object->m_id != 0))
+		{
+			existing = wxGetApp().GetIDObject( object->GetType(), object->m_id );
+		}
 #else
 		HeeksObj* object = heeksCAD->ReadXMLElement(pElem);
+
+		if ((object != NULL) && (object->GetType() != 0) && (object->m_id != 0))
+		{
+			existing = heeksCAD->GetIDObject( object->GetType(), object->m_id );
+		}
 #endif
-		if(object)Add(object, NULL);
+
+        // Check to see if this object has not already been read into memory (duplicate child of two parents)
+        // If so, use the existing object rather than this one.
+
+        if ((existing != NULL) && (existing != object))
+        {
+            Add(existing,NULL); // Add the pre-existing object as a child of this object.
+            if (object != NULL) delete object;
+        }
+        else
+        {
+            // Add the new object.
+            if(object)Add(object, NULL);
+        }
 	}
 
 	HeeksObj::ReadBaseXML(element);
