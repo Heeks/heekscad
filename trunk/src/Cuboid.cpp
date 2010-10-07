@@ -10,7 +10,9 @@
 #include "Gripper.h"
 #include "MarkedList.h"
 
-CCuboid::CCuboid(const gp_Ax2& pos, double x, double y, double z, const wxChar* title, const HeeksColor& col):CSolid(BRepPrimAPI_MakeBox(pos, x, y, z), title, col), m_pos(pos), m_x(x), m_y(y), m_z(z)
+CCuboid::CCuboid(const gp_Ax2& pos, double x, double y, double z, const wxChar* title, const HeeksColor& col)
+:CSolid(BRepPrimAPI_MakeBox(gp_Ax2(pos.Location().XYZ() + gp_XYZ((x < 0) ? x:0.0, (y < 0) ? y:0.0, (z < 0) ? z:0.0), pos.Direction()), fabs(x), fabs(y), fabs(z)), title, col)
+, m_pos(pos), m_x(x), m_y(y), m_z(z)
 {
 }
 
