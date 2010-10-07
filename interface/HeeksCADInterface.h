@@ -26,6 +26,7 @@ class wxToolBarBase;
 class CNurbSurfaceParams;
 class TransientObject;
 class Plugin;
+class CoordinateSystem;
 
 #include "SketchOrder.h"
 
@@ -44,6 +45,10 @@ class CHeeksCADInterface{
 public:
 	CHeeksCADInterface(){}
 	~CHeeksCADInterface(){}
+
+	//gp_Pnt m_o;
+	//gp_Dir m_x;
+	//gp_Dir m_y;
 
 	virtual double GetTolerance();
 	virtual void RefreshProperties();
@@ -158,7 +163,19 @@ public:
 	virtual bool ConvertSketchToEdges(HeeksObj *object, std::vector<TopoDS_Edge> &edges);
 	virtual HeeksObj* ConvertEdgesToSketch(const std::list<HeeksObj*> &edges, double deviation);
 	virtual bool FilletSketchAtPoint(HeeksObj* sketch, const double* d3, double rad);
+	 // get coordinate system/datum  parameters
+	virtual double GetDatumPosX(HeeksObj* c);
+	virtual double GetDatumPosY(HeeksObj* c); 
+	virtual double GetDatumPosZ(HeeksObj* c); 
+	
+	virtual double GetDatumDirx_X(HeeksObj* c);
+	virtual double GetDatumDirx_Y(HeeksObj* c);
+	virtual double GetDatumDirx_Z(HeeksObj* c);
 
+	virtual double GetDatumDiry_X(HeeksObj* c);
+	virtual double GetDatumDiry_Y(HeeksObj* c);
+	virtual double GetDatumDiry_Z(HeeksObj* c);
+	
 	// body functions
 	virtual long BodyGetNumFaces(HeeksObj* body);
 	virtual HeeksObj* BodyGetFirstFace(HeeksObj* body);
