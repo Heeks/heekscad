@@ -442,7 +442,7 @@ HeeksObj* CHeeksCADInterface::NewCone(const double* c, double r1, double r2, dou
 	return new CCone(gp_Ax2(make_point(c),up),r1,r2,h,_T("Cone"),wxGetApp().current_color);
 }
 
-//added by DF for heekspython
+
 HeeksObj* CHeeksCADInterface::NewSphere(const double* pos , double radius)
 {
    return new CSphere(gp_Pnt(make_point(pos)), radius,_T("Sphere"), wxGetApp().current_color);
@@ -452,14 +452,76 @@ HeeksObj* CHeeksCADInterface::NewSolid(const TopoDS_Solid &solid, const wxChar* 
 {
 	return(new CSolid( solid, title, col ) );
 
-} // End NewSolid() method
+} 
 
-// coordinate system
+// coordinate system/datum functions
 
 HeeksObj* CHeeksCADInterface::NewCoordinateSystem(const double* pos, const double* x, const double* y)
 {
 	return new CoordinateSystem(_("Coordinate System"), gp_Pnt(make_point(pos)), gp_Dir(make_vector(x)), gp_Dir(make_vector(y)));
 }
+
+// get coordinate system position, X_direction, and Y_direction
+// new datum position
+double CHeeksCADInterface::GetDatumPosX(HeeksObj* c)
+{
+
+	return ((CoordinateSystem*)(c))->m_o.X();
+}
+
+double CHeeksCADInterface::GetDatumPosY(HeeksObj* c)
+{
+
+	return ((CoordinateSystem*)(c))->m_o.Y();
+}
+
+double CHeeksCADInterface::GetDatumPosZ(HeeksObj* c)
+{
+
+	return ((CoordinateSystem*)(c))->m_o.Z();
+}
+
+
+// new datum X direction
+double CHeeksCADInterface::GetDatumDirx_X(HeeksObj* c)
+{
+
+	return ((CoordinateSystem*)(c))->m_x.X();
+}
+
+double CHeeksCADInterface::GetDatumDirx_Y(HeeksObj* c)
+{
+
+	return ((CoordinateSystem*)(c))->m_x.Y();
+}
+
+double CHeeksCADInterface::GetDatumDirx_Z(HeeksObj* c)
+{
+
+	return ((CoordinateSystem*)(c))->m_x.Z();
+}
+
+
+// new datum Y direction
+double CHeeksCADInterface::GetDatumDiry_X(HeeksObj* c)
+{
+
+	return ((CoordinateSystem*)(c))->m_y.X();
+}
+
+double CHeeksCADInterface::GetDatumDiry_Y(HeeksObj* c)
+{
+
+	return ((CoordinateSystem*)(c))->m_y.Y();
+}
+
+double CHeeksCADInterface::GetDatumDiry_Z(HeeksObj* c)
+{
+
+	return ((CoordinateSystem*)(c))->m_y.Z();
+}
+
+// end coordinate system/datum functions
 
 
 HeeksObj* CHeeksCADInterface::Fuse(std::list<HeeksObj*> objects)
