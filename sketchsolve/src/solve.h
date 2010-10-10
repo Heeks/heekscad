@@ -341,5 +341,6 @@ double ArcAngleOnArcAngleError(std::vector<double> &parms);
 double ColinearError(std::vector<double>& parms);
 double LinePerpToAngleError(std::vector<double>& parms);
 double EllipseTangentError(std::vector<double>& parms);
+double PointOnLineMidpointError(std::vector<double>& parms);
 
 #endif /* SOLVE_H_ */
