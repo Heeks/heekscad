@@ -104,6 +104,11 @@ SolveImpl::SolveImpl()
 	registerdependency(pointOnPoint,point2);
 	registerconstraint(pointOnPoint,PointOnPointError);
 
+	registerdependency(pointOnLineMidpoint,line1);
+	registerdependency(pointOnLineMidpoint,point1);
+	registerconstraint(pointOnLineMidpoint,PointOnLineMidpointError);
+
+
 	registerdependency(P2PDistance,point1);
 	registerdependency(P2PDistance,point2);
 	registerdependency(P2PDistance,parameter);

@@ -54,6 +54,21 @@ double PerpendicularError(std::vector<double> &parms)
      return (temp)*(temp)*1000;
 }
 
+
+double PointOnLineMidpointError(std::vector<double> &parms)
+{
+     double dx = parms[4] - parms[0];
+     double dy = parms[5] - parms[1];
+     double dx2 = parms[2] - parms[4];
+     double dy2 = parms[3] - parms[5];
+
+     double e1 = dx2 - dx;
+     double e2 = dy2 - dy;
+
+     double temp = e1*e1 + e2 * e2;
+     return temp;
+}
+
 double HorizontalError(std::vector<double> &parms)
 {
    double ody = parms[3] - parms[1];
