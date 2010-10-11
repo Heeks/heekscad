@@ -11,8 +11,8 @@
 
 class Gripper: public HeeksObj{
 public:
-	HeeksObj* m_gripper_parent;
 	GripData m_data;
+	HeeksObj* m_gripper_parent;
 
 	Gripper(const GripData& data, HeeksObj* parent);
 	virtual ~Gripper(){}

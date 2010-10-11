@@ -42,7 +42,7 @@ public:
 	{
 		if(picture != current_picture)
 		{
-			m_sizer->Remove(current_picture);
+			m_sizer->Detach(current_picture);
 			current_picture->Show(false);
 			m_sizer->Add(picture, 1, wxGROW);
 			picture->Show();
