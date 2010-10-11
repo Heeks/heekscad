@@ -236,7 +236,7 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 				button->obj->GetOnEdit(&callback);
 				if(callback)
 				{
-					bool result = (*callback)(button->obj);
+					(*callback)(button->obj);
 				}
 			}
 		}
@@ -803,7 +803,7 @@ void CTreeCanvas::RenderDraggedList(bool just_for_calculation)
 
 	if(m_dragged_list.size() > 0)
 	{
-		std::list<HeeksObj*>::iterator It = m_dragged_list.begin(); 
+		std::list<HeeksObj*>::iterator It = m_dragged_list.begin();
 		HeeksObj* prev_object = NULL;
 		HeeksObj* object = *It;
 		for(;It != m_dragged_list.end();)

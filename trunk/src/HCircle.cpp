@@ -481,7 +481,7 @@ bool HCircle::GetArcTangentPoints(const gp_Circ& c, const gp_Lin &line, const gp
 		{
 			gp_Pnt& pnt = *It;
 			double dp = gp_Vec(pnt.XYZ()) * gp_Vec(line.Direction());
-			if(best_pnt == NULL || p_infront_of_centre && dp > best_dp || !p_infront_of_centre && dp < best_dp)
+			if(best_pnt == NULL || (p_infront_of_centre && dp > best_dp) || (!p_infront_of_centre && dp < best_dp))
 			{
 				best_pnt = &pnt;
 				best_dp = dp;
