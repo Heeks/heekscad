@@ -416,7 +416,11 @@ bool HeeksCADapp::OnInit()
 			for(unsigned int i = 0; i<parser.GetParamCount(); i++)
 			{
 				wxString param = parser.GetParam(i);
+#ifdef WIN32
 				if(!(param.Lower().EndsWith(_T(".dll")) || param.Lower().EndsWith(_T(".pyd"))))
+#else
+				if(!(param.Lower().EndsWith(_T(".so"))))
+#endif
 				{
 					OpenFile(parser.GetParam(i));
 				}
@@ -806,7 +810,7 @@ HeeksObj* HeeksCADapp::ReadXMLElement(TiXmlElement* pElem)
 	if (object != NULL)
 	{
 		// Check to see if we already have an object for this type/id pair.  If so, use the existing one instead.
-		// 
+		//
 		// NOTE: This would be better if another ObjList pointer was passed in and we checked the objects in that
 		// ObjList for pre-existing elements rather than going to the global one.  This would allow imported data
 		// (i.e. data read from another file and used to augment the current data) to work as well as the scenario
@@ -1144,7 +1148,11 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 	else if(CShape::ImportSolidsFile(filepath))
 	{
 	}
+#ifdef WIN32
 	else if(wf.EndsWith(_T(".dll")) || wf.EndsWith(_T(".pyd")))
+#else
+	else if(wf.EndsWith(_T(".so")))
+#endif
 	{
 		// add a plugin
 	}
@@ -3958,7 +3966,11 @@ void HeeksCADapp::GetPluginsFromCommandLineParams(std::list<wxString> &plugins)
 			for(unsigned int i = 0; i<parser.GetParamCount(); i++)
 			{
 				wxString param = parser.GetParam(i);
+#ifdef WIN32
 				if(param.Lower().EndsWith(_T(".dll")) || param.Lower().EndsWith(_T(".pyd")))
+#else
+				if(param.Lower().EndsWith(_T(".so")))
+#endif
 				{
 					plugins.push_back(param);
 				}

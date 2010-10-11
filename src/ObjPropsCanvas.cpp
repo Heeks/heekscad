@@ -10,7 +10,6 @@
 #include "HeeksFrame.h"
 #include "MarkedList.h"
 #include "../interface/MarkedObject.h"
-#include "../interface/ObjectCanvas.h"
 
 BEGIN_EVENT_TABLE(CObjPropsCanvas, wxScrolledWindow)
 	EVT_SIZE(CObjPropsCanvas::OnSize)
@@ -218,7 +217,7 @@ void CObjPropsCanvas::OnCancel2()
 void CObjPropsCanvas::WhenMarkedListChanges(bool selection_cleared, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)
 {
 	if(in_OnCancel2)return;
-	
+
 	m_make_initial_properties_in_refresh = true;
 	RefreshByRemovingAndAddingAll();
 	m_make_initial_properties_in_refresh = false;
@@ -227,6 +226,6 @@ void CObjPropsCanvas::WhenMarkedListChanges(bool selection_cleared, const std::l
 void CObjPropsCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified)
 {
 	if(in_OnCancel2)return;
-	
+
 	RefreshByRemovingAndAddingAll();
 }

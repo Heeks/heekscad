@@ -137,7 +137,7 @@ bool HeeksObj::StretchTemporaryTransformed(const double *p, const double* shift,
 
 	HeeksObj* owner = Owner();
 	CSketch *sketch = dynamic_cast<CSketch*>(owner);
-	
+
 	if(sketch && sketch->m_coordinate_system)
 		mat = sketch->m_coordinate_system->GetMatrix();
 
@@ -165,8 +165,8 @@ void HeeksObj::GetGripperPositionsTransformed(std::list<GripData> *list, bool ju
 #ifdef HEEKSCAD
 
 	//TODO: We want to transform these coords by whatever has happened to the draw matrix on the way down to our level
-	//For right now we are just grabbing the sketches coord system, but this isn't right and won't work when parts or 
-	//assemblies come around. 
+	//For right now we are just grabbing the sketches coord system, but this isn't right and won't work when parts or
+	//assemblies come around.
 	//For that matter it has gotten out of control with the addition of faces and edges to pads
 	std::list<GripData> newlist;
 	GetGripperPositions(&newlist,just_for_endof);
@@ -175,7 +175,7 @@ void HeeksObj::GetGripperPositionsTransformed(std::list<GripData> *list, bool ju
 
 	HeeksObj* owner = Owner();
 	CSketch *sketch = dynamic_cast<CSketch*>(owner);
-	
+
 	if(sketch && sketch->m_coordinate_system)
 		mat = sketch->m_coordinate_system->GetMatrix();
 
@@ -210,7 +210,7 @@ void HeeksObj::GetGripperPositions(std::list<GripData> *list, bool just_for_endo
 	if(!box.m_valid)return;
 
 	//TODO: This is a tab bit of a strange thing to do. Especially for planar objects like faces
-	//ones that are on a plane like y-z or x-z will have all gripper merged togeather. 
+	//ones that are on a plane like y-z or x-z will have all gripper merged togeather.
 	list->push_back(GripData(GripperTypeTranslate,box.m_x[0],box.m_x[1],box.m_x[2],NULL));
 	list->push_back(GripData(GripperTypeRotateObject,box.m_x[3],box.m_x[1],box.m_x[2],NULL));
 	list->push_back(GripData(GripperTypeRotateObject,box.m_x[0],box.m_x[4],box.m_x[2],NULL));
@@ -348,7 +348,7 @@ void HeeksObj::ToString(char *str, unsigned int* rlen, unsigned int len)
 	unsigned int printed;
 	*rlen = 0;
 
-	printed = snprintf(str,len,"ID: 0x%X, Type: 0x%X, MarkingMask: 0x%X, IDGroup: 0x%X\n",GetID(),GetType(),GetMarkingMask(),GetIDGroupType());
+	printed = snprintf(str,len,"ID: 0x%X, Type: 0x%X, MarkingMask: 0x%X, IDGroup: 0x%X\n",GetID(),GetType(),(unsigned int)GetMarkingMask(),GetIDGroupType());
 	if(printed >= len)
 		goto abort;
 	*rlen += printed; len -= printed;
