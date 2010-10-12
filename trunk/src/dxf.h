@@ -86,8 +86,13 @@ private:
 	wxString m_section_name;
 	wxString m_block_name;
 	bool m_ignore_errors;
+	Aci_t m_aci; // manifest color name or 256 for layer color
+
+	typedef std::map< std::string,int > LayerAci_t;
+	LayerAci_t m_layer_aci;  // layer names -> layer color map
 
 	bool ReadUnits();
+	bool ReadLayer();
 	bool ReadLine();
 	bool ReadText();
 	bool ReadArc();
@@ -105,6 +110,8 @@ private:
 
 	void get_line();
 	void put_line(const char *value);
+	void DerefACI();
+
 
 public:
 	CDxfRead(const wxChar* filepath); // this opens the file
@@ -116,6 +123,7 @@ public:
 	double mm( const double & value ) const;
 
 	bool IgnoreErrors() const { return(m_ignore_errors); }
+	Aci_t  GetACI() const {return (m_aci); }
 
 	virtual void OnReadLine(const double* s, const double* e){}
 	virtual void OnReadPoint(const double* s){}
@@ -137,7 +145,8 @@ private:
     typedef wxString LayerName_t;
 	typedef std::map< LayerName_t, CSketch * > Sketches_t;
 	Sketches_t m_sketches;
-
+	
+	HeeksColor DecodeACI(const int aci);
 public:
 	HeeksDxfRead(const wxChar* filepath):CDxfRead(filepath){}
 
