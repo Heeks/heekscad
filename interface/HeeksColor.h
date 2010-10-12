@@ -4,6 +4,8 @@
 
 #pragma once
 
+typedef int Aci_t; // AutoCAD color index
+
 class HeeksColor{
 public:
 	unsigned char red;
@@ -13,6 +15,7 @@ public:
 	HeeksColor(void){red = 0; green = 0; blue = 0;}
 	HeeksColor(unsigned char a, unsigned char b, unsigned char c);
 	HeeksColor(long color);
+	HeeksColor(Aci_t aci);
 	long COLORREF_color(void)const;
 	bool operator==(const HeeksColor &b)const{if(red == b.red && green == b.green && blue == b.blue)return true;else return false;}
 	void glMaterial(double opacity, GLenum face = GL_FRONT_AND_BACK)const;
