@@ -2,6 +2,7 @@
 // Copyright (c) 2009, Dan Heeks
 // This program is released under the BSD license. See the file COPYING for details.
 
+#include <algorithm>
 #include "stdafx.h"
 #include "dxf.h"
 #include "HLine.h"
@@ -240,7 +241,8 @@ bool CDxfRead::ReadLine()
 		switch(n){
 			case 0:
 				// next item found, so finish with line
-				OnReadLine(s, e);
+			        DerefACI();
+			        OnReadLine(s, e);
 				return true;
 
 			case 8: // Layer name follows
@@ -278,6 +280,12 @@ bool CDxfRead::ReadLine()
 				get_line();
 				ss.str(m_str); ss >> e[2]; e[2] = mm(e[2]); if(ss.fail()) return false;
 				break;
+		        case 62:
+				// color index
+				get_line();
+				ss.str(m_str); ss >> m_aci; if(ss.fail()) return false;
+				break;
+			        
 			case 100:
 			case 39:
 			case 210:
@@ -291,11 +299,11 @@ bool CDxfRead::ReadLine()
 				get_line();
 				break;
 		}
-
 	}
 
 	try {
-		OnReadLine(s, e);
+	    DerefACI();
+	    OnReadLine(s, e);
 	}
 	catch(Standard_Failure)
 	{
@@ -325,6 +333,7 @@ bool CDxfRead::ReadPoint()
 		switch(n){
 			case 0:
 				// next item found, so finish with line
+			        DerefACI();
 				OnReadPoint(s);
 				return true;
 
@@ -348,6 +357,13 @@ bool CDxfRead::ReadPoint()
 				get_line();
 				ss.str(m_str); ss >> s[2]; s[2] = mm(s[2]); if(ss.fail()) return false;
 				break;
+
+		        case 62:
+				// color index
+				get_line();
+				ss.str(m_str); ss >> m_aci; if(ss.fail()) return false;
+				break;
+
 			case 100:
 			case 39:
 			case 210:
@@ -365,7 +381,8 @@ bool CDxfRead::ReadPoint()
 	}
 
 	try {
-		OnReadPoint(s);
+	    DerefACI();
+	    OnReadPoint(s);
 	}
 	catch(Standard_Failure)
 	{
@@ -397,8 +414,9 @@ bool CDxfRead::ReadArc()
 		switch(n){
 			case 0:
 				// next item found, so finish with arc
-				OnReadArc(start_angle, end_angle, radius, c);
-				return true;
+			        DerefACI();
+			        OnReadArc(start_angle, end_angle, radius, c);
+			        return true;
 
 			case 8: // Layer name follows
 				get_line();
@@ -435,6 +453,11 @@ bool CDxfRead::ReadArc()
 				get_line();
 				ss.str(m_str); ss >> end_angle; if(ss.fail()) return false;
 				break;
+		        case 62:
+				// color index
+				get_line();
+				ss.str(m_str); ss >> m_aci; if(ss.fail()) return false;
+				break;
 			case 100:
 			case 39:
 			case 210:
@@ -449,6 +472,7 @@ bool CDxfRead::ReadArc()
 				break;
 		}
 	}
+	DerefACI();
 	OnReadArc(start_angle, end_angle, radius, c);
 	return false;
 }
@@ -466,6 +490,7 @@ bool CDxfRead::ReadSpline()
 	sd.fit_points = 0;
 
 	double temp_double;
+
 	while(!((*m_ifs).eof()))
 	{
 		get_line();
@@ -480,13 +505,18 @@ bool CDxfRead::ReadSpline()
 		switch(n){
 			case 0:
 				// next item found, so finish with Spline
+			        DerefACI();
 				OnReadSpline(sd);
 				return true;
 			case 8: // Layer name follows
 				get_line();
 				m_layer_name = Ctt(m_str);
 				break;
-
+		        case 62:
+				// color index
+				get_line();
+				ss.str(m_str); ss >> m_aci; if(ss.fail()) return false;
+				break;
 			case 210:
 				// normal x
 				get_line();
@@ -623,6 +653,7 @@ bool CDxfRead::ReadSpline()
 				break;
 		}
 	}
+	DerefACI();
 	OnReadSpline(sd);
 	return false;
 }
@@ -647,6 +678,7 @@ bool CDxfRead::ReadCircle()
 		switch(n){
 			case 0:
 				// next item found, so finish with Circle
+			        DerefACI();
 				OnReadCircle(c, radius);
 				return true;
 			case 8: // Layer name follows
@@ -674,6 +706,12 @@ bool CDxfRead::ReadCircle()
 				get_line();
 				ss.str(m_str); ss >> radius; radius = mm(radius); if(ss.fail()) return false;
 				break;
+		        case 62:
+				// color index
+				get_line();
+				ss.str(m_str); ss >> m_aci; if(ss.fail()) return false;
+				break;
+
 			case 100:
 			case 39:
 			case 210:
@@ -688,6 +726,7 @@ bool CDxfRead::ReadCircle()
 				break;
 		}
 	}
+	DerefACI();
 	OnReadCircle(c, radius);
 	return false;
 }
@@ -734,16 +773,23 @@ bool CDxfRead::ReadText()
 				get_line();
 				ss.str(m_str); ss >> c[2]; c[2] = mm(c[2]); if(ss.fail()) return false;
 				break;
-            case 40:
+		        case 40:
 				// text height
 				get_line();
 				ss.str(m_str); ss >> height; height = mm(height); if(ss.fail()) return false;
 				break;
-            case 1:
+                       case 1:
 				// text
 				get_line();
+				DerefACI();
 				OnReadText(c, height * 25.4 / 72.0, wxString(Ctt(m_str)));
 				return(true);
+
+		        case 62:
+				// color index 
+				get_line();
+				ss.str(m_str); ss >> m_aci; if(ss.fail()) return false;
+				break;
 
 			case 100:
 			case 39:
@@ -786,6 +832,7 @@ bool CDxfRead::ReadEllipse()
 		switch(n){
 			case 0:
 				// next item found, so finish with Ellipse
+			        DerefACI();
 				OnReadEllipse(c, m, ratio, start, end);
 				return true;
 			case 8: // Layer name follows
@@ -838,6 +885,11 @@ bool CDxfRead::ReadEllipse()
 				get_line();
 				ss.str(m_str); ss >> end; if(ss.fail()) return false;
 				break;
+		        case 62:
+				// color index
+				get_line();
+				ss.str(m_str); ss >> m_aci; if(ss.fail()) return false;
+				break;
 			case 100:
 			case 210:
 			case 220:
@@ -851,6 +903,7 @@ bool CDxfRead::ReadEllipse()
 				break;
 		}
 	}
+	DerefACI();
 	OnReadEllipse(c, m, ratio, start, end);
 	return false;
 }
@@ -869,6 +922,7 @@ static double poly_first_z;
 
 static void AddPolyLinePoint(CDxfRead* dxf_read, double x, double y, double z, bool bulge_found, double bulge)
 {
+
 	try {
 		if(poly_prev_found)
 		{
@@ -949,7 +1003,9 @@ bool CDxfRead::ReadLwPolyLine()
 		switch(n){
 			case 0:
 				// next item found
-				if(x_found && y_found){
+		
+			        DerefACI();
+			        if(x_found && y_found){
 					// add point
 					AddPolyLinePoint(this, x, y, z, bulge_found, bulge);
 					bulge_found = false;
@@ -994,6 +1050,11 @@ bool CDxfRead::ReadLwPolyLine()
 				if(sscanf(m_str, "%d", &flags) != 1)return false;
 				closed = ((flags & 1) != 0);
 				break;
+		        case 62:
+				// color index
+				get_line();
+				ss.str(m_str); ss >> m_aci; if(ss.fail()) return false;
+				break;
 			default:
 				// skip the next line
 				get_line();
@@ -1006,6 +1067,7 @@ bool CDxfRead::ReadLwPolyLine()
 		if(closed && poly_first_found)
 		{
 			// repeat the first point
+		        DerefACI();
 			AddPolyLinePoint(this, poly_first_x, poly_first_y, poly_first_z, false, 0.0);
 		}
 		return true;
@@ -1041,6 +1103,7 @@ bool CDxfRead::ReadVertex(gp_Pnt *pVertex, bool *bulge_found, double *bulge)
         ss.imbue(std::locale("C"));
         switch(n){
         case 0:
+	    DerefACI();
             put_line(m_str);    // read one line too many.  put it back.
             return(x_found && y_found);
             break;
@@ -1073,6 +1136,12 @@ bool CDxfRead::ReadVertex(gp_Pnt *pVertex, bool *bulge_found, double *bulge)
             *bulge_found = true;
             ss.str(m_str); ss >> *bulge; if(ss.fail()) return false;
             break;
+	case 62:
+	    // color index
+	    get_line();
+	    ss.str(m_str); ss >> m_aci; if(ss.fail()) return false;
+	    break;
+	    
         default:
             // skip the next line
             get_line();
@@ -1110,6 +1179,7 @@ bool CDxfRead::ReadPolyLine()
 		switch(n){
 			case 0:
 				// next item found
+			        DerefACI();
 				get_line();
 				if (! strcmp(m_str,"VERTEX"))
 				{
@@ -1139,6 +1209,11 @@ bool CDxfRead::ReadPolyLine()
 				get_line();
 				if(sscanf(m_str, "%d", &flags) != 1)return false;
 				closed = ((flags & 1) != 0);
+				break;
+		        case 62:
+				// color index
+				get_line();
+				ss.str(m_str); ss >> m_aci; if(ss.fail()) return false;
 				break;
 			default:
 				// skip the next line
@@ -1321,6 +1396,64 @@ bool CDxfRead::ReadUnits()
 	}
 }
 
+
+bool CDxfRead::ReadLayer()
+{
+        std::string layername;
+	int aci = -1;
+
+	while(!((*m_ifs).eof()))
+	{
+		get_line();
+		int n;
+
+		if(sscanf(m_str, "%d", &n) != 1)
+		{
+		    printf("CDxfRead::ReadLayer() Failed to read integer from '%s'\n", m_str );
+		    return false;
+		}
+
+		std::istringstream ss;
+		ss.imbue(std::locale("C"));
+		switch(n){
+			case 0:	// next item found, so finish with line
+			        if (layername.empty()) 
+				{
+				    printf("CDxfRead::ReadLayer() - no layer name\n");
+				    return false;
+				}
+			        m_layer_aci[layername] = aci;
+				return true;
+
+			case 2: // Layer name follows
+				get_line();
+				layername = m_str;
+				break;
+
+			case 62:
+				// layer color ; if negative, layer is off
+				get_line();
+				if(sscanf(m_str, "%d", &aci) != 1)return false;
+				break;
+
+			case 6:	// linetype name
+			case 70: // layer flags
+			case 100:
+			case 290:
+			case 370:
+			case 390:
+				// skip the next line
+				get_line();
+				break;
+			default:
+				// skip the next line
+				get_line();
+				break;
+		}
+	}
+	return false;
+}
+
 void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 {
 	m_ignore_errors = ignore_errors;
@@ -1341,26 +1474,39 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			if (! strcmp(m_str,"2"))
 			{
 			    get_line();
-
 			    m_block_name = Ctt(m_str);
 			}
 		} // End if - then
 		else if(!strcmp(m_str, "0"))
 		{
 			get_line();
-
 			if (!strcmp( m_str, "SECTION" )){
-                get_line();
-                get_line();
+			  get_line();
+			  get_line();
+			  m_section_name = Ctt(m_str);
+			  m_block_name.Clear();
 
-                m_section_name = Ctt(m_str);
-                m_block_name.Clear();
-            } // End if - then
-            else if (!strcmp( m_str, "ENDSEC" )){
+		} // End if - then
+		else if (!strcmp( m_str, "TABLE" )){
+			  get_line();
+			  get_line();
+		}
+
+		else if (!strcmp( m_str, "LAYER" )){
+			  get_line();
+			  get_line();
+			  if(!ReadLayer())
+			    {
+			      printf("CDxfRead::DoRead() Failed to read layer\n");
+			      return;
+			    }
+			  continue;		}
+
+		else if (!strcmp( m_str, "ENDSEC" )){
                     m_section_name.Clear();
                     m_block_name.Clear();
-            } // End if - then
-			else if(!strcmp(m_str, "LINE")){
+                } // End if - then
+		else if(!strcmp(m_str, "LINE")){
 				if(!ReadLine())
 				{
 				    printf("CDxfRead::DoRead() Failed to read line\n");
@@ -1440,20 +1586,42 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
     AddGraphics();
 }
 
+// if color = layer color, replace by color from layer
+void  CDxfRead::DerefACI()
+{
+    
+    switch (m_aci) {
+    case 256: // color by layer
+	if (!m_layer_aci[std::string(m_layer_name.mb_str())])
+	{    
+	    printf("CDxfRead::DecodeColor(%d) - no layer color defined\n",m_aci);//,m_layer_name.mb_str());
+
+	    m_aci = 0;
+	}
+	m_aci = m_layer_aci[std::string(m_layer_name.mb_str())];
+	// cout << "color set to " << m_aci << ", layer= " << std::string(m_layer_name.mb_str()) << "\n";
+
+	break;
+    default:
+	break;
+    }
+}
+
+
 // static
 bool HeeksDxfRead::m_make_as_sketch = false;
 bool HeeksDxfRead::m_ignore_errors = false;
 
-void HeeksDxfRead::OnReadLine(const double* s, const double* e)
+void HeeksDxfRead::OnReadLine(const double* s, const double* e) //  HeeksColor color)
 {
-	HLine* new_object = new HLine(make_point(s), make_point(e), &(wxGetApp().current_color));
-	AddObject(new_object);
+    HLine* new_object = new HLine(make_point(s), make_point(e), &HeeksColor(GetACI()));
+    AddObject(new_object);
 }
 
 void HeeksDxfRead::OnReadPoint(const double* s)
 {
-	HPoint* new_object = new HPoint(make_point(s), &(wxGetApp().current_color));
-	AddObject(new_object);
+    HPoint* new_object = new HPoint(make_point(s),  &HeeksColor(GetACI()));
+    AddObject(new_object);
 }
 
 void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, bool dir)
@@ -1464,7 +1632,7 @@ void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, 
 	if(!dir)up = -up;
 	gp_Pnt pc = make_point(c);
 	gp_Circ circle(gp_Ax2(pc, up), p1.Distance(pc));
-	HArc* new_object = new HArc(p0, p1, circle, &wxGetApp().current_color);
+	HArc* new_object = new HArc(p0, p1, circle, &HeeksColor(GetACI()));
 	AddObject(new_object);
 }
 
@@ -1476,7 +1644,7 @@ void HeeksDxfRead::OnReadCircle(const double* s, const double* c, bool dir)
 	if(!dir)up = -up;
 	gp_Pnt pc = make_point(c);
 	gp_Circ circle(gp_Ax2(pc, up), p0.Distance(pc));
-	HCircle* new_object = new HCircle(circle, &wxGetApp().current_color);
+	HCircle* new_object = new HCircle(circle, &HeeksColor(GetACI())); 
 	AddObject(new_object);
 }
 
@@ -1484,7 +1652,7 @@ void HeeksDxfRead::OnReadSpline(TColgp_Array1OfPnt &control, TColStd_Array1OfRea
 {
 	try{
 		Geom_BSplineCurve spline(control,weight,knot,mult,degree,periodic,rational);
-		HSpline* new_object = new HSpline(spline, &wxGetApp().current_color);
+		HSpline* new_object = new HSpline(spline, &HeeksColor(GetACI())); 
 		AddObject(new_object);
 	}
 	catch(Standard_Failure)
@@ -1500,7 +1668,7 @@ void HeeksDxfRead::OnReadEllipse(const double* c, double major_radius, double mi
 	gp_Pnt pc = make_point(c);
 	gp_Elips ellipse(gp_Ax2(pc, up), major_radius, minor_radius);
 	ellipse.Rotate(gp_Ax1(pc,up),rotation);
-	HEllipse* new_object = new HEllipse(ellipse, &wxGetApp().current_color);
+	HEllipse* new_object = new HEllipse(ellipse, &HeeksColor(GetACI()));
 	AddObject(new_object);
 }
 
@@ -1519,7 +1687,7 @@ void HeeksDxfRead::OnReadText(const double *point, const double height, const wx
         txt.Remove(0, offset+1);
     }
 
-    HText *new_object = new HText(trsf, txt, &wxGetApp().current_color, NULL );
+    HText *new_object = new HText(trsf, txt, &HeeksColor(GetACI()), NULL);
     AddObject(new_object);
 }
 
@@ -1582,3 +1750,4 @@ wxString CDxfRead::LayerName() const
 
     return(result);
 }
+
