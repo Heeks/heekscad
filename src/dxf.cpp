@@ -1586,24 +1586,13 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
     AddGraphics();
 }
 
-// if color = layer color, replace by color from layer
+
 void  CDxfRead::DerefACI()
 {
     
-    switch (m_aci) {
-    case 256: // color by layer
-	if (!m_layer_aci[std::string(m_layer_name.mb_str())])
-	{    
-	    printf("CDxfRead::DecodeColor(%d) - no layer color defined\n",m_aci);//,m_layer_name.mb_str());
-
-	    m_aci = 0;
-	}
-	m_aci = m_layer_aci[std::string(m_layer_name.mb_str())];
-	// cout << "color set to " << m_aci << ", layer= " << std::string(m_layer_name.mb_str()) << "\n";
-
-	break;
-    default:
-	break;
+    if (m_aci == 256) // if color = layer color, replace by color from layer
+    {
+         m_aci = m_layer_aci[std::string(m_layer_name.mb_str())];
     }
 }
 
@@ -1612,15 +1601,15 @@ void  CDxfRead::DerefACI()
 bool HeeksDxfRead::m_make_as_sketch = false;
 bool HeeksDxfRead::m_ignore_errors = false;
 
-void HeeksDxfRead::OnReadLine(const double* s, const double* e) //  HeeksColor color)
+void HeeksDxfRead::OnReadLine(const double* s, const double* e) 
 {
-    HLine* new_object = new HLine(make_point(s), make_point(e), &HeeksColor(GetACI()));
+    HLine* new_object = new HLine(make_point(s), make_point(e), &HeeksColor(m_aci));
     AddObject(new_object);
 }
 
 void HeeksDxfRead::OnReadPoint(const double* s)
 {
-    HPoint* new_object = new HPoint(make_point(s),  &HeeksColor(GetACI()));
+    HPoint* new_object = new HPoint(make_point(s), &HeeksColor(m_aci));
     AddObject(new_object);
 }
 
@@ -1632,7 +1621,7 @@ void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, 
 	if(!dir)up = -up;
 	gp_Pnt pc = make_point(c);
 	gp_Circ circle(gp_Ax2(pc, up), p1.Distance(pc));
-	HArc* new_object = new HArc(p0, p1, circle, &HeeksColor(GetACI()));
+	HArc* new_object = new HArc(p0, p1, circle, &HeeksColor(m_aci));
 	AddObject(new_object);
 }
 
@@ -1644,7 +1633,7 @@ void HeeksDxfRead::OnReadCircle(const double* s, const double* c, bool dir)
 	if(!dir)up = -up;
 	gp_Pnt pc = make_point(c);
 	gp_Circ circle(gp_Ax2(pc, up), p0.Distance(pc));
-	HCircle* new_object = new HCircle(circle, &HeeksColor(GetACI())); 
+	HCircle* new_object = new HCircle(circle, &HeeksColor(m_aci)); 
 	AddObject(new_object);
 }
 
@@ -1652,7 +1641,7 @@ void HeeksDxfRead::OnReadSpline(TColgp_Array1OfPnt &control, TColStd_Array1OfRea
 {
 	try{
 		Geom_BSplineCurve spline(control,weight,knot,mult,degree,periodic,rational);
-		HSpline* new_object = new HSpline(spline, &HeeksColor(GetACI())); 
+		HSpline* new_object = new HSpline(spline, &HeeksColor(m_aci)); 
 		AddObject(new_object);
 	}
 	catch(Standard_Failure)
@@ -1668,7 +1657,7 @@ void HeeksDxfRead::OnReadEllipse(const double* c, double major_radius, double mi
 	gp_Pnt pc = make_point(c);
 	gp_Elips ellipse(gp_Ax2(pc, up), major_radius, minor_radius);
 	ellipse.Rotate(gp_Ax1(pc,up),rotation);
-	HEllipse* new_object = new HEllipse(ellipse, &HeeksColor(GetACI()));
+	HEllipse* new_object = new HEllipse(ellipse, &HeeksColor(m_aci));
 	AddObject(new_object);
 }
 
@@ -1687,7 +1676,7 @@ void HeeksDxfRead::OnReadText(const double *point, const double height, const wx
         txt.Remove(0, offset+1);
     }
 
-    HText *new_object = new HText(trsf, txt, &HeeksColor(GetACI()), NULL);
+    HText *new_object = new HText(trsf, txt, &HeeksColor(m_aci), NULL);
     AddObject(new_object);
 }
 
