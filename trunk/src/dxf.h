@@ -86,10 +86,10 @@ private:
 	wxString m_section_name;
 	wxString m_block_name;
 	bool m_ignore_errors;
-	Aci_t m_aci; // manifest color name or 256 for layer color
 
-	typedef std::map< std::string,int > LayerAci_t;
-	LayerAci_t m_layer_aci;  // layer names -> layer color map
+
+	typedef std::map< std::string,Aci_t > LayerAciMap_t;
+	LayerAciMap_t m_layer_aci;  // layer names -> layer color aci map
 
 	bool ReadUnits();
 	bool ReadLayer();
@@ -112,6 +112,8 @@ private:
 	void put_line(const char *value);
 	void DerefACI();
 
+protected:
+	Aci_t m_aci; // manifest color name or 256 for layer color
 
 public:
 	CDxfRead(const wxChar* filepath); // this opens the file
@@ -123,7 +125,6 @@ public:
 	double mm( const double & value ) const;
 
 	bool IgnoreErrors() const { return(m_ignore_errors); }
-	Aci_t  GetACI() const {return (m_aci); }
 
 	virtual void OnReadLine(const double* s, const double* e){}
 	virtual void OnReadPoint(const double* s){}
