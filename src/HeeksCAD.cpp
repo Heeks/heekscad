@@ -286,7 +286,7 @@ bool HeeksCADapp::OnInit()
 			wxString key = wxString::Format(_T("BackgroundColor%d"), i);
 			int color = default_color[i];
 			config.Read(key, &color);
-			background_color[i] = HeeksColor(color);
+			background_color[i] = HeeksColor((long)color);
 		}
 		int mode = (int)BackgroundModeTwoColors;
 		config.Read(_T("BackgroundMode"), &mode);
@@ -318,7 +318,7 @@ bool HeeksCADapp::OnInit()
 	{
 		int color = HeeksColor(0, 255, 0).COLORREF_color();
 		config.Read(_T("FaceSelectionColor"), &color);
-		face_selection_color = HeeksColor(color);
+		face_selection_color = HeeksColor((long)color);
 	}
 	config.Read(_T("RotateMode"), &m_rotate_mode);
 	config.Read(_T("Antialiasing"), &m_antialiasing);

@@ -334,7 +334,7 @@ HeeksObj* HSpline::ReadFromXMLElement(TiXmlElement* pElem)
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
 		std::string name(a->Name());
-		if(name == "col"){c = HeeksColor(a->IntValue());}
+		if(name == "col"){c = HeeksColor((long)(a->IntValue()));}
 		else if(name == "rational"){rational = a->IntValue() != 0;}
 		else if(name == "periodic"){periodic = a->IntValue() != 0;}
 		else if(name == "knots"){nknots = a->IntValue();}

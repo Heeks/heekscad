@@ -17,37 +17,6 @@ HeeksColor::HeeksColor(long color)
 	blue  = (unsigned char)((color>>16) & 0xff);
 }
 
-
-
-void HeeksColor::glMaterial(double opacity, GLenum face)const{
-    GLfloat matf[4];
-	matf[3] = (GLfloat)opacity;
-	if(opacity < 1)
-	{
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glDepthMask(0);
-	}
-	matf[0] = 0.1f * (GLfloat)red /255;
-	matf[1] = 0.1f * (GLfloat)green / 255;
-	matf[2] = 0.1f * (GLfloat)blue / 255;
-	glMaterialfv (face, GL_AMBIENT, matf);
-	matf[0] = 0.8f * (GLfloat)red / 255;
-	matf[1] = 0.8f * (GLfloat)green / 255;
-	matf[2] = 0.8f * (GLfloat)blue / 255;
-	glMaterialfv (face, GL_DIFFUSE, matf);
-	matf[0] = 0.3f;
-	matf[1] = 0.3f;
-	matf[2] = 0.3f;
-	glMaterialfv (face, GL_SPECULAR, matf);
-	matf[0] = 0.2f;
-	matf[1] = 0.2f;
-	matf[2] = 0.2f;
-	glMaterialfv (face, GL_EMISSION, matf);
-
-    glMaterialf (face, GL_SHININESS, 128.0);
-}
-
 HeeksColor HeeksColor::best_black_or_white(void)const{
 	if(red + green + blue > 0x17e)return HeeksColor(0, 0, 0);
 	else return HeeksColor(255, 255, 255);

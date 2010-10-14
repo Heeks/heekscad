@@ -37,12 +37,14 @@ public:
 		matf[9] = 15.0f;
 	}
 
-	void glMaterial(float opacity)
+	bool glMaterial(float opacity)
 	{
+		bool blend_enabled = false;
 		if (opacity<1) {
 			glEnable(GL_BLEND);
 			glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 			glDepthMask(0);
+			blend_enabled = true;
 		}
 		float f[4] = {0.0f, 0.0f, 0.0f, opacity};
 		memcpy(f, &matf[0], 3*sizeof(float));
@@ -54,5 +56,6 @@ public:
 		f[0] = 0.0f; f[1] = 0.0f; f[2] = 0.0f;
 		glMaterialfv( GL_FRONT_AND_BACK, GL_EMISSION, f );
 		glMaterialf( GL_FRONT_AND_BACK, GL_SHININESS, matf[9] );
+		return blend_enabled;
 	}
 };
