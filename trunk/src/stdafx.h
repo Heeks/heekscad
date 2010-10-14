@@ -26,7 +26,9 @@
 
 #include <wx/wx.h>
 #if wxUSE_UNICODE
-	#define _UNICODE
+	#ifndef _UNICODE
+		#define _UNICODE
+	#endif
 #endif
 
 #include <algorithm>
@@ -232,9 +234,6 @@
 
 
 #include "../tinyxml/tinyxml.h"
-#if wxUSE_UNICODE
-	#define _UNICODE
-#endif
 
 extern "C" {
 #include <GL/gl.h>

@@ -476,7 +476,7 @@ HeeksObj* HDimension::ReadFromXMLElement(TiXmlElement* pElem)
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
 		std::string name(a->Name());
-		if(name == "col"){c = HeeksColor(a->IntValue());}
+		if(name == "col"){c = HeeksColor((long)(a->IntValue()));}
 		else if(name == "m0"){m[0] = a->DoubleValue();}
 		else if(name == "m1"){m[1] = a->DoubleValue();}
 		else if(name == "m2"){m[2] = a->DoubleValue();}

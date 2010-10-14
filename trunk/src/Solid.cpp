@@ -33,7 +33,7 @@ void CSolid::SetFromXMLElement(TiXmlElement* pElem)
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
 		std::string name(a->Name());
-		if(name == "col"){m_color = HeeksColor(a->IntValue());}
+		if(name == "col"){m_color = HeeksColor((long)(a->IntValue()));}
 	}
 }
 

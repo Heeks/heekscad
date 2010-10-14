@@ -410,7 +410,7 @@ HeeksObj* HAngularDimension::ReadFromXMLElement(TiXmlElement* pElem)
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
 		std::string name(a->Name());
-		if(name == "col"){c = HeeksColor(a->IntValue());}
+		if(name == "col"){c = HeeksColor((long)(a->IntValue()));}
 		else if(name == "text"){text.assign(Ctt(a->Value()));}
 		else if(name == "scale"){scale= a->DoubleValue();}
 		else if(name == "textmode"){text_mode = (AngularDimensionTextMode)(a->IntValue());}
