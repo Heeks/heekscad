@@ -343,7 +343,7 @@ HeeksObj* HLine::ReadFromXMLElement(TiXmlElement* pElem)
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
 		std::string name(a->Name());
-		if(name == "col"){c = HeeksColor(a->IntValue());}
+		if(name == "col"){c = HeeksColor((long)(a->IntValue()));}
 		else if(name == "sx"){p0.SetX(a->DoubleValue());}
 		else if(name == "sy"){p0.SetY(a->DoubleValue());}
 		else if(name == "sz"){p0.SetZ(a->DoubleValue());}

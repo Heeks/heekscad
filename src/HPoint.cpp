@@ -184,7 +184,7 @@ HeeksObj* HPoint::ReadFromXMLElement(TiXmlElement* pElem)
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
 		std::string name(a->Name());
-		if(name == "col"){c = HeeksColor(a->IntValue());}
+		if(name == "col"){c = HeeksColor((long)(a->IntValue()));}
 		else if(name == "x"){p.SetX(a->DoubleValue());}
 		else if(name == "y"){p.SetY(a->DoubleValue());}
 		else if(name == "z"){p.SetZ(a->DoubleValue());}

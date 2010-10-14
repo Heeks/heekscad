@@ -55,6 +55,7 @@ const CShape& CShape::operator=(const CShape& s)
 	m_title = s.m_title;
 	m_color = s.m_color;
 	m_creation_time = s.m_creation_time;
+	m_opacity = s.m_opacity;
 
 	KillGLLists();
 
@@ -77,6 +78,7 @@ bool CShape::IsDifferent(HeeksObj* other)
 void CShape::Init()
 {
 	m_creation_time = wxGetLocalTimeMillis();
+	m_opacity = 1.0;
 	m_faces = new CFaceList;
 	m_edges = new CEdgeList;
 	m_vertices = new CVertexList;
@@ -141,7 +143,7 @@ void CShape::CallMesh()
 
 void CShape::glCommands(bool select, bool marked, bool no_color)
 {
-	Material(m_color).glMaterial(1.0);
+	bool blend_enabled = Material(m_color).glMaterial(m_opacity);
 
 	bool mesh_called = false;
 	bool draw_faces = (wxGetApp().m_solid_view_mode == SolidViewFacesAndEdges || wxGetApp().m_solid_view_mode == SolidViewFacesOnly);
@@ -214,6 +216,13 @@ void CShape::glCommands(bool select, bool marked, bool no_color)
 		glCallList(m_face_gl_list);
 		glDisable(GL_LIGHTING);
 		glShadeModel(GL_FLAT);
+	}
+
+	if(blend_enabled)
+	{
+		// turn off transparency
+		glDisable(GL_BLEND);
+		glDepthMask(1);
 	}
 
 	if(draw_edges && m_edge_gl_list)
@@ -1011,3 +1020,16 @@ void CShape::SetClickMarkPoint(MarkedObject* marked_object, const double* ray_st
 		}
 	}
 }
+
+double CShape::GetOpacity()
+{
+	return m_opacity;
+}
+
+void CShape::SetOpacity(double opacity)
+{
+	m_opacity = opacity;
+	if(m_opacity < 0.0)m_opacity = 0.0;
+	if(m_opacity > 1.0)m_opacity = 1.0;
+}
+

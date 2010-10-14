@@ -15,6 +15,7 @@ protected:
 	CBox m_box;
 	TopoDS_Shape m_shape;
 	wxLongLong m_creation_time;
+	float m_opacity;
 
 	void create_faces_and_edges();
 	void delete_faces_and_edges();
@@ -56,6 +57,7 @@ public:
 	bool UsesID(){return true;}
 	bool CanAddTo(HeeksObj* owner){return ((owner != NULL) && (owner->GetType() == GroupType));}
 	bool DescendForUndo(){return false;}
+	bool DrawAfterOthers(){return m_opacity < 0.9999;}
 
 	const TopoDS_Shape &Shape(){return m_shape;}
 	const TopoDS_Shape *GetShape(){return &m_shape;}
@@ -63,6 +65,8 @@ public:
 	CFace* find(const TopoDS_Face &face);
 	bool GetExtents(double* extents, const double* orig = NULL, const double* xdir = NULL, const double* ydir = NULL, const double* zdir = NULL);
 	void CopyIDsFrom(const CShape* shape_from);
+	double GetOpacity();
+	void SetOpacity(double opacity);
 
 	static HeeksObj* CutShapes(std::list<HeeksObj*> &list,bool dodelete=true);
 	static HeeksObj* FuseShapes(std::list<HeeksObj*> &list);

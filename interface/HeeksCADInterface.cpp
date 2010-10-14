@@ -1022,6 +1022,18 @@ long CHeeksCADInterface::BodyGetColor(HeeksObj* body)
 	return ((CShape*)body)->m_color.COLORREF_color();
 }
 
+double CHeeksCADInterface::BodyGetOpacity(HeeksObj* body)
+{
+	// 0.0 to 1.0
+	return ((CShape*)body)->GetOpacity();
+}
+
+void CHeeksCADInterface::BodySetOpacity(HeeksObj* body, double opacity)
+{
+	// 0.0 to 1.0
+	((CShape*)body)->SetOpacity(opacity);
+}
+
 int CHeeksCADInterface::BodyGetShapeType(HeeksObj* body)
 {
 	// 0 - TopAbs_COMPOUND

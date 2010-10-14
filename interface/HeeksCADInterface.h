@@ -190,6 +190,8 @@ public:
 	virtual bool BodyGetExtents(HeeksObj* body, double* extents, const double* orig = NULL, const double* xdir = NULL, const double* ydir = NULL, const double* zdir = NULL);
 	virtual long BodyGetColor(HeeksObj* body);
 	virtual int BodyGetShapeType(HeeksObj* body);
+	virtual double BodyGetOpacity(HeeksObj* body); // 0.0 to 1.0
+	virtual void BodySetOpacity(HeeksObj* body, double opacity); // 0.0 to 1.0
 
 	// face functions
 	virtual void FaceSetTempAttribute(HeeksObj* face, int attr);
