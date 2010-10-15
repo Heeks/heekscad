@@ -330,7 +330,7 @@ bool ConvertSketchToEdges(HeeksObj *object, std::vector<TopoDS_Edge> &edges)
 				default:
 					{
 						wxString message;
-						message << _("Cannot convert object type ") << object->GetType() << _(" to edge");
+						message << _("Cannot convert object type ") << wxGetApp().HeeksType(object->GetType()) << _(" to edge");
 						wxMessageBox(message);
 						return(false);
 					}

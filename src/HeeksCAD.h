@@ -38,6 +38,9 @@ class wxAuiManager;
 class CSketch;
 class CAutoSave;
 
+
+extern wxString HeeksCADType(const int type);
+
 #define MAX_RECENT_FILES 20
 
 enum GraphicsTextMode
@@ -224,6 +227,14 @@ public:
 	void RegisterUnitsChangeHandler( UnitsChangedHandler_t );
 	void UnregisterUnitsChangeHandler( UnitsChangedHandler_t );
 
+	typedef wxString(*HeeksTypesConverter_t)(const int type);
+	typedef std::list<HeeksTypesConverter_t> HeeksTypesConverters_t;
+
+	HeeksTypesConverters_t m_heeks_types_converters;
+
+	void RegisterHeeksTypesConverter( HeeksTypesConverter_t );
+	void UnregisterHeeksTypesConverter( HeeksTypesConverter_t );
+
 	//WxApp override
 	int OnRun();
 	bool OnExceptionInMainLoop();
@@ -361,6 +372,8 @@ public:
 	typedef std::map< ObjectReference_t, HeeksObj * > ObjectReferences_t;
 
 	HeeksObj *MergeCommonObjects( ObjectReferences_t & unique_set, HeeksObj *object ) const;
+
+	wxString HeeksType( const int type ) const;
 };
 
 DECLARE_APP(HeeksCADapp)

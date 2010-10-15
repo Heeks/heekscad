@@ -452,7 +452,7 @@ HeeksObj* CHeeksCADInterface::NewSolid(const TopoDS_Solid &solid, const wxChar* 
 {
 	return(new CSolid( solid, title, col ) );
 
-} 
+}
 
 // coordinate system/datum functions
 
@@ -1416,3 +1416,18 @@ void CHeeksCADInterface::UnregisterUnitsChangeHandler( void (*units_changed_hand
     return( wxGetApp().UnregisterUnitsChangeHandler( units_changed_handler ));
 }
 
+
+void CHeeksCADInterface::RegisterHeeksTypesConverter( wxString (*converter)(const int type) )
+{
+    wxGetApp().RegisterHeeksTypesConverter( converter );
+}
+
+void CHeeksCADInterface::UnregisterHeeksTypesConverter( wxString (*converter)(const int type) )
+{
+    wxGetApp().UnregisterHeeksTypesConverter( converter );
+}
+
+wxString CHeeksCADInterface::HeeksType( const int type )
+{
+    return(wxGetApp().HeeksType(type));
+}

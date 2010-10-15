@@ -19,6 +19,7 @@ class GripData;
 class TopoDS_Shape;
 class ObjectCanvas;
 
+// NOTE: If adding to this enumeration, please also add the verbose description to the HeeksCADType() routine
 enum{
 	UnknownType,
 	DocumentType,
@@ -54,6 +55,8 @@ enum{
 	AngularDimensionType,
 	OrientationModifierType
 };
+
+
 
 #define MARKING_FILTER_LINE					0x00000001
 #define MARKING_FILTER_ARC					0x00000002
