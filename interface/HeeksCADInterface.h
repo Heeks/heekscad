@@ -165,9 +165,9 @@ public:
 	virtual bool FilletSketchAtPoint(HeeksObj* sketch, const double* d3, double rad);
 	 // get coordinate system/datum  parameters
 	virtual double GetDatumPosX(HeeksObj* c);
-	virtual double GetDatumPosY(HeeksObj* c); 
-	virtual double GetDatumPosZ(HeeksObj* c); 
-	
+	virtual double GetDatumPosY(HeeksObj* c);
+	virtual double GetDatumPosZ(HeeksObj* c);
+
 	virtual double GetDatumDirx_X(HeeksObj* c);
 	virtual double GetDatumDirx_Y(HeeksObj* c);
 	virtual double GetDatumDirx_Z(HeeksObj* c);
@@ -175,7 +175,7 @@ public:
 	virtual double GetDatumDiry_X(HeeksObj* c);
 	virtual double GetDatumDiry_Y(HeeksObj* c);
 	virtual double GetDatumDiry_Z(HeeksObj* c);
-	
+
 	// body functions
 	virtual long BodyGetNumFaces(HeeksObj* body);
 	virtual HeeksObj* BodyGetFirstFace(HeeksObj* body);
@@ -294,4 +294,8 @@ public:
 
 	virtual void RegisterUnitsChangeHandler( void (*units_changed_handler)(const double value) );
 	virtual void UnregisterUnitsChangeHandler( void (*units_changed_handler)(const double value) );
+
+	virtual void RegisterHeeksTypesConverter( wxString (*converter)(const int type) );
+	virtual void UnregisterHeeksTypesConverter( wxString (*converter)(const int type) );
+	virtual wxString HeeksType( const int type );
 };
