@@ -156,6 +156,7 @@ OBJECTS=                                 \
     FastCurves.o                         \
     WrappedCurves.o                      \
     SketchTools.o                        \
+    SolidTools.o                         \
     CxfFont.o                            \
     DynamicSolid.o                       \
     ShapeTools.o                         \
