@@ -30,6 +30,8 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 	int sketches_in_marked_list = 0;
 	bool group_in_marked_list = false;
 	bool edges_in_marked_list = false;
+	bool ConvertSketchesToFace_added = false;
+
 
 	// check to see what types have been marked
 	std::list<HeeksObj*>::const_iterator It;
@@ -57,10 +59,16 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 	if(lines_or_arcs_etc_in_marked_list)
 	{
 		t_list->push_back(new MakeLineArcsToSketch);
+		t_list->push_back(new ConvertSketchesToFace);
+		ConvertSketchesToFace_added = true;
 	}
 
 	if(sketches_in_marked_list > 1){
-		t_list->push_back(new ConvertSketchesToFace);
+		if(!ConvertSketchesToFace_added)
+		{
+			t_list->push_back(new ConvertSketchesToFace);
+			ConvertSketchesToFace_added = true;
+		}
 		t_list->push_back(new SketchesArcsToLines);
 		t_list->push_back(new CombineSketches);
 #ifdef UNITE_SKETCHES
@@ -546,21 +554,53 @@ bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double devi
 }
 
 void ConvertSketchesToFace::Run(){
+    std::vector<TopoDS_Edge> individual_edges;
 	std::list<HeeksObj*>::const_iterator It;
 	for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
 		HeeksObj* object = *It;
-		if(object->GetType() == SketchType){
-			std::list<TopoDS_Shape> faces;
-			if(ConvertSketchToFaceOrWire(object, faces, true))
+		switch(object->GetType())
+		{
+		case SketchType:
 			{
-				wxGetApp().CreateUndoPoint();
-				for(std::list<TopoDS_Shape>::iterator It2 = faces.begin(); It2 != faces.end(); It2++)
+				std::list<TopoDS_Shape> faces;
+				if(ConvertSketchToFaceOrWire(object, faces, true))
 				{
-					TopoDS_Shape& face = *It2;
-					wxGetApp().Add(new CFace(TopoDS::Face(face)), NULL);
+					wxGetApp().CreateUndoPoint();
+					for(std::list<TopoDS_Shape>::iterator It2 = faces.begin(); It2 != faces.end(); It2++)
+					{
+						TopoDS_Shape& face = *It2;
+						wxGetApp().Add(new CFace(TopoDS::Face(face)), NULL);
+					}
+					wxGetApp().Changed();
 				}
-				wxGetApp().Changed();
 			}
+			break;
+
+		case LineType:
+		case ArcType:
+		case CircleType:
+		case EllipseType:
+		case SplineType:
+			{
+				if (! ConvertSketchToEdges(object, individual_edges))return;
+			}
+			break;
+		}
+	}
+
+	if(individual_edges.size() > 0)
+	{
+		SortEdges(individual_edges);
+		std::list<TopoDS_Shape> faces;
+		if(ConvertEdgesToFaceOrWire(individual_edges, faces, true))
+		{
+			wxGetApp().CreateUndoPoint();
+			for(std::list<TopoDS_Shape>::iterator It2 = faces.begin(); It2 != faces.end(); It2++)
+			{
+				TopoDS_Shape& face = *It2;
+				wxGetApp().Add(new CFace(TopoDS::Face(face)), NULL);
+			}
+			wxGetApp().Changed();
 		}
 	}
 }
