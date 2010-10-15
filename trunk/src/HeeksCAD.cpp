@@ -202,6 +202,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
         RegisterFileOpenHandler( extensions, OpenRS274XFile );
     }
 
+    RegisterHeeksTypesConverter(HeeksCADType);
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -4070,4 +4071,84 @@ void HeeksCADapp::UnregisterUnitsChangeHandler( void (*units_changed_handler)(co
     }
 }
 
+
+void HeeksCADapp::RegisterHeeksTypesConverter( wxString(*converter)(const int type) )
+{
+    m_heeks_types_converters.push_back( converter );
+}
+
+void HeeksCADapp::UnregisterHeeksTypesConverter( wxString(*converter)(const int type) )
+{
+    for (HeeksTypesConverters_t::iterator itConverter = m_heeks_types_converters.begin(); itConverter != m_heeks_types_converters.end(); /* increment within loop */ )
+    {
+        if (converter == *itConverter)
+        {
+            itConverter = m_heeks_types_converters.erase(itConverter);
+        }
+        else
+        {
+            itConverter++;
+        }
+    }
+}
+
+wxString HeeksCADType(const int type)
+{
+    switch (type)
+    {
+        case UnknownType:   return(_("Unknown"));
+        case DocumentType:   return(_("Document"));
+        case PointType:   return(_("Point"));
+        case LineType:   return(_("Line"));
+        case ArcType:   return(_("Arc"));
+        case ILineType:   return(_("ILine"));
+        case CircleType:   return(_("Circle"));
+        case GripperType:   return(_("Gripper"));
+        case VertexType:   return(_("Vertex"));
+        case EdgeType:   return(_("Edge"));
+        case FaceType:   return(_("Face"));
+        case LoopType:   return(_("Loop"));
+        case SolidType:   return(_("Solid"));
+        case StlSolidType:   return(_("StlSolid"));
+        case WireType:   return(_("Wire"));
+        case SketchType:   return(_("Sketch"));
+        case ImageType:   return(_("Image"));
+        case CoordinateSystemType:   return(_("CoordinateSystem"));
+        case TextType:   return(_("Text"));
+        case DimensionType:   return(_("Dimension"));
+        case RulerType:   return(_("Ruler"));
+        case XmlType:   return(_("Xml"));
+        case EllipseType:   return(_("Ellipse"));
+        case SplineType:   return(_("Spline"));
+        case GroupType:   return(_("Group"));
+        case CorrelationToolType:   return(_("CorrelationTool"));
+        case ObjectMaximumType:   return(_("ObjectMaximum"));
+        case ConstraintType:   return(_("Constraint"));
+        case PadType:   return(_("Pad"));
+        case PartType:   return(_("Part"));
+        case PocketSolidType:   return(_("PocketSolid"));
+        case AngularDimensionType:   return(_("AngularDimension"));
+        case OrientationModifierType:   return(_("OrientationModifier"));
+        default:    return(_T("")); // Indicate that this routine could not find a conversion.
+    } // End switch
+
+} // End HeeksCADType() routine
+
+
+wxString HeeksCADapp::HeeksType( const int type ) const
+{
+
+    for (HeeksTypesConverters_t::const_iterator itConverter = m_heeks_types_converters.begin(); itConverter != m_heeks_types_converters.end(); itConverter++ )
+    {
+        wxString result = (*itConverter)(type);
+        if (result.Length() > 0)
+        {
+            return(result);
+        }
+    }
+
+    wxString buf;
+    buf << type;
+    return(buf);
+}
 

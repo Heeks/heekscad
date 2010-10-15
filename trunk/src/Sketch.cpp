@@ -798,6 +798,12 @@ int CSketch::GetClosedSketchTurningNumber()
 	{
 		HeeksObj* object = *It;
 
+		if (dynamic_cast<EndedObject *>(object) == NULL)
+		{
+		    // This object does not have two ends.
+		    continue;
+		}
+
 		// internal angle
 		if(object->GetType() == ArcType)
 		{
