@@ -16,6 +16,7 @@
 #include "ConversionTools.h"
 #include "ConstraintTools.h"
 #include "SketchTools.h"
+#include "SolidTools.h"
 using namespace std;
 
 MarkedList::MarkedList(){
@@ -328,6 +329,7 @@ void MarkedList::GetTools(MarkedObject* clicked_object, std::list<Tool*>& t_list
 	GetConversionMenuTools(&t_list);
 	GetConstraintMenuTools(&t_list);
 	GetSketchMenuTools(&t_list);
+	GetSolidMenuTools(&t_list);
 
 	if(copy_and_paste_tools)
 	{
