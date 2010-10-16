@@ -58,7 +58,8 @@ public:
 	bool UsesID(){return true;}
 
 	const TopoDS_Edge &Edge(){return m_topods_edge;}
-	void Blend(double radius);
+	//void Blend(double radius);
+ 	void Blend(double radius,bool chamfer_not_fillet);
 	CFace* GetFirstFace();
 	CFace* GetNextFace();
 	int GetCurveType();

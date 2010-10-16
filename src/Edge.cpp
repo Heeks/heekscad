@@ -6,6 +6,7 @@
 #include "Face.h"
 #include "Vertex.h"
 #include "Solid.h"
+#include "Shape.h"
 #include "../interface/Tool.h"
 #include "HeeksConfig.h"
 #include "Gripper.h"
@@ -144,10 +145,10 @@ void CEdge::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
 
 static CEdge* edge_for_tools = NULL;
 
-class BlendTool:public Tool
+class FilletTool:public Tool
 {
 public:
-	const wxChar* GetTitle(){return _("Blend");}
+	const wxChar* GetTitle(){return _("Fillet");}
 	wxString BitmapPath(){return _T("edgeblend");}
 	const wxChar* GetToolTip(){return _T("Blend edge");}
 	void Run(){
@@ -156,13 +157,36 @@ public:
 		config.Read(_T("EdgeBlendRadius"), &rad);
 		if(wxGetApp().InputLength(_("Enter Blend Radius"), _("Radius"), rad))
 		{
-			edge_for_tools->Blend(rad);
+			edge_for_tools->Blend(rad,false);
 			config.Write(_T("EdgeBlendRadius"), rad);
 		}
 	}
 };
 
-static BlendTool blend_tool;
+static FilletTool fillet_tool;
+
+
+class ChamferTool:public Tool
+{
+public:
+	const wxChar* GetTitle(){return _("Chamfer");}
+	wxString BitmapPath(){return _T("edgeblend");}
+	const wxChar* GetToolTip(){return _T("Blend edge");}
+	void Run(){
+		double rad = 2.0;
+		HeeksConfig config;
+		config.Read(_T("EdgeChamferDist"), &rad);
+		if(wxGetApp().InputLength(_("Enter Chamfer Distance"), _("Radius"), rad))
+		{	//CShape::FilletOrChamferEdges(edge_for_tools->list(), rad, true);
+			edge_for_tools->Blend(rad,true);
+			config.Write(_T("EdgeChamferDist"), rad);
+		}
+	}
+};
+
+static ChamferTool chamfer_tool;
+
+
 
 class EdgeToSketchTool:public Tool
 {
@@ -181,29 +205,64 @@ static EdgeToSketchTool make_sketch_tool;
 
 void CEdge::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 	edge_for_tools = this;
-	if(GetParentBody())t_list->push_back(&blend_tool);
+	if(GetParentBody())t_list->push_back(&fillet_tool);
+	t_list->push_back(&chamfer_tool);
 	t_list->push_back(&make_sketch_tool);
 }
 
-void CEdge::Blend(double radius){
-	try{
-		if(Owner() && Owner()->Owner() && CShape::IsTypeAShape(Owner()->Owner()->GetType())){
-			BRepFilletAPI_MakeFillet fillet(((CShape*)(Owner()->Owner()))->Shape());
-			fillet.Add(radius, m_topods_edge);
-			TopoDS_Shape new_shape = fillet.Shape();
-			wxGetApp().Add(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(Owner()->Owner()->GetColor())), NULL);
-			wxGetApp().Remove(Owner()->Owner());
-		}
-	}
-	catch (Standard_Failure) {
-		Handle_Standard_Failure e = Standard_Failure::Caught();
-		wxMessageBox(wxString(_("Error making fillet")) + _T(": ") + Ctt(e->GetMessageString()));
-	}
-	catch(...)
-	{
-		wxMessageBox(_("A fatal error happened during Blend"));
-	}
-}
+
+
+void CEdge::Blend(double radius,  bool chamfer_not_fillet){
+	
+		if(chamfer_not_fillet)  //chamfer 
+		{
+			try{
+				
+				wxGetApp().CreateUndoPoint();
+				CShape::FilletOrChamferEdges(wxGetApp().m_marked_list->list(), radius, true);
+										
+				wxGetApp().m_marked_list->Clear(true);
+				wxGetApp().Changed();
+					
+			}
+			catch (Standard_Failure) {
+				Handle_Standard_Failure e = Standard_Failure::Caught();
+				wxMessageBox(wxString(_("Error making fillet")) + _T(": ") + Ctt(e->GetMessageString()));
+			}
+			catch(...)
+			{
+				wxMessageBox(_("A fatal error happened during Blend"));
+			}
+
+
+		} //end if- chamfer 
+
+		else  //fillet 
+		{
+			try{	wxGetApp().CreateUndoPoint();
+				if(Owner() && Owner()->Owner() && CShape::IsTypeAShape(Owner()->Owner()->GetType())){
+					BRepFilletAPI_MakeFillet fillet(((CShape*)(Owner()->Owner()))->Shape());
+					fillet.Add(radius, m_topods_edge);
+					TopoDS_Shape new_shape = fillet.Shape();
+					wxGetApp().Add(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(Owner()->Owner()->GetColor())), NULL);
+					wxGetApp().Remove(Owner()->Owner());
+				}
+			}
+			catch (Standard_Failure) {
+				Handle_Standard_Failure e = Standard_Failure::Caught();
+				wxMessageBox(wxString(_("Error making fillet")) + _T(": ") + Ctt(e->GetMessageString()));
+			}
+			catch(...)
+			{
+				wxMessageBox(_("A fatal error happened during Blend"));
+			}
+
+
+		} //end else- fillet 
+
+
+	
+}// end Blend function
 
 void CEdge::GetProperties(std::list<Property *> *list)
 {
