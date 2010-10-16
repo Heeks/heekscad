@@ -94,7 +94,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 {
 	wxGetApp().m_frame = this;
 
-	m_logger = new wxLogWindow(NULL,_("Trace Log"),false,true);
+	m_logger = new wxLogWindow(NULL,_("Trace Log"),false,false); // disable log popups
 	wxLog::SetActiveTarget(m_logger);
 
 	m_next_id_for_button = ID_FIRST_EXTERNAL_BUTTON;
