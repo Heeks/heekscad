@@ -1470,6 +1470,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\SolidTools.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\SolidTools.h"
+			>
+		</File>
+		<File
 			RelativePath="..\sketchsolve\src\solve.cpp"
 			>
 			<FileConfiguration
