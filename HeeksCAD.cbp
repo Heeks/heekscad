@@ -271,6 +271,8 @@
 		<Unit filename="src/SketchTools.h" />
 		<Unit filename="src/Solid.cpp" />
 		<Unit filename="src/Solid.h" />
+		<Unit filename="src/SolidTools.cpp" />
+		<Unit filename="src/SolidTools.h" />
 		<Unit filename="src/SolveSketch.cpp" />
 		<Unit filename="src/SolveSketch.h" />
 		<Unit filename="src/Sphere.cpp" />
