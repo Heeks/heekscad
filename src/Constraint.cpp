@@ -6,7 +6,6 @@
 #include "Constraint.h"
 #include "ConstrainedObject.h"
 #include "../tinyxml/tinyxml.h"
-
 std::string AbsoluteAngle[] = {
 	"AbsoluteAngleHorizontal",
 	"AbsoluteAngleVertical"
@@ -36,7 +35,7 @@ std::string ConstraintTypes[]={
 
 
 Constraint::Constraint(){
-	
+
 }
 
 Constraint::Constraint(const Constraint* obj){
@@ -222,7 +221,7 @@ void Constraint::glCommands(HeeksColor color, gp_Ax1 axis)
 			break;
 		case LineLengthConstraint:
 			wxChar str[100];
-			wxSprintf(str,_T("%f"),m_length);
+            wxSprintf(str,_T("%f"),m_length/(double)wxGetApp().m_view_units);
 			render_text(str);
 			break;
 		case ParallelLineConstraint:
@@ -259,8 +258,8 @@ void Constraint::EndSave(TiXmlNode *root)
 	{
 		Constraint *c = *it;
 		TiXmlElement * element;
-		element = new TiXmlElement( "Constraint" );	
-		root->LinkEndChild( element );  
+		element = new TiXmlElement( "Constraint" );
+		root->LinkEndChild( element );
 		element->SetAttribute("type", ConstraintTypes[c->m_type].c_str());
 		element->SetAttribute("angle", AbsoluteAngle[c->m_angle].c_str());
 		element->SetDoubleAttribute("length", c->m_length);
