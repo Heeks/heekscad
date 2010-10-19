@@ -3382,14 +3382,12 @@ HeeksObj* HeeksCADapp::GetIDObject(int type, int id)
 	if (FindIt1 == used_ids.end()) return(NULL);
 
 	IdsToObjects_t &ids = FindIt1->second;
-	if (ids.find(id) == ids.end()) return(NULL);
-	else
-	{
-		IdsToObjects_t::iterator It = ids.upper_bound(id);
-		It--;
-		HeeksObj* object = It->second;
-		return object;
-	}
+	IdsToObjects_t::iterator FindIt2 = ids.find(id);
+
+	if (FindIt2 == ids.end())return NULL;
+
+	std::list<HeeksObj*> &list = FindIt2->second;
+	return list.back();
 
 }
 
@@ -3398,60 +3396,49 @@ std::list<HeeksObj*> HeeksCADapp::GetIDObjects(int type, int id)
     std::list<HeeksObj *> results;
 
 	UsedIds_t::iterator FindIt1 = used_ids.find(type);
-	if (FindIt1 == used_ids.end()) return(results);
+	if (FindIt1 == used_ids.end()) return results;
 
 	IdsToObjects_t &ids = FindIt1->second;
-	if (ids.find(id) == ids.end()) return(results);
-	else
-	{
-	    for (IdsToObjects_t::iterator l_itObject = ids.lower_bound(id); l_itObject != ids.upper_bound(id); l_itObject++)
-	    {
-	        results.push_back( l_itObject->second );
-	    }
-	    return(results);
-	}
+	IdsToObjects_t::iterator FindIt2 = ids.find(id);
+
+	if (FindIt2 == ids.end()) return results;
+	return FindIt2->second;
 }
 
 void HeeksCADapp::SetObjectID(HeeksObj* object, int id)
 {
 	if(object->UsesID())
 	{
+		object->m_id = id;
 		GroupId_t id_group_type = object->GetIDGroupType();
 
 		UsedIds_t::iterator FindIt1 = used_ids.find(id_group_type);
 		if(FindIt1 == used_ids.end())
 		{
 			// add a new map
-			object->m_id = id;
+			std::list<HeeksObj*> empty_list;
+			empty_list.push_back(object);
 			IdsToObjects_t empty_map;
-			empty_map.insert( std::make_pair( id, object ) );
+			empty_map.insert( std::make_pair( id, empty_list ) );
 			FindIt1 = used_ids.insert( std::make_pair( id_group_type, empty_map )).first;
-			return;
 		}
-
-		IdsToObjects_t &map = FindIt1->second;
-		bool found = false;
-		for (IdsToObjects_t::iterator itIdsToObjects = map.lower_bound( id ); itIdsToObjects != map.upper_bound( id ); itIdsToObjects++)
+		else
 		{
-			HeeksObj *existing = itIdsToObjects->second;
-			if ((existing != NULL) && (existing->GetType() == object->GetType()))
+
+			IdsToObjects_t &map = FindIt1->second;
+			IdsToObjects_t::iterator FindIt2 = map.find(id);
+			if(FindIt2 == map.end())
 			{
-				found = true;
-				break;
+				std::list<HeeksObj*> empty_list;
+				empty_list.push_back(object);
+				map.insert( std::make_pair(id, empty_list) );
 			}
-		} // End for
-
-		if (found)
-		{
-			// It's already there.
-			object->m_id = id;
-			return;
+			else
+			{
+				std::list<HeeksObj*> &list = FindIt2->second;
+				list.push_back(object);
+			}
 		}
-
-		// It's not there yet.
-		map.insert( std::make_pair(id, object) );
-		object->m_id = id;
-		return;
 	}
 }
 
@@ -3488,18 +3475,13 @@ void HeeksCADapp::RemoveID(HeeksObj* object)
 	IdsToObjects_t &map = FindIt1->second;
 	if (FindIt2 != next_id_map.end())
 	{
-		for ( IdsToObjects_t::iterator it = map.lower_bound( object->m_id ); it != map.upper_bound( object->m_id ); /* increment within loop */)
+		IdsToObjects_t::iterator FindIt3 = map.find(object->m_id);
+		if(FindIt3 != map.end())
 		{
-			if (it->second == object)
-			{
-				map.erase(it);
-				return;
-			}
-			else
-			{
-				it++;
-			}
-		} // End for
+			std::list<HeeksObj*> &list = FindIt3->second;
+			list.remove(object);
+			if(list.size() == 0)map.erase(object->m_id);
+		}
 	} // End if - then
 }
 

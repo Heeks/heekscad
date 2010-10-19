@@ -32,7 +32,7 @@ public:
 	HeeksColor m_color;
 	CFace* m_picked_face;
 
-	CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor& col);
+	CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor& col, float opacity);
 	CShape(const CShape& s);
 	~CShape();
 
@@ -58,6 +58,7 @@ public:
 	bool CanAddTo(HeeksObj* owner){return ((owner != NULL) && (owner->GetType() == GroupType));}
 	bool DescendForUndo(){return false;}
 	bool DrawAfterOthers(){return m_opacity < 0.9999;}
+	void GetProperties(std::list<Property *> *list);
 
 	const TopoDS_Shape &Shape(){return m_shape;}
 	const TopoDS_Shape *GetShape(){return &m_shape;}
@@ -65,8 +66,8 @@ public:
 	CFace* find(const TopoDS_Face &face);
 	bool GetExtents(double* extents, const double* orig = NULL, const double* xdir = NULL, const double* ydir = NULL, const double* zdir = NULL);
 	void CopyIDsFrom(const CShape* shape_from);
-	double GetOpacity();
-	void SetOpacity(double opacity);
+	float GetOpacity();
+	void SetOpacity(float opacity);
 
 	static HeeksObj* CutShapes(std::list<HeeksObj*> &list,bool dodelete=true);
 	static HeeksObj* FuseShapes(std::list<HeeksObj*> &list);
@@ -74,7 +75,7 @@ public:
 	static void FilletOrChamferEdges(std::list<HeeksObj*> &list, double radius, bool chamfer_not_fillet = false);
 	static bool ImportSolidsFile(const wxChar* filepath,std::map<int, CShapeData> *index_map = NULL, HeeksObj* paste_into = NULL);
 	static bool ExportSolidsFile(const std::list<HeeksObj*>& objects, const wxChar* filepath, std::map<int, CShapeData> *index_map = NULL);
-	static HeeksObj* MakeObject(const TopoDS_Shape &shape, const wxChar* title, SolidTypeEnum solid_type, const HeeksColor& col);
+	static HeeksObj* MakeObject(const TopoDS_Shape &shape, const wxChar* title, SolidTypeEnum solid_type, const HeeksColor& col, float opacity);
 	static bool IsTypeAShape(int t);
 	static bool IsMatrixDifferentialScale(const gp_Trsf& trsf);
 

@@ -22,8 +22,8 @@ public:
 	double m_temp_r1;
 	double m_temp_r2;
 
-	CCone(const gp_Ax2& pos, double r1, double r2, double height, const wxChar* title, const HeeksColor& col);
-	CCone(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
+	CCone(const gp_Ax2& pos, double r1, double r2, double height, const wxChar* title, const HeeksColor& col, float opacity);
+	CCone(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col, float opacity);
 
 	// HeeksObj's virtual functions
 	const wxChar* GetTypeString(void)const{return _("Cone");}

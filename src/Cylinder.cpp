@@ -22,11 +22,11 @@ static TopoDS_Solid MakeCylinder(const gp_Ax2& pos, double radius, double height
 	return BRepPrimAPI_MakeCylinder(pos2, radius, height);
 }
 
-CCylinder::CCylinder(const gp_Ax2& pos, double radius, double height, const wxChar* title, const HeeksColor& col):CSolid(MakeCylinder(pos, radius, height), title, col), m_pos(pos), m_radius(radius), m_height(height)
+CCylinder::CCylinder(const gp_Ax2& pos, double radius, double height, const wxChar* title, const HeeksColor& col, float opacity):CSolid(MakeCylinder(pos, radius, height), title, col, opacity), m_pos(pos), m_radius(radius), m_height(height)
 {
 }
 
-CCylinder::CCylinder(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col):CSolid(solid, title, col), m_pos(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), m_radius(0.0), m_height(0.0)
+CCylinder::CCylinder(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col, float opacity):CSolid(solid, title, col, opacity), m_pos(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), m_radius(0.0), m_height(0.0)
 {
 }
 
@@ -108,7 +108,7 @@ void CCylinder::GetGripperPositions(std::list<GripData> *list, bool just_for_end
 
 void CCylinder::OnApplyProperties()
 {
-	CCylinder* new_object = new CCylinder(m_pos, m_radius, m_height, m_title.c_str(), m_color);
+	CCylinder* new_object = new CCylinder(m_pos, m_radius, m_height, m_title.c_str(), m_color, m_opacity);
 	new_object->CopyIDsFrom(this);
 	Owner()->Add(new_object, NULL);
 	Owner()->Remove(this);
@@ -158,7 +158,7 @@ bool CCylinder::Stretch(const double *p, const double* shift, void* data)
 
 	if(make_a_new_cylinder)
 	{
-		CCylinder* new_object = new CCylinder(m_pos, m_radius, m_height, m_title.c_str(), m_color);
+		CCylinder* new_object = new CCylinder(m_pos, m_radius, m_height, m_title.c_str(), m_color, m_opacity);
 		new_object->CopyIDsFrom(this);
 		Owner()->Add(new_object, NULL);
 		Owner()->Remove(this);

@@ -18,8 +18,8 @@ public:
 	double m_y; // height
 	double m_z; // depth
 
-	CCuboid(const gp_Ax2& pos, double x, double y, double z, const wxChar* title, const HeeksColor& col);
-	CCuboid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
+	CCuboid(const gp_Ax2& pos, double x, double y, double z, const wxChar* title, const HeeksColor& col, float opacity);
+	CCuboid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col, float opacity);
 	CCuboid(const CCuboid & rhs);
 	CCuboid & operator= ( const CCuboid &rhs );
 

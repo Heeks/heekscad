@@ -694,10 +694,7 @@ void CFace::MakeSureMarkingGLListExists()
 		{
 			m_marking_gl_list = glGenLists(1);
 			glNewList(m_marking_gl_list, GL_COMPILE_AND_EXECUTE);
-
 			// use the parent body's colour
-			Material(parent_body->m_color).glMaterial(1.0);
-
 			glEndList();
 		}
 	}
@@ -726,8 +723,7 @@ void CFace::UpdateMarkingGLList(bool marked)
 		{
 			// use the parent body's colour
 			CShape* parent_body = GetParentBody();
-			if(parent_body)Material(parent_body->m_color).glMaterial(1.0);
-			else Material().glMaterial(1.0);
+			if(parent_body == NULL)Material().glMaterial(1.0);
 		}
 
 		glEndList();

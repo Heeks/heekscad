@@ -5,7 +5,7 @@
 #include "Solid.h"
 #include "MarkedList.h"
 
-CSolid::CSolid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col):CShape(solid, title, col)
+CSolid::CSolid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col, float opacity):CShape(solid, title, col, opacity)
 {
 }
 
@@ -26,6 +26,8 @@ HeeksObj *CSolid::MakeACopy(void)const
 void CSolid::SetXMLElement(TiXmlElement* element)
 {
 	element->SetAttribute("col", m_color.COLORREF_color());
+	if(m_opacity < 0.9999)element->SetDoubleAttribute("opacity", m_opacity);
+
 }
 
 void CSolid::SetFromXMLElement(TiXmlElement* pElem)
@@ -34,6 +36,7 @@ void CSolid::SetFromXMLElement(TiXmlElement* pElem)
 	{
 		std::string name(a->Name());
 		if(name == "col"){m_color = HeeksColor((long)(a->IntValue()));}
+		else if(name == "opacity"){m_opacity = (float)(a->DoubleValue());}
 	}
 }
 
@@ -52,7 +55,7 @@ void CSolid::MakeTransformedShape(const gp_Trsf &mat)
 
 void CSolid::OnApplyProperties()
 {
-	CSolid* new_object = new CSolid(*((TopoDS_Solid*)(&m_shape)), m_title.c_str(), m_color);
+	CSolid* new_object = new CSolid(*((TopoDS_Solid*)(&m_shape)), m_title.c_str(), m_color, m_opacity);
 	new_object->CopyIDsFrom(this);
 	Owner()->Add(new_object, NULL);
 	Owner()->Remove(this);
