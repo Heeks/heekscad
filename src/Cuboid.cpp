@@ -10,13 +10,13 @@
 #include "Gripper.h"
 #include "MarkedList.h"
 
-CCuboid::CCuboid(const gp_Ax2& pos, double x, double y, double z, const wxChar* title, const HeeksColor& col)
-:CSolid(BRepPrimAPI_MakeBox(gp_Ax2(pos.Location().XYZ() + gp_XYZ((x < 0) ? x:0.0, (y < 0) ? y:0.0, (z < 0) ? z:0.0), pos.Direction()), fabs(x), fabs(y), fabs(z)), title, col)
+CCuboid::CCuboid(const gp_Ax2& pos, double x, double y, double z, const wxChar* title, const HeeksColor& col, float opacity)
+:CSolid(BRepPrimAPI_MakeBox(gp_Ax2(pos.Location().XYZ() + gp_XYZ((x < 0) ? x:0.0, (y < 0) ? y:0.0, (z < 0) ? z:0.0), pos.Direction()), fabs(x), fabs(y), fabs(z)), title, col, opacity)
 , m_pos(pos), m_x(x), m_y(y), m_z(z)
 {
 }
 
-CCuboid::CCuboid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col):CSolid(solid, title, col), m_pos(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), m_x(0.0), m_y(0.0), m_z(0.0)
+CCuboid::CCuboid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col, float opacity):CSolid(solid, title, col, opacity), m_pos(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), m_x(0.0), m_y(0.0), m_z(0.0)
 {
 }
 
@@ -173,7 +173,7 @@ void CCuboid::GetGripperPositions(std::list<GripData> *list, bool just_for_endof
 
 void CCuboid::OnApplyProperties()
 {
-	CCuboid* new_object = new CCuboid(m_pos, m_x, m_y, m_z, m_title.c_str(), m_color);
+	CCuboid* new_object = new CCuboid(m_pos, m_x, m_y, m_z, m_title.c_str(), m_color, m_opacity);
 	new_object->CopyIDsFrom(this);
 	Owner()->Add(new_object, NULL);
 	Owner()->Remove(this);
@@ -233,7 +233,7 @@ bool CCuboid::Stretch(const double *p, const double* shift, void* data)
 
 	if(make_a_new_cuboid)
 	{
-		CCuboid* new_object = new CCuboid(m_pos, m_x, m_y, m_z, m_title.c_str(), m_color);
+		CCuboid* new_object = new CCuboid(m_pos, m_x, m_y, m_z, m_title.c_str(), m_color, m_opacity);
 		new_object->CopyIDsFrom(this);
 		Owner()->Add(new_object, NULL);
 		Owner()->Remove(this);

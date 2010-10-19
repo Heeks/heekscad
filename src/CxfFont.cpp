@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #ifdef wxUSE_UNICODE
-	#define _UNICODE
+	#ifndef _UNICODE
+		#define _UNICODE
+	#endif
 #endif
 #include <stdio.h>
 #include <math.h>

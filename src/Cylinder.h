@@ -17,8 +17,8 @@ public:
 	double m_radius;
 	double m_height;
 
-	CCylinder(const gp_Ax2& pos, double radius, double height, const wxChar* title, const HeeksColor& col);
-	CCylinder(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
+	CCylinder(const gp_Ax2& pos, double radius, double height, const wxChar* title, const HeeksColor& col, float opacity);
+	CCylinder(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col, float opacity);
 
 	// HeeksObj's virtual functions
 	bool IsDifferent(HeeksObj* other);

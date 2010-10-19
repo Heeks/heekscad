@@ -427,30 +427,30 @@ HeeksObj* CHeeksCADInterface::NewGroup()
 HeeksObj* CHeeksCADInterface::NewCuboid(const double* c, double x, double y, double z)
 {
 	gp_Dir up(0,0,1);
-	return new CCuboid(gp_Ax2(make_point(c),up),x,y,z,_T("Cuboid"),wxGetApp().current_color);
+	return new CCuboid(gp_Ax2(make_point(c),up),x,y,z,_T("Cuboid"),wxGetApp().current_color, 1.0f);
 }
 
 HeeksObj* CHeeksCADInterface::NewCylinder(const double* c, double r, double h)
 {
 	gp_Dir up(0,0,1);
-	return new CCylinder(gp_Ax2(make_point(c),up),r,h,_T("Cylinder"),wxGetApp().current_color);
+	return new CCylinder(gp_Ax2(make_point(c),up),r,h,_T("Cylinder"),wxGetApp().current_color, 1.0f);
 }
 
 HeeksObj* CHeeksCADInterface::NewCone(const double* c, double r1, double r2, double h)
 {
 	gp_Dir up(0,0,1);
-	return new CCone(gp_Ax2(make_point(c),up),r1,r2,h,_T("Cone"),wxGetApp().current_color);
+	return new CCone(gp_Ax2(make_point(c),up),r1,r2,h,_T("Cone"),wxGetApp().current_color, 1.0f);
 }
 
 
 HeeksObj* CHeeksCADInterface::NewSphere(const double* pos , double radius)
 {
-   return new CSphere(gp_Pnt(make_point(pos)), radius,_T("Sphere"), wxGetApp().current_color);
+   return new CSphere(gp_Pnt(make_point(pos)), radius,_T("Sphere"), wxGetApp().current_color, 1.0f);
 }
 
 HeeksObj* CHeeksCADInterface::NewSolid(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col)
 {
-	return(new CSolid( solid, title, col ) );
+	return(new CSolid( solid, title, col, 1.0f ) );
 
 }
 
@@ -1022,13 +1022,13 @@ long CHeeksCADInterface::BodyGetColor(HeeksObj* body)
 	return ((CShape*)body)->m_color.COLORREF_color();
 }
 
-double CHeeksCADInterface::BodyGetOpacity(HeeksObj* body)
+float CHeeksCADInterface::BodyGetOpacity(HeeksObj* body)
 {
 	// 0.0 to 1.0
 	return ((CShape*)body)->GetOpacity();
 }
 
-void CHeeksCADInterface::BodySetOpacity(HeeksObj* body, double opacity)
+void CHeeksCADInterface::BodySetOpacity(HeeksObj* body, float opacity)
 {
 	// 0.0 to 1.0
 	((CShape*)body)->SetOpacity(opacity);

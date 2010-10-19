@@ -2,7 +2,9 @@
 // Copyright (c) 2009, Dan Heeks
 // This program is released under the BSD license. See the file COPYING for details.
 #if wxUSE_UNICODE
-	#define _UNICODE
+	#ifndef _UNICODE
+		#define _UNICODE
+	#endif
 #endif
 
 #define _WARNINGS 3

@@ -10,11 +10,11 @@
 #include "Gripper.h"
 #include "MarkedList.h"
 
-CCone::CCone(const gp_Ax2& pos, double r1, double r2, double height, const wxChar* title, const HeeksColor& col):CSolid(BRepPrimAPI_MakeCone(pos, r1, r2, height), title, col), m_render_without_OpenCASCADE(false), m_pos(pos), m_r1(r1), m_r2(r2), m_height(height)
+CCone::CCone(const gp_Ax2& pos, double r1, double r2, double height, const wxChar* title, const HeeksColor& col, float opacity):CSolid(BRepPrimAPI_MakeCone(pos, r1, r2, height), title, col, opacity), m_render_without_OpenCASCADE(false), m_pos(pos), m_r1(r1), m_r2(r2), m_height(height)
 {
 }
 
-CCone::CCone(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col):CSolid(solid, title, col), m_render_without_OpenCASCADE(false), m_pos(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), m_r1(0.0), m_r2(0.0), m_height(0.0)
+CCone::CCone(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col, float opacity):CSolid(solid, title, col, opacity), m_render_without_OpenCASCADE(false), m_pos(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0)), m_r1(0.0), m_r2(0.0), m_height(0.0)
 {
 }
 
@@ -211,7 +211,7 @@ void CCone::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
 
 void CCone::OnApplyProperties()
 {
-	CCone* new_object = new CCone(m_pos, m_r1, m_r2, m_height, m_title.c_str(), m_color);
+	CCone* new_object = new CCone(m_pos, m_r1, m_r2, m_height, m_title.c_str(), m_color, m_opacity);
 	new_object->CopyIDsFrom(this);
 	Owner()->Add(new_object, NULL);
 	Owner()->Remove(this);
@@ -300,7 +300,7 @@ bool CCone::Stretch(const double *p, const double* shift, void* data)
 
 	if(make_a_new_cone)
 	{
-		CCone* new_object = new CCone(new_pos, new_r1, new_r2, new_height, m_title.c_str(), m_color);
+		CCone* new_object = new CCone(new_pos, new_r1, new_r2, new_height, m_title.c_str(), m_color, m_opacity);
 		new_object->CopyIDsFrom(this);
 		Owner()->Add(new_object, NULL);
 		Owner()->Remove(this);
