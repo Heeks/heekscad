@@ -10,11 +10,11 @@
 #include "Gripper.h"
 #include "MarkedList.h"
 
-CSphere::CSphere(const gp_Pnt& pos, double radius, const wxChar* title, const HeeksColor& col):CSolid(BRepPrimAPI_MakeSphere(pos, radius), title, col), m_pos(pos), m_radius(radius)
+CSphere::CSphere(const gp_Pnt& pos, double radius, const wxChar* title, const HeeksColor& col, float opacity):CSolid(BRepPrimAPI_MakeSphere(pos, radius), title, col, opacity), m_pos(pos), m_radius(radius)
 {
 }
 
-CSphere::CSphere(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col):CSolid(solid, title, col), m_pos(0, 0, 0), m_radius(0.0)
+CSphere::CSphere(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col, float opacity):CSolid(solid, title, col, opacity), m_pos(0, 0, 0), m_radius(0.0)
 {
 }
 
@@ -93,7 +93,7 @@ void CSphere::GetGripperPositions(std::list<GripData> *list, bool just_for_endof
 
 void CSphere::OnApplyProperties()
 {
-	CSphere* new_object = new CSphere(m_pos, m_radius, m_title.c_str(), m_color);
+	CSphere* new_object = new CSphere(m_pos, m_radius, m_title.c_str(), m_color, m_opacity);
 	new_object->CopyIDsFrom(this);
 	Owner()->Add(new_object, NULL);
 	Owner()->Remove(this);

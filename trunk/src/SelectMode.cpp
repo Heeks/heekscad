@@ -498,7 +498,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 		
 		// so move that many pixels to keep the coordinate
 		// under the cursor approximately the same
-		wxGetApp().m_frame->m_graphics->m_view_point.Shift(wxPoint(x_moved_by, y_moved_by), wxPoint(0, 0));
+		wxGetApp().m_frame->m_graphics->m_view_point.Shift(wxPoint((int)x_moved_by, (int)y_moved_by), wxPoint(0, 0));
 		wxGetApp().m_frame->m_graphics->Refresh();
 	}
 

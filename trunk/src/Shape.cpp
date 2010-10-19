@@ -19,12 +19,13 @@
 #include "../interface/Tool.h"
 #include "HeeksConfig.h"
 #include "../interface/MarkedObject.h"
+#include "../interface/PropertyDouble.h"
 #include <locale.h>
 
 // static member variable
 bool CShape::m_solids_found = false;
 
-CShape::CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor& col):m_face_gl_list(0), m_edge_gl_list(0), m_shape(shape), m_title(title), m_color(col), m_picked_face(NULL)
+CShape::CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor& col, float opacity):m_face_gl_list(0), m_edge_gl_list(0), m_shape(shape), m_opacity(opacity), m_title(title), m_color(col), m_picked_face(NULL)
 {
 	Init();
 }
@@ -78,7 +79,6 @@ bool CShape::IsDifferent(HeeksObj* other)
 void CShape::Init()
 {
 	m_creation_time = wxGetLocalTimeMillis();
-	m_opacity = 1.0;
 	m_faces = new CFaceList;
 	m_edges = new CEdgeList;
 	m_vertices = new CVertexList;
@@ -266,7 +266,7 @@ public:
 				BRepMesh::Mesh(new_shape, 1.0);
 #endif
 
-				HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of 'Offset Shape'"), SOLID_TYPE_UNKNOWN, shape_for_tools->m_color);
+				HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of 'Offset Shape'"), SOLID_TYPE_UNKNOWN, shape_for_tools->m_color, shape_for_tools->GetOpacity());
 				shape_for_tools->Owner()->Add(new_object, NULL);
 				shape_for_tools->Owner()->Remove(shape_for_tools);
 				config.Write(_T("OffsetShapeValue"), offset_value);
@@ -323,7 +323,7 @@ void CShape::OnEditString(const wxChar* str){
 }
 
 // static member function
-HeeksObj* CShape::MakeObject(const TopoDS_Shape &shape, const wxChar* title, SolidTypeEnum solid_type, const HeeksColor& col){
+HeeksObj* CShape::MakeObject(const TopoDS_Shape &shape, const wxChar* title, SolidTypeEnum solid_type, const HeeksColor& col, float opacity){
 	if(shape.IsNull())return NULL;
 
 	switch(shape.ShapeType()){
@@ -350,17 +350,17 @@ HeeksObj* CShape::MakeObject(const TopoDS_Shape &shape, const wxChar* title, Sol
 				switch(solid_type)
 				{
 				case SOLID_TYPE_SPHERE:
-					return new CSphere(*((TopoDS_Solid*)(&shape)), title, col);
+					return new CSphere(*((TopoDS_Solid*)(&shape)), title, col, opacity);
 				case SOLID_TYPE_CYLINDER:
-					return new CCylinder(*((TopoDS_Solid*)(&shape)), title, col);
+					return new CCylinder(*((TopoDS_Solid*)(&shape)), title, col, opacity);
 				case SOLID_TYPE_CUBOID:
-					return new CCuboid(*((TopoDS_Solid*)(&shape)), title, col);
+					return new CCuboid(*((TopoDS_Solid*)(&shape)), title, col, opacity);
 				case SOLID_TYPE_CONE:
-					return new CCone(*((TopoDS_Solid*)(&shape)), title, col);
+					return new CCone(*((TopoDS_Solid*)(&shape)), title, col, opacity);
 				default:
 					// check there are some faces
 					if(TopExp_Explorer(shape, TopAbs_FACE).More())
-						return new CSolid(*((TopoDS_Solid*)(&shape)), title, col);
+						return new CSolid(*((TopoDS_Solid*)(&shape)), title, col, opacity);
 					return NULL;
 				}
 			}
@@ -402,7 +402,7 @@ static HeeksObj* Fuse(HeeksObj* s1, HeeksObj* s2){
 		if(wxGetApp().useOldFuse)new_shape = BRepAlgo_Fuse(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
 		else new_shape = BRepAlgoAPI_Fuse(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
 
-		HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of Fuse Operation"), SOLID_TYPE_UNKNOWN, ((CShape*)s1)->m_color);
+		HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of Fuse Operation"), SOLID_TYPE_UNKNOWN, ((CShape*)s1)->m_color, ((CShape*)s1)->GetOpacity());
 		wxGetApp().Add(new_object, NULL);
 		wxGetApp().Remove(s1);
 		wxGetApp().Remove(s2);
@@ -427,7 +427,7 @@ static HeeksObj* Common(HeeksObj* s1, HeeksObj* s2){
 		TopoDS_Shape sh1, sh2;
 		TopoDS_Shape new_shape = BRepAlgoAPI_Common(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
 
-		HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of Common Operation"), SOLID_TYPE_UNKNOWN, ((CShape*)s1)->m_color);
+		HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of Common Operation"), SOLID_TYPE_UNKNOWN, ((CShape*)s1)->m_color, ((CShape*)s1)->GetOpacity());
 		wxGetApp().Add(new_object, NULL);
 		wxGetApp().Remove(s1);
 		wxGetApp().Remove(s2);
@@ -581,7 +581,7 @@ HeeksObj* CShape::CutShapes(std::list<HeeksObj*> &list_in, bool dodelete)
 	TopoDS_Shape new_shape;
 	if(Cut(shapes, new_shape))
 	{
-		HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of Cut Operation"), SOLID_TYPE_UNKNOWN, ((CShape*)first_solid)->m_color);
+		HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of Cut Operation"), SOLID_TYPE_UNKNOWN, ((CShape*)first_solid)->m_color, ((CShape*)first_solid)->m_opacity);
 		wxGetApp().Add(new_object, NULL);
 		if(dodelete)
 		{
@@ -687,7 +687,7 @@ void CShape::FilletOrChamferEdges(std::list<HeeksObj*> &list, double radius, boo
 					}
 				}
 				TopoDS_Shape new_shape = chamfer.Shape();
-				wxGetApp().Add(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(solid->GetColor())), NULL);
+				wxGetApp().Add(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(solid->GetColor()), ((CShape*)solid)->m_opacity), NULL);
 				wxGetApp().Remove(solid);
 			}
 			else
@@ -698,7 +698,7 @@ void CShape::FilletOrChamferEdges(std::list<HeeksObj*> &list, double radius, boo
 					fillet.Add(radius, TopoDS::Edge(((CEdge*)(*It2))->Edge()));
 				}
 				TopoDS_Shape new_shape = fillet.Shape();
-				wxGetApp().Add(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(solid->GetColor())), NULL);
+				wxGetApp().Add(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(solid->GetColor()), ((CShape*)solid)->m_opacity), NULL);
 				wxGetApp().Remove(solid);
 			}
 		}
@@ -750,7 +750,7 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 					if(FindIt != index_map->end())
 					{
 						CShapeData& shape_data = FindIt->second;
-						HeeksObj* new_object = MakeObject(rShape, _("STEP solid"), shape_data.m_solid_type, HeeksColor(191, 191, 191));
+						HeeksObj* new_object = MakeObject(rShape, _("STEP solid"), shape_data.m_solid_type, HeeksColor(191, 191, 191), 1.0f);
 						if(new_object)
 						{
 							add_to->Add(new_object, NULL);
@@ -760,7 +760,7 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 				}
 				else
 				{
-					HeeksObj* new_object = MakeObject(rShape, _("STEP solid"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191));
+					HeeksObj* new_object = MakeObject(rShape, _("STEP solid"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191), 1.0f);
 					add_to->Add(new_object, NULL);
 				}
 			}
@@ -786,7 +786,7 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 		{
 			Reader.TransferRoots();
 			TopoDS_Shape shape = Reader.OneShape();
-			HeeksObj* new_object = MakeObject(shape, _("IGES shape"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191));
+			HeeksObj* new_object = MakeObject(shape, _("IGES shape"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191), 1.0f);
 			add_to->Add(new_object, NULL);
 #if 0
 			Reader.TransferRoots();
@@ -843,7 +843,7 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 
 		if(result)
 		{
-			HeeksObj* new_object = MakeObject(shape, _("BREP solid"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191));
+			HeeksObj* new_object = MakeObject(shape, _("BREP solid"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191), 1.0f);
 			add_to->Add(new_object, NULL);
 		}
 		else{
@@ -1021,15 +1021,25 @@ void CShape::SetClickMarkPoint(MarkedObject* marked_object, const double* ray_st
 	}
 }
 
-double CShape::GetOpacity()
+float CShape::GetOpacity()
 {
 	return m_opacity;
 }
 
-void CShape::SetOpacity(double opacity)
+void CShape::SetOpacity(float opacity)
 {
 	m_opacity = opacity;
-	if(m_opacity < 0.0)m_opacity = 0.0;
-	if(m_opacity > 1.0)m_opacity = 1.0;
+	if(m_opacity < 0.0)m_opacity = 0.0f;
+	if(m_opacity > 1.0)m_opacity = 1.0f;
 }
 
+static void on_set_opacity(double value, HeeksObj* object){
+	((CShape*)object)->SetOpacity((float)value);
+}
+
+void CShape::GetProperties(std::list<Property *> *list)
+{
+	list->push_back(new PropertyDouble(_("opacity"), m_opacity, this, on_set_opacity));
+
+	ObjList::GetProperties(list);
+}

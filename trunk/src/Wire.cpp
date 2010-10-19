@@ -9,7 +9,7 @@
 
 extern CHeeksCADInterface heekscad_interface;
 
-CWire::CWire(const TopoDS_Wire &wire, const wxChar* title):CShape(wire, title, false){
+CWire::CWire(const TopoDS_Wire &wire, const wxChar* title):CShape(wire, title, false, 1.0f){
 }
 
 CWire::~CWire(){
@@ -30,7 +30,7 @@ public:
 		{
 			BRepOffsetAPI_MakeOffset make_operation(m_wire->Wire());
 			make_operation.Perform(m_offset);
-			HeeksObj* new_object = CShape::MakeObject(make_operation.Shape(), _("Result of Wire Offset"), SOLID_TYPE_UNKNOWN, HeeksColor(234, 123, 89));
+			HeeksObj* new_object = CShape::MakeObject(make_operation.Shape(), _("Result of Wire Offset"), SOLID_TYPE_UNKNOWN, HeeksColor(234, 123, 89), 1.0f);
 			if(make_operation.Generated(make_operation.Shape()).Extent() > 0){
 				wxMessageBox(_("Generated"));
 			}

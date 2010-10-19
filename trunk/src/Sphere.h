@@ -16,8 +16,8 @@ public:
 	gp_Pnt m_pos;
 	double m_radius;
 
-	CSphere(const gp_Pnt& pos, double radius, const wxChar* title, const HeeksColor& col);
-	CSphere(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col);
+	CSphere(const gp_Pnt& pos, double radius, const wxChar* title, const HeeksColor& col, float opacity);
+	CSphere(const TopoDS_Solid &solid, const wxChar* title, const HeeksColor& col, float opacity);
 	CSphere(const CSphere & rhs);
 	CSphere & operator= ( const CSphere &rhs );
 

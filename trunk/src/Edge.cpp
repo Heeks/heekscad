@@ -239,13 +239,15 @@ void CEdge::Blend(double radius,  bool chamfer_not_fillet){
 
 		else  //fillet 
 		{
-			try{	wxGetApp().CreateUndoPoint();
-				if(Owner() && Owner()->Owner() && CShape::IsTypeAShape(Owner()->Owner()->GetType())){
-					BRepFilletAPI_MakeFillet fillet(((CShape*)(Owner()->Owner()))->Shape());
+			try{
+				wxGetApp().CreateUndoPoint();
+				CShape* body = GetParentBody();
+				if(body){
+					BRepFilletAPI_MakeFillet fillet(body->Shape());
 					fillet.Add(radius, m_topods_edge);
 					TopoDS_Shape new_shape = fillet.Shape();
-					wxGetApp().Add(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(Owner()->Owner()->GetColor())), NULL);
-					wxGetApp().Remove(Owner()->Owner());
+					wxGetApp().Add(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(body->GetColor()), body->GetOpacity()), NULL);
+					wxGetApp().Remove(body);
 				}
 			}
 			catch (Standard_Failure) {

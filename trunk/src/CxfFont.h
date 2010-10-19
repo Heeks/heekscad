@@ -1,5 +1,7 @@
 #ifdef wxUSE_UNICODE
-	#define _UNICODE
+	#ifndef _UNICODE
+		#define _UNICODE
+	#endif
 #endif
 
 #ifndef CXF_FONT_CLASS_DEFINITION

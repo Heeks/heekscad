@@ -745,7 +745,7 @@ void UniteSketches::Run(){
 	for(std::vector<TopoDS_Face>::iterator It = faces.begin(); It != faces.end(); It++)
 	{
 		TopoDS_Face &face = *It;
-		HeeksObj* new_object = CShape::MakeObject(face, _("Test Face, Sketches United"), SOLID_TYPE_UNKNOWN, HeeksColor(64, 51, 51));
+		HeeksObj* new_object = CShape::MakeObject(face, _("Test Face, Sketches United"), SOLID_TYPE_UNKNOWN, HeeksColor(64, 51, 51), 1.0f);
 		wxGetApp().Add(new_object, NULL);
 	}
 

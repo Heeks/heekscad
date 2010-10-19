@@ -46,7 +46,7 @@ void PickCreateRuledSurface()
 		TopoDS_Shape shape;
 		if(CreateRuledSurface(wire_list, shape, true))
 		{
-			HeeksObj* new_object = CShape::MakeObject(shape, _("Ruled Surface"), SOLID_TYPE_UNKNOWN, HeeksColor(51, 45, 51));
+			HeeksObj* new_object = CShape::MakeObject(shape, _("Ruled Surface"), SOLID_TYPE_UNKNOWN, HeeksColor(51, 45, 51), 1.0f);
 			wxGetApp().Add(new_object, NULL);
 			wxGetApp().Repaint();
 		}
@@ -102,7 +102,7 @@ HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_o
 	{
 		for(std::list<TopoDS_Shape>::iterator It = new_shapes.begin(); It != new_shapes.end(); It++){
 			TopoDS_Shape& shape = *It;
-			new_object = CShape::MakeObject(shape, revolution_not_extrusion ? _("Revolved Solid") : _("Extruded Solid"), SOLID_TYPE_UNKNOWN, wxGetApp().current_color);
+			new_object = CShape::MakeObject(shape, revolution_not_extrusion ? _("Revolved Solid") : _("Extruded Solid"), SOLID_TYPE_UNKNOWN, wxGetApp().current_color, 1.0f);
 			if(add_new_objects)
 				wxGetApp().Add(new_object, NULL);
 			else
@@ -131,7 +131,7 @@ HeeksObj* CreatePipeFromProfile(HeeksObj* spine, HeeksObj* profile)
 				makePipe.Build();
 				TopoDS_Shape shape = makePipe.Shape();
 
-				HeeksObj* new_object = CShape::MakeObject(shape, _("Pipe"), SOLID_TYPE_UNKNOWN, wxGetApp().current_color);
+				HeeksObj* new_object = CShape::MakeObject(shape, _("Pipe"), SOLID_TYPE_UNKNOWN, wxGetApp().current_color, 1.0f);
 				if(new_object)pipe_shapes.push_back(new_object);
 			}
 			catch (Standard_Failure) {
@@ -177,7 +177,7 @@ HeeksObj* CreateRuledFromSketches(std::list<HeeksObj*> list, bool make_solid)
 	TopoDS_Shape shape;
 	if(CreateRuledSurface(wire_list, shape, make_solid))
 	{
-		return CShape::MakeObject(shape, _("Ruled Surface"), SOLID_TYPE_UNKNOWN, HeeksColor(51, 45, 51));
+		return CShape::MakeObject(shape, _("Ruled Surface"), SOLID_TYPE_UNKNOWN, HeeksColor(51, 45, 51), 1.0f);
 	}
 	return NULL;
 }

@@ -83,7 +83,7 @@ private:
 #endif
 	std::map<HeeksObj*,std::list<HeeksObj*> > m_transient_objects;
 
-	typedef std::multimap< int, HeeksObj* > IdsToObjects_t;
+	typedef std::map< int, std::list<HeeksObj*> > IdsToObjects_t;
 	typedef int GroupId_t;
 	typedef std::map< GroupId_t, IdsToObjects_t > UsedIds_t;
 
