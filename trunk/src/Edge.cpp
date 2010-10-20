@@ -494,3 +494,26 @@ CShape* CEdge::GetParentBody()
 	return (CShape*)(Owner()->Owner());
 }
 
+bool CEdge::GetMidPoint(double* pos)
+{
+	BRepAdaptor_Curve curve(m_topods_edge);
+	double us = curve.FirstParameter();
+	double ue = curve.LastParameter();
+	double um = (us + ue)/2;
+	extract(curve.Value(um), pos);
+	return true;
+}
+
+bool CEdge::GetStartPoint(double* pos)
+{
+	BRepAdaptor_Curve curve(m_topods_edge);
+	extract(curve.Value(curve.FirstParameter()), pos);
+	return true;
+}
+
+bool CEdge::GetEndPoint(double* pos)
+{
+	BRepAdaptor_Curve curve(m_topods_edge);
+	extract(curve.Value(curve.LastParameter()), pos);
+	return true;
+}
