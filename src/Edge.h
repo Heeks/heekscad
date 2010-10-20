@@ -56,6 +56,9 @@ public:
 	void WriteXML(TiXmlNode *root);
 	void GetProperties(std::list<Property *> *list);
 	bool UsesID(){return true;}
+	bool GetMidPoint(double* pos);
+	bool GetStartPoint(double* pos);
+	bool GetEndPoint(double* pos);
 
 	const TopoDS_Edge &Edge(){return m_topods_edge;}
 	//void Blend(double radius);
