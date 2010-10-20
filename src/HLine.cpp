@@ -82,6 +82,12 @@ const wxBitmap &HLine::GetIcon()
 	return *icon;
 }
 
+bool HLine::GetMidPoint(double* pos)
+{
+	extract((A->m_p.XYZ() + B->m_p.XYZ())/2, pos);
+	return true;
+}
+
 void HLine::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	line_for_tool = this;
