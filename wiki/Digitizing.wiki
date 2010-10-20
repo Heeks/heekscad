@@ -1,38 +1,49 @@
 #summary A brief overview of the options under the digitizing menu.
 
 = Introduction =
-"snapping" as implemented in other applications (where the placement of one object is pulled toward a grid, or other object) is called digitizing in HeeksCAD.  The options for controlling it are found under the digitizing menu. 
+'Digitizing' in HeeksCAD refers to the process of specifically locating coordinates in 3d space.  It is desireable to locate points this way for several related operations.  
 
-Many of these options interact with each other producing complex, and sometimes confusing, behavior.
+*snapping* as implemented in other applications (where the placement of one object is pulled toward a grid, or other object).  Objects in HeeksCAD are dragged by the control handle and it is this handle which is "snapped" to the target location.  
 
-Some options only have behavior when moving entities, others have behavior when moving or drawing.
+*Transforms*  Multi step operations for moving, scaling, or duplicating objects.  Transforms are often controlled by selecting a reference and target location.
 
-Below is a brief description of the options.
+*Drawing new geometry*  Adding sketches or solids to a model where precise placement of points is required.
 
-= Details =
+For all these activities, the options for selecting reference coordinates are found under the digitizing menu. 
 
-*End*  Snap to the end points of a line or edge. 
 
-*Intersection* Snap to the intersecting points of two lines or edges.
+= Candidate Points =
 
-*centre* When enabled, will snap to the center of a circle when the cursor approaches the edge.
+The following can be used for either reference or target points.
 
-*midpoint* Doesn't seem to work.
+*End*  The end point of a line or edge. 
 
-*nearest* snaps to the nearest point of an existing entity.
+*Intersection* The intersecting points of two lines or edges.
+
+*centre* The center of a circle when the cursor approaches the edge.
+
+*midpoint* The midpoint of a line or edge.
+
+*nearest* The nearest point of an existing entity.  The option does not seem to work well.
 
 *tangent* Allows drawing lines and moving objects tangent to others.
 
 *radius for undefined circles*  I don't know what this does.
 
-*coordinates* I don't fully understand this.  In most cases, it should be left on.  Turning it off will cause objects being dragged to snap to the coordinate system origin.  It can be turned off when drawing a sketch to allow snapping only to endpoints and not the grid or intermediate coordinates.  
+= Non-point control = 
 
-*screen* I don't completely understand this one.  I believe it controls whether objects snap perpendicular to the plane of the screen.  If the view is set XY and screen is turned on.  A sphere at z=10 is moved over the sketch, the sphere snaps to the end-point with z=radius.  With screen turned off, the sphere is moved to the endpoint with z=endpoint z.
+The following options control other aspects of digitizing but do not rely on the existing geometry.
 
+*coordinates* In most cases, it should be left on.  Turning it off constrain the points available to only those that are snapable from the options above.  It will not be possible to draw or drop an object anywhere else.  Attempting to drag an object to empty space will cause it to be moved to the global coordinate system origin.  It can be turned off when drawing a sketch to allow snapping only to endpoints and not the grid or intermediate coordinates.  
+
+*screen* This controls whether objects in the plane of the screen.  If the view is set XY and screen is turned on.  A sphere at z=10 is moved over the sketch, the sphere snaps to the end-point with z=radius.  With screen turned off, the sphere is moved to the endpoint with z=endpoint z.
+
+
+*snap to grid* Snap to the on-screen grid whose size is controlled by the grid size option.  If 'snap to grid' is off, the grid will automatically subdivide by 1/10 as the user zooms in and out.  If 'snap to grid is on, the grid size remains fixed during zooming.  It is not possible to snap-to-grid unless 'coordinates' is also enabled.
+
+= Options = 
 
 *grid size*  default: 1.  Controls the size of the onscreen grid.
-
-*snap to grid* Snap to the on-screen grid whose size is controlled by the grid size option.  If 'snap to grid' is off, the grid will automatically subdivide by 1/10 as the user zooms in and out.  If 'snap to grid is on, the grid size remains fixed during zooming.
 
 *autosolve constraints*  Turns on and off the autosolving of constraints. Refer to the GeometricConstraints page.
  
