@@ -2810,7 +2810,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	digitizing->m_list.push_back(new PropertyCheck(_("midpoint"), digitize_midpoint, NULL, on_mid_point));
 	digitizing->m_list.push_back(new PropertyCheck(_("nearest"), digitize_nearest, NULL, on_nearest));
 	digitizing->m_list.push_back(new PropertyCheck(_("tangent"), digitize_tangent, NULL, on_tangent));
-	digitizing->m_list.push_back(new PropertyLength(_("radius for undefined circles"), digitizing_radius, NULL, on_radius));
+	// i'm not sure this works anyway    digitizing->m_list.push_back(new PropertyLength(_("radius for undefined circles"), digitizing_radius, NULL, on_radius));
 	digitizing->m_list.push_back(new PropertyCheck(_("coordinates"), digitize_coords, NULL, on_coords));
 	digitizing->m_list.push_back(new PropertyCheck(_("screen"), digitize_screen, NULL, on_relative));
 	digitizing->m_list.push_back(new PropertyLength(_("grid size"), digitizing_grid, NULL, on_grid_edit));
