@@ -323,7 +323,19 @@ static void on_edit_dimension(const wxChar *value, HeeksObj* object)
 	bool constrained=true;
 
 	double length=0;
-	wxSscanf(wxString(value),_T("%lf"),&length);
+    wxString dimensionString = wxString(value).MakeLower();
+         wxSscanf(wxString(value),_T("%lf"),&length);
+    // Need to convert inch to internally stored metric
+    // todo
+    // This could be improved to do conversions such as
+    // 1 Inch or 1 5/8" or 5/16 inch
+    // I suppose if just a number was entered
+    //
+    if (
+        dimensionString.Contains(_T("inch"))||
+        dimensionString.Contains(_T("\""))
+        ) length*=25.4;
+    dimensionString.clear();
 
 	if(!dimension->IsConstrained())
 	{
