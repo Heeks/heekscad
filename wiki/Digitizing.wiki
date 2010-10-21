@@ -14,21 +14,15 @@ For all these activities, the options for selecting reference coordinates are fo
 
 = Candidate Points =
 
-The following can be used for either reference or target points.
+The following can be used for either reference or target points.  Development is not finished in this area so some selection types don't work for all objects.
 
-*End*  The end point of a line or edge. 
-
-*Intersection* The intersecting points of two lines or edges.
-
-*centre* The center of a circle when the cursor approaches the edge.
-
-*midpoint* The midpoint of a line or edge.
-
-*nearest* The nearest point of an existing entity.  The option does not seem to work well.
-
-*tangent* Allows drawing lines and moving objects tangent to others.
-
-*radius for undefined circles*  I don't know what this does.
+|| * Option * || * Definition * || * Works with * ||
+|| End        || The end point of a line or edge || Line, arc, spline, edge || 
+||Intersection||The intersecting point of two lines or edges||line, infinite line,circle, arc, ellipse||
+||centre||A point equidistant from all other points in the object||sphere, arc, circle, ellipse||
+||midpoint||A point equidistant between the ends|| line, edge||
+||nearest||The point on an entity closest to the cursor||line, arc, circle, ellipse, spline||
+||tangent|| Allows drawing lines and moving objects tangent to other objects ||arc, circle, ellipse, infinite line, line, spline||
 
 = Non-point control = 
 
