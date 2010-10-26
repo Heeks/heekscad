@@ -6,6 +6,7 @@
 #include "Constraint.h"
 #include "ConstrainedObject.h"
 #include "../tinyxml/tinyxml.h"
+
 std::string AbsoluteAngle[] = {
 	"AbsoluteAngleHorizontal",
 	"AbsoluteAngleVertical"
@@ -282,6 +283,124 @@ void Constraint::WriteXML(TiXmlNode *root)
 	obj_to_save.push_back(this);
 	obj_to_save_find.insert(this);
 }
+//JT
+#ifdef CHECK_FOR_INVALID_CONSTRAINT
+bool checkForInvalidConstraint( const char* type, EnumConstraintType etype,const char* angle,EnumAbsoluteAngle eangle,double length,int obj1_id,int obj2_id,int obj1_type,int obj2_type)
+{
+    ConstrainedObject* obj1=0;
+	ConstrainedObject* obj2=0;
+    bool isItHosedUp = false;
+    wxString errorMessage(type,wxConvUTF8);
+    errorMessage +=  wxString::Format(wxT(" obj1_id = %d obj2_id= %d") ,obj1_id,obj2_id);
+    if ((obj1_id ==0)&& (obj2_id == 0))//This should never happen
+    {
+
+        isItHosedUp =true;
+
+    }
+    else if ((obj1_id ==0)&& (obj2_id != 0))// I believe this should also never happen
+    {    isItHosedUp = true;
+        errorMessage += _("\n obj1_id should be defined before obj2_id");
+    }
+    else if ((obj1_id !=0)&& (obj2_id != 0))//This can happen all the time. Need to verify that these objects exist in memory
+    {
+        obj1 = (ConstrainedObject*)wxGetApp().GetIDObject(obj1_type,obj1_id);
+        obj2 = (ConstrainedObject*)wxGetApp().GetIDObject(obj2_type,obj2_id);
+        if (obj1 ==0)
+        {
+            errorMessage += _("\nobj1_id specified but does not exist in memory");
+            isItHosedUp = true;
+        }
+        if (obj2 ==0)
+        {
+            errorMessage += _("\nobj2_id specified but does not exist in memory");
+            isItHosedUp = true;
+        }
+        else
+        {
+            // todo need to go through to make sure that only the contraints that have two members are called
+            // I've run into this bug.
+        }
+    }
+    else if ((obj1_id !=0)&& (obj2_id == 0))//This can happen all the time. Need to verify that these objects exist in memory
+    {
+        obj1 = (ConstrainedObject*)wxGetApp().GetIDObject(obj1_type,obj1_id);
+        if (obj1 ==0)
+        {
+            isItHosedUp = true;
+            errorMessage += _("\nobj1_id specified but does not exist in memory");
+        }
+        else
+        {
+
+
+            switch (etype)
+            {
+                case ParallelLineConstraint:
+                case PerpendicularLineConstraint:
+                case LineTangentConstraint:
+                case RadiusConstraint:
+                case EqualLengthConstraint:
+                case ColinearConstraint:
+                case EqualRadiusConstraint:
+                case ConcentricConstraint:
+                case PointOnLineConstraint:
+                case PointOnLineMidpointConstraint:
+                case PointOnArcMidpointConstraint:
+                case PointOnArcConstraint:
+                case PointOnCircleConstraint:
+                case CoincidantPointConstraint:// This is a common bug You need to variables.
+
+                    errorMessage += _("\n Two objects required for this constraint only one was specified");
+                    isItHosedUp = true;//I believe that these require multiple objs
+                    break;
+                case AbsoluteAngleConstraint:
+                case LineLengthConstraint:
+                case LineHorizontalLengthConstraint:
+                case LineVerticalLengthConstraint:
+                case FixedPointConstraint:
+
+                    //These values are single point
+                    break;
+                default:
+                    errorMessage += _("\n A constraint type needs to be added to the list");
+            }
+        }
+
+         //if a CoincidantPointConstraint is defined with one point this is a boo boo.
+         // todo Need to build checks here for single object contraints
+
+
+    }
+    else
+    {
+       wxMessageBox (_("This is a woops and you shouldn't be reading this message"));
+
+    }
+
+
+    if (isItHosedUp)
+    {
+#ifdef DISPLAY_CHECK_FOR_INVALID_CONSTRAINT_ERROR_MSGBOX
+        wxMessageBox (errorMessage);
+
+#endif
+        wxPuts(errorMessage);
+
+    }
+#ifdef LET_BAD_CONSTRAINT_PASS
+
+    return false;
+#else
+
+    return isItHosedUp;//false says all is well
+#endif
+
+}
+#endif
+
+
+
 
 HeeksObj* Constraint::ReadFromXMLElement(TiXmlElement* pElem)
 {
@@ -327,6 +446,24 @@ HeeksObj* Constraint::ReadFromXMLElement(TiXmlElement* pElem)
 			break;
 		}
 	}
+
+
+	//JT
+	//Ok.. There is a problem here.. Further up stream there a conditions where the xml has been written out for obj1_id, obj2_id != 0 for objects that don't exist
+	//This is a huge pain, since the error is being introduced on the file save, and doesn't show up, until you load the file.
+	// Sometimes you get a segmentation fault right at load... Or when you're really lucky it shows up when solvesketch kicks in and you have no clue whats going on.
+    // At this point,until these critters get irridicated CheckforValidConstraint basically tries to see if the constraint makes sense
+    // I hope to install this at both ends when constraints are being written out or read in my attempt to identify, isolate and irradicate these most annoying
+    // critters
+
+#ifdef CHECK_FOR_INVALID_CONSTRAINT
+    bool blockConstraint =false;
+    blockConstraint =  checkForInvalidConstraint(type,etype,angle,eangle,length,obj1_id,obj2_id,obj1_type,obj2_type);
+    if (blockConstraint)
+	{
+      return NULL;
+    }
+#endif
 
 	//Get real pointers to the objects
 	obj1 = (ConstrainedObject*)wxGetApp().GetIDObject(obj1_type,obj1_id);
