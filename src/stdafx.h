@@ -244,6 +244,16 @@ extern "C" {
 
 #define USE_UNDO_ENGINE
 
+
+#define CHECK_FOR_INVALID_CONSTRAINT//JT This is my attempt to isolate
+
+#ifdef CHECK_FOR_INVALID_CONSTRAINT //
+// THESE ARE SOME OPTIONS ON HOW TO HANDLE THIS STUFF
+#define DISPLAY_CHECK_FOR_INVALID_CONSTRAINT_ERROR_MSGBOX
+//#define LET_BAD_CONSTRAINT_PASS //JT Sometimes you know things are hosed up and you want to see what happens
+
+#endif
+
 #include "../interface/strconv.h"
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"
