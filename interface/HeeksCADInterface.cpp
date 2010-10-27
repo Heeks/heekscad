@@ -270,6 +270,12 @@ bool CHeeksCADInterface::GetArcCentre(HeeksObj* object, double* c)
 	return(false);
 }
 
+bool CHeeksCADInterface::GetArcRadius(HeeksObj* object, double* r)
+{
+	*r = ((HArc*)object)->m_radius;
+	return true;
+}
+
 bool CHeeksCADInterface::GetArcAxis(HeeksObj* object, double* a)
 {
 	extract(((HArc*)object)->m_axis.Direction(), a);
@@ -1167,6 +1173,17 @@ HeeksObj* CHeeksCADInterface::LoopGetEdge(HeeksObj* loop, int index)
 HeeksObj* CHeeksCADInterface::LoopGetFace(HeeksObj* loop)
 {
 	return ((CLoop*)loop)->m_pface;
+}
+
+HeeksObj* CHeeksCADInterface::LoopMakeSketch(HeeksObj* loop, double deviation)
+{
+	CSketch* new_object = new CSketch();
+
+	for(CEdge* edge = ((CLoop*)loop)->GetFirstEdge(); edge; edge = ((CLoop*)loop)->GetNextEdge())
+	{
+		ConvertEdgeToSketch2(edge->Edge(), new_object, deviation);
+	}
+	return new_object;
 }
 
 bool CHeeksCADInterface::LoopIsOuter(HeeksObj* loop)
