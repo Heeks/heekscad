@@ -309,7 +309,6 @@
 		<Unit filename="src/advprops.h" />
 		<Unit filename="src/dxf.cpp" />
 		<Unit filename="src/dxf.h" />
-		<Unit filename="src/glfont.h" />
 		<Unit filename="src/glfont2.cpp" />
 		<Unit filename="src/glfont2.h" />
 		<Unit filename="src/manager.cpp" />
