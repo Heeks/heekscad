@@ -254,6 +254,15 @@ cmake .
 make
 make doc        # Creates PDF file needed by make install
 sudo make install
+
+if test $(lsb_release -s -c) = 'hardy'; then
+    echo This is Ubuntu Hardy, creating symlinks
+    sudo ln -fs /usr/local/lib/python2.5/dist-packages/kurve.so /usr/local/lib/python2.5/site-packages/kurve.so
+    sudo ln -fs /usr/local/lib/python2.5/dist-packages/actp.so /usr/local/lib/python2.5/site-packages/actp.so
+    sudo ln -fs /usr/local/lib/python2.5/dist-packages/area.so /usr/local/lib/python2.5/site-packages/area.so
+fi
+
+
 }}}
 
 
