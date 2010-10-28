@@ -249,7 +249,7 @@ extern "C" {
 
 #ifdef CHECK_FOR_INVALID_CONSTRAINT //
 // THESE ARE SOME OPTIONS ON HOW TO HANDLE THIS STUFF
-#define DISPLAY_CHECK_FOR_INVALID_CONSTRAINT_ERROR_MSGBOX
+//#define DISPLAY_CHECK_FOR_INVALID_CONSTRAINT_ERROR_MSGBOX
 //#define LET_BAD_CONSTRAINT_PASS //JT Sometimes you know things are hosed up and you want to see what happens
 
 #endif
