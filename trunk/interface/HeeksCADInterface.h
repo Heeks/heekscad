@@ -28,6 +28,7 @@ class TransientObject;
 class Plugin;
 class CoordinateSystem;
 
+
 #include "SketchOrder.h"
 
 class TopoDS_Shape;
@@ -117,6 +118,7 @@ public:
 	virtual HeeksObj* Fuse(std::list<HeeksObj*> objects);
 	virtual HeeksObj* Cut(std::list<HeeksObj*> objects);
 	virtual HeeksObj* Common(std::list<HeeksObj*> objects);
+	virtual void AddText(const wxChar *text);
 	virtual void RotateObject(HeeksObj*, const double*p,const double*u,double r);
 	virtual void TranslateObject(HeeksObj*,const double* c);
 	virtual void RegisterObserver(Observer* observer);
@@ -125,6 +127,7 @@ public:
 	virtual void RegisterHideableWindow(wxWindow* w);
 	virtual void RemoveHideableWindow(wxWindow* w);
 	virtual HeeksObj* ReadXMLElement(TiXmlElement* pElem);
+	virtual void OpendxfFile(const wxChar *filepath);
 	virtual void RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem));
 	virtual void OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into = NULL);
 	virtual void ObjectWriteBaseXML(HeeksObj* object, TiXmlElement* element);
