@@ -47,10 +47,6 @@ public:
 	CHeeksCADInterface(){}
 	~CHeeksCADInterface(){}
 
-	//gp_Pnt m_o;
-	//gp_Dir m_x;
-	//gp_Dir m_y;
-
 	virtual double GetTolerance();
 	virtual void RefreshProperties();
 	virtual void RefreshOptions();
@@ -121,6 +117,7 @@ public:
 	virtual void AddText(const wxChar *text);
 	virtual void RotateObject(HeeksObj*, const double*p,const double*u,double r);
 	virtual void TranslateObject(HeeksObj*,const double* c);
+	virtual void ScaleObject(HeeksObj*, const double* c, double scale);
 	virtual void RegisterObserver(Observer* observer);
 	virtual void RemoveObserver(Observer* observer);
 	virtual bool TangentialArc(const double* p0, const double* v0, const double* p1, double *c, double *a); // given p0, v0, p1, returns true if an arc found and sets c and a ( centre and axis direction ), false for a straight line

@@ -550,9 +550,6 @@ HeeksObj* CHeeksCADInterface::Common(std::list<HeeksObj*> objects)
 void CHeeksCADInterface::AddText(const wxChar  *text)
 {
     gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
-    //HText* new_object = new HText(mat, _T("text"), &(wxGetApp().current_color), wxGetApp().m_pVectorFont );
-    //HText* new_object = new HText(mat, text, &(wxGetApp().current_color), wxGetApp().m_pVectorFont );
-    //wxGetApp().CreateUndoPoint();
     HText* new_object = new HText(mat, text, &(wxGetApp().current_color), wxGetApp().m_pVectorFont );
     wxGetApp().CreateUndoPoint();
 	wxGetApp().Add(new_object, NULL);
@@ -584,6 +581,20 @@ void CHeeksCADInterface::RotateObject(HeeksObj* obj, const double*c,const double
 	extract(t,m);
 	obj->ModifyByMatrix(m);
 }
+
+void CHeeksCADInterface::ScaleObject(HeeksObj* obj, const double*c, double scale)
+{
+
+	gp_Trsf t;
+	t.SetScale(make_point(c),scale);
+	double m[16];
+	extract(t,m);
+	obj->ModifyByMatrix(m);
+}
+
+
+
+
 
 
 HeeksObj* CHeeksCADInterface::NewArc(const double* s, const double* e, const double* c, const double* up)
@@ -663,7 +674,12 @@ void CHeeksCADInterface::RegisterReadXMLfunction(const char* type_name, HeeksObj
 
 void CHeeksCADInterface::OpendxfFile(const wxChar *filepath)
 {
-	wxGetApp().OpenDXFFile(filepath);
+
+	//wxGetApp().OpenDXFFile(filepath);
+	HeeksDxfRead dxf_file(filepath);
+    dxf_file.DoRead(HeeksDxfRead::m_ignore_errors);
+
+
 }
 
 void CHeeksCADInterface::OpenXMLFile(const wxChar *filepath,HeeksObj* paste_into)
