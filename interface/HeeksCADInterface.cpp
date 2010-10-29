@@ -44,6 +44,8 @@
 #include "Geom.h"
 #include "wxImageLoader.h"
 #include "CoordinateSystem.h"
+#include "HText.h"
+#include "dxf.h"
 
 double CHeeksCADInterface::GetTolerance()
 {
@@ -545,6 +547,25 @@ HeeksObj* CHeeksCADInterface::Common(std::list<HeeksObj*> objects)
 	return CShape::CommonShapes(objects);
 }
 
+void CHeeksCADInterface::AddText(const wxChar  *text)
+{
+    gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
+    //HText* new_object = new HText(mat, _T("text"), &(wxGetApp().current_color), wxGetApp().m_pVectorFont );
+    //HText* new_object = new HText(mat, text, &(wxGetApp().current_color), wxGetApp().m_pVectorFont );
+    //wxGetApp().CreateUndoPoint();
+    HText* new_object = new HText(mat, text, &(wxGetApp().current_color), wxGetApp().m_pVectorFont );
+    wxGetApp().CreateUndoPoint();
+	wxGetApp().Add(new_object, NULL);
+	wxGetApp().m_marked_list->Clear(true);
+	wxGetApp().m_marked_list->Add(new_object, true);
+	wxGetApp().SetInputMode(wxGetApp().m_select_mode);
+	wxGetApp().Changed();
+	wxGetApp().Repaint();
+
+
+}
+
+
 void CHeeksCADInterface::TranslateObject(HeeksObj* obj, const double*c)
 {
 	gp_Pnt zp(0,0,0);
@@ -638,6 +659,11 @@ HeeksObj* CHeeksCADInterface::ReadXMLElement(TiXmlElement* pElem)
 void CHeeksCADInterface::RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem))
 {
 	wxGetApp().RegisterReadXMLfunction(type_name, read_xml_function);
+}
+
+void CHeeksCADInterface::OpendxfFile(const wxChar *filepath)
+{
+	wxGetApp().OpenDXFFile(filepath);
 }
 
 void CHeeksCADInterface::OpenXMLFile(const wxChar *filepath,HeeksObj* paste_into)
