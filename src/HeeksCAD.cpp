@@ -345,6 +345,8 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("DxfMakeSketch"), &HeeksDxfRead::m_make_as_sketch, true);
 	config.Read(_T("DxfIgnoreErrors"), &HeeksDxfRead::m_ignore_errors, false);
 
+	config.Read(_T("SaveConstraints"), &m_save_constraints, true);
+
 	config.Read(_T("ViewUnits"), &m_view_units);
 	config.Read(_T("FaceToSketchDeviation"), &(FaceToSketchTool::deviation));
 
@@ -481,6 +483,7 @@ void HeeksCADapp::WriteConfig()
 	config.Write(_T("AllowOpenGLStippling"), m_allow_opengl_stippling);
 	config.Write(_T("DxfMakeSketch"), HeeksDxfRead::m_make_as_sketch);
 	config.Write(_T("DxfIgnoreErrors"), HeeksDxfRead::m_ignore_errors);
+	config.Write(_T("SaveConstraints"), m_save_constraints);
 	config.Write(_T("FaceToSketchDeviation"), FaceToSketchTool::deviation);
 
 	config.Write(_T("MinCorrelationFactor"), m_min_correlation_factor);
@@ -1456,8 +1459,10 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 		object->WriteXML(root);
 	}
 
-	// write the constraints to the root
+	// write the constraints to the root-if check box is selected
+	if (m_save_constraints){
 	Constraint::EndSave(root);
+	}
 
 	// write a step file for all the solids
 	if(CShape::m_solids_found){
@@ -2606,6 +2611,11 @@ void on_set_auto_save_interval(int value, HeeksObj* object){
 	config.Write(_T("AutoSaveInterval"), wxGetApp().m_auto_save_interval);
 }
 
+void on_save_constraints(bool onoff, HeeksObj* object)
+{
+  wxGetApp().m_save_constraints = onoff;
+}
+
 static void on_set_units(int value, HeeksObj* object)
 {
 	wxGetApp().m_view_units = (value == 0) ? 1.0:25.4;
@@ -2875,6 +2885,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	stl_options->m_list.push_back(new PropertyDouble(_("stl save facet tolerance"), m_stl_facet_tolerance, NULL, on_stl_facet_tolerance));
 	file_options->m_list.push_back(stl_options);
 	file_options->m_list.push_back(new PropertyInt(_("auto save interval (in minutes)"), m_auto_save_interval, NULL, on_set_auto_save_interval));
+	file_options->m_list.push_back(new PropertyCheck(_("save constraints to file"), m_save_constraints, NULL, on_save_constraints));
 	list->push_back(file_options);
 
 	// Font options
