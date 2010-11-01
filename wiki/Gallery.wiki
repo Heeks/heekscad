@@ -1,3 +1,4 @@
+#summary Screenshots that show what's possible with HeeksCAD
 =The HeeksCAD Interface=
 http://heekscad.googlecode.com/files/probe.png
 
