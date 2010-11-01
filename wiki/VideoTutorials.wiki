@@ -1,3 +1,4 @@
+#summary A collection of videos that might be helpful learning HeeksCAD
 =General Use=
 <wiki:video url="http://www.youtube.com/watch?v=idV54AqNbPo"/>
 <wiki:video url="http://www.youtube.com/watch?v=33vVbNi_89U"/>
