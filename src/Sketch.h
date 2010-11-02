@@ -14,12 +14,8 @@ class CSketch:public ObjList
 {
 	HeeksColor color;
 	wxString m_title;
-
-	int GetClosedSketchTurningNumber(); //only use this for closed sketches
-	double GetAngleAtJunction(HeeksObj* prev_object, HeeksObj* object);
-	double GetAngleBetweenVectors(const gp_Vec& v0, const gp_Vec& v1, double prev_segment_curvature, double segment_curvature);
-	int GetSegmentType(HeeksObj* object);
-	double GetSegmentCurvature(HeeksObj* object);
+	double GetArea()const;
+	bool IsClockwise()const{return GetArea()>0;}
 
 public:
 	static std::string m_sketch_order_str[MaxSketchOrderTypes];
