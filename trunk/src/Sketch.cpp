@@ -531,8 +531,8 @@ void CSketch::CalculateSketchOrder()
 					if(make_point(e).IsEqual(make_point(s), wxGetApp().m_geom_tol))
 					{
 						// closed
-						if(GetClosedSketchTurningNumber() > 0)m_order = SketchOrderTypeCloseCCW;
-						else m_order = SketchOrderTypeCloseCW;
+						if(IsClockwise())m_order = SketchOrderTypeCloseCW;
+						else m_order = SketchOrderTypeCloseCCW;
 						return;
 					}
 				}
@@ -721,131 +721,41 @@ void CSketch::ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketche
 	if(re_ordered_sketch)delete re_ordered_sketch;
 }
 
-double CSketch::GetAngleAtJunction(HeeksObj* prev_object, HeeksObj* object)
+double CSketch::GetArea()const
 {
-	EndedObject *obj1 = (EndedObject*)prev_object;
-	EndedObject *obj2 = (EndedObject*)object;
-	gp_Vec prev_end_vector(obj1->B->m_p.XYZ() - obj1->A->m_p.XYZ());
-	gp_Vec start_vector(obj2->B->m_p.XYZ() - obj2->A->m_p.XYZ());
-	if(prev_end_vector.Magnitude() < 0.00000000000001)return 0;
-	if(start_vector.Magnitude() < 0.00000000000001)return 0;
-	prev_end_vector.Normalize();
-	start_vector.Normalize();
+	double area = 0.0;
 
-	double prev_segment_curvature = 0;//GetSegmentCurvature(prev_object);
-	double segment_curvature = 0;//GetSegmentCurvature(object);
-
-	return GetAngleBetweenVectors(prev_end_vector, start_vector, prev_segment_curvature, segment_curvature);
-}
-
-double CSketch::GetAngleBetweenVectors(const gp_Vec& v0, const gp_Vec& v1, double prev_segment_curvature, double segment_curvature)
-{
-	double start_angle = atan2(v0.Y(), v0.X());
-	double end_angle = atan2(v1.Y(), v1.X());
-	if(end_angle < start_angle)end_angle += 6.2831853071795;
-
-	double diff = end_angle - start_angle;
-	if(fabs(diff - 3.1415926535897932) < 0.000000000001){
-		// back on itself
-		double curvature_diff = segment_curvature - prev_segment_curvature;
-		if(fabs(curvature_diff) < 0.00000000001)
-		{
-			// not the best case where they come in and go out at exactly the same direction and curve
-		}
-		else
-		{
-			if(curvature_diff< 0)diff = -3.1415926535897932;
-		}
-	}
-	else if(diff > 3.1415926535897932){
-		diff -= 6.2831853071795; // anti-clockwise direction more than 180 degrees is a clockwise direction
-	}
-
-	return diff;
-}
-
-int CSketch::GetSegmentType(HeeksObj* object)
-{
-	if(object->GetType() == ArcType)
-	{
-		if(((HArc*)object)->m_axis.Direction().Z() > 0)return 1;
-		return -1;
-	}
-
-	return 0;
-}
-
-double CSketch::GetSegmentCurvature(HeeksObj* object)
-{
-	if(object->GetType() == ArcType)
-	{
-		int dir = (((HArc*)object)->m_axis.Direction().Z() > 0) ? 1:-1;
-		return 1 / ((HArc*)object)->m_radius * dir;
-	}
-
-	return 0.0;
-}
-
-int CSketch::GetClosedSketchTurningNumber()
-{
-	double turning_angle = 0.0;
-
-	HeeksObj* prev_object = NULL;
-	HeeksObj* first_object = NULL;
-
-	std::list<HeeksObj*>::iterator It;
-	for(It=m_objects.begin(); It!=m_objects.end() ;It++)
+	for(std::list<HeeksObj*>::const_iterator It=m_objects.begin(); It!=m_objects.end() ;It++)
 	{
 		HeeksObj* object = *It;
-
-		if (dynamic_cast<EndedObject *>(object) == NULL)
+		switch(object->GetType())
 		{
-		    // This object does not have two ends.
-		    continue;
-		}
-
-		// internal angle
-		if(object->GetType() == ArcType)
-		{
-/*			gp_Vec v0 = ((HArc*)object)->GetSegmentVector(0.0);
-			gp_Vec v1 = ((HArc*)object)->GetSegmentVector(1.0);
-			double start_angle = atan2(v0.Y(), v0.X());
-			double end_angle = atan2(v1.Y(), v1.X());
-			bool ccw = (((HArc*)object)->m_axis.Direction().Z() > 0);
-			if(ccw)
+		case ArcType:
 			{
-				if(start_angle < end_angle)start_angle += 6.2831853071795;
+				double angle = ((HArc*)object)->IncludedAngle();
+				double radius = ((HArc*)object)->m_radius;
+				double p0x = ((HArc*)object)->A->m_p.X();
+				double p0y = ((HArc*)object)->A->m_p.Y();
+				double p1x = ((HArc*)object)->B->m_p.X();
+				double p1y = ((HArc*)object)->B->m_p.Y();
+				double pcx = ((HArc*)object)->C->m_p.X();
+				double pcy = ((HArc*)object)->C->m_p.Y();
+				area += ( 0.5 * ((pcx - p0x) * (pcy + p0y) - (pcx - p1x) * (pcy + p1y) - angle * radius * radius));
 			}
-			else
+			break;
+		default:
+			// treat all others as lines
 			{
-				if(end_angle < start_angle)end_angle += 6.2831853071795;
+				double s[3], e[3];
+				if(!object->GetStartPoint(s))break;
+				if(!object->GetEndPoint(e))break;
+				area += (0.5 * (e[0] - s[0]) * (s[1] + e[1]));
 			}
-			turning_angle += end_angle - start_angle; */
+			break;
 		}
-
-		if(prev_object)
-		{
-			turning_angle += GetAngleAtJunction(prev_object, object);
-		}
-
-		if(first_object == NULL)first_object = object;
-		prev_object = object;
 	}
 
-	if(first_object && prev_object)
-	{
-		turning_angle += GetAngleAtJunction(prev_object, first_object);
-	}
-
-	double turning_number = turning_angle / 6.2831853071795;
-
-	// round up or down to nearest int
-	if(turning_number > 0.00001)turning_number += 0.5;
-	else if(turning_number < -0.00001)turning_number -= 0.5;
-
-	int i_turning_number = (int)turning_number;
-
-	return i_turning_number;
+	return area;
 }
 
 bool CSketch::Add(HeeksObj* object, HeeksObj* prev_object)

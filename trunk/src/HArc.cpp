@@ -526,7 +526,7 @@ bool HArc::GetCentrePoint(double* pos)
 	return true;
 }
 
-gp_Vec HArc::GetSegmentVector(double fraction)
+gp_Vec HArc::GetSegmentVector(double fraction)const
 {
 	gp_Pnt centre = C->m_p;
 	gp_Pnt p = GetPointAtFraction(fraction);
@@ -536,7 +536,7 @@ gp_Vec HArc::GetSegmentVector(double fraction)
 	return vd;
 }
 
-gp_Pnt HArc::GetPointAtFraction(double fraction)
+gp_Pnt HArc::GetPointAtFraction(double fraction)const
 {
 	if(A->m_p.IsEqual(B->m_p, wxGetApp().m_geom_tol)){
 		return A->m_p;
@@ -677,3 +677,21 @@ void HArc::Reverse()
 	m_objects.push_front(A);
 }
 
+double HArc::IncludedAngle()const
+{
+	gp_Vec vs = GetSegmentVector(0.0);
+	gp_Vec ve = GetSegmentVector(1.0);
+
+	double inc_ang = vs * ve;
+	int dir = (this->m_axis.Direction().Z() > 0) ? 1:-1;
+	if(inc_ang > 1. - 1.0e-10) return 0;
+	if(inc_ang < -1. + 1.0e-10)
+		inc_ang = PI;  
+	else {									// dot product,   v1 . v2  =  cos ang
+		if(inc_ang > 1.0) inc_ang = 1.0;
+		inc_ang = acos(inc_ang);									// 0 to pi radians
+
+		if(dir * (vs ^ ve).Z() < 0) inc_ang = 2 * PI - inc_ang ;		// cp
+	}
+	return dir * inc_ang;
+}

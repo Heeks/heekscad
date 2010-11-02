@@ -57,11 +57,12 @@ public:
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 
 	bool Intersects(const gp_Pnt &pnt)const;
-	gp_Vec GetSegmentVector(double fraction);
-	gp_Pnt GetPointAtFraction(double fraction);
+	gp_Vec GetSegmentVector(double fraction)const;
+	gp_Pnt GetPointAtFraction(double fraction)const;
 	static bool TangentialArc(const gp_Pnt &p0, const gp_Vec &v0, const gp_Pnt &p1, gp_Pnt &centre, gp_Dir &axis);
 	bool UsesID(){return true;} 
 	void Reverse();
+	double IncludedAngle()const;
 
 	//Ended Objects virtaul functions;
 	void LoadToDoubles();
