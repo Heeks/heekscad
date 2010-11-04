@@ -15,6 +15,8 @@ public:
 	} eSpacing_t;
 
 	eSpacing_t m_spacing;
+	int m_number_of_rotations;  // Number of quarter circle rotations.
+	bool m_sketch_rotates_text;
 
 	void set_initial_values();
 	void write_values_to_config();
