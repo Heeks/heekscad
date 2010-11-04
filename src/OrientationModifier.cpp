@@ -3,6 +3,8 @@
 #include "stdafx.h"
 #include "OrientationModifier.h"
 #include "../interface/PropertyChoice.h"
+#include "../interface/PropertyInt.h"
+#include "../interface/PropertyCheck.h"
 #include "HeeksConfig.h"
 #include <BRepAdaptor_Curve.hxx>
 
@@ -11,6 +13,8 @@ void COrientationModifierParams::set_initial_values()
 	HeeksConfig config;
 
 	config.Read(_T("OrientationModifier_m_spacing"), (int *) &m_spacing, int(eNormalSpacing));
+	config.Read(_T("OrientationModifier_number_of_rotations"), (int *) &m_number_of_rotations, 0);
+	config.Read(_T("OrientationModifier_sketch_rotates_text"), &m_sketch_rotates_text, false);
 }
 
 void COrientationModifierParams::write_values_to_config()
@@ -21,6 +25,8 @@ void COrientationModifierParams::write_values_to_config()
 
 	// These values are in mm.
 	config.Write(_T("OrientationModifier_m_spacing"), m_spacing);
+	config.Write(_T("OrientationModifier_number_of_rotations"), m_number_of_rotations);
+	config.Write(_T("OrientationModifier_sketch_rotates_text"), m_sketch_rotates_text);
 }
 
 static void on_set_spacing(int zero_based_choice, HeeksObj* object)
@@ -29,6 +35,17 @@ static void on_set_spacing(int zero_based_choice, HeeksObj* object)
 	((COrientationModifier*)object)->m_params.write_values_to_config();
 }
 
+static void on_set_number_of_rotations(int number_of_rotations, HeeksObj* object)
+{
+	((COrientationModifier*)object)->m_params.m_number_of_rotations = number_of_rotations;
+	((COrientationModifier*)object)->m_params.write_values_to_config();
+}
+
+static void on_set_sketch_rotates_text(bool value, HeeksObj* object)
+{
+	((COrientationModifier*)object)->m_params.m_sketch_rotates_text = value;
+	((COrientationModifier*)object)->m_params.write_values_to_config();
+}
 
 void COrientationModifierParams::GetProperties(COrientationModifier * parent, std::list<Property *> *list)
 {
@@ -40,6 +57,9 @@ void COrientationModifierParams::GetProperties(COrientationModifier * parent, st
 
 		list->push_back(new PropertyChoice(_("Spacing"), choices, choice, parent, on_set_spacing));
 	}
+
+	list->push_back(new PropertyInt(_("Number of Rotations (negative for reverse direction)"), m_number_of_rotations, parent, on_set_number_of_rotations));
+	list->push_back(new PropertyCheck(_("Sketch rotates text"), m_sketch_rotates_text, parent,  on_set_sketch_rotates_text));
 }
 
 void COrientationModifierParams::WriteXMLAttributes(TiXmlNode *root)
@@ -49,11 +69,25 @@ void COrientationModifierParams::WriteXMLAttributes(TiXmlNode *root)
 	root->LinkEndChild( element );
 
 	element->SetAttribute("m_spacing", int(m_spacing));
+	element->SetAttribute("m_number_of_rotations", int(m_number_of_rotations));
+	element->SetAttribute("m_sketch_rotates_text", m_sketch_rotates_text);
 }
 
 void COrientationModifierParams::ReadParametersFromXMLElement(TiXmlElement* pElem)
 {
 	if (pElem->Attribute("m_spacing")) pElem->Attribute("m_spacing", (int *) &m_spacing);
+	if (pElem->Attribute("m_number_of_rotations")) pElem->Attribute("m_number_of_rotations", (int *) &m_number_of_rotations);
+
+	if (pElem->Attribute("m_sketch_rotates_text"))
+	{
+	    int flag = 0;
+	    pElem->Attribute("m_sketch_rotates_text", (int *) &flag);
+	    m_sketch_rotates_text = flag;
+	}
+	else
+	{
+	    m_sketch_rotates_text = false;
+	}
 }
 
 
@@ -251,20 +285,31 @@ gp_Pnt & COrientationModifier::Transform(gp_Trsf existing_transformation, const 
 					Standard_Real U = ((curve.LastParameter() - curve.FirstParameter()) * proportion) + curve.FirstParameter();
 					curve.D1(U, p, vec);
 
-					double angle = gp_Vec(0,1,0).Angle(vec);
-					angle += (PI / 2.0);
+					double angle = 0.0;
+					if (m_params.m_sketch_rotates_text)
+					{
+					    angle = gp_Vec(0,1,0).Angle(vec);
+					}
+
+					if (m_params.m_number_of_rotations > 0)
+					{
+					    for (int i=0; i<m_params.m_number_of_rotations; i++)
+					    {
+					        angle += (PI / 2.0);
+					    }
+					}
+					else
+					{
+					    for (int i=m_params.m_number_of_rotations; i<0; i++)
+					    {
+					        angle -= (PI / 2.0);
+					    }
+					}
+
 					angle *= -1.0;
 					gp_Trsf transformation;
 					transformation.SetRotation( gp_Ax1(origin, gp_Vec(0,0,-1)), angle );
 					point.Transform( transformation );
-
-					static std::set<double> angles;
-					if (angles.find(angle) == angles.end())
-					{
-						//double degrees = angle / (2.0 * PI) * 360.0;
-						angles.insert(angle);
-						printf("angle %lf\n", angle);						
-					}
 
 					gp_Trsf around;
 					around.SetTranslation(origin, p);

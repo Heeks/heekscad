@@ -74,18 +74,18 @@ void VectorFont::Glyph::Line::glCommands(
 	gp_Pnt from( starting_point );
 	gp_Pnt to( starting_point );
 
-	from.SetX( starting_point.X() + m_x1);
+	from.SetX( starting_point.Distance(gp_Pnt(0.0,0.0,0.0)) + m_x1);
 	from.SetY( starting_point.Y() + m_y1);
 	from.SetZ( starting_point.Z() );
 
-	to.SetX( starting_point.X() + m_x2);
+	to.SetX( starting_point.Distance(gp_Pnt(0.0,0.0,0.0)) + m_x2);
 	to.SetY( starting_point.Y() + m_y2);
 	to.SetZ( starting_point.Z() );
 
 	if (pOrientationModifier)
 	{
-	    from = pOrientationModifier->Transform(transformation, starting_point.X(), from );
-	    to = pOrientationModifier->Transform(transformation, starting_point.X(), to );
+	    from = pOrientationModifier->Transform(transformation, starting_point.Distance(gp_Pnt(0.0,0.0,0.0)), from );
+	    to = pOrientationModifier->Transform(transformation, starting_point.Distance(gp_Pnt(0.0,0.0,0.0)), to );
 	}
 
 	glBegin(GL_LINE_STRIP);
@@ -187,7 +187,7 @@ void VectorFont::Glyph::Arc::glCommands(
 	std::list<gp_Pnt> vertices = Interpolate( starting_point, 20 );
 	for (std::list<gp_Pnt>::iterator l_itVertex = vertices.begin(); l_itVertex != vertices.end(); l_itVertex++)
 	{
-		if (pOrientationModifier) *l_itVertex = pOrientationModifier->Transform(transformation, starting_point.X(), *l_itVertex );
+		if (pOrientationModifier) *l_itVertex = pOrientationModifier->Transform(transformation, starting_point.Distance(gp_Pnt(0.0,0.0,0.0)), *l_itVertex );
 		glVertex3d(l_itVertex->X(), l_itVertex->Y(), l_itVertex->Z());
 	} // End for
 	glEnd();
