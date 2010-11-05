@@ -747,6 +747,11 @@ void CHeeksCADInterface::ViewExtents(bool rotate)
 	wxGetApp().m_frame->m_graphics->OnMagExtents(rotate, false);
 }
 
+void CHeeksCADInterface::XYZView(bool recalculate_gl_lists )
+{
+	wxGetApp().m_frame->m_graphics->OnMagXYZ(recalculate_gl_lists);
+}
+
 void CHeeksCADInterface::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance, double *scale)
 {
 	wxGetApp().SaveSTLFile(objects, filepath, facet_tolerance, scale);
