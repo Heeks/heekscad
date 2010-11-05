@@ -147,6 +147,7 @@ public:
 	virtual const wxChar* GetFileFullPath(); // returns NULL for untitled
 	virtual void SetViewBox(const double* b);
 	virtual void ViewExtents(bool rotate);
+	virtual void XYZView(bool recalculate_gl_lists);
 	virtual void SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance = -1, double* scale = NULL);
 
 	// sketches
