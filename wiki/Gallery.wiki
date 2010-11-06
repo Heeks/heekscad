@@ -1,5 +1,10 @@
 #summary Screenshots that show what's possible with HeeksCAD
 =The HeeksCAD Interface=
+
+Dan Falck has been using [http://code.google.com/p/heekspython/ HeeksPython] to [http://opensourcedesigntools.blogspot.com/2010/11/creating-cross-sections-of-parts-in.html automatically import dxf files and convert them to solids].
+http://heekscad.googlecode.com/files/cross_section.png
+
+Using just the HeeksCAD interface, it's possible to get reasonable results.
 http://heekscad.googlecode.com/files/probe.png
 
 http://heekscad.googlecode.com/files/screenshot_001.png
