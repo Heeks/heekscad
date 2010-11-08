@@ -18,6 +18,15 @@ public:
 	int m_number_of_rotations;  // Number of quarter circle rotations.
 	bool m_sketch_rotates_text;
 
+	typedef enum
+	{
+		eLeftJustified = 0,
+		eCentreJustified,
+		eRightJustified		
+	} eJustification_t;
+
+	eJustification_t	m_justification;
+
 	void set_initial_values();
 	void write_values_to_config();
 	void GetProperties(COrientationModifier * parent, std::list<Property *> *list);
@@ -68,7 +77,7 @@ public:
 	void ReloadPointers();
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
-	gp_Pnt & Transform(gp_Trsf existing_transformation, const double _distance, gp_Pnt & point );
+	gp_Pnt & Transform(gp_Trsf existing_transformation, const double _distance, gp_Pnt & point, const float width );
 
 }; // End COrientationModifier class definition.
 

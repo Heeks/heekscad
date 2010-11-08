@@ -34,7 +34,7 @@
 extern CHeeksCADInterface heekscad_interface;
 
 
-HeeksObj *VectorFont::Glyph::Line::Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const
+HeeksObj *VectorFont::Glyph::Line::Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix, const float width, COrientationModifier *pOrientationModifier ) const
 {
 	gp_Pnt start_point( location );
 	gp_Pnt end_point( location );
@@ -44,6 +44,12 @@ HeeksObj *VectorFont::Glyph::Line::Sketch( const gp_Pnt & location, const gp_Trs
 
 	end_point.SetX( location.X() + m_x2 );
 	end_point.SetY( location.Y() + m_y2 );
+
+	if (pOrientationModifier)
+	{
+	    start_point = pOrientationModifier->Transform(transformation_matrix, location.Distance(gp_Pnt(0.0,0.0,0.0)), start_point, width );
+	    end_point = pOrientationModifier->Transform(transformation_matrix, location.Distance(gp_Pnt(0.0,0.0,0.0)), end_point, width );
+	}
 
 	start_point.Transform( transformation_matrix );
 	end_point.Transform( transformation_matrix );
@@ -69,23 +75,24 @@ void VectorFont::Glyph::Line::glCommands(
 	const bool marked,
 	const bool no_color,
 	COrientationModifier *pOrientationModifier,
-	gp_Trsf transformation) const
+	gp_Trsf transformation,
+	const float width ) const
 {
 	gp_Pnt from( starting_point );
 	gp_Pnt to( starting_point );
 
-	from.SetX( starting_point.Distance(gp_Pnt(0.0,0.0,0.0)) + m_x1);
+    from.SetX( starting_point.X() + m_x1);
 	from.SetY( starting_point.Y() + m_y1);
 	from.SetZ( starting_point.Z() );
 
-	to.SetX( starting_point.Distance(gp_Pnt(0.0,0.0,0.0)) + m_x2);
+	to.SetX( starting_point.X() + m_x2);
 	to.SetY( starting_point.Y() + m_y2);
 	to.SetZ( starting_point.Z() );
 
 	if (pOrientationModifier)
 	{
-	    from = pOrientationModifier->Transform(transformation, starting_point.Distance(gp_Pnt(0.0,0.0,0.0)), from );
-	    to = pOrientationModifier->Transform(transformation, starting_point.Distance(gp_Pnt(0.0,0.0,0.0)), to );
+	    from = pOrientationModifier->Transform(transformation, starting_point.Distance(gp_Pnt(0.0,0.0,0.0)), from, width );
+	    to = pOrientationModifier->Transform(transformation, starting_point.Distance(gp_Pnt(0.0,0.0,0.0)), to, width );
 	}
 
 	glBegin(GL_LINE_STRIP);
@@ -128,7 +135,7 @@ std::list<gp_Pnt> VectorFont::Glyph::Arc::Interpolate(const gp_Pnt & location, c
 }
 
 
-HeeksObj *VectorFont::Glyph::Arc::Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const
+HeeksObj *VectorFont::Glyph::Arc::Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix, const float width, COrientationModifier *pOrientationModifier ) const
 {
 	double start[3];
 	double end[3];
@@ -141,6 +148,10 @@ HeeksObj *VectorFont::Glyph::Arc::Sketch( const gp_Pnt & location, const gp_Trsf
 
     gp_Dir z_direction( 0, 0, 1 );
 
+    if (pOrientationModifier) centre_point = pOrientationModifier->Transform(transformation_matrix, location.Distance(gp_Pnt(0.0,0.0,0.0)), centre_point, width );
+
+    if (pOrientationModifier) start_point = pOrientationModifier->Transform(transformation_matrix, location.Distance(gp_Pnt(0.0,0.0,0.0)), start_point, width );
+
 	gp_Trsf start_rotation_matrix;
 	start_rotation_matrix.SetRotation( gp_Ax1(centre_point, z_direction), m_start_angle );
 	start_point.Transform(start_rotation_matrix);	// Rotate to start_angle
@@ -149,6 +160,8 @@ HeeksObj *VectorFont::Glyph::Arc::Sketch( const gp_Pnt & location, const gp_Trsf
 	start[1] = start_point.Y();
 	start[2] = start_point.Z();
 
+	if (pOrientationModifier) end_point = pOrientationModifier->Transform(transformation_matrix, location.Distance(gp_Pnt(0.0,0.0,0.0)), end_point, width );
+
 	gp_Trsf end_rotation_matrix;
 	end_rotation_matrix.SetRotation( gp_Ax1(centre_point, z_direction), m_end_angle );
 	end_point.Transform(end_rotation_matrix);	// Rotate to start_angle
@@ -156,6 +169,8 @@ HeeksObj *VectorFont::Glyph::Arc::Sketch( const gp_Pnt & location, const gp_Trsf
 	end[0] = end_point.X();
 	end[1] = end_point.Y();
 	end[2] = end_point.Z();
+
+
 
 	centre[0] = centre_point.X();
 	centre[1] = centre_point.Y();
@@ -181,13 +196,14 @@ void VectorFont::Glyph::Arc::glCommands(
 	const bool marked,
 	const bool no_color,
 	COrientationModifier *pOrientationModifier,
-	gp_Trsf transformation ) const
+	gp_Trsf transformation,
+	const float width) const
 {
 	glBegin(GL_LINE_STRIP);
 	std::list<gp_Pnt> vertices = Interpolate( starting_point, 20 );
 	for (std::list<gp_Pnt>::iterator l_itVertex = vertices.begin(); l_itVertex != vertices.end(); l_itVertex++)
 	{
-		if (pOrientationModifier) *l_itVertex = pOrientationModifier->Transform(transformation, starting_point.Distance(gp_Pnt(0.0,0.0,0.0)), *l_itVertex );
+		if (pOrientationModifier) *l_itVertex = pOrientationModifier->Transform(transformation, starting_point.Distance(gp_Pnt(0.0,0.0,0.0)), *l_itVertex, width );
 		glVertex3d(l_itVertex->X(), l_itVertex->Y(), l_itVertex->Z());
 	} // End for
 	glEnd();
@@ -443,25 +459,25 @@ VectorFont::Glyph & VectorFont::Glyph::operator= ( const VectorFont::Glyph & rhs
 	libraries will have had the transformation matrix pushed onto the stack so that all
 	OpenGL coordinates will be implicitly transformed.
  */
-HeeksObj *VectorFont::Glyph::Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const
+HeeksObj *VectorFont::Glyph::Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix, const float width, COrientationModifier *pOrientationModifier ) const
 {
 	HeeksObj *sketch = heekscad_interface.NewSketch();
 
 	for (GraphicsList_t::const_iterator l_itGraphic = m_graphics_list.begin(); l_itGraphic != m_graphics_list.end(); l_itGraphic++)
 	{
-		sketch->Add((*l_itGraphic)->Sketch( location, transformation_matrix ), NULL);
+		sketch->Add((*l_itGraphic)->Sketch( location, transformation_matrix, width, pOrientationModifier ), NULL);
 	} // End for
 
 	return(sketch);
 } // End Sketch() method
 
-std::list<HeeksObj *> VectorFont::Glyph::GetGraphics( const gp_Pnt & location, const gp_Trsf & transformation_matrix ) const
+std::list<HeeksObj *> VectorFont::Glyph::GetGraphics( const gp_Pnt & location, const gp_Trsf & transformation_matrix, const float width, COrientationModifier *pOrientationModifier ) const
 {
 	std::list<HeeksObj *> results;
 
 	for (GraphicsList_t::const_iterator l_itGraphic = m_graphics_list.begin(); l_itGraphic != m_graphics_list.end(); l_itGraphic++)
 	{
-		results.push_back( (*l_itGraphic)->Sketch( location, transformation_matrix ) );
+		results.push_back( (*l_itGraphic)->Sketch( location, transformation_matrix, width, pOrientationModifier ) );
 	} // End for
 
 	return(results);
@@ -474,11 +490,12 @@ void VectorFont::Glyph::glCommands(
 		const bool marked,
 		const bool no_color,
 		COrientationModifier *pOrientationModifier,
-		gp_Trsf transformation) const
+		gp_Trsf transformation,
+		const float width ) const
 {
 	for (GraphicsList_t::const_iterator l_itGraphic = m_graphics_list.begin(); l_itGraphic != m_graphics_list.end(); l_itGraphic++)
 	{
-		(*l_itGraphic)->glCommands( starting_point, select, marked, no_color, pOrientationModifier, transformation );
+		(*l_itGraphic)->glCommands( starting_point, select, marked, no_color, pOrientationModifier, transformation, width );
 	} // End for
 } // End glCommands() method
 
@@ -502,7 +519,7 @@ void VectorFont::Glyph::glCommands(
 		{
 			if ((file_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY) continue;
 
-			results.push_back((LPCWSTR) ((LPCSTR)(file_data.cFileName)) );
+			results.push_back(Ctt(file_data.cFileName) );
 		} while (FindNextFile( hFind, &file_data));
 
 		FindClose(hFind);
@@ -730,7 +747,7 @@ HersheyFont::HersheyFont( const wxChar *p_szFile, const double word_space_percen
 
 
 
-HeeksObj *VectorFont::Sketch( const wxString & text, const gp_Trsf & transformation_matrix ) const
+HeeksObj *VectorFont::Sketch( const wxString & text, const gp_Trsf & transformation_matrix, const float width, COrientationModifier *pOrientationModifier ) const
 {
 	HeeksObj *sketch = heekscad_interface.NewSketch();
 	sketch->OnEditString(text.c_str());
@@ -773,6 +790,14 @@ HeeksObj *VectorFont::Sketch( const wxString & text, const gp_Trsf & transformat
 
 			bottom_right.SetX( location.X() + largest_glyph.MaxX() );
 			bottom_right.SetY( location.Y() + largest_glyph.MinY() );
+
+			if (pOrientationModifier)
+			{
+			    top_left = pOrientationModifier->Transform(transformation_matrix, location.X(), top_left, width );
+			    top_right = pOrientationModifier->Transform(transformation_matrix, location.X(), top_right, width );
+			    bottom_left = pOrientationModifier->Transform(transformation_matrix, location.X(), bottom_left, width );
+			    bottom_right = pOrientationModifier->Transform(transformation_matrix, location.X(), bottom_right, width );
+			}
 
 			top_left.Transform( transformation_matrix );
 			top_right.Transform( transformation_matrix );
@@ -825,7 +850,7 @@ HeeksObj *VectorFont::Sketch( const wxString & text, const gp_Trsf & transformat
 			    location.SetX( location.X() + (l_itGlyph->second.BoundingBox().MinX() * -1.0) );
 
 				// Get the lines and arcs that represent the character (glyph)
-				std::list<HeeksObj *> graphics = l_itGlyph->second.GetGraphics( location, transformation_matrix );
+				std::list<HeeksObj *> graphics = l_itGlyph->second.GetGraphics( location, transformation_matrix, width, pOrientationModifier );
 				for (std::list<HeeksObj *>::iterator l_itGraphic = graphics.begin(); l_itGraphic != graphics.end(); l_itGraphic++)
 				{
 					// label this piece of graphics with the character it's representing
@@ -916,7 +941,8 @@ void VectorFont::glCommands(const wxString & text,
 							const bool marked,
 							const bool no_color,
 							COrientationModifier *pOrientationModifier,
-							gp_Trsf transformation ) const
+							gp_Trsf transformation,
+							const float width ) const
 {
 	gp_Pnt location( start_point );
 	location.SetX( location.X() + StartingLocation().X() );
@@ -963,10 +989,10 @@ void VectorFont::glCommands(const wxString & text,
 
 			if (pOrientationModifier)
 			{
-			    top_left = pOrientationModifier->Transform(transformation, location.X(), top_left );
-			    top_right = pOrientationModifier->Transform(transformation, location.X(), top_right );
-			    bottom_left = pOrientationModifier->Transform(transformation, location.X(), bottom_left );
-			    bottom_right = pOrientationModifier->Transform(transformation, location.X(), bottom_right );
+			    top_left = pOrientationModifier->Transform(transformation, location.X(), top_left, width );
+			    top_right = pOrientationModifier->Transform(transformation, location.X(), top_right, width );
+			    bottom_left = pOrientationModifier->Transform(transformation, location.X(), bottom_left, width );
+			    bottom_right = pOrientationModifier->Transform(transformation, location.X(), bottom_right, width );
 			}
 
 			glBegin(GL_LINE_STRIP);
@@ -988,7 +1014,7 @@ void VectorFont::glCommands(const wxString & text,
 
                 // Adjust this glyph left or right so that it's bottom left hand corner is at the x=0 mark.
 			    location.SetX( location.X() + (l_itGlyph->second.BoundingBox().MinX() * -1.0) );
-				l_itGlyph->second.glCommands(location, select, marked, no_color,pOrientationModifier, transformation);
+				l_itGlyph->second.glCommands(location, select, marked, no_color,pOrientationModifier, transformation, width );
 
                 location.SetX( original_location.X() + LetterSpacing( l_itGlyph->second ) );
 			} // End if - then

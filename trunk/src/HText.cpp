@@ -72,7 +72,9 @@ void HText::glCommands(bool select, bool marked, bool no_color)
 			}
 		}
 
-		m_pFont->glCommands( m_text, gp_Pnt(0.0, 0.0, 0.0), select, marked, no_color, pOrientationModifier, m_trsf );
+		float height, width;
+		GetTextSize( m_text, &width, &height );
+		m_pFont->glCommands( m_text, gp_Pnt(0.0, 0.0, 0.0), select, marked, no_color, pOrientationModifier, m_trsf, width );
 	} // End if - else
 
 	glPopMatrix();
@@ -320,7 +322,20 @@ HText *pTextForSketchTool = NULL;
 class TextToSketch:public Tool{
 public:
 	void Run(){
-		HeeksObj *sketch = pTextForSketchTool->m_pFont->Sketch( pTextForSketchTool->m_text, pTextForSketchTool->m_trsf );
+	    // See if this text object has an OrientationModifier child.
+	    COrientationModifier *pOrientationModifier = NULL;
+	    for (HeeksObj *child = pTextForSketchTool->GetFirstChild(); child != NULL; child = pTextForSketchTool->GetNextChild())
+	    {
+	        if (child->GetType() == OrientationModifierType)
+	        {
+	            pOrientationModifier = (COrientationModifier *) child;
+	            break;
+	        }
+	    } // End for
+
+		float height, width;
+		pTextForSketchTool->GetTextSize( pTextForSketchTool->m_text, &width, &height );
+		HeeksObj *sketch = pTextForSketchTool->m_pFont->Sketch( pTextForSketchTool->m_text, pTextForSketchTool->m_trsf, width, pOrientationModifier );
 		wxGetApp().Add( sketch, NULL);
 		wxGetApp().Remove( pTextForSketchTool );
 		pTextForSketchTool = NULL;

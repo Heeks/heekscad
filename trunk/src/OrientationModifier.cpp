@@ -15,6 +15,7 @@ void COrientationModifierParams::set_initial_values()
 	config.Read(_T("OrientationModifier_m_spacing"), (int *) &m_spacing, int(eNormalSpacing));
 	config.Read(_T("OrientationModifier_number_of_rotations"), (int *) &m_number_of_rotations, 0);
 	config.Read(_T("OrientationModifier_sketch_rotates_text"), &m_sketch_rotates_text, false);
+	config.Read(_T("OrientationModifier_justification"), (int *) &m_justification, int(eLeftJustified));
 }
 
 void COrientationModifierParams::write_values_to_config()
@@ -27,6 +28,13 @@ void COrientationModifierParams::write_values_to_config()
 	config.Write(_T("OrientationModifier_m_spacing"), m_spacing);
 	config.Write(_T("OrientationModifier_number_of_rotations"), m_number_of_rotations);
 	config.Write(_T("OrientationModifier_sketch_rotates_text"), m_sketch_rotates_text);
+	config.Write(_T("OrientationModifier_justification"), m_justification);
+}
+
+static void on_set_justification(int zero_based_choice, HeeksObj* object)
+{
+	((COrientationModifier*)object)->m_params.m_justification = COrientationModifierParams::eJustification_t(zero_based_choice);
+	((COrientationModifier*)object)->m_params.write_values_to_config();
 }
 
 static void on_set_spacing(int zero_based_choice, HeeksObj* object)
@@ -60,6 +68,16 @@ void COrientationModifierParams::GetProperties(COrientationModifier * parent, st
 
 	list->push_back(new PropertyInt(_("Number of Rotations (negative for reverse direction)"), m_number_of_rotations, parent, on_set_number_of_rotations));
 	list->push_back(new PropertyCheck(_("Sketch rotates text"), m_sketch_rotates_text, parent,  on_set_sketch_rotates_text));
+
+	{
+		int choice = int(m_justification);
+		std::list< wxString > choices;
+		choices.push_back( wxString(_("Left")) );
+		choices.push_back( wxString(_("Centre")) );
+		choices.push_back( wxString(_("Right")) );
+
+		list->push_back(new PropertyChoice(_("Justification"), choices, choice, parent, on_set_justification));
+	}
 }
 
 void COrientationModifierParams::WriteXMLAttributes(TiXmlNode *root)
@@ -71,6 +89,7 @@ void COrientationModifierParams::WriteXMLAttributes(TiXmlNode *root)
 	element->SetAttribute("m_spacing", int(m_spacing));
 	element->SetAttribute("m_number_of_rotations", int(m_number_of_rotations));
 	element->SetAttribute("m_sketch_rotates_text", m_sketch_rotates_text);
+	element->SetAttribute("m_justification", int(m_justification));
 }
 
 void COrientationModifierParams::ReadParametersFromXMLElement(TiXmlElement* pElem)
@@ -82,12 +101,14 @@ void COrientationModifierParams::ReadParametersFromXMLElement(TiXmlElement* pEle
 	{
 	    int flag = 0;
 	    pElem->Attribute("m_sketch_rotates_text", (int *) &flag);
-	    m_sketch_rotates_text = flag;
+	    m_sketch_rotates_text = (flag != 0);
 	}
 	else
 	{
 	    m_sketch_rotates_text = false;
 	}
+
+	if (pElem->Attribute("m_justification")) pElem->Attribute("m_justification", (int *) &m_justification);
 }
 
 
@@ -146,9 +167,14 @@ bool COrientationModifier::CanAdd(HeeksObj* object)
 	// We only want a single sketch.  Make sure we don't already have one.
 	if (GetNumChildren() > 0)
 	{
+	    // Don't popup a warning as this code gets called by the Undo engine
+	    // when the file is initially read in as well.
+
+	    /*
 		wxString message;
 		message << _("Only a single sketch is supported");
 		wxMessageBox(message);
+        */
 
 		return(false);
 	}
@@ -222,7 +248,7 @@ void COrientationModifier::ReloadPointers()
 
 
 
-gp_Pnt & COrientationModifier::Transform(gp_Trsf existing_transformation, const double _distance, gp_Pnt & point )
+gp_Pnt & COrientationModifier::Transform(gp_Trsf existing_transformation, const double _distance, gp_Pnt & point, const float width )
 {
 	double tolerance = wxGetApp().m_geom_tol;
 
@@ -250,80 +276,102 @@ gp_Pnt & COrientationModifier::Transform(gp_Trsf existing_transformation, const 
 		return(point);
     } // End if - then
 
-	double distance_remaining = distance;
+	typedef std::list<std::pair<TopoDS_Edge, double> > Edges_t;
+	Edges_t edges;
+
+	double total_edge_length = 0.0;
 	for (std::list<TopoDS_Shape>::iterator itWire = wires.begin(); itWire != wires.end(); itWire++)
 	{
 		TopoDS_Wire wire(TopoDS::Wire(*itWire));
-		std::vector<TopoDS_Edge> edges;
 
 		for(BRepTools_WireExplorer expEdge(TopoDS::Wire(wire)); expEdge.More(); expEdge.Next())
 		{
-			edges.push_back( TopoDS_Edge(expEdge.Current()) );
+			TopoDS_Edge edge(TopoDS_Edge(expEdge.Current()));
+
+			BRepAdaptor_Curve curve(edge);
+			double edge_length = GCPnts_AbscissaPoint::Length(curve);
+			edges.push_back( std::make_pair(edge,edge_length) );
+			total_edge_length += edge_length;
 		} // End for
+	} // End for
 
-		if (edges.size() > 0)
-		{
-			std::vector<TopoDS_Edge>::size_type i=0;
-			while (distance_remaining > tolerance)
+	// Now adjust the distance based on a combination of the justification and how far through
+	// the text string we are.
+	double distance_remaining = distance;
+
+	switch (m_params.m_justification)
+	{
+	case COrientationModifierParams::eLeftJustified:
+		distance_remaining = distance;	// No special adjustment required.
+		break;
+
+	case COrientationModifierParams::eRightJustified:
+		distance_remaining = total_edge_length - width + distance;
+		break;
+
+	case COrientationModifierParams::eCentreJustified:
+		distance_remaining = (total_edge_length / 2.0) - (width / 2.0) + distance;
+		break;
+	} // End switch
+
+
+    while (distance_remaining > tolerance)
+    {
+        for (Edges_t::iterator itEdge = edges.begin(); itEdge != edges.end(); itEdge++)
+        {
+
+			double edge_length = itEdge->second;
+			if (edge_length < distance_remaining)
 			{
-				if (i == edges.size()) i=0;	// Loop around.
+				distance_remaining -= edge_length;
+			}
+			else
+			{
+				// The point we're after is along this edge somewhere.  Find the point and
+				// the first derivative at that point.
+				BRepAdaptor_Curve curve(itEdge->first);
+				gp_Pnt p;
+				gp_Vec vec;
+				double proportion = distance_remaining / edge_length;
+				Standard_Real U = ((curve.LastParameter() - curve.FirstParameter()) * proportion) + curve.FirstParameter();
+				curve.D1(U, p, vec);
 
-				BRepAdaptor_Curve curve(edges[i]);
-				double edge_length = GCPnts_AbscissaPoint::Length(curve);
-
-				if (edge_length < distance_remaining)
+				double angle = 0.0;
+				if (m_params.m_sketch_rotates_text)
 				{
-					distance_remaining -= edge_length;
+				    angle = gp_Vec(0,1,0).Angle(vec);
+				}
+
+				if (m_params.m_number_of_rotations > 0)
+				{
+				    for (int i=0; i<m_params.m_number_of_rotations; i++)
+				    {
+				        angle += (PI / 2.0);
+				    }
 				}
 				else
 				{
-					// The point we're after is along this edge somewhere.  Find the point and
-					// the first derivative at that point.
-					gp_Pnt p;
-					gp_Vec vec;
-					double proportion = distance_remaining / edge_length;
-					Standard_Real U = ((curve.LastParameter() - curve.FirstParameter()) * proportion) + curve.FirstParameter();
-					curve.D1(U, p, vec);
-
-					double angle = 0.0;
-					if (m_params.m_sketch_rotates_text)
-					{
-					    angle = gp_Vec(0,1,0).Angle(vec);
-					}
-
-					if (m_params.m_number_of_rotations > 0)
-					{
-					    for (int i=0; i<m_params.m_number_of_rotations; i++)
-					    {
-					        angle += (PI / 2.0);
-					    }
-					}
-					else
-					{
-					    for (int i=m_params.m_number_of_rotations; i<0; i++)
-					    {
-					        angle -= (PI / 2.0);
-					    }
-					}
-
-					angle *= -1.0;
-					gp_Trsf transformation;
-					transformation.SetRotation( gp_Ax1(origin, gp_Vec(0,0,-1)), angle );
-					point.Transform( transformation );
-
-					gp_Trsf around;
-					around.SetTranslation(origin, p);
-					point.Transform(around);
-
-					point.Transform(existing_transformation);   // Restore the original HText transformation.
-
-					return(point);
+				    for (int i=m_params.m_number_of_rotations; i<0; i++)
+				    {
+				        angle -= (PI / 2.0);
+				    }
 				}
 
-				i++;
-			} // End while
-		} // End if - then
-	} // End for
+				angle *= -1.0;
+				gp_Trsf transformation;
+				transformation.SetRotation( gp_Ax1(origin, gp_Vec(0,0,-1)), angle );
+				point.Transform( transformation );
+
+				gp_Trsf around;
+				around.SetTranslation(origin, p);
+				point.Transform(around);
+
+				point.Transform(existing_transformation);   // Restore the original HText transformation.
+
+				return(point);
+			}
+		} // End for
+	} // End while
 
 	return(point);
 }
