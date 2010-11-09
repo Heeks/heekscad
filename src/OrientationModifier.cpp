@@ -34,6 +34,47 @@ void COrientationModifierParams::write_values_to_config()
 static void on_set_justification(int zero_based_choice, HeeksObj* object)
 {
 	((COrientationModifier*)object)->m_params.m_justification = COrientationModifierParams::eJustification_t(zero_based_choice);
+
+
+    if (((COrientationModifier*) object)->SketchIsClosed())
+    {
+        switch (zero_based_choice)
+        {
+            case 0:
+                ((COrientationModifier*)object)->m_params.m_justification = COrientationModifierParams::eLeftJustified;
+                break;
+
+            case 1:
+                ((COrientationModifier*)object)->m_params.m_justification = COrientationModifierParams::eRightJustified;
+                break;
+
+            case 2:
+                ((COrientationModifier*)object)->m_params.m_justification = COrientationModifierParams::eTopJustified;
+                break;
+
+            case 3:
+                ((COrientationModifier*)object)->m_params.m_justification = COrientationModifierParams::eBottomJustified;
+                break;
+        }
+    }
+    else
+    {
+        switch (zero_based_choice)
+        {
+            case 0:
+                ((COrientationModifier*)object)->m_params.m_justification = COrientationModifierParams::eLeftJustified;
+                break;
+
+            case 1:
+                ((COrientationModifier*)object)->m_params.m_justification = COrientationModifierParams::eCentreJustified;
+                break;
+
+            case 2:
+                ((COrientationModifier*)object)->m_params.m_justification = COrientationModifierParams::eRightJustified;
+                break;
+        }
+    }
+
 	((COrientationModifier*)object)->m_params.write_values_to_config();
 }
 
@@ -69,16 +110,47 @@ void COrientationModifierParams::GetProperties(COrientationModifier * parent, st
 	list->push_back(new PropertyInt(_("Number of Rotations (negative for reverse direction)"), m_number_of_rotations, parent, on_set_number_of_rotations));
 	list->push_back(new PropertyCheck(_("Sketch rotates text"), m_sketch_rotates_text, parent,  on_set_sketch_rotates_text));
 
+
 	{
 		int choice = int(m_justification);
 		std::list< wxString > choices;
-		choices.push_back( wxString(_("Left")) );
-		choices.push_back( wxString(_("Centre")) );
-		choices.push_back( wxString(_("Right")) );
+
+		if (parent->SketchIsClosed() == false)
+		{
+		    choices.push_back( wxString(_("Left")) ); if (m_justification == COrientationModifierParams::eLeftJustified) choice = 0;
+		    choices.push_back( wxString(_("Centre")) ); if (m_justification == COrientationModifierParams::eCentreJustified) choice = 1;
+		    choices.push_back( wxString(_("Right")) ); if (m_justification == COrientationModifierParams::eRightJustified) choice = 2;
+		}
+		else
+		{
+            choices.push_back( wxString(_("Left")) ); if (m_justification == COrientationModifierParams::eLeftJustified) choice = 0;
+		    choices.push_back( wxString(_("Right")) ); if (m_justification == COrientationModifierParams::eRightJustified) choice = 1;
+			choices.push_back( wxString(_("Top")) ); if (m_justification == COrientationModifierParams::eTopJustified) choice = 2;
+            choices.push_back( wxString(_("Bottom")) ); if (m_justification == COrientationModifierParams::eBottomJustified) choice = 3;
+		}
 
 		list->push_back(new PropertyChoice(_("Justification"), choices, choice, parent, on_set_justification));
 	}
 }
+
+bool COrientationModifier::SketchIsClosed()
+{
+    HeeksObj *child = GetFirstChild();
+    if (child == NULL) return(false);
+
+    switch (((CSketch *) child)->m_order)
+    {
+	case SketchOrderTypeCloseCW:
+	case SketchOrderTypeCloseCCW:
+	case SketchOrderHasCircles:
+            return(true);
+
+    default:
+            return(false);
+    } // End switch
+}
+
+
 
 void COrientationModifierParams::WriteXMLAttributes(TiXmlNode *root)
 {
@@ -302,16 +374,38 @@ gp_Pnt & COrientationModifier::Transform(gp_Trsf existing_transformation, const 
 	switch (m_params.m_justification)
 	{
 	case COrientationModifierParams::eLeftJustified:
-		distance_remaining = distance;	// No special adjustment required.
+        if (SketchIsClosed())
+        {
+            distance_remaining = (total_edge_length / 2.0) - (width / 2.0) + distance;
+        }
+        else
+        {
+            distance_remaining = distance;	// No special adjustment required.
+        }
 		break;
 
 	case COrientationModifierParams::eRightJustified:
-		distance_remaining = total_edge_length - width + distance;
+        if (SketchIsClosed())
+        {
+            distance_remaining = total_edge_length - (width / 2.0) + distance;
+        }
+        else
+        {
+            distance_remaining = total_edge_length - width + distance;
+        }
 		break;
 
 	case COrientationModifierParams::eCentreJustified:
 		distance_remaining = (total_edge_length / 2.0) - (width / 2.0) + distance;
 		break;
+
+    case COrientationModifierParams::eTopJustified:
+        distance_remaining = (total_edge_length / 4.0) - (width / 2.0) + distance;
+        break;
+
+    case COrientationModifierParams::eBottomJustified:
+        distance_remaining = (total_edge_length * 3.0 / 4.0) - (width / 2.0) + distance;
+        break;
 	} // End switch
 
 
