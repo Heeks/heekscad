@@ -20,9 +20,11 @@ public:
 
 	typedef enum
 	{
-		eLeftJustified = 0,
-		eCentreJustified,
-		eRightJustified		
+		eLeftJustified = 0, // Valid for both open and closed sketches
+		eCentreJustified,   // Valid for open sketches only
+		eRightJustified,    // Valid for both open and closed sketches
+		eTopJustified,      // Valid only for closed sketches
+		eBottomJustified    // Valid only for closed sketches
 	} eJustification_t;
 
 	eJustification_t	m_justification;
@@ -78,6 +80,7 @@ public:
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 	gp_Pnt & Transform(gp_Trsf existing_transformation, const double _distance, gp_Pnt & point, const float width );
+	bool SketchIsClosed();
 
 }; // End COrientationModifier class definition.
 
