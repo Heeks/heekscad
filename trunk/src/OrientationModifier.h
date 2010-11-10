@@ -81,6 +81,17 @@ public:
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 	gp_Pnt & Transform(gp_Trsf existing_transformation, const double _distance, gp_Pnt & point, const float width );
 	bool SketchIsClosed();
+	void InitializeFromSketch();
+
+private:
+    typedef std::list<std::pair<TopoDS_Edge, double> > Edges_t;
+
+    // NOTE: These three variables are relatively transient.  They are only held here to reduce re-work
+    // during a single rendering session.
+
+    HeeksObj *m_last_child;
+    Edges_t m_edges;
+    double m_total_edge_length;
 
 }; // End COrientationModifier class definition.
 
