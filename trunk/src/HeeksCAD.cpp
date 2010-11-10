@@ -709,6 +709,14 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 						shape_data.m_edge_ids.push_back(id);
 					}
 
+					// get vertex ids
+					for(TiXmlElement* vertexElem = TiXmlHandle(subsubElem).FirstChildElement("vertex").Element(); vertexElem; vertexElem = vertexElem->NextSiblingElement("vertex"))
+					{
+						int id = 0;
+						vertexElem->Attribute("id", &id);
+						shape_data.m_vertex_ids.push_back(id);
+					}
+
 					if(index != -1)index_map.insert(std::pair<int, CShapeData>(index, shape_data));
 				}
 			}
@@ -1512,6 +1520,15 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 					TiXmlElement *edge_id_element = new TiXmlElement( "edge" );
 					index_pair_element->LinkEndChild( edge_id_element );
 					edge_id_element->SetAttribute("id", id);
+				}
+
+				// write the vertex ids
+				for(std::list<int>::iterator It = shape_data.m_vertex_ids.begin(); It != shape_data.m_vertex_ids.end(); It++)
+				{
+					int id = *It;
+					TiXmlElement *vertex_id_element = new TiXmlElement( "vertex" );
+					index_pair_element->LinkEndChild( vertex_id_element );
+					vertex_id_element->SetAttribute("id", id);
 				}
 			}
 		}
