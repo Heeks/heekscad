@@ -749,6 +749,11 @@ HersheyFont::HersheyFont( const wxChar *p_szFile, const double word_space_percen
 
 HeeksObj *VectorFont::Sketch( const wxString & text, const gp_Trsf & transformation_matrix, const float width, COrientationModifier *pOrientationModifier ) const
 {
+    if (pOrientationModifier)
+    {
+        pOrientationModifier->InitializeFromSketch();
+    }
+
 	HeeksObj *sketch = heekscad_interface.NewSketch();
 	sketch->OnEditString(text.c_str());
 
@@ -944,6 +949,11 @@ void VectorFont::glCommands(const wxString & text,
 							gp_Trsf transformation,
 							const float width ) const
 {
+    if (pOrientationModifier)
+    {
+        pOrientationModifier->InitializeFromSketch();
+    }
+
 	gp_Pnt location( start_point );
 	location.SetX( location.X() + StartingLocation().X() );
 	location.SetY( location.Y() + StartingLocation().Y() );

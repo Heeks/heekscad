@@ -319,53 +319,81 @@ void COrientationModifier::ReloadPointers()
 }
 
 
+/**
+    Accumulate a list of TopoDS_Edge objects along with their lengths.  We will use
+    this repeatedly while we're rendering this text string.  We don't want to re-aquire
+    this information for every point of every character.  Cache it here.  This method
+    should be called once before each rendering session for the text string.
+ */
+void COrientationModifier::InitializeFromSketch()
+{
+    m_edges.clear();
+    m_total_edge_length = 0.0;
 
+    if (GetNumChildren() > 0)
+    {
+        std::list<TopoDS_Shape> wires;
+        if (::ConvertSketchToFaceOrWire( GetFirstChild(), wires, false))
+        {
+            // Aggregate a list of TopoDS_Edge objects and each of their lengths.  We can
+            // use this list to skip through edges that we're not interested in.  i.e. the
+            // text won't sit on top of them.
+
+            for (std::list<TopoDS_Shape>::iterator itWire = wires.begin(); itWire != wires.end(); itWire++)
+            {
+                TopoDS_Wire wire(TopoDS::Wire(*itWire));
+
+                for(BRepTools_WireExplorer expEdge(TopoDS::Wire(wire)); expEdge.More(); expEdge.Next())
+                {
+                    TopoDS_Edge edge(TopoDS_Edge(expEdge.Current()));
+
+                    BRepAdaptor_Curve curve(edge);
+                    double edge_length = GCPnts_AbscissaPoint::Length(curve);
+                    m_edges.push_back( std::make_pair(edge,edge_length) );
+                    m_total_edge_length += edge_length;
+                } // End for
+            } // End for
+        } // End if - then
+    } // End if - then
+}
+
+
+/**
+    take the input point
+    move it 'distance' back along X
+    determine the overall sketch length
+    determine the distance along the sketch for this character based on the distance along the text as well as the justification
+    find the point along the sketch for this character
+    find the angle of rotation at this point along the sketch
+    rotate the point about this character's origin
+    translate the point to align it with the point along the sketch.
+    return this adjusted point location.
+ */
 gp_Pnt & COrientationModifier::Transform(gp_Trsf existing_transformation, const double _distance, gp_Pnt & point, const float width )
 {
 	double tolerance = wxGetApp().m_geom_tol;
+	gp_Pnt original_location(point);
 
-    if (GetNumChildren() == 0)
+    if (m_edges.size() == 0)
 	{
 		// No children so no modification of position.
+		point = original_location;
 		return(point);
 	}
 
+    // The text is formatted as though the characters start at the origin (0,0,0) and move
+    // to the right by the character and/or word spacing as subsequent characters are rendered.
+    // This step moves this character so that its origin is at the (0,0,0) location so that
+    // we rotate just this character about its origin.  We can use the _distance value as
+    // the offset along the X axis at which point this character's origin is located.
 	gp_Pnt origin(0.0, 0.0, 0.0);
 	gp_Trsf move_to_origin;
 	move_to_origin.SetTranslation(origin, gp_Pnt(-1.0 * _distance, 0.0, 0.0));
 	point.Transform(move_to_origin);
 
+    // Make sure it's positive.
 	double distance(_distance);
 	if (distance < 0) distance *= -1.0;
-
-	// The distance in font coordinates is smaller than that used to place the characters.
-	// Scale this distance up by the HText scale factor being applied to the font graphics.
-	// distance *= existing_transformation.ScaleFactor();
-
-	std::list<TopoDS_Shape> wires;
-	if (! ::ConvertSketchToFaceOrWire( GetFirstChild(), wires, false))
-    {
-		return(point);
-    } // End if - then
-
-	typedef std::list<std::pair<TopoDS_Edge, double> > Edges_t;
-	Edges_t edges;
-
-	double total_edge_length = 0.0;
-	for (std::list<TopoDS_Shape>::iterator itWire = wires.begin(); itWire != wires.end(); itWire++)
-	{
-		TopoDS_Wire wire(TopoDS::Wire(*itWire));
-
-		for(BRepTools_WireExplorer expEdge(TopoDS::Wire(wire)); expEdge.More(); expEdge.Next())
-		{
-			TopoDS_Edge edge(TopoDS_Edge(expEdge.Current()));
-
-			BRepAdaptor_Curve curve(edge);
-			double edge_length = GCPnts_AbscissaPoint::Length(curve);
-			edges.push_back( std::make_pair(edge,edge_length) );
-			total_edge_length += edge_length;
-		} // End for
-	} // End for
 
 	// Now adjust the distance based on a combination of the justification and how far through
 	// the text string we are.
@@ -376,7 +404,9 @@ gp_Pnt & COrientationModifier::Transform(gp_Trsf existing_transformation, const 
 	case COrientationModifierParams::eLeftJustified:
         if (SketchIsClosed())
         {
-            distance_remaining = (total_edge_length / 2.0) - (width / 2.0) + distance;
+            // Centre the text on the left edge.  NOTE: This assumes that it's a circle with
+            // the starting location in the positive X axis.
+            distance_remaining = (m_total_edge_length / 2.0) - (width / 2.0) + distance;
         }
         else
         {
@@ -387,31 +417,31 @@ gp_Pnt & COrientationModifier::Transform(gp_Trsf existing_transformation, const 
 	case COrientationModifierParams::eRightJustified:
         if (SketchIsClosed())
         {
-            distance_remaining = total_edge_length - (width / 2.0) + distance;
+            distance_remaining = m_total_edge_length - (width / 2.0) + distance;
         }
         else
         {
-            distance_remaining = total_edge_length - width + distance;
+            distance_remaining = m_total_edge_length - width + distance;
         }
 		break;
 
 	case COrientationModifierParams::eCentreJustified:
-		distance_remaining = (total_edge_length / 2.0) - (width / 2.0) + distance;
+		distance_remaining = (m_total_edge_length / 2.0) - (width / 2.0) + distance;
 		break;
 
     case COrientationModifierParams::eTopJustified:
-        distance_remaining = (total_edge_length / 4.0) - (width / 2.0) + distance;
+        distance_remaining = (m_total_edge_length / 4.0) - (width / 2.0) + distance;
         break;
 
     case COrientationModifierParams::eBottomJustified:
-        distance_remaining = (total_edge_length * 3.0 / 4.0) - (width / 2.0) + distance;
+        distance_remaining = (m_total_edge_length * 3.0 / 4.0) - (width / 2.0) + distance;
         break;
 	} // End switch
 
 
-    while (distance_remaining > tolerance)
+    while ((distance_remaining > tolerance) && (m_edges.size() > 0))
     {
-        for (Edges_t::iterator itEdge = edges.begin(); itEdge != edges.end(); itEdge++)
+        for (Edges_t::iterator itEdge = m_edges.begin(); itEdge != m_edges.end(); itEdge++)
         {
 
 			double edge_length = itEdge->second;
@@ -422,7 +452,10 @@ gp_Pnt & COrientationModifier::Transform(gp_Trsf existing_transformation, const 
 			else
 			{
 				// The point we're after is along this edge somewhere.  Find the point and
-				// the first derivative at that point.
+				// the first derivative at that point.  The vector returned will allow us to
+				// find out what angle the sketch is at this point.  We can use this angle
+				// to rotate the character.
+
 				BRepAdaptor_Curve curve(itEdge->first);
 				gp_Pnt p;
 				gp_Vec vec;
@@ -433,9 +466,14 @@ gp_Pnt & COrientationModifier::Transform(gp_Trsf existing_transformation, const 
 				double angle = 0.0;
 				if (m_params.m_sketch_rotates_text)
 				{
-				    angle = gp_Vec(0,1,0).Angle(vec);
+				    // Measure the angle with respect to the positive X axis (when looking down from the top)
+				    gp_Vec x_axis(gp_Pnt(0.0, 0.0, 0.0), gp_Pnt(1.0, 0.0, 0.0));
+				    gp_Vec from_top_down( gp_Pnt(0.0, 0.0, 0.0), gp_Pnt(0.0, 0.0, 1.0));
+				    angle = x_axis.AngleWithRef(vec, from_top_down);
 				}
 
+                // If the user wants each character given an extra quarter turn (or more)
+                // then add this in now.
 				if (m_params.m_number_of_rotations > 0)
 				{
 				    for (int i=0; i<m_params.m_number_of_rotations; i++)
@@ -451,16 +489,16 @@ gp_Pnt & COrientationModifier::Transform(gp_Trsf existing_transformation, const 
 				    }
 				}
 
+                // Rotate the point around the origin.
 				angle *= -1.0;
 				gp_Trsf transformation;
 				transformation.SetRotation( gp_Ax1(origin, gp_Vec(0,0,-1)), angle );
 				point.Transform( transformation );
 
+                // And then translate the point from the origin to the point along the sketch.
 				gp_Trsf around;
 				around.SetTranslation(origin, p);
 				point.Transform(around);
-
-				point.Transform(existing_transformation);   // Restore the original HText transformation.
 
 				return(point);
 			}
