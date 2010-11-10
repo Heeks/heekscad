@@ -27,6 +27,7 @@ public:
 	SolidTypeEnum m_solid_type;
 
 	TiXmlElement m_xml_element;
+	std::list<int> m_vertex_ids;
 	std::list<int> m_edge_ids;
 	std::list<int> m_face_ids;
 
