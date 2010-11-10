@@ -32,6 +32,11 @@ CShapeData::CShapeData(CShape* shape): m_xml_element("")
 		m_edge_ids.push_back(object->m_id);
 	}
 
+	for(HeeksObj* object = shape->m_vertices->GetFirstChild(); object; object = shape->m_vertices->GetNextChild())
+	{
+		m_vertex_ids.push_back(object->m_id);
+	}
+
 }
 
 void CShapeData::SetShape(CShape* shape)
@@ -52,6 +57,14 @@ void CShapeData::SetShape(CShape* shape)
 	{
 		std::list<int>::iterator It = m_edge_ids.begin();
 		for(HeeksObj* object = shape->m_edges->GetFirstChild(); object && It != m_edge_ids.end(); object = shape->m_edges->GetNextChild(), It++)
+		{
+			object->SetID(*It);
+		}
+	}
+
+	{
+		std::list<int>::iterator It = m_vertex_ids.begin();
+		for(HeeksObj* object = shape->m_vertices->GetFirstChild(); object && It != m_vertex_ids.end(); object = shape->m_vertices->GetNextChild(), It++)
 		{
 			object->SetID(*It);
 		}
