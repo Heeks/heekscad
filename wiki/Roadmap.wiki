@@ -10,9 +10,9 @@ It isn't clear to me if we should start milestoning before or after 1.0. The fol
 
 = 1.0? / M1? =
 
-  # DXF importer needs support for points and elliptic arcs. 
+  # DXF importer needs support for ~~points and~~  elliptic arcs. 
   # DXF export is seriously behind import.
-  # Add buttons for drawing splines and ellipses
+  # ~~Add buttons for drawing splines and ellipses~~
   # Set some kind of maximum undo depth.
   # Garbage collector for HeeksObj's. Should be tied into the UndoEngine somehow as this is the only way objects ever get deleted. 
   # Ellipses and Elliptic arcs should be different entities
@@ -33,7 +33,7 @@ It isn't clear to me if we should start milestoning before or after 1.0. The fol
 = Wishlist = 
 
   # Svg export
-  # Linewidth and color from dxf and svg
+  # Linewidth from dxf, linewidth and color from svg
   # Block and reference objects.
   # Constraint inference engine. (Infers constraints when loading non native file formats)
   # Allow transformations by non orthogonal matrices. Start with 2d stuff, then move to 3d
