@@ -285,7 +285,7 @@ bool CDxfRead::ReadLine()
 				get_line();
 				ss.str(m_str); ss >> m_aci; if(ss.fail()) return false;
 				break;
-			        
+
 			case 100:
 			case 39:
 			case 210:
@@ -786,7 +786,7 @@ bool CDxfRead::ReadText()
 				return(true);
 
 		        case 62:
-				// color index 
+				// color index
 				get_line();
 				ss.str(m_str); ss >> m_aci; if(ss.fail()) return false;
 				break;
@@ -1003,7 +1003,7 @@ bool CDxfRead::ReadLwPolyLine()
 		switch(n){
 			case 0:
 				// next item found
-		
+
 			        DerefACI();
 			        if(x_found && y_found){
 					// add point
@@ -1141,7 +1141,7 @@ bool CDxfRead::ReadVertex(gp_Pnt *pVertex, bool *bulge_found, double *bulge)
 	    get_line();
 	    ss.str(m_str); ss >> m_aci; if(ss.fail()) return false;
 	    break;
-	    
+
         default:
             // skip the next line
             get_line();
@@ -1417,7 +1417,7 @@ bool CDxfRead::ReadLayer()
 		ss.imbue(std::locale("C"));
 		switch(n){
 			case 0:	// next item found, so finish with line
-			        if (layername.empty()) 
+			        if (layername.empty())
 				{
 				    printf("CDxfRead::ReadLayer() - no layer name\n");
 				    return false;
@@ -1589,7 +1589,7 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 
 void  CDxfRead::DerefACI()
 {
-    
+
     if (m_aci == 256) // if color = layer color, replace by color from layer
     {
          m_aci = m_layer_aci[std::string(m_layer_name.mb_str())];
@@ -1601,15 +1601,22 @@ void  CDxfRead::DerefACI()
 bool HeeksDxfRead::m_make_as_sketch = false;
 bool HeeksDxfRead::m_ignore_errors = false;
 
-void HeeksDxfRead::OnReadLine(const double* s, const double* e) 
+HeeksColor *CDxfRead::ActiveColorPtr(Aci_t & aci)
 {
-    HLine* new_object = new HLine(make_point(s), make_point(e), &HeeksColor(m_aci));
+    static HeeksColor color;
+    color = HeeksColor(aci);
+    return(&color);
+}
+
+void HeeksDxfRead::OnReadLine(const double* s, const double* e)
+{
+    HLine* new_object = new HLine(make_point(s), make_point(e), ActiveColorPtr(m_aci));
     AddObject(new_object);
 }
 
 void HeeksDxfRead::OnReadPoint(const double* s)
 {
-    HPoint* new_object = new HPoint(make_point(s), &HeeksColor(m_aci));
+    HPoint* new_object = new HPoint(make_point(s), ActiveColorPtr(m_aci));
     AddObject(new_object);
 }
 
@@ -1621,7 +1628,7 @@ void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, 
 	if(!dir)up = -up;
 	gp_Pnt pc = make_point(c);
 	gp_Circ circle(gp_Ax2(pc, up), p1.Distance(pc));
-	HArc* new_object = new HArc(p0, p1, circle, &HeeksColor(m_aci));
+	HArc* new_object = new HArc(p0, p1, circle, ActiveColorPtr(m_aci));
 	AddObject(new_object);
 }
 
@@ -1633,7 +1640,7 @@ void HeeksDxfRead::OnReadCircle(const double* s, const double* c, bool dir)
 	if(!dir)up = -up;
 	gp_Pnt pc = make_point(c);
 	gp_Circ circle(gp_Ax2(pc, up), p0.Distance(pc));
-	HCircle* new_object = new HCircle(circle, &HeeksColor(m_aci)); 
+	HCircle* new_object = new HCircle(circle, ActiveColorPtr(m_aci));
 	AddObject(new_object);
 }
 
@@ -1641,7 +1648,7 @@ void HeeksDxfRead::OnReadSpline(TColgp_Array1OfPnt &control, TColStd_Array1OfRea
 {
 	try{
 		Geom_BSplineCurve spline(control,weight,knot,mult,degree,periodic,rational);
-		HSpline* new_object = new HSpline(spline, &HeeksColor(m_aci)); 
+		HSpline* new_object = new HSpline(spline, ActiveColorPtr(m_aci));
 		AddObject(new_object);
 	}
 	catch(Standard_Failure)
@@ -1657,7 +1664,7 @@ void HeeksDxfRead::OnReadEllipse(const double* c, double major_radius, double mi
 	gp_Pnt pc = make_point(c);
 	gp_Elips ellipse(gp_Ax2(pc, up), major_radius, minor_radius);
 	ellipse.Rotate(gp_Ax1(pc,up),rotation);
-	HEllipse* new_object = new HEllipse(ellipse, &HeeksColor(m_aci));
+	HEllipse* new_object = new HEllipse(ellipse, ActiveColorPtr(m_aci));
 	AddObject(new_object);
 }
 
@@ -1676,7 +1683,7 @@ void HeeksDxfRead::OnReadText(const double *point, const double height, const wx
         txt.Remove(0, offset+1);
     }
 
-    HText *new_object = new HText(trsf, txt, &HeeksColor(m_aci), NULL);
+    HText *new_object = new HText(trsf, txt, ActiveColorPtr(m_aci), NULL);
     AddObject(new_object);
 }
 
