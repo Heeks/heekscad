@@ -114,6 +114,7 @@ private:
 
 protected:
 	Aci_t m_aci; // manifest color name or 256 for layer color
+	HeeksColor *ActiveColorPtr(Aci_t & aci);
 
 public:
 	CDxfRead(const wxChar* filepath); // this opens the file
@@ -146,7 +147,7 @@ private:
     typedef wxString LayerName_t;
 	typedef std::map< LayerName_t, CSketch * > Sketches_t;
 	Sketches_t m_sketches;
-	
+
 	HeeksColor DecodeACI(const int aci);
 public:
 	HeeksDxfRead(const wxChar* filepath):CDxfRead(filepath){}

@@ -957,13 +957,11 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, Heek
 		}
 	}
 
-/*
 	// where operations are pointing to the same sketch, for example, make sure that they are not duplicated sketches
 	for (std::list<HeeksObj *>::iterator itObject = objects.begin(); itObject != objects.end(); itObject++)
 	{
 		*itObject = MergeCommonObjects( unique_set, *itObject );
 	}
-*/
 
 	if(objects.size() > 0)
 	{
@@ -3404,6 +3402,7 @@ void HeeksCADapp::SetFrameTitle()
 	m_frame->SetTitle(str);
 }
 
+
 HeeksObj* HeeksCADapp::GetIDObject(int type, int id)
 {
 	UsedIds_t::iterator FindIt1 = used_ids.find(type);
@@ -3416,7 +3415,6 @@ HeeksObj* HeeksCADapp::GetIDObject(int type, int id)
 
 	std::list<HeeksObj*> &list = FindIt2->second;
 	return list.back();
-
 }
 
 std::list<HeeksObj*> HeeksCADapp::GetIDObjects(int type, int id)
