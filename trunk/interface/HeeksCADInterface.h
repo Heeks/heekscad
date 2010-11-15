@@ -240,6 +240,7 @@ public:
 	virtual double EdgeGetLength(HeeksObj* edge);
 	virtual double EdgeGetLength2(HeeksObj* edge, double uStart, double uEnd);
 	virtual bool EdgeGetClosestPoint(HeeksObj* edge, const double *pos, double *closest_pnt, double &u);
+	virtual HeeksObj* EdgeGetParentBody(HeeksObj* edge);
 
 	// loop functions
 	virtual long LoopGetEdgeCount(HeeksObj* loop);
@@ -288,7 +289,6 @@ public:
 	virtual void Intersect(const gp_Lin& line, const gp_Circ& circle, std::list<gp_Pnt> &list);
 	virtual void Intersect(const gp_Circ& c1, const gp_Circ& c2, std::list<gp_Pnt> &list);
 
-
 	virtual void RegisterOnBuildTexture( void(*callbackfunc)() );
 	virtual int LoadIconsTexture(const wxChar *filepath);
 
@@ -301,4 +301,21 @@ public:
 	virtual void RegisterHeeksTypesConverter( wxString (*converter)(const int type) );
 	virtual void UnregisterHeeksTypesConverter( wxString (*converter)(const int type) );
 	virtual wxString HeeksType( const int type );
+
+	// Matrix functions
+	virtual void MakeMatrix(double* m, const double *origin, const double* x_axis, const double* y_axis);
+	virtual void TransformPoint(double* p, const double* m);
+	virtual void TransformVector(double* v, const double* m);
+	virtual void TransformMatrix(double* m_to_change, const double* m);
+	virtual void CopyMatrix(double* m_copy, const double* m);
+	virtual void InverseMatrix(double* m_inv, const double* m);
+
+	// Vector functions
+	virtual double VectorDotProduct(const double* v1, const double* v2);
+	virtual void VectorCrossProduct(double* v, const double* v1, const double* v2);
+	virtual void VectorAdd(double* v, const double* v1, const double* v2);
+	virtual void VectorSubtract(double* v, const double* v1, const double* v2);
+	virtual void VectorMultiply(double* v, double d);
+	virtual double VectorLength(const double* v);
+	virtual void VectorNormalise(double* v);
 };

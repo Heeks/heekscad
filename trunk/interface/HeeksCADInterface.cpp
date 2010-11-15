@@ -1197,6 +1197,11 @@ bool CHeeksCADInterface::EdgeGetClosestPoint(HeeksObj* edge, const double *pos, 
 	return false;
 }
 
+HeeksObj* CHeeksCADInterface::EdgeGetParentBody(HeeksObj* edge)
+{
+	return ((CEdge*)edge)->GetParentBody();
+}
+
 long CHeeksCADInterface::LoopGetEdgeCount(HeeksObj* loop)
 {
 	return ((CLoop*)loop)->m_edges.size();
@@ -1495,3 +1500,72 @@ wxString CHeeksCADInterface::HeeksType( const int type )
 {
     return(wxGetApp().HeeksType(type));
 }
+
+void CHeeksCADInterface::MakeMatrix(double* m, const double *origin, const double* x_axis, const double* y_axis)
+{
+	extract(make_matrix(make_point(origin), make_vector(x_axis), make_vector(y_axis)), m);
+}
+
+void CHeeksCADInterface::TransformPoint(double* p, const double* m)
+{
+	extract(make_point(p).Transformed(make_matrix(m)), p);
+}
+
+void CHeeksCADInterface::TransformVector(double* v, const double* m)
+{
+	extract(make_vector(v).Transformed(make_matrix(m)), v);
+}
+
+void CHeeksCADInterface::TransformMatrix(double* m_to_change, const double* m)
+{
+	extract(make_matrix(m_to_change).Multiplied(make_matrix(m)), m_to_change);
+}
+
+void CHeeksCADInterface::CopyMatrix(double* m_copy, const double* m)
+{
+	memcpy(m_copy, m, 16*sizeof(double));
+}
+
+void CHeeksCADInterface::InverseMatrix(double* m_inv, const double* m)
+{
+	extract(make_matrix(m).Inverted(), m_inv);
+}
+
+double CHeeksCADInterface::VectorDotProduct(const double* v1, const double* v2)
+{
+	return make_vector(v1) * make_vector(v2);
+}
+
+void CHeeksCADInterface::VectorCrossProduct(double* v, const double* v1, const double* v2)
+{
+	extract(make_vector(v1) ^ make_vector(v2), v);
+}
+
+void CHeeksCADInterface::VectorAdd(double* v, const double* v1, const double* v2)
+{
+	extract(make_vector(v1) + make_vector(v2), v);
+}
+
+void CHeeksCADInterface::VectorSubtract(double* v, const double* v1, const double* v2)
+{
+	extract(make_vector(v1) - make_vector(v2), v);
+}
+
+void CHeeksCADInterface::VectorMultiply(double* v, double d)
+{
+	v[0] *= d;
+	v[1] *= d;
+	v[2] *= d;
+}
+
+double CHeeksCADInterface::VectorLength(const double* v)
+{
+	return make_vector(v).Magnitude();
+}
+
+void CHeeksCADInterface::VectorNormalise(double* v)
+{
+	extract(make_vector(v).Normalized(), v);
+}
+
+
