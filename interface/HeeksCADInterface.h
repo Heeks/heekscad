@@ -89,6 +89,7 @@ public:
 	virtual long GetMarkingFilter();
 	virtual void ClearMarkedList();
 	virtual CInputMode* GetSelectMode();
+	virtual void SetLineDrawingMode();
 	virtual void SetInputMode(CInputMode* input_mode);
 	virtual int PickObjects(const wxChar* str, long marking_filter = -1, bool m_just_one = false);
 	virtual bool PickPosition(const wxChar* str, double* pos);
