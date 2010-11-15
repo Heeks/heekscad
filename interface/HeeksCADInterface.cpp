@@ -46,6 +46,7 @@
 #include "CoordinateSystem.h"
 #include "HText.h"
 #include "dxf.h"
+#include "LineArcDrawing.h"
 
 double CHeeksCADInterface::GetTolerance()
 {
@@ -352,6 +353,14 @@ void CHeeksCADInterface::ClearMarkedList()
 CInputMode* CHeeksCADInterface::GetSelectMode()
 {
 	return wxGetApp().m_select_mode;
+}
+
+void CHeeksCADInterface::SetLineDrawingMode()
+{
+	wxGetApp().CreateUndoPoint();
+	line_strip.drawing_mode = LineDrawingMode;
+	wxGetApp().SetInputMode(&line_strip);
+	wxGetApp().Changed();
 }
 
 void CHeeksCADInterface::SetInputMode(CInputMode* input_mode)
