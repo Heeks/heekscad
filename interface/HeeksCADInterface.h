@@ -91,6 +91,8 @@ public:
 	virtual CInputMode* GetSelectMode();
 	virtual void SetLineDrawingMode();
 	virtual void SetInputMode(CInputMode* input_mode);
+	virtual bool EndSketchMode();
+	virtual void EnterSketchMode(HeeksObj* sketch);
 	virtual int PickObjects(const wxChar* str, long marking_filter = -1, bool m_just_one = false);
 	virtual bool PickPosition(const wxChar* str, double* pos);
 	virtual bool Digitize(const wxPoint &point, double* pos);
