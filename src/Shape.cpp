@@ -132,6 +132,7 @@ void CShape::delete_faces_and_edges()
 {
 	if(m_faces)m_faces->Clear();
 	if(m_edges)m_edges->Clear();
+	if(m_vertices)m_vertices->Clear();
 }
 
 void CShape::CallMesh()
@@ -515,6 +516,11 @@ void CShape::CopyIDsFrom(const CShape* shape_from)
 	for(HeeksObj* edge_to = m_edges->GetFirstChild(); edge_from && edge_to; edge_from = shape_from->m_edges->GetNextChild(), edge_to = m_edges->GetNextChild())
 	{
 		edge_to->SetID(edge_from->m_id);
+	}
+	HeeksObj* v_from = shape_from->m_vertices->GetFirstChild();
+	for(HeeksObj* v_to = m_vertices->GetFirstChild(); v_from && v_to; v_from = shape_from->m_vertices->GetNextChild(), v_to = m_vertices->GetNextChild())
+	{
+		v_to->SetID(v_from->m_id);
 	}
 }
 
