@@ -519,7 +519,7 @@ void VectorFont::Glyph::glCommands(
 		{
 			if ((file_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY) continue;
 
-			results.push_back(Ctt(file_data.cFileName) );
+			results.push_back(file_data.cFileName);
 		} while (FindNextFile( hFind, &file_data));
 
 		FindClose(hFind);
