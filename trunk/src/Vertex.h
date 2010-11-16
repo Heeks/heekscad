@@ -12,12 +12,12 @@ class CEdge;
 class CVertex:public HeeksObj{
 private:
 	TopoDS_Vertex m_topods_vertex;
-	std::list<CEdge*> m_edges;
 	std::list<CEdge*>::iterator m_edgeIt;
 
 	void FindEdges();
 
 public:
+	std::list<CEdge*> m_edges;
 	std::list<CFace*> m_faces;
 	double m_point[3];
 

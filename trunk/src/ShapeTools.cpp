@@ -29,174 +29,136 @@ const wxBitmap &CVertexList::GetIcon()
 
 void CreateFacesAndEdges(TopoDS_Shape shape, CFaceList* faces, CEdgeList* edges, CVertexList* vertices)
 {
-	// create the face objects
-	TopTools_MapOfShape edgeMap;
-	for (TopExp_Explorer expFace(shape, TopAbs_FACE); expFace.More(); expFace.Next())
+	// create index maps
+	TopTools_IndexedMapOfShape faceMap;
+	TopTools_IndexedMapOfShape edgeMap;
+	TopTools_IndexedMapOfShape vertexMap;
+	for (TopExp_Explorer explorer(shape, TopAbs_FACE); explorer.More(); explorer.Next())
 	{
-		TopoDS_Face F = TopoDS::Face(expFace.Current());
-		CFace* new_object = new CFace(F);
-		faces->Add(new_object, NULL);
-		
-		// create the edge objects from each face
-		for (TopExp_Explorer expEdge(F, TopAbs_EDGE); expEdge.More(); expEdge.Next())
-		{
-			edgeMap.Add(expEdge.Current());
-		}
+		faceMap.Add(explorer.Current());
+	}
+	for (TopExp_Explorer explorer(shape, TopAbs_EDGE); explorer.More(); explorer.Next())
+	{
+		edgeMap.Add(explorer.Current());
+	}
+	for (TopExp_Explorer explorer(shape, TopAbs_VERTEX); explorer.More(); explorer.Next())
+	{
+		vertexMap.Add(explorer.Current());
 	}
 
-	// create the vertex object
-	for (TopExp_Explorer expVertex(shape, TopAbs_VERTEX); expVertex.More(); expVertex.Next())
-	{
-		TopoDS_Vertex v = TopoDS::Vertex(expVertex.Current());
-		CVertex* new_object = new CVertex(v);
-		vertices->Add(new_object, NULL);
-	}
+	std::vector<CFace*> face_array;
+	face_array.resize(faceMap.Extent() + 1);
+	std::vector<CEdge*> edge_array;
+	edge_array.resize(edgeMap.Extent() + 1);
+	std::vector<CVertex*> vertex_array;
+	vertex_array.resize(vertexMap.Extent() + 1);
 
 	// create the edge objects
-	for (TopExp_Explorer expEdge(shape, TopAbs_EDGE); expEdge.More(); expEdge.Next())
+	for(int i = 1;i<=edgeMap.Extent();i++)
 	{
-		TopoDS_Edge E = TopoDS::Edge(expEdge.Current());
-		CEdge* new_object = new CEdge(E);
-		edges->Add(new_object, NULL);
+		const TopoDS_Shape &s = edgeMap(i);
+		CEdge* new_object = new CEdge(TopoDS::Edge(s));
+		edge_array[i] = new_object;
 	}
 
-	// make an edge map for each face
-	std::map< CFace*, TopTools_MapOfShape*> face_edge_maps;
-	for(HeeksObj* object = faces->GetFirstChild(); object; object = faces->GetNextChild())
+	// create the vertex objects
+	for(int i = 1;i<=vertexMap.Extent();i++)
 	{
-		CFace* face = (CFace*)object;
-		TopTools_MapOfShape* newEdgeMap = new TopTools_MapOfShape;
-		face_edge_maps.insert( std::make_pair(face, newEdgeMap) );
+		const TopoDS_Shape &s = vertexMap(i);
+		CVertex* new_object = new CVertex(TopoDS::Vertex(s));
+		vertex_array[i] = new_object;
+	}
 
+	// add the edges in their face loop order
+	std::set<CEdge*> edges_added;
+	std::set<CVertex*> vertices_added;
+
+	// create the face objects
+	for(int i = 1;i<=faceMap.Extent();i++)
+	{
+		const TopoDS_Shape &s = faceMap(i);
+		CFace* new_face_object = new CFace(TopoDS::Face(s));
+		faces->Add(new_face_object, NULL);
+		face_array[i] = new_face_object;
+		TopAbs_Orientation face_orientation = s.Orientation();
+
+		// create the loop objects
+		TopTools_IndexedMapOfShape loopMap;
+		for (TopExp_Explorer explorer(s, TopAbs_WIRE); explorer.More(); explorer.Next())
+		{
+			loopMap.Add(explorer.Current());
+		}
+		TopoDS_Wire outerWire=BRepTools::OuterWire(new_face_object->Face());
+		int outer_index = loopMap.FindIndex(outerWire);
+		for(int i = 1;i<=loopMap.Extent();i++)
+		{
+			const TopoDS_Shape &s = loopMap(i);
+			CLoop* new_loop_object = new CLoop(TopoDS::Wire(s));
+			new_face_object->m_loops.push_back(new_loop_object);
+			if(outer_index == i)new_loop_object->m_is_outer = true;
+			new_loop_object->m_pface = new_face_object;
+
+			TopAbs_Orientation orientation = s.Orientation();
+
+			// find the loop's edges
+			for(BRepTools_WireExplorer explorer(TopoDS::Wire(s)); explorer.More(); explorer.Next())
+			{
+				CEdge* e = edge_array[edgeMap.FindIndex(explorer.Current())];
+				new_loop_object->m_edges.push_back(e);
+
+				// add the edge
+				if(edges_added.find(e) == edges_added.end())
+				{
+					edges->Add(e, NULL);
+					edges_added.insert(e);
+				}
+
+				// add the vertex
+				CVertex* v = vertex_array[vertexMap.FindIndex(explorer.CurrentVertex())];
+				if(vertices_added.find(v) == vertices_added.end())
+				{
+					vertices->Add(v, NULL);
+					vertices_added.insert(v);
+				}
+			}
+		}
+	}
+
+	// find the vertices' edges
+	for(unsigned int i = 1; i<vertex_array.size(); i++)
+	{
+		CVertex* v = vertex_array[i];
+		TopTools_IndexedMapOfShape vertexEdgeMap;
+		for (TopExp_Explorer expEdge(v->Vertex(), TopAbs_EDGE); expEdge.More(); expEdge.Next())
+		{
+			vertexEdgeMap.Add(expEdge.Current());
+		}
+		for(int i = 1; i<=vertexEdgeMap.Extent(); i++)
+		{
+			const TopoDS_Shape &s = vertexEdgeMap(i);
+			CEdge* e = edge_array[edgeMap.FindIndex(s)];
+			v->m_edges.push_back(e);
+		}
+	}
+
+	// find the faces' edges
+	for(unsigned int i = 1; i<face_array.size(); i++)
+	{
+		CFace* face = face_array[i];
+		TopTools_IndexedMapOfShape faceEdgeMap;
 		for (TopExp_Explorer expEdge(face->Face(), TopAbs_EDGE); expEdge.More(); expEdge.Next())
 		{
-			const TopoDS_Shape &E = expEdge.Current();
-			newEdgeMap->Add(E);
+			faceEdgeMap.Add(expEdge.Current());
 		}
-	}
-
-	// for each edge, find which faces it belongs to
-	for(HeeksObj* object = edges->GetFirstChild(); object; object = edges->GetNextChild())
-	{
-		CEdge* edge = (CEdge*)object;
-
-		const TopoDS_Shape &E = edge->Edge();
-
-		// test each face
-		for(std::map< CFace*, TopTools_MapOfShape*>::iterator It = face_edge_maps.begin(); It != face_edge_maps.end(); It++)
+		for(int i = 1; i<=faceEdgeMap.Extent(); i++)
 		{
-			CFace* face = It->first;
-			TopTools_MapOfShape *map = It->second;
-			if(map->Contains(E)){
-				face->m_edges.push_back(edge);
-			}
+			const TopoDS_Shape &s = faceEdgeMap(i);
+			CEdge* e = edge_array[edgeMap.FindIndex(s)];
+			face->m_edges.push_back(e);
+			e->m_faces.push_back(face);
+			bool sense = (s.IsEqual(e->Edge()) == Standard_True);
+			e->m_face_senses.push_back(sense);
 		}
 	}
-
-	// create the face loops
-	std::set<HeeksObj*> edges_to_delete;
-	for(HeeksObj* object = faces->GetFirstChild(); object; object = faces->GetNextChild())
-	{
-		CFace* face = (CFace*)object;
-		const TopoDS_Shape &F = face->Face();
-
-		TopoDS_Wire outerWire=BRepTools::OuterWire(TopoDS::Face(F));
-
-		for (TopExp_Explorer expWire(F, TopAbs_WIRE); expWire.More(); expWire.Next())
-		{
-			const TopoDS_Shape &W = expWire.Current();
-			bool is_outer = W.IsSame(outerWire) != 0;
-			std::list<CEdge*> edges;
-
-			TopAbs_Orientation wo = W.Orientation();
-			bool bwo = (wo == TopAbs_FORWARD);
-			TopAbs_Orientation fwo = F.Orientation();
-			bool bfwo = (fwo == TopAbs_FORWARD);
-			bool ooooo = (bwo == bfwo);
-
-			for(BRepTools_WireExplorer expEdge(TopoDS::Wire(W)); expEdge.More(); expEdge.Next())
-			{
-				// look through the face's existing edges to find the CEdge*
-				for(CEdge* edge = face->GetFirstEdge(); edge; edge = face->GetNextEdge())
-				{
-					const TopoDS_Shape &E = edge->Edge();
-					if(E.IsSame(expEdge.Current())) {
-						edges.push_back(edge);
-						edge->m_faces.push_back(face);
-						break;
-					}
-				}
-			}
-
-			std::list<CEdge*> edges_for_loop;
-			for(std::list<CEdge*>::iterator It = edges.begin(); It != edges.end(); It++){
-				CEdge* edge = *It;
-				if(edge->m_faces.size() == 2 && edge->m_faces.front() == edge->m_faces.back()){
-					if(edges_for_loop.size() > 0){
-						CLoop* new_loop = new CLoop(face, ooooo, edges_for_loop, is_outer);
-						face->m_loops.push_back(new_loop);
-						edges_for_loop.clear();
-					}
-					edges_to_delete.insert(edge);
-					face->m_edges.clear();
-				}
-				else{
-					edges_for_loop.push_back(edge);
-				}
-			}
-			if(edges_for_loop.size() > 0){
-				CLoop* new_loop = new CLoop(face, ooooo, edges_for_loop, is_outer);
-				face->m_loops.push_back(new_loop);
-			}
-		}
-	}
-
-	// delete edges
-	edges->Clear(edges_to_delete);
-
-	// calculate face senses
-	for(HeeksObj* object = edges->GetFirstChild(); object; object = edges->GetNextChild())
-	{
-		CEdge* edge = (CEdge*)object;
-		const TopoDS_Shape &E1 = edge->Edge();
-		for(CFace* face = edge->GetFirstFace(); face; face = edge->GetNextFace())
-		{
-			bool sense = false;
-			const TopoDS_Shape &F = face->Face();
-			for (TopExp_Explorer expEdge(F, TopAbs_EDGE); expEdge.More(); expEdge.Next())
-			{
-				const TopoDS_Shape &E2 = expEdge.Current(); // this is the edge on the face
-				if(E1.IsSame(E2))// same edge, but maybe different orientation
-				{
-					if(E1.IsEqual(E2))sense = true; // same orientation too
-					break; // same edge ( ignore the face's other edges )
-				}
-			}
-			edge->m_face_senses.push_back(sense); // one sense for each face, for each edge
-		}
-	}
-
-	// delete the maps
-	for(std::map< CFace*, TopTools_MapOfShape*>::iterator It = face_edge_maps.begin(); It != face_edge_maps.end(); It++)
-	{
-		TopTools_MapOfShape *map = It->second;
-		delete map;
-	}
-
-#if _DEBUG
-	// test InFaceSense
-	for(HeeksObj* object = edges->GetFirstChild(); object; object = edges->GetNextChild())
-	{
-		CEdge* edge = (CEdge*)object;
-
-		for(CFace* face = edge->GetFirstFace(); face; face = edge->GetNextFace())
-		{
-			bool in_face_sense = edge->InFaceSense(face);
-
-			bool here = false;
-			here = true;
-		}
-	}
-#endif
 }
 
