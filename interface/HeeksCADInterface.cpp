@@ -463,6 +463,12 @@ HeeksObj* CHeeksCADInterface::NewCylinder(const double* c, double r, double h)
 	return new CCylinder(gp_Ax2(make_point(c),up),r,h,_T("Cylinder"),wxGetApp().current_color, 1.0f);
 }
 
+HeeksObj* CHeeksCADInterface::NewCylinderEx(const double* pos, const double* dir, double r, double h)
+{
+	gp_Dir up(dir[0],dir[1],dir[2]);
+	return new CCylinder(gp_Ax2(make_point(pos),up),r,h,_T("Cylinder"),wxGetApp().current_color, 1.0f);
+}
+
 HeeksObj* CHeeksCADInterface::NewCone(const double* c, double r1, double r2, double h)
 {
 	gp_Dir up(0,0,1);
