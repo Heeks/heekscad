@@ -109,6 +109,7 @@ public:
 	virtual HeeksObj* NewCircle(const double *c, double r);
 	virtual HeeksObj* NewCuboid(const double *c, double x, double y, double z);
 	virtual HeeksObj* NewCylinder(const double*c, double r, double h);
+        virtual HeeksObj* NewCylinderEx(const double* pos, const double* dir, double r, double h);
 	virtual HeeksObj* NewCone(const double*c, double r1, double r2, double h);
 	virtual HeeksObj* NewSphere(const double*pos, double radius);
 	virtual HeeksObj* NewGroup();
