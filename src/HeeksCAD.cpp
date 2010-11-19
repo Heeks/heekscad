@@ -2626,6 +2626,18 @@ void on_set_auto_save_interval(int value, HeeksObj* object){
 	config.Write(_T("AutoSaveInterval"), wxGetApp().m_auto_save_interval);
 }
 
+void on_set_loglevel(int value, HeeksObj* object){
+	wxGetApp().m_frame->SetLogLevel(value);
+}
+
+void on_set_repeatcounts(bool value, HeeksObj* object){
+	wxGetApp().m_frame->SetLogRepeatCounting(value);
+}
+
+void on_set_timestamps(bool value, HeeksObj* object){
+	wxGetApp().m_frame->SetLogLogTimestamps(value);
+}
+
 void on_save_constraints(bool onoff, HeeksObj* object)
 {
   wxGetApp().m_save_constraints = onoff;
@@ -2909,6 +2921,24 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	font_options->m_list.push_back( new PropertyDouble(_("Word Space Percentage"), m_word_space_percentage, this, on_edit_word_space_percentage));
 	font_options->m_list.push_back( new PropertyDouble(_("Character Space Percentage"), m_character_space_percentage, this, on_edit_character_space_percentage));
 	list->push_back(font_options);
+
+	PropertyList* logging_options = new PropertyList(_("logging"));
+	{
+		std::list< wxString > choices;
+		choices.push_back ( wxString ( _("FatalError") ) );
+		choices.push_back ( wxString ( _("Error") ) );
+		choices.push_back ( wxString ( _("Warning") ) );
+		choices.push_back ( wxString ( _("Message") ) );
+		choices.push_back ( wxString ( _("Status") ) );
+		choices.push_back ( wxString ( _("Info") ) );
+		choices.push_back ( wxString ( _("Debug") ) );
+		choices.push_back ( wxString ( _("Trace") ) );
+		int choice = CHeeksFrame::m_loglevel;
+		logging_options->m_list.push_back ( new PropertyChoice ( _("log level"),  choices, choice, this, on_set_loglevel ) );
+	}
+	logging_options->m_list.push_back(new PropertyCheck(_("use repetition counting"), (int)CHeeksFrame::m_logrepeatcounts, NULL, on_set_repeatcounts));
+	logging_options->m_list.push_back(new PropertyCheck(_("use timestamps"), (int)CHeeksFrame::m_logtimestamps, NULL, on_set_timestamps));
+	list->push_back(logging_options);
 
 	SketchTools_GetOptions(list);
 
