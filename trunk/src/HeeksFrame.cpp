@@ -89,6 +89,10 @@ static wxString default_layout_string = _T("layout2|name=ToolBar;caption=General
 
 CHeeksCADInterface heekscad_interface;
 
+int CHeeksFrame::m_loglevel;
+bool CHeeksFrame::m_logrepeatcounts;
+bool CHeeksFrame::m_logtimestamps;
+
 CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSize& size )
 	: wxFrame((wxWindow *)NULL, -1, title, pos, size)
 {
@@ -96,6 +100,14 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 	m_logger = new wxLogWindow(NULL,_("Trace Log"),false,false); // disable log popups
 	wxLog::SetActiveTarget(m_logger);
+	HeeksConfig config;
+	config.Read(_T("LogLevel"), &m_loglevel);
+	config.Read(_T("LogRepeatCounting"), &m_logrepeatcounts);
+	config.Read(_T("LogTimestamps"), &m_logtimestamps);
+
+	SetLogLevel(m_loglevel);
+	SetLogRepeatCounting(m_logrepeatcounts);
+	SetLogLogTimestamps(m_logtimestamps);
 
 	m_next_id_for_button = ID_FIRST_EXTERNAL_BUTTON;
 	m_printout = NULL;
@@ -123,7 +135,6 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	};
 
 	int bitmap_size = ToolImage::default_bitmap_size;
-	HeeksConfig config;
 	config.Read(_T("ToolImageSize"), &bitmap_size);
 	ToolImage::SetBitmapSize(bitmap_size);
 
@@ -248,6 +259,38 @@ CHeeksFrame::~CHeeksFrame()
 
 	delete m_aui_manager;
 	delete wxLog::SetActiveTarget(new wxLogStderr(NULL));
+}
+
+
+void CHeeksFrame::SetLogLevel(const int level){
+	wxLog::SetLogLevel(level);
+	if (m_loglevel != level) {
+		m_loglevel = level;
+		HeeksConfig config;
+		config.Write(_T("LogLevel"), m_loglevel);
+	}
+}
+
+void CHeeksFrame::SetLogRepeatCounting(const bool repeatcounting) {
+	wxLog::SetRepetitionCounting ((bool) repeatcounting);
+	if (m_logrepeatcounts != repeatcounting) {
+		m_logrepeatcounts = repeatcounting;
+		HeeksConfig config;
+		config.Write(_T("LogRepeatCounting"), m_logrepeatcounts);
+	}
+}
+
+void CHeeksFrame::SetLogLogTimestamps(const bool uselogtimestamps) {
+	if (uselogtimestamps != m_logtimestamps)  {
+		m_logtimestamps = uselogtimestamps;
+		HeeksConfig config;
+		config.Write(_T("LogTimestamps"), m_logtimestamps);
+	}
+	if (m_logtimestamps)  {
+		wxLog::SetTimestamp(_T("[%I:%M:%S%P] "));
+	} else {
+		wxLog::SetTimestamp(NULL);
+	}
 }
 
 void CHeeksFrame::OnKeyDown(wxKeyEvent& event)
@@ -1642,6 +1685,7 @@ void CHeeksFrame::SetToolBarsSize()
 		toolbar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
 	}
 }
+
 
 void CHeeksFrame::MakeMenus()
 {

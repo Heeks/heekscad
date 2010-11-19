@@ -67,8 +67,14 @@ private:
 	int m_next_id_for_button;
 	std::map<int, SExternalButtonFunctions > m_external_buttons;
 
+
+
 public:
 	wxLogWindow* m_logger;
+	static int m_loglevel; 			// for wxLog::SetLogLevel((wxLogLevel)m_loglevel)
+	static bool m_logrepeatcounts; 	// for wxLog::SetRepetitionCounting(m_logrepeatcounts)
+	static bool m_logtimestamps; 	// for wxLog::SetLogTimestamps(m_logtimestamps)
+
 	CTreeCanvas *m_tree_canvas;
 	CGraphicsCanvas* m_graphics;
 	CObjPropsCanvas* m_properties;
@@ -85,6 +91,8 @@ public:
 	wxMenu *m_menuWindow;
 	HeeksPrintout* m_printout;
 	wxString m_extra_about_box_str;
+
+
 
 	CHeeksFrame( const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize );
 	virtual ~CHeeksFrame();
@@ -114,6 +122,9 @@ public:
 	void SetDefaultLayout(const wxString& str); // call this from dll's OnStartUp
 	void SetToolBarsToLeft();
 	void SetToolBarsSize();
+	void SetLogLevel(const int level);
+	void SetLogRepeatCounting(const bool repeatcounting);
+	void SetLogLogTimestamps(const bool uselogtimestamps);
 
 	//wxTopLevelWindow's virtual functions
 	bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
