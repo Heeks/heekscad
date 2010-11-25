@@ -3,7 +3,24 @@
 // This program is released under the BSD license. See the file COPYING for details.
 #pragma once
 
-class gp_Pnt;   // Forward declaration.
+#include <algorithm>
+#include <list>
+#include <vector>
+#include <map>
+#include <set>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+
+//Following is required to be defined on Ubuntu with OCC 6.3.1
+#ifndef HAVE_IOSTREAM
+#define HAVE_IOSTREAM
+#endif
+
+typedef int Aci_t; // AutoCAD color index
 
 typedef enum
 {
@@ -57,34 +74,34 @@ struct SplineData
 
 class CDxfWrite{
 private:
-	ofstream* m_ofs;
+	std::ofstream* m_ofs;
 	bool m_fail;
 
 public:
-	CDxfWrite(const wxChar* filepath);
+	CDxfWrite(const char* filepath);
 	~CDxfWrite();
 
 	bool Failed(){return m_fail;}
 
-	void WriteLine(const double* s, const double* e, const wxString layer_name );
-	void WritePoint(const double*, wxString);
-	void WriteArc(const double* s, const double* e, const double* c, bool dir, const wxString layer_name );
-    void WriteEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir, const wxString layer_name );
-	void WriteCircle(const double* c, double radius, const wxString layer_name );
+	void WriteLine(const double* s, const double* e, const char* layer_name );
+	void WritePoint(const double*, const char*);
+	void WriteArc(const double* s, const double* e, const double* c, bool dir, const char* layer_name );
+    void WriteEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir, const char* layer_name );
+	void WriteCircle(const double* c, double radius, const char* layer_name );
 };
 
 // derive a class from this and implement it's virtual functions
 class CDxfRead{
 private:
-	ifstream* m_ifs;
+	std::ifstream* m_ifs;
 
 	bool m_fail;
 	char m_str[1024];
 	char m_unused_line[1024];
 	eDxfUnits_t m_eUnits;
-	wxString m_layer_name;
-	wxString m_section_name;
-	wxString m_block_name;
+	char m_layer_name[1024];
+	char m_section_name[1024];
+	char m_block_name[1024];
 	bool m_ignore_errors;
 
 
@@ -102,11 +119,10 @@ private:
 	bool ReadSpline();
 	bool ReadLwPolyLine();
 	bool ReadPolyLine();
-	bool ReadVertex(gp_Pnt *pVertex, bool *bulge_found, double *bulge);
+	bool ReadVertex(double *pVertex, bool *bulge_found, double *bulge);
 	void OnReadArc(double start_angle, double end_angle, double radius, const double* c);
 	void OnReadCircle(const double* c, double radius);
     void OnReadEllipse(const double* c, const double* m, double ratio, double start_angle, double end_angle);
-	void OnReadSpline(struct SplineData& sd);
 
 	void get_line();
 	void put_line(const char *value);
@@ -114,10 +130,9 @@ private:
 
 protected:
 	Aci_t m_aci; // manifest color name or 256 for layer color
-	HeeksColor *ActiveColorPtr(Aci_t & aci);
 
 public:
-	CDxfRead(const wxChar* filepath); // this opens the file
+	CDxfRead(const char* filepath); // this opens the file
 	~CDxfRead(); // this closes the file
 
 	bool Failed(){return m_fail;}
@@ -129,41 +144,13 @@ public:
 
 	virtual void OnReadLine(const double* s, const double* e){}
 	virtual void OnReadPoint(const double* s){}
-	virtual void OnReadText(const double* point, const double height, const wxString text){}
+	virtual void OnReadText(const double* point, const double height, const char* text){}
 	virtual void OnReadArc(const double* s, const double* e, const double* c, bool dir){}
 	virtual void OnReadCircle(const double* s, const double* c, bool dir){}
 	virtual void OnReadEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir){}
-	virtual void OnReadSpline(TColgp_Array1OfPnt &control, TColStd_Array1OfReal &weight, TColStd_Array1OfReal &knot,TColStd_Array1OfInteger &mult, int degree, bool periodic, bool rational){}
+	virtual void OnReadSpline(struct SplineData& sd){}
 	virtual void AddGraphics() const { }
 
-    wxString LayerName() const;
+    std::string LayerName() const;
 
-};
-
-class CSketch;
-
-class HeeksDxfRead : public CDxfRead{
-private:
-    typedef wxString LayerName_t;
-	typedef std::map< LayerName_t, CSketch * > Sketches_t;
-	Sketches_t m_sketches;
-
-	HeeksColor DecodeACI(const int aci);
-public:
-	HeeksDxfRead(const wxChar* filepath):CDxfRead(filepath){}
-
-	static bool m_make_as_sketch;
-	static bool m_ignore_errors;
-
-	// CDxfRead's virtual functions
-	void OnReadLine(const double* s, const double* e);
-	void OnReadPoint(const double* s);
-	void OnReadText(const double* point, const double height, const wxString text);
-	void OnReadArc(const double* s, const double* e, const double* c, bool dir);
-	void OnReadCircle(const double* s, const double* c, bool dir);
-    void OnReadEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir);
-	void OnReadSpline(TColgp_Array1OfPnt &control, TColStd_Array1OfReal &weight, TColStd_Array1OfReal &knot,TColStd_Array1OfInteger &mult, int degree, bool periodic, bool rational);
-
-	void AddObject(HeeksObj *object);
-	void AddGraphics() const;
 };

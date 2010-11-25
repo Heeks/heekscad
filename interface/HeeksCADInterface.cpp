@@ -45,7 +45,7 @@
 #include "wxImageLoader.h"
 #include "CoordinateSystem.h"
 #include "HText.h"
-#include "dxf.h"
+#include "HDxf.h"
 #include "LineArcDrawing.h"
 
 double CHeeksCADInterface::GetTolerance()

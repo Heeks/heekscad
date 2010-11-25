@@ -53,7 +53,7 @@
 #include "Sketch.h"
 #include "BezierCurve.h"
 #include "StlSolid.h"
-#include "dxf.h"
+#include "HDxf.h"
 #include "svg.h"
 #include "CoordinateSystem.h"
 #include "RegularShapesDrawing.h"
@@ -1221,7 +1221,7 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
 			double s[3], e[3];
 			extract(l->A->m_p, s);
 			extract(l->B->m_p, e);
-			dxf_file.WriteLine(s, e, layer_name);
+			dxf_file.WriteLine(s, e, Ttc(layer_name.c_str()));
 		}
 		break;
 	case PointType:
@@ -1229,7 +1229,7 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
 			HPoint* p = (HPoint*)object;
 			double s[3];
 			extract(p->m_p, s);
-			dxf_file.WritePoint(s, layer_name);
+			dxf_file.WritePoint(s, Ttc(layer_name.c_str()));
 		}
 		break;
 	case ArcType:
@@ -1240,7 +1240,7 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
 			extract(a->B->m_p, e);
 			extract(a->C->m_p, c);
 			bool dir = a->m_axis.Direction().Z() > 0;
-			dxf_file.WriteArc(s, e, c, dir, layer_name);
+			dxf_file.WriteArc(s, e, c, dir, Ttc(layer_name.c_str()));
 		}
 		break;
       case EllipseType:
@@ -1252,7 +1252,7 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
 			double maj_r = e->m_majr;
 			double min_r = e->m_minr;
 			double rot = e->GetRotation();
-			dxf_file.WriteEllipse(c, maj_r, min_r, rot, 0, 2 * Pi, dir, layer_name);
+			dxf_file.WriteEllipse(c, maj_r, min_r, rot, 0, 2 * Pi, dir, Ttc(layer_name.c_str()));
                 }
 		break;
         case CircleType:
@@ -1261,7 +1261,7 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
 			double c[3];
 			extract(cir->C->m_p, c);
 			double radius = cir->m_radius;
-			dxf_file.WriteCircle(c, radius, layer_name);
+			dxf_file.WriteCircle(c, radius, Ttc(layer_name.c_str()));
                 }
 		break;
 	default:
@@ -1295,7 +1295,7 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
 
 void HeeksCADapp::SaveDXFFile(const wxChar *filepath)
 {
-	CDxfWrite dxf_file(filepath);
+	CDxfWrite dxf_file(Ttc(filepath));
 	if(dxf_file.Failed())
 	{
 		wxString str = wxString(_("couldn't open file")) + filepath;

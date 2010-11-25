@@ -2,25 +2,19 @@
 // Copyright (c) 2009, Dan Heeks
 // This program is released under the BSD license. See the file COPYING for details.
 
-#include <algorithm>
-#include "stdafx.h"
 #include "dxf.h"
-#include "HLine.h"
-#include "HArc.h"
-#include "HCircle.h"
-#include "HEllipse.h"
-#include "HSpline.h"
-#include "Sketch.h"
-#include "HText.h"
 
-CDxfWrite::CDxfWrite(const wxChar* filepath)
+using namespace std;
+static const double Pi = 3.14159265358979323846264338327950288419716939937511;
+
+CDxfWrite::CDxfWrite(const char* filepath)
 {
 	// start the file
 	m_fail = false;
 #ifdef __WXMSW__
 	m_ofs = new ofstream(filepath, ios::out);
 #else
-	m_ofs = new ofstream(Ttc(filepath), ios::out);
+	m_ofs = new ofstream(filepath, ios::out);
 #endif
 	if(!(*m_ofs)){
 		m_fail = true;
@@ -46,12 +40,12 @@ CDxfWrite::~CDxfWrite()
 	delete m_ofs;
 }
 
-void CDxfWrite::WriteLine(const double* s, const double* e, const wxString layer_name)
+void CDxfWrite::WriteLine(const double* s, const double* e, const char* layer_name)
 {
 	(*m_ofs) << 0			<< endl;
 	(*m_ofs) << "LINE"		<< endl;
 	(*m_ofs) << 8			<< endl;	// Group code for layer name
-	(*m_ofs) << Ttc(layer_name.c_str())	<< endl;	// Layer number
+	(*m_ofs) << layer_name	<< endl;	// Layer number
 	(*m_ofs) << 10			<< endl;	// Start point of line
 	(*m_ofs) << s[0]		<< endl;	// X in WCS coordinates
 	(*m_ofs) << 20			<< endl;
@@ -66,12 +60,12 @@ void CDxfWrite::WriteLine(const double* s, const double* e, const wxString layer
 	(*m_ofs) << e[2]		<< endl;	// Z in WCS coordinates
 }
 
-void CDxfWrite::WritePoint(const double* s, const wxString layer_name)
+void CDxfWrite::WritePoint(const double* s, const char* layer_name)
 {
 	(*m_ofs) << 0			<< endl;
 	(*m_ofs) << "POINT"		<< endl;
 	(*m_ofs) << 8			<< endl;	// Group code for layer name
-	(*m_ofs) << Ttc(layer_name.c_str())	<< endl;	// Layer number
+	(*m_ofs) << layer_name	<< endl;	// Layer number
 	(*m_ofs) << 10			<< endl;	// Start point of line
 	(*m_ofs) << s[0]		<< endl;	// X in WCS coordinates
 	(*m_ofs) << 20			<< endl;
@@ -80,7 +74,7 @@ void CDxfWrite::WritePoint(const double* s, const wxString layer_name)
 	(*m_ofs) << s[2]		<< endl;	// Z in WCS coordinates
 }
 
-void CDxfWrite::WriteArc(const double* s, const double* e, const double* c, bool dir, const wxString layer_name)
+void CDxfWrite::WriteArc(const double* s, const double* e, const double* c, bool dir, const char* layer_name)
 {
 	double ax = s[0] - c[0];
 	double ay = s[1] - c[1];
@@ -98,7 +92,7 @@ void CDxfWrite::WriteArc(const double* s, const double* e, const double* c, bool
 	(*m_ofs) << 0			<< endl;
 	(*m_ofs) << "ARC"		<< endl;
 	(*m_ofs) << 8			<< endl;	// Group code for layer name
-	(*m_ofs) << Ttc(layer_name.c_str())	<< endl;	// Layer number
+	(*m_ofs) << layer_name	<< endl;	// Layer number
 	(*m_ofs) << 10			<< endl;	// Centre X
 	(*m_ofs) << c[0]		<< endl;	// X in WCS coordinates
 	(*m_ofs) << 20			<< endl;
@@ -113,12 +107,12 @@ void CDxfWrite::WriteArc(const double* s, const double* e, const double* c, bool
 	(*m_ofs) << end_angle	<< endl;	// End angle
 }
 
-void CDxfWrite::WriteCircle(const double* c, double radius, const wxString layer_name)
+void CDxfWrite::WriteCircle(const double* c, double radius, const char* layer_name)
 {
 	(*m_ofs) << 0			<< endl;
 	(*m_ofs) << "CIRCLE"		<< endl;
 	(*m_ofs) << 8			<< endl;	// Group code for layer name
-	(*m_ofs) << Ttc(layer_name.c_str())	<< endl;	// Layer number
+	(*m_ofs) << layer_name	<< endl;	// Layer number
 	(*m_ofs) << 10			<< endl;	// Centre X
 	(*m_ofs) << c[0]		<< endl;	// X in WCS coordinates
 	(*m_ofs) << 20			<< endl;
@@ -129,7 +123,7 @@ void CDxfWrite::WriteCircle(const double* c, double radius, const wxString layer
 	(*m_ofs) << radius		<< endl;	// Radius
 }
 
-void CDxfWrite::WriteEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir, const wxString layer_name )
+void CDxfWrite::WriteEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir, const char* layer_name )
 {
 	double m[3];
 	m[2]=0;
@@ -146,7 +140,7 @@ void CDxfWrite::WriteEllipse(const double* c, double major_radius, double minor_
 	(*m_ofs) << 0			<< endl;
 	(*m_ofs) << "ELLIPSE"		<< endl;
 	(*m_ofs) << 8			<< endl;	// Group code for layer name
-	(*m_ofs) << Ttc(layer_name.c_str())	<< endl;	// Layer number
+	(*m_ofs) << layer_name	<< endl;	// Layer number
 	(*m_ofs) << 10			<< endl;	// Centre X
 	(*m_ofs) << c[0]		<< endl;	// X in WCS coordinates
 	(*m_ofs) << 20			<< endl;
@@ -167,16 +161,16 @@ void CDxfWrite::WriteEllipse(const double* c, double major_radius, double minor_
 	(*m_ofs) << end_angle	<< endl;	// End angle
 }
 
-CDxfRead::CDxfRead(const wxChar* filepath)
+CDxfRead::CDxfRead(const char* filepath)
 {
 	// start the file
 	memset( m_unused_line, '\0', sizeof(m_unused_line) );
 	m_fail = false;
 	m_eUnits = eMillimeters;
-	m_layer_name = _T("0");	// Default layer name
+	strcpy(m_layer_name, "0");	// Default layer name
 	m_ignore_errors = true;
 
-	m_ifs = new ifstream(Ttc(filepath));
+	m_ifs = new ifstream(filepath);
 	if(!(*m_ifs)){
 		m_fail = true;
 		return;
@@ -247,7 +241,7 @@ bool CDxfRead::ReadLine()
 
 			case 8: // Layer name follows
 				get_line();
-				m_layer_name = Ctt(m_str);
+				strcpy(m_layer_name, m_str);
 				break;
 
 			case 10:
@@ -305,7 +299,7 @@ bool CDxfRead::ReadLine()
 	    DerefACI();
 	    OnReadLine(s, e);
 	}
-	catch(Standard_Failure)
+	catch(...)
 	{
 		if (! IgnoreErrors()) throw;	// Re-throw the exception.
 	}
@@ -339,7 +333,7 @@ bool CDxfRead::ReadPoint()
 
 			case 8: // Layer name follows
 				get_line();
-				m_layer_name = Ctt(m_str);
+				strcpy(m_layer_name, m_str);
 				break;
 
 			case 10:
@@ -384,7 +378,7 @@ bool CDxfRead::ReadPoint()
 	    DerefACI();
 	    OnReadPoint(s);
 	}
-	catch(Standard_Failure)
+	catch(...)
 	{
 		if (! IgnoreErrors()) throw;	// Re-throw the exception.
 	}
@@ -420,7 +414,7 @@ bool CDxfRead::ReadArc()
 
 			case 8: // Layer name follows
 				get_line();
-				m_layer_name = Ctt(m_str);
+				strcpy(m_layer_name, m_str);
 				break;
 
 			case 10:
@@ -510,7 +504,7 @@ bool CDxfRead::ReadSpline()
 				return true;
 			case 8: // Layer name follows
 				get_line();
-				m_layer_name = Ctt(m_str);
+				strcpy(m_layer_name, m_str);
 				break;
 		        case 62:
 				// color index
@@ -683,7 +677,7 @@ bool CDxfRead::ReadCircle()
 				return true;
 			case 8: // Layer name follows
 				get_line();
-				m_layer_name = Ctt(m_str);
+				strcpy(m_layer_name, m_str);
 				break;
 
 			case 10:
@@ -755,7 +749,7 @@ bool CDxfRead::ReadText()
 				return false;
 			case 8: // Layer name follows
 				get_line();
-				m_layer_name = Ctt(m_str);
+				strcpy(m_layer_name, m_str);
 				break;
 
 			case 10:
@@ -782,7 +776,7 @@ bool CDxfRead::ReadText()
 				// text
 				get_line();
 				DerefACI();
-				OnReadText(c, height * 25.4 / 72.0, wxString(Ctt(m_str)));
+				OnReadText(c, height * 25.4 / 72.0, m_str);
 				return(true);
 
 		        case 62:
@@ -837,7 +831,7 @@ bool CDxfRead::ReadEllipse()
 				return true;
 			case 8: // Layer name follows
 				get_line();
-				m_layer_name = Ctt(m_str);
+				strcpy(m_layer_name, m_str);
 				break;
 
 			case 10:
@@ -961,9 +955,8 @@ static void AddPolyLinePoint(CDxfRead* dxf_read, double x, double y, double z, b
 		poly_prev_bulge_found = bulge_found;
 		poly_prev_bulge = bulge;
 	}
-	catch(Standard_Failure & unused)
+	catch(...)
 	{
-		(void) unused;	// Avoid the compiler warning.
 		if (! dxf_read->IgnoreErrors())	throw;	// Re-throw it.
 	}
 }
@@ -1016,7 +1009,7 @@ bool CDxfRead::ReadLwPolyLine()
 				break;
 			case 8: // Layer name follows
 				get_line();
-				m_layer_name = Ctt(m_str);
+				strcpy(m_layer_name, m_str);
 				break;
 
 			case 10:
@@ -1077,7 +1070,7 @@ bool CDxfRead::ReadLwPolyLine()
 }
 
 
-bool CDxfRead::ReadVertex(gp_Pnt *pVertex, bool *bulge_found, double *bulge)
+bool CDxfRead::ReadVertex(double *pVertex, bool *bulge_found, double *bulge)
 {
     bool x_found = false;
     bool y_found = false;
@@ -1088,9 +1081,9 @@ bool CDxfRead::ReadVertex(gp_Pnt *pVertex, bool *bulge_found, double *bulge)
     *bulge = 0.0;
     *bulge_found = false;
 
-    pVertex->SetX(0.0);
-    pVertex->SetY(0.0);
-    pVertex->SetZ(0.0);
+    pVertex[0] = 0.0;
+    pVertex[1] = 0.0;
+    pVertex[2] = 0.0;
 
     while(!(*m_ifs).eof()) {
         get_line();
@@ -1110,25 +1103,25 @@ bool CDxfRead::ReadVertex(gp_Pnt *pVertex, bool *bulge_found, double *bulge)
 
         case 8: // Layer name follows
             get_line();
-            m_layer_name = Ctt(m_str);
+            strcpy(m_layer_name, m_str);
             break;
 
         case 10:
             // x
             get_line();
-            ss.str(m_str); ss >> x; pVertex->SetX(mm(x)); if(ss.fail()) return false;
+            ss.str(m_str); ss >> x; pVertex[0] = mm(x); if(ss.fail()) return false;
             x_found = true;
             break;
         case 20:
             // y
             get_line();
-            ss.str(m_str); ss >> y; pVertex->SetY(mm(y)); if(ss.fail()) return false;
+            ss.str(m_str); ss >> y; pVertex[1] = mm(y); if(ss.fail()) return false;
             y_found = true;
             break;
         case 30:
             // z
             get_line();
-            ss.str(m_str); ss >> z; pVertex->SetZ(mm(z)); if(ss.fail()) return false;
+            ss.str(m_str); ss >> z; pVertex[2] = mm(z); if(ss.fail()) return false;
             break;
 
         case 42:
@@ -1161,7 +1154,7 @@ bool CDxfRead::ReadPolyLine()
 	bool closed = false;
 	int flags;
 	bool first_vertex_section_found = false;
-	gp_Pnt first_vertex;
+	double first_vertex[3];
 	bool bulge_found;
 	double bulge;
 
@@ -1183,21 +1176,21 @@ bool CDxfRead::ReadPolyLine()
 				get_line();
 				if (! strcmp(m_str,"VERTEX"))
 				{
-				    gp_Pnt vertex;
-					if (CDxfRead::ReadVertex(&vertex, &bulge_found, &bulge))
+				    double vertex[3];
+					if (CDxfRead::ReadVertex(vertex, &bulge_found, &bulge))
 					{
 						if(!first_vertex_section_found) {
 							first_vertex_section_found = true;
-							first_vertex = vertex;
+							memcpy(first_vertex, vertex, 3*sizeof(double));
 						}
-						AddPolyLinePoint(this, vertex.X(), vertex.Y(), vertex.Z(), bulge_found, bulge);
+						AddPolyLinePoint(this, vertex[0], vertex[1], vertex[2], bulge_found, bulge);
 						break;
 					}
 				}
 				if (! strcmp(m_str,"SEQEND"))
 				{
                     if(closed && first_vertex_section_found) {
-                        AddPolyLinePoint(this, first_vertex.X(), first_vertex.Y(), first_vertex.Z(), 0, 0);
+                        AddPolyLinePoint(this, first_vertex[0], first_vertex[1], first_vertex[2], 0, 0);
                     }
 					first_vertex_section_found = false;
 					PolyLineStart();
@@ -1258,89 +1251,6 @@ void CDxfRead::OnReadEllipse(const double* c, const double* m, double ratio, dou
 
 
 	OnReadEllipse(c, major_radius, minor_radius, rotation, start_angle, end_angle, true);
-}
-
-void CDxfRead::OnReadSpline(struct SplineData& sd)
-{
-	bool closed = (sd.flag & 1) != 0;
-	bool periodic = (sd.flag & 2) != 0;
-	bool rational = (sd.flag & 4) != 0;
-	// bool planar = (sd.flag & 8) != 0;
-	// bool linear = (sd.flag & 16) != 0;
-
-	SplineData sd_copy = sd;
-
-	if(closed)
-	{
-		// add some more control points
-		sd_copy.control_points += 3;
-
-		//for(int i = 0; i<3; i++
-		//sd_copy.controlx
-	}
-
-	TColgp_Array1OfPnt control (1,/*closed ? sd.controlx.size() + 1:*/sd.controlx.size());
-	TColStd_Array1OfReal weight (1,sd.controlx.size());
-
-	std::list<double> knoto;
-	std::list<int> multo;
-
-	std::list<double>::iterator ity = sd.controly.begin();
-	std::list<double>::iterator itz = sd.controlz.begin();
-	std::list<double>::iterator itw = sd.weight.begin();
-
-	unsigned i=1; //int i=1;
-	for(std::list<double>::iterator itx = sd.controlx.begin(); itx!=sd.controlx.end(); ++itx)
-	{
-		gp_Pnt pnt(*itx,*ity,*itz);
-		control.SetValue(i,pnt);
-		if(sd.weight.empty())
-			weight.SetValue(i,1);
-		else
-		{
-			weight.SetValue(i,*itw);
-			++itw;
-		}
-		++i;
-		++ity;
-		++itz;
-	}
-
-	i=1;
-	double last_knot = -1;
-	for(std::list<double>::iterator it = sd.knot.begin(); it!=sd.knot.end(); ++it)
-	{
-		if(*it != last_knot)
-		{
-			knoto.push_back(*it);
-			multo.push_back(1);
-			i++;
-		}
-		else
-		{
-			int temp = multo.back();
-			multo.pop_back();
-			multo.push_back(temp+1);
-		}
-		last_knot = *it;
-	}
-
-	TColStd_Array1OfReal knot (1, knoto.size());
-	TColStd_Array1OfInteger mult (1, knoto.size());
-
-	std::list<int>::iterator itm = multo.begin();
-	i = 1;
-	for(std::list<double>::iterator it = knoto.begin(); it!=knoto.end(); ++it)
-	{
-		knot.SetValue(i,*it);
-		int m = *itm;
-		if(closed && (i == 1 || i == knoto.size()))m = 1;
-		mult.SetValue(i, m);
-		++itm;
-		++i;
-	}
-
-    OnReadSpline(control, weight, knot, mult, sd.degree, periodic, rational);
 }
 
 void CDxfRead::get_line()
@@ -1474,7 +1384,7 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			if (! strcmp(m_str,"2"))
 			{
 			    get_line();
-			    m_block_name = Ctt(m_str);
+			    strcpy(m_block_name, m_str);
 			}
 		} // End if - then
 		else if(!strcmp(m_str, "0"))
@@ -1483,8 +1393,8 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			if (!strcmp( m_str, "SECTION" )){
 			  get_line();
 			  get_line();
-			  m_section_name = Ctt(m_str);
-			  m_block_name.Clear();
+			  strcpy(m_section_name, m_str);
+			  strcpy(m_block_name, "");
 
 		} // End if - then
 		else if (!strcmp( m_str, "TABLE" )){
@@ -1503,8 +1413,8 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			  continue;		}
 
 		else if (!strcmp( m_str, "ENDSEC" )){
-                    m_section_name.Clear();
-                    m_block_name.Clear();
+                    strcpy(m_section_name, "");
+                    strcpy(m_block_name, "");
                 } // End if - then
 		else if(!strcmp(m_str, "LINE")){
 				if(!ReadLine())
@@ -1592,156 +1502,29 @@ void  CDxfRead::DerefACI()
 
     if (m_aci == 256) // if color = layer color, replace by color from layer
     {
-         m_aci = m_layer_aci[std::string(m_layer_name.mb_str())];
+         m_aci = m_layer_aci[std::string(m_layer_name)];
     }
 }
 
-
-// static
-bool HeeksDxfRead::m_make_as_sketch = false;
-bool HeeksDxfRead::m_ignore_errors = false;
-
-HeeksColor *CDxfRead::ActiveColorPtr(Aci_t & aci)
+std::string CDxfRead::LayerName() const
 {
-    static HeeksColor color;
-    color = HeeksColor(aci);
-    return(&color);
-}
+    std::string result;
 
-void HeeksDxfRead::OnReadLine(const double* s, const double* e)
-{
-    HLine* new_object = new HLine(make_point(s), make_point(e), ActiveColorPtr(m_aci));
-    AddObject(new_object);
-}
-
-void HeeksDxfRead::OnReadPoint(const double* s)
-{
-    HPoint* new_object = new HPoint(make_point(s), ActiveColorPtr(m_aci));
-    AddObject(new_object);
-}
-
-void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, bool dir)
-{
-	gp_Pnt p0 = make_point(s);
-	gp_Pnt p1 = make_point(e);
-	gp_Dir up(0, 0, 1);
-	if(!dir)up = -up;
-	gp_Pnt pc = make_point(c);
-	gp_Circ circle(gp_Ax2(pc, up), p1.Distance(pc));
-	HArc* new_object = new HArc(p0, p1, circle, ActiveColorPtr(m_aci));
-	AddObject(new_object);
-}
-
-void HeeksDxfRead::OnReadCircle(const double* s, const double* c, bool dir)
-{
-	gp_Pnt p0 = make_point(s);
-	//gp_Pnt p1 = make_point(e);
-	gp_Dir up(0, 0, 1);
-	if(!dir)up = -up;
-	gp_Pnt pc = make_point(c);
-	gp_Circ circle(gp_Ax2(pc, up), p0.Distance(pc));
-	HCircle* new_object = new HCircle(circle, ActiveColorPtr(m_aci));
-	AddObject(new_object);
-}
-
-void HeeksDxfRead::OnReadSpline(TColgp_Array1OfPnt &control, TColStd_Array1OfReal &weight, TColStd_Array1OfReal &knot,TColStd_Array1OfInteger &mult, int degree, bool periodic, bool rational)
-{
-	try{
-		Geom_BSplineCurve spline(control,weight,knot,mult,degree,periodic,rational);
-		HSpline* new_object = new HSpline(spline, ActiveColorPtr(m_aci));
-		AddObject(new_object);
-	}
-	catch(Standard_Failure)
-	{
-		if (! IgnoreErrors()) throw;	// Re-throw the exception.
-	}
-}
-
-void HeeksDxfRead::OnReadEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir)
-{
-	gp_Dir up(0, 0, 1);
-	if(!dir)up = -up;
-	gp_Pnt pc = make_point(c);
-	gp_Elips ellipse(gp_Ax2(pc, up), major_radius, minor_radius);
-	ellipse.Rotate(gp_Ax1(pc,up),rotation);
-	HEllipse* new_object = new HEllipse(ellipse, ActiveColorPtr(m_aci));
-	AddObject(new_object);
-}
-
-void HeeksDxfRead::OnReadText(const double *point, const double height, const wxString text)
-{
-    gp_Trsf trsf;
-    trsf.SetTranslation( gp_Vec( gp_Pnt(0,0,0), gp_Pnt(point[0], point[1], point[2]) ) );
-    trsf.SetScaleFactor( height );
-
-    wxString txt(text);
-    txt.Replace(_T("\\P"),_T("\n"),true);
-
-    int offset = 0;
-    while ((txt.Length() > 0) && (txt[0] == _T('\\')) && ((offset = txt.find(_T(';'))) != -1))
+    if (strlen(m_section_name) > 0)
     {
-        txt.Remove(0, offset+1);
+		result.append(m_section_name);
     }
 
-    HText *new_object = new HText(trsf, txt, ActiveColorPtr(m_aci), NULL);
-    AddObject(new_object);
-}
-
-void HeeksDxfRead::AddObject(HeeksObj *object)
-{
-	if(wxGetApp().m_in_OpenFile && wxGetApp().m_file_open_matrix)
-	{
-		object->ModifyByMatrix(wxGetApp().m_file_open_matrix);
-	}
-
-	if(m_make_as_sketch)
-	{
-		// Check to see if we've already added a sketch for the current layer name.  If not
-		// then add one now.
-
-		if (m_sketches.find( LayerName() ) == m_sketches.end())
-		{
-			m_sketches.insert( std::make_pair( LayerName(), new CSketch() ) );
-		}
-
-		m_sketches[LayerName()]->Add( object, NULL );
-	}
-	else
-	{
-        wxGetApp().Add( object, NULL );
-	}
-}
-
-void HeeksDxfRead::AddGraphics() const
-{
-    if (m_make_as_sketch)
+    if (strlen(m_block_name) > 0)
     {
-        for (Sketches_t::const_iterator l_itSketch = m_sketches.begin(); l_itSketch != m_sketches.end(); l_itSketch++)
-        {
-            ((CSketch *)l_itSketch->second)->OnEditString( l_itSketch->first.c_str() );
-            wxGetApp().Add( l_itSketch->second, NULL );
-        }
-    }
-}
-
-
-wxString CDxfRead::LayerName() const
-{
-    wxString result;
-
-    if (m_section_name.Len() > 0)
-    {
-        result << m_section_name;
+        result.append(" ");
+		result.append(m_block_name);
     }
 
-    if (m_block_name.Len() > 0)
+    if (strlen(m_layer_name) > 0)
     {
-        result << _T(" ") << m_block_name;
-    }
-
-    if (m_layer_name.Len() > 0)
-    {
-        result << _T(" ") << m_layer_name;
+        result.append(" ");
+		result.append(m_layer_name);
     }
 
     return(result);
