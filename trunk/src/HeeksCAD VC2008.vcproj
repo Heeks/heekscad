@@ -616,6 +616,14 @@
 		<File
 			RelativePath=".\dxf.cpp"
 			>
+			<FileConfiguration
+				Name="Unicode Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+				/>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\dxf.h"
@@ -831,6 +839,14 @@
 		</File>
 		<File
 			RelativePath=".\HDimension.h"
+			>
+		</File>
+		<File
+			RelativePath=".\HDxf.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\HDxf.h"
 			>
 		</File>
 		<File

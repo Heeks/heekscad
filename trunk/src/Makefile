@@ -59,6 +59,7 @@ OBJECTS=                                 \
     HArc.o                               \
     HCircle.o                            \
     HDimension.o                         \
+    HDxf.o                               \
     HeeksCAD.o                           \
     HeeksFrame.o                         \
     HeeksPrintout.o                      \
