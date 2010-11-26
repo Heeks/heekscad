@@ -168,6 +168,12 @@ public:
 	virtual double Area()const{return 0.0;}
 	virtual void GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point = true)const{};
 	virtual void WriteXML(TiXmlNode *root){}
+#ifdef CONSTRAINT_TESTER
+    //JT
+	virtual void AuditHeeksObjTree4Constraints(HeeksObj * SketchPtr ,HeeksObj * mom,int level,bool ShowMsgInConsole,bool * constraintsAreOk);
+    void HeeksObjOccurrenceInSketch(HeeksObj * Sketch,HeeksObj * Object, int * occurences,int FromLevel,bool ShowMsgInConsole);
+    virtual void FindConstrainedObj(HeeksObj * Sketch,HeeksObj * Object,int * OccurenceOfObjectInSketch,int FromLevel,int level,bool ShowMsgInConsole);
+#endif
 	virtual void WriteBaseXML(TiXmlElement *element);
 	virtual void ReadBaseXML(TiXmlElement* element);
 	void SetID(int id);
