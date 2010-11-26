@@ -4024,6 +4024,68 @@ void HeeksCADapp::RegisterOnBuildTexture(void(*callbackfunc)())
 	m_on_build_texture_callbacks.push_back(callbackfunc);
 }
 
+#ifdef CONSTRAINT_TESTER
+bool HeeksCADapp::TestForValidConstraints(const std::list<HeeksObj*>& objects)
+{
+//JT
+//The idea to this routine is to search through the object list that savefile uses and see
+//if everything makes sense.
+//This routine at the moment is only executed manually through the main menu
+//The idea is to insert this into various test points to get an idea where constraints are getting screwed up.
+
+
+    //wxString errorMessage(type,wxConvUTF8);
+    wxString message;
+    message += wxT("------------------------------------------\n");
+
+    message+=wxString::Format(wxT("  (Kids:%d)") ,GetNumChildren());
+    bool * ConstraintsAreOk = new bool;
+    bool * ConstraintsExist = new bool;
+    bool ConstraintareOktoReturn=true;
+    wxPuts(message);
+    wxString SketchLiteral = wxT("Sketch");
+    for(std::list<HeeksObj*>::const_iterator It = objects.begin(); It != objects.end(); It++)
+	{
+		HeeksObj* object = *It;
+		 *ConstraintsAreOk=true;//Reset the test to Ok.
+
+		object->AuditHeeksObjTree4Constraints(((SketchLiteral.IsSameAs(object->GetTypeString()))?object:NULL),this,0,true,ConstraintsAreOk);
+        if (!(*ConstraintsAreOk))
+        {
+            //If there are missing constraints within a sketch it's possible that they are in another sketch
+            //todo probably should pass pack the type of constraint errors where having.
+            //ConstraintsAreOk2
+
+
+            object->AuditHeeksObjTree4Constraints(((SketchLiteral.IsSameAs(object->GetTypeString()))?this:NULL),this,0,false,ConstraintsExist );
+            if (ConstraintsExist)//It appears that constraints exist outside the sketch
+            {
+                wxString SketchLiteral = wxString::Format(wxT("2nd object of contraints exist outside %s %d"),object->GetTypeString(),object->m_id);
+            }
+            else
+            {
+                wxString SketchLiteral = wxString::Format(wxT("Constraint problems within %s %d"),object->GetTypeString(),object->m_id);
+            }
+            ConstraintareOktoReturn=false;
+
+        }
+	}
+
+    if (ConstraintareOktoReturn)
+        message = wxT("Constraint tests:OK");
+    else
+    message = wxT("Constraint tests:!!!! ERRORS FOUND !!!!");
+
+    message += wxT("\n------------------------------------------\n");
+    wxPuts(message);
+    delete ConstraintsAreOk;
+    delete ConstraintsExist;
+    return ConstraintareOktoReturn;
+
+}
+#endif
+
+
 
 bool HeeksCADapp::RegisterFileOpenHandler( const std::list<wxString> file_extensions, FileOpenHandler_t fileopen_handler )
 {

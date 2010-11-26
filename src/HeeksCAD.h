@@ -293,6 +293,11 @@ public:
 	void SavePyFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance = -1.0);
 	void SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, bool for_clipboard = false);
 	void SaveXMLFile(const wxChar *filepath){SaveXMLFile(m_objects, filepath);}
+#ifdef CONSTRAINT_TESTER
+    //JT
+	 virtual void AuditHeeksObjTree4Constraints(HeeksObj * SketchPtr ,HeeksObj* mom, int level,bool ShowMsgInConsole,bool * ConstraintsAreOk){};
+#endif
+
 	bool SaveFile(const wxChar *filepath, bool use_dialog = false, bool update_recent_file_list = true, bool set_app_caption = true);
 	void CreateUndoPoint();
 	void Changed();
@@ -377,7 +382,19 @@ public:
 	HeeksObj *MergeCommonObjects( ObjectReferences_t & unique_set, HeeksObj *object ) const;
 
 	wxString HeeksType( const int type ) const;
+
+//JT
+#ifdef CONSTRAINT_TESTER
+     bool TestForValidConstraints(){return TestForValidConstraints(m_objects);};//m_objects is protected and visible to class or sub_class
+   	 bool TestForValidConstraints(const std::list<HeeksObj*>& objects);
+
+#endif
+
+
+
 };
+
+
 
 DECLARE_APP(HeeksCADapp)
 

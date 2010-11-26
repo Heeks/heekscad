@@ -1149,6 +1149,17 @@ static void OnMoveScaleButton( wxCommandEvent& event )
 	TransformTools::Scale(false);
 }
 
+//JT
+#ifdef FIRE_CONSTRAINT_TESTER_FROM_MAIN_MENU
+static void OnTestConstraint( wxCommandEvent& event )
+{
+
+    wxGetApp().TestForValidConstraints();
+
+}
+#endif
+
+
 void CHeeksFrame::OnExternalButton( wxCommandEvent& event )
 {
 	// this might be the undo button! wxGetApp().CreateUndoPoint();
@@ -1812,6 +1823,13 @@ void CHeeksFrame::MakeMenus()
 	AddMenuItem(m_menuWindow, _("Geometry Tool Bar"), wxBitmap(), OnViewGeometryBar, OnUpdateViewGeometryBar, NULL, true);
 	AddMenuItem(m_menuWindow, _("Viewing Tool Bar"), wxBitmap(), OnViewViewingBar, OnUpdateViewViewingBar, NULL, true);
 	AddMenuItem(m_menuWindow, _("Status Bar"), wxBitmap(), OnViewStatusBar, OnUpdateViewStatusBar, NULL, true);
+//JT
+#ifdef FIRE_CONSTRAINT_TESTER_FROM_MAIN_MENU
+    	wxMenu * m_menuConstraintTester = new wxMenu;
+    	AddMenuItem(m_menuConstraintTester, _("Validate Constraints"), wxBitmap(), OnTestConstraint);
+
+#endif
+
 
 	// Add them to the main menu
 	m_menuBar = new wxMenuBar;
@@ -1823,6 +1841,11 @@ void CHeeksFrame::MakeMenus()
 	m_menuBar->Append( coordinate_menu, _( "&Set Origin" ) );
 	m_menuBar->Append( transform_menu, _( "&Transform" ) );
 	m_menuBar->Append( m_menuWindow, _( "&Window" ) );
+	//JT
+#ifdef FIRE_CONSTRAINT_TESTER_FROM_MAIN_MENU
+
+    	m_menuBar->Append( m_menuConstraintTester, _( "&Constraint Tester" ) );
+#endif
 	SetMenuBar( m_menuBar );
 }
 

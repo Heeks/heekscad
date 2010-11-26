@@ -254,6 +254,21 @@ extern "C" {
 
 #endif
 
+//JT THIS IS ATTEMPT TO CREATE A TEST PROBE FUNCTION THAT CAN BE USED TO IDENTIFY ROOT CAUSE OF CONSTRAINT ERROR
+//#define CONSTRAINT_TESTER
+
+#ifdef CONSTRAINT_TESTER
+
+ #define FIRE_CONSTRAINT_TESTER_FROM_MAIN_MENU
+#endif
+
+
+
+
+
+
+
+
 #include "../interface/strconv.h"
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"
