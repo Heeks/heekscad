@@ -241,6 +241,43 @@ void HeeksObj::WriteBaseXML(TiXmlElement *element)
 #endif
 }
 
+#ifdef CONSTRAINT_TESTER
+//JT
+void HeeksObj::AuditHeeksObjTree4Constraints( HeeksObj * SketchPtr ,HeeksObj * mom, int level,bool ShowMsgInConsole,bool * constraintError)
+{
+
+    //If this routine is firing it probably means that either this has nothing to do with constraints or
+    //a virtual function was not implemented in a function.
+    //Most of the information needed can be fulled from ConstrainedObject::AuditHeeksObjTree4Constraints
+
+    wxString message=wxString::Format(wxT("Level:%d  %s ID=%d (From HeekObj::AuditHeeksObjTree4Constraints") ,level,GetTypeString(),m_id);
+    if (ShowMsgInConsole)wxPuts(message);
+
+}
+
+void HeeksObj::HeeksObjOccurrenceInSketch(HeeksObj * Sketch,HeeksObj * Object, int * OccurenceOfObjectInSketch,int FromLevel,bool ShowMsgInConsole)
+{
+    *OccurenceOfObjectInSketch =0;
+    if (Sketch!=NULL)
+    Sketch->FindConstrainedObj(Sketch,Object,OccurenceOfObjectInSketch,FromLevel,0,ShowMsgInConsole);//This initiates the recursion
+    else
+    wxMessageBox(_("Sketch Pointer == NULL in HeeksObjOccurrenceInSketch"));
+
+
+}
+void HeeksObj::FindConstrainedObj(HeeksObj * CurrentObject,HeeksObj * ObjectToFind,int * OccurenceOfObjectInSketch,int FromLevel,int Level,bool ShowMsgInConsole)
+{
+    //if we hit this it's the end of the line
+    if (this == ObjectToFind)
+    {
+       (*OccurenceOfObjectInSketch)++;
+    }
+
+}
+
+
+#endif
+
 void HeeksObj::ReadBaseXML(TiXmlElement* element)
 {
 #ifdef HEEKSCAD

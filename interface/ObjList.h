@@ -53,6 +53,11 @@ public:
 	void KillGLLists(void);
 	void WriteBaseXML(TiXmlElement *element);
 	void ReadBaseXML(TiXmlElement* element);
+#ifdef CONSTRAINT_TESTER
+    //JT
+	virtual void AuditHeeksObjTree4Constraints(HeeksObj * SketchPtr ,HeeksObj * mom,int level,bool ShowMsgInConsole,bool * ConstraintsAreOk);
+	virtual void FindConstrainedObj(HeeksObj * CurrentObject,HeeksObj * ObjectToFind,int * occurences,int FromLevel,int level,bool ShowMsgInConsole);
+#endif
 	void ModifyByMatrix(const double *m);
 	void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true);
 	void Disconnect(std::list<HeeksObj*>parents);
