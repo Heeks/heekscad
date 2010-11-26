@@ -398,7 +398,191 @@ bool checkForInvalidConstraint( const char* type, EnumConstraintType etype,const
 
 }
 #endif
+#ifdef CONSTRAINT_TESTER
+void Constraint::AuditHeeksObjTree4Constraints(HeeksObj * SketchPtr ,HeeksObj * mom,int level,bool ShowMsgInConsole,bool * ConstraintsAreOk)
+{
+    wxString message=wxT("");
+    message.Pad(level*3,' ',true);
+    message +=wxString::Format(wxT("%s ID=%d \n  ") ,GetTypeString(),m_id);
+    message.Pad(level*3,' ',true);
 
+    wxString wxstr_m_type(ConstraintTypes[m_type].c_str(), wxConvUTF8);
+    message += wxstr_m_type;
+    message += wxT(" consists of:\n");
+    message.Pad(level*3+3,' ',true);
+    if (!m_obj1 ==0)
+    {
+        message += wxString::Format(wxT("%s id=%d(%s) -"),m_obj1->GetTypeString(),m_obj1->m_id,((m_obj1==mom)?wxT("KNOWN"):wxT("UNKNOWN")));
+    }
+    else
+    {
+        message += wxString (wxT("!!!!! m_obj1 Should Always be specified!!!!! \n"));
+        *ConstraintsAreOk=false;
+    }
+
+    if (m_obj2 ==0)
+    {
+
+        if (ReturnStdObjectCtForConstraint(m_type)==2)
+            {    // We have a problem where
+                message += wxString (wxT("!!!!! m_obj2 not specified in two object constraint!!!!! \n"));
+                *ConstraintsAreOk=false;
+            }
+    }
+    else
+    {
+        message += wxString::Format(wxT("  %s id=%d(%s)\n"),m_obj2->GetTypeString(),m_obj2->m_id,((m_obj2==mom)?wxT("KNOWN"):wxT("UNKNOWN")));
+        message.Pad(level*3+3,' ',true);
+    }
+    if (*ConstraintsAreOk==true)
+    {
+        message += wxT("Searching:");
+        *ConstraintsAreOk =ValidateConstraint2Objects(SketchPtr,mom,this,level, ShowMsgInConsole);
+    }
+    if (ShowMsgInConsole)
+    {
+        wxPuts(message);
+    }
+
+}
+
+bool Constraint::ValidateConstraint2Objects(HeeksObj * Sketch,HeeksObj * ConstrainedObject,HeeksObj * Constraint,int FromLevel,bool ShowMsgInConsole)
+{
+
+    bool TestsareOK =true; // assume all is well unless we run into a problem
+
+    int StdNumberOfObjectsInConstraint = ReturnStdObjectCtForConstraint(m_type);
+    wxString message = wxString::Format(wxT(" Objs:(%i)"),StdNumberOfObjectsInConstraint); //Need to determine if the constraint is one or two objects
+    message +=_("");
+    if (StdNumberOfObjectsInConstraint==1)
+    {
+        //this is a single object constraint which means
+        if((m_obj1 ==ConstrainedObject)&&(m_obj2 ==NULL))
+        {
+            //at some point may want to check the object type against the contraint type to see if it makes sense
+            //we wouldn't want a point called out with a horizontal constraint as an example
+        }
+        else
+        {
+            message += _("Object error in a single object constraint");
+            TestsareOK =false;
+        }
+    }
+    else if (StdNumberOfObjectsInConstraint==2)
+    {
+        if((m_obj1 ==ConstrainedObject)&&(m_obj2 !=NULL))
+        {
+            TestsareOK =Validate2ndObjectInConstraint(Sketch,m_obj2,this,FromLevel, ShowMsgInConsole);
+
+        }
+
+        else if ((m_obj1 !=NULL)&&(m_obj2 ==ConstrainedObject))
+        {
+            TestsareOK =Validate2ndObjectInConstraint(Sketch,m_obj1,this,FromLevel, ShowMsgInConsole);
+        }
+        else
+        {
+            message += _("Object error in a two object constraint");
+            TestsareOK =false;
+        }
+
+    }
+    else if (StdNumberOfObjectsInConstraint==0)
+    {
+        message += _("Undefined Constraint?");
+        TestsareOK =false;
+    }
+    else
+    {
+
+
+    }
+    if (!TestsareOK)
+        if (ShowMsgInConsole)wxPuts(message);//just need to here about a problem if there is one
+
+    return TestsareOK ;
+
+}
+
+//JT I don't like defining this list globally but I can't think of away around this at the moment
+
+
+
+
+bool Constraint::Validate2ndObjectInConstraint(HeeksObj* aSketch,HeeksObj*  aConstrainedObject,HeeksObj* aConstraint,int FromLevel,bool ShowMsgInConsole)
+{
+    //JT
+    //Ok.. this is where things get interesting.
+    //A constraint can be the child of two objects.
+    //One object of a two object constraint has already been validated if we reached this point
+    //The second object takes a little more work.
+    //What is known:
+    //  sketch location
+    //  2nd constrained object location.
+    //  constraint
+    //What needs to be validated?
+    //  Is the second constrained object contained in the sketch?
+    //      Does this object contain the constraint in its m_obj's list
+    //Additional things to ponder:
+    //If I understand this correctly,within a sketch a heeksobj should be a unique within objlist, but the constraint itself can
+    //be either once or twice.
+    //It's probably safe to assume the first statement,but I'm not sure if that's an assumption that can be made across all sketches.
+    bool everythingOk = true;
+    int *occurence = new int;
+    *occurence =0;
+
+    HeeksObjOccurrenceInSketch(aSketch,aConstrainedObject,occurence,FromLevel, ShowMsgInConsole);
+    wxString occurencemsg=wxString::Format(wxT("Occurences:%d " ) ,*occurence);
+
+    if ((*occurence)!=1)
+    {
+        everythingOk=false;
+        //This looks promising if we go to here
+        //now we need to verify that the ConstrainedObject has the constraint as a child
+    }
+
+    delete occurence;
+    return everythingOk;
+
+}
+
+int Constraint::ReturnStdObjectCtForConstraint(EnumConstraintType etype)
+{
+//Sometimes it seems constraints are defined with the wrong object count. We need to know what we're supposed to have
+//This is just defined within the object. Wonder if this would be handy to broaden it out?
+    switch (etype)
+    {
+        case ParallelLineConstraint:
+        case PerpendicularLineConstraint:
+        case LineTangentConstraint:
+        case RadiusConstraint:
+        case EqualLengthConstraint:
+        case ColinearConstraint:
+        case EqualRadiusConstraint:
+        case ConcentricConstraint:
+        case PointOnLineConstraint:
+        case PointOnLineMidpointConstraint:
+        case PointOnArcMidpointConstraint:
+        case PointOnArcConstraint:
+        case PointOnCircleConstraint:
+        case CoincidantPointConstraint:// This is a common bug You need to variables.
+            return(2);
+            break;
+        case AbsoluteAngleConstraint:
+        case LineLengthConstraint:
+        case LineHorizontalLengthConstraint:
+        case LineVerticalLengthConstraint:
+        case FixedPointConstraint:
+            return(1);
+            break;
+        default:
+            return(0);
+                    //todo need to figure out how to send back an errmessage
+                    //errorMessage += _("\n Check to see  if a new constraint type has been added Err ref 201011200807");
+    }
+}
+
+#endif
 
 
 

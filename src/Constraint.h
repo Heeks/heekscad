@@ -65,6 +65,14 @@ public:
 	const wxChar* GetTypeString(void)const{return _("Constraint");}
 	void Disconnect(std::list<HeeksObj*> parents);
 	void WriteXML(TiXmlNode *root);
+#ifdef CONSTRAINT_TESTER
+    //JT
+	virtual void AuditHeeksObjTree4Constraints(HeeksObj * SketchPtr ,HeeksObj * mom,int level,bool ShowMsgInConsole,bool * ConstraintsAreOk);
+	int ReturnStdObjectCtForConstraint(EnumConstraintType etype);// This is can be either 1 or 2
+    bool ValidateConstraint2Objects(HeeksObj * Sketch,HeeksObj * ConstrainedObject,HeeksObj * constraint,int FromLevel,bool ShowMsgInConsole);
+    bool Validate2ndObjectInConstraint(HeeksObj * Sketch,HeeksObj * ConstrainedObject,HeeksObj * constraint,int FromLevel,bool ShowMsgInConsole);
+
+#endif
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 	static void BeginSave();
 	static void EndSave(TiXmlNode *root);
