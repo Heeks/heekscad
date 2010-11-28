@@ -434,16 +434,19 @@ void Constraint::AuditHeeksObjTree4Constraints(HeeksObj * SketchPtr ,HeeksObj * 
         message += wxString::Format(wxT("  %s id=%d(%s)\n"),m_obj2->GetTypeString(),m_obj2->m_id,((m_obj2==mom)?wxT("KNOWN"):wxT("UNKNOWN")));
         message.Pad(level*3+3,' ',true);
     }
-    if (*ConstraintsAreOk==true)
-    {
-        message += wxT("Searching:");
-        *ConstraintsAreOk =ValidateConstraint2Objects(SketchPtr,mom,this,level, ShowMsgInConsole);
-    }
     if (ShowMsgInConsole)
     {
         wxPuts(message);
     }
-
+    if (*ConstraintsAreOk==true)
+    {
+        message = wxT("Searching:");
+        *ConstraintsAreOk =ValidateConstraint2Objects(SketchPtr,mom,this,level, ShowMsgInConsole);
+        if (ShowMsgInConsole)
+        {
+            wxPuts(message);
+        }
+    }
 }
 
 bool Constraint::ValidateConstraint2Objects(HeeksObj * Sketch,HeeksObj * ConstrainedObject,HeeksObj * Constraint,int FromLevel,bool ShowMsgInConsole)
