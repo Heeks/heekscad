@@ -180,6 +180,7 @@
 		<Unit filename="src/HCircle.h" />
 		<Unit filename="src/HDimension.cpp" />
 		<Unit filename="src/HDimension.h" />
+		<Unit filename="src/HDxf.cpp" />
 		<Unit filename="src/HEllipse.cpp" />
 		<Unit filename="src/HEllipse.h" />
 		<Unit filename="src/HILine.cpp" />
