@@ -1173,7 +1173,7 @@ void CoordinateSystem::ApplyMatrix()
 
 void CoordinateSystem::glCommands(bool select, bool marked, bool no_color)
 {
-	if(!rendering_current && this == wxGetApp().m_current_coordinate_system)return; // will get rendered in HeeksCADapp::glCommandsAll
+	if(!select && !rendering_current && this == wxGetApp().m_current_coordinate_system)return; // will get rendered in HeeksCADapp::glCommandsAll
 	if(marked)glLineWidth(2);
 	glPushMatrix();
 	double m[16];
@@ -1245,9 +1245,8 @@ public:
 	void Run(){
 		coord_system_for_Tool->PickFrom3Points();
 	}
-	const wxChar* GetTitle(){return _("coord system 3 points");}
+	const wxChar* GetTitle(){return _("Set position and orientation by picking 3 points");}
 	wxString BitmapPath(){return _T("coords3");}
-	const wxChar* GetToolTip(){return _("Set position and orientation by picking 3 points");}
 };
 
 static CoordSystem3Points coord_system_3_points;
@@ -1260,33 +1259,42 @@ public:
 		wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
 		wxGetApp().Repaint();
 	}
-	const wxChar* GetTitle(){return _("set coord system active");}
+	const wxChar* GetTitle(){return _("Set this coordinate system as the active one");}
 	wxString BitmapPath(){return _T("setcoordsys");}
-	const wxChar* GetToolTip(){return _("Set this coordinate system as the active one");}
 };
 
 static SetCoordSystemActive coord_system_set;
 
-class UnsetCoordSystemActive:public Tool{
-	// set world coordinate system active again
+class TransformToWorld: public Tool
+{
 public:
-	void Run(){
-		wxGetApp().m_current_coordinate_system = NULL;
-		wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
-		wxGetApp().Repaint();
+	void Run()
+	{
+		double m[16];
+		extract(coord_system_for_Tool->GetMatrix().Inverted(), m);
+
+		// move any selected objects
+		wxGetApp().CreateUndoPoint();
+		for(std::list<HeeksObj *>::iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
+		{
+			HeeksObj* object = *It;
+			if(object == coord_system_for_Tool)continue;
+			object->ModifyByMatrix(m);
+		}
+		wxGetApp().Changed();
 	}
-	const wxChar* GetTitle(){return _("unset coord system active");}
-	wxString BitmapPath(){return _T("unsetcoordsys");}
-	const wxChar* GetToolTip(){return _("Set world coordinate system active");}
+	const wxChar* GetTitle(){return _("Transform selected items to world coordinates");}
+	wxString BitmapPath(){return _T("trsfw");}
 };
 
-static UnsetCoordSystemActive coord_system_unset;
+static TransformToWorld transform_to_world;
 
 void CoordinateSystem::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	coord_system_for_Tool = this;
 	t_list->push_back(&coord_system_3_points);
-	t_list->push_back((this == wxGetApp().m_current_coordinate_system) ? ((Tool*)(&coord_system_unset)) : ((Tool*)(&coord_system_set)));
+	if(this != wxGetApp().m_current_coordinate_system)t_list->push_back(&coord_system_set);
+	if(wxGetApp().m_marked_list->list().size() > 0)t_list->push_back(&transform_to_world);
 }
 
 void CoordinateSystem::GetProperties(std::list<Property *> *list)
@@ -1304,6 +1312,29 @@ void CoordinateSystem::GetProperties(std::list<Property *> *list)
 	list->push_back(new PropertyDouble(_("Twist Angle"), m_twist_angle * 180/Pi, this, on_set_twist_angle));
 
 	HeeksObj::GetProperties(list);
+}
+
+void CoordinateSystem::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
+{
+	gp_Trsf mat = GetMatrix();
+	double s = size;
+	if(size_is_pixels)s /= wxGetApp().GetPixelScale();
+
+	gp_Pnt px(m_o.XYZ() + m_x.XYZ() * s);
+	gp_Pnt py(m_o.XYZ() + m_y.XYZ() * s);
+	gp_Dir vz = gp_Dir(0, 0, 1).Transformed(mat);
+	gp_Pnt pz(m_o.XYZ() + vz.XYZ() * s);
+	list->push_back(GripData(GripperTypeTranslate,m_o.X(),m_o.Y(),m_o.Z(),NULL));
+	list->push_back(GripData(GripperTypeRotateObject,px.X(),px.Y(),px.Z(),NULL));
+	list->push_back(GripData(GripperTypeRotateObject,py.X(),py.Y(),py.Z(),NULL));
+	list->push_back(GripData(GripperTypeRotateObject,pz.X(),pz.Y(),pz.Z(),NULL));
+}
+
+bool CoordinateSystem::GetScaleAboutMatrix(double *m)
+{
+	gp_Trsf mat = GetMatrix();
+	extract(mat, m);
+	return true;
 }
 
 void CoordinateSystem::WriteXML(TiXmlNode *root)

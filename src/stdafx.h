@@ -242,7 +242,7 @@ extern "C" {
 #include <GL/glu.h>
 }
 
-#define USE_UNDO_ENGINE
+//#define USE_UNDO_ENGINE
 
 
 #define CHECK_FOR_INVALID_CONSTRAINT//JT This is my attempt to isolate
