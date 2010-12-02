@@ -209,7 +209,7 @@ void CGraphicsCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 	}
 
 	// render everything
-	wxGetApp().glCommandsAll(false, m_view_point);
+	wxGetApp().glCommandsAll(m_view_point);
 
 	// mark various XOR drawn items as not drawn
 	m_render_on_front_done = false;

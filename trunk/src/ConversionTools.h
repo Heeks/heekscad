@@ -86,5 +86,17 @@ public:
 	const wxChar* GetToolTip(){return _("Ungroup selected items");}
 };
 
+class TransformToCoordSys: public Tool
+{
+public:
+	CoordinateSystem* coordsys1;
+	CoordinateSystem* coordsys2;
+	TransformToCoordSys():coordsys1(NULL),coordsys2(NULL){}
+	void Run();
+	const wxChar* GetTitle(){return _("Transform to Coordinate System");}
+	wxString BitmapPath(){return _T("trsf2");}
+	const wxChar* GetToolTip(){return _("Transform selected items using two coordinate systems");}
+};
+
 void GetConversionMenuTools(std::list<Tool*>* t_list);
 

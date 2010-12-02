@@ -914,7 +914,10 @@ int CHeeksCADInterface::FaceGetSurfaceType(HeeksObj* face)
 
 bool CHeeksCADInterface::FaceIsAPlane(HeeksObj* face, double* normal3)
 {
-	return ((CFace*)face)->IsAPlane(normal3);
+	gp_Pln plane;
+	if(!((CFace*)face)->IsAPlane(&plane))return false;
+	extract(plane.Axis().Direction(), normal3);
+	return true;
 }
 
 void CHeeksCADInterface::FaceGetUVBox(HeeksObj* face, double *uv_box)

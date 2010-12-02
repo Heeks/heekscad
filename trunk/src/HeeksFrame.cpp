@@ -704,12 +704,12 @@ static void OnCoordinateSystem( wxCommandEvent& WXUNUSED( event ) )
 	CoordinateSystem* new_object = new CoordinateSystem(_("Coordinate System"), o, x, y);
 	wxGetApp().Add(new_object, NULL);
 	wxGetApp().m_marked_list->Clear(true);
-	wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().SetInputMode(wxGetApp().m_select_mode);
 	wxGetApp().Repaint();
 
 	// and pick from three points
 	new_object->PickFrom3Points();
+	wxGetApp().m_marked_list->Add(new_object, true);
 }
 
 static void OnNewOrigin( wxCommandEvent& WXUNUSED( event ) )
@@ -1205,29 +1205,6 @@ void CHeeksFrame::OnUpdateExternalButton( wxUpdateUIEvent& event )
 	if(FindIt != m_external_buttons.end()){
 		SExternalButtonFunctions& ebf = FindIt->second;
 		if(ebf.on_update_button)(*(ebf.on_update_button))(event);
-	}
-}
-
-ofstream* ofs_for_sim = NULL;
-
-void settrifunc(double *x, double *n){
-	int type = 1; // add a triangle
-	ofs_for_sim->write((char *)(&type), sizeof(int));
-	ofs_for_sim->write((char *)(x), 9*sizeof(double));
-}
-
-CBox box_for_floodfill;
-
-void floodfill(double area, double *x, double *n){
-	if(area < 100)return;
-	if(box_for_floodfill.m_valid){
-		int type = 2;// flood fill point
-		gp_Pnt p(x[0], x[1], x[2]);
-		gp_Pnt c = gp_Pnt(p.XYZ() - 1.42 * gp_XYZ(n[0], n[1], n[2]));
-		double x[3] = {c.X(), c.Y(), c.Z()};
-		ofs_for_sim->write((char *)(&type), sizeof(int));
-		ofs_for_sim->write((char *)(x), 3*sizeof(double));
-		ofs_for_sim->write((char *)(box_for_floodfill.m_x), 6*sizeof(double));
 	}
 }
 

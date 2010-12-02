@@ -39,7 +39,8 @@ public:
 	const wxBitmap &GetIcon();
 	void ModifyByMatrix(const double *mat);
 	void GetProperties(std::list<Property *> *list);
-	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof){}
+	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
+	bool GetScaleAboutMatrix(double *m);
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	void WriteXML(TiXmlNode *root);
 

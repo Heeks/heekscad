@@ -1631,7 +1631,7 @@ void HeeksCADapp::RecalculateGLLists()
 	}
 }
 
-void HeeksCADapp::RenderDatumOrCurrentCoordSys(bool select)
+void HeeksCADapp::RenderDatumOrCurrentCoordSys()
 {
 	if(m_show_datum_coords_system || m_current_coordinate_system)
 	{
@@ -1648,7 +1648,7 @@ void HeeksCADapp::RenderDatumOrCurrentCoordSys(bool select)
 			{
 				glClear(GL_DEPTH_BUFFER_BIT);
 				CoordinateSystem::rendering_current = true;
-				m_current_coordinate_system->glCommands(select, wxGetApp().m_marked_list->ObjectMarked(m_current_coordinate_system), false);
+				m_current_coordinate_system->glCommands(false, wxGetApp().m_marked_list->ObjectMarked(m_current_coordinate_system), false);
 				CoordinateSystem::rendering_current = false;
 			}
 		}
@@ -1662,7 +1662,7 @@ void HeeksCADapp::RenderDatumOrCurrentCoordSys(bool select)
 			if(m_current_coordinate_system)
 			{
 				CoordinateSystem::rendering_current = true;
-				m_current_coordinate_system->glCommands(select, wxGetApp().m_marked_list->ObjectMarked(m_current_coordinate_system), false);
+				m_current_coordinate_system->glCommands(false, wxGetApp().m_marked_list->ObjectMarked(m_current_coordinate_system), false);
 				CoordinateSystem::rendering_current = false;
 			}
 			if(m_show_datum_coords_system)
@@ -1676,7 +1676,7 @@ void HeeksCADapp::RenderDatumOrCurrentCoordSys(bool select)
 	}
 }
 
-void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
+void HeeksCADapp::glCommandsAll(const CViewPoint &view_point)
 {
 
 	CreateLights();
@@ -1700,9 +1700,7 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 			if(object->DrawAfterOthers())after_others_objects.push_back(object);
 			else
 			{
-				if(select)glPushName((unsigned long)object);
-				object->glCommands(select, m_marked_list->ObjectMarked(object), false);
-				if(select)glPopName();
+				object->glCommands(false, m_marked_list->ObjectMarked(object), false);
 			}
 		}
 	}
@@ -1730,17 +1728,13 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	for(std::list<HeeksObj*>::iterator It = after_others_objects.begin(); It != after_others_objects.end(); It++)
 	{
 		HeeksObj* object = *It;
-		if(select)glPushName((unsigned long)object);
-		object->glCommands(select, m_marked_list->ObjectMarked(object), false);
-		if(select)glPopName();
+		object->glCommands(false, m_marked_list->ObjectMarked(object), false);
 	}
 
 	// draw the ruler
 	if(m_show_ruler && m_ruler->m_visible)
 	{
-		if(select)glPushName((unsigned long)m_ruler);
-		m_ruler->glCommands(select, false, false);
-		if(select)glPopName();
+		m_ruler->glCommands(false, false, false);
 	}
 
 	// draw the grid
@@ -1749,13 +1743,13 @@ void HeeksCADapp::glCommandsAll(bool select, const CViewPoint &view_point)
 	glDepthFunc(GL_LEQUAL);
 
 	// draw the datum
-	RenderDatumOrCurrentCoordSys(select);
+	RenderDatumOrCurrentCoordSys();
 
 	DestroyLights();
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glPolygonMode(GL_FRONT_AND_BACK ,GL_FILL );
-	if(m_hidden_for_drag.size() == 0 || !m_show_grippers_on_drag)m_marked_list->GrippersGLCommands(select, false);
+	if(m_hidden_for_drag.size() == 0 || !m_show_grippers_on_drag)m_marked_list->GrippersGLCommands(false, false);
 
 	// draw the input mode text on the top
 	if(m_graphics_text_mode != GraphicsTextModeNone)
@@ -1962,6 +1956,20 @@ void HeeksCADapp::DoMoveOrCopyDropDownMenu(wxWindow *wnd, const wxPoint &point, 
 	wnd->PopupMenu(&menu, point);
 }
 
+class UnsetCoordSystemActive:public Tool{
+	// set world coordinate system active again
+public:
+	void Run(){
+		wxGetApp().m_current_coordinate_system = NULL;
+		wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
+		wxGetApp().Repaint();
+	}
+	const wxChar* GetTitle(){return _("Set world coordinate system active");}
+	wxString BitmapPath(){return _T("unsetcoordsys");}
+};
+
+static UnsetCoordSystemActive coord_system_unset;
+
 void HeeksCADapp::DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool from_graphics_canvas, bool control_pressed)
 {
 	tool_index_list.clear();
@@ -1982,6 +1990,8 @@ void HeeksCADapp::DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObje
 	if(input_mode_object)input_mode_object->GetTools(&temp_f_list, &new_point);
 	AddToolListWithSeparator(f_list, temp_f_list);
 	temp_f_list.clear();
+
+	if(wxGetApp().m_current_coordinate_system)f_list.push_back(&coord_system_unset);
 
 	// exit full screen
 	if(wxGetApp().m_frame->IsFullScreen() && point.x>=0 && point.y>=0)temp_f_list.push_back(new CFullScreenTool);
@@ -4222,16 +4232,17 @@ wxString HeeksCADType(const int type)
         case SplineType:   return(_("Spline"));
         case GroupType:   return(_("Group"));
         case CorrelationToolType:   return(_("CorrelationTool"));
-        case ObjectMaximumType:   return(_("ObjectMaximum"));
         case ConstraintType:   return(_("Constraint"));
         case PadType:   return(_("Pad"));
         case PartType:   return(_("Part"));
         case PocketSolidType:   return(_("PocketSolid"));
         case AngularDimensionType:   return(_("AngularDimension"));
         case OrientationModifierType:   return(_("OrientationModifier"));
+        case HoleType:   return(_("Hole"));
+        case HolePositionsType:   return(_("Positions"));
+        case ObjectMaximumType:   return(_("ObjectMaximum"));
         default:    return(_T("")); // Indicate that this routine could not find a conversion.
     } // End switch
-
 } // End HeeksCADType() routine
 
 
