@@ -63,7 +63,7 @@ public:
 	void GetTorusParams(gp_Torus &t);
 	bool GetNurbSurfaceParams(CNurbSurfaceParams* params);
 	int GetSurfaceType();
-	bool IsAPlane(double* normal3);
+	bool IsAPlane(gp_Pln *returned_plane);
 	wxString GetSurfaceTypeStr();
 	CEdge* GetFirstEdge();
 	CEdge* GetNextEdge();
@@ -81,9 +81,8 @@ public:
 class FaceToSketchTool:public Tool
 {
 public:
-	const wxChar* GetTitle(){return _("Make Sketch");}
+	const wxChar* GetTitle(){return _("Make a sketch from face");}
 	wxString BitmapPath(){return _T("face2sketch");}
-	const wxChar* GetToolTip(){return _T("Make a sketch from face");}
 	void Run();
 
 	static double deviation;

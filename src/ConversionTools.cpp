@@ -23,6 +23,17 @@
 #include <algorithm>
 #include <functional>
 
+static MakeLineArcsToSketch make_line_arcs_to_sketch;
+static ConvertSketchesToFace convert_sketches_to_face;
+static SketchesArcsToLines sketches_arcs_to_lines;
+static CombineSketches combine_sketches;
+#ifdef UNITE_SKETCHES
+static UniteSketches unite_sketches;
+#endif
+static GroupSelected group_selected;
+static UngroupSelected ungroup_selected;
+static MakeEdgesToSketch make_edges_to_sketch;
+static TransformToCoordSys transform_to_coordsys;
 
 void GetConversionMenuTools(std::list<Tool*>* t_list){
 	// Tools for multiple selected items.
@@ -31,7 +42,8 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 	bool group_in_marked_list = false;
 	bool edges_in_marked_list = false;
 	bool ConvertSketchesToFace_added = false;
-
+	CoordinateSystem* first_coord_sys = NULL;
+	CoordinateSystem* second_coord_sys = NULL;
 
 	// check to see what types have been marked
 	std::list<HeeksObj*>::const_iterator It;
@@ -53,32 +65,47 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 				break;
 			case EdgeType:
 				edges_in_marked_list = true;
+				break;
+			case CoordinateSystemType:
+				if(first_coord_sys == NULL)first_coord_sys = (CoordinateSystem*)object;
+				else if(second_coord_sys == NULL)second_coord_sys = (CoordinateSystem*)object;
+				break;
 		}
 	}
 
 	if(lines_or_arcs_etc_in_marked_list)
 	{
-		t_list->push_back(new MakeLineArcsToSketch);
-		t_list->push_back(new ConvertSketchesToFace);
+		t_list->push_back(&make_line_arcs_to_sketch);
+		t_list->push_back(&convert_sketches_to_face);
 		ConvertSketchesToFace_added = true;
 	}
 
 	if(sketches_in_marked_list > 1){
 		if(!ConvertSketchesToFace_added)
 		{
-			t_list->push_back(new ConvertSketchesToFace);
+			t_list->push_back(&convert_sketches_to_face);
 			ConvertSketchesToFace_added = true;
 		}
-		t_list->push_back(new SketchesArcsToLines);
-		t_list->push_back(new CombineSketches);
+		t_list->push_back(&sketches_arcs_to_lines);
+		t_list->push_back(&combine_sketches);
 #ifdef UNITE_SKETCHES
-		t_list->push_back(new UniteSketches);
+		t_list->push_back(&unite_sketches);
 #endif
 	}
 
-	if(wxGetApp().m_marked_list->list().size() > 1)t_list->push_back(new GroupSelected);
-	if(group_in_marked_list)t_list->push_back(new UngroupSelected);
-	if(edges_in_marked_list)t_list->push_back(new MakeEdgesToSketch);
+	if(wxGetApp().m_marked_list->list().size() > 1)t_list->push_back(&group_selected);
+	if(group_in_marked_list)t_list->push_back(&ungroup_selected);
+	if(edges_in_marked_list)t_list->push_back(&make_edges_to_sketch);
+
+	if(second_coord_sys)
+	{
+		if(wxGetApp().m_marked_list->list().size() > 2)// more than just two coordinate systems
+		{
+			transform_to_coordsys.coordsys1 = first_coord_sys;
+			transform_to_coordsys.coordsys2 = second_coord_sys;
+			t_list->push_back(&transform_to_coordsys);
+		}
+	}
 }
 
 
@@ -652,6 +679,21 @@ void MakeEdgesToSketch::Run(){
 	}
 
 	wxGetApp().Add(sketch, NULL);
+}
+
+void TransformToCoordSys::Run(){
+	double m[16];
+	extract(coordsys2->GetMatrix() * (coordsys1->GetMatrix().Inverted()), m);
+
+	// move any selected objects
+	wxGetApp().CreateUndoPoint();
+	for(std::list<HeeksObj *>::iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
+	{
+		HeeksObj* object = *It;
+		if((object == coordsys1) || (object == coordsys2))continue;
+		object->ModifyByMatrix(m);
+	}
+	wxGetApp().Changed();
 }
 
 static CSketch* sketch_for_arcs_to_lines = NULL;

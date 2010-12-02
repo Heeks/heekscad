@@ -94,7 +94,7 @@ private:
 	std::map< std::string, HeeksObj*(*)(TiXmlElement* pElem) > xml_read_fn_map;
 
 	void render_screen_text2(const wxChar* str);
-	void RenderDatumOrCurrentCoordSys(bool select);
+	void RenderDatumOrCurrentCoordSys();
 
 protected:
     wxLocale m_locale; // locale we'll be using
@@ -260,7 +260,7 @@ public:
 	void SetLikeNewFile(void);
 	bool IsModified(void);
 	void ClearHistory(void);
-	void glCommandsAll(bool select, const CViewPoint &view_point);
+	void glCommandsAll(const CViewPoint &view_point);
 	double GetPixelScale(void);
 	void DoMoveOrCopyDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, HeeksObj* paste_into, HeeksObj* paste_before);
 	void DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool from_graphics_canvas, bool control_pressed);

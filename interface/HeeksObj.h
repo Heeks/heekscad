@@ -47,13 +47,15 @@ enum{
 	SplineType,
 	GroupType,
 	CorrelationToolType,
-	ObjectMaximumType,
 	ConstraintType,
 	PadType,
 	PartType,
 	PocketSolidType,
 	AngularDimensionType,
-	OrientationModifierType
+	OrientationModifierType,
+	HoleType,
+	HolePositionsType,
+	ObjectMaximumType,
 };
 
 

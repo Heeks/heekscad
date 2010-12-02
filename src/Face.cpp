@@ -283,11 +283,58 @@ public:
 
 static ExtrudeFace extrude_face;
 
+class RotateToFace:public Tool
+{
+public:
+	const wxChar* GetTitle(){return _("Rotate to Face");}
+	wxString BitmapPath(){return _T("rotface");}
+	void Run(){
+		gp_Pln plane;
+		face_for_tools->GetPlaneParams(plane);
+		gp_Dir x_direction = plane.XAxis().Direction();
+		gp_Dir y_direction = plane.YAxis().Direction();
+		if(face_for_tools->Face().Orientation()==TopAbs_REVERSED)
+		{
+			// swap the axes to invert the normal
+			y_direction = plane.XAxis().Direction();
+			x_direction = plane.YAxis().Direction();
+		}
+		gp_Trsf face_matrix = make_matrix(plane.Location(), x_direction, y_direction);
+		gp_Trsf inv_matrix = face_matrix.Inverted();
+
+		double m[16];
+		extract(face_matrix.Inverted(), m);
+		wxGetApp().CreateUndoPoint();
+		// if any objects are selected, move them
+		if(wxGetApp().m_marked_list->list().size() > 0)
+		{
+			for(std::list<HeeksObj *>::iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
+			{
+				HeeksObj* object = *It;
+				object->ModifyByMatrix(m);
+			}
+		}
+		else
+		{
+			// move the solid
+			HeeksObj* parent_body = face_for_tools->GetParentBody();
+			if(parent_body)parent_body->ModifyByMatrix(m);
+		}
+		wxGetApp().Changed();
+	}
+};
+
+static RotateToFace rotate_to_face;
+
 void CFace::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 	face_for_tools = this;
 	t_list->push_back(&make_sketch_tool);
-	if(GetSurfaceType() == GeomAbs_Plane)t_list->push_back(&make_coordsys);
-	if(GetSurfaceType() == GeomAbs_Plane)t_list->push_back(&sketch_on_face);
+	if(IsAPlane(NULL))
+	{
+		t_list->push_back(&make_coordsys);
+		t_list->push_back(&sketch_on_face);
+		t_list->push_back(&rotate_to_face);
+	}
 	t_list->push_back(&extrude_face);
 }
 
@@ -319,7 +366,7 @@ int CFace::GetSurfaceType()
 	return surface_type;
 }
 
-bool CFace::IsAPlane(double* normal3)
+bool CFace::IsAPlane(gp_Pln *returned_plane)
 {
 	static const int GRID = 5;
 	BRepAdaptor_Surface surface(m_topods_face, Standard_True);
@@ -327,14 +374,10 @@ bool CFace::IsAPlane(double* normal3)
 	switch(surface_type)
 	{
 	case GeomAbs_Plane:
-		if(normal3)
+		if(returned_plane)
 		{
 			BRepAdaptor_Surface surface(m_topods_face, Standard_True);
-			gp_Pln p = surface.Plane();
-			gp_Dir d = p.Axis().Direction();
-			normal3[0] = d.X();
-			normal3[1] = d.Y();
-			normal3[2] = d.Z();
+			*returned_plane = surface.Plane();
 		}
 		return true;
 	case GeomAbs_Cylinder:
@@ -380,15 +423,7 @@ bool CFace::IsAPlane(double* normal3)
 				}
 			}
 
-			if(normal3)
-			{
-				gp_Pnt p;
-				gp_Dir n = GetNormalAtUV(uv_box[0] + U * 0.5, uv_box[2] + V * 0.5, &p);
-				normal3[0] = n.X();
-				normal3[1] = n.Y();
-				normal3[2] = n.Z();
-			}
-
+			if(returned_plane)*returned_plane = plane;
 			return true; // all points tested fitted the plane
 		}
 	}
@@ -446,7 +481,15 @@ wxString CFace::GetSurfaceTypeStr()
 void CFace::GetPlaneParams(gp_Pln &p)
 {
 	BRepAdaptor_Surface surface(m_topods_face, Standard_True);
-	p = surface.Plane();
+	GeomAbs_SurfaceType surface_type = surface.GetType();
+	if(surface_type == GeomAbs_Plane)
+	{
+		p = surface.Plane();
+	}
+	else
+	{
+		IsAPlane(&p);
+	}
 }
 
 void CFace::GetCylinderParams(gp_Cylinder &c)

@@ -148,9 +148,8 @@ static CEdge* edge_for_tools = NULL;
 class FilletTool:public Tool
 {
 public:
-	const wxChar* GetTitle(){return _("Fillet");}
+	const wxChar* GetTitle(){return _("Blend edge");}
 	wxString BitmapPath(){return _T("edgeblend");}
-	const wxChar* GetToolTip(){return _T("Blend edge");}
 	void Run(){
 		double rad = 2.0;
 		HeeksConfig config;
@@ -171,7 +170,6 @@ class ChamferTool:public Tool
 public:
 	const wxChar* GetTitle(){return _("Chamfer");}
 	wxString BitmapPath(){return _T("edgeblend");}
-	const wxChar* GetToolTip(){return _T("Blend edge");}
 	void Run(){
 		double rad = 2.0;
 		HeeksConfig config;
@@ -191,9 +189,8 @@ static ChamferTool chamfer_tool;
 class EdgeToSketchTool:public Tool
 {
 public:
-	const wxChar* GetTitle(){return _("Make Sketch");}
+	const wxChar* GetTitle(){return _("Make a sketch from edge");}
 	wxString BitmapPath(){return _T("edge2sketch");}
-	const wxChar* GetToolTip(){return _T("Make a sketch from edge");}
 	void Run(){
 		CSketch* new_object = new CSketch();
 		ConvertEdgeToSketch2(edge_for_tools->Edge(), new_object, FaceToSketchTool::deviation);
