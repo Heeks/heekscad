@@ -19,8 +19,6 @@
 #include "SketchTools.h"
 #include "HSpline.h"
 
-#include <GeomAPI_PointsToBSpline.hxx>
-
 extern CHeeksCADInterface heekscad_interface;
 
 /**

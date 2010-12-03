@@ -1502,6 +1502,15 @@ bool CHeeksCADInterface::UnregisterFileOpenHandler( void (*fileopen_handler)(con
     return(wxGetApp().UnregisterFileOpenHandler( fileopen_handler ));
 }
 
+void CHeeksCADInterface::RegisterOnBeforeNewOrOpen(void(*callbackfunc)(int, int))
+{
+	wxGetApp().RegisterOnBeforeNewOrOpen(callbackfunc);
+}
+
+void CHeeksCADInterface::RegisterOnBeforeFrameDelete(void(*callbackfunc)())
+{
+	wxGetApp().RegisterOnBeforeFrameDelete(callbackfunc);
+}
 
 void CHeeksCADInterface::RegisterUnitsChangeHandler( void (*units_changed_handler)(const double value) )
 {

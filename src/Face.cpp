@@ -737,10 +737,6 @@ void CFace::MakeSureMarkingGLListExists()
 		{
 			m_marking_gl_list = glGenLists(1);
 			glNewList(m_marking_gl_list, GL_COMPILE_AND_EXECUTE);
-
-			// use the parent body's colour
-			Material(parent_body->m_color).glMaterial(1.0);
-
 			glEndList();
 		}
 	}
@@ -764,13 +760,20 @@ void CFace::UpdateMarkingGLList(bool marked)
 		if(marked)
 		{
 			Material(wxGetApp().face_selection_color).glMaterial(1.0);
+			glDisable(GL_BLEND);
+			glDepthMask(1);
 		}
 		else
 		{
 			// use the parent body's colour
 			CShape* parent_body = GetParentBody();
-			if(parent_body)Material(parent_body->m_color).glMaterial(1.0);
-			else Material().glMaterial(1.0);
+			if(parent_body)Material(parent_body->m_color).glMaterial(parent_body->GetOpacity());
+			else
+			{
+				Material().glMaterial(1.0);
+				glDisable(GL_BLEND);
+				glDepthMask(1);
+			}
 		}
 
 		glEndList();

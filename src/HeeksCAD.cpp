@@ -425,7 +425,9 @@ bool HeeksCADapp::OnInit()
 				if(!(param.Lower().EndsWith(_T(".so"))))
 #endif
 				{
+					wxGetApp().OnBeforeNewOrOpen(true, wxOK);
 					OpenFile(parser.GetParam(i));
+					wxGetApp().OnNewOrOpen(true, wxOK);
 				}
 			}
 		}
@@ -3373,6 +3375,24 @@ void HeeksCADapp::OnNewOrOpen(bool open, int res)
 	}
 }
 
+void HeeksCADapp::OnBeforeNewOrOpen(bool open, int res)
+{
+	for(std::list< void(*)(int, int) >::iterator It = wxGetApp().m_beforeneworopen_callbacks.begin(); It != wxGetApp().m_beforeneworopen_callbacks.end(); It++)
+	{
+		void(*callbackfunc)(int, int) = *It;
+		(*callbackfunc)(open ? 1:0, res);
+	}
+}
+
+void HeeksCADapp::OnBeforeFrameDelete(void)
+{
+	for(std::list< void(*)() >::iterator It = wxGetApp().m_beforeframedelete_callbacks.begin(); It != wxGetApp().m_beforeframedelete_callbacks.end(); It++)
+	{
+		void(*callbackfunc)() = *It;
+		(*callbackfunc)();
+	}
+}
+
 void HeeksCADapp::RegisterHideableWindow(wxWindow* w)
 {
 	m_hideable_windows.push_back(w);
@@ -4032,6 +4052,16 @@ void HeeksCADapp::GetPluginsFromCommandLineParams(std::list<wxString> &plugins)
 void HeeksCADapp::RegisterOnBuildTexture(void(*callbackfunc)())
 {
 	m_on_build_texture_callbacks.push_back(callbackfunc);
+}
+
+void HeeksCADapp::RegisterOnBeforeNewOrOpen(void(*callbackfunc)(int, int))
+{
+	m_beforeneworopen_callbacks.push_back(callbackfunc);
+}
+
+void HeeksCADapp::RegisterOnBeforeFrameDelete(void(*callbackfunc)())
+{
+	m_beforeframedelete_callbacks.push_back(callbackfunc);
 }
 
 #ifdef CONSTRAINT_TESTER
