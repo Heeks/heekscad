@@ -123,6 +123,7 @@
 #include <GeomAPI_IntCS.hxx>
 #include <GeomAPI_Interpolate.hxx>
 #include <GeomAPI_IntSS.hxx>
+#include <GeomAPI_PointsToBSpline.hxx>
 #include <GeomAPI_ProjectPointOnCurve.hxx>
 #include <GeomAPI_ProjectPointOnSurf.hxx>
 #include <GeomConvert_CompCurveToBSplineCurve.hxx>
@@ -242,7 +243,7 @@ extern "C" {
 #include <GL/glu.h>
 }
 
-#define USE_UNDO_ENGINE
+//#define USE_UNDO_ENGINE
 
 
 #define CHECK_FOR_INVALID_CONSTRAINT//JT This is my attempt to isolate

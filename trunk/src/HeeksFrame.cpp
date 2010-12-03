@@ -196,6 +196,8 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 				fn.Normalize();
 				wxString path = fn.GetPath();
 
+				::wxSetWorkingDirectory(path);
+
 				wxDynamicLibrary* shared_library = new wxDynamicLibrary(fn.GetFullPath(),wxDL_NOW|wxDL_GLOBAL );
 				if(shared_library->IsLoaded()){
 					bool success;
@@ -352,6 +354,8 @@ void CHeeksFrame::OnClose( wxCloseEvent& event )
 		event.Veto();
 		return;
 	}
+
+	wxGetApp().OnBeforeFrameDelete();
 
 	event.Skip();
 }
@@ -760,6 +764,7 @@ static void OnOpenButton( wxCommandEvent& event )
 		int res = wxGetApp().CheckForModifiedDoc();
 		if(res != wxCANCEL)
 		{
+			wxGetApp().OnBeforeNewOrOpen(true, res);
 			wxGetApp().Reset();
 			if(!wxGetApp().OpenFile(dialog.GetPath().c_str()))
 			{
@@ -846,6 +851,7 @@ static void OnNewButton( wxCommandEvent& event )
 	int res = wxGetApp().CheckForModifiedDoc();
 	if(res != wxCANCEL)
 	{
+		wxGetApp().OnBeforeNewOrOpen(false, res);
 		wxGetApp().Reset();
 		wxGetApp().OnNewOrOpen(false, res);
 		wxGetApp().ClearHistory();
@@ -1187,6 +1193,7 @@ void CHeeksFrame::OnRecentFile( wxCommandEvent& event )
 		int res = wxGetApp().CheckForModifiedDoc();
 		if(res != wxCANCEL)
 		{
+			wxGetApp().OnBeforeNewOrOpen(true, res);
 			wxGetApp().Reset();
 			wxGetApp().OpenFile(filepath.c_str());
 			wxGetApp().OnNewOrOpen(true, res);

@@ -173,6 +173,8 @@ public:
 	std::list< void(*)(bool) > m_on_save_callbacks;
 	std::list< bool(*)() > m_is_modified_callbacks;
 	std::list< void(*)() > m_on_build_texture_callbacks;
+	std::list< void(*)(int, int) > m_beforeneworopen_callbacks;
+	std::list< void(*)() > m_beforeframedelete_callbacks;
 	int m_transform_gl_list;
 	gp_Trsf m_drag_matrix;
 	bool m_extrude_removes_sketches;
@@ -322,6 +324,8 @@ public:
 	bool PickPosition(const wxChar* str, double* pos, void(*callback)(const double*) = NULL);
 	void glSphere(double radius, const double* pos = NULL);
 	void OnNewOrOpen(bool open, int res);
+	void OnBeforeNewOrOpen(bool open, int res);
+	void OnBeforeFrameDelete(void);
 	void RegisterHideableWindow(wxWindow* w);
 	void RemoveHideableWindow(wxWindow* w);
 	void RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem));
@@ -373,6 +377,8 @@ public:
 	std::auto_ptr<VectorFonts>	& GetAvailableFonts(const bool force_read = false);
 	void GetPluginsFromCommandLineParams(std::list<wxString> &plugins);
 	void RegisterOnBuildTexture(void(*callbackfunc)());
+	void RegisterOnBeforeNewOrOpen(void(*callbackfunc)(int, int));
+	void RegisterOnBeforeFrameDelete(void(*callbackfunc)());
 
 	typedef int ObjectType_t;
 	typedef int ObjectId_t;
