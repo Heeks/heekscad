@@ -962,6 +962,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Hole.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Hole.h"
+			>
+		</File>
+		<File
 			RelativePath=".\HPoint.cpp"
 			>
 		</File>

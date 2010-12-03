@@ -144,8 +144,6 @@ void CShape::CallMesh()
 
 void CShape::glCommands(bool select, bool marked, bool no_color)
 {
-	bool blend_enabled = Material(m_color).glMaterial(m_opacity);
-
 	bool mesh_called = false;
 	bool draw_faces = (wxGetApp().m_solid_view_mode == SolidViewFacesAndEdges || wxGetApp().m_solid_view_mode == SolidViewFacesOnly);
 	bool draw_edges = (wxGetApp().m_solid_view_mode == SolidViewFacesAndEdges || wxGetApp().m_solid_view_mode == SolidViewEdgesOnly);
@@ -219,7 +217,6 @@ void CShape::glCommands(bool select, bool marked, bool no_color)
 		glShadeModel(GL_FLAT);
 	}
 
-	if(blend_enabled)
 	{
 		// turn off transparency
 		glDisable(GL_BLEND);
