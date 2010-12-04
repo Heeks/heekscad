@@ -73,7 +73,8 @@ bool CCorrelationTool::SimilarScale(
 CCorrelationTool::CorrelationData_t CCorrelationTool::CorrelationData(      HeeksObj *sample_object,
                                                 HeeksObj *reference_object,
                                                 const int number_of_sample_points,
-                                                const double max_scale_threshold ) const
+                                                const double max_scale_threshold,
+                                                const bool correlate_by_color ) const
 {
 	CorrelationData_t results;
 	double required_scaling = 1.0;	// How much do we need to scale the sample object to make it the same
@@ -92,6 +93,10 @@ CCorrelationTool::CorrelationData_t CCorrelationTool::CorrelationData(      Heek
 		return(results);	// return an empty data set.
 	} // End if - then
 
+	if ((correlate_by_color) && (! ColorsMatch(reference_object, sample_object)))
+    {
+		return(results);	// return an empty data set.
+	} // End if - then
 
 	// They're close enough in scale to warrant further investigation.  Now roll up your sleeves and
 	// describe this thar critter.
@@ -362,6 +367,22 @@ std::list<HeeksObj *> CCorrelationTool::ListAllChildren( HeeksObj *parent ) cons
 }
 
 
+
+bool CCorrelationTool::ColorsMatch( HeeksObj *obj1, HeeksObj *obj2 ) const
+{
+    if (obj1 == NULL) return(true);
+    if (obj2 == NULL) return(true);
+
+    const HeeksColor *pObj1Color = obj1->GetColor();
+    const HeeksColor *pObj2Color = obj2->GetColor();
+
+    if (pObj1Color == NULL) return(true);
+    if (pObj2Color == NULL) return(true);
+
+    return(*pObj1Color == *pObj2Color);
+}
+
+
 /**
 	- obtain the bounding box for both the reference and the sample objects.
 	- scale the reference object up/down (with a maximum of m_max_scale_threshold) until
@@ -406,14 +427,17 @@ std::list<HeeksObj *> CCorrelationTool::SimilarSymbols( HeeksObj *pReference ) c
 		    HeeksObj *ob = *itObject;
 			if (ob->GetType() == PointType)
 			{
-				result_set.push_back( ob );
+			    if (((m_correlate_by_color) && (ColorsMatch(pReference, ob))) || (m_correlate_by_color == false))
+			    {
+                    result_set.push_back( ob );
+			    }
 			} // End if - then
 		} // End for
 
 		return(result_set);
 	} // End if - then
 
-	CorrelationData_t reference_correlation_data = CorrelationData( pReference, pReference, m_number_of_sample_points, m_max_scale_threshold );
+	CorrelationData_t reference_correlation_data = CorrelationData( pReference, pReference, m_number_of_sample_points, m_max_scale_threshold, m_correlate_by_color );
 
 	// Scan through all objects looking for something that's like this one.
 	for (std::list<HeeksObj *>::iterator itObject = all_objects.begin(); itObject != all_objects.end(); itObject++)
@@ -431,14 +455,18 @@ std::list<HeeksObj *> CCorrelationTool::SimilarSymbols( HeeksObj *pReference ) c
 		CorrelationData_t sample_correlation_data = CorrelationData( ob,
 																	pReference,
 																	m_number_of_sample_points,
-																	m_max_scale_threshold );
+																	m_max_scale_threshold,
+																	m_correlate_by_color );
 
 		// Now compare the correlation data for both the reference and sample objects to see if we
 		// think they're similar.
 
 		if (Score( sample_correlation_data, reference_correlation_data ) >= m_min_correlation_factor)
 		{
-			result_set.push_back( ob );
+		    if (((m_correlate_by_color) && (ColorsMatch(pReference, ob))) || (m_correlate_by_color == false))
+		    {
+                result_set.push_back( ob );
+		    }
 		} // End if - then
 	} // End for
 

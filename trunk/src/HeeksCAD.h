@@ -195,6 +195,7 @@ public:
 	double m_min_correlation_factor;
 	double m_max_scale_threshold;
 	int m_number_of_sample_points;
+	bool m_correlate_by_color;
 	bool m_property_grid_validation;
 
 	std::auto_ptr<VectorFonts>	m_pVectorFonts;	// QCAD format fonts that have been loaded.
