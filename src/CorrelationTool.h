@@ -60,6 +60,7 @@ public:
 	double m_min_correlation_factor;// How similar do other objects need to be before we include them in our 'selection set'?
 	double m_max_scale_threshold;	// How much scaling will we allow before obtaining a correlation factor?
 	int m_number_of_sample_points;	// How many points will we compare when determining correlation factor?
+	bool m_correlate_by_color;
 
 	/**
                 There are all types of 3d point classes around but most of them seem to be in the HeeksCAD code
@@ -113,9 +114,11 @@ public:
 	//	Constructors.
         CCorrelationTool( const double min_correlation_factor,
 			  const double max_scale_threshold,
-			  const int number_of_sample_points ) : m_min_correlation_factor(min_correlation_factor),
+			  const int number_of_sample_points,
+			  const bool correlate_by_color ) : m_min_correlation_factor(min_correlation_factor),
 								m_max_scale_threshold( max_scale_threshold ),
-								m_number_of_sample_points( number_of_sample_points )
+								m_number_of_sample_points( number_of_sample_points ),
+								m_correlate_by_color( correlate_by_color )
 	{
 	} // End constructor
 
@@ -123,12 +126,14 @@ public:
 	CorrelationData_t CorrelationData( 	HeeksObj *sample_object,
                                         HeeksObj *reference_object,
 						const int number_of_sample_points,
-						const double max_scale_threshold ) const;
+						const double max_scale_threshold,
+						const bool correlate_by_color ) const;
 
 	std::set<Point3d> ReferencePoints( const Symbols_t & sample_symbols ) const;
 
 	bool SimilarScale( const CBox &reference_box, const CBox &sample_box, const double max_scale_threshold, double *pRequiredScaling ) const;
 	double Score( const CorrelationData_t & sample, const CorrelationData_t & reference ) const;
+	bool ColorsMatch( HeeksObj *obj1, HeeksObj *obj2 ) const;
 
 	std::list<HeeksObj *> ListAllChildren( HeeksObj *parent ) const;
 

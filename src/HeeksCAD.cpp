@@ -353,6 +353,7 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("MinCorrelationFactor"), &m_min_correlation_factor);
 	config.Read(_T("MaxScaleThreshold"), &m_max_scale_threshold);
 	config.Read(_T("NumberOfSamplePoints"), &m_number_of_sample_points);
+	config.Read(_T("CorrelateByColor"), &m_correlate_by_color);
 
 	config.Read(_T("FontPaths"), &m_font_paths, _T("/usr/share/qcad/fonts"));
 	config.Read(_T("STLFacetTolerance"), &m_stl_facet_tolerance, 0.1);
@@ -491,6 +492,8 @@ void HeeksCADapp::WriteConfig()
 	config.Write(_T("MinCorrelationFactor"), m_min_correlation_factor);
 	config.Write(_T("MaxScaleThreshold"), m_max_scale_threshold);
 	config.Write(_T("NumberOfSamplePoints"), m_number_of_sample_points);
+	config.Write(_T("CorrelateByColor"), m_correlate_by_color);
+
 	config.Write(_T("FontPaths"), m_font_paths);
 	config.Write(_T("STLFacetTolerance"), m_stl_facet_tolerance);
 	config.Write(_T("AutoSaveInterval"), m_auto_save_interval);
@@ -832,7 +835,7 @@ HeeksObj* HeeksCADapp::ReadXMLElement(TiXmlElement* pElem)
 
 		HeeksObj *existing = NULL;
 
-		existing = wxGetApp().GetIDObject(object->GetType(), object->m_id);
+		existing = wxGetApp().GetIDObject(object->GetIDGroupType(), object->m_id);
 
 		if ((existing != NULL) && (existing != object))
 		{
@@ -894,7 +897,7 @@ HeeksObj *HeeksCADapp::MergeCommonObjects( ObjectReferences_t & unique_set, Heek
 	if(object->UsesID())
 	{
 		HeeksObj *unique_reference = object;
-		ObjectReference_t object_reference(object->GetType(),object->m_id);
+		ObjectReference_t object_reference(object->GetIDGroupType(),object->m_id);
 
 		if (unique_set.find(object_reference) == unique_set.end())
 		{
@@ -2360,6 +2363,12 @@ void on_set_number_of_sample_points(int value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+void on_set_correlate_by_color(bool value, HeeksObj* object)
+{
+	wxGetApp().m_correlate_by_color = value;
+	wxGetApp().Repaint();
+}
+
 
 void on_grid_edit(double grid_value, HeeksObj* object)
 {
@@ -2871,6 +2880,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	correlation_properties->m_list.push_back(new PropertyDouble(_("Minimum correlation factor (0.0 (nothing like it) -> 1.0 (perfect match))"), m_min_correlation_factor, NULL, on_set_min_correlation_factor));
 	correlation_properties->m_list.push_back(new PropertyDouble(_("Maximum scale threshold (1.0 - must be same size, 1.5 (can be half as big again or 2/3 size)"), m_max_scale_threshold, NULL, on_set_max_scale_threshold));
 	correlation_properties->m_list.push_back(new PropertyInt(_("Number of sample points"), m_number_of_sample_points, NULL, on_set_number_of_sample_points));
+	correlation_properties->m_list.push_back(new PropertyCheck( _("Correlate by color"), m_correlate_by_color, NULL, on_set_correlate_by_color));
 	list->push_back(correlation_properties);
 
 	PropertyList* drawing = new PropertyList(_("drawing"));
