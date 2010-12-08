@@ -1,5 +1,5 @@
 #summary Documentation Index
 
-[http://heekscad.googlecode.com/svn/wiki/To%20draw%20a%20rectangle.pdf To draw a rectangle]
+[To%20draw%20a%20rectangle.pdf To draw a rectangle]
 
-[http://heekscad.googlecode.com/svn/wiki/To%20move%20all%20geometry.pdf To move all geometry]
+[To%20move%20all%20geometry.pdf To move all geometry]
