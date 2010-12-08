@@ -1,7 +1,5 @@
 #summary Documentation Index
 
-  * [http://heekscad.googlecode.com/svn/wiki/To%20draw%20a%20rectangle.pdf To draw a rectangle]
+[http://heekscad.googlecode.com/svn/wiki/To%20draw%20a%20rectangle.pdf To draw a rectangle]
 
-  * [http://heekscad.googlecode.com/svn/wiki/To%20move%20all%20geometry.pdf To move all geometry]
-
-  * [http://www.webbase-design.de/side/OpenMeetings%20Hosting.pdf Installation and Services around OpenMeetings offerings frmo Webbase-Design, contact us if you have any questions]
+[http://heekscad.googlecode.com/svn/wiki/To%20move%20all%20geometry.pdf To move all geometry]
