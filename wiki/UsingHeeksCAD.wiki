@@ -1,4 +1,5 @@
 #summary Using HeeksCAD
+#sidebar UsingHeeksCADIndex
 
 You start in Select mode. 
 http://heekscad.googlecode.com/svn/trunk/bitmaps/select.png
