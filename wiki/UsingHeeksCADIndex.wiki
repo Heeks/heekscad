@@ -1,5 +1,5 @@
 #summary Documentation Index
 
-<a href="To%20draw%20a%20rectangle.pdf" rel="nofollow">To draw a rectangle</a>
+<a href="http://To%20draw%20a%20rectangle.pdf" rel="nofollow">To draw a rectangle</a>
 
 <a href="To%20move%20all%20geometry.pdf" rel="nofollow">To move all geometry</a>
