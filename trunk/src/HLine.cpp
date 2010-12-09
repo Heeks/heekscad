@@ -15,6 +15,7 @@
 #include "Sketch.h"
 #include "SolveSketch.h"
 #include "Cylinder.h"
+#include "Cone.h"
 
 HLine::HLine(const HLine &line):EndedObject(&line.color){
 	operator=(line);
@@ -90,6 +91,20 @@ public:
 };
 static MakeCylinderOnLine make_cylinder_on_line;
 
+class MakeConeOnLine:public Tool{
+public:
+	void Run(){
+		gp_Vec v(line_for_tool->A->m_p, line_for_tool->B->m_p);
+		CCone* new_object = new CCone(gp_Ax2(line_for_tool->A->m_p, v), 2.0, 1.0, v.Magnitude(), _("Cone"), HeeksColor(240, 240, 191), 1.0f);
+		wxGetApp().CreateUndoPoint();
+		wxGetApp().Add(new_object,NULL);
+		wxGetApp().Changed();
+	}
+	const wxChar* GetTitle(){return _("Make Cone On Line");}
+	wxString BitmapPath(){return _T("coneonlin");}
+};
+static MakeConeOnLine make_cone_on_line;
+
 const wxBitmap &HLine::GetIcon()
 {
 	static wxBitmap* icon = NULL;
@@ -110,6 +125,7 @@ void HLine::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 	t_list->push_back(&vertical_line_toggle);
 	t_list->push_back(&line_length_toggle);
 	t_list->push_back(&make_cylinder_on_line);
+	t_list->push_back(&make_cone_on_line);
 }
 
 void HLine::glCommands(bool select, bool marked, bool no_color){
