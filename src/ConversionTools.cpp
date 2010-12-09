@@ -232,7 +232,7 @@ bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wire &wire
 }
 
 
-bool ConvertSketchToEdges(HeeksObj *object, std::vector<TopoDS_Edge> &edges)
+bool ConvertSketchToEdges(HeeksObj *object, std::list< std::vector<TopoDS_Edge> > &edges)
 {
     std::list<HeeksObj*> line_arc_list;
 
@@ -246,9 +246,7 @@ bool ConvertSketchToEdges(HeeksObj *object, std::vector<TopoDS_Edge> &edges)
 			for(std::list<HeeksObj*>::iterator It = new_separate_sketches.begin(); It != new_separate_sketches.end(); It++)
 			{
 				HeeksObj* sketch = *It;
-				std::vector<TopoDS_Edge> these_edges;
-				if(!ConvertSketchToEdges(sketch, these_edges))return false;
-				std::copy(these_edges.begin(), these_edges.end(), std::inserter( edges, edges.end() ));
+				if(!ConvertSketchToEdges(sketch, edges))return false;
 			}
 			return true;
 		}
@@ -258,11 +256,19 @@ bool ConvertSketchToEdges(HeeksObj *object, std::vector<TopoDS_Edge> &edges)
 			{
 				line_arc_list.push_back(child);
 			}
+			std::vector<TopoDS_Edge> empty_list;
+			edges.push_back(empty_list);
 		}
 	}
 	else
 	{
 		line_arc_list.push_back(object);
+	}
+
+	if(edges.size() == 0)
+	{
+		std::vector<TopoDS_Edge> empty_list;
+		edges.push_back(empty_list);
 	}
 
 	const double max_tolerance = 10.0;
@@ -295,7 +301,7 @@ bool ConvertSketchToEdges(HeeksObj *object, std::vector<TopoDS_Edge> &edges)
 								}
 								else
 								{
-									edges.push_back(edge.Edge());
+									edges.back().push_back(edge.Edge());
 									done = true;
 								}
 							} // End while
@@ -332,7 +338,7 @@ bool ConvertSketchToEdges(HeeksObj *object, std::vector<TopoDS_Edge> &edges)
 							}
 							else
 							{
-								edges.push_back(edge.Edge());
+								edges.back().push_back(edge.Edge());
 								done = true;
 							}
 						} // End while
@@ -346,19 +352,19 @@ bool ConvertSketchToEdges(HeeksObj *object, std::vector<TopoDS_Edge> &edges)
                 case CircleType:
                     {
                         HCircle* circle = (HCircle*)object;
-                        edges.push_back(BRepBuilderAPI_MakeEdge(circle->GetCircle()));
+                        edges.back().push_back(BRepBuilderAPI_MakeEdge(circle->GetCircle()));
                     }
                     break;
                 case EllipseType:
                     {
                         HEllipse* ellipse = (HEllipse*)object;
-                        edges.push_back(BRepBuilderAPI_MakeEdge(ellipse->GetEllipse()));
+                        edges.back().push_back(BRepBuilderAPI_MakeEdge(ellipse->GetEllipse()));
                     }
                     break;
                 case SplineType:
                     {
                         HSpline* spline = (HSpline*)object;
-                        edges.push_back(BRepBuilderAPI_MakeEdge(spline->m_spline));
+                        edges.back().push_back(BRepBuilderAPI_MakeEdge(spline->m_spline));
                     }
                     break;
 
@@ -400,7 +406,9 @@ bool ConvertEdgesToFaceOrWire(const std::vector<TopoDS_Edge> &edges, std::list<T
 
 		if(face_not_wire)
 		{
-			face_or_wire.push_back(BRepBuilderAPI_MakeFace(wire_maker.Wire()));
+			BRepBuilderAPI_MakeFace make_face(wire_maker.Wire());
+			if(make_face.IsDone() == Standard_False)face_or_wire.push_back(wire_maker.Wire());
+			else face_or_wire.push_back(make_face.Face());
 		}
 		else
 		{
@@ -423,18 +431,24 @@ bool ConvertEdgesToFaceOrWire(const std::vector<TopoDS_Edge> &edges, std::list<T
 
 bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_or_wire, bool face_not_wire)
 {
-    std::vector<TopoDS_Edge> edges;
+    std::list< std::vector<TopoDS_Edge> > edges;
 
     if (! ConvertSketchToEdges(object, edges))
     {
         return(false);
     }
 
-	if(edges.size() == 0)return false;
+	for(std::list< std::vector<TopoDS_Edge> >::iterator It = edges.begin(); It != edges.end(); It++)
+	{
+		std::vector<TopoDS_Edge> &list = *It;
+		if(list.size() > 0)
+		{
+			SortEdges(list);
+			if(!ConvertEdgesToFaceOrWire(list, face_or_wire, face_not_wire))return false;
+		}
+	}
 
-	SortEdges(edges);
-
-	return ConvertEdgesToFaceOrWire(edges, face_or_wire, face_not_wire);
+	return true;
 }
 
 bool ConvertFaceToSketch2(const TopoDS_Face& face, HeeksObj* sketch, double deviation)
@@ -581,7 +595,7 @@ bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double devi
 }
 
 void ConvertSketchesToFace::Run(){
-    std::vector<TopoDS_Edge> individual_edges;
+	std::list< std::vector<TopoDS_Edge> > individual_edges;
 	std::list<HeeksObj*>::const_iterator It;
 	for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
 		HeeksObj* object = *It;
@@ -615,19 +629,23 @@ void ConvertSketchesToFace::Run(){
 		}
 	}
 
-	if(individual_edges.size() > 0)
+	for(std::list< std::vector<TopoDS_Edge> >::iterator It = individual_edges.begin(); It != individual_edges.end(); It++)
 	{
-		SortEdges(individual_edges);
-		std::list<TopoDS_Shape> faces;
-		if(ConvertEdgesToFaceOrWire(individual_edges, faces, true))
+		std::vector<TopoDS_Edge> &edges = *It;
+		if(edges.size() > 0)
 		{
-			wxGetApp().CreateUndoPoint();
-			for(std::list<TopoDS_Shape>::iterator It2 = faces.begin(); It2 != faces.end(); It2++)
+			SortEdges(edges);
+			std::list<TopoDS_Shape> faces;
+			if(ConvertEdgesToFaceOrWire(edges, faces, true))
 			{
-				TopoDS_Shape& face = *It2;
-				wxGetApp().Add(new CFace(TopoDS::Face(face)), NULL);
+				wxGetApp().CreateUndoPoint();
+				for(std::list<TopoDS_Shape>::iterator It2 = faces.begin(); It2 != faces.end(); It2++)
+				{
+					TopoDS_Shape& face = *It2;
+					wxGetApp().Add(new CFace(TopoDS::Face(face)), NULL);
+				}
+				wxGetApp().Changed();
 			}
-			wxGetApp().Changed();
 		}
 	}
 }
