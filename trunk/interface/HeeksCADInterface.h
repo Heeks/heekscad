@@ -166,7 +166,7 @@ public:
 	virtual bool ConvertSketchToFaceOrWire(HeeksObj* object, std::list<TopoDS_Shape> &face_or_wire, bool face_not_wire);
 	virtual bool ConvertWireToSketch(const TopoDS_Wire& wire, HeeksObj* sketch, double deviation);
 	virtual HeeksObj* GetSketchFromName(const wxChar* name);
-	virtual bool ConvertSketchToEdges(HeeksObj *object, std::vector<TopoDS_Edge> &edges);
+	virtual bool ConvertSketchToEdges(HeeksObj *object, std::list< std::vector<TopoDS_Edge> > &edges);
 	virtual HeeksObj* ConvertEdgesToSketch(const std::list<HeeksObj*> &edges, double deviation);
 	virtual bool FilletSketchAtPoint(HeeksObj* sketch, const double* d3, double rad);
 	 // get coordinate system/datum  parameters

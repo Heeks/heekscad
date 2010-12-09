@@ -804,7 +804,7 @@ bool CHeeksCADInterface::ConvertWireToSketch(const TopoDS_Wire& wire, HeeksObj* 
 	return(::ConvertWireToSketch( wire, sketch, deviation ));
 }
 
-bool CHeeksCADInterface::ConvertSketchToEdges(HeeksObj *object, std::vector<TopoDS_Edge> &edges)
+bool CHeeksCADInterface::ConvertSketchToEdges(HeeksObj *object, std::list< std::vector<TopoDS_Edge> > &edges)
 {
     return(::ConvertSketchToEdges(object, edges));
 }
