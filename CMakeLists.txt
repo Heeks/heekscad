@@ -27,7 +27,7 @@ ENDIF( CMAKE_SIZEOF_VOID_P EQUAL 4 )
 
 #-------------------- package generation -------------------------
 set(CPACK_GENERATOR "DEB")
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Dan Heeks")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "HeeksCAD Developers <heekscad-devel@googlegroups.com>")
 set(CPACK_PACKAGE_NAME "heekscad")
 set(CPACK_PACKAGE_VERSION_MAJOR 0)
 set(CPACK_PACKAGE_VERSION_MINOR 15)
@@ -42,7 +42,10 @@ set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "HeeksCAD, Free CAD based on Open CASCADE
 set(CPACK_DEBIAN_PACKAGE_SECTION "Science")
 set(CPACK_DEBIAN_PACKAGE_VERSION "")
 
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libwxbase2.8-0 (>= 2.8.5), libwxgtk2.8-0 (>= 2.8.5), libgtkglext1 (>= 1.2), python (>= 2.5), libboost-python1.42.0 (>= 1.42)" ) # libopencascade-modeling-6.3.0 (>= 6.3)
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libwxbase2.8-0 (>= 2.8.5), libwxgtk2.8-0 (>= 2.8.5), libgtkglext1 (>= 1.2), python (>= 2.5), libboost-python1.40.0 | libboost-python1.42.0 
+Recommends: libopencascade-ocaf-6.3.0") 
+# ^^^^^^ A newline is REQUIRED immediately before the keyword Recommends. This takes advantage of a loophole in CPack - it doesn't have a way to set recommended packages. I set OCC as a recommendation because some of us devs (me, anyway) don't have occ packages installed
+
 include(CPack)
 
 #---------- put subdirs down here so that the package version vars above are visible to them -----------
