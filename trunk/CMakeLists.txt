@@ -39,11 +39,11 @@ set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "HeeksCAD, Free CAD based on Open CASCADE
  HeeksCAD is a free 3D CAD program based on Open CASCADE.
  Available plugins include HeeksCNC (for g-code generation)
  and HeeksPython (for python scripting)")
-set(CPACK_DEBIAN_PACKAGE_SECTION "Science")
+set(CPACK_DEBIAN_PACKAGE_SECTION "science")
 set(CPACK_DEBIAN_PACKAGE_VERSION "")
 
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libwxbase2.8-0 (>= 2.8.5), libwxgtk2.8-0 (>= 2.8.5), libgtkglext1 (>= 1.2), python (>= 2.5), libboost-python1.40.0 | libboost-python1.42.0 
-Recommends: libopencascade-ocaf-6.3.0") 
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libwxbase2.8-0 (>= 2.8.5), libwxgtk2.8-0 (>= 2.8.5), libgtkglext1 (>= 1.2), python (>= 2.5), libboost-python1.40.0 | libboost-python1.42.0
+Recommends: libopencascade-ocaf-6.3.0")
 # ^^^^^^ A newline is REQUIRED immediately before the keyword Recommends. This takes advantage of a loophole in CPack - it doesn't have a way to set recommended packages. I set OCC as a recommendation because some of us devs (me, anyway) don't have occ packages installed
 
 include(CPack)
