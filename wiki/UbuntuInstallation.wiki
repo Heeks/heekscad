@@ -31,8 +31,21 @@ sudo apt-get install subversion libwxbase2.8-dev g++ build-essential libopencasc
 
 Get a cup of coffee while all this downloads and installs.
 
-=Install HeeksCAD=
+=Install HeeksCAD (using cmake)=
+The following bit of script will download the source files, compile, and install HeeksCAD.
+It will create a HeeksCAD directory in your home directory.  If you don't want it there, modify the script appropriately.
 
+{{{
+#Get the source files from the SVN repository, build and install
+cd ~
+svn checkout http://heekscad.googlecode.com/svn/trunk/ HeeksCAD
+cd ~/HeeksCAD
+cmake .
+make package
+sudo dpkg -i heekscad_beta*
+}}} 
+
+=Install HeeksCAD (the old way)=
 The following bit of script will download the source files, compile, and install HeeksCAD.
 It will create a HeeksCAD directory in your home directory.  If you don't want it there, modify the script appropriately.
 
@@ -41,9 +54,9 @@ It will create a HeeksCAD directory in your home directory.  If you don't want i
 cd ~
 svn checkout http://heekscad.googlecode.com/svn/trunk/ HeeksCAD
 cd ~/HeeksCAD/src
-make clean
+make -f Makefile.old clean
 make
-sudo make install
+sudo make -f Makefile.old install
 }}} 
 
 At this point, HeeksCAD is installed and will run if launched from a command line.  The application launcher in in the menu, however, will give an error because it's looking in the wrong place for the binary.  The following commands will create symbolic links to resolve this.
@@ -58,8 +71,19 @@ Make HeeksCAD find the program icons
 sudo ln -s /usr/local/share/heekscad/ /usr/share/heekscad
 }}}
 
-=Install HeeksCNC=
+=Install HeeksCNC (with cmake)=
 
+{{{
+#Get the HeeksCNC files from the SVN repository, build, and install
+cd ~/HeeksCAD/
+svn checkout http://heekscnc.googlecode.com/svn/trunk/ HeeksCNC
+cd ~/HeeksCAD/HeeksCNC/
+cmake .
+make package
+sudo dpkg -i heekscnc_beta*.deb  #only one .deb to install, but the filename may change
+}}}
+
+=Install HeeksCNC (the old way)=
 
 {{{
 #Get the HeeksCNC files from the SVN repository, build, and install
@@ -69,23 +93,15 @@ cd ~/HeeksCAD/HeeksCNC/src
 make clean
 make
 sudo make install
-}}}
-
-==Install the helper libraries==
-HeeksCNC uses a number of libraries to perform various operations.  Install all of them or only the ones you plan to use.
-
-===Install Kurve===
-
-kurve.so is required for profile operations.  The code was downloaded with HeeksCNC but It requires a separate compile step.
-
-{{{
-#Get the Kurve files from the SVN repository, build, and install
+#optional, for profile operations: build and install Kurve
 cd ~/HeeksCAD/HeeksCNC/kurve
 make clean
 make
 sudo make install
 }}}
 
+==Install the helper libraries==
+HeeksCNC uses a number of libraries to perform various operations.  Install all of them or only the ones you plan to use.
 
 ===Install libarea===
 
@@ -139,7 +155,10 @@ Under the 'File' menu click 'plugins'
 
 When the dialog box appears, click 'new' 
 Name it HeeksCNC and click "..." 
-find libheekscnc.so.0.5.1 under /usr/local/lib/heekscnc/
+* If you built HeeksCNC with cmake and/or installed from a .deb:
+** find libheekscnc.so under /usr/lib
+* If you built HeeksCNC with the old Makefile:
+** find libheekscnc.so.0.5.1 under /usr/local/lib/heekscnc/
 Click 'ok' out and restart HeeksCAD.  You should now have a 'Machining' menu and a new toolbar with the machining icons.
 
 
