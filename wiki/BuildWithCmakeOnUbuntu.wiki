@@ -1,0 +1,206 @@
+#summary Using CMake to build and install HeeksCAD and related projects for Ubuntu 10.04
+#labels Featured
+
+This may also work on other versions of ubuntu and other distros that use .deb packages
+
+HeeksCAD is still under heavy development so any packages you find are likely to be out of date.  To get the most current version, you need to compile the current source version from SVN.
+
+This installation procedure was tested on Ubuntu 10.04 (Lucid Lynx) 
+==A script for easy install==
+Here's a script that was submitted in comments on a different wiki page.  It has been modified for cmake. *It does everything except activate the HeeksCNC plugin.* For that, look at the bottom of this page.
+
+{{{
+#!/bin/sh
+# heekscad-install.sh -- Downloads, builds and installs HeeksCAD from svn
+
+BUILDPATH=~             # Location of HeeksCAD build dir
+BUILDPREREQS="subversion libwxbase2.8-dev \
+  build-essential libopencascade-dev libwxgtk2.8-dev \
+  libgtkglext1-dev python-dev cmake libboost-python-dev"
+
+# Install build prerequisites
+sudo apt-get install -y $BUILDPREREQS
+
+cd $BUILDPATH
+if [ -d HeeksCAD ]; then
+  cd HeeksCAD
+  svn update
+else
+  svn checkout http://heekscad.googlecode.com/svn/trunk/ HeeksCAD
+fi
+cd ${BUILDPATH}/HeeksCAD/
+cmake .
+make package
+sudo dpkg -i heekscad_*.deb
+
+# Install HeeksCNC
+#Get the HeeksCNC files from the SVN repository, build, and install
+cd ${BUILDPATH}/HeeksCAD/
+if [ -d HeeksCNC ]; then
+  cd HeeksCNC
+  svn update
+else
+  svn checkout http://heekscnc.googlecode.com/svn/trunk/ HeeksCNC
+fi
+cd ${BUILDPATH}/HeeksCAD/HeeksCNC/
+cmake .
+make package
+sudo dpkg -i heekscnc_*.deb
+
+# Install libarea
+# area.so is required for pocket operations.
+#Get the libarea files from the SVN repository, build, and install
+cd ${BUILDPATH}/HeeksCAD/HeeksCNC/
+if [ -d libarea ]; then
+  cd libarea
+  svn update
+else
+  svn checkout http://libarea.googlecode.com/svn/trunk/ libarea
+fi
+cd ${BUILDPATH}/HeeksCAD/HeeksCNC/libarea/
+make clean
+make
+sudo make install
+sudo ln -s .libs/area.so ${BUILDPATH}/HeeksCAD/HeeksCNC/area.so
+
+# Install libactp
+# actp.so is required for adaptive roughing operations.
+# Get the libactp (adaptive roughing) files from the SVN repository, build, and install
+cd ${BUILDPATH}/HeeksCAD/HeeksCNC/
+if [ -d libactp ]; then
+  cd libactp
+  svn update
+else
+  svn checkout http://libactp.googlecode.com/svn/trunk/ libactp
+fi
+cd ${BUILDPATH}/HeeksCAD/HeeksCNC/libactp/PythonLib
+make clean
+make
+sudo make install
+sudo ln -s .libs/actp.so ${BUILDPATH}/HeeksCAD/HeeksCNC/actp.so
+
+# Install opencamlib
+# opencamlib is the replacement for pycam. It's required for zigzag operations.
+# Get the opencamlib files from the SVN repository, build, and install
+cd ${BUILDPATH}/HeeksCAD/HeeksCNC/
+if [ -d opencamlib ]; then
+  cd opencamlib
+  svn update
+else
+  svn checkout http://opencamlib.googlecode.com/svn/trunk/ opencamlib
+fi
+cd ${BUILDPATH}/HeeksCAD/HeeksCNC/opencamlib/src
+cmake .
+make
+make doc        # Creates PDF file needed by make install
+sudo make install
+
+}}}
+
+If you used the script above, skip to the bottom of the page where it says Activate the HeeksCNC plugin
+
+
+=Custom installation=
+==Install the dependencies==
+
+The following command will install the required packages.  apt-get will prompt you to accept a large number of additional dependencies.  Accept them as well.
+
+{{{
+sudo apt-get install subversion libwxbase2.8-dev g++ build-essential libopencascade-dev libwxgtk2.8-dev libgtkglext1-dev python-dev cmake libboost-python-dev
+}}}
+
+Get a cup of coffee while all this downloads and installs.
+
+==Install HeeksCAD==
+
+The following bit of script will download the source files, compile, and install HeeksCAD.
+It will create a HeeksCAD directory in your home directory.  If you don't want it there, modify the script appropriately.
+
+{{{
+#Get the source files from the SVN repository, build and install
+cd ~
+svn checkout http://heekscad.googlecode.com/svn/trunk/ HeeksCAD
+cd ~/HeeksCAD
+cmake .
+make package
+sudo dpkg -i heekscad_beta*
+}}} 
+
+==Install HeeksCNC==
+
+{{{
+#Get the HeeksCNC files from the SVN repository, build, and install
+cd ~/HeeksCAD/
+svn checkout http://heekscnc.googlecode.com/svn/trunk/ HeeksCNC
+cd ~/HeeksCAD/HeeksCNC/
+cmake .
+make package
+sudo dpkg -i heekscnc_beta*.deb  #only one .deb to install, but the filename may change
+}}}
+
+
+==Install the helper libraries==
+HeeksCNC uses a number of libraries to perform various operations.  Install all of them or only the ones you plan to use.
+
+===Install libarea===
+
+area.so is required for pocket operations.
+
+{{{
+#Get the libarea files from the SVN repository, build, and install
+cd ~/HeeksCAD/HeeksCNC/
+svn checkout http://libarea.googlecode.com/svn/trunk/ libarea
+cd ~/HeeksCAD/HeeksCNC/libarea/
+make clean
+make
+sudo make install
+}}}
+
+
+===Install libactp===
+
+actp.so is required for adaptive roughing operations.
+
+{{{
+#Get the libactp (adaptive roughing) files from the SVN repository, build, and install
+cd ~/HeeksCAD/HeeksCNC/
+svn checkout http://libactp.googlecode.com/svn/trunk/ libactp
+cd ~/HeeksCAD/HeeksCNC/libactp/PythonLib
+make clean
+make
+sudo make install
+}}}
+
+===Install opencamlib===
+
+opencamlib is the replacement for pycam.  It's required for zigzag operations.
+
+{{{
+#Get the opencamlib files from the SVN repository, build, and install
+cd ~/HeeksCAD/HeeksCNC/
+svn checkout http://opencamlib.googlecode.com/svn/trunk/ opencamlib
+cd ~/HeeksCAD/HeeksCNC/opencamlib/src
+make clean
+cmake .
+make
+sudo make install
+}}}
+
+=Activate the HeeksCNC plugin=
+
+ # Launch HeeksCAD.
+ # Under the 'File' menu click 'plugins'
+ # When the dialog box appears, click 'new' 
+ # Name it HeeksCNC and click "..." 
+ # Find libheekscnc.so under /usr/lib
+ # Click 'ok' out and restart HeeksCAD.  You should now have a 'Machining' menu and a new toolbar with the machining icons.
+
+
+=Other Notes=
+==use with default theme 'ambience'==
+If you are using the default Lucid theme (Ambience).
+The following bug and work-around affect the appearance of HeeksCAD in the default theme:
+
+http://code.google.com/p/heekscad/issues/detail?id=270
+
+
