@@ -14,7 +14,7 @@ Here's a script that was submitted in comments on a different wiki page.  It has
 # heekscad-install.sh -- Downloads, builds and installs HeeksCAD from svn
 
 BUILDPATH=~             # Location of HeeksCAD build dir
-BUILDPREREQS="subversion libwxbase2.8-dev \
+BUILDPREREQS="subversion libwxbase2.8-dev cmake \
   build-essential libopencascade-dev libwxgtk2.8-dev \
   libgtkglext1-dev python-dev cmake libboost-python-dev"
 
@@ -202,5 +202,3 @@ If you are using the default Lucid theme (Ambience).
 The following bug and work-around affect the appearance of HeeksCAD in the default theme:
 
 http://code.google.com/p/heekscad/issues/detail?id=270
-
-
