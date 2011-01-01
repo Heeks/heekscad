@@ -154,11 +154,12 @@ Launch HeeksCAD.
 Under the 'File' menu click 'plugins'
 
 When the dialog box appears, click 'new' 
+
 Name it HeeksCNC and click "..." 
-* If you built HeeksCNC with cmake and/or installed from a .deb:
-** find libheekscnc.so under /usr/lib
-* If you built HeeksCNC with the old Makefile:
-** find libheekscnc.so.0.5.1 under /usr/local/lib/heekscnc/
+ * If you built HeeksCNC with cmake and/or installed from a .deb:
+  * find libheekscnc.so under /usr/lib
+ * If you built HeeksCNC with the old Makefile:
+  * find libheekscnc.so.0.5.1 under /usr/local/lib/heekscnc/
 Click 'ok' out and restart HeeksCAD.  You should now have a 'Machining' menu and a new toolbar with the machining icons.
 
 
