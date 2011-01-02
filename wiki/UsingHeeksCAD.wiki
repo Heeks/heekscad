@@ -86,6 +86,6 @@ Have a look at the "Options" window to see all the options.
 
 When one object is selected, you can see its properties in the "Properties" window.
 
-http://heekscad.googlecode.com/svn/wiki/properties.png
+http://heekscad.googlecode.com/svn/wiki/images/properties.png
 
 You can edit them too. Your changes can be cancelled by pressing the red cross button at the bottom of the "Properties" window.
