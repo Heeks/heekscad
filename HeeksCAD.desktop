@@ -6,4 +6,5 @@ Terminal=false
 Name=HeeksCAD
 GenericName=HeeksCAD
 Comment=HeeksCAD is a free, open source, CAD application
-Categories=Graphics;3DGraphics;
+Categories=Graphics;Engineering;3DGraphics;
+
