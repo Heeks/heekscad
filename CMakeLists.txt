@@ -6,6 +6,7 @@ endif( ${CMAKE_VERSION} STREQUAL "2.8.2" )
 
 set( CMAKE_BUILD_TYPE Debug )
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+set( BUILD_STARTED_IN_RIGHT_DIR "true" )  #used in src/CMakeLists.txt to print a message
 
 add_definitions ( -Wall )
 FIND_PACKAGE( wxWidgets REQUIRED COMPONENTS base core gl )
@@ -44,7 +45,7 @@ set(CPACK_DEBIAN_PACKAGE_VERSION "")
 
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "libwxbase2.8-0 (>= 2.8.5), libwxgtk2.8-0 (>= 2.8.5), libgtkglext1 (>= 1.2), python (>= 2.5), libboost-python1.40.0 | libboost-python1.42.0
 Recommends: libopencascade-ocaf-6.3.0")
-# ^^^^^^ A newline is REQUIRED immediately before the keyword Recommends. This takes advantage of a loophole in CPack - it doesn't have a way to set recommended packages. I set OCC as a recommendation because some of us devs (me, anyway) don't have occ packages installed
+# ^^^^^^ A newline is REQUIRED immediately before the keyword Recommends. This takes advantage of a loophole in CPack - it doesn't have a way to set recommended packages. I set OCC as a recommendation because some of us devs (me, anyway) built from source instead of installing packages
 
 include(CPack)
 
@@ -52,5 +53,5 @@ include(CPack)
 add_subdirectory( interface )
 add_subdirectory( tinyxml )
 add_subdirectory( sketchsolve/src )
-add_subdirectory( src )  #needs libraries from above subdirs
-set_directory_properties( PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${CPACK_PACKAGE_FILE_NAME}.deb" )
+add_subdirectory( src )  #needs libraries from other subdirs, so it goes last
+

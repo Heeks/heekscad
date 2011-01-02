@@ -1,5 +1,10 @@
 project(HeeksCAD)
 cmake_minimum_required( VERSION 2.6 )
+
+if( NOT DEFINED BUILD_STARTED_IN_RIGHT_DIR )
+  message( FATAL_ERROR "Don't start a build in the src directory. Do a 'cd ..', then run cmake ." )
+endif( NOT DEFINED BUILD_STARTED_IN_RIGHT_DIR )
+
 set ( CMAKE_BUILD_TYPE Debug )
 add_definitions ( -Wall -DUSE_GENERIC_TREECTRL -DHEEKSCAD -DUNICODE -DTIXML_USE_STL )
 find_package( OpenCASCADE REQUIRED COMPONENTS TKVRML TKSTL TKBRep TKIGES TKShHealing TKSTEP TKSTEP209 TKSTEPAttr TKSTEPBase TKXSBase TKShapeSchema FWOSPlugin TKBool TKCAF TKCDF TKernel TKFeat TKFillet TKG2d TKG3d TKGeomAlgo TKGeomBase TKHLR TKMath TKOffset TKPrim TKPShape TKService TKTopAlgo TKV2d TKV3d TKMesh TKAdvTools TKBO TKXDESTEP TKXCAF TKXCAFSchema TKLCAF TKPLCAF )
@@ -100,8 +105,8 @@ install( FILES ${bitmaps} DESTINATION share/heekscad/bitmaps )
 file( GLOB icons "${CMAKE_CURRENT_SOURCE_DIR}/../icons/*.png" )
 install( FILES ${icons} DESTINATION share/heekscad/icons )
 
-file( GLOB pixmap "${CMAKE_CURRENT_SOURCE_DIR}/../bitmaps/cyl.png" )
-install( FILES ${pixmap} DESTINATION share/heekscad/icons RENAME HeeksCAD.png )
+file( GLOB menu_icon "${CMAKE_CURRENT_SOURCE_DIR}/../icons/HeeksCAD.svg" )
+install( FILES ${menu_icon} DESTINATION share/icons/hicolor/scalable/apps ) # freedesktop.org standard location
 
 file( GLOB desktop "${CMAKE_CURRENT_SOURCE_DIR}/../HeeksCAD.desktop" )
 install( FILES ${desktop} DESTINATION share/applications )
