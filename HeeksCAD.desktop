@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Exec=/usr/bin/HeeksCAD
+Exec=/usr/bin/heekscad
 Icon=HeeksCAD
 Terminal=false
 Name=HeeksCAD

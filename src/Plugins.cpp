@@ -6,11 +6,6 @@
 #include "stdafx.h"
 #include "Plugins.h"
 #include "HeeksConfig.h"
-//#ifdef CMAKE_UNIX
-  //for stat(), checking for libheekscnc.so
-//  #include <sys/types.h>
-//  #include <unistd.h>
-//#endif
 
 enum
 {
