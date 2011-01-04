@@ -14,7 +14,7 @@ public:
 	static const int default_bitmap_size;
 #endif
 
-	ToolImage(const wxString& name);
+	ToolImage(const wxString& name, bool full_path_given = false);
 
 	static int GetBitmapSize();
 #ifdef HEEKSCAD
