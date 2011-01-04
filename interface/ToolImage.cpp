@@ -10,14 +10,14 @@ float ToolImage::m_button_scale = 0.25;
 const int ToolImage::full_size = 96;
 const int ToolImage::default_bitmap_size = 24;
 
-ToolImage::ToolImage(const wxString& name):wxImage(wxGetApp().GetResFolder() + _T("/bitmaps/") + name + _T(".png"), wxBITMAP_TYPE_PNG)
+ToolImage::ToolImage(const wxString& name, bool full_path_given):wxImage(full_path_given?name:(wxGetApp().GetResFolder() + _T("/bitmaps/") + name + _T(".png")), wxBITMAP_TYPE_PNG)
 
 #else
 //remove after all plugins have some way of differentiate ressources from libs
 #ifdef HEEKSPLUGIN
-ToolImage::ToolImage(const wxString& name):wxImage(theApp.GetResFolder() + _T("/bitmaps/") + name + _T(".png"), wxBITMAP_TYPE_PNG)
+ToolImage::ToolImage(const wxString& name, bool full_path_given):wxImage(full_path_given?name:(theApp.GetResFolder() + _T("/bitmaps/") + name + _T(".png")), wxBITMAP_TYPE_PNG)
 #else
-ToolImage::ToolImage(const wxString& name):wxImage(theApp.GetDllFolder() + _T("/bitmaps/") + name + _T(".png"), wxBITMAP_TYPE_PNG)
+ToolImage::ToolImage(const wxString& name, bool full_path_given):wxImage(full_path_given?name:(theApp.GetDllFolder() + _T("/bitmaps/") + name + _T(".png")), wxBITMAP_TYPE_PNG)
 #endif
 
 #endif
