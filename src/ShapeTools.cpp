@@ -80,7 +80,6 @@ void CreateFacesAndEdges(TopoDS_Shape shape, CFaceList* faces, CEdgeList* edges,
 		CFace* new_face_object = new CFace(TopoDS::Face(s));
 		faces->Add(new_face_object, NULL);
 		face_array[i] = new_face_object;
-		TopAbs_Orientation face_orientation = s.Orientation();
 
 		// create the loop objects
 		TopTools_IndexedMapOfShape loopMap;
@@ -97,8 +96,6 @@ void CreateFacesAndEdges(TopoDS_Shape shape, CFaceList* faces, CEdgeList* edges,
 			new_face_object->m_loops.push_back(new_loop_object);
 			if(outer_index == i)new_loop_object->m_is_outer = true;
 			new_loop_object->m_pface = new_face_object;
-
-			TopAbs_Orientation orientation = s.Orientation();
 
 			// find the loop's edges
 			for(BRepTools_WireExplorer explorer(TopoDS::Wire(s)); explorer.More(); explorer.Next())
