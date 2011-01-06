@@ -221,7 +221,7 @@ void ReadPluginsList(std::list<PluginData> &plugins)
 		bool foundHcncPlugin = false;
 #ifdef WIN32
 		//this code should work on windows given the correct path
-		const char* cncPlugPath = "standard\windows\path\to\heekscnc.dll";
+		const char* cncPlugPath = "standard\\windows\\path\\to\\heekscnc.dll";
   #ifndef S_ISREG
   	//if this fails to compile on windows, change it to
   	//#define S_ISREG(mode) true
