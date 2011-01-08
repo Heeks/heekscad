@@ -7,7 +7,7 @@ HeeksCAD is still under heavy development so any packages you find are likely to
 
 This installation procedure was tested on Ubuntu 10.04 (Lucid Lynx) and 10.10 (Maverick Meerkat)
 
-===Important information for users of Ubuntu 10.10 (and cmake 2.8.2)===
+===Important information for users of Ubuntu 10.10 (and cmake 2.8.2):===
 The version of cmake in Ubuntu 10.10 is 2.8.2. Cmake 2.8.2 has a bug that will prevent HeeksCAD and HeeksCNC from installing.  You will need to use a newer (or older) version of cmake. 
 
 In Ubuntu 10.10, do the following:
