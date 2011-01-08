@@ -5,6 +5,22 @@ HeeksCAD is still under heavy development so any packages you find are likely to
 This installation procedure was tested on Ubuntu 10.04 (Lucid Lynx) 
 
 If you run into problems, check the notes and comments at the end of this page.
+=For Ubuntu 10.10 only=
+The version of cmake in Ubuntu 10.10 is 2.8.2. Cmake 2.8.2 has a bug that will prevent HeeksCAD and HeeksCNC from installing.  You will need to use a newer (or older) version of cmake. 
+
+Do the following:
+ # On the menubar at the top of the screen, choose System|Administration|Synaptic Package Manager
+ # In Synaptic: From the menu, choose Settings|Repositories
+ # Click on the Updates tab, and check the box for "unsupported updates (maverick-backports)"
+ # Click the close button
+ # Click Reload
+ # Type `cmake` in the search box
+ # Scroll through the list until you find cmake. 
+ # Click the box, and on the popup menu, choose "Mark for installation"
+ # In the window that appears, click Mark
+ # Click apply
+ # When it finishes, repeat steps 2 - 5, but in step 3 clear the checkbox
+ # Close Synaptic
 
 =For Ubuntu 8.04 only=
 The opencascade libraries are not in the ubuntu multiverse for Hardy.  You can get them from opennovation.
