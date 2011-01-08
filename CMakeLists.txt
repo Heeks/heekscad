@@ -12,11 +12,17 @@ add_definitions ( -Wall )
 FIND_PACKAGE( wxWidgets REQUIRED COMPONENTS base core gl )
 find_package ( OpenCASCADE REQUIRED COMPONENTS TKernel )
 
+if( APPLE )
+  # Apple includes two different openGL implementations, for Carbon and X11.  We want X11
+  set( OSX_INCLUDE_DIRS /usr/X11R6/include )
+  set( OSX_LIBS -L/usr/X11R6/lib -lGL -lX11 -lGLU -lglut )
+endif( APPLE )
+
 INCLUDE(${wxWidgets_USE_FILE})
 include_directories (
 	${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
-	${wxWidgets_INCLUDE_DIRS}
-	${OpenCASCADE_INCLUDE_DIR}
+	${wxWidgets_INCLUDE_DIRS} ${OpenCASCADE_INCLUDE_DIR}
+	${OSX_INCLUDE_DIRS}
 	)
 
 
