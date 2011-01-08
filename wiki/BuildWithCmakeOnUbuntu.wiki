@@ -38,6 +38,7 @@ BUILDPREREQS="subversion libwxbase2.8-dev cmake \
   libgtkglext1-dev python-dev cmake libboost-python-dev"
 
 # Install build prerequisites
+sudo apt-get update
 sudo apt-get install -y $BUILDPREREQS
 
 cd $BUILDPATH
