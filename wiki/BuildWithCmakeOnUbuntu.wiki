@@ -5,9 +5,28 @@ This may also work on other versions of ubuntu and other distros that use .deb p
 
 HeeksCAD is still under heavy development so any packages you find are likely to be out of date.  To get the most current version, you need to compile the current source version from SVN.
 
-This installation procedure was tested on Ubuntu 10.04 (Lucid Lynx) 
+This installation procedure was tested on Ubuntu 10.04 (Lucid Lynx) and 10.10 (Maverick Meerkat)
+
+===Important information for users of Ubuntu 10.10 (and cmake 2.8.2)===
+The version of cmake in Ubuntu 10.10 is 2.8.2. Cmake 2.8.2 has a bug that will prevent HeeksCAD and HeeksCNC from installing.  You will need to use a newer (or older) version of cmake. 
+
+In Ubuntu 10.10, do the following:
+ # On the menubar at the top of the screen, choose System|Administration|Synaptic Package Manager
+ # In Synaptic: From the menu, choose Settings|Repositories
+ # Click on the Updates tab, and check the box for "unsupported updates (maverick-backports)"
+ # Click the close button
+ # Click Reload
+ # Type `cmake` in the search box
+ # Scroll through the list until you find cmake. 
+ # Click the box, and on the popup menu, choose "Mark for installation"
+ # In the window that appears, click Mark
+ # Click apply
+ # When it finishes, repeat steps 2 & 3, but clear the checkbox
+ # Close Synaptic
+ # Now run the script below
+
 ==A script for easy install==
-Here's a script that was submitted in comments on a different wiki page.  It has been modified for cmake. *It does everything except activate the HeeksCNC plugin.* For that, look at the bottom of this page.
+Here's a script that was submitted in comments on a different wiki page.  It has been modified for cmake.
 
 {{{
 #!/bin/sh
@@ -97,8 +116,6 @@ sudo make install
 
 }}}
 
-If you used the script above, skip to the bottom of the page where it says Activate the HeeksCNC plugin
-
 
 =Custom installation=
 ==Install the dependencies==
@@ -187,7 +204,7 @@ sudo make install
 }}}
 
 =Activate the HeeksCNC plugin=
-
+*On linux, this is not necessary with the latest revisions of HeeksCAD*
  # Launch HeeksCAD.
  # Under the 'File' menu click 'plugins'
  # When the dialog box appears, click 'new' 
