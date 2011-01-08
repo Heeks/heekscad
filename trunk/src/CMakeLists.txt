@@ -11,10 +11,17 @@ find_package( OpenCASCADE REQUIRED COMPONENTS TKVRML TKSTL TKBRep TKIGES TKShHea
 FIND_PACKAGE( wxWidgets REQUIRED COMPONENTS base core gl aui )
 find_package( PythonLibs REQUIRED )
 INCLUDE(${wxWidgets_USE_FILE})
+
+if( APPLE )
+  # Apple includes two different openGL implementations, for Carbon and X11.  We want X11
+  set( OSX_INCLUDE_DIRS /usr/X11R6/include )
+  set( OSX_LIBS -L/usr/X11R6/lib -lGL -lX11 -lGLU -lglut )
+endif( APPLE )
+
 include_directories (
     ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
     ${wxWidgets_INCLUDE_DIRS} ${OpenCASCADE_INCLUDE_DIR}
-    ${PYTHON_INCLUDE_DIRS}
+    ${PYTHON_INCLUDE_DIRS} . ${OSX_INCLUDE_DIRS}
     )
 set ( EXECUTABLE_OUTPUT_PATH ../bin )
 
@@ -92,7 +99,7 @@ set( HeeksCAD_LIBS
 add_executable( heekscad ${heekscad_SRCS} ${platform_SRCS} ${heekscad_HDRS} )
 target_link_libraries( heekscad
                        ${wxWidgets_LIBRARIES}  ${OpenCASCADE_LIBRARIES}
-                       ${PYTHON_LIBRARIES} ${HeeksCAD_LIBS} )
+                       ${PYTHON_LIBRARIES} ${HeeksCAD_LIBS} ${OSX_LIBS} )
 set_target_properties( heekscad PROPERTIES VERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} )
 install( TARGETS heekscad DESTINATION bin )
 
