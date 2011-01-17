@@ -61,7 +61,7 @@ set( heekscad_HDRS
 set( heekscad_SRCS
         AboutBox.cpp           GLList.cpp               MarkedList.cpp            ShapeTools.cpp
         advprops.cpp           GraphicsCanvas.cpp       matrix.cpp                SimpleIntersector.cpp
-        AutoSave.cpp           Grid.cpp                 MatrixFactorization.cpp   Sketch.cpp
+        AutoSave.cpp           Grid.cpp                 Sketch.cpp
         BentleyOttmann.cpp     Gripper.cpp              MultiPoly.cpp             sketchinterface.cpp
         BezierCurve.cpp        GripperSelTransform.cpp  NearMap.cpp               SketchTools.cpp
         Cone.cpp               Group.cpp                ObjPropsCanvas.cpp        Solid.cpp
