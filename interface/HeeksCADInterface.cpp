@@ -1261,7 +1261,8 @@ HeeksObj* CHeeksCADInterface::LoopMakeSketch(HeeksObj* loop, double deviation)
 
 	for(CEdge* edge = ((CLoop*)loop)->GetFirstEdge(); edge; edge = ((CLoop*)loop)->GetNextEdge())
 	{
-		ConvertEdgeToSketch2(edge->Edge(), new_object, deviation);
+		bool reverse = (edge->InFaceSense(((CLoop*)loop)->m_pface) != edge->Orientation());
+		ConvertEdgeToSketch2(edge->Edge(), new_object, deviation, reverse);
 	}
 	return new_object;
 }

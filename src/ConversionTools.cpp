@@ -485,7 +485,7 @@ bool ConvertWireToSketch(const TopoDS_Wire& wire, HeeksObj* sketch, double devia
 
 
 
-bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double deviation)
+bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double deviation, bool reverse)
 {
 	// enum GeomAbs_CurveType
 	// 0 - GeomAbs_Line
@@ -500,6 +500,8 @@ bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double devi
 	BRepAdaptor_Curve curve(edge);
 	GeomAbs_CurveType curve_type = curve.GetType();
 	bool sense = (edge.Orientation() == TopAbs_FORWARD);
+
+	if(reverse)sense = !sense;
 
 	switch(curve_type)
 	{
