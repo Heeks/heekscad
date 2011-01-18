@@ -220,7 +220,7 @@ public:
 		face_for_tools->GetPlaneParams(plane);
 		gp_Dir x_direction = plane.XAxis().Direction();
 		gp_Dir y_direction = plane.YAxis().Direction();
-		if(face_for_tools->Face().Orientation()==TopAbs_REVERSED)
+		if(!face_for_tools->Face().Orientation())
 		{
 			// swap the axes to invert the normal
 			y_direction = plane.XAxis().Direction();
@@ -247,7 +247,7 @@ public:
 		face_for_tools->GetPlaneParams(plane);
 		gp_Dir x_direction = plane.XAxis().Direction();
 		gp_Dir y_direction = plane.YAxis().Direction();
-		if(face_for_tools->Face().Orientation()==TopAbs_REVERSED)
+		if(!face_for_tools->Face().Orientation())
 		{
 			// swap the axes to invert the normal
 			y_direction = plane.XAxis().Direction();
@@ -293,7 +293,7 @@ public:
 		face_for_tools->GetPlaneParams(plane);
 		gp_Dir x_direction = plane.XAxis().Direction();
 		gp_Dir y_direction = plane.YAxis().Direction();
-		if(face_for_tools->Face().Orientation()==TopAbs_REVERSED)
+		if(!face_for_tools->Face().Orientation())
 		{
 			// swap the axes to invert the normal
 			y_direction = plane.XAxis().Direction();
@@ -404,7 +404,20 @@ bool CFace::IsAPlane(gp_Pln *returned_plane)
 			gp_Dir n00 = GetNormalAtUV(u[0], v[0], &p00);
 			gp_Dir nN0 = GetNormalAtUV(u[GRID], v[0], &pN0);
 			gp_Dir nNN = GetNormalAtUV(u[GRID], v[GRID], &pNN);
-			gp_Trsf m = make_matrix(p00, make_vector(p00, pN0), make_vector(p00, pNN));
+
+			gp_Trsf m;
+			try
+			{
+				m = make_matrix(p00, make_vector(p00, pN0), make_vector(p00, pNN));
+			}
+			catch(...)
+			{
+				// matrix failed, probably two points in the same place. Try again 0.1 inwards from the edges
+				gp_Dir n00 = GetNormalAtUV(uv_box[0] + U * 0.1, uv_box[2] + V * 0.1, &p00);
+				gp_Dir nN0 = GetNormalAtUV(uv_box[0] + U * 0.9, uv_box[2] + V * 0.1, &pN0);
+				gp_Dir nNN = GetNormalAtUV(uv_box[0] + U * 0.9, uv_box[2] + V * 0.9, &pNN);
+				m = make_matrix(p00, make_vector(p00, pN0), make_vector(p00, pNN));
+			}
 			gp_Pln plane(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1));
 			plane.Transform(m);
 
@@ -480,6 +493,7 @@ wxString CFace::GetSurfaceTypeStr()
 
 void CFace::GetPlaneParams(gp_Pln &p)
 {
+	// returns a plane for the underlying surface
 	BRepAdaptor_Surface surface(m_topods_face, Standard_True);
 	GeomAbs_SurfaceType surface_type = surface.GetType();
 	if(surface_type == GeomAbs_Plane)
@@ -489,6 +503,11 @@ void CFace::GetPlaneParams(gp_Pln &p)
 	else
 	{
 		IsAPlane(&p);
+		if(	m_topods_face.Orientation()== TopAbs_REVERSED )
+		{
+			p = gp_Pln(p.Axis().Location(), -p.Axis().Direction());
+			
+		}
 	}
 }
 
