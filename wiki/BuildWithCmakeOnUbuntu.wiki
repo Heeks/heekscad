@@ -7,6 +7,10 @@ HeeksCAD is still under heavy development so any packages you find are likely to
 
 This installation procedure was tested on Ubuntu 10.04 (Lucid Lynx) and 10.10 (Maverick Meerkat)
 
+===Multiple versions of required packages===
+ * If you have multiple versions of OpenCASCADE installed (i.e. 6.2.0 and 6.3.0) cmake may fail, complaining that it cannot find TKernel. Either uninstall 6.2.0, or install it in a nonstandard location.
+ * If you have multiple versions of the wxWidgets development files, cmake may not find the correct version. If you need a different version, uninstall that version, build HeeksCAD, and then reinstall it.
+
 ===Important information for users of Ubuntu 10.10 (and cmake 2.8.2):===
 The version of cmake in Ubuntu 10.10 is 2.8.2. Cmake 2.8.2 has a bug that will prevent HeeksCAD and HeeksCNC from installing.  You will need to use a newer (or older) version of cmake. 
 
