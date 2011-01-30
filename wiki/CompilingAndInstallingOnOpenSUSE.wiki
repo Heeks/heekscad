@@ -38,7 +38,7 @@ In order to compile bye your own HeeksCAD you need to type the following command
 {{{
 sudo zypper in OpenCASCADE-devel wxGTK-devel gtkglext-devel subversion
 svn checkout http://heekscad.googlecode.com/svn/trunk/ HeeksCAD
-cd HeeksCAD/src
-make
+cd HeeksCAD
+cmake .
 sudo make install
 }}}
