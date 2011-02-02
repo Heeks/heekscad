@@ -564,6 +564,19 @@ bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double devi
 		}
 		break;
 
+		case GeomAbs_BSplineCurve:
+			{
+				BRepAdaptor_Curve curve(edge);
+				std::list<HeeksObj*> new_spans;
+				HSpline::ToBiarcs(curve.BSpline(), new_spans, deviation);
+				for(std::list<HeeksObj*>::iterator It = new_spans.begin(); It != new_spans.end(); It++)
+				{
+					sketch->Add(*It, NULL);
+				}
+			}
+			break;
+
+
 		default:
 		{
 			// make lots of small lines

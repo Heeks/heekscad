@@ -498,10 +498,11 @@ static bool calculate_biarc_points(const gp_Pnt &p0, gp_Vec v_start, const gp_Pn
 
 static std::list<HeeksObj*>* new_spans_for_CreateArcs = NULL;
 static double tolerance_for_CreateArcs = 1.0;
+static Handle(Geom_BSplineCurve) spline_for_CreateArcs = NULL;
 
-void HSpline::CreateArcs(const gp_Pnt &p_start, const gp_Vec &v_start, double t_start, double t_end, gp_Pnt &p_end, gp_Vec &v_end)
+void CreateArcs(const gp_Pnt &p_start, const gp_Vec &v_start, double t_start, double t_end, gp_Pnt &p_end, gp_Vec &v_end)
 {
-	m_spline->D1(t_end, p_end, v_end);
+	spline_for_CreateArcs->D1(t_end, p_end, v_end);
 
 	gp_Pnt p1, p2, p3;
 
@@ -516,8 +517,8 @@ void HSpline::CreateArcs(const gp_Pnt &p_start, const gp_Vec &v_start, double t_
 		CTangentialArc arc2(p2, gp_Vec(p3.XYZ() - p2.XYZ()), p_end);
 
 		gp_Pnt p_middle1, p_middle2;
-		m_spline->D0(t_start + ((t_end - t_start) * 0.25), p_middle1);
-		m_spline->D0(t_start + ((t_end - t_start) * 0.75), p_middle2);
+		spline_for_CreateArcs->D0(t_start + ((t_end - t_start) * 0.25), p_middle1);
+		spline_for_CreateArcs->D0(t_start + ((t_end - t_start) * 0.75), p_middle2);
 
 		if(!arc1.radius_equal(p_middle1, tolerance_for_CreateArcs) || !arc2.radius_equal(p_middle2, tolerance_for_CreateArcs))
 			can_do_spline_whole = false;
@@ -526,6 +527,12 @@ void HSpline::CreateArcs(const gp_Pnt &p_start, const gp_Vec &v_start, double t_
 			arc_object1 = arc1.MakeHArc();
 			arc_object2 = arc2.MakeHArc();
 		}
+	}
+	else
+	{
+		// calculate_biarc_points failed, just add a line
+		new_spans_for_CreateArcs->push_back(new HLine(p_start, p_end, &(wxGetApp().current_color)));
+		return;
 	}
 	
 	if(can_do_spline_whole)
@@ -561,7 +568,7 @@ bool HSpline::GetEndPoint(double* pos)
 	return true;
 }
 
-void HSpline::ToBiarcs(std::list<HeeksObj*> &new_spans, double tolerance)
+void HSpline::ToBiarcs(const Handle_Geom_BSplineCurve s, std::list<HeeksObj*> &new_spans, double tolerance)
 {
 	new_spans_for_CreateArcs = &new_spans;
 	if(tolerance < 0.000000000000001)tolerance = 0.000000000000001;
@@ -570,8 +577,14 @@ void HSpline::ToBiarcs(std::list<HeeksObj*> &new_spans, double tolerance)
 	gp_Vec v_start;
 	gp_Pnt p_end;
 	gp_Vec v_end;
-	m_spline->D1(m_spline->FirstParameter(), p_start, v_start);
-	CreateArcs(p_start, v_start, m_spline->FirstParameter(), m_spline->LastParameter(), p_end, v_end);
+	s->D1(s->FirstParameter(), p_start, v_start);
+	spline_for_CreateArcs = s;
+	CreateArcs(p_start, v_start, s->FirstParameter(), s->LastParameter(), p_end, v_end);
+}
+
+void HSpline::ToBiarcs(std::list<HeeksObj*> &new_spans, double tolerance)const
+{
+	ToBiarcs(m_spline, new_spans, tolerance);
 }
 
 void HSpline::Reverse()
