@@ -26,8 +26,6 @@ class HSpline: public EndedObject{
 private:
 	HeeksColor color;
 
-	void CreateArcs(const gp_Pnt &p_start, const gp_Vec &v_start, double t_start, double t_end, gp_Pnt &p_end, gp_Vec &v_end);
-
 public:
 	Handle(Geom_BSplineCurve) m_spline;
 
@@ -63,6 +61,7 @@ public:
 	bool GetStartPoint(double* pos);
 	bool GetEndPoint(double* pos);
 
-	void ToBiarcs(std::list<HeeksObj*> &new_spans, double tolerance);
+	void ToBiarcs(std::list<HeeksObj*> &new_spans, double tolerance)const;
+	static void ToBiarcs(const Handle_Geom_BSplineCurve s, std::list<HeeksObj*> &new_spans, double tolerance);
 	void Reverse();
 };
