@@ -6,17 +6,17 @@
 
 #include "DynamicSolid.h"
 
-class CPocket: public DynamicSolid{
+class HPocket: public DynamicSolid{
 public:
 	double m_length;
 	CSketch* m_sketch;
 
-	CPocket(double length);
-	CPocket();
+	HPocket(double length);
+	HPocket();
 
 	const wxChar* GetTypeString(void)const{return _("Pocket");}
 	int GetType()const{return PocketSolidType;}
-	HeeksObj *MakeACopy(void)const{ return new CPocket(*this);}
+	HeeksObj *MakeACopy(void)const{ return new HPocket(*this);}
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetProperties(std::list<Property *> *list);
 	void WriteXML(TiXmlNode *root);
