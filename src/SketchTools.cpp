@@ -127,7 +127,7 @@ public:
 		wxGetApp().InputLength(_("Input pad depth"), _("height"), height);
 		CSketch* sketch = (CSketch*)(*wxGetApp().m_marked_list->list().begin());
 
-		CPocket::PocketSketch(sketch,height);
+		HPocket::PocketSketch(sketch,height);
 	}
 	const wxChar* GetTitle(){return _("Pocket Sketch");}
 	wxString BitmapPath(){return _T("new");}

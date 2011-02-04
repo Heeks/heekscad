@@ -9,27 +9,27 @@
 #include "../interface/PropertyDouble.h"
 #include "Part.h"
 
-CPocket::CPocket(double length)
+HPocket::HPocket(double length)
 {
 	m_length = length;
 	m_faces->m_visible=false;
 }
 
-CPocket::CPocket()
+HPocket::HPocket()
 {
 	m_length = 0;
 }
 
-bool CPocket::IsDifferent(HeeksObj* other)
+bool HPocket::IsDifferent(HeeksObj* other)
 {
-	CPocket* pocket = (CPocket*)other;
+	HPocket* pocket = (HPocket*)other;
 	if(pocket->m_length != m_length)
 		return true;
 
 	return HeeksObj::IsDifferent(other);
 }
 
-void CPocket::ReloadPointers()
+void HPocket::ReloadPointers()
 {
 	DynamicSolid::ReloadPointers();
 
@@ -48,14 +48,14 @@ void CPocket::ReloadPointers()
 	Update();
 }
 
-gp_Trsf CPocket::GetTransform()
+gp_Trsf HPocket::GetTransform()
 {
 	if(m_sketch && m_sketch->m_coordinate_system)
 		return m_sketch->m_coordinate_system->GetMatrix();
 	return gp_Trsf();
 }
 
-void CPocket::Update()
+void HPocket::Update()
 {
 	if(m_sketch)
 	{
@@ -72,7 +72,7 @@ void CPocket::Update()
 		solid->Update();
 }
 
-void CPocket::glCommands(bool select, bool marked, bool no_color)
+void HPocket::glCommands(bool select, bool marked, bool no_color)
 {
 	//TODO: only do this when the sketch is dirty
 
@@ -93,18 +93,18 @@ void CPocket::glCommands(bool select, bool marked, bool no_color)
 
 void OnPocketSetHeight(double b, HeeksObj* o)
 {
-	((CPocket*)o)->m_length = b;
+	((HPocket*)o)->m_length = b;
 	wxGetApp().Repaint();
 }
 
-void CPocket::GetProperties(std::list<Property *> *list)
+void HPocket::GetProperties(std::list<Property *> *list)
 {
 	list->push_back(new PropertyDouble(_("Height"), m_length, this,OnPocketSetHeight));
 
 	ObjList::GetProperties(list);
 }
 
-void CPocket::WriteXML(TiXmlNode *root)
+void HPocket::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement * element = new TiXmlElement( "Pad" );  
 	return;
@@ -128,9 +128,9 @@ void CPocket::WriteXML(TiXmlNode *root)
 }
 
 // static member function
-HeeksObj* CPocket::ReadFromXMLElement(TiXmlElement* element)
+HeeksObj* HPocket::ReadFromXMLElement(TiXmlElement* element)
 {
-	CPocket* new_object = new CPocket;
+	HPocket* new_object = new HPocket;
 	return new_object;
 
 #if 0
@@ -160,9 +160,9 @@ HeeksObj* CPocket::ReadFromXMLElement(TiXmlElement* element)
 }
 
 // static
-void CPocket::PocketSketch(CSketch* sketch, double length)
+void HPocket::PocketSketch(CSketch* sketch, double length)
 {
-	CPocket *pad = new CPocket(length);
+	HPocket *pad = new HPocket(length);
 	sketch->Owner()->Add(pad,NULL);
 
 	sketch->Owner()->Remove(sketch);

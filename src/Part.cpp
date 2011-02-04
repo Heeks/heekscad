@@ -56,7 +56,7 @@ void CPart::Update()
 			}
 		}
 
-		CPocket* pocket = dynamic_cast<CPocket*>(child);
+		HPocket* pocket = dynamic_cast<HPocket*>(child);
 		if(pocket)
 		{
 			BRepBuilderAPI_Transform trsf(pocket->GetTransform());
