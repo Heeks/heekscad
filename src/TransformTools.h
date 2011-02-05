@@ -9,7 +9,7 @@ class TransformTools{
 
 public:
 	static void Translate(bool copy);
-	static void Rotate(bool copy, bool allow3DRotation);
+	static void Rotate(bool copy);
 	static void Mirror(bool copy);
 	static void Scale(bool copy);
 };

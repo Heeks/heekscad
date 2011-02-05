@@ -8,7 +8,7 @@
 
 class HDialog : public wxDialog
 {
-protected:
+public:
 	static const int control_border; // the border around controls
 
 	bool m_ignore_event_functions;
@@ -16,6 +16,5 @@ protected:
 	void AddLabelAndControl(wxBoxSizer* sizer, const wxString& label, wxWindow* control);
 	wxBoxSizer *MakeOkAndCancel(int orient);
 
-public:
-	HDialog(wxWindow *parent, wxWindowID id, const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxDialogNameStr);
+	HDialog(wxWindow *parent, wxWindowID id = wxID_ANY, const wxString& title = wxString(_T("")), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxDialogNameStr);
 };

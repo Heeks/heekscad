@@ -858,6 +858,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\interface\HDialogs.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\interface\HDialogs.h"
+			>
+		</File>
+		<File
 			RelativePath=".\HDimension.cpp"
 			>
 		</File>
@@ -1002,6 +1010,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Input.cpp"
+			>
+		</File>
+		<File
 			RelativePath="..\interface\InputMode.h"
 			>
 		</File>
@@ -1131,6 +1143,14 @@
 		</File>
 		<File
 			RelativePath=".\NearMap.h"
+			>
+		</File>
+		<File
+			RelativePath="..\interface\NiceTextCtrl.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\interface\NiceTextCtrl.h"
 			>
 		</File>
 		<File
