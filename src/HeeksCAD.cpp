@@ -16,7 +16,6 @@
 #include "../interface/PropertyCheck.h"
 #include "../interface/PropertyString.h"
 #include "../interface/PropertyList.h"
-#include "../interface/DoubleInput.h"
 #include "HeeksFrame.h"
 #include "GraphicsCanvas.h"
 #include "OptionsCanvas.h"
@@ -172,6 +171,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_number_of_sample_points = 10;
 	m_property_grid_validation = false;
 	m_solid_view_mode = SolidViewFacesAndEdges;
+	m_input_uses_modal_dialog = false;
 
 	m_font_paths = _T("/usr/share/qcad/fonts");
 	m_word_space_percentage = 100.0;
@@ -366,6 +366,8 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("ExtrudeToSolid"), &m_extrude_to_solid);
 	config.Read(_T("RevolveAngle"), &m_revolve_angle);
 	config.Read(_T("SolidViewMode"), (int*)(&m_solid_view_mode), 0);
+
+	config.Read(_T("InputUsesModalDialog"), &m_input_uses_modal_dialog, true);
 
 	HDimension::ReadFromConfig(config);
 
@@ -2690,6 +2692,10 @@ static void on_dimension_draw_flat(bool value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+static void on_input_uses_modal_dialog(bool value, HeeksObj* object)
+{
+	wxGetApp().m_input_uses_modal_dialog = value;
+}
 
 static void on_edit_font_paths(const wxChar* value, HeeksObj* object)
 {
@@ -2856,6 +2862,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 		choices.push_back ( wxString ( _("faces only") ) );
 		view_options->m_list.push_back ( new PropertyChoice ( _("solid view mode"),  choices, m_solid_view_mode, this, on_set_solid_view_mode ) );
 	}
+	view_options->m_list.push_back(new PropertyCheck(_("input uses modal dialog"), m_input_uses_modal_dialog, NULL, on_input_uses_modal_dialog));
 
 	list->push_back(view_options);
 
@@ -3585,36 +3592,6 @@ void HeeksCADapp::ResetIDs()
 {
 	used_ids.clear();
 	next_id_map.clear();
-}
-
-bool HeeksCADapp::InputDouble(const wxChar* prompt, const wxChar* value_name, double &value)
-{
-	CInputMode* save_mode = input_mode_object;
-	CDoubleInput double_input(prompt, value_name, value);
-	SetInputMode(&double_input);
-
-	OnRun();
-
-	SetInputMode(save_mode);
-
-	if(CDoubleInput::m_success)value = double_input.m_value;
-
-	return CDoubleInput::m_success;
-}
-
-bool HeeksCADapp::InputLength(const wxChar* prompt, const wxChar* value_name, double &value)
-{
-	CInputMode* save_mode = input_mode_object;
-	CLengthInput length_input(prompt, value_name, value);
-	SetInputMode(&length_input);
-
-	OnRun();
-
-	SetInputMode(save_mode);
-
-	if(CLengthInput::m_success)value = length_input.m_value;
-
-	return CLengthInput::m_success;
 }
 
 void HeeksCADapp::RegisterOnGLCommands( void(*callbackfunc)() )

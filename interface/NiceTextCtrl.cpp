@@ -55,7 +55,11 @@ CObjectIdsCtrl::CObjectIdsCtrl(wxWindow* parent, wxWindowID id)
 
 void CObjectIdsCtrl::GetAddChildren(HeeksObj* object, int group_type)
 {
+#ifdef HEEKSCAD
+	wxGetApp().CreateUndoPoint();
+#else
 	heeksCAD->CreateUndoPoint();
+#endif
 	((ObjList*)object)->Clear();
 	wxString str = wxTextCtrl::GetValue();
 	wxString s = _T("");
@@ -69,7 +73,11 @@ void CObjectIdsCtrl::GetAddChildren(HeeksObj* object, int group_type)
 			{
 				if(id != 0)
 				{
+#ifdef HEEKSCAD
+					HeeksObj *child = wxGetApp().GetIDObject( group_type, id );
+#else
 					HeeksObj *child = heeksCAD->GetIDObject( group_type, id );
+#endif
 					if (child != NULL)
 					{
 						object->Add( child, NULL );
@@ -83,7 +91,11 @@ void CObjectIdsCtrl::GetAddChildren(HeeksObj* object, int group_type)
 			s.Append(str[i]);
 		}
 	}
+#ifdef HEEKSCAD
+	wxGetApp().Changed();
+#else
 	heeksCAD->Changed();
+#endif
 }
 
 void CObjectIdsCtrl::SetFromChildren(HeeksObj* object, int group_type)

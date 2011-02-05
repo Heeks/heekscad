@@ -8,7 +8,7 @@ class CDoubleCtrl: public wxTextCtrl
 	wxString DoubleToString(double value);
 	double m_factor;
 public:
-	CDoubleCtrl(wxWindow* parent, wxWindowID id, double factor = 1.0);
+	CDoubleCtrl(wxWindow* parent, wxWindowID id = wxID_ANY, double factor = 1.0);
 	double GetValue();
 	void SetValue(double value);
 };
@@ -17,14 +17,14 @@ public:
 class CLengthCtrl: public CDoubleCtrl
 {
 public:
-	CLengthCtrl(wxWindow* parent, wxWindowID id);
+	CLengthCtrl(wxWindow* parent, wxWindowID id = wxID_ANY);
 };
 
 // a dialog control to enter a list of ids, for sketches or solids
 class CObjectIdsCtrl: public wxTextCtrl
 {
 public:
-	CObjectIdsCtrl(wxWindow* parent, wxWindowID id);
+	CObjectIdsCtrl(wxWindow* parent, wxWindowID id = wxID_ANY);
 	void GetAddChildren(HeeksObj* object, int group_type);
 	void SetFromChildren(HeeksObj* object, int group_type);
 };

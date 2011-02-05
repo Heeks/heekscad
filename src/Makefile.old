@@ -71,6 +71,7 @@ OBJECTS=                                 \
     HSpline.o                            \
     HText.o                              \
     HXml.o                               \
+    Input.o                    \
     InputModeCanvas.o                    \
     LineArcDrawing.o                     \
     Loop.o                               \
@@ -115,9 +116,11 @@ OBJECTS=                                 \
     ../interface/HeeksCADInterface.o     \
     ../interface/HeeksColor.o            \
     ../interface/HeeksObj.o              \
+    ../interface/HDialogs.o              \
     ../interface/DoubleInput.o           \
     ../interface/LeftAndRight.o          \
     ../interface/MarkedObject.o          \
+    ../interface/NiceTextCtrl.o          \
     ../interface/ObjList.o               \
     ../interface/PropertyCheck.o         \
     ../interface/PropertyChoice.o        \

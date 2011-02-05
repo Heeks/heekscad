@@ -26,9 +26,9 @@ wxBoxSizer *HDialog::MakeOkAndCancel(int orient)
 {
     wxBoxSizer *sizerOKCancel = new wxBoxSizer(orient);
     wxButton* buttonOK = new wxButton(this, wxID_OK, _("OK"));
-	sizerOKCancel->Add( buttonOK, 0, wxALL | wxDOWN, control_border );
+	sizerOKCancel->Add( buttonOK, 0, wxALL, control_border );
     wxButton* buttonCancel = new wxButton(this, wxID_CANCEL, _("Cancel"));
-	sizerOKCancel->Add( buttonCancel, 0, wxALL | wxUP, control_border );
+	sizerOKCancel->Add( buttonCancel, 0, wxALL, control_border );
     buttonOK->SetDefault();
 	return sizerOKCancel;
 }

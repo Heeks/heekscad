@@ -10,6 +10,7 @@
 #include "MarkedList.h"
 #include "HLine.h"
 #include "HILine.h"
+#include "HeeksConfig.h"
 
 static double from[3];
 static double centre[3];
@@ -42,7 +43,9 @@ void TransformTools::Translate(bool copy)
 	if(wxGetApp().m_marked_list->size() == 0)return;
 
 	// get number of copies
-	int ncopies = 1;
+	HeeksConfig config;
+	int ncopies;
+	config.Read(_T("TranslateNumCopies"), &ncopies, 1);
 	if(copy)
 	{
 		// check for uncopyable objects
@@ -50,10 +53,9 @@ void TransformTools::Translate(bool copy)
 		if(wxGetApp().m_marked_list->size() == 0)return;
 
 		// input "number of copies"
-		double number_of_copies = 1.0;
-		wxGetApp().InputDouble(_("Enter number of copies"), _("number of copies"), number_of_copies);
-		ncopies = (int)(number_of_copies + 0.5);
+		if(!wxGetApp().InputInt(_("Enter number of copies"), _("number of copies"), ncopies))return;
 		if(ncopies < 1)return;
+		config.Write(_T("TranslateNumCopies"), ncopies);
 	}
 
 	// clear the selection
@@ -87,6 +89,8 @@ void TransformTools::Translate(bool copy)
 	}
 	wxGetApp().DestroyTransformGLList();
 
+	wxGetApp().CreateUndoPoint();
+
 	// transform the objects
 	if(copy)
 	{
@@ -114,10 +118,12 @@ void TransformTools::Translate(bool copy)
 		extract(mat, m);
 		wxGetApp().Transform(selected_items, m);
 	}
+
+	wxGetApp().Changed();
 }
 
 //static
-void TransformTools::Rotate(bool copy, bool allow3DRotation)
+void TransformTools::Rotate(bool copy)
 {
 	//rotation axis - Z axis by default
 	gp_Dir axis_Dir = gp_Dir(0,0,1);
@@ -130,64 +136,50 @@ void TransformTools::Rotate(bool copy, bool allow3DRotation)
 	if(wxGetApp().m_marked_list->size() == 0)return;
 
 	// get number of copies
-	int ncopies = 1;
+	HeeksConfig config;
+	int ncopies;
+	config.Read(_T("RotateNumCopies"), &ncopies, 1);
 	if(copy)
 	{
 		// check for uncopyable objects
 		RemoveUncopyable();
 		if(wxGetApp().m_marked_list->size() == 0)return;
-
-		// input "number of copies"
-		double number_of_copies = 1.0;
-		wxGetApp().InputDouble(_("Enter number of copies"), _("number of copies"), number_of_copies);
-		ncopies = (int)(number_of_copies + 0.5);
-		if(ncopies < 1)return;
 	}
 
 	// clear the selection
 	std::list<HeeksObj *> selected_items = wxGetApp().m_marked_list->list();
 	wxGetApp().m_marked_list->Clear(true);
 
+	double angle;
+	config.Read(_T("RotateAngle"), &angle, 90.0);
 
-
-	if(allow3DRotation)
+	// enter angle, plane and position
+	double axis[3];
+	double pos[3];
+	config.Read(_T("RotateAxisX"), &axis[0], 0.0);
+	config.Read(_T("RotateAxisY"), &axis[1], 0.0);
+	config.Read(_T("RotateAxisZ"), &axis[2], 1.0);
+	config.Read(_T("RotatePosX"), &pos[0], 0.0);
+	config.Read(_T("RotatePosY"), &pos[1], 0.0);
+	config.Read(_T("RotatePosZ"), &pos[2], 0.0);
+	if(!wxGetApp().InputAngleWithPlane(angle, axis, pos, copy ? &ncopies : NULL))return;
+	if(copy)
 	{
-		// pick a line to use as rotation axis
-		bool line_found = false;
-		gp_Lin line;
-		int save_filter = wxGetApp().m_marked_list->m_filter;
-		wxGetApp().PickObjects(_("Pick line for rotation axis"), MARKING_FILTER_LINE | MARKING_FILTER_ILINE, true);
-		wxGetApp().m_marked_list->m_filter = save_filter;
-		for(std::list<HeeksObj *>::const_iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
-		{
-			HeeksObj* object = *It;
-			if(object->GetType() == LineType)
-			{
-				line = ((HLine*)object)->GetLine();
-				line_found = true;
-			}
-			else if(object->GetType() == ILineType)
-			{
-				line = ((HILine*)object)->GetLine();
-				line_found = true;
-			}
-		}
-		if(!line_found)return;
-		axis_Dir=line.Direction();
-		line_Pos= line.Location();
+		if(ncopies < 1)return;
+		config.Write(_T("RotateNumCopies"), ncopies);
 	}
-	else
-	{
-		// pick "centre" position
-		if(!wxGetApp().PickPosition(_("Click centre position to rotate about"), centre))return;
-		line_Pos.SetXYZ(gp_XYZ(centre[0],centre[1],centre[2]));
-	}
-
-	// enter angle
-	double angle = 45.0;
-	if(!wxGetApp().InputDouble(_("Enter angle to rotate by"), _("angle"), angle))return;
+	config.Write(_T("RotateAngle"), angle);
+	config.Write(_T("RotateAxisX"), axis[0]);
+	config.Write(_T("RotateAxisY"), axis[1]);
+	config.Write(_T("RotateAxisZ"), axis[2]);
+	config.Write(_T("RotatePosX"), pos[0]);
+	config.Write(_T("RotatePosY"), pos[1]);
+	config.Write(_T("RotatePosZ"), pos[2]);
+	axis_Dir = gp_Dir(axis[0], axis[1], axis[2]);
+	line_Pos = gp_Pnt(pos[0], pos[1], pos[2]);
 
 	// transform the objects
+	wxGetApp().CreateUndoPoint();
 	if(copy)
 	{
 		for(int i = 0; i<ncopies; i++)
@@ -214,6 +206,7 @@ void TransformTools::Rotate(bool copy, bool allow3DRotation)
 		extract(mat, m);
 		wxGetApp().Transform(selected_items, m);
 	}
+	wxGetApp().Changed();
 }
 
 //static
@@ -259,6 +252,7 @@ void TransformTools::Mirror(bool copy)
 	if(!line_found)return;
 
 	// transform the objects
+	wxGetApp().CreateUndoPoint();
 	gp_Trsf mat;
 	mat.SetMirror(gp_Ax1(line.Location(), line.Direction()));
 	double m[16];
@@ -279,6 +273,7 @@ void TransformTools::Mirror(bool copy)
 	{
 		wxGetApp().Transform(selected_items, m);
 	}
+	wxGetApp().Changed();
 }
 
 void TransformTools::Scale(bool copy)
@@ -290,7 +285,9 @@ void TransformTools::Scale(bool copy)
 	if(wxGetApp().m_marked_list->size() == 0)return;
 
 	// get number of copies
-	int ncopies = 1;
+	int ncopies;
+	HeeksConfig config;
+	config.Read(_T("ScaleNumCopies"), &ncopies, 1);
 	if(copy)
 	{
 		// check for uncopyable objects
@@ -298,10 +295,9 @@ void TransformTools::Scale(bool copy)
 		if(wxGetApp().m_marked_list->size() == 0)return;
 
 		// input "number of copies"
-		double number_of_copies = 1.0;
-		wxGetApp().InputDouble(_("Enter number of copies"), _("number of copies"), number_of_copies);
-		ncopies = (int)(number_of_copies + 0.5);
+		if(!wxGetApp().InputInt(_("Enter number of copies"), _("number of copies"), ncopies))return;
 		if(ncopies < 1)return;
+		config.Write(_T("ScaleNumCopies"), ncopies);
 	}
 
 	// clear the selection
@@ -312,10 +308,13 @@ void TransformTools::Scale(bool copy)
 	if(!wxGetApp().PickPosition(_("Click centre position to scale about"), centre))return;
 
 	// enter scale factor
-	double scale = 2.0;
+	double scale;
+	config.Read(_T("ScaleFactor"), &scale, 2.0);
 	if(!wxGetApp().InputDouble(_("Enter scale factor"), _("scale factor"), scale))return;
+	config.Write(_T("ScaleFactor"), scale);
 
 	// transform the objects
+	wxGetApp().CreateUndoPoint();
 	if(copy)
 	{
 		for(int i = 0; i<ncopies; i++)
@@ -342,4 +341,5 @@ void TransformTools::Scale(bool copy)
 		extract(mat, m);
 		wxGetApp().Transform(selected_items, m);
 	}
+	wxGetApp().Changed();
 }
