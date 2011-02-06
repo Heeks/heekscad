@@ -85,7 +85,7 @@ set( heekscad_SRCS
         Face.cpp               InputModeCanvas.cpp      RuledSurface.cpp          Wire.cpp
         FaceTools.cpp          LineArcDrawing.cpp       Ruler.cpp                 WrappedCurves.cpp
         FastCurves.cpp         Loop.cpp                 SelectMode.cpp            wxImageLoader.cpp
-        Geom.cpp               MagDragWindow.cpp        Shape.cpp
+        Geom.cpp               MagDragWindow.cpp        Shape.cpp                 Input.cpp
         glfont2.cpp            manager.cpp              ShapeData.cpp
    ) #Hole.cpp
 set( HeeksCAD_LIBS
