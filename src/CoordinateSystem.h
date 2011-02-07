@@ -35,6 +35,9 @@ public:
 	void glCommands(bool select, bool marked, bool no_color);
 	void GetBox(CBox &box);
 	const wxChar* GetTypeString(void)const{return _("Coordinate System");}
+	const wxChar* GetShortString(void)const{return m_title.c_str();}
+	bool CanEditString(void)const{return true;}
+	void OnEditString(const wxChar* str);
 	HeeksObj *MakeACopy(void)const;
 	const wxBitmap &GetIcon();
 	void ModifyByMatrix(const double *mat);
