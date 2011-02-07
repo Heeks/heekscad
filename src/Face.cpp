@@ -293,7 +293,7 @@ public:
 		face_for_tools->GetPlaneParams(plane);
 		gp_Dir x_direction = plane.XAxis().Direction();
 		gp_Dir y_direction = plane.YAxis().Direction();
-		if(!face_for_tools->Face().Orientation())
+		if(face_for_tools->Face().Orientation()== TopAbs_REVERSED)
 		{
 			// swap the axes to invert the normal
 			y_direction = plane.XAxis().Direction();
@@ -304,7 +304,6 @@ public:
 
 		double m[16];
 		extract(face_matrix.Inverted(), m);
-		wxGetApp().CreateUndoPoint();
 		// if any objects are selected, move them
 		if(wxGetApp().m_marked_list->list().size() > 0)
 		{
@@ -320,7 +319,6 @@ public:
 			HeeksObj* parent_body = face_for_tools->GetParentBody();
 			if(parent_body)parent_body->ModifyByMatrix(m);
 		}
-		wxGetApp().Changed();
 	}
 };
 
