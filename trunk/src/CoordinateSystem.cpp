@@ -1197,6 +1197,11 @@ void CoordinateSystem::GetBox(CBox &box)
 	box.Insert(p);
 }
 
+void CoordinateSystem::OnEditString(const wxChar* str){
+	m_title.assign(str);
+	wxGetApp().Changed();
+}
+
 HeeksObj *CoordinateSystem::MakeACopy(void)const
 {
 	return new CoordinateSystem(*this);
