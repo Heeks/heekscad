@@ -71,6 +71,7 @@ IMPLEMENT_APP(HeeksCADapp)
 
 extern void SketchTools_GetOptions(std::list<Property *> *list);
 
+
 #if 0
 int MyAllocHook( int allocType, void *userData, size_t size, int blockType, long requestNumber, const unsigned char *filename, int lineNumber)
 {
@@ -435,10 +436,31 @@ bool HeeksCADapp::OnInit()
 			}
 		}
 	}
-
-
+	//#define USE_DEBUG_WXPATH  
+	#ifdef USE_DEBUG_WXPATH
+		// this next bit is just to help debug the icons problem
+		// the wxStandardPaths class might be useful for this
+		// look here for docs:
+		// http://docs.wxwidgets.org/trunk/classwx_standard_paths.html
+		wxStandardPaths sp;
+		//sp.SetInstallPrefix(_T("/myPrefixDirectory")); //set the prefix directory here, if needed
+		wprintf(_T("system configs directory: ") + sp.GetConfigDir()  + _T("\n"));
+		wprintf(_T("applications global data directory: ") + sp.GetDataDir()  + _T("\n"));
+		wprintf(_T("documents directory: ") + sp.GetDocumentsDir()  + _T("\n"));
+		wprintf(_T("executable path: ") + sp.GetExecutablePath()  + _T("\n"));
+		wprintf(_T("install prefix: ") + sp.GetInstallPrefix()  + _T("\n"));
+		wprintf(_T("Local data directory: ") + sp.GetLocalDataDir()  + _T("\n"));
+		wprintf(_T("plugins directory: ") + sp.GetPluginsDir()  + _T("\n"));
+		wprintf(_T("resource directory: ") + sp.GetResourcesDir()  + _T("\n"));
+		wprintf(_T("temp directory: ") + sp.GetTempDir()  + _T("\n"));
+		wprintf(_T("user config directory: ") + sp.GetUserConfigDir()  + _T("\n"));
+		wprintf(_T("user-dependent application data directory: ") + sp.GetUserDataDir()  + _T("\n"));
+		wprintf(_T("user local data directory: ") + sp.GetUserLocalDataDir()  + _T("\n"));
+	#endif
+	
 	return TRUE;
 }
+
 
 
 void HeeksCADapp::WriteConfig()
