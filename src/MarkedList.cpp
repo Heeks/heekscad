@@ -315,6 +315,8 @@ void PasteTool::Run()
 }
 
 void MarkedList::GetTools(MarkedObject* clicked_object, std::list<Tool*>& t_list, const wxPoint* p, bool copy_and_paste_tools){
+	if(wxGetApp().m_no_creation_mode)return;
+
 	if (m_list.size() > 1)
 	{
 		t_list.push_back(&delete_marked_list_tool);

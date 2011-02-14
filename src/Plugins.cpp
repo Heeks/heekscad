@@ -6,6 +6,7 @@
 #include "stdafx.h"
 #include "Plugins.h"
 #include "HeeksConfig.h"
+#include <fstream>
 
 enum
 {
@@ -269,6 +270,36 @@ void ReadPluginsList(std::list<PluginData> &plugins)
 		plugins.push_back(pd);
 	}
 #endif
+
+
+	wxString plugins_file = wxGetApp().GetExeFolder() + _T("/plugins.txt");
+    ifstream ifs(Ttc(plugins_file.c_str()));
+	if(!(!ifs))
+	{
+		char s[1024] = "";
+
+		while(!(ifs.eof()))
+		{
+			ifs.getline(s, 1024);
+			wxString str(Ctt(s));
+
+			PluginData pd;
+			if(str[0] == '#')
+			{
+				str = str.Mid(1);
+				pd.enabled = false;
+			}
+			else
+			{
+				pd.enabled = true;
+			}
+			pd.hard_coded = true;
+			pd.name = str;
+			pd.path = str;
+			plugins.push_back(pd);
+		}
+	}
+
 }
 
 void CPluginsDialog::CreateCheckListbox(long flags)

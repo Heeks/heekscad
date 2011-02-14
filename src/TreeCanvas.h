@@ -51,7 +51,7 @@ private:
 
 public:
 	CTreeCanvas(wxWindow* parent);
-    virtual ~CTreeCanvas(){};
+    virtual ~CTreeCanvas();
 
     void OnPaint(wxPaintEvent& event);
     void OnMouse( wxMouseEvent& event );

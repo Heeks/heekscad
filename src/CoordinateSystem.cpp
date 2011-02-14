@@ -1261,7 +1261,7 @@ class SetCoordSystemActive:public Tool{
 public:
 	void Run(){
 		wxGetApp().m_current_coordinate_system = coord_system_for_Tool;
-		wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
+		wxGetApp().m_frame->RefreshProperties();
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Set this coordinate system as the active one");}

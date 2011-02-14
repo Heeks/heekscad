@@ -27,7 +27,9 @@ extern CHeeksCADInterface heekscad_interface;
 class SketchToolOptions
 {
 public:
-    SketchToolOptions()
+	SketchToolOptions(){}
+
+	void LoadSetttings()
     {
         HeeksConfig config;
         config.Read(_T("SketchToolOptions_reorder"), &m_reorder, true);
@@ -50,10 +52,6 @@ public:
         config.Read(_T("SketchToolOptions_continuity"), &m_continuity, 4);
 		config.Read(_T("SketchToolOptions_sort_points"), &m_sort_points, false);
 		config.Read(_T("SketchToolOptions_force_closed_shape"), &m_force_closed_shape, false);
-
-  // Standard_Integer& ModifyRemoveLoopMode() ;
-
-
     }
 
     void SaveSettings()
@@ -104,6 +102,10 @@ public:
 
 static SketchToolOptions sketch_tool_options;
 
+void LoadSketchToolsSettings()
+{
+	sketch_tool_options.LoadSetttings();
+}
 
 
 class PadSketch:public Tool{

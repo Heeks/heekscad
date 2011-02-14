@@ -129,7 +129,7 @@ void Drawing::OnMouse( wxMouseEvent& event )
 			else if(event.Moving()){
 				if(!m_inhibit_coordinate_change){
 					RecalculateAndRedraw(wxPoint(event.GetX(), event.GetY()));
-					wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
+					wxGetApp().m_frame->RefreshInputCanvas();
 				}
 			}
 		}
