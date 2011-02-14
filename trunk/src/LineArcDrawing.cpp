@@ -682,7 +682,7 @@ void LineArcDrawing::OnKeyDown(wxKeyEvent& event)
 			m_A_down = true;
 			m_save_drawing_mode.push_back(drawing_mode);
 			drawing_mode = ArcDrawingMode;
-			wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
+			wxGetApp().m_frame->RefreshInputCanvas();
 			RecalculateAndRedraw(wxPoint(event.GetX(), event.GetY()));
 			wxGetApp().OnInputModeTitleChanged();
 		}
@@ -701,7 +701,7 @@ void LineArcDrawing::OnKeyUp(wxKeyEvent& event)
 			drawing_mode = m_save_drawing_mode.back();
 			m_save_drawing_mode.pop_back();
 		}
-		wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
+		wxGetApp().m_frame->RefreshInputCanvas();
 		RecalculateAndRedraw(wxPoint(event.GetX(), event.GetY()));
 		wxGetApp().OnInputModeTitleChanged();
 		m_A_down = false;
@@ -720,14 +720,14 @@ static void on_set_drawing_mode(int drawing_mode, HeeksObj* object)
 {
 	line_drawing_for_GetProperties->drawing_mode = (EnumDrawingMode)drawing_mode;
 	line_drawing_for_GetProperties->m_save_drawing_mode.clear();
-	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
+	wxGetApp().m_frame->RefreshProperties();
 	wxGetApp().Repaint();
 }
 
 static void on_set_circle_mode(int circle_mode, HeeksObj* object)
 {
 	line_drawing_for_GetProperties->circle_mode = (EnumCircleDrawingMode)circle_mode;
-	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
+	wxGetApp().m_frame->RefreshProperties();
 	wxGetApp().Repaint();
 }
 

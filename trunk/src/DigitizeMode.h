@@ -29,7 +29,9 @@ public:
 
 	// InputMode's virtual functions
 	const wxChar* GetTitle();
+	const wxChar* GetHelpText();
 	void OnMouse( wxMouseEvent& event );
+	void OnKeyDown(wxKeyEvent& event);
 	bool OnModeChange(void);
 	void OnFrontRender();
 	void GetProperties(std::list<Property *> *list);

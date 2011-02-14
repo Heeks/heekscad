@@ -272,6 +272,16 @@ public:
 	virtual void RegisterToolBar( wxToolBarBase* );
 	virtual void RemoveToolBar( wxToolBarBase* );
 	virtual void RegisterAddToolBars( void(*callbackfunc)() );
+	virtual void RemoveMainToolbar();
+	virtual void RemoveGeometryToolbar();
+	virtual void RemoveSolidToolbar();
+	virtual void RemoveViewingToolbar();
+	virtual void RemoveTransformToolbar();
+	virtual void RemoveOptionsWindow();
+	virtual void RemovePropertiesWindow();
+	virtual void RemoveLogWindow();
+	virtual void RemoveObjectsWindow();
+	virtual void RemoveInputWindow();
 	virtual void PropertiesOnApply2();// don't need to press tick to make changes
 	virtual void AddToAboutBox(const wxChar* str);
 	virtual void SetDefaultLayout(const wxString& str);
@@ -292,6 +302,34 @@ public:
 	virtual bool Intersect(const gp_Pnt& pnt, const gp_Circ& cir);
 	virtual void Intersect(const gp_Lin& line, const gp_Circ& circle, std::list<gp_Pnt> &list);
 	virtual void Intersect(const gp_Circ& c1, const gp_Circ& c2, std::list<gp_Pnt> &list);
+
+	virtual void OnMoveTranslateButton();
+	virtual void OnCopyTranslateButton();
+	virtual void OnMoveRotateButton();
+	virtual void OnCopyRotateButton();
+	virtual void OnMoveMirrorButton();
+	virtual void OnCopyMirrorButton();
+	virtual void OnMoveScaleButton();
+
+	virtual void OnMagExtentsButton();
+	virtual void OnMagNoRotButton();
+	virtual void OnMagButton();
+	virtual void OnMagPreviousButton();
+	virtual void OnFullScreenButton();
+
+	virtual void OnMagXYButton();
+	virtual void OnMagXYMButton();
+	virtual void OnMagXZButton();
+	virtual void OnMagXZMButton();
+	virtual void OnMagYZButton();
+	virtual void OnMagYZMButton();
+	virtual void OnMagXYZButton();
+
+	virtual void OnViewRotateButton();
+	virtual void OnViewZoomButton();
+	virtual void OnViewPanButton();
+
+	virtual void ShowModalOptions();
 
 	virtual void RegisterOnBuildTexture( void(*callbackfunc)() );
 	virtual int LoadIconsTexture(const wxChar *filepath);
@@ -324,4 +362,8 @@ public:
 	virtual void VectorMultiply(double* v, double d);
 	virtual double VectorLength(const double* v);
 	virtual void VectorNormalise(double* v);
+
+	virtual void SetInputUsesModalDialog(bool b);
+	virtual void SetDraggingMovesObjects(bool b);
+	virtual void SetNoCreationMode();
 };

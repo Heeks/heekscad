@@ -202,12 +202,10 @@ static EdgeToSketchTool make_sketch_tool;
 
 void CEdge::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 	edge_for_tools = this;
-	if(GetParentBody())t_list->push_back(&fillet_tool);
-	t_list->push_back(&chamfer_tool);
-	t_list->push_back(&make_sketch_tool);
+	if(!wxGetApp().m_no_creation_mode && GetParentBody())t_list->push_back(&fillet_tool);
+	if(!wxGetApp().m_no_creation_mode)t_list->push_back(&chamfer_tool);
+	if(!wxGetApp().m_no_creation_mode)t_list->push_back(&make_sketch_tool);
 }
-
-
 
 void CEdge::Blend(double radius,  bool chamfer_not_fillet){
 	

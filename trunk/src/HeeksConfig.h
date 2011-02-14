@@ -5,6 +5,6 @@
 class HeeksConfig: public wxConfig
 {
 public:
-	HeeksConfig():wxConfig(_T("HeeksCAD")){}
+	HeeksConfig():wxConfig(wxGetApp().GetAppName()){}
 	~HeeksConfig(){}
 };

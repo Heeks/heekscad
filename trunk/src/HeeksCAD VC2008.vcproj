@@ -376,7 +376,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="opengl32.lib glu32.lib TKVrml.lib TKStl.lib TKBRep.lib TKIGES.lib TKShHealing.lib TKSTEP.lib TKSTEP209.lib TKSTEPAttr.lib TKSTEPBase.lib TKXSBase.lib TKShapeSchema.lib FWOSPlugin.lib PTKernel.lib TKBool.lib TKCAF.lib TKCDF.lib TKDraw.lib TKernel.lib TKFeat.lib TKFillet.lib TKG2d.lib TKG3d.lib TKGeomAlgo.lib TKGeomBase.lib TKHLR.lib TKMath.lib TKOffset.lib TKPCAF.lib TKPrim.lib TKPShape.lib TKService.lib TKTopAlgo.lib TKV2d.lib TKV3d.lib TKMesh.lib TKAdvTools.lib TKCPPExt.lib TKBO.lib TKXDESTEP.lib TKXCAF.lib TKXCAFSchema.lib TKDCAF.lib TKLCAF.lib TKPLCAF.lib wxmsw28u_core.lib wxmsw28u_aui.lib wxmsw28u_gl.lib wxbase28u.lib"
-				OutputFile="..\$(ProjectName).exe"
+				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="&quot;$(WXWIN)\lib\vc_dll&quot;;&quot;$(CASROOT)\win32\lib&quot;"

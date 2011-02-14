@@ -47,6 +47,11 @@
 #include "HText.h"
 #include "HDxf.h"
 #include "LineArcDrawing.h"
+#include "TransformTools.h"
+#include "MagDragWindow.h"
+#include "ViewRotating.h"
+#include "ViewZooming.h"
+#include "ViewPanning.h"
 
 double CHeeksCADInterface::GetTolerance()
 {
@@ -55,17 +60,17 @@ double CHeeksCADInterface::GetTolerance()
 
 void CHeeksCADInterface::RefreshProperties()
 {
-	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
+	wxGetApp().m_frame->RefreshProperties();
 }
 
 void CHeeksCADInterface::RefreshOptions()
 {
-	wxGetApp().m_frame->m_options->RefreshByRemovingAndAddingAll();
+	wxGetApp().m_frame->RefreshOptions();
 }
 
 void CHeeksCADInterface::RefreshInput()
 {
-	wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
+	wxGetApp().m_frame->RefreshInputCanvas();
 }
 
 void CHeeksCADInterface::Repaint(bool soon)
@@ -1358,6 +1363,109 @@ void CHeeksCADInterface::RegisterAddToolBars( void(*callbackfunc)() )
 	wxGetApp().m_AddToolBars_list.push_back(callbackfunc);
 }
 
+void CHeeksCADInterface::RemoveMainToolbar()
+{
+	wxGetApp().RemoveHideableWindow(wxGetApp().m_frame->m_toolBar);
+	wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_toolBar).Show(false);
+	wxGetApp().m_frame->m_aui_manager->DetachPane(wxGetApp().m_frame->m_toolBar);
+	wxGetApp().m_frame->m_main_toolbar_removed = true;
+	wxGetApp().m_frame->m_menuWindow->Remove(wxGetApp().m_frame->m_main_toolbar_menu_id);
+	delete wxGetApp().m_frame->m_toolBar;
+	wxGetApp().m_frame->m_toolBar = NULL;
+}
+
+void CHeeksCADInterface::RemoveGeometryToolbar()
+{
+	wxGetApp().RemoveHideableWindow(wxGetApp().m_frame->m_geometryBar);
+	wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_geometryBar).Show(false);
+	wxGetApp().m_frame->m_aui_manager->DetachPane(wxGetApp().m_frame->m_geometryBar);
+	wxGetApp().m_frame->m_geometry_toolbar_removed = true;
+	wxGetApp().m_frame->m_menuWindow->Remove(wxGetApp().m_frame->m_geometry_toolbar_menu_id);
+	delete wxGetApp().m_frame->m_geometryBar;
+	wxGetApp().m_frame->m_geometryBar = NULL;
+}
+
+void CHeeksCADInterface::RemoveSolidToolbar()
+{
+	wxGetApp().RemoveHideableWindow(wxGetApp().m_frame->m_solidBar);
+	wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_solidBar).Show(false);
+	wxGetApp().m_frame->m_aui_manager->DetachPane(wxGetApp().m_frame->m_solidBar);
+	wxGetApp().m_frame->m_solid_toolbar_removed = true;
+	wxGetApp().m_frame->m_menuWindow->Remove(wxGetApp().m_frame->m_solids_toolbar_menu_id);
+	delete wxGetApp().m_frame->m_solidBar;
+	wxGetApp().m_frame->m_solidBar = NULL;
+}
+
+void CHeeksCADInterface::RemoveViewingToolbar()
+{
+	wxGetApp().RemoveHideableWindow(wxGetApp().m_frame->m_viewingBar);
+	wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_viewingBar).Show(false);
+	wxGetApp().m_frame->m_aui_manager->DetachPane(wxGetApp().m_frame->m_viewingBar);
+	wxGetApp().m_frame->m_viewing_toolbar_removed = true;
+	wxGetApp().m_frame->m_menuWindow->Remove(wxGetApp().m_frame->m_viewing_toolbar_menu_id);
+	delete wxGetApp().m_frame->m_viewingBar;
+	wxGetApp().m_frame->m_viewingBar = NULL;
+}
+
+void CHeeksCADInterface::RemoveTransformToolbar()
+{
+	wxGetApp().RemoveHideableWindow(wxGetApp().m_frame->m_transformBar);
+	wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_transformBar).Show(false);
+	wxGetApp().m_frame->m_aui_manager->DetachPane(wxGetApp().m_frame->m_transformBar);
+	wxGetApp().m_frame->m_transform_toolbar_removed = true;
+	wxGetApp().m_frame->m_menuWindow->Remove(wxGetApp().m_frame->m_transform_toolbar_menu_id);
+	delete wxGetApp().m_frame->m_transformBar;
+	wxGetApp().m_frame->m_transformBar = NULL;
+}
+
+void CHeeksCADInterface::RemoveOptionsWindow()
+{
+	wxGetApp().RemoveHideableWindow(wxGetApp().m_frame->m_options);
+	wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_options).Show(false);
+	wxGetApp().m_frame->m_aui_manager->DetachPane(wxGetApp().m_frame->m_options);
+	wxGetApp().m_frame->m_menuWindow->Remove(wxGetApp().m_frame->m_options_menu_id);
+	//delete wxGetApp().m_frame->m_options;
+	  wxGetApp().m_frame->m_options->Show(false);
+	wxGetApp().m_frame->m_options = NULL;
+}
+
+void CHeeksCADInterface::RemovePropertiesWindow()
+{
+	wxGetApp().RemoveHideableWindow(wxGetApp().m_frame->m_properties);
+	wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_properties).Show(false);
+	wxGetApp().m_frame->m_aui_manager->DetachPane(wxGetApp().m_frame->m_properties);
+	wxGetApp().m_frame->m_menuWindow->Remove(wxGetApp().m_frame->m_properties_menu_id);
+	delete wxGetApp().m_frame->m_properties;
+	wxGetApp().m_frame->m_properties = NULL;
+}
+
+void CHeeksCADInterface::RemoveLogWindow()
+{
+	wxGetApp().m_frame->m_menuWindow->Remove(wxGetApp().m_frame->m_log_menu_id);
+	delete wxLog::SetActiveTarget(new wxLogStderr(NULL));
+	wxGetApp().m_frame->m_logger = NULL;
+}
+
+void CHeeksCADInterface::RemoveObjectsWindow()
+{
+	wxGetApp().RemoveHideableWindow(wxGetApp().m_frame->m_tree_canvas);
+	wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_tree_canvas).Show(false);
+	wxGetApp().m_frame->m_aui_manager->DetachPane(wxGetApp().m_frame->m_tree_canvas);
+	wxGetApp().m_frame->m_menuWindow->Remove(wxGetApp().m_frame->m_objects_menu_id);
+	delete wxGetApp().m_frame->m_tree_canvas;
+	wxGetApp().m_frame->m_tree_canvas = NULL;
+}
+
+void CHeeksCADInterface::RemoveInputWindow()
+{
+	wxGetApp().RemoveHideableWindow(wxGetApp().m_frame->m_input_canvas);
+	wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_input_canvas).Show(false);
+	wxGetApp().m_frame->m_aui_manager->DetachPane(wxGetApp().m_frame->m_input_canvas);
+	wxGetApp().m_frame->m_menuWindow->Remove(wxGetApp().m_frame->m_input_menu_id);
+	delete wxGetApp().m_frame->m_input_canvas;
+	wxGetApp().m_frame->m_input_canvas = NULL;
+}
+
 void CHeeksCADInterface::PropertiesOnApply2()
 {
 	// don't need to press tick to make changes
@@ -1473,6 +1581,121 @@ void CHeeksCADInterface::Intersect(const gp_Circ& c1, const gp_Circ& c2, std::li
 {
 	// Call the one in the Geom module.
 	intersect( c1, c2, list );
+}
+
+void CHeeksCADInterface::OnMoveTranslateButton()
+{
+	TransformTools::Translate(false);
+}
+
+void CHeeksCADInterface::OnCopyTranslateButton()
+{
+	TransformTools::Translate(true);
+}
+
+void CHeeksCADInterface::OnMoveRotateButton()
+{
+	TransformTools::Rotate(false);
+}
+
+void CHeeksCADInterface::OnCopyRotateButton()
+{
+	TransformTools::Rotate(true);
+}
+
+void CHeeksCADInterface::OnMoveMirrorButton()
+{
+	TransformTools::Mirror(false);
+}
+
+void CHeeksCADInterface::OnCopyMirrorButton()
+{
+	TransformTools::Mirror(true);
+}
+
+void CHeeksCADInterface::OnMoveScaleButton()
+{
+	TransformTools::Scale(false);
+}
+
+void CHeeksCADInterface::OnMagExtentsButton()
+{
+	wxGetApp().m_frame->m_graphics->OnMagExtents(true, true);
+}
+
+void CHeeksCADInterface::OnMagNoRotButton()
+{
+	wxGetApp().m_frame->m_graphics->OnMagExtents(false, true);
+}
+
+void CHeeksCADInterface::OnMagButton()
+{
+	wxGetApp().SetInputMode(wxGetApp().magnification);
+}
+
+void CHeeksCADInterface::OnMagPreviousButton()
+{
+	wxGetApp().m_frame->m_graphics->OnMagPrevious();
+}
+
+void CHeeksCADInterface::OnFullScreenButton()
+{
+	wxGetApp().m_frame->ShowFullScreen(true);
+}
+
+void CHeeksCADInterface::OnMagXYButton()
+{
+	wxGetApp().m_frame->m_graphics->OnMagXY(true);
+}
+
+void CHeeksCADInterface::OnMagXYMButton()
+{
+	wxGetApp().m_frame->m_graphics->OnMagXYM(true);
+}
+
+void CHeeksCADInterface::OnMagXZButton()
+{
+	wxGetApp().m_frame->m_graphics->OnMagXZ(true);
+}
+
+void CHeeksCADInterface::OnMagXZMButton()
+{
+	wxGetApp().m_frame->m_graphics->OnMagXZM(true);
+}
+
+void CHeeksCADInterface::OnMagYZButton()
+{
+	wxGetApp().m_frame->m_graphics->OnMagYZ(true);
+}
+
+void CHeeksCADInterface::OnMagYZMButton()
+{
+	wxGetApp().m_frame->m_graphics->OnMagYZM(true);
+}
+
+void CHeeksCADInterface::OnMagXYZButton()
+{
+	wxGetApp().m_frame->m_graphics->OnMagXYZ(true);
+}
+
+void CHeeksCADInterface::OnViewRotateButton()
+{
+	wxGetApp().SetInputMode(wxGetApp().viewrotating);
+}
+
+void CHeeksCADInterface::OnViewZoomButton()
+{
+	wxGetApp().SetInputMode(wxGetApp().viewzooming);
+}
+
+void CHeeksCADInterface::OnViewPanButton()
+{
+	wxGetApp().SetInputMode(wxGetApp().viewpanning);
+}
+
+void CHeeksCADInterface::ShowModalOptions()
+{
+	wxGetApp().ShowModalOptions();
 }
 
 void CHeeksCADInterface::RegisterOnBuildTexture( void(*callbackfunc)() )
@@ -1606,4 +1829,101 @@ void CHeeksCADInterface::VectorNormalise(double* v)
 	extract(make_vector(v).Normalized(), v);
 }
 
+void CHeeksCADInterface::SetInputUsesModalDialog(bool b)
+{
+	wxGetApp().m_input_uses_modal_dialog = b;
+}
 
+void CHeeksCADInterface::SetDraggingMovesObjects(bool b)
+{
+	wxGetApp().m_dragging_moves_objects = b;
+}
+
+void CHeeksCADInterface::SetNoCreationMode()
+{
+	// remove HeeksCAD menus
+	int menu_pos;
+	menu_pos = wxGetApp().m_frame->GetMenuBar()->FindMenu(_("Geometry"));
+	if(menu_pos != wxNOT_FOUND)wxGetApp().m_frame->GetMenuBar()->Remove(menu_pos);
+	menu_pos = wxGetApp().m_frame->GetMenuBar()->FindMenu(_("Solid"));
+	if(menu_pos != wxNOT_FOUND)wxGetApp().m_frame->GetMenuBar()->Remove(menu_pos);
+	menu_pos = wxGetApp().m_frame->GetMenuBar()->FindMenu(_("Set Origin"));
+	if(menu_pos != wxNOT_FOUND)wxGetApp().m_frame->GetMenuBar()->Remove(menu_pos);
+	RemoveSolidToolbar();
+	RemoveGeometryToolbar();
+	RemoveViewingToolbar();
+
+	// remove separator
+	wxMenu* menuFile = wxGetApp().m_frame->GetMenuBar()->GetMenu(0);
+	menuFile->Remove(menuFile->FindItemByPosition(13));
+
+	// remove "Plugins"
+	menuFile->Remove(menuFile->FindItemByPosition(12));
+
+	// remove separator
+	menuFile->Remove(menuFile->FindItemByPosition(11));
+
+	// remove "About"
+	menuFile->Remove(menuFile->FindItemByPosition(10));
+
+	// remove "Import"
+	menuFile->Remove(menuFile->FindItemByPosition(9));
+
+	// remove "Print Preview"
+	menuFile->Remove(menuFile->FindItemByPosition(7));
+
+	// remove "Page Setup"
+	menuFile->Remove(menuFile->FindItemByPosition(6));
+
+	// remove "Print"
+	menuFile->Remove(menuFile->FindItemByPosition(5));
+
+	// remove separator
+	menuFile->Remove(menuFile->FindItemByPosition(4));
+
+	// remove "Save As"
+	menuFile->Remove(menuFile->FindItemByPosition(3));
+
+	// remove "Save"
+	menuFile->Remove(menuFile->FindItemByPosition(2));
+
+	// remove "New"; we only need "Open"
+	menuFile->Remove(menuFile->FindItemByPosition(0));
+
+
+	// remove "Delete"
+	wxMenu* menuEdit = wxGetApp().m_frame->GetMenuBar()->GetMenu(1);
+	menuEdit->Remove(menuEdit->FindItemByPosition(6));
+
+	// remove "Paste"
+	menuEdit->Remove(menuEdit->FindItemByPosition(5));
+
+	// remove "Copy"
+	menuEdit->Remove(menuEdit->FindItemByPosition(4));
+
+	// remove "Cut"
+	menuEdit->Remove(menuEdit->FindItemByPosition(3));
+
+	// remove separator
+	menuEdit->Remove(menuEdit->FindItemByPosition(2));
+
+
+	// from the main toolbar
+	// remove "Paste" button
+	wxGetApp().m_frame->m_toolBar->DeleteToolByPos(5);
+
+	// remove "Copy" button
+	wxGetApp().m_frame->m_toolBar->DeleteToolByPos(4);
+
+	// remove "Cut" button
+	wxGetApp().m_frame->m_toolBar->DeleteToolByPos(3);
+
+	// remove "Save" button
+	wxGetApp().m_frame->m_toolBar->DeleteToolByPos(2);
+
+	// remove "New" button
+	wxGetApp().m_frame->m_toolBar->DeleteToolByPos(0);
+
+
+	wxGetApp().m_no_creation_mode = true;
+}

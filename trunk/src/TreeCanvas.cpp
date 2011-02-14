@@ -45,6 +45,11 @@ CTreeCanvas::CTreeCanvas(wxWindow* parent)
     SetVirtualSize( 92, 97 );
 }
 
+CTreeCanvas::~CTreeCanvas()
+{
+	wxGetApp().RemoveObserver(this);
+}
+
 wxPaintDC* CTreeCanvas::m_dc = NULL;
 
 void CTreeCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )

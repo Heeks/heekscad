@@ -85,6 +85,7 @@ public:
 	wxToolBar *m_geometryBar;
 	wxToolBar *m_solidBar;
 	wxToolBar *m_viewingBar;
+	wxToolBar *m_transformBar;
 	wxStatusBar* m_statusBar;
 	wxMenuBar *m_menuBar;
 	wxMenu* m_recent_files_menu;
@@ -92,7 +93,21 @@ public:
 	HeeksPrintout* m_printout;
 	wxString m_extra_about_box_str;
 
-
+	bool m_main_toolbar_removed;
+	bool m_geometry_toolbar_removed;
+	bool m_solid_toolbar_removed;
+	bool m_viewing_toolbar_removed;
+	bool m_transform_toolbar_removed;
+	int m_objects_menu_id;
+	int m_log_menu_id;
+	int m_options_menu_id;
+	int m_input_menu_id;
+	int m_properties_menu_id;
+	int m_main_toolbar_menu_id;
+	int m_solids_toolbar_menu_id;
+	int m_geometry_toolbar_menu_id;
+	int m_viewing_toolbar_menu_id;
+	int m_transform_toolbar_menu_id;
 
 	CHeeksFrame( const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize );
 	virtual ~CHeeksFrame();
@@ -125,6 +140,9 @@ public:
 	void SetLogLevel(const int level);
 	void SetLogRepeatCounting(const bool repeatcounting);
 	void SetLogLogTimestamps(const bool uselogtimestamps);
+	void RefreshInputCanvas();
+	void RefreshProperties();
+	void RefreshOptions();
 
 	//wxTopLevelWindow's virtual functions
 	bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);

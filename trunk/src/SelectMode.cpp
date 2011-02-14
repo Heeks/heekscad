@@ -72,9 +72,10 @@ const wxChar* CSelectMode::GetHelpText()
 	str_for_GetHelpText = wxString(_("Left button for selecting objects"))
 		+ _T("\n") + _("( with Ctrl key for extra objects)")
 		+ _T("\n") + _("( with Shift key for similar objects)")
-		+ _T("\n") + _("Drag with left button to window select")
-		+ _T("\n") + _("or to move object if on an object")
-		+ _T("\n") + _("Mouse wheel to zoom in and out");
+		+ _T("\n") + _("Drag with left button to window select");
+
+	if(wxGetApp().m_dragging_moves_objects)str_for_GetHelpText.Append(wxString(_T("\n")) + _("or to move object if on an object"));
+	str_for_GetHelpText.Append(wxString(_T("\n")) + _("Mouse wheel to zoom in and out"));
 
 	if(wxGetApp().ctrl_does_rotate){
 		str_for_GetHelpText.Append(wxString(_T("\n")) + _("Middle button to pan view"));
@@ -88,6 +89,12 @@ const wxChar* CSelectMode::GetHelpText()
 	str_for_GetHelpText.Append(wxString(_T("\n")) + _("Right button for object menu"));
 	str_for_GetHelpText.Append(wxString(_T("\n")) + _("See options window to hide this help"));
 	str_for_GetHelpText.Append(wxString(_T("\n")) + _T("( ") + _("view options") + _T("->") + _("screen text") + _T(" )"));
+
+	if(m_doing_a_main_loop)
+	{
+		str_for_GetHelpText.Append(wxString(_T("\n")) + _("Press Esc key to cancel"));
+		if(wxGetApp().m_marked_list->size() > 0)str_for_GetHelpText.Append(wxString(_T("\n")) + _("Press Return key to accept selection"));
+	}
 
 	return str_for_GetHelpText;
 }
@@ -110,51 +117,55 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 	{
 		button_down_point = wxPoint(event.GetX(), event.GetY());
 		CurrentPoint = button_down_point;
-		MarkedObjectManyOfSame marked_object;
-		wxGetApp().FindMarkedObject(button_down_point, &marked_object);
-		if(marked_object.m_map.size()>0)
+
+		if(wxGetApp().m_dragging_moves_objects)
 		{
-			HeeksObj* object = marked_object.GetFirstOfTopOnly();
-
-			if (event.ShiftDown())
+			MarkedObjectManyOfSame marked_object;
+			wxGetApp().FindMarkedObject(button_down_point, &marked_object);
+			if(marked_object.m_map.size()>0)
 			{
-				// Augment the marked_object list with objects that 'look' like
-				// the one selected.
+				HeeksObj* object = marked_object.GetFirstOfTopOnly();
 
-				CCorrelationTool correlate(wxGetApp().m_min_correlation_factor, wxGetApp().m_max_scale_threshold, wxGetApp().m_number_of_sample_points, wxGetApp().m_correlate_by_color );
-				std::list<HeeksObj *> similar_objects = correlate.SimilarSymbols( object );
-				std::list<HeeksObj *>::const_iterator l_itSymbol;
-
-				for (l_itSymbol = similar_objects.begin(); l_itSymbol != similar_objects.end(); l_itSymbol++)
+				if (event.ShiftDown())
 				{
-					HeeksObj *ob = *l_itSymbol;
-					if (! wxGetApp().m_marked_list->ObjectMarked(ob))
+					// Augment the marked_object list with objects that 'look' like
+					// the one selected.
+
+					CCorrelationTool correlate(wxGetApp().m_min_correlation_factor, wxGetApp().m_max_scale_threshold, wxGetApp().m_number_of_sample_points, wxGetApp().m_correlate_by_color );
+					std::list<HeeksObj *> similar_objects = correlate.SimilarSymbols( object );
+					std::list<HeeksObj *>::const_iterator l_itSymbol;
+
+					for (l_itSymbol = similar_objects.begin(); l_itSymbol != similar_objects.end(); l_itSymbol++)
 					{
-                        wxGetApp().m_marked_list->Add(ob, true);
-					}
-				} // End for
-			} // End if - then
+						HeeksObj *ob = *l_itSymbol;
+						if (! wxGetApp().m_marked_list->ObjectMarked(ob))
+						{
+							wxGetApp().m_marked_list->Add(ob, true);
+						}
+					} // End for
+				} // End if - then
 
-			while(object)
-			{
-				if(object->GetType() == GripperType)
+				while(object)
 				{
-					wxGetApp().m_frame->m_graphics->DrawFront();
-					wxGetApp().drag_gripper = (Gripper*)object;
-					wxGetApp().m_digitizing->SetOnlyCoords(wxGetApp().drag_gripper, true);
-					wxGetApp().m_digitizing->digitize(button_down_point);
-					wxGetApp().grip_from = wxGetApp().m_digitizing->digitized_point.m_point;
-					wxGetApp().grip_to = wxGetApp().grip_from;
-					double from[3];
-					from[0] = wxGetApp().grip_from.X();
-					from[1] = wxGetApp().grip_from.Y();
-					from[2] = wxGetApp().grip_from.Z();
-					wxGetApp().drag_gripper->OnGripperGrabbed(wxGetApp().m_marked_list->list(), true, from);
-					wxGetApp().grip_from = gp_Pnt(from[0], from[1], from[2]);
-					wxGetApp().m_frame->m_graphics->EndDrawFront();
-					return;
+					if(object->GetType() == GripperType)
+					{
+						wxGetApp().m_frame->m_graphics->DrawFront();
+						wxGetApp().drag_gripper = (Gripper*)object;
+						wxGetApp().m_digitizing->SetOnlyCoords(wxGetApp().drag_gripper, true);
+						wxGetApp().m_digitizing->digitize(button_down_point);
+						wxGetApp().grip_from = wxGetApp().m_digitizing->digitized_point.m_point;
+						wxGetApp().grip_to = wxGetApp().grip_from;
+						double from[3];
+						from[0] = wxGetApp().grip_from.X();
+						from[1] = wxGetApp().grip_from.Y();
+						from[2] = wxGetApp().grip_from.Z();
+						wxGetApp().drag_gripper->OnGripperGrabbed(wxGetApp().m_marked_list->list(), true, from);
+						wxGetApp().grip_from = gp_Pnt(from[0], from[1], from[2]);
+						wxGetApp().m_frame->m_graphics->EndDrawFront();
+						return;
+					}
+					object = marked_object.Increment();
 				}
-				object = marked_object.Increment();
 			}
 		}
 	}
@@ -356,7 +367,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 			}
 			else if(abs(button_down_point.x - event.GetX())>2 || abs(button_down_point.y - event.GetY())>2)
 			{
-				if(!window_box_exists && m_can_grip_objects)
+				if(wxGetApp().m_dragging_moves_objects && !window_box_exists && m_can_grip_objects)
 				{
 					std::list<HeeksObj*> selected_objects_dragged;
 					wxGetApp().m_show_grippers_on_drag = true;
@@ -507,6 +518,14 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 void CSelectMode::OnKeyDown(wxKeyEvent& event)
 {
 	switch(event.GetKeyCode()){
+	case WXK_RETURN:
+		if(m_doing_a_main_loop && wxGetApp().m_marked_list->size() > 0)wxGetApp().ExitMainLoop();
+		break;
+
+	case WXK_ESCAPE:
+		if(m_doing_a_main_loop)wxGetApp().ExitMainLoop();
+		break;
+
 	case WXK_DELETE:
 		wxGetApp().DeleteMarkedItems();
 		return;
@@ -545,24 +564,42 @@ public:
 		if(wxGetApp().m_select_mode->m_doing_a_main_loop)
 		{
 			wxGetApp().ExitMainLoop();
-			wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
+			wxGetApp().m_frame->RefreshInputCanvas();
 		}
 		else{
 			wxMessageBox(_T("Error! The \"Stop Picking\" button shouldn't have been available!"));
 		}
 	}
-	const wxChar* GetTitle(){return _("Stop Picking");}
+	const wxChar* GetTitle(){return _("Accept selection");}
 	wxString BitmapPath(){return _T("endpick");}
-	const wxChar* GetToolTip(){return _("Finish picking");}
 };
 
 static EndPicking end_picking;
+
+class CancelPicking:public Tool{
+public:
+	void Run(){
+		if(wxGetApp().m_select_mode->m_doing_a_main_loop)
+		{
+			wxGetApp().m_marked_list->Clear(false);
+			wxGetApp().ExitMainLoop();
+			wxGetApp().m_frame->RefreshInputCanvas();
+		}
+		else{
+			wxMessageBox(_T("Error! The \"Cancel Picking\" button shouldn't have been available!"));
+		}
+	}
+	const wxChar* GetTitle(){return _("Cancel selection");}
+	wxString BitmapPath(){return _T("escpick");}
+};
+
+static CancelPicking cancel_picking;
 
 class PickAnything:public Tool{
 public:
 	void Run(){
 		wxGetApp().m_marked_list->m_filter = -1;
-		wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
+		wxGetApp().m_frame->RefreshInputCanvas();
 	}
 	const wxChar* GetTitle(){return _("Pick Anything");}
 	wxString BitmapPath(){return _T("pickany");}
@@ -575,7 +612,7 @@ class PickEdges:public Tool{
 public:
 	void Run(){
 		wxGetApp().m_marked_list->m_filter = MARKING_FILTER_EDGE;
-		wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
+		wxGetApp().m_frame->RefreshInputCanvas();
 	}
 	const wxChar* GetTitle(){return _("Pick Edges");}
 	wxString BitmapPath(){return _T("pickedges");}
@@ -588,7 +625,7 @@ class PickFaces:public Tool{
 public:
 	void Run(){
 		wxGetApp().m_marked_list->m_filter = MARKING_FILTER_FACE;
-		wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
+		wxGetApp().m_frame->RefreshInputCanvas();
 	}
 	const wxChar* GetTitle(){return _("Pick Faces");}
 	wxString BitmapPath(){return _T("pickfaces");}
@@ -601,7 +638,7 @@ class EndSketchModeTool:public Tool{
 public:
 	void Run(){
 		wxGetApp().EndSketchMode();
-		wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
+		wxGetApp().m_frame->RefreshInputCanvas();
 	}
 	const wxChar* GetTitle(){return _("End Sketch Mode");}
 	wxString BitmapPath(){return _T("endsketchmode");}
@@ -611,7 +648,11 @@ static EndSketchModeTool end_sketch_mode;
 
 void CSelectMode::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
-	if(m_doing_a_main_loop)t_list->push_back(&end_picking);
+	if(m_doing_a_main_loop)
+	{
+		t_list->push_back(&end_picking);
+		t_list->push_back(&cancel_picking);
+	}
 	if(wxGetApp().m_marked_list->m_filter != -1)t_list->push_back(&pick_anything);
 	if(wxGetApp().m_marked_list->m_filter != MARKING_FILTER_EDGE)t_list->push_back(&pick_edges);
 	if(wxGetApp().m_marked_list->m_filter != MARKING_FILTER_FACE)t_list->push_back(&pick_faces);

@@ -70,6 +70,7 @@ using namespace std;
 IMPLEMENT_APP(HeeksCADapp)
 
 extern void SketchTools_GetOptions(std::list<Property *> *list);
+extern void LoadSketchToolsSettings();
 
 
 #if 0
@@ -137,7 +138,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	autosolve_constraints = false;
 	digitizing_grid = 1.0;
 	grid_mode = 3;
-	m_rotate_mode = 0;
+	m_rotate_mode = 1;
 	m_antialiasing = false;
 	m_light_push_matrix = true;
 	m_marked_list = new MarkedList;
@@ -173,6 +174,8 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_property_grid_validation = false;
 	m_solid_view_mode = SolidViewFacesAndEdges;
 	m_input_uses_modal_dialog = false;
+	m_dragging_moves_objects = false;
+	m_no_creation_mode = false;
 
 	m_font_paths = _T("/usr/share/qcad/fonts");
 	m_word_space_percentage = 100.0;
@@ -369,8 +372,10 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("SolidViewMode"), (int*)(&m_solid_view_mode), 0);
 
 	config.Read(_T("InputUsesModalDialog"), &m_input_uses_modal_dialog, true);
+	config.Read(_T("DraggingMovesObjects"), &m_dragging_moves_objects, true);
 
 	HDimension::ReadFromConfig(config);
+	LoadSketchToolsSettings();
 
 	m_ruler->ReadFromConfig(config);
 
@@ -609,8 +614,8 @@ void HeeksCADapp::SetInputMode(CInputMode *new_mode){
 	else{
 		input_mode_object = m_select_mode;
 	}
-	if(m_frame && m_frame->m_input_canvas)m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
-	if(m_frame && m_frame->m_options)m_frame->m_options->RefreshByRemovingAndAddingAll();
+	if(m_frame && m_frame->m_input_canvas)m_frame->RefreshInputCanvas();
+	if(m_frame && m_frame->m_options)m_frame->RefreshOptions();
 	if(m_graphics_text_mode != GraphicsTextModeNone)Repaint();
 }
 
@@ -1990,7 +1995,7 @@ class UnsetCoordSystemActive:public Tool{
 public:
 	void Run(){
 		wxGetApp().m_current_coordinate_system = NULL;
-		wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
+		wxGetApp().m_frame->RefreshProperties();
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Set world coordinate system active");}
@@ -2280,7 +2285,7 @@ void on_set_background_mode(int value, HeeksObj* object)
 {
 	wxGetApp().m_background_mode = (BackgroundMode)value;
 	wxGetApp().Repaint();
-	wxGetApp().m_frame->m_options->RefreshByRemovingAndAddingAll();
+	wxGetApp().m_frame->RefreshOptions();
 }
 
 void on_set_face_color(HeeksColor value, HeeksObj* object)
@@ -2701,8 +2706,8 @@ static void on_set_units(int value, HeeksObj* object)
 
 	HeeksConfig config;
 	config.Write(_T("ViewUnits"), wxGetApp().m_view_units);
-	wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
-	wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
+	wxGetApp().m_frame->RefreshProperties();
+	wxGetApp().m_frame->RefreshInputCanvas();
 	wxGetApp().m_ruler->KillGLLists();
 	wxGetApp().SetStatusText();
 	wxGetApp().Repaint();
@@ -2717,6 +2722,13 @@ static void on_dimension_draw_flat(bool value, HeeksObj* object)
 static void on_input_uses_modal_dialog(bool value, HeeksObj* object)
 {
 	wxGetApp().m_input_uses_modal_dialog = value;
+	wxGetApp().Repaint();
+}
+
+static void on_dragging_moves_objects(bool value, HeeksObj* object)
+{
+	wxGetApp().m_dragging_moves_objects = value;
+	wxGetApp().Repaint();
 }
 
 static void on_edit_font_paths(const wxChar* value, HeeksObj* object)
@@ -2885,10 +2897,9 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 		view_options->m_list.push_back ( new PropertyChoice ( _("solid view mode"),  choices, m_solid_view_mode, this, on_set_solid_view_mode ) );
 	}
 	view_options->m_list.push_back(new PropertyCheck(_("input uses modal dialog"), m_input_uses_modal_dialog, NULL, on_input_uses_modal_dialog));
+	view_options->m_list.push_back(new PropertyCheck(_("dragging moves objects"), m_dragging_moves_objects, NULL, on_dragging_moves_objects));
 
 	list->push_back(view_options);
-
-
 
 	PropertyList* digitizing = new PropertyList(_("digitizing"));
 	digitizing->m_list.push_back(new PropertyCheck(_("end"), digitize_end, NULL, on_end_of));
@@ -2897,7 +2908,6 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	digitizing->m_list.push_back(new PropertyCheck(_("midpoint"), digitize_midpoint, NULL, on_mid_point));
 	digitizing->m_list.push_back(new PropertyCheck(_("nearest"), digitize_nearest, NULL, on_nearest));
 	digitizing->m_list.push_back(new PropertyCheck(_("tangent"), digitize_tangent, NULL, on_tangent));
-	// i'm not sure this works anyway    digitizing->m_list.push_back(new PropertyLength(_("radius for undefined circles"), digitizing_radius, NULL, on_radius));
 	digitizing->m_list.push_back(new PropertyCheck(_("coordinates"), digitize_coords, NULL, on_coords));
 	digitizing->m_list.push_back(new PropertyCheck(_("screen"), digitize_screen, NULL, on_relative));
 	digitizing->m_list.push_back(new PropertyLength(_("grid size"), digitizing_grid, NULL, on_grid_edit));
@@ -3103,8 +3113,10 @@ public:
 				return _("Mark");
 			}
 		}
-		return _("Properties");
+		if(wxGetApp().m_frame->m_properties)return _("Properties");
+		return _("Mark");
 	}
+
 	void Run(){
 		if(m_marked_object == NULL)return;
 		if(m_marked_object->GetObject() == NULL)return;
@@ -3119,7 +3131,7 @@ public:
 		else{
 			wxGetApp().m_marked_list->Clear(true);
 			wxGetApp().m_marked_list->Add(m_marked_object->GetObject(), true);
-			if(!(wxGetApp().m_frame->m_properties->IsShown())){
+			if(wxGetApp().m_frame->m_properties && !(wxGetApp().m_frame->m_properties->IsShown())){
 				wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_properties).Show();
 				wxGetApp().m_frame->m_aui_manager->Update();
 			}
@@ -3150,11 +3162,6 @@ void HeeksCADapp::GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list
 
 		marked_object->GetObject()->GetTools(&tools, &point);
 		if(tools.size() > 0)tools.push_back(NULL);
-
-		//TODO: this is the only useful thing removeobjecttool ever did
-		//if(marked_object->GetObject()->CanBeRemoved())tools.push_back(new RemoveObjectTool(marked_object->GetObject()));
-
-		tools.push_back(NULL);
 
 		tools.push_back(new MarkObjectTool(marked_object, point, control_pressed));
 

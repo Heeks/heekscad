@@ -9,6 +9,7 @@
 #include "HeeksFrame.h"
 #include "HLine.h"
 #include "HILine.h"
+#include "OptionsCanvas.h"
 
 bool HeeksCADapp::InputInt(const wxChar* prompt, const wxChar* value_name, int &value)
 {
@@ -440,4 +441,46 @@ bool HeeksCADapp::InputLength(const wxChar* prompt, const wxChar* value_name, do
 
 		return CLengthInput::m_success;
 	}
+}
+
+class COptionsDlg : public HDialog
+{
+public:
+	COptionsCanvas *m_options_canvas;
+	bool m_ignore_event_functions;
+
+	COptionsDlg(wxWindow *parent):HDialog(parent)
+	{
+		m_ignore_event_functions = true;
+		wxBoxSizer *sizerMain = new wxBoxSizer(wxVERTICAL);
+
+		m_options_canvas = new COptionsCanvas(this);
+		m_options_canvas->RefreshByRemovingAndAddingAll2();
+		m_options_canvas->SetSize(0, 0, 400, 300);
+		sizerMain->Add( m_options_canvas, 0, wxALL, control_border );
+
+		// add OK and Cancel to bottom side
+		wxBoxSizer *sizerOKCancel = MakeOkAndCancel(wxHORIZONTAL);
+		sizerMain->Add( sizerOKCancel, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, control_border );
+
+		SetSizer( sizerMain );
+		sizerMain->SetSizeHints(this);
+		sizerMain->Fit(this);
+
+		m_options_canvas->SetFocus();
+
+		m_ignore_event_functions = false;
+	}
+
+	DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(COptionsDlg, HDialog)
+END_EVENT_TABLE()
+
+void HeeksCADapp::ShowModalOptions()
+{
+	COptionsDlg dlg(m_frame);
+	int ret = dlg.ShowModal();
+	//if(ret == wxID_OK);
 }
