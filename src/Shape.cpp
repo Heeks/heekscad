@@ -126,6 +126,7 @@ void CShape::create_faces_and_edges()
 		Add(m_vertices, NULL);
 	}
 	CreateFacesAndEdges(m_shape, m_faces, m_edges, m_vertices);
+	m_creation_time = wxGetLocalTimeMillis();
 }
 
 void CShape::delete_faces_and_edges()
@@ -284,7 +285,7 @@ static OffsetShapeTool offset_shape_tool;
 void CShape::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	shape_for_tools = this;
-	t_list->push_back(&offset_shape_tool);
+	if(!wxGetApp().m_no_creation_mode)t_list->push_back(&offset_shape_tool);
 }
 
 void CShape::MakeTransformedShape(const gp_Trsf &mat)

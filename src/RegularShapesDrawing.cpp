@@ -460,14 +460,14 @@ static void on_set_drawing_mode(int value, HeeksObj* object)
 {
 	RegularShapesDrawing_for_GetProperties->m_mode = (RegularShapeMode)value;
 	RegularShapesDrawing_for_GetProperties->ClearSketch();
-	wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
+	wxGetApp().m_frame->RefreshInputCanvas();
 }
 
 static void on_set_polygon_mode(int value, HeeksObj* object)
 {
 	RegularShapesDrawing_for_GetProperties->p_mode = (PolygonMode)value;
 	//RegularShapesDrawing_for_GetProperties->ClearSketch();
-	//wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
+	//wxGetApp().m_frame->RefreshInputCanvas();
 }
 
 static void on_set_rect_radius(double value, HeeksObj* object)

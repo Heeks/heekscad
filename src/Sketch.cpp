@@ -101,7 +101,7 @@ static void on_set_order_type(int value, HeeksObj* object)
 		int order = FindIt->second;
 		if(((CSketch*)object)->ReOrderSketch((SketchOrderType)order))
 		{
-			wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
+			wxGetApp().m_frame->RefreshProperties();
 		}
 	}
 }

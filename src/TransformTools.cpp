@@ -77,7 +77,9 @@ void TransformTools::Translate(bool copy)
 		}
 	}
 	double to[3];
-	wxGetApp().PickPosition(_("Click position to move to"), to, on_move_translate);
+
+	bool move_to_accepted = wxGetApp().PickPosition(_("Click position to move to"), to, on_move_translate);
+
 	if(!copy)
 	{
 		for(std::list<HeeksObj*>::iterator It = wxGetApp().m_hidden_for_drag.begin(); It != wxGetApp().m_hidden_for_drag.end(); It++)
@@ -88,6 +90,8 @@ void TransformTools::Translate(bool copy)
 		wxGetApp().m_hidden_for_drag.clear();
 	}
 	wxGetApp().DestroyTransformGLList();
+
+	if(!move_to_accepted)return;
 
 	wxGetApp().CreateUndoPoint();
 

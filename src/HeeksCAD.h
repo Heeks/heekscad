@@ -192,6 +192,8 @@ public:
 	double* m_file_open_matrix;
 	double m_view_units; // units to display to the user ( but everything is stored as mm ), 1.0 for mm, 25.4 for inches
 	bool m_input_uses_modal_dialog;
+	bool m_dragging_moves_objects;
+	bool m_no_creation_mode; // set from a plugin, for making an exporter only application
 
 	double m_min_correlation_factor;
 	double m_max_scale_threshold;
@@ -346,6 +348,7 @@ public:
 	bool InputDouble(const wxChar* prompt, const wxChar* value_name, double &value);
 	bool InputAngleWithPlane(double &angle, double *axis = NULL, double *pos = NULL, int *number_of_copies = NULL);
 	bool InputLength(const wxChar* prompt, const wxChar* value_name, double &value);
+	void ShowModalOptions();
 	void RegisterOnGLCommands( void(*callbackfunc)() );
 	void RemoveOnGLCommands( void(*callbackfunc)() );
 	void RegisterOnGraphicsSize( void(*callbackfunc)(wxSizeEvent&) );

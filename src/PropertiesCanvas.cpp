@@ -55,6 +55,8 @@ CPropertiesCanvas::CPropertiesCanvas(wxWindow* parent)
 CPropertiesCanvas::~CPropertiesCanvas()
 {
 	ClearProperties();
+	wxGetApp().RemoveObserver(this);
+	delete m_pg;
 }
 
 void CPropertiesCanvas::OnSize(wxSizeEvent& event)

@@ -30,9 +30,67 @@ DigitizeMode::~DigitizeMode(void){
 	delete point_or_window;
 }
 
+static wxString digitize_title_coords_string;
+
 const wxChar* DigitizeMode::GetTitle()
 {
-	return m_doing_a_main_loop ? (m_prompt_when_doing_a_main_loop.c_str()):_("Digitize Mode");
+	if(m_doing_a_main_loop)
+	{
+		digitize_title_coords_string = m_prompt_when_doing_a_main_loop;
+		wxString xy_str;
+		digitize_title_coords_string.append(_T("\n"));
+		if(fabs(digitized_point.m_point.Z()) < 0.00000001)digitize_title_coords_string += wxString::Format(_T("X%g Y%g"), digitized_point.m_point.X(), digitized_point.m_point.Y());
+		else if(fabs(digitized_point.m_point.Y()) < 0.00000001)digitize_title_coords_string += wxString::Format(_T("X%g Z%g"), digitized_point.m_point.X(), digitized_point.m_point.Z());
+		else if(fabs(digitized_point.m_point.X()) < 0.00000001)digitize_title_coords_string += wxString::Format(_T("Y%g Z%g"), digitized_point.m_point.Y(), digitized_point.m_point.Z());
+		else digitize_title_coords_string += wxString::Format(_T("X%g Y%g Z%g"), digitized_point.m_point.X(), digitized_point.m_point.Y(), digitized_point.m_point.Z());
+
+		const wxChar* type_str = NULL;
+		switch(digitized_point.m_type)
+		{
+		case DigitizeEndofType:
+			type_str = _("end");
+			break;
+		case DigitizeIntersType:
+			type_str = _("intersection");
+			break;
+		case DigitizeMidpointType:
+			type_str = _("midpoint");
+			break;
+		case DigitizeCentreType:
+			type_str = _("centre");
+			break;
+		case DigitizeScreenType:
+			type_str = _("screen");
+			break;
+		case DigitizeNearestType:
+			type_str = _("nearest");
+			break;
+		case DigitizeTangentType:
+			type_str = _("tangent");
+			break;
+		}
+
+		if(type_str)
+		{
+			digitize_title_coords_string.append(_T(" ("));
+			digitize_title_coords_string.append(type_str);
+			digitize_title_coords_string.append(_T(")"));
+		}
+
+		return digitize_title_coords_string.c_str();
+	}
+	return _("Digitize Mode");
+}
+
+static wxString digitize_help_text;
+
+const wxChar* DigitizeMode::GetHelpText()
+{
+	if(!m_doing_a_main_loop)return NULL;
+	digitize_help_text.assign(_("Press Esc key to cancel"));
+	digitize_help_text.append(_T("\n"));
+	digitize_help_text.append(_("Left button to accept position"));
+	return digitize_help_text.c_str();
 }
 
 void DigitizeMode::OnMouse( wxMouseEvent& event ){
@@ -57,13 +115,28 @@ void DigitizeMode::OnMouse( wxMouseEvent& event ){
 	else if(event.Moving()){
 		digitize(wxPoint(event.GetX(), event.GetY()));
 		point_or_window->OnMouse(event);
-		if(m_doing_a_main_loop)wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
+		if(m_doing_a_main_loop)
+		{
+			wxGetApp().m_frame->RefreshInputCanvas();
+			wxGetApp().OnInputModeTitleChanged();
+		}
 		if(m_callback)
 		{
 			double pos[3];
 			extract(digitized_point.m_point, pos);
 			(*m_callback)(pos);
 		}
+	}
+}
+
+void DigitizeMode::OnKeyDown(wxKeyEvent& event)
+{
+	switch(event.KeyCode())
+	{
+	case WXK_ESCAPE:
+		digitized_point.m_type = DigitizeNoItemType;
+		if(m_doing_a_main_loop)wxGetApp().ExitMainLoop();
+		break;
 	}
 }
 
@@ -296,9 +369,9 @@ void DigitizeMode::OnFrontRender(){
 	point_or_window->OnFrontRender();
 }
 
-static void set_x(double value, HeeksObj* object){wxGetApp().m_digitizing->digitized_point.m_point.SetX(value); wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();}
-static void set_y(double value, HeeksObj* object){wxGetApp().m_digitizing->digitized_point.m_point.SetY(value); wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();}
-static void set_z(double value, HeeksObj* object){wxGetApp().m_digitizing->digitized_point.m_point.SetZ(value); wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();}
+static void set_x(double value, HeeksObj* object){wxGetApp().m_digitizing->digitized_point.m_point.SetX(value); wxGetApp().m_frame->RefreshInputCanvas();}
+static void set_y(double value, HeeksObj* object){wxGetApp().m_digitizing->digitized_point.m_point.SetY(value); wxGetApp().m_frame->RefreshInputCanvas();}
+static void set_z(double value, HeeksObj* object){wxGetApp().m_digitizing->digitized_point.m_point.SetZ(value); wxGetApp().m_frame->RefreshInputCanvas();}
 
 void DigitizeMode::GetProperties(std::list<Property *> *list){
 	list->push_back(new PropertyLength(_("X"), digitized_point.m_point.X(), NULL, set_x));

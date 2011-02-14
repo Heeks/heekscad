@@ -263,7 +263,7 @@ public:
 		wxGetApp().m_marked_list->Add(sketch, true);
 		wxGetApp().EnterSketchMode(sketch);
 		wxGetApp().Repaint();
-		wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
+		wxGetApp().m_frame->RefreshInputCanvas();
 	}
 };
 
@@ -326,14 +326,14 @@ static RotateToFace rotate_to_face;
 
 void CFace::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 	face_for_tools = this;
-	t_list->push_back(&make_sketch_tool);
+	if(!wxGetApp().m_no_creation_mode)t_list->push_back(&make_sketch_tool);
 	if(IsAPlane(NULL))
 	{
-		t_list->push_back(&make_coordsys);
-		t_list->push_back(&sketch_on_face);
+		if(!wxGetApp().m_no_creation_mode)t_list->push_back(&make_coordsys);
+		if(!wxGetApp().m_no_creation_mode)t_list->push_back(&sketch_on_face);
 		t_list->push_back(&rotate_to_face);
 	}
-	t_list->push_back(&extrude_face);
+	if(!wxGetApp().m_no_creation_mode)t_list->push_back(&extrude_face);
 }
 
 void CFace::GetGripperPositionsTransformed(std::list<GripData> *list, bool just_for_endof)
