@@ -481,6 +481,5 @@ END_EVENT_TABLE()
 void HeeksCADapp::ShowModalOptions()
 {
 	COptionsDlg dlg(m_frame);
-	int ret = dlg.ShowModal();
-	//if(ret == wxID_OK);
+	dlg.ShowModal();
 }
