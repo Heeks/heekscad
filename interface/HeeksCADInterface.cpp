@@ -1414,7 +1414,7 @@ void CHeeksCADInterface::RemoveTransformToolbar()
 	wxGetApp().m_frame->m_aui_manager->DetachPane(wxGetApp().m_frame->m_transformBar);
 	wxGetApp().m_frame->m_transform_toolbar_removed = true;
 	wxGetApp().m_frame->m_menuWindow->Remove(wxGetApp().m_frame->m_transform_toolbar_menu_id);
-	delete wxGetApp().m_frame->m_transformBar;
+	//delete wxGetApp().m_frame->m_transformBar;
 	wxGetApp().m_frame->m_transformBar = NULL;
 }
 
@@ -1841,18 +1841,6 @@ void CHeeksCADInterface::SetDraggingMovesObjects(bool b)
 
 void CHeeksCADInterface::SetNoCreationMode()
 {
-	// remove HeeksCAD menus
-	int menu_pos;
-	menu_pos = wxGetApp().m_frame->GetMenuBar()->FindMenu(_("Geometry"));
-	if(menu_pos != wxNOT_FOUND)wxGetApp().m_frame->GetMenuBar()->Remove(menu_pos);
-	menu_pos = wxGetApp().m_frame->GetMenuBar()->FindMenu(_("Solid"));
-	if(menu_pos != wxNOT_FOUND)wxGetApp().m_frame->GetMenuBar()->Remove(menu_pos);
-	menu_pos = wxGetApp().m_frame->GetMenuBar()->FindMenu(_("Set Origin"));
-	if(menu_pos != wxNOT_FOUND)wxGetApp().m_frame->GetMenuBar()->Remove(menu_pos);
-	RemoveSolidToolbar();
-	RemoveGeometryToolbar();
-	RemoveViewingToolbar();
-
 	// remove separator
 	wxMenu* menuFile = wxGetApp().m_frame->GetMenuBar()->GetMenu(0);
 	menuFile->Remove(menuFile->FindItemByPosition(13));
@@ -1924,6 +1912,35 @@ void CHeeksCADInterface::SetNoCreationMode()
 	// remove "New" button
 	wxGetApp().m_frame->m_toolBar->DeleteToolByPos(0);
 
+	// remove separator
+	wxMenu* menuTranform = wxGetApp().m_frame->GetMenuBar()->GetMenu(6);
+	menuTranform->Remove(menuTranform->FindItemByPosition(8));
+
+	// remove "Copy Mirror"
+	menuTranform->Remove(menuTranform->FindItemByPosition(7));
+
+	// remove separator
+	menuTranform->Remove(menuTranform->FindItemByPosition(5));
+
+	// remove "Copy Rotate"
+	menuTranform->Remove(menuTranform->FindItemByPosition(4));
+
+	// remove separator
+	menuTranform->Remove(menuTranform->FindItemByPosition(2));
+
+	// remove "Copy Translate"
+	menuTranform->Remove(menuTranform->FindItemByPosition(1));
+
+	// remove HeeksCAD menus
+	int menu_pos;
+	menu_pos = wxGetApp().m_frame->GetMenuBar()->FindMenu(_("Geometry"));
+	if(menu_pos != wxNOT_FOUND)wxGetApp().m_frame->GetMenuBar()->Remove(menu_pos);
+	menu_pos = wxGetApp().m_frame->GetMenuBar()->FindMenu(_("Solid"));
+	if(menu_pos != wxNOT_FOUND)wxGetApp().m_frame->GetMenuBar()->Remove(menu_pos);
+	menu_pos = wxGetApp().m_frame->GetMenuBar()->FindMenu(_("Set Origin"));
+	if(menu_pos != wxNOT_FOUND)wxGetApp().m_frame->GetMenuBar()->Remove(menu_pos);
+	RemoveSolidToolbar();
+	RemoveGeometryToolbar();
 
 	wxGetApp().m_no_creation_mode = true;
 }

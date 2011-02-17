@@ -295,6 +295,7 @@ void ReadPluginsList(std::list<PluginData> &plugins)
 			}
 			pd.hard_coded = true;
 			pd.name = str;
+			str.Replace(_T("{app}"), wxGetApp().GetExeFolder().c_str());
 			pd.path = str;
 			plugins.push_back(pd);
 		}

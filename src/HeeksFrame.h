@@ -86,7 +86,6 @@ public:
 	wxToolBar *m_solidBar;
 	wxToolBar *m_viewingBar;
 	wxToolBar *m_transformBar;
-	wxStatusBar* m_statusBar;
 	wxMenuBar *m_menuBar;
 	wxMenu* m_recent_files_menu;
 	wxMenu *m_menuWindow;
