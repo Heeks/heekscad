@@ -151,8 +151,6 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
     m_properties = new CObjPropsCanvas(this);
 
-	m_statusBar = CreateStatusBar();
-
 	wxString exe_folder = wxGetApp().GetExeFolder();
 
 	m_main_toolbar_removed = false;
@@ -177,20 +175,11 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	// set xml reading functions
 	wxGetApp().InitializeXMLFunctions();
 
-#if 0
-	{
-		::wxSetWorkingDirectory(wxGetApp().GetExeFolder());
-
-		wxConfig plugins_config(_T("HeeksCAD"));
-		plugins_config.SetPath(_T("/plugins"));
-		plugins_config.Write(_T("HeeksCNC"), _T("HeeksCNC/libheekscnc.so.0.5.1"));
-	}
-#endif
-
 	// load up any other dlls and call OnStartUp on each of them
 	{
 		std::list<PluginData> plugins;
 		ReadPluginsList(plugins);
+		wxString save_current_directory = ::wxGetCwd();
 
 		for(std::list<PluginData>::iterator It = plugins.begin(); It != plugins.end(); It++)
 		{
@@ -218,6 +207,8 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 				}
 			}
 		}
+
+		::wxSetWorkingDirectory(save_current_directory);
 	}
 
 	SetDropTarget(new DnDFile(this));
@@ -335,15 +326,11 @@ void CHeeksFrame::OnKeyUp(wxKeyEvent& event)
 }
 
 bool CHeeksFrame::ShowFullScreen(bool show, long style){
-	static bool statusbar_visible = true;
-
 	static std::map< wxWindow*, bool > windows_visible;
 
 	if(show){
 		SetMenuBar(NULL);
 		windows_visible.clear();
-		statusbar_visible = m_statusBar->IsShown();
-		m_statusBar->Show(false);
 		for(std::list<wxWindow*>::iterator It = wxGetApp().m_hideable_windows.begin(); It != wxGetApp().m_hideable_windows.end(); It++)
 		{
 			wxWindow* w = *It;
@@ -353,7 +340,6 @@ bool CHeeksFrame::ShowFullScreen(bool show, long style){
 	}
 	else{
 		SetMenuBar(m_menuBar);
-		m_statusBar->Show(statusbar_visible);
 		for(std::list<wxWindow*>::iterator It = wxGetApp().m_hideable_windows.begin(); It != wxGetApp().m_hideable_windows.end(); It++)
 		{
 			wxWindow* w = *It;
@@ -519,16 +505,6 @@ static void OnViewTransformBar( wxCommandEvent& event )
 static void OnUpdateViewTransformBar( wxUpdateUIEvent& event )
 {
 	event.Check(wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_transformBar).IsShown());
-}
-
-static void OnViewStatusBar( wxCommandEvent& event )
-{
-	wxGetApp().m_frame->m_statusBar->Show(event.IsChecked());
-}
-
-static void OnUpdateViewStatusBar( wxUpdateUIEvent& event )
-{
-	event.Check(wxGetApp().m_frame->m_statusBar->IsShown());
 }
 
 void CHeeksFrame::OnResetLayout( wxCommandEvent& event )
@@ -1831,7 +1807,6 @@ void CHeeksFrame::MakeMenus()
 	m_geometry_toolbar_menu_id = AddMenuItem(m_menuWindow, _("Geometry Tool Bar"), wxBitmap(), OnViewGeometryBar, OnUpdateViewGeometryBar, NULL, true);
 	m_viewing_toolbar_menu_id = AddMenuItem(m_menuWindow, _("Viewing Tool Bar"), wxBitmap(), OnViewViewingBar, OnUpdateViewViewingBar, NULL, true);
 	m_transform_toolbar_menu_id = AddMenuItem(m_menuWindow, _("Transformations Tool Bar"), wxBitmap(), OnViewTransformBar, OnUpdateViewTransformBar, NULL, true);
-	AddMenuItem(m_menuWindow, _("Status Bar"), wxBitmap(), OnViewStatusBar, OnUpdateViewStatusBar, NULL, true);
 //JT
 #ifdef FIRE_CONSTRAINT_TESTER_FROM_MAIN_MENU
     	wxMenu * m_menuConstraintTester = new wxMenu;

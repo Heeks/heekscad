@@ -104,7 +104,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	_CrtSetAllocHook(MyAllocHook);
 #endif
 
-	m_version_number = _T("0 17 0");
+	m_version_number = _T("0 17 1");
 	m_geom_tol = 0.000001;
 	TiXmlBase::SetRequiredDecimalPlaces( DecimalPlaces(m_geom_tol) );	 // Ensure we write XML in enough accuracy to be useful when re-read.
 
@@ -400,7 +400,6 @@ bool HeeksCADapp::OnInit()
 	ClearHistory();
 	SetLikeNewFile();
 	SetFrameTitle();
-	SetStatusText();
 
 	if ((m_pAutoSave.get() != NULL) && (m_pAutoSave->AutoRecoverRequested()))
 	{
@@ -561,19 +560,6 @@ int HeeksCADapp::OnExit(){
 
 	int result = wxApp::OnExit();
 	return result;
-}
-
-void HeeksCADapp::SetStatusText()
-{
-	wxString status_text;
-
-	status_text.Append(_("units"));
-	status_text.Append(_T(" = "));
-	if(fabs(m_view_units - 1.0) < 0.0000000001)status_text.Append(_("mm"));
-	else if(fabs(m_view_units - 25.4) < 0.000000001)status_text.Append(_("inch"));
-	else status_text.Append(wxString::Format(_T("%g"), m_view_units));
-
-	m_frame->SetStatusText( status_text );
 }
 
 bool HeeksCADapp::EndSketchMode()
@@ -2709,7 +2695,6 @@ static void on_set_units(int value, HeeksObj* object)
 	wxGetApp().m_frame->RefreshProperties();
 	wxGetApp().m_frame->RefreshInputCanvas();
 	wxGetApp().m_ruler->KillGLLists();
-	wxGetApp().SetStatusText();
 	wxGetApp().Repaint();
 }
 
@@ -3503,8 +3488,8 @@ int HeeksCADapp::CheckForModifiedDoc()
 
 void HeeksCADapp::SetFrameTitle()
 {
-	wxFileName f(m_filepath.c_str());
-	wxString str = wxString::Format(_T("%s.%s - %s"), f.GetName().c_str(), f.GetExt().c_str(), m_filepath.c_str());
+	wxString str = wxGetApp().GetAppName().c_str();
+	if((!m_untitled) || (!m_no_creation_mode))str += wxString(_T(" - ")) + m_filepath.c_str();
 	m_frame->SetTitle(str);
 }
 
