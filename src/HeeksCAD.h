@@ -380,7 +380,6 @@ public:
 	CSketch* GetContainer();
 	bool EndSketchMode();
 	void EnterSketchMode(CSketch* sketch);
-	void SetStatusText();
 	std::auto_ptr<VectorFonts>	& GetAvailableFonts(const bool force_read = false);
 	void GetPluginsFromCommandLineParams(std::list<wxString> &plugins);
 	void RegisterOnBuildTexture(void(*callbackfunc)());
