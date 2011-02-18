@@ -525,10 +525,6 @@ void CSelectMode::OnKeyDown(wxKeyEvent& event)
 	case WXK_ESCAPE:
 		if(m_doing_a_main_loop)wxGetApp().ExitMainLoop();
 		break;
-
-	case WXK_DELETE:
-		wxGetApp().DeleteMarkedItems();
-		return;
 	}
 
 	CInputMode::OnKeyDown(event);
@@ -536,11 +532,6 @@ void CSelectMode::OnKeyDown(wxKeyEvent& event)
 
 void CSelectMode::OnKeyUp(wxKeyEvent& event)
 {
-	switch(event.GetKeyCode()){
-	case WXK_DELETE:
-		return;
-	}
-
 	CInputMode::OnKeyUp(event);
 }
 

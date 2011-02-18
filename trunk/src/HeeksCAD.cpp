@@ -240,6 +240,10 @@ bool HeeksCADapp::OnInit()
 
 	InitialiseLocale();
 
+#ifdef PYHEEKSCAD
+    m_printData = NULL;
+    m_pageSetupData = NULL;
+#else
     m_printData = new wxPrintData;
     m_pageSetupData = new wxPageSetupDialogData;
     // copy over initial paper size from print record
@@ -247,6 +251,7 @@ bool HeeksCADapp::OnInit()
     // Set some initial page margins in mm.
     m_pageSetupData->SetMarginTopLeft(wxPoint(15, 15));
     m_pageSetupData->SetMarginBottomRight(wxPoint(15, 15));
+#endif
 
 	int width = 996;
 	int height = 691;
@@ -382,25 +387,33 @@ bool HeeksCADapp::OnInit()
 	GetRecentFilesProfileString();
 
 	wxImage::AddHandler(new wxPNGHandler);
+#ifdef PYHEEKSCAD
+	m_frame = NULL;
+#else
 	m_frame = new CHeeksFrame( wxT( "HeeksCAD free Solid Modelling software based on Open CASCADE" ), wxPoint(posx, posy), wxSize(width, height));
 
 #ifdef __WXMSW__
 	// to do, make this compile in Linux
 	m_frame->SetIcon(wxICON(HeeksCAD));
 #endif
+#endif
 
 	// NOTE: A side-effect of calling the SetInputMode() method is
 	// that the GetOptions() method is called.  To that end, all
 	// configuration settings should be read BEFORE this point.
 	SetInputMode(m_select_mode);
-	m_frame->Show(TRUE);
-	SetTopWindow(m_frame);
+	if(m_frame)
+	{
+		m_frame->Show(TRUE);
+		SetTopWindow(m_frame);
+	}
 
 	OnNewOrOpen(false,wxNO);
 	ClearHistory();
 	SetLikeNewFile();
 	SetFrameTitle();
 
+#ifndef PYHEEKSCAD
 	if ((m_pAutoSave.get() != NULL) && (m_pAutoSave->AutoRecoverRequested()))
 	{
 		m_pAutoSave->Recover();
@@ -461,6 +474,7 @@ bool HeeksCADapp::OnInit()
 		wprintf(_T("user-dependent application data directory: ") + sp.GetUserDataDir()  + _T("\n"));
 		wprintf(_T("user local data directory: ") + sp.GetUserLocalDataDir()  + _T("\n"));
 	#endif
+#endif
 	
 	return TRUE;
 }
@@ -593,7 +607,7 @@ CSketch* HeeksCADapp::GetContainer()
 
 void HeeksCADapp::SetInputMode(CInputMode *new_mode){
 	if(!new_mode)return;
-	m_frame->m_graphics->EndDrawFront();
+	if(m_frame)m_frame->m_graphics->EndDrawFront();
 	if(new_mode->OnModeChange()){
 		input_mode_object = new_mode;
 	}
@@ -1640,8 +1654,11 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 
 void HeeksCADapp::Repaint(bool soon)
 {
-	if(soon)m_frame->m_graphics->RefreshSoon();
-	else m_frame->m_graphics->Refresh();
+	if(m_frame && m_frame->m_graphics)
+	{
+		if(soon)m_frame->m_graphics->RefreshSoon();
+		else m_frame->m_graphics->Refresh();
+	}
 }
 
 void HeeksCADapp::RecalculateGLLists()
@@ -3488,6 +3505,7 @@ int HeeksCADapp::CheckForModifiedDoc()
 
 void HeeksCADapp::SetFrameTitle()
 {
+	if(m_frame == NULL)return;
 	wxString str = wxGetApp().GetAppName().c_str();
 	if((!m_untitled) || (!m_no_creation_mode))str += wxString(_T(" - ")) + m_filepath.c_str();
 	m_frame->SetTitle(str);
