@@ -53,7 +53,7 @@ public:
 	void DrawWindow(wxRect &rect, bool allow_extra_bits); // extra bits are added to the corners when dragging from right to left
 
 public:
-    CGraphicsCanvas(wxWindow* parent, int *attribList = (int*) NULL);
+    CGraphicsCanvas(wxWindow* parent);
     virtual ~CGraphicsCanvas(){};
 
     void OnPaint(wxPaintEvent& event);

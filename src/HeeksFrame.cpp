@@ -116,29 +116,11 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 	m_aui_manager = new wxAuiManager(this);
 
-	int graphics_attrib_list[] = {
-		WX_GL_RGBA,
-		1,
-		WX_GL_DOUBLEBUFFER,
-		1,
-		WX_GL_DEPTH_SIZE,
-		1,
-		WX_GL_MIN_RED,
-		1,
-		WX_GL_MIN_GREEN,
-		1,
-		WX_GL_MIN_BLUE,
-		1,
-		WX_GL_MIN_ALPHA,
-		0,
-		0
-	};
-
 	int bitmap_size = ToolImage::default_bitmap_size;
 	config.Read(_T("ToolImageSize"), &bitmap_size);
 	ToolImage::SetBitmapSize(bitmap_size);
 
-    m_graphics = new CGraphicsCanvas(this, graphics_attrib_list);
+    m_graphics = new CGraphicsCanvas(this);
 
 	bool perspective = false;
 	config.Read(_T("Perspective"), &perspective);
@@ -1719,7 +1701,7 @@ void CHeeksFrame::MakeMenus()
 	AddMenuItem(edit_menu, _("Cut\tCtrl+X"), ToolImage(_T("cut")), OnCutButton, OnUpdateCut);
 	AddMenuItem(edit_menu, _("Copy\tCtrl+C"), ToolImage(_T("copy")), OnCopyButton, OnUpdateCopy);
 	AddMenuItem(edit_menu, _("Paste\tCtrl+V"), ToolImage(_T("paste")), OnPasteButton, OnUpdatePaste);
-	AddMenuItem(edit_menu, _("Delete\tDel"), ToolImage(_T("delete")), OnDeleteButton, OnUpdateDelete);
+	AddMenuItem(edit_menu, _("Delete"), ToolImage(_T("delete")), OnDeleteButton, OnUpdateDelete);
 	edit_menu->AppendSeparator();
 	AddMenuItem(edit_menu, _("Select Mode"), ToolImage(_T("select")), OnSelectModeButton);
 
