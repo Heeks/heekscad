@@ -24,8 +24,27 @@ BEGIN_EVENT_TABLE(CGraphicsCanvas, wxGLCanvas)
 	EVT_CHAR(CGraphicsCanvas::OnCharEvent)
 END_EVENT_TABLE()
 
-CGraphicsCanvas::CGraphicsCanvas(wxWindow* parent, int *attribList)
-        : wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("some text"), attribList),m_frozen(false), m_refresh_wanted_on_thaw(false)
+static int graphics_attrib_list[] = {
+		WX_GL_RGBA,
+		1,
+		WX_GL_DOUBLEBUFFER,
+		1,
+		WX_GL_DEPTH_SIZE,
+		1,
+		WX_GL_MIN_RED,
+		1,
+		WX_GL_MIN_GREEN,
+		1,
+		WX_GL_MIN_BLUE,
+		1,
+		WX_GL_MIN_ALPHA,
+		0,
+		0
+	};
+
+
+CGraphicsCanvas::CGraphicsCanvas(wxWindow* parent)
+        : wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("some text"), graphics_attrib_list),m_frozen(false), m_refresh_wanted_on_thaw(false)
 {
 	m_render_on_front_done = false;
 
@@ -213,23 +232,6 @@ void CGraphicsCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 
 	// mark various XOR drawn items as not drawn
 	m_render_on_front_done = false;
-
-	// test for OpenGL tree in graphics
-#if 0
-	if(wxGetApp().m_frame->m_tree_canvas->TextureBuilt())
-	{
-		glClear(GL_DEPTH_BUFFER_BIT);
-		int w, h;
-		GetClientSize(&w, &h);
-		glViewport(0, 0, w, h);
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(- 0.5, w - 0.5, -0.5, h - 0.5, 0,10);
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		wxGetApp().m_frame->m_tree_canvas->Render(w, h);
-	}
-#endif
 
     SwapBuffers();
 
