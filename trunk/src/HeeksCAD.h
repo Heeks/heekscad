@@ -30,6 +30,7 @@ class UndoEngine;
 #endif
 class Observer;
 class CHeeksFrame;
+class CViewport;
 class wxDynamicLibrary;
 class CoordinateSystem;
 class HRuler;
@@ -147,6 +148,7 @@ public:
 	gp_Pnt grip_from, grip_to;
 	Gripper *cursor_gripper;
 	CHeeksFrame *m_frame;
+	CViewport *m_current_viewport;
 	MarkedList *m_marked_list;
 	bool m_doing_rollback;
 	wxString m_filepath;
@@ -269,6 +271,7 @@ public:
 	void glCommandsAll(const CViewPoint &view_point);
 	double GetPixelScale(void);
 	void DoMoveOrCopyDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, HeeksObj* paste_into, HeeksObj* paste_before);
+	void GetDropDownTools(std::list<Tool*> &f_list, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool from_graphics_canvas, bool control_pressed);
 	void DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool from_graphics_canvas, bool control_pressed);
 	void on_menu_event(wxCommandEvent& event);
 	void DoToolUndoably(Tool *);
@@ -323,7 +326,6 @@ public:
 	wxString GetExeFolder()const;
 	wxString GetResFolder()const;
 	void get_2d_arc_segments(double xs, double ys, double xe, double ye, double xc, double yc, bool dir, bool want_start, double pixels_per_mm, void(*callbackfunc)(const double* xy));
-	void PassMouseWheelToGraphics(wxMouseEvent& event);
 	int PickObjects(const wxChar* str, long marking_filter = -1, bool just_one = false);
 	bool PickPosition(const wxChar* str, double* pos, void(*callback)(const double*) = NULL);
 	void glSphere(double radius, const double* pos = NULL);
@@ -401,9 +403,6 @@ public:
    	 bool TestForValidConstraints(const std::list<HeeksObj*>& objects);
 
 #endif
-
-
-
 };
 
 

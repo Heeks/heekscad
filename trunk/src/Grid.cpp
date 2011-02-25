@@ -12,7 +12,7 @@
 static void RenderGrid(const CViewPoint *view_point, double max_number_across, bool in_between_spaces, bool miss_main_lines, const HeeksColor *bg, const HeeksColor *cc, unsigned char brightness, int plane_mode){
 	gp_Pnt sp[4];
 	double zval = 0.5;
-	wxSize size = wxGetApp().m_frame->m_graphics->GetClientSize();
+	wxSize size = wxGetApp().m_current_viewport->GetViewportSize();
 	sp[0] = gp_Pnt(0, 0, zval);
 	sp[1] = gp_Pnt(size.GetWidth(), 0, zval);
 	sp[2] = gp_Pnt(size.GetWidth(), size.GetHeight(), zval);
@@ -158,7 +158,7 @@ static void RenderGrid(const CViewPoint *view_point, double max_number_across, b
 void GetGridBox(const CViewPoint *view_point, CBox &ext){
 	gp_Pnt sp[4];
 	double zval = 0.5;
-	wxSize size = wxGetApp().m_frame->m_graphics->GetClientSize();
+	wxSize size = wxGetApp().m_current_viewport->GetViewportSize();
 	sp[0] = gp_Pnt(0, 0, zval);
 	sp[1] = gp_Pnt(size.GetWidth(), 0, zval);
 	sp[2] = gp_Pnt(size.GetWidth(), size.GetHeight(), zval);

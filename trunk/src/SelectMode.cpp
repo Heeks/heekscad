@@ -31,12 +31,12 @@ bool CClickPoint::GetPos(double *pos)
 {
 	if(!m_valid)
 	{
-		wxGetApp().m_frame->m_graphics->m_view_point.SetViewport();
-		wxGetApp().m_frame->m_graphics->m_view_point.SetProjection(true);
-		wxGetApp().m_frame->m_graphics->m_view_point.SetModelview();
+		wxGetApp().m_current_viewport->SetViewport();
+		wxGetApp().m_current_viewport->m_view_point.SetProjection(true);
+		wxGetApp().m_current_viewport->m_view_point.SetModelview();
 
-		gp_Pnt screen_pos(m_point.x, wxGetApp().m_frame->m_graphics->GetClientSize().GetHeight() - m_point.y, (double)m_depth/4294967295.0);
-		gp_Pnt world_pos = wxGetApp().m_frame->m_graphics->m_view_point.glUnproject(screen_pos);
+		gp_Pnt screen_pos(m_point.x, wxGetApp().m_current_viewport->GetViewportSize().GetHeight() - m_point.y, (double)m_depth/4294967295.0);
+		gp_Pnt world_pos = wxGetApp().m_current_viewport->m_view_point.glUnproject(screen_pos);
 		extract(world_pos, m_pos);
 		m_valid = true;
 	}
@@ -149,7 +149,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 				{
 					if(object->GetType() == GripperType)
 					{
-						wxGetApp().m_frame->m_graphics->DrawFront();
+						wxGetApp().m_current_viewport->DrawFront();
 						wxGetApp().drag_gripper = (Gripper*)object;
 						wxGetApp().m_digitizing->SetOnlyCoords(wxGetApp().drag_gripper, true);
 						wxGetApp().m_digitizing->digitize(button_down_point);
@@ -161,7 +161,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 						from[2] = wxGetApp().grip_from.Z();
 						wxGetApp().drag_gripper->OnGripperGrabbed(wxGetApp().m_marked_list->list(), true, from);
 						wxGetApp().grip_from = gp_Pnt(from[0], from[1], from[2]);
-						wxGetApp().m_frame->m_graphics->EndDrawFront();
+						wxGetApp().m_current_viewport->EndDrawFront();
 						return;
 					}
 					object = marked_object.Increment();
@@ -174,8 +174,8 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 	{
 		button_down_point = wxPoint(event.GetX(), event.GetY());
 		CurrentPoint = button_down_point;
-		wxGetApp().m_frame->m_graphics->StoreViewPoint();
-		wxGetApp().m_frame->m_graphics->m_view_point.SetStartMousePoint(button_down_point);
+		wxGetApp().m_current_viewport->StoreViewPoint();
+		wxGetApp().m_current_viewport->m_view_point.SetStartMousePoint(button_down_point);
 	}
 
 	if(event.LeftUp())
@@ -249,7 +249,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 				}
 				wxGetApp().m_marked_list->Add(obj_list, true);
 			}
-			wxGetApp().m_frame->m_graphics->DrawWindow(window_box, true); // undraw the window
+			wxGetApp().m_current_viewport->DrawWindow(window_box, true); // undraw the window
 			window_box_exists = false;
 		}
 		else
@@ -299,7 +299,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 				{
 					wxGetApp().m_marked_list->Add(object, true);
 					m_last_click_point = CClickPoint(wxPoint(event.GetX(), event.GetY()), depth);
-					gp_Lin ray = wxGetApp().m_frame->m_graphics->m_view_point.SightLine(wxPoint(event.GetX(), event.GetY()));
+					gp_Lin ray = wxGetApp().m_current_viewport->m_view_point.SightLine(wxPoint(event.GetX(), event.GetY()));
 					double ray_start[3], ray_direction[3];
 					extract(ray.Location(), ray_start);
 					extract(ray.Direction(), ray_direction);
@@ -318,7 +318,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 		}
 		else
 		{
-			wxGetApp().Repaint();
+			wxGetApp().m_current_viewport->m_need_refresh = true;
 		}
 	}
 	else if(event.RightUp())
@@ -338,19 +338,19 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 			{
 				if(wxGetApp().m_rotate_mode)
 				{
-					wxGetApp().m_frame->m_graphics->m_view_point.Turn(dm);
+					wxGetApp().m_current_viewport->m_view_point.Turn(dm);
 				}
 				else
 				{
-					wxGetApp().m_frame->m_graphics->m_view_point.TurnVertical(dm);
+					wxGetApp().m_current_viewport->m_view_point.TurnVertical(dm);
 				}
 			}
 			else
 			{
-				wxGetApp().m_frame->m_graphics->m_view_point.Shift(dm, wxPoint(event.GetX(), event.GetY()));
+				wxGetApp().m_current_viewport->m_view_point.Shift(dm, wxPoint(event.GetX(), event.GetY()));
 			}
-			wxGetApp().m_frame->m_graphics->Update();
-			wxGetApp().m_frame->m_graphics->Refresh();
+			wxGetApp().m_current_viewport->m_need_update = true;
+			wxGetApp().m_current_viewport->m_need_refresh = true;
 		}
 		else if(event.LeftIsDown())
 		{
@@ -426,14 +426,15 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 				// do window selection
 				if(!m_just_one)
 				{
-					wxGetApp().m_frame->m_graphics->SetXOR();
-					if(window_box_exists)wxGetApp().m_frame->m_graphics->DrawWindow(window_box, true); // undraw the window
+					//wxGetApp().m_frame->m_graphics->SetCurrent();
+					wxGetApp().m_current_viewport->SetXOR();
+					if(window_box_exists)wxGetApp().m_current_viewport->DrawWindow(window_box, true); // undraw the window
 					window_box.x = button_down_point.x;
 					window_box.width = event.GetX() - button_down_point.x;
-					window_box.y = wxGetApp().m_frame->m_graphics->GetClientSize().GetHeight() - button_down_point.y;
+					window_box.y = wxGetApp().m_current_viewport->GetViewportSize().GetHeight() - button_down_point.y;
 					window_box.height = button_down_point.y - event.GetY();
-					wxGetApp().m_frame->m_graphics->DrawWindow(window_box, true);// draw the window
-					wxGetApp().m_frame->m_graphics->EndXOR();
+					wxGetApp().m_current_viewport->DrawWindow(window_box, true);// draw the window
+					wxGetApp().m_current_viewport->EndXOR();
 					window_box_exists = true;
 				}
 			}
@@ -442,20 +443,6 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 	}
 	else if(event.Moving())
 	{
-#if 0
-		MarkedObjectOneOfEach marked_object;
-		wxGetApp().FindMarkedObject(wxPoint(event.GetX(), event.GetY()), &marked_object);
-		wxGetApp().cursor_gripper = NULL;
-		HeeksObj* object = marked_object.GetFirstOfTopOnly();
-		while(object){
-			if(object->GetType() == GripperType){
-				wxGetApp().cursor_gripper = (Gripper*)object;
-				break;
-			}
-			object = marked_object.Increment();
-		}
-		wxGetApp().m_frame->m_graphics->Refresh(0);
-#endif
 		CurrentPoint = wxPoint(event.GetX(), event.GetY());
 	}
 
@@ -475,10 +462,10 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 			multiplier2 = 1/(1 - multiplier);
 		}
 
-		wxSize client_size = wxGetApp().m_frame->m_graphics->GetClientSize();
+		wxSize client_size = wxGetApp().m_current_viewport->GetViewportSize();
 
 		double pixelscale_before = wxGetApp().GetPixelScale();
-		wxGetApp().m_frame->m_graphics->m_view_point.Scale(multiplier2);
+		wxGetApp().m_current_viewport->m_view_point.Scale(multiplier2);
 		double pixelscale_after = wxGetApp().GetPixelScale();
 
 		double event_x = event.GetX();
@@ -509,8 +496,8 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 
 		// so move that many pixels to keep the coordinate
 		// under the cursor approximately the same
-		wxGetApp().m_frame->m_graphics->m_view_point.Shift(wxPoint((int)x_moved_by, (int)y_moved_by), wxPoint(0, 0));
-		wxGetApp().m_frame->m_graphics->Refresh();
+		wxGetApp().m_current_viewport->m_view_point.Shift(wxPoint((int)x_moved_by, (int)y_moved_by), wxPoint(0, 0));
+		wxGetApp().m_current_viewport->m_need_refresh = true;
 	}
 
 }
@@ -539,7 +526,7 @@ void CSelectMode::OnFrontRender(){
 	if(wxGetApp().drag_gripper){
 		wxGetApp().drag_gripper->OnFrontRender();
 	}
-	if(window_box_exists)wxGetApp().m_frame->m_graphics->DrawWindow(window_box, true);
+	if(window_box_exists)wxGetApp().m_current_viewport->DrawWindow(window_box, true);
 }
 
 bool CSelectMode::OnStart(){
