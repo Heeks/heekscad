@@ -272,7 +272,7 @@ void GripperSelTransform::MakeMatrix ( const double* from, const double* to, con
 			mat.SetTranslation ( -gp_Vec ( rotate_centre_point.XYZ() ) );
 
 			gp_Vec vx, vy;
-			wxGetApp().m_frame->m_graphics->m_view_point.GetTwoAxes(vx, vy, false, 0);			
+			wxGetApp().m_current_viewport->m_view_point.GetTwoAxes(vx, vy, false, 0);			
 			gp_Vec rot_dir = vx ^ vy;
 			rot_dir.Normalize();
 

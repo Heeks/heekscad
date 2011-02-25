@@ -275,19 +275,19 @@ void CHeeksFrame::SetLogLogTimestamps(const bool uselogtimestamps) {
 
 void CHeeksFrame::RefreshInputCanvas()
 {
-	if(wxGetApp().m_frame->m_input_canvas)
+	if(wxGetApp().m_frame && wxGetApp().m_frame->m_input_canvas)
 		wxGetApp().m_frame->m_input_canvas->RefreshByRemovingAndAddingAll();
 }
 
 void CHeeksFrame::RefreshProperties()
 {
-	if(wxGetApp().m_frame->m_properties)
+	if(wxGetApp().m_frame && wxGetApp().m_frame->m_properties)
 		wxGetApp().m_frame->m_properties->RefreshByRemovingAndAddingAll();
 }
 
 void CHeeksFrame::RefreshOptions()
 {
-	if(wxGetApp().m_frame->m_options)
+	if(wxGetApp().m_frame && wxGetApp().m_frame->m_options)
 		wxGetApp().m_frame->m_options->RefreshByRemovingAndAddingAll();
 }
 

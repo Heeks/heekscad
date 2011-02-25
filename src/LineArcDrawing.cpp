@@ -206,7 +206,7 @@ void LineArcDrawing::AddPoint()
 			wxGetApp().AddUndoably(new_object, GetOwnerForDrawingObjects(), NULL);
 			std::list<HeeksObj*> list;
 			list.push_back(new_object);
-			wxGetApp().m_frame->m_graphics->DrawObjectsOnFront(list, true);
+			wxGetApp().m_current_viewport->DrawObjectsOnFront(list, true);
 			m_getting_position = false;
 			m_inhibit_coordinate_change = false;
 #endif

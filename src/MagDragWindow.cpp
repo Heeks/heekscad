@@ -13,13 +13,13 @@ void MagDragWindow::OnMouse( wxMouseEvent& event )
 	if(event.LeftDown())
 	{
 		window_box.x = event.GetX();
-		window_box.y = wxGetApp().m_frame->m_graphics->GetSize().GetHeight() - event.GetY();
+		window_box.y = wxGetApp().m_current_viewport->GetViewportSize().GetHeight() - event.GetY();
 		window_box_exists = false;
 	}
 	else if(event.LeftUp())
 	{
 		window_box.width = event.GetX() - window_box.x;
-		window_box.height = (wxGetApp().m_frame->m_graphics->GetSize().GetHeight() - event.GetY()) - window_box.y;
+		window_box.height = (wxGetApp().m_current_viewport->GetViewportSize().GetHeight() - event.GetY()) - window_box.y;
 		if(abs(window_box.width)<4){wxGetApp().SetInputMode(save_input_mode); return;}
 		if(abs(window_box.height)<4){wxGetApp().SetInputMode(save_input_mode); return;}
 
@@ -29,12 +29,13 @@ void MagDragWindow::OnMouse( wxMouseEvent& event )
 	}
 	else if(event.Dragging())
 	{
-		wxGetApp().m_frame->m_graphics->SetXOR();
-		if(window_box_exists)wxGetApp().m_frame->m_graphics->DrawWindow(window_box, false);// undraw the window
+		wxGetApp().m_frame->m_graphics->SetCurrent();
+		wxGetApp().m_current_viewport->SetXOR();
+		if(window_box_exists)wxGetApp().m_current_viewport->DrawWindow(window_box, false);// undraw the window
 		window_box.width = event.GetX() - window_box.x;
-		window_box.height = (wxGetApp().m_frame->m_graphics->GetSize().GetHeight() - event.GetY()) - window_box.y;
-		wxGetApp().m_frame->m_graphics->DrawWindow(window_box, false);// draw the window
-		wxGetApp().m_frame->m_graphics->EndXOR();
+		window_box.height = (wxGetApp().m_current_viewport->GetViewportSize().GetHeight() - event.GetY()) - window_box.y;
+		wxGetApp().m_current_viewport->DrawWindow(window_box, false);// draw the window
+		wxGetApp().m_current_viewport->EndXOR();
 		window_box_exists = true;
 	}
 }
@@ -46,6 +47,6 @@ bool MagDragWindow::OnModeChange(void){
 
 void MagDragWindow::OnFrontRender(){
 	if(window_box_exists){
-		wxGetApp().m_frame->m_graphics->DrawWindow(window_box, false);
+		wxGetApp().m_current_viewport->DrawWindow(window_box, false);
 	}
 }

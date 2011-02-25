@@ -14,8 +14,8 @@ void ViewRotating::OnMouse( wxMouseEvent& event )
 	{
 		button_down_point = wxPoint(event.GetX(), event.GetY());
 		CurrentPoint = button_down_point;
-		wxGetApp().m_frame->m_graphics->StoreViewPoint();
-		wxGetApp().m_frame->m_graphics->m_view_point.SetStartMousePoint(button_down_point);
+		wxGetApp().m_current_viewport->StoreViewPoint();
+		wxGetApp().m_current_viewport->m_view_point.SetStartMousePoint(button_down_point);
 	}
 	else if(event.Dragging())
 	{
@@ -27,16 +27,16 @@ void ViewRotating::OnMouse( wxMouseEvent& event )
 		{
 			if(wxGetApp().m_rotate_mode)
 			{
-				wxGetApp().m_frame->m_graphics->m_view_point.Turn(dm);
+				wxGetApp().m_current_viewport->m_view_point.Turn(dm);
 			}
 			else
 			{
-				wxGetApp().m_frame->m_graphics->m_view_point.TurnVertical(dm);
+				wxGetApp().m_current_viewport->m_view_point.TurnVertical(dm);
 			}
 		}
 		else if(event.MiddleIsDown())
 		{
-			wxGetApp().m_frame->m_graphics->m_view_point.Shift(dm, wxPoint(event.GetX(), event.GetY()));
+			wxGetApp().m_current_viewport->m_view_point.Shift(dm, wxPoint(event.GetX(), event.GetY()));
 		}
 
 		wxGetApp().m_frame->m_graphics->Refresh();

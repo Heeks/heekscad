@@ -150,9 +150,9 @@ static const gp_Trsf& digitizing_matrix(bool calculate = false){
 			gp_Pnt x1 = origin.XYZ() + gp_XYZ(1, 0, 0);
 			gp_Pnt y1 = origin.XYZ() + gp_XYZ(0, 1, 0);
 			gp_Pnt po = origin;
-			po = wxGetApp().m_frame->m_graphics->m_view_point.glUnproject(po);
-			x1 = wxGetApp().m_frame->m_graphics->m_view_point.glUnproject(x1);
-			y1 = wxGetApp().m_frame->m_graphics->m_view_point.glUnproject(y1);
+			po = wxGetApp().m_current_viewport->m_view_point.glUnproject(po);
+			x1 = wxGetApp().m_current_viewport->m_view_point.glUnproject(x1);
+			y1 = wxGetApp().m_current_viewport->m_view_point.glUnproject(y1);
 			
 			global_matrix_relative_to_screen = make_matrix(origin, gp_Vec(po, x1).Normalized(), gp_Vec(po, y1).Normalized());
 		}
@@ -171,7 +171,7 @@ bool DigitizeMode::OnModeChange(void){
 }
 
 DigitizedPoint DigitizeMode::digitize1(const wxPoint &input_point){
-	gp_Lin ray = wxGetApp().m_frame->m_graphics->m_view_point.SightLine(input_point);
+	gp_Lin ray = wxGetApp().m_current_viewport->m_view_point.SightLine(input_point);
 	std::list<DigitizedPoint> compare_list;
 	MarkedObjectManyOfSame marked_object;
 	if(wxGetApp().digitize_end || wxGetApp().digitize_inters || wxGetApp().digitize_centre || wxGetApp().digitize_midpoint || wxGetApp().digitize_nearest || wxGetApp().digitize_tangent){

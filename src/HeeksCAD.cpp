@@ -67,7 +67,12 @@
 
 using namespace std;
 
+#ifdef PYHEEKSCAD
+HeeksCADapp theApp;
+HeeksCADapp &wxGetApp(){return theApp;}
+#else
 IMPLEMENT_APP(HeeksCADapp)
+#endif
 
 extern void SketchTools_GetOptions(std::list<Property *> *list);
 extern void LoadSketchToolsSettings();
@@ -387,6 +392,7 @@ bool HeeksCADapp::OnInit()
 	GetRecentFilesProfileString();
 
 	wxImage::AddHandler(new wxPNGHandler);
+	m_current_viewport = NULL;
 #ifdef PYHEEKSCAD
 	m_frame = NULL;
 #else
@@ -607,7 +613,7 @@ CSketch* HeeksCADapp::GetContainer()
 
 void HeeksCADapp::SetInputMode(CInputMode *new_mode){
 	if(!new_mode)return;
-	if(m_frame)m_frame->m_graphics->EndDrawFront();
+	if(m_frame)m_current_viewport->EndDrawFront();
 	if(new_mode->OnModeChange()){
 		input_mode_object = new_mode;
 	}
@@ -620,7 +626,7 @@ void HeeksCADapp::SetInputMode(CInputMode *new_mode){
 }
 
 void HeeksCADapp::FindMarkedObject(const wxPoint &point, MarkedObject* marked_object){
-	m_frame->m_graphics->FindMarkedObject(point, marked_object);
+	m_current_viewport->FindMarkedObject(point, marked_object);
 }
 
 void HeeksCADapp::CreateLights(void)
@@ -683,7 +689,7 @@ void HeeksCADapp::Reset(){
 	m_current_coordinate_system = NULL;
 	m_doing_rollback = false;
 	gp_Vec vy(0, 1, 0), vz(0, 0, 1);
-	m_frame->m_graphics->m_view_point.SetView(vy, vz);
+	m_current_viewport->m_view_point.SetView(vy, vz);
 	m_filepath = wxString(_("Untitled")) + _T(".heeks");
 	m_untitled = true;
 	m_hidden_for_drag.clear();
@@ -1654,11 +1660,16 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 
 void HeeksCADapp::Repaint(bool soon)
 {
-	if(m_frame && m_frame->m_graphics)
+#ifdef PYHEEKSCAD
+	if(m_current_viewport)
 	{
-		if(soon)m_frame->m_graphics->RefreshSoon();
-		else m_frame->m_graphics->Refresh();
+		m_current_viewport->m_need_refresh = true;
+		if(soon)m_current_viewport->m_need_update = true;
 	}
+#else
+	if(soon)m_frame->m_graphics->RefreshSoon();
+	else m_frame->m_graphics->Refresh();
+#endif
 }
 
 void HeeksCADapp::RecalculateGLLists()
@@ -1725,7 +1736,7 @@ void HeeksCADapp::glCommandsAll(const CViewPoint &view_point)
 	glDepthMask(1);
 	glEnable(GL_POLYGON_OFFSET_FILL);
 	glShadeModel(GL_FLAT);
-	m_frame->m_graphics->m_view_point.SetPolygonOffset();
+	view_point.SetPolygonOffset();
 
 	std::list<HeeksObj*> after_others_objects;
 
@@ -1870,7 +1881,7 @@ void HeeksCADapp::GetBox(CBox &box){
 }
 
 double HeeksCADapp::GetPixelScale(void){
-	return m_frame->m_graphics->m_view_point.m_pixel_scale;
+	return m_current_viewport->m_view_point.m_pixel_scale;
 }
 
 bool HeeksCADapp::IsModified(void){
@@ -2007,7 +2018,7 @@ public:
 
 static UnsetCoordSystemActive coord_system_unset;
 
-void HeeksCADapp::DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool from_graphics_canvas, bool control_pressed)
+void HeeksCADapp::GetDropDownTools(std::list<Tool*> &f_list, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool from_graphics_canvas, bool control_pressed)
 {
 	tool_index_list.clear();
 	wxPoint new_point = point;
@@ -2015,8 +2026,6 @@ void HeeksCADapp::DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObje
 		new_point.x = -1;
 		new_point.y = -1;
 	}
-	wxMenu menu;
-	std::list<Tool*> f_list;
 	std::list<Tool*> temp_f_list;
 
 	GetTools(marked_object, f_list, new_point, from_graphics_canvas, control_pressed);
@@ -2030,11 +2039,20 @@ void HeeksCADapp::DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObje
 
 	if(wxGetApp().m_current_coordinate_system)f_list.push_back(&coord_system_unset);
 
+#ifndef PYHEEKSCAD
 	// exit full screen
 	if(wxGetApp().m_frame->IsFullScreen() && point.x>=0 && point.y>=0)temp_f_list.push_back(new CFullScreenTool);
+#endif
 
 	AddToolListWithSeparator(f_list, temp_f_list);
+}
+
+void HeeksCADapp::DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool from_graphics_canvas, bool control_pressed)
+{
+	std::list<Tool*> f_list;
+	GetDropDownTools(f_list, point, marked_object, dont_use_point_for_functions, from_graphics_canvas, control_pressed);
 	std::list<Tool*>::iterator FIt;
+	wxMenu menu;
 	for (FIt = f_list.begin(); FIt != f_list.end(); FIt++)
 		m_frame->AddToolToListAndMenu(*FIt, tool_index_list, &menu);
 	wnd->PopupMenu(&menu, point);
@@ -2211,7 +2229,7 @@ gp_Trsf HeeksCADapp::GetDrawMatrix(bool get_the_appropriate_orthogonal)
 	if(get_the_appropriate_orthogonal){
 		// choose from the three orthoganal possibilities, the one where it's z-axis closest to the camera direction
 		gp_Vec vx, vy;
-		m_frame->m_graphics->m_view_point.GetTwoAxes(vx, vy, false, 0);
+		m_current_viewport->m_view_point.GetTwoAxes(vx, vy, false, 0);
 		{
 			gp_Pnt o(0, 0, 0);
 			if(m_current_coordinate_system)o.Transform(m_current_coordinate_system->GetMatrix());
@@ -2315,7 +2333,7 @@ void on_set_grid_mode(int value, HeeksObj* object)
 
 void on_set_perspective(bool value, HeeksObj* object)
 {
-	wxGetApp().m_frame->m_graphics->m_view_point.SetPerspective(value);
+	wxGetApp().m_current_viewport->m_view_point.SetPerspective(value);
 	wxGetApp().Repaint();
 }
 
@@ -2448,8 +2466,8 @@ void on_set_rotate_mode(int value, HeeksObj* object)
 	if(!wxGetApp().m_rotate_mode)
 	{
 		gp_Vec vy(0, 1, 0), vz(0, 0, 1);
-		wxGetApp().m_frame->m_graphics->m_view_point.SetView(vy, vz);
-		wxGetApp().m_frame->m_graphics->StoreViewPoint();
+		wxGetApp().m_current_viewport->m_view_point.SetView(vy, vz);
+		wxGetApp().m_current_viewport->StoreViewPoint();
 		wxGetApp().Repaint();
 	}
 }
@@ -2861,7 +2879,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 		view_options->m_list.push_back ( new PropertyChoice ( _("grid mode"),  choices, grid_mode, NULL, on_set_grid_mode ) );
 	}
 	view_options->m_list.push_back ( new PropertyColor ( _("face selection color"), face_selection_color, NULL, on_set_face_color ) );
-	view_options->m_list.push_back( new PropertyCheck(_("perspective"), m_frame->m_graphics->m_view_point.GetPerspective(), NULL, on_set_perspective));
+	view_options->m_list.push_back( new PropertyCheck(_("perspective"), m_current_viewport->m_view_point.GetPerspective(), NULL, on_set_perspective));
 
 	{
 		std::list< wxString > choices;
@@ -3115,7 +3133,9 @@ public:
 				return _("Mark");
 			}
 		}
+#ifndef PYHEEKSCAD
 		if(wxGetApp().m_frame->m_properties)return _("Properties");
+#endif
 		return _("Mark");
 	}
 
@@ -3133,13 +3153,15 @@ public:
 		else{
 			wxGetApp().m_marked_list->Clear(true);
 			wxGetApp().m_marked_list->Add(m_marked_object->GetObject(), true);
+#ifndef PYHEEKSCAD
 			if(wxGetApp().m_frame->m_properties && !(wxGetApp().m_frame->m_properties->IsShown())){
 				wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_properties).Show();
 				wxGetApp().m_frame->m_aui_manager->Update();
 			}
+#endif
 		}
 		if(m_point.x >= 0){
-			gp_Lin ray = wxGetApp().m_frame->m_graphics->m_view_point.SightLine(m_point);
+			gp_Lin ray = wxGetApp().m_current_viewport->m_view_point.SightLine(m_point);
 			double ray_start[3], ray_direction[3];
 			extract(ray.Location(), ray_start);
 			extract(ray.Direction(), ray_direction);
@@ -3259,11 +3281,6 @@ void HeeksCADapp::get_2d_arc_segments(double xs, double ys, double xe, double ye
         x += rx * radial_factor;
         y += ry * radial_factor;
     }
-}
-
-void HeeksCADapp::PassMouseWheelToGraphics(wxMouseEvent& event)
-{
-	m_frame->m_graphics->OnMouse(event);
 }
 
 int HeeksCADapp::PickObjects(const wxChar* str, long marking_filter, bool just_one)
@@ -3889,10 +3906,10 @@ void HeeksCADapp::render_screen_text(const wxChar* str1, const wxChar* str2)
 	glPushMatrix();
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
-	m_frame->m_graphics->SetIdentityProjection();
+	m_current_viewport->SetIdentityProjection();
 	background_color[0].best_black_or_white().glColor();
 	int w, h;
-	m_frame->m_graphics->GetClientSize(&w, &h);
+	m_current_viewport->GetViewportSize(&w, &h);
 	glTranslated(2.0, h - 1.0, 0.0);
 
 	glScaled(10.0, 10.0, 0);
@@ -3929,10 +3946,10 @@ void HeeksCADapp::render_screen_text_at(const wxChar* str1, double scale, double
 	glPushMatrix();
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
-	m_frame->m_graphics->SetIdentityProjection();
+	m_current_viewport->SetIdentityProjection();
 	background_color[0].best_black_or_white().glColor();
 	int w, h;
-	m_frame->m_graphics->GetClientSize(&w, &h);
+	m_current_viewport->GetViewportSize(&w, &h);
 	glTranslated(x,y, 0.0);
 
 	glScaled(scale, scale, 0);

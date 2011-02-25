@@ -135,9 +135,9 @@ void MarkedList::ObjectsInWindow( wxRect window, MarkedObject* marked_object, bo
 			glSelectBuffer(buffer_length, data);
 			glRenderMode(GL_SELECT);
 			glInitNames();
-			wxGetApp().m_frame->m_graphics->m_view_point.SetViewport();
-			wxGetApp().m_frame->m_graphics->m_view_point.SetPickProjection(window);
-			wxGetApp().m_frame->m_graphics->m_view_point.SetModelview();
+			wxGetApp().m_current_viewport->SetViewport();
+			wxGetApp().m_current_viewport->m_view_point.SetPickProjection(window);
+			wxGetApp().m_current_viewport->m_view_point.SetModelview();
 			wxGetApp().glCommands(true, false, false);
 			GrippersGLCommands(true, false);
 			glFlush();
