@@ -4,11 +4,14 @@
 
 #pragma once
 
+class CViewport;
+
 class CViewPoint{
 private:
 	wxPoint m_initial_point;
 	double m_initial_pixel_scale;
 	bool m_perspective;
+	CViewport* m_viewport;
 
 	void SetProjection2(bool use_depth_testing);
 	int ChooseBestPlane(int plane)const;
@@ -27,7 +30,7 @@ public:
 	double m_far_plane;
 	CBox m_extra_depth_box;
 
-	CViewPoint(void);
+	CViewPoint(CViewport* viewport);
 	~CViewPoint(void);
 	CViewPoint(const CViewPoint &c);
 
@@ -45,7 +48,7 @@ public:
 	void Scale(const wxPoint &point, bool reversed = false);
 	void Twist(double angle);
 	void Twist(wxPoint start, wxPoint point_diff);
-	void SetViewport(void)const;
+	void SetViewport()const;
 	void SetProjection(bool use_depth_testing);
 	void SetPickProjection(wxRect &pick_box);
 	void SetModelview(void);

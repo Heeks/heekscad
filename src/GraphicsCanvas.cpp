@@ -13,6 +13,16 @@
 
 extern CHeeksCADInterface heekscad_interface;
 
+CViewport::CViewport():m_frozen(false), m_refresh_wanted_on_thaw(false), m_w(0), m_h(0), m_view_point(this), m_need_update(false), m_need_refresh(false)
+{
+	wxGetApp().m_current_viewport = this;
+}
+
+CViewport::CViewport(int w, int h):m_frozen(false), m_refresh_wanted_on_thaw(false), m_w(w), m_h(h), m_view_point(this), m_need_update(false), m_need_refresh(false)
+{
+	wxGetApp().m_current_viewport = this;
+}
+
 BEGIN_EVENT_TABLE(CGraphicsCanvas, wxGLCanvas)
     EVT_SIZE(CGraphicsCanvas::OnSize)
 	EVT_ERASE_BACKGROUND(CGraphicsCanvas::OnEraseBackground)
@@ -44,24 +54,20 @@ static int graphics_attrib_list[] = {
 
 
 CGraphicsCanvas::CGraphicsCanvas(wxWindow* parent)
-        : wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("some text"), graphics_attrib_list),m_frozen(false), m_refresh_wanted_on_thaw(false)
+        : wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("some text"), graphics_attrib_list),CViewport(0, 0)
 {
 	m_render_on_front_done = false;
 
 	wxGetApp().RegisterObserver(this);
 }
 
-void CGraphicsCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
+void CViewport::SetViewport()
 {
-    /* must always be here */
-    wxPaintDC dc(this);
+	m_view_point.SetViewport();
+}
 
-#ifndef __WXMOTIF__
-    if (!GetContext()) return;
-#endif
-
-    SetCurrent();
-
+void CViewport::glCommands()
+{
 	glDrawBuffer(GL_BACK);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -78,7 +84,7 @@ void CGraphicsCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 		glDisable(GL_LINE_SMOOTH);
 	}
 
-	m_view_point.SetViewport();
+	SetViewport();
 
 	switch(wxGetApp().m_background_mode)
 	{
@@ -232,6 +238,20 @@ void CGraphicsCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 
 	// mark various XOR drawn items as not drawn
 	m_render_on_front_done = false;
+}
+
+void CGraphicsCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
+{
+    /* must always be here */
+    wxPaintDC dc(this);
+
+#ifndef __WXMOTIF__
+    if (!GetContext()) return;
+#endif
+
+    SetCurrent();
+
+	glCommands();
 
     SwapBuffers();
 
@@ -243,6 +263,9 @@ void CGraphicsCanvas::OnSize(wxSizeEvent& event)
 {
     // this is also necessary to update the context on some platforms
     wxGLCanvas::OnSize(event);
+    int w, h;
+    GetClientSize(&w, &h);
+	WidthAndHeightChanged(w, h);
 	Refresh();
 }
 
@@ -251,22 +274,22 @@ void CGraphicsCanvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 	// Do nothing, to avoid flashing on MSW
 }
 
-void CGraphicsCanvas::DrawFront(void){
+void CViewport::DrawFront(void){
 	if(!m_render_on_front_done){
 		FrontRender();
 		m_render_on_front_done = true;
 	}
 }
 
-void CGraphicsCanvas::EndDrawFront(void){
+void CViewport::EndDrawFront(void){
 	if(m_render_on_front_done){
 		FrontRender();
 		m_render_on_front_done = false;
 	}
 }
 
-void CGraphicsCanvas::FrontRender(void){
-	m_view_point.SetViewport();
+void CViewport::FrontRender(void){
+	SetViewport();
 	m_view_point.SetProjection(false);
 	m_view_point.SetModelview();
 	
@@ -279,19 +302,16 @@ void CGraphicsCanvas::FrontRender(void){
 	m_render_on_front_done = true;
 }
 
-void CGraphicsCanvas::SetIdentityProjection(void){
-    int w, h;
-    GetClientSize(&w, &h);
-	glViewport(0, 0, w, h);
+void CViewport::SetIdentityProjection(){
+	glViewport(0, 0, m_w, m_h);
     glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(- 0.5, w - 0.5, -0.5, h - 0.5, 0,10);
+	glOrtho(- 0.5, m_w - 0.5, -0.5, m_h - 0.5, 0,10);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
 
-void CGraphicsCanvas::SetXOR(void){
-	SetCurrent();
+void CViewport::SetXOR(void){
 	glGetIntegerv(GL_DRAW_BUFFER, &m_save_buffer_for_XOR);
 	glDrawBuffer(GL_FRONT);
 	glDepthMask(0);
@@ -301,12 +321,26 @@ void CGraphicsCanvas::SetXOR(void){
 	glColor3ub(255, 255, 255);
 }
 
-void CGraphicsCanvas::EndXOR(void){
+void CViewport::EndXOR(void){
 	glDisable(GL_COLOR_LOGIC_OP);
 	glDepthMask(1);
 	glEnable(GL_DEPTH_TEST);
 	glDrawBuffer(m_save_buffer_for_XOR);
 	glFlush();
+}
+
+void CViewport::ViewportOnMouse( wxMouseEvent& event )
+{
+	wxGetApp().m_current_viewport = this;
+	this->m_need_refresh = false;
+	this->m_need_update = false;
+	wxGetApp().input_mode_object->OnMouse( event );
+
+	for(std::list< void(*)(wxMouseEvent&) >::iterator It = wxGetApp().m_lbutton_up_callbacks.begin(); It != wxGetApp().m_lbutton_up_callbacks.end(); It++)
+	{
+		void(*callbackfunc)(wxMouseEvent& event) = *It;
+		(*callbackfunc)(event);
+	}
 }
 
 void CGraphicsCanvas::OnMouse( wxMouseEvent& event )
@@ -318,13 +352,10 @@ void CGraphicsCanvas::OnMouse( wxMouseEvent& event )
 		SetFocus(); // so middle wheel works
 	}
 
-	wxGetApp().input_mode_object->OnMouse( event );
+	ViewportOnMouse(event);
 
-	for(std::list< void(*)(wxMouseEvent&) >::iterator It = wxGetApp().m_lbutton_up_callbacks.begin(); It != wxGetApp().m_lbutton_up_callbacks.end(); It++)
-	{
-		void(*callbackfunc)(wxMouseEvent& event) = *It;
-		(*callbackfunc)(event);
-	}
+	if(this->m_need_update)Update();
+	if(this->m_need_refresh)Refresh();
 
 	event.Skip();
 }
@@ -523,7 +554,7 @@ void CGraphicsCanvas::OnMagPrevious()
 	Refresh();
 }
 
-void CGraphicsCanvas::SetViewPoint(void){
+void CViewport::SetViewPoint(void){
 	if(m_orthogonal){
 		gp_Vec vx, vy, vz;
 		m_view_point.GetTwoAxes(vx, vy, false, 0);
@@ -560,19 +591,19 @@ void CGraphicsCanvas::SetViewPoint(void){
 	StoreViewPoint();
 }
 
-void CGraphicsCanvas::StoreViewPoint(void){
+void CViewport::StoreViewPoint(void){
 	m_view_points.push_back(m_view_point);
 }
 
-void CGraphicsCanvas::RestorePreviousViewPoint(void){
+void CViewport::RestorePreviousViewPoint(void){
 	if(m_view_points.size()>0){
 		m_view_point = m_view_points.back();
 		m_view_points.pop_back();
 	}
 }
 
-void CGraphicsCanvas::DrawObjectsOnFront(const std::list<HeeksObj*> &list, bool do_depth_testing){
-	m_view_point.SetViewport();
+void CViewport::DrawObjectsOnFront(const std::list<HeeksObj*> &list, bool do_depth_testing){
+	SetViewport();
 	m_view_point.SetProjection(do_depth_testing);
 	m_view_point.SetModelview();
 	
@@ -588,7 +619,7 @@ void CGraphicsCanvas::DrawObjectsOnFront(const std::list<HeeksObj*> &list, bool 
 	glEnable(GL_POLYGON_OFFSET_FILL);
 	glShadeModel(GL_FLAT);
 
-	wxGetApp().m_frame->m_graphics->m_view_point.SetPolygonOffset();
+	m_view_point.SetPolygonOffset();
 
 	for(std::list<HeeksObj*>::const_iterator It = list.begin(); It != list.end(); It++)
 	{
@@ -621,17 +652,15 @@ void CGraphicsCanvas::WindowMag(wxRect &window_box){
 	Refresh();
 }
 
-void CGraphicsCanvas::FindMarkedObject(const wxPoint &point, MarkedObject* marked_object){
+void CViewport::FindMarkedObject(const wxPoint &point, MarkedObject* marked_object){
 	wxGetApp().m_marked_list->FindMarkedObject(point, marked_object);
 }
 
-void CGraphicsCanvas::DrawWindow(wxRect &rect, bool allow_extra_bits){
+void CViewport::DrawWindow(wxRect &rect, bool allow_extra_bits){
     glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
-    int w, h;
-    GetClientSize(&w, &h);
-	glOrtho(- 0.5, w - 0.5, -0.5, h - 0.5, 0,10);
+	glOrtho(- 0.5, m_w - 0.5, -0.5, m_h - 0.5, 0,10);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();

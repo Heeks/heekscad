@@ -8,7 +8,7 @@
 #include "HeeksFrame.h"
 #include "CoordinateSystem.h"
 
-CViewPoint::CViewPoint(void){
+CViewPoint::CViewPoint(CViewport* viewport){
 	m_lens_point = gp_Pnt(0, 0, 200);
 	m_target_point = gp_Pnt(0, 0, 0);
 	m_vertical = gp_Vec(0, 1, 0);
@@ -17,6 +17,7 @@ CViewPoint::CViewPoint(void){
 	m_view_angle = 30;
 	m_section = false;
 	m_matrix_valid = false;
+	m_viewport = viewport;
 }
 
 CViewPoint::~CViewPoint(void){
@@ -39,6 +40,7 @@ const CViewPoint& CViewPoint::operator=(const CViewPoint &c){
 	memcpy(m_modelm, c.m_modelm, 16*sizeof(double));
 	memcpy(m_window_rect, c.m_window_rect, 4*sizeof(int));
 	m_matrix_valid = c.m_matrix_valid;
+	m_viewport = c.m_viewport;
 	return *this;
 }
 
@@ -47,7 +49,7 @@ void CViewPoint::Turn(wxPoint point_diff){
 	else if(point_diff.x < -100)point_diff.x = -100;
 	if(point_diff.y > 100)point_diff.y = 100;
 	else if(point_diff.y < -100)point_diff.y = -100;
-	wxSize size = wxGetApp().m_frame->m_graphics->GetClientSize();
+	wxSize size = m_viewport->GetViewportSize();
 	double c=(size.GetWidth()+size.GetHeight())/20;
 	Turn(point_diff.x/c, point_diff.y/c);
 }
@@ -73,7 +75,7 @@ void CViewPoint::TurnVertical(wxPoint point_diff){
 	else if(point_diff.x < -100)point_diff.x = -100;
 	if(point_diff.y > 100)point_diff.y = 100;
 	else if(point_diff.y < -100)point_diff.y = -100;
-	wxSize size = wxGetApp().m_frame->m_graphics->GetClientSize();
+	wxSize size = m_viewport->GetViewportSize();
 	double c=(size.GetWidth()+size.GetHeight())/20;
 	TurnVertical(point_diff.x/c, point_diff.y/c);
 }
@@ -139,7 +141,7 @@ void CViewPoint::Shift(const wxPoint &point_diff, const wxPoint &point){
 }
 
 void CViewPoint::WindowMag(wxRect &window_box){
-	wxSize size = wxGetApp().m_frame->m_graphics->GetClientSize();
+	wxSize size = m_viewport->GetViewportSize();
 	double width_ratio=fabs((double)(window_box.width)/(double)(size.GetWidth()));
 	double height_ratio=fabs((double)(window_box.height)/(double)(size.GetHeight()));
 	if(height_ratio>width_ratio)width_ratio=height_ratio;
@@ -182,7 +184,7 @@ void CViewPoint::Scale(double multiplier, bool use_initial_pixel_scale){
 void CViewPoint::Scale(const wxPoint &point, bool reversed){
 	double mouse_ydiff = point.y - m_initial_point.y;
 	if(reversed)mouse_ydiff = -mouse_ydiff;
-	wxSize size = wxGetApp().m_frame->m_graphics->GetClientSize();
+	wxSize size = m_viewport->GetViewportSize();
 	double fraction=(mouse_ydiff)/((double)(size.GetHeight()));
 	double multiplier = fraction;
 	bool increasing=(multiplier>0);
@@ -244,7 +246,7 @@ void CViewPoint::SetProjection2(bool use_depth_testing){
 		m_far_plane = distance + rad;
 	}
 
-	wxSize size = wxGetApp().m_frame->m_graphics->GetClientSize();
+	wxSize size = m_viewport->GetViewportSize();
 	double w = size.GetWidth()/m_pixel_scale;
 	double h = size.GetHeight()/m_pixel_scale;
 	double s = sqrt(w*w + h*h);
@@ -270,7 +272,7 @@ void CViewPoint::SetProjection(bool use_depth_testing){
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	SetProjection2(use_depth_testing);
-	wxSize size = wxGetApp().m_frame->m_graphics->GetClientSize();
+	wxSize size = m_viewport->GetViewportSize();
 	m_window_rect[0] = 0;
 	m_window_rect[1] = 0;
 	m_window_rect[2]=size.GetWidth();
@@ -280,7 +282,7 @@ void CViewPoint::SetProjection(bool use_depth_testing){
 }
 
 void CViewPoint::SetPickProjection(wxRect &pick_box){
-	wxSize size = wxGetApp().m_frame->m_graphics->GetClientSize();
+	wxSize size = m_viewport->GetViewportSize();
 	int vp[4] ={0, 0, size.GetWidth(), size.GetHeight()};
 	double box_width = pick_box.width;
 	double box_height = pick_box.height;
@@ -302,7 +304,7 @@ void CViewPoint::SetModelview(void){
 }
 
 void CViewPoint::SetViewport(void)const{
-	wxSize size = wxGetApp().m_frame->m_graphics->GetClientSize();
+	wxSize size = m_viewport->GetViewportSize();
 	glViewport(0, 0, size.GetWidth(), size.GetHeight());
 }
 
@@ -340,7 +342,7 @@ void CViewPoint::SetViewAroundAllObjects(){
 	if(!box.m_valid)return;
 	gp_Vec r = rightwards_vector().Normalized();
 	CBox window;
-	wxSize size = wxGetApp().m_frame->m_graphics->GetClientSize();
+	wxSize size = m_viewport->GetViewportSize();
 	double width_ratio = (double)(size.GetWidth())/(double)(size.GetHeight());
 	int width = size.GetWidth();
 	int height = size.GetHeight();
@@ -378,7 +380,7 @@ void CViewPoint::SetViewAroundAllObjects(){
 }
 
 gp_Lin CViewPoint::SightLine(const wxPoint &point){
-	gp_Pnt screen_point(point.x, wxGetApp().m_frame->m_graphics->GetSize().GetHeight()-point.y, 0);
+	gp_Pnt screen_point(point.x, m_viewport->GetViewportSize().GetHeight()-point.y, 0);
 	gp_Pnt s = glUnproject(screen_point);
 	screen_point.SetZ(1);
 	gp_Pnt e = glUnproject(screen_point);

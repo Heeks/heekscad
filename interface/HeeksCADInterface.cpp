@@ -80,9 +80,8 @@ void CHeeksCADInterface::Repaint(bool soon)
 
 bool CHeeksCADInterface::GetCamera(double* pos, double* target, double* up, bool& perspective, double& field_of_view, double& near_plane, double& far_plane)
 {
-	if(wxGetApp().m_frame == NULL)return false;
-	if(wxGetApp().m_frame->m_graphics == NULL)return false;
-	CViewPoint &v = wxGetApp().m_frame->m_graphics->m_view_point;
+	if(wxGetApp().m_current_viewport == NULL)return false;
+	CViewPoint &v = wxGetApp().m_current_viewport->m_view_point;
 	extract(v.m_lens_point, pos);
 	extract(v.m_target_point, target);
 	extract(v.m_vertical, up);
@@ -420,7 +419,7 @@ HeeksObj* CHeeksCADInterface::GetNextObject()
 
 void CHeeksCADInterface::DrawObjectsOnFront(const std::list<HeeksObj*> &list)
 {
-	wxGetApp().m_frame->m_graphics->DrawObjectsOnFront(list);
+	wxGetApp().m_current_viewport->DrawObjectsOnFront(list);
 }
 
 HeeksObj* CHeeksCADInterface::NewSketch()
@@ -765,9 +764,8 @@ const wxChar* CHeeksCADInterface::GetFileFullPath()
 
 void CHeeksCADInterface::SetViewBox(const double* b)
 {
-	if(wxGetApp().m_frame == NULL)return;
-	if(wxGetApp().m_frame->m_graphics == NULL)return;
-	CViewPoint &v = wxGetApp().m_frame->m_graphics->m_view_point;
+	if(wxGetApp().m_current_viewport == NULL)return;
+	CViewPoint &v = wxGetApp().m_current_viewport->m_view_point;
 	v.m_extra_depth_box.Insert(b[0], b[1], b[2]);
 	v.m_extra_depth_box.Insert(b[3], b[4], b[5]);
 }

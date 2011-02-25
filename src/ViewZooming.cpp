@@ -16,8 +16,8 @@ void ViewZooming::OnMouse( wxMouseEvent& event )
 	{
 		button_down_point = wxPoint(event.GetX(), event.GetY());
 		CurrentPoint = button_down_point;
-		wxGetApp().m_frame->m_graphics->StoreViewPoint();
-		wxGetApp().m_frame->m_graphics->m_view_point.SetStartMousePoint(button_down_point);
+		wxGetApp().m_current_viewport->StoreViewPoint();
+		wxGetApp().m_current_viewport->m_view_point.SetStartMousePoint(button_down_point);
 	}
 	else if(event.Dragging())
 	{
@@ -27,11 +27,11 @@ void ViewZooming::OnMouse( wxMouseEvent& event )
 
 		if(event.LeftIsDown())
 		{
-			wxGetApp().m_frame->m_graphics->m_view_point.Scale(wxPoint(event.GetX(), event.GetY()), m_reversed);
+			wxGetApp().m_current_viewport->m_view_point.Scale(wxPoint(event.GetX(), event.GetY()), m_reversed);
 		}
 		else if(event.MiddleIsDown())
 		{
-			wxGetApp().m_frame->m_graphics->m_view_point.Shift(dm, wxPoint(event.GetX(), event.GetY()));
+			wxGetApp().m_current_viewport->m_view_point.Shift(dm, wxPoint(event.GetX(), event.GetY()));
 		}
 
 		wxGetApp().m_frame->m_graphics->Refresh();

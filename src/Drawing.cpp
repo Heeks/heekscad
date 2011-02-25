@@ -41,9 +41,9 @@ void Drawing::RecalculateAndRedraw(const wxPoint& point)
 
 	if(is_a_draw_level(GetDrawStep()))
 	{
-		if(DragDoneWithXOR())wxGetApp().m_frame->m_graphics->EndDrawFront();
+		if(DragDoneWithXOR())wxGetApp().m_current_viewport->EndDrawFront();
 		calculate_item(end);
-		if(DragDoneWithXOR())wxGetApp().m_frame->m_graphics->DrawFront();
+		if(DragDoneWithXOR())wxGetApp().m_current_viewport->DrawFront();
 		else wxGetApp().Repaint(true);
 	}
 }
@@ -63,7 +63,7 @@ void Drawing::AddPoint()
 			before_add_item();
 			const std::list<HeeksObj*>& drawing_objects = GetObjectsMade();
 			((ObjList*)GetOwnerForDrawingObjects())->Add(drawing_objects);
-			if(DragDoneWithXOR())wxGetApp().m_frame->m_graphics->DrawObjectsOnFront(drawing_objects, true);
+			if(DragDoneWithXOR())wxGetApp().m_current_viewport->DrawObjectsOnFront(drawing_objects, true);
 			else wxGetApp().Repaint();
 			set_previous_direction();
 			wxGetApp().Changed();
@@ -89,7 +89,7 @@ void Drawing::OnMouse( wxMouseEvent& event )
 
 	if(LeftAndRightPressed(event, event_used))
 	{
-		if(DragDoneWithXOR())wxGetApp().m_frame->m_graphics->EndDrawFront();
+		if(DragDoneWithXOR())wxGetApp().m_current_viewport->EndDrawFront();
 		clear_drawing_objects(2);
 		wxGetApp().SetInputMode(wxGetApp().m_select_mode);
 	}
@@ -168,7 +168,7 @@ static Drawing* drawing_for_tools = NULL;
 
 class EndDrawing:public Tool{
 public:
-	void Run(){if(drawing_for_tools->DragDoneWithXOR())wxGetApp().m_frame->m_graphics->EndDrawFront();drawing_for_tools->clear_drawing_objects(2); wxGetApp().SetInputMode(wxGetApp().m_select_mode);}
+	void Run(){if(drawing_for_tools->DragDoneWithXOR())wxGetApp().m_current_viewport->EndDrawFront();drawing_for_tools->clear_drawing_objects(2); wxGetApp().SetInputMode(wxGetApp().m_select_mode);}
 	const wxChar* GetTitle(){return _("Stop drawing");}
 	wxString BitmapPath(){return _T("enddraw");}
 	const wxChar* GetToolTip(){return _("Finish drawing");}
