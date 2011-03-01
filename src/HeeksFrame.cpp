@@ -187,10 +187,11 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 				else{
 					delete shared_library;
 				}
+
+				::wxSetWorkingDirectory(save_current_directory);
 			}
 		}
 
-		::wxSetWorkingDirectory(save_current_directory);
 	}
 
 	SetDropTarget(new DnDFile(this));
