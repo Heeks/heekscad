@@ -21,9 +21,9 @@
 #include "GripData.h"
 #endif
 
-HeeksObj::HeeksObj(void): m_skip_for_undo(false), m_id(0), m_layer(0), m_visible(true), m_preserving_id(false){}
+HeeksObj::HeeksObj(void): m_skip_for_undo(false), m_id(0), m_layer(0), m_visible(true), m_preserving_id(false), m_index(0){}
 
-HeeksObj::HeeksObj(const HeeksObj& ho): m_skip_for_undo(false), m_id(0), m_layer(0), m_visible(true),m_preserving_id(false){operator=(ho);}
+HeeksObj::HeeksObj(const HeeksObj& ho): m_skip_for_undo(false), m_id(0), m_layer(0), m_visible(true),m_preserving_id(false), m_index(0){operator=(ho);}
 
 const HeeksObj& HeeksObj::operator=(const HeeksObj &ho)
 {
@@ -45,6 +45,12 @@ HeeksObj::~HeeksObj()
 	{
 		(*it)->Remove(this);
 	}
+
+#ifdef HEEKSCAD
+	if (m_index) wxGetApp().ReleaseIndex(m_index);
+#else
+	if (m_index) heeksCAD->ReleaseIndex(m_index);
+#endif
 }
 
 HeeksObj* HeeksObj::MakeACopyWithID()
@@ -392,4 +398,13 @@ void HeeksObj::ToString(char *str, unsigned int* rlen, unsigned int len)
 
 abort:
 	*rlen = 0;
+}
+
+unsigned int HeeksObj::GetIndex() {
+#ifdef HEEKSCAD
+	if (!m_index) m_index = wxGetApp().GetIndex(this);
+#else
+	if (!m_index) m_index = heeksCAD->GetIndex(this);
+#endif
+	return m_index;
 }

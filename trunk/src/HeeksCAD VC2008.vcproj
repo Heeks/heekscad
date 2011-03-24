@@ -1010,6 +1010,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Index.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Input.cpp"
 			>
 		</File>

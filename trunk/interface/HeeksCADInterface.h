@@ -366,4 +366,8 @@ public:
 	virtual void SetInputUsesModalDialog(bool b);
 	virtual void SetDraggingMovesObjects(bool b);
 	virtual void SetNoCreationMode();
+
+	// Index functions
+	virtual unsigned int GetIndex(HeeksObj *object);
+	virtual void ReleaseIndex(unsigned int index);
 };

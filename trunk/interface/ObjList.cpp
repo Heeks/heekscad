@@ -129,7 +129,7 @@ void ObjList::glCommands(bool select, bool marked, bool no_color)
 		HeeksObj* object = *It;
 		if(object->OnVisibleLayer() && object->m_visible)
 		{
-			if(select)glPushName((unsigned long)object);
+			if(select)glPushName(object->GetIndex());
 #ifdef HEEKSCAD
 			(*It)->glCommands(select, marked || wxGetApp().m_marked_list->ObjectMarked(object), no_color);
 #else
