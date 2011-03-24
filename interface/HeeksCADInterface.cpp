@@ -1942,3 +1942,13 @@ void CHeeksCADInterface::SetNoCreationMode()
 
 	wxGetApp().m_no_creation_mode = true;
 }
+
+
+unsigned int CHeeksCADInterface::GetIndex(HeeksObj *object) {
+	return wxGetApp().GetIndex(object);
+}
+
+
+void CHeeksCADInterface::ReleaseIndex(unsigned int index) {
+	wxGetApp().ReleaseIndex(index);
+}

@@ -5,6 +5,7 @@
 #pragma once
 
 #include "ViewPoint.h"
+#include "Index.h"
 
 
 class Gripper;
@@ -15,6 +16,7 @@ private:
 	std::list<HeeksObj*> m_list;
 	std::set<HeeksObj*> m_set;
 	std::set<HeeksObj*> m_ignore_set;
+	Index<unsigned, HeeksObj*> m_name_index;
 
 	void delete_move_grips(bool check_app_grippers = false);
 	void create_move_grips();
@@ -54,4 +56,6 @@ public:
 	void CutSelectedItems();
 	void CopySelectedItems();
 	void Reset();
+	unsigned int GetIndex(HeeksObj *object);
+	void ReleaseIndex(unsigned int index);
 };
