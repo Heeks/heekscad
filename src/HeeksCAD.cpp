@@ -1857,7 +1857,7 @@ void HeeksCADapp::glCommands(bool select, bool marked, bool no_color)
 			HeeksObj* object = *It;
 			if(object->OnVisibleLayer() && object->m_visible)
 			{
-				if(select)glPushName((unsigned long)object);
+				if(select)glPushName(object->GetIndex());
 				object->glCommands(select, marked || wxGetApp().m_marked_list->ObjectMarked(object), no_color);
 				if(select)glPopName();
 			}
@@ -1866,7 +1866,7 @@ void HeeksCADapp::glCommands(bool select, bool marked, bool no_color)
 		// draw the ruler
 		if(m_show_ruler)
 		{
-			if(select)glPushName((unsigned long)m_ruler);
+			if(select)glPushName(m_ruler->GetIndex());
 			m_ruler->glCommands(select, false, false);
 			if(select)glPopName();
 		}
@@ -4329,3 +4329,14 @@ wxString HeeksCADapp::HeeksType( const int type ) const
     return(buf);
 }
 
+
+unsigned int HeeksCADapp::GetIndex(HeeksObj *object)
+{
+    return wxGetApp().m_marked_list->GetIndex(object);
+}
+
+
+void HeeksCADapp::ReleaseIndex(unsigned int index)
+{
+    wxGetApp().m_marked_list->ReleaseIndex(index);
+}

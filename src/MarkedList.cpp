@@ -87,7 +87,7 @@ void MarkedList::update_move_grips(){
 void MarkedList::render_move_grips(bool select, bool no_color){
 	std::list<Gripper*>::iterator It;
 	for(It = move_grips.begin(); It != move_grips.end(); It++){
-		if(select)glPushName((unsigned long)(*It));
+		if(select)glPushName((*It)->GetIndex());
 		(*It)->glCommands(select, false, no_color);
 		if(select)glPopName();
 	}
@@ -162,7 +162,7 @@ void MarkedList::ObjectsInWindow( wxRect window, MarkedObject* marked_object, bo
 			bool ignore_coords_only_found = false;
 			for(j=0; j<(int)names; j++, pos++){
 				if(!ignore_coords_only_found && current_found_object != NULL){
-					HeeksObj *object = (HeeksObj *)(data[pos]);
+					HeeksObj *object = m_name_index.find(data[pos]);
 					if(ignore_coords_only && wxGetApp().m_digitizing->OnlyCoords(object)){
 						ignore_coords_only_found = true;
 					}
@@ -403,3 +403,10 @@ void MarkedList::Reset()
 	delete_move_grips(true);
 }
 
+unsigned int MarkedList::GetIndex(HeeksObj *object) {
+	return m_name_index.insert(object);
+}
+
+void MarkedList::ReleaseIndex(unsigned int index) {
+	return m_name_index.erase(index);
+}

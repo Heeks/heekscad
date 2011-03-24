@@ -98,6 +98,7 @@ public:
 	unsigned int m_layer;
 	bool m_visible;
 	bool m_preserving_id;
+	unsigned int m_index;
 
 	HeeksObj(void);
 	HeeksObj(const HeeksObj& ho);
@@ -199,6 +200,7 @@ public:
 	virtual HeeksObj *Find( const int type, const unsigned int id );
 	virtual void SetIdPreservation(const bool flag) { m_preserving_id = flag; }
 	virtual void ToString(char* buf, unsigned int* rlen, unsigned int len);
+	virtual unsigned int GetIndex();
 protected:
 	virtual void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 };

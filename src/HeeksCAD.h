@@ -403,6 +403,9 @@ public:
    	 bool TestForValidConstraints(const std::list<HeeksObj*>& objects);
 
 #endif
+
+	unsigned int GetIndex(HeeksObj *object);
+	void ReleaseIndex(unsigned int index);
 };
 
 
