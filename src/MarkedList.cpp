@@ -195,12 +195,14 @@ void MarkedList::Add(std::list<HeeksObj *> &list, bool call_OnChanged){
 }
 
 void MarkedList::Remove(HeeksObj *object, bool call_OnChanged){
+	if (!object) return;
 	std::list<HeeksObj *> list;
 	list.push_back(object);
 	Remove(list, call_OnChanged);
 }
 
 void MarkedList::Add(HeeksObj *object, bool call_OnChanged){
+	if (!object) return;
 	std::list<HeeksObj *> list;
 	list.push_back(object);
 	Add(list, call_OnChanged);
@@ -320,6 +322,7 @@ void MarkedList::GetTools(MarkedObject* clicked_object, std::list<Tool*>& t_list
 	if (m_list.size() > 0)
 	{
 		t_list.push_back(&delete_marked_list_tool);
+		// jcoffland: Why push a NULL here?  Causes crash in GetConversionMenuTools()
 		t_list.push_back(NULL);
 	}
 
