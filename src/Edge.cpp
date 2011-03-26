@@ -174,8 +174,8 @@ public:
 		double rad = 2.0;
 		HeeksConfig config;
 		config.Read(_T("EdgeChamferDist"), &rad);
-		if(wxGetApp().InputLength(_("Enter Chamfer Distance"), _("Radius"), rad))
-		{	//CShape::FilletOrChamferEdges(edge_for_tools->list(), rad, true);
+		if(wxGetApp().InputLength(_("Enter Chamfer Distance"), _("Distance"), rad))
+		{
 			edge_for_tools->Blend(rad,true);
 			config.Write(_T("EdgeChamferDist"), rad);
 		}
@@ -208,57 +208,39 @@ void CEdge::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 }
 
 void CEdge::Blend(double radius,  bool chamfer_not_fillet){
-	
-		if(chamfer_not_fillet)  //chamfer 
-		{
-			try{
-				
-				wxGetApp().CreateUndoPoint();
-				CShape::FilletOrChamferEdges(wxGetApp().m_marked_list->list(), radius, true);
-										
-				wxGetApp().m_marked_list->Clear(true);
-				wxGetApp().Changed();
-					
-			}
-			catch (Standard_Failure) {
-				Handle_Standard_Failure e = Standard_Failure::Caught();
-				wxMessageBox(wxString(_("Error making fillet")) + _T(": ") + Ctt(e->GetMessageString()));
-			}
-			catch(...)
+	try{
+		wxGetApp().CreateUndoPoint();
+		CShape* body = GetParentBody();
+		if(body){
+			if(chamfer_not_fillet)
 			{
-				wxMessageBox(_("A fatal error happened during Blend"));
-			}
-
-
-		} //end if- chamfer 
-
-		else  //fillet 
-		{
-			try{
-				wxGetApp().CreateUndoPoint();
-				CShape* body = GetParentBody();
-				if(body){
-					BRepFilletAPI_MakeFillet fillet(body->Shape());
-					fillet.Add(radius, m_topods_edge);
-					TopoDS_Shape new_shape = fillet.Shape();
-					wxGetApp().Add(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(body->GetColor()), body->GetOpacity()), NULL);
-					wxGetApp().Remove(body);
+				BRepFilletAPI_MakeChamfer chamfer(body->Shape());
+				for(std::list<CFace*>::iterator It = m_faces.begin(); It != m_faces.end(); It++)
+				{
+					CFace* face = *It;
+					chamfer.Add(radius, m_topods_edge, TopoDS::Face(face->Face()));
 				}
+				TopoDS_Shape new_shape = chamfer.Shape();
+				wxGetApp().Add(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge chamfer"), *(body->GetColor()), body->GetOpacity()), NULL);
 			}
-			catch (Standard_Failure) {
-				Handle_Standard_Failure e = Standard_Failure::Caught();
-				wxMessageBox(wxString(_("Error making fillet")) + _T(": ") + Ctt(e->GetMessageString()));
-			}
-			catch(...)
+			else
 			{
-				wxMessageBox(_("A fatal error happened during Blend"));
+				BRepFilletAPI_MakeFillet fillet(body->Shape());
+				fillet.Add(radius, m_topods_edge);
+				TopoDS_Shape new_shape = fillet.Shape();
+				wxGetApp().Add(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(body->GetColor()), body->GetOpacity()), NULL);
 			}
-
-
-		} //end else- fillet 
-
-
-	
+			wxGetApp().Remove(body);
+		}
+	}
+	catch (Standard_Failure) {
+		Handle_Standard_Failure e = Standard_Failure::Caught();
+		wxMessageBox(wxString(chamfer_not_fillet ?_("Error making fillet"):_("Error making fillet")) + _T(": ") + Ctt(e->GetMessageString()));
+	}
+	catch(...)
+	{
+		wxMessageBox(chamfer_not_fillet ? _("A fatal error happened during Chamfer"):_("A fatal error happened during Blend"));
+	}
 }// end Blend function
 
 void CEdge::GetProperties(std::list<Property *> *list)
