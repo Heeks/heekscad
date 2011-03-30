@@ -52,6 +52,7 @@
 #include "ViewRotating.h"
 #include "ViewZooming.h"
 #include "ViewPanning.h"
+#include "Sectioning.h"
 
 double CHeeksCADInterface::GetTolerance()
 {
@@ -1694,6 +1695,11 @@ void CHeeksCADInterface::OnViewPanButton()
 void CHeeksCADInterface::ShowModalOptions()
 {
 	wxGetApp().ShowModalOptions();
+}
+
+void CHeeksCADInterface::ShowSectioningDialog()
+{
+	wxGetApp().SectioningDialog();
 }
 
 void CHeeksCADInterface::RegisterOnBuildTexture( void(*callbackfunc)() )

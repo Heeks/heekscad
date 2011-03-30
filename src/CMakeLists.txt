@@ -48,45 +48,45 @@ set( heekscad_HDRS
         DimensionDrawing.h   HILine.h               PointOrWindow.h         UndoEngine.h
         Drawing.h            HImage.h               Polygon.h               Vertex.h
         dxf.h                HLine.h                propdev.h               ViewPanning.h
-        DynamicSolid.h       PropertiesCanvas.h     ViewPoint.h
-        EdgeBlend.h          HPoint.h               PropertyTrsf.h          ViewRotating.h
-        Edge.h               HSpline.h              propgrid.h              ViewZooming.h
-        EndedObject.h        HText.h                RegularShapesDrawing.h  Window.h
-        Face.h               HXml.h                 RS274X.h                Wire.h
-        FaceTools.h          InputModeCanvas.h      RuledSurface.h          WrappedCurves.h
-        FastCurves.h         Intersector.h          Ruler.h                 wxImageLoader.h
-        Geom.h               LineArcDrawing.h       SelectMode.h
+        DynamicSolid.h       PropertiesCanvas.h		PropertyTrsf.h          ViewPoint.h
+        EdgeBlend.h          HPoint.h               propgrid.h              ViewRotating.h
+        Edge.h               HSpline.h              RegularShapesDrawing.h  ViewZooming.h
+        EndedObject.h        HText.h                RS274X.h                Window.h
+        Face.h               HXml.h                 RuledSurface.h          Wire.h
+        FaceTools.h          InputModeCanvas.h      Ruler.h                 WrappedCurves.h
+        FastCurves.h         Intersector.h          Sectioning.h            wxImageLoader.h
+        Geom.h               LineArcDrawing.h       SelectMode.h            
    )#Hole.h
 
 set( heekscad_SRCS
-        AboutBox.cpp           GLList.cpp               MarkedList.cpp            ShapeTools.cpp
-        advprops.cpp           GraphicsCanvas.cpp       matrix.cpp                SimpleIntersector.cpp
-        AutoSave.cpp           Grid.cpp                 Sketch.cpp
-        BentleyOttmann.cpp     Gripper.cpp              MultiPoly.cpp             sketchinterface.cpp
-        BezierCurve.cpp        GripperSelTransform.cpp  NearMap.cpp               SketchTools.cpp
-        Cone.cpp               Group.cpp                ObjPropsCanvas.cpp        Solid.cpp
-        ConstrainedObject.cpp  HAngularDimension.cpp    OCCSolver.cpp             SolidTools.cpp
-        Constraint.cpp         HArc.cpp                 odcombo.cpp               SolveSketch.cpp
-        ConstraintTools.cpp    HCircle.cpp              OptionsCanvas.cpp         Sphere.cpp
-        ConversionTools.cpp    HDimension.cpp           OrientationModifier.cpp   stdafx.cpp
-        CoordinateSystem.cpp   HDxf.cpp                 Pad.cpp                   StlSolid.cpp
-        CorrelationTool.cpp    HeeksCAD.cpp             Part.cpp                  StretchTool.cpp
-        Cuboid.cpp             HeeksFrame.cpp           Plugins.cpp               svg.cpp
-        CxfFont.cpp            HeeksPrintout.cpp        Pocket.cpp                TransformTool.cpp
-        Cylinder.cpp           HEllipse.cpp             PointDrawing.cpp          TransformTools.cpp
-        DigitizedPoint.cpp     HILine.cpp               PointOrWindow.cpp         TreeCanvas.cpp
-        DigitizeMode.cpp       HImage.cpp               Polygon.cpp               UndoEngine.cpp
-        DimensionDrawing.cpp   HLine.cpp                PropertiesCanvas.cpp      Vertex.cpp
-        Drawing.cpp            PropertyTrsf.cpp         ViewPanning.cpp
-        dxf.cpp                HPoint.cpp               propgrid.cpp              ViewPoint.cpp
-        DynamicSolid.cpp       HSpline.cpp              props.cpp                 ViewRotating.cpp
-        Edge.cpp               HText.cpp                RegularShapesDrawing.cpp  ViewZooming.cpp
-        EndedObject.cpp        HXml.cpp                 RS274X.cpp                Window.cpp
-        Face.cpp               InputModeCanvas.cpp      RuledSurface.cpp          Wire.cpp
-        FaceTools.cpp          LineArcDrawing.cpp       Ruler.cpp                 WrappedCurves.cpp
-        FastCurves.cpp         Loop.cpp                 SelectMode.cpp            wxImageLoader.cpp
-        Geom.cpp               MagDragWindow.cpp        Shape.cpp                 Input.cpp
-        glfont2.cpp            manager.cpp              ShapeData.cpp
+        AboutBox.cpp           GLList.cpp               manager.cpp               ShapeTools.cpp
+        advprops.cpp           GraphicsCanvas.cpp       MarkedList.cpp            SimpleIntersector.cpp
+        AutoSave.cpp           Grid.cpp                 matrix.cpp                ShapeTools.cpp     
+        BentleyOttmann.cpp     Gripper.cpp              MultiPoly.cpp             SimpleIntersector.cpp
+        BezierCurve.cpp        GripperSelTransform.cpp  NearMap.cpp               Sketch.cpp   
+        Cone.cpp               Group.cpp                ObjPropsCanvas.cpp        sketchinterface.cpp
+        ConstrainedObject.cpp  HAngularDimension.cpp    OCCSolver.cpp             SketchTools.cpp
+        Constraint.cpp         HArc.cpp                 odcombo.cpp               Solid.cpp
+        ConstraintTools.cpp    HCircle.cpp              OptionsCanvas.cpp         SolidTools.cpp
+        ConversionTools.cpp    HDimension.cpp           OrientationModifier.cpp   SolveSketch.cpp
+        CoordinateSystem.cpp   HDxf.cpp                 Pad.cpp                   Sphere.cpp
+        CorrelationTool.cpp    HeeksCAD.cpp             Part.cpp                  stdafx.cpp
+        Cuboid.cpp             HeeksFrame.cpp           Plugins.cpp               StlSolid.cpp
+        CxfFont.cpp            HeeksPrintout.cpp        Pocket.cpp                StretchTool.cpp
+        Cylinder.cpp           HEllipse.cpp             PointDrawing.cpp          svg.cpp
+        DigitizedPoint.cpp     HILine.cpp               PointOrWindow.cpp         TransformTool.cpp
+        DigitizeMode.cpp       HImage.cpp               Polygon.cpp               TransformTools.cpp
+        DimensionDrawing.cpp   HLine.cpp                PropertiesCanvas.cpp      TreeCanvas.cpp
+        Drawing.cpp            PropertyTrsf.cpp         propgrid.cpp              UndoEngine.cpp
+        dxf.cpp                HPoint.cpp               props.cpp                 Vertex.cpp
+        DynamicSolid.cpp       HSpline.cpp              RegularShapesDrawing.cpp  ViewPanning.cpp
+        Edge.cpp               HText.cpp                RS274X.cpp                ViewPoint.cpp
+        EndedObject.cpp        HXml.cpp                 RuledSurface.cpp          ViewRotating.cpp
+        Face.cpp               Input.cpp                Ruler.cpp                 ViewZooming.cpp
+        FaceTools.cpp          InputModeCanvas.cpp      SelectMode.cpp            Window.cpp
+        FastCurves.cpp         LineArcDrawing.cpp       Shape.cpp                 Wire.cpp
+        Geom.cpp               Loop.cpp                 ShapeData.cpp             WrappedCurves.cpp           
+        glfont2.cpp            MagDragWindow.cpp                                  wxImageLoader.cpp      
    ) #Hole.cpp
 set( HeeksCAD_LIBS
        -L../bin -ltinyxml -lheeksintf -lsketchsolve
