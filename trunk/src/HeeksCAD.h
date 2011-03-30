@@ -351,6 +351,7 @@ public:
 	bool InputAngleWithPlane(double &angle, double *axis = NULL, double *pos = NULL, int *number_of_copies = NULL);
 	bool InputLength(const wxChar* prompt, const wxChar* value_name, double &value);
 	void ShowModalOptions();
+	void SectioningDialog();
 	void RegisterOnGLCommands( void(*callbackfunc)() );
 	void RemoveOnGLCommands( void(*callbackfunc)() );
 	void RegisterOnGraphicsSize( void(*callbackfunc)(wxSizeEvent&) );

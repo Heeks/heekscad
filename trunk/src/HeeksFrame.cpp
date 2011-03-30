@@ -38,6 +38,7 @@
 #include "AboutBox.h"
 #include "HSpline.h"
 #include "../interface/Plugin.h"
+#include "Sectioning.h"
 
 using namespace std;
 
@@ -962,6 +963,11 @@ static void OnChamferButton( wxCommandEvent& event )
 	}
 }
 
+static void OnSectioningButton( wxCommandEvent& event )
+{
+	wxGetApp().SectioningDialog();
+}
+
 static void OnRuledSurfaceButton( wxCommandEvent& event )
 {
 	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 2, SketchType, wxString(_("Pick two or more sketches, to create a lofted solid between")) + _T("\n( ") + _( "hold down Ctrl key to select more than one solid") + _T(" )"), _("Lofted Body")))return;
@@ -1762,8 +1768,10 @@ void CHeeksFrame::MakeMenus()
 	AddMenuItem(solids_menu, _("Cut"), ToolImage(_T("subtract")), OnSubtractButton);
 	AddMenuItem(solids_menu, _("Fuse"), ToolImage(_T("fuse")), OnFuseButton);
 	AddMenuItem(solids_menu, _("Common"), ToolImage(_T("common")), OnCommonButton);
+	solids_menu->AppendSeparator();
 	AddMenuItem(solids_menu, _("Fillet"), ToolImage(_T("fillet")), OnFilletButton);
 	AddMenuItem(solids_menu, _("Chamfer"), ToolImage(_T("chamfer")), OnChamferButton);
+	AddMenuItem(solids_menu, _("Sectioning"), ToolImage(_T("section")), OnSectioningButton);
 
 	// Transformations Menu
 	wxMenu *transform_menu = new wxMenu;
