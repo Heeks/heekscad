@@ -330,6 +330,7 @@ public:
 	virtual void OnViewPanButton();
 
 	virtual void ShowModalOptions();
+	virtual void ShowSectioningDialog();
 
 	virtual void RegisterOnBuildTexture( void(*callbackfunc)() );
 	virtual int LoadIconsTexture(const wxChar *filepath);
