@@ -83,10 +83,10 @@ set( heekscad_SRCS
         Edge.cpp               HText.cpp                RS274X.cpp                ViewPoint.cpp
         EndedObject.cpp        HXml.cpp                 RuledSurface.cpp          ViewRotating.cpp
         Face.cpp               Input.cpp                Ruler.cpp                 ViewZooming.cpp
-        FaceTools.cpp          InputModeCanvas.cpp      SelectMode.cpp            Window.cpp
-        FastCurves.cpp         LineArcDrawing.cpp       Shape.cpp                 Wire.cpp
-        Geom.cpp               Loop.cpp                 ShapeData.cpp             WrappedCurves.cpp           
-        glfont2.cpp            MagDragWindow.cpp                                  wxImageLoader.cpp      
+        FaceTools.cpp          InputModeCanvas.cpp      Sectioning.cpp            Window.cpp
+        FastCurves.cpp         LineArcDrawing.cpp       SelectMode.cpp            Wire.cpp
+        Geom.cpp               Loop.cpp                 Shape.cpp                 WrappedCurves.cpp           
+        glfont2.cpp            MagDragWindow.cpp        ShapeData.cpp             wxImageLoader.cpp      
    ) #Hole.cpp
 set( HeeksCAD_LIBS
        -L../bin -ltinyxml -lheeksintf -lsketchsolve
