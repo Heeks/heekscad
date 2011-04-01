@@ -1,7 +1,7 @@
 # Traduction française de HeeksCAD.
 # Copyright (C) 2009 THE HeeksCAD'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the HeeksCAD package.
-# André PASCUAL <andre.pascual@linuxgraphic.org>, 2009-2010.
+# André PASCUAL <andre.pascual@linuxgraphic.org>, 2009-2011
 # 
 msgid ""
 msgstr ""
@@ -671,7 +671,7 @@ msgstr "Ajouter niveau de coupe de référence"
 
 #Ajout 534
 msgid "Leave manually assigned title"
-msgstr "Assigner manuellement un Titre"
+msgstr "Assignation manuelle d'un Titre"
 
 #Ajout 535
 msgid "New Fixture..."
@@ -707,7 +707,7 @@ msgstr "Dureté Brinell du matière brute"
 
 #Ajout 543
 msgid "Raw Material"
-msgstr "Dureté Brinell du matière brute"
+msgstr "Matière brute"
 
 #Ajout 544
 msgid "Surface Speed (m/min)"
@@ -803,7 +803,7 @@ msgstr "Définir les règles d'ajstement"
 
 #Ajout 567
 msgid "Design Rules Check..."
-msgstr "Vérifier les paramêtres CN..."
+msgstr "Vérifier les paramètres CN..."
 
 #Ajout 568
 msgid "Design Rules Adjustment..."
@@ -811,15 +811,15 @@ msgstr "Définir les règles d'ajustement..."
 
 #Ajout 569
 msgid "Add New Milling Operation"
-msgstr "Nouvelle Operation de Fraisage"
+msgstr "Nouvelle Opération de Fraisage"
 
 #Ajout 570
 msgid "Add New 3D Operation"
-msgstr "Nouvelle Operation 3D"
+msgstr "Nouvelle Opération 3D"
 
 #Ajout 571
 msgid "Add New Additive Operation"
-msgstr "Nouvelle Operation Ajoutée"
+msgstr "Nouvelle Opération Ajoutée"
 
 #Ajout 572
 msgid "Add Other Operation"
@@ -830,92 +830,92 @@ msgid "Add New Tool"
 msgstr "Ajout Nouvel Outil"
 
 #Ajout 574
-msgid "Tapping Operation"
-msgstr "Taraudage"
+msgid "Tapping Operation..."
+msgstr "Taraudage..."
 
 #Ajout 575
-msgid "Profile Operation"
-msgstr "Profil"
+msgid "Profile Operation..."
+msgstr "Profil..."
 
 #Ajout 576
-msgid "Pocket Operation"
-msgstr "Poche"
+msgid "Pocket Operation..."
+msgstr "Poche..."
 
 #Ajout 577
-msgid "Adaptive Roughing Operation"
-msgstr "ébauche adaptée"
+msgid "Adaptive Roughing Operation..."
+msgstr "Ébauche Adaptée..."
 
 #Ajout 578
-msgid "Drilling Operation"
-msgstr "Perçage"
+msgid "Drilling Operation..."
+msgstr "Perçage..."
 
 #Ajout 579
-msgid "CounterBore Operation"
-msgstr "Lamage"
+msgid "CounterBore Operation..."
+msgstr "Lamage..."
 
 #Ajout 580
-msgid "Chamfer Operation"
-msgstr "Chanfreinage"
+msgid "Chamfer Operation..."
+msgstr "Chanfreinage..."
 
 #Ajout 581
-msgid "Contour Operation"
-msgstr "Contournage"
+msgid "Contour Operation..."
+msgstr "Contournage..."
 
 #Ajout 581
-msgid "Inlay Operation"
-msgstr "Marqueterie"
+msgid "Inlay Operation..."
+msgstr "Incrustation..."
 
 #Ajout 582
-msgid "ZigZag Operation"
-msgstr "Dégrossissage"
+msgid "ZigZag Operation..."
+msgstr "Dégrossissage..."
 
 #Ajout 583
-msgid "Waterline Operation"
+msgid "Waterline Operation..."
 msgstr "Ligne de flotaison (?)"
 
 #Ajout 584
-msgid "Attach Operation"
-msgstr "Joindre"
+msgid "Attach Operation..."
+msgstr "Joindre..."
 
 #Ajout 585
-msgid "Unattach Operation"
-msgstr "Disjoindre"
+msgid "Unattach Operation..."
+msgstr "Disjoindre..."
 
 #Ajout 586
-msgid "Raft Operation"
-msgstr "Surfaçage"
+msgid "Raft Operation..."
+msgstr "Surfaçage..."
 
 #Ajout 587
-msgid "Rough Turning Operation"
-msgstr "Tournage ébauche"
+msgid "Rough Turning Operation..."
+msgstr "Tournage ébauche..."
 
 #Ajout 588
-msgid "Script Operation"
-msgstr "Script"
+msgid "Script Operation..."
+msgstr "Script..."
 
 #Ajout 589
-msgid "Speed Reference"
-msgstr "Vitesse Référence"
+msgid "Speed Reference..."
+msgstr "Vitesse Référence..."
 
 #Ajout 590
-msgid "Cutting Rate Reference"
-msgstr "Vitesse de Coupe Référence"
+msgid "Cutting Rate Reference..."
+msgstr "Vitesse de Coupe Référence..."
 
 #Ajout 591
-msgid "Positioning Operation"
-msgstr "Positionnement"
+msgid "Positioning Operation..."
+msgstr "Positionnement..."
 
 #Ajout 592
-msgid "Probe Centre Operation"
-msgstr "Palpage du Centre"
+msgid "Probe Centre Operation..."
+msgstr "Palpage du Centre..."
 
 #Ajout 593
-msgid "Probe Edge Operation"
-msgstr "Palpage d'Arête"
+msgid "Probe Edge Operation..."
+msgstr "Palpage d'Arête..."
 
 #Ajout 594
-msgid "Probe Grid Operation"
-msgstr "Palpage en Réseau"
+msgid "Probe Grid Operation..."
+msgstr "Palpage en Réseau..."
 
 #Ajout 595
 msgid "Drill..."
@@ -1004,6 +1004,244 @@ msgstr "Écart Contour spline"
 #Ajout 616
 msgid "Inlay spline deviation"
 msgstr "Écart Incrust spline"
+
+#Ajout 617
+msgid "YZ plane (around X) rotation"
+msgstr "Rotation Plan YZ autour de  X"
+
+#Ajout 618
+msgid "XZ plane (around Y) rotation"
+msgstr "Rotation Plan XZ autour de Y"
+
+#Ajout 619
+msgid "XY plane (around Z) rotation"
+msgstr "Rotation Plan XY autour de Z"
+
+#Ajout 620
+msgid "Safety Height Defined"
+msgstr "Hauteur sûre définie"
+
+#Ajout 621
+msgid "Safety Height (in G53 - Machine - coordinates)"
+msgstr "Hauteur sûre  (coordonnées Machine en G53)"
+
+#Ajout 622
+msgid "Touch Off Point Defined"
+msgstr "Point Hors Contact défini"
+
+#Ajout 623
+msgid "Touch-off Point (in "
+msgstr "Point Hors Contact (en"
+
+#Ajout 624
+msgid "Touch-off Description"
+msgstr "Description Hors Contact "
+
+#Ajout 626
+msgid "Import probe data"
+msgstr "Importe données de palpage"
+
+#Ajout 627
+msgid "Select Sketches"
+msgstr "Sélection d'Esquisses"
+
+#Ajout 628
+msgid "Select cancelled. No sketches were selected!"
+msgstr "Sélection annulée. Pas d'esquisse choisie!"
+
+#Ajout 629
+msgid "Select Solids"
+msgstr "Sélection de Solides"
+
+#Ajout 630
+msgid "Select cancelled. No solids were selected!"
+msgstr "Sélection annulée. Pas de solide choisi!"
+
+#Ajout 631
+msgid "solids"
+msgstr "Solides"
+
+#Ajout 632
+msgid "None"
+msgstr "Aucun"
+
+#Ajout 633
+msgid "solid id"
+msgstr "id solide"
+
+#Ajout 634
+msgid "sketches"
+msgstr "esquisses"
+
+#Ajout 635
+msgid "sketch id"
+msgstr "id esquisse"
+
+#Ajout 636
+msgid "ABS Plastic"
+msgstr "ABS Plastique"
+
+#Ajout 637
+msgid "PLA Plastic"
+msgstr "PLA Plastique"
+
+#Ajout 638
+msgid "HDPE Plastic"
+msgstr "HDPE Plastique"
+
+#Ajout 639
+msgid "Other"
+msgstr "Autre"
+
+#Ajout 640
+msgid "Extrusion Material"
+msgstr "Materiau d'Extrusion"
+
+#Ajout 641
+msgid "Feed Rate"
+msgstr "Valeur d'Avance"
+
+#Ajout 642
+msgid "Layer Height"
+msgstr "Couche Hauteur"
+
+#Ajout 643
+msgid "Width Over Thickness ratio"
+msgstr "Rapport largeur/épaisseur "
+
+#Ajout 644
+msgid "Temperature"
+msgstr "Température"
+
+#Ajout 645
+msgid "Flow Rate"
+msgstr "Débit"
+
+#Ajout 646
+msgid "Filament Diameter"
+msgstr "Diamètre Filament"
+
+#Ajout 647
+msgid "Title"
+msgstr "Titre"
+
+#Ajout 648
+msgid "Visible"
+msgstr "Visibile"
+
+#Ajout 649
+msgid "Pitch"
+msgstr "Pitch"
+
+#Ajout 650
+msgid "right hand"
+msgstr "main droite"
+
+#Ajout 651
+msgid "left hand"
+msgstr "main gauche"
+
+#Ajout 652
+msgid "Tap direction"
+msgstr "Direction Taraudage"
+
+#Ajout 654
+msgid "Title Type"
+msgstr "Titre Type"
+
+#Ajout 655
+msgid "Tool Material"
+msgstr "Materiau d'Outil"
+
+#Ajout 656
+msgid "Extrusion"
+msgstr "Extrusion"
+
+#Ajout 657
+msgid "Tap Tool"
+msgstr "Outil de taraudage"
+
+#Ajout 658
+msgid "Tool Type"
+msgstr "Type d'Outil"
+
+#Ajout 659
+msgid "Max advance per revolution"
+msgstr "Avance Maximale par tour"
+
+#Ajout 660
+msgid "Tool length offset"
+msgstr "Décalage longueur d'Outil"
+
+#Ajout 661
+msgid "Diameter"
+msgstr "Diamètre"
+
+#Ajout 662
+msgid "X Offset"
+msgstr "Décalage X"
+
+#Ajout 663 HeekFrame.cpp
+msgid "Sectioning"
+msgstr "Section"
+
+#Ajout 664  Sectioning.cpp
+msgid "Sectioned Solid"
+msgstr "Solide Sectionné"
+
+#Ajout 665 .....cpp
+msgid "Save Solids"
+msgstr "Sauvegarde Solide"
+
+#Ajout 666 SelectMode.cpp
+msgid "Accept selection"
+msgstr "Accepte Sélection"
+
+#Ajout 667 SelectMode.cpp
+msgid "Cancel selection"
+msgstr "Annule Sélection"
+
+#Ajout 668 Sectioning.cpp
+msgid "Pick objects to section"
+msgstr "Choisir object à sectionner"
+
+#Ajout 669S ectioning.cpp
+msgid "Solid Sectioning"
+msgstr "Section de Solide"
+
+#Ajout 670 Sectioning.cpp
+msgid "Angle of plane"
+msgstr "Incliniason du plan"
+
+#Ajout 671 Sectioning.cpp
+msgid "X axis"
+msgstr "Axe X"
+
+#Ajout 672 Sectioning.cpp
+msgid "Y axis"
+msgstr "Axe Y"
+
+#Ajout 673 Sectioning.cpp
+msgid "Z axis"
+msgstr "Axe Z"
+
+#Ajout 674 Sectioning.cpp
+msgid "Specify"
+msgstr "Spécifier"
+
+#Ajout 675 Sectioning.cpp
+msgid "Point on axis"
+msgstr "Point sur l'axe"
+
+#Ajout 676 Sectioning.cpp
+msgid "Axis"
+msgstr "Axe"
+
+#Ajout 677 Sectioning.cpp
+msgid "Select"
+msgstr "Choisir"
+
+
 
 #===================================================================================
 #Ajout1
@@ -2849,7 +3087,7 @@ msgid "rotate mode"
 msgstr "Mode rotation"
 
 msgid "none"
-msgstr "Aucun"
+msgstr "aucun"
 
 msgid "input mode title"
 msgstr "Titre en mode Entrée"
@@ -4322,7 +4560,7 @@ msgstr "avec l'aide de : crotchet1, DanielFalck, fenn,Sliptonic"
 msgid ""
 "geometry code, donated by Geoff Hawkesford, Camtek GmbH http://www.peps.de/"
 msgstr ""
-"code-gÈometrie, donné  par Geoff Hawkesford, Camtek GmbHhttp://www.peps.de/"
+"Code Géometrie, donné  par Geoff Hawkesford, Camtek GmbHhttp://www.peps.de/"
 
 msgid ""
 "pocketing code from http://code.google.com/p/libarea/ , derived from the "
@@ -4340,14 +4578,14 @@ msgid ""
 "Adaptive Roughing code from http://code.google.com/p/libactp/, using code "
 "written in 2004"
 msgstr ""
-"Code 'ébauche adaptée' de : http://code.code.google.com/p/libactp/,"
+"Code 'Ébauche Adaptée' de : http://code.code.google.com/p/libactp/,"
 "basé sur un code écrit en 2004."
 
 msgid ""
 "For a more modern version of adaptive roughing, see Julian Todd and Martin "
 "Dunschen of http://www.freesteel.co.uk/"
 msgstr ""
-"Pour une version plus récente de 'ébauche adaptée', voir Julian Todd and Martin "
+"Pour une version plus récente de 'Ébauche Adaptée', voir Julian Todd and Martin "
 "Dunschen sur le site :http://www.freesteel.co.uk/"
 
 msgid ""
