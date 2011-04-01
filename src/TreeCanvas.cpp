@@ -132,11 +132,6 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 
 			if(button == NULL || !wxGetApp().m_marked_list->ObjectMarked(button->obj)) // can only drop on to an item other than one of the items being dragged
 			{
-				wxGetApp().CreateUndoPoint();
-
-				// cut the objects
-				wxGetApp().m_marked_list->CutSelectedItems();
-
 				// paste the objects
 				HeeksObj* paste_into = NULL;
 				HeeksObj* paste_before = NULL;
@@ -218,6 +213,10 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 			{
 				m_dragging = true;
 				m_dragged_list = wxGetApp().m_marked_list->list();
+
+				// cut the objects
+				wxGetApp().CreateUndoPoint();
+				wxGetApp().m_marked_list->CutSelectedItems();
 			}
 			if(m_dragging)
 			{
