@@ -64,6 +64,7 @@
 #include "AutoSave.h"
 #include <wx/progdlg.h>
 #include "OrientationModifier.h"
+#include "MenuSeparator.h"
 
 using namespace std;
 
@@ -1929,7 +1930,7 @@ static void AddToolListWithSeparator(std::list<Tool*> &l, std::list<Tool*> &temp
 {
 	if(temp_l.size()>0)
 	{
-		if(l.size()>0)l.push_back(NULL);
+		if(l.size()>0)l.push_back(new MenuSeparator);
 		std::list<Tool*>::iterator FIt;
 		for(FIt = temp_l.begin(); FIt != temp_l.end(); FIt++)
 			l.push_back(*FIt);
@@ -3185,7 +3186,7 @@ void HeeksCADapp::GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list
 		std::list<Tool*> tools;
 
 		marked_object->GetObject()->GetTools(&tools, &point);
-		if(tools.size() > 0)tools.push_back(NULL);
+		if(tools.size() > 0)tools.push_back(new MenuSeparator);
 
 		tools.push_back(new MarkObjectTool(marked_object, point, control_pressed));
 

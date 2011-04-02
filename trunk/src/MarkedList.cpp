@@ -17,6 +17,7 @@
 #include "ConstraintTools.h"
 #include "SketchTools.h"
 #include "SolidTools.h"
+#include "MenuSeparator.h"
 using namespace std;
 
 MarkedList::MarkedList(){
@@ -322,8 +323,7 @@ void MarkedList::GetTools(MarkedObject* clicked_object, std::list<Tool*>& t_list
 	if (m_list.size() > 0)
 	{
 		t_list.push_back(&delete_marked_list_tool);
-		// jcoffland: Why push a NULL here?  Causes crash in GetConversionMenuTools()
-		t_list.push_back(NULL);
+		t_list.push_back(new MenuSeparator);
 	}
 
 	if(m_list.size() == 1)
