@@ -49,7 +49,6 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 	std::list<HeeksObj*>::const_iterator It;
 	for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
 		HeeksObj* object = *It;
-		if (!object) continue; // jcoffland: skip nulls added by MarkedList::GetTools.
 		switch(object->GetType()){
 			case LineType:
 			case ArcType:
