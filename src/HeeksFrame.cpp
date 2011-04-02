@@ -39,6 +39,7 @@
 #include "HSpline.h"
 #include "../interface/Plugin.h"
 #include "Sectioning.h"
+#include "MenuSeparator.h"
 
 using namespace std;
 
@@ -1537,8 +1538,9 @@ void CHeeksFrame::ClearToolBar(wxToolBar* m_toolBar)
 //static
 void CHeeksFrame::AddToolToListAndMenu(Tool *t, std::vector<ToolIndex> &tool_index_list, wxMenu *menu)
 {
-	if (t == NULL)
-		menu->AppendSeparator();
+    assert(t); // NULLs are no longer allowed
+
+    if (t->IsSeparator()) menu->AppendSeparator();
 	else if (t->IsAToolList())
 	{
 		wxMenu *menu2 = new wxMenu;
