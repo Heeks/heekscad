@@ -2347,20 +2347,27 @@ void on_set_tool_icon_size(int value, HeeksObj* object)
 		size = 16;
 		break;
 	case 1:
-		size = 24;
+		size = 20;
 		break;
 	case 2:
-		size = 32;
+		size = 24;
 		break;
 	case 3:
-		size = 48;
+		size = 28;
 		break;
 	case 4:
-		size = 64;
+		size = 32;
 		break;
 	case 5:
+		size = 48;
+		break;
+	case 6:
+		size = 64;
+		break;
+	case 7:
 		size = 96;
 		break;
+
 	}
 
 	ToolImage::SetBitmapSize(size);
@@ -2885,7 +2892,9 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	{
 		std::list< wxString > choices;
 		choices.push_back ( wxString ( _T("16") ) );
+		choices.push_back ( wxString ( _T("20") ) );
 		choices.push_back ( wxString ( _T("24") ) );
+		choices.push_back ( wxString ( _T("28") ) );
 		choices.push_back ( wxString ( _T("32") ) );
 		choices.push_back ( wxString ( _T("48") ) );
 		choices.push_back ( wxString ( _T("64") ) );
