@@ -256,7 +256,7 @@ void CStlSolid::ModifyByMatrix(const double* m){
 	KillGLLists();
 }
 
-CStlSolid::CStlSolid( const CStlSolid & rhs )
+CStlSolid::CStlSolid( const CStlSolid & rhs ) : m_gl_list(0)
 {
     *this = rhs;    // Call the assignment operator.
 }
