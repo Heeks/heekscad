@@ -32,19 +32,20 @@
 #include "GraphicsCanvas.h"
 #include "../interface/MarkedObject.h"
 #include "../interface/ToolList.h"
+#include "StlSolid.h"
+#include "HeeksFrame.h"
+#include "GraphicsCanvas.h"
 
 namespace bp = boost::python;
 
 static void Redraw(void)
 {
 	wxGetApp().Repaint();
-	printf("Repaint()\n");
 }
 
 static void Init(void)
 {
 	wxGetApp().OnInit();
-	printf("Init()\n");
 }
 
 static void AddObjectFromButton(HeeksObj* new_object)
@@ -105,6 +106,68 @@ static boost::python::list GetDropDownTools(int x, int y, bool dont_use_point_fo
 	return tool_list;
 }
 
+static const char* GetResFolder()
+{
+	return Ttc(wxGetApp().GetResFolder().c_str());
+}
+
+static int GetSketch()
+{
+	//Allows the user to pick a single sketch 
+	// it returns the sketch id, or 0 if none was picked
+	int result = wxGetApp().PickObjects(_("Select a Sketch"), MARKING_FILTER_SKETCH,true);
+
+	for(std::list<HeeksObj*>::iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
+	{
+		HeeksObj* object = *It;
+		if(object->GetType() == SketchType){
+			return object->GetID();
+		}
+	}
+
+	return 0;
+}
+
+static boost::python::list GetSketches()
+{
+	// Allows the user to pick multiple sketches
+	// returns a python list of sketch ids
+
+	boost::python::list sketch_list;
+
+	int result = wxGetApp().PickObjects(_("Select Sketches"), MARKING_FILTER_SKETCH);
+
+	PyObject* pList = PyList_New(0);
+	for(std::list<HeeksObj*>::iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
+	{
+		HeeksObj* object = *It;
+		if(object->GetType() == SketchType){
+			sketch_list.append(object->GetID());
+		}
+	}
+
+	return sketch_list;
+}
+
+static boost::python::list GetSelectedSketches()
+{
+	// returns a python list of sketch ids
+	boost::python::list sketch_list;
+	for(std::list<HeeksObj*>::iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
+	{
+		HeeksObj* object = *It;
+		if(object->GetType() == SketchType){
+			sketch_list.append(object->GetID());
+		}
+	}
+
+	return sketch_list;
+}
+
+static double GetViewUnits()
+{
+	return wxGetApp().m_view_units;
+}
 
 class MouseEvent
 {
@@ -181,6 +244,126 @@ static void ViewportOnMouseEvent(CViewport &v, MouseEvent &e)
 	v.ViewportOnMouse(e.GetWxMouseEvent());
 }
 
+class ToolpathPoint
+{
+public:
+	double x[3];
+	bool iv;
+
+	ToolpathPoint(double X, double Y, double Z, bool Iv){x[0] = X; x[1] = Y; x[2] = Z; iv = Iv;}
+};
+
+class CLineDraw
+{
+	std::list<ToolpathPoint> pts;
+	int display_list;
+	unsigned char red;
+	unsigned char green;
+	unsigned char blue;
+	CBox m_box;
+	void delete_list()
+	{
+		if(display_list)
+		{
+			glDeleteLists(display_list, 1);
+			display_list = 0;
+		}
+	}
+
+public:
+	CLineDraw(){red = 0; green = 0; blue = 0; display_list = 0;}
+	CLineDraw(unsigned char r, unsigned char g, unsigned char b){
+		display_list = 0;
+		red = r;
+		green = g;
+		blue = b;
+	}
+	~CLineDraw(){delete_list();}
+
+	void add_point(double x, double y, double z, bool iv)
+	{
+		delete_list();
+		pts.push_back(ToolpathPoint(x, y, z, iv));
+		m_box.Insert(x, y, z);
+	}
+
+	void glCommands()
+	{
+		if(display_list)glCallList(display_list);
+		else
+		{
+			display_list = glGenLists(1);
+			glNewList(display_list, GL_COMPILE_AND_EXECUTE);
+			glColor3ub(red, green, blue);
+			bool strip_begun = false;
+			for(std::list<ToolpathPoint>::iterator It = pts.begin(); It != pts.end(); It++)
+			{
+				ToolpathPoint &pt = *It;
+				if(pt.iv)
+				{
+					if(!strip_begun)
+					{
+						glBegin(GL_LINE_STRIP);
+						strip_begun = true;
+					}
+				}
+				else
+				{
+					if(strip_begun)
+					{
+						glEnd();
+						strip_begun = false;
+					}
+				}
+				glVertex3dv(pt.x);
+			}
+			if(strip_begun)
+			{
+				glEnd();
+				strip_begun = false;
+			}
+
+			glEndList();
+		}
+	}
+
+	void GetBox(CBox &box)
+	{
+		box.Insert(m_box);
+	}
+
+};
+
+static void GLBeginTriangles()
+{
+	glBegin(GL_TRIANGLES);
+}
+
+static void GLBeginLineStrip()
+{
+	glBegin(GL_LINE_STRIP);
+}
+
+static void GLEnd()
+{
+	glEnd();
+}
+
+static void GLVertex3d(double x, double y, double z)
+{
+	glVertex3d(x, y, z);
+}
+
+static void GLColor3ub(unsigned char r, unsigned char g, unsigned char b)
+{
+	glColor3ub(r, g, b);
+}
+
+static void CStlSolidglCommands(CStlSolid& stl_solid)
+{
+	stl_solid.glCommands(false, false, false);
+}
+
 BOOST_PYTHON_MODULE(HeeksCAD)
 {
 	bp::class_<CViewport>("Viewport") 
@@ -189,8 +372,12 @@ BOOST_PYTHON_MODULE(HeeksCAD)
 		.def("DrawFront", &CViewport::DrawFront)
 		.def("WidthAndHeightChanged", &CViewport::WidthAndHeightChanged)
 		.def("OnMouseEvent", &ViewportOnMouseEvent)
+		.def("SetViewPoint", &CViewport::SetViewPoint)
+		.def("InsertViewBox", &CViewport::InsertViewBox)
+		.def("OnMagExtents", &CViewport::OnMagExtents)
         .def_readwrite("m_need_update", &CViewport::m_need_update)
         .def_readwrite("m_need_refresh", &CViewport::m_need_refresh)
+        .def_readwrite("m_orthogonal", &CViewport::m_orthogonal)
     ;
 
 	bp::class_<MouseEvent>("MouseEvent") 
@@ -223,8 +410,48 @@ BOOST_PYTHON_MODULE(HeeksCAD)
 		.def("GetChildTools", &PyTool::GetChildTools)
     ;
 
+	bp::class_<CLineDraw>("LineDraw") 
+        .def(bp::init<unsigned char, unsigned char, unsigned char>())
+		.def("add_point", &CLineDraw::add_point)
+		.def("glCommands", &CLineDraw::glCommands)
+	;
+
+	bp::class_<HeeksColor>("HeeksColor") 
+        .def(bp::init<unsigned char, unsigned char, unsigned char>())
+	;
+
+	bp::class_<CStlSolid>("StlSolid") 
+        .def(bp::init<const std::wstring&>())
+		.def("glCommands", &CStlSolidglCommands)
+		.def("GetBox", &CStlSolid::GetBox)
+	;
+
+	bp::class_<CBox>("Box") 
+        .def(bp::init<CBox>())
+        .def(bp::init<double, double, double, double, double, double>())
+        .def(bp::self == bp::other<CBox>())
+        .def("Insert",static_cast< void (CBox::*)(double, double, double)>(&CBox::Insert))
+		.def("MinX", &CBox::MinX)
+		.def("MaxX", &CBox::MaxX)
+		.def("MinY", &CBox::MinY)
+		.def("MaxY", &CBox::MaxY)
+		.def("MinZ", &CBox::MinZ)
+		.def("MaxZ", &CBox::MaxZ)
+        .def_readonly("valid", &CBox::m_valid)		
+	;
+
 	bp::def("redraw", Redraw);
     bp::def("init", Init);
     bp::def("OnCubeButton", OnCubeButton);
     bp::def("GetDropDownTools", GetDropDownTools);
+    bp::def("GetResFolder", GetResFolder);
+    bp::def("getsketch", GetSketch);
+    bp::def("getsketches", GetSketches);
+    bp::def("get_selected_sketches", GetSelectedSketches);
+    bp::def("get_view_units", GetViewUnits);
+    bp::def("glBeginTriangles", GLBeginTriangles);
+    bp::def("glBeginLineStrip", GLBeginLineStrip);
+    bp::def("glEnd", GLEnd);
+    bp::def("glVertex3d", GLVertex3d);
+    bp::def("glColor3ub", GLColor3ub);
 }

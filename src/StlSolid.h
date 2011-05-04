@@ -24,8 +24,10 @@ private:
 public:
 	std::list<CStlTri> m_list;
 
+	CStlSolid();
 	CStlSolid(const HeeksColor* col);
 	CStlSolid(const wxChar* filepath, const HeeksColor* col);
+	CStlSolid(const std::wstring& filepath);
 	CStlSolid( const CStlSolid & rhs );
 	~CStlSolid();
 

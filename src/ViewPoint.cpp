@@ -41,6 +41,8 @@ const CViewPoint& CViewPoint::operator=(const CViewPoint &c){
 	memcpy(m_window_rect, c.m_window_rect, 4*sizeof(int));
 	m_matrix_valid = c.m_matrix_valid;
 	m_viewport = c.m_viewport;
+	m_extra_depth_box = c.m_extra_depth_box;
+	m_extra_view_box = c.m_extra_view_box;
 	return *this;
 }
 
@@ -222,6 +224,7 @@ void CViewPoint::SetProjection2(bool use_depth_testing){
 	{
 		wxGetApp().GetBox(box);
 		box.Insert(m_extra_depth_box);
+		box.Insert(m_extra_view_box);
 	}
 	if(!use_depth_testing){
 		m_near_plane = 0;
@@ -338,7 +341,10 @@ void CViewPoint::SetPolygonOffset(void)const{
 
 void CViewPoint::SetViewAroundAllObjects(){
 	CBox box;
+
 	wxGetApp().GetBox(box);
+	box.Insert(m_extra_view_box);
+
 	if(!box.m_valid)return;
 	gp_Vec r = rightwards_vector().Normalized();
 	CBox window;
