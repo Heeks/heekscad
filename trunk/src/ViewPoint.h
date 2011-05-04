@@ -29,6 +29,7 @@ public:
 	double m_near_plane;
 	double m_far_plane;
 	CBox m_extra_depth_box;
+	CBox m_extra_view_box;
 
 	CViewPoint(CViewport* viewport);
 	~CViewPoint(void);

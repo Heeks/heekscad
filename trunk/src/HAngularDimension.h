@@ -65,5 +65,6 @@ public:
 	bool IsDifferent(HeeksObj* other);
 	void ReloadPointers();
 
+	wxString MakeText(double angle);
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 };

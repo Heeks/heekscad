@@ -28,6 +28,20 @@ CStlSolid::CStlSolid(const HeeksColor* col):m_color(*col), m_gl_list(0){
 	m_title.assign(GetTypeString());
 }
 
+CStlSolid::CStlSolid():m_color(wxGetApp().current_color), m_gl_list(0){
+	m_title.assign(GetTypeString());
+}
+
+CStlSolid::CStlSolid(const std::wstring& filepath):m_color(wxGetApp().current_color), m_gl_list(0){
+	m_title.assign(GetTypeString());
+	read_from_file(filepath.c_str());
+
+	if(wxGetApp().m_in_OpenFile && wxGetApp().m_file_open_matrix)
+	{
+		ModifyByMatrix(wxGetApp().m_file_open_matrix);
+	}
+}
+
 CStlSolid::CStlSolid(const wxChar* filepath, const HeeksColor* col):m_color(*col), m_gl_list(0){
 	m_title.assign(GetTypeString());
 	read_from_file(filepath);
