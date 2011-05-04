@@ -135,8 +135,19 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 	// draw arrow line
 	draw_arrow_line(m_mode, A->m_p, B->m_p, m_p2->m_p, xdir, ydir, width, m_scale);
 
+	// draw text
+	RenderText(text, m_p2->m_p, xdir, ydir, m_scale);
+
+	EndedObject::glCommands(select,marked,no_color);
+}
+
+void HDimension::RenderText(const wxString &text, const gp_Pnt& p, const gp_Dir& xdir, const gp_Dir& ydir, double scale)
+{
+	float width, height;
+	if(!wxGetApp().get_text_size(text, &width, &height))return;
+
 	// make a matrix at top left of text
-	gp_Pnt text_top_left( m_p2->m_p.XYZ() + ydir.XYZ() * (m_scale * height) );
+	gp_Pnt text_top_left( p.XYZ() + ydir.XYZ() * (scale * height) );
 	gp_Trsf text_matrix = make_matrix(text_top_left, xdir, ydir);
 
 	glPushMatrix();
@@ -166,7 +177,7 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 			model_view, projection, viewport,
 			&x, &y, &z);
 
-		wxGetApp().render_screen_text_at(text,m_scale*8,x,y,atan2(xdir.Y(),xdir.X()) * 180 / PI);
+		wxGetApp().render_screen_text_at(text, scale*8,x,y,atan2(xdir.Y(),xdir.X()) * 180 / PI);
 	}
 	else
 	{
@@ -175,8 +186,6 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 
 	glPopMatrix();
 
-
-	EndedObject::glCommands(select,marked,no_color);
 }
 
 void HDimension::LoadToDoubles()

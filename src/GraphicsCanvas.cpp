@@ -484,7 +484,7 @@ void CGraphicsCanvas::RefreshSoon()
 	}
 }
 
-void CGraphicsCanvas::OnMagExtents(bool rotate, bool recalculate_gl_lists) 
+void CViewport::OnMagExtents(bool rotate) 
 {
 	m_view_points.clear();
 	if(rotate){
@@ -495,11 +495,17 @@ void CGraphicsCanvas::OnMagExtents(bool rotate, bool recalculate_gl_lists)
 		m_view_point.SetViewAroundAllObjects();
 		StoreViewPoint();
 	}
+}
+
+void CGraphicsCanvas::OnMagExtents(bool rotate, bool recalculate_gl_lists) 
+{
+	CViewport::OnMagExtents(rotate);
 
 	if(recalculate_gl_lists)
 		wxGetApp().RecalculateGLLists();
 
 	Refresh();
+
 }
 
 void CGraphicsCanvas::OnMag(const gp_Vec &unitY, const gp_Vec &unitZ, bool recalculate_gl_lists)
@@ -589,6 +595,11 @@ void CViewport::SetViewPoint(void){
 	gp_Vec vy(0, 1, 0), vz(0, 0, 1);
 	m_view_point.SetView(vy, vz);
 	StoreViewPoint();
+}
+
+void CViewport::InsertViewBox(const CBox& box)
+{
+	m_view_point.m_extra_view_box.Insert(box);
 }
 
 void CViewport::StoreViewPoint(void){

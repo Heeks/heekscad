@@ -74,6 +74,7 @@ public:
 	bool IsDifferent(HeeksObj* other);
 
 	wxString MakeText();
+	static void RenderText(const wxString &text, const gp_Pnt& p, const gp_Dir& xdir, const gp_Dir& ydir, double scale);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 

@@ -3,6 +3,7 @@
 // This program is released under the BSD license. See the file COPYING for details.
 #include "stdafx.h"
 #include "HAngularDimension.h"
+#include "HDimension.h"
 #include "../interface/PropertyDouble.h"
 #include "../interface/PropertyChoice.h"
 #include "PropertyTrsf.h"
@@ -12,7 +13,7 @@
 #include "HeeksFrame.h"
 #include "GraphicsCanvas.h"
 
-HAngularDimension::HAngularDimension(const wxString &text, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, const gp_Pnt &p3, const gp_Pnt &p4, AngularDimensionTextMode text_mode, const HeeksColor* col):m_color(*col), m_text(text), m_text_mode(text_mode)
+HAngularDimension::HAngularDimension(const wxString &text, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, const gp_Pnt &p3, const gp_Pnt &p4, AngularDimensionTextMode text_mode, const HeeksColor* col):m_color(*col), m_text(text), m_text_mode(text_mode),  m_scale(1.0)
 {
 	m_p0 = new HPoint(p0,col);
 	m_p1 = new HPoint(p1,col);
@@ -40,7 +41,7 @@ HAngularDimension::HAngularDimension(const wxString &text, const gp_Pnt &p0, con
 }
 
 //Points loaded via objlist constructor
-HAngularDimension::HAngularDimension(const wxString &text, AngularDimensionTextMode text_mode, const HeeksColor* col):m_color(*col), m_text(text), m_text_mode(text_mode)
+HAngularDimension::HAngularDimension(const wxString &text, AngularDimensionTextMode text_mode, const HeeksColor* col):m_color(*col), m_text(text), m_text_mode(text_mode),  m_scale(1.0)
 {
 
 }
@@ -200,7 +201,9 @@ void HAngularDimension::glCommands(bool select, bool marked, bool no_color)
 			}
 		}
 
+		wxString text = MakeText(da);
 
+		HDimension::RenderText(text, m_p4->m_p, gp_Dir(1, 0, 0), gp_Dir(0, 1, 0), m_scale);
 	}
 }
 
@@ -433,4 +436,24 @@ void HAngularDimension::ReloadPointers()
 	m_p4 = (HPoint*)GetNextChild();
 
 	ConstrainedObject::ReloadPointers();
+}
+
+wxString HAngularDimension::MakeText(double angle)
+{
+	wxString text;
+
+	switch(m_text_mode)
+	{
+		case StringAngularDimensionTextMode:
+			text = wxString::Format(_T("%s"), m_text.c_str());
+			break;
+		case DegreesAngularDimensionTextMode:
+			text = wxString::Format(_T("%lg degrees"), angle * 180/Pi);
+			break;
+		case RadiansAngularDimensionTextMode:
+			text = wxString::Format(_T("%lg radians"), angle);
+			break;
+	}
+
+	return text;
 }

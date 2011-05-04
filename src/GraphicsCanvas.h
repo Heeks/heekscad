@@ -32,6 +32,7 @@ public:
 	void SetViewport();
 	void glCommands();
 	void SetViewPoint(void);
+	void InsertViewBox(const CBox& box);
 	void StoreViewPoint(void);
 	void RestorePreviousViewPoint(void);
 	void DrawObjectsOnFront(const std::list<HeeksObj*> &list, bool do_depth_testing = false);
@@ -47,6 +48,7 @@ public:
 	wxSize GetViewportSize(){return wxSize(m_w, m_h);}
 	void GetViewportSize(int *w, int *h){*w = m_w; *h = m_h;}
     void ViewportOnMouse( wxMouseEvent& event );
+	void OnMagExtents(bool rotate);
 };
 
 class CGraphicsCanvas: public wxGLCanvas, public CViewport, Observer
