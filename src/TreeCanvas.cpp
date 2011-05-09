@@ -132,16 +132,63 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 
 			if(button == NULL || !wxGetApp().m_marked_list->ObjectMarked(button->obj)) // can only drop on to an item other than one of the items being dragged
 			{
-				// paste the objects
-				HeeksObj* paste_into = NULL;
-				HeeksObj* paste_before = NULL;
-				if(button)
+				// test drop possible
+				bool drag_possible = true;
+
+				HeeksObj* add_to = &wxGetApp();
+				if(button->paste_into)add_to = button->paste_into;
+				for(std::list<HeeksObj*>::iterator It = m_dragged_list.begin(); It != m_dragged_list.end(); It++)
 				{
-					paste_into = button->paste_into;
-					paste_before = button->paste_before;
+					HeeksObj* object = *It;
+
+					if(!add_to->CanAdd(object) || !object->CanAddTo(add_to))
+					{
+						drag_possible = false;
+						break;
+					}
 				}
-				wxGetApp().Paste(paste_into, paste_before);
-				wxGetApp().Changed();
+
+				if(drag_possible)
+				{
+					wxGetApp().CreateUndoPoint();
+
+					// cut the objects
+					wxGetApp().Remove(m_dragged_list);
+
+					// paste the objects
+					for(std::list<HeeksObj*>::iterator It = m_dragged_list.begin(); It != m_dragged_list.end(); It++)
+					{
+						HeeksObj* object = *It;
+						{
+							if(object->OneOfAKind())
+							{
+								bool one_found = false;
+								for(HeeksObj* child = add_to->GetFirstChild(); child; child = add_to->GetNextChild())
+								{
+									if(child->GetType() == object->GetType())
+									{
+										child->CopyFrom(object);
+										one_found = true;
+										break;
+									}
+								}
+								if(!one_found)
+								{
+									add_to->Add(object, button->paste_before);
+								}
+							}
+							else
+							{
+								add_to->Add(object, button->paste_before);
+							}
+						}
+					}
+					wxGetApp().Changed();
+				}
+				else
+				{
+					Refresh();
+				}
 			}
 			else
 			{
@@ -213,10 +260,6 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 			{
 				m_dragging = true;
 				m_dragged_list = wxGetApp().m_marked_list->list();
-
-				// cut the objects
-				wxGetApp().CreateUndoPoint();
-				wxGetApp().m_marked_list->CutSelectedItems();
 			}
 			if(m_dragging)
 			{
