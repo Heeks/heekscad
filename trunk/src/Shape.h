@@ -16,6 +16,9 @@ protected:
 	TopoDS_Shape m_shape;
 	wxLongLong m_creation_time;
 	float m_opacity;
+	bool m_volume_found;
+	double m_volume;
+	gp_Pnt m_centre_of_mass;
 
 	void create_faces_and_edges();
 	void delete_faces_and_edges();
@@ -68,6 +71,7 @@ public:
 	void CopyIDsFrom(const CShape* shape_from);
 	float GetOpacity();
 	void SetOpacity(float opacity);
+	void CalculateVolumeAndCentre();
 
 	static HeeksObj* CutShapes(std::list<HeeksObj*> &list,bool dodelete=true);
 	static HeeksObj* FuseShapes(std::list<HeeksObj*> &list);
