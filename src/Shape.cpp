@@ -20,17 +20,19 @@
 #include "HeeksConfig.h"
 #include "../interface/MarkedObject.h"
 #include "../interface/PropertyDouble.h"
+#include "../interface/PropertyVertex.h"
+#include "../interface/PropertyCheck.h"
 #include <locale.h>
 
 // static member variable
 bool CShape::m_solids_found = false;
 
-CShape::CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor& col, float opacity):m_face_gl_list(0), m_edge_gl_list(0), m_shape(shape), m_opacity(opacity), m_title(title), m_color(col), m_picked_face(NULL)
+CShape::CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor& col, float opacity):m_face_gl_list(0), m_edge_gl_list(0), m_shape(shape), m_opacity(opacity), m_title(title), m_color(col), m_picked_face(NULL), m_volume_found(false)
 {
 	Init();
 }
 
-CShape::CShape(const CShape& s):m_face_gl_list(0), m_edge_gl_list(0), m_picked_face(NULL)
+CShape::CShape(const CShape& s):m_face_gl_list(0), m_edge_gl_list(0), m_picked_face(NULL), m_volume_found(false)
 {
 	// the faces, edges, vertices children are not copied, because we don't need them for copies in the undo engine
 	m_faces = NULL;
@@ -57,6 +59,8 @@ const CShape& CShape::operator=(const CShape& s)
 	m_color = s.m_color;
 	m_creation_time = s.m_creation_time;
 	m_opacity = s.m_opacity;
+	m_volume_found = s.m_volume_found;
+	if(m_volume_found)m_volume = s.m_volume;
 
 	KillGLLists();
 
@@ -1041,9 +1045,37 @@ static void on_set_opacity(double value, HeeksObj* object){
 	((CShape*)object)->SetOpacity((float)value);
 }
 
+static void on_calculate_volume(bool value, HeeksObj* object){
+	((CShape*)object)->CalculateVolumeAndCentre();
+	wxGetApp().m_frame->RefreshProperties();
+}
+
+void CShape::CalculateVolumeAndCentre()
+{
+	GProp_GProps System;
+    BRepGProp::VolumeProperties(m_shape, System);
+    m_volume = System.Mass();
+	m_centre_of_mass = System.CentreOfMass();
+	m_volume_found = true;
+}
+
 void CShape::GetProperties(std::list<Property *> *list)
 {
 	list->push_back(new PropertyDouble(_("opacity"), m_opacity, this, on_set_opacity));
+
+	if(m_volume_found)
+	{
+		double volume = this->m_volume;
+		volume /= (pow(wxGetApp().m_view_units, 3)); // convert volume to cubic units
+		list->push_back(new PropertyDouble(_("volume"), volume, this));
+		double p[3];
+		extract(m_centre_of_mass, p);
+		list->push_back(new PropertyVertex(_("centre of gravity"), p, this));
+	}
+	else
+	{
+		list->push_back(new PropertyCheck(_("calculate volume"), false, this, on_calculate_volume));
+	}
 
 	ObjList::GetProperties(list);
 }
