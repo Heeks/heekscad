@@ -27,7 +27,9 @@ public:
 	CStlSolid();
 	CStlSolid(const HeeksColor* col);
 	CStlSolid(const wxChar* filepath, const HeeksColor* col);
+#ifdef UNICODE
 	CStlSolid(const std::wstring& filepath);
+#endif
 	CStlSolid( const CStlSolid & rhs );
 	~CStlSolid();
 
