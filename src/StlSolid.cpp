@@ -32,6 +32,8 @@ CStlSolid::CStlSolid():m_color(wxGetApp().current_color), m_gl_list(0){
 	m_title.assign(GetTypeString());
 }
 
+#ifdef UNICODE
+// constructor for the Boost Python interface
 CStlSolid::CStlSolid(const std::wstring& filepath):m_color(wxGetApp().current_color), m_gl_list(0){
 	m_title.assign(GetTypeString());
 	read_from_file(filepath.c_str());
@@ -41,6 +43,7 @@ CStlSolid::CStlSolid(const std::wstring& filepath):m_color(wxGetApp().current_co
 		ModifyByMatrix(wxGetApp().m_file_open_matrix);
 	}
 }
+#endif
 
 CStlSolid::CStlSolid(const wxChar* filepath, const HeeksColor* col):m_color(*col), m_gl_list(0){
 	m_title.assign(GetTypeString());
