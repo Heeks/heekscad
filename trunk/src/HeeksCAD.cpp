@@ -988,6 +988,9 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, Heek
 
 	ObjectReferences_t unique_set;
 
+	char oldlocale[1000];
+	strcpy(oldlocale, setlocale(LC_NUMERIC, "C"));
+
 	std::list<HeeksObj*> objects;
 	for(pElem = root->FirstChildElement(); pElem;	pElem = pElem->NextSiblingElement())
 	{
@@ -1039,24 +1042,36 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, Heek
 			}
 		}
 	}
+	setlocale(LC_NUMERIC, oldlocale);
 
 	CGroup::MoveSolidsToGroupsById(this);
 }
 
 /* static */ void HeeksCADapp::OpenSVGFile(const wxChar *filepath)
 {
+	char oldlocale[1000];
+	strcpy(oldlocale, setlocale(LC_NUMERIC, "C"));
+
 	HeeksSvgRead svgread(filepath,true);
+	setlocale(LC_NUMERIC, oldlocale);
 }
 
 /* static */ void HeeksCADapp::OpenSTLFile(const wxChar *filepath)
 {
+	char oldlocale[1000];
+	strcpy(oldlocale, setlocale(LC_NUMERIC, "C"));
+
 	HeeksColor c(128, 128, 128);
 	CStlSolid* new_object = new CStlSolid(filepath, &c);
 	wxGetApp().Add(new_object, NULL);
+	setlocale(LC_NUMERIC, oldlocale);
 }
 
 /* static */ void HeeksCADapp::OpenDXFFile(const wxChar *filepath )
 {
+	char oldlocale[1000];
+	strcpy(oldlocale, setlocale(LC_NUMERIC, "C"));
+
 	bool try_again = false;
 	try {
 		HeeksDxfRead dxf_file(filepath);
@@ -1080,6 +1095,7 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, Heek
 			wxMessageBox(_("OpenCascade failure occured during DXF read processing"));
 		}
 	}
+	setlocale(LC_NUMERIC, oldlocale);
 }
 
 /* static */ void HeeksCADapp::OpenRS274XFile(const wxChar *filepath)
