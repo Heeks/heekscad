@@ -5,10 +5,10 @@
 #include "ObjList.h"
 #ifdef HEEKSCAD
 #include "../src/MarkedList.h"
+#include "../tinyxml/tinyxml.h"
 #else
 #include "HeeksCADInterface.h"
 #endif
-#include "../tinyxml/tinyxml.h"
 
 #include "TransientObject.h"
 #include <algorithm>
@@ -298,7 +298,7 @@ void ObjList::KillGLLists(void)
 void ObjList::WriteBaseXML(TiXmlElement *element)
 {
 	std::list<HeeksObj*>::iterator It;
-	for(It=m_objects.begin(); It!=m_objects.end() ;It++) (*It)->WriteXML(element);
+	for(It=m_objects.begin(); It!=m_objects.end() ;It++) (*It)->WriteXML((TiXmlNode*)element);
 	HeeksObj::WriteBaseXML(element);
 }
 
@@ -370,7 +370,11 @@ void ObjList::FindConstrainedObj(HeeksObj * CurrentObject,HeeksObj * ObjectToFin
 void ObjList::ReadBaseXML(TiXmlElement* element)
 {
 	// loop through all the objects
+#ifdef HEEKSCAD
 	for(TiXmlElement* pElem = TiXmlHandle(element).FirstChildElement().Element(); pElem;	pElem = pElem->NextSiblingElement())
+#else
+	for(TiXmlElement* pElem = heeksCAD->FirstXMLChildElement(element); pElem;	pElem = heeksCAD->NextXMLSiblingElement(pElem))
+#endif
 	{
 	    HeeksObj *existing = NULL;
 

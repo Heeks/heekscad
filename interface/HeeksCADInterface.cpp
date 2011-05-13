@@ -697,6 +697,46 @@ HeeksObj* CHeeksCADInterface::ReadXMLElement(TiXmlElement* pElem)
 	return wxGetApp().ReadXMLElement(pElem);
 }
 
+TiXmlElement* CHeeksCADInterface::NewXMLElement(const char* value)
+{
+	return new TiXmlElement(value);
+}
+
+TiXmlText* CHeeksCADInterface::NewXMLText(const char* value)
+{
+	return new TiXmlText(value);
+}
+
+TiXmlDocument* CHeeksCADInterface::NewXMLDocument()
+{
+	return new TiXmlDocument();
+}
+
+TiXmlElement* CHeeksCADInterface::FirstXMLChildElement(TiXmlElement* pElem)
+{
+	return TiXmlHandle(pElem).FirstChildElement().Element();
+}
+
+TiXmlElement* CHeeksCADInterface::FirstNamedXMLChildElement(TiXmlElement* pElem, const char* name)
+{
+	return TiXmlHandle(pElem).FirstChildElement(name).Element();
+}
+
+TiXmlElement* CHeeksCADInterface::NextXMLSiblingElement(TiXmlElement* pElem)
+{
+	return pElem->NextSiblingElement();
+}
+
+void CHeeksCADInterface::LinkXMLEndChild(TiXmlNode* root, TiXmlElement* pElem)
+{
+	root->LinkEndChild(pElem);
+}
+
+void CHeeksCADInterface::RemoveXMLChild(TiXmlNode* pElem, TiXmlElement* child)
+{
+	pElem->RemoveChild(child);
+}
+
 void CHeeksCADInterface::RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem))
 {
 	wxGetApp().RegisterReadXMLfunction(type_name, read_xml_function);

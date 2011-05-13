@@ -4348,5 +4348,5 @@ unsigned int HeeksCADapp::GetIndex(HeeksObj *object)
 
 void HeeksCADapp::ReleaseIndex(unsigned int index)
 {
-    wxGetApp().m_marked_list->ReleaseIndex(index);
+    if(wxGetApp().m_marked_list)wxGetApp().m_marked_list->ReleaseIndex(index);
 }
