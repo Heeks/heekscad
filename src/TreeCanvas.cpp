@@ -136,7 +136,7 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 				bool drag_possible = true;
 
 				HeeksObj* add_to = &wxGetApp();
-				if(button->paste_into)add_to = button->paste_into;
+				if(button && button->paste_into)add_to = button->paste_into;
 				for(std::list<HeeksObj*>::iterator It = m_dragged_list.begin(); It != m_dragged_list.end(); It++)
 				{
 					HeeksObj* object = *It;
@@ -174,12 +174,12 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 								}
 								if(!one_found)
 								{
-									add_to->Add(object, button->paste_before);
+									add_to->Add(object, button ? button->paste_before : NULL);
 								}
 							}
 							else
 							{
-								add_to->Add(object, button->paste_before);
+								add_to->Add(object, button ? button->paste_before : NULL);
 							}
 						}
 					}
