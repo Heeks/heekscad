@@ -606,7 +606,7 @@ public:
 
 		@sa InsertEndChild
 	*/
-	TiXmlNode* LinkEndChild( TiXmlNode* addThis );
+	virtual TiXmlNode* LinkEndChild( TiXmlNode* addThis );
 
 	/** Add a new node related to this. Adds a child before the specified child.
 		Returns a pointer to the new object or NULL if an error occured.
@@ -657,7 +657,7 @@ public:
 		Calls NextSibling and ToElement. Will skip all non-Element
 		nodes. Returns 0 if there is not another element.
 	*/
-	const TiXmlElement* NextSiblingElement() const;
+	virtual const TiXmlElement* NextSiblingElement() const;
 	TiXmlElement* NextSiblingElement() {
 		return const_cast< TiXmlElement* >( (const_cast< const TiXmlNode* >(this))->NextSiblingElement() );
 	}
@@ -666,7 +666,7 @@ public:
 		Calls NextSibling and ToElement. Will skip all non-Element
 		nodes. Returns 0 if there is not another element.
 	*/
-	const TiXmlElement* NextSiblingElement( const char * ) const;
+	virtual const TiXmlElement* NextSiblingElement( const char * ) const;
 	TiXmlElement* NextSiblingElement( const char *_next ) {
 		return const_cast< TiXmlElement* >( (const_cast< const TiXmlNode* >(this))->NextSiblingElement( _next ) );
 	}
@@ -677,13 +677,13 @@ public:
 	#endif
 
 	/// Convenience function to get through elements.
-	const TiXmlElement* FirstChildElement()	const;
+	virtual const TiXmlElement* FirstChildElement()	const;
 	TiXmlElement* FirstChildElement() {
 		return const_cast< TiXmlElement* >( (const_cast< const TiXmlNode* >(this))->FirstChildElement() );
 	}
 
 	/// Convenience function to get through elements.
-	const TiXmlElement* FirstChildElement( const char * _value ) const;
+	virtual const TiXmlElement* FirstChildElement( const char * _value ) const;
 	TiXmlElement* FirstChildElement( const char * _value ) {
 		return const_cast< TiXmlElement* >( (const_cast< const TiXmlNode* >(this))->FirstChildElement( _value ) );
 	}
@@ -829,8 +829,8 @@ public:
 	#ifdef TIXML_USE_STL
 	const std::string& ValueStr() const	{ return value; }				///< Return the value of this attribute.
 	#endif
-	int				IntValue() const;									///< Return the value of this attribute, converted to an integer.
-	double			DoubleValue() const;								///< Return the value of this attribute, converted to a double.
+	virtual int				IntValue() const;									///< Return the value of this attribute, converted to an integer.
+	virtual double			DoubleValue() const;								///< Return the value of this attribute, converted to a double.
 
 	// Get the tinyxml string representation
 	const TIXML_STRING& NameTStr() const { return name; }
@@ -862,7 +862,7 @@ public:
 	#endif
 
 	/// Get the next sibling attribute in the DOM. Returns null at end.
-	const TiXmlAttribute* Next() const;
+	virtual const TiXmlAttribute* Next() const;
 	TiXmlAttribute* Next() {
 		return const_cast< TiXmlAttribute* >( (const_cast< const TiXmlAttribute* >(this))->Next() );
 	}
@@ -976,7 +976,7 @@ public:
 	/** Given an attribute name, Attribute() returns the value
 		for the attribute of that name, or null if none exists.
 	*/
-	const char* Attribute( const char* name ) const;
+	virtual const char* Attribute( const char* name ) const;
 
 	/** Given an attribute name, Attribute() returns the value
 		for the attribute of that name, or null if none exists.
@@ -984,7 +984,7 @@ public:
 		the integer value will be put in the return 'i', if 'i'
 		is non-null.
 	*/
-	const char* Attribute( const char* name, int* i ) const;
+	virtual const char* Attribute( const char* name, int* i ) const;
 
 	/** Given an attribute name, Attribute() returns the value
 		for the attribute of that name, or null if none exists.
@@ -992,7 +992,7 @@ public:
 		the double value will be put in the return 'd', if 'd'
 		is non-null.
 	*/
-	const char* Attribute( const char* name, double* d ) const;
+	virtual const char* Attribute( const char* name, double* d ) const;
 
 	/** QueryIntAttribute examines the attribute - it is an alternative to the
 		Attribute() method with richer error checking.
@@ -1055,7 +1055,7 @@ public:
 	/** Sets an attribute of name to a given value. The attribute
 		will be created if it does not exist, or changed if it does.
 	*/
-	void SetAttribute( const char* name, const char * _value );
+	virtual void SetAttribute( const char* name, const char * _value );
 
     #ifdef TIXML_USE_STL
 	const std::string* Attribute( const std::string& name ) const;
@@ -1073,12 +1073,12 @@ public:
 	/** Sets an attribute of name to a given value. The attribute
 		will be created if it does not exist, or changed if it does.
 	*/
-	void SetAttribute( const char * name, int value );
+	virtual void SetAttribute( const char * name, int value );
 
 	/** Sets an attribute of name to a given value. The attribute
 		will be created if it does not exist, or changed if it does.
 	*/
-	void SetDoubleAttribute( const char * name, double value );
+	virtual void SetDoubleAttribute( const char * name, double value );
 
 	/** Deletes an attribute with the given name.
 	*/
@@ -1124,7 +1124,7 @@ public:
 				 similarly named TiXmlHandle::Text() and TiXmlNode::ToText() which are
 				 safe type casts on the referenced node.
 	*/
-	const char* GetText() const;
+	virtual const char* GetText() const;
 
 	/// Creates a new Element and returns it - the returned element is a copy.
 	virtual TiXmlNode* Clone() const;
@@ -1423,7 +1423,7 @@ public:
 	/// Save a file using the current document value. Returns true if successful.
 	bool SaveFile() const;
 	/// Load a file using the given filename. Returns true if successful.
-	bool LoadFile( const char * filename, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
+	virtual bool LoadFile( const char * filename, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
 	/// Save a file using the given filename. Returns true if successful.
 	bool SaveFile( const char * filename ) const;
 	/** Load a file using the given FILE*. Returns true if successful. Note that this method
@@ -1660,9 +1660,9 @@ public:
 	/// Return a handle to the first child node with the given name.
 	TiXmlHandle FirstChild( const char * value ) const;
 	/// Return a handle to the first child element.
-	TiXmlHandle FirstChildElement() const;
+	virtual TiXmlHandle FirstChildElement() const;
 	/// Return a handle to the first child element with the given name.
-	TiXmlHandle FirstChildElement( const char * value ) const;
+	virtual TiXmlHandle FirstChildElement( const char * value ) const;
 
 	/** Return a handle to the "index" child with the given name.
 		The first child is 0, the second 1, etc.

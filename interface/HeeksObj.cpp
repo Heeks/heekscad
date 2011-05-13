@@ -8,8 +8,8 @@
 #include "PropertyInt.h"
 #include "PropertyColor.h"
 #include "PropertyCheck.h"
-#include "../tinyxml/tinyxml.h"
 #ifdef HEEKSCAD
+#include "../tinyxml/tinyxml.h"
 #include "ObjList.h"
 #include "../src/Gripper.h"
 #include "../src/HeeksFrame.h"
