@@ -246,9 +246,9 @@ public:
 		for(std::list<HeeksObj*>::iterator It = new_sketches.begin(); It != new_sketches.end(); It++)
 		{
 			HeeksObj* new_object = *It;
-			sketch_for_tools->Owner()->Add(new_object, NULL);
+			sketch_for_tools->HEEKSOBJ_OWNER->Add(new_object, NULL);
 		}
-		sketch_for_tools->Owner()->Remove(sketch_for_tools);
+		sketch_for_tools->HEEKSOBJ_OWNER->Remove(sketch_for_tools);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Split Sketch");}
@@ -337,26 +337,24 @@ class CopyParallel: public Tool
 public:
 	void Run()
 	{
-	    static long distance = 5;
-	    const long min_distance = -5000;
-	    const long max_distance = +5000;
-
 	    wxString message(_("Use negative for smaller and Positive for larger)"));
 	    wxString prompt(_("Enter the distance"));
 	    wxString caption(_("Distance"));
 
-        distance = ::wxGetNumberFromUser( message, prompt, caption, distance, min_distance, max_distance);
-
-	    HeeksObj *parallel_sketch = sketch_for_tools->Parallel( double(distance) );
-	    if (parallel_sketch != NULL)
-	    {
-            wxGetApp().CreateUndoPoint();
-            wxGetApp().Add(parallel_sketch, NULL);
-            wxGetApp().Changed();
-        }
-		else
+		double distance;
+		if(wxGetApp().InputDouble(wxString(_("Use negative for smaller and Positive for larger)") ), _("Enter the distance"), distance))
 		{
-			wxMessageBox(wxString(_("Error making offset")));
+			HeeksObj *parallel_sketch = sketch_for_tools->Parallel( double(distance) );
+			if (parallel_sketch != NULL)
+			{
+				wxGetApp().CreateUndoPoint();
+				wxGetApp().Add(parallel_sketch, NULL);
+				wxGetApp().Changed();
+			}
+			else
+			{
+				wxMessageBox(wxString(_("Error making offset")));
+			}
 		}
 	}
 	const wxChar* GetTitle(){return _("Copy Parallel");}

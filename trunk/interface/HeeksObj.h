@@ -19,6 +19,15 @@ class GripData;
 class TopoDS_Shape;
 class ObjectCanvas;
 
+#define MULTIPLE_OWNERS
+
+#ifdef MULTIPLE_OWNERS
+#define HEEKSOBJ_OWNER Owner()
+#else
+#define HEEKSOBJ_OWNER m_owner
+#define OLDLINES
+#endif
+
 // NOTE: If adding to this enumeration, please also add the verbose description to the HeeksCADType() routine
 enum{
 	UnknownType,
@@ -90,8 +99,13 @@ enum{
 #endif
 
 class HeeksObj{
+#ifdef MULTIPLE_OWNERS
 	std::list<HeeksObj*> m_owners;
 	std::list<HeeksObj*>::iterator m_owners_it;
+#else
+public:
+	HeeksObj* m_owner;
+#endif
 public:
 	bool m_skip_for_undo;
 	unsigned int m_id;
@@ -131,6 +145,7 @@ public:
 	virtual bool GetStartPoint(double* pos){return false;}
 	virtual bool GetEndPoint(double* pos){return false;}
 	virtual bool GetCentrePoint(double* pos){return false;}
+	virtual int GetCentrePoints(double* pos, double* pos2){if(GetCentrePoint(pos))return 1; return 0;}
 	virtual bool GetMidPoint(double* pos){return false;}
 	virtual bool GetScaleAboutMatrix(double *m);
 	virtual void GetProperties(std::list<Property *> *list); // use GetDialog instead of this, if you have time to code one.
@@ -155,7 +170,7 @@ public:
 	virtual bool GetSkipForUndo(){return m_skip_for_undo;}
 	virtual void SetSkipForUndo(bool val){m_skip_for_undo = val;}
 	virtual bool OneOfAKind(){return false;} // if true, then, instead of pasting, find the first object of the same type and copy object to it.
-	virtual bool Add(HeeksObj* object, HeeksObj* prev_object) {object->AddOwner(this); object->OnAdd(); return true;}
+	virtual bool Add(HeeksObj* object, HeeksObj* prev_object);
 	virtual bool IsDifferent(HeeksObj* other){return false;}
 	virtual void Remove(HeeksObj* object){object->OnRemove();}
 	virtual void OnAdd(){}
@@ -183,9 +198,10 @@ public:
 	virtual unsigned int GetID(){return m_id;}
 	virtual bool UsesID(){return true;}
 	bool OnVisibleLayer();
+#ifdef MULTIPLE_OWNERS
 	virtual HeeksObj* Owner();
-	virtual std::list<HeeksObj*> Owners();
 	virtual void SetOwner(HeeksObj*);
+	virtual std::list<HeeksObj*> Owners();
 	virtual bool HasOwner();
 	virtual bool HasOwner(HeeksObj* obj);
 	virtual void AddOwner(HeeksObj*);
@@ -194,6 +210,7 @@ public:
 	virtual void RemoveOwner(HeeksObj*);
 	virtual HeeksObj* GetFirstOwner();
 	virtual HeeksObj* GetNextOwner();
+#endif
 	virtual const TopoDS_Shape *GetShape() { return(NULL); }
 	virtual bool IsTransient(){return false;}
 	virtual bool IsList(){return false;}

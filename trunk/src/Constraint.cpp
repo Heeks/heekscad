@@ -2,6 +2,7 @@
 // Copyright (c) 2009, Dan Heeks
 // This program is released under the BSD license. See the file COPYING for details.
 #include "stdafx.h"
+#ifdef MULTIPLE_OWNERS
 
 #include "Constraint.h"
 #include "ConstrainedObject.h"
@@ -680,3 +681,5 @@ HeeksObj* Constraint::ReadFromXMLElement(TiXmlElement* pElem)
 	//Don't let the xml reader try to insert us in the tree
 	return NULL;
 }
+
+#endif

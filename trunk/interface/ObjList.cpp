@@ -21,9 +21,14 @@ void ObjList::Clear()
 	std::list<HeeksObj*>::iterator It;
 	for(It=m_objects.begin(); It!=m_objects.end() ;It++)
 	{
+#ifdef MULTIPLE_OWNERS
 		(*It)->RemoveOwner(this);
 		if(!(*It)->GetFirstOwner())
 			delete *It;
+#else
+		(*It)->m_owner = NULL;
+		delete *It;
+#endif
 	}
 	m_objects.clear();
 	m_index_list.clear();
@@ -37,7 +42,11 @@ void ObjList::Clear(std::set<HeeksObj*> &to_delete)
 	{
 		if(to_delete.find(*It) != to_delete.end())
 		{
+#ifdef MULTIPLE_OWNERS
 			(*It)->RemoveOwners();
+#else
+			(*It)->m_owner = NULL;
+#endif
 			It = m_objects.erase(It);
 		}
 		else
@@ -234,12 +243,12 @@ bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 	HeeksObj::Add(object, prev_object);
 
 #ifdef HEEKSCAD
-	if((!wxGetApp().m_in_OpenFile || wxGetApp().m_file_open_or_import_type != FileOpenTypeHeeks) && object->UsesID() && (object->m_id == 0 || (wxGetApp().m_file_open_or_import_type == FileImportTypeHeeks && wxGetApp().m_in_OpenFile)))
+	if(((!wxGetApp().m_in_OpenFile || wxGetApp().m_file_open_or_import_type != FileOpenTypeHeeks || wxGetApp().m_inPaste) && object->UsesID() && (object->m_id == 0 || (wxGetApp().m_file_open_or_import_type == FileImportTypeHeeks && wxGetApp().m_in_OpenFile))))
 	{
 		object->SetID(wxGetApp().GetNextID(object->GetIDGroupType()));
 	}
 #else
-	if(!heeksCAD->InOpenFile() && object->UsesID() && object->m_id == 0)
+	if(((!heeksCAD->InOpenFile() || !heeksCAD->FileOpenTypeHeeks() || heeksCAD->InPaste()) && object->UsesID() && (object->m_id == 0 || (heeksCAD->FileOpenTypeHeeks() && heeksCAD->InOpenFile()))))
 	{
 		object->SetID(heeksCAD->GetNextID(object->GetIDGroupType()));
 	}
@@ -248,6 +257,7 @@ bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 	return true;
 }
 
+#ifdef MULTIPLE_OWNERS
 void ObjList::Disconnect(std::list<HeeksObj*> parents)
 {
 	parents.push_back(this);
@@ -255,6 +265,7 @@ void ObjList::Disconnect(std::list<HeeksObj*> parents)
 		(*LoopIt)->Disconnect(parents);
 	}
 }
+#endif
 
 void ObjList::Remove(HeeksObj* object)
 {
@@ -282,7 +293,7 @@ void ObjList::Remove(HeeksObj* object)
 		wxGetApp().RemoveID(object);
 	}
 #else
-	if(!heeksCAD->InOpenFile() && object->UsesID() && object->m_id == 0)
+	if((!heeksCAD->InOpenFile() || !heeksCAD->FileOpenTypeHeeks()) && object->UsesID() && (object->m_id == 0 || (heeksCAD->FileOpenTypeHeeks() && heeksCAD->InOpenFile())))
 	{
 		heeksCAD->RemoveID(object);
 	}

@@ -42,7 +42,11 @@ HEllipse::~HEllipse(){
 }
 
 const HEllipse& HEllipse::operator=(const HEllipse &e){
+#ifdef MULTIPLE_OWNERS
 	ConstrainedObject::operator=(e);
+#else
+	HeeksObj::operator =(e);
+#endif
 	m_start = e.m_start; m_end = e.m_end;
 	color = e.color;
 	C = (HPoint*)GetFirstChild();
@@ -446,7 +450,11 @@ HeeksObj* HEllipse::ReadFromXMLElement(TiXmlElement* pElem)
 void HEllipse::ReloadPointers()
 {
 	C = (HPoint*)GetFirstChild();
+#ifdef MULTIPLE_OWNERS
 	ConstrainedObject::ReloadPointers();
+#else
+	HeeksObj::ReloadPointers();
+#endif
 }
 
 void HEllipse::SetEllipse(gp_Elips e)

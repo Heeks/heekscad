@@ -13,32 +13,58 @@
 EndedObject::EndedObject(const HeeksColor* color){
 	A = new HPoint(gp_Pnt(),color);
 	B = new HPoint(gp_Pnt(),color);
+#ifdef MULTIPLE_OWNERS
 	A->m_draw_unselected = false;
 	B->m_draw_unselected = false;
 	A->SetSkipForUndo(true);
 	B->SetSkipForUndo(true);
 	Add(A,NULL);
 	Add(B,NULL);
+#else
+	A->SetSkipForUndo(true);
+	B->SetSkipForUndo(true);
+#endif
 }
+
+#ifndef MULTIPLE_OWNERS
+EndedObject::EndedObject(const EndedObject& e)
+{
+	A = new HPoint(gp_Pnt(), e.A->GetColor());
+	B = new HPoint(gp_Pnt(), e.B->GetColor());
+	A->SetSkipForUndo(true);
+	B->SetSkipForUndo(true);
+	operator=(e);
+}
+#endif
 
 EndedObject::~EndedObject(){
 }
 
 const EndedObject& EndedObject::operator=(const EndedObject &b){
+#ifdef MULTIPLE_OWNERS
 	ConstrainedObject::operator=(b);
 	std::list<HeeksObj*>::iterator it = m_objects.begin();
 	A = (HPoint*)(*it++);
 	B = (HPoint*)(*it);
 	A->SetSkipForUndo(true);
 	B->SetSkipForUndo(true);
+#else
+	HeeksObj::operator=(b);
+	*A = *b.A;
+	*B = *b.B;
+#endif
 	return *this;
 }
 
 HeeksObj* EndedObject::MakeACopyWithID()
 {
+#ifdef MULTIPLE_OWNERS
 	EndedObject* pnew = (EndedObject*)ConstrainedObject::MakeACopyWithID();
 	pnew->A = (HPoint*)pnew->GetFirstChild();
 	pnew->B = (HPoint*)pnew->GetNextChild();
+#else
+	EndedObject* pnew = (EndedObject*)HeeksObj::MakeACopyWithID();
+#endif
 	return pnew;
 }
 
@@ -54,6 +80,7 @@ bool EndedObject::IsDifferent(HeeksObj *other)
 	return HeeksObj::IsDifferent(other);
 }
 
+#ifdef MULTIPLE_OWNERS
 void EndedObject::LoadToDoubles()
 {
 	A->LoadToDoubles();
@@ -65,6 +92,7 @@ void EndedObject::LoadFromDoubles()
 	A->LoadFromDoubles();
 	B->LoadFromDoubles();
 }
+#endif
 
 void EndedObject::ModifyByMatrix(const double* m){
 	gp_Trsf mat = make_matrix(m);
@@ -106,6 +134,7 @@ bool EndedObject::GetEndPoint(double* pos)
 void EndedObject::glCommands(bool select, bool marked, bool no_color)
 {
 	HeeksObj::glCommands(select, marked, no_color);
+#ifdef MULTIPLE_OWNERS
 	std::list<HeeksObj*>::iterator It;
 	for(It=m_objects.begin(); It!=m_objects.end() ;It++)
 	{
@@ -123,6 +152,7 @@ void EndedObject::glCommands(bool select, bool marked, bool no_color)
 			if(select)glPopName();
 		}
 	}
+#endif
 }
 
 /*void EndedObject::WriteBaseXML(TiXmlElement *element)

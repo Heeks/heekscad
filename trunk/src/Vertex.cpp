@@ -64,8 +64,15 @@ CEdge* CVertex::GetNextEdge()
 
 CShape* CVertex::GetParentBody()
 {
-	if(Owner() == NULL)return NULL;
-	if(Owner()->Owner() == NULL)return NULL;
-	if(Owner()->Owner()->GetType() != SolidType)return NULL;
-	return (CShape*)(Owner()->Owner());
+#ifdef MULTIPLE_OWNERS
+	if(HEEKSOBJ_OWNER == NULL)return NULL;
+	if(HEEKSOBJ_OWNER->HEEKSOBJ_OWNER == NULL)return NULL;
+	if(HEEKSOBJ_OWNER->HEEKSOBJ_OWNER->GetType() != SolidType)return NULL;
+	return (CShape*)(HEEKSOBJ_OWNER->HEEKSOBJ_OWNER);
+#else
+	if(m_owner == NULL)return NULL;
+	if(m_owner->m_owner == NULL)return NULL;
+	if(m_owner->m_owner->GetType() != SolidType)return NULL;
+	return (CShape*)(m_owner->m_owner);
+#endif
 }

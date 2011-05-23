@@ -4,9 +4,13 @@
 
 #pragma once
 
+#ifdef MULTIPLE_OWNERS
 #include "ConstrainedObject.h"
-
 class HEllipse: public ConstrainedObject{
+#else
+#include "HPoint.h"
+class HEllipse: public HeeksObj{
+#endif
 private:
 	HeeksColor color;
 

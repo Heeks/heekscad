@@ -53,6 +53,8 @@ CObjectIdsCtrl::CObjectIdsCtrl(wxWindow* parent, wxWindowID id)
 {
 }
 
+#ifdef OP_SKETCHES_AS_CHILDREN
+
 void CObjectIdsCtrl::GetAddChildren(HeeksObj* object, int group_type)
 {
 #ifdef HEEKSCAD
@@ -114,3 +116,44 @@ void CObjectIdsCtrl::SetFromChildren(HeeksObj* object, int group_type)
 
 	wxTextCtrl::SetValue(str);
 }
+
+#else
+void CObjectIdsCtrl::GetIDList(std::list<int> &id_list)
+{
+	wxString str = wxTextCtrl::GetValue();
+	wxString s = _T("");
+	unsigned int len = str.Len();
+	for(unsigned int i = 0; i <= len; i++)
+	{
+		if(i == len || str[i] == _T(' '))
+		{
+			long id = 0;
+			if(s.ToLong(&id))
+			{
+				if(id != 0)id_list.push_back(id);
+			}
+			s = _T("");
+		}
+		else
+		{
+			s.Append(str[i]);
+		}
+	}
+}
+
+void CObjectIdsCtrl::SetFromIDList(std::list<int> &id_list)
+{
+	wxString str;
+	int i = 0;
+	for (std::list<int>::iterator It = id_list.begin(); It != id_list.end(); It++)
+	{
+		int id = *It;
+		if(i != 0)str.Append(_T(" "));
+		str.Append(wxString::Format(_T("%d"), id));
+		i++;
+	}
+
+	wxTextCtrl::SetValue(str);
+}
+
+#endif

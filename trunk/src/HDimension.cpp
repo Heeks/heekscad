@@ -44,9 +44,11 @@ const HDimension& HDimension::operator=(const HDimension &b)
 	m_mode = b.m_mode;
 	m_scale = b.m_scale;
 
+#ifdef MULTIPLE_OWNERS
 	std::list<HeeksObj*>::iterator it = m_objects.begin();
 	it++;it++;
 	m_p2 = (HPoint*)(*it);
+#endif
 
 	return *this;
 }
@@ -188,6 +190,7 @@ void HDimension::RenderText(const wxString &text, const gp_Pnt& p, const gp_Dir&
 
 }
 
+#ifdef MULTIPLE_OWNERS
 void HDimension::LoadToDoubles()
 {
 	EndedObject::LoadToDoubles();
@@ -199,9 +202,11 @@ void HDimension::LoadFromDoubles()
 	EndedObject::LoadFromDoubles();
 	m_p2->LoadFromDoubles();
 }
+#endif
 
 HDimension* dimension_for_tool = NULL;
 
+#ifdef MULTIPLE_OWNERS
 class ConstrainDimension:public Tool{
 public:
 	void Run(){
@@ -217,7 +222,7 @@ public:
 				dimension_for_tool->SetLineVerticalLengthConstraint(fabs(dimension_for_tool->A->m_p.Y() - dimension_for_tool->B->m_p.Y()));
 			break;
 		}
-		SolveSketch((CSketch*)dimension_for_tool->Owner());
+		SolveSketch((CSketch*)dimension_for_tool->HEEKSOBJ_OWNER);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Toggle Dimension Constraint");}
@@ -225,11 +230,14 @@ public:
 	const wxChar* GetToolTip(){return _("Set this dimension as constrained");}
 };
 static ConstrainDimension constrain_dimension;
+#endif
 
 void HDimension::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	dimension_for_tool = this;
+#ifdef MULTIPLE_OWNERS
 	t_list->push_back(&constrain_dimension);
+#endif
 }
 
 void HDimension::GetBox(CBox &box)
@@ -325,6 +333,7 @@ static void on_set_scale(double value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+#ifdef MULTIPLE_OWNERS
 static void on_edit_dimension(const wxChar *value, HeeksObj* object)
 {
 	HDimension* dimension = (HDimension*)object;
@@ -367,7 +376,7 @@ static void on_edit_dimension(const wxChar *value, HeeksObj* object)
 			break;
 	}
 
-	SolveSketch((CSketch*)dimension_for_tool->Owner());
+	SolveSketch((CSketch*)dimension_for_tool->HEEKSOBJ_OWNER);
 
 	if(!constrained)
 	{
@@ -382,6 +391,7 @@ bool HDimension::IsConstrained()
 {
 	return GetExisting(LineLengthConstraint) || GetExisting(LineHorizontalLengthConstraint) || GetExisting(LineVerticalLengthConstraint);
 }
+#endif
 
 void HDimension::GetProperties(std::list<Property *> *list)
 {
@@ -409,7 +419,11 @@ void HDimension::GetProperties(std::list<Property *> *list)
 	}
 
 	wxString text = MakeText();
+#ifdef MULTIPLE_OWNERS
 	list->push_back(new PropertyString(_("dimension value"), text, this, on_edit_dimension));
+#else
+	list->push_back(new PropertyString(_("dimension value"), text, this, NULL));
+#endif
 
 	EndedObject::GetProperties(list);
 }
@@ -449,15 +463,15 @@ void HDimension::WriteXML(TiXmlNode *root)
 	element->SetDoubleAttribute("ma", m[10]);
 	element->SetDoubleAttribute("mb", m[11]);
 #ifdef OLDLINES
-	element->SetDoubleAttribute("sx", m_p0.X());
-	element->SetDoubleAttribute("sy", m_p0.Y());
-	element->SetDoubleAttribute("sz", m_p0.Z());
-	element->SetDoubleAttribute("ex", m_p1.X());
-	element->SetDoubleAttribute("ey", m_p1.Y());
-	element->SetDoubleAttribute("ez", m_p1.Z());
-	element->SetDoubleAttribute("cx", m_p2.X());
-	element->SetDoubleAttribute("cy", m_p2.Y());
-	element->SetDoubleAttribute("cz", m_p2.Z());
+	element->SetDoubleAttribute("sx", A->m_p.X());
+	element->SetDoubleAttribute("sy", A->m_p.Y());
+	element->SetDoubleAttribute("sz", A->m_p.Z());
+	element->SetDoubleAttribute("ex", B->m_p.X());
+	element->SetDoubleAttribute("ey", B->m_p.Y());
+	element->SetDoubleAttribute("ez", B->m_p.Z());
+	element->SetDoubleAttribute("cx", m_p2->m_p.X());
+	element->SetDoubleAttribute("cy", m_p2->m_p.Y());
+	element->SetDoubleAttribute("cz", m_p2->m_p.Z());
 #endif
 	element->SetDoubleAttribute("scale",m_scale);
 	element->SetAttribute("mode", m_mode);
@@ -510,6 +524,7 @@ HeeksObj* HDimension::ReadFromXMLElement(TiXmlElement* pElem)
 		else if(name == "m9"){m[9] = a->DoubleValue();}
 		else if(name == "ma"){m[10]= a->DoubleValue();}
 		else if(name == "mb"){m[11]= a->DoubleValue();}
+#ifdef OLDLINES
 		else if(name == "sx"){p0[0]= a->DoubleValue();}
 		else if(name == "sy"){p0[1]= a->DoubleValue();}
 		else if(name == "sz"){p0[2]= a->DoubleValue();}
@@ -519,6 +534,7 @@ HeeksObj* HDimension::ReadFromXMLElement(TiXmlElement* pElem)
 		else if(name == "cx"){p2[0]= a->DoubleValue();}
 		else if(name == "cy"){p2[1]= a->DoubleValue();}
 		else if(name == "cz"){p2[2]= a->DoubleValue();}
+#endif
 		else if(name == "scale"){scale= a->DoubleValue();}
 		else if(name == "mode"){mode = (DimensionMode)(a->IntValue());}
 		else if(name == "textmode"){text_mode = (DimensionTextMode)(a->IntValue());}

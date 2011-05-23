@@ -191,6 +191,7 @@ public:
 	wxPrintData *m_printData;
 	wxPageSetupDialogData* m_pageSetupData;
 	FileOpenOrImportType m_file_open_or_import_type;
+	bool m_inPaste;
 	double* m_file_open_matrix;
 	double m_view_units; // units to display to the user ( but everything is stored as mm ), 1.0 for mm, 25.4 for inches
 	bool m_input_uses_modal_dialog;
@@ -271,8 +272,8 @@ public:
 	void glCommandsAll(const CViewPoint &view_point);
 	double GetPixelScale(void);
 	void DoMoveOrCopyDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, HeeksObj* paste_into, HeeksObj* paste_before);
-	void GetDropDownTools(std::list<Tool*> &f_list, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool from_graphics_canvas, bool control_pressed);
-	void DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool from_graphics_canvas, bool control_pressed);
+	void GetDropDownTools(std::list<Tool*> &f_list, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool control_pressed);
+	void DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool control_pressed);
 	void on_menu_event(wxCommandEvent& event);
 	void DoToolUndoably(Tool *);
 	void Undo(void);
@@ -322,7 +323,8 @@ public:
 	void ObserversThaw();
 	const wxChar* GetKnownFilesWildCardString(bool open = true)const;
 	const wxChar* GetKnownFilesCommaSeparatedList(bool open = true)const;
-	void GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool from_graphics_canvas, bool control_pressed);
+	void GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool control_pressed);
+	void GetTools2(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool control_pressed);
 	wxString GetExeFolder()const;
 	wxString GetResFolder()const;
 	void get_2d_arc_segments(double xs, double ys, double xe, double ye, double xc, double yc, bool dir, bool want_start, double pixels_per_mm, void(*callbackfunc)(const double* xy));

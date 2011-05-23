@@ -30,6 +30,11 @@ MarkedList::MarkedList(){
 
 MarkedList::~MarkedList(void){
 	delete point_or_window;
+	std::list<Gripper*>::iterator It;
+	for(It = move_grips.begin(); It != move_grips.end(); It++){
+		Gripper* gripper = *It;
+		gripper->m_index = 0;
+	}
 	delete_move_grips(false);
 }
 
@@ -332,7 +337,9 @@ void MarkedList::GetTools(MarkedObject* clicked_object, std::list<Tool*>& t_list
 	}
 
 	GetConversionMenuTools(&t_list);
+#ifdef MULTIPLE_OWNERS
 	GetConstraintMenuTools(&t_list);
+#endif
 	GetSketchMenuTools(&t_list);
 	GetSolidMenuTools(&t_list);
 

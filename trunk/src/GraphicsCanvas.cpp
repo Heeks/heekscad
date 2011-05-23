@@ -560,36 +560,31 @@ void CGraphicsCanvas::OnMagPrevious()
 	Refresh();
 }
 
+gp_Vec getClosestOrthogonal(const gp_Vec &v)
+{
+	double best_dp = 0;
+	gp_Vec best_v;
+
+	gp_Vec test_v[6] = {gp_Vec(1, 0, 0), gp_Vec(-1, 0, 0), gp_Vec(0, 1, 0), gp_Vec(0, -1, 0), gp_Vec(0, 0, 1), gp_Vec(0, 0, -1)};
+	for(int i = 0; i<6; i++)
+	{
+		double dp = test_v[i] * v;
+		if(dp > best_dp)
+		{
+			best_dp = dp;
+			best_v = test_v[i];
+		}
+	}
+	return best_v;
+}
+
 void CViewport::SetViewPoint(void){
 	if(m_orthogonal){
-		gp_Vec vx, vy, vz;
-		m_view_point.GetTwoAxes(vx, vy, false, 0);
-		{
-			gp_Vec right = m_view_point.rightwards_vector().Normalized();
-			gp_Vec vertical = m_view_point.m_vertical.Normalized();
-			gp_Vec v_choices[4] = {vx, vy, -vx, -vy};
-			gp_Vec *best_x = NULL, *best_y = NULL;
-			double best_x_dp = 0, best_y_dp = 0;
-			for(int i = 0; i<4; i++){
-				double x_dp = v_choices[i] * right;
-				double y_dp = v_choices[i] * vertical;
-				if(i == 0 || x_dp > best_x_dp){
-					best_x_dp = x_dp;
-					best_x = &v_choices[i];
-				}
-				if(i == 0 || y_dp > best_y_dp){
-					best_y_dp = y_dp;
-					best_y = &v_choices[i];
-				}
-			}
-
-			vy = *best_y;				
-			vz = vx ^ vy;
-
-			m_view_point.SetView(vy, vz);
-			StoreViewPoint();
-			return;
-		}
+		gp_Vec vz = getClosestOrthogonal(-m_view_point.forwards_vector());
+		gp_Vec vy = getClosestOrthogonal(m_view_point.m_vertical);
+		m_view_point.SetView(vy, vz);
+		StoreViewPoint();
+		return;
 	}
 
 	gp_Vec vy(0, 1, 0), vz(0, 0, 1);

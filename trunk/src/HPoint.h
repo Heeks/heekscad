@@ -6,9 +6,13 @@
 
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"
+#ifdef MULTIPLE_OWNERS
 #include "ConstrainedObject.h"
 
 class HPoint: public ConstrainedObject{
+#else
+class HPoint: public HeeksObj{
+#endif
 private:
 	HeeksColor color;
 

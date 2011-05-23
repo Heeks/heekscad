@@ -738,10 +738,10 @@ void CFace::GetSurfaceUVPeriod(double *uv, bool *isUPeriodic, bool *isVPeriodic)
 
 CShape* CFace::GetParentBody()
 {
-	if(Owner() == NULL)return NULL;
-	if(Owner()->Owner() == NULL)return NULL;
-	if(Owner()->Owner()->GetType() != SolidType)return NULL;
-	return (CShape*)(Owner()->Owner());
+	if(HEEKSOBJ_OWNER == NULL)return NULL;
+	if(HEEKSOBJ_OWNER->HEEKSOBJ_OWNER == NULL)return NULL;
+	if(HEEKSOBJ_OWNER->HEEKSOBJ_OWNER->GetType() != SolidType)return NULL;
+	return (CShape*)(HEEKSOBJ_OWNER->HEEKSOBJ_OWNER);
 }
 
 void CFace::MakeSureMarkingGLListExists()

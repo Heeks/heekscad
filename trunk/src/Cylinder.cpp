@@ -110,8 +110,8 @@ void CCylinder::OnApplyProperties()
 {
 	CCylinder* new_object = new CCylinder(m_pos, m_radius, m_height, m_title.c_str(), m_color, m_opacity);
 	new_object->CopyIDsFrom(this);
-	Owner()->Add(new_object, NULL);
-	Owner()->Remove(this);
+	HEEKSOBJ_OWNER->Add(new_object, NULL);
+	HEEKSOBJ_OWNER->Remove(this);
 	if(wxGetApp().m_marked_list->ObjectMarked(this))
 	{
 		wxGetApp().m_marked_list->Remove(this,false);
@@ -120,6 +120,15 @@ void CCylinder::OnApplyProperties()
 	wxGetApp().Repaint();
 }
 
+int CCylinder::GetCentrePoints(double* pos, double* pos2)
+{
+	gp_Pnt o = m_pos.Location();
+	gp_Dir z_dir = m_pos.XDirection() ^ m_pos.YDirection();
+	gp_Pnt pz(o.XYZ() + z_dir.XYZ() * m_height);
+	extract(o, pos);
+	extract(pz, pos2);
+	return 2;
+}
 
 bool CCylinder::GetScaleAboutMatrix(double *m)
 {
@@ -160,8 +169,8 @@ bool CCylinder::Stretch(const double *p, const double* shift, void* data)
 	{
 		CCylinder* new_object = new CCylinder(m_pos, m_radius, m_height, m_title.c_str(), m_color, m_opacity);
 		new_object->CopyIDsFrom(this);
-		Owner()->Add(new_object, NULL);
-		Owner()->Remove(this);
+		HEEKSOBJ_OWNER->Add(new_object, NULL);
+		HEEKSOBJ_OWNER->Remove(this);
 		wxGetApp().m_marked_list->Clear(true);
 		wxGetApp().m_marked_list->Add(new_object, true);
 	}

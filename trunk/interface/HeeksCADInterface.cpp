@@ -792,6 +792,16 @@ bool CHeeksCADInterface::InOpenFile()
 	return wxGetApp().m_in_OpenFile;
 }
 
+bool CHeeksCADInterface::FileOpenTypeHeeks()
+{
+	return (wxGetApp().m_file_open_or_import_type == FileImportTypeHeeks);
+}
+
+bool CHeeksCADInterface::InPaste()
+{
+	return wxGetApp().m_inPaste;
+}
+
 void CHeeksCADInterface::RemoveID(HeeksObj* object)
 {
 	wxGetApp().RemoveID(object);
@@ -886,7 +896,7 @@ HeeksObj* CHeeksCADInterface::ExtrudeSketch(HeeksObj* sketch, double height, boo
 {
 	std::list<HeeksObj*>list;
 	list.push_back(sketch);
-	return CreateExtrusionOrRevolution(list,height, try_to_make_solid, false, false);
+	return CreateExtrusionOrRevolution(list,height, try_to_make_solid, false, 0.0, false);
 }
 
 // surface of revolution
@@ -894,7 +904,7 @@ HeeksObj* CHeeksCADInterface::RevolveSketch(HeeksObj* sketch, double angle, bool
 {
 	std::list<HeeksObj*>list;
 	list.push_back(sketch);
-	return CreateExtrusionOrRevolution(list,angle, try_to_make_solid, true, false);
+	return CreateExtrusionOrRevolution(list,angle, try_to_make_solid, true, 0.0, false);
 }
 
 void CHeeksCADInterface::ExtractSeparateSketches(HeeksObj* sketch, std::list<HeeksObj*> &new_separate_sketches, const bool allow_individual_objects)

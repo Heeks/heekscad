@@ -108,7 +108,11 @@ void TransformTools::Translate(bool copy)
 			{
 				HeeksObj* object = *It;
 				HeeksObj* new_object = object->MakeACopy();
-				object->Owner()->Add(new_object, NULL);
+#ifdef MULTIPLE_OWNERS
+				object->HEEKSOBJ_OWNER->Add(new_object, NULL);
+#else
+				object->m_owner->Add(new_object, NULL);
+#endif
 				new_object->ModifyByMatrix(m);
 			}
 		}
@@ -197,7 +201,11 @@ void TransformTools::Rotate(bool copy)
 				HeeksObj* object = *It;
 				HeeksObj* new_object = object->MakeACopy();
 				new_object->ModifyByMatrix(m);              // Rotate the duplicate object.
-				object->Owner()->Add(new_object, NULL);     // And add it to this object's owner
+#ifdef MULTIPLE_OWNERS
+				object->HEEKSOBJ_OWNER->Add(new_object, NULL);     // And add it to this object's owner
+#else
+				object->m_owner->Add(new_object, NULL);     // And add it to this object's owner
+#endif
 			}
 		}
 		wxGetApp().m_marked_list->Clear(true);
@@ -268,7 +276,11 @@ void TransformTools::Mirror(bool copy)
 		{
 			HeeksObj* object = *It;
 			HeeksObj* new_object = object->MakeACopy();
-			object->Owner()->Add(new_object, NULL);
+#ifdef MULTIPLE_OWNERS
+			object->HEEKSOBJ_OWNER->Add(new_object, NULL);
+#else
+			object->m_owner->Add(new_object, NULL);
+#endif
 			new_object->ModifyByMatrix(m);
 		}
 		wxGetApp().m_marked_list->Clear(true);
@@ -331,7 +343,11 @@ void TransformTools::Scale(bool copy)
 			{
 				HeeksObj* object = *It;
 				HeeksObj* new_object = object->MakeACopy();
-				object->Owner()->Add(new_object, NULL);
+#ifdef MULTIPLE_OWNERS
+				object->HEEKSOBJ_OWNER->Add(new_object, NULL);
+#else
+				object->m_owner->Add(new_object, NULL);
+#endif
 				new_object->ModifyByMatrix(m);
 			}
 		}

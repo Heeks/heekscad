@@ -54,12 +54,12 @@ void CPad::Update()
 		std::vector<TopoDS_Face> faces = m_sketch->GetFaces();
 		std::list<TopoDS_Shape> facelist(faces.begin(),faces.end());
 		std::list<TopoDS_Shape> new_shapes;
-		CreateExtrusions(facelist, new_shapes, gp_Vec(0, 0, m_length));
+		CreateExtrusions(facelist, new_shapes, gp_Vec(0, 0, m_length), 0.0, true);
 
 		SetShapes(new_shapes);
 	}
 
-	DynamicSolid* solid = dynamic_cast<DynamicSolid*>(Owner());
+	DynamicSolid* solid = dynamic_cast<DynamicSolid*>(HEEKSOBJ_OWNER);
 	if(solid)
 		solid->Update();
 }
@@ -161,10 +161,14 @@ HeeksObj* CPad::ReadFromXMLElement(TiXmlElement* element)
 void CPad::PadSketch(CSketch* sketch, double length)
 {
 	CPad *pad = new CPad(length);
-	sketch->Owner()->Add(pad,NULL);
+	sketch->HEEKSOBJ_OWNER->Add(pad,NULL);
 
-	sketch->Owner()->Remove(sketch);
+	sketch->HEEKSOBJ_OWNER->Remove(sketch);
+#ifdef MULTIPLE_OWNERS
 	sketch->RemoveOwner(sketch->Owner());
+#else
+	sketch->m_owner = NULL;
+#endif
 	sketch->m_draw_with_transform = false;
 	pad->Add(sketch,NULL);
 	pad->ReloadPointers();

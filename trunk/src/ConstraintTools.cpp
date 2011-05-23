@@ -3,6 +3,7 @@
 // This program is released under the BSD license. See the file COPYING for details.
 
 #include "stdafx.h"
+#ifdef MULTIPLE_OWNERS
 #include "ConstraintTools.h"
 #include "MarkedList.h"
 #include "HLine.h"
@@ -26,7 +27,7 @@ public:
 				obj->SetPerpendicularConstraint(last);
 			last=obj;
 		}
-		SolveSketch((CSketch*)last->Owner());
+		SolveSketch((CSketch*)last->HEEKSOBJ_OWNER);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Set Perpendicular");}
@@ -50,7 +51,7 @@ public:
 			}
 			last=obj;
 		}
-		SolveSketch((CSketch*)last->Owner());
+		SolveSketch((CSketch*)last->HEEKSOBJ_OWNER);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Toggle Tangent");}
@@ -72,7 +73,7 @@ public:
 					break;
 			last=obj;
 		}
-		SolveSketch((CSketch*)last->Owner());
+		SolveSketch((CSketch*)last->HEEKSOBJ_OWNER);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Set Parallel");}
@@ -93,7 +94,7 @@ public:
 					break;
 			last=obj;
 		}
-		SolveSketch((CSketch*)last->Owner());
+		SolveSketch((CSketch*)last->HEEKSOBJ_OWNER);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Set Equal Length");}
@@ -114,7 +115,7 @@ public:
 					break;
 			last=obj;
 		}
-		SolveSketch((CSketch*)last->Owner());
+		SolveSketch((CSketch*)last->HEEKSOBJ_OWNER);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Set Colinear");}
@@ -135,7 +136,7 @@ public:
 					break;
 			last=obj;
 		}
-		SolveSketch((CSketch*)last->Owner());
+		SolveSketch((CSketch*)last->HEEKSOBJ_OWNER);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Set Equal Radius");}
@@ -156,7 +157,7 @@ public:
 					break;
 			last=obj;
 		}
-		SolveSketch((CSketch*)last->Owner());
+		SolveSketch((CSketch*)last->HEEKSOBJ_OWNER);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Set Concentric");}
@@ -178,7 +179,7 @@ public:
 			}
 			last=obj;
 		}
-		SolveSketch((CSketch*)last->Owner()->Owner());
+		SolveSketch((CSketch*)last->HEEKSOBJ_OWNER->HEEKSOBJ_OWNER);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Set Coincident");}
@@ -226,7 +227,7 @@ public:
 				line2->B->SetCoincidentPoint(dimension->m_p3,true);
 				
 				//dimension_drawing.StartOnStep3(dimension);
-				line1->Owner()->Add(dimension,NULL);
+				line1->HEEKSOBJ_OWNER->Add(dimension,NULL);
 				break;
 			}
 			line1=line2;
@@ -285,7 +286,7 @@ public:
 		}
 		line->SetPointOnLineConstraint(point);
 
-		SolveSketch((CSketch*)line->Owner());
+		SolveSketch((CSketch*)line->HEEKSOBJ_OWNER);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Set Point On Line");}
@@ -309,7 +310,7 @@ public:
 		}
 		line->SetPointOnLineMidpointConstraint(point);
 
-		SolveSketch((CSketch*)line->Owner());
+		SolveSketch((CSketch*)line->HEEKSOBJ_OWNER);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Set Point On Midpoint");}
@@ -333,7 +334,7 @@ public:
 		}
 		line->SetPointOnArcMidpointConstraint(point);
 
-		SolveSketch((CSketch*)line->Owner());
+		SolveSketch((CSketch*)line->HEEKSOBJ_OWNER);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Set Point On Midpoint");}
@@ -357,7 +358,7 @@ public:
 		}
 		line->SetPointOnArcConstraint(point);
 
-		SolveSketch((CSketch*)line->Owner());
+		SolveSketch((CSketch*)line->HEEKSOBJ_OWNER);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Set Point On Arc");}
@@ -381,7 +382,7 @@ public:
 		}
 		circle->SetPointOnCircleConstraint(point);
 
-		SolveSketch((CSketch*)circle->Owner());
+		SolveSketch((CSketch*)circle->HEEKSOBJ_OWNER);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Set Point On Circle");}
@@ -396,7 +397,7 @@ class RunTest:public Tool{
 public:
 	void Run(){
 		std::list<CSketch*> list;
-		list.push_back((CSketch*)(*wxGetApp().m_marked_list->list().begin())->Owner());
+		list.push_back((CSketch*)(*wxGetApp().m_marked_list->list().begin())->HEEKSOBJ_OWNER);
 		MultiPoly(list);
 	//	Test2DNearMap();
 	//	TestMatrixFac();
@@ -583,3 +584,5 @@ void ApplyCoincidentConstraints(HeeksObj* extobj, std::list<HeeksObj*> list)
 	}
 }
 
+
+#endif

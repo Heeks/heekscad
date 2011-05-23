@@ -48,7 +48,9 @@ public:
 
 	const HDimension& operator=(const HDimension &b);
 
+#ifdef MULTIPLE_OWNERS
 	bool IsConstrained();
+#endif
 
 	// HeeksObj's virtual functions
 	int GetType()const{return DimensionType;}
@@ -68,8 +70,10 @@ public:
 	void CopyFrom(const HeeksObj* object){operator=(*((HDimension*)object));}
 	void WriteXML(TiXmlNode *root);
 	//const wxChar* GetShortString(void)const{return m_text.c_str();}
+#ifdef MULTIPLE_OWNERS
 	void LoadToDoubles();
 	void LoadFromDoubles();
+#endif
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	bool IsDifferent(HeeksObj* other);
 
