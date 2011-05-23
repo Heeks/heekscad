@@ -261,7 +261,9 @@ void LineArcDrawing::AddPoint()
 					
 				}
 			} 
+#ifdef MULTIPLE_OWNERS
 			ApplyCoincidentConstraints(temp_object,prev_object_in_list);
+#endif
 
 			Drawing::AddPoint();
 

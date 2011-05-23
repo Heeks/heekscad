@@ -19,16 +19,25 @@
 
 
 HArc::HArc(const HArc &line):EndedObject(&line.color){
+#ifndef MULTIPLE_OWNERS
+	C = new HPoint(gp_Pnt(),&line.color);
+#endif
 	operator=(line);
 }
 
 HArc::HArc(const gp_Pnt &a, const gp_Pnt &b, const gp_Circ &c, const HeeksColor* col):EndedObject(col),color(*col){ //:color(*col), EndedObject(col){
+#ifdef MULTIPLE_OWNERS
 	A->m_p = a;
 	B->m_p = b;
 	C = new HPoint(c.Location(),col);
-	C->m_draw_unselected = false;
 	C->SetSkipForUndo(true);
 	Add(C,NULL);
+#else
+	A->m_p = a;
+	B->m_p = b;
+	C = new HPoint(c.Location(),col);
+#endif
+	C->m_draw_unselected = false;
 	m_axis = c.Axis();
 	m_radius = c.Radius();
 }
@@ -58,9 +67,13 @@ const HArc& HArc::operator=(const HArc &b){
 	m_radius = b.m_radius;
 	m_axis = b.m_axis;
 	color = b.color;
+#ifdef MULTIPLE_OWNERS
 	std::list<HeeksObj*>::iterator it = m_objects.begin();
 	it++;it++;
 	C = (HPoint*)*it;
+#else
+	*C = *b.C;
+#endif
 	C->SetSkipForUndo(true);
 	return *this;
 }
@@ -74,18 +87,21 @@ HeeksObj* HArc::MakeACopyWithID()
 void HArc::ReloadPointers()
 {
 	EndedObject::ReloadPointers();
+#ifdef MULTIPLE_OWNERS
 	std::list<HeeksObj*>::iterator it = m_objects.begin();
 	it++;it++;
 	C = (HPoint*)*it;
+#endif
 }
 
 HArc* arc_for_tool = NULL;
 
+#ifdef MULTIPLE_OWNERS
 class SetArcRadius:public Tool{
 public:
 	void Run(){
 		arc_for_tool->SetRadiusConstraint(arc_for_tool->m_radius);
-		SolveSketch((CSketch*)arc_for_tool->Owner());
+		SolveSketch((CSketch*)arc_for_tool->HEEKSOBJ_OWNER);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Toggle Radius");}
@@ -93,11 +109,14 @@ public:
 	const wxChar* GetToolTip(){return _("Set this arcs radius as constrained");}
 };
 static SetArcRadius arc_radius_toggle;
+#endif
 
 void HArc::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	arc_for_tool = this;
+#ifdef MULTIPLE_OWNERS
 	t_list->push_back(&arc_radius_toggle);
+#endif
 }
 
 
@@ -270,12 +289,14 @@ static void on_set_axis(const double *vt, HeeksObj* object){
 	wxGetApp().Repaint();
 }
 
+#ifdef MULTIPLE_OWNERS
 static void on_set_radius(double v, HeeksObj* object){
 	((HArc*)object)->SetRadius(v);
 	if(wxGetApp().autosolve_constraints)
-		SolveSketch((CSketch*)object->Owner());
+		SolveSketch((CSketch*)object->HEEKSOBJ_OWNER);
 	wxGetApp().Repaint();
 }
+#endif
 
 void HArc::GetProperties(std::list<Property *> *list){
 	double a[3], b[3];
@@ -290,7 +311,11 @@ void HArc::GetProperties(std::list<Property *> *list){
 	list->push_back(new PropertyVector(_("axis"), ax, this, on_set_axis));
 	double length = A->m_p.Distance(B->m_p);
 	list->push_back(new PropertyLength(_("length"), length, NULL));
+#ifdef MULTIPLE_OWNERS
 	list->push_back(new PropertyLength(_("radius"), m_radius, this, on_set_radius));
+#else
+	list->push_back(new PropertyLength(_("radius"), m_radius, this, NULL));
+#endif
 
 	HeeksObj::GetProperties(list);
 }
@@ -441,6 +466,7 @@ bool HArc::FindNearPoint(const double* ray_start, const double* ray_direction, d
 	return false;
 }
 
+#ifdef MULTIPLE_OWNERS
 void HArc::LoadFromDoubles()
 {
 	EndedObject::LoadFromDoubles();
@@ -453,6 +479,7 @@ void HArc::LoadToDoubles()
 	EndedObject::LoadToDoubles();
 	C->LoadToDoubles();
 }
+#endif
 
 bool HArc::FindPossTangentPoint(const double* ray_start, const double* ray_direction, double *point){
 	// any point on this arc is a possible tangent point
@@ -595,16 +622,18 @@ void HArc::WriteXML(TiXmlNode *root)
 	TiXmlElement *element = new TiXmlElement( "Arc" );
 	root->LinkEndChild( element );
 	element->SetAttribute("col", color.COLORREF_color());
-//	element->SetDoubleAttribute("sx", A->m_p.X());
-//	element->SetDoubleAttribute("sy", A->m_p.Y());
-//	element->SetDoubleAttribute("sz", A->m_p.Z());
-//	element->SetDoubleAttribute("ex", B->m_p.X());
-//	element->SetDoubleAttribute("ey", B->m_p.Y());
-//	element->SetDoubleAttribute("ez", B->m_p.Z());
+#ifdef OLDLINES
+	element->SetDoubleAttribute("sx", A->m_p.X());
+	element->SetDoubleAttribute("sy", A->m_p.Y());
+	element->SetDoubleAttribute("sz", A->m_p.Z());
+	element->SetDoubleAttribute("ex", B->m_p.X());
+	element->SetDoubleAttribute("ey", B->m_p.Y());
+	element->SetDoubleAttribute("ez", B->m_p.Z());
+	element->SetDoubleAttribute("cx", C->m_p.X());
+	element->SetDoubleAttribute("cy", C->m_p.Y());
+	element->SetDoubleAttribute("cz", C->m_p.Z());
+#endif
 	gp_Dir D = m_axis.Direction();
-//	element->SetDoubleAttribute("cx", C->m_p.X());
-//	element->SetDoubleAttribute("cy", C->m_p.Y());
-//	element->SetDoubleAttribute("cz", C->m_p.Z());
 	element->SetDoubleAttribute("ax", D.X());
 	element->SetDoubleAttribute("ay", D.Y());
 	element->SetDoubleAttribute("az", D.Z());
@@ -671,10 +700,12 @@ void HArc::Reverse()
 	A = B;
 	B = temp;
 	m_axis.Reverse();
+#ifdef MULTIPLE_OWNERS
 	m_objects.pop_front();
 	m_objects.pop_front();
 	m_objects.push_front(B);
 	m_objects.push_front(A);
+#endif
 }
 
 double HArc::IncludedAngle()const

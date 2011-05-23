@@ -325,7 +325,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 	{
 		MarkedObjectOneOfEach marked_object;
 		wxGetApp().FindMarkedObject(wxPoint(event.GetX(), event.GetY()), &marked_object);
-		wxGetApp().DoDropDownMenu(wxGetApp().m_frame->m_graphics, wxPoint(event.GetX(), event.GetY()), &marked_object, false, true, event.ControlDown());
+		wxGetApp().DoDropDownMenu(wxGetApp().m_frame->m_graphics, wxPoint(event.GetX(), event.GetY()), &marked_object, false, event.ControlDown());
 	}
 	else if(event.Dragging())
 	{

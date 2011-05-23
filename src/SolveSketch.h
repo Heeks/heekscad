@@ -4,5 +4,7 @@
 
 #pragma once
 
+#ifdef MULTIPLE_OWNERS
 void SolveSketch(CSketch* sketch);
 void SolveSketch(CSketch* sketch,HeeksObj* dragged, void* whichpoint);
+#endif

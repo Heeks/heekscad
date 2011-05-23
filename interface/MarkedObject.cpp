@@ -61,27 +61,22 @@ MarkedObject* MarkedObject::Add(HeeksObj* object, unsigned long depth, int windo
 	// if this object has not been added yet
 	if(FindIt == m_map.end())
 	{
-		std::map<int, std::map<int, MarkedObject*> >::iterator FindIt2 = m_types.end();
+		std::map<int, MarkedObject*>::iterator FindIt2 = m_types.end();
 		if(single_type())
 		{
-			FindIt2 = m_types.find(0);
+			FindIt2 = m_types.find(object->GetType());
 			if(FindIt2 != m_types.end())
 			{
-				std::map<int, MarkedObject*>& map = FindIt2->second;
-				std::map<int, MarkedObject*>::iterator TypeFindIt = map.find(object->GetType());
-				if(TypeFindIt != FindIt2->second.end())
+				MarkedObject* so = FindIt2->second;
+				if(depth < so->GetDepth() && window_size<= so->GetWindowSize())
 				{
-					MarkedObject* so = TypeFindIt->second;
-					if(depth < so->GetDepth() && window_size<= so->GetWindowSize())
-					{
-						map.erase(TypeFindIt);
-						m_map.erase(so->GetObject());
-						so->Clear();
-						delete so;
-					}
-					else{
-						return NULL;
-					}
+					m_types.erase(FindIt2);
+					m_map.erase(so->GetObject());
+					so->Clear();
+					delete so;
+				}
+				else{
+					return NULL;
 				}
 			}
 		}
@@ -98,15 +93,7 @@ MarkedObject* MarkedObject::Add(HeeksObj* object, unsigned long depth, int windo
 		if(single_type())
 		{
 			std::pair<int, MarkedObject*> type_entry(object->GetType(), marked_object);
-			if(FindIt2 != m_types.end())
-			{
-				FindIt2->second.insert(type_entry);
-			}
-			else{
-				std::map<int, MarkedObject*> new_map;
-				new_map.insert(type_entry);
-				m_types.insert(std::pair< int, std::map<int, MarkedObject*> >(0, new_map));
-			}
+			m_types.insert(type_entry);
 		}
 	}
 	else

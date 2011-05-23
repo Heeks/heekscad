@@ -158,6 +158,8 @@ public:
 
 	virtual int GetNextID(int type);
 	virtual bool InOpenFile();
+	virtual bool FileOpenTypeHeeks();
+	virtual bool InPaste();
 	virtual void RemoveID(HeeksObj* object); // only call this from ObjList::Remove()
 	virtual const wxChar* GetFileFullPath(); // returns NULL for untitled
 	virtual void SetViewBox(const double* b);

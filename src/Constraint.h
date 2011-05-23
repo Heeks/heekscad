@@ -6,6 +6,7 @@
 
 #include "../interface/HeeksObj.h"
 
+#ifdef MULTIPLE_OWNERS
 
 class ConstrainedObject;
 
@@ -88,3 +89,5 @@ public:
 	void glCommands(HeeksColor color, gp_Ax1 mid_point);
 	void render_text(const wxChar* str);
 };
+
+#endif

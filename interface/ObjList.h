@@ -60,7 +60,9 @@ public:
 #endif
 	void ModifyByMatrix(const double *m);
 	void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true);
+#ifdef MULTIPLE_OWNERS
 	void Disconnect(std::list<HeeksObj*>parents);
+#endif
 	bool IsList(){return true;}
 	void GetProperties(std::list<Property *> *list);
 	void ReloadPointers();

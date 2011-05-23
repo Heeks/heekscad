@@ -64,7 +64,9 @@ public:
 	void Reverse();
 	double IncludedAngle()const;
 
+#ifdef MULTIPLE_OWNERS
 	//Ended Objects virtaul functions;
 	void LoadToDoubles();
 	void LoadFromDoubles();
+#endif
 };

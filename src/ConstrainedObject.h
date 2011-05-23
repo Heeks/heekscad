@@ -4,9 +4,10 @@
 
 #pragma once
 
-class Constraint;
 
 #include "../interface/HeeksObj.h"
+#ifdef MULTIPLE_OWNERS
+class Constraint;
 #include "Constraint.h"
 class HPoint;
 
@@ -53,3 +54,4 @@ public:
 	void SetPointOnCircleConstraint(HPoint* obj);
 	void SetPointFixedConstraint();
 };
+#endif

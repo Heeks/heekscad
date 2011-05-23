@@ -301,12 +301,23 @@ DigitizedPoint DigitizeMode::digitize1(const wxPoint &input_point){
 	if(wxGetApp().digitize_centre && (min_dist == -1 || min_dist * wxGetApp().GetPixelScale()>5)){
 		gp_Pnt pos;
 		for(HeeksObj* object = marked_object.GetFirstOfEverything(); object != NULL; object = marked_object.Increment()){
-			double p[3];
-			if(object->GetCentrePoint(p)){
+			double p[3], p2[3];
+			int num = object->GetCentrePoints(p, p2);
+			if(num == 1)
+			{
 				compare_list.push_back(DigitizedPoint(make_point(p), DigitizeCentreType));
-				best_digitized_point = &(compare_list.back());
-				break;
 			}
+			else if(num == 2)
+			{
+				double dist1 = ray.Distance(make_point(p));
+				double dist2 = ray.Distance(make_point(p2));
+				compare_list.push_back(DigitizedPoint(make_point((dist1 < dist2) ? p:p2), DigitizeCentreType));
+			}
+			else
+				continue;
+
+			best_digitized_point = &(compare_list.back());
+			break;
 		}
 	}
 	DigitizedPoint point;

@@ -25,7 +25,12 @@ class CObjectIdsCtrl: public wxTextCtrl
 {
 public:
 	CObjectIdsCtrl(wxWindow* parent, wxWindowID id = wxID_ANY);
+#ifdef OP_SKETCHES_AS_CHILDREN
 	void GetAddChildren(HeeksObj* object, int group_type);
 	void SetFromChildren(HeeksObj* object, int group_type);
+#else
+	void GetIDList(std::list<int> &id_list);
+	void SetFromIDList(std::list<int> &id_list);
+#endif
 };
 

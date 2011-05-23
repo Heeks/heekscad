@@ -29,7 +29,11 @@ HPoint::HPoint(const HPoint &p)
 
 const HPoint& HPoint::operator=(const HPoint &b)
 {
+#ifdef MULTIPLE_OWNERS
 	ConstrainedObject::operator=(b);
+#else
+	HeeksObj::operator =(b);
+#endif
 	m_p = b.m_p;
 	color = b.color;
 	m_draw_unselected = b.m_draw_unselected;
@@ -130,11 +134,12 @@ void HPoint::GetProperties(std::list<Property *> *list)
 
 HPoint* point_for_tool = NULL;
 
+#ifdef MULTIPLE_OWNERS
 class SetPointFixed:public Tool{
 public:
 	void Run(){
 		point_for_tool->SetPointFixedConstraint();
-		SolveSketch((CSketch*)point_for_tool->Owner());
+		SolveSketch((CSketch*)point_for_tool->HEEKSOBJ_OWNER);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Toggle Fixed");}
@@ -142,11 +147,14 @@ public:
 	const wxChar* GetToolTip(){return _("Set this point as fixed");}
 };
 static SetPointFixed set_point_fixed;
+#endif
 
 void HPoint::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	point_for_tool = this;
+#ifdef MULTIPLE_OWNERS
 	t_list->push_back(&set_point_fixed);
+#endif
 }
 
 bool HPoint::GetStartPoint(double* pos)

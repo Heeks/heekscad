@@ -3,6 +3,7 @@
 // This program is released under the BSD license. See the file COPYING for details.
 
 #include "stdafx.h"
+#ifdef MULTIPLE_OWNERS
 #include "Sketch.h"
 #include "../interface/ObjList.h"
 #include "SolveSketch.h"
@@ -34,11 +35,6 @@ std::vector<constraint> constraints;
 std::set<Constraint*> cons;
 std::map<HeeksObj*,HeeksObj*> pointonpoint;
 
-void debugprint(std::string s)
-{
-	wxLogDebug(wxString(s.c_str(),wxConvUTF8));
-}
-
 void SolveSketch(CSketch* sketch)
 {
 	SolveSketch(NULL,sketch,NULL);
@@ -58,7 +54,11 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 	sketch = dynamic_cast<CSketch*>(psketch);
 	while(psketch && !sketch)
 	{
-		psketch = psketch->Owner();
+#ifdef MULTIPLE_OWNERS
+		psketch = psketch->HEEKSOBJ_OWNER;
+#else
+		psketch = psketch->m_owner;
+#endif
 		sketch = dynamic_cast<CSketch*>(psketch);
 	}
 
@@ -240,10 +240,10 @@ void SolveSketch(CSketch* sketch, HeeksObj* dragged, void* whichpoint)
 						{
 							c.arc1 = GetArc((HArc*)con->m_obj1);
 							//check for pointonpoint between m_obj1 and m_obj2
-							if(pointonpoint[((HArc*)con->m_obj1)->A] && pointonpoint[((HArc*)con->m_obj1)->A]->Owner() == con->m_obj2)
+							if(pointonpoint[((HArc*)con->m_obj1)->A] && pointonpoint[((HArc*)con->m_obj1)->A]->HEEKSOBJ_OWNER == con->m_obj2)
 							{
 								c.type = tangentToArcStart;
-							}else if(pointonpoint[((HArc*)con->m_obj1)->B] && pointonpoint[((HArc*)con->m_obj1)->B]->Owner() == con->m_obj2)
+							}else if(pointonpoint[((HArc*)con->m_obj1)->B] && pointonpoint[((HArc*)con->m_obj1)->B]->HEEKSOBJ_OWNER == con->m_obj2)
 							{
 								c.type = tangentToArcEnd;
 							}
@@ -378,20 +378,20 @@ void AddPointConstraints(HPoint* point)
 			constraint c;
 			c.type = pointOnPoint;
 			//Do not retype the constraints if point is the center
-			if(dynamic_cast<HArc*>(con->m_obj1->Owner()) && con->m_obj1 != ((HArc*)con->m_obj1->Owner())->C)
+			if(dynamic_cast<HArc*>(con->m_obj1->HEEKSOBJ_OWNER) && con->m_obj1 != ((HArc*)con->m_obj1->HEEKSOBJ_OWNER)->C)
 			{
-				c.arc1 = GetArc((HArc*)con->m_obj1->Owner());
+				c.arc1 = GetArc((HArc*)con->m_obj1->HEEKSOBJ_OWNER);
 				c.point1 = GetPoint((HPoint*)con->m_obj2);
-				if(((HArc*)con->m_obj1->Owner())->A == con->m_obj1)
+				if(((HArc*)con->m_obj1->HEEKSOBJ_OWNER)->A == con->m_obj1)
 					c.type = pointOnArcStart;
 				else
 					c.type = pointOnArcEnd;
 
 				//Check if this is an arc to arc constraint
-				if(dynamic_cast<HArc*>(con->m_obj2->Owner()) && con->m_obj2 != ((HArc*)con->m_obj2->Owner())->C)
+				if(dynamic_cast<HArc*>(con->m_obj2->HEEKSOBJ_OWNER) && con->m_obj2 != ((HArc*)con->m_obj2->HEEKSOBJ_OWNER)->C)
 				{
-					c.arc2 = GetArc((HArc*)con->m_obj2->Owner());
-					if(((HArc*)con->m_obj2->Owner())->A == con->m_obj2)
+					c.arc2 = GetArc((HArc*)con->m_obj2->HEEKSOBJ_OWNER);
+					if(((HArc*)con->m_obj2->HEEKSOBJ_OWNER)->A == con->m_obj2)
 					{
 						if(c.type == pointOnArcStart)
 							c.type = arcStartToArcStart;
@@ -411,12 +411,12 @@ void AddPointConstraints(HPoint* point)
 							c.type = arcEndToArcEnd;
 					}
 				}
-			}else if(dynamic_cast<HArc*>(con->m_obj2->Owner()) && con->m_obj2 != ((HArc*)con->m_obj2->Owner())->C)
+			}else if(dynamic_cast<HArc*>(con->m_obj2->HEEKSOBJ_OWNER) && con->m_obj2 != ((HArc*)con->m_obj2->HEEKSOBJ_OWNER)->C)
 			{
-				c.arc1 = GetArc((HArc*)con->m_obj2->Owner());
+				c.arc1 = GetArc((HArc*)con->m_obj2->HEEKSOBJ_OWNER);
 				c.point1 = GetPoint((HPoint*)con->m_obj1);
 
-				if(((HArc*)con->m_obj2->Owner())->A == con->m_obj2)
+				if(((HArc*)con->m_obj2->HEEKSOBJ_OWNER)->A == con->m_obj2)
 					c.type = pointOnArcStart;
 				else
 					c.type = pointOnArcEnd;
@@ -498,3 +498,4 @@ ellipse GetEllipse(HEllipse* a)
 
 	return ret;
 }
+#endif
