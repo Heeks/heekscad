@@ -75,10 +75,12 @@ void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
 				{
 					double p[3] = {m_data.m_x, m_data.m_y, m_data.m_z};
 					stretch_done = object->StretchTemporaryTransformed(p, shift,m_data.m_data);
+#ifdef MULTIPLE_OWNERS
 					if(wxGetApp().autosolve_constraints && (dynamic_cast<ConstrainedObject*>(object)))
 					{
-						SolveSketch((CSketch*)object->Owner(),object,m_data.m_data);
+						SolveSketch((CSketch*)object->HEEKSOBJ_OWNER,object,m_data.m_data);
 					}
+#endif
 				}
 			}
 		}
@@ -137,10 +139,12 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 
 			{
 				if(object)wxGetApp().DoToolUndoably(new StretchTool(object, m_initial_grip_pos, shift, m_data.m_data));
+#ifdef MULTIPLE_OWNERS
 				if(wxGetApp().autosolve_constraints && (dynamic_cast<ConstrainedObject*>(object)))
 				{
-					SolveSketch((CSketch*)object->Owner());
+					SolveSketch((CSketch*)object->HEEKSOBJ_OWNER);
 				}
+#endif
 			}
 			m_data.m_x += shift[0];
 			m_data.m_y += shift[1];
@@ -155,10 +159,12 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 			double m[16];
 			extract(mat, m );
 			object->ModifyByMatrix(m);
+#ifdef MULTIPLE_OWNERS
 			if(wxGetApp().autosolve_constraints && (dynamic_cast<ConstrainedObject*>(object)))
 			{
-				SolveSketch((CSketch*)object->Owner(),object,object);
+				SolveSketch((CSketch*)object->HEEKSOBJ_OWNER,object,object);
 			}
+#endif
 		}
 	}
 

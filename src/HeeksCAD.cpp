@@ -141,7 +141,9 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	digitize_screen = false;
 	digitizing_radius = 5.0;
 	draw_to_grid = true;
+#ifdef MULTIPLE_OWNERS
 	autosolve_constraints = false;
+#endif
 	digitizing_grid = 1.0;
 	grid_mode = 3;
 	m_rotate_mode = 1;
@@ -173,6 +175,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_printData = NULL;
 	m_pageSetupData = NULL;
 	m_file_open_or_import_type = FileOpenOrImportTypeOther;
+	m_inPaste = false;
 	m_file_open_matrix = NULL;
 	m_min_correlation_factor = 0.75;
 	m_max_scale_threshold = 1.5;
@@ -229,6 +232,7 @@ HeeksCADapp::~HeeksCADapp()
 	delete viewrotating;
 	delete viewzooming;
 	delete viewpanning;
+	m_ruler->m_index = 0;
 	delete m_ruler;
 	if(m_printData)delete m_printData;
 	if(m_pageSetupData)delete m_pageSetupData;
@@ -279,7 +283,9 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("DrawCoords"), &digitize_coords, true);
 	config.Read(_T("DrawScreen"), &digitize_screen, false);
 	config.Read(_T("DrawToGrid"), &draw_to_grid, true);
+#ifdef MULTIPLE_OWNERS
 	config.Read(_T("AutoSolveConstraints"), &autosolve_constraints, false);
+#endif
 	config.Read(_T("UseOldFuse"), &useOldFuse, false);
 	config.Read(_T("DrawGrid"), &digitizing_grid);
 	config.Read(_T("DrawRadius"), &digitizing_radius);
@@ -360,7 +366,9 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("DxfMakeSketch"), &HeeksDxfRead::m_make_as_sketch, true);
 	config.Read(_T("DxfIgnoreErrors"), &HeeksDxfRead::m_ignore_errors, false);
 
+#ifdef MULTIPLE_OWNERS
 	config.Read(_T("SaveConstraints"), &m_save_constraints, true);
+#endif
 
 	config.Read(_T("ViewUnits"), &m_view_units);
 	config.Read(_T("FaceToSketchDeviation"), &(FaceToSketchTool::deviation));
@@ -500,7 +508,9 @@ void HeeksCADapp::WriteConfig()
 	config.Write(_T("DrawCoords"), digitize_coords);
 	config.Write(_T("DrawScreen"), digitize_screen);
 	config.Write(_T("DrawToGrid"), draw_to_grid);
+#ifdef MULTIPLE_OWNERS
 	config.Write(_T("AutoSolveConstraints"), autosolve_constraints);
+#endif
 	config.Write(_T("UseOldFuse"), useOldFuse);
 	config.Write(_T("DrawGrid"), digitizing_grid);
 	config.Write(_T("DrawRadius"), digitizing_radius);
@@ -535,7 +545,9 @@ void HeeksCADapp::WriteConfig()
 	config.Write(_T("AllowOpenGLStippling"), m_allow_opengl_stippling);
 	config.Write(_T("DxfMakeSketch"), HeeksDxfRead::m_make_as_sketch);
 	config.Write(_T("DxfIgnoreErrors"), HeeksDxfRead::m_ignore_errors);
+#ifdef MULTIPLE_OWNERS
 	config.Write(_T("SaveConstraints"), m_save_constraints);
+#endif
 	config.Write(_T("FaceToSketchDeviation"), FaceToSketchTool::deviation);
 
 	config.Write(_T("MinCorrelationFactor"), m_min_correlation_factor);
@@ -831,7 +843,9 @@ void HeeksCADapp::InitializeXMLFunctions()
 		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Ellipse", HEllipse::ReadFromXMLElement ) );
 		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Spline", HSpline::ReadFromXMLElement ) );
 		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Group", CGroup::ReadFromXMLElement ) );
+#ifdef MULTIPLE_OWNERS
 		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Constraint", Constraint::ReadFromXMLElement ) );
+#endif
 		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "OrientationModifier", COrientationModifier::ReadFromXMLElement ) );
 	}
 }
@@ -944,12 +958,20 @@ HeeksObj *HeeksCADapp::MergeCommonObjects( ObjectReferences_t & unique_set, Heek
 		{
 			// We've seen an object like this one before.  Use the old one.
 			unique_reference = unique_set[ object_reference ];
+#ifdef MULTIPLE_OWNERS
 			std::list<HeeksObj *> owners = object->Owners();
 			for (std::list<HeeksObj *>::iterator itOwner = owners.begin(); itOwner != owners.end(); itOwner++)
 			{
 				(*itOwner)->Remove(object);
 				(*itOwner)->Add( unique_reference, NULL );
 			}
+#else
+			if(object->m_owner)
+			{
+				object->m_owner->Remove(object);
+				object->m_owner->Add( unique_reference, NULL );
+			}
+#endif
 
 			unique_set[ object_reference ] = unique_reference;
 			object = unique_reference;
@@ -1515,17 +1537,21 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 
 	// loop through all the objects writing them
 	CShape::m_solids_found = false;
+#ifdef MULTIPLE_OWNERS
 	Constraint::BeginSave();
+#endif
 	for(std::list<HeeksObj*>::const_iterator It = objects.begin(); It != objects.end(); It++)
 	{
 		HeeksObj* object = *It;
 		object->WriteXML(root);
 	}
 
+#ifdef MULTIPLE_OWNERS
 	// write the constraints to the root-if check box is selected
 	if (m_save_constraints){
 	Constraint::EndSave(root);
 	}
+#endif
 
 	// write a step file for all the solids
 	if(CShape::m_solids_found){
@@ -2035,7 +2061,7 @@ public:
 
 static UnsetCoordSystemActive coord_system_unset;
 
-void HeeksCADapp::GetDropDownTools(std::list<Tool*> &f_list, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool from_graphics_canvas, bool control_pressed)
+void HeeksCADapp::GetDropDownTools(std::list<Tool*> &f_list, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool control_pressed)
 {
 	tool_index_list.clear();
 	wxPoint new_point = point;
@@ -2045,7 +2071,7 @@ void HeeksCADapp::GetDropDownTools(std::list<Tool*> &f_list, const wxPoint &poin
 	}
 	std::list<Tool*> temp_f_list;
 
-	GetTools(marked_object, f_list, new_point, from_graphics_canvas, control_pressed);
+	GetTools(marked_object, f_list, new_point, control_pressed);
 
 	m_marked_list->GetTools(marked_object, f_list, &new_point, true);
 
@@ -2064,10 +2090,10 @@ void HeeksCADapp::GetDropDownTools(std::list<Tool*> &f_list, const wxPoint &poin
 	AddToolListWithSeparator(f_list, temp_f_list);
 }
 
-void HeeksCADapp::DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool from_graphics_canvas, bool control_pressed)
+void HeeksCADapp::DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool control_pressed)
 {
 	std::list<Tool*> f_list;
-	GetDropDownTools(f_list, point, marked_object, dont_use_point_for_functions, from_graphics_canvas, control_pressed);
+	GetDropDownTools(f_list, point, marked_object, dont_use_point_for_functions, control_pressed);
 	std::list<Tool*>::iterator FIt;
 	wxMenu menu;
 	for (FIt = f_list.begin(); FIt != f_list.end(); FIt++)
@@ -2212,6 +2238,7 @@ bool HeeksCADapp::Add(HeeksObj *object, HeeksObj* prev_object)
 
 void HeeksCADapp::Remove(HeeksObj* object)
 {
+#ifdef MULTIPLE_OWNERS
 	HeeksObj* owner = object->GetFirstOwner();
 	while(owner)
 	{
@@ -2224,6 +2251,18 @@ void HeeksCADapp::Remove(HeeksObj* object)
 			ObjList::Remove(object);
 		owner = object->GetNextOwner();
 	}
+#else
+	if(object->m_owner)
+	{
+		if(object->m_owner != this)
+		{
+			object->m_owner->Remove(object);
+			object->m_owner->ReloadPointers();
+		}
+		else
+			ObjList::Remove(object);
+	}
+#endif
 	if(object == m_current_coordinate_system)m_current_coordinate_system = NULL;
 }
 
@@ -2398,11 +2437,13 @@ void on_grid(bool onoff, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+#ifdef MULTIPLE_OWNERS
 void on_autosolve(bool onoff, HeeksObj* object)
 {
 	wxGetApp().autosolve_constraints = onoff;
 	wxGetApp().Repaint();
 }
+#endif
 
 void on_useOldFuse(bool onoff, HeeksObj* object)
 {
@@ -2733,10 +2774,12 @@ void on_set_timestamps(bool value, HeeksObj* object){
 	wxGetApp().m_frame->SetLogLogTimestamps(value);
 }
 
+#ifdef MULTIPLE_OWNERS
 void on_save_constraints(bool onoff, HeeksObj* object)
 {
   wxGetApp().m_save_constraints = onoff;
 }
+#endif
 
 static void on_set_units(int value, HeeksObj* object)
 {
@@ -2958,7 +3001,9 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	digitizing->m_list.push_back(new PropertyCheck(_("screen"), digitize_screen, NULL, on_relative));
 	digitizing->m_list.push_back(new PropertyLength(_("grid size"), digitizing_grid, NULL, on_grid_edit));
 	digitizing->m_list.push_back(new PropertyCheck(_("snap to grid"), draw_to_grid, NULL, on_grid));
+#ifdef MULTIPLE_OWNERS
 	digitizing->m_list.push_back(new PropertyCheck(_("autosolve constraints"), autosolve_constraints, NULL, on_autosolve));
+#endif
 	list->push_back(digitizing);
 
 	PropertyList* correlation_properties = new PropertyList(_("correlation"));
@@ -3019,7 +3064,9 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	stl_options->m_list.push_back(new PropertyDouble(_("stl save facet tolerance"), m_stl_facet_tolerance, NULL, on_stl_facet_tolerance));
 	file_options->m_list.push_back(stl_options);
 	file_options->m_list.push_back(new PropertyInt(_("auto save interval (in minutes)"), m_auto_save_interval, NULL, on_set_auto_save_interval));
+#ifdef MULTIPLE_OWNERS
 	file_options->m_list.push_back(new PropertyCheck(_("save constraints to file"), m_save_constraints, NULL, on_save_constraints));
+#endif
 	list->push_back(file_options);
 
 	// Font options
@@ -3198,18 +3245,59 @@ public:
 	bool CallChangedOnRun(){return false;}
 };
 
-void HeeksCADapp::GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool from_graphics_canvas, bool control_pressed)
+void HeeksCADapp::GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool control_pressed)
 {
-	std::map<HeeksObj*, MarkedObject*>::iterator It;
-	for (It = marked_object->m_map.begin(); It != marked_object->m_map.end(); It++)
+	std::list<MarkedObject*> stack;
+	stack.push_back(marked_object);
+	std::map<int, MarkedObject*> types;
+
+	while(stack.size() > 0)
+	{
+		MarkedObject* m = stack.front();
+		stack.pop_front();
+
+		for(std::map<HeeksObj*, MarkedObject*>::iterator It = m->m_map.begin(); It != m->m_map.end(); It++)
+		{
+			stack.push_back(It->second);
+		}
+
+		for(std::map<int, MarkedObject*>::iterator It = m->m_types.begin(); It != m->m_types.end(); It++)
+		{
+			int type = It->first;
+			MarkedObject* object = It->second;
+			std::map<int, MarkedObject*>::iterator FindIt = types.find(type);
+
+			if(FindIt == types.end())
+			{
+				types.insert(std::make_pair(type, object));
+			}
+			else
+			{
+				MarkedObject* existing_object = FindIt->second;
+				if(object->GetDepth() < existing_object->GetDepth())
+				{
+					types.erase(type);
+					types.insert(std::make_pair(type, object));
+				}
+			}
+		}
+	}
+
+	for(std::map<int, MarkedObject*>::iterator It = types.begin(); It != types.end(); It++)
 	{
 		MarkedObject* object = It->second;
-		GetTools(object, t_list, point, from_graphics_canvas, control_pressed);
+		GetTools2(object, t_list, point, control_pressed);
 	}
-	if (marked_object->GetObject())
-	{
-		std::list<Tool*> tools;
 
+	//GetTools2(marked_object, t_list, point, control_pressed);
+}
+
+void HeeksCADapp::GetTools2(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool control_pressed)
+{
+	std::list<Tool*> tools;
+
+	if(marked_object->GetObject())
+	{
 		marked_object->GetObject()->GetTools(&tools, &point);
 		if(tools.size() > 0)tools.push_back(new MenuSeparator);
 
@@ -3757,6 +3845,8 @@ bool HeeksCADapp::IsPasteReady()
 
 void HeeksCADapp::Paste(HeeksObj* paste_into, HeeksObj* paste_before)
 {
+	m_inPaste = true;
+
 	// assume the text is the contents of a heeks file
 	wxString fstr;
 
@@ -3793,6 +3883,8 @@ void HeeksCADapp::Paste(HeeksObj* paste_into, HeeksObj* paste_before)
 	m_mark_newly_added_objects = true;
 	OpenFile(temp_file.GetFullPath(), true, paste_into, paste_before);
 	m_mark_newly_added_objects = false;
+
+	m_inPaste = false;
 }
 
 bool HeeksCADapp::CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num, int type, const wxString& msg, const wxString& caption)
@@ -4324,7 +4416,9 @@ wxString HeeksCADType(const int type)
         case SplineType:   return(_("Spline"));
         case GroupType:   return(_("Group"));
         case CorrelationToolType:   return(_("CorrelationTool"));
+#ifdef MULTIPLE_OWNERS
         case ConstraintType:   return(_("Constraint"));
+#endif
         case PadType:   return(_("Pad"));
         case PartType:   return(_("Part"));
         case PocketSolidType:   return(_("PocketSolid"));

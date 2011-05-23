@@ -29,7 +29,11 @@ HCircle::~HCircle(){
 }
 
 const HCircle& HCircle::operator=(const HCircle &c){
+#ifdef MULTIPLE_OWNERS
 	ConstrainedObject::operator=(c);
+#else
+	HeeksObj::operator=(c);
+#endif
 	m_axis = c.m_axis;
 	m_radius = c.m_radius;
 	color = c.color;

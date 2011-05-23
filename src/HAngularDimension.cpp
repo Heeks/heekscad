@@ -57,7 +57,11 @@ HAngularDimension::~HAngularDimension(void)
 
 const HAngularDimension& HAngularDimension::operator=(const HAngularDimension &b)
 {
+#ifdef MULTIPLE_OWNERS
 	ConstrainedObject::operator=(b);
+#else
+	HeeksObj::operator=(b);
+#endif
 	m_text = b.m_text;
 	m_text_mode = b.m_text_mode;
 	m_color = b.m_color;
@@ -101,8 +105,11 @@ bool HAngularDimension::IsDifferent(HeeksObj* other)
 	if(m_p4->m_p.Distance(dim->m_p4->m_p) > wxGetApp().m_geom_tol)
 		return true;
 
-
+#ifdef MULTIPLE_OWNERS
 	return ConstrainedObject::IsDifferent(other);
+#else
+	return HeeksObj::IsDifferent(other);
+#endif
 }
 
 void HAngularDimension::glCommands(bool select, bool marked, bool no_color)
@@ -246,7 +253,7 @@ void HAngularDimension::DrawArc(gp_Pnt center, double r, double a1, double a2)
 	}
 }
 
-
+#ifdef MULTIPLE_OWNERS
 void HAngularDimension::LoadToDoubles()
 {
 	ConstrainedObject::LoadToDoubles();
@@ -266,14 +273,16 @@ void HAngularDimension::LoadFromDoubles()
 	m_p3->LoadFromDoubles();
 	m_p4->LoadFromDoubles();
 }
+#endif
 
 HAngularDimension* angular_dimension_for_tool = NULL;
 
+#ifdef MULTIPLE_OWNERS
 class ConstrainAngularDimension:public Tool{
 public:
 	void Run(){
 //		dimension_for_tool->SetLineLengthConstraint(dimension_for_tool->A->m_p.Distance(dimension_for_tool->B->m_p));
-		SolveSketch((CSketch*)angular_dimension_for_tool->Owner());
+		SolveSketch((CSketch*)angular_dimension_for_tool->HEEKSOBJ_OWNER);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Toggle Dimension Constraint");}
@@ -281,11 +290,14 @@ public:
 	const wxChar* GetToolTip(){return _("Set this dimension as constrained");}
 };
 static ConstrainAngularDimension constrain_angular_dimension;
+#endif
 
 void HAngularDimension::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	angular_dimension_for_tool = this;
+#ifdef MULTIPLE_OWNERS
 	t_list->push_back(&constrain_angular_dimension);
+#endif
 }
 
 void HAngularDimension::GetBox(CBox &box)
@@ -366,12 +378,20 @@ void HAngularDimension::GetProperties(std::list<Property *> *list)
 
 	list->push_back ( new PropertyDouble ( _("scale"),  m_scale, this, on_set_scale ) );
 
+#ifdef MULTIPLE_OWNERS
 	ConstrainedObject::GetProperties(list);
+#else
+	HeeksObj::GetProperties(list);
+#endif
 }
 
 bool HAngularDimension::Stretch(const double *p, const double* shift, void* data)
 {
+#ifdef MULTIPLE_OWNERS
 	ConstrainedObject::Stretch(p,shift,data);
+#else
+	HeeksObj::Stretch(p,shift,data);
+#endif
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);
 
@@ -435,7 +455,11 @@ void HAngularDimension::ReloadPointers()
 	m_p3 = (HPoint*)GetNextChild();
 	m_p4 = (HPoint*)GetNextChild();
 
+#ifdef MULTIPLE_OWNERS
 	ConstrainedObject::ReloadPointers();
+#else
+	HeeksObj::ReloadPointers();
+#endif
 }
 
 wxString HAngularDimension::MakeText(double angle)

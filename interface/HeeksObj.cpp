@@ -21,9 +21,17 @@
 #include "GripData.h"
 #endif
 
-HeeksObj::HeeksObj(void): m_skip_for_undo(false), m_id(0), m_layer(0), m_visible(true), m_preserving_id(false), m_index(0){}
+HeeksObj::HeeksObj(void): m_skip_for_undo(false), m_id(0), m_layer(0), m_visible(true), m_preserving_id(false), m_index(0)
+#ifndef MULTIPLE_OWNERS
+, m_owner(NULL)
+#endif
+{}
 
-HeeksObj::HeeksObj(const HeeksObj& ho): m_skip_for_undo(false), m_id(0), m_layer(0), m_visible(true),m_preserving_id(false), m_index(0){operator=(ho);}
+HeeksObj::HeeksObj(const HeeksObj& ho): m_skip_for_undo(false), m_id(0), m_layer(0), m_visible(true),m_preserving_id(false), m_index(0)
+#ifndef MULTIPLE_OWNERS
+, m_owner(NULL)
+#endif
+{operator=(ho);}
 
 const HeeksObj& HeeksObj::operator=(const HeeksObj &ho)
 {
@@ -40,11 +48,15 @@ const HeeksObj& HeeksObj::operator=(const HeeksObj &ho)
 
 HeeksObj::~HeeksObj()
 {
+#ifdef MULTIPLE_OWNERS
 	std::list<HeeksObj*>::iterator it;
 	for(it = m_owners.begin(); it!= m_owners.end(); ++it)
 	{
 		(*it)->Remove(this);
 	}
+#else
+	if(m_owner)m_owner->Remove(this);
+#endif
 
 #ifdef HEEKSCAD
 	if (m_index) wxGetApp().ReleaseIndex(m_index);
@@ -141,7 +153,11 @@ bool HeeksObj::StretchTemporaryTransformed(const double *p, const double* shift,
 #ifdef HEEKSCAD
 	gp_Trsf mat;
 
+#ifdef MULTIPLE_OWNERS
 	HeeksObj* owner = Owner();
+#else
+	HeeksObj* owner = m_owner;
+#endif
 	CSketch *sketch = dynamic_cast<CSketch*>(owner);
 
 	if(sketch && sketch->m_coordinate_system)
@@ -179,15 +195,25 @@ void HeeksObj::GetGripperPositionsTransformed(std::list<GripData> *list, bool ju
 
 	gp_Trsf mat;
 
+#ifdef MULTIPLE_OWNERS
 	HeeksObj* owner = Owner();
 	CSketch *sketch = dynamic_cast<CSketch*>(owner);
+#else
+	CSketch *sketch = dynamic_cast<CSketch*>(m_owner);
+#endif
 
 	if(sketch && sketch->m_coordinate_system)
 		mat = sketch->m_coordinate_system->GetMatrix();
 
+#ifdef MULTIPLE_OWNERS
 	CPad *pad = dynamic_cast<CPad*>(owner);
 	if(!pad && owner)
 		pad = dynamic_cast<CPad*>(owner->Owner());
+#else
+	CPad *pad = dynamic_cast<CPad*>(m_owner);
+	if(!pad && m_owner)
+		pad = dynamic_cast<CPad*>(m_owner->m_owner);
+#endif
 	if(pad && pad->m_sketch->m_coordinate_system)
 		mat = pad->m_sketch->m_coordinate_system->GetMatrix();
 
@@ -224,9 +250,24 @@ void HeeksObj::GetGripperPositions(std::list<GripData> *list, bool just_for_endo
 //#endif
 }
 
+bool HeeksObj::Add(HeeksObj* object, HeeksObj* prev_object)
+{
+#ifdef MULTIPLE_OWNERS
+	object->AddOwner(this);
+#else
+	object->m_owner = this;
+#endif
+	object->OnAdd();
+	return true;
+}
+
 void HeeksObj::OnRemove()
 {
+#ifdef MULTIPLE_OWNERS
 	if(m_owners.size() == 0)KillGLLists();
+#else
+	if(m_owner == NULL)KillGLLists();
+#endif
 }
 
 void HeeksObj::SetID(int id)
@@ -298,6 +339,8 @@ bool HeeksObj::OnVisibleLayer()
 	// to do, support multiple layers.
 	return true;
 }
+
+#ifdef MULTIPLE_OWNERS
 
 HeeksObj* HeeksObj::Owner()
 {
@@ -375,6 +418,7 @@ HeeksObj* HeeksObj::GetNextOwner()
 		return *m_owners_it++;
 	return NULL;
 }
+#endif
 
 HeeksObj *HeeksObj::Find( const int type, const unsigned int id )
 {

@@ -18,7 +18,6 @@ class MarkedObject{
 private:
 	unsigned long m_depth;
 	std::map<HeeksObj*, MarkedObject*>::iterator CurrentIt;
-	std::map<int, std::map<int, MarkedObject*> > m_types;
 	int m_window_size;
 	bool m_processed;
 	EnumStackedType m_stacked_type;
@@ -28,6 +27,7 @@ private:
 
 public:
 	std::map<HeeksObj*, MarkedObject*> m_map;
+	std::map<int, MarkedObject*> m_types;
 
 	MarkedObject();
 	MarkedObject(unsigned long depth, HeeksObj* object, int window_size);

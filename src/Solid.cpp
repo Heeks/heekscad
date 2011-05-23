@@ -57,8 +57,8 @@ void CSolid::OnApplyProperties()
 {
 	CSolid* new_object = new CSolid(*((TopoDS_Solid*)(&m_shape)), m_title.c_str(), m_color, m_opacity);
 	new_object->CopyIDsFrom(this);
-	Owner()->Add(new_object, NULL);
-	Owner()->Remove(this);
+	HEEKSOBJ_OWNER->Add(new_object, NULL);
+	HEEKSOBJ_OWNER->Remove(this);
 	wxGetApp().m_marked_list->Clear(true);
 	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().Repaint();

@@ -454,6 +454,7 @@ int CViewPoint::ChooseBestPlane(int plane)const{
 int CViewPoint::GetTwoAxes(gp_Vec& vx, gp_Vec& vy, bool flattened_onto_screen, int plane)const{
 	int plane_mode = ChooseBestPlane(plane);
 	gp_Trsf orimat = wxGetApp().GetDrawMatrix(false);
+
 	switch(plane_mode){
 	case 0:
 		vx = gp_Vec(1, 0, 0).Transformed(orimat);

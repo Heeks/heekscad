@@ -67,6 +67,7 @@ void UndoEngine::RecalculateMapsRecursive(std::map<HeeksObjId,HeeksObj*> &treema
 		//Check the owner for debugging
 		//TODO: This is fubar, WTF is causing objects to get copied with no owners
 		//only happens when they objects are > 2 levels deep. 
+#ifdef MULTIPLE_OWNERS
 		bool found=false;
 		HeeksObj* owner = new_obj->GetFirstOwner();
 		while(owner)
@@ -79,7 +80,9 @@ void UndoEngine::RecalculateMapsRecursive(std::map<HeeksObjId,HeeksObj*> &treema
 		{
 			new_obj->AddOwner(obj);
 		}
-
+#else
+		if(new_obj->m_owner != obj)new_obj->m_owner = obj;
+#endif
 		HeeksObjId id = GetHeeksObjId(new_obj);
 		treemap[id] = new_obj;
 		if(new_obj->IsList())
@@ -207,20 +210,36 @@ void UndoEngine::DealWithTransients(std::map<HeeksObjId,HeeksObj*> &treemap)
 			if(it3 == treemap.end())
 			{
 				HeeksObj* nobj = obj->MakeACopyWithID();
+#ifdef MULTIPLE_OWNERS
 				nobj->RemoveOwners();
+#else
+				nobj->m_owner = NULL;
+#endif
 				needupdate.push_back(nobj);
 				treemap[GetHeeksObjId(nobj)] = nobj;
+#ifdef MULTIPLE_OWNERS
 				tobj->Owner()->Add(nobj,NULL);
+#else
+				tobj->m_owner->Add(nobj,NULL);
+#endif
 
 			}
 			else
 			{
 				needupdate.push_back((*it3).second);
+#ifdef MULTIPLE_OWNERS
 				tobj->Owner()->Add((*it3).second, NULL);
+#else
+				tobj->m_owner->Add((*it3).second, NULL);
+#endif
 			}
 		}
 
+#ifdef MULTIPLE_OWNERS
 		tobj->Owner()->Remove(tobj);
+#else
+		tobj->m_owner->Remove(tobj);
+#endif
 		//delete tobj;
 	}
 
@@ -229,12 +248,16 @@ void UndoEngine::DealWithTransients(std::map<HeeksObjId,HeeksObj*> &treemap)
 	for(it2 = needupdate.begin(); it2 != needupdate.end(); it2++)
 	{
 		HeeksObj *obj = *it2;
+#ifdef MULTIPLE_OWNERS
 		HeeksObj *owner = obj->GetFirstOwner();
 		while(owner)
 		{
 			owner->ReloadPointers();
 			owner = obj->GetNextOwner();
 		}
+#else
+		if(obj->m_owner)obj->m_owner->ReloadPointers();
+#endif
 		obj->ReloadPointers();
 	}
 
@@ -273,7 +296,11 @@ void UndoEngine::UndoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
 					tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Add(new_obj,NULL);
 					tree->m_treemap[GetHeeksObjId(new_obj)] = new_obj;
 					new_obj->ReloadPointers();
+#ifdef MULTIPLE_OWNERS
 					new_obj->Owner()->ReloadPointers();
+#else
+					new_obj->m_owner->ReloadPointers();
+#endif
 				}
 				break;
 		}
@@ -295,7 +322,11 @@ void UndoEngine::DoEvents(std::vector<UndoEvent> &events, EventTreeMap* tree)
 					tree->m_treemap[GetHeeksObjId(evt.m_parent)]->Add(new_obj,NULL);
 					tree->m_treemap[GetHeeksObjId(new_obj)] = new_obj;
 					new_obj->ReloadPointers();
+#ifdef MULTIPLE_OWNERS
 					new_obj->Owner()->ReloadPointers();
+#else
+					new_obj->m_owner->ReloadPointers();
+#endif
 				}
 				break;
 			case EventTypeModified:
@@ -373,7 +404,10 @@ void UndoEngine::CreateUndoPoint()
 	PrintTrees();
 }
 
-void debugprint(std::string s);
+void debugprint(std::string s)
+{
+	wxLogDebug(wxString(s.c_str(),wxConvUTF8));
+}
 
 void UndoEngine::PrintTrees()
 {

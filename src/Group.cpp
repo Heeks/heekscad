@@ -129,8 +129,12 @@ void CGroup::MoveSolidsToGroupsById(HeeksObj* object)
 			HeeksObj* o = wxGetApp().GetIDObject(SolidType, id);
 			if (o != NULL)
 			{
-                o->Owner()->Remove(o);
+                o->HEEKSOBJ_OWNER->Remove(o);
+#ifdef MULTIPLE_OWNERS
                 o->RemoveOwner(o->Owner());
+#else
+				o->m_owner = NULL;
+#endif
                 group->Add(o, NULL);
 			}
 		}

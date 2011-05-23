@@ -6,20 +6,29 @@
 
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"
-#include "ConstrainedObject.h"
 #include "HPoint.h"
+#ifdef MULTIPLE_OWNERS
+#include "ConstrainedObject.h"
 
 class EndedObject: public ConstrainedObject{
+#else
+class EndedObject: public HeeksObj{
+#endif
 public:
 	HPoint* A, *B;
 
 	~EndedObject(void);
 	EndedObject(const HeeksColor* color);
+#ifndef MULTIPLE_OWNERS
+	EndedObject(const EndedObject& e);
+#endif
 
 	const EndedObject& operator=(const EndedObject &b);
 
+#ifdef MULTIPLE_OWNERS
 	virtual void LoadToDoubles();
 	virtual void LoadFromDoubles();
+#endif
 
 	// HeeksObj's virtual functions
 	bool Stretch(const double *p, const double* shift, void* data);

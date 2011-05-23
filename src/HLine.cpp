@@ -38,11 +38,12 @@ const HLine& HLine::operator=(const HLine &b){
 
 HLine* line_for_tool = NULL;
 
+#ifdef MULTIPLE_OWNERS
 class SetLineHorizontal:public Tool{
 public:
 	void Run(){
 		line_for_tool->SetAbsoluteAngleConstraint(AbsoluteAngleHorizontal);
-		SolveSketch((CSketch*)line_for_tool->Owner());
+		SolveSketch((CSketch*)line_for_tool->HEEKSOBJ_OWNER);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Toggle Horizontal");}
@@ -55,7 +56,7 @@ class SetLineVertical:public Tool{
 public:
 	void Run(){
 		line_for_tool->SetAbsoluteAngleConstraint(AbsoluteAngleVertical);
-		SolveSketch((CSketch*)line_for_tool->Owner());
+		SolveSketch((CSketch*)line_for_tool->HEEKSOBJ_OWNER);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Toggle Vertical");}
@@ -68,7 +69,7 @@ class SetLineLength:public Tool{
 public:
 	void Run(){
 		line_for_tool->SetLineLengthConstraint(line_for_tool->A->m_p.Distance(line_for_tool->B->m_p));
-		SolveSketch((CSketch*)line_for_tool->Owner());
+		SolveSketch((CSketch*)line_for_tool->HEEKSOBJ_OWNER);
 		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Toggle Line Length");}
@@ -76,6 +77,7 @@ public:
 	const wxChar* GetToolTip(){return _("Set this lines length as constrained");}
 };
 static SetLineLength line_length_toggle;
+#endif
 
 class MakeCylinderOnLine:public Tool{
 public:
@@ -121,9 +123,11 @@ bool HLine::GetMidPoint(double* pos)
 void HLine::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	line_for_tool = this;
+#ifdef MULTIPLE_OWNERS
 	t_list->push_back(&horizontal_line_toggle);
 	t_list->push_back(&vertical_line_toggle);
 	t_list->push_back(&line_length_toggle);
+#endif
 	t_list->push_back(&make_cylinder_on_line);
 	t_list->push_back(&make_cone_on_line);
 }
@@ -147,6 +151,7 @@ void HLine::glCommands(bool select, bool marked, bool no_color){
 		glDepthRange(save_depth_range[0], save_depth_range[1]);
 	}
 
+#ifdef MULTIPLE_OWNERS
 	if(!A->m_p.IsEqual(B->m_p, wxGetApp().m_geom_tol))
 	{
 		gp_Pnt mid_point = A->m_p.XYZ() + (B->m_p.XYZ() - A->m_p.XYZ())/2;
@@ -156,6 +161,7 @@ void HLine::glCommands(bool select, bool marked, bool no_color){
 		//ax.Rotate(gp_Ax1(mid_point,up),Pi/2);
 		ConstrainedObject::glCommands(color,ax);
 	}
+#endif
 
 	EndedObject::glCommands(select,marked,no_color);
 }
@@ -193,12 +199,14 @@ static void on_set_end(const double *vt, HeeksObj* object){
 	wxGetApp().Repaint();
 }
 
+#ifdef MULTIPLE_OWNERS
 static void on_set_length(double v, HeeksObj* object){
 	((HLine*)object)->SetLineLength(v);
 	if(wxGetApp().autosolve_constraints)
-		SolveSketch((CSketch*)object->Owner());
+		SolveSketch((CSketch*)object->HEEKSOBJ_OWNER);
 	wxGetApp().Repaint();
 }
+#endif
 
 void HLine::GetProperties(std::list<Property *> *list){
 	double a[3], b[3];
@@ -207,7 +215,11 @@ void HLine::GetProperties(std::list<Property *> *list){
 	list->push_back(new PropertyVertex(_("start"), a, this, on_set_start));
 	list->push_back(new PropertyVertex(_("end"), b, this, on_set_end));
 	double length = A->m_p.Distance(B->m_p);
+#ifdef MULTIPLE_OWNERS
 	list->push_back(new PropertyLength(_("Length"), length, this, on_set_length));
+#else
+	list->push_back(new PropertyLength(_("Length"), length, this, NULL));
+#endif
 
 	HeeksObj::GetProperties(list);
 }
@@ -428,9 +440,11 @@ void HLine::Reverse()
 	HPoint* temp = A;
 	A = B;
 	B = temp;
+#ifdef MULTIPLE_OWNERS
 	m_objects.pop_front();
 	m_objects.pop_front();
 	m_objects.push_front(B);
 	m_objects.push_front(A);
+#endif
 }
 

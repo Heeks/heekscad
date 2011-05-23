@@ -9,8 +9,11 @@
 #include "ConversionTools.h"
 #include "MarkedList.h"
 #include "HeeksConfig.h"
+#include "HeeksFrame.h"
 #include "../interface/DoubleInput.h"
 #include "../interface/PropertyCheck.h"
+#include "../interface/HDialogs.h"
+#include "../interface/NiceTextCtrl.h"
 
 void PickCreateRuledSurface()
 {
@@ -54,7 +57,7 @@ void PickCreateRuledSurface()
 	}
 }
 
-HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_or_angle, bool solid_if_possible, bool revolution_not_extrusion, bool add_new_objects)
+HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_or_angle, bool solid_if_possible, bool revolution_not_extrusion, double taper_angle_for_extrusion, bool add_new_objects)
 {
 	std::list<TopoDS_Shape> faces_or_wires;
 
@@ -68,7 +71,7 @@ HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_o
 		case SketchType:
 		case CircleType:
 			{
-				if(ConvertSketchToFaceOrWire(object, faces_or_wires, solid_if_possible))
+				if(ConvertSketchToFaceOrWire(object, faces_or_wires, (fabs(taper_angle_for_extrusion) <= 0.0000001) && solid_if_possible))
 				{
 					if(wxGetApp().m_extrude_removes_sketches)sketches_or_faces_to_delete.push_back(object);
 				}
@@ -95,7 +98,7 @@ HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_o
 	}
 	else
 	{
-		CreateExtrusions(faces_or_wires, new_shapes, gp_Vec(0, 0, height_or_angle).Transformed(trsf));
+		CreateExtrusions(faces_or_wires, new_shapes, gp_Vec(0, 0, height_or_angle).Transformed(trsf), taper_angle_for_extrusion, solid_if_possible);
 	}
 	HeeksObj* new_object = 0;
 	if(new_shapes.size() > 0)
@@ -182,39 +185,46 @@ HeeksObj* CreateRuledFromSketches(std::list<HeeksObj*> list, bool make_solid)
 	return NULL;
 }
 
-static void on_extrude_to_solid(bool onoff, HeeksObj* object)
+bool InputExtrusionHeight(double &value, bool *extrude_makes_a_solid, double *taper_angle)
 {
-	wxGetApp().m_extrude_to_solid = onoff;
-	HeeksConfig config;
-	config.Write(_T("ExtrudeToSolid"), wxGetApp().m_extrude_to_solid);
-}
+		HDialog dlg(wxGetApp().m_frame);
+		wxBoxSizer *sizerMain = new wxBoxSizer(wxVERTICAL);
+		wxStaticText *static_label = new wxStaticText(&dlg, wxID_ANY, _("Make extrusion"));
+		sizerMain->Add( static_label, 0, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, dlg.control_border );
 
-class CExtrusionInput:public CLengthInput
-{
-public:
-	CExtrusionInput(double &value):CLengthInput(_("Input extrusion height"), _("height"), value){}
+		CLengthCtrl* value_control = new CLengthCtrl(&dlg);
+		value_control->SetValue(value);
+		dlg.AddLabelAndControl(sizerMain, _("height"), value_control);
 
-	// virtual functions for InputMode
-	void GetProperties(std::list<Property *> *list)
-	{
-		CLengthInput::GetProperties(list);
-		list->push_back(new PropertyCheck(_("Extrude makes a solid"), wxGetApp().m_extrude_to_solid, NULL, on_extrude_to_solid));
-	}
-};
+		wxCheckBox* solid_check_box = NULL;
+		if(extrude_makes_a_solid)
+		{
+			solid_check_box = new wxCheckBox(&dlg, wxID_ANY, _("Extrude makes a solid"));
+			solid_check_box->SetValue(*extrude_makes_a_solid);
+			sizerMain->Add( solid_check_box, 0, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, dlg.control_border );
+		}
 
-bool InputExtrusionHeight(double &value)
-{
-	CInputMode* save_mode = wxGetApp().input_mode_object;
-	CExtrusionInput extrusion_input(value);
-	wxGetApp().SetInputMode(&extrusion_input);
+		CDoubleCtrl* taper_angle_control = NULL;
+		if(taper_angle)
+		{
+			taper_angle_control = new CDoubleCtrl(&dlg);
+			taper_angle_control->SetValue(*taper_angle);
+			dlg.AddLabelAndControl(sizerMain, _("taper outward angle"), taper_angle_control);
+		}
 
-	wxGetApp().OnRun();
-
-	wxGetApp().SetInputMode(save_mode);
-
-	if(CLengthInput::m_success)value = extrusion_input.m_value;
-
-	return CLengthInput::m_success;
+		sizerMain->Add( dlg.MakeOkAndCancel(wxHORIZONTAL), 0, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, dlg.control_border );
+		dlg.SetSizer( sizerMain );
+		sizerMain->SetSizeHints(&dlg);
+		sizerMain->Fit(&dlg);
+		value_control->SetFocus();
+		if(dlg.ShowModal() == wxID_OK)
+		{
+			value = value_control->GetValue();
+			if(extrude_makes_a_solid)*extrude_makes_a_solid = solid_check_box->GetValue();
+			if(taper_angle)*taper_angle = taper_angle_control->GetValue();
+			return true;
+		}
+		return false;
 }
 
 void PickCreateExtrusion()
@@ -224,30 +234,62 @@ void PickCreateExtrusion()
 		wxGetApp().PickObjects(_("pick sketches, faces or circles"), MARKING_FILTER_CIRCLE | MARKING_FILTER_SKETCH | MARKING_FILTER_FACE);
 	}
 
-	double height = 10; // to do, this should get written to config file
-
-
-	if(InputExtrusionHeight(height))
+	double height;
+	double taper_angle;
 	{
+		HeeksConfig config;
+		config.Read(_T("ExtrusionHeight"), &height, 10.0);
+		config.Read(_T("ExtrusionTaperAngle"), &taper_angle, 0.0);
+	}
+
+	if(InputExtrusionHeight(height, &(wxGetApp().m_extrude_to_solid), &taper_angle))
+	{
+		{
+			HeeksConfig config;
+			config.Write(_T("ExtrusionHeight"), height);
+			config.Write(_T("ExtrusionTaperAngle"), taper_angle);
+			config.Write(_T("ExtrudeToSolid"), wxGetApp().m_extrude_to_solid);
+		}
+
 		if(wxGetApp().m_marked_list->size() > 0)
 		{
-			CreateExtrusionOrRevolution(wxGetApp().m_marked_list->list(),height, wxGetApp().m_extrude_to_solid, false);
+			CreateExtrusionOrRevolution(wxGetApp().m_marked_list->list(),height, wxGetApp().m_extrude_to_solid, false, taper_angle);
 		}
 	}
 }
 
-class CRevolutionInput:public CDoubleInput
+bool InputRevolutionAngle(double &angle, bool *extrude_makes_a_solid)
 {
-public:
-	CRevolutionInput(double &value):CDoubleInput(_("Input revolution angle"), _("angle"), value){}
+		HDialog dlg(wxGetApp().m_frame);
+		wxBoxSizer *sizerMain = new wxBoxSizer(wxVERTICAL);
+		wxStaticText *static_label = new wxStaticText(&dlg, wxID_ANY, _("Input revolution angle"));
+		sizerMain->Add( static_label, 0, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, dlg.control_border );
 
-	// virtual functions for InputMode
-	void GetProperties(std::list<Property *> *list)
-	{
-		CDoubleInput::GetProperties(list);
-		list->push_back(new PropertyCheck(_("Extrude makes a solid"), wxGetApp().m_extrude_to_solid, NULL, on_extrude_to_solid));
-	}
-};
+		CDoubleCtrl* value_control = new CDoubleCtrl(&dlg);
+		value_control->SetValue(angle);
+		dlg.AddLabelAndControl(sizerMain, _("angle"), value_control);
+
+		wxCheckBox* solid_check_box = NULL;
+		if(extrude_makes_a_solid)
+		{
+			solid_check_box = new wxCheckBox(&dlg, wxID_ANY, _("Makes a solid"));
+			solid_check_box->SetValue(*extrude_makes_a_solid);
+			sizerMain->Add( solid_check_box, 0, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, dlg.control_border );
+		}
+
+		sizerMain->Add( dlg.MakeOkAndCancel(wxHORIZONTAL), 0, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, dlg.control_border );
+		dlg.SetSizer( sizerMain );
+		sizerMain->SetSizeHints(&dlg);
+		sizerMain->Fit(&dlg);
+		value_control->SetFocus();
+		if(dlg.ShowModal() == wxID_OK)
+		{
+			angle = value_control->GetValue();
+			if(extrude_makes_a_solid)*extrude_makes_a_solid = solid_check_box->GetValue();
+			return true;
+		}
+		return false;
+}
 
 void PickCreateRevolution()
 {
@@ -258,11 +300,11 @@ void PickCreateRevolution()
 
 	double angle = 360.0; // to do, this should get written to config file
 
-	if(wxGetApp().InputDouble(_("Input revolution angle"), _("angle"), angle))
+	if(InputRevolutionAngle(angle, &wxGetApp().m_extrude_to_solid))
 	{
 		if(wxGetApp().m_marked_list->size() > 0)
 		{
-			CreateExtrusionOrRevolution(wxGetApp().m_marked_list->list(), angle, true, true);
+			CreateExtrusionOrRevolution(wxGetApp().m_marked_list->list(), angle, true, 0.0, true);
 		}
 	}
 }
@@ -298,15 +340,46 @@ bool CreateRuledSurface(const std::list<TopoDS_Wire> &wire_list, TopoDS_Shape& s
 	return false;
 }
 
-void CreateExtrusions(const std::list<TopoDS_Shape> &faces_or_wires, std::list<TopoDS_Shape>& new_shapes, const gp_Vec& extrude_vector)
+void CreateExtrusions(const std::list<TopoDS_Shape> &faces_or_wires, std::list<TopoDS_Shape>& new_shapes, const gp_Vec& extrude_vector, double taper_angle, bool solid_if_possible)
 {
 	try{
 		for(std::list<TopoDS_Shape>::const_iterator It = faces_or_wires.begin(); It != faces_or_wires.end(); It++)
 		{
 			const TopoDS_Shape& face_or_wire = *It;
-			BRepPrimAPI_MakePrism generator( face_or_wire, extrude_vector );
-			generator.Build();
-			new_shapes.push_back(generator.Shape());
+			if(fabs(taper_angle) > 0.0000001)
+			{
+				// make an offset face
+				double distance = tan(taper_angle * Pi/180) * extrude_vector.Magnitude();
+				bool wire = (face_or_wire.ShapeType() == TopAbs_WIRE);
+				BRepOffsetAPI_MakeOffset offset;
+				if(wire)
+					offset = BRepOffsetAPI_MakeOffset(TopoDS::Wire(face_or_wire));
+				else
+					continue; // can't do CreateRuledSurface on faces yet
+                offset.Perform(distance);
+
+				// parallel
+				std::list<TopoDS_Wire> wire_list;
+				wire_list.push_back(TopoDS::Wire(face_or_wire));
+				wire_list.push_back(TopoDS::Wire(offset.Shape()));
+
+				gp_Trsf mat;
+				mat.SetTranslation(extrude_vector);
+				BRepBuilderAPI_Transform myBRepTransformation(wire_list.back(),mat);
+				wire_list.back() = TopoDS::Wire(myBRepTransformation.Shape());
+
+				TopoDS_Shape new_shape;
+				if(CreateRuledSurface(wire_list, new_shape, solid_if_possible))
+				{
+					new_shapes.push_back(new_shape);
+				}
+            }
+			else
+			{
+				BRepPrimAPI_MakePrism generator( face_or_wire, extrude_vector );
+				generator.Build();
+				new_shapes.push_back(generator.Shape());
+			}
 		}
 	}
 	catch (Standard_Failure) {
