@@ -1,4 +1,4 @@
-project(HeeksCAD)
+project( HeeksCAD-app )
 cmake_minimum_required( VERSION 2.6 )
 
 if( NOT DEFINED BUILD_STARTED_IN_RIGHT_DIR )
@@ -7,7 +7,19 @@ endif( NOT DEFINED BUILD_STARTED_IN_RIGHT_DIR )
 
 set ( CMAKE_BUILD_TYPE Debug )
 add_definitions ( -Wall -DUSE_GENERIC_TREECTRL -DHEEKSCAD -DUNICODE -DTIXML_USE_STL )
-find_package( OpenCASCADE REQUIRED COMPONENTS TKVRML TKSTL TKBRep TKIGES TKShHealing TKSTEP TKSTEP209 TKSTEPAttr TKSTEPBase TKXSBase TKShapeSchema FWOSPlugin TKBool TKCAF TKCDF TKernel TKFeat TKFillet TKG2d TKG3d TKGeomAlgo TKGeomBase TKHLR TKMath TKOffset TKPrim TKPShape TKService TKTopAlgo TKV2d TKV3d TKMesh TKAdvTools TKBO TKXDESTEP TKXCAF TKXCAFSchema TKLCAF TKPLCAF )
+
+#find OCE or OpenCASCADE
+set( CASCADE_LIBS TKVRML TKSTL TKBRep TKIGES TKShHealing TKSTEP TKSTEP209 TKSTEPAttr TKSTEPBase TKXSBase TKShapeSchema FWOSPlugin TKBool TKCAF TKCDF TKernel TKFeat TKFillet TKG2d TKG3d TKGeomAlgo TKGeomBase TKHLR TKMath TKOffset TKPrim TKPShape TKService TKTopAlgo TKV2d TKV3d TKMesh TKAdvTools TKBO TKXDESTEP TKXCAF TKXCAFSchema TKLCAF TKPLCAF )
+#inherits variables from parent dir - don't need to 'find_package ( OCE )' again
+if( ${OCE_FOUND} )
+  set( OpenCASCADE_LIBRARIES ${CASCADE_LIBS} )
+  set( OpenCASCADE_INCLUDE_DIR ${OCE_INCLUDE_DIRS} )
+else() #look for OpenCASCADE
+  set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+  find_package ( OpenCASCADE REQUIRED COMPONENTS ${CASCADE_LIBS} )
+endif()
+
+find_package( OpenGL REQUIRED )
 FIND_PACKAGE( wxWidgets REQUIRED COMPONENTS base core gl aui )
 find_package( PythonLibs REQUIRED )
 INCLUDE(${wxWidgets_USE_FILE})
@@ -16,16 +28,9 @@ INCLUDE(${wxWidgets_USE_FILE})
 include_directories (
     ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
     ${wxWidgets_INCLUDE_DIRS} ${OpenCASCADE_INCLUDE_DIR}
-    ${PYTHON_INCLUDE_DIRS} .
+    ${PYTHON_INCLUDE_DIRS} . ${OPENGL_INCLUDE_DIR}
     )
 set ( EXECUTABLE_OUTPUT_PATH ../bin )
-
-if( UNIX )
-  #set( platform_SRCS some_necessary_linux_file.cpp )
-else( UNIX )
-  #windows
-  #set( platform_SRCS dllmain.cpp stdafx.cpp )
-endif( UNIX )
 
 set( heekscad_HDRS
         AboutBox.h           glfont2.h              Loop.h                  ShapeData.h
@@ -55,15 +60,15 @@ set( heekscad_HDRS
         Face.h               HXml.h                 RuledSurface.h          Wire.h
         FaceTools.h          InputModeCanvas.h      Ruler.h                 WrappedCurves.h
         FastCurves.h         Intersector.h          Sectioning.h            wxImageLoader.h
-        Geom.h               LineArcDrawing.h       SelectMode.h            
-   )#Hole.h
+        Geom.h               LineArcDrawing.h       SelectMode.h
+   )
 
 set( heekscad_SRCS
         AboutBox.cpp           GLList.cpp               manager.cpp               ShapeTools.cpp
         advprops.cpp           GraphicsCanvas.cpp       MarkedList.cpp            SimpleIntersector.cpp
-        AutoSave.cpp           Grid.cpp                 matrix.cpp                ShapeTools.cpp     
+        AutoSave.cpp           Grid.cpp                 matrix.cpp                ShapeTools.cpp
         BentleyOttmann.cpp     Gripper.cpp              MultiPoly.cpp             SimpleIntersector.cpp
-        BezierCurve.cpp        GripperSelTransform.cpp  NearMap.cpp               Sketch.cpp   
+        BezierCurve.cpp        GripperSelTransform.cpp  NearMap.cpp               Sketch.cpp
         Cone.cpp               Group.cpp                ObjPropsCanvas.cpp        sketchinterface.cpp
         ConstrainedObject.cpp  HAngularDimension.cpp    OCCSolver.cpp             SketchTools.cpp
         Constraint.cpp         HArc.cpp                 odcombo.cpp               Solid.cpp
@@ -85,16 +90,17 @@ set( heekscad_SRCS
         Face.cpp               Input.cpp                Ruler.cpp                 ViewZooming.cpp
         FaceTools.cpp          InputModeCanvas.cpp      Sectioning.cpp            Window.cpp
         FastCurves.cpp         LineArcDrawing.cpp       SelectMode.cpp            Wire.cpp
-        Geom.cpp               Loop.cpp                 Shape.cpp                 WrappedCurves.cpp           
-        glfont2.cpp            MagDragWindow.cpp        ShapeData.cpp             wxImageLoader.cpp      
-   ) #Hole.cpp
+        Geom.cpp               Loop.cpp                 Shape.cpp                 WrappedCurves.cpp
+        glfont2.cpp            MagDragWindow.cpp        ShapeData.cpp             wxImageLoader.cpp
+   )
 set( HeeksCAD_LIBS
        -L../bin -ltinyxml -lheeksintf -lsketchsolve
    )
 add_executable( heekscad ${heekscad_SRCS} ${platform_SRCS} ${heekscad_HDRS} )
 target_link_libraries( heekscad
                        ${wxWidgets_LIBRARIES}  ${OpenCASCADE_LIBRARIES}
-                       ${PYTHON_LIBRARIES} ${HeeksCAD_LIBS} ${OSX_LIBS} )
+                       ${PYTHON_LIBRARIES} ${HeeksCAD_LIBS} ${OSX_LIBS}
+                       ${OPENGL_LIBRARIES} )
 set_target_properties( heekscad PROPERTIES VERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} )
 install( TARGETS heekscad DESTINATION bin )
 
