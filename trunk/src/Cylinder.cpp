@@ -60,8 +60,8 @@ static void on_set_centre(const double *vt, HeeksObj* object){
 	((CCylinder*)object)->m_pos.Transform(mat);
 }
 
-static void on_set_radius(double value, HeeksObj* object){
-	((CCylinder*)object)->m_radius = value;
+static void on_set_diameter(double value, HeeksObj* object){
+	((CCylinder*)object)->m_radius = value*0.5;
 }
 
 static void on_set_height(double value, HeeksObj* object){
@@ -85,7 +85,7 @@ void CCylinder::GetProperties(std::list<Property *> *list)
 	double c[3];
 	extract(m_pos.Location(), c);
 	list->push_back(new PropertyVertex(_("centre pos"), c, this, on_set_centre));
-	list->push_back(new PropertyLength(_("radius"), m_radius, this, on_set_radius));
+	list->push_back(new PropertyLength(_("diameter"), m_radius*2, this, on_set_diameter));
 	list->push_back(new PropertyLength(_("height"), m_height, this, on_set_height));
 
 	CSolid::GetProperties(list);
