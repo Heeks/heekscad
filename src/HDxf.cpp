@@ -11,13 +11,22 @@
 #include "HSpline.h"
 #include "Sketch.h"
 #include "HText.h"
+#include "HeeksConfig.h"
 
 
 // static
 bool HeeksDxfRead::m_make_as_sketch = false;
 bool HeeksDxfRead::m_ignore_errors = false;
+wxString HeeksDxfRead::m_layer_name_suffixes_to_discard = _T("_DOT,_DOTSMALL,_DOTBLANK,_OBLIQUE,_CLOSEDBLANK");
 
-HeeksDxfRead::HeeksDxfRead(const wxChar* filepath):CDxfRead(Ttc(filepath)){}
+HeeksDxfRead::HeeksDxfRead(const wxChar* filepath) : CDxfRead(Ttc(filepath))
+{
+    HeeksConfig config;
+
+	config.Read(_T("ImportDxfAsSketches"), &m_make_as_sketch);
+	config.Read(_T("IgnoreDxfReadErrors"), &m_ignore_errors);
+	config.Read(_T("LayerNameSuffixesToDiscard"), m_layer_name_suffixes_to_discard);
+}
 
 HeeksColor *HeeksDxfRead::ActiveColorPtr(Aci_t & aci)
 {
@@ -188,8 +197,38 @@ void HeeksDxfRead::OnReadText(const double *point, const double height, const wx
     AddObject(new_object);
 }
 
+/**
+    Don't add graphics for layer names included in this list.  There are
+    some graphics packages that add setup graphics that we don't want
+    to be seen.
+ */
+bool HeeksDxfRead::IsValidLayerName( const wxString layer_name ) const
+{
+    wxStringTokenizer tokens(m_layer_name_suffixes_to_discard,_T(" :;,"));
+    while (tokens.HasMoreTokens())
+    {
+        wxString token = tokens.GetNextToken();
+        if (layer_name.find(token) != -1)
+        {
+            return(false);  // We do NOT want this one added.
+        }
+    }
+
+    return(true);   // This layername seems fine.
+}
+
 void HeeksDxfRead::AddObject(HeeksObj *object)
 {
+
+    if (! IsValidLayerName(Ctt(LayerName().c_str())))
+    {
+        // This is one of the forbidden layer names.  Discard the
+        // graphics object and move on.
+
+        delete object;
+        return;
+    }
+
 	if(wxGetApp().m_in_OpenFile && wxGetApp().m_file_open_matrix)
 	{
 		object->ModifyByMatrix(wxGetApp().m_file_open_matrix);
@@ -219,8 +258,12 @@ void HeeksDxfRead::AddGraphics() const
     {
         for (Sketches_t::const_iterator l_itSketch = m_sketches.begin(); l_itSketch != m_sketches.end(); l_itSketch++)
         {
-            ((CSketch *)l_itSketch->second)->OnEditString( l_itSketch->first.c_str() );
-            wxGetApp().Add( l_itSketch->second, NULL );
+			CSketch *pSketch = (CSketch *)(l_itSketch->second);
+			if (pSketch->GetNumChildren() > 0)
+			{
+				((CSketch *)l_itSketch->second)->OnEditString( l_itSketch->first.c_str() );
+				wxGetApp().Add( l_itSketch->second, NULL );
+			} // End if - then
         }
     }
 }
