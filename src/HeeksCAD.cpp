@@ -2726,11 +2726,25 @@ void on_sel_filter_pocket(bool value, HeeksObj* object){
 
 void on_dxf_make_sketch(bool value, HeeksObj* object){
 	HeeksDxfRead::m_make_as_sketch = value;
+	HeeksConfig config;
+	config.Write(_T("ImportDxfAsSketches"), HeeksDxfRead::m_make_as_sketch);
 }
 
 void on_sel_dxf_read_errors(bool value, HeeksObj* object){
 	HeeksDxfRead::m_ignore_errors = value;
+
+	HeeksConfig config;
+	config.Write(_T("IgnoreDxfReadErrors"), HeeksDxfRead::m_ignore_errors);
 }
+
+void on_edit_layer_name_suffixes_to_discard(const wxChar* value, HeeksObj* object)
+{
+	HeeksDxfRead::m_layer_name_suffixes_to_discard = value;
+
+	HeeksConfig config;
+	config.Write(_T("LayerNameSuffixesToDiscard"), HeeksDxfRead::m_layer_name_suffixes_to_discard);
+}
+
 
 void on_stl_facet_tolerance(double value, HeeksObj* object){
 	wxGetApp().m_stl_facet_tolerance = value;
@@ -3058,6 +3072,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	PropertyList* dxf_options = new PropertyList(_("DXF"));
 	dxf_options->m_list.push_back(new PropertyCheck(_("make sketch"), HeeksDxfRead::m_make_as_sketch, NULL, on_dxf_make_sketch));
 	dxf_options->m_list.push_back(new PropertyCheck(_("ignore errors where possible"), HeeksDxfRead::m_ignore_errors, NULL, on_sel_dxf_read_errors));
+	dxf_options->m_list.push_back( new PropertyString(_("Layer Name Suffixes To Discard"), HeeksDxfRead::m_layer_name_suffixes_to_discard, this, on_edit_layer_name_suffixes_to_discard));
 
 	file_options->m_list.push_back(dxf_options);
 	PropertyList* stl_options = new PropertyList(_("STL"));
