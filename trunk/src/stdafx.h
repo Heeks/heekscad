@@ -234,7 +234,7 @@
 #include <wx/tooltip.h>
 #include <wx/treectrl.h>
 #include "wx/window.h"
-
+#include <wx/tokenzr.h>
 
 #include "../tinyxml/tinyxml.h"
 
