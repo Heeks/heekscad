@@ -689,6 +689,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\src\HGear.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\src\HGear.h"
+			>
+		</File>
+		<File
 			RelativePath="..\src\HILine.cpp"
 			>
 		</File>

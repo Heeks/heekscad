@@ -40,6 +40,7 @@
 #include "../interface/Plugin.h"
 #include "Sectioning.h"
 #include "MenuSeparator.h"
+#include "HGear.h"
 
 using namespace std;
 
@@ -1004,6 +1005,12 @@ static void AddObjectFromButton(HeeksObj* new_object)
 	wxGetApp().Repaint();
 }
 
+static void OnGearButton( wxCommandEvent& event )
+{
+	HGear* new_object = new HGear();
+	AddObjectFromButton(new_object);
+}
+
 static void OnSphereButton( wxCommandEvent& event )
 {
 	gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
@@ -1721,6 +1728,7 @@ void CHeeksFrame::MakeMenus()
 	AddMenuItem(geometry_menu, _("Draw Ellipses"), ToolImage(_T("circles")), OnEllipseButton);
 	AddMenuItem(geometry_menu, _("Draw Infinite Lines"), ToolImage(_T("iline")), OnILineButton);
 	AddMenuItem(geometry_menu, _("Draw Points"), ToolImage(_T("point")), OnPointsButton);
+	AddMenuItem(geometry_menu, _("Gear"), ToolImage(_T("gear")), OnGearButton);
 	AddMenuItem(geometry_menu, _("Spline Through Points"), ToolImage(_T("splpts")), OnSplinePointsButton);
 	geometry_menu->AppendSeparator();
 	AddMenuItem(geometry_menu, _("Add Text"), ToolImage(_T("text")), OnTextButton);
@@ -1868,6 +1876,7 @@ void CHeeksFrame::AddToolBars()
 			flyout_list.m_list.push_back(CFlyOutItem(_T("Rectangles"), ToolImage(_T("rect")), _("Start drawing rectangles"), OnRectanglesButton));
 			flyout_list.m_list.push_back(CFlyOutItem(_T("Obrounds"), ToolImage(_T("obround")), _("Start drawing obrounds"), OnObroundsButton));
 			flyout_list.m_list.push_back(CFlyOutItem(_T("Polygons"), ToolImage(_T("pentagon")), _("Start drawing polygons"), OnPolygonsButton));
+			flyout_list.m_list.push_back(CFlyOutItem(_T("Gear"), ToolImage(_T("gear")), _("Add a gear"), OnGearButton));
 			AddToolBarFlyout(m_geometryBar, flyout_list);
 		}
 

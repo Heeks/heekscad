@@ -304,7 +304,7 @@ void PickCreateRevolution()
 	{
 		if(wxGetApp().m_marked_list->size() > 0)
 		{
-			CreateExtrusionOrRevolution(wxGetApp().m_marked_list->list(), angle, true, 0.0, true);
+			CreateExtrusionOrRevolution(wxGetApp().m_marked_list->list(), angle, wxGetApp().m_extrude_to_solid, true, 0.0, true);
 		}
 	}
 }

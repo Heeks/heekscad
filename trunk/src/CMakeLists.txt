@@ -61,6 +61,7 @@ set( heekscad_HDRS
         FaceTools.h          InputModeCanvas.h      Ruler.h                 WrappedCurves.h
         FastCurves.h         Intersector.h          Sectioning.h            wxImageLoader.h
         Geom.h               LineArcDrawing.h       SelectMode.h
+        HGear.h
    )
 
 set( heekscad_SRCS
@@ -92,6 +93,7 @@ set( heekscad_SRCS
         FastCurves.cpp         LineArcDrawing.cpp       SelectMode.cpp            Wire.cpp
         Geom.cpp               Loop.cpp                 Shape.cpp                 WrappedCurves.cpp
         glfont2.cpp            MagDragWindow.cpp        ShapeData.cpp             wxImageLoader.cpp
+        HGear.cpp
    )
 set( HeeksCAD_LIBS
        -L../bin -ltinyxml -lheeksintf -lsketchsolve

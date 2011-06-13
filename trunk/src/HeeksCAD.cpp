@@ -65,6 +65,7 @@
 #include <wx/progdlg.h>
 #include "OrientationModifier.h"
 #include "MenuSeparator.h"
+#include "HGear.h"
 
 using namespace std;
 
@@ -847,6 +848,7 @@ void HeeksCADapp::InitializeXMLFunctions()
 		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Constraint", Constraint::ReadFromXMLElement ) );
 #endif
 		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "OrientationModifier", COrientationModifier::ReadFromXMLElement ) );
+		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Gear", HGear::ReadFromXMLElement ) );
 	}
 }
 

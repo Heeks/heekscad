@@ -64,6 +64,7 @@ enum{
 	OrientationModifierType,
 	HoleType,
 	HolePositionsType,
+	GearType,
 	ObjectMaximumType,
 };
 
@@ -90,7 +91,8 @@ enum{
 #define MARKING_FILTER_PAD					0x00020000
 #define MARKING_FILTER_PART					0x00040000
 #define MARKING_FILTER_POCKETSOLID			0x00080000
-#define MARKING_FILTER_UNKNOWN				0x00100000
+#define MARKING_FILTER_GEAR					0x00100000
+#define MARKING_FILTER_UNKNOWN				0x00200000
 
 #ifdef HEEKSCAD
 #define GET_ICON(X,Y) x = (X); y = (Y); texture_number = wxGetApp().m_icon_texture_number
