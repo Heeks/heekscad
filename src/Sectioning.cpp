@@ -432,6 +432,8 @@ static void SectionObjectsWithDialog(std::list<HeeksObj*> list)
 
 			wxGetApp().CreateUndoPoint();
 
+			try{
+
 			TopoDS_Solid cuboid = BRepPrimAPI_MakeBox(axis, 2000.0, 2000.0, 1000.0);
 
 			wxGetApp().m_marked_list->Clear(false);
@@ -446,6 +448,11 @@ static void SectionObjectsWithDialog(std::list<HeeksObj*> list)
 				wxGetApp().Add(new_object, NULL);
 				wxGetApp().Remove(object);
 				wxGetApp().m_marked_list->Add(new_object, false);
+			}
+			}
+			catch(...)
+			{
+				::wxMessageBox(_("Sectioning failed!"));
 			}
 
 			wxGetApp().Changed();
