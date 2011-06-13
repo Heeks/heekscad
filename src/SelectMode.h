@@ -33,8 +33,6 @@ public:
 	wxString m_prompt_when_doing_a_main_loop;
 	CClickPoint m_last_click_point;
 
-	static bool m_can_grip_objects;
-
 	CSelectMode();
 	virtual ~CSelectMode(void){}
 

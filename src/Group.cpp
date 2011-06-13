@@ -13,6 +13,7 @@ CGroup::CGroup()
 	m_title = _("Group");
 	m_gripper_datum_set = false;
 	m_custom_grippers = false;
+	m_custom_grippers_just_one_axis = true;
 }
 
 void CGroup::WriteXML(TiXmlNode *root)
@@ -21,6 +22,7 @@ void CGroup::WriteXML(TiXmlNode *root)
 	root->LinkEndChild( element );
     element->SetAttribute("title", m_title.utf8_str());
 	element->SetAttribute("custom_grippers", m_custom_grippers ? 1:0);
+	element->SetAttribute("custom_grippers_one_axis", m_custom_grippers_just_one_axis ? 1:0);
 	element->SetAttribute("gripper_datum_set", m_gripper_datum_set ? 1:0);
 	if(m_gripper_datum_set)
 	{
@@ -65,6 +67,7 @@ HeeksObj* CGroup::ReadFromXMLElement(TiXmlElement* element)
 	if(element->Attribute("title"))new_object->m_title = Ctt(element->Attribute("title"));
 	int int_for_bool;
 	if(element->Attribute("custom_grippers", &int_for_bool))new_object->m_custom_grippers = (int_for_bool != 0);
+	if(element->Attribute("custom_grippers_one_axis", &int_for_bool))new_object->m_custom_grippers_just_one_axis = (int_for_bool != 0);
 	if(element->Attribute("gripper_datum_set", &int_for_bool))new_object->m_gripper_datum_set = (int_for_bool != 0);
 	if(new_object->m_gripper_datum_set)
 	{
@@ -158,6 +161,13 @@ void CGroup::OnEditString(const wxChar* str){
 	m_title.assign(str);
 }
 
+bool CGroup::Stretch(const double *p, const double* shift, void* data){
+	gp_Pnt vp = make_point(p);
+	gp_Vec vshift = make_vector(shift);
+	m_px = vp.XYZ() + vshift.XYZ();
+	return false;
+}
+
 void CGroup::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
 	if(m_custom_grippers)
 	{
@@ -174,9 +184,18 @@ void CGroup::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
 		}
 
 		list->push_back(GripData(GripperTypeTranslate, m_o.X(), m_o.Y(), m_o.Z(), NULL));
-		list->push_back(GripData(GripperTypeRotateObject, m_px.X(), m_px.Y(), m_px.Z(), NULL));
-		list->push_back(GripData(GripperTypeRotateObject, m_py.X(), m_py.Y(), m_py.Z(), NULL));
-		list->push_back(GripData(GripperTypeRotateObject, m_pz.X(), m_pz.Y(), m_pz.Z(), NULL));
+		if(m_custom_grippers_just_one_axis)
+		{
+			list->push_back(GripData(GripperTypeStretch, m_px.X(), m_px.Y(), m_px.Z(), NULL));
+			list->push_back(GripData(GripperTypeRotateObjectYZ, m_py.X(), m_py.Y(), m_py.Z(), NULL));
+			list->push_back(GripData(GripperTypeRotateObjectYZ, m_pz.X(), m_pz.Y(), m_pz.Z(), NULL));
+		}
+		else
+		{
+			list->push_back(GripData(GripperTypeRotateObjectXY, m_px.X(), m_px.Y(), m_px.Z(), NULL));
+			list->push_back(GripData(GripperTypeRotateObjectYZ, m_py.X(), m_py.Y(), m_py.Z(), NULL));
+			list->push_back(GripData(GripperTypeRotateObjectXZ, m_pz.X(), m_pz.Y(), m_pz.Z(), NULL));
+		}
 	}
 	else
 	{
@@ -187,6 +206,12 @@ void CGroup::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
 static void on_set_custom_grippers(bool value, HeeksObj* object)
 {
 	((CGroup*)object)->m_custom_grippers = value;
+	wxGetApp().Repaint();
+}
+
+static void on_set_custom_grippers_one_axis(bool value, HeeksObj* object)
+{
+	((CGroup*)object)->m_custom_grippers_just_one_axis = value;
 	wxGetApp().Repaint();
 }
 
@@ -216,6 +241,7 @@ void CGroup::GetProperties(std::list<Property *> *list)
 
 	if(m_custom_grippers)
 	{
+		list->push_back ( new PropertyCheck( _("custom grippers just one axis"), m_custom_grippers_just_one_axis, this, on_set_custom_grippers_one_axis) );
 		double p[3];
 		extract(m_o, p);
 		list->push_back(new PropertyVertex(_("datum"), p, this, on_set_o));

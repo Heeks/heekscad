@@ -98,31 +98,59 @@ wxString HDimension::MakeText()
 	switch(m_text_mode)
 	{
 		case PythagoreanDimensionTextMode:
-			text = wxString::Format(_T("%lg %s"), A->m_p.Distance(B->m_p)/units_factor, units_str.c_str());
+			text = wxString::Format(_T("%lg %s"), A->m_p.Distance(GetB2())/units_factor, units_str.c_str());
 			break;
 		case HorizontalDimensionTextMode:
-			text = wxString::Format(_T("%lg %s H"), fabs(A->m_p.X() - B->m_p.X())/units_factor, units_str.c_str());
+			text = wxString::Format(_T("%lg %s H"), fabs(A->m_p.X() - GetB2().X())/units_factor, units_str.c_str());
 			break;
 		case VerticalDimensionTextMode:
-			text = wxString::Format(_T("%lg %s V"), fabs(A->m_p.Y() - B->m_p.Y())/units_factor, units_str.c_str());
+			text = wxString::Format(_T("%lg %s V"), fabs(A->m_p.Y() - GetB2().Y())/units_factor, units_str.c_str());
 			break;
 	}
 
 	return text;
 }
 
+gp_Pnt HDimension::GetB2()
+{
+	// return B, possibly flattened
+	if(m_mode == TwoPointsXYOnlyDimensionMode)
+	{
+		gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(m_trsf);
+		double dp = gp_Vec(B->m_p.XYZ()) * zdir - gp_Vec(A->m_p.XYZ()) * zdir;
+		return gp_Pnt(B->m_p.XYZ() + zdir.XYZ() * (-dp));
+	}
+
+	return B->m_p;
+}
+
+gp_Pnt HDimension::GetC2()
+{
+	// return m_p2, possibly flattened
+	if(m_mode == TwoPointsXYOnlyDimensionMode)
+	{
+		gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(m_trsf);
+		double dp = gp_Vec(m_p2->m_p.XYZ()) * zdir - gp_Vec(A->m_p.XYZ()) * zdir;
+		return gp_Pnt(m_p2->m_p.XYZ() + zdir.XYZ() * (-dp));
+	}
+
+	return m_p2->m_p;
+}
+
 void HDimension::glCommands(bool select, bool marked, bool no_color)
 {
-	if(A->m_p.IsEqual(B->m_p, wxGetApp().m_geom_tol))return;
+	gp_Pnt b = GetB2();
+	
+	if(A->m_p.IsEqual(b, wxGetApp().m_geom_tol))return;
 
 	if(!no_color)wxGetApp().glColorEnsuringContrast(m_color);
 
 	gp_Dir xdir = gp_Dir(1, 0, 0).Transformed(m_trsf);
 	gp_Dir ydir = gp_Dir(0, 1, 0).Transformed(m_trsf);
 	gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(m_trsf);
-	if(m_mode == TwoPointsDimensionMode)
+	if(m_mode == TwoPointsDimensionMode || m_mode == TwoPointsXYOnlyDimensionMode)
 	{
-		xdir = make_vector(A->m_p, B->m_p);
+		xdir = make_vector(A->m_p, b);
 		if(xdir.IsParallel(zdir,wxGetApp().m_geom_tol))
 			zdir = xdir ^ ydir;
 		else
@@ -135,10 +163,10 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 	if(!wxGetApp().get_text_size(text, &width, &height))return;
 
 	// draw arrow line
-	draw_arrow_line(m_mode, A->m_p, B->m_p, m_p2->m_p, xdir, ydir, width, m_scale);
+	draw_arrow_line(m_mode, A->m_p, b, GetC2(), xdir, ydir, width, m_scale);
 
 	// draw text
-	RenderText(text, m_p2->m_p, xdir, ydir, m_scale);
+	RenderText(text, GetC2(), xdir, ydir, m_scale);
 
 	EndedObject::glCommands(select,marked,no_color);
 }
@@ -399,6 +427,7 @@ void HDimension::GetProperties(std::list<Property *> *list)
 
 		std::list< wxString > choices;
 	choices.push_back ( wxString ( _("between two points") ) );
+	choices.push_back ( wxString ( _("between two points, XY only") ) );
 	choices.push_back ( wxString ( _("orthogonal") ) );
 	list->push_back ( new PropertyChoice ( _("mode"),  choices, m_mode, this, on_set_mode ) );
 

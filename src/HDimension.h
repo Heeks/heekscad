@@ -10,6 +10,7 @@
 enum DimensionMode
 {
 	TwoPointsDimensionMode,
+	TwoPointsXYOnlyDimensionMode,
 	OrthogonalDimensionMode,
 };
 
@@ -32,6 +33,8 @@ class HeeksConfig;
 class HDimension: public EndedObject{
 private:
 	HeeksColor m_color;
+	gp_Pnt GetB2(); // return B, possibly flattened
+	gp_Pnt GetC2(); // return m_p2, possibly flattened
 
 public:
 	gp_Trsf m_trsf; // draw matrix at time of creation
