@@ -58,7 +58,7 @@ class myGLCanvas(wxGLCanvas):
    def OnMouse(self, event):
       if event.RightUp():
          if self.context_menu_enabled:
-             tools = HeeksCAD.GetDropDownTools(event.GetX(), event.GetY(), False, True, event.m_controlDown)
+             tools = HeeksCAD.GetDropDownTools(event.GetX(), event.GetY(), False, event.m_controlDown)
              if len(tools) > 0:
                 self.next_tool_id = 0
                 self.tools = []

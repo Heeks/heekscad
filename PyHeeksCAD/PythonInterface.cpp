@@ -90,7 +90,7 @@ public:
 	}
 };
 
-static boost::python::list GetDropDownTools(int x, int y, bool dont_use_point_for_functions, bool from_graphics_canvas, bool control_pressed)
+static boost::python::list GetDropDownTools(int x, int y, bool dont_use_point_for_functions, bool control_pressed)
 {
 	boost::python::list tool_list;
 
@@ -98,7 +98,7 @@ static boost::python::list GetDropDownTools(int x, int y, bool dont_use_point_fo
 	wxGetApp().FindMarkedObject(wxPoint(x, y), &marked_object);
 
 	std::list<Tool*> f_list;
-	wxGetApp().GetDropDownTools(f_list, wxPoint(x, y), &marked_object, dont_use_point_for_functions, from_graphics_canvas, control_pressed);
+	wxGetApp().GetDropDownTools(f_list, wxPoint(x, y), &marked_object, dont_use_point_for_functions, control_pressed);
 
 	BOOST_FOREACH(Tool* tool, f_list) {
 		tool_list.append(new PyTool(tool));

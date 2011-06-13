@@ -5862,6 +5862,13 @@
        x2="375.5"
        y2="622.36218"
        gradientTransform="matrix(0.6923482,0,0,1,-22.041217,-4.9999974)" />
+    <inkscape:perspective
+       id="perspective4031"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -5873,12 +5880,12 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8284273"
-     inkscape:cx="242.63723"
-     inkscape:cy="437.22803"
+     inkscape:zoom="4.0000002"
+     inkscape:cx="141.91421"
+     inkscape:cy="693.26399"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     showgrid="true"
+     showgrid="false"
      inkscape:window-width="1914"
      inkscape:window-height="1139"
      inkscape:window-x="0"
@@ -10298,5 +10305,12 @@
          d="M 259.7445,617.36218 L 260.43685,617.36218"
          style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
     </g>
+    <path
+       style="fill:#999999;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 178.74999,345.61223 L 180.87499,345.11223 L 181.68749,340.92473 L 184.87499,340.92473 L 185.81249,345.11223 L 187.81249,345.61223 L 190.87499,342.54973 L 193.43749,343.98723 L 192.37499,347.98723 L 193.62499,349.54973 L 197.56249,348.36223 L 199.24999,350.86223 L 196.37499,353.92472 L 196.68749,355.86222 L 200.99999,357.11222 L 200.93749,359.92472 L 196.81249,361.11222 L 196.18749,362.98722 L 199.43749,365.98722 L 197.74999,368.61222 L 193.68749,367.23722 L 192.12499,368.92472 L 193.37499,372.86222 L 190.74999,374.42472 L 187.93749,371.29972 L 185.93749,371.73722 L 184.93749,376.04972 L 181.93749,376.04972 L 180.93749,371.86222 L 178.99999,371.36222 L 175.93749,374.42472 L 173.12499,372.86222 L 174.43749,368.79972 L 173.06249,367.36222 L 168.99999,368.61222 L 167.37499,365.98722 L 170.68749,362.98722 L 169.99999,360.92472 L 165.81249,360.04972 L 165.74999,356.92472 L 170.06249,356.04972 L 170.62499,353.98722 L 167.24999,350.92473 L 169.06249,348.23723 L 172.99999,349.79973 L 174.56249,348.23723 L 173.24999,343.98723 L 175.99999,342.36223 L 178.74999,345.61223 z"
+       id="path4037"
+       inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\gear.png"
+       inkscape:export-xdpi="239.16956"
+       inkscape:export-ydpi="239.16956" />
   </g>
 </svg>
