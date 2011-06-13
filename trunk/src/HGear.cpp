@@ -1,0 +1,579 @@
+// HGear.cpp
+// Copyright (c) 2011, Dan Heeks
+// This program is released under the BSD license. See the file COPYING for details.
+#include "stdafx.h"
+
+#include "HGear.h"
+#include "../interface/PropertyDouble.h"
+#include "../interface/PropertyInt.h"
+#include "../interface/PropertyCheck.h"
+#include "../interface/PropertyLength.h"
+#include "Gripper.h"
+#include "HLine.h"
+
+HGear::HGear(const HGear &o){
+	operator=(o);
+}
+
+HGear::HGear(){
+	m_num_teeth = 12;
+	m_module = 1.0;
+	m_clearance = 0.1;
+	m_addendum_offset = 0.0;
+	m_addendum_multiplier = 0.5;
+	m_dedendum_multiplier = 0.5;
+	m_pressure_angle = 0.34906585039886;
+	m_spacing = 0.0;
+	m_tip_relief = 0.05;
+	m_depth = 1.0;
+	m_cone_half_angle = 0.0;
+	m_inner_ring = 1.0;
+}
+
+HGear::~HGear(){
+}
+
+const HGear& HGear::operator=(const HGear &o){
+	HeeksObj::operator=(o);
+	return *this;
+}
+
+const wxBitmap &HGear::GetIcon()
+{
+	static wxBitmap* icon = NULL;
+	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/gear.png")));
+	return *icon;
+}
+
+bool HGear::IsDifferent(HeeksObj* other)
+{
+	//HGear* gear = (HGear*)other;
+	//if(cir->C->m_p.Distance(C->m_p) > wxGetApp().m_geom_tol)
+	//	return true;
+
+	return HeeksObj::IsDifferent(other);
+}
+
+class PhiAndAngle{
+public:
+	double phi;
+	double angle;
+	PhiAndAngle(double Phi, double Angle){phi = Phi; angle = Angle;}
+};
+
+void(*callbackfunc_for_point)(const double *p) = NULL;
+gp_Trsf mat_for_point;
+const HGear* gear_for_point = NULL;
+double height_for_point = 0.0;
+double pitch_radius = 0.0;
+double base_radius = 0.0;
+double cone_sin_for_point = 0.0;
+double cone_cos_for_point = 0.0;
+static double inside_radius = 0.0;
+static double outside_radius = 0.0;
+static PhiAndAngle outside_phi_and_angle(0.0, 0.0);
+static PhiAndAngle inside_phi_and_angle(0.0, 0.0);
+static PhiAndAngle tip_relief_phi_and_angle(0.0, 0.0);
+static PhiAndAngle middle_phi_and_angle(0.0, 0.0);
+
+void point_at_phi(double phi, double &px, double &py)
+{
+	double x = base_radius * phi;
+	double sx = cos(phi) * base_radius;
+	double sy = sin(phi) * base_radius;
+	px = sx + sin(phi) * x;
+	py = sy - cos(phi) * x;
+}
+
+PhiAndAngle involute_intersect(double r, double phi, double phi_step)
+{
+	while(1)
+	{
+		double px, py;
+		point_at_phi(phi, px, py);
+
+        if(sqrt(px*px + py*py) > r)
+		{
+			if(phi_step > 1e-10)
+                return involute_intersect(r, phi-phi_step, phi_step/2);
+            return PhiAndAngle(phi, atan2(py, px));
+		}
+		phi = phi + phi_step;
+	}
+}
+
+PhiAndAngle involute_intersect(double r)
+{
+	return involute_intersect(r, 1.0, 1.0);
+}
+
+void transform_for_cone_and_depth(gp_Pnt &p)
+{
+	gp_Vec v(p.XYZ());
+	double radius_beyond_surface = v.Magnitude() - pitch_radius;
+	v.Normalize();
+
+	double scale = 1.0 - cone_sin_for_point * height_for_point / pitch_radius;
+
+	p = gp_Pnt(v.XYZ() * (scale * pitch_radius + scale * radius_beyond_surface * cone_cos_for_point)
+		+ gp_XYZ(0.0, 0.0, height_for_point * cone_cos_for_point + scale * radius_beyond_surface * cone_sin_for_point));
+}
+
+void point(double x, double y)
+{
+	// input - a point as if for a spur gear at 0, 0, 0
+	
+	// this transforms the point to put it on the cone, for a bevel gear
+	// then calls the callback function
+
+	gp_Pnt p(x, y, 0.0);
+
+	transform_for_cone_and_depth(p);
+
+	p.Transform(mat_for_point);
+	double pp[3];
+	extract(p, pp);
+	(*callbackfunc_for_point)(pp);
+}
+
+void involute(double tooth_angle, bool do_reverse)
+{
+	int steps = 10;
+
+	for(int i = do_reverse ? (steps) : 0; do_reverse ? (i>= 0) : (i<=steps); )
+	{
+		double phi = inside_phi_and_angle.phi + (tip_relief_phi_and_angle.phi - inside_phi_and_angle.phi)*i/steps;
+
+		// calculate point on the first tooth
+		double px, py;
+		point_at_phi(phi, px, py);
+		if(do_reverse)py = -py; // mirror for reverse
+
+		// rotate by tooth angle
+		double x = px*cos(tooth_angle) - py*sin(tooth_angle);
+		double y = py*cos(tooth_angle) + px*sin(tooth_angle);
+
+		// output the point
+		point(x, y);
+
+		if(do_reverse)i--;
+		else i++;
+	}
+}
+
+void point_at_rad_and_angle(double r, double angle)
+{
+	point(cos(angle)*r, sin(angle)*r);
+}
+
+void tooth(int i, bool want_start_point, bool make_closed_tooth_form)
+{
+	double tooth_angle = 2*Pi*i/gear_for_point->m_num_teeth;
+	double next_tooth_angle = 2*Pi*(i+1)/gear_for_point->m_num_teeth;
+	// incremental_angle - to space the middle point at a quarter of a cycle
+	double incremental_angle = 0.5*Pi/gear_for_point->m_num_teeth - middle_phi_and_angle.angle;
+	double angle1 = tooth_angle - (inside_phi_and_angle.angle + incremental_angle);
+	double angle2 = tooth_angle + (inside_phi_and_angle.angle + incremental_angle);
+	double angle3 = tooth_angle + (outside_phi_and_angle.angle + incremental_angle);
+	double angle4 = next_tooth_angle - (outside_phi_and_angle.angle + incremental_angle);
+	double angle5 = next_tooth_angle - (inside_phi_and_angle.angle + incremental_angle);
+
+	if(!make_closed_tooth_form && fabs(gear_for_point->m_clearance) > 0.0000000001)
+	{
+		if(i==0 && want_start_point)point_at_rad_and_angle(inside_radius-gear_for_point->m_clearance, angle1);
+		point_at_rad_and_angle(inside_radius-gear_for_point->m_clearance, angle2);
+	}
+	else
+	{
+		if(i==0 && want_start_point)point_at_rad_and_angle(inside_radius, angle1);
+	}
+
+	involute(tooth_angle + incremental_angle, false);
+
+	if(fabs(gear_for_point->m_tip_relief) > 0.00000000001)
+	{
+		point_at_rad_and_angle(outside_radius, angle3 + (gear_for_point->m_tip_relief/2)/outside_radius);
+		point_at_rad_and_angle(outside_radius, angle4 - (gear_for_point->m_tip_relief/2)/outside_radius);
+	}
+
+	involute(next_tooth_angle - incremental_angle, true);
+
+	if(!make_closed_tooth_form && fabs(gear_for_point->m_clearance) > 0.0000000001)
+	{
+		point_at_rad_and_angle(inside_radius-gear_for_point->m_clearance, angle5);
+	}
+
+	if(make_closed_tooth_form)
+	{
+		double inside_ring_radius = inside_radius - gear_for_point->m_clearance - gear_for_point->m_inner_ring;
+		int num_steps = 10;
+		for(int i = 0; i<=num_steps; i++)
+		{
+			double angle = angle5 + (angle1 - angle5) * i / num_steps;
+			point_at_rad_and_angle(inside_ring_radius, angle);
+		}
+		point_at_rad_and_angle(inside_radius, angle1);
+	}
+}
+
+void HGear::SetSegmentsVariables(void(*callbackfunc)(const double *p))const
+{
+	callbackfunc_for_point = callbackfunc;
+	gear_for_point = this;
+	mat_for_point = make_matrix(m_pos.Location(), m_pos.XDirection(), m_pos.YDirection());
+	cone_sin_for_point = sin(m_cone_half_angle);
+	cone_cos_for_point = cos(m_cone_half_angle);
+
+	pitch_radius = (double)(m_module * m_num_teeth)/2;
+	inside_radius = pitch_radius - m_dedendum_multiplier*m_module;
+	outside_radius = pitch_radius + (m_addendum_multiplier*m_module + m_addendum_offset);
+	base_radius = pitch_radius * cos(gear_for_point->m_pressure_angle) / cos(gear_for_point->m_cone_half_angle);
+
+	if(inside_radius < base_radius)inside_radius = base_radius;
+
+	inside_phi_and_angle = involute_intersect(inside_radius);
+	outside_phi_and_angle = involute_intersect(outside_radius);
+	tip_relief_phi_and_angle = involute_intersect(outside_radius - m_tip_relief);
+	middle_phi_and_angle = involute_intersect(pitch_radius);
+}
+
+void HGear::GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point)const
+{
+	SetSegmentsVariables(callbackfunc);
+
+	for(int i = 0; i<m_num_teeth; i++)
+	{
+		tooth(i, i==0 && want_start_point, false);
+	}
+}
+
+void HGear::GetInnerRingSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point)const
+{
+	SetSegmentsVariables(callbackfunc);
+
+	double inner_ring_radius = inside_radius - this->m_clearance - this->m_inner_ring;
+
+	int num = 10*m_num_teeth;
+	for(int i = 0; i<=num; i++)
+	{
+		double angle = 2*Pi*i/num;
+
+		if(i!=0 || want_start_point)point(cos(angle)*inner_ring_radius, sin(angle)*inner_ring_radius);
+	}
+}
+
+void HGear::GetOneToothSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point)const
+{
+	SetSegmentsVariables(callbackfunc);
+	tooth(0, want_start_point, true);
+}
+
+static void glVertexFunction(const double *p){glVertex3d(p[0], p[1], p[2]);}
+
+void HGear::glCommands(bool select, bool marked, bool no_color){
+	if(!no_color){
+		wxGetApp().glColorEnsuringContrast(HeeksColor(0, 0, 0));
+	}
+	GLfloat save_depth_range[2];
+	if(marked){
+		glGetFloatv(GL_DEPTH_RANGE, save_depth_range);
+		glDepthRange(0, 0);
+		glLineWidth(2);
+	}
+
+	height_for_point = 0.0;
+	glBegin(GL_LINE_STRIP);
+	GetSegments(glVertexFunction, wxGetApp().GetPixelScale());
+	glEnd();
+	glBegin(GL_LINE_STRIP);
+	GetInnerRingSegments(glVertexFunction, wxGetApp().GetPixelScale());
+	glEnd();
+
+	if(fabs(m_depth) > 0.000000000001)
+	{
+		height_for_point = m_depth;
+		glBegin(GL_LINE_STRIP);
+		GetSegments(glVertexFunction, wxGetApp().GetPixelScale());
+		glEnd();
+		glBegin(GL_LINE_STRIP);
+		GetInnerRingSegments(glVertexFunction, wxGetApp().GetPixelScale());
+		glEnd();
+	}
+
+	if(marked){
+		glLineWidth(1);
+		glDepthRange(save_depth_range[0], save_depth_range[1]);
+	}
+}
+
+HeeksObj *HGear::MakeACopy(void)const{
+		HGear *new_object = new HGear(*this);
+		return new_object;
+}
+
+void HGear::ModifyByMatrix(const double* m){
+	gp_Trsf mat = make_matrix(m);
+	m_pos.Transform(mat);
+}
+
+void HGear::GetBox(CBox &box){
+	double acting_radius = (double)(m_module * m_num_teeth)/2;
+	double outside_radius = acting_radius + (m_addendum_multiplier*m_module + m_addendum_offset);
+	gp_Trsf mat = make_matrix(m_pos.Location(), m_pos.XDirection(), m_pos.YDirection());
+	gp_Pnt p[4];
+	p[0] = gp_Pnt(m_pos.Location().XYZ() + gp_XYZ(outside_radius, outside_radius, 0.0));
+	p[1] = gp_Pnt(m_pos.Location().XYZ() + gp_XYZ(-outside_radius, outside_radius, 0.0));
+	p[2] = gp_Pnt(m_pos.Location().XYZ() + gp_XYZ(-outside_radius, -outside_radius, 0.0));
+	p[3] = gp_Pnt(m_pos.Location().XYZ() + gp_XYZ(outside_radius, -outside_radius, 0.0));
+	for(int i = 0; i<4; i++)
+	{
+		p[i].Transform(mat);
+		box.Insert(p[i].X(), p[i].Y(), p[i].Z());
+	}
+}
+
+void HGear::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
+	gp_Pnt o = m_pos.Location();
+	double acting_radius = (double)(m_module * m_num_teeth)/2;
+	gp_Pnt px(o.XYZ() + m_pos.XDirection().XYZ() * acting_radius);
+	gp_Pnt py(o.XYZ() + m_pos.YDirection().XYZ() * acting_radius);
+	gp_Dir z_dir = m_pos.XDirection() ^ m_pos.YDirection();
+	gp_Pnt pz(o.XYZ() + z_dir.XYZ() * acting_radius);
+	gp_Pnt pxyz(o.XYZ() + m_pos.XDirection().XYZ() * acting_radius  + m_pos.YDirection().XYZ() * acting_radius + z_dir.XYZ() * acting_radius);
+	list->push_back(GripData(GripperTypeTranslate,o.X(),o.Y(),o.Z(),NULL));
+	list->push_back(GripData(GripperTypeRotateObject,px.X(),px.Y(),px.Z(),NULL));
+	list->push_back(GripData(GripperTypeRotateObject,py.X(),py.Y(),py.Z(),NULL));
+	list->push_back(GripData(GripperTypeRotateObject,pz.X(),pz.Y(),pz.Z(),NULL));
+	list->push_back(GripData(GripperTypeScale,pxyz.X(),pxyz.Y(),pxyz.Z(),NULL));
+}
+
+static void on_set_num_teeth(int value, HeeksObj* object){
+	((HGear*)object)->m_num_teeth = value;
+}
+
+static void on_set_module(double value, HeeksObj* object){
+	((HGear*)object)->m_module = value;
+}
+
+static void on_set_clearance(double value, HeeksObj* object){
+	((HGear*)object)->m_clearance = value;
+}
+
+static void on_set_addendum_offset(double value, HeeksObj* object){
+	((HGear*)object)->m_addendum_offset = value;
+}
+
+static void on_set_addendum_multiplier(double value, HeeksObj* object){
+	((HGear*)object)->m_addendum_multiplier = value;
+}
+
+static void on_set_dedendum_multiplier(double value, HeeksObj* object){
+	((HGear*)object)->m_dedendum_multiplier = value;
+}
+
+static void on_set_pressure_angle(double value, HeeksObj* object){
+	((HGear*)object)->m_pressure_angle = value * Pi/180;
+}
+
+static void on_set_spacing(double value, HeeksObj* object){
+	((HGear*)object)->m_spacing = value;
+}
+
+static void on_set_tip_relief(double value, HeeksObj* object){
+	((HGear*)object)->m_tip_relief = value;
+}
+
+static void on_set_depth(double value, HeeksObj* object){
+	((HGear*)object)->m_depth = value;
+}
+
+static void on_set_cone_half_angle(double value, HeeksObj* object){
+	((HGear*)object)->m_cone_half_angle = value * Pi/180;
+}
+
+static void on_set_inner_ring(double value, HeeksObj* object){
+	((HGear*)object)->m_inner_ring = value;
+}
+
+void HGear::GetProperties(std::list<Property *> *list){
+	list->push_back(new PropertyInt(_("num teeth"), m_num_teeth, this, on_set_num_teeth));
+	list->push_back(new PropertyDouble(_("module"), m_module, this, on_set_module));
+	list->push_back(new PropertyDouble(_("clearance"), m_clearance, this, on_set_clearance));
+	list->push_back(new PropertyDouble(_("addendum_offset"), m_addendum_offset, this, on_set_addendum_offset));
+	list->push_back(new PropertyDouble(_("addendum_multiplier"), m_addendum_multiplier, this, on_set_addendum_multiplier));
+	list->push_back(new PropertyDouble(_("dedendum_multiplier"), m_dedendum_multiplier, this, on_set_dedendum_multiplier));
+	list->push_back(new PropertyDouble(_("pressure_angle"), m_pressure_angle * 180/Pi, this, on_set_pressure_angle));
+	list->push_back(new PropertyDouble(_("spacing"), m_spacing, this, on_set_spacing));
+	list->push_back(new PropertyDouble(_("tip_relief"), m_tip_relief, this, on_set_tip_relief));
+	list->push_back(new PropertyDouble(_("depth"), m_depth, this, on_set_depth));
+	list->push_back(new PropertyDouble(_("cone_half_angle"), m_cone_half_angle * 180/Pi, this, on_set_cone_half_angle));
+	list->push_back(new PropertyDouble(_("inner_ring"), m_inner_ring, this, on_set_inner_ring));
+
+	HeeksObj::GetProperties(list);
+}
+
+bool HGear::GetScaleAboutMatrix(double *m)
+{
+	gp_Trsf mat = make_matrix(m_pos.Location(), m_pos.XDirection(), m_pos.YDirection());
+	extract(mat, m);
+	return true;
+}
+
+static HGear* object_for_Tool = NULL;
+static bool lines_started = false;
+static gp_Pnt prev_point = gp_Pnt(0.0, 0.0, 0.0);
+static CSketch* sketch_for_make = NULL;
+
+static void lineAddFunction(const double *p)
+{
+	gp_Pnt pnt = make_point(p);
+
+	if(lines_started)
+	{
+		HLine* new_object = new HLine(prev_point, pnt, &wxGetApp().current_color);
+		sketch_for_make->Add(new_object, NULL);
+	}
+
+	lines_started = true;
+	prev_point = pnt;
+}
+
+class GearMakeSketches: public Tool
+{
+public:
+	void Run(){
+		sketch_for_make = new CSketch();
+
+		height_for_point = 0.0;
+		lines_started = false;
+		if(oneTooth())
+		{
+			object_for_Tool->GetOneToothSegments(lineAddFunction, wxGetApp().GetPixelScale());
+		}
+		else
+		{
+			object_for_Tool->GetSegments(lineAddFunction, wxGetApp().GetPixelScale());
+			lines_started = false;
+			object_for_Tool->GetInnerRingSegments(lineAddFunction, wxGetApp().GetPixelScale());
+		}
+		wxGetApp().Add(sketch_for_make, NULL);
+
+		if(fabs(object_for_Tool->m_depth) > 0.000000000001)
+		{
+			height_for_point = object_for_Tool->m_depth;
+			lines_started = false;
+			sketch_for_make = new CSketch();
+			if(oneTooth())
+			{
+				object_for_Tool->GetOneToothSegments(lineAddFunction, wxGetApp().GetPixelScale());
+			}
+			else
+			{
+				object_for_Tool->GetSegments(lineAddFunction, wxGetApp().GetPixelScale());
+				lines_started = false;
+				object_for_Tool->GetInnerRingSegments(lineAddFunction, wxGetApp().GetPixelScale());
+			}
+			wxGetApp().Add(sketch_for_make, NULL);
+		}
+	}
+	const wxChar* GetTitle(){return _("Make Sketches");}
+	//wxString BitmapPath(){return _T("trsfw");}
+
+	virtual bool oneTooth(){return false;}
+};
+
+class GearMakeOneToothSketches: public GearMakeSketches
+{
+public:
+	const wxChar* GetTitle(){return _("Make One Tooth Sketches");}
+	bool oneTooth(){return true;}
+};
+
+static GearMakeSketches make_sketches;
+static GearMakeOneToothSketches make_one_tooth_sketches;
+
+void HGear::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
+{
+	object_for_Tool = this;
+	t_list->push_back(&make_sketches);
+	t_list->push_back(&make_one_tooth_sketches);
+}
+
+void HGear::WriteXML(TiXmlNode *root)
+{
+	TiXmlElement * element;
+	element = new TiXmlElement( "Gear" );
+	root->LinkEndChild( element );
+
+	element->SetAttribute("num_teeth", m_num_teeth);
+	element->SetDoubleAttribute("module", m_module);
+	element->SetDoubleAttribute("clearance", m_clearance);
+	element->SetDoubleAttribute("addendum_offset", m_addendum_offset);
+	element->SetDoubleAttribute("addendum_multiplier", m_addendum_multiplier);
+	element->SetDoubleAttribute("dedendum_multiplier", m_dedendum_multiplier);
+	element->SetDoubleAttribute("pressure_angle", m_pressure_angle);
+	element->SetDoubleAttribute("spacing", m_spacing);
+	element->SetDoubleAttribute("tip_relief", m_tip_relief);
+	element->SetDoubleAttribute("depth", m_depth);
+	element->SetDoubleAttribute("cone_half_angle", m_cone_half_angle);
+	element->SetDoubleAttribute("inner_ring", m_inner_ring);
+
+	const gp_Pnt& l = m_pos.Location();
+	element->SetDoubleAttribute("lx", l.X());
+	element->SetDoubleAttribute("ly", l.Y());
+	element->SetDoubleAttribute("lz", l.Z());
+
+	const gp_Dir& d = m_pos.Direction();
+	element->SetDoubleAttribute("dx", d.X());
+	element->SetDoubleAttribute("dy", d.Y());
+	element->SetDoubleAttribute("dz", d.Z());
+
+	const gp_Dir& x = m_pos.XDirection();
+	element->SetDoubleAttribute("xx", x.X());
+	element->SetDoubleAttribute("xy", x.Y());
+	element->SetDoubleAttribute("xz", x.Z());
+
+	WriteBaseXML(element);
+}
+
+// static member function
+HeeksObj* HGear::ReadFromXMLElement(TiXmlElement* element)
+{
+	HGear* new_object = new HGear();
+
+	element->Attribute("num_teeth", &new_object->m_num_teeth);
+	element->Attribute("module", &new_object->m_module);
+	element->Attribute("clearance", &new_object->m_clearance);
+	element->Attribute("addendum_offset", &new_object->m_addendum_offset);
+	element->Attribute("addendum_multiplier", &new_object->m_addendum_multiplier);
+	element->Attribute("dedendum_multiplier", &new_object->m_dedendum_multiplier);
+	element->Attribute("pressure_angle", &new_object->m_pressure_angle);
+	element->Attribute("spacing", &new_object->m_spacing);
+	element->Attribute("tip_relief", &new_object->m_tip_relief);
+	element->Attribute("depth", &new_object->m_depth);
+	element->Attribute("cone_half_angle", &new_object->m_cone_half_angle);
+	element->Attribute("inner_ring", &new_object->m_inner_ring);
+
+	double l[3] = {0.0, 0.0, 0.0};
+	double d[3] = {0.0, 0.0, 1.0};
+	double x[3] = {1.0, 0.0, 0.0};
+
+	element->Attribute("lx", &l[0]);
+	element->Attribute("ly", &l[1]);
+	element->Attribute("lz", &l[2]);
+
+	element->Attribute("dx", &d[0]);
+	element->Attribute("dy", &d[1]);
+	element->Attribute("dz", &d[2]);
+
+	element->Attribute("xx", &x[0]);
+	element->Attribute("xy", &x[1]);
+	element->Attribute("xz", &x[2]);
+
+	new_object->m_pos = gp_Ax2(gp_Pnt(l[0], l[1], l[2]), gp_Dir(d[0], d[1], d[2]), gp_Dir(x[0], x[1], x[2]));
+
+	new_object->ReadBaseXML(element);
+
+	return new_object;
+}
+
