@@ -18,8 +18,6 @@
 #include "CorrelationTool.h"
 #include "InputModeCanvas.h"
 
-bool CSelectMode::m_can_grip_objects = true;
-
 CClickPoint::CClickPoint(const wxPoint& point, unsigned long depth)
 {
 	m_point = point;
@@ -367,35 +365,37 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 			}
 			else if(abs(button_down_point.x - event.GetX())>2 || abs(button_down_point.y - event.GetY())>2)
 			{
-				if(wxGetApp().m_dragging_moves_objects && !window_box_exists && m_can_grip_objects)
+				if(wxGetApp().m_dragging_moves_objects && !window_box_exists)
 				{
 					std::list<HeeksObj*> selected_objects_dragged;
 					wxGetApp().m_show_grippers_on_drag = true;
 
-					MarkedObjectManyOfSame marked_object;
-					wxGetApp().FindMarkedObject(button_down_point, &marked_object);
-					if(marked_object.m_map.size()>0){
-						HeeksObj* object = marked_object.GetFirstOfTopOnly();
-						double min_depth = 0.0;
-						HeeksObj* closest_object = NULL;
-						while(object)
-						{
-							if(wxGetApp().m_marked_list->ObjectMarked(object))
+					if(	wxGetApp().m_marked_list->list().size() > 0)
+					{
+						selected_objects_dragged = wxGetApp().m_marked_list->list();
+					}
+					else
+					{
+						MarkedObjectManyOfSame marked_object;
+						wxGetApp().FindMarkedObject(button_down_point, &marked_object);
+						if(marked_object.m_map.size()>0){
+							HeeksObj* object = marked_object.GetFirstOfTopOnly();
+							double min_depth = 0.0;
+							HeeksObj* closest_object = NULL;
+							while(object)
 							{
-								selected_objects_dragged = wxGetApp().m_marked_list->list();
-								break;
+								double depth = marked_object.GetDepth();
+								if(closest_object == NULL || depth<min_depth)
+								{
+									min_depth = depth;
+									closest_object = object;
+								}
+								object = marked_object.Increment();
 							}
-							double depth = marked_object.GetDepth();
-							if(closest_object == NULL || depth<min_depth)
-							{
-								min_depth = depth;
-								closest_object = object;
+							if(selected_objects_dragged.size() == 0 && closest_object){
+								selected_objects_dragged.push_back(closest_object);
+								wxGetApp().m_show_grippers_on_drag = false;
 							}
-							object = marked_object.Increment();
-						}
-						if(selected_objects_dragged.size() == 0 && closest_object){
-							selected_objects_dragged.push_back(closest_object);
-							wxGetApp().m_show_grippers_on_drag = false;
 						}
 					}
 

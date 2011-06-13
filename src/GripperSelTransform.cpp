@@ -266,6 +266,9 @@ void GripperSelTransform::MakeMatrix ( const double* from, const double* to, con
 		break;
 	case GripperTypeRotate:
 	case GripperTypeRotateObject:
+	case GripperTypeRotateObjectXY:
+	case GripperTypeRotateObjectXZ:
+	case GripperTypeRotateObjectYZ:
 		{
 			gp_Trsf object_mat = make_matrix(object_m);
 			gp_Pnt rotate_centre_point = gp_Pnt(0, 0, 0).Transformed(object_mat);
@@ -282,9 +285,38 @@ void GripperSelTransform::MakeMatrix ( const double* from, const double* to, con
 			gp_Vec rot_dir = vx ^ vy;
 			rot_dir.Normalize();
 
-			if(m_data.m_type == GripperTypeRotateObject){
+			if(m_data.m_type == GripperTypeRotateObjectXY){
+				// use object z axis
+				gp_Vec object_x = gp_Vec(1, 0, 0).Transformed(object_mat).Normalized();
+				gp_Vec object_y = gp_Vec(0, 1, 0).Transformed(object_mat).Normalized();
+				gp_Vec object_z = gp_Vec(0, 0, 1).Transformed(object_mat).Normalized();
+				rot_dir = object_z;
+				vx = object_x;
+				vy = object_y;
+			}
+
+			else if(m_data.m_type == GripperTypeRotateObjectXZ){
+				// use object y axis
+				gp_Vec object_x = gp_Vec(1, 0, 0).Transformed(object_mat).Normalized();
+				gp_Vec object_y = gp_Vec(0, 1, 0).Transformed(object_mat).Normalized();
+				gp_Vec object_z = gp_Vec(0, 0, 1).Transformed(object_mat).Normalized();
+				rot_dir = object_y;
+				vx = object_z;
+				vy = object_x;
+			}
+
+			else if(m_data.m_type == GripperTypeRotateObjectYZ){
+				// use object x axis
+				gp_Vec object_x = gp_Vec(1, 0, 0).Transformed(object_mat).Normalized();
+				gp_Vec object_y = gp_Vec(0, 1, 0).Transformed(object_mat).Normalized();
+				gp_Vec object_z = gp_Vec(0, 0, 1).Transformed(object_mat).Normalized();
+				rot_dir = object_x;
+				vx = object_y;
+				vy = object_z;
+			}
+
+			else if(m_data.m_type == GripperTypeRotateObject){
 				// choose the closest object axis to use
-				gp_Trsf object_mat = make_matrix(object_m);
 				gp_Vec object_x = gp_Vec(1, 0, 0).Transformed(object_mat).Normalized();
 				gp_Vec object_y = gp_Vec(0, 1, 0).Transformed(object_mat).Normalized();
 				gp_Vec object_z = gp_Vec(0, 0, 1).Transformed(object_mat).Normalized();
