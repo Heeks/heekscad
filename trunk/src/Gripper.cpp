@@ -102,6 +102,15 @@ void Gripper::glCommands(bool select, bool marked, bool no_color){
 		case GripperTypeRotateObject:
 			glBitmap(16, 13, 8, 4, 10.0, 0.0, rotation_object_circle);
 			break;
+		case GripperTypeRotateObjectXY:
+			glBitmap(16, 13, 8, 4, 10.0, 0.0, rotation_object_circle);
+			break;
+		case GripperTypeRotateObjectXZ:
+			glBitmap(16, 13, 8, 4, 10.0, 0.0, rotation_object_circle);
+			break;
+		case GripperTypeRotateObjectYZ:
+			glBitmap(16, 13, 8, 4, 10.0, 0.0, rotation_object_circle);
+			break;
 		case GripperTypeRotate:
 			glBitmap(16, 13, 8, 4, 10.0, 0.0, rotation_circle);
 			break;
