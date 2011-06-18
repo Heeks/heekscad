@@ -392,7 +392,8 @@ bool CDxfRead::ReadArc()
 	double end_angle = 0.0;
 	double radius = 0.0;
 	double c[3]; // centre
-
+    double z_extrusion_dir = 1.0;
+    
 	while(!((*m_ifs).eof()))
 	{
 		get_line();
@@ -409,7 +410,7 @@ bool CDxfRead::ReadArc()
 			case 0:
 				// next item found, so finish with arc
 			        DerefACI();
-			        OnReadArc(start_angle, end_angle, radius, c);
+			        OnReadArc(start_angle, end_angle, radius, c,z_extrusion_dir);
 			        return true;
 
 			case 8: // Layer name follows
@@ -452,14 +453,22 @@ bool CDxfRead::ReadArc()
 				get_line();
 				ss.str(m_str); ss >> m_aci; if(ss.fail()) return false;
 				break;
+
+
+
 			case 100:
 			case 39:
 			case 210:
 			case 220:
-			case 230:
-				// skip the next line
+                // skip the next line
 				get_line();
 				break;
+			case 230:
+                //Z extrusion direction for arc 
+				get_line();
+				ss.str(m_str); ss >> z_extrusion_dir; if(ss.fail()) return false;                                
+				break;
+
 			default:
 				// skip the next line
 				get_line();
@@ -467,7 +476,7 @@ bool CDxfRead::ReadArc()
 		}
 	}
 	DerefACI();
-	OnReadArc(start_angle, end_angle, radius, c);
+	OnReadArc(start_angle, end_angle, radius, c, z_extrusion_dir);
 	return false;
 }
 
@@ -1218,16 +1227,35 @@ bool CDxfRead::ReadPolyLine()
 	return false;
 }
 
-void CDxfRead::OnReadArc(double start_angle, double end_angle, double radius, const double* c){
-	double s[3], e[3];
+void CDxfRead::OnReadArc(double start_angle, double end_angle, double radius, const double* c, double z_extrusion_dir){
+	double s[3], e[3], temp[3] ;
+    if (z_extrusion_dir==1.0)
+  {
+    temp[0] =c[0];
+    temp[1] =c[1];
+    temp[2] =c[2];
 	s[0] = c[0] + radius * cos(start_angle * Pi/180);
 	s[1] = c[1] + radius * sin(start_angle * Pi/180);
 	s[2] = c[2];
 	e[0] = c[0] + radius * cos(end_angle * Pi/180);
 	e[1] = c[1] + radius * sin(end_angle * Pi/180);
 	e[2] = c[2];
+   }
+    else
+    {
+    temp[0] =-c[0];
+    temp[1] =c[1];
+    temp[2] =c[2];
+    
+    e[0] = -(c[0] + radius * cos(start_angle * Pi/180));
+	e[1] = (c[1] + radius * sin(start_angle * Pi/180));
+	e[2] = c[2];
+	s[0] = -(c[0] + radius * cos(end_angle * Pi/180));
+	s[1] = (c[1] + radius * sin(end_angle * Pi/180));
+	s[2] = c[2];
 
-	OnReadArc(s, e, c, true);
+    }
+	OnReadArc(s, e, temp, true);
 }
 
 void CDxfRead::OnReadCircle(const double* c, double radius){
