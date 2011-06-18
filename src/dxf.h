@@ -120,7 +120,7 @@ private:
 	bool ReadLwPolyLine();
 	bool ReadPolyLine();
 	bool ReadVertex(double *pVertex, bool *bulge_found, double *bulge);
-	void OnReadArc(double start_angle, double end_angle, double radius, const double* c);
+	void OnReadArc(double start_angle, double end_angle, double radius, const double* c, double z_extrusion_dir);
 	void OnReadCircle(const double* c, double radius);
     void OnReadEllipse(const double* c, const double* m, double ratio, double start_angle, double end_angle);
 
