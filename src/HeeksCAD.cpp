@@ -932,19 +932,17 @@ void HeeksCADapp::ObjectReadBaseXML(HeeksObj *object, TiXmlElement* element)
 
 HeeksObj *HeeksCADapp::MergeCommonObjects( ObjectReferences_t & unique_set, HeeksObj *object ) const
 {
-	if (object->GetFirstChild() != NULL)
+	std::list<HeeksObj *> children = ((ObjList *) object)->GetChildren();
+
+	for (std::list<HeeksObj *>::iterator itChild = children.begin(); itChild != children.end(); itChild++)
 	{
-		// This is also an ObjList pointer.  Recursively check the children for duplicates.
-		for (HeeksObj *child = object->GetFirstChild(); child != NULL; child = object->GetNextChild())
+		HeeksObj * replacement = MergeCommonObjects( unique_set, *itChild );
+		if (replacement != *itChild)
 		{
-			HeeksObj * replacement = MergeCommonObjects( unique_set, child );
-			if (replacement != child)
-			{
-				object->Remove(child);
-				object->Add( replacement, NULL );
-			}
+			object->Remove(*itChild);
+			object->Add( replacement, NULL );
 		}
-	}
+	} // for
 
 	if(object->UsesID())
 	{
@@ -964,8 +962,11 @@ HeeksObj *HeeksCADapp::MergeCommonObjects( ObjectReferences_t & unique_set, Heek
 			std::list<HeeksObj *> owners = object->Owners();
 			for (std::list<HeeksObj *>::iterator itOwner = owners.begin(); itOwner != owners.end(); itOwner++)
 			{
-				(*itOwner)->Remove(object);
-				(*itOwner)->Add( unique_reference, NULL );
+				if (unique_reference != object)
+				{
+					(*itOwner)->Remove(object);
+					(*itOwner)->Add( unique_reference, NULL );
+				}
 			}
 #else
 			if(object->m_owner)

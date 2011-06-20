@@ -228,6 +228,8 @@ bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 {
 	if (object==NULL) return false;
 	if (!CanAdd(object)) return false;
+	if (std::find(m_objects.begin(), m_objects.end(), object) != m_objects.end()) return true; // It's already here.
+
 	if (m_objects.size()==0 || prev_object==NULL)
 	{
 		m_objects.push_back(object);
@@ -256,6 +258,15 @@ bool ObjList::Add(HeeksObj* object, HeeksObj* prev_object)
 
 	return true;
 }
+
+
+std::list<HeeksObj *> ObjList::GetChildren() const
+{
+	std::list<HeeksObj *> children;
+	std::copy( m_objects.begin(), m_objects.end(), std::inserter(children, children.begin()) );
+	return(children);
+}
+
 
 #ifdef MULTIPLE_OWNERS
 void ObjList::Disconnect(std::list<HeeksObj*> parents)

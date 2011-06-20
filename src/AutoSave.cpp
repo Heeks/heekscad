@@ -69,6 +69,6 @@ void CAutoSave::Notify()
 void CAutoSave::Recover() const
 {
 	printf("Recovering from backup file %s\n", Ttc(m_backup_file_name.c_str()));
-	wxGetApp().OpenFile(m_backup_file_name.c_str(), false, NULL, false );
+	wxGetApp().OpenFile(m_backup_file_name.c_str(), false, NULL, NULL, false );
 }
 

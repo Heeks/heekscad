@@ -19,7 +19,9 @@ class GripData;
 class TopoDS_Shape;
 class ObjectCanvas;
 
-#define MULTIPLE_OWNERS
+#ifndef MULTIPLE_OWNERS
+    #define MULTIPLE_OWNERS
+#endif
 
 #ifdef MULTIPLE_OWNERS
 #define HEEKSOBJ_OWNER Owner()
@@ -183,6 +185,7 @@ public:
 	virtual HeeksObj* GetNextChild(){return NULL;}
 	virtual HeeksObj* GetAtIndex(int index){return NULL;}
 	virtual int GetNumChildren(){return 0;}
+	virtual std::list<HeeksObj *> GetChildren() const { std::list<HeeksObj *> empty; return(empty); }
 	virtual bool AutoExpand(){return false;}
 	virtual void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true){} // [nine doubles, three doubles],  or [nine doubles, nine doubles] if just_one_average_normal = false
 	virtual double Area()const{return 0.0;}
