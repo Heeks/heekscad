@@ -45,6 +45,7 @@ public:
 	HeeksObj* GetNextChild();
 	HeeksObj* GetAtIndex(int index);
 	int GetNumChildren();
+	std::list<HeeksObj *> GetChildren() const;
 	bool CanAdd(HeeksObj* object){return true;}
 	virtual bool Add(HeeksObj* object, HeeksObj* prev_object);
 	virtual void Add(std::list<HeeksObj*> objects);
