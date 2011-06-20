@@ -43,6 +43,7 @@
 			<Add option="-Wall" />
 			<Add option="`wx-config --cxxflags`" />
 			<Add option='-Wall -g -I &quot;./&quot; -I &quot;/usr/include/opencascade&quot; $(WXCFLAGS) -DUNICODE -D__WXGTK__ -DHEEKSCAD -DHAVE_LIMITS -DWXUSINGDLL -DHAVE_LIMITS -DTIXML_USE_STL -DRUNINPLACE -DCODEBLOCKS -DUSE_GENERIC_TREECTRL' />
+			<Add option="-DRUNINPLACE" />
 			<Add directory="/usr/include/opencascade" />
 			<Add directory="/usr/include/python2.6" />
 		</Compiler>
@@ -70,6 +71,8 @@
 		<Unit filename="interface/MarkedObject.cpp" />
 		<Unit filename="interface/MarkedObject.h" />
 		<Unit filename="interface/Material.h" />
+		<Unit filename="interface/NiceTextCtrl.cpp" />
+		<Unit filename="interface/NiceTextCtrl.h" />
 		<Unit filename="interface/ObjList.cpp" />
 		<Unit filename="interface/ObjList.h" />
 		<Unit filename="interface/Observer.h" />
@@ -184,6 +187,8 @@
 		<Unit filename="src/HDxf.h" />
 		<Unit filename="src/HEllipse.cpp" />
 		<Unit filename="src/HEllipse.h" />
+		<Unit filename="src/HGear.cpp" />
+		<Unit filename="src/HGear.h" />
 		<Unit filename="src/HILine.cpp" />
 		<Unit filename="src/HILine.h" />
 		<Unit filename="src/HImage.cpp" />
@@ -205,6 +210,7 @@
 		<Unit filename="src/HeeksFrame.h" />
 		<Unit filename="src/HeeksPrintout.cpp" />
 		<Unit filename="src/HeeksPrintout.h" />
+		<Unit filename="src/Input.cpp" />
 		<Unit filename="src/InputModeCanvas.cpp" />
 		<Unit filename="src/InputModeCanvas.h" />
 		<Unit filename="src/Intersector.h" />
@@ -257,6 +263,8 @@
 		<Unit filename="src/RuledSurface.h" />
 		<Unit filename="src/Ruler.cpp" />
 		<Unit filename="src/Ruler.h" />
+		<Unit filename="src/Sectioning.cpp" />
+		<Unit filename="src/Sectioning.h" />
 		<Unit filename="src/SelectMode.cpp" />
 		<Unit filename="src/SelectMode.h" />
 		<Unit filename="src/Shape.cpp" />
