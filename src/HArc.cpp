@@ -16,7 +16,8 @@
 #include "Gripper.h"
 #include "Sketch.h"
 #include "SolveSketch.h"
-
+#include "Drawing.h"
+#include "DigitizeMode.h"
 
 HArc::HArc(const HArc &line):EndedObject(&line.color){
 #ifndef MULTIPLE_OWNERS
@@ -111,12 +112,91 @@ public:
 static SetArcRadius arc_radius_toggle;
 #endif
 
+class ClickArcCentre: public Tool
+{
+public:
+	HArc *pArc;
+
+public:
+	void Run()
+	{
+		wxGetApp().m_digitizing->digitized_point = DigitizedPoint(pArc->C->m_p, DigitizeInputType);
+		Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+		if (pDrawingMode != NULL)
+		{
+			pDrawingMode->AddPoint();
+		}
+	}
+
+	const wxChar* GetTitle(){return _("Click centre point");}
+	wxString BitmapPath(){return _T("click_arc_midpoint");}
+};
+
+ClickArcCentre click_arc_centre;
+
+class ClickArcEndOne: public Tool
+{
+public:
+	HArc *pArc;
+
+public:
+	void Run()
+	{
+		wxGetApp().m_digitizing->digitized_point = DigitizedPoint(pArc->A->m_p, DigitizeInputType);
+		Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+		if (pDrawingMode != NULL)
+		{
+			pDrawingMode->AddPoint();
+		}
+	}
+
+	const wxChar* GetTitle(){return _("Click first end point");}
+	wxString BitmapPath(){return _T("click_arc_end_one");}
+};
+
+ClickArcEndOne click_arc_first_one;
+
+class ClickArcEndTwo: public Tool
+{
+public:
+	HArc *pArc;
+
+public:
+	void Run()
+	{
+		wxGetApp().m_digitizing->digitized_point = DigitizedPoint(pArc->B->m_p, DigitizeInputType);
+		Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+		if (pDrawingMode != NULL)
+		{
+			pDrawingMode->AddPoint();
+		}
+	}
+
+	const wxChar* GetTitle(){return _("Click second end point");}
+	wxString BitmapPath(){return _T("click_arc_end_two");}
+};
+
+ClickArcEndTwo click_arc_first_two;
+
 void HArc::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	arc_for_tool = this;
 #ifdef MULTIPLE_OWNERS
 	t_list->push_back(&arc_radius_toggle);
 #endif
+
+	Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+	if (pDrawingMode != NULL)
+	{
+		click_arc_centre.pArc = this;
+		t_list->push_back(&click_arc_centre);
+
+		click_arc_first_one.pArc = this;
+		t_list->push_back(&click_arc_first_one);
+
+		click_arc_first_two.pArc = this;
+		t_list->push_back(&click_arc_first_two);
+	}
 }
 
 

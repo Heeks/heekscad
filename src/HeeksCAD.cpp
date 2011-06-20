@@ -2064,6 +2064,72 @@ public:
 
 static UnsetCoordSystemActive coord_system_unset;
 
+std::list<Tool *> dynamic_tool_menu_options;
+
+
+class AddPointsAtIntersections : public Tool{
+
+public:
+	void Run(){
+		// Intersect each selected object with all other selected objects.  Where they intersect,
+		// add points objects.
+
+		std::list<HeeksObj *> marked_list = wxGetApp().m_marked_list->list();
+
+		for (std::list<HeeksObj *>::const_iterator itLhs = marked_list.begin(); itLhs != marked_list.end(); itLhs++)
+		{
+			std::list<HeeksObj *>::const_iterator itNext = itLhs;
+			itNext++;
+			for (std::list<HeeksObj *>::const_iterator itRhs = itNext; itRhs != marked_list.end(); itRhs++)
+			{
+				std::list< double > intersections;
+				if ((*itLhs)->Intersects(*itRhs, &intersections) > 0)
+				{
+					gp_Pnt location(0.0, 0.0, 0.0);
+					for (std::list<double>::iterator itValue = intersections.begin(); itValue != intersections.end(); /* increment within loop */ )
+					{
+						wxString verbose;
+
+						location.SetX( *itValue );
+						verbose << *itValue;
+
+						itValue++; if (itValue == intersections.end()) break;
+						location.SetY( *itValue );
+						verbose << _T(",") << *itValue;
+
+						itValue++; if (itValue == intersections.end()) break;
+						location.SetZ( *itValue );
+						verbose << _T(",") << *itValue;
+						itValue++;
+
+						HPoint *new_point = new HPoint( location, &(wxGetApp().construction_color) );
+						wxGetApp().Add(new_point, NULL);
+					}
+
+				}
+			}
+		}
+	}
+	const wxChar* GetTitle(){return(_("Add points at intersections"));}
+	wxString BitmapPath(){return _T("add_intersection_points");}
+
+private:
+	wxString	m_title;
+	gp_Pnt		m_location;
+};
+
+AddPointsAtIntersections add_points_at_intersections;
+
+
+void HeeksCADapp::GenerateIntersectionMenuOptions( std::list<Tool*> &f_list )
+{
+	if (wxGetApp().m_marked_list->list().size() > 1)
+	{
+		f_list.push_back(&add_points_at_intersections);
+	}
+}
+
+
 void HeeksCADapp::GetDropDownTools(std::list<Tool*> &f_list, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool control_pressed)
 {
 	tool_index_list.clear();
@@ -2077,6 +2143,8 @@ void HeeksCADapp::GetDropDownTools(std::list<Tool*> &f_list, const wxPoint &poin
 	GetTools(marked_object, f_list, new_point, control_pressed);
 
 	m_marked_list->GetTools(marked_object, f_list, &new_point, true);
+
+	GenerateIntersectionMenuOptions( f_list );
 
 	temp_f_list.clear();
 	if(input_mode_object)input_mode_object->GetTools(&temp_f_list, &new_point);

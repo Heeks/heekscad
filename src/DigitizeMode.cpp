@@ -20,6 +20,9 @@
 #include "CoordinateSystem.h"
 #include "PropertiesCanvas.h"
 
+#include "DigitizeMode.h"
+#include "Drawing.h"
+
 DigitizeMode::DigitizeMode(){
 	point_or_window = new PointOrWindow(false);
 	m_doing_a_main_loop = false;
@@ -383,11 +386,59 @@ void DigitizeMode::OnFrontRender(){
 static void set_x(double value, HeeksObj* object){wxGetApp().m_digitizing->digitized_point.m_point.SetX(value); wxGetApp().m_frame->RefreshInputCanvas();}
 static void set_y(double value, HeeksObj* object){wxGetApp().m_digitizing->digitized_point.m_point.SetY(value); wxGetApp().m_frame->RefreshInputCanvas();}
 static void set_z(double value, HeeksObj* object){wxGetApp().m_digitizing->digitized_point.m_point.SetZ(value); wxGetApp().m_frame->RefreshInputCanvas();}
+static void set_offset(const wxChar *value, HeeksObj* object)
+{
+	wxStringTokenizer tokens(value,_T(" :,\t\n"));
+
+	// The reference_point is the last coordinate that was used in the Drawing::AddPoint() method.  i.e. the
+	// last point clicked by the operator during a drawing operation.
+
+	gp_Pnt location(wxGetApp().m_digitizing->reference_point.m_point);
+	for (int i=0; i<3; i++)
+	{
+		if (tokens.HasMoreTokens())
+		{
+			double offset = 0.0;
+			wxString token = tokens.GetNextToken();
+			if (token.ToDouble(&offset))
+			{
+				switch(i)
+				{
+				case 0: 
+					wxGetApp().m_digitizing->digitized_point.m_point.SetX( location.X() + offset );
+					break;
+
+				case 1:
+					wxGetApp().m_digitizing->digitized_point.m_point.SetY( location.Y() + offset );
+					break;
+
+				case 2:
+					wxGetApp().m_digitizing->digitized_point.m_point.SetZ( location.Z() + offset );
+					break;
+				}
+				
+			}
+		}
+	}
+
+	wxGetApp().m_frame->RefreshInputCanvas();
+}
 
 void DigitizeMode::GetProperties(std::list<Property *> *list){
 	list->push_back(new PropertyLength(_("X"), digitized_point.m_point.X(), NULL, set_x));
 	list->push_back(new PropertyLength(_("Y"), digitized_point.m_point.Y(), NULL, set_y));
 	list->push_back(new PropertyLength(_("Z"), digitized_point.m_point.Z(), NULL, set_z));
+
+	Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+	if (pDrawingMode != NULL)
+	{
+		// The wxGetApp().m_digitizing->reference_point is only valid while in one of the
+		// Drawing input modes.  If we want to expand its role then we need to make sure
+		// its value is set in other circumstances as well.  At the moment, it's only set
+		// within the Drawing::AddPoint() method.
+
+		list->push_back(new PropertyString(_("Offset (from last point)"), _T("0,0,0"), NULL, set_offset));
+	}
 }
 
 class EndPosPicking:public Tool{

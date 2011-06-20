@@ -72,6 +72,7 @@ void Drawing::AddPoint()
 	
 	clear_drawing_objects(calculated ? 1:0);
 	SetStartPosUndoable(wxGetApp().m_digitizing->digitized_point);
+	wxGetApp().m_digitizing->reference_point = wxGetApp().m_digitizing->digitized_point;
 
 	int next_step = GetDrawStep() + 1;
 	if(next_step >= number_of_steps()){

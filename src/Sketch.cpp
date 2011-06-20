@@ -19,6 +19,9 @@
 #include "Wire.h"
 #include <wx/numdlg.h>
 
+#include "DigitizeMode.h"
+#include "Drawing.h"
+
 extern CHeeksCADInterface heekscad_interface;
 
 std::string CSketch::m_sketch_order_str[MaxSketchOrderTypes] = {
@@ -391,6 +394,128 @@ public:
 
 static SketchEnterSketchMode enter_sketch_mode;
 
+class ClickMidpointOfSketch: public Tool
+{
+public:
+	void Run()
+	{
+		CBox box;
+		sketch_for_tools->GetBox(box);
+		double centre[3];
+		box.Centre(centre);
+
+		wxGetApp().m_digitizing->digitized_point = DigitizedPoint(gp_Pnt(centre[0], centre[1], centre[2]), DigitizeInputType);
+		Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+		if (pDrawingMode != NULL)
+		{
+			pDrawingMode->AddPoint();
+		}
+	}
+
+	const wxChar* GetTitle(){return _("Click midpoint");}
+	wxString BitmapPath(){return _T("click_sketch_midpoint");}
+};
+
+ClickMidpointOfSketch click_midpoint_of_sketch;
+
+
+class ClickNorthernMidpointOfSketch: public Tool
+{
+public:
+	void Run()
+	{
+		CBox box;
+		sketch_for_tools->GetBox(box);
+		double centre[3];
+		box.Centre(centre);		
+
+		wxGetApp().m_digitizing->digitized_point = DigitizedPoint(gp_Pnt(centre[0], box.MaxY(), centre[2]), DigitizeInputType);
+		Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+		if (pDrawingMode != NULL)
+		{
+			pDrawingMode->AddPoint();
+		}
+	}
+
+	const wxChar* GetTitle(){return _("Click centre-top point");}
+	wxString BitmapPath(){return _T("click_sketch_centre_top");}
+};
+
+ClickNorthernMidpointOfSketch click_northern_midpoint_of_sketch;
+
+class ClickSouthernMidpointOfSketch: public Tool
+{
+public:
+	void Run()
+	{
+		CBox box;
+		sketch_for_tools->GetBox(box);
+		double centre[3];
+		box.Centre(centre);		
+
+		wxGetApp().m_digitizing->digitized_point = DigitizedPoint(gp_Pnt(centre[0], box.MinY(), centre[2]), DigitizeInputType);
+		Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+		if (pDrawingMode != NULL)
+		{
+			pDrawingMode->AddPoint();
+		}
+	}
+
+	const wxChar* GetTitle(){return _("Click centre-bottom point");}
+	wxString BitmapPath(){return _T("click_sketch_centre_bottom");}
+};
+
+ClickSouthernMidpointOfSketch click_southern_midpoint_of_sketch;
+
+class ClickEasternMidpointOfSketch: public Tool
+{
+public:
+	void Run()
+	{
+		CBox box;
+		sketch_for_tools->GetBox(box);
+		double centre[3];
+		box.Centre(centre);		
+
+		wxGetApp().m_digitizing->digitized_point = DigitizedPoint(gp_Pnt(box.MaxX(), centre[1], centre[2]), DigitizeInputType);
+		Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+		if (pDrawingMode != NULL)
+		{
+			pDrawingMode->AddPoint();
+		}
+	}
+
+	const wxChar* GetTitle(){return _("Click centre-right point");}
+	wxString BitmapPath(){return _T("click_sketch_centre_right");}
+};
+
+ClickEasternMidpointOfSketch click_eastern_midpoint_of_sketch;
+
+class ClickWesternMidpointOfSketch: public Tool
+{
+public:
+	void Run()
+	{
+		CBox box;
+		sketch_for_tools->GetBox(box);
+		double centre[3];
+		box.Centre(centre);		
+
+		wxGetApp().m_digitizing->digitized_point = DigitizedPoint(gp_Pnt(box.MinX(), centre[1], centre[2]), DigitizeInputType);
+		Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+		if (pDrawingMode != NULL)
+		{
+			pDrawingMode->AddPoint();
+		}
+	}
+
+	const wxChar* GetTitle(){return _("Click centre-left point");}
+	wxString BitmapPath(){return _T("click_sketch_centre_left");}
+};
+
+ClickWesternMidpointOfSketch click_western_midpoint_of_sketch;
+
+
 void CSketch::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	sketch_for_tools = this;
@@ -405,6 +530,17 @@ void CSketch::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 	t_list->push_back(&sketch_arcs_to_lines);
 	t_list->push_back(&copy_parallel);
 	t_list->push_back(&enter_sketch_mode);
+
+	Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+	if (pDrawingMode != NULL)
+	{
+		// We're drawing something.  Allow these options.
+		t_list->push_back(&click_midpoint_of_sketch);
+		t_list->push_back(&click_northern_midpoint_of_sketch);
+		t_list->push_back(&click_southern_midpoint_of_sketch);
+		t_list->push_back(&click_eastern_midpoint_of_sketch);
+		t_list->push_back(&click_western_midpoint_of_sketch);
+	}
 }
 
 // static

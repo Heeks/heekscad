@@ -17,6 +17,7 @@ class ViewRotating;
 class ViewZooming;
 class ViewPanning;
 class CInputMode;
+class Drawing;
 class CSelectMode;
 class DigitizeMode;
 class MarkedList;
@@ -274,6 +275,7 @@ public:
 	void DoMoveOrCopyDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, HeeksObj* paste_into, HeeksObj* paste_before);
 	void GetDropDownTools(std::list<Tool*> &f_list, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool control_pressed);
 	void DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool control_pressed);
+	void GenerateIntersectionMenuOptions( std::list<Tool*> &f_list );
 	void on_menu_event(wxCommandEvent& event);
 	void DoToolUndoably(Tool *);
 	void Undo(void);
