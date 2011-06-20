@@ -408,6 +408,39 @@ bool CHeeksCADInterface::GetLastClickPosition(double *pos)
 	return wxGetApp().m_select_mode->GetLastClickPosition(pos);
 }
 
+bool CHeeksCADInterface::GetLastDigitizePosition(double *pos)
+{
+    if (wxGetApp().m_digitizing != NULL)
+    {
+        pos[0] = wxGetApp().m_digitizing->digitized_point.m_point.X();
+        pos[1] = wxGetApp().m_digitizing->digitized_point.m_point.Y();
+        pos[2] = wxGetApp().m_digitizing->digitized_point.m_point.Z();
+
+        return( true );
+    }
+    else
+    {
+        return( false );
+    }
+}
+
+
+bool CHeeksCADInterface::GetReferencePoint(double *pos)
+{
+    if (wxGetApp().m_digitizing != NULL)
+    {
+        pos[0] = wxGetApp().m_digitizing->reference_point.m_point.X();
+        pos[1] = wxGetApp().m_digitizing->reference_point.m_point.Y();
+        pos[2] = wxGetApp().m_digitizing->reference_point.m_point.Z();
+
+        return( true );
+    }
+    else
+    {
+        return( false );
+    }
+}
+
 HeeksObj* CHeeksCADInterface::GetFirstObject()
 {
 	return wxGetApp().GetFirstChild();

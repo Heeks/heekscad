@@ -100,6 +100,8 @@ public:
 	virtual bool PickPosition(const wxChar* str, double* pos);
 	virtual bool Digitize(const wxPoint &point, double* pos);
 	virtual bool GetLastClickPosition(double *pos);
+	virtual bool GetLastDigitizePosition(double *pos);
+	virtual bool GetReferencePoint(double *pos);
 	virtual HeeksObj* GetFirstObject();
 	virtual HeeksObj* GetNextObject();
 	virtual void DrawObjectsOnFront(const std::list<HeeksObj*> &list);

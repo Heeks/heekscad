@@ -16,6 +16,8 @@
 #include "SolveSketch.h"
 #include "Cylinder.h"
 #include "Cone.h"
+#include "DigitizeMode.h"
+#include "Drawing.h"
 
 HLine::HLine(const HLine &line):EndedObject(&line.color){
 	operator=(line);
@@ -107,6 +109,58 @@ public:
 };
 static MakeConeOnLine make_cone_on_line;
 
+
+class ClickMidpointOnLine:public Tool{
+public:
+	void Run(){
+		gp_Pnt midpoint((line_for_tool->A->m_p.XYZ() + line_for_tool->B->m_p.XYZ()) /2);
+
+		wxGetApp().m_digitizing->digitized_point = DigitizedPoint(midpoint, DigitizeInputType);
+		Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+		if (pDrawingMode != NULL)
+		{
+			pDrawingMode->AddPoint();
+		}
+	}
+	const wxChar* GetTitle(){return _("Click Midpoint On Line");}
+	wxString BitmapPath(){return _T("click_line_midpoint");}
+};
+static ClickMidpointOnLine click_midpoint_on_line;
+
+
+class ClickStartPointOnLine:public Tool{
+public:
+	void Run(){
+		wxGetApp().m_digitizing->digitized_point = DigitizedPoint(line_for_tool->A->m_p, DigitizeInputType);
+		Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+		if (pDrawingMode != NULL)
+		{
+			pDrawingMode->AddPoint();
+		}
+	}
+	const wxChar* GetTitle(){return _("Click Start Of Line");}
+	wxString BitmapPath(){return _T("click_line_end_one");}
+};
+static ClickStartPointOnLine click_start_point_on_line;
+
+
+class ClickEndPointOnLine:public Tool{
+public:
+	void Run(){
+		wxGetApp().m_digitizing->digitized_point = DigitizedPoint(line_for_tool->B->m_p, DigitizeInputType);
+		Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+		if (pDrawingMode != NULL)
+		{
+			pDrawingMode->AddPoint();
+		}
+	}
+	const wxChar* GetTitle(){return _("Click End Of Line");}
+	wxString BitmapPath(){return _T("click_line_end_two");}
+};
+static ClickEndPointOnLine click_end_point_on_line;
+
+
+
 const wxBitmap &HLine::GetIcon()
 {
 	static wxBitmap* icon = NULL;
@@ -130,6 +184,14 @@ void HLine::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 #endif
 	t_list->push_back(&make_cylinder_on_line);
 	t_list->push_back(&make_cone_on_line);
+
+	Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+	if (pDrawingMode != NULL)
+	{
+		t_list->push_back(&click_start_point_on_line);
+		t_list->push_back(&click_midpoint_on_line);
+		t_list->push_back(&click_end_point_on_line);
+	}
 }
 
 void HLine::glCommands(bool select, bool marked, bool no_color){

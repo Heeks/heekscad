@@ -12,6 +12,8 @@
 #include "HILine.h"
 #include "HArc.h"
 #include "Gripper.h"
+#include "DigitizeMode.h"
+#include "Drawing.h"
 
 HCircle::HCircle(const HCircle &c){
 	operator=(c);
@@ -879,3 +881,142 @@ void HCircle::LoadToDoubles()
 	C->LoadToDoubles();
 }
 
+static HCircle *object_for_tools = NULL;
+
+class ClickMidpointOfCircle: public Tool
+{
+public:
+	void Run()
+	{
+		CBox box;
+		object_for_tools->GetBox(box);
+		double centre[3];
+		box.Centre(centre);
+
+		wxGetApp().m_digitizing->digitized_point = DigitizedPoint(gp_Pnt(centre[0], centre[1], centre[2]), DigitizeInputType);
+		Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+		if (pDrawingMode != NULL)
+		{
+			pDrawingMode->AddPoint();
+		}
+	}
+
+	const wxChar* GetTitle(){return _("Click midpoint");}
+	wxString BitmapPath(){return _T("click_circle_midpoint");}
+};
+
+ClickMidpointOfCircle click_midpoint_of_circle;
+
+
+class ClickNorthernMidpointOfCircle: public Tool
+{
+public:
+	void Run()
+	{
+		CBox box;
+		object_for_tools->GetBox(box);
+		double centre[3];
+		box.Centre(centre);		
+
+		wxGetApp().m_digitizing->digitized_point = DigitizedPoint(gp_Pnt(centre[0], box.MaxY(), centre[2]), DigitizeInputType);
+		Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+		if (pDrawingMode != NULL)
+		{
+			pDrawingMode->AddPoint();
+		}
+	}
+
+	const wxChar* GetTitle(){return _("Click centre-top point");}
+	wxString BitmapPath(){return _T("click_circle_centre_top");}
+};
+
+ClickNorthernMidpointOfCircle click_northern_midpoint_of_circle;
+
+class ClickSouthernMidpointOfCircle: public Tool
+{
+public:
+	void Run()
+	{
+		CBox box;
+		object_for_tools->GetBox(box);
+		double centre[3];
+		box.Centre(centre);		
+
+		wxGetApp().m_digitizing->digitized_point = DigitizedPoint(gp_Pnt(centre[0], box.MinY(), centre[2]), DigitizeInputType);
+		Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+		if (pDrawingMode != NULL)
+		{
+			pDrawingMode->AddPoint();
+		}
+	}
+
+	const wxChar* GetTitle(){return _("Click centre-bottom point");}
+	wxString BitmapPath(){return _T("click_circle_centre_bottom");}
+};
+
+ClickSouthernMidpointOfCircle click_southern_midpoint_of_circle;
+
+class ClickEasternMidpointOfCircle: public Tool
+{
+public:
+	void Run()
+	{
+		CBox box;
+		object_for_tools->GetBox(box);
+		double centre[3];
+		box.Centre(centre);		
+
+		wxGetApp().m_digitizing->digitized_point = DigitizedPoint(gp_Pnt(box.MaxX(), centre[1], centre[2]), DigitizeInputType);
+		Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+		if (pDrawingMode != NULL)
+		{
+			pDrawingMode->AddPoint();
+		}
+	}
+
+	const wxChar* GetTitle(){return _("Click centre-right point");}
+	wxString BitmapPath(){return _T("click_circle_centre_right");}
+};
+
+ClickEasternMidpointOfCircle click_eastern_midpoint_of_circle;
+
+class ClickWesternMidpointOfCircle: public Tool
+{
+public:
+	void Run()
+	{
+		CBox box;
+		object_for_tools->GetBox(box);
+		double centre[3];
+		box.Centre(centre);		
+
+		wxGetApp().m_digitizing->digitized_point = DigitizedPoint(gp_Pnt(box.MinX(), centre[1], centre[2]), DigitizeInputType);
+		Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+		if (pDrawingMode != NULL)
+		{
+			pDrawingMode->AddPoint();
+		}
+	}
+
+	const wxChar* GetTitle(){return _("Click centre-left point");}
+	wxString BitmapPath(){return _T("click_circle_centre_left");}
+};
+
+ClickWesternMidpointOfCircle click_western_midpoint_of_circle;
+
+void HCircle::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
+{
+	object_for_tools = this;
+
+	Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+	if (pDrawingMode != NULL)
+	{
+		// We're drawing something.  Allow these options.
+		t_list->push_back(&click_midpoint_of_circle);
+		t_list->push_back(&click_northern_midpoint_of_circle);
+		t_list->push_back(&click_southern_midpoint_of_circle);
+		t_list->push_back(&click_eastern_midpoint_of_circle);
+		t_list->push_back(&click_western_midpoint_of_circle);
+	}
+
+}
