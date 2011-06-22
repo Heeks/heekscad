@@ -18,11 +18,6 @@ public:
 	static bool size_is_pixels; // false for mm
 	static bool rendering_current;
 
-	// used for user properties, but only to create m_x and m_y
-	double m_vertical_angle;
-	double m_horizontal_angle;
-	double m_twist_angle;
-
 	CoordinateSystem(const wxString& str, const gp_Pnt &o, const gp_Dir &x, const gp_Dir &y);
 	CoordinateSystem(const CoordinateSystem &c);
 	~CoordinateSystem(void);
@@ -55,8 +50,7 @@ public:
 	static void RenderDatum(bool bright, bool solid); // render a coordinate system at 0, 0, 0
 	static void AxesToAngles(const gp_Dir &x, const gp_Dir &y, double &v_angle, double &h_angle, double &t_angle);
 	static void AnglesToAxes(const double &v_angle, const double &h_angle, const double &t_angle, gp_Dir &x, gp_Dir &y);
-	void AxesToAngles(){AxesToAngles(m_x, m_y, m_vertical_angle, m_horizontal_angle, m_twist_angle);}
-	void AnglesToAxes(){AnglesToAxes(m_vertical_angle, m_horizontal_angle, m_twist_angle, m_x, m_y);}
+	static void GetAx2Properties(std::list<Property *> *list, gp_Ax2& a);
 	void PickFrom3Points();
 	void PickFrom1Point();
 };

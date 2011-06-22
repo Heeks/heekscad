@@ -29,7 +29,7 @@ public:
 	const wxBitmap &GetIcon();
 	HeeksObj *MakeACopy(void)const;
 	void GetProperties(std::list<Property *> *list);
-	ObjectCanvas* GetDialog(wxWindow* parent);
+	//ObjectCanvas* GetDialog(wxWindow* parent);
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	void OnApplyProperties();
 	bool GetScaleAboutMatrix(double *m);

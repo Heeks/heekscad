@@ -54,12 +54,6 @@ bool CCylinder::IsDifferent(HeeksObj* other)
 	return CShape::IsDifferent(other);
 }
 
-static void on_set_centre(const double *vt, HeeksObj* object){
-	gp_Trsf mat;
-	mat.SetTranslation ( gp_Vec ( ((CCylinder*)object)->m_pos.Location(), make_point(vt) ) );
-	((CCylinder*)object)->m_pos.Transform(mat);
-}
-
 static void on_set_diameter(double value, HeeksObj* object){
 	((CCylinder*)object)->m_radius = value*0.5;
 }
@@ -82,9 +76,7 @@ wxString CCylinder::StretchedName(){ return _("Stretched Cylinder");}
 
 void CCylinder::GetProperties(std::list<Property *> *list)
 {
-	double c[3];
-	extract(m_pos.Location(), c);
-	list->push_back(new PropertyVertex(_("centre pos"), c, this, on_set_centre));
+	CoordinateSystem::GetAx2Properties(list, m_pos);
 	list->push_back(new PropertyLength(_("diameter"), m_radius*2, this, on_set_diameter));
 	list->push_back(new PropertyLength(_("height"), m_height, this, on_set_height));
 
