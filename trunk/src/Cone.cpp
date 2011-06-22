@@ -145,12 +145,6 @@ bool CCone::IsDifferent(HeeksObj* o)
 	return HeeksObj::IsDifferent(o);
 }
 
-static void on_set_centre(const double *vt, HeeksObj* object){
-	gp_Trsf mat;
-	mat.SetTranslation ( gp_Vec ( ((CCone*)object)->m_pos.Location(), make_point(vt) ) );
-	((CCone*)object)->m_pos.Transform(mat);
-}
-
 static void on_set_r1(double value, HeeksObj* object){
 	((CCone*)object)->m_r1 = value;
 }
@@ -177,13 +171,7 @@ wxString CCone::StretchedName(){ return _("Stretched Cone");}
 
 void CCone::GetProperties(std::list<Property *> *list)
 {
-	double p[3], d[3], x[3];
-	extract(m_pos.Location(), p);
-	extract(m_pos.Direction(), d);
-	extract(m_pos.XDirection(), x);
-	list->push_back(new PropertyVertex(_("centre pos"), p, this, on_set_centre));
-	list->push_back(new PropertyVector(_("direction"), d, NULL));
-	list->push_back(new PropertyVector(_("x direction"), x, NULL));
+	CoordinateSystem::GetAx2Properties(list, m_pos);
 	list->push_back(new PropertyLength(_("r1"), m_r1, this, on_set_r1));
 	list->push_back(new PropertyLength(_("r2"), m_r2, this, on_set_r2));
 	list->push_back(new PropertyLength(_("height"), m_height, this, on_set_height));
