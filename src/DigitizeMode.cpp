@@ -402,6 +402,7 @@ static void set_offset(const wxChar *value, HeeksObj* object)
 			wxString token = tokens.GetNextToken();
 			if (token.ToDouble(&offset))
 			{
+				offset *= wxGetApp().m_view_units;
 				switch(i)
 				{
 				case 0: 
