@@ -195,6 +195,7 @@ public:
 					wxString token = tokens.GetNextToken();
 					if (token.ToDouble(&offset))
 					{
+						offset *= wxGetApp().m_view_units;
 						switch(i)
 						{
 						case 0: 
