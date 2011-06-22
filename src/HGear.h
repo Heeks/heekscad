@@ -20,7 +20,7 @@ public:
 	double m_tip_relief;
 	double m_depth;
 	double m_cone_half_angle; // 0 for a cylinder ( spur gear ), 90 for a circular rack
-	double m_inner_ring;
+	double m_inner_ring;  // a circle drawn in the middle of the gear with this diameter
 
 	HGear();
 	HGear(const HGear &o);

@@ -67,12 +67,6 @@ bool CCuboid::IsDifferent(HeeksObj* other)
 	return CShape::IsDifferent(other);
 }
 
-static void on_set_centre(const double *vt, HeeksObj* object){
-	gp_Trsf mat;
-	mat.SetTranslation ( gp_Vec ( ((CCuboid*)object)->m_pos.Location(), make_point(vt) ) );
-	((CCuboid*)object)->m_pos.Transform(mat);
-}
-
 static void on_set_x(double value, HeeksObj* object){
 	((CCuboid*)object)->m_x = value;
 }
@@ -97,49 +91,12 @@ void CCuboid::MakeTransformedShape(const gp_Trsf &mat)
 
 wxString CCuboid::StretchedName(){ return _("Stretched Cuboid");}
 
-class CuboidPictureCanvas: public PictureCanvas
-{
-public:
-	PictureFrame* datum_picture;
-	PictureFrame* x_picture;
-	PictureFrame* y_picture;
-	PictureFrame* z_picture;
-
-	CuboidPictureCanvas(wxWindow* parent) : PictureCanvas(parent, wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/bitmaps/dlgcuboid.png"))))
-	{
-		// add extra picture controls
-		datum_picture = new PictureFrame(this, wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/bitmaps/dlgcuboid_datum.png"))));
-		datum_picture->Show(false);
-		x_picture = new PictureFrame(this, wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/bitmaps/dlgcuboid_x.png"))));
-		x_picture->Show(false);
-		y_picture = new PictureFrame(this, wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/bitmaps/dlgcuboid_y.png"))));
-		y_picture->Show(false);
-		z_picture = new PictureFrame(this, wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/bitmaps/dlgcuboid_z.png"))));
-		z_picture->Show(false);
-	}
-};
-
-static CuboidPictureCanvas* object_canvas = NULL;
-
-ObjectCanvas* CCuboid::GetDialog(wxWindow* parent)
-{
-	if(object_canvas == NULL)object_canvas = new CuboidPictureCanvas(parent);
-	return object_canvas;
-}
-
-void on_select_datum(HeeksObj* object){	object_canvas->SetPicture(object_canvas->datum_picture); }
-void on_select_x(HeeksObj* object){	object_canvas->SetPicture(object_canvas->x_picture); }
-void on_select_y(HeeksObj* object){	object_canvas->SetPicture(object_canvas->y_picture); }
-void on_select_z(HeeksObj* object){	object_canvas->SetPicture(object_canvas->z_picture); }
-
 void CCuboid::GetProperties(std::list<Property *> *list)
 {
-	double pos[3];
-	extract(m_pos.Location(), pos);
-	list->push_back(new PropertyVertex(_("datum corner"), pos, this, on_set_centre, on_select_datum));
-	list->push_back(new PropertyLength(_("width ( x )"), m_x, this, on_set_x, on_select_x));
-	list->push_back(new PropertyLength(_("height( y )"), m_y, this, on_set_y, on_select_y));
-	list->push_back(new PropertyLength(_("depth ( z )"), m_z, this, on_set_z, on_select_z));
+	CoordinateSystem::GetAx2Properties(list, m_pos);
+	list->push_back(new PropertyLength(_("width ( x )"), m_x, this, on_set_x));
+	list->push_back(new PropertyLength(_("height( y )"), m_y, this, on_set_y));
+	list->push_back(new PropertyLength(_("depth ( z )"), m_z, this, on_set_z));
 
 	CSolid::GetProperties(list);
 }
