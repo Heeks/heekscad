@@ -1241,6 +1241,68 @@ msgstr "Axe"
 msgid "Select"
 msgstr "Choisir"
 
+#======================================================================
+#Ajout du 21 juin 20011
+#Ajout 678 HGear.cpp
+msgid "num teeth"
+msgstr "Nbre Dents"
+
+#Ajout 679 HGear.cpp
+msgid "module"
+msgstr "Module"
+
+#Ajout 680 HGear.cpp
+#msgid "clearance"
+#msgstr "Espace"
+
+#Ajout 681 HGear.cpp
+msgid "addendum_offset"
+msgstr "Ajout_Saillie"
+
+#Ajout 682 HGear.cpp
+msgid "addendum_multiplier"
+msgstr "Coeff_Saillie"
+
+#Ajout 683 HGear.cpp
+msgid "dedendum_multiplier"
+msgstr "Coeff_Creux"
+
+#Ajout 684 HGear.cpp
+msgid "pressure_angle"
+msgstr "Angle_de_pression"
+
+#Ajout 685 HGear.cpp
+msgid "spacing"
+msgstr "Espacement"
+
+#Ajout 686 HGear.cpp
+msgid "tip_relief"
+msgstr "Affûtage"
+
+#Ajout 686 HGear.cpp
+msgid "cone_half_angle"
+msgstr "Cône_de_Face"
+
+#Ajout 687 HGear.cpp
+msgid "inner_ring"
+msgstr "Coeff_Alésage"
+
+#Ajout 688HGear.cpp
+msgid "Make Sketches"
+msgstr "Créer_Esquisses"
+
+#Ajout 689 HGear.cpp
+msgid "Make One Tooth Sketches"
+msgstr "Esquisser_d'Une_Dent"
+
+#Ajout 690 HeeksFrame.cpp
+msgid "Gear"
+msgstr "Roue dentée"
+
+#Ajout 691 HeeksFrame.cpp
+msgid "Add a gear"
+msgstr "Ajoute Roue dentée"
+
 
 
 #===================================================================================
