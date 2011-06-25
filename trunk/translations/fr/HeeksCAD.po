@@ -599,7 +599,7 @@ msgstr "Numéro de l'outil de coupe"
 
 #Ajout 516
 msgid "depth"
-msgstr "Profondeur de perçage"
+msgstr "Profondeur"
 
 #Ajout 517
 msgid "peck_depth"
@@ -1256,19 +1256,19 @@ msgstr "Module"
 #msgstr "Espace"
 
 #Ajout 681 HGear.cpp
-msgid "addendum_offset"
+msgid "addendum offset"
 msgstr "Ajout_Saillie"
 
 #Ajout 682 HGear.cpp
-msgid "addendum_multiplier"
+msgid "addendum multiplier"
 msgstr "Coeff_Saillie"
 
 #Ajout 683 HGear.cpp
-msgid "dedendum_multiplier"
+msgid "dedendum multiplier"
 msgstr "Coeff_Creux"
 
 #Ajout 684 HGear.cpp
-msgid "pressure_angle"
+msgid "pressure angle"
 msgstr "Angle_de_pression"
 
 #Ajout 685 HGear.cpp
@@ -1276,16 +1276,16 @@ msgid "spacing"
 msgstr "Espacement"
 
 #Ajout 686 HGear.cpp
-msgid "tip_relief"
+msgid "tip relief"
 msgstr "Affûtage"
 
 #Ajout 686 HGear.cpp
-msgid "cone_half_angle"
+msgid "cone half angle"
 msgstr "Cône_de_Face"
 
 #Ajout 687 HGear.cpp
-msgid "inner_ring"
-msgstr "Coeff_Alésage"
+msgid "inner ring diameter"
+msgstr "Diam_Alésage"
 
 #Ajout 688HGear.cpp
 msgid "Make Sketches"
@@ -1301,8 +1301,68 @@ msgstr "Roue dentée"
 
 #Ajout 691 HeeksFrame.cpp
 msgid "Add a gear"
-msgstr "Ajoute Roue dentée"
+msgstr "Dessiner Roue dentée"
 
+#======================================================================
+#Ajout du 23 juin 20011
+#Ajout 692 HArc.cpp
+msgid "Click centre point"
+msgstr "Clic Point de Centre"
+
+ #Ajout 693 HArc.cpp
+msgid "Click first end point"
+msgstr "Clic Point de Début"
+
+#Ajout 694 HArc.cpp
+msgid "Click second end point"
+msgstr "Clic Point de Fin"
+
+#Ajout 695 Sketch.cpp
+msgid "Click midpoint"
+msgstr "Clic Point Millieu"
+
+#Ajout 696 Sketch.cpp
+msgid "Click centre-top point"
+msgstr "Clic Point de centre Haut"
+
+#Ajout 697 Sketch.cpp
+msgid "Click centre-bottom point"
+msgstr "Clic Point de centre Bas"
+
+#Ajout 698 Sketch.cpp
+msgid "Click centre-right point"
+msgstr "Clic Point de centre Droite"
+
+#Ajout 699 Sketch.cpp
+msgid "Click centre-left point"
+msgstr "Clic Point de centre Gauche"
+
+#Ajout 700 DigitizeMode.cpp
+msgid "Offset (from last point)"
+msgstr "Décalage (du dernier point)"
+
+#Ajout 701 HeeksCAD.cpp
+msgid "Move here"
+msgstr "Déplacer ici"
+
+#Ajout 702 HeeksCAD.cpp
+msgid "Copy here"
+msgstr "Copier ici"
+
+#======================================================================
+#Ajout du 25 juin 20011
+
+#Ajout 703 HLine.cpp
+msgid "Click Midpoint On Line"
+msgstr "Clic point Milieu de Ligne"
+
+#Ajout 704 HLine.cpp
+msgid "Click Start Of Line"
+msgstr "Clic Début de Ligne"
+
+#Ajout 705 HLine.cpp
+msgid "Click End Of Line"
+msgstr "Clic Fin de Ligne"
 
 
 #===================================================================================
