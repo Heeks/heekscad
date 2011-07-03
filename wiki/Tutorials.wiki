@@ -1,0 +1,24 @@
+#summary Non-video tutorials and other long form articles about HeeksCAD
+
+= Introduction =
+
+The following resources may be useful, especially to new users of HeeksCAD and HeeksCNC.  This is not official documentations so features and user interface may have changed significantly. 
+
+
+== Digital Machinist Article ==
+[http://sliptonic.com/?p=491 
+No Secrets:  Open-source CAM Application Bares All ]  A good general introduction to HeeksCAD and HeeksCNC with examples.
+
+
+
+== Creating a pump housing with HeeksCAD ==
+An illustrated tutorial by André Pascual, introducing some of the
+basics functions of HeekCAD to build a pump housing.
+The links will redirect you to a french forum but anyone should be
+able to understand it as this tutorial is a kind of "Babel" tutorial
+with just images.
+
+  *  [http://www.linuxgraphic.org/forums/viewtopic.php?f=12&t=6071 Part 1 ]
+  *  [http://www.linuxgraphic.org/forums/viewtopic.php?f=12&t=6073 Part 2 ]
+  *  [http://www.linuxgraphic.org/forums/viewtopic.php?f=12&t=6074 Part 3 ]
+  *  [http://www.linuxgraphic.org/forums/viewtopic.php?f=12&t=6075 Part 4 ]
