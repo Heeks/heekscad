@@ -5,7 +5,7 @@
 The following resources may be useful, especially to new users of HeeksCAD and HeeksCNC.  Some of this is not official documentations so features and user interface may have changed significantly. 
 
 == Using HeeksCad == 
-Probably the best place to get started is the wiki page UsingHeeksCAD
+Probably the best place to get started is the wiki page [UsingHeeksCAD]
 
 == Digital Machinist Article ==
 [http://sliptonic.com/?p=491 No Secrets: Open-source CAM Application Bares All ]  A good general introduction to HeeksCAD and HeeksCNC with examples.
