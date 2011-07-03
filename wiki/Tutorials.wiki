@@ -6,8 +6,7 @@ The following resources may be useful, especially to new users of HeeksCAD and H
 
 
 == Digital Machinist Article ==
-[http://sliptonic.com/?p=491 
-No Secrets:  Open-source CAM Application Bares All ]  A good general introduction to HeeksCAD and HeeksCNC with examples.
+[http://sliptonic.com/?p=491 No Secrets: Open-source CAM Application Bares All ]  A good general introduction to HeeksCAD and HeeksCNC with examples.
 
 
 
