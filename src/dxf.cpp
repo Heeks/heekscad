@@ -3,7 +3,7 @@
 // This program is released under the BSD license. See the file COPYING for details.
 
 #include "dxf.h"
-
+#include <wx/string.h>
 using namespace std;
 static const double Pi = 3.14159265358979323846264338327950288419716939937511;
 
@@ -173,6 +173,7 @@ CDxfRead::CDxfRead(const char* filepath)
 	m_ifs = new ifstream(filepath);
 	if(!(*m_ifs)){
 		m_fail = true;
+        wprintf(_T("DXF file didn't load\n"));
 		return;
 	}
 	m_ifs->imbue(std::locale("C"));
