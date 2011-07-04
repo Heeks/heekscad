@@ -26,6 +26,10 @@
 #include <boost/python/class.hpp>
 #include <boost/python/wrapper.hpp>
 #include <boost/python/call.hpp>
+#include <boost/python/return_value_policy.hpp>
+#include <boost/python/return_internal_reference.hpp>
+
+
 
 #include "Cuboid.h"
 #include "SelectMode.h"
@@ -35,6 +39,8 @@
 #include "StlSolid.h"
 #include "HeeksFrame.h"
 #include "GraphicsCanvas.h"
+#include "Shape.h"
+#include "Face.h"
 
 namespace bp = boost::python;
 
@@ -359,9 +365,48 @@ static void GLColor3ub(unsigned char r, unsigned char g, unsigned char b)
 	glColor3ub(r, g, b);
 }
 
+static CShape* GetFirstBody(void)
+{
+	HeeksObj* object = wxGetApp().GetFirstChild();
+	while(object)
+	{
+		if(CShape::IsTypeAShape(object->GetType()))return (CShape*)object;
+		object = wxGetApp().GetNextChild();
+	}
+
+	return NULL;
+}
+
+static CShape* GetNextBody(void)
+{
+	HeeksObj* object = wxGetApp().GetNextChild();
+	while(object)
+	{
+		if(CShape::IsTypeAShape(object->GetType()))return (CShape*)object;
+		object = wxGetApp().GetNextChild();
+	}
+
+	return NULL;
+}
+
 static void CStlSolidglCommands(CStlSolid& stl_solid)
 {
 	stl_solid.glCommands(false, false, false);
+}
+
+static CFace* BodyGetFirstFace(CShape* body)
+{
+	return (CFace*)(body->m_faces->GetFirstChild());
+}
+
+static int PickObjects(const char* str, long marking_filter, bool m_just_one)
+{
+	return wxGetApp().PickObjects(Ctt(str), marking_filter, m_just_one);
+}
+
+static bool PyOpenFile(const char* str)
+{
+	return wxGetApp().OpenFile(Ctt(str));
 }
 
 BOOST_PYTHON_MODULE(HeeksCAD)
@@ -426,6 +471,15 @@ BOOST_PYTHON_MODULE(HeeksCAD)
 		.def("GetBox", &CStlSolid::GetBox)
 	;
 
+	bp::class_<CFace>("Face")
+        .def(bp::init<CFace>())
+	;
+
+	bp::class_<CShape>("Body")
+        .def(bp::init<CShape>())
+		.def("GetFirstFace", &BodyGetFirstFace, bp::return_value_policy<bp::reference_existing_object>(), "returns the first face")
+	;
+
 	bp::class_<CBox>("Box") 
         .def(bp::init<CBox>())
         .def(bp::init<double, double, double, double, double, double>())
@@ -454,4 +508,8 @@ BOOST_PYTHON_MODULE(HeeksCAD)
     bp::def("glEnd", GLEnd);
     bp::def("glVertex3d", GLVertex3d);
     bp::def("glColor3ub", GLColor3ub);
+    bp::def("GetFirstBody", GetFirstBody, bp::return_value_policy<bp::reference_existing_object>());
+    bp::def("GetNextBody", GetNextBody, bp::return_value_policy<bp::reference_existing_object>());
+	bp::def("PickObjects", PickObjects);
+	bp::def("OpenFile", PyOpenFile);
 }

@@ -27,6 +27,11 @@
 // static member variable
 bool CShape::m_solids_found = false;
 
+CShape::CShape():m_face_gl_list(0), m_edge_gl_list(0), m_opacity(1.0), m_title(_T("")), m_color(0, 0, 0), m_picked_face(NULL), m_volume_found(false)
+{
+	Init();
+}
+
 CShape::CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor& col, float opacity):m_face_gl_list(0), m_edge_gl_list(0), m_shape(shape), m_opacity(opacity), m_title(title), m_color(col), m_picked_face(NULL), m_volume_found(false)
 {
 	Init();
@@ -787,6 +792,19 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 		strcpy(oldlocale, setlocale(LC_NUMERIC, "C"));
 
 		Standard_CString aFileName = (Standard_CString) (Ttc(filepath));
+//
+//#ifdef WIN32
+//#ifdef UNICODE
+//		// if the const char* filename is different to the original unicode filename, then copy the file to a temporary file with a simple name
+//		if(stricmp(Ctt(aFileName), filepath))
+//		{
+//			wxStandardPaths standard_paths;
+//			wxFileName path( standard_paths.GetTempDir().c_str(), _("temp_iges.igs"));
+//			copy_file; // to do
+//	m_backup_file_name = path.GetFullPath();
+//#endif
+//#endif
+
 		IGESControl_Reader Reader;
 		int status = Reader.ReadFile( aFileName );
 
