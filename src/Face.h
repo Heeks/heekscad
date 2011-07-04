@@ -31,6 +31,7 @@ public:
 	std::list<CLoop*>::iterator m_loopIt;
 	std::list<CLoop*> m_loops;
 
+	CFace();
 	CFace(const TopoDS_Face &face);
 	~CFace();
 
