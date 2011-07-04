@@ -10,6 +10,10 @@
 #include "HeeksFrame.h"
 #include "InputModeCanvas.h"
 
+CFace::CFace():m_temp_attr(0)
+{
+}
+
 CFace::CFace(const TopoDS_Face &face):m_topods_face(face), m_temp_attr(0){
 #if _DEBUG
 	gp_Pnt pos;
