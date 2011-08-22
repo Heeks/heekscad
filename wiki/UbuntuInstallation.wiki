@@ -1,4 +1,5 @@
 #summary How to build and install HeeksCAD and related projects for Ubuntu
+#labels Featured
 
 HeeksCAD is still under heavy development so any packages you find are likely to be out of date.  To get the most current version, you need to compile the current source version from [https://github.com/Heeks git].
 
