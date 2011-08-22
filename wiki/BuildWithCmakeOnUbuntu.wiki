@@ -1,4 +1,3 @@
-#labels Featured
 *Note:* The codebase has been transitioned to git. The below information is now dated. For updated build information please see [UbuntuInstallation] 
 
 
