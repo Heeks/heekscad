@@ -1,5 +1,8 @@
-#summary Using CMake to build and install HeeksCAD and related projects for Ubuntu 10.04
 #labels Featured
+*Note:* The codebase has been transitioned to git. The below information is now dated. For updated build information please see [UbuntuInstallation] 
+
+
+#summary Using CMake to build and install HeeksCAD and related projects for Ubuntu 10.04
 
 This may also work on other versions of ubuntu and other distros that use .deb packages
 
