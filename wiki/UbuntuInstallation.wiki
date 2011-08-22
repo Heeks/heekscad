@@ -1,8 +1,8 @@
 #summary How to build and install HeeksCAD and related projects for Ubuntu
 
-HeeksCAD is still under heavy development so any packages you find are likely to be out of date.  To get the most current version, you need to compile the current source version from SVN.
+HeeksCAD is still under heavy development so any packages you find are likely to be out of date.  To get the most current version, you need to compile the current source version from [https://github.com/Heeks git].
 
-This installation procedure was tested on Ubuntu 10.04 (Lucid Lynx) 
+This installation procedure was tested on Ubuntu 11.04 (Natty Narwhal) using gnome. 
 
 If you run into problems, check the notes and comments at the end of this page.
 =For Ubuntu 10.10 only=
@@ -42,92 +42,47 @@ Click the 'authentication' tab and import the key file you just downloaded.
 The following command will install the required packages.  apt-get will prompt you to accept a large number of additional dependencies.  Accept them as well.
 
 {{{
-sudo apt-get install subversion libwxbase2.8-dev g++ build-essential libopencascade-dev libwxgtk2.8-dev libgtkglext1-dev python-dev cmake libboost-python-dev
+sudo apt-get install git subversion libwxbase2.8-dev cmake build-essential libopencascade-dev libwxgtk2.8-dev libgtkglext1-dev python-dev cmake libboost-python-dev
 }}}
 
 Get a cup of coffee while all this downloads and installs.
 
-=Install HeeksCAD (using cmake)=
-The following bit of script will download the source files, compile, and install HeeksCAD.
-It will create a HeeksCAD directory in your home directory.  If you don't want it there, modify the script appropriately.
+=Downloading code=
+The codebase has been transferred from subversion to git. One advantage of this is now heekscad, heekscnc, libarea, libactp, and opencamlib can be checked out with one command:
+{{{
+git clone --recursive git://github.com/Heeks/heekscad.git
+}}}
+
+=Install HeeksCAD=
+The following commands describe how to compile and install HeeksCAD.
 
 {{{
-#Get the source files from the SVN repository, build and install
-cd ~
-svn checkout http://heekscad.googlecode.com/svn/trunk/ HeeksCAD
-cd ~/HeeksCAD
+cd heekscad
 cmake .
 make package
-sudo dpkg -i heekscad_beta*
+sudo dpkg -i heekscad_*.deb
 }}} 
 
-=Install HeeksCAD (the old way)=
-The following bit of script will download the source files, compile, and install HeeksCAD.
-It will create a HeeksCAD directory in your home directory.  If you don't want it there, modify the script appropriately.
+
+=Install HeeksCNC=
+The following commands describe how to compile and install HeeksCNC.
 
 {{{
-#Get the source files from the SVN repository, build and install
-cd ~
-svn checkout http://heekscad.googlecode.com/svn/trunk/ HeeksCAD
-cd ~/HeeksCAD/src
-make -f Makefile.old clean
-make
-sudo make -f Makefile.old install
-}}} 
-
-At this point, HeeksCAD is installed and will run if launched from a command line.  The application launcher in in the menu, however, will give an error because it's looking in the wrong place for the binary.  The following commands will create symbolic links to resolve this.
-
-{{{
-sudo ln -s /usr/local/bin/HeeksCAD /usr/bin/HeeksCAD
-}}}
-
-Make HeeksCAD find the program icons
-
-{{{
-sudo ln -s /usr/local/share/heekscad/ /usr/share/heekscad
-}}}
-
-=Install HeeksCNC (with cmake)=
-
-{{{
-#Get the HeeksCNC files from the SVN repository, build, and install
-cd ~/HeeksCAD/
-svn checkout http://heekscnc.googlecode.com/svn/trunk/ HeeksCNC
-cd ~/HeeksCAD/HeeksCNC/
+cd heekscad/heekscnc/
 cmake .
 make package
-sudo dpkg -i heekscnc_beta*.deb  #only one .deb to install, but the filename may change
+sudo dpkg -i heekscnc_*.deb  #only one .deb to install, but the filename may change
 }}}
 
-=Install HeeksCNC (the old way)=
-
-{{{
-#Get the HeeksCNC files from the SVN repository, build, and install
-cd ~/HeeksCAD/
-svn checkout http://heekscnc.googlecode.com/svn/trunk/ HeeksCNC
-cd ~/HeeksCAD/HeeksCNC/src
-make clean
-make
-sudo make install
-#optional, for profile operations: build and install Kurve
-cd ~/HeeksCAD/HeeksCNC/kurve
-make clean
-make
-sudo make install
-}}}
 
 ==Install the helper libraries==
 HeeksCNC uses a number of libraries to perform various operations.  Install all of them or only the ones you plan to use.
 
 ===Install libarea===
-
 area.so is required for pocket operations.
 
 {{{
-#Get the libarea files from the SVN repository, build, and install
-cd ~/HeeksCAD/HeeksCNC/
-svn checkout http://libarea.googlecode.com/svn/trunk/ libarea
-cd ~/HeeksCAD/HeeksCNC/libarea/
+cd heekscad/heekscnc/libarea/
 make clean
 make
 sudo make install
@@ -135,49 +90,25 @@ sudo make install
 
 
 ===Install libactp===
-
-actp.so is required for adaptive roughing operations.
+actp.so is required for adaptive roughing operations. *This may be removed from git soon thus you may want to skip it*
 
 {{{
-#Get the libactp (adaptive roughing) files from the SVN repository, build, and install
-cd ~/HeeksCAD/HeeksCNC/
-svn checkout http://libactp.googlecode.com/svn/trunk/ libactp
-cd ~/HeeksCAD/HeeksCNC/libactp/PythonLib
+cd heeskcad/heekscnc/libactp/PythonLib
 make clean
 make
 sudo make install
 }}}
 
 ===Install opencamlib===
-
 opencamlib is the replacement for pycam.  It's required for zigzag operations.
 
 {{{
-#Get the opencamlib files from the SVN repository, build, and install
-cd ~/HeeksCAD/HeeksCNC/
-svn checkout http://opencamlib.googlecode.com/svn/trunk/ opencamlib
-cd ~/HeeksCAD/HeeksCNC/opencamlib/src
+cd heekscad/heekscnc/opencamlib/src
 make clean
 cmake .
 make
 sudo make install
 }}}
-
-==Activate the HeeksCNC plugin==
-
-Launch HeeksCAD.
-
-Under the 'File' menu click 'plugins'
-
-When the dialog box appears, click 'new' 
-
-Name it HeeksCNC and click "..." 
- * If you built HeeksCNC with cmake and/or installed from a .deb:
-  * find libheekscnc.so under /usr/lib
- * If you built HeeksCNC with the old Makefile:
-  * find libheekscnc.so.0.5.1 under /usr/local/lib/heekscnc/
-Click 'ok' out and restart HeeksCAD.  You should now have a 'Machining' menu and a new toolbar with the machining icons.
-
 
 =Other Notes=
 ==use with default theme 'ambience'==
@@ -187,105 +118,63 @@ The following bug and work-around affect the appearance of HeeksCAD in the defau
 http://code.google.com/p/heekscad/issues/detail?id=270
 
 ==Making it go fast==
-As noted above, HeeksCAD is changing all the time.  The bits of script above can be combined into one script and executed together with sudo.  
-
-Here's a complete script as submitted in the comments below.  I've added a 'make clean' for each step.  I'm not sure what effect this has on the efficiency, but without it, you can't be guaranteed a clean rebuild.
+As noted above, HeeksCAD is changing all the time.  The bits of script above can be combined into one script and executed together with sudo. If run multiple times, it will check git for updates and pull them recursively (including 3rd party repos which may not be desirable!)
 
 {{{
 #!/bin/sh
 # heekscad-install.sh -- Downloads, builds and installs HeeksCAD from svn
 
-BUILDPATH=~             # Location of HeeksCAD build dir
-INSTALLPATH=/usr/local  # Location to install HeeksCAD
-BUILDPREREQS="subversion libwxbase2.8-dev \
+
+BUILDPATH=~/             # Location of HeeksCAD build dir
+BUILDPREREQS="git subversion libwxbase2.8-dev cmake \
   build-essential libopencascade-dev libwxgtk2.8-dev \
   libgtkglext1-dev python-dev cmake libboost-python-dev"
 
 # Install build prerequisites
+sudo apt-get update
 sudo apt-get install -y $BUILDPREREQS
 
-cd $BUILDPATH
-if [ -d HeeksCAD ]; then
-  cd HeeksCAD
-  svn update
-else
-  svn checkout http://heekscad.googlecode.com/svn/trunk/ HeeksCAD
-fi
-cd ${BUILDPATH}/HeeksCAD/src
-make clean
-make
-sudo make install
 
-# Make menu entry find the binary
-sudo ln -s ${INSTALLPATH}/bin/HeeksCAD /usr/bin/HeeksCAD
-# Make HeeksCAD find the program icons
-sudo ln -s ${INSTALLPATH}/share/heekscad/ /usr/share/heekscad
+#Git the HeeksCAD files and sub repos
+cd $BUILDPATH
+if [ -d heekscad ]; then
+  cd heekscad
+  git pull
+  git submodule foreach --recursive git pull origin master
+else
+  git clone --recursive git://github.com/Heeks/heekscad.git
+fi
+
+
+# Install HeeksCAD
+cd ${BUILDPATH}/heekscad/
+cmake .
+make package
+sudo dpkg -i heekscad_*.deb
 
 # Install HeeksCNC
-#Get the HeeksCNC files from the SVN repository, build, and install
-cd ${BUILDPATH}/HeeksCAD/
-if [ -d HeeksCNC ]; then
-  cd HeeksCNC
-  svn update
-else
-  svn checkout http://heekscnc.googlecode.com/svn/trunk/ HeeksCNC
-fi
-cd ${BUILDPATH}/HeeksCAD/HeeksCNC/src
-make clean 
-make
-sudo make install
-
-# build, and install kurve
-cd ${BUILDPATH}/HeeksCAD/HeeksCNC/kurve
-make clean
-make
-sudo make install
-sudo ln -s .libs/kurve.so ${BUILDPATH}/HeeksCAD/HeeksCNC/kurve.so
+cd ${BUILDPATH}/heekscad/heekscnc/
+cmake .
+make package
+sudo dpkg -i heekscnc_*.deb
 
 # Install libarea
 # area.so is required for pocket operations.
-#Get the libarea files from the SVN repository, build, and install
-cd ${BUILDPATH}/HeeksCAD/HeeksCNC/
-if [ -d libarea ]; then
-  cd libarea
-  svn update
-else
-  svn checkout http://libarea.googlecode.com/svn/trunk/ libarea
-fi
-cd ${BUILDPATH}/HeeksCAD/HeeksCNC/libarea/
+cd ${BUILDPATH}/heekscad/heekscnc/libarea/
 make clean
 make
 sudo make install
-sudo ln -s .libs/area.so ${BUILDPATH}/HeeksCAD/HeeksCNC/area.so
 
-# Install libactp
+# Install libactp 
 # actp.so is required for adaptive roughing operations.
-# Get the libactp (adaptive roughing) files from the SVN repository, build, and install
-cd ${BUILDPATH}/HeeksCAD/HeeksCNC/
-if [ -d libactp ]; then
-  cd libactp
-  svn update
-else
-  svn checkout http://libactp.googlecode.com/svn/trunk/ libactp
-fi
-cd ${BUILDPATH}/HeeksCAD/HeeksCNC/libactp/PythonLib
-make clean
-make
-sudo make install
-sudo ln -s .libs/actp.so ${BUILDPATH}/HeeksCAD/HeeksCNC/actp.so
+#cd ${BUILDPATH}/heekscad/heekscnc/libactp/PythonLib
+#make clean
+#make
+#sudo make install
 
 # Install opencamlib
 # opencamlib is the replacement for pycam. It's required for zigzag operations.
-# Get the opencamlib files from the SVN repository, build, and install
-cd ${BUILDPATH}/HeeksCAD/HeeksCNC/
-if [ -d opencamlib ]; then
-  cd opencamlib
-  svn update
-else
-  svn checkout http://opencamlib.googlecode.com/svn/trunk/ opencamlib
-fi
-cd ${BUILDPATH}/HeeksCAD/HeeksCNC/opencamlib/src
-make clean
+cd ${BUILDPATH}/heekscad/heekscnc/opencamlib/src
 cmake .
 make
 make doc        # Creates PDF file needed by make install
@@ -298,6 +187,7 @@ if test $(lsb_release -s -c) = 'hardy'; then
     sudo ln -fs /usr/local/lib/python2.5/dist-packages/area.so /usr/local/lib/python2.5/site-packages/area.so
 fi
 
+sudo ldconfig # Makes sure heekscnc/cad can find libraries that were just installed.
 
 }}}
 
