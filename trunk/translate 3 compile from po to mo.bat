@@ -6,5 +6,7 @@ mkdir "%HEEKSCADPATH%\fr"
 "C:\Program Files\GnuWin32\bin\msgfmt.exe" -o "%HEEKSCADPATH%\fr\HeeksCAD.mo" "%HEEKSCADPATH%\translations\fr\HeeksCAD.po"
 mkdir "%HEEKSCADPATH%\sk"
 "C:\Program Files\GnuWin32\bin\msgfmt.exe" -o "%HEEKSCADPATH%\sk\HeeksCAD.mo" "%HEEKSCADPATH%\translations\sk\HeeksCAD.po"
+mkdir "%HEEKSCADPATH%\ko"
+"C:\Program Files\GnuWin32\bin\msgfmt.exe" -o "%HEEKSCADPATH%\ko\HeeksCAD.mo" "%HEEKSCADPATH%\translations\ko\HeeksCAD.po"
 
 pause
