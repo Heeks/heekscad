@@ -462,9 +462,9 @@ bool HeeksCADapp::OnInit()
 				if(!(param.Lower().EndsWith(_T(".so"))))
 #endif
 				{
-					wxGetApp().OnBeforeNewOrOpen(true, wxOK);
+					OnBeforeNewOrOpen(true, wxOK);
 					OpenFile(parser.GetParam(i));
-					wxGetApp().OnNewOrOpen(true, wxOK);
+					OnNewOrOpen(true, wxOK);
 				}
 			}
 		}
@@ -887,7 +887,7 @@ HeeksObj* HeeksCADapp::ReadXMLElement(TiXmlElement* pElem)
 
 		HeeksObj *existing = NULL;
 
-		existing = wxGetApp().GetIDObject(object->GetIDGroupType(), object->m_id);
+		existing = GetIDObject(object->GetIDGroupType(), object->m_id);
 
 		if ((existing != NULL) && (existing != object))
 		{
@@ -1191,6 +1191,48 @@ bool HeeksCADapp::OpenImageFile(const wxChar *filepath)
 	return false;
 }
 
+void HeeksCADapp::OnOpenButton()
+{
+	wxString default_directory = wxGetCwd();
+
+	if (m_recent_files.size() > 0)
+	{
+		#ifdef WIN32
+			wxString delimiter(_T("\\"));
+		#else
+			wxString delimiter(_T("/"));
+		#endif // WIN32
+
+		default_directory = *(m_recent_files.begin());
+		int last_directory_delimiter = default_directory.Find(delimiter[0],true);
+		if (last_directory_delimiter > 0)
+		{
+			default_directory.Remove(last_directory_delimiter);
+		}
+	}
+
+    wxFileDialog dialog(m_frame, _("Open file"), default_directory, wxEmptyString, GetKnownFilesWildCardString());
+    dialog.CentreOnParent();
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+		int res = CheckForModifiedDoc();
+		if(res != wxCANCEL)
+		{
+			OnBeforeNewOrOpen(true, res);
+			Reset();
+			if(!OpenFile(dialog.GetPath().c_str()))
+			{
+				wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + GetKnownFilesCommaSeparatedList();
+				wxMessageBox(str);
+			}
+			OnNewOrOpen(true, res);
+			ClearHistory();
+			SetLikeNewFile();
+		}
+    }
+}
+
 bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksObj* paste_into, HeeksObj* paste_before, bool retain_filename /* = true */ )
 {
 	if(import_not_open && paste_into == NULL)CreateUndoPoint();
@@ -1198,9 +1240,9 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 	m_in_OpenFile = true;
 	m_file_open_or_import_type = FileOpenOrImportTypeOther;
 	double file_open_matrix[16];
-	if(import_not_open && wxGetApp().m_current_coordinate_system)
+	if(import_not_open && m_current_coordinate_system)
 	{
-		extract(wxGetApp().m_current_coordinate_system->GetMatrix(), file_open_matrix);
+		extract(m_current_coordinate_system->GetMatrix(), file_open_matrix);
 		m_file_open_matrix = file_open_matrix;
 	}
 
@@ -1659,7 +1701,7 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 	if(wf.EndsWith(_T(".heeks")))
 	{
 		// call external OnSave functions
-		for(std::list< void(*)(bool) >::iterator It = wxGetApp().m_on_save_callbacks.begin(); It != wxGetApp().m_on_save_callbacks.end(); It++)
+		for(std::list< void(*)(bool) >::iterator It = m_on_save_callbacks.begin(); It != m_on_save_callbacks.end(); It++)
 		{
 			void(*callbackfunc)(bool) = *It;
 			(*callbackfunc)(false);
@@ -1742,7 +1784,7 @@ void HeeksCADapp::RenderDatumOrCurrentCoordSys()
 			{
 				glClear(GL_DEPTH_BUFFER_BIT);
 				CoordinateSystem::rendering_current = true;
-				m_current_coordinate_system->glCommands(false, wxGetApp().m_marked_list->ObjectMarked(m_current_coordinate_system), false);
+				m_current_coordinate_system->glCommands(false, m_marked_list->ObjectMarked(m_current_coordinate_system), false);
 				CoordinateSystem::rendering_current = false;
 			}
 		}
@@ -1756,7 +1798,7 @@ void HeeksCADapp::RenderDatumOrCurrentCoordSys()
 			if(m_current_coordinate_system)
 			{
 				CoordinateSystem::rendering_current = true;
-				m_current_coordinate_system->glCommands(false, wxGetApp().m_marked_list->ObjectMarked(m_current_coordinate_system), false);
+				m_current_coordinate_system->glCommands(false, m_marked_list->ObjectMarked(m_current_coordinate_system), false);
 				CoordinateSystem::rendering_current = false;
 			}
 			if(m_show_datum_coords_system)
@@ -1893,7 +1935,7 @@ void HeeksCADapp::glCommands(bool select, bool marked, bool no_color)
 	// for sketch mode, only allow items in the sketch to be selected
 	if(m_sketch_mode)
 	{
-		m_sketch->glCommands(select, marked || wxGetApp().m_marked_list->ObjectMarked(m_sketch), no_color);
+		m_sketch->glCommands(select, marked || m_marked_list->ObjectMarked(m_sketch), no_color);
 	}
 	else
 	{
@@ -1904,7 +1946,7 @@ void HeeksCADapp::glCommands(bool select, bool marked, bool no_color)
 			if(object->OnVisibleLayer() && object->m_visible)
 			{
 				if(select)glPushName(object->GetIndex());
-				object->glCommands(select, marked || wxGetApp().m_marked_list->ObjectMarked(object), no_color);
+				object->glCommands(select, marked || m_marked_list->ObjectMarked(object), no_color);
 				if(select)glPopName();
 			}
 		}
@@ -1933,7 +1975,7 @@ double HeeksCADapp::GetPixelScale(void){
 bool HeeksCADapp::IsModified(void){
 	if(m_isModifiedValid)return m_isModified;
 
-	for(std::list< bool(*)() >::iterator It = wxGetApp().m_is_modified_callbacks.begin(); It != wxGetApp().m_is_modified_callbacks.end(); It++)
+	for(std::list< bool(*)() >::iterator It = m_is_modified_callbacks.begin(); It != m_is_modified_callbacks.end(); It++)
 	{
 		bool(*callbackfunc)() = *It;
 		bool is_modified = (*callbackfunc)();
@@ -2123,7 +2165,7 @@ AddPointsAtIntersections add_points_at_intersections;
 
 void HeeksCADapp::GenerateIntersectionMenuOptions( std::list<Tool*> &f_list )
 {
-	if (wxGetApp().m_marked_list->list().size() > 1)
+	if (m_marked_list->list().size() > 1)
 	{
 		f_list.push_back(&add_points_at_intersections);
 	}
@@ -2151,11 +2193,11 @@ void HeeksCADapp::GetDropDownTools(std::list<Tool*> &f_list, const wxPoint &poin
 	AddToolListWithSeparator(f_list, temp_f_list);
 	temp_f_list.clear();
 
-	if(wxGetApp().m_current_coordinate_system)f_list.push_back(&coord_system_unset);
+	if(m_current_coordinate_system)f_list.push_back(&coord_system_unset);
 
 #ifndef PYHEEKSCAD
 	// exit full screen
-	if(wxGetApp().m_frame->IsFullScreen() && point.x>=0 && point.y>=0)temp_f_list.push_back(new CFullScreenTool);
+	if(m_frame->IsFullScreen() && point.x>=0 && point.y>=0)temp_f_list.push_back(new CFullScreenTool);
 #endif
 
 	AddToolListWithSeparator(f_list, temp_f_list);
@@ -3642,7 +3684,7 @@ void HeeksCADapp::OnNewOrOpen(bool open, int res)
 
 void HeeksCADapp::OnBeforeNewOrOpen(bool open, int res)
 {
-	for(std::list< void(*)(int, int) >::iterator It = wxGetApp().m_beforeneworopen_callbacks.begin(); It != wxGetApp().m_beforeneworopen_callbacks.end(); It++)
+	for(std::list< void(*)(int, int) >::iterator It = m_beforeneworopen_callbacks.begin(); It != m_beforeneworopen_callbacks.end(); It++)
 	{
 		void(*callbackfunc)(int, int) = *It;
 		(*callbackfunc)(open ? 1:0, res);
@@ -3651,7 +3693,7 @@ void HeeksCADapp::OnBeforeNewOrOpen(bool open, int res)
 
 void HeeksCADapp::OnBeforeFrameDelete(void)
 {
-	for(std::list< void(*)() >::iterator It = wxGetApp().m_beforeframedelete_callbacks.begin(); It != wxGetApp().m_beforeframedelete_callbacks.end(); It++)
+	for(std::list< void(*)() >::iterator It = m_beforeframedelete_callbacks.begin(); It != m_beforeframedelete_callbacks.end(); It++)
 	{
 		void(*callbackfunc)() = *It;
 		(*callbackfunc)();
@@ -3723,7 +3765,7 @@ int HeeksCADapp::CheckForModifiedDoc()
 void HeeksCADapp::SetFrameTitle()
 {
 	if(m_frame == NULL)return;
-	wxString str = wxGetApp().GetAppName().c_str();
+	wxString str = GetAppName().c_str();
 	if((!m_untitled) || (!m_no_creation_mode))str += wxString(_T(" - ")) + m_filepath.c_str();
 	m_frame->SetTitle(str);
 }
@@ -4538,11 +4580,11 @@ wxString HeeksCADapp::HeeksType( const int type ) const
 
 unsigned int HeeksCADapp::GetIndex(HeeksObj *object)
 {
-    return wxGetApp().m_marked_list->GetIndex(object);
+    return m_marked_list->GetIndex(object);
 }
 
 
 void HeeksCADapp::ReleaseIndex(unsigned int index)
 {
-    if(wxGetApp().m_marked_list)wxGetApp().m_marked_list->ReleaseIndex(index);
+    if(m_marked_list)m_marked_list->ReleaseIndex(index);
 }

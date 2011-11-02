@@ -298,6 +298,7 @@ public:
 	static void OpenDXFFile(const wxChar *filepath);
 	static void OpenRS274XFile(const wxChar *filepath);
 	bool OpenImageFile(const wxChar *filepath);
+	void OnOpenButton();
 	bool OpenFile(const wxChar *filepath, bool import_not_open = false, HeeksObj* paste_into = NULL, HeeksObj* paste_before = NULL, bool retain_filename = true );
 	void SaveDXFFile(const wxChar *filepath);
 	void SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance = -1.0, double* scale = NULL);
