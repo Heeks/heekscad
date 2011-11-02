@@ -732,49 +732,9 @@ static void OnNewOrigin( wxCommandEvent& WXUNUSED( event ) )
 	new_object->PickFrom1Point();
 }
 
-
-
-
 static void OnOpenButton( wxCommandEvent& event )
 {
-	wxString default_directory = wxGetCwd();
-
-	if (wxGetApp().m_recent_files.size() > 0)
-	{
-		#ifdef WIN32
-			wxString delimiter(_T("\\"));
-		#else
-			wxString delimiter(_T("/"));
-		#endif // WIN32
-
-		default_directory = *(wxGetApp().m_recent_files.begin());
-		int last_directory_delimiter = default_directory.Find(delimiter[0],true);
-		if (last_directory_delimiter > 0)
-		{
-			default_directory.Remove(last_directory_delimiter);
-		}
-	}
-
-    wxFileDialog dialog(wxGetApp().m_frame, _("Open file"), default_directory, wxEmptyString, wxGetApp().GetKnownFilesWildCardString());
-    dialog.CentreOnParent();
-
-    if (dialog.ShowModal() == wxID_OK)
-    {
-		int res = wxGetApp().CheckForModifiedDoc();
-		if(res != wxCANCEL)
-		{
-			wxGetApp().OnBeforeNewOrOpen(true, res);
-			wxGetApp().Reset();
-			if(!wxGetApp().OpenFile(dialog.GetPath().c_str()))
-			{
-				wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + wxGetApp().GetKnownFilesCommaSeparatedList();
-				wxMessageBox(str);
-			}
-			wxGetApp().OnNewOrOpen(true, res);
-			wxGetApp().ClearHistory();
-			wxGetApp().SetLikeNewFile();
-		}
-    }
+	wxGetApp().OnOpenButton();
 }
 
 static void OnImportButton( wxCommandEvent& event )

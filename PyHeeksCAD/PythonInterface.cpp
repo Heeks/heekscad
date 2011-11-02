@@ -404,6 +404,11 @@ static int PickObjects(const char* str, long marking_filter, bool m_just_one)
 	return wxGetApp().PickObjects(Ctt(str), marking_filter, m_just_one);
 }
 
+static void PyOnOpenButton()
+{
+	wxGetApp().OnOpenButton();
+}
+
 static bool PyOpenFile(const char* str)
 {
 	return wxGetApp().OpenFile(Ctt(str));
@@ -511,5 +516,6 @@ BOOST_PYTHON_MODULE(HeeksCAD)
     bp::def("GetFirstBody", GetFirstBody, bp::return_value_policy<bp::reference_existing_object>());
     bp::def("GetNextBody", GetNextBody, bp::return_value_policy<bp::reference_existing_object>());
 	bp::def("PickObjects", PickObjects);
+	bp::def("OnOpenButton", PyOnOpenButton);
 	bp::def("OpenFile", PyOpenFile);
 }
