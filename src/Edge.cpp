@@ -185,7 +185,6 @@ public:
 static ChamferTool chamfer_tool;
 
 
-
 class EdgeToSketchTool:public Tool
 {
 public:
@@ -200,11 +199,57 @@ public:
 
 static EdgeToSketchTool make_sketch_tool;
 
+static bool EdgeIsFlat(CEdge* edge)
+{
+	bool flat = fabs(edge->GetVertex0()->m_point[2] - edge->GetVertex1()->m_point[2]) < wxGetApp().m_geom_tol;
+	return flat;
+}
+
+class SelectLinkedEdgesTool:public Tool
+{
+public:
+	const wxChar* GetTitle(){return _("Select Flat Linked Edges");}
+	wxString BitmapPath(){return _T("linked");}
+	void Run(){
+		if(edge_for_tools == NULL)return;
+		std::list<CEdge*> live_edges;
+		std::set<CEdge*> edges_to_mark;
+		edges_to_mark.insert(edge_for_tools);
+		live_edges.push_back(edge_for_tools);
+		while(live_edges.size() > 0)
+		{
+			CEdge* current_edge = live_edges.front();
+			live_edges.pop_front();
+			for(int i = 0; i<2; i++)
+			{
+				CVertex* vertex = (i==0)?current_edge->GetVertex0():current_edge->GetVertex1();
+				for(CEdge* edge = vertex->GetFirstEdge(); edge; edge = vertex->GetNextEdge())
+				{
+					if(edge != current_edge && (wxGetApp().m_marked_list->ObjectMarked(edge) == false) && (edges_to_mark.find(edge) == edges_to_mark.end()) && EdgeIsFlat(edge))
+					{
+						edges_to_mark.insert(edge);
+						live_edges.push_back(edge);
+					}
+				}
+			}
+		}
+
+		std::list<HeeksObj*> obj_list;
+		for(std::set<CEdge*>::iterator It = edges_to_mark.begin(); It != edges_to_mark.end(); It++)obj_list.push_back(*It);
+		wxGetApp().m_marked_list->Add(obj_list, true);
+	}
+	bool CallChangedOnRun(){return false;}
+};
+
+static SelectLinkedEdgesTool link_flat_tool;
+
+
 void CEdge::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 	edge_for_tools = this;
 	if(!wxGetApp().m_no_creation_mode && GetParentBody())t_list->push_back(&fillet_tool);
 	if(!wxGetApp().m_no_creation_mode)t_list->push_back(&chamfer_tool);
 	if(!wxGetApp().m_no_creation_mode)t_list->push_back(&make_sketch_tool);
+	if(!wxGetApp().m_no_creation_mode)t_list->push_back(&link_flat_tool);
 }
 
 void CEdge::Blend(double radius,  bool chamfer_not_fillet){

@@ -524,17 +524,17 @@ bool CDxfRead::ReadSpline()
 			case 210:
 				// normal x
 				get_line();
-				ss.str(m_str); ss >> sd.norm[0]; sd.norm[0] = mm(sd.norm[0]); if(ss.fail()) return false;
+				ss.str(m_str); ss >> sd.norm[0]; if(ss.fail()) return false;
 				break;
 			case 220:
 				// normal y
 				get_line();
-				ss.str(m_str); ss >> sd.norm[1]; sd.norm[1] = mm(sd.norm[1]); if(ss.fail()) return false;
+				ss.str(m_str); ss >> sd.norm[1]; if(ss.fail()) return false;
 				break;
 			case 230:
 				// normal z
 				get_line();
-				ss.str(m_str); ss >> sd.norm[2]; sd.norm[2] = mm(sd.norm[2]); if(ss.fail()) return false;
+				ss.str(m_str); ss >> sd.norm[2]; if(ss.fail()) return false;
 				break;
 			case 70:
 				// flag
@@ -564,85 +564,85 @@ bool CDxfRead::ReadSpline()
 			case 12:
 				// starttan x
 				get_line();
-				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				ss.str(m_str); ss >> temp_double; temp_double = mm(temp_double); if(ss.fail()) return false;
 				sd.starttanx.push_back(temp_double);
 				break;
 			case 22:
 				// starttan y
 				get_line();
-				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				ss.str(m_str); ss >> temp_double; temp_double = mm(temp_double); if(ss.fail()) return false;
 				sd.starttany.push_back(temp_double);
 				break;
 			case 32:
 				// starttan z
 				get_line();
-				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				ss.str(m_str); ss >> temp_double; temp_double = mm(temp_double); if(ss.fail()) return false;
 				sd.starttanz.push_back(temp_double);
 				break;
 			case 13:
 				// endtan x
 				get_line();
-				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				ss.str(m_str); ss >> temp_double; temp_double = mm(temp_double); if(ss.fail()) return false;
 				sd.endtanx.push_back(temp_double);
 				break;
 			case 23:
 				// endtan y
 				get_line();
-				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				ss.str(m_str); ss >> temp_double; temp_double = mm(temp_double); if(ss.fail()) return false;
 				sd.endtany.push_back(temp_double);
 				break;
 			case 33:
 				// endtan z
 				get_line();
-				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				ss.str(m_str); ss >> temp_double; temp_double = mm(temp_double); if(ss.fail()) return false;
 				sd.endtanz.push_back(temp_double);
 				break;
 			case 40:
 				// knot
 				get_line();
-				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				ss.str(m_str); ss >> temp_double; temp_double = mm(temp_double); if(ss.fail()) return false;
 				sd.knot.push_back(temp_double);
 				break;
 			case 41:
 				// weight
 				get_line();
-				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				ss.str(m_str); ss >> temp_double; temp_double = mm(temp_double); if(ss.fail()) return false;
 				sd.weight.push_back(temp_double);
 				break;
 			case 10:
 				// control x
 				get_line();
-				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				ss.str(m_str); ss >> temp_double; temp_double = mm(temp_double); if(ss.fail()) return false;
 				sd.controlx.push_back(temp_double);
 				break;
 			case 20:
 				// control y
 				get_line();
-				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				ss.str(m_str); ss >> temp_double; temp_double = mm(temp_double); if(ss.fail()) return false;
 				sd.controly.push_back(temp_double);
 				break;
 			case 30:
 				// control z
 				get_line();
-				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				ss.str(m_str); ss >> temp_double; temp_double = mm(temp_double); if(ss.fail()) return false;
 				sd.controlz.push_back(temp_double);
 				break;
 			case 11:
 				// fit x
 				get_line();
-				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				ss.str(m_str); ss >> temp_double; temp_double = mm(temp_double); if(ss.fail()) return false;
 				sd.fitx.push_back(temp_double);
 				break;
 			case 21:
 				// fit y
 				get_line();
-				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				ss.str(m_str); ss >> temp_double; temp_double = mm(temp_double); if(ss.fail()) return false;
 				sd.fity.push_back(temp_double);
 				break;
 			case 31:
 				// fit z
 				get_line();
-				ss.str(m_str); ss >> temp_double; if(ss.fail()) return false;
+				ss.str(m_str); ss >> temp_double; temp_double = mm(temp_double); if(ss.fail()) return false;
 				sd.fitz.push_back(temp_double);
 				break;
 			case 42:

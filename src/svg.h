@@ -33,6 +33,7 @@ private:
 	struct TwoPoints ReadQuadratic(const char *text,gp_Pnt ppnt,bool isupper);
 	struct TwoPoints ReadQuadratic(const char *text,gp_Pnt ppnt,gp_Pnt pcpnt,bool isupper);
 	gp_Pnt ReadEllipse(const char *text,gp_Pnt ppnt,bool isupper);
+	int JumpValues(const char *text, int number);
 public:
 	CSvgRead(); // this opens the file
 	~CSvgRead(); // this closes the file

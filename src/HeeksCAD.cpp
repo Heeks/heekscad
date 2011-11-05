@@ -1,6 +1,31 @@
 // HeeksCAD.cpp
 // Copyright (c) 2009, Dan Heeks
 // This program is released under the BSD license. See the file COPYING for details.
+
+/** @mainpage HeeksCAD: Opensource 3D CAD and solid modeling solution.
+*   @par Description:
+*   - HeeksCAD is a free, open source, CAD application written by Dan Heeks, danheeks@gmail.com
+*   @par Features
+*   - Import solid models from STEP and IGES files. 
+*   - Draw construction geometry and lines and arcs. 
+*   - Create new primitive solids, or make solids by extruding a sketch or by making a lofted solid between sketches. 
+*   - Modify solids using blending, or boolean operations. 
+*   - Save IGES, STEP and STL. Printer plot the 2D geometry or to HPGL. 
+*   - Import and export dxf files; lines, arcs, ellipses, splines and polylines are supported. 
+*   - Use the geometric constraints solver to create accurate drawings from rough sketches.
+*   - HeeksCAD can be translated into any language. There are currently English, German, and Italian translations.
+*   - HeeksCAD has been built for Windows, Ubuntu, Debian, and OpenSUSE.
+*   - It is possible to make Add-In modules, see HeeksCNC, HeeksArt, and HeeksPython projects.
+*
+*   @par Dependencies:
+*   - Solid modeling is provided by Open CASCADE. 
+*   - Graphical user interface is made using wxWidgets.
+*
+*   @par License 
+*   - New BSD License. This means you can take all my work and use it for your own commercial application. Do what you want with it.
+*/
+
+
 #include "stdafx.h"
 #include "HeeksCAD.h"
 #include "../interface/Tool.h"
@@ -111,7 +136,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	_CrtSetAllocHook(MyAllocHook);
 #endif
 
-	m_version_number = _T("0 18 0");
+	m_version_number = _T("0 19 0");
 	m_geom_tol = 0.000001;
 	TiXmlBase::SetRequiredDecimalPlaces( DecimalPlaces(m_geom_tol) );	 // Ensure we write XML in enough accuracy to be useful when re-read.
 
@@ -1191,6 +1216,21 @@ bool HeeksCADapp::OpenImageFile(const wxChar *filepath)
 	return false;
 }
 
+void HeeksCADapp::OnNewButton()
+{
+	int res = CheckForModifiedDoc();
+	if(res != wxCANCEL)
+	{
+		OnBeforeNewOrOpen(false, res);
+		Reset();
+		OnNewOrOpen(false, res);
+		ClearHistory();
+		SetLikeNewFile();
+		SetFrameTitle();
+		Repaint();
+	}
+}
+
 void HeeksCADapp::OnOpenButton()
 {
 	wxString default_directory = wxGetCwd();
@@ -2186,7 +2226,7 @@ void HeeksCADapp::GetDropDownTools(std::list<Tool*> &f_list, const wxPoint &poin
 
 	m_marked_list->GetTools(marked_object, f_list, &new_point, true);
 
-	GenerateIntersectionMenuOptions( f_list );
+	if(!wxGetApp().m_no_creation_mode)GenerateIntersectionMenuOptions( f_list );
 
 	temp_f_list.clear();
 	if(input_mode_object)input_mode_object->GetTools(&temp_f_list, &new_point);
@@ -3258,6 +3298,9 @@ static wxString known_file_ext;
 const wxChar* HeeksCADapp::GetKnownFilesWildCardString(bool open)const
 {
 	if(open){
+		if(m_alternative_open_wild_card_string.Len() > 0)
+			return m_alternative_open_wild_card_string.c_str();
+
 		wxList handlers = wxImage::GetHandlers();
 		wxString imageExtStr;
 		wxString imageExtStr2;
@@ -3525,29 +3568,44 @@ void HeeksCADapp::get_2d_arc_segments(double xs, double ys, double xe, double ye
     }
 }
 
-int HeeksCADapp::PickObjects(const wxChar* str, long marking_filter, bool just_one)
+static long save_filter_for_StartPickObjects = 0;
+static bool save_just_one_for_EndPickObjects = false;
+static CInputMode* save_mode_for_EndPickObjects = NULL;
+
+void HeeksCADapp::StartPickObjects(const wxChar* str, long marking_filter, bool just_one)
 {
-	CInputMode* save_mode = input_mode_object;
+	save_mode_for_EndPickObjects = input_mode_object;
 	m_select_mode->m_prompt_when_doing_a_main_loop.assign(str);
 	m_select_mode->m_doing_a_main_loop = true;
-	bool save_just_one = m_select_mode->m_just_one;
+	save_just_one_for_EndPickObjects = m_select_mode->m_just_one;
 	m_select_mode->m_just_one = just_one;
 	SetInputMode(m_select_mode);
 
 	// set marking filter
-	long save_filter = m_marked_list->m_filter;
+	save_filter_for_StartPickObjects = m_marked_list->m_filter;
 	m_marked_list->m_filter = marking_filter;
+}
+
+int HeeksCADapp::EndPickObjects()
+{
+	// restore marking filter
+	m_marked_list->m_filter = save_filter_for_StartPickObjects;
+
+	m_select_mode->m_just_one = save_just_one_for_EndPickObjects;
+	m_select_mode->m_doing_a_main_loop = false;
+	SetInputMode(save_mode_for_EndPickObjects); // update tool bar
+
+	return 1;
+}
+
+int HeeksCADapp::PickObjects(const wxChar* str, long marking_filter, bool just_one)
+{
+	StartPickObjects(str, marking_filter, just_one);
 
 	// stay in an input loop until finished picking
 	OnRun();
 
-	// restore marking filter
-	m_marked_list->m_filter = save_filter;
-
-	m_select_mode->m_just_one = save_just_one;
-	m_select_mode->m_doing_a_main_loop = false;
-	SetInputMode(save_mode); // update tool bar
-	return 1;
+	return EndPickObjects();
 }
 
 int HeeksCADapp::OnRun()
@@ -3749,7 +3807,7 @@ void HeeksCADapp::InsertRecentFileItem(const wxChar* filepath)
 int HeeksCADapp::CheckForModifiedDoc()
 {
 	// returns wxCANCEL if not OK to continue opening file
-	if(IsModified())
+	if(!m_no_creation_mode && IsModified())
 	{
 		wxString str = wxString(_("Save changes to file")) + _T(" ") + m_filepath;
 		int res = wxMessageBox(str, wxMessageBoxCaptionStr, wxCANCEL|wxYES_NO|wxCENTRE);

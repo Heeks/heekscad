@@ -105,7 +105,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 	if(LeftAndRightPressed(event, event_used))
 	{
 		if(m_doing_a_main_loop){
-			wxGetApp().ExitMainLoop();
+			ExitMainLoop();
 		}
 	}
 
@@ -312,7 +312,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 
 		if(m_just_one && m_doing_a_main_loop && (wxGetApp().m_marked_list->size() > 0))
 		{
-			wxGetApp().ExitMainLoop();
+			ExitMainLoop();
 		}
 		else
 		{
@@ -506,11 +506,11 @@ void CSelectMode::OnKeyDown(wxKeyEvent& event)
 {
 	switch(event.GetKeyCode()){
 	case WXK_RETURN:
-		if(m_doing_a_main_loop && wxGetApp().m_marked_list->size() > 0)wxGetApp().ExitMainLoop();
+		if(m_doing_a_main_loop && wxGetApp().m_marked_list->size() > 0)ExitMainLoop();
 		break;
 
 	case WXK_ESCAPE:
-		if(m_doing_a_main_loop)wxGetApp().ExitMainLoop();
+		if(m_doing_a_main_loop)ExitMainLoop();
 		break;
 	}
 
@@ -541,7 +541,7 @@ public:
 	void Run(){
 		if(wxGetApp().m_select_mode->m_doing_a_main_loop)
 		{
-			wxGetApp().ExitMainLoop();
+			ExitMainLoop();
 			wxGetApp().m_frame->RefreshInputCanvas();
 		}
 		else{
@@ -560,7 +560,7 @@ public:
 		if(wxGetApp().m_select_mode->m_doing_a_main_loop)
 		{
 			wxGetApp().m_marked_list->Clear(false);
-			wxGetApp().ExitMainLoop();
+			ExitMainLoop();
 			wxGetApp().m_frame->RefreshInputCanvas();
 		}
 		else{

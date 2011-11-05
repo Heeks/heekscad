@@ -2,6 +2,9 @@
 // Copyright (c) 2009, Dan Heeks
 // This program is released under the BSD license. See the file COPYING for details.
 
+/*! \brief HeeksCAD Program:
+ *
+ * Perhaps someone smart could say something useful about this */
 #pragma once
 
 #include "../interface/HeeksColor.h"
@@ -77,6 +80,9 @@ enum SolidViewMode
 };
 
 class HeeksCADapp : public wxApp, public ObjList
+/*! \class The Application Class:
+ *
+ * Perhaps a cluefull person could say more about this */
 {
 private:
 	std::set<Observer*> observers;
@@ -248,6 +254,8 @@ public:
 	void RegisterHeeksTypesConverter( HeeksTypesConverter_t );
 	void UnregisterHeeksTypesConverter( HeeksTypesConverter_t );
 
+	wxString m_alternative_open_wild_card_string;
+
 	//WxApp override
 	int OnRun();
 	bool OnExceptionInMainLoop();
@@ -298,6 +306,7 @@ public:
 	static void OpenDXFFile(const wxChar *filepath);
 	static void OpenRS274XFile(const wxChar *filepath);
 	bool OpenImageFile(const wxChar *filepath);
+	void OnNewButton();
 	void OnOpenButton();
 	bool OpenFile(const wxChar *filepath, bool import_not_open = false, HeeksObj* paste_into = NULL, HeeksObj* paste_before = NULL, bool retain_filename = true );
 	void SaveDXFFile(const wxChar *filepath);
@@ -332,6 +341,8 @@ public:
 	wxString GetResFolder()const;
 	void get_2d_arc_segments(double xs, double ys, double xe, double ye, double xc, double yc, bool dir, bool want_start, double pixels_per_mm, void(*callbackfunc)(const double* xy));
 	int PickObjects(const wxChar* str, long marking_filter = -1, bool just_one = false);
+	void StartPickObjects(const wxChar* str, long marking_filter = -1, bool just_one = false);
+	int EndPickObjects();
 	bool PickPosition(const wxChar* str, double* pos, void(*callback)(const double*) = NULL);
 	void glSphere(double radius, const double* pos = NULL);
 	void OnNewOrOpen(bool open, int res);
@@ -414,6 +425,7 @@ public:
 	void ReleaseIndex(unsigned int index);
 };
 
+void ExitMainLoop();
 
 
 DECLARE_APP(HeeksCADapp)
