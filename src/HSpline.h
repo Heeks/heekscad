@@ -62,6 +62,6 @@ public:
 	bool GetEndPoint(double* pos);
 
 	void ToBiarcs(std::list<HeeksObj*> &new_spans, double tolerance)const;
-	static void ToBiarcs(const Handle_Geom_BSplineCurve s, std::list<HeeksObj*> &new_spans, double tolerance);
+	static void ToBiarcs(const Handle_Geom_BSplineCurve s, std::list<HeeksObj*> &new_spans, double tolerance, double first_parameter, double last_parameter);
 	void Reverse();
 };

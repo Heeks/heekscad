@@ -411,6 +411,7 @@ void CSvgRead::ReadCircle(TiXmlElement *pElem)
 gp_Pnt CSvgRead::ReadStart(const char *text,gp_Pnt ppnt,bool isupper)
 {
 	double x, y;
+cout << '@' << text <<'@';
 	sscanf(text, "%lf%lf", &x, &y);
 	y = -y;
 	gp_Pnt npt(x,y,0);
@@ -473,12 +474,16 @@ struct TwoPoints CSvgRead::ReadCubic(const char *text,gp_Pnt ppnt,bool isupper)
 	double x1, y1, x2, y2, x3, y3;
 	sscanf(text, "%lf%lf%lf%lf%lf%lf", &x1, &y1, &x2, &y2, &x3, &y3);
 	y1 = -y1; y2 = -y2; y3 = -y3;	
-
+cout << "x1=" << x1 << "y1=" << y1 << "x2=" << x2 << "y2=" << y2 << "x3=" << x3 << "y3=" << y3 << "\n";
+// All points appear to be relative to the first
 	if(!isupper)
 	{
 		x1+=ppnt.X(); y1+=ppnt.Y();
-		x2+=x1;	y2+=y1;
-		x3+=x2;	y3+=y2;
+//		x2+=x1;	y2+=y1;
+//		x3+=x2;	y3+=y2;
+		x2+=ppnt.X(); y2+=ppnt.Y();
+		x3+=ppnt.X(); y3+=ppnt.Y();
+cout << "x1=" << x1 << "y1=" << y1 << "x2=" << x2 << "y2=" << y2 << "x3=" << x3 << "y3=" << y3 << "\n";
 	}
 
 	gp_Pnt pnt1(x1,y1,0);
@@ -499,7 +504,8 @@ struct TwoPoints CSvgRead::ReadCubic(const char *text,gp_Pnt ppnt, gp_Pnt pcpnt,
 	if(!isupper)
 	{
 		x2+=ppnt.X(); y2+=ppnt.Y();
-		x3+=x2;	y3+=y2;
+		x3+=ppnt.X(); y3+=ppnt.Y();
+	//	x3+=x2;	y3+=y2;
 	}
 
 	gp_Dir dir=ppnt.XYZ()-pcpnt.XYZ();
@@ -523,7 +529,7 @@ struct TwoPoints CSvgRead::ReadQuadratic(const char *text,gp_Pnt ppnt,bool isupp
 	if(!isupper)
 	{
 		x1+=ppnt.X(); y1+=ppnt.Y();
-		x2+=x1;	y2+=y1;
+		x2+=ppnt.X(); y2+=ppnt.Y();
 	}
 
 	retpts.pcpnt = gp_Pnt(x1,y1,0);
@@ -632,8 +638,25 @@ gp_Pnt CSvgRead::ReadEllipse(const char *text,gp_Pnt ppnt,bool isupper)
 	return ept;
 }
 
+// because we can no longer take the first numbers after a command, we have to jump values we have already read in
+int CSvgRead::JumpValues(const char *text, int number){
+	int pos=0;
+	if(text[pos]==32)
+		pos++;
+	while(number >0 && text[pos]!=0){
+		if(text[pos]==32){
+			number--;
+		}else if(text[pos]==0){
+			return pos;
+		}
+		pos++;
+	}
+	return pos;
+}
+
 void CSvgRead::ReadPath(TiXmlElement* pElem)
 {
+	char cmd;
 	// get the attributes
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
@@ -644,77 +667,91 @@ void CSvgRead::ReadPath(TiXmlElement* pElem)
 			std::string in(a->Value());
 			in = RemoveCommas(in);
 			const char* d = in.c_str();
+			int length = strlen(d);
 			gp_Pnt spnt(0,0,0);
 			gp_Pnt ppnt(0,0,0);
 			gp_Pnt pcpnt(0,0,0);
-
 			int pos = 0;
+			cmd = 'l';
 			while(1){
-				if(toupper(d[pos]) == 'M'){
+// if we are looking at a command letter reset the cmd variable
+				if(toupper(d[pos])=='M' || toupper(d[pos])=='L' || toupper(d[pos])=='H' || toupper(d[pos])=='V' || toupper(d[pos])=='C' || toupper(d[pos])=='S' || toupper(d[pos])=='Q' || toupper(d[pos])=='T' || toupper(d[pos])=='A' || toupper(d[pos])=='Z' ){
+					cmd = d[pos];
+					pos++;
+				}
+// if we have got to the end of the string, stop
+				if(pos>=length){
+					break;
+				}
+				if(toupper(cmd) == 'M'){
 					// make a sketch
-					spnt = ReadStart(&d[pos+1],ppnt,isupper(d[pos])!=0);
+					spnt = ReadStart(&d[pos],ppnt,isupper(cmd)!=0);
 					ppnt = spnt;
-					pos++;
+					pos+=JumpValues(&d[pos],2);
+// If there is no command after a move it seems to assume the next one is an l
+					cmd = 'l';
 				}
-				else if(toupper(d[pos]) == 'L'){
+				else if(toupper(cmd) == 'L'){
 					// add a line
-					ppnt = ReadLine(&d[pos+1],ppnt,isupper(d[pos])!=0);
-					pos++;
+					ppnt = ReadLine(&d[pos],ppnt,isupper(cmd)!=0);
+					pos+=JumpValues(&d[pos],2);
 				}
-				else if(toupper(d[pos]) == 'H'){
+				else if(toupper(cmd) == 'H'){
 					//horizontal line
-					ppnt = ReadHorizontal(&d[pos+1],ppnt,isupper(d[pos])!=0);
-					pos++;
+					ppnt = ReadHorizontal(&d[pos],ppnt,isupper(cmd)!=0);
+					pos+=JumpValues(&d[pos],1);
 				}
-				else if(toupper(d[pos]) == 'V'){
+				else if(toupper(cmd) == 'V'){
 					//vertical line
-					ppnt = ReadVertical(&d[pos+1],ppnt,isupper(d[pos])!=0);
-					pos++;
+					ppnt = ReadVertical(&d[pos],ppnt,isupper(cmd)!=0);
+					pos+=JumpValues(&d[pos],1);
 				}
-				else if(toupper(d[pos]) == 'C'){
+				else if(toupper(cmd) == 'C'){
 					// add a cubic bezier curve ( just split into lines for now )
-					struct TwoPoints ret = ReadCubic(&d[pos+1],ppnt,isupper(d[pos])!=0);
+					struct TwoPoints ret = ReadCubic(&d[pos],ppnt,isupper(cmd)!=0);
 					ppnt = ret.ppnt;
 					pcpnt = ret.pcpnt;
-					pos++;
+					pos+=JumpValues(&d[pos],6);
 				}
-				else if(toupper(d[pos]) == 'S'){
+				else if(toupper(cmd) == 'S'){
                     // add a cubic bezier curve ( short hand)
-					struct TwoPoints ret = ReadCubic(&d[pos+1],ppnt,pcpnt,isupper(d[pos])!=0);
+					struct TwoPoints ret = ReadCubic(&d[pos],ppnt,pcpnt,isupper(cmd)!=0);
 					ppnt = ret.ppnt;
 					pcpnt = ret.pcpnt;
-					pos++;
+					pos+=JumpValues(&d[pos],4);
 				}
-				else if(toupper(d[pos]) == 'Q'){
+				else if(toupper(cmd) == 'Q'){
 					// add a quadratic bezier curve 
-					struct TwoPoints ret = ReadQuadratic(&d[pos+1],ppnt,isupper(d[pos])!=0);
+					struct TwoPoints ret = ReadQuadratic(&d[pos+1],ppnt,isupper(cmd)!=0);
 					ppnt = ret.ppnt;
 					pcpnt = ret.pcpnt;
-					pos++;
+					pos+=JumpValues(&d[pos],4);
 				}
-				else if(toupper(d[pos]) == 'T'){
+				else if(toupper(cmd) == 'T'){
                		// add a quadratic bezier curve 
-					struct TwoPoints ret = ReadQuadratic(&d[pos+1],ppnt,pcpnt,isupper(d[pos])!=0);
+					struct TwoPoints ret = ReadQuadratic(&d[pos],ppnt,pcpnt,isupper(cmd)!=0);
 					ppnt = ret.ppnt;
 					pcpnt = ret.pcpnt;
-					pos++;
+					pos+=JumpValues(&d[pos],2);
 				}
-				else if(toupper(d[pos]) == 'A'){
+				else if(toupper(cmd) == 'A'){
 					// add an elliptic arc
-					ppnt = ReadEllipse(&d[pos+1],ppnt,isupper(d[pos])!=0);
-					pos++;
+					ppnt = ReadEllipse(&d[pos+1],ppnt,isupper(cmd)!=0);
+					pos+=JumpValues(&d[pos],7);
 				}
-				else if(toupper(d[pos]) == 'Z'){
+				else if(toupper(cmd) == 'Z'){
 					// join to end
 					ReadClose(ppnt,spnt);
-					pos++;
 					ppnt = spnt;
 				}
-				else if(d[pos] == 0){
+				else if(d[pos] == 0 ){
 					break;
 				}
 				else{
 					pos++;
+				}
+				if(pos<0) {
+					break;
 				}
 			}
 		}

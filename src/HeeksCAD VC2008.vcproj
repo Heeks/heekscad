@@ -714,6 +714,10 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath=".\ExitMainLoop.cpp"
+			>
+		</File>
+		<File
 			RelativePath=".\Face.cpp"
 			>
 		</File>

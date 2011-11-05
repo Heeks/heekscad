@@ -807,17 +807,7 @@ static void OnRedoButton( wxCommandEvent& event )
 
 static void OnNewButton( wxCommandEvent& event )
 {
-	int res = wxGetApp().CheckForModifiedDoc();
-	if(res != wxCANCEL)
-	{
-		wxGetApp().OnBeforeNewOrOpen(false, res);
-		wxGetApp().Reset();
-		wxGetApp().OnNewOrOpen(false, res);
-		wxGetApp().ClearHistory();
-		wxGetApp().SetLikeNewFile();
-		wxGetApp().SetFrameTitle();
-		wxGetApp().Repaint();
-	}
+	wxGetApp().OnNewButton();
 }
 
 static void OnCutButton( wxCommandEvent& event )

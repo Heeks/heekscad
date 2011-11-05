@@ -14,7 +14,6 @@ class CSketch:public ObjList
 {
 	HeeksColor color;
 	wxString m_title;
-	double GetArea()const;
 	bool IsClockwise()const{return GetArea()>0;}
 
 public:
@@ -72,6 +71,7 @@ public:
 	HeeksObj *Parallel( const double distance );
 	bool FilletAtPoint(const gp_Pnt& p, double rad);
 	static void ReverseObject(HeeksObj* object);
+	double GetArea()const;
 };
 
 class CSketchRelinker{
