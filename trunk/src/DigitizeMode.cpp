@@ -111,7 +111,7 @@ void DigitizeMode::OnMouse( wxMouseEvent& event ){
 		if(lbutton_point.m_type != DigitizeNoItemType){
 			digitized_point = lbutton_point;
 			if(m_doing_a_main_loop){
-				wxGetApp().ExitMainLoop();
+				ExitMainLoop();
 			}
 		}
 	}
@@ -138,7 +138,7 @@ void DigitizeMode::OnKeyDown(wxKeyEvent& event)
 	{
 	case WXK_ESCAPE:
 		digitized_point.m_type = DigitizeNoItemType;
-		if(m_doing_a_main_loop)wxGetApp().ExitMainLoop();
+		if(m_doing_a_main_loop)ExitMainLoop();
 		break;
 	}
 }
@@ -447,7 +447,7 @@ public:
 	void Run(){
 		if(wxGetApp().m_digitizing->m_doing_a_main_loop)
 		{
-			wxGetApp().ExitMainLoop();
+			ExitMainLoop();
 		}
 		else{
 			wxMessageBox(_("Error! The 'Stop Picking' button shouldn't have been available!"));

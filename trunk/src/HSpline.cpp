@@ -568,7 +568,7 @@ bool HSpline::GetEndPoint(double* pos)
 	return true;
 }
 
-void HSpline::ToBiarcs(const Handle_Geom_BSplineCurve s, std::list<HeeksObj*> &new_spans, double tolerance)
+void HSpline::ToBiarcs(const Handle_Geom_BSplineCurve s, std::list<HeeksObj*> &new_spans, double tolerance, double first_parameter, double last_parameter)
 {
 	new_spans_for_CreateArcs = &new_spans;
 	if(tolerance < 0.000000000000001)tolerance = 0.000000000000001;
@@ -577,14 +577,14 @@ void HSpline::ToBiarcs(const Handle_Geom_BSplineCurve s, std::list<HeeksObj*> &n
 	gp_Vec v_start;
 	gp_Pnt p_end;
 	gp_Vec v_end;
-	s->D1(s->FirstParameter(), p_start, v_start);
+	s->D1(first_parameter, p_start, v_start);
 	spline_for_CreateArcs = s;
-	CreateArcs(p_start, v_start, s->FirstParameter(), s->LastParameter(), p_end, v_end);
+	CreateArcs(p_start, v_start, first_parameter, last_parameter, p_end, v_end);
 }
 
 void HSpline::ToBiarcs(std::list<HeeksObj*> &new_spans, double tolerance)const
 {
-	ToBiarcs(m_spline, new_spans, tolerance);
+	ToBiarcs(m_spline, new_spans, tolerance, m_spline->FirstParameter(), m_spline->LastParameter());
 }
 
 void HSpline::Reverse()

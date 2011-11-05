@@ -49,4 +49,5 @@ public:
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 	void GetInnerRingSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point = true)const;
 	void GetOneToothSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point = true)const;
+	HeeksObj* MakeSketch()const;
 };

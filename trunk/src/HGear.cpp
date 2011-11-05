@@ -10,6 +10,7 @@
 #include "../interface/PropertyLength.h"
 #include "Gripper.h"
 #include "HLine.h"
+#include "HSpline.h"
 
 HGear::HGear(const HGear &o){
 	operator=(o);
@@ -75,6 +76,8 @@ static PhiAndAngle outside_phi_and_angle(0.0, 0.0);
 static PhiAndAngle inside_phi_and_angle(0.0, 0.0);
 static PhiAndAngle tip_relief_phi_and_angle(0.0, 0.0);
 static PhiAndAngle middle_phi_and_angle(0.0, 0.0);
+static CSketch* sketch_for_gear = NULL;
+static std::list<gp_Pnt> spline_points_for_gear;
 
 void point_at_phi(double phi, double &px, double &py)
 {
@@ -131,14 +134,41 @@ void point(double x, double y)
 	transform_for_cone_and_depth(p);
 
 	p.Transform(mat_for_point);
-	double pp[3];
-	extract(p, pp);
-	(*callbackfunc_for_point)(pp);
+	if(sketch_for_gear)
+	{
+		spline_points_for_gear.push_back(p);
+	}
+	
+	if(callbackfunc_for_point)
+	{
+		double pp[3];
+		extract(p, pp);
+		(*callbackfunc_for_point)(pp);
+	}
+}
+
+void add_spline()
+{
+	// add spline
+	if(sketch_for_gear == NULL)return;
+
+	if(spline_points_for_gear.size() < 2)return;
+
+	if(spline_points_for_gear.size() == 2)
+		sketch_for_gear->Add(new HLine(spline_points_for_gear.front(), spline_points_for_gear.back(), &wxGetApp().current_color), NULL);
+	else
+		sketch_for_gear->Add(new HSpline(spline_points_for_gear, &wxGetApp().current_color), NULL);
+
+	// clear points, retaining last one
+	gp_Pnt back = spline_points_for_gear.back();
+	spline_points_for_gear.clear();
+	spline_points_for_gear.push_back(back);
 }
 
 void involute(double tooth_angle, bool do_reverse)
 {
 	int steps = 10;
+	bool first = true;
 
 	for(int i = do_reverse ? (steps) : 0; do_reverse ? (i>= 0) : (i<=steps); )
 	{
@@ -155,6 +185,8 @@ void involute(double tooth_angle, bool do_reverse)
 
 		// output the point
 		point(x, y);
+		if(first)add_spline();
+		first = false;
 
 		if(do_reverse)i--;
 		else i++;
@@ -203,7 +235,7 @@ void tooth(int i, bool want_start_point, bool make_closed_tooth_form)
 	// incremental_angle - to space the middle point at a quarter of a cycle
 	double incremental_angle = 0.5*Pi/gear_for_point->m_num_teeth - middle_phi_and_angle.angle;
 	double angle1 = tooth_angle - (inside_phi_and_angle.angle + incremental_angle);
-	double angle2 = tooth_angle + (inside_phi_and_angle.angle + incremental_angle);
+//	double angle2 = tooth_angle + (inside_phi_and_angle.angle + incremental_angle);
 	double angle3 = tooth_angle + (outside_phi_and_angle.angle + incremental_angle);
 	double angle4 = next_tooth_angle - (outside_phi_and_angle.angle + incremental_angle);
 	double angle5 = next_tooth_angle - (inside_phi_and_angle.angle + incremental_angle);
@@ -211,6 +243,7 @@ void tooth(int i, bool want_start_point, bool make_closed_tooth_form)
 	if(!make_closed_tooth_form && fabs(gear_for_point->m_clearance) > 0.0000000001)
 	{
 		if(i==0 && want_start_point)clearance_point1(tooth_angle);
+	add_spline();
 		clearance_point2(tooth_angle);
 	}
 	else
@@ -218,19 +251,28 @@ void tooth(int i, bool want_start_point, bool make_closed_tooth_form)
 		if(i==0 && want_start_point)point_at_rad_and_angle(inside_radius, angle1);
 	}
 
+	add_spline();
+
 	involute(tooth_angle + incremental_angle, false);
+
+	add_spline();
 
 	if(fabs(gear_for_point->m_tip_relief) > 0.00000000001)
 	{
 		point_at_rad_and_angle(outside_radius, angle3 + (gear_for_point->m_tip_relief/2)/outside_radius);
+	add_spline();
 		point_at_rad_and_angle(outside_radius, angle4 - (gear_for_point->m_tip_relief/2)/outside_radius);
+		add_spline();
 	}
 
 	involute(next_tooth_angle - incremental_angle, true);
 
+	add_spline();
+
 	if(!make_closed_tooth_form && fabs(gear_for_point->m_clearance) > 0.0000000001)
 	{
 		clearance_point1(next_tooth_angle);
+		add_spline();
 	}
 
 	if(make_closed_tooth_form)
@@ -265,6 +307,7 @@ void HGear::SetSegmentsVariables(void(*callbackfunc)(const double *p))const
 	outside_phi_and_angle = involute_intersect(outside_radius);
 	tip_relief_phi_and_angle = involute_intersect(outside_radius - m_tip_relief);
 	middle_phi_and_angle = involute_intersect(pitch_radius);
+	spline_points_for_gear.clear();
 }
 
 void HGear::GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point)const
@@ -275,6 +318,21 @@ void HGear::GetSegments(void(*callbackfunc)(const double *p), double pixels_per_
 	{
 		tooth(i, i==0 && want_start_point, false);
 	}
+}
+
+HeeksObj* HGear::MakeSketch()const
+{
+	sketch_for_gear = new CSketch();
+	SetSegmentsVariables(NULL);
+
+	for(int i = 0; i<m_num_teeth; i++)
+	{
+		tooth(i, true, false);
+	}
+
+	CSketch* sketch = sketch_for_gear;
+	sketch_for_gear = NULL;
+	return sketch;
 }
 
 void HGear::GetInnerRingSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point)const
@@ -472,23 +530,21 @@ class GearMakeSketches: public Tool
 {
 public:
 	void Run(){
-		sketch_for_make = new CSketch();
-
 		height_for_point = 0.0;
 		lines_started = false;
+
+		void(*callbackfunc)(const double *p) = NULL;
+		callbackfunc = lineAddFunction;
+
 		if(oneTooth())
 		{
-			object_for_Tool->GetOneToothSegments(lineAddFunction, wxGetApp().GetPixelScale());
+			object_for_Tool->GetOneToothSegments(callbackfunc, wxGetApp().GetPixelScale());
+		wxGetApp().Add(sketch_for_make, NULL);
 		}
 		else
 		{
-			object_for_Tool->GetSegments(lineAddFunction, wxGetApp().GetPixelScale());
-			lines_started = false;
-			wxGetApp().Add(sketch_for_make, NULL);
-			sketch_for_make = new CSketch();
-			object_for_Tool->GetInnerRingSegments(lineAddFunction, wxGetApp().GetPixelScale());
+			wxGetApp().Add(object_for_Tool->MakeSketch(), NULL);
 		}
-		wxGetApp().Add(sketch_for_make, NULL);
 
 		if(fabs(object_for_Tool->m_depth) > 0.000000000001)
 		{
@@ -497,17 +553,13 @@ public:
 			sketch_for_make = new CSketch();
 			if(oneTooth())
 			{
-				object_for_Tool->GetOneToothSegments(lineAddFunction, wxGetApp().GetPixelScale());
+				object_for_Tool->GetOneToothSegments(callbackfunc, wxGetApp().GetPixelScale());
+		wxGetApp().Add(sketch_for_make, NULL);
 			}
 			else
 			{
-				object_for_Tool->GetSegments(lineAddFunction, wxGetApp().GetPixelScale());
-				lines_started = false;
-				wxGetApp().Add(sketch_for_make, NULL);
-				sketch_for_make = new CSketch();
-				object_for_Tool->GetInnerRingSegments(lineAddFunction, wxGetApp().GetPixelScale());
+				wxGetApp().Add(object_for_Tool->MakeSketch(), NULL);
 			}
-			wxGetApp().Add(sketch_for_make, NULL);
 		}
 	}
 	const wxChar* GetTitle(){return _("Make Sketches");}
