@@ -304,13 +304,17 @@ bool ConvertSketchToEdges(HeeksObj *object, std::list< std::vector<TopoDS_Edge> 
 									edges.back().push_back(edge.Edge());
 									done = true;
 								}
-							} // End while
+							}
+							else
+							{
+								break;
+							}
 
 							if (! done)
 							{
 								return(false);
 							}
-                        }
+						} // End while
                     }
                     break;
                 case ArcType:
