@@ -11,7 +11,7 @@ public:
 	gp_Ax2 m_pos; // coordinate system defining position and orientation
 	int m_num_teeth;
 	double m_module;
-	double m_clearance;
+	double m_clearance; // as a fraction of the module
 	double m_addendum_offset;
 	double m_addendum_multiplier;
 	double m_dedendum_multiplier;
@@ -50,4 +50,5 @@ public:
 	void GetInnerRingSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point = true)const;
 	void GetOneToothSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point = true)const;
 	HeeksObj* MakeSketch()const;
+	double GetClearanceMM()const{return m_clearance * m_module;}
 };
