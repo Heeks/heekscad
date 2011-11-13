@@ -10,6 +10,7 @@
 #include "../interface/PropertyLength.h"
 #include "Gripper.h"
 #include "HLine.h"
+#include "HArc.h"
 #include "HSpline.h"
 
 HGear::HGear(const HGear &o){
@@ -19,7 +20,7 @@ HGear::HGear(const HGear &o){
 HGear::HGear(){
 	m_num_teeth = 12;
 	m_module = 1.0;
-	m_clearance = 0.7;
+	m_clearance = 0.8;
 	m_addendum_offset = 0.0;
 	m_addendum_multiplier = 1.0;
 	m_dedendum_multiplier = 1.0;
@@ -198,12 +199,16 @@ void point_at_rad_and_angle(double r, double angle)
 	point(cos(angle)*r, sin(angle)*r);
 }
 
-void clearance_point(double tooth_angle, bool point1_not_2)
+enum ClearancePointType{
+	CLEARANCE_POINT1_TYPE,
+	CLEARANCE_POINT2_TYPE,
+};
+
+void get_clearance_points(gp_Pnt &p1_clearance, gp_Pnt &p2_clearance, double tooth_angle, double clearance)
 {
 	double incremental_angle = 0.5*Pi/gear_for_point->m_num_teeth - middle_phi_and_angle.angle;
 	double angle1 = tooth_angle - (inside_phi_and_angle.angle + incremental_angle);
 	double angle2 = tooth_angle + (inside_phi_and_angle.angle + incremental_angle);
-
 	gp_Pnt p1(cos(angle1) * inside_radius, sin(angle1) * inside_radius, 0);
 	gp_Pnt p2(cos(angle2) * inside_radius, sin(angle2) * inside_radius, 0);
 
@@ -211,21 +216,122 @@ void clearance_point(double tooth_angle, bool point1_not_2)
 	gp_Vec v_in = gp_Vec(0, 0, 1) ^ v;
 	v_in.Normalize();
 
-	gp_Pnt p1_clearance = gp_Pnt(p1.XYZ() + v_in.XYZ() * gear_for_point->m_clearance);
-	gp_Pnt p2_clearance = gp_Pnt(p2.XYZ() + v_in.XYZ() * gear_for_point->m_clearance);
-
-	if(point1_not_2)point(p1_clearance.X(), p1_clearance.Y());
-	else point(p2_clearance.X(), p2_clearance.Y());
+	p1_clearance = gp_Pnt(p1.XYZ() + v_in.XYZ() * clearance);
+	p2_clearance = gp_Pnt(p2.XYZ() + v_in.XYZ() * clearance);
 }
 
-void clearance_point1(double tooth_angle)
+gp_Pnt mid_point(double tooth_angle, double clearance)
 {
-	clearance_point(tooth_angle, true);
+	gp_Pnt p1_clearance, p2_clearance;
+	get_clearance_points(p1_clearance, p2_clearance, tooth_angle, clearance);
+	return gp_Pnt(p1_clearance.XYZ() + (p2_clearance.XYZ() - p1_clearance.XYZ()) * 0.5);
 }
 
-void clearance_point2(double tooth_angle)
+double gap_width()
 {
-	clearance_point(tooth_angle, false);
+	gp_Pnt p1, p2;
+	get_clearance_points(p1, p2, 0.0, 0.0);
+	return p1.Distance(p2);
+}
+
+void clearance_point(double tooth_angle, ClearancePointType point_type, double clearance)
+{
+	gp_Pnt p1_clearance, p2_clearance;
+	get_clearance_points(p1_clearance, p2_clearance, tooth_angle, clearance);
+
+	switch(point_type)
+	{
+	case CLEARANCE_POINT1_TYPE:
+		point(p1_clearance.X(), p1_clearance.Y());	
+		break;
+
+	case CLEARANCE_POINT2_TYPE:
+		point(p2_clearance.X(), p2_clearance.Y());
+		break;
+	}
+
+}
+
+void base_point(double tooth_angle, ClearancePointType point_type)
+{
+	gp_Pnt p1, p2;
+	get_clearance_points(p1, p2, tooth_angle, 0.0);
+
+	switch(point_type)
+	{
+	case CLEARANCE_POINT1_TYPE:
+		point(p1.X(), p1.Y());	
+		break;
+	}
+}
+
+void clearance_point1(double tooth_angle, double clearance)
+{
+	clearance_point(tooth_angle, CLEARANCE_POINT1_TYPE, clearance);
+}
+
+void clearance_point2(double tooth_angle, double clearance)
+{
+	clearance_point(tooth_angle, CLEARANCE_POINT2_TYPE, clearance);
+}
+
+void clearance_point_mid(double tooth_angle)
+{
+	gp_Pnt m = mid_point(tooth_angle, 1.0);
+	point(m.X(), m.Y());
+}
+
+void base_point1(double tooth_angle)
+{
+	base_point(tooth_angle, CLEARANCE_POINT1_TYPE);
+}
+
+void line_arc_line(double tooth_angle)
+{
+	double gap = gap_width();
+	double radius = gap/2;
+	double line_length = gear_for_point->GetClearanceMM() - radius;
+	gp_Pnt p1, p2, p1B, p2B;
+	get_clearance_points(p1, p2, tooth_angle, 0.0);
+	get_clearance_points(p1B, p2B, tooth_angle, line_length);
+	gp_Pnt pm = mid_point(tooth_angle, line_length);
+	gp_Circ c(gp_Ax2(pm, gp_Dir(0, 0, -1)), radius);
+
+	if(line_length < wxGetApp().m_geom_tol)
+	{
+		radius = gear_for_point->GetClearanceMM();
+		if(line_length > 0)line_length = 0;
+		double mid_span_line_length = gap - 2*radius;
+		if(mid_span_line_length >= wxGetApp().m_geom_tol)
+		{
+			gp_Vec v(p1, p2);
+			v.Normalize();
+			gp_Pnt p1C, p2C;
+			get_clearance_points(p1C, p2C, tooth_angle, gear_for_point->GetClearanceMM());
+			gp_Pnt two_arc_p1 = gp_Pnt(p1C.XYZ() + v.XYZ() * radius);
+			gp_Pnt two_arc_p2 = gp_Pnt(two_arc_p1.XYZ() + v.XYZ() * mid_span_line_length);
+			gp_Pnt pm1 = gp_Pnt(p1.XYZ() + v.XYZ() * radius);
+			gp_Pnt pm2 = gp_Pnt(pm1.XYZ() + v.XYZ() * mid_span_line_length);
+			gp_Circ c1(gp_Ax2(pm1, gp_Dir(0, 0, -1)), radius);
+			gp_Circ c2(gp_Ax2(pm2, gp_Dir(0, 0, -1)), radius);
+			sketch_for_gear->Add(new HArc(p1, two_arc_p1, c1, &wxGetApp().current_color), NULL);
+			sketch_for_gear->Add(new HLine(two_arc_p1, two_arc_p2, &wxGetApp().current_color), NULL);
+			sketch_for_gear->Add(new HArc(two_arc_p2, p2, c2, &wxGetApp().current_color), NULL);
+		}
+		else
+		{
+			sketch_for_gear->Add(new HArc(p1B, p2B, c, &wxGetApp().current_color), NULL);
+		}
+	}
+	else
+	{
+		sketch_for_gear->Add(new HLine(p1, p1B, &wxGetApp().current_color), NULL);
+		sketch_for_gear->Add(new HArc(p1B, p2B, c, &wxGetApp().current_color), NULL);
+		sketch_for_gear->Add(new HLine(p2B, p2, &wxGetApp().current_color), NULL);
+	}
+
+	spline_points_for_gear.clear();
+	spline_points_for_gear.push_back(p2);
 }
 
 void tooth(int i, bool want_start_point, bool make_closed_tooth_form)
@@ -240,18 +346,24 @@ void tooth(int i, bool want_start_point, bool make_closed_tooth_form)
 	double angle4 = next_tooth_angle - (outside_phi_and_angle.angle + incremental_angle);
 	double angle5 = next_tooth_angle - (inside_phi_and_angle.angle + incremental_angle);
 
-	if(!make_closed_tooth_form && fabs(gear_for_point->m_clearance) > 0.0000000001)
+	if(!make_closed_tooth_form && fabs(gear_for_point->GetClearanceMM()) > 0.0000000001)
 	{
-		if(i==0 && want_start_point)clearance_point1(tooth_angle);
-	add_spline();
-		clearance_point2(tooth_angle);
+		add_spline();
+		if(sketch_for_gear)
+		{			
+			line_arc_line(tooth_angle);
+		}
+		else
+		{
+			if(i == 0 && want_start_point)base_point1(tooth_angle);
+			clearance_point1(tooth_angle, gear_for_point->GetClearanceMM());
+			clearance_point2(tooth_angle, gear_for_point->GetClearanceMM());
+		}
 	}
 	else
 	{
 		if(i==0 && want_start_point)point_at_rad_and_angle(inside_radius, angle1);
 	}
-
-	add_spline();
 
 	involute(tooth_angle + incremental_angle, false);
 
@@ -268,12 +380,6 @@ void tooth(int i, bool want_start_point, bool make_closed_tooth_form)
 	involute(next_tooth_angle - incremental_angle, true);
 
 	add_spline();
-
-	if(!make_closed_tooth_form && fabs(gear_for_point->m_clearance) > 0.0000000001)
-	{
-		clearance_point1(next_tooth_angle);
-		add_spline();
-	}
 
 	if(make_closed_tooth_form)
 	{
