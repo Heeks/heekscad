@@ -26,6 +26,8 @@ public:
 	wxPoint CurrentPoint;
 	wxPoint button_down_point;
 	bool control_key_initially_pressed;
+	bool m_button_down; // don't trust dragging, if button wasn't received first
+	bool m_middle_button_down;
 	wxRect window_box;
 	bool window_box_exists;
 	bool m_doing_a_main_loop;
