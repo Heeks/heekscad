@@ -50,6 +50,8 @@ CSelectMode::CSelectMode(){
 	control_key_initially_pressed = false;
 	window_box_exists = false;
 	m_doing_a_main_loop = false;
+	m_button_down = false;
+	m_middle_button_down = false;
 	m_just_one = false;
 }
 
@@ -115,6 +117,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 	{
 		button_down_point = wxPoint(event.GetX(), event.GetY());
 		CurrentPoint = button_down_point;
+		m_button_down = true;
 
 		if(wxGetApp().m_dragging_moves_objects)
 		{
@@ -170,13 +173,26 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 
 	if(event.MiddleDown())
 	{
+		m_middle_button_down = true;
 		button_down_point = wxPoint(event.GetX(), event.GetY());
 		CurrentPoint = button_down_point;
 		wxGetApp().m_current_viewport->StoreViewPoint();
 		wxGetApp().m_current_viewport->m_view_point.SetStartMousePoint(button_down_point);
 	}
 
+	bool dragging = event.Dragging() && (m_button_down || m_middle_button_down);
+	bool moving = event.Moving() || (event.Dragging() && (!(m_button_down || m_middle_button_down)));
+	bool left_up = false;
+
 	if(event.LeftUp())
+	{
+		if(m_button_down)left_up = true;
+		m_button_down = false;
+	}
+
+	if(event.MiddleUp())m_middle_button_down = false;
+
+	if(left_up)
 	{
 		if(wxGetApp().drag_gripper)
 		{
@@ -306,7 +322,10 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 			}
 			else
 			{
-				wxGetApp().m_marked_list->Clear(true);
+				if(!event.ShiftDown() && !event.ControlDown())
+				{
+					wxGetApp().m_marked_list->Clear(true);
+				}
 			}
 		}
 
@@ -325,7 +344,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 		wxGetApp().FindMarkedObject(wxPoint(event.GetX(), event.GetY()), &marked_object);
 		wxGetApp().DoDropDownMenu(wxGetApp().m_frame->m_graphics, wxPoint(event.GetX(), event.GetY()), &marked_object, false, event.ControlDown());
 	}
-	else if(event.Dragging())
+	else if(dragging)
 	{
 		if(event.MiddleIsDown())
 		{
@@ -441,7 +460,7 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 		}
 		CurrentPoint = wxPoint(event.GetX(), event.GetY());
 	}
-	else if(event.Moving())
+	else if(moving)
 	{
 		CurrentPoint = wxPoint(event.GetX(), event.GetY());
 	}
