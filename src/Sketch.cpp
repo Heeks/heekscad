@@ -33,7 +33,8 @@ std::string CSketch::m_sketch_order_str[MaxSketchOrderTypes] = {
 	std::string("re-order"),
 	std::string("clockwise"),
 	std::string("counter-clockwise"),
-	std::string("multiple")
+	std::string("multiple"),
+	std::string("has circles"),
 };
 
 CSketch::CSketch():m_order(SketchOrderTypeUnknown)
@@ -1129,4 +1130,29 @@ bool CSketch::FilletAtPoint(const gp_Pnt& p, double rad)
 	}
 
 	return fillet_done;
+}
+
+CSketch* CSketch::SplineToBiarcs(double tolerance)const
+{
+	CSketch *new_sketch = new CSketch;
+
+	for(std::list<HeeksObj*>::const_iterator It = m_objects.begin(); It != m_objects.end(); It++)
+	{
+		HeeksObj* span = *It;
+		if(span->GetType() == SplineType)
+		{
+			std::list<HeeksObj*> new_spans;
+			((HSpline*)span)->ToBiarcs(new_spans, tolerance);
+			for(std::list<HeeksObj*>::iterator ItS = new_spans.begin(); ItS != new_spans.end(); ItS++)
+			{
+				new_sketch->Add(*ItS, NULL);
+			}
+		}
+		else
+		{
+			new_sketch->Add(span->MakeACopy(), NULL);
+		}
+	}
+
+	return new_sketch;
 }

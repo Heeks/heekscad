@@ -11,16 +11,14 @@ public:
 	gp_Ax2 m_pos; // coordinate system defining position and orientation
 	int m_num_teeth;
 	double m_module;
-	double m_clearance; // as a fraction of the module
 	double m_addendum_offset;
 	double m_addendum_multiplier;
 	double m_dedendum_multiplier;
 	double m_pressure_angle;
-	double m_spacing;
 	double m_tip_relief;
 	double m_depth;
 	double m_cone_half_angle; // 0 for a cylinder ( spur gear ), 90 for a circular rack
-	double m_inner_ring;  // a circle drawn in the middle of the gear with this diameter
+	double m_angle; // draw the gear rotated anti-clockwise by this angle
 
 	HGear();
 	HGear(const HGear &o);
@@ -47,8 +45,7 @@ public:
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
-	void GetInnerRingSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point = true)const;
 	void GetOneToothSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point = true)const;
 	HeeksObj* MakeSketch()const;
-	double GetClearanceMM()const{return m_clearance * m_module;}
+	double GetClearanceMM()const;
 };

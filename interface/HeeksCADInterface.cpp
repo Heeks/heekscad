@@ -864,9 +864,9 @@ void CHeeksCADInterface::XYZView(bool recalculate_gl_lists )
 	wxGetApp().m_frame->m_graphics->OnMagXYZ(recalculate_gl_lists);
 }
 
-void CHeeksCADInterface::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance, double *scale)
+void CHeeksCADInterface::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance, double *scale, bool binary)
 {
-	wxGetApp().SaveSTLFile(objects, filepath, facet_tolerance, scale);
+	wxGetApp().SaveSTLFile(objects, filepath, facet_tolerance, scale, binary);
 }
 
 SketchOrderType CHeeksCADInterface::GetSketchOrder(HeeksObj* sketch)
@@ -1614,6 +1614,11 @@ void CHeeksCADInterface::SetViewUnits(double units, bool write_to_config)
 void CHeeksCADInterface::SplineToBiarcs(HeeksObj* spline, std::list<HeeksObj*> &new_spans, double tolerance)
 {
 	((HSpline*)spline)->ToBiarcs(new_spans, tolerance);
+}
+
+HeeksObj* CHeeksCADInterface::SketchSplineToBiarcs(HeeksObj* sketch, double tolerance)
+{
+	return ((CSketch*)sketch)->SplineToBiarcs(tolerance);
 }
 
 HeeksObj* CHeeksCADInterface::NewSplineFromPoints(unsigned int num_points, const double* d3)
