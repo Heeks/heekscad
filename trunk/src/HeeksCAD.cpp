@@ -221,6 +221,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_icon_texture_number = 0;
 	m_extrude_to_solid = true;
 	m_revolve_angle = 360.0;
+	m_stl_save_as_binary = true;
 
 
     {
@@ -418,6 +419,7 @@ bool HeeksCADapp::OnInit()
 
 	config.Read(_T("InputUsesModalDialog"), &m_input_uses_modal_dialog, true);
 	config.Read(_T("DraggingMovesObjects"), &m_dragging_moves_objects, true);
+	config.Read(_T("STLSaveBinary"), &m_stl_save_as_binary, true);
 
 	HDimension::ReadFromConfig(config);
 	LoadSketchToolsSettings();
@@ -587,6 +589,7 @@ void HeeksCADapp::WriteConfig()
 	config.Write(_T("ExtrudeToSolid"), m_extrude_to_solid);
 	config.Write(_T("RevolveAngle"), m_revolve_angle);
 	config.Write(_T("SolidViewMode"), m_solid_view_mode);
+	config.Write(_T("STLSaveBinary"), m_stl_save_as_binary);
 
 	HDimension::WriteToConfig(config);
 
@@ -1518,7 +1521,76 @@ static void write_cpp_triangle(const double* x, const double* n)
 	}
 }
 
-void HeeksCADapp::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance, double* scale)
+class NineFloatsThreeFloats
+{
+public:
+	float x[9];
+	float n[3];
+};
+static std::list<NineFloatsThreeFloats> binary_triangles;
+
+static void write_binary_triangle(const double* x, const double* n)
+{
+	NineFloatsThreeFloats t;
+	for(int i = 0; i<9; i++)t.x[i] = (float)(x[i]);
+	for(int i = 0; i<3; i++)t.n[i] = (float)(n[i]);
+	binary_triangles.push_back(t);
+}
+
+void HeeksCADapp::SaveSTLFileBinary(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance, double* scale)
+{
+#ifdef __WXMSW__
+	ofstream ofs(filepath, ios::binary);
+#else
+	ofstream ofs(Ttc(filepath), ios::binary);
+#endif
+
+	// write 80 characters ( could be anything )
+	char header[80] = "Binary STL file made with HeeksCAD                                     ";
+	ofs.write(header, 80);
+
+	// get all the triangles
+	for(std::list<HeeksObj*>::const_iterator It = objects.begin(); It != objects.end(); It++)
+	{
+		HeeksObj* object = *It;
+		object->GetTriangles(write_binary_triangle, facet_tolerance < 0 ? m_stl_facet_tolerance : facet_tolerance);
+	}
+
+	// write the number of facets
+	unsigned int num_facets = binary_triangles.size();
+	ofs.write((char*)(&num_facets), 4);
+
+	for(std::list<NineFloatsThreeFloats>::iterator It = binary_triangles.begin(); It != binary_triangles.end(); It++)
+	{
+		NineFloatsThreeFloats t = *It;
+
+		gp_Pnt p0(t.x[0], t.x[1], t.x[2]);
+		gp_Pnt p1(t.x[3], t.x[4], t.x[5]);
+		gp_Pnt p2(t.x[6], t.x[7], t.x[8]);
+		gp_Vec v1(p0, p1);
+		gp_Vec v2(p0, p2);
+		float n[3] = {0.0f, 0.0f, 1.0f};
+		try
+		{
+			gp_Vec norm = (v1 ^ v2).Normalized();
+			n[0] = (float)(norm.X());
+			n[1] = (float)(norm.Y());
+			n[2] = (float)(norm.Z());
+		}
+		catch(...)
+		{
+		}
+
+		ofs.write((char*)(n), 12);
+		ofs.write((char*)(t.x), 36);
+		short attr = 0;
+		ofs.write((char*)(&attr), 2);
+	}
+
+	binary_triangles.clear();
+}
+
+void HeeksCADapp::SaveSTLFileAscii(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance, double* scale)
 {
 #ifdef __WXMSW__
 	ofstream ofs(filepath);
@@ -1546,6 +1618,12 @@ void HeeksCADapp::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar 
 	scale_for_write_triangle = NULL;
 
 	ofs<<"endsolid"<<endl;
+}
+
+void HeeksCADapp::SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance, double* scale, bool binary)
+{
+	if(binary)SaveSTLFileBinary(objects, filepath, facet_tolerance, scale);
+	else SaveSTLFileAscii(objects, filepath, facet_tolerance, scale);
 }
 
 void HeeksCADapp::SaveCPPFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance)
@@ -1755,7 +1833,7 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 	}
 	else if(wf.EndsWith(_T(".stl")))
 	{
-		SaveSTLFile(m_objects, filepath);
+		SaveSTLFile(m_objects, filepath, -1.0, NULL, m_stl_save_as_binary);
 	}
 	else if(wf.EndsWith(_T(".cpp")))
 	{
@@ -2713,6 +2791,11 @@ void on_set_reverse_mouse_wheel(bool value, HeeksObj* object)
 	wxGetApp().mouse_wheel_forward_away = !value;
 }
 
+void on_set_stl_save_binary(bool value, HeeksObj* object)
+{
+	wxGetApp().m_stl_save_as_binary = value;
+}
+
 void on_set_reverse_zooming(bool value, HeeksObj* object)
 {
 	ViewZooming::m_reversed = value;
@@ -3230,6 +3313,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	file_options->m_list.push_back(dxf_options);
 	PropertyList* stl_options = new PropertyList(_("STL"));
 	stl_options->m_list.push_back(new PropertyDouble(_("stl save facet tolerance"), m_stl_facet_tolerance, NULL, on_stl_facet_tolerance));
+	stl_options->m_list.push_back( new PropertyCheck(_("STL save binary"), m_stl_save_as_binary, NULL, on_set_stl_save_binary));
 	file_options->m_list.push_back(stl_options);
 	file_options->m_list.push_back(new PropertyInt(_("auto save interval (in minutes)"), m_auto_save_interval, NULL, on_set_auto_save_interval));
 #ifdef MULTIPLE_OWNERS

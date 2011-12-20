@@ -167,7 +167,7 @@ public:
 	virtual void SetViewBox(const double* b);
 	virtual void ViewExtents(bool rotate);
 	virtual void XYZView(bool recalculate_gl_lists);
-	virtual void SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance = -1, double* scale = NULL);
+	virtual void SaveSTLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance = -1, double* scale = NULL, bool binary = true);
 
 	// sketches
 	virtual SketchOrderType GetSketchOrder(HeeksObj* sketch);
@@ -309,6 +309,7 @@ public:
 	virtual double GetViewUnits();
 	virtual void SetViewUnits(double units, bool write_to_config);
 	virtual void SplineToBiarcs(HeeksObj* spline, std::list<HeeksObj*> &new_spans, double tolerance);
+	virtual HeeksObj* SketchSplineToBiarcs(HeeksObj* sketch, double tolerance);
 	virtual HeeksObj* NewSplineFromPoints(unsigned int num_points, const double* d3); // list of 3 doubles
 
 	// Geometry functions

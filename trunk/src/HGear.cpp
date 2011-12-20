@@ -20,16 +20,14 @@ HGear::HGear(const HGear &o){
 HGear::HGear(){
 	m_num_teeth = 12;
 	m_module = 1.0;
-	m_clearance = 0.8;
 	m_addendum_offset = 0.0;
 	m_addendum_multiplier = 1.0;
 	m_dedendum_multiplier = 1.0;
 	m_pressure_angle = 0.34906585039886; // 20 degrees
-	m_spacing = 0.0;
 	m_tip_relief = 0.05;
 	m_depth = 0.0;
 	m_cone_half_angle = 0.0;
-	m_inner_ring = 1.0;
+	m_angle = 0.0;
 }
 
 HGear::~HGear(){
@@ -289,46 +287,48 @@ void base_point1(double tooth_angle)
 void line_arc_line(double tooth_angle)
 {
 	double gap = gap_width();
-	double radius = gap/2;
-	double line_length = gear_for_point->GetClearanceMM() - radius;
+	double radius = gap/3;
+	double clearance = gear_for_point->GetClearanceMM();
+	double line_length = clearance - radius;
+	if(line_length < 0.0)
+	{
+		line_length = 0.0;
+		radius = clearance;
+	}
+
 	gp_Pnt p1, p2, p1B, p2B;
 	get_clearance_points(p1, p2, tooth_angle, 0.0);
 	get_clearance_points(p1B, p2B, tooth_angle, line_length);
 	gp_Pnt pm = mid_point(tooth_angle, line_length);
 	gp_Circ c(gp_Ax2(pm, gp_Dir(0, 0, -1)), radius);
 
-	if(line_length < wxGetApp().m_geom_tol)
+	if(line_length >= wxGetApp().m_geom_tol)
+		sketch_for_gear->Add(new HLine(p1, p1B, &wxGetApp().current_color), NULL);
+
+	double mid_span_line_length = gap - 2*radius;
+	if(mid_span_line_length >= wxGetApp().m_geom_tol)
 	{
-		radius = gear_for_point->GetClearanceMM();
-		if(line_length > 0)line_length = 0;
-		double mid_span_line_length = gap - 2*radius;
-		if(mid_span_line_length >= wxGetApp().m_geom_tol)
-		{
-			gp_Vec v(p1, p2);
-			v.Normalize();
-			gp_Pnt p1C, p2C;
-			get_clearance_points(p1C, p2C, tooth_angle, gear_for_point->GetClearanceMM());
-			gp_Pnt two_arc_p1 = gp_Pnt(p1C.XYZ() + v.XYZ() * radius);
-			gp_Pnt two_arc_p2 = gp_Pnt(two_arc_p1.XYZ() + v.XYZ() * mid_span_line_length);
-			gp_Pnt pm1 = gp_Pnt(p1.XYZ() + v.XYZ() * radius);
-			gp_Pnt pm2 = gp_Pnt(pm1.XYZ() + v.XYZ() * mid_span_line_length);
-			gp_Circ c1(gp_Ax2(pm1, gp_Dir(0, 0, -1)), radius);
-			gp_Circ c2(gp_Ax2(pm2, gp_Dir(0, 0, -1)), radius);
-			sketch_for_gear->Add(new HArc(p1, two_arc_p1, c1, &wxGetApp().current_color), NULL);
-			sketch_for_gear->Add(new HLine(two_arc_p1, two_arc_p2, &wxGetApp().current_color), NULL);
-			sketch_for_gear->Add(new HArc(two_arc_p2, p2, c2, &wxGetApp().current_color), NULL);
-		}
-		else
-		{
-			sketch_for_gear->Add(new HArc(p1B, p2B, c, &wxGetApp().current_color), NULL);
-		}
+		gp_Vec v(p1, p2);
+		v.Normalize();
+		gp_Pnt p1C, p2C;
+		get_clearance_points(p1C, p2C, tooth_angle, clearance);
+		gp_Pnt two_arc_p1 = gp_Pnt(p1C.XYZ() + v.XYZ() * radius);
+		gp_Pnt two_arc_p2 = gp_Pnt(two_arc_p1.XYZ() + v.XYZ() * mid_span_line_length);
+		gp_Pnt pm1 = gp_Pnt(p1B.XYZ() + v.XYZ() * radius);
+		gp_Pnt pm2 = gp_Pnt(pm1.XYZ() + v.XYZ() * mid_span_line_length);
+		gp_Circ c1(gp_Ax2(pm1, gp_Dir(0, 0, -1)), radius);
+		gp_Circ c2(gp_Ax2(pm2, gp_Dir(0, 0, -1)), radius);
+		sketch_for_gear->Add(new HArc(p1B, two_arc_p1, c1, &wxGetApp().current_color), NULL);
+		sketch_for_gear->Add(new HLine(two_arc_p1, two_arc_p2, &wxGetApp().current_color), NULL);
+		sketch_for_gear->Add(new HArc(two_arc_p2, p2B, c2, &wxGetApp().current_color), NULL);
 	}
 	else
 	{
-		sketch_for_gear->Add(new HLine(p1, p1B, &wxGetApp().current_color), NULL);
 		sketch_for_gear->Add(new HArc(p1B, p2B, c, &wxGetApp().current_color), NULL);
-		sketch_for_gear->Add(new HLine(p2B, p2, &wxGetApp().current_color), NULL);
 	}
+
+	if(line_length >= wxGetApp().m_geom_tol)
+		sketch_for_gear->Add(new HLine(p2B, p2, &wxGetApp().current_color), NULL);
 
 	spline_points_for_gear.clear();
 	spline_points_for_gear.push_back(p2);
@@ -341,10 +341,10 @@ void tooth(int i, bool want_start_point, bool make_closed_tooth_form)
 	// incremental_angle - to space the middle point at a quarter of a cycle
 	double incremental_angle = 0.5*Pi/gear_for_point->m_num_teeth - middle_phi_and_angle.angle;
 	double angle1 = tooth_angle - (inside_phi_and_angle.angle + incremental_angle);
-//	double angle2 = tooth_angle + (inside_phi_and_angle.angle + incremental_angle);
+	//double angle2 = tooth_angle + (inside_phi_and_angle.angle + incremental_angle);
 	double angle3 = tooth_angle + (outside_phi_and_angle.angle + incremental_angle);
 	double angle4 = next_tooth_angle - (outside_phi_and_angle.angle + incremental_angle);
-	double angle5 = next_tooth_angle - (inside_phi_and_angle.angle + incremental_angle);
+	//double angle5 = next_tooth_angle - (inside_phi_and_angle.angle + incremental_angle);
 
 	if(!make_closed_tooth_form && fabs(gear_for_point->GetClearanceMM()) > 0.0000000001)
 	{
@@ -380,25 +380,16 @@ void tooth(int i, bool want_start_point, bool make_closed_tooth_form)
 	involute(next_tooth_angle - incremental_angle, true);
 
 	add_spline();
-
-	if(make_closed_tooth_form)
-	{
-		double inside_ring_radius = gear_for_point->m_inner_ring/2;
-		int num_steps = 10;
-		for(int i = 0; i<=num_steps; i++)
-		{
-			double angle = angle5 + (angle1 - angle5) * i / num_steps;
-			point_at_rad_and_angle(inside_ring_radius, angle);
-		}
-		point_at_rad_and_angle(inside_radius, angle1);
-	}
 }
 
 void HGear::SetSegmentsVariables(void(*callbackfunc)(const double *p))const
 {
 	callbackfunc_for_point = callbackfunc;
 	gear_for_point = this;
+	gp_Trsf rotation;
+	rotation.SetRotation(gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)), m_angle * Pi/180);
 	mat_for_point = make_matrix(m_pos.Location(), m_pos.XDirection(), m_pos.YDirection());
+	mat_for_point = rotation.Multiplied(mat_for_point);
 	cone_sin_for_point = sin(m_cone_half_angle);
 	cone_cos_for_point = cos(m_cone_half_angle);
 
@@ -436,24 +427,16 @@ HeeksObj* HGear::MakeSketch()const
 		tooth(i, true, false);
 	}
 
+#ifdef GEAR_SKETCH_BIARCS
+	CSketch *sketch_with_biarcs = sketch_for_gear->SplineToBiarcs(0.01);
+	delete sketch_for_gear;
+	sketch_for_gear = NULL;
+	return sketch_with_biarcs;
+#else
 	CSketch* sketch = sketch_for_gear;
 	sketch_for_gear = NULL;
 	return sketch;
-}
-
-void HGear::GetInnerRingSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point)const
-{
-	SetSegmentsVariables(callbackfunc);
-
-	double inner_ring_radius = this->m_inner_ring/2;
-
-	int num = 10*m_num_teeth;
-	for(int i = 0; i<=num; i++)
-	{
-		double angle = 2*Pi*i/num;
-
-		if(i!=0 || want_start_point)point(cos(angle)*inner_ring_radius, sin(angle)*inner_ring_radius);
-	}
+#endif
 }
 
 void HGear::GetOneToothSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point)const
@@ -479,18 +462,12 @@ void HGear::glCommands(bool select, bool marked, bool no_color){
 	glBegin(GL_LINE_STRIP);
 	GetSegments(glVertexFunction, wxGetApp().GetPixelScale());
 	glEnd();
-	glBegin(GL_LINE_STRIP);
-	GetInnerRingSegments(glVertexFunction, wxGetApp().GetPixelScale());
-	glEnd();
 
 	if(fabs(m_depth) > 0.000000000001)
 	{
 		height_for_point = m_depth;
 		glBegin(GL_LINE_STRIP);
 		GetSegments(glVertexFunction, wxGetApp().GetPixelScale());
-		glEnd();
-		glBegin(GL_LINE_STRIP);
-		GetInnerRingSegments(glVertexFunction, wxGetApp().GetPixelScale());
 		glEnd();
 	}
 
@@ -549,28 +526,8 @@ static void on_set_module(double value, HeeksObj* object){
 	((HGear*)object)->m_module = value;
 }
 
-static void on_set_clearance(double value, HeeksObj* object){
-	((HGear*)object)->m_clearance = value;
-}
-
-static void on_set_addendum_offset(double value, HeeksObj* object){
-	((HGear*)object)->m_addendum_offset = value;
-}
-
-static void on_set_addendum_multiplier(double value, HeeksObj* object){
-	((HGear*)object)->m_addendum_multiplier = value;
-}
-
-static void on_set_dedendum_multiplier(double value, HeeksObj* object){
-	((HGear*)object)->m_dedendum_multiplier = value;
-}
-
 static void on_set_pressure_angle(double value, HeeksObj* object){
 	((HGear*)object)->m_pressure_angle = value * Pi/180;
-}
-
-static void on_set_spacing(double value, HeeksObj* object){
-	((HGear*)object)->m_spacing = value;
 }
 
 static void on_set_tip_relief(double value, HeeksObj* object){
@@ -585,23 +542,17 @@ static void on_set_cone_half_angle(double value, HeeksObj* object){
 	((HGear*)object)->m_cone_half_angle = value * Pi/180;
 }
 
-static void on_set_inner_ring(double value, HeeksObj* object){
-	((HGear*)object)->m_inner_ring = value;
+static void on_set_angle(double value, HeeksObj* object){
+	((HGear*)object)->m_angle = value;
 }
-
 void HGear::GetProperties(std::list<Property *> *list){
 	list->push_back(new PropertyInt(_("num teeth"), m_num_teeth, this, on_set_num_teeth));
 	list->push_back(new PropertyDouble(_("module"), m_module, this, on_set_module));
-	list->push_back(new PropertyDouble(_("clearance"), m_clearance, this, on_set_clearance));
-	list->push_back(new PropertyDouble(_("addendum offset"), m_addendum_offset, this, on_set_addendum_offset));
-	list->push_back(new PropertyDouble(_("addendum multiplier"), m_addendum_multiplier, this, on_set_addendum_multiplier));
-	list->push_back(new PropertyDouble(_("dedendum multiplier"), m_dedendum_multiplier, this, on_set_dedendum_multiplier));
 	list->push_back(new PropertyDouble(_("pressure angle"), m_pressure_angle * 180/Pi, this, on_set_pressure_angle));
-	list->push_back(new PropertyDouble(_("spacing"), m_spacing, this, on_set_spacing));
 	list->push_back(new PropertyDouble(_("tip relief"), m_tip_relief, this, on_set_tip_relief));
 	list->push_back(new PropertyDouble(_("depth"), m_depth, this, on_set_depth));
 	list->push_back(new PropertyDouble(_("cone half angle"), m_cone_half_angle * 180/Pi, this, on_set_cone_half_angle));
-	list->push_back(new PropertyDouble(_("inner ring diameter"), m_inner_ring, this, on_set_inner_ring));
+	list->push_back(new PropertyDouble(_("drawn angle"), m_angle, this, on_set_angle));
 
 	HeeksObj::GetProperties(list);
 }
@@ -645,7 +596,7 @@ public:
 		if(oneTooth())
 		{
 			object_for_Tool->GetOneToothSegments(callbackfunc, wxGetApp().GetPixelScale());
-		wxGetApp().Add(sketch_for_make, NULL);
+			wxGetApp().Add(sketch_for_make, NULL);
 		}
 		else
 		{
@@ -699,16 +650,14 @@ void HGear::WriteXML(TiXmlNode *root)
 
 	element->SetAttribute("num_teeth", m_num_teeth);
 	element->SetDoubleAttribute("module", m_module);
-	element->SetDoubleAttribute("clearance", m_clearance);
 	element->SetDoubleAttribute("addendum_offset", m_addendum_offset);
 	element->SetDoubleAttribute("addendum_multiplier", m_addendum_multiplier);
 	element->SetDoubleAttribute("dedendum_multiplier", m_dedendum_multiplier);
 	element->SetDoubleAttribute("pressure_angle", m_pressure_angle);
-	element->SetDoubleAttribute("spacing", m_spacing);
 	element->SetDoubleAttribute("tip_relief", m_tip_relief);
 	element->SetDoubleAttribute("depth", m_depth);
 	element->SetDoubleAttribute("cone_half_angle", m_cone_half_angle);
-	element->SetDoubleAttribute("inner_ring", m_inner_ring);
+	element->SetDoubleAttribute("drawn_angle", m_angle);
 
 	const gp_Pnt& l = m_pos.Location();
 	element->SetDoubleAttribute("lx", l.X());
@@ -735,16 +684,14 @@ HeeksObj* HGear::ReadFromXMLElement(TiXmlElement* element)
 
 	element->Attribute("num_teeth", &new_object->m_num_teeth);
 	element->Attribute("module", &new_object->m_module);
-	element->Attribute("clearance", &new_object->m_clearance);
 	element->Attribute("addendum_offset", &new_object->m_addendum_offset);
 	element->Attribute("addendum_multiplier", &new_object->m_addendum_multiplier);
 	element->Attribute("dedendum_multiplier", &new_object->m_dedendum_multiplier);
 	element->Attribute("pressure_angle", &new_object->m_pressure_angle);
-	element->Attribute("spacing", &new_object->m_spacing);
 	element->Attribute("tip_relief", &new_object->m_tip_relief);
 	element->Attribute("depth", &new_object->m_depth);
 	element->Attribute("cone_half_angle", &new_object->m_cone_half_angle);
-	element->Attribute("inner_ring", &new_object->m_inner_ring);
+	element->Attribute("drawn_angle", &new_object->m_angle);
 
 	double l[3] = {0.0, 0.0, 0.0};
 	double d[3] = {0.0, 0.0, 1.0};
@@ -769,3 +716,12 @@ HeeksObj* HGear::ReadFromXMLElement(TiXmlElement* element)
 	return new_object;
 }
 
+double HGear::GetClearanceMM()const
+{
+	// 12 teeth clearance 0.8
+	// 20 teeth clearance 0.55
+	// 52 teeth clearance 0.4
+	// 100000 teeth clearance 0.1
+
+	return (8.4 / ( 7.2 + m_num_teeth/2.5 )) * m_module;
+}
