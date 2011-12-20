@@ -72,6 +72,7 @@ public:
 	bool FilletAtPoint(const gp_Pnt& p, double rad);
 	static void ReverseObject(HeeksObj* object);
 	double GetArea()const;
+	CSketch* SplineToBiarcs(double tolerance)const;
 };
 
 class CSketchRelinker{

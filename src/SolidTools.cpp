@@ -64,7 +64,7 @@ void SaveSolids::Run(){
 
 		if(wf.EndsWith(_T(".stl")))
 		{
-			wxGetApp().SaveSTLFile(objects, filepath);
+			wxGetApp().SaveSTLFile(objects, filepath, -1.0, NULL, wxGetApp().m_stl_save_as_binary);
 		}
 		else if(wf.EndsWith(_T(".cpp")))
 		{
