@@ -81,6 +81,7 @@ public:
 	virtual bool GetArcCentre(HeeksObj* object, double* c);
 	virtual bool GetArcRadius(HeeksObj* object, double* r);
 	virtual bool GetArcAxis(HeeksObj* object, double* a);
+	virtual double GetArcIncludedAngle(HeeksObj* object);
 	virtual double CircleGetRadius(HeeksObj* object);
 	virtual void get_2d_arc_segments(double xs, double ys, double xe, double ye, double xc, double yc, bool dir, bool want_start, double pixels_per_mm, void(*callbackfunc)(const double* xy));
 	virtual bool GetSegmentVector(HeeksObj* object, double fraction, double* v);
@@ -387,4 +388,7 @@ public:
 	// Index functions
 	virtual unsigned int GetIndex(HeeksObj *object);
 	virtual void ReleaseIndex(unsigned int index);
+
+	virtual void Exit();
+	virtual void SetAlternativeFileOpenWildCardString(const wxChar* s);
 };
