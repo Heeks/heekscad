@@ -290,6 +290,11 @@ bool CHeeksCADInterface::GetArcAxis(HeeksObj* object, double* a)
 	return true;
 }
 
+double CHeeksCADInterface::GetArcIncludedAngle(HeeksObj* object)
+{
+	return ((HArc*)object)->IncludedAngle();
+}
+
 double CHeeksCADInterface::CircleGetRadius(HeeksObj* object)
 {
 	return ((HCircle*)object)->m_radius;
@@ -2045,4 +2050,14 @@ unsigned int CHeeksCADInterface::GetIndex(HeeksObj *object) {
 
 void CHeeksCADInterface::ReleaseIndex(unsigned int index) {
 	wxGetApp().ReleaseIndex(index);
+}
+
+void CHeeksCADInterface::Exit()
+{
+	exit(0);
+}
+
+void CHeeksCADInterface::SetAlternativeFileOpenWildCardString(const wxChar* s)
+{
+	wxGetApp().m_alternative_open_wild_card_string = wxString(s);
 }
