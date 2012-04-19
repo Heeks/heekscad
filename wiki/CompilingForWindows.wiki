@@ -6,6 +6,18 @@ How to build HeeksCAD for Windows
 
 I used a 64bit SONY VPCCB running Windows 7
 
+download and install TortoiseSVN software from here http://tortoisesvn.net/
+make a new folder on your computer somewhere, called HeeksCAD.
+I made these folders "C:\Dev\HeeksCAD"
+right click on the HeeksCAD folder and do "TortoiseSVN"->"SVN Checkout..."
+The "URL of repository":
+http://heekscad.googlecode.com/svn/trunk/
+The Checkout directory something like:
+C:\Dev\HeeksCAD
+Press OK.
+It should checkout all the HeeksCAD source code
+
+
 Get Microsoft Visual C++ 2008 Express Edition ( it's free, but about 1GB ) or use full version.
 
 Download and install the Open CASCADE installation. I am currently using 6.5.2. http://www.opencascade.org/getocc/download/loadocc/ ( OpenCASCADE652.exe )
@@ -34,19 +46,6 @@ Make and environment variable called
 CASROOT
 with value of
 C:\OpenCASCADE6.5.2\ros
-
-
-
-download and install TortoiseSVN software from here http://tortoisesvn.net/
-make a new folder on your computer somewhere, called HeeksCAD.
-I made these folders "C:\Dev\HeeksCAD"
-right click on the HeeksCAD folder and do "TortoiseSVN"->"SVN Checkout..."
-The "URL of repository":
-http://heekscad.googlecode.com/svn/trunk/
-The Checkout directory something like:
-C:\Dev\HeeksCAD
-Press OK.
-It should checkout all the HeeksCAD source code
 
 Get libarea source code:
 	make "C:\Dev\libarea"
