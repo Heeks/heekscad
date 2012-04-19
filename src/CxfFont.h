@@ -62,10 +62,10 @@ protected:
 			virtual Graphics *Duplicate() = 0;
 		}; // End Graphics class defintion.
 
-		class Line : public Graphics
+		class GlyphLine : public Graphics
 		{
 		public:
-			Line( const double x1, const double y1, const double x2, const double y2 ) :
+			GlyphLine( const double x1, const double y1, const double x2, const double y2 ) :
 			  m_x1(x1), m_y1(y1), m_x2(x2), m_y2(y2)
 			{
 				// Setup the bounding box values.
@@ -83,7 +83,7 @@ protected:
 				m_bounding_box.Insert( point );
 			}
 
-			Line() : m_x1(0.0), m_y1(0.0), m_x2(0.0), m_y2(0.0)
+			GlyphLine() : m_x1(0.0), m_y1(0.0), m_x2(0.0), m_y2(0.0)
 			{
 				// Setup the bounding box values.
 				double point[3];
@@ -109,7 +109,7 @@ protected:
 							 gp_Trsf transformation,
 							 const float width ) const;
 			CBox BoundingBox() const { return(m_bounding_box); }
-			Graphics *Duplicate() { return(new Line(*this)); }
+			Graphics *Duplicate() { return(new GlyphLine(*this)); }
 
 		private:
 			double m_x1;
@@ -120,10 +120,10 @@ protected:
 			CBox m_bounding_box;
 		};
 
-		class Arc : public Graphics
+		class GlyphArc : public Graphics
 		{
 		public:
-			Arc( const double xcentre, const double ycentre, const double radius, const double start_angle, const double end_angle ) :
+			GlyphArc( const double xcentre, const double ycentre, const double radius, const double start_angle, const double end_angle ) :
 			  m_xcentre(xcentre), m_ycentre(ycentre), m_radius(radius),
 				m_start_angle((start_angle / 360.0) * (2 * PI)),
 				m_end_angle((end_angle / 360.0) * (2 * PI))
@@ -144,8 +144,8 @@ protected:
 				} // End for
 			  }
 
-			Arc() : m_xcentre(0.0), m_ycentre(0.0), m_radius(0.0), m_start_angle(0.0), m_end_angle(0.0) { }
-			Graphics *Duplicate() { return(new Arc(*this)); }
+			GlyphArc() : m_xcentre(0.0), m_ycentre(0.0), m_radius(0.0), m_start_angle(0.0), m_end_angle(0.0) { }
+			Graphics *Duplicate() { return(new GlyphArc(*this)); }
 
 			HeeksObj *Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix, const float width, COrientationModifier *pOrientationModifier ) const;
 			void glCommands( const gp_Pnt & starting_point,
@@ -168,7 +168,7 @@ protected:
 			double m_end_angle;
 
 			CBox	m_bounding_box;
-		}; // End Arc class defintion.
+		}; // End GlyphArc class defintion.
 
 
 	public:

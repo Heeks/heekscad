@@ -90,6 +90,7 @@ public:
 	wxRadioButton *rbYz;
 	wxRadioButton *rbOther;
 	CDoubleCtrl *angle_ctrl;
+	CLengthCtrl *axial_shift_ctrl;
 	CLengthCtrl *posx;
 	CLengthCtrl *posy;
 	CLengthCtrl *posz;
@@ -97,7 +98,7 @@ public:
 	CDoubleCtrl *vectory;
 	CDoubleCtrl *vectorz;
 
-	AngleAndPlaneDlg(wxWindow *parent, double angle, const double* axis, int axis_type, const double* pos, int *number_of_copies):HDialog(parent)
+	AngleAndPlaneDlg(wxWindow *parent, double angle, const double* axis, int axis_type, const double* pos, int *number_of_copies, double* axial_shift = NULL):HDialog(parent)
 	{
 		m_ignore_event_functions = true;
 		m_axis_type = axis_type;
@@ -178,6 +179,16 @@ public:
 
 		AddLabelAndControl(sizerMain, _("angle"), angle_ctrl = new CDoubleCtrl(this));
 		angle_ctrl->SetValue(angle);
+
+		if(axial_shift)
+		{
+			AddLabelAndControl(sizerMain, _("axial shift"), axial_shift_ctrl = new CLengthCtrl(this));
+			axial_shift_ctrl->SetValue(*axial_shift);
+		}
+		else
+		{
+			angle_ctrl = NULL;
+		}
 
 		// add OK and Cancel to right side
 		wxBoxSizer *sizerOKCancel = MakeOkAndCancel(wxHORIZONTAL);
@@ -263,7 +274,7 @@ wxBitmap* AngleAndPlaneDlg::m_xz_bitmap = NULL;
 wxBitmap* AngleAndPlaneDlg::m_yz_bitmap = NULL;
 wxBitmap* AngleAndPlaneDlg::m_line_bitmap = NULL;
 
-bool HeeksCADapp::InputAngleWithPlane(double &angle, double *axis, double *pos, int *number_of_copies)
+bool HeeksCADapp::InputAngleWithPlane(double &angle, double *axis, double *pos, int *number_of_copies, double *axial_shift)
 {
 	double save_axis[3], save_pos[3];
 	if(axis)memcpy(save_axis, axis, 3*sizeof(double));
@@ -283,7 +294,7 @@ bool HeeksCADapp::InputAngleWithPlane(double &angle, double *axis, double *pos, 
 
 	while(1)
 	{
-		AngleAndPlaneDlg dlg(m_frame, angle, axis, axis_type, pos, number_of_copies);
+		AngleAndPlaneDlg dlg(m_frame, angle, axis, axis_type, pos, number_of_copies, axial_shift);
 		int ret = dlg.ShowModal();
 		if(ret == wxID_OK)
 		{
@@ -328,6 +339,8 @@ bool HeeksCADapp::InputAngleWithPlane(double &angle, double *axis, double *pos, 
 				pos[1] = dlg.posy->GetValue();
 				pos[2] = dlg.posz->GetValue();
 			}
+
+			if(axial_shift)*axial_shift = dlg.axial_shift_ctrl->GetValue();
 
 			return true;
 		}

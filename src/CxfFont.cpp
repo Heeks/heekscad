@@ -34,7 +34,7 @@
 extern CHeeksCADInterface heekscad_interface;
 
 
-HeeksObj *VectorFont::Glyph::Line::Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix, const float width, COrientationModifier *pOrientationModifier ) const
+HeeksObj *VectorFont::Glyph::GlyphLine::Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix, const float width, COrientationModifier *pOrientationModifier ) const
 {
 	gp_Pnt start_point( location );
 	gp_Pnt end_point( location );
@@ -69,7 +69,7 @@ HeeksObj *VectorFont::Glyph::Line::Sketch( const gp_Pnt & location, const gp_Trs
 	return(line);
 } // End Sketch() method
 
-void VectorFont::Glyph::Line::glCommands(
+void VectorFont::Glyph::GlyphLine::glCommands(
 	const gp_Pnt & starting_point,
 	const bool select,
 	const bool marked,
@@ -103,7 +103,7 @@ void VectorFont::Glyph::Line::glCommands(
 
 
 
-std::list<gp_Pnt> VectorFont::Glyph::Arc::Interpolate(const gp_Pnt & location, const unsigned int number_of_points ) const
+std::list<gp_Pnt> VectorFont::Glyph::GlyphArc::Interpolate(const gp_Pnt & location, const unsigned int number_of_points ) const
 {
 	std::list<gp_Pnt> points;
 
@@ -135,7 +135,7 @@ std::list<gp_Pnt> VectorFont::Glyph::Arc::Interpolate(const gp_Pnt & location, c
 }
 
 
-HeeksObj *VectorFont::Glyph::Arc::Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix, const float width, COrientationModifier *pOrientationModifier ) const
+HeeksObj *VectorFont::Glyph::GlyphArc::Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix, const float width, COrientationModifier *pOrientationModifier ) const
 {
 	double start[3];
 	double end[3];
@@ -190,7 +190,7 @@ HeeksObj *VectorFont::Glyph::Arc::Sketch( const gp_Pnt & location, const gp_Trsf
 	return(arc);
 } // End Sketch() method
 
-void VectorFont::Glyph::Arc::glCommands(
+void VectorFont::Glyph::GlyphArc::glCommands(
 	const gp_Pnt & starting_point,
 	const bool select,
 	const bool marked,
@@ -304,7 +304,7 @@ VectorFont::Glyph::Glyph( const std::list<std::string> &cxf_glyph_definition, co
 			}
 			else
 			{
-				Line *line = new Line(	 PointToMM(strtod( Ttc(tokens[1].c_str()), NULL )),
+				GlyphLine *line = new GlyphLine(	 PointToMM(strtod( Ttc(tokens[1].c_str()), NULL )),
 										 PointToMM(strtod( Ttc(tokens[2].c_str()), NULL )),
 										 PointToMM(strtod( Ttc(tokens[3].c_str()), NULL )),
 										 PointToMM(strtod( Ttc(tokens[4].c_str()), NULL )) );
@@ -326,7 +326,7 @@ VectorFont::Glyph::Glyph( const std::list<std::string> &cxf_glyph_definition, co
 				if ((tokens[0].size() == 2) && (tokens[0][1] == 'R'))
 				{
 					// Reverse the starting and ending points.
-					Arc *arc = new Arc( PointToMM(strtod( Ttc(tokens[1].c_str()), NULL )),
+					GlyphArc *arc = new GlyphArc( PointToMM(strtod( Ttc(tokens[1].c_str()), NULL )),
 										 PointToMM(strtod( Ttc(tokens[2].c_str()), NULL )),
 										 PointToMM(strtod( Ttc(tokens[3].c_str()), NULL )),
 										 strtod( Ttc(tokens[5].c_str()), NULL) ,
@@ -336,7 +336,7 @@ VectorFont::Glyph::Glyph( const std::list<std::string> &cxf_glyph_definition, co
 				} // End if - then
 				else
 				{
-					Arc *arc = new Arc( PointToMM(strtod( Ttc(tokens[1].c_str()), NULL )),
+					GlyphArc *arc = new GlyphArc( PointToMM(strtod( Ttc(tokens[1].c_str()), NULL )),
 										 PointToMM(strtod( Ttc(tokens[2].c_str()), NULL )),
 										 PointToMM(strtod( Ttc(tokens[3].c_str()), NULL )),
 										 strtod( Ttc(tokens[4].c_str()), NULL ),
@@ -393,7 +393,7 @@ VectorFont::Glyph::Glyph( const std::string &hershey_glyph_definition, const dou
 						double to_x = double(definition[0] - 'R');
 						double to_y = double(definition[1] - 'R') * -1.0;
 
-						Line *line = new Line( PointToMM(x), PointToMM(y), PointToMM(to_x), PointToMM(to_y) );
+						GlyphLine *line = new GlyphLine( PointToMM(x), PointToMM(y), PointToMM(to_x), PointToMM(to_y) );
 						m_graphics_list.push_back( line );
 						m_bounding_box.Insert( line->BoundingBox() );
 						x = to_x;

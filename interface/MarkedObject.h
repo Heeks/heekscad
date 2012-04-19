@@ -22,6 +22,8 @@ private:
 	bool m_processed;
 	EnumStackedType m_stacked_type;
 	HeeksObj* m_object;
+	unsigned int m_num_custom_names;
+	unsigned int *m_custom_names;
 
 	virtual bool single_type() = 0;
 
@@ -30,16 +32,19 @@ public:
 	std::map<int, MarkedObject*> m_types;
 
 	MarkedObject();
-	MarkedObject(unsigned long depth, HeeksObj* object, int window_size);
+	MarkedObject(unsigned long depth, HeeksObj* object, int window_size, unsigned int num_custom_names, unsigned int *custom_names);
 	MarkedObject(const MarkedObject &f);
 	virtual ~MarkedObject();
 
 	const MarkedObject &operator=(const MarkedObject &rhs);
 	unsigned long GetDepth();
+	unsigned int GetNumCustomNames();
+	unsigned int* GetCustomNames();
 	int GetWindowSize(){return m_window_size;}
 	HeeksObj* GetObject(){return m_object;}
+	MarkedObject* GetCurrent();
 	void Clear();
-	MarkedObject* Add(HeeksObj* object, unsigned long z_depth, int window_size);
+	MarkedObject* Add(HeeksObj* object, unsigned long z_depth, int window_size, unsigned int num_custom_names, unsigned int *custom_names);
 	virtual void SetFirst(EnumStackedType stacked_type);
 	virtual HeeksObj* GetFirstOfEverything();
 	virtual HeeksObj* GetFirstOfTopOnly();
@@ -53,7 +58,7 @@ class MarkedObjectOneOfEach:public MarkedObject{
 
 public:
 	MarkedObjectOneOfEach():MarkedObject(){}
-	MarkedObjectOneOfEach(unsigned long z, HeeksObj* object, int window_size):MarkedObject(z, object, window_size){}
+	MarkedObjectOneOfEach(unsigned long z, HeeksObj* object, int window_size, unsigned int num_custom_names, unsigned int *custom_names):MarkedObject(z, object, window_size, num_custom_names, custom_names){}
 };
 
 
@@ -62,7 +67,7 @@ class MarkedObjectManyOfSame: public MarkedObject{
 
 public:
 	MarkedObjectManyOfSame():MarkedObject(){}
-	MarkedObjectManyOfSame(unsigned long z, HeeksObj* object, int window_size):MarkedObject(z, object, window_size){}
+	MarkedObjectManyOfSame(unsigned long z, HeeksObj* object, int window_size, unsigned int num_custom_names, unsigned int *custom_names):MarkedObject(z, object, window_size, num_custom_names, custom_names){}
 };
 
 #endif

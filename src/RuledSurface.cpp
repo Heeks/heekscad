@@ -57,10 +57,29 @@ void PickCreateRuledSurface()
 	}
 }
 
-HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_or_angle, bool solid_if_possible, bool revolution_not_extrusion, double taper_angle_for_extrusion, bool add_new_objects)
-{
-	std::list<TopoDS_Shape> faces_or_wires;
+#if 0
+MakeHelix
+	double angle;
+	{
+		HeeksConfig config;
+		config.Read(_T("RevolutionAngle"), &angle, 360.0);
+	}
 
+	if(InputRevolutionAngle(angle, &wxGetApp().m_extrude_to_solid))
+	{
+		{
+			HeeksConfig config;
+			config.Write(_T("RevolutionAngle"), angle);
+		}
+		if(wxGetApp().m_marked_list->size() > 0)
+		{
+			CreateExtrusionOrRevolution(wxGetApp().m_marked_list->list(), angle, wxGetApp().m_extrude_to_solid, true, 0.0, true);
+		}
+	}
+#endif
+
+void ConvertToFaceOrWire(std::list<HeeksObj*> list, std::list<TopoDS_Shape> &faces_or_wires, bool face_not_wire)
+{
 	std::list<HeeksObj*> sketches_or_faces_to_delete;
 
 	for(std::list<HeeksObj *>::const_iterator It = list.begin(); It != list.end(); It++)
@@ -71,7 +90,7 @@ HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_o
 		case SketchType:
 		case CircleType:
 			{
-				if(ConvertSketchToFaceOrWire(object, faces_or_wires, (fabs(taper_angle_for_extrusion) <= 0.0000001) && solid_if_possible))
+				if(ConvertSketchToFaceOrWire(object, faces_or_wires, face_not_wire))
 				{
 					if(wxGetApp().m_extrude_removes_sketches)sketches_or_faces_to_delete.push_back(object);
 				}
@@ -89,6 +108,13 @@ HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_o
 	}
 
 	wxGetApp().Remove(sketches_or_faces_to_delete);
+}
+
+HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_or_angle, bool solid_if_possible, bool revolution_not_extrusion, double taper_angle_for_extrusion, bool add_new_objects)
+{
+	std::list<TopoDS_Shape> faces_or_wires;
+
+	ConvertToFaceOrWire(list, faces_or_wires, (fabs(taper_angle_for_extrusion) <= 0.0000001) && solid_if_possible);
 
 	std::list<TopoDS_Shape> new_shapes;
 	gp_Trsf trsf = wxGetApp().GetDrawMatrix(false);
@@ -116,47 +142,87 @@ HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_o
 	return new_object;
 }
 
+HeeksObj* CreatePipeFromProfile(const TopoDS_Wire &spine, std::list<TopoDS_Shape> &faces)
+{
+	std::list<HeeksObj*> pipe_shapes;
+
+	for(std::list<TopoDS_Shape>::iterator It2 = faces.begin(); It2 != faces.end(); It2++)
+	{
+		TopoDS_Shape& face = *It2;
+
+		try
+		{
+			// pipe profile algong spine
+			BRepOffsetAPI_MakePipe makePipe(spine, face);
+			makePipe.Build();
+			TopoDS_Shape shape = makePipe.Shape();
+
+			HeeksObj* new_object = CShape::MakeObject(shape, _("Pipe"), SOLID_TYPE_UNKNOWN, wxGetApp().current_color, 1.0f);
+			if(new_object)pipe_shapes.push_back(new_object);
+		}
+		catch (Standard_Failure) {
+			Handle_Standard_Failure e = Standard_Failure::Caught();
+			wxMessageBox(wxString(_("Error making pipe")) + _T(": ") + Ctt(e->GetMessageString()));
+		}
+	}
+	if(pipe_shapes.size() > 0)
+	{
+		wxGetApp().CreateUndoPoint();
+		for(std::list<HeeksObj*>::iterator It = pipe_shapes.begin(); It != pipe_shapes.end(); It++)
+		{
+			HeeksObj* object = *It;
+			wxGetApp().Add(object, NULL);
+		}
+		return pipe_shapes.front();
+	}
+
+	return NULL;
+}
+
 HeeksObj* CreatePipeFromProfile(HeeksObj* spine, HeeksObj* profile)
 {
 	const TopoDS_Wire wire = ((CWire*)spine)->Wire();
 	std::list<TopoDS_Shape> faces;
-	std::list<HeeksObj*> pipe_shapes;
-	if(ConvertSketchToFaceOrWire(profile, faces, true))
+	if(!ConvertSketchToFaceOrWire(profile, faces, true))return NULL;
+	HeeksObj* pipe = CreatePipeFromProfile(wire, faces);
+	if(pipe)
 	{
-		for(std::list<TopoDS_Shape>::iterator It2 = faces.begin(); It2 != faces.end(); It2++)
-		{
-			TopoDS_Shape& face = *It2;
+		wxGetApp().Remove(profile);
+		wxGetApp().Changed();
+	}
+	return pipe;
+}
 
-			try
-			{
-				// pipe profile algong spine
-				BRepOffsetAPI_MakePipe makePipe(wire, face);
-				makePipe.Build();
-				TopoDS_Shape shape = makePipe.Shape();
+HeeksObj* CreateSweep(std::list<HeeksObj*> &sweep_objects, HeeksObj* sweep_profile, bool solid_if_possible)
+{
+	std::list<TopoDS_Shape> faces_or_wires;
+	ConvertToFaceOrWire(sweep_objects, faces_or_wires, solid_if_possible);
+	std::list<TopoDS_Wire> wires;
+	HeeksObj* pipe = NULL;
+	if(SketchToWires(sweep_profile, wires))
+	{
+		TopoDS_Wire wire = wires.front();
+		pipe = CreatePipeFromProfile(wire, faces_or_wires);
+		wxGetApp().Changed();
+	}
+	return pipe;
+}
 
-				HeeksObj* new_object = CShape::MakeObject(shape, _("Pipe"), SOLID_TYPE_UNKNOWN, wxGetApp().current_color, 1.0f);
-				if(new_object)pipe_shapes.push_back(new_object);
-			}
-			catch (Standard_Failure) {
-				Handle_Standard_Failure e = Standard_Failure::Caught();
-				wxMessageBox(wxString(_("Error making pipe")) + _T(": ") + Ctt(e->GetMessageString()));
-			}
-		}
-		if(pipe_shapes.size() > 0)
-		{
-			wxGetApp().CreateUndoPoint();
-			for(std::list<HeeksObj*>::iterator It = pipe_shapes.begin(); It != pipe_shapes.end(); It++)
-			{
-				HeeksObj* object = *It;
-				wxGetApp().Add(object, NULL);
-			}
-			wxGetApp().Remove(profile);
-			wxGetApp().Changed();
-			return pipe_shapes.front();
-		}
+void PickCreateSweep()
+{
+	if(wxGetApp().m_marked_list->size() == 0)
+	{
+		wxGetApp().PickObjects(_("pick sketches, faces or circles"), MARKING_FILTER_CIRCLE | MARKING_FILTER_SKETCH | MARKING_FILTER_FACE);
 	}
 
-	return NULL;
+	std::list<HeeksObj*> sweep_objects = wxGetApp().m_marked_list->list();
+	wxGetApp().m_marked_list->Clear(true);
+	if(!wxGetApp().PickObjects(_("Pick a Sketch to sweep along"), MARKING_FILTER_SKETCH, true))return;
+	if(wxGetApp().m_marked_list->list().size() == 0)return;
+
+	HeeksObj* sweep_profile = wxGetApp().m_marked_list->list().front();
+
+	CreateSweep(sweep_objects, sweep_profile, true);
 }
 
 HeeksObj* CreateRuledFromSketches(std::list<HeeksObj*> list, bool make_solid)
@@ -298,10 +364,18 @@ void PickCreateRevolution()
 		wxGetApp().PickObjects(_("pick sketches, faces or circles"), MARKING_FILTER_CIRCLE | MARKING_FILTER_SKETCH | MARKING_FILTER_FACE);
 	}
 
-	double angle = 360.0; // to do, this should get written to config file
+	double angle;
+	{
+		HeeksConfig config;
+		config.Read(_T("RevolutionAngle"), &angle, 360.0);
+	}
 
 	if(InputRevolutionAngle(angle, &wxGetApp().m_extrude_to_solid))
 	{
+		{
+			HeeksConfig config;
+			config.Write(_T("RevolutionAngle"), angle);
+		}
 		if(wxGetApp().m_marked_list->size() > 0)
 		{
 			CreateExtrusionOrRevolution(wxGetApp().m_marked_list->list(), angle, wxGetApp().m_extrude_to_solid, true, 0.0, true);
@@ -313,7 +387,7 @@ bool CreateRuledSurface(const std::list<TopoDS_Wire> &wire_list, TopoDS_Shape& s
 {
 	if(wire_list.size() > 0)
 	{
-			BRepOffsetAPI_ThruSections generator( make_solid ? Standard_True : Standard_False, Standard_False );
+			BRepOffsetAPI_ThruSections generator( make_solid ? Standard_True : Standard_True, Standard_False );
 			for(std::list<TopoDS_Wire>::const_iterator It = wire_list.begin(); It != wire_list.end(); It++)
 			{
 				const TopoDS_Wire &wire = *It;

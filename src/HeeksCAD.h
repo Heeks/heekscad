@@ -367,7 +367,7 @@ public:
 	void ResetIDs();
 	bool InputInt(const wxChar* prompt, const wxChar* value_name, int &value);
 	bool InputDouble(const wxChar* prompt, const wxChar* value_name, double &value);
-	bool InputAngleWithPlane(double &angle, double *axis = NULL, double *pos = NULL, int *number_of_copies = NULL);
+	bool InputAngleWithPlane(double &angle, double *axis = NULL, double *pos = NULL, int *number_of_copies = NULL, double *axial_shift = NULL);
 	bool InputLength(const wxChar* prompt, const wxChar* value_name, double &value);
 	void ShowModalOptions();
 	void SectioningDialog();

@@ -220,7 +220,7 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 	if(event.RightUp())
 	{
 		// do a context menu
-		MarkedObjectOneOfEach marked_object(0, clicked_object, 1);
+		MarkedObjectOneOfEach marked_object(0, clicked_object, 1, 0, NULL);
 		if(m_dragging)
 		{
 			m_dragging = false;
