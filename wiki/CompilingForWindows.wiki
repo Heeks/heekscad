@@ -2,37 +2,78 @@
 
 =How to build HeeksCAD=
 
-I used Windows XP.
+How to build HeeksCAD for Windows
 
-Get Microsoft Visual C++ 2008 Express Edition ( it's free, but about 1GB ).
+I used a 64bit SONY VPCCB running Windows 7
 
-Download the Open CASCADE installation. I am currently using 6.3.0.   http://www.opencascade.org/getocc/download/loadocc/     ( OpenCASCADE_win32.exe )
+Get Microsoft Visual C++ 2008 Express Edition ( it's free, but about 1GB ) or use full version.
 
-Download the wxWidgets installation. I am using 2.8.9.    http://prdownloads.sourceforge.net/wxwindows/wxMSW-2.8.9-Setup.exe
+Download and install the Open CASCADE installation. I am currently using 6.5.2. http://www.opencascade.org/getocc/download/loadocc/ ( OpenCASCADE652.exe )
 
-Set an environment variable called WXWIN to be C:\wxWidgets-2.8.8 or whereever wxWidgets installed to. ( to set an evironment variable go to Control Panel, then System, then Advanced tab, then press "Environment Variables" button, then press "New" ).
+Download and install the wxWidgets installation. I am using 2.8.12. http://sourceforge.net/projects/wxwindows/files/2.8.12/wxMSW-2.8.12-Setup.exe/download
 
-Edit C:\wxWidgets-2.8.8\include\wx\msw\setup.h
-changing "#define wxUSE_GLCANVAS 0" to "#define wxUSE_GLCANVAS 1"
-and changing "#define wxUSE_ODBC 0" to "#define wxUSE_ODBC 1"
+Set an environment variable called WXWIN to be
+C:\wxWidgets-2.8.12
+or whereever wxWidgets installed to. ( to set an environment variable go to Control Panel -> System and Security -> System -> Advanced system settings -> press "Environment Variables" button -> in "user variable" add new ).
+( you must restart Visual Studio for it to know the new environment variable )
 
-Open C:\wxWidgets-2.8.8\build\msw\wx_dll.dsw ( let VC2008 convert the projects ).
-Change the configuration to "DLL Release" or to "DLL Debug" if you will be building HeeksCAD in Debug mode.
-Press "Build Solution"
+Edit C:\wxWidgets-2.8.12\include\wx\msw\setup.h changing "#define wxUSE_GLCANVAS 0" to "#define wxUSE_GLCANVAS 1" and changing "#define wxUSE_ODBC 0" to "#define wxUSE_ODBC 1" 
 
-Copy 4 of the dlls that get made from C:\wxWidgets-2.8.8\lib\vc_dll to HeeksCAD ( the folder you checked out this project to ).
+Open C:\wxWidgets-2.8.12\build\msw\wx_dll.dsw ( let VC2008 convert the projects ). Change the configuration to "DLL Unicode Release" or to "DLL Unicode Debug" if you will be building HeeksCAD in Debug mode.
+Press "Build Solution" 
 
-They are: wxbase28_vc_custom.dll wxmsw28_aui_vc_custom.dll wxmsw28_core_vc_custom.dll wxmsw28_gl_vc_custom.dll
+Copy 4 of the dlls that get made from C:\wxWidgets-2.8.12\lib\vc_dll to HeeksCAD ( the folder you checked out this project to ).
+
+They are: wxbase28u_vc_custom.dll wxmsw28u_aui_vc_custom.dll wxmsw28u_core_vc_custom.dll wxmsw28u_gl_vc_custom.dll
 
 or if you are building Debug
 
-wxbase28d_vc_custom.dll wxmsw28d_aui_vc_custom.dll wxmsw28d_core_vc_custom.dll wxmsw28d_gl_vc_custom.dll
+wxbase28ud_vc_custom.dll wxmsw28ud_aui_vc_custom.dll wxmsw28ud_core_vc_custom.dll wxmsw28ud_gl_vc_custom.dll 
 
-Open "HeeksCAD.sln"
+Make and environment variable called
+CASROOT
+with value of
+C:\OpenCASCADE6.5.2\ros
+
+
+
+download and install TortoiseSVN software from here http://tortoisesvn.net/
+make a new folder on your computer somewhere, called HeeksCAD.
+I made these folders "C:\Dev\HeeksCAD"
+right click on the HeeksCAD folder and do "TortoiseSVN"->"SVN Checkout..."
+The "URL of repository":
+http://heekscad.googlecode.com/svn/trunk/
+The Checkout directory something like:
+C:\Dev\HeeksCAD
+Press OK.
+It should checkout all the HeeksCAD source code
+
+Get libarea source code:
+	make "C:\Dev\libarea"
+	SVN Checkout in the same way but with libarea instead of HeeksCAD
+
+
+   add and environment variable to your computer
+   
+   called
+   LIBAREA_PATH
+   with value as where your libarea code is, for example for me it is
+   C:\Dev\libarea
+
+
+
+copy all the dlls from C:\OpenCASCADE6.5.2\ros\win32\vc8\bin to C:\Dev\HeeksCAD
+copy all the dlls from C:\OpenCASCADE6.5.2\3rdparty\win32\tbb\bin to C:\Dev\HeeksCAD
+copy the dlls from C:\OpenCASCADE6.5.2\3rdparty\win32\freeimage\bin to C:\Dev\HeeksCAD
+
+Open "C:\Dev\HeeksCAD\src\HeeksCAD VC2008.sln"
+Change configuration to "Unicode Release" or "Unicode Debug"
 
 Press "Build Solution"
 
-If it builds OK, press "Start Debugging"
+If it builds OK, press "Start Debugging" 
+
+
 
 
 ==VC2003 and VC2005==
