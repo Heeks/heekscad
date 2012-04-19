@@ -67,6 +67,7 @@ enum{
 	HoleType,
 	HolePositionsType,
 	GearType,
+	AreaType,
 	ObjectMaximumType,
 };
 
@@ -94,7 +95,8 @@ enum{
 #define MARKING_FILTER_PART					0x00040000
 #define MARKING_FILTER_POCKETSOLID			0x00080000
 #define MARKING_FILTER_GEAR					0x00100000
-#define MARKING_FILTER_UNKNOWN				0x00200000
+#define MARKING_FILTER_AREA					0x00200000
+#define MARKING_FILTER_UNKNOWN				0x00400000
 
 #ifdef HEEKSCAD
 #define GET_ICON(X,Y) x = (X); y = (Y); texture_number = wxGetApp().m_icon_texture_number
@@ -223,6 +225,7 @@ public:
 	virtual void SetIdPreservation(const bool flag) { m_preserving_id = flag; }
 	virtual void ToString(char* buf, unsigned int* rlen, unsigned int len);
 	virtual unsigned int GetIndex();
+	virtual bool UsesCustomSubNames(){return false;}
 protected:
 	virtual void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 };

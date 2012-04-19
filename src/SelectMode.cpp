@@ -317,7 +317,8 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 					double ray_start[3], ray_direction[3];
 					extract(ray.Location(), ray_start);
 					extract(ray.Direction(), ray_direction);
-					object->SetClickMarkPoint(&marked_object, ray_start, ray_direction);
+					marked_object.GetFirstOfTopOnly();
+					object->SetClickMarkPoint(marked_object.GetCurrent(), ray_start, ray_direction);
 				}
 			}
 			else

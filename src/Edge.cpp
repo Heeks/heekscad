@@ -222,7 +222,7 @@ public:
 			live_edges.pop_front();
 			for(int i = 0; i<2; i++)
 			{
-				CVertex* vertex = (i==0)?current_edge->GetVertex0():current_edge->GetVertex1();
+				HVertex* vertex = (i==0)?current_edge->GetVertex0():current_edge->GetVertex1();
 				for(CEdge* edge = vertex->GetFirstEdge(); edge; edge = vertex->GetNextEdge())
 				{
 					if(edge != current_edge && (wxGetApp().m_marked_list->ObjectMarked(edge) == false) && (edges_to_mark.find(edge) == edges_to_mark.end()) && EdgeIsFlat(edge))
@@ -484,7 +484,7 @@ void CEdge::FindVertices()
 			const TopoDS_Shape &V = expVertex.Current();
 			for(HeeksObj* object = body->m_vertices->GetFirstChild(); object; object = body->m_vertices->GetNextChild())
 			{
-				CVertex* v = (CVertex*)object;
+				HVertex* v = (HVertex*)object;
 				if(v->Vertex().IsSame(V))
 				{
 					if(i == 0)m_vertex0 = v;
@@ -496,13 +496,13 @@ void CEdge::FindVertices()
 	}
 }
 
-CVertex* CEdge::GetVertex0()
+HVertex* CEdge::GetVertex0()
 {
 	if(m_vertex0 == NULL)FindVertices();
 	return m_vertex0;
 }
 
-CVertex* CEdge::GetVertex1()
+HVertex* CEdge::GetVertex1()
 {
 	if(m_vertex1 == NULL)FindVertices();
 	return m_vertex1;

@@ -131,7 +131,7 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll2(){
 		wxGetApp().m_frame->AddToolBarTool(m_toolBar, _("Cancel"), wxBitmap(ToolImage(_T("cancel"))), _("Stop editing the object"), OnCancel);
 
 		std::list<Tool*> t_list;
-		MarkedObjectOneOfEach mo(0, marked_object, 1);
+		MarkedObjectOneOfEach mo(0, marked_object, 1, 0, NULL);
 		wxGetApp().m_marked_list->GetTools(&mo, t_list, NULL, false);
 		for(std::list<Tool*>::iterator It = t_list.begin(); It != t_list.end(); It++)
 		{

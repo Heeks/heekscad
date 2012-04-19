@@ -7,15 +7,15 @@
 #include "Solid.h"
 #include "Gripper.h"
 
-CVertex::CVertex(const TopoDS_Vertex &vertex):m_topods_vertex(vertex){
+HVertex::HVertex(const TopoDS_Vertex &vertex):m_topods_vertex(vertex){
 	gp_Pnt pos = BRep_Tool::Pnt(vertex);
 	extract(pos, m_point);
 }
 
-CVertex::~CVertex(){
+HVertex::~HVertex(){
 }
 
-void CVertex::FindEdges()
+void HVertex::FindEdges()
 {
 	CShape* body = GetParentBody();
 	if(body)
@@ -23,30 +23,30 @@ void CVertex::FindEdges()
 		for(HeeksObj* object = body->m_edges->GetFirstChild(); object; object = body->m_edges->GetNextChild())
 		{
 			CEdge* e = (CEdge*)object;
-			CVertex* v0 = e->GetVertex0();
-			CVertex* v1 = e->GetVertex1();
+			HVertex* v0 = e->GetVertex0();
+			HVertex* v1 = e->GetVertex1();
 			if(v0 == this || v1 == this)m_edges.push_back(e);
 		}
 	}
 }
 
-const wxBitmap &CVertex::GetIcon()
+const wxBitmap &HVertex::GetIcon()
 {
 	static wxBitmap* icon = NULL;
 	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/vertex.png")));
 	return *icon;
 }
 
-void CVertex::glCommands(bool select, bool marked, bool no_color){
+void HVertex::glCommands(bool select, bool marked, bool no_color){
 	// don't render anything, but put a point for selection
 	glRasterPos3dv(m_point);
 }
 
-void CVertex::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
+void HVertex::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
 	list->push_back(GripData(GripperTypeTranslate,m_point[0],m_point[1],m_point[2],NULL));
 }
 
-CEdge* CVertex::GetFirstEdge()
+CEdge* HVertex::GetFirstEdge()
 {
 	if (m_edges.size()==0)FindEdges();
 	if (m_edges.size()==0) return NULL;
@@ -54,7 +54,7 @@ CEdge* CVertex::GetFirstEdge()
 	return *m_edgeIt;
 }
 
-CEdge* CVertex::GetNextEdge()
+CEdge* HVertex::GetNextEdge()
 {
 	if (m_edges.size()==0 || m_edgeIt==m_edges.end()) return NULL;
 	m_edgeIt++;
@@ -62,7 +62,7 @@ CEdge* CVertex::GetNextEdge()
 	return *m_edgeIt;
 }
 
-CShape* CVertex::GetParentBody()
+CShape* HVertex::GetParentBody()
 {
 #ifdef MULTIPLE_OWNERS
 	if(HEEKSOBJ_OWNER == NULL)return NULL;

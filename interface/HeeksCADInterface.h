@@ -391,4 +391,7 @@ public:
 
 	virtual void Exit();
 	virtual void SetAlternativeFileOpenWildCardString(const wxChar* s);
+
+	// Area functions
+	virtual void ObjectAreaString(HeeksObj* object, wxString &s);
 };

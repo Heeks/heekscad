@@ -50,7 +50,7 @@ void CreateFacesAndEdges(TopoDS_Shape shape, CFaceList* faces, CEdgeList* edges,
 	face_array.resize(faceMap.Extent() + 1);
 	std::vector<CEdge*> edge_array;
 	edge_array.resize(edgeMap.Extent() + 1);
-	std::vector<CVertex*> vertex_array;
+	std::vector<HVertex*> vertex_array;
 	vertex_array.resize(vertexMap.Extent() + 1);
 
 	// create the edge objects
@@ -65,13 +65,13 @@ void CreateFacesAndEdges(TopoDS_Shape shape, CFaceList* faces, CEdgeList* edges,
 	for(int i = 1;i<=vertexMap.Extent();i++)
 	{
 		const TopoDS_Shape &s = vertexMap(i);
-		CVertex* new_object = new CVertex(TopoDS::Vertex(s));
+		HVertex* new_object = new HVertex(TopoDS::Vertex(s));
 		vertex_array[i] = new_object;
 	}
 
 	// add the edges in their face loop order
 	std::set<CEdge*> edges_added;
-	std::set<CVertex*> vertices_added;
+	std::set<HVertex*> vertices_added;
 
 	// create the face objects
 	for(int i = 1;i<=faceMap.Extent();i++)
@@ -111,7 +111,7 @@ void CreateFacesAndEdges(TopoDS_Shape shape, CFaceList* faces, CEdgeList* edges,
 				}
 
 				// add the vertex
-				CVertex* v = vertex_array[vertexMap.FindIndex(explorer.CurrentVertex())];
+				HVertex* v = vertex_array[vertexMap.FindIndex(explorer.CurrentVertex())];
 				if(vertices_added.find(v) == vertices_added.end())
 				{
 					vertices->Add(v, NULL);
@@ -124,7 +124,7 @@ void CreateFacesAndEdges(TopoDS_Shape shape, CFaceList* faces, CEdgeList* edges,
 	// find the vertices' edges
 	for(unsigned int i = 1; i<vertex_array.size(); i++)
 	{
-		CVertex* v = vertex_array[i];
+		HVertex* v = vertex_array[i];
 		TopTools_IndexedMapOfShape vertexEdgeMap;
 		for (TopExp_Explorer expEdge(v->Vertex(), TopAbs_EDGE); expEdge.More(); expEdge.Next())
 		{

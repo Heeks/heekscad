@@ -5,6 +5,7 @@
 extern void PickCreateRuledSurface();
 extern void PickCreateExtrusion();
 extern void PickCreateRevolution();
+extern void PickCreateSweep();
 extern bool ConvertLineArcsToWire2(const std::list<HeeksObj*> &list, TopoDS_Wire &wire);
 extern HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_or_angle, bool solid_if_possible, bool revolution_not_extrusion, double taper_angle_for_extrusion, bool add_new_objects = true);
 extern HeeksObj* CreatePipeFromProfile(HeeksObj* spine, HeeksObj* profile);

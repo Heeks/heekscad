@@ -11,13 +11,22 @@ MarkedObject::MarkedObject()
 	m_depth = 0;
 	m_object = NULL;
 	m_window_size = -1;
+	m_num_custom_names = 0;
+	m_custom_names = NULL;
 }
 
-MarkedObject::MarkedObject(unsigned long depth, HeeksObj* object, int window_size)
+MarkedObject::MarkedObject(unsigned long depth, HeeksObj* object, int window_size, unsigned int num_custom_names, unsigned int *custom_names)
 {
 	m_object = object;
 	m_depth = depth;
 	m_window_size = window_size;
+	m_num_custom_names = num_custom_names;
+	m_custom_names = NULL;
+	if(num_custom_names>0)
+	{
+		m_custom_names = (unsigned int *)malloc(num_custom_names * sizeof(unsigned int));
+		memcpy(m_custom_names, custom_names, num_custom_names * sizeof(unsigned int));
+	}
 }
 
 MarkedObject::MarkedObject(const MarkedObject &so)
@@ -27,20 +36,43 @@ MarkedObject::MarkedObject(const MarkedObject &so)
 
 MarkedObject::~MarkedObject(){
 	Clear();
+	delete(m_custom_names);
 }
 
 const MarkedObject& MarkedObject::operator=(const MarkedObject &so)
 {
 	m_depth = so.m_depth;
 	m_object = so.m_object;
+	m_num_custom_names = so.m_num_custom_names;
+	m_custom_names = NULL;
+	if(m_num_custom_names>0)
+	{
+		m_custom_names = (unsigned int *)malloc(m_num_custom_names * sizeof(unsigned int));
+		memcpy(m_custom_names, so.m_custom_names, m_num_custom_names * sizeof(unsigned int));
+	}
 	return (*this);
+}
+
+MarkedObject* MarkedObject::GetCurrent()
+{
+	if(m_map.size() == 0)return this;
+	if(CurrentIt == m_map.end())return this;
+	return CurrentIt->second->GetCurrent();
 }
 
 unsigned long MarkedObject::GetDepth()
 {
-	if(m_map.size() == 0)return m_depth;
-	if(CurrentIt == m_map.end())return m_depth;
-	return CurrentIt->second->GetDepth();
+	return GetCurrent()->m_depth;
+}
+
+unsigned int MarkedObject::GetNumCustomNames()
+{
+	return GetCurrent()->m_num_custom_names;
+}
+
+unsigned int* MarkedObject::GetCustomNames()
+{
+	return GetCurrent()->m_custom_names;
 }
 
 void MarkedObject::Clear()
@@ -54,7 +86,7 @@ void MarkedObject::Clear()
 	m_types.clear();
 }
 
-MarkedObject* MarkedObject::Add(HeeksObj* object, unsigned long depth, int window_size)
+MarkedObject* MarkedObject::Add(HeeksObj* object, unsigned long depth, int window_size, unsigned int num_custom_names, unsigned int *custom_names)
 {
 	std::map<HeeksObj*, MarkedObject*>::iterator FindIt = m_map.find(object);
 	MarkedObject* marked_object = NULL;
@@ -82,11 +114,11 @@ MarkedObject* MarkedObject::Add(HeeksObj* object, unsigned long depth, int windo
 		}
 		if(single_type())
 		{
-			marked_object = new MarkedObjectOneOfEach(depth, object, window_size);
+			marked_object = new MarkedObjectOneOfEach(depth, object, window_size, num_custom_names, custom_names);
 		}
 		else
 		{
-			marked_object = new MarkedObjectManyOfSame(depth, object, window_size);
+			marked_object = new MarkedObjectManyOfSame(depth, object, window_size, num_custom_names, custom_names);
 		}
 		m_map.insert(std::pair<HeeksObj*, MarkedObject*>(object, marked_object));
 		CurrentIt = m_map.end();

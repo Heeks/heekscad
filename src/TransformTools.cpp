@@ -170,13 +170,18 @@ void TransformTools::Rotate(bool copy)
 	config.Read(_T("RotatePosX"), &pos[0], 0.0);
 	config.Read(_T("RotatePosY"), &pos[1], 0.0);
 	config.Read(_T("RotatePosZ"), &pos[2], 0.0);
-	if(!wxGetApp().InputAngleWithPlane(angle, axis, pos, copy ? &ncopies : NULL))return;
+
+	double axial_shift;
+	config.Read(_T("RotateAxialShift"), &axial_shift, 0.0);
+
+	if(!wxGetApp().InputAngleWithPlane(angle, axis, pos, copy ? &ncopies : NULL, &axial_shift))return;
 	if(copy)
 	{
 		if(ncopies < 1)return;
 		config.Write(_T("RotateNumCopies"), ncopies);
 	}
 	config.Write(_T("RotateAngle"), angle);
+	config.Write(_T("RotateAxialShift"), axial_shift);
 	config.Write(_T("RotateAxisX"), axis[0]);
 	config.Write(_T("RotateAxisY"), axis[1]);
 	config.Write(_T("RotateAxisZ"), axis[2]);
@@ -194,6 +199,9 @@ void TransformTools::Rotate(bool copy)
 		{
 			gp_Trsf mat;
 			mat.SetRotation(gp_Ax1(line_Pos, axis_Dir), angle * Pi/180 * (i+1));
+			gp_Trsf tmat;
+			tmat.SetTranslation(gp_Vec(axis_Dir.XYZ() * (axial_shift * ((double)(i+1)) / ncopies)));
+			mat = tmat * mat;
 			double m[16];
 			extract(mat, m);
 			for(std::list<HeeksObj*>::iterator It = selected_items.begin(); It != selected_items.end(); It++)
@@ -214,6 +222,9 @@ void TransformTools::Rotate(bool copy)
 	{
 		gp_Trsf mat;
 		mat.SetRotation(gp_Ax1(line_Pos, axis_Dir), angle * Pi/180);
+		gp_Trsf tmat;
+		tmat.SetTranslation(gp_Vec(axis_Dir.XYZ() * axial_shift));
+		mat = tmat * mat;
 		double m[16];
 		extract(mat, m);
 		wxGetApp().Transform(selected_items, m);
