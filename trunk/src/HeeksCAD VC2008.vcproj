@@ -466,7 +466,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\libareaSVN\Arc.cpp"
+			RelativePath="$(LIBAREA_PATH)\Arc.cpp"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -502,51 +502,11 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\libareaSVN\Arc.h"
+			RelativePath="$(LIBAREA_PATH)\Arc.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\libareaSVN\Area.cpp"
-			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\libareaSVN\Area.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\libareaSVN\AreaClipper.cpp"
+			RelativePath="$(LIBAREA_PATH)\Area.cpp"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -582,7 +542,11 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\libareaSVN\AreaOrderer.cpp"
+			RelativePath="$(LIBAREA_PATH)\Area.h"
+			>
+		</File>
+		<File
+			RelativePath="$(LIBAREA_PATH)\AreaClipper.cpp"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -618,11 +582,47 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\libareaSVN\AreaOrderer.h"
+			RelativePath="$(LIBAREA_PATH)\AreaOrderer.cpp"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Unicode Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Unicode Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="$(LIBAREA_PATH)\AreaOrderer.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\libareaSVN\AreaPocket.cpp"
+			RelativePath="$(LIBAREA_PATH)\AreaPocket.cpp"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -686,51 +686,11 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\libareaSVN\Box2D.h"
+			RelativePath="$(LIBAREA_PATH)\Box2D.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\libareaSVN\Circle.cpp"
-			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\libareaSVN\Circle.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\libareaSVN\clipper.cpp"
+			RelativePath="$(LIBAREA_PATH)\Circle.cpp"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -766,7 +726,47 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\libareaSVN\clipper.hpp"
+			RelativePath="$(LIBAREA_PATH)\Circle.h"
+			>
+		</File>
+		<File
+			RelativePath="$(LIBAREA_PATH)\clipper.cpp"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Unicode Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Unicode Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="0"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="$(LIBAREA_PATH)\clipper.hpp"
 			>
 		</File>
 		<File
@@ -802,7 +802,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\libareaSVN\kurve\Construction.cpp"
+			RelativePath="$(LIBAREA_PATH)\kurve\Construction.cpp"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -870,7 +870,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\libareaSVN\Curve.cpp"
+			RelativePath="$(LIBAREA_PATH)\Curve.cpp"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -906,7 +906,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\libareaSVN\Curve.h"
+			RelativePath="$(LIBAREA_PATH)\Curve.h"
 			>
 		</File>
 		<File
@@ -1094,7 +1094,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\libareaSVN\kurve\Finite.cpp"
+			RelativePath="$(LIBAREA_PATH)\kurve\Finite.cpp"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1138,7 +1138,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\libareaSVN\kurve\geometry.h"
+			RelativePath="$(LIBAREA_PATH)\kurve\geometry.h"
 			>
 		</File>
 		<File
@@ -1454,7 +1454,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\libareaSVN\kurve\kurve.cpp"
+			RelativePath="$(LIBAREA_PATH)\kurve\kurve.cpp"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1582,7 +1582,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\libareaSVN\kurve\Matrix.cpp"
+			RelativePath="$(LIBAREA_PATH)\kurve\Matrix.cpp"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1714,7 +1714,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\libareaSVN\kurve\offset.cpp"
+			RelativePath="$(LIBAREA_PATH)\kurve\offset.cpp"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1806,7 +1806,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\libareaSVN\Point.h"
+			RelativePath="$(LIBAREA_PATH)\Point.h"
 			>
 		</File>
 		<File
