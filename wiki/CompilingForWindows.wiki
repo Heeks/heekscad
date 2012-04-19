@@ -53,7 +53,7 @@ Get libarea source code:
 	SVN Checkout in the same way but with libarea instead of HeeksCAD
 
 
-   add and environment variable to your computer
+   add an environment variable to your computer
    
    called
    LIBAREA_PATH
