@@ -7,7 +7,7 @@
 #include "../interface/HeeksObj.h"
 
 class CFace;
-class CVertex;
+class HVertex;
 
 class CEdge:public HeeksObj{
 private:
@@ -27,8 +27,8 @@ private:
 	int m_isClosed;
 	int m_isPeriodic;
 	bool m_orientation;
-	CVertex* m_vertex0;
-	CVertex* m_vertex1;
+	HVertex* m_vertex0;
+	HVertex* m_vertex1;
 
 	void FindVertices();
 
@@ -77,8 +77,8 @@ public:
 	bool Orientation();
 	double Length();
 	double Length2(double uStart, double uEnd);
-	CVertex* GetVertex0();
-	CVertex* GetVertex1();
+	HVertex* GetVertex0();
+	HVertex* GetVertex1();
 	CShape* GetParentBody();
 };
 

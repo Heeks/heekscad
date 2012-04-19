@@ -5073,7 +5073,7 @@
        xlink:href="#linearGradient1887"
        id="linearGradient3441"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(1,2.6171871e-6)"
+       gradientTransform="translate(1,2.6171867e-6)"
        x1="21.011263"
        y1="244.34225"
        x2="33.810226"
@@ -5093,7 +5093,7 @@
        xlink:href="#linearGradient1887"
        id="linearGradient3489"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(1,2.6171875e-6)"
+       gradientTransform="translate(1,2.6171869e-6)"
        x1="21.011263"
        y1="244.34225"
        x2="33.810226"
@@ -5243,7 +5243,7 @@
        xlink:href="#linearGradient1887"
        id="linearGradient3640"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(1,2.617187e-6)"
+       gradientTransform="translate(1,2.6171867e-6)"
        x1="21.011263"
        y1="244.34225"
        x2="33.810226"
@@ -5880,12 +5880,12 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="102.91421"
-     inkscape:cy="3.5364407"
+     inkscape:zoom="2.0000001"
+     inkscape:cx="519.48377"
+     inkscape:cy="425.27111"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     showgrid="false"
+     showgrid="true"
      inkscape:window-width="1914"
      inkscape:window-height="1139"
      inkscape:window-x="0"
@@ -6081,14 +6081,14 @@
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="15"
-       y="412.36218"
+       x="20"
+       y="492.36218"
        id="text24198"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan24202"
-         x="15"
-         y="412.36218">View</tspan></text>
+         x="20"
+         y="492.36218">View</tspan></text>
     <g
        id="g6641"
        inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\help.png"
@@ -6128,26 +6128,27 @@
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="15"
-       y="502.36218"
+       x="20"
+       y="594.82922"
        id="text24262"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan24280"
-         x="15"
-         y="502.36218">Create</tspan></text>
+         x="20"
+         y="594.82922">Create</tspan></text>
     <rect
        style="opacity:1;fill:#e0e0e0;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect24278"
        width="30"
        height="30"
-       x="230"
-       y="512.36218" />
+       x="235"
+       y="604.82922" />
     <g
        id="g4701"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\icons\sphere.png"
        inkscape:export-xdpi="45"
-       inkscape:export-ydpi="45">
+       inkscape:export-ydpi="45"
+       transform="translate(5,92.467048)">
       <path
          transform="translate(4.5000003,89.5)"
          d="M 45,437.36218 A 15,15 0 1 1 15,437.36218 A 15,15 0 1 1 45,437.36218 z"
@@ -6173,7 +6174,8 @@
        id="g4711"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\cube.png"
        inkscape:export-xdpi="270"
-       inkscape:export-ydpi="270">
+       inkscape:export-ydpi="270"
+       transform="translate(5,92.467048)">
       <path
          id="path24326"
          d="M 70.353553,512.36218 L 85.353553,517.36218 L 70.353553,522.36218 L 55.353553,517.36218 L 70.353553,512.36218 z"
@@ -6207,7 +6209,7 @@
        inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\cyl.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270"
-       transform="translate(5,90.000002)">
+       transform="translate(10,182.46705)">
       <path
          d="M 115,427.36218 A 15,5 0 1 1 85,427.36218 A 15,5 0 1 1 115,427.36218 z"
          sodipodi:ry="5"
@@ -6241,41 +6243,41 @@
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="15"
-       y="592.36218"
+       x="20"
+       y="684.82922"
        id="text24374"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan24392"
-         x="15"
-         y="592.36218">Modify</tspan></text>
+         x="20"
+         y="684.82922">Modify</tspan></text>
     <rect
        style="opacity:1;fill:#e0e0e0;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect24384"
        width="30"
        height="30"
-       x="125"
-       y="602.36218" />
+       x="130"
+       y="694.82922" />
     <rect
        style="opacity:1;fill:#e0e0e0;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect24386"
        width="30"
        height="30"
-       x="160"
-       y="602.36218" />
+       x="165"
+       y="694.82922" />
     <rect
        style="opacity:1;fill:#e0e0e0;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect24388"
        width="30"
        height="30"
-       x="195"
-       y="602.36218" />
+       x="200"
+       y="694.82922" />
     <g
        id="g6725"
        inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\fuse.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270"
-       transform="translate(5,90.000002)">
+       transform="translate(10,182.46705)">
       <path
          id="path24402"
          d="M 27,512.375 C 20.376,512.375 15,517.75102 15,524.375 C 15,529.23452 17.90564,533.39498 22.0625,535.28125 C 23.943176,539.45183 28.130516,542.375 33,542.375 C 39.624,542.375 45,536.999 45,530.375 C 45,525.51548 42.09436,521.32378 37.9375,519.4375 C 36.055446,515.27029 31.867039,512.37501 27,512.375 z"
@@ -6306,7 +6308,7 @@
        inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\common.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270"
-       transform="translate(5,90.000002)">
+       transform="translate(10,182.46705)">
       <path
          transform="matrix(1.2,0,0,1.2,32,-102.47244)"
          d="M 35,522.36218 A 10,10 0 1 1 15,522.36218 A 10,10 0 1 1 35,522.36218 z"
@@ -6342,7 +6344,7 @@
        inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\subtract.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270"
-       transform="translate(5,90.000002)">
+       transform="translate(10,182.46705)">
       <path
          transform="matrix(1.2,0,0,1.2,73,-96.472437)"
          d="M 35,522.36218 A 10,10 0 1 1 15,522.36218 A 10,10 0 1 1 35,522.36218 z"
@@ -6368,7 +6370,7 @@
        inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\redraw.png"
        inkscape:export-xdpi="271.40121"
        inkscape:export-ydpi="271.40121"
-       transform="translate(5,90.000002)">
+       transform="translate(10,182.46705)">
       <path
          sodipodi:nodetypes="ccccccccccccc"
          id="path24505"
@@ -6385,7 +6387,7 @@
        inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\mag.png"
        inkscape:export-xdpi="270.42001"
        inkscape:export-ydpi="270.42001"
-       transform="translate(5,90.000002)">
+       transform="translate(10,182.46705)">
       <rect
          y="332.40143"
          x="50.049477"
@@ -6426,7 +6428,7 @@
        inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\magextents.png"
        inkscape:export-xdpi="275.72485"
        inkscape:export-ydpi="275.72485"
-       transform="translate(5,90.000002)">
+       transform="translate(10,182.46705)">
       <rect
          y="335.58856"
          x="88.226234"
@@ -6467,7 +6469,7 @@
        inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\magnorot.png"
        inkscape:export-xdpi="269.99896"
        inkscape:export-ydpi="269.99896"
-       transform="translate(5,90.000002)">
+       transform="translate(10,182.46705)">
       <rect
          transform="matrix(0.7055184,-0.7086916,0.7046804,0.7095249,0,0)"
          y="330.06931"
@@ -6554,7 +6556,7 @@
        inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\magprev.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270"
-       transform="translate(5,90.000002)">
+       transform="translate(10,182.46705)">
       <g
          transform="translate(6,2.0000026)"
          id="g3260">
@@ -6760,7 +6762,8 @@
        id="g4729"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\icons\cone.png"
        inkscape:export-xdpi="45"
-       inkscape:export-ydpi="45">
+       inkscape:export-ydpi="45"
+       transform="translate(5,92.467048)">
       <path
          sodipodi:nodetypes="ccscc"
          d="M 140,512.36218 L 125,537.36218 C 125,540.12218 131.72,542.36218 140,542.36218 C 148.28,542.36218 155,540.12218 155,537.36218 L 140,512.36218 z"
@@ -6777,7 +6780,7 @@
        inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\ruled.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270"
-       transform="translate(5,90.000002)">
+       transform="translate(10,182.46705)">
       <path
          sodipodi:nodetypes="ccccc"
          d="M 170,422.36218 L 160,422.36218 C 169,434.36218 162,443.36218 155,452.36218 L 185,452.36218 C 185,437.36218 174,432.36218 170,422.36218 z"
@@ -6799,7 +6802,7 @@
        inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\extrude.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270"
-       transform="translate(5,90.000002)">
+       transform="translate(10,182.46705)">
       <path
          sodipodi:nodetypes="ccccccc"
          id="path5181"
@@ -6893,7 +6896,7 @@
        inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\viewrot.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270"
-       transform="translate(5,90.000002)">
+       transform="translate(10,182.46705)">
       <g
          transform="translate(0,0.500018)"
          id="g5327">
@@ -6937,7 +6940,7 @@
        inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\fullscreen.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270"
-       transform="translate(5,90.000002)">
+       transform="translate(10,182.46705)">
       <rect
          y="356.36218"
          x="230"
@@ -6971,20 +6974,20 @@
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="15"
-       y="682.36218"
+       x="20"
+       y="774.82922"
        id="text5361"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan5363"
-         x="15"
-         y="682.36218">Translate</tspan></text>
+         x="20"
+         y="774.82922">Translate</tspan></text>
     <g
        id="g5421"
        inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\movet.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270"
-       transform="translate(5,90.000002)">
+       transform="translate(10,182.46705)">
       <path
          transform="translate(3.167928,14.551479)"
          d="M 26,616 L 20.770138,614.40608 L 16.492219,617.8107 L 16.392007,612.34426 L 11.832072,609.3278 L 17,607.54327 L 18.459724,602.27438 L 21.753891,606.63792 L 27.215985,606.39802 L 24.083964,610.87937 L 26,616 z"
@@ -7028,7 +7031,7 @@
        inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\mover.png"
        inkscape:export-xdpi="261.22"
        inkscape:export-ydpi="261.22"
-       transform="translate(5,90.000002)">
+       transform="translate(10,182.46705)">
       <path
          sodipodi:type="star"
          style="fill:#d0d0d0;fill-opacity:1;stroke:#606060;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
@@ -7072,7 +7075,7 @@
        inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\movem.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270"
-       transform="translate(5,90.000002)">
+       transform="translate(10,182.46705)">
       <path
          transform="matrix(-1,0,0,1,182.21599,7.3196405)"
          d="M 26,616 L 20.770138,614.40608 L 16.492219,617.8107 L 16.392007,612.34426 L 11.832072,609.3278 L 17,607.54327 L 18.459724,602.27438 L 21.753891,606.63792 L 27.215985,606.39802 L 24.083964,610.87937 L 26,616 z"
@@ -7113,7 +7116,7 @@
     </g>
     <g
        id="g7482"
-       transform="translate(40.000005,90.000005)"
+       transform="translate(45.000005,182.46705)"
        inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\copym.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
@@ -7160,7 +7163,7 @@
        inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\moves.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270"
-       transform="translate(5,90.000002)">
+       transform="translate(10,182.46705)">
       <path
          sodipodi:type="star"
          style="fill:#d0d0d0;fill-opacity:1;stroke:#606060;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
@@ -7464,21 +7467,21 @@
        id="rect4202"
        width="30"
        height="30"
-       x="335"
-       y="422.36218" />
+       x="340"
+       y="514.82922" />
     <rect
        style="opacity:1;fill:#e0e0e0;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4204"
        width="30"
        height="30"
-       x="370"
-       y="422.36218" />
+       x="375"
+       y="514.82922" />
     <g
        id="g4236"
        inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\zoom.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270"
-       transform="translate(5,90.000002)">
+       transform="translate(10,182.46705)">
       <g
          transform="translate(70,0.500018)"
          id="g4208">
@@ -7520,17 +7523,17 @@
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="25"
-       y="772.36218"
+       x="30"
+       y="864.82922"
        id="text3401"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3405"
-         x="25"
-         y="772.36218">Solids</tspan></text>
+         x="30"
+         y="864.82922">Solids</tspan></text>
     <g
        id="g3491"
-       transform="translate(5,90.000002)">
+       transform="translate(10,182.46705)">
       <path
          id="path3425"
          d="M 26.277779,702.86652 L 44.944446,696.64043 L 48.055557,715.31871 L 29.38889,713.76219"
@@ -7559,7 +7562,7 @@
     </g>
     <g
        id="g4273"
-       transform="translate(5,90.000002)">
+       transform="translate(10,182.46705)">
       <g
          transform="matrix(0.6428571,0,0,0.6173614,34.5,432.70859)"
          inkscape:export-ydpi="270"
@@ -7673,7 +7676,7 @@
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\fillet.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270"
-       transform="translate(38.941125,87.878682)">
+       transform="translate(43.941125,180.34573)">
       <g
          transform="translate(56,270)"
          inkscape:export-ydpi="270"
@@ -7731,7 +7734,7 @@
     </g>
     <g
        id="g4364"
-       transform="matrix(0.1557029,0,0,0.162378,165.86819,666.19269)"
+       transform="matrix(0.1557029,0,0,0.162378,170.86819,758.65974)"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\chamfer.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
@@ -7821,7 +7824,7 @@
     </g>
     <path
        style="fill:#d0d0d0;fill-opacity:1;fill-rule:evenodd;stroke:#606060;stroke-width:1.04792106;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 241.67219,806.43674 L 243.97781,807.18091 L 247.14811,800.31821 C 247.69017,798.75145 250.79397,799.26915 249.97324,801.28837 L 248.24887,805.03903 C 245.96126,810.95166 254.9036,811.69364 256.04187,807.39199 L 258.91582,800.7052 L 256.52552,799.92584 L 253.4399,806.75336 C 252.6422,808.57879 249.87069,807.78656 250.69944,805.88875 L 252.4238,801.99736 C 254.35924,797.59262 247.63532,794.50264 244.54613,799.74995 L 241.67219,806.43674 z"
+       d="M 246.67219,898.90379 L 248.97781,899.64796 L 252.14811,892.78526 C 252.69017,891.2185 255.79397,891.7362 254.97324,893.75542 L 253.24887,897.50608 C 250.96126,903.41871 259.9036,904.16069 261.04187,899.85904 L 263.91582,893.17225 L 261.52552,892.39289 L 258.4399,899.22041 C 257.6422,901.04584 254.87069,900.25361 255.69944,898.3558 L 257.4238,894.46441 C 259.35924,890.05967 252.63532,886.96969 249.54613,892.217 L 246.67219,898.90379 z"
        id="path3463"
        sodipodi:nodetypes="ccssssccssssc"
        inkscape:export-filename="C:\Users\Dan\Heeks Software\HeeksCAD\bitmaps\lines.png"
@@ -7829,11 +7832,11 @@
        inkscape:export-ydpi="271.42096" />
     <path
        style="fill:#004beb;fill-opacity:1;fill-rule:evenodd;stroke:#0000aa;stroke-width:1.74617589;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 232.95917,796.31519 L 233.60775,783.09288 L 251.7679,780.1546 L 250.47074,793.96456 L 232.95917,796.31519 z"
+       d="M 237.95917,888.78224 L 238.60775,875.55993 L 256.7679,872.62165 L 255.47074,886.43161 L 237.95917,888.78224 z"
        id="path3495" />
     <g
        id="g3559"
-       transform="matrix(1.0142861,0,0,1,1.1927476,90.000002)"
+       transform="matrix(1.0142861,0,0,1,6.1927476,182.46705)"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\icons\group.png"
        inkscape:export-xdpi="40.5532"
        inkscape:export-ydpi="40.5532">
@@ -7965,7 +7968,7 @@
     </g>
     <g
        id="g3590"
-       transform="matrix(0.5248749,0,0,0.494255,152.75087,307.15733)"
+       transform="matrix(0.5248749,0,0,0.494255,157.75087,399.62438)"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\ungroup.png"
        inkscape:export-xdpi="271.68494"
        inkscape:export-ydpi="271.68494">
@@ -8093,7 +8096,7 @@
     </g>
     <g
        id="g3519"
-       transform="matrix(1.025641,0,0,1,33.787279,87.878682)"
+       transform="matrix(1.025641,0,0,1,38.787279,180.34573)"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\icons\vertex.png"
        inkscape:export-xdpi="72.046501"
        inkscape:export-ydpi="72.046501">
@@ -8108,7 +8111,7 @@
     </g>
     <g
        id="g4371"
-       transform="matrix(0.9554541,0,0,1.0222296,11.864691,114.1244)"
+       transform="matrix(0.9554541,0,0,1.0222296,16.864691,206.59145)"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\icons\vertices.png"
        inkscape:export-xdpi="62.84409"
        inkscape:export-ydpi="62.84409">
@@ -8625,7 +8628,7 @@
     </g>
     <g
        id="g3640"
-       transform="translate(126.94113,-86.12132)"
+       transform="translate(131.94113,6.3457276)"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\edge2sketch.png"
        inkscape:export-xdpi="247.79289"
        inkscape:export-ydpi="247.79289">
@@ -8644,7 +8647,7 @@
     </g>
     <g
        id="g3642"
-       transform="translate(-26.162951,-70.710678)"
+       transform="translate(-21.162951,21.75637)"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\pickfaces.png"
        inkscape:export-xdpi="372.17386"
        inkscape:export-ydpi="372.17386">
@@ -8676,7 +8679,7 @@
     </g>
     <g
        id="g3661"
-       transform="translate(-5.6568541,2.1213203)"
+       transform="translate(-0.6568541,94.588368)"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\extface.png"
        inkscape:export-xdpi="316.03622"
        inkscape:export-ydpi="316.03622">
@@ -8780,7 +8783,7 @@
     <g
        inkscape:label="Layer 1"
        id="g3700"
-       transform="matrix(0.6180026,0,0,0.6727391,362.3022,504.46)"
+       transform="matrix(0.6180026,0,0,0.6727391,367.3022,596.92705)"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\extrude.png"
        inkscape:export-xdpi="228.50063"
        inkscape:export-ydpi="228.50063">
@@ -8816,7 +8819,7 @@
     <g
        inkscape:label="Layer 1"
        id="g3745"
-       transform="matrix(0.6754156,0,0,0.6700388,453.7932,507.89366)"
+       transform="matrix(0.6754156,0,0,0.6700388,458.7932,600.36071)"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\fillet.png"
        inkscape:export-xdpi="218.08624"
        inkscape:export-ydpi="218.08624">
@@ -8848,7 +8851,7 @@
     <g
        inkscape:label="Layer 1"
        id="g3815"
-       transform="matrix(0.6888072,0,0,0.6602762,406.05236,504.54476)"
+       transform="matrix(0.6888072,0,0,0.6602762,411.05236,597.01181)"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\revolve.png"
        inkscape:export-xdpi="230.21901"
        inkscape:export-ydpi="230.21901">
@@ -8878,7 +8881,7 @@
     </g>
     <g
        id="g4577"
-       transform="matrix(0.6843308,0,0,0.6671785,63.262779,251.70807)"
+       transform="matrix(0.6843308,0,0,0.6671785,68.262779,344.17512)"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\move3dr.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
@@ -8936,7 +8939,8 @@
        id="g4521"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\copyt.png"
        inkscape:export-xdpi="307.33139"
-       inkscape:export-ydpi="307.33139">
+       inkscape:export-ydpi="307.33139"
+       transform="translate(5,92.467048)">
       <path
          transform="matrix(0.59375,0,0,0.609375,47.568456,346.27441)"
          d="M 26,616 L 20.770138,614.40608 L 16.492219,617.8107 L 16.392007,612.34426 L 11.832072,609.3278 L 17,607.54327 L 18.459724,602.27438 L 21.753891,606.63792 L 27.215985,606.39802 L 24.083964,610.87937 L 26,616 z"
@@ -9000,7 +9004,8 @@
        id="g4528"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\copyr.png"
        inkscape:export-xdpi="239.8671"
-       inkscape:export-ydpi="239.8671">
+       inkscape:export-ydpi="239.8671"
+       transform="translate(5,92.467048)">
       <path
          sodipodi:type="star"
          style="fill:#8080ff;fill-opacity:1;stroke:#0000a0;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
@@ -9062,7 +9067,7 @@
     </g>
     <g
        id="g4585"
-       transform="translate(-89.095452,19.091883)"
+       transform="translate(-84.095452,111.55893)"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\copy3dr.png"
        inkscape:export-xdpi="270"
        inkscape:export-ydpi="270">
@@ -9245,7 +9250,7 @@
     </g>
     <g
        id="g3827"
-       transform="translate(9.2781742,-31.319804)"
+       transform="translate(14.278174,61.147244)"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\magxy.png"
        inkscape:export-xdpi="194.48567"
        inkscape:export-ydpi="194.48567">
@@ -9306,7 +9311,8 @@
        id="g4723"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\magxz.png"
        inkscape:export-xdpi="191.86897"
-       inkscape:export-ydpi="191.86897">
+       inkscape:export-ydpi="191.86897"
+       transform="translate(5,92.467048)">
       <g
          transform="translate(375.00158,93.872067)"
          inkscape:export-ydpi="275.72485"
@@ -9368,7 +9374,7 @@
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\magyz.png"
        inkscape:export-xdpi="201.07979"
        inkscape:export-ydpi="201.07979"
-       transform="translate(16.142136,3.3786796)">
+       transform="translate(21.142136,95.845728)">
       <g
          transform="translate(65.053822,2.1213203)"
          id="g3805">
@@ -9431,7 +9437,7 @@
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\magxzm.png"
        inkscape:export-xdpi="191.86897"
        inkscape:export-ydpi="191.86897"
-       transform="translate(3.9999999,-1)">
+       transform="translate(8.9999999,91.467048)">
       <g
          transform="translate(376.70562,56.806575)"
          inkscape:export-ydpi="275.72485"
@@ -9497,7 +9503,7 @@
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\magxym.png"
        inkscape:export-xdpi="194.48567"
        inkscape:export-ydpi="194.48567"
-       transform="translate(3.4999999,-2.4999999)">
+       transform="translate(8.4999999,89.967048)">
       <g
          inkscape:export-ydpi="194.48567"
          inkscape:export-xdpi="194.48567"
@@ -9566,7 +9572,8 @@
        id="g4706"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\magyzm.png"
        inkscape:export-xdpi="201.07979"
-       inkscape:export-ydpi="201.07979">
+       inkscape:export-ydpi="201.07979"
+       transform="translate(5,92.467048)">
       <g
          transform="translate(15.846182,-39.186813)"
          inkscape:export-ydpi="201.07979"
@@ -9639,7 +9646,8 @@
        id="g4765"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\magxyz.png"
        inkscape:export-xdpi="200.00362"
-       inkscape:export-ydpi="200.00362">
+       inkscape:export-ydpi="200.00362"
+       transform="translate(98.923277,3.9999928)">
       <g
          transform="translate(452.85792,144.6628)"
          inkscape:export-ydpi="275.72485"
@@ -9695,7 +9703,7 @@
     </g>
     <g
        id="g4630"
-       transform="translate(-265.70711,-165.81803)"
+       transform="translate(-260.70711,-73.350982)"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\pan.png"
        inkscape:export-xdpi="261.37656"
        inkscape:export-ydpi="261.37656">
@@ -10063,7 +10071,8 @@
          style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.24266195px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     </g>
     <g
-       id="g4749">
+       id="g4749"
+       transform="translate(5,92.467048)">
       <g
          transform="matrix(0.347358,0.2910457,-0.8780091,0.9141354,791.1465,368.03382)"
          inkscape:export-ydpi="270"
@@ -10111,7 +10120,7 @@
     </g>
     <g
        id="g4757"
-       transform="translate(-4.7729706,-1.2374368)"
+       transform="translate(0.2270294,91.229611)"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\coneonlin.png"
        inkscape:export-xdpi="276.16769"
        inkscape:export-ydpi="276.16769">
@@ -10143,35 +10152,35 @@
        id="rect3924"
        width="30"
        height="30"
-       x="65"
-       y="842.36218" />
+       x="70"
+       y="934.82922" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 45,842.36218 L 45,872.36218"
+       d="M 50,934.82923 L 50,964.82923"
        id="path3926" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 30,857.36218 L 60,857.36218"
+       d="M 35,949.82923 L 65,949.82923"
        id="path3928" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 30,847.36218 L 60,847.36218"
+       d="M 35,939.82923 L 65,939.82923"
        id="path3930" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 30,852.36218 L 60,852.36218"
+       d="M 35,944.82923 L 65,944.82923"
        id="path3932" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 30,862.36218 L 60,862.36218"
+       d="M 35,954.82923 L 65,954.82923"
        id="path3934" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 30,867.36218 L 60,867.36218"
+       d="M 35,959.82923 L 65,959.82923"
        id="path3936" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 30,842.36218 L 30,872.36218 L 60,872.36218 L 60,842.36218 L 30,842.36218 z"
+       d="M 35,934.82923 L 35,964.82923 L 65,964.82923 L 65,934.82923 L 35,934.82923 z"
        id="path3938"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\options.png"
        inkscape:export-xdpi="278.70969"
@@ -10253,57 +10262,58 @@
        id="g4821"
        inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\section.png"
        inkscape:export-xdpi="272.90323"
-       inkscape:export-ydpi="272.90323">
+       inkscape:export-ydpi="272.90323"
+       transform="translate(5,92.467048)">
       <path
          id="path3949"
          d="M 237.58936,602.36218 L 237.58936,612.36218 L 258.3598,612.36218 L 258.3598,607.36218 L 247.97458,607.36218 L 247.97458,602.36218 L 237.58936,602.36218 z"
-         style="fill:#b0b0b0;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+         style="fill:#b0b0b0;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <path
          id="path3951"
          d="M 237.58936,622.36218 L 237.58936,632.36218 L 247.97458,632.36218 L 247.97458,627.36218 L 258.3598,627.36218 L 258.3598,622.36218 L 237.58936,622.36218 z"
-         style="fill:#b0b0b0;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+         style="fill:#b0b0b0;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <path
          sodipodi:nodetypes="ccccc"
          id="path3964"
          d="M 237.58936,632.36218 L 237.58936,622.36218 C 234.12762,622.36218 234.12762,612.36218 237.58936,612.36218 L 237.58936,602.36218 C 227.20413,602.36218 227.20413,632.36218 237.58936,632.36218 z"
-         style="fill:url(#linearGradient4817);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+         style="fill:url(#linearGradient4817);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <path
          sodipodi:nodetypes="ccccc"
          id="path3966"
          d="M 237.59047,622.39905 L 258.36084,622.31867 C 254.89911,622.33207 254.88055,612.3321 258.34229,612.3187 L 237.57191,612.39909 C 234.11018,612.41248 234.12874,622.41244 237.59047,622.39905 z"
-         style="fill:url(#linearGradient4813);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+         style="fill:url(#linearGradient4813);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <path
          id="path4772"
          d="M 234.12762,617.36218 L 237.58936,617.36218 L 237.58936,617.36218"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <path
          id="path4774"
          d="M 238.97405,617.36218 L 239.6664,617.36218"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <path
          id="path4776"
          d="M 241.0511,617.36218 L 244.51284,617.36218"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <path
          id="path4778"
          d="M 245.89754,617.36218 L 246.58988,617.36218"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <path
          id="path4780"
          d="M 247.97458,617.36218 L 251.43632,617.36218"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <path
          id="path4782"
          d="M 252.82102,617.36218 L 253.51337,617.36218"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <path
          id="path4784"
          d="M 254.89806,617.36218 L 258.3598,617.36218"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <path
          id="path4786"
          d="M 259.7445,617.36218 L 260.43685,617.36218"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     </g>
     <path
        style="fill:#999999;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -10314,16 +10324,18 @@
        inkscape:export-ydpi="239.16956" />
     <text
        xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;writing-mode:lr;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="23.830645"
-       y="914.65063"
+       style="font-size:40px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="28.830645"
+       y="1007.1177"
        id="text3967"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         id="tspan3971">Select</tspan></text>
+         id="tspan3971"
+         x="28.830645"
+         y="1007.1177">Select</tspan></text>
     <g
        id="g4766"
-       transform="matrix(0.5256522,0,0,0.52024,-26.065181,418.36277)"
+       transform="matrix(0.5256522,0,0,0.52024,-21.065181,510.82982)"
        inkscape:export-filename="C:\Users\Dan\heeks\heekscad\bitmaps\linked.png"
        inkscape:export-xdpi="284.05212"
        inkscape:export-ydpi="284.05212">
@@ -10339,6 +10351,272 @@
          id="path4755"
          d="M 144.75,995.34375 C 144.30923,995.40743 143.90232,995.61638 143.59375,995.9375 L 123.59375,1015.9375 C 123.06879,1016.4363 122.85443,1017.1799 123.03332,1017.8816 C 123.2122,1018.5833 123.75638,1019.1335 124.45608,1019.3202 C 125.15577,1019.5068 125.90168,1019.3006 126.40625,1018.7812 L 146.40625,998.78125 C 147.04278,998.18342 147.21791,997.24175 146.83886,996.45505 C 146.45981,995.66836 145.61422,995.21849 144.75,995.34375 L 144.75,995.34375 z"
          style="fill:#82f1f2;fill-opacity:1;fill-rule:evenodd;stroke:#2b425a;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <path
+       style="fill:#ffcc00;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 335,372.36218 L 350,372.36218 L 350,357.36218 L 365,357.36218 L 365,342.36218 L 335,342.36218 L 335,372.36218 z"
+       id="path3974" />
+    <path
+       style="fill:#ffcc00;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 355,372.36218 L 365,372.36218 L 365,362.36218 L 355,362.36218 L 355,372.36218"
+       id="path3976" />
+    <g
+       id="g3994"
+       inkscape:export-filename="C:\Users\Dan\HeeksCADSVN\bitmaps\offsetarea.png"
+       inkscape:export-xdpi="261.81818"
+       inkscape:export-ydpi="261.81818">
+      <g
+         transform="matrix(0.9447514,0,0,0.9964484,60.281761,1.2656585)"
+         inkscape:export-ydpi="45"
+         inkscape:export-xdpi="45"
+         inkscape:export-filename="C:\Users\Dan\HeeksCADSVN\icons\area.png"
+         id="g3976">
+        <path
+           sodipodi:nodetypes="ccccccccc"
+           style="fill:#ffcc00;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M 337,370.36218 L 348,370.36218 L 348,358.36218 L 349,356.36218 L 351,355.36218 L 363,355.36218 L 363,344.36218 L 337,344.36218 L 337,370.36218 z"
+           id="path3978" />
+        <path
+           sodipodi:nodetypes="ccccc"
+           style="fill:#ffcc00;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M 357,370.36218 L 363,370.36218 L 363,364.36218 L 357,364.36218 L 357,370.36218"
+           id="path3980" />
+      </g>
+      <path
+         id="path3986"
+         d="M 375,341.36218 L 377,343.36218"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         id="path3988"
+         d="M 405,343.36218 L 407,341.36218"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         id="path3990"
+         d="M 377,371.36218 C 375.94853,373.13888 375,371.42157 375,373.36218"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         id="path3992"
+         d="M 405,371.36218 C 404.69305,372.96514 405.91223,372.36218 407,372.36218"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:30.08307457px;font-style:normal;font-weight:normal;fill:#ffcc00;fill-opacity:1;stroke:#000000;stroke-width:0.75207686px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="51.42646"
+       y="442.1326"
+       id="text4806"><tspan
+         sodipodi:role="line"
+         id="tspan4808"
+         x="51.42646"
+         y="442.1326"
+         style="stroke-width:0.75207686">2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:30.08307457px;font-style:normal;font-weight:normal;fill:#ffcc00;fill-opacity:1;stroke:#000000;stroke-width:0.75207686px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="51.42646"
+       y="434.61182"
+       id="text4810"><tspan
+         sodipodi:role="line"
+         id="tspan4812"
+         x="51.42646"
+         y="434.61182"
+         style="stroke-width:0.75207686">1</tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.10000000000000001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;opacity:0.23893805"
+       d="M 45,442.36218 L 75,442.36218 L 75,412.36218 L 45,412.36218 L 45,442.36218 z"
+       id="path4814"
+       inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\rect.png"
+       inkscape:export-xdpi="269.94592"
+       inkscape:export-ydpi="269.94592" />
+    <g
+       id="g4862"
+       inkscape:export-filename="C:\Users\Dan\HeeksCADSVN\bitmaps\areaunite.png"
+       inkscape:export-xdpi="286.07986"
+       inkscape:export-ydpi="286.07986">
+      <path
+         id="text4816"
+         d="M 95.9375 413 C 95.477236 413.93032 94.700315 414.88596 93.59375 415.875 C 92.487173 416.86408 91.166185 417.71097 89.6875 418.40625 L 89.6875 420.9375 C 90.51008 420.63394 91.46687 420.20092 92.5 419.59375 C 93.533119 418.98662 94.363466 418.35717 95 417.75 L 95 420.5 C 94.946867 420.49922 94.897465 420.5 94.84375 420.5 C 92.797076 420.50002 91.151784 421.03126 89.9375 422.09375 C 88.723207 423.15627 88.029812 424.72294 87.84375 426.75 L 90.5625 427.03125 C 90.572289 425.67988 90.954918 424.6076 91.71875 423.84375 C 92.482572 423.07994 93.508196 422.68753 94.78125 422.6875 C 94.859591 422.6875 94.923586 422.7157 95 422.71875 L 95 432.3125 C 94.364454 432.88899 93.667179 433.48097 92.84375 434.15625 C 91.335674 435.39013 90.173101 436.4974 89.375 437.4375 C 88.576895 438.3776 88.018579 439.31177 87.65625 440.28125 C 87.431018 440.86881 87.324161 441.48848 87.34375 442.125 L 101.5625 442.125 L 101.5625 439.59375 L 91 439.59375 C 91.293775 439.11391 91.674531 438.63121 92.125 438.15625 C 92.575457 437.68131 93.601079 436.76931 95.1875 435.4375 C 95.551912 435.12944 95.800403 434.90784 96.125 434.625 L 97.625 434.625 L 97.625 433.3125 C 98.304366 432.68087 98.841151 432.11651 99.25 431.65625 C 100.06767 430.73575 100.64745 429.86365 101 429.03125 C 101.35252 428.19889 101.53123 427.36178 101.53125 426.5 C 101.53123 424.80589 100.95448 423.36451 99.75 422.21875 C 99.154476 421.65229 98.431168 421.2239 97.625 420.9375 L 97.625 413 L 95.9375 413 z M 97.625 423.71875 C 97.647116 423.73902 97.665767 423.76037 97.6875 423.78125 C 98.436627 424.50103 98.81249 425.3897 98.8125 426.4375 C 98.812488 427.41895 98.419136 428.4629 97.625 429.5625 L 97.625 423.71875 z "
+         style="font-size:30.08307457px;font-style:normal;font-weight:normal;fill:#ffcc00;fill-opacity:1;stroke:#000000;stroke-width:0.75207686px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans" />
+      <path
+         inkscape:export-ydpi="269.94592"
+         inkscape:export-xdpi="269.94592"
+         inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\rect.png"
+         id="path4824"
+         d="M 80,442.36218 L 110,442.36218 L 110,412.36218 L 80,412.36218 L 80,442.36218 z"
+         style="opacity:0.23893804;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <g
+       id="g4866"
+       inkscape:export-filename="C:\Users\Dan\HeeksCADSVN\bitmaps\areacut.png"
+       inkscape:export-xdpi="286.07986"
+       inkscape:export-ydpi="286.07986">
+      <path
+         id="text4830"
+         d="M 130.9375 413 C 130.47724 413.93032 129.70031 414.88596 128.59375 415.875 C 127.48717 416.86408 126.16619 417.71097 124.6875 418.40625 L 124.6875 420.9375 C 125.51008 420.63394 126.46687 420.20092 127.5 419.59375 C 128.53312 418.98662 129.36347 418.35717 130 417.75 L 130 420.5 C 130.98021 420.5143 131.843 420.65969 132.625 420.9375 L 132.625 413 L 130.9375 413 z M 130 422.71875 L 130 432.3125 C 131.17087 431.25043 132.06057 430.35178 132.59375 429.625 C 132.60809 429.60545 132.61091 429.58201 132.625 429.5625 L 132.625 423.71875 C 131.93435 423.08562 131.06438 422.76118 130 422.71875 z M 132.625 433.3125 C 132.20626 433.70181 131.64651 434.17059 131.125 434.625 L 132.625 434.625 L 132.625 433.3125 z "
+         style="font-size:30.08307457px;font-style:normal;font-weight:normal;fill:#ffcc00;fill-opacity:1;stroke:#000000;stroke-width:0.75207686px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans" />
+      <path
+         inkscape:export-ydpi="269.94592"
+         inkscape:export-xdpi="269.94592"
+         inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\rect.png"
+         id="path4835"
+         d="M 115,442.36218 L 145,442.36218 L 145,412.36218 L 115,412.36218 L 115,442.36218 z"
+         style="opacity:0.23893804;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <g
+       id="g4870"
+       inkscape:export-filename="C:\Users\Dan\HeeksCADSVN\bitmaps\areaintersect.png"
+       inkscape:export-xdpi="286.07986"
+       inkscape:export-ydpi="286.07986">
+      <path
+         id="text4837"
+         d="M 165 420.5 L 165 422.71875 C 166.06438 422.76118 166.93435 423.08562 167.625 423.71875 L 167.625 420.9375 C 166.843 420.65969 165.98021 420.5143 165 420.5 z M 167.625 429.5625 C 167.61091 429.58201 167.60809 429.60545 167.59375 429.625 C 167.06057 430.35178 166.17087 431.25043 165 432.3125 L 165 434.625 L 166.125 434.625 C 166.64651 434.17059 167.20626 433.70181 167.625 433.3125 L 167.625 429.5625 z "
+         style="font-size:30.08307457px;font-style:normal;font-weight:normal;fill:#ffcc00;fill-opacity:1;stroke:#000000;stroke-width:0.75207686px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans" />
+      <path
+         inkscape:export-ydpi="269.94592"
+         inkscape:export-xdpi="269.94592"
+         inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\rect.png"
+         id="path4845"
+         d="M 150,442.36218 L 180,442.36218 L 180,412.36218 L 150,412.36218 L 150,442.36218 z"
+         style="opacity:0.23893804;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <g
+       id="g4874"
+       inkscape:export-filename="C:\Users\Dan\HeeksCADSVN\bitmaps\areaxor.png"
+       inkscape:export-xdpi="286.07986"
+       inkscape:export-ydpi="286.07986">
+      <path
+         id="text4847"
+         d="M 200.9375 413 C 200.47724 413.93032 199.70031 414.88596 198.59375 415.875 C 197.48717 416.86408 196.16619 417.71097 194.6875 418.40625 L 194.6875 420.9375 C 195.51008 420.63394 196.46686 420.20092 197.5 419.59375 C 198.53312 418.98662 199.36347 418.35717 200 417.75 L 200 420.5 C 200.98021 420.5143 201.843 420.65969 202.625 420.9375 L 202.625 413 L 200.9375 413 z M 202.625 420.9375 L 202.625 423.71875 C 202.64712 423.73902 202.66577 423.76037 202.6875 423.78125 C 203.43663 424.50103 203.81248 425.3897 203.8125 426.4375 C 203.81249 427.41895 203.41914 428.4629 202.625 429.5625 L 202.625 433.3125 C 203.30437 432.68087 203.84115 432.11651 204.25 431.65625 C 205.06767 430.73575 205.64745 429.86365 206 429.03125 C 206.35252 428.19889 206.53124 427.36178 206.53125 426.5 C 206.53123 424.80589 205.95449 423.36451 204.75 422.21875 C 204.15448 421.65229 203.43117 421.2239 202.625 420.9375 z M 202.625 433.3125 C 202.20626 433.70181 201.64651 434.17059 201.125 434.625 L 202.625 434.625 L 202.625 433.3125 z M 201.125 434.625 L 200 434.625 L 200 432.3125 C 199.36445 432.88899 198.66718 433.48097 197.84375 434.15625 C 196.33567 435.39013 195.17309 436.4974 194.375 437.4375 C 193.5769 438.3776 193.01857 439.31177 192.65625 440.28125 C 192.43102 440.86881 192.32416 441.48848 192.34375 442.125 L 206.5625 442.125 L 206.5625 439.59375 L 196 439.59375 C 196.29378 439.11391 196.67454 438.63121 197.125 438.15625 C 197.57546 437.68131 198.60109 436.76931 200.1875 435.4375 C 200.55191 435.12944 200.8004 434.90784 201.125 434.625 z M 200 432.3125 C 201.17087 431.25043 202.06057 430.35178 202.59375 429.625 C 202.60809 429.60545 202.61091 429.58201 202.625 429.5625 L 202.625 423.71875 C 201.93435 423.08562 201.06438 422.76118 200 422.71875 L 200 432.3125 z M 200 422.71875 L 200 420.5 C 199.94687 420.49922 199.89746 420.5 199.84375 420.5 C 197.79708 420.50002 196.15179 421.03126 194.9375 422.09375 C 193.72321 423.15627 193.02981 424.72294 192.84375 426.75 L 195.5625 427.03125 C 195.57229 425.67988 195.95492 424.6076 196.71875 423.84375 C 197.48257 423.07994 198.5082 422.68753 199.78125 422.6875 C 199.85959 422.6875 199.92359 422.7157 200 422.71875 z "
+         style="font-size:30.08307457px;font-style:normal;font-weight:normal;fill:#ffcc00;fill-opacity:1;stroke:#000000;stroke-width:0.75207686px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans" />
+      <path
+         inkscape:export-ydpi="269.94592"
+         inkscape:export-xdpi="269.94592"
+         inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\rect.png"
+         id="path4855"
+         d="M 185,442.36218 L 215,442.36218 L 215,412.36218 L 185,412.36218 L 185,442.36218 z"
+         style="opacity:0.23893804;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <path
+       style="opacity:0.23893804;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 220,442.36218 L 250,442.36218 L 250,412.36218 L 220,412.36218 L 220,442.36218 z"
+       id="path4886"
+       inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\rect.png"
+       inkscape:export-xdpi="269.94592"
+       inkscape:export-ydpi="269.94592" />
+    <rect
+       style="opacity:1;fill:#ffcc00;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.50625002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4890"
+       width="30.125"
+       height="30.125"
+       x="220.00313"
+       y="412.3653"
+       inkscape:export-filename="C:\Users\Dan\HeeksCADSVN\bitmaps\reorderarea.png"
+       inkscape:export-xdpi="273.1478"
+       inkscape:export-ydpi="273.1478" />
+    <g
+       id="g4790"
+       inkscape:export-filename="C:\Users\Dan\HeeksCADSVN\bitmaps\thickenarea.png"
+       inkscape:export-xdpi="284.82275"
+       inkscape:export-ydpi="284.82275">
+      <path
+         inkscape:export-ydpi="269.94592"
+         inkscape:export-xdpi="269.94592"
+         inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\rect.png"
+         id="path4002"
+         d="M 255,442.36218 L 285,442.36218 L 285,412.36218 L 255,412.36218 L 255,442.36218 z"
+         style="opacity:0.23893804;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         d="M 279.65625,412.59375 C 279.26259,412.61303 278.87349,412.68665 278.5,412.8125 L 263.5,417.8125 C 263.44751,417.83231 263.39542,417.85314 263.34375,417.875 L 263.09375,417.96875 C 261.80049,418.45634 260.82265,419.53895 260.46875,420.875 C 260.45816,420.89575 260.44775,420.91658 260.4375,420.9375 L 260.375,421.1875 L 255.46875,435.875 C 255.11156,436.95242 255.19742,438.12766 255.70739,439.14173 C 256.21736,440.15581 257.10959,440.92552 258.1875,441.28125 L 259.125,441.59375 C 260.20242,441.95094 261.37766,441.86508 262.39173,441.35511 C 263.40581,440.84514 264.17552,439.95291 264.53125,438.875 L 268.75,426.125 L 281.5,421.90625 C 283.7285,421.16517 284.94228,418.76551 284.21875,416.53125 L 283.90625,415.5625 C 283.31935,413.72907 281.57967,412.51385 279.65625,412.59375 z"
+         inkscape:href="#path4004"
+         id="path4012"
+         style="fill:#ffcc00;fill-opacity:1;fill-rule:evenodd;stroke:#550000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xlink:href="#path4004"
+         inkscape:original="M 279.84375 416.875 L 264.84375 421.875 L 264.59375 421.96875 L 264.53125 422.21875 L 259.53125 437.21875 L 260.46875 437.53125 L 265.375 422.75 L 280.15625 417.84375 L 279.84375 416.875 z "
+         inkscape:radius="4.2756577"
+         sodipodi:type="inkscape:offset" />
+    </g>
+    <g
+       id="g4803"
+       inkscape:export-filename="C:\Users\Dan\HeeksCADSVN\bitmaps\areasplit.png"
+       inkscape:export-xdpi="278.70969"
+       inkscape:export-ydpi="278.70969">
+      <path
+         inkscape:export-ydpi="269.94592"
+         inkscape:export-xdpi="269.94592"
+         inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\rect.png"
+         id="path4005"
+         d="M 290,442.36218 L 320,442.36218 L 320,412.36218 L 290,412.36218 L 290,442.36218 z"
+         style="opacity:0.23893804;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         id="path4007"
+         d="M 290,427.36218 L 305,412.36218 L 290,412.36218 L 290,427.36218 z"
+         style="fill:#ffcc00;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1" />
+      <path
+         id="path4009"
+         d="M 305,442.36218 L 320,442.36218 L 320,427.36218 L 305,442.36218 z"
+         style="fill:#ffcc00;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1" />
+      <g
+         transform="matrix(0.2222222,0,0,0.2222222,264.44445,321.83726)"
+         id="g4021">
+        <path
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="M 160,452.36218 L 205,497.36218"
+           id="path4015" />
+        <path
+           style="fill:#000000;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="M 195,492.36218 L 205,497.36218 L 200,487.36218 L 195,492.36218 z"
+           id="path4017" />
+        <path
+           style="fill:#000000;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="M 160,452.36218 L 165,462.36218 L 170,457.36218 L 160,452.36218 z"
+           id="path4019" />
+      </g>
+    </g>
+    <g
+       id="g4808"
+       inkscape:export-filename="C:\Users\Dan\HeeksCADSVN\bitmaps\sweep.png"
+       inkscape:export-xdpi="283.6698"
+       inkscape:export-ydpi="283.6698">
+      <path
+         id="path4013"
+         d="M 505.62963,619.91279 L 506,612.36218 L 516.37037,610.68427 L 515.62963,618.57046 L 505.62963,619.91279 z"
+         style="fill:#004beb;fill-opacity:1;fill-rule:evenodd;stroke:#0000aa;stroke-width:0.99715555;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         inkscape:export-ydpi="269.94592"
+         inkscape:export-xdpi="269.94592"
+         inkscape:export-filename="C:\Users\Dan\HeeksCAD\bitmaps\rect.png"
+         id="path4018"
+         d="M 505,637.36218 L 535,637.36218 L 535,607.36218 L 505,607.36218 L 505,637.36218 z"
+         style="opacity:0.23893804;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="csc"
+         id="path4026"
+         d="M 515.5598,618.34056 C 524.5598,619.34056 519.0158,630.34056 527.5598,630.34056 C 536.5598,630.34056 533.5598,630.34056 533.5598,630.34056"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="csc"
+         id="path4022"
+         d="M 511,615.36218 C 520,616.36218 514.456,627.36218 523,627.36218 C 532,627.36218 529,627.36218 529,627.36218"
+         style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="csc"
+         id="path4024"
+         d="M 506.18937,612.35089 C 515.18937,613.35089 509.64537,624.35089 518.18937,624.35089 C 527.18937,624.35089 524.18937,624.35089 524.18937,624.35089"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="csc"
+         id="path4028"
+         d="M 516.35923,610.67634 C 525.35923,611.67634 519.81523,622.67634 528.35923,622.67634 C 537.35923,622.67634 534.35923,622.67634 534.35923,622.67634"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="csc"
+         id="path4030"
+         d="M 505.38128,619.53896 C 514.38128,620.53896 508.83728,631.53896 517.38128,631.53896 C 526.38128,631.53896 523.38128,631.53896 523.38128,631.53896"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         id="path4020"
+         d="M 523.62963,631.91279 L 524,624.36218 L 534.37037,622.68427 L 533.62963,630.57046 L 523.62963,631.91279 z"
+         style="fill:#004beb;fill-opacity:1;fill-rule:evenodd;stroke:#0000aa;stroke-width:0.99715555;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     </g>
   </g>
 </svg>
