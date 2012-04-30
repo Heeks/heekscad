@@ -24,7 +24,7 @@
 #include <algorithm>
 #include <functional>
 
-static MakeLineArcsToSketch make_line_arcs_to_sketch;
+static MakeToSketch make_to_sketch;
 static ConvertSketchesToFace convert_sketches_to_face;
 static SketchesArcsToLines sketches_arcs_to_lines;
 static CombineSketches combine_sketches;
@@ -83,9 +83,13 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 		}
 	}
 
+	if(lines_or_arcs_etc_in_marked_list || areas_in_marked_list)
+	{
+		t_list->push_back(&make_to_sketch);
+	}
+
 	if(lines_or_arcs_etc_in_marked_list)
 	{
-		t_list->push_back(&make_line_arcs_to_sketch);
 		t_list->push_back(&convert_sketches_to_face);
 		ConvertSketchesToFace_added = true;
 	}
@@ -655,7 +659,8 @@ bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double devi
 	return true;
 }
 
-void ConvertSketchesToFace::Run(){
+void ConvertSketchesToFace::Run()
+{
 	std::list< std::vector<TopoDS_Edge> > individual_edges;
 	std::list<HeeksObj*>::const_iterator It;
 	for(It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
@@ -711,7 +716,39 @@ void ConvertSketchesToFace::Run(){
 	}
 }
 
-void MakeLineArcsToSketch::Run(){
+static void AddLineOrArc(CSketch* sketch, Span &span)
+{
+	if(span.m_v.m_type == 0)
+	{
+		HLine* new_object = new HLine(gp_Pnt(span.m_p.x, span.m_p.y, 0), gp_Pnt(span.m_v.m_p.x, span.m_v.m_p.y, 0), &wxGetApp().current_color);
+		sketch->Add(new_object, NULL);
+	}
+	else
+	{
+		gp_Dir axis = (span.m_v.m_type > 0) ? gp_Dir(0, 0, 1):gp_Dir(0, 0, -1);
+		double radius = span.m_p.dist(span.m_v.m_c);
+		gp_Circ c(gp_Ax2(gp_Pnt(span.m_v.m_c.x, span.m_v.m_c.y, 0), axis), radius);
+		HArc* new_object = new HArc(gp_Pnt(span.m_p.x, span.m_p.y, 0), gp_Pnt(span.m_v.m_p.x, span.m_v.m_p.y, 0), c, &wxGetApp().current_color);
+		sketch->Add(new_object, NULL);
+	}
+}
+
+static void AddLinesOrArcs(CSketch* sketch, CArea &area)
+{
+	for(std::list<CCurve>::iterator It2 = area.m_curves.begin(); It2 != area.m_curves.end(); It2++)
+	{
+		CCurve& curve = *It2;
+		std::list<Span> spans;
+		curve.GetSpans(spans);
+		for(std::list<Span>::iterator It3 = spans.begin(); It3 != spans.end(); It3++)
+		{
+			Span& span = *It3;
+			AddLineOrArc(sketch, span);
+		}
+	}
+}
+
+void MakeToSketch::Run(){
 	std::list<HeeksObj*> objects_to_delete;
 
 	CSketch* sketch = new CSketch();
@@ -729,6 +766,11 @@ void MakeLineArcsToSketch::Run(){
 					HeeksObj* new_object = object->MakeACopy();
 					objects_to_delete.push_back(object);
 					sketch->Add(new_object, NULL);
+				}
+				break;
+			case AreaType:
+				{
+					AddLinesOrArcs(sketch, ((HArea*)object)->m_area);
 				}
 				break;
 			default:
@@ -882,7 +924,22 @@ static void AddObjectToArea(HeeksObj* object)
 		}
 		break;
 	case CircleType:
-		// to do - add a couple of arcs
+		{
+			// add a couple of arcs
+			double c[3];
+			if(object->GetCentrePoint(c))
+			{
+				MakeNewCurveIfNecessary(object);
+				Point pc(c[0], c[1]);
+				double radius = ((HCircle*)object)->GetCircle().Radius();
+				Point p0 = pc + Point(radius, 0.0);
+				Point p1 = pc + Point(-radius, 0.0);
+				curve_to_add_to->append(p0);
+				curve_to_add_to->append(CVertex(1, p1, pc));
+				curve_to_add_to->append(CVertex(1, p0, pc));
+			}
+		}
+
 		break;
 	case EllipseType:
 		// to do - add some arcs
