@@ -819,45 +819,50 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 
 		if ( status == IFSelect_RetDone )
 		{
-			Reader.TransferRoots();
-			TopoDS_Shape shape = Reader.OneShape();
-
-			int shapes_added_for_sewing = 0;
-			BRepOffsetAPI_Sewing face_sewing (0.001);
-			for (TopExp_Explorer explorer(shape, TopAbs_FACE); explorer.More(); explorer.Next())
+			int num = Reader.NbRootsForTransfer();
+			for(int i = 1; i<=num; i++)
 			{
-				face_sewing.Add (explorer.Current());
-				shapes_added_for_sewing++;
-			}
+				Handle_Standard_Transient root = Reader.RootForTransfer(i);
+				Reader.TransferEntity(root);
+				TopoDS_Shape rShape = Reader.Shape(i);
 
-			bool sewed_shape_added = false;
-			try{
-			if(shapes_added_for_sewing > 0)
-			{
-				face_sewing.Perform ();
-
-				if(!face_sewing.SewedShape().IsNull())
+				int shapes_added_for_sewing = 0;
+				BRepOffsetAPI_Sewing face_sewing (0.001);
+				for (TopExp_Explorer explorer(rShape, TopAbs_FACE); explorer.More(); explorer.Next())
 				{
-					BRepBuilderAPI_MakeSolid solid_maker;
-					solid_maker.Add(TopoDS::Shell(face_sewing.SewedShape()));
-					TopoDS_Shape solid = solid_maker.Solid();
-
-					if (GetVolume(solid) < 0.0) solid.Reverse();
-
-					HeeksObj* new_object = MakeObject(solid, _("sewed IGES solid"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191), 1.0f);
-					add_to->Add(new_object, NULL);
-					sewed_shape_added = true;
+					face_sewing.Add (explorer.Current());
+					shapes_added_for_sewing++;
 				}
-			}
-			}
-			catch(...)
-			{
-			}
-			if(!sewed_shape_added)
-			{
-				// add the original
-				HeeksObj* new_object = MakeObject(shape, _("IGES shape"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191), 1.0f);
-				add_to->Add(new_object, NULL);
+
+				bool sewed_shape_added = false;
+				try{
+					if(shapes_added_for_sewing > 0)
+					{
+						face_sewing.Perform ();
+
+						if(!face_sewing.SewedShape().IsNull())
+						{
+							BRepBuilderAPI_MakeSolid solid_maker;
+							solid_maker.Add(TopoDS::Shell(face_sewing.SewedShape()));
+							TopoDS_Shape solid = solid_maker.Solid();
+
+							if (GetVolume(solid) < 0.0) solid.Reverse();
+
+							HeeksObj* new_object = MakeObject(solid, _("sewed IGES solid"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191), 1.0f);
+							add_to->Add(new_object, NULL);
+							sewed_shape_added = true;
+						}
+					}
+				}
+				catch(...)
+				{
+				}
+				if(!sewed_shape_added)
+				{
+					// add the original
+					HeeksObj* new_object = MakeObject(rShape, _("IGES shape"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191), 1.0f);
+					add_to->Add(new_object, NULL);
+				}
 			}
 
 		}
