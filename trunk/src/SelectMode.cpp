@@ -160,7 +160,15 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 						from[0] = wxGetApp().grip_from.X();
 						from[1] = wxGetApp().grip_from.Y();
 						from[2] = wxGetApp().grip_from.Z();
-						wxGetApp().drag_gripper->OnGripperGrabbed(wxGetApp().m_marked_list->list(), true, from);
+
+						std::list<HeeksObj*> selected_objects;
+						for(std::list<HeeksObj*>::iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
+						{
+							HeeksObj* object = *It;
+							if(object->CanBeDragged())selected_objects.push_back(object);
+						}
+
+						wxGetApp().drag_gripper->OnGripperGrabbed(selected_objects, true, from);
 						wxGetApp().grip_from = gp_Pnt(from[0], from[1], from[2]);
 						wxGetApp().m_current_viewport->EndDrawFront();
 						return;
@@ -392,7 +400,11 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 
 					if(	wxGetApp().m_marked_list->list().size() > 0)
 					{
-						selected_objects_dragged = wxGetApp().m_marked_list->list();
+						for(std::list<HeeksObj*>::iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
+						{
+							HeeksObj* object = *It;
+							if(object->CanBeDragged())selected_objects_dragged.push_back(object);
+						}
 					}
 					else
 					{
@@ -404,11 +416,14 @@ void CSelectMode::OnMouse( wxMouseEvent& event )
 							HeeksObj* closest_object = NULL;
 							while(object)
 							{
-								double depth = marked_object.GetDepth();
-								if(closest_object == NULL || depth<min_depth)
+								if(object->CanBeDragged())
 								{
-									min_depth = depth;
-									closest_object = object;
+									double depth = marked_object.GetDepth();
+									if(closest_object == NULL || depth<min_depth)
+									{
+										min_depth = depth;
+										closest_object = object;
+									}
 								}
 								object = marked_object.Increment();
 							}
