@@ -182,6 +182,7 @@ public:
 	virtual void OnAdd(){}
 	virtual void OnRemove();
 	virtual bool CanBeRemoved(){return true;}
+	virtual bool CanBeDragged(){return true;}
 	virtual bool CanBeCopied(){return true;}
 	virtual HeeksObj* GetFirstChild(){return NULL;}
 	virtual HeeksObj* GetNextChild(){return NULL;}
