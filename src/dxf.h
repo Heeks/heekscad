@@ -99,6 +99,7 @@ private:
 	char m_str[1024];
 	char m_unused_line[1024];
 	eDxfUnits_t m_eUnits;
+	bool m_measurement_inch;
 	char m_layer_name[1024];
 	char m_section_name[1024];
 	char m_block_name[1024];
@@ -138,7 +139,7 @@ public:
 	bool Failed(){return m_fail;}
 	void DoRead(const bool ignore_errors = false); // this reads the file and calls the following functions
 
-	double mm( const double & value ) const;
+	double mm( double value ) const;
 
 	bool IgnoreErrors() const { return(m_ignore_errors); }
 
