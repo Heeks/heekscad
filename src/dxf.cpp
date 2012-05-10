@@ -167,6 +167,7 @@ CDxfRead::CDxfRead(const char* filepath)
 	memset( m_unused_line, '\0', sizeof(m_unused_line) );
 	m_fail = false;
 	m_eUnits = eMillimeters;
+	m_measurement_inch = false;
 	strcpy(m_layer_name, "0");	// Default layer name
 	m_ignore_errors = true;
 
@@ -185,8 +186,13 @@ CDxfRead::~CDxfRead()
 	delete m_ifs;
 }
 
-double CDxfRead::mm( const double & value ) const
+double CDxfRead::mm( double value ) const
 {
+	if(m_measurement_inch)
+	{
+		value *= 0.0393700787401575;
+	}
+
 	switch(m_eUnits)
 	{
 		case eUnspecified:	return(value * 1.0);	// We don't know any better.
@@ -1404,6 +1410,17 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 	{
 		if (!strcmp( m_str, "$INSUNITS" )){
 			if (!ReadUnits())return;
+			continue;
+		} // End if - then
+
+		if (!strcmp( m_str, "$MEASUREMENT" )){
+			get_line();
+			get_line();
+			int n = 1;
+			if(sscanf(m_str, "%d", &n) == 1)
+			{
+				if(n == 0)m_measurement_inch = true;
+			}
 			continue;
 		} // End if - then
 
