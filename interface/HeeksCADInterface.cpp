@@ -1611,6 +1611,7 @@ double CHeeksCADInterface::GetViewUnits()
 void CHeeksCADInterface::SetViewUnits(double units, bool write_to_config)
 {
 	wxGetApp().m_view_units = units;
+	wxGetApp().OnChangeViewUnits(wxGetApp().m_view_units);
 	if(write_to_config)
 	{
 		HeeksConfig config;

@@ -67,6 +67,7 @@ public:
 	bool IsList(){return true;}
 	void GetProperties(std::list<Property *> *list);
 	void ReloadPointers();
+	void OnChangeViewUnits(const double units);
 
 	HeeksObj *Find( const int type, const unsigned int id );	// Search for an object by type/id from this or any child objects.
 	/* virtual */ void SetIdPreservation(const bool flag);

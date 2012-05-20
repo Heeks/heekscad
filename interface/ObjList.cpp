@@ -516,3 +516,12 @@ bool ObjList::operator==( const ObjList & rhs ) const
 	return(sorted_lhs == sorted_rhs);
 }
 
+void ObjList::OnChangeViewUnits(const double units)
+{
+	for (std::list<HeeksObj*>::iterator itObject = m_objects.begin(); itObject != m_objects.end(); itObject++)
+	{
+		(*itObject)->OnChangeViewUnits(units);
+	}
+
+	HeeksObj::OnChangeViewUnits(units);
+}
