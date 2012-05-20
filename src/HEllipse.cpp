@@ -95,6 +95,7 @@ void HEllipse::GetSegments(void(*callbackfunc)(const double *p), double pixels_p
 		segments = 1000;
 
     double theta = d_angle / (double)segments;
+	while(theta>1.0){segments*=2;theta = d_angle / (double)segments;}
     double tangetial_factor = tan(theta);
     double radial_factor = 1 - cos(theta);
 

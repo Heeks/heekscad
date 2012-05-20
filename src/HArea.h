@@ -8,6 +8,13 @@
 #include "Area.h"
 
 class HArea: public HeeksObj{
+	static void WriteVertex(const CVertex& vertex, TiXmlNode *root);
+	static void WriteCurve(const CCurve& curve, TiXmlNode *root);
+	static void WriteArea(const CArea& area, TiXmlNode *root);
+	static void ReadVertex(CVertex& vertex, TiXmlElement *root);
+	static void ReadCurve(CCurve& curve, TiXmlElement *root);
+	static void ReadArea(CArea& area, TiXmlElement *root);
+
 public:
 	CArea m_area;
 	CCurve* m_selected_curve;

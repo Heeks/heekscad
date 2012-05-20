@@ -91,6 +91,7 @@
 #include "OrientationModifier.h"
 #include "MenuSeparator.h"
 #include "HGear.h"
+#include "HArea.h"
 
 using namespace std;
 
@@ -877,6 +878,7 @@ void HeeksCADapp::InitializeXMLFunctions()
 #endif
 		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "OrientationModifier", COrientationModifier::ReadFromXMLElement ) );
 		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Gear", HGear::ReadFromXMLElement ) );
+		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Area", HArea::ReadFromXMLElement ) );
 	}
 }
 
@@ -3034,6 +3036,7 @@ void on_save_constraints(bool onoff, HeeksObj* object)
 static void on_set_units(int value, HeeksObj* object)
 {
 	wxGetApp().m_view_units = (value == 0) ? 1.0:25.4;
+	wxGetApp().OnChangeViewUnits(wxGetApp().m_view_units);
 
 	// Notify any registered handler routines.
 	for (HeeksCADapp::UnitsChangedHandlers_t::iterator itHandler = wxGetApp().m_units_changed_handlers.begin();
@@ -3625,6 +3628,7 @@ void HeeksCADapp::get_2d_arc_segments(double xs, double ys, double xe, double ye
 	int segments = (int)(pixels_per_mm * radius * fabs(d_angle) / 6.28318530717958 + 1);
 
     double theta = d_angle / (double)segments;
+	while(theta>1.0){segments*=2;theta = d_angle / (double)segments;}
     double tangetial_factor = tan(theta);
     double radial_factor = 1 - cos(theta);
 

@@ -298,27 +298,99 @@ bool HArea::Stretch(const double *p, const double* shift, void* data){
 	return false;
 }
 
+// static
+void HArea::WriteVertex(const CVertex& vertex, TiXmlNode *root)
+{
+	TiXmlElement* element = new TiXmlElement( "vertex" );
+	root->LinkEndChild( element );  
+
+	element->SetAttribute("type", vertex.m_type);
+	element->SetDoubleAttribute("x", vertex.m_p.x);
+	element->SetDoubleAttribute("y", vertex.m_p.y);
+	if(vertex.m_type != 0)
+	{
+		element->SetDoubleAttribute("i", vertex.m_c.x);
+		element->SetDoubleAttribute("j", vertex.m_c.y);
+	}
+}
+
+// static
+void HArea::ReadVertex(CVertex& vertex, TiXmlElement *root)
+{
+	root->Attribute("type", &vertex.m_type);
+	root->Attribute("x", &vertex.m_p.x);
+	root->Attribute("y", &vertex.m_p.y);
+	if(vertex.m_type != 0)
+	{
+		root->Attribute("i", &vertex.m_c.x);
+		root->Attribute("j", &vertex.m_c.y);
+	}
+}
+
+// static
+void HArea::WriteCurve(const CCurve& curve, TiXmlNode *root)
+{
+	TiXmlElement* element = new TiXmlElement( "curve" );
+	root->LinkEndChild( element );  
+	for(std::list<CVertex>::const_iterator It = curve.m_vertices.begin(); It != curve.m_vertices.end(); It++)
+	{
+		const CVertex& vertex = *It;
+		WriteVertex(vertex, element);
+	}
+}
+
+// static
+void HArea::ReadCurve(CCurve& curve, TiXmlElement *root)
+{
+	for(TiXmlElement *pElem = root->FirstChildElement(); pElem;	pElem = pElem->NextSiblingElement())
+	{
+		CVertex vertex;
+		ReadVertex(vertex, pElem);
+		curve.m_vertices.push_back(vertex);
+	}
+}
+
+// static
+void HArea::WriteArea(const CArea& area, TiXmlNode *root)
+{
+	TiXmlElement* element = new TiXmlElement( "area" );
+	root->LinkEndChild( element );  
+	for(std::list<CCurve>::const_iterator It = area.m_curves.begin(); It != area.m_curves.end(); It++)
+	{
+		const CCurve& curve = *It;
+		WriteCurve(curve, element);
+	}
+}
+
+// static
+void HArea::ReadArea(CArea& area, TiXmlElement *root)
+{
+	for(TiXmlElement *pElem = root->FirstChildElement(); pElem;	pElem = pElem->NextSiblingElement())
+	{
+		CCurve curve;
+		ReadCurve(curve, pElem);
+		area.m_curves.push_back(curve);
+	}
+}
+
 void HArea::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement *element = new TiXmlElement( "Area" );
 	root->LinkEndChild( element );
-#if 0 // to do
-	element->SetAttribute("col", color.COLORREF_color());
-	gp_Dir D = m_axis.Direction();
-	element->SetDoubleAttribute("ax", D.X());
-	element->SetDoubleAttribute("ay", D.Y());
-	element->SetDoubleAttribute("az", D.Z());
-#endif
+	WriteArea(m_area, element);
+
 	WriteBaseXML(element);
 }
 
 // static member function
-HeeksObj* HArea::ReadFromXMLElement(TiXmlElement* pElem)
+HeeksObj* HArea::ReadFromXMLElement(TiXmlElement* root)
 {
-	// to do, read area
+	// read area
 	CArea area;
+	ReadArea(area, root->FirstChildElement());
+
 	HArea* new_object = new HArea(area);
-	new_object->ReadBaseXML(pElem);
+	new_object->ReadBaseXML(root);
 
 	return new_object;
 }

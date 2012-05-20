@@ -229,4 +229,6 @@ public:
 	virtual bool UsesCustomSubNames(){return false;}
 protected:
 	virtual void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
+public:
+	virtual void OnChangeViewUnits(const double units){}
 };
