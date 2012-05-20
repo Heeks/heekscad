@@ -227,8 +227,10 @@ void HArc::GetSegments(void(*callbackfunc)(const double *p), double pixels_per_m
 	double radius = m_radius;
 	double d_angle = end_angle - start_angle;
 	int segments = (int)(fabs(pixels_per_mm * radius * d_angle / 6.28318530717958 + 1));
+	if(segments<3)segments = 3;
 
     double theta = d_angle / (double)segments;
+	while(theta>1.0){segments*=2;theta = d_angle / (double)segments;}
     double tangetial_factor = tan(theta);
     double radial_factor = 1 - cos(theta);
 
