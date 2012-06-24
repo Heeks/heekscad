@@ -3826,6 +3826,8 @@ void HeeksCADapp::OnNewOrOpen(bool open, int res)
 			(*fnOnNewOrOpen)(open ? 1:0, res);
 		}
 	}
+
+	ObserversOnChange(&m_objects, NULL, NULL);
 }
 
 void HeeksCADapp::OnBeforeNewOrOpen(bool open, int res)
