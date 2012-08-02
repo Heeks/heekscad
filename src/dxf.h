@@ -121,7 +121,7 @@ private:
 	bool ReadLwPolyLine();
 	bool ReadPolyLine();
 	bool ReadVertex(double *pVertex, bool *bulge_found, double *bulge);
-	void OnReadArc(double start_angle, double end_angle, double radius, const double* c, double z_extrusion_dir);
+	void OnReadArc(double start_angle, double end_angle, double radius, const double* c, double z_extrusion_dir, bool hidden);
 	void OnReadCircle(const double* c, double radius);
     void OnReadEllipse(const double* c, const double* m, double ratio, double start_angle, double end_angle);
 
@@ -143,10 +143,10 @@ public:
 
 	bool IgnoreErrors() const { return(m_ignore_errors); }
 
-	virtual void OnReadLine(const double* s, const double* e){}
+	virtual void OnReadLine(const double* s, const double* e, bool hidden){}
 	virtual void OnReadPoint(const double* s){}
 	virtual void OnReadText(const double* point, const double height, const char* text){}
-	virtual void OnReadArc(const double* s, const double* e, const double* c, bool dir){}
+	virtual void OnReadArc(const double* s, const double* e, const double* c, bool dir, bool hidden){}
 	virtual void OnReadCircle(const double* s, const double* c, bool dir){}
 	virtual void OnReadEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir){}
 	virtual void OnReadSpline(struct SplineData& sd){}
