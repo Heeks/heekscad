@@ -35,9 +35,11 @@ HeeksColor *HeeksDxfRead::ActiveColorPtr(Aci_t & aci)
     return(&color);
 }
 
-void HeeksDxfRead::OnReadLine(const double* s, const double* e)
+HeeksColor hidden_color(128, 128, 128);
+
+void HeeksDxfRead::OnReadLine(const double* s, const double* e, bool hidden)
 {
-    HLine* new_object = new HLine(make_point(s), make_point(e), ActiveColorPtr(m_aci));
+	HLine* new_object = new HLine(make_point(s), make_point(e), hidden ? (&hidden_color) : ActiveColorPtr(m_aci));
     AddObject(new_object);
 }
 
@@ -47,7 +49,7 @@ void HeeksDxfRead::OnReadPoint(const double* s)
     AddObject(new_object);
 }
 
-void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, bool dir)
+void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, bool dir, bool hidden)
 {
 	gp_Pnt p0 = make_point(s);
 	gp_Pnt p1 = make_point(e);
@@ -55,7 +57,7 @@ void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, 
 	if(!dir)up = -up;
 	gp_Pnt pc = make_point(c);
 	gp_Circ circle(gp_Ax2(pc, up), p1.Distance(pc));
-	HArc* new_object = new HArc(p0, p1, circle, ActiveColorPtr(m_aci));
+	HArc* new_object = new HArc(p0, p1, circle, hidden ? (&hidden_color) : ActiveColorPtr(m_aci));
 	AddObject(new_object);
 }
 
