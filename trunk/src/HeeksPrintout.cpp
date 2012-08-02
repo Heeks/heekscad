@@ -98,7 +98,9 @@ void HeeksPrintout::SetUnitsFactor()
 
 void HeeksPrintout::SetColor(const HeeksColor &c)
 {
-	wxPen pen(c.COLORREF_color(), (int)(m_scale + 0.99));
+	HeeksColor col = c;
+	if(c == HeeksColor(255, 255, 255))col = HeeksColor(0, 0, 0);
+	wxPen pen(col.COLORREF_color(), (int)(m_scale + 0.99));
     wxDC *dc = GetDC();
     dc->SetPen(pen);
 }
