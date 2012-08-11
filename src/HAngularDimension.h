@@ -5,7 +5,8 @@
 #pragma once
 
 #ifdef MULTIPLE_OWNERS
-#include "ConstrainedObject.h"
+#include "../interface/ObjList.h"
+class HPoint;
 #include "../interface/HeeksColor.h"
 #else
 #include "HPoint.h"
@@ -19,7 +20,7 @@ enum AngularDimensionTextMode
 };
 
 #ifdef MULTIPLE_OWNERS
-class HAngularDimension: public ConstrainedObject{
+class HAngularDimension: public ObjList{
 #else
 class HAngularDimension: public HeeksObj{
 #endif

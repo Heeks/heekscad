@@ -32,7 +32,7 @@ HCircle::~HCircle(){
 
 const HCircle& HCircle::operator=(const HCircle &c){
 #ifdef MULTIPLE_OWNERS
-	ConstrainedObject::operator=(c);
+	ObjList::operator=(c);
 #else
 	HeeksObj::operator=(c);
 #endif

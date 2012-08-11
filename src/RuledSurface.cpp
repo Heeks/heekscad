@@ -423,7 +423,7 @@ void CreateExtrusions(const std::list<TopoDS_Shape> &faces_or_wires, std::list<T
 			if(fabs(taper_angle) > 0.0000001)
 			{
 				// make an offset face
-				double distance = tan(taper_angle * Pi/180) * extrude_vector.Magnitude();
+				double distance = tan(taper_angle * M_PI/180) * extrude_vector.Magnitude();
 				bool wire = (face_or_wire.ShapeType() == TopAbs_WIRE);
 				BRepOffsetAPI_MakeOffset offset;
 				if(wire)
@@ -481,7 +481,7 @@ void CreateRevolutions(const std::list<TopoDS_Shape> &faces_or_wires, std::list<
 			}
 			else
 			{
-				BRepPrimAPI_MakeRevol generator( face_or_wire, axis, angle * Pi/180 );
+				BRepPrimAPI_MakeRevol generator( face_or_wire, axis, angle * M_PI/180 );
 				generator.Build();
 				new_shapes.push_back(generator.Shape());
 			}

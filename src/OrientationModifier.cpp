@@ -478,14 +478,14 @@ gp_Pnt & COrientationModifier::Transform(gp_Trsf existing_transformation, const 
 				{
 				    for (int i=0; i<m_params.m_number_of_rotations; i++)
 				    {
-				        angle += (PI / 2.0);
+				        angle += (M_PI / 2.0);
 				    }
 				}
 				else
 				{
 				    for (int i=m_params.m_number_of_rotations; i<0; i++)
 				    {
-				        angle -= (PI / 2.0);
+				        angle -= (M_PI / 2.0);
 				    }
 				}
 

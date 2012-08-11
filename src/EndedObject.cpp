@@ -42,7 +42,7 @@ EndedObject::~EndedObject(){
 
 const EndedObject& EndedObject::operator=(const EndedObject &b){
 #ifdef MULTIPLE_OWNERS
-	ConstrainedObject::operator=(b);
+	ObjList::operator=(b);
 	std::list<HeeksObj*>::iterator it = m_objects.begin();
 	A = (HPoint*)(*it++);
 	B = (HPoint*)(*it);
@@ -59,7 +59,7 @@ const EndedObject& EndedObject::operator=(const EndedObject &b){
 HeeksObj* EndedObject::MakeACopyWithID()
 {
 #ifdef MULTIPLE_OWNERS
-	EndedObject* pnew = (EndedObject*)ConstrainedObject::MakeACopyWithID();
+	EndedObject* pnew = (EndedObject*)ObjList::MakeACopyWithID();
 	pnew->A = (HPoint*)pnew->GetFirstChild();
 	pnew->B = (HPoint*)pnew->GetNextChild();
 #else

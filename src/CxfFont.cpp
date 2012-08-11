@@ -116,7 +116,7 @@ std::list<gp_Pnt> VectorFont::Glyph::GlyphArc::Interpolate(const gp_Pnt & locati
 
 	if (start_angle > end_angle)
 	{
-		end_angle += (2 * PI);
+		end_angle += (2 * M_PI);
 	}
 
 	double increment = (end_angle - start_angle) / number_of_points;

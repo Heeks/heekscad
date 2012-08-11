@@ -24,7 +24,7 @@ HEllipse::HEllipse(const gp_Elips &e, const HeeksColor* col):color(*col){
 	Add(C,NULL);
 
 	m_start = 0;
-	m_end = 2*Pi;
+	m_end = 2*M_PI;
 	SetEllipse(e);
 }
 
@@ -43,7 +43,7 @@ HEllipse::~HEllipse(){
 
 const HEllipse& HEllipse::operator=(const HEllipse &e){
 #ifdef MULTIPLE_OWNERS
-	ConstrainedObject::operator=(e);
+	ObjList::operator=(e);
 #else
 	HeeksObj::operator =(e);
 #endif
@@ -85,12 +85,12 @@ void HEllipse::GetSegments(void(*callbackfunc)(const double *p), double pixels_p
 	double d_angle = end_angle - start_angle;
 
 	if(fabs(d_angle) < wxGetApp().m_geom_tol)
-		d_angle = 2*Pi;
+		d_angle = 2*M_PI;
 
 	if(d_angle < 0)
-		d_angle += 2*Pi;
+		d_angle += 2*M_PI;
 
-	int segments = (int)(fabs(pixels_per_mm * radius * d_angle / (2*Pi) + 1));
+	int segments = (int)(fabs(pixels_per_mm * radius * d_angle / (2*M_PI) + 1));
 	if(segments > 1000)
 		segments = 1000;
 
@@ -308,7 +308,7 @@ bool HEllipse::Stretch(const double *p, const double* shift, void* data){
 
 	//TODO:
         // 1. When the major and minor axis swap, the unused handle switches sides.
-	// 2. The handle switches to the other radius if you go past Pi/4
+	// 2. The handle switches to the other radius if you go past M_PI/4
 
 	gp_Pnt vp = make_point(p);
 	gp_Pnt zp(0,0,0);
@@ -353,9 +353,9 @@ bool HEllipse::Stretch(const double *p, const double* shift, void* data){
 			{
 				m_majr = min_r;
 				m_minr = nradius;
-				SetRotation(GetRotation()-Pi/2);
-				m_start += Pi/2;
-				m_end += Pi/2;
+				SetRotation(GetRotation()-M_PI/2);
+				m_start += M_PI/2;
+				m_end += M_PI/2;
 			}
 		}
 		else
@@ -369,9 +369,9 @@ bool HEllipse::Stretch(const double *p, const double* shift, void* data){
 			{
 				m_minr = maj_r;
 				m_majr = nradius;
-				SetRotation(GetRotation()+Pi/2);
-				m_start-=Pi/2;
-				m_end-=Pi/2;
+				SetRotation(GetRotation()+M_PI/2);
+				m_start-=M_PI/2;
+				m_end-=M_PI/2;
 			}
 		}
 	}
@@ -411,7 +411,7 @@ HeeksObj* HEllipse::ReadFromXMLElement(TiXmlElement* pElem)
 	double min = 0.0;
 	double rot = 0;
 	double start=0;
-	double end=2*Pi;
+	double end=2*M_PI;
 	HeeksColor c;
 
 	// get the attributes
@@ -452,7 +452,7 @@ void HEllipse::ReloadPointers()
 {
 	C = (HPoint*)GetFirstChild();
 #ifdef MULTIPLE_OWNERS
-	ConstrainedObject::ReloadPointers();
+	ObjList::ReloadPointers();
 #else
 	HeeksObj::ReloadPointers();
 #endif
@@ -544,7 +544,7 @@ void HEllipse::LoadFromDoubles()
 		double t = m_majr;
 		m_majr = m_minr;
 		m_minr = t;
-		SetRotation(m_rot+PI/2);
+		SetRotation(m_rot+M_PI/2);
 	}
 	else
 		SetRotation(m_rot);

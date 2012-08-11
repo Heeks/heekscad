@@ -330,7 +330,7 @@ void RegularShapesDrawing::CalculatePolygon(const gp_Pnt& p0, const gp_Pnt& p1, 
     {
         case InscribedMode:
             //inscribed circle
-            sideAngle =2.0 * Pi / m_number_of_side_for_polygon;
+            sideAngle =2.0 * M_PI / m_number_of_side_for_polygon;
             radius = radius/cos((sideAngle/2));
             for(int i = 0; i<m_number_of_side_for_polygon; i++)
             {
@@ -349,8 +349,8 @@ void RegularShapesDrawing::CalculatePolygon(const gp_Pnt& p0, const gp_Pnt& p1, 
             {
                 gp_Dir xdir(make_vector(p0, p1));
                 gp_Dir ydir = zdir ^ xdir;
-                angle0 = 2.0 * Pi / m_number_of_side_for_polygon * i;
-                angle1 = 2.0 * Pi / m_number_of_side_for_polygon * (i+1);
+                angle0 = 2.0 * M_PI / m_number_of_side_for_polygon * i;
+                angle1 = 2.0 * M_PI / m_number_of_side_for_polygon * (i+1);
                 lines[i]->A->m_p = p0.XYZ() + xdir.XYZ() * ( cos(angle0) * radius ) + ydir.XYZ() * ( sin(angle0) * radius );
                 if(i == m_number_of_side_for_polygon - 1)lines[i]->B->m_p = lines[0]->A->m_p;
                 lines[i]->B->m_p = p0.XYZ() + xdir.XYZ() * ( cos(angle1) * radius ) + ydir .XYZ()* ( sin(angle1) * radius );

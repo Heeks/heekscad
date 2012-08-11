@@ -5,8 +5,9 @@
 #pragma once
 
 #ifdef MULTIPLE_OWNERS
-#include "ConstrainedObject.h"
-class HCircle: public ConstrainedObject{
+#include "../interface/ObjList.h"
+class HPoint;
+class HCircle: public ObjList{
 #else
 #include "HPoint.h"
 class HCircle: public HeeksObj{

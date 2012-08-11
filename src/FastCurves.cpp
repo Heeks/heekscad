@@ -102,7 +102,7 @@ FastArc::FastArc(gp_Pnt A,gp_Pnt B, gp_Pnt C, bool cw, gp_Circ circ)
 	a1 = atan2(A.Y()-C.Y(), A.X()-C.X());
 	a2 = atan2(B.Y()-C.Y(), B.X()-C.X());
 	if(a2<a1)
-		a2+=2*Pi;
+		a2+=2*M_PI;
 
 	da = a2 - a1;
 	rad = C.Distance(A);
@@ -172,8 +172,8 @@ double FastArc::GetU(double x, double y)
 	double ang = atan2(y-C.Y(),x-C.X());
 
 	if(ang < a1-TOLERANCE)
-		ang += 2*Pi;
-		double u =  fmod((a2-ang)/da,2*Pi);
+		ang += 2*M_PI;
+		double u =  fmod((a2-ang)/da,2*M_PI);
 	if(u!=u)
 	{
 		int x=0;

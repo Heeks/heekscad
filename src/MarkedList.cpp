@@ -14,7 +14,6 @@
 #include "GraphicsCanvas.h"
 #include "HeeksFrame.h"
 #include "ConversionTools.h"
-#include "ConstraintTools.h"
 #include "SketchTools.h"
 #include "SolidTools.h"
 #include "MenuSeparator.h"
@@ -345,9 +344,6 @@ void MarkedList::GetTools(MarkedObject* clicked_object, std::list<Tool*>& t_list
 	}
 
 	GetConversionMenuTools(&t_list);
-#ifdef MULTIPLE_OWNERS
-	GetConstraintMenuTools(&t_list);
-#endif
 	GetSketchMenuTools(&t_list);
 	GetSolidMenuTools(&t_list);
 

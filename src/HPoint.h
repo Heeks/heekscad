@@ -7,9 +7,9 @@
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"
 #ifdef MULTIPLE_OWNERS
-#include "ConstrainedObject.h"
+#include "../interface/ObjList.h"
 
-class HPoint: public ConstrainedObject{
+class HPoint: public ObjList{
 #else
 class HPoint: public HeeksObj{
 #endif

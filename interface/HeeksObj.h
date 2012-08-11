@@ -27,7 +27,6 @@ class ObjectCanvas;
 #define HEEKSOBJ_OWNER Owner()
 #else
 #define HEEKSOBJ_OWNER m_owner
-#define OLDLINES
 #endif
 
 // NOTE: If adding to this enumeration, please also add the verbose description to the HeeksCADType() routine

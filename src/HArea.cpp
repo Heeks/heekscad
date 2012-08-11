@@ -16,7 +16,6 @@
 #include "../interface/Tool.h"
 #include "Gripper.h"
 #include "Sketch.h"
-#include "SolveSketch.h"
 #include "Drawing.h"
 #include "DigitizeMode.h"
 #include "../interface/MarkedObject.h"

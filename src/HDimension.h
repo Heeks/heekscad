@@ -11,14 +11,10 @@ enum DimensionMode
 {
 	TwoPointsDimensionMode,
 	TwoPointsXYOnlyDimensionMode,
+	TwoPointsXOnlyDimensionMode,
+	TwoPointsYOnlyDimensionMode,
+	TwoPointsZOnlyDimensionMode,
 	OrthogonalDimensionMode,
-};
-
-enum DimensionTextMode
-{
-	PythagoreanDimensionTextMode,
-	HorizontalDimensionTextMode,
-	VerticalDimensionTextMode
 };
 
 enum DimensionUnits
@@ -40,20 +36,15 @@ public:
 	gp_Trsf m_trsf; // draw matrix at time of creation
 	HPoint* m_p2;
 	DimensionMode m_mode;
-	DimensionTextMode m_text_mode;
 	DimensionUnits m_units;
 	double m_scale; // to do - text, gaps, and arrow heads will be scaled by this factor
 	static bool DrawFlat;
 
-	HDimension(const gp_Trsf &trsf, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, DimensionMode mode, DimensionTextMode text_mode, DimensionUnits units, const HeeksColor* col);
+	HDimension(const gp_Trsf &trsf, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, DimensionMode mode, DimensionUnits units, const HeeksColor* col);
 	HDimension(const HDimension &b);
 	~HDimension(void);
 
 	const HDimension& operator=(const HDimension &b);
-
-#ifdef MULTIPLE_OWNERS
-	bool IsConstrained();
-#endif
 
 	// HeeksObj's virtual functions
 	int GetType()const{return DimensionType;}
