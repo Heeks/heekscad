@@ -19,7 +19,6 @@ DimensionDrawing::DimensionDrawing(void)
 {
 	temp_object = NULL;
 	m_mode = TwoPointsDimensionMode;
-	m_text_mode = PythagoreanDimensionTextMode;
 }
 
 DimensionDrawing::~DimensionDrawing(void)
@@ -40,7 +39,7 @@ bool DimensionDrawing::calculate_item(DigitizedPoint &end)
 
 	// make sure dimension exists
 	if(!temp_object){
-		temp_object = new HDimension(mat, gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), m_mode, m_text_mode, DimensionUnitsGlobal, &(wxGetApp().current_color));
+		temp_object = new HDimension(mat, gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), m_mode, DimensionUnitsGlobal, &(wxGetApp().current_color));
 		if(temp_object)temp_object_in_list.push_back(temp_object);
 	}
 
@@ -69,7 +68,6 @@ bool DimensionDrawing::calculate_item(DigitizedPoint &end)
 	((HDimension*)temp_object)->B->m_p = p1;
 	((HDimension*)temp_object)->m_p2->m_p = p2;
 	((HDimension*)temp_object)->m_mode = m_mode;
-	((HDimension*)temp_object)->m_text_mode = m_text_mode;
 
 	return true;
 }
@@ -89,12 +87,6 @@ static void on_set_mode(int value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
-static void on_set_text_mode(int value, HeeksObj* object)
-{
-	DimensionDrawing_for_GetProperties->m_text_mode = (DimensionTextMode)value;
-	wxGetApp().Repaint();
-}
-
 void DimensionDrawing::StartOnStep3(HDimension* object)
 {
 	wxGetApp().SetInputMode(this);
@@ -105,7 +97,6 @@ void DimensionDrawing::StartOnStep3(HDimension* object)
 	current_view_stuff->start_pos.m_point = object->B->m_p;
 
 	m_mode = object->m_mode;
-	m_text_mode = object->m_text_mode;
 }
 
 void DimensionDrawing::GetProperties(std::list<Property *> *list){
@@ -113,16 +104,12 @@ void DimensionDrawing::GetProperties(std::list<Property *> *list){
 	std::list< wxString > choices;
 	choices.push_back ( wxString ( _("between two points") ) );
 	choices.push_back ( wxString ( _("between two points, XY only") ) );
+	choices.push_back ( wxString ( _("between two points, X only") ) );
+	choices.push_back ( wxString ( _("between two points, Y only") ) );
+	choices.push_back ( wxString ( _("between two points, Z only") ) );
 	choices.push_back ( wxString ( _("orthogonal") ) );
 	DimensionDrawing_for_GetProperties = this;
 	list->push_back ( new PropertyChoice ( _("mode"),  choices, m_mode, NULL, on_set_mode ) );
-
-	choices.clear();
-	choices.push_back ( wxString ( _("pythagorean") ) );
-	choices.push_back ( wxString ( _("horizontal") ) );
-	choices.push_back ( wxString ( _("vertical") ) );
-	list->push_back ( new PropertyChoice ( _("text mode"),  choices, m_text_mode, NULL, on_set_text_mode ) );
-
 
 	Drawing::GetProperties(list);
 }

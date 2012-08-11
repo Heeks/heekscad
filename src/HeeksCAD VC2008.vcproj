@@ -778,30 +778,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\ConstrainedObject.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\ConstrainedObject.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Constraint.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Constraint.h"
-			>
-		</File>
-		<File
-			RelativePath=".\ConstraintTools.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\ConstraintTools.h"
-			>
-		</File>
-		<File
 			RelativePath="$(LIBAREA_PATH)\kurve\Construction.cpp"
 			>
 			<FileConfiguration
@@ -1028,42 +1004,6 @@
 		<File
 			RelativePath=".\EndedObject.h"
 			>
-		</File>
-		<File
-			RelativePath="..\sketchsolve\src\errorfuncs.cpp"
-			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\ExitMainLoop.cpp"
@@ -1666,14 +1606,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\OCCSolver.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\OCCSolver.h"
-			>
-		</File>
-		<File
 			RelativePath=".\odcombo.cpp"
 			>
 			<FileConfiguration
@@ -2070,10 +2002,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\sketchinterface.cpp"
-			>
-		</File>
-		<File
 			RelativePath=".\SketchTools.cpp"
 			>
 		</File>
@@ -2095,90 +2023,6 @@
 		</File>
 		<File
 			RelativePath=".\SolidTools.h"
-			>
-		</File>
-		<File
-			RelativePath="..\sketchsolve\src\solve.cpp"
-			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\sketchsolve\src\solve.h"
-			>
-		</File>
-		<File
-			RelativePath="..\sketchsolve\src\solveimpl.cpp"
-			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath=".\SolveSketch.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\SolveSketch.h"
 			>
 		</File>
 		<File

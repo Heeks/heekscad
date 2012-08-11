@@ -204,7 +204,7 @@ enum ClearancePointType{
 
 void get_clearance_points(gp_Pnt &p1_clearance, gp_Pnt &p2_clearance, double tooth_angle, double clearance)
 {
-	double incremental_angle = 0.5*Pi/gear_for_point->m_num_teeth - middle_phi_and_angle.angle;
+	double incremental_angle = 0.5*M_PI/gear_for_point->m_num_teeth - middle_phi_and_angle.angle;
 	double angle1 = tooth_angle - (inside_phi_and_angle.angle + incremental_angle);
 	double angle2 = tooth_angle + (inside_phi_and_angle.angle + incremental_angle);
 	gp_Pnt p1(cos(angle1) * inside_radius, sin(angle1) * inside_radius, 0);
@@ -336,10 +336,10 @@ void line_arc_line(double tooth_angle)
 
 void tooth(int i, bool want_start_point, bool make_closed_tooth_form)
 {
-	double tooth_angle = 2*Pi*i/gear_for_point->m_num_teeth;
-	double next_tooth_angle = 2*Pi*(i+1)/gear_for_point->m_num_teeth;
+	double tooth_angle = 2*M_PI*i/gear_for_point->m_num_teeth;
+	double next_tooth_angle = 2*M_PI*(i+1)/gear_for_point->m_num_teeth;
 	// incremental_angle - to space the middle point at a quarter of a cycle
-	double incremental_angle = 0.5*Pi/gear_for_point->m_num_teeth - middle_phi_and_angle.angle;
+	double incremental_angle = 0.5*M_PI/gear_for_point->m_num_teeth - middle_phi_and_angle.angle;
 	double angle1 = tooth_angle - (inside_phi_and_angle.angle + incremental_angle);
 	//double angle2 = tooth_angle + (inside_phi_and_angle.angle + incremental_angle);
 	double angle3 = tooth_angle + (outside_phi_and_angle.angle + incremental_angle);
@@ -387,7 +387,7 @@ void HGear::SetSegmentsVariables(void(*callbackfunc)(const double *p))const
 	callbackfunc_for_point = callbackfunc;
 	gear_for_point = this;
 	gp_Trsf rotation;
-	rotation.SetRotation(gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)), m_angle * Pi/180);
+	rotation.SetRotation(gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)), m_angle * M_PI/180);
 	mat_for_point = make_matrix(m_pos.Location(), m_pos.XDirection(), m_pos.YDirection());
 	mat_for_point = rotation.Multiplied(mat_for_point);
 	cone_sin_for_point = sin(m_cone_half_angle);
@@ -527,7 +527,7 @@ static void on_set_module(double value, HeeksObj* object){
 }
 
 static void on_set_pressure_angle(double value, HeeksObj* object){
-	((HGear*)object)->m_pressure_angle = value * Pi/180;
+	((HGear*)object)->m_pressure_angle = value * M_PI/180;
 }
 
 static void on_set_tip_relief(double value, HeeksObj* object){
@@ -539,7 +539,7 @@ static void on_set_depth(double value, HeeksObj* object){
 }
 
 static void on_set_cone_half_angle(double value, HeeksObj* object){
-	((HGear*)object)->m_cone_half_angle = value * Pi/180;
+	((HGear*)object)->m_cone_half_angle = value * M_PI/180;
 }
 
 static void on_set_angle(double value, HeeksObj* object){
@@ -548,10 +548,10 @@ static void on_set_angle(double value, HeeksObj* object){
 void HGear::GetProperties(std::list<Property *> *list){
 	list->push_back(new PropertyInt(_("num teeth"), m_num_teeth, this, on_set_num_teeth));
 	list->push_back(new PropertyDouble(_("module"), m_module, this, on_set_module));
-	list->push_back(new PropertyDouble(_("pressure angle"), m_pressure_angle * 180/Pi, this, on_set_pressure_angle));
+	list->push_back(new PropertyDouble(_("pressure angle"), m_pressure_angle * 180/M_PI, this, on_set_pressure_angle));
 	list->push_back(new PropertyDouble(_("tip relief"), m_tip_relief, this, on_set_tip_relief));
 	list->push_back(new PropertyDouble(_("depth"), m_depth, this, on_set_depth));
-	list->push_back(new PropertyDouble(_("cone half angle"), m_cone_half_angle * 180/Pi, this, on_set_cone_half_angle));
+	list->push_back(new PropertyDouble(_("cone half angle"), m_cone_half_angle * 180/M_PI, this, on_set_cone_half_angle));
 	list->push_back(new PropertyDouble(_("drawn angle"), m_angle, this, on_set_angle));
 
 	HeeksObj::GetProperties(list);

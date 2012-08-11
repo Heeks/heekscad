@@ -198,7 +198,7 @@ void TransformTools::Rotate(bool copy)
 		for(int i = 0; i<ncopies; i++)
 		{
 			gp_Trsf mat;
-			mat.SetRotation(gp_Ax1(line_Pos, axis_Dir), angle * Pi/180 * (i+1));
+			mat.SetRotation(gp_Ax1(line_Pos, axis_Dir), angle * M_PI/180 * (i+1));
 			gp_Trsf tmat;
 			tmat.SetTranslation(gp_Vec(axis_Dir.XYZ() * (axial_shift * ((double)(i+1)) / ncopies)));
 			mat = tmat * mat;
@@ -221,7 +221,7 @@ void TransformTools::Rotate(bool copy)
 	else
 	{
 		gp_Trsf mat;
-		mat.SetRotation(gp_Ax1(line_Pos, axis_Dir), angle * Pi/180);
+		mat.SetRotation(gp_Ax1(line_Pos, axis_Dir), angle * M_PI/180);
 		gp_Trsf tmat;
 		tmat.SetTranslation(gp_Vec(axis_Dir.XYZ() * axial_shift));
 		mat = tmat * mat;

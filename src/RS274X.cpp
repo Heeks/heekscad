@@ -1429,7 +1429,7 @@ void RS274X::DrawCentrelines()
 				double mirror[16];
 				gp_Ax1 mirror_axis = gp_Ax1(gp_Pnt(0,0,0), gp_Dir(1,0,0));
 				gp_Trsf rotation;
-				rotation.SetRotation( mirror_axis, PI );
+				rotation.SetRotation( mirror_axis, M_PI );
 				extract(rotation, mirror);
 				object->ModifyByMatrix(mirror);
 			}
@@ -1450,7 +1450,7 @@ void RS274X::DrawCentrelines()
 					double mirror[16];
 					gp_Ax1 mirror_axis = gp_Ax1(gp_Pnt(0,0,0), gp_Dir(1,0,0));
 					gp_Trsf rotation;
-					rotation.SetRotation( mirror_axis, PI );
+					rotation.SetRotation( mirror_axis, M_PI );
 					extract(rotation, mirror);
 					object->ModifyByMatrix(mirror);
 				}
@@ -1580,7 +1580,7 @@ int RS274X::FormNetworks()
 				double mirror[16];
 				gp_Ax1 mirror_axis = gp_Ax1(gp_Pnt(0,0,0), gp_Dir(1,0,0));
 				gp_Trsf rotation;
-				rotation.SetRotation( mirror_axis, PI );
+				rotation.SetRotation( mirror_axis, M_PI );
 				extract(rotation, mirror);
 				sketch->ModifyByMatrix(mirror);
 			}
@@ -1607,7 +1607,7 @@ int RS274X::FormNetworks()
 			double mirror[16];
 			gp_Ax1 mirror_axis = gp_Ax1(gp_Pnt(0,0,0), gp_Dir(1,0,0));
 			gp_Trsf rotation;
-			rotation.SetRotation( mirror_axis, PI );
+			rotation.SetRotation( mirror_axis, M_PI );
 			extract(rotation, mirror);
 			sketch->ModifyByMatrix(mirror);
 		}
@@ -1961,7 +1961,7 @@ gp_Lin RS274X::Trace::Line() const
     gp_Vec reference( 0, 0, 1 );    // Looking from the top down.
 
     double angle = vector1.AngleWithRef( vector2, reference );
-    while (angle < minimum_angle) angle += (2 * PI);
+    while (angle < minimum_angle) angle += (2 * M_PI);
     return(angle);
 }
 
@@ -2006,21 +2006,21 @@ double RS274X::Trace::Length() const
 			if ((abs(m_i_term) < m_tolerance) && (abs(m_j_term) < m_tolerance) && (Radius() > m_tolerance))
 			{
 				// It's a full circle.
-				return(2.0 * PI * Radius());
+				return(2.0 * M_PI * Radius());
 			} // End if - then
 			else
 			{
 				if ((Start().Distance(End()) < 0.000001) && (Radius() < 0.00001)) return(0.0);
 
 				double arc_angle = EndAngle() - StartAngle();
-				double arc_length = (arc_angle / (2.0 * PI)) * (2.0 * PI * Radius());
+				double arc_length = (arc_angle / (2.0 * M_PI)) * (2.0 * M_PI * Radius());
 				return(abs(arc_length));
 			} // End if - else
 			break;
 
 		case eFlash:
 		default:
-			return( 2.0 * PI * Radius() );
+			return( 2.0 * M_PI * Radius() );
 	} // End switch
 } // End Length() method
 
@@ -2210,13 +2210,13 @@ TopoDS_Face RS274X::Trace::Face() const
 				gp_Pnt p1 = Start().Translated(vx*radius*cos(StartAngle())+vy*radius*sin(StartAngle()));
 
 				radius = (m_aperture.OutsideDiameter()/2.0);
-				gp_Pnt p2 = Start().Translated(vx*radius*cos(StartAngle() + PI)+vy*radius*sin(StartAngle() + PI));
+				gp_Pnt p2 = Start().Translated(vx*radius*cos(StartAngle() + M_PI)+vy*radius*sin(StartAngle() + M_PI));
 
 				radius = (m_aperture.OutsideDiameter()/2.0);
 				gp_Pnt p3 = End().Translated(vx*radius*cos(EndAngle())+vy*radius*sin(EndAngle()));
 
 				radius = (m_aperture.OutsideDiameter()/2.0);
-				gp_Pnt p4 = End().Translated(vx*radius*cos(EndAngle() + PI)+vy*radius*sin(EndAngle() + PI));
+				gp_Pnt p4 = End().Translated(vx*radius*cos(EndAngle() + M_PI)+vy*radius*sin(EndAngle() + M_PI));
 
 				gp_Dir dir1, dir2;
 

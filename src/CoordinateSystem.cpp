@@ -1228,7 +1228,7 @@ static void on_set_pos(const double *pos, HeeksObj* object)
 static void on_set_vertical_angle(double value, HeeksObj* object)
 {
 	CoordinateSystem* co = ((CoordinateSystem*)object);
-	vertical_angle_for_property = value * Pi/180;
+	vertical_angle_for_property = value * M_PI/180;
 	CoordinateSystem::AnglesToAxes(vertical_angle_for_property, horizontal_angle_for_property, twist_angle_for_property, co->m_x, co->m_y);
 	wxGetApp().Repaint();
 }
@@ -1236,7 +1236,7 @@ static void on_set_vertical_angle(double value, HeeksObj* object)
 static void on_set_horizontal_angle(double value, HeeksObj* object)
 {
 	CoordinateSystem* co = ((CoordinateSystem*)object);
-	horizontal_angle_for_property = value * Pi/180;
+	horizontal_angle_for_property = value * M_PI/180;
 	CoordinateSystem::AnglesToAxes(vertical_angle_for_property, horizontal_angle_for_property, twist_angle_for_property, co->m_x, co->m_y);
 	wxGetApp().Repaint();
 }
@@ -1244,7 +1244,7 @@ static void on_set_horizontal_angle(double value, HeeksObj* object)
 static void on_set_twist_angle(double value, HeeksObj* object)
 {
 	CoordinateSystem* co = ((CoordinateSystem*)object);
-	twist_angle_for_property = value * Pi/180;
+	twist_angle_for_property = value * M_PI/180;
 	CoordinateSystem::AnglesToAxes(vertical_angle_for_property, horizontal_angle_for_property, twist_angle_for_property, co->m_x, co->m_y);
 	wxGetApp().Repaint();
 }
@@ -1319,9 +1319,9 @@ void CoordinateSystem::GetProperties(std::list<Property *> *list)
 	list->push_back(new PropertyVector(_("x axis"), x, NULL));
 	list->push_back(new PropertyVector(_("y axis"), y, NULL));
 	AxesToAngles(m_x, m_y, vertical_angle_for_property, horizontal_angle_for_property, twist_angle_for_property);
-	list->push_back(new PropertyDouble(_("Vertical Angle"), vertical_angle_for_property * 180/Pi, this, on_set_vertical_angle));
-	list->push_back(new PropertyDouble(_("Horizontal Angle"), horizontal_angle_for_property * 180/Pi, this, on_set_horizontal_angle));
-	list->push_back(new PropertyDouble(_("Twist Angle"), twist_angle_for_property * 180/Pi, this, on_set_twist_angle));
+	list->push_back(new PropertyDouble(_("Vertical Angle"), vertical_angle_for_property * 180/M_PI, this, on_set_vertical_angle));
+	list->push_back(new PropertyDouble(_("Horizontal Angle"), horizontal_angle_for_property * 180/M_PI, this, on_set_horizontal_angle));
+	list->push_back(new PropertyDouble(_("Twist Angle"), twist_angle_for_property * 180/M_PI, this, on_set_twist_angle));
 
 	HeeksObj::GetProperties(list);
 }
@@ -1488,19 +1488,19 @@ static void on_set_ax2_angle()
 
 static void on_set_ax2_vertical_angle(double value, HeeksObj* object)
 {
-	vertical_angle_for_property = value * Pi/180;
+	vertical_angle_for_property = value * M_PI/180;
 	on_set_ax2_angle();
 }
 
 static void on_set_ax2_horizontal_angle(double value, HeeksObj* object)
 {
-	horizontal_angle_for_property = value * Pi/180;
+	horizontal_angle_for_property = value * M_PI/180;
 	on_set_ax2_angle();
 }
 
 static void on_set_ax2_twist_angle(double value, HeeksObj* object)
 {
-	twist_angle_for_property = value * Pi/180;
+	twist_angle_for_property = value * M_PI/180;
 	on_set_ax2_angle();
 }
 
@@ -1511,9 +1511,9 @@ void CoordinateSystem::GetAx2Properties(std::list<Property *> *list, gp_Ax2& a)
 	extract(a.Location(), o);
 	list->push_back(new PropertyVertex(_("position"), o, NULL, on_set_ax2_pos));
 	AxesToAngles(a.XDirection(), a.YDirection(), vertical_angle_for_property, horizontal_angle_for_property, twist_angle_for_property);
-	list->push_back(new PropertyDouble(_("Vertical Angle"), vertical_angle_for_property * 180/Pi, NULL, on_set_ax2_vertical_angle));
-	list->push_back(new PropertyDouble(_("Horizontal Angle"), horizontal_angle_for_property * 180/Pi, NULL, on_set_ax2_horizontal_angle));
-	list->push_back(new PropertyDouble(_("Twist Angle"), twist_angle_for_property * 180/Pi, NULL, on_set_ax2_twist_angle));
+	list->push_back(new PropertyDouble(_("Vertical Angle"), vertical_angle_for_property * 180/M_PI, NULL, on_set_ax2_vertical_angle));
+	list->push_back(new PropertyDouble(_("Horizontal Angle"), horizontal_angle_for_property * 180/M_PI, NULL, on_set_ax2_horizontal_angle));
+	list->push_back(new PropertyDouble(_("Twist Angle"), twist_angle_for_property * 180/M_PI, NULL, on_set_ax2_twist_angle));
 }
 
 static void on_set_origin(const double* pos)

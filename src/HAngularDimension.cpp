@@ -9,7 +9,6 @@
 #include "PropertyTrsf.h"
 #include "Gripper.h"
 #include "HPoint.h"
-#include "SolveSketch.h"
 #include "HeeksFrame.h"
 #include "GraphicsCanvas.h"
 
@@ -58,7 +57,7 @@ HAngularDimension::~HAngularDimension(void)
 const HAngularDimension& HAngularDimension::operator=(const HAngularDimension &b)
 {
 #ifdef MULTIPLE_OWNERS
-	ConstrainedObject::operator=(b);
+	ObjList::operator=(b);
 #else
 	HeeksObj::operator=(b);
 #endif
@@ -106,7 +105,7 @@ bool HAngularDimension::IsDifferent(HeeksObj* other)
 		return true;
 
 #ifdef MULTIPLE_OWNERS
-	return ConstrainedObject::IsDifferent(other);
+	return ObjList::IsDifferent(other);
 #else
 	return HeeksObj::IsDifferent(other);
 #endif
@@ -151,22 +150,22 @@ void HAngularDimension::glCommands(bool select, bool marked, bool no_color)
 
 
 		//Figure out if which way the lines should be pointing
-		while(a1 - ca > PI)
-			a1 -= PI;
-		while(a1 - ca < -PI)
-			a1 += PI;
-		while(a2 - ca > PI)
-			a2 -= PI;
-		while(a2 - ca < -PI)
-			a2 += PI;
+		while(a1 - ca > M_PI)
+			a1 -= M_PI;
+		while(a1 - ca < -M_PI)
+			a1 += M_PI;
+		while(a2 - ca > M_PI)
+			a2 -= M_PI;
+		while(a2 - ca < -M_PI)
+			a2 += M_PI;
 
 
 		//Need to find DA and compensate for the 2*Pi period of atan2
 		double da = a2 - a1;
-		while(da > PI)
-			da -= 2*Pi;
-		while(da < -PI)
-			da += 2*Pi;
+		while(da > M_PI)
+			da -= 2*M_PI;
+		while(da < -M_PI)
+			da += 2*M_PI;
 
 		// double ma = a1 + da/2;
 
@@ -195,7 +194,7 @@ void HAngularDimension::glCommands(bool select, bool marked, bool no_color)
 		}
 		else
 		{
-			double offset = da > 0? PI/20 : -PI/20;
+			double offset = da > 0? M_PI/20 : -M_PI/20;
 			if((ca < a1) ^ (da < 0))
 			{
 				DrawArc(pnt,r,ca,a1);
@@ -256,7 +255,6 @@ void HAngularDimension::DrawArc(gp_Pnt center, double r, double a1, double a2)
 #ifdef MULTIPLE_OWNERS
 void HAngularDimension::LoadToDoubles()
 {
-	ConstrainedObject::LoadToDoubles();
 	m_p0->LoadToDoubles();
 	m_p1->LoadToDoubles();
 	m_p2->LoadToDoubles();
@@ -266,7 +264,6 @@ void HAngularDimension::LoadToDoubles()
 
 void HAngularDimension::LoadFromDoubles()
 {
-	ConstrainedObject::LoadFromDoubles();
 	m_p0->LoadFromDoubles();
 	m_p1->LoadFromDoubles();
 	m_p2->LoadFromDoubles();
@@ -277,27 +274,9 @@ void HAngularDimension::LoadFromDoubles()
 
 HAngularDimension* angular_dimension_for_tool = NULL;
 
-#ifdef MULTIPLE_OWNERS
-class ConstrainAngularDimension:public Tool{
-public:
-	void Run(){
-//		dimension_for_tool->SetLineLengthConstraint(dimension_for_tool->A->m_p.Distance(dimension_for_tool->B->m_p));
-		SolveSketch((CSketch*)angular_dimension_for_tool->HEEKSOBJ_OWNER);
-		wxGetApp().Repaint();
-	}
-	const wxChar* GetTitle(){return _("Toggle Dimension Constraint");}
-	wxString BitmapPath(){return _T("new");}
-	const wxChar* GetToolTip(){return _("Set this dimension as constrained");}
-};
-static ConstrainAngularDimension constrain_angular_dimension;
-#endif
-
 void HAngularDimension::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	angular_dimension_for_tool = this;
-#ifdef MULTIPLE_OWNERS
-	t_list->push_back(&constrain_angular_dimension);
-#endif
 }
 
 void HAngularDimension::GetBox(CBox &box)
@@ -379,7 +358,7 @@ void HAngularDimension::GetProperties(std::list<Property *> *list)
 	list->push_back ( new PropertyDouble ( _("scale"),  m_scale, this, on_set_scale ) );
 
 #ifdef MULTIPLE_OWNERS
-	ConstrainedObject::GetProperties(list);
+	ObjList::GetProperties(list);
 #else
 	HeeksObj::GetProperties(list);
 #endif
@@ -388,7 +367,7 @@ void HAngularDimension::GetProperties(std::list<Property *> *list)
 bool HAngularDimension::Stretch(const double *p, const double* shift, void* data)
 {
 #ifdef MULTIPLE_OWNERS
-	ConstrainedObject::Stretch(p,shift,data);
+	ObjList::Stretch(p,shift,data);
 #else
 	HeeksObj::Stretch(p,shift,data);
 #endif
@@ -456,7 +435,7 @@ void HAngularDimension::ReloadPointers()
 	m_p4 = (HPoint*)GetNextChild();
 
 #ifdef MULTIPLE_OWNERS
-	ConstrainedObject::ReloadPointers();
+	ObjList::ReloadPointers();
 #else
 	HeeksObj::ReloadPointers();
 #endif
@@ -472,7 +451,7 @@ wxString HAngularDimension::MakeText(double angle)
 			text = wxString::Format(_T("%s"), m_text.c_str());
 			break;
 		case DegreesAngularDimensionTextMode:
-			text = wxString::Format(_T("%lg degrees"), angle * 180/Pi);
+			text = wxString::Format(_T("%lg degrees"), angle * 180/M_PI);
 			break;
 		case RadiansAngularDimensionTextMode:
 			text = wxString::Format(_T("%lg radians"), angle);

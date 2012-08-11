@@ -132,7 +132,6 @@ public:
 	bool digitize_tangent;
 	double digitizing_radius; // for ambiguous arcs and circles
 	bool draw_to_grid;
-	bool autosolve_constraints;
 	bool useOldFuse;
 	double digitizing_grid;
 	bool mouse_wheel_forward_away; // true for forwards/backwards = zoom out / zoom in, false for reverse
@@ -221,8 +220,6 @@ public:
 
 	int m_auto_save_interval;	// In minutes
 	std::auto_ptr<CAutoSave> m_pAutoSave;
-
-	bool m_save_constraints;
 
 	bool m_isModified;
 	bool m_isModifiedValid;

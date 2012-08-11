@@ -38,8 +38,8 @@ double VecAngle(gp_Vec v1, gp_Vec v2)
 	double v1a = atan2(v1.Y(), v1.X());
 	double v2a = atan2(v2.Y(), v2.X());
 	double angle = v2a - v1a;
-	if(angle <= -PI) angle += PI*2;
-	else if(angle > PI) angle -= PI*2;
+	if(angle <= -M_PI) angle += M_PI*2;
+	else if(angle > M_PI) angle -= M_PI*2;
 	return angle;
 }
 
@@ -1520,8 +1520,8 @@ bool UnionPolygons_old(std::list<CPolygon> & polygons_list,
 				double v1a = atan2(v1.Y(), v1.X());
 				double v2a = atan2(v2.Y(), v2.X());
 				double angle = v2a - v1a;
-				if(angle <= -PI) angle += PI*2;
-				else if(angle > PI) angle -= PI*2;
+				if(angle <= -M_PI) angle += M_PI*2;
+				else if(angle > M_PI) angle -= M_PI*2;
 				if(UPODEBUG)std::cout<<"\t angle="<<angle<<std::endl;
 				
 				//if the end of the intersecting line is equal to the
@@ -1548,8 +1548,8 @@ bool UnionPolygons_old(std::list<CPolygon> & polygons_list,
 						gp_Vec v3(a2, a3);
 						double v3a = atan2(v3.Y(), v3.X());
 						double angle = v3a - v2a;
-						if(angle <= -PI) angle += PI*2;
-						else if(angle > PI) angle -= PI*2;
+						if(angle <= -M_PI) angle += M_PI*2;
+						else if(angle > M_PI) angle -= M_PI*2;
 						if(UPODEBUG)std::cout<<"\t angle="<<angle<<std::endl;
 						if(angle < 0.0000000001){
 							if(UPODEBUG)std::cout<<"\t line not useful: turns to right or doesn't turn"<<std::endl;

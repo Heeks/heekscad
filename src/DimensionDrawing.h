@@ -23,7 +23,6 @@ private:
 
 public:
 	DimensionMode m_mode;
-	DimensionTextMode m_text_mode;
 
 	DimensionDrawing(void);
 	virtual ~DimensionDrawing(void);
