@@ -4,8 +4,6 @@
 
 #pragma once
 
-static const double Pi = 3.14159265358979323846264338327950288419716939937511;
-
 // functions to find intersections between gp items
 bool intersect(const gp_Lin& lin, const gp_Lin& lin2, gp_Pnt &pnt);
 bool intersect(const gp_Lin& lin, const gp_Pln& pln, gp_Pnt &pnt);

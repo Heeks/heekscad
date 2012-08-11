@@ -168,9 +168,6 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	digitize_screen = false;
 	digitizing_radius = 5.0;
 	draw_to_grid = true;
-#ifdef MULTIPLE_OWNERS
-	autosolve_constraints = false;
-#endif
 	digitizing_grid = 1.0;
 	grid_mode = 3;
 	m_rotate_mode = 1;
@@ -311,9 +308,6 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("DrawCoords"), &digitize_coords, true);
 	config.Read(_T("DrawScreen"), &digitize_screen, false);
 	config.Read(_T("DrawToGrid"), &draw_to_grid, true);
-#ifdef MULTIPLE_OWNERS
-	config.Read(_T("AutoSolveConstraints"), &autosolve_constraints, false);
-#endif
 	config.Read(_T("UseOldFuse"), &useOldFuse, false);
 	config.Read(_T("DrawGrid"), &digitizing_grid);
 	config.Read(_T("DrawRadius"), &digitizing_radius);
@@ -393,10 +387,6 @@ bool HeeksCADapp::OnInit()
 
 	config.Read(_T("DxfMakeSketch"), &HeeksDxfRead::m_make_as_sketch, true);
 	config.Read(_T("DxfIgnoreErrors"), &HeeksDxfRead::m_ignore_errors, false);
-
-#ifdef MULTIPLE_OWNERS
-	config.Read(_T("SaveConstraints"), &m_save_constraints, true);
-#endif
 
 	config.Read(_T("ViewUnits"), &m_view_units);
 	config.Read(_T("FaceToSketchDeviation"), &(FaceToSketchTool::deviation));
@@ -537,9 +527,6 @@ void HeeksCADapp::WriteConfig()
 	config.Write(_T("DrawCoords"), digitize_coords);
 	config.Write(_T("DrawScreen"), digitize_screen);
 	config.Write(_T("DrawToGrid"), draw_to_grid);
-#ifdef MULTIPLE_OWNERS
-	config.Write(_T("AutoSolveConstraints"), autosolve_constraints);
-#endif
 	config.Write(_T("UseOldFuse"), useOldFuse);
 	config.Write(_T("DrawGrid"), digitizing_grid);
 	config.Write(_T("DrawRadius"), digitizing_radius);
@@ -574,9 +561,6 @@ void HeeksCADapp::WriteConfig()
 	config.Write(_T("AllowOpenGLStippling"), m_allow_opengl_stippling);
 	config.Write(_T("DxfMakeSketch"), HeeksDxfRead::m_make_as_sketch);
 	config.Write(_T("DxfIgnoreErrors"), HeeksDxfRead::m_ignore_errors);
-#ifdef MULTIPLE_OWNERS
-	config.Write(_T("SaveConstraints"), m_save_constraints);
-#endif
 	config.Write(_T("FaceToSketchDeviation"), FaceToSketchTool::deviation);
 
 	config.Write(_T("MinCorrelationFactor"), m_min_correlation_factor);
@@ -873,9 +857,6 @@ void HeeksCADapp::InitializeXMLFunctions()
 		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Ellipse", HEllipse::ReadFromXMLElement ) );
 		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Spline", HSpline::ReadFromXMLElement ) );
 		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Group", CGroup::ReadFromXMLElement ) );
-#ifdef MULTIPLE_OWNERS
-		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Constraint", Constraint::ReadFromXMLElement ) );
-#endif
 		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "OrientationModifier", COrientationModifier::ReadFromXMLElement ) );
 		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Gear", HGear::ReadFromXMLElement ) );
 		xml_read_fn_map.insert( std::pair< std::string, HeeksObj*(*)(TiXmlElement* pElem) > ( "Area", HArea::ReadFromXMLElement ) );
@@ -1421,7 +1402,7 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
 			double maj_r = e->m_majr;
 			double min_r = e->m_minr;
 			double rot = e->GetRotation();
-			dxf_file.WriteEllipse(c, maj_r, min_r, rot, 0, 2 * Pi, dir, Ttc(layer_name.c_str()));
+			dxf_file.WriteEllipse(c, maj_r, min_r, rot, 0, 2 * M_PI, dir, Ttc(layer_name.c_str()));
                 }
 		break;
         case CircleType:
@@ -1702,21 +1683,11 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 
 	// loop through all the objects writing them
 	CShape::m_solids_found = false;
-#ifdef MULTIPLE_OWNERS
-	Constraint::BeginSave();
-#endif
 	for(std::list<HeeksObj*>::const_iterator It = objects.begin(); It != objects.end(); It++)
 	{
 		HeeksObj* object = *It;
 		object->WriteXML(root);
 	}
-
-#ifdef MULTIPLE_OWNERS
-	// write the constraints to the root-if check box is selected
-	if (m_save_constraints){
-	Constraint::EndSave(root);
-	}
-#endif
 
 	// write a step file for all the solids
 	if(CShape::m_solids_found){
@@ -2670,14 +2641,6 @@ void on_grid(bool onoff, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
-#ifdef MULTIPLE_OWNERS
-void on_autosolve(bool onoff, HeeksObj* object)
-{
-	wxGetApp().autosolve_constraints = onoff;
-	wxGetApp().Repaint();
-}
-#endif
-
 void on_useOldFuse(bool onoff, HeeksObj* object)
 {
 	wxGetApp().useOldFuse = onoff;
@@ -3026,13 +2989,6 @@ void on_set_timestamps(bool value, HeeksObj* object){
 	wxGetApp().m_frame->SetLogLogTimestamps(value);
 }
 
-#ifdef MULTIPLE_OWNERS
-void on_save_constraints(bool onoff, HeeksObj* object)
-{
-  wxGetApp().m_save_constraints = onoff;
-}
-#endif
-
 static void on_set_units(int value, HeeksObj* object)
 {
 	wxGetApp().m_view_units = (value == 0) ? 1.0:25.4;
@@ -3254,9 +3210,6 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	digitizing->m_list.push_back(new PropertyCheck(_("screen"), digitize_screen, NULL, on_relative));
 	digitizing->m_list.push_back(new PropertyLength(_("grid size"), digitizing_grid, NULL, on_grid_edit));
 	digitizing->m_list.push_back(new PropertyCheck(_("snap to grid"), draw_to_grid, NULL, on_grid));
-#ifdef MULTIPLE_OWNERS
-	digitizing->m_list.push_back(new PropertyCheck(_("autosolve constraints"), autosolve_constraints, NULL, on_autosolve));
-#endif
 	list->push_back(digitizing);
 
 	PropertyList* correlation_properties = new PropertyList(_("correlation"));
@@ -3319,9 +3272,6 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	stl_options->m_list.push_back( new PropertyCheck(_("STL save binary"), m_stl_save_as_binary, NULL, on_set_stl_save_binary));
 	file_options->m_list.push_back(stl_options);
 	file_options->m_list.push_back(new PropertyInt(_("auto save interval (in minutes)"), m_auto_save_interval, NULL, on_set_auto_save_interval));
-#ifdef MULTIPLE_OWNERS
-	file_options->m_list.push_back(new PropertyCheck(_("save constraints to file"), m_save_constraints, NULL, on_save_constraints));
-#endif
 	list->push_back(file_options);
 
 	// Font options

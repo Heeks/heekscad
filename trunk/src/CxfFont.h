@@ -125,11 +125,11 @@ protected:
 		public:
 			GlyphArc( const double xcentre, const double ycentre, const double radius, const double start_angle, const double end_angle ) :
 			  m_xcentre(xcentre), m_ycentre(ycentre), m_radius(radius),
-				m_start_angle((start_angle / 360.0) * (2 * PI)),
-				m_end_angle((end_angle / 360.0) * (2 * PI))
+				m_start_angle((start_angle / 360.0) * (2 * M_PI)),
+				m_end_angle((end_angle / 360.0) * (2 * M_PI))
 			  {
-				if (m_start_angle < 0) m_start_angle += (2 * PI);
-				if (m_end_angle < 0) m_end_angle += (2 * PI);
+				if (m_start_angle < 0) m_start_angle += (2 * M_PI);
+				if (m_end_angle < 0) m_end_angle += (2 * M_PI);
 
 				std::list<gp_Pnt> points = Interpolate(gp_Pnt(0.0, 0.0, 0.0), 20 );
 				for (std::list<gp_Pnt>::const_iterator l_itPoint = points.begin();

@@ -261,10 +261,10 @@ void CompoundSegment::DrawDebugLine(gp_Pnt A, gp_Pnt B, int i)
 	gp_Pnt mpnt = A.XYZ() + (B.XYZ()-A.XYZ())/2;
 	double theta = atan2(B.Y() - A.Y(),B.X() - A.X());
 
-	gp_Pnt lpnt1(mpnt.X() + cos(theta+Pi/4),mpnt.Y() + sin(theta+Pi/4),0);
-	gp_Pnt lpnt2(mpnt.X() + cos(theta-Pi/4),mpnt.Y() + sin(theta-Pi/4),0);
-	gp_Pnt tpnt1(mpnt.X() + cos(theta-Pi/2)*2,mpnt.Y() + sin(theta-Pi/2)*2,0);
-	gp_Pnt tpnt2(mpnt.X() + cos(theta+Pi/2)*2,mpnt.Y() + sin(theta+Pi/2)*2,0);
+	gp_Pnt lpnt1(mpnt.X() + cos(theta+M_PI/4),mpnt.Y() + sin(theta+M_PI/4),0);
+	gp_Pnt lpnt2(mpnt.X() + cos(theta-M_PI/4),mpnt.Y() + sin(theta-M_PI/4),0);
+	gp_Pnt tpnt1(mpnt.X() + cos(theta-M_PI/2)*2,mpnt.Y() + sin(theta-M_PI/2)*2,0);
+	gp_Pnt tpnt2(mpnt.X() + cos(theta+M_PI/2)*2,mpnt.Y() + sin(theta+M_PI/2)*2,0);
 
 	glBegin(GL_LINES);
 	glVertex3d(mpnt.X(),mpnt.Y(),mpnt.Z());

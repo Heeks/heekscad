@@ -103,8 +103,8 @@ void CViewPoint::TurnVertical(double ang_x, double ang_y){
 	f = make_vector(m_lens_point, m_target_point);
 	uu = m_vertical.Normalized();
 	r = (f ^ uu).Normalized();
-	if(ang_y>Pi/2)ang_y = Pi/2;
-	else if(ang_y<-Pi/2)ang_y = -Pi/2;
+	if(ang_y>M_PI/2)ang_y = M_PI/2;
+	else if(ang_y<-M_PI/2)ang_y = -M_PI/2;
 	double fl = f.Magnitude();
 	double div_magn = 1/fl;
 	bool beyond_vertical = false;
@@ -261,7 +261,7 @@ void CViewPoint::SetProjection2(bool use_depth_testing){
 	if(m_perspective)
 	{
 		double fovy = m_view_angle;
-		if(h>w && w>0) fovy = 2 * 180/Pi * atan( tan(m_view_angle/2 * Pi/180) * h/w );
+		if(h>w && w>0) fovy = 2 * 180/M_PI * atan( tan(m_view_angle/2 * M_PI/180) * h/w );
 		if(m_near_plane < m_far_plane / 200)m_near_plane = m_far_plane / 200;
 		gluPerspective(fovy, w/h, m_near_plane, m_far_plane);
 	}

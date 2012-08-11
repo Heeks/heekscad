@@ -15,7 +15,6 @@
 #include "../interface/Tool.h"
 #include "Gripper.h"
 #include "Sketch.h"
-#include "SolveSketch.h"
 #include "Drawing.h"
 #include "DigitizeMode.h"
 
@@ -97,21 +96,6 @@ void HArc::ReloadPointers()
 
 HArc* arc_for_tool = NULL;
 
-#ifdef MULTIPLE_OWNERS
-class SetArcRadius:public Tool{
-public:
-	void Run(){
-		arc_for_tool->SetRadiusConstraint(arc_for_tool->m_radius);
-		SolveSketch((CSketch*)arc_for_tool->HEEKSOBJ_OWNER);
-		wxGetApp().Repaint();
-	}
-	const wxChar* GetTitle(){return _("Toggle Radius");}
-	wxString BitmapPath(){return _T("new");}
-	const wxChar* GetToolTip(){return _("Set this arcs radius as constrained");}
-};
-static SetArcRadius arc_radius_toggle;
-#endif
-
 class ClickArcCentre: public Tool
 {
 public:
@@ -181,9 +165,6 @@ ClickArcEndTwo click_arc_first_two;
 void HArc::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	arc_for_tool = this;
-#ifdef MULTIPLE_OWNERS
-	t_list->push_back(&arc_radius_toggle);
-#endif
 
 	Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
 	if (pDrawingMode != NULL)
@@ -371,15 +352,6 @@ static void on_set_axis(const double *vt, HeeksObj* object){
 	wxGetApp().Repaint();
 }
 
-#ifdef MULTIPLE_OWNERS
-static void on_set_radius(double v, HeeksObj* object){
-	((HArc*)object)->SetRadius(v);
-	if(wxGetApp().autosolve_constraints)
-		SolveSketch((CSketch*)object->HEEKSOBJ_OWNER);
-	wxGetApp().Repaint();
-}
-#endif
-
 void HArc::GetProperties(std::list<Property *> *list){
 	double a[3], b[3];
 	double c[3], ax[3];
@@ -393,11 +365,7 @@ void HArc::GetProperties(std::list<Property *> *list){
 	list->push_back(new PropertyVector(_("axis"), ax, this, on_set_axis));
 	double length = A->m_p.Distance(B->m_p);
 	list->push_back(new PropertyLength(_("length"), length, NULL));
-#ifdef MULTIPLE_OWNERS
-	list->push_back(new PropertyLength(_("radius"), m_radius, this, on_set_radius));
-#else
 	list->push_back(new PropertyLength(_("radius"), m_radius, this, NULL));
-#endif
 
 	HeeksObj::GetProperties(list);
 }
@@ -572,35 +540,6 @@ bool HArc::Stretch(const double *p, const double* shift, void* data){
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);
 
-	if(wxGetApp().autosolve_constraints)
-	{
-		if(data == C)
-		{
-			gp_Pnt npt = vp.XYZ()+vshift.XYZ();
-			B->m_p = B->m_p.XYZ() + (npt.XYZ() - C->m_p.XYZ());
-			A->m_p = A->m_p.XYZ() + (npt.XYZ() - C->m_p.XYZ());
-			C->m_p = npt;
-		}
-		EndedObject::Stretch(p,shift,data);
-
-		if(data == B)
-		{
-			double a = atan2(A->m_p.X(),A->m_p.Y());
-			double d = B->m_p.Distance(C->m_p);
-			A->m_p = gp_Pnt(sin(a)*d,cos(a)*d,A->m_p.Z());
-		}
-
-		if(data == A)
-		{
-			double a = atan2(B->m_p.X(),B->m_p.Y());
-			double d = A->m_p.Distance(C->m_p);
-			B->m_p = gp_Pnt(sin(a)*d,cos(a)*d,B->m_p.Z());
-		}
-
-		m_radius = B->m_p.Distance(C->m_p);
-		return false;
-	}
-
 	if(A->m_p.IsEqual(vp, wxGetApp().m_geom_tol)){
 		gp_Vec direction = -(GetSegmentVector(1.0));
 		gp_Pnt centre;
@@ -704,17 +643,6 @@ void HArc::WriteXML(TiXmlNode *root)
 	TiXmlElement *element = new TiXmlElement( "Arc" );
 	root->LinkEndChild( element );
 	element->SetAttribute("col", color.COLORREF_color());
-#ifdef OLDLINES
-	element->SetDoubleAttribute("sx", A->m_p.X());
-	element->SetDoubleAttribute("sy", A->m_p.Y());
-	element->SetDoubleAttribute("sz", A->m_p.Z());
-	element->SetDoubleAttribute("ex", B->m_p.X());
-	element->SetDoubleAttribute("ey", B->m_p.Y());
-	element->SetDoubleAttribute("ez", B->m_p.Z());
-	element->SetDoubleAttribute("cx", C->m_p.X());
-	element->SetDoubleAttribute("cy", C->m_p.Y());
-	element->SetDoubleAttribute("cz", C->m_p.Z());
-#endif
 	gp_Dir D = m_axis.Direction();
 	element->SetDoubleAttribute("ax", D.X());
 	element->SetDoubleAttribute("ay", D.Y());
@@ -799,12 +727,12 @@ double HArc::IncludedAngle()const
 	int dir = (this->m_axis.Direction().Z() > 0) ? 1:-1;
 	if(inc_ang > 1. - 1.0e-10) return 0;
 	if(inc_ang < -1. + 1.0e-10)
-		inc_ang = PI;  
+		inc_ang = M_PI;  
 	else {									// dot product,   v1 . v2  =  cos ang
 		if(inc_ang > 1.0) inc_ang = 1.0;
-		inc_ang = acos(inc_ang);									// 0 to pi radians
+		inc_ang = acos(inc_ang);									// 0 to M_PI radians
 
-		if(dir * (vs ^ ve).Z() < 0) inc_ang = 2 * PI - inc_ang ;		// cp
+		if(dir * (vs ^ ve).Z() < 0) inc_ang = 2 * M_PI - inc_ang ;		// cp
 	}
 	return dir * inc_ang;
 }

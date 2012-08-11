@@ -8,14 +8,13 @@
 #include "PropertyTrsf.h"
 #include "Gripper.h"
 #include "HPoint.h"
-#include "SolveSketch.h"
 #include "HeeksFrame.h"
 #include "GraphicsCanvas.h"
 #include "HeeksConfig.h"
 
 bool HDimension::DrawFlat = true;
 
-HDimension::HDimension(const gp_Trsf &trsf, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, DimensionMode mode, DimensionTextMode text_mode, DimensionUnits units, const HeeksColor* col): EndedObject(col), m_color(*col), m_trsf(trsf), m_mode(mode), m_text_mode(text_mode),  m_units(units),  m_scale(1.0)
+HDimension::HDimension(const gp_Trsf &trsf, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, DimensionMode mode, DimensionUnits units, const HeeksColor* col): EndedObject(col), m_color(*col), m_trsf(trsf), m_mode(mode),  m_units(units),  m_scale(1.0)
 {
 	m_p2 = new HPoint(p2,col);
 	m_p2->m_draw_unselected = false;
@@ -38,7 +37,6 @@ const HDimension& HDimension::operator=(const HDimension &b)
 {
 	EndedObject::operator=(b);
 	m_trsf = b.m_trsf;
-	m_text_mode = b.m_text_mode;
 	m_units = b.m_units;
 	m_color = b.m_color;
 	m_mode = b.m_mode;
@@ -64,7 +62,7 @@ bool HDimension::IsDifferent(HeeksObj* other)
 {
 	HDimension* dim = (HDimension*)other;
 
-	if(m_color.COLORREF_color() != dim->m_color.COLORREF_color() || m_mode != dim->m_mode || m_scale != dim->m_scale || m_text_mode != dim->m_text_mode || m_units != dim->m_units)
+	if(m_color.COLORREF_color() != dim->m_color.COLORREF_color() || m_mode != dim->m_mode || m_scale != dim->m_scale || m_units != dim->m_units)
 		return true;
 
 	if(m_p2->m_p.Distance(dim->m_p2->m_p) > wxGetApp().m_geom_tol)
@@ -95,18 +93,7 @@ wxString HDimension::MakeText()
 	if(fabs(units_factor - 1.0) < 0.0000000001)units_str += wxString(_T(" ")) + _("mm");
 	else if(fabs(units_factor - 25.4) < 0.000000001)units_str += wxString(_T(" ")) + _("inch");
 
-	switch(m_text_mode)
-	{
-		case PythagoreanDimensionTextMode:
-			text = wxString::Format(_T("%lg %s"), A->m_p.Distance(GetB2())/units_factor, units_str.c_str());
-			break;
-		case HorizontalDimensionTextMode:
-			text = wxString::Format(_T("%lg %s H"), fabs(A->m_p.X() - GetB2().X())/units_factor, units_str.c_str());
-			break;
-		case VerticalDimensionTextMode:
-			text = wxString::Format(_T("%lg %s V"), fabs(A->m_p.Y() - GetB2().Y())/units_factor, units_str.c_str());
-			break;
-	}
+	text = wxString::Format(_T("%lg %s"), A->m_p.Distance(GetB2())/units_factor, units_str.c_str());
 
 	return text;
 }
@@ -120,6 +107,30 @@ gp_Pnt HDimension::GetB2()
 		double dp = gp_Vec(B->m_p.XYZ()) * zdir - gp_Vec(A->m_p.XYZ()) * zdir;
 		return gp_Pnt(B->m_p.XYZ() + zdir.XYZ() * (-dp));
 	}
+	else if(m_mode == TwoPointsXOnlyDimensionMode)
+	{
+		gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(m_trsf);
+		gp_Dir ydir = gp_Dir(0, 1, 0).Transformed(m_trsf);
+		double dpz = gp_Vec(B->m_p.XYZ()) * zdir - gp_Vec(A->m_p.XYZ()) * zdir;
+		double dpy = gp_Vec(B->m_p.XYZ()) * ydir - gp_Vec(A->m_p.XYZ()) * ydir;
+		return gp_Pnt(B->m_p.XYZ() + zdir.XYZ() * (-dpz) + ydir.XYZ() * (-dpy));
+	}
+	else if(m_mode == TwoPointsYOnlyDimensionMode)
+	{
+		gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(m_trsf);
+		gp_Dir xdir = gp_Dir(1, 0, 0).Transformed(m_trsf);
+		double dpz = gp_Vec(B->m_p.XYZ()) * zdir - gp_Vec(A->m_p.XYZ()) * zdir;
+		double dpx = gp_Vec(B->m_p.XYZ()) * xdir - gp_Vec(A->m_p.XYZ()) * xdir;
+		return gp_Pnt(B->m_p.XYZ() + zdir.XYZ() * (-dpz) + xdir.XYZ() * (-dpx));
+	}
+	else if(m_mode == TwoPointsZOnlyDimensionMode)
+	{
+		gp_Dir xdir = gp_Dir(1, 0, 0).Transformed(m_trsf);
+		gp_Dir ydir = gp_Dir(0, 1, 0).Transformed(m_trsf);
+		double dpx = gp_Vec(B->m_p.XYZ()) * xdir - gp_Vec(A->m_p.XYZ()) * xdir;
+		double dpy = gp_Vec(B->m_p.XYZ()) * ydir - gp_Vec(A->m_p.XYZ()) * ydir;
+		return gp_Pnt(B->m_p.XYZ() + xdir.XYZ() * (-dpx) + ydir.XYZ() * (-dpy));
+	}
 
 	return B->m_p;
 }
@@ -127,12 +138,22 @@ gp_Pnt HDimension::GetB2()
 gp_Pnt HDimension::GetC2()
 {
 	// return m_p2, possibly flattened
-	if(m_mode == TwoPointsXYOnlyDimensionMode)
+	if(m_mode == TwoPointsXYOnlyDimensionMode || m_mode == TwoPointsXOnlyDimensionMode)
 	{
 		gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(m_trsf);
 		double dp = gp_Vec(m_p2->m_p.XYZ()) * zdir - gp_Vec(A->m_p.XYZ()) * zdir;
 		return gp_Pnt(m_p2->m_p.XYZ() + zdir.XYZ() * (-dp));
 	}
+#if 0
+	else if(m_mode == TwoPointsXOnlyDimensionMode)
+	{
+		gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(m_trsf);
+		double zdp = gp_Vec(m_p2->m_p.XYZ()) * zdir - gp_Vec(A->m_p.XYZ()) * zdir;
+		gp_Dir ydir = gp_Dir(0, 1, 0).Transformed(m_trsf);
+		double ydp = gp_Vec(m_p2->m_p.XYZ()) * ydir - gp_Vec(A->m_p.XYZ()) * ydir;
+		return gp_Pnt(m_p2->m_p.XYZ() + zdir.XYZ() * (-zdp) + ydir.XYZ() * (-ydp));
+	}
+#endif
 
 	return m_p2->m_p;
 }
@@ -148,7 +169,7 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 	gp_Dir xdir = gp_Dir(1, 0, 0).Transformed(m_trsf);
 	gp_Dir ydir = gp_Dir(0, 1, 0).Transformed(m_trsf);
 	gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(m_trsf);
-	if(m_mode == TwoPointsDimensionMode || m_mode == TwoPointsXYOnlyDimensionMode)
+	if(m_mode == TwoPointsDimensionMode || m_mode == TwoPointsXYOnlyDimensionMode || m_mode == TwoPointsXOnlyDimensionMode)
 	{
 		xdir = make_vector(A->m_p, b);
 		if(xdir.IsParallel(zdir,wxGetApp().m_geom_tol))
@@ -207,7 +228,7 @@ void HDimension::RenderText(const wxString &text, const gp_Pnt& p, const gp_Dir&
 			model_view, projection, viewport,
 			&x, &y, &z);
 
-		wxGetApp().render_screen_text_at(text, scale*8,x,y,atan2(xdir.Y(),xdir.X()) * 180 / PI);
+		wxGetApp().render_screen_text_at(text, scale*8,x,y,atan2(xdir.Y(),xdir.X()) * 180 / M_PI);
 	}
 	else
 	{
@@ -234,38 +255,9 @@ void HDimension::LoadFromDoubles()
 
 HDimension* dimension_for_tool = NULL;
 
-#ifdef MULTIPLE_OWNERS
-class ConstrainDimension:public Tool{
-public:
-	void Run(){
-		switch(dimension_for_tool->m_text_mode)
-		{
-			case PythagoreanDimensionTextMode:
-				dimension_for_tool->SetLineLengthConstraint(dimension_for_tool->A->m_p.Distance(dimension_for_tool->B->m_p));
-			break;
-			case HorizontalDimensionTextMode:
-				dimension_for_tool->SetLineHorizontalLengthConstraint(fabs(dimension_for_tool->A->m_p.X() - dimension_for_tool->B->m_p.X()));
-			break;
-			case VerticalDimensionTextMode:
-				dimension_for_tool->SetLineVerticalLengthConstraint(fabs(dimension_for_tool->A->m_p.Y() - dimension_for_tool->B->m_p.Y()));
-			break;
-		}
-		SolveSketch((CSketch*)dimension_for_tool->HEEKSOBJ_OWNER);
-		wxGetApp().Repaint();
-	}
-	const wxChar* GetTitle(){return _("Toggle Dimension Constraint");}
-	wxString BitmapPath(){return _T("new");}
-	const wxChar* GetToolTip(){return _("Set this dimension as constrained");}
-};
-static ConstrainDimension constrain_dimension;
-#endif
-
 void HDimension::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
 	dimension_for_tool = this;
-#ifdef MULTIPLE_OWNERS
-	t_list->push_back(&constrain_dimension);
-#endif
 }
 
 void HDimension::GetBox(CBox &box)
@@ -346,80 +338,12 @@ static void on_set_units(int value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
-static void on_set_text_mode(int value, HeeksObj* object)
-{
-	HDimension* dimension = (HDimension*)object;
-	dimension->m_text_mode = (DimensionTextMode)value;
-	//TODO: remove constraints on change
-	wxGetApp().Repaint();
-}
-
 static void on_set_scale(double value, HeeksObj* object)
 {
 	HDimension* dimension = (HDimension*)object;
 	dimension->m_scale = value;
 	wxGetApp().Repaint();
 }
-
-#ifdef MULTIPLE_OWNERS
-static void on_edit_dimension(const wxChar *value, HeeksObj* object)
-{
-	HDimension* dimension = (HDimension*)object;
-
-	bool constrained=true;
-
-	double length=0;
-    wxString dimensionString = wxString(value).MakeLower();
-         wxSscanf(wxString(value),_T("%lf"),&length);
-    // Need to convert inch to internally stored metric
-    // todo
-    // This could be improved to do conversions such as
-    // 1 Inch or 1 5/8" or 5/16 inch
-    // I suppose if just a number was entered
-    //
-    if (
-        dimensionString.Contains(_T("inch"))||
-        dimensionString.Contains(_T("\""))
-        ) length*=25.4;
-    dimensionString.clear();
-
-	if(!dimension->IsConstrained())
-	{
-		constrain_dimension.Run();
-		constrained = false;
-	}
-
-	switch(dimension->m_text_mode)
-	{
-		case PythagoreanDimensionTextMode:
-			dimension->SetLineLength(length);
-		break;
-		case HorizontalDimensionTextMode:
-			dimension->SetLineHorizontalLength(length);
-		break;
-		case VerticalDimensionTextMode:
-			dimension->SetLineVerticalLength(length);
-		break;
-		default:
-			break;
-	}
-
-	SolveSketch((CSketch*)dimension_for_tool->HEEKSOBJ_OWNER);
-
-	if(!constrained)
-	{
-		//Remove the constraint by running the tool again
-		constrain_dimension.Run();
-	}
-
-	wxGetApp().Repaint();
-}
-
-bool HDimension::IsConstrained()
-{
-	return GetExisting(LineLengthConstraint) || GetExisting(LineHorizontalLengthConstraint) || GetExisting(LineVerticalLengthConstraint);
-}
-#endif
 
 void HDimension::GetProperties(std::list<Property *> *list)
 {
@@ -430,12 +354,6 @@ void HDimension::GetProperties(std::list<Property *> *list)
 	choices.push_back ( wxString ( _("between two points, XY only") ) );
 	choices.push_back ( wxString ( _("orthogonal") ) );
 	list->push_back ( new PropertyChoice ( _("mode"),  choices, m_mode, this, on_set_mode ) );
-
-	choices.clear();
-	choices.push_back ( wxString ( _("pythagorean") ) );
-	choices.push_back ( wxString ( _("horizontal") ) );
-	choices.push_back ( wxString ( _("vertical") ) );
-	list->push_back ( new PropertyChoice ( _("text mode"),  choices, m_text_mode, this, on_set_text_mode ) );
 
 	list->push_back ( new PropertyDouble ( _("scale"),  m_scale, this, on_set_scale ) );
 
@@ -448,11 +366,7 @@ void HDimension::GetProperties(std::list<Property *> *list)
 	}
 
 	wxString text = MakeText();
-#ifdef MULTIPLE_OWNERS
-	list->push_back(new PropertyString(_("dimension value"), text, this, on_edit_dimension));
-#else
 	list->push_back(new PropertyString(_("dimension value"), text, this, NULL));
-#endif
 
 	EndedObject::GetProperties(list);
 }
@@ -491,20 +405,8 @@ void HDimension::WriteXML(TiXmlNode *root)
 	element->SetDoubleAttribute("m9", m[9] );
 	element->SetDoubleAttribute("ma", m[10]);
 	element->SetDoubleAttribute("mb", m[11]);
-#ifdef OLDLINES
-	element->SetDoubleAttribute("sx", A->m_p.X());
-	element->SetDoubleAttribute("sy", A->m_p.Y());
-	element->SetDoubleAttribute("sz", A->m_p.Z());
-	element->SetDoubleAttribute("ex", B->m_p.X());
-	element->SetDoubleAttribute("ey", B->m_p.Y());
-	element->SetDoubleAttribute("ez", B->m_p.Z());
-	element->SetDoubleAttribute("cx", m_p2->m_p.X());
-	element->SetDoubleAttribute("cy", m_p2->m_p.Y());
-	element->SetDoubleAttribute("cz", m_p2->m_p.Z());
-#endif
 	element->SetDoubleAttribute("scale",m_scale);
 	element->SetAttribute("mode", m_mode);
-	element->SetAttribute("textmode", m_text_mode);
 	switch(m_units)
 	{
 	case DimensionUnitsMM:
@@ -533,7 +435,6 @@ HeeksObj* HDimension::ReadFromXMLElement(TiXmlElement* pElem)
 	double scale=1;
 
 	DimensionMode mode = TwoPointsDimensionMode;
-	DimensionTextMode text_mode = PythagoreanDimensionTextMode;
 	DimensionUnits units = DimensionUnitsGlobal;
 
 	// get the attributes
@@ -553,20 +454,8 @@ HeeksObj* HDimension::ReadFromXMLElement(TiXmlElement* pElem)
 		else if(name == "m9"){m[9] = a->DoubleValue();}
 		else if(name == "ma"){m[10]= a->DoubleValue();}
 		else if(name == "mb"){m[11]= a->DoubleValue();}
-#ifdef OLDLINES
-		else if(name == "sx"){p0[0]= a->DoubleValue();}
-		else if(name == "sy"){p0[1]= a->DoubleValue();}
-		else if(name == "sz"){p0[2]= a->DoubleValue();}
-		else if(name == "ex"){p1[0]= a->DoubleValue();}
-		else if(name == "ey"){p1[1]= a->DoubleValue();}
-		else if(name == "ez"){p1[2]= a->DoubleValue();}
-		else if(name == "cx"){p2[0]= a->DoubleValue();}
-		else if(name == "cy"){p2[1]= a->DoubleValue();}
-		else if(name == "cz"){p2[2]= a->DoubleValue();}
-#endif
 		else if(name == "scale"){scale= a->DoubleValue();}
 		else if(name == "mode"){mode = (DimensionMode)(a->IntValue());}
-		else if(name == "textmode"){text_mode = (DimensionTextMode)(a->IntValue());}
 		else if(name == "units"){
 			const char* str = a->Value();
 			switch(str[0])
@@ -581,7 +470,7 @@ HeeksObj* HDimension::ReadFromXMLElement(TiXmlElement* pElem)
 		}
 	}
 
-	HDimension* new_object = new HDimension(make_matrix(m), make_point(p0), make_point(p1), make_point(p2), mode, text_mode, units, &c);
+	HDimension* new_object = new HDimension(make_matrix(m), make_point(p0), make_point(p1), make_point(p2), mode, units, &c);
 	new_object->ReadBaseXML(pElem);
 	new_object->m_scale = scale;
 

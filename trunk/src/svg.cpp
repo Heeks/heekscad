@@ -255,7 +255,7 @@ void CSvgRead::ReadTransform(TiXmlElement *pElem)
 			{
 				double rot;
 				sscanf(&d[pos],"rotate(%lf)%n",&rot,&count);
-				ntrsf.SetRotation(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,0,1)),3*Pi/2-rot);
+				ntrsf.SetRotation(gp_Ax1(gp_Pnt(0,0,0),gp_Dir(0,0,1)),3*M_PI/2-rot);
 				m_transform.Multiply(ntrsf);
 				pos+=count;
 
@@ -321,9 +321,9 @@ void CSvgRead::ReadEllipse(TiXmlElement *pElem)
 		double temp = rx;
 		rx = ry;
 		ry = temp;
-		rot = Pi/2;
+		rot = M_PI/2;
 	}
-	OnReadEllipse(gp_Pnt(x,y,0),rx,ry,rot,0,2*Pi);
+	OnReadEllipse(gp_Pnt(x,y,0),rx,ry,rot,0,2*M_PI);
 }
 
 void CSvgRead::ReadLine(TiXmlElement *pElem)
@@ -572,7 +572,7 @@ gp_Pnt CSvgRead::ReadEllipse(const char *text,gp_Pnt ppnt,bool isupper)
 		x+=ppnt.X(); y+=ppnt.Y();
 	}
 
-	xrot = -Pi*xrot/180.0;
+	xrot = -M_PI*xrot/180.0;
 
 	gp_Pnt ept(x,y,0);
 	gp_Dir up(0,0,1);
@@ -606,7 +606,7 @@ gp_Pnt CSvgRead::ReadEllipse(const char *text,gp_Pnt ppnt,bool isupper)
 		double temp = ry;
 		ry = rx;
 		rx = temp;
-		xrot += Pi/2;
+		xrot += M_PI/2;
 	}
 
 	gp_Pnt start(ppnt.XYZ() - cpnt.XYZ());
@@ -618,16 +618,16 @@ gp_Pnt CSvgRead::ReadEllipse(const char *text,gp_Pnt ppnt,bool isupper)
 	double end_angle = atan2(end.Y()/ry,end.X()/rx);
 
 	if(start_angle<0)
-		start_angle+=2*Pi;
+		start_angle+=2*M_PI;
 	if(end_angle<0)
-		end_angle+=2*Pi;
+		end_angle+=2*M_PI;
 
 	double d_angle = end_angle - start_angle;
 	
 	if(d_angle < 0)
-		d_angle += 2*Pi;
+		d_angle += 2*M_PI;
 
-	if((large_arc_flag && (d_angle < Pi)) || (!large_arc_flag && (d_angle > Pi)))
+	if((large_arc_flag && (d_angle < M_PI)) || (!large_arc_flag && (d_angle > M_PI)))
 	{
 		double temp = start_angle;
 		start_angle = end_angle;
