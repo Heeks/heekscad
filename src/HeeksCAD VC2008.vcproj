@@ -2138,10 +2138,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\sketchsolve\src\timer.h"
-			>
-		</File>
-		<File
 			RelativePath="..\tinyxml\tinystr.cpp"
 			>
 			<FileConfiguration
