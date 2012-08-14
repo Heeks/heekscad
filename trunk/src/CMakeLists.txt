@@ -332,8 +332,10 @@ set( heekscad_SRCS
     wxImageLoader.cpp
    )
 
+# remove lsketchsolve below
+# -L../bin -ltinyxml -lheeksintf -lsketchsolve
 set( HeeksCAD_LIBS
-       -L../bin -ltinyxml -lheeksintf -lsketchsolve
+       -L../bin -ltinyxml -lheeksintf
    )
 add_executable( heekscad ${heekscad_SRCS} ${platform_SRCS} ${heekscad_HDRS} )
 target_link_libraries( heekscad
