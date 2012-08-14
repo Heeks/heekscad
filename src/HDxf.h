@@ -33,7 +33,7 @@ public:
 	void OnReadPoint(const double* s);
 	void OnReadText(const double* point, const double height, const wxString text);
 	void OnReadArc(const double* s, const double* e, const double* c, bool dir, bool hidden);
-	void OnReadCircle(const double* s, const double* c, bool dir);
+	void OnReadCircle(const double* s, const double* c, bool dir, bool hidden);
     void OnReadEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir);
 	void OnReadSpline(struct SplineData& sd);
 

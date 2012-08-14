@@ -61,7 +61,7 @@ void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, 
 	AddObject(new_object);
 }
 
-void HeeksDxfRead::OnReadCircle(const double* s, const double* c, bool dir)
+void HeeksDxfRead::OnReadCircle(const double* s, const double* c, bool dir, bool hidden)
 {
 	gp_Pnt p0 = make_point(s);
 	//gp_Pnt p1 = make_point(e);
@@ -69,7 +69,7 @@ void HeeksDxfRead::OnReadCircle(const double* s, const double* c, bool dir)
 	if(!dir)up = -up;
 	gp_Pnt pc = make_point(c);
 	gp_Circ circle(gp_Ax2(pc, up), p0.Distance(pc));
-	HCircle* new_object = new HCircle(circle, ActiveColorPtr(m_aci));
+	HCircle* new_object = new HCircle(circle, hidden ? (&hidden_color) : ActiveColorPtr(m_aci));
 	AddObject(new_object);
 }
 

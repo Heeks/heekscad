@@ -688,6 +688,7 @@ bool CDxfRead::ReadCircle()
 {
 	double radius = 0.0;
 	double c[3]; // centre
+	bool hidden = false;
 
 	while(!((*m_ifs).eof()))
 	{
@@ -703,9 +704,16 @@ bool CDxfRead::ReadCircle()
 		switch(n){
 			case 0:
 				// next item found, so finish with Circle
-			        DerefACI();
-				OnReadCircle(c, radius);
+			    DerefACI();
+				OnReadCircle(c, radius, hidden);
+				hidden = false;
 				return true;
+
+			case 6: // line style name follows
+				get_line();
+				if(m_str[0] == 'h' || m_str[0] == 'H')hidden = true;
+				break;
+
 			case 8: // Layer name follows
 				get_line();
 				strcpy(m_layer_name, m_str);
@@ -752,7 +760,7 @@ bool CDxfRead::ReadCircle()
 		}
 	}
 	DerefACI();
-	OnReadCircle(c, radius);
+	OnReadCircle(c, radius, false);
 	return false;
 }
 
@@ -1280,14 +1288,14 @@ void CDxfRead::OnReadArc(double start_angle, double end_angle, double radius, co
 	OnReadArc(s, e, temp, true, hidden);
 }
 
-void CDxfRead::OnReadCircle(const double* c, double radius){
+void CDxfRead::OnReadCircle(const double* c, double radius, bool hidden){
 	double s[3];
     double start_angle = 0;
 	s[0] = c[0] + radius * cos(start_angle * Pi/180);
 	s[1] = c[1] + radius * sin(start_angle * Pi/180);
 	s[2] = c[2];
 
-	OnReadCircle(s, c, false); //false to change direction because otherwise the arc length is zero
+	OnReadCircle(s, c, false, hidden); //false to change direction because otherwise the arc length is zero
 }
 
 void CDxfRead::OnReadEllipse(const double* c, const double* m, double ratio, double start_angle, double end_angle){
