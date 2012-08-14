@@ -78,7 +78,7 @@ include(CPack)
 #---------- put subdirs down here so that the package version vars above are visible to them -----------
 add_subdirectory( interface )
 add_subdirectory( tinyxml )
-add_subdirectory( sketchsolve/src )
+# add_subdirectory( sketchsolve/src )
 add_subdirectory( translations )
 add_subdirectory( src )  #needs libraries from other subdirs, so it goes last
 
