@@ -820,19 +820,23 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 		if ( status == IFSelect_RetDone )
 		{
 			int num = Reader.NbRootsForTransfer();
+				int shapes_added_for_sewing = 0;
+				BRepOffsetAPI_Sewing face_sewing (0.001);
+				std::list<TopoDS_Shape> shapes_readed;
+
 			for(int i = 1; i<=num; i++)
 			{
 				Handle_Standard_Transient root = Reader.RootForTransfer(i);
 				Reader.TransferEntity(root);
 				TopoDS_Shape rShape = Reader.Shape(i);
+				shapes_readed.push_back(rShape);
 
-				int shapes_added_for_sewing = 0;
-				BRepOffsetAPI_Sewing face_sewing (0.001);
 				for (TopExp_Explorer explorer(rShape, TopAbs_FACE); explorer.More(); explorer.Next())
 				{
 					face_sewing.Add (explorer.Current());
 					shapes_added_for_sewing++;
 				}
+			}
 
 				bool sewed_shape_added = false;
 				try{
@@ -859,11 +863,14 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 				}
 				if(!sewed_shape_added)
 				{
-					// add the original
+					// add the originals
+					for(std::list<TopoDS_Shape>::iterator It = shapes_readed.begin(); It != shapes_readed.end(); It++)
+					{
+						TopoDS_Shape rShape = *It;
 					HeeksObj* new_object = MakeObject(rShape, _("IGES shape"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191), 1.0f);
 					add_to->Add(new_object, NULL);
+					}
 				}
-			}
 
 		}
 		else{
