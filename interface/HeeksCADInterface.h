@@ -307,7 +307,7 @@ public:
 	virtual void SetColor(int r, int b, int g);
 	virtual bool InputDouble(const wxChar* prompt, const wxChar* value_name, double &value);
 	virtual bool InputLength(const wxChar* prompt, const wxChar* value_name, double &value);
-	virtual double GetViewUnits();
+	virtual double GetViewUnits(); //1.0 for mm, 25.4 for inches
 	virtual void SetViewUnits(double units, bool write_to_config);
 	virtual void SplineToBiarcs(HeeksObj* spline, std::list<HeeksObj*> &new_spans, double tolerance);
 	virtual HeeksObj* SketchSplineToBiarcs(HeeksObj* sketch, double tolerance);
