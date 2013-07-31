@@ -49,6 +49,8 @@ std::vector<wxString> Tokens( const wxString wxLine, const wxString wxDelimiters
 		{
 			tokens.push_back( line.substr(0, offset) );
 		} // End if - then
+		else
+			break;
 
 		line.Remove(0, offset+1);
 	} // End while
