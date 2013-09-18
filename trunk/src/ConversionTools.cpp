@@ -235,6 +235,12 @@ bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wire &wire
 					edges.push_back(BRepBuilderAPI_MakeEdge(arc->GetCircle(), arc->A->m_p, arc->B->m_p));
 				}
 				break;
+			case SplineType:
+				{
+					HSpline* spline = (HSpline*)object;
+					edges.push_back(BRepBuilderAPI_MakeEdge(spline->m_spline));
+				}
+				break;
 		}
 	}
 
