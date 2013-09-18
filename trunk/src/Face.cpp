@@ -9,6 +9,7 @@
 #include "RuledSurface.h"
 #include "HeeksFrame.h"
 #include "InputModeCanvas.h"
+#include "HPoint.h"
 
 CFace::CFace():m_temp_attr(0)
 {
@@ -328,6 +329,34 @@ public:
 
 static RotateToFace rotate_to_face;
 
+#if 0
+class Intersector:public Tool
+{
+public:
+	const wxChar* GetTitle(){return _("Intersector");}
+	//wxString BitmapPath(){return _T("rotface");}
+	void Run(){
+		TopoDS_Face face = face_for_tools->Face();
+		Handle(Geom_Surface) surface = BRep_Tool::Surface(face);
+		Geom_Line line = Geom_Line(make_line(gp_Pnt(10.0, 20.0, 1000.0), gp_Pnt(10, 20, -1000)));
+		//Geom_Curve curve = Geom_Curve(line);
+		GeomAPI_IntCS inCS;
+		inCS.Perform(&line, surface);
+		if (inCS.IsDone())
+		{
+			for(int i = 0; i<inCS.NbPoints(); i++)
+			{
+				gp_Pnt ResultPoint = gp_Pnt(inCS.Point(i+1).XYZ());
+				HPoint* new_object = new HPoint(ResultPoint, &(wxGetApp().construction_color));
+				wxGetApp().Add(new_object,NULL);
+			}
+		}
+	}
+};
+
+static Intersector intersector;
+#endif
+
 void CFace::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 	face_for_tools = this;
 	if(!wxGetApp().m_no_creation_mode)t_list->push_back(&make_sketch_tool);
@@ -338,6 +367,7 @@ void CFace::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 		t_list->push_back(&rotate_to_face);
 	}
 	if(!wxGetApp().m_no_creation_mode)t_list->push_back(&extrude_face);
+	//t_list->push_back(&intersector);
 }
 
 void CFace::GetGripperPositionsTransformed(std::list<GripData> *list, bool just_for_endof)
