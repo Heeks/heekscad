@@ -19,8 +19,6 @@ GripperSelTransform::GripperSelTransform(const GripData& data, HeeksObj* parent)
 }
 
 bool GripperSelTransform::OnGripperGrabbed(const std::list<HeeksObj*>& list, bool show_grippers_on_drag, double* from){
-	wxGetApp().CreateUndoPoint();
-
 	m_initial_grip_pos[0] = m_data.m_x;
 	m_initial_grip_pos[1] = m_data.m_y;
 	m_initial_grip_pos[2] = m_data.m_z;
@@ -113,6 +111,8 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 {
 	wxGetApp().DestroyTransformGLList();
 
+	wxGetApp().StartHistory();
+
 	for ( std::list<HeeksObj *>::iterator It = m_items_marked_at_grab.begin(); It != m_items_marked_at_grab.end(); It++ )
 	{
 		HeeksObj* object = *It;
@@ -145,7 +145,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 			MakeMatrix ( from, to, object_m, mat );
 			double m[16];
 			extract(mat, m );
-			object->ModifyByMatrix(m);
+			wxGetApp().TransformUndoably(object, m);
 		}
 	}
 
@@ -169,7 +169,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 		}
 	}
 	wxGetApp().m_marked_list->gripping = false;
-	wxGetApp().Changed();
+	wxGetApp().EndHistory();
 }
 
 void GripperSelTransform::MakeMatrix ( const double* from, const double* to, const double* object_m, gp_Trsf& mat )

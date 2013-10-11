@@ -14,7 +14,6 @@
 #include "CxfFont.h"
 
 #include <memory>
-class TransientObject;
 class MagDragWindow;
 class ViewRotating;
 class ViewZooming;
@@ -29,9 +28,7 @@ class HeeksObj;
 class MarkedObject;
 class Gripper;
 class CViewPoint;
-#ifdef USE_UNDO_ENGINE
-class UndoEngine;
-#endif
+class MainHistory;
 class Observer;
 class CHeeksFrame;
 class CViewport;
@@ -86,10 +83,7 @@ class HeeksCADapp : public wxApp, public ObjList
 {
 private:
 	std::set<Observer*> observers;
-#ifdef USE_UNDO_ENGINE
-	UndoEngine *history;
-#endif
-	std::map<HeeksObj*,std::list<HeeksObj*> > m_transient_objects;
+	MainHistory *history;
 
 	typedef std::map< int, std::list<HeeksObj*> > IdsToObjects_t;
 	typedef int GroupId_t;
@@ -221,9 +215,6 @@ public:
 	int m_auto_save_interval;	// In minutes
 	std::auto_ptr<CAutoSave> m_pAutoSave;
 
-	bool m_isModified;
-	bool m_isModifiedValid;
-
 	int m_icon_texture_number;
 	bool m_extrude_to_solid;
 	double m_revolve_angle;
@@ -275,6 +266,7 @@ public:
 	void RecalculateGLLists();
 	void SetLikeNewFile(void);
 	bool IsModified(void);
+	void SetAsModified();
 	void ClearHistory(void);
 	void glCommandsAll(const CViewPoint &view_point);
 	double GetPixelScale(void);
@@ -284,11 +276,11 @@ public:
 	void GenerateIntersectionMenuOptions( std::list<Tool*> &f_list );
 	void on_menu_event(wxCommandEvent& event);
 	void DoToolUndoably(Tool *);
-	void Undo(void);
-	void Redo(void);
-	void WentTransient(HeeksObj* obj, TransientObject* tobj);
-	void ClearTransients();
-	std::map<HeeksObj*,std::list<HeeksObj*> >& GetTransients();
+	bool RollBack(void);
+	bool RollForward(void);
+	void StartHistory();
+	void EndHistory(void);
+	void ClearRollingForward(void);
 	bool Add(HeeksObj* object, HeeksObj* prev_object);
 	void Remove(HeeksObj* object);
 	void Remove(std::list<HeeksObj*> objects);
@@ -298,7 +290,7 @@ public:
 	void ObjectWriteBaseXML(HeeksObj *object, TiXmlElement *element);
 	void ObjectReadBaseXML(HeeksObj *object, TiXmlElement* element);
 	void InitializeXMLFunctions();
-	void OpenXMLFile(const wxChar *filepath,HeeksObj* paste_into = NULL, HeeksObj* paste_before = NULL);
+	void OpenXMLFile(const wxChar *filepath,HeeksObj* paste_into = NULL, HeeksObj* paste_before = NULL, bool undoably = false);
 	static void OpenSVGFile(const wxChar *filepath);
 	static void OpenSTLFile(const wxChar *filepath);
 	static void OpenDXFFile(const wxChar *filepath);
@@ -315,14 +307,19 @@ public:
 	void SavePyFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance = -1.0);
 	void SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, bool for_clipboard = false);
 	void SaveXMLFile(const wxChar *filepath){SaveXMLFile(m_objects, filepath);}
-#ifdef CONSTRAINT_TESTER
-    //JT
-	 virtual void AuditHeeksObjTree4Constraints(HeeksObj * SketchPtr ,HeeksObj* mom, int level,bool ShowMsgInConsole,bool * ConstraintsAreOk){};
-#endif
-
 	bool SaveFile(const wxChar *filepath, bool use_dialog = false, bool update_recent_file_list = true, bool set_app_caption = true);
-	void CreateUndoPoint();
-	void Changed();
+	void AddUndoably(HeeksObj *object, HeeksObj* owner, HeeksObj* prev_object);
+	void AddUndoably(const std::list<HeeksObj*>& list, HeeksObj* owner);
+	void DeleteUndoably(HeeksObj* object);
+	void DeleteUndoably(const std::list<HeeksObj*>& list);
+	void TransformUndoably(HeeksObj *object, double *m);
+	void TransformUndoably(const std::list<HeeksObj*>& list, double* m);
+	void WasModified(HeeksObj *object);
+	void WasAdded(HeeksObj *object);
+	void WasRemoved(HeeksObj *object);
+	void WereModified(const std::list<HeeksObj*>& list);
+	void WereAdded(const std::list<HeeksObj*>& list);
+	void WereRemoved(const std::list<HeeksObj*>& list);
 	gp_Trsf GetDrawMatrix(bool get_the_appropriate_orthogonal);
 	void GetOptions(std::list<Property *> *list);
 	void DeleteMarkedItems();
@@ -413,14 +410,6 @@ public:
 	HeeksObj *MergeCommonObjects( ObjectReferences_t & unique_set, HeeksObj *object ) const;
 
 	wxString HeeksType( const int type ) const;
-
-//JT
-#ifdef CONSTRAINT_TESTER
-     bool TestForValidConstraints(){return TestForValidConstraints(m_objects);};//m_objects is protected and visible to class or sub_class
-   	 bool TestForValidConstraints(const std::list<HeeksObj*>& objects);
-
-#endif
-
 	unsigned int GetIndex(HeeksObj *object);
 	void ReleaseIndex(unsigned int index);
 };

@@ -150,10 +150,10 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 
 				if(drag_possible)
 				{
-					wxGetApp().CreateUndoPoint();
+					wxGetApp().StartHistory();
 
 					// cut the objects
-					wxGetApp().Remove(m_dragged_list);
+					wxGetApp().DeleteUndoably(m_dragged_list);
 
 					// paste the objects
 					for(std::list<HeeksObj*>::iterator It = m_dragged_list.begin(); It != m_dragged_list.end(); It++)
@@ -174,16 +174,16 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 								}
 								if(!one_found)
 								{
-									add_to->Add(object, button ? button->paste_before : NULL);
+									wxGetApp().AddUndoably(object, add_to, button ? button->paste_before : NULL);
 								}
 							}
 							else
 							{
-								add_to->Add(object, button ? button->paste_before : NULL);
+								wxGetApp().AddUndoably(object, add_to, button ? button->paste_before : NULL);
 							}
 						}
 					}
-					wxGetApp().Changed();
+					wxGetApp().EndHistory();
 				}
 				else
 				{

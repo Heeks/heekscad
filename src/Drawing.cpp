@@ -58,16 +58,17 @@ void Drawing::AddPoint()
 
 	bool calculated = false;
 	if(is_an_add_level(GetDrawStep())){
+		wxGetApp().StartHistory();
 		calculated = calculate_item(wxGetApp().m_digitizing->digitized_point);
 		if(calculated){
 			before_add_item();
 			const std::list<HeeksObj*>& drawing_objects = GetObjectsMade();
-			((ObjList*)GetOwnerForDrawingObjects())->Add(drawing_objects);
+			wxGetApp().AddUndoably(drawing_objects,((ObjList*)GetOwnerForDrawingObjects()));
 			if(DragDoneWithXOR())wxGetApp().m_current_viewport->DrawObjectsOnFront(drawing_objects, true);
 			else wxGetApp().Repaint();
 			set_previous_direction();
-			wxGetApp().Changed();
 		}
+		wxGetApp().EndHistory();
 	}
 	
 	clear_drawing_objects(calculated ? 1:0);

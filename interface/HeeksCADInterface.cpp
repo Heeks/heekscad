@@ -184,6 +184,16 @@ wxString CHeeksCADInterface::GetExeFolder()
 	return wxGetApp().GetExeFolder();
 }
 
+void CHeeksCADInterface::AddUndoably(HeeksObj* object, HeeksObj* owner)
+{
+	wxGetApp().AddUndoably(object, owner, NULL);
+}
+
+void CHeeksCADInterface::DeleteUndoably(HeeksObj* object)
+{
+	wxGetApp().DeleteUndoably(object);
+}
+
 wxString CHeeksCADInterface::GetResFolder()
 {
 	return wxGetApp().GetResFolder();
@@ -204,16 +214,6 @@ void CHeeksCADInterface::Add(HeeksObj* object,HeeksObj* prev)
 	wxGetApp().Add(object,prev);
 }
 
-void CHeeksCADInterface::CreateUndoPoint()
-{
-	wxGetApp().CreateUndoPoint();
-}
-
-void CHeeksCADInterface::WentTransient(HeeksObj* obj, TransientObject *tobj)
-{
-	wxGetApp().WentTransient(obj, tobj);
-}
-
 static std::list<Plugin>::iterator PluginIt;
 
 const Plugin* CHeeksCADInterface::GetFirstPlugin()
@@ -229,11 +229,6 @@ const Plugin* CHeeksCADInterface::GetNextPlugin()
 	PluginIt++;
 	if (PluginIt==wxGetApp().m_loaded_libraries.end()) return NULL;
 	return &(*PluginIt);
-}
-
-void CHeeksCADInterface::Changed()
-{
-	wxGetApp().Changed();
 }
 
 const std::list<HeeksObj*>& CHeeksCADInterface::GetMarkedList(void)
@@ -369,10 +364,8 @@ CInputMode* CHeeksCADInterface::GetSelectMode()
 
 void CHeeksCADInterface::SetLineDrawingMode()
 {
-	wxGetApp().CreateUndoPoint();
 	line_strip.drawing_mode = LineDrawingMode;
 	wxGetApp().SetInputMode(&line_strip);
-	wxGetApp().Changed();
 }
 
 bool CHeeksCADInterface::EndSketchMode()
@@ -621,17 +614,12 @@ void CHeeksCADInterface::AddText(const wxChar  *text)
 {
     gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
     HText* new_object = new HText(mat, text, &(wxGetApp().current_color), wxGetApp().m_pVectorFont );
-    wxGetApp().CreateUndoPoint();
-	wxGetApp().Add(new_object, NULL);
+	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().m_marked_list->Clear(true);
 	wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().SetInputMode(wxGetApp().m_select_mode);
-	wxGetApp().Changed();
 	wxGetApp().Repaint();
-
-
 }
-
 
 void CHeeksCADInterface::TranslateObject(HeeksObj* obj, const double*c)
 {
@@ -794,7 +782,7 @@ void CHeeksCADInterface::OpendxfFile(const wxChar *filepath)
 
 void CHeeksCADInterface::OpenXMLFile(const wxChar *filepath,HeeksObj* paste_into)
 {
-	wxGetApp().OpenXMLFile(filepath, paste_into);
+	wxGetApp().OpenXMLFile(filepath, paste_into, NULL, true);
 }
 
 void CHeeksCADInterface::ObjectWriteBaseXML(HeeksObj* object, TiXmlElement* element)

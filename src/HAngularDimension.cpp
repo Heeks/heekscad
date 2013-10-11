@@ -382,7 +382,7 @@ bool HAngularDimension::Stretch(const double *p, const double* shift, void* data
 
 void HAngularDimension::OnEditString(const wxChar* str){
 	m_text.assign(str);
-	wxGetApp().Changed();
+	// to do, use undoable property changes
 }
 
 void HAngularDimension::WriteXML(TiXmlNode *root)

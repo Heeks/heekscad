@@ -430,7 +430,7 @@ static void SectionObjectsWithDialog(std::list<HeeksObj*> list)
 			p1.Transform(trsf);
 			gp_Ax2 axis(p1, gp_Dir(0, 0, 1).Transformed(trsf), gp_Dir(1, 0, 0).Transformed(trsf));
 
-			wxGetApp().CreateUndoPoint();
+			wxGetApp().StartHistory();
 
 			try{
 
@@ -445,8 +445,8 @@ static void SectionObjectsWithDialog(std::list<HeeksObj*> list)
 				TopoDS_Shape new_shape = BRepAlgoAPI_Cut(((CShape*)object)->Shape(), cuboid);
 				if(new_shape.IsNull())continue;
 				HeeksObj* new_object = CShape::MakeObject(new_shape, _("Sectioned Solid"), SOLID_TYPE_UNKNOWN, ((CShape*)object)->m_color, ((CShape*)object)->GetOpacity());
-				wxGetApp().Add(new_object, NULL);
-				wxGetApp().Remove(object);
+				wxGetApp().AddUndoably(new_object, NULL, NULL);
+				wxGetApp().DeleteUndoably(object);
 				wxGetApp().m_marked_list->Add(new_object, false);
 			}
 			}
@@ -455,7 +455,7 @@ static void SectionObjectsWithDialog(std::list<HeeksObj*> list)
 				::wxMessageBox(_("Sectioning failed!"));
 			}
 
-			wxGetApp().Changed();
+			wxGetApp().EndHistory();
 
 			break;
 		}

@@ -200,9 +200,10 @@ void CCone::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
 void CCone::OnApplyProperties()
 {
 	CCone* new_object = new CCone(m_pos, m_r1, m_r2, m_height, m_title.c_str(), m_color, m_opacity);
-	new_object->CopyIDsFrom(this);
-	HEEKSOBJ_OWNER->Add(new_object, NULL);
-	HEEKSOBJ_OWNER->Remove(this);
+	wxGetApp().StartHistory();
+	wxGetApp().AddUndoably(new_object, NULL, NULL);
+	wxGetApp().DeleteUndoably(this);
+	wxGetApp().EndHistory();
 	wxGetApp().m_marked_list->Clear(true);
 	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().Repaint();

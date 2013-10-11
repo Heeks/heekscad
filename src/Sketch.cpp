@@ -269,13 +269,13 @@ public:
 		std::list<TopoDS_Shape> faces;
 		if(ConvertSketchToFaceOrWire(sketch_for_tools, faces, true))
 		{
-			wxGetApp().CreateUndoPoint();
+			wxGetApp().StartHistory();
 			for(std::list<TopoDS_Shape>::iterator It2 = faces.begin(); It2 != faces.end(); It2++)
 			{
 				TopoDS_Shape& face = *It2;
-				wxGetApp().Add(new CFace(TopoDS::Face(face)), NULL);
+				wxGetApp().AddUndoably(new CFace(TopoDS::Face(face)), NULL, NULL);
 			}
-			wxGetApp().Changed();
+			wxGetApp().EndHistory();
 		}
 	}
 	const wxChar* GetTitle(){return _("Convert sketch to face");}
@@ -293,13 +293,13 @@ public:
 		std::list<TopoDS_Shape> wires;
 		if(ConvertSketchToFaceOrWire(sketch_for_tools, wires, false))
 		{
-			wxGetApp().CreateUndoPoint();
+			wxGetApp().StartHistory();
 			for(std::list<TopoDS_Shape>::iterator It2 = wires.begin(); It2 != wires.end(); It2++)
 			{
 				TopoDS_Shape& wire = *It2;
-				wxGetApp().Add(new CWire(TopoDS::Wire(wire), _T("Wire from sketch")), NULL);
+				wxGetApp().AddUndoably(new CWire(TopoDS::Wire(wire), _T("Wire from sketch")), NULL, NULL);
 			}
-			wxGetApp().Changed();
+			wxGetApp().EndHistory();
 		}
 	}
 	const wxChar* GetTitle(){return _("Convert sketch to wire");}
@@ -351,9 +351,9 @@ public:
 			HeeksObj *parallel_sketch = sketch_for_tools->Parallel( double(distance) );
 			if (parallel_sketch != NULL)
 			{
-				wxGetApp().CreateUndoPoint();
-				wxGetApp().Add(parallel_sketch, NULL);
-				wxGetApp().Changed();
+				wxGetApp().StartHistory();
+				wxGetApp().AddUndoably(parallel_sketch, NULL, NULL);
+				wxGetApp().EndHistory();
 			}
 			else
 			{
@@ -609,7 +609,7 @@ const HeeksColor* CSketch::GetColor()const
 
 void CSketch::OnEditString(const wxChar* str){
 	m_title.assign(str);
-	wxGetApp().Changed();
+	// to do, use undoable property changes
 }
 
 SketchOrderType CSketch::GetSketchOrder()

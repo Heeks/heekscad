@@ -256,7 +256,7 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 	Property* property = GetProperty(p);
 	if(property == NULL)return;
 
-	wxGetApp().CreateUndoPoint();
+	// to do, use a PropertyChange undoable command
 
 	switch(property->get_property_type()){
 	case StringPropertyType:
@@ -367,7 +367,7 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 		break;
 	}
 
-	wxGetApp().Changed();
+	// to do add property change undoable command
 }
 
 void CPropertiesCanvas::OnPropertyGridSelect( wxPropertyGridEvent& event ) {

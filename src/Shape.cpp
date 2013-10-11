@@ -276,8 +276,8 @@ public:
 #endif
 
 				HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of 'Offset Shape'"), SOLID_TYPE_UNKNOWN, shape_for_tools->m_color, shape_for_tools->GetOpacity());
-				shape_for_tools->HEEKSOBJ_OWNER->Add(new_object, NULL);
-				shape_for_tools->HEEKSOBJ_OWNER->Remove(shape_for_tools);
+				wxGetApp().AddUndoably(new_object, shape_for_tools->HEEKSOBJ_OWNER, NULL);
+				wxGetApp().DeleteUndoably(shape_for_tools);
 				config.Write(_T("OffsetShapeValue"), offset_value);
 			}
 			catch (Standard_Failure) {
@@ -412,9 +412,9 @@ static HeeksObj* Fuse(HeeksObj* s1, HeeksObj* s2){
 		else new_shape = BRepAlgoAPI_Fuse(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
 
 		HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of Fuse Operation"), SOLID_TYPE_UNKNOWN, ((CShape*)s1)->m_color, ((CShape*)s1)->GetOpacity());
-		wxGetApp().Add(new_object, NULL);
-		wxGetApp().Remove(s1);
-		wxGetApp().Remove(s2);
+		wxGetApp().AddUndoably(new_object, NULL, NULL);
+		wxGetApp().DeleteUndoably(s1);
+		wxGetApp().DeleteUndoably(s2);
 		return new_object;
 	}
 	catch (Standard_Failure) {
@@ -437,9 +437,9 @@ static HeeksObj* Common(HeeksObj* s1, HeeksObj* s2){
 		TopoDS_Shape new_shape = BRepAlgoAPI_Common(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
 
 		HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of Common Operation"), SOLID_TYPE_UNKNOWN, ((CShape*)s1)->m_color, ((CShape*)s1)->GetOpacity());
-		wxGetApp().Add(new_object, NULL);
-		wxGetApp().Remove(s1);
-		wxGetApp().Remove(s2);
+		wxGetApp().AddUndoably(new_object, NULL, NULL);
+		wxGetApp().DeleteUndoably(s1);
+		wxGetApp().DeleteUndoably(s2);
 		return new_object;
 	}
 	catch (Standard_Failure) {
@@ -534,11 +534,14 @@ void CShape::CopyIDsFrom(const CShape* shape_from)
 
 HeeksObj* CShape::CutShapes(std::list<HeeksObj*> &list_in, bool dodelete)
 {
+	wxGetApp().StartHistory();
+	HeeksObj* return_object = NULL;
+
 	if(list_in.front()->GetType() == GroupType)
 	{
 		CGroup* group = (CGroup*)list_in.front();
 		CGroup* newgroup = new CGroup();
-		group->HEEKSOBJ_OWNER->Add(newgroup,NULL);
+		wxGetApp().AddUndoably(newgroup,group->HEEKSOBJ_OWNER,NULL);
 
 		std::list<HeeksObj*> children;
 		HeeksObj* child = group->GetFirstChild();
@@ -561,15 +564,17 @@ HeeksObj* CShape::CutShapes(std::list<HeeksObj*> &list_in, bool dodelete)
 			newlist.pop_front();
 			newlist.push_front(*iter);
 			HeeksObj* newshape = CutShapes(newlist,false);
-			newshape->HEEKSOBJ_OWNER->Remove(newshape);
-			newgroup->Add(newshape,NULL);
+			wxGetApp().DeleteUndoably(newshape);
+			wxGetApp().AddUndoably(newshape,newgroup, NULL);
 			++iter;
 		}
 
-		group->HEEKSOBJ_OWNER->Remove(group);
-		wxGetApp().Remove(list_in);
-		return newgroup;
+		wxGetApp().DeleteUndoably(group);
+		wxGetApp().DeleteUndoably(list_in);
+		return_object = newgroup;
 	}
+	else
+	{
 
 	// subtract from the first one in the list all the others
 	std::list<TopoDS_Shape> shapes;
@@ -592,19 +597,25 @@ HeeksObj* CShape::CutShapes(std::list<HeeksObj*> &list_in, bool dodelete)
 		}
 	}
 
+	return_object = first_solid;
+
 	TopoDS_Shape new_shape;
 	if(Cut(shapes, new_shape))
 	{
 		HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of Cut Operation"), SOLID_TYPE_UNKNOWN, ((CShape*)first_solid)->m_color, ((CShape*)first_solid)->m_opacity);
-		wxGetApp().Add(new_object, NULL);
+		wxGetApp().AddUndoably(new_object, NULL, NULL);
 		if(dodelete)
 		{
-			wxGetApp().Remove(delete_list);
-			wxGetApp().Repaint();
+			wxGetApp().DeleteUndoably(delete_list);
 		}
-		return new_object;
+		return_object = new_object;
 	}
-	return first_solid;
+	}
+
+	wxGetApp().EndHistory();
+	wxGetApp().Repaint();
+
+	return return_object;
 }
 
 HeeksObj* CShape::FuseShapes(std::list<HeeksObj*> &list_in)
@@ -701,8 +712,8 @@ void CShape::FilletOrChamferEdges(std::list<HeeksObj*> &list, double radius, boo
 					}
 				}
 				TopoDS_Shape new_shape = chamfer.Shape();
-				wxGetApp().Add(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(solid->GetColor()), ((CShape*)solid)->m_opacity), NULL);
-				wxGetApp().Remove(solid);
+				wxGetApp().AddUndoably(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(solid->GetColor()), ((CShape*)solid)->m_opacity), NULL, NULL);
+				wxGetApp().DeleteUndoably(solid);
 			}
 			else
 			{
@@ -712,8 +723,8 @@ void CShape::FilletOrChamferEdges(std::list<HeeksObj*> &list, double radius, boo
 					fillet.Add(radius, TopoDS::Edge(((CEdge*)(*It2))->Edge()));
 				}
 				TopoDS_Shape new_shape = fillet.Shape();
-				wxGetApp().Add(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(solid->GetColor()), ((CShape*)solid)->m_opacity), NULL);
-				wxGetApp().Remove(solid);
+				wxGetApp().AddUndoably(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(solid->GetColor()), ((CShape*)solid)->m_opacity), NULL, NULL);
+				wxGetApp().DeleteUndoably(solid);
 			}
 		}
 		catch (Standard_Failure) {
@@ -737,7 +748,7 @@ BRepGProp::VolumeProperties(shape, System);
 return System.Mass();
 }
 
-bool CShape::ImportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> *index_map, HeeksObj* paste_into)
+bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<int, CShapeData> *index_map, HeeksObj* paste_into)
 {
 	// only allow paste of solids at top level or to groups
 	if(paste_into && paste_into->GetType() != GroupType)return false;
@@ -775,7 +786,8 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 						HeeksObj* new_object = MakeObject(rShape, _("STEP solid"), shape_data.m_solid_type, HeeksColor(191, 191, 191), 1.0f);
 						if(new_object)
 						{
-							add_to->Add(new_object, NULL);
+							if(undoably)wxGetApp().AddUndoably(new_object, add_to, NULL);
+							else add_to->Add(new_object, NULL);
 							shape_data.SetShape((CShape*)new_object);
 						}
 					}
@@ -783,7 +795,8 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 				else
 				{
 					HeeksObj* new_object = MakeObject(rShape, _("STEP solid"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191), 1.0f);
-					add_to->Add(new_object, NULL);
+					if(undoably)wxGetApp().AddUndoably(new_object, add_to, NULL);
+					else add_to->Add(new_object, NULL);
 				}
 			}
 		}
@@ -853,7 +866,8 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 							if (GetVolume(solid) < 0.0) solid.Reverse();
 
 							HeeksObj* new_object = MakeObject(solid, _("sewed IGES solid"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191), 1.0f);
-							add_to->Add(new_object, NULL);
+							if(undoably)wxGetApp().AddUndoably(new_object, add_to, NULL);
+							else add_to->Add(new_object, NULL);
 							sewed_shape_added = true;
 						}
 					}
@@ -867,8 +881,9 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, std::map<int, CShapeData> 
 					for(std::list<TopoDS_Shape>::iterator It = shapes_readed.begin(); It != shapes_readed.end(); It++)
 					{
 						TopoDS_Shape rShape = *It;
-					HeeksObj* new_object = MakeObject(rShape, _("IGES shape"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191), 1.0f);
-					add_to->Add(new_object, NULL);
+						HeeksObj* new_object = MakeObject(rShape, _("IGES shape"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191), 1.0f);
+						if(undoably)wxGetApp().AddUndoably(new_object, add_to, NULL);
+						else add_to->Add(new_object, NULL);
 					}
 				}
 

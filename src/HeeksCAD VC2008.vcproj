@@ -1322,6 +1322,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\History.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\History.h"
+			>
+		</File>
+		<File
 			RelativePath=".\HLine.cpp"
 			>
 		</File>
@@ -1902,6 +1910,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\RemoveOrAddTool.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\RemoveOrAddTool.h"
+			>
+		</File>
+		<File
 			RelativePath=".\RS274X.cpp"
 			>
 		</File>
@@ -2318,27 +2334,11 @@
 			>
 		</File>
 		<File
-			RelativePath="..\interface\TransientObject.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\interface\TransientObject.h"
-			>
-		</File>
-		<File
 			RelativePath=".\TreeCanvas.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\TreeCanvas.h"
-			>
-		</File>
-		<File
-			RelativePath=".\UndoEngine.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\UndoEngine.h"
 			>
 		</File>
 		<File

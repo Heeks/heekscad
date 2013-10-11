@@ -726,7 +726,7 @@ std::list<SimplifySketchTool::SortPoint> SimplifySketchTool::GetPoints( TopoDS_W
 static void SimplifySketch(const double deviation, bool make_bspline )
 {
 
-    wxGetApp().CreateUndoPoint();
+    wxGetApp().StartHistory();
 
     double original_tolerance = wxGetApp().m_geom_tol;
     wxGetApp().m_geom_tol = sketch_tool_options.m_cleanup_tolerance;
@@ -952,7 +952,7 @@ static void SimplifySketch(const double deviation, bool make_bspline )
 	} // End for
 
     wxGetApp().m_geom_tol = original_tolerance;
-    wxGetApp().Changed();
+    wxGetApp().EndHistory();
 }
 
 void SimplifySketchTool::Run()

@@ -290,7 +290,7 @@ void CStlSolid::CopyFrom(const HeeksObj* object)
 
 void CStlSolid::OnEditString(const wxChar* str){
 	m_title.assign(str);
-	wxGetApp().Changed();
+	// to do, use undoable property changes
 }
 
 void CStlSolid::GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal){
