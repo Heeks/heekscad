@@ -549,31 +549,25 @@ static void OnSelectModeButton( wxCommandEvent& WXUNUSED( event ) )
 
 static void OnLinesButton( wxCommandEvent& WXUNUSED( event ) )
 {
-	wxGetApp().CreateUndoPoint();
 	line_strip.drawing_mode = LineDrawingMode;
 	wxGetApp().SetInputMode(&line_strip);
-	wxGetApp().Changed();
 }
 
 
 static void OnEllipseButton( wxCommandEvent& WXUNUSED( event ) )
 {
-	wxGetApp().CreateUndoPoint();
 	line_strip.drawing_mode = EllipseDrawingMode;
 	wxGetApp().SetInputMode(&line_strip);
-	wxGetApp().Changed();
 }
 static void OnPointsButton( wxCommandEvent& WXUNUSED( event ) )
 {
-	wxGetApp().CreateUndoPoint();
 	wxGetApp().SetInputMode(&point_drawing);
-	wxGetApp().Changed();
 }
 
 static void OnSplinePointsButton( wxCommandEvent& WXUNUSED( event ) )
 {
 	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 3, PointType, 0, _("Pick three or more points to be splined"), _("Spline Through Points")))return;
-	wxGetApp().CreateUndoPoint();
+	wxGetApp().StartHistory();
 	std::list<gp_Pnt> points;
 	for(std::list<HeeksObj*>::iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
 	{
@@ -584,50 +578,43 @@ static void OnSplinePointsButton( wxCommandEvent& WXUNUSED( event ) )
 		}
 	}
 	HSpline* new_object = new HSpline(points, &wxGetApp().current_color);
-	wxGetApp().Add(new_object, NULL);
-	wxGetApp().Changed();
+	wxGetApp().AddUndoably(new_object, NULL, NULL);
+	wxGetApp().EndHistory();
 }
 
 static void OnRectanglesButton( wxCommandEvent& WXUNUSED( event ) )
 {
-	wxGetApp().CreateUndoPoint();
 	regular_shapes_drawing.m_mode = RectanglesRegularShapeMode;
 	wxGetApp().SetInputMode(&regular_shapes_drawing);
-	wxGetApp().Changed();
 }
 
 static void OnObroundsButton( wxCommandEvent& WXUNUSED( event ) )
 {
-	wxGetApp().CreateUndoPoint();
 	regular_shapes_drawing.m_mode = ObroundRegularShapeMode;
 	wxGetApp().SetInputMode(&regular_shapes_drawing);
-	wxGetApp().Changed();
 }
 
 static void OnPolygonsButton( wxCommandEvent& WXUNUSED( event ) )
 {
-	wxGetApp().CreateUndoPoint();
 	regular_shapes_drawing.m_mode = PolygonsRegularShapeMode;
 	wxGetApp().SetInputMode(&regular_shapes_drawing);
-	wxGetApp().Changed();
 }
 
 static void OnTextButton( wxCommandEvent& WXUNUSED( event ) )
 {
 	gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
 	HText* new_object = new HText(mat, _T("text"), &(wxGetApp().current_color), wxGetApp().m_pVectorFont );
-	wxGetApp().CreateUndoPoint();
-	wxGetApp().Add(new_object, NULL);
+	wxGetApp().StartHistory();
+	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().m_marked_list->Clear(true);
 	wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().SetInputMode(wxGetApp().m_select_mode);
-	wxGetApp().Changed();
+	wxGetApp().EndHistory();
 	wxGetApp().Repaint();
 }
 
 static void OnDimensioningButton( wxCommandEvent& WXUNUSED( event ) )
 {
-	wxGetApp().CreateUndoPoint();
 	wxGetApp().SetInputMode(&dimension_drawing);
 }
 
@@ -664,14 +651,13 @@ static void OnCircles3pButton( wxCommandEvent& WXUNUSED( event ) )
             centre[1] = c.Location().Coord().Y();
             centre[2] = c.Location().Coord().Z();
 
-			wxGetApp().CreateUndoPoint();
-            heekscad_interface.Add( heekscad_interface.NewCircle( centre, c.Radius() ), NULL );
-			wxGetApp().Changed();
+			wxGetApp().StartHistory();
+            heekscad_interface.AddUndoably( heekscad_interface.NewCircle( centre, c.Radius() ), NULL );
+			wxGetApp().EndHistory();
         }
     }
     else
     {
-        wxGetApp().CreateUndoPoint();
         line_strip.drawing_mode = CircleDrawingMode;
         line_strip.circle_mode = ThreePointsCircleMode;
         wxGetApp().SetInputMode(&line_strip);
@@ -776,9 +762,7 @@ static void OnSaveButton( wxCommandEvent& event )
 
 static void OnUpdateSave( wxUpdateUIEvent& event )
 {
-#ifdef USE_UNDO_ENGINE
 	event.Enable(wxGetApp().IsModified());
-#endif
 }
 
 static void OnSaveAsButton( wxCommandEvent& event )
@@ -791,19 +775,17 @@ static void OnSaveSettingsButton( wxCommandEvent& event )
     wxGetApp().WriteConfig();
 }
 
-#ifdef USE_UNDO_ENGINE
 static void OnUndoButton( wxCommandEvent& event )
 {
-	wxGetApp().Undo();
+	wxGetApp().RollBack();
 	wxGetApp().Repaint();
 }
 
 static void OnRedoButton( wxCommandEvent& event )
 {
-	wxGetApp().Redo();
+	wxGetApp().RollForward();
 	wxGetApp().Repaint();
 }
-#endif
 
 static void OnNewButton( wxCommandEvent& event )
 {
@@ -837,15 +819,15 @@ static void OnPasteButton( wxCommandEvent& event )
 
 static void OnDeleteButton( wxCommandEvent& event )
 {
-	wxGetApp().CreateUndoPoint();
+	wxGetApp().StartHistory();
 	std::list<HeeksObj *> list;
 	for(std::list<HeeksObj*>::iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
 	{
 		HeeksObj* object = *It;
-		if(object->CanBeRemoved())wxGetApp().Remove(object);
+		if(object->CanBeRemoved())wxGetApp().DeleteUndoably(object);
 	}
 	wxGetApp().m_marked_list->Clear(true);
-	wxGetApp().Changed();
+	wxGetApp().EndHistory();
 }
 
 static void OnUpdateDelete( wxUpdateUIEvent& event )
@@ -861,26 +843,26 @@ static void OnUpdatePaste( wxUpdateUIEvent& event )
 static void OnSubtractButton( wxCommandEvent& event )
 {
 	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 2, SolidType, FaceType, _("Pick two or more faces or solids, the first one will be cut by the others"), _("Subtract Solids")))return;
-	wxGetApp().CreateUndoPoint();
+	wxGetApp().StartHistory();
 	CShape::CutShapes(wxGetApp().m_marked_list->list());
-	wxGetApp().Changed();
+	wxGetApp().EndHistory();
 }
 
 static void OnFuseButton( wxCommandEvent& event )
 {
 	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 2, SolidType, _("Pick two or more solids to be fused together"), _("Fuse Solids")))return;
-	wxGetApp().CreateUndoPoint();
+	wxGetApp().StartHistory();
 	CShape::FuseShapes(wxGetApp().m_marked_list->list());
-	wxGetApp().Changed();
+	wxGetApp().EndHistory();
 }
 
 static void OnCommonButton( wxCommandEvent& event )
 {
 	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 2, SolidType, _("Pick two or more solids, only the shape that is contained by all of them will remain"), _("Intersection of Solids")))return;
-	wxGetApp().CreateUndoPoint();
+	wxGetApp().StartHistory();
 	CShape::CommonShapes(wxGetApp().m_marked_list->list());
 	wxGetApp().m_marked_list->Clear(true);
-	wxGetApp().Changed();
+	wxGetApp().EndHistory();
 }
 
 static void OnFilletButton( wxCommandEvent& event )
@@ -891,11 +873,11 @@ static void OnFilletButton( wxCommandEvent& event )
 	config.Read(_T("EdgeBlendRadius"), &rad);
 	if(wxGetApp().InputLength(_("Enter Blend Radius"), _("Radius"), rad))
 	{
-		wxGetApp().CreateUndoPoint();
+		wxGetApp().StartHistory();
 		CShape::FilletOrChamferEdges(wxGetApp().m_marked_list->list(), rad);
 		config.Write(_T("EdgeBlendRadius"), rad);
 		wxGetApp().m_marked_list->Clear(true);
-		wxGetApp().Changed();
+		wxGetApp().EndHistory();
 	}
 }
 
@@ -907,11 +889,11 @@ static void OnChamferButton( wxCommandEvent& event )
 	config.Read(_T("EdgeChamferDist"), &rad);
 	if(wxGetApp().InputLength(_("Enter chamfer distance"), _("Distance"), rad))
 	{
-		wxGetApp().CreateUndoPoint();
+		wxGetApp().StartHistory();
 		CShape::FilletOrChamferEdges(wxGetApp().m_marked_list->list(), rad, true);
 		config.Write(_T("EdgeChamferDist"), rad);
 		wxGetApp().m_marked_list->Clear(true);
-		wxGetApp().Changed();
+		wxGetApp().EndHistory();
 	}
 }
 
@@ -923,43 +905,43 @@ static void OnSectioningButton( wxCommandEvent& event )
 static void OnRuledSurfaceButton( wxCommandEvent& event )
 {
 	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 2, SketchType, wxString(_("Pick two or more sketches, to create a lofted solid between")) + _T("\n( ") + _( "hold down Ctrl key to select more than one solid") + _T(" )"), _("Lofted Body")))return;
-	wxGetApp().CreateUndoPoint();
+	wxGetApp().StartHistory();
 	PickCreateRuledSurface();
-	wxGetApp().Changed();
+	wxGetApp().EndHistory();
 }
 
 static void OnExtrudeButton( wxCommandEvent& event )
 {
 	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 1, SketchType, FaceType, CircleType, wxString(_("Pick one or more sketches, faces or circles, to create an extruded body from")) + _T("\n( ") + _( "hold down Ctrl key to select more than one solid") + _T(" )"), _("Extrude")))return;
-	wxGetApp().CreateUndoPoint();
+	wxGetApp().StartHistory();
 	PickCreateExtrusion();
-	wxGetApp().Changed();
+	wxGetApp().EndHistory();
 }
 
 static void OnRevolveButton( wxCommandEvent& event )
 {
 	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 1, SketchType, FaceType, CircleType, wxString(_("Pick one or more sketches, faces or circles, to create a revolved body from")) + _T("\n( ") + _( "hold down Ctrl key to select more than one solid") + _T(" )"), _("Extrude")))return;
-	wxGetApp().CreateUndoPoint();
+	wxGetApp().StartHistory();
 	PickCreateRevolution();
-	wxGetApp().Changed();
+	wxGetApp().EndHistory();
 }
 
 static void OnSweepButton( wxCommandEvent& event )
 {
 	if(!wxGetApp().CheckForNOrMore(wxGetApp().m_marked_list->list(), 1, SketchType, FaceType, CircleType, wxString(_("Pick one or more sketches, faces or circles, to sweep")) + _T("\n( ") + _( "hold down Ctrl key to select more than one solid") + _T(" )"), _("Extrude")))return;
-	wxGetApp().CreateUndoPoint();
+	wxGetApp().StartHistory();
 	PickCreateSweep();
-	wxGetApp().Changed();
+	wxGetApp().EndHistory();
 }
 
 static void AddObjectFromButton(HeeksObj* new_object)
 {
-	wxGetApp().CreateUndoPoint();
-	wxGetApp().Add(new_object,NULL);
-	wxGetApp().Changed();
+	wxGetApp().StartHistory();
+	wxGetApp().AddUndoably(new_object,NULL,NULL);
 	wxGetApp().m_marked_list->Clear(true);
 	wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().SetInputMode(wxGetApp().m_select_mode);
+	wxGetApp().EndHistory();
 	wxGetApp().Repaint();
 }
 
@@ -1112,17 +1094,6 @@ static void OnMoveScaleButton( wxCommandEvent& event )
 {
 	TransformTools::Scale(false);
 }
-
-//JT
-#ifdef FIRE_CONSTRAINT_TESTER_FROM_MAIN_MENU
-static void OnTestConstraint( wxCommandEvent& event )
-{
-
-    wxGetApp().TestForValidConstraints();
-
-}
-#endif
-
 
 void CHeeksFrame::OnExternalButton( wxCommandEvent& event )
 {
@@ -1667,11 +1638,9 @@ void CHeeksFrame::MakeMenus()
 
 	// Edit Menu
 	wxMenu *edit_menu = new wxMenu;
-#ifdef USE_UNDO_ENGINE
 	AddMenuItem(edit_menu, _("Undo\tCtrl+Z"), ToolImage(_T("undo")), OnUndoButton);
 	AddMenuItem(edit_menu, _("Redo\tCtrl+Shift+Z"), ToolImage(_T("redo")), OnRedoButton);
 	edit_menu->AppendSeparator();
-#endif
 	AddMenuItem(edit_menu, _("Cut\tCtrl+X"), ToolImage(_T("cut")), OnCutButton, OnUpdateCut);
 	AddMenuItem(edit_menu, _("Copy\tCtrl+C"), ToolImage(_T("copy")), OnCopyButton, OnUpdateCopy);
 	AddMenuItem(edit_menu, _("Paste\tCtrl+V"), ToolImage(_T("paste")), OnPasteButton, OnUpdatePaste);
@@ -1767,13 +1736,6 @@ void CHeeksFrame::MakeMenus()
 	m_geometry_toolbar_menu_id = AddMenuItem(m_menuWindow, _("Geometry Tool Bar"), wxBitmap(), OnViewGeometryBar, OnUpdateViewGeometryBar, NULL, true);
 	m_viewing_toolbar_menu_id = AddMenuItem(m_menuWindow, _("Viewing Tool Bar"), wxBitmap(), OnViewViewingBar, OnUpdateViewViewingBar, NULL, true);
 	m_transform_toolbar_menu_id = AddMenuItem(m_menuWindow, _("Transformations Tool Bar"), wxBitmap(), OnViewTransformBar, OnUpdateViewTransformBar, NULL, true);
-//JT
-#ifdef FIRE_CONSTRAINT_TESTER_FROM_MAIN_MENU
-    	wxMenu * m_menuConstraintTester = new wxMenu;
-    	AddMenuItem(m_menuConstraintTester, _("Validate Constraints"), wxBitmap(), OnTestConstraint);
-
-#endif
-
 
 	// Add them to the main menu
 	m_menuBar = new wxMenuBar;
@@ -1785,11 +1747,7 @@ void CHeeksFrame::MakeMenus()
 	m_menuBar->Append( coordinate_menu, _( "&Set Origin" ) );
 	m_menuBar->Append( transform_menu, _( "&Transform" ) );
 	m_menuBar->Append( m_menuWindow, _( "&Window" ) );
-	//JT
-#ifdef FIRE_CONSTRAINT_TESTER_FROM_MAIN_MENU
 
-    	m_menuBar->Append( m_menuConstraintTester, _( "&Constraint Tester" ) );
-#endif
 	SetMenuBar( m_menuBar );
 }
 
@@ -1816,10 +1774,8 @@ void CHeeksFrame::AddToolBars()
 		if(!wxGetApp().m_no_creation_mode)AddToolBarTool(m_toolBar, _T("Cut"), ToolImage(_T("cut")), _("Cut selected items to the clipboard"), OnCutButton, OnUpdateCut);
 		if(!wxGetApp().m_no_creation_mode)AddToolBarTool(m_toolBar, _T("Copy"), ToolImage(_T("copy")), _("Copy selected items to the clipboard"), OnCopyButton, OnUpdateCopy);
 		if(!wxGetApp().m_no_creation_mode)AddToolBarTool(m_toolBar, _T("Paste"), ToolImage(_T("paste")), _("Paste items from the clipboard"), OnPasteButton, OnUpdatePaste);
-#ifdef USE_UNDO_ENGINE
 		AddToolBarTool(m_toolBar, _T("Undo"), ToolImage(_T("undo")), _("Undo the previous command"), OnUndoButton);
 		AddToolBarTool(m_toolBar, _T("Redo"), ToolImage(_T("redo")), _("Redo the next command"), OnRedoButton);
-#endif
 		AddToolBarTool(m_toolBar, _T("Select"), ToolImage(_T("select")), _("Select Mode"), OnSelectModeButton);
 
 		m_toolBar->Realize();

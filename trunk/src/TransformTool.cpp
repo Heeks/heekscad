@@ -50,8 +50,6 @@ void TransformObjectsTool::Run(){
 		HeeksObj* object = *It;
 		object->ModifyByMatrix(modify_matrix);
 	}
-
-	wxGetApp().Changed();
 }
 
 void TransformObjectsTool::RollBack(){
@@ -60,6 +58,4 @@ void TransformObjectsTool::RollBack(){
 		HeeksObj* object = *It;
 		object->ModifyByMatrix(revert_matrix);
 	}
-
-	wxGetApp().Changed();
 }

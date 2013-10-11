@@ -10,11 +10,10 @@
 #include "HeeksCADInterface.h"
 #endif
 
-#include "TransientObject.h"
 #include <algorithm>
 
 
-ObjList::ObjList(const ObjList& objlist): HeeksObj(objlist), m_index_list_valid(true) {copy_objects(objlist);}
+ObjList::ObjList(const ObjList& objlist): HeeksObj(objlist), m_index_list_valid(true) {operator=(objlist);}
 
 void ObjList::Clear()
 {
@@ -56,40 +55,16 @@ void ObjList::Clear(std::set<HeeksObj*> &to_delete)
 	m_index_list_valid = false;
 }
 
-void ObjList::copy_objects(const ObjList& objlist)
-{
-	Clear();
-
-	std::list<HeeksObj*>::const_iterator It;
-	for (It=objlist.m_objects.begin();It!=objlist.m_objects.end();It++)
-	{
-		HeeksObj* new_op;
-		if(objlist.m_preserving_id)
-		{
-			if(dynamic_cast<TransientObject*>(*It))
-			{
-				TransientObject* tobj = (TransientObject*)(*It)->MakeACopyWithID();
-				//wxGetApp().WentTransient(tobj->m_object,tobj);
-				new_op = tobj;
-			}
-			else
-				if((*It)->IsTransient())
-					new_op = new TransientObject((*It)->MakeACopyWithID());
-				else
-					new_op = (*It)->MakeACopyWithID();
-		}
-		else
-			new_op = (*It)->MakeACopy();
-		if(new_op)Add(new_op, NULL);
-	}
-}
-
 const ObjList& ObjList::operator=(const ObjList& objlist)
 {
 	HeeksObj::operator=(objlist);
-
-	copy_objects(objlist);
-
+	Clear();
+	std::list<HeeksObj*>::const_iterator It;
+	for (It=objlist.m_objects.begin();It!=objlist.m_objects.end();It++)
+	{
+		HeeksObj* new_op = (*It)->MakeACopy();
+		if(new_op)Add(new_op, NULL);
+	}
 	return *this;
 }
 
@@ -101,9 +76,9 @@ void ObjList::ClearUndoably(void)
 	for (It=objects_to_delete.begin();It!=objects_to_delete.end();It++)
 	{
 #ifdef HEEKSCAD
-		wxGetApp().Remove(*It);
+		wxGetApp().DeleteUndoably(*It);
 #else
-		heeksCAD->Remove(*It);
+		heeksCAD->DeleteUndoably(*It);
 #endif
 	}
 	m_objects.clear();
@@ -323,71 +298,6 @@ void ObjList::WriteBaseXML(TiXmlElement *element)
 	for(It=m_objects.begin(); It!=m_objects.end() ;It++) (*It)->WriteXML((TiXmlNode*)element);
 	HeeksObj::WriteBaseXML(element);
 }
-
-#ifdef CONSTRAINT_TESTER
-//JT
-void ObjList::AuditHeeksObjTree4Constraints(HeeksObj * SketchPtr ,HeeksObj * mom, int level,bool ShowMsgInConsole,bool *ConstraintsAreOk  )
-{
-    wxString message=wxT("");
-    message.Pad(level*3,' ',true);
-    message+=wxString::Format(wxT("%s ID=%d  ") ,GetTypeString(),m_id);
-
-    if (GetNumChildren() > 0)message+=wxString::Format(wxT("  (Kids:%d)") ,GetNumChildren());
-        if (ShowMsgInConsole)wxPuts(message);
-
-//At this point need to get some info about mom whether or not shee has kids
-//What's you lastman
-
-//How about your first name_id
-//Where to you really reside in memory
-
-
-    if (GetNumChildren() > 0)
-    {
-        std::list<HeeksObj*>::iterator It;
-        for(It=m_objects.begin(); It!=m_objects.end() ;It++)
-        {
-            if(((*It)==NULL)||((*It)==0))
-            wxMessageBox(wxT("this is a problem 201011260146"));
-            (*It)->AuditHeeksObjTree4Constraints(SketchPtr ,this,level+1,ShowMsgInConsole,ConstraintsAreOk);
-        }
-
-    }
-}
-
-void ObjList::FindConstrainedObj(HeeksObj * CurrentObject,HeeksObj * ObjectToFind,int * occurrences,int FromLevel,int Level,bool ShowMsgInConsole)
-{
-    //if we hit this it's the end of the line
-    wxString searchmessage;
-
-
-    //Moving the next two line inside the if,but it will reduce the output to view on big projectes
-       searchmessage.Pad((FromLevel+1)*3+9+Level,' ');
-    searchmessage += wxString::Format(wxT("%s  ID=%d  ") ,GetTypeString(),m_id);//I
-
-    if (this == ObjectToFind)
-    {
-       //Originally had the next two lines outside the if,but it generated too much output to view on big projectes
-       (*occurrences)++;
-        searchmessage += wxT(" $$$ MATCH $$$");
-
-    }
-        if (ShowMsgInConsole)wxPuts(searchmessage);
-
-    if (GetNumChildren() > 0)
-    {
-        std::list<HeeksObj*>::iterator It;
-        for(It=m_objects.begin(); It!=m_objects.end() ;It++)
-        {
-            (*It)->FindConstrainedObj((*It),ObjectToFind, occurrences,FromLevel,Level+1,ShowMsgInConsole);
-        }
-
-    }
-
-
-}
-#endif
-
 
 void ObjList::ReadBaseXML(TiXmlElement* element)
 {

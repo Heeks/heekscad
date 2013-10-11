@@ -182,7 +182,7 @@ static void on_set_font(int zero_based_choice, HeeksObj *obj)
 	{
 		((HText*)obj)->m_pFont = wxGetApp().GetAvailableFonts()->Font( VectorFont::Name_t(vector_names[zero_based_choice].c_str()) );
 	}
-	wxGetApp().Changed();
+	// to do, use undoable property changes
 }
 
 void HText::GetProperties(std::list<Property *> *list)
@@ -223,7 +223,7 @@ bool HText::Stretch(const double *p, const double* shift, void* data)
 
 void HText::OnEditString(const wxChar* str){
 	m_text.assign(str);
-	wxGetApp().Changed();
+	// to do, use undoable property changes
 }
 
 void HText::WriteXML(TiXmlNode *root)

@@ -57,27 +57,6 @@ void PickCreateRuledSurface()
 	}
 }
 
-#if 0
-MakeHelix
-	double angle;
-	{
-		HeeksConfig config;
-		config.Read(_T("RevolutionAngle"), &angle, 360.0);
-	}
-
-	if(InputRevolutionAngle(angle, &wxGetApp().m_extrude_to_solid))
-	{
-		{
-			HeeksConfig config;
-			config.Write(_T("RevolutionAngle"), angle);
-		}
-		if(wxGetApp().m_marked_list->size() > 0)
-		{
-			CreateExtrusionOrRevolution(wxGetApp().m_marked_list->list(), angle, wxGetApp().m_extrude_to_solid, true, 0.0, true);
-		}
-	}
-#endif
-
 void ConvertToFaceOrWire(std::list<HeeksObj*> list, std::list<TopoDS_Shape> &faces_or_wires, bool face_not_wire)
 {
 	std::list<HeeksObj*> sketches_or_faces_to_delete;
@@ -133,11 +112,17 @@ HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_o
 			TopoDS_Shape& shape = *It;
 			new_object = CShape::MakeObject(shape, revolution_not_extrusion ? _("Revolved Solid") : _("Extruded Solid"), SOLID_TYPE_UNKNOWN, wxGetApp().current_color, 1.0f);
 			if(add_new_objects)
-				wxGetApp().Add(new_object, NULL);
+				wxGetApp().AddUndoably(new_object, NULL, NULL);
 			else
 				break;
 		}
 		wxGetApp().Repaint();
+	}
+
+	for(std::list<TopoDS_Shape>::iterator It = faces_or_wires.begin(); It != faces_or_wires.end(); It++)
+	{
+		TopoDS_Shape shape = *It;
+		shape.Free();
 	}
 	return new_object;
 }
@@ -167,12 +152,13 @@ HeeksObj* CreatePipeFromProfile(const TopoDS_Wire &spine, std::list<TopoDS_Shape
 	}
 	if(pipe_shapes.size() > 0)
 	{
-		wxGetApp().CreateUndoPoint();
+		wxGetApp().StartHistory();
 		for(std::list<HeeksObj*>::iterator It = pipe_shapes.begin(); It != pipe_shapes.end(); It++)
 		{
 			HeeksObj* object = *It;
-			wxGetApp().Add(object, NULL);
+			wxGetApp().AddUndoably(object, NULL, NULL);
 		}
+		wxGetApp().EndHistory();
 		return pipe_shapes.front();
 	}
 
@@ -187,8 +173,7 @@ HeeksObj* CreatePipeFromProfile(HeeksObj* spine, HeeksObj* profile)
 	HeeksObj* pipe = CreatePipeFromProfile(wire, faces);
 	if(pipe)
 	{
-		wxGetApp().Remove(profile);
-		wxGetApp().Changed();
+		wxGetApp().DeleteUndoably(profile);
 	}
 	return pipe;
 }
@@ -203,7 +188,6 @@ HeeksObj* CreateSweep(std::list<HeeksObj*> &sweep_objects, HeeksObj* sweep_profi
 	{
 		TopoDS_Wire wire = wires.front();
 		pipe = CreatePipeFromProfile(wire, faces_or_wires);
-		wxGetApp().Changed();
 	}
 	return pipe;
 }

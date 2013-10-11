@@ -68,7 +68,6 @@ public:
 	{
 		drawing->m_previous_direction = new_direction;
 		drawing->m_previous_direction_set = true;
-		wxGetApp().Changed();
 	}
 	void RollBack()
 	{

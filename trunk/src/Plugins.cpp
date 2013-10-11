@@ -64,7 +64,7 @@ CPluginItemDialog::CPluginItemDialog(wxWindow *parent, const wxString& title, Pl
     mainsizer->Add( gridsizer, wxSizerFlags().Align(wxALIGN_CENTER).Border(wxALL, 10).Expand() );
     mainsizer->Add( bottomsizer, wxSizerFlags().Align(wxALIGN_CENTER) );
 
-    // tell frame to make use of sizer (or constraints, if any)
+    // tell frame to make use of sizer
     m_panel->SetAutoLayout( true );
     m_panel->SetSizer( mainsizer );
 
@@ -164,7 +164,7 @@ CPluginsDialog::CPluginsDialog(wxWindow *parent):wxDialog(parent, wxID_ANY, _("H
 
     mainsizer->Add( bottomsizer, 0, wxCENTER );
 
-    // tell frame to make use of sizer (or constraints, if any)
+    // tell frame to make use of sizer
     m_panel->SetAutoLayout( true );
     m_panel->SetSizer( mainsizer );
 
