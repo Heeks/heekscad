@@ -243,33 +243,6 @@ extern "C" {
 #include <GL/glu.h>
 }
 
-#define USE_UNDO_ENGINE
-
-
-#define CHECK_FOR_INVALID_CONSTRAINT//JT This is my attempt to isolate
-
-#ifdef CHECK_FOR_INVALID_CONSTRAINT //
-// THESE ARE SOME OPTIONS ON HOW TO HANDLE THIS STUFF
-//#define DISPLAY_CHECK_FOR_INVALID_CONSTRAINT_ERROR_MSGBOX
-//#define LET_BAD_CONSTRAINT_PASS //JT Sometimes you know things are hosed up and you want to see what happens
-
-#endif
-
-//JT THIS IS ATTEMPT TO CREATE A TEST PROBE FUNCTION THAT CAN BE USED TO IDENTIFY ROOT CAUSE OF CONSTRAINT ERROR
-//#define CONSTRAINT_TESTER
-
-#ifdef CONSTRAINT_TESTER
-
- #define FIRE_CONSTRAINT_TESTER_FROM_MAIN_MENU
-#endif
-
-
-
-
-
-
-
-
 #include "../interface/strconv.h"
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"

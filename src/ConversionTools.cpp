@@ -678,13 +678,11 @@ void ConvertSketchesToFace::Run()
 				std::list<TopoDS_Shape> faces;
 				if(ConvertSketchToFaceOrWire(object, faces, true))
 				{
-					wxGetApp().CreateUndoPoint();
 					for(std::list<TopoDS_Shape>::iterator It2 = faces.begin(); It2 != faces.end(); It2++)
 					{
 						TopoDS_Shape& face = *It2;
-						wxGetApp().Add(new CFace(TopoDS::Face(face)), NULL);
+						wxGetApp().AddUndoably(new CFace(TopoDS::Face(face)), NULL, NULL);
 					}
-					wxGetApp().Changed();
 				}
 			}
 			break;
@@ -710,13 +708,11 @@ void ConvertSketchesToFace::Run()
 			std::list<TopoDS_Shape> faces;
 			if(ConvertEdgesToFaceOrWire(edges, faces, true))
 			{
-				wxGetApp().CreateUndoPoint();
 				for(std::list<TopoDS_Shape>::iterator It2 = faces.begin(); It2 != faces.end(); It2++)
 				{
 					TopoDS_Shape& face = *It2;
-					wxGetApp().Add(new CFace(TopoDS::Face(face)), NULL);
+					wxGetApp().AddUndoably(new CFace(TopoDS::Face(face)), NULL, NULL);
 				}
-				wxGetApp().Changed();
 			}
 		}
 	}
@@ -813,14 +809,12 @@ void TransformToCoordSys::Run(){
 	extract(coordsys2->GetMatrix() * (coordsys1->GetMatrix().Inverted()), m);
 
 	// move any selected objects
-	wxGetApp().CreateUndoPoint();
 	for(std::list<HeeksObj *>::iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
 	{
 		HeeksObj* object = *It;
 		if((object == coordsys1) || (object == coordsys2))continue;
-		object->ModifyByMatrix(m);
+		wxGetApp().TransformUndoably(object, m);
 	}
-	wxGetApp().Changed();
 }
 
 static CSketch* sketch_for_arcs_to_lines = NULL;

@@ -279,13 +279,11 @@ static void on_set_pos(const double* pos)
 class PickPos: public Tool{
 	// Tool's virtual functions
 	void Run(){
-		wxGetApp().CreateUndoPoint();
 		callback_for_pick_pos = on_set_pos;
 		SetVertexPtr();
 		double p[3];
 		extract(*vertex_for_pick_pos, p);
 		wxGetApp().PickPosition(GetTitle(), p, callback_for_pick_pos);
-		wxGetApp().Changed();
 	}
 	wxString BitmapPath(){ return _T("pickpos");}
 	virtual void SetVertexPtr()=0;

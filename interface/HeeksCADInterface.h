@@ -27,7 +27,6 @@ class wxSizeEvent;
 class wxMouseEvent;
 class wxToolBarBase;
 class CNurbSurfaceParams;
-class TransientObject;
 class Plugin;
 class CoordinateSystem;
 
@@ -73,6 +72,8 @@ public:
 	virtual int AddMenuItem(wxMenu* menu, const wxString& title, const wxBitmap& bitmap, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL, wxMenu* submenu = NULL, bool check_item = false);
 	virtual wxString GetExeFolder();
 	virtual wxString GetResFolder();
+	virtual void AddUndoably(HeeksObj* object, HeeksObj* owner);
+	virtual void DeleteUndoably(HeeksObj* object);
 	virtual HeeksObj* GetMainObject();
 	virtual const std::list<HeeksObj*>& GetMarkedList();
 	virtual unsigned long GetMarkedListSize();
@@ -151,11 +152,8 @@ public:
 	virtual HeeksObj* GetIDObject(int type, int id);
 	virtual void SetObjectID(HeeksObj* object, int id); // check for existing id using GetIDObject and call DeleteUndoably first
 	virtual void SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, bool for_clipboard);
-	virtual void Changed();
 	virtual void Remove(HeeksObj* obj);
 	virtual void Add(HeeksObj* object, HeeksObj* other);
-	virtual void CreateUndoPoint();
-	virtual void WentTransient(HeeksObj* obj, TransientObject *tobj);
 	virtual const Plugin* GetFirstPlugin();
 	virtual const Plugin* GetNextPlugin();
 

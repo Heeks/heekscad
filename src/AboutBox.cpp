@@ -40,7 +40,7 @@ CAboutBox::CAboutBox(wxWindow *parent):wxDialog(parent, wxID_ANY, _T(""), wxDefa
 	mainsizer->Add( ok_button );
 	mainsizer->RecalcSizes();
 
-    // tell frame to make use of sizer (or constraints, if any)
+    // tell frame to make use of sizer
     panel->SetAutoLayout( true );
     panel->SetSizer( mainsizer );
 

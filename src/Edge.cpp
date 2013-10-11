@@ -254,7 +254,6 @@ void CEdge::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 
 void CEdge::Blend(double radius,  bool chamfer_not_fillet){
 	try{
-		wxGetApp().CreateUndoPoint();
 		CShape* body = GetParentBody();
 		if(body){
 			if(chamfer_not_fillet)
@@ -266,16 +265,16 @@ void CEdge::Blend(double radius,  bool chamfer_not_fillet){
 					chamfer.Add(radius, m_topods_edge, TopoDS::Face(face->Face()));
 				}
 				TopoDS_Shape new_shape = chamfer.Shape();
-				wxGetApp().Add(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge chamfer"), *(body->GetColor()), body->GetOpacity()), NULL);
+				wxGetApp().AddUndoably(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge chamfer"), *(body->GetColor()), body->GetOpacity()), NULL, NULL);
 			}
 			else
 			{
 				BRepFilletAPI_MakeFillet fillet(body->Shape());
 				fillet.Add(radius, m_topods_edge);
 				TopoDS_Shape new_shape = fillet.Shape();
-				wxGetApp().Add(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(body->GetColor()), body->GetOpacity()), NULL);
+				wxGetApp().AddUndoably(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(body->GetColor()), body->GetOpacity()), NULL, NULL);
 			}
-			wxGetApp().Remove(body);
+			wxGetApp().DeleteUndoably(body);
 		}
 	}
 	catch (Standard_Failure) {

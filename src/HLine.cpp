@@ -44,9 +44,9 @@ public:
 	void Run(){
 		gp_Vec v(line_for_tool->A->m_p, line_for_tool->B->m_p);
 		CCylinder* new_object = new CCylinder(gp_Ax2(line_for_tool->A->m_p, v), 1.0, v.Magnitude(), _("Cylinder"), HeeksColor(191, 191, 240), 1.0f);
-		wxGetApp().CreateUndoPoint();
-		wxGetApp().Add(new_object,NULL);
-		wxGetApp().Changed();
+		wxGetApp().StartHistory();
+		wxGetApp().AddUndoably(new_object,NULL,NULL);
+		wxGetApp().EndHistory();
 	}
 	const wxChar* GetTitle(){return _("Make Cylinder On Line");}
 	wxString BitmapPath(){return _T("cylonlin");}
@@ -58,9 +58,9 @@ public:
 	void Run(){
 		gp_Vec v(line_for_tool->A->m_p, line_for_tool->B->m_p);
 		CCone* new_object = new CCone(gp_Ax2(line_for_tool->A->m_p, v), 2.0, 1.0, v.Magnitude(), _("Cone"), HeeksColor(240, 240, 191), 1.0f);
-		wxGetApp().CreateUndoPoint();
-		wxGetApp().Add(new_object,NULL);
-		wxGetApp().Changed();
+		wxGetApp().StartHistory();
+		wxGetApp().AddUndoably(new_object,NULL,NULL);
+		wxGetApp().EndHistory();
 	}
 	const wxChar* GetTitle(){return _("Make Cone On Line");}
 	wxString BitmapPath(){return _T("coneonlin");}

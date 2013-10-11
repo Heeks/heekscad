@@ -1199,7 +1199,7 @@ void CoordinateSystem::GetBox(CBox &box)
 
 void CoordinateSystem::OnEditString(const wxChar* str){
 	m_title.assign(str);
-	wxGetApp().Changed();
+	// to do, use undoable property changes
 }
 
 HeeksObj *CoordinateSystem::MakeACopy(void)const
@@ -1286,14 +1286,12 @@ public:
 		extract(coord_system_for_Tool->GetMatrix().Inverted(), m);
 
 		// move any selected objects
-		wxGetApp().CreateUndoPoint();
 		for(std::list<HeeksObj *>::iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
 		{
 			HeeksObj* object = *It;
 			if(object == coord_system_for_Tool)continue;
-			object->ModifyByMatrix(m);
+			wxGetApp().TransformUndoably(object, m);
 		}
-		wxGetApp().Changed();
 	}
 	const wxChar* GetTitle(){return _("Transform selected items to world coordinates");}
 	wxString BitmapPath(){return _T("trsfw");}
