@@ -40,10 +40,10 @@ std::vector<TopoDS_Face> MultiPoly(std::list<CSketch*> sketches)
 				HArc* arc = dynamic_cast<HArc*>(obj);
 				if(arc)
 				{
-					shapes.push_back(new FastArc(arc->A->m_p,arc->B->m_p,arc->C->m_p,arc->m_axis.Direction().Z() > 0, arc->GetCircle()));
+					shapes.push_back(new FastArc(arc->A,arc->B,arc->C,arc->m_axis.Direction().Z() > 0, arc->GetCircle()));
 				}
 				else
-					shapes.push_back(new FastLine(eobj->A->m_p,eobj->B->m_p));
+					shapes.push_back(new FastLine(eobj->A,eobj->B));
 			}
 			obj = sketch->GetNextChild();
 		 }

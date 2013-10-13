@@ -89,7 +89,7 @@ public:
 				CArea area = object_for_tool->m_area;
 				area.Offset(-offset_value);
 				HeeksObj* new_object = new HArea(area);
-				object_for_tool->Owner()->Add(new_object, NULL);
+				object_for_tool->m_owner->Add(new_object, NULL);
 				config.Write(_T("OffsetAreaValue"), offset_value);
 			}
 			catch (...) {
@@ -117,7 +117,7 @@ public:
 				CArea area = object_for_tool->m_area;
 				area.Thicken(fabs(offset_value));
 				HeeksObj* new_object = new HArea(area);
-				object_for_tool->Owner()->Add(new_object, NULL);
+				object_for_tool->m_owner->Add(new_object, NULL);
 				config.Write(_T("ObroundAreaValue"), fabs(offset_value));
 			}
 			catch (...) {

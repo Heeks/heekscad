@@ -133,11 +133,7 @@ void CGroup::MoveSolidsToGroupsById(HeeksObj* object)
 			if (o != NULL)
 			{
                 o->HEEKSOBJ_OWNER->Remove(o);
-#ifdef MULTIPLE_OWNERS
-                o->RemoveOwner(o->Owner());
-#else
 				o->m_owner = NULL;
-#endif
                 group->Add(o, NULL);
 			}
 		}

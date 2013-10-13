@@ -56,11 +56,8 @@ HAngularDimension::~HAngularDimension(void)
 
 const HAngularDimension& HAngularDimension::operator=(const HAngularDimension &b)
 {
-#ifdef MULTIPLE_OWNERS
-	ObjList::operator=(b);
-#else
 	HeeksObj::operator=(b);
-#endif
+
 	m_text = b.m_text;
 	m_text_mode = b.m_text_mode;
 	m_color = b.m_color;
@@ -104,11 +101,7 @@ bool HAngularDimension::IsDifferent(HeeksObj* other)
 	if(m_p4->m_p.Distance(dim->m_p4->m_p) > wxGetApp().m_geom_tol)
 		return true;
 
-#ifdef MULTIPLE_OWNERS
-	return ObjList::IsDifferent(other);
-#else
 	return HeeksObj::IsDifferent(other);
-#endif
 }
 
 void HAngularDimension::glCommands(bool select, bool marked, bool no_color)
@@ -252,26 +245,6 @@ void HAngularDimension::DrawArc(gp_Pnt center, double r, double a1, double a2)
 	}
 }
 
-#ifdef MULTIPLE_OWNERS
-void HAngularDimension::LoadToDoubles()
-{
-	m_p0->LoadToDoubles();
-	m_p1->LoadToDoubles();
-	m_p2->LoadToDoubles();
-	m_p3->LoadToDoubles();
-	m_p4->LoadToDoubles();
-}
-
-void HAngularDimension::LoadFromDoubles()
-{
-	m_p0->LoadFromDoubles();
-	m_p1->LoadFromDoubles();
-	m_p2->LoadFromDoubles();
-	m_p3->LoadFromDoubles();
-	m_p4->LoadFromDoubles();
-}
-#endif
-
 HAngularDimension* angular_dimension_for_tool = NULL;
 
 void HAngularDimension::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
@@ -357,20 +330,13 @@ void HAngularDimension::GetProperties(std::list<Property *> *list)
 
 	list->push_back ( new PropertyDouble ( _("scale"),  m_scale, this, on_set_scale ) );
 
-#ifdef MULTIPLE_OWNERS
-	ObjList::GetProperties(list);
-#else
 	HeeksObj::GetProperties(list);
-#endif
 }
 
 bool HAngularDimension::Stretch(const double *p, const double* shift, void* data)
 {
-#ifdef MULTIPLE_OWNERS
-	ObjList::Stretch(p,shift,data);
-#else
 	HeeksObj::Stretch(p,shift,data);
-#endif
+
 	gp_Pnt vp = make_point(p);
 	gp_Vec vshift = make_vector(shift);
 
@@ -434,11 +400,7 @@ void HAngularDimension::ReloadPointers()
 	m_p3 = (HPoint*)GetNextChild();
 	m_p4 = (HPoint*)GetNextChild();
 
-#ifdef MULTIPLE_OWNERS
-	ObjList::ReloadPointers();
-#else
 	HeeksObj::ReloadPointers();
-#endif
 }
 
 wxString HAngularDimension::MakeText(double angle)

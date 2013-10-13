@@ -16,12 +16,9 @@ bool HDimension::DrawFlat = true;
 
 HDimension::HDimension(const gp_Trsf &trsf, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, DimensionMode mode, DimensionUnits units, const HeeksColor* col): EndedObject(col), m_color(*col), m_trsf(trsf), m_mode(mode),  m_units(units),  m_scale(1.0)
 {
-	m_p2 = new HPoint(p2,col);
-	m_p2->m_draw_unselected = false;
-	m_p2->SetSkipForUndo(true);
-	Add(m_p2,NULL);
-	A->m_p = p0;
-	B->m_p = p1;
+	m_p2 = p2;
+	A = p0;
+	B = p1;
 }
 
 HDimension::HDimension(const HDimension &b):EndedObject(&b.m_color)
@@ -42,12 +39,6 @@ const HDimension& HDimension::operator=(const HDimension &b)
 	m_mode = b.m_mode;
 	m_scale = b.m_scale;
 
-#ifdef MULTIPLE_OWNERS
-	std::list<HeeksObj*>::iterator it = m_objects.begin();
-	it++;it++;
-	m_p2 = (HPoint*)(*it);
-#endif
-
 	return *this;
 }
 
@@ -65,7 +56,7 @@ bool HDimension::IsDifferent(HeeksObj* other)
 	if(m_color.COLORREF_color() != dim->m_color.COLORREF_color() || m_mode != dim->m_mode || m_scale != dim->m_scale || m_units != dim->m_units)
 		return true;
 
-	if(m_p2->m_p.Distance(dim->m_p2->m_p) > wxGetApp().m_geom_tol)
+	if(m_p2.Distance(dim->m_p2) > wxGetApp().m_geom_tol)
 		return true;
 
 	return EndedObject::IsDifferent(other);
@@ -93,7 +84,7 @@ wxString HDimension::MakeText()
 	if(fabs(units_factor - 1.0) < 0.0000000001)units_str += wxString(_T(" ")) + _("mm");
 	else if(fabs(units_factor - 25.4) < 0.000000001)units_str += wxString(_T(" ")) + _("inch");
 
-	text = wxString::Format(_T("%lg %s"), A->m_p.Distance(GetB2())/units_factor, units_str.c_str());
+	text = wxString::Format(_T("%lg %s"), A.Distance(GetB2())/units_factor, units_str.c_str());
 
 	return text;
 }
@@ -104,35 +95,35 @@ gp_Pnt HDimension::GetB2()
 	if(m_mode == TwoPointsXYOnlyDimensionMode)
 	{
 		gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(m_trsf);
-		double dp = gp_Vec(B->m_p.XYZ()) * zdir - gp_Vec(A->m_p.XYZ()) * zdir;
-		return gp_Pnt(B->m_p.XYZ() + zdir.XYZ() * (-dp));
+		double dp = gp_Vec(B.XYZ()) * zdir - gp_Vec(A.XYZ()) * zdir;
+		return gp_Pnt(B.XYZ() + zdir.XYZ() * (-dp));
 	}
 	else if(m_mode == TwoPointsXOnlyDimensionMode)
 	{
 		gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(m_trsf);
 		gp_Dir ydir = gp_Dir(0, 1, 0).Transformed(m_trsf);
-		double dpz = gp_Vec(B->m_p.XYZ()) * zdir - gp_Vec(A->m_p.XYZ()) * zdir;
-		double dpy = gp_Vec(B->m_p.XYZ()) * ydir - gp_Vec(A->m_p.XYZ()) * ydir;
-		return gp_Pnt(B->m_p.XYZ() + zdir.XYZ() * (-dpz) + ydir.XYZ() * (-dpy));
+		double dpz = gp_Vec(B.XYZ()) * zdir - gp_Vec(A.XYZ()) * zdir;
+		double dpy = gp_Vec(B.XYZ()) * ydir - gp_Vec(A.XYZ()) * ydir;
+		return gp_Pnt(B.XYZ() + zdir.XYZ() * (-dpz) + ydir.XYZ() * (-dpy));
 	}
 	else if(m_mode == TwoPointsYOnlyDimensionMode)
 	{
 		gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(m_trsf);
 		gp_Dir xdir = gp_Dir(1, 0, 0).Transformed(m_trsf);
-		double dpz = gp_Vec(B->m_p.XYZ()) * zdir - gp_Vec(A->m_p.XYZ()) * zdir;
-		double dpx = gp_Vec(B->m_p.XYZ()) * xdir - gp_Vec(A->m_p.XYZ()) * xdir;
-		return gp_Pnt(B->m_p.XYZ() + zdir.XYZ() * (-dpz) + xdir.XYZ() * (-dpx));
+		double dpz = gp_Vec(B.XYZ()) * zdir - gp_Vec(A.XYZ()) * zdir;
+		double dpx = gp_Vec(B.XYZ()) * xdir - gp_Vec(A.XYZ()) * xdir;
+		return gp_Pnt(B.XYZ() + zdir.XYZ() * (-dpz) + xdir.XYZ() * (-dpx));
 	}
 	else if(m_mode == TwoPointsZOnlyDimensionMode)
 	{
 		gp_Dir xdir = gp_Dir(1, 0, 0).Transformed(m_trsf);
 		gp_Dir ydir = gp_Dir(0, 1, 0).Transformed(m_trsf);
-		double dpx = gp_Vec(B->m_p.XYZ()) * xdir - gp_Vec(A->m_p.XYZ()) * xdir;
-		double dpy = gp_Vec(B->m_p.XYZ()) * ydir - gp_Vec(A->m_p.XYZ()) * ydir;
-		return gp_Pnt(B->m_p.XYZ() + xdir.XYZ() * (-dpx) + ydir.XYZ() * (-dpy));
+		double dpx = gp_Vec(B.XYZ()) * xdir - gp_Vec(A.XYZ()) * xdir;
+		double dpy = gp_Vec(B.XYZ()) * ydir - gp_Vec(A.XYZ()) * ydir;
+		return gp_Pnt(B.XYZ() + xdir.XYZ() * (-dpx) + ydir.XYZ() * (-dpy));
 	}
 
-	return B->m_p;
+	return B;
 }
 
 gp_Pnt HDimension::GetC2()
@@ -141,28 +132,18 @@ gp_Pnt HDimension::GetC2()
 	if(m_mode == TwoPointsXYOnlyDimensionMode || m_mode == TwoPointsXOnlyDimensionMode)
 	{
 		gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(m_trsf);
-		double dp = gp_Vec(m_p2->m_p.XYZ()) * zdir - gp_Vec(A->m_p.XYZ()) * zdir;
-		return gp_Pnt(m_p2->m_p.XYZ() + zdir.XYZ() * (-dp));
+		double dp = gp_Vec(m_p2.XYZ()) * zdir - gp_Vec(A.XYZ()) * zdir;
+		return gp_Pnt(m_p2.XYZ() + zdir.XYZ() * (-dp));
 	}
-#if 0
-	else if(m_mode == TwoPointsXOnlyDimensionMode)
-	{
-		gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(m_trsf);
-		double zdp = gp_Vec(m_p2->m_p.XYZ()) * zdir - gp_Vec(A->m_p.XYZ()) * zdir;
-		gp_Dir ydir = gp_Dir(0, 1, 0).Transformed(m_trsf);
-		double ydp = gp_Vec(m_p2->m_p.XYZ()) * ydir - gp_Vec(A->m_p.XYZ()) * ydir;
-		return gp_Pnt(m_p2->m_p.XYZ() + zdir.XYZ() * (-zdp) + ydir.XYZ() * (-ydp));
-	}
-#endif
 
-	return m_p2->m_p;
+	return m_p2;
 }
 
 void HDimension::glCommands(bool select, bool marked, bool no_color)
 {
 	gp_Pnt b = GetB2();
 	
-	if(A->m_p.IsEqual(b, wxGetApp().m_geom_tol))return;
+	if(A.IsEqual(b, wxGetApp().m_geom_tol))return;
 
 	if(!no_color)wxGetApp().glColorEnsuringContrast(m_color);
 
@@ -171,7 +152,7 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 	gp_Dir zdir = gp_Dir(0, 0, 1).Transformed(m_trsf);
 	if(m_mode == TwoPointsDimensionMode || m_mode == TwoPointsXYOnlyDimensionMode || m_mode == TwoPointsXOnlyDimensionMode)
 	{
-		xdir = make_vector(A->m_p, b);
+		xdir = make_vector(A, b);
 		if(xdir.IsParallel(zdir,wxGetApp().m_geom_tol))
 			zdir = xdir ^ ydir;
 		else
@@ -184,7 +165,7 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 	if(!wxGetApp().get_text_size(text, &width, &height))return;
 
 	// draw arrow line
-	draw_arrow_line(m_mode, A->m_p, b, GetC2(), xdir, ydir, width, m_scale);
+	draw_arrow_line(m_mode, A, b, GetC2(), xdir, ydir, width, m_scale);
 
 	// draw text
 	RenderText(text, GetC2(), xdir, ydir, m_scale);
@@ -238,20 +219,6 @@ void HDimension::RenderText(const wxString &text, const gp_Pnt& p, const gp_Dir&
 	glPopMatrix();
 
 }
-
-#ifdef MULTIPLE_OWNERS
-void HDimension::LoadToDoubles()
-{
-	EndedObject::LoadToDoubles();
-	m_p2->LoadToDoubles();
-}
-
-void HDimension::LoadFromDoubles()
-{
-	EndedObject::LoadFromDoubles();
-	m_p2->LoadFromDoubles();
-}
-#endif
 
 HDimension* dimension_for_tool = NULL;
 
@@ -316,7 +283,7 @@ void HDimension::GetGripperPositions(std::list<GripData> *list, bool just_for_en
 	list->push_back(GripData(GripperTypeScale,point[3].X(),point[3].Y(),point[3].Z(),NULL));
 
 	EndedObject::GetGripperPositions(list,just_for_endof);
-	list->push_back(GripData(GripperTypeStretch,m_p2->m_p.X(),m_p2->m_p.Y(),m_p2->m_p.Z(),&m_p2));
+	list->push_back(GripData(GripperTypeStretch,m_p2.X(),m_p2.Y(),m_p2.Z(),&m_p2));
 }
 
 static void on_set_trsf(const gp_Trsf &trsf, HeeksObj* object){
@@ -378,7 +345,7 @@ bool HDimension::Stretch(const double *p, const double* shift, void* data)
 	gp_Vec vshift = make_vector(shift);
 
 	if(data == &m_p2){
-		m_p2->m_p = vp.XYZ() + vshift.XYZ();
+		m_p2 = vp.XYZ() + vshift.XYZ();
 	}
 	return false;
 }
@@ -473,27 +440,6 @@ HeeksObj* HDimension::ReadFromXMLElement(TiXmlElement* pElem)
 	HDimension* new_object = new HDimension(make_matrix(m), make_point(p0), make_point(p1), make_point(p2), mode, units, &c);
 	new_object->ReadBaseXML(pElem);
 	new_object->m_scale = scale;
-
-	if(new_object->GetNumChildren()>3)
-	{
-		//This is a new style line, with children points
-		new_object->Remove(new_object->A);
-		new_object->Remove(new_object->B);
-		new_object->Remove(new_object->m_p2);
-		delete new_object->A;
-		delete new_object->B;
-		delete new_object->m_p2;
-		new_object->A = (HPoint*)new_object->GetFirstChild();
-		new_object->B = (HPoint*)new_object->GetNextChild();
-		new_object->m_p2 = (HPoint*)new_object->GetNextChild();
-		new_object->A->m_draw_unselected = false;
-		new_object->B->m_draw_unselected = false;
-		new_object->m_p2->m_draw_unselected = false;
-		new_object->A->SetSkipForUndo(true);
-		new_object->B->SetSkipForUndo(true);
-		new_object->m_p2->SetSkipForUndo(true);
-	}
-
 
 	return new_object;
 }

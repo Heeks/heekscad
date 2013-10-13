@@ -41,6 +41,7 @@
 #include "Sectioning.h"
 #include "MenuSeparator.h"
 #include "HGear.h"
+#include "HPoint.h"
 
 using namespace std;
 

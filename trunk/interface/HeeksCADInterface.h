@@ -74,6 +74,8 @@ public:
 	virtual wxString GetResFolder();
 	virtual void AddUndoably(HeeksObj* object, HeeksObj* owner);
 	virtual void DeleteUndoably(HeeksObj* object);
+	virtual void StartHistory();
+	virtual void EndHistory(void);
 	virtual HeeksObj* GetMainObject();
 	virtual const std::list<HeeksObj*>& GetMarkedList();
 	virtual unsigned long GetMarkedListSize();

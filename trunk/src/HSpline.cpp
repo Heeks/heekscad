@@ -50,14 +50,14 @@ HSpline::HSpline(const HSpline &s):EndedObject(&s.color){
 
 HSpline::HSpline(const Geom_BSplineCurve &s, const HeeksColor* col):EndedObject(col),color(*col){
 	m_spline = Handle(Geom_BSplineCurve)::DownCast(s.Copy());	
-	m_spline->D0(m_spline->FirstParameter(), A->m_p);
-	m_spline->D0(m_spline->LastParameter() , B->m_p);
+	m_spline->D0(m_spline->FirstParameter(), A);
+	m_spline->D0(m_spline->LastParameter() , B);
 }
 
 HSpline::HSpline(Handle_Geom_BSplineCurve s, const HeeksColor* col):EndedObject(col),color(*col){
 	m_spline = s;//Handle(Geom_BSplineCurve)::DownCast(s->Copy());
-	m_spline->D0(m_spline->FirstParameter(), A->m_p);
-	m_spline->D0(m_spline->LastParameter() , B->m_p);
+	m_spline->D0(m_spline->FirstParameter(), A);
+	m_spline->D0(m_spline->LastParameter() , B);
 }
 
 HSpline::HSpline(const std::list<gp_Pnt> &points, const HeeksColor* col):EndedObject(col),color(*col)
@@ -78,8 +78,8 @@ HSpline::HSpline(const std::list<gp_Pnt> &points, const HeeksColor* col):EndedOb
 	GeomAPI_Interpolate anInterpolation(Array, periodicity, Precision::Approximation());
 	anInterpolation.Perform();
 	m_spline = anInterpolation.Curve();
-	m_spline->D0(m_spline->FirstParameter(), A->m_p);
-	m_spline->D0(m_spline->LastParameter() , B->m_p);
+	m_spline->D0(m_spline->FirstParameter(), A);
+	m_spline->D0(m_spline->LastParameter() , B);
 }
 
 HSpline::~HSpline(){
