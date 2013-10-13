@@ -14,6 +14,7 @@
 #include "HArc.h"
 #include "HCircle.h"
 #include "HSpline.h"
+#include "HPoint.h"
 #include "Group.h"
 #include "Cylinder.h"
 #include "Cuboid.h"
@@ -199,6 +200,16 @@ wxString CHeeksCADInterface::GetResFolder()
 	return wxGetApp().GetResFolder();
 }
 
+void CHeeksCADInterface::StartHistory()
+{
+	wxGetApp().StartHistory();
+}
+
+void CHeeksCADInterface::EndHistory(void)
+{
+	wxGetApp().EndHistory();
+}
+
 HeeksObj* CHeeksCADInterface::GetMainObject()
 {
 	return &(wxGetApp());
@@ -263,11 +274,11 @@ bool CHeeksCADInterface::GetArcCentre(HeeksObj* object, double* c)
 	switch (object->GetType())
 	{
 		case ArcType:
-			extract(((HArc*)object)->C->m_p, c);
+			extract(((HArc*)object)->C, c);
 			return true;
 
 		case CircleType:
-			extract(((HCircle*)object)->C->m_p, c);
+			extract(((HCircle*)object)->C, c);
 			return true;
 
 	} // End switch
@@ -2060,7 +2071,7 @@ void CHeeksCADInterface::ObjectAreaString(HeeksObj* object, wxString &s)
 	{
 	case CircleType:
 		{
-			double c[2] = {((HCircle*)object)->C->m_p.X(), ((HCircle*)object)->C->m_p.Y()};
+			double c[2] = {((HCircle*)object)->C.X(), ((HCircle*)object)->C.Y()};
 			double radius = ((HCircle*)object)->m_radius;
 			s << _T("a = area.Area()\n");
 			s << _T("c = area.Curve()\n");

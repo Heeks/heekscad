@@ -166,11 +166,7 @@ void HPocket::PocketSketch(CSketch* sketch, double length)
 	sketch->HEEKSOBJ_OWNER->Add(pad,NULL);
 
 	sketch->HEEKSOBJ_OWNER->Remove(sketch);
-#ifdef MULTIPLE_OWNERS
-	sketch->RemoveOwner(sketch->Owner());
-#else
 	sketch->m_owner = NULL;
-#endif
 	sketch->m_draw_with_transform = false;
 	pad->Add(sketch,NULL);
 	pad->ReloadPointers();

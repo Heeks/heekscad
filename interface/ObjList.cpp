@@ -20,14 +20,8 @@ void ObjList::Clear()
 	std::list<HeeksObj*>::iterator It;
 	for(It=m_objects.begin(); It!=m_objects.end() ;It++)
 	{
-#ifdef MULTIPLE_OWNERS
-		(*It)->RemoveOwner(this);
-		if(!(*It)->GetFirstOwner())
-			delete *It;
-#else
 		(*It)->m_owner = NULL;
 		delete *It;
-#endif
 	}
 	m_objects.clear();
 	m_index_list.clear();
@@ -41,11 +35,7 @@ void ObjList::Clear(std::set<HeeksObj*> &to_delete)
 	{
 		if(to_delete.find(*It) != to_delete.end())
 		{
-#ifdef MULTIPLE_OWNERS
-			(*It)->RemoveOwners();
-#else
 			(*It)->m_owner = NULL;
-#endif
 			It = m_objects.erase(It);
 		}
 		else
@@ -241,17 +231,6 @@ std::list<HeeksObj *> ObjList::GetChildren() const
 	std::copy( m_objects.begin(), m_objects.end(), std::inserter(children, children.begin()) );
 	return(children);
 }
-
-
-#ifdef MULTIPLE_OWNERS
-void ObjList::Disconnect(std::list<HeeksObj*> parents)
-{
-	parents.push_back(this);
-	for(LoopIt = m_objects.begin(); LoopIt != m_objects.end(); LoopIt++){
-		(*LoopIt)->Disconnect(parents);
-	}
-}
-#endif
 
 void ObjList::Remove(HeeksObj* object)
 {

@@ -4,21 +4,16 @@
 
 #pragma once
 
-#ifdef MULTIPLE_OWNERS
-#include "../interface/ObjList.h"
-class HPoint;
-class HCircle: public ObjList{
-#else
-#include "HPoint.h"
-class HCircle: public HeeksObj{
-#endif
+#include "../interface/HeeksObj.h"
+#include "../interface/HeeksColor.h"
 
+class HCircle: public HeeksObj{
 private:
 	HeeksColor color;
 
 public:
 	gp_Ax1 m_axis;
-	HPoint *C;
+	gp_Pnt C;
 	double m_radius;
 
 	~HCircle(void);
@@ -63,6 +58,4 @@ public:
 
 	void SetCircle(gp_Circ c);
 	gp_Circ GetCircle() const;
-	void LoadFromDoubles();
-	void LoadToDoubles();
 };

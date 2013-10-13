@@ -9,6 +9,7 @@
 #include "HCircle.h"
 #include "HEllipse.h"
 #include "HSpline.h"
+#include "HPoint.h"
 #include "Sketch.h"
 #include "HText.h"
 #include "HeeksConfig.h"

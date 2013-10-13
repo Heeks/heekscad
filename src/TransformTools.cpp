@@ -108,11 +108,7 @@ void TransformTools::Translate(bool copy)
 			{
 				HeeksObj* object = *It;
 				HeeksObj* new_object = object->MakeACopy();
-#ifdef MULTIPLE_OWNERS
-				object->HEEKSOBJ_OWNER->Add(new_object, NULL);
-#else
 				object->m_owner->Add(new_object, NULL);
-#endif
 				wxGetApp().TransformUndoably(new_object, m);
 			}
 		}
@@ -209,11 +205,7 @@ void TransformTools::Rotate(bool copy)
 				HeeksObj* object = *It;
 				HeeksObj* new_object = object->MakeACopy();
 				wxGetApp().TransformUndoably(new_object, m);             // Rotate the duplicate object.
-#ifdef MULTIPLE_OWNERS
-				wxGetApp().AddUndoably(new_object, object->HEEKSOBJ_OWNER, NULL);// And add it to this object's owner
-#else
 				wxGetApp().AddUndoably(new_object, object->m_owner, NULL);// And add it to this object's owner
-#endif
 			}
 		}
 		wxGetApp().m_marked_list->Clear(true);
@@ -287,11 +279,7 @@ void TransformTools::Mirror(bool copy)
 		{
 			HeeksObj* object = *It;
 			HeeksObj* new_object = object->MakeACopy();
-#ifdef MULTIPLE_OWNERS
-			wxGetApp().AddUndoably(new_object, object->HEEKSOBJ_OWNER, NULL);
-#else
 			wxGetApp().AddUndoably(new_object, object->m_owner, NULL);
-#endif
 			wxGetApp().TransformUndoably(new_object, m);
 		}
 		wxGetApp().m_marked_list->Clear(true);
@@ -354,11 +342,7 @@ void TransformTools::Scale(bool copy)
 			{
 				HeeksObj* object = *It;
 				HeeksObj* new_object = object->MakeACopy();
-#ifdef MULTIPLE_OWNERS
-				wxGetApp().AddUndoably(new_object, object->HEEKSOBJ_OWNER, NULL);
-#else
 				wxGetApp().AddUndoably(new_object, object->m_owner, NULL);
-#endif
 				wxGetApp().TransformUndoably(new_object, m);
 			}
 		}

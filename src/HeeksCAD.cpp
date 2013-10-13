@@ -967,23 +967,11 @@ HeeksObj *HeeksCADapp::MergeCommonObjects( ObjectReferences_t & unique_set, Heek
 		{
 			// We've seen an object like this one before.  Use the old one.
 			unique_reference = unique_set[ object_reference ];
-#ifdef MULTIPLE_OWNERS
-			std::list<HeeksObj *> owners = object->Owners();
-			for (std::list<HeeksObj *>::iterator itOwner = owners.begin(); itOwner != owners.end(); itOwner++)
-			{
-				if (unique_reference != object)
-				{
-					(*itOwner)->Remove(object);
-					(*itOwner)->Add( unique_reference, NULL );
-				}
-			}
-#else
 			if(object->m_owner)
 			{
 				object->m_owner->Remove(object);
 				object->m_owner->Add( unique_reference, NULL );
 			}
-#endif
 
 			unique_set[ object_reference ] = unique_reference;
 			object = unique_reference;
@@ -1371,8 +1359,8 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
 		{
 			HLine* l = (HLine*)object;
 			double s[3], e[3];
-			extract(l->A->m_p, s);
-			extract(l->B->m_p, e);
+			extract(l->A, s);
+			extract(l->B, e);
 			dxf_file.WriteLine(s, e, Ttc(layer_name.c_str()));
 		}
 		break;
@@ -1388,9 +1376,9 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
 		{
 			HArc* a = (HArc*)object;
 			double s[3], e[3], c[3];
-			extract(a->A->m_p, s);
-			extract(a->B->m_p, e);
-			extract(a->C->m_p, c);
+			extract(a->A, s);
+			extract(a->B, e);
+			extract(a->C, c);
 			bool dir = a->m_axis.Direction().Z() > 0;
 			dxf_file.WriteArc(s, e, c, dir, Ttc(layer_name.c_str()));
 		}
@@ -1399,7 +1387,7 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
                 {
 			HEllipse* e = (HEllipse*)object;
 			double c[3];
-			extract(e->C->m_p, c);
+			extract(e->C, c);
 			bool dir = e->m_zdir.Z() > 0;
 			double maj_r = e->m_majr;
 			double min_r = e->m_minr;
@@ -1411,7 +1399,7 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
                 {
 			HCircle* cir = (HCircle*)object;
 			double c[3];
-			extract(cir->C->m_p, c);
+			extract(cir->C, c);
 			double radius = cir->m_radius;
 			dxf_file.WriteCircle(c, radius, Ttc(layer_name.c_str()));
                 }
@@ -2476,7 +2464,7 @@ void HeeksCADapp::DeleteUndoably(const std::list<HeeksObj*>& list)
 		if(object->CanBeRemoved())list2.push_back(object);
 	}
 	if(list2.size() == 0)return;
-	RemoveObjectsTool *tool = new RemoveObjectsTool(list2, list2.front()->Owner());
+	RemoveObjectsTool *tool = new RemoveObjectsTool(list2, list2.front()->m_owner);
 	DoToolUndoably(tool);
 }
 

@@ -13,7 +13,7 @@ private:
 public:
 	gp_Ax1 m_axis;
 
-	HPoint* C;
+	gp_Pnt C;
 	double m_radius;
 
 	~HArc(void);
@@ -63,10 +63,4 @@ public:
 	bool UsesID(){return true;} 
 	void Reverse();
 	double IncludedAngle()const;
-
-#ifdef MULTIPLE_OWNERS
-	//Ended Objects virtaul functions;
-	void LoadToDoubles();
-	void LoadFromDoubles();
-#endif
 };

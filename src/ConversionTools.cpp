@@ -226,13 +226,13 @@ bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wire &wire
 			case LineType:
 				{
 					HLine* line = (HLine*)object;
-					edges.push_back(BRepBuilderAPI_MakeEdge(line->A->m_p, line->B->m_p));
+					edges.push_back(BRepBuilderAPI_MakeEdge(line->A, line->B));
 				}
 				break;
 			case ArcType:
 				{
 					HArc* arc = (HArc*)object;
-					edges.push_back(BRepBuilderAPI_MakeEdge(arc->GetCircle(), arc->A->m_p, arc->B->m_p));
+					edges.push_back(BRepBuilderAPI_MakeEdge(arc->GetCircle(), arc->A, arc->B));
 				}
 				break;
 			case SplineType:
@@ -304,15 +304,15 @@ bool ConvertSketchToEdges(HeeksObj *object, std::list< std::vector<TopoDS_Edge> 
 						while ((! done) && (tolerance < max_tolerance))
 						{
 							HLine* line = (HLine*)object;
-							if(!(line->A->m_p.IsEqual(line->B->m_p, wxGetApp().m_geom_tol)))
+							if(!(line->A.IsEqual(line->B, wxGetApp().m_geom_tol)))
 							{
 								BRep_Builder aBuilder;
 								TopoDS_Vertex start, end;
 
-								aBuilder.MakeVertex (start, line->A->m_p, wxGetApp().m_geom_tol);
+								aBuilder.MakeVertex (start, line->A, wxGetApp().m_geom_tol);
 								start.Orientation (TopAbs_REVERSED);
 
-								aBuilder.MakeVertex (end, line->B->m_p, wxGetApp().m_geom_tol);
+								aBuilder.MakeVertex (end, line->B, wxGetApp().m_geom_tol);
 								end.Orientation (TopAbs_FORWARD);
 
 								BRepBuilderAPI_MakeEdge edge(start, end);
@@ -349,10 +349,10 @@ bool ConvertSketchToEdges(HeeksObj *object, std::list< std::vector<TopoDS_Edge> 
 							BRep_Builder aBuilder;
 							TopoDS_Vertex start, end;
 
-							aBuilder.MakeVertex (start, arc->A->m_p, wxGetApp().m_geom_tol);
+							aBuilder.MakeVertex (start, arc->A, wxGetApp().m_geom_tol);
 							start.Orientation (TopAbs_REVERSED);
 
-							aBuilder.MakeVertex (end, arc->B->m_p, wxGetApp().m_geom_tol);
+							aBuilder.MakeVertex (end, arc->B, wxGetApp().m_geom_tol);
 							end.Orientation (TopAbs_FORWARD);
 
 							BRepBuilderAPI_MakeEdge edge(arc->GetCircle(), start, end);
@@ -1126,11 +1126,7 @@ void GroupSelected::Run(){
 
 	std::list<HeeksObj*>::iterator it;
 	for(it = copy_of_marked_list.begin(); it != copy_of_marked_list.end(); it++)
-#ifdef MULTIPLE_OWNERS
-		(*it)->RemoveOwners();
-#else
 		(*it)->m_owner = NULL;
-#endif
 
 	new_group->Add(copy_of_marked_list);
 	wxGetApp().Add(new_group, NULL);

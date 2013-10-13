@@ -19,15 +19,7 @@ class GripData;
 class TopoDS_Shape;
 class ObjectCanvas;
 
-#ifndef MULTIPLE_OWNERS
-    #define MULTIPLE_OWNERS
-#endif
-
-#ifdef MULTIPLE_OWNERS
-#define HEEKSOBJ_OWNER Owner()
-#else
 #define HEEKSOBJ_OWNER m_owner
-#endif
 
 // NOTE: If adding to this enumeration, please also add the verbose description to the HeeksCADType() routine
 enum{
@@ -103,14 +95,8 @@ enum{
 #endif
 
 class HeeksObj{
-#ifdef MULTIPLE_OWNERS
-	std::list<HeeksObj*> m_owners;
-	std::list<HeeksObj*>::iterator m_owners_it;
-#else
 public:
 	HeeksObj* m_owner;
-#endif
-public:
 	bool m_skip_for_undo;
 	unsigned int m_id;
 	unsigned int m_layer;
@@ -198,19 +184,6 @@ public:
 	virtual unsigned int GetID(){return m_id;}
 	virtual bool UsesID(){return true;}
 	bool OnVisibleLayer();
-#ifdef MULTIPLE_OWNERS
-	virtual HeeksObj* Owner();
-	virtual void SetOwner(HeeksObj*);
-	virtual std::list<HeeksObj*> Owners();
-	virtual bool HasOwner();
-	virtual bool HasOwner(HeeksObj* obj);
-	virtual void AddOwner(HeeksObj*);
-	virtual void AddOwners(std::list<HeeksObj *> owners);
-	virtual void RemoveOwners();
-	virtual void RemoveOwner(HeeksObj*);
-	virtual HeeksObj* GetFirstOwner();
-	virtual HeeksObj* GetNextOwner();
-#endif
 	virtual const TopoDS_Shape *GetShape() { return(NULL); }
 	virtual bool IsList(){return false;}
 	virtual HeeksObj *Find( const int type, const unsigned int id );

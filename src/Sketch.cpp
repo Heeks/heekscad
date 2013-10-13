@@ -869,12 +869,12 @@ double CSketch::GetArea()const
 			{
 				double angle = ((HArc*)object)->IncludedAngle();
 				double radius = ((HArc*)object)->m_radius;
-				double p0x = ((HArc*)object)->A->m_p.X();
-				double p0y = ((HArc*)object)->A->m_p.Y();
-				double p1x = ((HArc*)object)->B->m_p.X();
-				double p1y = ((HArc*)object)->B->m_p.Y();
-				double pcx = ((HArc*)object)->C->m_p.X();
-				double pcy = ((HArc*)object)->C->m_p.Y();
+				double p0x = ((HArc*)object)->A.X();
+				double p0y = ((HArc*)object)->A.Y();
+				double p1x = ((HArc*)object)->B.X();
+				double p1y = ((HArc*)object)->B.Y();
+				double pcx = ((HArc*)object)->C.X();
+				double pcy = ((HArc*)object)->C.Y();
 				area += ( 0.5 * ((pcx - p0x) * (pcy + p0y) - (pcx - p1x) * (pcy + p1y) - angle * radius * radius));
 			}
 			break;
