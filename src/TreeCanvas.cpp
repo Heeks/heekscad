@@ -470,11 +470,7 @@ void CTreeCanvas::AddLabelButton(bool expanded, HeeksObj* prev_object, bool prev
 	}
 	b.type = ButtonTypeLabelBefore;
 	b.obj = object;
-#ifdef MULTIPLE_OWNERS
-	b.paste_into = object->HEEKSOBJ_OWNER;
-#else
 	b.paste_into = object->m_owner;
-#endif
 	b.paste_before = object;
 	m_tree_buttons.push_back(b);
 
@@ -490,11 +486,7 @@ void CTreeCanvas::AddLabelButton(bool expanded, HeeksObj* prev_object, bool prev
 	if(next_object == NULL && !expanded)
 	{
 		b.type = ButtonTypeLabelBefore;
-#ifdef MULTIPLE_OWNERS
-		b.paste_into = object->HEEKSOBJ_OWNER;
-#else
 		b.paste_into = object->m_owner;
-#endif
 		b.paste_before = next_object;
 		m_tree_buttons.push_back(b);
 	}
@@ -505,11 +497,7 @@ void CTreeCanvas::OnLabelLeftDown(HeeksObj* object, wxMouseEvent& event)
 	if(event.ShiftDown())
 	{
 		// mark a list of siblings
-#ifdef MULTIPLE_OWNERS
-		HeeksObj* parent = object->HEEKSOBJ_OWNER;
-#else
 		HeeksObj* parent = object->m_owner;
-#endif
 		std::set<HeeksObj*> sibling_set;
 		std::list<HeeksObj*> sibling_list;
 		for(HeeksObj* sibling = parent->GetFirstChild(); sibling; sibling = parent->GetNextChild())

@@ -64,9 +64,9 @@ bool DimensionDrawing::calculate_item(DigitizedPoint &end)
 	// double distance = p0.Distance(p1);
 
 	((HDimension*)temp_object)->m_trsf = mat;
-	((HDimension*)temp_object)->A->m_p = p0;
-	((HDimension*)temp_object)->B->m_p = p1;
-	((HDimension*)temp_object)->m_p2->m_p = p2;
+	((HDimension*)temp_object)->A = p0;
+	((HDimension*)temp_object)->B = p1;
+	((HDimension*)temp_object)->m_p2 = p2;
 	((HDimension*)temp_object)->m_mode = m_mode;
 
 	return true;
@@ -93,8 +93,8 @@ void DimensionDrawing::StartOnStep3(HDimension* object)
 	temp_object = object;
 	temp_object_in_list.push_back(object);
 	set_draw_step_not_undoable(2);
-	current_view_stuff->before_start_pos.m_point = object->A->m_p;
-	current_view_stuff->start_pos.m_point = object->B->m_p;
+	current_view_stuff->before_start_pos.m_point = object->A;
+	current_view_stuff->start_pos.m_point = object->B;
 
 	m_mode = object->m_mode;
 }

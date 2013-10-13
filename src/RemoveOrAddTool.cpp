@@ -45,7 +45,7 @@ void RemoveOrAddTool::Add()
 	}
 
 	m_owner->Add(m_object, m_prev_object);
-	m_object->SetOwner(m_owner);
+	m_object->m_owner = m_owner;
 
 	wxGetApp().WasAdded(m_object);
 	wxGetApp().WasModified(m_owner);
@@ -55,14 +55,14 @@ void RemoveOrAddTool::Add()
 
 void RemoveOrAddTool::Remove()
 {
-	if (m_object->Owner())
+	if (m_object->m_owner)
 	{
 		// to do multiple owners
-		m_owner = m_object->Owner();
+		m_owner = m_object->m_owner;
 		m_owner->Remove(m_object);
 		wxGetApp().WasRemoved(m_object);
 		wxGetApp().WasModified(m_owner);
-		m_object->RemoveOwners();
+		m_object->m_owner = NULL;
 	}
 	m_belongs_to_owner = false;
 }
@@ -79,7 +79,7 @@ void AddObjectTool::RollBack()
 
 RemoveObjectTool::RemoveObjectTool(HeeksObj *object):RemoveOrAddTool(object, NULL, NULL)
 {
-	if(object)m_owner = object->Owner();
+	if(object)m_owner = object->m_owner;
 	else m_owner = NULL;
 }
 
@@ -117,7 +117,7 @@ void ManyRemoveOrAddTool::Add()
 	for(It = m_objects.begin(); It != m_objects.end(); It++){
 		HeeksObj* object = *It;
 		m_owner->Add(object, NULL);
-		object->SetOwner(m_owner);
+		object->m_owner = m_owner;
 	}
 
 	wxGetApp().WereAdded(m_objects);
@@ -139,7 +139,7 @@ void ManyRemoveOrAddTool::Remove()
 	wxGetApp().WasModified(m_owner);
 	for(It = m_objects.begin(); It != m_objects.end(); It++){
 		HeeksObj* object = *It;
-		object->RemoveOwners(); // to do multiple owners
+		object->m_owner = NULL;
 	}
 
 	m_belongs_to_owner = false;

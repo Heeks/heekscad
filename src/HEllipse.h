@@ -4,19 +4,15 @@
 
 #pragma once
 
-#ifdef MULTIPLE_OWNERS
-#include "../interface/ObjList.h"
-class HPoint;
-class HEllipse: public ObjList{
-#else
-#include "HPoint.h"
+#include "../interface/HeeksObj.h"
+#include "../interface/HeeksColor.h"
+
 class HEllipse: public HeeksObj{
-#endif
 private:
 	HeeksColor color;
 
 public:
-	HPoint* C;
+	gp_Pnt C;
 	double m_rot;
 	double m_start; double m_end;
 	double m_majr; double m_minr;
@@ -56,10 +52,6 @@ public:
 	bool GetCentrePoint(double* pos);
 	void WriteXML(TiXmlNode *root);
 	int Intersects(const HeeksObj *object, std::list< double > *rl)const;
-	void ReloadPointers();
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
-	void LoadToDoubles();
-	void LoadFromDoubles();
-
 };
 

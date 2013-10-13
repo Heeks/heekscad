@@ -34,7 +34,7 @@ private:
 
 public:
 	gp_Trsf m_trsf; // draw matrix at time of creation
-	HPoint* m_p2;
+	gp_Pnt m_p2;
 	DimensionMode m_mode;
 	DimensionUnits m_units;
 	double m_scale; // to do - text, gaps, and arrow heads will be scaled by this factor
@@ -63,11 +63,6 @@ public:
 	bool Stretch(const double *p, const double* shift, void* data);
 	void CopyFrom(const HeeksObj* object){operator=(*((HDimension*)object));}
 	void WriteXML(TiXmlNode *root);
-	//const wxChar* GetShortString(void)const{return m_text.c_str();}
-#ifdef MULTIPLE_OWNERS
-	void LoadToDoubles();
-	void LoadFromDoubles();
-#endif
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	bool IsDifferent(HeeksObj* other);
 
