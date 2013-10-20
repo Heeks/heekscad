@@ -28,7 +28,6 @@ class HeeksConfig;
 
 class HDimension: public EndedObject{
 private:
-	HeeksColor m_color;
 	gp_Pnt GetB2(); // return B, possibly flattened
 	gp_Pnt GetC2(); // return m_p2, possibly flattened
 
@@ -56,8 +55,6 @@ public:
 	HeeksObj *MakeACopy(void)const;
 	const wxBitmap &GetIcon();
 	void ModifyByMatrix(const double *mat);
-	void SetColor(const HeeksColor &col){m_color = col;}
-	const HeeksColor* GetColor()const{return &m_color;}
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	void GetProperties(std::list<Property *> *list);
 	bool Stretch(const double *p, const double* shift, void* data);

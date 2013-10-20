@@ -13,6 +13,11 @@ private:
     typedef wxString LayerName_t;
 	typedef std::map< LayerName_t, CSketch * > Sketches_t;
 	Sketches_t m_sketches;
+    typedef wxString BlockName_t;
+	typedef std::map< BlockName_t, CSketch * > Blocks_t;
+	Blocks_t m_blocks;
+	CSketch* m_current_block;
+	double m_ucs_matrix[16];
 
 	HeeksColor DecodeACI(const int aci);
 	void OnReadSpline(TColgp_Array1OfPnt &control, TColStd_Array1OfReal &weight, TColStd_Array1OfReal &knot,TColStd_Array1OfInteger &mult, int degree, bool periodic, bool rational);
@@ -29,6 +34,10 @@ public:
 	static wxString m_layer_name_suffixes_to_discard;
 
 	// CDxfRead's virtual functions
+	void OnReadUCS(const double* ucs_point);
+	void OnReadBlock(const char* block_name, const double* base_point);
+	void OnReadEndBlock();
+	void OnReadInsert(const char* block_name, const double* insert_point);
 	void OnReadLine(const double* s, const double* e, bool hidden);
 	void OnReadPoint(const double* s);
 	void OnReadText(const double* point, const double height, const wxString text);

@@ -9,7 +9,6 @@
 class HLine: public EndedObject{
 private:
 	HeeksColor color;
-
 public:
 	~HLine(void);
 	HLine(const gp_Pnt &a, const gp_Pnt &b, const HeeksColor* col);
@@ -26,8 +25,6 @@ public:
 	const wxChar* GetTypeString(void)const{return _("Line");}
 	HeeksObj *MakeACopy(void)const;
 	const wxBitmap &GetIcon();
-	void SetColor(const HeeksColor &col){color = col;}
-	const HeeksColor* GetColor()const{return &color;}
 	bool GetMidPoint(double* pos);
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	void GetProperties(std::list<Property *> *list);

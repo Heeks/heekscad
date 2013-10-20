@@ -44,23 +44,25 @@ HeeksObj* CTangentialArc::MakeHArc()const
 	return new_object;
 }
 
-HSpline::HSpline(const HSpline &s):EndedObject(&s.color){
+HSpline::HSpline(const HSpline &s):EndedObject(){
 	operator=(s);
 }
 
-HSpline::HSpline(const Geom_BSplineCurve &s, const HeeksColor* col):EndedObject(col),color(*col){
+HSpline::HSpline(const Geom_BSplineCurve &s, const HeeksColor* col):EndedObject(){
 	m_spline = Handle(Geom_BSplineCurve)::DownCast(s.Copy());	
 	m_spline->D0(m_spline->FirstParameter(), A);
 	m_spline->D0(m_spline->LastParameter() , B);
+	SetColor(*col);
 }
 
-HSpline::HSpline(Handle_Geom_BSplineCurve s, const HeeksColor* col):EndedObject(col),color(*col){
+HSpline::HSpline(Handle_Geom_BSplineCurve s, const HeeksColor* col):EndedObject(){
 	m_spline = s;//Handle(Geom_BSplineCurve)::DownCast(s->Copy());
 	m_spline->D0(m_spline->FirstParameter(), A);
 	m_spline->D0(m_spline->LastParameter() , B);
+	SetColor(*col);
 }
 
-HSpline::HSpline(const std::list<gp_Pnt> &points, const HeeksColor* col):EndedObject(col),color(*col)
+HSpline::HSpline(const std::list<gp_Pnt> &points, const HeeksColor* col):EndedObject()
 {
 	Standard_Boolean periodicity = points.front().IsEqual(points.back(), wxGetApp().m_geom_tol);
 
@@ -80,6 +82,7 @@ HSpline::HSpline(const std::list<gp_Pnt> &points, const HeeksColor* col):EndedOb
 	m_spline = anInterpolation.Curve();
 	m_spline->D0(m_spline->FirstParameter(), A);
 	m_spline->D0(m_spline->LastParameter() , B);
+	SetColor(*col);
 }
 
 HSpline::~HSpline(){
@@ -88,7 +91,6 @@ HSpline::~HSpline(){
 const HSpline& HSpline::operator=(const HSpline &s){
 	EndedObject::operator=(s);
 	m_spline = Handle(Geom_BSplineCurve)::DownCast((s.m_spline)->Copy());;
-	color = s.color;
 	return *this;
 }
 
@@ -142,7 +144,7 @@ static void glVertexFunction(const double *p){glVertex3d(p[0], p[1], p[2]);}
 
 void HSpline::glCommands(bool select, bool marked, bool no_color){
 	if(!no_color){
-		wxGetApp().glColorEnsuringContrast(color);
+		wxGetApp().glColorEnsuringContrast(*GetColor());
 //		if (wxGetApp().m_allow_opengl_stippling)
 //		{
 //			glEnable(GL_LINE_STIPPLE);
@@ -286,7 +288,6 @@ void HSpline::WriteXML(TiXmlNode *root)
 	TiXmlElement * element;
 	element = new TiXmlElement( "Spline" );
 	root->LinkEndChild( element );  
-	element->SetAttribute("col", color.COLORREF_color());
 	element->SetAttribute("rational", m_spline->IsRational()?1:0);
 	element->SetAttribute("periodic", m_spline->IsPeriodic()?1:0);
 	element->SetAttribute("knots", m_spline->NbKnots());
@@ -334,8 +335,7 @@ HeeksObj* HSpline::ReadFromXMLElement(TiXmlElement* pElem)
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
 		std::string name(a->Name());
-		if(name == "col"){c = HeeksColor((long)(a->IntValue()));}
-		else if(name == "rational"){rational = a->IntValue() != 0;}
+		if(name == "rational"){rational = a->IntValue() != 0;}
 		else if(name == "periodic"){periodic = a->IntValue() != 0;}
 		else if(name == "knots"){nknots = a->IntValue();}
 		else if(name == "poles"){npoles = a->IntValue();}

@@ -19,14 +19,14 @@
 #include "Drawing.h"
 #include "HPoint.h"
 
-HLine::HLine(const HLine &line):EndedObject(&line.color){
+HLine::HLine(const HLine &line):EndedObject(){
 	operator=(line);
 }
 
-HLine::HLine(const gp_Pnt &a, const gp_Pnt &b, const HeeksColor* col):EndedObject(col){
+HLine::HLine(const gp_Pnt &a, const gp_Pnt &b, const HeeksColor* col):EndedObject(){
 	A = a;
 	B = b;
-	color = *col;
+	SetColor(*col);
 }
 
 HLine::~HLine(){
@@ -34,7 +34,6 @@ HLine::~HLine(){
 
 const HLine& HLine::operator=(const HLine &b){
 	EndedObject::operator=(b);
-	color = b.color;
 	return *this;
 }
 
@@ -361,59 +360,15 @@ void HLine::WriteXML(TiXmlNode *root)
 	TiXmlElement * element;
 	element = new TiXmlElement( "Line" );
 	root->LinkEndChild( element );
-	element->SetAttribute("col", color.COLORREF_color());
-	element->SetDoubleAttribute("sx", A.X());
-	element->SetDoubleAttribute("sy", A.Y());
-	element->SetDoubleAttribute("sz", A.Z());
-	element->SetDoubleAttribute("ex", B.X());
-	element->SetDoubleAttribute("ey", B.Y());
-	element->SetDoubleAttribute("ez", B.Z());
+
 	WriteBaseXML(element);
 }
 
 // static member function
 HeeksObj* HLine::ReadFromXMLElement(TiXmlElement* pElem)
 {
-	gp_Pnt p0(0, 0, 0), p1(0, 0, 0);
 	HeeksColor c;
-
-	// get the attributes
-	int att_col;
-	double x;
-	if(pElem->Attribute("col", &att_col))c = HeeksColor((long)att_col);
-	if(pElem->Attribute("sx", &x))p0.SetX(x);
-	if(pElem->Attribute("sy", &x))p0.SetY(x);
-	if(pElem->Attribute("sz", &x))p0.SetZ(x);
-	if(pElem->Attribute("ex", &x))p1.SetX(x);
-	if(pElem->Attribute("ey", &x))p1.SetY(x);
-	if(pElem->Attribute("ez", &x))p1.SetZ(x);
-
-	else
-	{
-		// try the version where the points were children
-		bool p0_found = false;
-		for(TiXmlElement* pElem2 = TiXmlHandle(pElem).FirstChildElement().Element(); pElem2;	pElem2 = pElem2->NextSiblingElement())
-		{
-			HeeksObj* object = wxGetApp().ReadXMLElement(pElem2);
-			if(object->GetType() == PointType)
-			{
-				if(!p0_found)
-				{
-					p0 = ((HPoint*)object)->m_p;
-					p0_found = true;
-				}
-				else
-				{
-					p1 = ((HPoint*)object)->m_p;
-					delete object;
-					break;
-				}
-			}
-			delete object;
-		}
-	}
-
-	HLine* new_object = new HLine(p0, p1, &c);
+	HLine* new_object = new HLine(gp_Pnt(), gp_Pnt(), &c);
 	new_object->ReadBaseXML(pElem);
 
 	// The OpenCascade libraries throw an exception when one tries to

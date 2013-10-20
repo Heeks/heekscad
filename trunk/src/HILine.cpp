@@ -7,19 +7,20 @@
 #include "HLine.h"
 #include "HArc.h"
 #include "HCircle.h"
+#include "HPoint.h"
 #include "../interface/PropertyDouble.h"
 #include "../interface/PropertyLength.h"
 #include "../interface/PropertyVertex.h"
 #include "Gripper.h"
 
-HILine::HILine(const HILine &line):EndedObject(&line.color){
+HILine::HILine(const HILine &line):EndedObject(){
 	operator=(line);
 }
 
-HILine::HILine(const gp_Pnt &a, const gp_Pnt &b, const HeeksColor* col):EndedObject(col){
+HILine::HILine(const gp_Pnt &a, const gp_Pnt &b, const HeeksColor* col):EndedObject(){
 	A = a;
 	B = b;
-	color = *col;
+	SetColor(*col);
 }
 
 HILine::~HILine(){
@@ -27,7 +28,6 @@ HILine::~HILine(){
 
 const HILine& HILine::operator=(const HILine &b){
 	EndedObject::operator=(b);
-	color = b.color;
 	return *this;
 }
 
@@ -42,7 +42,7 @@ void HILine::glCommands(bool select, bool marked, bool no_color)
 {
 	if(!no_color)
 	{
-		wxGetApp().glColorEnsuringContrast(color);
+		wxGetApp().glColorEnsuringContrast(*GetColor());
 		if (wxGetApp().m_allow_opengl_stippling)
 		{
 			glEnable(GL_LINE_STIPPLE);
@@ -220,13 +220,6 @@ void HILine::WriteXML(TiXmlNode *root)
 	TiXmlElement * element;
 	element = new TiXmlElement( "InfiniteLine" );
 	root->LinkEndChild( element );
-	element->SetAttribute("col", color.COLORREF_color());
-	element->SetDoubleAttribute("sx", A.X());
-	element->SetDoubleAttribute("sy", A.Y());
-	element->SetDoubleAttribute("sz", A.Z());
-	element->SetDoubleAttribute("ex", B.X());
-	element->SetDoubleAttribute("ey", B.Y());
-	element->SetDoubleAttribute("ez", B.Z());
 	WriteBaseXML(element);
 }
 
@@ -235,19 +228,6 @@ HeeksObj* HILine::ReadFromXMLElement(TiXmlElement* pElem)
 {
 	gp_Pnt p0, p1;
 	HeeksColor c;
-
-	// get the attributes
-	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
-	{
-		std::string name(a->Name());
-		if(name == "col"){c = HeeksColor((long)(a->IntValue()));}
-		else if(name == "sx"){p0.SetX(a->DoubleValue());}
-		else if(name == "sy"){p0.SetY(a->DoubleValue());}
-		else if(name == "sz"){p0.SetZ(a->DoubleValue());}
-		else if(name == "ex"){p1.SetX(a->DoubleValue());}
-		else if(name == "ey"){p1.SetY(a->DoubleValue());}
-		else if(name == "ez"){p1.SetZ(a->DoubleValue());}
-	}
 
 	HILine* new_object = new HILine(p0, p1, &c);
 	new_object->ReadBaseXML(pElem);
