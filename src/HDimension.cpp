@@ -14,14 +14,15 @@
 
 bool HDimension::DrawFlat = true;
 
-HDimension::HDimension(const gp_Trsf &trsf, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, DimensionMode mode, DimensionUnits units, const HeeksColor* col): EndedObject(col), m_color(*col), m_trsf(trsf), m_mode(mode),  m_units(units),  m_scale(1.0)
+HDimension::HDimension(const gp_Trsf &trsf, const gp_Pnt &p0, const gp_Pnt &p1, const gp_Pnt &p2, DimensionMode mode, DimensionUnits units, const HeeksColor* col): EndedObject(), m_trsf(trsf), m_mode(mode),  m_units(units),  m_scale(1.0)
 {
 	m_p2 = p2;
 	A = p0;
 	B = p1;
+	SetColor(*col);
 }
 
-HDimension::HDimension(const HDimension &b):EndedObject(&b.m_color)
+HDimension::HDimension(const HDimension &b):EndedObject()
 {
 	operator=(b);
 }
@@ -35,7 +36,6 @@ const HDimension& HDimension::operator=(const HDimension &b)
 	EndedObject::operator=(b);
 	m_trsf = b.m_trsf;
 	m_units = b.m_units;
-	m_color = b.m_color;
 	m_mode = b.m_mode;
 	m_scale = b.m_scale;
 
@@ -53,7 +53,7 @@ bool HDimension::IsDifferent(HeeksObj* other)
 {
 	HDimension* dim = (HDimension*)other;
 
-	if(m_color.COLORREF_color() != dim->m_color.COLORREF_color() || m_mode != dim->m_mode || m_scale != dim->m_scale || m_units != dim->m_units)
+	if(m_mode != dim->m_mode || m_scale != dim->m_scale || m_units != dim->m_units)
 		return true;
 
 	if(m_p2.Distance(dim->m_p2) > wxGetApp().m_geom_tol)
@@ -145,7 +145,7 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 	
 	if(A.IsEqual(b, wxGetApp().m_geom_tol))return;
 
-	if(!no_color)wxGetApp().glColorEnsuringContrast(m_color);
+	if(!no_color)wxGetApp().glColorEnsuringContrast(*GetColor());
 
 	gp_Dir xdir = gp_Dir(1, 0, 0).Transformed(m_trsf);
 	gp_Dir ydir = gp_Dir(0, 1, 0).Transformed(m_trsf);
@@ -359,7 +359,9 @@ void HDimension::WriteXML(TiXmlNode *root)
 	double m[16];
 	extract(m_trsf, m);
 
-	element->SetAttribute("col", m_color.COLORREF_color());
+	element->SetDoubleAttribute("px", m_p2.X());
+	element->SetDoubleAttribute("py", m_p2.Y());
+	element->SetDoubleAttribute("pz", m_p2.Z());
 	element->SetDoubleAttribute("m0", m[0] );
 	element->SetDoubleAttribute("m1", m[1] );
 	element->SetDoubleAttribute("m2", m[2] );
@@ -405,35 +407,54 @@ HeeksObj* HDimension::ReadFromXMLElement(TiXmlElement* pElem)
 	DimensionUnits units = DimensionUnitsGlobal;
 
 	// get the attributes
-	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
+	pElem->Attribute("m0", &m[0]);
+	pElem->Attribute("m1", &m[1]);
+	pElem->Attribute("m2", &m[2]);
+	pElem->Attribute("m3", &m[3]);
+	pElem->Attribute("m4", &m[4]);
+	pElem->Attribute("m5", &m[5]);
+	pElem->Attribute("m6", &m[6]);
+	pElem->Attribute("m7", &m[7]);
+	pElem->Attribute("m8", &m[8]);
+	pElem->Attribute("m9", &m[9]);
+	pElem->Attribute("ma", &m[10]);
+	pElem->Attribute("mb", &m[11]);
+	pElem->Attribute("scale", &scale);
+	int i;
+	if(pElem->Attribute("mode", &i))mode = (DimensionMode)i;
+	if(const char* str = pElem->Attribute("units")){
+		switch(str[0])
+		{
+		case 'm':
+			units = DimensionUnitsMM;
+			break;
+		case 'i':
+			units = DimensionUnitsInches;
+			break;
+		}
+	}
+	pElem->Attribute("px", &p2[0]);
+	pElem->Attribute("py", &p2[1]);
+	if(pElem->Attribute("pz", &p2[2])){}
+
+	else
 	{
-		std::string name(a->Name());
-		if(name == "col"){c = HeeksColor((long)(a->IntValue()));}
-		else if(name == "m0"){m[0] = a->DoubleValue();}
-		else if(name == "m1"){m[1] = a->DoubleValue();}
-		else if(name == "m2"){m[2] = a->DoubleValue();}
-		else if(name == "m3"){m[3] = a->DoubleValue();}
-		else if(name == "m4"){m[4] = a->DoubleValue();}
-		else if(name == "m5"){m[5] = a->DoubleValue();}
-		else if(name == "m6"){m[6] = a->DoubleValue();}
-		else if(name == "m7"){m[7] = a->DoubleValue();}
-		else if(name == "m8"){m[8] = a->DoubleValue();}
-		else if(name == "m9"){m[9] = a->DoubleValue();}
-		else if(name == "ma"){m[10]= a->DoubleValue();}
-		else if(name == "mb"){m[11]= a->DoubleValue();}
-		else if(name == "scale"){scale= a->DoubleValue();}
-		else if(name == "mode"){mode = (DimensionMode)(a->IntValue());}
-		else if(name == "units"){
-			const char* str = a->Value();
-			switch(str[0])
+		// try the version where the points were children
+		int num_points = 0;
+		for(TiXmlElement* pElem2 = TiXmlHandle(pElem).FirstChildElement().Element(); pElem2;	pElem2 = pElem2->NextSiblingElement())
+		{
+			HeeksObj* object = wxGetApp().ReadXMLElement(pElem2);
+			if(object->GetType() == PointType)
 			{
-			case 'm':
-				units = DimensionUnitsMM;
-				break;
-			case 'i':
-				units = DimensionUnitsInches;
-				break;
+				num_points++;
+				if(num_points == 3)
+				{
+					extract(((HPoint*)object)->m_p, p2);
+					delete object;
+					break;
+				}
 			}
+			delete object;
 		}
 	}
 

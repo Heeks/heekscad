@@ -19,16 +19,17 @@
 #include "Drawing.h"
 #include "DigitizeMode.h"
 
-HArc::HArc(const HArc &line):EndedObject(&line.color){
+HArc::HArc(const HArc &line):EndedObject(){
 	operator=(line);
 }
 
-HArc::HArc(const gp_Pnt &a, const gp_Pnt &b, const gp_Circ &c, const HeeksColor* col):EndedObject(col),color(*col){ //:color(*col), EndedObject(col){
+HArc::HArc(const gp_Pnt &a, const gp_Pnt &b, const gp_Circ &c, const HeeksColor* col):EndedObject(){ 
 	A = a;
 	B = b;
 	C = c.Location();
 	m_axis = c.Axis();
 	m_radius = c.Radius();
+	SetColor(*col);
 }
 
 HArc::~HArc(){
@@ -55,7 +56,6 @@ const HArc& HArc::operator=(const HArc &b){
 	EndedObject::operator=(b);
 	m_radius = b.m_radius;
 	m_axis = b.m_axis;
-	color = b.color;
 	C = b.C;
 	return *this;
 }
@@ -221,7 +221,7 @@ static void glVertexFunction(const double *p){glVertex3d(p[0], p[1], p[2]);}
 
 void HArc::glCommands(bool select, bool marked, bool no_color){
 	if(!no_color){
-		wxGetApp().glColorEnsuringContrast(color);
+		wxGetApp().glColorEnsuringContrast(*GetColor());
 	}
 	GLfloat save_depth_range[2];
 	if(marked){
@@ -243,7 +243,7 @@ void HArc::glCommands(bool select, bool marked, bool no_color){
 
 void HArc::Draw(wxDC& dc)
 {
-	wxGetApp().PlotSetColor(color);
+	wxGetApp().PlotSetColor(*GetColor());
 	double s[3], e[3], c[3];
 	extract(A, s);
 	extract(B, e);
@@ -604,13 +604,6 @@ void HArc::WriteXML(TiXmlNode *root)
 {
 	TiXmlElement *element = new TiXmlElement( "Arc" );
 	root->LinkEndChild( element );
-	element->SetAttribute("col", color.COLORREF_color());
-	element->SetDoubleAttribute("sx", A.X());
-	element->SetDoubleAttribute("sy", A.Y());
-	element->SetDoubleAttribute("sz", A.Z());
-	element->SetDoubleAttribute("ex", B.X());
-	element->SetDoubleAttribute("ey", B.Y());
-	element->SetDoubleAttribute("ez", B.Z());
 	gp_Dir D = m_axis.Direction();
 	element->SetDoubleAttribute("cx", C.X());
 	element->SetDoubleAttribute("cy", C.Y());
@@ -624,20 +617,12 @@ void HArc::WriteXML(TiXmlNode *root)
 // static member function
 HeeksObj* HArc::ReadFromXMLElement(TiXmlElement* pElem)
 {
-	gp_Pnt p0(1,0,0), p1(0,1,0), centre(0,0,0);
 	double axis[3];
+	gp_Pnt centre(0,0,0);
 	HeeksColor c;
 
 	// get the attributes
-	int att_col;
 	double x;
-	if(pElem->Attribute("col", &att_col))c = HeeksColor((long)att_col);
-	if(pElem->Attribute("sx", &x))p0.SetX(x);
-	if(pElem->Attribute("sy", &x))p0.SetY(x);
-	if(pElem->Attribute("sz", &x))p0.SetZ(x);
-	if(pElem->Attribute("ex", &x))p1.SetX(x);
-	if(pElem->Attribute("ey", &x))p1.SetY(x);
-	if(pElem->Attribute("ez", &x))p1.SetZ(x);
 	if(pElem->Attribute("ax", &x))axis[0] = x;
 	if(pElem->Attribute("ay", &x))axis[1] = x;
 	if(pElem->Attribute("az", &x))axis[2] = x;
@@ -648,24 +633,14 @@ HeeksObj* HArc::ReadFromXMLElement(TiXmlElement* pElem)
 	else
 	{
 		// try the version where the points were children
-		bool p0_found = false;
-		bool p1_found = false;
+		int num_points = 0;
 		for(TiXmlElement* pElem2 = TiXmlHandle(pElem).FirstChildElement().Element(); pElem2;	pElem2 = pElem2->NextSiblingElement())
 		{
 			HeeksObj* object = wxGetApp().ReadXMLElement(pElem2);
 			if(object->GetType() == PointType)
 			{
-				if(!p0_found)
-				{
-					p0 = ((HPoint*)object)->m_p;
-					p0_found = true;
-				}
-				else if(!p1_found)
-				{
-					p1 = ((HPoint*)object)->m_p;
-					p1_found = true;
-				}
-				else
+				num_points++;
+				if(num_points == 3)
 				{
 					centre = ((HPoint*)object)->m_p;
 					delete object;
@@ -676,10 +651,11 @@ HeeksObj* HArc::ReadFromXMLElement(TiXmlElement* pElem)
 		}
 	}
 
-	gp_Circ circle(gp_Ax2(centre, gp_Dir(make_vector(axis))), centre.Distance(p0));
-
-	HArc* new_object = new HArc(p0, p1, circle, &c);
+	HArc* new_object = new HArc(gp_Pnt(), gp_Pnt(), gp_Circ(), &c);
 	new_object->ReadBaseXML(pElem);
+
+	gp_Circ circle(gp_Ax2(centre, gp_Dir(make_vector(axis))), centre.Distance(new_object->A));
+	new_object->SetCircle(circle);
 
 	return new_object;
 }
