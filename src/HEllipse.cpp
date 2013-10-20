@@ -380,6 +380,9 @@ void HEllipse::WriteXML(TiXmlNode *root)
 	element->SetDoubleAttribute("maj", m_majr);
 	element->SetDoubleAttribute("min", m_minr);
 	element->SetDoubleAttribute("rot", GetRotation());
+	element->SetDoubleAttribute("cx", C.X());
+	element->SetDoubleAttribute("cy", C.Y());
+	element->SetDoubleAttribute("cz", C.Z());
 	gp_Dir D = m_zdir;
 	element->SetDoubleAttribute("ax", D.X());
 	element->SetDoubleAttribute("ay", D.Y());

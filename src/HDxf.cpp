@@ -27,6 +27,9 @@ HeeksDxfRead::HeeksDxfRead(const wxChar* filepath) : CDxfRead(Ttc(filepath))
 	config.Read(_T("ImportDxfAsSketches"), &m_make_as_sketch);
 	config.Read(_T("IgnoreDxfReadErrors"), &m_ignore_errors);
 	config.Read(_T("LayerNameSuffixesToDiscard"), m_layer_name_suffixes_to_discard);
+
+	m_current_block = NULL;
+	extract(gp_Trsf(), m_ucs_matrix);
 }
 
 HeeksColor *HeeksDxfRead::ActiveColorPtr(Aci_t & aci)
@@ -37,6 +40,51 @@ HeeksColor *HeeksDxfRead::ActiveColorPtr(Aci_t & aci)
 }
 
 HeeksColor hidden_color(128, 128, 128);
+
+void HeeksDxfRead::OnReadUCS(const double* ucs_point)
+{
+	gp_Trsf tm;
+	tm.SetTranslation(make_point(ucs_point), gp_Pnt(0, 0, 0));
+	extract(tm, m_ucs_matrix);
+}
+
+void HeeksDxfRead::OnReadBlock(const char* block_name, const double* base_point)
+{
+	if (m_blocks.find( wxString(Ctt(block_name)) ) == m_blocks.end())
+	{
+		m_current_block = new CSketch();
+		m_current_block->OnEditString(Ctt(block_name));
+		m_blocks.insert( std::make_pair( wxString(Ctt(block_name)), m_current_block ) );
+	}
+	else
+	{
+		m_current_block = m_blocks[wxString(Ctt(block_name))];
+	}
+}
+
+void HeeksDxfRead::OnReadInsert(const char* block_name, const double* insert_point)
+{
+	if (m_blocks.find( wxString(Ctt(block_name)) ) == m_blocks.end())
+	{
+		return; // block not found
+	}
+	else
+	{
+		CSketch* block = m_blocks[wxString(Ctt(block_name))];
+		CSketch* block_copy = new CSketch(*block);
+		gp_Trsf tm;
+		tm.SetTranslationPart(make_vector(insert_point));
+		double m[16];
+		extract(tm, m);
+		block_copy->ModifyByMatrix(m);
+		AddObject(block_copy);
+	}
+}
+
+void HeeksDxfRead::OnReadEndBlock()
+{
+	m_current_block = NULL;
+}
 
 void HeeksDxfRead::OnReadLine(const double* s, const double* e, bool hidden)
 {
@@ -251,7 +299,12 @@ void HeeksDxfRead::AddObject(HeeksObj *object)
 	}
 	else
 	{
-        wxGetApp().Add( object, NULL );
+		if(m_current_block)m_current_block->Add(object, NULL);
+        else
+		{
+			object->ModifyByMatrix(m_ucs_matrix);
+			wxGetApp().Add( object, NULL );
+		}
 	}
 }
 
@@ -265,6 +318,7 @@ void HeeksDxfRead::AddGraphics() const
 			if (pSketch->GetNumChildren() > 0)
 			{
 				((CSketch *)l_itSketch->second)->OnEditString( l_itSketch->first.c_str() );
+				l_itSketch->second->ModifyByMatrix(m_ucs_matrix);
 				wxGetApp().Add( l_itSketch->second, NULL );
 			} // End if - then
         }

@@ -7,9 +7,6 @@
 #include "EndedObject.h"
 
 class HILine: public EndedObject{
-private:
-	HeeksColor color;
-
 public:
 	~HILine(void);
 	HILine(const gp_Pnt &a, const gp_Pnt &b, const HeeksColor* col);
@@ -25,8 +22,6 @@ public:
 	const wxChar* GetTypeString(void)const{return _("Infinite Line");}
 	HeeksObj *MakeACopy(void)const;
 	const wxBitmap &GetIcon();
-	void SetColor(const HeeksColor &col){color = col;}
-	const HeeksColor* GetColor()const{return &color;}
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	void GetProperties(std::list<Property *> *list);
 	bool FindNearPoint(const double* ray_start, const double* ray_direction, double *point);
