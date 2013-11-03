@@ -25,14 +25,16 @@ FIND_PACKAGE( wxWidgets REQUIRED COMPONENTS base core gl aui )
 find_package( PythonLibs REQUIRED )
 INCLUDE(${wxWidgets_USE_FILE})
 
+set( LIBAREA_PATH ../libarea/ )
+
 include_directories (
     ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
     ${wxWidgets_INCLUDE_DIRS} ${OpenCASCADE_INCLUDE_DIR}
     ${PYTHON_INCLUDE_DIRS} . ${OPENGL_INCLUDE_DIR}
+    ${LIBAREA_PATH}
     )
 set ( EXECUTABLE_OUTPUT_PATH ../bin )
 
-set( LIBAREA_PATH ../libarea/ )
 
 set( heekscad_HDRS
     AboutBox.h
@@ -94,6 +96,7 @@ set( heekscad_HDRS
     HGear.h
     HILine.h
     HImage.h
+    History.h
     HLine.h
     HPoint.h
     HSpline.h
@@ -144,6 +147,7 @@ set( heekscad_HDRS
     ../interface/PropertyVertex.h
     propgrid.h
     RegularShapesDrawing.h
+    RemoveOrAddTool.h
     RuledSurface.h
     Ruler.h
     Sectioning.h
@@ -169,9 +173,9 @@ set( heekscad_HDRS
     ../interface/ToolList.h
     TransformTool.h
     TransformTools.h
-    ../interface/TransientObject.h
+    #../interface/TransientObject.h
     TreeCanvas.h
-    UndoEngine.h
+    #UndoEngine.h
     Vertex.h
     ViewPanning.h
     ViewPoint.h
@@ -244,6 +248,7 @@ set( heekscad_SRCS
     HGear.cpp
     HILine.cpp
     HImage.cpp
+    History.cpp
     HLine.cpp
     HPoint.cpp
     HSpline.cpp
@@ -291,6 +296,7 @@ set( heekscad_SRCS
     propgrid.cpp
     props.cpp
     RegularShapesDrawing.cpp
+    RemoveOrAddTool.cpp
     RS274X.cpp
     RuledSurface.cpp
     Ruler.cpp
@@ -318,9 +324,9 @@ set( heekscad_SRCS
     ../interface/ToolList.cpp
     TransformTool.cpp
     TransformTools.cpp
-    ../interface/TransientObject.cpp
+    #../interface/TransientObject.cpp
     TreeCanvas.cpp
-    UndoEngine.cpp
+    #UndoEngine.cpp
     Vertex.cpp
     ViewPanning.cpp
     ViewPoint.cpp
