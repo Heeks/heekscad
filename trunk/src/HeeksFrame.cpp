@@ -298,11 +298,7 @@ void CHeeksFrame::RefreshOptions()
 
 void CHeeksFrame::OnKeyDown(wxKeyEvent& event)
 {
-	if(event.GetKeyCode() == WXK_ESCAPE && wxGetApp().EndSketchMode())
-	{
-	}
-	else
-		wxGetApp().input_mode_object->OnKeyDown(event);
+	wxGetApp().input_mode_object->OnKeyDown(event);
 	event.Skip();
 }
 
@@ -1352,6 +1348,11 @@ public:
 	{
 	}
 
+    ~CFlyOutButton()
+	{
+		delete m_toolbarPopup;
+	}
+
     void OnMouse( wxMouseEvent& event )
 	{
 		if(event.Entering())
@@ -1381,7 +1382,8 @@ public:
 			if( i+ID_FIRST_POP_UP_MENU_TOOL == event.GetId())
 			{
 				// hide the popup
-				m_toolbarPopup->Hide();
+				delete m_toolbarPopup;
+				m_toolbarPopup = NULL;
 
 				// call the OnButtonFunction
 				const CFlyOutItem &fo = *It;

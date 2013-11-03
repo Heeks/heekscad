@@ -21,6 +21,7 @@
 #include "MarkedList.h"
 #include "HeeksFrame.h"
 #include "CoordinateSystem.h"
+#include "PropertyChange.h"
 
 BEGIN_EVENT_TABLE(CPropertiesCanvas, wxScrolledWindow)
 	EVT_SIZE(CPropertiesCanvas::OnSize)
@@ -49,6 +50,8 @@ CPropertiesCanvas::CPropertiesCanvas(wxWindow* parent)
 
 	m_pg->SetExtraStyle( wxPG_EX_HELP_AS_TOOLTIPS );  
 
+	m_map = new PropertyMapItem(NULL);
+
 	wxGetApp().RegisterObserver(this);
 }
 
@@ -57,6 +60,7 @@ CPropertiesCanvas::~CPropertiesCanvas()
 	ClearProperties();
 	wxGetApp().RemoveObserver(this);
 	delete m_pg;
+	delete m_map;
 }
 
 void CPropertiesCanvas::OnSize(wxSizeEvent& event)
@@ -73,30 +77,63 @@ void CPropertiesCanvas::ClearProperties()
 {
 	m_pg->Clear();
 	pmap.clear();
-
-	{
-	std::set<Property*>::iterator It;
-	for(It = pset.begin(); It != pset.end(); It++)
+	delete m_map;
+	m_map = new PropertyMapItem(NULL);
+	for(std::set<Property*>::iterator It = pset.begin(); It != pset.end(); It++)
 	{
 		Property* p = *It;
 		delete p;
 	}
-	}
 	pset.clear();
+}
+
+PropertyMapItem* PropertyMapItem::OnAddProperty(wxPGProperty* prop, bool& new_item)
+{
+	const wxString& label = prop->GetLabel();
+
+	std::pair<std::map<wxString, PropertyMapItem>::iterator, bool> insert_return = m_children.insert(std::make_pair(label, PropertyMapItem(prop)));
+	new_item = insert_return.second;
+
+	return &(insert_return.first->second);
+}
+
+PropertyMapItem* PropertyMapItem::FindItem(const wxString& str)
+{
+	std::map<wxString, PropertyMapItem>::iterator FindIt = m_children.find(str);
+	if(FindIt == m_children.end())
+	{
+		return &(FindIt->second);
+	}
+
+	return NULL;
+}
+
+PropertyMapItem* CPropertiesCanvas::FindMapItem(wxPGProperty* p)
+{
+	std::map<wxPGProperty*, PropertyMapItem* >::iterator FindIt;
+	FindIt = pmap.find(p);
+	if(FindIt == pmap.end())return NULL;
+	return FindIt->second;
 }
 
 void CPropertiesCanvas::Append(wxPGProperty* parent_prop, wxPGProperty* new_prop, Property* property)
 {
+	PropertyMapItem* new_item = NULL;
+	bool newly_inserted = false;
+
 	if(parent_prop){
-		m_pg->AppendIn(parent_prop, new_prop);
+		new_item = FindMapItem(parent_prop)->OnAddProperty(new_prop, newly_inserted);
+		if(newly_inserted)m_pg->AppendIn(parent_prop, new_prop);
 	}
 	else
 	{
-		m_pg->Append(new_prop);
-		pset.insert(property);
+		new_item = m_map->OnAddProperty(new_prop, newly_inserted);
+		if(newly_inserted)m_pg->Append(new_prop);
 	}
 
-	pmap.insert(std::pair<wxPGProperty*, Property*>( new_prop, property));
+	new_item->m_properties.push_back(property);
+	pmap.insert(std::pair<wxPGProperty*, PropertyMapItem* >( new_prop, new_item));
+	pset.insert(property);
 }
 
 void CPropertiesCanvas::AddProperty(Property* p, wxPGProperty* parent_prop)
@@ -242,41 +279,48 @@ void CPropertiesCanvas::AddProperty(Property* p, wxPGProperty* parent_prop)
 	}
 }
 
-Property* CPropertiesCanvas::GetProperty(wxPGProperty* p)
+std::list<Property*>* CPropertiesCanvas::GetProperties(wxPGProperty* p)
 {
-	std::map<wxPGProperty*, Property*>::iterator FindIt;
-	FindIt = pmap.find(p);
-	if(FindIt == pmap.end())return NULL;
-	return FindIt->second;
+	PropertyMapItem* item = FindMapItem(p);
+	if(item == NULL)return NULL;
+	return &(item->m_properties);
 }
 
 void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 	wxPGProperty* p = event.GetPropertyPtr();
 
-	Property* property = GetProperty(p);
-	if(property == NULL)return;
+	std::list<Property*>* properties = GetProperties(p);
+	if(properties == NULL)return;
 
-	// to do, use a PropertyChange undoable command
+	std::list<Tool*> changers;
+
+	for(std::list<Property*>::iterator It = properties->begin(); It != properties->end(); It++)
+	{
+		Property* property = *It;
 
 	switch(property->get_property_type()){
 	case StringPropertyType:
 		{
-			(*(((PropertyString*)property)->m_callbackfunc))(event.GetPropertyValue().GetString(), ((PropertyString*)property)->m_object);
+			PropertyChangeString* changer = new PropertyChangeString(event.GetPropertyValue().GetString(), (PropertyString*)property);
+			changers.push_back(changer);
 		}
 		break;
 	case DoublePropertyType:
 		{
-			(*(((PropertyDouble*)property)->m_callbackfunc))(event.GetPropertyValue().GetDouble(), ((PropertyDouble*)property)->m_object);
+			PropertyChangeDouble* changer = new PropertyChangeDouble(event.GetPropertyValue().GetDouble(), (PropertyDouble*)property);
+			changers.push_back(changer);
 		}
 		break;
 	case LengthPropertyType:
 		{
-			(*(((PropertyLength*)property)->m_callbackfunc))(event.GetPropertyValue().GetDouble() * wxGetApp().m_view_units, ((PropertyDouble*)property)->m_object);
+			PropertyChangeLength* changer = new PropertyChangeLength(event.GetPropertyValue().GetDouble() * wxGetApp().m_view_units, (PropertyLength*)property);
+			changers.push_back(changer);
 		}
 		break;
 	case IntPropertyType:
 		{
-			(*(((PropertyInt*)property)->m_callbackfunc))(event.GetPropertyValue().GetLong(), ((PropertyInt*)property)->m_object);
+			PropertyChangeInt* changer = new PropertyChangeInt(event.GetPropertyValue().GetLong(), (PropertyInt*)property);
+			changers.push_back(changer);
 		}
 		break;
 	case ColorPropertyType:
@@ -284,7 +328,8 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 			wxVariant var = event.GetPropertyValue();
 			const wxColour* wcol = wxGetVariantCast(var,wxColour);
 			HeeksColor col(wcol->Red(), wcol->Green(), wcol->Blue());
-			(*(((PropertyColor*)property)->m_callbackfunc))(col, ((PropertyColor*)property)->m_object);
+			PropertyChangeColor* changer = new PropertyChangeColor(col, (PropertyColor*)property);
+			changers.push_back(changer);
 		}
 		break;
 	case VertexPropertyType:
@@ -302,7 +347,8 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 				if(((PropertyVertex*)property)->m_affected_by_view_units)((PropertyVertex*)property)->m_x[2] *= wxGetApp().m_view_units;
 			}
 
-			(*(((PropertyVertex*)property)->m_callbackfunc))(((PropertyVertex*)property)->m_x, ((PropertyVertex*)property)->m_object);
+			PropertyChangeVertex* changer = new PropertyChangeVertex(((PropertyVertex*)property)->m_x, (PropertyVertex*)property);
+			changers.push_back(changer);
 		}
 		break;
 	case TrsfPropertyType:
@@ -343,16 +389,20 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 
 			((PropertyTrsf*)property)->m_trsf = make_matrix(make_point(pos), xaxis, yaxis);
 
-			(*(((PropertyTrsf*)property)->m_callbackfunc))(((PropertyTrsf*)property)->m_trsf, ((PropertyTrsf*)property)->m_object);
+			PropertyChangeTrsf* changer = new PropertyChangeTrsf(((PropertyTrsf*)property)->m_trsf, (PropertyTrsf*)property);
+			changers.push_back(changer);
 		}
 		break;
 	case ChoicePropertyType:
 		{
-			(*(((PropertyChoice*)property)->m_callbackfunc))(event.GetPropertyValue().GetLong(), ((PropertyChoice*)property)->m_object);
+			PropertyChangeChoice* changer = new PropertyChangeChoice(event.GetPropertyValue().GetLong(), (PropertyChoice*)property);
+			changers.push_back(changer);
+			//(*(((PropertyChoice*)property)->m_callbackfunc))(event.GetPropertyValue().GetLong(), ((PropertyChoice*)property)->m_object);
 		}
 		break;
 	case CheckPropertyType:
 		{
+			// to do
 			(*(((PropertyCheck*)property)->m_callbackfunc))(event.GetPropertyValue().GetBool(), ((PropertyCheck*)property)->m_object);
 		}
 		break;
@@ -362,22 +412,35 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 		break;
 	case FilePropertyType:
 		{
+			// to do
 			(*(((PropertyFile*)property)->m_callbackfunc))(event.GetPropertyValue().GetString(), ((PropertyFile*)property)->m_object);
 		}
 		break;
 	}
+	}
 
-	// to do add property change undoable command
+	wxGetApp().StartHistory();
+	for(std::list<Tool*>::iterator It = changers.begin(); It != changers.end(); It++)
+	{
+		Tool* changer = *It;
+		wxGetApp().DoToolUndoably(changer);
+	}
+	wxGetApp().EndHistory();
 }
 
 void CPropertiesCanvas::OnPropertyGridSelect( wxPropertyGridEvent& event ) {
 	wxPGProperty* p = event.GetPropertyPtr();
 
-	Property* property = GetProperty(p);
-	if(property == NULL)return;
+	std::list<Property*>* properties = GetProperties(p);
+	if(properties == NULL)return;
 
-	if(property->m_selectcallback)
-		(*(property->m_selectcallback))(((PropertyChoice*)property)->m_object);
+	// to do, use a PropertyChange undoable command
+	for(std::list<Property*>::iterator It = properties->begin(); It != properties->end(); It++)
+	{
+		Property* property = *It;
+		if(property->m_selectcallback)
+			(*(property->m_selectcallback))(((PropertyChoice*)property)->m_object);
+	}
 }
 
 void CPropertiesCanvas::DeselectProperties()
@@ -410,4 +473,11 @@ void CPropertiesCanvas::Thaw()
 		RefreshByRemovingAndAddingAll2();
 		m_refresh_wanted_on_thaw = false;
 	}
+}
+void PropertyChange::Run()
+{
+}
+
+void PropertyChange::RollBack()
+{
 }

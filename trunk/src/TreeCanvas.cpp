@@ -294,9 +294,7 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 
 void CTreeCanvas::OnKeyDown(wxKeyEvent& event)
 {
-	if(event.GetKeyCode() == WXK_ESCAPE && wxGetApp().EndSketchMode())
-	{}
-	else wxGetApp().input_mode_object->OnKeyDown(event);
+	wxGetApp().input_mode_object->OnKeyDown(event);
 
 	event.Skip();
 }

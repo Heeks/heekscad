@@ -1472,34 +1472,34 @@ static gp_Ax2* ax2_for_GetProperties = NULL;
 static void on_set_ax2_pos(const double *pos, HeeksObj* object)
 {
 	*ax2_for_GetProperties = gp_Ax2(make_point(pos), ax2_for_GetProperties->Direction(), ax2_for_GetProperties->XDirection());
+	object->OnApplyProperties();
 	wxGetApp().Repaint();
 }
 
-static void on_set_ax2_angle()
+static void on_set_ax2_angle(HeeksObj* object)
 {
 	gp_Dir dx, dy;
 	CoordinateSystem::AnglesToAxes(vertical_angle_for_property, horizontal_angle_for_property, twist_angle_for_property, dx, dy);
 	gp_Trsf mat = make_matrix(ax2_for_GetProperties->Location(), dx, dy);
 	*ax2_for_GetProperties = gp_Ax2(ax2_for_GetProperties->Location(), gp_Dir(0, 0, 1).Transformed(mat), gp_Dir(1, 0, 0).Transformed(mat));
-	wxGetApp().Repaint();
 }
 
 static void on_set_ax2_vertical_angle(double value, HeeksObj* object)
 {
 	vertical_angle_for_property = value * M_PI/180;
-	on_set_ax2_angle();
+	on_set_ax2_angle(object);
 }
 
 static void on_set_ax2_horizontal_angle(double value, HeeksObj* object)
 {
 	horizontal_angle_for_property = value * M_PI/180;
-	on_set_ax2_angle();
+	on_set_ax2_angle(object);
 }
 
 static void on_set_ax2_twist_angle(double value, HeeksObj* object)
 {
 	twist_angle_for_property = value * M_PI/180;
-	on_set_ax2_angle();
+	on_set_ax2_angle(object);
 }
 
 void CoordinateSystem::GetAx2Properties(std::list<Property *> *list, gp_Ax2& a)

@@ -13,7 +13,6 @@ protected:
 public:
 	double m_x[3];
 	int m_index;
-	bool has_index;
 	bool m_affected_by_view_units;
 	void(*m_callbackfunc)(const double*, HeeksObj*);
 	void(*m_callbackfuncidx)(const double*, HeeksObj*,int);

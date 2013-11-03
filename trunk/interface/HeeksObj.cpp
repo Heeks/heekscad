@@ -15,7 +15,6 @@
 #include "../src/HeeksFrame.h"
 #include "../src/ObjPropsCanvas.h"
 #include "../src/Sketch.h"
-#include "../src/Pad.h"
 #else
 #include "GripperTypes.h"
 #include "GripData.h"
@@ -170,44 +169,7 @@ bool HeeksObj::StretchTemporaryTransformed(const double *p, const double* shift,
 
 void HeeksObj::GetGripperPositionsTransformed(std::list<GripData> *list, bool just_for_endof)
 {
-#ifdef HEEKSCAD
-
-	//TODO: We want to transform these coords by whatever has happened to the draw matrix on the way down to our level
-	//For right now we are just grabbing the sketches coord system, but this isn't right and won't work when parts or
-	//assemblies come around.
-	//For that matter it has gotten out of control with the addition of faces and edges to pads
-	std::list<GripData> newlist;
-	GetGripperPositions(&newlist,just_for_endof);
-
-	gp_Trsf mat;
-
-	CSketch *sketch = dynamic_cast<CSketch*>(m_owner);
-
-	if(sketch && sketch->m_coordinate_system)
-		mat = sketch->m_coordinate_system->GetMatrix();
-
-	CPad *pad = dynamic_cast<CPad*>(m_owner);
-	if(!pad && m_owner)
-		pad = dynamic_cast<CPad*>(m_owner->m_owner);
-
-	if(pad && pad->m_sketch->m_coordinate_system)
-		mat = pad->m_sketch->m_coordinate_system->GetMatrix();
-
-	std::list<GripData>::iterator it;
-	for(it = newlist.begin(); it != newlist.end(); ++it)
-	{
-		GripData gd = *it;
-
-		gp_Pnt pnt(gd.m_x,gd.m_y,gd.m_z);
-		pnt.Transform(mat);
-		gd.m_x = pnt.X();
-		gd.m_y = pnt.Y();
-		gd.m_z = pnt.Z();
-		list->push_back(gd);
-	}
-#else
 	GetGripperPositions(list,just_for_endof);
-#endif
 }
 
 void HeeksObj::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)

@@ -260,15 +260,12 @@ public:
 		}
 		CoordinateSystem* coord_sys = new CoordinateSystem(_("Face Coordinate System"), plane.Location(), x_direction, y_direction);
 		CSketch* sketch = new CSketch();
-		sketch->Add(coord_sys,NULL);
+		wxGetApp().AddUndoably(coord_sys,NULL, NULL);
 		sketch->ReloadPointers();
 		//TODO: should be faces solids parent
-		wxGetApp().Add(sketch, NULL);
+		wxGetApp().AddUndoably(sketch, NULL, NULL);
 		wxGetApp().m_marked_list->Clear(true);
 		wxGetApp().m_marked_list->Add(sketch, true);
-		wxGetApp().EnterSketchMode(sketch);
-		wxGetApp().Repaint();
-		wxGetApp().m_frame->RefreshInputCanvas();
 	}
 };
 
@@ -772,10 +769,10 @@ void CFace::GetSurfaceUVPeriod(double *uv, bool *isUPeriodic, bool *isVPeriodic)
 
 CShape* CFace::GetParentBody()
 {
-	if(HEEKSOBJ_OWNER == NULL)return NULL;
-	if(HEEKSOBJ_OWNER->HEEKSOBJ_OWNER == NULL)return NULL;
-	if(HEEKSOBJ_OWNER->HEEKSOBJ_OWNER->GetType() != SolidType)return NULL;
-	return (CShape*)(HEEKSOBJ_OWNER->HEEKSOBJ_OWNER);
+	if(m_owner == NULL)return NULL;
+	if(m_owner->m_owner == NULL)return NULL;
+	if(m_owner->m_owner->GetType() != SolidType)return NULL;
+	return (CShape*)(m_owner->m_owner);
 }
 
 void CFace::MakeSureMarkingGLListExists()

@@ -147,14 +147,17 @@ bool CCone::IsDifferent(HeeksObj* o)
 
 static void on_set_r1(double value, HeeksObj* object){
 	((CCone*)object)->m_r1 = value;
+	object->OnApplyProperties();
 }
 
 static void on_set_r2(double value, HeeksObj* object){
 	((CCone*)object)->m_r2 = value;
+	object->OnApplyProperties();
 }
 
 static void on_set_height(double value, HeeksObj* object){
 	((CCone*)object)->m_height = value;
+	object->OnApplyProperties();
 }
 
 void CCone::MakeTransformedShape(const gp_Trsf &mat)
@@ -199,13 +202,8 @@ void CCone::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
 
 void CCone::OnApplyProperties()
 {
-	CCone* new_object = new CCone(m_pos, m_r1, m_r2, m_height, m_title.c_str(), m_color, m_opacity);
-	wxGetApp().StartHistory();
-	wxGetApp().AddUndoably(new_object, NULL, NULL);
-	wxGetApp().DeleteUndoably(this);
-	wxGetApp().EndHistory();
-	wxGetApp().m_marked_list->Clear(true);
-	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
+	*this = CCone(m_pos, m_r1, m_r2, m_height, m_title.c_str(), m_color, m_opacity);
+	this->create_faces_and_edges();
 	wxGetApp().Repaint();
 }
 
@@ -289,12 +287,9 @@ bool CCone::Stretch(const double *p, const double* shift, void* data)
 
 	if(make_a_new_cone)
 	{
-		CCone* new_object = new CCone(new_pos, new_r1, new_r2, new_height, m_title.c_str(), m_color, m_opacity);
-		new_object->CopyIDsFrom(this);
-		HEEKSOBJ_OWNER->Add(new_object, NULL);
-		HEEKSOBJ_OWNER->Remove(this);
-		wxGetApp().m_marked_list->Clear(true);
-		wxGetApp().m_marked_list->Add(new_object, true);
+		*this = CCone(new_pos, new_r1, new_r2, new_height, m_title.c_str(), m_color, m_opacity);
+		//new_object->CopyIDsFrom(this);
+		this->create_faces_and_edges();
 	}
 
 	return true;
