@@ -379,16 +379,6 @@ void CHeeksCADInterface::SetLineDrawingMode()
 	wxGetApp().SetInputMode(&line_strip);
 }
 
-bool CHeeksCADInterface::EndSketchMode()
-{
-	return wxGetApp().EndSketchMode();
-}
-
-void CHeeksCADInterface::EnterSketchMode(HeeksObj* sketch)
-{
-	wxGetApp().EnterSketchMode((CSketch*)sketch);
-}
-
 void CHeeksCADInterface::SetInputMode(CInputMode* input_mode)
 {
 	wxGetApp().SetInputMode(input_mode);

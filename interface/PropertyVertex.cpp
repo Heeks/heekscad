@@ -11,7 +11,6 @@ PropertyVertex::PropertyVertex(const wxChar *t, const double *initial_vt, HeeksO
 	memcpy(m_x, initial_vt, 3*sizeof(double));
 	m_callbackfunc = callbackfunc;
 	m_callbackfuncidx = 0;
-	has_index = false;
 }
 
 PropertyVertex::PropertyVertex(const wxChar *t, const double *initial_vt, HeeksObj* object, void(*callbackfunc)(const double* vt, HeeksObj* m_object, int), int index, void(*selectcallback)(HeeksObj*)):Property(object, selectcallback){
@@ -20,7 +19,6 @@ PropertyVertex::PropertyVertex(const wxChar *t, const double *initial_vt, HeeksO
 	memcpy(m_x, initial_vt, 3*sizeof(double));
 	m_callbackfunc = 0;
 	m_callbackfuncidx = callbackfunc;
-	has_index = true;
 }
 
 PropertyVertex::~PropertyVertex(){

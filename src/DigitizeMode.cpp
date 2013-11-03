@@ -160,7 +160,7 @@ static const gp_Trsf& digitizing_matrix(bool calculate = false){
 			global_matrix_relative_to_screen = make_matrix(origin, gp_Vec(po, x1).Normalized(), gp_Vec(po, y1).Normalized());
 		}
 		else{
-			global_matrix_relative_to_screen = wxGetApp().GetDrawMatrix(!wxGetApp().m_sketch_mode);
+			global_matrix_relative_to_screen = wxGetApp().GetDrawMatrix(true);
 		}
 	}
 	return global_matrix_relative_to_screen;
@@ -365,10 +365,7 @@ DigitizedPoint DigitizeMode::Digitize(const gp_Lin &ray){
 		double extra2 = d > -0.00000001 ? 0.5:-0.5;
 		d = (int)(d / wxGetApp().digitizing_grid + extra2) * wxGetApp().digitizing_grid;
 
-		if(wxGetApp().m_sketch_mode)
-			point.m_point = gp_XYZ(1,0,0) * c + gp_XYZ(0,1,0) * d;
-		else
-			point.m_point = datum.XYZ() + plane_vx.XYZ() * c + plane_vy.XYZ() * d;
+		point.m_point = datum.XYZ() + plane_vx.XYZ() * c + plane_vy.XYZ() * d;
 	}
 
 	return point;

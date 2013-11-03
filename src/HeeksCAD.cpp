@@ -102,9 +102,6 @@ HeeksCADapp &wxGetApp(){return theApp;}
 IMPLEMENT_APP(HeeksCADapp)
 #endif
 
-extern void SketchTools_GetOptions(std::list<Property *> *list);
-extern void LoadSketchToolsSettings();
-
 
 #if 0
 int MyAllocHook( int allocType, void *userData, size_t size, int blockType, long requestNumber, const unsigned char *filename, int lineNumber)
@@ -137,7 +134,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	_CrtSetAllocHook(MyAllocHook);
 #endif
 
-	m_version_number = _T("0 23 0");
+	m_version_number = _T("0 24 0");
 	m_geom_tol = 0.000001;
 	TiXmlBase::SetRequiredDecimalPlaces( DecimalPlaces(m_geom_tol) );	 // Ensure we write XML in enough accuracy to be useful when re-read.
 
@@ -265,8 +262,7 @@ HeeksCADapp::~HeeksCADapp()
 bool HeeksCADapp::OnInit()
 {
 	m_gl_font_initialized = false;
-	m_sketch_mode = false;
-
+	
 	wxInitAllImageHandlers();
 
 	InitialiseLocale();
@@ -409,7 +405,6 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("STLSaveBinary"), &m_stl_save_as_binary, true);
 
 	HDimension::ReadFromConfig(config);
-	LoadSketchToolsSettings();
 
 	m_ruler->ReadFromConfig(config);
 
@@ -605,35 +600,6 @@ int HeeksCADapp::OnExit(){
 
 	int result = wxApp::OnExit();
 	return result;
-}
-
-bool HeeksCADapp::EndSketchMode()
-{
-	if(m_sketch_mode  && input_mode_object == m_select_mode)
-	{
-		m_sketch_mode = false;
-		Repaint();
-		return true;
-	}
-	return false;
-}
-
-void HeeksCADapp::EnterSketchMode(CSketch* sketch)
-{
-	m_sketch_mode = true;
-	m_sketch = sketch;
-	if(sketch->m_coordinate_system)
-		m_current_coordinate_system = sketch->m_coordinate_system;
-}
-
-CSketch* HeeksCADapp::GetContainer()
-{
-	if(m_sketch_mode)
-		return m_sketch;
-
-	m_sketch = new CSketch();
-	Add(m_sketch,NULL);
-	return m_sketch;
 }
 
 void HeeksCADapp::SetInputMode(CInputMode *new_mode){
@@ -1973,9 +1939,6 @@ void HeeksCADapp::glCommandsAll(const CViewPoint &view_point)
 	{
 		wxString screen_text1, screen_text2;
 
-		if(m_sketch_mode)
-			screen_text1.Append(_T("Sketch Mode:\n"));
-
 		if(input_mode_object && input_mode_object->GetTitle())
 		{
 			screen_text1.Append(input_mode_object->GetTitle());
@@ -2013,32 +1976,24 @@ void HeeksCADapp::glCommands(bool select, bool marked, bool no_color)
 {
 	// this is called when select is true
 
-	// for sketch mode, only allow items in the sketch to be selected
-	if(m_sketch_mode)
+	std::list<HeeksObj*>::iterator It;
+	for(It=m_objects.begin(); It!=m_objects.end() ;It++)
 	{
-		m_sketch->glCommands(select, marked || m_marked_list->ObjectMarked(m_sketch), no_color);
-	}
-	else
-	{
-		std::list<HeeksObj*>::iterator It;
-		for(It=m_objects.begin(); It!=m_objects.end() ;It++)
+		HeeksObj* object = *It;
+		if(object->OnVisibleLayer() && object->m_visible)
 		{
-			HeeksObj* object = *It;
-			if(object->OnVisibleLayer() && object->m_visible)
-			{
-				if(select)glPushName(object->GetIndex());
-				object->glCommands(select, marked || m_marked_list->ObjectMarked(object), no_color);
-				if(select)glPopName();
-			}
-		}
-
-		// draw the ruler
-		if(m_show_ruler)
-		{
-			if(select)glPushName(m_ruler->GetIndex());
-			m_ruler->glCommands(select, false, false);
+			if(select)glPushName(object->GetIndex());
+			object->glCommands(select, marked || m_marked_list->ObjectMarked(object), no_color);
 			if(select)glPopName();
 		}
+	}
+
+	// draw the ruler
+	if(m_show_ruler)
+	{
+		if(select)glPushName(m_ruler->GetIndex());
+		m_ruler->glCommands(select, false, false);
+		if(select)glPopName();
 	}
 }
 
@@ -3368,9 +3323,6 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	logging_options->m_list.push_back(new PropertyCheck(_("use repetition counting"), (int)CHeeksFrame::m_logrepeatcounts, NULL, on_set_repeatcounts));
 	logging_options->m_list.push_back(new PropertyCheck(_("use timestamps"), (int)CHeeksFrame::m_logtimestamps, NULL, on_set_timestamps));
 	list->push_back(logging_options);
-
-	SketchTools_GetOptions(list);
-
 }
 
 void HeeksCADapp::DeleteMarkedItems()
@@ -4649,9 +4601,6 @@ wxString HeeksCADType(const int type)
         case SplineType:   return(_("Spline"));
         case GroupType:   return(_("Group"));
         case CorrelationToolType:   return(_("CorrelationTool"));
-        case PadType:   return(_("Pad"));
-        case PartType:   return(_("Part"));
-        case PocketSolidType:   return(_("PocketSolid"));
         case AngularDimensionType:   return(_("AngularDimension"));
         case OrientationModifierType:   return(_("OrientationModifier"));
         case HoleType:   return(_("Hole"));

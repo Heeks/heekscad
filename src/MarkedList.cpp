@@ -14,7 +14,6 @@
 #include "GraphicsCanvas.h"
 #include "HeeksFrame.h"
 #include "ConversionTools.h"
-#include "SketchTools.h"
 #include "SolidTools.h"
 #include "MenuSeparator.h"
 using namespace std;
@@ -286,7 +285,12 @@ void MarkedList::GetProperties(std::list<Property *> *list){
 	else
 	{
 		// multiple selection
-		list->push_back(new PropertyInt(_("Number of items selected"), m_list.size(), NULL));
+		//list->push_back(new PropertyInt(_("Number of items selected"), m_list.size(), NULL));
+		for(std::list<HeeksObj*>::iterator It = m_list.begin(); It != m_list.end(); It++)
+		{
+			HeeksObj* obj = *It;
+			obj->GetProperties(list);
+		}
 	}
 }
 
@@ -344,7 +348,6 @@ void MarkedList::GetTools(MarkedObject* clicked_object, std::list<Tool*>& t_list
 	}
 
 	GetConversionMenuTools(&t_list);
-	GetSketchMenuTools(&t_list);
 	GetSolidMenuTools(&t_list);
 
 	if(copy_and_paste_tools)

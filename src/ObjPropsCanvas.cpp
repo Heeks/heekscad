@@ -191,12 +191,6 @@ bool CObjPropsCanvas::OnApply2()
 		if(!marked_object->ValidateProperties())return false;
 	}
 
-	if(wxGetApp().m_marked_list->size() == 1)
-	{
-		HeeksObj* marked_object = (*wxGetApp().m_marked_list->list().begin());
-		marked_object->OnApplyProperties();
-	}
-
 	return true;
 }
 
