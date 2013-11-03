@@ -19,7 +19,7 @@ class GripData;
 class TopoDS_Shape;
 class ObjectCanvas;
 
-#define HEEKSOBJ_OWNER m_owner
+#define m_owner m_owner
 
 // NOTE: If adding to this enumeration, please also add the verbose description to the HeeksCADType() routine
 enum{
@@ -48,9 +48,6 @@ enum{
 	SplineType,
 	GroupType,
 	CorrelationToolType,
-	PadType,
-	PartType,
-	PocketSolidType,
 	AngularDimensionType,
 	OrientationModifierType,
 	HoleType,

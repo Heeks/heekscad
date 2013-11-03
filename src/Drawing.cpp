@@ -225,10 +225,6 @@ void Drawing::GetTools(std::list<Tool*> *f_list, const wxPoint *p){
 
 HeeksObj* Drawing::GetOwnerForDrawingObjects()
 {
-	if(wxGetApp().m_sketch_mode)
-	{
-		return wxGetApp().GetContainer();
-	}
 	return &wxGetApp(); //Object always needs to be added somewhere
 }
 

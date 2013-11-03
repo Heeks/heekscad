@@ -19,7 +19,6 @@ class CSketch:public ObjList
 public:
 	static std::string m_sketch_order_str[MaxSketchOrderTypes];
 	SketchOrderType m_order;
-	bool m_solidify;
 	bool m_draw_with_transform;
 	CoordinateSystem* m_coordinate_system;
 
@@ -36,7 +35,6 @@ public:
 	bool IsDifferent( HeeksObj *other ) { return(*this != (*(CSketch *)other)); }
 
 	std::vector<TopoDS_Face> GetFaces();
-
 	int GetType()const{return SketchType;}
 	long GetMarkingMask()const{return MARKING_FILTER_SKETCH;}
 	const wxChar* GetTypeString(void)const{return _("Sketch");}

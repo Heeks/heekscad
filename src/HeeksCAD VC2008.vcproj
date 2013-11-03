@@ -666,14 +666,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\BentleyOttmann.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\BentleyOttmann.h"
-			>
-		</File>
-		<File
 			RelativePath=".\BezierCurve.cpp"
 			>
 		</File>
@@ -982,14 +974,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\DynamicSolid.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\DynamicSolid.h"
-			>
-		</File>
-		<File
 			RelativePath=".\Edge.cpp"
 			>
 		</File>
@@ -1023,14 +1007,6 @@
 		</File>
 		<File
 			RelativePath=".\FaceTools.h"
-			>
-		</File>
-		<File
-			RelativePath=".\FastCurves.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\FastCurves.h"
 			>
 		</File>
 		<File
@@ -1558,22 +1534,6 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\MultiPoly.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\MultiPoly.h"
-			>
-		</File>
-		<File
-			RelativePath=".\NearMap.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\NearMap.h"
-			>
-		</File>
-		<File
 			RelativePath="..\interface\NiceTextCtrl.cpp"
 			>
 		</File>
@@ -1698,22 +1658,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Pad.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Pad.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Part.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Part.h"
-			>
-		</File>
-		<File
 			RelativePath="..\interface\PictureFrame.cpp"
 			>
 		</File>
@@ -1727,14 +1671,6 @@
 		</File>
 		<File
 			RelativePath=".\Plugins.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Pocket.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Pocket.h"
 			>
 		</File>
 		<File
@@ -1758,10 +1694,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Polygon.cpp"
-			>
-		</File>
-		<File
 			RelativePath=".\propdev.h"
 			>
 		</File>
@@ -1775,6 +1707,14 @@
 		</File>
 		<File
 			RelativePath="..\interface\Property.h"
+			>
+		</File>
+		<File
+			RelativePath=".\PropertyChange.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\PropertyChange.h"
 			>
 		</File>
 		<File
@@ -1994,27 +1934,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\SimpleIntersector.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\SimpleIntersector.h"
-			>
-		</File>
-		<File
 			RelativePath=".\Sketch.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\Sketch.h"
-			>
-		</File>
-		<File
-			RelativePath=".\SketchTools.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\SketchTools.h"
 			>
 		</File>
 		<File
@@ -2395,14 +2319,6 @@
 		</File>
 		<File
 			RelativePath=".\Wire.h"
-			>
-		</File>
-		<File
-			RelativePath=".\WrappedCurves.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\WrappedCurves.h"
 			>
 		</File>
 		<File

@@ -194,20 +194,6 @@ void LineArcDrawing::AddPoint()
 	{
 	case CircleDrawingMode:
 		{
-#if 0
-			// kill focus on control being typed into
-			wxGetApp().m_frame->m_input_canvas->DeselectProperties();
-			wxGetApp().ProcessPendingEvents();
-
-			// add a circle
-			HCircle* new_object = new HCircle(gp_Circ(gp_Ax2(wxGetApp().m_digitizing->digitized_point.m_point, gp_Dir(0, 0, 1)), radius_for_circle), &wxGetApp().construction_color);
-			wxGetApp().AddUndoably(new_object, GetOwnerForDrawingObjects(), NULL);
-			std::list<HeeksObj*> list;
-			list.push_back(new_object);
-			wxGetApp().m_current_viewport->DrawObjectsOnFront(list, true);
-			m_getting_position = false;
-			m_inhibit_coordinate_change = false;
-#endif
 		Drawing::AddPoint();
 		}
 		break;
@@ -519,7 +505,8 @@ HeeksObj* LineArcDrawing::GetOwnerForDrawingObjects()
 			{
 				if(m_container == NULL)
 				{
-					m_container = wxGetApp().GetContainer();
+					m_container = new CSketch();
+					wxGetApp().AddUndoably(m_container, NULL, NULL);
 				}
 				return m_container;
 			}
@@ -528,11 +515,7 @@ HeeksObj* LineArcDrawing::GetOwnerForDrawingObjects()
 	default:
 		break;
 	}
-	if(wxGetApp().m_sketch_mode)
-	{
-		m_container = wxGetApp().GetContainer();
-		return m_container;
-	}
+
 	return &wxGetApp(); //Object always needs to be added somewhere
 }
 

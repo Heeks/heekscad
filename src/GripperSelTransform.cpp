@@ -99,11 +99,6 @@ void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
 
 	MakeMatrix ( from, to, object_m, wxGetApp().m_drag_matrix );
 
-	if(wxGetApp().m_sketch_mode && wxGetApp().m_sketch->m_coordinate_system)
-	{
-		wxGetApp().m_drag_matrix = wxGetApp().m_sketch->m_coordinate_system->GetMatrix() * wxGetApp().m_drag_matrix;
-	}
-
 	wxGetApp().Repaint();
 }
 

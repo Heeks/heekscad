@@ -132,8 +132,8 @@ void CCuboid::OnApplyProperties()
 {
 	CCuboid* new_object = new CCuboid(m_pos, m_x, m_y, m_z, m_title.c_str(), m_color, m_opacity);
 	new_object->CopyIDsFrom(this);
-	HEEKSOBJ_OWNER->Add(new_object, NULL);
-	HEEKSOBJ_OWNER->Remove(this);
+	m_owner->Add(new_object, NULL);
+	m_owner->Remove(this);
 	if(wxGetApp().m_marked_list->ObjectMarked(this))
 	{
 		wxGetApp().m_marked_list->Remove(this, false);
@@ -192,8 +192,8 @@ bool CCuboid::Stretch(const double *p, const double* shift, void* data)
 	{
 		CCuboid* new_object = new CCuboid(m_pos, m_x, m_y, m_z, m_title.c_str(), m_color, m_opacity);
 		new_object->CopyIDsFrom(this);
-		HEEKSOBJ_OWNER->Add(new_object, NULL);
-		HEEKSOBJ_OWNER->Remove(this);
+		m_owner->Add(new_object, NULL);
+		m_owner->Remove(this);
 		wxGetApp().m_marked_list->Clear(false);
 		wxGetApp().m_marked_list->Add(new_object, true);
 	}
