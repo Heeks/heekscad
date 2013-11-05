@@ -31,17 +31,13 @@ enum EnumSplineDrawingMode{
 
 class LineArcDrawing: public Drawing{
 private:
-	std::list<HeeksObj*> temp_object_in_list;
-	std::list<HeeksObj*> prev_object_in_list;
 	std::list<DigitizedPoint> spline_points;
-	HeeksObj *temp_object;
 	bool m_A_down; // is key A pressed
 	HeeksObj* m_container;
 	bool m_add_to_sketch;
 
 	// Drawing's virtual functions
 	bool calculate_item(DigitizedPoint &end);
-	const std::list<HeeksObj*>& GetObjectsMade()const{return temp_object_in_list;}
 	void set_previous_direction();
 	int number_of_steps();
 	int step_to_go_to_after_last_step();
@@ -74,7 +70,6 @@ public:
 	bool OnModeChange(void);
 
 	// Drawing's virtual functions
-	void clear_drawing_objects(int mode);
 	void set_draw_step_not_undoable(int s);
 };
 

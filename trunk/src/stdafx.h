@@ -45,9 +45,9 @@
 #include <ctime>
 #include <iostream>
 
-
 #include <stdio.h>
 #include <stdlib.h>
+
 #include <string.h>
 #include <math.h>
 
@@ -85,6 +85,7 @@
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepBuilderAPI_MakePolygon.hxx>
 #include <BRepBuilderAPI_MakeShape.hxx>
+#include <BRepBuilderAPI_MakeSolid.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
 #include <BRepExtrema_DistShapeShape.hxx>
@@ -130,6 +131,7 @@
 #include <GeomLProp_SLProps.hxx>
 #include <GProp_GProps.hxx>
 #include <gp.hxx>
+#include <gp_Ax1.hxx>
 #include <gp_Circ.hxx>
 #include <gp_Cone.hxx>
 #include <gp_Cylinder.hxx>
@@ -182,6 +184,12 @@
 #include <TopTools_MapIteratorOfMapOfShape.hxx>
 #include <TopTools_MapOfShape.hxx>
 #include <UnitsAPI.hxx>
+
+#ifdef __WXMSW__
+#ifdef _DEBUG
+    #include <wx/msw/msvcrt.h>      // redefines the new() operator 
+#endif
+#endif
 
 #include <wx/aui/aui.h>
 #include "wx/brush.h"

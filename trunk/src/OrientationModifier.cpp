@@ -6,7 +6,6 @@
 #include "../interface/PropertyInt.h"
 #include "../interface/PropertyCheck.h"
 #include "HeeksConfig.h"
-#include <BRepAdaptor_Curve.hxx>
 
 void COrientationModifierParams::set_initial_values()
 {

@@ -12,8 +12,6 @@
 #include <wx/string.h>
 #include <wx/window.h>
 
-#include <gp_Pnt.hxx>
-
 #include <iostream>
 #include <fstream>
 #include <string>
