@@ -47,6 +47,15 @@ CTreeCanvas::CTreeCanvas(wxWindow* parent)
 
 CTreeCanvas::~CTreeCanvas()
 {
+	delete bmp_branch_plus;
+	delete bmp_branch_minus;
+	delete bmp_branch_end_plus;
+	delete bmp_branch_end_minus;
+	delete bmp_branch_split;
+	delete bmp_branch_end;
+	delete bmp_plus;
+	delete bmp_minus;
+	delete bmp_branch_trunk;
 	wxGetApp().RemoveObserver(this);
 }
 

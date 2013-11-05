@@ -243,7 +243,7 @@ CHeeksFrame::~CHeeksFrame()
 	config.Write(_T("Perspective"), m_graphics->m_view_point.GetPerspective());
 
 	delete m_aui_manager;
-	delete wxLog::SetActiveTarget(new wxLogStderr(NULL));
+	delete wxLog::SetActiveTarget(NULL);
 }
 
 

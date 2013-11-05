@@ -19,9 +19,6 @@ class CSketch:public ObjList
 public:
 	static std::string m_sketch_order_str[MaxSketchOrderTypes];
 	SketchOrderType m_order;
-	bool m_draw_with_transform;
-	CoordinateSystem* m_coordinate_system;
-
 
 	CSketch();
 	CSketch(const CSketch& c);
@@ -52,9 +49,6 @@ public:
 	void OnEditString(const wxChar* str);
 	bool Add(HeeksObj* object, HeeksObj* prev_object);
 	void Remove(HeeksObj* object);
-	void glCommands(bool select, bool marked, bool no_color);
-	void ReloadPointers();
-	void ModifyByMatrix(const double *m);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 

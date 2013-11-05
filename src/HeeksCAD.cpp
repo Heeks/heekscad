@@ -95,18 +95,22 @@
 
 using namespace std;
 
-#ifdef PYHEEKSCAD
-HeeksCADapp theApp;
-HeeksCADapp &wxGetApp(){return theApp;}
-#else
-IMPLEMENT_APP(HeeksCADapp)
-#endif
+#ifdef _DEBUG
+#ifdef __WXMSW__
+class DestroyedAtClose{
+public:
+	DestroyedAtClose()
+	{}
 
+	~DestroyedAtClose()
+	{
+_CrtDumpMemoryLeaks();
+	}
+} destroyed_at_close;
 
-#if 0
 int MyAllocHook( int allocType, void *userData, size_t size, int blockType, long requestNumber, const unsigned char *filename, int lineNumber)
 {
-	if (size==24 && requestNumber > 14000 && requestNumber < 18000)
+	if (requestNumber == 154)
 	{
 		int here = 0;
 		here = 3;
@@ -114,6 +118,15 @@ int MyAllocHook( int allocType, void *userData, size_t size, int blockType, long
 	return TRUE;
 }
 #endif
+#endif
+
+#ifdef PYHEEKSCAD
+HeeksCADapp theApp;
+HeeksCADapp &wxGetApp(){return theApp;}
+#else
+IMPLEMENT_APP(HeeksCADapp)
+#endif
+
 
 static unsigned int DecimalPlaces( const double value )
 {
@@ -130,10 +143,6 @@ static unsigned int DecimalPlaces( const double value )
 
 HeeksCADapp::HeeksCADapp(): ObjList()
 {
-#if 0
-	_CrtSetAllocHook(MyAllocHook);
-#endif
-
 	m_version_number = _T("0 24 0");
 	m_geom_tol = 0.000001;
 	TiXmlBase::SetRequiredDecimalPlaces( DecimalPlaces(m_geom_tol) );	 // Ensure we write XML in enough accuracy to be useful when re-read.
@@ -266,6 +275,12 @@ bool HeeksCADapp::OnInit()
 	wxInitAllImageHandlers();
 
 	InitialiseLocale();
+
+#ifdef __WXMSW__
+#ifdef _DEBUG
+	wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
+#endif
+#endif
 
 #ifdef PYHEEKSCAD
     m_printData = NULL;
@@ -504,6 +519,7 @@ bool HeeksCADapp::OnInit()
 		wprintf(_T("user local data directory: ") + sp.GetUserLocalDataDir()  + _T("\n"));
 	#endif
 #endif
+        //wxLog::SetActiveTarget(new wxLogStderr());
 	
 	return TRUE;
 }
@@ -3118,9 +3134,6 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 		view_options->m_list.push_back ( new PropertyChoice ( _("screen text"),  choices, m_graphics_text_mode, NULL, on_set_screen_text ) );
 	}
 	view_options->m_list.push_back( new PropertyCheck(_("antialiasing"), m_antialiasing, NULL, on_set_antialiasing));
-#if _DEBUG
-	view_options->m_list.push_back( new PropertyCheck(_("fixed light"), m_light_push_matrix, NULL, on_set_light_push_matrix));
-#endif
 	view_options->m_list.push_back( new PropertyCheck(_("reverse mouse wheel"), !(mouse_wheel_forward_away), NULL, on_set_reverse_mouse_wheel));
 	view_options->m_list.push_back( new PropertyCheck(_("reverse zooming mode"), ViewZooming::m_reversed, NULL, on_set_reverse_zooming));
 	view_options->m_list.push_back( new PropertyCheck(_("Ctrl key does rotate"), ctrl_does_rotate, NULL, on_set_ctrl_does_rotate));
