@@ -27,9 +27,6 @@
 #include "../interface/strconv.h"
 
 #include "CxfFont.h"
-#include <gp_Pnt.hxx>
-#include <gp_Ax1.hxx>
-#include <gp_Trsf.hxx>
 
 extern CHeeksCADInterface heekscad_interface;
 

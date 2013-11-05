@@ -69,7 +69,13 @@ HSpline::HSpline(const std::list<gp_Pnt> &points, const HeeksColor* col):EndedOb
 	unsigned int size = points.size();
 	if(periodicity == Standard_True)size--;
 
+#ifdef _DEBUG
+#undef new
+#endif
 	TColgp_HArray1OfPnt *Array = new TColgp_HArray1OfPnt(1, size);
+#ifdef _DEBUG
+#define new  WXDEBUG_NEW
+#endif
 
 	unsigned int i = 1;
 	for(std::list<gp_Pnt>::const_iterator It = points.begin(); i <= size; It++, i++)

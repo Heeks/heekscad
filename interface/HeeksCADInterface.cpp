@@ -38,10 +38,6 @@
 #include "StlSolid.h"
 #include "RuledSurface.h"
 #include "HeeksConfig.h"
-#include <gp_Sphere.hxx>
-#include <gp_Cone.hxx>
-#include <gp_Sphere.hxx>
-#include <TopoDS_Wire.hxx>
 #include "Geom.h"
 #include "wxImageLoader.h"
 #include "CoordinateSystem.h"

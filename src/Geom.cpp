@@ -68,8 +68,14 @@ bool intersect(const gp_Pln& pln, const gp_Pln& pln2, gp_Lin& lin)
 {
 	bool result = false;
 	{
+#ifdef _DEBUG
+#undef new
+#endif
 		Handle (Geom_Plane) g_p = new Geom_Plane(pln);
 		Handle (Geom_Plane) g_p2 = new Geom_Plane(pln2);
+#ifdef _DEBUG
+#define new  WXDEBUG_NEW
+#endif
 
 		{
 			Handle (Geom_Surface) hs = Handle (Geom_Plane)::DownCast(g_p);

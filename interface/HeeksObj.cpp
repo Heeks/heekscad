@@ -136,37 +136,6 @@ bool HeeksObj::GetScaleAboutMatrix(double *m)
 #endif
 }
 
-bool HeeksObj::StretchTemporaryTransformed(const double *p, const double* shift, void* data)
-{
-#ifdef HEEKSCAD
-	gp_Trsf mat;
-
-	HeeksObj* owner = m_owner;
-
-	CSketch *sketch = dynamic_cast<CSketch*>(owner);
-
-	if(sketch && sketch->m_coordinate_system)
-		mat = sketch->m_coordinate_system->GetMatrix();
-
-	//mat.Invert();
-
-	gp_Pnt vp = make_point(p);
-	gp_Vec vshift = make_vector(shift);
-
-	//vp.Transform(mat);
-	//vshift.Transform(mat);
-
-	double np[3];
-	double nshift[3];
-	extract(vp,np);
-	extract(vshift,nshift);
-
-	return StretchTemporary(np,nshift,data);
-#else
-	return StretchTemporary(p,shift,data);
-#endif
-}
-
 void HeeksObj::GetGripperPositionsTransformed(std::list<GripData> *list, bool just_for_endof)
 {
 	GetGripperPositions(list,just_for_endof);

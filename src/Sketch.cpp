@@ -39,8 +39,6 @@ std::string CSketch::m_sketch_order_str[MaxSketchOrderTypes] = {
 CSketch::CSketch():m_order(SketchOrderTypeUnknown)
 {
 	m_title = _("Sketch");
-	m_coordinate_system = NULL;
-	m_draw_with_transform = true;
 }
 
 CSketch::CSketch(const CSketch& c)
@@ -62,8 +60,6 @@ const CSketch& CSketch::operator=(const CSketch& c)
         color = c.color;
         m_order = c.m_order;
         m_title = c.m_title;
-        m_coordinate_system = c.m_coordinate_system;
-        m_draw_with_transform = c.m_draw_with_transform;
     }
 
 	return *this;
@@ -74,22 +70,6 @@ const wxBitmap &CSketch::GetIcon()
 	static wxBitmap* icon = NULL;
 	if(icon == NULL)icon = new wxBitmap(wxImage(wxGetApp().GetResFolder() + _T("/icons/sketch.png")));
 	return *icon;
-}
-
-void CSketch::ReloadPointers()
-{
-	HeeksObj* child = GetFirstChild();
-	while(child)
-	{
-		CoordinateSystem *system = dynamic_cast<CoordinateSystem*>(child);
-		if(system)
-		{
-			m_coordinate_system = system;
-		}
-		child = GetNextChild();
-	}
-
-	ObjList::ReloadPointers();
 }
 
 static std::map<int, int> order_map_for_properties; // maps drop-down index to SketchOrderType
@@ -156,20 +136,6 @@ static bool SketchOrderAvailable(SketchOrderType old_order, SketchOrderType new_
 	}
 
 	return false;
-}
-
-void CSketch::glCommands(bool select, bool marked, bool no_color)
-{
-	if(m_coordinate_system && m_draw_with_transform)
-	{
-		glPushMatrix();
-		m_coordinate_system->ApplyMatrix();
-	}
-
-	ObjList::glCommands(select,marked,no_color);
-
-	if(m_coordinate_system && m_draw_with_transform)
-		glPopMatrix();
 }
 
 void CSketch::GetProperties(std::list<Property *> *list)
@@ -996,21 +962,11 @@ int CSketch::Intersects(const HeeksObj *object, std::list< double > *rl) const
 	return(number_of_intersections);
 } // End Intersects() method
 
-void CSketch::ModifyByMatrix(const double *m)
-{
-	if(m_coordinate_system && m_draw_with_transform)
-	{
-		m_coordinate_system->ModifyByMatrix(m);
-	}
-	else
-		ObjList::ModifyByMatrix(m);
-}
 bool CSketch::operator==( const CSketch & rhs ) const
 {
     if (color != rhs.color) return(false);
 	if (m_title != rhs.m_title) return(false);
 	if (m_order != rhs.m_order) return(false);
-	if (m_draw_with_transform != rhs.m_draw_with_transform) return(false);
 
 	return(ObjList::operator==(rhs));
 }

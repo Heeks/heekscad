@@ -71,7 +71,7 @@ void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
 				if(object)
 				{
 					double p[3] = {m_data.m_x, m_data.m_y, m_data.m_z};
-					stretch_done = object->StretchTemporaryTransformed(p, shift,m_data.m_data);
+					stretch_done = object->StretchTemporary(p, shift,m_data.m_data);
 				}
 			}
 		}
