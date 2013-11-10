@@ -43,7 +43,6 @@ set( heekscad_HDRS
     ${LIBAREA_PATH}/Area.h
     ${LIBAREA_PATH}/AreaOrderer.h
     AutoSave.h
-    BentleyOttmann.h
     BezierCurve.h
     ../interface/Box.h
     ${LIBAREA_PATH}/Box2D.h
@@ -63,7 +62,6 @@ set( heekscad_HDRS
     ../interface/DoubleInput.h
     Drawing.h
     dxf.h
-    DynamicSolid.h
     Edge.h
     EndedObject.h
     Face.h
@@ -114,8 +112,6 @@ set( heekscad_HDRS
     MarkedList.h
     ../interface/MarkedObject.h
     ../interface/Material.h
-    MultiPoly.h
-    NearMap.h
     ../interface/NiceTextCtrl.h
     ../interface/ObjectCanvas.h
     ../interface/ObjList.h
@@ -124,16 +120,14 @@ set( heekscad_HDRS
     odcombo.h
     OptionsCanvas.h
     OrientationModifier.h
-    Pad.h
-    Part.h
     ../interface/PictureFrame.h
     Plugins.h
-    Pocket.h
     ${LIBAREA_PATH}/Point.h
     PointDrawing.h
     PointOrWindow.h
     propdev.h
     PropertiesCanvas.h
+    PropertyChange.h
     ../interface/Property.h
     ../interface/PropertyCheck.h
     ../interface/PropertyChoice.h
@@ -155,9 +149,7 @@ set( heekscad_HDRS
     Shape.h
     ShapeData.h
     ShapeTools.h
-    SimpleIntersector.h
     Sketch.h
-    SketchTools.h
     Solid.h
     SolidTools.h
     Sphere.h
@@ -173,9 +165,7 @@ set( heekscad_HDRS
     ../interface/ToolList.h
     TransformTool.h
     TransformTools.h
-    #../interface/TransientObject.h
     TreeCanvas.h
-    #UndoEngine.h
     Vertex.h
     ViewPanning.h
     ViewPoint.h
@@ -183,7 +173,6 @@ set( heekscad_HDRS
     ViewZooming.h
     Window.h
     Wire.h
-    WrappedCurves.h
     wxImageLoader.h
    )
 
@@ -196,7 +185,6 @@ set( heekscad_SRCS
     ${LIBAREA_PATH}/AreaOrderer.cpp
     ${LIBAREA_PATH}/AreaPocket.cpp
     AutoSave.cpp
-    BentleyOttmann.cpp
     BezierCurve.cpp
     ${LIBAREA_PATH}/Circle.cpp
     ${LIBAREA_PATH}/clipper.cpp
@@ -215,7 +203,6 @@ set( heekscad_SRCS
     ../interface/DoubleInput.cpp
     Drawing.cpp
     dxf.cpp
-    DynamicSolid.cpp
     Edge.cpp
     EndedObject.cpp
     ExitMainLoop.cpp
@@ -265,8 +252,6 @@ set( heekscad_SRCS
     MarkedList.cpp
     ../interface/MarkedObject.cpp
     ${LIBAREA_PATH}/kurve/Matrix.cpp
-    MultiPoly.cpp
-    NearMap.cpp
     ../interface/NiceTextCtrl.cpp
     ../interface/ObjList.cpp
     ObjPropsCanvas.cpp
@@ -274,15 +259,12 @@ set( heekscad_SRCS
     ${LIBAREA_PATH}/kurve/offset.cpp
     OptionsCanvas.cpp
     OrientationModifier.cpp
-    Pad.cpp
-    Part.cpp
     ../interface/PictureFrame.cpp
     Plugins.cpp
-    Pocket.cpp
     PointDrawing.cpp
     PointOrWindow.cpp
-    Polygon.cpp
     PropertiesCanvas.cpp
+    PropertyChange.cpp
     ../interface/PropertyCheck.cpp
     ../interface/PropertyChoice.cpp
     ../interface/PropertyColor.cpp
@@ -305,9 +287,7 @@ set( heekscad_SRCS
     Shape.cpp
     ShapeData.cpp
     ShapeTools.cpp
-    SimpleIntersector.cpp
     Sketch.cpp
-    SketchTools.cpp
     Solid.cpp
     SolidTools.cpp
     Sphere.cpp
@@ -324,9 +304,7 @@ set( heekscad_SRCS
     ../interface/ToolList.cpp
     TransformTool.cpp
     TransformTools.cpp
-    #../interface/TransientObject.cpp
     TreeCanvas.cpp
-    #UndoEngine.cpp
     Vertex.cpp
     ViewPanning.cpp
     ViewPoint.cpp
@@ -334,7 +312,6 @@ set( heekscad_SRCS
     ViewZooming.cpp
     Window.cpp
     Wire.cpp
-    WrappedCurves.cpp
     wxImageLoader.cpp
    )
 
