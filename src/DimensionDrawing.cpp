@@ -70,7 +70,7 @@ bool DimensionDrawing::calculate_item(DigitizedPoint &end)
 
 static DimensionDrawing* DimensionDrawing_for_GetProperties = NULL;
 
-static void on_set_mode(int value, HeeksObj* object)
+static void on_set_mode(int value, HeeksObj* object, bool from_undo_redo)
 {
 	DimensionDrawing_for_GetProperties->m_mode = (DimensionMode)value;
 	wxGetApp().Repaint();

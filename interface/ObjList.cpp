@@ -414,3 +414,20 @@ void ObjList::OnChangeViewUnits(const double units)
 
 	HeeksObj::OnChangeViewUnits(units);
 }
+
+ReorderTool::ReorderTool(ObjList* object, std::list<HeeksObj *> &new_order)
+{
+	m_object = object;
+	m_original_order = object->m_objects;
+	m_new_order = new_order;
+}
+
+void ReorderTool::Run(bool redo)
+{
+	m_object->m_objects = m_new_order;
+}
+
+void ReorderTool::RollBack()
+{
+	m_object->m_objects = m_original_order;
+}

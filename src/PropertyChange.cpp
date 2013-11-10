@@ -21,7 +21,7 @@ PropertyChangeString::PropertyChangeString(const wxString& value, PropertyString
 	m_object = ((PropertyString*)property)->m_object;
 }
 
-void PropertyChangeString::Run()
+void PropertyChangeString::Run(bool redo)
 {
 	(*(m_callbackfunc))(m_value, m_object);
 	wxGetApp().WasModified(m_object);
@@ -41,7 +41,7 @@ PropertyChangeDouble::PropertyChangeDouble(const double& value, PropertyDouble* 
 	m_object = ((PropertyDouble*)property)->m_object;
 }
 
-void PropertyChangeDouble::Run()
+void PropertyChangeDouble::Run(bool redo)
 {
 	(*(m_callbackfunc))(m_value, m_object);
 	wxGetApp().WasModified(m_object);
@@ -61,7 +61,7 @@ PropertyChangeLength::PropertyChangeLength(const double& value, PropertyLength* 
 	m_object = ((PropertyLength*)property)->m_object;
 }
 
-void PropertyChangeLength::Run()
+void PropertyChangeLength::Run(bool redo)
 {
 	(*(m_callbackfunc))(m_value, m_object);
 	wxGetApp().WasModified(m_object);
@@ -81,7 +81,7 @@ PropertyChangeInt::PropertyChangeInt(const int& value, PropertyInt* property)
 	m_object = ((PropertyInt*)property)->m_object;
 }
 
-void PropertyChangeInt::Run()
+void PropertyChangeInt::Run(bool redo)
 {
 	(*(m_callbackfunc))(m_value, m_object);
 	wxGetApp().WasModified(m_object);
@@ -101,7 +101,7 @@ PropertyChangeColor::PropertyChangeColor(const HeeksColor& value, PropertyColor*
 	m_object = ((PropertyColor*)property)->m_object;
 }
 
-void PropertyChangeColor::Run()
+void PropertyChangeColor::Run(bool redo)
 {
 	(*(m_callbackfunc))(m_value, m_object);
 	wxGetApp().WasModified(m_object);
@@ -121,7 +121,7 @@ PropertyChangeVertex::PropertyChangeVertex(const double* value, PropertyVertex* 
 	m_object = ((PropertyVertex*)property)->m_object;
 }
 
-void PropertyChangeVertex::Run()
+void PropertyChangeVertex::Run(bool redo)
 {
 	(*(m_callbackfunc))(m_value, m_object);
 	wxGetApp().WasModified(m_object);
@@ -141,7 +141,7 @@ PropertyChangeTrsf::PropertyChangeTrsf(const gp_Trsf &value, PropertyTrsf* prope
 	m_object = ((PropertyTrsf*)property)->m_object;
 }
 
-void PropertyChangeTrsf::Run()
+void PropertyChangeTrsf::Run(bool redo)
 {
 	(*(m_callbackfunc))(m_value, m_object);
 	wxGetApp().WasModified(m_object);
@@ -161,14 +161,14 @@ PropertyChangeChoice::PropertyChangeChoice(const int& value, PropertyChoice* pro
 	m_object = ((PropertyChoice*)property)->m_object;
 }
 
-void PropertyChangeChoice::Run()
+void PropertyChangeChoice::Run(bool redo)
 {
-	(*(m_callbackfunc))(m_value, m_object);
+	(*(m_callbackfunc))(m_value, m_object, redo);
 	wxGetApp().WasModified(m_object);
 }
 
 void PropertyChangeChoice::RollBack()
 {
-	(*(m_callbackfunc))(m_old, m_object);
+	(*(m_callbackfunc))(m_old, m_object, true);
 	wxGetApp().WasModified(m_object);
 }

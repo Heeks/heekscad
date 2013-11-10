@@ -24,7 +24,7 @@ const wxChar* StretchTool::GetTitle(){
 	return stretch_function_string.c_str();
 }
 
-void StretchTool::Run(){
+void StretchTool::Run(bool redo){
 	m_undo_uses_add = m_object->Stretch(m_pos, m_shift, m_data);
 	for(int i = 0; i<3; i++)m_new_pos[i]= m_pos[i] + m_shift[i];
 }

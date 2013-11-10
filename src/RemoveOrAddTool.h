@@ -4,7 +4,7 @@
 
 #include "../interface/Tool.h"
 
-class RemoveOrAddTool:public Tool{
+class RemoveOrAddTool:public Undoable{
 protected:
 	HeeksObj* m_prev_object;
 	bool m_belongs_to_owner;
@@ -18,9 +18,6 @@ public:
 
 	RemoveOrAddTool(HeeksObj *object, HeeksObj *owner, HeeksObj* prev_object);
 	virtual ~RemoveOrAddTool();
-
-	// Tool's virtual functions
-	bool Undoable(){return true;}
 };
 
 class AddObjectTool:public RemoveOrAddTool{
@@ -31,7 +28,7 @@ public:
 
 	// Tool's virtual functions
 	const wxChar* GetTitle();
-	void Run();
+	void Run(bool redo);
 	void RollBack();
 };
 
@@ -41,12 +38,12 @@ public:
 
 	// Tool's virtual functions
 	const wxChar* GetTitle() {return _("Remove");}
-	void Run();
+	void Run(bool redo);
 	void RollBack();
 	wxString BitmapPath(){return _T("delete");}
 };
 
-class ManyRemoveOrAddTool:public Tool{
+class ManyRemoveOrAddTool:public Undoable{
 protected:
 	std::list<HeeksObj*> m_objects;
 	HeeksObj* m_owner;
@@ -58,9 +55,6 @@ protected:
 public:
 	ManyRemoveOrAddTool(const std::list<HeeksObj*> &list, HeeksObj *owner): m_objects(list), m_owner(owner), m_belongs_to_owner(false){}
 	virtual ~ManyRemoveOrAddTool();
-
-	// Tool's virtual functions
-	bool Undoable(){return true;}
 };
 
 class AddObjectsTool:public ManyRemoveOrAddTool{
@@ -69,7 +63,7 @@ public:
 
 	// Tool's virtual functions
 	const wxChar* GetTitle();
-	void Run();
+	void Run(bool redo);
 	void RollBack();
 };
 
@@ -79,6 +73,6 @@ public:
 
 	// Tool's virtual functions
 	const wxChar* GetTitle();
-	void Run();
+	void Run(bool redo);
 	void RollBack();
 };

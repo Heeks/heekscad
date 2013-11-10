@@ -778,6 +778,9 @@ void CTreeCanvas::Render(bool just_for_calculation)
 	if(!just_for_calculation)
 	{
 #ifdef WIN32
+		wxFont font(10,wxSWISS,wxNORMAL,wxNORMAL);
+		m_dc->SetFont(font);
+
 		// draw a white background rectangle
 		int w, h;
 		GetClientSize(&w, &h);

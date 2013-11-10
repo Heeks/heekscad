@@ -1199,7 +1199,6 @@ void CoordinateSystem::GetBox(CBox &box)
 
 void CoordinateSystem::OnEditString(const wxChar* str){
 	m_title.assign(str);
-	// to do, use undoable property changes
 }
 
 HeeksObj *CoordinateSystem::MakeACopy(void)const

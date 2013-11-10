@@ -19,19 +19,6 @@ BEGIN_EVENT_TABLE(CObjPropsCanvas, wxScrolledWindow)
         EVT_PG_SELECTED( -1, CObjPropsCanvas::OnPropertyGridSelect )
 END_EVENT_TABLE()
 
-static void OnApply(wxCommandEvent& event)
-{
-	if(wxGetApp().m_frame->m_properties->OnApply2())
-	{
-		wxGetApp().m_marked_list->Clear(true);
-	}
-}
-
-static void OnCancel(wxCommandEvent& event)
-{
-	wxGetApp().m_frame->m_properties->OnCancel2();
-}
-
 CObjPropsCanvas::CObjPropsCanvas(wxWindow* parent)
         : CPropertiesCanvas(parent)
 {
@@ -126,10 +113,6 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll2(){
 		}
 
 		// add toolbar buttons
-		wxString exe_folder = wxGetApp().GetExeFolder();
-		wxGetApp().m_frame->AddToolBarTool(m_toolBar, _("Apply"), wxBitmap(ToolImage(_T("apply"))), _("Apply any changes made to the properties"), OnApply);
-		wxGetApp().m_frame->AddToolBarTool(m_toolBar, _("Cancel"), wxBitmap(ToolImage(_T("cancel"))), _("Stop editing the object"), OnCancel);
-
 		std::list<Tool*> t_list;
 		MarkedObjectOneOfEach mo(0, marked_object, 1, 0, NULL);
 		wxGetApp().m_marked_list->GetTools(&mo, t_list, NULL, false);
@@ -194,24 +177,8 @@ bool CObjPropsCanvas::OnApply2()
 	return true;
 }
 
-static bool in_OnCancel2 = false;
-
-void CObjPropsCanvas::OnCancel2()
-{
-	in_OnCancel2 = true;
-	ClearProperties();
-	for(std::list<Property*>::iterator It = m_initial_properties.begin(); It != m_initial_properties.end(); It++){
-		Property* p = *It;
-		p->CallSetFunction();
-	}
-	wxGetApp().m_marked_list->Clear(true);
-	in_OnCancel2 = false;
-}
-
 void CObjPropsCanvas::WhenMarkedListChanges(bool selection_cleared, const std::list<HeeksObj *>* added_list, const std::list<HeeksObj *>* removed_list)
 {
-	if(in_OnCancel2)return;
-
 	m_make_initial_properties_in_refresh = true;
 	RefreshByRemovingAndAddingAll();
 	m_make_initial_properties_in_refresh = false;
@@ -219,7 +186,5 @@ void CObjPropsCanvas::WhenMarkedListChanges(bool selection_cleared, const std::l
 
 void CObjPropsCanvas::OnChanged(const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed, const std::list<HeeksObj*>* modified)
 {
-	if(in_OnCancel2)return;
-
 	RefreshByRemovingAndAddingAll();
 }

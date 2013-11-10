@@ -5,6 +5,7 @@
 #pragma once
 
 #include "HeeksObj.h"
+#include "Tool.h"
 
 #include <list>
 #include <vector>
@@ -12,6 +13,8 @@
 
 class ObjList : public HeeksObj
 {
+	friend class ReorderTool;
+
 protected:
 	std::list<HeeksObj*> m_objects;
 	std::list<HeeksObj*>::iterator LoopIt;
@@ -62,4 +65,18 @@ public:
 
 	HeeksObj *Find( const int type, const unsigned int id );	// Search for an object by type/id from this or any child objects.
 	/* virtual */ void SetIdPreservation(const bool flag);
+};
+
+
+class ReorderTool: public Undoable
+{
+	ObjList* m_object;
+	std::list<HeeksObj *> m_original_order;
+	std::list<HeeksObj *> m_new_order;
+
+public:
+	ReorderTool(ObjList* object, std::list<HeeksObj *> &new_order);
+	const wxChar* GetTitle(){return _("Reorder");}
+	void Run(bool redo);
+	void RollBack();
 };

@@ -32,7 +32,7 @@ END_EVENT_TABLE()
 
 CPropertiesCanvas::CPropertiesCanvas(wxWindow* parent)
 : wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-				   wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE),m_frozen(false), m_refresh_wanted_on_thaw(false)
+				   wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE)
 {
 	// Assumes code is in frame/dialog constructor
 
@@ -61,6 +61,14 @@ CPropertiesCanvas::~CPropertiesCanvas()
 	wxGetApp().RemoveObserver(this);
 	delete m_pg;
 	delete m_map;
+}
+
+void CPropertiesCanvas::OnDraw(wxDC& dc)
+{
+	if(m_refresh_wanted_on_draw)RefreshByRemovingAndAddingAll2();
+	m_refresh_wanted_on_draw = false;
+
+	wxScrolledWindow::OnDraw(dc);
 }
 
 void CPropertiesCanvas::OnSize(wxSizeEvent& event)
@@ -292,7 +300,7 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 	std::list<Property*>* properties = GetProperties(p);
 	if(properties == NULL)return;
 
-	std::list<Tool*> changers;
+	std::list<Undoable*> changers;
 
 	for(std::list<Property*>::iterator It = properties->begin(); It != properties->end(); It++)
 	{
@@ -420,10 +428,10 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 	}
 
 	wxGetApp().StartHistory();
-	for(std::list<Tool*>::iterator It = changers.begin(); It != changers.end(); It++)
+	for(std::list<Undoable*>::iterator It = changers.begin(); It != changers.end(); It++)
 	{
-		Tool* changer = *It;
-		wxGetApp().DoToolUndoably(changer);
+		Undoable* changer = *It;
+		wxGetApp().DoUndoable(changer);
 	}
 	wxGetApp().EndHistory();
 }
@@ -450,31 +458,21 @@ void CPropertiesCanvas::DeselectProperties()
 
 void CPropertiesCanvas::RefreshByRemovingAndAddingAll()
 {
-	if(m_frozen)
-	{
-		m_refresh_wanted_on_thaw = true;
-	}
-	else
-	{
-		RefreshByRemovingAndAddingAll2();
-	}
+	m_refresh_wanted_on_draw = true;
+	Refresh();
 }
 
 void CPropertiesCanvas::Freeze()
 {
-	m_frozen = true;
+	wxScrolledWindow::Freeze();
 }
 
 void CPropertiesCanvas::Thaw()
 {
-	m_frozen = false;
-	if(m_refresh_wanted_on_thaw)
-	{
-		RefreshByRemovingAndAddingAll2();
-		m_refresh_wanted_on_thaw = false;
-	}
+	wxScrolledWindow::Thaw();
 }
-void PropertyChange::Run()
+
+void PropertyChange::Run(bool redo)
 {
 }
 

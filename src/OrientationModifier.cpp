@@ -30,7 +30,7 @@ void COrientationModifierParams::write_values_to_config()
 	config.Write(_T("OrientationModifier_justification"), m_justification);
 }
 
-static void on_set_justification(int zero_based_choice, HeeksObj* object)
+static void on_set_justification(int zero_based_choice, HeeksObj* object, bool from_undo_redo)
 {
 	((COrientationModifier*)object)->m_params.m_justification = COrientationModifierParams::eJustification_t(zero_based_choice);
 
@@ -77,7 +77,7 @@ static void on_set_justification(int zero_based_choice, HeeksObj* object)
 	((COrientationModifier*)object)->m_params.write_values_to_config();
 }
 
-static void on_set_spacing(int zero_based_choice, HeeksObj* object)
+static void on_set_spacing(int zero_based_choice, HeeksObj* object, bool from_undo_redo)
 {
 	((COrientationModifier*)object)->m_params.m_spacing = COrientationModifierParams::eSpacing_t(zero_based_choice);
 	((COrientationModifier*)object)->m_params.write_values_to_config();

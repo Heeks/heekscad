@@ -291,14 +291,14 @@ static void on_set_trsf(const gp_Trsf &trsf, HeeksObj* object){
 	wxGetApp().Repaint();
 }
 
-static void on_set_mode(int value, HeeksObj* object)
+static void on_set_mode(int value, HeeksObj* object, bool from_undo_redo)
 {
 	HDimension* dimension = (HDimension*)object;
 	dimension->m_mode = (DimensionMode)value;
 	wxGetApp().Repaint();
 }
 
-static void on_set_units(int value, HeeksObj* object)
+static void on_set_units(int value, HeeksObj* object, bool from_undo_redo)
 {
 	HDimension* dimension = (HDimension*)object;
 	dimension->m_units = (DimensionUnits)value;

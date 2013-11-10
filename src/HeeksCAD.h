@@ -272,7 +272,7 @@ public:
 	void DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool control_pressed);
 	void GenerateIntersectionMenuOptions( std::list<Tool*> &f_list );
 	void on_menu_event(wxCommandEvent& event);
-	void DoToolUndoably(Tool *);
+	void DoUndoable(Undoable *);
 	bool RollBack(void);
 	bool RollForward(void);
 	void StartHistory();
@@ -311,6 +311,7 @@ public:
 	void DeleteUndoably(const std::list<HeeksObj*>& list);
 	void TransformUndoably(HeeksObj *object, double *m);
 	void TransformUndoably(const std::list<HeeksObj*>& list, double* m);
+	void ReverseUndoably(HeeksObj *object);
 	void WasModified(HeeksObj *object);
 	void WasAdded(HeeksObj *object);
 	void WasRemoved(HeeksObj *object);

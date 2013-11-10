@@ -20,7 +20,6 @@ public:
     CObjPropsCanvas(wxWindow* parent);
     virtual ~CObjPropsCanvas();
 
-    //virtual void OnDraw(wxDC& dc);
     void OnSize(wxSizeEvent& event);
     void OnPropertyGridChange( wxPropertyGridEvent& event );
     void OnPropertyGridSelect( wxPropertyGridEvent& event );
