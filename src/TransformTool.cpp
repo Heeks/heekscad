@@ -22,7 +22,7 @@ const wxChar* TransformTool::GetTitle(){
 	return global_string.c_str();
 }
 
-void TransformTool::Run(){
+void TransformTool::Run(bool redo){
 	object->ModifyByMatrix(modify_matrix);
 }
 
@@ -44,7 +44,7 @@ const wxChar* TransformObjectsTool::GetTitle(){
 	return _("Transform Objects");
 }
 
-void TransformObjectsTool::Run(){
+void TransformObjectsTool::Run(bool redo){
 	std::list<HeeksObj*>::iterator It;
 	for(It = m_list.begin(); It != m_list.end(); It++){
 		HeeksObj* object = *It;

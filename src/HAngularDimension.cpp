@@ -302,7 +302,7 @@ void HAngularDimension::GetGripperPositions(std::list<GripData> *list, bool just
 	list->push_back(GripData(GripperTypeStretch,m_p4->m_p.X(),m_p4->m_p.Y(),m_p4->m_p.Z(),&m_p4));
 }
 
-static void on_set_text_mode(int value, HeeksObj* object)
+static void on_set_text_mode(int value, HeeksObj* object, bool from_undo_redo)
 {
 	HAngularDimension* dimension = (HAngularDimension*)object;
 	dimension->m_text_mode = (AngularDimensionTextMode)value;

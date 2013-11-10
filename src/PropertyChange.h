@@ -1,6 +1,6 @@
 // PropertyChange.h
 
-class PropertyChangeString: public Tool
+class PropertyChangeString: public Undoable
 {
 public:
 	wxString m_value;
@@ -10,15 +10,14 @@ public:
 
 	PropertyChangeString(const wxString& value, PropertyString* property);
 
-	void Run();
+	void Run(bool redo);
 	void RollBack();
 	const wxChar* GetTitle(){return _("Property Change String");}
-	bool Undoable(){return true;}
 };
 
 class PropertyDouble;
 
-class PropertyChangeDouble: public Tool
+class PropertyChangeDouble: public Undoable
 {
 public:
 	double m_value;
@@ -28,15 +27,14 @@ public:
 
 	PropertyChangeDouble(const double& value, PropertyDouble* property);
 
-	void Run();
+	void Run(bool redo);
 	void RollBack();
 	const wxChar* GetTitle(){return _("Property Change Double");}
-	bool Undoable(){return true;}
 };
 
 class PropertyLength;
 
-class PropertyChangeLength: public Tool
+class PropertyChangeLength: public Undoable
 {
 public:
 	double m_value;
@@ -46,15 +44,14 @@ public:
 
 	PropertyChangeLength(const double& value, PropertyLength* property);
 
-	void Run();
+	void Run(bool redo);
 	void RollBack();
 	const wxChar* GetTitle(){return _("Property Change Length");}
-	bool Undoable(){return true;}
 };
 
 class PropertyInt;
 
-class PropertyChangeInt: public Tool
+class PropertyChangeInt: public Undoable
 {
 public:
 	int m_value;
@@ -64,15 +61,14 @@ public:
 
 	PropertyChangeInt(const int& value, PropertyInt* property);
 
-	void Run();
+	void Run(bool redo);
 	void RollBack();
 	const wxChar* GetTitle(){return _("Property Change Int");}
-	bool Undoable(){return true;}
 };
 
 class PropertyColor;
 
-class PropertyChangeColor: public Tool
+class PropertyChangeColor: public Undoable
 {
 public:
 	HeeksColor m_value;
@@ -82,15 +78,14 @@ public:
 
 	PropertyChangeColor(const HeeksColor& value, PropertyColor* property);
 
-	void Run();
+	void Run(bool redo);
 	void RollBack();
 	const wxChar* GetTitle(){return _("Property Change Color");}
-	bool Undoable(){return true;}
 };
 
 class PropertyVertex;
 
-class PropertyChangeVertex: public Tool
+class PropertyChangeVertex: public Undoable
 {
 public:
 	double m_value[3];
@@ -100,15 +95,14 @@ public:
 
 	PropertyChangeVertex(const double* value, PropertyVertex* property);
 
-	void Run();
+	void Run(bool redo);
 	void RollBack();
 	const wxChar* GetTitle(){return _("Property Change Vertex");}
-	bool Undoable(){return true;}
 };
 
 class PropertyTrsf;
 
-class PropertyChangeTrsf: public Tool
+class PropertyChangeTrsf: public Undoable
 {
 public:
 	gp_Trsf m_value;
@@ -118,26 +112,24 @@ public:
 
 	PropertyChangeTrsf(const gp_Trsf &value, PropertyTrsf* property);
 
-	void Run();
+	void Run(bool redo);
 	void RollBack();
 	const wxChar* GetTitle(){return _("Property Change Trsf");}
-	bool Undoable(){return true;}
 };
 
 class PropertyChoice;
 
-class PropertyChangeChoice: public Tool
+class PropertyChangeChoice: public Undoable
 {
 public:
 	int m_value;
 	int m_old;
 	HeeksObj* m_object;
-	void(*m_callbackfunc)(int, HeeksObj*);
+	void(*m_callbackfunc)(int, HeeksObj*, bool);
 
 	PropertyChangeChoice(const int& value, PropertyChoice* property);
 
-	void Run();
+	void Run(bool redo);
 	void RollBack();
 	const wxChar* GetTitle(){return _("Property Change Choice");}
-	bool Undoable(){return true;}
 };

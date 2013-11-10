@@ -18,12 +18,11 @@ class wxPropertyGridEvent;
 #define EXTRA_TOOLBAR_HEIGHT 14
 #endif
 
-class PropertyChange: public Tool {
+class PropertyChange: public Undoable {
 public:
 	const wxChar* GetTitle(){return _("Change Property");}
-	void Run();
+	void Run(bool redo);
 	void RollBack();
-	bool Undoable(){return true;}
 };
 
 class PropertyMapItem
@@ -41,14 +40,13 @@ public:
 
 class CPropertiesCanvas: public wxScrolledWindow, public Observer
 {
-	bool m_frozen;
-	bool m_refresh_wanted_on_thaw;
+	bool m_refresh_wanted_on_draw;
 
 public:
     CPropertiesCanvas(wxWindow* parent);
     virtual ~CPropertiesCanvas();
 
-    //virtual void OnDraw(wxDC& dc);
+    virtual void OnDraw(wxDC& dc);
     void OnSize(wxSizeEvent& event);
     void OnPropertyGridChange( wxPropertyGridEvent& event );
     void OnPropertyGridSelect( wxPropertyGridEvent& event );

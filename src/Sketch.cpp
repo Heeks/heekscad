@@ -72,15 +72,27 @@ const wxBitmap &CSketch::GetIcon()
 	return *icon;
 }
 
+class SetOrderUndoable : public Undoable{
+	CSketch* m_object;
+	SketchOrderType m_old_order;
+
+public:
+	SketchOrderType m_new_order;
+	SetOrderUndoable(CSketch* object, SketchOrderType old_order):m_object(object),m_old_order(old_order){}
+	void Run(bool redo){if(redo)m_object->m_order = m_new_order;}
+	const wxChar* GetTitle(){return _("Reorder Object");}
+	void RollBack(){m_object->m_order = m_old_order;}
+};
+
 static std::map<int, int> order_map_for_properties; // maps drop-down index to SketchOrderType
 
-static void on_set_order_type(int value, HeeksObj* object)
+static void on_set_order_type(int value, HeeksObj* object, bool from_undo_redo)
 {
 	std::map<int, int>::iterator FindIt = order_map_for_properties.find(value);
 	if(FindIt != order_map_for_properties.end())
 	{
 		int order = FindIt->second;
-		((CSketch*)object)->ReOrderSketch((SketchOrderType)order);
+		if(!from_undo_redo)((CSketch*)object)->ReOrderSketch((SketchOrderType)order);
 	}
 }
 
@@ -593,6 +605,10 @@ void CSketch::CalculateSketchOrder()
 bool CSketch::ReOrderSketch(SketchOrderType new_order)
 {
 	SketchOrderType old_order = GetSketchOrder();
+
+	SetOrderUndoable* reorder_undoable = new SetOrderUndoable(this, m_order);
+	wxGetApp().DoUndoable(reorder_undoable);
+
 	bool done = false;
 
 	switch(old_order)
@@ -649,6 +665,8 @@ bool CSketch::ReOrderSketch(SketchOrderType new_order)
 		break;
 	}
 
+	reorder_undoable->m_new_order = m_order;
+
 	return done;
 }
 
@@ -668,8 +686,7 @@ void CSketch::ReLinkSketch()
 		}
 	}
 
-	wxGetApp().DeleteUndoably(m_objects);
-	wxGetApp().AddUndoably(new_list, this);
+	wxGetApp().DoUndoable(new ReorderTool(this, new_list));
 
 	if(relinker.m_new_lists.size() > 1)
 	{
@@ -687,18 +704,19 @@ void CSketch::ReverseSketch()
 
 	std::list<HeeksObj*> new_list;
 
+	SketchOrderType old_order = m_order;
+
 	for(std::list<HeeksObj*>::iterator It=m_objects.begin(); It!=m_objects.end() ;It++)
 	{
 		HeeksObj* object = *It;
-		ReverseObject(object);
+		wxGetApp().ReverseUndoably(object);
 		new_list.push_front(object);
 	}
 
-	wxGetApp().DeleteUndoably(m_objects);
-	wxGetApp().AddUndoably(new_list, this);
+	wxGetApp().DoUndoable(new ReorderTool(this, new_list));
 
-	if(m_order == SketchOrderTypeCloseCW)m_order = SketchOrderTypeCloseCCW;
-	else if(m_order == SketchOrderTypeCloseCCW)m_order = SketchOrderTypeCloseCW;
+	if(old_order == SketchOrderTypeCloseCW)m_order = SketchOrderTypeCloseCCW;
+	else if(old_order == SketchOrderTypeCloseCCW)m_order = SketchOrderTypeCloseCW;
 }
 
 void CSketch::ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketches, const bool allow_individual_objects /* = false */ )

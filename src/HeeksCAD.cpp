@@ -2269,9 +2269,9 @@ void HeeksCADapp::on_menu_event(wxCommandEvent& event)
 	}
 }
 
-void HeeksCADapp::DoToolUndoably(Tool *t)
+void HeeksCADapp::DoUndoable(Undoable *u)
 {
-	history->DoToolUndoably(t);
+	history->DoUndoable(u);
 }
 
 bool HeeksCADapp::RollBack(void)
@@ -2406,23 +2406,23 @@ void HeeksCADapp::AddUndoably(HeeksObj *object, HeeksObj* owner, HeeksObj* prev_
 {
 	if(object == NULL)return;
 	if(owner == NULL)owner = this;
-	AddObjectTool *tool = new AddObjectTool(object, owner, prev_object);
-	DoToolUndoably(tool);
+	AddObjectTool *undoable = new AddObjectTool(object, owner, prev_object);
+	DoUndoable(undoable);
 }
 
 void HeeksCADapp::AddUndoably(const std::list<HeeksObj*> &list, HeeksObj* owner)
 {
 	if(list.size() == 0)return;
 	if(owner == NULL)owner = this;
-	AddObjectsTool *tool = new AddObjectsTool(list, owner);
-	DoToolUndoably(tool);
+	AddObjectsTool *undoable = new AddObjectsTool(list, owner);
+	DoUndoable(undoable);
 }
 
 void HeeksCADapp::DeleteUndoably(HeeksObj *object){
 	if(object == NULL)return;
 	if(!object->CanBeRemoved())return;
-	RemoveObjectTool *tool = new RemoveObjectTool(object);
-	DoToolUndoably(tool);
+	RemoveObjectTool *undoable = new RemoveObjectTool(object);
+	DoUndoable(undoable);
 }
 
 void HeeksCADapp::DeleteUndoably(const std::list<HeeksObj*>& list)
@@ -2435,8 +2435,8 @@ void HeeksCADapp::DeleteUndoably(const std::list<HeeksObj*>& list)
 		if(object->CanBeRemoved())list2.push_back(object);
 	}
 	if(list2.size() == 0)return;
-	RemoveObjectsTool *tool = new RemoveObjectsTool(list2, list2.front()->m_owner);
-	DoToolUndoably(tool);
+	RemoveObjectsTool *undoable = new RemoveObjectsTool(list2, list2.front()->m_owner);
+	DoUndoable(undoable);
 }
 
 void HeeksCADapp::TransformUndoably(HeeksObj *object, double *m)
@@ -2445,8 +2445,8 @@ void HeeksCADapp::TransformUndoably(HeeksObj *object, double *m)
 	gp_Trsf mat = make_matrix(m);
 	gp_Trsf im = mat;
 	im.Invert();
-	TransformTool *tool = new TransformTool(object, mat, im);
-	DoToolUndoably(tool);
+	TransformTool *undoable = new TransformTool(object, mat, im);
+	DoUndoable(undoable);
 }
 
 void HeeksCADapp::TransformUndoably(const std::list<HeeksObj*> &list, double *m)
@@ -2455,8 +2455,23 @@ void HeeksCADapp::TransformUndoably(const std::list<HeeksObj*> &list, double *m)
 	gp_Trsf mat = make_matrix(m);
 	gp_Trsf im = mat;
 	im.Invert();
-	TransformObjectsTool *tool = new TransformObjectsTool(list, mat, im);
-	DoToolUndoably(tool);
+	TransformObjectsTool *undoable = new TransformObjectsTool(list, mat, im);
+	DoUndoable(undoable);
+}
+
+class ReverseUndoable : public Undoable{
+	HeeksObj* m_object;
+
+public:
+	ReverseUndoable(HeeksObj* object):m_object(object){}
+	void Run(bool redo){CSketch::ReverseObject(m_object);}
+	const wxChar* GetTitle(){return _("Reverse Object");}
+	void RollBack(){CSketch::ReverseObject(m_object);}
+};
+
+void HeeksCADapp::ReverseUndoably(HeeksObj *object)
+{
+	DoUndoable(new ReverseUndoable(object));
 }
 
 void HeeksCADapp::Transform(std::list<HeeksObj*> objects,double *m)
@@ -2603,7 +2618,7 @@ void on_set_background_color9(HeeksColor value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
-void on_set_background_mode(int value, HeeksObj* object)
+void on_set_background_mode(int value, HeeksObj* object, bool from_undo_redo)
 {
 	wxGetApp().m_background_mode = (BackgroundMode)value;
 	wxGetApp().Repaint();
@@ -2626,7 +2641,7 @@ void on_set_construction_color(HeeksColor value, HeeksObj* object)
 	wxGetApp().construction_color = value;
 }
 
-void on_set_grid_mode(int value, HeeksObj* object)
+void on_set_grid_mode(int value, HeeksObj* object, bool from_undo_redo)
 {
 	wxGetApp().grid_mode = value;
 	wxGetApp().Repaint();
@@ -2638,7 +2653,7 @@ void on_set_perspective(bool value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
-void on_set_tool_icon_size(int value, HeeksObj* object)
+void on_set_tool_icon_size(int value, HeeksObj* object, bool from_undo_redo)
 {
 	int size = 16;
 	switch(value)
@@ -2762,7 +2777,7 @@ void on_set_show_ruler(bool onoff, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
-void on_set_rotate_mode(int value, HeeksObj* object)
+void on_set_rotate_mode(int value, HeeksObj* object, bool from_undo_redo)
 {
 	wxGetApp().m_rotate_mode = value;
 	if(!wxGetApp().m_rotate_mode)
@@ -2774,7 +2789,7 @@ void on_set_rotate_mode(int value, HeeksObj* object)
 	}
 }
 
-void on_set_screen_text(int value, HeeksObj* object)
+void on_set_screen_text(int value, HeeksObj* object, bool from_undo_redo)
 {
 	wxGetApp().m_graphics_text_mode = (GraphicsTextMode)value;
 	wxGetApp().Repaint();
@@ -3018,7 +3033,7 @@ void on_set_auto_save_interval(int value, HeeksObj* object){
 	config.Write(_T("AutoSaveInterval"), wxGetApp().m_auto_save_interval);
 }
 
-void on_set_loglevel(int value, HeeksObj* object){
+void on_set_loglevel(int value, HeeksObj* object, bool from_undo_redo){
 	wxGetApp().m_frame->SetLogLevel(value);
 }
 
@@ -3030,7 +3045,7 @@ void on_set_timestamps(bool value, HeeksObj* object){
 	wxGetApp().m_frame->SetLogLogTimestamps(value);
 }
 
-static void on_set_units(int value, HeeksObj* object)
+static void on_set_units(int value, HeeksObj* object, bool from_undo_redo)
 {
 	wxGetApp().m_view_units = (value == 0) ? 1.0:25.4;
 	wxGetApp().OnChangeViewUnits(wxGetApp().m_view_units);
@@ -3111,7 +3126,7 @@ void on_set_allow_opengl_stippling(bool value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
-void on_set_solid_view_mode(int value, HeeksObj* object)
+void on_set_solid_view_mode(int value, HeeksObj* object, bool from_undo_redo)
 {
 	wxGetApp().m_solid_view_mode = (SolidViewMode)value;
 }

@@ -11,41 +11,41 @@ History::History(int Level)
 	level = Level;
 }
 
-void History::Run()
+void History::Run(bool redo)
 {
-	for(std::list<Tool *>::iterator It = m_tools.begin(); It != m_tools.end(); It++)
+	for(std::list<Undoable *>::iterator It = m_undoables.begin(); It != m_undoables.end(); It++)
 	{
-		Tool *t = *It;
-		t->Run();
+		Undoable *u = *It;
+		u->Run(redo);
 	}
 }
 
 void History::RollBack(void)
 {
-	for(std::list<Tool *>::reverse_iterator It = m_tools.rbegin(); It != m_tools.rend(); It++)
+	for(std::list<Undoable *>::reverse_iterator It = m_undoables.rbegin(); It != m_undoables.rend(); It++)
 	{
-		Tool *t = *It;
-		t->RollBack();
+		Undoable *u = *It;
+		u->RollBack();
 	}
 }
 
 bool History::InternalRollBack(void)
 {
-	if(m_tools.size() == 0)return false;
-	if(m_curpos == m_tools.begin())return false;
-	Tool *t;
+	if(m_undoables.size() == 0)return false;
+	if(m_curpos == m_undoables.begin())return false;
+	Undoable *u;
 	m_curpos--;
-	t = *m_curpos;
-	t->RollBack();
+	u = *m_curpos;
+	u->RollBack();
 	return true;
 }
 
 bool History::InternalRollForward(void)
 {
-	if(m_tools.size() == 0)return false;
-	if(m_curpos == m_tools.end())return false;
-	Tool *t = *m_curpos;
-	t->Run();
+	if(m_undoables.size() == 0)return false;
+	if(m_curpos == m_undoables.end())return false;
+	Undoable *u = *m_curpos;
+	u->Run(true);
 	m_curpos++;
 	return true;
 }
@@ -80,46 +80,46 @@ bool History::EndHistory(void)
 	}
 }
 
-void History::DoToolUndoably(Tool *t)
+void History::DoUndoable(Undoable *u)
 {
-	if(t == NULL)return;
-	if(sub_history)sub_history->DoToolUndoably(t);
+	if(u == NULL)return;
+	if(sub_history)sub_history->DoUndoable(u);
 	else
 	{
-		t->Run();
-		Add(t);
+		u->Run(false);
+		Add(u);
 	}
 }
 
-void History::Add(Tool *t)
+void History::Add(Undoable *u)
 {
-	if(m_tools.size() > 0 && m_curpos != m_tools.end())
+	if(m_undoables.size() > 0 && m_curpos != m_undoables.end())
 	{
 		ClearFromCurPos();
 	}
-	m_curpos = m_tools.end();
-	m_tools.push_back(t);
-	m_curpos = m_tools.end();
+	m_curpos = m_undoables.end();
+	m_undoables.push_back(u);
+	m_curpos = m_undoables.end();
 }
 
-void History::Clear(std::list<Tool *>::iterator FromIt)
+void History::Clear(std::list<Undoable *>::iterator FromIt)
 {
-	if(m_tools.size() == 0)return;
-	std::list<Tool *>::iterator It = m_tools.end();
+	if(m_undoables.size() == 0)return;
+	std::list<Undoable *>::iterator It = m_undoables.end();
 	It--;
 	for(;; It--)
 	{
 		RemoveAsNewPosIfEqual(It);
-		Tool *t = *It;
-		delete t;
+		Undoable *u = *It;
+		delete u;
 		if(It == FromIt)break;
 	}
-	m_tools.erase(FromIt, m_tools.end());
+	m_undoables.erase(FromIt, m_undoables.end());
 }
 
 void History::ClearFromFront(void)
 {
-	Clear(m_tools.begin());
+	Clear(m_undoables.begin());
 }
 
 void History::ClearFromCurPos(void)
@@ -129,15 +129,15 @@ void History::ClearFromCurPos(void)
 
 History::~History(void)
 {
-	if(m_tools.size() == 0)return;
-	std::list<Tool *>::iterator It;
-	It = m_tools.end();
+	if(m_undoables.size() == 0)return;
+	std::list<Undoable *>::iterator It;
+	It = m_undoables.end();
 	It--;
 	for(;; It--)
 	{
-		Tool *t = *It;
-		delete t;
-		if(It == m_tools.begin())break;
+		Undoable *u = *It;
+		delete u;
+		if(It == m_undoables.begin())break;
 	}
 }
 
@@ -146,20 +146,20 @@ bool MainHistory::IsModified(void)
 	if(as_new_when_at_list_start)
 	{
 		if(size()==0)return false;
-		if(m_curpos == m_tools.begin())return false;
+		if(m_curpos == m_undoables.begin())return false;
 		return true;
 	}
 	if(size() == 0)return true;
 	if(as_new_pos_exists)
 	{
-		std::list<Tool *>::iterator TempIt = m_curpos;
+		std::list<Undoable *>::iterator TempIt = m_curpos;
 		TempIt--;
 		if(TempIt == as_new_pos)return false;
 	}
 	return true;
 }
 
-void MainHistory::RemoveAsNewPosIfEqual(std::list<Tool *>::iterator &It)
+void MainHistory::RemoveAsNewPosIfEqual(std::list<Undoable *>::iterator &It)
 {
 	if(as_new_pos_exists && as_new_pos == It)
 	{
@@ -176,7 +176,7 @@ void MainHistory::SetLikeNewFile(void)
 	}
 	else
 	{
-		std::list<Tool *>::iterator TempIt = m_curpos;
+		std::list<Undoable *>::iterator TempIt = m_curpos;
 		TempIt--;
 		as_new_pos = TempIt;
 		as_new_pos_exists = true;
@@ -184,9 +184,9 @@ void MainHistory::SetLikeNewFile(void)
 	}
 }
 
-void MainHistory::DoToolUndoably(Tool *t)
+void MainHistory::DoUndoable(Undoable *u)
 {
-	History::DoToolUndoably(t);
+	History::DoUndoable(u);
 }
 
 void MainHistory::SetAsModified()

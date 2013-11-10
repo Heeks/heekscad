@@ -67,7 +67,7 @@ void RemoveOrAddTool::Remove()
 	m_belongs_to_owner = false;
 }
 
-void AddObjectTool::Run()
+void AddObjectTool::Run(bool redo)
 {
 	Add();
 }
@@ -83,7 +83,7 @@ RemoveObjectTool::RemoveObjectTool(HeeksObj *object):RemoveOrAddTool(object, NUL
 	else m_owner = NULL;
 }
 
-void RemoveObjectTool::Run()
+void RemoveObjectTool::Run(bool redo)
 {
 	Remove();
 }
@@ -150,7 +150,7 @@ const wxChar* AddObjectsTool::GetTitle()
 	return _("Add Objects");
 }
 
-void AddObjectsTool::Run()
+void AddObjectsTool::Run(bool redo)
 {
 	Add();
 }
@@ -165,7 +165,7 @@ const wxChar* RemoveObjectsTool::GetTitle()
 	return _("Remove Objects");
 }
 
-void RemoveObjectsTool::Run()
+void RemoveObjectsTool::Run(bool redo)
 {
 	Remove();
 }

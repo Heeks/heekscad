@@ -283,7 +283,7 @@ int Drawing::GetView(){
 	return current_view_stuff->view;
 }
 
-class SetDrawingDrawStep:public Tool{
+class SetDrawingDrawStep:public Undoable{
 private:
 	Drawing *drawing;
 	int old_step;
@@ -294,12 +294,11 @@ public:
 
 	// Tool's virtual functions
 	const wxChar* GetTitle(){return _("set_draw_step");}
-	void Run(){drawing->set_draw_step_not_undoable(step);}
+	void Run(bool redo){drawing->set_draw_step_not_undoable(step);}
 	void RollBack(){drawing->set_draw_step_not_undoable(old_step);}
-	bool Undoable(){return true;}
 };
 
-class SetDrawingPosition:public Tool{
+class SetDrawingPosition:public Undoable{
 private:
 	Drawing *drawing;
 	DigitizedPoint prev_pos;
@@ -314,21 +313,16 @@ public:
 
 	// Tool's virtual functions
 	const wxChar* GetTitle(){return _("set_position");}
-	void Run(){drawing->set_start_pos_not_undoable(next_pos);}
+	void Run(bool redo){drawing->set_start_pos_not_undoable(next_pos);}
 	void RollBack(){drawing->set_start_pos_not_undoable(prev_pos);}
-	bool Undoable(){return true;}
 };
 
 void Drawing::SetDrawStepUndoable(int s){
-//	wxGetApp().DoToolUndoably(new SetDrawingDrawStep(this, s));
-	SetDrawingDrawStep sds(this, s);
-	sds.Run();
+	wxGetApp().DoUndoable(new SetDrawingDrawStep(this, s));
 }
 
 void Drawing::SetStartPosUndoable(const DigitizedPoint& pos){
-//	wxGetApp().DoToolUndoably(new SetDrawingPosition(this, pos));
-	SetDrawingPosition sdp(this, pos);
-	sdp.Run();
+	wxGetApp().DoUndoable(new SetDrawingPosition(this, pos));
 }
 
 void Drawing::OnFrontRender(){
