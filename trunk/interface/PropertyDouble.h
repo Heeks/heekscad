@@ -26,7 +26,6 @@ public:
 	int get_property_type(){return DoublePropertyType;}
 	bool property_editable()const{return m_callbackfunc != NULL || m_callbackfuncidx != NULL;}
 	Property *MakeACopy(void)const;
-	void CallSetFunction()const;
 	const wxChar* GetShortString(void)const;
 };
 

@@ -444,14 +444,14 @@ void RegularShapesDrawing::CalculateObround(const gp_Pnt& p0, const gp_Pnt& p1, 
 
 static RegularShapesDrawing* RegularShapesDrawing_for_GetProperties = NULL;
 
-static void on_set_drawing_mode(int value, HeeksObj* object)
+static void on_set_drawing_mode(int value, HeeksObj* object, bool from_undo_redo)
 {
 	RegularShapesDrawing_for_GetProperties->m_mode = (RegularShapeMode)value;
 	RegularShapesDrawing_for_GetProperties->ClearSketch();
 	wxGetApp().m_frame->RefreshInputCanvas();
 }
 
-static void on_set_polygon_mode(int value, HeeksObj* object)
+static void on_set_polygon_mode(int value, HeeksObj* object, bool from_undo_redo)
 {
 	RegularShapesDrawing_for_GetProperties->p_mode = (PolygonMode)value;
 	//RegularShapesDrawing_for_GetProperties->ClearSketch();

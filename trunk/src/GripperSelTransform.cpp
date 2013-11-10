@@ -126,7 +126,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 			}
 
 			{
-				if(object)wxGetApp().DoToolUndoably(new StretchTool(object, m_initial_grip_pos, shift, m_data.m_data));
+				if(object)wxGetApp().DoUndoable(new StretchTool(object, m_initial_grip_pos, shift, m_data.m_data));
 			}
 			m_data.m_x += shift[0];
 			m_data.m_y += shift[1];

@@ -166,7 +166,7 @@ static void on_set_trsf(const gp_Trsf &trsf, HeeksObj* object){
 	wxGetApp().Repaint();
 }
 
-static void on_set_font(int zero_based_choice, HeeksObj *obj)
+static void on_set_font(int zero_based_choice, HeeksObj *obj, bool from_undo_redo)
 {
 	if (zero_based_choice == 0)
 	{

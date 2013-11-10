@@ -19,7 +19,3 @@ Property *PropertyLength::MakeACopy(void)const{
 	PropertyLength* new_object = new PropertyLength(*this);
 	return new_object;
 }
-void PropertyLength::CallSetFunction()const{
-	if(m_callbackfunc)(*m_callbackfunc)(m_initial_value * VIEW_UNITS, m_object);
-}
-

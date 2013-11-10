@@ -6,7 +6,7 @@
 
 #include "../interface/Tool.h"
 
-class TransformTool: public Tool{
+class TransformTool: public Undoable{
 private:
 	double modify_matrix[16];
 	double revert_matrix[16];
@@ -18,12 +18,11 @@ public:
 
 	// Tool's virtual functions
 	const wxChar* GetTitle();
-	void Run();
+	void Run(bool redo);
 	void RollBack();
-	bool Undoable(){return true;}
 };
 
-class TransformObjectsTool: public Tool{
+class TransformObjectsTool: public Undoable{
 private:
 	double modify_matrix[16];
 	double revert_matrix[16];
@@ -35,7 +34,6 @@ public:
 
 	// Tool's virtual functions
 	const wxChar* GetTitle();
-	void Run();
+	void Run(bool redo);
 	void RollBack();
-	bool Undoable(){return true;}
 };

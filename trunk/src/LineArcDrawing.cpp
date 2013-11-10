@@ -45,7 +45,7 @@ LineArcDrawing::LineArcDrawing(void){
 LineArcDrawing::~LineArcDrawing(void){
 }
 
-class SetPreviousDirection:public Tool{
+class SetPreviousDirection:public Undoable{
 private:
 	LineArcDrawing *drawing;
 	gp_Vec old_direction;
@@ -63,7 +63,7 @@ public:
 
 	// Tool's virtual functions
 	const wxChar* GetTitle(){return _("set previous direction");}
-	void Run()
+	void Run(bool redo)
 	{
 		drawing->m_previous_direction = new_direction;
 		drawing->m_previous_direction_set = true;
@@ -73,7 +73,6 @@ public:
 		if(old_previous_direction_set)drawing->m_previous_direction = old_direction;
 		drawing->m_previous_direction_set = old_previous_direction_set;
 	}
-	bool Undoable(){return true;}
 };
 
 void LineArcDrawing::set_previous_direction(){
@@ -83,15 +82,13 @@ void LineArcDrawing::set_previous_direction(){
 		double s[3], e[3];
 		if(TempObject()->GetStartPoint(s) && TempObject()->GetEndPoint(e))
 		{
-			SetPreviousDirection spd(this, make_vector(make_point(s), make_point(e)));
-			spd.Run();
+			wxGetApp().DoUndoable(new SetPreviousDirection(this, make_vector(make_point(s), make_point(e))));
 		}
 	}
 	else if(TempObject()->GetType() == ArcType){
 		gp_Vec circlev(((HArc*)TempObject())->m_axis.Direction());
 		gp_Vec endv(((HArc*)TempObject())->C, ((HArc*)TempObject())->B);
-		SetPreviousDirection spd(this, (circlev ^ endv).Normalized());
-		spd.Run();
+		wxGetApp().DoUndoable(new SetPreviousDirection(this, (circlev ^ endv).Normalized()));
 	}
 }
 
@@ -660,7 +657,7 @@ void LineArcDrawing::set_cursor(void){
 
 static LineArcDrawing* line_drawing_for_GetProperties = NULL;
 
-static void on_set_drawing_mode(int drawing_mode, HeeksObj* object)
+static void on_set_drawing_mode(int drawing_mode, HeeksObj* object, bool from_undo_redo)
 {
 	line_drawing_for_GetProperties->drawing_mode = (EnumDrawingMode)drawing_mode;
 	line_drawing_for_GetProperties->m_save_drawing_mode.clear();
@@ -668,7 +665,7 @@ static void on_set_drawing_mode(int drawing_mode, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
-static void on_set_circle_mode(int circle_mode, HeeksObj* object)
+static void on_set_circle_mode(int circle_mode, HeeksObj* object, bool from_undo_redo)
 {
 	line_drawing_for_GetProperties->circle_mode = (EnumCircleDrawingMode)circle_mode;
 	wxGetApp().m_frame->RefreshProperties();
