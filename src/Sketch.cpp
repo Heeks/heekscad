@@ -842,9 +842,8 @@ bool CSketchRelinker::TryAdd(HeeksObj* object)
 		object->GetStartPoint(new_point);
 		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_geom_tol))
 		{
-			HeeksObj* new_object = object->MakeACopy();
-			m_new_lists.back().push_back(new_object);
-			m_new_back = new_object;
+			m_new_lists.back().push_back(object);
+			m_new_back = object;
 			m_added_from_old_set.insert(object);
 			return true;
 		}
@@ -853,10 +852,9 @@ bool CSketchRelinker::TryAdd(HeeksObj* object)
 		object->GetEndPoint(new_point);
 		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_geom_tol))
 		{
-			HeeksObj* new_object = object->MakeACopy();
-			CSketch::ReverseObject(new_object);
-			m_new_lists.back().push_back(new_object);
-			m_new_back = new_object;
+			CSketch::ReverseObject(object);
+			m_new_lists.back().push_back(object);
+			m_new_back = object;
 			m_added_from_old_set.insert(object);
 			return true;
 		}
@@ -868,9 +866,8 @@ bool CSketchRelinker::TryAdd(HeeksObj* object)
 		object->GetEndPoint(new_point);
 		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_geom_tol))
 		{
-			HeeksObj* new_object = object->MakeACopy();
-			m_new_lists.back().push_front(new_object);
-			m_new_front = new_object;
+			m_new_lists.back().push_front(object);
+			m_new_front = object;
 			m_added_from_old_set.insert(object);
 			return true;
 		}
@@ -879,10 +876,9 @@ bool CSketchRelinker::TryAdd(HeeksObj* object)
 		object->GetStartPoint(new_point);
 		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_geom_tol))
 		{
-			HeeksObj* new_object = object->MakeACopy();
-			CSketch::ReverseObject(new_object);
-			m_new_lists.back().push_front(new_object);
-			m_new_front = new_object;
+			CSketch::ReverseObject(object);
+			m_new_lists.back().push_front(object);
+			m_new_front = object;
 			m_added_from_old_set.insert(object);
 			return true;
 		}
@@ -925,14 +921,13 @@ bool CSketchRelinker::AddNext()
 				HeeksObj* object = *It;
 				if(m_added_from_old_set.find(object) == m_added_from_old_set.end())
 				{
-					HeeksObj* new_object = object->MakeACopy();
 					std::list<HeeksObj*> empty_list;
 					m_new_lists.push_back(empty_list);
-					m_new_lists.back().push_back(new_object);
+					m_new_lists.back().push_back(object);
 					m_added_from_old_set.insert(object);
 					m_old_front = It;
-					m_new_back = new_object;
-					m_new_front = new_object;
+					m_new_back = object;
+					m_new_front = object;
 					return true;
 				}
 			}
