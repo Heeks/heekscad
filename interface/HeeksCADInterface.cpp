@@ -1847,6 +1847,17 @@ wxString CHeeksCADInterface::HeeksType( const int type )
     return(wxGetApp().HeeksType(type));
 }
 
+bool CHeeksCADInterface::GetCoordinateSystemMatrix(HeeksObj* object, double *m)
+{
+	if(object && object->GetType() == CoordinateSystemType)
+	{
+		extract(((CoordinateSystem*)object)->GetMatrix(), m);
+		return true;
+	}
+
+	return false;
+}
+
 void CHeeksCADInterface::MakeMatrix(double* m, const double *origin, const double* x_axis, const double* y_axis)
 {
 	extract(make_matrix(make_point(origin), make_vector(x_axis), make_vector(y_axis)), m);

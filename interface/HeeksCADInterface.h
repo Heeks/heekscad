@@ -363,6 +363,7 @@ public:
 	virtual wxString HeeksType( const int type );
 
 	// Matrix functions
+	virtual bool GetCoordinateSystemMatrix(HeeksObj* object, double *m);
 	virtual void MakeMatrix(double* m, const double *origin, const double* x_axis, const double* y_axis);
 	virtual void TransformPoint(double* p, const double* m);
 	virtual void TransformVector(double* v, const double* m);

@@ -1259,75 +1259,16 @@ BEGIN_EVENT_TABLE(PanelForToolBar, wxScrolledWindow)
     EVT_MOUSE_EVENTS( PanelForToolBar::OnMouse )
 END_EVENT_TABLE()
 
-#define FLYOUT_PANEL_BORDER 5
-
-class ToolBarPopup: public wxPopupTransientWindow
-{
-public:
-	wxToolBar *m_toolBar;
-    PanelForToolBar *m_panel;
-
-public:
-	ToolBarPopup( wxWindow *parent, const CFlyOutList &flyout_list):wxPopupTransientWindow( parent )
-	{
-		m_panel = new PanelForToolBar( this );
-		m_panel->SetBackgroundColour( *wxLIGHT_GREY );
-
- 		m_toolBar = new wxToolBar(m_panel, -1, wxDefaultPosition, wxDefaultSize, wxTB_VERTICAL | wxTB_NODIVIDER | wxTB_FLAT);
-		m_toolBar->SetToolBitmapSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize()));
-
-		const CFlyOutItem* main_fo = flyout_list.GetMainItem();
-		std::list<const CFlyOutItem*> items_to_add;
-		std::list<int> ids_to_add;
-		int i = 0;
-		for(std::list<CFlyOutItem>::const_iterator It = flyout_list.m_list.begin(); It != flyout_list.m_list.end(); It++, i++)
-		{
-			const CFlyOutItem &fo = *It;
-			int id_to_use = i+ID_FIRST_POP_UP_MENU_TOOL;
-			if(&fo == main_fo)
-			{
-				items_to_add.push_front(&fo);
-				ids_to_add.push_front(id_to_use);
-			}
-			else
-			{
-				items_to_add.push_back(&fo);
-				ids_to_add.push_back(id_to_use);
-			}
-		}
-
-		std::list<const CFlyOutItem*>::iterator ItemsIt = items_to_add.begin();
-		std::list<int>::iterator IdIt = ids_to_add.begin();
-		for(; ItemsIt != items_to_add.end(); ItemsIt++, IdIt++)
-		{
-			const CFlyOutItem *fo = *ItemsIt;
-			int id_to_use = *IdIt;
-			m_toolBar->AddTool(id_to_use, fo->m_title, fo->m_bitmap, fo->m_tooltip);
-		}
-		m_toolBar->Realize();
-
-		wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
-		topSizer->Add( m_toolBar, 0, wxALL, FLYOUT_PANEL_BORDER );
-
-		m_panel->SetAutoLayout( true );
-		m_panel->SetSizer( topSizer );
-		topSizer->Fit(m_panel);
-		topSizer->Fit(this);
-	}
-
-private:
-    wxButton *m_button;
-    wxStaticText *m_mouseText;
-};
+class ToolBarPopup;
 
 class CFlyOutButton: public wxBitmapButton
 {
-	CFlyOutList m_flyout_list;
 	wxToolBar *m_toolBar;
 	wxBitmap m_current_bitmap;
 	wxTimer m_timer;
 
 public:
+	CFlyOutList m_flyout_list;
 	ToolBarPopup* m_toolbarPopup;
 
     CFlyOutButton(const CFlyOutList &flyout_list,
@@ -1348,12 +1289,128 @@ public:
 	{
 	}
 
-    ~CFlyOutButton()
+	~CFlyOutButton();
+
+	void OnMouse( wxMouseEvent& event );
+
+	void OnMenuEvent2(int id);
+
+	void OnMenuEvent(wxCommandEvent& event)
 	{
-		delete m_toolbarPopup;
+		OnMenuEvent2(event.GetId());
 	}
 
+	void OnIdle(wxIdleEvent& event);
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(CFlyOutButton, wxBitmapButton)
+    EVT_MOUSE_EVENTS(CFlyOutButton::OnMouse)
+    EVT_MENU_RANGE(ID_FIRST_POP_UP_MENU_TOOL, ID_FIRST_POP_UP_MENU_TOOL + 1000, CFlyOutButton::OnMenuEvent)
+    EVT_IDLE(CFlyOutButton::OnIdle)
+END_EVENT_TABLE()
+
+
+class BitmapButton2:public wxBitmapButton
+{
+	CFlyOutButton *m_fly_out_button;
+
+public:
+	BitmapButton2( CFlyOutButton *fly_out_button, wxWindow* parent, wxWindowID id, const wxBitmap& bitmap, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize):wxBitmapButton(parent, id, bitmap, pos, size), m_fly_out_button(fly_out_button){}
     void OnMouse( wxMouseEvent& event )
+	{
+		if(event.LeftUp())
+		{
+			m_fly_out_button->OnMenuEvent2(this->GetId());
+		}
+	}
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(BitmapButton2, wxBitmapButton)
+    EVT_MOUSE_EVENTS(BitmapButton2::OnMouse)
+END_EVENT_TABLE()
+
+
+#define FLYOUT_PANEL_BORDER 5
+
+class ToolBarPopup: public wxPopupTransientWindow
+{
+public:
+	wxWindow *m_toolBar;
+    PanelForToolBar *m_panel;
+
+public:
+	ToolBarPopup( CFlyOutButton *flyout_button):wxPopupTransientWindow( flyout_button )
+	{
+		m_panel = new PanelForToolBar( this );
+		m_panel->SetBackgroundColour( *wxLIGHT_GREY );
+
+ 		m_toolBar = new wxWindow(m_panel, -1, wxDefaultPosition, wxDefaultSize);
+
+		const CFlyOutItem* main_fo = flyout_button->m_flyout_list.GetMainItem();
+		std::list<const CFlyOutItem*> items_to_add;
+		std::list<int> ids_to_add;
+		int i = 0;
+		for(std::list<CFlyOutItem>::const_iterator It = flyout_button->m_flyout_list.m_list.begin(); It != flyout_button->m_flyout_list.m_list.end(); It++, i++)
+		{
+			const CFlyOutItem &fo = *It;
+			int id_to_use = i+ID_FIRST_POP_UP_MENU_TOOL;
+			if(&fo == main_fo)
+			{
+				items_to_add.push_front(&fo);
+				ids_to_add.push_front(id_to_use);
+			}
+			else
+			{
+				items_to_add.push_back(&fo);
+				ids_to_add.push_back(id_to_use);
+			}
+		}
+
+		std::list<const CFlyOutItem*>::iterator ItemsIt = items_to_add.begin();
+		std::list<int>::iterator IdIt = ids_to_add.begin();
+		i = 0;
+		for(; ItemsIt != items_to_add.end(); ItemsIt++, IdIt++, i++)
+		{
+			const CFlyOutItem *fo = *ItemsIt;
+			int id_to_use = *IdIt;
+			BitmapButton2* button = new BitmapButton2(flyout_button, m_toolBar, id_to_use, fo->m_bitmap, wxPoint(0, i * (ToolImage::GetBitmapSize() + FLYOUT_PANEL_BORDER)),
+#ifdef WIN32
+				wxSize(ToolImage::GetBitmapSize() + FLYOUT_PANEL_BORDER, ToolImage::GetBitmapSize() + FLYOUT_PANEL_BORDER)
+#else
+				wxDefaultSize
+#endif
+				);
+			button->SetToolTip(fo->m_tooltip);
+		}
+
+		m_toolBar->SetSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize() * items_to_add.size()));
+
+		wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
+		topSizer->Add( m_toolBar, 0, wxALL, FLYOUT_PANEL_BORDER );
+
+		m_panel->SetAutoLayout( true );
+		m_panel->SetSizer( topSizer );
+		topSizer->Fit(m_panel);
+		topSizer->Fit(this);
+	}
+
+private:
+    wxButton *m_button;
+    wxStaticText *m_mouseText;
+};
+
+
+CFlyOutButton::~CFlyOutButton()
+{
+	delete m_toolbarPopup;
+}
+
+    void CFlyOutButton::OnMouse( wxMouseEvent& event )
 	{
 		if(event.Entering())
 		{
@@ -1361,7 +1418,7 @@ public:
 			if(m_toolbarPopup)m_toolbarPopup->Close();
 
 			// make a new popup toolbar
-			m_toolbarPopup = new ToolBarPopup( this, m_flyout_list );
+			m_toolbarPopup = new ToolBarPopup( this );
 			wxWindow *btn = (wxWindow*) event.GetEventObject();
 			wxPoint pos = btn->ClientToScreen( wxPoint(0,0) );
 			wxSize sz = btn->GetSize();
@@ -1374,12 +1431,12 @@ public:
 		}
 	}
 
-	void OnMenuEvent(wxCommandEvent& event)
+	void CFlyOutButton::OnMenuEvent2(int id)
 	{
 		int i = 0;
 		for(std::list<CFlyOutItem>::const_iterator It = m_flyout_list.m_list.begin(); It != m_flyout_list.m_list.end(); It++, i++)
 		{
-			if( i+ID_FIRST_POP_UP_MENU_TOOL == event.GetId())
+			if( i+ID_FIRST_POP_UP_MENU_TOOL == id)
 			{
 				// hide the popup
 				delete m_toolbarPopup;
@@ -1387,6 +1444,7 @@ public:
 
 				// call the OnButtonFunction
 				const CFlyOutItem &fo = *It;
+				wxCommandEvent event;
 				(*fo.m_onButtonFunction)(event);
 
 				// change the toolbar tool
@@ -1398,7 +1456,7 @@ public:
 		}
 	}
 
-	void OnIdle(wxIdleEvent& event)	{
+		void CFlyOutButton::OnIdle(wxIdleEvent& event)	{
 		if(m_toolbarPopup)
 		{
 			const wxPoint & pt = ::wxGetMousePosition();
@@ -1410,15 +1468,6 @@ public:
 		}
 	}
 
-private:
-    DECLARE_EVENT_TABLE()
-};
-
-BEGIN_EVENT_TABLE(CFlyOutButton, wxBitmapButton)
-    EVT_MOUSE_EVENTS(CFlyOutButton::OnMouse)
-    EVT_MENU_RANGE(ID_FIRST_POP_UP_MENU_TOOL, ID_FIRST_POP_UP_MENU_TOOL + 1000, CFlyOutButton::OnMenuEvent)
-    EVT_IDLE(CFlyOutButton::OnIdle)
-END_EVENT_TABLE()
 
 void PanelForToolBar::OnMouse( wxMouseEvent& event )
 {
