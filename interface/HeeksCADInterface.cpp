@@ -147,7 +147,7 @@ void CHeeksCADInterface::AddFlyoutButton(const wxString& title, const wxBitmap& 
 {
 	if(toolbar_flyout)
 	{
-		toolbar_flyout->m_list.push_back(CFlyOutItem(title, bitmap, tooltip, onButtonFunction));
+		toolbar_flyout->m_list.push_back(new CFlyOutItem(title, bitmap, tooltip, onButtonFunction));
 	}
 }
 
