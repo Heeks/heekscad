@@ -34,12 +34,17 @@ public:
 	wxToolBar* toolbar;
 };
 
+class BitmapButton2;
+class CFlyOutButton;
+
 class CFlyOutItem{
 public:
 	wxString m_title;
 	wxBitmap m_bitmap;
 	wxString m_tooltip;
 	void(*m_onButtonFunction)(wxCommandEvent&);
+	CFlyOutButton *flyout_button;
+	BitmapButton2* button;
 
 	CFlyOutItem(const wxString& title, const wxBitmap& bitmap, const wxString& tooltip, void(*onButtonFunction)(wxCommandEvent&));
 
@@ -49,7 +54,7 @@ public:
 class CFlyOutList: public CFlyOutItem
 {
 public:
-	std::list<CFlyOutItem> m_list;
+	std::list<CFlyOutItem*> m_list;
 
 	CFlyOutList(const wxString& title);
 
@@ -58,7 +63,6 @@ public:
 
 	// Get the item that should appear on the main toolbar
 	const CFlyOutItem* GetMainItem()const;
-	void SetMainItem(const CFlyOutItem* item);
 };
 
 class CHeeksFrame : public wxFrame
@@ -85,12 +89,19 @@ public:
 	wxToolBar *m_geometryBar;
 	wxToolBar *m_solidBar;
 	wxToolBar *m_viewingBar;
+	wxToolBar *m_digitizingBar;
 	wxToolBar *m_transformBar;
 	wxMenuBar *m_menuBar;
 	wxMenu* m_recent_files_menu;
 	wxMenu *m_menuWindow;
 	HeeksPrintout* m_printout;
 	wxString m_extra_about_box_str;
+
+	CFlyOutItem* m_endof_button;
+	CFlyOutItem* m_inters_button;
+	CFlyOutItem* m_centre_button;
+	CFlyOutItem* m_midpoint_button;
+	CFlyOutItem* m_snap_button;
 
 	bool m_main_toolbar_removed;
 	bool m_geometry_toolbar_removed;

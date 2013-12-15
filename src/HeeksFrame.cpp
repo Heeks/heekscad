@@ -83,7 +83,7 @@ bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
 }
 
 #ifdef WIN32
-static wxString default_layout_string = _T("layout2|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=279;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=290;prop=100000;bestw=147;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=0;pos=448;prop=100000;bestw=116;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=485;floaty=209;floatw=143;floath=71|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=0;pos=575;prop=100000;bestw=89;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=479;floaty=236;floatw=116;floath=71|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=204;floaty=327;floatw=318;floath=440|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=504|dock_size(4,1,0)=205|dock_size(1,10,0)=33|");
+static wxString default_layout_string = _T("layout2|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=279;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=290;prop=100000;bestw=174;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=0;pos=475;prop=100000;bestw=116;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=184;floaty=102;floatw=141;floath=65|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=0;pos=602;prop=100000;bestw=118;besth=31;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=233;floaty=155;floatw=143;floath=65|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=204;floaty=327;floatw=318;floath=440|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=504|dock_size(4,1,0)=205|dock_size(1,10,0)=33|");
 #else
 static wxString default_layout_string = _T("layout2|name=ToolBar;caption=General Tools;state=2108156;dir=1;layer=10;row=0;pos=0;prop=100000;bestw=328;besth=40;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=469;floaty=243;floatw=345;floath=64|name=GeomBar;caption=Geometry Tools;state=2108156;dir=1;layer=10;row=0;pos=339;prop=100000;bestw=174;besth=38;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=319;floaty=311;floatw=191;floath=62|name=SolidBar;caption=Solid Tools;state=2108156;dir=1;layer=10;row=0;pos=638;prop=100000;bestw=140;besth=38;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=373;floaty=261;floatw=157;floath=62|name=ViewingBar;caption=Viewing Tools;state=2108156;dir=1;layer=10;row=0;pos=524;prop=100000;bestw=102;besth=40;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=334;floaty=257;floatw=119;floath=64|name=Graphics;caption=Graphics;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=800;besth=600;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Objects;caption=Objects;state=2099196;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=300;besth=400;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=204;floaty=327;floatw=318;floath=440|name=Options;caption=Options;state=2099196;dir=4;layer=1;row=0;pos=1;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Input;caption=Input;state=2099196;dir=4;layer=1;row=0;pos=2;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Properties;caption=Properties;state=2099196;dir=4;layer=1;row=0;pos=3;prop=100000;bestw=300;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=MachiningBar;caption=Machining tools;state=2108156;dir=1;layer=10;row=0;pos=791;prop=100000;bestw=178;besth=40;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=357;floaty=413;floatw=195;floath=64|name=Program;caption=Program;state=2099196;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=600;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Output;caption=Output;state=2099196;dir=3;layer=0;row=0;pos=1;prop=100000;bestw=600;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=504|dock_size(4,1,0)=334|dock_size(3,0,0)=110|dock_size(1,10,0)=42|");
 #endif
@@ -982,6 +982,7 @@ static void OnRedrawButton( wxCommandEvent& event )
 	wxGetApp().Repaint();
 }
 
+
 static void OnMagButton( wxCommandEvent& event )
 {
 	wxGetApp().SetInputMode(wxGetApp().magnification);
@@ -1325,6 +1326,8 @@ public:
 		{
 			m_fly_out_button->OnMenuEvent2(this->GetId());
 		}
+		else
+			event.Skip();
 	}
 private:
     DECLARE_EVENT_TABLE()
@@ -1352,31 +1355,31 @@ public:
  		m_toolBar = new wxWindow(m_panel, -1, wxDefaultPosition, wxDefaultSize);
 
 		const CFlyOutItem* main_fo = flyout_button->m_flyout_list.GetMainItem();
-		std::list<const CFlyOutItem*> items_to_add;
+		std::list<CFlyOutItem*> items_to_add;
 		std::list<int> ids_to_add;
 		int i = 0;
-		for(std::list<CFlyOutItem>::const_iterator It = flyout_button->m_flyout_list.m_list.begin(); It != flyout_button->m_flyout_list.m_list.end(); It++, i++)
+		for(std::list<CFlyOutItem*>::iterator It = flyout_button->m_flyout_list.m_list.begin(); It != flyout_button->m_flyout_list.m_list.end(); It++, i++)
 		{
-			const CFlyOutItem &fo = *It;
+			CFlyOutItem *fo = *It;
 			int id_to_use = i+ID_FIRST_POP_UP_MENU_TOOL;
-			if(&fo == main_fo)
+			if(fo == main_fo)
 			{
-				items_to_add.push_front(&fo);
+				items_to_add.push_front(fo);
 				ids_to_add.push_front(id_to_use);
 			}
 			else
 			{
-				items_to_add.push_back(&fo);
+				items_to_add.push_back(fo);
 				ids_to_add.push_back(id_to_use);
 			}
 		}
 
-		std::list<const CFlyOutItem*>::iterator ItemsIt = items_to_add.begin();
+		std::list<CFlyOutItem*>::iterator ItemsIt = items_to_add.begin();
 		std::list<int>::iterator IdIt = ids_to_add.begin();
 		i = 0;
 		for(; ItemsIt != items_to_add.end(); ItemsIt++, IdIt++, i++)
 		{
-			const CFlyOutItem *fo = *ItemsIt;
+			CFlyOutItem *fo = *ItemsIt;
 			int id_to_use = *IdIt;
 			BitmapButton2* button = new BitmapButton2(flyout_button, m_toolBar, id_to_use, fo->m_bitmap, wxPoint(0, i * (ToolImage::GetBitmapSize() + FLYOUT_PANEL_BORDER)),
 #ifdef WIN32
@@ -1386,6 +1389,8 @@ public:
 #endif
 				);
 			button->SetToolTip(fo->m_tooltip);
+			fo->flyout_button = flyout_button;
+			fo->button = button;
 		}
 
 		m_toolBar->SetSize(wxSize(ToolImage::GetBitmapSize(), ToolImage::GetBitmapSize() * items_to_add.size()));
@@ -1434,23 +1439,16 @@ CFlyOutButton::~CFlyOutButton()
 	void CFlyOutButton::OnMenuEvent2(int id)
 	{
 		int i = 0;
-		for(std::list<CFlyOutItem>::const_iterator It = m_flyout_list.m_list.begin(); It != m_flyout_list.m_list.end(); It++, i++)
+		for(std::list<CFlyOutItem*>::const_iterator It = m_flyout_list.m_list.begin(); It != m_flyout_list.m_list.end(); It++, i++)
 		{
 			if( i+ID_FIRST_POP_UP_MENU_TOOL == id)
 			{
-				// hide the popup
-				delete m_toolbarPopup;
-				m_toolbarPopup = NULL;
+				const CFlyOutItem &fo = *(*It);
 
 				// call the OnButtonFunction
-				const CFlyOutItem &fo = *It;
 				wxCommandEvent event;
 				(*fo.m_onButtonFunction)(event);
 
-				// change the toolbar tool
-				m_flyout_list.SetMainItem(&fo);
-				this->SetBitmapLabel(fo.m_bitmap);
-				m_toolBar->Refresh();
 				break;
 			}
 		}
@@ -1468,6 +1466,48 @@ CFlyOutButton::~CFlyOutButton()
 		}
 	}
 
+
+static void OnEndofButton( wxCommandEvent& event )
+{
+	wxGetApp().digitize_end = !wxGetApp().digitize_end;
+	wxGetApp().m_frame->m_endof_button->m_bitmap = wxBitmap(ToolImage(wxGetApp().digitize_end ? _T("endof") : _T("endofgray")));
+	wxGetApp().m_frame->m_endof_button->button->SetBitmapLabel(wxBitmap(ToolImage(wxGetApp().digitize_end ? _T("endof") : _T("endofgray"))));
+	wxGetApp().m_frame->m_endof_button->flyout_button->SetBitmapLabel(wxBitmap(ToolImage(wxGetApp().digitize_end ? _T("endof") : _T("endofgray"))));
+}
+
+static void OnIntersButton( wxCommandEvent& event )
+{
+	wxGetApp().digitize_inters = !wxGetApp().digitize_inters;
+	wxGetApp().m_frame->m_inters_button->m_bitmap = wxBitmap(ToolImage(wxGetApp().digitize_inters ? _T("inters") : _T("intersgray")));
+	wxGetApp().m_frame->m_inters_button->button->SetBitmapLabel(wxBitmap(ToolImage(wxGetApp().digitize_inters ? _T("inters") : _T("intersgray"))));
+}
+
+static void OnCentreButton( wxCommandEvent& event )
+{
+	wxGetApp().digitize_centre = !wxGetApp().digitize_centre;
+	wxGetApp().m_frame->m_centre_button->m_bitmap = wxBitmap(ToolImage(wxGetApp().digitize_centre ? _T("centre") : _T("centregray")));
+	wxGetApp().m_frame->m_centre_button->button->SetBitmapLabel(wxBitmap(ToolImage(wxGetApp().digitize_centre ? _T("centre") : _T("centregray"))));
+}
+
+static void OnMidpointButton( wxCommandEvent& event )
+{
+	wxGetApp().digitize_midpoint = !wxGetApp().digitize_midpoint;
+	wxGetApp().m_frame->m_midpoint_button->m_bitmap = wxBitmap(ToolImage(wxGetApp().digitize_midpoint ? _T("midpoint") : _T("midpointgray")));
+	wxGetApp().m_frame->m_midpoint_button->button->SetBitmapLabel(wxBitmap(ToolImage(wxGetApp().digitize_midpoint ? _T("midpoint") : _T("midpointgray"))));
+}
+
+static void OnSnapButton( wxCommandEvent& event )
+{
+	wxGetApp().draw_to_grid = !wxGetApp().draw_to_grid;
+	wxGetApp().m_frame->m_snap_button->m_bitmap = wxBitmap(ToolImage(wxGetApp().draw_to_grid ? _T("snap") : _T("snapgray")));
+	wxGetApp().m_frame->m_snap_button->button->SetBitmapLabel(wxBitmap(ToolImage(wxGetApp().draw_to_grid ? _T("snap") : _T("snapgray"))));
+}
+
+static void OnEditGridButton( wxCommandEvent& event )
+{
+	wxGetApp().InputDouble(_T("Edit snap grid"), _T("snap grid"), wxGetApp().digitizing_grid);
+	wxGetApp().m_frame->m_graphics->Refresh();
+}
 
 void PanelForToolBar::OnMouse( wxMouseEvent& event )
 {
@@ -1618,6 +1658,7 @@ void CHeeksFrame::OnChangeBitmapSize()
 	if(!m_geometry_toolbar_removed)m_aui_manager->DetachPane(m_geometryBar);
 	if(!m_solid_toolbar_removed)m_aui_manager->DetachPane(m_solidBar);
 	if(!m_viewing_toolbar_removed)m_aui_manager->DetachPane(m_viewingBar);
+
 	for(std::list< wxToolBarBase* >::iterator It = wxGetApp().m_external_toolbars.begin(); It != wxGetApp().m_external_toolbars.end(); It++)
 	{
 		wxToolBarBase* toolbar = *It;
@@ -1839,48 +1880,59 @@ void CHeeksFrame::AddToolBars()
 	{
 		{
 			CFlyOutList flyout_list(_T("Sketches"));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Lines"), ToolImage(_T("lines")), _("Draw a sketch"), OnLinesButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Rectangles"), ToolImage(_T("rect")), _("Start drawing rectangles"), OnRectanglesButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Obrounds"), ToolImage(_T("obround")), _("Start drawing obrounds"), OnObroundsButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Polygons"), ToolImage(_T("pentagon")), _("Start drawing polygons"), OnPolygonsButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Gear"), ToolImage(_T("gear")), _("Add a gear"), OnGearButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Lines"), ToolImage(_T("lines")), _("Draw a sketch"), OnLinesButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Rectangles"), ToolImage(_T("rect")), _("Start drawing rectangles"), OnRectanglesButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Obrounds"), ToolImage(_T("obround")), _("Start drawing obrounds"), OnObroundsButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Polygons"), ToolImage(_T("pentagon")), _("Start drawing polygons"), OnPolygonsButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Gear"), ToolImage(_T("gear")), _("Add a gear"), OnGearButton));
 			AddToolBarFlyout(m_geometryBar, flyout_list);
 		}
 
 		{
 			CFlyOutList flyout_list(_T("Circles"));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("circ3p"), ToolImage(_T("circ3p")), _("Draw circles through 3 points"), OnCircles3pButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("circ2p"), ToolImage(_T("circ2p")), _("Draw circles, centre and point"), OnCircles2pButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("circpr"), ToolImage(_T("circpr")), _("Draw circles, centre and radius"), OnCirclesprButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Ellipses"), ToolImage(_T("ellipse")), _("Draw ellipses"), OnEllipseButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("circ3p"), ToolImage(_T("circ3p")), _("Draw circles through 3 points"), OnCircles3pButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("circ2p"), ToolImage(_T("circ2p")), _("Draw circles, centre and point"), OnCircles2pButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("circpr"), ToolImage(_T("circpr")), _("Draw circles, centre and radius"), OnCirclesprButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Ellipses"), ToolImage(_T("ellipse")), _("Draw ellipses"), OnEllipseButton));
 			AddToolBarFlyout(m_geometryBar, flyout_list);
 		}
 
 		{
 			CFlyOutList flyout_list(_T("OtherDrawing"));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("ILine"), ToolImage(_T("iline")), _("Start Drawing Infinite Lines"), OnILineButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Points"), ToolImage(_T("point")), _("Start Drawing Points"), OnPointsButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Spline"), ToolImage(_T("splpts")), _("Spline Through Points"), OnSplinePointsButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("ILine"), ToolImage(_T("iline")), _("Start Drawing Infinite Lines"), OnILineButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Points"), ToolImage(_T("point")), _("Start Drawing Points"), OnPointsButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Spline"), ToolImage(_T("splpts")), _("Spline Through Points"), OnSplinePointsButton));
 			AddToolBarFlyout(m_geometryBar, flyout_list);
 		}
 
 		{
 			CFlyOutList flyout_list(_T("Text"));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Text"), ToolImage(_T("text")), _("Add a text object"), OnTextButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Dimensioning"), ToolImage(_T("dimension")), _("Add a dimension"), OnDimensioningButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("CoordinateSys"), ToolImage(_T("coordsys")), _("Add Coordinate System"), OnCoordinateSystem));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Text"), ToolImage(_T("text")), _("Add a text object"), OnTextButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Dimensioning"), ToolImage(_T("dimension")), _("Add a dimension"), OnDimensioningButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("CoordinateSys"), ToolImage(_T("coordsys")), _("Add Coordinate System"), OnCoordinateSystem));
 			AddToolBarFlyout(m_geometryBar, flyout_list);
 		}
 
 		{
 			CFlyOutList flyout_list(_T("Transformations"));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Move Translate"), ToolImage(_T("movet")), _("Translate selected items"), OnMoveTranslateButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Copy Translate"), ToolImage(_T("copyt")), _("Copy and translate selected items"), OnCopyTranslateButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Move Rotate"), ToolImage(_T("mover")), _("Rotate selected items"), OnMoveRotateButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Copy Rotate"), ToolImage(_T("copyr")), _("Copy and rotate selected items"), OnCopyRotateButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Move Mirror"), ToolImage(_T("movem")), _("Mirror selected items"), OnMoveMirrorButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Copy Mirror"), ToolImage(_T("copym")), _("Copy and mirror selected items"), OnCopyMirrorButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Move Scale"), ToolImage(_T("moves")), _("Scale selected items"), OnMoveScaleButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Move Translate"), ToolImage(_T("movet")), _("Translate selected items"), OnMoveTranslateButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Copy Translate"), ToolImage(_T("copyt")), _("Copy and translate selected items"), OnCopyTranslateButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Move Rotate"), ToolImage(_T("mover")), _("Rotate selected items"), OnMoveRotateButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Copy Rotate"), ToolImage(_T("copyr")), _("Copy and rotate selected items"), OnCopyRotateButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Move Mirror"), ToolImage(_T("movem")), _("Mirror selected items"), OnMoveMirrorButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Copy Mirror"), ToolImage(_T("copym")), _("Copy and mirror selected items"), OnCopyMirrorButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Move Scale"), ToolImage(_T("moves")), _("Scale selected items"), OnMoveScaleButton));
+			AddToolBarFlyout(m_geometryBar, flyout_list);
+		}
+
+		{
+			CFlyOutList flyout_list(_T("Digitizing"));
+			flyout_list.m_list.push_back(m_endof_button = new CFlyOutItem( _T("Endof"), ToolImage(wxGetApp().digitize_end ? _T("endof") : _T("endofgray")), _("End point"), OnEndofButton));
+			flyout_list.m_list.push_back(m_inters_button = new CFlyOutItem(_T("Inters"), ToolImage(wxGetApp().digitize_inters ? _T("inters") : _T("intersgray")), _("Intersection"), OnIntersButton));
+			flyout_list.m_list.push_back(m_centre_button = new CFlyOutItem(_T("Centre"), ToolImage(wxGetApp().digitize_centre ? _T("centre") : _T("centregray")), _("Centre"), OnCentreButton));
+			flyout_list.m_list.push_back(m_midpoint_button = new CFlyOutItem( _T("Midpoint"), ToolImage(wxGetApp().digitize_midpoint ? _T("midpoint") : _T("midpointgray")), _("Midpoint"), OnMidpointButton));
+			flyout_list.m_list.push_back(m_snap_button = new CFlyOutItem(_T("Snap"), ToolImage(wxGetApp().draw_to_grid ? _T("snap") : _T("snapgray")), _("Snap"), OnSnapButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("EditGrid"), ToolImage(_T("editgrid")), _("edit grid"), OnEditGridButton));
 			AddToolBarFlyout(m_geometryBar, flyout_list);
 		}
 
@@ -1893,34 +1945,34 @@ void CHeeksFrame::AddToolBars()
 	{
 		{
 			CFlyOutList flyout_list(_T("SolidPrimitives"));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("sphere"), ToolImage(_T("sphere")), _("Add a sphere"), OnSphereButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("cube"), ToolImage(_T("cube")), _("Add a cube"), OnCubeButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("cyl"), ToolImage(_T("cyl")), _("Add a cylinder"), OnCylButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("cone"), ToolImage(_T("cone")), _("Add a cone"), OnConeButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("sphere"), ToolImage(_T("sphere")), _("Add a sphere"), OnSphereButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("cube"), ToolImage(_T("cube")), _("Add a cube"), OnCubeButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("cyl"), ToolImage(_T("cyl")), _("Add a cylinder"), OnCylButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("cone"), ToolImage(_T("cone")), _("Add a cone"), OnConeButton));
 			AddToolBarFlyout(m_solidBar, flyout_list);
 		}
 
 		{
 			CFlyOutList flyout_list(_T("SolidMake"));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Ruled Surface"), ToolImage(_T("ruled")), _("Create a lofted face"), OnRuledSurfaceButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Extrude"), ToolImage(_T("extrude")), _("Extrude a wire or face"), OnExtrudeButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Revolve"), ToolImage(_T("revolve")), _("Revolve a wire or face"), OnRevolveButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Sweep"), ToolImage(_T("sweep")), _("Sweep a wire or face"), OnSweepButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Ruled Surface"), ToolImage(_T("ruled")), _("Create a lofted face"), OnRuledSurfaceButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Extrude"), ToolImage(_T("extrude")), _("Extrude a wire or face"), OnExtrudeButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Revolve"), ToolImage(_T("revolve")), _("Revolve a wire or face"), OnRevolveButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Sweep"), ToolImage(_T("sweep")), _("Sweep a wire or face"), OnSweepButton));
 			AddToolBarFlyout(m_solidBar, flyout_list);
 		}
 
 		{
 			CFlyOutList flyout_list(_T("SolidBooleans"));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Cut"), ToolImage(_T("subtract")), _("Cut one solid from another"), OnSubtractButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Fuse"), ToolImage(_T("fuse")), _("Fuse one solid to another"), OnFuseButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Common"), ToolImage(_T("common")), _("Find common solid between two solids"), OnCommonButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Cut"), ToolImage(_T("subtract")), _("Cut one solid from another"), OnSubtractButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Fuse"), ToolImage(_T("fuse")), _("Fuse one solid to another"), OnFuseButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Common"), ToolImage(_T("common")), _("Find common solid between two solids"), OnCommonButton));
 			AddToolBarFlyout(m_solidBar, flyout_list);
 		}
 
 		{
 			CFlyOutList flyout_list(_T("SolidChamfers"));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Fillet"), ToolImage(_T("fillet")), _("Make a fillet on selected edges"), OnFilletButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Chamfer"), ToolImage(_T("chamfer")), _("Make a chamfer on selected edges"), OnChamferButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Fillet"), ToolImage(_T("fillet")), _("Make a fillet on selected edges"), OnFilletButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Chamfer"), ToolImage(_T("chamfer")), _("Make a chamfer on selected edges"), OnChamferButton));
 			AddToolBarFlyout(m_solidBar, flyout_list);
 		}
 
@@ -1933,31 +1985,31 @@ void CHeeksFrame::AddToolBars()
 	{
 		{
 			CFlyOutList flyout_list(_T("ViewMag"));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Mag Extents"), ToolImage(_T("magextents")), _("Zoom in to fit the extents of the drawing into the graphics window"), OnMagExtentsButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Mag No Rotation"), ToolImage(_T("magnorot")), _("Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"), OnMagNoRotButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("Zoom Window"), ToolImage(_T("mag")), _("Zoom in to a dragged window"), OnMagButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("View Back"), ToolImage(_T("magprev")), _("Go back to previous view"), OnMagPreviousButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("FullScreen"), ToolImage(_T("fullscreen")), _("Switch to full screen view ( press escape to return )"), OnFullScreenButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Mag Extents"), ToolImage(_T("magextents")), _("Zoom in to fit the extents of the drawing into the graphics window"), OnMagExtentsButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Mag No Rotation"), ToolImage(_T("magnorot")), _("Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"), OnMagNoRotButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("Zoom Window"), ToolImage(_T("mag")), _("Zoom in to a dragged window"), OnMagButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("View Back"), ToolImage(_T("magprev")), _("Go back to previous view"), OnMagPreviousButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("FullScreen"), ToolImage(_T("fullscreen")), _("Switch to full screen view ( press escape to return )"), OnFullScreenButton));
 			AddToolBarFlyout(m_viewingBar, flyout_list);
 		}
 
 		{
 			CFlyOutList flyout_list(_T("ViewSpecific"));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("View XY Front"), ToolImage(_T("magxy")), _("View XY Front"), OnMagXYButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("View XY Back"), ToolImage(_T("magxym")), _("View XY Back"), OnMagXYMButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("View XZ Top"), ToolImage(_T("magxz")), _("View XZ Top"), OnMagXZButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("View XZ Bottom"), ToolImage(_T("magxzm")), _("View XZ Bottom"), OnMagXZMButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("View YZ Right"), ToolImage(_T("magyz")), _("View YZ Right"), OnMagYZButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("View YZ Left"), ToolImage(_T("magyzm")), _("View YZ Left"), OnMagYZMButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("View XY Isometric"), ToolImage(_T("magxyz")), _("View XY Isometric"), OnMagXYZButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("View XY Front"), ToolImage(_T("magxy")), _("View XY Front"), OnMagXYButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("View XY Back"), ToolImage(_T("magxym")), _("View XY Back"), OnMagXYMButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("View XZ Top"), ToolImage(_T("magxz")), _("View XZ Top"), OnMagXZButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("View XZ Bottom"), ToolImage(_T("magxzm")), _("View XZ Bottom"), OnMagXZMButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("View YZ Right"), ToolImage(_T("magyz")), _("View YZ Right"), OnMagYZButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("View YZ Left"), ToolImage(_T("magyzm")), _("View YZ Left"), OnMagYZMButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("View XY Isometric"), ToolImage(_T("magxyz")), _("View XY Isometric"), OnMagXYZButton));
 			AddToolBarFlyout(m_viewingBar, flyout_list);
 		}
 
 		{
 			CFlyOutList flyout_list(_T("ViewMag"));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("View Rotate"), ToolImage(_T("viewrot")), _("Enter view rotating mode"), OnViewRotateButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("View Zoom"), ToolImage(_T("zoom")), _("Drag to zoom in and out"), OnViewZoomButton));
-			flyout_list.m_list.push_back(CFlyOutItem(_T("View Pan"), ToolImage(_T("pan")), _("Drag to move view"), OnViewPanButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("View Rotate"), ToolImage(_T("viewrot")), _("Enter view rotating mode"), OnViewRotateButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("View Zoom"), ToolImage(_T("zoom")), _("Drag to zoom in and out"), OnViewZoomButton));
+			flyout_list.m_list.push_back(new CFlyOutItem(_T("View Pan"), ToolImage(_T("pan")), _("Drag to move view"), OnViewPanButton));
 			AddToolBarFlyout(m_viewingBar, flyout_list);
 		}
 
@@ -1965,6 +2017,7 @@ void CHeeksFrame::AddToolBars()
 
 		m_viewingBar->Realize();
 		m_aui_manager->AddPane(m_viewingBar, wxAuiPaneInfo().Name(_T("ViewingBar")).Caption(_("Viewing Tools")).ToolbarPane().Top());
+
 		wxGetApp().RegisterHideableWindow(m_viewingBar);
 	}
 }
@@ -2014,40 +2067,8 @@ CFlyOutList::CFlyOutList(const wxString& title):CFlyOutItem(title, wxBitmap(), _
 {
 }
 
-static wxString GetFlyoutConfigString(const wxString& title)
-{
-	wxString config_string = wxString(_T("ToolBar")) + title;
-	return config_string;
-}
-
 const CFlyOutItem* CFlyOutList::GetMainItem()const
 {
 	// get the item to show on toolbar
-	const CFlyOutItem &first_fo = m_list.front();
-
-	wxString config_string = GetFlyoutConfigString(m_title) + _T("ActiveTool");
-	HeeksConfig config;
-	wxString active_tool_str;
-	config.Read(config_string, &active_tool_str, first_fo.m_title);
-
-	const CFlyOutItem *main_fo = &first_fo;
-	for(std::list<CFlyOutItem>::const_iterator It = m_list.begin(); It != m_list.end(); It++)
-	{
-		const CFlyOutItem &fo = *It;
-		if(fo.m_title == active_tool_str)
-		{
-			main_fo = &fo;
-			break;
-		}
-	}
-
-	return main_fo;
-}
-
-void CFlyOutList::SetMainItem(const CFlyOutItem* item)
-{
-	wxString config_string = GetFlyoutConfigString(m_title) + _T("ActiveTool");
-	HeeksConfig config;
-	wxString active_tool_str = item->m_title;
-	config.Write(config_string, active_tool_str);
+	return m_list.front();
 }

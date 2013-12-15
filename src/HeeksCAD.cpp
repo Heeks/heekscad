@@ -143,7 +143,7 @@ static unsigned int DecimalPlaces( const double value )
 
 HeeksCADapp::HeeksCADapp(): ObjList()
 {
-	m_version_number = _T("0 25 0");
+	m_version_number = _T("0 27 0");
 	m_geom_tol = 0.000001;
 	TiXmlBase::SetRequiredDecimalPlaces( DecimalPlaces(m_geom_tol) );	 // Ensure we write XML in enough accuracy to be useful when re-read.
 
@@ -2694,6 +2694,7 @@ void on_set_tool_icon_size(int value, HeeksObj* object, bool from_undo_redo)
 void on_grid(bool onoff, HeeksObj* object)
 {
 	wxGetApp().draw_to_grid = onoff;
+	wxGetApp().m_frame->m_snap_button->m_bitmap = wxBitmap(ToolImage(wxGetApp().draw_to_grid ? _T("snap") : _T("snapgray")));
 	wxGetApp().Repaint();
 }
 
@@ -2831,18 +2832,22 @@ void on_set_ctrl_does_rotate(bool value, HeeksObj* object)
 
 void on_intersection(bool onoff, HeeksObj* object){
 	wxGetApp().digitize_inters = onoff;
+	wxGetApp().m_frame->m_inters_button->m_bitmap = wxBitmap(ToolImage(wxGetApp().digitize_inters ? _T("inters") : _T("intersgray")));
 }
 
 void on_centre(bool onoff, HeeksObj* object){
 	wxGetApp().digitize_centre = onoff;
+	wxGetApp().m_frame->m_centre_button->m_bitmap = wxBitmap(ToolImage(wxGetApp().digitize_centre ? _T("centre") : _T("centregray")));
 }
 
 void on_end_of(bool onoff, HeeksObj* object){
 	wxGetApp().digitize_end = onoff;
+	wxGetApp().m_frame->m_endof_button->m_bitmap = wxBitmap(ToolImage(wxGetApp().digitize_end ? _T("endof") : _T("endofgray")));
 }
 
 void on_mid_point(bool onoff, HeeksObj* object){
 	wxGetApp().digitize_midpoint = onoff;
+	wxGetApp().m_frame->m_midpoint_button->m_bitmap = wxBitmap(ToolImage(wxGetApp().digitize_midpoint ? _T("midpoint") : _T("midpointgray")));
 }
 
 void on_nearest(bool onoff, HeeksObj* object){

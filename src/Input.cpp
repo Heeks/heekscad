@@ -28,6 +28,7 @@ bool HeeksCADapp::InputDouble(const wxChar* prompt, const wxChar* value_name, do
 		wxStaticText *static_label = new wxStaticText(&dlg, wxID_ANY, prompt);
 		sizerMain->Add( static_label, 0, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, dlg.control_border );
 		CDoubleCtrl* value_control = new CDoubleCtrl(&dlg);
+		value_control->SetValue(value);
 		dlg.AddLabelAndControl(sizerMain, value_name, value_control);
 		sizerMain->Add( dlg.MakeOkAndCancel(wxHORIZONTAL), 0, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, dlg.control_border );
 		dlg.SetSizer( sizerMain );
