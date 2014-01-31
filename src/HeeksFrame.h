@@ -134,7 +134,7 @@ public:
 	void OnKeyUp(wxKeyEvent& event);
 	wxToolBarToolBase* AddToolBarTool(wxToolBar* toolbar, const wxString& title, const wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
 	void AddToolBarTool(wxToolBar* toolbar, Tool* tool);
-	void AddToolBarFlyout(wxToolBar* toolbar, const CFlyOutList& flyout);
+	void AddToolBarFlyout(wxToolBar* toolbar, const CFlyOutList& flyout, bool disappears_on_click = true);
 	int MakeNextIDForTool(void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&));
 	void SetToolFunctions(int Id, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&));
 	void ClearToolBar(wxToolBar* m_toolBar);

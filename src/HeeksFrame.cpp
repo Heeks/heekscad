@@ -1244,22 +1244,6 @@ void CHeeksFrame::AddToolBarTool(wxToolBar* toolbar, Tool* tool)
 }
 
 class CFlyOutButton;
-
-class PanelForToolBar : public wxScrolledWindow
-{
-public:
-	PanelForToolBar(wxWindow *parent):wxScrolledWindow(parent, wxID_ANY){}
-
-	void OnMouse( wxMouseEvent& event );
-
-private:
-    DECLARE_EVENT_TABLE()
-};
-
-BEGIN_EVENT_TABLE(PanelForToolBar, wxScrolledWindow)
-    EVT_MOUSE_EVENTS( PanelForToolBar::OnMouse )
-END_EVENT_TABLE()
-
 class ToolBarPopup;
 
 class CFlyOutButton: public wxBitmapButton
@@ -1267,6 +1251,7 @@ class CFlyOutButton: public wxBitmapButton
 	wxToolBar *m_toolBar;
 	wxBitmap m_current_bitmap;
 	wxTimer m_timer;
+	bool m_disappears_on_click;
 
 public:
 	CFlyOutList m_flyout_list;
@@ -1275,8 +1260,9 @@ public:
     CFlyOutButton(const CFlyOutList &flyout_list,
 				wxToolBar *toolbar,
 				int id_to_use,
-				const wxPoint& pos = wxDefaultPosition,
-				const wxSize& size = wxDefaultSize)
+				const wxPoint& pos,
+				const wxSize& size,
+				bool disappears_on_click)
 				:wxBitmapButton(toolbar, id_to_use, flyout_list.GetMainItem()->m_bitmap, pos, size,
 #ifdef WIN32
 				wxBORDER_SIMPLE
@@ -1287,6 +1273,7 @@ public:
 		,m_flyout_list(flyout_list)
 		,m_toolBar(toolbar)
 		,m_toolbarPopup(NULL)
+		,m_disappears_on_click(disappears_on_click)
 	{
 	}
 
@@ -1326,8 +1313,6 @@ public:
 		{
 			m_fly_out_button->OnMenuEvent2(this->GetId());
 		}
-		else
-			event.Skip();
 	}
 private:
     DECLARE_EVENT_TABLE()
@@ -1344,12 +1329,12 @@ class ToolBarPopup: public wxPopupTransientWindow
 {
 public:
 	wxWindow *m_toolBar;
-    PanelForToolBar *m_panel;
+    wxScrolledWindow *m_panel;
 
 public:
 	ToolBarPopup( CFlyOutButton *flyout_button):wxPopupTransientWindow( flyout_button )
 	{
-		m_panel = new PanelForToolBar( this );
+		m_panel = new wxScrolledWindow( this, wxID_ANY );
 		m_panel->SetBackgroundColour( *wxLIGHT_GREY );
 
  		m_toolBar = new wxWindow(m_panel, -1, wxDefaultPosition, wxDefaultSize);
@@ -1409,7 +1394,6 @@ private:
     wxStaticText *m_mouseText;
 };
 
-
 CFlyOutButton::~CFlyOutButton()
 {
 	delete m_toolbarPopup;
@@ -1443,6 +1427,14 @@ CFlyOutButton::~CFlyOutButton()
 		{
 			if( i+ID_FIRST_POP_UP_MENU_TOOL == id)
 			{
+				// hide the popup
+				if(m_disappears_on_click)
+				{
+					delete m_toolbarPopup;
+					m_toolbarPopup = NULL;
+				}
+
+				// call the OnButtonFunction
 				const CFlyOutItem &fo = *(*It);
 
 				// call the OnButtonFunction
@@ -1509,16 +1501,7 @@ static void OnEditGridButton( wxCommandEvent& event )
 	wxGetApp().m_frame->m_graphics->Refresh();
 }
 
-void PanelForToolBar::OnMouse( wxMouseEvent& event )
-{
-	if(event.Leaving())
-	{
-		//((CFlyOutButton*)(this->GetParent()->GetParent()))->m_toolbarPopup = NULL;
-		//delete this->GetParent();
-	}
-}
-
-void CHeeksFrame::AddToolBarFlyout(wxToolBar* toolbar, const CFlyOutList& flyout_list)
+void CHeeksFrame::AddToolBarFlyout(wxToolBar* toolbar, const CFlyOutList& flyout_list, bool disappears_on_click)
 {
 	if(flyout_list.m_list.size() == 0)return;
 	int id_to_use = MakeNextIDForTool(NULL, NULL);
@@ -1528,7 +1511,7 @@ void CHeeksFrame::AddToolBarFlyout(wxToolBar* toolbar, const CFlyOutList& flyout
 #else
 		wxDefaultSize
 #endif
-		);
+		,disappears_on_click);
 	toolbar->AddControl(button);
 }
 
@@ -1933,7 +1916,7 @@ void CHeeksFrame::AddToolBars()
 			flyout_list.m_list.push_back(m_midpoint_button = new CFlyOutItem( _T("Midpoint"), ToolImage(wxGetApp().digitize_midpoint ? _T("midpoint") : _T("midpointgray")), _("Midpoint"), OnMidpointButton));
 			flyout_list.m_list.push_back(m_snap_button = new CFlyOutItem(_T("Snap"), ToolImage(wxGetApp().draw_to_grid ? _T("snap") : _T("snapgray")), _("Snap"), OnSnapButton));
 			flyout_list.m_list.push_back(new CFlyOutItem(_T("EditGrid"), ToolImage(_T("editgrid")), _("edit grid"), OnEditGridButton));
-			AddToolBarFlyout(m_geometryBar, flyout_list);
+			AddToolBarFlyout(m_geometryBar, flyout_list, false);
 		}
 
 		m_geometryBar->Realize();

@@ -56,10 +56,12 @@ bool CCylinder::IsDifferent(HeeksObj* other)
 
 static void on_set_diameter(double value, HeeksObj* object){
 	((CCylinder*)object)->m_radius = value*0.5;
+	object->OnApplyProperties();
 }
 
 static void on_set_height(double value, HeeksObj* object){
 	((CCylinder*)object)->m_height = value;
+	object->OnApplyProperties();
 }
 
 
@@ -100,15 +102,8 @@ void CCylinder::GetGripperPositions(std::list<GripData> *list, bool just_for_end
 
 void CCylinder::OnApplyProperties()
 {
-	CCylinder* new_object = new CCylinder(m_pos, m_radius, m_height, m_title.c_str(), m_color, m_opacity);
-	new_object->CopyIDsFrom(this);
-	m_owner->Add(new_object, NULL);
-	m_owner->Remove(this);
-	if(wxGetApp().m_marked_list->ObjectMarked(this))
-	{
-		wxGetApp().m_marked_list->Remove(this,false);
-		wxGetApp().m_marked_list->Add(new_object, true);
-	}
+	*this = CCylinder(m_pos, m_radius, m_height, m_title.c_str(), m_color, m_opacity);
+	this->create_faces_and_edges();
 	wxGetApp().Repaint();
 }
 
@@ -161,9 +156,11 @@ bool CCylinder::Stretch(const double *p, const double* shift, void* data)
 	{
 		CCylinder* new_object = new CCylinder(m_pos, m_radius, m_height, m_title.c_str(), m_color, m_opacity);
 		new_object->CopyIDsFrom(this);
-		m_owner->Add(new_object, NULL);
-		m_owner->Remove(this);
-		wxGetApp().m_marked_list->Clear(true);
+		wxGetApp().StartHistory();
+		wxGetApp().DeleteUndoably(this);
+		wxGetApp().AddUndoably(new_object,m_owner,NULL);
+		wxGetApp().EndHistory();
+		wxGetApp().m_marked_list->Clear(false);
 		wxGetApp().m_marked_list->Add(new_object, true);
 	}
 

@@ -35,6 +35,9 @@ public:
 	bool GetScaleAboutMatrix(double *m);
 	bool Stretch(const double *p, const double* shift, void* data);
 	bool DescendForUndo(){return false;}
+	void WriteDefaultValues();
+	void ReadDefaultValues();
+	void GetOnEdit(bool(**callback)(HeeksObj*, std::list<HeeksObj*> *));
 
 	// CShape's virtual functions
 	void SetXMLElement(TiXmlElement* element);

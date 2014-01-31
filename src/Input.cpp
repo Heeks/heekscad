@@ -30,7 +30,7 @@ bool HeeksCADapp::InputDouble(const wxChar* prompt, const wxChar* value_name, do
 		CDoubleCtrl* value_control = new CDoubleCtrl(&dlg);
 		value_control->SetValue(value);
 		dlg.AddLabelAndControl(sizerMain, value_name, value_control);
-		sizerMain->Add( dlg.MakeOkAndCancel(wxHORIZONTAL), 0, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, dlg.control_border );
+		dlg.MakeOkAndCancel(wxHORIZONTAL).AddToSizer(sizerMain);
 		dlg.SetSizer( sizerMain );
 		sizerMain->SetSizeHints(&dlg);
 		sizerMain->Fit(&dlg);
@@ -76,10 +76,6 @@ enum
 
 class AngleAndPlaneDlg : public HDialog
 {
-	static wxBitmap* m_xy_bitmap;
-	static wxBitmap* m_xz_bitmap;
-	static wxBitmap* m_yz_bitmap;
-	static wxBitmap* m_line_bitmap;
 	bool m_ignore_event_functions;
 
 	PictureWindow *m_picture;
@@ -192,8 +188,7 @@ public:
 		}
 
 		// add OK and Cancel to right side
-		wxBoxSizer *sizerOKCancel = MakeOkAndCancel(wxHORIZONTAL);
-		sizerMain->Add( sizerOKCancel, 0, wxALL | wxALIGN_RIGHT | wxALIGN_BOTTOM, control_border );
+		MakeOkAndCancel(wxHORIZONTAL).AddToSizer(sizerMain);
 
 		SetSizer( sizerMain );
 		sizerMain->SetSizeHints(this);
@@ -207,17 +202,17 @@ public:
 		m_ignore_event_functions = false;
 	}
 
-	void SetPicture(wxBitmap** bitmap, const wxString& name)
+	void SetPicture(const wxString& name)
 	{
-		m_picture->SetPicture(bitmap, wxGetApp().GetResFolder() + _T("/bitmaps/angle/") + name + _T(".png"), wxBITMAP_TYPE_PNG);
+		m_picture->SetPicture(wxGetApp().GetResFolder() + _T("/bitmaps/angle/") + name + _T(".png"), wxBITMAP_TYPE_PNG);
 	}
 
 	void SetPicture()
 	{
-		if(rbXy && rbXy->GetValue())SetPicture(&m_xy_bitmap, _T("xy"));
-		else if(rbXz && rbXz->GetValue())SetPicture(&m_xz_bitmap, _T("xz"));
-		else if(rbYz && rbYz->GetValue())SetPicture(&m_yz_bitmap, _T("yz"));
-		else if(rbOther && rbOther->GetValue())SetPicture(&m_line_bitmap, _T("line"));
+		if(rbXy && rbXy->GetValue())SetPicture(_T("xy"));
+		else if(rbXz && rbXz->GetValue())SetPicture(_T("xz"));
+		else if(rbYz && rbYz->GetValue())SetPicture(_T("yz"));
+		else if(rbOther && rbOther->GetValue())SetPicture(_T("line"));
 	}
 
 	void OnRadioButton(wxCommandEvent& event)
@@ -269,11 +264,6 @@ BEGIN_EVENT_TABLE(AngleAndPlaneDlg, HDialog)
     EVT_BUTTON(ID_BUTTON_PICK,AngleAndPlaneDlg::OnPick)
     EVT_BUTTON(ID_BUTTON_VECTOR_PICK,AngleAndPlaneDlg::OnPickVector)
 END_EVENT_TABLE()
-
-wxBitmap* AngleAndPlaneDlg::m_xy_bitmap = NULL;
-wxBitmap* AngleAndPlaneDlg::m_xz_bitmap = NULL;
-wxBitmap* AngleAndPlaneDlg::m_yz_bitmap = NULL;
-wxBitmap* AngleAndPlaneDlg::m_line_bitmap = NULL;
 
 bool HeeksCADapp::InputAngleWithPlane(double &angle, double *axis, double *pos, int *number_of_copies, double *axial_shift)
 {
@@ -429,7 +419,7 @@ bool HeeksCADapp::InputLength(const wxChar* prompt, const wxChar* value_name, do
 		sizerMain->Add( static_label, 0, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, dlg.control_border );
 		CLengthCtrl* value_control = new CLengthCtrl(&dlg);
 		dlg.AddLabelAndControl(sizerMain, value_name, value_control);
-		sizerMain->Add( dlg.MakeOkAndCancel(wxHORIZONTAL), 0, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, dlg.control_border );
+		dlg.MakeOkAndCancel(wxHORIZONTAL).AddToSizer(sizerMain);
 		dlg.SetSizer( sizerMain );
 		sizerMain->SetSizeHints(&dlg);
 		sizerMain->Fit(&dlg);
@@ -474,8 +464,7 @@ public:
 		sizerMain->Add( m_options_canvas, 0, wxALL, control_border );
 
 		// add OK and Cancel to bottom side
-		wxBoxSizer *sizerOKCancel = MakeOkAndCancel(wxHORIZONTAL);
-		sizerMain->Add( sizerOKCancel, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, control_border );
+		MakeOkAndCancel(wxHORIZONTAL).AddToSizer(sizerMain);
 
 		SetSizer( sizerMain );
 		sizerMain->SetSizeHints(this);

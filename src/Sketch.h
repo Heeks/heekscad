@@ -4,16 +4,15 @@
 
 #pragma once
 
-#include "../interface/ObjList.h"
+#include "../interface/IdNamedObjList.h"
 #include "../interface/HeeksColor.h"
 #include "../interface/SketchOrder.h"
 
 class CoordinateSystem;
 
-class CSketch:public ObjList
+class CSketch:public IdNamedObjList
 {
 	HeeksColor color;
-	wxString m_title;
 	bool IsClockwise()const{return GetArea()>0;}
 
 public:
@@ -39,14 +38,11 @@ public:
 	void GetProperties(std::list<Property *> *list);
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	HeeksObj *MakeACopy(void)const;
-	void CopyFrom(const HeeksObj* object){operator=(*((CSketch*)((ObjList*)object)));}
+	void CopyFrom(const HeeksObj* object){operator=(*((CSketch*)((IdNamedObjList*)object)));}
 	void WriteXML(TiXmlNode *root);
 	bool UsesID(){return true;}
 	void SetColor(const HeeksColor &col);
 	const HeeksColor* GetColor()const;
-	const wxChar* GetShortString(void)const{return m_title.c_str();}
-	bool CanEditString(void)const{return true;}
-	void OnEditString(const wxChar* str);
 	bool Add(HeeksObj* object, HeeksObj* prev_object);
 	void Remove(HeeksObj* object);
 
