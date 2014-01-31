@@ -59,10 +59,12 @@ bool CSphere::IsDifferent(HeeksObj *other)
 
 static void on_set_centre(const double *pos, HeeksObj* object){
 	((CSphere*)object)->m_pos = make_point(pos);
+	object->OnApplyProperties();
 }
 
 static void on_set_radius(double value, HeeksObj* object){
 	((CSphere*)object)->m_radius = value;
+	object->OnApplyProperties();
 }
 
 void CSphere::MakeTransformedShape(const gp_Trsf &mat)
@@ -93,16 +95,8 @@ void CSphere::GetGripperPositions(std::list<GripData> *list, bool just_for_endof
 
 void CSphere::OnApplyProperties()
 {
-	CSphere* new_object = new CSphere(m_pos, m_radius, m_title.c_str(), m_color, m_opacity);
-	new_object->CopyIDsFrom(this);
-	m_owner->Add(new_object, NULL);
-	m_owner->Remove(this);
-
-	if(wxGetApp().m_marked_list->ObjectMarked(this))
-	{
-		wxGetApp().m_marked_list->Remove(this,false);
-		wxGetApp().m_marked_list->Add(new_object, true);
-	}
+	*this = CSphere(m_pos, m_radius, m_title.c_str(), m_color, m_opacity);
+	this->create_faces_and_edges();
 	wxGetApp().Repaint();
 }
 

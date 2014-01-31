@@ -55,7 +55,7 @@ const CSketch& CSketch::operator=(const CSketch& c)
     if (this != &c)
     {
         // just copy all the lines and arcs, not the id
-        ObjList::operator =(c);
+        IdNamedObjList::operator =(c);
 
         color = c.color;
         m_order = c.m_order;
@@ -152,7 +152,7 @@ static bool SketchOrderAvailable(SketchOrderType old_order, SketchOrderType new_
 
 void CSketch::GetProperties(std::list<Property *> *list)
 {
-	list->push_back(new PropertyInt(_("Number of elements"), ObjList::GetNumChildren(), this));
+	list->push_back(new PropertyInt(_("Number of elements"), IdNamedObjList::GetNumChildren(), this));
 
 	int initial_index = 0;
 	std::list< wxString > choices;
@@ -173,7 +173,7 @@ void CSketch::GetProperties(std::list<Property *> *list)
 
 	list->push_back ( new PropertyChoice ( _("order"), choices, initial_index, this, on_set_order_type ) );
 
-	ObjList::GetProperties(list);
+	IdNamedObjList::GetProperties(list);
 }
 
 static CSketch* sketch_for_tools = NULL;
@@ -486,7 +486,7 @@ default:
 
 HeeksObj *CSketch::MakeACopy(void)const
 {
-	return (ObjList*)(new CSketch(*this));
+	return (IdNamedObjList*)(new CSketch(*this));
 }
 
 void CSketch::WriteXML(TiXmlNode *root)
@@ -509,7 +509,7 @@ HeeksObj* CSketch::ReadFromXMLElement(TiXmlElement* pElem)
 
 	new_object->ReloadPointers();
 
-	return (ObjList*)new_object;
+	return (IdNamedObjList*)new_object;
 }
 
 void CSketch::SetColor(const HeeksColor &col)
@@ -526,11 +526,6 @@ const HeeksColor* CSketch::GetColor()const
 {
 	if(m_objects.size() == 0)return NULL;
 	return m_objects.front()->GetColor();
-}
-
-void CSketch::OnEditString(const wxChar* str){
-	m_title.assign(str);
-	// to do, use undoable property changes
 }
 
 SketchOrderType CSketch::GetSketchOrder()
@@ -820,13 +815,13 @@ double CSketch::GetArea()const
 bool CSketch::Add(HeeksObj* object, HeeksObj* prev_object)
 {
 	m_order = SketchOrderTypeUnknown;
-	return ObjList::Add(object, prev_object);
+	return IdNamedObjList::Add(object, prev_object);
 }
 
 void CSketch::Remove(HeeksObj* object)
 {
 	m_order = SketchOrderTypeUnknown;
-	ObjList::Remove(object);
+	IdNamedObjList::Remove(object);
 }
 
 bool CSketchRelinker::TryAdd(HeeksObj* object)
@@ -981,7 +976,7 @@ bool CSketch::operator==( const CSketch & rhs ) const
 	if (m_title != rhs.m_title) return(false);
 	if (m_order != rhs.m_order) return(false);
 
-	return(ObjList::operator==(rhs));
+	return(IdNamedObjList::operator==(rhs));
 }
 
 static bool FindClosestVertex(const gp_Pnt& p, const TopoDS_Face &face, TopoDS_Vertex &closest_vertex)

@@ -838,6 +838,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\CuboidDlg.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\CuboidDlg.h"
+			>
+		</File>
+		<File
 			RelativePath="$(LIBAREA_PATH)\Curve.cpp"
 			>
 			<FileConfiguration
@@ -1258,6 +1266,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\interface\HeeksObjDlg.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\interface\HeeksObjDlg.h"
+			>
+		</File>
+		<File
 			RelativePath=".\HeeksPrintout.cpp"
 			>
 		</File>
@@ -1343,6 +1359,22 @@
 		</File>
 		<File
 			RelativePath=".\HXml.h"
+			>
+		</File>
+		<File
+			RelativePath="..\interface\IdNamedObj.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\interface\IdNamedObj.h"
+			>
+		</File>
+		<File
+			RelativePath="..\interface\IdNamedObjList.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\interface\IdNamedObjList.h"
 			>
 		</File>
 		<File

@@ -3463,16 +3463,14 @@ public:
 	const wxChar* GetTitle(){
 		if(m_xor_marked_list){
 			if(wxGetApp().m_marked_list->ObjectMarked(m_marked_object->GetObject())){
-				return _("Unmark");
+				return _("Deselect");
 			}
 			else{
-				return _("Mark");
+				if(wxGetApp().m_marked_list->size() == 0)return _("Select");
+				return _("Add to selection");
 			}
 		}
-#ifndef PYHEEKSCAD
-		if(wxGetApp().m_frame->m_properties)return _("Properties");
-#endif
-		return _("Mark");
+		return _("Select");
 	}
 
 	void Run(){
@@ -3504,6 +3502,31 @@ public:
 			m_marked_object->GetObject()->SetClickMarkPoint(m_marked_object, ray_start, ray_direction);
 		}
 		wxGetApp().Repaint();
+	}
+	bool CallChangedOnRun(){return false;}
+};
+
+class EditObjectTool:public Tool{
+public:
+	MarkedObject *m_marked_object;
+
+	EditObjectTool(MarkedObject *marked_object):m_marked_object(marked_object){}
+
+	// Tool's virtual functions
+	const wxChar* GetTitle(){return _("Edit");}
+
+	void Run(){
+		if(m_marked_object == NULL)return;
+		HeeksObj* object = m_marked_object->GetObject();
+		if(object == NULL)return;
+
+		std::list<HeeksObj*> others;
+		for(std::list<HeeksObj*>::iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
+		{
+			HeeksObj* o = *It;
+			if(o != object)others.push_back(o);
+		}
+		m_marked_object->GetObject()->Edit(&others);
 	}
 	bool CallChangedOnRun(){return false;}
 };
@@ -3546,16 +3569,21 @@ void HeeksCADapp::GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list
 		}
 	}
 
+	if(types.size() > 0)
+	{
 	for(std::map<int, MarkedObject*>::iterator It = types.begin(); It != types.end(); It++)
 	{
 		MarkedObject* object = It->second;
-		GetTools2(object, t_list, point, control_pressed);
+		GetTools2(object, t_list, point, control_pressed, types.size() > 1);
 	}
-
-	//GetTools2(marked_object, t_list, point, control_pressed);
+	}
+	else
+	{
+		GetTools2(marked_object, t_list, point, control_pressed, false);
+	}
 }
 
-void HeeksCADapp::GetTools2(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool control_pressed)
+void HeeksCADapp::GetTools2(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool control_pressed, bool make_tool_list_container)
 {
 	std::list<Tool*> tools;
 
@@ -3566,11 +3594,26 @@ void HeeksCADapp::GetTools2(MarkedObject* marked_object, std::list<Tool*>& t_lis
 
 		tools.push_back(new MarkObjectTool(marked_object, point, control_pressed));
 
+		bool(*callback)(HeeksObj*, std::list<HeeksObj*> *) = NULL;
+		marked_object->GetObject()->GetOnEdit(&callback);
+		if(callback)tools.push_back(new EditObjectTool(marked_object));
+
 		if (tools.size()>0)
 		{
-			ToolList *function_list = new ToolList(marked_object->GetObject()->GetShortStringOrTypeString());
-			function_list->Add(tools);
-			t_list.push_back(function_list);
+			if(make_tool_list_container)
+			{
+				ToolList *function_list = new ToolList(marked_object->GetObject()->GetShortStringOrTypeString());
+				function_list->Add(tools);
+				t_list.push_back(function_list);
+			}
+			else
+			{
+				for(std::list<Tool*>::iterator It = tools.begin(); It != tools.end(); It++)
+				{
+					Tool* tool = *It;
+					t_list.push_back(tool);
+				}
+			}
 		}
 	}
 }

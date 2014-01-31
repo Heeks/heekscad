@@ -28,4 +28,3 @@ public:
 	void GetIDList(std::list<int> &id_list);
 	void SetFromIDList(std::list<int> &id_list);
 };
-

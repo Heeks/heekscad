@@ -3,8 +3,70 @@
 // This program is released under the BSD license. See the file COPYING for details.
 
 #include <stdafx.h>
+#ifdef HEEKSCNC
+#include <CTool.h>
+#endif
 
 #include "HDialogs.h"
+#include "NiceTextCtrl.h"
+
+wxSizerItem* HControl::AddToSizer(wxSizer* s)
+{
+	if(m_w != NULL)return s->Add( m_w, 0, m_add_flag, HDialog::control_border );
+	else return s->Add( m_s, 0, m_add_flag, HDialog::control_border );
+}
+
+std::vector< std::pair< int, wxString > > global_ids_for_combo;
+
+HTypeObjectDropDown::HTypeObjectDropDown(wxWindow *parent, wxWindowID id, int object_type, HeeksObj* obj_list)
+:ids_for_combo(global_ids_for_combo)
+,wxComboBox(parent, id, _T(""), wxDefaultPosition, wxDefaultSize, GetObjectArrayString(object_type, obj_list, global_ids_for_combo))
+{
+	global_ids_for_combo.clear();
+}
+
+
+wxArrayString HTypeObjectDropDown::GetObjectArrayString(int object_type, HeeksObj* obj_list, std::vector< std::pair< int, wxString > > &ids_for_combo)
+{
+	wxArrayString str_array;
+
+	// Always add a value of zero to allow for an absense of object use.
+	ids_for_combo.push_back( std::make_pair(0, _("None") ) );
+	str_array.Add(_("None"));
+
+	for(HeeksObj* ob = obj_list->GetFirstChild(); ob; ob = obj_list->GetNextChild())
+	{
+		if (ob->GetType() != object_type) continue;
+
+		int number = ob->GetID();
+#ifdef HEEKSCNC
+		if(object_type == ToolType)number = ((CTool*)ob)->m_tool_number;
+#endif
+		ids_for_combo.push_back( std::make_pair( number, ob->GetShortString() ) );
+		str_array.Add(ob->GetShortString());
+	} // End for
+
+	return str_array;
+}
+
+int HTypeObjectDropDown::GetSelectedId()
+{
+	if(GetSelection() < 0)return 0;
+	return ids_for_combo[GetSelection()].first;
+}
+
+void HTypeObjectDropDown::SelectById(int id)
+{
+	// set the combo to the correct item
+	for(unsigned int i = 0; i < ids_for_combo.size(); i++)
+	{
+		if(ids_for_combo[i].first == id)
+		{
+			SetSelection(i);
+			break;
+		}
+	}
+}
 
 const int HDialog::control_border = 3;
 
@@ -13,16 +75,27 @@ HDialog::HDialog(wxWindow *parent, wxWindowID id, const wxString& title, const w
 {
 }
 
-void HDialog::AddLabelAndControl(wxBoxSizer* sizer, const wxString& label, wxWindow* control)
+wxStaticText *HDialog::AddLabelAndControl(wxBoxSizer* sizer, const wxString& label, wxWindow* control)
+{
+	wxStaticText *static_label;
+	HControl c = MakeLabelAndControl(label, control, &static_label);
+	if(c.m_w)sizer->Add( c.m_w, 0, wxEXPAND | wxALL, control_border );
+	else sizer->Add( c.m_s, 0, wxEXPAND | wxALL, control_border );
+	return static_label;
+}
+
+HControl HDialog::MakeLabelAndControl(const wxString& label, wxWindow* control, wxStaticText** static_text)
 {
     wxBoxSizer *sizer_horizontal = new wxBoxSizer(wxHORIZONTAL);
 	wxStaticText *static_label = new wxStaticText(this, wxID_ANY, label);
 	sizer_horizontal->Add( static_label, 0, wxRIGHT | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, control_border );
 	sizer_horizontal->Add( control, 1, wxLEFT | wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL, control_border );
-	sizer->Add( sizer_horizontal, 0, wxEXPAND | wxALL, control_border );
+	if(static_text)*static_text = static_label;
+
+	return HControl(sizer_horizontal, wxEXPAND | wxALL);
 }
 
-wxBoxSizer *HDialog::MakeOkAndCancel(int orient)
+HControl HDialog::MakeOkAndCancel(int orient)
 {
     wxBoxSizer *sizerOKCancel = new wxBoxSizer(orient);
     wxButton* buttonOK = new wxButton(this, wxID_OK, _("OK"));
@@ -30,5 +103,12 @@ wxBoxSizer *HDialog::MakeOkAndCancel(int orient)
     wxButton* buttonCancel = new wxButton(this, wxID_CANCEL, _("Cancel"));
 	sizerOKCancel->Add( buttonCancel, 0, wxALL, control_border );
     buttonOK->SetDefault();
-	return sizerOKCancel;
+	return HControl(sizerOKCancel, wxALL | wxALIGN_RIGHT | wxALIGN_BOTTOM);
+}
+
+XYZBoxes::XYZBoxes(HDialog *dlg, const wxString& label, const wxString &xstr, const wxString &ystr, const wxString &zstr):wxStaticBoxSizer(wxVERTICAL, dlg, label)
+{
+	m_sttcX = dlg->AddLabelAndControl(this, xstr, m_lgthX = new CLengthCtrl(dlg));
+	m_sttcY = dlg->AddLabelAndControl(this, ystr, m_lgthY = new CLengthCtrl(dlg));
+	m_sttcZ = dlg->AddLabelAndControl(this, zstr, m_lgthZ = new CLengthCtrl(dlg));
 }

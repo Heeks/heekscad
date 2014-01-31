@@ -262,7 +262,7 @@ bool InputExtrusionHeight(double &value, bool *extrude_makes_a_solid, double *ta
 			dlg.AddLabelAndControl(sizerMain, _("taper outward angle"), taper_angle_control);
 		}
 
-		sizerMain->Add( dlg.MakeOkAndCancel(wxHORIZONTAL), 0, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, dlg.control_border );
+		dlg.MakeOkAndCancel(wxHORIZONTAL).AddToSizer(sizerMain);
 		dlg.SetSizer( sizerMain );
 		sizerMain->SetSizeHints(&dlg);
 		sizerMain->Fit(&dlg);
@@ -327,7 +327,7 @@ bool InputRevolutionAngle(double &angle, bool *extrude_makes_a_solid)
 			sizerMain->Add( solid_check_box, 0, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, dlg.control_border );
 		}
 
-		sizerMain->Add( dlg.MakeOkAndCancel(wxHORIZONTAL), 0, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, dlg.control_border );
+		dlg.MakeOkAndCancel(wxHORIZONTAL).AddToSizer(sizerMain);
 		dlg.SetSizer( sizerMain );
 		sizerMain->SetSizeHints(&dlg);
 		sizerMain->Fit(&dlg);

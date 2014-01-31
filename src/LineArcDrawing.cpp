@@ -76,18 +76,18 @@ public:
 };
 
 void LineArcDrawing::set_previous_direction(){
-	if(TempObject() == NULL)return;
+	if(PrevObject() == NULL)return;
 
-	if(TempObject()->GetType() == LineType){
+	if(PrevObject()->GetType() == LineType){
 		double s[3], e[3];
-		if(TempObject()->GetStartPoint(s) && TempObject()->GetEndPoint(e))
+		if(PrevObject()->GetStartPoint(s) && PrevObject()->GetEndPoint(e))
 		{
 			wxGetApp().DoUndoable(new SetPreviousDirection(this, make_vector(make_point(s), make_point(e))));
 		}
 	}
-	else if(TempObject()->GetType() == ArcType){
-		gp_Vec circlev(((HArc*)TempObject())->m_axis.Direction());
-		gp_Vec endv(((HArc*)TempObject())->C, ((HArc*)TempObject())->B);
+	else if(PrevObject()->GetType() == ArcType){
+		gp_Vec circlev(((HArc*)PrevObject())->m_axis.Direction());
+		gp_Vec endv(((HArc*)PrevObject())->C, ((HArc*)PrevObject())->B);
 		wxGetApp().DoUndoable(new SetPreviousDirection(this, (circlev ^ endv).Normalized()));
 	}
 }
