@@ -288,11 +288,11 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 		{
 			if(button->obj)
 			{
-				bool(*callback)(HeeksObj*) = NULL;
+				bool(*callback)(HeeksObj*, std::list<HeeksObj*> *) = NULL;
 				button->obj->GetOnEdit(&callback);
 				if(callback)
 				{
-					(*callback)(button->obj);
+					(*callback)(button->obj, NULL);
 				}
 			}
 		}

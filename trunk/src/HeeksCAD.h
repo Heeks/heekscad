@@ -331,7 +331,7 @@ public:
 	const wxChar* GetKnownFilesWildCardString(bool open = true)const;
 	const wxChar* GetKnownFilesCommaSeparatedList(bool open = true)const;
 	void GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool control_pressed);
-	void GetTools2(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool control_pressed);
+	void GetTools2(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool control_pressed, bool make_tool_list_container);
 	wxString GetExeFolder()const;
 	wxString GetResFolder()const;
 	void get_2d_arc_segments(double xs, double ys, double xe, double ye, double xc, double yc, bool dir, bool want_start, double pixels_per_mm, void(*callbackfunc)(const double* xy));

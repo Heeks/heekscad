@@ -5882,9 +5882,9 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4.6901069"
-     inkscape:cx="387.79624"
-     inkscape:cy="10.628485"
+     inkscape:zoom="10.998551"
+     inkscape:cx="203.13862"
+     inkscape:cy="65.632058"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -11449,6 +11449,34 @@
          id="path5764-61-93-3"
          d="m 482,1040.3622 -4,4"
          style="fill:none;stroke:#b3b3b3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    </g>
+    <g
+       id="g4798"
+       inkscape:export-filename="C:\Dev\HeeksCADSVN\bitmaps\editgrid.png"
+       inkscape:export-xdpi="278.70969"
+       inkscape:export-ydpi="278.70969">
+      <rect
+         y="977.36218"
+         x="180"
+         height="30"
+         width="30"
+         id="rect4786"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4792"
+         d="m 203,980.36218 4,0"
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4794"
+         d="m 205,980.36218 0,24.00002"
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4796"
+         d="m 203,1004.3622 4,0"
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     </g>
   </g>
 </svg>

@@ -287,9 +287,15 @@ bool CCone::Stretch(const double *p, const double* shift, void* data)
 
 	if(make_a_new_cone)
 	{
-		*this = CCone(new_pos, new_r1, new_r2, new_height, m_title.c_str(), m_color, m_opacity);
-		//new_object->CopyIDsFrom(this);
-		this->create_faces_and_edges();
+		CCone* new_object = new CCone(new_pos, new_r1, new_r2, new_height, m_title.c_str(), m_color, m_opacity);
+		new_object->CopyIDsFrom(this);
+		wxGetApp().StartHistory();
+		wxGetApp().DeleteUndoably(this);
+		wxGetApp().AddUndoably(new_object,m_owner,NULL);
+		wxGetApp().EndHistory();
+		wxGetApp().m_marked_list->Clear(false);
+		wxGetApp().m_marked_list->Add(new_object, true);
+		this->m_render_without_OpenCASCADE = false;
 	}
 
 	return true;

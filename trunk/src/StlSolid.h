@@ -41,6 +41,8 @@ public:
 	const wxChar* GetTypeString(void)const{return _("STL Solid");}
 	const wxBitmap &GetIcon();
 	void glCommands(bool select, bool marked, bool no_color);
+	void SetColor(const HeeksColor &col){m_color = col;}
+	const HeeksColor* GetColor()const{return &m_color;}
 	void GetBox(CBox &box);
 	void KillGLLists(void);
 	void ModifyByMatrix(const double* m);

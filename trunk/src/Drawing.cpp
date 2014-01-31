@@ -97,13 +97,13 @@ void Drawing::AddPoint()
 		calculated = calculate_item(wxGetApp().m_digitizing->digitized_point);
 		if(calculated){
 			before_add_item();
+			m_prev_object = TempObject();
 			AddObjectsMade();
 			set_previous_direction();
 		}
 		wxGetApp().EndHistory();
 	}
 	
-	if(calculated)m_prev_object = TempObject();
 	ClearObjectsMade();
 	SetStartPosUndoable(wxGetApp().m_digitizing->digitized_point);
 	wxGetApp().m_digitizing->reference_point = wxGetApp().m_digitizing->digitized_point;

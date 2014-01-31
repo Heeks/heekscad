@@ -248,8 +248,7 @@ SectioningDlg::SectioningDlg( wxWindow* parent, SectioningData &data ) : HDialog
 	bSizer1->Add( bSizer3, 0, wxEXPAND, 5 );
 
 	// add OK and Cancel
-	wxBoxSizer *sizerOKCancel = MakeOkAndCancel(wxHORIZONTAL);
-	bSizer1->Add( sizerOKCancel, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, control_border );
+	MakeOkAndCancel(wxHORIZONTAL).AddToSizer(bSizer1);
 	
 	this->SetSizer( bSizer1 );
 	this->Layout();

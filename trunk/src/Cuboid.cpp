@@ -9,6 +9,9 @@
 #include "../interface/PropertyLength.h"
 #include "Gripper.h"
 #include "MarkedList.h"
+#include "HeeksConfig.h"
+#include "CuboidDlg.h"
+#include "HeeksFrame.h"
 
 CCuboid::CCuboid(const gp_Ax2& pos, double x, double y, double z, const wxChar* title, const HeeksColor& col, float opacity)
 :CSolid(BRepPrimAPI_MakeBox(gp_Ax2(pos.Location().XYZ() + gp_XYZ((x < 0) ? x:0.0, (y < 0) ? y:0.0, (z < 0) ? z:0.0), pos.Direction(), pos.XDirection()), fabs(x), fabs(y), fabs(z)), title, col, opacity)
@@ -69,14 +72,17 @@ bool CCuboid::IsDifferent(HeeksObj* other)
 
 static void on_set_x(double value, HeeksObj* object){
 	((CCuboid*)object)->m_x = value;
+	object->OnApplyProperties();
 }
 
 static void on_set_y(double value, HeeksObj* object){
 	((CCuboid*)object)->m_y = value;
+	object->OnApplyProperties();
 }
 
 static void on_set_z(double value, HeeksObj* object){
 	((CCuboid*)object)->m_z = value;
+	object->OnApplyProperties();
 }
 
 void CCuboid::MakeTransformedShape(const gp_Trsf &mat)
@@ -130,15 +136,8 @@ void CCuboid::GetGripperPositions(std::list<GripData> *list, bool just_for_endof
 
 void CCuboid::OnApplyProperties()
 {
-	CCuboid* new_object = new CCuboid(m_pos, m_x, m_y, m_z, m_title.c_str(), m_color, m_opacity);
-	new_object->CopyIDsFrom(this);
-	m_owner->Add(new_object, NULL);
-	m_owner->Remove(this);
-	if(wxGetApp().m_marked_list->ObjectMarked(this))
-	{
-		wxGetApp().m_marked_list->Remove(this, false);
-		wxGetApp().m_marked_list->Add(new_object, true);
-	}
+	*this = CCuboid(m_pos, m_x, m_y, m_z, m_title.c_str(), m_color, m_opacity);
+	this->create_faces_and_edges();
 	wxGetApp().Repaint();
 }
 
@@ -192,8 +191,10 @@ bool CCuboid::Stretch(const double *p, const double* shift, void* data)
 	{
 		CCuboid* new_object = new CCuboid(m_pos, m_x, m_y, m_z, m_title.c_str(), m_color, m_opacity);
 		new_object->CopyIDsFrom(this);
-		m_owner->Add(new_object, NULL);
-		m_owner->Remove(this);
+		wxGetApp().StartHistory();
+		wxGetApp().DeleteUndoably(this);
+		wxGetApp().AddUndoably(new_object,m_owner,NULL);
+		wxGetApp().EndHistory();
 		wxGetApp().m_marked_list->Clear(false);
 		wxGetApp().m_marked_list->Add(new_object, true);
 	}
@@ -254,4 +255,37 @@ void CCuboid::SetFromXMLElement(TiXmlElement* pElem)
 	m_pos = gp_Ax2(make_point(l), make_vector(d), make_vector(x));
 
 	CSolid::SetFromXMLElement(pElem);
+}
+void CCuboid::WriteDefaultValues()
+{
+	HeeksConfig config;
+
+	//config.Write(_T("ProgramMachine"), m_machine.file_name);
+}
+
+void CCuboid::ReadDefaultValues()
+{
+	HeeksConfig config;
+
+	//config.Read(_T("ProgramOutputFile"), &m_output_file, default_path.GetFullPath().c_str());
+}
+
+#if 0
+static bool OnEdit(HeeksObj* object)
+{
+	CuboidDlg dlg(wxGetApp().m_frame, (CCuboid*)object);
+	if(dlg.ShowModal() == wxID_OK)
+	{
+		dlg.GetData((CCuboid*)object);
+		((CCuboid*)object)->WriteDefaultValues();
+		return true;
+	}
+	return false;
+}
+#endif
+
+void CCuboid::GetOnEdit(bool(**callback)(HeeksObj*, std::list<HeeksObj*> *))
+{
+	// to do, dialogs for drawing objects
+	//*callback = OnEdit;
 }
