@@ -183,6 +183,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	history = new MainHistory;
 	m_doing_rollback = false;
 	mouse_wheel_forward_away = true;
+	m_mouse_move_highlighting = true;
 	ctrl_does_rotate = false;
 	m_ruler = new HRuler();
 	m_show_ruler = false;
@@ -224,7 +225,8 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_extrude_to_solid = true;
 	m_revolve_angle = 360.0;
 	m_stl_save_as_binary = true;
-
+	m_mouse_move_highlighting = true;
+	m_highlight_color = HeeksColor(128, 255, 0);
 
     {
         std::list<wxString> extensions;
@@ -418,6 +420,12 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("InputUsesModalDialog"), &m_input_uses_modal_dialog, true);
 	config.Read(_T("DraggingMovesObjects"), &m_dragging_moves_objects, true);
 	config.Read(_T("STLSaveBinary"), &m_stl_save_as_binary, true);
+	config.Read(_T("MouseMoveHighlighting"), &m_mouse_move_highlighting, true);
+	{
+		int color = HeeksColor(128, 255, 0).COLORREF_color();
+		config.Read(_T("HighlightColor"), &color);
+		m_highlight_color = HeeksColor((long)color);
+	}
 
 	HDimension::ReadFromConfig(config);
 
@@ -586,6 +594,9 @@ void HeeksCADapp::WriteConfig()
 	config.Write(_T("RevolveAngle"), m_revolve_angle);
 	config.Write(_T("SolidViewMode"), m_solid_view_mode);
 	config.Write(_T("STLSaveBinary"), m_stl_save_as_binary);
+
+	config.Write(_T("MouseMoveHighlighting"), m_mouse_move_highlighting);
+	config.Write(_T("HighlightColor"), m_highlight_color.COLORREF_color());
 
 	HDimension::WriteToConfig(config);
 
@@ -3131,6 +3142,18 @@ void on_set_allow_opengl_stippling(bool value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+void on_set_mouse_move_highlighting(bool value, HeeksObj* object)
+{
+	wxGetApp().m_mouse_move_highlighting = value;
+	wxGetApp().Repaint();
+}
+
+void on_set_highlight_color(HeeksColor value, HeeksObj* object)
+{
+	wxGetApp().m_highlight_color = value;
+	wxGetApp().Repaint();
+}
+
 void on_set_solid_view_mode(int value, HeeksObj* object, bool from_undo_redo)
 {
 	wxGetApp().m_solid_view_mode = (SolidViewMode)value;
@@ -3254,6 +3277,8 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	}
 	view_options->m_list.push_back(new PropertyCheck(_("input uses modal dialog"), m_input_uses_modal_dialog, NULL, on_input_uses_modal_dialog));
 	view_options->m_list.push_back(new PropertyCheck(_("dragging moves objects"), m_dragging_moves_objects, NULL, on_dragging_moves_objects));
+	view_options->m_list.push_back(new PropertyCheck(_("highlight items under mouse"), m_mouse_move_highlighting, NULL, on_set_mouse_move_highlighting));
+	view_options->m_list.push_back ( new PropertyColor ( _("highlight color"), m_highlight_color, NULL, on_set_highlight_color ) );
 
 	list->push_back(view_options);
 
@@ -3520,13 +3545,7 @@ public:
 		HeeksObj* object = m_marked_object->GetObject();
 		if(object == NULL)return;
 
-		std::list<HeeksObj*> others;
-		for(std::list<HeeksObj*>::iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
-		{
-			HeeksObj* o = *It;
-			if(o != object)others.push_back(o);
-		}
-		m_marked_object->GetObject()->Edit(&others);
+		m_marked_object->GetObject()->Edit();
 	}
 	bool CallChangedOnRun(){return false;}
 };
@@ -3594,7 +3613,7 @@ void HeeksCADapp::GetTools2(MarkedObject* marked_object, std::list<Tool*>& t_lis
 
 		tools.push_back(new MarkObjectTool(marked_object, point, control_pressed));
 
-		bool(*callback)(HeeksObj*, std::list<HeeksObj*> *) = NULL;
+		bool(*callback)(HeeksObj*) = NULL;
 		marked_object->GetObject()->GetOnEdit(&callback);
 		if(callback)tools.push_back(new EditObjectTool(marked_object));
 

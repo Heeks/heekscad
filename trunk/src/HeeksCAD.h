@@ -132,6 +132,8 @@ public:
 	bool m_allow_opengl_stippling;
 	SolidViewMode m_solid_view_mode;
 	bool m_stl_save_as_binary;
+	bool m_mouse_move_highlighting;
+	HeeksColor m_highlight_color;
 
 	//gp_Trsf digitizing_matrix;
 	CoordinateSystem *m_current_coordinate_system;
