@@ -145,8 +145,10 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 {
 	m_version_number = _T("0 27 0");
 	m_geom_tol = 0.000001;
+
 	TiXmlBase::SetRequiredDecimalPlaces( DecimalPlaces(m_geom_tol) );	 // Ensure we write XML in enough accuracy to be useful when re-read.
 
+	m_sketch_reorder_tol = 0.01;
 	m_view_units = 1.0;
 	for(int i = 0; i<NUM_BACKGROUND_COLORS; i++)background_color[i] = HeeksColor(0, 0, 0);
 	m_background_mode = BackgroundModeOneColor;
@@ -426,6 +428,7 @@ bool HeeksCADapp::OnInit()
 		config.Read(_T("HighlightColor"), &color);
 		m_highlight_color = HeeksColor((long)color);
 	}
+	config.Read(_T("SketchReorderTolerance"), &m_sketch_reorder_tol, 0.01);
 
 	HDimension::ReadFromConfig(config);
 
@@ -2766,6 +2769,14 @@ void on_set_geom_tol(double value, HeeksObj* object)
 	TiXmlBase::SetRequiredDecimalPlaces( DecimalPlaces(value) );
 }
 
+void on_set_sketch_reorder_tol(double value, HeeksObj* object)
+{
+	wxGetApp().m_sketch_reorder_tol = value;
+	HeeksConfig config;
+	config.Write(_T("SketchReorderTolerance"), wxGetApp().m_sketch_reorder_tol);
+	wxGetApp().Repaint();
+}
+
 void on_set_face_to_sketch_deviation(double value, HeeksObj* object)
 {
 	FaceToSketchTool::deviation = value;
@@ -3306,6 +3317,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	drawing->m_list.push_back ( new PropertyColor ( _("current color"),  current_color, NULL, on_set_current_color ) );
 	drawing->m_list.push_back ( new PropertyColor ( _("construction color"),  construction_color, NULL, on_set_construction_color ) );
 	drawing->m_list.push_back(new PropertyLength(_("geometry tolerance"), m_geom_tol, NULL, on_set_geom_tol));
+	drawing->m_list.push_back(new PropertyLength(_("sketch reorder tolerance"), m_sketch_reorder_tol, NULL, on_set_sketch_reorder_tol));
 	drawing->m_list.push_back(new PropertyLength(_("face to sketch deviaton"), FaceToSketchTool::deviation, NULL, on_set_face_to_sketch_deviation));
 	drawing->m_list.push_back(new PropertyCheck(_("Use old solid fuse ( to prevent coplanar faces )"), useOldFuse, NULL, on_useOldFuse));
 	drawing->m_list.push_back(new PropertyCheck(_("Extrude makes a solid"), m_extrude_to_solid, NULL, on_extrude_to_solid));
