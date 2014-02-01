@@ -143,6 +143,16 @@ static bool SketchOrderAvailable(SketchOrderType old_order, SketchOrderType new_
 		}
 		break;
 
+	case SketchOrderTypeMultipleCurves:
+		switch(new_order)
+		{
+		case SketchOrderTypeReOrder:
+			return true;
+		default:
+			break;
+		}
+		break;
+
 	default:
 		break;
 	}
@@ -563,7 +573,7 @@ void CSketch::CalculateSketchOrder()
 			double prev_e[3], s[3];
 			if(!prev_object->GetEndPoint(prev_e)){well_ordered = false; break;}
 			if(!object->GetStartPoint(s)){well_ordered = false; break;}
-			if(!(make_point(prev_e).IsEqual(make_point(s), wxGetApp().m_geom_tol))){well_ordered = false; break;}
+			if(!(make_point(prev_e).IsEqual(make_point(s), wxGetApp().m_sketch_reorder_tol))){well_ordered = false; break;}
 		}
 
 		if(first_object == NULL)first_object = object;
@@ -579,7 +589,7 @@ void CSketch::CalculateSketchOrder()
 			{
 				if(first_object->GetStartPoint(s))
 				{
-					if(make_point(e).IsEqual(make_point(s), wxGetApp().m_geom_tol))
+					if(make_point(e).IsEqual(make_point(s), wxGetApp().m_sketch_reorder_tol))
 					{
 						// closed
 						if(IsClockwise())m_order = SketchOrderTypeCloseCW;
@@ -621,6 +631,7 @@ bool CSketch::ReOrderSketch(SketchOrderType new_order)
 		break;
 
 	case SketchOrderTypeBad:
+	case SketchOrderTypeMultipleCurves:
 		switch(new_order)
 		{
 		case SketchOrderTypeBad:
@@ -835,7 +846,7 @@ bool CSketchRelinker::TryAdd(HeeksObj* object)
 
 		// try the object, the right way round
 		object->GetStartPoint(new_point);
-		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_geom_tol))
+		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_sketch_reorder_tol))
 		{
 			m_new_lists.back().push_back(object);
 			m_new_back = object;
@@ -845,7 +856,7 @@ bool CSketchRelinker::TryAdd(HeeksObj* object)
 
 		// try the object, the wrong way round
 		object->GetEndPoint(new_point);
-		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_geom_tol))
+		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_sketch_reorder_tol))
 		{
 			CSketch::ReverseObject(object);
 			m_new_lists.back().push_back(object);
@@ -859,7 +870,7 @@ bool CSketchRelinker::TryAdd(HeeksObj* object)
 
 		// try the object, the right way round
 		object->GetEndPoint(new_point);
-		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_geom_tol))
+		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_sketch_reorder_tol))
 		{
 			m_new_lists.back().push_front(object);
 			m_new_front = object;
@@ -869,7 +880,7 @@ bool CSketchRelinker::TryAdd(HeeksObj* object)
 
 		// try the object, the wrong way round
 		object->GetStartPoint(new_point);
-		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_geom_tol))
+		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_sketch_reorder_tol))
 		{
 			CSketch::ReverseObject(object);
 			m_new_lists.back().push_front(object);
