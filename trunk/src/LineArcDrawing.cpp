@@ -333,7 +333,7 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 			DigitizedPoint::GetLinePoints(GetStartPos(), end, p1, p2);
 			if(p1.IsEqual(p2, wxGetApp().m_geom_tol))return false;
 			if(TempObject() == NULL){
-				AddToTempObjects(new HILine(p1, p2, &wxGetApp().construction_color));
+				AddToTempObjects(new HILine(p1, p2, &wxGetApp().current_color));
 			}
 			else{
 				((HILine*)TempObject())->A = p1;
@@ -352,7 +352,7 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 			gp_Elips elip;
 			DigitizedPoint::GetEllipse(GetBeforeStartPos(), GetStartPos(), end,elip);
 					
-			AddToTempObjects(new HEllipse(elip, &wxGetApp().construction_color));
+			AddToTempObjects(new HEllipse(elip, &wxGetApp().current_color));
 
 		}
 		else
@@ -384,7 +384,7 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 			}
 
 			if(TempObject() == NULL){
-				AddToTempObjects(new HSpline(spline, &wxGetApp().construction_color));
+				AddToTempObjects(new HSpline(spline, &wxGetApp().current_color));
 			}
 			else{
 				((HSpline*)TempObject())->m_spline = spline;
@@ -408,7 +408,7 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 					radius_for_circle = p1.Distance(p2);
 
 					if(TempObject() == NULL){
-						AddToTempObjects(new HCircle(gp_Circ(gp_Ax2(p1, gp_Dir(0, 0, 1)), radius_for_circle), &wxGetApp().construction_color));
+						AddToTempObjects(new HCircle(gp_Circ(gp_Ax2(p1, gp_Dir(0, 0, 1)), radius_for_circle), &wxGetApp().current_color));
 					}
 					else{
 						((HCircle*)TempObject())->C = p1;
@@ -423,7 +423,7 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 					if(DigitizedPoint::GetTangentCircle(GetBeforeStartPos(), GetStartPos(), end, c))
 					{
 						if(TempObject() == NULL){
-							AddToTempObjects(new HCircle(c, &wxGetApp().construction_color));
+							AddToTempObjects(new HCircle(c, &wxGetApp().current_color));
 						}
 						else{
 							((HCircle*)TempObject())->SetCircle(c);
@@ -437,7 +437,7 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 					if(DigitizedPoint::GetCircleBetween(GetStartPos(), end, c))
 					{
 						if(TempObject() == NULL){
-							AddToTempObjects(new HCircle(c, &wxGetApp().construction_color));
+							AddToTempObjects(new HCircle(c, &wxGetApp().current_color));
 						}
 						else{
 							((HCircle*)TempObject())->SetCircle(c);
@@ -448,7 +448,7 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 			case CentreAndRadiusCircleMode:
 				{
 					if(TempObject()==NULL){
-						AddToTempObjects(new HCircle(gp_Circ(gp_Ax2(end.m_point, gp_Dir(0, 0, 1)), radius_for_circle), &wxGetApp().construction_color));
+						AddToTempObjects(new HCircle(gp_Circ(gp_Ax2(end.m_point, gp_Dir(0, 0, 1)), radius_for_circle), &wxGetApp().current_color));
 					}
 					else{
 						((HCircle*)TempObject())->C = end.m_point;

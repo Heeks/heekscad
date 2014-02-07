@@ -287,14 +287,7 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 		if(button)
 		{
 			if(button->obj)
-			{
-				bool(*callback)(HeeksObj*) = NULL;
-				button->obj->GetOnEdit(&callback);
-				if(callback)
-				{
-					(*callback)(button->obj);
-				}
-			}
+				wxGetApp().EditUndoably(button->obj);
 		}
 	}
 

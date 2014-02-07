@@ -31,6 +31,8 @@ public:
 
 	bool InternalRollBack(void);
 	bool InternalRollForward(void);
+	bool CanUndo(void);
+	bool CanRedo(void);
 	void DoUndoable(Undoable *);
 	void Add(Undoable *);
 	void StartHistory();

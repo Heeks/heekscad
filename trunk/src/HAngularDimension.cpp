@@ -208,30 +208,14 @@ void HAngularDimension::glCommands(bool select, bool marked, bool no_color)
 
 void HAngularDimension::DrawLine(gp_Pnt p1, gp_Pnt p2)
 {
-	if (wxGetApp().m_allow_opengl_stippling)
-	{
-		glEnable(GL_LINE_STIPPLE);
-		glLineStipple(3, 0xaaaa);
-	}
-
 	glBegin(GL_LINES);
 	glVertex2d(p1.X(),p1.Y());
 	glVertex2d(p2.X(),p2.Y());
 	glEnd();
-	if (wxGetApp().m_allow_opengl_stippling)
-	{
-		glDisable(GL_LINE_STIPPLE);
-	}
 }
 
 void HAngularDimension::DrawArc(gp_Pnt center, double r, double a1, double a2)
 {
-	if (wxGetApp().m_allow_opengl_stippling)
-	{
-		glEnable(GL_LINE_STIPPLE);
-		glLineStipple(3, 0xaaaa);
-	}
-
 	glBegin(GL_LINE_STRIP);
 	double da = a2 - a1;
 	for(int i=0; i < 100; i++)
@@ -239,10 +223,6 @@ void HAngularDimension::DrawArc(gp_Pnt center, double r, double a1, double a2)
 		glVertex2d(center.X() + cos(a1 + da*i/100.0)*r,center.Y() + sin(a1 + da*i/100.0)*r);
 	}
 	glEnd();
-	if (wxGetApp().m_allow_opengl_stippling)
-	{
-		glDisable(GL_LINE_STIPPLE);
-	}
 }
 
 HAngularDimension* angular_dimension_for_tool = NULL;

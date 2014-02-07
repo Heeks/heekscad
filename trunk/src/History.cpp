@@ -31,8 +31,7 @@ void History::RollBack(void)
 
 bool History::InternalRollBack(void)
 {
-	if(m_undoables.size() == 0)return false;
-	if(m_curpos == m_undoables.begin())return false;
+	if(!CanUndo())return false;
 	Undoable *u;
 	m_curpos--;
 	u = *m_curpos;
@@ -42,11 +41,24 @@ bool History::InternalRollBack(void)
 
 bool History::InternalRollForward(void)
 {
-	if(m_undoables.size() == 0)return false;
-	if(m_curpos == m_undoables.end())return false;
+	if(!CanRedo())return false;
 	Undoable *u = *m_curpos;
 	u->Run(true);
 	m_curpos++;
+	return true;
+}
+
+bool History::CanUndo(void)
+{
+	if(m_undoables.size() == 0)return false;
+	if(m_curpos == m_undoables.begin())return false;
+	return true;
+}
+
+bool History::CanRedo(void)
+{
+	if(m_undoables.size() == 0)return false;
+	if(m_curpos == m_undoables.end())return false;
 	return true;
 }
 

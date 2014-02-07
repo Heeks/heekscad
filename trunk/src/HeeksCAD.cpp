@@ -143,7 +143,7 @@ static unsigned int DecimalPlaces( const double value )
 
 HeeksCADapp::HeeksCADapp(): ObjList()
 {
-	m_version_number = _T("0 27 0");
+	m_version_number = _T("0 29 0");
 	m_geom_tol = 0.000001;
 
 	TiXmlBase::SetRequiredDecimalPlaces( DecimalPlaces(m_geom_tol) );	 // Ensure we write XML in enough accuracy to be useful when re-read.
@@ -153,7 +153,6 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	for(int i = 0; i<NUM_BACKGROUND_COLORS; i++)background_color[i] = HeeksColor(0, 0, 0);
 	m_background_mode = BackgroundModeOneColor;
 	current_color = HeeksColor(0, 0, 0);
-	construction_color = HeeksColor(0, 0, 255);
 	face_selection_color = HeeksColor(0, 0, 0);
 	input_mode_object = NULL;
 	cur_mouse_pos.x = 0;
@@ -324,8 +323,8 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("DrawRadius"), &digitizing_radius);
 	{
 		int default_color[NUM_BACKGROUND_COLORS] = {
-			HeeksColor(255, 175, 96).COLORREF_color(),
-			HeeksColor(198, 217, 119).COLORREF_color(),
+			HeeksColor(187, 233, 255).COLORREF_color(),
+			HeeksColor(255, 255, 255).COLORREF_color(),
 			HeeksColor(247, 198, 243).COLORREF_color(),
 			HeeksColor(193, 235, 236).COLORREF_color(),
 			HeeksColor(255, 255, 255).COLORREF_color(),
@@ -360,17 +359,6 @@ bool HeeksCADapp::OnInit()
 		current_color = HeeksColor((unsigned char)r, (unsigned char)g, (unsigned char)b);
 	}
 	{
-		wxString str;
-		config.Read(_T("ConstructionColor"), &str, _T("0 0 255"));
-		int r = 0, g = 0, b = 255;
-#if wxUSE_UNICODE
-		swscanf(str, _T("%d %d %d"), &r, &g, &b);
-#else
-		sscanf(str, _T("%d %d %d"), &r, &g, &b);
-#endif
-		construction_color = HeeksColor((unsigned char)r, (unsigned char)g, (unsigned char)b);
-	}
-	{
 		int color = HeeksColor(0, 255, 0).COLORREF_color();
 		config.Read(_T("FaceSelectionColor"), &color);
 		face_selection_color = HeeksColor((long)color);
@@ -394,7 +382,6 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("ExtrudeRemovesSketches"), &m_extrude_removes_sketches, true);
 	config.Read(_T("LoftRemovesSketches"), &m_loft_removes_sketches, true);
 	config.Read(_T("GraphicsTextMode"), (int*)(&m_graphics_text_mode), GraphicsTextModeWithHelp);
-	config.Read(_T("AllowOpenGLStippling"), &m_allow_opengl_stippling, true);
 
 	config.Read(_T("DxfMakeSketch"), &HeeksDxfRead::m_make_as_sketch, false);
 	config.Read(_T("DxfIgnoreErrors"), &HeeksDxfRead::m_ignore_errors, false);
@@ -530,7 +517,6 @@ bool HeeksCADapp::OnInit()
 		wprintf(_T("user local data directory: ") + sp.GetUserLocalDataDir()  + _T("\n"));
 	#endif
 #endif
-        //wxLog::SetActiveTarget(new wxLogStderr());
 	
 	return TRUE;
 }
@@ -560,7 +546,6 @@ void HeeksCADapp::WriteConfig()
 	config.Write(_T("BackgroundMode"), (int)m_background_mode);
 	config.Write(_T("FaceSelectionColor"), face_selection_color.COLORREF_color());
 	config.Write(_T("CurrentColor"), wxString::Format( _T("%d %d %d"), current_color.red, current_color.green, current_color.blue));
-	config.Write(_T("ConstructionColor"), wxString::Format(_T("%d %d %d"), construction_color.red, construction_color.green, construction_color.blue));
 	config.Write(_T("RotateMode"), m_rotate_mode);
 	config.Write(_T("Antialiasing"), m_antialiasing);
 	config.Write(_T("GridMode"), grid_mode);
@@ -580,7 +565,6 @@ void HeeksCADapp::WriteConfig()
 	config.Write(_T("ExtrudeRemovesSketches"), m_extrude_removes_sketches);
 	config.Write(_T("LoftRemovesSketches"), m_loft_removes_sketches);
 	config.Write(_T("GraphicsTextMode"), m_graphics_text_mode);
-	config.Write(_T("AllowOpenGLStippling"), m_allow_opengl_stippling);
 	config.Write(_T("DxfMakeSketch"), HeeksDxfRead::m_make_as_sketch);
 	config.Write(_T("DxfIgnoreErrors"), HeeksDxfRead::m_ignore_errors);
 	config.Write(_T("FaceToSketchDeviation"), FaceToSketchTool::deviation);
@@ -2195,7 +2179,7 @@ public:
 						verbose << _T(",") << *itValue;
 						itValue++;
 
-						HPoint *new_point = new HPoint( location, &(wxGetApp().construction_color) );
+						HPoint *new_point = new HPoint( location, &(wxGetApp().current_color) );
 						wxGetApp().Add(new_point, NULL);
 					}
 
@@ -2294,6 +2278,16 @@ bool HeeksCADapp::RollBack(void)
 	bool result = history->InternalRollBack();
 	m_doing_rollback = false;
 	return result;
+}
+
+bool HeeksCADapp::CanUndo(void)
+{
+	return history->CanUndo();
+}
+
+bool HeeksCADapp::CanRedo(void)
+{
+	return history->CanRedo();
 }
 
 bool HeeksCADapp::RollForward(void)
@@ -2453,6 +2447,11 @@ void HeeksCADapp::DeleteUndoably(const std::list<HeeksObj*>& list)
 	DoUndoable(undoable);
 }
 
+void HeeksCADapp::CopyUndoably(HeeksObj* object, HeeksObj* copy_with_new_data)
+{
+	DoUndoable(new CopyObjectUndoable(object, copy_with_new_data));
+}
+
 void HeeksCADapp::TransformUndoably(HeeksObj *object, double *m)
 {
 	if(!object)return;
@@ -2486,6 +2485,18 @@ public:
 void HeeksCADapp::ReverseUndoably(HeeksObj *object)
 {
 	DoUndoable(new ReverseUndoable(object));
+}
+
+void HeeksCADapp::EditUndoably(HeeksObj *object)
+{
+	HeeksObj* copy_object = object->MakeACopy();
+	if(copy_object->Edit())
+	{
+		wxGetApp().CopyUndoably(object, copy_object);
+		object->WriteDefaultValues();
+	}
+	else
+		delete copy_object;
 }
 
 void HeeksCADapp::Transform(std::list<HeeksObj*> objects,double *m)
@@ -2648,11 +2659,6 @@ void on_set_face_color(HeeksColor value, HeeksObj* object)
 void on_set_current_color(HeeksColor value, HeeksObj* object)
 {
 	wxGetApp().current_color = value;
-}
-
-void on_set_construction_color(HeeksColor value, HeeksObj* object)
-{
-	wxGetApp().construction_color = value;
 }
 
 void on_set_grid_mode(int value, HeeksObj* object, bool from_undo_redo)
@@ -3060,18 +3066,6 @@ void on_set_auto_save_interval(int value, HeeksObj* object){
 	config.Write(_T("AutoSaveInterval"), wxGetApp().m_auto_save_interval);
 }
 
-void on_set_loglevel(int value, HeeksObj* object, bool from_undo_redo){
-	wxGetApp().m_frame->SetLogLevel(value);
-}
-
-void on_set_repeatcounts(bool value, HeeksObj* object){
-	wxGetApp().m_frame->SetLogRepeatCounting(value);
-}
-
-void on_set_timestamps(bool value, HeeksObj* object){
-	wxGetApp().m_frame->SetLogLogTimestamps(value);
-}
-
 static void on_set_units(int value, HeeksObj* object, bool from_undo_redo)
 {
 	wxGetApp().m_view_units = (value == 0) ? 1.0:25.4;
@@ -3144,13 +3138,6 @@ static void on_edit_character_space_percentage(const double value, HeeksObj* obj
 	{
 	    wxGetApp().m_pVectorFonts->SetCharacterSpacePercentage(value);
 	}
-}
-
-
-void on_set_allow_opengl_stippling(bool value, HeeksObj* object)
-{
-	wxGetApp().m_allow_opengl_stippling = value;
-	wxGetApp().Repaint();
 }
 
 void on_set_mouse_move_highlighting(bool value, HeeksObj* object)
@@ -3278,7 +3265,6 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 		view_options->m_list.push_back ( new PropertyChoice ( _("units"),  choices, choice, this, on_set_units ) );
 	}
 	view_options->m_list.push_back(new PropertyCheck(_("flat on screen dimension text"), HDimension::DrawFlat, NULL, on_dimension_draw_flat));
-	view_options->m_list.push_back(new PropertyCheck(_("Allow OpenGL stippling"), m_allow_opengl_stippling, NULL, on_set_allow_opengl_stippling));
 	{
 		std::list< wxString > choices;
 		choices.push_back ( wxString ( _("faces and edges") ) );
@@ -3315,7 +3301,6 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 
 	PropertyList* drawing = new PropertyList(_("drawing"));
 	drawing->m_list.push_back ( new PropertyColor ( _("current color"),  current_color, NULL, on_set_current_color ) );
-	drawing->m_list.push_back ( new PropertyColor ( _("construction color"),  construction_color, NULL, on_set_construction_color ) );
 	drawing->m_list.push_back(new PropertyLength(_("geometry tolerance"), m_geom_tol, NULL, on_set_geom_tol));
 	drawing->m_list.push_back(new PropertyLength(_("sketch reorder tolerance"), m_sketch_reorder_tol, NULL, on_set_sketch_reorder_tol));
 	drawing->m_list.push_back(new PropertyLength(_("face to sketch deviaton"), FaceToSketchTool::deviation, NULL, on_set_face_to_sketch_deviation));
@@ -3376,23 +3361,6 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	font_options->m_list.push_back( new PropertyDouble(_("Character Space Percentage"), m_character_space_percentage, this, on_edit_character_space_percentage));
 	list->push_back(font_options);
 
-	PropertyList* logging_options = new PropertyList(_("logging"));
-	{
-		std::list< wxString > choices;
-		choices.push_back ( wxString ( _("FatalError") ) );
-		choices.push_back ( wxString ( _("Error") ) );
-		choices.push_back ( wxString ( _("Warning") ) );
-		choices.push_back ( wxString ( _("Message") ) );
-		choices.push_back ( wxString ( _("Status") ) );
-		choices.push_back ( wxString ( _("Info") ) );
-		choices.push_back ( wxString ( _("Debug") ) );
-		choices.push_back ( wxString ( _("Trace") ) );
-		int choice = CHeeksFrame::m_loglevel;
-		logging_options->m_list.push_back ( new PropertyChoice ( _("log level"),  choices, choice, this, on_set_loglevel ) );
-	}
-	logging_options->m_list.push_back(new PropertyCheck(_("use repetition counting"), (int)CHeeksFrame::m_logrepeatcounts, NULL, on_set_repeatcounts));
-	logging_options->m_list.push_back(new PropertyCheck(_("use timestamps"), (int)CHeeksFrame::m_logtimestamps, NULL, on_set_timestamps));
-	list->push_back(logging_options);
 }
 
 void HeeksCADapp::DeleteMarkedItems()
@@ -3555,9 +3523,7 @@ public:
 	void Run(){
 		if(m_marked_object == NULL)return;
 		HeeksObj* object = m_marked_object->GetObject();
-		if(object == NULL)return;
-
-		m_marked_object->GetObject()->Edit();
+		if(object)wxGetApp().EditUndoably(object);
 	}
 	bool CallChangedOnRun(){return false;}
 };

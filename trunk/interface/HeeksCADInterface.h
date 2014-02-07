@@ -29,7 +29,7 @@ class wxToolBarBase;
 class CNurbSurfaceParams;
 class Plugin;
 class CoordinateSystem;
-
+class Undoable;
 
 #include "SketchOrder.h"
 
@@ -74,6 +74,8 @@ public:
 	virtual wxString GetResFolder();
 	virtual void AddUndoably(HeeksObj* object, HeeksObj* owner);
 	virtual void DeleteUndoably(HeeksObj* object);
+	virtual void CopyUndoably(HeeksObj* object, HeeksObj* copy_with_new_data);
+	virtual void DoUndoable(Undoable *);
 	virtual void StartHistory();
 	virtual void EndHistory(void);
 	virtual HeeksObj* GetMainObject();

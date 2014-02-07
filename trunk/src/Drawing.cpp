@@ -92,8 +92,8 @@ void Drawing::AddPoint()
 	if(wxGetApp().m_digitizing->digitized_point.m_type == DigitizeNoItemType)return;
 
 	bool calculated = false;
+	wxGetApp().StartHistory();
 	if(is_an_add_level(GetDrawStep())){
-		wxGetApp().StartHistory();
 		calculated = calculate_item(wxGetApp().m_digitizing->digitized_point);
 		if(calculated){
 			before_add_item();
@@ -101,7 +101,6 @@ void Drawing::AddPoint()
 			AddObjectsMade();
 			set_previous_direction();
 		}
-		wxGetApp().EndHistory();
 	}
 	
 	ClearObjectsMade();
@@ -113,6 +112,7 @@ void Drawing::AddPoint()
 		next_step = step_to_go_to_after_last_step();
 	}
 	SetDrawStepUndoable(next_step);
+	wxGetApp().EndHistory();
 	m_getting_position = false;
 	m_inhibit_coordinate_change = false;
 	wxGetApp().OnInputModeTitleChanged();

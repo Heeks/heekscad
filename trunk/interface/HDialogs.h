@@ -22,10 +22,14 @@ public:
 class HTypeObjectDropDown: public wxComboBox
 {
 public:
-	std::vector< std::pair< int, wxString > > ids_for_combo;
+	int m_object_type;
+	HeeksObj* m_obj_list;
+	std::vector< std::pair< int, wxString > > m_ids_for_combo;
+
 	HTypeObjectDropDown(wxWindow *parent, wxWindowID id, int object_type, HeeksObj* obj_list);
 	int GetSelectedId();
 	void SelectById(int id);
+	void Recreate();
 
 	static wxArrayString GetObjectArrayString(int object_type, HeeksObj* obj_list, std::vector< std::pair< int, wxString > > &ids_for_combo);
 };
@@ -54,6 +58,7 @@ public:
 	bool m_ignore_event_functions;
 
 	HControl MakeLabelAndControl(const wxString& label, wxWindow* control, wxStaticText** static_text = NULL);
+	HControl MakeLabelAndControl(const wxString& label, wxWindow* control1, wxWindow* control2, wxStaticText** static_text = NULL);
 	wxStaticText *AddLabelAndControl(wxBoxSizer* sizer, const wxString& label, wxWindow* control);
 	HControl MakeOkAndCancel(int orient);
 

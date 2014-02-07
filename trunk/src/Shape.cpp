@@ -27,12 +27,12 @@
 // static member variable
 bool CShape::m_solids_found = false;
 
-CShape::CShape():m_face_gl_list(0), m_edge_gl_list(0), m_opacity(1.0), m_title(_T("")), m_color(0, 0, 0), m_picked_face(NULL), m_volume_found(false)
+CShape::CShape():m_face_gl_list(0), m_edge_gl_list(0), m_opacity(1.0), m_color(0, 0, 0), m_picked_face(NULL), m_volume_found(false)
 {
 	Init();
 }
 
-CShape::CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor& col, float opacity):m_face_gl_list(0), m_edge_gl_list(0), m_shape(shape), m_opacity(opacity), m_title(title), m_color(col), m_picked_face(NULL), m_volume_found(false)
+CShape::CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor& col, float opacity):IdNamedObjList(title), m_face_gl_list(0), m_edge_gl_list(0), m_shape(shape), m_opacity(opacity), m_color(col), m_picked_face(NULL), m_volume_found(false)
 {
 	Init();
 }
@@ -82,7 +82,7 @@ bool CShape::IsDifferent(HeeksObj* other)
 		return true;
 
 	return false;
-	// don't check all the faces and edges ( m_creation_time should be enough ) return ObjList::IsDifferent(other);
+	// don't check all the faces and edges ( m_creation_time should be enough ) return IdNamedObjList::IsDifferent(other);
 }
 
 void CShape::Init()
@@ -274,7 +274,7 @@ public:
 				BRepMesh::Mesh(new_shape, 1.0);
 #endif
 
-				HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of 'Offset Shape'"), SOLID_TYPE_UNKNOWN, shape_for_tools->m_color, shape_for_tools->GetOpacity());
+				HeeksObj* new_object = CShape::MakeObject(new_shape, shape_for_tools->m_title_made_from_id ? _("Result of 'Offset Shape'") : shape_for_tools->m_title.c_str(), SOLID_TYPE_UNKNOWN, shape_for_tools->m_color, shape_for_tools->GetOpacity());
 				wxGetApp().AddUndoably(new_object, shape_for_tools->m_owner, NULL);
 				wxGetApp().DeleteUndoably(shape_for_tools);
 				config.Write(_T("OffsetShapeValue"), offset_value);
@@ -324,10 +324,6 @@ void CShape::ModifyByMatrix(const double* m){
 	delete_faces_and_edges();
 	KillGLLists();
 	create_faces_and_edges();
-}
-
-void CShape::OnEditString(const wxChar* str){
-	m_title.assign(str);
 }
 
 // static member function
@@ -410,7 +406,7 @@ static HeeksObj* Fuse(HeeksObj* s1, HeeksObj* s2){
 		if(wxGetApp().useOldFuse)new_shape = BRepAlgo_Fuse(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
 		else new_shape = BRepAlgoAPI_Fuse(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
 
-		HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of Fuse Operation"), SOLID_TYPE_UNKNOWN, ((CShape*)s1)->m_color, ((CShape*)s1)->GetOpacity());
+		HeeksObj* new_object = CShape::MakeObject(new_shape, ((CShape*)s1)->m_title_made_from_id ? _("Result of Fuse Operation") : ((CShape*)s1)->m_title.c_str(), SOLID_TYPE_UNKNOWN, ((CShape*)s1)->m_color, ((CShape*)s1)->GetOpacity());
 		wxGetApp().AddUndoably(new_object, NULL, NULL);
 		wxGetApp().DeleteUndoably(s1);
 		wxGetApp().DeleteUndoably(s2);
@@ -435,7 +431,7 @@ static HeeksObj* Common(HeeksObj* s1, HeeksObj* s2){
 		TopoDS_Shape sh1, sh2;
 		TopoDS_Shape new_shape = BRepAlgoAPI_Common(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
 
-		HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of Common Operation"), SOLID_TYPE_UNKNOWN, ((CShape*)s1)->m_color, ((CShape*)s1)->GetOpacity());
+		HeeksObj* new_object = CShape::MakeObject(new_shape, ((CShape*)s1)->m_title_made_from_id ? _("Result of Common Operation") : ((CShape*)s1)->m_title.c_str(), SOLID_TYPE_UNKNOWN, ((CShape*)s1)->m_color, ((CShape*)s1)->GetOpacity());
 		wxGetApp().AddUndoably(new_object, NULL, NULL);
 		wxGetApp().DeleteUndoably(s1);
 		wxGetApp().DeleteUndoably(s2);
@@ -601,7 +597,7 @@ HeeksObj* CShape::CutShapes(std::list<HeeksObj*> &list_in, bool dodelete)
 	TopoDS_Shape new_shape;
 	if(Cut(shapes, new_shape))
 	{
-		HeeksObj* new_object = CShape::MakeObject(new_shape, _("Result of Cut Operation"), SOLID_TYPE_UNKNOWN, ((CShape*)first_solid)->m_color, ((CShape*)first_solid)->m_opacity);
+		HeeksObj* new_object = CShape::MakeObject(new_shape, ((CShape*)first_solid)->m_title_made_from_id ? _("Result of Cut Operation") : ((CShape*)first_solid)->m_title.c_str(), SOLID_TYPE_UNKNOWN, ((CShape*)first_solid)->m_color, ((CShape*)first_solid)->m_opacity);
 		wxGetApp().AddUndoably(new_object, NULL, NULL);
 		if(dodelete)
 		{
@@ -1014,7 +1010,7 @@ void CShape::GetTriangles(void(*callbackfunc)(const double* x, const double* n),
 	BRepTools::Clean(m_shape);
 	BRepMesh::Mesh(m_shape, cusp);
 
-	return ObjList::GetTriangles(callbackfunc, cusp, just_one_average_normal);
+	return IdNamedObjList::GetTriangles(callbackfunc, cusp, just_one_average_normal);
 }
 
 double CShape::Area()const{
@@ -1132,5 +1128,5 @@ void CShape::GetProperties(std::list<Property *> *list)
 		list->push_back(new PropertyCheck(_("calculate volume"), false, this, on_calculate_volume));
 	}
 
-	ObjList::GetProperties(list);
+	IdNamedObjList::GetProperties(list);
 }

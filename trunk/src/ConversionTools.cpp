@@ -38,6 +38,7 @@ static AreaUnion union_area;
 static AreaCut cut_area;
 static AreaIntersect intersect_area;
 static AreaXor xor_area;
+static AreaInsideCurves inside_curves;
 
 void GetConversionMenuTools(std::list<Tool*>* t_list){
 	// Tools for multiple selected items.
@@ -111,6 +112,7 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 		t_list->push_back(&cut_area);
 		t_list->push_back(&intersect_area);
 		t_list->push_back(&xor_area);
+		t_list->push_back(&inside_curves);
 	}
 
 	if(wxGetApp().m_marked_list->list().size() > 1)t_list->push_back(&group_selected);
@@ -996,6 +998,15 @@ static void AreaToolRun(int type)
 				case 4:
 					area.Xor(((HArea*)object)->m_area);
 					break;
+				case 5:
+					std::list<CCurve> curves;
+					area.InsideCurves(((HArea*)object)->m_area.m_curves.front(), curves);
+					area = CArea();
+					for(std::list<CCurve>::iterator It = curves.begin(); It != curves.end(); It++)
+					{
+						area.append(*It);
+					}
+					break;
 				}
 			}
 			else
@@ -1008,9 +1019,9 @@ static void AreaToolRun(int type)
 	}
 
 	HArea* new_object = new HArea(area);
-	wxGetApp().Add(new_object, NULL);
+	wxGetApp().AddUndoably(new_object, NULL, NULL);
 
-	wxGetApp().Remove(objects_to_delete);
+	wxGetApp().DeleteUndoably(objects_to_delete);
 }
 
 void AreaUnion::Run(){
@@ -1027,6 +1038,10 @@ void AreaIntersect::Run(){
 
 void AreaXor::Run(){
 	AreaToolRun(4);
+}
+
+void AreaInsideCurves::Run(){
+	AreaToolRun(5);
 }
 
 void CombineSketches::Run(){
