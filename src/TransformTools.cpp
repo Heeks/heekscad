@@ -12,14 +12,8 @@
 #include "HILine.h"
 #include "HeeksConfig.h"
 
-static double from[3];
+//static double from[3];
 static double centre[3];
-
-static void on_move_translate(const double* to)
-{
-	wxGetApp().m_drag_matrix.SetTranslationPart(gp_Vec(make_point(from), make_point(to)));
-	wxGetApp().Repaint(true);
-}
 
 //static
 void TransformTools::RemoveUncopyable()
@@ -51,47 +45,33 @@ void TransformTools::Translate(bool copy)
 		// check for uncopyable objects
 		RemoveUncopyable();
 		if(wxGetApp().m_marked_list->size() == 0)return;
-
-		// input "number of copies"
-		if(!wxGetApp().InputInt(_("Enter number of copies"), _("number of copies"), ncopies))return;
-		if(ncopies < 1)return;
-		config.Write(_T("TranslateNumCopies"), ncopies);
 	}
 
 	// clear the selection
 	std::list<HeeksObj *> selected_items = wxGetApp().m_marked_list->list();
 	wxGetApp().m_marked_list->Clear(true);
 
-	// pick "from" position
-	if(!wxGetApp().PickPosition(_("Click position to move from"), from))return;
+	double from[3], to[3];
+	config.Read(_T("TranslateFromX"), &from[0], 0.0);
+	config.Read(_T("TranslateFromY"), &from[1], 0.0);
+	config.Read(_T("TranslateFromZ"), &from[2], 0.0);
+	config.Read(_T("TranslateToX"), &to[0], 0.0);
+	config.Read(_T("TranslateToY"), &to[1], 0.0);
+	config.Read(_T("TranslateToZ"), &to[2], 0.0);
 
-	// pick "to" position
-	wxGetApp().CreateTransformGLList(selected_items, false);
-	wxGetApp().m_drag_matrix = gp_Trsf();
-	if(!copy)
+	if(!wxGetApp().InputFromAndTo(from, to, copy ? &ncopies : NULL))return;
+
+	if(copy)
 	{
-		for(std::list<HeeksObj*>::const_iterator It = selected_items.begin(); It != selected_items.end(); It++){
-			HeeksObj* object = *It;
-			if(object->m_visible)wxGetApp().m_hidden_for_drag.push_back(object);
-			object->m_visible = false;
-		}
+		if(ncopies < 1)return;
+		config.Write(_T("TranslateNumCopies"), ncopies);
 	}
-	double to[3];
-
-	bool move_to_accepted = wxGetApp().PickPosition(_("Click position to move to"), to, on_move_translate);
-
-	if(!copy)
-	{
-		for(std::list<HeeksObj*>::iterator It = wxGetApp().m_hidden_for_drag.begin(); It != wxGetApp().m_hidden_for_drag.end(); It++)
-		{
-			HeeksObj* object = *It;
-			object->m_visible = true;
-		}
-		wxGetApp().m_hidden_for_drag.clear();
-	}
-	wxGetApp().DestroyTransformGLList();
-
-	if(!move_to_accepted)return;
+	config.Write(_T("TranslateFromX"), from[0]);
+	config.Write(_T("TranslateFromY"), from[1]);
+	config.Write(_T("TranslateFromZ"), from[2]);
+	config.Write(_T("TranslateToX"), to[0]);
+	config.Write(_T("TranslateToY"), to[1]);
+	config.Write(_T("TranslateToZ"), to[2]);
 
 	wxGetApp().StartHistory();
 

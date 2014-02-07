@@ -76,6 +76,14 @@ public:
 	wxString BitmapPath(){return _T("areaxor");}
 };
 
+class AreaInsideCurves: public Tool
+{
+public:
+	void Run();
+	const wxChar* GetTitle(){return _("Inside Curves");}
+	wxString BitmapPath(){return _T("areaxor");}
+};
+
 class ConvertSketchesToFace: public Tool
 {
 public:

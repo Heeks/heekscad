@@ -44,14 +44,14 @@ void PickCreateRuledSurface()
 			}
 		}
 
-		wxGetApp().Remove(sketches_to_delete);
-
 		TopoDS_Shape shape;
 		if(CreateRuledSurface(wire_list, shape, true))
 		{
+			wxGetApp().StartHistory();
+			wxGetApp().DeleteUndoably(sketches_to_delete);
 			HeeksObj* new_object = CShape::MakeObject(shape, _("Ruled Surface"), SOLID_TYPE_UNKNOWN, HeeksColor(51, 45, 51), 1.0f);
-			wxGetApp().Add(new_object, NULL);
-			wxGetApp().Repaint();
+			wxGetApp().AddUndoably(new_object, NULL, NULL);
+			wxGetApp().EndHistory();
 		}
 
 	}
@@ -86,7 +86,7 @@ void ConvertToFaceOrWire(std::list<HeeksObj*> list, std::list<TopoDS_Shape> &fac
 		}
 	}
 
-	wxGetApp().Remove(sketches_or_faces_to_delete);
+	wxGetApp().DeleteUndoably(sketches_or_faces_to_delete);
 }
 
 HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_or_angle, bool solid_if_possible, bool revolution_not_extrusion, double taper_angle_for_extrusion, bool add_new_objects)
@@ -116,7 +116,6 @@ HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_o
 			else
 				break;
 		}
-		wxGetApp().Repaint();
 	}
 
 	for(std::list<TopoDS_Shape>::iterator It = faces_or_wires.begin(); It != faces_or_wires.end(); It++)
@@ -194,6 +193,7 @@ HeeksObj* CreateSweep(std::list<HeeksObj*> &sweep_objects, HeeksObj* sweep_profi
 
 void PickCreateSweep()
 {
+	// undoable
 	if(wxGetApp().m_marked_list->size() == 0)
 	{
 		wxGetApp().PickObjects(_("pick sketches, faces or circles"), MARKING_FILTER_CIRCLE | MARKING_FILTER_SKETCH | MARKING_FILTER_FACE);
@@ -206,7 +206,9 @@ void PickCreateSweep()
 
 	HeeksObj* sweep_profile = wxGetApp().m_marked_list->list().front();
 
+	wxGetApp().StartHistory();
 	CreateSweep(sweep_objects, sweep_profile, true);
+	wxGetApp().EndHistory();
 }
 
 HeeksObj* CreateRuledFromSketches(std::list<HeeksObj*> list, bool make_solid)
@@ -303,7 +305,9 @@ void PickCreateExtrusion()
 
 		if(wxGetApp().m_marked_list->size() > 0)
 		{
+			wxGetApp().StartHistory();
 			CreateExtrusionOrRevolution(wxGetApp().m_marked_list->list(),height, wxGetApp().m_extrude_to_solid, false, taper_angle);
+			wxGetApp().EndHistory();
 		}
 	}
 }

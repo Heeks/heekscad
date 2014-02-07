@@ -74,11 +74,6 @@ private:
 
 
 public:
-	wxLogWindow* m_logger;
-	static int m_loglevel; 			// for wxLog::SetLogLevel((wxLogLevel)m_loglevel)
-	static bool m_logrepeatcounts; 	// for wxLog::SetRepetitionCounting(m_logrepeatcounts)
-	static bool m_logtimestamps; 	// for wxLog::SetLogTimestamps(m_logtimestamps)
-
 	CTreeCanvas *m_tree_canvas;
 	CGraphicsCanvas* m_graphics;
 	CObjPropsCanvas* m_properties;
@@ -109,7 +104,6 @@ public:
 	bool m_viewing_toolbar_removed;
 	bool m_transform_toolbar_removed;
 	int m_objects_menu_id;
-	int m_log_menu_id;
 	int m_options_menu_id;
 	int m_input_menu_id;
 	int m_properties_menu_id;
@@ -147,9 +141,6 @@ public:
 	void SetDefaultLayout(const wxString& str); // call this from dll's OnStartUp
 	void SetToolBarsToLeft();
 	void SetToolBarsSize();
-	void SetLogLevel(const int level);
-	void SetLogRepeatCounting(const bool repeatcounting);
-	void SetLogLogTimestamps(const bool uselogtimestamps);
 	void RefreshInputCanvas();
 	void RefreshProperties();
 	void RefreshOptions();

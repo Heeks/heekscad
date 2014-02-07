@@ -78,7 +78,7 @@ wxString CCylinder::StretchedName(){ return _("Stretched Cylinder");}
 
 void CCylinder::GetProperties(std::list<Property *> *list)
 {
-	CoordinateSystem::GetAx2Properties(list, m_pos);
+	CoordinateSystem::GetAx2Properties(list, m_pos, this);
 	list->push_back(new PropertyLength(_("diameter"), m_radius*2, this, on_set_diameter));
 	list->push_back(new PropertyLength(_("height"), m_height, this, on_set_height));
 
@@ -154,7 +154,7 @@ bool CCylinder::Stretch(const double *p, const double* shift, void* data)
 
 	if(make_a_new_cylinder)
 	{
-		CCylinder* new_object = new CCylinder(m_pos, m_radius, m_height, m_title.c_str(), m_color, m_opacity);
+		CCylinder* new_object = new CCylinder(m_pos, m_radius, m_height, NULL, m_color, m_opacity);
 		new_object->CopyIDsFrom(this);
 		wxGetApp().StartHistory();
 		wxGetApp().DeleteUndoably(this);

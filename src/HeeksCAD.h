@@ -107,7 +107,6 @@ public:
 
 	wxPoint cur_mouse_pos;
 	HeeksColor current_color;
-	HeeksColor construction_color;
 #define NUM_BACKGROUND_COLORS 10
 	HeeksColor background_color[NUM_BACKGROUND_COLORS];
 	BackgroundMode m_background_mode;
@@ -278,6 +277,8 @@ public:
 	void DoUndoable(Undoable *);
 	bool RollBack(void);
 	bool RollForward(void);
+	bool CanUndo(void);
+	bool CanRedo(void);
 	void StartHistory();
 	void EndHistory(void);
 	void ClearRollingForward(void);
@@ -312,9 +313,11 @@ public:
 	void AddUndoably(const std::list<HeeksObj*>& list, HeeksObj* owner);
 	void DeleteUndoably(HeeksObj* object);
 	void DeleteUndoably(const std::list<HeeksObj*>& list);
+	void CopyUndoably(HeeksObj* object, HeeksObj* copy_with_new_data);
 	void TransformUndoably(HeeksObj *object, double *m);
 	void TransformUndoably(const std::list<HeeksObj*>& list, double* m);
 	void ReverseUndoably(HeeksObj *object);
+	void EditUndoably(HeeksObj *object);
 	void WasModified(HeeksObj *object);
 	void WasAdded(HeeksObj *object);
 	void WasRemoved(HeeksObj *object);
@@ -363,6 +366,7 @@ public:
 	bool InputInt(const wxChar* prompt, const wxChar* value_name, int &value);
 	bool InputDouble(const wxChar* prompt, const wxChar* value_name, double &value);
 	bool InputAngleWithPlane(double &angle, double *axis = NULL, double *pos = NULL, int *number_of_copies = NULL, double *axial_shift = NULL);
+	bool InputFromAndTo(double *from, double *to, int *number_of_copies = NULL);
 	bool InputLength(const wxChar* prompt, const wxChar* value_name, double &value);
 	void ShowModalOptions();
 	void SectioningDialog();

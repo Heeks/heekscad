@@ -99,7 +99,7 @@ wxString CCuboid::StretchedName(){ return _("Stretched Cuboid");}
 
 void CCuboid::GetProperties(std::list<Property *> *list)
 {
-	CoordinateSystem::GetAx2Properties(list, m_pos);
+	CoordinateSystem::GetAx2Properties(list, m_pos, this);
 	list->push_back(new PropertyLength(_("width ( x )"), m_x, this, on_set_x));
 	list->push_back(new PropertyLength(_("height( y )"), m_y, this, on_set_y));
 	list->push_back(new PropertyLength(_("depth ( z )"), m_z, this, on_set_z));
@@ -189,7 +189,7 @@ bool CCuboid::Stretch(const double *p, const double* shift, void* data)
 
 	if(make_a_new_cuboid)
 	{
-		CCuboid* new_object = new CCuboid(m_pos, m_x, m_y, m_z, m_title.c_str(), m_color, m_opacity);
+		CCuboid* new_object = new CCuboid(m_pos, m_x, m_y, m_z, NULL, m_color, m_opacity);
 		new_object->CopyIDsFrom(this);
 		wxGetApp().StartHistory();
 		wxGetApp().DeleteUndoably(this);

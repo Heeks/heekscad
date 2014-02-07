@@ -19,15 +19,21 @@ wxSizerItem* HControl::AddToSizer(wxSizer* s)
 std::vector< std::pair< int, wxString > > global_ids_for_combo;
 
 HTypeObjectDropDown::HTypeObjectDropDown(wxWindow *parent, wxWindowID id, int object_type, HeeksObj* obj_list)
-:ids_for_combo(global_ids_for_combo)
+:m_ids_for_combo(global_ids_for_combo), m_object_type(object_type), m_obj_list(obj_list)
 ,wxComboBox(parent, id, _T(""), wxDefaultPosition, wxDefaultSize, GetObjectArrayString(object_type, obj_list, global_ids_for_combo))
 {
+}
+
+void HTypeObjectDropDown::Recreate()
+{
+	Clear();
+	Append(GetObjectArrayString(m_object_type, m_obj_list, m_ids_for_combo));
 	global_ids_for_combo.clear();
 }
 
-
 wxArrayString HTypeObjectDropDown::GetObjectArrayString(int object_type, HeeksObj* obj_list, std::vector< std::pair< int, wxString > > &ids_for_combo)
 {
+	ids_for_combo.clear();
 	wxArrayString str_array;
 
 	// Always add a value of zero to allow for an absense of object use.
@@ -52,15 +58,15 @@ wxArrayString HTypeObjectDropDown::GetObjectArrayString(int object_type, HeeksOb
 int HTypeObjectDropDown::GetSelectedId()
 {
 	if(GetSelection() < 0)return 0;
-	return ids_for_combo[GetSelection()].first;
+	return m_ids_for_combo[GetSelection()].first;
 }
 
 void HTypeObjectDropDown::SelectById(int id)
 {
 	// set the combo to the correct item
-	for(unsigned int i = 0; i < ids_for_combo.size(); i++)
+	for(unsigned int i = 0; i < m_ids_for_combo.size(); i++)
 	{
-		if(ids_for_combo[i].first == id)
+		if(m_ids_for_combo[i].first == id)
 		{
 			SetSelection(i);
 			break;
@@ -90,6 +96,18 @@ HControl HDialog::MakeLabelAndControl(const wxString& label, wxWindow* control, 
 	wxStaticText *static_label = new wxStaticText(this, wxID_ANY, label);
 	sizer_horizontal->Add( static_label, 0, wxRIGHT | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, control_border );
 	sizer_horizontal->Add( control, 1, wxLEFT | wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL, control_border );
+	if(static_text)*static_text = static_label;
+
+	return HControl(sizer_horizontal, wxEXPAND | wxALL);
+}
+
+HControl HDialog::MakeLabelAndControl(const wxString& label, wxWindow* control1, wxWindow* control2, wxStaticText** static_text)
+{
+    wxBoxSizer *sizer_horizontal = new wxBoxSizer(wxHORIZONTAL);
+	wxStaticText *static_label = new wxStaticText(this, wxID_ANY, label);
+	sizer_horizontal->Add( static_label, 0, wxRIGHT | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, control_border );
+	sizer_horizontal->Add( control1, 1, wxLEFT | wxRIGHT | wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL, control_border );
+	sizer_horizontal->Add( control2, 0, wxLEFT | wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL, control_border );
 	if(static_text)*static_text = static_label;
 
 	return HControl(sizer_horizontal, wxEXPAND | wxALL);

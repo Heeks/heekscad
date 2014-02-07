@@ -831,10 +831,6 @@ int wxSystemColourPropertyClass::ColToInd( const wxColour& colour )
 
         if ( GetColour(ind) == pixval )
         {
-            /*wxLogDebug(wxT("%s(%s): Index %i for ( getcolour(%i,%i,%i), colour(%i,%i,%i))"),
-                GetClassName(),GetLabel().c_str(),
-                (int)i,(int)GetColour(ind).Red(),(int)GetColour(ind).Green(),(int)GetColour(ind).Blue(),
-                (int)colour.Red(),(int)colour.Green(),(int)colour.Blue());*/
             return ind;
         }
     }
@@ -907,15 +903,6 @@ wxString wxSystemColourPropertyClass::GetValueAsString( int argFlags ) const
          (argFlags & wxPG_PROPERTY_SPECIFIC) )
     {
 
-/*#ifdef __WXDEBUG__
-        // Sanity check
-        if ( m_value.m_type != wxPG_COLOUR_CUSTOM &&
-             (GetEditorClass() == wxPG_EDITOR(Choice) ||
-              GetEditorClass() == wxPG_EDITOR(ChoiceAndButton)) )
-        {
-            wxLogDebug(wxT("wxSystemColourPropertyClass: Assumed wrong editor type!!!"));
-        }
-#endif*/
 
         return wxString::Format(wxT("(%i,%i,%i)"),
                                 (int)m_value.m_colour.Red(),
