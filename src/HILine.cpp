@@ -43,11 +43,6 @@ void HILine::glCommands(bool select, bool marked, bool no_color)
 	if(!no_color)
 	{
 		wxGetApp().glColorEnsuringContrast(*GetColor());
-		if (wxGetApp().m_allow_opengl_stippling)
-		{
-			glEnable(GL_LINE_STIPPLE);
-			glLineStipple(3, 0xaaaa);
-		}
 	}
 	GLfloat save_depth_range[2];
 	if(marked)
@@ -75,13 +70,6 @@ void HILine::glCommands(bool select, bool marked, bool no_color)
 	{
 		glLineWidth(1);
 		glDepthRange(save_depth_range[0], save_depth_range[1]);
-	}
-	if(!no_color)
-	{
-		if (wxGetApp().m_allow_opengl_stippling)
-		{
-			glDisable(GL_LINE_STIPPLE);
-		}
 	}
 }
 

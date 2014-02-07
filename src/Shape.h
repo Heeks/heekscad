@@ -7,8 +7,9 @@
 #include "../interface/Material.h"
 #include "ShapeData.h"
 #include "ShapeTools.h"
+#include "../interface/IdNamedObjList.h"
 
-class CShape:public ObjList{
+class CShape:public IdNamedObjList{
 protected:
 	int m_face_gl_list;
 	int m_edge_gl_list;
@@ -31,7 +32,6 @@ public:
 	CFaceList* m_faces;
 	CEdgeList* m_edges;
 	CVertexList* m_vertices;
-	wxString m_title;
 	HeeksColor m_color;
 	CFace* m_picked_face;
 
@@ -49,9 +49,6 @@ public:
 	void GetBox(CBox &box);
 	void KillGLLists(void);
 	void ModifyByMatrix(const double* m);
-	const wxChar* GetShortString(void)const{return m_title.c_str();}
-	bool CanEditString(void)const{return true;}
-	void OnEditString(const wxChar* str);
 	void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true);
 	double Area()const;
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);

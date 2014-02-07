@@ -174,7 +174,7 @@ wxString CCone::StretchedName(){ return _("Stretched Cone");}
 
 void CCone::GetProperties(std::list<Property *> *list)
 {
-	CoordinateSystem::GetAx2Properties(list, m_pos);
+	CoordinateSystem::GetAx2Properties(list, m_pos, this);
 	list->push_back(new PropertyLength(_("r1"), m_r1, this, on_set_r1));
 	list->push_back(new PropertyLength(_("r2"), m_r2, this, on_set_r2));
 	list->push_back(new PropertyLength(_("height"), m_height, this, on_set_height));
@@ -287,7 +287,7 @@ bool CCone::Stretch(const double *p, const double* shift, void* data)
 
 	if(make_a_new_cone)
 	{
-		CCone* new_object = new CCone(new_pos, new_r1, new_r2, new_height, m_title.c_str(), m_color, m_opacity);
+		CCone* new_object = new CCone(new_pos, new_r1, new_r2, new_height, NULL, m_color, m_opacity);
 		new_object->CopyIDsFrom(this);
 		wxGetApp().StartHistory();
 		wxGetApp().DeleteUndoably(this);

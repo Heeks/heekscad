@@ -59,18 +59,30 @@ public:
 	}
 };
 
+class MyTextCtrl: public wxTextCtrl
+{
+	wxString m_original_text;
+public:
+	wxString* m_str;
+	MyTextCtrl(wxWindow* parent, wxString *str):wxTextCtrl(parent, wxID_ANY, *str, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE), m_str(str), m_original_text(*str){}
+
+	void OnKillFocusEvent( wxFocusEvent& event );
+
+	DECLARE_EVENT_TABLE()
+};
+
 // a class which simply has text
 class TextCanvas: public ObjectCanvas
 {
 public:
-	wxString* m_str;
-	wxTextCtrl* m_text;
+	static TextCanvas* global_text_canvas;
+
+	MyTextCtrl* m_text;
 	wxBoxSizer* m_sizer;
 
 	TextCanvas(wxWindow* parent, wxString *str);
 	void SetWithObject(HeeksObj* object);
 	void OnTextCtrlEvent(wxCommandEvent& event);
-	void OnKillFocusEvent( wxFocusEvent& event );
 
     DECLARE_NO_COPY_CLASS(TextCanvas)
 	DECLARE_EVENT_TABLE()

@@ -93,25 +93,12 @@ static wxString default_layout_string = _T("layout2|name=ToolBar;caption=General
 
 CHeeksCADInterface heekscad_interface;
 
-int CHeeksFrame::m_loglevel;
-bool CHeeksFrame::m_logrepeatcounts;
-bool CHeeksFrame::m_logtimestamps;
-
 CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSize& size )
 	: wxFrame((wxWindow *)NULL, -1, title, pos, size)
 {
 	wxGetApp().m_frame = this;
 
-	m_logger = new wxLogWindow(NULL,_("Trace Log"),false,false); // disable log popups
-	wxLog::SetActiveTarget(m_logger);
 	HeeksConfig config;
-	config.Read(_T("LogLevel"), &m_loglevel);
-	config.Read(_T("LogRepeatCounting"), &m_logrepeatcounts);
-	config.Read(_T("LogTimestamps"), &m_logtimestamps);
-
-	SetLogLevel(m_loglevel);
-	SetLogRepeatCounting(m_logrepeatcounts);
-	SetLogLogTimestamps(m_logtimestamps);
 
 	m_next_id_for_button = ID_FIRST_EXTERNAL_BUTTON;
 	m_printout = NULL;
@@ -246,38 +233,6 @@ CHeeksFrame::~CHeeksFrame()
 	delete wxLog::SetActiveTarget(NULL);
 }
 
-
-void CHeeksFrame::SetLogLevel(const int level){
-	wxLog::SetLogLevel(level);
-	if (m_loglevel != level) {
-		m_loglevel = level;
-		HeeksConfig config;
-		config.Write(_T("LogLevel"), m_loglevel);
-	}
-}
-
-void CHeeksFrame::SetLogRepeatCounting(const bool repeatcounting) {
-	wxLog::SetRepetitionCounting ((bool) repeatcounting);
-	if (m_logrepeatcounts != repeatcounting) {
-		m_logrepeatcounts = repeatcounting;
-		HeeksConfig config;
-		config.Write(_T("LogRepeatCounting"), m_logrepeatcounts);
-	}
-}
-
-void CHeeksFrame::SetLogLogTimestamps(const bool uselogtimestamps) {
-	if (uselogtimestamps != m_logtimestamps)  {
-		m_logtimestamps = uselogtimestamps;
-		HeeksConfig config;
-		config.Write(_T("LogTimestamps"), m_logtimestamps);
-	}
-	if (m_logtimestamps)  {
-		wxLog::SetTimestamp(_T("[%I:%M:%S%P] "));
-	} else {
-		wxLog::SetTimestamp(NULL);
-	}
-}
-
 void CHeeksFrame::RefreshInputCanvas()
 {
 	if(wxGetApp().m_frame && wxGetApp().m_frame->m_input_canvas)
@@ -385,12 +340,6 @@ static void OnUpdateViewObjects( wxUpdateUIEvent& event )
 	event.Check(wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_tree_canvas).IsShown());
 }
 
-static void OnLog( wxCommandEvent& event )
-{
-	if(wxGetApp().m_frame->m_logger){
-		wxGetApp().m_frame->m_logger->Show(true);
-	}
-}
 
 static void OnViewOptions( wxCommandEvent& event )
 {
@@ -688,14 +637,20 @@ static void OnCoordinateSystem( wxCommandEvent& WXUNUSED( event ) )
 	gp_Dir x = gp_Dir(1, 0, 0).Transformed(mat);
 	gp_Dir y = gp_Dir(0, 1, 0).Transformed(mat);
 	CoordinateSystem* new_object = new CoordinateSystem(_("Coordinate System"), o, x, y);
-	wxGetApp().Add(new_object, NULL);
 	wxGetApp().m_marked_list->Clear(true);
 	wxGetApp().SetInputMode(wxGetApp().m_select_mode);
-	wxGetApp().Repaint();
 
 	// and pick from three points
-	new_object->PickFrom3Points();
-	wxGetApp().m_marked_list->Add(new_object, true);
+	bool result = new_object->PickFrom3Points();
+	if(result)
+	{
+		wxGetApp().AddUndoably(new_object, NULL, NULL);
+		wxGetApp().m_marked_list->Add(new_object, true);
+	}
+	else
+	{
+		delete new_object;
+	}
 }
 
 static void OnNewOrigin( wxCommandEvent& WXUNUSED( event ) )
@@ -705,14 +660,20 @@ static void OnNewOrigin( wxCommandEvent& WXUNUSED( event ) )
 	gp_Dir x = gp_Dir(1, 0, 0).Transformed(mat);
 	gp_Dir y = gp_Dir(0, 1, 0).Transformed(mat);
 	CoordinateSystem* new_object = new CoordinateSystem(_("Coordinate System"), o, x, y);
-	wxGetApp().Add(new_object, NULL);
 	wxGetApp().m_marked_list->Clear(true);
-	wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().SetInputMode(wxGetApp().m_select_mode);
-	wxGetApp().Repaint();
 
 	// and pick from three points
-	new_object->PickFrom1Point();
+	bool result = new_object->PickFrom1Point();
+	if(result)
+	{
+		wxGetApp().AddUndoably(new_object, NULL, NULL);
+		wxGetApp().m_marked_list->Add(new_object, true);
+	}
+	else
+	{
+		delete new_object;
+	}
 }
 
 static void OnOpenButton( wxCommandEvent& event )
@@ -782,6 +743,16 @@ static void OnRedoButton( wxCommandEvent& event )
 {
 	wxGetApp().RollForward();
 	wxGetApp().Repaint();
+}
+
+static void OnUpdateUndo( wxUpdateUIEvent& event )
+{
+	event.Enable(wxGetApp().CanUndo());
+}
+
+static void OnUpdateRedo( wxUpdateUIEvent& event )
+{
+	event.Enable(wxGetApp().CanRedo());
 }
 
 static void OnNewButton( wxCommandEvent& event )
@@ -951,28 +922,28 @@ static void OnGearButton( wxCommandEvent& event )
 static void OnSphereButton( wxCommandEvent& event )
 {
 	gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
-	CSphere* new_object = new CSphere(gp_Pnt(0, 0, 0).Transformed(mat), 5, _("Sphere"), HeeksColor(240, 191, 191), 1.0f);
+	CSphere* new_object = new CSphere(gp_Pnt(0, 0, 0).Transformed(mat), 5, NULL, HeeksColor(240, 191, 191), 1.0f);
 	AddObjectFromButton(new_object);
 }
 
 static void OnCubeButton( wxCommandEvent& event )
 {
 	gp_Trsf mat = wxGetApp().GetDrawMatrix(false);
-	CCuboid* new_object = new CCuboid(gp_Ax2(gp_Pnt(0, 0, 0).Transformed(mat), gp_Dir(0, 0, 1).Transformed(mat), gp_Dir(1, 0, 0).Transformed(mat)), 10, 10, 10, _("Cuboid"), HeeksColor(191, 240, 191), 1.0f);
+	CCuboid* new_object = new CCuboid(gp_Ax2(gp_Pnt(0, 0, 0).Transformed(mat), gp_Dir(0, 0, 1).Transformed(mat), gp_Dir(1, 0, 0).Transformed(mat)), 10, 10, 10, NULL, HeeksColor(191, 240, 191), 1.0f);
 	AddObjectFromButton(new_object);
 }
 
 static void OnCylButton( wxCommandEvent& event )
 {
 	gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
-	CCylinder* new_object = new CCylinder(gp_Ax2(gp_Pnt(0, 0, 0).Transformed(mat), gp_Dir(0, 0, 1).Transformed(mat), gp_Dir(1, 0, 0).Transformed(mat)), 5, 10, _("Cylinder"), HeeksColor(191, 191, 240), 1.0f);
+	CCylinder* new_object = new CCylinder(gp_Ax2(gp_Pnt(0, 0, 0).Transformed(mat), gp_Dir(0, 0, 1).Transformed(mat), gp_Dir(1, 0, 0).Transformed(mat)), 5, 10, NULL, HeeksColor(191, 191, 240), 1.0f);
 	AddObjectFromButton(new_object);
 }
 
 static void OnConeButton( wxCommandEvent& event )
 {
 	gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
-	CCone* new_object = new CCone(gp_Ax2(gp_Pnt(0, 0, 0).Transformed(mat), gp_Dir(0, 0, 1).Transformed(mat), gp_Dir(1, 0, 0).Transformed(mat)), 10, 5, 20, _("Cone"), HeeksColor(240, 240, 191), 1.0f);
+	CCone* new_object = new CCone(gp_Ax2(gp_Pnt(0, 0, 0).Transformed(mat), gp_Dir(0, 0, 1).Transformed(mat), gp_Dir(1, 0, 0).Transformed(mat)), 10, 5, 20, NULL, HeeksColor(240, 240, 191), 1.0f);
 	AddObjectFromButton(new_object);
 }
 
@@ -1714,8 +1685,8 @@ void CHeeksFrame::MakeMenus()
 
 	// Edit Menu
 	wxMenu *edit_menu = new wxMenu;
-	AddMenuItem(edit_menu, _("Undo\tCtrl+Z"), ToolImage(_T("undo")), OnUndoButton);
-	AddMenuItem(edit_menu, _("Redo\tCtrl+Shift+Z"), ToolImage(_T("redo")), OnRedoButton);
+	AddMenuItem(edit_menu, _("Undo\tCtrl+Z"), ToolImage(_T("undo")), OnUndoButton, OnUpdateUndo);
+	AddMenuItem(edit_menu, _("Redo\tCtrl+Shift+Z"), ToolImage(_T("redo")), OnRedoButton, OnUpdateRedo);
 	edit_menu->AppendSeparator();
 	AddMenuItem(edit_menu, _("Cut\tCtrl+X"), ToolImage(_T("cut")), OnCutButton, OnUpdateCut);
 	AddMenuItem(edit_menu, _("Copy\tCtrl+C"), ToolImage(_T("copy")), OnCopyButton, OnUpdateCopy);
@@ -1803,7 +1774,6 @@ void CHeeksFrame::MakeMenus()
 	// Window Menu
 	m_menuWindow = new wxMenu;
 	m_objects_menu_id = AddMenuItem(m_menuWindow, _("Objects"), wxBitmap(), OnViewObjects, OnUpdateViewObjects, NULL, true);
-	m_log_menu_id = AddMenuItem(m_menuWindow, _("Log"), wxBitmap(), OnLog);
 	m_options_menu_id = AddMenuItem(m_menuWindow, _("Options"), wxBitmap(), OnViewOptions, OnUpdateViewOptions, NULL, true);
 	m_input_menu_id = AddMenuItem(m_menuWindow, _("Input"), wxBitmap(), OnViewInput, OnUpdateViewInput, NULL, true);
 	m_properties_menu_id = AddMenuItem(m_menuWindow, _("Properties"), wxBitmap(), OnViewProperties, OnUpdateViewProperties, NULL, true);
@@ -1850,8 +1820,8 @@ void CHeeksFrame::AddToolBars()
 		if(!wxGetApp().m_no_creation_mode)AddToolBarTool(m_toolBar, _T("Cut"), ToolImage(_T("cut")), _("Cut selected items to the clipboard"), OnCutButton, OnUpdateCut);
 		if(!wxGetApp().m_no_creation_mode)AddToolBarTool(m_toolBar, _T("Copy"), ToolImage(_T("copy")), _("Copy selected items to the clipboard"), OnCopyButton, OnUpdateCopy);
 		if(!wxGetApp().m_no_creation_mode)AddToolBarTool(m_toolBar, _T("Paste"), ToolImage(_T("paste")), _("Paste items from the clipboard"), OnPasteButton, OnUpdatePaste);
-		AddToolBarTool(m_toolBar, _T("Undo"), ToolImage(_T("undo")), _("Undo the previous command"), OnUndoButton);
-		AddToolBarTool(m_toolBar, _T("Redo"), ToolImage(_T("redo")), _("Redo the next command"), OnRedoButton);
+		AddToolBarTool(m_toolBar, _T("Undo"), ToolImage(_T("undo")), _("Undo the previous command"), OnUndoButton, OnUpdateUndo);
+		AddToolBarTool(m_toolBar, _T("Redo"), ToolImage(_T("redo")), _("Redo the next command"), OnRedoButton, OnUpdateRedo);
 		AddToolBarTool(m_toolBar, _T("Select"), ToolImage(_T("select")), _("Select Mode"), OnSelectModeButton);
 
 		m_toolBar->Realize();

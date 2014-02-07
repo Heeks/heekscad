@@ -174,3 +174,26 @@ void RemoveObjectsTool::RollBack()
 {
 	Add();
 }
+
+CopyObjectUndoable::CopyObjectUndoable(HeeksObj* object, HeeksObj* copy_object): m_object(object), m_new_copy(copy_object)
+{
+	m_old_copy = m_object->MakeACopy();
+}
+
+CopyObjectUndoable::~CopyObjectUndoable()
+{
+	delete m_new_copy;
+	delete m_old_copy;
+}
+
+void CopyObjectUndoable::Run(bool redo)
+{
+	m_object->CopyFrom(m_new_copy);
+	wxGetApp().WasModified(m_object);
+}
+
+void CopyObjectUndoable::RollBack()
+{
+	m_object->CopyFrom(m_old_copy);
+	wxGetApp().WasModified(m_object);
+}

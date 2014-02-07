@@ -191,6 +191,16 @@ void CHeeksCADInterface::DeleteUndoably(HeeksObj* object)
 	wxGetApp().DeleteUndoably(object);
 }
 
+void CHeeksCADInterface::CopyUndoably(HeeksObj* object, HeeksObj* copy_with_new_data)
+{
+	wxGetApp().CopyUndoably(object, copy_with_new_data);
+}
+
+void CHeeksCADInterface::DoUndoable(Undoable* undoable)
+{
+	wxGetApp().DoUndoable(undoable);
+}
+
 wxString CHeeksCADInterface::GetResFolder()
 {
 	return wxGetApp().GetResFolder();
@@ -1515,9 +1525,7 @@ void CHeeksCADInterface::RemovePropertiesWindow()
 
 void CHeeksCADInterface::RemoveLogWindow()
 {
-	wxGetApp().m_frame->m_menuWindow->Remove(wxGetApp().m_frame->m_log_menu_id);
 	delete wxLog::SetActiveTarget(new wxLogStderr(NULL));
-	wxGetApp().m_frame->m_logger = NULL;
 }
 
 void CHeeksCADInterface::RemoveObjectsWindow()

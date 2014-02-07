@@ -15,7 +15,11 @@ public:
 	wxString m_title;
 	bool m_title_made_from_id;
 
-	IdNamedObjList():m_title_made_from_id(true){}
+	IdNamedObjList(const wxChar* title = NULL)
+	{
+		if(title){m_title_made_from_id = false; m_title = wxString(title);}
+		else {m_title_made_from_id = true;}
+	}
 
 	// HeeksObj's virtual functions
 	void WriteBaseXML(TiXmlElement *element);

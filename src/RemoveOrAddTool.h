@@ -76,3 +76,21 @@ public:
 	void Run(bool redo);
 	void RollBack();
 };
+
+class CopyObjectUndoable:public Undoable{
+	// object will be changed on do and undo
+	// copy is a new object that must be made and will live in this Undoable object
+protected:
+	HeeksObj* m_object;
+	HeeksObj* m_new_copy;
+	HeeksObj* m_old_copy;
+
+	// Undoable's virtual functions
+	const wxChar* GetTitle(){return _T("CopyObject");}
+	void Run(bool redo);
+	void RollBack();
+
+public:
+	CopyObjectUndoable(HeeksObj* object, HeeksObj* copy_object);
+	virtual ~CopyObjectUndoable();
+};

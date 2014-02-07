@@ -151,11 +151,6 @@ static void glVertexFunction(const double *p){glVertex3d(p[0], p[1], p[2]);}
 void HSpline::glCommands(bool select, bool marked, bool no_color){
 	if(!no_color){
 		wxGetApp().glColorEnsuringContrast(*GetColor());
-//		if (wxGetApp().m_allow_opengl_stippling)
-//		{
-//			glEnable(GL_LINE_STIPPLE);
-//			glLineStipple(3, 0xaaaa);
-//		}
 	}
 	GLfloat save_depth_range[2];
 	if(marked){
@@ -171,13 +166,6 @@ void HSpline::glCommands(bool select, bool marked, bool no_color){
 	if(marked){
 		glLineWidth(1);
 		glDepthRange(save_depth_range[0], save_depth_range[1]);
-	}
-	if(!no_color)
-	{
-//		if (wxGetApp().m_allow_opengl_stippling)
-//		{
-//			glDisable(GL_LINE_STIPPLE);
-//		}
 	}
 }
 

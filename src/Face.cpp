@@ -207,7 +207,7 @@ static CFace* face_for_tools = NULL;
 void FaceToSketchTool::Run(){
 	CSketch* new_object = new CSketch();
 	ConvertFaceToSketch2(face_for_tools->Face(), new_object, deviation);
-	wxGetApp().Add(new_object, NULL);
+	wxGetApp().AddUndoably(new_object, NULL, NULL);
 }
 
 double FaceToSketchTool::deviation = 0.1;
@@ -232,7 +232,7 @@ public:
 			x_direction = plane.YAxis().Direction();
 		}
 		CoordinateSystem* new_object = new CoordinateSystem(_("Face Coordinate System"), plane.Location(), x_direction, y_direction);
-		wxGetApp().Add(new_object, NULL);
+		wxGetApp().AddUndoably(new_object, NULL, NULL);
 		wxGetApp().m_marked_list->Clear(true);
 		wxGetApp().m_marked_list->Add(new_object, true);
 		wxGetApp().Repaint();
@@ -240,36 +240,6 @@ public:
 };
 
 static MakeCoordSystem make_coordsys;
-
-class SketchOnFace:public Tool
-{
-	// only use this if GetSurfaceType() == GeomAbs_Plane
-public:
-	const wxChar* GetTitle(){return _("Sketch On Face");}
-	wxString BitmapPath(){return _T("sketchmode");}
-	void Run(){
-		gp_Pln plane;
-		face_for_tools->GetPlaneParams(plane);
-		gp_Dir x_direction = plane.XAxis().Direction();
-		gp_Dir y_direction = plane.YAxis().Direction();
-		if(!face_for_tools->Face().Orientation())
-		{
-			// swap the axes to invert the normal
-			y_direction = plane.XAxis().Direction();
-			x_direction = plane.YAxis().Direction();
-		}
-		CoordinateSystem* coord_sys = new CoordinateSystem(_("Face Coordinate System"), plane.Location(), x_direction, y_direction);
-		CSketch* sketch = new CSketch();
-		wxGetApp().AddUndoably(coord_sys,NULL, NULL);
-		sketch->ReloadPointers();
-		//TODO: should be faces solids parent
-		wxGetApp().AddUndoably(sketch, NULL, NULL);
-		wxGetApp().m_marked_list->Clear(true);
-		wxGetApp().m_marked_list->Add(sketch, true);
-	}
-};
-
-static SketchOnFace sketch_on_face;
 
 class ExtrudeFace:public Tool
 {
@@ -304,6 +274,7 @@ public:
 		gp_Trsf face_matrix = make_matrix(plane.Location(), x_direction, y_direction);
 		gp_Trsf inv_matrix = face_matrix.Inverted();
 
+		wxGetApp().StartHistory();
 		double m[16];
 		extract(face_matrix.Inverted(), m);
 		// if any objects are selected, move them
@@ -312,47 +283,20 @@ public:
 			for(std::list<HeeksObj *>::iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
 			{
 				HeeksObj* object = *It;
-				object->ModifyByMatrix(m);
+				wxGetApp().TransformUndoably(object, m);
 			}
 		}
 		else
 		{
 			// move the solid
 			HeeksObj* parent_body = face_for_tools->GetParentBody();
-			if(parent_body)parent_body->ModifyByMatrix(m);
+			if(parent_body)wxGetApp().TransformUndoably(parent_body, m);
 		}
+		wxGetApp().EndHistory();
 	}
 };
 
 static RotateToFace rotate_to_face;
-
-#if 0
-class Intersector:public Tool
-{
-public:
-	const wxChar* GetTitle(){return _("Intersector");}
-	//wxString BitmapPath(){return _T("rotface");}
-	void Run(){
-		TopoDS_Face face = face_for_tools->Face();
-		Handle(Geom_Surface) surface = BRep_Tool::Surface(face);
-		Geom_Line line = Geom_Line(make_line(gp_Pnt(10.0, 20.0, 1000.0), gp_Pnt(10, 20, -1000)));
-		//Geom_Curve curve = Geom_Curve(line);
-		GeomAPI_IntCS inCS;
-		inCS.Perform(&line, surface);
-		if (inCS.IsDone())
-		{
-			for(int i = 0; i<inCS.NbPoints(); i++)
-			{
-				gp_Pnt ResultPoint = gp_Pnt(inCS.Point(i+1).XYZ());
-				HPoint* new_object = new HPoint(ResultPoint, &(wxGetApp().construction_color));
-				wxGetApp().Add(new_object,NULL);
-			}
-		}
-	}
-};
-
-static Intersector intersector;
-#endif
 
 void CFace::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 	face_for_tools = this;
@@ -360,7 +304,6 @@ void CFace::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 	if(IsAPlane(NULL))
 	{
 		if(!wxGetApp().m_no_creation_mode)t_list->push_back(&make_coordsys);
-		if(!wxGetApp().m_no_creation_mode)t_list->push_back(&sketch_on_face);
 		t_list->push_back(&rotate_to_face);
 	}
 	if(!wxGetApp().m_no_creation_mode)t_list->push_back(&extrude_face);
