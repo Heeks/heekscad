@@ -549,7 +549,11 @@ static void OnPolygonsButton( wxCommandEvent& WXUNUSED( event ) )
 static void OnTextButton( wxCommandEvent& WXUNUSED( event ) )
 {
 	gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
-	HText* new_object = new HText(mat, _T("text"), &(wxGetApp().current_color), wxGetApp().m_pVectorFont );
+	HText* new_object = new HText(mat, _T("text"), &(wxGetApp().current_color),
+#ifndef WIN32
+		wxGetApp().m_pVectorFont,
+#endif
+		0, 0);
 	wxGetApp().StartHistory();
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().m_marked_list->Clear(true);

@@ -765,11 +765,13 @@ bool CDxfRead::ReadCircle()
 	return false;
 }
 
-
 bool CDxfRead::ReadText()
 {
 	double c[3]; // coordinate
 	double height = 0.03082;
+	int hj = 0;
+	int vj = 0;
+	double scale_x = 1.0;
 
 	memset( c, 0, sizeof(c) );
 
@@ -812,17 +814,34 @@ bool CDxfRead::ReadText()
 				get_line();
 				ss.str(m_str); ss >> height; height = mm(height); if(ss.fail()) return false;
 				break;
+		        case 41:
+				// text relative x scale
+				get_line();
+				ss.str(m_str); ss >> scale_x; if(ss.fail()) return false;
+				break;
                        case 1:
 				// text
 				get_line();
 				DerefACI();
-				OnReadText(c, height * 25.4 / 72.0, m_str);
+				OnReadText(c, height * 25.4 / 72.0, m_str, hj, vj);
 				return(true);
 
 		        case 62:
 				// color index
 				get_line();
 				ss.str(m_str); ss >> m_aci; if(ss.fail()) return false;
+				break;
+
+		        case 72:
+				// horizontal justification
+				get_line();
+				ss.str(m_str); ss >> hj; if(ss.fail()) return false;
+				break;
+
+		        case 73:
+				// horizontal justification
+				get_line();
+				ss.str(m_str); ss >> vj; if(ss.fail()) return false;
 				break;
 
 			case 100:
@@ -843,6 +862,140 @@ bool CDxfRead::ReadText()
 	return false;
 }
 
+
+bool CDxfRead::ReadMText()
+{
+	double c[3]; // coordinate
+	double height = 0.03082;
+	int hj = 0;
+	int vj = 0;
+
+	memset( c, 0, sizeof(c) );
+
+	while(!((*m_ifs).eof()))
+	{
+		get_line();
+		int n;
+		if(sscanf(m_str, "%d", &n) != 1)
+		{
+		    printf("CDxfRead::ReadText() Failed to read integer from '%s'\n", m_str);
+		    return false;
+		}
+		std::istringstream ss;
+		ss.imbue(std::locale("C"));
+		switch(n){
+			case 0:
+				return false;
+			case 8: // Layer name follows
+				get_line();
+				strcpy(m_layer_name, m_str);
+				break;
+
+			case 10:
+				// centre x
+				get_line();
+				ss.str(m_str); ss >> c[0]; c[0] = mm(c[0]); if(ss.fail()) return false;
+				break;
+			case 20:
+				// centre y
+				get_line();
+				ss.str(m_str); ss >> c[1]; c[1] = mm(c[1]); if(ss.fail()) return false;
+				break;
+			case 30:
+				// centre z
+				get_line();
+				ss.str(m_str); ss >> c[2]; c[2] = mm(c[2]); if(ss.fail()) return false;
+				break;
+	        case 40:
+	        case 43:
+				// text height
+				get_line();
+				ss.str(m_str); ss >> height; height = mm(height); if(ss.fail()) return false;
+				break;
+            case 1:
+				// text
+				get_line();
+				DerefACI();
+				OnReadText(c, height * 25.4 / 72.0, m_str, hj, vj);
+				return(true);
+
+	        case 62:
+				// color index
+				get_line();
+				ss.str(m_str); ss >> m_aci; if(ss.fail()) return false;
+				break;
+
+	        case 71:
+				//Attachment point:
+				//1 = Top left; 2 = Top center; 3 = Top right;
+				//4 = Middle left; 5 = Middle center; 6 = Middle right
+				//7 = Bottom left; 8 = Bottom center; 9 = Bottom right
+				get_line();
+				ss.str(m_str); ss >> hj; if(ss.fail()) return false;
+				switch(hj)
+				{
+				case 1:
+					hj = 0;
+					vj = 3;
+					break;
+				case 2:
+					hj = 1;
+					vj = 3;
+					break;
+				case 3:
+					hj = 2;
+					vj = 3;
+					break;
+				case 4:
+					hj = 0;
+					vj = 2;
+					break;
+				case 5:
+					hj = 1;
+					vj = 2;
+					break;
+				case 6:
+					hj = 2;
+					vj = 2;
+					break;
+				case 7:
+					hj = 0;
+					vj = 1;
+					break;
+				case 8:
+					hj = 1;
+					vj = 1;
+					break;
+				case 9:
+					hj = 2;
+					vj = 1;
+					break;
+				}
+				break;
+
+	        case 72:
+				// drawing direction
+				get_line(); // to do
+				//ss.str(m_str); ss >> vj; if(ss.fail()) return false;
+				break;
+
+			case 100:
+			case 39:
+			case 210:
+			case 220:
+			case 230:
+				// skip the next line
+				get_line();
+				break;
+			default:
+				// skip the next line
+				get_line();
+				break;
+		}
+	}
+
+	return false;
+}
 
 bool CDxfRead::ReadEllipse()
 {
@@ -1287,6 +1440,362 @@ bool CDxfRead::ReadPolyLine()
 				// color index
 				get_line();
 				ss.str(m_str); ss >> m_aci; if(ss.fail()) return false;
+				break;
+			default:
+				// skip the next line
+				get_line();
+				break;
+		}
+	}
+
+	return false;
+}
+
+struct three_doubles
+{
+	double x[3];
+};
+
+bool CDxfRead::ReadLeader()
+{
+	double vertex_coordinates[3] = {0, 0, 0};
+	double horizontal_direction[3] = {1, 0, 0};
+	int leader_creation_flag = 3;
+	int arrowhead_flag = 1;
+	int leader_path_type = 0;
+	int hookline_direction_flag = 1;
+	int hookline_flag = 0;
+	double text_annotation_height = 0.3;
+	double text_annotation_width = 0.3;
+	bool next_item_found = false;
+	std::list<three_doubles> vertices;
+
+	while(!((*m_ifs).eof()) && !next_item_found)
+	{
+		get_line();
+		int n;
+		if(sscanf(m_str, "%d", &n) != 1)
+		{
+		    printf("CDxfRead::ReadLeader() Failed to read integer from '%s'\n", m_str);
+		    return false;
+		}
+		std::istringstream ss;
+		ss.imbue(std::locale("C"));
+		switch(n){
+			case 0:
+				// next item found, so finish with Leader
+			    DerefACI();
+				next_item_found = true;
+				break;
+			case 8: // Layer name follows
+				get_line();
+				strcpy(m_layer_name, m_str);
+				break;
+			case 10:
+				// x
+				get_line();
+				ss.str(m_str); ss >> vertex_coordinates[0]; vertex_coordinates[0] = mm(vertex_coordinates[0]); if(ss.fail()) return false;
+				break;
+			case 20:
+				// y
+				get_line();
+				ss.str(m_str); ss >> vertex_coordinates[1]; vertex_coordinates[1] = mm(vertex_coordinates[1]); if(ss.fail()) return false;
+				break;
+			case 30:
+				// z
+				get_line();
+				ss.str(m_str); ss >> vertex_coordinates[2]; vertex_coordinates[2] = mm(vertex_coordinates[2]); if(ss.fail()) return false;
+				three_doubles td;
+				for(int i = 0; i<3; i++)td.x[i] = vertex_coordinates[i];
+				vertices.push_back(td);
+				break;
+			case 211:
+				// x
+				get_line();
+				ss.str(m_str); ss >> horizontal_direction[0]; if(ss.fail()) return false;
+				break;
+			case 221:
+				// y
+				get_line();
+				ss.str(m_str); ss >> horizontal_direction[1]; if(ss.fail()) return false;
+				break;
+			case 231:
+				// z
+				get_line();
+				ss.str(m_str); ss >> horizontal_direction[2]; if(ss.fail()) return false;
+				break;
+			case 40:
+				// ratio
+				get_line();
+				ss.str(m_str); ss >> text_annotation_height; if(ss.fail()) return false;
+				break;
+			case 41:
+				// start
+				get_line();
+				ss.str(m_str); ss >> text_annotation_width; if(ss.fail()) return false;
+				break;
+			case 100:
+			case 210:
+			case 220:
+			case 230:
+				// skip the next line
+				get_line();
+				break;
+			default:
+				// skip the next line
+				get_line();
+				break;
+		}
+	}
+
+	double leftward_direction[3] = {-horizontal_direction[1] * 0.25, horizontal_direction[0] * 0.25, 0};
+	for(std::list<three_doubles>::iterator It = vertices.begin(); It != vertices.end(); It++)
+	{
+		three_doubles &td = *It;
+		{
+			// just draw a triangle with 3 lines; HeeksCAD doesn't really support leaders
+			double v1[3] = {td.x[0], td.x[1], td.x[2]};
+			double v2[3], v3[3];
+
+			for(int i = 0; i<3; i++)
+			{
+				v2[i] = v1[i] + horizontal_direction[i] + leftward_direction[i];
+				v3[i] = v1[i] + horizontal_direction[i] - leftward_direction[i];
+			}
+
+			OnReadLine(v1, v2, false);
+			OnReadLine(v2, v3, false);
+			OnReadLine(v3, v1, false);
+		}
+	}
+
+	return next_item_found;
+}
+
+bool CDxfRead::ReadMLine()
+{
+	while(!((*m_ifs).eof()))
+	{
+		get_line();
+		int n;
+		if(sscanf(m_str, "%d", &n) != 1)
+		{
+		    printf("CDxfRead::ReadMLine() Failed to read integer from '%s'\n", m_str );
+		    return false;
+		}
+		switch(n){
+        case 0:
+		    DerefACI();
+            return true;
+		default:
+			get_line();
+			break;
+		}
+	}
+
+	return false;
+}
+
+bool CDxfRead::ReadXLine()
+{
+	while(!((*m_ifs).eof()))
+	{
+		get_line();
+		int n;
+		if(sscanf(m_str, "%d", &n) != 1)
+		{
+		    printf("CDxfRead::ReadXLine() Failed to read integer from '%s'\n", m_str );
+		    return false;
+		}
+		switch(n){
+        case 0:
+		    DerefACI();
+            return true;
+		default:
+			get_line();
+			break;
+		}
+	}
+
+	return false;
+}
+
+bool CDxfRead::ReadDimension()
+{
+	double def_point[3] = {0, 0, 0};
+	double mid[3] = {0, 0, 0};
+	double p1[3] = {0, 0, 0};
+	double p2[3] = {0, 0, 0};
+	double p3[3] = {0, 0, 0};
+	double p4[3] = {0, 0, 0};
+	double p5[3] = {0, 0, 0};
+	int dimension_type = 0;
+	double angle = 0;
+	double angle2 = 0;
+	double angle3 = 0;
+	double radius_leader_length = 0;
+	std::string str;
+
+	while(!((*m_ifs).eof()))
+	{
+		get_line();
+		int n;
+		if(sscanf(m_str, "%d", &n) != 1)
+		{
+		    printf("CDxfRead::ReadDimension() Failed to read integer from '%s'\n", m_str );
+		    return false;
+		}
+		std::istringstream ss;
+		ss.imbue(std::locale("C"));
+		switch(n){
+			case 0:
+				// next item found, so finish
+				DerefACI();
+				OnReadDimension(dimension_type, angle, angle2, angle3, radius_leader_length, def_point, mid, p1, p2, p3, p4, p5);
+				return true;
+			case 3:
+				// style name
+				get_line();
+				//ss.str(m_str); ss >> str; if(ss.fail()) return false;
+				break;
+			case 70:
+				// dimension type
+				get_line();
+				ss.str(m_str); ss >> dimension_type; if(ss.fail()) return false;
+				break;
+			case 50:
+				// angle
+				get_line();
+				ss.str(m_str); ss >> angle; if(ss.fail()) return false;
+				break;
+			case 51:
+				// angle2
+				get_line();
+				ss.str(m_str); ss >> angle2; if(ss.fail()) return false;
+				break;
+			case 52:
+				// angle3
+				get_line();
+				ss.str(m_str); ss >> angle3; if(ss.fail()) return false;
+				break;
+			case 40:
+				// radius leader length
+				get_line();
+				ss.str(m_str); ss >> radius_leader_length; if(ss.fail()) return false;
+				break;
+			case 10:
+				// x
+				get_line();
+				ss.str(m_str); ss >> def_point[0]; def_point[0] = mm(def_point[0]); if(ss.fail()) return false;
+				break;
+			case 20:
+				// y
+				get_line();
+				ss.str(m_str); ss >> def_point[1]; def_point[1] = mm(def_point[1]); if(ss.fail()) return false;
+				break;
+			case 30:
+				// z
+				get_line();
+				ss.str(m_str); ss >> def_point[2]; def_point[2] = mm(def_point[2]); if(ss.fail()) return false;
+				break;
+			case 11:
+				// x
+				get_line();
+				ss.str(m_str); ss >> mid[0]; mid[0] = mm(mid[0]); if(ss.fail()) return false;
+				break;
+			case 21:
+				// y
+				get_line();
+				ss.str(m_str); ss >> mid[1]; mid[1] = mm(mid[1]); if(ss.fail()) return false;
+				break;
+			case 31:
+				// z
+				get_line();
+				ss.str(m_str); ss >> mid[2]; mid[2] = mm(mid[2]); if(ss.fail()) return false;
+				break;
+			case 12:
+				// x
+				get_line();
+				ss.str(m_str); ss >> p1[0]; p1[0] = mm(p1[0]); if(ss.fail()) return false;
+				break;
+			case 22:
+				// y
+				get_line();
+				ss.str(m_str); ss >> p1[1]; p1[1] = mm(p1[1]); if(ss.fail()) return false;
+				break;
+			case 32:
+				// z
+				get_line();
+				ss.str(m_str); ss >> p1[2]; p1[2] = mm(p1[2]); if(ss.fail()) return false;
+				break;
+			case 13:
+				// x
+				get_line();
+				ss.str(m_str); ss >> p2[0]; p2[0] = mm(p2[0]); if(ss.fail()) return false;
+				break;
+			case 23:
+				// y
+				get_line();
+				ss.str(m_str); ss >> p2[1]; p2[1] = mm(p2[1]); if(ss.fail()) return false;
+				break;
+			case 33:
+				// z
+				get_line();
+				ss.str(m_str); ss >> p2[2]; p2[2] = mm(p2[2]); if(ss.fail()) return false;
+				break;
+			case 14:
+				// x
+				get_line();
+				ss.str(m_str); ss >> p3[0]; p3[0] = mm(p3[0]); if(ss.fail()) return false;
+				break;
+			case 24:
+				// y
+				get_line();
+				ss.str(m_str); ss >> p3[1]; p3[1] = mm(p3[1]); if(ss.fail()) return false;
+				break;
+			case 34:
+				// z
+				get_line();
+				ss.str(m_str); ss >> p3[2]; p3[2] = mm(p3[2]); if(ss.fail()) return false;
+				break;
+			case 15:
+				// x
+				get_line();
+				ss.str(m_str); ss >> p4[0]; p4[0] = mm(p4[0]); if(ss.fail()) return false;
+				break;
+			case 25:
+				// y
+				get_line();
+				ss.str(m_str); ss >> p4[1]; p4[1] = mm(p4[1]); if(ss.fail()) return false;
+				break;
+			case 35:
+				// z
+				get_line();
+				ss.str(m_str); ss >> p4[2]; p4[2] = mm(p4[2]); if(ss.fail()) return false;
+				break;
+			case 16:
+				// x
+				get_line();
+				ss.str(m_str); ss >> p5[0]; p5[0] = mm(p5[0]); if(ss.fail()) return false;
+				break;
+			case 26:
+				// y
+				get_line();
+				ss.str(m_str); ss >> p5[1]; p5[1] = mm(p5[1]); if(ss.fail()) return false;
+				break;
+			case 36:
+				// z
+				get_line();
+				ss.str(m_str); ss >> p5[2]; p5[2] = mm(p5[2]); if(ss.fail()) return false;
+				break;
+
+			case 53:
+			case 100:
+			case 210:
+			case 220:
+			case 230:
+				// skip the next line
+				get_line();
 				break;
 			default:
 				// skip the next line
@@ -1860,10 +2369,18 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 				}
 				continue;
 			}
-			else if(!strcmp(m_str, "MTEXT")){
+			else if(!strcmp(m_str, "TEXT")){
 				if(!ReadText())
 				{
 					printf("CDxfRead::DoRead() Failed to read text\n");
+					return;
+				}
+				continue;
+			}
+			else if(!strcmp(m_str, "MTEXT")){
+				if(!ReadMText())
+				{
+					printf("CDxfRead::DoRead() Failed to read mtext\n");
 					return;
 				}
 				continue;
@@ -1904,6 +2421,38 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 				if(!ReadPoint())
 				{
 					printf("CDxfRead::DoRead() Failed to read Point\n");
+					return;
+				}
+				continue;
+			}
+			else if (!strcmp(m_str, "LEADER")) {
+				if(!ReadLeader())
+				{
+					printf("CDxfRead::DoRead() Failed to read Leader\n");
+					return;
+				}
+				continue;
+			}
+			else if (!strcmp(m_str, "MLINE")) {
+				if(!ReadMLine())
+				{
+					printf("CDxfRead::DoRead() Failed to read MLine\n");
+					return;
+				}
+				continue;
+			}
+			else if (!strcmp(m_str, "XLINE")) {
+				if(!ReadXLine())
+				{
+					printf("CDxfRead::DoRead() Failed to read XLine\n");
+					return;
+				}
+				continue;
+			}
+			else if (!strcmp(m_str, "DIMENSION")) {
+				if(!ReadDimension())
+				{
+					printf("CDxfRead::DoRead() Failed to read Dimension\n");
 					return;
 				}
 				continue;

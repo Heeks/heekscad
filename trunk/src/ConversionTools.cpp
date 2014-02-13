@@ -965,9 +965,9 @@ void ConvertToArea::Run(){
 	}
 
 	HArea* new_object = new HArea(area);
-	wxGetApp().Add(new_object, NULL);
+	wxGetApp().AddUndoably(new_object, NULL, NULL);
 
-	wxGetApp().Remove(objects_to_delete);
+	wxGetApp().DeleteUndoably(objects_to_delete);
 }
 
 static void AreaToolRun(int type)
@@ -1068,6 +1068,8 @@ void CombineSketches::Run(){
 			}
 		}
 	}
+
+	if(sketch1)sketch1->ReOrderSketch(SketchOrderTypeReOrder);
 }
 
 void GroupSelected::Run(){

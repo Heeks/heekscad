@@ -620,7 +620,11 @@ HeeksObj* CHeeksCADInterface::Common(std::list<HeeksObj*> objects)
 void CHeeksCADInterface::AddText(const wxChar  *text)
 {
     gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
-    HText* new_object = new HText(mat, text, &(wxGetApp().current_color), wxGetApp().m_pVectorFont );
+    HText* new_object = new HText(mat, text, &(wxGetApp().current_color),
+#ifndef WIN32
+		wxGetApp().m_pVectorFont,
+#endif
+		0, 0);
 	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	wxGetApp().m_marked_list->Clear(true);
 	wxGetApp().m_marked_list->Add(new_object, true);
@@ -2105,4 +2109,9 @@ void CHeeksCADInterface::ObjectAreaString(HeeksObj* object, wxString &s)
 		}
 		break;
 	}
+}
+
+void CHeeksCADInterface::RegisterMarkeListTools(void(*callbackfunc)(std::list<Tool*>&))
+{
+	wxGetApp().RegisterMarkeListTools(callbackfunc);
 }

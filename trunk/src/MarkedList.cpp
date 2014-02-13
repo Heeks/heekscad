@@ -342,11 +342,7 @@ void MarkedList::GetTools(MarkedObject* clicked_object, std::list<Tool*>& t_list
 		t_list.push_back(new MenuSeparator);
 	}
 
-	if(m_list.size() == 1)
-	{
-		m_list.front()->GetTools(&t_list, p);
-	}
-
+	wxGetApp().GetExternalMarkedListTools(t_list);
 	GetConversionMenuTools(&t_list);
 	GetSolidMenuTools(&t_list);
 

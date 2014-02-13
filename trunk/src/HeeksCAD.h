@@ -11,7 +11,9 @@
 #include "../interface/ObjList.h"
 #include "../interface/Plugin.h"
 #include "glfont2.h"
+#ifndef WIN32
 #include "CxfFont.h"
+#endif
 
 #include <memory>
 class MagDragWindow;
@@ -179,6 +181,7 @@ public:
 	std::list< void(*)() > m_on_build_texture_callbacks;
 	std::list< void(*)(int, int) > m_beforeneworopen_callbacks;
 	std::list< void(*)() > m_beforeframedelete_callbacks;
+	std::list< void(*)(std::list<Tool*>&) > m_markedlisttools_callbacks;
 	int m_transform_gl_list;
 	gp_Trsf m_drag_matrix;
 	bool m_extrude_removes_sketches;
@@ -204,11 +207,13 @@ public:
 	bool m_correlate_by_color;
 	bool m_property_grid_validation;
 
+#ifndef WIN32
 	std::auto_ptr<VectorFonts>	m_pVectorFonts;	// QCAD format fonts that have been loaded.
 	VectorFont   *m_pVectorFont;	// which font are we using? (NULL indicates the internal (OpenGL) font)
 	wxString m_font_paths;	// SemiColon delimited list of directories that hold font files to load.
 	double m_word_space_percentage;	// Font
 	double m_character_space_percentage; // Font
+#endif
 	double m_stl_facet_tolerance;
 
 	int m_auto_save_interval;	// In minutes
@@ -398,7 +403,9 @@ public:
 	void PlotArc(const double* s, const double* e, const double* c);
 	void InitialiseLocale();
 	void create_font();
+#ifndef WIN32
 	std::auto_ptr<VectorFonts>	& GetAvailableFonts(const bool force_read = false);
+#endif
 	void GetPluginsFromCommandLineParams(std::list<wxString> &plugins);
 	void RegisterOnBuildTexture(void(*callbackfunc)());
 	void RegisterOnBeforeNewOrOpen(void(*callbackfunc)(int, int));
@@ -414,6 +421,9 @@ public:
 	wxString HeeksType( const int type ) const;
 	unsigned int GetIndex(HeeksObj *object);
 	void ReleaseIndex(unsigned int index);
+
+	void GetExternalMarkedListTools(std::list<Tool*>& t_list);
+	void RegisterMarkeListTools(void(*callbackfunc)(std::list<Tool*>& t_list));
 };
 
 void ExitMainLoop();
