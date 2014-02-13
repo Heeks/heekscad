@@ -133,3 +133,20 @@ public:
 	void RollBack();
 	const wxChar* GetTitle(){return _("Property Change Choice");}
 };
+
+class PropertyCheck;
+
+class PropertyChangeCheck: public Undoable
+{
+public:
+	bool m_value;
+	bool m_old;
+	HeeksObj* m_object;
+	void(*m_callbackfunc)(bool, HeeksObj*);
+
+	PropertyChangeCheck(const bool& value, PropertyCheck* property);
+
+	void Run(bool redo);
+	void RollBack();
+	const wxChar* GetTitle(){return _("Property Change Check");}
+};

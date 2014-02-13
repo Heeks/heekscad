@@ -23,6 +23,7 @@
 #include <list>
 #include <map>
 #include <vector>
+#include "../interface/HeeksCADInterface.h"
 
 extern CHeeksCADInterface heekscad_interface;
 

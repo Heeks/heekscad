@@ -16,6 +16,7 @@ private:
     typedef wxString BlockName_t;
 	typedef std::map< BlockName_t, CSketch * > Blocks_t;
 	Blocks_t m_blocks;
+	std::set<BlockName_t> inserted_blocks;
 	CSketch* m_current_block;
 	double m_ucs_matrix[16];
 
@@ -31,6 +32,7 @@ public:
 
 	static bool m_make_as_sketch;
 	static bool m_ignore_errors;
+	static bool m_read_points;
 	static wxString m_layer_name_suffixes_to_discard;
 
 	// CDxfRead's virtual functions
@@ -40,12 +42,13 @@ public:
 	void OnReadInsert(const char* block_name, const double* insert_point);
 	void OnReadLine(const double* s, const double* e, bool hidden);
 	void OnReadPoint(const double* s);
-	void OnReadText(const double* point, const double height, const wxString text);
+	void OnReadText(const double* point, const double height,  const char* text, int hj, int vj);
 	void OnReadArc(const double* s, const double* e, const double* c, bool dir, bool hidden);
 	void OnReadCircle(const double* s, const double* c, bool dir, bool hidden);
     void OnReadEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir);
 	void OnReadSpline(struct SplineData& sd);
+	void OnReadDimension(int, double, double, double, double, const double *, const double *, const double *, const double *, const double *, const double *, const double *);
 
 	void AddObject(HeeksObj *object);
-	void AddGraphics() const;
+	void AddGraphics();
 };

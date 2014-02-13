@@ -238,7 +238,6 @@ public:
 		for(std::set<CEdge*>::iterator It = edges_to_mark.begin(); It != edges_to_mark.end(); It++)obj_list.push_back(*It);
 		wxGetApp().m_marked_list->Add(obj_list, true);
 	}
-	bool CallChangedOnRun(){return false;}
 };
 
 static SelectLinkedEdgesTool link_flat_tool;

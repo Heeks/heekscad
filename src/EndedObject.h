@@ -8,7 +8,7 @@
 #include "../interface/HeeksColor.h"
 
 class EndedObject: public HeeksObj{
-private:
+protected:
 	HeeksColor color;
 
 public:

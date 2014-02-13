@@ -17,6 +17,7 @@
 #include "CoordinateSystem.h"
 #include "Wire.h"
 #include <wx/numdlg.h>
+#include "../interface/HeeksCADInterface.h"
 
 #include "DigitizeMode.h"
 #include "Drawing.h"

@@ -7,8 +7,6 @@
 #include "EndedObject.h"
 
 class HLine: public EndedObject{
-private:
-	HeeksColor color;
 public:
 	~HLine(void);
 	HLine(const gp_Pnt &a, const gp_Pnt &b, const HeeksColor* col);

@@ -18,6 +18,7 @@
 // static
 bool HeeksDxfRead::m_make_as_sketch = false;
 bool HeeksDxfRead::m_ignore_errors = false;
+bool HeeksDxfRead::m_read_points = false;
 wxString HeeksDxfRead::m_layer_name_suffixes_to_discard = _T("_DOT,_DOTSMALL,_DOTBLANK,_OBLIQUE,_CLOSEDBLANK");
 
 HeeksDxfRead::HeeksDxfRead(const wxChar* filepath) : CDxfRead(Ttc(filepath))
@@ -26,6 +27,7 @@ HeeksDxfRead::HeeksDxfRead(const wxChar* filepath) : CDxfRead(Ttc(filepath))
 
 	config.Read(_T("ImportDxfAsSketches"), &m_make_as_sketch);
 	config.Read(_T("IgnoreDxfReadErrors"), &m_ignore_errors);
+	config.Read(_T("DxfReadPoints"), &m_read_points);
 	config.Read(_T("LayerNameSuffixesToDiscard"), m_layer_name_suffixes_to_discard);
 
 	m_current_block = NULL;
@@ -70,7 +72,8 @@ void HeeksDxfRead::OnReadInsert(const char* block_name, const double* insert_poi
 	}
 	else
 	{
-		CSketch* block = m_blocks[wxString(Ctt(block_name))];
+		BlockName_t b_name = wxString(Ctt(block_name));
+		CSketch* block = m_blocks[b_name];
 		CSketch* block_copy = new CSketch(*block);
 		gp_Trsf tm;
 		tm.SetTranslationPart(make_vector(insert_point));
@@ -78,6 +81,7 @@ void HeeksDxfRead::OnReadInsert(const char* block_name, const double* insert_poi
 		extract(tm, m);
 		block_copy->ModifyByMatrix(m);
 		AddObject(block_copy);
+		inserted_blocks.insert(b_name);
 	}
 }
 
@@ -94,8 +98,11 @@ void HeeksDxfRead::OnReadLine(const double* s, const double* e, bool hidden)
 
 void HeeksDxfRead::OnReadPoint(const double* s)
 {
-    HPoint* new_object = new HPoint(make_point(s), ActiveColorPtr(m_aci));
-    AddObject(new_object);
+	if(m_read_points)
+	{
+		HPoint* new_object = new HPoint(make_point(s), ActiveColorPtr(m_aci));
+		AddObject(new_object);
+	}
 }
 
 void HeeksDxfRead::OnReadArc(const double* s, const double* e, const double* c, bool dir, bool hidden)
@@ -229,13 +236,69 @@ void HeeksDxfRead::OnReadEllipse(const double* c, double major_radius, double mi
 	AddObject(new_object);
 }
 
-void HeeksDxfRead::OnReadText(const double *point, const double height, const wxString text)
+    #define Slice(str, start, end) (str.Mid(start, end))
+//Split (Tokenize) string at specified intervals
+    //s == string to split
+    //retArray == split up string (out)
+    //cpszExp == expression to split at
+    //crnStart == start postion to split
+    //crnCount == max number of split of strings
+    //crbCIComp == true if case insensitive
+    void Split(  const wxString& s, wxArrayString& retArray,  const wxChar* cpszExp, 
+                                    const size_t& crnStart = 0,    const size_t& crnCount = (size_t)-1,
+                                    const bool& crbCIComp = false)
+    {
+        //sanity checks
+        wxASSERT_MSG(cpszExp != NULL, wxT("Invalid value for First Param of wxString::Split (cpszExp)"));
+    //    wxASSERT_MSG(crnCount >= (size_t)-1, wxT("Invalid value for Third Param of wxString::Split (crnCount)"));
+     
+        retArray.Clear();
+
+        size_t  nOldPos = crnStart,      //Current start position in this string
+                nPos = crnStart;      //Current end position in this string
+
+        wxString szComp,            //this string as-is (if bCIComp is false) or converted to lowercase
+                 szExp = cpszExp;   //Expression string, normal or lowercase
+
+        if (crbCIComp)
+        {
+            szComp = s.Lower();
+            szExp.MakeLower();
+        }
+        else
+            szComp = s;
+
+        if(crnCount == (size_t)-1)
+        {
+        for (; (nPos = szComp.find(szExp, nPos)) != wxString::npos;)//Is there another token in the string
+            {
+            retArray.Add(Slice(s, nOldPos, nPos)); //Insert the token in the array
+            nOldPos = nPos += szExp.Length();//Move up the start slice position
+            }
+       
+        }
+        else
+        {
+        for (int i = crnCount;
+                (nPos = szComp.find(szExp, nPos)) != wxString::npos &&
+                i != 0;
+                    --i)//Is there another token in the string && have we met nCount?
+        {
+            retArray.Add(Slice(s, nOldPos, nPos)); //Insert the token in the array
+            nOldPos = nPos += szExp.Length();//Move up the start slice position
+        }
+        }
+        if (nOldPos != s.Length())
+            retArray.Add( Slice(s, nOldPos, s.Length()) ); //Add remaining characters in string
+    }
+
+void HeeksDxfRead::OnReadText(const double *point, const double height,  const char* text, int hj, int vj)
 {
     gp_Trsf trsf;
     trsf.SetTranslation( gp_Vec( gp_Pnt(0,0,0), gp_Pnt(point[0], point[1], point[2]) ) );
-    trsf.SetScaleFactor( height );
+    trsf.SetScaleFactor( height * 1.7 );
 
-    wxString txt(text);
+    wxString txt(Ctt(text));
     txt.Replace(_T("\\P"),_T("\n"),true);
 
     int offset = 0;
@@ -244,8 +307,65 @@ void HeeksDxfRead::OnReadText(const double *point, const double height, const wx
         txt.Remove(0, offset+1);
     }
 
-    HText *new_object = new HText(trsf, txt, ActiveColorPtr(m_aci), NULL);
-    AddObject(new_object);
+	wxArrayString retArray;
+	Split(txt, retArray, _T("\n"));
+
+	gp_Trsf line_feed_shift;
+	line_feed_shift.SetTranslationPart(gp_Vec(0, -height, 0));
+
+	for(unsigned int i = 0; i<retArray.GetCount(); i++)
+	{
+		HText *new_object = new HText(trsf, retArray[i], ActiveColorPtr(m_aci),
+#ifndef WIN32
+			NULL, 
+#endif
+			hj, vj);
+		AddObject(new_object);
+		trsf = trsf * line_feed_shift;
+	}
+}
+
+void HeeksDxfRead::OnReadDimension(int dimension_type, double angle, double angle2, double angle3, double radius_leader_length, const double *def_point, const double *mid, const double *p1, const double *p2, const double *p3, const double *p4, const double *p5)
+{
+	int type = (dimension_type & 0x07);
+
+	gp_Pnt d = make_point(def_point);
+	gp_Pnt m = make_point(mid);
+
+	gp_Vec d_to_m = make_vector(d, m);
+
+	gp_Pnt e = gp_Pnt(m.XYZ() + d_to_m.XYZ());
+
+	gp_Dir forward(1,0,0);
+
+	HeeksColor c(0, 0, 0);
+
+	if(type == 0)
+	{
+		forward.Rotate(gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)), (angle/* + angle2 + angle3*/) * -0.01745329251);
+	}
+	else
+	{
+		forward = gp_Dir(-d_to_m);
+		c = HeeksColor(255, 0, 0);
+	}
+
+	gp_Dir left(-forward.Y(), forward.X(), 0.0);
+
+	double arrow_size = 5.0;
+	gp_Pnt da1 = d.XYZ() + forward.XYZ() * (-arrow_size) + left.XYZ() * (arrow_size * 0.25);
+	gp_Pnt da2 = d.XYZ() + forward.XYZ() * (-arrow_size) + left.XYZ() * (arrow_size * -0.25);
+
+	gp_Pnt ea1 = e.XYZ() + forward.XYZ() * (arrow_size) + left.XYZ() * (arrow_size * 0.25);
+	gp_Pnt ea2 = e.XYZ() + forward.XYZ() * (arrow_size) + left.XYZ() * (arrow_size * -0.25);
+
+	AddObject(new HLine(d, da1, &c));
+	AddObject(new HLine(da1, da2, &c));
+	AddObject(new HLine(da2, d, &c));
+
+	AddObject(new HLine(e, ea1, &c));
+	AddObject(new HLine(ea1, ea2, &c));
+	AddObject(new HLine(ea2, e, &c));
 }
 
 /**
@@ -308,8 +428,22 @@ void HeeksDxfRead::AddObject(HeeksObj *object)
 	}
 }
 
-void HeeksDxfRead::AddGraphics() const
+void HeeksDxfRead::AddGraphics()
 {
+	// add one insert of any blocks which haven't been added at all
+	for(Blocks_t::const_iterator It = m_blocks.begin(); It != m_blocks.end(); It++)
+	{
+		if(inserted_blocks.find(It->first) == inserted_blocks.end())
+		{
+			CSketch* block = It->second;
+			if(block->GetNumChildren() > 0)
+			{
+				CSketch* block_copy = new CSketch(*(It->second));
+				AddObject(block_copy);
+			}
+		}
+	}
+
     if (m_make_as_sketch)
     {
         for (Sketches_t::const_iterator l_itSketch = m_sketches.begin(); l_itSketch != m_sketches.end(); l_itSketch++)
