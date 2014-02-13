@@ -83,7 +83,9 @@
 #include "HeeksConfig.h"
 #include "Group.h"
 #include "RS274X.h"
+#ifndef WIN32
 #include "CxfFont.h"
+#endif
 #include "AutoSave.h"
 #include <wx/progdlg.h>
 #include "OrientationModifier.h"
@@ -92,6 +94,7 @@
 #include "HArea.h"
 #include "History.h"
 #include "RemoveOrAddTool.h"
+#include "../interface/HeeksCADInterface.h"
 
 using namespace std;
 
@@ -143,7 +146,7 @@ static unsigned int DecimalPlaces( const double value )
 
 HeeksCADapp::HeeksCADapp(): ObjList()
 {
-	m_version_number = _T("0 29 0");
+	m_version_number = wxString(_T(STR_VALUE(HEEKSCAD_VERSION_MAIN))) + _T(" ") + _T(STR_VALUE(HEEKSCAD_VERSION_SUB)) + _T(" 0");
 	m_geom_tol = 0.000001;
 
 	TiXmlBase::SetRequiredDecimalPlaces( DecimalPlaces(m_geom_tol) );	 // Ensure we write XML in enough accuracy to be useful when re-read.
@@ -216,12 +219,13 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_dragging_moves_objects = false;
 	m_no_creation_mode = false;
 
+#ifndef WIN32
 	m_font_paths = _T("/usr/share/qcad/fonts");
 	m_word_space_percentage = 100.0;
 	m_character_space_percentage = 25.0;
-	m_stl_facet_tolerance = 0.1;
-
 	m_pVectorFont = NULL;	// Default to internal (OpenGL) font.
+#endif
+	m_stl_facet_tolerance = 0.1;
 	m_icon_texture_number = 0;
 	m_extrude_to_solid = true;
 	m_revolve_angle = 360.0;
@@ -267,8 +271,10 @@ HeeksCADapp::~HeeksCADapp()
 	if(m_printData)delete m_printData;
 	if(m_pageSetupData)delete m_pageSetupData;
 
+#ifndef WIN32
 	m_pVectorFont = NULL;	// Don't free this here.  This memory will be released via ~CxfFonts() instead.
 	if (m_pVectorFonts.get() != NULL) delete m_pVectorFonts.release();
+#endif
 }
 
 bool HeeksCADapp::OnInit()
@@ -394,7 +400,9 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("NumberOfSamplePoints"), &m_number_of_sample_points);
 	config.Read(_T("CorrelateByColor"), &m_correlate_by_color);
 
+#ifndef WIN32
 	config.Read(_T("FontPaths"), &m_font_paths, _T("/usr/share/qcad/fonts"));
+#endif
 	config.Read(_T("STLFacetTolerance"), &m_stl_facet_tolerance, 0.1);
 
 	config.Read(_T("AutoSaveInterval"), (int *) &m_auto_save_interval, 0);
@@ -574,7 +582,9 @@ void HeeksCADapp::WriteConfig()
 	config.Write(_T("NumberOfSamplePoints"), m_number_of_sample_points);
 	config.Write(_T("CorrelateByColor"), m_correlate_by_color);
 
+#ifndef WIN32
 	config.Write(_T("FontPaths"), m_font_paths);
+#endif
 	config.Write(_T("STLFacetTolerance"), m_stl_facet_tolerance);
 	config.Write(_T("AutoSaveInterval"), m_auto_save_interval);
 	config.Write(_T("ExtrudeToSolid"), m_extrude_to_solid);
@@ -1902,6 +1912,13 @@ void HeeksCADapp::glCommandsAll(const CViewPoint &view_point)
 		}
 	}
 
+	// draw any last_objects
+	for(std::list<HeeksObj*>::iterator It = after_others_objects.begin(); It != after_others_objects.end(); It++)
+	{
+		HeeksObj* object = *It;
+		object->glCommands(false, m_marked_list->ObjectMarked(object), false);
+	}
+
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	for(std::list< void(*)() >::iterator It = m_on_glCommands_list.begin(); It != m_on_glCommands_list.end(); It++)
 	{
@@ -1919,13 +1936,6 @@ void HeeksCADapp::glCommandsAll(const CViewPoint &view_point)
 		glMultMatrixd(m);
 		glCallList(m_transform_gl_list);
 		glPopMatrix();
-	}
-
-	// draw any last_objects
-	for(std::list<HeeksObj*>::iterator It = after_others_objects.begin(); It != after_others_objects.end(); It++)
-	{
-		HeeksObj* object = *It;
-		object->glCommands(false, m_marked_list->ObjectMarked(object), false);
 	}
 
 	// draw the ruler
@@ -2256,13 +2266,6 @@ void HeeksCADapp::on_menu_event(wxCommandEvent& event)
 		Tool *t = tool_index_list[id - ID_FIRST_POP_UP_MENU_TOOL].m_tool;
 		StartHistory();
 		t->Run();
-		if(t->CallChangedOnRun())
-		{
-			//TODO: this should be handled better. While TreeView is parsing the tree it should be able to remove
-			//non existant items from MarkedList.
-			m_marked_list->Clear(false);
-			Repaint();
-		}
 		EndHistory();
 	}
 }
@@ -2489,7 +2492,7 @@ void HeeksCADapp::ReverseUndoably(HeeksObj *object)
 
 void HeeksCADapp::EditUndoably(HeeksObj *object)
 {
-	HeeksObj* copy_object = object->MakeACopy();
+	HeeksObj* copy_object = object->MakeACopyWithID();
 	if(copy_object->Edit())
 	{
 		wxGetApp().CopyUndoably(object, copy_object);
@@ -3027,6 +3030,13 @@ void on_sel_dxf_read_errors(bool value, HeeksObj* object){
 	config.Write(_T("IgnoreDxfReadErrors"), HeeksDxfRead::m_ignore_errors);
 }
 
+void on_dxf_read_points(bool value, HeeksObj* object){
+	HeeksDxfRead::m_read_points = value;
+
+	HeeksConfig config;
+	config.Write(_T("DxfReadPoints"), HeeksDxfRead::m_read_points);
+}
+
 void on_edit_layer_name_suffixes_to_discard(const wxChar* value, HeeksObj* object)
 {
 	HeeksDxfRead::m_layer_name_suffixes_to_discard = value;
@@ -3104,6 +3114,7 @@ static void on_dragging_moves_objects(bool value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
+#ifndef WIN32
 static void on_edit_font_paths(const wxChar* value, HeeksObj* object)
 {
 	wxGetApp().m_font_paths.assign(value);
@@ -3139,6 +3150,7 @@ static void on_edit_character_space_percentage(const double value, HeeksObj* obj
 	    wxGetApp().m_pVectorFonts->SetCharacterSpacePercentage(value);
 	}
 }
+#endif
 
 void on_set_mouse_move_highlighting(bool value, HeeksObj* object)
 {
@@ -3344,6 +3356,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	PropertyList* dxf_options = new PropertyList(_("DXF"));
 	dxf_options->m_list.push_back(new PropertyCheck(_("make sketch"), HeeksDxfRead::m_make_as_sketch, NULL, on_dxf_make_sketch));
 	dxf_options->m_list.push_back(new PropertyCheck(_("ignore errors where possible"), HeeksDxfRead::m_ignore_errors, NULL, on_sel_dxf_read_errors));
+	dxf_options->m_list.push_back(new PropertyCheck(_("read points"), HeeksDxfRead::m_read_points, NULL, on_dxf_read_points));
 	dxf_options->m_list.push_back( new PropertyString(_("Layer Name Suffixes To Discard"), HeeksDxfRead::m_layer_name_suffixes_to_discard, this, on_edit_layer_name_suffixes_to_discard));
 
 	file_options->m_list.push_back(dxf_options);
@@ -3354,13 +3367,14 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	file_options->m_list.push_back(new PropertyInt(_("auto save interval (in minutes)"), m_auto_save_interval, NULL, on_set_auto_save_interval));
 	list->push_back(file_options);
 
+#ifndef WIN32
 	// Font options
 	PropertyList* font_options = new PropertyList(_("font options"));
 	font_options->m_list.push_back( new PropertyString(_("Paths (semicolon delimited)"), m_font_paths, this, on_edit_font_paths));
 	font_options->m_list.push_back( new PropertyDouble(_("Word Space Percentage"), m_word_space_percentage, this, on_edit_word_space_percentage));
 	font_options->m_list.push_back( new PropertyDouble(_("Character Space Percentage"), m_character_space_percentage, this, on_edit_character_space_percentage));
 	list->push_back(font_options);
-
+#endif
 }
 
 void HeeksCADapp::DeleteMarkedItems()
@@ -3386,7 +3400,7 @@ void HeeksCADapp::DeleteMarkedItems()
 
 void HeeksCADapp::glColorEnsuringContrast(const HeeksColor &c)
 {
-	if(c == background_color[0])background_color[0].best_black_or_white().glColor();
+	if(c == HeeksColor(0, 0, 0) || c == HeeksColor(255,255,255))background_color[0].best_black_or_white().glColor();
 	else c.glColor();
 }
 
@@ -3478,6 +3492,8 @@ public:
 		return _("Select");
 	}
 
+	wxString BitmapPath(){ return _T("select");}
+
 	void Run(){
 		if(m_marked_object == NULL)return;
 		if(m_marked_object->GetObject() == NULL)return;
@@ -3508,7 +3524,6 @@ public:
 		}
 		wxGetApp().Repaint();
 	}
-	bool CallChangedOnRun(){return false;}
 };
 
 class EditObjectTool:public Tool{
@@ -3525,7 +3540,6 @@ public:
 		HeeksObj* object = m_marked_object->GetObject();
 		if(object)wxGetApp().EditUndoably(object);
 	}
-	bool CallChangedOnRun(){return false;}
 };
 
 void HeeksCADapp::GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool control_pressed)
@@ -4444,6 +4458,7 @@ void HeeksCADapp::InitialiseLocale()
 	}
 }
 
+#ifndef WIN32
 
 std::auto_ptr<VectorFonts>	& HeeksCADapp::GetAvailableFonts(const bool force_read /* = false */ )
 {
@@ -4484,6 +4499,7 @@ std::auto_ptr<VectorFonts>	& HeeksCADapp::GetAvailableFonts(const bool force_rea
 
 	return(m_pVectorFonts);
 } // End GetAvailableFonts() method
+#endif
 
 void HeeksCADapp::GetPluginsFromCommandLineParams(std::list<wxString> &plugins)
 {
@@ -4712,3 +4728,18 @@ void HeeksCADapp::ReleaseIndex(unsigned int index)
 {
     if(m_marked_list)m_marked_list->ReleaseIndex(index);
 }
+
+void HeeksCADapp::GetExternalMarkedListTools(std::list<Tool*>& t_list)
+{
+	for(std::list< void(*)(std::list<Tool*>&) >::iterator It = m_markedlisttools_callbacks.begin(); It != m_markedlisttools_callbacks.end(); It++)
+	{
+		void(*callbackfunc)(std::list<Tool*>& t_list) = *It;
+		(*callbackfunc)(t_list);
+	}
+}
+
+void HeeksCADapp::RegisterMarkeListTools(void(*callbackfunc)(std::list<Tool*>& t_list))
+{
+	m_markedlisttools_callbacks.push_back(callbackfunc);
+}
+

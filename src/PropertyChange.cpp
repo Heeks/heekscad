@@ -12,6 +12,7 @@
 #include "../interface/PropertyVertex.h"
 #include "PropertyTrsf.h"
 #include "../interface/PropertyChoice.h"
+#include "../interface/PropertyCheck.h"
 
 PropertyChangeString::PropertyChangeString(const wxString& value, PropertyString* property)
 {
@@ -136,9 +137,9 @@ void PropertyChangeVertex::RollBack()
 PropertyChangeTrsf::PropertyChangeTrsf(const gp_Trsf &value, PropertyTrsf* property)
 {
 	m_value = value;
-	m_old = ((PropertyTrsf*)property)->m_trsf;
-	m_callbackfunc = ((PropertyTrsf*)property)->m_callbackfunc;
-	m_object = ((PropertyTrsf*)property)->m_object;
+	m_old = property->m_trsf;
+	m_callbackfunc = property->m_callbackfunc;
+	m_object = property->m_object;
 }
 
 void PropertyChangeTrsf::Run(bool redo)
@@ -156,9 +157,9 @@ void PropertyChangeTrsf::RollBack()
 PropertyChangeChoice::PropertyChangeChoice(const int& value, PropertyChoice* property)
 {
 	m_value = value;
-	m_old = ((PropertyChoice*)property)->m_initial_index;
-	m_callbackfunc = ((PropertyChoice*)property)->m_callbackfunc;
-	m_object = ((PropertyChoice*)property)->m_object;
+	m_old = property->m_initial_index;
+	m_callbackfunc = property->m_callbackfunc;
+	m_object = property->m_object;
 }
 
 void PropertyChangeChoice::Run(bool redo)
@@ -172,3 +173,24 @@ void PropertyChangeChoice::RollBack()
 	(*(m_callbackfunc))(m_old, m_object, true);
 	wxGetApp().WasModified(m_object);
 }
+
+PropertyChangeCheck::PropertyChangeCheck(const bool& value, PropertyCheck* property)
+{
+	m_value = value;
+	m_old = property->m_initial_value;
+	m_callbackfunc = property->m_callbackfunc;
+	m_object = property->m_object;
+}
+
+void PropertyChangeCheck::Run(bool redo)
+{
+	(*(m_callbackfunc))(m_value, m_object);
+	wxGetApp().WasModified(m_object);
+}
+
+void PropertyChangeCheck::RollBack()
+{
+	(*(m_callbackfunc))(m_old, m_object);
+	wxGetApp().WasModified(m_object);
+}
+

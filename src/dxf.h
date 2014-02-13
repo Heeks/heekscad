@@ -133,6 +133,7 @@ private:
 	bool ReadInsert();
 	bool ReadLine();
 	bool ReadText();
+	bool ReadMText();
 	bool ReadArc();
 	bool ReadCircle();
 	bool ReadEllipse();
@@ -144,6 +145,10 @@ private:
 	void OnReadArc(double start_angle, double end_angle, double radius, const double* c, double z_extrusion_dir, bool hidden);
 	void OnReadCircle(const double* c, double radius, bool hidden);
     void OnReadEllipse(const double* c, const double* m, double ratio, double start_angle, double end_angle);
+	bool ReadLeader();
+	bool ReadMLine();
+	bool ReadXLine();
+	bool ReadDimension();
 
 	void get_line();
 	void put_line(const char *value);
@@ -171,12 +176,13 @@ public:
 	virtual void OnReadEndBlock(){}
 	virtual void OnReadLine(const double* /*s*/, const double* /*e*/, bool /*hidden*/){}
 	virtual void OnReadPoint(const double* /*s*/){}
-	virtual void OnReadText(const double* /*point*/, const double /*height*/, const char* /*text*/){}
+	virtual void OnReadText(const double* /*point*/, const double /*height*/, const char* /*text*/, int /*hj*/, int /*vj*/){}
 	virtual void OnReadArc(const double* /*s*/, const double* /*e*/, const double* /*c*/, bool /*dir*/, bool /*hidden*/){}
 	virtual void OnReadCircle(const double* /*s*/, const double* /*c*/, bool /*dir*/, bool /*hidden*/){}
 	virtual void OnReadEllipse(const double* /*c*/, double /*major_radius*/, double /*minor_radius*/, double /*rotation*/, double /*start_angle*/, double /*end_angle*/, bool /*dir*/){}
 	virtual void OnReadSpline(struct SplineData& /*sd*/){}
-	virtual void AddGraphics() const { }
+	virtual void OnReadDimension(int /*dimension_type*/, double /*angle*/, double /*angle2*/, double /*angle3*/, double /*radius_leader_length*/, const double * /*def_point*/, const double * /*mid*/, const double * /*p1*/, const double * /*p2*/, const double * /*p3*/, const double * /*p4*/, const double * /*p5*/){}
+	virtual void AddGraphics() { }
 
     std::string LayerName() const;
 

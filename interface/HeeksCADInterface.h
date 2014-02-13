@@ -30,6 +30,12 @@ class CNurbSurfaceParams;
 class Plugin;
 class CoordinateSystem;
 class Undoable;
+class Tool;
+
+
+#define STR_VALUE(arg)      #arg
+#define HEEKSCAD_VERSION_MAIN 0
+#define HEEKSCAD_VERSION_SUB 30
 
 #include "SketchOrder.h"
 
@@ -395,4 +401,6 @@ public:
 
 	// Area functions
 	virtual void ObjectAreaString(HeeksObj* object, wxString &s);
+
+	virtual void RegisterMarkeListTools(void(*callbackfunc)(std::list<Tool*>&));
 };

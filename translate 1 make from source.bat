@@ -1,3 +1,3 @@
-"C:\Program Files\GnuWin32\bin\xgettext.exe" -C -n -k_ -o "C:\Users\Dan\HeeksCAD\HeeksCAD.po" C:\Users\Dan\HeeksCAD\src\*.cpp C:\Users\Dan\HeeksCAD/src/*.h C:\Users\Dan\HeeksCAD\interface\*.cpp C:\Users\Dan\HeeksCAD\interface\*.h C:\Users\Dan\HeeksCNC\src\*.cpp C:\Users\Dan\HeeksCNC/src/*.h
+"C:\Program Files (x86)\GnuWin32\bin\xgettext.exe" -C -n -k_ -o "C:\Dev\HeeksCADSVN\HeeksCAD.po" C:\Dev\HeeksCADSVN\src\*.cpp C:\Dev\HeeksCADSVN/src/*.h C:\Dev\HeeksCADSVN\interface\*.cpp C:\Dev\HeeksCADSVN\interface\*.h C:\Dev\HeeksCNCSVN\src\*.cpp C:\Dev\HeeksCNCSVN/src/*.h
 
 pause

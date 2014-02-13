@@ -410,8 +410,9 @@ void CPropertiesCanvas::OnPropertyGridChange( wxPropertyGridEvent& event ) {
 		break;
 	case CheckPropertyType:
 		{
-			// to do
-			(*(((PropertyCheck*)property)->m_callbackfunc))(event.GetPropertyValue().GetBool(), ((PropertyCheck*)property)->m_object);
+			PropertyChangeCheck* changer = new PropertyChangeCheck(event.GetPropertyValue().GetBool(), (PropertyCheck*)property);
+			changers.push_back(changer);
+			//(*(((PropertyCheck*)property)->m_callbackfunc))(event.GetPropertyValue().GetBool(), ((PropertyCheck*)property)->m_object);
 		}
 		break;
 	case ListOfPropertyType:
