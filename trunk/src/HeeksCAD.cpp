@@ -146,7 +146,7 @@ static unsigned int DecimalPlaces( const double value )
 
 HeeksCADapp::HeeksCADapp(): ObjList()
 {
-	m_version_number = wxString(_T(STR_VALUE(HEEKSCAD_VERSION_MAIN))) + _T(" ") + _T(STR_VALUE(HEEKSCAD_VERSION_SUB)) + _T(" 0");
+	m_version_number = wxString(_T(HEEKSCAD_VERSION_MAIN)) + _T(" ") + _T(HEEKSCAD_VERSION_SUB) + _T(" 0");
 	m_geom_tol = 0.000001;
 
 	TiXmlBase::SetRequiredDecimalPlaces( DecimalPlaces(m_geom_tol) );	 // Ensure we write XML in enough accuracy to be useful when re-read.
