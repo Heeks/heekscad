@@ -33,9 +33,8 @@ class Undoable;
 class Tool;
 
 
-#define STR_VALUE(arg)      #arg
-#define HEEKSCAD_VERSION_MAIN 0
-#define HEEKSCAD_VERSION_SUB 30
+#define HEEKSCAD_VERSION_MAIN "0"
+#define HEEKSCAD_VERSION_SUB "30"
 
 #include "SketchOrder.h"
 
