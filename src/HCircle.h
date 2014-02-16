@@ -13,7 +13,6 @@ private:
 
 public:
 	gp_Ax1 m_axis;
-	gp_Pnt C;
 	double m_radius;
 
 	~HCircle(void);
