@@ -29,7 +29,7 @@ HCircle::~HCircle(){
 }
 
 const HCircle& HCircle::operator=(const HCircle &c){
-	HeeksObj::operator=(c);
+	IdNamedObj::operator=(c);
 
 	m_axis = c.m_axis;
 	m_radius = c.m_radius;
@@ -57,7 +57,7 @@ bool HCircle::IsDifferent(HeeksObj* other)
 	if(cir->m_radius != m_radius)
 		return true;
 
-	return HeeksObj::IsDifferent(other);
+	return IdNamedObj::IsDifferent(other);
 }
 
 //segments - number of segments per full revolution!
@@ -195,7 +195,7 @@ void HCircle::GetProperties(std::list<Property *> *list){
 	list->push_back(new PropertyVector(_("axis"), a, this, on_set_axis));
 	list->push_back(new PropertyLength(_("radius"), m_radius, this, on_set_radius));
 
-	HeeksObj::GetProperties(list);
+	IdNamedObj::GetProperties(list);
 }
 
 bool HCircle::FindNearPoint(const double* ray_start, const double* ray_direction, double *point){

@@ -42,7 +42,7 @@ wxArrayString HTypeObjectDropDown::GetObjectArrayString(int object_type, HeeksOb
 
 	for(HeeksObj* ob = obj_list->GetFirstChild(); ob; ob = obj_list->GetNextChild())
 	{
-		if (ob->GetType() != object_type) continue;
+		if (ob->GetIDGroupType() != object_type) continue;
 
 		int number = ob->GetID();
 #ifdef HEEKSCNC

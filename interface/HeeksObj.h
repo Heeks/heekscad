@@ -85,6 +85,9 @@ enum{
 #define MARKING_FILTER_AREA					0x00200000
 #define MARKING_FILTER_UNKNOWN				0x00400000
 
+#define MARKING_FILTER_SKETCH_GROUP			(MARKING_FILTER_SKETCH | MARKING_FILTER_AREA | MARKING_FILTER_CIRCLE)
+
+
 #ifdef HEEKSCAD
 #define GET_ICON(X,Y) x = (X); y = (Y); texture_number = wxGetApp().m_icon_texture_number
 #else
