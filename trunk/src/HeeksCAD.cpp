@@ -1389,7 +1389,7 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
                 {
 			HCircle* cir = (HCircle*)object;
 			double c[3];
-			extract(cir->C, c);
+			extract(cir->m_axis.Location(), c);
 			double radius = cir->m_radius;
 			dxf_file.WriteCircle(c, radius, Ttc(layer_name.c_str()));
                 }

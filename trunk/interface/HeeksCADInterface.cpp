@@ -284,7 +284,7 @@ bool CHeeksCADInterface::GetArcCentre(HeeksObj* object, double* c)
 			return true;
 
 		case CircleType:
-			extract(((HCircle*)object)->C, c);
+			extract(((HCircle*)object)->m_axis.Location(), c);
 			return true;
 
 	} // End switch
@@ -2080,7 +2080,7 @@ void CHeeksCADInterface::ObjectAreaString(HeeksObj* object, wxString &s)
 	{
 	case CircleType:
 		{
-			double c[2] = {((HCircle*)object)->C.X(), ((HCircle*)object)->C.Y()};
+			double c[2] = {((HCircle*)object)->m_axis.Location().X(), ((HCircle*)object)->m_axis.Location().Y()};
 			double radius = ((HCircle*)object)->m_radius;
 			s << _T("a = area.Area()\n");
 			s << _T("c = area.Curve()\n");
