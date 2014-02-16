@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include "../interface/HeeksObj.h"
+#include "../interface/IdNamedObj.h"
 #include "../interface/HeeksColor.h"
 
-class HCircle: public HeeksObj{
+class HCircle: public IdNamedObj{
 private:
 	HeeksColor color;
 

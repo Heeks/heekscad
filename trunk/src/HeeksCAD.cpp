@@ -389,7 +389,7 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("LoftRemovesSketches"), &m_loft_removes_sketches, true);
 	config.Read(_T("GraphicsTextMode"), (int*)(&m_graphics_text_mode), GraphicsTextModeWithHelp);
 
-	config.Read(_T("DxfMakeSketch"), &HeeksDxfRead::m_make_as_sketch, false);
+	config.Read(_T("DxfMakeSketch"), &HeeksDxfRead::m_make_as_sketch, true);
 	config.Read(_T("DxfIgnoreErrors"), &HeeksDxfRead::m_ignore_errors, false);
 
 	config.Read(_T("ViewUnits"), &m_view_units);
