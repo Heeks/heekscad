@@ -411,7 +411,7 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 						AddToTempObjects(new HCircle(gp_Circ(gp_Ax2(p1, gp_Dir(0, 0, 1)), radius_for_circle), &wxGetApp().current_color));
 					}
 					else{
-						((HCircle*)TempObject())->C = p1;
+						((HCircle*)TempObject())->m_axis.SetLocation(p1);
 						((HCircle*)TempObject())->m_radius = radius_for_circle;
 					}
 				}
@@ -451,7 +451,7 @@ bool LineArcDrawing::calculate_item(DigitizedPoint &end){
 						AddToTempObjects(new HCircle(gp_Circ(gp_Ax2(end.m_point, gp_Dir(0, 0, 1)), radius_for_circle), &wxGetApp().current_color));
 					}
 					else{
-						((HCircle*)TempObject())->C = end.m_point;
+						((HCircle*)TempObject())->m_axis.SetLocation(end.m_point);
 						((HCircle*)TempObject())->m_radius = radius_for_circle;
 					}
 				}
