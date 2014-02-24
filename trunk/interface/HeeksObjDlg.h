@@ -1,6 +1,8 @@
 // HeeksObjDlg.h
 // Copyright (c) 2014, Dan Heeks
 // This program is released under the BSD license. See the file COPYING for details.
+#if !defined HeeksObjDlg_HEADER
+#define HeeksObjDlg_HEADER
 
 class HeeksObj;
 class PictureWindow;
@@ -9,9 +11,9 @@ class PictureWindow;
 
 class HeeksObjDlg : public HDialog
 {
+protected:
 	PictureWindow *m_picture;
 
-protected:
 	HeeksObj* m_object;
 	std::list<HControl> leftControls;
 	std::list<HControl> rightControls;
@@ -35,3 +37,5 @@ public:
 
     DECLARE_EVENT_TABLE()
 };
+
+#endif

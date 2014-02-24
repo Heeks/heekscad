@@ -57,8 +57,9 @@ wxArrayString HTypeObjectDropDown::GetObjectArrayString(int object_type, HeeksOb
 
 int HTypeObjectDropDown::GetSelectedId()
 {
-	if(GetSelection() < 0)return 0;
-	return m_ids_for_combo[GetSelection()].first;
+	int sel = GetSelection();
+	if(sel < 0)return 0;
+	return m_ids_for_combo[sel].first;
 }
 
 void HTypeObjectDropDown::SelectById(int id)
@@ -69,9 +70,11 @@ void HTypeObjectDropDown::SelectById(int id)
 		if(m_ids_for_combo[i].first == id)
 		{
 			SetSelection(i);
-			break;
+			return;
 		}
 	}
+
+	SetSelection(0);
 }
 
 const int HDialog::control_border = 3;
@@ -120,6 +123,8 @@ HControl HDialog::MakeOkAndCancel(int orient)
 	sizerOKCancel->Add( buttonOK, 0, wxALL, control_border );
     wxButton* buttonCancel = new wxButton(this, wxID_CANCEL, _("Cancel"));
 	sizerOKCancel->Add( buttonCancel, 0, wxALL, control_border );
+    wxButton* buttonHelp = new wxButton(this, wxID_HELP, _("Help"));
+	sizerOKCancel->Add( buttonHelp, 0, wxALL, control_border );
     buttonOK->SetDefault();
 	return HControl(sizerOKCancel, wxALL | wxALIGN_RIGHT | wxALIGN_BOTTOM);
 }

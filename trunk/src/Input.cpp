@@ -6,10 +6,13 @@
 #include "../interface/DoubleInput.h"
 #include "../interface/HDialogs.h"
 #include "../interface/NiceTextCtrl.h"
+#include "../interface/PictureFrame.h"
 #include "HeeksFrame.h"
 #include "HLine.h"
 #include "HILine.h"
 #include "OptionsCanvas.h"
+
+class PictureWindow;
 
 bool HeeksCADapp::InputInt(const wxChar* prompt, const wxChar* value_name, int &value)
 {
