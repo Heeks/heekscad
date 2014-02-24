@@ -34,7 +34,7 @@ class Tool;
 
 
 #define HEEKSCAD_VERSION_MAIN "0"
-#define HEEKSCAD_VERSION_SUB "30"
+#define HEEKSCAD_VERSION_SUB "31"
 
 #include "SketchOrder.h"
 
@@ -400,6 +400,8 @@ public:
 
 	// Area functions
 	virtual void ObjectAreaString(HeeksObj* object, wxString &s);
+	virtual HeeksObj* NewSketchFromArea(HeeksObj* object);
 
 	virtual void RegisterMarkeListTools(void(*callbackfunc)(std::list<Tool*>&));
+	virtual void RegisterOnRestoreDefaults(void(*callbackfunc)());
 };

@@ -24,7 +24,6 @@ CObjPropsCanvas::CObjPropsCanvas(wxWindow* parent)
 {
 	m_toolBar = NULL;
 	m_make_initial_properties_in_refresh = false;
-	m_object_canvas = NULL;
 	AddToolBar();
 }
 
@@ -83,25 +82,8 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll2(){
 
 	if(m_make_initial_properties_in_refresh)ClearInitialProperties();
 
-	ObjectCanvas* object_canvas = NULL;
-	if(wxGetApp().m_marked_list->size() == 1)
-		object_canvas = wxGetApp().m_marked_list->list().front()->GetDialog(this);
-	if(m_object_canvas && object_canvas != m_object_canvas)
-		m_object_canvas->Show(false); // hide the previous object canvas
-
-	m_object_canvas = object_canvas;
-
-	if(m_object_canvas)
-		m_object_canvas->Show(); // show the next object canvas
-
 	if(wxGetApp().m_marked_list->size() > 0)
 	{
-
-		if(m_object_canvas)
-		{
-			m_object_canvas->SetWithObject(wxGetApp().m_marked_list->list().front());
-		}
-
 		// use the property list too
 		std::list<Property *> list;
 		wxGetApp().m_marked_list->GetProperties(&list);
@@ -145,18 +127,6 @@ void CObjPropsCanvas::Resize()
 	else
 	{
 		m_toolBar->Show(false);
-	}
-
-	if(m_object_canvas)
-	{
-		if(pmap.size() > 0)
-		{
-			wxSize half_size = wxSize(pg_size.x, pg_size.y / 2);
-			pg_size = wxSize(size.x, pg_size.y - half_size.y);
-			m_object_canvas->SetSize(0, pg_size.y, size.x, half_size.y);
-		}
-		else
-			m_object_canvas->SetSize(0, 0, pg_size.x, pg_size.y);
 	}
 
 	// change size for property grid

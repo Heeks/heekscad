@@ -732,9 +732,15 @@ static void OnSaveAsButton( wxCommandEvent& event )
     wxGetApp().SaveFile( wxGetApp().m_filepath.c_str(), true );
 }
 
-static void OnSaveSettingsButton( wxCommandEvent& event )
+//static void OnSaveSettingsButton( wxCommandEvent& event )
+//{
+//    wxGetApp().WriteConfig();
+//}
+//
+static void OnResetDefaultsButton( wxCommandEvent& event )
 {
-    wxGetApp().WriteConfig();
+	wxGetApp().RestoreDefaults();
+	wxMessageBox(_("You must restart the application for the settings to be changed"));
 }
 
 static void OnUndoButton( wxCommandEvent& event )
@@ -1683,7 +1689,9 @@ void CHeeksFrame::MakeMenus()
 	file_menu->AppendSeparator();
 	AddMenuItem(file_menu, _("Plugins"), ToolImage(_T("plugin")), OnPlugins);
 	file_menu->AppendSeparator();
-	AddMenuItem(file_menu, _("Save Settings"), ToolImage(_T("save")), OnSaveSettingsButton);
+	//AddMenuItem(file_menu, _("Save Settings"), ToolImage(_T("save")), OnSaveSettingsButton);
+	//file_menu->AppendSeparator();
+	AddMenuItem(file_menu, _("Restore All Defaults"), ToolImage(_T("restore")), OnResetDefaultsButton);
 	file_menu->AppendSeparator();
 	AddMenuItem(file_menu, _("Exit\tCtrl+Q"), ToolImage(_T("exit")), OnQuit);
 

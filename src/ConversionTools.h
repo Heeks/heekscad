@@ -6,6 +6,9 @@
 
 #include "../interface/Tool.h"
 
+class CSketch;
+class CArea;
+
 extern bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wire& wire);
 extern void SortEdges( std::vector<TopoDS_Edge> & edges );
 extern bool ConvertEdgesToFaceOrWire(const std::vector<TopoDS_Edge> &edges, std::list<TopoDS_Shape> &face_or_wire, bool face_not_wire);
@@ -159,4 +162,5 @@ public:
 };
 
 void GetConversionMenuTools(std::list<Tool*>* t_list);
+CSketch* MakeNewSketchFromArea(CArea &area);
 

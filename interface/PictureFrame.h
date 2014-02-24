@@ -20,12 +20,11 @@ private:
 
 class PictureWindow: public wxWindow
 {   
-protected:
+public:
 	wxBitmap m_bitmap;
 	bool m_bitmap_set;
 	std::map<wxString, wxBitmap*> m_bitmaps;
 
-public:
     PictureWindow(wxWindow* parent, const wxSize& size);
     PictureWindow(wxWindow* parent, const wxBitmap& b);
 	~PictureWindow();

@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include "../interface/HeeksObj.h"
+#include "../interface/IdNamedObj.h"
 #include "Area.h"
 
-class HArea: public HeeksObj{
+class HArea: public IdNamedObj{
 	static void WriteVertex(const CVertex& vertex, TiXmlNode *root);
 	static void WriteCurve(const CCurve& curve, TiXmlNode *root);
 	static void WriteArea(const CArea& area, TiXmlNode *root);

@@ -2111,7 +2111,17 @@ void CHeeksCADInterface::ObjectAreaString(HeeksObj* object, wxString &s)
 	}
 }
 
+HeeksObj* CHeeksCADInterface::NewSketchFromArea(HeeksObj* object)
+{
+	return MakeNewSketchFromArea(((HArea*)object)->m_area);
+}
+
 void CHeeksCADInterface::RegisterMarkeListTools(void(*callbackfunc)(std::list<Tool*>&))
 {
 	wxGetApp().RegisterMarkeListTools(callbackfunc);
+}
+
+void CHeeksCADInterface::RegisterOnRestoreDefaults(void(*callbackfunc)())
+{
+	wxGetApp().RegisterOnRestoreDefaults(callbackfunc);
 }

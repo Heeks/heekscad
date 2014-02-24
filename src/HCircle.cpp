@@ -227,7 +227,9 @@ bool HCircle::Stretch(const double *p, const double* shift, void* data){
 	gp_Pnt s(c.XYZ() + x_axis.XYZ() * r);
 
 	if(data == &C_for_gripper_posns){
-		m_axis.SetLocation(vp.XYZ() + vshift.XYZ());
+		C_for_gripper_posns = vp.XYZ() + vshift.XYZ();
+		m_axis.SetLocation(C_for_gripper_posns);
+
 	}
 	else if(data == &m_radius)
 	{
