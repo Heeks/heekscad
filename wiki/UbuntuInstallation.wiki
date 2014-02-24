@@ -1,212 +1,39 @@
 #summary How to build and install HeeksCAD and related projects for Ubuntu
 #labels Featured
 
-HeeksCAD is still under heavy development so any packages you find are likely to be out of date.  To get the most current version, you need to compile the current source version from [https://github.com/Heeks git].
-
-This installation procedure was tested on Ubuntu 11.04 (Natty Narwhal) using gnome. 
-
-If you run into problems, check the notes and comments at the end of this page.
-=For Ubuntu 10.10 only=
-The version of cmake in Ubuntu 10.10 is 2.8.2. Cmake 2.8.2 has a bug that will prevent HeeksCAD and HeeksCNC from installing.  You will need to use a newer (or older) version of cmake. 
-
-Do the following:
- # On the menubar at the top of the screen, choose System|Administration|Synaptic Package Manager
- # In Synaptic: From the menu, choose Settings|Repositories
- # Click on the Updates tab, and check the box for "unsupported updates (maverick-backports)"
- # Click the close button
- # Click Reload
- # Type `cmake` in the search box
- # Scroll through the list until you find cmake. 
- # Click the box, and on the popup menu, choose "Mark for installation"
- # In the window that appears, click Mark
- # Click apply
- # When it finishes, repeat steps 2 - 5, but in step 3 clear the checkbox
- # Close Synaptic
-
-=For Ubuntu 8.04 only=
-The opencascade libraries are not in the ubuntu multiverse for Hardy.  You can get them from opennovation.
-
-First add the following to your /etc/apt/sources.list file
-{{{
-deb http://www.opennovation.org/ubuntu hardy main contrib non-free
-}}}
-
-Download the signing key available here
-[http://www.opennovation.org/ubuntu/opennovation.key]
-
-Go into synaptic.  Click the Settings -> repositories menu.
-Click the 'authentication' tab and import the key file you just downloaded.
+I copied this from https://elrippoisland.net/public/CAD_CAM/heeks.html
+It worked for me.
 
 
-=Install the dependencies=
+Last updated 2013.06.16
 
-The following command will install the required packages.  apt-get will prompt you to accept a large number of additional dependencies.  Accept them as well.
+Like mentioned before, i can provide you with a script, that does the installation of HeeksCAD and HeeksCNC on your Debian based OS.
 
-{{{
-sudo apt-get install git subversion libwxbase2.8-dev cmake build-essential libopencascade-dev libwxgtk2.8-dev libgtkglext1-dev python-dev cmake libboost-python-dev
-}}}
+I tested this script successfuly on K/Ubuntu 10.04, 12.04 and 13.04 in both architectures.
 
-Get a cup of coffee while all this downloads and installs.
+Before you ask, the script does ask you to do three things that the provided packages by Heeks.net are not able to do, sadly.
 
-=Downloading code=
-The codebase has been transferred from subversion to git. One advantage of this is now heekscad, heekscnc, libarea, libactp, and opencamlib can be checked out with one command:
-{{{
-git clone --recursive git://github.com/Heeks/heekscad.git
-}}}
+1.) Makes a directory in your home folder called HEEKSCAD where the source files are downloaded to (After the installation, it will be deleted by the script!).
 
-=Install HeeksCAD=
-The following commands describe how to compile and install HeeksCAD.
+2.) Builds the shared libraries to /usr/local/lib needed by HeeksCAD and HeeksCNC.
 
-{{{
-cd heekscad
-cmake .
-make package
-sudo dpkg -i heekscad_*.deb
-}}} 
+3.) Installs HeeksCAD ans HeeksCNC on your system and builds the packages to your home folder, so you can easily remove or instal them again if you want.
 
 
-=Install HeeksCNC=
-The following commands describe how to compile and install HeeksCNC.
+Download the script, take a look at it, change it if you want, make it executable and run it.
 
-{{{
-cd heekscad/heekscnc/
-cmake .
-make package
-sudo dpkg -i heekscnc_*.deb  #only one .deb to install, but the filename may change
-}}}
+4.) Open the terminal and cd yourself in to the directory where you downloaded the srcipt.
 
+5.) Make it executable with chmod +x INSTALL_HEEKS.bash and run it wit ./INSTALL_HEEKS.bash. DO NOT USE SUDO!.
 
-==Install the helper libraries==
-HeeksCNC uses a number of libraries to perform various operations.  Install all of them or only the ones you plan to use.
+6.) You will be asked a few things and prompted for your sudo password. After that you will see a lot of lines and you should wait about an hour. It will prompt you a second time for your sudo password
 
-===Install libarea===
-area.so is required for pocket operations.
+Why, because it takes about 30 to 45 minutes to build the oce libraries and after that we need sudo a few times more.
 
-{{{
-cd heekscad/heekscnc/libarea/
-make clean
-make
-sudo make install
-}}}
+On K/Ubuntu 12.04 and newer you will have to install a library suiting your architecture. Look for it at pkgs.org
+
+The libarary is called libboost-python1.40.0 or libboost-python1.42.0
+
+You can use the debian binary package also, but if you are on K/Ubuntu you should take those from K/Ubuntu.
 
 
-===Install libactp===
-actp.so is required for adaptive roughing operations. *This may be removed from git soon thus you may want to skip it*
-
-{{{
-cd heeskcad/heekscnc/libactp/PythonLib
-make clean
-make
-sudo make install
-}}}
-
-===Install opencamlib===
-opencamlib is the replacement for pycam.  It's required for zigzag operations.
-
-{{{
-cd heekscad/heekscnc/opencamlib/src
-make clean
-cmake .
-make
-sudo make install
-}}}
-
-=Other Notes=
-==use with default theme 'ambience'==
-If you are using the default Lucid theme (Ambience).
-The following bug and work-around affect the appearance of HeeksCAD in the default theme:
-
-http://code.google.com/p/heekscad/issues/detail?id=270
-
-==Making it go fast==
-As noted above, HeeksCAD is changing all the time.  The bits of script above can be combined into one script and executed together with sudo. If run multiple times, it will check git for updates and pull them recursively (including 3rd party repos which may not be desirable!)
-
-{{{
-#!/bin/sh
-# heekscad-install.sh -- Downloads, builds and installs HeeksCAD from svn
-
-
-BUILDPATH=~/             # Location of HeeksCAD build dir
-BUILDPREREQS="git subversion libwxbase2.8-dev cmake \
-  build-essential libopencascade-dev libwxgtk2.8-dev \
-  libgtkglext1-dev python-dev cmake libboost-python-dev"
-
-# Install build prerequisites
-sudo apt-get update
-sudo apt-get install -y $BUILDPREREQS
-
-
-#Git the HeeksCAD files and sub repos
-cd $BUILDPATH
-if [ -d heekscad ]; then
-  cd heekscad
-  git pull
-  git submodule foreach --recursive git pull origin master
-else
-  git clone --recursive git://github.com/Heeks/heekscad.git
-fi
-
-
-# Install HeeksCAD
-cd ${BUILDPATH}/heekscad/
-cmake .
-make package
-sudo dpkg -i heekscad_*.deb
-
-# Install HeeksCNC
-cd ${BUILDPATH}/heekscad/heekscnc/
-cmake .
-make package
-sudo dpkg -i heekscnc_*.deb
-
-# Install libarea
-# area.so is required for pocket operations.
-cd ${BUILDPATH}/heekscad/heekscnc/libarea/
-make clean
-make
-sudo make install
-
-# Install libactp 
-# actp.so is required for adaptive roughing operations.
-#cd ${BUILDPATH}/heekscad/heekscnc/libactp/PythonLib
-#make clean
-#make
-#sudo make install
-
-# Install opencamlib
-# opencamlib is the replacement for pycam. It's required for zigzag operations.
-cd ${BUILDPATH}/heekscad/heekscnc/opencamlib/src
-cmake .
-make
-make doc        # Creates PDF file needed by make install
-sudo make install
-
-if test $(lsb_release -s -c) = 'hardy'; then
-    echo This is Ubuntu Hardy, creating symlinks
-    sudo ln -fs /usr/local/lib/python2.5/dist-packages/kurve.so /usr/local/lib/python2.5/site-packages/kurve.so
-    sudo ln -fs /usr/local/lib/python2.5/dist-packages/actp.so /usr/local/lib/python2.5/site-packages/actp.so
-    sudo ln -fs /usr/local/lib/python2.5/dist-packages/area.so /usr/local/lib/python2.5/site-packages/area.so
-fi
-
-sudo ldconfig # Makes sure heekscnc/cad can find libraries that were just installed.
-
-}}}
-
-
-
-===Earlier version of Ubuntu===
-This affects at least 8.04(Hardy) and may affect other releases as well.  Earlier releases using Python2.5 will look for the module in a different directory.  Make the following symlinks to enable the modules
-{{{
-sudo ln -s /usr/local/lib/python2.5/dist-packages/kurve.so /usr/local/lib/python2.5/site-packages/kurve.so
-sudo ln -s /usr/local/lib/python2.5/dist-packages/actp.so /usr/local/lib/python2.5/site-packages/actp.so
-sudo ln -s /usr/local/lib/python2.5/dist-packages/area.so /usr/local/lib/python2.5/site-packages/area.so
-}}}
-
-==A possible problem==
-If you get this error:
-{{{
-/opt/opencascade-6.3/ros/lin/inc/Standard_Stream.hxx: At global scope:
-/opt/opencascade-6.3/ros/lin/inc/Standard_Stream.hxx:84: error: ‘std::setw’ has not been declared
-/opt/opencascade-6.3/ros/lin/inc/Standard_Stream.hxx:85: error: ‘std::setprecision’ has not been declared
-}}}
-You need to add -DHAVE_IOMANIP to CCFLAGS in src/Makefile of HeeksCAD and HeeksCNC.
