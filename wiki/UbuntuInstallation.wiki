@@ -2,7 +2,7 @@
 #labels Featured
 
 I copied this from https://elrippoisland.net/public/CAD_CAM/heeks.html
-It worked for me.
+It worked for me on Linux Mint 14, about 6 months ago. Dan Heeks. 24th Feb 2014
 
 
 Last updated 2013.06.16
@@ -35,5 +35,3 @@ On K/Ubuntu 12.04 and newer you will have to install a library suiting your arch
 The libarary is called libboost-python1.40.0 or libboost-python1.42.0
 
 You can use the debian binary package also, but if you are on K/Ubuntu you should take those from K/Ubuntu.
-
-
