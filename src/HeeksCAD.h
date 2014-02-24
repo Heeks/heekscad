@@ -182,6 +182,7 @@ public:
 	std::list< void(*)(int, int) > m_beforeneworopen_callbacks;
 	std::list< void(*)() > m_beforeframedelete_callbacks;
 	std::list< void(*)(std::list<Tool*>&) > m_markedlisttools_callbacks;
+	std::list< void(*)() > m_on_restore_defaults_callbacks;
 	int m_transform_gl_list;
 	gp_Trsf m_drag_matrix;
 	bool m_extrude_removes_sketches;
@@ -248,6 +249,8 @@ public:
 	void UnregisterHeeksTypesConverter( HeeksTypesConverter_t );
 
 	wxString m_alternative_open_wild_card_string;
+
+	bool m_settings_restored;
 
 	//WxApp override
 	int OnRun();
@@ -424,6 +427,8 @@ public:
 
 	void GetExternalMarkedListTools(std::list<Tool*>& t_list);
 	void RegisterMarkeListTools(void(*callbackfunc)(std::list<Tool*>& t_list));
+	void RegisterOnRestoreDefaults(void(*callbackfunc)());
+	void RestoreDefaults();
 };
 
 void ExitMainLoop();

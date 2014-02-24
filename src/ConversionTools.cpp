@@ -750,6 +750,13 @@ static void AddLinesOrArcs(CSketch* sketch, CArea &area)
 	}
 }
 
+CSketch* MakeNewSketchFromArea(CArea &area)
+{
+	CSketch* sketch = new CSketch();
+	AddLinesOrArcs(sketch, area);
+	return sketch;
+}
+
 void MakeToSketch::Run(){
 	std::list<HeeksObj*> objects_to_delete;
 

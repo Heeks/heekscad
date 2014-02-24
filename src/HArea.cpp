@@ -273,7 +273,7 @@ void HArea::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
 
 void HArea::GetProperties(std::list<Property *> *list){
 	list->push_back(new PropertyInt(_("number of curves"), this->m_area.m_curves.size(), this, NULL));
-	HeeksObj::GetProperties(list);
+	IdNamedObj::GetProperties(list);
 }
 
 bool HArea::Stretch(const double *p, const double* shift, void* data){

@@ -252,6 +252,8 @@ HeeksCADapp::HeeksCADapp(): ObjList()
     }
 
     RegisterHeeksTypesConverter(HeeksCADType);
+
+	m_settings_restored = false;
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -2496,7 +2498,6 @@ void HeeksCADapp::EditUndoably(HeeksObj *object)
 	if(copy_object->Edit())
 	{
 		wxGetApp().CopyUndoably(object, copy_object);
-		object->WriteDefaultValues();
 	}
 	else
 		delete copy_object;
@@ -4743,3 +4744,19 @@ void HeeksCADapp::RegisterMarkeListTools(void(*callbackfunc)(std::list<Tool*>& t
 	m_markedlisttools_callbacks.push_back(callbackfunc);
 }
 
+void HeeksCADapp::RegisterOnRestoreDefaults(void(*callbackfunc)())
+{
+	m_on_restore_defaults_callbacks.push_back(callbackfunc);
+}
+
+void HeeksCADapp::RestoreDefaults()
+{
+	HeeksConfig config;
+	config.DeleteAll();
+	for(std::list< void(*)() >::iterator It = m_on_restore_defaults_callbacks.begin(); It != m_on_restore_defaults_callbacks.end(); It++)
+	{
+		void(*callbackfunc)() = *It;
+		(*callbackfunc)();
+	}
+	wxGetApp().m_settings_restored = true;
+}
