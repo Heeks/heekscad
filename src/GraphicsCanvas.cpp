@@ -482,22 +482,22 @@ void CGraphicsCanvas::RefreshSoon()
 	}
 }
 
-void CViewport::OnMagExtents(bool rotate) 
+void CViewport::OnMagExtents(bool rotate, int margin) 
 {
 	m_view_points.clear();
 	if(rotate){
 		m_orthogonal = true;
-		SetViewPoint();
+		SetViewPoint(margin);
 	}
 	else{
-		m_view_point.SetViewAroundAllObjects();
+		m_view_point.SetViewAroundAllObjects(margin);
 		StoreViewPoint();
 	}
 }
 
-void CGraphicsCanvas::OnMagExtents(bool rotate, bool recalculate_gl_lists) 
+void CGraphicsCanvas::OnMagExtents(bool rotate, bool recalculate_gl_lists, int margin) 
 {
-	CViewport::OnMagExtents(rotate);
+	CViewport::OnMagExtents(rotate, margin);
 
 	if(recalculate_gl_lists)
 		wxGetApp().RecalculateGLLists();
@@ -509,7 +509,7 @@ void CGraphicsCanvas::OnMagExtents(bool rotate, bool recalculate_gl_lists)
 void CGraphicsCanvas::OnMag(const gp_Vec &unitY, const gp_Vec &unitZ, bool recalculate_gl_lists)
 {
 	m_view_points.clear();
-	m_view_point.SetView(unitY, unitZ);
+	m_view_point.SetView(unitY, unitZ, 6);
 	StoreViewPoint();
 	if(recalculate_gl_lists)
 		wxGetApp().RecalculateGLLists();
@@ -576,17 +576,17 @@ gp_Vec getClosestOrthogonal(const gp_Vec &v)
 	return best_v;
 }
 
-void CViewport::SetViewPoint(void){
+void CViewport::SetViewPoint(int margin){
 	if(m_orthogonal){
 		gp_Vec vz = getClosestOrthogonal(-m_view_point.forwards_vector());
 		gp_Vec vy = getClosestOrthogonal(m_view_point.m_vertical);
-		m_view_point.SetView(vy, vz);
+		m_view_point.SetView(vy, vz, margin);
 		StoreViewPoint();
 		return;
 	}
 
 	gp_Vec vy(0, 1, 0), vz(0, 0, 1);
-	m_view_point.SetView(vy, vz);
+	m_view_point.SetView(vy, vz, margin);
 	StoreViewPoint();
 }
 

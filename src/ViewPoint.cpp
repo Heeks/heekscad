@@ -311,12 +311,12 @@ void CViewPoint::SetViewport(void)const{
 	glViewport(0, 0, size.GetWidth(), size.GetHeight());
 }
 
-void CViewPoint::SetView(const gp_Vec &unity, const gp_Vec &unitz){
+void CViewPoint::SetView(const gp_Vec &unity, const gp_Vec &unitz, int margin){
 	m_target_point = gp_Pnt(0, 0, 0);
 	m_lens_point = m_target_point.XYZ() + unitz.XYZ();
 	m_vertical = unity;
 	m_pixel_scale = 10;
-	SetViewAroundAllObjects();
+	SetViewAroundAllObjects(margin);
 }
 
 gp_Pnt CViewPoint::glUnproject(const gp_Pnt &v)const{
@@ -339,7 +339,7 @@ void CViewPoint::SetPolygonOffset(void)const{
 	glPolygonOffset(1.0, 1.0);
 }
 
-void CViewPoint::SetViewAroundAllObjects(){
+void CViewPoint::SetViewAroundAllObjects(int margin){
 	CBox box;
 
 	wxGetApp().GetBox(box);
@@ -372,8 +372,8 @@ void CViewPoint::SetViewAroundAllObjects(){
 	m_lens_point = m_target_point.XYZ() - (uf.XYZ() * m);
 	double Width = window.Width();
 	double Height = window.Height();
-	double pw = width - 6;
-	double ph = height - 6;
+	double pw = width - margin;
+	double ph = height - margin;
 	if(Width<0.00001)Width = 0.00001;
 	if(Height<0.00001)Height = 0.00001;
 	if(pw<0.00001)pw = 0.00001;

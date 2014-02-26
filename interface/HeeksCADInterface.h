@@ -34,7 +34,7 @@ class Tool;
 
 
 #define HEEKSCAD_VERSION_MAIN "0"
-#define HEEKSCAD_VERSION_SUB "31"
+#define HEEKSCAD_VERSION_SUB "32"
 
 #include "SketchOrder.h"
 
