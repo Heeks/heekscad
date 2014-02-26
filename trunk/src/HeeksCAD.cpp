@@ -705,7 +705,7 @@ void HeeksCADapp::Reset(){
 	m_current_coordinate_system = NULL;
 	m_doing_rollback = false;
 	gp_Vec vy(0, 1, 0), vz(0, 0, 1);
-	m_current_viewport->m_view_point.SetView(vy, vz);
+	m_current_viewport->m_view_point.SetView(vy, vz, 6);
 	m_filepath = wxString(_("Untitled")) + _T(".heeks");
 	m_untitled = true;
 	m_hidden_for_drag.clear();
@@ -1231,9 +1231,13 @@ void HeeksCADapp::OnOpenButton()
 				wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + GetKnownFilesCommaSeparatedList();
 				wxMessageBox(str);
 			}
-			OnNewOrOpen(true, res);
-			ClearHistory();
-			SetLikeNewFile();
+			else
+			{
+				m_frame->m_graphics->OnMagExtents(true, true, 25);
+				OnNewOrOpen(true, res);
+				ClearHistory();
+				SetLikeNewFile();
+			}
 		}
     }
 }
@@ -2816,7 +2820,7 @@ void on_set_rotate_mode(int value, HeeksObj* object, bool from_undo_redo)
 	if(!wxGetApp().m_rotate_mode)
 	{
 		gp_Vec vy(0, 1, 0), vz(0, 0, 1);
-		wxGetApp().m_current_viewport->m_view_point.SetView(vy, vz);
+		wxGetApp().m_current_viewport->m_view_point.SetView(vy, vz, 6);
 		wxGetApp().m_current_viewport->StoreViewPoint();
 		wxGetApp().Repaint();
 	}
