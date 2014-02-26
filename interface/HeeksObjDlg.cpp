@@ -85,7 +85,8 @@ void HeeksObjDlg::SetPicture()
 {
 	wxWindow* w = FindFocus();
 
-	SetPictureByWindow(w);
+	if(m_picture)
+		SetPictureByWindow(w);
 
 }
 
