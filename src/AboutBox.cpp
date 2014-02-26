@@ -23,9 +23,13 @@ CAboutBox::CAboutBox(wxWindow *parent):wxDialog(parent, wxID_ANY, _T(""), wxDefa
 	wxString str = wxString(_T("HeeksCAD\n see http://heeks.net, or for source code: http://code.google.com/p/heekscad/\n\nusing Open CASCADE solid modeller - http://www.opencascade.org"))
 		+ wxString(_T("\n\nwindows made with wxWidgets 2.8.9 - http://wxwidgets.org"))
 		+ wxString(_T("\n\ntext uses glFont Copyright (c) 1998 Brad Fish E-mail: bhf5@email.byu.edu Web: http://students.cs.byu.edu/~bfish/"))
-		+ wxString(_T("\n\nWritten by:\n Dan Heeks\n Jon Pry\n Jonathan George\n David Nicholls"))
-		+ wxString(_T("\n\nWith contributions from:\n Hirutso Enni\n Perttu Ahola\n Dave ( the archivist )\n mpictor\n fenn\n fungunner2\n andrea ( openSUSE )\n g_code\n Luigi Barbati (Italian translation)\n Andre Pascual (French translation)"))
-		+ wxString(_T("\n\nThis is free, open source software."));
+		+ wxString(_T("\n\nWritten by:\n Dan Heeks\n"))
+		+ wxString(_T("\n\nWith contributions from:\n David Nicholls\n Perttu Ahola\n Dave ( the archivist )\n mpictor\n fenn\n fungunner2\n andrea ( openSUSE )\n g_code\n Luigi Barbati (Italian translation)\n Andre Pascual (French translation)"))
+#ifdef FREE_VERSION
+		+ wxString(_T("\n\nThis is free, open source software, not to be used for commercial use. Please buy the full version."));
+#else
+		+ wxString(_T("\n\nThis software is open source software, but this version is only for use by the purchaser. Please buy a copy for each computer you are using it on."));
+#endif
 
 	wxString version_str = wxGetApp().m_version_number;
 	version_str.Replace(_T(" "), _T("."));

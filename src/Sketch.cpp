@@ -18,6 +18,7 @@
 #include "Wire.h"
 #include <wx/numdlg.h>
 #include "../interface/HeeksCADInterface.h"
+#include "HeeksConfig.h"
 
 #include "DigitizeMode.h"
 #include "Drawing.h"
@@ -289,8 +290,11 @@ public:
 	    wxString caption(_("Distance"));
 
 		double distance;
+		HeeksConfig config;
+		config.Read(_T("CopyParallelDistance"), &distance, 1.0);
 		if(wxGetApp().InputDouble(wxString(_("Use negative for smaller and Positive for larger)") ), _("Enter the distance"), distance))
 		{
+			config.Write(_T("CopyParallelDistance"), distance);
 			HeeksObj *parallel_sketch = sketch_for_tools->Parallel( double(distance) );
 			if (parallel_sketch != NULL)
 			{
