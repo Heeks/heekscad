@@ -735,19 +735,6 @@ void CSketch::ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketche
 	CSketch* re_ordered_sketch = NULL;
 	CSketch* sketch = this;
 
-	if(GetSketchOrder() == SketchOrderHasCircles)
-	{
-		std::list<HeeksObj*>::iterator It;
-		for(It=m_objects.begin(); It!=m_objects.end() ;It++)
-		{
-			HeeksObj* object = *It;
-			CSketch* new_object = new CSketch();
-			new_object->color = color;
-			new_object->Add(object->MakeACopy(), NULL);
-			new_separate_sketches.push_back(new_object);
-		}
-	}
-
 	if(GetSketchOrder() == SketchOrderTypeBad)
 	{
 	    // Duplicate and reorder the sketch to see if it's possible to make separate connected sketches.
@@ -755,10 +742,27 @@ void CSketch::ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketche
 		re_ordered_sketch->ReOrderSketch(SketchOrderTypeReOrder);
 		sketch = re_ordered_sketch;
 	}
-	if(sketch->GetSketchOrder() == SketchOrderTypeMultipleCurves)
+	if(sketch->GetSketchOrder() == SketchOrderTypeMultipleCurves || GetSketchOrder() == SketchOrderHasCircles)
 	{
-        // Make separate connected sketches from the child elements.
-		CSketchRelinker relinker(sketch->m_objects);
+		std::list<HeeksObj*> objects_for_relinker;
+		for(std::list<HeeksObj*>::iterator It=m_objects.begin(); It!=m_objects.end() ;It++)
+		{
+			HeeksObj* object = *It;
+			if(object->GetType() == CircleType)
+			{
+				CSketch* new_object = new CSketch();
+				new_object->color = color;
+				new_object->Add(object->MakeACopy(), NULL);
+				new_separate_sketches.push_back(new_object);
+			}
+			else
+			{
+				objects_for_relinker.push_back(object);
+			}
+		}
+
+		// Make separate connected sketches from the child elements.
+		CSketchRelinker relinker(objects_for_relinker);
 
 		relinker.Do();
 
