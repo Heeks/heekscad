@@ -675,13 +675,9 @@ void CSvgRead::ReadPath(TiXmlElement* pElem)
 			cmd = 'l';
 			while(1){
 // if we are looking at a command letter reset the cmd variable
-				if(toupper(d[pos])=='M' || toupper(d[pos])=='L' || toupper(d[pos])=='H' || toupper(d[pos])=='V' || toupper(d[pos])=='C' || toupper(d[pos])=='S' || toupper(d[pos])=='Q' || toupper(d[pos])=='T' || toupper(d[pos])=='A' || toupper(d[pos])=='Z' ){
+				if(toupper(d[pos])=='M' || toupper(d[pos])=='L' || toupper(d[pos])=='H' || toupper(d[pos])=='V' || toupper(d[pos])=='C' || toupper(d[pos])=='S' || toupper(d[pos])=='Q' || toupper(d[pos])=='T' || toupper(d[pos])=='A' || toupper(d[pos])=='Z' || toupper(d[pos])==' ' ){
 					cmd = d[pos];
 					pos++;
-				}
-// if we have got to the end of the string, stop
-				if(pos>=length){
-					break;
 				}
 				if(toupper(cmd) == 'M'){
 					// make a sketch
@@ -744,11 +740,17 @@ void CSvgRead::ReadPath(TiXmlElement* pElem)
 					ReadClose(ppnt,spnt);
 					ppnt = spnt;
 				}
+				else if(toupper(cmd) == ' '){
+				}
 				else if(d[pos] == 0 ){
 					break;
 				}
 				else{
 					pos++;
+				}
+// if we have got to the end of the string, stop
+				if(pos>=length){
+					break;
 				}
 				if(pos<0) {
 					break;
