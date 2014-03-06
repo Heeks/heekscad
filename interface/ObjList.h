@@ -36,7 +36,6 @@ public:
 	bool IsDifferent(HeeksObj *other) { return( *this != (*(ObjList *)other) ); }
 
 	void ClearUndoably(void);
-	void Clear();
 	void Clear(std::set<HeeksObj*> &to_delete);
 
 	HeeksObj* MakeACopy(void) const;
@@ -53,6 +52,7 @@ public:
 	virtual void Add(std::list<HeeksObj*> objects);
 	virtual void Remove(HeeksObj* object);
 	virtual void Remove(std::list<HeeksObj*> objects);
+	void Clear();
 	void KillGLLists(void);
 	void WriteBaseXML(TiXmlElement *element);
 	void ReadBaseXML(TiXmlElement* element);

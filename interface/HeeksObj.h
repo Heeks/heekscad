@@ -126,6 +126,7 @@ public:
 	virtual void KillGLLists(void){};
 	virtual HeeksObj *MakeACopy()const = 0;
 	virtual HeeksObj *MakeACopyWithID();
+	virtual void Clear(){}
 	virtual void ReloadPointers(){}
 	virtual void Disconnect(std::list<HeeksObj*>parents){}
 	virtual void CopyFrom(const HeeksObj* object){}

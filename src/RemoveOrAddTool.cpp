@@ -178,6 +178,8 @@ void RemoveObjectsTool::RollBack()
 CopyObjectUndoable::CopyObjectUndoable(HeeksObj* object, HeeksObj* copy_object): m_object(object), m_new_copy(copy_object)
 {
 	m_old_copy = m_object->MakeACopy();
+	if(m_old_copy->IsList())((ObjList*)m_old_copy)->Clear();
+	if(m_new_copy->IsList())((ObjList*)m_new_copy)->Clear();
 }
 
 CopyObjectUndoable::~CopyObjectUndoable()
