@@ -785,10 +785,8 @@ void CHeeksCADInterface::OpendxfFile(const wxChar *filepath)
 {
 
 	//wxGetApp().OpenDXFFile(filepath);
-	HeeksDxfRead dxf_file(filepath);
+	HeeksDxfRead dxf_file(filepath, true);
     dxf_file.DoRead(HeeksDxfRead::m_ignore_errors);
-
-
 }
 
 void CHeeksCADInterface::OpenXMLFile(const wxChar *filepath,HeeksObj* paste_into)

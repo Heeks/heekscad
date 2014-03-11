@@ -2174,6 +2174,7 @@ bool CDxfRead::ReadInsert()
 {
     std::string blockname;
 	double e[3] = {0, 0, 0};
+	double rotation_angle = 0.0;
 
 	// to do, scale, rotation etc.
 
@@ -2197,7 +2198,7 @@ bool CDxfRead::ReadInsert()
 				    printf("CDxfRead::ReadInsert() - no block name\n");
 				    return false;
 				}
-				OnReadInsert(blockname.c_str(), e);
+				OnReadInsert(blockname.c_str(), e, rotation_angle);
 				return true;
 
 			case 2: // Block name follows
@@ -2219,6 +2220,12 @@ bool CDxfRead::ReadInsert()
 				// insert point z
 				get_line();
 				ss.str(m_str); ss >> e[2]; e[2] = mm(e[2]); if(ss.fail()) return false;
+				break;
+
+			case 50:
+				// rotation angle
+				get_line();
+				ss.str(m_str); ss >> rotation_angle; if(ss.fail()) return false;
 				break;
 
 			case 100: // subclass marker
