@@ -706,12 +706,15 @@ static void OnImportButton( wxCommandEvent& event )
 		}
 	}
 
-    wxFileDialog dialog(wxGetApp().m_frame, _("Import file"), default_directory, wxEmptyString, wxGetApp().GetKnownFilesWildCardString());
+    wxFileDialog dialog(wxGetApp().m_frame, _("Import file"), default_directory, wxEmptyString, wxGetApp().GetKnownFilesWildCardString(true, true));
     dialog.CentreOnParent();
 
     if (dialog.ShowModal() == wxID_OK)
     {
-		wxGetApp().OpenFile(dialog.GetPath().c_str(), true);
+		if(wxGetApp().OpenFile(dialog.GetPath().c_str(), true))
+		{
+			wxGetApp().m_frame->m_graphics->OnMagExtents(true, true, 25);
+		}
     }
 }
 

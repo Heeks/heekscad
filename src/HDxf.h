@@ -8,6 +8,29 @@
 
 class CSketch;
 
+// a class just to be used while doing dxf import
+class HInsert: public HeeksObj
+{
+	std::string m_block_name;
+	double m_insert_point[3];
+	double m_rotation_angle;
+
+	wxString title; // to be removed
+
+public:
+	HInsert(const char* block_name, const double* insert_point, double rotation_angle)
+	{
+		m_block_name.assign(block_name);
+		memcpy(m_insert_point, insert_point, 3*sizeof(double));
+		m_rotation_angle = rotation_angle;
+		title = wxString::Format(_T("Insert of %s at x%lf y%lf %lf rot%lf"), Ctt(block_name), insert_point[0], insert_point[1], insert_point[2], rotation_angle);
+	}
+
+	HeeksObj *MakeACopy(void)const{ return new HInsert(*this);}
+
+	const wxChar* GetShortString(void)const{return title.c_str();} // to be removed
+};
+
 class HeeksDxfRead : public CDxfRead{
 private:
     typedef wxString LayerName_t;
@@ -19,6 +42,7 @@ private:
 	std::set<BlockName_t> inserted_blocks;
 	CSketch* m_current_block;
 	double m_ucs_matrix[16];
+	bool m_undoable;
 
 	HeeksColor DecodeACI(const int aci);
 	void OnReadSpline(TColgp_Array1OfPnt &control, TColStd_Array1OfReal &weight, TColStd_Array1OfReal &knot,TColStd_Array1OfInteger &mult, int degree, bool periodic, bool rational);
@@ -28,7 +52,7 @@ protected:
 	HeeksColor *ActiveColorPtr(Aci_t & aci);
 
 public:
-	HeeksDxfRead(const wxChar* filepath);
+	HeeksDxfRead(const wxChar* filepath, bool undoable);
 
 	static bool m_make_as_sketch;
 	static bool m_ignore_errors;
@@ -39,7 +63,7 @@ public:
 	void OnReadUCS(const double* ucs_point);
 	void OnReadBlock(const char* block_name, const double* base_point);
 	void OnReadEndBlock();
-	void OnReadInsert(const char* block_name, const double* insert_point);
+	void OnReadInsert(const char* block_name, const double* insert_point, double rotation_angle);
 	void OnReadLine(const double* s, const double* e, bool hidden);
 	void OnReadPoint(const double* s);
 	void OnReadText(const double* point, const double height,  const char* text, int hj, int vj);

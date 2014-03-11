@@ -24,6 +24,7 @@ public:
 	int m_id;
 	bool m_visible;
 	wxString m_title;
+	bool m_title_made_from_id;
 	SolidTypeEnum m_solid_type;
 
 	TiXmlElement m_xml_element;
@@ -31,6 +32,6 @@ public:
 	std::list<int> m_edge_ids;
 	std::list<int> m_face_ids;
 
-	void SetShape(CShape* shape);
+	void SetShape(CShape* shape, bool apply_id);
 };
 

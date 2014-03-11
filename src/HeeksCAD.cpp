@@ -745,6 +745,7 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 						if(attr_name == std::string("index")){index = a->IntValue();}
 						else if(attr_name == std::string("id")){shape_data.m_id = a->IntValue();}
 						else if(attr_name == std::string("title")){shape_data.m_title.assign(Ctt(a->Value()));}
+						else if(attr_name == std::string("title_from_id")){shape_data.m_title_made_from_id = (a->IntValue() != 0);}
 						else if(attr_name == std::string("solid_type")){shape_data.m_solid_type = (SolidTypeEnum)(a->IntValue());}
 						else if(attr_name == std::string("vis")){shape_data.m_visible = (a->IntValue() != 0);}
 						else shape_data.m_xml_element.SetAttribute(a->Name(), a->Value());
@@ -1078,7 +1079,7 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, Heek
 
 	HeeksColor c(128, 128, 128);
 	CStlSolid* new_object = new CStlSolid(filepath, &c);
-	wxGetApp().Add(new_object, NULL);
+	wxGetApp().AddUndoably(new_object, NULL, NULL);
 	setlocale(LC_NUMERIC, oldlocale);
 }
 
@@ -1089,7 +1090,7 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, Heek
 
 	bool try_again = false;
 	try {
-		HeeksDxfRead dxf_file(filepath);
+		HeeksDxfRead dxf_file(filepath, true);
 		dxf_file.DoRead(HeeksDxfRead::m_ignore_errors);
 	} catch(Standard_Failure)
 	{
@@ -1103,7 +1104,7 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, Heek
 	if (try_again)
 	{
 		try {
-			HeeksDxfRead dxf_file(filepath);
+			HeeksDxfRead dxf_file(filepath, true);
 			dxf_file.DoRead(true);
 		} catch(...)
 		{
@@ -1131,6 +1132,8 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, Heek
 
     RS274X gerber;
 
+	wxGetApp().StartHistory();
+
     if ((choices.size() > 0) && (choice == choices[0]))
     {
         gerber.Read(wxString(filepath).mb_str(), RS274X::IsolationRouting, false );
@@ -1156,7 +1159,7 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, Heek
         gerber.Read(wxString(filepath).mb_str(), RS274X::RasterImage, true );
     }
 
-
+	wxGetApp().EndHistory();
 }
 
 bool HeeksCADapp::OpenImageFile(const wxChar *filepath)
@@ -1216,7 +1219,7 @@ void HeeksCADapp::OnOpenButton()
 		}
 	}
 
-    wxFileDialog dialog(m_frame, _("Open file"), default_directory, wxEmptyString, GetKnownFilesWildCardString());
+    wxFileDialog dialog(m_frame, _("Open file"), default_directory, wxEmptyString, GetKnownFilesWildCardString(true, false));
     dialog.CentreOnParent();
 
     if (dialog.ShowModal() == wxID_OK)
@@ -1228,7 +1231,7 @@ void HeeksCADapp::OnOpenButton()
 			Reset();
 			if(!OpenFile(dialog.GetPath().c_str()))
 			{
-				wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + GetKnownFilesCommaSeparatedList();
+				wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + GetKnownFilesCommaSeparatedList(true, false);
 				wxMessageBox(str);
 			}
 			else
@@ -1307,25 +1310,22 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 	else
 	{
 		// error
-		wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + GetKnownFilesCommaSeparatedList();
+		wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + GetKnownFilesCommaSeparatedList(true, import_not_open);
 		wxMessageBox(str);
 		open_succeeded = false;
 	}
 
-	if(open_succeeded)
+	if(open_succeeded && !import_not_open)
 	{
 	    InsertRecentFileItem(filepath);
 
-		if(!import_not_open)
+		if(retain_filename)
 		{
-			if(retain_filename)
-			{
-				m_filepath.assign(filepath);
-				m_untitled = false;
-				SetFrameTitle();
-			}
-			SetLikeNewFile();
+			m_filepath.assign(filepath);
+			m_untitled = false;
+			SetFrameTitle();
 		}
+		SetLikeNewFile();
 	}
 
 	m_file_open_matrix = NULL;
@@ -1699,6 +1699,7 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 				index_pair_element->SetAttribute("index", index);
 				index_pair_element->SetAttribute("id", shape_data.m_id);
 				index_pair_element->SetAttribute("title", Ttc(shape_data.m_title));
+				index_pair_element->SetAttribute("title_from_id", (shape_data.m_title_made_from_id?1:0));
 				index_pair_element->SetAttribute("vis", shape_data.m_visible ? 1:0);
 				if(shape_data.m_solid_type != SOLID_TYPE_UNKNOWN)index_pair_element->SetAttribute("solid_type", shape_data.m_solid_type);
 				// get the CShapeData attributes
@@ -1766,7 +1767,7 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_recent_file_list, bool set_app_caption)
 {
 	if(use_dialog){
-		wxFileDialog fd(m_frame, _("Save graphical data file"), wxEmptyString, filepath, GetKnownFilesWildCardString(false), wxSAVE|wxOVERWRITE_PROMPT);
+		wxFileDialog fd(m_frame, _("Save graphical data file"), wxEmptyString, filepath, GetKnownFilesWildCardString(false, false), wxSAVE|wxOVERWRITE_PROMPT);
 		fd.SetFilterIndex(1);
 		if (fd.ShowModal() == wxID_CANCEL)return false;
 		return SaveFile( fd.GetPath().c_str(), false, update_recent_file_list );
@@ -1807,7 +1808,7 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 	}
 	else
 	{
-		wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + GetKnownFilesCommaSeparatedList();
+		wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + GetKnownFilesCommaSeparatedList(false, false);
 		wxMessageBox(str);
 		return false;
 	}
@@ -3411,8 +3412,14 @@ void HeeksCADapp::glColorEnsuringContrast(const HeeksColor &c)
 
 static wxString known_file_ext;
 
-const wxChar* HeeksCADapp::GetKnownFilesWildCardString(bool open)const
+const wxChar* HeeksCADapp::GetKnownFilesWildCardString(bool open, bool import_export)const
 {
+	if(!import_export)
+	{
+		known_file_ext = wxString(_("Heeks files")) + _T(" |*.heeks;*.HEEKS");
+		return known_file_ext.c_str();
+	}
+
 	if(open){
 		if(m_alternative_open_wild_card_string.Len() > 0)
 			return m_alternative_open_wild_card_string.c_str();
@@ -3448,11 +3455,14 @@ const wxChar* HeeksCADapp::GetKnownFilesWildCardString(bool open)const
 	}
 }
 
-const wxChar* HeeksCADapp::GetKnownFilesCommaSeparatedList(bool open)const
+const wxChar* HeeksCADapp::GetKnownFilesCommaSeparatedList(bool open, bool import_export)const
 {
+	if(!import_export)
+		return _T("heeks");
+
 	if(open){
 		wxList handlers = wxImage::GetHandlers();
-		wxString known_ext_str = _T("heeks, HEEKS, igs, iges, stp, step, dxf");
+		wxString known_ext_str = _T("heeks, igs, iges, stp, step, dxf");
 		for(wxList::iterator It = handlers.begin(); It != handlers.end(); It++)
 		{
 			wxImageHandler* handler = (wxImageHandler*)(*It);

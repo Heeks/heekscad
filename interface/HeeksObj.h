@@ -54,6 +54,7 @@ enum{
 	GearType,
 	ImageType,
 	XmlType,
+	InsertType, // just temporarily during dxf import
 	ObjectMaximumType,
 };
 

@@ -777,7 +777,7 @@ void HeeksSvgRead::ModifyByMatrix(HeeksObj* object)
 void HeeksSvgRead::OnReadStart()
 {
 		m_sketch = new CSketch();
-		wxGetApp().Add(m_sketch, NULL);
+		wxGetApp().AddUndoably(m_sketch, NULL, NULL);
 }
 
 void HeeksSvgRead::OnReadCubic(gp_Pnt s, gp_Pnt c1, gp_Pnt c2, gp_Pnt e)
@@ -798,7 +798,7 @@ void HeeksSvgRead::OnReadCubic(gp_Pnt s, gp_Pnt c1, gp_Pnt c2, gp_Pnt e)
 	HSpline* new_object = new HSpline(spline, &wxGetApp().current_color);
 	ModifyByMatrix(new_object);
 	AddSketchIfNeeded();
-	m_sketch->Add(new_object, NULL);
+	wxGetApp().AddUndoably(new_object, m_sketch, NULL);
 }
 
 void HeeksSvgRead::OnReadQuadratic(gp_Pnt s, gp_Pnt c, gp_Pnt e)
@@ -819,7 +819,7 @@ void HeeksSvgRead::OnReadQuadratic(gp_Pnt s, gp_Pnt c, gp_Pnt e)
 	HSpline* new_object = new HSpline(spline, &wxGetApp().current_color);
 	ModifyByMatrix(new_object);
 	AddSketchIfNeeded();
-	m_sketch->Add(new_object, NULL);}
+	wxGetApp().AddUndoably(new_object, m_sketch, NULL);}
 
 void HeeksSvgRead::OnReadLine(gp_Pnt p1, gp_Pnt p2)
 {
@@ -837,7 +837,7 @@ void HeeksSvgRead::OnReadEllipse(gp_Pnt c, double maj_r, double min_r, double ro
 	HEllipse *new_object = new HEllipse(elip,start,end,&wxGetApp().current_color);
 	ModifyByMatrix(new_object);
 	AddSketchIfNeeded();
-	m_sketch->Add(new_object, NULL);
+	wxGetApp().AddUndoably(new_object, m_sketch, NULL);
 }
 
 void HeeksSvgRead::OnReadCircle(gp_Pnt c, double r)
@@ -847,7 +847,7 @@ void HeeksSvgRead::OnReadCircle(gp_Pnt c, double r)
 	HCircle *new_object = new HCircle(cir,&wxGetApp().current_color);
 	ModifyByMatrix(new_object);
 	AddSketchIfNeeded();
-	m_sketch->Add(new_object, NULL);
+	wxGetApp().AddUndoably(new_object, m_sketch, NULL);
 }
 
 void HeeksSvgRead::AddSketchIfNeeded()
@@ -855,6 +855,6 @@ void HeeksSvgRead::AddSketchIfNeeded()
 	if(m_sketch == NULL)
 	{
 		m_sketch = new CSketch();
-		wxGetApp().Add(m_sketch, NULL);
+		wxGetApp().AddUndoably(m_sketch, NULL, NULL);
 	}
 }
