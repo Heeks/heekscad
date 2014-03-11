@@ -783,7 +783,7 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<in
 						{
 							if(undoably)wxGetApp().AddUndoably(new_object, add_to, NULL);
 							else add_to->Add(new_object, NULL);
-							shape_data.SetShape((CShape*)new_object);
+							shape_data.SetShape((CShape*)new_object, !wxGetApp().m_inPaste);
 						}
 					}
 				}

@@ -342,8 +342,8 @@ public:
 	void ObserversMarkedListChanged(bool selection_cleared, const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed);
 	void ObserversFreeze();
 	void ObserversThaw();
-	const wxChar* GetKnownFilesWildCardString(bool open = true)const;
-	const wxChar* GetKnownFilesCommaSeparatedList(bool open = true)const;
+	const wxChar* GetKnownFilesWildCardString(bool open, bool import_export)const;
+	const wxChar* GetKnownFilesCommaSeparatedList(bool open, bool import_export)const;
 	void GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool control_pressed);
 	void GetTools2(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool control_pressed, bool make_tool_list_container);
 	wxString GetExeFolder()const;

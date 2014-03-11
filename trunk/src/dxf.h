@@ -172,7 +172,7 @@ public:
 
 	virtual void OnReadUCS(const double* /*ucs point*/){}
 	virtual void OnReadBlock(const char* /*block_name*/, const double* /*base_point*/){}
-	virtual void OnReadInsert(const char* /*block_name*/, const double* /*insert_point*/){}
+	virtual void OnReadInsert(const char* /*block_name*/, const double* /*insert_point*/, double /*rotation_angle*/){}
 	virtual void OnReadEndBlock(){}
 	virtual void OnReadLine(const double* /*s*/, const double* /*e*/, bool /*hidden*/){}
 	virtual void OnReadPoint(const double* /*s*/){}

@@ -1498,14 +1498,14 @@ void RS274X::DrawCentrelines()
         if (joins_made == false)
         {
             // This is as big as it's ever going to get.
-            heekscad_interface.Add( *(objects.begin()), NULL );
+			wxGetApp().AddUndoably( *(objects.begin()), NULL, NULL );
             objects.erase( objects.begin() );
         }
     } // End while
 
 	if (objects.size() > 0)
 	{
-		heekscad_interface.Add( *(objects.begin()), NULL );
+		wxGetApp().AddUndoably( *(objects.begin()), NULL, NULL );
         objects.erase( objects.begin() );
 	}
 }
@@ -1586,7 +1586,7 @@ int RS274X::FormNetworks()
 				sketch->ModifyByMatrix(mirror);
 			}
 
-            heekscad_interface.Add( sketch, NULL );
+            wxGetApp().AddUndoably( sketch, NULL, NULL );
             number_of_networks++;
 
             faces.erase( faces.begin() );
@@ -1613,7 +1613,7 @@ int RS274X::FormNetworks()
 			sketch->ModifyByMatrix(mirror);
 		}
 
-		heekscad_interface.Add( sketch, NULL );
+		wxGetApp().AddUndoably( sketch, NULL, NULL );
 		number_of_networks++;
         faces.erase( faces.begin() );
 	}

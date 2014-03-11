@@ -21,7 +21,7 @@ bool HeeksDxfRead::m_ignore_errors = false;
 bool HeeksDxfRead::m_read_points = false;
 wxString HeeksDxfRead::m_layer_name_suffixes_to_discard = _T("_DOT,_DOTSMALL,_DOTBLANK,_OBLIQUE,_CLOSEDBLANK");
 
-HeeksDxfRead::HeeksDxfRead(const wxChar* filepath) : CDxfRead(Ttc(filepath))
+HeeksDxfRead::HeeksDxfRead(const wxChar* filepath, bool undoable) : CDxfRead(Ttc(filepath)), m_undoable(undoable)
 {
     HeeksConfig config;
 
@@ -64,23 +64,31 @@ void HeeksDxfRead::OnReadBlock(const char* block_name, const double* base_point)
 	}
 }
 
-void HeeksDxfRead::OnReadInsert(const char* block_name, const double* insert_point)
+void HeeksDxfRead::OnReadInsert(const char* block_name, const double* insert_point, double rotation_angle)
 {
 	if (m_blocks.find( wxString(Ctt(block_name)) ) == m_blocks.end())
 	{
-		return; // block not found
+		return; // block not foundblock_name, const double* insert_point, double rotation_angle
 	}
 	else
 	{
 		BlockName_t b_name = wxString(Ctt(block_name));
+#if 0
+		// insert an insert object. To be expanded at the end
+		HInsert* new_object = new HInsert(block_name, insert_point, rotation_angle);
+		AddObject(new_object);
+#else
 		CSketch* block = m_blocks[b_name];
 		CSketch* block_copy = new CSketch(*block);
 		gp_Trsf tm;
 		tm.SetTranslationPart(make_vector(insert_point));
+		gp_Trsf rm;
+		rm.SetRotation(gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)), rotation_angle * 0.01745329251994329);
 		double m[16];
-		extract(tm, m);
+		extract(tm * rm, m);
 		block_copy->ModifyByMatrix(m);
 		AddObject(block_copy);
+#endif
 		inserted_blocks.insert(b_name);
 	}
 }
@@ -300,6 +308,7 @@ void HeeksDxfRead::OnReadText(const double *point, const double height,  const c
 
     wxString txt(Ctt(text));
     txt.Replace(_T("\\P"),_T("\n"),true);
+    txt.Replace(_T("\r"),_T("\n"),true);
 
     int offset = 0;
     while ((txt.Length() > 0) && (txt[0] == _T('\\')) && ((offset = txt.find(_T(';'))) != -1))
@@ -415,7 +424,12 @@ void HeeksDxfRead::AddObject(HeeksObj *object)
 			m_sketches.insert( std::make_pair( wxString(Ctt(LayerName().c_str())), new CSketch() ) );
 		}
 
-		m_sketches[wxString(Ctt(LayerName().c_str()))]->Add( object, NULL );
+		if(m_current_block)m_current_block->Add(object, NULL);
+        else
+		{
+			object->ModifyByMatrix(m_ucs_matrix);
+			m_sketches[wxString(Ctt(LayerName().c_str()))]->Add( object, NULL );
+		}
 	}
 	else
 	{
@@ -423,7 +437,8 @@ void HeeksDxfRead::AddObject(HeeksObj *object)
         else
 		{
 			object->ModifyByMatrix(m_ucs_matrix);
-			wxGetApp().Add( object, NULL );
+			if(m_undoable)wxGetApp().AddUndoably(object, NULL, NULL);
+			else wxGetApp().Add( object, NULL );
 		}
 	}
 }
@@ -453,7 +468,8 @@ void HeeksDxfRead::AddGraphics()
 			{
 				((CSketch *)l_itSketch->second)->OnEditString( l_itSketch->first.c_str() );
 				l_itSketch->second->ModifyByMatrix(m_ucs_matrix);
-				wxGetApp().Add( l_itSketch->second, NULL );
+				if(m_undoable)wxGetApp().AddUndoably(l_itSketch->second, NULL, NULL );
+				else wxGetApp().Add( l_itSketch->second, NULL );
 			} // End if - then
         }
     }
