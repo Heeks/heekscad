@@ -308,7 +308,7 @@ void HeeksDxfRead::OnReadText(const double *point, const double height,  const c
 
     wxString txt(Ctt(text));
     txt.Replace(_T("\\P"),_T("\n"),true);
-    txt.Replace(_T("\r"),_T("\n"),true);
+    txt.Replace(_T("%%010"),_T("\n"),true);
 
     int offset = 0;
     while ((txt.Length() > 0) && (txt[0] == _T('\\')) && ((offset = txt.find(_T(';'))) != -1))
