@@ -919,61 +919,10 @@ void HeeksCADapp::ObjectReadBaseXML(HeeksObj *object, TiXmlElement* element)
 	for(TiXmlAttribute* a = element->FirstAttribute(); a; a = a->Next())
 	{
 		std::string name(a->Name());
-		if(object->UsesID() && name == "id"){object->SetID(a->IntValue());}
+		if(!this->m_inPaste && object->UsesID() && name == "id"){object->SetID(a->IntValue());}
 		if(name == "vis"){object->m_visible = (a->IntValue() != 0);}
 	}
 }
-
-
-/**
-	This method traverses the list of HeeksObj pointers recursively and looks for
-	duplicate objects based on the type/id pairs.  When a duplicate is found, the
-	duplicate is deleted and both pointers are reset to point at a common object.
-	The object's owner pointers are also updated appropriately.
- */
-
-HeeksObj *HeeksCADapp::MergeCommonObjects( ObjectReferences_t & unique_set, HeeksObj *object ) const
-{
-	std::list<HeeksObj *> children = ((ObjList *) object)->GetChildren();
-
-	for (std::list<HeeksObj *>::iterator itChild = children.begin(); itChild != children.end(); itChild++)
-	{
-		HeeksObj * replacement = MergeCommonObjects( unique_set, *itChild );
-		if (replacement != *itChild)
-		{
-			object->Remove(*itChild);
-			object->Add( replacement, NULL );
-		}
-	} // for
-
-	if(object->UsesID())
-	{
-		HeeksObj *unique_reference = object;
-		ObjectReference_t object_reference(object->GetIDGroupType(),object->m_id);
-
-		if (unique_set.find(object_reference) == unique_set.end())
-		{
-			unique_set.insert( std::make_pair( object_reference, object ) );
-			unique_reference = object;
-		}
-		else
-		{
-			// We've seen an object like this one before.  Use the old one.
-			unique_reference = unique_set[ object_reference ];
-			if(object->m_owner)
-			{
-				object->m_owner->Remove(object);
-				object->m_owner->Add( unique_reference, NULL );
-			}
-
-			unique_set[ object_reference ] = unique_reference;
-			object = unique_reference;
-		}
-	}
-
-	return(object);
-}
-
 
 void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, HeeksObj* paste_before, bool undoably)
 {
@@ -1015,12 +964,6 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, Heek
 		{
 			objects.push_back(object);
 		}
-	}
-
-	// where operations are pointing to the same sketch, for example, make sure that they are not duplicated sketches
-	for (std::list<HeeksObj *>::iterator itObject = objects.begin(); itObject != objects.end(); itObject++)
-	{
-		*itObject = MergeCommonObjects( unique_set, *itObject );
 	}
 
 	if(objects.size() > 0)

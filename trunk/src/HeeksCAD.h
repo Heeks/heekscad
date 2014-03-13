@@ -419,8 +419,6 @@ public:
 	typedef std::pair< ObjectType_t, ObjectId_t > ObjectReference_t;
 	typedef std::map< ObjectReference_t, HeeksObj * > ObjectReferences_t;
 
-	HeeksObj *MergeCommonObjects( ObjectReferences_t & unique_set, HeeksObj *object ) const;
-
 	wxString HeeksType( const int type ) const;
 	unsigned int GetIndex(HeeksObj *object);
 	void ReleaseIndex(unsigned int index);
