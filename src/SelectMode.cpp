@@ -433,7 +433,7 @@ void CSelectMode::OnDragging( wxMouseEvent& event )
 				}
 			}
 
-			if(window_box_exists)
+			if(window_box_exists && wxGetApp().m_mouse_move_highlighting)
 			{
 				m_highlighted_objects.clear();
 				GetObjectsInWindow(event, m_highlighted_objects);
