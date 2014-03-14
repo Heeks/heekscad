@@ -595,27 +595,28 @@ public:
 
 		if(oneTooth())
 		{
+			sketch_for_make = new CSketch();
 			object_for_Tool->GetOneToothSegments(callbackfunc, wxGetApp().GetPixelScale());
-			wxGetApp().Add(sketch_for_make, NULL);
+			wxGetApp().AddUndoably(sketch_for_make, NULL, NULL);
 		}
 		else
 		{
-			wxGetApp().Add(object_for_Tool->MakeSketch(), NULL);
+			wxGetApp().AddUndoably(object_for_Tool->MakeSketch(), NULL, NULL);
 		}
 
 		if(fabs(object_for_Tool->m_depth) > 0.000000000001)
 		{
 			height_for_point = object_for_Tool->m_depth;
 			lines_started = false;
-			sketch_for_make = new CSketch();
 			if(oneTooth())
 			{
+				sketch_for_make = new CSketch();
 				object_for_Tool->GetOneToothSegments(callbackfunc, wxGetApp().GetPixelScale());
-		wxGetApp().Add(sketch_for_make, NULL);
+				wxGetApp().AddUndoably(sketch_for_make, NULL, NULL);
 			}
 			else
 			{
-				wxGetApp().Add(object_for_Tool->MakeSketch(), NULL);
+				wxGetApp().AddUndoably(object_for_Tool->MakeSketch(), NULL, NULL);
 			}
 		}
 	}

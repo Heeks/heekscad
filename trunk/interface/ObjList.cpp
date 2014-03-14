@@ -52,8 +52,11 @@ const ObjList& ObjList::operator=(const ObjList& objlist)
 	std::list<HeeksObj*>::const_iterator It;
 	for (It=objlist.m_objects.begin();It!=objlist.m_objects.end();It++)
 	{
-		HeeksObj* new_op = (*It)->MakeACopy();
-		if(new_op)Add(new_op, NULL);
+		if(!(*It)->OneOfAKind())
+		{
+			HeeksObj* new_op = (*It)->MakeACopy();
+			if(new_op)Add(new_op, NULL);
+		}
 	}
 	return *this;
 }
