@@ -975,29 +975,43 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, Heek
 			HeeksObj* object = *It;
 			object->ReloadPointers();
 
-			if(add_to->CanAdd(object) && object->CanAddTo(add_to))
+			while(1)
 			{
-				if(object->OneOfAKind())
+				if(add_to->CanAdd(object) && object->CanAddTo(add_to))
 				{
-					bool one_found = false;
-					for(HeeksObj* child = add_to->GetFirstChild(); child; child = add_to->GetNextChild())
+					if(object->OneOfAKind())
 					{
-						if(child->GetType() == object->GetType())
+						bool one_found = false;
+						for(HeeksObj* child = add_to->GetFirstChild(); child; child = add_to->GetNextChild())
 						{
-							child->CopyFrom(object);
-							one_found = true;
-							break;
+							if(child->GetType() == object->GetType())
+							{
+								child->CopyFrom(object);
+								one_found = true;
+								break;
+							}
+						}
+						if(!one_found)
+						{
+							add_to->Add(object, paste_before);
+							if(m_inPaste)WasAdded(object);
 						}
 					}
-					if(!one_found)
+					else
 					{
 						add_to->Add(object, paste_before);
+						if(m_inPaste)WasAdded(object);
 					}
+					break;
 				}
-				else
+				else if(paste_into == NULL)
 				{
-					add_to->Add(object, paste_before);
+					// can't add normally, look for preferred paste target
+					add_to = object->PreferredPasteTarget();
+					if(add_to == NULL || add_to == this)// already tried
+						break;
 				}
+				else break;
 			}
 		}
 	}
@@ -3930,7 +3944,11 @@ int HeeksCADapp::CheckForModifiedDoc()
 void HeeksCADapp::SetFrameTitle()
 {
 	if(m_frame == NULL)return;
-	wxString str = GetAppName().c_str();
+	wxString str;
+#ifdef FREE_VERSION
+	str = _T("TRIAL VERSION of ");
+#endif
+	str += GetAppName().c_str();
 	if((!m_untitled) || (!m_no_creation_mode))str += wxString(_T(" - ")) + m_filepath.c_str();
 	m_frame->SetTitle(str);
 }
