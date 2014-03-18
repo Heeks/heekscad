@@ -1,0 +1,25 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HeeksCAD", "HeeksCAD.vcxproj", "{2702996F-5BCC-436D-A756-D9675FE828A8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+		Unicode Debug|Win32 = Unicode Debug|Win32
+		Unicode Release|Win32 = Unicode Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2702996F-5BCC-436D-A756-D9675FE828A8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2702996F-5BCC-436D-A756-D9675FE828A8}.Debug|Win32.Build.0 = Debug|Win32
+		{2702996F-5BCC-436D-A756-D9675FE828A8}.Release|Win32.ActiveCfg = Release|Win32
+		{2702996F-5BCC-436D-A756-D9675FE828A8}.Release|Win32.Build.0 = Release|Win32
+		{2702996F-5BCC-436D-A756-D9675FE828A8}.Unicode Debug|Win32.ActiveCfg = Unicode Debug|Win32
+		{2702996F-5BCC-436D-A756-D9675FE828A8}.Unicode Debug|Win32.Build.0 = Unicode Debug|Win32
+		{2702996F-5BCC-436D-A756-D9675FE828A8}.Unicode Release|Win32.ActiveCfg = Unicode Release|Win32
+		{2702996F-5BCC-436D-A756-D9675FE828A8}.Unicode Release|Win32.Build.0 = Unicode Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

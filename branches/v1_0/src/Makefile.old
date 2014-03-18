@@ -1,0 +1,228 @@
+ifeq ($(strip $(PREFIX)),)
+  PREFIX=/usr/local
+endif
+BINDIR=$(PREFIX)/bin
+DATADIR=$(PREFIX)/share
+HEEKSCADDIR=$(DATADIR)/heekscad
+PIXMAPSDIR=$(DATADIR)/pixmaps
+APPSDIR=$(DATADIR)/applications
+mkdir_p= mkdir -p
+CC = g++
+
+ifeq ($(strip $(PYTHONCFLAGS)),)
+  PYTHONCFLAGS=$(shell python-config --includes)
+endif
+
+#run-in-place, for people on linux who don't want to sudo make install:
+ifeq ($(strip $(RUNINPLACE)),yes)
+  RIP=-DRUNINPLACE
+else
+  RIP= 
+endif
+
+FLAGS_64BIT=$(shell if [ x`getconf LONG_BIT` = x64 ] ; then echo "-D_OCC64 -m64" ; fi )
+
+ifneq ($(strip $(CASROOT)),)
+    CASINCPATH=$(CASROOT)/inc
+else
+    CASINCPATH=/usr/include/opencascade
+endif
+
+CCFLAGS=$(CFLAGS) -Wall -g -I "./" -I ${CASINCPATH} $(GLINCLUDES) $(FLAGS_64BIT) -DUSE_GENERIC_TREECTRL -DUNICODE -DHEEKSCAD -DHAVE_LIMITS -DWXUSINGDLL -DHAVE_LIMITS -DTIXML_USE_STL ${RIP} $(PYTHONCFLAGS)  `wx-config  --cflags`
+
+
+OBJECTS=                                 \
+    AboutBox.o                           \
+    advprops.o                           \
+    BezierCurve.o                        \
+    Cone.o                               \
+    ConversionTools.o                    \
+    CoordinateSystem.o                   \
+    Cuboid.o                             \
+    Cylinder.o                           \
+    DigitizedPoint.o                     \
+    DigitizeMode.o                       \
+    DimensionDrawing.o                   \
+    Drawing.o                            \
+    dxf.o                                \
+    svg.o                                \
+    Edge.o                               \
+    Face.o                               \
+    Geom.o                               \
+    glfont2.o                            \
+    GLList.o                             \
+    GraphicsCanvas.o                     \
+    Grid.o                               \
+    Gripper.o                            \
+    GripperSelTransform.o                \
+    Group.o                              \
+    HArc.o                               \
+    HCircle.o                            \
+    HDimension.o                         \
+    HDxf.o                               \
+    HeeksCAD.o                           \
+    HeeksFrame.o                         \
+    HeeksPrintout.o                      \
+    HILine.o                             \
+    HEllipse.o                           \
+    HImage.o                             \
+    HLine.o                              \
+    HPoint.o                             \
+    HSpline.o                            \
+    HText.o                              \
+    HXml.o                               \
+    Input.o                    \
+    InputModeCanvas.o                    \
+    LineArcDrawing.o                     \
+    Loop.o                               \
+    MagDragWindow.o                      \
+    manager.o                            \
+    MarkedList.o                         \
+    ObjPropsCanvas.o                     \
+    odcombo.o                            \
+    OptionsCanvas.o                      \
+    OrientationModifier.o                \
+    Plugins.o                            \
+    PointDrawing.o                       \
+    PointOrWindow.o                      \
+    PropertiesCanvas.o                   \
+    PropertyTrsf.o                       \
+    ../interface/PropertyVertex.o        \
+    propgrid.o                           \
+    props.o                              \
+    RegularShapesDrawing.o               \
+    RuledSurface.o                       \
+    Ruler.o                              \
+    SelectMode.o                         \
+    Shape.o                              \
+    ShapeData.o                          \
+    Sketch.o                             \
+    Solid.o                              \
+    Sphere.o                             \
+    StlSolid.o                           \
+    StretchTool.o                        \
+    TransformTool.o                      \
+    TransformTools.o                     \
+    TreeCanvas.o                         \
+    UndoEngine.o                         \
+    Vertex.o                             \
+    ViewPoint.o                          \
+    ViewRotating.o                       \
+    ViewZooming.o                        \
+    ViewPanning.o                        \
+    Window.o                             \
+    Wire.o                               \
+    wxImageLoader.o                      \
+    ../interface/HeeksCADInterface.o     \
+    ../interface/HeeksColor.o            \
+    ../interface/HeeksObj.o              \
+    ../interface/HDialogs.o              \
+    ../interface/DoubleInput.o           \
+    ../interface/LeftAndRight.o          \
+    ../interface/MarkedObject.o          \
+    ../interface/NiceTextCtrl.o          \
+    ../interface/ObjList.o               \
+    ../interface/PropertyCheck.o         \
+    ../interface/PropertyChoice.o        \
+    ../interface/PropertyColor.o         \
+    ../interface/PropertyDouble.o        \
+    ../interface/PropertyLength.o        \
+    ../interface/PropertyInt.o           \
+    ../interface/PropertyList.o          \
+    ../interface/PropertyString.o        \
+    ../interface/PictureFrame.o          \
+    ../interface/strconv.o               \
+    ../interface/ToolImage.o             \
+    ../interface/ToolList.o              \
+    ../interface/TransientObject.o       \
+    ../tinyxml/tinyxml.o                 \
+    ../tinyxml/tinyxmlerror.o            \
+    ../tinyxml/tinyxmlparser.o           \
+    Constraint.o                         \
+    ConstrainedObject.o                  \
+    ConstraintTools.o                    \
+    EndedObject.o                        \
+    SolveSketch.o                        \
+    ../sketchsolve/src/solve.o           \
+    CorrelationTool.o                    \
+    sketchinterface.o                    \
+    ../sketchsolve/src/solveimpl.o       \
+    ../sketchsolve/src/errorfuncs.o      \
+    OCCSolver.o                          \
+    MultiPoly.o                          \
+    BentleyOttmann.o                     \
+    SimpleIntersector.o                  \
+    NearMap.o                            \
+    Polygon.o                            \
+    RS274X.o                             \
+    FaceTools.o                          \
+    Pad.o                                \
+    FastCurves.o                         \
+    WrappedCurves.o                      \
+    SketchTools.o                        \
+    SolidTools.o                         \
+    CxfFont.o                            \
+    DynamicSolid.o                       \
+    ShapeTools.o                         \
+    Part.o                               \
+    Pocket.o                             \
+    HAngularDimension.o                  \
+    AutoSave.o
+
+EXECUTABLE=../HeeksCAD
+
+ifeq ($(strip $(PYTHONLIBS)),)
+  PYTHONLIBS=$(shell python-config --ldflags)
+endif
+
+#if user doesn't have OCC debs, they will have casroot set - look for and use it
+ifneq ($(strip $(CASROOT)),)
+    CASLIBPATH=-L$(CASROOT)/lib
+else
+    CASLIBPATH=
+endif
+
+OCCLIBS=-lTKVRML -lTKSTL -lTKBRep -lTKIGES -lTKShHealing -lTKSTEP -lTKSTEP209 -lTKSTEPAttr -lTKSTEPBase -lTKXSBase -lTKShapeSchema -lFWOSPlugin -lTKBool -lTKCAF -lTKCDF -lTKernel -lTKFeat -lTKFillet -lTKG2d -lTKG3d -lTKGeomAlgo -lTKGeomBase -lTKHLR -lTKMath -lTKOffset -lTKPrim -lTKPShape -lTKService -lTKTopAlgo -lTKV2d -lTKV3d -lTKMesh -lTKAdvTools -lTKBO -lTKXDESTEP -lTKXCAF -lTKXCAFSchema -lTKLCAF -lTKPLCAF ${CASLIBPATH}
+
+
+.PHONY: all
+all: stdafx.h executable
+
+stdafx.h.gch: stdafx.h
+	$(CC) ${CCFLAGS} -c $? -o $@
+
+
+.PHONY: executable
+executable: stdafx.h.gch	${OBJECTS}
+	$(CC) -o ${EXECUTABLE} ${OBJECTS} -lstdc++ -lGLU ${PYTHONLIBS} -lGL -g ${OCCLIBS} `wx-config --libs --gl-libs`
+
+%.o:%.cpp
+	$(CC) ${CCFLAGS} -c $? -o $@
+
+clean:
+	-rm -rf ${EXECUTABLE} ${OBJECTS} stdafx.h.gch
+
+
+install:
+	test -z "$(DESTDIR)$(HEEKSCADDIR)" || $(mkdir_p) "$(DESTDIR)$(BINDIR)"
+	test -z "$(DESTDIR)$(HEEKSCADDIR)/bitmaps" || $(mkdir_p) "$(DESTDIR)$(HEEKSCADDIR)/bitmaps"
+	test -z "$(DESTDIR)$(HEEKSCADDIR)/icons" || $(mkdir_p) "$(DESTDIR)$(HEEKSCADDIR)/icons"
+	test -z "$(DESTDIR)$(PIXMAPSDIR)" || $(mkdir_p) "$(DESTDIR)$(PIXMAPSDIR)"
+	test -z "$(DESTDIR)$(APPSDIR)" || $(mkdir_p) "$(DESTDIR)$(APPSDIR)"
+	install -s $(EXECUTABLE) $(DESTDIR)$(BINDIR)/
+	cp ../bitmaps/*.png $(DESTDIR)$(HEEKSCADDIR)/bitmaps/
+	cp ../bitmaps/*.svg $(DESTDIR)$(HEEKSCADDIR)/bitmaps/
+	cp ../bitmaps/*.glf $(DESTDIR)$(HEEKSCADDIR)/bitmaps/
+	cp ../icons/*.png $(DESTDIR)$(HEEKSCADDIR)/icons/
+	cp ../bitmaps/cyl.png $(DESTDIR)$(PIXMAPSDIR)/HeeksCAD.png
+	cp ../HeeksCAD.desktop $(DESTDIR)$(APPSDIR)/
+
+uninstall:
+	-rm -rf $(DESTDIR)$(HEEKSCADDIR)
+	-rm $(DESTDIR)$(BINDIR)/HeeksCAD
+	-rm $(DESTDIR)$(PIXMAPSDIR)/HeeksCAD.png
+	-rm $(DESTDIR)$(APPSDIR)/HeeksCAD.desktop
+
+
+
+

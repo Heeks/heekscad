@@ -1,0 +1,17 @@
+heekscad (0.8.2-svn274) intrepid; urgency=low
+
+  * rebuild for svn r674
+
+ -- Joachim Steiger <ubuntu@hyte.de>  Fri, 17 Jul 2009 23:26:41 +0200
+
+heekscad (0.8.2-svn643) intrepid; urgency=low
+
+  * rebuild for svn r643
+
+ -- Joachim Steiger <ubuntu@hyte.de>  Fri, 10 Jul 2009 07:12:43 +0200
+
+heekscad (0.7.0-svn0) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Joachim Steiger <ubuntu@hyte.de>  Tue, 05 May 2009 21:40:00 +0200

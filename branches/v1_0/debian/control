@@ -1,0 +1,22 @@
+Source: heekscad
+Section: editors
+Priority: extra
+Maintainer: Joachim Steiger <ubuntu@hyte.de>
+Build-Depends: cdbs, cmake, debhelper (>= 7), libopencascade-dev, libwxgtk2.8-dev, libwxbase2.8-dev, libgtkglext1-dev
+Standards-Version: 3.7.3
+Homepage: http://code.google.com/p/heekscad/
+
+Package: heekscad
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: HeeksCAD is a free, open source, CAD application written by Dan Heeks.
+ Functionality: Import solid models from STEP and IGES files.
+ Draw construction geomtery and lines and arcs.
+ Create new primitive solids, or make solids by extruding a sketch or by making a lofted solid between sketches.
+ Modify solids using blending, or boolean operations.
+ Save IGES, STEP and STL. Printer plot the 2D geometry.
+ Import and export dxf files; only lines and arcs at the moment
+ .
+ The solid modelling is provided by Open CASCADE. http://www.opencascade.org The graphical user interface is made using wxWidgets. http://www.wxwidgets.org 
+ .
+
