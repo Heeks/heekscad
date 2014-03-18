@@ -36,7 +36,7 @@ class Tool;
 #define HEEKSCAD_VERSION_MAIN "1"
 #define HEEKSCAD_VERSION_SUB "0"
 
-#define FREE_VERSION
+//#define FREE_VERSION
 
 #include "SketchOrder.h"
 
