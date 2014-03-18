@@ -21,7 +21,7 @@ CTangentialArc::CTangentialArc(const gp_Pnt &p0, const gp_Vec &v0, const gp_Pnt 
 
 bool CTangentialArc::radius_equal(const gp_Pnt &p, double tolerance)const
 {
-	if(m_is_a_line)return 0.0;
+	if(m_is_a_line)return true;
 
 	double point_radius = gp_Vec(m_c.XYZ() - p.XYZ()).Magnitude();
 	double diff =  fabs(point_radius - radius());
@@ -39,6 +39,11 @@ double CTangentialArc::radius()const
 
 HeeksObj* CTangentialArc::MakeHArc()const
 {
+	if(m_is_a_line)
+	{
+		return new HLine(m_p0, m_p1, &(wxGetApp().current_color));
+	}
+
 	gp_Circ c(gp_Ax2(m_c, m_a), radius());
 	HArc* new_object = new HArc(m_p0, m_p1, c, &(wxGetApp().current_color));
 	return new_object;
@@ -456,8 +461,11 @@ int HSpline::Intersects(const HeeksObj *object, std::list< double > *rl)const
 
 static bool calculate_biarc_points(const gp_Pnt &p0, gp_Vec v_start, const gp_Pnt &p4, gp_Vec v_end, gp_Pnt &p1, gp_Pnt &p2, gp_Pnt &p3)
 {
+	if(v_start.Magnitude() < 0.0000000001)v_start = gp_Vec(p0, p1);
+    if(v_end.Magnitude() < 0.0000000001)v_end = gp_Vec(p3, p4);
+
 	v_start.Normalize();
-    v_end.Normalize();
+	v_end.Normalize();
 
     gp_Vec v = p0.XYZ() - p4.XYZ();
 
