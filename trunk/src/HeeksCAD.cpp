@@ -473,11 +473,7 @@ bool HeeksCADapp::OnInit()
 		cmdLineDesc[0].kind = wxCMD_LINE_PARAM;
 		cmdLineDesc[0].shortName = NULL;
 		cmdLineDesc[0].longName = NULL;
-#ifdef wxUSE_UNICODE
-		cmdLineDesc[0].description = wxT("input files");
-#else
 		cmdLineDesc[0].description = "input files";
-#endif
 		cmdLineDesc[0].type = wxCMD_LINE_VAL_STRING;
 		cmdLineDesc[0].flags = wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_PARAM_MULTIPLE;
 
@@ -511,7 +507,7 @@ bool HeeksCADapp::OnInit()
 		// the wxStandardPaths class might be useful for this
 		// look here for docs:
 		// http://docs.wxwidgets.org/trunk/classwx_standard_paths.html
-		wxStandardPaths sp;
+		wxStandardPaths& standard_paths = wxStandardPaths::Get();
 		//sp.SetInstallPrefix(_T("/myPrefixDirectory")); //set the prefix directory here, if needed
 		wprintf(_T("system configs directory: ") + sp.GetConfigDir()  + _T("\n"));
 		wprintf(_T("applications global data directory: ") + sp.GetDataDir()  + _T("\n"));
@@ -568,13 +564,13 @@ void HeeksCADapp::WriteConfig()
 	config.Write(_T("DatumSize"), CoordinateSystem::size);
 	config.Write(_T("DatumSizeIsPixels"), CoordinateSystem::size_is_pixels);
 	config.Write(_T("DrawRuler"), m_show_ruler);
-	config.Write(_T("RegularShapesMode"), regular_shapes_drawing.m_mode);
+	config.Write(_T("RegularShapesMode"), (int)(regular_shapes_drawing.m_mode));
 	config.Write(_T("RegularShapesNSides"), regular_shapes_drawing.m_number_of_side_for_polygon);
 	config.Write(_T("RegularShapesRectRad"), regular_shapes_drawing.m_rect_radius);
 	config.Write(_T("RegularShapesObRad"), regular_shapes_drawing.m_obround_radius);
 	config.Write(_T("ExtrudeRemovesSketches"), m_extrude_removes_sketches);
 	config.Write(_T("LoftRemovesSketches"), m_loft_removes_sketches);
-	config.Write(_T("GraphicsTextMode"), m_graphics_text_mode);
+	config.Write(_T("GraphicsTextMode"), (int)m_graphics_text_mode);
 	config.Write(_T("DxfMakeSketch"), HeeksDxfRead::m_make_as_sketch);
 	config.Write(_T("DxfIgnoreErrors"), HeeksDxfRead::m_ignore_errors);
 	config.Write(_T("FaceToSketchDeviation"), FaceToSketchTool::deviation);
@@ -591,7 +587,7 @@ void HeeksCADapp::WriteConfig()
 	config.Write(_T("AutoSaveInterval"), m_auto_save_interval);
 	config.Write(_T("ExtrudeToSolid"), m_extrude_to_solid);
 	config.Write(_T("RevolveAngle"), m_revolve_angle);
-	config.Write(_T("SolidViewMode"), m_solid_view_mode);
+	config.Write(_T("SolidViewMode"), (int)m_solid_view_mode);
 	config.Write(_T("STLSaveBinary"), m_stl_save_as_binary);
 
 	config.Write(_T("MouseMoveHighlighting"), m_mouse_move_highlighting);
@@ -784,13 +780,13 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 			const char* file_text = subElem->GetText();
 			if(file_text)
 			{
-				wxStandardPaths sp;
+				wxStandardPaths& sp = wxStandardPaths::Get();
 				sp.GetTempDir();
 				wxFileName temp_file(sp.GetTempDir().c_str(), _T("temp_HeeksCAD_STEP_file.step") );
 				{
 #if wxUSE_UNICODE
 #ifdef __WXMSW__
-					wofstream ofs(temp_file.GetFullPath());
+					wofstream ofs(Ttc(temp_file.GetFullPath().c_str()));
 #else
 					wofstream ofs(Ttc(temp_file.GetFullPath().c_str()));
 #endif
@@ -810,15 +806,11 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 		std::string name(a->Name());
 		if(name == "text")
 		{
-			wxStandardPaths sp;
+			wxStandardPaths& sp = wxStandardPaths::Get();
 			sp.GetTempDir();
 			wxFileName temp_file( sp.GetTempDir().c_str(), _T("temp_HeeksCAD_STEP_file.step") );
 			{
-#ifdef __WXMSW__
-				ofstream ofs(temp_file.GetFullPath());
-#else
 				ofstream ofs(Ttc(temp_file.GetFullPath().c_str()));
-#endif
 				ofs<<a->Value();
 			}
 			CShape::ImportSolidsFile(temp_file.GetFullPath(),undoably_for_ReadSTEPFileFromXMLElement, &index_map, paste_into_for_ReadSTEPFileFromXMLElement);
@@ -1634,7 +1626,7 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 
 	// write a step file for all the solids
 	if(CShape::m_solids_found){
-		wxStandardPaths sp;
+		wxStandardPaths& sp = wxStandardPaths::Get();
 		sp.GetTempDir();
 		wxFileName temp_file( sp.GetTempDir().c_str(), _T("temp_HeeksCAD_STEP_file.step") );
 		std::map<int, CShapeData> index_map;
@@ -1695,11 +1687,8 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 		}
 
 		// write the step file as a string attribute of step_file
-#ifdef __WXMSW__
-		ifstream ifs(temp_file.GetFullPath());
-#else
 		ifstream ifs(Ttc(temp_file.GetFullPath().c_str()));
-#endif
+
 		if(!(!ifs)){
 			std::string fstr;
 			char str[1024];
@@ -1724,7 +1713,7 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_recent_file_list, bool set_app_caption)
 {
 	if(use_dialog){
-		wxFileDialog fd(m_frame, _("Save graphical data file"), wxEmptyString, filepath, GetKnownFilesWildCardString(false, false), wxSAVE|wxOVERWRITE_PROMPT);
+		wxFileDialog fd(m_frame, _("Save graphical data file"), wxEmptyString, filepath, GetKnownFilesWildCardString(false, false), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 		fd.SetFilterIndex(1);
 		if (fd.ShowModal() == wxID_CANCEL)return false;
 		return SaveFile( fd.GetPath().c_str(), false, update_recent_file_list );
@@ -3603,7 +3592,7 @@ void HeeksCADapp::GetTools2(MarkedObject* marked_object, std::list<Tool*>& t_lis
 
 wxString HeeksCADapp::GetExeFolder()const
 {
-	wxStandardPaths sp;
+	wxStandardPaths& sp = wxStandardPaths::Get();
 	wxString exepath = sp.GetExecutablePath();
 	int last_fs = exepath.Find('/', true);
 	int last_bs = exepath.Find('\\', true);
@@ -3949,7 +3938,7 @@ void HeeksCADapp::SetFrameTitle()
 	str = _T("TRIAL VERSION of ");
 #endif
 	str += GetAppName().c_str();
-	if((!m_untitled) || (!m_no_creation_mode))str += wxString(_T(" - ")) + m_filepath.c_str();
+	if((!m_untitled) || (!m_no_creation_mode))str += wxString(_T(" - ")) + m_filepath;
 	m_frame->SetTitle(str);
 }
 
@@ -4173,17 +4162,13 @@ void HeeksCADapp::Paste(HeeksObj* paste_into, HeeksObj* paste_before)
 	}
 
 	// write a temporary file
-	wxStandardPaths sp;
+	wxStandardPaths& sp = wxStandardPaths::Get();
 	sp.GetTempDir();
 	wxFileName temp_file( sp.GetTempDir().c_str(), _T("temp_Heeks_clipboard_file.heeks"));
 
 	{
 #if wxUSE_UNICODE
-#ifdef __WXMSW__
-		wofstream ofs(temp_file.GetFullPath());
-#else
 		wofstream ofs(Ttc(temp_file.GetFullPath().c_str()));
-#endif
 #else
 		ofstream ofs(temp_file.GetFullPath());
 #endif
@@ -4421,7 +4406,7 @@ void HeeksCADapp::InitialiseLocale()
 		}
 
 		// Initialize the catalogs we'll be using
-		if ( !m_locale.Init(language, wxLOCALE_CONV_ENCODING) )
+		if ( !m_locale.Init(language) )
 		{
 			wxLogError(_T("This language is not supported by the system."));
 			return;
@@ -4487,7 +4472,7 @@ void HeeksCADapp::GetPluginsFromCommandLineParams(std::list<wxString> &plugins)
 		cmdLineDesc[0].kind = wxCMD_LINE_PARAM;
 		cmdLineDesc[0].shortName = NULL;
 		cmdLineDesc[0].longName = NULL;
-		cmdLineDesc[0].description = wxT("input files");
+		cmdLineDesc[0].description = "input files";
 		cmdLineDesc[0].type = wxCMD_LINE_VAL_STRING;
 		cmdLineDesc[0].flags = wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_PARAM_MULTIPLE;
 

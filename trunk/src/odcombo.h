@@ -1064,7 +1064,7 @@ public:
     virtual int GetSelection() const;
     void SetSelection(int n) { Select(n); }
 
-    wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
+    //wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
 
 protected:
 
