@@ -809,18 +809,6 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<in
 		strcpy(oldlocale, setlocale(LC_NUMERIC, "C"));
 
 		Standard_CString aFileName = (Standard_CString) (Ttc(filepath));
-//
-//#ifdef WIN32
-//#ifdef UNICODE
-//		// if the const char* filename is different to the original unicode filename, then copy the file to a temporary file with a simple name
-//		if(stricmp(Ctt(aFileName), filepath))
-//		{
-//			wxStandardPaths standard_paths;
-//			wxFileName path( standard_paths.GetTempDir().c_str(), _("temp_iges.igs"));
-//			copy_file; // to do
-//	m_backup_file_name = path.GetFullPath();
-//#endif
-//#endif
 
 		IGESControl_Reader Reader;
 		int status = Reader.ReadFile( aFileName );

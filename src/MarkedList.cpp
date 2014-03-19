@@ -376,18 +376,14 @@ void MarkedList::CutSelectedItems()
 
 void MarkedList::CopySelectedItems()
 {
-	wxStandardPaths sp;
+	wxStandardPaths& sp = wxStandardPaths::Get();
 	sp.GetTempDir();
 	wxFileName temp_file(sp.GetTempDir().c_str(), _T("temp_Heeks_clipboard_file.xml"));
 
 	wxGetApp().SaveXMLFile(m_list, temp_file.GetFullPath().c_str(), true);
 
 #if wxUSE_UNICODE
-#ifdef __WXMSW__
-	wifstream ifs(temp_file.GetFullPath());
-#else
 	wifstream ifs(Ttc(temp_file.GetFullPath().c_str()));
-#endif
 #else
 	ifstream ifs(temp_file.GetFullPath());
 #endif

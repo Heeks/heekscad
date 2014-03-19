@@ -44,17 +44,19 @@ CInputModeCanvas::~CInputModeCanvas()
 
 void CInputModeCanvas::OnSize(wxSizeEvent& event)
 {
-	wxScrolledWindow::OnSize(event);
+	CPropertiesCanvas::OnSize(event);
 
 	wxSize size = GetClientSize();
-	if(m_toolBar->GetToolsCount() > 0){
+	if(m_toolBar->GetToolsCount() > 0)
+	{
 		wxSize toolbar_size = m_toolBar->GetClientSize();
 		int toolbar_height = ToolImage::GetBitmapSize() + EXTRA_TOOLBAR_HEIGHT;
 		m_pg->SetSize(0, 0, size.x, size.y - toolbar_height );
 		m_toolBar->SetSize(0, size.y - toolbar_height , size.x, toolbar_height );
 		m_toolBar->Show();
 	}
-	else{
+	else
+	{
 		m_pg->SetSize(0, 0, size.x, size.y );
 		m_toolBar->Show(false);
 	}

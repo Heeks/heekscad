@@ -73,7 +73,7 @@ void CPropertiesCanvas::OnDraw(wxDC& dc)
 
 void CPropertiesCanvas::OnSize(wxSizeEvent& event)
 {
-	wxScrolledWindow::OnSize(event);
+	wxScrolledWindow::HandleOnSize(event);
 
 	wxSize size = GetClientSize();
 	m_pg->SetSize(0, 0, size.x, size.y );
