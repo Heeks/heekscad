@@ -44,7 +44,7 @@ CObjPropsCanvas::~CObjPropsCanvas()
 
 void CObjPropsCanvas::OnSize(wxSizeEvent& event)
 {
-	wxScrolledWindow::OnSize(event);
+	CPropertiesCanvas::OnSize(event);
 
 	Resize();
 

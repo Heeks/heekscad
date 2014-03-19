@@ -54,8 +54,9 @@ void SaveSolids::Run(){
 			config.Read(_T("SolidExportFilepath"), &filepath, _T(""));
 		}
 
-		wxFileDialog fd(wxGetApp().m_frame, _("Save solid file"), wxEmptyString, filepath, wxString(_("Solid Files")) + _T(" |*.igs;*.iges;*.stp;*.step;*.stl;*.cpp;*.py|") + _("IGES files") + _T(" (*.igs *.iges)|*.igs;*.iges|") + _("STEP files") + _T(" (*.stp *.step)|*.stp;*.step|") + _("STL files") + _T(" (*.stl)|*.stl|") + _("CPP files") + _T(" (*.cpp)|*.cpp|") + _("OpenCAMLib python files") + _T(" (*.py)|*.py"), wxSAVE|wxOVERWRITE_PROMPT);
+		wxFileDialog fd(wxGetApp().m_frame, _("Save solid file"), wxEmptyString, filepath, wxString(_("Solid Files")) + _T(" |*.igs;*.iges;*.stp;*.step;*.stl;*.cpp;*.py|") + _("IGES files") + _T(" (*.igs *.iges)|*.igs;*.iges|") + _("STEP files") + _T(" (*.stp *.step)|*.stp;*.step|") + _("STL files") + _T(" (*.stl)|*.stl|") + _("CPP files") + _T(" (*.cpp)|*.cpp|") + _("OpenCAMLib python files") + _T(" (*.py)|*.py"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 		fd.SetFilterIndex(0);
+
 		if (fd.ShowModal() == wxID_CANCEL)return;
 		filepath = fd.GetPath();
 

@@ -134,7 +134,7 @@ void DigitizeMode::OnMouse( wxMouseEvent& event ){
 
 void DigitizeMode::OnKeyDown(wxKeyEvent& event)
 {
-	switch(event.KeyCode())
+	switch(event.GetKeyCode())
 	{
 	case WXK_ESCAPE:
 		digitized_point.m_type = DigitizeNoItemType;

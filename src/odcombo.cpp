@@ -381,7 +381,7 @@ void wxPGComboPopupWindow::OnKeyEvent( wxKeyEvent& event )
     wxWindowList children = GetChildren();
     wxWindowList::iterator node = children.begin();
     wxWindow* child = (wxWindow*)*node;
-    child->AddPendingEvent(event);
+	child->GetEventHandler()->AddPendingEvent(event);
 }
 
 void wxPGComboPopupWindow::OnMouseEvent( wxMouseEvent& event )
@@ -2057,7 +2057,7 @@ void wxPGComboControlBase::HandleNormalMouseEvent( wxMouseEvent& event )
     {
         // relay (some) mouse events to the popup
         if ( evtType == wxEVT_MOUSEWHEEL )
-            m_popup->AddPendingEvent(event);
+			m_popup->GetEventHandler()->AddPendingEvent(event);
     }
     else if ( evtType )
         event.Skip();
@@ -2082,7 +2082,7 @@ void wxPGComboControlBase::OnKeyEvent( wxKeyEvent& event )
     if ( IsPopupShown() )
     {
         // pass it to the popped up control
-        GetPopupControl()->AddPendingEvent(event);
+		GetPopupControl()->GetEventHandler()->AddPendingEvent(event);
     }
     else // no popup
     {

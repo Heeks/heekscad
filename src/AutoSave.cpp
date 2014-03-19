@@ -11,7 +11,7 @@ CAutoSave::CAutoSave(const int interval, const bool skip_recovery /* = false */ 
 	// We need to see if our backup file already exists.  If so, we should
 	// prompt the user to see if they want to use its contents or ignore it.
 
-	wxStandardPaths standard_paths;
+	wxStandardPaths& standard_paths = wxStandardPaths::Get();
 	wxFileName path( standard_paths.GetTempDir().c_str(), _(".HeeksCAD_Backup_Data_File.heeks"));
 	m_backup_file_name = path.GetFullPath();
 
