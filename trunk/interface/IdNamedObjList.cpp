@@ -25,9 +25,7 @@ const wxChar* IdNamedObjList::GetShortString(void)const
 {
 	if(m_title_made_from_id)
 	{
-		wxChar pattern_str[512];
-		wsprintf(pattern_str, _T("%s %d"), GetTypeString(), m_id);
-		temp_pattern_string.assign(pattern_str);
+		temp_pattern_string = wxString::Format(_T("%s %d"), GetTypeString(), m_id);
 		return temp_pattern_string;
 	}
 	return m_title.c_str();}
