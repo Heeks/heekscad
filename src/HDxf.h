@@ -8,6 +8,7 @@
 
 class CSketch;
 
+#if 0
 // a class just to be used while doing dxf import
 class HInsert: public HeeksObj
 {
@@ -30,6 +31,7 @@ public:
 
 	const wxChar* GetShortString(void)const{return title.c_str();} // to be removed
 };
+#endif
 
 class HeeksDxfRead : public CDxfRead{
 private:

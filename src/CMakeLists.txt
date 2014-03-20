@@ -54,7 +54,6 @@ set( heekscad_HDRS
     CorrelationTool.h
     Cuboid.h
     ${LIBAREA_PATH}/Curve.h
-    CxfFont.h
     Cylinder.h
     DigitizedPoint.h
     DigitizeMode.h
@@ -89,6 +88,7 @@ set( heekscad_HDRS
     HeeksConfig.h
     HeeksFrame.h
     ../interface/HeeksObj.h
+    ../interface/HeeksObjDlg.h
     HeeksPrintout.h
     HEllipse.h
     HGear.h
@@ -100,6 +100,8 @@ set( heekscad_HDRS
     HSpline.h
     HText.h
     HXml.h
+	../interface/IdNamedObj.h
+	../interface/IdNamedObjList.h
     Index.h
     ../interface/InputMode.h
     InputModeCanvas.h
@@ -113,7 +115,6 @@ set( heekscad_HDRS
     ../interface/MarkedObject.h
     ../interface/Material.h
     ../interface/NiceTextCtrl.h
-    ../interface/ObjectCanvas.h
     ../interface/ObjList.h
     ObjPropsCanvas.h
     ../interface/Observer.h
@@ -241,6 +242,8 @@ set( heekscad_SRCS
     HSpline.cpp
     HText.cpp
     HXml.cpp
+	../interface/IdNamedObj.cpp
+	../interface/IdNamedObjList.cpp
     Input.cpp
     InputModeCanvas.cpp
     ${LIBAREA_PATH}/kurve/kurve.cpp
