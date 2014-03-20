@@ -376,7 +376,11 @@ void MarkedList::CutSelectedItems()
 
 void MarkedList::CopySelectedItems()
 {
+#if wxCHECK_VERSION(3, 0, 0)
 	wxStandardPaths& sp = wxStandardPaths::Get();
+#else
+	wxStandardPaths sp;
+#endif
 	sp.GetTempDir();
 	wxFileName temp_file(sp.GetTempDir().c_str(), _T("temp_Heeks_clipboard_file.xml"));
 
