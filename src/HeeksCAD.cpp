@@ -473,7 +473,11 @@ bool HeeksCADapp::OnInit()
 		cmdLineDesc[0].kind = wxCMD_LINE_PARAM;
 		cmdLineDesc[0].shortName = NULL;
 		cmdLineDesc[0].longName = NULL;
+#if wxCHECK_VERSION(3, 0, 0)
 		cmdLineDesc[0].description = "input files";
+#else
+		cmdLineDesc[0].description = _T("input files");
+#endif
 		cmdLineDesc[0].type = wxCMD_LINE_VAL_STRING;
 		cmdLineDesc[0].flags = wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_PARAM_MULTIPLE;
 
@@ -507,7 +511,11 @@ bool HeeksCADapp::OnInit()
 		// the wxStandardPaths class might be useful for this
 		// look here for docs:
 		// http://docs.wxwidgets.org/trunk/classwx_standard_paths.html
-		wxStandardPaths& standard_paths = wxStandardPaths::Get();
+#if wxCHECK_VERSION(3, 0, 0)
+		wxStandardPaths& sp = wxStandardPaths::Get();
+#else
+		wxStandardPaths sp;
+#endif
 		//sp.SetInstallPrefix(_T("/myPrefixDirectory")); //set the prefix directory here, if needed
 		wprintf(_T("system configs directory: ") + sp.GetConfigDir()  + _T("\n"));
 		wprintf(_T("applications global data directory: ") + sp.GetDataDir()  + _T("\n"));
@@ -780,7 +788,11 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 			const char* file_text = subElem->GetText();
 			if(file_text)
 			{
+#if wxCHECK_VERSION(3, 0, 0)
 				wxStandardPaths& sp = wxStandardPaths::Get();
+#else
+				wxStandardPaths sp;
+#endif
 				sp.GetTempDir();
 				wxFileName temp_file(sp.GetTempDir().c_str(), _T("temp_HeeksCAD_STEP_file.step") );
 				{
@@ -806,7 +818,11 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 		std::string name(a->Name());
 		if(name == "text")
 		{
+#if wxCHECK_VERSION(3, 0, 0)
 			wxStandardPaths& sp = wxStandardPaths::Get();
+#else
+			wxStandardPaths sp;
+#endif
 			sp.GetTempDir();
 			wxFileName temp_file( sp.GetTempDir().c_str(), _T("temp_HeeksCAD_STEP_file.step") );
 			{
@@ -1626,7 +1642,11 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 
 	// write a step file for all the solids
 	if(CShape::m_solids_found){
+#if wxCHECK_VERSION(3, 0, 0)
 		wxStandardPaths& sp = wxStandardPaths::Get();
+#else
+		wxStandardPaths sp;
+#endif
 		sp.GetTempDir();
 		wxFileName temp_file( sp.GetTempDir().c_str(), _T("temp_HeeksCAD_STEP_file.step") );
 		std::map<int, CShapeData> index_map;
@@ -3592,7 +3612,11 @@ void HeeksCADapp::GetTools2(MarkedObject* marked_object, std::list<Tool*>& t_lis
 
 wxString HeeksCADapp::GetExeFolder()const
 {
+#if wxCHECK_VERSION(3, 0, 0)
 	wxStandardPaths& sp = wxStandardPaths::Get();
+#else
+	wxStandardPaths sp;
+#endif
 	wxString exepath = sp.GetExecutablePath();
 	int last_fs = exepath.Find('/', true);
 	int last_bs = exepath.Find('\\', true);
@@ -4162,7 +4186,11 @@ void HeeksCADapp::Paste(HeeksObj* paste_into, HeeksObj* paste_before)
 	}
 
 	// write a temporary file
+#if wxCHECK_VERSION(3, 0, 0)
 	wxStandardPaths& sp = wxStandardPaths::Get();
+#else
+	wxStandardPaths sp;
+#endif
 	sp.GetTempDir();
 	wxFileName temp_file( sp.GetTempDir().c_str(), _T("temp_Heeks_clipboard_file.heeks"));
 
