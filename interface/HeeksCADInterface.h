@@ -406,4 +406,6 @@ public:
 
 	virtual void RegisterMarkeListTools(void(*callbackfunc)(std::list<Tool*>&));
 	virtual void RegisterOnRestoreDefaults(void(*callbackfunc)());
+
+	virtual bool UsingRibbon();
 };
