@@ -2123,3 +2123,12 @@ void CHeeksCADInterface::RegisterOnRestoreDefaults(void(*callbackfunc)())
 {
 	wxGetApp().RegisterOnRestoreDefaults(callbackfunc);
 }
+
+bool CHeeksCADInterface::UsingRibbon()
+{
+#ifdef USING_RIBBON
+	return true;
+#else
+	return false;
+#endif
+}

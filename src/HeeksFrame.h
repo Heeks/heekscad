@@ -2,12 +2,15 @@
 // Copyright (c) 2009, Dan Heeks
 // This program is released under the BSD license. See the file COPYING for details.
 
+//#define USING_RIBBON
+
 class CTreeCanvas;
 class CGraphicsCanvas;
 class CObjPropsCanvas;
 class COptionsCanvas;
 class CInputModeCanvas;
 class HeeksPrintout;
+class HeeksRibbon;
 
 struct SExternalButtonFunctions{
 	void (*on_button)(wxCommandEvent&);
@@ -71,8 +74,6 @@ private:
 	int m_next_id_for_button;
 	std::map<int, SExternalButtonFunctions > m_external_buttons;
 
-
-
 public:
 	CTreeCanvas *m_tree_canvas;
 	CGraphicsCanvas* m_graphics;
@@ -91,6 +92,9 @@ public:
 	wxMenu *m_menuWindow;
 	HeeksPrintout* m_printout;
 	wxString m_extra_about_box_str;
+#ifdef USING_RIBBON
+	HeeksRibbon *m_ribbon;
+#endif
 
 	CFlyOutItem* m_endof_button;
 	CFlyOutItem* m_inters_button;
