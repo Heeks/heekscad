@@ -42,6 +42,9 @@
 #include "MenuSeparator.h"
 #include "HGear.h"
 #include "HPoint.h"
+#ifdef USING_RIBBON
+#include "HeeksRibbon.h"
+#endif
 
 using namespace std;
 
@@ -103,7 +106,9 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_next_id_for_button = ID_FIRST_EXTERNAL_BUTTON;
 	m_printout = NULL;
 
+#ifndef USING_RIBBON
 	MakeMenus();
+#endif
 
 	m_aui_manager = new wxAuiManager(this);
 
@@ -131,7 +136,12 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	m_solid_toolbar_removed = false;
 	m_viewing_toolbar_removed = false;
 
+#ifdef USING_RIBBON
+	m_ribbon = new HeeksRibbon(this);
+	m_aui_manager->AddPane(m_ribbon, wxAuiPaneInfo().Name(_T("Ribbon")).Caption(_("Ribbon")).Top().LeftDockable(false).SetFlag(wxAuiPaneInfo::optionToolbar, true));
+#else
 	AddToolBars();
+#endif
 
 	m_aui_manager->AddPane(m_graphics, wxAuiPaneInfo().Name(_T("Graphics")).Caption(_("Graphics")).CentrePane().BestSize(wxSize(800, 600)));
 	m_aui_manager->AddPane(m_tree_canvas, wxAuiPaneInfo().Name(_T("Objects")).Caption(_("Objects")).Left().Layer(1).BestSize(wxSize(300, 400)));
@@ -187,13 +197,15 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 	SetDropTarget(new DnDFile(this));
 
+#ifndef USING_RIBBON
 	m_menuWindow->Append( Menu_View_ResetLayout, _( "Reset Layout" ) );
 	m_menuWindow->Append( Menu_View_SetToolBarsToLeft, _( "Set toolbars to left" ) );
+#endif
 
 	//Read layout
 	wxString str;
 	config.Read(_T("AuiPerspective"), &str, default_layout_string);
-	LoadPerspective(str);
+//	LoadPerspective(str);
 
 	m_aui_manager->Update();
 }
@@ -2006,7 +2018,9 @@ void CHeeksFrame::LoadPerspective(const wxString& str)
 	m_aui_manager->GetPane(m_solidBar).Caption(_("Solid Tools"));
 	m_aui_manager->GetPane(m_viewingBar).Caption(_("Viewing Tools"));
 
+#ifndef USING_RIBBON
 	SetToolBarsSize();
+#endif
 }
 
 void CHeeksFrame::SetDefaultLayout(const wxString& str)

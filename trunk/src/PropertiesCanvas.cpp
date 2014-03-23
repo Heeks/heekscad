@@ -462,7 +462,7 @@ void CPropertiesCanvas::DeselectProperties()
 
 void CPropertiesCanvas::RefreshByRemovingAndAddingAll()
 {
-#ifdef WIN32
+#if 0
 	m_refresh_wanted_on_draw = true;
 #else
 	RefreshByRemovingAndAddingAll2();
