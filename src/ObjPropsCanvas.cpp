@@ -11,7 +11,7 @@
 #include "MarkedList.h"
 #include "../interface/MarkedObject.h"
 
-BEGIN_EVENT_TABLE(CObjPropsCanvas, wxScrolledWindow)
+BEGIN_EVENT_TABLE(CObjPropsCanvas, CPropertiesCanvas)
 	EVT_SIZE(CObjPropsCanvas::OnSize)
 
         // This occurs when a property value changes
