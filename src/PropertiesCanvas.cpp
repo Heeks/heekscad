@@ -65,7 +65,10 @@ CPropertiesCanvas::~CPropertiesCanvas()
 
 void CPropertiesCanvas::OnDraw(wxDC& dc)
 {
-	if(m_refresh_wanted_on_draw)RefreshByRemovingAndAddingAll2();
+	if(m_refresh_wanted_on_draw)
+	{
+		RefreshByRemovingAndAddingAll2();
+	}
 	m_refresh_wanted_on_draw = false;
 
 	wxScrolledWindow::OnDraw(dc);
@@ -459,7 +462,11 @@ void CPropertiesCanvas::DeselectProperties()
 
 void CPropertiesCanvas::RefreshByRemovingAndAddingAll()
 {
+#ifdef WIN32
 	m_refresh_wanted_on_draw = true;
+#else
+	RefreshByRemovingAndAddingAll2();
+#endif
 	Refresh();
 }
 
