@@ -7,15 +7,15 @@ How to build HeeksCAD 1.0 for Windows
 I used a 64bit SONY VPCCB running Windows 7
 
 download and install TortoiseSVN software from here http://tortoisesvn.net/
-make a new folder on your computer somewhere, called HeeksCAD.
-I made these folders "C:\Dev\HeeksCAD"
-right click on the HeeksCAD folder and do "TortoiseSVN"->"SVN Checkout..."
+make a new folder on your computer somewhere, called HeeksCAD1.0
+I made this folder "C:\Dev\HeeksCAD1.0"
+right click on the HeeksCAD1.0 folder and do "TortoiseSVN"->"SVN Checkout..."
 The "URL of repository":
-http://heekscad.googlecode.com/svn/trunk/
+http://heekscad.googlecode.com/svn//branches/v1_0/
 The Checkout directory something like:
-C:\Dev\HeeksCAD
+C:\Dev\HeeksCAD1.0
 Press OK.
-It should checkout all the HeeksCAD source code
+It should checkout all the HeeksCAD 1.0 source code
 
 
 Get Microsoft Visual C++ 2008 Express Edition ( it's free, but about 1GB ) or use full version.
@@ -42,7 +42,7 @@ or if you are building Debug
 
 wxbase28ud_vc_custom.dll wxmsw28ud_aui_vc_custom.dll wxmsw28ud_core_vc_custom.dll wxmsw28ud_gl_vc_custom.dll 
 
-Make and environment variable called
+Make an environment variable called
 CASROOT
 with value of
 C:\OpenCASCADE6.5.2\ros
