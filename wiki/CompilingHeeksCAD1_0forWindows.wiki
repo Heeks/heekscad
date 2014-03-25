@@ -34,7 +34,7 @@ Edit C:\wxWidgets-2.8.12\include\wx\msw\setup.h changing "#define wxUSE_GLCANVAS
 Open C:\wxWidgets-2.8.12\build\msw\wx_dll.dsw ( let VC2008 convert the projects ). Change the configuration to "DLL Unicode Release".
 Press "Build Solution" 
 
-Copy 4 of the dlls that get made from C:\wxWidgets-2.8.12\lib\vc_dll to HeeksCAD ( the folder you checked out this project to ).
+Copy 4 of the dlls that get made from C:\wxWidgets-2.8.12\lib\vc_dll to HeeksCAD1.0 ( the folder you checked out this project to ).
 
 They are: wxbase28u_vc_custom.dll wxmsw28u_aui_vc_custom.dll wxmsw28u_core_vc_custom.dll wxmsw28u_gl_vc_custom.dll
 
