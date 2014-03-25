@@ -57,8 +57,8 @@ ENDIF( CMAKE_SIZEOF_VOID_P EQUAL 4 )
 set(CPACK_GENERATOR "DEB")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "HeeksCAD Developers <heekscad-devel@googlegroups.com>")
 set(CPACK_PACKAGE_NAME "heekscad")
-set(CPACK_PACKAGE_VERSION_MAJOR 0)
-set(CPACK_PACKAGE_VERSION_MINOR 18)
+set(CPACK_PACKAGE_VERSION_MAJOR 1)
+set(CPACK_PACKAGE_VERSION_MINOR 0)
 set(CPACK_PACKAGE_VERSION_PATCH 0)
 set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_beta-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}_${PKG_ARCH}")
 
@@ -78,7 +78,6 @@ include(CPack)
 #---------- put subdirs down here so that the package version vars above are visible to them -----------
 add_subdirectory( interface )
 add_subdirectory( tinyxml )
-# add_subdirectory( sketchsolve/src )
 add_subdirectory( translations )
 add_subdirectory( src )  #needs libraries from other subdirs, so it goes last
 
