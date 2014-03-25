@@ -31,16 +31,12 @@ or whereever wxWidgets installed to. ( to set an environment variable go to Cont
 
 Edit C:\wxWidgets-2.8.12\include\wx\msw\setup.h changing "#define wxUSE_GLCANVAS 0" to "#define wxUSE_GLCANVAS 1" and changing "#define wxUSE_ODBC 0" to "#define wxUSE_ODBC 1" 
 
-Open C:\wxWidgets-2.8.12\build\msw\wx_dll.dsw ( let VC2008 convert the projects ). Change the configuration to "DLL Unicode Release" or to "DLL Unicode Debug" if you will be building HeeksCAD in Debug mode.
+Open C:\wxWidgets-2.8.12\build\msw\wx_dll.dsw ( let VC2008 convert the projects ). Change the configuration to "DLL Unicode Release".
 Press "Build Solution" 
 
 Copy 4 of the dlls that get made from C:\wxWidgets-2.8.12\lib\vc_dll to HeeksCAD ( the folder you checked out this project to ).
 
 They are: wxbase28u_vc_custom.dll wxmsw28u_aui_vc_custom.dll wxmsw28u_core_vc_custom.dll wxmsw28u_gl_vc_custom.dll
-
-or if you are building Debug
-
-wxbase28ud_vc_custom.dll wxmsw28ud_aui_vc_custom.dll wxmsw28ud_core_vc_custom.dll wxmsw28ud_gl_vc_custom.dll 
 
 Make an environment variable called
 CASROOT
@@ -61,22 +57,13 @@ Get libarea source code:
 
 
 
-copy all the dlls from C:\OpenCASCADE6.5.2\ros\win32\vc8\bin to C:\Dev\HeeksCAD
-copy all the dlls from C:\OpenCASCADE6.5.2\3rdparty\win32\tbb\bin to C:\Dev\HeeksCAD
-copy the dlls from C:\OpenCASCADE6.5.2\3rdparty\win32\freeimage\bin to C:\Dev\HeeksCAD
+copy all the dlls from C:\OpenCASCADE6.5.2\ros\win32\vc8\bin to C:\Dev\HeeksCAD1.0
+copy all the dlls from C:\OpenCASCADE6.5.2\3rdparty\win32\tbb\bin to C:\Dev\HeeksCAD1.0
+copy the dlls from C:\OpenCASCADE6.5.2\3rdparty\win32\freeimage\bin to C:\Dev\HeeksCAD1.0
 
-Open "C:\Dev\HeeksCAD\src\HeeksCAD VC2008.sln"
-Change configuration to "Unicode Release" or "Unicode Debug"
+Open "C:\Dev\HeeksCAD1.0\src\HeeksCAD VC2008.sln" with Visual Studio 2008.
+Change configuration to "Unicode Release"
 
 Press "Build Solution"
 
-If it builds OK, press "Start Debugging" 
-
-
-
-
-==VC2003 and VC2005==
-
-To use VC2003 or VC2005, run vc_retro.py ( you will need to install Python first ).
-
-This will make .vcproj and .sln files for VC2003 and for VC2005. 
+If it builds OK, press "Start without Debugging" 
