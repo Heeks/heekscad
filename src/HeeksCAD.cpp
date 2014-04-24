@@ -3585,9 +3585,22 @@ void HeeksCADapp::GetTools2(MarkedObject* marked_object, std::list<Tool*>& t_lis
 		{
 			if(make_tool_list_container)
 			{
-				ToolList *function_list = new ToolList(marked_object->GetObject()->GetShortStringOrTypeString());
-				function_list->Add(tools);
-				t_list.push_back(function_list);
+				const wxChar* str = marked_object->GetObject()->GetShortStringOrTypeString();
+				
+				if(wxString(str).CmpNoCase(_("Unknown")) == 0)
+				{
+					// delete the unused tools, if no valid name
+					for(std::list<Tool*>::iterator It = tools.begin(); It != tools.end(); It++)
+					{
+						delete *It;
+					}
+				}
+				else
+				{
+					ToolList *function_list = new ToolList(marked_object->GetObject()->GetShortStringOrTypeString());
+					function_list->Add(tools);
+					t_list.push_back(function_list);
+				}
 			}
 			else
 			{
