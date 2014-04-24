@@ -154,7 +154,7 @@ private:
 	void put_line(const char *value);
 	void DerefACI();
 	void StorePolyLinePoint(double x, double y, double z, bool bulge_found, double bulge);
-	void AddPolyLinePoints(bool mirrored);
+	void AddPolyLinePoints(bool mirrored, bool closed);
 
 protected:
 	Aci_t m_aci; // manifest color name or 256 for layer color

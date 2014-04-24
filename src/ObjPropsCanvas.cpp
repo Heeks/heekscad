@@ -97,8 +97,9 @@ void CObjPropsCanvas::RefreshByRemovingAndAddingAll2(){
 		// add toolbar buttons
 		std::list<Tool*> t_list;
 		MarkedObjectOneOfEach mo(0, marked_object, 1, 0, NULL);
-		wxGetApp().m_marked_list->GetTools(&mo, t_list, NULL, false);
-		for(std::list<Tool*>::iterator It = t_list.begin(); It != t_list.end(); It++)
+		if (wxGetApp().m_marked_list->size() == 1)mo.GetObject()->GetTools(&t_list, NULL);
+		else wxGetApp().m_marked_list->GetTools(&mo, t_list, NULL, false);
+		for (std::list<Tool*>::iterator It = t_list.begin(); It != t_list.end(); It++)
 		{
 			Tool* tool = *It;
 			if(tool)wxGetApp().m_frame->AddToolBarTool(m_toolBar, tool);
