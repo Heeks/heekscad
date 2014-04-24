@@ -1168,13 +1168,19 @@ static void AddPolyLinePoint(CDxfRead* dxf_read, CPolyLinePoint& p)
 	}
 }
 
-void CDxfRead::AddPolyLinePoints(bool mirrored)
+void CDxfRead::AddPolyLinePoints(bool mirrored, bool closed)
 {
 	poly_mirrored = mirrored;
 	for(std::list<CPolyLinePoint>::iterator It = poly_line_points.begin(); It != poly_line_points.end(); It++)
 	{
 		CPolyLinePoint &p = *It;
 		AddPolyLinePoint(this, p);
+	}
+
+	if(closed && (poly_line_points.size() > 0))
+	{
+		// repeat the first point
+		AddPolyLinePoint(this, poly_line_points.front());
 	}
 
 	poly_line_points.clear();
@@ -1288,14 +1294,7 @@ bool CDxfRead::ReadLwPolyLine()
 
 	if(next_item_found)
 	{
-		if(closed && poly_first_found)
-		{
-			// repeat the first point
-		        DerefACI();
-			StorePolyLinePoint(poly_first_x, poly_first_y, poly_first_z, false, 0.0);
-		}
-
-		AddPolyLinePoints(mirrored);
+		AddPolyLinePoints(mirrored, closed);
 		return true;
 	}
 
