@@ -21,114 +21,50 @@ else() #look for OpenCASCADE
 endif()
 
 find_package( OpenGL REQUIRED )
-FIND_PACKAGE( wxWidgets REQUIRED COMPONENTS base core gl aui )
+find_package( wxWidgets REQUIRED COMPONENTS base core gl aui )
 find_package( PythonLibs REQUIRED )
-INCLUDE(${wxWidgets_USE_FILE})
+include(${wxWidgets_USE_FILE})
 
-set( LIBAREA_PATH ../libarea/ )
+find_package( libarea REQUIRED )
 
 include_directories (
     ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
     ${wxWidgets_INCLUDE_DIRS} ${OpenCASCADE_INCLUDE_DIR}
     ${PYTHON_INCLUDE_DIRS} . ${OPENGL_INCLUDE_DIR}
-    ${LIBAREA_PATH}
+    ${libarea_SRC_DIR}
     )
 set ( EXECUTABLE_OUTPUT_PATH ../bin )
 
+set( libarea_HDRS
+    ${libarea_SRC_DIR}/Arc.h
+    ${libarea_SRC_DIR}/Area.h
+    ${libarea_SRC_DIR}/AreaOrderer.h
+    ${libarea_SRC_DIR}/Box2D.h
+    ${libarea_SRC_DIR}/Circle.h
+    ${libarea_SRC_DIR}/Curve.h
+    ${libarea_SRC_DIR}/Point.h
+    ${libarea_SRC_DIR}/clipper.hpp
+    ${libarea_SRC_DIR}/kurve/geometry.h
+    )
 
 set( heekscad_HDRS
-    AboutBox.h
-    advprops.h
-    ${LIBAREA_PATH}/Arc.h
-    ${LIBAREA_PATH}/Area.h
-    ${LIBAREA_PATH}/AreaOrderer.h
-    AutoSave.h
-    BezierCurve.h
     ../interface/Box.h
-    ${LIBAREA_PATH}/Box2D.h
-    ${LIBAREA_PATH}/Circle.h
-    ${LIBAREA_PATH}/clipper.hpp
-    Cone.h
-    ConversionTools.h
-    CoordinateSystem.h
-    CorrelationTool.h
-    Cuboid.h
-    ${LIBAREA_PATH}/Curve.h
-    Cylinder.h
-    DigitizedPoint.h
-    DigitizeMode.h
-    DimensionDrawing.h
     ../interface/DoubleInput.h
-    Drawing.h
-    dxf.h
-    Edge.h
-    EndedObject.h
-    Face.h
-    FaceTools.h
-    FastCurves.h
-    Geom.h
-    ${LIBAREA_PATH}/kurve/geometry.h
-    glfont2.h
-    GLList.h
-    GraphicsCanvas.h
-    Grid.h
-    Gripper.h
-    GripperSelTransform.h
-    Group.h
-    HAngularDimension.h
-    HArc.h
-    HArea.h
-    HCircle.h
     ../interface/HDialogs.h
-    HDimension.h
-    HDxf.h
-    HeeksCAD.h
     ../interface/HeeksCADInterface.h
     ../interface/HeeksColor.h
-    HeeksConfig.h
-    HeeksFrame.h
     ../interface/HeeksObj.h
     ../interface/HeeksObjDlg.h
-    HeeksPrintout.h
-    HEllipse.h
-    HGear.h
-    HILine.h
-    HImage.h
-    History.h
-    HLine.h
-    HPoint.h
-    HSpline.h
-    HText.h
-    HXml.h
-	../interface/IdNamedObj.h
-	../interface/IdNamedObjList.h
-    Index.h
+    ../interface/IdNamedObj.h
+    ../interface/IdNamedObjList.h
     ../interface/InputMode.h
-    InputModeCanvas.h
-    Intersector.h
     ../interface/LeftAndRight.h
-    LineArcDrawing.h
-    Loop.h
-    MagDragWindow.h
-    manager.h
-    MarkedList.h
     ../interface/MarkedObject.h
     ../interface/Material.h
     ../interface/NiceTextCtrl.h
     ../interface/ObjList.h
-    ObjPropsCanvas.h
     ../interface/Observer.h
-    odcombo.h
-    OptionsCanvas.h
-    OrientationModifier.h
     ../interface/PictureFrame.h
-    Plugins.h
-    ${LIBAREA_PATH}/Point.h
-    PointDrawing.h
-    PointOrWindow.h
-    propdev.h
-    PropertiesCanvas.h
-    PropertyChange.h
     ../interface/Property.h
     ../interface/PropertyCheck.h
     ../interface/PropertyChoice.h
@@ -138,9 +74,74 @@ set( heekscad_HDRS
     ../interface/PropertyLength.h
     ../interface/PropertyList.h
     ../interface/PropertyString.h
-    PropertyTrsf.h
     ../interface/PropertyVertex.h
-    propgrid.h
+    ../interface/Tool.h
+    ../interface/ToolImage.h
+    ../interface/ToolList.h
+    ../interface/strconv.h
+    ../tinyxml/tinystr.h
+    ../tinyxml/tinyxml.h
+    AboutBox.h
+    AutoSave.h
+    BezierCurve.h
+    Cone.h
+    ConversionTools.h
+    CoordinateSystem.h
+    CorrelationTool.h
+    Cuboid.h
+    Cylinder.h
+    DigitizeMode.h
+    DigitizedPoint.h
+    DimensionDrawing.h
+    Drawing.h
+    Edge.h
+    EndedObject.h
+    Face.h
+    FaceTools.h
+    FastCurves.h
+    GLList.h
+    Geom.h
+    GraphicsCanvas.h
+    Grid.h
+    Gripper.h
+    GripperSelTransform.h
+    Group.h
+    HAngularDimension.h
+    HArc.h
+    HArea.h
+    HCircle.h
+    HDimension.h
+    HDxf.h
+    HEllipse.h
+    HGear.h
+    HILine.h
+    HImage.h
+    HLine.h
+    HPoint.h
+    HSpline.h
+    HText.h
+    HXml.h
+    HeeksCAD.h
+    HeeksConfig.h
+    HeeksFrame.h
+    HeeksPrintout.h
+    History.h
+    Index.h
+    InputModeCanvas.h
+    Intersector.h
+    LineArcDrawing.h
+    Loop.h
+    MagDragWindow.h
+    MarkedList.h
+    ObjPropsCanvas.h
+    OptionsCanvas.h
+    OrientationModifier.h
+    Plugins.h
+    PointDrawing.h
+    PointOrWindow.h
+    PropertiesCanvas.h
+    PropertyChange.h
+    PropertyTrsf.h
     RegularShapesDrawing.h
     RemoveOrAddTool.h
     RuledSurface.h
@@ -154,16 +155,8 @@ set( heekscad_HDRS
     Solid.h
     SolidTools.h
     Sphere.h
-    stdafx.h
     StlSolid.h
-    ../interface/strconv.h
     StretchTool.h
-    svg.h
-    ../tinyxml/tinystr.h
-    ../tinyxml/tinyxml.h
-    ../interface/Tool.h
-    ../interface/ToolImage.h
-    ../interface/ToolList.h
     TransformTool.h
     TransformTools.h
     TreeCanvas.h
@@ -174,46 +167,85 @@ set( heekscad_HDRS
     ViewZooming.h
     Window.h
     Wire.h
+    advprops.h
+    dxf.h
+    glfont2.h
+    manager.h
+    odcombo.h
+    propdev.h
+    propgrid.h
+    stdafx.h
+    svg.h
     wxImageLoader.h
-   )
+    )
+
+set( libarea_SRCS
+    ${libarea_SRC_DIR}/Arc.cpp
+    ${libarea_SRC_DIR}/Area.cpp
+    ${libarea_SRC_DIR}/AreaClipper.cpp
+    ${libarea_SRC_DIR}/AreaOrderer.cpp
+    ${libarea_SRC_DIR}/AreaPocket.cpp
+    ${libarea_SRC_DIR}/Circle.cpp
+    ${libarea_SRC_DIR}/Curve.cpp
+    ${libarea_SRC_DIR}/clipper.cpp
+    ${libarea_SRC_DIR}/kurve/Construction.cpp
+    ${libarea_SRC_DIR}/kurve/Finite.cpp
+    ${libarea_SRC_DIR}/kurve/Matrix.cpp
+    ${libarea_SRC_DIR}/kurve/kurve.cpp
+    ${libarea_SRC_DIR}/kurve/offset.cpp
+    )
 
 set( heekscad_SRCS
+    ../interface/DoubleInput.cpp
+    ../interface/HDialogs.cpp
+    ../interface/HeeksCADInterface.cpp
+    ../interface/HeeksColor.cpp
+    ../interface/HeeksObj.cpp
+    ../interface/IdNamedObj.cpp
+    ../interface/IdNamedObjList.cpp
+    ../interface/LeftAndRight.cpp
+    ../interface/MarkedObject.cpp
+    ../interface/NiceTextCtrl.cpp
+    ../interface/ObjList.cpp
+    ../interface/PictureFrame.cpp
+    ../interface/PropertyCheck.cpp
+    ../interface/PropertyChoice.cpp
+    ../interface/PropertyColor.cpp
+    ../interface/PropertyDouble.cpp
+    ../interface/PropertyInt.cpp
+    ../interface/PropertyLength.cpp
+    ../interface/PropertyList.cpp
+    ../interface/PropertyString.cpp
+    ../interface/PropertyVertex.cpp
+    ../interface/ToolImage.cpp
+    ../interface/ToolList.cpp
+    ../interface/strconv.cpp
+    ../tinyxml/tinystr.cpp
+    ../tinyxml/tinyxml.cpp
+    ../tinyxml/tinyxmlerror.cpp
+    ../tinyxml/tinyxmlparser.cpp
     AboutBox.cpp
-    advprops.cpp
-    ${LIBAREA_PATH}/Arc.cpp
-    ${LIBAREA_PATH}/Area.cpp
-    ${LIBAREA_PATH}/AreaClipper.cpp
-    ${LIBAREA_PATH}/AreaOrderer.cpp
-    ${LIBAREA_PATH}/AreaPocket.cpp
     AutoSave.cpp
     BezierCurve.cpp
-    ${LIBAREA_PATH}/Circle.cpp
-    ${LIBAREA_PATH}/clipper.cpp
     Cone.cpp
-    ${LIBAREA_PATH}/kurve/Construction.cpp
     ConversionTools.cpp
     CoordinateSystem.cpp
     CorrelationTool.cpp
     Cuboid.cpp
-    ${LIBAREA_PATH}/Curve.cpp
     CxfFont.cpp
     Cylinder.cpp
-    DigitizedPoint.cpp
     DigitizeMode.cpp
+    DigitizedPoint.cpp
     DimensionDrawing.cpp
-    ../interface/DoubleInput.cpp
     Drawing.cpp
-    dxf.cpp
     Edge.cpp
     EndedObject.cpp
     ExitMainLoop.cpp
     Face.cpp
     FaceTools.cpp
     FastCurves.cpp
-    ${LIBAREA_PATH}/kurve/Finite.cpp
-    Geom.cpp
-    glfont2.cpp
     GLList.cpp
+    Geom.cpp
     GraphicsCanvas.cpp
     Grid.cpp
     Gripper.cpp
@@ -223,66 +255,39 @@ set( heekscad_SRCS
     HArc.cpp
     HArea.cpp
     HCircle.cpp
-    ../interface/HDialogs.cpp
     HDimension.cpp
     HDxf.cpp
-    HeeksCAD.cpp
-    ../interface/HeeksCADInterface.cpp
-    ../interface/HeeksColor.cpp
-    HeeksFrame.cpp
-    ../interface/HeeksObj.cpp
-    HeeksPrintout.cpp
     HEllipse.cpp
     HGear.cpp
     HILine.cpp
     HImage.cpp
-    History.cpp
     HLine.cpp
     HPoint.cpp
     HSpline.cpp
     HText.cpp
     HXml.cpp
-	../interface/IdNamedObj.cpp
-	../interface/IdNamedObjList.cpp
+    HeeksCAD.cpp
+    HeeksFrame.cpp
+    HeeksPrintout.cpp
+    History.cpp
     Input.cpp
     InputModeCanvas.cpp
-    ${LIBAREA_PATH}/kurve/kurve.cpp
-    ../interface/LeftAndRight.cpp
     LineArcDrawing.cpp
     Loop.cpp
     MagDragWindow.cpp
-    manager.cpp
     MarkedList.cpp
-    ../interface/MarkedObject.cpp
-    ${LIBAREA_PATH}/kurve/Matrix.cpp
-    ../interface/NiceTextCtrl.cpp
-    ../interface/ObjList.cpp
     ObjPropsCanvas.cpp
-    odcombo.cpp
-    ${LIBAREA_PATH}/kurve/offset.cpp
     OptionsCanvas.cpp
     OrientationModifier.cpp
-    ../interface/PictureFrame.cpp
     Plugins.cpp
     PointDrawing.cpp
     PointOrWindow.cpp
     PropertiesCanvas.cpp
     PropertyChange.cpp
-    ../interface/PropertyCheck.cpp
-    ../interface/PropertyChoice.cpp
-    ../interface/PropertyColor.cpp
-    ../interface/PropertyDouble.cpp
-    ../interface/PropertyInt.cpp
-    ../interface/PropertyLength.cpp
-    ../interface/PropertyList.cpp
-    ../interface/PropertyString.cpp
     PropertyTrsf.cpp
-    ../interface/PropertyVertex.cpp
-    propgrid.cpp
-    props.cpp
+    RS274X.cpp
     RegularShapesDrawing.cpp
     RemoveOrAddTool.cpp
-    RS274X.cpp
     RuledSurface.cpp
     Ruler.cpp
     Sectioning.cpp
@@ -294,17 +299,8 @@ set( heekscad_SRCS
     Solid.cpp
     SolidTools.cpp
     Sphere.cpp
-    stdafx.cpp
     StlSolid.cpp
-    ../interface/strconv.cpp
     StretchTool.cpp
-    svg.cpp
-    ../tinyxml/tinystr.cpp
-    ../tinyxml/tinyxml.cpp
-    ../tinyxml/tinyxmlerror.cpp
-    ../tinyxml/tinyxmlparser.cpp
-    ../interface/ToolImage.cpp
-    ../interface/ToolList.cpp
     TransformTool.cpp
     TransformTools.cpp
     TreeCanvas.cpp
@@ -315,15 +311,24 @@ set( heekscad_SRCS
     ViewZooming.cpp
     Window.cpp
     Wire.cpp
+    advprops.cpp
+    dxf.cpp
+    glfont2.cpp
+    manager.cpp
+    odcombo.cpp
+    propgrid.cpp
+    props.cpp
+    stdafx.cpp
+    svg.cpp
     wxImageLoader.cpp
-   )
+    )
 
 # remove lsketchsolve below
 # -L../bin -ltinyxml -lheeksintf -lsketchsolve
 set( HeeksCAD_LIBS
        -L../bin -ltinyxml -lheeksintf
-   )
-add_executable( heekscad ${heekscad_SRCS} ${platform_SRCS} ${heekscad_HDRS} )
+    )
+add_executable( heekscad ${heekscad_SRCS} ${libarea_SRCS} ${platform_SRCS} ${heekscad_HDRS} )
 target_link_libraries( heekscad
                        ${wxWidgets_LIBRARIES}  ${OpenCASCADE_LIBRARIES}
                        ${PYTHON_LIBRARIES} ${HeeksCAD_LIBS} ${OSX_LIBS}

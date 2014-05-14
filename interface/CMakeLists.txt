@@ -5,10 +5,10 @@ add_definitions ( -Wall -DHEEKSCAD -DUNICODE -DTIXML_USE_STL )
 FIND_PACKAGE( wxWidgets REQUIRED COMPONENTS base core gl )
 INCLUDE(${wxWidgets_USE_FILE})
 find_package( PythonLibs REQUIRED )
-set ( LIBAREA_PATH ../libarea )
+find_package( libarea REQUIRED )
 include_directories ( ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
                       ${PYTHON_INCLUDE_DIRS} ${wxWidgets_INCLUDE_DIRS}
-                      ${LIBAREA_PATH}
+                      ${libarea_SRC_DIR}
                       ../src
                     )
 set ( LIBRARY_OUTPUT_PATH ../bin )
@@ -21,7 +21,7 @@ set( heeksintf_SRCS
         HeeksObj.cpp           PropertyCheck.cpp   PropertyList.cpp
         LeftAndRight.cpp       PropertyChoice.cpp  PropertyString.cpp
         MarkedObject.cpp       PropertyColor.cpp   PropertyVertex.cpp
-        ${LIBAREA_PATH}/Area.cpp
+        ${libarea_SRC_DIR}/Area.cpp
    )
    
 set( heeksintf_HDRS
@@ -33,7 +33,7 @@ set( heeksintf_HDRS
         HeeksCADInterface.h  NurbSurfaceParams.h  PropertyColor.h   PropertyVertex.h
         HeeksColor.h         PropertyDouble.h  SketchOrder.h
         HeeksObj.h           ObjList.h            PropertyFile.h    strconv.h
-        ${LIBAREA_PATH}/Area.h
+        ${libarea_SRC_DIR}/Area.h
    )
 
 add_library( heeksintf SHARED ${heeksintf_SRCS} ${heeksintf_HDRS} )
