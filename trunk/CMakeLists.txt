@@ -70,7 +70,7 @@ set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "HeeksCAD, Free CAD based on Open CASCADE
 set(CPACK_DEBIAN_PACKAGE_SECTION "science")
 set(CPACK_DEBIAN_PACKAGE_VERSION "")
 
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libwxbase2.8-0 (>= 2.8.5), libwxgtk2.8-0 (>= 2.8.5), libgtkglext1 (>= 1.2), python (>= 2.5), libboost-python1.40.0 | libboost-python1.42.0")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libwxbase2.8-0 (>= 2.8.5), libwxgtk2.8-0 (>= 2.8.5), libgtkglext1 (>= 1.2), python (>= 2.5), libboost-python1.49.0 | libboost-python1.48.0 | libboost-python1.46.1 | libboost-python1.42.0 | libboost-python1.40.0")
 set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "libopencascade-ocaf-6.3.0 | libopencascade-ocaf-6.5.0 | oce" )
 
 include(CPack)
