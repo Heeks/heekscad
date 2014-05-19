@@ -1,10 +1,12 @@
 Source: heekscad
 Section: editors
 Priority: extra
-Maintainer: Joachim Steiger <ubuntu@hyte.de>
-Build-Depends: cdbs, cmake, debhelper (>= 7), libopencascade-dev, libwxgtk2.8-dev, libwxbase2.8-dev, libgtkglext1-dev
-Standards-Version: 3.7.3
-Homepage: http://code.google.com/p/heekscad/
+Maintainer: Romuald Conty <neomilium@gmail.com>
+Build-Depends: debhelper (>= 8.0.0), cmake, libwxbase2.8-0 (>= 2.8.5), libwxgtk2.8-0 (>= 2.8.5), libgtkglext1 (>= 1.2), python (>= 2.5), libboost-python1.40.0 | libboost-python1.42.0 | libboost-python1.46.1 | libboost-python1.48.0 | libboost-python1.49.0, libopencascade-dev, libwxgtk2.8-dev, libwxbase2.8-dev, libgtkglext1-dev, python-dev
+Standards-Version: 3.9.3
+Homepage: https://github.com/Heeks/heekscad
+Vcs-Svn: http://heekscad.googlecode.com/svn/trunk/
+Vcs-Browser: https://code.google.com/p/heekscad/source/browse/
 
 Package: heekscad
 Architecture: any
