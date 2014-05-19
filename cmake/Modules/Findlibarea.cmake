@@ -2,25 +2,30 @@
 #
 # Once done, this will define
 #  libarea_FOUND - true if libarea has been found
-#  libarea_SRC_DIR - the libarea src directory (*.h/*.cpp)
+#  libarea_INCLUDE_DIRS - the libarea include directories
+#  libarea_LIBRARIES - the libarea libs
 #
 # Author: Romuald Conty <neomilium@gmail.com>
-# Version: 20140512
+# Version: 20140515
 #
 
 IF(NOT libarea_FOUND)
-  # Will try to find at standard locations
-  FIND_PATH(libarea_SRC_DIR Area.cpp PATH_SUFFIXES libarea)
+  FIND_PACKAGE (PkgConfig)
+    IF(PKG_CONFIG_FOUND)
+    # Will find PC/SC library on Linux/BSDs using PkgConfig
+    PKG_CHECK_MODULES(libarea libarea)
+  ENDIF(PKG_CONFIG_FOUND)
+  
+  IF(NOT libarea_FOUND)
+    # Will find libarea headers
+    FIND_PATH(libarea_INCLUDE_DIRS Area.h PATH_SUFFIXES area)
+    FIND_LIBRARY(libarea_LIBRARIES NAMES area)
 
-  IF( libarea_SRC_DIR STREQUAL libarea_SRC_DIR-NOTFOUND )
-    # try to find at ./libarea/ location then ../libarea
-    FIND_PATH( libarea_SRC_DIR Area.cpp PATHS "${CMAKE_SOURCE_DIR}/libarea" "${CMAKE_SOURCE_DIR}/../libarea" DOC "Path to libarea sources" )
-    IF( libarea_SRC_DIR STREQUAL Area.cpp-NOTFOUND )
-      MESSAGE( FATAL_ERROR "Cannot find libarea sources dir." )
-    ENDIF( libarea_SRC_DIR STREQUAL Area.cpp-NOTFOUND )
-  ENDIF(libarea_SRC_DIR STREQUAL libarea_SRC_DIR-NOTFOUND )
-
-  set( libarea_FOUND TRUE )
-  MESSAGE( STATUS "libarea_SRC_DIR:     " ${libarea_SRC_DIR} )
+    IF(libarea_INCLUDE_DIRS AND libarea_LIBRARIES)
+      SET(libarea_FOUND true)
+    ENDIF(libarea_INCLUDE_DIRS AND libarea_LIBRARIES)
+  ENDIF(NOT libarea_FOUND)
+  
+  MESSAGE( STATUS "libarea_INCLUDE_DIRS:     " ${libarea_INCLUDE_DIRS} )
+  MESSAGE( STATUS "libarea_LIBRARIES:     " ${libarea_LIBRARIES} )
 ENDIF(NOT libarea_FOUND)
-
