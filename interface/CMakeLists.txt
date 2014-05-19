@@ -20,24 +20,66 @@ include_directories ( ${CMAKE_SOURCE_DIR}
 set ( LIBRARY_OUTPUT_PATH ../bin )
 
 set( heeksintf_SRCS
-        DoubleInput.cpp        NiceTextCtrl.cpp    PropertyDouble.cpp  strconv.cpp
-        HDialogs.cpp           PropertyFile.cpp    ToolImage.cpp
-        HeeksCADInterface.cpp  ObjList.cpp         PropertyInt.cpp     ToolList.cpp
-        HeeksColor.cpp         PictureFrame.cpp    PropertyLength.cpp  #TransientObject.cpp
-        HeeksObj.cpp           PropertyCheck.cpp   PropertyList.cpp
-        LeftAndRight.cpp       PropertyChoice.cpp  PropertyString.cpp
-        MarkedObject.cpp       PropertyColor.cpp   PropertyVertex.cpp
+    DoubleInput.cpp
+    HDialogs.cpp
+    HeeksCADInterface.cpp
+    HeeksColor.cpp
+    HeeksObj.cpp
+    LeftAndRight.cpp
+    MarkedObject.cpp
+    NiceTextCtrl.cpp
+    ObjList.cpp
+    PictureFrame.cpp
+    PropertyCheck.cpp
+    PropertyChoice.cpp
+    PropertyColor.cpp
+    PropertyDouble.cpp
+    PropertyFile.cpp
+    PropertyInt.cpp
+    PropertyLength.cpp
+    PropertyList.cpp
+    PropertyString.cpp
+    PropertyVertex.cpp
+    ToolImage.cpp
+    ToolList.cpp
+    strconv.cpp
    )
    
 set( heeksintf_HDRS
-        Box.h                InputMode.h          Observer.h        Property.h        Tool.h
-        DoubleInput.h        LeftAndRight.h       PictureFrame.h    PropertyInt.h     ToolImage.h
-        GripData.h           MarkedObject.h       Plugin.h          PropertyLength.h  ToolList.h
-        GripperTypes.h       Material.h           PropertyCheck.h   PropertyList.h    #TransientObject.h
-        HDialogs.h           NiceTextCtrl.h       PropertyChoice.h  PropertyString.h
-        HeeksCADInterface.h  NurbSurfaceParams.h  PropertyColor.h   PropertyVertex.h
-        HeeksColor.h         PropertyDouble.h  SketchOrder.h
-        HeeksObj.h           ObjList.h            PropertyFile.h    strconv.h
+    Box.h
+    DoubleInput.h
+    GripData.h
+    GripperTypes.h
+    HDialogs.h
+    HeeksCADInterface.h
+    HeeksColor.h
+    HeeksObj.h
+    InputMode.h
+    LeftAndRight.h
+    MarkedObject.h
+    Material.h
+    NiceTextCtrl.h
+    NurbSurfaceParams.h
+    ObjList.h
+    Observer.h
+    PictureFrame.h
+    Plugin.h
+    Property.h
+    PropertyCheck.h
+    PropertyChoice.h
+    PropertyColor.h
+    PropertyDouble.h
+    PropertyFile.h
+    PropertyInt.h
+    PropertyLength.h
+    PropertyList.h
+    PropertyString.h
+    PropertyVertex.h
+    SketchOrder.h
+    Tool.h
+    ToolImage.h
+    ToolList.h
+    strconv.h
    )
 
 add_library( heeksintf SHARED ${heeksintf_SRCS} )
