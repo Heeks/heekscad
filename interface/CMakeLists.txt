@@ -1,14 +1,20 @@
 project( heeksintf )
 cmake_minimum_required( VERSION 2.6 )
+
 set ( CMAKE_BUILD_TYPE Debug )
+
 add_definitions ( -Wall -DHEEKSCAD -DUNICODE -DTIXML_USE_STL )
-FIND_PACKAGE( wxWidgets REQUIRED COMPONENTS base core gl )
-INCLUDE(${wxWidgets_USE_FILE})
+
+# wxWidgets
+find_package( wxWidgets REQUIRED COMPONENTS base core gl )
+include(${wxWidgets_USE_FILE})
+
+# python libs
 find_package( PythonLibs REQUIRED )
-find_package( libarea REQUIRED )
-include_directories ( ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
+
+include_directories ( ${CMAKE_SOURCE_DIR}
                       ${PYTHON_INCLUDE_DIRS} ${wxWidgets_INCLUDE_DIRS}
-                      ${libarea_SRC_DIR}
+                      ${libarea_INCLUDE_DIRS}
                       ../src
                     )
 set ( LIBRARY_OUTPUT_PATH ../bin )
@@ -21,7 +27,6 @@ set( heeksintf_SRCS
         HeeksObj.cpp           PropertyCheck.cpp   PropertyList.cpp
         LeftAndRight.cpp       PropertyChoice.cpp  PropertyString.cpp
         MarkedObject.cpp       PropertyColor.cpp   PropertyVertex.cpp
-        ${libarea_SRC_DIR}/Area.cpp
    )
    
 set( heeksintf_HDRS
@@ -33,10 +38,11 @@ set( heeksintf_HDRS
         HeeksCADInterface.h  NurbSurfaceParams.h  PropertyColor.h   PropertyVertex.h
         HeeksColor.h         PropertyDouble.h  SketchOrder.h
         HeeksObj.h           ObjList.h            PropertyFile.h    strconv.h
-        ${libarea_SRC_DIR}/Area.h
    )
 
-add_library( heeksintf SHARED ${heeksintf_SRCS} ${heeksintf_HDRS} )
-target_link_libraries( heeksintf ${PYTHON_LIBRARIES} ${wxWidgets_LIBRARIES} )
+add_library( heeksintf SHARED ${heeksintf_SRCS} )
+
+target_link_libraries( heeksintf ${PYTHON_LIBRARIES} ${wxWidgets_LIBRARIES} ${libarea_LIBRARIES} )
+
 set_target_properties( heeksintf PROPERTIES SOVERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} )
 install( TARGETS heeksintf DESTINATION lib )
