@@ -1,12 +1,8 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
 
-# this package cannot be created without the package 'cdbs' being installed
-# also, if you have built in-source, cmake may get confused.
-# do a fresh checkout, or delete all instances of the following from the source tree:
-# CMakeCache.txt
-# CMakeFiles/
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
 
-
-include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/cmake.mk
+%:
+	dh $@ 
