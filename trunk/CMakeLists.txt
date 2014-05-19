@@ -33,6 +33,9 @@ else() #look for OpenCASCADE
   find_package ( OpenCASCADE REQUIRED COMPONENTS ${CASCADE_LIBS} )
 endif()
 
+#find libarea
+find_package( libarea REQUIRED )
+
 if( APPLE )
   # Apple includes two different openGL implementations, for Carbon and X11.  We want X11
   set( OSX_INCLUDE_DIRS /usr/X11R6/include )

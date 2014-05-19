@@ -1,4 +1,3 @@
-
 project( heekscad )
 cmake_minimum_required( VERSION 2.6 )
 
@@ -25,27 +24,13 @@ find_package( wxWidgets REQUIRED COMPONENTS base core gl aui )
 find_package( PythonLibs REQUIRED )
 include(${wxWidgets_USE_FILE})
 
-find_package( libarea REQUIRED )
-
 include_directories (
-    ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_SOURCE_DIR}
     ${wxWidgets_INCLUDE_DIRS} ${OpenCASCADE_INCLUDE_DIR}
     ${PYTHON_INCLUDE_DIRS} . ${OPENGL_INCLUDE_DIR}
-    ${libarea_SRC_DIR}
+    ${libarea_INCLUDE_DIRS}
     )
 set ( EXECUTABLE_OUTPUT_PATH ../bin )
-
-set( libarea_HDRS
-    ${libarea_SRC_DIR}/Arc.h
-    ${libarea_SRC_DIR}/Area.h
-    ${libarea_SRC_DIR}/AreaOrderer.h
-    ${libarea_SRC_DIR}/Box2D.h
-    ${libarea_SRC_DIR}/Circle.h
-    ${libarea_SRC_DIR}/Curve.h
-    ${libarea_SRC_DIR}/Point.h
-    ${libarea_SRC_DIR}/clipper.hpp
-    ${libarea_SRC_DIR}/kurve/geometry.h
-    )
 
 set( heekscad_HDRS
     ../interface/Box.h
@@ -177,22 +162,6 @@ set( heekscad_HDRS
     stdafx.h
     svg.h
     wxImageLoader.h
-    )
-
-set( libarea_SRCS
-    ${libarea_SRC_DIR}/Arc.cpp
-    ${libarea_SRC_DIR}/Area.cpp
-    ${libarea_SRC_DIR}/AreaClipper.cpp
-    ${libarea_SRC_DIR}/AreaOrderer.cpp
-    ${libarea_SRC_DIR}/AreaPocket.cpp
-    ${libarea_SRC_DIR}/Circle.cpp
-    ${libarea_SRC_DIR}/Curve.cpp
-    ${libarea_SRC_DIR}/clipper.cpp
-    ${libarea_SRC_DIR}/kurve/Construction.cpp
-    ${libarea_SRC_DIR}/kurve/Finite.cpp
-    ${libarea_SRC_DIR}/kurve/Matrix.cpp
-    ${libarea_SRC_DIR}/kurve/kurve.cpp
-    ${libarea_SRC_DIR}/kurve/offset.cpp
     )
 
 set( heekscad_SRCS
@@ -328,11 +297,11 @@ set( heekscad_SRCS
 set( HeeksCAD_LIBS
        -L../bin -ltinyxml -lheeksintf
     )
-add_executable( heekscad ${heekscad_SRCS} ${libarea_SRCS} ${platform_SRCS} ${heekscad_HDRS} )
+add_executable( heekscad ${heekscad_SRCS} ${platform_SRCS} ${heekscad_HDRS} )
 target_link_libraries( heekscad
-                       ${wxWidgets_LIBRARIES}  ${OpenCASCADE_LIBRARIES}
-                       ${PYTHON_LIBRARIES} ${HeeksCAD_LIBS} ${OSX_LIBS}
-                       ${OPENGL_LIBRARIES} )
+                       ${wxWidgets_LIBRARIES} ${OpenCASCADE_LIBRARIES}
+                       ${OPENGL_LIBRARIES} ${PYTHON_LIBRARIES} ${OSX_LIBS}
+                       ${HeeksCAD_LIBS} ${libarea_LIBRARIES} )
 set_target_properties( heekscad PROPERTIES VERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} )
 install( TARGETS heekscad DESTINATION bin )
 
