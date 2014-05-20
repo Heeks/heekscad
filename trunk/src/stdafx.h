@@ -252,6 +252,7 @@ extern "C" {
 }
 
 #include "../interface/strconv.h"
+#include "../interface/Geom.h"
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"
 #include "../interface/Material.h"
@@ -266,7 +267,6 @@ extern "C" {
 #include "Edge.h"
 #include "Loop.h"
 #include "Gripper.h"
-#include "Geom.h"
 //#include "Loop.h"
 #include "MarkedList.h"
 #include "Shape.h"

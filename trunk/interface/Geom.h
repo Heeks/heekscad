@@ -3,6 +3,7 @@
 // This program is released under the BSD license. See the file COPYING for details.
 
 #pragma once
+#include "GripData.h"
 
 // functions to find intersections between gp items
 bool intersect(const gp_Lin& lin, const gp_Lin& lin2, gp_Pnt &pnt);

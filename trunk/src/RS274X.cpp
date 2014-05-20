@@ -10,7 +10,7 @@
 #include <string.h>
 
 #include "RS274X.h"
-#include "Geom.h"
+#include "../interface/Geom.h"
 #include "ConversionTools.h"
 #include "Sketch.h"
 
