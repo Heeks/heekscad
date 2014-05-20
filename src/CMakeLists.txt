@@ -39,37 +39,6 @@ include_directories (
 set ( EXECUTABLE_OUTPUT_PATH ../bin )
 
 set( heekscad_HDRS
-    ../interface/Box.h
-    ../interface/DoubleInput.h
-    ../interface/HDialogs.h
-    ../interface/HeeksCADInterface.h
-    ../interface/HeeksColor.h
-    ../interface/HeeksObj.h
-    ../interface/HeeksObjDlg.h
-    ../interface/IdNamedObj.h
-    ../interface/IdNamedObjList.h
-    ../interface/InputMode.h
-    ../interface/LeftAndRight.h
-    ../interface/MarkedObject.h
-    ../interface/Material.h
-    ../interface/NiceTextCtrl.h
-    ../interface/ObjList.h
-    ../interface/Observer.h
-    ../interface/PictureFrame.h
-    ../interface/Property.h
-    ../interface/PropertyCheck.h
-    ../interface/PropertyChoice.h
-    ../interface/PropertyColor.h
-    ../interface/PropertyDouble.h
-    ../interface/PropertyInt.h
-    ../interface/PropertyLength.h
-    ../interface/PropertyList.h
-    ../interface/PropertyString.h
-    ../interface/PropertyVertex.h
-    ../interface/Tool.h
-    ../interface/ToolImage.h
-    ../interface/ToolList.h
-    ../interface/strconv.h
     ../tinyxml/tinystr.h
     ../tinyxml/tinyxml.h
     AboutBox.h
@@ -170,30 +139,6 @@ set( heekscad_HDRS
     )
 
 set( heekscad_SRCS
-    ../interface/DoubleInput.cpp
-    ../interface/HDialogs.cpp
-    ../interface/HeeksCADInterface.cpp
-    ../interface/HeeksColor.cpp
-    ../interface/HeeksObj.cpp
-    ../interface/IdNamedObj.cpp
-    ../interface/IdNamedObjList.cpp
-    ../interface/LeftAndRight.cpp
-    ../interface/MarkedObject.cpp
-    ../interface/NiceTextCtrl.cpp
-    ../interface/ObjList.cpp
-    ../interface/PictureFrame.cpp
-    ../interface/PropertyCheck.cpp
-    ../interface/PropertyChoice.cpp
-    ../interface/PropertyColor.cpp
-    ../interface/PropertyDouble.cpp
-    ../interface/PropertyInt.cpp
-    ../interface/PropertyLength.cpp
-    ../interface/PropertyList.cpp
-    ../interface/PropertyString.cpp
-    ../interface/PropertyVertex.cpp
-    ../interface/ToolImage.cpp
-    ../interface/ToolList.cpp
-    ../interface/strconv.cpp
     ../tinyxml/tinystr.cpp
     ../tinyxml/tinyxml.cpp
     ../tinyxml/tinyxmlerror.cpp
@@ -297,11 +242,11 @@ set( heekscad_SRCS
     )
 
 # remove lsketchsolve below
-# -L../bin -ltinyxml -lheeksintf -lsketchsolve
+# -L../bin -ltinyxml -lheeksintf
 set( HeeksCAD_LIBS
        -L../bin -ltinyxml -lheeksintf
     )
-add_executable( heekscad ${heekscad_SRCS} ${platform_SRCS} ${heekscad_HDRS} )
+add_executable( heekscad ${heekscad_SRCS} ${platform_SRCS} )
 target_link_libraries( heekscad
                        ${wxWidgets_LIBRARIES} ${OpenCASCADE_LIBRARIES}
                        ${OPENGL_LIBRARIES} ${PYTHON_LIBRARIES} ${OSX_LIBS}
