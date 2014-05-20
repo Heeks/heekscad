@@ -97,3 +97,6 @@ target_link_libraries( heeksintf ${PYTHON_LIBRARIES} ${wxWidgets_LIBRARIES} ${li
 
 set_target_properties( heeksintf PROPERTIES SOVERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} )
 install( TARGETS heeksintf DESTINATION lib )
+
+file( GLOB sources ${heeksintf_SRCS} ${heeksintf_HDRS} )
+install( FILES ${sources} DESTINATION "share/heekscad/interface" COMPONENT heeksintf )
