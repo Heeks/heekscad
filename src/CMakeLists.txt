@@ -85,7 +85,6 @@ set( heekscad_HDRS
     FaceTools.h
     FastCurves.h
     GLList.h
-    Geom.h
     GraphicsCanvas.h
     Grid.h
     Gripper.h
@@ -214,7 +213,6 @@ set( heekscad_SRCS
     FaceTools.cpp
     FastCurves.cpp
     GLList.cpp
-    Geom.cpp
     GraphicsCanvas.cpp
     Grid.cpp
     Gripper.cpp

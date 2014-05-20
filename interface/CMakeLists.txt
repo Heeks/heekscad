@@ -13,18 +13,23 @@ include(${wxWidgets_USE_FILE})
 find_package( PythonLibs REQUIRED )
 
 include_directories ( ${CMAKE_SOURCE_DIR}
-                      ${PYTHON_INCLUDE_DIRS} ${wxWidgets_INCLUDE_DIRS}
+                      ${CMAKE_SOURCE_DIR}/src
+                      ${PYTHON_INCLUDE_DIRS}
+                      ${wxWidgets_INCLUDE_DIRS}
                       ${libarea_INCLUDE_DIRS}
-                      ../src
                     )
 set ( LIBRARY_OUTPUT_PATH ../bin )
 
 set( heeksintf_SRCS
     DoubleInput.cpp
+    Geom.cpp
     HDialogs.cpp
     HeeksCADInterface.cpp
     HeeksColor.cpp
     HeeksObj.cpp
+    HeeksObjDlg.cpp
+    IdNamedObj.cpp
+    IdNamedObjList.cpp
     LeftAndRight.cpp
     MarkedObject.cpp
     NiceTextCtrl.cpp
@@ -48,12 +53,16 @@ set( heeksintf_SRCS
 set( heeksintf_HDRS
     Box.h
     DoubleInput.h
+    Geom.h
     GripData.h
     GripperTypes.h
     HDialogs.h
     HeeksCADInterface.h
     HeeksColor.h
     HeeksObj.h
+    HeeksObjDlg.h
+    IdNamedObj.h
+    IdNamedObjList.h
     InputMode.h
     LeftAndRight.h
     MarkedObject.h

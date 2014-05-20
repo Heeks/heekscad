@@ -4,7 +4,6 @@
 
 #include <stdafx.h>
 #include "Geom.h"
-#include "Gripper.h"
 
 #ifdef HEEKSCAD
 #define GEOM_TOL wxGetApp().m_geom_tol
