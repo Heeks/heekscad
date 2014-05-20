@@ -24,12 +24,18 @@ find_package( wxWidgets REQUIRED COMPONENTS base core gl aui )
 find_package( PythonLibs REQUIRED )
 include(${wxWidgets_USE_FILE})
 
+include_directories ( SYSTEM
+    ${OpenCASCADE_INCLUDE_DIR}
+    )
+
 include_directories (
-    ${CMAKE_SOURCE_DIR}
-    ${wxWidgets_INCLUDE_DIRS} ${OpenCASCADE_INCLUDE_DIR}
-    ${PYTHON_INCLUDE_DIRS} . ${OPENGL_INCLUDE_DIR}
+    ${CMAKE_SOURCE_DIR}/src
+    ${PYTHON_INCLUDE_DIRS}
+    ${OPENGL_INCLUDE_DIR}
+    ${wxWidgets_INCLUDE_DIRS}
     ${libarea_INCLUDE_DIRS}
     )
+
 set ( EXECUTABLE_OUTPUT_PATH ../bin )
 
 set( heekscad_HDRS
