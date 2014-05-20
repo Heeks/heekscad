@@ -51,11 +51,13 @@ using namespace std;
 BEGIN_EVENT_TABLE( CHeeksFrame, wxFrame )
 EVT_CLOSE(CHeeksFrame::OnClose)
 EVT_MENU( Menu_View_ResetLayout, CHeeksFrame::OnResetLayout )
-EVT_MENU( Menu_View_SetToolBarsToLeft, CHeeksFrame::OnSetToolBarsToLeft )
 EVT_MENU_RANGE(	ID_RECENT_FIRST, ID_RECENT_FIRST + MAX_RECENT_FILES, CHeeksFrame::OnRecentFile)
+#ifndef USING_RIBBON
+EVT_MENU( Menu_View_SetToolBarsToLeft, CHeeksFrame::OnSetToolBarsToLeft )
 EVT_MENU_RANGE(ID_FIRST_EXTERNAL_BUTTON, ID_FIRST_POP_UP_MENU_TOOL + 1000, CHeeksFrame::OnExternalButton)
 //wx__DECLARE_EVT2(wxEVT_COMMAND_BUTTON_CLICKED, ID_FIRST_EXTERNAL_BUTTON, ID_FIRST_POP_UP_MENU_TOOL + 1000, wxCommandEventHandler(CHeeksFrame::OnExternalButton))
 EVT_UPDATE_UI_RANGE(ID_FIRST_EXTERNAL_BUTTON, ID_FIRST_POP_UP_MENU_TOOL + 1000, CHeeksFrame::OnUpdateExternalButton)
+#endif
 EVT_SIZE(CHeeksFrame::OnSize)
 EVT_MOVE(CHeeksFrame::OnMove)
 EVT_KEY_DOWN(CHeeksFrame::OnKeyDown)
@@ -138,7 +140,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 #ifdef USING_RIBBON
 	m_ribbon = new HeeksRibbon(this);
-	m_aui_manager->AddPane(m_ribbon, wxAuiPaneInfo().Name(_T("Ribbon")).Caption(_("Ribbon")).Top().LeftDockable(false).SetFlag(wxAuiPaneInfo::optionToolbar, true));
+	m_aui_manager->AddPane(m_ribbon, wxAuiPaneInfo().ToolbarPane().Gripper(false).Name(_T("Ribbon")).Movable(false).MinSize(wxSize(-1, 85)).Top());
 #else
 	AddToolBars();
 #endif
@@ -205,7 +207,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	//Read layout
 	wxString str;
 	config.Read(_T("AuiPerspective"), &str, default_layout_string);
-//	LoadPerspective(str);
+	LoadPerspective(str);
 
 	m_aui_manager->Update();
 }
@@ -499,7 +501,7 @@ static void OnUpdateViewProperties( wxUpdateUIEvent& event )
 	event.Check(wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_properties).IsShown());
 }
 
-static void OnSelectModeButton( wxCommandEvent& WXUNUSED( event ) )
+void OnSelectModeButton( wxCommandEvent& WXUNUSED( event ) )
 {
 	wxGetApp().m_marked_list->m_filter = -1;
 	wxGetApp().SetInputMode((CInputMode*)(wxGetApp().m_select_mode));
@@ -692,12 +694,12 @@ static void OnNewOrigin( wxCommandEvent& WXUNUSED( event ) )
 	}
 }
 
-static void OnOpenButton( wxCommandEvent& event )
+void OnOpenButton( wxCommandEvent& event )
 {
 	wxGetApp().OnOpenButton();
 }
 
-static void OnImportButton( wxCommandEvent& event )
+void OnImportButton( wxCommandEvent& event )
 {
 
 	wxString default_directory = wxEmptyString;
@@ -730,19 +732,19 @@ static void OnImportButton( wxCommandEvent& event )
     }
 }
 
-static void OnSaveButton( wxCommandEvent& event )
+void OnSaveButton( wxCommandEvent& event )
 {
 	wxString temp_filepath = wxGetApp().m_filepath;
 	bool use_dialog = wxGetApp().m_untitled;
     wxGetApp().SaveFile( temp_filepath.c_str(), use_dialog );
 }
 
-static void OnUpdateSave( wxUpdateUIEvent& event )
+void OnUpdateSave( wxUpdateUIEvent& event )
 {
 	event.Enable(wxGetApp().IsModified());
 }
 
-static void OnSaveAsButton( wxCommandEvent& event )
+void OnSaveAsButton( wxCommandEvent& event )
 {
     wxGetApp().SaveFile( wxGetApp().m_filepath.c_str(), true );
 }
@@ -758,54 +760,54 @@ static void OnResetDefaultsButton( wxCommandEvent& event )
 	wxMessageBox(_("You must restart the application for the settings to be changed"));
 }
 
-static void OnUndoButton( wxCommandEvent& event )
+void OnUndoButton( wxCommandEvent& event )
 {
 	wxGetApp().RollBack();
 	wxGetApp().Repaint();
 }
 
-static void OnRedoButton( wxCommandEvent& event )
+void OnRedoButton( wxCommandEvent& event )
 {
 	wxGetApp().RollForward();
 	wxGetApp().Repaint();
 }
 
-static void OnUpdateUndo( wxUpdateUIEvent& event )
+void OnUpdateUndo( wxUpdateUIEvent& event )
 {
 	event.Enable(wxGetApp().CanUndo());
 }
 
-static void OnUpdateRedo( wxUpdateUIEvent& event )
+void OnUpdateRedo( wxUpdateUIEvent& event )
 {
 	event.Enable(wxGetApp().CanRedo());
 }
 
-static void OnNewButton( wxCommandEvent& event )
+void OnNewButton( wxCommandEvent& event )
 {
 	wxGetApp().OnNewButton();
 }
 
-static void OnCutButton( wxCommandEvent& event )
+void OnCutButton( wxCommandEvent& event )
 {
 	wxGetApp().m_marked_list->CutSelectedItems();
 }
 
-static void OnUpdateCut( wxUpdateUIEvent& event )
+void OnUpdateCut( wxUpdateUIEvent& event )
 {
 	event.Enable(wxGetApp().m_marked_list->size() > 0);
 }
 
-static void OnCopyButton( wxCommandEvent& event )
+void OnCopyButton( wxCommandEvent& event )
 {
 	wxGetApp().m_marked_list->CopySelectedItems();
 }
 
-static void OnUpdateCopy( wxUpdateUIEvent& event )
+void OnUpdateCopy( wxUpdateUIEvent& event )
 {
 	event.Enable(wxGetApp().m_marked_list->size() > 0);
 }
 
-static void OnPasteButton( wxCommandEvent& event )
+void OnPasteButton( wxCommandEvent& event )
 {
 	wxGetApp().Paste(NULL, NULL);
 }
@@ -828,7 +830,7 @@ static void OnUpdateDelete( wxUpdateUIEvent& event )
 	event.Enable(wxGetApp().m_marked_list->size() > 0);
 }
 
-static void OnUpdatePaste( wxUpdateUIEvent& event )
+void OnUpdatePaste( wxUpdateUIEvent& event )
 {
 	event.Enable(wxGetApp().IsPasteReady());
 }
@@ -1089,6 +1091,7 @@ static void OnMoveScaleButton( wxCommandEvent& event )
 	TransformTools::Scale(false);
 }
 
+#ifndef USING_RIBBON
 void CHeeksFrame::OnExternalButton( wxCommandEvent& event )
 {
 	// this might be the undo button! wxGetApp().CreateUndoPoint();
@@ -1102,6 +1105,7 @@ void CHeeksFrame::OnExternalButton( wxCommandEvent& event )
 
 	// this might be the undo button! wxGetApp().Changed();
 }
+#endif
 
 void CHeeksFrame::OnRecentFile( wxCommandEvent& event )
 {
@@ -1128,6 +1132,7 @@ void CHeeksFrame::OnRecentFile( wxCommandEvent& event )
 	}
 }
 
+#ifndef USING_RIBBON
 void CHeeksFrame::OnUpdateExternalButton( wxUpdateUIEvent& event )
 {
 	int id = event.GetId();
@@ -1138,7 +1143,7 @@ void CHeeksFrame::OnUpdateExternalButton( wxUpdateUIEvent& event )
 		if(ebf.on_update_button)(*(ebf.on_update_button))(event);
 	}
 }
-
+#endif
 void CHeeksFrame::OnSize( wxSizeEvent& evt )
 {
 	wxSize size = evt.GetSize();
