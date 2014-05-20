@@ -32,3 +32,6 @@ target_link_libraries( tinyxml ${PYTHON_LIBRARIES} )
 set_target_properties( tinyxml PROPERTIES SOVERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} )
 
 install( TARGETS tinyxml DESTINATION lib )
+
+file( GLOB sources ${tinyxml_SRCS} ${tinyxml_HDRS} )
+install( FILES ${sources} DESTINATION "share/heekscad/tinyxml" COMPONENT tinyxml )
