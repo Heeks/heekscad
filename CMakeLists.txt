@@ -42,19 +42,23 @@ if( APPLE )
   set( OSX_LIBS -L/usr/X11R6/lib -lGL -lX11 -lGLU -lglut )
 endif( APPLE )
 
-INCLUDE(${wxWidgets_USE_FILE})
+include(${wxWidgets_USE_FILE})
+
+include_directories ( SYSTEM
+  ${OpenCASCADE_INCLUDE_DIR}
+)
+
 include_directories (
-	${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
-	${wxWidgets_INCLUDE_DIRS} ${OpenCASCADE_INCLUDE_DIR}
-	${OSX_INCLUDE_DIRS}
-	)
+  ${CMAKE_SOURCE_DIR}
+  ${wxWidgets_INCLUDE_DIRS}
+  ${OSX_INCLUDE_DIRS}
+)
 
-
-IF( CMAKE_SIZEOF_VOID_P EQUAL 4 )
+if( CMAKE_SIZEOF_VOID_P EQUAL 4 )
   set(PKG_ARCH i386)
-ELSE( CMAKE_SIZEOF_VOID_P EQUAL 4 )
+else( CMAKE_SIZEOF_VOID_P EQUAL 4 )
   set(PKG_ARCH amd64)
-ENDIF( CMAKE_SIZEOF_VOID_P EQUAL 4 )
+endif( CMAKE_SIZEOF_VOID_P EQUAL 4 )
 
 #-------------------- package generation -------------------------
 set(CPACK_GENERATOR "DEB")
