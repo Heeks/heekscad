@@ -22,3 +22,9 @@ Description: HeeksCAD is a free, open source, CAD application written by Dan Hee
  The solid modelling is provided by Open CASCADE. http://www.opencascade.org The graphical user interface is made using wxWidgets. http://www.wxwidgets.org 
  .
 
+Package: heekscad-dev
+Architecture: any
+Depends: ${misc:Depends}
+Description: HeeksCAD add-ins interface (development files)
+ This package contains the HeeksCAD add-ins development files (ie. sources, headers).
+ .
