@@ -4447,7 +4447,13 @@ void HeeksCADapp::InitialiseLocale()
 		}
 
 		// Initialize the catalogs we'll be using
+#if wxCHECK_VERSION(3, 0, 0)
 		if ( !m_locale.Init(language) )
+#else
+		// don't use wxLOCALE_LOAD_DEFAULT flag so that Init() doesn't return
+		// false just because it failed to load wxstd catalog
+		if ( !m_locale.Init(language, 0) )
+#endif
 		{
 			wxLogError(_T("This language is not supported by the system."));
 			return;
