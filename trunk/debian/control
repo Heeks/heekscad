@@ -10,7 +10,7 @@ Vcs-Browser: https://code.google.com/p/heekscad/source/browse/
 
 Package: heekscad
 Architecture: any
-Depends: ${shlibs:Depends}, libwxbase2.8-0 (>= 2.8.5), libwxgtk2.8-0 (>= 2.8.5), libgtkglext1 (>= 1.2), python (>= 2.5), libboost-python1.40.0 | libboost-python1.42.0 | libboost-python1.46.1 | libboost-python1.48.0 | libboost-python1.49.0,libarea0
+Depends: ${shlibs:Depends}, libwxbase2.8-0 (>= 2.8.5), libwxgtk2.8-0 (>= 2.8.5), libgtkglext1 (>= 1.2), python (>= 2.5), libboost-python1.40.0 | libboost-python1.42.0 | libboost-python1.46.1 | libboost-python1.48.0 | libboost-python1.49.0, wx2.8-i18n,libarea0
 Description: HeeksCAD is a free, open source, CAD application written by Dan Heeks.
  Functionality: Import solid models from STEP and IGES files.
  Draw construction geomtery and lines and arcs.
