@@ -4458,6 +4458,9 @@ void HeeksCADapp::InitialiseLocale()
 			wxLogError(_T("This language is not supported by the system."));
 			return;
 		}
+		// This will add standard wx catalog that translates common wx strings.
+		// e.g. "Print preview" window will be translated
+		m_locale.AddCatalog(wxT("wxstd"));
 
 		wxLocale::AddCatalogLookupPathPrefix(wxT("."));
 
