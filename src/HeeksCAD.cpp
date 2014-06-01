@@ -939,7 +939,9 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, Heek
 	{
 		if(doc.Error())
 		{
-			wxMessageBox(Ctt(doc.ErrorDesc()));
+			wxString msg(filepath);
+			msg << wxT(": ") << Ctt(doc.ErrorDesc());
+			wxMessageBox(msg);
 		}
 		return;
 	}
