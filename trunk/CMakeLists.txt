@@ -16,6 +16,9 @@ set( BUILD_STARTED_IN_RIGHT_DIR "true" )  #used in src/CMakeLists.txt to print a
 add_definitions ( -Wall )
 FIND_PACKAGE( wxWidgets REQUIRED COMPONENTS base core gl )
 
+#set additionnal CMake module path
+set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+
 #find OCE or OpenCASCADE
 set( CASCADE_LIBS TKernel )
 if( UNIX )
@@ -29,9 +32,9 @@ if( ${OCE_FOUND} )
   set( OpenCASCADE_LIBRARIES ${CASCADE_LIBS} )
   set( OpenCASCADE_INCLUDE_DIR ${OCE_INCLUDE_DIRS} )
 else() #look for OpenCASCADE
-  set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/" )
   find_package ( OpenCASCADE REQUIRED COMPONENTS ${CASCADE_LIBS} )
 endif()
+
 
 #find libarea
 find_package( libarea REQUIRED )

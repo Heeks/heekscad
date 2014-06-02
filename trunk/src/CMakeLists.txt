@@ -15,7 +15,6 @@ if( ${OCE_FOUND} )
   set( OpenCASCADE_LIBRARIES ${CASCADE_LIBS} )
   set( OpenCASCADE_INCLUDE_DIR ${OCE_INCLUDE_DIRS} )
 else() #look for OpenCASCADE
-  set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
   find_package ( OpenCASCADE REQUIRED COMPONENTS ${CASCADE_LIBS} )
 endif()
 
