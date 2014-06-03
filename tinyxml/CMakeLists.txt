@@ -1,4 +1,4 @@
-project( tinyxml )
+project( heekstinyxml )
 
 cmake_minimum_required( VERSION 2.6 )
 
@@ -13,25 +13,26 @@ include_directories (
 
 set( LIBRARY_OUTPUT_PATH ../bin )
 
-set( tinyxml_SRCS
+set( heekstinyxml_SRCS
   tinystr.cpp
   tinyxml.cpp
   tinyxmlerror.cpp
   tinyxmlparser.cpp
 )
 
-set( tinyxml_HDRS
+set( heekstinyxml_HDRS
   tinystr.h
   tinyxml.h
 )
 
-add_library( tinyxml SHARED ${tinyxml_SRCS} ${tinyxml_HDRS} )
+add_library( heekstinyxml SHARED ${heekstinyxml_SRCS} ${heekstinyxml_HDRS} )
 
-target_link_libraries( tinyxml ${PYTHON_LIBRARIES} )
+target_link_libraries( heekstinyxml ${PYTHON_LIBRARIES} )
 
-set_target_properties( tinyxml PROPERTIES SOVERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} )
+set_target_properties( heekstinyxml PROPERTIES SOVERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} )
 
-install( TARGETS tinyxml DESTINATION lib )
+install( TARGETS heekstinyxml DESTINATION lib )
 
-file( GLOB sources ${tinyxml_SRCS} ${tinyxml_HDRS} )
-install( FILES ${sources} DESTINATION "share/heekscad/tinyxml" COMPONENT tinyxml )
+file( GLOB sources ${heekstinyxml_HDRS} )
+# FIXME: to install in right directory (ie. include/heekstinyxml), sources must be updated to use "heekstinyxml/tinyxml.h"
+install( FILES ${sources} DESTINATION "include/heekscad/tinyxml/" COMPONENT heekstinyxml )

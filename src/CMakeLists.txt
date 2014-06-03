@@ -38,8 +38,6 @@ include_directories (
 set ( EXECUTABLE_OUTPUT_PATH ../bin )
 
 set( heekscad_HDRS
-    ../tinyxml/tinystr.h
-    ../tinyxml/tinyxml.h
     AboutBox.h
     AutoSave.h
     BezierCurve.h
@@ -138,10 +136,6 @@ set( heekscad_HDRS
     )
 
 set( heekscad_SRCS
-    ../tinyxml/tinystr.cpp
-    ../tinyxml/tinyxml.cpp
-    ../tinyxml/tinyxmlerror.cpp
-    ../tinyxml/tinyxmlparser.cpp
     AboutBox.cpp
     AutoSave.cpp
     BezierCurve.cpp
@@ -243,7 +237,7 @@ set( heekscad_SRCS
 # remove lsketchsolve below
 # -L../bin -ltinyxml -lheeksintf
 set( HeeksCAD_LIBS
-       -L../bin -ltinyxml -lheeksintf
+       -L../bin -lheekstinyxml -lheeksintf
     )
 add_executable( heekscad ${heekscad_SRCS} ${platform_SRCS} )
 target_link_libraries( heekscad
