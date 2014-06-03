@@ -10,7 +10,7 @@ Vcs-Browser: https://code.google.com/p/heekscad/source/browse/
 
 Package: heekscad
 Architecture: any
-Depends: ${shlibs:Depends}, libwxbase2.8-0 (>= 2.8.5), libwxgtk2.8-0 (>= 2.8.5), libgtkglext1 (>= 1.2), python (>= 2.5), libboost-python1.40.0 | libboost-python1.42.0 | libboost-python1.46.1 | libboost-python1.48.0 | libboost-python1.49.0, libarea0
+Depends: ${shlibs:Depends}, libwxbase2.8-0 (>= 2.8.5), libwxgtk2.8-0 (>= 2.8.5), libgtkglext1 (>= 1.2), python (>= 2.5), libboost-python1.40.0 | libboost-python1.42.0 | libboost-python1.46.1 | libboost-python1.48.0 | libboost-python1.49.0, libarea0, libheekstinyxml0
 Breaks: heekscnc (<< 1.0.0)
 Recommends: wx2.8-i18n
 Description: HeeksCAD is a free, open source, CAD application written by Dan Heeks.
@@ -22,7 +22,22 @@ Description: HeeksCAD is a free, open source, CAD application written by Dan Hee
  Import and export dxf files; only lines and arcs at the moment
  .
  The solid modelling is provided by Open CASCADE. http://www.opencascade.org The graphical user interface is made using wxWidgets. http://www.wxwidgets.org 
+
+Package: libheekstinyxml0
+Architecture: any
+Depends: ${misc:Depends}
+Description: HeeksCAD version of libtinyxml
+ Customized version of tinyxml for HeeksCAD and add-ins.
  .
+ This package contains the shared library.
+
+Package: libheekstinyxml-dev
+Architecture: all
+Depends: ${misc:Depends}, libheekstinyxml0 (= ${binary:Version})
+Description: HeeksCAD version of libtinyxml (development files)
+ Customized version of tinyxml for HeeksCAD and add-ins.
+ .
+ This package contains the development files (ie. headers).
 
 Package: heekscad-dev
 Architecture: any
