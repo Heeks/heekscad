@@ -12,7 +12,7 @@
 IF(NOT libarea_FOUND)
   FIND_PACKAGE (PkgConfig)
     IF(PKG_CONFIG_FOUND)
-    # Will find PC/SC library on Linux/BSDs using PkgConfig
+    # Will find Area library on Linux/BSDs using PkgConfig
     PKG_CHECK_MODULES(libarea libarea)
   ENDIF(PKG_CONFIG_FOUND)
   
