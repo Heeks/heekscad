@@ -1,10 +1,6 @@
 project( heekscad )
 cmake_minimum_required( VERSION 2.6 )
 
-if( NOT DEFINED BUILD_STARTED_IN_RIGHT_DIR )
-  message( FATAL_ERROR "Don't start a build in the src directory. Do a 'cd ..', then run cmake ." )
-endif( NOT DEFINED BUILD_STARTED_IN_RIGHT_DIR )
-
 set ( CMAKE_BUILD_TYPE Debug )
 add_definitions ( -Wall -DUSE_GENERIC_TREECTRL -DHEEKSCAD -DUNICODE -DTIXML_USE_STL )
 
@@ -248,11 +244,14 @@ target_link_libraries( heekscad
 set_target_properties( heekscad PROPERTIES VERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} )
 install( TARGETS heekscad DESTINATION bin )
 
-file( GLOB bitmaps "${CMAKE_CURRENT_SOURCE_DIR}/../bitmaps/*.png"
-                   "${CMAKE_CURRENT_SOURCE_DIR}/../bitmaps/*.svg"
-                   "${CMAKE_CURRENT_SOURCE_DIR}/../bitmaps/*.glf"
+# Bitmaps, fonts, etc.
+foreach( bitmap_relpath "" "angle" "cuboid" )
+  file( GLOB bitmaps_${bitmap_relpath} "${CMAKE_CURRENT_SOURCE_DIR}/../bitmaps/${bitmap_relpath}/*.png"
+                   "${CMAKE_CURRENT_SOURCE_DIR}/../bitmaps/${bitmap_relpath}/*.svg"
+                   "${CMAKE_CURRENT_SOURCE_DIR}/../bitmaps/${bitmap_relpath}/*.glf"
     )
-install( FILES ${bitmaps} DESTINATION share/heekscad/bitmaps )
+  install( FILES ${bitmaps_${bitmap_relpath}} DESTINATION share/heekscad/bitmaps/${bitmap_relpath} )
+endforeach()
 
 file( GLOB icons "${CMAKE_CURRENT_SOURCE_DIR}/../icons/*.png" )
 install( FILES ${icons} DESTINATION share/heekscad/icons )
