@@ -11,7 +11,6 @@ if( UNIX )
 else()
   set( CMAKE_INSTALL_PREFIX "c:/HeeksCAD" )
 endif()
-set( BUILD_STARTED_IN_RIGHT_DIR "true" )  #used in src/CMakeLists.txt to print a message
 
 add_definitions ( -Wall )
 FIND_PACKAGE( wxWidgets REQUIRED COMPONENTS base core gl )
