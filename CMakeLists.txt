@@ -57,13 +57,17 @@ include_directories (
   ${OSX_INCLUDE_DIRS}
 )
 
+# CMake summary
+message (STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
+message (STATUS "CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}")
+
+#-------------------- package generation -------------------------
 if( CMAKE_SIZEOF_VOID_P EQUAL 4 )
   set(PKG_ARCH i386)
 else( CMAKE_SIZEOF_VOID_P EQUAL 4 )
   set(PKG_ARCH amd64)
 endif( CMAKE_SIZEOF_VOID_P EQUAL 4 )
 
-#-------------------- package generation -------------------------
 set(CPACK_GENERATOR "DEB")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "HeeksCAD Developers <heekscad-devel@googlegroups.com>")
 set(CPACK_PACKAGE_NAME "heekscad")
