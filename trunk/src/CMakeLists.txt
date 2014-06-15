@@ -1,7 +1,6 @@
 project( heekscad )
 cmake_minimum_required( VERSION 2.6 )
 
-set ( CMAKE_BUILD_TYPE Debug )
 add_definitions ( -Wall -DUSE_GENERIC_TREECTRL -DHEEKSCAD -DUNICODE -DTIXML_USE_STL )
 
 #find OCE or OpenCASCADE

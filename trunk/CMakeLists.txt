@@ -5,13 +5,6 @@ if( ${CMAKE_VERSION} STREQUAL "2.8.2" )
   message( WARNING "CMake/CPack version 2.8.2 will not create working .deb packages!")
 endif( ${CMAKE_VERSION} STREQUAL "2.8.2" )
 
-set( CMAKE_BUILD_TYPE Debug )
-if( UNIX )
-  set( CMAKE_INSTALL_PREFIX "/usr" )
-else()
-  set( CMAKE_INSTALL_PREFIX "c:/HeeksCAD" )
-endif()
-
 add_definitions ( -Wall )
 FIND_PACKAGE( wxWidgets REQUIRED COMPONENTS base core gl )
 
