@@ -45,6 +45,17 @@ If you want more output (ie. to debug):
 Using default or system-wide prefix:
   sudo make install
 
+Please note that if you installed it in /usr/local, you may need to run:
+  sudo ldconfig
+
 If you choose a user-writable prefix, superuser privileges are not needed:
   make install
 
+X. One-liner snippets
+---------------------
+Default:
+  mkdir build && cd build && cmake .. && make
+
+Debug:
+  mkdir debug && cd debug && cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$PWD/install .. && make && make install
+  LD_LIBRARY_PATH=install/lib install/bin/heekscad
