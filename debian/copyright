@@ -1,9 +1,9 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: heekscad
-Source: <https://github.com/Heeks/heekscad>
+Source: <https://heekscad.googlecode.com>
 
 Files: *
-Copyright: 2008-2013 Dan Heeks <danheeks@gmail.com>
+Copyright: 2008-2014 Dan Heeks <danheeks@gmail.com>
 
 License: BSD 3-Clause License
  Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,7 @@ License: BSD 3-Clause License
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 
 Files: debian/*
-Copyright: 2013 Romuald Conty <neomilium@gmail.com>
+Copyright: 2013-2014 Romuald Conty <neomilium@gmail.com>
            2009 Joachim Steiger <ubuntu@hyte.de>
 License: GPL-2+
  This package is free software; you can redistribute it and/or modify
