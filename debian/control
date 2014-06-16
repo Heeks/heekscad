@@ -33,6 +33,7 @@ Description: HeeksCAD version of libtinyxml
 
 Package: libheekstinyxml-dev
 Architecture: all
+Section: libdevel
 Depends: ${misc:Depends}, libheekstinyxml0 (= ${binary:Version})
 Description: HeeksCAD version of libtinyxml (development files)
  Customized version of tinyxml for HeeksCAD and add-ins.
