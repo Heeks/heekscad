@@ -218,30 +218,25 @@ void ReadPluginsList(std::list<PluginData> &plugins)
 
 	//look for heekscnc in the standard install location and automatically add it, if it isn't already configured
 	if( !hCncConfigured ) {
-		struct stat cncstat;
-		bool foundHcncPlugin = false;
 #ifdef WIN32
 		//this code should work on windows given the correct path
-		const char* cncPlugPath = "standard\\windows\\path\\to\\heekscnc.dll";
-  #ifndef S_ISREG
-  	//if this fails to compile on windows, change it to
-  	//#define S_ISREG(mode) true
-    #define S_ISREG(mode)  (((mode) & S_IFMT) == S_IFREG)
-  #endif
+		// FIXME: put the right path under Windows
+		wxString sCncplugPath = wxT("standard\\windows\\path\\to\\heekscnc.dll");
 #else
-		const char* cncPlugPath = "/usr/lib/libheekscnc.so";  //this is the path that cmake installs the lib to
+  #if wxCHECK_VERSION(3, 0, 0)
+		wxStandardPaths& sp = wxStandardPaths::Get();
+  #else
+		wxStandardPaths sp;
+  #endif
+		wxString sCncplugPath = sp.GetInstallPrefix()  + wxT("/lib/libheekscnc.so");
 #endif
-		if( stat(cncPlugPath, &cncstat) == 0 ) {
-			if( S_ISREG(cncstat.st_mode) )
-				foundHcncPlugin = true;
-		}
-
-		if( foundHcncPlugin ) {
+		wprintf(_T("Attempt to automatically load HeeksCNC: ") + sCncplugPath  + wxT("\n"));
+		if (wxFileName::FileExists(sCncplugPath)) {
 			PluginData pd;
 			pd.enabled = true;
 			pd.hard_coded = false; //if this was true, the plugin wouldn't be added to the config - meaning the user couldn't disable it
 			pd.name = _T("HeeksCNC (Automatically added)");
-			pd.path = _T("/usr/lib/libheekscnc.so");
+			pd.path = sCncplugPath;
 			plugins.push_back(pd);
 		}
 	}
