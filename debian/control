@@ -27,7 +27,8 @@ Description: Computer-aided design application based on OCE
 
 Package: libheekstinyxml0
 Architecture: any
-Depends: ${misc:Depends}
+Section: libs
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: HeeksCAD version of libtinyxml
  Customized version of tinyxml for HeeksCAD and add-ins.
  .
