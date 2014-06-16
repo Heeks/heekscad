@@ -46,4 +46,4 @@ Package: heekscad-dev
 Architecture: all
 Depends: ${misc:Depends}
 Description: HeeksCAD add-ins interface (development files)
- This package contains the HeeksCAD add-ins development files (ie. sources, headers).
+ This package contains the add-ins development files (ie. sources, headers).
