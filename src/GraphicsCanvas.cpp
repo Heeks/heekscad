@@ -579,7 +579,9 @@ gp_Vec getClosestOrthogonal(const gp_Vec &v)
 void CViewport::SetViewPoint(int margin){
 	if(m_orthogonal){
 		gp_Vec vz = getClosestOrthogonal(-m_view_point.forwards_vector());
-		gp_Vec vy = getClosestOrthogonal(m_view_point.m_vertical);
+		gp_Vec v2 = m_view_point.m_vertical;
+		v2 = v2 + vz * (-(v2 * vz)); // remove any component in new vz direction	    
+		gp_Vec vy = getClosestOrthogonal(v2);
 		m_view_point.SetView(vy, vz, margin);
 		StoreViewPoint();
 		return;
