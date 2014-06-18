@@ -2691,7 +2691,9 @@ void on_set_tool_icon_size(int value, HeeksObj* object, bool from_undo_redo)
 void on_grid(bool onoff, HeeksObj* object)
 {
 	wxGetApp().draw_to_grid = onoff;
+#ifndef USING_RIBBON
 	wxGetApp().m_frame->m_snap_button->m_bitmap = wxBitmap(ToolImage(wxGetApp().draw_to_grid ? _T("snap") : _T("snapgray")));
+#endif
 	wxGetApp().Repaint();
 }
 
@@ -2837,22 +2839,30 @@ void on_set_ctrl_does_rotate(bool value, HeeksObj* object)
 
 void on_intersection(bool onoff, HeeksObj* object){
 	wxGetApp().digitize_inters = onoff;
+#ifndef USING_RIBBON
 	wxGetApp().m_frame->m_inters_button->m_bitmap = wxBitmap(ToolImage(wxGetApp().digitize_inters ? _T("inters") : _T("intersgray")));
+#endif
 }
 
 void on_centre(bool onoff, HeeksObj* object){
 	wxGetApp().digitize_centre = onoff;
+#ifndef USING_RIBBON
 	wxGetApp().m_frame->m_centre_button->m_bitmap = wxBitmap(ToolImage(wxGetApp().digitize_centre ? _T("centre") : _T("centregray")));
+#endif
 }
 
 void on_end_of(bool onoff, HeeksObj* object){
 	wxGetApp().digitize_end = onoff;
+#ifndef USING_RIBBON
 	wxGetApp().m_frame->m_endof_button->m_bitmap = wxBitmap(ToolImage(wxGetApp().digitize_end ? _T("endof") : _T("endofgray")));
+#endif
 }
 
 void on_mid_point(bool onoff, HeeksObj* object){
 	wxGetApp().digitize_midpoint = onoff;
+#ifndef USING_RIBBON
 	wxGetApp().m_frame->m_midpoint_button->m_bitmap = wxBitmap(ToolImage(wxGetApp().digitize_midpoint ? _T("midpoint") : _T("midpointgray")));
+#endif
 }
 
 void on_nearest(bool onoff, HeeksObj* object){
