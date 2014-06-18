@@ -18,9 +18,9 @@ public:
 	wxString m_caption;
 	void(*m_on_button)(wxCommandEvent&);
 	void(*m_on_update_button)(wxUpdateUIEvent&);
-	std::list<RibbonButtonData> m_children;
+	void(*m_on_dropdown)(wxRibbonButtonBarEvent&);
 
-	RibbonButtonData(const wxString& title, const wxBitmap& bitmap, const wxString& caption, void(*on_button)(wxCommandEvent&), void(*on_update_button)(wxUpdateUIEvent&) = NULL, std::initializer_list <RibbonButtonData> children = {}) :m_title(title), m_bitmap(bitmap), m_caption(caption), m_on_button(on_button), m_on_update_button(on_update_button), m_children(children){}
+	RibbonButtonData(const wxString& title, const wxBitmap& bitmap, const wxString& caption, void(*on_button)(wxCommandEvent&), void(*on_update_button)(wxUpdateUIEvent&) = NULL, void(*on_dropdown)(wxRibbonButtonBarEvent&) = NULL) :m_title(title), m_bitmap(bitmap), m_caption(caption), m_on_button(on_button), m_on_update_button(on_update_button), m_on_dropdown(on_dropdown){}
 };
 
 class HeeksRibbon : public wxRibbonBar{
