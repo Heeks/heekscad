@@ -292,7 +292,7 @@ public:
 				BRepMesh::Mesh(new_shape, 1.0);
 #endif
 
-				HeeksObj* new_object = CShape::MakeObject(new_shape, shape_for_tools->m_title_made_from_id ? _("Result of 'Offset Shape'") : shape_for_tools->m_title.c_str(), SOLID_TYPE_UNKNOWN, shape_for_tools->m_color, shape_for_tools->GetOpacity());
+				HeeksObj* new_object = CShape::MakeObject(new_shape, shape_for_tools->m_title_made_from_id ? wxString(_("Result of 'Offset Shape'")).c_str() : shape_for_tools->m_title.c_str(), SOLID_TYPE_UNKNOWN, shape_for_tools->m_color, shape_for_tools->GetOpacity());
 				wxGetApp().AddUndoably(new_object, shape_for_tools->m_owner, NULL);
 				wxGetApp().DeleteUndoably(shape_for_tools);
 				config.Write(_T("OffsetShapeValue"), offset_value);
@@ -424,7 +424,7 @@ static HeeksObj* Fuse(HeeksObj* s1, HeeksObj* s2){
 		if(wxGetApp().useOldFuse)new_shape = BRepAlgo_Fuse(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
 		else new_shape = BRepAlgoAPI_Fuse(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
 
-		HeeksObj* new_object = CShape::MakeObject(new_shape, ((CShape*)s1)->m_title_made_from_id ? _("Result of Fuse Operation") : ((CShape*)s1)->m_title.c_str(), SOLID_TYPE_UNKNOWN, ((CShape*)s1)->m_color, ((CShape*)s1)->GetOpacity());
+		HeeksObj* new_object = CShape::MakeObject(new_shape, ((CShape*)s1)->m_title_made_from_id ? wxString(_("Result of Fuse Operation")).c_str() : ((CShape*)s1)->m_title.c_str(), SOLID_TYPE_UNKNOWN, ((CShape*)s1)->m_color, ((CShape*)s1)->GetOpacity());
 		wxGetApp().AddUndoably(new_object, NULL, NULL);
 		wxGetApp().DeleteUndoably(s1);
 		wxGetApp().DeleteUndoably(s2);
@@ -449,7 +449,7 @@ static HeeksObj* Common(HeeksObj* s1, HeeksObj* s2){
 		TopoDS_Shape sh1, sh2;
 		TopoDS_Shape new_shape = BRepAlgoAPI_Common(((CShape*)s1)->Shape(), ((CShape*)s2)->Shape());
 
-		HeeksObj* new_object = CShape::MakeObject(new_shape, ((CShape*)s1)->m_title_made_from_id ? _("Result of Common Operation") : ((CShape*)s1)->m_title.c_str(), SOLID_TYPE_UNKNOWN, ((CShape*)s1)->m_color, ((CShape*)s1)->GetOpacity());
+		HeeksObj* new_object = CShape::MakeObject(new_shape, ((CShape*)s1)->m_title_made_from_id ? wxString(_("Result of Common Operation")).c_str() : ((CShape*)s1)->m_title.c_str(), SOLID_TYPE_UNKNOWN, ((CShape*)s1)->m_color, ((CShape*)s1)->GetOpacity());
 		wxGetApp().AddUndoably(new_object, NULL, NULL);
 		wxGetApp().DeleteUndoably(s1);
 		wxGetApp().DeleteUndoably(s2);
@@ -615,7 +615,7 @@ HeeksObj* CShape::CutShapes(std::list<HeeksObj*> &list_in, bool dodelete)
 	TopoDS_Shape new_shape;
 	if(Cut(shapes, new_shape))
 	{
-		HeeksObj* new_object = CShape::MakeObject(new_shape, ((CShape*)first_solid)->m_title_made_from_id ? _("Result of Cut Operation") : ((CShape*)first_solid)->m_title.c_str(), SOLID_TYPE_UNKNOWN, ((CShape*)first_solid)->m_color, ((CShape*)first_solid)->m_opacity);
+		HeeksObj* new_object = CShape::MakeObject(new_shape, ((CShape*)first_solid)->m_title_made_from_id ? wxString(_("Result of Cut Operation")).c_str() : ((CShape*)first_solid)->m_title.c_str(), SOLID_TYPE_UNKNOWN, ((CShape*)first_solid)->m_color, ((CShape*)first_solid)->m_opacity);
 		wxGetApp().AddUndoably(new_object, NULL, NULL);
 		if(dodelete)
 		{
