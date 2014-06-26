@@ -11,7 +11,7 @@ class wxBitmap;
 
 class Tool
 {
-	public:
+public:
 	wxBitmap* m_bitmap;
 	int m_icon_size;
 
@@ -33,7 +33,8 @@ class Tool
 
 class Undoable
 {
-	public:
+public:
+	virtual ~Undoable() {};
 	virtual void Run(bool redo) = 0;
 	virtual const wxChar* GetTitle() = 0;
 	virtual const wxChar* GetToolTip(){return GetTitle();}
