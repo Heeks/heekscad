@@ -60,6 +60,7 @@ public:
 	std::list<CFlyOutItem*> m_list;
 
 	CFlyOutList(const wxString& title);
+	virtual ~CFlyOutList() {};
 
 	// CFlyOutItem's virtual functions
 	bool IsAList(){return true;}
