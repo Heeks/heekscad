@@ -1256,23 +1256,23 @@ public:
 	CFlyOutList m_flyout_list;
 	ToolBarPopup* m_toolbarPopup;
 
-    CFlyOutButton(const CFlyOutList &flyout_list,
+	CFlyOutButton(const CFlyOutList &flyout_list,
 				wxToolBar *toolbar,
 				int id_to_use,
 				const wxPoint& pos,
 				const wxSize& size,
 				bool disappears_on_click)
-				:wxBitmapButton(toolbar, id_to_use, flyout_list.GetMainItem()->m_bitmap, pos, size,
+		:wxBitmapButton(toolbar, id_to_use, flyout_list.GetMainItem()->m_bitmap, pos, size,
 #ifdef WIN32
 				wxBORDER_SIMPLE
 #else
 				wxBORDER_NONE
 #endif
 				)
-		,m_flyout_list(flyout_list)
 		,m_toolBar(toolbar)
-		,m_toolbarPopup(NULL)
 		,m_disappears_on_click(disappears_on_click)
+		,m_flyout_list(flyout_list)
+		,m_toolbarPopup(NULL)
 	{
 	}
 

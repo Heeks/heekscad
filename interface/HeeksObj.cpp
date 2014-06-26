@@ -20,11 +20,11 @@
 #include "GripData.h"
 #endif
 
-HeeksObj::HeeksObj(void): m_skip_for_undo(false), m_id(0), m_layer(0), m_visible(true), m_preserving_id(false), m_index(0), m_owner(NULL)
+HeeksObj::HeeksObj(void): m_owner(NULL), m_skip_for_undo(false), m_id(0), m_layer(0), m_visible(true), m_preserving_id(false), m_index(0)
 {
 }
 
-HeeksObj::HeeksObj(const HeeksObj& ho): m_skip_for_undo(false), m_id(0), m_layer(0), m_visible(true),m_preserving_id(false), m_index(0), m_owner(NULL)
+HeeksObj::HeeksObj(const HeeksObj& ho): m_owner(NULL), m_skip_for_undo(false), m_id(0), m_layer(0), m_visible(true),m_preserving_id(false), m_index(0)
 {
 	operator=(ho);
 }

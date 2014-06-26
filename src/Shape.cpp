@@ -27,17 +27,35 @@
 // static member variable
 bool CShape::m_solids_found = false;
 
-CShape::CShape():m_face_gl_list(0), m_edge_gl_list(0), m_opacity(1.0), m_color(0, 0, 0), m_picked_face(NULL), m_volume_found(false)
+CShape::CShape()
+:m_face_gl_list(0),
+ m_edge_gl_list(0),
+ m_opacity(1.0),
+ m_volume_found(false),
+ m_color(0, 0, 0),
+ m_picked_face(NULL)
 {
 	Init();
 }
 
-CShape::CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor& col, float opacity):IdNamedObjList(title), m_face_gl_list(0), m_edge_gl_list(0), m_shape(shape), m_opacity(opacity), m_color(col), m_picked_face(NULL), m_volume_found(false)
+CShape::CShape(const TopoDS_Shape &shape, const wxChar* title, const HeeksColor& col, float opacity)
+:IdNamedObjList(title),
+ m_face_gl_list(0),
+ m_edge_gl_list(0),
+ m_shape(shape),
+ m_opacity(opacity),
+ m_volume_found(false),
+ m_color(col),
+ m_picked_face(NULL)
 {
 	Init();
 }
 
-CShape::CShape(const CShape& s):m_face_gl_list(0), m_edge_gl_list(0), m_picked_face(NULL), m_volume_found(false)
+CShape::CShape(const CShape& s)
+:m_face_gl_list(0),
+ m_edge_gl_list(0),
+ m_volume_found(false),
+ m_picked_face(NULL)
 {
 	// the faces, edges, vertices children are not copied, because we don't need them for copies in the undo engine
 	m_faces = NULL;
