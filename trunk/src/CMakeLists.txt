@@ -17,6 +17,7 @@ endif()
 find_package( OpenGL REQUIRED )
 find_package( wxWidgets REQUIRED COMPONENTS base core gl aui )
 find_package( PythonLibs REQUIRED )
+
 include(${wxWidgets_USE_FILE})
 
 include_directories ( SYSTEM
@@ -240,6 +241,10 @@ target_link_libraries( heekscad
                        ${wxWidgets_LIBRARIES} ${OpenCASCADE_LIBRARIES}
                        ${OPENGL_LIBRARIES} ${PYTHON_LIBRARIES} ${OSX_LIBS}
                        ${HeeksCAD_LIBS} ${libarea_LIBRARIES} )
+message(STATUS "wxWidgets_LIBRARIES: ${wxWidgets_LIBRARIES}")
+message(STATUS "wxWidgets_ROOT_DIR: ${wxWidgets_ROOT_DIR}")
+message(STATUS "wxWidgets_INCLUDE_DIRS: ${wxWidgets_INCLUDE_DIRS}")
+
 set_target_properties( heekscad PROPERTIES VERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} )
 install( TARGETS heekscad DESTINATION bin )
 
