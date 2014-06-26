@@ -19,8 +19,10 @@ wxSizerItem* HControl::AddToSizer(wxSizer* s)
 std::vector< std::pair< int, wxString > > global_ids_for_combo;
 
 HTypeObjectDropDown::HTypeObjectDropDown(wxWindow *parent, wxWindowID id, int object_type, HeeksObj* obj_list)
-:m_ids_for_combo(global_ids_for_combo), m_object_type(object_type), m_obj_list(obj_list)
-,wxComboBox(parent, id, _T(""), wxDefaultPosition, wxDefaultSize, GetObjectArrayString(object_type, obj_list, global_ids_for_combo))
+:wxComboBox(parent, id, _T(""), wxDefaultPosition, wxDefaultSize, GetObjectArrayString(object_type, obj_list, global_ids_for_combo)),
+ m_object_type(object_type),
+ m_obj_list(obj_list),
+ m_ids_for_combo(global_ids_for_combo)
 {
 }
 
