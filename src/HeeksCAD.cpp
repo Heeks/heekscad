@@ -440,10 +440,14 @@ bool HeeksCADapp::OnInit()
 #else
 	m_frame = new CHeeksFrame( wxT( "HeeksCAD free Solid Modelling software based on Open CASCADE" ), wxPoint(posx, posy), wxSize(width, height));
 
-#ifdef __WXMSW__
-	// to do, make this compile in Linux
-	m_frame->SetIcon(wxICON(HeeksCAD));
+// wxWidgets uses .xpm as icons, except under Windows where .ico are used
+#ifndef __WXMSW__
+	// So, we include xpm...
+	// Note: wxWidgets wxICON() macro assumes that a HeeksCAD_xpm char* is in scope
+	#include "../icons/HeeksCAD.xpm"
 #endif
+
+	m_frame->SetIcon(wxICON(HeeksCAD));
 #endif
 
 	// NOTE: A side-effect of calling the SetInputMode() method is
