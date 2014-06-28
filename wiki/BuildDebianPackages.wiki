@@ -33,14 +33,20 @@ sudo dpkg -i libarea*.deb python-area*.deb
 When libarea is correctly installed, we can build HeeksCAD packages the same way.
 
 == Install build dependencies ==
+On system released before 2013 (ie. Ubuntu 10.04 LTS, 12.04 LTS):
 {{{
-sudo apt-get install libopencascade-dev libwxgtk2.8-dev libwxbase2.8-dev libgtkglext1-dev python-dev
+sudo apt-get install libopencascade-visualization-dev libwxgtk2.8-dev libgtkglext1-dev python-dev
+}}}
+
+On more recent system:
+{{{
+sudo apt-get install liboce-visualization-dev libwxgtk2.8-dev libgtkglext1-dev python-dev
 }}}
 
 == Fetch sources ==
 
 {{{
-svn checkout http://libarea.googlecode.com/svn/trunk/ heekscad
+svn checkout http://heekscad.googlecode.com/svn/trunk/ heekscad
 cd heekscad
 }}}
 
@@ -50,9 +56,10 @@ cd heekscad
 dpkg-buildpackage -b -us -uc
 }}}
 
-This will produces 2 packages: heekscad and heekscad-dev
+This will produces 4 packages: heekscad, heekscad-dev, libheekstinyxml0 and libheekstinyxml-dev
 
 == Install run-time dependencies ==
+If you want a fully translated version:
 {{{
 sudo apt-get install wx2.8-i18n
 }}}
@@ -60,7 +67,7 @@ sudo apt-get install wx2.8-i18n
 == Install packages ==
 {{{
 cd ..
-sudo dpkg -i heekscad*.deb
+sudo dpkg -i *heeks*.deb
 }}}
 
 = Optionnal: HeeksCNC =
