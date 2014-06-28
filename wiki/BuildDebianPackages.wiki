@@ -1,0 +1,66 @@
+#summary This page explains how to build HeeksCAD packages for Debian and derivatives (Ubuntu, Linux Mint, etc.)
+
+= Requirement: libarea =
+HeeksCAD requires libarea, this section will explain how to build and install libarea using the Debian way.
+
+== Install build dependencies ==
+{{{
+sudo apt-get install subversion build-essential debhelper cmake libboost-python-dev
+}}}
+
+== Fetch sources ==
+{{{
+svn checkout http://libarea.googlecode.com/svn/trunk/ libarea
+cd libarea
+}}}
+
+== Build packages ==
+
+{{{
+dpkg-buildpackage -b -us -uc
+}}}
+
+This will produces 3 packages: libarea0, libarea-dev and python-area.
+
+== Install packages ==
+{{{
+cd ..
+sudo dpkg -i libarea*.deb python-area*.deb
+}}}
+
+= HeeksCAD =
+When libarea is correctly installed, we can build HeeksCAD packages the same way.
+
+== Install build dependencies ==
+{{{
+sudo apt-get install libopencascade-dev libwxgtk2.8-dev libwxbase2.8-dev libgtkglext1-dev python-dev
+}}}
+
+== Fetch sources ==
+
+{{{
+svn checkout http://libarea.googlecode.com/svn/trunk/ heekscad
+cd heekscad
+}}}
+
+== Build packages ==
+
+{{{
+dpkg-buildpackage -b -us -uc
+}}}
+
+This will produces 2 packages: heekscad and heekscad-dev
+
+== Install run-time dependencies ==
+{{{
+sudo apt-get install wx2.8-i18n
+}}}
+
+== Install packages ==
+{{{
+cd ..
+sudo dpkg -i heekscad*.deb
+}}}
+
+= Optionnal: HeeksCNC =
+If you want to use HeeksCNC, CAM plugin, have a look to:
