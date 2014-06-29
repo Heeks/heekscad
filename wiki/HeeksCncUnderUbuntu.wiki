@@ -14,6 +14,8 @@ HeeksCNC and related tools (HeeksCAD, libarea, OpenCAMLib) are daily packaged in
 
 Note: this PPA provides development versions of HeeksCNC, HeeksCAD, libarea and OpenCAMLib.
 
+Supported versions: Lucid (10.04 LTS), Precise (12.04 LTS), Saucy (13.10), Trusty (14.04 LTS), Utopic (14.10).
+
 Add [https://launchpad.net/~neomilium/+archive/heekscnc-devel heekscnc-devel PPA] to your repositories list:
 {{{
 sudo add-apt-repository ppa:neomilium/heekscnc-devel
