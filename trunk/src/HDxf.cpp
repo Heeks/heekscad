@@ -378,9 +378,11 @@ void HeeksDxfRead::OnReadDimension(int dimension_type, double angle, double angl
 }
 
 /**
-	Don't add graphics for layer names included in this list.  There are
-	some graphics packages that add setup graphics that we don't want
+	Don't add graphics for layer names included in discard-list:
+	There are some graphics packages that add setup graphics that we don't want
 	to be seen.
+	This function discard names presents in m_layer_name_suffixes_to_discard
+	(default: _DOT,_DOTSMALL,_DOTBLANK,_OBLIQUE,_CLOSEDBLANK) 
  */
 bool HeeksDxfRead::IsValidLayerName( const wxString layer_name ) const
 {
@@ -388,7 +390,7 @@ bool HeeksDxfRead::IsValidLayerName( const wxString layer_name ) const
 	while (tokens.HasMoreTokens())
 	{
 		wxString token = tokens.GetNextToken();
-		if (layer_name.find(token) != -1)
+		if (layer_name.Find(token) != wxNOT_FOUND)
 		{
 			return(false);  // We do NOT want this one added.
 		}
