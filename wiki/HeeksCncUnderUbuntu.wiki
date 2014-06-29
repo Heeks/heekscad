@@ -1,0 +1,42 @@
+#summary This page explains How-to install HeeksCNC suite under Ubuntu
+#labels Featured,Phase-Requirements,Phase-Deploy
+
+= Introduction =
+
+There are 3 ways to use HeeksCNC suite:
+  * The easiest is to use PPA to install directly Ubuntu packages
+  * If you want to build it locally, it recommended to use [BuildDebianPackages Debian packaging way]
+  * Or you can build it using CMake, [BuildHeeksCncUnderLinux the regular way]
+
+= Use PPA (Personal Package Archives) =
+
+HeeksCNC and related tools (HeeksCAD, libarea, OpenCAMLib) are daily packaged in heekscnc-devel PPA.
+
+Note: this PPA provided development versions are HeeksCNC
+
+To add PPA to your repositories list
+{{{
+sudo add-apt-repository ppa:neomilium/heekscnc-devel
+}}}
+
+Update your packages list
+{{{
+sudo apt-get update
+}}}
+
+Install HeeksCNC
+{{{
+sudo apt-get install heekscnc
+}}}
+
+= Build it the Debian way =
+
+This method allow you to build all Debian packages related to HeeksCNC.
+
+Instructions are available on a [BuildDebianPackages dedicated wiki page]
+
+= Build it the standard way =
+
+This method allow you to build HeeksCNC and its dependencies using CMake.
+
+Instructions are available on a [BuildHeeksCncUnderLinux dedicated wiki page] and in _README.Unix_ file in sources root directory.
