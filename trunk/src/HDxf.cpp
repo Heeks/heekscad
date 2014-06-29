@@ -23,7 +23,7 @@ wxString HeeksDxfRead::m_layer_name_suffixes_to_discard = _T("_DOT,_DOTSMALL,_DO
 
 HeeksDxfRead::HeeksDxfRead(const wxChar* filepath, bool undoable) : CDxfRead(Ttc(filepath)), m_undoable(undoable)
 {
-    HeeksConfig config;
+	HeeksConfig config;
 
 	config.Read(_T("ImportDxfAsSketches"), &m_make_as_sketch);
 	config.Read(_T("IgnoreDxfReadErrors"), &m_ignore_errors);
@@ -36,9 +36,9 @@ HeeksDxfRead::HeeksDxfRead(const wxChar* filepath, bool undoable) : CDxfRead(Ttc
 
 HeeksColor *HeeksDxfRead::ActiveColorPtr(Aci_t & aci)
 {
-    static HeeksColor color;
-    color = HeeksColor(aci);
-    return(&color);
+	static HeeksColor color;
+	color = HeeksColor(aci);
+	return(&color);
 }
 
 HeeksColor hidden_color(128, 128, 128);
@@ -101,7 +101,7 @@ void HeeksDxfRead::OnReadEndBlock()
 void HeeksDxfRead::OnReadLine(const double* s, const double* e, bool hidden)
 {
 	HLine* new_object = new HLine(make_point(s), make_point(e), hidden ? (&hidden_color) : ActiveColorPtr(m_aci));
-    AddObject(new_object);
+	AddObject(new_object);
 }
 
 void HeeksDxfRead::OnReadPoint(const double* s)
@@ -230,7 +230,7 @@ void HeeksDxfRead::OnReadSpline(struct SplineData& sd)
 		++i;
 	}
 
-    OnReadSpline(control, weight, knot, mult, sd.degree, periodic, rational);
+	OnReadSpline(control, weight, knot, mult, sd.degree, periodic, rational);
 }
 
 void HeeksDxfRead::OnReadEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir)
@@ -244,77 +244,77 @@ void HeeksDxfRead::OnReadEllipse(const double* c, double major_radius, double mi
 	AddObject(new_object);
 }
 
-    #define Slice(str, start, end) (str.Mid(start, end))
+	#define Slice(str, start, end) (str.Mid(start, end))
 //Split (Tokenize) string at specified intervals
-    //s == string to split
-    //retArray == split up string (out)
-    //cpszExp == expression to split at
-    //crnStart == start postion to split
-    //crnCount == max number of split of strings
-    //crbCIComp == true if case insensitive
-    void Split(  const wxString& s, wxArrayString& retArray,  const wxChar* cpszExp, 
-                                    const size_t& crnStart = 0,    const size_t& crnCount = (size_t)-1,
-                                    const bool& crbCIComp = false)
-    {
-        //sanity checks
-        wxASSERT_MSG(cpszExp != NULL, wxT("Invalid value for First Param of wxString::Split (cpszExp)"));
-    //    wxASSERT_MSG(crnCount >= (size_t)-1, wxT("Invalid value for Third Param of wxString::Split (crnCount)"));
-     
-        retArray.Clear();
+	//s == string to split
+	//retArray == split up string (out)
+	//cpszExp == expression to split at
+	//crnStart == start postion to split
+	//crnCount == max number of split of strings
+	//crbCIComp == true if case insensitive
+	void Split( const wxString& s, wxArrayString& retArray,  const wxChar* cpszExp, 
+				const size_t& crnStart = 0, const size_t& crnCount = (size_t)-1,
+				const bool& crbCIComp = false)
+	{
+		//sanity checks
+		wxASSERT_MSG(cpszExp != NULL, wxT("Invalid value for First Param of wxString::Split (cpszExp)"));
+		//wxASSERT_MSG(crnCount >= (size_t)-1, wxT("Invalid value for Third Param of wxString::Split (crnCount)"));
 
-        size_t  nOldPos = crnStart,      //Current start position in this string
-                nPos = crnStart;      //Current end position in this string
+		retArray.Clear();
 
-        wxString szComp,            //this string as-is (if bCIComp is false) or converted to lowercase
-                 szExp = cpszExp;   //Expression string, normal or lowercase
+		size_t  nOldPos = crnStart,	  //Current start position in this string
+				nPos = crnStart;	  //Current end position in this string
 
-        if (crbCIComp)
-        {
-            szComp = s.Lower();
-            szExp.MakeLower();
-        }
-        else
-            szComp = s;
+		wxString szComp,			//this string as-is (if bCIComp is false) or converted to lowercase
+				 szExp = cpszExp;   //Expression string, normal or lowercase
 
-        if(crnCount == (size_t)-1)
-        {
-        for (; (nPos = szComp.find(szExp, nPos)) != wxString::npos;)//Is there another token in the string
-            {
-            retArray.Add(Slice(s, nOldPos, nPos)); //Insert the token in the array
-            nOldPos = nPos += szExp.Length();//Move up the start slice position
-            }
-       
-        }
-        else
-        {
-        for (int i = crnCount;
-                (nPos = szComp.find(szExp, nPos)) != wxString::npos &&
-                i != 0;
-                    --i)//Is there another token in the string && have we met nCount?
-        {
-            retArray.Add(Slice(s, nOldPos, nPos)); //Insert the token in the array
-            nOldPos = nPos += szExp.Length();//Move up the start slice position
-        }
-        }
-        if (nOldPos != s.Length())
-            retArray.Add( Slice(s, nOldPos, s.Length()) ); //Add remaining characters in string
-    }
+		if (crbCIComp)
+		{
+			szComp = s.Lower();
+			szExp.MakeLower();
+		}
+		else
+			szComp = s;
+
+		if(crnCount == (size_t)-1)
+		{
+		for (; (nPos = szComp.find(szExp, nPos)) != wxString::npos;)//Is there another token in the string
+			{
+			retArray.Add(Slice(s, nOldPos, nPos)); //Insert the token in the array
+			nOldPos = nPos += szExp.Length();//Move up the start slice position
+			}
+	   
+		}
+		else
+		{
+		for (int i = crnCount;
+				(nPos = szComp.find(szExp, nPos)) != wxString::npos &&
+				i != 0;
+					--i)//Is there another token in the string && have we met nCount?
+		{
+			retArray.Add(Slice(s, nOldPos, nPos)); //Insert the token in the array
+			nOldPos = nPos += szExp.Length();//Move up the start slice position
+		}
+		}
+		if (nOldPos != s.Length())
+			retArray.Add( Slice(s, nOldPos, s.Length()) ); //Add remaining characters in string
+	}
 
 void HeeksDxfRead::OnReadText(const double *point, const double height,  const char* text, int hj, int vj)
 {
-    gp_Trsf trsf;
-    trsf.SetTranslation( gp_Vec( gp_Pnt(0,0,0), gp_Pnt(point[0], point[1], point[2]) ) );
-    trsf.SetScaleFactor( height * 1.7 );
+	gp_Trsf trsf;
+	trsf.SetTranslation( gp_Vec( gp_Pnt(0,0,0), gp_Pnt(point[0], point[1], point[2]) ) );
+	trsf.SetScaleFactor( height * 1.7 );
 
-    wxString txt(Ctt(text));
-    txt.Replace(_T("\\P"),_T("\n"),true);
-    txt.Replace(_T("%%010"),_T("\n"),true);
+	wxString txt(Ctt(text));
+	txt.Replace(_T("\\P"),_T("\n"),true);
+	txt.Replace(_T("%%010"),_T("\n"),true);
 
-    int offset = 0;
-    while ((txt.Length() > 0) && (txt[0] == _T('\\')) && ((offset = txt.find(_T(';'))) != -1))
-    {
-        txt.Remove(0, offset+1);
-    }
+	int offset = 0;
+	while ((txt.Length() > 0) && (txt[0] == _T('\\')) && ((offset = txt.find(_T(';'))) != -1))
+	{
+		txt.Remove(0, offset+1);
+	}
 
 	wxArrayString retArray;
 	Split(txt, retArray, _T("\n"));
@@ -378,36 +378,35 @@ void HeeksDxfRead::OnReadDimension(int dimension_type, double angle, double angl
 }
 
 /**
-    Don't add graphics for layer names included in this list.  There are
-    some graphics packages that add setup graphics that we don't want
-    to be seen.
+	Don't add graphics for layer names included in this list.  There are
+	some graphics packages that add setup graphics that we don't want
+	to be seen.
  */
 bool HeeksDxfRead::IsValidLayerName( const wxString layer_name ) const
 {
-    wxStringTokenizer tokens(m_layer_name_suffixes_to_discard,_T(" :;,"));
-    while (tokens.HasMoreTokens())
-    {
-        wxString token = tokens.GetNextToken();
-        if (layer_name.find(token) != -1)
-        {
-            return(false);  // We do NOT want this one added.
-        }
-    }
+	wxStringTokenizer tokens(m_layer_name_suffixes_to_discard,_T(" :;,"));
+	while (tokens.HasMoreTokens())
+	{
+		wxString token = tokens.GetNextToken();
+		if (layer_name.find(token) != -1)
+		{
+			return(false);  // We do NOT want this one added.
+		}
+	}
 
-    return(true);   // This layername seems fine.
+	return(true);   // This layername seems fine.
 }
 
 void HeeksDxfRead::AddObject(HeeksObj *object)
 {
+	if (! IsValidLayerName(Ctt(LayerName().c_str())))
+	{
+		// This is one of the forbidden layer names.  Discard the
+		// graphics object and move on.
 
-    if (! IsValidLayerName(Ctt(LayerName().c_str())))
-    {
-        // This is one of the forbidden layer names.  Discard the
-        // graphics object and move on.
-
-        delete object;
-        return;
-    }
+		delete object;
+		return;
+	}
 
 	if(wxGetApp().m_in_OpenFile && wxGetApp().m_file_open_matrix)
 	{
@@ -425,7 +424,7 @@ void HeeksDxfRead::AddObject(HeeksObj *object)
 		}
 
 		if(m_current_block)m_current_block->Add(object, NULL);
-        else
+		else
 		{
 			object->ModifyByMatrix(m_ucs_matrix);
 			m_sketches[wxString(Ctt(LayerName().c_str()))]->Add( object, NULL );
@@ -434,7 +433,7 @@ void HeeksDxfRead::AddObject(HeeksObj *object)
 	else
 	{
 		if(m_current_block)m_current_block->Add(object, NULL);
-        else
+		else
 		{
 			object->ModifyByMatrix(m_ucs_matrix);
 			if(m_undoable)wxGetApp().AddUndoably(object, NULL, NULL);
@@ -459,10 +458,10 @@ void HeeksDxfRead::AddGraphics()
 		}
 	}
 
-    if (m_make_as_sketch)
-    {
-        for (Sketches_t::const_iterator l_itSketch = m_sketches.begin(); l_itSketch != m_sketches.end(); l_itSketch++)
-        {
+	if (m_make_as_sketch)
+	{
+		for (Sketches_t::const_iterator l_itSketch = m_sketches.begin(); l_itSketch != m_sketches.end(); l_itSketch++)
+		{
 			CSketch *pSketch = (CSketch *)(l_itSketch->second);
 			if (pSketch->GetNumChildren() > 0)
 			{
@@ -471,7 +470,7 @@ void HeeksDxfRead::AddGraphics()
 				if(m_undoable)wxGetApp().AddUndoably(l_itSketch->second, NULL, NULL );
 				else wxGetApp().Add( l_itSketch->second, NULL );
 			} // End if - then
-        }
-    }
+		}
+	}
 }
 
