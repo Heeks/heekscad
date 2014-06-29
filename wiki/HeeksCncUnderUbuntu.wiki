@@ -10,21 +10,21 @@ There are 3 ways to use HeeksCNC suite:
 
 = Use PPA (Personal Package Archives) =
 
-HeeksCNC and related tools (HeeksCAD, libarea, OpenCAMLib) are daily packaged in heekscnc-devel PPA.
+HeeksCNC and related tools (HeeksCAD, libarea, OpenCAMLib) are daily packaged in [https://launchpad.net/~neomilium/+archive/heekscnc-devel heekscnc-devel PPA].
 
-Note: this PPA provided development versions are HeeksCNC
+Note: this PPA provides development versions of HeeksCNC, HeeksCAD, libarea and OpenCAMLib.
 
-To add PPA to your repositories list
+Add [https://launchpad.net/~neomilium/+archive/heekscnc-devel heekscnc-devel PPA] to your repositories list:
 {{{
 sudo add-apt-repository ppa:neomilium/heekscnc-devel
 }}}
 
-Update your packages list
+Update your packages list:
 {{{
 sudo apt-get update
 }}}
 
-Install HeeksCNC
+Install HeeksCNC:
 {{{
 sudo apt-get install heekscnc
 }}}
