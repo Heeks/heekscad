@@ -330,7 +330,7 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("DrawGrid"), &digitizing_grid);
 	config.Read(_T("DrawRadius"), &digitizing_radius);
 	{
-		int default_color[NUM_BACKGROUND_COLORS] = {
+		long default_color[NUM_BACKGROUND_COLORS] = {
 			HeeksColor(187, 233, 255).COLORREF_color(),
 			HeeksColor(255, 255, 255).COLORREF_color(),
 			HeeksColor(247, 198, 243).COLORREF_color(),
