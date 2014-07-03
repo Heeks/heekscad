@@ -1421,12 +1421,8 @@ bool CDxfRead::ReadPolyLine()
 				}
 				if (! strcmp(m_str,"SEQEND"))
 				{
-                    if(closed && first_vertex_section_found) {
-                        StorePolyLinePoint(first_vertex[0], first_vertex[1], first_vertex[2], 0, 0);
-                    }
-					first_vertex_section_found = false;
-					PolyLineStart();
-				    return(true);
+					AddPolyLinePoints(false, closed);
+					return true;
 				}
 				break;
 			case 70:
