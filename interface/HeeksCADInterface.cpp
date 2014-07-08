@@ -1434,8 +1434,9 @@ void CHeeksCADInterface::RegisterIsModifiedFn( bool(*callbackfunc)() )
 	wxGetApp().RegisterIsModifiedFn(callbackfunc);
 }
 
-void CHeeksCADInterface::RegisterToolBar( wxToolBarBase* toolbar )
+void CHeeksCADInterface::RegisterToolBar( wxToolBarBase* toolbar, const wxString& name, const wxString& caption )
 {
+	wxGetApp().m_frame->AddToolBar(toolbar, name, caption);
 	wxGetApp().m_external_toolbars.push_back(toolbar);
 }
 
@@ -1559,11 +1560,6 @@ void CHeeksCADInterface::PropertiesOnApply2()
 void CHeeksCADInterface::AddToAboutBox(const wxChar* str)
 {
 	wxGetApp().m_frame->m_extra_about_box_str.Append(str);
-}
-
-void CHeeksCADInterface::SetDefaultLayout(const wxString& str)
-{
-	wxGetApp().m_frame->SetDefaultLayout(str);
 }
 
 HeeksObj* CHeeksCADInterface::NewSTLSolid()

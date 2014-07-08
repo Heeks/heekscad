@@ -292,7 +292,7 @@ public:
 	virtual void RemoveOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
 	virtual void RegisterOnSaveFn( void(*callbackfunc)(bool from_changed_prompt) );
 	virtual void RegisterIsModifiedFn( bool(*callbackfunc)() );
-	virtual void RegisterToolBar( wxToolBarBase* );
+	virtual void RegisterToolBar( wxToolBarBase*, const wxString& name, const wxString& caption );
 	virtual void RemoveToolBar( wxToolBarBase* );
 	virtual void RegisterAddToolBars( void(*callbackfunc)() );
 	virtual void RemoveMainToolbar();
@@ -307,7 +307,6 @@ public:
 	virtual void RemoveInputWindow();
 	virtual void PropertiesOnApply2();// don't need to press tick to make changes
 	virtual void AddToAboutBox(const wxChar* str);
-	virtual void SetDefaultLayout(const wxString& str);
 	virtual HeeksObj* NewSTLSolid();
 	virtual void STLSolidAddTriangle(HeeksObj* stl_solid, float* t);
 	virtual const HeeksColor& GetBackgroundColor();
