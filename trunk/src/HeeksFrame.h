@@ -121,7 +121,7 @@ public:
 	CHeeksFrame( const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize );
 	virtual ~CHeeksFrame();
 
-    void OnClose( wxCloseEvent& event );
+	void OnClose( wxCloseEvent& event );
 	void OnResetLayout( wxCommandEvent& event );
 	void OnSetToolBarsToLeft( wxCommandEvent& event );
 	void OnExternalButton( wxCommandEvent& event );
@@ -138,11 +138,13 @@ public:
 	void SetToolFunctions(int Id, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&));
 	void ClearToolBar(wxToolBar* m_toolBar);
 	int AddMenuItem(wxMenu* menu, const wxString& text, const wxBitmap& bitmap, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL, wxMenu* submenu = NULL, bool check_item = false);
-    void Draw(wxDC& dc);
+	void Draw(wxDC& dc);
 	void OnChangeBitmapSize();
 #ifndef USING_RIBBON
 	void MakeMenus();
 	void AddToolBars();
+	void AddToolBar(wxToolBarBase* tb, const wxString& name, const wxString& caption);
+	int m_toolbars_last_position;
 #endif
 	void LoadPerspective(const wxString& str);
 	void SetDefaultLayout(const wxString& str); // call this from dll's OnStartUp
