@@ -1702,12 +1702,12 @@ void CHeeksFrame::MakeMenus()
 	// File Menu
 	wxMenu *file_menu = new wxMenu;
 	AddMenuItem(file_menu, _("New\tCtrl+N"), ToolImage(_T("new")), OnNewButton);
-	AddMenuItem(file_menu, _("Open\tCtrl+O"), ToolImage(_T("open")), OnOpenButton);
+	AddMenuItem(file_menu, _("Open...\tCtrl+O"), ToolImage(_T("open")), OnOpenButton);
 	AddMenuItem(file_menu, _("Save\tCtrl+S"), ToolImage(_T("save")), OnSaveButton, OnUpdateSave);
-	AddMenuItem(file_menu, _("Save As"), ToolImage(_T("saveas")), OnSaveAsButton);
+	AddMenuItem(file_menu, _("Save As..."), ToolImage(_T("saveas")), OnSaveAsButton);
 	file_menu->AppendSeparator();
-	AddMenuItem(file_menu, _("Print\tCtrl+P"), ToolImage(_T("print")), OnPrint);
- 	AddMenuItem(file_menu, _("Page Setup"), ToolImage(_T("psetup")), OnPageSetup);
+	AddMenuItem(file_menu, _("Print...\tCtrl+P"), ToolImage(_T("print")), OnPrint);
+ 	AddMenuItem(file_menu, _("Page Setup..."), ToolImage(_T("psetup")), OnPageSetup);
 	AddMenuItem(file_menu, _("Print Preview"), ToolImage(_T("ppreview")), OnPrintPreview);
 	m_recent_files_menu = new wxMenu;
 	m_recent_files_menu->Append(-1, _T("test"));
