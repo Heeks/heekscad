@@ -194,6 +194,7 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 	SetDropTarget(new DnDFile(this));
 
 #ifndef USING_RIBBON
+	m_menuWindow->AppendSeparator();
 	m_menuWindow->Append( Menu_View_ResetLayout, _( "Reset Layout" ) );
 	m_menuWindow->Append( Menu_View_SetToolBarsToLeft, _( "Set toolbars to left" ) );
 #endif
@@ -1703,23 +1704,26 @@ void CHeeksFrame::MakeMenus()
 	wxMenu *file_menu = new wxMenu;
 	AddMenuItem(file_menu, _("New\tCtrl+N"), ToolImage(_T("new")), OnNewButton);
 	AddMenuItem(file_menu, _("Open...\tCtrl+O"), ToolImage(_T("open")), OnOpenButton);
+	m_recent_files_menu = new wxMenu;
+	m_recent_files_menu->Append(-1, _T("test"));
+	AddMenuItem(file_menu, _("Open Recent"), ToolImage(_T("recent")), NULL, OnUpdateOpenRecent, m_recent_files_menu);
+	file_menu->AppendSeparator();
 	AddMenuItem(file_menu, _("Save\tCtrl+S"), ToolImage(_T("save")), OnSaveButton, OnUpdateSave);
 	AddMenuItem(file_menu, _("Save As..."), ToolImage(_T("saveas")), OnSaveAsButton);
+	file_menu->AppendSeparator();
+	AddMenuItem(file_menu, _("Import..."), ToolImage(_T("import")), OnImportButton);
 	file_menu->AppendSeparator();
 	AddMenuItem(file_menu, _("Print...\tCtrl+P"), ToolImage(_T("print")), OnPrint);
  	AddMenuItem(file_menu, _("Page Setup..."), ToolImage(_T("psetup")), OnPageSetup);
 	AddMenuItem(file_menu, _("Print Preview"), ToolImage(_T("ppreview")), OnPrintPreview);
-	m_recent_files_menu = new wxMenu;
-	m_recent_files_menu->Append(-1, _T("test"));
-	AddMenuItem(file_menu, _("Open Recent"), ToolImage(_T("recent")), NULL, OnUpdateOpenRecent, m_recent_files_menu);
-	AddMenuItem(file_menu, _("Import"), ToolImage(_T("import")), OnImportButton);
-	AddMenuItem(file_menu, _("About"), ToolImage(_T("about")), OnAbout);
 	file_menu->AppendSeparator();
 	AddMenuItem(file_menu, _("Plugins"), ToolImage(_T("plugin")), OnPlugins);
 	file_menu->AppendSeparator();
 	//AddMenuItem(file_menu, _("Save Settings"), ToolImage(_T("save")), OnSaveSettingsButton);
 	//file_menu->AppendSeparator();
 	AddMenuItem(file_menu, _("Restore All Defaults"), ToolImage(_T("restore")), OnResetDefaultsButton);
+	file_menu->AppendSeparator();
+	AddMenuItem(file_menu, _("About"), ToolImage(_T("about")), OnAbout);
 	file_menu->AppendSeparator();
 	AddMenuItem(file_menu, _("Exit\tCtrl+Q"), ToolImage(_T("exit")), OnQuit);
 
@@ -1747,7 +1751,6 @@ void CHeeksFrame::MakeMenus()
 	geometry_menu->AppendSeparator();
 	AddMenuItem(geometry_menu, _("Add Text"), ToolImage(_T("text")), OnTextButton);
 	AddMenuItem(geometry_menu, _("Add Dimension"), ToolImage(_T("dimension")), OnDimensioningButton);
-	geometry_menu->AppendSeparator();
 
 	wxMenu *coordinate_menu = new wxMenu;
 	//AddMenuItem(coordinate_menu, _("Add Coordinate System"), ToolImage(_T("coordsys")), coordinate_menu);
@@ -1817,6 +1820,7 @@ void CHeeksFrame::MakeMenus()
 	m_options_menu_id = AddMenuItem(m_menuWindow, _("Options"), wxBitmap(), OnViewOptions, OnUpdateViewOptions, NULL, true);
 	m_input_menu_id = AddMenuItem(m_menuWindow, _("Input"), wxBitmap(), OnViewInput, OnUpdateViewInput, NULL, true);
 	m_properties_menu_id = AddMenuItem(m_menuWindow, _("Properties"), wxBitmap(), OnViewProperties, OnUpdateViewProperties, NULL, true);
+	m_menuWindow->AppendSeparator();
 	m_main_toolbar_menu_id = AddMenuItem(m_menuWindow, _("Tool Bar"), wxBitmap(), OnViewToolBar, OnUpdateViewToolBar, NULL, true);
 	m_solids_toolbar_menu_id = AddMenuItem(m_menuWindow, _("Solids Tool Bar"), wxBitmap(), OnViewSolidBar, OnUpdateViewSolidBar, NULL, true);
 	m_geometry_toolbar_menu_id = AddMenuItem(m_menuWindow, _("Geometry Tool Bar"), wxBitmap(), OnViewGeometryBar, OnUpdateViewGeometryBar, NULL, true);
