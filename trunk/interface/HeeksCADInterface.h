@@ -69,6 +69,7 @@ public:
 #endif
 	virtual wxMenuBar* GetMenuBar();
 	virtual wxMenu* GetWindowMenu();
+	virtual wxMenu* GetHelpMenu();
 	virtual wxAuiManager* GetAuiManager();
 	virtual void AddToolBarButton(wxToolBar* toolbar, const wxString& title, const wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
 	virtual void StartToolBarFlyout(const wxString& title_and_bitmap);
