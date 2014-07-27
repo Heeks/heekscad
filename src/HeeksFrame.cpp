@@ -1723,8 +1723,6 @@ void CHeeksFrame::MakeMenus()
 	//file_menu->AppendSeparator();
 	AddMenuItem(file_menu, _("Restore All Defaults"), ToolImage(_T("restore")), OnResetDefaultsButton);
 	file_menu->AppendSeparator();
-	AddMenuItem(file_menu, _("About"), ToolImage(_T("about")), OnAbout);
-	file_menu->AppendSeparator();
 	AddMenuItem(file_menu, _("Exit\tCtrl+Q"), ToolImage(_T("exit")), OnQuit);
 
 	// Edit Menu
@@ -1827,6 +1825,10 @@ void CHeeksFrame::MakeMenus()
 	m_viewing_toolbar_menu_id = AddMenuItem(m_menuWindow, _("Viewing Tool Bar"), wxBitmap(), OnViewViewingBar, OnUpdateViewViewingBar, NULL, true);
 	m_transform_toolbar_menu_id = AddMenuItem(m_menuWindow, _("Transformations Tool Bar"), wxBitmap(), OnViewTransformBar, OnUpdateViewTransformBar, NULL, true);
 
+	// Help Menu
+	m_menuHelp = new wxMenu;
+	AddMenuItem(m_menuHelp, _("About"), ToolImage(_T("about")), OnAbout);
+
 	// Add them to the main menu
 	m_menuBar = new wxMenuBar;
 	m_menuBar->Append( file_menu, _( "&File" ) );
@@ -1837,6 +1839,7 @@ void CHeeksFrame::MakeMenus()
 	m_menuBar->Append( coordinate_menu, _( "&Set Origin" ) );
 	m_menuBar->Append( transform_menu, _( "&Transform" ) );
 	m_menuBar->Append( m_menuWindow, _( "&Window" ) );
+	m_menuBar->Append( m_menuHelp, _( "&Help" ) );
 
 	SetMenuBar( m_menuBar );
 }
