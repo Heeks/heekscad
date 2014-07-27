@@ -91,6 +91,7 @@ public:
 	wxMenuBar *m_menuBar;
 	wxMenu* m_recent_files_menu;
 	wxMenu *m_menuWindow;
+	wxMenu *m_menuHelp;
 	HeeksPrintout* m_printout;
 	wxString m_extra_about_box_str;
 #ifdef USING_RIBBON
