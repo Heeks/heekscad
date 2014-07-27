@@ -125,6 +125,11 @@ wxMenu* CHeeksCADInterface::GetWindowMenu()
 	return wxGetApp().m_frame->m_menuWindow;
 }
 
+wxMenu* CHeeksCADInterface::GetHelpMenu()
+{
+	return wxGetApp().m_frame->m_menuHelp;
+}
+
 wxAuiManager* CHeeksCADInterface::GetAuiManager()
 {
 	return wxGetApp().m_frame->m_aui_manager;
