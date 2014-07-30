@@ -31,7 +31,7 @@ public:
 
 	void SetViewport();
 	void glCommands();
-	void SetViewPoint(void);
+	void SetViewPoint(int margin);
 	void InsertViewBox(const CBox& box);
 	void StoreViewPoint(void);
 	void RestorePreviousViewPoint(void);
@@ -48,7 +48,7 @@ public:
 	wxSize GetViewportSize(){return wxSize(m_w, m_h);}
 	void GetViewportSize(int *w, int *h){*w = m_w; *h = m_h;}
     void ViewportOnMouse( wxMouseEvent& event );
-	void OnMagExtents(bool rotate);
+	void OnMagExtents(bool rotate, int margin);
 };
 
 class CGraphicsCanvas: public wxGLCanvas, public CViewport, Observer
@@ -77,7 +77,7 @@ public:
 	void OnCharEvent(wxKeyEvent& event);
 	void OnKeyDown(wxKeyEvent& event);
 	void OnKeyUp(wxKeyEvent& event);
-	void OnMagExtents(bool rotate, bool recalculate_gl_lists);
+	void OnMagExtents(bool rotate, bool recalculate_gl_lists, int margin);
 	void OnMag(const gp_Vec &unitY, const gp_Vec &unitZ, bool recalculate_gl_lists);
 	void OnMagXY (bool recalculate_gl_lists);
 	void OnMagXYM(bool recalculate_gl_lists);

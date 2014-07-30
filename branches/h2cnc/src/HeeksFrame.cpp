@@ -1010,7 +1010,7 @@ static void OnMagButton( wxCommandEvent& event )
 
 static void OnMagExtentsButton( wxCommandEvent& event )
 {
-	wxGetApp().m_frame->m_graphics->OnMagExtents(true, true);
+	wxGetApp().m_frame->m_graphics->OnMagExtents(true, true, 6);
 }
 
 static void OnMagXYButton( wxCommandEvent& event )
@@ -1050,7 +1050,7 @@ static void OnMagXYZButton( wxCommandEvent& event )
 
 static void OnMagNoRotButton( wxCommandEvent& event )
 {
-	wxGetApp().m_frame->m_graphics->OnMagExtents(false, true);
+	wxGetApp().m_frame->m_graphics->OnMagExtents(false, true, 6);
 }
 
 static void OnMagPreviousButton( wxCommandEvent& event )
@@ -1154,6 +1154,7 @@ void CHeeksFrame::OnRecentFile( wxCommandEvent& event )
 			wxGetApp().OnBeforeNewOrOpen(true, res);
 			wxGetApp().Reset();
 			wxGetApp().OpenFile(filepath.c_str());
+			wxGetApp().m_frame->m_graphics->OnMagExtents(true, true, 25);
 			wxGetApp().OnNewOrOpen(true, res);
 			wxGetApp().ClearHistory();
 			wxGetApp().SetLikeNewFile();
