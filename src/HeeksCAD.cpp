@@ -4786,3 +4786,14 @@ void HeeksCADapp::RestoreDefaults()
 	}
 	wxGetApp().m_settings_restored = true;
 }
+
+#ifdef USING_RIBBON
+void HeeksCADapp::AddRibbonPanels(wxRibbonBar* ribbon, wxRibbonPage* main_page)
+{
+	for (std::list< void(*)(wxRibbonBar*, wxRibbonPage*) >::iterator It = m_AddRibbonPanels_list.begin(); It != m_AddRibbonPanels_list.end(); It++)
+	{
+		void(*callbackfunc)(wxRibbonBar*, wxRibbonPage*) = *It;
+		(*callbackfunc)(ribbon, main_page);
+	}
+}
+#endif
