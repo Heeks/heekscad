@@ -40,7 +40,10 @@ class HRuler;
 class wxConfigBase;
 class wxAuiManager;
 class CAutoSave;
-
+#ifdef USING_RIBBON
+class wxRibbonBar;
+class wxRibbonPage;
+#endif
 
 extern wxString HeeksCADType(const int type);
 
@@ -164,7 +167,11 @@ public:
 	std::list<Plugin> m_loaded_libraries;
 	std::list< void(*)() > m_on_glCommands_list;
 	std::list< wxToolBarBase* > m_external_toolbars;
+#ifdef USING_RIBBON
+	std::list< void(*)(wxRibbonBar*, wxRibbonPage*) > m_AddRibbonPanels_list;
+#else
 	std::list< void(*)() > m_AddToolBars_list;
+#endif
 	std::list<wxWindow*> m_hideable_windows;
 	HRuler* m_ruler;
 	bool m_show_ruler;
@@ -427,6 +434,9 @@ public:
 	void RegisterMarkeListTools(void(*callbackfunc)(std::list<Tool*>& t_list));
 	void RegisterOnRestoreDefaults(void(*callbackfunc)());
 	void RestoreDefaults();
+#ifdef USING_RIBBON
+	void AddRibbonPanels(wxRibbonBar* ribbon, wxRibbonPage* main_page);
+#endif
 };
 
 void ExitMainLoop();

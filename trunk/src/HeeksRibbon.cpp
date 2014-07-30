@@ -114,6 +114,7 @@ wxRIBBON_BAR_FLOW_HORIZONTAL
 		AddToolBarTool(toolbar, RibbonButtonData(_("Plugins"), ToolImage(_T("plugin")), _("Edit plugins"), OnPlugins));
 		AddToolBarTool(toolbar, RibbonButtonData(_("Restore Defaults"), ToolImage(_T("restore")), _("Restore all defaults"), OnResetDefaultsButton));
 		AddToolBarTool(toolbar, RibbonButtonData(_("About"), ToolImage(_T("about")), _("Software Information"), OnAbout));
+		//AddToolBarTool(toolbar, RibbonButtonData(_("Help"), ToolImage(_T("help")), _("User Manual"), OnHelp));
 	}
 	{
 		wxRibbonPanel *panel = new wxRibbonPanel(home, wxID_ANY, wxT("Print"), ToolImage(_T("print")), wxDefaultPosition, wxDefaultSize);
@@ -131,10 +132,6 @@ wxRIBBON_BAR_FLOW_HORIZONTAL
 		AddToolBarTool(toolbar, RibbonButtonData(_("Undo"), ToolImage(_T("undo")), _("Undo the previous command"), OnUndoButton, OnUpdateUndo));
 		AddToolBarTool(toolbar, RibbonButtonData(_("Redo"), ToolImage(_T("redo")), _("Redo the next command"), OnRedoButton, OnUpdateRedo));
 		AddToolBarTool(toolbar, RibbonButtonData(_("Select"), ToolImage(_T("select")), _("Select Mode"), OnSelectModeButton));
-	}
-	{
-		wxRibbonPanel *panel = new wxRibbonPanel(home, wxID_ANY, wxT("Settings"), ToolImage(_T("gear")));
-		wxRibbonButtonBar *toolbar = new wxRibbonButtonBar(panel);
 	}
 	{
 		wxRibbonPanel *panel = new wxRibbonPanel(home, wxID_ANY, wxT("Sketches"), ToolImage(_T("lines")));
@@ -244,6 +241,8 @@ wxRIBBON_BAR_FLOW_HORIZONTAL
 		AddToolBarTool(toolbar, RibbonButtonData(_("View Pan"), ToolImage(_T("pan")), _("Drag to move view"), OnViewPanButton));
 		AddToolBarTool(toolbar, RibbonButtonData(_("Redraw"), ToolImage(_T("redraw")), _("Redraw"), OnRedrawButton));
 	}
+
+	wxGetApp().AddRibbonPanels(this, home);
 
 	this->AddPageHighlight(this->GetPageCount() - 1);
 
