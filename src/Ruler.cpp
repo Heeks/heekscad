@@ -310,7 +310,7 @@ static void on_set_use_view_units(bool value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
-static void on_set_units(int value, HeeksObj* object, bool from_undo_redo)
+static void on_set_units(int value, HeeksObj* object)
 {
 	((HRuler*)object)->m_units = (value == 0) ? 1.0:25.4;
 	((HRuler*)object)->KillGLLists();

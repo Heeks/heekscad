@@ -35,7 +35,7 @@ void CEdge::glCommands(bool select, bool marked, bool no_color){
 		wxGetApp().glColorEnsuringContrast(HeeksColor(0, 0, 0));
 	}
 
-	if(m_owner && m_owner->m_owner && m_owner->m_owner->GetType() == SolidType)
+	if(HEEKSOBJ_OWNER && HEEKSOBJ_OWNER->HEEKSOBJ_OWNER && HEEKSOBJ_OWNER->HEEKSOBJ_OWNER->GetType() == SolidType)
 	{
 		// triangulate a face on the edge first
 		if(this->m_faces.size() > 0)
@@ -75,7 +75,7 @@ void CEdge::glCommands(bool select, bool marked, bool no_color){
 	{
 		bool glwidth_done = false;
 		GLfloat save_depth_range[2];
-		if(m_owner == NULL || m_owner->m_owner == NULL || m_owner->m_owner->GetType() != WireType)
+		if(HEEKSOBJ_OWNER == NULL || HEEKSOBJ_OWNER->HEEKSOBJ_OWNER == NULL || HEEKSOBJ_OWNER->HEEKSOBJ_OWNER->GetType() != WireType)
 		{
 			BRepTools::Clean(m_topods_edge);
 			double pixels_per_mm = wxGetApp().GetPixelScale();
@@ -238,6 +238,7 @@ public:
 		for(std::set<CEdge*>::iterator It = edges_to_mark.begin(); It != edges_to_mark.end(); It++)obj_list.push_back(*It);
 		wxGetApp().m_marked_list->Add(obj_list, true);
 	}
+	bool CallChangedOnRun(){return false;}
 };
 
 static SelectLinkedEdgesTool link_flat_tool;
@@ -253,6 +254,7 @@ void CEdge::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 
 void CEdge::Blend(double radius,  bool chamfer_not_fillet){
 	try{
+		wxGetApp().CreateUndoPoint();
 		CShape* body = GetParentBody();
 		if(body){
 			if(chamfer_not_fillet)
@@ -264,16 +266,16 @@ void CEdge::Blend(double radius,  bool chamfer_not_fillet){
 					chamfer.Add(radius, m_topods_edge, TopoDS::Face(face->Face()));
 				}
 				TopoDS_Shape new_shape = chamfer.Shape();
-				wxGetApp().AddUndoably(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge chamfer"), *(body->GetColor()), body->GetOpacity()), NULL, NULL);
+				wxGetApp().Add(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge chamfer"), *(body->GetColor()), body->GetOpacity()), NULL);
 			}
 			else
 			{
 				BRepFilletAPI_MakeFillet fillet(body->Shape());
 				fillet.Add(radius, m_topods_edge);
 				TopoDS_Shape new_shape = fillet.Shape();
-				wxGetApp().AddUndoably(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(body->GetColor()), body->GetOpacity()), NULL, NULL);
+				wxGetApp().Add(new CSolid(*((TopoDS_Solid*)(&new_shape)), _("Solid with edge blend"), *(body->GetColor()), body->GetOpacity()), NULL);
 			}
-			wxGetApp().DeleteUndoably(body);
+			wxGetApp().Remove(body);
 		}
 	}
 	catch (Standard_Failure) {
@@ -508,10 +510,10 @@ HVertex* CEdge::GetVertex1()
 
 CShape* CEdge::GetParentBody()
 {
-	if(m_owner == NULL)return NULL;
-	if(m_owner->m_owner == NULL)return NULL;
-	if(m_owner->m_owner->GetType() != SolidType)return NULL;
-	return (CShape*)(m_owner->m_owner);
+	if(HEEKSOBJ_OWNER == NULL)return NULL;
+	if(HEEKSOBJ_OWNER->HEEKSOBJ_OWNER == NULL)return NULL;
+	if(HEEKSOBJ_OWNER->HEEKSOBJ_OWNER->GetType() != SolidType)return NULL;
+	return (CShape*)(HEEKSOBJ_OWNER->HEEKSOBJ_OWNER);
 }
 
 bool CEdge::GetMidPoint(double* pos)

@@ -30,15 +30,6 @@ PictureWindow::PictureWindow(wxWindow* parent, const wxBitmap& b): wxWindow(pare
 {
 }
 
-PictureWindow::~PictureWindow()
-{
-	for(std::map<wxString, wxBitmap*>::iterator It = m_bitmaps.begin(); It != m_bitmaps.end(); It++)
-	{
-		wxBitmap* bitmap = It->second;
-		delete bitmap;
-	}
-}
-
 void PictureWindow::OnPaint(wxPaintEvent &event) {
 	wxPaintDC dc(this);
 	PrepareDC(dc);
@@ -55,21 +46,10 @@ void PictureWindow::SetPicture(const wxBitmap& b)
 	Refresh();
 }
 
-void PictureWindow::SetPicture(const wxString& filepath, long image_type)
+void PictureWindow::SetPicture(wxBitmap** b, const wxString& filepath, long image_type)
 {
-	std::map<wxString, wxBitmap*>::iterator FindIt = m_bitmaps.find(filepath);
-
-	wxBitmap* bitmap = NULL;
-	if(FindIt == m_bitmaps.end())
-	{
-		bitmap = new wxBitmap(wxImage(filepath, image_type));
-	}
-	else
-	{
-		bitmap = FindIt->second;
-	}
-
-	SetPicture(*bitmap);
+	if(*b == NULL)*b = new wxBitmap(wxImage(filepath, image_type));
+	SetPicture(**b);
 }
 
 BEGIN_EVENT_TABLE(PictureWindow,wxWindow)

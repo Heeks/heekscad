@@ -7,7 +7,7 @@
 
 #include "../interface/Tool.h"
 
-class StretchTool: public Undoable{
+class StretchTool: public Tool{
 private:
 	double m_pos[3];
 	double m_shift[3];
@@ -22,8 +22,9 @@ public:
 
 	// Tool's virtual functions
 	const wxChar* GetTitle();
-	void Run(bool redo);
+	void Run();
 	void RollBack();
+	bool Undoable(){return true;}
 };
 
 #endif

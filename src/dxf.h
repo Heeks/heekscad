@@ -90,20 +90,6 @@ public:
 	void WriteCircle(const double* c, double radius, const char* layer_name );
 };
 
-#define STORE_LINE_NUMBERS
-
-class CPolyLinePoint
-{
-public:
-	double x;
-	double y;
-	double z;
-	bool bulge_found;
-	double bulge;
-
-	CPolyLinePoint(double px, double py, double pz, bool pbulge_found, double pbulge){x = px; y = py; z = pz; bulge_found = pbulge_found; bulge = pbulge;}
-};
-
 // derive a class from this and implement it's virtual functions
 class CDxfRead{
 private:
@@ -116,24 +102,17 @@ private:
 	bool m_measurement_inch;
 	char m_layer_name[1024];
 	char m_section_name[1024];
+	char m_block_name[1024];
 	bool m_ignore_errors;
-#ifdef STORE_LINE_NUMBERS
-	long m_line_number;
-#endif
+
 
 	typedef std::map< std::string,Aci_t > LayerAciMap_t;
 	LayerAciMap_t m_layer_aci;  // layer names -> layer color aci map
 
-	bool ReadUCS();
 	bool ReadUnits();
 	bool ReadLayer();
-	bool ReadSection();
-	bool ReadBlock();
-	bool ReadEndBlock();
-	bool ReadInsert();
 	bool ReadLine();
 	bool ReadText();
-	bool ReadMText();
 	bool ReadArc();
 	bool ReadCircle();
 	bool ReadEllipse();
@@ -145,16 +124,10 @@ private:
 	void OnReadArc(double start_angle, double end_angle, double radius, const double* c, double z_extrusion_dir, bool hidden);
 	void OnReadCircle(const double* c, double radius, bool hidden);
     void OnReadEllipse(const double* c, const double* m, double ratio, double start_angle, double end_angle);
-	bool ReadLeader();
-	bool ReadMLine();
-	bool ReadXLine();
-	bool ReadDimension();
 
 	void get_line();
 	void put_line(const char *value);
 	void DerefACI();
-	void StorePolyLinePoint(double x, double y, double z, bool bulge_found, double bulge);
-	void AddPolyLinePoints(bool mirrored, bool closed);
 
 protected:
 	Aci_t m_aci; // manifest color name or 256 for layer color
@@ -170,19 +143,14 @@ public:
 
 	bool IgnoreErrors() const { return(m_ignore_errors); }
 
-	virtual void OnReadUCS(const double* /*ucs point*/){}
-	virtual void OnReadBlock(const char* /*block_name*/, const double* /*base_point*/){}
-	virtual void OnReadInsert(const char* /*block_name*/, const double* /*insert_point*/, double /*rotation_angle*/){}
-	virtual void OnReadEndBlock(){}
-	virtual void OnReadLine(const double* /*s*/, const double* /*e*/, bool /*hidden*/){}
-	virtual void OnReadPoint(const double* /*s*/){}
-	virtual void OnReadText(const double* /*point*/, const double /*height*/, const char* /*text*/, int /*hj*/, int /*vj*/){}
-	virtual void OnReadArc(const double* /*s*/, const double* /*e*/, const double* /*c*/, bool /*dir*/, bool /*hidden*/){}
-	virtual void OnReadCircle(const double* /*s*/, const double* /*c*/, bool /*dir*/, bool /*hidden*/){}
-	virtual void OnReadEllipse(const double* /*c*/, double /*major_radius*/, double /*minor_radius*/, double /*rotation*/, double /*start_angle*/, double /*end_angle*/, bool /*dir*/){}
-	virtual void OnReadSpline(struct SplineData& /*sd*/){}
-	virtual void OnReadDimension(int /*dimension_type*/, double /*angle*/, double /*angle2*/, double /*angle3*/, double /*radius_leader_length*/, const double * /*def_point*/, const double * /*mid*/, const double * /*p1*/, const double * /*p2*/, const double * /*p3*/, const double * /*p4*/, const double * /*p5*/){}
-	virtual void AddGraphics() { }
+	virtual void OnReadLine(const double* s, const double* e, bool hidden){}
+	virtual void OnReadPoint(const double* s){}
+	virtual void OnReadText(const double* point, const double height, const char* text){}
+	virtual void OnReadArc(const double* s, const double* e, const double* c, bool dir, bool hidden){}
+	virtual void OnReadCircle(const double* s, const double* c, bool dir, bool hidden){}
+	virtual void OnReadEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir){}
+	virtual void OnReadSpline(struct SplineData& sd){}
+	virtual void AddGraphics() const { }
 
     std::string LayerName() const;
 

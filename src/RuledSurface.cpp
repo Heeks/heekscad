@@ -44,18 +44,39 @@ void PickCreateRuledSurface()
 			}
 		}
 
+		wxGetApp().Remove(sketches_to_delete);
+
 		TopoDS_Shape shape;
 		if(CreateRuledSurface(wire_list, shape, true))
 		{
-			wxGetApp().StartHistory();
-			wxGetApp().DeleteUndoably(sketches_to_delete);
 			HeeksObj* new_object = CShape::MakeObject(shape, _("Ruled Surface"), SOLID_TYPE_UNKNOWN, HeeksColor(51, 45, 51), 1.0f);
-			wxGetApp().AddUndoably(new_object, NULL, NULL);
-			wxGetApp().EndHistory();
+			wxGetApp().Add(new_object, NULL);
+			wxGetApp().Repaint();
 		}
 
 	}
 }
+
+#if 0
+MakeHelix
+	double angle;
+	{
+		HeeksConfig config;
+		config.Read(_T("RevolutionAngle"), &angle, 360.0);
+	}
+
+	if(InputRevolutionAngle(angle, &wxGetApp().m_extrude_to_solid))
+	{
+		{
+			HeeksConfig config;
+			config.Write(_T("RevolutionAngle"), angle);
+		}
+		if(wxGetApp().m_marked_list->size() > 0)
+		{
+			CreateExtrusionOrRevolution(wxGetApp().m_marked_list->list(), angle, wxGetApp().m_extrude_to_solid, true, 0.0, true);
+		}
+	}
+#endif
 
 void ConvertToFaceOrWire(std::list<HeeksObj*> list, std::list<TopoDS_Shape> &faces_or_wires, bool face_not_wire)
 {
@@ -86,7 +107,7 @@ void ConvertToFaceOrWire(std::list<HeeksObj*> list, std::list<TopoDS_Shape> &fac
 		}
 	}
 
-	wxGetApp().DeleteUndoably(sketches_or_faces_to_delete);
+	wxGetApp().Remove(sketches_or_faces_to_delete);
 }
 
 HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_or_angle, bool solid_if_possible, bool revolution_not_extrusion, double taper_angle_for_extrusion, bool add_new_objects)
@@ -112,16 +133,11 @@ HeeksObj* CreateExtrusionOrRevolution(std::list<HeeksObj*> list, double height_o
 			TopoDS_Shape& shape = *It;
 			new_object = CShape::MakeObject(shape, revolution_not_extrusion ? _("Revolved Solid") : _("Extruded Solid"), SOLID_TYPE_UNKNOWN, wxGetApp().current_color, 1.0f);
 			if(add_new_objects)
-				wxGetApp().AddUndoably(new_object, NULL, NULL);
+				wxGetApp().Add(new_object, NULL);
 			else
 				break;
 		}
-	}
-
-	for(std::list<TopoDS_Shape>::iterator It = faces_or_wires.begin(); It != faces_or_wires.end(); It++)
-	{
-		TopoDS_Shape shape = *It;
-		shape.Free();
+		wxGetApp().Repaint();
 	}
 	return new_object;
 }
@@ -151,13 +167,12 @@ HeeksObj* CreatePipeFromProfile(const TopoDS_Wire &spine, std::list<TopoDS_Shape
 	}
 	if(pipe_shapes.size() > 0)
 	{
-		wxGetApp().StartHistory();
+		wxGetApp().CreateUndoPoint();
 		for(std::list<HeeksObj*>::iterator It = pipe_shapes.begin(); It != pipe_shapes.end(); It++)
 		{
 			HeeksObj* object = *It;
-			wxGetApp().AddUndoably(object, NULL, NULL);
+			wxGetApp().Add(object, NULL);
 		}
-		wxGetApp().EndHistory();
 		return pipe_shapes.front();
 	}
 
@@ -172,7 +187,8 @@ HeeksObj* CreatePipeFromProfile(HeeksObj* spine, HeeksObj* profile)
 	HeeksObj* pipe = CreatePipeFromProfile(wire, faces);
 	if(pipe)
 	{
-		wxGetApp().DeleteUndoably(profile);
+		wxGetApp().Remove(profile);
+		wxGetApp().Changed();
 	}
 	return pipe;
 }
@@ -187,13 +203,13 @@ HeeksObj* CreateSweep(std::list<HeeksObj*> &sweep_objects, HeeksObj* sweep_profi
 	{
 		TopoDS_Wire wire = wires.front();
 		pipe = CreatePipeFromProfile(wire, faces_or_wires);
+		wxGetApp().Changed();
 	}
 	return pipe;
 }
 
 void PickCreateSweep()
 {
-	// undoable
 	if(wxGetApp().m_marked_list->size() == 0)
 	{
 		wxGetApp().PickObjects(_("pick sketches, faces or circles"), MARKING_FILTER_CIRCLE | MARKING_FILTER_SKETCH | MARKING_FILTER_FACE);
@@ -206,9 +222,7 @@ void PickCreateSweep()
 
 	HeeksObj* sweep_profile = wxGetApp().m_marked_list->list().front();
 
-	wxGetApp().StartHistory();
 	CreateSweep(sweep_objects, sweep_profile, true);
-	wxGetApp().EndHistory();
 }
 
 HeeksObj* CreateRuledFromSketches(std::list<HeeksObj*> list, bool make_solid)
@@ -264,7 +278,7 @@ bool InputExtrusionHeight(double &value, bool *extrude_makes_a_solid, double *ta
 			dlg.AddLabelAndControl(sizerMain, _("taper outward angle"), taper_angle_control);
 		}
 
-		dlg.MakeOkAndCancel(wxHORIZONTAL).AddToSizer(sizerMain);
+		sizerMain->Add( dlg.MakeOkAndCancel(wxHORIZONTAL), 0, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, dlg.control_border );
 		dlg.SetSizer( sizerMain );
 		sizerMain->SetSizeHints(&dlg);
 		sizerMain->Fit(&dlg);
@@ -305,9 +319,7 @@ void PickCreateExtrusion()
 
 		if(wxGetApp().m_marked_list->size() > 0)
 		{
-			wxGetApp().StartHistory();
 			CreateExtrusionOrRevolution(wxGetApp().m_marked_list->list(),height, wxGetApp().m_extrude_to_solid, false, taper_angle);
-			wxGetApp().EndHistory();
 		}
 	}
 }
@@ -331,7 +343,7 @@ bool InputRevolutionAngle(double &angle, bool *extrude_makes_a_solid)
 			sizerMain->Add( solid_check_box, 0, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, dlg.control_border );
 		}
 
-		dlg.MakeOkAndCancel(wxHORIZONTAL).AddToSizer(sizerMain);
+		sizerMain->Add( dlg.MakeOkAndCancel(wxHORIZONTAL), 0, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, dlg.control_border );
 		dlg.SetSizer( sizerMain );
 		sizerMain->SetSizeHints(&dlg);
 		sizerMain->Fit(&dlg);

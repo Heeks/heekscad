@@ -9,7 +9,6 @@
 #include "RuledSurface.h"
 #include "HeeksFrame.h"
 #include "InputModeCanvas.h"
-#include "HPoint.h"
 
 CFace::CFace():m_temp_attr(0)
 {
@@ -207,7 +206,7 @@ static CFace* face_for_tools = NULL;
 void FaceToSketchTool::Run(){
 	CSketch* new_object = new CSketch();
 	ConvertFaceToSketch2(face_for_tools->Face(), new_object, deviation);
-	wxGetApp().AddUndoably(new_object, NULL, NULL);
+	wxGetApp().Add(new_object, NULL);
 }
 
 double FaceToSketchTool::deviation = 0.1;
@@ -232,7 +231,7 @@ public:
 			x_direction = plane.YAxis().Direction();
 		}
 		CoordinateSystem* new_object = new CoordinateSystem(_("Face Coordinate System"), plane.Location(), x_direction, y_direction);
-		wxGetApp().AddUndoably(new_object, NULL, NULL);
+		wxGetApp().Add(new_object, NULL);
 		wxGetApp().m_marked_list->Clear(true);
 		wxGetApp().m_marked_list->Add(new_object, true);
 		wxGetApp().Repaint();
@@ -240,6 +239,39 @@ public:
 };
 
 static MakeCoordSystem make_coordsys;
+
+class SketchOnFace:public Tool
+{
+	// only use this if GetSurfaceType() == GeomAbs_Plane
+public:
+	const wxChar* GetTitle(){return _("Sketch On Face");}
+	wxString BitmapPath(){return _T("sketchmode");}
+	void Run(){
+		gp_Pln plane;
+		face_for_tools->GetPlaneParams(plane);
+		gp_Dir x_direction = plane.XAxis().Direction();
+		gp_Dir y_direction = plane.YAxis().Direction();
+		if(!face_for_tools->Face().Orientation())
+		{
+			// swap the axes to invert the normal
+			y_direction = plane.XAxis().Direction();
+			x_direction = plane.YAxis().Direction();
+		}
+		CoordinateSystem* coord_sys = new CoordinateSystem(_("Face Coordinate System"), plane.Location(), x_direction, y_direction);
+		CSketch* sketch = new CSketch();
+		sketch->Add(coord_sys,NULL);
+		sketch->ReloadPointers();
+		//TODO: should be faces solids parent
+		wxGetApp().Add(sketch, NULL);
+		wxGetApp().m_marked_list->Clear(true);
+		wxGetApp().m_marked_list->Add(sketch, true);
+		wxGetApp().EnterSketchMode(sketch);
+		wxGetApp().Repaint();
+		wxGetApp().m_frame->RefreshInputCanvas();
+	}
+};
+
+static SketchOnFace sketch_on_face;
 
 class ExtrudeFace:public Tool
 {
@@ -274,7 +306,6 @@ public:
 		gp_Trsf face_matrix = make_matrix(plane.Location(), x_direction, y_direction);
 		gp_Trsf inv_matrix = face_matrix.Inverted();
 
-		wxGetApp().StartHistory();
 		double m[16];
 		extract(face_matrix.Inverted(), m);
 		// if any objects are selected, move them
@@ -283,16 +314,15 @@ public:
 			for(std::list<HeeksObj *>::iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
 			{
 				HeeksObj* object = *It;
-				wxGetApp().TransformUndoably(object, m);
+				object->ModifyByMatrix(m);
 			}
 		}
 		else
 		{
 			// move the solid
 			HeeksObj* parent_body = face_for_tools->GetParentBody();
-			if(parent_body)wxGetApp().TransformUndoably(parent_body, m);
+			if(parent_body)parent_body->ModifyByMatrix(m);
 		}
-		wxGetApp().EndHistory();
 	}
 };
 
@@ -304,10 +334,10 @@ void CFace::GetTools(std::list<Tool*>* t_list, const wxPoint* p){
 	if(IsAPlane(NULL))
 	{
 		if(!wxGetApp().m_no_creation_mode)t_list->push_back(&make_coordsys);
+		if(!wxGetApp().m_no_creation_mode)t_list->push_back(&sketch_on_face);
 		t_list->push_back(&rotate_to_face);
 	}
 	if(!wxGetApp().m_no_creation_mode)t_list->push_back(&extrude_face);
-	//t_list->push_back(&intersector);
 }
 
 void CFace::GetGripperPositionsTransformed(std::list<GripData> *list, bool just_for_endof)
@@ -712,10 +742,10 @@ void CFace::GetSurfaceUVPeriod(double *uv, bool *isUPeriodic, bool *isVPeriodic)
 
 CShape* CFace::GetParentBody()
 {
-	if(m_owner == NULL)return NULL;
-	if(m_owner->m_owner == NULL)return NULL;
-	if(m_owner->m_owner->GetType() != SolidType)return NULL;
-	return (CShape*)(m_owner->m_owner);
+	if(HEEKSOBJ_OWNER == NULL)return NULL;
+	if(HEEKSOBJ_OWNER->HEEKSOBJ_OWNER == NULL)return NULL;
+	if(HEEKSOBJ_OWNER->HEEKSOBJ_OWNER->GetType() != SolidType)return NULL;
+	return (CShape*)(HEEKSOBJ_OWNER->HEEKSOBJ_OWNER);
 }
 
 void CFace::MakeSureMarkingGLListExists()

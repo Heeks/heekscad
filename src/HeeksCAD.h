@@ -11,11 +11,10 @@
 #include "../interface/ObjList.h"
 #include "../interface/Plugin.h"
 #include "glfont2.h"
-#ifndef WIN32
 #include "CxfFont.h"
-#endif
 
 #include <memory>
+class TransientObject;
 class MagDragWindow;
 class ViewRotating;
 class ViewZooming;
@@ -30,7 +29,9 @@ class HeeksObj;
 class MarkedObject;
 class Gripper;
 class CViewPoint;
-class MainHistory;
+#ifdef USE_UNDO_ENGINE
+class UndoEngine;
+#endif
 class Observer;
 class CHeeksFrame;
 class CViewport;
@@ -39,11 +40,9 @@ class CoordinateSystem;
 class HRuler;
 class wxConfigBase;
 class wxAuiManager;
+class CSketch;
 class CAutoSave;
-#ifdef USING_RIBBON
-class wxRibbonBar;
-class wxRibbonPage;
-#endif
+
 
 extern wxString HeeksCADType(const int type);
 
@@ -87,7 +86,10 @@ class HeeksCADapp : public wxApp, public ObjList
 {
 private:
 	std::set<Observer*> observers;
-	MainHistory *history;
+#ifdef USE_UNDO_ENGINE
+	UndoEngine *history;
+#endif
+	std::map<HeeksObj*,std::list<HeeksObj*> > m_transient_objects;
 
 	typedef std::map< int, std::list<HeeksObj*> > IdsToObjects_t;
 	typedef int GroupId_t;
@@ -112,6 +114,7 @@ public:
 
 	wxPoint cur_mouse_pos;
 	HeeksColor current_color;
+	HeeksColor construction_color;
 #define NUM_BACKGROUND_COLORS 10
 	HeeksColor background_color[NUM_BACKGROUND_COLORS];
 	BackgroundMode m_background_mode;
@@ -136,8 +139,6 @@ public:
 	bool m_allow_opengl_stippling;
 	SolidViewMode m_solid_view_mode;
 	bool m_stl_save_as_binary;
-	bool m_mouse_move_highlighting;
-	HeeksColor m_highlight_color;
 
 	//gp_Trsf digitizing_matrix;
 	CoordinateSystem *m_current_coordinate_system;
@@ -163,15 +164,10 @@ public:
 	std::list<HeeksObj*> m_hidden_for_drag;
 	bool m_show_grippers_on_drag;
 	double m_geom_tol;
-	double m_sketch_reorder_tol;
 	std::list<Plugin> m_loaded_libraries;
 	std::list< void(*)() > m_on_glCommands_list;
 	std::list< wxToolBarBase* > m_external_toolbars;
-#ifdef USING_RIBBON
-	std::list< void(*)(wxRibbonBar*, wxRibbonPage*) > m_AddRibbonPanels_list;
-#else
 	std::list< void(*)() > m_AddToolBars_list;
-#endif
 	std::list<wxWindow*> m_hideable_windows;
 	HRuler* m_ruler;
 	bool m_show_ruler;
@@ -188,14 +184,14 @@ public:
 	std::list< void(*)() > m_on_build_texture_callbacks;
 	std::list< void(*)(int, int) > m_beforeneworopen_callbacks;
 	std::list< void(*)() > m_beforeframedelete_callbacks;
-	std::list< void(*)(std::list<Tool*>&) > m_markedlisttools_callbacks;
-	std::list< void(*)() > m_on_restore_defaults_callbacks;
 	int m_transform_gl_list;
 	gp_Trsf m_drag_matrix;
 	bool m_extrude_removes_sketches;
 	bool m_loft_removes_sketches;
 	bool m_font_created;
 	glfont::GLFont m_gl_font;
+	bool m_sketch_mode;
+	CSketch* m_sketch;
 	unsigned int m_font_tex_number;
 	GraphicsTextMode m_graphics_text_mode;
 	bool m_print_scaled_to_page;
@@ -215,17 +211,18 @@ public:
 	bool m_correlate_by_color;
 	bool m_property_grid_validation;
 
-#ifndef WIN32
 	std::auto_ptr<VectorFonts>	m_pVectorFonts;	// QCAD format fonts that have been loaded.
 	VectorFont   *m_pVectorFont;	// which font are we using? (NULL indicates the internal (OpenGL) font)
 	wxString m_font_paths;	// SemiColon delimited list of directories that hold font files to load.
 	double m_word_space_percentage;	// Font
 	double m_character_space_percentage; // Font
-#endif
 	double m_stl_facet_tolerance;
 
 	int m_auto_save_interval;	// In minutes
 	std::auto_ptr<CAutoSave> m_pAutoSave;
+
+	bool m_isModified;
+	bool m_isModifiedValid;
 
 	int m_icon_texture_number;
 	bool m_extrude_to_solid;
@@ -257,8 +254,6 @@ public:
 
 	wxString m_alternative_open_wild_card_string;
 
-	bool m_settings_restored;
-
 	//WxApp override
 	int OnRun();
 	bool OnExceptionInMainLoop();
@@ -280,7 +275,6 @@ public:
 	void RecalculateGLLists();
 	void SetLikeNewFile(void);
 	bool IsModified(void);
-	void SetAsModified();
 	void ClearHistory(void);
 	void glCommandsAll(const CViewPoint &view_point);
 	double GetPixelScale(void);
@@ -289,14 +283,12 @@ public:
 	void DoDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, bool dont_use_point_for_functions, bool control_pressed);
 	void GenerateIntersectionMenuOptions( std::list<Tool*> &f_list );
 	void on_menu_event(wxCommandEvent& event);
-	void DoUndoable(Undoable *);
-	bool RollBack(void);
-	bool RollForward(void);
-	bool CanUndo(void);
-	bool CanRedo(void);
-	void StartHistory();
-	void EndHistory(void);
-	void ClearRollingForward(void);
+	void DoToolUndoably(Tool *);
+	void Undo(void);
+	void Redo(void);
+	void WentTransient(HeeksObj* obj, TransientObject* tobj);
+	void ClearTransients();
+	std::map<HeeksObj*,std::list<HeeksObj*> >& GetTransients();
 	bool Add(HeeksObj* object, HeeksObj* prev_object);
 	void Remove(HeeksObj* object);
 	void Remove(std::list<HeeksObj*> objects);
@@ -306,7 +298,7 @@ public:
 	void ObjectWriteBaseXML(HeeksObj *object, TiXmlElement *element);
 	void ObjectReadBaseXML(HeeksObj *object, TiXmlElement* element);
 	void InitializeXMLFunctions();
-	void OpenXMLFile(const wxChar *filepath,HeeksObj* paste_into = NULL, HeeksObj* paste_before = NULL, bool undoably = false);
+	void OpenXMLFile(const wxChar *filepath,HeeksObj* paste_into = NULL, HeeksObj* paste_before = NULL);
 	static void OpenSVGFile(const wxChar *filepath);
 	static void OpenSTLFile(const wxChar *filepath);
 	static void OpenDXFFile(const wxChar *filepath);
@@ -323,22 +315,14 @@ public:
 	void SavePyFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance = -1.0);
 	void SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, bool for_clipboard = false);
 	void SaveXMLFile(const wxChar *filepath){SaveXMLFile(m_objects, filepath);}
+#ifdef CONSTRAINT_TESTER
+    //JT
+	 virtual void AuditHeeksObjTree4Constraints(HeeksObj * SketchPtr ,HeeksObj* mom, int level,bool ShowMsgInConsole,bool * ConstraintsAreOk){};
+#endif
+
 	bool SaveFile(const wxChar *filepath, bool use_dialog = false, bool update_recent_file_list = true, bool set_app_caption = true);
-	void AddUndoably(HeeksObj *object, HeeksObj* owner, HeeksObj* prev_object);
-	void AddUndoably(const std::list<HeeksObj*>& list, HeeksObj* owner);
-	void DeleteUndoably(HeeksObj* object);
-	void DeleteUndoably(const std::list<HeeksObj*>& list);
-	void CopyUndoably(HeeksObj* object, HeeksObj* copy_with_new_data);
-	void TransformUndoably(HeeksObj *object, double *m);
-	void TransformUndoably(const std::list<HeeksObj*>& list, double* m);
-	void ReverseUndoably(HeeksObj *object);
-	void EditUndoably(HeeksObj *object);
-	void WasModified(HeeksObj *object);
-	void WasAdded(HeeksObj *object);
-	void WasRemoved(HeeksObj *object);
-	void WereModified(const std::list<HeeksObj*>& list);
-	void WereAdded(const std::list<HeeksObj*>& list);
-	void WereRemoved(const std::list<HeeksObj*>& list);
+	void CreateUndoPoint();
+	void Changed();
 	gp_Trsf GetDrawMatrix(bool get_the_appropriate_orthogonal);
 	void GetOptions(std::list<Property *> *list);
 	void DeleteMarkedItems();
@@ -349,10 +333,10 @@ public:
 	void ObserversMarkedListChanged(bool selection_cleared, const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed);
 	void ObserversFreeze();
 	void ObserversThaw();
-	const wxChar* GetKnownFilesWildCardString(bool open, bool import_export)const;
-	const wxChar* GetKnownFilesCommaSeparatedList(bool open, bool import_export)const;
+	const wxChar* GetKnownFilesWildCardString(bool open = true)const;
+	const wxChar* GetKnownFilesCommaSeparatedList(bool open = true)const;
 	void GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool control_pressed);
-	void GetTools2(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool control_pressed, bool make_tool_list_container);
+	void GetTools2(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool control_pressed);
 	wxString GetExeFolder()const;
 	wxString GetResFolder()const;
 	void get_2d_arc_segments(double xs, double ys, double xe, double ye, double xc, double yc, bool dir, bool want_start, double pixels_per_mm, void(*callbackfunc)(const double* xy));
@@ -381,7 +365,6 @@ public:
 	bool InputInt(const wxChar* prompt, const wxChar* value_name, int &value);
 	bool InputDouble(const wxChar* prompt, const wxChar* value_name, double &value);
 	bool InputAngleWithPlane(double &angle, double *axis = NULL, double *pos = NULL, int *number_of_copies = NULL, double *axial_shift = NULL);
-	bool InputFromAndTo(double *from, double *to, int *number_of_copies = NULL);
 	bool InputLength(const wxChar* prompt, const wxChar* value_name, double &value);
 	void ShowModalOptions();
 	void SectioningDialog();
@@ -413,9 +396,10 @@ public:
 	void PlotArc(const double* s, const double* e, const double* c);
 	void InitialiseLocale();
 	void create_font();
-#ifndef WIN32
+	CSketch* GetContainer();
+	bool EndSketchMode();
+	void EnterSketchMode(CSketch* sketch);
 	std::auto_ptr<VectorFonts>	& GetAvailableFonts(const bool force_read = false);
-#endif
 	void GetPluginsFromCommandLineParams(std::list<wxString> &plugins);
 	void RegisterOnBuildTexture(void(*callbackfunc)());
 	void RegisterOnBeforeNewOrOpen(void(*callbackfunc)(int, int));
@@ -426,17 +410,19 @@ public:
 	typedef std::pair< ObjectType_t, ObjectId_t > ObjectReference_t;
 	typedef std::map< ObjectReference_t, HeeksObj * > ObjectReferences_t;
 
+	HeeksObj *MergeCommonObjects( ObjectReferences_t & unique_set, HeeksObj *object ) const;
+
 	wxString HeeksType( const int type ) const;
+
+//JT
+#ifdef CONSTRAINT_TESTER
+     bool TestForValidConstraints(){return TestForValidConstraints(m_objects);};//m_objects is protected and visible to class or sub_class
+   	 bool TestForValidConstraints(const std::list<HeeksObj*>& objects);
+
+#endif
+
 	unsigned int GetIndex(HeeksObj *object);
 	void ReleaseIndex(unsigned int index);
-
-	void GetExternalMarkedListTools(std::list<Tool*>& t_list);
-	void RegisterMarkeListTools(void(*callbackfunc)(std::list<Tool*>& t_list));
-	void RegisterOnRestoreDefaults(void(*callbackfunc)());
-	void RestoreDefaults();
-#ifdef USING_RIBBON
-	void AddRibbonPanels(wxRibbonBar* ribbon, wxRibbonPage* main_page);
-#endif
 };
 
 void ExitMainLoop();

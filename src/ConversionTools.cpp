@@ -15,6 +15,8 @@
 #include "Shape.h"
 #include "Sketch.h"
 #include "Group.h"
+#include "MultiPoly.h"
+#include "Polygon.h"
 #include "HArea.h"
 
 #include <sstream>
@@ -38,7 +40,6 @@ static AreaUnion union_area;
 static AreaCut cut_area;
 static AreaIntersect intersect_area;
 static AreaXor xor_area;
-static AreaInsideCurves inside_curves;
 
 void GetConversionMenuTools(std::list<Tool*>* t_list){
 	// Tools for multiple selected items.
@@ -112,7 +113,6 @@ void GetConversionMenuTools(std::list<Tool*>* t_list){
 		t_list->push_back(&cut_area);
 		t_list->push_back(&intersect_area);
 		t_list->push_back(&xor_area);
-		t_list->push_back(&inside_curves);
 	}
 
 	if(wxGetApp().m_marked_list->list().size() > 1)t_list->push_back(&group_selected);
@@ -226,19 +226,13 @@ bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wire &wire
 			case LineType:
 				{
 					HLine* line = (HLine*)object;
-					edges.push_back(BRepBuilderAPI_MakeEdge(line->A, line->B));
+					edges.push_back(BRepBuilderAPI_MakeEdge(line->A->m_p, line->B->m_p));
 				}
 				break;
 			case ArcType:
 				{
 					HArc* arc = (HArc*)object;
-					edges.push_back(BRepBuilderAPI_MakeEdge(arc->GetCircle(), arc->A, arc->B));
-				}
-				break;
-			case SplineType:
-				{
-					HSpline* spline = (HSpline*)object;
-					edges.push_back(BRepBuilderAPI_MakeEdge(spline->m_spline));
+					edges.push_back(BRepBuilderAPI_MakeEdge(arc->GetCircle(), arc->A->m_p, arc->B->m_p));
 				}
 				break;
 		}
@@ -304,15 +298,15 @@ bool ConvertSketchToEdges(HeeksObj *object, std::list< std::vector<TopoDS_Edge> 
 						while ((! done) && (tolerance < max_tolerance))
 						{
 							HLine* line = (HLine*)object;
-							if(!(line->A.IsEqual(line->B, wxGetApp().m_geom_tol)))
+							if(!(line->A->m_p.IsEqual(line->B->m_p, wxGetApp().m_geom_tol)))
 							{
 								BRep_Builder aBuilder;
 								TopoDS_Vertex start, end;
 
-								aBuilder.MakeVertex (start, line->A, wxGetApp().m_geom_tol);
+								aBuilder.MakeVertex (start, line->A->m_p, wxGetApp().m_geom_tol);
 								start.Orientation (TopAbs_REVERSED);
 
-								aBuilder.MakeVertex (end, line->B, wxGetApp().m_geom_tol);
+								aBuilder.MakeVertex (end, line->B->m_p, wxGetApp().m_geom_tol);
 								end.Orientation (TopAbs_FORWARD);
 
 								BRepBuilderAPI_MakeEdge edge(start, end);
@@ -349,10 +343,10 @@ bool ConvertSketchToEdges(HeeksObj *object, std::list< std::vector<TopoDS_Edge> 
 							BRep_Builder aBuilder;
 							TopoDS_Vertex start, end;
 
-							aBuilder.MakeVertex (start, arc->A, wxGetApp().m_geom_tol);
+							aBuilder.MakeVertex (start, arc->A->m_p, wxGetApp().m_geom_tol);
 							start.Orientation (TopAbs_REVERSED);
 
-							aBuilder.MakeVertex (end, arc->B, wxGetApp().m_geom_tol);
+							aBuilder.MakeVertex (end, arc->B->m_p, wxGetApp().m_geom_tol);
 							end.Orientation (TopAbs_FORWARD);
 
 							BRepBuilderAPI_MakeEdge edge(arc->GetCircle(), start, end);
@@ -678,11 +672,13 @@ void ConvertSketchesToFace::Run()
 				std::list<TopoDS_Shape> faces;
 				if(ConvertSketchToFaceOrWire(object, faces, true))
 				{
+					wxGetApp().CreateUndoPoint();
 					for(std::list<TopoDS_Shape>::iterator It2 = faces.begin(); It2 != faces.end(); It2++)
 					{
 						TopoDS_Shape& face = *It2;
-						wxGetApp().AddUndoably(new CFace(TopoDS::Face(face)), NULL, NULL);
+						wxGetApp().Add(new CFace(TopoDS::Face(face)), NULL);
 					}
+					wxGetApp().Changed();
 				}
 			}
 			break;
@@ -708,11 +704,13 @@ void ConvertSketchesToFace::Run()
 			std::list<TopoDS_Shape> faces;
 			if(ConvertEdgesToFaceOrWire(edges, faces, true))
 			{
+				wxGetApp().CreateUndoPoint();
 				for(std::list<TopoDS_Shape>::iterator It2 = faces.begin(); It2 != faces.end(); It2++)
 				{
 					TopoDS_Shape& face = *It2;
-					wxGetApp().AddUndoably(new CFace(TopoDS::Face(face)), NULL, NULL);
+					wxGetApp().Add(new CFace(TopoDS::Face(face)), NULL);
 				}
+				wxGetApp().Changed();
 			}
 		}
 	}
@@ -748,13 +746,6 @@ static void AddLinesOrArcs(CSketch* sketch, CArea &area)
 			AddLineOrArc(sketch, span);
 		}
 	}
-}
-
-CSketch* MakeNewSketchFromArea(CArea &area)
-{
-	CSketch* sketch = new CSketch();
-	AddLinesOrArcs(sketch, area);
-	return sketch;
 }
 
 void MakeToSketch::Run(){
@@ -816,12 +807,14 @@ void TransformToCoordSys::Run(){
 	extract(coordsys2->GetMatrix() * (coordsys1->GetMatrix().Inverted()), m);
 
 	// move any selected objects
+	wxGetApp().CreateUndoPoint();
 	for(std::list<HeeksObj *>::iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
 	{
 		HeeksObj* object = *It;
 		if((object == coordsys1) || (object == coordsys2))continue;
-		wxGetApp().TransformUndoably(object, m);
+		object->ModifyByMatrix(m);
 	}
+	wxGetApp().Changed();
 }
 
 static CSketch* sketch_for_arcs_to_lines = NULL;
@@ -972,9 +965,9 @@ void ConvertToArea::Run(){
 	}
 
 	HArea* new_object = new HArea(area);
-	wxGetApp().AddUndoably(new_object, NULL, NULL);
+	wxGetApp().Add(new_object, NULL);
 
-	wxGetApp().DeleteUndoably(objects_to_delete);
+	wxGetApp().Remove(objects_to_delete);
 }
 
 static void AreaToolRun(int type)
@@ -1005,15 +998,6 @@ static void AreaToolRun(int type)
 				case 4:
 					area.Xor(((HArea*)object)->m_area);
 					break;
-				case 5:
-					std::list<CCurve> curves;
-					area.InsideCurves(((HArea*)object)->m_area.m_curves.front(), curves);
-					area = CArea();
-					for(std::list<CCurve>::iterator It = curves.begin(); It != curves.end(); It++)
-					{
-						area.append(*It);
-					}
-					break;
 				}
 			}
 			else
@@ -1026,9 +1010,9 @@ static void AreaToolRun(int type)
 	}
 
 	HArea* new_object = new HArea(area);
-	wxGetApp().AddUndoably(new_object, NULL, NULL);
+	wxGetApp().Add(new_object, NULL);
 
-	wxGetApp().DeleteUndoably(objects_to_delete);
+	wxGetApp().Remove(objects_to_delete);
 }
 
 void AreaUnion::Run(){
@@ -1047,10 +1031,6 @@ void AreaXor::Run(){
 	AreaToolRun(4);
 }
 
-void AreaInsideCurves::Run(){
-	AreaToolRun(5);
-}
-
 void CombineSketches::Run(){
 	CSketch* sketch1 = NULL;
 	std::list<HeeksObj*>::const_iterator It;
@@ -1064,10 +1044,10 @@ void CombineSketches::Run(){
 				std::list<HeeksObj*> new_lines_and_arcs;
 				for(HeeksObj* o = object->GetFirstChild(); o; o = object->GetNextChild())
 				{
-					new_lines_and_arcs.push_back(o);
+					new_lines_and_arcs.push_back(o->MakeACopy());
 				}
-				wxGetApp().DeleteUndoably(object);
-				wxGetApp().AddUndoably(new_lines_and_arcs, sketch1);
+				wxGetApp().Remove(object);
+				((ObjList*)sketch1)->Add(new_lines_and_arcs);
 			}
 			else
 			{
@@ -1076,7 +1056,61 @@ void CombineSketches::Run(){
 		}
 	}
 
-	if(sketch1)sketch1->ReOrderSketch(SketchOrderTypeReOrder);
+	wxGetApp().Repaint();
+}
+
+void UniteSketches::Run(){
+#if 1 // use MultiPoly, doesn't work yet
+	std::list<HeeksObj*>::const_iterator It;
+	std::list<HeeksObj*> copy_of_marked_list = wxGetApp().m_marked_list->list();
+
+	std::list<CSketch*> sketches;
+
+	for(It = copy_of_marked_list.begin(); It != copy_of_marked_list.end(); It++){
+		HeeksObj* object = *It;
+		if(object->GetType() == SketchType){
+			sketches.push_back((CSketch*)object);
+		}
+	}
+
+	std::vector<TopoDS_Face> faces = MultiPoly(sketches);
+
+	for(std::vector<TopoDS_Face>::iterator It = faces.begin(); It != faces.end(); It++)
+	{
+		TopoDS_Face &face = *It;
+		HeeksObj* new_object = CShape::MakeObject(face, _("Test Face, Sketches United"), SOLID_TYPE_UNKNOWN, HeeksColor(64, 51, 51), 1.0f);
+		wxGetApp().Add(new_object, NULL);
+	}
+
+	wxGetApp().Repaint();
+#else // use Polygon
+//bool UnionPolygons(std::vector<LineSegment> &lines_vector,
+//		std::list<CPolygon> & result_list);
+	std::list<HeeksObj*>::const_iterator It;
+	std::list<HeeksObj*> copy_of_marked_list = wxGetApp().m_marked_list->list();
+
+	for(It = copy_of_marked_list.begin(); It != copy_of_marked_list.end(); It++){
+		HeeksObj* object = *It;
+		if(object->GetType() == SketchType){
+			std::vector<LineSegment> lines;
+			lines.resize(object->GetNumChildren());
+			unsigned int i = 0;
+			for(HeeksObj* sub_object = object->GetFirstChild(); sub_object != NULL; sub_object = object->GetNextChild(), i++)
+			{
+				LineSegment line;
+				double pos[3];
+				sub_object->GetStartPoint(pos);
+				line.a = make_point(pos);
+				sub_object->GetEndPoint(pos);
+				line.b = make_point(pos);
+				lines[i] = line;
+			}
+
+			UnionPolygons(lines, result_list);
+
+		}
+	}
+#endif
 }
 
 void GroupSelected::Run(){
@@ -1092,7 +1126,11 @@ void GroupSelected::Run(){
 
 	std::list<HeeksObj*>::iterator it;
 	for(it = copy_of_marked_list.begin(); it != copy_of_marked_list.end(); it++)
+#ifdef MULTIPLE_OWNERS
+		(*it)->RemoveOwners();
+#else
 		(*it)->m_owner = NULL;
+#endif
 
 	new_group->Add(copy_of_marked_list);
 	wxGetApp().Add(new_group, NULL);

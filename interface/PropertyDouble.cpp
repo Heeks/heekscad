@@ -36,3 +36,10 @@ Property *PropertyDouble::MakeACopy(void)const{
 	PropertyDouble* new_object = new PropertyDouble(*this);
 	return new_object;
 }
+
+void PropertyDouble::CallSetFunction() const
+{ 
+	if(m_callbackfunc)(*m_callbackfunc)(m_initial_value, m_object);
+	if(m_callbackfuncidx)(*m_callbackfuncidx)(m_initial_value, m_object,m_index);
+}
+

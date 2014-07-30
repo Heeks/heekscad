@@ -30,8 +30,11 @@ HPoint::HPoint(const HPoint &p)
 
 const HPoint& HPoint::operator=(const HPoint &b)
 {
+#ifdef MULTIPLE_OWNERS
+	ObjList::operator=(b);
+#else
 	HeeksObj::operator =(b);
-
+#endif
 	m_p = b.m_p;
 	color = b.color;
 	m_draw_unselected = b.m_draw_unselected;
@@ -52,6 +55,18 @@ bool HPoint::IsDifferent(HeeksObj* o)
 		return true;
 
 	return HeeksObj::IsDifferent(o);
+}
+
+void HPoint::LoadFromDoubles()
+{
+	m_p.SetX(mx);
+	m_p.SetY(my);
+}
+
+void HPoint::LoadToDoubles()
+{
+	mx = m_p.X();
+	my = m_p.Y();
 }
 
 void HPoint::glCommands(bool select, bool marked, bool no_color)
@@ -116,6 +131,101 @@ void HPoint::GetProperties(std::list<Property *> *list)
 	list->push_back(new PropertyVertex(_("position"), p, this, on_set_point));
 
 	HeeksObj::GetProperties(list);
+}
+
+HPoint* point_for_tool = NULL;
+
+#ifdef MULTIPLE_OWNERS
+class ClickPointLocation:public Tool{
+public:
+	HPoint *which;
+
+public:
+	void Run(){
+		wxGetApp().m_digitizing->digitized_point = DigitizedPoint(which->m_p, DigitizeInputType);
+		Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+		if (pDrawingMode != NULL)
+		{
+			pDrawingMode->AddPoint();
+		}
+	}
+	const wxChar* GetTitle(){return _("Click point location");}
+	wxString BitmapPath(){return _T("pickpos");}
+	const wxChar* GetToolTip(){return _("Click point location");}
+};
+static ClickPointLocation click_point_location;
+
+
+class OffsetFromPoint:public Tool{
+public:
+	HPoint *which;
+
+public:
+	void Run(){
+		Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+		if (pDrawingMode != NULL)
+		{
+			wxString message(_("Enter offset in X,Y,Z format (with commas between them)"));
+			wxString caption(_("Apply Offset To Selected Location"));
+			wxString default_value(_T("0,0,0"));
+
+			wxString value = wxGetTextFromUser(message, caption, default_value);
+			wxStringTokenizer tokens(value,_T(" :,\t\n"));
+			
+			gp_Pnt location(which->m_p);
+			for (int i=0; i<3; i++)
+			{
+				if (tokens.HasMoreTokens())
+				{
+					double offset = 0.0;
+					wxString token = tokens.GetNextToken();
+					if (token.ToDouble(&offset))
+					{
+						offset *= wxGetApp().m_view_units;
+						switch(i)
+						{
+						case 0: 
+							location.SetX( location.X() + offset );
+							break;
+
+						case 1:
+							location.SetY( location.Y() + offset );
+							break;
+
+						case 2:
+							location.SetZ( location.Z() + offset );
+							break;
+						}
+						
+					}
+				}
+			}
+
+			wxGetApp().m_digitizing->digitized_point = DigitizedPoint(location, DigitizeInputType);
+			pDrawingMode->AddPoint();
+		}
+	}
+	const wxChar* GetTitle(){return _("Offset from point");}
+	wxString BitmapPath(){return _T("offset_from_point");}
+	const wxChar* GetToolTip(){return _("Offset from point");}
+};
+static OffsetFromPoint offset_from_point;
+
+#endif
+
+void HPoint::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
+{
+	point_for_tool = this;
+
+	Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
+	if (pDrawingMode != NULL)
+	{
+		click_point_location.which = this;
+		t_list->push_back(&click_point_location);
+
+		offset_from_point.which = this;
+		t_list->push_back(&offset_from_point);
+	}
 }
 
 bool HPoint::GetStartPoint(double* pos)

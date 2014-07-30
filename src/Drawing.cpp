@@ -30,41 +30,6 @@ Drawing::~Drawing(void){
 		ViewSpecific *view = It->second;
 		delete view;
 	}
-
-	ClearObjectsMade();
-}
-
-HeeksObj* Drawing::TempObject()
-{
-	if(m_temp_object_in_list.size() == 0)return NULL;
-	return m_temp_object_in_list.back();
-}
-
-void Drawing::AddToTempObjects(HeeksObj* object)
-{
-	m_temp_object_in_list.push_back(object);
-}
-
-void Drawing::AddObjectsMade()
-{
-	wxGetApp().AddUndoably(m_temp_object_in_list,((ObjList*)GetOwnerForDrawingObjects()));
-	if(DragDoneWithXOR())wxGetApp().m_current_viewport->DrawObjectsOnFront(m_temp_object_in_list, true);
-	m_temp_object_in_list.clear();
-}
-
-void Drawing::ClearObjectsMade()
-{
-	for(std::list<HeeksObj*>::iterator It = m_temp_object_in_list.begin(); It != m_temp_object_in_list.end(); It++)
-	{
-		HeeksObj* object = *It;
-		delete object;
-	}
-	m_temp_object_in_list.clear();
-}
-
-void Drawing::ClearPrevObject()
-{
-	m_prev_object = NULL;
 }
 
 void Drawing::RecalculateAndRedraw(const wxPoint& point)
@@ -92,18 +57,20 @@ void Drawing::AddPoint()
 	if(wxGetApp().m_digitizing->digitized_point.m_type == DigitizeNoItemType)return;
 
 	bool calculated = false;
-	wxGetApp().StartHistory();
 	if(is_an_add_level(GetDrawStep())){
 		calculated = calculate_item(wxGetApp().m_digitizing->digitized_point);
 		if(calculated){
 			before_add_item();
-			m_prev_object = TempObject();
-			AddObjectsMade();
+			const std::list<HeeksObj*>& drawing_objects = GetObjectsMade();
+			((ObjList*)GetOwnerForDrawingObjects())->Add(drawing_objects);
+			if(DragDoneWithXOR())wxGetApp().m_current_viewport->DrawObjectsOnFront(drawing_objects, true);
+			else wxGetApp().Repaint();
 			set_previous_direction();
+			wxGetApp().Changed();
 		}
 	}
 	
-	ClearObjectsMade();
+	clear_drawing_objects(calculated ? 1:0);
 	SetStartPosUndoable(wxGetApp().m_digitizing->digitized_point);
 	wxGetApp().m_digitizing->reference_point = wxGetApp().m_digitizing->digitized_point;
 
@@ -112,7 +79,6 @@ void Drawing::AddPoint()
 		next_step = step_to_go_to_after_last_step();
 	}
 	SetDrawStepUndoable(next_step);
-	wxGetApp().EndHistory();
 	m_getting_position = false;
 	m_inhibit_coordinate_change = false;
 	wxGetApp().OnInputModeTitleChanged();
@@ -125,7 +91,7 @@ void Drawing::OnMouse( wxMouseEvent& event )
 	if(LeftAndRightPressed(event, event_used))
 	{
 		if(DragDoneWithXOR())wxGetApp().m_current_viewport->EndDrawFront();
-		ClearObjectsMade();
+		clear_drawing_objects(2);
 		wxGetApp().SetInputMode(wxGetApp().m_select_mode);
 	}
 
@@ -178,7 +144,7 @@ void Drawing::OnKeyDown(wxKeyEvent& event)
 	case WXK_RETURN:
 	case WXK_ESCAPE:
 		// end drawing mode
-		ClearObjectsMade();
+		clear_drawing_objects(2);
 		wxGetApp().SetInputMode(wxGetApp().m_select_mode);
 	}
 }
@@ -203,7 +169,7 @@ static Drawing* drawing_for_tools = NULL;
 
 class EndDrawing:public Tool{
 public:
-	void Run(){if(drawing_for_tools->DragDoneWithXOR())wxGetApp().m_current_viewport->EndDrawFront();drawing_for_tools->ClearObjectsMade(); wxGetApp().SetInputMode(wxGetApp().m_select_mode);}
+	void Run(){if(drawing_for_tools->DragDoneWithXOR())wxGetApp().m_current_viewport->EndDrawFront();drawing_for_tools->clear_drawing_objects(2); wxGetApp().SetInputMode(wxGetApp().m_select_mode);}
 	const wxChar* GetTitle(){return _("Stop drawing");}
 	wxString BitmapPath(){return _T("enddraw");}
 	const wxChar* GetToolTip(){return _("Finish drawing");}
@@ -258,6 +224,10 @@ void Drawing::GetTools(std::list<Tool*> *f_list, const wxPoint *p){
 
 HeeksObj* Drawing::GetOwnerForDrawingObjects()
 {
+	if(wxGetApp().m_sketch_mode)
+	{
+		return wxGetApp().GetContainer();
+	}
 	return &wxGetApp(); //Object always needs to be added somewhere
 }
 
@@ -283,7 +253,7 @@ int Drawing::GetView(){
 	return current_view_stuff->view;
 }
 
-class SetDrawingDrawStep:public Undoable{
+class SetDrawingDrawStep:public Tool{
 private:
 	Drawing *drawing;
 	int old_step;
@@ -294,11 +264,12 @@ public:
 
 	// Tool's virtual functions
 	const wxChar* GetTitle(){return _("set_draw_step");}
-	void Run(bool redo){drawing->set_draw_step_not_undoable(step);}
+	void Run(){drawing->set_draw_step_not_undoable(step);}
 	void RollBack(){drawing->set_draw_step_not_undoable(old_step);}
+	bool Undoable(){return true;}
 };
 
-class SetDrawingPosition:public Undoable{
+class SetDrawingPosition:public Tool{
 private:
 	Drawing *drawing;
 	DigitizedPoint prev_pos;
@@ -313,24 +284,42 @@ public:
 
 	// Tool's virtual functions
 	const wxChar* GetTitle(){return _("set_position");}
-	void Run(bool redo){drawing->set_start_pos_not_undoable(next_pos);}
+	void Run(){drawing->set_start_pos_not_undoable(next_pos);}
 	void RollBack(){drawing->set_start_pos_not_undoable(prev_pos);}
+	bool Undoable(){return true;}
 };
 
 void Drawing::SetDrawStepUndoable(int s){
-	wxGetApp().DoUndoable(new SetDrawingDrawStep(this, s));
+//	wxGetApp().DoToolUndoably(new SetDrawingDrawStep(this, s));
+	SetDrawingDrawStep sds(this, s);
+	sds.Run();
 }
 
 void Drawing::SetStartPosUndoable(const DigitizedPoint& pos){
-	wxGetApp().DoUndoable(new SetDrawingPosition(this, pos));
+//	wxGetApp().DoToolUndoably(new SetDrawingPosition(this, pos));
+	SetDrawingPosition sdp(this, pos);
+	sdp.Run();
 }
 
 void Drawing::OnFrontRender(){
 	if(DragDoneWithXOR() && GetDrawStep()){
-		for(std::list<HeeksObj*>::iterator It = m_temp_object_in_list.begin(); It != m_temp_object_in_list.end(); It++){
+		std::list<HeeksObj*>::const_iterator It;
+		const std::list<HeeksObj*>& drawing_objects = GetObjectsMade();
+
+		HeeksObj *owner = GetOwnerForDrawingObjects();
+		CSketch *sketch = dynamic_cast<CSketch*>(owner);
+		glPushMatrix();
+		if(sketch && sketch->m_coordinate_system)
+		{
+			sketch->m_coordinate_system->ApplyMatrix();
+		}
+
+		for(It = drawing_objects.begin(); It != drawing_objects.end(); It++){
 			HeeksObj *object = *It;
 			object->glCommands(false, false, true);
 		}
+
+		glPopMatrix();
 	}
 
 	wxGetApp().m_digitizing->OnFrontRender();
@@ -338,10 +327,23 @@ void Drawing::OnFrontRender(){
 
 void Drawing::OnRender(){
 	if(!DragDoneWithXOR() && GetDrawStep()){
-		for(std::list<HeeksObj*>::iterator It = m_temp_object_in_list.begin(); It != m_temp_object_in_list.end(); It++){
+		std::list<HeeksObj*>::const_iterator It;
+		const std::list<HeeksObj*>& drawing_objects = GetObjectsMade();
+		
+		HeeksObj *owner = GetOwnerForDrawingObjects();
+		CSketch *sketch = dynamic_cast<CSketch*>(owner);
+		glPushMatrix();
+		if(sketch && sketch->m_coordinate_system)
+		{
+			sketch->m_coordinate_system->ApplyMatrix();
+		}
+
+		for(It = drawing_objects.begin(); It != drawing_objects.end(); It++){
 			HeeksObj *object = *It;
 			object->glCommands(false, false, false);
 		}
+
+		glPopMatrix();
 	}
 }
 

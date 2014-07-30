@@ -811,7 +811,7 @@ void wxPGProperty::ShowError( const wxString& msg )
         }
     }
 #endif
-    wxLogError(msg);
+    ::wxLogError(msg);
 }
 
 

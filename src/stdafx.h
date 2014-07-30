@@ -45,9 +45,9 @@
 #include <ctime>
 #include <iostream>
 
+
 #include <stdio.h>
 #include <stdlib.h>
-
 #include <string.h>
 #include <math.h>
 
@@ -85,7 +85,6 @@
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepBuilderAPI_MakePolygon.hxx>
 #include <BRepBuilderAPI_MakeShape.hxx>
-#include <BRepBuilderAPI_MakeSolid.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
 #include <BRepExtrema_DistShapeShape.hxx>
@@ -131,7 +130,6 @@
 #include <GeomLProp_SLProps.hxx>
 #include <GProp_GProps.hxx>
 #include <gp.hxx>
-#include <gp_Ax1.hxx>
 #include <gp_Circ.hxx>
 #include <gp_Cone.hxx>
 #include <gp_Cylinder.hxx>
@@ -184,12 +182,6 @@
 #include <TopTools_MapIteratorOfMapOfShape.hxx>
 #include <TopTools_MapOfShape.hxx>
 #include <UnitsAPI.hxx>
-
-#ifdef __WXMSW__
-#ifdef _DEBUG
-    #include <wx/msw/msvcrt.h>      // redefines the new() operator 
-#endif
-#endif
 
 #include <wx/aui/aui.h>
 #include "wx/brush.h"
@@ -251,15 +243,41 @@ extern "C" {
 #include <GL/glu.h>
 }
 
+#define USE_UNDO_ENGINE
+
+
+#define CHECK_FOR_INVALID_CONSTRAINT//JT This is my attempt to isolate
+
+#ifdef CHECK_FOR_INVALID_CONSTRAINT //
+// THESE ARE SOME OPTIONS ON HOW TO HANDLE THIS STUFF
+//#define DISPLAY_CHECK_FOR_INVALID_CONSTRAINT_ERROR_MSGBOX
+//#define LET_BAD_CONSTRAINT_PASS //JT Sometimes you know things are hosed up and you want to see what happens
+
+#endif
+
+//JT THIS IS ATTEMPT TO CREATE A TEST PROBE FUNCTION THAT CAN BE USED TO IDENTIFY ROOT CAUSE OF CONSTRAINT ERROR
+//#define CONSTRAINT_TESTER
+
+#ifdef CONSTRAINT_TESTER
+
+ #define FIRE_CONSTRAINT_TESTER_FROM_MAIN_MENU
+#endif
+
+
+
+
+
+
+
+
 #include "../interface/strconv.h"
-#include "../interface/Geom.h"
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"
 #include "../interface/Material.h"
 #include "../interface/InputMode.h"
 #include "../interface/Tool.h"
 #include "../interface/PropertyString.h"
-#include "../interface/HeeksCADInterface.h"
+#include "../interface/ObjectCanvas.h"
 #include "HeeksCAD.h"
 
 #include "ConversionTools.h"
@@ -268,6 +286,7 @@ extern "C" {
 #include "Edge.h"
 #include "Loop.h"
 #include "Gripper.h"
+#include "Geom.h"
 //#include "Loop.h"
 #include "MarkedList.h"
 #include "Shape.h"

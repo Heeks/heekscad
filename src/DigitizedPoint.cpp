@@ -210,13 +210,7 @@ bool DigitizedPoint::GetCubicSpline(const DigitizedPoint& d1, const DigitizedPoi
 
 	TColgp_Array1OfPnt poles(1,4);
 	poles.SetValue(1,s); poles.SetValue(2,c1); poles.SetValue(3,c2); poles.SetValue(4,e);
-#ifdef _DEBUG
-#undef new
-#endif
 	Handle(Geom_BezierCurve) curve = new Geom_BezierCurve(poles);
-#ifdef _DEBUG
-#define new  WXDEBUG_NEW
-#endif
 	GeomConvert_CompCurveToBSplineCurve convert(curve);
 
 	spline = convert.BSplineCurve();
@@ -230,13 +224,7 @@ bool DigitizedPoint::GetQuarticSpline(const DigitizedPoint& d1, const DigitizedP
 	gp_Pnt c = d3.m_point;
 	TColgp_Array1OfPnt poles(1,3);
 	poles.SetValue(1,s); poles.SetValue(2,c); poles.SetValue(3,e);
-#ifdef _DEBUG
-#undef new
-#endif
 	Handle(Geom_BezierCurve) curve = new Geom_BezierCurve(poles);
-#ifdef _DEBUG
-#define new  WXDEBUG_NEW
-#endif
 	GeomConvert_CompCurveToBSplineCurve convert(curve);
 
 	spline = convert.BSplineCurve();
@@ -255,13 +243,7 @@ bool DigitizedPoint::GetRationalSpline(std::list<DigitizedPoint> &spline_points,
 		idx++;
 	}
 	poles.SetValue(spline_points.size()+1,d4.m_point);
-#ifdef _DEBUG
-#undef new
-#endif
 	Handle(Geom_BezierCurve) curve = new Geom_BezierCurve(poles);
-#ifdef _DEBUG
-#define new  WXDEBUG_NEW
-#endif
 	GeomConvert_CompCurveToBSplineCurve convert(curve);
 
 	spline = convert.BSplineCurve();

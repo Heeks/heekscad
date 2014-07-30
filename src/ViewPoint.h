@@ -53,12 +53,12 @@ public:
 	void SetProjection(bool use_depth_testing);
 	void SetPickProjection(wxRect &pick_box);
 	void SetModelview(void);
-	void SetView(const gp_Vec &unity, const gp_Vec &unitz, int margin);
+	void SetView(const gp_Vec &unity, const gp_Vec &unitz);
 	gp_Pnt glUnproject(const gp_Pnt &v)const;
 	gp_Pnt glProject(const gp_Pnt &v)const;
 	void SetPolygonOffset(void)const;
 	void WindowMag(wxRect &window_box);
-	void SetViewAroundAllObjects(int margin);
+	void SetViewAroundAllObjects();
 	void SetStartMousePoint(const wxPoint &point){m_initial_pixel_scale = m_pixel_scale; m_initial_point = point;}
 	gp_Lin SightLine(const wxPoint &point);
 	int GetTwoAxes(gp_Vec& vx, gp_Vec& vy, bool flattened_onto_screen, int plane)const;

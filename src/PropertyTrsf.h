@@ -21,6 +21,7 @@ public:
 	int get_property_type(){return TrsfPropertyType;}
 	bool property_editable()const{return m_callbackfunc != NULL;}
 	Property *MakeACopy(void)const;
+	void CallSetFunction()const{ if(m_callbackfunc)(*m_callbackfunc)(m_trsf, m_object);}
 	const wxChar* GetShortString(void)const;
 };
 

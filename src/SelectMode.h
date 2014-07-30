@@ -34,20 +34,11 @@ public:
 	bool m_just_one;
 	wxString m_prompt_when_doing_a_main_loop;
 	CClickPoint m_last_click_point;
-	std::list<HeeksObj*> m_highlighted_objects;
 
 	CSelectMode();
 	virtual ~CSelectMode(void){}
 
 	bool GetLastClickPosition(double *pos);
-
-	void OnLeftDown( wxMouseEvent& event );
-	void OnMiddleDown( wxMouseEvent& event );
-	void GetObjectsInWindow(wxMouseEvent& event, std::list<HeeksObj*> &objects);
-	void OnLeftUp( wxMouseEvent& event );
-	void OnDragging( wxMouseEvent& event );
-	void OnMoving( wxMouseEvent& event );
-	void OnWheelRotation( wxMouseEvent& event );
 
 	// virtual functions for InputMode
 	const wxChar* GetTitle();
@@ -60,5 +51,4 @@ public:
 	void OnFrontRender();
 	void GetProperties(std::list<Property *> *list);
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
-	void OnRender();
 };

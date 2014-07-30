@@ -409,106 +409,6 @@
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
-		<Configuration
-			Name="Unicode Release with debug|Win32"
-			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32,__WXMSW__,_WINDOWS,NOPCH"
-				MkTypLibCompatible="true"
-				SuppressStartupBanner="true"
-				TargetEnvironment="1"
-				TypeLibraryName=".\vc_msw/HeeksCAD.tlb"
-				HeaderFileName=""
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				AdditionalOptions="/EHsc "
-				Optimization="0"
-				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories=".\;&quot;$(CASROOT)\inc&quot;;&quot;$(WXWIN)\include&quot;;&quot;$(WXWIN)&quot;;&quot;$(WXWIN)\lib\vc_dll\mswu&quot;;&quot;$(WXWIN)\include\msvc&quot;;&quot;$(LIBAREA_PATH)&quot;"
-				PreprocessorDefinitions="WIN32;__WXMSW__;_WINDOWS;NOPCH;WNT;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;_SECURE_ATL =0;HEEKSCAD;USE_GENERIC_TREECTRL"
-				StringPooling="false"
-				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
-				RuntimeTypeInfo="true"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderFile=".\vc_msw\HeeksCAD.pch"
-				AssemblerListingLocation=".\vc_msw\"
-				ObjectFile=".\vc_msw\"
-				ProgramDataBaseFileName="vc_msw\HeeksCAD.pdb"
-				WarningLevel="4"
-				SuppressStartupBanner="true"
-				DebugInformationFormat="0"
-				CompileAs="0"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__,_WINDOWS,NOPCH"
-				Culture="1033"
-				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\msw;.\..\..\include;.;.\..\..\samples"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib glu32.lib TKVrml.lib TKStl.lib TKBRep.lib TKIGES.lib TKShHealing.lib TKSTEP.lib TKSTEP209.lib TKSTEPAttr.lib TKSTEPBase.lib TKXSBase.lib TKShapeSchema.lib FWOSPlugin.lib PTKernel.lib TKBool.lib TKCAF.lib TKCDF.lib TKDraw.lib TKernel.lib TKFeat.lib TKFillet.lib TKG2d.lib TKG3d.lib TKGeomAlgo.lib TKGeomBase.lib TKHLR.lib TKMath.lib TKOffset.lib TKPCAF.lib TKPrim.lib TKPShape.lib TKService.lib TKTopAlgo.lib TKV2d.lib TKV3d.lib TKMesh.lib TKAdvTools.lib TKBO.lib TKXDESTEP.lib TKXCAF.lib TKXCAFSchema.lib TKDCAF.lib TKLCAF.lib TKPLCAF.lib wxmsw28u_core.lib wxmsw28u_aui.lib wxmsw28u_gl.lib wxbase28u.lib"
-				OutputFile="..\HeeksCAD.exe"
-				LinkIncremental="1"
-				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;$(WXWIN)\lib\vc_dll&quot;;&quot;$(CASROOT)\win32\vc8\lib&quot;"
-				GenerateDebugInformation="false"
-				ProgramDatabaseFile=".\vc_msw/HeeksCAD.pdb"
-				SubSystem="2"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				TargetMachine="1"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
 	</Configurations>
 	<References>
 	</References>
@@ -560,14 +460,6 @@
 					UsePrecompiledHeader="0"
 				/>
 			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\advprops.h"
@@ -602,14 +494,6 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Unicode Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
 				>
 				<Tool
 					Name="VCCLCompilerTool"
@@ -656,14 +540,6 @@
 					UsePrecompiledHeader="0"
 				/>
 			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="$(LIBAREA_PATH)\Area.h"
@@ -704,14 +580,6 @@
 					UsePrecompiledHeader="0"
 				/>
 			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="$(LIBAREA_PATH)\AreaOrderer.cpp"
@@ -742,14 +610,6 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Unicode Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
 				>
 				<Tool
 					Name="VCCLCompilerTool"
@@ -796,14 +656,6 @@
 					UsePrecompiledHeader="0"
 				/>
 			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\AutoSave.cpp"
@@ -811,6 +663,14 @@
 		</File>
 		<File
 			RelativePath=".\AutoSave.h"
+			>
+		</File>
+		<File
+			RelativePath=".\BentleyOttmann.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\BentleyOttmann.h"
 			>
 		</File>
 		<File
@@ -864,14 +724,6 @@
 					UsePrecompiledHeader="0"
 				/>
 			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="$(LIBAREA_PATH)\Circle.h"
@@ -906,14 +758,6 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Unicode Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
 				>
 				<Tool
 					Name="VCCLCompilerTool"
@@ -968,14 +812,6 @@
 					UsePrecompiledHeader="0"
 				/>
 			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\ConversionTools.cpp"
@@ -1007,14 +843,6 @@
 		</File>
 		<File
 			RelativePath=".\Cuboid.h"
-			>
-		</File>
-		<File
-			RelativePath=".\CuboidDlg.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\CuboidDlg.h"
 			>
 		</File>
 		<File
@@ -1052,17 +880,17 @@
 					UsePrecompiledHeader="0"
 				/>
 			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="$(LIBAREA_PATH)\Curve.h"
+			>
+		</File>
+		<File
+			RelativePath=".\CxfFont.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\CxfFont.h"
 			>
 		</File>
 		<File
@@ -1148,17 +976,17 @@
 					UsePrecompiledHeader="0"
 				/>
 			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\dxf.h"
+			>
+		</File>
+		<File
+			RelativePath=".\DynamicSolid.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\DynamicSolid.h"
 			>
 		</File>
 		<File
@@ -1198,6 +1026,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\FastCurves.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\FastCurves.h"
+			>
+		</File>
+		<File
 			RelativePath="$(LIBAREA_PATH)\kurve\Finite.cpp"
 			>
 			<FileConfiguration
@@ -1226,14 +1062,6 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Unicode Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
 				>
 				<Tool
 					Name="VCCLCompilerTool"
@@ -1282,14 +1110,6 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Unicode Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
 				>
 				<Tool
 					Name="VCCLCompilerTool"
@@ -1370,14 +1190,6 @@
 			>
 			<FileConfiguration
 				Name="Unicode Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
 				>
 				<Tool
 					Name="VCCLCompilerTool"
@@ -1470,14 +1282,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\interface\HeeksObjDlg.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\interface\HeeksObjDlg.h"
-			>
-		</File>
-		<File
 			RelativePath=".\HeeksPrintout.cpp"
 			>
 		</File>
@@ -1518,14 +1322,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\History.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\History.h"
-			>
-		</File>
-		<File
 			RelativePath=".\HLine.cpp"
 			>
 		</File>
@@ -1563,22 +1359,6 @@
 		</File>
 		<File
 			RelativePath=".\HXml.h"
-			>
-		</File>
-		<File
-			RelativePath="..\interface\IdNamedObj.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\interface\IdNamedObj.h"
-			>
-		</File>
-		<File
-			RelativePath="..\interface\IdNamedObjList.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\interface\IdNamedObjList.h"
 			>
 		</File>
 		<File
@@ -1634,14 +1414,6 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Unicode Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
 				>
 				<Tool
 					Name="VCCLCompilerTool"
@@ -1716,14 +1488,6 @@
 					UsePrecompiledHeader="0"
 				/>
 			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\manager.h"
@@ -1784,14 +1548,22 @@
 					UsePrecompiledHeader="0"
 				/>
 			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
+		</File>
+		<File
+			RelativePath=".\MultiPoly.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\MultiPoly.h"
+			>
+		</File>
+		<File
+			RelativePath=".\NearMap.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\NearMap.h"
+			>
 		</File>
 		<File
 			RelativePath="..\interface\NiceTextCtrl.cpp"
@@ -1799,6 +1571,10 @@
 		</File>
 		<File
 			RelativePath="..\interface\NiceTextCtrl.h"
+			>
+		</File>
+		<File
+			RelativePath="..\interface\ObjectCanvas.h"
 			>
 		</File>
 		<File
@@ -1856,14 +1632,6 @@
 					UsePrecompiledHeader="0"
 				/>
 			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\odcombo.h"
@@ -1904,14 +1672,6 @@
 					UsePrecompiledHeader="0"
 				/>
 			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\OptionsCanvas.cpp"
@@ -1930,6 +1690,22 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Pad.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Pad.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Part.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Part.h"
+			>
+		</File>
+		<File
 			RelativePath="..\interface\PictureFrame.cpp"
 			>
 		</File>
@@ -1943,6 +1719,14 @@
 		</File>
 		<File
 			RelativePath=".\Plugins.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Pocket.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Pocket.h"
 			>
 		</File>
 		<File
@@ -1966,6 +1750,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Polygon.cpp"
+			>
+		</File>
+		<File
 			RelativePath=".\propdev.h"
 			>
 		</File>
@@ -1979,14 +1767,6 @@
 		</File>
 		<File
 			RelativePath="..\interface\Property.h"
-			>
-		</File>
-		<File
-			RelativePath=".\PropertyChange.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\PropertyChange.h"
 			>
 		</File>
 		<File
@@ -2112,14 +1892,6 @@
 					UsePrecompiledHeader="0"
 				/>
 			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\RegularShapesDrawing.cpp"
@@ -2127,14 +1899,6 @@
 		</File>
 		<File
 			RelativePath=".\RegularShapesDrawing.h"
-			>
-		</File>
-		<File
-			RelativePath=".\RemoveOrAddTool.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\RemoveOrAddTool.h"
 			>
 		</File>
 		<File
@@ -2170,14 +1934,6 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Unicode Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
 				>
 				<Tool
 					Name="VCCLCompilerTool"
@@ -2222,11 +1978,27 @@
 			>
 		</File>
 		<File
+			RelativePath=".\SimpleIntersector.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\SimpleIntersector.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Sketch.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\Sketch.h"
+			>
+		</File>
+		<File
+			RelativePath=".\SketchTools.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\SketchTools.h"
 			>
 		</File>
 		<File
@@ -2288,14 +2060,6 @@
 					UsePrecompiledHeader="1"
 				/>
 			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="1"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\stdafx.h"
@@ -2338,14 +2102,6 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Unicode Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
 				>
 				<Tool
 					Name="VCCLCompilerTool"
@@ -2408,14 +2164,6 @@
 					UsePrecompiledHeader="0"
 				/>
 			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\tinyxml\tinystr.h"
@@ -2450,14 +2198,6 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Unicode Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
 				>
 				<Tool
 					Name="VCCLCompilerTool"
@@ -2504,14 +2244,6 @@
 					UsePrecompiledHeader="0"
 				/>
 			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\tinyxml\tinyxmlparser.cpp"
@@ -2542,14 +2274,6 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Unicode Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="0"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release with debug|Win32"
 				>
 				<Tool
 					Name="VCCLCompilerTool"
@@ -2594,11 +2318,27 @@
 			>
 		</File>
 		<File
+			RelativePath="..\interface\TransientObject.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\interface\TransientObject.h"
+			>
+		</File>
+		<File
 			RelativePath=".\TreeCanvas.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\TreeCanvas.h"
+			>
+		</File>
+		<File
+			RelativePath=".\UndoEngine.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\UndoEngine.h"
 			>
 		</File>
 		<File
@@ -2655,6 +2395,14 @@
 		</File>
 		<File
 			RelativePath=".\Wire.h"
+			>
+		</File>
+		<File
+			RelativePath=".\WrappedCurves.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\WrappedCurves.h"
 			>
 		</File>
 		<File

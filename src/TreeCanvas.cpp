@@ -47,15 +47,6 @@ CTreeCanvas::CTreeCanvas(wxWindow* parent)
 
 CTreeCanvas::~CTreeCanvas()
 {
-	delete bmp_branch_plus;
-	delete bmp_branch_minus;
-	delete bmp_branch_end_plus;
-	delete bmp_branch_end_minus;
-	delete bmp_branch_split;
-	delete bmp_branch_end;
-	delete bmp_plus;
-	delete bmp_minus;
-	delete bmp_branch_trunk;
 	wxGetApp().RemoveObserver(this);
 }
 
@@ -159,10 +150,10 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 
 				if(drag_possible)
 				{
-					wxGetApp().StartHistory();
+					wxGetApp().CreateUndoPoint();
 
 					// cut the objects
-					wxGetApp().DeleteUndoably(m_dragged_list);
+					wxGetApp().Remove(m_dragged_list);
 
 					// paste the objects
 					for(std::list<HeeksObj*>::iterator It = m_dragged_list.begin(); It != m_dragged_list.end(); It++)
@@ -183,16 +174,16 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 								}
 								if(!one_found)
 								{
-									wxGetApp().AddUndoably(object, add_to, button ? button->paste_before : NULL);
+									add_to->Add(object, button ? button->paste_before : NULL);
 								}
 							}
 							else
 							{
-								wxGetApp().AddUndoably(object, add_to, button ? button->paste_before : NULL);
+								add_to->Add(object, button ? button->paste_before : NULL);
 							}
 						}
 					}
-					wxGetApp().EndHistory();
+					wxGetApp().Changed();
 				}
 				else
 				{
@@ -287,7 +278,14 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 		if(button)
 		{
 			if(button->obj)
-				wxGetApp().EditUndoably(button->obj);
+			{
+				bool(*callback)(HeeksObj*) = NULL;
+				button->obj->GetOnEdit(&callback);
+				if(callback)
+				{
+					(*callback)(button->obj);
+				}
+			}
 		}
 	}
 
@@ -296,7 +294,9 @@ void CTreeCanvas::OnMouse( wxMouseEvent& event )
 
 void CTreeCanvas::OnKeyDown(wxKeyEvent& event)
 {
-	wxGetApp().input_mode_object->OnKeyDown(event);
+	if(event.GetKeyCode() == WXK_ESCAPE && wxGetApp().EndSketchMode())
+	{}
+	else wxGetApp().input_mode_object->OnKeyDown(event);
 
 	event.Skip();
 }
@@ -470,7 +470,11 @@ void CTreeCanvas::AddLabelButton(bool expanded, HeeksObj* prev_object, bool prev
 	}
 	b.type = ButtonTypeLabelBefore;
 	b.obj = object;
+#ifdef MULTIPLE_OWNERS
+	b.paste_into = object->HEEKSOBJ_OWNER;
+#else
 	b.paste_into = object->m_owner;
+#endif
 	b.paste_before = object;
 	m_tree_buttons.push_back(b);
 
@@ -486,7 +490,11 @@ void CTreeCanvas::AddLabelButton(bool expanded, HeeksObj* prev_object, bool prev
 	if(next_object == NULL && !expanded)
 	{
 		b.type = ButtonTypeLabelBefore;
+#ifdef MULTIPLE_OWNERS
+		b.paste_into = object->HEEKSOBJ_OWNER;
+#else
 		b.paste_into = object->m_owner;
+#endif
 		b.paste_before = next_object;
 		m_tree_buttons.push_back(b);
 	}
@@ -497,7 +505,11 @@ void CTreeCanvas::OnLabelLeftDown(HeeksObj* object, wxMouseEvent& event)
 	if(event.ShiftDown())
 	{
 		// mark a list of siblings
+#ifdef MULTIPLE_OWNERS
+		HeeksObj* parent = object->HEEKSOBJ_OWNER;
+#else
 		HeeksObj* parent = object->m_owner;
+#endif
 		std::set<HeeksObj*> sibling_set;
 		std::list<HeeksObj*> sibling_list;
 		for(HeeksObj* sibling = parent->GetFirstChild(); sibling; sibling = parent->GetNextChild())
@@ -771,9 +783,6 @@ void CTreeCanvas::Render(bool just_for_calculation)
 	if(!just_for_calculation)
 	{
 #ifdef WIN32
-		wxFont font(10,wxSWISS,wxNORMAL,wxNORMAL);
-		m_dc->SetFont(font);
-
 		// draw a white background rectangle
 		int w, h;
 		GetClientSize(&w, &h);

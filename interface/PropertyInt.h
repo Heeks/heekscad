@@ -22,6 +22,7 @@ public:
 	int get_property_type(){return IntPropertyType;}
 	bool property_editable()const{return m_callbackfunc != NULL;}
 	Property *MakeACopy(void)const;
+	void CallSetFunction()const{ if(m_callbackfunc)(*m_callbackfunc)(m_initial_value, m_object);}
 	const wxChar* GetShortString(void)const;
 };
 

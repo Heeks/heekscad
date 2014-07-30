@@ -20,18 +20,16 @@ private:
 
 class PictureWindow: public wxWindow
 {   
-public:
+protected:
 	wxBitmap m_bitmap;
 	bool m_bitmap_set;
-	std::map<wxString, wxBitmap*> m_bitmaps;
 
+public:
     PictureWindow(wxWindow* parent, const wxSize& size);
     PictureWindow(wxWindow* parent, const wxBitmap& b);
-	~PictureWindow();
-
     void OnPaint(wxPaintEvent &event);
 	void SetPicture(const wxBitmap& b);
-	void SetPicture(const wxString& filepath, long image_type);
+	void SetPicture(wxBitmap** b, const wxString& filepath, long image_type);
 
 private:
     DECLARE_EVENT_TABLE()

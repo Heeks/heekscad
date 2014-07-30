@@ -27,6 +27,9 @@
 #include "../interface/strconv.h"
 
 #include "CxfFont.h"
+#include <gp_Pnt.hxx>
+#include <gp_Ax1.hxx>
+#include <gp_Trsf.hxx>
 
 extern CHeeksCADInterface heekscad_interface;
 
@@ -283,13 +286,13 @@ VectorFont::Glyph::Glyph( const std::list<std::string> &cxf_glyph_definition, co
 			throw(std::runtime_error(l_ossError.str().c_str()));
 		}
 
-		// Replace dot (.) for comma (,) if the locale settings require it.
+        // Replace dot (.) for comma (,) if the locale settings require it.
 		for (std::vector<wxString>::iterator token = tokens.begin(); token != tokens.end(); token++)
 		{
-			*token = PrepareStringForConversion( *token );
+            *token = PrepareStringForConversion( *token );
 		}
-		const wxChar * c_str = tokens[0].c_str();
-		switch (c_str[0])
+
+		switch (tokens[0][0])
 		{
 		case 'L':
 			if (tokens.size() != 5)
@@ -320,7 +323,7 @@ VectorFont::Glyph::Glyph( const std::list<std::string> &cxf_glyph_definition, co
 			}
 			else
 			{
-				if ((tokens[0].size() == 2) && (c_str[1] == 'R'))
+				if ((tokens[0].size() == 2) && (tokens[0][1] == 'R'))
 				{
 					// Reverse the starting and ending points.
 					GlyphArc *arc = new GlyphArc( PointToMM(strtod( Ttc(tokens[1].c_str()), NULL )),
@@ -346,7 +349,7 @@ VectorFont::Glyph::Glyph( const std::list<std::string> &cxf_glyph_definition, co
 
 		default:
 			std::ostringstream l_ossError;
-			l_ossError << "Unexpected graphics element type '" << c_str[0] << "'";
+			l_ossError << "Unexpected graphics element type '" << tokens[0][0] << "'";
 			throw(std::runtime_error(l_ossError.str().c_str()));
 		} // End switch
 	} // End for
@@ -1076,7 +1079,7 @@ void VectorFonts::Add( const VectorFont::Name_t & directory )
 			{
 				wxString path( directory );
 				path = path + _T("/");
-				path = path + wxString(l_itFile->c_str());
+				path = path + l_itFile->c_str();
 				CxfFont *pFont = new CxfFont( path.c_str(), m_word_space_percentage, m_character_space_percentage );
 				m_fonts.insert( std::make_pair( pFont->Name(), pFont ) );
 			} // End if - then
@@ -1084,7 +1087,7 @@ void VectorFonts::Add( const VectorFont::Name_t & directory )
 			{
 				wxString path( directory );
 				path = path + _T("/");
-				path = path + wxString(l_itFile->c_str());
+				path = path + l_itFile->c_str();
 				HersheyFont *pFont = new HersheyFont( path.c_str(), m_word_space_percentage, m_character_space_percentage );
 				m_fonts.insert( std::make_pair( pFont->Name(), pFont ) );
 			} // End if - then

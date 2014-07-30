@@ -12,6 +12,7 @@ private:
 	wxToolBar *m_toolBar;
 	std::list<Property *> m_initial_properties;
 	bool m_make_initial_properties_in_refresh;
+	ObjectCanvas* m_object_canvas;
 
 	void ClearInitialProperties();
 
@@ -19,6 +20,7 @@ public:
     CObjPropsCanvas(wxWindow* parent);
     virtual ~CObjPropsCanvas();
 
+    //virtual void OnDraw(wxDC& dc);
     void OnSize(wxSizeEvent& event);
     void OnPropertyGridChange( wxPropertyGridEvent& event );
     void OnPropertyGridSelect( wxPropertyGridEvent& event );

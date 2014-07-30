@@ -4,10 +4,15 @@
 
 #pragma once
 
-#include "../interface/IdNamedObj.h"
+#include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"
+#ifdef MULTIPLE_OWNERS
+#include "../interface/ObjList.h"
 
-class HPoint: public IdNamedObj{
+class HPoint: public ObjList{
+#else
+class HPoint: public HeeksObj{
+#endif
 private:
 	HeeksColor color;
 
@@ -39,7 +44,10 @@ public:
 	bool GetEndPoint(double* pos);
 	void CopyFrom(const HeeksObj* object){operator=(*((HPoint*)object));}
 	void WriteXML(TiXmlNode *root);
+	void LoadFromDoubles();
+	void LoadToDoubles();
 	bool IsDifferent(HeeksObj* other);
+	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 
 	void Draw(wxDC& dc);
 

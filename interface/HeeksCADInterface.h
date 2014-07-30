@@ -27,16 +27,10 @@ class wxSizeEvent;
 class wxMouseEvent;
 class wxToolBarBase;
 class CNurbSurfaceParams;
+class TransientObject;
 class Plugin;
 class CoordinateSystem;
-class Undoable;
-class Tool;
 
-
-#define HEEKSCAD_VERSION_MAIN "1"
-#define HEEKSCAD_VERSION_SUB "0"
-
-//#define FREE_VERSION
 
 #include "SketchOrder.h"
 
@@ -69,7 +63,6 @@ public:
 #endif
 	virtual wxMenuBar* GetMenuBar();
 	virtual wxMenu* GetWindowMenu();
-	virtual wxMenu* GetHelpMenu();
 	virtual wxAuiManager* GetAuiManager();
 	virtual void AddToolBarButton(wxToolBar* toolbar, const wxString& title, const wxBitmap& bitmap, const wxString& caption, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL);
 	virtual void StartToolBarFlyout(const wxString& title_and_bitmap);
@@ -80,12 +73,6 @@ public:
 	virtual int AddMenuItem(wxMenu* menu, const wxString& title, const wxBitmap& bitmap, void(*onButtonFunction)(wxCommandEvent&), void(*onUpdateButtonFunction)(wxUpdateUIEvent&) = NULL, wxMenu* submenu = NULL, bool check_item = false);
 	virtual wxString GetExeFolder();
 	virtual wxString GetResFolder();
-	virtual void AddUndoably(HeeksObj* object, HeeksObj* owner);
-	virtual void DeleteUndoably(HeeksObj* object);
-	virtual void CopyUndoably(HeeksObj* object, HeeksObj* copy_with_new_data);
-	virtual void DoUndoable(Undoable *);
-	virtual void StartHistory();
-	virtual void EndHistory(void);
 	virtual HeeksObj* GetMainObject();
 	virtual const std::list<HeeksObj*>& GetMarkedList();
 	virtual unsigned long GetMarkedListSize();
@@ -108,6 +95,8 @@ public:
 	virtual CInputMode* GetSelectMode();
 	virtual void SetLineDrawingMode();
 	virtual void SetInputMode(CInputMode* input_mode);
+	virtual bool EndSketchMode();
+	virtual void EnterSketchMode(HeeksObj* sketch);
 	virtual int PickObjects(const wxChar* str, long marking_filter = -1, bool m_just_one = false);
 	virtual bool PickPosition(const wxChar* str, double* pos);
 	virtual bool Digitize(const wxPoint &point, double* pos);
@@ -162,8 +151,11 @@ public:
 	virtual HeeksObj* GetIDObject(int type, int id);
 	virtual void SetObjectID(HeeksObj* object, int id); // check for existing id using GetIDObject and call DeleteUndoably first
 	virtual void SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, bool for_clipboard);
+	virtual void Changed();
 	virtual void Remove(HeeksObj* obj);
 	virtual void Add(HeeksObj* object, HeeksObj* other);
+	virtual void CreateUndoPoint();
+	virtual void WentTransient(HeeksObj* obj, TransientObject *tobj);
 	virtual const Plugin* GetFirstPlugin();
 	virtual const Plugin* GetNextPlugin();
 
@@ -293,7 +285,7 @@ public:
 	virtual void RemoveOnMouseFn( void(*callbackfunc)(wxMouseEvent&) );
 	virtual void RegisterOnSaveFn( void(*callbackfunc)(bool from_changed_prompt) );
 	virtual void RegisterIsModifiedFn( bool(*callbackfunc)() );
-	virtual void RegisterToolBar( wxToolBarBase*, const wxString& name, const wxString& caption );
+	virtual void RegisterToolBar( wxToolBarBase* );
 	virtual void RemoveToolBar( wxToolBarBase* );
 	virtual void RegisterAddToolBars( void(*callbackfunc)() );
 	virtual void RemoveMainToolbar();
@@ -308,6 +300,7 @@ public:
 	virtual void RemoveInputWindow();
 	virtual void PropertiesOnApply2();// don't need to press tick to make changes
 	virtual void AddToAboutBox(const wxChar* str);
+	virtual void SetDefaultLayout(const wxString& str);
 	virtual HeeksObj* NewSTLSolid();
 	virtual void STLSolidAddTriangle(HeeksObj* stl_solid, float* t);
 	virtual const HeeksColor& GetBackgroundColor();
@@ -372,7 +365,6 @@ public:
 	virtual wxString HeeksType( const int type );
 
 	// Matrix functions
-	virtual bool GetCoordinateSystemMatrix(HeeksObj* object, double *m);
 	virtual void MakeMatrix(double* m, const double *origin, const double* x_axis, const double* y_axis);
 	virtual void TransformPoint(double* p, const double* m);
 	virtual void TransformVector(double* v, const double* m);
@@ -402,10 +394,4 @@ public:
 
 	// Area functions
 	virtual void ObjectAreaString(HeeksObj* object, wxString &s);
-	virtual HeeksObj* NewSketchFromArea(HeeksObj* object);
-
-	virtual void RegisterMarkeListTools(void(*callbackfunc)(std::list<Tool*>&));
-	virtual void RegisterOnRestoreDefaults(void(*callbackfunc)());
-
-	virtual bool UsingRibbon();
 };

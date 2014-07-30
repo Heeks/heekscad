@@ -56,6 +56,7 @@ class CSketch;
 
 class HeeksSvgRead : public CSvgRead{
 	bool m_usehspline;
+	bool m_undoably;
 	CSketch* m_sketch;
 public:
 	HeeksSvgRead(const wxChar* filepath, bool usehspline);

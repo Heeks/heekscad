@@ -14,6 +14,7 @@
 #include "GraphicsCanvas.h"
 #include "HeeksFrame.h"
 #include "ConversionTools.h"
+#include "SketchTools.h"
 #include "SolidTools.h"
 #include "MenuSeparator.h"
 using namespace std;
@@ -285,12 +286,7 @@ void MarkedList::GetProperties(std::list<Property *> *list){
 	else
 	{
 		// multiple selection
-		//list->push_back(new PropertyInt(_("Number of items selected"), m_list.size(), NULL));
-		for(std::list<HeeksObj*>::iterator It = m_list.begin(); It != m_list.end(); It++)
-		{
-			HeeksObj* obj = *It;
-			obj->GetProperties(list);
-		}
+		list->push_back(new PropertyInt(_("Number of items selected"), m_list.size(), NULL));
 	}
 }
 
@@ -342,8 +338,13 @@ void MarkedList::GetTools(MarkedObject* clicked_object, std::list<Tool*>& t_list
 		t_list.push_back(new MenuSeparator);
 	}
 
-	wxGetApp().GetExternalMarkedListTools(t_list);
+	if(m_list.size() == 1)
+	{
+		m_list.front()->GetTools(&t_list, p);
+	}
+
 	GetConversionMenuTools(&t_list);
+	GetSketchMenuTools(&t_list);
 	GetSolidMenuTools(&t_list);
 
 	if(copy_and_paste_tools)
@@ -376,18 +377,18 @@ void MarkedList::CutSelectedItems()
 
 void MarkedList::CopySelectedItems()
 {
-#if wxCHECK_VERSION(3, 0, 0)
-	wxStandardPaths& sp = wxStandardPaths::Get();
-#else
 	wxStandardPaths sp;
-#endif
 	sp.GetTempDir();
 	wxFileName temp_file(sp.GetTempDir().c_str(), _T("temp_Heeks_clipboard_file.xml"));
 
 	wxGetApp().SaveXMLFile(m_list, temp_file.GetFullPath().c_str(), true);
 
 #if wxUSE_UNICODE
+#ifdef __WXMSW__
+	wifstream ifs(temp_file.GetFullPath());
+#else
 	wifstream ifs(Ttc(temp_file.GetFullPath().c_str()));
+#endif
 #else
 	ifstream ifs(temp_file.GetFullPath());
 #endif

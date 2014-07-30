@@ -50,7 +50,7 @@ public:
 	static void RenderDatum(bool bright, bool solid); // render a coordinate system at 0, 0, 0
 	static void AxesToAngles(const gp_Dir &x, const gp_Dir &y, double &v_angle, double &h_angle, double &t_angle);
 	static void AnglesToAxes(const double &v_angle, const double &h_angle, const double &t_angle, gp_Dir &x, gp_Dir &y);
-	static void GetAx2Properties(std::list<Property *> *list, gp_Ax2& a, HeeksObj* object);
-	bool PickFrom3Points();
-	bool PickFrom1Point();
+	static void GetAx2Properties(std::list<Property *> *list, gp_Ax2& a);
+	void PickFrom3Points();
+	void PickFrom1Point();
 };

@@ -28,12 +28,13 @@ class HeeksConfig;
 
 class HDimension: public EndedObject{
 private:
+	HeeksColor m_color;
 	gp_Pnt GetB2(); // return B, possibly flattened
 	gp_Pnt GetC2(); // return m_p2, possibly flattened
 
 public:
 	gp_Trsf m_trsf; // draw matrix at time of creation
-	gp_Pnt m_p2;
+	HPoint* m_p2;
 	DimensionMode m_mode;
 	DimensionUnits m_units;
 	double m_scale; // to do - text, gaps, and arrow heads will be scaled by this factor
@@ -55,11 +56,18 @@ public:
 	HeeksObj *MakeACopy(void)const;
 	const wxBitmap &GetIcon();
 	void ModifyByMatrix(const double *mat);
+	void SetColor(const HeeksColor &col){m_color = col;}
+	const HeeksColor* GetColor()const{return &m_color;}
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 	void GetProperties(std::list<Property *> *list);
 	bool Stretch(const double *p, const double* shift, void* data);
 	void CopyFrom(const HeeksObj* object){operator=(*((HDimension*)object));}
 	void WriteXML(TiXmlNode *root);
+	//const wxChar* GetShortString(void)const{return m_text.c_str();}
+#ifdef MULTIPLE_OWNERS
+	void LoadToDoubles();
+	void LoadFromDoubles();
+#endif
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	bool IsDifferent(HeeksObj* other);
 

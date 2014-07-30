@@ -6,6 +6,7 @@
 #include "../interface/PropertyInt.h"
 #include "../interface/PropertyCheck.h"
 #include "HeeksConfig.h"
+#include <BRepAdaptor_Curve.hxx>
 
 void COrientationModifierParams::set_initial_values()
 {
@@ -24,13 +25,13 @@ void COrientationModifierParams::write_values_to_config()
 	HeeksConfig config;
 
 	// These values are in mm.
-	config.Write(_T("OrientationModifier_m_spacing"), (int)m_spacing);
+	config.Write(_T("OrientationModifier_m_spacing"), m_spacing);
 	config.Write(_T("OrientationModifier_number_of_rotations"), m_number_of_rotations);
 	config.Write(_T("OrientationModifier_sketch_rotates_text"), m_sketch_rotates_text);
-	config.Write(_T("OrientationModifier_justification"), (int)m_justification);
+	config.Write(_T("OrientationModifier_justification"), m_justification);
 }
 
-static void on_set_justification(int zero_based_choice, HeeksObj* object, bool from_undo_redo)
+static void on_set_justification(int zero_based_choice, HeeksObj* object)
 {
 	((COrientationModifier*)object)->m_params.m_justification = COrientationModifierParams::eJustification_t(zero_based_choice);
 
@@ -77,7 +78,7 @@ static void on_set_justification(int zero_based_choice, HeeksObj* object, bool f
 	((COrientationModifier*)object)->m_params.write_values_to_config();
 }
 
-static void on_set_spacing(int zero_based_choice, HeeksObj* object, bool from_undo_redo)
+static void on_set_spacing(int zero_based_choice, HeeksObj* object)
 {
 	((COrientationModifier*)object)->m_params.m_spacing = COrientationModifierParams::eSpacing_t(zero_based_choice);
 	((COrientationModifier*)object)->m_params.write_values_to_config();

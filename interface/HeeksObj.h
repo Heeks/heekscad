@@ -17,8 +17,17 @@ class TiXmlNode;
 class TiXmlElement;
 class GripData;
 class TopoDS_Shape;
+class ObjectCanvas;
 
-#define m_owner m_owner
+#ifndef MULTIPLE_OWNERS
+    #define MULTIPLE_OWNERS
+#endif
+
+#ifdef MULTIPLE_OWNERS
+#define HEEKSOBJ_OWNER Owner()
+#else
+#define HEEKSOBJ_OWNER m_owner
+#endif
 
 // NOTE: If adding to this enumeration, please also add the verbose description to the HeeksCADType() routine
 enum{
@@ -47,6 +56,10 @@ enum{
 	SplineType,
 	GroupType,
 	CorrelationToolType,
+	ConstraintType,
+	PadType,
+	PartType,
+	PocketSolidType,
 	AngularDimensionType,
 	OrientationModifierType,
 	HoleType,
@@ -54,7 +67,6 @@ enum{
 	GearType,
 	ImageType,
 	XmlType,
-	InsertType, // just temporarily during dxf import
 	ObjectMaximumType,
 };
 
@@ -85,10 +97,6 @@ enum{
 #define MARKING_FILTER_AREA					0x00200000
 #define MARKING_FILTER_UNKNOWN				0x00400000
 
-#define MARKING_FILTER_SKETCH_GROUP			(MARKING_FILTER_SKETCH | MARKING_FILTER_AREA | MARKING_FILTER_CIRCLE)
-#define MARKING_FILTER_SOLIDS_GROUP			(MARKING_FILTER_SOLID | MARKING_FILTER_STL_SOLID)
-
-
 #ifdef HEEKSCAD
 #define GET_ICON(X,Y) x = (X); y = (Y); texture_number = wxGetApp().m_icon_texture_number
 #else
@@ -96,8 +104,14 @@ enum{
 #endif
 
 class HeeksObj{
+#ifdef MULTIPLE_OWNERS
+	std::list<HeeksObj*> m_owners;
+	std::list<HeeksObj*>::iterator m_owners_it;
+#else
 public:
 	HeeksObj* m_owner;
+#endif
+public:
 	bool m_skip_for_undo;
 	unsigned int m_id;
 	unsigned int m_layer;
@@ -127,7 +141,6 @@ public:
 	virtual void KillGLLists(void){};
 	virtual HeeksObj *MakeACopy()const = 0;
 	virtual HeeksObj *MakeACopyWithID();
-	virtual void Clear(){}
 	virtual void ReloadPointers(){}
 	virtual void Disconnect(std::list<HeeksObj*>parents){}
 	virtual void CopyFrom(const HeeksObj* object){}
@@ -141,8 +154,9 @@ public:
 	virtual bool GetMidPoint(double* pos){return false;}
 	virtual bool GetScaleAboutMatrix(double *m);
 	virtual void GetProperties(std::list<Property *> *list); // use GetDialog instead of this, if you have time to code one.
+	virtual ObjectCanvas* GetDialog(wxWindow* parent){return NULL;} // returns a window for editing the values of this object.
 	virtual void GetOnEdit(bool(**callback)(HeeksObj*)){} // returns a function for doing edit with a dialog
-	bool Edit(){bool(*fn)(HeeksObj*) = NULL;GetOnEdit(&fn);if(fn){if((*fn)(this)){WriteDefaultValues();return true;}}return false;}  // do edit with a dialog
+	bool Edit(){ bool(*fn)(HeeksObj*) = NULL; GetOnEdit(&fn); if(fn)return (*fn)(this); else return false;}  // do edit with a dialog
 	virtual void OnApplyProperties(){}
 	virtual bool ValidateProperties(){return true;}
 	virtual const wxBitmap &GetIcon();
@@ -153,10 +167,10 @@ public:
 	virtual void GetGripperPositionsTransformed(std::list<GripData> *list, bool just_for_endof);
 	virtual bool Stretch(const double *p, const double* shift, void* data){return false;} // return true, if undo stretch is done with Add and Delete
 	virtual bool StretchTemporary(const double *p, const double* shift, void* data){Stretch(p, shift, data); return true;} // returns true, because Stretch was done.  If not done, then override and return false;
+	virtual bool StretchTemporaryTransformed(const double *p, const double* shift, void* data);
 	virtual void SetClickMarkPoint(MarkedObject* marked_object, const double* ray_start, const double* ray_direction){}
 	virtual bool CanAdd(HeeksObj* object){return false;}
 	virtual bool CanAddTo(HeeksObj* owner){return true;}
-	virtual HeeksObj* PreferredPasteTarget(){return NULL;}
 	virtual bool DescendForUndo(){return true;}
 	virtual bool GetSkipForUndo(){return m_skip_for_undo;}
 	virtual void SetSkipForUndo(bool val){m_skip_for_undo = val;}
@@ -179,13 +193,33 @@ public:
 	virtual double Area()const{return 0.0;}
 	virtual void GetSegments(void(*callbackfunc)(const double *p), double pixels_per_mm, bool want_start_point = true)const{};
 	virtual void WriteXML(TiXmlNode *root){}
+#ifdef CONSTRAINT_TESTER
+    //JT
+	virtual void AuditHeeksObjTree4Constraints(HeeksObj * SketchPtr ,HeeksObj * mom,int level,bool ShowMsgInConsole,bool * constraintsAreOk);
+    void HeeksObjOccurrenceInSketch(HeeksObj * Sketch,HeeksObj * Object, int * occurences,int FromLevel,bool ShowMsgInConsole);
+    virtual void FindConstrainedObj(HeeksObj * Sketch,HeeksObj * Object,int * OccurenceOfObjectInSketch,int FromLevel,int level,bool ShowMsgInConsole);
+#endif
 	virtual void WriteBaseXML(TiXmlElement *element);
 	virtual void ReadBaseXML(TiXmlElement* element);
 	void SetID(int id);
 	virtual unsigned int GetID(){return m_id;}
 	virtual bool UsesID(){return true;}
 	bool OnVisibleLayer();
+#ifdef MULTIPLE_OWNERS
+	virtual HeeksObj* Owner();
+	virtual void SetOwner(HeeksObj*);
+	virtual std::list<HeeksObj*> Owners();
+	virtual bool HasOwner();
+	virtual bool HasOwner(HeeksObj* obj);
+	virtual void AddOwner(HeeksObj*);
+	virtual void AddOwners(std::list<HeeksObj *> owners);
+	virtual void RemoveOwners();
+	virtual void RemoveOwner(HeeksObj*);
+	virtual HeeksObj* GetFirstOwner();
+	virtual HeeksObj* GetNextOwner();
+#endif
 	virtual const TopoDS_Shape *GetShape() { return(NULL); }
+	virtual bool IsTransient(){return false;}
 	virtual bool IsList(){return false;}
 	virtual HeeksObj *Find( const int type, const unsigned int id );
 	virtual void SetIdPreservation(const bool flag) { m_preserving_id = flag; }
@@ -196,6 +230,4 @@ protected:
 	virtual void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 public:
 	virtual void OnChangeViewUnits(const double units){}
-	virtual void WriteDefaultValues(){}
-	virtual void ReadDefaultValues(){}
 };

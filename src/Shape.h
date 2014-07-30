@@ -7,9 +7,8 @@
 #include "../interface/Material.h"
 #include "ShapeData.h"
 #include "ShapeTools.h"
-#include "../interface/IdNamedObjList.h"
 
-class CShape:public IdNamedObjList{
+class CShape:public ObjList{
 protected:
 	int m_face_gl_list;
 	int m_edge_gl_list;
@@ -32,6 +31,7 @@ public:
 	CFaceList* m_faces;
 	CEdgeList* m_edges;
 	CVertexList* m_vertices;
+	wxString m_title;
 	HeeksColor m_color;
 	CFace* m_picked_face;
 
@@ -49,6 +49,9 @@ public:
 	void GetBox(CBox &box);
 	void KillGLLists(void);
 	void ModifyByMatrix(const double* m);
+	const wxChar* GetShortString(void)const{return m_title.c_str();}
+	bool CanEditString(void)const{return true;}
+	void OnEditString(const wxChar* str);
 	void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true);
 	double Area()const;
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
@@ -75,7 +78,7 @@ public:
 	static HeeksObj* FuseShapes(std::list<HeeksObj*> &list);
 	static HeeksObj* CommonShapes(std::list<HeeksObj*> &list);
 	static void FilletOrChamferEdges(std::list<HeeksObj*> &list, double radius, bool chamfer_not_fillet = false);
-	static bool ImportSolidsFile(const wxChar* filepath, bool undoably,std::map<int, CShapeData> *index_map = NULL, HeeksObj* paste_into = NULL);
+	static bool ImportSolidsFile(const wxChar* filepath,std::map<int, CShapeData> *index_map = NULL, HeeksObj* paste_into = NULL);
 	static bool ExportSolidsFile(const std::list<HeeksObj*>& objects, const wxChar* filepath, std::map<int, CShapeData> *index_map = NULL);
 	static HeeksObj* MakeObject(const TopoDS_Shape &shape, const wxChar* title, SolidTypeEnum solid_type, const HeeksColor& col, float opacity);
 	static bool IsTypeAShape(int t);

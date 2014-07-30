@@ -12,6 +12,8 @@
 #include <wx/string.h>
 #include <wx/window.h>
 
+#include <gp_Pnt.hxx>
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -34,7 +36,6 @@
 class VectorFont
 {
 public:
-	virtual ~VectorFont() {};
 	typedef wxString Name_t;
 
 protected:
@@ -49,8 +50,6 @@ protected:
 		class Graphics
 		{
 		public:
-			virtual ~Graphics() {};
-
 			virtual HeeksObj *Sketch( const gp_Pnt & location, const gp_Trsf & transformation_matrix, const float width, COrientationModifier *pOrientationModifier ) const = 0;
 			virtual void glCommands( const gp_Pnt & starting_point,
 									 const bool select,

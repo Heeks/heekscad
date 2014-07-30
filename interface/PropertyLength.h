@@ -14,6 +14,7 @@ public:
 	// Property's virtual functions
 	int get_property_type(){return LengthPropertyType;}
 	Property *MakeACopy(void)const;
+	void CallSetFunction()const;
 };
 
 #endif

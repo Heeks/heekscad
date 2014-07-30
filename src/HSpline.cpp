@@ -21,7 +21,7 @@ CTangentialArc::CTangentialArc(const gp_Pnt &p0, const gp_Vec &v0, const gp_Pnt 
 
 bool CTangentialArc::radius_equal(const gp_Pnt &p, double tolerance)const
 {
-	if(m_is_a_line)return true;
+	if(m_is_a_line)return 0.0;
 
 	double point_radius = gp_Vec(m_c.XYZ() - p.XYZ()).Magnitude();
 	double diff =  fabs(point_radius - radius());
@@ -39,48 +39,35 @@ double CTangentialArc::radius()const
 
 HeeksObj* CTangentialArc::MakeHArc()const
 {
-	if(m_is_a_line)
-	{
-		return new HLine(m_p0, m_p1, &(wxGetApp().current_color));
-	}
-
 	gp_Circ c(gp_Ax2(m_c, m_a), radius());
 	HArc* new_object = new HArc(m_p0, m_p1, c, &(wxGetApp().current_color));
 	return new_object;
 }
 
-HSpline::HSpline(const HSpline &s):EndedObject(){
+HSpline::HSpline(const HSpline &s):EndedObject(&s.color){
 	operator=(s);
 }
 
-HSpline::HSpline(const Geom_BSplineCurve &s, const HeeksColor* col):EndedObject(){
+HSpline::HSpline(const Geom_BSplineCurve &s, const HeeksColor* col):EndedObject(col),color(*col){
 	m_spline = Handle(Geom_BSplineCurve)::DownCast(s.Copy());	
-	m_spline->D0(m_spline->FirstParameter(), A);
-	m_spline->D0(m_spline->LastParameter() , B);
-	SetColor(*col);
+	m_spline->D0(m_spline->FirstParameter(), A->m_p);
+	m_spline->D0(m_spline->LastParameter() , B->m_p);
 }
 
-HSpline::HSpline(Handle_Geom_BSplineCurve s, const HeeksColor* col):EndedObject(){
+HSpline::HSpline(Handle_Geom_BSplineCurve s, const HeeksColor* col):EndedObject(col),color(*col){
 	m_spline = s;//Handle(Geom_BSplineCurve)::DownCast(s->Copy());
-	m_spline->D0(m_spline->FirstParameter(), A);
-	m_spline->D0(m_spline->LastParameter() , B);
-	SetColor(*col);
+	m_spline->D0(m_spline->FirstParameter(), A->m_p);
+	m_spline->D0(m_spline->LastParameter() , B->m_p);
 }
 
-HSpline::HSpline(const std::list<gp_Pnt> &points, const HeeksColor* col):EndedObject()
+HSpline::HSpline(const std::list<gp_Pnt> &points, const HeeksColor* col):EndedObject(col),color(*col)
 {
 	Standard_Boolean periodicity = points.front().IsEqual(points.back(), wxGetApp().m_geom_tol);
 
 	unsigned int size = points.size();
 	if(periodicity == Standard_True)size--;
 
-#ifdef _DEBUG
-#undef new
-#endif
 	TColgp_HArray1OfPnt *Array = new TColgp_HArray1OfPnt(1, size);
-#ifdef _DEBUG
-#define new  WXDEBUG_NEW
-#endif
 
 	unsigned int i = 1;
 	for(std::list<gp_Pnt>::const_iterator It = points.begin(); i <= size; It++, i++)
@@ -91,9 +78,8 @@ HSpline::HSpline(const std::list<gp_Pnt> &points, const HeeksColor* col):EndedOb
 	GeomAPI_Interpolate anInterpolation(Array, periodicity, Precision::Approximation());
 	anInterpolation.Perform();
 	m_spline = anInterpolation.Curve();
-	m_spline->D0(m_spline->FirstParameter(), A);
-	m_spline->D0(m_spline->LastParameter() , B);
-	SetColor(*col);
+	m_spline->D0(m_spline->FirstParameter(), A->m_p);
+	m_spline->D0(m_spline->LastParameter() , B->m_p);
 }
 
 HSpline::~HSpline(){
@@ -102,6 +88,7 @@ HSpline::~HSpline(){
 const HSpline& HSpline::operator=(const HSpline &s){
 	EndedObject::operator=(s);
 	m_spline = Handle(Geom_BSplineCurve)::DownCast((s.m_spline)->Copy());;
+	color = s.color;
 	return *this;
 }
 
@@ -155,7 +142,12 @@ static void glVertexFunction(const double *p){glVertex3d(p[0], p[1], p[2]);}
 
 void HSpline::glCommands(bool select, bool marked, bool no_color){
 	if(!no_color){
-		wxGetApp().glColorEnsuringContrast(*GetColor());
+		wxGetApp().glColorEnsuringContrast(color);
+//		if (wxGetApp().m_allow_opengl_stippling)
+//		{
+//			glEnable(GL_LINE_STIPPLE);
+//			glLineStipple(3, 0xaaaa);
+//		}
 	}
 	GLfloat save_depth_range[2];
 	if(marked){
@@ -171,6 +163,13 @@ void HSpline::glCommands(bool select, bool marked, bool no_color){
 	if(marked){
 		glLineWidth(1);
 		glDepthRange(save_depth_range[0], save_depth_range[1]);
+	}
+	if(!no_color)
+	{
+//		if (wxGetApp().m_allow_opengl_stippling)
+//		{
+//			glDisable(GL_LINE_STIPPLE);
+//		}
 	}
 }
 
@@ -287,6 +286,7 @@ void HSpline::WriteXML(TiXmlNode *root)
 	TiXmlElement * element;
 	element = new TiXmlElement( "Spline" );
 	root->LinkEndChild( element );  
+	element->SetAttribute("col", color.COLORREF_color());
 	element->SetAttribute("rational", m_spline->IsRational()?1:0);
 	element->SetAttribute("periodic", m_spline->IsPeriodic()?1:0);
 	element->SetAttribute("knots", m_spline->NbKnots());
@@ -334,7 +334,8 @@ HeeksObj* HSpline::ReadFromXMLElement(TiXmlElement* pElem)
 	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
 	{
 		std::string name(a->Name());
-		if(name == "rational"){rational = a->IntValue() != 0;}
+		if(name == "col"){c = HeeksColor((long)(a->IntValue()));}
+		else if(name == "rational"){rational = a->IntValue() != 0;}
 		else if(name == "periodic"){periodic = a->IntValue() != 0;}
 		else if(name == "knots"){nknots = a->IntValue();}
 		else if(name == "poles"){npoles = a->IntValue();}
@@ -461,11 +462,8 @@ int HSpline::Intersects(const HeeksObj *object, std::list< double > *rl)const
 
 static bool calculate_biarc_points(const gp_Pnt &p0, gp_Vec v_start, const gp_Pnt &p4, gp_Vec v_end, gp_Pnt &p1, gp_Pnt &p2, gp_Pnt &p3)
 {
-	if(v_start.Magnitude() < 0.0000000001)v_start = gp_Vec(p0, p1);
-    if(v_end.Magnitude() < 0.0000000001)v_end = gp_Vec(p3, p4);
-
 	v_start.Normalize();
-	v_end.Normalize();
+    v_end.Normalize();
 
     gp_Vec v = p0.XYZ() - p4.XYZ();
 

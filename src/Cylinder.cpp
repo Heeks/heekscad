@@ -56,12 +56,10 @@ bool CCylinder::IsDifferent(HeeksObj* other)
 
 static void on_set_diameter(double value, HeeksObj* object){
 	((CCylinder*)object)->m_radius = value*0.5;
-	object->OnApplyProperties();
 }
 
 static void on_set_height(double value, HeeksObj* object){
 	((CCylinder*)object)->m_height = value;
-	object->OnApplyProperties();
 }
 
 
@@ -78,7 +76,7 @@ wxString CCylinder::StretchedName(){ return _("Stretched Cylinder");}
 
 void CCylinder::GetProperties(std::list<Property *> *list)
 {
-	CoordinateSystem::GetAx2Properties(list, m_pos, this);
+	CoordinateSystem::GetAx2Properties(list, m_pos);
 	list->push_back(new PropertyLength(_("diameter"), m_radius*2, this, on_set_diameter));
 	list->push_back(new PropertyLength(_("height"), m_height, this, on_set_height));
 
@@ -102,8 +100,15 @@ void CCylinder::GetGripperPositions(std::list<GripData> *list, bool just_for_end
 
 void CCylinder::OnApplyProperties()
 {
-	*this = CCylinder(m_pos, m_radius, m_height, m_title.c_str(), m_color, m_opacity);
-	this->create_faces_and_edges();
+	CCylinder* new_object = new CCylinder(m_pos, m_radius, m_height, m_title.c_str(), m_color, m_opacity);
+	new_object->CopyIDsFrom(this);
+	HEEKSOBJ_OWNER->Add(new_object, NULL);
+	HEEKSOBJ_OWNER->Remove(this);
+	if(wxGetApp().m_marked_list->ObjectMarked(this))
+	{
+		wxGetApp().m_marked_list->Remove(this,false);
+		wxGetApp().m_marked_list->Add(new_object, true);
+	}
 	wxGetApp().Repaint();
 }
 
@@ -154,13 +159,11 @@ bool CCylinder::Stretch(const double *p, const double* shift, void* data)
 
 	if(make_a_new_cylinder)
 	{
-		CCylinder* new_object = new CCylinder(m_pos, m_radius, m_height, NULL, m_color, m_opacity);
+		CCylinder* new_object = new CCylinder(m_pos, m_radius, m_height, m_title.c_str(), m_color, m_opacity);
 		new_object->CopyIDsFrom(this);
-		wxGetApp().StartHistory();
-		wxGetApp().DeleteUndoably(this);
-		wxGetApp().AddUndoably(new_object,m_owner,NULL);
-		wxGetApp().EndHistory();
-		wxGetApp().m_marked_list->Clear(false);
+		HEEKSOBJ_OWNER->Add(new_object, NULL);
+		HEEKSOBJ_OWNER->Remove(this);
+		wxGetApp().m_marked_list->Clear(true);
 		wxGetApp().m_marked_list->Add(new_object, true);
 	}
 

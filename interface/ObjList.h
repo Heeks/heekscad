@@ -5,7 +5,6 @@
 #pragma once
 
 #include "HeeksObj.h"
-#include "Tool.h"
 
 #include <list>
 #include <vector>
@@ -13,8 +12,6 @@
 
 class ObjList : public HeeksObj
 {
-	friend class ReorderTool;
-
 protected:
 	std::list<HeeksObj*> m_objects;
 	std::list<HeeksObj*>::iterator LoopIt;
@@ -23,6 +20,7 @@ protected:
 	bool m_index_list_valid;
 
 	void recalculate_index_list();
+	void copy_objects(const ObjList& objlist);
 
 public:
 	ObjList():m_index_list_valid(true){}
@@ -36,6 +34,7 @@ public:
 	bool IsDifferent(HeeksObj *other) { return( *this != (*(ObjList *)other) ); }
 
 	void ClearUndoably(void);
+	void Clear();
 	void Clear(std::set<HeeksObj*> &to_delete);
 
 	HeeksObj* MakeACopy(void) const;
@@ -52,12 +51,19 @@ public:
 	virtual void Add(std::list<HeeksObj*> objects);
 	virtual void Remove(HeeksObj* object);
 	virtual void Remove(std::list<HeeksObj*> objects);
-	void Clear();
 	void KillGLLists(void);
 	void WriteBaseXML(TiXmlElement *element);
 	void ReadBaseXML(TiXmlElement* element);
+#ifdef CONSTRAINT_TESTER
+    //JT
+	virtual void AuditHeeksObjTree4Constraints(HeeksObj * SketchPtr ,HeeksObj * mom,int level,bool ShowMsgInConsole,bool * ConstraintsAreOk);
+	virtual void FindConstrainedObj(HeeksObj * CurrentObject,HeeksObj * ObjectToFind,int * occurences,int FromLevel,int level,bool ShowMsgInConsole);
+#endif
 	void ModifyByMatrix(const double *m);
 	void GetTriangles(void(*callbackfunc)(const double* x, const double* n), double cusp, bool just_one_average_normal = true);
+#ifdef MULTIPLE_OWNERS
+	void Disconnect(std::list<HeeksObj*>parents);
+#endif
 	bool IsList(){return true;}
 	void GetProperties(std::list<Property *> *list);
 	void ReloadPointers();
@@ -65,18 +71,4 @@ public:
 
 	HeeksObj *Find( const int type, const unsigned int id );	// Search for an object by type/id from this or any child objects.
 	/* virtual */ void SetIdPreservation(const bool flag);
-};
-
-
-class ReorderTool: public Undoable
-{
-	ObjList* m_object;
-	std::list<HeeksObj *> m_original_order;
-	std::list<HeeksObj *> m_new_order;
-
-public:
-	ReorderTool(ObjList* object, std::list<HeeksObj *> &new_order);
-	const wxChar* GetTitle(){return _("Reorder");}
-	void Run(bool redo);
-	void RollBack();
 };

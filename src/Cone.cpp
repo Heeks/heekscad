@@ -147,17 +147,14 @@ bool CCone::IsDifferent(HeeksObj* o)
 
 static void on_set_r1(double value, HeeksObj* object){
 	((CCone*)object)->m_r1 = value;
-	object->OnApplyProperties();
 }
 
 static void on_set_r2(double value, HeeksObj* object){
 	((CCone*)object)->m_r2 = value;
-	object->OnApplyProperties();
 }
 
 static void on_set_height(double value, HeeksObj* object){
 	((CCone*)object)->m_height = value;
-	object->OnApplyProperties();
 }
 
 void CCone::MakeTransformedShape(const gp_Trsf &mat)
@@ -174,7 +171,7 @@ wxString CCone::StretchedName(){ return _("Stretched Cone");}
 
 void CCone::GetProperties(std::list<Property *> *list)
 {
-	CoordinateSystem::GetAx2Properties(list, m_pos, this);
+	CoordinateSystem::GetAx2Properties(list, m_pos);
 	list->push_back(new PropertyLength(_("r1"), m_r1, this, on_set_r1));
 	list->push_back(new PropertyLength(_("r2"), m_r2, this, on_set_r2));
 	list->push_back(new PropertyLength(_("height"), m_height, this, on_set_height));
@@ -202,8 +199,12 @@ void CCone::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
 
 void CCone::OnApplyProperties()
 {
-	*this = CCone(m_pos, m_r1, m_r2, m_height, m_title.c_str(), m_color, m_opacity);
-	this->create_faces_and_edges();
+	CCone* new_object = new CCone(m_pos, m_r1, m_r2, m_height, m_title.c_str(), m_color, m_opacity);
+	new_object->CopyIDsFrom(this);
+	HEEKSOBJ_OWNER->Add(new_object, NULL);
+	HEEKSOBJ_OWNER->Remove(this);
+	wxGetApp().m_marked_list->Clear(true);
+	if(wxGetApp().m_marked_list->ObjectMarked(this))wxGetApp().m_marked_list->Add(new_object, true);
 	wxGetApp().Repaint();
 }
 
@@ -287,15 +288,12 @@ bool CCone::Stretch(const double *p, const double* shift, void* data)
 
 	if(make_a_new_cone)
 	{
-		CCone* new_object = new CCone(new_pos, new_r1, new_r2, new_height, NULL, m_color, m_opacity);
+		CCone* new_object = new CCone(new_pos, new_r1, new_r2, new_height, m_title.c_str(), m_color, m_opacity);
 		new_object->CopyIDsFrom(this);
-		wxGetApp().StartHistory();
-		wxGetApp().DeleteUndoably(this);
-		wxGetApp().AddUndoably(new_object,m_owner,NULL);
-		wxGetApp().EndHistory();
-		wxGetApp().m_marked_list->Clear(false);
+		HEEKSOBJ_OWNER->Add(new_object, NULL);
+		HEEKSOBJ_OWNER->Remove(this);
+		wxGetApp().m_marked_list->Clear(true);
 		wxGetApp().m_marked_list->Add(new_object, true);
-		this->m_render_without_OpenCASCADE = false;
 	}
 
 	return true;

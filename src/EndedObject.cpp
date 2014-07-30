@@ -10,50 +10,94 @@
 #include "HPoint.h"
 #include "MarkedList.h"
 
-EndedObject::EndedObject(void){
+EndedObject::EndedObject(const HeeksColor* color){
+	A = new HPoint(gp_Pnt(),color);
+	B = new HPoint(gp_Pnt(),color);
+#ifdef MULTIPLE_OWNERS
+	A->m_draw_unselected = false;
+	B->m_draw_unselected = false;
+	A->SetSkipForUndo(true);
+	B->SetSkipForUndo(true);
+	Add(A,NULL);
+	Add(B,NULL);
+#else
+	A->SetSkipForUndo(true);
+	B->SetSkipForUndo(true);
+#endif
 }
 
+#ifndef MULTIPLE_OWNERS
 EndedObject::EndedObject(const EndedObject& e)
 {
+	A = new HPoint(gp_Pnt(), e.A->GetColor());
+	B = new HPoint(gp_Pnt(), e.B->GetColor());
+	A->SetSkipForUndo(true);
+	B->SetSkipForUndo(true);
 	operator=(e);
 }
+#endif
 
 EndedObject::~EndedObject(){
 }
 
 const EndedObject& EndedObject::operator=(const EndedObject &b){
+#ifdef MULTIPLE_OWNERS
+	ObjList::operator=(b);
+	std::list<HeeksObj*>::iterator it = m_objects.begin();
+	A = (HPoint*)(*it++);
+	B = (HPoint*)(*it);
+	A->SetSkipForUndo(true);
+	B->SetSkipForUndo(true);
+#else
 	HeeksObj::operator=(b);
-	A = b.A;
-	B = b.B;
-	color = b.color;
+	*A = *b.A;
+	*B = *b.B;
+#endif
 	return *this;
 }
 
 HeeksObj* EndedObject::MakeACopyWithID()
 {
+#ifdef MULTIPLE_OWNERS
+	EndedObject* pnew = (EndedObject*)ObjList::MakeACopyWithID();
+	pnew->A = (HPoint*)pnew->GetFirstChild();
+	pnew->B = (HPoint*)pnew->GetNextChild();
+#else
 	EndedObject* pnew = (EndedObject*)HeeksObj::MakeACopyWithID();
+#endif
 	return pnew;
 }
 
 bool EndedObject::IsDifferent(HeeksObj *other)
 {
 	EndedObject* eobj = (EndedObject*)other;
-	if(eobj->A.Distance(A) > wxGetApp().m_geom_tol)
+	if(eobj->A->m_p.Distance(A->m_p) > wxGetApp().m_geom_tol)
 		return true;
 
-	if(eobj->B.Distance(B) > wxGetApp().m_geom_tol)
-		return true;
-
-	if(color.COLORREF_color() != eobj->color.COLORREF_color())
+	if(eobj->B->m_p.Distance(B->m_p) > wxGetApp().m_geom_tol)
 		return true;
 
 	return HeeksObj::IsDifferent(other);
 }
 
+#ifdef MULTIPLE_OWNERS
+void EndedObject::LoadToDoubles()
+{
+	A->LoadToDoubles();
+	B->LoadToDoubles();
+}
+
+void EndedObject::LoadFromDoubles()
+{
+	A->LoadFromDoubles();
+	B->LoadFromDoubles();
+}
+#endif
+
 void EndedObject::ModifyByMatrix(const double* m){
 	gp_Trsf mat = make_matrix(m);
-	A.Transform(mat);
-	B.Transform(mat);
+	A->m_p.Transform(mat);
+	B->m_p.Transform(mat);
 }
 
 bool EndedObject::Stretch(const double *p, const double* shift, void* data){
@@ -61,84 +105,58 @@ bool EndedObject::Stretch(const double *p, const double* shift, void* data){
 	gp_Vec vshift = make_vector(shift);
 
 	if(data == &A){
-		A = vp.XYZ() + vshift.XYZ();
+		A->m_p = vp.XYZ() + vshift.XYZ();
 	}
 	else if(data == &B){
-		B = vp.XYZ() + vshift.XYZ();
+		B->m_p = vp.XYZ() + vshift.XYZ();
 	}
 	return false;
 }
 
 void EndedObject::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
 {
-	list->push_back(GripData(GripperTypeStretch,A.X(),A.Y(),A.Z(),&A));
-	list->push_back(GripData(GripperTypeStretch,B.X(),B.Y(),B.Z(),&B));
+	list->push_back(GripData(GripperTypeStretch,A->m_p.X(),A->m_p.Y(),A->m_p.Z(),&A));
+	list->push_back(GripData(GripperTypeStretch,B->m_p.X(),B->m_p.Y(),B->m_p.Z(),&B));
 }
 
 bool EndedObject::GetStartPoint(double* pos)
 {
-	extract(A, pos);
+	extract(A->m_p, pos);
 	return true;
 }
 
 bool EndedObject::GetEndPoint(double* pos)
 {
-	extract(B, pos);
+	extract(B->m_p, pos);
 	return true;
 }
 
-void EndedObject::WriteBaseXML(TiXmlElement *element)
+void EndedObject::glCommands(bool select, bool marked, bool no_color)
 {
-	element->SetAttribute("col", color.COLORREF_color());
-	element->SetDoubleAttribute("sx", A.X());
-	element->SetDoubleAttribute("sy", A.Y());
-	element->SetDoubleAttribute("sz", A.Z());
-	element->SetDoubleAttribute("ex", B.X());
-	element->SetDoubleAttribute("ey", B.Y());
-	element->SetDoubleAttribute("ez", B.Z());
-
-	HeeksObj::WriteBaseXML(element);
-}
-
-void EndedObject::ReadBaseXML(TiXmlElement* pElem)
-{
-	HeeksColor c;
-
-	// get the attributes
-	int att_col;
-	double x;
-	if(pElem->Attribute("col", &att_col))c = HeeksColor((long)att_col);
-	if(pElem->Attribute("sx", &x))A.SetX(x);
-	if(pElem->Attribute("sy", &x))A.SetY(x);
-	if(pElem->Attribute("sz", &x))A.SetZ(x);
-	if(pElem->Attribute("ex", &x))B.SetX(x);
-	if(pElem->Attribute("ey", &x))B.SetY(x);
-	if(pElem->Attribute("ez", &x))B.SetZ(x);
-
-	else
+	HeeksObj::glCommands(select, marked, no_color);
+#ifdef MULTIPLE_OWNERS
+	std::list<HeeksObj*>::iterator It;
+	for(It=m_objects.begin(); It!=m_objects.end() ;It++)
 	{
-		// try the version where the points were children
-		bool a_found = false;
-		for(TiXmlElement* pElem2 = TiXmlHandle(pElem).FirstChildElement().Element(); pElem2;	pElem2 = pElem2->NextSiblingElement())
+		HeeksObj* object = *It;
+		if(object->OnVisibleLayer() && object->m_visible)
 		{
-			HeeksObj* object = wxGetApp().ReadXMLElement(pElem2);
-			if(object->GetType() == PointType)
-			{
-				if(!a_found)
-				{
-					A = ((HPoint*)object)->m_p;
-					a_found = true;
-				}
-				else
-				{
-					B = ((HPoint*)object)->m_p;
-					delete object;
-					break;
-				}
-			}
-			delete object;
+			bool object_marked = wxGetApp().m_marked_list->ObjectMarked(object);
+			if(object->GetType() == PointType && !select && !object_marked)continue; // don't show points unless the point object is selected.
+			if(select)glPushName(object->GetIndex());
+#ifdef HEEKSCAD
+			(*It)->glCommands(select, marked || wxGetApp().m_marked_list->ObjectMarked(object), no_color);
+#else
+			(*It)->glCommands(select, marked || heeksCAD->ObjectMarked(object), no_color);
+#endif
+			if(select)glPopName();
 		}
 	}
-
-	HeeksObj::ReadBaseXML(pElem);
+#endif
 }
+
+/*void EndedObject::WriteBaseXML(TiXmlElement *element)
+{
+	HeeksObj::WriteBaseXML(element);
+}*/
+

@@ -22,14 +22,12 @@ const wxChar* TransformTool::GetTitle(){
 	return global_string.c_str();
 }
 
-void TransformTool::Run(bool redo){
+void TransformTool::Run(){
 	object->ModifyByMatrix(modify_matrix);
-	wxGetApp().WasModified(object);
 }
 
 void TransformTool::RollBack(){
 	object->ModifyByMatrix(revert_matrix);
-	wxGetApp().WasModified(object);
 }
 
 TransformObjectsTool::TransformObjectsTool(const std::list<HeeksObj*> &list, const gp_Trsf &t, const gp_Trsf &i){
@@ -46,13 +44,14 @@ const wxChar* TransformObjectsTool::GetTitle(){
 	return _("Transform Objects");
 }
 
-void TransformObjectsTool::Run(bool redo){
+void TransformObjectsTool::Run(){
 	std::list<HeeksObj*>::iterator It;
 	for(It = m_list.begin(); It != m_list.end(); It++){
 		HeeksObj* object = *It;
 		object->ModifyByMatrix(modify_matrix);
 	}
-	wxGetApp().WereModified(m_list);
+
+	wxGetApp().Changed();
 }
 
 void TransformObjectsTool::RollBack(){
@@ -61,5 +60,6 @@ void TransformObjectsTool::RollBack(){
 		HeeksObj* object = *It;
 		object->ModifyByMatrix(revert_matrix);
 	}
-	wxGetApp().WereModified(m_list);
+
+	wxGetApp().Changed();
 }

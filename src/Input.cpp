@@ -6,13 +6,10 @@
 #include "../interface/DoubleInput.h"
 #include "../interface/HDialogs.h"
 #include "../interface/NiceTextCtrl.h"
-#include "../interface/PictureFrame.h"
 #include "HeeksFrame.h"
 #include "HLine.h"
 #include "HILine.h"
 #include "OptionsCanvas.h"
-
-class PictureWindow;
 
 bool HeeksCADapp::InputInt(const wxChar* prompt, const wxChar* value_name, int &value)
 {
@@ -31,9 +28,8 @@ bool HeeksCADapp::InputDouble(const wxChar* prompt, const wxChar* value_name, do
 		wxStaticText *static_label = new wxStaticText(&dlg, wxID_ANY, prompt);
 		sizerMain->Add( static_label, 0, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, dlg.control_border );
 		CDoubleCtrl* value_control = new CDoubleCtrl(&dlg);
-		value_control->SetValue(value);
 		dlg.AddLabelAndControl(sizerMain, value_name, value_control);
-		dlg.MakeOkAndCancel(wxHORIZONTAL).AddToSizer(sizerMain);
+		sizerMain->Add( dlg.MakeOkAndCancel(wxHORIZONTAL), 0, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, dlg.control_border );
 		dlg.SetSizer( sizerMain );
 		sizerMain->SetSizeHints(&dlg);
 		sizerMain->Fit(&dlg);
@@ -79,6 +75,10 @@ enum
 
 class AngleAndPlaneDlg : public HDialog
 {
+	static wxBitmap* m_xy_bitmap;
+	static wxBitmap* m_xz_bitmap;
+	static wxBitmap* m_yz_bitmap;
+	static wxBitmap* m_line_bitmap;
 	bool m_ignore_event_functions;
 
 	PictureWindow *m_picture;
@@ -191,7 +191,8 @@ public:
 		}
 
 		// add OK and Cancel to right side
-		MakeOkAndCancel(wxHORIZONTAL).AddToSizer(sizerMain);
+		wxBoxSizer *sizerOKCancel = MakeOkAndCancel(wxHORIZONTAL);
+		sizerMain->Add( sizerOKCancel, 0, wxALL | wxALIGN_RIGHT | wxALIGN_BOTTOM, control_border );
 
 		SetSizer( sizerMain );
 		sizerMain->SetSizeHints(this);
@@ -205,17 +206,17 @@ public:
 		m_ignore_event_functions = false;
 	}
 
-	void SetPicture(const wxString& name)
+	void SetPicture(wxBitmap** bitmap, const wxString& name)
 	{
-		m_picture->SetPicture(wxGetApp().GetResFolder() + _T("/bitmaps/angle/") + name + _T(".png"), wxBITMAP_TYPE_PNG);
+		m_picture->SetPicture(bitmap, wxGetApp().GetResFolder() + _T("/bitmaps/angle/") + name + _T(".png"), wxBITMAP_TYPE_PNG);
 	}
 
 	void SetPicture()
 	{
-		if(rbXy && rbXy->GetValue())SetPicture(_T("xy"));
-		else if(rbXz && rbXz->GetValue())SetPicture(_T("xz"));
-		else if(rbYz && rbYz->GetValue())SetPicture(_T("yz"));
-		else if(rbOther && rbOther->GetValue())SetPicture(_T("line"));
+		if(rbXy && rbXy->GetValue())SetPicture(&m_xy_bitmap, _T("xy"));
+		else if(rbXz && rbXz->GetValue())SetPicture(&m_xz_bitmap, _T("xz"));
+		else if(rbYz && rbYz->GetValue())SetPicture(&m_yz_bitmap, _T("yz"));
+		else if(rbOther && rbOther->GetValue())SetPicture(&m_line_bitmap, _T("line"));
 	}
 
 	void OnRadioButton(wxCommandEvent& event)
@@ -268,6 +269,11 @@ BEGIN_EVENT_TABLE(AngleAndPlaneDlg, HDialog)
     EVT_BUTTON(ID_BUTTON_VECTOR_PICK,AngleAndPlaneDlg::OnPickVector)
 END_EVENT_TABLE()
 
+wxBitmap* AngleAndPlaneDlg::m_xy_bitmap = NULL;
+wxBitmap* AngleAndPlaneDlg::m_xz_bitmap = NULL;
+wxBitmap* AngleAndPlaneDlg::m_yz_bitmap = NULL;
+wxBitmap* AngleAndPlaneDlg::m_line_bitmap = NULL;
+
 bool HeeksCADapp::InputAngleWithPlane(double &angle, double *axis, double *pos, int *number_of_copies, double *axial_shift)
 {
 	double save_axis[3], save_pos[3];
@@ -290,53 +296,52 @@ bool HeeksCADapp::InputAngleWithPlane(double &angle, double *axis, double *pos, 
 	{
 		AngleAndPlaneDlg dlg(m_frame, angle, axis, axis_type, pos, number_of_copies, axial_shift);
 		int ret = dlg.ShowModal();
-
-		if(number_of_copies)
-		{
-			long long_num_copies;
-			if(dlg.txt_num_copies->GetValue().ToLong(&long_num_copies))
-				*number_of_copies = long_num_copies;
-		}
-		angle = dlg.angle_ctrl->GetValue();
-		if(axis)
-		{
-			if(dlg.rbXy->GetValue())
-			{
-				axis[0] = 0.0;
-				axis[1] = 0.0;
-				axis[2] = 1.0;
-			}
-			else if(dlg.rbXz->GetValue())
-			{
-				axis[0] = 0.0;
-				axis[1] = -1.0;
-				axis[2] = 0.0;
-			}
-			else if(dlg.rbYz->GetValue())
-			{
-				axis[0] = 1.0;
-				axis[1] = 0.0;
-				axis[2] = 0.0;
-			}
-			else
-			{
-				axis[0] = dlg.vectorx->GetValue();
-				axis[1] = dlg.vectory->GetValue();
-				axis[2] = dlg.vectorz->GetValue();
-			}
-		}
-
-		if(pos)
-		{
-			pos[0] = dlg.posx->GetValue();
-			pos[1] = dlg.posy->GetValue();
-			pos[2] = dlg.posz->GetValue();
-		}
-
-		if(axial_shift)*axial_shift = dlg.axial_shift_ctrl->GetValue();
-
 		if(ret == wxID_OK)
 		{
+			if(number_of_copies)
+			{
+				long long_num_copies;
+				if(dlg.txt_num_copies->GetValue().ToLong(&long_num_copies))
+					*number_of_copies = long_num_copies;
+			}
+			angle = dlg.angle_ctrl->GetValue();
+			if(axis)
+			{
+				if(dlg.rbXy->GetValue())
+				{
+					axis[0] = 0.0;
+					axis[1] = 0.0;
+					axis[2] = 1.0;
+				}
+				else if(dlg.rbXz->GetValue())
+				{
+					axis[0] = 0.0;
+					axis[1] = -1.0;
+					axis[2] = 0.0;
+				}
+				else if(dlg.rbYz->GetValue())
+				{
+					axis[0] = 1.0;
+					axis[1] = 0.0;
+					axis[2] = 0.0;
+				}
+				else
+				{
+					axis[0] = dlg.vectorx->GetValue();
+					axis[1] = dlg.vectory->GetValue();
+					axis[2] = dlg.vectorz->GetValue();
+				}
+			}
+
+			if(pos)
+			{
+				pos[0] = dlg.posx->GetValue();
+				pos[1] = dlg.posy->GetValue();
+				pos[2] = dlg.posz->GetValue();
+			}
+
+			if(axial_shift)*axial_shift = dlg.axial_shift_ctrl->GetValue();
+
 			return true;
 		}
 		else if(ret == ID_BUTTON_PICK)
@@ -412,160 +417,6 @@ bool HeeksCADapp::InputAngleWithPlane(double &angle, double *axis, double *pos, 
 	}
 	return false;
 }
-enum
-{
-	ID_FROMX = 100,
-	ID_FROMY,
-	ID_FROMZ,
-	ID_TOX,
-	ID_TOY,
-	ID_TOZ,
-	ID_BUTTON_PICK_FROM,
-	ID_BUTTON_PICK_TO,
-};
-
-class FromAndToDlg : public HDialog
-{
-	bool m_ignore_event_functions;
-	int *m_number_of_copies;
-	double *m_from;
-	double *m_to;
-public:
-	wxTextCtrl *txt_num_copies;
-	CLengthCtrl *fromx;
-	CLengthCtrl *fromy;
-	CLengthCtrl *fromz;
-	CLengthCtrl *tox;
-	CLengthCtrl *toy;
-	CLengthCtrl *toz;
-
-	FromAndToDlg(wxWindow *parent, double* from, double* to, int *number_of_copies):HDialog(parent)
-	{
-		m_ignore_event_functions = true;
-		wxBoxSizer *sizerMain = new wxBoxSizer(wxVERTICAL);
-
-		m_number_of_copies = number_of_copies;
-		m_from = from;
-		m_to = to;
-
-		if(number_of_copies)
-		{
-			AddLabelAndControl(sizerMain, _("number of copies"), txt_num_copies = new wxTextCtrl(this, wxID_ANY, wxString::Format(_T("%d"), *number_of_copies)));
-		}
-
-		{
-			wxBoxSizer *sizerPos = new wxBoxSizer(wxVERTICAL);
-			sizerMain->Add(sizerPos, 0, wxGROW);
-			AddLabelAndControl(sizerPos, _("Position to move from"), new wxButton(this, ID_BUTTON_PICK_FROM, _("Select")));
-			AddLabelAndControl(sizerPos, _("X"), fromx = new CLengthCtrl(this, ID_FROMX));
-			AddLabelAndControl(sizerPos, _("Y"), fromy = new CLengthCtrl(this, ID_FROMY));
-			AddLabelAndControl(sizerPos, _("Z"), fromz = new CLengthCtrl(this, ID_FROMZ));
-
-			fromx->SetValue( from[0] );
-			fromy->SetValue( from[1] );
-			fromz->SetValue( from[2] );
-		}
-
-		{
-			wxBoxSizer *sizerPos = new wxBoxSizer(wxVERTICAL);
-			sizerMain->Add(sizerPos, 0, wxGROW);
-			AddLabelAndControl(sizerPos, _("Position to move to"), new wxButton(this, ID_BUTTON_PICK_TO, _("Select")));
-			AddLabelAndControl(sizerPos, _("X"), tox = new CLengthCtrl(this, ID_TOX));
-			AddLabelAndControl(sizerPos, _("Y"), toy = new CLengthCtrl(this, ID_TOY));
-			AddLabelAndControl(sizerPos, _("Z"), toz = new CLengthCtrl(this, ID_TOZ));
-
-			tox->SetValue( to[0] );
-			toy->SetValue( to[1] );
-			toz->SetValue( to[2] );
-		}
-
-		// add OK and Cancel to right side
-		MakeOkAndCancel(wxHORIZONTAL).AddToSizer(sizerMain);
-
-		SetSizer( sizerMain );
-		sizerMain->SetSizeHints(this);
-		sizerMain->Fit(this);
-
-		if(number_of_copies)txt_num_copies->SetFocus();
-		else fromx->SetFocus();
-
-		m_ignore_event_functions = false;
-	}
-
-	void OnPickFrom(wxCommandEvent& event)
-	{
-		this->EndDialog(ID_BUTTON_PICK_FROM);
-	}
-
-	void OnPickTo(wxCommandEvent& event)
-	{
-		this->EndDialog(ID_BUTTON_PICK_TO);
-	}
-
-	void GetAllValues()
-	{
-		if(m_number_of_copies)
-		{
-			long long_num_copies;
-			if(txt_num_copies->GetValue().ToLong(&long_num_copies))
-				*m_number_of_copies = long_num_copies;
-		}
-
-		m_from[0] = fromx->GetValue();
-		m_from[1] = fromy->GetValue();
-		m_from[2] = fromz->GetValue();
-
-		m_to[0] = tox->GetValue();
-		m_to[1] = toy->GetValue();
-		m_to[2] = toz->GetValue();
-	}
-
-	DECLARE_EVENT_TABLE()
-};
-
-BEGIN_EVENT_TABLE(FromAndToDlg, HDialog)
-    EVT_BUTTON(ID_BUTTON_PICK_FROM,FromAndToDlg::OnPickFrom)
-    EVT_BUTTON(ID_BUTTON_PICK_TO,FromAndToDlg::OnPickTo)
-END_EVENT_TABLE()
-
-bool HeeksCADapp::InputFromAndTo(double *from, double *to, int *number_of_copies)
-{
-	double save_from[3], save_to[3];
-	int save_num_copies = 0;
-	if(number_of_copies)save_num_copies = *number_of_copies;
-	memcpy(save_from, from, 3*sizeof(double));
-	memcpy(save_to, to, 3*sizeof(double));
-
-	while(1)
-	{
-		FromAndToDlg dlg(m_frame, from, to, number_of_copies);
-		int ret = dlg.ShowModal();
-		
-		dlg.GetAllValues();
-
-		if(ret == wxID_OK)
-		{
-			return true;
-		}
-		else if(ret == ID_BUTTON_PICK_FROM)
-		{
-			wxGetApp().PickPosition(_("Pick position to move from"), from);
-		}
-		else if(ret == ID_BUTTON_PICK_TO)
-		{
-			wxGetApp().PickPosition(_("Pick position to move to"), to);
-		}
-		else
-		{
-			memcpy(from, save_from, 3*sizeof(double));
-			memcpy(to, save_to, 3*sizeof(double));
-			if(number_of_copies)*number_of_copies = save_num_copies;
-			return false;
-		}
-
-	}
-	return false;
-}	
 
 bool HeeksCADapp::InputLength(const wxChar* prompt, const wxChar* value_name, double &value)
 {
@@ -577,7 +428,7 @@ bool HeeksCADapp::InputLength(const wxChar* prompt, const wxChar* value_name, do
 		sizerMain->Add( static_label, 0, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, dlg.control_border );
 		CLengthCtrl* value_control = new CLengthCtrl(&dlg);
 		dlg.AddLabelAndControl(sizerMain, value_name, value_control);
-		dlg.MakeOkAndCancel(wxHORIZONTAL).AddToSizer(sizerMain);
+		sizerMain->Add( dlg.MakeOkAndCancel(wxHORIZONTAL), 0, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, dlg.control_border );
 		dlg.SetSizer( sizerMain );
 		sizerMain->SetSizeHints(&dlg);
 		sizerMain->Fit(&dlg);
@@ -622,7 +473,8 @@ public:
 		sizerMain->Add( m_options_canvas, 0, wxALL, control_border );
 
 		// add OK and Cancel to bottom side
-		MakeOkAndCancel(wxHORIZONTAL).AddToSizer(sizerMain);
+		wxBoxSizer *sizerOKCancel = MakeOkAndCancel(wxHORIZONTAL);
+		sizerMain->Add( sizerOKCancel, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, control_border );
 
 		SetSizer( sizerMain );
 		sizerMain->SetSizeHints(this);

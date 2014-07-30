@@ -13,12 +13,11 @@
 #include "../interface/PropertyChoice.h"
 #include "../interface/PropertyCheck.h"
 #include "../interface/Tool.h"
+#include "MultiPoly.h"
 #include "FaceTools.h"
 #include "CoordinateSystem.h"
 #include "Wire.h"
 #include <wx/numdlg.h>
-#include "../interface/HeeksCADInterface.h"
-#include "HeeksConfig.h"
 
 #include "DigitizeMode.h"
 #include "Drawing.h"
@@ -41,6 +40,9 @@ std::string CSketch::m_sketch_order_str[MaxSketchOrderTypes] = {
 CSketch::CSketch():m_order(SketchOrderTypeUnknown)
 {
 	m_title = _("Sketch");
+	m_solidify = false;
+	m_coordinate_system = NULL;
+	m_draw_with_transform = true;
 }
 
 CSketch::CSketch(const CSketch& c)
@@ -57,11 +59,14 @@ const CSketch& CSketch::operator=(const CSketch& c)
     if (this != &c)
     {
         // just copy all the lines and arcs, not the id
-        IdNamedObjList::operator =(c);
+        ObjList::operator =(c);
 
         color = c.color;
         m_order = c.m_order;
         m_title = c.m_title;
+        m_solidify = c.m_solidify;
+        m_coordinate_system = c.m_coordinate_system;
+        m_draw_with_transform = c.m_draw_with_transform;
     }
 
 	return *this;
@@ -74,28 +79,41 @@ const wxBitmap &CSketch::GetIcon()
 	return *icon;
 }
 
-class SetOrderUndoable : public Undoable{
-	CSketch* m_object;
-	SketchOrderType m_old_order;
+void CSketch::ReloadPointers()
+{
+	HeeksObj* child = GetFirstChild();
+	while(child)
+	{
+		CoordinateSystem *system = dynamic_cast<CoordinateSystem*>(child);
+		if(system)
+		{
+			m_coordinate_system = system;
+		}
+		child = GetNextChild();
+	}
 
-public:
-	SketchOrderType m_new_order;
-	SetOrderUndoable(CSketch* object, SketchOrderType old_order):m_object(object),m_old_order(old_order){}
-	void Run(bool redo){if(redo)m_object->m_order = m_new_order;}
-	const wxChar* GetTitle(){return _("Reorder Object");}
-	void RollBack(){m_object->m_order = m_old_order;}
-};
+	ObjList::ReloadPointers();
+}
 
 static std::map<int, int> order_map_for_properties; // maps drop-down index to SketchOrderType
 
-static void on_set_order_type(int value, HeeksObj* object, bool from_undo_redo)
+static void on_set_order_type(int value, HeeksObj* object)
 {
 	std::map<int, int>::iterator FindIt = order_map_for_properties.find(value);
 	if(FindIt != order_map_for_properties.end())
 	{
 		int order = FindIt->second;
-		if(!from_undo_redo)((CSketch*)object)->ReOrderSketch((SketchOrderType)order);
+		if(((CSketch*)object)->ReOrderSketch((SketchOrderType)order))
+		{
+			wxGetApp().m_frame->RefreshProperties();
+		}
 	}
+}
+
+static void on_set_solidify(bool value, HeeksObj* object)
+{
+	((CSketch*)object)->m_solidify = value;
+	wxGetApp().Repaint();
 }
 
 static bool SketchOrderAvailable(SketchOrderType old_order, SketchOrderType new_order)
@@ -145,16 +163,6 @@ static bool SketchOrderAvailable(SketchOrderType old_order, SketchOrderType new_
 		}
 		break;
 
-	case SketchOrderTypeMultipleCurves:
-		switch(new_order)
-		{
-		case SketchOrderTypeReOrder:
-			return true;
-		default:
-			break;
-		}
-		break;
-
 	default:
 		break;
 	}
@@ -162,9 +170,50 @@ static bool SketchOrderAvailable(SketchOrderType old_order, SketchOrderType new_
 	return false;
 }
 
+std::vector<TopoDS_Face> CSketch::GetFaces()
+{
+	std::list<CSketch*> sketches;
+	sketches.push_back(this);
+	return MultiPoly(sketches);
+}
+
+void CSketch::glCommands(bool select, bool marked, bool no_color)
+{
+	if(m_coordinate_system && m_draw_with_transform)
+	{
+		glPushMatrix();
+		m_coordinate_system->ApplyMatrix();
+	}
+
+	ObjList::glCommands(select,marked,no_color);
+
+	if(m_solidify)
+	{
+	    try
+	    {
+            //TODO: we should really only be doing this when geometry changes
+            std::vector<TopoDS_Face> faces = GetFaces();
+
+            double pixels_per_mm = wxGetApp().GetPixelScale();
+
+            for(unsigned i=0; i < faces.size(); i++)
+            {
+                MeshFace(faces[i],pixels_per_mm);
+                DrawFaceWithCommands(faces[i]);
+            }
+	    }catch(...)
+	    {
+
+	    }
+	}
+
+	if(m_coordinate_system && m_draw_with_transform)
+		glPopMatrix();
+}
+
 void CSketch::GetProperties(std::list<Property *> *list)
 {
-	list->push_back(new PropertyInt(_("Number of elements"), IdNamedObjList::GetNumChildren(), this));
+	list->push_back(new PropertyInt(_("Number of elements"), ObjList::GetNumChildren(), this));
 
 	int initial_index = 0;
 	std::list< wxString > choices;
@@ -185,7 +234,9 @@ void CSketch::GetProperties(std::list<Property *> *list)
 
 	list->push_back ( new PropertyChoice ( _("order"), choices, initial_index, this, on_set_order_type ) );
 
-	IdNamedObjList::GetProperties(list);
+	list->push_back ( new PropertyCheck( _("solidify"), m_solidify, this, on_set_solidify) );
+
+	ObjList::GetProperties(list);
 }
 
 static CSketch* sketch_for_tools = NULL;
@@ -196,8 +247,13 @@ public:
 		if(sketch_for_tools == NULL)return;
 		std::list<HeeksObj*> new_sketches;
 		sketch_for_tools->ExtractSeparateSketches(new_sketches, true);
-		wxGetApp().DeleteUndoably(sketch_for_tools);
-		wxGetApp().AddUndoably(new_sketches, sketch_for_tools->m_owner);
+		for(std::list<HeeksObj*>::iterator It = new_sketches.begin(); It != new_sketches.end(); It++)
+		{
+			HeeksObj* new_object = *It;
+			sketch_for_tools->HEEKSOBJ_OWNER->Add(new_object, NULL);
+		}
+		sketch_for_tools->HEEKSOBJ_OWNER->Remove(sketch_for_tools);
+		wxGetApp().Repaint();
 	}
 	const wxChar* GetTitle(){return _("Split Sketch");}
 	wxString BitmapPath(){return _T("splitsketch");}
@@ -213,13 +269,13 @@ public:
 		std::list<TopoDS_Shape> faces;
 		if(ConvertSketchToFaceOrWire(sketch_for_tools, faces, true))
 		{
-			wxGetApp().StartHistory();
+			wxGetApp().CreateUndoPoint();
 			for(std::list<TopoDS_Shape>::iterator It2 = faces.begin(); It2 != faces.end(); It2++)
 			{
 				TopoDS_Shape& face = *It2;
-				wxGetApp().AddUndoably(new CFace(TopoDS::Face(face)), NULL, NULL);
+				wxGetApp().Add(new CFace(TopoDS::Face(face)), NULL);
 			}
-			wxGetApp().EndHistory();
+			wxGetApp().Changed();
 		}
 	}
 	const wxChar* GetTitle(){return _("Convert sketch to face");}
@@ -237,13 +293,13 @@ public:
 		std::list<TopoDS_Shape> wires;
 		if(ConvertSketchToFaceOrWire(sketch_for_tools, wires, false))
 		{
-			wxGetApp().StartHistory();
+			wxGetApp().CreateUndoPoint();
 			for(std::list<TopoDS_Shape>::iterator It2 = wires.begin(); It2 != wires.end(); It2++)
 			{
 				TopoDS_Shape& wire = *It2;
-				wxGetApp().AddUndoably(new CWire(TopoDS::Wire(wire), _T("Wire from sketch")), NULL, NULL);
+				wxGetApp().Add(new CWire(TopoDS::Wire(wire), _T("Wire from sketch")), NULL);
 			}
-			wxGetApp().EndHistory();
+			wxGetApp().Changed();
 		}
 	}
 	const wxChar* GetTitle(){return _("Convert sketch to wire");}
@@ -290,17 +346,14 @@ public:
 	    wxString caption(_("Distance"));
 
 		double distance;
-		HeeksConfig config;
-		config.Read(_T("CopyParallelDistance"), &distance, 1.0);
 		if(wxGetApp().InputDouble(wxString(_("Use negative for smaller and Positive for larger)") ), _("Enter the distance"), distance))
 		{
-			config.Write(_T("CopyParallelDistance"), distance);
 			HeeksObj *parallel_sketch = sketch_for_tools->Parallel( double(distance) );
 			if (parallel_sketch != NULL)
 			{
-				wxGetApp().StartHistory();
-				wxGetApp().AddUndoably(parallel_sketch, NULL, NULL);
-				wxGetApp().EndHistory();
+				wxGetApp().CreateUndoPoint();
+				wxGetApp().Add(parallel_sketch, NULL);
+				wxGetApp().Changed();
 			}
 			else
 			{
@@ -321,9 +374,9 @@ public:
 	void Run()
 	{
 		HeeksObj* new_object = SplitArcsIntoLittleLines(sketch_for_tools);
-		wxGetApp().DeleteUndoably(sketch_for_tools);
+		wxGetApp().Remove(sketch_for_tools);
 		sketch_for_tools = NULL;
-		wxGetApp().AddUndoably(new_object, NULL, NULL);
+		wxGetApp().Add(new_object, NULL);
 	}
 
 	const wxChar* GetTitle(){return _("Split arcs to little lines");}
@@ -331,6 +384,16 @@ public:
 };
 
 static SketchArcsToLines sketch_arcs_to_lines;
+
+class SketchEnterSketchMode: public Tool
+{
+public:
+	void Run(){wxGetApp().EnterSketchMode(sketch_for_tools);}
+	const wxChar* GetTitle(){return _("Enter Sketch Mode");}
+	wxString BitmapPath(){return _T("sketchmode");}
+};
+
+static SketchEnterSketchMode enter_sketch_mode;
 
 class ClickMidpointOfSketch: public Tool
 {
@@ -467,6 +530,7 @@ void CSketch::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 	// t_list->push_back(&convert_sketch_to_wire);
 	t_list->push_back(&sketch_arcs_to_lines);
 	t_list->push_back(&copy_parallel);
+	t_list->push_back(&enter_sketch_mode);
 
 	Drawing *pDrawingMode = dynamic_cast<Drawing *>(wxGetApp().input_mode_object);
 	if (pDrawingMode != NULL)
@@ -501,7 +565,7 @@ default:
 
 HeeksObj *CSketch::MakeACopy(void)const
 {
-	return (IdNamedObjList*)(new CSketch(*this));
+	return (ObjList*)(new CSketch(*this));
 }
 
 void CSketch::WriteXML(TiXmlNode *root)
@@ -524,7 +588,7 @@ HeeksObj* CSketch::ReadFromXMLElement(TiXmlElement* pElem)
 
 	new_object->ReloadPointers();
 
-	return (IdNamedObjList*)new_object;
+	return (ObjList*)new_object;
 }
 
 void CSketch::SetColor(const HeeksColor &col)
@@ -541,6 +605,11 @@ const HeeksColor* CSketch::GetColor()const
 {
 	if(m_objects.size() == 0)return NULL;
 	return m_objects.front()->GetColor();
+}
+
+void CSketch::OnEditString(const wxChar* str){
+	m_title.assign(str);
+	wxGetApp().Changed();
 }
 
 SketchOrderType CSketch::GetSketchOrder()
@@ -578,7 +647,7 @@ void CSketch::CalculateSketchOrder()
 			double prev_e[3], s[3];
 			if(!prev_object->GetEndPoint(prev_e)){well_ordered = false; break;}
 			if(!object->GetStartPoint(s)){well_ordered = false; break;}
-			if(!(make_point(prev_e).IsEqual(make_point(s), wxGetApp().m_sketch_reorder_tol))){well_ordered = false; break;}
+			if(!(make_point(prev_e).IsEqual(make_point(s), wxGetApp().m_geom_tol))){well_ordered = false; break;}
 		}
 
 		if(first_object == NULL)first_object = object;
@@ -594,7 +663,7 @@ void CSketch::CalculateSketchOrder()
 			{
 				if(first_object->GetStartPoint(s))
 				{
-					if(make_point(e).IsEqual(make_point(s), wxGetApp().m_sketch_reorder_tol))
+					if(make_point(e).IsEqual(make_point(s), wxGetApp().m_geom_tol))
 					{
 						// closed
 						if(IsClockwise())m_order = SketchOrderTypeCloseCW;
@@ -615,10 +684,6 @@ void CSketch::CalculateSketchOrder()
 bool CSketch::ReOrderSketch(SketchOrderType new_order)
 {
 	SketchOrderType old_order = GetSketchOrder();
-
-	SetOrderUndoable* reorder_undoable = new SetOrderUndoable(this, m_order);
-	wxGetApp().DoUndoable(reorder_undoable);
-
 	bool done = false;
 
 	switch(old_order)
@@ -636,7 +701,6 @@ bool CSketch::ReOrderSketch(SketchOrderType new_order)
 		break;
 
 	case SketchOrderTypeBad:
-	case SketchOrderTypeMultipleCurves:
 		switch(new_order)
 		{
 		case SketchOrderTypeBad:
@@ -676,8 +740,6 @@ bool CSketch::ReOrderSketch(SketchOrderType new_order)
 		break;
 	}
 
-	reorder_undoable->m_new_order = m_order;
-
 	return done;
 }
 
@@ -687,17 +749,15 @@ void CSketch::ReLinkSketch()
 
 	relinker.Do();
 
-	std::list<HeeksObj*> new_list;
+	Clear();
 
 	for(std::list< std::list<HeeksObj*> >::iterator It = relinker.m_new_lists.begin(); It != relinker.m_new_lists.end(); It++)
 	{
 		for(std::list<HeeksObj*>::iterator It2 = It->begin(); It2 != It->end(); It2++)
 		{
-			new_list.push_back(*It2);
+			Add(*It2, NULL);
 		}
 	}
-
-	wxGetApp().DoUndoable(new ReorderTool(this, new_list));
 
 	if(relinker.m_new_lists.size() > 1)
 	{
@@ -714,26 +774,44 @@ void CSketch::ReverseSketch()
 	if(m_objects.size() == 0)return;
 
 	std::list<HeeksObj*> new_list;
-
-	SketchOrderType old_order = m_order;
+	std::list<HeeksObj*> old_list = m_objects;
 
 	for(std::list<HeeksObj*>::iterator It=m_objects.begin(); It!=m_objects.end() ;It++)
 	{
 		HeeksObj* object = *It;
-		wxGetApp().ReverseUndoably(object);
-		new_list.push_front(object);
+		HeeksObj* copy = object->MakeACopy();
+		ReverseObject(copy);
+		new_list.push_front(copy);
 	}
 
-	wxGetApp().DoUndoable(new ReorderTool(this, new_list));
-
-	if(old_order == SketchOrderTypeCloseCW)m_order = SketchOrderTypeCloseCCW;
-	else if(old_order == SketchOrderTypeCloseCCW)m_order = SketchOrderTypeCloseCW;
+	Clear();
+	for(std::list<HeeksObj*>::iterator It = new_list.begin(); It != new_list.end(); It++)
+	{
+		HeeksObj* object = *It;
+		Add(object, NULL);
+	}
+	//TODO: this is a hack. Must call remove before add, or else add has no effect. Why are we calling this here?
+	wxGetApp().ObserversOnChange(NULL,&old_list,NULL);
+	wxGetApp().ObserversOnChange(&new_list,NULL,NULL);
 }
 
 void CSketch::ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketches, const bool allow_individual_objects /* = false */ )
 {
 	CSketch* re_ordered_sketch = NULL;
 	CSketch* sketch = this;
+
+	if(GetSketchOrder() == SketchOrderHasCircles)
+	{
+		std::list<HeeksObj*>::iterator It;
+		for(It=m_objects.begin(); It!=m_objects.end() ;It++)
+		{
+			HeeksObj* object = *It;
+			CSketch* new_object = new CSketch();
+			new_object->color = color;
+			new_object->Add(object->MakeACopy(), NULL);
+			new_separate_sketches.push_back(new_object);
+		}
+	}
 
 	if(GetSketchOrder() == SketchOrderTypeBad)
 	{
@@ -742,27 +820,10 @@ void CSketch::ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketche
 		re_ordered_sketch->ReOrderSketch(SketchOrderTypeReOrder);
 		sketch = re_ordered_sketch;
 	}
-	if(sketch->GetSketchOrder() == SketchOrderTypeMultipleCurves || GetSketchOrder() == SketchOrderHasCircles)
+	if(sketch->GetSketchOrder() == SketchOrderTypeMultipleCurves)
 	{
-		std::list<HeeksObj*> objects_for_relinker;
-		for(std::list<HeeksObj*>::iterator It=m_objects.begin(); It!=m_objects.end() ;It++)
-		{
-			HeeksObj* object = *It;
-			if(object->GetType() == CircleType)
-			{
-				CSketch* new_object = new CSketch();
-				new_object->color = color;
-				new_object->Add(object->MakeACopy(), NULL);
-				new_separate_sketches.push_back(new_object);
-			}
-			else
-			{
-				objects_for_relinker.push_back(object);
-			}
-		}
-
-		// Make separate connected sketches from the child elements.
-		CSketchRelinker relinker(objects_for_relinker);
+        // Make separate connected sketches from the child elements.
+		CSketchRelinker relinker(sketch->m_objects);
 
 		relinker.Do();
 
@@ -808,12 +869,12 @@ double CSketch::GetArea()const
 			{
 				double angle = ((HArc*)object)->IncludedAngle();
 				double radius = ((HArc*)object)->m_radius;
-				double p0x = ((HArc*)object)->A.X();
-				double p0y = ((HArc*)object)->A.Y();
-				double p1x = ((HArc*)object)->B.X();
-				double p1y = ((HArc*)object)->B.Y();
-				double pcx = ((HArc*)object)->C.X();
-				double pcy = ((HArc*)object)->C.Y();
+				double p0x = ((HArc*)object)->A->m_p.X();
+				double p0y = ((HArc*)object)->A->m_p.Y();
+				double p1x = ((HArc*)object)->B->m_p.X();
+				double p1y = ((HArc*)object)->B->m_p.Y();
+				double pcx = ((HArc*)object)->C->m_p.X();
+				double pcy = ((HArc*)object)->C->m_p.Y();
 				area += ( 0.5 * ((pcx - p0x) * (pcy + p0y) - (pcx - p1x) * (pcy + p1y) - angle * radius * radius));
 			}
 			break;
@@ -835,13 +896,13 @@ double CSketch::GetArea()const
 bool CSketch::Add(HeeksObj* object, HeeksObj* prev_object)
 {
 	m_order = SketchOrderTypeUnknown;
-	return IdNamedObjList::Add(object, prev_object);
+	return ObjList::Add(object, prev_object);
 }
 
 void CSketch::Remove(HeeksObj* object)
 {
 	m_order = SketchOrderTypeUnknown;
-	IdNamedObjList::Remove(object);
+	ObjList::Remove(object);
 }
 
 bool CSketchRelinker::TryAdd(HeeksObj* object)
@@ -855,21 +916,23 @@ bool CSketchRelinker::TryAdd(HeeksObj* object)
 
 		// try the object, the right way round
 		object->GetStartPoint(new_point);
-		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_sketch_reorder_tol))
+		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_geom_tol))
 		{
-			m_new_lists.back().push_back(object);
-			m_new_back = object;
+			HeeksObj* new_object = object->MakeACopy();
+			m_new_lists.back().push_back(new_object);
+			m_new_back = new_object;
 			m_added_from_old_set.insert(object);
 			return true;
 		}
 
 		// try the object, the wrong way round
 		object->GetEndPoint(new_point);
-		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_sketch_reorder_tol))
+		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_geom_tol))
 		{
-			CSketch::ReverseObject(object);
-			m_new_lists.back().push_back(object);
-			m_new_back = object;
+			HeeksObj* new_object = object->MakeACopy();
+			CSketch::ReverseObject(new_object);
+			m_new_lists.back().push_back(new_object);
+			m_new_back = new_object;
 			m_added_from_old_set.insert(object);
 			return true;
 		}
@@ -879,21 +942,23 @@ bool CSketchRelinker::TryAdd(HeeksObj* object)
 
 		// try the object, the right way round
 		object->GetEndPoint(new_point);
-		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_sketch_reorder_tol))
+		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_geom_tol))
 		{
-			m_new_lists.back().push_front(object);
-			m_new_front = object;
+			HeeksObj* new_object = object->MakeACopy();
+			m_new_lists.back().push_front(new_object);
+			m_new_front = new_object;
 			m_added_from_old_set.insert(object);
 			return true;
 		}
 
 		// try the object, the wrong way round
 		object->GetStartPoint(new_point);
-		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_sketch_reorder_tol))
+		if(make_point(old_point).IsEqual(make_point(new_point), wxGetApp().m_geom_tol))
 		{
-			CSketch::ReverseObject(object);
-			m_new_lists.back().push_front(object);
-			m_new_front = object;
+			HeeksObj* new_object = object->MakeACopy();
+			CSketch::ReverseObject(new_object);
+			m_new_lists.back().push_front(new_object);
+			m_new_front = new_object;
 			m_added_from_old_set.insert(object);
 			return true;
 		}
@@ -936,13 +1001,14 @@ bool CSketchRelinker::AddNext()
 				HeeksObj* object = *It;
 				if(m_added_from_old_set.find(object) == m_added_from_old_set.end())
 				{
+					HeeksObj* new_object = object->MakeACopy();
 					std::list<HeeksObj*> empty_list;
 					m_new_lists.push_back(empty_list);
-					m_new_lists.back().push_back(object);
+					m_new_lists.back().push_back(new_object);
 					m_added_from_old_set.insert(object);
 					m_old_front = It;
-					m_new_back = object;
-					m_new_front = object;
+					m_new_back = new_object;
+					m_new_front = new_object;
 					return true;
 				}
 			}
@@ -956,7 +1022,7 @@ bool CSketchRelinker::Do()
 {
 	if(m_old_list.size() > 0)
 	{
-		HeeksObj* new_object = m_old_list.front();
+		HeeksObj* new_object = m_old_list.front()->MakeACopy();
 		std::list<HeeksObj*> empty_list;
 		m_new_lists.push_back(empty_list);
 		m_new_lists.back().push_back(new_object);
@@ -990,13 +1056,24 @@ int CSketch::Intersects(const HeeksObj *object, std::list< double > *rl) const
 	return(number_of_intersections);
 } // End Intersects() method
 
+void CSketch::ModifyByMatrix(const double *m)
+{
+	if(m_coordinate_system && m_draw_with_transform)
+	{
+		m_coordinate_system->ModifyByMatrix(m);
+	}
+	else
+		ObjList::ModifyByMatrix(m);
+}
 bool CSketch::operator==( const CSketch & rhs ) const
 {
     if (color != rhs.color) return(false);
 	if (m_title != rhs.m_title) return(false);
 	if (m_order != rhs.m_order) return(false);
+	if (m_solidify != rhs.m_solidify) return(false);
+	if (m_draw_with_transform != rhs.m_draw_with_transform) return(false);
 
-	return(IdNamedObjList::operator==(rhs));
+	return(ObjList::operator==(rhs));
 }
 
 static bool FindClosestVertex(const gp_Pnt& p, const TopoDS_Face &face, TopoDS_Vertex &closest_vertex)

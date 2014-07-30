@@ -13,6 +13,7 @@ protected:
 public:
 	double m_x[3];
 	int m_index;
+	bool has_index;
 	bool m_affected_by_view_units;
 	void(*m_callbackfunc)(const double*, HeeksObj*);
 	void(*m_callbackfuncidx)(const double*, HeeksObj*,int);
@@ -25,6 +26,7 @@ public:
 	int get_property_type(){return VertexPropertyType;}
 	bool property_editable()const{return m_callbackfunc != NULL || m_callbackfuncidx != NULL;}
 	Property *MakeACopy(void)const;
+	void CallSetFunction()const;
 	const wxChar* GetShortString(void)const;
 
 	virtual bool xyOnly()const{return false;}

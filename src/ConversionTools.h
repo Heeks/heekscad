@@ -6,9 +6,6 @@
 
 #include "../interface/Tool.h"
 
-class CSketch;
-class CArea;
-
 extern bool ConvertLineArcsToWire2(const std::list<HeeksObj *> &list, TopoDS_Wire& wire);
 extern void SortEdges( std::vector<TopoDS_Edge> & edges );
 extern bool ConvertEdgesToFaceOrWire(const std::vector<TopoDS_Edge> &edges, std::list<TopoDS_Shape> &face_or_wire, bool face_not_wire);
@@ -76,14 +73,6 @@ class AreaXor: public Tool
 public:
 	void Run();
 	const wxChar* GetTitle(){return _("Xor Areas");}
-	wxString BitmapPath(){return _T("areaxor");}
-};
-
-class AreaInsideCurves: public Tool
-{
-public:
-	void Run();
-	const wxChar* GetTitle(){return _("Inside Curves");}
 	wxString BitmapPath(){return _T("areaxor");}
 };
 
@@ -162,5 +151,4 @@ public:
 };
 
 void GetConversionMenuTools(std::list<Tool*>* t_list);
-CSketch* MakeNewSketchFromArea(CArea &area);
 

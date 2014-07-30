@@ -6,30 +6,18 @@
 
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"
-#ifndef WIN32
 #include "CxfFont.h"
-#endif
 
 class HText: public ObjList {
 private:
 	HeeksColor m_color;
 
-	void GetBoxPoints(std::list<gp_Pnt> &pnts);
-
 public:
 	gp_Trsf m_trsf; // matrix defining position, orientation, scale, compared with default text size
 	wxString m_text;
-#ifndef WIN32
 	VectorFont *m_pFont;	// NULL for internal (normal) fonts
-#endif
-	int m_h_justification;//0 = Left;1= Center; 2 = Right
-	int m_v_justification;//0 = Baseline; 1 = Bottom; 2 = Middle; 3 = Top
 
-	HText(const gp_Trsf &trsf, const wxString &text, const HeeksColor* col,
-#ifndef WIN32
-		VectorFont *pVectorFont,
-#endif
-		int hj, int vj );
+	HText(const gp_Trsf &trsf, const wxString &text, const HeeksColor* col, VectorFont *pVectorFont );
 	HText(const HText &b);
 	~HText(void);
 

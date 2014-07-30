@@ -89,7 +89,7 @@ public:
 				CArea area = object_for_tool->m_area;
 				area.Offset(-offset_value);
 				HeeksObj* new_object = new HArea(area);
-				object_for_tool->m_owner->Add(new_object, NULL);
+				object_for_tool->Owner()->Add(new_object, NULL);
 				config.Write(_T("OffsetAreaValue"), offset_value);
 			}
 			catch (...) {
@@ -117,7 +117,7 @@ public:
 				CArea area = object_for_tool->m_area;
 				area.Thicken(fabs(offset_value));
 				HeeksObj* new_object = new HArea(area);
-				object_for_tool->m_owner->Add(new_object, NULL);
+				object_for_tool->Owner()->Add(new_object, NULL);
 				config.Write(_T("ObroundAreaValue"), fabs(offset_value));
 			}
 			catch (...) {
@@ -273,7 +273,7 @@ void HArea::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
 
 void HArea::GetProperties(std::list<Property *> *list){
 	list->push_back(new PropertyInt(_("number of curves"), this->m_area.m_curves.size(), this, NULL));
-	IdNamedObj::GetProperties(list);
+	HeeksObj::GetProperties(list);
 }
 
 bool HArea::Stretch(const double *p, const double* shift, void* data){

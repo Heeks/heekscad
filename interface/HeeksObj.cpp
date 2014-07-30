@@ -15,19 +15,23 @@
 #include "../src/HeeksFrame.h"
 #include "../src/ObjPropsCanvas.h"
 #include "../src/Sketch.h"
+#include "../src/Pad.h"
 #else
 #include "GripperTypes.h"
 #include "GripData.h"
 #endif
 
-HeeksObj::HeeksObj(void): m_owner(NULL), m_skip_for_undo(false), m_id(0), m_layer(0), m_visible(true), m_preserving_id(false), m_index(0)
-{
-}
+HeeksObj::HeeksObj(void): m_skip_for_undo(false), m_id(0), m_layer(0), m_visible(true), m_preserving_id(false), m_index(0)
+#ifndef MULTIPLE_OWNERS
+, m_owner(NULL)
+#endif
+{}
 
-HeeksObj::HeeksObj(const HeeksObj& ho): m_owner(NULL), m_skip_for_undo(false), m_id(0), m_layer(0), m_visible(true),m_preserving_id(false), m_index(0)
-{
-	operator=(ho);
-}
+HeeksObj::HeeksObj(const HeeksObj& ho): m_skip_for_undo(false), m_id(0), m_layer(0), m_visible(true),m_preserving_id(false), m_index(0)
+#ifndef MULTIPLE_OWNERS
+, m_owner(NULL)
+#endif
+{operator=(ho);}
 
 const HeeksObj& HeeksObj::operator=(const HeeksObj &ho)
 {
@@ -44,7 +48,15 @@ const HeeksObj& HeeksObj::operator=(const HeeksObj &ho)
 
 HeeksObj::~HeeksObj()
 {
+#ifdef MULTIPLE_OWNERS
+	std::list<HeeksObj*>::iterator it;
+	for(it = m_owners.begin(); it!= m_owners.end(); ++it)
+	{
+		(*it)->Remove(this);
+	}
+#else
 	if(m_owner)m_owner->Remove(this);
+#endif
 
 #ifdef HEEKSCAD
 	if (m_index) wxGetApp().ReleaseIndex(m_index);
@@ -136,9 +148,90 @@ bool HeeksObj::GetScaleAboutMatrix(double *m)
 #endif
 }
 
+bool HeeksObj::StretchTemporaryTransformed(const double *p, const double* shift, void* data)
+{
+#ifdef HEEKSCAD
+	gp_Trsf mat;
+
+#ifdef MULTIPLE_OWNERS
+	HeeksObj* owner = Owner();
+#else
+	HeeksObj* owner = m_owner;
+#endif
+	CSketch *sketch = dynamic_cast<CSketch*>(owner);
+
+	if(sketch && sketch->m_coordinate_system)
+		mat = sketch->m_coordinate_system->GetMatrix();
+
+	//mat.Invert();
+
+	gp_Pnt vp = make_point(p);
+	gp_Vec vshift = make_vector(shift);
+
+	//vp.Transform(mat);
+	//vshift.Transform(mat);
+
+	double np[3];
+	double nshift[3];
+	extract(vp,np);
+	extract(vshift,nshift);
+
+	return StretchTemporary(np,nshift,data);
+#else
+	return StretchTemporary(p,shift,data);
+#endif
+}
+
 void HeeksObj::GetGripperPositionsTransformed(std::list<GripData> *list, bool just_for_endof)
 {
+#ifdef HEEKSCAD
+
+	//TODO: We want to transform these coords by whatever has happened to the draw matrix on the way down to our level
+	//For right now we are just grabbing the sketches coord system, but this isn't right and won't work when parts or
+	//assemblies come around.
+	//For that matter it has gotten out of control with the addition of faces and edges to pads
+	std::list<GripData> newlist;
+	GetGripperPositions(&newlist,just_for_endof);
+
+	gp_Trsf mat;
+
+#ifdef MULTIPLE_OWNERS
+	HeeksObj* owner = Owner();
+	CSketch *sketch = dynamic_cast<CSketch*>(owner);
+#else
+	CSketch *sketch = dynamic_cast<CSketch*>(m_owner);
+#endif
+
+	if(sketch && sketch->m_coordinate_system)
+		mat = sketch->m_coordinate_system->GetMatrix();
+
+#ifdef MULTIPLE_OWNERS
+	CPad *pad = dynamic_cast<CPad*>(owner);
+	if(!pad && owner)
+		pad = dynamic_cast<CPad*>(owner->Owner());
+#else
+	CPad *pad = dynamic_cast<CPad*>(m_owner);
+	if(!pad && m_owner)
+		pad = dynamic_cast<CPad*>(m_owner->m_owner);
+#endif
+	if(pad && pad->m_sketch->m_coordinate_system)
+		mat = pad->m_sketch->m_coordinate_system->GetMatrix();
+
+	std::list<GripData>::iterator it;
+	for(it = newlist.begin(); it != newlist.end(); ++it)
+	{
+		GripData gd = *it;
+
+		gp_Pnt pnt(gd.m_x,gd.m_y,gd.m_z);
+		pnt.Transform(mat);
+		gd.m_x = pnt.X();
+		gd.m_y = pnt.Y();
+		gd.m_z = pnt.Z();
+		list->push_back(gd);
+	}
+#else
 	GetGripperPositions(list,just_for_endof);
+#endif
 }
 
 void HeeksObj::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
@@ -159,14 +252,22 @@ void HeeksObj::GetGripperPositions(std::list<GripData> *list, bool just_for_endo
 
 bool HeeksObj::Add(HeeksObj* object, HeeksObj* prev_object)
 {
+#ifdef MULTIPLE_OWNERS
+	object->AddOwner(this);
+#else
 	object->m_owner = this;
+#endif
 	object->OnAdd();
 	return true;
 }
 
 void HeeksObj::OnRemove()
 {
+#ifdef MULTIPLE_OWNERS
+	if(m_owners.size() == 0)KillGLLists();
+#else
 	if(m_owner == NULL)KillGLLists();
+#endif
 }
 
 void HeeksObj::SetID(int id)
@@ -187,6 +288,43 @@ void HeeksObj::WriteBaseXML(TiXmlElement *element)
 #endif
 }
 
+#ifdef CONSTRAINT_TESTER
+//JT
+void HeeksObj::AuditHeeksObjTree4Constraints( HeeksObj * SketchPtr ,HeeksObj * mom, int level,bool ShowMsgInConsole,bool * constraintError)
+{
+
+    //If this routine is firing it probably means that either this has nothing to do with constraints or
+    //a virtual function was not implemented in a function.
+    //Most of the information needed can be fulled from ConstrainedObject::AuditHeeksObjTree4Constraints
+
+    wxString message=wxString::Format(wxT("Level:%d  %s ID=%d (From HeekObj::AuditHeeksObjTree4Constraints") ,level,GetTypeString(),m_id);
+    if (ShowMsgInConsole)wxPuts(message);
+
+}
+
+void HeeksObj::HeeksObjOccurrenceInSketch(HeeksObj * Sketch,HeeksObj * Object, int * OccurenceOfObjectInSketch,int FromLevel,bool ShowMsgInConsole)
+{
+    *OccurenceOfObjectInSketch =0;
+    if (Sketch!=NULL)
+    Sketch->FindConstrainedObj(Sketch,Object,OccurenceOfObjectInSketch,FromLevel,0,ShowMsgInConsole);//This initiates the recursion
+    else
+    wxMessageBox(_("Sketch Pointer == NULL in HeeksObjOccurrenceInSketch"));
+
+
+}
+void HeeksObj::FindConstrainedObj(HeeksObj * CurrentObject,HeeksObj * ObjectToFind,int * OccurenceOfObjectInSketch,int FromLevel,int Level,bool ShowMsgInConsole)
+{
+    //if we hit this it's the end of the line
+    if (this == ObjectToFind)
+    {
+       (*OccurenceOfObjectInSketch)++;
+    }
+
+}
+
+
+#endif
+
 void HeeksObj::ReadBaseXML(TiXmlElement* element)
 {
 #ifdef HEEKSCAD
@@ -201,6 +339,86 @@ bool HeeksObj::OnVisibleLayer()
 	// to do, support multiple layers.
 	return true;
 }
+
+#ifdef MULTIPLE_OWNERS
+
+HeeksObj* HeeksObj::Owner()
+{
+	if(m_owners.size() == 0)return NULL;
+	return *m_owners.begin();
+}
+
+std::list<HeeksObj*> HeeksObj::Owners()
+{
+	std::list<HeeksObj *> copy;
+	std::copy( m_owners.begin(), m_owners.end(), std::inserter( copy, copy.begin() ) );
+	return(copy);
+}
+
+void HeeksObj::SetOwner(HeeksObj *obj)
+{
+	m_owners.clear();
+	if(obj)AddOwner(obj);
+}
+
+bool HeeksObj::HasOwner(HeeksObj *obj)
+{
+	std::list<HeeksObj*>::iterator it;
+	for(it = m_owners.begin(); it!= m_owners.end(); ++it)
+	{
+		if(*it == obj)
+			return true;
+	}
+	return false;
+}
+
+bool HeeksObj::HasOwner()
+{
+	return !m_owners.empty();
+}
+
+void HeeksObj::RemoveOwners()
+{
+	m_owners.clear();
+}
+
+void HeeksObj::RemoveOwner(HeeksObj* obj)
+{
+	m_owners.remove(obj);
+}
+
+void HeeksObj::AddOwner(HeeksObj *obj)
+{
+	// Make sure we don't add duplicates.
+	for (std::list<HeeksObj*>::iterator itOwner = m_owners.begin(); itOwner != m_owners.end(); itOwner++)
+	{
+		if (*itOwner == obj) return;	// It's already here.
+	}
+
+	m_owners.push_back(obj);
+}
+
+void HeeksObj::AddOwners(std::list<HeeksObj*> owners)
+{
+	for (std::list<HeeksObj*>::iterator itOwner = m_owners.begin(); itOwner != m_owners.end(); itOwner++)
+	{
+		AddOwner( *itOwner );
+	}
+}
+
+HeeksObj* HeeksObj::GetFirstOwner()
+{
+	m_owners_it = m_owners.begin();
+	return GetNextOwner();
+}
+
+HeeksObj* HeeksObj::GetNextOwner()
+{
+	if(m_owners_it != m_owners.end())
+		return *m_owners_it++;
+	return NULL;
+}
+#endif
 
 HeeksObj *HeeksObj::Find( const int type, const unsigned int id )
 {

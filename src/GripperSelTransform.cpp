@@ -19,6 +19,8 @@ GripperSelTransform::GripperSelTransform(const GripData& data, HeeksObj* parent)
 }
 
 bool GripperSelTransform::OnGripperGrabbed(const std::list<HeeksObj*>& list, bool show_grippers_on_drag, double* from){
+	wxGetApp().CreateUndoPoint();
+
 	m_initial_grip_pos[0] = m_data.m_x;
 	m_initial_grip_pos[1] = m_data.m_y;
 	m_initial_grip_pos[2] = m_data.m_z;
@@ -71,7 +73,7 @@ void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
 				if(object)
 				{
 					double p[3] = {m_data.m_x, m_data.m_y, m_data.m_z};
-					stretch_done = object->StretchTemporary(p, shift,m_data.m_data);
+					stretch_done = object->StretchTemporaryTransformed(p, shift,m_data.m_data);
 				}
 			}
 		}
@@ -99,14 +101,17 @@ void GripperSelTransform::OnGripperMoved( double* from, const double* to ){
 
 	MakeMatrix ( from, to, object_m, wxGetApp().m_drag_matrix );
 
+	if(wxGetApp().m_sketch_mode && wxGetApp().m_sketch->m_coordinate_system)
+	{
+		wxGetApp().m_drag_matrix = wxGetApp().m_sketch->m_coordinate_system->GetMatrix() * wxGetApp().m_drag_matrix;
+	}
+
 	wxGetApp().Repaint();
 }
 
 void GripperSelTransform::OnGripperReleased ( const double* from, const double* to )
 {
 	wxGetApp().DestroyTransformGLList();
-
-	wxGetApp().StartHistory();
 
 	for ( std::list<HeeksObj *>::iterator It = m_items_marked_at_grab.begin(); It != m_items_marked_at_grab.end(); It++ )
 	{
@@ -126,7 +131,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 			}
 
 			{
-				if(object)wxGetApp().DoUndoable(new StretchTool(object, m_initial_grip_pos, shift, m_data.m_data));
+				if(object)wxGetApp().DoToolUndoably(new StretchTool(object, m_initial_grip_pos, shift, m_data.m_data));
 			}
 			m_data.m_x += shift[0];
 			m_data.m_y += shift[1];
@@ -140,7 +145,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 			MakeMatrix ( from, to, object_m, mat );
 			double m[16];
 			extract(mat, m );
-			wxGetApp().TransformUndoably(object, m);
+			object->ModifyByMatrix(m);
 		}
 	}
 
@@ -164,7 +169,7 @@ void GripperSelTransform::OnGripperReleased ( const double* from, const double* 
 		}
 	}
 	wxGetApp().m_marked_list->gripping = false;
-	wxGetApp().EndHistory();
+	wxGetApp().Changed();
 }
 
 void GripperSelTransform::MakeMatrix ( const double* from, const double* to, const double* object_m, gp_Trsf& mat )

@@ -1,5 +1,5 @@
 // GripperTypes.h
-#pragma once
+
 enum EnumGripperType{
 	GripperTypeTranslate,
 	GripperTypeRotate,

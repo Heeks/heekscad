@@ -4,7 +4,13 @@
 
 #pragma once
 
+#ifdef MULTIPLE_OWNERS
+#include "../interface/ObjList.h"
+class HPoint;
+#include "../interface/HeeksColor.h"
+#else
 #include "HPoint.h"
+#endif
 
 enum AngularDimensionTextMode
 {
@@ -13,8 +19,11 @@ enum AngularDimensionTextMode
 	RadiansAngularDimensionTextMode
 };
 
-
+#ifdef MULTIPLE_OWNERS
+class HAngularDimension: public ObjList{
+#else
 class HAngularDimension: public HeeksObj{
+#endif
 private:
 	HeeksColor m_color;
 
@@ -57,7 +66,10 @@ public:
 	//const wxChar* GetShortString(void)const{return m_text.c_str();}
 	bool CanEditString(void)const{return true;}
 	void OnEditString(const wxChar* str);
-
+#ifdef MULTIPLE_OWNERS
+	void LoadToDoubles();
+	void LoadFromDoubles();
+#endif
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	bool IsDifferent(HeeksObj* other);
 	void ReloadPointers();

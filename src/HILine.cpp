@@ -7,20 +7,19 @@
 #include "HLine.h"
 #include "HArc.h"
 #include "HCircle.h"
-#include "HPoint.h"
 #include "../interface/PropertyDouble.h"
 #include "../interface/PropertyLength.h"
 #include "../interface/PropertyVertex.h"
 #include "Gripper.h"
 
-HILine::HILine(const HILine &line):EndedObject(){
+HILine::HILine(const HILine &line):EndedObject(&line.color){
 	operator=(line);
 }
 
-HILine::HILine(const gp_Pnt &a, const gp_Pnt &b, const HeeksColor* col):EndedObject(){
-	A = a;
-	B = b;
-	SetColor(*col);
+HILine::HILine(const gp_Pnt &a, const gp_Pnt &b, const HeeksColor* col):EndedObject(col){
+	A->m_p = a;
+	B->m_p = b;
+	color = *col;
 }
 
 HILine::~HILine(){
@@ -28,6 +27,7 @@ HILine::~HILine(){
 
 const HILine& HILine::operator=(const HILine &b){
 	EndedObject::operator=(b);
+	color = b.color;
 	return *this;
 }
 
@@ -42,7 +42,12 @@ void HILine::glCommands(bool select, bool marked, bool no_color)
 {
 	if(!no_color)
 	{
-		wxGetApp().glColorEnsuringContrast(*GetColor());
+		wxGetApp().glColorEnsuringContrast(color);
+		if (wxGetApp().m_allow_opengl_stippling)
+		{
+			glEnable(GL_LINE_STIPPLE);
+			glLineStipple(3, 0xaaaa);
+		}
 	}
 	GLfloat save_depth_range[2];
 	if(marked)
@@ -52,13 +57,13 @@ void HILine::glCommands(bool select, bool marked, bool no_color)
 		glLineWidth(2);
 	}
 
-	gp_Vec v(A, B);
+	gp_Vec v(A->m_p, B->m_p);
 	if(v.Magnitude() > 0.0000000001)
 	{
 		v.Normalize();
 
-		gp_Pnt p1 = A.XYZ() - v.XYZ() * 10000;
-		gp_Pnt p2 = A.XYZ() + v.XYZ() * 10000;
+		gp_Pnt p1 = A->m_p.XYZ() - v.XYZ() * 10000;
+		gp_Pnt p2 = A->m_p.XYZ() + v.XYZ() * 10000;
 
 		glBegin(GL_LINES);
 		glVertex3d(p1.X(), p1.Y(), p1.Z());
@@ -71,6 +76,13 @@ void HILine::glCommands(bool select, bool marked, bool no_color)
 		glLineWidth(1);
 		glDepthRange(save_depth_range[0], save_depth_range[1]);
 	}
+	if(!no_color)
+	{
+		if (wxGetApp().m_allow_opengl_stippling)
+		{
+			glDisable(GL_LINE_STIPPLE);
+		}
+	}
 }
 
 HeeksObj *HILine::MakeACopy(void)const{
@@ -79,8 +91,8 @@ HeeksObj *HILine::MakeACopy(void)const{
 }
 
 void HILine::GetBox(CBox &box){
-	box.Insert(A.X(), A.Y(), A.Z());
-	box.Insert(B.X(), B.Y(), B.Z());
+	box.Insert(A->m_p.X(), A->m_p.Y(), A->m_p.Z());
+	box.Insert(B->m_p.X(), B->m_p.Y(), B->m_p.Z());
 }
 
 void HILine::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){
@@ -91,22 +103,22 @@ void HILine::GetGripperPositions(std::list<GripData> *list, bool just_for_endof)
 }
 
 static void on_set_start(const double *vt, HeeksObj* object){
-	((HILine*)object)->A = make_point(vt);
+	((HILine*)object)->A->m_p = make_point(vt);
 	wxGetApp().Repaint();
 }
 
 static void on_set_end(const double *vt, HeeksObj* object){
-	((HILine*)object)->B = make_point(vt);
+	((HILine*)object)->B->m_p = make_point(vt);
 	wxGetApp().Repaint();
 }
 
 void HILine::GetProperties(std::list<Property *> *list){
 	double a[3], b[3];
-	extract(A, a);
-	extract(B, b);
+	extract(A->m_p, a);
+	extract(B->m_p, b);
 	list->push_back(new PropertyVertex(_("start"), a, this, on_set_start));
 	list->push_back(new PropertyVertex(_("end"), b, this, on_set_end));
-	double length = A.Distance(B);
+	double length = A->m_p.Distance(B->m_p);
 	list->push_back(new PropertyLength(_("Length"), length, this));
 
 	HeeksObj::GetProperties(list);
@@ -126,8 +138,8 @@ bool HILine::FindPossTangentPoint(const double* ray_start, const double* ray_dir
 }
 
 gp_Lin HILine::GetLine()const{
-	gp_Vec v(A,B);
-	return gp_Lin(A, v);
+	gp_Vec v(A->m_p,B->m_p);
+	return gp_Lin(A->m_p, v);
 }
 
 int HILine::Intersects(const HeeksObj *object, std::list< double > *rl)const{
@@ -193,13 +205,13 @@ int HILine::Intersects(const HeeksObj *object, std::list< double > *rl)const{
 
 bool HILine::GetStartPoint(double* pos)
 {
-	extract(A, pos);
+	extract(A->m_p, pos);
 	return true;
 }
 
 bool HILine::GetEndPoint(double* pos)
 {
-	extract(B, pos);
+	extract(B->m_p, pos);
 	return true;
 }
 
@@ -208,6 +220,13 @@ void HILine::WriteXML(TiXmlNode *root)
 	TiXmlElement * element;
 	element = new TiXmlElement( "InfiniteLine" );
 	root->LinkEndChild( element );
+	element->SetAttribute("col", color.COLORREF_color());
+//	element->SetDoubleAttribute("sx", A->m_p.X());
+//	element->SetDoubleAttribute("sy", A->m_p.Y());
+//	element->SetDoubleAttribute("sz", A->m_p.Z());
+//	element->SetDoubleAttribute("ex", B->m_p.X());
+//	element->SetDoubleAttribute("ey", B->m_p.Y());
+//	element->SetDoubleAttribute("ez", B->m_p.Z());
 	WriteBaseXML(element);
 }
 
@@ -217,9 +236,34 @@ HeeksObj* HILine::ReadFromXMLElement(TiXmlElement* pElem)
 	gp_Pnt p0, p1;
 	HeeksColor c;
 
+	// get the attributes
+	for(TiXmlAttribute* a = pElem->FirstAttribute(); a; a = a->Next())
+	{
+		std::string name(a->Name());
+		if(name == "col"){c = HeeksColor((long)(a->IntValue()));}
+		else if(name == "sx"){p0.SetX(a->DoubleValue());}
+		else if(name == "sy"){p0.SetY(a->DoubleValue());}
+		else if(name == "sz"){p0.SetZ(a->DoubleValue());}
+		else if(name == "ex"){p1.SetX(a->DoubleValue());}
+		else if(name == "ey"){p1.SetY(a->DoubleValue());}
+		else if(name == "ez"){p1.SetZ(a->DoubleValue());}
+	}
+
 	HILine* new_object = new HILine(p0, p1, &c);
 	new_object->ReadBaseXML(pElem);
 
+	if(new_object->GetNumChildren()>2)
+	{
+		//This is a new style line, with children points
+		new_object->Remove(new_object->A);
+		new_object->Remove(new_object->B);
+		delete new_object->A;
+		delete new_object->B;
+		new_object->A = (HPoint*)new_object->GetFirstChild();
+		new_object->B = (HPoint*)new_object->GetNextChild();
+		new_object->A->m_draw_unselected = false;
+		new_object->B->m_draw_unselected = false;
+	}
 	return new_object;
 }
 

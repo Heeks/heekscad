@@ -17,6 +17,7 @@ DimensionDrawing dimension_drawing;
 
 DimensionDrawing::DimensionDrawing(void)
 {
+	temp_object = NULL;
 	m_mode = TwoPointsDimensionMode;
 }
 
@@ -28,15 +29,18 @@ bool DimensionDrawing::calculate_item(DigitizedPoint &end)
 {
 	if(end.m_type == DigitizeNoItemType)return false;
 
-	if(TempObject() && TempObject()->GetType() != DimensionType){
-		ClearObjectsMade();
+	if(temp_object && temp_object->GetType() != DimensionType){
+		delete temp_object;
+		temp_object = NULL;
+		temp_object_in_list.clear();
 	}
 
 	gp_Trsf mat = wxGetApp().GetDrawMatrix(true);
 
 	// make sure dimension exists
-	if(TempObject()==NULL){
-		AddToTempObjects(new HDimension(mat, gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), m_mode, DimensionUnitsGlobal, &(wxGetApp().current_color)));
+	if(!temp_object){
+		temp_object = new HDimension(mat, gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), gp_Pnt(0, 0, 0), m_mode, DimensionUnitsGlobal, &(wxGetApp().current_color));
+		if(temp_object)temp_object_in_list.push_back(temp_object);
 	}
 
 	gp_Pnt p0, p1, p2;
@@ -59,21 +63,40 @@ bool DimensionDrawing::calculate_item(DigitizedPoint &end)
 
 	// double distance = p0.Distance(p1);
 
-	((HDimension*)TempObject())->m_trsf = mat;
-	((HDimension*)TempObject())->A = p0;
-	((HDimension*)TempObject())->B = p1;
-	((HDimension*)TempObject())->m_p2 = p2;
-	((HDimension*)TempObject())->m_mode = m_mode;
+	((HDimension*)temp_object)->m_trsf = mat;
+	((HDimension*)temp_object)->A->m_p = p0;
+	((HDimension*)temp_object)->B->m_p = p1;
+	((HDimension*)temp_object)->m_p2->m_p = p2;
+	((HDimension*)temp_object)->m_mode = m_mode;
 
 	return true;
 }
 
+void DimensionDrawing::clear_drawing_objects(int mode)
+{
+	if(temp_object && mode == 2)delete temp_object;
+	temp_object = NULL;
+	temp_object_in_list.clear();
+}
+
 static DimensionDrawing* DimensionDrawing_for_GetProperties = NULL;
 
-static void on_set_mode(int value, HeeksObj* object, bool from_undo_redo)
+static void on_set_mode(int value, HeeksObj* object)
 {
 	DimensionDrawing_for_GetProperties->m_mode = (DimensionMode)value;
 	wxGetApp().Repaint();
+}
+
+void DimensionDrawing::StartOnStep3(HDimension* object)
+{
+	wxGetApp().SetInputMode(this);
+	temp_object = object;
+	temp_object_in_list.push_back(object);
+	set_draw_step_not_undoable(2);
+	current_view_stuff->before_start_pos.m_point = object->A->m_p;
+	current_view_stuff->start_pos.m_point = object->B->m_p;
+
+	m_mode = object->m_mode;
 }
 
 void DimensionDrawing::GetProperties(std::list<Property *> *list){

@@ -64,7 +64,7 @@ CPluginItemDialog::CPluginItemDialog(wxWindow *parent, const wxString& title, Pl
     mainsizer->Add( gridsizer, wxSizerFlags().Align(wxALIGN_CENTER).Border(wxALL, 10).Expand() );
     mainsizer->Add( bottomsizer, wxSizerFlags().Align(wxALIGN_CENTER) );
 
-    // tell frame to make use of sizer
+    // tell frame to make use of sizer (or constraints, if any)
     m_panel->SetAutoLayout( true );
     m_panel->SetSizer( mainsizer );
 
@@ -164,7 +164,7 @@ CPluginsDialog::CPluginsDialog(wxWindow *parent):wxDialog(parent, wxID_ANY, _("H
 
     mainsizer->Add( bottomsizer, 0, wxCENTER );
 
-    // tell frame to make use of sizer
+    // tell frame to make use of sizer (or constraints, if any)
     m_panel->SetAutoLayout( true );
     m_panel->SetSizer( mainsizer );
 
@@ -218,25 +218,30 @@ void ReadPluginsList(std::list<PluginData> &plugins)
 
 	//look for heekscnc in the standard install location and automatically add it, if it isn't already configured
 	if( !hCncConfigured ) {
+		struct stat cncstat;
+		bool foundHcncPlugin = false;
 #ifdef WIN32
 		//this code should work on windows given the correct path
-		// FIXME: put the right path under Windows
-		wxString sCncplugPath = wxT("standard\\windows\\path\\to\\heekscnc.dll");
-#else
-  #if wxCHECK_VERSION(3, 0, 0)
-		wxStandardPaths& sp = wxStandardPaths::Get();
-  #else
-		wxStandardPaths sp;
+		const char* cncPlugPath = "standard\\windows\\path\\to\\heekscnc.dll";
+  #ifndef S_ISREG
+  	//if this fails to compile on windows, change it to
+  	//#define S_ISREG(mode) true
+    #define S_ISREG(mode)  (((mode) & S_IFMT) == S_IFREG)
   #endif
-		wxString sCncplugPath = sp.GetInstallPrefix()  + wxT("/lib/libheekscnc.so");
+#else
+		const char* cncPlugPath = "/usr/lib/libheekscnc.so";  //this is the path that cmake installs the lib to
 #endif
-		wprintf(_T("Attempt to automatically load HeeksCNC: ") + sCncplugPath  + wxT("\n"));
-		if (wxFileName::FileExists(sCncplugPath)) {
+		if( stat(cncPlugPath, &cncstat) == 0 ) {
+			if( S_ISREG(cncstat.st_mode) )
+				foundHcncPlugin = true;
+		}
+
+		if( foundHcncPlugin ) {
 			PluginData pd;
 			pd.enabled = true;
 			pd.hard_coded = false; //if this was true, the plugin wouldn't be added to the config - meaning the user couldn't disable it
 			pd.name = _T("HeeksCNC (Automatically added)");
-			pd.path = sCncplugPath;
+			pd.path = _T("/usr/lib/libheekscnc.so");
 			plugins.push_back(pd);
 		}
 	}

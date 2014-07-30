@@ -28,30 +28,3 @@ public:
 	void Add(std::list<Tool*>& tools);
 	void Clear();
 };
-
-
-// splitting undoablelist from toollist
-
-class UndoableList: public Undoable{
-private:
-	std::list<Undoable*>::iterator LoopIt;
-
-public:
-	wxString m_title;
-	std::list<Undoable*> m_undoables;
-
-	UndoableList(const wxChar *t): m_title(t){}
-	UndoableList(std::list<Undoable*>& undoables, const wxChar *t): m_title(t), m_undoables(undoables){}
-	~UndoableList(){Clear();}
-
-	// Tool's virtual functions
-	const wxChar* GetTitle(){return m_title.c_str();}
-	void Run(bool redo){};
-	bool IsAnUndoableList(){return true;}
-
-	// member functions
-	void Add(Undoable *u);
-	void Add(std::list<Undoable*>& undoables);
-	void Clear();
-};
-

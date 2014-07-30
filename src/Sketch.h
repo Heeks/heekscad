@@ -4,20 +4,25 @@
 
 #pragma once
 
-#include "../interface/IdNamedObjList.h"
+#include "../interface/ObjList.h"
 #include "../interface/HeeksColor.h"
 #include "../interface/SketchOrder.h"
 
 class CoordinateSystem;
 
-class CSketch:public IdNamedObjList
+class CSketch:public ObjList
 {
 	HeeksColor color;
+	wxString m_title;
 	bool IsClockwise()const{return GetArea()>0;}
 
 public:
 	static std::string m_sketch_order_str[MaxSketchOrderTypes];
 	SketchOrderType m_order;
+	bool m_solidify;
+	bool m_draw_with_transform;
+	CoordinateSystem* m_coordinate_system;
+
 
 	CSketch();
 	CSketch(const CSketch& c);
@@ -31,6 +36,7 @@ public:
 	bool IsDifferent( HeeksObj *other ) { return(*this != (*(CSketch *)other)); }
 
 	std::vector<TopoDS_Face> GetFaces();
+
 	int GetType()const{return SketchType;}
 	long GetMarkingMask()const{return MARKING_FILTER_SKETCH;}
 	const wxChar* GetTypeString(void)const{return _("Sketch");}
@@ -38,13 +44,20 @@ public:
 	void GetProperties(std::list<Property *> *list);
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
 	HeeksObj *MakeACopy(void)const;
-	void CopyFrom(const HeeksObj* object){operator=(*((CSketch*)((IdNamedObjList*)object)));}
+	void CopyFrom(const HeeksObj* object){operator=(*((CSketch*)((ObjList*)object)));}
 	void WriteXML(TiXmlNode *root);
 	bool UsesID(){return true;}
 	void SetColor(const HeeksColor &col);
 	const HeeksColor* GetColor()const;
+	const wxChar* GetShortString(void)const{return m_title.c_str();}
+	bool CanEditString(void)const{return true;}
+	void OnEditString(const wxChar* str);
 	bool Add(HeeksObj* object, HeeksObj* prev_object);
 	void Remove(HeeksObj* object);
+	void glCommands(bool select, bool marked, bool no_color);
+	void ReloadPointers();
+	bool IsTransient(){return true;}
+	void ModifyByMatrix(const double *m);
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 

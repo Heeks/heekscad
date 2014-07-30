@@ -132,8 +132,12 @@ void CGroup::MoveSolidsToGroupsById(HeeksObj* object)
 			HeeksObj* o = wxGetApp().GetIDObject(SolidType, id);
 			if (o != NULL)
 			{
-                o->m_owner->Remove(o);
+                o->HEEKSOBJ_OWNER->Remove(o);
+#ifdef MULTIPLE_OWNERS
+                o->RemoveOwner(o->Owner());
+#else
 				o->m_owner = NULL;
+#endif
                 group->Add(o, NULL);
 			}
 		}
@@ -275,11 +279,13 @@ static void on_set_pos(const double* pos)
 class PickPos: public Tool{
 	// Tool's virtual functions
 	void Run(){
+		wxGetApp().CreateUndoPoint();
 		callback_for_pick_pos = on_set_pos;
 		SetVertexPtr();
 		double p[3];
 		extract(*vertex_for_pick_pos, p);
 		wxGetApp().PickPosition(GetTitle(), p, callback_for_pick_pos);
+		wxGetApp().Changed();
 	}
 	wxString BitmapPath(){ return _T("pickpos");}
 	virtual void SetVertexPtr()=0;

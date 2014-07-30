@@ -6,19 +6,29 @@
 
 #include "../interface/HeeksObj.h"
 #include "../interface/HeeksColor.h"
+#include "HPoint.h"
+#ifdef MULTIPLE_OWNERS
+#include "../interface/ObjList.h"
 
+class EndedObject: public ObjList{
+#else
 class EndedObject: public HeeksObj{
-protected:
-	HeeksColor color;
-
+#endif
 public:
-	gp_Pnt A, B;
+	HPoint* A, *B;
 
 	~EndedObject(void);
-	EndedObject(void);
+	EndedObject(const HeeksColor* color);
+#ifndef MULTIPLE_OWNERS
 	EndedObject(const EndedObject& e);
+#endif
 
 	const EndedObject& operator=(const EndedObject &b);
+
+#ifdef MULTIPLE_OWNERS
+	virtual void LoadToDoubles();
+	virtual void LoadFromDoubles();
+#endif
 
 	// HeeksObj's virtual functions
 	bool Stretch(const double *p, const double* shift, void* data);
@@ -26,11 +36,10 @@ public:
 	bool GetStartPoint(double* pos);
 	bool GetEndPoint(double* pos);
 	void CopyFrom(const HeeksObj* object){operator=(*((EndedObject*)object));}
-	void SetColor(const HeeksColor &col){color = col;}
-	const HeeksColor* GetColor()const{return &color;}
 	void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
+	void glCommands(bool select, bool marked, bool no_color);
 	HeeksObj* MakeACopyWithID();
 	bool IsDifferent(HeeksObj* other);
-	void WriteBaseXML(TiXmlElement *element);
-	void ReadBaseXML(TiXmlElement* element);
+//	void WriteBaseXML(TiXmlElement *element);
+	
 };

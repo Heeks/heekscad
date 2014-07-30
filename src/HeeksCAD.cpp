@@ -12,6 +12,7 @@
 *   - Modify solids using blending, or boolean operations. 
 *   - Save IGES, STEP and STL. Printer plot the 2D geometry or to HPGL. 
 *   - Import and export dxf files; lines, arcs, ellipses, splines and polylines are supported. 
+*   - Use the geometric constraints solver to create accurate drawings from rough sketches.
 *   - HeeksCAD can be translated into any language. There are currently English, German, and Italian translations.
 *   - HeeksCAD has been built for Windows, Ubuntu, Debian, and OpenSUSE.
 *   - It is possible to make Add-In modules, see HeeksCNC, HeeksArt, and HeeksPython projects.
@@ -56,6 +57,7 @@
 #include "Face.h"
 #include "ViewPoint.h"
 #include "MarkedList.h"
+#include "UndoEngine.h"
 #include "../interface/Observer.h"
 #include "TransformTool.h"
 #include "Grid.h"
@@ -83,45 +85,15 @@
 #include "HeeksConfig.h"
 #include "Group.h"
 #include "RS274X.h"
-#ifndef WIN32
 #include "CxfFont.h"
-#endif
 #include "AutoSave.h"
 #include <wx/progdlg.h>
 #include "OrientationModifier.h"
 #include "MenuSeparator.h"
 #include "HGear.h"
 #include "HArea.h"
-#include "History.h"
-#include "RemoveOrAddTool.h"
-#include "../interface/HeeksCADInterface.h"
 
 using namespace std;
-
-#ifdef _DEBUG
-#ifdef __WXMSW__
-class DestroyedAtClose{
-public:
-	DestroyedAtClose()
-	{}
-
-	~DestroyedAtClose()
-	{
-_CrtDumpMemoryLeaks();
-	}
-} destroyed_at_close;
-
-int MyAllocHook( int allocType, void *userData, size_t size, int blockType, long requestNumber, const unsigned char *filename, int lineNumber)
-{
-	if (requestNumber == 154)
-	{
-		int here = 0;
-		here = 3;
-	}
-	return TRUE;
-}
-#endif
-#endif
 
 #ifdef PYHEEKSCAD
 HeeksCADapp theApp;
@@ -130,6 +102,21 @@ HeeksCADapp &wxGetApp(){return theApp;}
 IMPLEMENT_APP(HeeksCADapp)
 #endif
 
+extern void SketchTools_GetOptions(std::list<Property *> *list);
+extern void LoadSketchToolsSettings();
+
+
+#if 0
+int MyAllocHook( int allocType, void *userData, size_t size, int blockType, long requestNumber, const unsigned char *filename, int lineNumber)
+{
+	if (size==24 && requestNumber > 14000 && requestNumber < 18000)
+	{
+		int here = 0;
+		here = 3;
+	}
+	return TRUE;
+}
+#endif
 
 static unsigned int DecimalPlaces( const double value )
 {
@@ -146,16 +133,19 @@ static unsigned int DecimalPlaces( const double value )
 
 HeeksCADapp::HeeksCADapp(): ObjList()
 {
-	m_version_number = wxString(_T(HEEKSCAD_VERSION_MAIN)) + _T(" ") + _T(HEEKSCAD_VERSION_SUB) + _T(" 0");
-	m_geom_tol = 0.000001;
+#if 0
+	_CrtSetAllocHook(MyAllocHook);
+#endif
 
+	m_version_number = _T("0 21 0");
+	m_geom_tol = 0.000001;
 	TiXmlBase::SetRequiredDecimalPlaces( DecimalPlaces(m_geom_tol) );	 // Ensure we write XML in enough accuracy to be useful when re-read.
 
-	m_sketch_reorder_tol = 0.01;
 	m_view_units = 1.0;
 	for(int i = 0; i<NUM_BACKGROUND_COLORS; i++)background_color[i] = HeeksColor(0, 0, 0);
 	m_background_mode = BackgroundModeOneColor;
 	current_color = HeeksColor(0, 0, 0);
+	construction_color = HeeksColor(0, 0, 255);
 	face_selection_color = HeeksColor(0, 0, 0);
 	input_mode_object = NULL;
 	cur_mouse_pos.x = 0;
@@ -184,10 +174,11 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_antialiasing = false;
 	m_light_push_matrix = true;
 	m_marked_list = new MarkedList;
-	history = new MainHistory;
+#ifdef USE_UNDO_ENGINE
+	history = new UndoEngine(this);
+#endif
 	m_doing_rollback = false;
 	mouse_wheel_forward_away = true;
-	m_mouse_move_highlighting = true;
 	ctrl_does_rotate = false;
 	m_ruler = new HRuler();
 	m_show_ruler = false;
@@ -219,19 +210,17 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_dragging_moves_objects = false;
 	m_no_creation_mode = false;
 
-#ifndef WIN32
 	m_font_paths = _T("/usr/share/qcad/fonts");
 	m_word_space_percentage = 100.0;
 	m_character_space_percentage = 25.0;
-	m_pVectorFont = NULL;	// Default to internal (OpenGL) font.
-#endif
 	m_stl_facet_tolerance = 0.1;
+
+	m_pVectorFont = NULL;	// Default to internal (OpenGL) font.
 	m_icon_texture_number = 0;
 	m_extrude_to_solid = true;
 	m_revolve_angle = 360.0;
 	m_stl_save_as_binary = true;
-	m_mouse_move_highlighting = true;
-	m_highlight_color = HeeksColor(128, 255, 0);
+
 
     {
         std::list<wxString> extensions;
@@ -252,8 +241,6 @@ HeeksCADapp::HeeksCADapp(): ObjList()
     }
 
     RegisterHeeksTypesConverter(HeeksCADType);
-
-	m_settings_restored = false;
 }
 
 HeeksCADapp::~HeeksCADapp()
@@ -261,7 +248,9 @@ HeeksCADapp::~HeeksCADapp()
 	delete m_marked_list;
 	m_marked_list = NULL;
 	observers.clear();
+#ifdef USE_UNDO_ENGINE
 	delete history;
+#endif
 	delete magnification;
 	delete m_select_mode;
 	delete m_digitizing;
@@ -273,25 +262,18 @@ HeeksCADapp::~HeeksCADapp()
 	if(m_printData)delete m_printData;
 	if(m_pageSetupData)delete m_pageSetupData;
 
-#ifndef WIN32
 	m_pVectorFont = NULL;	// Don't free this here.  This memory will be released via ~CxfFonts() instead.
 	if (m_pVectorFonts.get() != NULL) delete m_pVectorFonts.release();
-#endif
 }
 
 bool HeeksCADapp::OnInit()
 {
 	m_gl_font_initialized = false;
-	
+	m_sketch_mode = false;
+
 	wxInitAllImageHandlers();
 
 	InitialiseLocale();
-
-#ifdef __WXMSW__
-#ifdef _DEBUG
-	wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
-#endif
-#endif
 
 #ifdef PYHEEKSCAD
     m_printData = NULL;
@@ -330,9 +312,9 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("DrawGrid"), &digitizing_grid);
 	config.Read(_T("DrawRadius"), &digitizing_radius);
 	{
-		long default_color[NUM_BACKGROUND_COLORS] = {
-			HeeksColor(187, 233, 255).COLORREF_color(),
-			HeeksColor(255, 255, 255).COLORREF_color(),
+		int default_color[NUM_BACKGROUND_COLORS] = {
+			HeeksColor(255, 175, 96).COLORREF_color(),
+			HeeksColor(198, 217, 119).COLORREF_color(),
 			HeeksColor(247, 198, 243).COLORREF_color(),
 			HeeksColor(193, 235, 236).COLORREF_color(),
 			HeeksColor(255, 255, 255).COLORREF_color(),
@@ -367,6 +349,17 @@ bool HeeksCADapp::OnInit()
 		current_color = HeeksColor((unsigned char)r, (unsigned char)g, (unsigned char)b);
 	}
 	{
+		wxString str;
+		config.Read(_T("ConstructionColor"), &str, _T("0 0 255"));
+		int r = 0, g = 0, b = 255;
+#if wxUSE_UNICODE
+		swscanf(str, _T("%d %d %d"), &r, &g, &b);
+#else
+		sscanf(str, _T("%d %d %d"), &r, &g, &b);
+#endif
+		construction_color = HeeksColor((unsigned char)r, (unsigned char)g, (unsigned char)b);
+	}
+	{
 		int color = HeeksColor(0, 255, 0).COLORREF_color();
 		config.Read(_T("FaceSelectionColor"), &color);
 		face_selection_color = HeeksColor((long)color);
@@ -390,6 +383,7 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("ExtrudeRemovesSketches"), &m_extrude_removes_sketches, true);
 	config.Read(_T("LoftRemovesSketches"), &m_loft_removes_sketches, true);
 	config.Read(_T("GraphicsTextMode"), (int*)(&m_graphics_text_mode), GraphicsTextModeWithHelp);
+	config.Read(_T("AllowOpenGLStippling"), &m_allow_opengl_stippling, true);
 
 	config.Read(_T("DxfMakeSketch"), &HeeksDxfRead::m_make_as_sketch, true);
 	config.Read(_T("DxfIgnoreErrors"), &HeeksDxfRead::m_ignore_errors, false);
@@ -402,9 +396,7 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("NumberOfSamplePoints"), &m_number_of_sample_points);
 	config.Read(_T("CorrelateByColor"), &m_correlate_by_color);
 
-#ifndef WIN32
 	config.Read(_T("FontPaths"), &m_font_paths, _T("/usr/share/qcad/fonts"));
-#endif
 	config.Read(_T("STLFacetTolerance"), &m_stl_facet_tolerance, 0.1);
 
 	config.Read(_T("AutoSaveInterval"), (int *) &m_auto_save_interval, 0);
@@ -419,15 +411,9 @@ bool HeeksCADapp::OnInit()
 	config.Read(_T("InputUsesModalDialog"), &m_input_uses_modal_dialog, true);
 	config.Read(_T("DraggingMovesObjects"), &m_dragging_moves_objects, true);
 	config.Read(_T("STLSaveBinary"), &m_stl_save_as_binary, true);
-	config.Read(_T("MouseMoveHighlighting"), &m_mouse_move_highlighting, true);
-	{
-		int color = HeeksColor(128, 255, 0).COLORREF_color();
-		config.Read(_T("HighlightColor"), &color);
-		m_highlight_color = HeeksColor((long)color);
-	}
-	config.Read(_T("SketchReorderTolerance"), &m_sketch_reorder_tol, 0.01);
 
 	HDimension::ReadFromConfig(config);
+	LoadSketchToolsSettings();
 
 	m_ruler->ReadFromConfig(config);
 
@@ -440,14 +426,10 @@ bool HeeksCADapp::OnInit()
 #else
 	m_frame = new CHeeksFrame( wxT( "HeeksCAD free Solid Modelling software based on Open CASCADE" ), wxPoint(posx, posy), wxSize(width, height));
 
-// wxWidgets uses .xpm as icons, except under Windows where .ico are used
-#ifndef __WXMSW__
-	// So, we include xpm...
-	// Note: wxWidgets wxICON() macro assumes that a HeeksCAD_xpm char* is in scope
-	#include "../icons/HeeksCAD.xpm"
-#endif
-
+#ifdef __WXMSW__
+	// to do, make this compile in Linux
 	m_frame->SetIcon(wxICON(HeeksCAD));
+#endif
 #endif
 
 	// NOTE: A side-effect of calling the SetInputMode() method is
@@ -477,10 +459,10 @@ bool HeeksCADapp::OnInit()
 		cmdLineDesc[0].kind = wxCMD_LINE_PARAM;
 		cmdLineDesc[0].shortName = NULL;
 		cmdLineDesc[0].longName = NULL;
-#if wxCHECK_VERSION(3, 0, 0)
-		cmdLineDesc[0].description = "input files";
+#ifdef wxUSE_UNICODE
+		cmdLineDesc[0].description = wxT("input files");
 #else
-		cmdLineDesc[0].description = _T("input files");
+		cmdLineDesc[0].description = "input files";
 #endif
 		cmdLineDesc[0].type = wxCMD_LINE_VAL_STRING;
 		cmdLineDesc[0].flags = wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_PARAM_MULTIPLE;
@@ -515,11 +497,7 @@ bool HeeksCADapp::OnInit()
 		// the wxStandardPaths class might be useful for this
 		// look here for docs:
 		// http://docs.wxwidgets.org/trunk/classwx_standard_paths.html
-#if wxCHECK_VERSION(3, 0, 0)
-		wxStandardPaths& sp = wxStandardPaths::Get();
-#else
 		wxStandardPaths sp;
-#endif
 		//sp.SetInstallPrefix(_T("/myPrefixDirectory")); //set the prefix directory here, if needed
 		wprintf(_T("system configs directory: ") + sp.GetConfigDir()  + _T("\n"));
 		wprintf(_T("applications global data directory: ") + sp.GetDataDir()  + _T("\n"));
@@ -564,6 +542,7 @@ void HeeksCADapp::WriteConfig()
 	config.Write(_T("BackgroundMode"), (int)m_background_mode);
 	config.Write(_T("FaceSelectionColor"), face_selection_color.COLORREF_color());
 	config.Write(_T("CurrentColor"), wxString::Format( _T("%d %d %d"), current_color.red, current_color.green, current_color.blue));
+	config.Write(_T("ConstructionColor"), wxString::Format(_T("%d %d %d"), construction_color.red, construction_color.green, construction_color.blue));
 	config.Write(_T("RotateMode"), m_rotate_mode);
 	config.Write(_T("Antialiasing"), m_antialiasing);
 	config.Write(_T("GridMode"), grid_mode);
@@ -576,13 +555,14 @@ void HeeksCADapp::WriteConfig()
 	config.Write(_T("DatumSize"), CoordinateSystem::size);
 	config.Write(_T("DatumSizeIsPixels"), CoordinateSystem::size_is_pixels);
 	config.Write(_T("DrawRuler"), m_show_ruler);
-	config.Write(_T("RegularShapesMode"), (int)(regular_shapes_drawing.m_mode));
+	config.Write(_T("RegularShapesMode"), regular_shapes_drawing.m_mode);
 	config.Write(_T("RegularShapesNSides"), regular_shapes_drawing.m_number_of_side_for_polygon);
 	config.Write(_T("RegularShapesRectRad"), regular_shapes_drawing.m_rect_radius);
 	config.Write(_T("RegularShapesObRad"), regular_shapes_drawing.m_obround_radius);
 	config.Write(_T("ExtrudeRemovesSketches"), m_extrude_removes_sketches);
 	config.Write(_T("LoftRemovesSketches"), m_loft_removes_sketches);
-	config.Write(_T("GraphicsTextMode"), (int)m_graphics_text_mode);
+	config.Write(_T("GraphicsTextMode"), m_graphics_text_mode);
+	config.Write(_T("AllowOpenGLStippling"), m_allow_opengl_stippling);
 	config.Write(_T("DxfMakeSketch"), HeeksDxfRead::m_make_as_sketch);
 	config.Write(_T("DxfIgnoreErrors"), HeeksDxfRead::m_ignore_errors);
 	config.Write(_T("FaceToSketchDeviation"), FaceToSketchTool::deviation);
@@ -592,18 +572,13 @@ void HeeksCADapp::WriteConfig()
 	config.Write(_T("NumberOfSamplePoints"), m_number_of_sample_points);
 	config.Write(_T("CorrelateByColor"), m_correlate_by_color);
 
-#ifndef WIN32
 	config.Write(_T("FontPaths"), m_font_paths);
-#endif
 	config.Write(_T("STLFacetTolerance"), m_stl_facet_tolerance);
 	config.Write(_T("AutoSaveInterval"), m_auto_save_interval);
 	config.Write(_T("ExtrudeToSolid"), m_extrude_to_solid);
 	config.Write(_T("RevolveAngle"), m_revolve_angle);
-	config.Write(_T("SolidViewMode"), (int)m_solid_view_mode);
+	config.Write(_T("SolidViewMode"), m_solid_view_mode);
 	config.Write(_T("STLSaveBinary"), m_stl_save_as_binary);
-
-	config.Write(_T("MouseMoveHighlighting"), m_mouse_move_highlighting);
-	config.Write(_T("HighlightColor"), m_highlight_color.COLORREF_color());
 
 	HDimension::WriteToConfig(config);
 
@@ -623,8 +598,10 @@ int HeeksCADapp::OnExit(){
 
     WriteConfig();
 
+#ifdef USE_UNDO_ENGINE
 	delete history;
 	history = NULL;
+#endif
 
 	for(std::list<Plugin>::iterator It = m_loaded_libraries.begin(); It != m_loaded_libraries.end(); It++){
 		wxDynamicLibrary* shared_library = It->dynamic_library;
@@ -634,6 +611,35 @@ int HeeksCADapp::OnExit(){
 
 	int result = wxApp::OnExit();
 	return result;
+}
+
+bool HeeksCADapp::EndSketchMode()
+{
+	if(m_sketch_mode  && input_mode_object == m_select_mode)
+	{
+		m_sketch_mode = false;
+		Repaint();
+		return true;
+	}
+	return false;
+}
+
+void HeeksCADapp::EnterSketchMode(CSketch* sketch)
+{
+	m_sketch_mode = true;
+	m_sketch = sketch;
+	if(sketch->m_coordinate_system)
+		m_current_coordinate_system = sketch->m_coordinate_system;
+}
+
+CSketch* HeeksCADapp::GetContainer()
+{
+	if(m_sketch_mode)
+		return m_sketch;
+
+	m_sketch = new CSketch();
+	Add(m_sketch,NULL);
+	return m_sketch;
 }
 
 void HeeksCADapp::SetInputMode(CInputMode *new_mode){
@@ -707,13 +713,14 @@ void HeeksCADapp::Reset(){
 		ov->Clear();
 	}
 	Clear();
-	EndHistory();
+#ifdef USE_UNDO_ENGINE
 	delete history;
-	history = new MainHistory;
+	history = new UndoEngine(this);
+#endif
 	m_current_coordinate_system = NULL;
 	m_doing_rollback = false;
 	gp_Vec vy(0, 1, 0), vz(0, 0, 1);
-	m_current_viewport->m_view_point.SetView(vy, vz, 6);
+	m_current_viewport->m_view_point.SetView(vy, vz);
 	m_filepath = wxString(_("Untitled")) + _T(".heeks");
 	m_untitled = true;
 	m_hidden_for_drag.clear();
@@ -724,7 +731,6 @@ void HeeksCADapp::Reset(){
 	ResetIDs();
 }
 
-static bool undoably_for_ReadSTEPFileFromXMLElement = false;
 static HeeksObj* paste_into_for_ReadSTEPFileFromXMLElement = NULL;
 
 static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
@@ -753,7 +759,6 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 						if(attr_name == std::string("index")){index = a->IntValue();}
 						else if(attr_name == std::string("id")){shape_data.m_id = a->IntValue();}
 						else if(attr_name == std::string("title")){shape_data.m_title.assign(Ctt(a->Value()));}
-						else if(attr_name == std::string("title_from_id")){shape_data.m_title_made_from_id = (a->IntValue() != 0);}
 						else if(attr_name == std::string("solid_type")){shape_data.m_solid_type = (SolidTypeEnum)(a->IntValue());}
 						else if(attr_name == std::string("vis")){shape_data.m_visible = (a->IntValue() != 0);}
 						else shape_data.m_xml_element.SetAttribute(a->Name(), a->Value());
@@ -792,17 +797,13 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 			const char* file_text = subElem->GetText();
 			if(file_text)
 			{
-#if wxCHECK_VERSION(3, 0, 0)
-				wxStandardPaths& sp = wxStandardPaths::Get();
-#else
 				wxStandardPaths sp;
-#endif
 				sp.GetTempDir();
 				wxFileName temp_file(sp.GetTempDir().c_str(), _T("temp_HeeksCAD_STEP_file.step") );
 				{
 #if wxUSE_UNICODE
 #ifdef __WXMSW__
-					wofstream ofs(Ttc(temp_file.GetFullPath().c_str()));
+					wofstream ofs(temp_file.GetFullPath());
 #else
 					wofstream ofs(Ttc(temp_file.GetFullPath().c_str()));
 #endif
@@ -811,7 +812,7 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 #endif
 					ofs<<file_text;
 				}
-				CShape::ImportSolidsFile(temp_file.GetFullPath(), undoably_for_ReadSTEPFileFromXMLElement, &index_map, paste_into_for_ReadSTEPFileFromXMLElement);
+				CShape::ImportSolidsFile(temp_file.GetFullPath(), &index_map, paste_into_for_ReadSTEPFileFromXMLElement);
 			}
 		}
 	}
@@ -822,18 +823,18 @@ static HeeksObj* ReadSTEPFileFromXMLElement(TiXmlElement* pElem)
 		std::string name(a->Name());
 		if(name == "text")
 		{
-#if wxCHECK_VERSION(3, 0, 0)
-			wxStandardPaths& sp = wxStandardPaths::Get();
-#else
 			wxStandardPaths sp;
-#endif
 			sp.GetTempDir();
 			wxFileName temp_file( sp.GetTempDir().c_str(), _T("temp_HeeksCAD_STEP_file.step") );
 			{
+#ifdef __WXMSW__
+				ofstream ofs(temp_file.GetFullPath());
+#else
 				ofstream ofs(Ttc(temp_file.GetFullPath().c_str()));
+#endif
 				ofs<<a->Value();
 			}
-			CShape::ImportSolidsFile(temp_file.GetFullPath(),undoably_for_ReadSTEPFileFromXMLElement, &index_map, paste_into_for_ReadSTEPFileFromXMLElement);
+			CShape::ImportSolidsFile(temp_file.GetFullPath(),&index_map, paste_into_for_ReadSTEPFileFromXMLElement);
 		}
 	}
 
@@ -931,26 +932,86 @@ void HeeksCADapp::ObjectReadBaseXML(HeeksObj *object, TiXmlElement* element)
 	for(TiXmlAttribute* a = element->FirstAttribute(); a; a = a->Next())
 	{
 		std::string name(a->Name());
-		if(!this->m_inPaste && object->UsesID() && name == "id"){object->SetID(a->IntValue());}
+		if(object->UsesID() && name == "id"){object->SetID(a->IntValue());}
 		if(name == "vis"){object->m_visible = (a->IntValue() != 0);}
 	}
 }
 
-void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, HeeksObj* paste_before, bool undoably)
+
+/**
+	This method traverses the list of HeeksObj pointers recursively and looks for
+	duplicate objects based on the type/id pairs.  When a duplicate is found, the
+	duplicate is deleted and both pointers are reset to point at a common object.
+	The object's owner pointers are also updated appropriately.
+ */
+
+HeeksObj *HeeksCADapp::MergeCommonObjects( ObjectReferences_t & unique_set, HeeksObj *object ) const
+{
+	std::list<HeeksObj *> children = ((ObjList *) object)->GetChildren();
+
+	for (std::list<HeeksObj *>::iterator itChild = children.begin(); itChild != children.end(); itChild++)
+	{
+		HeeksObj * replacement = MergeCommonObjects( unique_set, *itChild );
+		if (replacement != *itChild)
+		{
+			object->Remove(*itChild);
+			object->Add( replacement, NULL );
+		}
+	} // for
+
+	if(object->UsesID())
+	{
+		HeeksObj *unique_reference = object;
+		ObjectReference_t object_reference(object->GetIDGroupType(),object->m_id);
+
+		if (unique_set.find(object_reference) == unique_set.end())
+		{
+			unique_set.insert( std::make_pair( object_reference, object ) );
+			unique_reference = object;
+		}
+		else
+		{
+			// We've seen an object like this one before.  Use the old one.
+			unique_reference = unique_set[ object_reference ];
+#ifdef MULTIPLE_OWNERS
+			std::list<HeeksObj *> owners = object->Owners();
+			for (std::list<HeeksObj *>::iterator itOwner = owners.begin(); itOwner != owners.end(); itOwner++)
+			{
+				if (unique_reference != object)
+				{
+					(*itOwner)->Remove(object);
+					(*itOwner)->Add( unique_reference, NULL );
+				}
+			}
+#else
+			if(object->m_owner)
+			{
+				object->m_owner->Remove(object);
+				object->m_owner->Add( unique_reference, NULL );
+			}
+#endif
+
+			unique_set[ object_reference ] = unique_reference;
+			object = unique_reference;
+		}
+	}
+
+	return(object);
+}
+
+
+void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, HeeksObj* paste_before)
 {
 	TiXmlDocument doc(Ttc(filepath));
 	if (!doc.LoadFile())
 	{
 		if(doc.Error())
 		{
-			wxString msg(filepath);
-			msg << wxT(": ") << Ctt(doc.ErrorDesc());
-			wxMessageBox(msg);
+			wxMessageBox(Ctt(doc.ErrorDesc()));
 		}
 		return;
 	}
 
-	undoably_for_ReadSTEPFileFromXMLElement = undoably;
 	paste_into_for_ReadSTEPFileFromXMLElement = paste_into;
 
 	TiXmlHandle hDoc(&doc);
@@ -980,6 +1041,12 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, Heek
 		}
 	}
 
+	// where operations are pointing to the same sketch, for example, make sure that they are not duplicated sketches
+	for (std::list<HeeksObj *>::iterator itObject = objects.begin(); itObject != objects.end(); itObject++)
+	{
+		*itObject = MergeCommonObjects( unique_set, *itObject );
+	}
+
 	if(objects.size() > 0)
 	{
 		HeeksObj* add_to = this;
@@ -989,43 +1056,29 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, Heek
 			HeeksObj* object = *It;
 			object->ReloadPointers();
 
-			while(1)
+			if(add_to->CanAdd(object) && object->CanAddTo(add_to))
 			{
-				if(add_to->CanAdd(object) && object->CanAddTo(add_to))
+				if(object->OneOfAKind())
 				{
-					if(object->OneOfAKind())
+					bool one_found = false;
+					for(HeeksObj* child = add_to->GetFirstChild(); child; child = add_to->GetNextChild())
 					{
-						bool one_found = false;
-						for(HeeksObj* child = add_to->GetFirstChild(); child; child = add_to->GetNextChild())
+						if(child->GetType() == object->GetType())
 						{
-							if(child->GetType() == object->GetType())
-							{
-								child->CopyFrom(object);
-								one_found = true;
-								break;
-							}
-						}
-						if(!one_found)
-						{
-							add_to->Add(object, paste_before);
-							if(m_inPaste)WasAdded(object);
+							child->CopyFrom(object);
+							one_found = true;
+							break;
 						}
 					}
-					else
+					if(!one_found)
 					{
 						add_to->Add(object, paste_before);
-						if(m_inPaste)WasAdded(object);
 					}
-					break;
 				}
-				else if(paste_into == NULL)
+				else
 				{
-					// can't add normally, look for preferred paste target
-					add_to = object->PreferredPasteTarget();
-					if(add_to == NULL || add_to == this)// already tried
-						break;
+					add_to->Add(object, paste_before);
 				}
-				else break;
 			}
 		}
 	}
@@ -1050,7 +1103,7 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, Heek
 
 	HeeksColor c(128, 128, 128);
 	CStlSolid* new_object = new CStlSolid(filepath, &c);
-	wxGetApp().AddUndoably(new_object, NULL, NULL);
+	wxGetApp().Add(new_object, NULL);
 	setlocale(LC_NUMERIC, oldlocale);
 }
 
@@ -1061,7 +1114,7 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, Heek
 
 	bool try_again = false;
 	try {
-		HeeksDxfRead dxf_file(filepath, true);
+		HeeksDxfRead dxf_file(filepath);
 		dxf_file.DoRead(HeeksDxfRead::m_ignore_errors);
 	} catch(Standard_Failure)
 	{
@@ -1075,7 +1128,7 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, Heek
 	if (try_again)
 	{
 		try {
-			HeeksDxfRead dxf_file(filepath, true);
+			HeeksDxfRead dxf_file(filepath);
 			dxf_file.DoRead(true);
 		} catch(...)
 		{
@@ -1103,8 +1156,6 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, Heek
 
     RS274X gerber;
 
-	wxGetApp().StartHistory();
-
     if ((choices.size() > 0) && (choice == choices[0]))
     {
         gerber.Read(wxString(filepath).mb_str(), RS274X::IsolationRouting, false );
@@ -1130,7 +1181,7 @@ void HeeksCADapp::OpenXMLFile(const wxChar *filepath, HeeksObj* paste_into, Heek
         gerber.Read(wxString(filepath).mb_str(), RS274X::RasterImage, true );
     }
 
-	wxGetApp().EndHistory();
+
 }
 
 bool HeeksCADapp::OpenImageFile(const wxChar *filepath)
@@ -1190,7 +1241,7 @@ void HeeksCADapp::OnOpenButton()
 		}
 	}
 
-    wxFileDialog dialog(m_frame, _("Open file"), default_directory, wxEmptyString, GetKnownFilesWildCardString(true, false));
+    wxFileDialog dialog(m_frame, _("Open file"), default_directory, wxEmptyString, GetKnownFilesWildCardString());
     dialog.CentreOnParent();
 
     if (dialog.ShowModal() == wxID_OK)
@@ -1202,28 +1253,19 @@ void HeeksCADapp::OnOpenButton()
 			Reset();
 			if(!OpenFile(dialog.GetPath().c_str()))
 			{
-				wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + GetKnownFilesCommaSeparatedList(true, false);
+				wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + GetKnownFilesCommaSeparatedList();
 				wxMessageBox(str);
 			}
-			else
-			{
-				m_frame->m_graphics->OnMagExtents(true, true, 25);
-				OnNewOrOpen(true, res);
-				ClearHistory();
-				SetLikeNewFile();
-			}
+			OnNewOrOpen(true, res);
+			ClearHistory();
+			SetLikeNewFile();
 		}
     }
 }
 
 bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksObj* paste_into, HeeksObj* paste_before, bool retain_filename /* = true */ )
 {
-	bool history_started = false;
-	if(import_not_open && paste_into == NULL)
-	{
-		StartHistory();
-		history_started = true;
-	}
+	if(import_not_open && paste_into == NULL)CreateUndoPoint();
 
 	m_in_OpenFile = true;
 	m_file_open_or_import_type = FileOpenOrImportTypeOther;
@@ -1250,7 +1292,7 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 		m_file_open_or_import_type = FileOpenTypeHeeks;
 		if(import_not_open)
 			m_file_open_or_import_type = FileImportTypeHeeks;
-		OpenXMLFile(filepath, paste_into, paste_before, history_started);
+		OpenXMLFile(filepath, paste_into, paste_before);
 	}
 	else if(m_fileopen_handlers.find(extension) != m_fileopen_handlers.end())
 	{
@@ -1267,7 +1309,7 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 	}
 
 	// check for solid files
-	else if(CShape::ImportSolidsFile(filepath, false))
+	else if(CShape::ImportSolidsFile(filepath))
 	{
 	}
 #ifdef WIN32
@@ -1281,28 +1323,33 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 	else
 	{
 		// error
-		wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + GetKnownFilesCommaSeparatedList(true, import_not_open);
+		wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + GetKnownFilesCommaSeparatedList();
 		wxMessageBox(str);
 		open_succeeded = false;
 	}
 
-	if(open_succeeded && !import_not_open)
+	if(open_succeeded)
 	{
 	    InsertRecentFileItem(filepath);
 
-		if(retain_filename)
+		if(import_not_open)
 		{
-			m_filepath.assign(filepath);
-			m_untitled = false;
-			SetFrameTitle();
+			if(paste_into == NULL)Changed();
 		}
-		SetLikeNewFile();
+		else
+		{
+			if(retain_filename)
+			{
+				m_filepath.assign(filepath);
+				m_untitled = false;
+				SetFrameTitle();
+			}
+			SetLikeNewFile();
+		}
 	}
 
 	m_file_open_matrix = NULL;
 	m_in_OpenFile = false;
-
-	if(history_started)EndHistory();
 
 	return open_succeeded;
 }
@@ -1326,8 +1373,8 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
 		{
 			HLine* l = (HLine*)object;
 			double s[3], e[3];
-			extract(l->A, s);
-			extract(l->B, e);
+			extract(l->A->m_p, s);
+			extract(l->B->m_p, e);
 			dxf_file.WriteLine(s, e, Ttc(layer_name.c_str()));
 		}
 		break;
@@ -1343,9 +1390,9 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
 		{
 			HArc* a = (HArc*)object;
 			double s[3], e[3], c[3];
-			extract(a->A, s);
-			extract(a->B, e);
-			extract(a->C, c);
+			extract(a->A->m_p, s);
+			extract(a->B->m_p, e);
+			extract(a->C->m_p, c);
 			bool dir = a->m_axis.Direction().Z() > 0;
 			dxf_file.WriteArc(s, e, c, dir, Ttc(layer_name.c_str()));
 		}
@@ -1354,7 +1401,7 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
                 {
 			HEllipse* e = (HEllipse*)object;
 			double c[3];
-			extract(e->C, c);
+			extract(e->C->m_p, c);
 			bool dir = e->m_zdir.Z() > 0;
 			double maj_r = e->m_majr;
 			double min_r = e->m_minr;
@@ -1366,7 +1413,7 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
                 {
 			HCircle* cir = (HCircle*)object;
 			double c[3];
-			extract(cir->m_axis.Location(), c);
+			extract(cir->C->m_p, c);
 			double radius = cir->m_radius;
 			dxf_file.WriteCircle(c, radius, Ttc(layer_name.c_str()));
                 }
@@ -1648,11 +1695,7 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 
 	// write a step file for all the solids
 	if(CShape::m_solids_found){
-#if wxCHECK_VERSION(3, 0, 0)
-		wxStandardPaths& sp = wxStandardPaths::Get();
-#else
 		wxStandardPaths sp;
-#endif
 		sp.GetTempDir();
 		wxFileName temp_file( sp.GetTempDir().c_str(), _T("temp_HeeksCAD_STEP_file.step") );
 		std::map<int, CShapeData> index_map;
@@ -1674,7 +1717,6 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 				index_pair_element->SetAttribute("index", index);
 				index_pair_element->SetAttribute("id", shape_data.m_id);
 				index_pair_element->SetAttribute("title", Ttc(shape_data.m_title));
-				index_pair_element->SetAttribute("title_from_id", (shape_data.m_title_made_from_id?1:0));
 				index_pair_element->SetAttribute("vis", shape_data.m_visible ? 1:0);
 				if(shape_data.m_solid_type != SOLID_TYPE_UNKNOWN)index_pair_element->SetAttribute("solid_type", shape_data.m_solid_type);
 				// get the CShapeData attributes
@@ -1713,8 +1755,11 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 		}
 
 		// write the step file as a string attribute of step_file
+#ifdef __WXMSW__
+		ifstream ifs(temp_file.GetFullPath());
+#else
 		ifstream ifs(Ttc(temp_file.GetFullPath().c_str()));
-
+#endif
 		if(!(!ifs)){
 			std::string fstr;
 			char str[1024];
@@ -1739,7 +1784,7 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_recent_file_list, bool set_app_caption)
 {
 	if(use_dialog){
-		wxFileDialog fd(m_frame, _("Save graphical data file"), wxEmptyString, filepath, GetKnownFilesWildCardString(false, false), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+		wxFileDialog fd(m_frame, _("Save graphical data file"), wxEmptyString, filepath, GetKnownFilesWildCardString(false), wxSAVE|wxOVERWRITE_PROMPT);
 		fd.SetFilterIndex(1);
 		if (fd.ShowModal() == wxID_CANCEL)return false;
 		return SaveFile( fd.GetPath().c_str(), false, update_recent_file_list );
@@ -1780,7 +1825,7 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 	}
 	else
 	{
-		wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + GetKnownFilesCommaSeparatedList(false, false);
+		wxString str = wxString(_("Invalid file type chosen")) + _T("  ") + _("expecting") + _T(" ") + GetKnownFilesCommaSeparatedList();
 		wxMessageBox(str);
 		return false;
 	}
@@ -1891,13 +1936,6 @@ void HeeksCADapp::glCommandsAll(const CViewPoint &view_point)
 		}
 	}
 
-	// draw any last_objects
-	for(std::list<HeeksObj*>::iterator It = after_others_objects.begin(); It != after_others_objects.end(); It++)
-	{
-		HeeksObj* object = *It;
-		object->glCommands(false, m_marked_list->ObjectMarked(object), false);
-	}
-
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	for(std::list< void(*)() >::iterator It = m_on_glCommands_list.begin(); It != m_on_glCommands_list.end(); It++)
 	{
@@ -1915,6 +1953,13 @@ void HeeksCADapp::glCommandsAll(const CViewPoint &view_point)
 		glMultMatrixd(m);
 		glCallList(m_transform_gl_list);
 		glPopMatrix();
+	}
+
+	// draw any last_objects
+	for(std::list<HeeksObj*>::iterator It = after_others_objects.begin(); It != after_others_objects.end(); It++)
+	{
+		HeeksObj* object = *It;
+		object->glCommands(false, m_marked_list->ObjectMarked(object), false);
 	}
 
 	// draw the ruler
@@ -1941,6 +1986,9 @@ void HeeksCADapp::glCommandsAll(const CViewPoint &view_point)
 	if(m_graphics_text_mode != GraphicsTextModeNone)
 	{
 		wxString screen_text1, screen_text2;
+
+		if(m_sketch_mode)
+			screen_text1.Append(_T("Sketch Mode:\n"));
 
 		if(input_mode_object && input_mode_object->GetTitle())
 		{
@@ -1979,24 +2027,32 @@ void HeeksCADapp::glCommands(bool select, bool marked, bool no_color)
 {
 	// this is called when select is true
 
-	std::list<HeeksObj*>::iterator It;
-	for(It=m_objects.begin(); It!=m_objects.end() ;It++)
+	// for sketch mode, only allow items in the sketch to be selected
+	if(m_sketch_mode)
 	{
-		HeeksObj* object = *It;
-		if(object->OnVisibleLayer() && object->m_visible)
+		m_sketch->glCommands(select, marked || m_marked_list->ObjectMarked(m_sketch), no_color);
+	}
+	else
+	{
+		std::list<HeeksObj*>::iterator It;
+		for(It=m_objects.begin(); It!=m_objects.end() ;It++)
 		{
-			if(select)glPushName(object->GetIndex());
-			object->glCommands(select, marked || m_marked_list->ObjectMarked(object), no_color);
+			HeeksObj* object = *It;
+			if(object->OnVisibleLayer() && object->m_visible)
+			{
+				if(select)glPushName(object->GetIndex());
+				object->glCommands(select, marked || m_marked_list->ObjectMarked(object), no_color);
+				if(select)glPopName();
+			}
+		}
+
+		// draw the ruler
+		if(m_show_ruler)
+		{
+			if(select)glPushName(m_ruler->GetIndex());
+			m_ruler->glCommands(select, false, false);
 			if(select)glPopName();
 		}
-	}
-
-	// draw the ruler
-	if(m_show_ruler)
-	{
-		if(select)glPushName(m_ruler->GetIndex());
-		m_ruler->glCommands(select, false, false);
-		if(select)glPopName();
 	}
 }
 
@@ -2012,7 +2068,7 @@ double HeeksCADapp::GetPixelScale(void){
 }
 
 bool HeeksCADapp::IsModified(void){
-	if(history->IsModified())return true;
+	if(m_isModifiedValid)return m_isModified;
 
 	for(std::list< bool(*)() >::iterator It = m_is_modified_callbacks.begin(); It != m_is_modified_callbacks.end(); It++)
 	{
@@ -2020,24 +2076,36 @@ bool HeeksCADapp::IsModified(void){
 		bool is_modified = (*callbackfunc)();
 		if(is_modified)
 		{
+			m_isModified = true;
+			m_isModifiedValid = true;
 			return true;
 		}
 	}
 
-	return false;
-}
-
-void HeeksCADapp::SetAsModified(){
-	history->SetAsModified();
+#ifdef USE_UNDO_ENGINE
+	m_isModified = history->IsModified();
+#else
+	m_isModified = false;
+#endif
+	m_isModifiedValid = true;
+	return m_isModified;
 }
 
 void HeeksCADapp::SetLikeNewFile(void){
+#ifdef USE_UNDO_ENGINE
 	history->SetLikeNewFile();
+#endif
+	m_isModifiedValid = true;
+	m_isModified = false;
 }
 
 void HeeksCADapp::ClearHistory(void){
-	history->ClearFromFront();
+#ifdef USE_UNDO_ENGINE
+	history->ClearHistory();
 	history->SetLikeNewFile();
+#endif
+	m_isModifiedValid = true;
+	m_isModified = false;
 }
 
 static void AddToolListWithSeparator(std::list<Tool*> &l, std::list<Tool*> &temp_l)
@@ -2076,6 +2144,8 @@ public:
 
 	MoveOrCopyTool(bool move_not_copy):m_move_not_copy(move_not_copy){}
 	void Run(){
+		wxGetApp().CreateUndoPoint();
+
 		if(m_move_not_copy)
 		{
 			// cut the objects
@@ -2089,6 +2159,7 @@ public:
 
 		// paste the objects
 		wxGetApp().Paste(paste_into, paste_before);
+		wxGetApp().Changed();
 	}
 	const wxChar* GetTitle(){return m_move_not_copy ? _("Move here") : _("Copy here");}
 	wxString BitmapPath(){return m_move_not_copy ? _T("move") : _T("copy");}
@@ -2168,7 +2239,7 @@ public:
 						verbose << _T(",") << *itValue;
 						itValue++;
 
-						HPoint *new_point = new HPoint( location, &(wxGetApp().current_color) );
+						HPoint *new_point = new HPoint( location, &(wxGetApp().construction_color) );
 						wxGetApp().Add(new_point, NULL);
 					}
 
@@ -2243,56 +2314,59 @@ void HeeksCADapp::on_menu_event(wxCommandEvent& event)
 	int id = event.GetId();
 	if(id){
 		Tool *t = tool_index_list[id - ID_FIRST_POP_UP_MENU_TOOL].m_tool;
-		StartHistory();
+		CreateUndoPoint();
 		t->Run();
-		EndHistory();
+		if(t->CallChangedOnRun())
+		{
+			//TODO: this should be handled better. While TreeView is parsing the tree it should be able to remove
+			//non existant items from MarkedList.
+			m_marked_list->Clear(false);
+			Changed();
+			Repaint();
+		}
 	}
 }
 
-void HeeksCADapp::DoUndoable(Undoable *u)
+void HeeksCADapp::DoToolUndoably(Tool *t)
 {
-	history->DoUndoable(u);
+	CreateUndoPoint();
+	t->Run();
+	Changed();
 }
 
-bool HeeksCADapp::RollBack(void)
+void HeeksCADapp::Undo(void)
 {
-	m_doing_rollback = true;
-	bool result = history->InternalRollBack();
-	m_doing_rollback = false;
-	return result;
+#ifdef USE_UNDO_ENGINE
+	history->Undo();
+	Changed();
+	m_marked_list->Clear(true);
+	Repaint();
+#endif
 }
 
-bool HeeksCADapp::CanUndo(void)
+void HeeksCADapp::Redo(void)
 {
-	return history->CanUndo();
+#ifdef USE_UNDO_ENGINE
+	history->Redo();
+	Changed();
+	m_marked_list->Clear(true);
+	Repaint();
+#endif
 }
 
-bool HeeksCADapp::CanRedo(void)
+void HeeksCADapp::WentTransient(HeeksObj* obj, TransientObject *tobj)
 {
-	return history->CanRedo();
+	m_transient_objects[(HeeksObj*)tobj].push_back(obj);
 }
 
-bool HeeksCADapp::RollForward(void)
+void HeeksCADapp::ClearTransients()
 {
-	m_doing_rollback = true;
-	bool result = history->InternalRollForward();
-	m_doing_rollback = false;
-	return result;
+	m_transient_objects.clear();
 }
 
-void HeeksCADapp::StartHistory()
+std::map<HeeksObj*,std::list<HeeksObj*> >& HeeksCADapp::GetTransients()
 {
-	history->StartHistory();
-}
-
-void HeeksCADapp::EndHistory(void)
-{
-	history->EndHistory();
-}
-
-void HeeksCADapp::ClearRollingForward(void)
-{
-	history->ClearFromCurPos();
+	return m_transient_objects;
 }
 
 void HeeksCADapp::RegisterObserver(Observer* observer)
@@ -2312,6 +2386,19 @@ void HeeksCADapp::ObserversOnChange(const std::list<HeeksObj*>* added, const std
 		Observer *ov = *It;
 		ov->OnChanged(added, removed, modified);
 	}
+}
+
+void HeeksCADapp::CreateUndoPoint()
+{
+#ifdef USE_UNDO_ENGINE
+	history->CreateUndoPoint();
+#endif
+}
+
+void HeeksCADapp::Changed()
+{
+	ObserversOnChange(NULL,NULL,NULL);
+	m_isModifiedValid = false;
 }
 
 void HeeksCADapp::ObserversMarkedListChanged(bool selection_cleared, const std::list<HeeksObj*>* added, const std::list<HeeksObj*>* removed){
@@ -2392,94 +2479,6 @@ void HeeksCADapp::Remove(std::list<HeeksObj*> objects)
 	ObjList::Remove(objects);
 }
 
-void HeeksCADapp::AddUndoably(HeeksObj *object, HeeksObj* owner, HeeksObj* prev_object)
-{
-	if(object == NULL)return;
-	if(owner == NULL)owner = this;
-	AddObjectTool *undoable = new AddObjectTool(object, owner, prev_object);
-	DoUndoable(undoable);
-}
-
-void HeeksCADapp::AddUndoably(const std::list<HeeksObj*> &list, HeeksObj* owner)
-{
-	if(list.size() == 0)return;
-	if(owner == NULL)owner = this;
-	AddObjectsTool *undoable = new AddObjectsTool(list, owner);
-	DoUndoable(undoable);
-}
-
-void HeeksCADapp::DeleteUndoably(HeeksObj *object){
-	if(object == NULL)return;
-	if(!object->CanBeRemoved())return;
-	RemoveObjectTool *undoable = new RemoveObjectTool(object);
-	DoUndoable(undoable);
-}
-
-void HeeksCADapp::DeleteUndoably(const std::list<HeeksObj*>& list)
-{
-	if(list.size() == 0)return;
-	std::list<HeeksObj*> list2;
-	for(std::list<HeeksObj*>::const_iterator It = list.begin(); It != list.end(); It++)
-	{
-		HeeksObj* object = *It;
-		if(object->CanBeRemoved())list2.push_back(object);
-	}
-	if(list2.size() == 0)return;
-	RemoveObjectsTool *undoable = new RemoveObjectsTool(list2, list2.front()->m_owner);
-	DoUndoable(undoable);
-}
-
-void HeeksCADapp::CopyUndoably(HeeksObj* object, HeeksObj* copy_with_new_data)
-{
-	DoUndoable(new CopyObjectUndoable(object, copy_with_new_data));
-}
-
-void HeeksCADapp::TransformUndoably(HeeksObj *object, double *m)
-{
-	if(!object)return;
-	gp_Trsf mat = make_matrix(m);
-	gp_Trsf im = mat;
-	im.Invert();
-	TransformTool *undoable = new TransformTool(object, mat, im);
-	DoUndoable(undoable);
-}
-
-void HeeksCADapp::TransformUndoably(const std::list<HeeksObj*> &list, double *m)
-{
-	if(list.size() == 0)return;
-	gp_Trsf mat = make_matrix(m);
-	gp_Trsf im = mat;
-	im.Invert();
-	TransformObjectsTool *undoable = new TransformObjectsTool(list, mat, im);
-	DoUndoable(undoable);
-}
-
-class ReverseUndoable : public Undoable{
-	HeeksObj* m_object;
-
-public:
-	ReverseUndoable(HeeksObj* object):m_object(object){}
-	void Run(bool redo){CSketch::ReverseObject(m_object);}
-	const wxChar* GetTitle(){return _("Reverse Object");}
-	void RollBack(){CSketch::ReverseObject(m_object);}
-};
-
-void HeeksCADapp::ReverseUndoably(HeeksObj *object)
-{
-	DoUndoable(new ReverseUndoable(object));
-}
-
-void HeeksCADapp::EditUndoably(HeeksObj *object)
-{
-	HeeksObj* copy_object = object->MakeACopyWithID();
-	if(copy_object->Edit())
-	{
-		wxGetApp().CopyUndoably(object, copy_object);
-	}
-	else
-		delete copy_object;
-}
-
 void HeeksCADapp::Transform(std::list<HeeksObj*> objects,double *m)
 {
 	std::list<HeeksObj*>::iterator it;
@@ -2487,63 +2486,6 @@ void HeeksCADapp::Transform(std::list<HeeksObj*> objects,double *m)
 	{
 		(*it)->ModifyByMatrix(m);
 	}
-}
-
-void HeeksCADapp::WasModified(HeeksObj *object)
-{
-	std::list<HeeksObj*> list;
-	list.push_back(object);
-	WereModified(list);
-}
-
-void HeeksCADapp::WasAdded(HeeksObj *object)
-{
-	std::list<HeeksObj*> list;
-	list.push_back(object);
-	WereAdded(list);
-}
-
-void HeeksCADapp::WasRemoved(HeeksObj *object)
-{
-	std::list<HeeksObj*> list;
-	list.push_back(object);
-	WereRemoved(list);
-}
-
-void HeeksCADapp::WereModified(const std::list<HeeksObj*>& list)
-{
-	if (list.size() == 0) return;
-	HeeksObj* object = *(list.begin());
-	if (object == NULL) return;
-	ObserversOnChange(NULL, NULL, &list);
-	SetAsModified();
-}
-
-void HeeksCADapp::WereAdded(const std::list<HeeksObj*>& list)
-{
-	if (list.size() == 0) return;
-	HeeksObj* object = *(list.begin());
-	if (object == NULL) return;
-	ObserversOnChange(&list, NULL, NULL);
-	SetAsModified();
-}
-
-void HeeksCADapp::WereRemoved(const std::list<HeeksObj*>& list)
-{
-	if (list.size() == 0) return;
-	HeeksObj* object = *(list.begin());
-	if (object == NULL) return;
-
-	std::list<HeeksObj*> marked_remove;
-	for(std::list<HeeksObj*>::const_iterator It = list.begin(); It != list.end(); It++)
-	{
-		object = *It;
-		if(m_marked_list->ObjectMarked(object))marked_remove.push_back(object);
-	}
-	if(marked_remove.size() > 0)m_marked_list->Remove(marked_remove, false);
-
-	ObserversOnChange(NULL, &list, NULL);
-	SetAsModified();
 }
 
 gp_Trsf HeeksCADapp::GetDrawMatrix(bool get_the_appropriate_orthogonal)
@@ -2624,7 +2566,7 @@ void on_set_background_color9(HeeksColor value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
-void on_set_background_mode(int value, HeeksObj* object, bool from_undo_redo)
+void on_set_background_mode(int value, HeeksObj* object)
 {
 	wxGetApp().m_background_mode = (BackgroundMode)value;
 	wxGetApp().Repaint();
@@ -2642,7 +2584,12 @@ void on_set_current_color(HeeksColor value, HeeksObj* object)
 	wxGetApp().current_color = value;
 }
 
-void on_set_grid_mode(int value, HeeksObj* object, bool from_undo_redo)
+void on_set_construction_color(HeeksColor value, HeeksObj* object)
+{
+	wxGetApp().construction_color = value;
+}
+
+void on_set_grid_mode(int value, HeeksObj* object)
 {
 	wxGetApp().grid_mode = value;
 	wxGetApp().Repaint();
@@ -2654,7 +2601,7 @@ void on_set_perspective(bool value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
-void on_set_tool_icon_size(int value, HeeksObj* object, bool from_undo_redo)
+void on_set_tool_icon_size(int value, HeeksObj* object)
 {
 	int size = 16;
 	switch(value)
@@ -2695,9 +2642,6 @@ void on_set_tool_icon_size(int value, HeeksObj* object, bool from_undo_redo)
 void on_grid(bool onoff, HeeksObj* object)
 {
 	wxGetApp().draw_to_grid = onoff;
-#ifndef USING_RIBBON
-	wxGetApp().m_frame->m_snap_button->m_bitmap = wxBitmap(ToolImage(wxGetApp().draw_to_grid ? _T("snap") : _T("snapgray")));
-#endif
 	wxGetApp().Repaint();
 }
 
@@ -2758,14 +2702,6 @@ void on_set_geom_tol(double value, HeeksObj* object)
 	TiXmlBase::SetRequiredDecimalPlaces( DecimalPlaces(value) );
 }
 
-void on_set_sketch_reorder_tol(double value, HeeksObj* object)
-{
-	wxGetApp().m_sketch_reorder_tol = value;
-	HeeksConfig config;
-	config.Write(_T("SketchReorderTolerance"), wxGetApp().m_sketch_reorder_tol);
-	wxGetApp().Repaint();
-}
-
 void on_set_face_to_sketch_deviation(double value, HeeksObj* object)
 {
 	FaceToSketchTool::deviation = value;
@@ -2789,19 +2725,19 @@ void on_set_show_ruler(bool onoff, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
-void on_set_rotate_mode(int value, HeeksObj* object, bool from_undo_redo)
+void on_set_rotate_mode(int value, HeeksObj* object)
 {
 	wxGetApp().m_rotate_mode = value;
 	if(!wxGetApp().m_rotate_mode)
 	{
 		gp_Vec vy(0, 1, 0), vz(0, 0, 1);
-		wxGetApp().m_current_viewport->m_view_point.SetView(vy, vz, 6);
+		wxGetApp().m_current_viewport->m_view_point.SetView(vy, vz);
 		wxGetApp().m_current_viewport->StoreViewPoint();
 		wxGetApp().Repaint();
 	}
 }
 
-void on_set_screen_text(int value, HeeksObj* object, bool from_undo_redo)
+void on_set_screen_text(int value, HeeksObj* object)
 {
 	wxGetApp().m_graphics_text_mode = (GraphicsTextMode)value;
 	wxGetApp().Repaint();
@@ -2843,30 +2779,18 @@ void on_set_ctrl_does_rotate(bool value, HeeksObj* object)
 
 void on_intersection(bool onoff, HeeksObj* object){
 	wxGetApp().digitize_inters = onoff;
-#ifndef USING_RIBBON
-	wxGetApp().m_frame->m_inters_button->m_bitmap = wxBitmap(ToolImage(wxGetApp().digitize_inters ? _T("inters") : _T("intersgray")));
-#endif
 }
 
 void on_centre(bool onoff, HeeksObj* object){
 	wxGetApp().digitize_centre = onoff;
-#ifndef USING_RIBBON
-	wxGetApp().m_frame->m_centre_button->m_bitmap = wxBitmap(ToolImage(wxGetApp().digitize_centre ? _T("centre") : _T("centregray")));
-#endif
 }
 
 void on_end_of(bool onoff, HeeksObj* object){
 	wxGetApp().digitize_end = onoff;
-#ifndef USING_RIBBON
-	wxGetApp().m_frame->m_endof_button->m_bitmap = wxBitmap(ToolImage(wxGetApp().digitize_end ? _T("endof") : _T("endofgray")));
-#endif
 }
 
 void on_mid_point(bool onoff, HeeksObj* object){
 	wxGetApp().digitize_midpoint = onoff;
-#ifndef USING_RIBBON
-	wxGetApp().m_frame->m_midpoint_button->m_bitmap = wxBitmap(ToolImage(wxGetApp().digitize_midpoint ? _T("midpoint") : _T("midpointgray")));
-#endif
 }
 
 void on_nearest(bool onoff, HeeksObj* object){
@@ -3018,13 +2942,6 @@ void on_sel_dxf_read_errors(bool value, HeeksObj* object){
 	config.Write(_T("IgnoreDxfReadErrors"), HeeksDxfRead::m_ignore_errors);
 }
 
-void on_dxf_read_points(bool value, HeeksObj* object){
-	HeeksDxfRead::m_read_points = value;
-
-	HeeksConfig config;
-	config.Write(_T("DxfReadPoints"), HeeksDxfRead::m_read_points);
-}
-
 void on_edit_layer_name_suffixes_to_discard(const wxChar* value, HeeksObj* object)
 {
 	HeeksDxfRead::m_layer_name_suffixes_to_discard = value;
@@ -3064,7 +2981,19 @@ void on_set_auto_save_interval(int value, HeeksObj* object){
 	config.Write(_T("AutoSaveInterval"), wxGetApp().m_auto_save_interval);
 }
 
-static void on_set_units(int value, HeeksObj* object, bool from_undo_redo)
+void on_set_loglevel(int value, HeeksObj* object){
+	wxGetApp().m_frame->SetLogLevel(value);
+}
+
+void on_set_repeatcounts(bool value, HeeksObj* object){
+	wxGetApp().m_frame->SetLogRepeatCounting(value);
+}
+
+void on_set_timestamps(bool value, HeeksObj* object){
+	wxGetApp().m_frame->SetLogLogTimestamps(value);
+}
+
+static void on_set_units(int value, HeeksObj* object)
 {
 	wxGetApp().m_view_units = (value == 0) ? 1.0:25.4;
 	wxGetApp().OnChangeViewUnits(wxGetApp().m_view_units);
@@ -3102,7 +3031,6 @@ static void on_dragging_moves_objects(bool value, HeeksObj* object)
 	wxGetApp().Repaint();
 }
 
-#ifndef WIN32
 static void on_edit_font_paths(const wxChar* value, HeeksObj* object)
 {
 	wxGetApp().m_font_paths.assign(value);
@@ -3138,21 +3066,15 @@ static void on_edit_character_space_percentage(const double value, HeeksObj* obj
 	    wxGetApp().m_pVectorFonts->SetCharacterSpacePercentage(value);
 	}
 }
-#endif
 
-void on_set_mouse_move_highlighting(bool value, HeeksObj* object)
+
+void on_set_allow_opengl_stippling(bool value, HeeksObj* object)
 {
-	wxGetApp().m_mouse_move_highlighting = value;
+	wxGetApp().m_allow_opengl_stippling = value;
 	wxGetApp().Repaint();
 }
 
-void on_set_highlight_color(HeeksColor value, HeeksObj* object)
-{
-	wxGetApp().m_highlight_color = value;
-	wxGetApp().Repaint();
-}
-
-void on_set_solid_view_mode(int value, HeeksObj* object, bool from_undo_redo)
+void on_set_solid_view_mode(int value, HeeksObj* object)
 {
 	wxGetApp().m_solid_view_mode = (SolidViewMode)value;
 }
@@ -3175,6 +3097,9 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 		view_options->m_list.push_back ( new PropertyChoice ( _("screen text"),  choices, m_graphics_text_mode, NULL, on_set_screen_text ) );
 	}
 	view_options->m_list.push_back( new PropertyCheck(_("antialiasing"), m_antialiasing, NULL, on_set_antialiasing));
+#if _DEBUG
+	view_options->m_list.push_back( new PropertyCheck(_("fixed light"), m_light_push_matrix, NULL, on_set_light_push_matrix));
+#endif
 	view_options->m_list.push_back( new PropertyCheck(_("reverse mouse wheel"), !(mouse_wheel_forward_away), NULL, on_set_reverse_mouse_wheel));
 	view_options->m_list.push_back( new PropertyCheck(_("reverse zooming mode"), ViewZooming::m_reversed, NULL, on_set_reverse_zooming));
 	view_options->m_list.push_back( new PropertyCheck(_("Ctrl key does rotate"), ctrl_does_rotate, NULL, on_set_ctrl_does_rotate));
@@ -3265,6 +3190,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 		view_options->m_list.push_back ( new PropertyChoice ( _("units"),  choices, choice, this, on_set_units ) );
 	}
 	view_options->m_list.push_back(new PropertyCheck(_("flat on screen dimension text"), HDimension::DrawFlat, NULL, on_dimension_draw_flat));
+	view_options->m_list.push_back(new PropertyCheck(_("Allow OpenGL stippling"), m_allow_opengl_stippling, NULL, on_set_allow_opengl_stippling));
 	{
 		std::list< wxString > choices;
 		choices.push_back ( wxString ( _("faces and edges") ) );
@@ -3274,8 +3200,6 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	}
 	view_options->m_list.push_back(new PropertyCheck(_("input uses modal dialog"), m_input_uses_modal_dialog, NULL, on_input_uses_modal_dialog));
 	view_options->m_list.push_back(new PropertyCheck(_("dragging moves objects"), m_dragging_moves_objects, NULL, on_dragging_moves_objects));
-	view_options->m_list.push_back(new PropertyCheck(_("highlight items under mouse"), m_mouse_move_highlighting, NULL, on_set_mouse_move_highlighting));
-	view_options->m_list.push_back ( new PropertyColor ( _("highlight color"), m_highlight_color, NULL, on_set_highlight_color ) );
 
 	list->push_back(view_options);
 
@@ -3301,8 +3225,8 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 
 	PropertyList* drawing = new PropertyList(_("drawing"));
 	drawing->m_list.push_back ( new PropertyColor ( _("current color"),  current_color, NULL, on_set_current_color ) );
+	drawing->m_list.push_back ( new PropertyColor ( _("construction color"),  construction_color, NULL, on_set_construction_color ) );
 	drawing->m_list.push_back(new PropertyLength(_("geometry tolerance"), m_geom_tol, NULL, on_set_geom_tol));
-	drawing->m_list.push_back(new PropertyLength(_("sketch reorder tolerance"), m_sketch_reorder_tol, NULL, on_set_sketch_reorder_tol));
 	drawing->m_list.push_back(new PropertyLength(_("face to sketch deviaton"), FaceToSketchTool::deviation, NULL, on_set_face_to_sketch_deviation));
 	drawing->m_list.push_back(new PropertyCheck(_("Use old solid fuse ( to prevent coplanar faces )"), useOldFuse, NULL, on_useOldFuse));
 	drawing->m_list.push_back(new PropertyCheck(_("Extrude makes a solid"), m_extrude_to_solid, NULL, on_extrude_to_solid));
@@ -3344,7 +3268,6 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	PropertyList* dxf_options = new PropertyList(_("DXF"));
 	dxf_options->m_list.push_back(new PropertyCheck(_("make sketch"), HeeksDxfRead::m_make_as_sketch, NULL, on_dxf_make_sketch));
 	dxf_options->m_list.push_back(new PropertyCheck(_("ignore errors where possible"), HeeksDxfRead::m_ignore_errors, NULL, on_sel_dxf_read_errors));
-	dxf_options->m_list.push_back(new PropertyCheck(_("read points"), HeeksDxfRead::m_read_points, NULL, on_dxf_read_points));
 	dxf_options->m_list.push_back( new PropertyString(_("Layer Name Suffixes To Discard"), HeeksDxfRead::m_layer_name_suffixes_to_discard, this, on_edit_layer_name_suffixes_to_discard));
 
 	file_options->m_list.push_back(dxf_options);
@@ -3355,14 +3278,33 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	file_options->m_list.push_back(new PropertyInt(_("auto save interval (in minutes)"), m_auto_save_interval, NULL, on_set_auto_save_interval));
 	list->push_back(file_options);
 
-#ifndef WIN32
 	// Font options
 	PropertyList* font_options = new PropertyList(_("font options"));
 	font_options->m_list.push_back( new PropertyString(_("Paths (semicolon delimited)"), m_font_paths, this, on_edit_font_paths));
 	font_options->m_list.push_back( new PropertyDouble(_("Word Space Percentage"), m_word_space_percentage, this, on_edit_word_space_percentage));
 	font_options->m_list.push_back( new PropertyDouble(_("Character Space Percentage"), m_character_space_percentage, this, on_edit_character_space_percentage));
 	list->push_back(font_options);
-#endif
+
+	PropertyList* logging_options = new PropertyList(_("logging"));
+	{
+		std::list< wxString > choices;
+		choices.push_back ( wxString ( _("FatalError") ) );
+		choices.push_back ( wxString ( _("Error") ) );
+		choices.push_back ( wxString ( _("Warning") ) );
+		choices.push_back ( wxString ( _("Message") ) );
+		choices.push_back ( wxString ( _("Status") ) );
+		choices.push_back ( wxString ( _("Info") ) );
+		choices.push_back ( wxString ( _("Debug") ) );
+		choices.push_back ( wxString ( _("Trace") ) );
+		int choice = CHeeksFrame::m_loglevel;
+		logging_options->m_list.push_back ( new PropertyChoice ( _("log level"),  choices, choice, this, on_set_loglevel ) );
+	}
+	logging_options->m_list.push_back(new PropertyCheck(_("use repetition counting"), (int)CHeeksFrame::m_logrepeatcounts, NULL, on_set_repeatcounts));
+	logging_options->m_list.push_back(new PropertyCheck(_("use timestamps"), (int)CHeeksFrame::m_logtimestamps, NULL, on_set_timestamps));
+	list->push_back(logging_options);
+
+	SketchTools_GetOptions(list);
+
 }
 
 void HeeksCADapp::DeleteMarkedItems()
@@ -3378,30 +3320,24 @@ void HeeksCADapp::DeleteMarkedItems()
 	m_marked_list->Clear(false);
 
 	if(list.size() == 1){
-		DeleteUndoably(*(list.begin()));
+		Remove(*(list.begin()));
 	}
 	else if(list.size()>1){
-		DeleteUndoably(list);
+		Remove(list);
 	}
 	Repaint(0);
 }
 
 void HeeksCADapp::glColorEnsuringContrast(const HeeksColor &c)
 {
-	if(c == HeeksColor(0, 0, 0) || c == HeeksColor(255,255,255))background_color[0].best_black_or_white().glColor();
+	if(c == background_color[0])background_color[0].best_black_or_white().glColor();
 	else c.glColor();
 }
 
 static wxString known_file_ext;
 
-const wxChar* HeeksCADapp::GetKnownFilesWildCardString(bool open, bool import_export)const
+const wxChar* HeeksCADapp::GetKnownFilesWildCardString(bool open)const
 {
-	if(!import_export)
-	{
-		known_file_ext = wxString(_("Heeks files")) + _T(" |*.heeks;*.HEEKS");
-		return known_file_ext.c_str();
-	}
-
 	if(open){
 		if(m_alternative_open_wild_card_string.Len() > 0)
 			return m_alternative_open_wild_card_string.c_str();
@@ -3437,14 +3373,11 @@ const wxChar* HeeksCADapp::GetKnownFilesWildCardString(bool open, bool import_ex
 	}
 }
 
-const wxChar* HeeksCADapp::GetKnownFilesCommaSeparatedList(bool open, bool import_export)const
+const wxChar* HeeksCADapp::GetKnownFilesCommaSeparatedList(bool open)const
 {
-	if(!import_export)
-		return _T("heeks");
-
 	if(open){
 		wxList handlers = wxImage::GetHandlers();
-		wxString known_ext_str = _T("heeks, igs, iges, stp, step, dxf");
+		wxString known_ext_str = _T("heeks, HEEKS, igs, iges, stp, step, dxf");
 		for(wxList::iterator It = handlers.begin(); It != handlers.end(); It++)
 		{
 			wxImageHandler* handler = (wxImageHandler*)(*It);
@@ -3479,17 +3412,17 @@ public:
 	const wxChar* GetTitle(){
 		if(m_xor_marked_list){
 			if(wxGetApp().m_marked_list->ObjectMarked(m_marked_object->GetObject())){
-				return _("Deselect");
+				return _("Unmark");
 			}
 			else{
-				if(wxGetApp().m_marked_list->size() == 0)return _("Select");
-				return _("Add to selection");
+				return _("Mark");
 			}
 		}
-		return _("Select");
+#ifndef PYHEEKSCAD
+		if(wxGetApp().m_frame->m_properties)return _("Properties");
+#endif
+		return _("Mark");
 	}
-
-	wxString BitmapPath(){ return _T("select");}
 
 	void Run(){
 		if(m_marked_object == NULL)return;
@@ -3521,22 +3454,7 @@ public:
 		}
 		wxGetApp().Repaint();
 	}
-};
-
-class EditObjectTool:public Tool{
-public:
-	MarkedObject *m_marked_object;
-
-	EditObjectTool(MarkedObject *marked_object):m_marked_object(marked_object){}
-
-	// Tool's virtual functions
-	const wxChar* GetTitle(){return _("Edit");}
-
-	void Run(){
-		if(m_marked_object == NULL)return;
-		HeeksObj* object = m_marked_object->GetObject();
-		if(object)wxGetApp().EditUndoably(object);
-	}
+	bool CallChangedOnRun(){return false;}
 };
 
 void HeeksCADapp::GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool control_pressed)
@@ -3577,21 +3495,16 @@ void HeeksCADapp::GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list
 		}
 	}
 
-	if(types.size() > 0)
-	{
 	for(std::map<int, MarkedObject*>::iterator It = types.begin(); It != types.end(); It++)
 	{
 		MarkedObject* object = It->second;
-		GetTools2(object, t_list, point, control_pressed, types.size() > 1);
+		GetTools2(object, t_list, point, control_pressed);
 	}
-	}
-	else
-	{
-		GetTools2(marked_object, t_list, point, control_pressed, false);
-	}
+
+	//GetTools2(marked_object, t_list, point, control_pressed);
 }
 
-void HeeksCADapp::GetTools2(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool control_pressed, bool make_tool_list_container)
+void HeeksCADapp::GetTools2(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool control_pressed)
 {
 	std::list<Tool*> tools;
 
@@ -3602,50 +3515,18 @@ void HeeksCADapp::GetTools2(MarkedObject* marked_object, std::list<Tool*>& t_lis
 
 		tools.push_back(new MarkObjectTool(marked_object, point, control_pressed));
 
-		bool(*callback)(HeeksObj*) = NULL;
-		marked_object->GetObject()->GetOnEdit(&callback);
-		if(callback)tools.push_back(new EditObjectTool(marked_object));
-
 		if (tools.size()>0)
 		{
-			if(make_tool_list_container)
-			{
-				const wxChar* str = marked_object->GetObject()->GetShortStringOrTypeString();
-
-				if (wxString(str).CmpNoCase(_("Unknown")) == 0)
-				{
-					// delete the unused tools, if no valid name
-					for (std::list<Tool*>::iterator It = tools.begin(); It != tools.end(); It++)
-					{
-						delete *It;
-					}
-				}
-				else
-				{
-					ToolList *function_list = new ToolList(marked_object->GetObject()->GetShortStringOrTypeString());
-					function_list->Add(tools);
-					t_list.push_back(function_list);
-				}
-			}
-			else
-			{
-				for(std::list<Tool*>::iterator It = tools.begin(); It != tools.end(); It++)
-				{
-					Tool* tool = *It;
-					t_list.push_back(tool);
-				}
-			}
+			ToolList *function_list = new ToolList(marked_object->GetObject()->GetShortStringOrTypeString());
+			function_list->Add(tools);
+			t_list.push_back(function_list);
 		}
 	}
 }
 
 wxString HeeksCADapp::GetExeFolder()const
 {
-#if wxCHECK_VERSION(3, 0, 0)
-	wxStandardPaths& sp = wxStandardPaths::Get();
-#else
 	wxStandardPaths sp;
-#endif
 	wxString exepath = sp.GetExecutablePath();
 	int last_fs = exepath.Find('/', true);
 	int last_bs = exepath.Find('\\', true);
@@ -3986,12 +3867,8 @@ int HeeksCADapp::CheckForModifiedDoc()
 void HeeksCADapp::SetFrameTitle()
 {
 	if(m_frame == NULL)return;
-	wxString str;
-#ifdef FREE_VERSION
-	str = _T("TRIAL VERSION of ");
-#endif
-	str += GetAppName().c_str();
-	if((!m_untitled) || (!m_no_creation_mode))str += wxString(_T(" - ")) + m_filepath;
+	wxString str = GetAppName().c_str();
+	if((!m_untitled) || (!m_no_creation_mode))str += wxString(_T(" - ")) + m_filepath.c_str();
 	m_frame->SetTitle(str);
 }
 
@@ -4177,7 +4054,7 @@ bool HeeksCADapp::IsPasteReady()
 	wxString fstr;
 
 #ifndef WIN32
-	if(wxTheClipboard->IsOpened())return false;
+	if(wxTheClipboard->m_open)return false;
 #endif
 
 	if (wxTheClipboard->Open())
@@ -4215,17 +4092,17 @@ void HeeksCADapp::Paste(HeeksObj* paste_into, HeeksObj* paste_before)
 	}
 
 	// write a temporary file
-#if wxCHECK_VERSION(3, 0, 0)
-	wxStandardPaths& sp = wxStandardPaths::Get();
-#else
 	wxStandardPaths sp;
-#endif
 	sp.GetTempDir();
 	wxFileName temp_file( sp.GetTempDir().c_str(), _T("temp_Heeks_clipboard_file.heeks"));
 
 	{
 #if wxUSE_UNICODE
+#ifdef __WXMSW__
+		wofstream ofs(temp_file.GetFullPath());
+#else
 		wofstream ofs(Ttc(temp_file.GetFullPath().c_str()));
+#endif
 #else
 		ofstream ofs(temp_file.GetFullPath());
 #endif
@@ -4463,20 +4340,11 @@ void HeeksCADapp::InitialiseLocale()
 		}
 
 		// Initialize the catalogs we'll be using
-#if wxCHECK_VERSION(3, 0, 0)
-		if ( !m_locale.Init(language) )
-#else
-		// don't use wxLOCALE_LOAD_DEFAULT flag so that Init() doesn't return
-		// false just because it failed to load wxstd catalog
-		if ( !m_locale.Init(language, 0) )
-#endif
+		if ( !m_locale.Init(language, wxLOCALE_CONV_ENCODING) )
 		{
 			wxLogError(_T("This language is not supported by the system."));
 			return;
 		}
-		// This will add standard wx catalog that translates common wx strings.
-		// e.g. "Print preview" window will be translated
-		m_locale.AddCatalog(wxT("wxstd"));
 
 		wxLocale::AddCatalogLookupPathPrefix(wxT("."));
 
@@ -4485,7 +4353,6 @@ void HeeksCADapp::InitialiseLocale()
 	}
 }
 
-#ifndef WIN32
 
 std::auto_ptr<VectorFonts>	& HeeksCADapp::GetAvailableFonts(const bool force_read /* = false */ )
 {
@@ -4526,7 +4393,6 @@ std::auto_ptr<VectorFonts>	& HeeksCADapp::GetAvailableFonts(const bool force_rea
 
 	return(m_pVectorFonts);
 } // End GetAvailableFonts() method
-#endif
 
 void HeeksCADapp::GetPluginsFromCommandLineParams(std::list<wxString> &plugins)
 {
@@ -4538,7 +4404,7 @@ void HeeksCADapp::GetPluginsFromCommandLineParams(std::list<wxString> &plugins)
 		cmdLineDesc[0].kind = wxCMD_LINE_PARAM;
 		cmdLineDesc[0].shortName = NULL;
 		cmdLineDesc[0].longName = NULL;
-		cmdLineDesc[0].description = "input files";
+		cmdLineDesc[0].description = wxT("input files");
 		cmdLineDesc[0].type = wxCMD_LINE_VAL_STRING;
 		cmdLineDesc[0].flags = wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_PARAM_MULTIPLE;
 
@@ -4581,6 +4447,69 @@ void HeeksCADapp::RegisterOnBeforeFrameDelete(void(*callbackfunc)())
 {
 	m_beforeframedelete_callbacks.push_back(callbackfunc);
 }
+
+#ifdef CONSTRAINT_TESTER
+bool HeeksCADapp::TestForValidConstraints(const std::list<HeeksObj*>& objects)
+{
+//JT
+//The idea to this routine is to search through the object list that savefile uses and see
+//if everything makes sense.
+//This routine at the moment is only executed manually through the main menu
+//The idea is to insert this into various test points to get an idea where constraints are getting screwed up.
+
+
+    //wxString errorMessage(type,wxConvUTF8);
+    wxString message;
+    message += wxT("------------------------------------------\n");
+
+    message+=wxString::Format(wxT("  (Kids:%d)") ,GetNumChildren());
+    bool * ConstraintsAreOk = new bool;
+    bool * ConstraintsExist = new bool;
+    bool ConstraintareOktoReturn=true;
+    wxPuts(message);
+    wxString SketchLiteral = wxT("Sketch");
+    for(std::list<HeeksObj*>::const_iterator It = objects.begin(); It != objects.end(); It++)
+	{
+		HeeksObj* object = *It;
+		 *ConstraintsAreOk=true;//Reset the test to Ok.
+
+		object->AuditHeeksObjTree4Constraints(((SketchLiteral.IsSameAs(object->GetTypeString()))?object:NULL),this,0,true,ConstraintsAreOk);
+        if (!(*ConstraintsAreOk))
+        {
+            //If there are missing constraints within a sketch it's possible that they are in another sketch
+            //todo probably should pass pack the type of constraint errors where having.
+            //ConstraintsAreOk2
+
+
+            object->AuditHeeksObjTree4Constraints(((SketchLiteral.IsSameAs(object->GetTypeString()))?this:NULL),this,0,false,ConstraintsExist );
+            if (ConstraintsExist)//It appears that constraints exist outside the sketch
+            {
+                wxString SketchLiteral = wxString::Format(wxT("2nd object of contraints exist outside %s %d"),object->GetTypeString(),object->m_id);
+            }
+            else
+            {
+                wxString SketchLiteral = wxString::Format(wxT("Constraint problems within %s %d"),object->GetTypeString(),object->m_id);
+            }
+            ConstraintareOktoReturn=false;
+
+        }
+	}
+
+    if (ConstraintareOktoReturn)
+        message = wxT("Constraint tests:OK");
+    else
+    message = wxT("Constraint tests:!!!! ERRORS FOUND !!!!");
+
+    message += wxT("\n------------------------------------------\n");
+    wxPuts(message);
+    delete ConstraintsAreOk;
+    delete ConstraintsExist;
+    return ConstraintareOktoReturn;
+
+}
+#endif
+
+
 
 bool HeeksCADapp::RegisterFileOpenHandler( const std::list<wxString> file_extensions, FileOpenHandler_t fileopen_handler )
 {
@@ -4717,6 +4646,12 @@ wxString HeeksCADType(const int type)
         case SplineType:   return(_("Spline"));
         case GroupType:   return(_("Group"));
         case CorrelationToolType:   return(_("CorrelationTool"));
+#ifdef MULTIPLE_OWNERS
+        case ConstraintType:   return(_("Constraint"));
+#endif
+        case PadType:   return(_("Pad"));
+        case PartType:   return(_("Part"));
+        case PocketSolidType:   return(_("PocketSolid"));
         case AngularDimensionType:   return(_("AngularDimension"));
         case OrientationModifierType:   return(_("OrientationModifier"));
         case HoleType:   return(_("Hole"));
@@ -4755,45 +4690,3 @@ void HeeksCADapp::ReleaseIndex(unsigned int index)
 {
     if(m_marked_list)m_marked_list->ReleaseIndex(index);
 }
-
-void HeeksCADapp::GetExternalMarkedListTools(std::list<Tool*>& t_list)
-{
-	for(std::list< void(*)(std::list<Tool*>&) >::iterator It = m_markedlisttools_callbacks.begin(); It != m_markedlisttools_callbacks.end(); It++)
-	{
-		void(*callbackfunc)(std::list<Tool*>& t_list) = *It;
-		(*callbackfunc)(t_list);
-	}
-}
-
-void HeeksCADapp::RegisterMarkeListTools(void(*callbackfunc)(std::list<Tool*>& t_list))
-{
-	m_markedlisttools_callbacks.push_back(callbackfunc);
-}
-
-void HeeksCADapp::RegisterOnRestoreDefaults(void(*callbackfunc)())
-{
-	m_on_restore_defaults_callbacks.push_back(callbackfunc);
-}
-
-void HeeksCADapp::RestoreDefaults()
-{
-	HeeksConfig config;
-	config.DeleteAll();
-	for(std::list< void(*)() >::iterator It = m_on_restore_defaults_callbacks.begin(); It != m_on_restore_defaults_callbacks.end(); It++)
-	{
-		void(*callbackfunc)() = *It;
-		(*callbackfunc)();
-	}
-	wxGetApp().m_settings_restored = true;
-}
-
-#ifdef USING_RIBBON
-void HeeksCADapp::AddRibbonPanels(wxRibbonBar* ribbon, wxRibbonPage* main_page)
-{
-	for (std::list< void(*)(wxRibbonBar*, wxRibbonPage*) >::iterator It = m_AddRibbonPanels_list.begin(); It != m_AddRibbonPanels_list.end(); It++)
-	{
-		void(*callbackfunc)(wxRibbonBar*, wxRibbonPage*) = *It;
-		(*callbackfunc)(ribbon, main_page);
-	}
-}
-#endif

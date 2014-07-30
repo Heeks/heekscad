@@ -675,9 +675,13 @@ void CSvgRead::ReadPath(TiXmlElement* pElem)
 			cmd = 'l';
 			while(1){
 // if we are looking at a command letter reset the cmd variable
-				if(toupper(d[pos])=='M' || toupper(d[pos])=='L' || toupper(d[pos])=='H' || toupper(d[pos])=='V' || toupper(d[pos])=='C' || toupper(d[pos])=='S' || toupper(d[pos])=='Q' || toupper(d[pos])=='T' || toupper(d[pos])=='A' || toupper(d[pos])=='Z' || toupper(d[pos])==' ' ){
+				if(toupper(d[pos])=='M' || toupper(d[pos])=='L' || toupper(d[pos])=='H' || toupper(d[pos])=='V' || toupper(d[pos])=='C' || toupper(d[pos])=='S' || toupper(d[pos])=='Q' || toupper(d[pos])=='T' || toupper(d[pos])=='A' || toupper(d[pos])=='Z' ){
 					cmd = d[pos];
 					pos++;
+				}
+// if we have got to the end of the string, stop
+				if(pos>=length){
+					break;
 				}
 				if(toupper(cmd) == 'M'){
 					// make a sketch
@@ -740,17 +744,11 @@ void CSvgRead::ReadPath(TiXmlElement* pElem)
 					ReadClose(ppnt,spnt);
 					ppnt = spnt;
 				}
-				else if(toupper(cmd) == ' '){
-				}
 				else if(d[pos] == 0 ){
 					break;
 				}
 				else{
 					pos++;
-				}
-// if we have got to the end of the string, stop
-				if(pos>=length){
-					break;
 				}
 				if(pos<0) {
 					break;
@@ -777,20 +775,14 @@ void HeeksSvgRead::ModifyByMatrix(HeeksObj* object)
 void HeeksSvgRead::OnReadStart()
 {
 		m_sketch = new CSketch();
-		wxGetApp().AddUndoably(m_sketch, NULL, NULL);
+		wxGetApp().Add(m_sketch, NULL);
 }
 
 void HeeksSvgRead::OnReadCubic(gp_Pnt s, gp_Pnt c1, gp_Pnt c2, gp_Pnt e)
 {
 	TColgp_Array1OfPnt poles(1,4);
 	poles.SetValue(1,s); poles.SetValue(2,c1); poles.SetValue(3,c2); poles.SetValue(4,e);
-#ifdef _DEBUG
-#undef new
-#endif
 	Handle(Geom_BezierCurve) curve = new Geom_BezierCurve(poles);
-#ifdef _DEBUG
-#define new  WXDEBUG_NEW
-#endif
 	GeomConvert_CompCurveToBSplineCurve convert(curve);
 
 	Handle_Geom_BSplineCurve spline = convert.BSplineCurve();
@@ -798,20 +790,14 @@ void HeeksSvgRead::OnReadCubic(gp_Pnt s, gp_Pnt c1, gp_Pnt c2, gp_Pnt e)
 	HSpline* new_object = new HSpline(spline, &wxGetApp().current_color);
 	ModifyByMatrix(new_object);
 	AddSketchIfNeeded();
-	wxGetApp().AddUndoably(new_object, m_sketch, NULL);
+	m_sketch->Add(new_object, NULL);
 }
 
 void HeeksSvgRead::OnReadQuadratic(gp_Pnt s, gp_Pnt c, gp_Pnt e)
 {
 	TColgp_Array1OfPnt poles(1,3);
 	poles.SetValue(1,s); poles.SetValue(2,c); poles.SetValue(3,e);
-#ifdef _DEBUG
-#undef new
-#endif
 	Handle(Geom_BezierCurve) curve = new Geom_BezierCurve(poles);
-#ifdef _DEBUG
-#define new  WXDEBUG_NEW
-#endif
 	GeomConvert_CompCurveToBSplineCurve convert(curve);
 
 	Handle_Geom_BSplineCurve spline = convert.BSplineCurve();
@@ -819,7 +805,7 @@ void HeeksSvgRead::OnReadQuadratic(gp_Pnt s, gp_Pnt c, gp_Pnt e)
 	HSpline* new_object = new HSpline(spline, &wxGetApp().current_color);
 	ModifyByMatrix(new_object);
 	AddSketchIfNeeded();
-	wxGetApp().AddUndoably(new_object, m_sketch, NULL);}
+	m_sketch->Add(new_object, NULL);}
 
 void HeeksSvgRead::OnReadLine(gp_Pnt p1, gp_Pnt p2)
 {
@@ -837,7 +823,7 @@ void HeeksSvgRead::OnReadEllipse(gp_Pnt c, double maj_r, double min_r, double ro
 	HEllipse *new_object = new HEllipse(elip,start,end,&wxGetApp().current_color);
 	ModifyByMatrix(new_object);
 	AddSketchIfNeeded();
-	wxGetApp().AddUndoably(new_object, m_sketch, NULL);
+	m_sketch->Add(new_object, NULL);
 }
 
 void HeeksSvgRead::OnReadCircle(gp_Pnt c, double r)
@@ -847,7 +833,7 @@ void HeeksSvgRead::OnReadCircle(gp_Pnt c, double r)
 	HCircle *new_object = new HCircle(cir,&wxGetApp().current_color);
 	ModifyByMatrix(new_object);
 	AddSketchIfNeeded();
-	wxGetApp().AddUndoably(new_object, m_sketch, NULL);
+	m_sketch->Add(new_object, NULL);
 }
 
 void HeeksSvgRead::AddSketchIfNeeded()
@@ -855,6 +841,6 @@ void HeeksSvgRead::AddSketchIfNeeded()
 	if(m_sketch == NULL)
 	{
 		m_sketch = new CSketch();
-		wxGetApp().AddUndoably(m_sketch, NULL, NULL);
+		wxGetApp().Add(m_sketch, NULL);
 	}
 }

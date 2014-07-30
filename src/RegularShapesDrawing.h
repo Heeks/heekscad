@@ -21,8 +21,13 @@ enum PolygonMode
 
 class RegularShapesDrawing: public Drawing{
 private:
+	std::list<HeeksObj*> temp_object_in_list;
+	std::list<HeeksObj*> prev_object_in_list;
+	HeeksObj *temp_object;
+
 	// Drawing's virtual functions
 	bool calculate_item(DigitizedPoint &end);
+	const std::list<HeeksObj*>& GetObjectsMade()const{return temp_object_in_list;}
 	int number_of_steps(){return 2;}
 	int step_to_go_to_after_last_step(){return 0;}
 	bool is_an_add_level(int level){return level == 1;}
@@ -45,6 +50,9 @@ public:
 	const wxChar* GetTitle();
 	void GetTools(std::list<Tool*> *f_list, const wxPoint *p);
 	void GetProperties(std::list<Property *> *list);
+
+	// Drawing's virtual functions
+	void clear_drawing_objects(int mode);
 
 	void ClearSketch();
 };
