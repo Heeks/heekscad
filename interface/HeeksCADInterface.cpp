@@ -863,7 +863,7 @@ void CHeeksCADInterface::SetViewBox(const double* b)
 
 void CHeeksCADInterface::ViewExtents(bool rotate)
 {
-	wxGetApp().m_frame->m_graphics->OnMagExtents(rotate, false);
+	wxGetApp().m_frame->m_graphics->OnMagExtents(rotate, false, 6);
 }
 
 void CHeeksCADInterface::XYZView(bool recalculate_gl_lists )
@@ -1715,12 +1715,12 @@ void CHeeksCADInterface::OnMoveScaleButton()
 
 void CHeeksCADInterface::OnMagExtentsButton()
 {
-	wxGetApp().m_frame->m_graphics->OnMagExtents(true, true);
+	wxGetApp().m_frame->m_graphics->OnMagExtents(true, true, 6);
 }
 
 void CHeeksCADInterface::OnMagNoRotButton()
 {
-	wxGetApp().m_frame->m_graphics->OnMagExtents(false, true);
+	wxGetApp().m_frame->m_graphics->OnMagExtents(false, true, 6);
 }
 
 void CHeeksCADInterface::OnMagButton()
