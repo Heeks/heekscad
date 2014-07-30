@@ -1,0 +1,5073 @@
+# Traduction française de HeeksCAD.
+# Copyright (C) 2009 THE HeeksCAD'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the HeeksCAD package.
+# André PASCUAL <andre.pascual@linuxgraphic.org>, 2009-2011
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: HeeksCAD 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-05-26 13:41+0200\n"
+"PO-Revision-Date : 2011-26-02. r\n"
+"Complété  par André PASCUAL\n"
+"Last-Translator:  André <andre.pascual@linuxgraphic.org>\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit"
+
+#==============================================================
+# Messages CNC regroupés
+
+#Ajout2  HeeksCNC.cpp. Pas d'effet
+msgid "Program"
+msgstr "Programme CN"
+
+#Ajout3   HeeksCNC.cpp. Pas d'effet
+msgid "Output"
+msgstr "Sortie CN"
+
+#Ajout4 : HeeksCNC.cpp
+msgid "New Rough Turning Operation..."
+msgstr "Nouvelle Ébauche de Tournage"
+
+#Ajout5
+msgid "( with Shift key for similar objects)"
+msgstr "(avec Shift pour des objets similaires)"
+
+#Ajout6  : HeeksCNC.cpp
+msgid "New Locating Operation..."
+msgstr "Nouvelle Opération de Pointage"
+
+#Ajout7 : HeeksCNC.cpp
+msgid "Run Python Script"
+msgstr "Exécuter un Script Python"
+
+#Ajout8 : HeeksCNC.cpp
+msgid "Cancel Python Script"
+msgstr "Abandonner le Script Python"
+
+#Ajout9
+msgid "speeds"
+msgstr "Vitesses"
+
+#Ajout10
+msgid "auto set speeds for new operation"
+msgstr "Opération nouvelle : vitesses auto"
+
+#Ajout11: aucun effet. Il faut traduire <default.speeds>
+msgid "Aluminium (15) with "
+msgstr "Aluminium (15) avec "
+
+#Ajout12: aucun effet. Il faut traduire <default.speeds>
+msgid "Mild Steel (150) with "
+msgstr "Acier Doux (150) avec "
+
+#Ajout13: aucun effet. Il faut traduire <default.speeds>
+msgid "Alloy Steel <0.3% carbon (200) with "
+msgstr "Acier Allié <0.3% carbone (200) avec "
+
+#Ajout14: aucun effet. Il faut traduire <default.speeds>
+msgid "Alloy Steel >0.3% carbon (200) with "
+msgstr "Acier Allié >0.3% carbone (200) avec "
+
+#Ajout15: aucun effet. Il faut traduire <default.speeds>
+msgid "Brinell (15) at 400 (mm^3/min)"
+msgstr "Dureté Brinell (15) à 400 "
+
+#Ajout16: aucun effet. Il faut traduire <default.speeds>
+msgid "Brinell (150) at 1600 (mm^3/min)"
+msgstr "Dureté Brinell (150) à 1600"
+
+#Ajout75 
+msgid "New Drill..."
+msgstr "Nouveau Foret"
+
+#Ajout76 
+msgid "New Centre Drill..."
+msgstr "Nouveau Foret à centrer"
+
+#Ajout77 
+msgid "New End Mill..."
+msgstr "Nouvelle Fraise de finition"
+
+#Ajout78 
+msgid "New Slot Drill..."
+msgstr "Nouvelle Fraise à rainurer"
+
+#Ajout79 
+msgid "New Ball End Mill..."
+msgstr "Nouvelle Fraise Sph à finir"
+
+#Ajout79 
+msgid "New Chamfer Mill..."
+msgstr "Nouvelle Fraise à chanfreiner"
+
+#Ajout79 
+msgid "New Turning Tool..."
+msgstr "Nouvel Outil de tour"
+
+#Ajout80 
+msgid "Material"
+msgstr "Matière"
+
+#Ajout81 
+msgid "Changing name to "
+msgstr "Change de nom pour "
+
+#Ajout82 
+msgid "max_advance_per_revolution"
+msgstr "Avance Maxi par tour"
+
+#Ajout83 
+msgid "automatically_generate_title"
+msgstr "Titre auto-généré"
+
+#Ajout84 
+msgid "x_offset"
+msgstr "Décalage en X"
+
+#Ajout85 
+msgid "front_angle"
+msgstr "Angle de coupe"
+
+#Ajout86 
+msgid "tool_angle"
+msgstr "Angle de taillant"
+
+#Ajout87 
+msgid "back_angle"
+msgstr "Angle de dépouille"
+
+#Ajout88 
+msgid "Orientation values must be between 0 and 9 inclusive.  Aborting value change"
+msgstr "Valeurs d'orientation : entre 0 et 9 inclus. Abandon du changement de valeur"
+
+#Ajout88 
+msgid "Cutting Tool material must be between 0 and 1. Aborting value change"
+msgstr "Matière de l'Outil de Coupe entre:  0 et 1. Abandon du changement de valeur"
+
+#Ajout89 
+msgid "Changing corner radius to zero\n"
+msgstr "Valeur  du rayon de coin = 0\n"
+
+#Ajout90 
+msgid "Changing flat radius to zero\n"
+msgstr "Valeur  du rayon plat = 0\n"
+
+#Ajout91 
+msgid "Changing cutting edge angle to 59 degrees (for normal 118 degree cutting face)\n"
+msgstr "Change l'Angle de Coupe pour 59° (pour une face de coupe normale à 118°)\n"
+
+#Ajout92 
+msgid "Changing cutting edge height to "
+msgstr "Change hauteur Arête de coupe pour "
+
+#Ajout92 
+msgid "Changing cutting edge angle to zero degrees\n"
+msgstr "Change angle de l'Arête de Coupe pour 0°\n"
+
+#Ajout93 
+msgid "Changing flat radius to zero (this may need to be reset)\n"
+msgstr "Change rayon plat pour 0 (il se peut qu'il y ait un reset)\n"
+
+#Ajout94 
+msgid "Changing cutting edge angle to 45 degrees\n"
+msgstr "Change l'angle de coupe pour 45 degrés)\n"
+
+#Ajout94 
+msgid "That is not a valid cutting tool type. Aborting value change."
+msgstr "Type d'Outil de coupe invalide. Abandon du changement "
+
+#Ajout95 
+msgid "Outside"
+msgstr "Extérieur "
+
+#Ajout96 
+msgid "Inside"
+msgstr "Intérieur "
+
+#Ajout97 
+msgid "Outside or Left"
+msgstr "Extérieur ou à gauche"
+
+#Ajout98 
+msgid "Inside or Right"
+msgstr "Intérieur ou à droite"
+
+#Ajout99 
+msgid "cut mode"
+msgstr "Mode de coupe"
+
+
+#Ajout 387 HeeksCNC.cpp
+msgid "New Chamfer Operation..."
+msgstr "Nouvelle Opération Chanfrein"
+
+#Ajout 388 HeeksCNC.cpp
+msgid "New Contour Operation..."
+msgstr "Nouvelle Opération Contournage"
+
+#Ajout 389 HeeksCNC.cpp
+msgid "New Inlay Operation..."
+msgstr "Nouvelle Opération..."
+
+#Ajout 390 HeeksCNC.cpp
+msgid "New Script Operation..."
+msgstr "Nouvelle Opération Script"
+
+#Ajout 391 HeeksCNC.cpp
+msgid "New Probe Grid Operation..."
+msgstr "Nouvelle Opération Réseau de Palpage"
+
+#======================================================================
+#Ajout du 28/02/2011
+#Ajout 420
+msgid "Back Angle"
+msgstr "Angle Arrière"
+
+#Ajout 421
+msgid "Front Angle"
+msgstr "Angle Frontal"
+
+#Ajout 422
+msgid "Tool Angle"
+msgstr "Angle d'outil"
+
+#Ajout 423
+msgid "Orientation"
+msgstr "Orientation"
+
+#Ajout 424
+msgid "Probe Offset X"
+msgstr "Décalage X du Palpeur"
+
+#Ajout 425
+msgid "Probe Offset Y"
+msgstr "Décalage Y du Palpeur"
+
+#Ajout 426
+msgid "allow dummy tool definitions"
+msgstr "alloue définition outil factice"
+
+#Ajout 430
+msgid "Moving to a safety height common to both"
+msgstr "Déplacement  à hauteur de garde commune"
+
+#Ajout 431
+msgid "and"
+msgstr "et"
+
+#Ajout 432
+msgid "Move above touch-off point for"
+msgstr "Déplacment au-dessus du point hors contact"
+
+#Ajout 433
+msgid "This program assumes taht the machine operator has joged"
+msgstr "Ce programme suppose que l'accostage est à vitesse  lente"
+
+#Ajout 434
+msgid "the machine to approximatedly the correct location"
+msgstr "position corrcete d ela machine par approximation"
+
+#Ajout 435
+msgid "immediately above the protrusion we are finding the centre of."
+msgstr "immédiatement au-dessus de la saillie proche du centre."
+
+#Ajout 436
+msgid "This program then jogs out and down in two opposite directions"
+msgstr "Ce programme accoste lentement hors et sous en 2 directions opposées"
+
+#Ajout 437
+msgid "before probing back towards the centre point looking for the"
+msgstr "avant le palpage vers le point de centre regardant pour la"
+
+#Ajout 438
+msgid "protrusion"
+msgstr "saillie"
+
+#Ajout 439
+msgid "Move back to the intersection points"
+msgstr "Retour aux points d'intersection"
+
+#Ajout 440
+msgid "NOTE: We set the temporary origin because it was in effect when the values in these variabales were established"
+msgstr "NOTE: Poser l'origine temporaire parce que ... quand cette variable est établie (charabia)"
+
+#Ajout 441
+msgid "immediately above the hole we are finding the centre of."
+msgstr "immédiatement au-dessus du trou, nous trouvons le centre de."
+
+#Ajout 442
+msgid "This programm then jogs down and probes out in two opposite directions"
+msgstr "Ce programme avance lentement et palpe dans 2 directions opposées"
+
+#Ajout 443
+msgid "looking for the workpiece"
+msgstr "recherche de la pièce en usinage"
+
+#Ajout 444
+msgid "Num points along X"
+msgstr "Num point le long de X"
+
+#Ajout 445
+msgid "Num points along Y"
+msgstr "Num points le long de Y"
+
+#Ajout 446
+msgid "Point Cloud"
+msgstr "Nuage de points"
+
+#Ajout 447
+msgid "Fixture Measurement"
+msgstr "Appareil de mesure"
+
+#Ajout 448
+msgid "Point Data Format"
+msgstr "Format Données de Points"
+
+#Ajout 449
+msgid "Check Levels"
+msgstr "Contrôle de Niveaux"
+
+#Ajout 450
+msgid "Corner Coordinate"
+msgstr "Coordonnées angulaires"
+
+#Ajout 451
+msgid "Final Coordinate"
+msgstr "Coordonnées fniales"
+
+#Ajout 452
+msgid "Probe"
+msgstr "Palpe"
+#Ajout 453
+msgid "corner"
+msgstr "coin"
+
+#Ajout 454
+msgid "Probe protrusion along"
+msgstr "Palpe le long de la saillie"
+
+#Ajout 455
+msgid "Probe hole along"
+msgstr "Palpe génératrice du trou"
+
+#Ajout 456
+msgid "Probe protrusion"
+msgstr "Palpe la saillie"
+
+#Ajout 457
+msgid "Probe hole"
+msgstr "Palpe le perçage"
+
+#Ajout 458
+msgid "Probe Fixture Tilt"
+msgstr "Palpeur Tilt"
+
+#Ajout 459
+msgid "grid"
+msgstr "grille"
+
+#Ajout 460
+msgid "minimum x"
+msgstr "x minimum"
+
+#Ajout 461
+msgid "maximum x"
+msgstr "x maximum"
+
+#Ajout 462
+msgid "minimum y"
+msgstr "y minimum"
+
+#Ajout 463
+msgid "maximum y"
+msgstr "y maximum"
+
+#Ajout 464
+msgid "one way"
+msgstr "voie unique"
+
+#Ajout 465
+msgid "back and forth"
+msgstr "retour et suite"
+
+#Ajout 466
+msgid "style"
+msgstr "style"
+
+#Ajout 467
+msgid "Reset Boudary"
+msgstr "Réinitialisation Limites"
+
+#Ajout 468
+msgid "rigid tapping"
+msgstr "taraudage rigide"
+
+#Ajout 469
+msgid "chuck tapping"
+msgstr "mandrin de taraudage"
+
+#Ajout 470
+msgid "tap_mode"
+msgstr "mode_taraudage"
+
+#Ajout 471
+msgid "dwell"
+msgstr "logement"
+
+#Ajout 472
+msgid "Respect existing order"
+msgstr "Respect ordre existant"
+
+#Ajout 473
+msgid "sort_tapping_locations"
+msgstr "tri_taraudage_positions"
+
+#Ajout 474
+msgid "The tapping operation has not selected a tapping tool to use\n"
+msgstr "L'operation de taraudage n'a pas d'outil attribué pour usiner\n"
+
+#Ajout 475
+msgid "Left-hand tapping needs counterclockwise spindle rotation (negative spindle_speed)\n"
+msgstr "Taraudage à gauche nécessite une rotation sens antihoraire de la broche\n"
+
+#Ajout 476
+msgid "Adjusting spindle rotation to counterclockwise.\n"
+msgstr "Ajustage la rotation sens antihoraire de la broche.\n"
+
+#Ajout 477
+msgid "right-hand tapping needs clockwise spindle rotation (positve spindle_speed)\n"
+msgstr "Taraudage a droite nécessite une rotation sens horaire de la broche\n"
+
+#Ajout 478
+msgid "Adjusting spindle rotation to clockwise.\n"
+msgstr "Ajustage la rotation sens horaire de la broche.\n"
+
+#Ajout 479
+msgid " The tapping operation's depth is greater than the previously drilled hole\n"
+msgstr " La profondeur du taraudage est plus grande que celle du perçage préalable\n"
+
+#Ajout 480
+msgid "Adjusting depth of tapping cycle"
+msgstr "Ajustage de la profondeur du cycle de taraudage"
+
+#Ajout 481
+msgid "from"
+msgstr "de"
+
+#Ajout 482
+msgid "to"
+msgstr "à"
+
+#Ajout 483
+msgid "Tapping"
+msgstr "Taraudage"
+
+#Ajout 484
+msgid "Can't tap hole"
+msgstr "Taraudage impossible"
+
+#Ajout 485
+msgid "Select tap size"
+msgstr "Choisir la taille du taraudage"
+
+#Ajout 486
+msgid "Standard Tap Sizes"
+msgstr "Dim. standar de taraudage"
+
+#Ajout 487
+msgid "Automatically generate title"
+msgstr "Génère un titre automatique"
+
+#Ajout 488
+msgid "Automatic Title"
+msgstr "Titre Automatique"
+
+#Ajout 489
+msgid "Type"
+msgstr "Type"
+
+#Ajout 490
+msgid "(0) Unused"
+msgstr "(0) Inutilisé"
+
+#Ajout 491
+msgid "(1) Turning/Back Facing"
+msgstr "(1) Tournant arrière"
+
+#Ajout 492
+msgid "(2) Turning/Facing"
+msgstr "(2) Tournant Frontal"
+
+#Ajout 493
+msgid "(3) Boring/Facing"
+msgstr "(3) Perçage Frontal"
+
+#Ajout 494
+msgid "(4) Boring/Back Facing"
+msgstr "(4) Perçage arrière"
+
+#Ajout 495
+msgid "(5) Back Facing"
+msgstr "(5) Retour vers"
+
+#Ajout 496
+msgid "(6) Turning"
+msgstr "(6) Tournant"
+
+#Ajout 497
+msgid "(7) Facing"
+msgstr "(7) Face à"
+
+#Ajout 498
+msgid "(8) Boring"
+msgstr "(8) Perçage"
+
+#Ajout 499
+msgid "(9) Centre"
+msgstr "(9) Centre"
+
+#Ajout 500
+msgid "units for nc output"
+msgstr "Unités pour la sortie du code CN"
+
+#Ajout 501
+msgid "Tools"
+msgstr "Outils"
+
+#Ajout 502
+msgid "type"
+msgstr "Fraise"
+
+#Ajout 502
+msgid "Drill Bit"
+msgstr "Foret"
+
+#Ajout 503
+msgid "Slot Cutter"
+msgstr "Fraise à rainurer"
+
+#Ajout 504
+msgid "Ball End Mill"
+msgstr "Fraise sphérique"
+
+#Ajout 505
+msgid "cutting tool"
+msgstr "Outil de coupe"
+
+#Ajout 506
+msgid "Chamfering Bit"
+msgstr "Fraise à chanfreiner"
+
+#Ajout 507
+msgid "New Drilling Operation..."
+msgstr "Nouveau cycle G81/82/83"
+
+#Ajout 508
+msgid "New Cutting Tool Definition..."
+msgstr "Nouvelle définition de l'outil de coupe"
+
+#Ajout 509
+msgid "tool_number"
+msgstr "Numéro d'Outil"
+
+#Ajout 510
+msgid "diameter"
+msgstr "Diamètre d'outil"
+
+#Ajout 511
+msgid "tool_length_offset"
+msgstr "Décalage d'outil"
+
+#Ajout 512
+msgid "pocket_number"
+msgstr "Numéro de Poche"
+
+#Ajout 513
+msgid "Open NC File"
+msgstr "Ouvrir fichier CN"
+
+#Ajout 514
+msgid "Save NC File"
+msgstr "Sauver fichier CN"
+
+#Ajout 515
+msgid "cutting_tool_number"
+msgstr "Numéro de l'outil de coupe"
+
+#Ajout 516
+msgid "depth"
+msgstr "Profondeur"
+
+#Ajout 517
+msgid "peck_depth"
+msgstr "Profondeur de passe en mm"
+
+#Ajout 518
+msgid "standoff"
+msgstr "Hauteur de garde"
+
+#Ajout 519 HeeksCNC.cpp
+msgid "You must select some points, circles or other intersecting elements first!"
+msgstr " Sélectionner d'abord des points, cercles ou autres éléments qui se coupent"
+
+#Ajout 520 HeeksCNC.cpp
+msgid "New CounterBore Operation..."
+msgstr "Nouvelle Opération de Perçage..."
+
+#Ajout 521
+msgid "Brinell Hardness of raw material"
+msgstr "Dureté des matériaux"
+
+#Ajout 522
+msgid "Carbide "
+msgstr "Carbure "
+
+#Ajout 523
+msgid "Carbide"
+msgstr "Carbure"
+
+#Ajout 524
+msgid "High Speed Steel"
+msgstr "HSS"
+
+#Ajout 525
+msgid "Estimate when possible"
+msgstr "Estimer quand c'est possible"
+
+#Ajout 526
+msgid "Use default values"
+msgstr "Utiliser les valeurs par défaut"
+
+#Ajout 527
+msgid " degree "
+msgstr " degré "
+
+#Ajout 528
+msgid "Turning Tool"
+msgstr "Outil de tournage"
+
+#Ajout 529
+msgid "New Special Adaptive Roughing Operation..."
+msgstr "Opération spéciale d'ébauche adaptée..."
+
+#Ajout 530
+msgid "New Drill Cycle Operation..."
+msgstr "Nouveau cycle de G81/82/83..."
+
+#Ajout 531
+msgid "New CounterBore Cycle Operation..."
+msgstr "Nouveau cycles de perçage..."
+
+#Ajout 532
+msgid "Add Speed Reference..."
+msgstr "Ajouter Vitesse de référence"
+
+#Ajout 533
+msgid "Add Cutting Rate Reference..."
+msgstr "Ajouter niveau de coupe de référence"
+
+#Ajout 534
+msgid "Leave manually assigned title"
+msgstr "Assignation manuelle d'un Titre"
+
+#Ajout 535
+msgid "New Fixture..."
+msgstr "Nouvelle Origine..."
+
+#Ajout 536
+msgid "A axis (around X) rotation"
+msgstr "A : axe de rotation (autour de X)"
+
+#Ajout 537
+msgid "B axis (around Y) rotation"
+msgstr "B : axe de rotation (autour de Y)"
+
+#Ajout 538
+msgid "C axis (around Z) rotation"
+msgstr "C : axe de rotation (autour de Z)"
+
+#Ajout 539
+msgid "Pivot Point"
+msgstr "'Centre de rotation"
+
+#Ajout 540
+msgid "Pick roll on point"
+msgstr "Choisir point contournage"
+
+#Ajout 541
+msgid "Pick roll off point"
+msgstr "Choisir point de fin contournage"
+
+#Ajout 542
+msgid "Brinell hardness of raw material"
+msgstr "Dureté Brinell du matière brute"
+
+#Ajout 543
+msgid "Raw Material"
+msgstr "Matière brute"
+
+#Ajout 544
+msgid "Surface Speed (m/min)"
+msgstr "Vitesse de coupe (m/min)"
+
+#Ajout 545
+msgid "Surface Speed (ft/min)"
+msgstr "Vitesse de coupe (ft/min)"
+
+#Ajout 546
+msgid "Raw Material Name"
+msgstr "Nom de la matière brute"
+
+#Ajout 547
+msgid "Maximum Material Removal Rate (mm^3/min)"
+msgstr "Épaisseur de passe maximale (mm^3/min"
+
+#Ajout 548
+msgid "Maximum Material Removal Rate (inches^3/min)"
+msgstr "Épaisseur de passe maximale (inches^3/min)"
+
+#Ajout 549
+msgid "New Speed Reference..."
+msgstr "Nouvelle vitesse de référence..."
+
+#Ajout 550
+msgid "New Cutting Rate Reference..."
+msgstr "Nouveau taux de coupe de référence..."
+
+#Ajout 551
+msgid "Feeds and Speeds"
+msgstr "Vitesses d'avance et de rotation"
+
+#Ajout 552
+msgid "Fixtures"
+msgstr "Origines"
+
+#Ajout 553
+msgid "output file name follows data file name"
+msgstr "Nom du fichier de sortie = nom de fichier de données"
+
+#Ajout 554
+msgid "Chamfering bit"
+msgstr "Fraise À chanfreiner"
+
+#Ajout 555
+msgid "End Mill"
+msgstr "Fraise de finition"
+
+#Ajout 556
+msgid "CounterBore"
+msgstr "Profondeur de passe"
+
+#Ajout 557
+msgid "Centre Drill Bit"
+msgstr "Foret à centrer"
+
+#Ajout 558
+msgid "flat_radius"
+msgstr "Rayon de pointe"
+
+#Ajout 559
+msgid "corner_radius"
+msgstr "Rayon d'angle"
+
+#Ajout 560
+msgid "cutting_edge_angle"
+msgstr "Angle de l'arête de coupe"
+
+#Ajout 561
+msgid "cutting_edge_height"
+msgstr "Hauteur de l'arête de coupe"
+
+#Ajout 562
+msgid "sort_locations"
+msgstr "Ordonner les positions"
+
+#Ajout 563
+msgid "sort_drilling_locations"
+msgstr "Ordonner les positions de perçage"
+
+#Ajout 564
+msgid "sort_sketches"
+msgstr "Ordonner les esquisses"
+
+#Ajout 565
+msgid "Designe Rules Check"
+msgstr "Définir les règles de contrôle "
+
+#Ajout 566
+msgid "Designe Rules Adjustment"
+msgstr "Définir les règles d'ajstement"
+
+#Ajout 567
+msgid "Design Rules Check..."
+msgstr "Vérifier les paramètres CN..."
+
+#Ajout 568
+msgid "Design Rules Adjustment..."
+msgstr "Définir les règles d'ajustement..."
+
+#Ajout 569
+msgid "Add New Milling Operation"
+msgstr "Nouvelle Opération de Fraisage"
+
+#Ajout 570
+msgid "Add New 3D Operation"
+msgstr "Nouvelle Opération 3D"
+
+#Ajout 571
+msgid "Add New Additive Operation"
+msgstr "Nouvelle Opération Ajoutée"
+
+#Ajout 572
+msgid "Add Other Operation"
+msgstr "Ajouter Autre Opération"
+
+#Ajout 573
+msgid "Add New Tool"
+msgstr "Ajout Nouvel Outil"
+
+#Ajout 574
+msgid "Tapping Operation..."
+msgstr "Taraudage..."
+
+#Ajout 575
+msgid "Profile Operation..."
+msgstr "Profil..."
+
+#Ajout 576
+msgid "Pocket Operation..."
+msgstr "Poche..."
+
+#Ajout 577
+msgid "Adaptive Roughing Operation..."
+msgstr "Ébauche Adaptée..."
+
+#Ajout 578
+msgid "Drilling Operation..."
+msgstr "Perçage..."
+
+#Ajout 579
+msgid "CounterBore Operation..."
+msgstr "Lamage..."
+
+#Ajout 580
+msgid "Chamfer Operation..."
+msgstr "Chanfreinage..."
+
+#Ajout 581
+msgid "Contour Operation..."
+msgstr "Contournage..."
+
+#Ajout 581
+msgid "Inlay Operation..."
+msgstr "Incrustation..."
+
+#Ajout 582
+msgid "ZigZag Operation..."
+msgstr "Dégrossissage..."
+
+#Ajout 583
+msgid "Waterline Operation..."
+msgstr "Ligne de flotaison (?)"
+
+#Ajout 584
+msgid "Attach Operation..."
+msgstr "Joindre..."
+
+#Ajout 585
+msgid "Unattach Operation..."
+msgstr "Disjoindre..."
+
+#Ajout 586
+msgid "Raft Operation..."
+msgstr "Surfaçage..."
+
+#Ajout 587
+msgid "Rough Turning Operation..."
+msgstr "Tournage ébauche..."
+
+#Ajout 588
+msgid "Script Operation..."
+msgstr "Script..."
+
+#Ajout 589
+msgid "Speed Reference..."
+msgstr "Vitesse Référence..."
+
+#Ajout 590
+msgid "Cutting Rate Reference..."
+msgstr "Vitesse de Coupe Référence..."
+
+#Ajout 591
+msgid "Positioning Operation..."
+msgstr "Positionnement..."
+
+#Ajout 592
+msgid "Probe Centre Operation..."
+msgstr "Palpage du Centre..."
+
+#Ajout 593
+msgid "Probe Edge Operation..."
+msgstr "Palpage d'Arête..."
+
+#Ajout 594
+msgid "Probe Grid Operation..."
+msgstr "Palpage en Réseau..."
+
+#Ajout 595
+msgid "Drill..."
+msgstr "Foret..."
+
+#Ajout 596
+msgid "Centre Drill..."
+msgstr "Foret à Centrer..."
+
+#Ajout 597
+msgid "End Mill..."
+msgstr "Fraise de finition..."
+
+#Ajout 598
+msgid "Slot Drill..."
+msgstr "Fraise à rainurer..."
+
+#Ajout 599
+msgid "Ball End Mill..."
+msgstr "Fraise Finition Sphèr..."
+
+#Ajout 600
+msgid "Chamfer Mill..."
+msgstr "Fraise à Chanfreiner..."
+
+#Ajout 601
+msgid "Turning Tool..."
+msgstr "Outil de tour..."
+
+#Ajout 602
+msgid "Touch Probe..."
+msgstr "Palpeur..."
+
+#Ajout 603
+msgid "Tool Length Switch..."
+msgstr "Longueur d'Outil..."
+
+#Ajout 604
+msgid "Tap Tool..."
+msgstr "Taraud..."
+
+#Ajout 605
+msgid "Any sized tap..."
+msgstr "Toute taille..."
+
+#Ajout 606
+msgid "Pick from Metric standard sizes"
+msgstr "Tailles Métriques standard"
+
+#Ajout 607
+msgid "Pick from Unified Threading Standard (UNC, UNF or UNEF)"
+msgstr "Tailles Unified Threading Standard"
+
+#Ajout 608
+msgid "Pick from British Standard Whitworth standard sizes"
+msgstr "Tailles filetages Whitworth"
+
+#Ajout 609
+msgid "Send to Machine"
+msgstr "Envoyer à la Machine"
+
+#Ajout 610
+msgid "machining options"
+msgstr "Usinage  Options"
+
+#Ajout 611
+msgid "send-to-machine command"
+msgstr "Commande envoi CN"
+
+#Ajout 612
+msgid "axis-remote"
+msgstr "axes distants"
+
+#Ajout 613 
+msgid "Profile spline deviation"
+msgstr "Écart Profil spline"
+
+#Ajout 614
+msgid "Pocket spline deviation"
+msgstr "Écart Poche spline"
+
+#Ajout 615
+msgid "Contour spline deviation"
+msgstr "Écart Contour spline"
+
+#Ajout 616
+msgid "Inlay spline deviation"
+msgstr "Écart Incrust spline"
+
+#Ajout 617
+msgid "YZ plane (around X) rotation"
+msgstr "Rotation Plan YZ autour de  X"
+
+#Ajout 618
+msgid "XZ plane (around Y) rotation"
+msgstr "Rotation Plan XZ autour de Y"
+
+#Ajout 619
+msgid "XY plane (around Z) rotation"
+msgstr "Rotation Plan XY autour de Z"
+
+#Ajout 620
+msgid "Safety Height Defined"
+msgstr "Hauteur sûre définie"
+
+#Ajout 621
+msgid "Safety Height (in G53 - Machine - coordinates)"
+msgstr "Hauteur sûre  (coordonnées Machine en G53)"
+
+#Ajout 622
+msgid "Touch Off Point Defined"
+msgstr "Point Hors Contact défini"
+
+#Ajout 623
+msgid "Touch-off Point (in "
+msgstr "Point Hors Contact (en"
+
+#Ajout 624
+msgid "Touch-off Description"
+msgstr "Description Hors Contact "
+
+#Ajout 626
+msgid "Import probe data"
+msgstr "Importe données de palpage"
+
+#Ajout 627
+msgid "Select Sketches"
+msgstr "Sélection d'Esquisses"
+
+#Ajout 628
+msgid "Select cancelled. No sketches were selected!"
+msgstr "Sélection annulée. Pas d'esquisse choisie!"
+
+#Ajout 629
+msgid "Select Solids"
+msgstr "Sélection de Solides"
+
+#Ajout 630
+msgid "Select cancelled. No solids were selected!"
+msgstr "Sélection annulée. Pas de solide choisi!"
+
+#Ajout 631
+msgid "solids"
+msgstr "Solides"
+
+#Ajout 632
+msgid "None"
+msgstr "Aucun"
+
+#Ajout 633
+msgid "solid id"
+msgstr "id solide"
+
+#Ajout 634
+msgid "sketches"
+msgstr "esquisses"
+
+#Ajout 635
+msgid "sketch id"
+msgstr "id esquisse"
+
+#Ajout 636
+msgid "ABS Plastic"
+msgstr "ABS Plastique"
+
+#Ajout 637
+msgid "PLA Plastic"
+msgstr "PLA Plastique"
+
+#Ajout 638
+msgid "HDPE Plastic"
+msgstr "HDPE Plastique"
+
+#Ajout 639
+msgid "Other"
+msgstr "Autre"
+
+#Ajout 640
+msgid "Extrusion Material"
+msgstr "Materiau d'Extrusion"
+
+#Ajout 641
+msgid "Feed Rate"
+msgstr "Valeur d'Avance"
+
+#Ajout 642
+msgid "Layer Height"
+msgstr "Couche Hauteur"
+
+#Ajout 643
+msgid "Width Over Thickness ratio"
+msgstr "Rapport largeur/épaisseur "
+
+#Ajout 644
+msgid "Temperature"
+msgstr "Température"
+
+#Ajout 645
+msgid "Flow Rate"
+msgstr "Débit"
+
+#Ajout 646
+msgid "Filament Diameter"
+msgstr "Diamètre Filament"
+
+#Ajout 647
+msgid "Title"
+msgstr "Titre"
+
+#Ajout 648
+msgid "Visible"
+msgstr "Visibile"
+
+#Ajout 649
+msgid "Pitch"
+msgstr "Pitch"
+
+#Ajout 650
+msgid "right hand"
+msgstr "main droite"
+
+#Ajout 651
+msgid "left hand"
+msgstr "main gauche"
+
+#Ajout 652
+msgid "Tap direction"
+msgstr "Direction Taraudage"
+
+#Ajout 654
+msgid "Title Type"
+msgstr "Titre Type"
+
+#Ajout 655
+msgid "Tool Material"
+msgstr "Materiau d'Outil"
+
+#Ajout 656
+msgid "Extrusion"
+msgstr "Extrusion"
+
+#Ajout 657
+msgid "Tap Tool"
+msgstr "Outil de taraudage"
+
+#Ajout 658
+msgid "Tool Type"
+msgstr "Type d'Outil"
+
+#Ajout 659
+msgid "Max advance per revolution"
+msgstr "Avance Maximale par tour"
+
+#Ajout 660
+msgid "Tool length offset"
+msgstr "Décalage longueur d'Outil"
+
+#Ajout 661
+msgid "Diameter"
+msgstr "Diamètre"
+
+#Ajout 662
+msgid "X Offset"
+msgstr "Décalage X"
+
+#Ajout 663 HeekFrame.cpp
+msgid "Sectioning"
+msgstr "Section"
+
+#Ajout 664  Sectioning.cpp
+msgid "Sectioned Solid"
+msgstr "Solide Sectionné"
+
+#Ajout 665 .....cpp
+msgid "Save Solids"
+msgstr "Sauvegarde Solide"
+
+#Ajout 666 SelectMode.cpp
+msgid "Accept selection"
+msgstr "Accepte Sélection"
+
+#Ajout 667 SelectMode.cpp
+msgid "Cancel selection"
+msgstr "Annule Sélection"
+
+#Ajout 668 Sectioning.cpp
+msgid "Pick objects to section"
+msgstr "Choisir object à sectionner"
+
+#Ajout 669S ectioning.cpp
+msgid "Solid Sectioning"
+msgstr "Section de Solide"
+
+#Ajout 670 Sectioning.cpp
+msgid "Angle of plane"
+msgstr "Incliniason du plan"
+
+#Ajout 671 Sectioning.cpp
+msgid "X axis"
+msgstr "Axe X"
+
+#Ajout 672 Sectioning.cpp
+msgid "Y axis"
+msgstr "Axe Y"
+
+#Ajout 673 Sectioning.cpp
+msgid "Z axis"
+msgstr "Axe Z"
+
+#Ajout 674 Sectioning.cpp
+msgid "Specify"
+msgstr "Spécifier"
+
+#Ajout 675 Sectioning.cpp
+msgid "Point on axis"
+msgstr "Point sur l'axe"
+
+#Ajout 676 Sectioning.cpp
+msgid "Axis"
+msgstr "Axe"
+
+#Ajout 677 Sectioning.cpp
+msgid "Select"
+msgstr "Choisir"
+
+#======================================================================
+#Ajout du 21 juin 20011
+#Ajout 678 HGear.cpp
+msgid "num teeth"
+msgstr "Nbre Dents"
+
+#Ajout 679 HGear.cpp
+msgid "module"
+msgstr "Module"
+
+#Ajout 680 HGear.cpp
+#msgid "clearance"
+#msgstr "Espace"
+
+#Ajout 681 HGear.cpp
+msgid "addendum offset"
+msgstr "Ajout_Saillie"
+
+#Ajout 682 HGear.cpp
+msgid "addendum multiplier"
+msgstr "Coeff_Saillie"
+
+#Ajout 683 HGear.cpp
+msgid "dedendum multiplier"
+msgstr "Coeff_Creux"
+
+#Ajout 684 HGear.cpp
+msgid "pressure angle"
+msgstr "Angle_de_pression"
+
+#Ajout 685 HGear.cpp
+msgid "spacing"
+msgstr "Espacement"
+
+#Ajout 686 HGear.cpp
+msgid "tip relief"
+msgstr "Affûtage"
+
+#Ajout 686 HGear.cpp
+msgid "cone half angle"
+msgstr "Cône_de_Face"
+
+#Ajout 687 HGear.cpp
+msgid "inner ring diameter"
+msgstr "Diam_Alésage"
+
+#Ajout 688HGear.cpp
+msgid "Make Sketches"
+msgstr "Créer_Esquisses"
+
+#Ajout 689 HGear.cpp
+msgid "Make One Tooth Sketches"
+msgstr "Esquisser_d'Une_Dent"
+
+#Ajout 690 HeeksFrame.cpp
+msgid "Gear"
+msgstr "Roue dentée"
+
+#Ajout 691 HeeksFrame.cpp
+msgid "Add a gear"
+msgstr "Dessiner Roue dentée"
+
+#======================================================================
+#Ajout du 23 juin 20011
+#Ajout 692 HArc.cpp
+msgid "Click centre point"
+msgstr "Clic Point de Centre"
+
+ #Ajout 693 HArc.cpp
+msgid "Click first end point"
+msgstr "Clic Point de Début"
+
+#Ajout 694 HArc.cpp
+msgid "Click second end point"
+msgstr "Clic Point de Fin"
+
+#Ajout 695 Sketch.cpp
+msgid "Click midpoint"
+msgstr "Clic Point Millieu"
+
+#Ajout 696 Sketch.cpp
+msgid "Click centre-top point"
+msgstr "Clic Point de centre Haut"
+
+#Ajout 697 Sketch.cpp
+msgid "Click centre-bottom point"
+msgstr "Clic Point de centre Bas"
+
+#Ajout 698 Sketch.cpp
+msgid "Click centre-right point"
+msgstr "Clic Point de centre Droite"
+
+#Ajout 699 Sketch.cpp
+msgid "Click centre-left point"
+msgstr "Clic Point de centre Gauche"
+
+#Ajout 700 DigitizeMode.cpp
+msgid "Offset (from last point)"
+msgstr "Décalage (du dernier point)"
+
+#Ajout 701 HeeksCAD.cpp
+msgid "Move here"
+msgstr "Déplacer ici"
+
+#Ajout 702 HeeksCAD.cpp
+msgid "Copy here"
+msgstr "Copier ici"
+
+#======================================================================
+#Ajout du 25 juin 20011
+
+#Ajout 703 HLine.cpp
+msgid "Click Midpoint On Line"
+msgstr "Clic point Milieu de Ligne"
+
+#Ajout 704 HLine.cpp
+msgid "Click Start Of Line"
+msgstr "Clic Début de Ligne"
+
+#Ajout 705 HLine.cpp
+msgid "Click End Of Line"
+msgstr "Clic Fin de Ligne"
+
+
+#===================================================================================
+#Ajout1
+msgid "Log"
+msgstr "Journal"
+
+#Ajout17
+msgid "datum corner"
+msgstr "Coord. du coin"
+
+#Ajout18: aucun effet
+msgid "Toggle Horizontal"
+msgstr "Rendre Horizontal"
+
+#Ajout19: aucun effet
+msgid "Toggle Vertical"
+msgstr "Rendre Vertical"
+
+#Ajout20: aucun effet
+msgid "Toggle Line Length"
+msgstr "Afficher Longueur"
+
+#Ajout21
+msgid "Copy"
+msgstr "Copier"
+
+#Ajout22
+msgid "Cut"
+msgstr "Soustraction"
+
+#Ajout23
+msgid "solidify"
+msgstr "Remplir"
+
+#Ajout24 : aucun effet
+msgid "Pad Sketch"
+msgstr "Tirer esquisse"
+
+#Ajout25  HeeksCAD.cpp
+msgid "This language is not supported by the system."
+msgstr "Ce langage n'est pas supporté par le système "
+
+#Ajout26 
+msgid "HeeksCAD free Solid Modelling software based on Open CASCADE"
+msgstr "HeeksCAD, Modeleur Volumique Libre basé sur Open CASCADE"
+
+#Ajout27 
+msgid "Fill in material name"
+msgstr "Nom de matériau"
+
+#Ajout28 
+msgid "Constraint"
+msgstr "Contrainte"
+
+#Ajout29. Profile.cpp
+msgid "Conventional"
+msgstr "Conventionnel"
+
+#Ajout30 
+msgid "Sketch Mode:\n"
+msgstr "Mode Esquisse:\n"
+
+#Ajout31 
+msgid "fullscreen"
+msgstr "plein écran"
+
+#Ajout32 
+msgid "ViewUnits"
+msgstr "Voir Unités"
+
+#Ajout33 
+msgid "Use 3D rotation"
+msgstr "Utiliser rotation 3D"
+
+#Ajout34 HeeksCAD.cpp
+msgid "font options"
+msgstr "Options de fonte"
+
+#Ajout35  HeeksCAD.cpp
+msgid "OpenGL (default) font"
+msgstr "Fonte OpenGL"
+
+#Ajout36 HeeksCAD.cpp
+msgid "Active font"
+msgstr "Fonte active"
+
+#Ajout37 HeeksCAD.cpp
+msgid "Paths (semicolon delimited)"
+msgstr "Chemins séparés par ;"
+
+#Ajout38 
+msgid "apply"
+msgstr "appliquer'"
+
+#Ajout39 Aucun effet Terme dans default.tooltable et CuttingTool.cpp
+msgid " degreee "
+msgstr " degré "
+
+#Ajout39bis Aucun effet 
+msgid " degree  "
+msgstr " degré "
+
+#Ajout40 ConstraintTools.cpp
+msgid "Set Perpendicular"
+msgstr "Rendre Perpendiculaire"
+
+#Ajout41 ConstraintTools.cpp
+msgid "Set these lines to be perpendicular"
+msgstr "Rendre ces lignes Perpendiculaires"
+
+#Ajout42 ConstraintTools.cpp
+msgid "new"
+msgstr "Nouveau"
+
+#Ajout43 ConstraintTools.cpp
+msgid "Toggle Tangent"
+msgstr "Rendre Tangent"
+
+#Ajout44 ConstraintTools.cpp
+msgid "Set line tangent to arc"
+msgstr "Rendre Tangents Ligne/Arc"
+
+#Ajout45 ConstraintTools.cpp
+msgid "Set Parallel"
+msgstr "Rendre Parallèle"
+
+#Ajout46 ConstraintTools.cpp
+msgid "Set these lines to be parallel"
+msgstr "Rendre ces lignes parallèles"
+
+#Ajout47 ConstraintTools.cpp
+msgid "Set Equal Length"
+msgstr "Même Longueur"
+
+#Ajout48 ConstraintTools.cpp
+msgid "Set these lines to be equal length"
+msgstr "Rendre ces lignes de même Longueur"
+
+#Ajout49 ConstraintTools.cpp
+msgid "Set Colinear"
+msgstr "Rendre Colinéaire"
+
+#Ajout50 ConstraintTools.cpp
+msgid "Set these lines to be colinear"
+msgstr "Rendre ces lignes Colinéaires"
+
+#Ajout51 
+msgid "two points mode"
+msgstr "Mode deux points"
+
+#Ajout52 
+msgid "centre with radius mode"
+msgstr "Mode centre et rayon"
+
+#Ajout53 ConstraintTools.cpp
+msgid "Set Equal Radius"
+msgstr "Rendre Rayon égal"
+
+#Ajout54 ConstraintTools.cpp
+msgid "Set these arcs to have equal radii"
+msgstr "Donner le même rayon à ces arcs"
+
+#Ajout55 ConstraintTools.cpp
+msgid "Set Concentric"
+msgstr "Rendre Concentrique"
+
+#Ajout56 ConstraintTools.cpp
+msgid "Set these arcs to be concentric"
+msgstr "Rendre ces arcs concentriques"
+
+#Ajout57 ConstraintTools.cpp
+msgid "Set Coincident"
+msgstr "Faire Coïncider"
+
+#Ajout58 ConstraintTools.cpp
+msgid "Set these points to be coincident"
+msgstr "Faire coïncider ces points"
+
+#Ajout59 ConstraintTools.cpp
+msgid "Set Point On Line"
+msgstr "Poser Point sur Ligne"
+
+#Ajout60 ConstraintTools.cpp
+msgid "Set this point on line"
+msgstr "Poser ce point sur la ligne"
+
+#Ajout61 ConstraintTools.cpp
+msgid "Set Point On Midpoint"
+msgstr "Poser Point Milieu"
+
+#Ajout62 ConstraintTools.cpp
+msgid "Set this point on the midpoint of line"
+msgstr "Poser ce point au milieu de la ligne"
+
+#Ajout63 ConstraintTools.cpp
+msgid "Set this point on the midpoint of arc"
+msgstr "Poser ce point au milieu de l'arc"
+
+#Ajout64 ConstraintTools.cpp
+msgid "Set Point On Arc"
+msgstr "Poser Point sur Arc"
+
+#Ajout65 ConstraintTools.cpp
+msgid "Set this point on arc"
+msgstr "Poser ce point sur l'arc"
+
+#Ajout66 ConstraintTools.cpp
+msgid "Run Test"
+msgstr "Tester"
+
+#Ajout67  ConversionTools.cpp
+msgid "Test Face, Sketches United"
+msgstr "Test Face, Esquisses Réunies"
+
+#Ajout68 
+msgid "add"
+msgstr "ajouter"
+
+#Ajout69  : Aucun effet
+msgid "Make a sketch from edge"
+msgstr "Créer une esquisse à partir de l'arête"
+
+#Ajout70 : Face.cpp
+msgid "Face Coordinate System"
+msgstr "Face Système de coordonnées"
+
+#Ajout70 
+msgid "Toggle Radius"
+msgstr "Rendre Arrondi"
+
+#Ajout71 
+msgid "Set this arcs radius as constrained"
+msgstr "Déclare contraints les rayons de ces arcs"
+
+#Ajout72 
+msgid "click on centre point"
+msgstr "Désigner le centre"
+
+#Ajout73  RegularShapesDrawing.cpp
+msgid "excribed circle"
+msgstr "Cercle circonscrit"
+
+#Ajout74 RegularShapesDrawing.cpp
+msgid "inscribed circle"
+msgstr "Cercle inscrit"
+
+
+#Ajout100  : PythonStuff.cpp
+msgid "not found"
+msgstr "pas trouvé"
+
+#Ajout102 : PythonStuff.cpp
+msgid "Machine name (defined in Program Properties) not found"
+msgstr "Nom de Machine (Défini dans Propriétés Prgramme) absent "
+
+#Ajout103  : PythonStuff.cpp
+msgid "couldn't write post.py!"
+msgstr "impossible d'écrire post.py!"
+
+#Ajout104  : PythonStuff.cpp
+msgid "Error while post-processing the program!"
+msgstr "Erreur de traitement post-processeur!"
+
+#Ajout105  : PythonStuff.cpp
+msgid "Error while backplotting the program!"
+msgstr "Erreur de traçage du programme!"
+
+#Ajout106 
+msgid "Export"
+msgstr "Exporter"
+
+#Ajout107 
+msgid "Select a file to export to"
+msgstr "Choisir un fichier à Exporter"
+
+#Ajout108 
+msgid "export"
+msgstr "exporter"
+
+#Ajout109 
+msgid "facing"
+msgstr "arrière"
+
+#Ajout109 
+msgid "clearance"
+msgstr "dégagement"
+
+#Ajout110 
+msgid "Cannot generate GCode for profile without a cutting tool assigned"
+msgstr "Le code ISO du profil ne peut être généré sans affectation d'un outil"
+
+#Ajout111 
+msgid "Could not open '%s' for reading\n"
+msgstr "Ne peut ouvrir '%s' en lecture\n"
+
+#Ajout112 
+msgid "Pattern repetition is not yet supported\n"
+msgstr "La répétition de motif n'est pas encore supportée\n"
+
+#Ajout113 
+msgid "Expected number following 'X'\n"
+msgstr "En attente du nombre suivant  'X'\n"
+
+#Ajout114 
+msgid "Expected number following 'Y'\n"
+msgstr "En attente du nombre suivant  'Y'\n"
+
+#Ajout114 
+msgid "Ignoring select drill mode (G05) command\n"
+msgstr "Le mode  de perçage choisi (G05) est ignoré'\n"
+
+#Ajout115
+msgid "Ignoring select drill mode (G81) command\n"
+msgstr "Le mode  de perçage choisi (G81) est ignoré'\n"
+
+#Ajout116 
+msgid "Ignoring variable dwell (G04) command\n"
+msgstr "La variable d'attente (G04) est ignorée'\n"
+
+#Ajout117 
+msgid "Incremental coordinates mode (G91) is not yet supported\n"
+msgstr "La programmation relative (G91) n'est pas encore supporté'\n"
+
+#Ajout118 
+msgid "Set zero (G92) is not yet supported\n"
+msgstr "Le changement d'origine (G92) n'est pas encore supporté'\n"
+
+#Ajout119 
+msgid "Set zero (G93) is not yet supported\n"
+msgstr "Le changement d'origine (G93) n'est pas encore supporté\n"
+
+#Ajout120 
+msgid "Unexpected command '%s'\n"
+msgstr "Commande inattendue '%s'\n"
+
+#Ajout121 
+msgid "Hole position defined without selecting a tool first\n"
+msgstr "Position de perçage définie sans choix d'outil d'abord\n"
+
+#Ajout122 
+msgid "Excellon::Read(%s)\n"
+msgstr "Excellon::Lit(%s)\n"
+
+#Ajout123 
+msgid " rotated "
+msgstr " pivoté "
+
+#Ajout124 
+msgid " degrees in YZ plane"
+msgstr " degrés dans le plan YZ"
+
+#Ajout125 
+msgid " degrees in XZ plane"
+msgstr " degrés dans le plan XZ"
+
+#Ajout126 
+msgid " degrees in XY plane"
+msgstr " degrés dans le plan XY"
+
+#Ajout127 
+msgid "path"
+msgstr "chemin"
+
+#Ajout128 
+msgid "Apply NC Code to solids. NOTE: This not ready yet."
+msgstr "Appliquer Code CN aux Objets 3D (Non fonctionnel)"
+
+#Ajout129 
+msgid "Applying NC operations to solid"
+msgstr "Applique opérations CN aux Objets 3D"
+
+#Ajout130 
+msgid "Replacing solids in model"
+msgstr "Replace Objets 3D en modèle"
+
+#Ajout131 
+msgid "Machined "
+msgstr "Usiné "
+
+#Ajout132 
+msgid "Standard_DomainError thrown during shape operations\n"
+msgstr "Erreur intervenue pendant les opérations de forme\n"
+
+#Ajout133 
+msgid "Unexpected exception thrown during shape operations\n"
+msgstr "Exception inattendue pendant les opérations de forme\n"
+
+#Ajout134 
+msgid "nccode"
+msgstr "Code CN"
+
+#Ajout135 
+msgid "edited"
+msgstr "édité"
+
+#Ajout136 
+msgid "ncblock"
+msgstr "Bloc CN"
+
+#Ajout137 
+msgid "Set this line to be horizontal"
+msgstr "Règle ces lignes pour être horizontales"
+
+#Ajout138 
+msgid "Set this line to be vertical"
+msgstr "Règle ces lignes pour être verticales"
+
+#Ajout139 
+msgid "Set this lines length as constrained"
+msgstr "Déclare contraintes ces longueurs de lignes"
+
+#Ajout140 
+msgid ") with "
+msgstr ") avec "
+
+#Ajout141 : 
+msgid "Make selected edges into a new sketch"
+msgstr "Transformer les arêtes choisies en esquisse" 
+
+#Ajout142 : aucun effet
+msgid "Blend edge"
+msgstr "Arrondir l'arête"
+
+#Ajout143 HeeksCAD.cpp
+msgid "stl save facet tolerance"
+msgstr "Tolérance de face sauvée"
+
+#Ajout144 
+msgid "Draw circles through 3 points"
+msgstr "Cercles définis par 3 points"
+
+#Ajout145 
+msgid "Draw circles, centre and point"
+msgstr "Cercles, par centre et 1 point"
+
+#Ajout146 
+msgid "Draw circles, centre and radius"
+msgstr "Cercles, par centre et rayon"
+
+#Ajout147  Nombre d'étapes d'interpolations???
+msgid "Arc Interpolation Count"
+msgstr "Interpolation arc"
+
+#Ajout148 Drilling.cpp
+msgid "Chamfering bit for drilling op (id="
+msgstr "Chanfrein pour perçage op (id="
+
+#Ajout149 Drilling.cpp
+msgid ") is too big for previously drilled hole (drilling id="
+msgstr ") est trop grand pour le trou précèdent (perçage id="
+
+#Ajout150 Drilling.cpp
+msgid ") is too small for previously drilled hole (drilling id="
+msgstr ") est trop petit pour le trou précèdent (perçage id="
+
+#Ajout151 Drilling.cpp
+msgid "Adjusting depth of drill cycle id='"
+msgstr "Ajuste profondeur du cycle de perçage id='"
+
+#Ajout152 Drilling.cpp
+msgid "' from '"
+msgstr "' à partir de '"
+
+#Ajout153 Drilling.cpp
+msgid " to "
+msgstr " vers "
+
+#Ajout154 Drilling.cpp
+msgid "WARNING: Drilling (id="
+msgstr "ATTENTION: Perçage (id="
+
+#Ajout155 Drilling.cpp
+msgid ").  Can't drill hole "
+msgstr "). ne peut être effectué "
+
+#Ajout156 Drilling.cpp
+msgid  " when the drill bit's cutting length is only "
+msgstr  " when the drill bit's cutting length is only "
+
+#Ajout157 Drilling.cpp
+msgid  " long\n"
+msgstr  " long\n"
+
+#Ajout157 HeeksCNC.cpp
+msgid  "Importing data from %s\n"
+msgstr  "Importe données de %s\n"
+
+#Ajout158 HeeksCNC.cpp
+msgid  "speed"
+msgstr  "S tr/min"
+
+#Ajout159 HeeksCNC.cpp
+msgid  "feed"
+msgstr  "F mm/min"
+
+#Ajout160 HeeksCNC.cpp
+msgid  "tool"
+msgstr  "outl T"
+
+#Ajout161 HeeksCNC.cpp
+msgid  "fixture"
+msgstr  "fixrure"
+
+#Ajout162 HeeksCNC.cpp
+msgid  "possible default filename does not contain either 'speed', 'feed' or 'tool' in its name.\n"
+msgstr  "le fichier par défaut ne contient pas 'S', ou'F' ou 'T' dans son nom.\n"
+
+#Ajout162 
+msgid  "roll radius"
+msgstr  "Rayon de contournage"
+
+#Ajout163 
+msgid  "execution_order"
+msgstr  "Ordre d'exécution"
+
+#Ajout164  Aucun effet
+msgid  "CuttingTool"
+msgstr  "Outil de Coupe"
+
+#Ajout 165 HSpline.cpp
+msgid "col"
+msgstr "coul"
+
+#Ajout 166 HSpline.cpp
+msgid "rational"
+msgstr "rationnelle"
+
+#Ajout 167 HSpline.cpp
+msgid "periodic"
+msgstr "périodique"
+
+#Ajout 168 HSpline.cpp
+msgid "knots"
+msgstr "noeuds"
+
+#Ajout 168 HSpline.cpp
+msgid "poles"
+msgstr "pôles"
+
+#Ajout 169 HSpline.cpp
+msgid "degree"
+msgstr "degré"
+
+#Ajout 170 HSpline.cpp
+msgid "knot"
+msgstr "noeud"
+
+#Ajout 171 Pad.cpp
+msgid "Pad"
+msgstr "Tirer"
+
+#Ajout 171 Pad.cpp
+msgid "Height"
+msgstr "Hauteur"
+
+#Ajout 172 TreeCanvas.cpp
+msgid "root"
+msgstr "racine"
+
+#Ajout 173 TreeCanvas.cpp
+msgid "not "
+msgstr "ne pas "
+
+#Ajout 174 MarkedList.cpp
+msgid "delete"
+msgstr "supprimer"
+
+#Ajout 175 MarkedList.cpp
+msgid "copy"
+msgstr "copier"
+
+#Ajout 176 MarkedList.cpp
+msgid "Paste"
+msgstr "Coller"
+
+#Ajout 177 MarkedList.cpp
+msgid "paste"
+msgstr "coller"
+
+#Ajout 177 Sketch.cpp
+msgid "clockwise"
+msgstr "anti-trigo"
+
+#Ajout 178 LineArcDrawin.cpp
+msgid "set previous direction"
+msgstr "règler direction précédente"
+
+#Ajout 179 LineArcDrawin.cpp
+msgid "Ellipse drawing mode"
+msgstr "Mode dessin d'ellipse"
+
+#Ajout 180 LineArcDrawin.cpp
+msgid "center and 2 points mode"
+msgstr "Par centre et 2 poins"
+
+#Ajout 181 LineArcDrawin.cpp
+msgid "click on point on ellipse\n"
+msgstr "Désigner 1 point de l'ellipse\n"
+
+#Ajout 182 LineArcDrawin.cpp
+msgid "(colinear or orthogonal to axis)"
+msgstr "(aligné ou orthogonal aux axes)"
+
+#Ajout 183 LineArcDrawin.cpp
+msgid "click on another point on ellipse"
+msgstr "Désigner 1 autre point de l'ellipse"
+
+#Ajout 184 LineArcDrawin.cpp
+msgid "Spline drawing mode"
+msgstr "Mode dessin de Spline"
+
+#Ajout 185 LineArcDrawin.cpp
+msgid "cubic spline mode"
+msgstr "Mode Spline cubique"
+
+#Ajout 186 LineArcDrawin.cpp
+msgid "click on end point"
+msgstr "désigner le point de fin"
+
+#Ajout 186 LineArcDrawin.cpp
+msgid "click on first control point"
+msgstr "désigner le 1° point de contrôle"
+
+#Ajout 187 LineArcDrawin.cpp
+msgid "click on second control point"
+msgstr "désigner le 2° point de contrôle"
+
+#Ajout 188 LineArcDrawin.cpp
+msgid "quartic spline mode"
+msgstr "Mode Spline quadratique"
+
+#Ajout 189 LineArcDrawin.cpp
+msgid "click on control point"
+msgstr "désigner un point de contrôle"
+
+#Ajout 190 LineArcDrawin.cpp
+msgid "rational spline mode"
+msgstr "Mode Spline rationnelle"
+
+#Ajout 191 LineArcDrawin.cpp
+msgid "click on next control point or endpoint"
+msgstr "désigner contrôle suivant ou point final"
+
+#Ajout 192 UndoEngine.cpp
+msgid "OldTree: "
+msgstr "Ancienne Arborescence: "
+
+#Ajout 193 UndoEngine.cpp
+msgid "NewTree: "
+msgstr "Nouvelle Arborescence: "
+
+#Ajout 194 HeeksCAD.cpp
+msgid "single color"
+msgstr "couleur unique"
+
+#Ajout 195 HeeksCAD.cpp
+msgid "top color and bottom color"
+msgstr "Couleurs du haut  et du bas"
+
+#Ajout 196 HeeksCAD.cpp
+msgid "left color and right color"
+msgstr "Couleurs du gauche  et de droite"
+
+#Ajout 197 HeeksCAD.cpp
+msgid "four corner colors"
+msgstr "Couleurs aux quatre coins"
+
+#Ajout 198 HeeksCAD.cpp
+msgid "background mode"
+msgstr "Mode arrière-plan"
+
+#Ajout 199 HeeksCAD.cpp
+msgid "background color"
+msgstr "Couleur d'arrière-plan"
+
+#Ajout 200 HeeksCAD.cpp
+msgid "top background color"
+msgstr "Couleur du haut"
+
+#Ajout 201 HeeksCAD.cpp
+msgid "bottom background color"
+msgstr "Couleur du bas"
+
+#Ajout 202 HeeksCAD.cpp
+msgid "left background color"
+msgstr "Couleur à gauche"
+
+#Ajout 203 HeeksCAD.cpp
+msgid "right background color"
+msgstr "Couleur à droite"
+
+#Ajout 204 HeeksCAD.cpp
+msgid "top left background color"
+msgstr "Couleur en haut-gauche"
+
+#Ajout 205 HeeksCAD.cpp
+msgid "bottom left background color"
+msgstr "Couleur en bas-gauche"
+
+#Ajout 206 HeeksCAD.cpp
+msgid "top right background color"
+msgstr "Couleur en haut-droite"
+
+#Ajout 207 HeeksCAD.cpp
+msgid "bottom right background color"
+msgstr "Couleur en bas-droite"
+
+#Ajout 208 RegularShapesDrawing.cpp
+msgid "polygon mode"
+msgstr "Type de Polygone"
+
+#Ajout 209
+msgid "Vertices"
+msgstr "Sommets"
+
+#Ajout 210
+msgid "Vertex"
+msgstr "Sommet"
+
+#Ajout 211: aucun effet
+msgid "Stop rotating"
+msgstr "Arrêt rotation"
+
+#Ajout 212 : aucun effet
+msgid "Sketch On Face"
+msgstr "Esquisse sur face"
+
+#Ajout 213
+msgid "Part"
+msgstr "Pièce"
+
+#Ajout 214 : aucun effet
+msgid "Pocket Sketch"
+msgstr "Esquisse pour Poche"
+
+#Ajout 215: aucun effet
+msgid "Make To Part"
+msgstr "Créer une Pièce"
+
+#Ajout 216 : aucun effet
+msgid "Make a sketch from face"
+msgstr "Créer une esquisse à partir de la face"
+
+#Ajout 217 . shape.cpp : aucun effet
+msgid "STEP solid"
+msgstr "Objet 3D STEP"
+
+#Ajout 218 : shape.cpp
+msgid "BREP solid"
+msgstr "Objet 3D BREP"
+
+#Ajout 219  Program.cpp
+msgid "Maximum Spindle Speed (RPM)"
+msgstr "Fréquence de Broche Maxi (tr/min)"
+
+#Ajout 220 : HeeksCNC.cpp
+msgid "Open BOM File"
+msgstr "Ouvrir une Nomenclature"
+
+#Ajout 221. Plugins.cpp
+msgid "/plugins"
+msgstr "/greffons"
+
+#Ajout 222. Plugins.cpp
+msgid "MyPlugin"
+msgstr "MonGreffon"
+
+#Ajout 223. Plugins.cpp
+msgid "plugins"
+msgstr "greffons"
+
+#Ajout 224. ConstraintTools.cpp
+msgid "Add a dimension object"
+msgstr "Ajouter une dimension objet"
+
+#Ajout 225. ConstraintTools.cpp
+msgid "Set Point On Circle"
+msgstr "Poser un Point sur Cercle"
+
+#Ajout 226. ConstraintTools.cpp
+msgid "Set this point on circle"
+msgstr "Poser ce Point sur Cercle"
+
+#Ajout 227. Plugins.cpp
+msgid "New"
+msgstr "Nouveau"
+
+#Ajout 228. Plugins.cpp
+msgid "Delete"
+msgstr "Supprimer"
+
+#Ajout 229. AboutBox.cpp
+msgid "HeeksCAD\n see http://code.google.com/p/heekscad/\n\nusing Open CASCADE solid modeller - http://www.opencascade.org"
+msgstr "HeeksCAD\n Voir : http://code.google.com/p/heekscad/\n\nUtilise le moteur 3D paramétrique Open CASCADE - http://www.opencascade.org"
+
+#Ajout 230. AboutBox.cpp
+msgid "\n\nwindows made with wxWidgets 2.8.9 - http://wxwidgets.org"
+msgstr "\n\ninterface produite avec wxWidgets 2.8.9 - http://wxwidgets.org"
+
+#Ajout 231. AboutBox.cpp
+msgid "\n\ntext uses glFont Copyright (c) 1998 Brad Fish E-mail: bhf5@email.byu.edu Web: http://students.cs.byu.edu/~bfish/"
+msgstr "\n\nle texte utilise glFont Copyright (c) 1998 Brad Fish E-mail: bhf5@email.byu.edu Web: http://students.cs.byu.edu/~bfish/"
+
+#Ajout 232. AboutBox.cpp
+msgid "\n\nWritten by:\n Dan Heeks\n Jon Pry\n Jonathan George\n David Nicholls"
+msgstr "\n\nÉcrit par:\n Dan Heeks\n Jon Pry\n Jonathan George\n David Nicholls"
+
+#Ajout 233. AboutBox.cpp
+msgid "\n\nWith contributions from:\n Hirutso Enni\n Perttu Ahola\n Dave ( the archivist )\n mpictor\n fenn\n fungunner2\n andrea ( openSUSE )\n g_code"
+msgstr "\n\navec des contributions de:\n Hirutso Enni\n Perttu Ahola\n Dave ( the archivist )\n mpictor\n fenn\n fungunner2\n andrea ( openSUSE )\n g_code"
+
+#Ajout 234. AboutBox.cpp
+msgid "\n\nThis is free, open source software."
+msgstr "\n\nCeci est un logiciel Libre Open Source"
+
+#Ajout 235. HeeksCNC.cpp
+msgid "BOM files"
+msgstr "Fichiers Nomenclature"
+
+#Ajout 236. HeeksCNC.cpp
+msgid "NC files"
+msgstr "Fichiers CN"
+
+#Ajout 237. HeeksCNC.cpp
+msgid "opprofile"
+msgstr "Contournage"
+
+#Ajout 238. HeeksCNC.cpp
+msgid "pocket"
+msgstr "Poche"
+
+#Ajout 239. HeeksCNC.cpp
+msgid "zigzag"
+msgstr "Zigzag"
+
+#Ajout 240. HeeksCNC.cpp
+msgid "adapt"
+msgstr "Ébauche"
+
+#Ajout 241. HeeksCNC.cpp
+msgid "drilling"
+msgstr "Perçage"
+
+#Ajout 242. HeeksCNC.cpp
+msgid "turnrough"
+msgstr "Ébauche_tournage"
+
+#Ajout 243. HeeksCNC.cpp
+msgid "drill"
+msgstr "Foret"
+
+#Ajout 244. HeeksCNC.cpp
+msgid "Machining tools"
+msgstr "Outils CNC"
+
+#Ajout245  ConversionTools.cpp
+msgid "Add Angular Dimension"
+msgstr "Ajouter Valeur Angulaire"
+
+#Ajout246  ConversionTools.cpp
+msgid "Add an angular dimension object"
+msgstr "Ajouter une dimension angulaire objet"
+
+#Ajout247  HAngularDimension.cpp
+msgid "Toggle Dimension Constraint"
+msgstr "Rendre Contraintes les Dimensions"
+
+#Ajout248  HAngularDimension.cpp
+msgid "Set this dimension as constrained"
+msgstr "Déclare contrainte cette dimension"
+
+#Ajout249  HAngularDimension.cpp
+msgid "string"
+msgstr "Chaîne"
+
+#Ajout250 HAngularDimension.cpp
+msgid "pythagorean"
+msgstr "Pythagorien"
+
+#Ajout250 HAngularDimension.cpp
+msgid "horizontal"
+msgstr "Horizontal"
+
+#Ajout250 HAngularDimension.cpp
+msgid "vertical"
+msgstr "Vertical"
+
+#Ajout251 HAngularDimension.cpp
+msgid "text mode"
+msgstr "Mode texte"
+
+#Ajout252 HAngularDimension.cpp
+msgid "scale"
+msgstr "Échelle"
+
+#Ajout253 HAngularDimension.cpp
+msgid "textmode"
+msgstr "Mode_texte"
+
+#Ajout254 HAngularDimension.cpp
+msgid "dimension value"
+msgstr "Valeur de dimension"
+
+#Ajout255 HAngularDimension.cpp
+msgid "DimensionDrawFlat"
+msgstr "DimensionDessinPlat"
+
+#Ajout256 HeeksCAD.cpp
+msgid "sky and ground"
+msgstr "Ciel et Sol"
+
+#Ajout256 HeeksCAD.cpp
+msgid "sky top color"
+msgstr "Couleur de Ciel en haut"
+
+#Ajout257 HeeksCAD.cpp
+msgid "sky middle color"
+msgstr "Couleur en milieu de Ciel"
+
+#Ajout258 HeeksCAD.cpp
+msgid "sky bottom color"
+msgstr "Couleur de Ciel en bas"
+
+#Ajout259 HeeksCAD.cpp
+msgid "ground top color"
+msgstr "Couleur de Sol en haut"
+
+#Ajout260 HeeksCAD.cpp
+msgid "ground middle color"
+msgstr "Couleur en milieu de Sol"
+
+#Ajout261 HeeksCAD.cpp
+msgid "ground bottom color"
+msgstr "Couleur de Sol en bas"
+
+#Ajout262 HeeksCAD.cpp
+msgid "flat on screen dimension text"
+msgstr "Texte de dimension Gras"
+
+#Ajout263 Ruler.cpp
+msgid "use view units"
+msgstr "Utilise les unités de la vue"
+
+#Ajout263 Ruler.cpp
+msgid "ResetRuler"
+msgstr "Réinitialise la règle"
+
+#Ajout264 HPoint.cpp
+msgid "Toggle Fixed"
+msgstr "Rendre Fixe"
+
+#Ajout264 HPoint.cpp
+msgid "Set this point as fixed"
+msgstr "Rendre Fixe ce point"
+
+#Ajout265 HeeksCNC.cpp
+msgid "There are no more coordinate systems available"
+msgstr "Il n'y a pas de systèmes de coordonnées valides"
+
+#Ajout266 HeeksCNC.cpp
+msgid "You may only select a single cutting tool for each drilling operation.!"
+msgstr "Sélectionner un seul outil de coupe pour chaque perçage!"
+
+#Ajout 267 : HeeksCNC.cpp
+msgid "New Touch Probe..."
+msgstr "Nouveau palpeur..."
+
+#Ajout 268 : HeeksCNC.cpp
+msgid "New Tool Length Switch..."
+msgstr "Palpeur de longueur..."
+
+#Ajout 269 : HeeksCNC.cpp
+msgid "Probing"
+msgstr "Palpage"
+
+#Ajout 269 : HeeksCNC.cpp
+msgid "New Probe Centre Operation..."
+msgstr "Nouveau Palpage du Centre..."
+
+#Ajout 270 : HeeksCNC.cpp
+msgid "New Probe Edge Operation..."
+msgstr "Nouveau Palpage d'arête..."
+
+#Ajout 271 : Operation.cpp
+msgid "Import Excellon Drill File"
+msgstr "Importer un fichier Excellon"
+
+#Ajout 272 : Operation.cpp
+msgid "Excellon Drill Files"
+msgstr "Fichiers Excellon"
+
+#Ajout 273 
+msgid "Touch Probe"
+msgstr "Palpeur"
+
+#Ajout 274 
+msgid "Tool Length Switch"
+msgstr "Palpeur de longueur"
+
+#Ajout 275 TransfromTools.cpp 
+msgid "Pick line for rotation axis"
+msgstr "Choisir la ligne-axe de rotation"
+
+#Ajout 276 AutoSave.cpp 
+msgid "Do you want to recover using the automatic backup file?"
+msgstr "Restaurer avec le fichier de sauvegarde automatique?"
+
+#Ajout 277 AutoSave.cpp 
+msgid "Confirm"
+msgstr "Confirmer"
+
+#Ajout 278 AutoSave.cpp 
+msgid "Recovering from backup file %s\n"
+msgstr "Restauration à partir du fichier %s\n"
+
+#Ajout 279 HText.cpp 
+msgid "Convert the lines and arcs that make up this text into a sketch object."
+msgstr "Convertir lignes et arcs pour faire de ce texte un objet esquisse."
+
+#Ajout 280 CxFont.cpp  Pas d'effet
+msgid "Failed to load font.  Error is %s\n"
+msgstr "Chargement de fonte interrompu. Erreur : %s\n"
+
+#Ajout 281 CxFont.cpp  Pas d'effet
+msgid "Read %d Cxf-format font files\n"
+msgstr "Lit %d fontes en Cxf-format\n"
+
+#Ajout 282 HeeksCNC.cpp  
+msgid "You haven't selected a cutting tool for this hole.  By default no 'tool definition' or 'select tool' code will be generated for this drilling cycle."
+msgstr "Pas d'outil de coupe choisi pour ce perçage. Par défaut, sans définition ou sélection d'outil, le code sera généré pour ce cycle de perçage."
+
+#Ajout 283 Probing.cpp
+msgid "Depth"
+msgstr "Profondeur"
+
+#Ajout 284 Fixture.cpp
+msgid "Select a file to import"
+msgstr "Choisir  fichier à importer"
+
+#Ajout 285 Fixture.cpp
+msgid "import"
+msgstr "importer"
+
+#Ajout 286 Probing.cpp
+msgid "Two"
+msgstr "Deux"
+
+#Ajout 287 Probing.cpp
+msgid "Four"
+msgstr "Quatre"
+
+#Ajout 288 Probing.cpp
+msgid "Number of points"
+msgstr "Nombre de points"
+
+#Ajout 289 Probing.cpp
+msgid "Alignment"
+msgstr "Alignement"
+
+#Ajout 290 Probing.cpp
+msgid "Retract"
+msgstr "Retrait"
+
+#Ajout 291 Probing.cpp
+msgid "One"
+msgstr "Un"
+
+#Ajout 292 Probing.cpp
+msgid "Number of edges"
+msgstr "Nombre d'arêtes"
+
+#Ajout 293 Probing.cpp
+msgid "Direction"
+msgstr "Direction"
+
+#Ajout 294 Probing.cpp
+msgid "Generate GCode"
+msgstr "Générer le Code CN"
+
+#Ajout 295 SelectMode.cpp
+msgid "Error! The \"Stop Picking\" button shouldn't have been available!"
+msgstr "Erreur! Le  bouton \"Arrêt de Sélection\" ne devrait pas être valide!"
+
+#Ajout 296 SelectMode.cpp
+msgid "Set the selection filter to only faces"
+msgstr "Sélectionner seulement des faces"
+
+#Ajout 297 SelectMode.cpp
+msgid "Pick Faces"
+msgstr "Choisir des faces"
+
+#Ajout 298 HeeksCAD.cpp
+msgid "pad"
+msgstr "Tirer"
+
+#Ajout 299 HeeksCAD.cpp
+msgid "part"
+msgstr "Pièce"
+
+#Ajout 300 HeeksCAD.cpp
+msgid "auto save interval (in minutes)"
+msgstr "Intervalle d'auto-sauve (min)"
+
+#Ajout 301 RuledSurface.cpp
+msgid "Pipe"
+msgstr "Coude"
+
+#Ajout 302 Profile.cpp
+msgid "Climb"
+msgstr "Montée"
+
+#Ajout 303 DepthOp.cpp
+msgid "WARNING"
+msgstr "ATTENTION"
+
+#Ajout 304 DepthOp.cpp
+msgid "Depth Operation"
+msgstr "Opération de Plongée"
+
+#Ajout 305 DepthOp.cpp
+msgid "is set to cut deeper than the assigned cutting tool will allow"
+msgstr "est réglée pour une profondeur plus grande l'outil"
+
+#Ajout 306 DepthOp.cpp
+msgid "has poor start and final depths"
+msgstr "a une différence de profondeur trop faible"
+
+#Ajout 307 DepthOp.cpp
+msgid "Can't change this setting automatically"
+msgstr "Modification automatique impossible"
+
+#Ajout 308 DepthOp.cpp
+msgid "Clearance height is below start depth"
+msgstr "Hauteur Libre sous le départ d'usinage"
+
+#Ajout 309 DepthOp.cpp
+msgid "Raising clearance height up to start depth (+5 mm)"
+msgstr "Règler Hauteur Libre au-dessus du départ (+5mm)"
+
+#Ajout 310 DepthOp.cpp
+msgid "does not have a cutting tool assigned"
+msgstr "n'a pas d'outil de coupe assigné"
+
+#Ajout 311 DepthOp.cpp
+msgid "It can not produce GCode without a cutting tool assignment"
+msgstr "Production de Code CN impossible sans outil assigné"
+
+#Ajout 312 Pocket.cpp
+msgid "Pocket"
+msgstr "Poche"
+
+#Ajout 313 Pocket.cpp
+msgid "Invalid reference to sketch"
+msgstr "Référence d'esquisse invalide"
+
+#Ajout 314 Pocket.cpp
+msgid "in pocket operations"
+msgstr "dans l'usinage de poche"
+
+#Ajout 315HeeksCAD.cpp
+msgid "Language"
+msgstr "Langage"
+
+#Ajout 316 RuledSurface.cpp
+msgid "Input revolution angle"
+msgstr "Angle de révolution"
+
+#Ajout 317 GraphicCanvas.cpp
+msgid "some text"
+msgstr "quelque texte"
+
+#Ajout 317 wxImageLoader.cpp
+msgid "Failed to load resource image from "
+msgstr "Echec pour charger image ressource de "
+
+#Ajout 318 HeeksFrame.cpp
+msgid "Pick one or more sketches, faces or circles, to create a revolved body from"
+msgstr "Choisir une ou plusieurs esquisses, faces ou cercles, pour créer un volume de révolution"
+
+#Ajout 319 HeeksFrame.cpp
+msgid "hold down Ctrl key to select more than one solid"
+msgstr "Appuyer sur Ctrl pour chosir plus d'un volume"
+
+#Ajout 320 HeeksFrame.cpp
+msgid "Pick one or more sketches, faces or circles, to create an extruded body from"
+msgstr "Choisir une ou plusieurs esquisses, faces ou cercles, pour créer un volume extrudé"
+
+#Ajout 321 HeeksFrame.cpp
+msgid "Pick two or more sketches, to create a lofted solid between"
+msgstr "Choisir deux ou plusieurs esquisses,  pour créer un volume lissé entre elles"
+
+#Ajout 322 HeeksFrame.cpp
+msgid "Revolve a sketch"
+msgstr "Révolution esquisse"
+
+#Ajout 323 HeeksFrame.cpp
+msgid "Revolve a wire or face"
+msgstr "Révolution maille ou face"
+
+#Ajout 324 HeeksFrame.cpp
+msgid "Revolve"
+msgstr "Révolution"
+
+#Ajout 325 RuledSurface.cpp
+msgid "pick sketches, faces or circles"
+msgstr "choisir esquisses, faces ou cercles"
+
+#Ajout 326 RuledSurface.cpp
+msgid "Extrude makes a solid"
+msgstr "Extrusion Solide/Surface"
+
+#Ajout 327 RuledSurface.cpp
+msgid "Error making revolved solid"
+msgstr "Erreur en créant le solide de révolution"
+
+#Ajout 328 RuledSurface.cpp
+msgid "Fatal error making revolved solid"
+msgstr "Erreur fatale de création du Solide de révolution"
+
+#Ajout 329 RuledSurface.cpp
+msgid "Error making extruded solid"
+msgstr "Erreur en créant le Solide extrudé"
+
+#Ajout 330 RuledSurface.cpp
+msgid "Error making ruled solid"
+msgstr "Erreur en créant le Solide réglé"
+
+#Ajout 331 RuledSurface.cpp
+msgid "Error making pipe"
+msgstr "Erreur en créant le Coude"
+
+#Ajout 332 Face.cpp
+msgid "Extrude Face"
+msgstr "Extruder Face"
+
+#Ajout 333 HeeksFrame.cpp
+msgid "3D Move Rotate"
+msgstr "Pivotement 3D"
+
+#Ajout 334 HeeksFrame.cpp
+msgid "3D Rotate selected items"
+msgstr "Pivotement 3D des éléments sélectionnés"
+
+#Ajout 335 HeeksFrame.cpp
+msgid "3D Copy Rotate"
+msgstr "Copie circulaire 3D"
+
+#Ajout 335 HeeksFrame.cpp
+msgid "3D Copy and rotate selected items"
+msgstr "Copie circulaire 3D des éléments sélectionnés"
+
+#Ajout 336 Shape.cpp
+msgid "Error making offset"
+msgstr "Erreur en dilatant l'objet"
+
+#Ajout 337 Shape.cpp
+msgid "Stretched Shape"
+msgstr "Objet deforme"
+
+#Ajout 338 Shape.cpp
+msgid "Error with cut operation"
+msgstr "Erreur de Soustraction"
+
+#Ajout 339 Shape.cpp
+msgid "Error with fuse operation"
+msgstr "Erreur de Fusion"
+
+#Ajout 340 Shape.cpp
+msgid "Error with common operation"
+msgstr "Erreur d'Intersection"
+
+#Ajout 341 HeeksFrame.cpp
+msgid "Start drawing rectangles"
+msgstr "Dessiner des rectangles"
+
+#Ajout 342 HeeksFrame.cpp
+msgid "Start drawing obrounds"
+msgstr "Dessiner des oblongs"
+
+#Ajout 343 HeeksFrame.cpp
+msgid "Start drawing polygons"
+msgstr "Dessiner des polygones"
+
+#Ajout 344 HeekscAD.cpp
+msgid "Select how the file is to be interpreted"
+msgstr "Choisir comment le fichier est interprété"
+
+#Ajout 345 HeekscAD.cpp
+msgid "RS274X file interpretation"
+msgstr "Interprétation du fichier RS274X"
+
+#Ajout 346 HeekscAD.cpp Traduction hypothétique
+msgid "Produce trace isolation sketches"
+msgstr "Isoler le tracé d'esquisses"
+
+#Ajout 347 HeekscAD.cpp Traduction hypothétique
+msgid "Produce trace centre-line sketches"
+msgstr "Tracé d'esquisses centre-lignes"
+
+#Ajout 348 HeekscAD.cpp
+msgid "Solid revolution angle"
+msgstr "Angle de révolution du solide"
+
+#Ajout 349 HeekscAD.cpp 
+msgid "Use old solid fuse ( to prevent coplanar faces )"
+msgstr "Utiliser ancien objet fusionné pour faces coplanes"
+
+#Ajout 350 HText.cpp 
+msgid "Make a Sketch"
+msgstr "Créer une Esquisse"
+
+#Ajout 351 Shape.cpp 
+msgid "Error making fillet"
+msgstr "Erreur en créant le congé"
+
+#Ajout 352 
+msgid "command not done"
+msgstr "Échec de la commande"
+
+#Ajout 353  HeeksFrame.cpp
+msgid "View XY Front"
+msgstr "Vue de Face XY"
+
+#Ajout 354  HeeksFrame.cpp
+msgid "View XY Back"
+msgstr "Vue Arrière XY"
+
+#Ajout 355  HeeksFrame.cpp
+msgid "View XZ Top"
+msgstr "Vue de Dessus XZ"
+
+#Ajout 356  HeeksFrame.cpp
+msgid "View XZ Bottom"
+msgstr "Vue de Dessous XZ"
+
+#Ajout 357  HeeksFrame.cpp
+msgid "View YZ Right"
+msgstr "Vue de Droite YZ"
+
+#Ajout 358  HeeksFrame.cpp
+msgid "View XZ Left"
+msgstr "Vue de Gauche YZ"
+
+#Ajout 359  HeeksFrame.cpp
+msgid "View XZY Isometric"
+msgstr "Vue Isométrique XZY"
+
+#Ajout 360 Sketch.cpp Aucun effet
+msgid "Copy Parallel"
+msgstr "Copie Parallèle"
+
+#Ajout 361 Sketch.cpp  Aucun effet
+msgid "Enter Sketch Mode"
+msgstr "Entrer Mode Esquisse"
+
+#Ajout 362 HeeksFrame.cpp
+msgid "View pan"
+msgstr "Panoramique"
+
+#Ajout 363 HeeksFrame.cpp
+msgid "View Pan"
+msgstr "Panoramique"
+
+#Ajout 364 HeeksFrame.cpp
+msgid "Save Settings"
+msgstr "Sauver Réglages"
+
+#Ajout 365 HeeksCAD.cpp
+msgid "Allow OpenGL stippling"
+msgstr "Pointillés OpenGL"
+
+#Ajout 366 HeeksCAD.cpp
+msgid "solid view mode"
+msgstr "Types visuels"
+
+#Ajout 367 HeeksCAD.cpp
+msgid "faces and edges"
+msgstr "Faces et arêtes"
+
+#Ajout 368 HeeksCAD.cpp
+msgid "edges only"
+msgstr "Arêtes seules"
+
+#Ajout 369 HeeksCAD.cpp
+msgid "faces only"
+msgstr "Faces seules"
+
+#Ajout 370 HeeksCAD.cpp
+msgid "face selection color"
+msgstr "Face sélectionnée"
+
+#Ajout 371 RegularShapesDrawing.cpp
+msgid "Rectangle drawing"
+msgstr "Dessin de Rectangles"
+
+#Ajout 372 RegularShapesDrawing.cpp
+msgid "Polygon drawing"
+msgstr "Dessin de Polygones"
+
+#Ajout 373 RegularShapesDrawing.cpp
+msgid "Obround drawing"
+msgstr "Dessin d'Oblongs"
+
+#Ajout 374 RegularShapesDrawing.cpp
+msgid "Regular shapes drawing"
+msgstr "Dessin de formes regulieres"
+
+#Ajout 375 HeeksFrame.cpp
+msgid "Draw Ellipses"
+msgstr "Dessiner des ellipses"
+
+#Ajout 376 SketchTools.cpp
+msgid "simplify sketch options"
+msgstr "Simplifier l'esquisse"
+
+#Ajout 377 SketchTools.cpp
+msgid "max deviation"
+msgstr "Écart maxi"
+
+#Ajout 378 SketchTools.cpp
+msgid "cleanup tolerance (temporary)"
+msgstr "Décimale de simplification"
+
+#Ajout 379 SketchTools.cpp
+msgid "bspline min degree (eg: 3)"
+msgstr "Degré min bspline Ex: 3)"
+
+#Ajout 380 SketchTools.cpp
+msgid "bspline max degree (eg: 8)"
+msgstr "Degré max BSpline (Ex: 8)"
+
+#Ajout 381 SketchTools.cpp
+msgid "bspline continuity (eg: GeomAbs_C2)"
+msgstr "Continuité BSpline (Ex: GeomAbs_C2)"
+
+#Ajout 382 SketchTools.cpp
+msgid "Sort Points"
+msgstr "Tri de Points"
+
+#Ajout 383 SketchTools.cpp
+msgid "Force closed shape"
+msgstr "Forme close forcée"
+
+#Ajout 384
+msgid "Simplify Sketch to Lines"
+msgstr "Esquisse en Segments"
+
+#Ajout 385
+msgid "Simplify Sketch to BSplines"
+msgstr "Esquisse en Courbes de Bézier"
+
+#Ajout 386 Heeksframe.cpp
+msgid "Save As"
+msgstr "Sauver comme"
+
+
+#Ajout 392 HeeksFrame.cpp
+msgid "&Set Origin"
+msgstr "&Fixer l'Origine"
+
+#Ajout 393 HeeksFrame.cpp
+msgid "Pick 3 points"
+msgstr "Indiquer 3 points"
+
+#Ajout 394 HeeksFrame.cpp
+msgid "Pick 1 point"
+msgstr "Indiquer 1 point"
+
+#Ajout 395 HeeksCAD.cpp
+msgid "Word Space Percentage"
+msgstr "% d'espace entre mots"
+
+#Ajput 396 HeeksCAD.cpp
+msgid "Character Space Percentage"
+msgstr "% d'espace entre caractères"
+
+#Ajout 397 HeeksCAD.cpp
+msgid "ignore errors where possible"
+msgstr "Ignore erreurs si possible"
+
+#Ajout 398 Sketch.cpp
+msgid "Use negative for smaller and Positive for larger)"
+msgstr "Valeur négative pour diminuer et Positive pour augmenter"
+
+#Ajout 399 Sketch.cpp
+msgid "Enter the distance"
+msgstr "Entrer la distance"
+
+#Ajout 400 SelectMode.cpp
+msgid "End Sketch Mode"
+msgstr "Fin Mode Esquisse"
+
+#Ajout 401 HeeksFrame.cpp
+msgid "Spline Through Points"
+msgstr "Courbe par Points"
+
+#Ajout 402 HeeksFrame.cpp
+msgid "Pick three or more points to be splined"
+msgstr "Pointer au moins 3 points pour tracer"
+
+#Ajout 403 HeeksFrame.cpp
+msgid "Reading Vector Font Definition Files"
+msgstr "Lecture Définition Fontes Vectorielles"
+
+#Ajout 404 HLine.cpp
+msgid "Make Cylinder On Line"
+msgstr "Créer Cylindre sur Ligne"
+
+#Ajout 405 HLine.cpp
+msgid "Make Cone On Line"
+msgstr "Créer Cône sur Ligne"
+
+#Ajout 406 HeeksCAD.cpp
+msgid "logging"
+msgstr "Historique"
+
+#Ajout 407 HeeksCAD.cpp
+msgid "FatalError"
+msgstr "Erreur Fatale"
+
+#Ajout 408 HeelsCAD.cpp
+msgid "Error"
+msgstr "Erreur"
+
+#Ajout 409 HeeksCAD.cpp
+msgid "Warning"
+msgstr "Attention"
+
+#Ajout 410 HeeksCAD.cpp
+msgid "Message"
+msgstr "Message"
+
+#Ajout 411 HeeksCAD.cpp
+msgid "Status"
+msgstr "État"
+
+#Ajout 412 HeeksCAD.cpp
+msgid "Info"
+msgstr "Infos"
+
+#Ajout 413 HeeksCAD.cpp
+msgid "Debug"
+msgstr "Déverminer"
+
+#Ajout 414 HeeksCAD.cpp
+msgid "Trace"
+msgstr "Trace"
+
+#Ajout 415 HeeksCAD.cpp
+msgid "log level"
+msgstr "Niveau Hist."
+
+#Ajout 416 HeeksCAD.cpp
+msgid "use repetition counting"
+msgstr "Ré-utiliser le comptage"
+
+#Ajout 419 HeeksCAD.cpp
+msgid "use timestamps"
+msgstr "Utiliser horodatage"
+
+#===================================================
+
+msgid "OK"
+msgstr "OK"
+
+#Cone.cpp
+msgid "centre pos"
+msgstr "Pos du Centre"
+
+#Cone.cpp
+msgid "direction"
+msgstr "direction"
+
+#Cone.cpp
+msgid "x direction"
+msgstr "X Direction"
+
+#Cone.cpp
+msgid "r1"
+msgstr "Rayon de la Base"
+
+#Cone.cpp
+msgid "r2"
+msgstr "Rayon du Sommet"
+
+#Cone.cpp
+msgid "height"
+msgstr "Hauteur"
+
+#Cone.cpp
+msgid "cone must not have both radiuses the same"
+msgstr "Un cône ne peut avoir 2 rayons identiques"
+
+#ConversionTools.cpp
+msgid "Fatal Error converting sketch to face"
+msgstr "Erreur fatale de conversion esquisse / face"
+
+msgid "Set position and orientation by picking 3 points"
+msgstr "Définir position et orientation par 3 points"
+
+msgid "Set this coordinate system as the active one"
+msgstr "Activer ce système  de coordonnées"
+
+msgid "Set world coordinate system active"
+msgstr "Activer le système  de coordonnées global"
+
+msgid "position"
+msgstr "Position"
+
+msgid "x axis"
+msgstr "X Axe"
+
+msgid "y axis"
+msgstr "Y Axe"
+
+msgid "Vertical Angle"
+msgstr "Angle Vertical"
+
+msgid "Horizontal Angle"
+msgstr "Angle Horizontal"
+
+msgid "Twist Angle"
+msgstr "Angle de rotation"
+
+msgid "Pick the location"
+msgstr "Choisir la localisation"
+
+msgid "Pick a point on the x-axis"
+msgstr "Choisir un point sur l'Axe X"
+
+msgid "Pick a point where y > 0"
+msgstr "Choisir un point où Y > 0"
+
+
+msgid "width ( x )"
+msgstr "Largeur X"
+
+msgid "height( y )"
+msgstr "Hauteur Y"
+
+msgid "depth ( z )"
+msgstr "Profondeur Z"
+
+msgid "radius"
+msgstr "Rayon"
+
+msgid "Digitize Mode"
+msgstr "Mode Accrochage"
+
+msgid "X"
+msgstr "X"
+
+msgid "Y"
+msgstr "Y"
+
+msgid "Z"
+msgstr "Z"
+
+msgid "Error! The 'Stop Picking' button shouldn't have been available!"
+msgstr "Erreur! Le Bouton Arrêt de Sélection n'aurait pas dû être disponible"
+
+msgid "Stop Picking"
+msgstr "Arrêt de sélection"
+
+msgid "Finish picking"
+msgstr "Fin de sélection"
+
+msgid "between two points"
+msgstr "entre deux points"
+
+msgid "orthogonal"
+msgstr "orthogonal"
+
+msgid "mode"
+msgstr "Mode"
+
+msgid "Stop drawing"
+msgstr "Arrêt de dessin"
+
+msgid "Finish drawing"
+msgstr "Finir le dessin"
+
+msgid "Add point"
+msgstr "Ajouter un point"
+
+msgid "Add a point to drawing"
+msgstr "Ajouter un point pour dessiner"
+
+msgid "Get Position"
+msgstr "Obtenir la Position"
+
+msgid "Pick position without adding to the drawing"
+msgstr "Choisir une position sans l'ajouter au dessin"
+
+msgid "Blend"
+msgstr "Congé/Raccord"
+
+msgid "Enter Blend Radius"
+msgstr "Indiquer le rayon du Congé"
+
+msgid "Radius"
+msgstr "Rayon"
+
+#Shape.cpp
+msgid "Solid with edge blend"
+msgstr "Solide 3D avec arête arrondie"
+
+#Shape.cpp
+msgid "A fatal error happened during Blend"
+msgstr "Erreur fatale pendant la création du Congé"
+
+msgid "surface type"
+msgstr "type de surface"
+
+msgid "Make Sketch"
+msgstr "Créer une esquisse"
+
+#Sketch.cpp
+msgid "unknown"
+msgstr "Inconnu"
+
+msgid "plane"
+msgstr "Plan"
+
+msgid "cylinder"
+msgstr "Cylindre"
+
+msgid "cone"
+msgstr "Cône"
+
+msgid "sphere"
+msgstr "Sphère"
+
+msgid "torus"
+msgstr "Tore"
+
+msgid "bezier"
+msgstr "Bézier"
+
+msgid "bspline"
+msgstr "Bspline"
+
+msgid "revolution"
+msgstr "Révolution"
+
+msgid "extrusion"
+msgstr "Extrusion (2D>3D)"
+
+msgid "offset"
+msgstr "Dilatation"
+
+msgid "start"
+msgstr "Début"
+
+msgid "end"
+msgstr "Fin"
+
+msgid "centre"
+msgstr "Centre"
+
+msgid "axis"
+msgstr "Axe"
+
+msgid "length"
+msgstr "Longueur"
+
+msgid ".orientation"
+msgstr ".Orientation"
+
+msgid "major radius"
+msgstr "Rayon supérieur"
+
+msgid "minor radius"
+msgstr "Rayon inférieur"
+
+msgid "rotation"
+msgstr "Rotation"
+
+msgid "start angle"
+msgstr "Angle de départ"
+
+msgid "end angle"
+msgstr "Angle d'arrivée"
+
+msgid "Length"
+msgstr "Longueur"
+
+msgid "Picture - "
+msgstr "Image -"
+
+#HSpline.cpp
+msgid "%s %d"
+msgstr "%s %d"
+
+#HSpline.cpp
+msgid "Knot"
+msgstr "Noeud"
+
+#HSpline.cpp
+msgid "Pole"
+msgstr "Pôle"
+
+#HSpline.cpp
+msgid "Weight"
+msgstr "Poids"
+
+msgid "Untitled"
+msgstr "SansTitre"
+
+msgid "This is not an SVG document!"
+msgstr "Ce n'est pas un document SVG!"
+
+msgid "Invalid file type chosen"
+msgstr "Format de fichier invalide"
+
+msgid "expecting"
+msgstr "En attente"
+
+#HeeksCAD.cpp
+msgid "couldn't open file"
+msgstr "Ouverture de fichier impossible"
+
+#HeeksCAD.cpp
+msgid "Save graphical data file"
+msgstr "Enregistrer fichier graphique"
+
+msgid "Exit Full Screen Mode"
+msgstr "Sortir du mode Plein écran"
+
+msgid "Show Full Screen"
+msgstr "Afficher en Plein écran"
+
+msgid "view options"
+msgstr "Voir Options "
+
+msgid "stay upright"
+msgstr "Rester en haut à droite"
+
+msgid "free"
+msgstr "Libre"
+
+msgid "rotate mode"
+msgstr "Mode rotation"
+
+msgid "none"
+msgstr "aucun"
+
+msgid "input mode title"
+msgstr "Titre en mode Entrée"
+
+msgid "full help"
+msgstr "Aide complète"
+
+msgid "screen text"
+msgstr " OSD"
+
+msgid "antialiasing"
+msgstr "Anticrénelage"
+
+msgid "fixed light"
+msgstr "Lumière-fixée"
+
+msgid "reverse mouse wheel"
+msgstr "Inverser la roue de souris"
+
+msgid "reverse zooming mode"
+msgstr "Inverser le mode Zoom"
+
+msgid "Ctrl key does rotate"
+msgstr "Ctrl fait tourner"
+
+msgid "show datum"
+msgstr "Affiche le repère de coordonnées"
+
+msgid "datum is solid"
+msgstr "Repère en objet 3D"
+
+msgid "datum size"
+msgstr "Taille du repère"
+
+msgid "datum size is pixels not mm"
+msgstr "La taille du repère est en pixels, non en mm"
+
+msgid "show ruler"
+msgstr "Afficher la  Règle"
+
+msgid "no grid"
+msgstr "Pas de grille"
+
+msgid "faint color"
+msgstr "Couleur pâle"
+
+
+msgid "alpha blending"
+msgstr "Mélange de couleurs"
+
+msgid "colored alpha blending"
+msgstr "Mélange coloré "
+
+msgid "grid mode"
+msgstr "Mode Grille"
+
+msgid "perspective"
+msgstr "Perspective"
+
+msgid "tool icon size"
+msgstr "Taille des icônes"
+
+msgid "mm"
+msgstr "mm"
+
+msgid "inch"
+msgstr "inch"
+
+msgid "units"
+msgstr "Unités"
+
+msgid "digitizing"
+msgstr "Accrochage"
+
+msgid "intersection"
+msgstr "Intersection"
+
+msgid "midpoint"
+msgstr "Point Milieu"
+
+msgid "nearest"
+msgstr "Point proche"
+
+msgid "tangent"
+msgstr "Tangent"
+
+msgid "radius for undefined circles"
+msgstr "Rayon par défaut"
+
+msgid "coordinates"
+msgstr "Coordonnées"
+
+msgid "screen"
+msgstr "Écran"
+
+msgid "grid size"
+msgstr "Pas de la Grille"
+
+msgid "snap to grid"
+msgstr "Grille aimantée"
+
+msgid "drawing"
+msgstr "Dessin"
+
+msgid "current color"
+msgstr "Couleur actuelle"
+
+msgid "construction color"
+msgstr "Couleur de construction"
+
+msgid "geometry tolerance"
+msgstr "Tolérance géométrique"
+
+#HeeksCAD.cpp
+msgid "selection filter"
+msgstr "Filtre de sélection"
+
+msgid "point"
+msgstr "Point"
+
+msgid "line"
+msgstr "Ligne"
+
+msgid "arc"
+msgstr "Arc"
+
+msgid "infinite line"
+msgstr "Ligne infinie"
+
+msgid "circle"
+msgstr "Cercle"
+
+msgid "edge"
+msgstr "Arête"
+
+msgid "face"
+msgstr "Face"
+
+msgid "solid"
+msgstr "Objet 3D"
+
+msgid "stl_solid"
+msgstr "STL_Solid"
+
+msgid "wire"
+msgstr "Maillage"
+
+msgid "sketch"
+msgstr "Esquisse"
+
+msgid "image"
+msgstr "Image"
+
+msgid "coordinate system"
+msgstr "Système de Coordonnées"
+
+msgid "text"
+msgstr "Texte"
+
+msgid "dimension"
+msgstr "Dimension"
+
+msgid "ruler"
+msgstr "Règle"
+
+msgid "file options"
+msgstr "Options de fichier"
+
+msgid "DXF"
+msgstr "DXF"
+
+msgid "make sketch"
+msgstr "Créer une esquisse"
+
+msgid "Known Files"
+msgstr "Fichiers reconnus"
+
+msgid "Heeks files"
+msgstr "Fichiers Heeks"
+
+msgid "IGES files"
+msgstr "Fichiers IGES"
+
+msgid "STEP files"
+msgstr "Fichiers STEP"
+
+msgid "STL files"
+msgstr "Fichiers STL"
+
+msgid "Scalar Vector Graphics files"
+msgstr "Fichiers SVG"
+
+msgid "DXF files"
+msgstr "Fichiers DXF"
+
+msgid "Picture files"
+msgstr "Fichiers Image"
+
+msgid "Unmark"
+msgstr "Décocher"
+
+msgid "Mark"
+msgstr "Cocher"
+
+msgid "Properties"
+msgstr "Propriétés"
+
+msgid "Save changes to file"
+msgstr "Enregistrer les changements"
+
+msgid "Apply"
+msgstr "Appliquer"
+
+msgid "Accept value and continue"
+msgstr "Accepter valeur et continuer"
+
+msgid "Cancel"
+msgstr "Abandon"
+
+msgid "Cancel operation"
+msgstr "Abandonner Opérations"
+
+msgid "New\tCtrl+N"
+msgstr "Nouveau\tCtrl+N"
+
+msgid "Open\tCtrl+O"
+msgstr "Ouvrir\tCtrl+O"
+
+msgid "Save\tCtrl+S"
+msgstr "Sauver\tCtrl+S"
+
+msgid "Print\tCtrl+P"
+msgstr "Imprimer\tCtrl+P"
+
+msgid "Page Setup"
+msgstr "Mise en Page"
+
+msgid "Print Preview"
+msgstr "Aperçu avant impression"
+
+msgid "Open Recent"
+msgstr "Fichiers récents"
+
+msgid "Import"
+msgstr "Importer"
+
+msgid "About"
+msgstr "À propos"
+
+msgid "Plugins"
+msgstr "Greffons"
+
+msgid "Exit\tCtrl+Q"
+msgstr "Quitter\tCtrl+Q"
+
+msgid "Undo\tCtrl+Z"
+msgstr "Défaire\tCtrl+Z"
+
+msgid "Redo\tCtrl+Shift+Z"
+msgstr "Refaire\tCtrl+Shift+Z"
+
+msgid "Cut\tCtrl+X"
+msgstr "Couper\tCtrl+X"
+
+msgid "Copy\tCtrl+C"
+msgstr "Copier\tCtrl+C"
+
+msgid "Paste\tCtrl+V"
+msgstr "Coller\tCtrl+V"
+
+msgid "Delete\tDel"
+msgstr "Supprimer\tDel"
+
+msgid "Select Mode"
+msgstr "Mode Sélection"
+
+msgid "Draw a sketch"
+msgstr "Dessiner une esquisse"
+
+msgid "Draw Circles"
+msgstr "Dessiner un cercle"
+
+msgid "Draw Infinite Lines"
+msgstr "Dessiner une ligne infinie"
+
+msgid "Draw Points"
+msgstr "Dessiner des points"
+
+msgid "Draw Regular Shapes"
+msgstr "Dessiner un rectangle"
+
+msgid "Add Text"
+msgstr "Ajouter un Texte"
+
+#ConstraintTools.cpp
+msgid "Add Dimension"
+msgstr "Ajouter une dimemsion"
+
+#HeeksFrame.cpp
+msgid "Add Coordinate System"
+msgstr "Ajouter un système  de coordonnées"
+
+#HeeksFrame.cpp
+msgid "Previous view"
+msgstr "Vue précédente"
+
+#HeeksFrame.cpp
+msgid "Zoom window"
+msgstr "Zoom Fenêtre"
+
+#HeeksFrame.cpp
+msgid "Fit view to extents"
+msgstr "Maximise normal au plan"
+
+#HeeksFrame.cpp
+msgid "Fit view to extents, but no rotation"
+msgstr "Maximise sans redressement"
+
+#HeeksFrame.cpp
+msgid "View rotate"
+msgstr "Rotation dynamique"
+
+#HeeksFrame.cpp
+msgid "View zoom"
+msgstr "Zoom dynamique"
+
+#HeeksFrame.cpp
+msgid "Full screen"
+msgstr "Plein écran"
+
+#HeeksFrame.cpp
+msgid "Redraw"
+msgstr "Redessiner"
+
+#HeeksFrame.cpp
+msgid "Add a sphere"
+msgstr "Ajouter une Sphère"
+
+#HeeksFrame.cpp
+msgid "Add a cube"
+msgstr "Ajouter un Cube"
+
+#HeeksFrame.cpp
+msgid "Add a cylinder"
+msgstr "Ajouter un Cylindre"
+
+#HeeksFrame.cpp
+msgid "Add a cone"
+msgstr "Ajouter un Cône"
+
+#HeeksFrame.cpp
+msgid "Loft two sketches"
+msgstr "Lissage entre 2 esquisses"
+
+#HeeksFrame.cpp
+msgid "Extrude a sketch"
+msgstr "Extruder une esquisse"
+
+msgid "Fuse"
+msgstr "Fusion de Solides"
+
+msgid "Common"
+msgstr "Intersection de Solides"
+
+msgid "Fillet"
+msgstr "Congé/Arrondi"
+
+msgid "Chamfer"
+msgstr "Chanfrein"
+
+msgid "Move Translate"
+msgstr "Translater"
+
+msgid "Copy Translate"
+msgstr "Copier et Translater"
+
+msgid "Move Rotate"
+msgstr "Pivoter"
+
+msgid "Copy Rotate"
+msgstr "Copier circulaire"
+
+msgid "Move Mirror"
+msgstr "Déplacer en Miroir"
+
+msgid "Copy Mirror"
+msgstr "Copier en Miroir"
+
+msgid "Move Scale"
+msgstr "Homothétie"
+
+msgid "Objects"
+msgstr "Objets"
+
+msgid "Options"
+msgstr "Options"
+
+msgid "Input"
+msgstr "Saisir"
+
+msgid "Tool Bar"
+msgstr "Barre d'outils"
+
+msgid "Solids Tool Bar"
+msgstr "Barre d'outils Objet 3D"
+
+msgid "Geometry Tool Bar"
+msgstr "Barre d'outils Géométrie"
+
+msgid "Viewing Tool Bar"
+msgstr "Barre d'outils Visualisation"
+
+msgid "Transformations Tool Bar"
+msgstr "Barre d'outils Transformations"
+
+msgid "Status Bar"
+msgstr "Barre d'état"
+
+msgid "&File"
+msgstr "&Fichier"
+
+msgid "&Edit"
+msgstr "&Editer"
+
+msgid "&Geometry"
+msgstr "&Géométrie"
+
+msgid "&View"
+msgstr "&Vue"
+
+msgid "&Solid"
+msgstr "&Solides 3D"
+
+msgid "&Transform"
+msgstr "&Transformer"
+
+msgid "&Window"
+msgstr "&Fenêtres"
+
+msgid "Graphics"
+msgstr "Graphiques"
+
+msgid "Reset Layout"
+msgstr "Réinitialiser la mise en page"
+
+msgid "Set toolbars to left"
+msgstr "Barre d'outils à gauche"
+
+msgid "Coordinate System"
+msgstr "Système de coordonnées"
+
+msgid "Open file"
+msgstr "Ouvrir Fichier"
+
+msgid "Import file"
+msgstr "Importer Fichier"
+
+#HeeksFrame.cpp
+msgid "Pick two or more solids, the first one will be cut by the others"
+msgstr "Désigner 2 objets 3D, ou plus; le premier sera découpé par les autres"
+
+#HeeksFrame.cpp
+msgid "Subtract Solids"
+msgstr "Soustraction de Solides"
+
+#HeeksFrame.cpp
+msgid "Pick two or more solids to be fused together"
+msgstr "Désigner 2 objets 3D, ou plus, pour les fusionner ensemble"
+
+#HeeksFrame.cpp
+msgid "Fuse Solids"
+msgstr "Fusion de Solides"
+
+#HeeksFrame.cpp
+msgid ""
+"Pick two or more solids, only the shape that is contained by all of them "
+"will remain"
+msgstr ""
+"Désigner 2 objets 3D, ou plus; seul le volume commun aux objets sélectionnés "
+"demeurera"
+
+#HeeksFrame.cpp
+msgid "Intersection of Solids"
+msgstr "Intersection de Solides"
+
+#HeeksFrame.cpp
+msgid "Pick one or more edges to add a fillet to"
+msgstr ""
+"Désigner une ou plusieurs arêtes pour les arrondir par des Conges"
+
+#HeeksFrame.cpp
+msgid "Edge Fillet"
+msgstr "Arêtes arrondies"
+
+#HeeksFrame.cpp
+msgid "Pick one or more edges to add a chamfer to"
+msgstr "Désigner une ou plusieurs arêtes pour les abattre par des Chanfreins"
+
+#HeeksFrame.cpp
+msgid "Edge Chamfer"
+msgstr "Arêtes chanfreinées"
+
+#HeeksFrame.cpp
+msgid "Enter chamfer distance"
+msgstr "Entrer la taille du chanfrein"
+
+#HeeksFrame.cpp
+msgid "Distance"
+msgstr "Distance"
+
+msgid ""
+"Pick two or more sketches, to create a lofted solid between\n"
+"( hold down Ctrl key to select more than one solid )"
+msgstr ""
+"Désigner 2 esquisses, ou plus, pour créer une surface liséee entre elles\n"
+"(Maintenir CTRL appuyé pour choisir plusieurs éléments)"
+
+msgid "Lofted Body"
+msgstr "Corps Lissé"
+
+msgid ""
+"Pick one or more sketches, to create extruded body from\n"
+"( hold down Ctrl key to select more than one solid )"
+msgstr "Désigner 2 esquisses, ou plus, pour créer une surface extrudée entre elles\n"
+"(Maintenir CTRL appuyé pour choisir plusieurs éléments)"
+
+msgid "Extrude"
+msgstr "Extrusion 2D -> 3D"
+
+msgid "Sphere"
+msgstr "Sphère"
+
+msgid "Cuboid"
+msgstr "Parallèlépipède"
+
+msgid "Cylinder"
+msgstr "Cylindre"
+
+msgid "Cone"
+msgstr "Cône"
+
+msgid ""
+"There was a problem printing.\n"
+"Perhaps your current printer is not set correctly?"
+msgstr ""
+"Problemes d'impression.\n"
+"L'imprimante est-elle correctement configuree?"
+
+msgid "Printing"
+msgstr "Impression en cours"
+
+msgid "You canceled printing"
+msgstr "Impression abandonnée"
+
+msgid ""
+"There was a problem previewing.\n"
+"Perhaps your current printer is not set correctly?"
+msgstr ""
+"Problemes d'aperçu d'impression.\n"
+"L'imprimante est-elle correctement configurée?"
+
+msgid "Previewing"
+msgstr "Aperçu"
+
+msgid "Demo Print Preview"
+msgstr "Demo d'impression"
+
+msgid "New file"
+msgstr "Nouveau fichier"
+
+msgid "Save file"
+msgstr "Enregistre fichier"
+
+msgid "Cut selected items to the clipboard"
+msgstr "Couper les éléments sélectionnés dans le presse-papiers"
+
+msgid "Copy selected items to the clipboard"
+msgstr "Copier les éléments sélectionnés dans le presse-papiers"
+
+msgid "Paste items from the clipboard"
+msgstr "Coller les éléments contenus dans le presse-papiers"
+
+msgid "Undo the previous command"
+msgstr "Défaire la commande précédente"
+
+msgid "Redo the next command"
+msgstr "Refaire la commande suivante"
+
+msgid "Start Circle Drawing"
+msgstr "Dessiner des Cercles"
+
+msgid "Start Drawing Infinite Lines"
+msgstr "Dessiner des Lignes infinies"
+
+msgid "Start Drawing Points"
+msgstr "Poser des Points"
+
+msgid "Draw regular shapes; rectangles, polygons, obrounds"
+msgstr "Dessiner des formes régulières : rectangles, polygones, oblongs"
+
+msgid "Add a text object"
+msgstr "Ajouter un Texte"
+
+msgid "Add a dimension"
+msgstr "Ajouter une dimension"
+
+msgid "Create a Coordinate System"
+msgstr "Créer un système  de coordonnées"
+
+msgid "Create a lofted face"
+msgstr "Créer une surface lissée"
+
+msgid "Extrude a wire or face"
+msgstr "Extruder un maillage ou une face"
+
+msgid "Cut one solid from another"
+msgstr ""
+"Soustraire un objet 3D à un autre"
+
+msgid "Fuse one solid to another"
+msgstr "Fusionner un objet 3D avec un autre"
+
+msgid "Find common solid between two solids"
+msgstr "Chercher le volume commun à deux Objets 3D"
+
+msgid "Make a fillet on selected edges"
+msgstr "Créer un Congé sur les arêtes sélectionnées"
+
+msgid "Make a chamfer on selected edges"
+msgstr "Créer un Chanfrein sur les arêtes sélectionnées"
+
+msgid "Go back to previous view"
+msgstr "Revenir à la vue précédente"
+
+msgid "Zoom in to a dragged window"
+msgstr "Zoom + dans la fenêtre tracée"
+
+msgid "Zoom in to fit the extents of the drawing into the graphics window"
+msgstr "Maximise l'objet avec X, Y ou Z Normal au plan  de la fenêtre graphique"
+
+msgid ""
+"Zoom in to fit the extents of the drawing into the graphics window, but "
+"without rotating the view"
+msgstr "Maximise l'objet sans redressement  dans la fenêtre graphique"
+
+msgid "Enter view rotating mode"
+msgstr "Entrer le mode rotation dynamique"
+
+msgid "Drag to zoom in and out"
+msgstr "Déplacer pour un Zoom + ou - dynamique"
+
+msgid "Switch to full screen view ( press escape to return )"
+msgstr "Basculer en mode plein écran (presser ESC pour en sortir)"
+
+msgid "Translate selected items"
+msgstr "Translater les éléments sélectionnés"
+
+msgid "Copy and translate selected items"
+msgstr "Copier et translater les éléments sélectionnés"
+
+msgid "Rotate selected items"
+msgstr "Faire pivoter les éléments sélectionnés"
+
+msgid "Copy and rotate selected items"
+msgstr "Copier et faire pivoter les éléments sélectionnés"
+
+msgid "Mirror selected items"
+msgstr "Déplacer en miroir les éléments sélectionnés"
+
+msgid "Copy and mirror selected items"
+msgstr "Copier et mettre en miroir les éléments sélectionnés"
+
+msgid "Scale selected items"
+msgstr "Homothétie des éléments sélectionnés"
+
+msgid "General Tools"
+msgstr "Outils Standard"
+
+msgid "Geometry Tools"
+msgstr "Outils Géométrie"
+
+msgid "Solid Tools"
+msgstr "Outils Solide 3D"
+
+msgid "Viewing Tools"
+msgstr "Outils Voir"
+
+msgid "Transformation Tools"
+msgstr "Outils Transformer"
+
+msgid "Input Mode"
+msgstr "Mode saisie"
+
+msgid "Line drawing mode"
+msgstr "Mode dessin de ligne"
+
+msgid "click on start point"
+msgstr "Désigner le point de début"
+
+msgid "click on end of line"
+msgstr "Désigner le point de fin de la ligne"
+
+msgid "Arc drawing mode"
+msgstr "Mode dessin d'arcs"
+
+msgid "click on end of arc"
+msgstr "Désigner la fin de l'arc"
+
+msgid "Infinite line drawing"
+msgstr "Dessin de ligne infinie"
+
+msgid "click on first point"
+msgstr "Désigner le premier point"
+
+msgid "click on second point"
+msgstr "Désigner le deuxième point"
+
+msgid "Circle drawing mode"
+msgstr "Mode dessin de cercle"
+
+msgid "center and point mode"
+msgstr "Mode Centre et Point"
+
+msgid "click on center point"
+msgstr "Désigner le centre"
+
+msgid "click on point on circle"
+msgstr "Désigner un point du cercle"
+
+msgid "three points mode"
+msgstr "Mode trois points"
+
+msgid "click on third point"
+msgstr "Désigner le troisième point"
+
+msgid "draw lines"
+msgstr "Dessiner des segments"
+
+msgid "draw tangential arcs"
+msgstr "Dessiner des arcs tangents"
+
+msgid "draw circles"
+msgstr "Dessiner des cercles"
+
+# RegularShapesDrawing.cpp
+msgid "drawing mode"
+msgstr "Type de dessin"
+
+msgid "(press 'a' for arcs)"
+msgstr "(Touche 'a' pour arcs)"
+
+msgid "Number of items selected"
+msgstr "Nombre d'éléments sélectionnés"
+
+msgid "Delete Marked Items"
+msgstr "Supprimer les éléments cochés"
+
+msgid "Copies the selected items to the clipboard"
+msgstr "Copier les éléments choisis vers presse-papiers "
+
+msgid "Paste Into"
+msgstr "Coller dans"
+
+msgid "Paste items from the clipboard to the drawing"
+msgstr "Coller les éléments du presse-papiers dans le dessin"
+
+msgid "Apply any changes made to the properties"
+msgstr "Appliquer les changements de propriétés"
+
+msgid "Stop editing the object"
+msgstr "Arrêter l'édition de l'objet"
+
+#Plugins.cpp
+msgid "Name"
+msgstr "Nom"
+
+#Plugins.cpp
+msgid "File Path"
+msgstr "Chemin des fichiers"
+
+#Plugins.cpp
+msgid "Plugin must have a name!"
+msgstr "Le Greffon doit avoir un nom!"
+
+#Plugins.cpp
+msgid "No file specified!"
+msgstr "Pas de fichiers spécifié!"
+
+#Plugins.cpp
+msgid "shared library files"
+msgstr "Bibliothèques partagées"
+
+#Plugins.cpp
+msgid "Choose shared library file"
+msgstr "Choisir bibliothèque partagée"
+
+#Plugins.cpp
+msgid "HeeksCAD plugin libraries"
+msgstr "Greffon(s) pour HeeksCAD"
+
+#Plugins.cpp
+msgid "Edit"
+msgstr "Éditer"
+
+#Plugins.cpp
+msgid "Add New Plugin"
+msgstr "Ajouter un Nouveau Greffon"
+
+msgid "x"
+msgstr "x"
+
+msgid "y"
+msgstr "y"
+
+msgid "z"
+msgstr "z"
+
+msgid "vertical angle"
+msgstr "Angle Vertical"
+
+msgid "horizontal angle"
+msgstr "Angle Horizontal"
+
+msgid "twist angle"
+msgstr "Angle de rotation"
+
+# RegularShapesDrawing.cpp
+msgid "draw rectangles"
+msgstr "Dessin de Rectangles"
+
+# RegularShapesDrawing.cpp
+msgid "draw polygons"
+msgstr "Dessin de Polygones"
+
+# RegularShapesDrawing.cpp
+msgid "draw slots"
+msgstr "Dessin d'Oblongs"
+
+# RegularShapesDrawing.cpp
+msgid "number of sides for polygon"
+msgstr "Nbre de côtés Polygone"
+
+msgid "Add "
+msgstr "Ajouter"
+
+msgid "Add Objects"
+msgstr "Ajouter des Objets"
+
+msgid "Remove Objects"
+msgstr "Supprimer des Objets"
+
+#RuledSurface.cpp
+msgid "pick some sketches"
+msgstr "Désigner quelques esquisses"
+
+#RuledSurface.cpp
+msgid "Ruled Surface"
+msgstr "Surface lissée"
+
+msgid "pick sketches"
+msgstr "Choisir des Esquisses"
+
+#RuledSurface.cpp
+msgid "Input extrusion height"
+msgstr "Indiquer la hauteur d'extrusion"
+
+#RuledSurface.cpp
+msgid "Extruded Solid"
+msgstr "Solide 3D extrudé"
+
+#RuledSurface.cpp
+msgid "Fatal error making ruled solid"
+msgstr "Erreur fatale de création du Solide réglé"
+
+#RuledSurface.cpp
+msgid "Fatal error making extruded solid"
+msgstr "Erreur fatale de création du Solide extrudé"
+
+msgid "Reset the ruler"
+msgstr "Réinitialise la règle"
+
+msgid "Left button for selecting objects"
+msgstr "Bouton gauche pour sélectionner des objets"
+
+msgid "( with Ctrl key for extra objects)"
+msgstr "(avec Ctrl pour plusieurs objets)"
+
+msgid "Drag with left button to window select"
+msgstr "Déplacer avec le bouton gauche vers la fenêtre de sélection"
+
+msgid "or to move object if on an object"
+msgstr ""
+"ou deplacer l'objet si sur un objet"
+
+msgid "Mouse wheel to zoom in and out"
+msgstr "Zoom dynamique avec la roulette de souris"
+
+msgid "Middle button to pan view"
+msgstr "Panoramique avec le bouton du milieu"
+
+msgid "( with Ctrl key to rotate view )"
+msgstr "(avec CTRL pour pivoter la vue)"
+
+msgid "Middle button to rotate view"
+msgstr "Bouton du milieu pour pivoter la vue"
+
+msgid "( with Ctrl key to pan view )"
+msgstr "(avec CTRL pour panoramiquer)"
+
+msgid "Right button for object menu"
+msgstr "Bouton droit pour le menu Objet"
+
+msgid "See options window to hide this help"
+msgstr "Voir dans fenêtre Options pour cacher l'aide"
+
+msgid "Pick Anything"
+msgstr "Choisir des objets 3D"
+
+msgid "Set the selection filter to all items"
+msgstr "Sélectionner des objets 3D "
+
+msgid "Pick Edges"
+msgstr "Choisir des arêtes"
+
+msgid "Set the selection filter to only edges"
+msgstr "Sélectionner seulement des arêtes"
+
+msgid "Enter Offset Value, + for making bigger, - for making smaller"
+msgstr "Valeur de Dilatation,+ pour augmenter,- pour diminuer"
+
+msgid "Offset value"
+msgstr "Valeur de Dilatation"
+
+#Shape.cpp 
+msgid "Result of 'Offset Shape'"
+msgstr "Résultat de la Dilatation"
+
+#Shape.cpp 
+msgid "Offset Shape"
+msgstr "Dilatation d'objet"
+
+#Shape.cpp 
+msgid "Offset the shape"
+msgstr "Dilater l'objet"
+
+#Shape.cpp 
+msgid "Result of Fuse Operation"
+msgstr "Résultat de la Fusion"
+
+#Shape.cpp 
+msgid "Result of Common Operation"
+msgstr "Résultat de l'Intersection"
+
+#Shape.cpp : Sans effet
+msgid "Result of Cut Operation"
+msgstr "Résultat de la Soustraction"
+
+#Shape.cpp
+msgid "STEP import not done!"
+msgstr "L'importation STEP a échoué"
+
+#Shape.cpp
+msgid "sewed IGES solid"
+msgstr "Solide 3D IGES assemblé"
+
+#Shape.cpp
+msgid "IGES import not done!"
+msgstr "L'importation IGES a échoué"
+
+msgid "Number of elements"
+msgstr "Nombre d'éléments"
+
+msgid "order"
+msgstr "ordre"
+
+msgid "Transform"
+msgstr "Transfromer"
+
+msgid "Transform Objects"
+msgstr "Transformer Objet"
+
+#TransformTools.cpp
+msgid "Pick objects to move"
+msgstr "Choisir l'objet à déplacer"
+
+#TransformTools.cpp
+msgid "Enter number of copies"
+msgstr "Indiquer le nombre de copies"
+
+#TransformTools.cpp
+msgid "number of copies"
+msgstr "Nombre de copies"
+
+#TransformTools.cpp
+msgid "Click position to move from"
+msgstr "Indiquer le point Début du déplacement"
+
+#TransformTools.cpp
+msgid "Click position to move to"
+msgstr "Indiquer le point Fin du déplacement"
+
+#TransformTools.cpp
+msgid "Pick objects to rotate"
+msgstr "Choisir les objets à faire pivoter"
+
+#TransformTools.cpp
+msgid "Click centre position to rotate about"
+msgstr "Indiquer la position du centre de rotation"
+
+#TransformTools.cpp
+msgid "Enter angle to rotate by"
+msgstr "Indiquer l'angle de rotation"
+
+#TransformTools.cpp
+msgid "angle"
+msgstr "angle"
+
+#TransformTools.cpp
+msgid "Pick objects to mirror"
+msgstr "Choisir objets à retourner en miroir"
+
+#TransformTools.cpp
+msgid "Pick line to mirror about"
+msgstr "Choisir l'axe de symétrie"
+
+#TransformTools.cpp
+msgid "Pick objects to scale"
+msgstr "Choisir les objets à homothétiser"
+
+#TransformTools.cpp
+msgid "Click centre position to scale about"
+msgstr "Indiquer le centre d'homothétie"
+
+#TransformTools.cpp
+msgid "Enter scale factor"
+msgstr "Indiquer le coeff. d'homothétie"
+
+#TransformTools.cpp
+msgid "scale factor"
+msgstr "Coeff. d'homothétie"
+
+msgid "Drag with the left mouse button"
+msgstr "Déplacer avec le bouton gauche"
+
+msgid "Forward to zoom in, Back to zoom out"
+msgstr "En avant pour Zoom +, en arrière pour Zoom -"
+
+msgid "Back to zoom in, Forward to zoom out"
+msgstr "En arrière pour Zoom +, en avant pour Zoom -"
+
+msgid "Hold middle mouse button down to pan"
+msgstr "Bouton du milieu appuyé pour panoramiquer"
+
+msgid "Result of Wire Offset"
+msgstr "Résultat Dilataion de Maille"
+
+msgid "Generated"
+msgstr "Généré"
+
+msgid "Generated from edge"
+msgstr "Généré à partir de l'arête"
+
+msgid "Modified"
+msgstr "Modifié"
+
+msgid "Is Deleted"
+msgstr "est supprimé"
+
+msgid "Offset Wire"
+msgstr "Dilatation de Maille"
+
+msgid "Point Size"
+msgstr "Grosseur du Point"
+
+msgid "Family"
+msgstr "Famille"
+
+msgid "Face Name"
+msgstr "Nom de Face"
+
+msgid "Style"
+msgstr "Style"
+
+msgid "Underlined"
+msgstr "Souligné"
+
+msgid "files"
+msgstr "Fichiers"
+
+msgid "All files"
+msgstr "Tous les fichiers"
+
+msgid "Make a selection:"
+msgstr "Réaliser une sélection"
+
+msgid "Categorized Mode"
+msgstr "Mode Catégorié"
+
+msgid "Alphabetic Mode"
+msgstr "Mode Alphabétique"
+
+msgid "<< Compact"
+msgstr "Compacter"
+
+msgid "Expand >>"
+msgstr "Déployer"
+
+msgid "False"
+msgstr "Faux"
+
+msgid "True"
+msgstr "Vrai"
+
+msgid "Unspecified"
+msgstr "Non spécifié"
+
+msgid "is not a floating-point number"
+msgstr "ce n'est pas un nombre à virgule flottante"
+
+msgid "true"
+msgstr "Vrai"
+
+msgid "false"
+msgstr "Faux"
+
+msgid "Choose a directory:"
+msgstr "Choisir un répertoire"
+
+msgid "Choose a file"
+msgstr "Choisir un fichier"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Add"
+msgstr "Ajouter"
+
+msgid "Update"
+msgstr "Mis à jour"
+
+msgid "Remove"
+msgstr "Supprimer"
+
+msgid "Up"
+msgstr "En haut"
+
+msgid "Down"
+msgstr "En bas"
+
+msgid "Failed to load resource image"
+msgstr "Échec du chargement d'image ressource"
+
+msgid "Convert sketch to face"
+msgstr "Convertir esquisse en face"
+
+msgid "Make To Sketch"
+msgstr "Transformer en esquisse"
+
+msgid "Make selected lines and arcs into a new sketch"
+msgstr "Créer nouvelle esquisse avec segments et arcs choisis"
+
+msgid "Combine sketches"
+msgstr "Combiner des esquisses"
+
+msgid "Combine selected sketches"
+msgstr "Combiner les esquisses choisies"
+
+msgid "Group"
+msgstr "Grouper"
+
+msgid "Group selected items"
+msgstr "Grouper les éléments choisis"
+
+msgid "Ungroup"
+msgstr "Dégrouper"
+
+msgid "Ungroup selected items"
+msgstr "Dégrouper les éléments choisis"
+
+msgid "Dimension drawing"
+msgstr "Dimensions du dessin"
+
+msgid "Drawing"
+msgstr "Dessin"
+
+msgid "Edge"
+msgstr "Arête"
+
+msgid "Face"
+msgstr "Face"
+
+msgid "Gripper"
+msgstr "Saisir"
+
+msgid "Arc"
+msgstr "Arc"
+
+msgid "Circle"
+msgstr "Cercle"
+
+msgid "Dimension"
+msgstr "Dimension"
+
+msgid "Ellipse"
+msgstr "Ellipse"
+
+msgid "Infinite Line"
+msgstr "Ligne infinie"
+
+msgid "Image"
+msgstr "Image"
+
+msgid "Line"
+msgstr "Ligne"
+
+msgid "Point"
+msgstr "Point"
+
+msgid "Spline"
+msgstr "Spline"
+
+msgid "Text"
+msgstr "Texte"
+
+msgid "Xml"
+msgstr "Xml"
+
+msgid "Magnifying by dragging a window"
+msgstr "Agrandir en traçant une fenêtre"
+
+msgid "Point drawing"
+msgstr "Point de dessin"
+
+msgid "Dragging a window or picking a point"
+msgstr "Tracer une fenêtre ou choisir un point"
+
+msgid "ChangeOwner"
+msgstr "ChangePropriétaire"
+
+msgid "ManyChangeOwner"
+msgstr "BeaucoupChangePropriétaire"
+
+msgid "Ruler"
+msgstr "Règle"
+
+msgid "Faces"
+msgstr "Faces"
+
+msgid "Edges"
+msgstr "Arêtes"
+
+msgid "Sketch"
+msgstr "Esquisse"
+
+msgid "Solid"
+msgstr "Objet 3D"
+
+msgid "STL Solid"
+msgstr "Objet 3D STL"
+
+msgid "View Rotate"
+msgstr "Rotation dynamique"
+
+msgid "View Zoom"
+msgstr "Zoom dynamique"
+
+msgid "Dragging a window"
+msgstr "Tracer une fenêtre"
+
+msgid "Wire"
+msgstr "Maillage"
+
+msgid "object type"
+msgstr "Type d'objet"
+
+msgid "object title"
+msgstr "Nom de l'objet"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "color"
+msgstr "Couleur"
+
+msgid "visible"
+msgstr "Visible"
+
+msgid "Unknown"
+msgstr "Inconnu"
+
+msgid "Unknown Property"
+msgstr "Propriété inconnue"
+
+msgid "leadoffdz"
+msgstr "Partir de Z"
+
+msgid "leadofflen"
+msgstr "Partir de long."
+
+msgid "leadoffrad"
+msgstr "Partir de rad."
+
+msgid "retractzheight"
+msgstr "Retrait en hauteur (Z)"
+
+msgid "leadoffsamplestep"
+msgstr "Partir du pas modèle"
+
+msgid "toolcornerrad"
+msgstr "Rayon de l'outil d'angle"
+
+msgid "toolflatrad"
+msgstr "Rayon du foret"
+
+msgid "samplestep"
+msgstr "Modèle de pas"
+
+msgid "stepdown"
+msgstr "Passe en Z"
+
+msgid "clearcuspheight"
+msgstr ""
+
+msgid "triangleweaveres"
+msgstr "Maillage Triangle"
+
+msgid "flatradweaveres"
+msgstr ""
+
+msgid "dchangright"
+msgstr ""
+
+msgid "dchangrightoncontour"
+msgstr ""
+
+msgid "dchangleft"
+msgstr ""
+
+msgid "dchangefreespace"
+msgstr ""
+
+msgid "sidecutdisplch"
+msgstr ""
+
+msgid "fcut"
+msgstr ""
+
+msgid "fretract"
+msgstr ""
+
+msgid "thintol"
+msgstr ""
+
+msgid "startpoint_x"
+msgstr "Point de départ_X"
+
+msgid "startpoint_y"
+msgstr "Point de départ_Y"
+
+msgid "startvel_x"
+msgstr "Vitesse de départ_X"
+
+msgid "startvel_y"
+msgstr "Vitesse de départ_Y"
+
+msgid "minz"
+msgstr "Mini_z"
+
+msgid "boundaryclear"
+msgstr "Sans limite"
+
+msgid "boundary_x0"
+msgstr "Limite_x0"
+
+msgid "boundary_x1"
+msgstr "Limite_x1"
+
+msgid "boundary_y0"
+msgstr "Limite_y0"
+
+msgid "boundary_y1"
+msgstr "Limite_y1"
+
+msgid "tool number"
+msgstr "Numéro d'outil"
+
+msgid "tool diameter"
+msgstr "Diamètre d'outil"
+
+#DepthOp.cpp
+msgid "clearance height"
+msgstr "Hauteur libre"
+
+#DepthOp.cpp
+msgid "step down"
+msgstr "Passe en Z"
+
+#DepthOp.cpp
+msgid "start depth"
+msgstr "Hauteur de départ"
+
+#DepthOp.cpp
+msgid "final depth"
+msgstr "Profondeur finale"
+
+#DepthOp.cpp
+msgid "rapid down to height"
+msgstr "Descente rapide en Z "
+
+msgid "horizontal feed rate"
+msgstr "Vitesse d'avance horizontale"
+
+msgid "vertical feed rate"
+msgstr "Vitesse d'avance verticale"
+
+msgid "spindle speed"
+msgstr "Fréquence de roatation"
+
+msgid "You must select some sketches, first!"
+msgstr "Vous devez choisir d'abord quelques esquisses!"
+
+msgid "There are no solids!"
+msgstr "Il n'y a pas d'Objets 3D"
+
+msgid "You must select some sketches first!"
+msgstr "Vous devez choisir d'abord quelques esquisses!"
+
+msgid "Open NC file"
+msgstr "Ouvrir fichier CN"
+
+msgid "Save NC file"
+msgstr "Enregistrer fichier CN"
+
+msgid "Couldn't open file"
+msgstr "Le fichier ne pourrait être ouvert"
+
+msgid "Profile"
+msgstr "Profil"
+
+msgid "ZigZag"
+msgstr "ZigZag"
+
+msgid "Adaptive"
+msgstr "Adaptée"
+
+msgid "Python"
+msgstr "Python"
+
+msgid "PostProcess"
+msgstr "Créer le code CN"
+
+msgid "OpenNC"
+msgstr "OuvrirCN"
+
+msgid "SaveNC"
+msgstr "SauveCN"
+
+msgid "HeeksCNC is the free machining add-on to HeeksCAD"
+msgstr "HeeksCNC est un greffon libre de FAO pour HeeksCAD"
+
+msgid "          http://code.google.com/p/heekscnc/"
+msgstr "          http://code.google.com/p/heekscnc/"
+
+msgid "Written by Dan Heeks, Hirutso Enni, Perttu Ahola"
+msgstr "Écrit par : Dan Heeks, Hirutso Enni, PerttuAhola"
+
+msgid "With help from archivist, crotchet1, DanielFalck, fenn, Sliptonic"
+msgstr "avec l'aide de : crotchet1, DanielFalck, fenn,Sliptonic"
+
+msgid ""
+"geometry code, donated by Geoff Hawkesford, Camtek GmbH http://www.peps.de/"
+msgstr ""
+"Code Géometrie, donné  par Geoff Hawkesford, Camtek GmbHhttp://www.peps.de/"
+
+msgid ""
+"pocketing code from http://code.google.com/p/libarea/ , derived from the "
+"kbool library written by Klaas Holwerda http://boolean.klaasholwerda.nl/bool."
+"html"
+msgstr ""
+"Code pour usinage des poches de http://code.google.com/p/libarea/, dérivé de"
+" bibliothèque kbool, de Klaas Holwerda http://boolean.klaasholwerda.nl/bool.htm"
+
+msgid "Zig zag code from pycam http://sourceforge.net/svn/?group_id=237831"
+msgstr ""
+"Zigzag Code du site-pycam: http://sourceforge.net/svn/?group_id=237831"
+
+msgid ""
+"Adaptive Roughing code from http://code.google.com/p/libactp/, using code "
+"written in 2004"
+msgstr ""
+"Code 'Ébauche Adaptée' de : http://code.code.google.com/p/libactp/,"
+"basé sur un code écrit en 2004."
+
+msgid ""
+"For a more modern version of adaptive roughing, see Julian Todd and Martin "
+"Dunschen of http://www.freesteel.co.uk/"
+msgstr ""
+"Pour une version plus récente de 'Ébauche Adaptée', voir Julian Todd and Martin "
+"Dunschen sur le site :http://www.freesteel.co.uk/"
+
+msgid ""
+"This HeeksCNC software installation is restricted by the GPL license http://"
+"www.gnu.org/licenses/gpl-3.0.txt"
+msgstr "L'installation du logiciel HeeksCNC est restreinte par la licence GPL v3 : http://www.gnu.org/licenses/gpl-3.0.txt"
+
+msgid "  which means it is free and open source, and must stay that way"
+msgstr "ce qui signifie que le code est ouvert et libre et qu'il doit le rester"
+
+msgid "New Profile Operation..."
+msgstr "Nouveau Contournage"
+
+msgid "New Pocket Operation..."
+msgstr "Nouvelle Poche"
+
+msgid "New ZigZag Operation..."
+msgstr "Nouveau ZigZag"
+
+msgid "New Adaptive Roughing Operation..."
+msgstr "Nouvelle Ébauche adaptée"
+
+msgid "Operations"
+msgstr "Opérations"
+
+msgid "Make Python Script"
+msgstr "Créer un Script Python"
+
+msgid "Post-Process"
+msgstr "Créer le code CN"
+
+msgid "Machining"
+msgstr "Module CNC"
+
+msgid "nc options"
+msgstr "Options du code CN"
+
+msgid "text colors"
+msgstr "Couleur de texte"
+
+msgid "default color"
+msgstr "Couleur par défaut"
+
+msgid "block color"
+msgstr "Couleur de bloc"
+
+msgid "misc color"
+msgstr "Couleur pour le reste"
+
+msgid "program color\t"
+msgstr "Couleur de programme\t"
+
+msgid "tool color"
+msgstr "Couleur d'outil"
+
+msgid "comment color\t"
+msgstr "Couleur de commenatires\t"
+
+msgid "variable color"
+msgstr "Couleur des varaibles"
+
+msgid "prep color"
+msgstr "Couleur d'ébauche"
+
+msgid "axis color"
+msgstr "Couleur des axes"
+
+msgid "rapid color"
+msgstr "Couleur Dépl. rapide"
+
+msgid "feed color"
+msgstr "Couleur Dépl. travail"
+
+msgid "comment"
+msgstr "Commentaire"
+
+msgid "active"
+msgstr "Actif"
+
+#Pocket.cpp
+msgid "step over"
+msgstr "Passe latérale"
+
+#Pocket.cpp
+msgid "material allowance"
+msgstr "Matériel Attribué"
+
+#Pocket.cpp
+msgid "round corner factor"
+msgstr "Facteur pour le rayon d'angle"
+
+#Pocket.cpp
+msgid "for 90 degree corners"
+msgstr "pour des coins à 90°"
+
+#Pocket.cpp
+msgid "1.5 for square, 1.0 for round"
+msgstr "1.5 pour carré,1.0 pour arrondi"
+
+#Pocket.cpp
+msgid "Boundary"
+msgstr "Limite"
+
+#Pocket.cpp
+msgid "Center"
+msgstr "Centre"
+
+#Pocket.cpp
+msgid "starting_place"
+msgstr "Position de départ"
+
+#Pocket.cpp
+msgid "Pocket operation - Sketch doesn't exist - %d"
+msgstr "Opération Poche - L'esquisse n'existe pas - %d"
+
+#Pocket.cpp
+msgid "Pocket operation - Sketch must be a closed shape - sketch %d"
+msgstr "Opération Poche - L'esquisse doit être une forme close - sketch %d"
+
+#Pocket.cpp
+msgid "Pocket operation - Badly ordered sketch - sketch %d"
+msgstr "Opération Poche - Mauvais ordre esquissé - sketché%d"
+
+msgid "Left"
+msgstr "Décalage à Gauche"
+
+msgid "Right"
+msgstr "Décalage à Droite"
+
+msgid "On"
+msgstr "Sans décalage"
+
+msgid "tool on side"
+msgstr "Outil sur le côté"
+
+msgid "auto roll on"
+msgstr "Départ contournage auto"
+
+msgid "roll on point"
+msgstr "Début contournage"
+
+msgid "auto roll off"
+msgstr "Arrêt contournage auto"
+
+msgid "roll off point"
+msgstr "Arrêt contournage"
+
+msgid "use start point"
+msgstr "Utiliser un point de départ"
+
+msgid "start point"
+msgstr "Point de départ"
+
+msgid "use end point"
+msgstr "Utiliser un point de fin"
+
+msgid "end point"
+msgstr "Point de fin"
+
+msgid "Pick Start"
+msgstr "Choisir le Départ"
+
+msgid "Pick new start point"
+msgstr "Choisir un nouveau Départ"
+
+msgid "Pick End"
+msgstr "Choisir la Fin"
+
+msgid "Pick new end point"
+msgstr "Choisir une nouvelle Fin"
+
+msgid "Set All Operations Active"
+msgstr "Activer toutes les opérations"
+
+msgid "Set All Operations Inactive"
+msgstr "Désactiver toutes les operations"
+
+msgid "machine"
+msgstr "Sortie NC"
+
+msgid "output file"
+msgstr "Sortie Fichier"
+
+msgid "spherical"
+msgstr "Sphérique"
+
+msgid "cylindrical"
+msgstr "Cylindrique"
+
+msgid "toroidal"
+msgstr "Torique"
+
+msgid "tool type"
+msgstr "Outil type"
+
+msgid "corner radius"
+msgstr "Rayon de coin"
+
+msgid "z0"
+msgstr "z0"
+
+msgid "z1"
+msgstr "z1"
+
+msgid "dx"
+msgstr "dx"
+
+msgid "dy"
+msgstr "dy"
+
+msgid "Simple Mesh"
+msgstr "Simple Maillage"
+
+msgid "HeeksArt is a free random add-on to HeeksCAD"
+msgstr "HeeksArt est un greffon aléatoire libre pour HeeksCAD"
+
+msgid "          http://code.google.com/p/heeksart/"
+msgstr "        http://code.google.com/p/heeksart/"
+
+msgid "Written by Dan Heeks"
+msgstr "Écrit par Dan Heeks"
+
+msgid "Add a simple mesh"
+msgstr "Ajouter un Simple Maillage"
+
+msgid "Mesh"
+msgstr "Maillage"
+
+msgid "mesh options"
+msgstr "Maillage Options"
+
+msgid "number of splits"
+msgstr "Nombre de divisions"
+
+msgid "Edge cannot have more than 2 faces!"
+msgstr "L'Arête ne peut avoir plus de 2 faces"
+
+msgid "Convert Mesh To Triangles"
+msgstr "Convertir le maillage en Triangles"
+
+msgid "Normalize All Vertices"
+msgstr "Normaliser tous les Sommets"
+
+msgid "Set All Vertex Normals"
+msgstr "Règle toutes les Normales au Sommet"
+
+msgid "At least one vertex could not be normalized!"
+msgstr "Au moins un sommet n'a pas pu être normalisé!"
+
+msgid "Recalculate All Face Centres"
+msgstr "Recalcule tous les Centres de Face"
+
+msgid "Mirror all x<1"
+msgstr "Symétrise tout x<1"
+
+msgid "Split Edge"
+msgstr "Découpe l'Arête"
+
+msgid "Recalculate a Good Centre Point"
+msgstr "Recalcule un Point Central correct"
+
+msgid "Normalize All Edge Directions"
+msgstr "Normalise toutes les Directions d'Arête"
+
+msgid "Set Normal From Edges"
+msgstr "Règle la Normale à partir des Arêtes"
+
+msgid "Mesh Edge"
+msgstr "Arête de Maille"
+
+msgid "Mesh Face"
+msgstr "Face de Maille"
+
+msgid "Mesh Vertex"
+msgstr "Sommet de Maille"
+
+msgid "Split arcs to little lines"
+msgstr "Découper les arcs en segments"
+
+#Sketch.cpp
+msgid "empty"
+msgstr "vide"
+
+#Sketch.cpp
+msgid "open"
+msgstr "Ouvrir"
+
+#Sketch.cpp
+msgid "reverse"
+msgstr "inverse"
+
+#Sketch.cpp
+msgid "bad"
+msgstr "mauvais"
+
+#Sketch.cpp
+msgid "re-order"
+msgstr "Re-ordonner"
+
+# Pas d'effet
+msgid "clockwise\n"
+msgstr "anti-trigo\n"
+
+#Pas d'effet. Sketch.cpp
+msgid "counter-clockwise"
+msgstr "Sens Trigo"
+
+#Sketch.cpp
+msgid "multiple"
+msgstr "multiple"
+
+#Sketch.cpp
+msgid "Split Sketch"
+msgstr "Découper l'esquisse"
+
+msgid "fixture offset"
+msgstr "Fixer le décalage +"
+
+msgid "correlation"
+msgstr "Corrélation"
+
+msgid "Minimum correlation factor (0.0 (nothing like it) -> 1.0 (perfect match))"
+msgstr "Facteur mini de corrélation (0.0( rien d'égal) à 1.0(égalité absolue)) "
+
+msgid "Maximum scale threshold (1.0 - must be same size, 1.5 (can be half as big "
+"again or 2/3 size)"
+msgstr "Échelle de seuil maxi (1.0 - doit être même taille), 1.5 (peut être de moitié)"
+"ou 2/3 de la taille)"
+
+msgid "orientation"
+msgstr "Orientation"
+
+msgid "Make Coordinate System"
+msgstr "Créer un système  de coordonnées"
+
+msgid "vertex"
+msgstr "Sommet de polygone"
+
+msgid "autosolve constraints"
+msgstr "Contraintes auto-résolues"
+
+msgid "circle mode"
+msgstr "Mode Cercle"
+
+msgid "three points"
+msgstr "Trois points"
+
+msgid "centre and point"
+msgstr "Centre et 1 point"
+
+msgid "two points"
+msgstr "2 Points"
+
+msgid "centre and radius"
+msgstr "Centre et Rayon"
+
+#HeeksCAD.cpp
+msgid "Number of sample points"
+msgstr "Nombre de points exemples"
+
+#HeeksCAD.cpp
+msgid "face to sketch deviaton"
+msgstr "Écart Face-Esquisse"

@@ -1,0 +1,2463 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: HeeksCAD 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-05-26 13:41+0200\n"
+"PO-Revision-Date: 2011-07-01 18:27+0900\n"
+"Last-Translator: Choi Youn-Soo <korea3d@gmail.com>\n"
+"Language-Team: Choi Youn-Soo <korea3d@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Korean\n"
+"X-Poedit-Country: KOREA, REPUBLIC OF\n"
+
+msgid "          http://code.google.com/p/heeksart/"
+msgstr "··········http://code.google.com/p/heeksart/"
+
+msgid "          http://code.google.com/p/heekscnc/"
+msgstr "··········http://code.google.com/p/heekscnc/"
+
+msgid "  which means it is free and open source, and must stay that way"
+msgstr "이 소프트웨어는 무료 및 오픈 소스이며, 그 방법을 유지합니다."
+
+msgid " degree "
+msgstr "단계"
+
+msgid "%s %d"
+msgstr "%s·%d"
+
+msgid "&Edit"
+msgstr "편집(&E)"
+
+msgid "&File"
+msgstr "파일(&F)"
+
+msgid "&Geometry"
+msgstr "지오메트리(&G)"
+
+msgid "&Solid"
+msgstr "솔리드(&S)"
+
+msgid "&Transform"
+msgstr "변형(&T)"
+
+msgid "&View"
+msgstr "뷰(&V)"
+
+msgid "&Window"
+msgstr "윈도우(&W)"
+
+msgid "( with Ctrl key for extra objects)"
+msgstr "( with Ctrl key for extra objects)"
+
+msgid "( with Ctrl key to pan view )"
+msgstr "( with Ctrl key to pan view )"
+
+msgid "( with Ctrl key to rotate view )"
+msgstr "( with Ctrl key to rotate view )"
+
+msgid "(press 'a' for arcs)"
+msgstr "(press 'a' for arcs)"
+
+msgid ".orientation"
+msgstr ".orientation"
+
+msgid "1.5 for square, 1.0 for round"
+msgstr "스퀘어 1.5, 라운드 1.0"
+
+msgid "A axis (around X) rotation"
+msgstr "A 축(X 주변) 회전"
+
+msgid "A fatal error happened during Blend"
+msgstr "혼합하는 동안 치명적인 오류가 발생했습니다."
+
+msgid "About"
+msgstr "정보"
+
+msgid "Accept value and continue"
+msgstr "값을 허용하고 계속"
+
+msgid "Active font"
+msgstr "활성 폰트"
+
+msgid "Adaptive"
+msgstr "적응"
+
+msgid "Adaptive Roughing Operation..."
+msgstr "적응형 러핑(황삭) 작업..."
+
+msgid "Adaptive Roughing code from http://code.google.com/p/libactp/, using code written in 2004"
+msgstr "적응형 러핑(황삭) 코드 : http://code.google.com/p/libactp/ 2004년 작성된 코드 사용."
+
+msgid "Add"
+msgstr "추가"
+
+msgid "Add "
+msgstr "추가"
+
+msgid "Add Coordinate System"
+msgstr "좌표계 추가"
+
+msgid "Add Cutting Rate Reference..."
+msgstr "커팅 비율 자료 추가..."
+
+msgid "Add Dimension"
+msgstr "치수 추가"
+
+msgid "Add New 3D Operation"
+msgstr "새로운 3D 작업 추가"
+
+msgid "Add New Milling Operation"
+msgstr "새로운 CNC 작업 추가"
+
+msgid "Add New Plugin"
+msgstr "새 플러그인 추가"
+
+msgid "Add New Tool"
+msgstr "새 도구 추가"
+
+msgid "Add Objects"
+msgstr "오브젝트 추가"
+
+msgid "Add Other Operation"
+msgstr "기타 작업 추가"
+
+msgid "Add Speed Reference..."
+msgstr "스피드 자료 추가..."
+
+msgid "Add Text"
+msgstr "텍스트 추가"
+
+msgid "Add a cone"
+msgstr "콘 추가"
+
+msgid "Add a cube"
+msgstr "큐브 추가"
+
+msgid "Add a cylinder"
+msgstr "실린더 추가"
+
+msgid "Add a dimension"
+msgstr "치수 추가"
+
+msgid "Add a point to drawing"
+msgstr "드로잉에 포인트 추가"
+
+msgid "Add a simple mesh"
+msgstr "심플 메쉬 추가"
+
+msgid "Add a sphere"
+msgstr "스피어 추가"
+
+msgid "Add a text object"
+msgstr "텍스트 오브젝트 추가"
+
+msgid "Add point"
+msgstr "포인트 추가"
+
+msgid "All files"
+msgstr "모든 파일"
+
+msgid "Alphabetic Mode"
+msgstr "알파벳 모드"
+
+msgid "Apply"
+msgstr "적용"
+
+msgid "Apply any changes made to the properties"
+msgstr "속성에 만들어진 모든 변경 적용"
+
+msgid "Arc"
+msgstr "아크"
+
+msgid "Arc drawing mode"
+msgstr "아크 드로잉 모드"
+
+msgid "At least one vertex could not be normalized!"
+msgstr "적어도 하나의 버텍스가 정상화되지 않았습니다!"
+
+msgid "Automatic Title"
+msgstr "자동 도구 설명"
+
+msgid "Automatically generate title"
+msgstr "자동으로 도구 설명 생성"
+
+msgid "B axis (around Y) rotation"
+msgstr "B 축(Y주변) 회전"
+
+msgid "Back to zoom in, Forward to zoom out"
+msgstr "Back to zoom in, Forward to zoom out"
+
+msgid "Ball End Drill..."
+msgstr "볼 드릴링 커터"
+
+msgid "Ball End Mill"
+msgstr "볼 엔드 밀"
+
+msgid "Blend"
+msgstr "블렌드"
+
+msgid "Border Width"
+msgstr "경계 너비"
+
+msgid "Both halves"
+msgstr "내부 및 외부"
+
+msgid "Boundary"
+msgstr "경계"
+
+msgid "Brinell Hardness of raw material"
+msgstr "재질의 브리넬 경도"
+
+msgid "Brinell hardness of raw material"
+msgstr "재질의 브리넬 경도"
+
+msgid "C axis (around Z) rotation"
+msgstr "C 축(Z 주변) 회전"
+
+msgid "Cancel"
+msgstr "취소"
+
+msgid "Cancel operation"
+msgstr "작업 취소"
+
+msgid "Carbide"
+msgstr "카바이드"
+
+msgid "Carbide "
+msgstr "카바이드"
+
+msgid "Center"
+msgstr "중심"
+
+msgid "Centre Drill Bit"
+msgstr "센터 드릴 비트"
+
+msgid "Centre Drill..."
+msgstr "센터 드릴..."
+
+msgid "Chamfer"
+msgstr "챔퍼(베벨)"
+
+msgid "Chamfer Mill..."
+msgstr "챔퍼 밀..."
+
+msgid "Chamfer Operation..."
+msgstr "챔퍼 작업..."
+
+msgid "Chamfering Bit"
+msgstr "챔퍼링 비트"
+
+msgid "Chamfering bit"
+msgstr "챔퍼링 비트(베벨)"
+
+msgid "ChangeOwner"
+msgstr "사용자 전환"
+
+msgid "Character Space Percentage"
+msgstr "문자 간격 퍼센트"
+
+msgid "Choose a directory:"
+msgstr "디렉토리 선택: "
+
+msgid "Choose a file"
+msgstr "파일 선택"
+
+msgid "Choose shared library file"
+msgstr "라이브러리 공유 파일 선택"
+
+msgid "Circle"
+msgstr "서클"
+
+msgid "Circle drawing mode"
+msgstr "Circle drawing mode"
+
+msgid "Clearance Tool"
+msgstr "제거 도구"
+
+msgid "Click centre position to rotate about"
+msgstr "Click centre position to rotate about"
+
+msgid "Click centre position to scale about"
+msgstr "Click centre position to scale about"
+
+msgid "Click position to move from"
+msgstr "Click position to move from"
+
+msgid "Click position to move to"
+msgstr "Click position to move to"
+
+msgid "Combine selected sketches"
+msgstr "선텍 스케치 결합"
+
+msgid "Combine sketches"
+msgstr "스케치 결함"
+
+msgid "Common"
+msgstr "커먼(교차)"
+
+msgid "Cone"
+msgstr "콘"
+
+msgid "Contour spline deviation"
+msgstr "등고선 스플라인 편차"
+
+msgid "Convert Mesh To Triangles"
+msgstr "메쉬를 삼각으로 변환"
+
+msgid "Convert sketch to face"
+msgstr "스케치를 페이스로 변환"
+
+msgid "Coordinate System"
+msgstr "좌표계"
+
+msgid "Copies the selected items to the clipboard"
+msgstr "선택 항목을 클립보드로 복사"
+
+msgid "Copy\tCtrl+C"
+msgstr "복사\tCtrl+C"
+
+msgid "Copy Mirror"
+msgstr "대칭 복사"
+
+msgid "Copy Parallel"
+msgstr "평행 복사"
+
+msgid "Copy Rotate"
+msgstr "회전 복사"
+
+msgid "Copy Translate"
+msgstr "이동 복사"
+
+msgid "Copy and mirror selected items"
+msgstr "선택 항목 복사 및 대칭"
+
+msgid "Copy and rotate selected items"
+msgstr "선택 항목 복사 및 회전"
+
+msgid "Copy and translate selected items"
+msgstr "선택 항목 복사 및 이동"
+
+msgid "Copy selected items to the clipboard"
+msgstr "선택 항목을 클립보드로 복사"
+
+msgid "Couldn't open file"
+msgstr "파일을 열 수 없습니다."
+
+msgid "CounterBore"
+msgstr "카운터보어(축소)"
+
+msgid "CounterBore Operation..."
+msgstr "카운터보어 작업..."
+
+msgid "Create a Coordinate System"
+msgstr "좌표계 만들기"
+
+msgid "Create a lofted face"
+msgstr "로프트 페이스 만들기"
+
+msgid "Ctrl key does rotate"
+msgstr "Ctrl 키는 회전"
+
+msgid "Cuboid"
+msgstr "큐보이드"
+
+msgid "Cut"
+msgstr "컷(절단)"
+
+msgid "Cut\tCtrl+X"
+msgstr "잘라내기\tCtrl+X"
+
+msgid "Cut one solid from another"
+msgstr "다른  하나에서 1 솔리드 잘라내기"
+
+msgid "Cut selected items to the clipboard"
+msgstr "선택 항목을 클립보드로 잘라내기"
+
+msgid "Cylinder"
+msgstr "실린더"
+
+msgid "DXF"
+msgstr "DXF"
+
+msgid "DXF files"
+msgstr "DXF 파일"
+
+msgid "Delete\tDel"
+msgstr "삭제\tDel"
+
+msgid "Delete Marked Items"
+msgstr "표시된 항목 삭제"
+
+msgid "Demo Print Preview"
+msgstr "인쇄 미리보기"
+
+msgid "Design Rules Adjustment..."
+msgstr "디자인 규칙 조정..."
+
+msgid "Design Rules Check..."
+msgstr "디자인 규칙 확인..."
+
+msgid "Designe Rules Adjustment"
+msgstr "디자인 규칙 조정"
+
+msgid "Designe Rules Check"
+msgstr "디자인 규칙 확인"
+
+msgid "Dimension"
+msgstr "치수"
+
+msgid "Dimension drawing"
+msgstr "Dimension drawing"
+
+msgid "Distance"
+msgstr "거리"
+
+msgid "Down"
+msgstr "아래"
+
+msgid "Drag to move view"
+msgstr "Drag to move view"
+
+msgid "Drag to zoom in and out"
+msgstr "Drag to zoom in and out"
+
+msgid "Drag with left button to window select"
+msgstr "Drag with left button to window select"
+
+msgid "Drag with the left mouse button"
+msgstr "Drag with the left mouse button"
+
+msgid "Dragging a window"
+msgstr "Dragging a window"
+
+msgid "Dragging a window or picking a point"
+msgstr "Dragging a window or picking a point"
+
+msgid "Draw Circles"
+msgstr "서클 그리기"
+
+msgid "Draw Ellipses"
+msgstr "일립스(타원) 그리기"
+
+msgid "Draw Infinite Lines"
+msgstr "무한 라인 그리기"
+
+msgid "Draw Points"
+msgstr "포인트 그리기"
+
+msgid "Draw Regular Shapes"
+msgstr "정규 쉐이프 그리기"
+
+msgid "Draw a sketch"
+msgstr "스케치 그리기"
+
+msgid "Draw circles through 3 points"
+msgstr "3포인트를 통해 서클 그리기"
+
+msgid "Draw circles, centre and point"
+msgstr "중심과 포인트로 서클 그리기"
+
+msgid "Draw circles, centre and radius"
+msgstr "중심과 반경으로 서클 그리기"
+
+msgid "Draw ellipses"
+msgstr "일립스 그리기"
+
+msgid "Draw regular shapes; rectangles, polygons, obrounds"
+msgstr "정규 쉐이프 드로우: 사각형, 폴리곤, 회로 "
+
+msgid "Drawing"
+msgstr "드로잉"
+
+msgid "Drill Bit"
+msgstr "드릴 비트"
+
+msgid "Drill..."
+msgstr "드릴..."
+
+msgid "Drilling Operation..."
+msgstr "드릴링 작업..."
+
+msgid "Edge"
+msgstr "엣지"
+
+msgid "Edge Chamfer"
+msgstr "엣지 챔퍼"
+
+msgid "Edge Fillet"
+msgstr "엣지 필렛"
+
+msgid "Edge cannot have more than 2 faces!"
+msgstr "엣지는 2개 이상의 페이스를 가질 수 없습니다!"
+
+msgid "Edges"
+msgstr "엣지"
+
+msgid "Edit"
+msgstr "편집"
+
+msgid "Ellipse"
+msgstr "일립스"
+
+msgid "End Mill"
+msgstr "엔드 밀"
+
+msgid "End Mill..."
+msgstr "엔드 밀..."
+
+msgid "Enter Blend Radius"
+msgstr "블렌드 반경 입력"
+
+msgid "Enter Offset Value, + for making bigger, - for making smaller"
+msgstr "옵셋 값 입력, + 크게, - 작게"
+
+msgid "Enter Sketch Mode"
+msgstr "스케치 모드 입력"
+
+msgid "Enter angle to rotate by"
+msgstr "회전할 각도 입력"
+
+msgid "Enter chamfer distance"
+msgstr "챔퍼 거리 입력"
+
+msgid "Enter number of copies"
+msgstr "복사할 수 입력"
+
+msgid "Enter scale factor"
+msgstr "스케일 요소 입력"
+
+msgid "Enter view rotating mode"
+msgstr "회전 모드 입력"
+
+msgid "Error! The 'Stop Picking' button shouldn't have been available!"
+msgstr "오류! \"선택 멈추기\" - 버튼을 사용할 수 없었습니다."
+
+msgid "Estimate when possible"
+msgstr "가능한 경우 계산"
+
+msgid "Exit\tCtrl+Q"
+msgstr "종료\tCtrl+Q"
+
+msgid "Exit Full Screen Mode"
+msgstr "전체 화면 모드 종료"
+
+msgid "Extrude"
+msgstr "익스트루드"
+
+msgid "Extrude a sketch"
+msgstr "스케치 익스트루드(압출)"
+
+msgid "Extrude a wire or face"
+msgstr "와이어 또는 페이스 익스트루드"
+
+msgid "Extruded Solid"
+msgstr "익스트루드 솔리드"
+
+msgid "Face"
+msgstr "페이스"
+
+msgid "Face Name"
+msgstr "페이스 명"
+
+msgid "Faces"
+msgstr "페이스"
+
+msgid "Failed to load resource image"
+msgstr "리소스 이미지를 열지 못했습니다."
+
+msgid "False"
+msgstr "아니오"
+
+msgid "Fatal Error converting sketch to face"
+msgstr "치명적인 오류로 스케치를 페이스로 변환하는 데 실패했습니다."
+
+msgid "Fatal error making extruded solid"
+msgstr "치명적인 오류로 익스트루드 솔리드 만드는 데 실패했습니다."
+
+msgid "Fatal error making ruled solid"
+msgstr "치명적인 오류로 관련 솔리드를 만드는 데 실패했습니다."
+
+msgid "Feeds and Speeds"
+msgstr "피드와 속도"
+
+msgid "Female half"
+msgstr "외부 부품"
+
+msgid "File Path"
+msgstr "파일 경로"
+
+msgid "Fillet"
+msgstr "필렛(라운딩)"
+
+msgid "Find common solid between two solids"
+msgstr "2 솔리드 사이의 공통 솔리드 찾기"
+
+msgid "Finish drawing"
+msgstr "드로잉 끝내기"
+
+msgid "Finish picking"
+msgstr "선택 끝내기"
+
+msgid "Fit view to extents"
+msgstr "윈도우에 뷰 맞추기"
+
+msgid "Fit view to extents, but no rotation"
+msgstr "윈도우에 뷰 맞추기(뷰 회전 안함)"
+
+msgid "Fixtures"
+msgstr "좌표계(조정)"
+
+msgid "For a more modern version of adaptive roughing, see Julian Todd and Martin Dunschen of http://www.freesteel.co.uk/"
+msgstr "적응형 러핑(황삭)의 최신 버전에 대한 내용은, http://www.freesteel.co.uk/ 의 Julian Todd 및 Martin Dunschen을 참고하십시오 ."
+
+msgid "Force closed shape"
+msgstr "닫힌 쉐이프 전용"
+
+msgid "Forward to zoom in, Back to zoom out"
+msgstr "앞으로 확대, 뒤로 축소"
+
+msgid "Full screen"
+msgstr "전체 화면"
+
+msgid "Fuse"
+msgstr "퓨즈(연결)"
+
+msgid "Fuse Solids"
+msgstr "솔리드 연결"
+
+msgid "Fuse one solid to another"
+msgstr "다른  하나에서 1 솔리드 연결"
+
+msgid "GCode generation"
+msgstr "G 코드 생성"
+
+msgid "General Tools"
+msgstr "일반 도구"
+
+msgid "Generated"
+msgstr "생성"
+
+msgid "Generated from edge"
+msgstr "엣지에서 생성하기"
+
+msgid "Geometry Tool Bar"
+msgstr "지오메트리 도구바"
+
+msgid "Geometry Tools"
+msgstr "지오메트리 도구"
+
+msgid "Get Position"
+msgstr "위치"
+
+msgid "Go back to previous view"
+msgstr "이전 뷰로 이동"
+
+msgid "Graphics"
+msgstr "그래픽"
+
+msgid "Gripper"
+msgstr "그리퍼"
+
+msgid "Group"
+msgstr "그룹"
+
+msgid "Group selected items"
+msgstr "선택 항목 그룹"
+
+msgid "Heeks files"
+msgstr "Heeks 파일"
+
+msgid "HeeksArt is a free random add-on to HeeksCAD"
+msgstr "HeeksArt는 HeeksCAD 무료 임의 Add On입니다."
+
+msgid "HeeksCAD plugin libraries"
+msgstr "HeeksCAD 플러그인 라이브러리"
+
+msgid "HeeksCNC is the free machining add-on to HeeksCAD"
+msgstr "HeeksCNC는 HeeksCAD 무료 가공 Add On입니다."
+
+msgid "High Speed Steel"
+msgstr "HSS(고속도강)"
+
+msgid "Hold middle mouse button down to pan"
+msgstr "Hold middle mouse button down to pan"
+
+msgid "Horizontal Angle"
+msgstr "수평 각도"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "IGES files"
+msgstr "IGES 파일"
+
+msgid "IGES import not done!"
+msgstr "IGES 수입을 완료하지 못했습니다!"
+
+msgid "Image"
+msgstr "이미지"
+
+msgid "Import"
+msgstr "수입"
+
+msgid "Import file"
+msgstr "파일 수입"
+
+msgid "Infinite Line"
+msgstr "무한 라인"
+
+msgid "Infinite line drawing"
+msgstr "Infinite line drawing"
+
+msgid "Inlay Operation..."
+msgstr "인레이 작업..."
+
+msgid "Inlay spline deviation"
+msgstr "인레이 스플라인 편차"
+
+msgid "Input"
+msgstr "입력"
+
+msgid "Input Mode"
+msgstr "입력 모드"
+
+msgid "Input extrusion height"
+msgstr "익스트루드 높이 입력"
+
+msgid "Intersection of Solids"
+msgstr "솔리드의 교차점"
+
+msgid "Invalid file type chosen"
+msgstr "잘못된 파일 형식입니다."
+
+msgid "Is Deleted"
+msgstr "삭제"
+
+msgid "Knot"
+msgstr "매듭"
+
+msgid "Known Files"
+msgstr "모든 지원 파일"
+
+msgid "Leave manually assigned title"
+msgstr "수동으로 할당 제목 부여(AUS)"
+
+msgid "Left"
+msgstr "좌"
+
+msgid "Left button for selecting objects"
+msgstr "Left button for selecting objects"
+
+msgid "Length"
+msgstr "길이"
+
+msgid "Line"
+msgstr "라인"
+
+msgid "Line drawing mode"
+msgstr "Line drawing mode"
+
+msgid "Loft two sketches"
+msgstr "2 스케치 로프트(연결)"
+
+msgid "Lofted Body"
+msgstr "로프트 바디"
+
+msgid "Machining"
+msgstr "CNC"
+
+msgid "Magnifying by dragging a window"
+msgstr "Magnifying by dragging a window"
+
+msgid "Make Coordinate System"
+msgstr "좌표계 만들기"
+
+msgid "Make Python Script"
+msgstr "Python 스크립트 만들기"
+
+msgid "Make Sketch"
+msgstr "스케치 만들기"
+
+msgid "Make To Sketch"
+msgstr "스케치 만들기"
+
+msgid "Make a chamfer on selected edges"
+msgstr "선택 엣지에 챔퍼 만들기"
+
+msgid "Make a fillet on selected edges"
+msgstr "선택 엣지에 필렛 \"라운딩\"  만들기"
+
+msgid "Make a selection:"
+msgstr "선택 만들기:"
+
+msgid "Make selected lines and arcs into a new sketch"
+msgstr "선택 라인과 아크로 새 스케치 만들기"
+
+msgid "Male half"
+msgstr "내부 부품"
+
+msgid "Mark"
+msgstr "마크"
+
+msgid "Maximum Material Removal Rate (inches^3/min)"
+msgstr "최대 재질 제거율(inches^3/min)"
+
+msgid "Maximum Material Removal Rate (mm^3/min)"
+msgstr "최대 재질 제거율(mm^3/min)"
+
+msgid "Maximum scale threshold (1.0 - must be same size, 1.5 (can be half as big again or 2/3 size)"
+msgstr "최대 크기 임계값(1.0 - 동일 크기만, bis 1.5 - 절반 보다 크거나  2/3 크기)"
+
+msgid "Mesh"
+msgstr "메쉬"
+
+msgid "Mesh Edge"
+msgstr "메쉬 엣지"
+
+msgid "Mesh Face"
+msgstr "메쉬 페이스"
+
+msgid "Mesh Vertex"
+msgstr "메쉬 버텍스"
+
+msgid "Middle button to pan view"
+msgstr "중 버튼으로 이동 뷰"
+
+msgid "Middle button to rotate view"
+msgstr "Middle button to rotate view"
+
+msgid "Minimum correlation factor (0.0 (nothing like it) -> 1.0 (perfect match))"
+msgstr "최소 상관 요소 (0.0(거의 모든) -> 1.0(완벽하게 일치))"
+
+msgid "Mirror Axis"
+msgstr "대칭 축"
+
+msgid "Mirror all x<1"
+msgstr "모든 x 대칭<1"
+
+msgid "Mirror selected items"
+msgstr "선택 항목 대칭"
+
+msgid "Modified"
+msgstr "수정"
+
+msgid "Mouse wheel to zoom in and out"
+msgstr "Mouse wheel to zoom in and out"
+
+msgid "Move Mirror"
+msgstr "대칭 이동"
+
+msgid "Move Rotate"
+msgstr "회전 이동"
+
+msgid "Move Scale"
+msgstr "스케일 이동"
+
+msgid "Move Translate"
+msgstr "오브젝트 이동"
+
+msgid "NC files"
+msgstr "NC 파일"
+
+msgid "Name"
+msgstr "이름"
+
+msgid "New\tCtrl+N"
+msgstr "새 파일\tCtrl+N"
+
+msgid "New Adaptive Roughing Operation..."
+msgstr "새 적응형 러핑(황삭) 작업..."
+
+msgid "New Ball End Mill..."
+msgstr "새 볼 엔드 밀..."
+
+msgid "New Centre Drill..."
+msgstr "새 센터 드릴..."
+
+msgid "New Chamfer Mill..."
+msgstr "새 챔퍼 밀..."
+
+msgid "New Chamfer Operation..."
+msgstr "새 챔퍼 작업..."
+
+msgid "New Contour Operation..."
+msgstr "새 등고선 작업..."
+
+msgid "New CounterBore Cycle Operation..."
+msgstr "새 카운터보어 사이클 작업..."
+
+msgid "New CounterBore Operation..."
+msgstr "새 카운터보어 작업..."
+
+msgid "New Cutting Rate Reference..."
+msgstr "새 커팅 비율 참조..."
+
+msgid "New Cutting Tool Definition..."
+msgstr "새 커팅 도구 정의..."
+
+msgid "New Drill Cycle Operation..."
+msgstr "새 드릴 사이클 작업..."
+
+msgid "New Drill..."
+msgstr "새 드릴..."
+
+msgid "New Drilling Operation..."
+msgstr "새 드릴링 작업..."
+
+msgid "New End Mill..."
+msgstr "새 엔드 밀..."
+
+msgid "New Fixture..."
+msgstr "새 좌표계의 수정..."
+
+msgid "New Pocket Operation..."
+msgstr "새 포켓 작업..."
+
+msgid "New Profile Operation..."
+msgstr "새 프로파일 작업..."
+
+msgid "New Slot Drill..."
+msgstr "새 슬롯 드릴..."
+
+msgid "New Special Adaptive Roughing Operation..."
+msgstr "새 특별 적응형 러핑(황삭) 작업..."
+
+msgid "New Speed Reference..."
+msgstr "새 스피드 자료..."
+
+msgid "New Tool Length Switch..."
+msgstr "새 도구 길이 전환"
+
+msgid "New Touch Probe..."
+msgstr "새 터치 프로브..."
+
+msgid "New Turning Tool..."
+msgstr "새 터닝 도구..."
+
+msgid "New file"
+msgstr "새 파일"
+
+msgid "No file specified!"
+msgstr "지정된 파일이 없습니다."
+
+msgid "Normalize All Vertices"
+msgstr "모든 버텍스 정상화 "
+
+msgid "Number of elements"
+msgstr "요소의 수"
+
+msgid "Number of items selected"
+msgstr "선택 항목의 수"
+
+msgid "Number of sample points"
+msgstr "샘플 포인트의 수"
+
+msgid "OK"
+msgstr "확인"
+
+msgid "Objects"
+msgstr "오브젝트"
+
+msgid "Offset Shape"
+msgstr "쉐이프 옵셋"
+
+msgid "Offset value"
+msgstr "옵셋 값"
+
+msgid "Ok"
+msgstr "확인"
+
+msgid "On"
+msgstr "라인 위"
+
+msgid "Open\tCtrl+O"
+msgstr "열기\tCtrl+O"
+
+msgid "Open BOM File"
+msgstr "BOM 파일 열기"
+
+msgid "Open NC File"
+msgstr "NC 파일 열기"
+
+msgid "Open NC file"
+msgstr "NC 파일 열기"
+
+msgid "Open Recent"
+msgstr "최근 파일"
+
+msgid "Open file"
+msgstr "파일 열기"
+
+msgid "OpenNC"
+msgstr "NC(G-코드) 열기"
+
+msgid "Operations"
+msgstr "작업"
+
+msgid "Options"
+msgstr "옵션"
+
+msgid "Pad Sketch"
+msgstr "패드 스케치"
+
+msgid "Page Setup"
+msgstr "페이지 설정"
+
+msgid "Paste\tCtrl+V"
+msgstr "붙여넣기\tCtrl+V"
+
+msgid "Paste Into"
+msgstr "붙여넣기"
+
+msgid "Paste items from the clipboard"
+msgstr "클립보드에서 항목 붙여넣기"
+
+msgid "Paste items from the clipboard to the drawing"
+msgstr "클립보드에서 드로잉에 항목 붙여넣기"
+
+msgid "Paths (semicolon delimited)"
+msgstr "경로(세미콜론(;)으로 구분)"
+
+msgid "Pick Anything"
+msgstr "모두 선택"
+
+msgid "Pick Edges"
+msgstr "엣지 선택"
+
+msgid "Pick End"
+msgstr "끝 선택"
+
+msgid "Pick Start"
+msgstr "시작 선택"
+
+msgid "Pick a point on the x-axis"
+msgstr "Pick a point on the x-axis"
+
+msgid "Pick a point where y > 0"
+msgstr "Pick a point where y > 0"
+
+msgid "Pick line to mirror about"
+msgstr "Pick line to mirror about"
+
+msgid "Pick new end point"
+msgstr "Pick new end point"
+
+msgid "Pick new start point"
+msgstr "Pick new start point"
+
+msgid "Pick objects to mirror"
+msgstr "Pick objects to mirror"
+
+msgid "Pick objects to move"
+msgstr "Pick objects to move"
+
+msgid "Pick objects to rotate"
+msgstr "Pick objects to rotate"
+
+msgid "Pick objects to scale"
+msgstr "Pick objects to scale"
+
+msgid "Pick one or more edges to add a chamfer to"
+msgstr "챔퍼를 추가할 하나 이상의 엣지를 선택하십시오."
+
+msgid "Pick one or more edges to add a fillet to"
+msgstr "필렛 \"라운딩\"을 추가할 하나 이상의 엣지 선택하십시오. "
+
+msgid "Pick one or more sketches, faces or circles, to create a revolved body from"
+msgstr "회전 바디를 만들기 위해, 하나 이상의 스케치, 페이스 또는 서클을 선택하십시오."
+
+msgid "Pick one or more sketches, faces or circles, to create an extruded body from"
+msgstr "익스트루드 바디를 만들기 위해, 하나 이상의 스케치, 페이스 또는 서클을 선택하십시오."
+
+msgid ""
+"Pick one or more sketches, to create extruded body from\n"
+"( hold down Ctrl key to select more than one solid )"
+msgstr ""
+"익스트루드 바디를 만들기 위해, 하나 이상의 스케치를 선택하십시오.\n"
+"(Ctrl 키 누른 상태로 하나 이상의 솔리드 선택)"
+
+msgid "Pick position without adding to the drawing"
+msgstr "드로잉에 추가하지 않고 위치 선택"
+
+msgid "Pick roll off point"
+msgstr "Pick roll off point"
+
+msgid "Pick roll on point"
+msgstr "Pick roll on point"
+
+msgid "Pick the location"
+msgstr "Pick the location"
+
+msgid "Pick two or more faces or solids, the first one will be cut by the others"
+msgstr "첫 번째에서 다른 것을 절단하기 위해, 2개 이상의 페이스 또는 솔리드를 선택하십시오."
+
+msgid "Pick two or more sketches, to create a lofted solid between"
+msgstr "연결 솔리드를 만들기 위해, 2개 이상의 스케치를 선택하십시오."
+
+msgid ""
+"Pick two or more sketches, to create a lofted solid between\n"
+"( hold down Ctrl key to select more than one solid )"
+msgstr ""
+"연결 솔리드를 만들기 위해, 2개 이상의 스케치를 선택하십시오.\n"
+"(Ctrl 키 누른 상태로 하나 이상의 솔리드 선택)"
+
+msgid "Pick two or more solids to be fused together"
+msgstr "연결될 2개 이상의 솔리드를 선택하십시오."
+
+msgid "Pick two or more solids, only the shape that is contained by all of them will remain"
+msgstr "공통 포함된 모양만 남기기 위해, 2개 이상의 솔리드를 선택하십시오."
+
+msgid "Pick two or more solids, the first one will be cut by the others"
+msgstr "2개 이상의 솔리드를 선택, 처음 하나는 다른 것에 의해 절단"
+
+msgid "Picture - "
+msgstr "이미지 - "
+
+msgid "Picture files"
+msgstr "이미지 파일"
+
+msgid "Pivot Point"
+msgstr "피벗 포인트"
+
+msgid "Plugin must have a name!"
+msgstr "플러그인은 이름이 있어야 합니다!"
+
+msgid "Plugins"
+msgstr "플러그인"
+
+msgid "Pocket"
+msgstr "포켓"
+
+msgid "Pocket Operation..."
+msgstr "포켓 작업..."
+
+msgid "Pocket Sketch"
+msgstr "포켓 스케치"
+
+msgid "Pocket operation - Badly ordered sketch - sketch %d"
+msgstr "포켓 작업 - 잘못된 명령의 스케치입니다. - 스케치·%d"
+
+msgid "Pocket operation - Sketch doesn't exist - %d"
+msgstr "포켓 작업 - 스케치가 존재하지 않습니다 -·%d"
+
+msgid "Pocket operation - Sketch must be a closed shape - sketch %d"
+msgstr "포켓 작업 - 스케치는 닫힌 쉐이프여야 합니다 - 스케치·%d"
+
+msgid "Pocket spline deviation"
+msgstr "포켓 스플라인 편차"
+
+msgid "Point"
+msgstr "포인트"
+
+msgid "Point Size"
+msgstr "포인트 크기"
+
+msgid "Point drawing"
+msgstr "Point drawing"
+
+msgid "Pole"
+msgstr "폴"
+
+msgid "Post-Process"
+msgstr "G-코드 만드는 법"
+
+msgid "PostProcess"
+msgstr "G-코드 만드는 법"
+
+msgid "Previewing"
+msgstr "미리보기"
+
+msgid "Previous view"
+msgstr "이전 뷰"
+
+msgid "Print\tCtrl+P"
+msgstr "인쇄\tCtrl+P"
+
+msgid "Print Preview"
+msgstr "인쇄 미리보기"
+
+msgid "Printing"
+msgstr "인쇄"
+
+msgid "Profile"
+msgstr "프로파일"
+
+msgid "Profile Operation..."
+msgstr "프로파일 작업..."
+
+msgid "Profile spline deviation"
+msgstr "프로파일 스플라인 편차"
+
+msgid "Properties"
+msgstr "속성"
+
+msgid "Python"
+msgstr "Python"
+
+msgid "Radius"
+msgstr "반경"
+
+msgid "Raw Material"
+msgstr "원시 재질"
+
+msgid "Raw Material Name"
+msgstr "원시 재질명"
+
+msgid "Recalculate All Face Centres"
+msgstr "모든 페이스의 중심 포인트 재계산"
+
+msgid "Recalculate a Good Centre Point"
+msgstr "적절한 중심 포인트 재계산"
+
+msgid "Redo\tCtrl+Shift+Z"
+msgstr "재실행\tCtrl+Shift+Z"
+
+msgid "Redo the next command"
+msgstr "다음 명령을 재실행"
+
+msgid "Redraw"
+msgstr "리드로우"
+
+msgid "Regular shapes drawing"
+msgstr "정규 쉐이프 드로잉"
+
+msgid "Remove"
+msgstr "삭제"
+
+msgid "Remove Objects"
+msgstr "오브젝트 삭제"
+
+msgid "Reset Layout"
+msgstr "레이아웃 재설정"
+
+msgid "Reset the ruler"
+msgstr "룰러(자) 재설정"
+
+msgid "Respect existing order"
+msgstr "기존 순서 유지"
+
+msgid "Result of 'Offset Shape'"
+msgstr "'옵셋 쉐이프' 결과"
+
+msgid "Result of Common Operation"
+msgstr "교차 작업 결과"
+
+msgid "Result of Cut Operation"
+msgstr "컷 작업 결과"
+
+msgid "Result of Fuse Operation"
+msgstr "퓨즈 작업 결과"
+
+msgid "Result of Wire Offset"
+msgstr "와이어 옵셋의 결과"
+
+msgid "Revolve a sketch"
+msgstr "스케치 리볼브(회전)"
+
+msgid "Revolved Solid"
+msgstr "회전 솔리드"
+
+msgid "Right"
+msgstr "우"
+
+msgid "Right button for object menu"
+msgstr "Right button for object menu"
+
+msgid "Rotate selected items"
+msgstr "선택 항목 회전"
+
+msgid "Ruled Surface"
+msgstr "관련 표면"
+
+msgid "Ruler"
+msgstr "룰러(자)"
+
+msgid "Run Python Script"
+msgstr "Python 스크립트 실행"
+
+msgid "STEP files"
+msgstr "STEP 파일"
+
+msgid "STEP import not done!"
+msgstr "STEP 수입을 완료하지 못했습니다!"
+
+msgid "STEP solid"
+msgstr "STEP 솔리드"
+
+msgid "STL Solid"
+msgstr "STL 솔리드"
+
+msgid "STL files"
+msgstr "STL 파일"
+
+msgid "Save\tCtrl+S"
+msgstr "저장\tCtrl+S"
+
+msgid "Save As"
+msgstr "다른 이름으로 저장"
+
+msgid "Save NC File"
+msgstr "NC 파일 저장"
+
+msgid "Save NC file"
+msgstr "NC 파일 저장"
+
+msgid "Save Settings"
+msgstr "설정 저장"
+
+msgid "Save changes to file"
+msgstr "변경된 파일을 저장하시겠습니까?"
+
+msgid "Save file"
+msgstr "파일 저장"
+
+msgid "Save graphical data file"
+msgstr "그래픽 데이터 파일로 저장"
+
+msgid "SaveNC"
+msgstr "NC(G-코드) 저장"
+
+msgid "Scalar Vector Graphics files"
+msgstr "SVG 파일"
+
+msgid "Scale selected items"
+msgstr "선택 항목 크기 조정"
+
+msgid "See options window to hide this help"
+msgstr "See options window to hide this help"
+
+msgid "Select Mode"
+msgstr "Select Mode"
+
+msgid "Set All Operations Active"
+msgstr "모든 작업 활성 설정"
+
+msgid "Set All Operations Inactive"
+msgstr "모든 작업 비활성 설정"
+
+msgid "Set All Vertex Normals"
+msgstr "모든 버텍스 노멀 설정"
+
+msgid "Set position and orientation by picking 3 points"
+msgstr "3 포인트 선택으로 위치와 방향 설정"
+
+msgid "Set the selection filter to all items"
+msgstr "선택 필터를 모든 항목에 설정"
+
+msgid "Set the selection filter to only edges"
+msgstr "선택 필터에 엣지만 설정"
+
+msgid "Set this coordinate system as the active one"
+msgstr "활성 하나로 이 좌표계 설정"
+
+msgid "Set toolbars to left"
+msgstr "도구바 왼쪽 설정"
+
+msgid "Set world coordinate system active"
+msgstr "월드 좌표계 활성 설정"
+
+msgid "Show Full Screen"
+msgstr "전체 화면 보기"
+
+msgid "Simple Mesh"
+msgstr "심플 메쉬"
+
+msgid "Sketch"
+msgstr "스케치"
+
+msgid "Slot Cutter"
+msgstr "슬롯 커터"
+
+msgid "Slot Drill..."
+msgstr "슬롯 드릴..."
+
+msgid "Solid"
+msgstr "솔리드"
+
+msgid "Solid Tools"
+msgstr "솔리드 도구"
+
+msgid "Solid with edge blend"
+msgstr "엣지 혼합 솔리드"
+
+msgid "Solids Tool Bar"
+msgstr "솔리드 도구바"
+
+msgid "Sort Points"
+msgstr "포인트 정렬"
+
+msgid "Sphere"
+msgstr "스피어"
+
+msgid "Spline"
+msgstr "스플라인"
+
+msgid "Spline Through Points"
+msgstr "포인트 통과 스플라인"
+
+msgid "Split Edge"
+msgstr "엣지 분리"
+
+msgid "Split Sketch"
+msgstr "스케치 분리"
+
+msgid "Split arcs to little lines"
+msgstr "작은 라인에 아크 분리"
+
+msgid "Start Circle Drawing"
+msgstr "서클 드로잉 시작"
+
+msgid "Start Drawing Infinite Lines"
+msgstr "무한 라인 드로잉 시작"
+
+msgid "Start Drawing Points"
+msgstr "포인트 드로잉 시작"
+
+msgid "Start drawing obrounds"
+msgstr "회로 드로잉 시작"
+
+msgid "Start drawing polygons"
+msgstr "폴리곤 드로잉 시작"
+
+msgid "Start drawing rectangles"
+msgstr "사각형 드로잉 시작"
+
+msgid "Status Bar"
+msgstr "상태바"
+
+msgid "Stop Picking"
+msgstr "선택 멈추기"
+
+msgid "Stop drawing"
+msgstr "드로잉 멈추기"
+
+msgid "Stop editing the object"
+msgstr "오브젝트 편집 멈추기"
+
+msgid "Style"
+msgstr "형식"
+
+msgid "Subtract Solids"
+msgstr "솔리드 절단(빼기)"
+
+msgid "Surface Speed (ft/min)"
+msgstr "표면 속도(ft/min)"
+
+msgid "Surface Speed (m/min)"
+msgstr "표면 속도(m/min)"
+
+msgid "Switch to full screen view ( press escape to return )"
+msgstr "Switch to full screen view ( press escape to return )"
+
+msgid "Text"
+msgstr "텍스트"
+
+msgid "There are no solids!"
+msgstr "솔리드가 없습니다!"
+
+msgid ""
+"There was a problem previewing.\n"
+"Perhaps your current printer is not set correctly?"
+msgstr ""
+"미리보기에 문제가 있었습니다.\n"
+"현재 프린터가 올바르게 설정되어 있는지 확인하십시오."
+
+msgid ""
+"There was a problem printing.\n"
+"Perhaps your current printer is not set correctly?"
+msgstr ""
+"인쇄에 문제가 발생했습니다.\n"
+"현재 프린터가 올바르게 설정되어 있는지 확인하십시오."
+
+msgid "This HeeksCNC software installation is restricted by the GPL license http://www.gnu.org/licenses/gpl-3.0.txt"
+msgstr "이 HeeksCNC 소프트웨어 설치는 GPL 라이센스 http://www.gnu.org/licenses/gpl-3.0.txt 에 의해 제한됩니다."
+
+msgid "This is not an SVG document!"
+msgstr "이것은 SVG 문서가 아닙니다!"
+
+msgid "Tool Bar"
+msgstr "도구바"
+
+msgid "Tool Length Switch"
+msgstr "도구 길이 전환"
+
+msgid "Tool Length Switch..."
+msgstr "도구 길이 전환..."
+
+msgid "Tools"
+msgstr "도구"
+
+msgid "Touch Probe"
+msgstr "터치 프로브"
+
+msgid "Touch Probe..."
+msgstr "터치 프로브..."
+
+msgid "Transform"
+msgstr "변형"
+
+msgid "Transform Objects"
+msgstr "오브젝트 변형"
+
+msgid "Transformation Tools"
+msgstr "변형 도구"
+
+msgid "Transformations Tool Bar"
+msgstr "변형 도구바"
+
+msgid "Translate selected items"
+msgstr "선택 항목 이동"
+
+msgid "True"
+msgstr "예"
+
+msgid "Turning Tool"
+msgstr "터닝 도구"
+
+msgid "Turning Tool..."
+msgstr "터닝 도구..."
+
+msgid "Twist Angle"
+msgstr "트위스트 각도"
+
+msgid "Underlined"
+msgstr "밑줄"
+
+msgid "Undo\tCtrl+Z"
+msgstr "실행 취소\tCtrl+Z"
+
+msgid "Undo the previous command"
+msgstr "이전 명령을 원상태로 돌리기"
+
+msgid "Ungroup"
+msgstr "그룹 해제"
+
+msgid "Ungroup selected items"
+msgstr "선택 항목 그룹 해제"
+
+msgid "Unknown"
+msgstr "알 수 없음"
+
+msgid "Unknown Property"
+msgstr "알 수 없는 속성"
+
+msgid "Unmark"
+msgstr "마크 해제"
+
+msgid "Unspecified"
+msgstr "지정되지 않음"
+
+msgid "Untitled"
+msgstr "Untitled"
+
+msgid "Up"
+msgstr "업"
+
+msgid "Update"
+msgstr "업데이트"
+
+msgid "Use default values"
+msgstr "기본값 사용"
+
+msgid "Vertical Angle"
+msgstr "수직 각도"
+
+msgid "View Rotate"
+msgstr "View Rotate"
+
+msgid "View XY Back"
+msgstr "XY 뷰 후"
+
+msgid "View XY Front"
+msgstr "XY 뷰 전"
+
+msgid "View XY Isometric"
+msgstr "XY 뷰 3D"
+
+msgid "View XZ Bottom"
+msgstr "XZ 뷰 하"
+
+msgid "View XZ Left"
+msgstr "XZ 뷰 좌"
+
+msgid "View XZ Top"
+msgstr "XZ 뷰 상"
+
+msgid "View XZY Isometric"
+msgstr "XZY 뷰 3D"
+
+msgid "View YZ Left"
+msgstr "YZ 뷰 좌"
+
+msgid "View YZ Right"
+msgstr "YZ 뷰 우"
+
+msgid "View Zoom"
+msgstr "View Zoom"
+
+msgid "View pan"
+msgstr "View pan"
+
+msgid "View rotate"
+msgstr "회전 뷰"
+
+msgid "View zoom"
+msgstr "줌 뷰"
+
+msgid "Viewing Tool Bar"
+msgstr "뷰 도구 바"
+
+msgid "Viewing Tools"
+msgstr "뷰 도구"
+
+msgid "Weight"
+msgstr "무게"
+
+msgid "Wire"
+msgstr "와이어"
+
+msgid "With help from archivist, crotchet1, DanielFalck, fenn, Sliptonic"
+msgstr "기록 보관인의 도움을 받아, crotchet1, DanielFalck, fenn, Sliptonic"
+
+msgid "Word Space Percentage"
+msgstr "단어 간격 퍼센트"
+
+msgid "Written by Dan Heeks"
+msgstr "Dan Heeks 작성"
+
+msgid "Written by Dan Heeks, Hirutso Enni, Perttu Ahola"
+msgstr "작성자: Dan Heeks, Hirutso Enni, Perttu Ahola"
+
+msgid "X"
+msgstr "X"
+
+msgid "X Axis"
+msgstr "X 축"
+
+msgid "Y"
+msgstr "Y"
+
+msgid "Y Axis"
+msgstr "Y 축"
+
+msgid "You canceled printing"
+msgstr "인쇄를 취소했습니다."
+
+msgid "You haven't selected a cutting tool for this hole.  By default no 'tool definition' or 'select tool' code will be generated for this drilling cycle."
+msgstr "이 홀을 위한 커팅 도구를 선택하지 않았습니다. 이 드릴링 사이클을 위한 '도구 정의' 또는 '선택 도구' 코드는 생성되지 않습니다."
+
+msgid "You must select some points, circles or other intersecting elements first!"
+msgstr "처음으로 몇 가지 포인트, 서클 또는 기타 교차 요소를 선택해야 합니다!"
+
+msgid "You must select some sketches first!"
+msgstr "처음으로 몇 가지 스케치를 선택해야 합니다!"
+
+msgid "You must select some sketches, first!"
+msgstr "처음으로 몇 가지 스케치를 선택해야 합니다!"
+
+msgid "Z"
+msgstr "Z"
+
+msgid "Zig zag code from pycam http://sourceforge.net/svn/?group_id=237831"
+msgstr "pycam의 Zig zag 코드 웹사이트 : http://sourceforge.net/svn/?group_id=237831"
+
+msgid "Zoom in to a dragged window"
+msgstr "선택 영역 확대"
+
+msgid "Zoom in to fit the extents of the drawing into the graphics window"
+msgstr "그래픽 창을 드로잉 범위에 맞게 확대"
+
+msgid "Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"
+msgstr "그래픽 창을 드로잉 범위에 맞게 확대(뷰 회전 안함)"
+
+msgid "Zoom window"
+msgstr "드래그 줌 윈도우"
+
+msgid "active"
+msgstr "활성"
+
+msgid "alpha blending"
+msgstr "알파 블렌딩"
+
+msgid "angle"
+msgstr "각도"
+
+msgid "antialiasing"
+msgstr "안티앨리어싱"
+
+msgid "arc"
+msgstr "아크"
+
+msgid "auto roll off"
+msgstr "자동 롤 끄기"
+
+msgid "auto roll on"
+msgstr "자동 롤 켜기"
+
+msgid "auto save interval (in minutes)"
+msgstr "자동 저장 간격(분)"
+
+msgid "auto set speeds for new operation"
+msgstr "새 작업을 위해 자동 속도 설정"
+
+msgid "autosolve constraints"
+msgstr "자동 변수 제한"
+
+msgid "axis"
+msgstr "축"
+
+msgid "axis color"
+msgstr "축색"
+
+msgid "background color"
+msgstr "배경색"
+
+msgid "between two points"
+msgstr "2 포인트 사이"
+
+msgid "bezier"
+msgstr "베지어"
+
+msgid "block color"
+msgstr "블록색"
+
+msgid "boundary_x0"
+msgstr "프레임_x0"
+
+msgid "boundary_x1"
+msgstr "프레임_x1"
+
+msgid "boundary_y0"
+msgstr "프레임_y0"
+
+msgid "boundary_y1"
+msgstr "프레임_y1"
+
+msgid "boundaryclear"
+msgstr "프레임 없음"
+
+msgid "bspline"
+msgstr "B-스플라인"
+
+msgid "bspline continuity (eg: GeomAbs_C2)"
+msgstr "B-스플라인 연속성(예: GeomAbs_C2)"
+
+msgid "bspline max degree (eg: 8)"
+msgstr "B-스플라인 최대 단계(예: 8)"
+
+msgid "bspline min degree (eg: 3)"
+msgstr "B-스플라인 최소 단계(예: 3)"
+
+msgid "center and point mode"
+msgstr "center and point mode"
+
+msgid "centre"
+msgstr "중심"
+
+msgid "centre and point"
+msgstr "중심 및 포인트"
+
+msgid "centre and radius"
+msgstr "중심 및 반경"
+
+msgid "centre pos"
+msgstr "중심 위치"
+
+msgid "circle"
+msgstr "서클"
+
+msgid "circle mode"
+msgstr "서클 모드"
+
+msgid "clearance height"
+msgstr "여유 높이"
+
+msgid "click on center point"
+msgstr "click on center point"
+
+msgid "click on end of arc"
+msgstr "아크의 끝 클릭"
+
+msgid "click on end of line"
+msgstr "click on end of line"
+
+msgid "click on first point"
+msgstr "click on first point"
+
+msgid "click on point on circle"
+msgstr "서클의 포인트 클릭"
+
+msgid "click on second point"
+msgstr "click on second point"
+
+msgid "click on start point"
+msgstr "click on start point"
+
+msgid "click on third point"
+msgstr "click on third point"
+
+msgid "clockwise\n"
+msgstr "우회전\n"
+
+msgid "color"
+msgstr "색"
+
+msgid "colored alpha blending"
+msgstr "색의 알파 블렌딩"
+
+msgid "comment"
+msgstr "주석"
+
+msgid "comment color\t"
+msgstr "주석색\t"
+
+msgid "cone"
+msgstr "콘"
+
+msgid "cone must not have both radiuses the same"
+msgstr "콘은 2 반경이 같지 않아야 합니다."
+
+msgid "construction color"
+msgstr "색 디자인"
+
+msgid "coordinate system"
+msgstr "좌표계"
+
+msgid "coordinates"
+msgstr "좌표"
+
+msgid "corner radius"
+msgstr "코너 반경"
+
+msgid "corner_radius"
+msgstr "코너 반경"
+
+msgid "correlation"
+msgstr "같은 크기의 다른 오브젝트"
+
+msgid "couldn't open file"
+msgstr "파일을 열 수 없습니다."
+
+msgid "counter-clockwise"
+msgstr "왼쪽"
+
+msgid "current color"
+msgstr "현재색"
+
+msgid "cutting tool"
+msgstr "컷팅 도구"
+
+msgid "cutting_edge_angle"
+msgstr "컷팅 엣지 각도"
+
+msgid "cutting_edge_height"
+msgstr "컷팅 엣지 높이"
+
+msgid "cutting_tool_number"
+msgstr "컷팅 도구 번호"
+
+msgid "cylinder"
+msgstr "실린더"
+
+msgid "cylindrical"
+msgstr "실린더형"
+
+msgid "datum corner"
+msgstr "좌표계 코너"
+
+msgid "datum is solid"
+msgstr "솔리드 좌표계"
+
+msgid "datum size"
+msgstr "좌표계 크기"
+
+msgid "datum size is pixels not mm"
+msgstr "좌표계 크기 mm 픽셀"
+
+msgid "default color"
+msgstr "기본색"
+
+msgid "degree"
+msgstr "단계"
+
+msgid "depth"
+msgstr "깊이"
+
+msgid "depth ( z )"
+msgstr "깊이 ( Z )"
+
+msgid "diameter"
+msgstr "지름"
+
+msgid "digitizing"
+msgstr "디지털화"
+
+msgid "dimension"
+msgstr "치수"
+
+msgid "direction"
+msgstr "방향"
+
+msgid "draw circles"
+msgstr "서클 드로우"
+
+msgid "draw lines"
+msgstr "라인 드로우"
+
+msgid "draw polygons"
+msgstr "폴리곤 드로우"
+
+msgid "draw rectangles"
+msgstr "사각형 드로우"
+
+msgid "draw slots"
+msgstr "슬롯 드로우"
+
+msgid "draw tangential arcs"
+msgstr "접선 아크 드로우"
+
+msgid "drawing"
+msgstr "드로잉"
+
+msgid "drawing mode"
+msgstr "드로잉 모드"
+
+msgid "dwell"
+msgstr "홀의 단계 당 시간"
+
+msgid "dx"
+msgstr "dx"
+
+msgid "dy"
+msgstr "dy"
+
+msgid "edge"
+msgstr "엣지"
+
+msgid "end"
+msgstr "끝"
+
+msgid "end angle"
+msgstr "끝 각도"
+
+msgid "end point"
+msgstr "끝 포인트"
+
+msgid "execution_order"
+msgstr "실행 순서"
+
+msgid "expecting"
+msgstr "예정"
+
+msgid "extrusion"
+msgstr "익스트루전"
+
+msgid "face"
+msgstr "페이스"
+
+msgid "face to sketch deviaton"
+msgstr "페이스 스케치 편차"
+
+msgid "faint color"
+msgstr "연한색"
+
+msgid "false"
+msgstr "아니오"
+
+msgid "feed color"
+msgstr "피드색"
+
+msgid "file options"
+msgstr "파일 옵션"
+
+msgid "files"
+msgstr "파일"
+
+msgid "final depth"
+msgstr "최종 깊이"
+
+msgid "fixed light"
+msgstr "수정 라이트"
+
+msgid "fixture offset"
+msgstr "고정 옵셋"
+
+msgid "flat_radius"
+msgstr "플랫 반경"
+
+msgid "font options"
+msgstr "폰트 옵션"
+
+msgid "for 90 degree corners"
+msgstr "90단계 코너를 위한"
+
+msgid "free"
+msgstr "자유"
+
+msgid "full help"
+msgstr "전체 도움말"
+
+msgid "geometry code, donated by Geoff Hawkesford, Camtek GmbH http://www.peps.de/"
+msgstr "지오메트리 코드, Geoff Hawkesford, Camtek GmbH http://www.peps.de/ 에 의해 기부."
+
+msgid "geometry tolerance"
+msgstr "지오메트리 허용 오차"
+
+msgid "grid mode"
+msgstr "그리드 모드"
+
+msgid "grid size"
+msgstr "그리드 크기"
+
+msgid "height"
+msgstr "높이"
+
+msgid "height( y )"
+msgstr "높이(Y)"
+
+msgid "hold down Ctrl key to select more than one solid"
+msgstr "1개 이상의 솔리드를 선택하려면 Ctrl 키 클릭"
+
+msgid "horizontal angle"
+msgstr "수평 각도"
+
+msgid "horizontal feed rate"
+msgstr "수평 피드 속도"
+
+msgid "ignore errors where possible"
+msgstr "가능하면 오류 무시"
+
+msgid "image"
+msgstr "이미지"
+
+msgid "inch"
+msgstr "인치"
+
+msgid "infinite line"
+msgstr "무한 라인"
+
+msgid "input mode title"
+msgstr "입력 모드 제목"
+
+msgid "intersection"
+msgstr "교차점"
+
+msgid "is not a floating-point number"
+msgstr "부동 소수점 숫자가 없습니다."
+
+msgid "length"
+msgstr "길이"
+
+msgid "line"
+msgstr "라인"
+
+msgid "machine"
+msgstr "G-코드 출력"
+
+msgid "machining options"
+msgstr "CNC 설정"
+
+msgid "major radius"
+msgstr "주요 반경"
+
+msgid "make sketch"
+msgstr "스케치 만들기"
+
+msgid "material allowance"
+msgstr "재질 할당"
+
+msgid "max deviation"
+msgstr "최대 편차"
+
+msgid "maximum x"
+msgstr "최대 X"
+
+msgid "maximum y"
+msgstr "최대 Y"
+
+msgid "mesh options"
+msgstr "메쉬 옵션"
+
+msgid "midpoint"
+msgstr "중심 포인트"
+
+msgid "minimum x"
+msgstr "최소 X"
+
+msgid "minimum y"
+msgstr "최소 Y"
+
+msgid "minor radius"
+msgstr "작은 반경"
+
+msgid "misc color"
+msgstr "기타색"
+
+msgid "mm"
+msgstr "mm"
+
+msgid "mode"
+msgstr "모드"
+
+msgid "nc options"
+msgstr "NC 옵션"
+
+msgid "nearest"
+msgstr "가장 가까운"
+
+msgid "no grid"
+msgstr "그리드 없음"
+
+msgid "none"
+msgstr "없음"
+
+msgid "number of copies"
+msgstr "복사의 수"
+
+msgid "number of sides for polygon"
+msgstr "폴린곤을 위한 측면의 수"
+
+msgid "number of splits"
+msgstr "분리의 수"
+
+msgid "object title"
+msgstr "오브젝트명"
+
+msgid "object type"
+msgstr "오브젝트 형식"
+
+msgid "offset"
+msgstr "옵셋"
+
+msgid "or to move object if on an object"
+msgstr "or to move object if on an object"
+
+msgid "order"
+msgstr "밀링 방향"
+
+msgid "orientation"
+msgstr "텍스트 위치"
+
+msgid "orthogonal"
+msgstr "직각"
+
+msgid "output file"
+msgstr "출력 파일"
+
+msgid "output file name follows data file name"
+msgstr "출력 파일명은 데이터 파일명"
+
+msgid "peck_depth"
+msgstr "단계 당 mm"
+
+msgid "perspective"
+msgstr "시각"
+
+msgid "pick sketches"
+msgstr "스케치 선택"
+
+msgid "pick some sketches"
+msgstr "몇가지 스케치 선택"
+
+msgid "plane"
+msgstr "평면"
+
+msgid "pocket_number"
+msgstr "포켓 번호"
+
+msgid "pocketing code from http://code.google.com/p/libarea/ , derived from the kbool library written by Klaas Holwerda http://boolean.klaasholwerda.nl/bool.html"
+msgstr "http://code.google.com/p/libarea/에서 코드를 포켓에 넣기, Klaas Holwerda http://boolean.klaasholwerda.nl/bool.html 에 의해 작성된 kbool 라이브러리에서 유래."
+
+msgid "point"
+msgstr "포인트"
+
+msgid "position"
+msgstr "위치"
+
+msgid "prep color"
+msgstr "기본 설정"
+
+msgid "program color\t"
+msgstr "프로그램색\t"
+
+msgid "r1"
+msgstr "r1"
+
+msgid "r2"
+msgstr "r2"
+
+msgid "radius"
+msgstr "반경"
+
+msgid "radius for undefined circles"
+msgstr "정의되지 않은 서클을 위한 반경"
+
+msgid "rapid color"
+msgstr "빠른 동작 처리"
+
+msgid "rapid down to height"
+msgstr "아래에서 위로 빠르게"
+
+msgid "re-order"
+msgstr "재정렬"
+
+msgid "retractzheight"
+msgstr "Z 높이로 돌아가기"
+
+msgid "reverse mouse wheel"
+msgstr "마우스 휠 반전"
+
+msgid "reverse zooming mode"
+msgstr "줌 모드 반전"
+
+msgid "revolution"
+msgstr "레볼루션(회전)"
+
+msgid "roll off point"
+msgstr "포인트 종료"
+
+msgid "roll on point"
+msgstr "포인트 입력"
+
+msgid "rotate mode"
+msgstr "회전 모드"
+
+msgid "rotation"
+msgstr "회전"
+
+msgid "round corner factor"
+msgstr "라운드 코너 요소"
+
+msgid "ruler"
+msgstr "눈금자"
+
+msgid "samplestep"
+msgstr "단계 예"
+
+msgid "scale factor"
+msgstr "스케일 요소"
+
+msgid "screen"
+msgstr "화면"
+
+msgid "screen text"
+msgstr "screen text"
+
+msgid "selection filter"
+msgstr "선택 필터"
+
+msgid "sewed IGES solid"
+msgstr "연결 IGES 솔리드"
+
+msgid "show datum"
+msgstr "좌표계 보이기"
+
+msgid "show ruler"
+msgstr "눈금자 표시"
+
+msgid "simplify sketch options"
+msgstr "스케치 옵션"
+
+msgid "sketch"
+msgstr "스케치"
+
+msgid "snap to grid"
+msgstr "그리드에 스냅"
+
+msgid "solid"
+msgstr "솔리드"
+
+msgid "solidify"
+msgstr "솔리디파이"
+
+msgid "sort_drilling_locations"
+msgstr "드릴링 위치 정렬"
+
+msgid "sort_locations"
+msgstr "위치 정렬"
+
+msgid "sort_sketches"
+msgstr "스케치 정렬"
+
+msgid "sphere"
+msgstr "스피어"
+
+msgid "spherical"
+msgstr "스피어형"
+
+msgid "spindle speed"
+msgstr "스핀들 속도"
+
+msgid "standoff"
+msgstr "홀 위의 높이"
+
+msgid "start"
+msgstr "시작"
+
+msgid "start angle"
+msgstr "시작 각도"
+
+msgid "start depth"
+msgstr "시작 깊이"
+
+msgid "start point"
+msgstr "시작 포인트"
+
+msgid "starting_place"
+msgstr "시작 위치"
+
+msgid "startpoint_x"
+msgstr "시작포인트 X"
+
+msgid "startpoint_y"
+msgstr "시작포인트 Y"
+
+msgid "startvel_x"
+msgstr "시작속도 X"
+
+msgid "startvel_y"
+msgstr "시작속도 Y"
+
+msgid "stay upright"
+msgstr "톱 뷰"
+
+msgid "step down"
+msgstr "단계 깊이"
+
+msgid "step over"
+msgstr "커터의 옵셋"
+
+msgid "stepdown"
+msgstr "단계 깊이"
+
+msgid "surface type"
+msgstr "표면 형식"
+
+msgid "tangent"
+msgstr "탄젠트"
+
+msgid "text"
+msgstr "텍스트"
+
+msgid "text colors"
+msgstr "텍스트색"
+
+msgid "three points"
+msgstr "3 포인트"
+
+msgid "three points mode"
+msgstr "three points mode"
+
+msgid "tool color"
+msgstr "도구색"
+
+msgid "tool diameter"
+msgstr "도구 직경"
+
+msgid "tool icon size"
+msgstr "도구 아이콘 크기"
+
+msgid "tool number"
+msgstr "도구 번호"
+
+msgid "tool on side"
+msgstr "측면 도구"
+
+msgid "tool type"
+msgstr "도구 형식"
+
+msgid "tool_length_offset"
+msgstr "도구 길이 옵셋"
+
+msgid "tool_number"
+msgstr "도구 번호"
+
+msgid "toolcornerrad"
+msgstr "도구 코너 반경"
+
+msgid "toolflatrad"
+msgstr "도구 플랫 반경"
+
+msgid "toroidal"
+msgstr "환형(도넛)"
+
+msgid "torus"
+msgstr "링(도넛)"
+
+msgid "true"
+msgstr "예"
+
+msgid "twist angle"
+msgstr "트위스트 각도"
+
+msgid "two points"
+msgstr "2 포인트"
+
+msgid "type"
+msgstr "형식"
+
+msgid "units"
+msgstr "단위"
+
+msgid "units for nc output"
+msgstr "NC(G-코드) 출력 단위"
+
+msgid "unknown"
+msgstr "알 수 없는"
+
+msgid "use end point"
+msgstr "끝 포인트 사용"
+
+msgid "use start point"
+msgstr "시작 포인트 사용"
+
+msgid "variable color"
+msgstr "색상 변수"
+
+msgid "vertex"
+msgstr "버텍스"
+
+msgid "vertical angle"
+msgstr "수직 각도"
+
+msgid "vertical feed rate"
+msgstr "수직 피드 속도"
+
+msgid "view options"
+msgstr "view options"
+
+msgid "visible"
+msgstr "보이기"
+
+msgid "width ( x )"
+msgstr "너비 ( X )"
+
+msgid "wire"
+msgstr "와이어"
+
+msgid "x"
+msgstr "X"
+
+msgid "x axis"
+msgstr "X 축"
+
+msgid "x direction"
+msgstr "X 방향"
+
+msgid "y"
+msgstr "Y"
+
+msgid "y axis"
+msgstr "Y 축"
+
+msgid "z"
+msgstr "Z"
+
+msgid "z0"
+msgstr "z0"
+
+msgid "z1"
+msgstr "z1"
+

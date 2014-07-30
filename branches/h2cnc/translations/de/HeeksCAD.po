@@ -1,0 +1,2577 @@
+# German translation of HeeksCAD.
+# Copyright (C) 2009 THE HeeksCAD'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the HeeksCAD package.
+# Hans <fungunner2@freenet.de>, 2009.
+# , fuzzy
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: HeeksCAD 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-05-26 13:41+0200\n"
+"PO-Revision-Date: 2010-08-11 01:23+0100\n"
+"Last-Translator: hans <fungunner2@frreenet.de>\n"
+"Language-Team: German <gnome-de@gnome.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "centre pos"
+msgstr "Mittelpunkt Position"
+
+msgid "direction"
+msgstr "Richtung"
+
+msgid "x direction"
+msgstr "X Richtung"
+
+msgid "r1"
+msgstr "r1"
+
+msgid "r2"
+msgstr "r2"
+
+msgid "height"
+msgstr "Höhe"
+
+msgid "cone must not have both radiuses the same"
+msgstr "Beim Kegel nicht 2 gleiche Radien benutzen"
+
+msgid "Fatal Error converting sketch to face"
+msgstr "Fehler beim belegen der Zeichnung mit einer Oberflaeche"
+
+msgid "Set position and orientation by picking 3 points"
+msgstr "Setze Position und Richtung durch benennen von 3 Punkten"
+
+msgid "Set this coordinate system as the active one"
+msgstr "Setze dieses Koordinatensystem auf Aktiv"
+
+msgid "Set world coordinate system active"
+msgstr "Grund Koordinatensystem aktiv"
+
+msgid "position"
+msgstr "Position"
+
+msgid "x axis"
+msgstr "X Achse"
+
+msgid "y axis"
+msgstr "Y Achse"
+
+msgid "Vertical Angle"
+msgstr "Vertikaler Winkel"
+
+msgid "Horizontal Angle"
+msgstr "Horizontaler Winkel"
+
+msgid "Twist Angle"
+msgstr "Dreh Winkel"
+
+msgid "Pick the location"
+msgstr "Waehle den Ort"
+
+msgid "Pick a point on the x-axis"
+msgstr "Waehle einen Punkt auf der X-Achse"
+
+msgid "Pick a point where y > 0"
+msgstr "Waehle einen Punkt wo Y>0 ist"
+
+msgid "datum corner"
+msgstr "Koordinatenkreuz Ecke"
+
+msgid "width ( x )"
+msgstr "Grösse X"
+
+msgid "height( y )"
+msgstr "Höhe Y"
+
+msgid "depth ( z )"
+msgstr "Tiefe Z"
+
+msgid "radius"
+msgstr "Radius"
+
+msgid "Digitize Mode"
+msgstr ""
+
+msgid "X"
+msgstr "X"
+
+msgid "Y"
+msgstr "Y"
+
+msgid "Z"
+msgstr "Z"
+
+msgid "Error! The 'Stop Picking' button shouldn't have been available!"
+msgstr "Fehler! Der \"Stop-Auswahl\"-Button sollte nicht zur Verfügung stehen"
+
+msgid "Stop Picking"
+msgstr "Stoppe·Auswahl"
+
+msgid "Finish picking"
+msgstr "Fertig Auswahl"
+
+msgid "between two points"
+msgstr "zwischen 2 Punkten"
+
+msgid "orthogonal"
+msgstr "rechter Winkel"
+
+msgid "mode"
+msgstr "Modus"
+
+msgid "Stop drawing"
+msgstr "Stopp mit zeichnen"
+
+msgid "Finish drawing"
+msgstr "Fertig mit zeichnen"
+
+msgid "Add point"
+msgstr "Punkt hinzufügen"
+
+msgid "Add a point to drawing"
+msgstr "Füge einen Punkt zur Zeichnung hinzu"
+
+msgid "Get Position"
+msgstr "Hole Position"
+
+msgid "Pick position without adding to the drawing"
+msgstr "Waehle eine Position ohne sie zur Zeichnung hinzuzufügen"
+
+msgid "Blend"
+msgstr "Mischung"
+
+msgid "Enter Blend Radius"
+msgstr "Verbindungs Radius"
+
+msgid "Radius"
+msgstr "Radius"
+
+msgid "Solid with edge blend"
+msgstr "3D mit Kantenausblendung"
+
+msgid "A fatal error happened during Blend"
+msgstr "Falscher Radius zum verbinden der Kanten"
+
+msgid "surface type"
+msgstr "Oberflaechentyp"
+
+msgid "Make Sketch"
+msgstr "Erstelle Zeichnung"
+
+msgid "unknown"
+msgstr "Unbekannt"
+
+msgid "plane"
+msgstr "Flaeche"
+
+msgid "cylinder"
+msgstr "Zylinder"
+
+msgid "cone"
+msgstr "Kegel"
+
+msgid "sphere"
+msgstr "Kugel"
+
+msgid "torus"
+msgstr "Ring(Donut)"
+
+msgid "bezier"
+msgstr "bezier"
+
+msgid "bspline"
+msgstr "bspline"
+
+msgid "revolution"
+msgstr "revolution"
+
+msgid "extrusion"
+msgstr "Dimensionserhöhung(2D>3D)"
+
+msgid "offset"
+msgstr "Offset"
+
+msgid "start"
+msgstr "Start"
+
+msgid "end"
+msgstr "Endpunkte einer Linie"
+
+msgid "centre"
+msgstr "Kreis-Mittelpunkt"
+
+msgid "axis"
+msgstr "Achse"
+
+msgid "length"
+msgstr "Laenge"
+
+msgid ".orientation"
+msgstr "Richtung"
+
+msgid "major radius"
+msgstr "Größter·radius"
+
+msgid "minor radius"
+msgstr "Kleinster·radius"
+
+msgid "rotation"
+msgstr "Drehung"
+
+msgid "start angle"
+msgstr "Start Winkel"
+
+msgid "end angle"
+msgstr "End Winkel"
+
+msgid "Length"
+msgstr "Laenge"
+
+msgid "Picture - "
+msgstr "Bild-"
+
+msgid "%s %d"
+msgstr "%s·%d"
+
+msgid "Knot"
+msgstr "Knoten"
+
+msgid "Pole"
+msgstr "Pole"
+
+msgid "Weight"
+msgstr "Gewicht"
+
+msgid "Untitled"
+msgstr "Unbekannt"
+
+msgid "This is not an SVG document!"
+msgstr "Kein svg Dokument"
+
+msgid "Invalid file type chosen"
+msgstr "Falscher Dateityp"
+
+msgid "expecting"
+msgstr "erwartet"
+
+msgid "couldn't open file"
+msgstr "Kann Datei nicht öffnen"
+
+msgid "Save graphical data file"
+msgstr "Speichere Bild Datei"
+
+msgid "Exit Full Screen Mode"
+msgstr "Verlasse Vollbildschirm"
+
+msgid "Show Full Screen"
+msgstr "Vollbildschirm"
+
+msgid "view options"
+msgstr "Ansicht"
+
+msgid "stay upright"
+msgstr "Draufsicht"
+
+msgid "free"
+msgstr "Frei"
+
+msgid "rotate mode"
+msgstr "Dreh-Modus"
+
+msgid "none"
+msgstr "Keine Hilfe"
+
+msgid "input mode title"
+msgstr "Nur Modus zeigen"
+
+msgid "full help"
+msgstr "Komplette Hilfe"
+
+msgid "screen text"
+msgstr "OSD"
+
+msgid "antialiasing"
+msgstr "Kantenglaettung"
+
+msgid "fixed light"
+msgstr "fixed·light"
+
+msgid "reverse mouse wheel"
+msgstr "Mausrad invertieren"
+
+msgid "reverse zooming mode"
+msgstr "Umgekehrter Zoommodus"
+
+msgid "Ctrl key does rotate"
+msgstr "Ctrl Taste Drehen"
+
+msgid "show datum"
+msgstr "Zeige Koordinatenkreuz"
+
+msgid "datum is solid"
+msgstr "Koordinatenkreuz 3D Ansicht"
+
+msgid "datum size"
+msgstr "Koordinatenkreuz Grösse"
+
+msgid "datum size is pixels not mm"
+msgstr "Koordinatenkreuz Grösse in Pixel statt mm"
+
+msgid "show ruler"
+msgstr "Zeige Lineal"
+
+msgid "background color"
+msgstr "Hintergrundfarbe"
+
+msgid "no grid"
+msgstr "Kein Raster"
+
+msgid "faint color"
+msgstr "Leicht farbliche Darstellung"
+
+msgid "alpha blending"
+msgstr "Darstellung der Ebenen"
+
+msgid "colored alpha blending"
+msgstr "Farbige Darstellung der Ebenen"
+
+msgid "grid mode"
+msgstr "Raster·Modus"
+
+msgid "perspective"
+msgstr "Perspektive"
+
+msgid "tool icon size"
+msgstr "Werkzeug Icon Grösse"
+
+msgid "mm"
+msgstr "mm"
+
+msgid "inch"
+msgstr "inch"
+
+msgid "units"
+msgstr "Einheiten"
+
+msgid "digitizing"
+msgstr "Einfangen an..."
+
+msgid "intersection"
+msgstr "Kreuzung"
+
+msgid "midpoint"
+msgstr "Mittelpunkt "
+
+msgid "nearest"
+msgstr "Nächst gelegener Punkt des Objekts"
+
+msgid "tangent"
+msgstr "tangent"
+
+msgid "radius for undefined circles"
+msgstr "Radius für undeffinierte Kreise"
+
+msgid "coordinates"
+msgstr "Koordinaten"
+
+msgid "screen"
+msgstr "Bildschirm"
+
+msgid "grid size"
+msgstr "Raster Grösse"
+
+msgid "snap to grid"
+msgstr "Am Raster fangen"
+
+msgid "drawing"
+msgstr "zeichnen"
+
+msgid "current color"
+msgstr "Derzeitige Farbe"
+
+msgid "construction color"
+msgstr "Konstruktions Farbe"
+
+msgid "geometry tolerance"
+msgstr "Zeichnungstolleranz"
+
+msgid "selection filter"
+msgstr "Auswahlfilter"
+
+msgid "point"
+msgstr "Punkt"
+
+msgid "line"
+msgstr "Linie"
+
+msgid "arc"
+msgstr "Bogen"
+
+msgid "infinite line"
+msgstr "unendliche Linie"
+
+msgid "circle"
+msgstr "Kreis"
+
+msgid "edge"
+msgstr "Ecke"
+
+msgid "face"
+msgstr "Oberflaeche"
+
+msgid "solid"
+msgstr "3D bearbeiten"
+
+msgid "stl_solid"
+msgstr ""
+
+msgid "wire"
+msgstr "verbinden"
+
+msgid "sketch"
+msgstr "zeichne"
+
+msgid "image"
+msgstr "Bild"
+
+msgid "coordinate system"
+msgstr "Koordinatensystem"
+
+msgid "text"
+msgstr "Text"
+
+msgid "dimension"
+msgstr "Bemassung"
+
+msgid "ruler"
+msgstr "Lineal"
+
+msgid "file options"
+msgstr "Datei·Optionen"
+
+msgid "DXF"
+msgstr "DXF"
+
+msgid "make sketch"
+msgstr "Erstelle Zeichnung"
+
+msgid "Known Files"
+msgstr "Bekannte Dateien"
+
+msgid "Heeks files"
+msgstr "Heeks Dateien"
+
+msgid "IGES files"
+msgstr "IGES Dateien"
+
+msgid "STEP files"
+msgstr "STEP Dateien"
+
+msgid "STL files"
+msgstr "STL Dateien"
+
+msgid "Scalar Vector Graphics files"
+msgstr "SVG Dateien"
+
+msgid "DXF files"
+msgstr "DXF Dateien"
+
+msgid "Picture files"
+msgstr "Bild Dateien"
+
+msgid "Unmark"
+msgstr "Markierung löschen"
+
+msgid "Mark"
+msgstr "Markieren"
+
+msgid "Properties"
+msgstr "Einstellungen"
+
+msgid "Save changes to file"
+msgstr "aenderungen abspeichern"
+
+msgid "Apply"
+msgstr "aenderungen anwenden"
+
+msgid "Accept value and continue"
+msgstr "Einstellungen übernehmen"
+
+msgid "Cancel"
+msgstr "Abbrechen"
+
+msgid "Cancel operation"
+msgstr "Operation abbrechen"
+
+msgid "New\tCtrl+N"
+msgstr "Neu\tCtrl+N"
+
+msgid "Open\tCtrl+O"
+msgstr "Öffnen\tCtrl+O"
+
+msgid "Save\tCtrl+S"
+msgstr "Speichern\tCtrl+S"
+
+msgid "Print\tCtrl+P"
+msgstr "Drucken\tCtrl+P"
+
+msgid "Page Setup"
+msgstr "Seiten Layout"
+
+msgid "Print Preview"
+msgstr "Druckvorschau"
+
+msgid "Open Recent"
+msgstr "Zuletzt geöffnet"
+
+msgid "Import"
+msgstr "Importieren"
+
+msgid "About"
+msgstr "Über"
+
+msgid "Plugins"
+msgstr "Plugins"
+
+msgid "Exit\tCtrl+Q"
+msgstr "Beenden\tCtrl+Q"
+
+msgid "Undo\tCtrl+Z"
+msgstr "Rückgaengig\tCtrl+Z"
+
+msgid "Redo\tCtrl+Shift+Z"
+msgstr "Wiederholen\tCtrl+Shift+Z"
+
+msgid "Cut\tCtrl+X"
+msgstr "Ausschneiden\tCtrl+X"
+
+msgid "Copy\tCtrl+C"
+msgstr "Kopieren\tCtrl+C"
+
+msgid "Paste\tCtrl+V"
+msgstr "Einfügen\tCtrl+V"
+
+msgid "Delete\tDel"
+msgstr "Löschen\tDel"
+
+msgid "Select Mode"
+msgstr "Markiermodus"
+
+msgid "Draw a sketch"
+msgstr "Freihand"
+
+msgid "Draw Circles"
+msgstr "Kreise zeichnen"
+
+msgid "Draw Infinite Lines"
+msgstr "Unendliche Linien zeichnen"
+
+msgid "Draw Points"
+msgstr "Punkte zeichnen"
+
+msgid "Draw Regular Shapes"
+msgstr "Zeichne Formen"
+
+msgid "Add Text"
+msgstr "Text hinzufügen"
+
+msgid "Add Dimension"
+msgstr "Bemassung hinzufügen"
+
+msgid "Add Coordinate System"
+msgstr "Koordinatensystem hinzufügen"
+
+msgid "Previous view"
+msgstr "Letzte Ansicht"
+
+msgid "Zoom window"
+msgstr "Markierten Bereich vergrössern"
+
+msgid "Fit view to extents"
+msgstr "Gröstmöglichen Bereich zoomen"
+
+msgid "Fit view to extents, but no rotation"
+msgstr "Gröstmöglichen·Bereich·zoomen,ohne Drehung"
+
+msgid "View rotate"
+msgstr "Ansicht drehen(linke Maustaste)"
+
+msgid "View zoom"
+msgstr "Ansicht zoomen(linke Maustaste)"
+
+msgid "Full screen"
+msgstr "Ganzer Bildschirm"
+
+msgid "Redraw"
+msgstr "Neuzeichnen"
+
+msgid "Add a sphere"
+msgstr "Kugel hinzufügen"
+
+msgid "Add a cube"
+msgstr "Würfel hinzufügen"
+
+msgid "Add a cylinder"
+msgstr "Zylinder hinzufügen"
+
+msgid "Add a cone"
+msgstr "Kegel hinzufügen"
+
+msgid "Loft two sketches"
+msgstr "Verbinde 2 Zeichnungen"
+
+msgid "Extrude a sketch"
+msgstr "Zeichnung in 3D Objekt umwandeln"
+
+msgid "Fuse"
+msgstr "Miteinander verbinden"
+
+msgid "Common"
+msgstr "Schnittmenge erzeugen"
+
+msgid "Fillet"
+msgstr "Kanten abrunden"
+
+msgid "Chamfer"
+msgstr "V-Nutfraeser(Fasen)"
+
+msgid "Move Translate"
+msgstr "Objekt verschieben"
+
+msgid "Copy Translate"
+msgstr "Kopiere Objekt"
+
+msgid "Move Rotate"
+msgstr "Verschieben und drehen des Objekts"
+
+msgid "Copy Rotate"
+msgstr "Kopieren und drehen"
+
+msgid "Move Mirror"
+msgstr "Objekt über Linie spiegeln"
+
+msgid "Copy Mirror"
+msgstr "Obekt als·Kopie über eine Linie spiegeln"
+
+msgid "Move Scale"
+msgstr "Verschieben-Skalieren"
+
+msgid "Objects"
+msgstr "Objekte"
+
+msgid "Options"
+msgstr "Optionen"
+
+msgid "Input"
+msgstr "Eingabe"
+
+msgid "Tool Bar"
+msgstr "Werkzeug Leiste"
+
+msgid "Solids Tool Bar"
+msgstr "3D-Objekt Werkzeugleiste"
+
+msgid "Geometry Tool Bar"
+msgstr "Zeichnung Werkzeugleiste"
+
+msgid "Viewing Tool Bar"
+msgstr "Ansicht Werkzeugleiste"
+
+msgid "Transformations Tool Bar"
+msgstr "Objektbearbeitung Werkzeugleiste"
+
+msgid "Status Bar"
+msgstr "Statusleiste"
+
+msgid "&File"
+msgstr "&Datei"
+
+msgid "&Edit"
+msgstr "&Bearbeiten"
+
+msgid "&Geometry"
+msgstr "&Zeichnung"
+
+msgid "&View"
+msgstr "&Ansicht"
+
+msgid "&Solid"
+msgstr "&3DObjekt"
+
+msgid "&Transform"
+msgstr "&Objekt bearbeiten"
+
+msgid "&Window"
+msgstr "&Anzeige"
+
+msgid "Graphics"
+msgstr "Grafiken"
+
+msgid "Reset Layout"
+msgstr "Layout zurücksetzen"
+
+msgid "Set toolbars to left"
+msgstr "Werkzeugleisten links anordnen"
+
+msgid "Coordinate System"
+msgstr "Koordinaten·System"
+
+msgid "Open file"
+msgstr "Öffne Datei"
+
+msgid "Import file"
+msgstr "Importiere Datei"
+
+msgid "Pick two or more solids, the first one will be cut by the others"
+msgstr "Waehle 2 oder mehr 3D Objekte,das 1 wird ausgeschnitten von den anderen"
+
+msgid "Subtract Solids"
+msgstr "3D-Modell auschneiden"
+
+msgid "Pick two or more solids to be fused together"
+msgstr "Markiere 2 oder mehr 3D-Objekte die verbunden werden sollen"
+
+msgid "Fuse Solids"
+msgstr "Verbinde 3D Objekte"
+
+msgid "Pick two or more solids, only the shape that is contained by all of them will remain"
+msgstr "Markiere 2 oder mehr 3D-Objekte die sich überschneiden,um die gemeinsame Schnittmenge zu erzeugen"
+
+msgid "Intersection of Solids"
+msgstr "Durchschnitt der 3D Objekte"
+
+msgid "Pick one or more edges to add a fillet to"
+msgstr "Mindestens eine Kante waehlen,die durch einen Radius \"gerundet\" werden soll"
+
+msgid "Edge Fillet"
+msgstr "Kante(n) abrunden"
+
+msgid "Pick one or more edges to add a chamfer to"
+msgstr "Markiere eine oder mehrere Kanten,die abgeschraegt werden sollen"
+
+msgid "Edge Chamfer"
+msgstr "Kanten abschraegen(Fase)"
+
+msgid "Enter chamfer distance"
+msgstr "Tiefe der Schraege(Fase)"
+
+msgid "Distance"
+msgstr "Entfernung"
+
+msgid ""
+"Pick two or more sketches, to create a lofted solid between\n"
+"( hold down Ctrl key to select more than one solid )"
+msgstr ""
+"Waehle 2 odere mehrere Zeichnungen,welche durch Oberflaechen\n"
+" miteinander verbunden werden sollen\n"
+"( CTRL Taste für Mehrfachauswahl)"
+
+msgid "Lofted Body"
+msgstr "Verbundene Zeichnungen"
+
+msgid ""
+"Pick one or more sketches, to create extruded body from\n"
+"( hold down Ctrl key to select more than one solid )"
+msgstr ""
+"Zeichnung(en) die zu 3D Objekt(e) werden sollen \n"
+"(·Ctrl Taste für Mehrfachwahl)"
+
+msgid "Extrude"
+msgstr "2D nach 3D"
+
+msgid "Sphere"
+msgstr "Kugel"
+
+msgid "Cuboid"
+msgstr "Quader"
+
+msgid "Cylinder"
+msgstr "Zylinder"
+
+msgid "Cone"
+msgstr "Kegel"
+
+msgid ""
+"There was a problem printing.\n"
+"Perhaps your current printer is not set correctly?"
+msgstr ""
+"Problem beim Drucken.\n"
+"Druckereinstellungen ?"
+
+msgid "Printing"
+msgstr "Drucken"
+
+msgid "You canceled printing"
+msgstr "Druckvorgang abgebrochen"
+
+msgid ""
+"There was a problem previewing.\n"
+"Perhaps your current printer is not set correctly?"
+msgstr ""
+"Probleme bei der Druckvorschau.\n"
+"Drucker richtig eingestellt ?"
+
+msgid "Previewing"
+msgstr "Vorschau"
+
+msgid "Demo Print Preview"
+msgstr "Druck Vorschau"
+
+msgid "New file"
+msgstr "Neue Datei"
+
+msgid "Save file"
+msgstr "Datei speichern"
+
+msgid "Cut selected items to the clipboard"
+msgstr "Markierte Bereiche ausschneiden und in die Zwischenablage"
+
+msgid "Copy selected items to the clipboard"
+msgstr "Markierte·Bereiche·kopieren·und·in·die·Zwischenablage"
+
+msgid "Paste items from the clipboard"
+msgstr "Einfügen aus der Zwischenablage"
+
+msgid "Undo the previous command"
+msgstr "Letzte Aktion rückgaengig machen"
+
+msgid "Redo the next command"
+msgstr "Wiederhole die naechste Aktion"
+
+msgid "Start Circle Drawing"
+msgstr "Zeichne Kreise"
+
+msgid "Start Drawing Infinite Lines"
+msgstr "Zeichne unendlich lange Linien"
+
+msgid "Start Drawing Points"
+msgstr "Zeichne Punkte"
+
+msgid "Draw regular shapes; rectangles, polygons, obrounds"
+msgstr "Formen zeichnen: Rechtecke Poligone Kreistaschen"
+
+msgid "Add a text object"
+msgstr "Text hinzufügen"
+
+msgid "Add a dimension"
+msgstr "Bemassung hinzufügen"
+
+msgid "Create a Coordinate System"
+msgstr "Koordinatensystem erstellen"
+
+msgid "Create a lofted face"
+msgstr "Zeichnungen durch Oberflaechen verbinden"
+
+msgid "Extrude a wire or face"
+msgstr "2D in 3D verwandeln"
+
+msgid "Cut one solid from another"
+msgstr "Entferne vom 1.Objekt die Schnittmenge des 2.Objekts und das 2.Objekt selber"
+
+msgid "Fuse one solid to another"
+msgstr "Verbinde 2 oder mehr 3D Objekte miteinander"
+
+msgid "Find common solid between two solids"
+msgstr "Finde Schnittmenge von zwei 3D-Objekten"
+
+msgid "Make a fillet on selected edges"
+msgstr "\"Abrunden\" der markierten Kante(n) mit einem bestimmten Radius"
+
+msgid "Make a chamfer on selected edges"
+msgstr "Markierte Kanten abschraegen(Fasen)"
+
+msgid "Go back to previous view"
+msgstr "zurück zur letzten Ansicht"
+
+msgid "Zoom in to a dragged window"
+msgstr "Markierten Bereich zoomen"
+
+msgid "Zoom in to fit the extents of the drawing into the graphics window"
+msgstr "Grösstmöglichen Bereich Zoomen"
+
+msgid "Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"
+msgstr "Größtmöglichen·Bereich·Zoomen ohne das Objekt zu drehen"
+
+msgid "Enter view rotating mode"
+msgstr "Dreh Modus (mit linker Maustaste)"
+
+msgid "Drag to zoom in and out"
+msgstr "Mit linker Maustaste zoomen"
+
+msgid "Switch to full screen view ( press escape to return )"
+msgstr "Vollbildschirm Modus (zurück mit ESC)"
+
+msgid "Translate selected items"
+msgstr "Verschiebe markiertes Element"
+
+msgid "Copy and translate selected items"
+msgstr "Kopiere und Verschiebe"
+
+msgid "Rotate selected items"
+msgstr "Drehe markierte Objekte"
+
+msgid "Copy and rotate selected items"
+msgstr "Kopiere und drehe markierte Objekte"
+
+msgid "Mirror selected items"
+msgstr "Markiertes Objekt spiegeln"
+
+msgid "Copy and mirror selected items"
+msgstr "Kopieren und spiegeln der markierten Ojekte"
+
+msgid "Scale selected items"
+msgstr "Neudimensionierung der markierten Objekte"
+
+msgid "General Tools"
+msgstr "Standardwerkzeuge"
+
+msgid "Geometry Tools"
+msgstr "Zeichen Werkzeuge"
+
+msgid "Solid Tools"
+msgstr "3D Werkzeug"
+
+msgid "Viewing Tools"
+msgstr "Ansicht·Tools"
+
+msgid "Transformation Tools"
+msgstr "Transformation·Tools"
+
+msgid "Input Mode"
+msgstr "Eingabe·Modus"
+
+msgid "Line drawing mode"
+msgstr "Modus Linien zeichnen"
+
+msgid "click on start point"
+msgstr "Startpunkt angeben"
+
+msgid "click on end of line"
+msgstr "Endpunkt angeben"
+
+msgid "Arc drawing mode"
+msgstr "Modus Bogen zeichnen"
+
+msgid "click on end of arc"
+msgstr "Endpunkt des Bogens"
+
+msgid "Infinite line drawing"
+msgstr "Unendlich lange Linie zeichnen"
+
+msgid "click on first point"
+msgstr "Der 1 Punkt"
+
+msgid "click on second point"
+msgstr "Der 2 Punkt"
+
+msgid "Circle drawing mode"
+msgstr "Kreis zeichnen"
+
+msgid "center and point mode"
+msgstr "center·and·point·mode"
+
+msgid "click on center point"
+msgstr "Mittelpunkt angeben"
+
+msgid "click on point on circle"
+msgstr "Punkt auf dem Kreis"
+
+msgid "three points mode"
+msgstr "3 Punkte Modus"
+
+msgid "click on third point"
+msgstr "1 Punkt angeben"
+
+msgid "draw lines"
+msgstr "Linien zeichnen"
+
+msgid "draw tangential arcs"
+msgstr "tangential·Kreisbögen"
+
+msgid "draw circles"
+msgstr "Kreise zeichnen"
+
+msgid "drawing mode"
+msgstr "Zeichen Modus"
+
+msgid "(press 'a' for arcs)"
+msgstr "(Drücke·'a'·für·Kreisbogen)"
+
+msgid "Number of items selected"
+msgstr "Anzahl der selektierten Items"
+
+msgid "Delete Marked Items"
+msgstr "Lösche markierte Items"
+
+msgid "Copies the selected items to the clipboard"
+msgstr "Kopiert das Selektierte in die Zwischenablage"
+
+msgid "Paste Into"
+msgstr "einfügen"
+
+msgid "Paste items from the clipboard to the drawing"
+msgstr "Füge Items aus der Zwischenablage hinzu"
+
+msgid "Apply any changes made to the properties"
+msgstr "Einstellungen/Aenderungen übernehmen"
+
+msgid "Stop editing the object"
+msgstr "Stoppe die Bearbeitung des Objekts"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "File Path"
+msgstr "Datei Pfad"
+
+msgid "Plugin must have a name!"
+msgstr "Plugin muss einen Namen erhalten"
+
+msgid "No file specified!"
+msgstr "Keine Datei angegeben"
+
+msgid "shared library files"
+msgstr ""
+
+msgid "Choose shared library file"
+msgstr "Waehle·shared·library·File"
+
+msgid "HeeksCAD plugin libraries"
+msgstr "HeeksCAD·Plugin·Libraries"
+
+msgid "Edit"
+msgstr "Bearbeiten"
+
+msgid "Add New Plugin"
+msgstr "Plugin hinzufügen"
+
+msgid "x"
+msgstr "x"
+
+msgid "y"
+msgstr "y"
+
+msgid "z"
+msgstr "z"
+
+msgid "vertical angle"
+msgstr "Vertikaler Winkel"
+
+msgid "horizontal angle"
+msgstr "Horizontaler Winkel"
+
+msgid "twist angle"
+msgstr "Drehwinkel"
+
+msgid "draw rectangles"
+msgstr "Zeichne Rechtecke"
+
+msgid "draw polygons"
+msgstr "Zeichne Polygone"
+
+msgid "draw slots"
+msgstr "Zeichne Taschen"
+
+msgid "number of sides for polygon"
+msgstr "Anzahl der Polygon Seiten"
+
+msgid "Add "
+msgstr "Hinzufügen"
+
+msgid "Add Objects"
+msgstr "Objekte hinzufügen"
+
+msgid "Remove Objects"
+msgstr "Entferne Objekte"
+
+msgid "pick some sketches"
+msgstr "Waehle mehrere Zeichnungn"
+
+msgid "Ruled Surface"
+msgstr "Verbundene Zeichnungen"
+
+msgid "pick sketches"
+msgstr "Waehle Zeichnung"
+
+msgid "Input extrusion height"
+msgstr "Auf welche Höhe soll das Objekt herausgeholt werden ?"
+
+msgid "Extruded Solid"
+msgstr "3D Objekt aus Flaeche"
+
+msgid "Fatal error making ruled solid"
+msgstr "Fehler beim erstellen des linierten 3D Objekts"
+
+msgid "Fatal error making extruded solid"
+msgstr "Fehler beim erstellen des 3D Objektess aus der Flaeche"
+
+msgid "Reset the ruler"
+msgstr "Reset Lineal"
+
+msgid "Left button for selecting objects"
+msgstr "Mit linker Maustaste Objekt auswaehlen"
+
+msgid "( with Ctrl key for extra objects)"
+msgstr "(·mit·Ctrl·Taste für·Extras·)"
+
+msgid "Drag with left button to window select"
+msgstr "Verschiebe mit linker Maustaste ins selektierte Fenster"
+
+msgid "or to move object if on an object"
+msgstr "oder verschiebe das Objekt falls es sich über einem anderen Objekt befindet"
+
+msgid "Mouse wheel to zoom in and out"
+msgstr "Mausrad zum zoomen"
+
+msgid "Middle button to pan view"
+msgstr "Mittlere Maustaste für Pan Ansicht"
+
+msgid "( with Ctrl key to rotate view )"
+msgstr "(mit CTRL Taste um zu drehen)"
+
+msgid "Middle button to rotate view"
+msgstr "Mittlere Maustaste zum drehen der Ansicht"
+
+msgid "( with Ctrl key to pan view )"
+msgstr "(mit CTRL Taste für rauf/runter)"
+
+msgid "Right button for object menu"
+msgstr "Rechte Maustaste für Objekt Menü"
+
+msgid "See options window to hide this help"
+msgstr "Optionen Fenster um den Hilfetext auszublenden"
+
+msgid "Pick Anything"
+msgstr "Alles auswaehlen"
+
+msgid "Set the selection filter to all items"
+msgstr "Setze den Auswahlfilter für alle Items"
+
+msgid "Pick Edges"
+msgstr "Waehle Kanten"
+
+msgid "Set the selection filter to only edges"
+msgstr "Setze den Auswahlfilter nur für Kanten"
+
+msgid "Enter Offset Value, + for making bigger, - for making smaller"
+msgstr "Offset angeben,+ für grösser,- für kleiner"
+
+msgid "Offset value"
+msgstr "Offset Angabe"
+
+msgid "Result of 'Offset Shape'"
+msgstr "Resultat für 'Offset Shape'"
+
+msgid "Offset Shape"
+msgstr "Offset Form"
+
+msgid "Offset the shape"
+msgstr ""
+
+msgid "Result of Fuse Operation"
+msgstr "Resultat der Vereinigung"
+
+msgid "Result of Common Operation"
+msgstr "Ergebnis der Schnittmengen Operation"
+
+msgid "Result of Cut Operation"
+msgstr "Resultat des Ausschneidens"
+
+msgid "STEP solid"
+msgstr "STEP 3D Objekt"
+
+msgid "STEP import not done!"
+msgstr "STEP Import hat nicht funktioniert"
+
+msgid "sewed IGES solid"
+msgstr "Verbinden IGES 3D Objekt"
+
+msgid "IGES import not done!"
+msgstr "IGES Import hat nicht funktioniert"
+
+msgid "Number of elements"
+msgstr "Anzahl der Elemente"
+
+msgid "order"
+msgstr "Fraesrichtung"
+
+msgid "Transform"
+msgstr "Umwandeln"
+
+msgid "Transform Objects"
+msgstr "Objekte bearbeiten"
+
+msgid "Pick objects to move"
+msgstr "Welche Objekte sollen verschoben werden"
+
+msgid "Enter number of copies"
+msgstr "Gebe die Anzahl der Kopien an"
+
+msgid "number of copies"
+msgstr "Anzahl der Kopien"
+
+msgid "Click position to move from"
+msgstr "Von welcher Position soll verschoben werden"
+
+msgid "Click position to move to"
+msgstr "An welche Position soll verschoben werden"
+
+msgid "Pick objects to rotate"
+msgstr "Objekte angeben die gedreht werden sollen"
+
+msgid "Click centre position to rotate about"
+msgstr "Position angeben um die gedreht werden soll"
+
+msgid "Enter angle to rotate by"
+msgstr "Drehwinkel angeben"
+
+msgid "angle"
+msgstr "Winkel"
+
+msgid "Pick objects to mirror"
+msgstr "Objekte die gespiegelt werden sollen"
+
+msgid "Pick line to mirror about"
+msgstr "Linie zu spiegeln"
+
+msgid "Pick objects to scale"
+msgstr "Welches Objekt soll skalliert werden"
+
+msgid "Click centre position to scale about"
+msgstr "MIttelpunkt der Neuskallierung angeben"
+
+msgid "Enter scale factor"
+msgstr "Skallierungsfaktor angeben"
+
+msgid "scale factor"
+msgstr "Skallierungsfaktor"
+
+msgid "Drag with the left mouse button"
+msgstr "Verschieben mit linker Maustaste"
+
+msgid "Forward to zoom in, Back to zoom out"
+msgstr "Nach vorne vergrössern,zurück verkleinern"
+
+msgid "Back to zoom in, Forward to zoom out"
+msgstr "zurück vergrössern,nach vorne verkleinern"
+
+msgid "Hold middle mouse button down to pan"
+msgstr "Mittlere Maustaste gedrückt halten für hoch/runter"
+
+msgid "Result of Wire Offset"
+msgstr "Ergebnis des Verbindungsoffsets"
+
+msgid "Generated"
+msgstr "Erzeugt"
+
+msgid "Generated from edge"
+msgstr "Von Kante erzeugt"
+
+msgid "Modified"
+msgstr "Modifiziert"
+
+msgid "Is Deleted"
+msgstr "Ist gelöscht"
+
+msgid "Offset Wire"
+msgstr ""
+
+msgid "Point Size"
+msgstr "Punkt Grösse"
+
+msgid "Family"
+msgstr ""
+
+msgid "Face Name"
+msgstr "Oberflaechenname"
+
+msgid "Style"
+msgstr "Style"
+
+msgid "Underlined"
+msgstr "Unterstrichen"
+
+msgid "files"
+msgstr "Dateien"
+
+msgid "All files"
+msgstr "Alle Dateien"
+
+msgid "Make a selection:"
+msgstr "Treffe eine Auswahl"
+
+msgid "Categorized Mode"
+msgstr ""
+
+msgid "Alphabetic Mode"
+msgstr "Alphabetischer Modus"
+
+msgid "<< Compact"
+msgstr ""
+
+msgid "Expand >>"
+msgstr ""
+
+msgid "False"
+msgstr "Nein"
+
+msgid "True"
+msgstr "Ja"
+
+msgid "Unspecified"
+msgstr "Nicht angegeben"
+
+msgid "is not a floating-point number"
+msgstr "Keine Fliesskommazahl"
+
+msgid "true"
+msgstr "Ja"
+
+msgid "false"
+msgstr "Nein"
+
+msgid "Choose a directory:"
+msgstr "Waehle Verzeichnis"
+
+msgid "Choose a file"
+msgstr "Waehle Datei"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Add"
+msgstr "Hinzufügen"
+
+msgid "Update"
+msgstr "Update"
+
+msgid "Remove"
+msgstr "Entfernen"
+
+msgid "Up"
+msgstr "Hoch"
+
+msgid "Down"
+msgstr "Runter"
+
+msgid "Failed to load resource image"
+msgstr "Konnte Bild Resource nicht laden"
+
+msgid "Convert sketch to face"
+msgstr "Belege Zeichnung mit einer Oberflaeche"
+
+msgid "Make To Sketch"
+msgstr "Zur Zeichnung umwandeln"
+
+msgid "Make selected lines and arcs into a new sketch"
+msgstr "Erstelle aus den markierten linien +Bögen eine neue Zeichnung"
+
+msgid "Combine sketches"
+msgstr "Kombiniere Zeichnungen"
+
+msgid "Combine selected sketches"
+msgstr "Kombiniere markierte Zeichnungen"
+
+msgid "Group"
+msgstr "Gruppe"
+
+msgid "Group selected items"
+msgstr "Gruppiere die selektierten Bereiche"
+
+msgid "Ungroup"
+msgstr "Gruppierung aufheben"
+
+msgid "Ungroup selected items"
+msgstr "Deselektiere alle Items"
+
+msgid "Dimension drawing"
+msgstr "Bemassung einzeichnen"
+
+msgid "Drawing"
+msgstr "Zeichnen"
+
+msgid "Edge"
+msgstr "Kante"
+
+msgid "Face"
+msgstr "Oberflaeche"
+
+msgid "Gripper"
+msgstr "Greifer"
+
+msgid "Arc"
+msgstr "Bogen"
+
+msgid "Circle"
+msgstr "Kreis"
+
+msgid "Dimension"
+msgstr "Bemassung"
+
+msgid "Ellipse"
+msgstr "Elipse"
+
+msgid "Infinite Line"
+msgstr "Unendlich lange Linie"
+
+msgid "Image"
+msgstr "Bild"
+
+msgid "Line"
+msgstr "Linie"
+
+msgid "Point"
+msgstr "Punkt"
+
+msgid "Spline"
+msgstr "Spline"
+
+msgid "Text"
+msgstr "Text"
+
+msgid "Xml"
+msgstr ""
+
+msgid "Magnifying by dragging a window"
+msgstr "Bereich markieren"
+
+msgid "Point drawing"
+msgstr "Punkt zeichnen"
+
+msgid "Dragging a window or picking a point"
+msgstr "Bereich/Punkt markieren"
+
+msgid "Regular shapes drawing"
+msgstr "Formen zeichnen"
+
+msgid "ChangeOwner"
+msgstr "Benutzerwechsel"
+
+msgid "ManyChangeOwner"
+msgstr ""
+
+msgid "Ruler"
+msgstr "Lineal"
+
+msgid "Faces"
+msgstr "Oberflaechen"
+
+msgid "Edges"
+msgstr "Kanten"
+
+msgid "Sketch"
+msgstr "Zeichnung"
+
+msgid "Solid"
+msgstr "3D Objekt"
+
+msgid "STL Solid"
+msgstr "STL 3D Objekt"
+
+msgid "View Rotate"
+msgstr "Ansicht·drehen(linke·Maustaste)"
+
+msgid "View Zoom"
+msgstr "Ansicht·zoomen(linke·Maustaste)"
+
+msgid "Dragging a window"
+msgstr "Markiere einen Ausschnitt"
+
+msgid "Wire"
+msgstr "Verbinden"
+
+msgid "object type"
+msgstr "Objekt Typ"
+
+msgid "object title"
+msgstr "Objekt Name"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "color"
+msgstr "Farbe"
+
+msgid "visible"
+msgstr "Sichtbar"
+
+msgid "Unknown"
+msgstr "Unbekannt"
+
+msgid "Unknown Property"
+msgstr "Unbekannte Einstellung"
+
+msgid "leadoffdz"
+msgstr ""
+
+msgid "leadofflen"
+msgstr ""
+
+msgid "leadoffrad"
+msgstr ""
+
+msgid "retractzheight"
+msgstr "Rückzugsebene für Z"
+
+msgid "leadoffsamplestep"
+msgstr ""
+
+msgid "toolcornerrad"
+msgstr "Radius Werkzeugspitze"
+
+msgid "toolflatrad"
+msgstr "Radius Werkzeugschaft"
+
+msgid "samplestep"
+msgstr "Beispiel Schritt"
+
+msgid "stepdown"
+msgstr "Schritt runter"
+
+msgid "clearcuspheight"
+msgstr ""
+
+msgid "triangleweaveres"
+msgstr ""
+
+msgid "flatradweaveres"
+msgstr ""
+
+msgid "dchangright"
+msgstr ""
+
+msgid "dchangrightoncontour"
+msgstr ""
+
+msgid "dchangleft"
+msgstr ""
+
+msgid "dchangefreespace"
+msgstr ""
+
+msgid "sidecutdisplch"
+msgstr ""
+
+msgid "fcut"
+msgstr ""
+
+msgid "fretract"
+msgstr ""
+
+msgid "thintol"
+msgstr ""
+
+msgid "startpoint_x"
+msgstr "Startpunkt X"
+
+msgid "startpoint_y"
+msgstr "Startpunkt Y"
+
+msgid "startvel_x"
+msgstr "Startgeschwindigkeit X"
+
+msgid "startvel_y"
+msgstr "Startgeschwindigkeit Y"
+
+msgid "minz"
+msgstr ""
+
+msgid "boundaryclear"
+msgstr "ohne Umrandung"
+
+msgid "boundary_x0"
+msgstr "Rahmen_x0"
+
+msgid "boundary_x1"
+msgstr "Rahmen_x1"
+
+msgid "boundary_y0"
+msgstr "Rahmen_y0"
+
+msgid "boundary_y1"
+msgstr "Rahmen_y1"
+
+msgid "tool number"
+msgstr "Werkzeug Nummer"
+
+msgid "tool diameter"
+msgstr "Werkzeug Durchmesser"
+
+msgid "clearance height"
+msgstr "Freie Höhe"
+
+msgid "step down"
+msgstr "Tiefe pro Schritt"
+
+msgid "start depth"
+msgstr "Beginne mit Z-Tiefe"
+
+msgid "final depth"
+msgstr "Endgültige Z-Tiefe"
+
+msgid "rapid down to height"
+msgstr "Z Schnell runter auf "
+
+msgid "horizontal feed rate"
+msgstr "Horizontale Arbeitsgeschwindigkeit"
+
+msgid "vertical feed rate"
+msgstr "Vertikale Arbeitsgeschwindigkeit"
+
+msgid "spindle speed"
+msgstr "Spindel Geschwindigkeit"
+
+msgid "You must select some sketches, first!"
+msgstr "Erst Zeichnungn markieren"
+
+msgid "There are no solids!"
+msgstr "Keine 3D Objekte"
+
+msgid "You must select some sketches first!"
+msgstr "Erst eine Zeichnung markieren"
+
+msgid "NC files"
+msgstr "G-Code Dateien"
+
+msgid "Open NC file"
+msgstr "NC Datei öffnen"
+
+msgid "Save NC file"
+msgstr "G-Code speichern"
+
+msgid "Couldn't open file"
+msgstr "Kann Datei nicht öffnen"
+
+msgid "Profile"
+msgstr "Profil"
+
+msgid "Pocket"
+msgstr "Tasche"
+
+msgid "ZigZag"
+msgstr ""
+
+msgid "Adaptive"
+msgstr "Anpassen"
+
+msgid "Python"
+msgstr "Python"
+
+msgid "PostProcess"
+msgstr "G-Code erstellen"
+
+msgid "OpenNC"
+msgstr "Öffne G-Code"
+
+msgid "SaveNC"
+msgstr "G-Code speichern"
+
+msgid "HeeksCNC is the free machining add-on to HeeksCAD"
+msgstr "HeeksCNC ist ein HeeksCAD Plugin zum erstellen von G-Code"
+
+msgid "          http://code.google.com/p/heekscnc/"
+msgstr "··········http://code.google.com/p/heekscnc/"
+
+msgid "Written by Dan Heeks, Hirutso Enni, Perttu Ahola"
+msgstr "Die Authoren sind: Dan·Heeks,·Hirutso·Enni,·Perttu·Ahola"
+
+msgid "With help from archivist, crotchet1, DanielFalck, fenn, Sliptonic"
+msgstr "Mit Hilfe von archivist,·crotchet1,·DanielFalck,·fenn,·Sliptonic"
+
+msgid "geometry code, donated by Geoff Hawkesford, Camtek GmbH http://www.peps.de/"
+msgstr "geometry·code,·donated·by·Geoff·Hawkesford,·Camtek·GmbH·http://www.peps.de/"
+
+msgid "pocketing code from http://code.google.com/p/libarea/ , derived from the kbool library written by Klaas Holwerda http://boolean.klaasholwerda.nl/bool.html"
+msgstr "Programmcode fürs Taschenfraesen von http://code.google.com/p/libarea/·,·abgeleitet·von derkbool·library,·geschrieben·von·Klaas·Holwerda·http://boolean.klaasholwerda.nl/bool.html"
+
+msgid "Zig zag code from pycam http://sourceforge.net/svn/?group_id=237831"
+msgstr "Zig·zag·Code·von·der pycam·Website: http://sourceforge.net/svn/?group_id=237831"
+
+msgid "Adaptive Roughing code from http://code.google.com/p/libactp/, using code written in 2004"
+msgstr "Der Code zum Adaptiven·Schruppverfahren·ist zu finden·unter : http://code.google.com/p/libactp/ .Er wurde 2004 geschrieben."
+
+msgid "For a more modern version of adaptive roughing, see Julian Todd and Martin Dunschen of http://www.freesteel.co.uk/"
+msgstr "Eine ausführliche Version des adaptiven Schruppverfahrens ist auf der Website von Julian·Todd·und·Martin·Dunschen zu finden:http://www.freesteel.co.uk/"
+
+msgid "This HeeksCNC software installation is restricted by the GPL license http://www.gnu.org/licenses/gpl-3.0.txt"
+msgstr "Die Software HeeksCNC unterliegt der GPL·license·http://www.gnu.org/licenses/gpl-3.0.txt"
+
+msgid "  which means it is free and open source, and must stay that way"
+msgstr "welche besagt,das die Software FREI ist und als Open Source gehandhabt werden muss."
+
+msgid "New Profile Operation..."
+msgstr "Profil fraesen"
+
+msgid "New Pocket Operation..."
+msgstr "(Fraes-)Tasche erstellen"
+
+msgid "New ZigZag Operation..."
+msgstr ""
+
+msgid "New Adaptive Roughing Operation..."
+msgstr "Adaptiver Schruppzyklus "
+
+msgid "Operations"
+msgstr "Neue Aufgabe"
+
+msgid "Make Python Script"
+msgstr "Erstelle Python Script"
+
+msgid "Post-Process"
+msgstr "G-Code erstellen"
+
+msgid "Machining"
+msgstr "CNC"
+
+msgid "nc options"
+msgstr "G-Code Optionen"
+
+msgid "text colors"
+msgstr "Text Farbe"
+
+msgid "default color"
+msgstr "Voreingestellte Farbe"
+
+msgid "block color"
+msgstr "Block Farbe"
+
+msgid "misc color"
+msgstr "Farbe für übrige Dinge"
+
+msgid "program color\t"
+msgstr "Programm Farbe\t"
+
+msgid "tool color"
+msgstr "Werkzeug Farbe"
+
+msgid "comment color\t"
+msgstr "Komentar Farbe\t"
+
+msgid "variable color"
+msgstr "Variabeln Farbe"
+
+msgid "prep color"
+msgstr "Grundeinstellungen"
+
+msgid "axis color"
+msgstr "Achsen Farbe"
+
+msgid "rapid color"
+msgstr "Axen schnellverfahren"
+
+msgid "feed color"
+msgstr "Arbeitgeschwindigkeit"
+
+msgid "comment"
+msgstr "Kommentar"
+
+msgid "active"
+msgstr "Aktiv"
+
+msgid "step over"
+msgstr "Versatz des Fraesers"
+
+msgid "material allowance"
+msgstr "Material Zulage"
+
+msgid "round corner factor"
+msgstr "Faktor für runde Ecken"
+
+msgid "for 90 degree corners"
+msgstr "Für 90 Grad Ecken"
+
+msgid "1.5 for square, 1.0 for round"
+msgstr "1.5 viereckig,1.0 rund"
+
+msgid "Boundary"
+msgstr "Von Ausen nach Innen"
+
+msgid "Center"
+msgstr "Von Innen nach Außen"
+
+msgid "starting_place"
+msgstr "Start Position"
+
+msgid "Pocket operation - Sketch doesn't exist - %d"
+msgstr "Taschen Operation - Zeichnung existiert nicht-·%d"
+
+msgid "Pocket operation - Sketch must be a closed shape - sketch %d"
+msgstr "Taschen Operation - Zeichnung muss eine geschlossene Kontur sein - sketch·%d"
+
+msgid "Pocket operation - Badly ordered sketch - sketch %d"
+msgstr "Taschen Operation - Falsch aufgebaute Zeichnung - sketch·%d"
+
+msgid "Left"
+msgstr "Innenkontur"
+
+msgid "Right"
+msgstr "Aussenkontur"
+
+msgid "On"
+msgstr "Auf der Linie"
+
+msgid "tool on side"
+msgstr "Werkzeugkorrektur"
+
+msgid "auto roll on"
+msgstr "Automatischer Einstiegsradius"
+
+msgid "roll on point"
+msgstr "Einstiegspunkt"
+
+msgid "auto roll off"
+msgstr "Automatischer Ausstiegsradius"
+
+msgid "roll off point"
+msgstr "Ausstiegspunkt"
+
+msgid "use start point"
+msgstr "Manueller Startpunkt"
+
+msgid "start point"
+msgstr "Startpunkt"
+
+msgid "use end point"
+msgstr "Manueller Endpunkt"
+
+msgid "end point"
+msgstr "Endpunkt"
+
+msgid "Pick Start"
+msgstr "Waehle Start"
+
+msgid "Pick new start point"
+msgstr "Waehle neuen Startpunkt"
+
+msgid "Pick End"
+msgstr "Waehle Ende"
+
+msgid "Pick new end point"
+msgstr "Waehle neuen Endpunkt"
+
+msgid "Set All Operations Active"
+msgstr "Setze alle Operationen auf Aktiv"
+
+msgid "Set All Operations Inactive"
+msgstr "Setze alle Operationen auf Inaktiv"
+
+msgid "machine"
+msgstr "G-Code Ausgabe"
+
+msgid "output file"
+msgstr "Ausgabe Datei"
+
+msgid "spherical"
+msgstr "Kugelförmig"
+
+msgid "cylindrical"
+msgstr "Zylindrisch"
+
+msgid "toroidal"
+msgstr "Ringkern(Donut)"
+
+msgid "tool type"
+msgstr "Werkzeugtyp"
+
+msgid "corner radius"
+msgstr "Eckradius"
+
+msgid "minimum x"
+msgstr "Minimum·x"
+
+msgid "maximum x"
+msgstr "Maximum·x"
+
+msgid "minimum y"
+msgstr "Minimum·y"
+
+msgid "maximum y"
+msgstr "Maximum·y"
+
+msgid "z0"
+msgstr "z0"
+
+msgid "z1"
+msgstr "z1"
+
+msgid "dx"
+msgstr "dx"
+
+msgid "dy"
+msgstr "dy"
+
+msgid "Simple Mesh"
+msgstr "Einfaches Gittermodell"
+
+msgid "HeeksArt is a free random add-on to HeeksCAD"
+msgstr "HeeksArt ist ein freies Add On zu HeeksCAD"
+
+msgid "          http://code.google.com/p/heeksart/"
+msgstr "··········http://code.google.com/p/heeksart/"
+
+msgid "Written by Dan Heeks"
+msgstr "Author Dan·Heeks"
+
+msgid "Add a simple mesh"
+msgstr "Erstelle ein einfaches Gittermodell"
+
+msgid "Mesh"
+msgstr "Gittermodell"
+
+msgid "mesh options"
+msgstr "Gitter Modell Optionen"
+
+msgid "number of splits"
+msgstr "Anzahl der Unterbrechungen"
+
+msgid "Edge cannot have more than 2 faces!"
+msgstr "Kante kann nicht mehr wie 2 Oberflaechen haben"
+
+msgid "Convert Mesh To Triangles"
+msgstr "Konvertiere Gittemodell in Dreiecke"
+
+msgid "Normalize All Vertices"
+msgstr "Normalisiere alle Eckpunkte"
+
+msgid "Set All Vertex Normals"
+msgstr "Alle Ecken des Poligons normal"
+
+msgid "At least one vertex could not be normalized!"
+msgstr "Mimndestens eine Ecke konnte nicht normalisiert werden"
+
+msgid "Recalculate All Face Centres"
+msgstr "Neuberechnung aller Mittelpunkte der Oberflaechen"
+
+msgid "Mirror all x<1"
+msgstr "Alles spiegeln was <1 ist"
+
+msgid "Split Edge"
+msgstr "Kante trennen"
+
+msgid "Recalculate a Good Centre Point"
+msgstr "Kalkuliere einen passenden Mittelpunkt"
+
+msgid "Normalize All Edge Directions"
+msgstr ""
+
+msgid "Set Normal From Edges"
+msgstr ""
+
+msgid "Mesh Edge"
+msgstr "Gitter Ecke"
+
+msgid "Mesh Face"
+msgstr "Gitter Oberflaeche"
+
+msgid "Mesh Vertex"
+msgstr "Gitter-Eckpunkte"
+
+msgid "Split arcs to little lines"
+msgstr "Bogen in kleine Geraden aufteilen"
+
+msgid "empty"
+msgstr ""
+
+msgid "open"
+msgstr ""
+
+msgid "reverse"
+msgstr ""
+
+msgid "bad"
+msgstr ""
+
+msgid "re-order"
+msgstr "Neu ordnen"
+
+msgid "clockwise\n"
+msgstr "rechts\n"
+
+msgid "counter-clockwise"
+msgstr "links"
+
+msgid "multiple"
+msgstr ""
+
+msgid "New Drilling Operation..."
+msgstr "G81/82/83 Bohrlöcher setzen"
+
+msgid "New Cutting Tool Definition..."
+msgstr "Werkzeug definieren"
+
+msgid "tool_number"
+msgstr "Werkzeugnummer"
+
+msgid "diameter"
+msgstr "Werkzeug Durchmesser"
+
+msgid "tool_length_offset"
+msgstr "Offset der Werkzeuglaenge"
+
+msgid "pocket_number"
+msgstr "Werkzeugslot"
+
+msgid "Open NC File"
+msgstr "G-Code laden"
+
+msgid "Save NC File"
+msgstr "G-Code speichern"
+
+msgid "cutting_tool_number"
+msgstr "Werkzeug Nummer"
+
+msgid "depth"
+msgstr "Tiefe der Bohrung"
+
+msgid "peck_depth"
+msgstr "mm pro Schritt"
+
+msgid "dwell"
+msgstr "Zeit(s) in der Bohrung pro Schritt"
+
+msgid "standoff"
+msgstr "Höhe über der Bohrung"
+
+msgid "Split Sketch"
+msgstr "In einzelne Elemente auflösen"
+
+msgid "You must select some points, circles or other intersecting elements first!"
+msgstr "Zuerst Punkte,Kreise oder andere passende Elemente auswaehlen !"
+
+msgid "New CounterBore Operation..."
+msgstr "Einsatz des Flachsenkers"
+
+msgid "fixture offset"
+msgstr "Maschinennullpunkt +"
+
+msgid "correlation"
+msgstr "Andere Objekte mit gleicher Größe"
+
+msgid "Minimum correlation factor (0.0 (nothing like it) -> 1.0 (perfect match))"
+msgstr "Vergleichsfaktor (von 0.0(ziemlich alles) bis 1.0(Genau gleich)) "
+
+msgid "Maximum scale threshold (1.0 - must be same size, 1.5 (can be half as big again or 2/3 size)"
+msgstr "Größenvergleich (von 1.0 (Nur gleiche Größen) bis 1.5 (um die Haelfte größer)"
+
+msgid "orientation"
+msgstr "Text Position"
+
+msgid "Make Coordinate System"
+msgstr "Neues Koordinaten System"
+
+msgid "vertex"
+msgstr "Polygon Ecke"
+
+msgid "autosolve constraints"
+msgstr "Automatisch Variabeln einschraenken"
+
+msgid "units for nc output"
+msgstr "Masseinheit für den G-Code"
+
+msgid "You haven't selected a cutting tool for this hole.  By default no 'tool definition' or 'select tool' code will be generated for this drilling cycle."
+msgstr "Für diesen Vorgang wurde noch kein Werkzeug ausgewaehl.Das heisst,es wird im G-Code keine Aufforderung zum Werkzeugwechsel geben !"
+
+msgid "Tools"
+msgstr "Werkzeuge"
+
+msgid "type"
+msgstr "Fraesertyp"
+
+msgid "Drill Bit"
+msgstr "Bohrer"
+
+msgid "Slot Cutter"
+msgstr "Taschen Fraeser"
+
+msgid "Ball End Mill"
+msgstr "Kugelfraeser"
+
+msgid "Chamfering bit"
+msgstr "V-Nut Fraeser(Fasen)"
+
+msgid "End Mill"
+msgstr "Schaft Fraeser"
+
+msgid "CounterBore"
+msgstr "Senkung"
+
+msgid "Centre Drill Bit"
+msgstr "Zentrier Bohrer"
+
+msgid "flat_radius"
+msgstr "Radius an der Spitze"
+
+msgid "corner_radius"
+msgstr "Radius zum Schaft"
+
+msgid "cutting_edge_angle"
+msgstr "Winkel Fraeskante unten"
+
+msgid "cutting_edge_height"
+msgstr "Höhe der Fraeskante unten"
+
+msgid "sort_locations"
+msgstr "Reihenfolge optimieren"
+
+msgid "sort_drilling_locations"
+msgstr "Reihenfolge optimieren"
+
+msgid "Respect existing order"
+msgstr "Reihenfolge beibehalten"
+
+msgid "sort_sketches"
+msgstr "Zeichnungen sortieren"
+
+msgid "Designe Rules Check"
+msgstr "G-Code Parameter überprüfen"
+
+msgid "Designe Rules Adjustment"
+msgstr "G-Code Parameter verbessern"
+
+msgid "Design Rules Check..."
+msgstr "G-Code Parameter überprüfen..."
+
+msgid "Design Rules Adjustment..."
+msgstr "G-Code Parameter verbessern..."
+
+msgid "circle mode"
+msgstr "Kreis Modus"
+
+msgid "three points"
+msgstr "3 Punkten angeben"
+
+msgid "centre and point"
+msgstr "Mittelpunkt + 1 Punkt"
+
+msgid "two points"
+msgstr "2 Punkte"
+
+msgid "centre and radius"
+msgstr "Mittelpunkt + Radius"
+
+msgid "cutting tool"
+msgstr "Werkzeug"
+
+msgid "Chamfering Bit"
+msgstr "V-Nutfraeser(Fasen)"
+
+msgid "New Fixture..."
+msgstr "Korrektur des Koordinatensystems"
+
+msgid "A axis (around X) rotation"
+msgstr "Korrektur X Achse"
+
+msgid "B axis (around Y) rotation"
+msgstr "Korrektur Y Achse"
+
+msgid "C axis (around Z) rotation"
+msgstr "Korrektur Z Achse"
+
+msgid "Pivot Point"
+msgstr "'Drehpunkt' der Korrektur"
+
+msgid "Pick roll on point"
+msgstr "Fraeser Einstiegspunkt"
+
+msgid "Pick roll off point"
+msgstr "Fraeser Ausstiegspunkt"
+
+msgid "Brinell hardness of raw material"
+msgstr "Material-Haerte nach Brinell"
+
+msgid "Raw Material"
+msgstr "Werkstück Material"
+
+msgid "Surface Speed (m/min)"
+msgstr "Spindel RPM (m/min)waehrend der Werkzeugfahrt(Drehen)"
+
+msgid "Surface Speed (ft/min)"
+msgstr "Spindel RPM (ft/min)waehrend der Werkzeugfahrt(Drehen)"
+
+msgid "Raw Material Name"
+msgstr "Material des Werkstücks"
+
+msgid "Maximum Material Removal Rate (mm^3/min)"
+msgstr "Maximaler Materialabtrag(mm^3/min)"
+
+msgid "Maximum Material Removal Rate (inches^3/min)"
+msgstr "Maximaler Materialabtrag(inches^3/min)"
+
+msgid "New Speed Reference..."
+msgstr "Spindeldrehzahl kalkulieren"
+
+msgid "New Cutting Rate Reference..."
+msgstr "Vorschub kalkulieren"
+
+msgid "Feeds and Speeds"
+msgstr "Spindeldrehzahl/Vorschub"
+
+msgid "Fixtures"
+msgstr "Koordinatensystem (anpassen)"
+
+msgid "output file name follows data file name"
+msgstr "Ausgabedateiname = Datendateiname"
+
+msgid "Number of sample points"
+msgstr "Anzahl der Vergleichspunkte"
+
+msgid "face to sketch deviaton"
+msgstr "Oberflaeche/Zeichnung Abweichung"
+
+msgid "Brinell Hardness of raw material"
+msgstr "Brinell-Haertegrad des Materials"
+
+msgid "Carbide "
+msgstr "Karbid "
+
+msgid "Carbide"
+msgstr "Karbid "
+
+msgid "High Speed Steel"
+msgstr "HSS"
+
+msgid "Estimate when possible"
+msgstr "Wenn möglich berechnen"
+
+msgid "Use default values"
+msgstr "Vorgegebene Werte benutzen"
+
+msgid "degree"
+msgstr "Grad"
+
+msgid " degree "
+msgstr " Grad "
+
+msgid "Turning Tool"
+msgstr "Drehstahl"
+
+msgid "New Special Adaptive Roughing Operation..."
+msgstr "Adaptiver Schruppzyklus "
+
+msgid "New Drill Cycle Operation..."
+msgstr "G81/82/83 Bohrlöcher setzen"
+
+msgid "New CounterBore Cycle Operation..."
+msgstr "Einsatz des Flachsenkers"
+
+msgid "Add Speed Reference..."
+msgstr "Spindeldrehzahl kalkulieren"
+
+msgid "Add Cutting Rate Reference..."
+msgstr "Vorschub kalkulieren"
+
+msgid "Leave manually assigned title"
+msgstr "AUS"
+
+msgid "Automatically generate title"
+msgstr "EIN"
+
+msgid "Automatic Title"
+msgstr "Autom. Werkzeugbeschreibung"
+
+msgid "New Drill..."
+msgstr "Neuer Bohrer"
+
+msgid "New End Mill..."
+msgstr "Neuer Fraeser"
+
+msgid "New Centre Drill..."
+msgstr "Neuer Zentrier-Bohrer"
+
+msgid "New Slot Drill..."
+msgstr "Neuer Taschen-Fraeser"
+
+msgid "New Ball End Mill..."
+msgstr "Neuer Kugelfraeser"
+
+msgid "New Chamfer Mill..."
+msgstr "Neuer Fasen-Fraeser"
+
+msgid "New Turning Tool..."
+msgstr "Neuer Drehstahl"
+
+msgid "Draw circles through 3 points"
+msgstr "Erstelle Kreis durch Angabe von 3 Punkten"
+
+msgid "Draw circles, centre and point"
+msgstr "Erstelle Kreis durch Angabe von Mitte und einem Punkt auf der Kreisbahn"
+
+msgid "Draw circles, centre and radius"
+msgstr "Erstelle Kreis durch Angabe von Mitte und Radius"
+
+msgid "font options"
+msgstr "Schriftarten"
+
+msgid "Active font"
+msgstr "Aktuelle Schrift"
+
+msgid "Paths (semicolon delimited)"
+msgstr "Schriftverzeichnisse (durch Semikolon getrennt)"
+
+msgid "Draw Ellipses"
+msgstr "Elipsen zeichnen"
+
+msgid "Draw ellipses"
+msgstr "Elipsen zeichnen"
+
+msgid "View XY Front"
+msgstr "Draufsicht"
+
+msgid "View XY Back"
+msgstr "Rückansicht XY"
+
+msgid "View XZY Isometric"
+msgstr "Isometrisch/3D"
+
+msgid "Save Settings"
+msgstr "Einstellungen speichern"
+
+msgid "View XZ Top"
+msgstr "Draufsicht XZ"
+
+msgid "View XZ Bottom"
+msgstr "Rückansicht XZ"
+
+msgid "View YZ Right"
+msgstr "Anicht YZ Rechts"
+
+msgid "View YZ Left"
+msgstr "Anicht YZ Links"
+
+msgid "View XY Isometric"
+msgstr "Isometrisch/3D"
+
+msgid "View XZ Left"
+msgstr "Anicht XZ Links"
+
+msgid "View pan"
+msgstr "3D Bearbeitung Aus"
+
+msgid "Cut"
+msgstr "Schnittmenge entfernen"
+
+msgid "Pick two or more faces or solids, the first one will be cut by the others"
+msgstr "Erst mindestens 2 Objekte markieren,beim ersten wird die Schnittmenge der anderen entfernt"
+
+msgid "Revolve a sketch"
+msgstr "Volumenkörper erzeugen"
+
+msgid "Revolved Solid"
+msgstr "Volumenkörper"
+
+msgid "New Chamfer Operation..."
+msgstr "Fasen"
+
+msgid "New Contour Operation..."
+msgstr "Umriss fräsen"
+
+msgid "Open BOM File"
+msgstr "Öffne BOM Datei"
+
+msgid "Profile spline deviation"
+msgstr "Profile Spline Abweichung"
+
+msgid "Pocket spline deviation"
+msgstr "Pocket Spline Abweichung"
+
+msgid "Contour spline deviation"
+msgstr "Kontur Spline Abweichung"
+
+msgid "Inlay spline deviation"
+msgstr "Inlay Spline Abweichung"
+
+msgid "execution_order"
+msgstr "Bearbeitungs_Reihenfolge"
+
+msgid "auto set speeds for new operation"
+msgstr "Automatische Speed Einstellungen"
+
+msgid "ignore errors where possible"
+msgstr "Ignoriert Fehler, soweit möglich"
+
+msgid "auto save interval (in minutes)"
+msgstr "Automatisch speichern nach (Minuten)"
+
+msgid "Word Space Percentage"
+msgstr "Wort-Abstand in Prozent"
+
+msgid "Character Space Percentage"
+msgstr "Buchstaben-Abstand in Prozent"
+
+msgid "simplify sketch options"
+msgstr "Zeichnung-Grundeinstellungen"
+
+msgid "max deviation"
+msgstr "Maximale Abweichung"
+
+msgid "bspline min degree (eg: 3)"
+msgstr "B-Spline min. Grad (z.B. 3)"
+
+msgid "bspline max degree (eg: 8)"
+msgstr "B-Spline max. Grad (z.B. 8)"
+
+msgid "bspline continuity (eg: GeomAbs_C2)"
+msgstr "B-Spline Gleichmässigkeit"
+
+msgid "Force closed shape"
+msgstr "Nur geschlossene Formen"
+
+msgid "Sort Points"
+msgstr "Punkte sortieren"
+
+msgid "machining options"
+msgstr "CNC Einstellungen"
+
+msgid "Touch Probe"
+msgstr "Messtaster"
+
+msgid "Tool Length Switch"
+msgstr "Werkzeug-Laengen-Taster"
+
+msgid "New Touch Probe..."
+msgstr "Neuer Messtaster"
+
+msgid "New Tool Length Switch..."
+msgstr "Neuer W.Z.Laengentaster"
+
+msgid "Female half"
+msgstr "Aussenteil"
+
+msgid "Male half"
+msgstr "Innenteil"
+
+msgid "Both halves"
+msgstr "Innen und aussen"
+
+msgid "GCode generation"
+msgstr "Auswahl"
+
+msgid "Border Width"
+msgstr "Randbreite"
+
+msgid "Clearance Tool"
+msgstr "Clearance Tool"
+
+msgid "Mirror Axis"
+msgstr "Über Achse spiegeln"
+
+msgid "X Axis"
+msgstr "X Achse"
+
+msgid "Y Axis"
+msgstr "Y Achse"
+
+msgid "Enter Sketch Mode"
+msgstr "Zeichenmodus"
+
+msgid "Pad Sketch"
+msgstr "3D MIT Oberflächen"
+
+msgid "Pocket Sketch"
+msgstr "3D OHNE Oberflächen"
+
+msgid "Copy Parallel"
+msgstr "In/Outline Modus"
+
+msgid "solidify"
+msgstr "+Oberfläche"
+
+msgid "Add New Milling Operation"
+msgstr "Neue CNC Funktion"
+
+msgid "Add New 3D Operation"
+msgstr "Neue 3D Funktion"
+
+msgid "Add Other Operation"
+msgstr "Andere Funktionen"
+
+msgid "Add New Tool"
+msgstr "Neues Werkzeug"
+
+msgid "Run Python Script"
+msgstr "Python Script starten"
+
+msgid "Save As"
+msgstr "Speichern unter"
+
+msgid "Profile Operation..."
+msgstr "Umriss fraesen"
+
+msgid "Pocket Operation..."
+msgstr "Tasche fraesen"
+
+msgid "Adaptive Roughing Operation..."
+msgstr "Adaptives Schruppen"
+
+msgid "Drilling Operation..."
+msgstr "Bohren"
+
+msgid "CounterBore Operation..."
+msgstr "Bohren mit Aushub"
+
+msgid "Chamfer Operation..."
+msgstr "Fasen"
+
+msgid "Inlay Operation..."
+msgstr "Inlay Funktion"
+
+msgid "Drill..."
+msgstr "Bohrer"
+
+msgid "Centre Drill..."
+msgstr "Zentrierbohrer"
+
+msgid "End Mill..."
+msgstr "Schaftfraeser"
+
+msgid "Slot Drill..."
+msgstr "Taschenfraeser"
+
+msgid "Ball End Drill..."
+msgstr "Kugelfraeser"
+
+msgid "Chamfer Mill..."
+msgstr "V-Nutfraeser(Fasen)"
+
+msgid "Turning Tool..."
+msgstr "Drehstahl"
+
+msgid "Touch Probe..."
+msgstr "Messtaster"
+
+msgid "Tool Length Switch..."
+msgstr "Werkzeug-Laengen-Taster"
+
+msgid "Start drawing rectangles"
+msgstr "Rechteck zeichnen"
+
+msgid "Start drawing obrounds"
+msgstr "Rechteck mit angefuegten Kreisboegen"
+
+msgid "Start drawing polygons"
+msgstr "Poligon zeichnen"
+
+msgid "Spline Through Points"
+msgstr "Punkte mit Splines verbinden"
+
+msgid "Drag to move view"
+msgstr "Mit linker Maustaste veschieben"
+
+msgid "Pick one or more sketches, faces or circles, to create a revolved body from"
+msgstr "Waehle mindestens 1 Zeichnung/Oberflaeche oder Kreis um einen Rotationskoerper zu erstellen"
+
+msgid "hold down Ctrl key to select more than one solid"
+msgstr "( CTRL-Taste um mehrere Objekte zu markieren )"
+
+msgid "Pick two or more sketches, to create a lofted solid between"
+msgstr "Min. 2 Zeichnungen waehlen die miteinander verbunden werden sollen"
+
+msgid "Pick one or more sketches, faces or circles, to create an extruded body from"
+msgstr "Min. 1 Zeichnung/Oberfläche waehlen die in einen 3D Körper umgewandelt werden soll"
+
