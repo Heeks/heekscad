@@ -259,6 +259,7 @@ extern "C" {
 #include "../interface/InputMode.h"
 #include "../interface/Tool.h"
 #include "../interface/PropertyString.h"
+#include "../interface/HeeksCADInterface.h"
 #include "HeeksCAD.h"
 
 #include "ConversionTools.h"
