@@ -856,20 +856,26 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<in
 				try{
 					if(shapes_added_for_sewing > 0)
 					{
-						face_sewing.Perform ();
-
-						if(!face_sewing.SewedShape().IsNull())
+						const TopoDS_Shape& sewed_shape = face_sewing.SewedShape();
+						if (!sewed_shape.IsNull())
 						{
 							BRepBuilderAPI_MakeSolid solid_maker;
-							solid_maker.Add(TopoDS::Shell(face_sewing.SewedShape()));
-							TopoDS_Shape solid = solid_maker.Solid();
+							try{
+								solid_maker.Add(TopoDS::Shell(sewed_shape));
+								TopoDS_Shape solid = solid_maker.Solid();
 
-							if (GetVolume(solid) < 0.0) solid.Reverse();
+								if (GetVolume(solid) < 0.0) solid.Reverse();
 
-							HeeksObj* new_object = MakeObject(solid, _("sewed IGES solid"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191), 1.0f);
-							if(undoably)wxGetApp().AddUndoably(new_object, add_to, NULL);
-							else add_to->Add(new_object, NULL);
-							sewed_shape_added = true;
+								HeeksObj* new_object = MakeObject(solid, _("sewed IGES solid"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191), 1.0f);
+								add_to->Add(new_object, NULL);
+								sewed_shape_added = true;
+							}
+							catch (...)
+							{
+								HeeksObj* new_object = MakeObject(sewed_shape, _("sewed IGES shape"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191), 1.0f);
+								add_to->Add(new_object, NULL);
+								sewed_shape_added = true;
+							}
 						}
 					}
 				}
