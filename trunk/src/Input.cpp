@@ -112,6 +112,10 @@ public:
 		wxBoxSizer *sizerPosAndAxis = new wxBoxSizer(wxHORIZONTAL);
 		sizerMain->Add(sizerPosAndAxis, 0, wxGROW);
 
+		posx = NULL;
+		posy = NULL;
+		posz = NULL;
+
 		if(pos)
 		{
 			wxBoxSizer *sizerPos = new wxBoxSizer(wxVERTICAL);
@@ -127,6 +131,14 @@ public:
 			posy->SetValue( pos[1] );
 			posz->SetValue( pos[2] );
 		}
+
+		rbXy = NULL;
+		rbXz = NULL;
+		rbYz = NULL;
+		rbOther = NULL;
+		vectorx = NULL;
+		vectory = NULL;
+		vectorz = NULL;
 
 		if(axis)
 		{
@@ -168,13 +180,6 @@ public:
 			rbXz->SetValue( axis_type == 2 );
 			rbYz->SetValue( axis_type == 3 );
 			rbOther->SetValue( axis_type == 0 );
-		}
-		else
-		{
-			rbXy = NULL;
-			rbXz = NULL;
-			rbYz = NULL;
-			rbOther = NULL;
 		}
 
 		AddLabelAndControl(sizerMain, _("angle"), angle_ctrl = new CDoubleCtrl(this));
@@ -320,9 +325,9 @@ bool HeeksCADapp::InputAngleWithPlane(double &angle, double *axis, double *pos, 
 			}
 			else
 			{
-				axis[0] = dlg.vectorx->GetValue();
-				axis[1] = dlg.vectory->GetValue();
-				axis[2] = dlg.vectorz->GetValue();
+				if (dlg.vectorx)axis[0] = dlg.vectorx->GetValue();
+				if (dlg.vectory)axis[1] = dlg.vectory->GetValue();
+				if (dlg.vectorz)axis[2] = dlg.vectorz->GetValue();
 			}
 		}
 
