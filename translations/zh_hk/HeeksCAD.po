@@ -1,0 +1,6204 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Heekscad 0.18\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-08-08 09:45+0200\n"
+"PO-Revision-Date: 2012-03-18 HO:MI+ZONE\n"
+"Last-Translator: k.t.chan <eddie692962@netvigator.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh-hk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-Country: UNITED STATES\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ../heekscad/src\n"
+"X-Poedit-SearchPath-1: ../heekscad/heekscnc/src\n"
+
+#: ../heekscad/src/AboutBox.cpp:17
+msgid "OK"
+msgstr ""
+
+#: ../heekscad/src/AutoSave.cpp:15
+msgid ".HeeksCAD_Backup_Data_File.heeks"
+msgstr ""
+
+#: ../heekscad/src/AutoSave.cpp:29
+msgid "Do you want to recover using the automatic backup file?"
+msgstr "你想復原,採用自動備份的文件?"
+
+#: ../src/Cone.cpp:170
+msgid "Stretched Cone"
+msgstr "伸展錐"
+
+#: ../src/Cone.cpp:175
+msgid "r1"
+msgstr ""
+
+#: ../src/Cone.cpp:176
+msgid "r2"
+msgstr ""
+
+#: ../src/Cone.cpp:177
+#: ../src/Cylinder.cpp:81 
+msgid "height"
+msgstr "高度"
+
+#: ../src/Cone.cpp:215
+msgid "can not enter negative value for radius"
+msgstr "不能輸入負值半徑"
+
+#: ../src/Cone.cpp:222
+msgid "cone must not have both radiuses the same"
+msgstr "圓錐不能有兩個相同半徑"
+
+#: ../src/Constraint.cpp:216
+msgid "H"
+msgstr ""
+
+#: ../src/Constraint.cpp:220
+msgid "V"
+msgstr ""
+
+#: ../src/Constraint.cpp:230
+msgid "L"
+msgstr ""
+
+#: ../src/Constraint.cpp:233
+msgid "P"
+msgstr ""
+
+#: ../src/Constraint.cpp:304
+msgid ""
+"\n"
+" obj1_id should be defined before obj2_id"
+msgstr "\n"
+"obj1_id應定義在obj2_id之前"
+
+#: ../heekscad/src/Constraint.cpp:312
+#: ../heekscad/src/Constraint.cpp:332
+msgid ""
+"\n"
+"obj1_id specified but does not exist in memory"
+msgstr 
+"\n"
+"obj1_id指定但並不存在於內存中"
+
+#: ../src/Constraint.cpp:317
+msgid ""
+"\n"
+"obj2_id specified but does not exist in memory"
+msgstr "\n"
+"obj2_id指定但並不存在於內存中"
+
+#: ../src/Constraint.cpp:355
+msgid ""
+"\n"
+" Two objects required for this constraint only one was specified"
+msgstr "\n"
+"這約束條件需要兩個對象但只有一個被指定"
+
+#: ../src/Constraint.cpp:367
+msgid ""
+"\n"
+" A constraint type needs to be added to the list"
+msgstr "\n"
+" 一個約束條件類型需要被添加到清單"
+
+#: ../src/Constraint.cpp:378
+msgid "This is a woops and you shouldn't be reading this message"
+msgstr "你不應該讀到此消息"
+
+#: ../src/Constraint.cpp:471
+msgid "Object error in a single object constraint"
+msgstr "物件錯誤,在單一物件的,約束條件"
+
+#: ../src/Constraint.cpp:489
+msgid "Object error in a two object constraint"
+msgstr "物件錯誤,在兩個的物件約束條件"
+
+#: ../src/Constraint.cpp:496
+msgid "Undefined Constraint?"
+msgstr "未定義的約束條件"
+
+#: ../src/ConstraintTools.cpp:33
+msgid "Set Perpendicular"
+msgstr "設置正交"
+
+#: ../src/ConstraintTools.cpp:35
+msgid "Set these lines to be perpendicular"
+msgstr "設定這些線是正交"
+
+#: ../src/ConstraintTools.cpp:57
+msgid "Toggle Tangent"
+msgstr "切換切線"
+
+#: ../src/ConstraintTools.cpp:59
+msgid "Set line tangent to arc"
+msgstr "設定線正切至弧形"
+
+#: ../src/ConstraintTools.cpp:79
+msgid "Set Parallel"
+msgstr "設定平行"
+
+#: ../src/ConstraintTools.cpp:81
+msgid "Set these lines to be parallel"
+msgstr "設定這些線平行"
+
+#: ../src/ConstraintTools.cpp:100
+msgid "Set Equal Length"
+msgstr "設定長度相等"
+
+#: ../src/ConstraintTools.cpp:102
+msgid "Set these lines to be equal length"
+msgstr "設定這些線長度相等"
+
+#: ../src/ConstraintTools.cpp:121
+msgid "Set Colinear"
+msgstr "設定共線"
+
+#: ../src/ConstraintTools.cpp:123
+msgid "Set these lines to be colinear"
+msgstr "設定這些線是共線"
+
+#: ../src/ConstraintTools.cpp:142
+msgid "Set Equal Radius"
+msgstr "設定相等半徑"
+
+#: ../src/ConstraintTools.cpp:144
+msgid "Set these arcs to have equal radii"
+msgstr "設定這些弧具有相等的半徑"
+
+#: ../src/ConstraintTools.cpp:163
+msgid "Set Concentric"
+msgstr "設定同心"
+
+#: ../src/ConstraintTools.cpp:165
+msgid "Set these arcs to be concentric"
+msgstr "設置這些弧是同心"
+
+#: ../src/ConstraintTools.cpp:185
+msgid "Set Coincident"
+msgstr "設定重合"
+
+#: ../src/ConstraintTools.cpp:187
+msgid "Set these points to be coincident"
+msgstr "設定這些點是重合"
+
+#: ../heekscad/src/ConstraintTools.cpp:209
+#: ../heekscad/src/ConstraintTools.cpp:253
+#: ../heekscad/src/ConstraintTools.cpp:268
+msgid "Add Dimension"
+msgstr "標示尺寸"
+
+#: ../src/ConstraintTools.cpp:211
+#: ../src/ConstraintTools.cpp:255
+#: ../src/ConstraintTools.cpp:270
+msgid "Add a dimension object"
+msgstr "加一個尺寸物件"
+
+#: ../src/ConstraintTools.cpp:237
+msgid "Add Angular Dimension"
+msgstr "加角測量尺寸"
+
+#: ../src/ConstraintTools.cpp:239
+msgid "Add an angular dimension object"
+msgstr "加一個角測量物件"
+
+#: ../src/ConstraintTools.cpp:292
+msgid "Set Point On Line"
+msgstr "在線上定點"
+
+#: ../src/ConstraintTools.cpp:294
+msgid "Set this point on line"
+msgstr "在線上定這點"
+
+#: ../src/ConstraintTools.cpp:316
+#: ../src/ConstraintTools.cpp:340
+msgid "Set Point On Midpoint"
+msgstr "在中點上定點"
+
+#: ../src/ConstraintTools.cpp:318
+msgid "Set this point on the midpoint of line"
+msgstr "在線的中點上定這點"
+
+#: ../src/ConstraintTools.cpp:342
+msgid "Set this point on the midpoint of arc"
+msgstr "在弧的中點上定這點"
+
+#: ../src/ConstraintTools.cpp:364
+msgid "Set Point On Arc"
+msgstr "在弧上定點"
+
+#: ../src/ConstraintTools.cpp:366
+msgid "Set this point on arc"
+msgstr "在弧上定這點"
+
+#: ../src/ConstraintTools.cpp:388
+msgid "Set Point On Circle"
+msgstr "在圓上定點"
+
+#: ../src/ConstraintTools.cpp:390
+msgid "Set this point on circle"
+msgstr "在圓上定這點"
+
+#: ../src/ConstraintTools.cpp:405
+#: ../src/ConstraintTools.cpp:407
+msgid "Run Test"
+msgstr "運行測試"
+
+#: ../src/ConversionTools.cpp:374
+msgid "Cannot convert object type "
+msgstr "不能轉換物件類型"
+
+#: ../src/ConversionTools.cpp:374
+msgid " to edge"
+msgstr "到邊緣"
+
+#: ../src/ConversionTools.cpp:383
+#: ../src/ConversionTools.cpp:420
+msgid "Error converting sketch to face"
+msgstr "轉換草圖到面錯誤"
+
+#: ../src/ConversionTools.cpp:425
+msgid "Fatal Error converting sketch to face"
+msgstr "嚴重錯誤轉換草圖到面"
+
+#: ../src/ConversionTools.cpp:823
+msgid "Test Face, Sketches United"
+msgstr "測試面，草圖聯合"
+
+#: ../src/CoordinateSystem.cpp:1260
+msgid "Set position and orientation by picking 3 points"
+msgstr "設定位置和取向通過選擇3點"
+
+#: ../src/CoordinateSystem.cpp:1274
+msgid "Set this coordinate system as the active one"
+msgstr "設定此坐標系統作為活躍的一個"
+
+#: ../src/CoordinateSystem.cpp:1298
+msgid "Transform selected items to world coordinates"
+msgstr "把所選的項目轉換成世界坐標"
+
+#: ../src/CoordinateSystem.cpp:1318
+#: ../src/CoordinateSystem.cpp:1512
+msgid "position"
+msgstr "位置"
+
+#: ../src/CoordinateSystem.cpp:1319
+msgid "x axis"
+msgstr "X軸"
+
+#: ../src/CoordinateSystem.cpp:1320
+msgid "y axis"
+msgstr "Y軸"
+
+#: ../src/CoordinateSystem.cpp:1322
+#: ../src/CoordinateSystem.cpp:1514
+msgid "Vertical Angle"
+msgstr "垂直角"
+
+#: ../src/CoordinateSystem.cpp:1323
+#: ../src/CoordinateSystem.cpp:1515
+msgid "Horizontal Angle"
+msgstr "水平角"
+
+#: ../src/CoordinateSystem.cpp:1324
+#: ../src/CoordinateSystem.cpp:1516
+msgid "Twist Angle"
+msgstr "扭轉角"
+
+#: ../src/CoordinateSystem.cpp:1575
+#: ../src/CoordinateSystem.cpp:1600
+msgid "Pick the location"
+msgstr "挑選這位置"
+
+#: ../src/CoordinateSystem.cpp:1577
+msgid "Pick a point on the x-axis"
+msgstr "在x軸挑選一個點"
+
+#: ../src/CoordinateSystem.cpp:1579
+msgid "Pick a point where y > 0"
+msgstr "挑選一個點 在 y > 0"
+
+#: ../src/Cuboid.cpp:92
+msgid "Stretched Cuboid"
+msgstr "拉伸的長方體"
+
+#: ../src/Cuboid.cpp:97
+msgid "width ( x )"
+msgstr "寬度 ( x )"
+
+#: ../src/Cuboid.cpp:98
+msgid "height( y )"
+msgstr "高度 ( y )"
+
+#: ../src/Cuboid.cpp:99
+msgid "depth ( z )"
+msgstr "深度 ( z )"
+
+#: ../src/Cylinder.cpp:75
+msgid "Stretched Cylinder"
+msgstr "拉伸的圓柱"
+
+#: ../src/Cylinder.cpp:80
+msgid "diameter"
+msgstr "直徑"
+
+#: ../src/DigitizeMode.cpp:54
+msgid "end"
+msgstr "結束"
+
+#: ../src/DigitizeMode.cpp:57
+msgid "intersection"
+msgstr "交點"
+
+#: ../src/DigitizeMode.cpp:60
+msgid "midpoint"
+msgstr "中點"
+
+#: ../src/DigitizeMode.cpp:63
+msgid "centre"
+msgstr "中心"
+
+#: ../src/DigitizeMode.cpp:66
+msgid "screen"
+msgstr "屏"
+
+#: ../src/DigitizeMode.cpp:69
+msgid "nearest"
+msgstr "最近"
+
+#: ../src/DigitizeMode.cpp:72
+msgid "tangent"
+msgstr "切線"
+
+#: ../src/DigitizeMode.cpp:85
+msgid "Digitize Mode"
+msgstr "數字化模式"
+
+#: ../src/DigitizeMode.cpp:93
+msgid "Press Esc key to cancel"
+msgstr "按Esc鍵取消"
+
+#: ../src/DigitizeMode.cpp:95
+msgid "Left button to accept position"
+msgstr "左鍵接受位置"
+
+#: ../src/DigitizeMode.cpp:429
+msgid "X"
+msgstr ""
+
+#: ../src/DigitizeMode.cpp:430 
+msgid "Y"
+msgstr ""
+
+#: ../src/DigitizeMode.cpp:431
+msgid "Z"
+msgstr ""
+
+#: ../src/DigitizeMode.cpp:441
+msgid "Offset (from last point)"
+msgstr "偏移"
+
+#: ../src/DigitizeMode.cpp:453
+msgid "Error! The 'Stop Picking' button shouldn't have been available!"
+msgstr "錯誤！'停止揀取“按鈕，不應該是可用的"
+
+#: ../src/DigitizeMode.cpp:456
+msgid "Stop Picking"
+msgstr "停止揀取"
+
+#: ../src/DigitizeMode.cpp:458
+msgid "Finish picking"
+msgstr "完成挑選"
+
+#: ../src/DimensionDrawing.cpp:114
+msgid "between two points"
+msgstr "兩點之間"
+
+#: ../src/DimensionDrawing.cpp:115
+msgid "between two points, XY only"
+msgstr "兩點之間 僅是XY"
+
+#: ../src/DimensionDrawing.cpp:116
+msgid "orthogonal"
+msgstr "正交"
+
+#: ../src/DimensionDrawing.cpp:118
+msgid "mode"
+msgstr "模式"
+
+#: ../src/DimensionDrawing.cpp:121
+#: ../src/HAngularDimension.cpp:374
+msgid "pythagorean"
+msgstr "畢氏圖形"
+
+#: ../src/DimensionDrawing.cpp:122
+#: ../src/HAngularDimension.cpp:375
+msgid "horizontal"
+msgstr "水平"
+
+#: ../src/DimensionDrawing.cpp:123
+#: ../src/HAngularDimension.cpp:376
+msgid "vertical"
+msgstr "垂直"
+
+#: ../src/DimensionDrawing.cpp:124
+#: ../src/HAngularDimension.cpp:377
+msgid "text mode"
+msgstr "文字模式"
+
+#: ../src/Drawing.cpp:173
+msgid "Stop drawing"
+msgstr "停止繪圖"
+
+#: ../src/Drawing.cpp:175
+msgid "Finish drawing"
+msgstr "完成繪圖"
+
+#: ../src/Drawing.cpp:191
+msgid "Add point"
+msgstr "加點"
+
+#: ../src/Drawing.cpp:193
+msgid "Add a point to drawing"
+msgstr "添加一個點到圖"
+
+#: ../src/Drawing.cpp:208
+msgid "Get Position"
+msgstr "獲取位置"
+
+#: ../src/Drawing.cpp:210
+msgid "Pick position without adding to the drawing"
+msgstr "挑選位置但不加到圖裡"
+
+#: ../src/Drawing.cpp:266
+msgid "set_draw_step"
+msgstr "設置_繪製_步驟"
+
+#: ../src/Drawing.cpp:286
+msgid "set_position"
+msgstr "設置_位置"
+
+#: ../src/Edge.cpp:151
+msgid "Blend edge"
+msgstr "混和的邊緣"
+
+#: ../src/Edge.cpp:157
+msgid "Enter Blend Radius"
+msgstr "輸入混和半徑"
+
+#: ../src/Edge.cpp:157
+msgid "Radius"
+msgstr "半徑"
+
+#: ../src/Edge.cpp:171
+msgid "Chamfer"
+msgstr "斜角"
+
+#: ../src/Edge.cpp:177
+msgid "Enter Chamfer Distance"
+msgstr "輸入斜角距離"
+
+#: ../src/Edge.cpp:177
+msgid "Distance"
+msgstr "距離"
+
+#: ../src/Edge.cpp:192
+msgid "Make a sketch from edge"
+msgstr "用邊沿做草圖"
+
+#: ../src/Edge.cpp:224
+msgid "Solid with edge chamfer"
+msgstr "有邊沿斜角的立體"
+
+#: ../src/Edge.cpp:231
+msgid "Solid with edge blend"
+msgstr "有邊沿混和的立體"
+
+#: ../src/Edge.cpp:238
+msgid "Error making fillet"
+msgstr "錯誤製作圓角"
+
+#: ../src/Edge.cpp:242
+msgid "A fatal error happened during Chamfer"
+msgstr "在做斜角時發生一個致命的錯誤"
+
+#: ../src/Edge.cpp:242
+msgid "A fatal error happened during Blend"
+msgstr "在做混和時發生一個致命的錯誤"
+
+#: ../src/Edge.cpp:248
+msgid "length"
+msgstr "長度"
+
+#: ../src/Face.cpp:199
+msgid "surface type"
+msgstr "表面類型"
+
+#: ../src/Face.cpp:220
+msgid "Make Coordinate System"
+msgstr "做坐標系統"
+
+#: ../src/Face.cpp:233
+#: ../src/Face.cpp:260
+msgid "Face Coordinate System"
+msgstr "面的坐標系統"
+
+#: ../src/Face.cpp:247
+msgid "Sketch On Face"
+msgstr "在面做草圖"
+
+#: ../src/Face.cpp:279
+msgid "Extrude Face"
+msgstr "凸出面"
+
+#: ../src/Face.cpp:293
+msgid "Rotate to Face"
+msgstr "對面旋轉"
+
+#: ../src/Face.cpp:449
+msgid "unknown"
+msgstr "不明"
+
+#: ../src/Face.cpp:453
+msgid "plane"
+msgstr "平面"
+
+#: ../src/Face.cpp:457
+msgid "cylinder"
+msgstr "圓柱"
+
+#: ../src/Face.cpp:461
+msgid "cone"
+msgstr "錐體"
+
+#: ../src/Face.cpp:465
+msgid "sphere"
+msgstr "球"
+
+#: ../src/Face.cpp:469
+msgid "torus"
+msgstr "凸圓盤"
+
+#: ../src/Face.cpp:473
+msgid "bezier"
+msgstr "貝茲曲線"
+
+#: ../src/Face.cpp:477
+msgid "bspline"
+msgstr "B樣條曲線"
+
+#: ../src/Face.cpp:481
+msgid "revolution"
+msgstr "轉"
+
+#: ../src/Face.cpp:485
+msgid "extrusion"
+msgstr "突出"
+
+#: ../src/Face.cpp:489
+msgid "offset"
+msgstr "偏移"
+
+#: ../src/Face.cpp:682
+msgid "Error in CFace::GetNurbSurfaceParams"
+msgstr ""
+
+#: ../src/FaceTools.cpp:66
+#: ../src/FaceTools.cpp:71
+#: ../src/FaceTools.cpp:76
+msgid "Error in GetFaceNormalAtUV"
+msgstr ""
+
+#: ../src/Group.cpp:13
+msgid "Group"
+msgstr "組合"
+
+#: ../src/Group.cpp:240
+msgid "custom grippers"
+msgstr "自定夾持器"
+
+#: ../src/Group.cpp:244
+msgid "custom grippers just one axis"
+msgstr "自定夾持器 只是一軸"
+
+#: ../src/Group.cpp:247
+msgid "datum"
+msgstr "原點"
+
+#: ../src/Group.cpp:249
+msgid "x" 
+msgstr ""
+
+#: ../src/Group.cpp:251
+msgid "y"
+msgstr ""
+
+#: ../src/Group.cpp:253
+msgid "z"
+msgstr ""
+
+#: ../src/Group.cpp:295
+msgid "Move datum"
+msgstr "移動原點"
+
+#: ../src/Group.cpp:303
+msgid "Move px"
+msgstr "移動 px"
+
+#: ../src/Group.cpp:308
+msgid "Move py"
+msgstr "移動 py"
+
+#: ../src/Group.cpp:313
+msgid "Move pz"
+msgstr "移動 pz"
+
+#: ../src/HAngularDimension.cpp:288
+msgid "Toggle Dimension Constraint"
+msgstr "切換尺寸約束"
+
+#: ../src/HAngularDimension.cpp:290
+msgid "Set this dimension as constrained"
+msgstr "設定此尺寸作為已約束"
+
+#: ../src/HAngularDimension.cpp:373
+msgid "string"
+msgstr "弦"
+
+#: ../src/HAngularDimension.cpp:379
+msgid "scale"
+msgstr "比例"
+
+#: ../src/HArc.cpp:108
+msgid "Toggle Radius"
+msgstr "切換半徑"
+
+#: ../src/HArc.cpp:110
+msgid "Set this arcs radius as constrained"
+msgstr "設定此圓弧半徑作為已約束"
+
+#: ../src/HArc.cpp:131
+msgid "Click centre point"
+msgstr "點擊中心點"
+
+#: ../src/HArc.cpp:153
+msgid "Click first end point"
+msgstr "點擊第一個端點"
+
+#: ../src/HArc.cpp:175
+msgid "Click second end point"
+msgstr "點擊第二個端點"
+
+#: ../src/HArc.cpp:388
+#: ../src/HILine.cpp:119
+#: ../src/HLine.cpp:277
+msgid "start"
+msgstr "開始"
+
+#: ../src/HArc.cpp:391
+#: ../src/HCircle.cpp:215
+#: ../src/HEllipse.cpp:279
+msgid "axis"
+msgstr "軸"
+
+#: ../src/HArc.cpp:395
+#: ../src/HArc.cpp:397
+#: ../src/HCircle.cpp:216
+msgid "radius"
+msgstr "半徑"
+
+#: ../src/HCircle.cpp:904
+msgid "Click midpoint"
+msgstr "點擊中間點"
+
+#: ../src/HCircle.cpp:929
+msgid "Click centre-top point"
+msgstr "點擊中間的最高點"
+
+#: ../src/HCircle.cpp:953
+msgid "Click centre-bottom point"
+msgstr "點擊中間的最底點"
+
+#: ../src/HCircle.cpp:977
+msgid "Click centre-right point"
+msgstr "點擊中間偏右點"
+
+#: ../src/HCircle.cpp:1001
+msgid "Click centre-left point"
+msgstr "點擊中間偏右點"
+
+#: ../src/HDimension.cpp:95
+#: ../src/HDimension.cpp:446
+#: ../src/HeeksCAD.cpp:3100
+msgid "mm"
+msgstr ""
+
+#: ../src/HDimension.cpp:96
+#: ../src/HeeksCAD.cpp:3101
+msgid "inch"
+msgstr ""
+
+#: ../src/HDimension.cpp:426
+#: ../src/HText.cpp:190
+msgid "orientation"
+msgstr "方向"
+
+#: ../src/HDimension.cpp:444 ../src/Ruler.cpp:322
+msgid "use view units"
+msgstr "使用視圖單位"
+
+#: ../src/HDimension.cpp:445
+msgid "inches"
+msgstr ""
+
+#: ../src/HDimension.cpp:447
+#: ../src/HeeksCAD.cpp:3104
+msgid "units"
+msgstr "單位"
+
+#: ../src/HDimension.cpp:452
+#: ../src/HDimension.cpp:454
+msgid "dimension value"
+msgstr "尺寸值"
+
+#: ../heekscad/src/HEllipse.cpp:280
+msgid "major radius"
+msgstr "大半徑"
+
+#: ../heekscad/src/HEllipse.cpp:281
+msgid "minor radius"
+msgstr "小半徑"
+
+#: ../heekscad/src/HEllipse.cpp:282
+msgid "rotation"
+msgstr "旋轉"
+
+#: ../heekscad/src/HEllipse.cpp:283
+msgid "start angle"
+msgstr "起始角"
+
+#: ../heekscad/src/HEllipse.cpp:284
+msgid "end angle"
+msgstr "結束角"
+
+#: ../heekscad/src/HGear.cpp:429
+msgid "num teeth"
+msgstr "齒數"
+
+#: ../heekscad/src/HGear.cpp:430
+msgid "module"
+msgstr "模塊"
+
+#: ../heekscad/src/HGear.cpp:431
+msgid "clearance"
+msgstr "間隙"
+
+#: ../heekscad/src/HGear.cpp:432
+msgid "addendum offset"
+msgstr "增編偏移量"
+
+#: ../heekscad/src/HGear.cpp:433
+msgid "addendum multiplier"
+msgstr "增編倍數"
+
+#: ../heekscad/src/HGear.cpp:434
+msgid "dedendum multiplier"
+msgstr "減編倍數"
+
+#: ../heekscad/src/HGear.cpp:435
+msgid "pressure angle"
+msgstr "壓力角"
+
+#: ../heekscad/src/HGear.cpp:436
+msgid "spacing"
+msgstr "間隔"
+
+#: ../heekscad/src/HGear.cpp:437
+msgid "tip relief"
+msgstr "修缘"
+
+#: ../heekscad/src/HGear.cpp:438
+msgid "depth"
+msgstr "深度"
+
+#: ../heekscad/src/HGear.cpp:439
+msgid "cone half angle"
+msgstr "錐半角"
+
+#: ../heekscad/src/HGear.cpp:440
+msgid "inner ring diameter"
+msgstr "內圈直徑"
+
+#: ../heekscad/src/HGear.cpp:513
+msgid "Make Sketches"
+msgstr "作出草圖"
+
+#: ../heekscad/src/HGear.cpp:522
+msgid "Make One Tooth Sketches"
+msgstr "作出一個齒的草圖"
+
+#: ../heekscad/src/HILine.cpp:122
+#: ../heekscad/src/HLine.cpp:281
+#: ../heekscad/src/HLine.cpp:283
+msgid "Length"
+msgstr "長度"
+
+#: ../heekscad/src/HImage.cpp:155
+msgid "Picture - "
+msgstr "圖像 - "
+
+#: ../heekscad/src/HLine.cpp:51
+msgid "Toggle Horizontal"
+msgstr "切換水平"
+
+#: ../heekscad/src/HLine.cpp:53
+msgid "Set this line to be horizontal"
+msgstr "設置此線是水平"
+
+#: ../heekscad/src/HLine.cpp:64
+msgid "Toggle Vertical"
+msgstr "切換垂直"
+
+#: ../heekscad/src/HLine.cpp:66
+msgid "Set this line to be vertical"
+msgstr "設置此線是垂直"
+
+#: ../heekscad/src/HLine.cpp:77
+msgid "Toggle Line Length"
+msgstr "切換線長"
+
+#: ../heekscad/src/HLine.cpp:79
+msgid "Set this lines length as constrained"
+msgstr "設置此線的長度作為約束"
+
+#: ../heekscad/src/HLine.cpp:88
+#: ../heekscad/src/HeeksFrame.cpp:991
+msgid "Cylinder"
+msgstr "圓柱體"
+
+#: ../heekscad/src/HLine.cpp:93
+msgid "Make Cylinder On Line"
+msgstr "作出線上圓柱"
+
+#: ../heekscad/src/HLine.cpp:102
+#: ../heekscad/src/HeeksFrame.cpp:998
+msgid "Cone"
+msgstr "錐體"
+
+#: ../heekscad/src/HLine.cpp:107
+msgid "Make Cone On Line"
+msgstr "作出線上錐體"
+
+#: ../heekscad/src/HLine.cpp:125
+msgid "Click Midpoint On Line"
+msgstr "按一下線的中點"
+
+#: ../heekscad/src/HLine.cpp:141
+msgid "Click Start Of Line"
+msgstr "按一下線的開端"
+
+#: ../heekscad/src/HLine.cpp:157
+msgid "Click End Of Line"
+msgstr "按一下線的終端"
+
+#: ../heekscad/src/HPoint.cpp:147
+msgid "Toggle Fixed"
+msgstr "切換固定的"
+
+#: ../heekscad/src/HPoint.cpp:149
+msgid "Set this point as fixed"
+msgstr "設置此點為固定的"
+
+#: ../heekscad/src/HPoint.cpp:166
+#: ../heekscad/src/HPoint.cpp:168
+msgid "Click point location"
+msgstr "點擊點的位置"
+
+#: ../heekscad/src/HPoint.cpp:182
+msgid "Enter offset in X,Y,Z format (with commas between them)"
+msgstr "輸入偏移量用X，Y，Z軸格式"
+
+#: ../heekscad/src/HPoint.cpp:183
+msgid "Apply Offset To Selected Location"
+msgstr "套用偏移量到選定的位置"
+
+#: ../heekscad/src/HPoint.cpp:222
+#: ../heekscad/src/HPoint.cpp:224
+msgid "Offset from point"
+msgstr "從點的偏移量"
+
+#: ../heekscad/src/HSpline.cpp:234
+msgid "Knot"
+msgstr "節"
+
+#: ../heekscad/src/HSpline.cpp:245
+msgid "Pole"
+msgstr "極點"
+
+#: ../heekscad/src/HSpline.cpp:247
+msgid "Weight"
+msgstr "衡量"
+
+#: ../heekscad/src/HText.cpp:201
+msgid "OpenGL (default) font"
+msgstr "OpenGL字體"
+
+#: ../heekscad/src/HText.cpp:213
+msgid "Font"
+msgstr "字體"
+
+#: ../heekscad/src/HText.cpp:311
+msgid "Only a single orientation modifier is supported"
+msgstr "只支持有單取向修改器"
+
+#: ../heekscad/src/HText.cpp:343
+msgid "Make a Sketch"
+msgstr "做一個草圖"
+
+#: ../heekscad/src/HText.cpp:345
+msgid "Convert the lines and arcs that make up this text into a sketch object."
+msgstr "轉換線條和圓弧做成的這個文字到草圖物件"
+
+#: ../heekscad/src/HText.cpp:359
+msgid "Add Orientation Modifier"
+msgstr "添加取向修改器"
+
+#: ../heekscad/src/HText.cpp:361
+msgid "Add graphics to orient text"
+msgstr "添加圖形中文字定向"
+
+#: ../heekscad/src/HeeksCAD.cpp:164
+#: ../heekscad/src/HeeksCAD.cpp:707
+msgid "Untitled"
+msgstr "未命名的"
+
+#: ../src/HeeksCAD.cpp:1106
+msgid "OpenCascade failures occured during DXF read processing.  Would you like to import again and ignore the errors?"
+msgstr "讀DXF的期間發生OpenCascade故障。你想再次導入，而忽略錯誤?"
+
+#: ../src/HeeksCAD.cpp:1106
+msgid "DXF Read"
+msgstr "DXF文件讀取"
+
+#: ../src/HeeksCAD.cpp:1120
+msgid "OpenCascade failure occured during DXF read processing"
+msgstr "讀DXF的期間發生OpenCascade故障"
+
+#: ../src/HeeksCAD.cpp:1128
+msgid "Select how the file is to be interpreted"
+msgstr "選擇該文件是如何解釋"
+
+#: ../src/HeeksCAD.cpp:1129
+msgid "RS274X file interpretation"
+msgstr "RS274X文件解釋"
+
+#: ../src/HeeksCAD.cpp:1133
+msgid "Produce trace isolation sketches"
+msgstr "做成輪廓隔離的草圖"
+
+#: ../src/HeeksCAD.cpp:1134
+msgid "Produce trace centre-line sketches"
+msgstr "做成中心線描繪草圖"
+
+#: ../src/HeeksCAD.cpp:1135
+msgid "Produce mirrored trace isolation sketches"
+msgstr "做成鏡像輪廓隔離草圖"
+
+#: ../src/HeeksCAD.cpp:1136
+msgid "Produce mirrored trace centre-line sketches"
+msgstr "做成鏡像中心線描繪草圖"
+
+#: ../src/HeeksCAD.cpp:1214
+#: ../src/HeeksFrame.cpp:1815
+msgid "Open file"
+msgstr "打開文件"
+
+#: ../src/HeeksCAD.cpp:1226
+#: ../src/HeeksCAD.cpp:1296
+#: ../src/HeeksCAD.cpp:1733
+msgid "Invalid file type chosen"
+msgstr "無效的文件類型選擇"
+
+#: ../src/HeeksCAD.cpp:1226
+#: ../src/HeeksCAD.cpp:1296
+#: ../src/HeeksCAD.cpp:1733
+msgid "expecting"
+msgstr "期待"
+
+#: ../src/HeeksCAD.cpp:1425
+#: ../src/HeeksCAD.cpp:1490
+#: ../src/HeeksCAD.cpp:1520
+#: ../src/HeeksCAD.cpp:1548
+msgid "couldn't open file"
+msgstr "無法打開文件"
+
+#: ../src/HeeksCAD.cpp:1692
+msgid "Save graphical data file"
+msgstr "保存圖形數據的文件"
+
+#: ../src/HeeksCAD.cpp:2034
+msgid "Exit Full Screen Mode"
+msgstr "退出全屏模式"
+
+#: ../src/HeeksCAD.cpp:2035
+msgid "Show Full Screen"
+msgstr "全屏顯示"
+
+#: ../src/HeeksCAD.cpp:2069
+msgid "Move here"
+msgstr "搬到這裡"
+
+#: ../src/HeeksCAD.cpp:2069
+msgid "Copy here"
+msgstr "複製到此處"
+
+#: ../src/HeeksCAD.cpp:2103
+msgid "Set world coordinate system active"
+msgstr "設定世界坐標系統為主動"
+
+#: ../src/HeeksCAD.cpp:2155
+msgid "Add points at intersections"
+msgstr "在交點加入點"
+
+#: ../src/HeeksCAD.cpp:2998
+msgid "view options"
+msgstr "視圖選項"
+
+#: ../src/HeeksCAD.cpp:3002
+msgid "stay upright"
+msgstr "保持垂直"
+
+#: ../src/HeeksCAD.cpp:3003
+msgid "free"
+msgstr "自由"
+
+#: ../src/HeeksCAD.cpp:3004
+msgid "rotate mode"
+msgstr "旋轉模式"
+
+#: ../src/HeeksCAD.cpp:3008
+msgid "none"
+msgstr "沒有"
+
+#: ../src/HeeksCAD.cpp:3009
+msgid "input mode title"
+msgstr "輸入模式標題"
+
+#: ../src/HeeksCAD.cpp:3010
+msgid "full help"
+msgstr "全面幫助"
+
+#: ../src/HeeksCAD.cpp:3011
+msgid "screen text"
+msgstr "屏幕上的文字"
+
+#: ../src/HeeksCAD.cpp:3013
+msgid "antialiasing"
+msgstr "消除鋸齒"
+
+#: ../src/HeeksCAD.cpp:3015
+msgid "fixed light"
+msgstr "固定光線"
+
+#: ../src/HeeksCAD.cpp:3017
+msgid "reverse mouse wheel"
+msgstr "逆向鼠標滾輪"
+
+#: ../src/HeeksCAD.cpp:3018
+msgid "reverse zooming mode"
+msgstr "逆向縮放模式"
+
+#: ../src/HeeksCAD.cpp:3019
+msgid "Ctrl key does rotate"
+msgstr "Ctrl鍵做旋轉"
+
+#: ../src/HeeksCAD.cpp:3020
+msgid "show datum"
+msgstr "顯示原點"
+
+#: ../src/HeeksCAD.cpp:3021
+msgid "datum is solid"
+msgstr "原點是立體"
+
+#: ../src/HeeksCAD.cpp:3022
+msgid "datum size"
+msgstr "原點大小"
+
+#: ../src/HeeksCAD.cpp:3023
+msgid "datum size is pixels not mm"
+msgstr "原點大小是像素不是毫米"
+
+#: ../src/HeeksCAD.cpp:3024
+msgid "show ruler"
+msgstr "顯示標尺"
+
+#: ../src/HeeksCAD.cpp:3027
+msgid "single color"
+msgstr "單一顏色"
+
+#: ../src/HeeksCAD.cpp:3028
+msgid "top color and bottom color"
+msgstr "頂部和底部的顏色"
+
+#: ../src/HeeksCAD.cpp:3029
+msgid "left color and right color"
+msgstr "左邊和右邊的顏色"
+
+#: ../src/HeeksCAD.cpp:3030
+msgid "four corner colors"
+msgstr "四個角落的顏色"
+
+#: ../src/HeeksCAD.cpp:3031
+msgid "sky and ground"
+msgstr "天空和地面"
+
+#: ../src/HeeksCAD.cpp:3032
+msgid "background mode"
+msgstr "背景模式"
+
+#: ../src/HeeksCAD.cpp:3037
+msgid "background color"
+msgstr "背景顏色"
+
+#: ../src/HeeksCAD.cpp:3041
+msgid "top background color"
+msgstr "頂部背景顏色"
+
+#: ../src/HeeksCAD.cpp:3042
+msgid "bottom background color"
+msgstr "底部的背景色"
+
+#: ../src/HeeksCAD.cpp:3046
+msgid "left background color"
+msgstr "左側的背景顏色"
+
+#: ../src/HeeksCAD.cpp:3047
+msgid "right background color"
+msgstr "右側的背景顏色"
+
+#: ../src/HeeksCAD.cpp:3051
+msgid "top left background color"
+msgstr "左上角的背景顏色"
+
+#: ../src/HeeksCAD.cpp:3052
+msgid "bottom left background color"
+msgstr "左下角的背景顏色"
+
+#: ../src/HeeksCAD.cpp:3053
+msgid "top right background color"
+msgstr "右上角的背景顏色"
+
+#: ../src/HeeksCAD.cpp:3054
+msgid "bottom right background color"
+msgstr "右下角的背景顏色"
+
+#: ../src/HeeksCAD.cpp:3058
+msgid "sky top color"
+msgstr "天空的顏色"
+
+#: ../src/HeeksCAD.cpp:3059
+msgid "sky middle color"
+msgstr "天空中間的顏色"
+
+#: ../src/HeeksCAD.cpp:3060
+msgid "sky bottom color"
+msgstr "天空底部顏色"
+
+#: ../src/HeeksCAD.cpp:3061
+msgid "ground top color"
+msgstr "地面頂部顏色"
+
+#: ../src/HeeksCAD.cpp:3062
+msgid "ground middle color"
+msgstr "地面中間顏色"
+
+#: ../src/HeeksCAD.cpp:3063
+msgid "ground bottom color"
+msgstr "地面底部顏色"
+
+#: ../src/HeeksCAD.cpp:3069
+msgid "no grid"
+msgstr "無柵格"
+
+#: ../src/HeeksCAD.cpp:3070
+msgid "faint color"
+msgstr "淡淡的顏色"
+
+#: ../src/HeeksCAD.cpp:3071
+msgid "alpha blending"
+msgstr "alpha混合"
+
+#: ../src/HeeksCAD.cpp:3072
+msgid "colored alpha blending"
+msgstr "彩色alpha混合"
+
+#: ../src/HeeksCAD.cpp:3073
+msgid "grid mode"
+msgstr "網格模式"
+
+#: ../src/HeeksCAD.cpp:3075
+msgid "face selection color"
+msgstr "面的選擇顏色"
+
+#: ../src/HeeksCAD.cpp:3076
+msgid "perspective"
+msgstr "透視"
+
+#: ../src/HeeksCAD.cpp:3095
+msgid "tool icon size"
+msgstr "工具圖示的大小"
+
+#: ../src/HeeksCAD.cpp:3106
+msgid "flat on screen dimension text"
+msgstr "平面上的屏幕尺寸文字"
+
+#: ../src/HeeksCAD.cpp:3107
+msgid "Allow OpenGL stippling"
+msgstr "允許OpenGL的點畫"
+
+#: ../src/HeeksCAD.cpp:3110
+msgid "faces and edges"
+msgstr "面和邊"
+
+#: ../src/HeeksCAD.cpp:3111
+msgid "edges only"
+msgstr "只有邊"
+
+#: ../src/HeeksCAD.cpp:3112
+msgid "faces only"
+msgstr "只有面"
+
+#: ../src/HeeksCAD.cpp:3113
+msgid "solid view mode"
+msgstr "立體視圖模式"
+
+#: ../src/HeeksCAD.cpp:3115
+msgid "input uses modal dialog"
+msgstr "使用模態對話框輸入"
+
+#: ../src/HeeksCAD.cpp:3116
+msgid "dragging moves objects"
+msgstr "拖曳物件"
+
+#: ../src/HeeksCAD.cpp:3120
+msgid "digitizing"
+msgstr "數字化"
+
+#: ../src/HeeksCAD.cpp:3127
+msgid "coordinates"
+msgstr "座標"
+
+#: ../src/HeeksCAD.cpp:3129
+msgid "grid size"
+msgstr "網格尺寸"
+
+#: ../src/HeeksCAD.cpp:3130
+msgid "snap to grid"
+msgstr "對齊網格"
+
+#: ../src/HeeksCAD.cpp:3132
+msgid "autosolve constraints"
+msgstr "自動解釋制約"
+
+#: ../src/HeeksCAD.cpp:3136
+msgid "correlation"
+msgstr "相關"
+
+#: ../src/HeeksCAD.cpp:3137
+msgid "Minimum correlation factor (0.0 (nothing like it) -> 1.0 (perfect match))"
+msgstr "最小相關係數 (0.0 (毫不相干) -> 1.0 (完全匹配)"
+
+#: ../heekscad/src/HeeksCAD.cpp:3138
+msgid "Maximum scale threshold (1.0 - must be same size, 1.5 (can be half as big again or 2/3 size)"
+msgstr "最大比例的門檻 (1.0 - 必須是相同的大小, 1.5 (可以是一半，或2/3大小) "
+
+#: ../heekscad/src/HeeksCAD.cpp:3139
+msgid "Number of sample points"
+msgstr "採樣點的數量"
+
+#: ../heekscad/src/HeeksCAD.cpp:3140
+msgid "Correlate by color"
+msgstr "按顏色相關"
+
+#: ../heekscad/src/HeeksCAD.cpp:3143
+msgid "drawing"
+msgstr "繪圖"
+
+#: ../heekscad/src/HeeksCAD.cpp:3144
+msgid "current color"
+msgstr "當前顏色"
+
+#: ../heekscad/src/HeeksCAD.cpp:3145
+msgid "construction color"
+msgstr "施工顏色"
+
+#: ../heekscad/src/HeeksCAD.cpp:3146
+msgid "geometry tolerance"
+msgstr "幾何公差"
+
+#: ../heekscad/src/HeeksCAD.cpp:3147
+msgid "face to sketch deviaton"
+msgstr "面至草圖的偏差"
+
+#: ../heekscad/src/HeeksCAD.cpp:3148
+msgid "Use old solid fuse ( to prevent coplanar faces )"
+msgstr "使用舊的立體熔合"
+
+#: ../heekscad/src/HeeksCAD.cpp:3149
+msgid "Extrude makes a solid"
+msgstr "凸出作出立體"
+
+#: ../heekscad/src/HeeksCAD.cpp:3150
+msgid "Solid revolution angle"
+msgstr "立體轉動的角度"
+
+#: ../heekscad/src/HeeksCAD.cpp:3161
+msgid "selection filter"
+msgstr "選取範圍篩選"
+
+#: ../heekscad/src/HeeksCAD.cpp:3162
+msgid "point"
+msgstr "點"
+
+#: ../heekscad/src/HeeksCAD.cpp:3163
+msgid "line"
+msgstr "線"
+
+#: ../heekscad/src/HeeksCAD.cpp:3164
+msgid "arc"
+msgstr "弧"
+
+#: ../heekscad/src/HeeksCAD.cpp:3165
+msgid "infinite line"
+msgstr "無限線"
+
+#: ../heekscad/src/HeeksCAD.cpp:3166
+msgid "circle"
+msgstr ""
+
+#: ../heekscad/src/HeeksCAD.cpp:3167
+msgid "edge"
+msgstr ""
+
+#: ../heekscad/src/HeeksCAD.cpp:3168
+msgid "face"
+msgstr "圓"
+
+#: ../heekscad/src/HeeksCAD.cpp:3169
+msgid "vertex"
+msgstr "頂點"
+
+#: ../heekscad/src/HeeksCAD.cpp:3170
+msgid "solid"
+msgstr "立體"
+
+#: ../heekscad/src/HeeksCAD.cpp:3171
+msgid "stl_solid"
+msgstr "stl立體 (_s)"
+
+#: ../heekscad/src/HeeksCAD.cpp:3172
+msgid "wire"
+msgstr "線"
+
+#: ../heekscad/src/HeeksCAD.cpp:3173
+msgid "sketch"
+msgstr "草圖"
+
+#: ../heekscad/src/HeeksCAD.cpp:3174
+msgid "image"
+msgstr "圖像"
+
+#: ../heekscad/src/HeeksCAD.cpp:3175
+msgid "coordinate system"
+msgstr "坐標系統"
+
+#: ../heekscad/src/HeeksCAD.cpp:3176
+msgid "text"
+msgstr "文字"
+
+#: ../heekscad/src/HeeksCAD.cpp:3177
+msgid "dimension"
+msgstr "量度尺寸"
+
+#: ../heekscad/src/HeeksCAD.cpp:3178
+msgid "ruler"
+msgstr "尺"
+
+#: ../heekscad/src/HeeksCAD.cpp:3179
+msgid "pad"
+msgstr "墊"
+
+#: ../heekscad/src/HeeksCAD.cpp:3180
+msgid "part"
+msgstr "部件"
+
+#: ../heekscad/src/HeeksCAD.cpp:3181
+msgid "pocket"
+msgstr "挖口袋槽"
+
+#: ../heekscad/src/HeeksCAD.cpp:3184
+msgid "file options"
+msgstr "文件選項"
+
+#: ../heekscad/src/HeeksCAD.cpp:3185
+msgid "DXF"
+msgstr ""
+
+#: ../heekscad/src/HeeksCAD.cpp:3186
+msgid "make sketch"
+msgstr "做出草圖"
+
+#: ../heekscad/src/HeeksCAD.cpp:3187
+msgid "ignore errors where possible"
+msgstr "在可能的情況下忽略錯誤"
+
+#: ../heekscad/src/HeeksCAD.cpp:3188
+msgid "Layer Name Suffixes To Discard"
+msgstr "要廢棄的圖層後綴"
+
+#: ../heekscad/src/HeeksCAD.cpp:3191
+msgid "STL"
+msgstr ""
+
+#: ../heekscad/src/HeeksCAD.cpp:3192
+msgid "stl save facet tolerance"
+msgstr "STL保存面公差"
+
+#: ../heekscad/src/HeeksCAD.cpp:3194
+msgid "auto save interval (in minutes)"
+msgstr "自動保存的時間間隔 (分鐘)"
+
+#: ../heekscad/src/HeeksCAD.cpp:3196
+msgid "save constraints to file"
+msgstr "保存約束到文件"
+
+#: ../heekscad/src/HeeksCAD.cpp:3201
+msgid "font options"
+msgstr "字體選項"
+
+#: ../heekscad/src/HeeksCAD.cpp:3202
+msgid "Paths (semicolon delimited)"
+msgstr "路徑"
+
+#: ../heekscad/src/HeeksCAD.cpp:3203
+msgid "Word Space Percentage"
+msgstr "字詞空間百分比"
+
+#: ../heekscad/src/HeeksCAD.cpp:3204
+msgid "Character Space Percentage"
+msgstr "字符空間百分比"
+
+#: ../heekscad/src/HeeksCAD.cpp:3207
+msgid "logging"
+msgstr "日誌"
+
+#: ../heekscad/src/HeeksCAD.cpp:3210
+msgid "FatalError"
+msgstr "致命錯誤"
+
+#: ../heekscad/src/HeeksCAD.cpp:3211
+msgid "Error"
+msgstr "錯誤"
+
+#: ../heekscad/src/HeeksCAD.cpp:3212
+msgid "Warning"
+msgstr "警告"
+
+#: ../heekscad/src/HeeksCAD.cpp:3213
+msgid "Message"
+msgstr "訊息"
+
+#: ../heekscad/src/HeeksCAD.cpp:3214
+msgid "Status"
+msgstr "狀態"
+
+#: ../heekscad/src/HeeksCAD.cpp:3215
+msgid "Info"
+msgstr "資訊"
+
+#: ../heekscad/src/HeeksCAD.cpp:3216
+msgid "Debug"
+msgstr "除錯"
+
+#: ../heekscad/src/HeeksCAD.cpp:3217
+msgid "Trace"
+msgstr "描圖"
+
+#: ../heekscad/src/HeeksCAD.cpp:3219
+msgid "log level"
+msgstr "日誌級別"
+
+#: ../heekscad/src/HeeksCAD.cpp:3221
+msgid "use repetition counting"
+msgstr "使用重複計數"
+
+#: ../heekscad/src/HeeksCAD.cpp:3222
+msgid "use timestamps"
+msgstr "使用時間標記"
+
+#: ../heekscad/src/HeeksCAD.cpp:3282
+#: ../heekscad/src/HeeksCAD.cpp:3287
+msgid "Known Files"
+msgstr "已知的文件"
+
+#: ../heekscad/src/HeeksCAD.cpp:3282
+#: ../heekscad/src/HeeksCAD.cpp:3287
+msgid "Heeks files"
+msgstr "Heeks 文件"
+
+#: ../heekscad/src/HeeksCAD.cpp:3282
+#: ../heekscad/src/HeeksCAD.cpp:3287
+msgid "IGES files"
+msgstr "IGIS 文件"
+
+#: ../heekscad/src/HeeksCAD.cpp:3282
+#: ../heekscad/src/HeeksCAD.cpp:3287
+msgid "STEP files"
+msgstr "STEP 文件"
+
+#: ../heekscad/src/HeeksCAD.cpp:3282
+#: ../heekscad/src/HeeksCAD.cpp:3287
+msgid "STL files"
+msgstr "STL 文件"
+
+#: ../heekscad/src/HeeksCAD.cpp:3282
+msgid "Scalar Vector Graphics files"
+msgstr "SVG 文件"
+
+#: ../heekscad/src/HeeksCAD.cpp:3282
+#: ../heekscad/src/HeeksCAD.cpp:3287
+msgid "DXF files"
+msgstr "DXF 文件"
+
+#: ../heekscad/src/HeeksCAD.cpp:3282
+msgid "RX274X/Gerber files"
+msgstr "RX274X/Gerber 文件"
+
+#: ../heekscad/src/HeeksCAD.cpp:3282
+msgid "Picture files"
+msgstr "圖片文件"
+
+#: ../heekscad/src/HeeksCAD.cpp:3287
+msgid "CPP files"
+msgstr "CPP 文件"
+
+#: ../heekscad/src/HeeksCAD.cpp:3287
+msgid "OpenCAMLib python files"
+msgstr "OpenCAMLib python 文件"
+
+#: ../heekscad/src/HeeksCAD.cpp:3331
+msgid "Unmark"
+msgstr "取消標記"
+
+#: ../heekscad/src/HeeksCAD.cpp:3334
+#: ../heekscad/src/HeeksCAD.cpp:3340
+msgid "Mark"
+msgstr "標記"
+
+#: ../heekscad/src/HeeksCAD.cpp:3338
+#: ../heekscad/src/HeeksFrame.cpp:152
+#: ../heekscad/src/HeeksFrame.cpp:1765
+#: ../heekscad/src/HeeksFrame.cpp:1973
+msgid "Properties"
+msgstr "屬性"
+
+#: ../heekscad/src/HeeksCAD.cpp:3769
+msgid "Save changes to file"
+msgstr "存盘修改的文件"
+
+#: ../heekscad/src/HeeksCAD.cpp:4536
+msgid "Unknown"
+msgstr "未知"
+
+#: ../heekscad/src/HeeksCAD.cpp:4537
+msgid "Document"
+msgstr "文件"
+
+#: ../heekscad/src/HeeksCAD.cpp:4538
+msgid "Point"
+msgstr "點"
+
+#: ../heekscad/src/HeeksCAD.cpp:4539
+msgid "Line"
+msgstr "線"
+
+#: ../heekscad/src/HeeksCAD.cpp:4540
+msgid "Arc"
+msgstr "弧"
+
+#: ../heekscad/src/HeeksCAD.cpp:4541
+msgid "ILine"
+msgstr "無限線"
+
+#: ../heekscad/src/HeeksCAD.cpp:4542
+msgid "Circle"
+msgstr "圓"
+
+#: ../heekscad/src/HeeksCAD.cpp:4543
+msgid "Gripper"
+msgstr "夾持器"
+
+#: ../heekscad/src/HeeksCAD.cpp:4544
+msgid "Vertex"
+msgstr "頂點"
+
+#: ../heekscad/src/HeeksCAD.cpp:4545
+msgid "Edge"
+msgstr "邊沿"
+
+#: ../heekscad/src/HeeksCAD.cpp:4546
+msgid "Face"
+msgstr "面"
+
+#: ../heekscad/src/HeeksCAD.cpp:4547
+msgid "Loop"
+msgstr "圈"
+
+#: ../heekscad/src/HeeksCAD.cpp:4548
+msgid "Solid"
+msgstr "立體"
+
+#: ../heekscad/src/HeeksCAD.cpp:4549
+msgid "StlSolid"
+msgstr "STL立體"
+
+#: ../heekscad/src/HeeksCAD.cpp:4550
+msgid "Wire"
+msgstr "線"
+
+#: ../heekscad/src/HeeksCAD.cpp:4551
+msgid "Sketch"
+msgstr "草圖"
+
+#: ../heekscad/src/HeeksCAD.cpp:4552
+msgid "Image"
+msgstr "影像"
+
+#: ../heekscad/src/HeeksCAD.cpp:4553
+msgid "CoordinateSystem"
+msgstr "坐標系統"
+
+#: ../heekscad/src/HeeksCAD.cpp:4554
+msgid "Text"
+msgstr "文字"
+
+#: ../heekscad/src/HeeksCAD.cpp:4555
+msgid "Dimension"
+msgstr "文字"
+
+#: ../heekscad/src/HeeksCAD.cpp:4556
+msgid "Ruler"
+msgstr "尺"
+
+#: ../heekscad/src/HeeksCAD.cpp:4557
+msgid "Xml"
+msgstr ""
+
+#: ../heekscad/src/HeeksCAD.cpp:4558
+msgid "Ellipse"
+msgstr "橢圓"
+
+#: ../heekscad/src/HeeksCAD.cpp:4559
+msgid "Spline"
+msgstr "樣條曲線"
+
+#: ../heekscad/src/HeeksCAD.cpp:4561
+msgid "CorrelationTool"
+msgstr "相關工具"
+
+#: ../heekscad/src/HeeksCAD.cpp:4563
+msgid "Constraint"
+msgstr "約束"
+
+#: ../heekscad/src/HeeksCAD.cpp:4565
+msgid "Pad"
+msgstr "墊"
+
+#: ../heekscad/src/HeeksCAD.cpp:4566
+msgid "Part"
+msgstr "部件"
+
+#: ../heekscad/src/HeeksCAD.cpp:4567
+msgid "PocketSolid"
+msgstr "挖口袋槽立體"
+
+#: ../heekscad/src/HeeksCAD.cpp:4568
+msgid "AngularDimension"
+msgstr "角尺寸"
+
+#: ../heekscad/src/HeeksCAD.cpp:4569
+msgid "OrientationModifier"
+msgstr "取向修改器"
+
+#: ../heekscad/src/HeeksCAD.cpp:4570
+msgid "Hole"
+msgstr "洞"
+
+#: ../heekscad/src/HeeksCAD.cpp:4571
+msgid "Positions"
+msgstr "位置"
+
+#: ../heekscad/src/HeeksCAD.cpp:4572
+msgid "ObjectMaximum"
+msgstr "物件的最大"
+
+#: ../heekscad/src/HeeksFrame.cpp:104
+msgid "Trace Log"
+msgstr "描圖日誌"
+
+#: ../heekscad/src/HeeksFrame.cpp:148
+#: ../heekscad/src/HeeksFrame.cpp:1969
+msgid "Graphics"
+msgstr "圖形"
+
+#: ../heekscad/src/HeeksFrame.cpp:149
+#: ../heekscad/src/HeeksFrame.cpp:1761
+#: ../heekscad/src/HeeksFrame.cpp:1970
+msgid "Objects"
+msgstr "物件"
+
+#: ../heekscad/src/HeeksFrame.cpp:150
+#: ../heekscad/src/HeeksFrame.cpp:1763
+#: ../heekscad/src/HeeksFrame.cpp:1971
+msgid "Options"
+msgstr "選項"
+
+#: ../heekscad/src/HeeksFrame.cpp:151
+#: ../heekscad/src/HeeksFrame.cpp:1764
+#: ../heekscad/src/HeeksFrame.cpp:1972
+msgid "Input"
+msgstr "輸入"
+
+#: ../heekscad/src/HeeksFrame.cpp:202
+msgid "Reset Layout"
+msgstr "重設佈局"
+
+#: ../heekscad/src/HeeksFrame.cpp:203
+msgid "Set toolbars to left"
+msgstr "設置工具欄到左"
+
+#: ../heekscad/src/HeeksFrame.cpp:575
+msgid "Pick three or more points to be splined"
+msgstr "選擇兩個點或以上做樣條曲線"
+
+#: ../heekscad/src/HeeksFrame.cpp:575
+#: ..../heekscad/src/HeeksFrame.cpp:1692
+#: ../heekscad/src/HeeksFrame.cpp:1856
+msgid "Spline Through Points"
+msgstr "樣條透過點"
+
+#: ../heekscad/src/HeeksFrame.cpp:707
+#: ../heekscad/src/HeeksFrame.cpp:724
+msgid "Coordinate System"
+msgstr "坐標系統"
+
+#: ../heekscad/src/HeeksFrame.cpp:761
+msgid "Import file"
+msgstr "匯入檔案"
+
+#: ../heekscad/src/HeeksFrame.cpp:873
+msgid "Pick two or more faces or solids, the first one will be cut by the others"
+msgstr "選擇兩個或多個面或固體，第一個將被其他切削"
+
+#: ../heekscad/src/HeeksFrame.cpp:873
+msgid "Subtract Solids"
+msgstr "減去立體"
+
+#: ../heekscad/src/HeeksFrame.cpp:881
+msgid "Pick two or more solids to be fused together"
+msgstr "選擇兩個或兩個以上的立體被融合在一起"
+
+#: ../heekscad/src/HeeksFrame.cpp:881
+msgid "Fuse Solids"
+msgstr "熔合立體"
+
+#: ../heekscad/src/HeeksFrame.cpp:889
+msgid "Pick two or more solids, only the shape that is contained by all of them will remain"
+msgstr "選擇兩個或兩個以上的立體，只有形狀包含了所有的將維持"
+
+#: ../heekscad/src/HeeksFrame.cpp:889
+msgid "Intersection of Solids"
+msgstr "相交的立體"
+
+#: ../heekscad/src/HeeksFrame.cpp:898
+msgid "Pick one or more edges to add a fillet to"
+msgstr "選擇一個或多個邊 以添加圓角"
+
+#: ../heekscad/src/HeeksFrame.cpp:898
+msgid "Edge Fillet"
+msgstr "邊沿圓角"
+
+#: ../heekscad/src/HeeksFrame.cpp:914
+msgid "Pick one or more edges to add a chamfer to"
+msgstr "選擇一個或多個邊沿 把新斜面銑刀...添加進去"
+
+#: ../heekscad/src/HeeksFrame.cpp:914
+msgid "Edge Chamfer"
+msgstr "邊沿斜角"
+
+#: ../heekscad/src/HeeksFrame.cpp:918
+msgid "Enter chamfer distance"
+msgstr "輸入斜角距離"
+
+#: ../heekscad/src/HeeksFrame.cpp:935
+msgid "Pick two or more sketches, to create a lofted solid between"
+msgstr "選擇兩個或兩個以上的草圖,創建一個連接立體在中間"
+
+#: ../heekscad/src/HeeksFrame.cpp:935
+#: ../heekscad/src/HeeksFrame.cpp:943
+#: ../heekscad/src/HeeksFrame.cpp:951
+msgid "hold down Ctrl key to select more than one solid"
+msgstr "按住Ctrl鍵選擇多個立體"
+
+#: ../heekscad/src/HeeksFrame.cpp:935
+msgid "Lofted Body"
+msgstr "連接結構"
+
+#: ../heekscad/src/HeeksFrame.cpp:943
+msgid "Pick one or more sketches, faces or circles, to create an extruded body from"
+msgstr "選擇一個或多個 草圖，面或圓形，創造一個拉伸物體"
+
+#: ../heekscad/src/HeeksFrame.cpp:943
+#: ../heekscad/src/HeeksFrame.cpp:951
+msgid "Extrude"
+msgstr "凸出"
+
+#: ../src/HeeksFrame.cpp:951
+msgid "Pick one or more sketches, faces or circles, to create a revolved body from"
+msgstr "挑選一個或多個草圖，面或圓，以創建一個旋轉的物體"
+
+#: ../src/HeeksFrame.cpp:977
+msgid "Sphere"
+msgstr "球"
+
+#: ../src/HeeksFrame.cpp:984
+msgid "Cuboid"
+msgstr "長方體"
+
+#: ../src/HeeksFrame.cpp:1552
+msgid ""
+"There was a problem printing.\n"
+"Perhaps your current printer is not set correctly?"
+msgstr ""
+"有一個打印問題.\n"
+"也許你的當前打印機設置不正確?"
+
+#: ../src/HeeksFrame.cpp:1552
+#: ../src/HeeksFrame.cpp:1554
+msgid "Printing"
+msgstr "打印"
+
+#: ../src/HeeksFrame.cpp:1554
+msgid "You canceled printing"
+msgstr "您已取消打印"
+
+#: ../src/HeeksFrame.cpp:1573
+msgid ""
+"There was a problem previewing.\n"
+"Perhaps your current printer is not set correctly?"
+msgstr ""
+"預覽有個問題.\n"
+"也許您的當前打印機設置不正確?"
+
+#: ../src/HeeksFrame.cpp:1573
+msgid "Previewing"
+msgstr "預覽"
+
+#: ../src/HeeksFrame.cpp:1577
+msgid "Demo Print Preview"
+msgstr "示範打印預覽"
+
+#: ../src/HeeksFrame.cpp:1650
+msgid "New\tCtrl+N"
+msgstr "新\tCtrl+N"
+
+#: ../src/HeeksFrame.cpp:1651
+msgid "Open\tCtrl+O"
+msgstr "打開\tCtrl+O"
+
+#: ../src/HeeksFrame.cpp:1652
+msgid "Save\tCtrl+S"
+msgstr "保存\tCtrl+S"
+
+#: ../src/HeeksFrame.cpp:1653
+msgid "Save As"
+msgstr "另存為"
+
+#: ../src/HeeksFrame.cpp:1655
+msgid "Print\tCtrl+P"
+msgstr "打印\tCtrl+P"
+
+#: ../src/HeeksFrame.cpp:1656
+msgid "Page Setup"
+msgstr "頁面設置"
+
+#: ../src/HeeksFrame.cpp:1657
+msgid "Print Preview"
+msgstr "打印預覽"
+
+#: ../src/HeeksFrame.cpp:1660
+msgid "Open Recent"
+msgstr "最近打開"
+
+#: ../src/HeeksFrame.cpp:1661
+msgid "Import"
+msgstr "輸入"
+
+#: ../src/HeeksFrame.cpp:1662
+msgid "About"
+msgstr "關於"
+
+#: ../src/HeeksFrame.cpp:1664
+msgid "Plugins"
+msgstr "插件"
+
+#: ../src/HeeksFrame.cpp:1666
+msgid "Save Settings"
+msgstr "儲存設定"
+
+#: ../src/HeeksFrame.cpp:1668
+msgid "Exit\tCtrl+Q"
+msgstr "退出\tCtrl+Q"
+
+#: ../src/HeeksFrame.cpp:1673
+msgid "Undo\tCtrl+Z"
+msgstr "復原\tCtrl+Z"
+
+#: ../src/HeeksFrame.cpp:1674
+msgid "Redo\tCtrl+Shift+Z"
+msgstr "重做\tCtrl+Shift+Z"
+
+#: ../src/HeeksFrame.cpp:1677
+msgid "Cut\tCtrl+X"
+msgstr "切\tCtrl+X"
+
+#: ../src/HeeksFrame.cpp:1678
+msgid "Copy\tCtrl+C"
+msgstr "複製\tCtrl+C"
+
+#: ../src/HeeksFrame.cpp:1679
+msgid "Paste\tCtrl+V"
+msgstr "貼上\tCtrl+V"
+
+#: ../src/HeeksFrame.cpp:1680
+msgid "Delete"
+msgstr "刪除"
+
+#: ../src/HeeksFrame.cpp:1682
+#: ../src/HeeksFrame.cpp:1824
+msgid "Select Mode"
+msgstr "選擇模式"
+
+#: ../src/HeeksFrame.cpp:1686
+#: ../src/HeeksFrame.cpp:1835
+msgid "Draw a sketch"
+msgstr "繪製草圖"
+
+#: ../src/HeeksFrame.cpp:1688
+msgid "Draw Ellipses"
+msgstr "繪製橢圓"
+
+#: ../src/HeeksFrame.cpp:1689
+msgid "Draw Infinite Lines"
+msgstr "繪製無限線"
+
+#: ../src/HeeksFrame.cpp:1690
+msgid "Draw Points"
+msgstr "畫點"
+
+#: ../src/HeeksFrame.cpp:1691
+msgid "Gear"
+msgstr "齒輪"
+
+#: ../src/HeeksFrame.cpp:1694
+msgid "Add Text"
+msgstr "添加文字"
+
+#: ../src/HeeksFrame.cpp:1701
+msgid "Pick 3 points"
+msgstr "挑選3個點"
+
+#: ../src/HeeksFrame.cpp:1703
+msgid "Pick 1 point"
+msgstr "挑選一個點"
+
+#: ../src/HeeksFrame.cpp:1707
+msgid "Previous view"
+msgstr "前一個視圖"
+
+#: ../src/HeeksFrame.cpp:1709
+msgid "Zoom window"
+msgstr "縮放窗口"
+
+#: ../src/HeeksFrame.cpp:1710
+msgid "Fit view to extents"
+msgstr "擴展視圖到適合"
+
+#: ../src/HeeksFrame.cpp:1711
+msgid "Fit view to extents, but no rotation"
+msgstr "適合視圖擴展，但不旋轉"
+
+#: ../src/HeeksFrame.cpp:1712
+#: ../src/HeeksFrame.cpp:1938
+msgid "View XY Front"
+msgstr "查看的XY前"
+
+#: ../src/HeeksFrame.cpp:1713
+#: ../src/HeeksFrame.cpp:1939
+msgid "View XY Back"
+msgstr "查看的XY後"
+
+#: ../src/HeeksFrame.cpp:1714
+#: ../src/HeeksFrame.cpp:1940
+msgid "View XZ Top"
+msgstr "查看XZ頂部"
+
+#: ../src/HeeksFrame.cpp:1715
+#: ../src/HeeksFrame.cpp:1941
+msgid "View XZ Bottom"
+msgstr "查看XZ底"
+
+#: ../src/HeeksFrame.cpp:1716
+#: ../src/HeeksFrame.cpp:1942
+msgid "View YZ Right"
+msgstr "查看YZ右"
+
+#: ../src/HeeksFrame.cpp:1717
+#: ../src/HeeksFrame.cpp:1943
+msgid "View YZ Left"
+msgstr "查看YZ左"
+
+#: ../src/HeeksFrame.cpp:1718
+msgid "View XZY Isometric"
+msgstr "查看XZY等角"
+
+#: ../src/HeeksFrame.cpp:1720
+msgid "View rotate"
+msgstr "查看旋轉"
+
+#: ../src/HeeksFrame.cpp:1721
+msgid "View zoom"
+msgstr "查看放大"
+
+#: ../src/HeeksFrame.cpp:1722
+msgid "View pan"
+msgstr "查看平移"
+
+#: ../src/HeeksFrame.cpp:1723
+msgid "Full screen"
+msgstr "全屏"
+
+#: ../src/HeeksFrame.cpp:1725 ../src/HeeksFrame.cpp:1956
+msgid "Redraw"
+msgstr "重繪"
+
+#: ../src/HeeksFrame.cpp:1729
+#: ../src/HeeksFrame.cpp:1889
+msgid "Add a sphere"
+msgstr "添加一個球體"
+
+#: ../src/HeeksFrame.cpp:1730
+#: ../src/HeeksFrame.cpp:1890
+msgid "Add a cube"
+msgstr "添加一個立方體"
+
+#: ../src/HeeksFrame.cpp:1731
+#: ../src/HeeksFrame.cpp:1891
+msgid "Add a cylinder"
+msgstr "添加一個圓柱體"
+
+#: ../src/HeeksFrame.cpp:1732
+#: ../src/HeeksFrame.cpp:1892
+msgid "Add a cone"
+msgstr "添加圓錐體"
+
+#: ../src/HeeksFrame.cpp:1734
+msgid "Loft two sketches"
+msgstr "放樣兩個草圖"
+
+#: ../src/HeeksFrame.cpp:1735
+msgid "Extrude a sketch"
+msgstr "凸出草圖"
+
+#: ../src/HeeksFrame.cpp:1736
+msgid "Revolve a sketch"
+msgstr "旋轉草圖"
+
+#: ../src/HeeksFrame.cpp:1738
+msgid "Cut"
+msgstr "剪切"
+
+#: ../src/HeeksFrame.cpp:1739
+msgid "Fuse"
+msgstr "融合"
+
+#: ../src/HeeksFrame.cpp:1740
+msgid "Common"
+msgstr "共同"
+
+#: ../src/HeeksFrame.cpp:1742
+msgid "Fillet"
+msgstr "圓角"
+
+#: ../src/HeeksFrame.cpp:1744
+msgid "Sectioning"
+msgstr "分段"
+
+#: ../src/HeeksFrame.cpp:1748
+msgid "Move Translate"
+msgstr "移動轉換"
+
+#: ../src/HeeksFrame.cpp:1749
+msgid "Copy Translate"
+msgstr "複製轉換"
+
+#: ../src/HeeksFrame.cpp:1751
+msgid "Move Rotate"
+msgstr "移動旋轉"
+
+#: ../src/HeeksFrame.cpp:1752
+msgid "Copy Rotate"
+msgstr "複製旋轉"
+
+#: ../src/HeeksFrame.cpp:1754
+msgid "Move Mirror"
+msgstr "移動鏡像"
+
+#: ../src/HeeksFrame.cpp:1755
+msgid "Copy Mirror"
+msgstr "複製鏡像"
+
+#: ../src/HeeksFrame.cpp:1757
+msgid "Move Scale"
+msgstr "移動比例"
+
+#: ../src/HeeksFrame.cpp:1762
+msgid "Log"
+msgstr "日誌"
+
+#: ../src/HeeksFrame.cpp:1766
+msgid "Tool Bar"
+msgstr "工具欄"
+
+#: ../src/HeeksFrame.cpp:1767
+msgid "Solids Tool Bar"
+msgstr "立體工具欄"
+
+#: ../src/HeeksFrame.cpp:1768
+msgid "Geometry Tool Bar"
+msgstr "幾何體工具欄"
+
+#: ../src/HeeksFrame.cpp:1769
+msgid "Viewing Tool Bar"
+msgstr "觀看工具欄"
+
+#: ../src/HeeksFrame.cpp:1770
+msgid "Transformations Tool Bar"
+msgstr "變換工具欄"
+
+#: ../src/HeeksFrame.cpp:1774
+msgid "Validate Constraints"
+msgstr "確認約束條件"
+
+#: ../src/HeeksFrame.cpp:1781
+msgid "&File"
+msgstr "&F文件"
+
+#: ../src/HeeksFrame.cpp:1782
+msgid "&Edit"
+msgstr "&E编辑"
+
+#: ../src/HeeksFrame.cpp:1783
+msgid "&View"
+msgstr "&V视图"
+
+#: ../src/HeeksFrame.cpp:1784
+msgid "&Geometry"
+msgstr "&G幾何图形"
+
+#: ../src/HeeksFrame.cpp:1785
+msgid "&Solid"
+msgstr "&S立体图形"
+
+#: ../src/HeeksFrame.cpp:1786
+msgid "&Set Origin"
+msgstr "&S設定源點"
+
+#: ../src/HeeksFrame.cpp:1787
+msgid "&Transform"
+msgstr "&T轉換"
+
+#: ../src/HeeksFrame.cpp:1788
+msgid "&Window"
+msgstr "&W窗口"
+
+#: ../src/HeeksFrame.cpp:1792
+msgid "&Constraint Tester"
+msgstr "&C約束測試"
+
+#: ../src/HeeksFrame.cpp:1814
+msgid "New file"
+msgstr "新文件"
+
+#: ../src/HeeksFrame.cpp:1816
+msgid "Save file"
+msgstr "文件存盘"
+
+#: ../src/HeeksFrame.cpp:1817
+msgid "Cut selected items to the clipboard"
+msgstr "剪下選取的項目到剪貼板"
+
+#: ../src/HeeksFrame.cpp:1818
+msgid "Copy selected items to the clipboard"
+msgstr "複製選定的項目到剪貼板"
+
+#: ../src/HeeksFrame.cpp:1819
+msgid "Paste items from the clipboard"
+msgstr "從剪貼板粘貼項目"
+
+#: ../src/HeeksFrame.cpp:1821
+msgid "Undo the previous command"
+msgstr "撤消上一個命令"
+
+#: ../src/HeeksFrame.cpp:1822
+msgid "Redo the next command"
+msgstr "重做下一個命令"
+
+#: ../src/HeeksFrame.cpp:1827 ../src/HeeksFrame.cpp:1974
+msgid "General Tools"
+msgstr "一般工具"
+
+#: ../src/HeeksFrame.cpp:1836
+msgid "Start drawing rectangles"
+msgstr "開始繪製矩形"
+
+#: ../src/HeeksFrame.cpp:1837
+msgid "Start drawing obrounds"
+msgstr "開始繪製長圓形"
+
+#: ../src/HeeksFrame.cpp:1838
+msgid "Start drawing polygons"
+msgstr "開始繪製多邊形"
+
+#: ../src/HeeksFrame.cpp:1839
+msgid "Add a gear"
+msgstr "添加齒輪"
+
+#: ../src/HeeksFrame.cpp:1845
+msgid "Draw circles through 3 points"
+msgstr "通過3點繪製圓"
+
+#: ../src/HeeksFrame.cpp:1846
+msgid "Draw circles, centre and point"
+msgstr "繪製圓形，用中心和點"
+
+#: ../src/HeeksFrame.cpp:1847
+msgid "Draw circles, centre and radius"
+msgstr "繪製圓，用圓心和半徑"
+
+#: ../src/HeeksFrame.cpp:1848
+msgid "Draw ellipses"
+msgstr "繪製橢圓"
+
+#: ../src/HeeksFrame.cpp:1854
+msgid "Start Drawing Infinite Lines"
+msgstr "開始繪製無限線條"
+
+#: ../src/HeeksFrame.cpp:1855
+msgid "Start Drawing Points"
+msgstr "開始畫點"
+
+#: ../src/HeeksFrame.cpp:1862
+msgid "Add a text object"
+msgstr "添加文字物件"
+
+#: ../src/HeeksFrame.cpp:1863
+msgid "Add a dimension"
+msgstr "添加一個尺寸"
+
+#: ../src/HeeksFrame.cpp:1864
+msgid "Add Coordinate System"
+msgstr "添加坐標系"
+
+#: ../src/HeeksFrame.cpp:1870
+msgid "Translate selected items"
+msgstr "翻譯所選項目"
+
+#: ../src/HeeksFrame.cpp:1871
+msgid "Copy and translate selected items"
+msgstr "複製並翻譯所選項目"
+
+#: ../src/HeeksFrame.cpp:1872
+msgid "Rotate selected items"
+msgstr "旋轉所選項目"
+
+#: ../src/HeeksFrame.cpp:1873
+msgid "Copy and rotate selected items"
+msgstr "複製並旋轉選定項目"
+
+#: ../src/HeeksFrame.cpp:1874
+msgid "Mirror selected items"
+msgstr "鏡像選定項目"
+
+#: ../src/HeeksFrame.cpp:1875
+msgid "Copy and mirror selected items"
+msgstr "複製和鏡像所選項目"
+
+#: ../src/HeeksFrame.cpp:1876
+msgid "Scale selected items"
+msgstr "縮放選擇項目"
+
+#: ../src/HeeksFrame.cpp:1881
+#: ../src/HeeksFrame.cpp:1975
+msgid "Geometry Tools"
+msgstr "幾何工具"
+
+#: ../src/HeeksFrame.cpp:1898
+msgid "Create a lofted face"
+msgstr "創建一個連接面"
+
+#: ../src/HeeksFrame.cpp:1899
+msgid "Extrude a wire or face"
+msgstr "拉伸導線或面"
+
+#: ../src/HeeksFrame.cpp:1900
+msgid "Revolve a wire or face"
+msgstr "旋轉線或面"
+
+#: ../src/HeeksFrame.cpp:1906
+msgid "Cut one solid from another"
+msgstr "從一個立體切削另一個立體"
+
+#: ../src/HeeksFrame.cpp:1907
+msgid "Fuse one solid to another"
+msgstr "融合一個立體和另一個"
+
+#: ../src/HeeksFrame.cpp:1908
+msgid "Find common solid between two solids"
+msgstr "找兩個立體的共同點"
+
+#: ../src/HeeksFrame.cpp:1914
+msgid "Make a fillet on selected edges"
+msgstr "在選定的邊線製作圓角"
+
+#: ../src/HeeksFrame.cpp:1915
+msgid "Make a chamfer on selected edges"
+msgstr "在選定的邊線製作斜角"
+
+#: ../src/HeeksFrame.cpp:1920
+#: ../src/HeeksFrame.cpp:1976
+msgid "Solid Tools"
+msgstr "立體工具"
+
+#: ../src/HeeksFrame.cpp:1928
+msgid "Zoom in to fit the extents of the drawing into the graphics window"
+msgstr "放大繪圖的範圍到適合圖形窗口"
+
+#: ../src/HeeksFrame.cpp:1929
+msgid "Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"
+msgstr ""
+"放大繪圖的範圍到適合圖形窗口"
+"但不旋轉視圖"
+
+#: ../src/HeeksFrame.cpp:1930
+msgid "Zoom in to a dragged window"
+msgstr "放大到拖動的窗口"
+
+#: ../src/HeeksFrame.cpp:1931
+msgid "Go back to previous view"
+msgstr "返回到以前的視圖"
+
+#: ../src/HeeksFrame.cpp:1932
+msgid "Switch to full screen view ( press escape to return )"
+msgstr "切換到全屏視圖"
+
+#: ../src/HeeksFrame.cpp:1944
+msgid "View XY Isometric"
+msgstr "查看XY等角"
+
+#: ../src/HeeksFrame.cpp:1950
+msgid "Enter view rotating mode"
+msgstr "輸入視圖旋轉模式"
+
+#: ../src/HeeksFrame.cpp:1951
+msgid "Drag to zoom in and out"
+msgstr "拖動放大和縮小"
+
+#: ../src/HeeksFrame.cpp:1952
+msgid "Drag to move view"
+msgstr "拖動以移動視圖"
+
+#: ../src/HeeksFrame.cpp:1959
+#: ../src/HeeksFrame.cpp:1977
+msgid "Viewing Tools"
+msgstr "選擇一個或多個 草圖，面或圓形，以建立旋轉物體"
+
+#: ../src/Input.cpp:108
+msgid "number of copies"
+msgstr "份數"
+
+#: ../src/Input.cpp:118
+#: ../src/Input.cpp:119
+msgid "Position to rotate about"
+msgstr "旋轉大約位置"
+
+#: ../src/Input.cpp:119
+#: ../src/Input.cpp:123
+msgid "Select"
+msgstr "挑選"
+
+#: ../src/Input.cpp:147
+msgid "Axis to rotate about"
+msgstr "旋轉大約軸"
+
+#: ../src/Input.cpp:151
+msgid "Select a line"
+msgstr "選擇線"
+
+#: ../src/Input.cpp:179
+msgid "angle"
+msgstr "角"
+
+#: ../src/Input.cpp:336
+msgid "Pick Position"
+msgstr "挑選位置"
+
+#: ../src/Input.cpp:369
+msgid "Pick line for rotation axis"
+msgstr "挑選自轉軸線"
+
+#: ../src/InputModeCanvas.cpp:75
+msgid "Input Mode"
+msgstr "輸入模式"
+
+#: ../src/LineArcDrawing.cpp:67
+msgid "set previous direction"
+msgstr "設置以前的方向"
+
+#: ../src/LineArcDrawing.cpp:562
+msgid "Line drawing mode"
+msgstr "線繪圖模式"
+
+#: ../src/LineArcDrawing.cpp:564
+#: ../src/LineArcDrawing.cpp:571
+#: ../src/LineArcDrawing.cpp:608
+#: ../src/LineArcDrawing.cpp:616
+#: ../src/LineArcDrawing.cpp:623
+msgid "click on start point"
+msgstr "點擊起點"
+
+#: ../src/LineArcDrawing.cpp:565
+msgid "click on end of line"
+msgstr "點擊線末"
+
+#: ../src/LineArcDrawing.cpp:569
+msgid "Arc drawing mode"
+msgstr "圓弧繪製模式"
+
+#: ../src/LineArcDrawing.cpp:572
+msgid "click on end of arc"
+msgstr "點擊弧線末端"
+
+#: ../src/LineArcDrawing.cpp:576
+msgid "Infinite line drawing"
+msgstr "無限線條繪圖"
+
+#: ../src/LineArcDrawing.cpp:578
+#: ../src/LineArcDrawing.cpp:650
+#: ../src/LineArcDrawing.cpp:659
+msgid "click on first point"
+msgstr "點擊第一點"
+
+#: ../src/LineArcDrawing.cpp:579
+#: ../src/LineArcDrawing.cpp:651
+#: ../src/LineArcDrawing.cpp:660
+msgid "click on second point"
+msgstr "點擊第二個點"
+
+#: ../src/LineArcDrawing.cpp:583
+msgid "Ellipse drawing mode"
+msgstr "橢圓繪圖模式"
+
+#: ../src/LineArcDrawing.cpp:586
+msgid "center and 2 points mode"
+msgstr "中心和2個點模式"
+
+#: ../src/LineArcDrawing.cpp:588
+#: ../src/LineArcDrawing.cpp:642
+msgid "click on center point"
+msgstr "點擊中心點"
+
+#: ../src/LineArcDrawing.cpp:591
+msgid "click on point on ellipse"
+msgstr "點擊在橢圓上的點"
+
+#: ../src/LineArcDrawing.cpp:593
+msgid "(colinear or orthogonal to axis)"
+msgstr "(共線或正交軸)"
+
+#: ../src/LineArcDrawing.cpp:595
+msgid "click on another point on ellipse"
+msgstr "單擊橢圓上的另一個點"
+
+#: ../src/LineArcDrawing.cpp:601
+msgid "Spline drawing mode"
+msgstr "樣條繪圖模式"
+
+#: ../src/LineArcDrawing.cpp:606
+msgid "cubic spline mode"
+msgstr "三次樣條模式"
+
+#: ../src/LineArcDrawing.cpp:609
+#: ../src/LineArcDrawing.cpp:617
+msgid "click on end point"
+msgstr "點擊終點"
+
+#: ../src/LineArcDrawing.cpp:610
+#: ../src/LineArcDrawing.cpp:624
+msgid "click on first control point"
+msgstr "點擊第一個控制點"
+
+#: ../src/LineArcDrawing.cpp:611
+#: ../src/LineArcDrawing.cpp:625
+msgid "click on second control point"
+msgstr "點擊第二個控制點"
+
+#: ../src/LineArcDrawing.cpp:614
+msgid "quartic spline mode"
+msgstr "四次樣條模式"
+
+#: ../src/LineArcDrawing.cpp:618
+msgid "click on control point"
+msgstr "單擊控制點"
+
+#: ../src/LineArcDrawing.cpp:621
+msgid "rational spline mode"
+msgstr "有理樣條模式"
+
+#: ../src/LineArcDrawing.cpp:626
+msgid "click on next control point or endpoint"
+msgstr "點擊下一個控制點或端點"
+
+#: ../src/LineArcDrawing.cpp:634
+msgid "Circle drawing mode"
+msgstr "圓繪製模式"
+
+#: ../src/LineArcDrawing.cpp:640
+msgid "center and point mode"
+msgstr "中心和點模式"
+
+#: ../src/LineArcDrawing.cpp:643
+msgid "click on point on circle"
+msgstr "點擊圓圈一點上"
+
+#: ../src/LineArcDrawing.cpp:648
+msgid "three points mode"
+msgstr "三點模式"
+
+#: ../src/LineArcDrawing.cpp:652
+msgid "click on third point"
+msgstr "點擊第三點"
+
+#: ../src/LineArcDrawing.cpp:657
+msgid "two points mode"
+msgstr "兩點模式"
+
+#: ../src/LineArcDrawing.cpp:665
+msgid "centre with radius mode"
+msgstr "中心與半徑模式"
+
+#: ../src/LineArcDrawing.cpp:667
+msgid "click on centre point"
+msgstr "點擊中心點"
+
+#: ../src/LineArcDrawing.cpp:749
+msgid "draw lines"
+msgstr "畫線"
+
+#: ../src/LineArcDrawing.cpp:750
+msgid "draw tangential arcs"
+msgstr "畫切線弧"
+
+#: ../src/LineArcDrawing.cpp:752
+msgid "draw circles"
+msgstr "畫圓"
+
+#: ../src/LineArcDrawing.cpp:753
+msgid "drawing mode"
+msgstr "繪圖模式"
+
+#: ../src/LineArcDrawing.cpp:760
+msgid "(press 'a' for arcs)"
+msgstr "(按 'a' 做弧)"
+
+#: ../src/LineArcDrawing.cpp:767
+msgid "centre and point"
+msgstr "中心和點"
+
+#: ../src/LineArcDrawing.cpp:768
+msgid "three points"
+msgstr "三點"
+
+#: ../src/LineArcDrawing.cpp:769
+msgid "two points"
+msgstr "兩點"
+
+#: ../src/LineArcDrawing.cpp:770
+msgid "centre and radius"
+msgstr "圓心和半徑"
+
+#: ../src/LineArcDrawing.cpp:771
+msgid "circle mode"
+msgstr "圓模式"
+
+#: ../src/MarkedList.cpp:282
+msgid "Number of items selected"
+msgstr "所選項目數"
+
+#: ../src/MarkedList.cpp:289
+msgid "Delete Marked Items"
+msgstr "刪除已標記的條目"
+
+#: ../src/MarkedList.cpp:298
+msgid "Copy"
+msgstr "複製"
+
+#: ../src/MarkedList.cpp:300
+msgid "Copies the selected items to the clipboard"
+msgstr "複製選定的項目到剪貼板"
+
+#: ../src/MarkedList.cpp:315
+msgid "Paste Into"
+msgstr "粘貼到"
+
+#: ../src/MarkedList.cpp:315
+msgid "Paste"
+msgstr "貼上"
+
+#: ../src/MarkedList.cpp:317
+msgid "Paste items from the clipboard to the drawing"
+msgstr "項目從剪貼板粘貼到繪圖"
+
+#: ../src/ObjPropsCanvas.cpp:130
+msgid "Apply"
+msgstr "套用"
+
+#: ../src/ObjPropsCanvas.cpp:130
+msgid "Apply any changes made to the properties"
+msgstr "應用所做的任何更改的屬性"
+
+#: ../src/ObjPropsCanvas.cpp:131
+msgid "Cancel"
+msgstr "取消"
+
+#: ../src/ObjPropsCanvas.cpp:131
+msgid "Stop editing the object"
+msgstr "停止編輯物件"
+
+#: ../src/OrientationModifier.cpp:105
+msgid "Normally spaced"
+msgstr "正常間距"
+
+#: ../src/OrientationModifier.cpp:107
+msgid "Spacing"
+msgstr "間距"
+
+#: ../src/OrientationModifier.cpp:110
+msgid "Number of Rotations (negative for reverse direction)"
+msgstr "旋轉圈數"
+
+#: ../src/OrientationModifier.cpp:111
+msgid "Sketch rotates text"
+msgstr "草圖旋轉文字"
+
+#: ../src/OrientationModifier.cpp:120
+#: ../src/OrientationModifier.cpp:126
+msgid "Left"
+msgstr "向左"
+
+#: ../src/OrientationModifier.cpp:121
+msgid "Centre"
+msgstr "中心"
+
+#: ../src/OrientationModifier.cpp:122
+#: ../src/OrientationModifier.cpp:127
+msgid "Right"
+msgstr "右邊"
+
+#: ../src/OrientationModifier.cpp:128
+msgid "Top"
+msgstr "頂部"
+
+#: ../src/OrientationModifier.cpp:129
+msgid "Bottom"
+msgstr "底部"
+
+#: ../src/OrientationModifier.cpp:132
+msgid "Justification"
+msgstr "對齊"
+
+#: ../src/Pad.cpp:101
+msgid "Height"
+msgstr "高度"
+
+#: ../src/Plugins.cpp:39
+msgid "Name"
+msgstr "名稱"
+
+#: ../src/Plugins.cpp:43
+msgid "File Path"
+msgstr "文件路徑"
+
+#: ../src/Plugins.cpp:84
+msgid "Plugin must have a name!"
+msgstr "插件必須有一個名字!"
+
+#: ../src/Plugins.cpp:92
+msgid "No file specified!"
+msgstr "沒有指定的文件！"
+
+#: ../src/Plugins.cpp:115
+msgid "shared library files"
+msgstr "共享資料庫文件"
+
+#: ../src/Plugins.cpp:117
+msgid "Choose shared library file"
+msgstr "選擇共享庫文件"
+
+#: ../src/Plugins.cpp:137
+msgid "HeeksCAD plugin libraries"
+msgstr "HeeksCAD插件程式庫"
+
+#: ../src/Plugins.cpp:147
+msgid "New"
+msgstr "新"
+
+#: ../src/Plugins.cpp:148
+msgid "Edit"
+msgstr "編輯"
+
+#: ../src/Plugins.cpp:347
+#: ../src/Plugins.cpp:362
+msgid "Add New Plugin"
+msgstr "添加新的外掛"
+
+#: ../src/PropertiesCanvas.cpp:202
+msgid "vertical angle"
+msgstr "垂直角"
+
+#: ../src/PropertiesCanvas.cpp:205
+msgid "horizontal angle"
+msgstr "水平角"
+
+#: ../src/PropertiesCanvas.cpp:208
+msgid "twist angle"
+msgstr "扭轉角"
+
+#: ../src/RS274X.cpp:190
+msgid "pcb"
+msgstr ""
+
+#: ../src/RS274X.cpp:190
+msgid "_width_"
+msgstr "_寬度_"
+
+#: ../src/RS274X.cpp:190
+msgid "_height_"
+msgstr "_高度_"
+
+#: ../src/RS274X.cpp:2601
+msgid "# This file converts the RAW image file generated by the HeeksCAD import of\n"
+msgstr ""
+
+#: ../src/RS274X.cpp:2602
+msgid ""
+"# a GERBER format data file into a GIF format file.   This just makes it\n"
+msgstr ""
+
+#: ../src/RS274X.cpp:2603
+msgid ""
+"# more convenient for viewing\n"
+"\n"
+msgstr ""
+"# 查看更方便\n"
+"\n"
+
+#: ../src/RuledSurface.cpp:22
+msgid "pick some sketches"
+msgstr "挑一些草圖"
+
+#: ../src/RuledSurface.cpp:52 ../src/RuledSurface.cpp:183
+msgid "Ruled Surface"
+msgstr "直纹曲面"
+
+#: ../src/RuledSurface.cpp:108
+msgid "Revolved Solid"
+msgstr "旋轉立體"
+
+#: ../src/RuledSurface.cpp:108
+msgid "Extruded Solid"
+msgstr "凸出立體"
+
+#: ../src/RuledSurface.cpp:137
+msgid "Pipe"
+msgstr "管"
+
+#: ../src/RuledSurface.cpp:142
+msgid "Error making pipe"
+msgstr "錯誤作出管"
+
+#: ../src/RuledSurface.cpp:192
+msgid "Make extrusion"
+msgstr "作出凸出"
+
+#: ../src/RuledSurface.cpp:212
+msgid "taper outward angle"
+msgstr "錐形向外角"
+
+#: ../src/RuledSurface.cpp:234 ../src/RuledSurface.cpp:298
+msgid "pick sketches, faces or circles"
+msgstr "挑選草圖，面或圓"
+
+#: ../src/RuledSurface.cpp:265
+msgid "Input revolution angle"
+msgstr "輸入旋轉角度"
+
+#: ../src/RuledSurface.cpp:275
+msgid "Makes a solid"
+msgstr "作出立體"
+
+#: ../src/RuledSurface.cpp:329
+msgid "Error making ruled solid"
+msgstr "錯誤作出裁定立體"
+
+#: ../src/RuledSurface.cpp:334
+msgid "Fatal error making ruled solid"
+msgstr "致命的錯誤作出裁定立體"
+
+#: ../src/RuledSurface.cpp:387
+msgid "Error making extruded solid"
+msgstr "錯誤作出的凸出立體"
+
+#: ../src/RuledSurface.cpp:391
+msgid "Fatal error making extruded solid"
+msgstr "致命的錯誤，作出凸出立體"
+
+#: ../src/RuledSurface.cpp:418
+msgid "Error making revolved solid"
+msgstr "錯誤作出旋轉立體"
+
+#: ../src/RuledSurface.cpp:422
+msgid "Fatal error making revolved solid"
+msgstr "致命的錯誤作出旋轉立體"
+
+#: ../src/Ruler.cpp:280
+msgid "ResetRuler"
+msgstr "重置標尺"
+
+#: ../src/Ruler.cpp:282
+msgid "Reset the ruler"
+msgstr "重置標尺"
+
+#: ../src/Ruler.cpp:331
+msgid "width"
+msgstr "寬度"
+
+#: ../src/Ruler.cpp:333
+msgid "empty_length"
+msgstr "空的_長度"
+
+#: ../src/Sectioning.cpp:57
+msgid "Points must not be the same!"
+msgstr "點必須不相同!"
+
+#: ../src/Sectioning.cpp:447
+msgid "Sectioned Solid"
+msgstr "分段立體"
+
+#: ../src/Sectioning.cpp:455
+msgid "Sectioning failed!"
+msgstr "分段失敗!"
+
+#: ../src/Sectioning.cpp:469
+msgid "Pick point on axis"
+msgstr "挑選軸線上點"
+
+#: ../src/Sectioning.cpp:477
+msgid "Pick secondary point on axis"
+msgstr "挑選軸點上第二點"
+
+#: ../src/Sectioning.cpp:486
+msgid "Pick objects to section"
+msgstr "挑選物件，以分段"
+
+#: ../src/SelectMode.cpp:70
+msgid "Left button for selecting objects"
+msgstr "左邊的按鈕選擇物件"
+
+#: ../src/SelectMode.cpp:71
+msgid "( with Ctrl key for extra objects)"
+msgstr "( 用Ctrl鍵到額外的物體 )"
+
+#: ../src/SelectMode.cpp:72
+msgid "( with Shift key for similar objects)"
+msgstr "( 用Shift鍵到類似物體 )"
+
+#: ../src/SelectMode.cpp:73
+msgid "Drag with left button to window select"
+msgstr "拖動左鍵到視窗中選取"
+
+#: ../src/SelectMode.cpp:75
+msgid "or to move object if on an object"
+msgstr "或移動物件，如果在物件上"
+
+#: ../src/SelectMode.cpp:76
+msgid "Mouse wheel to zoom in and out"
+msgstr "鼠標滾輪來放大縮小"
+
+#: ../src/SelectMode.cpp:79
+msgid "Middle button to pan view"
+msgstr "中間鍵平移視圖"
+
+#: ../src/SelectMode.cpp:80
+msgid "( with Ctrl key to rotate view )"
+msgstr "( 用Ctrl鍵來旋轉視圖 )"
+
+#: ../src/SelectMode.cpp:83
+msgid "Middle button to rotate view"
+msgstr "中間的按鈕，旋轉視圖"
+
+#: ../src/SelectMode.cpp:84
+msgid "( with Ctrl key to pan view )"
+msgstr "( Ctrl鍵平移視圖 )"
+
+#: ../src/SelectMode.cpp:87
+msgid "Right button for object menu"
+msgstr "右邊的按鈕為物件菜單"
+
+#: ../src/SelectMode.cpp:88
+msgid "See options window to hide this help"
+msgstr "見選項窗口如何隱藏這個幫助"
+
+#: ../src/SelectMode.cpp:94
+msgid "Press Return key to accept selection"
+msgstr "按返回鍵接受選擇"
+
+#: ../src/SelectMode.cpp:551
+msgid "Accept selection"
+msgstr "接受選擇"
+
+#: ../src/SelectMode.cpp:570
+msgid "Cancel selection"
+msgstr "取消選擇"
+
+#: ../src/SelectMode.cpp:582
+msgid "Pick Anything"
+msgstr "挑選任何"
+
+#: ../src/SelectMode.cpp:584
+msgid "Set the selection filter to all items"
+msgstr "設定選擇過濾器到所有項目"
+
+#: ../src/SelectMode.cpp:595
+msgid "Pick Edges"
+msgstr "揀選邊線"
+
+#: ../src/SelectMode.cpp:597
+msgid "Set the selection filter to only edges"
+msgstr "設定選擇過濾器只用邊線"
+
+#: ../src/SelectMode.cpp:608
+msgid "Pick Faces"
+msgstr "揀選面"
+
+#: ../src/SelectMode.cpp:610
+msgid "Set the selection filter to only faces"
+msgstr "設定選擇過濾器只用面"
+
+#: ../src/SelectMode.cpp:621
+msgid "End Sketch Mode"
+msgstr "結束草圖模式"
+
+#: ../src/Shape.cpp:265
+msgid "Enter Offset Value, + for making bigger, - for making smaller"
+msgstr "輸入偏移值，+作出更大的,-作出更小的"
+
+#: ../src/Shape.cpp:265
+msgid "Offset value"
+msgstr "偏移值"
+
+#: ../src/Shape.cpp:277
+msgid "Result of 'Offset Shape'"
+msgstr "'偏移的形狀'結果"
+
+#: ../src/Shape.cpp:284 ../src/Sketch.cpp:359 ../src/Wire.cpp:60
+msgid "Error making offset"
+msgstr "錯誤作出偏移"
+
+#: ../src/Shape.cpp:288
+msgid "Offset Shape"
+msgstr "偏移形狀"
+
+#: ../src/Shape.cpp:308
+msgid "Stretched Shape"
+msgstr "伸展形狀"
+
+#: ../src/Shape.cpp:400
+msgid "Error with cut operation"
+msgstr "剪切操作錯誤"
+
+#: ../src/Shape.cpp:413
+msgid "Result of Fuse Operation"
+msgstr "溶合操作的結果"
+
+#: ../src/Shape.cpp:421
+msgid "Error with fuse operation"
+msgstr "溶合操作錯誤"
+
+#: ../src/Shape.cpp:438
+msgid "Result of Common Operation"
+msgstr "共同的操作結果"
+
+#: ../src/Shape.cpp:446
+msgid "Error with common operation"
+msgstr "共同操作錯誤"
+
+#: ../src/Shape.cpp:597
+msgid "Result of Cut Operation"
+msgstr "剪切操作的結果"
+
+#: ../src/Shape.cpp:766 ../src/Shape.cpp:776
+msgid "STEP solid"
+msgstr "STEP立體"
+
+#: ../src/Shape.cpp:782 ../src/Shape.cpp:876
+msgid "STEP import not done!"
+msgstr "STEP導入未完成"
+
+#: ../src/Shape.cpp:815
+msgid "IGES shape"
+msgstr "IGES的造型"
+
+#: ../src/Shape.cpp:845
+msgid "sewed IGES solid"
+msgstr "縫合的IGES立體"
+
+#: ../src/Shape.cpp:854
+msgid "IGES import not done!"
+msgstr "IGES導入沒有完成!"
+
+#: ../src/Shape.cpp:872
+msgid "BREP solid"
+msgstr "BREP立體"
+
+#: ../src/Shape.cpp:1082
+msgid "opacity"
+msgstr "透明度"
+
+#: ../src/Shape.cpp:1088
+msgid "volume"
+msgstr "體積"
+
+#: ../src/Shape.cpp:1091
+msgid "centre of gravity"
+msgstr "重心"
+
+#: ../src/Shape.cpp:1095
+msgid "calculate volume"
+msgstr "計算體積"
+
+#: ../src/Sketch.cpp:215
+msgid "Number of elements"
+msgstr "元件的數目"
+
+#: ../src/Sketch.cpp:234
+msgid "order"
+msgstr "次序"
+
+#: ../src/Sketch.cpp:236
+msgid "solidify"
+msgstr "固化"
+
+#: ../src/Sketch.cpp:257
+msgid "Split Sketch"
+msgstr "分裂草圖"
+
+#: ../src/Sketch.cpp:280 ../src/ConversionTools.h:23
+msgid "Convert sketch to face"
+msgstr "轉換草圖到面"
+
+#: ../src/Sketch.cpp:304
+msgid "Convert sketch to wire"
+msgstr "草圖轉換成線"
+
+#: ../src/Sketch.cpp:343 ../src/Sketch.cpp:348
+msgid "Use negative for smaller and Positive for larger)"
+msgstr "使用負為較小,和正為較大"
+
+#: ../src/Sketch.cpp:344 ../src/Sketch.cpp:348
+msgid "Enter the distance"
+msgstr "輸入距離"
+
+#: ../src/Sketch.cpp:363
+msgid "Copy Parallel"
+msgstr "複製平行"
+
+#: ../src/Sketch.cpp:381 ../src/ConversionTools.h:31
+msgid "Split arcs to little lines"
+msgstr "分裂弧到小線"
+
+#: ../src/Sketch.cpp:391
+msgid "Enter Sketch Mode"
+msgstr "進入草圖模式"
+
+#: ../src/SketchTools.cpp:115
+msgid "Input extrusion height"
+msgstr "輸入擠出高度"
+
+#: ../src/SketchTools.cpp:120 ../src/SketchTools.cpp:122
+#: ../src/SketchTools.h:94
+msgid "Pad Sketch"
+msgstr "墊草圖"
+
+#: ../src/SketchTools.cpp:129
+msgid "Input pad depth"
+msgstr "輸入墊深度"
+
+#: ../src/SketchTools.cpp:134 ../src/SketchTools.cpp:136
+msgid "Pocket Sketch"
+msgstr "挖口袋槽草圖"
+
+#: ../src/SketchTools.cpp:154 ../src/SketchTools.cpp:156
+msgid "Make To Part"
+msgstr "作出部件"
+
+#: ../src/SketchTools.cpp:182 ../src/SketchTools.cpp:184
+#: ../src/SketchTools.cpp:274
+msgid "Add To Part"
+msgstr "加到部件"
+
+#: ../src/SketchTools.cpp:203
+msgid "Failed to convert sketch to wire"
+msgstr "無法轉換草圖到線"
+
+#: ../src/SketchTools.cpp:239
+msgid "Wire fix failed"
+msgstr "線修復失敗"
+
+#: ../src/SketchTools.cpp:248
+msgid "Failed to convert wire to sketch"
+msgstr "無法轉換線到草圖"
+
+#: ../src/SketchTools.cpp:266
+msgid "Failed to fix wire"
+msgstr "無法修復線"
+
+#: ../src/SketchTools.cpp:272
+msgid "Fix Wire"
+msgstr "修復線"
+
+#: ../src/SketchTools.cpp:345
+msgid "simplify sketch options"
+msgstr "簡化草圖選項"
+
+#: ../src/SketchTools.cpp:346
+msgid "max deviation"
+msgstr "最大偏差"
+
+#: ../src/SketchTools.cpp:347
+msgid "cleanup tolerance (temporary)"
+msgstr "清理公差"
+
+#: ../src/SketchTools.cpp:348
+msgid "bspline min degree (eg: 3)"
+msgstr "B樣條曲線最小角度"
+
+#: ../src/SketchTools.cpp:349
+msgid "bspline max degree (eg: 8)"
+msgstr "B樣條曲線最大角度"
+
+#: ../src/SketchTools.cpp:363
+msgid "bspline continuity (eg: GeomAbs_C2)"
+msgstr "B樣條曲線的連續性"
+
+#: ../src/SketchTools.cpp:373
+msgid "Sort Points"
+msgstr "排序點"
+
+#: ../src/SketchTools.cpp:383
+msgid "Force closed shape"
+msgstr "強行關閉造型"
+
+#: ../src/SketchTools.cpp:392
+msgid "fix wire options"
+msgstr "修復線選項"
+
+#: ../src/SketchTools.cpp:393
+msgid "reorder"
+msgstr "重新排序"
+
+#: ../src/SketchTools.cpp:394
+msgid "fix small"
+msgstr "修復小型"
+
+#: ../src/SketchTools.cpp:395
+msgid "fix small precision"
+msgstr "修復小型精確"
+
+#: ../src/SketchTools.cpp:396
+msgid "fix self intersection"
+msgstr "修復自相交"
+
+#: ../src/SketchTools.cpp:397
+msgid "fix lacking"
+msgstr "解決欠缺"
+
+#: ../src/SketchTools.cpp:398
+msgid "fix degenerated"
+msgstr "修復退化"
+
+#: ../src/SketchTools.cpp:400
+msgid "modify topology"
+msgstr "修改拓撲"
+
+#: ../src/SketchTools.cpp:401
+msgid "modify geometry"
+msgstr "修改幾何形狀"
+
+#: ../src/SketchTools.cpp:402
+msgid "closed wire"
+msgstr "封閉線"
+
+#: ../src/SketchTools.cpp:403
+msgid "preference pcurve"
+msgstr "偏好p曲線"
+
+#: ../src/SketchTools.cpp:404
+msgid "fix gaps by ranges"
+msgstr "修復範圍的差距"
+
+#: ../src/SketchTools.cpp:893
+msgid "Failed to create BSpline curve"
+msgstr "無法建立B樣條曲線"
+
+#: ../src/SketchTools.cpp:937
+msgid "Replaced "
+msgstr "取代"
+
+#: ../src/SolidTools.cpp:57
+msgid "Save solid file"
+msgstr "保存固體文件"
+
+#: ../src/SolidTools.cpp:57
+msgid "Solid Files"
+msgstr "固體文件"
+
+#: ../src/SolidTools.cpp:82
+msgid "Invalid solid file type chosen"
+msgstr "選擇了無效的固體文件類型"
+
+#: ../src/Sphere.cpp:76
+msgid "Ellipsoid"
+msgstr "橢球面"
+
+#: ../src/TransformTool.cpp:21
+msgid "Transform"
+msgstr "轉換"
+
+#: ../src/TransformTool.cpp:44
+msgid "Transform Objects"
+msgstr "轉換對象"
+
+#: ../src/TransformTools.cpp:41
+msgid "Pick objects to move"
+msgstr "選擇物件去移動"
+
+#: ../src/TransformTools.cpp:56 ../src/TransformTools.cpp:314
+msgid "Enter number of copies"
+msgstr "輸入份數"
+
+#: ../src/TransformTools.cpp:66
+msgid "Click position to move from"
+msgstr "點擊移動從位置"
+
+#: ../src/TransformTools.cpp:81
+msgid "Click position to move to"
+msgstr "點擊移動到的位置"
+
+#: ../src/TransformTools.cpp:142
+msgid "Pick objects to rotate"
+msgstr "選擇物件旋轉"
+
+#: ../src/TransformTools.cpp:229
+msgid "Pick objects to mirror"
+msgstr "選擇物件鏡像"
+
+#: ../src/TransformTools.cpp:248
+msgid "Pick line to mirror about"
+msgstr "挑線進行鏡像"
+
+#: ../src/TransformTools.cpp:299
+msgid "Pick objects to scale"
+msgstr "選擇物件作縮放"
+
+#: ../src/TransformTools.cpp:324
+msgid "Click centre position to scale about"
+msgstr "點擊中心的地位，以作縮放"
+
+#: ../src/TransformTools.cpp:329
+msgid "Enter scale factor"
+msgstr "輸入縮放係數"
+
+#: ../src/TransformTools.cpp:329
+msgid "scale factor"
+msgstr "縮放係數"
+
+#: ../src/ViewPanning.cpp:44 ../src/ViewZooming.cpp:50
+msgid "Drag with the left mouse button"
+msgstr "以鼠標左鍵拖動"
+
+#: ../src/ViewPanning.cpp:55
+msgid "Stop panning"
+msgstr "停止平移"
+
+#: ../src/ViewRotating.cpp:60
+msgid "Stop rotating"
+msgstr "停止旋轉"
+
+#: ../src/ViewZooming.cpp:50
+msgid "Forward to zoom in, Back to zoom out"
+msgstr "正向放大，縮小返回"
+
+#: ../src/ViewZooming.cpp:50
+msgid "Back to zoom in, Forward to zoom out"
+msgstr "返回放大，前進縮小"
+
+#: ../src/ViewZooming.cpp:50
+msgid "Hold middle mouse button down to pan"
+msgstr "按住鼠標中鍵平移"
+
+#: ../src/ViewZooming.cpp:61
+msgid "Stop zooming"
+msgstr "停止縮放"
+
+#: ../src/Wire.cpp:33
+msgid "Result of Wire Offset"
+msgstr "偏移線的結果"
+
+#: ../src/Wire.cpp:35
+msgid "Generated"
+msgstr "產生"
+
+#: ../src/Wire.cpp:44
+msgid "Generated from edge"
+msgstr "從邊緣產生"
+
+#: ../src/Wire.cpp:50
+msgid "Modified"
+msgstr "修改"
+
+#: ../src/Wire.cpp:53
+msgid "Is Deleted"
+msgstr "已 刪除"
+
+#: ../src/Wire.cpp:65
+msgid "Offset Wire"
+msgstr "偏移線"
+
+#: ../heekscad/src/advprops.cpp:497
+msgid "Point Size"
+msgstr ""
+
+#: ../heekscad/src/advprops.cpp:499
+msgid "Family"
+msgstr ""
+
+#: ../heekscad/src/advprops.cpp:509
+msgid "Face Name"
+msgstr ""
+
+#: ../heekscad/src/advprops.cpp:516
+msgid "Style"
+msgstr ""
+
+#: ../heekscad/src/advprops.cpp:522
+msgid "Underlined"
+msgstr ""
+
+#: ../heekscad/src/advprops.cpp:1329
+msgid "files"
+msgstr ""
+
+#: ../heekscad/src/advprops.cpp:1337
+#: ../heekscad/src/props.cpp:1509
+msgid "All files"
+msgstr ""
+
+#: ../heekscad/src/advprops.cpp:1589
+msgid "Make a selection:"
+msgstr ""
+
+#: ../heekscad/src/manager.cpp:1293
+msgid "Categorized Mode"
+msgstr ""
+
+#: ../heekscad/src/manager.cpp:1294
+msgid "Alphabetic Mode"
+msgstr ""
+
+#: ../heekscad/src/manager.cpp:1339
+#: ../heekscad/src/manager.cpp:1737
+msgid "<< Compact"
+msgstr ""
+
+#: ../heekscad/src/manager.cpp:1339
+#: ../heekscad/src/manager.cpp:1732
+msgid "Expand >>"
+msgstr ""
+
+#: ../heekscad/src/propgrid.cpp:635
+#: ../heekscad/src/props.cpp:569
+msgid "False"
+msgstr ""
+
+#: ../heekscad/src/propgrid.cpp:636
+#: ../heekscad/src/props.cpp:570
+msgid "True"
+msgstr ""
+
+#: ../heekscad/src/propgrid.cpp:637
+#: ../heekscad/src/props.cpp:571
+msgid "Unspecified"
+msgstr ""
+
+#: ../heekscad/src/props.cpp:480
+msgid "is not a floating-point number"
+msgstr ""
+
+#: ../heekscad/src/props.cpp:581
+#: ../heekscad/src/props.cpp:602
+msgid "true"
+msgstr ""
+
+#: ../heekscad/src/props.cpp:582
+msgid "false"
+msgstr ""
+
+#: ../heekscad/src/props.cpp:1470
+msgid "Choose a directory:"
+msgstr ""
+
+#: ../heekscad/src/props.cpp:1685
+msgid "Choose a file"
+msgstr ""
+
+#: ../heekscad/src/props.cpp:1851
+#: ../heekscad/src/props.cpp:2083
+msgid "Ok"
+msgstr ""
+
+#: ../heekscad/src/props.cpp:2029
+msgid "Add"
+msgstr ""
+
+#: ../heekscad/src/props.cpp:2057
+msgid "Update"
+msgstr ""
+
+#: ../heekscad/src/props.cpp:2060
+msgid "Remove"
+msgstr ""
+
+#: ../heekscad/src/props.cpp:2063
+msgid "Up"
+msgstr ""
+
+#: ../heekscad/src/props.cpp:2066
+msgid "Down"
+msgstr ""
+
+#: ../heekscad/src/wxImageLoader.cpp:22
+msgid "Failed to load resource image from "
+msgstr "無法載入資源圖像"
+
+#: ../heekscad/heekscnc/src/AttachOp.cpp:184
+msgid "tolerance"
+msgstr "公差"
+
+#: ../heekscad/heekscnc/src/AttachOp.cpp:185
+msgid "minimum z"
+msgstr "最小z"
+
+#: ../heekscad/heekscnc/src/AttachOp.cpp:186
+msgid "material allowance"
+msgstr "材料容差"
+
+#: ../heekscad/heekscnc/src/BOM.cpp:449
+msgid "output.nc"
+msgstr "輸出."
+
+#: ../heekscad/heekscnc/src/BOM.cpp:471
+msgid "Pack BOM"
+msgstr "材料清單打包"
+
+#: ../heekscad/heekscnc/src/BOM.cpp:476
+msgid "Enter width of panel in inches"
+msgstr "輸入英寸面板的寬度"
+
+#: ../heekscad/heekscnc/src/BOM.cpp:477
+msgid "Enter gap in millimeters"
+msgstr "輸入以毫米為單位的間隙"
+
+#: ../heekscad/heekscnc/src/BOM.cpp:477
+msgid "gap"
+msgstr "間隙"
+
+#: ../heekscad/heekscnc/src/BOM.cpp:485
+msgid "Output NC"
+msgstr "輸出NC"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:804
+msgid "Select tap size"
+msgstr "選擇攻絲大小"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:805
+msgid "Standard Tap Sizes"
+msgstr "標準攻絲尺寸"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:840
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:120
+msgid "Leave manually assigned title"
+msgstr "離開手動指派標題"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:841
+msgid "Automatically generate title"
+msgstr "自動生成標題"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:843
+msgid "Automatic Title"
+msgstr "自動標題"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:858
+msgid "Material"
+msgstr "材料"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:874
+msgid "Type"
+msgstr "類型"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:879
+msgid "max_advance_per_revolution"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:886
+msgid "x_offset"
+msgstr "x偏移量(_o)"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:887
+msgid "front_angle"
+msgstr "前角(_a)"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:888
+msgid "tool_angle"
+msgstr "刀具角度(_a)"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:889
+msgid "back_angle"
+msgstr "背後角度(_a)"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:893
+msgid "(0) Unused"
+msgstr "(0) 未使用"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:894
+msgid "(1) Turning/Back Facing"
+msgstr "(1) 車削/背向端面"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:895
+msgid "(2) Turning/Facing"
+msgstr "(2) 車削/端面"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:896
+msgid "(3) Boring/Facing"
+msgstr "(3) 鏜孔/端面"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:897
+msgid "(4) Boring/Back Facing"
+msgstr "(4) 鏜孔/背端面"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:898
+msgid "(5) Back Facing"
+msgstr "背端面"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:899
+msgid "(6) Turning"
+msgstr "车削"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:900
+msgid "(7) Facing"
+msgstr "端面"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:901
+msgid "(8) Boring"
+msgstr "搪孔"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:902
+msgid "(9) Centre"
+msgstr "中心钻"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:914
+msgid "tool_length_offset"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:919
+msgid "flat_radius"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:920
+msgid "corner_radius"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:921
+msgid "cutting_edge_angle"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:922
+msgid "cutting_edge_height"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:923
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:136
+msgid "gradient"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:930
+msgid "Probe offset X"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:931
+msgid "Probe offset Y"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:947
+msgid "extrusion_material"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:948
+msgid "width_over_thickness"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:949
+msgid "feedrate"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:950
+msgid "layer_height"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:951
+msgid "temperature"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:952
+msgid "flowrate"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:953
+msgid "filament_diameter"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:960
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:111
+msgid "right hand"
+msgstr "右手"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:961
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:111
+msgid "left hand"
+msgstr "左手"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:963
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:112
+msgid "Tap direction"
+msgstr "攻絲方向"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:965
+msgid "pitch"
+msgstr "節距"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:969
+msgid "Select size"
+msgstr "選擇尺寸"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:970
+msgid "Metric"
+msgstr "公制"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:971
+msgid "Unified Thread Standard (UNC/UNF/UNEF)"
+msgstr "統一螺紋標準"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:972
+msgid "British Standard Whitworth"
+msgstr "韋氏粗螺紋BSW"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:974
+msgid "Select TAP from standard sizes"
+msgstr "從標準尺寸選擇的絲錐"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:1151
+msgid "tool_number"
+msgstr "刀具號"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:1519
+msgid "Carbide "
+msgstr "硬質合金"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:1530
+msgid "PLA "
+msgstr "聚乳酸"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:1532
+msgid "HDPE "
+msgstr "高密度聚乙烯"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:1541
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:126
+msgid "Drill Bit"
+msgstr "鑽頭"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:1544
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:126
+msgid "Centre Drill Bit"
+msgstr "中心鑽"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:1547
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:126
+msgid "End Mill"
+msgstr "端銑刀"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:1550
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:126
+msgid "Slot Cutter"
+msgstr "槽銑刀"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:1553
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:126
+msgid "Ball End Mill"
+msgstr "球頭立銑刀"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:1558
+msgid "Chamfering Bit"
+msgstr "切角頭"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:1561
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:126
+msgid "Turning Tool"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:1564
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:126
+msgid "Touch Probe"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:1567
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:126
+msgid "Extrusion"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:1570
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:126
+msgid "Tool Length Switch"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:1617
+msgid " Tap Tool"
+msgstr "絲錐"
+
+#: ../heekscad/heekscnc/src/CTool.cpp:1619
+msgid ", left hand"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:1625
+msgid "Engraving Bit"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:2226
+msgid "Import probe calibration data"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CTool.cpp:2501
+msgid "The TAP tool's diameter and pitch don't match any of the standard sizes\n"
+msgstr "絲錐\n"
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:97
+msgid "ABS Plastic"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:97
+msgid "PLA Plastic"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:97
+msgid "HDPE Plastic"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:97
+msgid "Other"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:98
+msgid "Extrusion Material"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:99
+msgid "Feed Rate"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:100
+msgid "Layer Height"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:101
+msgid "Width Over Thickness ratio"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:102
+msgid "Temperature"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:103
+msgid "Flow Rate"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:104
+msgid "Filament Diameter"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:106
+msgid "Title"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:107
+msgid "Visible"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:110
+msgid "Pitch"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:120
+msgid "Automatically Generate Title"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:121
+msgid "Title Type"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:123
+msgid "High Speed Steel"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:123
+msgid "Carbide"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:124
+msgid "Tool Material"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:126
+msgid "Tap Tool"
+msgstr "絲錐"
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:127
+msgid "Tool Type"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:129
+msgid "Max advance per revolution"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:130
+msgid "Diameter"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:131
+msgid "Tool length offset"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:132
+msgid "Flat radius"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:133
+msgid "Corner radius"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:134
+msgid "Cutting edge angle"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:135
+msgid "Cutting edge height"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:140
+msgid "X Offset"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:141
+msgid "Front Angle"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:142
+msgid "Tool Angle"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:143
+msgid "Back Angle"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:144
+msgid "Orientation"
+msgstr "取向"
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:148
+msgid "Probe Offset X"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/CToolDlg.cpp:149
+msgid "Probe Offset Y"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Chamfer.cpp:82
+msgid "Chamfer Width"
+msgstr "切角闊度"
+
+#: ../heekscad/heekscnc/src/Chamfer.cpp:113
+#: ../heekscad/heekscnc/src/Contour.cpp:117
+msgid "Outside"
+msgstr "外側"
+
+#: ../heekscad/heekscnc/src/Chamfer.cpp:114
+#: ../heekscad/heekscnc/src/Contour.cpp:118
+msgid "Inside"
+msgstr "內側"
+
+#: ../heekscad/heekscnc/src/Chamfer.cpp:118
+#: ../heekscad/heekscnc/src/Contour.cpp:122
+msgid "Outside or Left"
+msgstr "外側或左"
+
+#: ../heekscad/heekscnc/src/Chamfer.cpp:119
+#: ../heekscad/heekscnc/src/Contour.cpp:123
+msgid "Inside or Right"
+msgstr "內側或右"
+
+#: ../heekscad/heekscnc/src/Chamfer.cpp:123
+#: ../heekscad/heekscnc/src/Contour.cpp:128
+msgid "On"
+msgstr "在...之上"
+
+#: ../heekscad/heekscnc/src/Chamfer.cpp:138
+#: ../heekscad/heekscnc/src/Contour.cpp:143
+msgid "tool on side"
+msgstr "工具"
+
+#: ../heekscad/heekscnc/src/Chamfer.cpp:759
+#: ../heekscad/heekscnc/src/Contour.cpp:1126
+msgid "Failed to create contours around "
+msgstr "無法創建等高線周圍"
+
+#: ../heekscad/heekscnc/src/Chamfer.cpp:759
+#: ../heekscad/heekscnc/src/Contour.cpp:1126
+msgid " sketches"
+msgstr "草圖"
+
+#: ../heekscad/heekscnc/src/Contour.cpp:157
+msgid "entry move type"
+msgstr "入口移動類型"
+
+#: ../heekscad/heekscnc/src/Contour.cpp:1280
+msgid "Contour spline deviation"
+msgstr "等高線樣條線偏差"
+
+#: ../heekscad/heekscnc/src/CounterBore.cpp:74
+#: ../heekscad/heekscnc/src/Drilling.cpp:185
+msgid "Respect existing order"
+msgstr "尊重現有秩序"
+
+#: ../heekscad/heekscnc/src/CounterBore.cpp:78
+msgid "Sort Locations"
+msgstr "排序位置"
+
+#: ../heekscad/heekscnc/src/CounterBore.cpp:329
+msgid "Error: Tool diameter ("
+msgstr "錯誤：刀具直徑　("
+
+#: ../heekscad/heekscnc/src/CounterBore.cpp:330
+msgid ">= hole diameter ("
+msgstr ">=孔直徑　("
+
+#: ../heekscad/heekscnc/src/CounterBore.cpp:331
+msgid "in counter bore operation.  "
+msgstr "在做埋頭操作"
+
+#: ../heekscad/heekscnc/src/CounterBore.cpp:332
+#: ../heekscad/heekscnc/src/CounterBore.cpp:350
+#: ../heekscad/heekscnc/src/CounterBore.cpp:358
+msgid "Skipping this counter bore operation (ID="
+msgstr "跳過這埋頭操作 (ID="
+
+#: ../heekscad/heekscnc/src/CounterBore.cpp:348
+msgid "Warning: Counter bore refers to a tool "
+msgstr "警告：埋頭指向一個工具"
+
+#: ../heekscad/heekscnc/src/CounterBore.cpp:349
+msgid "that can't be found in the model.  "
+msgstr "無法在模型中發現. "
+
+#: ../heekscad/heekscnc/src/CounterBore.cpp:357
+msgid "Warning: Counter bore operations MUST refer to a tool.  "
+msgstr "警告：埋頭操作必須指定工具.　"
+
+#: ../heekscad/heekscnc/src/CuttingRate.cpp:67
+msgid "Brinell hardness of raw material"
+msgstr "原材料的布氏硬度"
+
+#: ../heekscad/heekscnc/src/CuttingRate.cpp:72
+msgid "Maximum Material Removal Rate (mm^3/min)"
+msgstr "最大材料去除率　(mm^3/min)"
+
+#: ../heekscad/heekscnc/src/CuttingRate.cpp:79
+msgid "Maximum Material Removal Rate (inches^3/min)"
+msgstr "最大材料去除率 (inch^3/min)"
+
+#: ../heekscad/heekscnc/src/DepthOp.cpp:109
+msgid "Absolute"
+msgstr "絕對"
+
+#: ../heekscad/heekscnc/src/DepthOp.cpp:110
+msgid "Incremental"
+msgstr "增量"
+
+#: ../heekscad/heekscnc/src/DepthOp.cpp:111
+msgid "ABS/INCR mode"
+msgstr "ABS/INCR 模式"
+
+#: ../heekscad/heekscnc/src/DepthOp.cpp:117
+#: ../heekscad/heekscnc/src/DepthOp.cpp:121
+#: ../heekscad/heekscnc/src/DepthOp.cpp:126
+#: ../heekscad/heekscnc/src/Drilling.cpp:149
+#: ../heekscad/heekscnc/src/Drilling.cpp:153
+#: ../heekscad/heekscnc/src/Drilling.cpp:158
+msgid "clearance height"
+msgstr "間隙高度"
+
+#: ../heekscad/heekscnc/src/DepthOp.cpp:117
+#: ../heekscad/heekscnc/src/Drilling.cpp:149
+msgid "Defined in fixture definition"
+msgstr "在夾具的定義界定"
+
+#: ../heekscad/heekscnc/src/DepthOp.cpp:121
+#: ../heekscad/heekscnc/src/Drilling.cpp:153
+msgid "Defined in Program properties for whole machine"
+msgstr "在整機的程式內容定義"
+
+#: ../heekscad/heekscnc/src/DepthOp.cpp:129
+msgid "rapid safety space"
+msgstr "快速移動安全空間"
+
+#: ../heekscad/heekscnc/src/DepthOp.cpp:134
+msgid "start depth"
+msgstr "起始深度"
+
+#: ../heekscad/heekscnc/src/DepthOp.cpp:135
+msgid "final depth"
+msgstr "最終深度"
+
+#: ../heekscad/heekscnc/src/DepthOp.cpp:140
+msgid "step down"
+msgstr "下降步伐"
+
+#: ../heekscad/heekscnc/src/DepthOp.cpp:347
+#: ../heekscad/heekscnc/src/DepthOp.cpp:361
+#: ../heekscad/heekscnc/src/DepthOp.cpp:373
+#: ../heekscad/heekscnc/src/DepthOp.cpp:385
+#: ../heekscad/heekscnc/src/Drilling.cpp:925
+#: ../heekscad/heekscnc/src/Drilling.cpp:983
+msgid "WARNING"
+msgstr "警告"
+
+#: ../heekscad/heekscnc/src/DepthOp.cpp:347
+#: ../heekscad/heekscnc/src/DepthOp.cpp:361
+#: ../heekscad/heekscnc/src/DepthOp.cpp:373
+#: ../heekscad/heekscnc/src/DepthOp.cpp:385
+#: ../heekscad/heekscnc/src/DepthOp.cpp:390
+msgid "Depth Operation"
+msgstr "深入的操作"
+
+#: ../heekscad/heekscnc/src/DepthOp.cpp:347
+msgid "does not have a tool assigned"
+msgstr "沒有指定的工具"
+
+#: ../heekscad/heekscnc/src/DepthOp.cpp:347
+msgid "It can not produce GCode without a tool assignment"
+msgstr "它不能產生一個沒有指派工具的G代碼"
+
+#: ../heekscad/heekscnc/src/DepthOp.cpp:361
+msgid "is set to cut deeper than the assigned tool will allow"
+msgstr "設置切深度超過所分配的工具所容許"
+
+#: ../heekscad/heekscnc/src/DepthOp.cpp:373
+msgid "has poor start and final depths"
+msgstr "有惡劣的開始和最終的深度"
+
+#: ../heekscad/heekscnc/src/DepthOp.cpp:373
+msgid "Can't change this setting automatically"
+msgstr "不能自動更改此設定"
+
+#: ../heekscad/heekscnc/src/DepthOp.cpp:385
+msgid "Clearance height is below start depth"
+msgstr "間隙高度低於開始深度"
+
+#: ../heekscad/heekscnc/src/DepthOp.cpp:390
+msgid "Raising clearance height up to start depth (+5 mm)"
+msgstr "提升間隙高度高達開始深度　(+５mm)"
+
+#: ../heekscad/heekscnc/src/DepthOp.cpp:399
+msgid "The step-down value for pocket (id="
+msgstr "挖口袋槽的步降值　(id="
+
+#: ../heekscad/heekscnc/src/DepthOp.cpp:399
+msgid ") must be positive"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Drilling.cpp:144
+msgid "standoff"
+msgstr "孔以上的高度"
+
+#: ../heekscad/heekscnc/src/Drilling.cpp:161
+msgid "dwell"
+msgstr "停頓時間"
+
+#: ../heekscad/heekscnc/src/Drilling.cpp:163
+msgid "peck_depth"
+msgstr "深孔啄鑽深度(_d)"
+
+#: ../heekscad/heekscnc/src/Drilling.cpp:167
+msgid "Rapid retract"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Drilling.cpp:168
+msgid "Feed retract"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Drilling.cpp:171
+msgid "retract_mode"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Drilling.cpp:176
+msgid "Keep running"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Drilling.cpp:177
+msgid "Stop at bottom"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Drilling.cpp:180
+msgid "spindle_mode"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Drilling.cpp:189
+msgid "sort_drilling_locations"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Drilling.cpp:871
+#: ../heekscad/heekscnc/src/Drilling.cpp:882
+msgid "Chamfering bit for drilling op"
+msgstr "斜角"
+
+#: ../heekscad/heekscnc/src/Drilling.cpp:871
+msgid "is too big for previously drilled hole"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Drilling.cpp:882
+msgid "is too small for previously drilled hole"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Drilling.cpp:910
+#: ../heekscad/heekscnc/src/Drilling.cpp:950
+msgid "Adjusting depth of drill cycle"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Drilling.cpp:910
+#: ../heekscad/heekscnc/src/Drilling.cpp:950
+msgid "from"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Drilling.cpp:911
+#: ../heekscad/heekscnc/src/Drilling.cpp:951
+msgid "to"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Drilling.cpp:925
+msgid "Drilling"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Drilling.cpp:925
+msgid "Can't drill hole"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Drilling.cpp:983
+msgid "cant have boring cycle with pecking > 0"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Excellon.cpp:890
+msgid "allow dummy tool definitions"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Fixture.cpp:166
+msgid "YZ plane (around X) rotation"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Fixture.cpp:167
+msgid "XZ plane (around Y) rotation"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Fixture.cpp:168
+msgid "XY plane (around Z) rotation"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Fixture.cpp:175
+msgid "Pivot Point"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Fixture.cpp:177
+msgid "Safety Height Defined"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Fixture.cpp:181
+msgid "Safety Height for inter-fixture movements (in G53 - Machine - coordinates)"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Fixture.cpp:184
+msgid "Clearance Height for inter-operation movements(in local (G54, G55 etc.) coordinates)"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Fixture.cpp:186
+msgid "Touch Off Point Defined"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Fixture.cpp:194
+msgid "Touch-off Point (in "
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Fixture.cpp:196
+msgid "Touch-off Description"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Fixture.cpp:425
+#: ../heekscad/heekscnc/src/Fixture.cpp:430
+#: ../heekscad/heekscnc/src/Fixture.cpp:435
+msgid " rotated "
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Fixture.cpp:425
+msgid " degrees in YZ plane"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Fixture.cpp:430
+msgid " degrees in XZ plane"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Fixture.cpp:435
+msgid " degrees in XY plane"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Fixture.cpp:459
+msgid "Changing name to "
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Fixture.cpp:761
+msgid "Import probe data"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Fixtures.cpp:41
+msgid "Export"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:177
+msgid "You must select some sketches, first!"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:293
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:329
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:528
+msgid "There are no solids!"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:386
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:448
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:570
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:770
+msgid "You must select some points, circles or other intersecting elements first!"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:392
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:776
+msgid "You may only select a single tool for each drilling operation.!"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:454
+msgid "You may only select a single tool for each tapping operation.!"
+msgstr "攻絲"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:491
+msgid "You may only select a single tool for each chamfer operation.!"
+msgstr "切角每個切角操作，你可能只能選擇一個工具.!"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1137
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1182
+msgid "NC files"
+msgstr "NC文件"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1138
+msgid "Open NC file"
+msgstr "打開NC文件"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1160
+msgid "BOM files"
+msgstr "材料清單文件"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1161
+msgid "Open BOM file"
+msgstr "打開材料清單文件"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1184
+msgid "Save NC file"
+msgstr "保存NC文件"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1193
+msgid "Couldn't open file"
+msgstr "無法打開文件"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1235
+msgid "New Drill..."
+msgstr "新的鑽頭..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1236
+msgid "New Centre Drill..."
+msgstr "新的中心鑽..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1237
+msgid "New End Mill..."
+msgstr "新端銑刀..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1238
+msgid "New Slot Drill..."
+msgstr "新插槽鑽頭..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1239
+msgid "New Ball End Mill..."
+msgstr "新球端銑刀..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1240
+msgid "New Chamfer Mill..."
+msgstr "新切角銑刀"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1242
+msgid "New Turning Tool..."
+msgstr ""
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1244
+msgid "New Touch Probe..."
+msgstr ""
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1246
+msgid "New Extrusion..."
+msgstr ""
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1248
+msgid "New Tool Length Switch..."
+msgstr ""
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1249
+msgid "New Tap Tool..."
+msgstr "絲錐"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1250
+msgid "New Engraver Tool..."
+msgstr ""
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1283
+msgid "Milling operations"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1284
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1912
+msgid "Profile"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1284
+msgid "New Profile Operation..."
+msgstr ""
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1285
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1913
+#: ../src/Pocket.h:17
+msgid "Pocket"
+msgstr "挖口袋槽"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1285
+msgid "New Pocket Operation..."
+msgstr ""
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1286
+msgid "Drill"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1286
+msgid "New Drill Cycle Operation..."
+msgstr ""
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1288
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1918
+msgid "CounterBore"
+msgstr "沉頭"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1288
+msgid "New CounterBore Cycle Operation..."
+msgstr "新沉頭週期操作"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1289
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1930
+msgid "Contour"
+msgstr "等高線"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1289
+msgid "New Contour Operation..."
+msgstr "新的等高線操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1290
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1932
+msgid "Inlay"
+msgstr "鑲嵌"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1290
+msgid "New Inlay Operation..."
+msgstr "新的鑲嵌操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1291
+msgid "New Chamfer Operation..."
+msgstr "新的斜角操作"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1293
+msgid "Tap"
+msgstr "絲錐"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1293
+msgid "New Tapping Operation..."
+msgstr "新的攻絲操作"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1296
+msgid "3D Milling operations"
+msgstr "3D銑削操作"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1298
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1914
+msgid "ZigZag"
+msgstr "鋸齒形"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1298
+msgid "New ZigZag Operation..."
+msgstr "新的鋸齒形操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1299
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1939
+msgid "Waterline"
+msgstr "吃水線"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1299
+msgid "New Waterline Operation..."
+msgstr "新的水線操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1301
+msgid "Attach"
+msgstr "掛接"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1301
+msgid "New Attach Operation..."
+msgstr "新的掛接操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1302
+msgid "Unattach"
+msgstr "拆卸"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1302
+msgid "New Unattach Operation..."
+msgstr "新的拆卸操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1305
+msgid "Other operations"
+msgstr "其他操作"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1306
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1925
+msgid "Positioning"
+msgstr "定位"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1306
+msgid "New Positioning Operation..."
+msgstr "新的定位操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1307
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1308
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1309
+msgid "Probing"
+msgstr "探測"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1307
+msgid "New Probe Centre Operation..."
+msgstr "新的探測中點操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1308
+msgid "New Probe Edge Operation..."
+msgstr "新的探測邊點操作"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1309
+msgid "New Probe Grid Operation..."
+msgstr "新的探測柵格操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1310
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1936
+msgid "ScriptOp"
+msgstr "指令碼選項"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1310
+msgid "New Script Operation..."
+msgstr "新的探指令碼操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1313
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1916
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:113
+msgid "Tool"
+msgstr "工具"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1313
+msgid "New Tool Definition..."
+msgstr "新工具的定義..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1316
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1920
+msgid "Fixture"
+msgstr "夾具"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1316
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1485
+msgid "New Fixture..."
+msgstr "新夾具..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1318
+msgid "Design Rules"
+msgstr "設計規則"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1319
+msgid "Design Rules Check"
+msgstr "設計規則檢查"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1319
+msgid "design_rules_check"
+msgstr "設計規則檢查　(_r_c)"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1319
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1448
+msgid "Design Rules Check..."
+msgstr "設計規則檢查"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1320
+msgid "Design Rules Adjustment"
+msgstr "設計規則調整"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1320
+msgid "design_rules_adjustment"
+msgstr "設計規則調整(_r_a)"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1320
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1449
+msgid "Design Rules Adjustment..."
+msgstr "設計規則調整"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1323
+msgid "Speeds"
+msgstr "速度"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1324
+msgid "Speed Reference"
+msgstr "速度基準值"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1324
+msgid "Add Speed Reference..."
+msgstr "添加速度基準值..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1325
+msgid "Cutting Rate"
+msgstr "切割速度"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1325
+msgid "Add Cutting Rate Reference..."
+msgstr "添加切割速度基準值..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1328
+msgid "Post Processing"
+msgstr "後處理"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1329
+msgid "PostProcess"
+msgstr "後處理"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1329
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1499
+msgid "Post-Process"
+msgstr "後處理"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1330
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1497
+msgid "Make Python Script"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1331
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1498
+msgid "Run Python Script"
+msgstr "運行Python指令碼"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1332
+msgid "OpenNC"
+msgstr "打開NC"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1332
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1500
+msgid "Open NC File"
+msgstr "打開NC文件"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1333
+msgid "SaveNC"
+msgstr "保存NC"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1333
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1501
+msgid "Save NC File"
+msgstr "保存NC文件"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1334
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1502
+msgid "Send to Machine"
+msgstr "發送到機器"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1335
+msgid "Cancel Python Script"
+msgstr "取消Python指令碼"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1355
+msgid "Excellon drill file interpretation"
+msgstr "Excellon鑽孔文件演繹"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1359
+msgid "Produce drill pattern as described"
+msgstr "生產鑽孔格局的描述"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1360
+msgid "Produce mirrored drill pattern"
+msgstr "產生鏡像的鑽孔格局"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1383
+msgid "Would you like to change the NC code generation units too?"
+msgstr "你想改變NC代碼生成單位?"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1383
+#: ../heekscad/heekscnc/src/Program.cpp:269
+msgid "Change Units"
+msgstr "改變單位"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1403
+msgid "HeeksCNC is the free machining add-on to HeeksCAD"
+msgstr "HeeksCNC是免費機加工插件到HeeksCAD"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1405
+msgid "Written by Dan Heeks, Hirutso Enni, Perttu Ahola, David Nicholls"
+msgstr "作者是 Dan Heeks，Hirutso ENNI，Perttu Ahola"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1406
+msgid "With help from archivist, crotchet1, DanielFalck, fenn, Sliptonic"
+msgstr "檔案工作者的幫助 ·crotchet1, DanielFalck, fenn, Sliptonic"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1407
+msgid "geometry code, donated by Geoff Hawkesford, Camtek GmbH http://www.peps.de/"
+msgstr "幾何代碼，捐贈者 Geoff Hawkesford, Camtek GmbH http://www.peps.de/"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1408
+msgid "pocketing code from http://code.google.com/p/libarea/ , derived from the kbool library written by Klaas Holwerda http://boolean.klaasholwerda.nl/bool.html"
+msgstr "挖口袋槽代碼 http://code.google.com/p/libarea/ 來自 kbool 程式庫 撰寫者 Klaas Holwerda http://boolean.klaasholwerda.nl/bool.html"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1409
+msgid "Zig zag code from opencamlib http://code.google.com/p/opencamlib/"
+msgstr "鋸齒形代碼 從 pycam Website: http://sourceforge.net/svn/?group_id=237831"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1410
+msgid "This HeeksCNC software installation is restricted by the GPL license http://www.gnu.org/licenses/gpl-3.0.txt"
+msgstr "這 HeeksCNC軟件安裝在GPL許可證限制 http://www.gnu.org/licenses/gpl-3.0.txt"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1411
+msgid "  which means it is free and open source, and must stay that way"
+msgstr "　　這意味著它是免費的，開源的，而且必須保持下去"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1424
+msgid "Profile Operation..."
+msgstr "新的外形操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1425
+msgid "Pocket Operation..."
+msgstr "新的挖口袋槽操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1426
+msgid "Drilling Operation..."
+msgstr "鑽孔操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1428
+msgid "Chamfer Operation..."
+msgstr "斜角操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1429
+msgid "CounterBore Operation..."
+msgstr "沉頭操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1430
+msgid "Contour Operation..."
+msgstr "等高線操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1431
+msgid "Inlay Operation..."
+msgstr ""
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1433
+msgid "Tapping Operation..."
+msgstr ""
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1437
+msgid "ZigZag Operation..."
+msgstr "鋸齒形"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1438
+msgid "Waterline Operation..."
+msgstr "吃水線操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1440
+msgid "Attach Operation..."
+msgstr "掛接操作"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1441
+msgid "Unattach Operation..."
+msgstr "拆卸操作"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1445
+msgid "Rough Turning Operation..."
+msgstr "粗車削操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1447
+msgid "Script Operation..."
+msgstr "指令運行..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1450
+msgid "Speed Reference..."
+msgstr "速度基準..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1451
+msgid "Cutting Rate Reference..."
+msgstr "切割速率基準..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1452
+msgid "Positioning Operation..."
+msgstr "定位操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1453
+msgid "Probe Centre Operation..."
+msgstr "中心探測操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1454
+msgid "Probe Edge Operation..."
+msgstr "邊緣探測操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1455
+msgid "Probe Grid Operation..."
+msgstr "網格探測操作..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1459
+msgid "Any sized tap..."
+msgstr "任何大小絲錐..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1460
+msgid "Pick from Metric standard sizes"
+msgstr "從公制標準尺寸挑選"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1461
+msgid "Pick from Unified Threading Standard (UNC, UNF or UNEF)"
+msgstr "從統一螺紋標準尺寸挑選"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1462
+msgid "Pick from British Standard Whitworth standard sizes"
+msgstr "從韋氏粗螺紋BSW尺寸挑選"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1466
+msgid "Drill..."
+msgstr "鑽孔..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1467
+msgid "Centre Drill..."
+msgstr "中心鑽孔..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1468
+msgid "End Mill..."
+msgstr "端銑..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1469
+msgid "Slot Drill..."
+msgstr "插槽鑽孔..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1470
+msgid "Ball End Mill..."
+msgstr "球頭立銑刀..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1471
+msgid "Chamfer Mill..."
+msgstr "斜角銑刀..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1473
+msgid "Turning Tool..."
+msgstr "車削刀具..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1475
+msgid "Touch Probe..."
+msgstr "接觸探針..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1476
+msgid "Tool Length Switch..."
+msgstr "刀具長度切換..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1478
+msgid "Extrusion..."
+msgstr "突出部分..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1480
+msgid "Tap Tool..."
+msgstr "絲錐工具..."
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1490
+msgid "Add New Milling Operation"
+msgstr "添加新的銑削操作"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1491
+msgid "Add New 3D Operation"
+msgstr "新增的3D操作"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1492
+msgid "Add Other Operation"
+msgstr "添加其他操作"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1493
+msgid "Add New Tool"
+msgstr "添加新工具"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1495
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1921
+msgid "Fixtures"
+msgstr "夾具"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1503
+msgid "Open BOM File"
+msgstr "打開材料清單文件"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1504
+#: ../heekscad/heekscnc/src/HeeksCNCInterface.cpp:85
+msgid "Machining"
+msgstr "機加工"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1754
+msgid "default"
+msgstr "默認的"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1816
+msgid "machining options"
+msgstr "加工選項"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1826
+msgid "Use Clipper not Boolean"
+msgstr "使用剪切不用布爾邏輯"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1827
+msgid "Use DOS Line Endings"
+msgstr "使用DOS行結束符"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1831
+msgid "Excellon options"
+msgstr "Excellon的選項"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1908
+msgid "Program"
+msgstr "指令"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1909
+msgid "NCCodeBlock"
+msgstr "NC代碼塊"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1910
+msgid "NCCode"
+msgstr "NC代碼"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1911
+msgid "Operations"
+msgstr "操作"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1917
+msgid "Tools"
+msgstr "Tools"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1919
+msgid "TurnRough"
+msgstr "粗車削"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1922
+msgid "SpeedReference"
+msgstr "速度基準"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1923
+msgid "SpeedReferences"
+msgstr "速度基準"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1924
+msgid "CuttingRate"
+msgstr "切割速度"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1926
+msgid "BOM"
+msgstr "物料清單"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1927
+msgid "TrsfNCCode"
+msgstr "轉移NC代碼"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1928
+msgid "ProbeCentre"
+msgstr "探測中心"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1929
+msgid "ProbeEdge"
+msgstr "探測邊緣"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1933
+msgid "ProbeGrid"
+msgstr "ProbeGrid"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1934
+msgid "Tags"
+msgstr "標籤"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1935
+msgid "Tag"
+msgstr "標籤"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1937
+msgid "AttachOp"
+msgstr "掛接操作"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1938
+msgid "UnattachOp"
+msgstr "拆卸操作"
+
+#: ../heekscad/heekscnc/src/HeeksCNC.cpp:1940
+msgid "Tapping"
+msgstr "攻絲"
+
+#: ../heekscad/heekscnc/src/Inlay.cpp:150
+msgid "Border Width"
+msgstr "邊框的寬度"
+
+#: ../heekscad/heekscnc/src/Inlay.cpp:167
+msgid "Clearance Tool"
+msgstr "工具間隙"
+
+#: ../heekscad/heekscnc/src/Inlay.cpp:175
+msgid "Female half"
+msgstr "山谷的一半"
+
+#: ../heekscad/heekscnc/src/Inlay.cpp:176
+msgid "Male half"
+msgstr "山頂的一半"
+
+#: ../heekscad/heekscnc/src/Inlay.cpp:177
+msgid "Both halves"
+msgstr "兩半"
+
+#: ../heekscad/heekscnc/src/Inlay.cpp:179
+msgid "GCode generation"
+msgstr "G代碼生成"
+
+#: ../heekscad/heekscnc/src/Inlay.cpp:186
+msgid "X Axis"
+msgstr "X軸"
+
+#: ../heekscad/heekscnc/src/Inlay.cpp:187
+msgid "Y Axis"
+msgstr "Y軸"
+
+#: ../heekscad/heekscnc/src/Inlay.cpp:189
+msgid "Mirror Axis"
+msgstr "鏡像軸"
+
+#: ../heekscad/heekscnc/src/Inlay.cpp:219
+msgid "Female Op Fixture"
+msgstr "山谷夾具"
+
+#: ../heekscad/heekscnc/src/Inlay.cpp:220
+msgid "Male Op Fixture"
+msgstr "山頂夾具"
+
+#: ../heekscad/heekscnc/src/Inlay.cpp:224
+msgid "Min Cornering Angle (degrees)"
+msgstr "最小轉彎角度"
+
+#: ../heekscad/heekscnc/src/Inlay.cpp:868
+msgid "sharpen corner"
+msgstr "銳化轉角"
+
+#: ../heekscad/heekscnc/src/Inlay.cpp:1087
+msgid "Form valley walls"
+msgstr "形成谷牆"
+
+#: ../heekscad/heekscnc/src/Inlay.cpp:1167
+msgid "Form valley pockets"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Inlay.cpp:1255
+msgid "Form mountain pockets above short mountains"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Inlay.cpp:1259
+msgid "Form mountains"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Inlay.cpp:1546
+msgid "Form mountain walls"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Inlay.cpp:1873
+msgid "Inlay spline deviation"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/MachineState.cpp:129
+msgid "Moving to a safety height common to both "
+msgstr ""
+
+#: ../heekscad/heekscnc/src/MachineState.cpp:129
+msgid " and "
+msgstr ""
+
+#: ../heekscad/heekscnc/src/MachineState.cpp:165
+msgid "Move above touch-off point for "
+msgstr ""
+
+#: ../heekscad/heekscnc/src/NCCode.cpp:655
+msgid "nc options"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/NCCode.cpp:657
+msgid "text colors"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/NCCode.cpp:658
+msgid "default color"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/NCCode.cpp:659
+msgid "block color"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/NCCode.cpp:660
+msgid "misc color"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/NCCode.cpp:661
+msgid "program color\t"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/NCCode.cpp:662
+msgid "tool color"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/NCCode.cpp:663
+msgid "comment color\t"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/NCCode.cpp:664
+msgid "variable color"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/NCCode.cpp:665
+msgid "prep color"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/NCCode.cpp:666
+msgid "axis color"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/NCCode.cpp:667
+msgid "rapid color"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/NCCode.cpp:668
+msgid "feed color"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/NCCode.cpp:759
+msgid "Arc Interpolation Count"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/NCCode.cpp:771
+msgid "Apply NC Code to solids. NOTE: This is not ready yet."
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Op.cpp:115
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:90
+msgid "comment"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Op.cpp:116
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:91
+msgid "active"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Op.cpp:133
+msgid "tool"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Op.cpp:296
+msgid "Add Fixture"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Operations.cpp:89
+msgid "Set All Operations Active"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Operations.cpp:108
+msgid "Set All Operations Inactive"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:106
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:100
+msgid "step over"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:110
+msgid "Boundary"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:111
+msgid "Center"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:112
+msgid "starting_place"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:116
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:106
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:155
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:200
+msgid "Plunge"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:117
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:106
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:158
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:203
+msgid "Ramp"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:118
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:106
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:161
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:206
+msgid "Helical"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:119
+msgid "entry_move"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:121
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:116
+msgid "keep tool down"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:122
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:115
+msgid "use zig zag"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:125
+msgid "zig angle"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:126
+msgid "unidirectional"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:395
+msgid "Pocket operation - Sketch doesn't exist"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:430
+#, c-format
+msgid "Pocket operation - Sketch %d has no children"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:454
+#, c-format
+msgid "Pocket operation - Sketch must be a closed shape - sketch %d"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:462
+#, c-format
+msgid "Pocket operation - Badly ordered sketch - sketch %d"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:753
+msgid "No valid sketches upon which to act for pocket operations"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:773
+msgid "Adjusting depth of pocket"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:775
+#: ../heekscad/heekscnc/src/Profile.cpp:1327
+msgid "due to cutting edge length of selected tool"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:788
+msgid "The step-over distance for pocket (id="
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:790
+msgid ") is larger than the tool's diameter"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Pocket.cpp:815
+msgid "Pocket spline deviation"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:86
+msgid "horizontal feedrate"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:87
+msgid "vertical feedrate"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:88
+msgid "spindle speed"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:92
+msgid "title"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:99
+msgid "sketches"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:103
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:197
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:245
+msgid "boundary"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:103
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:197
+msgid "center"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:104
+msgid "starting place"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:107
+msgid "entry move"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:117
+msgid "zig zag angle"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:118
+msgid "zig unidirectional"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:120
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:217
+msgid "absolute"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:120
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:167
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:217
+msgid "incremental"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/PocketDlg.cpp:121
+msgid "absolute mode"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Positioning.cpp:75
+msgid "sort_locations"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Probing.cpp:87
+#: ../heekscad/heekscnc/src/Probing.cpp:143
+#: ../heekscad/heekscnc/src/Probing.cpp:201
+#: ../heekscad/heekscnc/src/Probing.cpp:215
+#: ../heekscad/heekscnc/src/Probing.cpp:444
+msgid "This program assumes that the machine operator has jogged"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Probing.cpp:88
+#: ../heekscad/heekscnc/src/Probing.cpp:144
+#: ../heekscad/heekscnc/src/Probing.cpp:202
+#: ../heekscad/heekscnc/src/Probing.cpp:216
+#: ../heekscad/heekscnc/src/Probing.cpp:445
+msgid "the machine to approximatedly the correct location"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Probing.cpp:89
+#: ../heekscad/heekscnc/src/Probing.cpp:203
+msgid "immediately above the protrusion we are finding the centre of."
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Probing.cpp:90
+#: ../heekscad/heekscnc/src/Probing.cpp:204
+msgid "This program then jogs out and down in two opposite directions"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Probing.cpp:91
+#: ../heekscad/heekscnc/src/Probing.cpp:205
+msgid "before probing back towards the centre point looking for the"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Probing.cpp:92
+#: ../heekscad/heekscnc/src/Probing.cpp:206
+msgid "protrusion."
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Probing.cpp:102
+#: ../heekscad/heekscnc/src/Probing.cpp:123
+#: ../heekscad/heekscnc/src/Probing.cpp:157
+#: ../heekscad/heekscnc/src/Probing.cpp:180
+#: ../heekscad/heekscnc/src/Probing.cpp:228
+msgid "Move back to the intersection points"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Probing.cpp:103
+#: ../heekscad/heekscnc/src/Probing.cpp:124
+#: ../heekscad/heekscnc/src/Probing.cpp:158
+#: ../heekscad/heekscnc/src/Probing.cpp:181
+#: ../heekscad/heekscnc/src/Probing.cpp:229
+msgid "NOTE: We set the temporary origin because it was in effect when the values in these variables were established"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Probing.cpp:145
+#: ../heekscad/heekscnc/src/Probing.cpp:217
+msgid "immediately above the hole we are finding the centre of."
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Probing.cpp:146
+#: ../heekscad/heekscnc/src/Probing.cpp:218
+msgid "This program then jogs down and probes out in two opposite directions"
+msgstr "這個程序慢跑下來，並兩個相反的方"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:147
+#: ../heekscad/heekscnc/src/Probing.cpp:219
+msgid "looking for the workpiece"
+msgstr "尋找工件"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:907
+msgid "Depth"
+msgstr "深度"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:940
+#: ../heekscad/heekscnc/src/Probing.cpp:1090
+msgid "Two"
+msgstr "二"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:941
+msgid "Four"
+msgstr "四"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:946
+msgid "Number of points"
+msgstr "點數"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:963
+msgid "Direction"
+msgstr "方向"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:981
+msgid "Alignment"
+msgstr "校準"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:1012
+msgid "Num points along X"
+msgstr "沿x的點數"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:1013
+msgid "Num points along Y"
+msgstr "沿y的點數"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:1017
+msgid "Point Cloud"
+msgstr "點雲"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:1018
+msgid "Fixture Measurement"
+msgstr "夾具測量"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:1019
+msgid "Point Data Format"
+msgstr "點的數據格式"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:1074
+msgid "Retract"
+msgstr "撤回"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:1083
+msgid "Check Levels"
+msgstr "檢查水平"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:1089
+msgid "One"
+msgstr "一"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:1093
+msgid "Number of edges"
+msgstr "邊數"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:1135
+msgid "Corner Coordinate"
+msgstr "角落坐標"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:1136
+msgid "Final Coordinate"
+msgstr "最後的坐標"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:1614
+#: ../heekscad/heekscnc/src/Probing.cpp:1671
+#: ../heekscad/heekscnc/src/Probing.cpp:1731
+msgid "Generate GCode"
+msgstr "生成G代碼"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:2129
+#: ../heekscad/heekscnc/src/Probing.cpp:2136
+#: ../heekscad/heekscnc/src/Probing.cpp:2232
+msgid "Probe "
+msgstr "探測"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:2130
+msgid " edge"
+msgstr "邊緣"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:2137
+msgid " corner"
+msgstr "轉角"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:2160
+msgid "Probe protrusion along "
+msgstr "探測突起沿線"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:2176
+msgid "Probe hole along "
+msgstr "探測孔沿"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:2195
+msgid "Probe protrusion"
+msgstr "探測突起"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:2209
+msgid "Probe hole"
+msgstr "探測孔"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:2228
+msgid "Probe Fixture Tilt"
+msgstr "探測夾具傾斜"
+
+#: ../heekscad/heekscnc/src/Probing.cpp:2233
+msgid "grid"
+msgstr "網格"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:194
+#: ../heekscad/heekscnc/src/Profile.cpp:245
+msgid "Conventional"
+msgstr "常規"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:195
+#: ../heekscad/heekscnc/src/Profile.cpp:246
+msgid "Climb"
+msgstr "攀登"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:196
+msgid "cut mode"
+msgstr "切割模式"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:201
+msgid "auto roll on"
+msgstr "自動滾上"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:202
+msgid "roll on point"
+msgstr "滾上點"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:203
+msgid "auto roll off"
+msgstr "自動推離"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:204
+msgid "roll off point"
+msgstr "推離點"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:205
+#: ../heekscad/heekscnc/src/Profile.cpp:226
+msgid "roll radius"
+msgstr "滾動半徑"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:206
+msgid "use start point"
+msgstr "使用起點"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:207
+msgid "start point"
+msgstr "起點"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:208
+msgid "use end point"
+msgstr "使用終點"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:211
+msgid "end point"
+msgstr "終點"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:212
+msgid "end beyond full profile"
+msgstr "結尾超越整個輪廓"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:223
+msgid "sort_sketches"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Profile.cpp:229
+msgid "extend before start"
+msgstr "延長啟動之前"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:230
+msgid "extend past end"
+msgstr "延長的末端"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:233
+msgid "lead in line length"
+msgstr "引入線的長度"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:234
+msgid "lead out line length"
+msgstr "引出線的長度"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:236
+msgid "offset_extra"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Profile.cpp:237
+msgid "do finishing pass"
+msgstr "精加工走刀"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:240
+msgid "only finishing pass"
+msgstr "只是精加工走刀"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:241
+msgid "finishing feed rate"
+msgstr "完成進給率"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:247
+msgid "finish cut mode"
+msgstr "完成切割模式"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:249
+msgid "finishing step down"
+msgstr "完成步降"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:999
+msgid "Pick Start"
+msgstr "挑選開始"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:1000
+msgid "Pick new start point"
+msgstr "挑選新的起點"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:1008
+msgid "Pick End"
+msgstr "挑選終點"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:1009
+msgid "Pick new end point"
+msgstr "挑選新的端點"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:1017
+#: ../heekscad/heekscnc/src/Profile.cpp:1018
+msgid "Pick roll on point"
+msgstr "挑選推上點"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:1026
+#: ../heekscad/heekscnc/src/Profile.cpp:1027
+msgid "Pick roll off point"
+msgstr "挑選推離點"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:1039
+msgid "Add Tag"
+msgstr "添加標記"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:1280
+msgid "Invalid reference to sketch"
+msgstr "無效引用的草圖"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:1280
+msgid "in profile operations"
+msgstr "在輪廓操作"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:1310
+msgid "No valid sketches upon which to act for profile operations"
+msgstr "沒有有效的草圖給相關輪廓操作"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:1325
+msgid "Adjusting depth of profile"
+msgstr "調整輪廓深度"
+
+#: ../heekscad/heekscnc/src/Profile.cpp:1355
+msgid "Profile spline deviation"
+msgstr "輪廓樣條曲線偏差"
+
+#: ../heekscad/heekscnc/src/Program.cpp:72
+msgid "ProgramPathControlMode"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Program.cpp:73
+msgid "ProgramMotionBlendingTolerance"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Program.cpp:74
+msgid "ProgramNaiveCamTolerance"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Program.cpp:76
+msgid "ClearanceSource"
+msgstr "間隙來源"
+
+#: ../heekscad/heekscnc/src/Program.cpp:216
+msgid "ClearanceHeight"
+msgstr "淨空高度"
+
+#: ../heekscad/heekscnc/src/Program.cpp:269
+msgid "Would you like to change the HeeksCAD view units too?"
+msgstr "你想改變HeeksCAD視圖單位嗎?"
+
+#: ../heekscad/heekscnc/src/Program.cpp:340
+msgid "machine"
+msgstr "機器"
+
+#: ../heekscad/heekscnc/src/Program.cpp:349
+msgid "output file name follows data file name"
+msgstr "輸出文件的名稱遵循數據文件的名稱"
+
+#: ../heekscad/heekscnc/src/Program.cpp:354
+msgid "By Machine"
+msgstr "按機器"
+
+#: ../heekscad/heekscnc/src/Program.cpp:355
+msgid "By Fixture"
+msgstr "按夾具"
+
+#: ../heekscad/heekscnc/src/Program.cpp:356
+msgid "By Operation"
+msgstr "按操作"
+
+#: ../heekscad/heekscnc/src/Program.cpp:359
+msgid "Clearance Height Defined"
+msgstr "淨空高度定義"
+
+#: ../heekscad/heekscnc/src/Program.cpp:364
+msgid "output file"
+msgstr "輸出文件"
+
+#: ../heekscad/heekscnc/src/Program.cpp:373
+msgid "units for nc output"
+msgstr "NC輸出單位"
+
+#: ../heekscad/heekscnc/src/Program.cpp:381
+msgid "Exact Path Mode"
+msgstr "精確的路徑模式"
+
+#: ../heekscad/heekscnc/src/Program.cpp:382
+msgid "Exact Stop Mode"
+msgstr "精確停止模式"
+
+#: ../heekscad/heekscnc/src/Program.cpp:383
+msgid "Best Possible Speed"
+msgstr "最好的速度"
+
+#: ../heekscad/heekscnc/src/Program.cpp:384
+msgid "Undefined"
+msgstr "未定義"
+
+#: ../heekscad/heekscnc/src/Program.cpp:386
+msgid "Path Control Mode"
+msgstr "路徑控制模式"
+
+#: ../heekscad/heekscnc/src/Program.cpp:390
+msgid "Motion Blending Tolerance"
+msgstr "運動混合公差"
+
+#: ../heekscad/heekscnc/src/Program.cpp:391
+msgid "Naive CAM Tolerance"
+msgstr "本機的CAM公差"
+
+#: ../heekscad/heekscnc/src/Program.cpp:437
+msgid "Maximum Spindle Speed (RPM)"
+msgstr "主軸最高轉速 (RPM)"
+
+#: ../heekscad/heekscnc/src/Program.cpp:442
+msgid "Clearance Height (for inter-operation movement)"
+msgstr "淨空高度(給交互操作運動)"
+
+#: ../heekscad/heekscnc/src/Program.cpp:447
+msgid "Safety Height (in G53 - Machine - coordinates)"
+msgstr "安全高度 (用G53 - 機器 - 座標)"
+
+#: ../heekscad/heekscnc/src/Program.cpp:958
+msgid "The Python program is too long \n"
+msgstr "Python指令太長\n"
+
+#: ../heekscad/heekscnc/src/Program.cpp:959
+msgid "to display in this window.\n"
+msgstr "在此窗口中顯示.\n"
+
+#: ../heekscad/heekscnc/src/Program.cpp:960
+msgid "Please edit the python program directly at \n"
+msgstr "請直接編輯在Python的指令在\n"
+
+#: ../heekscad/heekscnc/src/PythonStuff.cpp:376
+msgid "send-to-machine command"
+msgstr "發送到機器的指令"
+
+#: ../heekscad/heekscnc/src/RawMaterial.cpp:103
+msgid "Raw Material"
+msgstr "原料"
+
+#: ../heekscad/heekscnc/src/RawMaterial.cpp:128
+msgid "Brinell Hardness of raw material"
+msgstr "原料的布氏硬度"
+
+#: ../heekscad/heekscnc/src/RawMaterial.cpp:160
+msgid "Feeds and Speeds set for machining "
+msgstr "進給和速度設定用於加工"
+
+#: ../heekscad/heekscnc/src/Reselect.cpp:33
+msgid "Select Sketches"
+msgstr "選擇草圖"
+
+#: ../heekscad/heekscnc/src/Reselect.cpp:45
+msgid "Select cancelled. No sketches were selected!"
+msgstr "選擇取消。沒有選擇草圖!"
+
+#: ../heekscad/heekscnc/src/Reselect.cpp:75
+msgid "Select Solids"
+msgstr "選擇立體"
+
+#: ../heekscad/heekscnc/src/Reselect.cpp:87
+msgid "Select cancelled. No solids were selected!"
+msgstr "選擇取消。沒有選擇立體!"
+
+#: ../heekscad/heekscnc/src/Reselect.cpp:125
+#: ../heekscad/heekscnc/src/Reselect.cpp:127
+msgid "solids"
+msgstr "立體"
+
+#: ../heekscad/heekscnc/src/Reselect.cpp:125
+#: ../heekscad/heekscnc/src/Reselect.cpp:142
+msgid "None"
+msgstr "沒有"
+
+#: ../heekscad/heekscnc/src/Reselect.cpp:126
+msgid "solid id"
+msgstr "立體編號"
+
+#: ../heekscad/heekscnc/src/Reselect.cpp:143
+msgid "sketch id"
+msgstr "草圖編號"
+
+#: ../heekscad/heekscnc/src/ScriptOp.cpp:340
+msgid "emit_depthop_params"
+msgstr ""
+
+#: ../heekscad/heekscnc/src/SpeedOp.cpp:186
+msgid "horizontal feed rate"
+msgstr "水平進給率"
+
+#: ../heekscad/heekscnc/src/SpeedOp.cpp:187
+msgid "vertical feed rate"
+msgstr "垂直進給率"
+
+#: ../heekscad/heekscnc/src/SpeedOp.cpp:306
+msgid "auto set speeds for new operation"
+msgstr "自動設定新的操作速度"
+
+#: ../heekscad/heekscnc/src/SpeedOp.cpp:332
+msgid "Reset Feeds and Speeds"
+msgstr "重設進給和速度"
+
+#: ../heekscad/heekscnc/src/SpeedReference.cpp:97
+msgid "Surface Speed (m/min)"
+msgstr "表面速度(m/min)"
+
+#: ../heekscad/heekscnc/src/SpeedReference.cpp:103
+msgid "Surface Speed (ft/min)"
+msgstr "表面速度(ft/min)"
+
+#: ../heekscad/heekscnc/src/SpeedReference.cpp:106
+msgid "Raw Material Name"
+msgstr "原料名稱"
+
+#: ../heekscad/heekscnc/src/SpeedReferences.cpp:165
+msgid "Estimate when possible"
+msgstr "估計如果可能"
+
+#: ../heekscad/heekscnc/src/SpeedReferences.cpp:166
+msgid "Use default values"
+msgstr "使用默認值"
+
+#: ../heekscad/heekscnc/src/SpeedReferences.cpp:177
+msgid "Feeds and Speeds"
+msgstr "進給和速度"
+
+#: ../heekscad/heekscnc/src/Tag.cpp:82
+#: ../heekscad/heekscnc/src/Tag.cpp:85
+msgid "Pick position"
+msgstr "挑選位置"
+
+#: ../heekscad/heekscnc/src/Tapping.cpp:103
+msgid "rigid tapping"
+msgstr "剛性攻絲"
+
+#: ../heekscad/heekscnc/src/Tapping.cpp:104
+msgid "chuck tapping"
+msgstr "夾頭攻絲"
+
+#: ../heekscad/heekscnc/src/Tapping.cpp:107
+msgid "tap_mode"
+msgstr "攻絲模式"
+
+#: ../heekscad/heekscnc/src/Tapping.cpp:122
+msgid "sort_tapping_locations"
+msgstr "整理攻絲位置"
+
+#: ../heekscad/heekscnc/src/Tapping.cpp:551
+msgid "The tapping operation has not selected a tapping tool to use\n"
+msgstr "攻絲操作沒有選擇要使用攻絲工具\n"
+
+#: ../heekscad/heekscnc/src/Tapping.cpp:566
+msgid "Left-hand tapping needs a counterclockwise spindle rotation (negative spindle_speed)\n"
+msgstr "左手攻需要一個逆時針主軸旋轉 (負主軸轉速)\n"
+
+#: ../heekscad/heekscnc/src/Tapping.cpp:569
+msgid "Adjusting spindle rotation to counterclockwise.\n"
+msgstr "調整主軸以逆時針方向旋轉.\n"
+
+#: ../heekscad/heekscnc/src/Tapping.cpp:575
+msgid "right-hand tapping needs clockwise spindle rotation (positive spindle_speed)\n"
+msgstr "右手攻需要順時針主軸旋轉 (正的主軸轉速)\n"
+
+#: ../heekscad/heekscnc/src/Tapping.cpp:578
+msgid "Adjusting spindle rotation to clockwise.\n"
+msgstr "調整主軸以順時針旋轉.\n"
+
+#: ../heekscad/heekscnc/src/Tapping.cpp:633
+msgid "ID "
+msgstr ""
+
+#: ../heekscad/heekscnc/src/Tapping.cpp:633
+msgid " The tapping operation's depth is greater than the previously drilled hole\n"
+msgstr "攻絲操作的深度大於以前鑽的孔\n"
+
+#: ../heekscad/heekscnc/src/Tapping.cpp:661
+msgid "Adjusting depth of tapping cycle"
+msgstr "調整攻絲循環深度"
+
+#: ../heekscad/heekscnc/src/Tapping.cpp:676
+msgid "Can't tap hole"
+msgstr "不能把洞攻絲"
+
+#: ../heekscad/heekscnc/src/Tools.cpp:221
+msgid "Guage number replaces size"
+msgstr "儀表號碼取代大小"
+
+#: ../heekscad/heekscnc/src/Tools.cpp:222
+msgid "Include guage number and size"
+msgstr "包括量規的號碼和大小"
+
+#: ../heekscad/heekscnc/src/Tools.cpp:224
+msgid "Title Format"
+msgstr "標題格式"
+
+#: ../heekscad/heekscnc/src/Waterline.cpp:39
+#: ../heekscad/heekscnc/src/ZigZag.cpp:40
+msgid "minimum x"
+msgstr "最小x"
+
+#: ../heekscad/heekscnc/src/Waterline.cpp:40
+#: ../heekscad/heekscnc/src/ZigZag.cpp:41
+msgid "maximum x"
+msgstr "最大x"
+
+#: ../heekscad/hexxekscnc/src/Waterline.cpp:41
+#: ../heekscad/heekscnc/src/ZigZag.cpp:42
+msgid "minimum y"
+msgstr "最小y"
+
+#: ../heekscad/heekscnc/src/Waterline.cpp:42
+#: ../heekscad/heekscnc/src/ZigZag.cpp:43
+msgid "maximum y"
+msgstr "最大y"
+
+#: ../heekscad/heekscnc/src/Waterline.cpp:405
+#: ../heekscad/heekscnc/src/ZigZag.cpp:422
+msgid "Reset Boundary"
+msgstr "重設邊界"
+
+#: ../heekscad/heekscnc/src/ZigZag.cpp:49
+msgid "direction"
+msgstr "方向"
+
+#: ../heekscad/heekscnc/src/ZigZag.cpp:54
+msgid "one way"
+msgstr "單向"
+
+#: ../heekscad/heekscnc/src/ZigZag.cpp:55
+msgid "back and forth"
+msgstr "來回"
+
+#: ../heekscad/heekscnc/src/ZigZag.cpp:56
+msgid "style"
+msgstr "式樣"
+
+#: ../heekscad/src/ConversionTools.h:39
+#: ../heekscad/src/ConversionTools.h:48
+msgid "Make To Sketch"
+msgstr "使之成為草圖"
+
+#: ../src/ConversionTools.h:41
+msgid "Make selected lines and arcs into a new sketch"
+msgstr "把選定直線和圓弧使之成為個新的草圖"
+
+#: ../src/ConversionTools.h:50
+msgid "Make selected edges into a new sketch"
+msgstr "把選定的邊緣使之成為一個新的草圖"
+
+#: ../src/ConversionTools.h:57
+msgid "Combine sketches"
+msgstr "結合 草圖"
+
+#: ../src/ConversionTools.h:59
+msgid "Combine selected sketches"
+msgstr "結合所選草圖"
+
+#: ../src/ConversionTools.h:66
+msgid "Unite sketches"
+msgstr "聯合草圖"
+
+#: ../src/ConversionTools.h:68
+msgid "Unite selected sketches"
+msgstr "聯合選定的草圖"
+
+#: ../src/ConversionTools.h:77
+msgid "Group selected items"
+msgstr "聚合選定的項目"
+
+#: ../src/ConversionTools.h:84
+msgid "Ungroup"
+msgstr "取消聚合"
+
+#: ../src/ConversionTools.h:86
+msgid "Ungroup selected items"
+msgstr "把所選項目 取消聚合"
+
+#: ../src/ConversionTools.h:96
+msgid "Transform to Coordinate System"
+msgstr "轉變為坐標系統"
+
+#: ../src/ConversionTools.h:98
+msgid "Transform selected items using two coordinate systems"
+msgstr "轉換選定項目用兩個坐標系統"
+
+#: ../src/DimensionDrawing.h:32
+msgid "Dimension drawing"
+msgstr "外形尺寸圖"
+
+#: ../src/Drawing.h:65
+msgid "Drawing"
+msgstr "繪圖"
+
+#: ../src/Face.h:85
+msgid "Make a sketch from face"
+msgstr "從草圖做面"
+
+#: ../src/HILine.h:25
+msgid "Infinite Line"
+msgstr "無限長線"
+
+#: ../src/MagDragWindow.h:20
+msgid "Magnifying by dragging a window"
+msgstr "通過拖動窗口,放大"
+
+#: ../src/MenuSeparator.h:13
+msgid "MenuSeparator"
+msgstr "選單分隔"
+
+#: ../src/PointDrawing.h:27
+msgid "Point drawing"
+msgstr "點繪圖"
+
+#: ../src/PointOrWindow.h:26
+msgid "Dragging a window or picking a point"
+msgstr "拖動窗口或選一點"
+
+#: ../src/ShapeTools.h:12
+msgid "Faces"
+msgstr "面"
+
+#: ../src/ShapeTools.h:21
+msgid "Edges"
+msgstr "邊"
+
+#: ../src/ShapeTools.h:30
+msgid "Vertices"
+msgstr "頂點"
+
+#: ../src/SketchTools.h:92
+msgid "Simplify Sketch to Lines"
+msgstr "簡化草圖到線"
+
+#: ../src/SketchTools.h:101
+msgid "Simplify Sketch to BSplines"
+msgstr "簡化草圖到B樣條線"
+
+#: ../src/SolidTools.h:15
+msgid "Save Solids"
+msgstr "保存立體"
+
+#: ../src/StlSolid.h:41
+msgid "STL Solid"
+msgstr "STL 立體"
+
+#: ../src/ViewPanning.h:12
+msgid "View Pan"
+msgstr "查看平移"
+
+#: ../src/ViewRotating.h:15
+msgid "View Rotate"
+msgstr "查看 旋轉"
+
+#: ../src/ViewZooming.h:14
+msgid "View Zoom"
+msgstr "查看 放大"
+
+#: ../src/Window.h:19
+msgid "Dragging a window"
+msgstr "拖動一個窗口"
+
+#: ../heekscad/heekscnc/src/CTool.h:62
+msgid "Tapping Tool"
+msgstr "攻絲工具"
+
+#: ../heekscad/heekscnc/src/CTool.h:64
+msgid "Engraving Tool"
+msgstr "雕刻工具"
+
+#: ../heekscad/heekscnc/src/Probing.h:165
+#: ../heekscad/heekscnc/src/Probing.h:185
+msgid "Feed"
+msgstr "進刀"
+
+#: ../heekscad/heekscnc/src/Probing.h:168
+#: ../heekscad/heekscnc/src/Probing.h:188
+msgid "Rapid"
+msgstr "快速"
+
+#: ../heekscad/heekscnc/src/Probing.h:171
+#: ..//heekscad/heekscnc/src/Probing.h:191
+msgid "Probe"
+msgstr "試探"
+
+#: ../heekscad/heekscnc/src/Probing.h:174
+#: ../heekscad/heekscnc/src/Probing.h:194
+msgid "End Of Data"
+msgstr "數據結束"
+
+#: ../heekscad/heekscnc/src/Probing.h:219
+#: ../heekscad/heekscnc/src/Probing.h:243
+msgid "Bottom Left"
+msgstr "左下方"
+
+#: ../heekscad/heekscnc/src/Probing.h:223
+#: ../heekscad/heekscnc/src/Probing.h:247
+msgid "Bottom Right"
+msgstr "右下方"
+
+#: ../heekscad/heekscnc/src/Probing.h:227
+#: ../heekscad/heekscnc/src/Probing.h:251
+msgid "Top Left"
+msgstr "左上方"
+
+#: ../heekscad/heekscnc/src/Probing.h:231
+#: ../heekscad/heekscnc/src/Probing.h:255
+msgid "Top Right"
+msgstr "右上方"
+
+#: ../heekscad/heekscnc/src/Probing.h:387
+msgid "Probe Grid"
+msgstr "探測網格"
+
+#: ../heekscad/heekscnc/src/Probing.h:436
+msgid "Probe Centre"
+msgstr "探測中心"
+
+#: ../heekscad/heekscnc/src/Probing.h:492這 HeeksCNC軟件安裝在GPL許可證限制 http://www.gnu.org/licenses/gpl-3.0.txt
+msgid "Probe Edge"
+msgstr "探測邊緣"
+
+#: ../heekscad/heekscnc/src/Reselect.h:14
+msgid "Re-select sketches"
+msgstr "重新選擇草圖"
+
+#: ../heekscad/heekscnc/src/Reselect.h:26
+msgid "Re-select solids"
+msgstr "重新選擇立體"
+
