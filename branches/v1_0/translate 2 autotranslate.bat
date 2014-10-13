@@ -1,3 +1,3 @@
-c:\python25\python.exe autotranslate.py
+c:\python26\python.exe autotranslate.py
 
 pause
