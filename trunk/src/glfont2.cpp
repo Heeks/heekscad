@@ -238,5 +238,43 @@ void GLFont::Begin (void)
 }
 //*******************************************************************
 
+
+wchar_t GLFont::get_unaccented_character( wchar_t c)
+	{
+		switch(c)
+		{
+		case 225:
+			return 'a';
+		case 193:
+			return 'A';
+		case 233:
+			return 'e';
+		case 201:
+			return 'E';
+		case 237:
+			return 'i';
+		case 205:
+			return 'I';
+		case 243:
+			return 'o';
+		case 211:
+			return 'O';
+		case 250:
+			return 'u';
+		case 218:
+			return 'U';
+		case 241:
+			return 'n';
+		case 209:
+			return 'N';
+		case 252:
+			return 'u';
+		case 220:
+			return 'U';
+		default:
+			return c;
+		}
+	}
+
 //End of file
 
