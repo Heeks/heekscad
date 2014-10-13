@@ -199,7 +199,7 @@ void TransformTools::Rotate(bool copy)
 		mat = tmat * mat;
 		double m[16];
 		extract(mat, m);
-		wxGetApp().Transform(selected_items, m);
+		wxGetApp().TransformUndoably(selected_items, m);
 	}
 	wxGetApp().EndHistory();
 }
