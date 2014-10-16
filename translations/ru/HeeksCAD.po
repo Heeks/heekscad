@@ -1,0 +1,4464 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Alexander Puchkov <mailex@mail.ru>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+
+#: ../src/AboutBox.cpp:17 ../interface/HDialogs.cpp:28
+msgid "OK"
+msgstr "Ок"
+
+#: ../src/advprops.cpp:497
+msgid "Point Size"
+msgstr "Размер точки"
+
+#: ../src/advprops.cpp:499
+msgid "Family"
+msgstr "Семейство"
+
+#: ../src/advprops.cpp:509
+msgid "Face Name"
+msgstr "Имя грани"
+
+#: ../src/advprops.cpp:516
+msgid "Style"
+msgstr "Стиль"
+
+#: ../src/advprops.cpp:519 ../src/HSpline.cpp:247
+msgid "Weight"
+msgstr "Масса"
+
+#: ../src/advprops.cpp:522
+msgid "Underlined"
+msgstr "Подчеркнутый"
+
+#: ../src/advprops.cpp:1329
+msgid "files"
+msgstr "файлы"
+
+#: ../src/advprops.cpp:1337 ../src/props.cpp:1509
+msgid "All files"
+msgstr "Все файлы"
+
+#: ../src/advprops.cpp:1589
+msgid "Make a selection:"
+msgstr "Выбирайте:"
+
+#: ../src/AutoSave.cpp:15
+msgid ".HeeksCAD_Backup_Data_File.heeks"
+msgstr ".HeeksCAD_Backup_Data_File.heeks"
+
+#: ../src/AutoSave.cpp:29
+msgid "Do you want to recover using the automatic backup file?"
+msgstr ""
+"Вы желаете произвести восстановление из автоматически сохранненого ранее "
+"файла?"
+
+#: ../src/Cone.cpp:170
+msgid "Stretched Cone"
+msgstr "Вытянутый конус"
+
+#: ../src/Cone.cpp:175
+msgid "r1"
+msgstr "r1"
+
+#: ../src/Cone.cpp:176
+msgid "r2"
+msgstr "r2"
+
+#: ../src/Cone.cpp:177 ../src/Cylinder.cpp:81 ../src/RuledSurface.cpp:197
+#: ../src/SketchTools.cpp:115 ../src/SketchTools.cpp:129
+msgid "height"
+msgstr "высота"
+
+#: ../src/Cone.cpp:215
+msgid "can not enter negative value for radius"
+msgstr "Нельзя указывать отрицательное значение для радиуса"
+
+#: ../src/Cone.cpp:222
+msgid "cone must not have both radiuses the same"
+msgstr "Конус не должен иметь два одинаковых радиуса сечения"
+
+#: ../src/Constraint.cpp:216
+msgid "H"
+msgstr "H"
+
+#: ../src/Constraint.cpp:220
+msgid "V"
+msgstr "V"
+
+#: ../src/Constraint.cpp:230
+msgid "L"
+msgstr "L"
+
+#: ../src/Constraint.cpp:233
+msgid "P"
+msgstr "P"
+
+#: ../src/Constraint.cpp:304
+msgid " obj1_id should be defined before obj2_id"
+msgstr " obj1_id будет определен ранее obj2_id"
+
+#: ../src/Constraint.cpp:312 ../src/Constraint.cpp:332
+msgid "obj1_id specified but does not exist in memory"
+msgstr "obj1_id задан, но не существует в памяти"
+
+#: ../src/Constraint.cpp:317
+msgid "obj2_id specified but does not exist in memory"
+msgstr "obj2_id задан, но не существует в памяти"
+
+#: ../src/Constraint.cpp:355
+msgid " Two objects required for this constraint only one was specified"
+msgstr ""
+"Два объекта для этого ограничения требуют, чтобы только один был определен"
+
+#: ../src/Constraint.cpp:367
+msgid " A constraint type needs to be added to the list"
+msgstr "Тип ограничения должен быть добавлен в список"
+
+#: ../src/Constraint.cpp:378
+msgid "This is a woops and you shouldn't be reading this message"
+msgstr "Это ерунда, и Вы не должны увидеть это сообщение"
+
+#: ../src/Constraint.cpp:471
+msgid "Object error in a single object constraint"
+msgstr "Ошибка объекта для ограничения одного объекта"
+
+#: ../src/Constraint.cpp:489
+msgid "Object error in a two object constraint"
+msgstr "Ошибка объекта для ограничения двух объектов"
+
+#: ../src/Constraint.cpp:496
+msgid "Undefined Constraint?"
+msgstr "Незаданные ограничения?"
+
+#: ../src/ConstraintTools.cpp:33
+msgid "Set Perpendicular"
+msgstr "Устаеновить перпендикуляр"
+
+#: ../src/ConstraintTools.cpp:35
+msgid "Set these lines to be perpendicular"
+msgstr "Установить эти линии перпендикулярно"
+
+#: ../src/ConstraintTools.cpp:57
+msgid "Toggle Tangent"
+msgstr "Включить касательную"
+
+#: ../src/ConstraintTools.cpp:59
+msgid "Set line tangent to arc"
+msgstr "Сделать линию касательной к кривой"
+
+#: ../src/ConstraintTools.cpp:79
+msgid "Set Parallel"
+msgstr "Установить паралелль"
+
+#: ../src/ConstraintTools.cpp:81
+msgid "Set these lines to be parallel"
+msgstr "Сделать эти линии параллельными"
+
+#: ../src/ConstraintTools.cpp:100
+msgid "Set Equal Length"
+msgstr "Установить одинаковую длину"
+
+#: ../src/ConstraintTools.cpp:102
+msgid "Set these lines to be equal length"
+msgstr "Сделать эти линии одинаковой длины"
+
+#: ../src/ConstraintTools.cpp:121
+msgid "Set Colinear"
+msgstr "Сделать коллинеарным"
+
+#: ../src/ConstraintTools.cpp:123
+msgid "Set these lines to be colinear"
+msgstr "Сделать эти линии коллинеарными"
+
+#: ../src/ConstraintTools.cpp:142
+msgid "Set Equal Radius"
+msgstr "Установить равный радиус"
+
+#: ../src/ConstraintTools.cpp:144
+msgid "Set these arcs to have equal radii"
+msgstr "Установить для этих дуг один и тот же радиус"
+
+#: ../src/ConstraintTools.cpp:163
+msgid "Set Concentric"
+msgstr "Сделать соосным"
+
+#: ../src/ConstraintTools.cpp:165
+msgid "Set these arcs to be concentric"
+msgstr "Сделать эти дуги соосными"
+
+#: ../src/ConstraintTools.cpp:185
+msgid "Set Coincident"
+msgstr "Сделать совпадающим"
+
+#: ../src/ConstraintTools.cpp:187
+msgid "Set these points to be coincident"
+msgstr "Сделать, чтобы эти точки совпали"
+
+#: ../src/ConstraintTools.cpp:209 ../src/ConstraintTools.cpp:253
+#: ../src/ConstraintTools.cpp:268 ../src/HeeksFrame.cpp:1695
+msgid "Add Dimension"
+msgstr "Добавить размер"
+
+#: ../src/ConstraintTools.cpp:211 ../src/ConstraintTools.cpp:255
+#: ../src/ConstraintTools.cpp:270
+msgid "Add a dimension object"
+msgstr "Добавить размер объекта"
+
+#: ../src/ConstraintTools.cpp:237
+msgid "Add Angular Dimension"
+msgstr "Добавить угловой размер"
+
+#: ../src/ConstraintTools.cpp:239
+msgid "Add an angular dimension object"
+msgstr "Добавить угловой размер объекта"
+
+#: ../src/ConstraintTools.cpp:292
+msgid "Set Point On Line"
+msgstr "Поставить точку на линии"
+
+#: ../src/ConstraintTools.cpp:294
+msgid "Set this point on line"
+msgstr "Установить эту точку на линии"
+
+#: ../src/ConstraintTools.cpp:316 ../src/ConstraintTools.cpp:340
+msgid "Set Point On Midpoint"
+msgstr "Поставить точку в середине"
+
+#: ../src/ConstraintTools.cpp:318
+msgid "Set this point on the midpoint of line"
+msgstr "Установить эту точку  на середине линии"
+
+#: ../src/ConstraintTools.cpp:342
+msgid "Set this point on the midpoint of arc"
+msgstr "Установить эту тоучку на середине дуги"
+
+#: ../src/ConstraintTools.cpp:364
+msgid "Set Point On Arc"
+msgstr "Установить точку на дуге"
+
+#: ../src/ConstraintTools.cpp:366
+msgid "Set this point on arc"
+msgstr "Установить эту точку на дуге"
+
+#: ../src/ConstraintTools.cpp:388
+msgid "Set Point On Circle"
+msgstr "Установить точку на окружности"
+
+#: ../src/ConstraintTools.cpp:390
+msgid "Set this point on circle"
+msgstr "Установить эту точку на окружности"
+
+#: ../src/ConstraintTools.cpp:405 ../src/ConstraintTools.cpp:407
+msgid "Run Test"
+msgstr "Запустить тест"
+
+#: ../src/ConversionTools.cpp:374
+msgid "Cannot convert object type "
+msgstr "Невозможно изменить тип объекта"
+
+#: ../src/ConversionTools.cpp:374
+msgid " to edge"
+msgstr "на грань"
+
+#: ../src/ConversionTools.cpp:383 ../src/ConversionTools.cpp:420
+msgid "Error converting sketch to face"
+msgstr "Ошибка преобразования эскиза к грани"
+
+#: ../src/ConversionTools.cpp:425
+msgid "Fatal Error converting sketch to face"
+msgstr "Критическая ошибка преобразования эскиза к грани"
+
+#: ../src/ConversionTools.cpp:823
+msgid "Test Face, Sketches United"
+msgstr "Тестовая грань, эскизы объединены"
+
+#: ../src/CoordinateSystem.cpp:1260
+msgid "Set position and orientation by picking 3 points"
+msgstr "Установить позицию и ориентацию при помощи 3-х точек"
+
+#: ../src/CoordinateSystem.cpp:1274
+msgid "Set this coordinate system as the active one"
+msgstr "Установить эту координатную систему как активную"
+
+#: ../src/CoordinateSystem.cpp:1298
+msgid "Transform selected items to world coordinates"
+msgstr "Преобразовать выбранные объекты к \"мировым\" координатам"
+
+#: ../src/CoordinateSystem.cpp:1318 ../src/CoordinateSystem.cpp:1512
+#: ../src/HPoint.cpp:132
+msgid "position"
+msgstr "позиция"
+
+#: ../src/CoordinateSystem.cpp:1319
+msgid "x axis"
+msgstr "ось X"
+
+#: ../src/CoordinateSystem.cpp:1320
+msgid "y axis"
+msgstr "ось Y"
+
+#: ../src/CoordinateSystem.cpp:1322 ../src/CoordinateSystem.cpp:1514
+msgid "Vertical Angle"
+msgstr "Вертикальный угол"
+
+#: ../src/CoordinateSystem.cpp:1323 ../src/CoordinateSystem.cpp:1515
+msgid "Horizontal Angle"
+msgstr "Горизонтальный угол"
+
+#: ../src/CoordinateSystem.cpp:1324 ../src/CoordinateSystem.cpp:1516
+msgid "Twist Angle"
+msgstr "Угол кручения"
+
+#: ../src/CoordinateSystem.cpp:1575 ../src/CoordinateSystem.cpp:1600
+msgid "Pick the location"
+msgstr "Выберите место"
+
+#: ../src/CoordinateSystem.cpp:1577
+msgid "Pick a point on the x-axis"
+msgstr "Выберите точку на оси X"
+
+#: ../src/CoordinateSystem.cpp:1579
+msgid "Pick a point where y > 0"
+msgstr "Выберите точку, где Y>0"
+
+#: ../src/Cuboid.cpp:92
+msgid "Stretched Cuboid"
+msgstr "Вытянутый прямоугольный параллелепипед"
+
+#: ../src/Cuboid.cpp:97
+msgid "width ( x )"
+msgstr "длина (размер по оси X)"
+
+#: ../src/Cuboid.cpp:98
+msgid "height( y )"
+msgstr "высота (размер по оси Y)"
+
+#: ../src/Cuboid.cpp:99
+msgid "depth ( z )"
+msgstr "глубина (размер по оси Z)"
+
+#: ../src/Cylinder.cpp:75
+msgid "Stretched Cylinder"
+msgstr "Вытянутый цилиндр"
+
+#: ../src/Cylinder.cpp:80
+msgid "diameter"
+msgstr "диаметр"
+
+#: ../src/DigitizeMode.cpp:54 ../src/HArc.cpp:389 ../src/HeeksCAD.cpp:3121
+#: ../src/HILine.cpp:120 ../src/HLine.cpp:278
+msgid "end"
+msgstr "конец"
+
+#: ../src/DigitizeMode.cpp:57 ../src/HeeksCAD.cpp:3122
+msgid "intersection"
+msgstr "пересечение"
+
+#: ../src/DigitizeMode.cpp:60 ../src/HeeksCAD.cpp:3124
+msgid "midpoint"
+msgstr "Середина"
+
+#: ../src/DigitizeMode.cpp:63 ../src/HArc.cpp:390 ../src/HCircle.cpp:214
+#: ../src/HeeksCAD.cpp:3123 ../src/HEllipse.cpp:278 ../src/Sphere.cpp:82
+msgid "centre"
+msgstr "центр"
+
+#: ../src/DigitizeMode.cpp:66 ../src/HeeksCAD.cpp:3128
+msgid "screen"
+msgstr "экран"
+
+#: ../src/DigitizeMode.cpp:69 ../src/HeeksCAD.cpp:3125
+msgid "nearest"
+msgstr "ближайший"
+
+#: ../src/DigitizeMode.cpp:72 ../src/HeeksCAD.cpp:3126
+msgid "tangent"
+msgstr "касательная"
+
+#: ../src/DigitizeMode.cpp:85
+msgid "Digitize Mode"
+msgstr "Режим оцифровки"
+
+#: ../src/DigitizeMode.cpp:93 ../src/SelectMode.cpp:93
+msgid "Press Esc key to cancel"
+msgstr "Нажмите клавишу ESC, чтобы прервать"
+
+#: ../src/DigitizeMode.cpp:95
+msgid "Left button to accept position"
+msgstr "Левая кнопка для принятия позиции"
+
+#: ../src/DigitizeMode.cpp:429 ../src/Input.cpp:120 ../src/Input.cpp:148
+msgid "X"
+msgstr "X"
+
+#: ../src/DigitizeMode.cpp:430 ../src/Input.cpp:121 ../src/Input.cpp:149
+msgid "Y"
+msgstr "Y"
+
+#: ../src/DigitizeMode.cpp:431 ../src/Input.cpp:122 ../src/Input.cpp:150
+msgid "Z"
+msgstr "Z"
+
+#: ../src/DigitizeMode.cpp:441
+msgid "Offset (from last point)"
+msgstr "Смещение (от последней точки)"
+
+#: ../src/DigitizeMode.cpp:453
+msgid "Error! The 'Stop Picking' button shouldn't have been available!"
+msgstr "Ошибка! Кнопка \"Остановить захват\" не будет доступна!"
+
+#: ../src/DigitizeMode.cpp:456
+msgid "Stop Picking"
+msgstr "Остановить захват"
+
+#: ../src/DigitizeMode.cpp:458
+msgid "Finish picking"
+msgstr "Завершить захват"
+
+#: ../src/DimensionDrawing.cpp:114 ../src/HDimension.cpp:429
+msgid "between two points"
+msgstr "между двумя точками"
+
+#: ../src/DimensionDrawing.cpp:115 ../src/HDimension.cpp:430
+msgid "between two points, XY only"
+msgstr "между двумя точками (только XY)"
+
+#: ../src/DimensionDrawing.cpp:116 ../src/HDimension.cpp:431
+msgid "orthogonal"
+msgstr "ортогональный"
+
+#: ../src/DimensionDrawing.cpp:118 ../src/HDimension.cpp:432
+msgid "mode"
+msgstr "режим"
+
+#: ../src/DimensionDrawing.cpp:121 ../src/HAngularDimension.cpp:374
+#: ../src/HDimension.cpp:435
+msgid "pythagorean"
+msgstr "пифагорейский"
+
+#: ../src/DimensionDrawing.cpp:122 ../src/HAngularDimension.cpp:375
+#: ../src/HDimension.cpp:436
+msgid "horizontal"
+msgstr "горизонтальный"
+
+#: ../src/DimensionDrawing.cpp:123 ../src/HAngularDimension.cpp:376
+#: ../src/HDimension.cpp:437
+msgid "vertical"
+msgstr "вертикальный"
+
+#: ../src/DimensionDrawing.cpp:124 ../src/HAngularDimension.cpp:377
+#: ../src/HDimension.cpp:438
+msgid "text mode"
+msgstr "текстовый режим"
+
+#: ../src/Drawing.cpp:173
+msgid "Stop drawing"
+msgstr "Остановить чертеж"
+
+#: ../src/Drawing.cpp:175
+msgid "Finish drawing"
+msgstr "Завершить чертеж"
+
+#: ../src/Drawing.cpp:191
+msgid "Add point"
+msgstr "Добавить точку"
+
+#: ../src/Drawing.cpp:193
+msgid "Add a point to drawing"
+msgstr "Добавить точку на чертеж"
+
+#: ../src/Drawing.cpp:208
+msgid "Get Position"
+msgstr "Получить позицию"
+
+#: ../src/Drawing.cpp:210
+msgid "Pick position without adding to the drawing"
+msgstr "Получить позцию без добавления на чертеж"
+
+#: ../src/Drawing.cpp:266
+msgid "set_draw_step"
+msgstr "установить_шаг_черчения"
+
+#: ../src/Drawing.cpp:286
+msgid "set_position"
+msgstr "установить_позицию"
+
+#: ../src/Edge.cpp:151
+msgid "Blend edge"
+msgstr "Сглаженная грань"
+
+#: ../src/Edge.cpp:157 ../src/HeeksFrame.cpp:902
+msgid "Enter Blend Radius"
+msgstr "Введите радиус элемента сопряжения"
+
+#: ../src/Edge.cpp:157 ../src/HeeksFrame.cpp:902
+msgid "Radius"
+msgstr "Радиус"
+
+#: ../src/Edge.cpp:171 ../src/HeeksFrame.cpp:1743
+msgid "Chamfer"
+msgstr "Фаска"
+
+#: ../src/Edge.cpp:177
+msgid "Enter Chamfer Distance"
+msgstr "Введите размер фаски"
+
+#: ../src/Edge.cpp:177 ../src/HeeksFrame.cpp:918 ../src/Sketch.cpp:345
+msgid "Distance"
+msgstr "Дистанция"
+
+#: ../src/Edge.cpp:192
+msgid "Make a sketch from edge"
+msgstr "Сделать эскиз от края"
+
+#: ../src/Edge.cpp:224
+msgid "Solid with edge chamfer"
+msgstr "Тело с фаск на краю"
+
+#: ../src/Edge.cpp:231 ../src/Shape.cpp:703 ../src/Shape.cpp:714
+msgid "Solid with edge blend"
+msgstr "Тело с сглаженными краями"
+
+#: ../src/Edge.cpp:238 ../src/Shape.cpp:720
+msgid "Error making fillet"
+msgstr "Ошибка при создании галтели(выкружки)"
+
+#: ../src/Edge.cpp:242
+msgid "A fatal error happened during Chamfer"
+msgstr "Критическая ошибка при создании фаски"
+
+#: ../src/Edge.cpp:242 ../src/Shape.cpp:724
+msgid "A fatal error happened during Blend"
+msgstr "Критическая ошибка при создании скругления"
+
+#: ../src/Edge.cpp:248 ../src/HArc.cpp:393 ../src/Ruler.cpp:332
+msgid "length"
+msgstr "длина"
+
+#: ../src/Face.cpp:199
+msgid "surface type"
+msgstr "тип поверхности"
+
+#: ../src/Face.cpp:220
+msgid "Make Coordinate System"
+msgstr "Создать координатную систему"
+
+#: ../src/Face.cpp:233 ../src/Face.cpp:260
+msgid "Face Coordinate System"
+msgstr "Система координат на поверхности"
+
+#: ../src/Face.cpp:247
+msgid "Sketch On Face"
+msgstr "Кривая на поверхности"
+
+#: ../src/Face.cpp:279
+msgid "Extrude Face"
+msgstr "Вытянуть поверхность"
+
+#: ../src/Face.cpp:293
+msgid "Rotate to Face"
+msgstr "Вращать поверхность"
+
+#: ../src/Face.cpp:449 ../src/LineArcDrawing.cpp:674
+msgid "unknown"
+msgstr "неизвестный"
+
+#: ../src/Face.cpp:453
+msgid "plane"
+msgstr "плоскость"
+
+#: ../src/Face.cpp:457
+msgid "cylinder"
+msgstr "цилиндр"
+
+#: ../src/Face.cpp:461
+msgid "cone"
+msgstr "конус"
+
+#: ../src/Face.cpp:465
+msgid "sphere"
+msgstr "сфера"
+
+#: ../src/Face.cpp:469
+msgid "torus"
+msgstr "тор"
+
+#: ../src/Face.cpp:473
+msgid "bezier"
+msgstr "кривая Безье"
+
+#: ../src/Face.cpp:477
+msgid "bspline"
+msgstr "b-сплайн"
+
+#: ../src/Face.cpp:481
+msgid "revolution"
+msgstr "поворот"
+
+#: ../src/Face.cpp:485
+msgid "extrusion"
+msgstr "вытягивание 2D сечения в 3D тело"
+
+#: ../src/Face.cpp:489
+msgid "offset"
+msgstr "смещение"
+
+#: ../src/Face.cpp:682
+msgid "Error in CFace::GetNurbSurfaceParams"
+msgstr "Ошибка в методе  CFace::GetNurbSurfaceParams"
+
+#: ../src/FaceTools.cpp:66 ../src/FaceTools.cpp:71 ../src/FaceTools.cpp:76
+msgid "Error in GetFaceNormalAtUV"
+msgstr "Ошибка в методе GetFaceNormalAtUV"
+
+#: ../src/Group.cpp:13 ../src/HeeksCAD.cpp:4560 ../src/ConversionTools.h:75
+#: ../src/Group.h:24
+msgid "Group"
+msgstr "Группа"
+
+#: ../src/Group.cpp:240
+msgid "custom grippers"
+msgstr "Пользовательские захваты"
+
+#: ../src/Group.cpp:244
+msgid "custom grippers just one axis"
+msgstr "Пользовательские захваты на одной оси"
+
+#: ../src/Group.cpp:247
+msgid "datum"
+msgstr "данные"
+
+#: ../src/Group.cpp:249 ../src/PropertiesCanvas.cpp:161
+#: ../src/PropertiesCanvas.cpp:193
+msgid "x"
+msgstr "x"
+
+#: ../src/Group.cpp:251 ../src/PropertiesCanvas.cpp:164
+#: ../src/PropertiesCanvas.cpp:196
+msgid "y"
+msgstr "y"
+
+#: ../src/Group.cpp:253 ../src/PropertiesCanvas.cpp:169
+#: ../src/PropertiesCanvas.cpp:199
+msgid "z"
+msgstr "z"
+
+#: ../src/Group.cpp:295
+msgid "Move datum"
+msgstr "Переместить данные"
+
+#: ../src/Group.cpp:303
+msgid "Move px"
+msgstr "Переместить px"
+
+#: ../src/Group.cpp:308
+msgid "Move py"
+msgstr "Переместить py"
+
+#: ../src/Group.cpp:313
+msgid "Move pz"
+msgstr "Переместить pz"
+
+#: ../src/HAngularDimension.cpp:288 ../src/HDimension.cpp:256
+msgid "Toggle Dimension Constraint"
+msgstr "Включить ограничение размеров"
+
+#: ../src/HAngularDimension.cpp:290 ../src/HDimension.cpp:258
+msgid "Set this dimension as constrained"
+msgstr "Указать этот размер как ограниченный"
+
+#: ../src/HAngularDimension.cpp:373
+msgid "string"
+msgstr "строка"
+
+#: ../src/HAngularDimension.cpp:379 ../src/HDimension.cpp:440
+msgid "scale"
+msgstr "размер"
+
+#: ../src/HArc.cpp:108
+msgid "Toggle Radius"
+msgstr "Включить радиус"
+
+#: ../src/HArc.cpp:110
+msgid "Set this arcs radius as constrained"
+msgstr "Установить этот радиус дуги как ограниченный"
+
+#: ../src/HArc.cpp:131
+msgid "Click centre point"
+msgstr "Нажмите на точку в центре"
+
+#: ../src/HArc.cpp:153
+msgid "Click first end point"
+msgstr "Нажмите на первую концевую точку"
+
+#: ../src/HArc.cpp:175
+msgid "Click second end point"
+msgstr "Нажмите на вторую концевую точку"
+
+#: ../src/HArc.cpp:388 ../src/HILine.cpp:119 ../src/HLine.cpp:277
+msgid "start"
+msgstr "старт"
+
+#: ../src/HArc.cpp:391 ../src/HCircle.cpp:215 ../src/HEllipse.cpp:279
+msgid "axis"
+msgstr "ось"
+
+#: ../src/HArc.cpp:395 ../src/HArc.cpp:397 ../src/HCircle.cpp:216
+#: ../src/LineArcDrawing.cpp:772 ../src/RegularShapesDrawing.cpp:516
+#: ../src/RegularShapesDrawing.cpp:517 ../src/Sphere.cpp:83
+msgid "radius"
+msgstr "радиус"
+
+#: ../src/HCircle.cpp:904 ../src/Sketch.cpp:415
+msgid "Click midpoint"
+msgstr "Нажмите на точку в середине"
+
+#: ../src/HCircle.cpp:929 ../src/Sketch.cpp:440
+msgid "Click centre-top point"
+msgstr "Нажмите на верхней центральной точке"
+
+#: ../src/HCircle.cpp:953 ../src/Sketch.cpp:464
+msgid "Click centre-bottom point"
+msgstr "Нажмите на нижней центральной точке"
+
+#: ../src/HCircle.cpp:977 ../src/Sketch.cpp:488
+msgid "Click centre-right point"
+msgstr "Нажмите на правой центральной точке"
+
+#: ../src/HCircle.cpp:1001 ../src/Sketch.cpp:512
+msgid "Click centre-left point"
+msgstr "Нажмите на левой центральной точке"
+
+#: ../src/HDimension.cpp:95 ../src/HDimension.cpp:446 ../src/HeeksCAD.cpp:3100
+#: ../src/Ruler.cpp:325
+msgid "mm"
+msgstr "мм"
+
+#: ../src/HDimension.cpp:96 ../src/HeeksCAD.cpp:3101 ../src/Ruler.cpp:326
+msgid "inch"
+msgstr "дюйм"
+
+#: ../src/HDimension.cpp:426 ../src/HText.cpp:190
+msgid "orientation"
+msgstr "ориентация"
+
+#: ../src/HDimension.cpp:444 ../src/Ruler.cpp:322
+msgid "use view units"
+msgstr "использовать видимые единицы"
+
+#: ../src/HDimension.cpp:445
+msgid "inches"
+msgstr "дюймы"
+
+#: ../src/HDimension.cpp:447 ../src/HeeksCAD.cpp:3104 ../src/Ruler.cpp:329
+msgid "units"
+msgstr "единицы"
+
+#: ../src/HDimension.cpp:452 ../src/HDimension.cpp:454
+msgid "dimension value"
+msgstr "Значение размера"
+
+#: ../src/HeeksCAD.cpp:164 ../src/HeeksCAD.cpp:707
+msgid "Untitled"
+msgstr "Безымянный"
+
+#: ../src/HeeksCAD.cpp:1106
+msgid "DXF Read"
+msgstr "Читать файл в формате DXF"
+
+#: ../src/HeeksCAD.cpp:1120
+msgid "OpenCascade failure occured during DXF read processing"
+msgstr "Ошибка библиотеки OpenCascade при попытке прочтения файла формата DXF"
+
+#: ../src/HeeksCAD.cpp:1128
+msgid "Select how the file is to be interpreted"
+msgstr "Выберите, как этот файл будет интерпретирован"
+
+#: ../src/HeeksCAD.cpp:1129
+msgid "RS274X file interpretation"
+msgstr "Интерпритация файла в формате RS-274X (расширеный формат Gerber)"
+
+#: ../src/HeeksCAD.cpp:1133
+msgid "Produce trace isolation sketches"
+msgstr "Создать трассировкой изолированные эскизы"
+
+#: ../src/HeeksCAD.cpp:1134
+msgid "Produce trace centre-line sketches"
+msgstr "Создать эскиз, трассировкой через центральную линию"
+
+#: ../src/HeeksCAD.cpp:1135
+msgid "Produce mirrored trace isolation sketches"
+msgstr "Создать зеркальной трассировкой изолированные эскизы"
+
+#: ../src/HeeksCAD.cpp:1136
+msgid "Produce mirrored trace centre-line sketches"
+msgstr "Создать эскиз, зеркальной трассировкой через центральную линию"
+
+#: ../src/HeeksCAD.cpp:1214 ../src/HeeksFrame.cpp:1815
+msgid "Open file"
+msgstr "Открыть файл"
+
+#: ../src/HeeksCAD.cpp:1226 ../src/HeeksCAD.cpp:1296 ../src/HeeksCAD.cpp:1733
+msgid "Invalid file type chosen"
+msgstr "Выбран неверный формат файла"
+
+#: ../src/HeeksCAD.cpp:1226 ../src/HeeksCAD.cpp:1296 ../src/HeeksCAD.cpp:1733
+msgid "expecting"
+msgstr "ожидаемый"
+
+#: ../src/HeeksCAD.cpp:1425 ../src/HeeksCAD.cpp:1490 ../src/HeeksCAD.cpp:1520
+#: ../src/HeeksCAD.cpp:1548
+msgid "couldn't open file"
+msgstr "Невозможно открыть файл"
+
+#: ../src/HeeksCAD.cpp:1692
+msgid "Save graphical data file"
+msgstr "Сохранить файл с графическими данными"
+
+#: ../src/HeeksCAD.cpp:2034
+msgid "Exit Full Screen Mode"
+msgstr "Выйти из полноэкранного режима"
+
+#: ../src/HeeksCAD.cpp:2035
+msgid "Show Full Screen"
+msgstr "Полноэкранный режим"
+
+#: ../src/HeeksCAD.cpp:2069
+msgid "Move here"
+msgstr "Переместить сюда"
+
+#: ../src/HeeksCAD.cpp:2069
+msgid "Copy here"
+msgstr "Копировать сюда"
+
+#: ../src/HeeksCAD.cpp:2103
+msgid "Set world coordinate system active"
+msgstr "Сделать \"мировые\" коррдинаты активными"
+
+#: ../src/HeeksCAD.cpp:2155
+msgid "Add points at intersections"
+msgstr "Добавить точку на пересечение"
+
+#: ../src/HeeksCAD.cpp:2998 ../src/SelectMode.cpp:89
+msgid "view options"
+msgstr "Просмотр опций"
+
+#: ../src/HeeksCAD.cpp:3002
+msgid "stay upright"
+msgstr "поставить вертикально"
+
+#: ../src/HeeksCAD.cpp:3003
+msgid "free"
+msgstr "свободный"
+
+#: ../src/HeeksCAD.cpp:3004
+msgid "rotate mode"
+msgstr "режим вращения"
+
+#: ../src/HeeksCAD.cpp:3008
+msgid "none"
+msgstr "ничего"
+
+#: ../src/HeeksCAD.cpp:3009
+msgid "input mode title"
+msgstr "режим ввода имени"
+
+#: ../src/HeeksCAD.cpp:3010
+msgid "full help"
+msgstr "полная помощь"
+
+#: ../src/HeeksCAD.cpp:3011 ../src/SelectMode.cpp:89
+msgid "screen text"
+msgstr "текст на экране"
+
+#: ../src/HeeksCAD.cpp:3013
+msgid "antialiasing"
+msgstr "сглаживание"
+
+#: ../src/HeeksCAD.cpp:3015
+msgid "fixed light"
+msgstr "фиксированный свет"
+
+#: ../src/HeeksCAD.cpp:3017
+msgid "reverse mouse wheel"
+msgstr "инвертировать колесо мыши"
+
+#: ../src/HeeksCAD.cpp:3018
+msgid "reverse zooming mode"
+msgstr "инвертировать режим увеличения"
+
+#: ../src/HeeksCAD.cpp:3019
+msgid "Ctrl key does rotate"
+msgstr "Клавиша Ctrl может вращать"
+
+#: ../src/HeeksCAD.cpp:3020
+msgid "show datum"
+msgstr "покаать данные"
+
+#: ../src/HeeksCAD.cpp:3021
+msgid "datum is solid"
+msgstr "данные - это тело"
+
+#: ../src/HeeksCAD.cpp:3022
+msgid "datum size"
+msgstr "размер данных"
+
+#: ../src/HeeksCAD.cpp:3023
+msgid "datum size is pixels not mm"
+msgstr "размер данных в пикселах, не в мм"
+
+#: ../src/HeeksCAD.cpp:3024
+msgid "show ruler"
+msgstr "показать линейку"
+
+#: ../src/HeeksCAD.cpp:3027
+msgid "single color"
+msgstr "один цвет"
+
+#: ../src/HeeksCAD.cpp:3028
+msgid "top color and bottom color"
+msgstr "Верхний цвет и нижний цвет"
+
+#: ../src/HeeksCAD.cpp:3029
+msgid "left color and right color"
+msgstr "левый цвет и правый цвет"
+
+#: ../src/HeeksCAD.cpp:3030
+msgid "four corner colors"
+msgstr "цвет четырех углов"
+
+#: ../src/HeeksCAD.cpp:3031
+msgid "sky and ground"
+msgstr "небо и земля"
+
+#: ../src/HeeksCAD.cpp:3032
+msgid "background mode"
+msgstr "фоновый режим"
+
+#: ../src/HeeksCAD.cpp:3037
+msgid "background color"
+msgstr "фоновый цвет"
+
+#: ../src/HeeksCAD.cpp:3041
+msgid "top background color"
+msgstr "верхний фоновый цвет"
+
+#: ../src/HeeksCAD.cpp:3042
+msgid "bottom background color"
+msgstr "задний фоновый цвет"
+
+#: ../src/HeeksCAD.cpp:3046
+msgid "left background color"
+msgstr "левый фоновый цвет"
+
+#: ../src/HeeksCAD.cpp:3047
+msgid "right background color"
+msgstr "правый фоновый цвет"
+
+#: ../src/HeeksCAD.cpp:3051
+msgid "top left background color"
+msgstr "верхний левый фоновый цвет"
+
+#: ../src/HeeksCAD.cpp:3052
+msgid "bottom left background color"
+msgstr "нижний левый фоновый цвет"
+
+#: ../src/HeeksCAD.cpp:3053
+msgid "top right background color"
+msgstr "верхний правый фоновый цвет"
+
+#: ../src/HeeksCAD.cpp:3054
+msgid "bottom right background color"
+msgstr "нижний правый фоновый цвет"
+
+#: ../src/HeeksCAD.cpp:3058
+msgid "sky top color"
+msgstr "цвет  верха заполнения"
+
+#: ../src/HeeksCAD.cpp:3059
+msgid "sky middle color"
+msgstr "цвет середины  заполнения"
+
+#: ../src/HeeksCAD.cpp:3060
+msgid "sky bottom color"
+msgstr "цвет низа заполнения"
+
+#: ../src/HeeksCAD.cpp:3061
+msgid "ground top color"
+msgstr "цвет вверху основания"
+
+#: ../src/HeeksCAD.cpp:3062
+msgid "ground middle color"
+msgstr "цвет середины основания"
+
+#: ../src/HeeksCAD.cpp:3063
+msgid "ground bottom color"
+msgstr "цвет внизу основания"
+
+#: ../src/HeeksCAD.cpp:3069
+msgid "no grid"
+msgstr "без сетки"
+
+#: ../src/HeeksCAD.cpp:3070
+msgid "faint color"
+msgstr "тусклый цвет"
+
+#: ../src/HeeksCAD.cpp:3071
+msgid "alpha blending"
+msgstr "альфа смешивание"
+
+#: ../src/HeeksCAD.cpp:3072
+msgid "colored alpha blending"
+msgstr "цветовое альфа смешивание"
+
+#: ../src/HeeksCAD.cpp:3073
+msgid "grid mode"
+msgstr "режим сетки"
+
+#: ../src/HeeksCAD.cpp:3075
+msgid "face selection color"
+msgstr "цвет выделения плоскости"
+
+#: ../src/HeeksCAD.cpp:3076
+msgid "perspective"
+msgstr "перспектива"
+
+#: ../src/HeeksCAD.cpp:3095
+msgid "tool icon size"
+msgstr "размер иконки инструментов"
+
+#: ../src/HeeksCAD.cpp:3106
+msgid "flat on screen dimension text"
+msgstr "текст размеров, плоский на экране"
+
+#: ../src/HeeksCAD.cpp:3107
+msgid "Allow OpenGL stippling"
+msgstr "Разрешить зернистость, на основе  технологии OpenGL"
+
+#: ../src/HeeksCAD.cpp:3110
+msgid "faces and edges"
+msgstr "Плоскости и грани"
+
+#: ../src/HeeksCAD.cpp:3111
+msgid "edges only"
+msgstr "только края"
+
+#: ../src/HeeksCAD.cpp:3112
+msgid "faces only"
+msgstr "только плоскости"
+
+#: ../src/HeeksCAD.cpp:3113
+msgid "solid view mode"
+msgstr "режим отображения тел"
+
+#: ../src/HeeksCAD.cpp:3115
+msgid "input uses modal dialog"
+msgstr "ввод использует модальный диалог"
+
+#: ../src/HeeksCAD.cpp:3116
+msgid "dragging moves objects"
+msgstr "перетаскивание передвигает объекты"
+
+#: ../src/HeeksCAD.cpp:3120
+msgid "digitizing"
+msgstr "оцифровка"
+
+#: ../src/HeeksCAD.cpp:3127
+msgid "coordinates"
+msgstr "координаты"
+
+#: ../src/HeeksCAD.cpp:3129
+msgid "grid size"
+msgstr "размер сетки"
+
+#: ../src/HeeksCAD.cpp:3130
+msgid "snap to grid"
+msgstr "привязать к сетке"
+
+#: ../src/HeeksCAD.cpp:3132
+msgid "autosolve constraints"
+msgstr "построить  границы автоматически"
+
+#: ../src/HeeksCAD.cpp:3136
+msgid "correlation"
+msgstr "корреляция"
+
+#: ../src/HeeksCAD.cpp:3137
+msgid ""
+"Minimum correlation factor (0.0 (nothing like it) -> 1.0 (perfect match))"
+msgstr ""
+"Минимальный коэффициент корелляции (от 0.0 (ничего похожего) до 1.0 (100% "
+"идеальное совпадение)) "
+
+#: ../src/HeeksCAD.cpp:3138
+msgid ""
+"Maximum scale threshold (1.0 - must be same size, 1.5 (can be half as big "
+"again or 2/3 size)"
+msgstr ""
+"Максимальный порог масштабирования (1.0 -такиж же размеров, 1.5 (может быть "
+"вдвое меньше или 2/3 размера)"
+
+#: ../src/HeeksCAD.cpp:3139
+msgid "Number of sample points"
+msgstr "Количество точек выборки"
+
+#: ../src/HeeksCAD.cpp:3140
+msgid "Correlate by color"
+msgstr "Корреляция по цвету"
+
+#: ../src/HeeksCAD.cpp:3143
+msgid "drawing"
+msgstr "чертеж"
+
+#: ../src/HeeksCAD.cpp:3144
+msgid "current color"
+msgstr "актуальный цвет"
+
+#: ../src/HeeksCAD.cpp:3145
+msgid "construction color"
+msgstr "цвет конструкции"
+
+#: ../src/HeeksCAD.cpp:3146
+msgid "geometry tolerance"
+msgstr "геометрический допуск"
+
+#: ../src/HeeksCAD.cpp:3147
+msgid "face to sketch deviaton"
+msgstr "отклонение поверхности от контура"
+
+#: ../src/HeeksCAD.cpp:3148
+msgid "Use old solid fuse ( to prevent coplanar faces )"
+msgstr ""
+"Использовать старый способ объединить (чтобы избежать несколько контуров в "
+"одной плоскости)"
+
+#: ../src/HeeksCAD.cpp:3149 ../src/RuledSurface.cpp:202
+msgid "Extrude makes a solid"
+msgstr "Вытягивание создает тело"
+
+#: ../src/HeeksCAD.cpp:3150
+msgid "Solid revolution angle"
+msgstr "Угол разворота тела"
+
+#: ../src/HeeksCAD.cpp:3161
+msgid "selection filter"
+msgstr "фильтр выбора"
+
+#: ../src/HeeksCAD.cpp:3162
+msgid "point"
+msgstr "точка"
+
+#: ../src/HeeksCAD.cpp:3163
+msgid "line"
+msgstr "линия"
+
+#: ../src/HeeksCAD.cpp:3164
+msgid "arc"
+msgstr "дуга"
+
+#: ../src/HeeksCAD.cpp:3165 ../src/LineArcDrawing.cpp:751
+msgid "infinite line"
+msgstr "прямая"
+
+#: ../src/HeeksCAD.cpp:3166
+msgid "circle"
+msgstr "окружность"
+
+#: ../src/HeeksCAD.cpp:3167
+msgid "edge"
+msgstr "ребро"
+
+#: ../src/HeeksCAD.cpp:3168
+msgid "face"
+msgstr "плоскость"
+
+#: ../src/HeeksCAD.cpp:3169
+msgid "vertex"
+msgstr "вершина"
+
+#: ../src/HeeksCAD.cpp:3170
+msgid "solid"
+msgstr "тело"
+
+#: ../src/HeeksCAD.cpp:3171
+msgid "stl_solid"
+msgstr "стандартное(stl)_тело"
+
+#: ../src/HeeksCAD.cpp:3172
+msgid "wire"
+msgstr "провод"
+
+#: ../src/HeeksCAD.cpp:3173
+msgid "sketch"
+msgstr "эскиз"
+
+#: ../src/HeeksCAD.cpp:3174
+msgid "image"
+msgstr "изображение"
+
+#: ../src/HeeksCAD.cpp:3175
+msgid "coordinate system"
+msgstr "координатная система"
+
+#: ../src/HeeksCAD.cpp:3176
+msgid "text"
+msgstr "текст"
+
+#: ../src/HeeksCAD.cpp:3177
+msgid "dimension"
+msgstr "размер"
+
+#: ../src/HeeksCAD.cpp:3178
+msgid "ruler"
+msgstr "линейка"
+
+#: ../src/HeeksCAD.cpp:3179
+msgid "pad"
+msgstr "подложка"
+
+#: ../src/HeeksCAD.cpp:3180
+msgid "part"
+msgstr "часть"
+
+#: ../src/HeeksCAD.cpp:3181
+msgid "pocket"
+msgstr "карман(гнездо)"
+
+#: ../src/HeeksCAD.cpp:3184
+msgid "file options"
+msgstr "файловые опции "
+
+#: ../src/HeeksCAD.cpp:3185
+msgid "DXF"
+msgstr "DXF"
+
+#: ../src/HeeksCAD.cpp:3186
+msgid "make sketch"
+msgstr "сделать эскиз"
+
+#: ../src/HeeksCAD.cpp:3187
+msgid "ignore errors where possible"
+msgstr "игнорировать ошибки, где это возможно"
+
+#: ../src/HeeksCAD.cpp:3188
+msgid "Layer Name Suffixes To Discard"
+msgstr "Отменить суффиксы имен слоев "
+
+#: ../src/HeeksCAD.cpp:3191
+msgid "STL"
+msgstr "STL"
+
+#: ../src/HeeksCAD.cpp:3192
+msgid "stl save facet tolerance"
+msgstr "Допуск точности по стандарту STL"
+
+#: ../src/HeeksCAD.cpp:3194
+msgid "auto save interval (in minutes)"
+msgstr "интервал автоматического сохранения (в минутах)"
+
+#: ../src/HeeksCAD.cpp:3196
+msgid "save constraints to file"
+msgstr "сохранить ограничения в файле"
+
+#: ../src/HeeksCAD.cpp:3201
+msgid "font options"
+msgstr "Свойства шрифтов"
+
+#: ../src/HeeksCAD.cpp:3202
+msgid "Paths (semicolon delimited)"
+msgstr "Пути (разделенные запятой)"
+
+#: ../src/HeeksCAD.cpp:3203
+msgid "Word Space Percentage"
+msgstr "Расстояние между словами в процентах"
+
+#: ../src/HeeksCAD.cpp:3204
+msgid "Character Space Percentage"
+msgstr "Расстояние между знаками в процентах"
+
+#: ../src/HeeksCAD.cpp:3207
+msgid "logging"
+msgstr "журналирование"
+
+#: ../src/HeeksCAD.cpp:3210
+msgid "FatalError"
+msgstr "Критическая ошибка"
+
+#: ../src/HeeksCAD.cpp:3211
+msgid "Error"
+msgstr "Ошибка"
+
+#: ../src/HeeksCAD.cpp:3212
+msgid "Warning"
+msgstr "Предупреждение"
+
+#: ../src/HeeksCAD.cpp:3213
+msgid "Message"
+msgstr "Сообщение"
+
+#: ../src/HeeksCAD.cpp:3214
+msgid "Status"
+msgstr "Статус"
+
+#: ../src/HeeksCAD.cpp:3215
+msgid "Info"
+msgstr "Информация"
+
+#: ../src/HeeksCAD.cpp:3216
+msgid "Debug"
+msgstr "Отладка"
+
+#: ../src/HeeksCAD.cpp:3217
+msgid "Trace"
+msgstr "Трассировка"
+
+#: ../src/HeeksCAD.cpp:3219
+msgid "log level"
+msgstr "Уровень подробности журналирования"
+
+#: ../src/HeeksCAD.cpp:3221
+msgid "use repetition counting"
+msgstr "использовать счетчик повторений"
+
+#: ../src/HeeksCAD.cpp:3222
+msgid "use timestamps"
+msgstr "использовать метку времени "
+
+#: ../src/HeeksCAD.cpp:3282 ../src/HeeksCAD.cpp:3287
+msgid "Known Files"
+msgstr "Известные типы файлов"
+
+#: ../src/HeeksCAD.cpp:3282 ../src/HeeksCAD.cpp:3287
+msgid "Heeks files"
+msgstr "файлы в формате Heeks"
+
+#: ../src/HeeksCAD.cpp:3282 ../src/HeeksCAD.cpp:3287 ../src/SolidTools.cpp:57
+msgid "IGES files"
+msgstr "файлы в формате IGES"
+
+#: ../src/HeeksCAD.cpp:3282 ../src/HeeksCAD.cpp:3287 ../src/SolidTools.cpp:57
+msgid "STEP files"
+msgstr "файлы в формате STEP"
+
+#: ../src/HeeksCAD.cpp:3282 ../src/HeeksCAD.cpp:3287 ../src/SolidTools.cpp:57
+msgid "STL files"
+msgstr "файлы в формате STL"
+
+#: ../src/HeeksCAD.cpp:3282
+msgid "Scalar Vector Graphics files"
+msgstr "файлы в формате SVG"
+
+#: ../src/HeeksCAD.cpp:3282 ../src/HeeksCAD.cpp:3287
+msgid "DXF files"
+msgstr "файлы в формате DXF "
+
+#: ../src/HeeksCAD.cpp:3282
+msgid "RX274X/Gerber files"
+msgstr "файлы в формате RX274X/Gerber"
+
+#: ../src/HeeksCAD.cpp:3282
+msgid "Picture files"
+msgstr "Файлы с изображениями"
+
+#: ../src/HeeksCAD.cpp:3287 ../src/SolidTools.cpp:57
+msgid "CPP files"
+msgstr "Файлы c++ (CPP)"
+
+#: ../src/HeeksCAD.cpp:3287 ../src/SolidTools.cpp:57
+msgid "OpenCAMLib python files"
+msgstr "Файлы OpenCAMLib Python "
+
+#: ../src/HeeksCAD.cpp:3331
+msgid "Unmark"
+msgstr "Снять метку"
+
+#: ../src/HeeksCAD.cpp:3334 ../src/HeeksCAD.cpp:3340
+msgid "Mark"
+msgstr "Пометить"
+
+#: ../src/HeeksCAD.cpp:3338 ../src/HeeksFrame.cpp:152
+#: ../src/HeeksFrame.cpp:1765 ../src/HeeksFrame.cpp:1973
+msgid "Properties"
+msgstr "Свойства"
+
+#: ../src/HeeksCAD.cpp:3769
+msgid "Save changes to file"
+msgstr "Сохранить изменения в файле"
+
+#: ../src/HeeksCAD.cpp:4536 ../interface/HeeksObj.h:136
+msgid "Unknown"
+msgstr "Неизвестный"
+
+#: ../src/HeeksCAD.cpp:4537
+msgid "Document"
+msgstr "Документ"
+
+#: ../src/HeeksCAD.cpp:4538 ../src/HPoint.h:35
+msgid "Point"
+msgstr "Точка"
+
+#: ../src/HeeksCAD.cpp:4539 ../src/HLine.h:26
+msgid "Line"
+msgstr "Линия"
+
+#: ../src/HeeksCAD.cpp:4540 ../src/HArc.h:36
+msgid "Arc"
+msgstr "Дуга"
+
+#: ../src/HeeksCAD.cpp:4541
+msgid "ILine"
+msgstr "Линия типа I"
+
+#: ../src/HeeksCAD.cpp:4542 ../src/HCircle.h:34
+msgid "Circle"
+msgstr "Окружность"
+
+#: ../src/HeeksCAD.cpp:4543 ../src/Gripper.h:23
+msgid "Gripper"
+msgstr "Захват"
+
+#: ../src/HeeksCAD.cpp:4544 ../src/Vertex.h:33
+msgid "Vertex"
+msgstr "Вершина"
+
+#: ../src/HeeksCAD.cpp:4545 ../src/Edge.h:54
+msgid "Edge"
+msgstr "Грань"
+
+#: ../src/HeeksCAD.cpp:4546 ../src/Face.h:44
+msgid "Face"
+msgstr "Поверхность"
+
+#: ../src/HeeksCAD.cpp:4547
+msgid "Loop"
+msgstr "Петля"
+
+#: ../src/HeeksCAD.cpp:4548 ../src/DynamicSolid.h:23 ../src/Solid.h:26
+#: ../interface/HeeksCADInterface.cpp:2025
+msgid "Solid"
+msgstr "Тело"
+
+#: ../src/HeeksCAD.cpp:4549
+msgid "StlSolid"
+msgstr "Тело стандарта STL"
+
+#: ../src/HeeksCAD.cpp:4550 ../src/Wire.h:14
+msgid "Wire"
+msgstr "Провод"
+
+#: ../src/HeeksCAD.cpp:4551 ../src/Sketch.cpp:41 ../src/Sketch.h:43
+msgid "Sketch"
+msgstr "Траектория"
+
+#: ../src/HeeksCAD.cpp:4552 ../src/HImage.h:42
+msgid "Image"
+msgstr "Изображение"
+
+#: ../src/HeeksCAD.cpp:4553
+msgid "CoordinateSystem"
+msgstr "Координатная система"
+
+#: ../src/HeeksCAD.cpp:4554 ../src/HText.h:32
+msgid "Text"
+msgstr "Текст"
+
+#: ../src/HeeksCAD.cpp:4555 ../src/HAngularDimension.h:54
+#: ../src/HDimension.h:64
+msgid "Dimension"
+msgstr "Размер"
+
+#: ../src/HeeksCAD.cpp:4556 ../src/Ruler.h:50
+msgid "Ruler"
+msgstr "Линейка"
+
+#: ../src/HeeksCAD.cpp:4557 ../src/HXml.h:18
+msgid "Xml"
+msgstr "Xml"
+
+#: ../src/HeeksCAD.cpp:4558 ../src/HEllipse.h:43
+msgid "Ellipse"
+msgstr "Эллипс"
+
+#: ../src/HeeksCAD.cpp:4559 ../src/HSpline.h:45
+msgid "Spline"
+msgstr "Сплайн"
+
+#: ../src/HeeksCAD.cpp:4561
+msgid "CorrelationTool"
+msgstr "ИнструментКорреляции"
+
+#: ../src/HeeksCAD.cpp:4563 ../src/Constraint.h:66
+msgid "Constraint"
+msgstr "Граница"
+
+#: ../src/HeeksCAD.cpp:4565 ../src/Pad.h:17
+msgid "Pad"
+msgstr "Подложка"
+
+#: ../src/HeeksCAD.cpp:4566 ../src/Part.h:15
+msgid "Part"
+msgstr "Часть"
+
+#: ../src/HeeksCAD.cpp:4567
+msgid "PocketSolid"
+msgstr "КарманТело"
+
+#: ../src/HeeksCAD.cpp:4568
+msgid "AngularDimension"
+msgstr "Угловой размер"
+
+#: ../src/HeeksCAD.cpp:4569
+msgid "OrientationModifier"
+msgstr "МодификаторОриентации"
+
+#: ../src/HeeksCAD.cpp:4570
+msgid "Hole"
+msgstr "Отверстие"
+
+#: ../src/HeeksCAD.cpp:4571 ../src/Hole.h:21
+msgid "Positions"
+msgstr "Позиции"
+
+#: ../src/HeeksCAD.cpp:4572
+msgid "ObjectMaximum"
+msgstr "МаксимальныйОбъект"
+
+#: ../src/HeeksFrame.cpp:104
+msgid "Trace Log"
+msgstr "Журнал трассировки"
+
+#: ../src/HeeksFrame.cpp:148 ../src/HeeksFrame.cpp:1969
+msgid "Graphics"
+msgstr "Графика"
+
+#: ../src/HeeksFrame.cpp:149 ../src/HeeksFrame.cpp:1761
+#: ../src/HeeksFrame.cpp:1970
+msgid "Objects"
+msgstr "Объекты"
+
+#: ../src/HeeksFrame.cpp:150 ../src/HeeksFrame.cpp:1763
+#: ../src/HeeksFrame.cpp:1971
+msgid "Options"
+msgstr "Свойства"
+
+#: ../src/HeeksFrame.cpp:151 ../src/HeeksFrame.cpp:1764
+#: ../src/HeeksFrame.cpp:1972
+msgid "Input"
+msgstr "Ввод"
+
+#: ../src/HeeksFrame.cpp:202
+msgid "Reset Layout"
+msgstr "Удалить разметку"
+
+#: ../src/HeeksFrame.cpp:203
+msgid "Set toolbars to left"
+msgstr "Переместить панель инструментов влево"
+
+#: ../src/HeeksFrame.cpp:575
+msgid "Pick three or more points to be splined"
+msgstr "Выделите 3 или более точек, для создания сплайна"
+
+#: ../src/HeeksFrame.cpp:575 ../src/HeeksFrame.cpp:1692
+#: ../src/HeeksFrame.cpp:1856
+msgid "Spline Through Points"
+msgstr "Сплайн через заданные точки"
+
+#: ../src/HeeksFrame.cpp:707 ../src/HeeksFrame.cpp:724
+#: ../src/CoordinateSystem.h:32 ../interface/HeeksCADInterface.cpp:532
+msgid "Coordinate System"
+msgstr "Координатная система"
+
+#: ../src/HeeksFrame.cpp:761
+msgid "Import file"
+msgstr "Импортировать файл"
+
+#: ../src/HeeksFrame.cpp:873
+msgid "Subtract Solids"
+msgstr "Вычесть тела"
+
+#: ../src/HeeksFrame.cpp:881
+msgid "Pick two or more solids to be fused together"
+msgstr "Выберите 2 или большее количество тел, чтобы слить их воедино"
+
+#: ../src/HeeksFrame.cpp:881
+msgid "Fuse Solids"
+msgstr "Склеить тела"
+
+#: ../src/HeeksFrame.cpp:889
+msgid ""
+"Pick two or more solids, only the shape that is contained by all of them "
+"will remain"
+msgstr ""
+"Укажите два или более тел, останется только фигура, которую содержат эти тела"
+
+#: ../src/HeeksFrame.cpp:889
+msgid "Intersection of Solids"
+msgstr "Пересечение тел"
+
+#: ../src/HeeksFrame.cpp:898
+msgid "Pick one or more edges to add a fillet to"
+msgstr "Укажите один или несколько краев для добавления на них скругления"
+
+#: ../src/HeeksFrame.cpp:898
+msgid "Edge Fillet"
+msgstr "Срез грани(фаска)"
+
+#: ../src/HeeksFrame.cpp:914
+msgid "Pick one or more edges to add a chamfer to"
+msgstr "Укажите один или несколько краев для создания на них фаски"
+
+#: ../src/HeeksFrame.cpp:914
+msgid "Edge Chamfer"
+msgstr "Край фаски"
+
+#: ../src/HeeksFrame.cpp:918
+msgid "Enter chamfer distance"
+msgstr "Введите размер фаски"
+
+#: ../src/HeeksFrame.cpp:935
+msgid "Pick two or more sketches, to create a lofted solid between"
+msgstr ""
+"Указать два или более контуров, для создания между ними вытянутого тела"
+
+#: ../src/HeeksFrame.cpp:935 ../src/HeeksFrame.cpp:943
+#: ../src/HeeksFrame.cpp:951
+msgid "hold down Ctrl key to select more than one solid"
+msgstr "Нажмите и удерживайте клавишу CTRL для выбора нескольких тел"
+
+#: ../src/HeeksFrame.cpp:935
+msgid "Lofted Body"
+msgstr "Вытянутое тело"
+
+#: ../src/HeeksFrame.cpp:943
+msgid ""
+"Pick one or more sketches, faces or circles, to create an extruded body from"
+msgstr ""
+"Выберите один или несколько эскизов, поверхностей, или окружностей, чтобы "
+"создать выянутое тело из них"
+
+#: ../src/HeeksFrame.cpp:943 ../src/HeeksFrame.cpp:951
+msgid "Extrude"
+msgstr "Вытянуть"
+
+#: ../src/HeeksFrame.cpp:951
+msgid ""
+"Pick one or more sketches, faces or circles, to create a revolved body from"
+msgstr ""
+"Укажите один или несколько эскизов, поверхностей, или окружностей, для "
+"создания из них тела вращения"
+
+#: ../src/HeeksFrame.cpp:977 ../src/Sphere.h:25
+msgid "Sphere"
+msgstr "Сфера"
+
+#: ../src/HeeksFrame.cpp:984 ../src/Cuboid.h:28
+msgid "Cuboid"
+msgstr "Куб"
+
+#: ../src/HeeksFrame.cpp:991 ../src/HLine.cpp:88 ../src/Cylinder.h:25
+msgid "Cylinder"
+msgstr "Цилиндр"
+
+#: ../src/HeeksFrame.cpp:998 ../src/HLine.cpp:102 ../src/Cone.h:29
+msgid "Cone"
+msgstr "Конус"
+
+#: ../src/HeeksFrame.cpp:1552
+msgid ""
+"There was a problem printing.\n"
+" Perhaps your current printer is not set correctly?"
+msgstr ""
+"Проблемы при печати\n"
+"Возможно, текущий принтер неверно настроен?"
+
+#: ../src/HeeksFrame.cpp:1552 ../src/HeeksFrame.cpp:1554
+msgid "Printing"
+msgstr "Печать"
+
+#: ../src/HeeksFrame.cpp:1554
+msgid "You canceled printing"
+msgstr "Вы прервали печать"
+
+#: ../src/HeeksFrame.cpp:1573
+msgid ""
+"There was a problem previewing.\n"
+" Perhaps your current printer is not set correctly?"
+msgstr ""
+"Проблема при предпросмотре\n"
+"Вероятно, текущий принтер неверно настроен?"
+
+#: ../src/HeeksFrame.cpp:1573
+msgid "Previewing"
+msgstr "Предпросмотр"
+
+#: ../src/HeeksFrame.cpp:1577
+msgid "Demo Print Preview"
+msgstr "Предпросмотр печати"
+
+#: ../src/HeeksFrame.cpp:1650
+msgid "New\tCtrl+N"
+msgstr "Новый\tCtrl+N"
+
+#: ../src/HeeksFrame.cpp:1651
+msgid "Open\tCtrl+O"
+msgstr "Открыть\tCtrl+O"
+
+#: ../src/HeeksFrame.cpp:1652
+msgid "Save\tCtrl+S"
+msgstr "Сохранить\tCtrl+S"
+
+#: ../src/HeeksFrame.cpp:1653
+msgid "Save As"
+msgstr "Сохранить как..."
+
+#: ../src/HeeksFrame.cpp:1655
+msgid "Print\tCtrl+P"
+msgstr "Печать\tCtrl+P"
+
+#: ../src/HeeksFrame.cpp:1656
+msgid "Page Setup"
+msgstr "Настройки страницы"
+
+#: ../src/HeeksFrame.cpp:1657
+msgid "Print Preview"
+msgstr "Препросмотр печати"
+
+#: ../src/HeeksFrame.cpp:1660
+msgid "Open Recent"
+msgstr "Открыть недавние документы..."
+
+#: ../src/HeeksFrame.cpp:1661
+msgid "Import"
+msgstr "Импорт"
+
+#: ../src/HeeksFrame.cpp:1662
+msgid "About"
+msgstr "О программе"
+
+#: ../src/HeeksFrame.cpp:1664
+msgid "Plugins"
+msgstr "Подключаемые модули"
+
+#: ../src/HeeksFrame.cpp:1666
+msgid "Save Settings"
+msgstr "Сохранить установки"
+
+#: ../src/HeeksFrame.cpp:1668
+msgid "Exit\tCtrl+Q"
+msgstr "Выход\tCtrl+Q"
+
+#: ../src/HeeksFrame.cpp:1673
+msgid "Undo\tCtrl+Z"
+msgstr "Отмена\tCtrl+Z"
+
+#: ../src/HeeksFrame.cpp:1674
+msgid "Redo\tCtrl+Shift+Z"
+msgstr "Повтор\tCtrl+Shift+Z"
+
+#: ../src/HeeksFrame.cpp:1677
+msgid "Cut\tCtrl+X"
+msgstr "Вырезать\tCtrl+X"
+
+#: ../src/HeeksFrame.cpp:1678
+msgid "Copy\tCtrl+C"
+msgstr "Копировать\tCtrl+C"
+
+#: ../src/HeeksFrame.cpp:1679
+msgid "Paste\tCtrl+V"
+msgstr "Вставить\tCtrl+V"
+
+#: ../src/HeeksFrame.cpp:1680 ../src/Plugins.cpp:149
+msgid "Delete"
+msgstr "Удалить"
+
+#: ../src/HeeksFrame.cpp:1682 ../src/HeeksFrame.cpp:1824
+#: ../src/SelectMode.cpp:63
+msgid "Select Mode"
+msgstr "Режим выбора"
+
+#: ../src/HeeksFrame.cpp:1686 ../src/HeeksFrame.cpp:1835
+msgid "Draw a sketch"
+msgstr "Начертить эскиз"
+
+#: ../src/HeeksFrame.cpp:1688
+msgid "Draw Ellipses"
+msgstr "Начертить эллипс"
+
+#: ../src/HeeksFrame.cpp:1689
+msgid "Draw Infinite Lines"
+msgstr "Начертить прямую"
+
+#: ../src/HeeksFrame.cpp:1690
+msgid "Draw Points"
+msgstr "Начертить точки"
+
+#: ../src/HeeksFrame.cpp:1691 ../src/HGear.h:36
+msgid "Gear"
+msgstr "Передача"
+
+#: ../src/HeeksFrame.cpp:1694
+msgid "Add Text"
+msgstr "Добавить текст"
+
+#: ../src/HeeksFrame.cpp:1701
+msgid "Pick 3 points"
+msgstr "Выберите 3 точки"
+
+#: ../src/HeeksFrame.cpp:1703
+msgid "Pick 1 point"
+msgstr "Выберите 1 точку"
+
+#: ../src/HeeksFrame.cpp:1707
+msgid "Previous view"
+msgstr "Предыдущий вид"
+
+#: ../src/HeeksFrame.cpp:1709
+msgid "Zoom window"
+msgstr "Увеличение окна"
+
+#: ../src/HeeksFrame.cpp:1710
+msgid "Fit view to extents"
+msgstr "Разместить просмотр по границам "
+
+#: ../src/HeeksFrame.cpp:1711
+msgid "Fit view to extents, but no rotation"
+msgstr "Вид на фигуру полностью, без вращения"
+
+#: ../src/HeeksFrame.cpp:1712 ../src/HeeksFrame.cpp:1938
+msgid "View XY Front"
+msgstr "Фронтальный вид XY"
+
+#: ../src/HeeksFrame.cpp:1713 ../src/HeeksFrame.cpp:1939
+msgid "View XY Back"
+msgstr "Задний вид XY"
+
+#: ../src/HeeksFrame.cpp:1714 ../src/HeeksFrame.cpp:1940
+msgid "View XZ Top"
+msgstr "Вид сверху XZ"
+
+#: ../src/HeeksFrame.cpp:1715 ../src/HeeksFrame.cpp:1941
+msgid "View XZ Bottom"
+msgstr "Вид снизу XZ"
+
+#: ../src/HeeksFrame.cpp:1716 ../src/HeeksFrame.cpp:1942
+msgid "View YZ Right"
+msgstr "Вид справа YZ"
+
+#: ../src/HeeksFrame.cpp:1717 ../src/HeeksFrame.cpp:1943
+msgid "View YZ Left"
+msgstr "Вид слева"
+
+#: ../src/HeeksFrame.cpp:1718
+msgid "View XZY Isometric"
+msgstr "Изометрический вид XZY"
+
+#: ../src/HeeksFrame.cpp:1720
+msgid "View rotate"
+msgstr "Повернутый вид"
+
+#: ../src/HeeksFrame.cpp:1721
+msgid "View zoom"
+msgstr "Детальный вид"
+
+#: ../src/HeeksFrame.cpp:1722
+msgid "View pan"
+msgstr "Панорамный вид"
+
+#: ../src/HeeksFrame.cpp:1723
+msgid "Full screen"
+msgstr "Полный экран"
+
+#: ../src/HeeksFrame.cpp:1725 ../src/HeeksFrame.cpp:1956
+msgid "Redraw"
+msgstr "Перечертить"
+
+#: ../src/HeeksFrame.cpp:1729 ../src/HeeksFrame.cpp:1889
+msgid "Add a sphere"
+msgstr "Добавить сферу"
+
+#: ../src/HeeksFrame.cpp:1730 ../src/HeeksFrame.cpp:1890
+msgid "Add a cube"
+msgstr "Добавить куб"
+
+#: ../src/HeeksFrame.cpp:1731 ../src/HeeksFrame.cpp:1891
+msgid "Add a cylinder"
+msgstr "Добавить цилиндр"
+
+#: ../src/HeeksFrame.cpp:1732 ../src/HeeksFrame.cpp:1892
+msgid "Add a cone"
+msgstr "Добавить конус"
+
+#: ../src/HeeksFrame.cpp:1734
+msgid "Loft two sketches"
+msgstr "Вытянуть два сечения"
+
+#: ../src/HeeksFrame.cpp:1735
+msgid "Extrude a sketch"
+msgstr "Вытянуть сечение"
+
+#: ../src/HeeksFrame.cpp:1736
+msgid "Revolve a sketch"
+msgstr "Вращать сечение"
+
+#: ../src/HeeksFrame.cpp:1738
+msgid "Cut"
+msgstr "Вырезать"
+
+#: ../src/HeeksFrame.cpp:1739
+msgid "Fuse"
+msgstr "Склеить"
+
+#: ../src/HeeksFrame.cpp:1740
+msgid "Common"
+msgstr "Обычный"
+
+#: ../src/HeeksFrame.cpp:1742
+msgid "Fillet"
+msgstr "Скругление"
+
+#: ../src/HeeksFrame.cpp:1744
+msgid "Sectioning"
+msgstr "Вычерчивание сечения"
+
+#: ../src/HeeksFrame.cpp:1748
+msgid "Move Translate"
+msgstr "Передвинуть"
+
+#: ../src/HeeksFrame.cpp:1749
+msgid "Copy Translate"
+msgstr "Скопировать с перемещением"
+
+#: ../src/HeeksFrame.cpp:1751
+msgid "Move Rotate"
+msgstr "Передвинуть с поворотом"
+
+#: ../src/HeeksFrame.cpp:1752
+msgid "Copy Rotate"
+msgstr "Копировать с поворотом"
+
+#: ../src/HeeksFrame.cpp:1754
+msgid "Move Mirror"
+msgstr "Переместить зеркально"
+
+#: ../src/HeeksFrame.cpp:1755
+msgid "Copy Mirror"
+msgstr "Копировать зеркально"
+
+#: ../src/HeeksFrame.cpp:1757
+msgid "Move Scale"
+msgstr "Передвинуть с увеличением"
+
+#: ../src/HeeksFrame.cpp:1762
+msgid "Log"
+msgstr "Журнал"
+
+#: ../src/HeeksFrame.cpp:1766
+msgid "Tool Bar"
+msgstr "Панель инструментов"
+
+#: ../src/HeeksFrame.cpp:1767
+msgid "Solids Tool Bar"
+msgstr "Панель инструментов для тел"
+
+#: ../src/HeeksFrame.cpp:1768
+msgid "Geometry Tool Bar"
+msgstr "Панель инструментов геометрии"
+
+#: ../src/HeeksFrame.cpp:1769
+msgid "Viewing Tool Bar"
+msgstr "Панель инструментов для просмотра"
+
+#: ../src/HeeksFrame.cpp:1770
+msgid "Transformations Tool Bar"
+msgstr "Панель инструментов для преобразований"
+
+#: ../src/HeeksFrame.cpp:1774
+msgid "Validate Constraints"
+msgstr "Проверить границы"
+
+#: ../src/HeeksFrame.cpp:1781
+msgid "&File"
+msgstr "&Файл"
+
+#: ../src/HeeksFrame.cpp:1782
+msgid "&Edit"
+msgstr "&Редактирование"
+
+#: ../src/HeeksFrame.cpp:1783
+msgid "&View"
+msgstr "&Просмотр"
+
+#: ../src/HeeksFrame.cpp:1784
+msgid "&Geometry"
+msgstr "&Геометрия"
+
+#: ../src/HeeksFrame.cpp:1785
+msgid "&Solid"
+msgstr "&Тела"
+
+#: ../src/HeeksFrame.cpp:1786
+msgid "&Set Origin"
+msgstr "&Установить начало"
+
+#: ../src/HeeksFrame.cpp:1787
+msgid "&Transform"
+msgstr "&Преобразования"
+
+#: ../src/HeeksFrame.cpp:1788
+msgid "&Window"
+msgstr "&Окно"
+
+#: ../src/HeeksFrame.cpp:1792
+msgid "&Constraint Tester"
+msgstr "&Тестирование границ/ограничений"
+
+#: ../src/HeeksFrame.cpp:1814
+msgid "New file"
+msgstr "Новый файл"
+
+#: ../src/HeeksFrame.cpp:1816
+msgid "Save file"
+msgstr "Сохранить файл"
+
+#: ../src/HeeksFrame.cpp:1817
+msgid "Cut selected items to the clipboard"
+msgstr "Вырезать выделенное в буффер обмена"
+
+#: ../src/HeeksFrame.cpp:1818
+msgid "Copy selected items to the clipboard"
+msgstr "Копировать выделенное в буффер обмена"
+
+#: ../src/HeeksFrame.cpp:1819
+msgid "Paste items from the clipboard"
+msgstr "Вставить данные из буфера обмена"
+
+#: ../src/HeeksFrame.cpp:1821
+msgid "Undo the previous command"
+msgstr "Отменить предыдущую команду"
+
+#: ../src/HeeksFrame.cpp:1822
+msgid "Redo the next command"
+msgstr "Повторить следующую команду"
+
+#: ../src/HeeksFrame.cpp:1827 ../src/HeeksFrame.cpp:1974
+msgid "General Tools"
+msgstr "Главные инструменты"
+
+#: ../src/HeeksFrame.cpp:1836
+msgid "Start drawing rectangles"
+msgstr "Чертить прямоугольники"
+
+#: ../src/HeeksFrame.cpp:1837
+msgid "Start drawing obrounds"
+msgstr "Чертить обводку"
+
+#: ../src/HeeksFrame.cpp:1838
+msgid "Start drawing polygons"
+msgstr "Чертить многоугольники"
+
+#: ../src/HeeksFrame.cpp:1839
+msgid "Add a gear"
+msgstr "Добавить шестерню"
+
+#: ../src/HeeksFrame.cpp:1845
+msgid "Draw circles through 3 points"
+msgstr "Чертить окружности по 3-м точкам"
+
+#: ../src/HeeksFrame.cpp:1846
+msgid "Draw circles, centre and point"
+msgstr "Чертить окружности по центру и точкам"
+
+#: ../src/HeeksFrame.cpp:1847
+msgid "Draw circles, centre and radius"
+msgstr "Чертить окружности по центру и радиусу"
+
+#: ../src/HeeksFrame.cpp:1848
+msgid "Draw ellipses"
+msgstr "Чертить эллипсы"
+
+#: ../src/HeeksFrame.cpp:1854
+msgid "Start Drawing Infinite Lines"
+msgstr "Начать чертить прямые"
+
+#: ../src/HeeksFrame.cpp:1855
+msgid "Start Drawing Points"
+msgstr "Начать черчение точек"
+
+#: ../src/HeeksFrame.cpp:1862
+msgid "Add a text object"
+msgstr "Добавить текстовый объект"
+
+#: ../src/HeeksFrame.cpp:1863
+msgid "Add a dimension"
+msgstr "Добавить размер"
+
+#: ../src/HeeksFrame.cpp:1864
+msgid "Add Coordinate System"
+msgstr "Добавить координатную систему"
+
+#: ../src/HeeksFrame.cpp:1870
+msgid "Translate selected items"
+msgstr "Переместить выделенное"
+
+#: ../src/HeeksFrame.cpp:1871
+msgid "Copy and translate selected items"
+msgstr "Копировать и переместить выделенное"
+
+#: ../src/HeeksFrame.cpp:1872
+msgid "Rotate selected items"
+msgstr "Повернуть выделенное"
+
+#: ../src/HeeksFrame.cpp:1873
+msgid "Copy and rotate selected items"
+msgstr "Копировать и повернуть выделенное"
+
+#: ../src/HeeksFrame.cpp:1874
+msgid "Mirror selected items"
+msgstr "Зеркально отразить выделенное"
+
+#: ../src/HeeksFrame.cpp:1875
+msgid "Copy and mirror selected items"
+msgstr "Скопировать и зеркально отразить"
+
+#: ../src/HeeksFrame.cpp:1876
+msgid "Scale selected items"
+msgstr "Масштабировать выделенное"
+
+#: ../src/HeeksFrame.cpp:1881 ../src/HeeksFrame.cpp:1975
+msgid "Geometry Tools"
+msgstr "Геометрические инструменты"
+
+#: ../src/HeeksFrame.cpp:1898
+msgid "Create a lofted face"
+msgstr "Создать тело, вытягивая поверхность"
+
+#: ../src/HeeksFrame.cpp:1899
+msgid "Extrude a wire or face"
+msgstr "Вытянуть провод или поверхность"
+
+#: ../src/HeeksFrame.cpp:1900
+msgid "Revolve a wire or face"
+msgstr "Развернуть провод или поверхность"
+
+#: ../src/HeeksFrame.cpp:1906
+msgid "Cut one solid from another"
+msgstr "Вырезать тело из другого"
+
+#: ../src/HeeksFrame.cpp:1907
+msgid "Fuse one solid to another"
+msgstr "Слить одно тело с другим"
+
+#: ../src/HeeksFrame.cpp:1908
+msgid "Find common solid between two solids"
+msgstr "Найти обычное тело между 2 телами"
+
+#: ../src/HeeksFrame.cpp:1914
+msgid "Make a fillet on selected edges"
+msgstr "Создать закругление(скругление) на выбранных краях"
+
+#: ../src/HeeksFrame.cpp:1915
+msgid "Make a chamfer on selected edges"
+msgstr "Сделать фаску на выбранных краях"
+
+#: ../src/HeeksFrame.cpp:1920 ../src/HeeksFrame.cpp:1976
+msgid "Solid Tools"
+msgstr "Инструменты для тел"
+
+#: ../src/HeeksFrame.cpp:1928
+msgid "Zoom in to fit the extents of the drawing into the graphics window"
+msgstr "Увеличить, чтобы увидеть полностью чертеж на графическом окне"
+
+#: ../src/HeeksFrame.cpp:1929 ../src/HeeksFrame.cpp:1930
+msgid "Zoom in to a dragged window"
+msgstr "Увеличить для перетаскиваемого окна"
+
+#: ../src/HeeksFrame.cpp:1931
+msgid "Go back to previous view"
+msgstr "Вернуться назад к предыдущему виду"
+
+#: ../src/HeeksFrame.cpp:1932
+msgid "Switch to full screen view ( press escape to return )"
+msgstr "Переключиться на полный экран (кнопка Escape - вернуться)"
+
+#: ../src/HeeksFrame.cpp:1944
+msgid "View XY Isometric"
+msgstr "Изометрический вид  XY"
+
+#: ../src/HeeksFrame.cpp:1950
+msgid "Enter view rotating mode"
+msgstr "Войти в режим вращающегося просмотра"
+
+#: ../src/HeeksFrame.cpp:1951
+msgid "Drag to zoom in and out"
+msgstr "Тащите для увеличения и уменьшения"
+
+#: ../src/HeeksFrame.cpp:1952
+msgid "Drag to move view"
+msgstr "Тащите, чтобы переместить вид"
+
+#: ../src/HeeksFrame.cpp:1959 ../src/HeeksFrame.cpp:1977
+msgid "Viewing Tools"
+msgstr "Инструменты просмотра"
+
+#: ../src/HEllipse.cpp:280
+msgid "major radius"
+msgstr "бОльший радиус"
+
+#: ../src/HEllipse.cpp:281
+msgid "minor radius"
+msgstr "меньший радиус"
+
+#: ../src/HEllipse.cpp:282
+msgid "rotation"
+msgstr "вращение"
+
+#: ../src/HEllipse.cpp:283
+msgid "start angle"
+msgstr "начальный угол"
+
+#: ../src/HEllipse.cpp:284
+msgid "end angle"
+msgstr "конечный угол"
+
+#: ../src/HGear.cpp:429
+msgid "num teeth"
+msgstr "число зубов"
+
+#: ../src/HGear.cpp:430
+msgid "module"
+msgstr "модуль"
+
+#: ../src/HGear.cpp:431
+msgid "clearance"
+msgstr "зазор"
+
+#: ../src/HGear.cpp:432
+msgid "addendum offset"
+msgstr "смещение выступа"
+
+#: ../src/HGear.cpp:433
+msgid "addendum multiplier"
+msgstr "множитель ножки зубьев"
+
+#: ../src/HGear.cpp:434
+msgid "dedendum multiplier"
+msgstr "множитель ножки зубьев"
+
+#: ../src/HGear.cpp:435
+msgid "pressure angle"
+msgstr "угол давления"
+
+#: ../src/HGear.cpp:436
+msgid "spacing"
+msgstr "интервал"
+
+#: ../src/HGear.cpp:437
+msgid "tip relief"
+msgstr "форма рельефа"
+
+#: ../src/HGear.cpp:438
+msgid "depth"
+msgstr "глубина"
+
+#: ../src/HGear.cpp:439
+msgid "cone half angle"
+msgstr "половинный угол конуса"
+
+#: ../src/HGear.cpp:440
+msgid "inner ring diameter"
+msgstr "внутренний диаметр кольца"
+
+#: ../src/HGear.cpp:513
+msgid "Make Sketches"
+msgstr "Сделать сечения"
+
+#: ../src/HGear.cpp:522
+msgid "Make One Tooth Sketches"
+msgstr "Сделать контуры одного зуба"
+
+#: ../src/HILine.cpp:122 ../src/HLine.cpp:281 ../src/HLine.cpp:283
+msgid "Length"
+msgstr "Длина"
+
+#: ../src/HImage.cpp:155
+msgid "Picture - "
+msgstr "Изображение- "
+
+#: ../src/HLine.cpp:51
+msgid "Toggle Horizontal"
+msgstr "Обозначить горизонтальным"
+
+#: ../src/HLine.cpp:53
+msgid "Set this line to be horizontal"
+msgstr "Сделать линию горизонтальной"
+
+#: ../src/HLine.cpp:64
+msgid "Toggle Vertical"
+msgstr "Обозначить вертикальным"
+
+#: ../src/HLine.cpp:66
+msgid "Set this line to be vertical"
+msgstr "Сделать линию вертикальной"
+
+#: ../src/HLine.cpp:77
+msgid "Toggle Line Length"
+msgstr "Включить длину линии"
+
+#: ../src/HLine.cpp:79
+msgid "Set this lines length as constrained"
+msgstr "Сделать длину этой линии ограниченной"
+
+#: ../src/HLine.cpp:93
+msgid "Make Cylinder On Line"
+msgstr "Сделать цилиндр на линии"
+
+#: ../src/HLine.cpp:107
+msgid "Make Cone On Line"
+msgstr "Сделать конус на линии"
+
+#: ../src/HLine.cpp:125
+msgid "Click Midpoint On Line"
+msgstr "Нажмите среднюю кнопку на линии"
+
+#: ../src/HLine.cpp:141
+msgid "Click Start Of Line"
+msgstr "Нажмите на начало линии"
+
+#: ../src/HLine.cpp:157
+msgid "Click End Of Line"
+msgstr "Нажмите на конец линии"
+
+#: ../src/HPoint.cpp:147
+msgid "Toggle Fixed"
+msgstr "Установить зафиксированным"
+
+#: ../src/HPoint.cpp:149
+msgid "Set this point as fixed"
+msgstr "Зафиксировать точку (сделать неподвижной)"
+
+#: ../src/HPoint.cpp:166 ../src/HPoint.cpp:168
+msgid "Click point location"
+msgstr "Нажмите на место точки"
+
+#: ../src/HPoint.cpp:182
+msgid "Enter offset in X,Y,Z format (with commas between them)"
+msgstr "Введите смещениев формате X,Y,Z (между ними используйте запятую)"
+
+#: ../src/HPoint.cpp:183
+msgid "Apply Offset To Selected Location"
+msgstr "Применить смещение к выбранному месту"
+
+#: ../src/HPoint.cpp:222 ../src/HPoint.cpp:224
+msgid "Offset from point"
+msgstr "Смещение от точки"
+
+#: ../src/HSpline.cpp:234
+msgid "Knot"
+msgstr "Узел"
+
+#: ../src/HSpline.cpp:245
+msgid "Pole"
+msgstr "Полюс"
+
+#: ../src/HText.cpp:201
+msgid "OpenGL (default) font"
+msgstr "Шрифт по умолчанию в библиотеке openGL"
+
+#: ../src/HText.cpp:213
+msgid "Font"
+msgstr "Шрифт"
+
+#: ../src/HText.cpp:311
+msgid "Only a single orientation modifier is supported"
+msgstr "Поддерживается только один модификатор ориентации"
+
+#: ../src/HText.cpp:343
+msgid "Make a Sketch"
+msgstr "Сделать эскиз"
+
+#: ../src/HText.cpp:345
+msgid "Convert the lines and arcs that make up this text into a sketch object."
+msgstr "Преобразование текста в кривые, чтобы из кривых создать эскиз"
+
+#: ../src/HText.cpp:359
+msgid "Add Orientation Modifier"
+msgstr "Добавить модификатор ориентации"
+
+#: ../src/HText.cpp:361
+msgid "Add graphics to orient text"
+msgstr "Добавиь графику к направленному тексту"
+
+#: ../src/Input.cpp:108 ../src/TransformTools.cpp:56
+#: ../src/TransformTools.cpp:314
+msgid "number of copies"
+msgstr "количество копий"
+
+#: ../src/Input.cpp:118 ../src/Input.cpp:119
+msgid "Position to rotate about"
+msgstr "Позиция для вращение вокруг"
+
+#: ../src/Input.cpp:119 ../src/Input.cpp:123
+msgid "Select"
+msgstr "Выбрать"
+
+#: ../src/Input.cpp:147
+msgid "Axis to rotate about"
+msgstr "Ось, вокруг которой вращать"
+
+#: ../src/Input.cpp:151
+msgid "Select a line"
+msgstr "Выбрать линию"
+
+#: ../src/Input.cpp:179 ../src/RuledSurface.cpp:270
+msgid "angle"
+msgstr "угол"
+
+#: ../src/Input.cpp:336
+msgid "Pick Position"
+msgstr "Выбрать позицию"
+
+#: ../src/Input.cpp:369
+msgid "Pick line for rotation axis"
+msgstr "Укажите линию, которая будет осью вращения"
+
+#: ../src/InputModeCanvas.cpp:75
+msgid "Input Mode"
+msgstr "Режим ввода"
+
+#: ../src/LineArcDrawing.cpp:67
+msgid "set previous direction"
+msgstr "установить предыдущее направление"
+
+#: ../src/LineArcDrawing.cpp:562
+msgid "Line drawing mode"
+msgstr "Режим черчения линий"
+
+#: ../src/LineArcDrawing.cpp:564 ../src/LineArcDrawing.cpp:571
+#: ../src/LineArcDrawing.cpp:608 ../src/LineArcDrawing.cpp:616
+#: ../src/LineArcDrawing.cpp:623
+msgid "click on start point"
+msgstr "нажмите на начальную точку"
+
+#: ../src/LineArcDrawing.cpp:565
+msgid "click on end of line"
+msgstr "нажмите на конец линии"
+
+#: ../src/LineArcDrawing.cpp:569
+msgid "Arc drawing mode"
+msgstr "Режим черчения дуг"
+
+#: ../src/LineArcDrawing.cpp:572
+msgid "click on end of arc"
+msgstr "Нажмите на конец окружности"
+
+#: ../src/LineArcDrawing.cpp:576
+msgid "Infinite line drawing"
+msgstr "черчение прямых"
+
+#: ../src/LineArcDrawing.cpp:578 ../src/LineArcDrawing.cpp:650
+#: ../src/LineArcDrawing.cpp:659
+msgid "click on first point"
+msgstr "Нажмите на первой точке"
+
+#: ../src/LineArcDrawing.cpp:579 ../src/LineArcDrawing.cpp:651
+#: ../src/LineArcDrawing.cpp:660
+msgid "click on second point"
+msgstr "Нажмите на второй точке"
+
+#: ../src/LineArcDrawing.cpp:583
+msgid "Ellipse drawing mode"
+msgstr "Режим черчения эллипсов"
+
+#: ../src/LineArcDrawing.cpp:586
+msgid "center and 2 points mode"
+msgstr "режим определения центра и двух точек"
+
+#: ../src/LineArcDrawing.cpp:588 ../src/LineArcDrawing.cpp:642
+msgid "click on center point"
+msgstr "Нажмите на центральной точке"
+
+#: ../src/LineArcDrawing.cpp:591
+msgid "click on point on ellipse"
+msgstr "Нажмите на копке на эллипсе"
+
+#: ../src/LineArcDrawing.cpp:593
+msgid "(colinear or orthogonal to axis)"
+msgstr "(коллинеарны или ортогональны осям)"
+
+#: ../src/LineArcDrawing.cpp:595
+msgid "click on another point on ellipse"
+msgstr "нажмите на другой точке эллипса"
+
+#: ../src/LineArcDrawing.cpp:601
+msgid "Spline drawing mode"
+msgstr "Режим черчения сплайнов"
+
+#: ../src/LineArcDrawing.cpp:606
+msgid "cubic spline mode"
+msgstr "режим кубических сплайнов"
+
+#: ../src/LineArcDrawing.cpp:609 ../src/LineArcDrawing.cpp:617
+msgid "click on end point"
+msgstr "нажмите на конечной точке"
+
+#: ../src/LineArcDrawing.cpp:610 ../src/LineArcDrawing.cpp:624
+msgid "click on first control point"
+msgstr "нажмите на первой контрольной точке"
+
+#: ../src/LineArcDrawing.cpp:611 ../src/LineArcDrawing.cpp:625
+msgid "click on second control point"
+msgstr "нажмите на второй контрольной точке"
+
+#: ../src/LineArcDrawing.cpp:614
+msgid "quartic spline mode"
+msgstr "режим квадратичных сплайнов"
+
+#: ../src/LineArcDrawing.cpp:618
+msgid "click on control point"
+msgstr "нажмите на  контрольной точке"
+
+#: ../src/LineArcDrawing.cpp:621
+msgid "rational spline mode"
+msgstr "режми рациональных сплайнов"
+
+#: ../src/LineArcDrawing.cpp:626
+msgid "click on next control point or endpoint"
+msgstr "нажмите на следующей контрольной точке или на конечной точке"
+
+#: ../src/LineArcDrawing.cpp:634
+msgid "Circle drawing mode"
+msgstr "Режми черчения окружностей"
+
+#: ../src/LineArcDrawing.cpp:640
+msgid "center and point mode"
+msgstr "режим задания центра и точки"
+
+#: ../src/LineArcDrawing.cpp:643
+msgid "click on point on circle"
+msgstr "нажмите на точке на окружности"
+
+#: ../src/LineArcDrawing.cpp:648
+msgid "three points mode"
+msgstr "Режим задания 3-х точек"
+
+#: ../src/LineArcDrawing.cpp:652
+msgid "click on third point"
+msgstr "нажмите на 3-ей точке"
+
+#: ../src/LineArcDrawing.cpp:657
+msgid "two points mode"
+msgstr "режим 2ух точек"
+
+#: ../src/LineArcDrawing.cpp:665
+msgid "centre with radius mode"
+msgstr "режим задания центра и радиуса"
+
+#: ../src/LineArcDrawing.cpp:667
+msgid "click on centre point"
+msgstr "нажмите на центральной точке"
+
+#: ../src/LineArcDrawing.cpp:749
+msgid "draw lines"
+msgstr "чртить линии"
+
+#: ../src/LineArcDrawing.cpp:750
+msgid "draw tangential arcs"
+msgstr "чертить касательные дуги"
+
+#: ../src/LineArcDrawing.cpp:752
+msgid "draw circles"
+msgstr "чертить окружности"
+
+#: ../src/LineArcDrawing.cpp:753 ../src/RegularShapesDrawing.cpp:513
+msgid "drawing mode"
+msgstr "режим черчения"
+
+#: ../src/LineArcDrawing.cpp:760
+msgid "(press 'a' for arcs)"
+msgstr "(нажмите клавишу \"а\" для дуг)"
+
+#: ../src/LineArcDrawing.cpp:767
+msgid "centre and point"
+msgstr "центр и точка"
+
+#: ../src/LineArcDrawing.cpp:768
+msgid "three points"
+msgstr "3 точки"
+
+#: ../src/LineArcDrawing.cpp:769
+msgid "two points"
+msgstr "2 точки"
+
+#: ../src/LineArcDrawing.cpp:770
+msgid "centre and radius"
+msgstr "центр и радиус"
+
+#: ../src/LineArcDrawing.cpp:771
+msgid "circle mode"
+msgstr "режим окружностей"
+
+#: ../src/manager.cpp:1293
+msgid "Categorized Mode"
+msgstr "Режим классификации"
+
+#: ../src/manager.cpp:1294
+msgid "Alphabetic Mode"
+msgstr "Алфавитный режим"
+
+#: ../src/manager.cpp:1339 ../src/manager.cpp:1737
+msgid "<< Compact"
+msgstr "<< сжать"
+
+#: ../src/manager.cpp:1339 ../src/manager.cpp:1732
+msgid "Expand >>"
+msgstr "Расширить >>"
+
+#: ../src/MarkedList.cpp:282
+msgid "Number of items selected"
+msgstr "Количество выделенных объектов"
+
+#: ../src/MarkedList.cpp:289
+msgid "Delete Marked Items"
+msgstr "Удалить выбранное"
+
+#: ../src/MarkedList.cpp:298
+msgid "Copy"
+msgstr "Копировать"
+
+#: ../src/MarkedList.cpp:300
+msgid "Copies the selected items to the clipboard"
+msgstr "Копировать выделенное в буфер обмена"
+
+#: ../src/MarkedList.cpp:315
+msgid "Paste Into"
+msgstr "Вставить в"
+
+#: ../src/MarkedList.cpp:315
+msgid "Paste"
+msgstr "Вставить"
+
+#: ../src/MarkedList.cpp:317
+msgid "Paste items from the clipboard to the drawing"
+msgstr "Вставить из буфера обмена в чертеж"
+
+#: ../src/ObjPropsCanvas.cpp:130 ../interface/DoubleInput.cpp:19
+msgid "Apply"
+msgstr "Принять"
+
+#: ../src/ObjPropsCanvas.cpp:130
+msgid "Apply any changes made to the properties"
+msgstr "Принять все изменения, сделанные для свойств"
+
+#: ../src/ObjPropsCanvas.cpp:131 ../src/props.cpp:1853 ../src/props.cpp:2085
+#: ../interface/DoubleInput.cpp:29 ../interface/HDialogs.cpp:30
+msgid "Cancel"
+msgstr "Прервать"
+
+#: ../src/ObjPropsCanvas.cpp:131
+msgid "Stop editing the object"
+msgstr "Окончить редактирование объекта"
+
+#: ../src/OrientationModifier.cpp:105
+msgid "Normally spaced"
+msgstr "Нормально разделенный"
+
+#: ../src/OrientationModifier.cpp:107
+msgid "Spacing"
+msgstr "Интервал"
+
+#: ../src/OrientationModifier.cpp:110
+msgid "Number of Rotations (negative for reverse direction)"
+msgstr "Количество поворотов (отрицательное число для обратного направления)"
+
+#: ../src/OrientationModifier.cpp:111
+msgid "Sketch rotates text"
+msgstr "Текст, развернутый по кривой"
+
+#: ../src/OrientationModifier.cpp:120 ../src/OrientationModifier.cpp:126
+msgid "Left"
+msgstr "Лево"
+
+#: ../src/OrientationModifier.cpp:121
+msgid "Centre"
+msgstr "Центр"
+
+#: ../src/OrientationModifier.cpp:122 ../src/OrientationModifier.cpp:127
+msgid "Right"
+msgstr "Право"
+
+#: ../src/OrientationModifier.cpp:128
+msgid "Top"
+msgstr "Верх"
+
+#: ../src/OrientationModifier.cpp:129
+msgid "Bottom"
+msgstr "Низ"
+
+#: ../src/OrientationModifier.cpp:132
+msgid "Justification"
+msgstr "Выравнивание"
+
+#: ../src/Pad.cpp:101 ../src/Pocket.cpp:102
+msgid "Height"
+msgstr "Высота"
+
+#: ../src/Plugins.cpp:39
+msgid "Name"
+msgstr "Имя"
+
+#: ../src/Plugins.cpp:43
+msgid "File Path"
+msgstr "Путь к файлу"
+
+#: ../src/Plugins.cpp:84
+msgid "Plugin must have a name!"
+msgstr "Дополнительный модуль должен иметь имя!"
+
+#: ../src/Plugins.cpp:92
+msgid "No file specified!"
+msgstr "Файл не указан!"
+
+#: ../src/Plugins.cpp:115
+msgid "shared library files"
+msgstr "файлы общих библиотек"
+
+#: ../src/Plugins.cpp:117
+msgid "Choose shared library file"
+msgstr "Выберите файл общей библиотеки"
+
+#: ../src/Plugins.cpp:137
+msgid "HeeksCAD plugin libraries"
+msgstr "Библиотеки модулей HeeksCAD"
+
+#: ../src/Plugins.cpp:147
+msgid "New"
+msgstr "Новый"
+
+#: ../src/Plugins.cpp:148
+msgid "Edit"
+msgstr "Редактирование"
+
+#: ../src/Plugins.cpp:347 ../src/Plugins.cpp:362
+msgid "Add New Plugin"
+msgstr "Добавить новый модуль"
+
+#: ../src/PropertiesCanvas.cpp:202
+msgid "vertical angle"
+msgstr "вертикальный угол"
+
+#: ../src/PropertiesCanvas.cpp:205
+msgid "horizontal angle"
+msgstr "горизонтальный угол"
+
+#: ../src/PropertiesCanvas.cpp:208
+msgid "twist angle"
+msgstr "угол скручивания"
+
+#: ../src/propgrid.cpp:635 ../src/props.cpp:569
+msgid "False"
+msgstr "Ложь"
+
+#: ../src/propgrid.cpp:636 ../src/props.cpp:570
+msgid "True"
+msgstr "Истина"
+
+#: ../src/propgrid.cpp:637 ../src/props.cpp:571
+msgid "Unspecified"
+msgstr "Незаданный"
+
+#: ../src/props.cpp:480
+msgid "is not a floating-point number"
+msgstr "это не число с плавающей точкой"
+
+#: ../src/props.cpp:581 ../src/props.cpp:602
+msgid "true"
+msgstr "истина"
+
+#: ../src/props.cpp:582
+msgid "false"
+msgstr "ложь"
+
+#: ../src/props.cpp:1470
+msgid "Choose a directory:"
+msgstr "Выберите каталог:"
+
+#: ../src/props.cpp:1685
+msgid "Choose a file"
+msgstr "Выберите файл"
+
+#: ../src/props.cpp:1851 ../src/props.cpp:2083
+msgid "Ok"
+msgstr "Ок"
+
+#: ../src/props.cpp:2029
+msgid "Add"
+msgstr "Добавить"
+
+#: ../src/props.cpp:2057
+msgid "Update"
+msgstr "Обновить"
+
+#: ../src/props.cpp:2060
+msgid "Remove"
+msgstr "Удалить"
+
+#: ../src/props.cpp:2063
+msgid "Up"
+msgstr "Вверх"
+
+#: ../src/props.cpp:2066
+msgid "Down"
+msgstr "Вниз"
+
+#: ../src/RegularShapesDrawing.cpp:493
+msgid "Rectangle drawing"
+msgstr "Черчение прямоугольников"
+
+#: ../src/RegularShapesDrawing.cpp:496
+msgid "Polygon drawing"
+msgstr "Черчение многоугольника"
+
+#: ../src/RegularShapesDrawing.cpp:499
+msgid "Obround drawing"
+msgstr "Черчение с округленными углами"
+
+#: ../src/RegularShapesDrawing.cpp:502
+msgid "Regular shapes drawing"
+msgstr "Черчение правильных(симметричных) фигур"
+
+#: ../src/RegularShapesDrawing.cpp:509
+msgid "draw rectangles"
+msgstr "чертить прямоугольники"
+
+#: ../src/RegularShapesDrawing.cpp:510
+msgid "draw polygons"
+msgstr "чертить многоугольники"
+
+#: ../src/RegularShapesDrawing.cpp:511
+msgid "draw slots"
+msgstr "чертить паз"
+
+#: ../src/RegularShapesDrawing.cpp:520
+msgid "number of sides for polygon"
+msgstr "количество сторон многоугольника"
+
+#: ../src/RegularShapesDrawing.cpp:523
+msgid "excribed circle"
+msgstr "внешнее кольцо"
+
+#: ../src/RegularShapesDrawing.cpp:524
+msgid "inscribed circle"
+msgstr "внутреннее кольцо"
+
+#: ../src/RegularShapesDrawing.cpp:525
+msgid "polygon mode"
+msgstr "режим многоугольников"
+
+#: ../src/RS274X.cpp:190
+msgid "pcb"
+msgstr "pcb"
+
+#: ../src/RS274X.cpp:190
+msgid "_width_"
+msgstr "_ширина_"
+
+#: ../src/RS274X.cpp:190
+msgid "_height_"
+msgstr "_высота_"
+
+#: ../src/RS274X.cpp:2601
+msgid ""
+"# This file converts the RAW image file generated by the HeeksCAD import of\n"
+msgstr ""
+"# Этот файл переконвертирован в формат RAW,  который был сгенерирован  "
+"программой HeeksCAD при импорте из\n"
+
+#: ../src/RS274X.cpp:2602
+msgid ""
+"# a GERBER format data file into a GIF format file.   This just makes it\n"
+msgstr "# файл данных формата GERBER в файле формата GIF. Это делает т\n"
+
+#: ../src/RS274X.cpp:2603
+msgid "# more convenient for viewing\n"
+msgstr "# больше удобств для просмотра\n"
+
+#: ../src/RuledSurface.cpp:22
+msgid "pick some sketches"
+msgstr "выделить несколько сечений"
+
+#: ../src/RuledSurface.cpp:52 ../src/RuledSurface.cpp:183
+msgid "Ruled Surface"
+msgstr "Поверхность с размерами"
+
+#: ../src/RuledSurface.cpp:108
+msgid "Revolved Solid"
+msgstr "Перевернутое тело"
+
+#: ../src/RuledSurface.cpp:108
+msgid "Extruded Solid"
+msgstr "Вытянутое тело"
+
+#: ../src/RuledSurface.cpp:137
+msgid "Pipe"
+msgstr "Труба"
+
+#: ../src/RuledSurface.cpp:142
+msgid "Error making pipe"
+msgstr "Ошибка создания трубы"
+
+#: ../src/RuledSurface.cpp:192
+msgid "Make extrusion"
+msgstr "Вытянуть 2D фигуру в  3D тело"
+
+#: ../src/RuledSurface.cpp:212
+msgid "taper outward angle"
+msgstr "внешний угол конуса"
+
+#: ../src/RuledSurface.cpp:234 ../src/RuledSurface.cpp:298
+msgid "pick sketches, faces or circles"
+msgstr "взять сечения, поверхности окружностей"
+
+#: ../src/RuledSurface.cpp:265
+msgid "Input revolution angle"
+msgstr "Введите значение угла переворота"
+
+#: ../src/RuledSurface.cpp:275
+msgid "Makes a solid"
+msgstr "Создать тело"
+
+#: ../src/RuledSurface.cpp:329
+msgid "Error making ruled solid"
+msgstr "Ошибка создания тела с заданными размерами"
+
+#: ../src/RuledSurface.cpp:334
+msgid "Fatal error making ruled solid"
+msgstr "Критическая ошибка создания тела с заданными размерами"
+
+#: ../src/RuledSurface.cpp:387
+msgid "Error making extruded solid"
+msgstr "Ошибка создания вытянутого тела"
+
+#: ../src/RuledSurface.cpp:391
+msgid "Fatal error making extruded solid"
+msgstr "Критическая ошибка создания вытянутого тела"
+
+#: ../src/RuledSurface.cpp:418
+msgid "Error making revolved solid"
+msgstr "Ошибка создания тела вращения"
+
+#: ../src/RuledSurface.cpp:422
+msgid "Fatal error making revolved solid"
+msgstr "Критическая ошибка создания тела вращения"
+
+#: ../src/Ruler.cpp:280
+msgid "ResetRuler"
+msgstr "СброситьЛинейку"
+
+#: ../src/Ruler.cpp:282
+msgid "Reset the ruler"
+msgstr "Сбросить линейку"
+
+#: ../src/Ruler.cpp:331
+msgid "width"
+msgstr "ширина"
+
+#: ../src/Ruler.cpp:333
+msgid "empty_length"
+msgstr "незаданная_длина"
+
+#: ../src/Sectioning.cpp:57
+msgid "Points must not be the same!"
+msgstr "Точки не могут совпадать!"
+
+#: ../src/Sectioning.cpp:447
+msgid "Sectioned Solid"
+msgstr "Разделенное тело"
+
+#: ../src/Sectioning.cpp:455
+msgid "Sectioning failed!"
+msgstr "Выделение не удалось!"
+
+#: ../src/Sectioning.cpp:469
+msgid "Pick point on axis"
+msgstr "Выбрать точку на оси"
+
+#: ../src/Sectioning.cpp:477
+msgid "Pick secondary point on axis"
+msgstr "Взять вторую точку на оси"
+
+#: ../src/Sectioning.cpp:486
+msgid "Pick objects to section"
+msgstr "Выделите объекты для разделения"
+
+#: ../src/SelectMode.cpp:70
+msgid "Left button for selecting objects"
+msgstr "Левая кнопка для выбора объектов"
+
+#: ../src/SelectMode.cpp:71
+msgid "( with Ctrl key for extra objects)"
+msgstr "(с клавишей Ctrl для экстра-объектов)"
+
+#: ../src/SelectMode.cpp:72
+msgid "( with Shift key for similar objects)"
+msgstr "(с клавишей Shift для похожих объектов)"
+
+#: ../src/SelectMode.cpp:73
+msgid "Drag with left button to window select"
+msgstr "Тащите с нажатой ЛКМ для выбора окна"
+
+#: ../src/SelectMode.cpp:75
+msgid "or to move object if on an object"
+msgstr "или для перемещения объекта, если он является объектом"
+
+#: ../src/SelectMode.cpp:76
+msgid "Mouse wheel to zoom in and out"
+msgstr "Колесо мыши для увеличения и уменьшения"
+
+#: ../src/SelectMode.cpp:79
+msgid "Middle button to pan view"
+msgstr "Средняя кнопка для перемещения вида"
+
+#: ../src/SelectMode.cpp:80
+msgid "( with Ctrl key to rotate view )"
+msgstr "(с клавишей CTRL для поворота взгляда)"
+
+#: ../src/SelectMode.cpp:83
+msgid "Middle button to rotate view"
+msgstr "Средняя кнопка для  для поворота взгляда"
+
+#: ../src/SelectMode.cpp:84
+msgid "( with Ctrl key to pan view )"
+msgstr "(с клавишей Ctrl переместить вид)"
+
+#: ../src/SelectMode.cpp:87
+msgid "Right button for object menu"
+msgstr "Павая кнопка для меню объектов"
+
+#: ../src/SelectMode.cpp:88
+msgid "See options window to hide this help"
+msgstr "Смотрите окно настроек, чтобы скрыть эту подсказку"
+
+#: ../src/SelectMode.cpp:94
+msgid "Press Return key to accept selection"
+msgstr "Нажмите клавишу \"Enter\", чтобы принять выбор"
+
+#: ../src/SelectMode.cpp:551
+msgid "Accept selection"
+msgstr "Принять выбор"
+
+#: ../src/SelectMode.cpp:570
+msgid "Cancel selection"
+msgstr "Прервать выбор"
+
+#: ../src/SelectMode.cpp:582
+msgid "Pick Anything"
+msgstr "Выбрать что-нибудь"
+
+#: ../src/SelectMode.cpp:584
+msgid "Set the selection filter to all items"
+msgstr "Установить фильтр выбора для всего"
+
+#: ../src/SelectMode.cpp:595
+msgid "Pick Edges"
+msgstr "Выделить грани"
+
+#: ../src/SelectMode.cpp:597
+msgid "Set the selection filter to only edges"
+msgstr "Установить фильтр выбора только для углов"
+
+#: ../src/SelectMode.cpp:608
+msgid "Pick Faces"
+msgstr "Выберите поверхности"
+
+#: ../src/SelectMode.cpp:610
+msgid "Set the selection filter to only faces"
+msgstr "Установить фильтр выбора только для поверхностей"
+
+#: ../src/SelectMode.cpp:621
+msgid "End Sketch Mode"
+msgstr "Режим завершения эскизов"
+
+#: ../src/Shape.cpp:265
+msgid "Enter Offset Value, + for making bigger, - for making smaller"
+msgstr ""
+"Введите значение смещения, + для того чтобы увеличить, -  чтобы уменьшить"
+
+#: ../src/Shape.cpp:265
+msgid "Offset value"
+msgstr "Значение смещения"
+
+#: ../src/Shape.cpp:277
+msgid "Result of 'Offset Shape'"
+msgstr "Результат \"Смещения фигуры\""
+
+#: ../src/Shape.cpp:284 ../src/Sketch.cpp:359 ../src/Wire.cpp:60
+msgid "Error making offset"
+msgstr "Ошибка содания смещения"
+
+#: ../src/Shape.cpp:288
+msgid "Offset Shape"
+msgstr "Смещение фигуры"
+
+#: ../src/Shape.cpp:308
+msgid "Stretched Shape"
+msgstr "Натянутая фигура"
+
+#: ../src/Shape.cpp:400
+msgid "Error with cut operation"
+msgstr "Ошибка операции вырезания"
+
+#: ../src/Shape.cpp:413
+msgid "Result of Fuse Operation"
+msgstr "Результат операции слияния"
+
+#: ../src/Shape.cpp:421
+msgid "Error with fuse operation"
+msgstr "Ошибка операции слияния"
+
+#: ../src/Shape.cpp:438
+msgid "Result of Common Operation"
+msgstr "Результат обычной операции"
+
+#: ../src/Shape.cpp:446
+msgid "Error with common operation"
+msgstr "Ошибка с обычной операцией"
+
+#: ../src/Shape.cpp:597
+msgid "Result of Cut Operation"
+msgstr "Результат операции вырезания"
+
+#: ../src/Shape.cpp:766 ../src/Shape.cpp:776
+msgid "STEP solid"
+msgstr "Объект типа STEP"
+
+#: ../src/Shape.cpp:782 ../src/Shape.cpp:876
+msgid "STEP import not done!"
+msgstr "Импорт объекта типа STEP не завершен!"
+
+#: ../src/Shape.cpp:815
+msgid "IGES shape"
+msgstr "фигура в формате IGES"
+
+#: ../src/Shape.cpp:845
+msgid "sewed IGES solid"
+msgstr "сшитые тела типа IGES"
+
+#: ../src/Shape.cpp:854
+msgid "IGES import not done!"
+msgstr "Импорт файла типа IGES не совершен!"
+
+#: ../src/Shape.cpp:872
+msgid "BREP solid"
+msgstr "Тело типа BREP"
+
+#: ../src/Shape.cpp:1082
+msgid "opacity"
+msgstr "прозрачность"
+
+#: ../src/Shape.cpp:1088
+msgid "volume"
+msgstr "объем"
+
+#: ../src/Shape.cpp:1091
+msgid "centre of gravity"
+msgstr "центр тяжести"
+
+#: ../src/Shape.cpp:1095
+msgid "calculate volume"
+msgstr "расчитать объем"
+
+#: ../src/Sketch.cpp:215
+msgid "Number of elements"
+msgstr "Количество элементов"
+
+#: ../src/Sketch.cpp:234
+msgid "order"
+msgstr "порядок"
+
+#: ../src/Sketch.cpp:236
+msgid "solidify"
+msgstr "затвердеть"
+
+#: ../src/Sketch.cpp:257
+msgid "Split Sketch"
+msgstr "Разделить эскиз"
+
+#: ../src/Sketch.cpp:280 ../src/ConversionTools.h:23
+msgid "Convert sketch to face"
+msgstr "Конвертировать эскиз в поверхность"
+
+#: ../src/Sketch.cpp:304
+msgid "Convert sketch to wire"
+msgstr "Конвертировать эскиз в линии"
+
+#: ../src/Sketch.cpp:343 ../src/Sketch.cpp:348
+msgid "Use negative for smaller and Positive for larger)"
+msgstr ""
+"Используйте отрицательные числа для уменьшения или положительные для "
+"увеличения)"
+
+#: ../src/Sketch.cpp:344 ../src/Sketch.cpp:348
+msgid "Enter the distance"
+msgstr "Введите расстояние"
+
+#: ../src/Sketch.cpp:363
+msgid "Copy Parallel"
+msgstr "Скопировать паралелльно"
+
+#: ../src/Sketch.cpp:381 ../src/ConversionTools.h:31
+msgid "Split arcs to little lines"
+msgstr "Разбить дугу на маленькие линии"
+
+#: ../src/Sketch.cpp:391
+msgid "Enter Sketch Mode"
+msgstr "Войти в режим эскизов"
+
+#: ../src/SketchTools.cpp:115
+msgid "Input extrusion height"
+msgstr "Введите высоту вытягивания"
+
+#: ../src/SketchTools.cpp:120 ../src/SketchTools.cpp:122
+#: ../src/SketchTools.h:94
+msgid "Pad Sketch"
+msgstr "Эскиз подложки"
+
+#: ../src/SketchTools.cpp:129
+msgid "Input pad depth"
+msgstr "Введите глубину подложки"
+
+#: ../src/SketchTools.cpp:134 ../src/SketchTools.cpp:136
+msgid "Pocket Sketch"
+msgstr "Эскиз кармана"
+
+#: ../src/SketchTools.cpp:154 ../src/SketchTools.cpp:156
+msgid "Make To Part"
+msgstr "Сделать часть"
+
+#: ../src/SketchTools.cpp:182 ../src/SketchTools.cpp:184
+#: ../src/SketchTools.cpp:274
+msgid "Add To Part"
+msgstr "Добавить к части"
+
+#: ../src/SketchTools.cpp:203
+msgid "Failed to convert sketch to wire"
+msgstr "Ошибка при конвертировании эскиза в провод"
+
+#: ../src/SketchTools.cpp:239
+msgid "Wire fix failed"
+msgstr "Не удалось отремонтировать провод"
+
+#: ../src/SketchTools.cpp:248
+msgid "Failed to convert wire to sketch"
+msgstr "Ошибка при конвертации провода в эскиз"
+
+#: ../src/SketchTools.cpp:266
+msgid "Failed to fix wire"
+msgstr "Не удалось отремонтировать провод"
+
+#: ../src/SketchTools.cpp:272
+msgid "Fix Wire"
+msgstr "Зафиксировать провод"
+
+#: ../src/SketchTools.cpp:345
+msgid "simplify sketch options"
+msgstr "упрощение конфигурации эскиза"
+
+#: ../src/SketchTools.cpp:346
+msgid "max deviation"
+msgstr "максимальное отклонение"
+
+#: ../src/SketchTools.cpp:347
+msgid "cleanup tolerance (temporary)"
+msgstr "допуск очистки (временный)"
+
+#: ../src/SketchTools.cpp:348
+msgid "bspline min degree (eg: 3)"
+msgstr "минимальный уровень b-сплана (например.. 3)"
+
+#: ../src/SketchTools.cpp:349
+msgid "bspline max degree (eg: 8)"
+msgstr "максимальный уровень b-сплана (например.. 8)"
+
+#: ../src/SketchTools.cpp:363
+msgid "bspline continuity (eg: GeomAbs_C2)"
+msgstr "непрерывность b-сплайнов (например: GeomAbs_C2)"
+
+#: ../src/SketchTools.cpp:373
+msgid "Sort Points"
+msgstr "Сортировать точки"
+
+#: ../src/SketchTools.cpp:383
+msgid "Force closed shape"
+msgstr "Принудительно закрыть фигуру"
+
+#: ../src/SketchTools.cpp:392
+msgid "fix wire options"
+msgstr "параметры коррекции провода"
+
+#: ../src/SketchTools.cpp:393
+msgid "reorder"
+msgstr "переупорядочить"
+
+#: ../src/SketchTools.cpp:394
+msgid "fix small"
+msgstr "устранить мелкие дефекты"
+
+#: ../src/SketchTools.cpp:395
+msgid "fix small precision"
+msgstr "зафиксировать низкую точность"
+
+#: ../src/SketchTools.cpp:396
+msgid "fix self intersection"
+msgstr "устранить самопересечение"
+
+#: ../src/SketchTools.cpp:397
+msgid "fix lacking"
+msgstr "устранить недостатки"
+
+#: ../src/SketchTools.cpp:398
+msgid "fix degenerated"
+msgstr "устранить изменение формы"
+
+#: ../src/SketchTools.cpp:400
+msgid "modify topology"
+msgstr "изменить топологию"
+
+#: ../src/SketchTools.cpp:401
+msgid "modify geometry"
+msgstr "изменить геометрию"
+
+#: ../src/SketchTools.cpp:402
+msgid "closed wire"
+msgstr "замкнутый контур"
+
+#: ../src/SketchTools.cpp:403
+msgid "preference pcurve"
+msgstr "настройки p-кривой"
+
+#: ../src/SketchTools.cpp:404
+msgid "fix gaps by ranges"
+msgstr "исправить пробелы по диапазонам"
+
+#: ../src/SketchTools.cpp:893
+msgid "Failed to create BSpline curve"
+msgstr "Ошибка создания B-сплайна"
+
+#: ../src/SketchTools.cpp:937
+msgid "Replaced "
+msgstr "Замененный"
+
+#: ../src/SolidTools.cpp:57
+msgid "Save solid file"
+msgstr "Сохранить файл с телами"
+
+#: ../src/SolidTools.cpp:57
+msgid "Solid Files"
+msgstr "Файлы с телами"
+
+#: ../src/SolidTools.cpp:82
+msgid "Invalid solid file type chosen"
+msgstr "Выбран неверный формат файла тел"
+
+#: ../src/Sphere.cpp:76
+msgid "Ellipsoid"
+msgstr "Элипсоид"
+
+#: ../src/TransformTool.cpp:21
+msgid "Transform"
+msgstr "Преобразование"
+
+#: ../src/TransformTool.cpp:44
+msgid "Transform Objects"
+msgstr "Преобразование объектов"
+
+#: ../src/TransformTools.cpp:41
+msgid "Pick objects to move"
+msgstr "Выделить объекты для перемещения"
+
+#: ../src/TransformTools.cpp:56 ../src/TransformTools.cpp:314
+msgid "Enter number of copies"
+msgstr "Введите количество копий"
+
+#: ../src/TransformTools.cpp:66
+msgid "Click position to move from"
+msgstr "Укажите на позицию, откуда двигать"
+
+#: ../src/TransformTools.cpp:81
+msgid "Click position to move to"
+msgstr "Кликните на то место, куда передвигать"
+
+#: ../src/TransformTools.cpp:142
+msgid "Pick objects to rotate"
+msgstr "Укажите объекты для вращения"
+
+#: ../src/TransformTools.cpp:229
+msgid "Pick objects to mirror"
+msgstr "Укажите объекты для зеркального отражения"
+
+#: ../src/TransformTools.cpp:248
+msgid "Pick line to mirror about"
+msgstr "Укажите линию, от которой зеркально отразить"
+
+#: ../src/TransformTools.cpp:299
+msgid "Pick objects to scale"
+msgstr "Укажите объекты для масштабирования"
+
+#: ../src/TransformTools.cpp:324
+msgid "Click centre position to scale about"
+msgstr ""
+"Нажмите на центральную позицию, относительно которой проводить "
+"масштабирование"
+
+#: ../src/TransformTools.cpp:329
+msgid "Enter scale factor"
+msgstr "Введите коэффициент масштабирования"
+
+#: ../src/TransformTools.cpp:329
+msgid "scale factor"
+msgstr "коэффициент масштабирования"
+
+#: ../src/ViewPanning.cpp:44 ../src/ViewZooming.cpp:50
+msgid "Drag with the left mouse button"
+msgstr "Перетаскивание с оевой кнопкой мыши"
+
+#: ../src/ViewPanning.cpp:55
+msgid "Stop panning"
+msgstr "Остановить просмотр"
+
+#: ../src/ViewRotating.cpp:60
+msgid "Stop rotating"
+msgstr "Отсановить вращение"
+
+#: ../src/ViewZooming.cpp:50
+msgid "Forward to zoom in, Back to zoom out"
+msgstr "Вперед для увеличения, назад для уменьшения"
+
+#: ../src/ViewZooming.cpp:50
+msgid "Back to zoom in, Forward to zoom out"
+msgstr "Назад для увеличения, вперед для уменьшения"
+
+#: ../src/ViewZooming.cpp:50
+msgid "Hold middle mouse button down to pan"
+msgstr "Удерживайте СКМ внизу для перемещения"
+
+#: ../src/ViewZooming.cpp:61
+msgid "Stop zooming"
+msgstr "Остановить масштабирование"
+
+#: ../src/Wire.cpp:33
+msgid "Result of Wire Offset"
+msgstr "Результат смещения провода"
+
+#: ../src/Wire.cpp:35
+msgid "Generated"
+msgstr "Сгенерирован"
+
+#: ../src/Wire.cpp:44
+msgid "Generated from edge"
+msgstr "Сгенерировано с грани"
+
+#: ../src/Wire.cpp:50
+msgid "Modified"
+msgstr "Изменен"
+
+#: ../src/Wire.cpp:53
+msgid "Is Deleted"
+msgstr "Удален"
+
+#: ../src/Wire.cpp:65
+msgid "Offset Wire"
+msgstr "Сдвиг провода"
+
+#: ../src/wxImageLoader.cpp:22
+msgid "Failed to load resource image from "
+msgstr "Ошибка загрузки настройки изображения"
+
+#: ../src/ConversionTools.h:39 ../src/ConversionTools.h:48
+msgid "Make To Sketch"
+msgstr "Сделать эскиз"
+
+#: ../src/ConversionTools.h:41
+msgid "Make selected lines and arcs into a new sketch"
+msgstr "Создать новый эскиз из выбранных линий и дуг"
+
+#: ../src/ConversionTools.h:50
+msgid "Make selected edges into a new sketch"
+msgstr "Создать эскиз из выбранных граней"
+
+#: ../src/ConversionTools.h:57
+msgid "Combine sketches"
+msgstr "Комбинировать сечения"
+
+#: ../src/ConversionTools.h:59
+msgid "Combine selected sketches"
+msgstr "Комбинировать выделенные сечения"
+
+#: ../src/ConversionTools.h:66
+msgid "Unite sketches"
+msgstr "Объеденить сечения"
+
+#: ../src/ConversionTools.h:68
+msgid "Unite selected sketches"
+msgstr "Объединить  выбранные сечения"
+
+#: ../src/ConversionTools.h:77
+msgid "Group selected items"
+msgstr "Сгруппировать выбранные объекты"
+
+#: ../src/ConversionTools.h:84
+msgid "Ungroup"
+msgstr "Разгруппировать"
+
+#: ../src/ConversionTools.h:86
+msgid "Ungroup selected items"
+msgstr "Разргруппировать выделенные объекты"
+
+#: ../src/ConversionTools.h:96
+msgid "Transform to Coordinate System"
+msgstr "Преобразовать к системе координат"
+
+#: ../src/ConversionTools.h:98
+msgid "Transform selected items using two coordinate systems"
+msgstr "Преобразовать выбранные объекты, используя 2 координатные системы"
+
+#: ../src/DimensionDrawing.h:32
+msgid "Dimension drawing"
+msgstr "Черчение размеров"
+
+#: ../src/Drawing.h:65
+msgid "Drawing"
+msgstr "Черчение"
+
+#: ../src/Face.h:85
+msgid "Make a sketch from face"
+msgstr "Сделать эскиз из поверхности"
+
+#: ../src/HILine.h:25
+msgid "Infinite Line"
+msgstr "Прямая"
+
+#: ../src/MagDragWindow.h:20
+msgid "Magnifying by dragging a window"
+msgstr "Увеличение при перетаскивании окна"
+
+#: ../src/MenuSeparator.h:13
+msgid "MenuSeparator"
+msgstr "Разделитель меню"
+
+#: ../src/Pocket.h:17
+msgid "Pocket"
+msgstr "Карман"
+
+#: ../src/PointDrawing.h:27
+msgid "Point drawing"
+msgstr "Черчение точек"
+
+#: ../src/PointOrWindow.h:26
+msgid "Dragging a window or picking a point"
+msgstr "Перетаскивайте окно или захватите точку"
+
+#: ../src/ShapeTools.h:12
+msgid "Faces"
+msgstr "Грани"
+
+#: ../src/ShapeTools.h:21
+msgid "Edges"
+msgstr "Ребра"
+
+#: ../src/ShapeTools.h:30
+msgid "Vertices"
+msgstr "Вершины"
+
+#: ../src/SketchTools.h:92
+msgid "Simplify Sketch to Lines"
+msgstr "Упростить эскиз до ломаной"
+
+#: ../src/SketchTools.h:101
+msgid "Simplify Sketch to BSplines"
+msgstr "Упростить эских до B-сплайнов"
+
+#: ../src/SolidTools.h:15
+msgid "Save Solids"
+msgstr "Сохранить тела"
+
+#: ../src/StlSolid.h:41
+msgid "STL Solid"
+msgstr "тело формата STL"
+
+#: ../src/ViewPanning.h:12
+msgid "View Pan"
+msgstr "Панорамный вид"
+
+#: ../src/ViewRotating.h:15
+msgid "View Rotate"
+msgstr "Повернуть вид"
+
+#: ../src/ViewZooming.h:14
+msgid "View Zoom"
+msgstr "Увеличить"
+
+#: ../src/Window.h:19
+msgid "Dragging a window"
+msgstr "Перетаскивание окна"
+
+#: ../interface/DoubleInput.cpp:21
+msgid "Accept value and continue"
+msgstr "Принять значение и продолжить"
+
+#: ../interface/DoubleInput.cpp:31
+msgid "Cancel operation"
+msgstr "Прервать операцию"
+
+#: ../interface/HeeksCADInterface.cpp:2023
+msgid "Geometry"
+msgstr "Геометрия"
+
+#: ../interface/HeeksCADInterface.cpp:2027
+msgid "Set Origin"
+msgstr "Установить начало"
+
+#: ../interface/HeeksObj.cpp:124
+msgid "object type"
+msgstr "тип объекта"
+
+#: ../interface/HeeksObj.cpp:125
+msgid "object title"
+msgstr "название объекта"
+
+#: ../interface/HeeksObj.cpp:126
+msgid "ID"
+msgstr "ID"
+
+#: ../interface/HeeksObj.cpp:130
+msgid "color"
+msgstr "цвет"
+
+#: ../interface/HeeksObj.cpp:132
+msgid "visible"
+msgstr "видимый"
+
+#: ../interface/HeeksObj.cpp:311
+msgid "Sketch Pointer == NULL in HeeksObjOccurrenceInSketch"
+msgstr "Указатель на сечение  == NULL в HeeksObjOccurrenceInSketch"
+
+#: ../interface/Property.h:41
+msgid "Unknown Property"
+msgstr "Неизвестное свойство"
+
+#~ msgid "centre pos"
+#~ msgstr "pozícia stredu"
+
+#~ msgid "datum corner"
+#~ msgstr "indikátor súradnicovej sústavy"
+
+#~ msgid ".orientation"
+#~ msgstr "orientácia"
+
+#~ msgid "%s %d"
+#~ msgstr "%s %d"
+
+#~ msgid "This is not an SVG document!"
+#~ msgstr "Toto nie je dokument vo formáteSVG"
+
+#~ msgid "radius for undefined circles"
+#~ msgstr "polomer nedifinovaných kruhov"
+
+#~ msgid "Exit"
+#~ msgstr "Koniec"
+
+#~ msgid "Draw Circles"
+#~ msgstr "Nakresli kružnicu"
+
+#~ msgid "Draw Regular Shapes"
+#~ msgstr "Nakresli pravideľné tvary"
+
+#~ msgid "Pick two or more solids, the first one will be cut by the others"
+#~ msgstr "Vložte dve alebo viac telies, prvé bude orezané ostatnými"
+
+#~ msgid "Start Circle Drawing"
+#~ msgstr "Začni kresliť nákres"
+
+#~ msgid "Draw regular shapes; rectangles, polygons, obrounds"
+#~ msgstr ""
+#~ "Nakresli bežné tvary, prvaouholníky, mnohouhoľníky s alebo bez zaoblenia"
+
+#~ msgid "Transformation Tools"
+#~ msgstr "Transformačné nástroje"
+
+#~ msgid "Add "
+#~ msgstr "Pridaj"
+
+#~ msgid "Add Objects"
+#~ msgstr "Pridaj objekty"
+
+#~ msgid "Offset the shape"
+#~ msgstr "Posuň tvar"
+
+#~ msgid "Enter angle to rotate by"
+#~ msgstr "Vložte uhol otočenia"
+
+#~ msgid "leadoffdz"
+#~ msgstr "dĺžka nábehu"
+
+#~ msgid "leadofflen"
+#~ msgstr "dĺžka rezania"
+
+#~ msgid "leadoffrad"
+#~ msgstr "dĺžka výbehu"
+
+#~ msgid "retractzheight"
+#~ msgstr "výška prebodnutia/prepalu"
+
+#~ msgid "leadoffsamplestep"
+#~ msgstr "veľkosť kroku"
+
+#~ msgid "toolcornerrad"
+#~ msgstr "Polomer rezacieho nástroja"
+
+#~ msgid "toolflatrad"
+#~ msgstr "Hrúbka rezacieho nástroja"
+
+#~ msgid "samplestep"
+#~ msgstr "Periňoda vzorkovania"
+
+#~ msgid "stepdown"
+#~ msgstr "Krok koklesu"
+
+#~ msgid "clearcuspheight"
+#~ msgstr "výska čistacehohrotu"
+
+#~ msgid "startpoint_x"
+#~ msgstr "Štartovací bod na osi X"
+
+#~ msgid "startpoint_y"
+#~ msgstr "Štartovací bod na osi Y"
+
+#~ msgid "startvel_x"
+#~ msgstr "Štartovacia rýchlosť na osi X"
+
+#~ msgid "startvel_y"
+#~ msgstr "Štartovacia rýchlosť na osi Y"
+
+#~ msgid "boundaryclear"
+#~ msgstr "bez korekcie"
+
+#~ msgid "boundary_x0"
+#~ msgstr "koreckia_x0"
+
+#~ msgid "boundary_x1"
+#~ msgstr "korekcia_x1"
+
+#~ msgid "boundary_y0"
+#~ msgstr "korekcia_y0"
+
+#~ msgid "boundary_y1"
+#~ msgstr "korekcia_y1"
+
+#~ msgid "tool number"
+#~ msgstr "číslo rezacieho nástroja"
+
+#~ msgid "tool diameter"
+#~ msgstr "priemer nástroja"
+
+#~ msgid "step down"
+#~ msgstr "poles"
+
+#~ msgid "start depth"
+#~ msgstr "hĺbka na začiatku"
+
+#~ msgid "final depth"
+#~ msgstr "hĺbka na konci prerezania"
+
+#~ msgid "rapid down to height"
+#~ msgstr " rýchloposuv po osi Y"
+
+#~ msgid "horizontal feed rate"
+#~ msgstr "Horizontálna frekvencia bodov"
+
+#~ msgid "vertical feed rate"
+#~ msgstr "Horizontálna frekvencia bodov"
+
+#~ msgid "spindle speed"
+#~ msgstr "rýchlosť závitnice"
+
+#~ msgid "You must select some sketches, first!"
+#~ msgstr "Musíte si najsôr vybarať trajektňoriu"
+
+#~ msgid "There are no solids!"
+#~ msgstr "Nepracuje sio žiadnym telesom"
+
+#~ msgid "You must select some sketches first!"
+#~ msgstr "Musíte si najsôr vybarať trajektňoriu"
+
+#~ msgid "Open NC file"
+#~ msgstr "Otvoriť súbor s NC programom/rezným plánom"
+
+#~ msgid "Save NC file"
+#~ msgstr "Uložiť súbor s NC programom/rezným plánom"
+
+#~ msgid "Couldn't open file"
+#~ msgstr "Nemôžem otvoriť súbor"
+
+#~ msgid "Profile"
+#~ msgstr "vyrezanie tvaru"
+
+#~ msgid "ZigZag"
+#~ msgstr "metódou 'cik-cak'"
+
+#~ msgid "Adaptive"
+#~ msgstr "Prispôsobivo"
+
+#~ msgid "Python"
+#~ msgstr "jazyk Python"
+
+#~ msgid "PostProcess"
+#~ msgstr "Vytvorenie NC programu/rezného plánu"
+
+#~ msgid "OpenNC"
+#~ msgstr "Otvoriť NC program/rezný plán"
+
+#~ msgid "SaveNC"
+#~ msgstr "Uložiť NC program/rezný plán "
+
+#~ msgid "HeeksCNC is the free machining add-on to HeeksCAD"
+#~ msgstr ""
+#~ "HeeksCNC je doplnok HeeksCAD-u na tvorbu NC programov/rezných plánov,"
+#~ "ktorý je zadarmo"
+
+#~ msgid "          http://code.google.com/p/heekscnc/"
+#~ msgstr "\thttp://code.google.com/p/heekscnc/"
+
+#~ msgid "Written by Dan Heeks, Hirutso Enni, Perttu Ahola"
+#~ msgstr "Autori sú: Dan Heeks,Hirutso Enni, Perttu Ahola"
+
+#~ msgid "With help from archivist, crotchet1, DanielFalck, fenn, Sliptonic"
+#~ msgstr ""
+#~ "S pomocou tvorcov inštalátorov!,crotchet1,DanielFalck,fenn,Sliptonic"
+
+#~ msgid ""
+#~ "geometry code, donated by Geoff Hawkesford, Camtek GmbH http://www.peps."
+#~ "de/"
+#~ msgstr ""
+#~ "Dodávateľ rozmerovo tvarového kódu Geoff Hawkesford, CamtekGmb http://www."
+#~ "peps.de/"
+
+#~ msgid ""
+#~ "pocketing code from http://code.google.com/p/libarea/ , derived from the "
+#~ "kbool library written by Klaas Holwerda http://boolean.klaasholwerda.nl/"
+#~ "bool.html"
+#~ msgstr ""
+#~ "Knižnica frézovacieho kódu  http://code.google.com/p/libarea/, odvodené "
+#~ "od kódu od ·Klaasa Holwerda http://boolean.klaasholwerda.nl/bool.html"
+
+#~ msgid "Zig zag code from pycam http://sourceforge.net/svn/?group_id=237831"
+#~ msgstr ""
+#~ "kód Cik-cak  knižnice pycam  http://sourceforge.net/svn/?group_id=237831"
+
+#~ msgid ""
+#~ "Adaptive Roughing code from http://code.google.com/p/libactp/, using code "
+#~ "written in 2004"
+#~ msgstr ""
+#~ "Kód adaptívneho vyfrézovazovai z: http://code.google.com/p/libactp/ "
+#~ "Podˇal verzie z roku 2004"
+
+#~ msgid ""
+#~ "For a more modern version of adaptive roughing, see Julian Todd and "
+#~ "Martin Dunschen of http://www.freesteel.co.uk/"
+#~ msgstr ""
+#~ "Modernejšia verzia vyfrézovacieho kósdu je od autorov Julian Todd a "
+#~ "Martin Dunschen z http://www.freesteel.co.uk/"
+
+#~ msgid ""
+#~ "This HeeksCNC software installation is restricted by the GPL license "
+#~ "http://www.gnu.org/licenses/gpl-3.0.txt"
+#~ msgstr ""
+#~ "Sofvňer je licencovaný pod licenčnou zmluvou GPL http://www.gnu.org/"
+#~ "licenses/gpl-3.0.txt"
+
+#~ msgid "  which means it is free and open source, and must stay that way"
+#~ msgstr "to znamená, že je open source a takým musňi ostatť."
+
+#~ msgid "New Profile Operation..."
+#~ msgstr "Nový tvar na vzrezanie"
+
+#~ msgid "New Pocket Operation..."
+#~ msgstr "Nové vyfreztovanie"
+
+#~ msgid "New ZigZag Operation..."
+#~ msgstr "Nové použitie metódy 'cik-cak'"
+
+#~ msgid "New Adaptive Roughing Operation..."
+#~ msgstr "Prispôsobivé odfrézovanie"
+
+#~ msgid "Operations"
+#~ msgstr "Úlohy v NC programe /reznom pláne"
+
+#~ msgid "Make Python Script"
+#~ msgstr "Vytvor skript v jazaku Python"
+
+#~ msgid "Post-Process"
+#~ msgstr "Vytvor NC program/ rezný plán"
+
+#~ msgid "nc options"
+#~ msgstr "Možnosti konverzie na rezný plán"
+
+#~ msgid "text colors"
+#~ msgstr "farba textu"
+
+#~ msgid "default color"
+#~ msgstr "prednastavená farba"
+
+#~ msgid "block color"
+#~ msgstr "čierna farba"
+
+#~ msgid "program color\t"
+#~ msgstr "Farba prohybu podľa programu\t"
+
+#~ msgid "comment color\t"
+#~ msgstr "Farba komentárov\t"
+
+#~ msgid "variable color"
+#~ msgstr "Premenná farba"
+
+#~ msgid "prep color"
+#~ msgstr "farba prípravnňych úkonov"
+
+#~ msgid "axis color"
+#~ msgstr "farba osí"
+
+#~ msgid "rapid color"
+#~ msgstr "fraba rýchloposuvu"
+
+#~ msgid "feed color"
+#~ msgstr "farba nastavnia rýchlosti"
+
+#~ msgid "active"
+#~ msgstr "Aktívny"
+
+#~ msgid "step over"
+#~ msgstr "ďalší krok"
+
+#~ msgid "material allowance"
+#~ msgstr "Dovolén materiálny"
+
+#~ msgid "for 90 degree corners"
+#~ msgstr "pre 90 stupňové rohy"
+
+#~ msgid "1.5 for square, 1.0 for round"
+#~ msgstr "1.5 štvorec,1.0 oblúk"
+
+#~ msgid "Boundary"
+#~ msgstr "Ohraničenie"
+
+#~ msgid "Center"
+#~ msgstr "Stred"
+
+#~ msgid "starting_place"
+#~ msgstr "Bod počiatku"
+
+#~ msgid "Pocket operation - Sketch doesn't exist - %d"
+#~ msgstr "Odfrézovanie - Neexistuje taká trajektória =tarjektória %d"
+
+#~ msgid "Pocket operation - Sketch must be a closed shape - sketch %d"
+#~ msgstr "Odfrézovanie - Trajektória musi byť uzavretá  trajektória %d"
+
+#~ msgid "Pocket operation - Badly ordered sketch - sketch %d"
+#~ msgstr "Odfrézovanie - Zlé poradie rezania Trajektória-%d"
+
+#~ msgid "On"
+#~ msgstr "Po mietse rezania"
+
+#~ msgid "tool on side"
+#~ msgstr "Nástroj na strane"
+
+#~ msgid "auto roll on"
+#~ msgstr "Automatický nábeh"
+
+#~ msgid "roll on point"
+#~ msgstr "bod nábehu"
+
+#~ msgid "auto roll off"
+#~ msgstr "Automatický výbeh"
+
+#~ msgid "roll off point"
+#~ msgstr "bod výbehu"
+
+#~ msgid "use start point"
+#~ msgstr "Poži počiatočný bod"
+
+#~ msgid "use end point"
+#~ msgstr "Použi koncový bod"
+
+#~ msgid "end point"
+#~ msgstr "koncpový bod"
+
+#~ msgid "Pick new start point"
+#~ msgstr "Ukáž na nový začiatočný bod"
+
+#~ msgid "Pick End"
+#~ msgstr "Ukáž koncový bod"
+
+#~ msgid "Set All Operations Active"
+#~ msgstr "Nastav všetky operácie ako používané"
+
+#~ msgid "Set All Operations Inactive"
+#~ msgstr "Nastav všetky operácie ako nepoužívané"
+
+#~ msgid "machine"
+#~ msgstr "NC jazyk/jazyk rezného plánu"
+
+#~ msgid "output file"
+#~ msgstr "Výtupný súbor"
+
+#~ msgid "spherical"
+#~ msgstr "sférické súradnice"
+
+#~ msgid "cylindrical"
+#~ msgstr "cylindrické súradnice"
+
+#~ msgid "toroidal"
+#~ msgstr "Toridné súrodncie"
+
+#~ msgid "tool type"
+#~ msgstr "Typ nástroja"
+
+#~ msgid "corner radius"
+#~ msgstr "Polomer rohu"
+
+#~ msgid "minimum x"
+#~ msgstr "minimálne x"
+
+#~ msgid "maximum x"
+#~ msgstr "maximálne x"
+
+#~ msgid "minimum y"
+#~ msgstr "minimálne y"
+
+#~ msgid "maximum y"
+#~ msgstr "maximálne y"
+
+#~ msgid "z0"
+#~ msgstr "z0"
+
+#~ msgid "z1"
+#~ msgstr "z1"
+
+#~ msgid "dx"
+#~ msgstr "dx"
+
+#~ msgid "dy"
+#~ msgstr "dy"
+
+#~ msgid "Simple Mesh"
+#~ msgstr "Jednduchá mriežka"
+
+#~ msgid "HeeksArt is a free random add-on to HeeksCAD"
+#~ msgstr "HeeksArt je doplnokHeeksCADu, ktory je zadarmo"
+
+#~ msgid "          http://code.google.com/p/heeksart/"
+#~ msgstr "http://code.google.com/p/heeksart/"
+
+#~ msgid "Written by Dan Heeks"
+#~ msgstr "Autor Dan Heeks"
+
+#~ msgid "Add a simple mesh"
+#~ msgstr "Pridaj jednoduchú mriežku"
+
+#~ msgid "Mesh"
+#~ msgstr "mrižka"
+
+#~ msgid "mesh options"
+#~ msgstr "Voľby mriežky"
+
+#~ msgid "number of splits"
+#~ msgstr "Počet častí"
+
+#~ msgid "Edge cannot have more than 2 faces!"
+#~ msgstr "Hrana nemôže byť súčasťou viac než dvoch plôch"
+
+#~ msgid "Convert Mesh To Triangles"
+#~ msgstr "Premeň mriežku na trojuholníky"
+
+#~ msgid "Normalize All Vertices"
+#~ msgstr "Normlizuj všetky vrcholy"
+
+#~ msgid "Set All Vertex Normals"
+#~ msgstr "Nastav všetky normály vvrcholov"
+
+#~ msgid "At least one vertex could not be normalized!"
+#~ msgstr "Najmenej jeden vrchol nemôže byť normalizovaný"
+
+#~ msgid "Recalculate All Face Centres"
+#~ msgstr "Prepočítaj všetky stredy plôch"
+
+#~ msgid "Mirror all x<1"
+#~ msgstr "zrkadli všetky hladiny, de x<1"
+
+#~ msgid "Split Edge"
+#~ msgstr "Rozdeľ hranu"
+
+#~ msgid "Recalculate a Good Centre Point"
+#~ msgstr "Prewpočítaj všetky vhodné stredy"
+
+#~ msgid "Normalize All Edge Directions"
+#~ msgstr "Normalizuj všetky smery hrán"
+
+#~ msgid "Set Normal From Edges"
+#~ msgstr "nastav normály z hrán"
+
+#~ msgid "Mesh Edge"
+#~ msgstr "hrana mriežky"
+
+#~ msgid "Mesh Vertex"
+#~ msgstr "bod mriežky"
+
+#~ msgid "empty"
+#~ msgstr "prázny"
+
+#~ msgid "open"
+#~ msgstr "otvor"
+
+#~ msgid "reverse"
+#~ msgstr "v opačnom poradí"
+
+#~ msgid "clockwise\n"
+#~ msgstr "v smere hodinových ručičiek\n"
+
+#~ msgid "counter-clockwise"
+#~ msgstr "proti smeru hodinových ručičiek"
+
+#~ msgid "multiple"
+#~ msgstr "násob"
+
+#~ msgid "New Drilling Operation..."
+#~ msgstr "Nová frňezovacia operácia"
+
+#~ msgid "New Cutting Tool Definition..."
+#~ msgstr "definícia nového nástroja"
+
+#~ msgid "tool_number"
+#~ msgstr "číslo nástroja"
+
+#~ msgid "tool_length_offset"
+#~ msgstr "posunuti vplyvzm dĺžky nástroja"
+
+#~ msgid "pocket_number"
+#~ msgstr "číslo frézy"
+
+#~ msgid "Open NC File"
+#~ msgstr "Otvor súbor s NC programom /rezným plánom"
+
+#~ msgid "Save NC File"
+#~ msgstr "Ulož súbor s NC programom /rezným plánom"
+
+#~ msgid "cutting_tool_number"
+#~ msgstr "číslo rezacieho nástroja"
+
+#~ msgid "peck_depth"
+#~ msgstr "hĺbka prepishnutria"
+
+#~ msgid "dwell"
+#~ msgstr "čas na prerezanie/prepal"
+
+#~ msgid "standoff"
+#~ msgstr "bod odsunutia"
+
+#~ msgid ""
+#~ "You must select some points, circles or other intersecting elements first!"
+#~ msgstr ""
+#~ "Najskôr musíte vybrať nejaké bbodz kruhz, či iné rôznobežné elementy"
+
+#~ msgid "New CounterBore Operation..."
+#~ msgstr "Nová protivývrtová operáciu "
+
+#~ msgid "fixture offset"
+#~ msgstr "Pevné posunutie"
+
+#~ msgid "units for nc output"
+#~ msgstr "Jednotky pre NC program/reznňy plán"
+
+#~ msgid ""
+#~ "You haven't selected a cutting tool for this hole.  By default no 'tool "
+#~ "definition' or 'select tool' code will be generated for this drilling "
+#~ "cycle."
+#~ msgstr ""
+#~ "Nevzbrali ste si nástroj na rezanie tejtoi diery. Prednasvené je použitie "
+#~ "buď žiadny nástroj alebo vyber si nástroj pre toto vŕtanie"
+
+#~ msgid "Tools"
+#~ msgstr "Nástroje"
+
+#~ msgid "type"
+#~ msgstr "typ"
+
+#~ msgid "Drill Bit"
+#~ msgstr "hrot vrtáka"
+
+#~ msgid "Slot Cutter"
+#~ msgstr "vyrezávač drážok"
+
+#~ msgid "Ball End Mill"
+#~ msgstr "kruhová fréza"
+
+#~ msgid "Chamfering bit"
+#~ msgstr "hrot úkosu"
+
+#~ msgid "End Mill"
+#~ msgstr "hrot frézy"
+
+#~ msgid "CounterBore"
+#~ msgstr "Spätné vyvŕtanie"
+
+#~ msgid "Centre Drill Bit"
+#~ msgstr "stred hrotu vrtáka"
+
+#~ msgid "flat_radius"
+#~ msgstr "Polomer na hrote"
+
+#~ msgid "corner_radius"
+#~ msgstr "Polomer v rohu"
+
+#~ msgid "cutting_edge_angle"
+#~ msgstr "uhol reznej hrany"
+
+#~ msgid "cutting_edge_height"
+#~ msgstr "výška reznej hrany"
+
+#~ msgid "sort_locations"
+#~ msgstr "Usporiadať umiestnenia"
+
+#~ msgid "sort_drilling_locations"
+#~ msgstr "Usporiadať umiestnenia vývrtov"
+
+#~ msgid "Respect existing order"
+#~ msgstr "Dodržať toto poradie"
+
+#~ msgid "sort_sketches"
+#~ msgstr "usporiadaj výkresy"
+
+#~ msgid "Designe Rules Check"
+#~ msgstr "Kontrola zadaných parametrov NC Programu/rezného plánu"
+
+#~ msgid "Designe Rules Adjustment"
+#~ msgstr "Ladenie parametrov NC Programu/rezného plánu"
+
+#~ msgid "Design Rules Check..."
+#~ msgstr "Prebieha kontrola zadaných parametrov NC Programu/rezného plánu..."
+
+#~ msgid "Design Rules Adjustment..."
+#~ msgstr "Prebieha ladenie parametrov NC Programu/rezného plánu"
+
+#~ msgid "cutting tool"
+#~ msgstr "rezný nástroj"
+
+#~ msgid "Chamfering Bit"
+#~ msgstr "Ostrie úkosu"
+
+#~ msgid "New Fixture..."
+#~ msgstr "Oprava systému súradníc"
+
+#~ msgid "A axis (around X) rotation"
+#~ msgstr "Otočenie okolo osi X"
+
+#~ msgid "B axis (around Y) rotation"
+#~ msgstr "Otočenie okolo osi Y"
+
+#~ msgid "C axis (around Z) rotation"
+#~ msgstr "Otočenie okolo osi Y"
+
+#~ msgid "Pivot Point"
+#~ msgstr "bod, okolo ktorého sa bude realzovať otočenie"
+
+#~ msgid "Pick roll on point"
+#~ msgstr "Označte bod nábehu"
+
+#~ msgid "Pick roll off point"
+#~ msgstr "Označte bod výbehu"
+
+#~ msgid "Brinell hardness of raw material"
+#~ msgstr "Material-Haerte nach Brinell"
+
+#~ msgid "Raw Material"
+#~ msgstr "Bežný materiál"
+
+#~ msgid "Surface Speed (m/min)"
+#~ msgstr "Rýchlsoť brúsenia (m/min)"
+
+#~ msgid "Surface Speed (ft/min)"
+#~ msgstr "Rýchlsoť brúsenia (ft/min)"
+
+#~ msgid "Raw Material Name"
+#~ msgstr "Meno bežného materiálu"
+
+#~ msgid "Maximum Material Removal Rate (mm^3/min)"
+#~ msgstr "Maximálna miera odstraňovania materiálu (mm^3/min)"
+
+#~ msgid "Maximum Material Removal Rate (inches^3/min)"
+#~ msgstr "Maximálna miera odstraňovania materiálu (inches^3/min)"
+
+#~ msgid "New Speed Reference..."
+#~ msgstr "Nová žiadaná hodnotu rýchlosti"
+
+#~ msgid "New Cutting Rate Reference..."
+#~ msgstr "Nová žiadaná hodnota miery odstraňovania materiálu"
+
+#~ msgid "Fixtures"
+#~ msgstr "Súradnicové systémy"
+
+#~ msgid "output file name follows data file name"
+#~ msgstr "meno výstupného súboru je rovnaké ako meno súbrou s dátami"
+
+#~ msgid "Brinell Hardness of raw material"
+#~ msgstr "Brinellova tvrdosť býného materiálu"
+
+#~ msgid "Carbide "
+#~ msgstr "Karbidový/á "
+
+#~ msgid "Carbide"
+#~ msgstr "Karbid"
+
+#~ msgid "High Speed Steel"
+#~ msgstr "vysokorýchlsotná oceľ"
+
+#~ msgid "Estimate when possible"
+#~ msgstr "Odhadni, keď je to možné"
+
+#~ msgid "Use default values"
+#~ msgstr "Použi prednastavné hodnoty"
+
+#~ msgid "degree"
+#~ msgstr "stupeň"
+
+#~ msgid " degree "
+#~ msgstr " stupeň "
+
+#~ msgid "Turning Tool"
+#~ msgstr "Rezací nástroj"
+
+#~ msgid "New Special Adaptive Roughing Operation..."
+#~ msgstr "Nová špeciálna prispôsobivá operácia zdrsńovania "
+
+#~ msgid "New Drill Cycle Operation..."
+#~ msgstr "Nový cyklus vŕtania"
+
+#~ msgid "New CounterBore Cycle Operation..."
+#~ msgstr "Nová operácia proti spätnému vyvŕtaniu"
+
+#~ msgid "Add Speed Reference..."
+#~ msgstr "Pridaj žiadanú rýchlosť"
+
+#~ msgid "Add Cutting Rate Reference..."
+#~ msgstr "Pridaj novú periódu vzorkovania"
+
+#~ msgid "Leave manually assigned title"
+#~ msgstr "odstráň manuálne priradený popis"
+
+#~ msgid "Automatically generate title"
+#~ msgstr "Automaticky generuh popis"
+
+#~ msgid "Automatic Title"
+#~ msgstr "Automatický popis"
+
+#~ msgid "New Drill..."
+#~ msgstr "Nové vŕtamie"
+
+#~ msgid "New End Mill..."
+#~ msgstr "Nový hrot frézy"
+
+#~ msgid "New Centre Drill..."
+#~ msgstr "Nový hrot kruhopvej frézy"
+
+#~ msgid "New Slot Drill..."
+#~ msgstr "Nová fréza na tvorbu drážok"
+
+#~ msgid "New Ball End Mill..."
+#~ msgstr "Nová guľová fréza"
+
+#~ msgid "New Chamfer Mill..."
+#~ msgstr "Nová úkosná frňeza"
+
+#~ msgid "New Turning Tool..."
+#~ msgstr "Nový sústržiaci nástroj"
+
+#~ msgid "Active font"
+#~ msgstr "Nastavené písmo/font"
+
+#~ msgid "View XZ Left"
+#~ msgstr "Pohľad zľava v osiach YZ"
+
+#~ msgid "New Chamfer Operation..."
+#~ msgstr "Nová operácia úkosu"
+
+#~ msgid "New Contour Operation..."
+#~ msgstr "Nová operácia rezania obrysu"
+
+#~ msgid "Open BOM File"
+#~ msgstr "Otvor súbopr vo formáte BOM"
+
+#~ msgid "Profile spline deviation"
+#~ msgstr "Odchýlka trajektórie o splajnu"
+
+#~ msgid "Pocket spline deviation"
+#~ msgstr "Odchýlka trajektórie o splajnu"
+
+#~ msgid "Contour spline deviation"
+#~ msgstr "Odchýlka obrysu o splajnu"
+
+#~ msgid "Inlay spline deviation"
+#~ msgstr "Odchýlka dutiny o splajnu"
+
+#~ msgid "execution_order"
+#~ msgstr "Poradie vakonávania"
+
+#~ msgid "auto set speeds for new operation"
+#~ msgstr "automatické nastavenie rýchlsotí pre novú operáciu"
+
+#~ msgid "machining options"
+#~ msgstr "Voľby tvorby NC programu/rezného plánu"
+
+#~ msgid "Touch Probe"
+#~ msgstr "Dotykový senzor výšky"
+
+#~ msgid "Tool Length Switch"
+#~ msgstr "Nástroj s nastaviteľnou hrúbkou reznej štrbiny"
+
+#~ msgid "New Touch Probe..."
+#~ msgstr "Nový dotykový senzor výšky"
+
+#~ msgid "New Tool Length Switch..."
+#~ msgstr "Nový nástroj s nastaviteľnou hrúbkou reznej štrbiny"
+
+#~ msgid "Female half"
+#~ msgstr "Vonkajšia časť"
+
+#~ msgid "Male half"
+#~ msgstr "Vnúrorná časť"
+
+#~ msgid "Both halves"
+#~ msgstr "Vonkajšia aj vnútorná časť"
+
+#~ msgid "GCode generation"
+#~ msgstr "Generovanie NC programu rezného plánu (GCode)"
+
+#~ msgid "Border Width"
+#~ msgstr "Šírka reznej štrbiny"
+
+#~ msgid "Clearance Tool"
+#~ msgstr "Nástroj na rezných medzier/hrán"
+
+#~ msgid "Mirror Axis"
+#~ msgstr "Zrkadlenie osí"
+
+#~ msgid "X Axis"
+#~ msgstr "os X"
+
+#~ msgid "Y Axis"
+#~ msgstr "os Y"
