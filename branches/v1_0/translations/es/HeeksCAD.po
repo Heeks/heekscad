@@ -3088,7 +3088,7 @@ msgstr "configurar el filtro de selección de sólo las caras"
 
 #: C:\Dev\HeeksCAD1.0\src\Shape.cpp:277
 msgid "Result of 'Offset Shape'"
-msgstr "resultado de la ' forma de desplazamiento '"
+msgstr "resultado de la 'forma de desplazamiento'"
 
 #: C:\Dev\HeeksCAD1.0\src\Shape.cpp:284 C:\Dev\HeeksCAD1.0\src\Sketch.cpp:307
 #: C:\Dev\HeeksCAD1.0\src\Wire.cpp:60

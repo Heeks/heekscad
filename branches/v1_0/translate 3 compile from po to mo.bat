@@ -12,5 +12,7 @@ mkdir "%HEEKSCAD1PATH%\es"
 "C:\Users\Dan\Downloads\gettext-0.14.4-bin\bin\msgfmt.exe" -o "%HEEKSCAD1PATH%\es\HeeksCAD.mo" "%HEEKSCAD1PATH%\translations\es\HeeksCAD.po"
 mkdir "%HEEKSCAD1PATH%\zh_hk"
 "C:\Users\Dan\Downloads\gettext-0.14.4-bin\bin\msgfmt.exe" -o "%HEEKSCAD1PATH%\zh_hk\HeeksCAD.mo" "%HEEKSCAD1PATH%\translations\zh_hk\HeeksCAD.po"
+mkdir "%HEEKSCAD1PATH%\ru"
+"C:\Users\Dan\Downloads\gettext-0.14.4-bin\bin\msgfmt.exe" -o "%HEEKSCAD1PATH%\ru\HeeksCAD.mo" "%HEEKSCAD1PATH%\translations\ru\HeeksCAD.po"
 
 pause
