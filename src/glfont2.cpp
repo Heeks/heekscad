@@ -244,24 +244,34 @@ wchar_t GLFont::get_unaccented_character( wchar_t c)
 		switch(c)
 		{
 		case 225:
+		case 224:
 			return 'a';
-		case 193:
+		case 193: 
+		case 192:
 			return 'A';
 		case 233:
+		case 232:
 			return 'e';
 		case 201:
+		case 200:
 			return 'E';
 		case 237:
+		case 236:
 			return 'i';
 		case 205:
+		case 204:
 			return 'I';
 		case 243:
+		case 242:
 			return 'o';
 		case 211:
+		case 210:
 			return 'O';
 		case 250:
+		case 249:
 			return 'u';
 		case 218:
+		case 217:
 			return 'U';
 		case 241:
 			return 'n';
