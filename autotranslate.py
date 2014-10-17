@@ -7,9 +7,11 @@ f_in = open('HeeksCAD.po')
 #f_out = codecs.open('zh_CN/HeeksCAD.po', encoding='utf_8', mode='w')
 #f_out = codecs.open('zh_TW/HeeksCAD.po', encoding='utf_8', mode='w')
 # turkish not available yet f_out = codecs.open('tr/HeeksCAD.po', encoding='utf_8', mode='w')
-f_out = codecs.open('ru/HeeksCAD.po', encoding='utf_8', mode='w')
+#f_out = codecs.open('translations/es/HeeksCAD.po', encoding='utf_8', mode='w')
 
 translate_str = ''
+
+translator= translate.Translator('es', 'en')
 
 count = 1
 
@@ -27,7 +29,8 @@ while (True):
             translate_str = unicode(translate_str, encoding='utf_8')
             #translate_str = translate.translate('en', 'zh-CN', translate_str)
             #translate_str = translate.translate('en', 'zh-TW', translate_str)
-            translate_str = translate.translate('en', 'ru', translate_str)
+            #translate_str = translate.translate('en', 'ru', translate_str)
+            translate_str = translator.translate(translate_str)
             if translate_str:
                 pass
             else:

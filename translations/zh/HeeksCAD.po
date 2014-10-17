@@ -1,0 +1,5098 @@
+# Traduction française de HeeksCAD.
+# Copyright (C) 2009 THE HeeksCAD'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the HeeksCAD package.
+# André PASCUAL <andre.pascual@linuxgraphic.org>, 2009-2011
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: HeeksCAD 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-05-26 13:41+0200\n"
+"PO-Revision-Date: 2011-09-16 14:13+0800\n"
+"Last-Translator: Tours <ToursZhou@gmail.com>\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#==============================================================
+# Messages CNC regroupés
+#Ajout2  HeeksCNC.cpp. Pas d'effet
+msgid "Program"
+msgstr "程序"
+
+#Ajout3   HeeksCNC.cpp. Pas d'effet
+msgid "Output"
+msgstr "输出"
+
+#Ajout4 : HeeksCNC.cpp
+msgid "New Rough Turning Operation..."
+msgstr "新的车间粗制操作"
+
+#Ajout5
+msgid "( with Shift key for similar objects)"
+msgstr "(按下Shift键查找相同实体)"
+
+#Ajout6  : HeeksCNC.cpp
+msgid "New Locating Operation..."
+msgstr "新的定位操作"
+
+#Ajout7 : HeeksCNC.cpp
+msgid "Run Python Script"
+msgstr "运行Python脚本"
+
+#Ajout8 : HeeksCNC.cpp
+msgid "Cancel Python Script"
+msgstr "取消Python脚本"
+
+#Ajout9
+msgid "speeds"
+msgstr "速度"
+
+#Ajout10
+msgid "auto set speeds for new operation"
+msgstr "为新的操作自动设置速度"
+
+#Ajout11: aucun effet. Il faut traduire <default.speeds>
+msgid "Aluminium (15) with "
+msgstr "铝 (15) "
+
+#Ajout12: aucun effet. Il faut traduire <default.speeds>
+msgid "Mild Steel (150) with "
+msgstr "低碳钢(150)"
+
+#Ajout13: aucun effet. Il faut traduire <default.speeds>
+msgid "Alloy Steel <0.3% carbon (200) with "
+msgstr "合金钢 <0.3% 碳 (200) "
+
+#Ajout14: aucun effet. Il faut traduire <default.speeds>
+msgid "Alloy Steel >0.3% carbon (200) with "
+msgstr "合金钢 >0.3% 碳 (200) "
+
+#Ajout15: aucun effet. Il faut traduire <default.speeds>
+msgid "Brinell (15) at 400 (mm^3/min)"
+msgstr "布氏硬度（15）400 mm^3/min"
+
+#Ajout16: aucun effet. Il faut traduire <default.speeds>
+msgid "Brinell (150) at 1600 (mm^3/min)"
+msgstr "布氏硬度（15）600 mm^3/min"
+
+#Ajout75
+msgid "New Drill..."
+msgstr "新孔"
+
+#Ajout76
+msgid "New Centre Drill..."
+msgstr "新中心孔"
+
+#Ajout77
+msgid "New End Mill..."
+msgstr "新端部铣削"
+
+#Ajout78
+msgid "New Slot Drill..."
+msgstr "新表面铣削"
+
+#Ajout79
+msgid "New Ball End Mill..."
+msgstr "新球体终点"
+
+#Ajout79
+msgid "New Chamfer Mill..."
+msgstr "新倒角"
+
+#Ajout79
+msgid "New Turning Tool..."
+msgstr "新转向工具"
+
+#Ajout80
+msgid "Material"
+msgstr "材料"
+
+#Ajout81
+msgid "Changing name to "
+msgstr "更改名称为"
+
+#Ajout82
+msgid "max_advance_per_revolution"
+msgstr "每个革新的最大改进"
+
+#Ajout83
+msgid "automatically_generate_title"
+msgstr "自动生成标题"
+
+#Ajout84
+msgid "x_offset"
+msgstr "X偏移"
+
+#Ajout85
+msgid "front_angle"
+msgstr "顶部角度"
+
+#Ajout86
+msgid "tool_angle"
+msgstr "工具角度"
+
+#Ajout87
+msgid "back_angle"
+msgstr "底部角度"
+
+#Ajout88
+msgid "Orientation values must be between 0 and 9 inclusive.  Aborting value change"
+msgstr "方向值必须介于0和9之间。数据变化则终止进程"
+
+#Ajout88
+msgid "Cutting Tool material must be between 0 and 1. Aborting value change"
+msgstr "刀具材料必须是0和1之间。数据变化则终止进程"
+
+#Ajout89
+msgid "Changing corner radius to zero\n"
+msgstr "改变圆角半径为零 \n"
+
+#Ajout90
+msgid "Changing flat radius to zero\n"
+msgstr "改变平面半径为零 \n"
+
+#Ajout91
+msgid "Changing cutting edge angle to 59 degrees (for normal 118 degree cutting face)\n"
+msgstr "改变切割角度为59度（正常为118度切割面)\n"
+
+#Ajout92
+msgid "Changing cutting edge height to "
+msgstr "改变切割边缘高度"
+
+#Ajout92
+msgid "Changing cutting edge angle to zero degrees\n"
+msgstr "改变切割边缘角度为 0°\n"
+
+#Ajout93
+msgid "Changing flat radius to zero (this may need to be reset)\n"
+msgstr "改变倒圆角半径为 0 (这个也许需要重设)\n"
+
+#Ajout94
+msgid "Changing cutting edge angle to 45 degrees\n"
+msgstr "改变切割边缘角度45度 \n"
+
+#Ajout94
+msgid "That is not a valid cutting tool type. Aborting value change."
+msgstr "这不是一个有效的切割工具类型。数据变化则终止进程"
+
+#Ajout95
+msgid "Outside"
+msgstr "外侧"
+
+#Ajout96
+msgid "Inside"
+msgstr "内侧"
+
+#Ajout97
+msgid "Outside or Left"
+msgstr "外侧或左侧"
+
+#Ajout98
+msgid "Inside or Right"
+msgstr "内侧或右侧"
+
+#Ajout99
+msgid "cut mode"
+msgstr "切割模式"
+
+#Ajout 387 HeeksCNC.cpp
+msgid "New Chamfer Operation..."
+msgstr "新倒角操作..."
+
+#Ajout 388 HeeksCNC.cpp
+msgid "New Contour Operation..."
+msgstr "新轮廓操作..."
+
+#Ajout 389 HeeksCNC.cpp
+msgid "New Inlay Operation..."
+msgstr "新镶嵌操作..."
+
+#Ajout 390 HeeksCNC.cpp
+msgid "New Script Operation..."
+msgstr "新脚本操作..."
+
+#Ajout 391 HeeksCNC.cpp
+msgid "New Probe Grid Operation..."
+msgstr "新探头轴线操作..."
+
+#======================================================================
+#Ajout du 28/02/2011
+#Ajout 420
+msgid "Back Angle"
+msgstr "底部角度"
+
+#Ajout 421
+msgid "Front Angle"
+msgstr "前部角度"
+
+#Ajout 422
+msgid "Tool Angle"
+msgstr "工具角度"
+
+#Ajout 423
+msgid "Orientation"
+msgstr "原点"
+
+#Ajout 424
+msgid "Probe Offset X"
+msgstr "探头偏移量X"
+
+#Ajout 425
+msgid "Probe Offset Y"
+msgstr "探头偏移量Y"
+
+#Ajout 426
+msgid "allow dummy tool definitions"
+msgstr "允许虚拟工具的定义"
+
+#Ajout 430
+msgid "Moving to a safety height common to both"
+msgstr "移动到一个共同的安全高度"
+
+#Ajout 431
+msgid "and"
+msgstr "和"
+
+#Ajout 432
+msgid "Move above touch-off point for"
+msgstr "移动触摸点以上"
+
+#Ajout 433
+msgid "This program assumes taht the machine operator has joged"
+msgstr "这个方案FALSE设，机器操作员joged"
+
+#Ajout 434
+msgid "the machine to approximatedly the correct location"
+msgstr "机器到approximatedly正确的位置"
+
+#Ajout 435
+msgid "immediately above the protrusion we are finding the centre of."
+msgstr "上方附近的中心投影"
+
+#Ajout 436
+msgid "This program then jogs out and down in two opposite directions"
+msgstr "这个程序慢跑，并在两个相反的方向"
+
+#Ajout 437
+msgid "before probing back towards the centre point looking for the"
+msgstr "寻找之前探测对中心点"
+
+#Ajout 438
+msgid "protrusion"
+msgstr "突出"
+
+#Ajout 439
+msgid "Move back to the intersection points"
+msgstr "向后移动的交汇点"
+
+#Ajout 440
+msgid "NOTE: We set the temporary origin because it was in effect when the values in these variabales were established"
+msgstr "注：我们设置了临时的起源，因为它实际上是当这些variabales值分别成立"
+
+#Ajout 441
+msgid "immediately above the hole we are finding the centre of."
+msgstr "立即上面的孔中，我们发现的中心"
+
+#Ajout 442
+msgid "This programm then jogs down and probes out in two opposite directions"
+msgstr "这个程序然后沼泽和探针在两个相反的方向"
+
+#Ajout 443
+msgid "looking for the workpiece"
+msgstr "寻找工件"
+
+#Ajout 444
+msgid "Num points along X"
+msgstr "X向点的数量"
+
+#Ajout 445
+msgid "Num points along Y"
+msgstr "Y向点的数量"
+
+#Ajout 446
+msgid "Point Cloud"
+msgstr "点阵"
+
+#Ajout 447
+msgid "Fixture Measurement"
+msgstr "夹具测量"
+
+#Ajout 448
+msgid "Point Data Format"
+msgstr "点阵数据格式"
+
+#Ajout 449
+msgid "Check Levels"
+msgstr "检测等级"
+
+#Ajout 450
+msgid "Corner Coordinate"
+msgstr "拐角坐标"
+
+#Ajout 451
+msgid "Final Coordinate"
+msgstr "最终坐标"
+
+#Ajout 452
+msgid "Probe"
+msgstr "探测"
+
+#Ajout 453
+msgid "corner"
+msgstr "拐角"
+
+#Ajout 454
+msgid "Probe protrusion along"
+msgstr "探头突沿"
+
+#Ajout 455
+msgid "Probe hole along"
+msgstr "探孔沿"
+
+#Ajout 456
+msgid "Probe protrusion"
+msgstr "探头突"
+
+#Ajout 457
+msgid "Probe hole"
+msgstr "探孔"
+
+#Ajout 458
+msgid "Probe Fixture Tilt"
+msgstr "探头夹具倾斜"
+
+#Ajout 459
+msgid "grid"
+msgstr "轴线"
+
+#Ajout 460
+msgid "minimum x"
+msgstr "x 最小值"
+
+#Ajout 461
+msgid "maximum x"
+msgstr "x 最大值"
+
+#Ajout 462
+msgid "minimum y"
+msgstr "y 最小值"
+
+#Ajout 463
+msgid "maximum y"
+msgstr "y 最大值"
+
+#Ajout 464
+msgid "one way"
+msgstr "单程"
+
+#Ajout 465
+msgid "back and forth"
+msgstr "来回"
+
+#Ajout 466
+msgid "style"
+msgstr "样式"
+
+#Ajout 467
+msgid "Reset Boudary"
+msgstr "复位边界"
+
+#Ajout 468
+msgid "rigid tapping"
+msgstr "刚性攻丝"
+
+#Ajout 469
+msgid "chuck tapping"
+msgstr "夹头攻丝"
+
+#Ajout 470
+msgid "tap_mode"
+msgstr "TAP模式"
+
+#Ajout 471
+msgid "dwell"
+msgstr "栖"
+
+#Ajout 472
+msgid "Respect existing order"
+msgstr "遵从现有的顺序"
+
+#Ajout 473
+msgid "sort_tapping_locations"
+msgstr "排序攻地点"
+
+#Ajout 474
+msgid "The tapping operation has not selected a tapping tool to use\n"
+msgstr "攻丝操作选择了一个窃听工具来使用\n"
+
+#Ajout 475
+msgid "Left-hand tapping needs counterclockwise spindle rotation (negative spindle_speed)\n"
+msgstr "左手攻需要逆时针主轴旋转（负主轴转速) \n"
+
+#Ajout 476
+msgid "Adjusting spindle rotation to counterclockwise.\n"
+msgstr "调整主轴旋转逆时针.\n"
+
+#Ajout 477
+msgid "right-hand tapping needs clockwise spindle rotation (positve spindle_speed)\n"
+msgstr "右手攻需要顺时针主轴旋转（正主轴转速)\n"
+
+#Ajout 478
+msgid "Adjusting spindle rotation to clockwise.\n"
+msgstr "以顺时针方向调整主轴旋转.\n"
+
+#Ajout 479
+msgid " The tapping operation's depth is greater than the previously drilled hole\n"
+msgstr "攻丝操作深度大于以前钻孔\n"
+
+#Ajout 480
+msgid "Adjusting depth of tapping cycle"
+msgstr "攻丝循环调节深度"
+
+#Ajout 481
+msgid "from"
+msgstr "从"
+
+#Ajout 482
+msgid "to"
+msgstr "到"
+
+#Ajout 483
+msgid "Tapping"
+msgstr "出渣"
+
+#Ajout 484
+msgid "Can't tap hole"
+msgstr "无法开孔"
+
+#Ajout 485
+msgid "Select tap size"
+msgstr "选择割头尺寸"
+
+#Ajout 486
+msgid "Standard Tap Sizes"
+msgstr "标准割头尺寸"
+
+#Ajout 487
+msgid "Automatically generate title"
+msgstr "自动生成标题"
+
+#Ajout 488
+msgid "Automatic Title"
+msgstr "自动标题"
+
+#Ajout 489
+msgid "Type"
+msgstr "类型"
+
+#Ajout 490
+msgid "(0) Unused"
+msgstr "(0) 未使用"
+
+#Ajout 491
+msgid "(1) Turning/Back Facing"
+msgstr "(1)车刀/背对"
+
+#Ajout 492
+msgid "(2) Turning/Facing"
+msgstr "(2) 车刀/覆盖"
+
+#Ajout 493
+msgid "(3) Boring/Facing"
+msgstr "(3) 镗孔/覆盖"
+
+#Ajout 494
+msgid "(4) Boring/Back Facing"
+msgstr "(4) 镗孔/背对"
+
+#Ajout 495
+msgid "(5) Back Facing"
+msgstr "(5) 背对着"
+
+#Ajout 496
+msgid "(6) Turning"
+msgstr "(6) 车刀"
+
+#Ajout 497
+msgid "(7) Facing"
+msgstr "(7) 车刀"
+
+#Ajout 498
+msgid "(8) Boring"
+msgstr "(8) 镗孔"
+
+#Ajout 499
+msgid "(9) Centre"
+msgstr "(9) 圆心"
+
+#Ajout 500
+msgid "units for nc output"
+msgstr "NC输出单位"
+
+#Ajout 501
+msgid "Tools"
+msgstr "工具"
+
+#Ajout 502
+msgid "type"
+msgstr "类型"
+
+#Ajout 502
+msgid "Drill Bit"
+msgstr "钻头"
+
+#Ajout 503
+msgid "Slot Cutter"
+msgstr "开槽器"
+
+#Ajout 504
+msgid "Ball End Mill"
+msgstr "球头立铣刀"
+
+#Ajout 505
+msgid "cutting tool"
+msgstr "切割工具"
+
+#Ajout 506
+msgid "Chamfering Bit"
+msgstr "倒角割头"
+
+#Ajout 507
+msgid "New Drilling Operation..."
+msgstr "新钻孔操作 G81/82/83"
+
+#Ajout 508
+msgid "New Cutting Tool Definition..."
+msgstr "新切割工具定义"
+
+#Ajout 509
+msgid "tool_number"
+msgstr "工具编号"
+
+#Ajout 510
+msgid "diameter"
+msgstr "直径"
+
+#Ajout 511
+msgid "tool_length_offset"
+msgstr "工具长度偏差"
+
+#Ajout 512
+msgid "pocket_number"
+msgstr "容器编号"
+
+#Ajout 513
+msgid "Open NC File"
+msgstr "打开 CN 文件"
+
+#Ajout 514
+msgid "Save NC File"
+msgstr "保存 NC 文件"
+
+#Ajout 515
+msgid "cutting_tool_number"
+msgstr "切割工具编号"
+
+#Ajout 516
+msgid "depth"
+msgstr "深度"
+
+#Ajout 517
+msgid "peck_depth"
+msgstr "啄印深度"
+
+#Ajout 518
+msgid "standoff"
+msgstr "对峙"
+
+#Ajout 519 HeeksCNC.cpp
+msgid "You must select some points, circles or other intersecting elements first!"
+msgstr "您必须先选择一些点，圆或其他相交元素！"
+
+#Ajout 520 HeeksCNC.cpp
+msgid "New CounterBore Operation..."
+msgstr "新锪操作..."
+
+#Ajout 521
+msgid "Brinell Hardness of raw material"
+msgstr "布氏硬度的原料"
+
+#Ajout 522
+msgid "Carbide "
+msgstr "碳化物"
+
+#Ajout 523
+msgid "Carbide"
+msgstr "碳化物"
+
+#Ajout 524
+msgid "High Speed Steel"
+msgstr "HSS"
+
+#Ajout 525
+msgid "Estimate when possible"
+msgstr "估计可能"
+
+#Ajout 526
+msgid "Use default values"
+msgstr "使用默认值"
+
+#Ajout 527
+msgid " degree "
+msgstr "角度"
+
+#Ajout 528
+msgid "Turning Tool"
+msgstr "车刀"
+
+#Ajout 529
+msgid "New Special Adaptive Roughing Operation..."
+msgstr "新的特殊适应性粗加工..."
+
+#Ajout 530
+msgid "New Drill Cycle Operation..."
+msgstr "新的钻探周期操作......"
+
+#Ajout 531
+msgid "New CounterBore Cycle Operation..."
+msgstr "新锪周期操作..."
+
+#Ajout 532
+msgid "Add Speed Reference..."
+msgstr "新增速度参考..."
+
+#Ajout 533
+msgid "Add Cutting Rate Reference..."
+msgstr "添加切削率参考..."
+
+#Ajout 534
+msgid "Leave manually assigned title"
+msgstr "手动分配称号"
+
+#Ajout 535
+msgid "New Fixture..."
+msgstr "新的原产地..."
+
+#Ajout 536
+msgid "A axis (around X) rotation"
+msgstr "A轴旋转（绕X）"
+
+#Ajout 537
+msgid "B axis (around Y) rotation"
+msgstr "B轴旋转（绕Y）"
+
+#Ajout 538
+msgid "C axis (around Z) rotation"
+msgstr "C轴旋转（绕Z）"
+
+#Ajout 539
+msgid "Pivot Point"
+msgstr "支点"
+
+#Ajout 540
+msgid "Pick roll on point"
+msgstr "选择结束点轮廓"
+
+#Ajout 541
+msgid "Pick roll off point"
+msgstr "选择结束点轮廓"
+
+#Ajout 542
+msgid "Brinell hardness of raw material"
+msgstr "布氏硬度的原料"
+
+#Ajout 543
+msgid "Raw Material"
+msgstr "原料"
+
+#Ajout 544
+msgid "Surface Speed (m/min)"
+msgstr "切割速度（米/分）"
+
+#Ajout 545
+msgid "Surface Speed (ft/min)"
+msgstr "切割速度（米/分）"
+
+#Ajout 546
+msgid "Raw Material Name"
+msgstr "原料名称"
+
+#Ajout 547
+msgid "Maximum Material Removal Rate (mm^3/min)"
+msgstr "最大进刀深度（mm^3/min）"
+
+#Ajout 548
+msgid "Maximum Material Removal Rate (inches^3/min)"
+msgstr "最大进刀深度（英寸^3/min）"
+
+#Ajout 549
+msgid "New Speed Reference..."
+msgstr "新的参考速度..."
+
+#Ajout 550
+msgid "New Cutting Rate Reference..."
+msgstr "新的降息参考..."
+
+#Ajout 551
+msgid "Feeds and Speeds"
+msgstr "进给速度和旋转"
+
+#Ajout 552
+msgid "Fixtures"
+msgstr "原点"
+
+#Ajout 553
+msgid "output file name follows data file name"
+msgstr "文件名=名称输出的数据文件"
+
+#Ajout 554
+msgid "Chamfering bit"
+msgstr "埋头"
+
+#Ajout 555
+msgid "End Mill"
+msgstr "立铣刀"
+
+#Ajout 556
+msgid "CounterBore"
+msgstr "切削深度"
+
+#Ajout 557
+msgid "Centre Drill Bit"
+msgstr "中心钻"
+
+#Ajout 558
+msgid "flat_radius"
+msgstr "提示半径"
+
+#Ajout 559
+msgid "corner_radius"
+msgstr "角半径"
+
+#Ajout 560
+msgid "cutting_edge_angle"
+msgstr "角的尖端"
+
+#Ajout 561
+msgid "cutting_edge_height"
+msgstr "高度的尖端"
+
+#Ajout 562
+msgid "sort_locations"
+msgstr "预设位置"
+
+#Ajout 563
+msgid "sort_drilling_locations"
+msgstr "预设钻孔位置"
+
+#Ajout 564
+msgid "sort_sketches"
+msgstr "预设的草图"
+
+#Ajout 565
+msgid "Designe Rules Check"
+msgstr "定义控制规则"
+
+#Ajout 566
+msgid "Designe Rules Adjustment"
+msgstr "定义调整规则"
+
+#Ajout 567
+msgid "Design Rules Check..."
+msgstr "检查设置CN..."
+
+#Ajout 568
+msgid "Design Rules Adjustment..."
+msgstr "定义调整的规则..."
+
+#Ajout 569
+msgid "Add New Milling Operation"
+msgstr "新的铣削操作"
+
+#Ajout 570
+msgid "Add New 3D Operation"
+msgstr "新操作3D"
+
+#Ajout 571
+msgid "Add New Additive Operation"
+msgstr "增加了新的操作"
+
+#Ajout 572
+msgid "Add Other Operation"
+msgstr "添加另一个操作"
+
+#Ajout 573
+msgid "Add New Tool"
+msgstr "添加新工具"
+
+#Ajout 574
+msgid "Tapping Operation..."
+msgstr "攻牙..."
+
+#Ajout 575
+msgid "Profile Operation..."
+msgstr "简介... ..."
+
+#Ajout 576
+msgid "Pocket Operation..."
+msgstr "很少..."
+
+#Ajout 577
+msgid "Adaptive Roughing Operation..."
+msgstr "改编草案..."
+
+#Ajout 578
+msgid "Drilling Operation..."
+msgstr "钻井..."
+
+#Ajout 579
+msgid "CounterBore Operation..."
+msgstr "沉..."
+
+#Ajout 580
+msgid "Chamfer Operation..."
+msgstr "倒角操作..."
+
+#Ajout 581
+msgid "Contour Operation..."
+msgstr "轮廓操作..."
+
+#Ajout 581
+msgid "Inlay Operation..."
+msgstr "覆盖..."
+
+#Ajout 582
+msgid "ZigZag Operation..."
+msgstr "整理..."
+
+#Ajout 583
+msgid "Waterline Operation..."
+msgstr "水线操作..."
+
+#Ajout 584
+msgid "Attach Operation..."
+msgstr "加入..."
+
+#Ajout 585
+msgid "Unattach Operation..."
+msgstr "断绝... ..."
+
+#Ajout 586
+msgid "Raft Operation..."
+msgstr "堆焊..."
+
+#Ajout 587
+msgid "Rough Turning Operation..."
+msgstr "粗车..."
+
+#Ajout 588
+msgid "Script Operation..."
+msgstr "脚本..."
+
+#Ajout 589
+msgid "Speed Reference..."
+msgstr "速度参考..."
+
+#Ajout 590
+msgid "Cutting Rate Reference..."
+msgstr "切割速度参考..."
+
+#Ajout 591
+msgid "Positioning Operation..."
+msgstr "定位..."
+
+#Ajout 592
+msgid "Probe Centre Operation..."
+msgstr "探测中心..."
+
+#Ajout 593
+msgid "Probe Edge Operation..."
+msgstr "探测的边缘..."
+
+#Ajout 594
+msgid "Probe Grid Operation..."
+msgstr "探头电网运行..."
+
+#Ajout 595
+msgid "Drill..."
+msgstr "钻..."
+
+#Ajout 596
+msgid "Centre Drill..."
+msgstr "中心钻..."
+
+#Ajout 597
+msgid "End Mill..."
+msgstr "立铣刀..."
+
+#Ajout 598
+msgid "Slot Drill..."
+msgstr "伸直位..."
+
+#Ajout 599
+msgid "Ball End Mill..."
+msgstr "球头立铣刀..."
+
+#Ajout 600
+msgid "Chamfer Mill..."
+msgstr "埋头..."
+
+#Ajout 601
+msgid "Turning Tool..."
+msgstr "机床工具..."
+
+#Ajout 602
+msgid "Touch Probe..."
+msgstr "探头..."
+
+#Ajout 603
+msgid "Tool Length Switch..."
+msgstr "长度的工具... ..."
+
+#Ajout 604
+msgid "Tap Tool..."
+msgstr "塔..."
+
+#Ajout 605
+msgid "Any sized tap..."
+msgstr "任何大小..."
+
+#Ajout 606
+msgid "Pick from Metric standard sizes"
+msgstr "公制标准尺寸"
+
+#Ajout 607
+msgid "Pick from Unified Threading Standard (UNC, UNF or UNEF)"
+msgstr "从统一执行绪标准（UNC, UNF or UNEF)"
+
+#Ajout 608
+msgid "Pick from British Standard Whitworth standard sizes"
+msgstr "选择从英国标准惠氏标准尺寸"
+
+#Ajout 609
+msgid "Send to Machine"
+msgstr "发送到本机"
+
+#Ajout 610
+msgid "machining options"
+msgstr "加工选项"
+
+#Ajout 611
+msgid "send-to-machine command"
+msgstr "发送到机命令"
+
+#Ajout 612
+msgid "axis-remote"
+msgstr "偏远地区"
+
+#Ajout 613
+msgid "Profile spline deviation"
+msgstr "简介间距样条"
+
+#Ajout 614
+msgid "Pocket spline deviation"
+msgstr "样条差"
+
+#Ajout 615
+msgid "Contour spline deviation"
+msgstr "轮廓样条差"
+
+#Ajout 616
+msgid "Inlay spline deviation"
+msgstr "嵌样条线的偏差"
+
+#Ajout 617
+msgid "YZ plane (around X) rotation"
+msgstr "计划旋转绕X YZ"
+
+#Ajout 618
+msgid "XZ plane (around Y) rotation"
+msgstr "绕Y XZ平面旋转"
+
+#Ajout 619
+msgid "XY plane (around Z) rotation"
+msgstr "绕Z XY平面旋转"
+
+#Ajout 620
+msgid "Safety Height Defined"
+msgstr "安全高度定义"
+
+#Ajout 621
+msgid "Safety Height (in G53 - Machine - coordinates)"
+msgstr "安全高度（以机床坐标系G53）"
+
+#Ajout 622
+msgid "Touch Off Point Defined"
+msgstr "外联络点设置"
+
+#Ajout 623
+msgid "Touch-off Point (in "
+msgstr "站失去联系 (in"
+
+#Ajout 624
+msgid "Touch-off Description"
+msgstr "描述失去联系"
+
+#Ajout 626
+msgid "Import probe data"
+msgstr "进口数据探头"
+
+#Ajout 627
+msgid "Select Sketches"
+msgstr "选择草图"
+
+#Ajout 628
+msgid "Select cancelled. No sketches were selected!"
+msgstr "选择取消。没有草图选择！"
+
+#Ajout 629
+msgid "Select Solids"
+msgstr "选择实体"
+
+#Ajout 630
+msgid "Select cancelled. No solids were selected!"
+msgstr "选择取消，没有选中实体！"
+
+#Ajout 631
+msgid "solids"
+msgstr "实体"
+
+#Ajout 632
+msgid "None"
+msgstr "无"
+
+#Ajout 633
+msgid "solid id"
+msgstr "实体ID"
+
+#Ajout 634
+msgid "sketches"
+msgstr "线框"
+
+#Ajout 635
+msgid "sketch id"
+msgstr "草图ID"
+
+#Ajout 636
+msgid "ABS Plastic"
+msgstr "ABS塑料"
+
+#Ajout 637
+msgid "PLA Plastic"
+msgstr "PLA 塑料"
+
+#Ajout 638
+msgid "HDPE Plastic"
+msgstr "HDPE塑料"
+
+#Ajout 639
+msgid "Other"
+msgstr "其它"
+
+#Ajout 640
+msgid "Extrusion Material"
+msgstr "挤压材"
+
+#Ajout 641
+msgid "Feed Rate"
+msgstr "进给速度"
+
+#Ajout 642
+msgid "Layer Height"
+msgstr "层的高度"
+
+#Ajout 643
+msgid "Width Over Thickness ratio"
+msgstr "宽厚度比"
+
+#Ajout 644
+msgid "Temperature"
+msgstr "温度"
+
+#Ajout 645
+msgid "Flow Rate"
+msgstr "流量"
+
+#Ajout 646
+msgid "Filament Diameter"
+msgstr "单丝直径"
+
+#Ajout 647
+msgid "Title"
+msgstr "标题"
+
+#Ajout 648
+msgid "Visible"
+msgstr "可见的"
+
+#Ajout 649
+msgid "Pitch"
+msgstr "音高"
+
+#Ajout 650
+msgid "right hand"
+msgstr "右手"
+
+#Ajout 651
+msgid "left hand"
+msgstr "左手"
+
+#Ajout 652
+msgid "Tap direction"
+msgstr "塔方向"
+
+#Ajout 654
+msgid "Title Type"
+msgstr "标题样式"
+
+#Ajout 655
+msgid "Tool Material"
+msgstr "刀具材料"
+
+#Ajout 656
+msgid "Extrusion"
+msgstr "挤压"
+
+#Ajout 657
+msgid "Tap Tool"
+msgstr "点选工具"
+
+#Ajout 658
+msgid "Tool Type"
+msgstr "工具类型"
+
+#Ajout 659
+msgid "Max advance per revolution"
+msgstr "每转的最大推进"
+
+#Ajout 660
+msgid "Tool length offset"
+msgstr "刀具长度补偿"
+
+#Ajout 661
+msgid "Diameter"
+msgstr "直径"
+
+#Ajout 662
+msgid "X Offset"
+msgstr "X偏移"
+
+#Ajout 663 HeekFrame.cpp
+msgid "Sectioning"
+msgstr "切片"
+
+#Ajout 664  Sectioning.cpp
+msgid "Sectioned Solid"
+msgstr "强剪"
+
+#Ajout 665 .....cpp
+msgid "Save Solids"
+msgstr "固体备份"
+
+#Ajout 666 SelectMode.cpp
+msgid "Accept selection"
+msgstr "接受选择"
+
+#Ajout 667 SelectMode.cpp
+msgid "Cancel selection"
+msgstr "取消选择"
+
+#Ajout 668 Sectioning.cpp
+msgid "Pick objects to section"
+msgstr "选择对象削减"
+
+#Ajout 669S ectioning.cpp
+msgid "Solid Sectioning"
+msgstr "固体切片"
+
+#Ajout 670 Sectioning.cpp
+msgid "Angle of plane"
+msgstr "平面的夹角"
+
+#Ajout 671 Sectioning.cpp
+msgid "X axis"
+msgstr "X轴"
+
+#Ajout 672 Sectioning.cpp
+msgid "Y axis"
+msgstr "Y轴"
+
+#Ajout 673 Sectioning.cpp
+msgid "Z axis"
+msgstr "Z轴"
+
+#Ajout 674 Sectioning.cpp
+msgid "Specify"
+msgstr "指定"
+
+#Ajout 675 Sectioning.cpp
+msgid "Point on axis"
+msgstr "轴上的点"
+
+#Ajout 676 Sectioning.cpp
+msgid "Axis"
+msgstr "轴线"
+
+#Ajout 677 Sectioning.cpp
+msgid "Select"
+msgstr "选择"
+
+#======================================================================
+#Ajout du 21 juin 20011
+#Ajout 678 HGear.cpp
+msgid "num teeth"
+msgstr "牙齿号"
+
+#Ajout 679 HGear.cpp
+msgid "module"
+msgstr "模块"
+
+#Ajout 680 HGear.cpp
+#msgid "clearance"
+#msgstr "Espace"
+#Ajout 681 HGear.cpp
+msgid "addendum offset"
+msgstr "增编偏移"
+
+#Ajout 682 HGear.cpp
+msgid "addendum multiplier"
+msgstr "增编的乘数"
+
+#Ajout 683 HGear.cpp
+msgid "dedendum multiplier"
+msgstr "齿根倍增"
+
+#Ajout 684 HGear.cpp
+msgid "pressure angle"
+msgstr "压力角"
+
+#Ajout 685 HGear.cpp
+msgid "spacing"
+msgstr "间距"
+
+#Ajout 686 HGear.cpp
+msgid "tip relief"
+msgstr "缘"
+
+#Ajout 686 HGear.cpp
+msgid "cone half angle"
+msgstr "锥形半角"
+
+#Ajout 687 HGear.cpp
+msgid "inner ring diameter"
+msgstr "内环直径"
+
+#Ajout 688HGear.cpp
+msgid "Make Sketches"
+msgstr "绘制草图"
+
+#Ajout 689 HGear.cpp
+msgid "Make One Tooth Sketches"
+msgstr "一个齿轮草图"
+
+#Ajout 690 HeeksFrame.cpp
+msgid "Gear"
+msgstr "齿轮"
+
+#Ajout 691 HeeksFrame.cpp
+msgid "Add a gear"
+msgstr "添加齿轮"
+
+#======================================================================
+#Ajout du 23 juin 20011
+#Ajout 692 HArc.cpp
+msgid "Click centre point"
+msgstr "点击中心点"
+
+#Ajout 693 HArc.cpp
+msgid "Click first end point"
+msgstr "点击第一个终点"
+
+#Ajout 694 HArc.cpp
+msgid "Click second end point"
+msgstr "点击第二个终点"
+
+#Ajout 695 Sketch.cpp
+msgid "Click midpoint"
+msgstr "点击中点"
+
+#Ajout 696 Sketch.cpp
+msgid "Click centre-top point"
+msgstr "点击顶部中心"
+
+#Ajout 697 Sketch.cpp
+msgid "Click centre-bottom point"
+msgstr "点击底部中心点"
+
+#Ajout 698 Sketch.cpp
+msgid "Click centre-right point"
+msgstr "点击右侧中间点"
+
+#Ajout 699 Sketch.cpp
+msgid "Click centre-left point"
+msgstr "点击左侧中间点"
+
+#Ajout 700 DigitizeMode.cpp
+msgid "Offset (from last point)"
+msgstr "偏移(从最后一点)"
+
+#Ajout 701 HeeksCAD.cpp
+msgid "Move here"
+msgstr "移到此处"
+
+#Ajout 702 HeeksCAD.cpp
+msgid "Copy here"
+msgstr "复制到此处"
+
+#======================================================================
+#Ajout du 25 juin 20011
+#Ajout 703 HLine.cpp
+msgid "Click Midpoint On Line"
+msgstr "点击线段中心点"
+
+#Ajout 704 HLine.cpp
+msgid "Click Start Of Line"
+msgstr "点击起点"
+
+#Ajout 705 HLine.cpp
+msgid "Click End Of Line"
+msgstr "点击终点"
+
+#===================================================================================
+#Ajout1
+msgid "Log"
+msgstr "日志"
+
+#Ajout17
+msgid "datum corner"
+msgstr "拐角倒圆"
+
+#Ajout18: aucun effet
+msgid "Toggle Horizontal"
+msgstr "切换水平"
+
+#Ajout19: aucun effet
+msgid "Toggle Vertical"
+msgstr "切换垂直"
+
+#Ajout20: aucun effet
+msgid "Toggle Line Length"
+msgstr "切换线段长度"
+
+#Ajout21
+msgid "Copy"
+msgstr "复制"
+
+#Ajout22
+msgid "Cut"
+msgstr "剪切"
+
+#Ajout23
+msgid "solidify"
+msgstr "固化"
+
+#Ajout24 : aucun effet
+msgid "Pad Sketch"
+msgstr "线框"
+
+#Ajout25  HeeksCAD.cpp
+msgid "This language is not supported by the system."
+msgstr "系统不支持这种语言。"
+
+#Ajout26
+msgid "HeeksCAD free Solid Modelling software based on Open CASCADE"
+msgstr "HeeksCAD 自由实体建模软件，基于 OpenCASCADE"
+
+#Ajout27
+msgid "Fill in material name"
+msgstr "填充材料的名称"
+
+#Ajout28
+msgid "Constraint"
+msgstr "约束"
+
+#Ajout29. Profile.cpp
+msgid "Conventional"
+msgstr "常规"
+
+#Ajout30
+msgid "Sketch Mode:\n"
+msgstr "草图模式:\n"
+
+#Ajout31
+msgid "fullscreen"
+msgstr "全屏"
+
+#Ajout32
+msgid "ViewUnits"
+msgstr "查看单位"
+
+#Ajout33
+msgid "Use 3D rotation"
+msgstr "使用三维旋转"
+
+#Ajout34 HeeksCAD.cpp
+msgid "font options"
+msgstr "字体选项"
+
+#Ajout35  HeeksCAD.cpp
+msgid "OpenGL (default) font"
+msgstr "OpenGL 默认字体"
+
+#Ajout36 HeeksCAD.cpp
+msgid "Active font"
+msgstr "动态字体"
+
+#Ajout37 HeeksCAD.cpp
+msgid "Paths (semicolon delimited)"
+msgstr "路径（以分号分隔）"
+
+#Ajout38
+msgid "apply"
+msgstr "确认"
+
+#Ajout39 Aucun effet Terme dans default.tooltable et CuttingTool.cpp
+msgid " degreee "
+msgstr "角度"
+
+#Ajout39bis Aucun effet
+msgid " degree  "
+msgstr "角度"
+
+#Ajout40 ConstraintTools.cpp
+msgid "Set Perpendicular"
+msgstr "设置垂直"
+
+#Ajout41 ConstraintTools.cpp
+msgid "Set these lines to be perpendicular"
+msgstr "设置这些行是垂直"
+
+#Ajout42 ConstraintTools.cpp
+msgid "new"
+msgstr "新建"
+
+#Ajout43 ConstraintTools.cpp
+msgid "Toggle Tangent"
+msgstr "切换正切"
+
+#Ajout44 ConstraintTools.cpp
+msgid "Set line tangent to arc"
+msgstr "设置线相切弧"
+
+#Ajout45 ConstraintTools.cpp
+msgid "Set Parallel"
+msgstr "设置平行"
+
+#Ajout46 ConstraintTools.cpp
+msgid "Set these lines to be parallel"
+msgstr "设置这些线平行"
+
+#Ajout47 ConstraintTools.cpp
+msgid "Set Equal Length"
+msgstr "设置长度相等"
+
+#Ajout48 ConstraintTools.cpp
+msgid "Set these lines to be equal length"
+msgstr "设置这些线长度相等"
+
+#Ajout49 ConstraintTools.cpp
+msgid "Set Colinear"
+msgstr "设置共线"
+
+#Ajout50 ConstraintTools.cpp
+msgid "Set these lines to be colinear"
+msgstr "这些线路设置将共线"
+
+#Ajout51
+msgid "two points mode"
+msgstr "两点模式"
+
+#Ajout52
+msgid "centre with radius mode"
+msgstr "中心，半径模式"
+
+#Ajout53 ConstraintTools.cpp
+msgid "Set Equal Radius"
+msgstr "使半径等于"
+
+#Ajout54 ConstraintTools.cpp
+msgid "Set these arcs to have equal radii"
+msgstr "给这些弧半径相同"
+
+#Ajout55 ConstraintTools.cpp
+msgid "Set Concentric"
+msgstr "设置同心"
+
+#Ajout56 ConstraintTools.cpp
+msgid "Set these arcs to be concentric"
+msgstr "设置这些同心度的弧"
+
+#Ajout57 ConstraintTools.cpp
+msgid "Set Coincident"
+msgstr "设置重合"
+
+#Ajout58 ConstraintTools.cpp
+msgid "Set these points to be coincident"
+msgstr "设置这些点重合"
+
+#Ajout59 ConstraintTools.cpp
+msgid "Set Point On Line"
+msgstr "线上设置点"
+
+#Ajout60 ConstraintTools.cpp
+msgid "Set this point on line"
+msgstr "设置这点上线"
+
+#Ajout61 ConstraintTools.cpp
+msgid "Set Point On Midpoint"
+msgstr "在中点设置点"
+
+#Ajout62 ConstraintTools.cpp
+msgid "Set this point on the midpoint of line"
+msgstr "这一点设置为线的中点"
+
+#Ajout63 ConstraintTools.cpp
+msgid "Set this point on the midpoint of arc"
+msgstr "这一点设置为弧的中点"
+
+#Ajout64 ConstraintTools.cpp
+msgid "Set Point On Arc"
+msgstr "弧上设置点"
+
+#Ajout65 ConstraintTools.cpp
+msgid "Set this point on arc"
+msgstr "弧上设置该点"
+
+#Ajout66 ConstraintTools.cpp
+msgid "Run Test"
+msgstr "运行测试"
+
+#Ajout67  ConversionTools.cpp
+msgid "Test Face, Sketches United"
+msgstr "测试面，及草图"
+
+#Ajout68
+msgid "add"
+msgstr "添加"
+
+#Ajout69  : Aucun effet
+msgid "Make a sketch from edge"
+msgstr "从边创建草图"
+
+#Ajout70 : Face.cpp
+msgid "Face Coordinate System"
+msgstr "面坐标系统"
+
+#Ajout70
+msgid "Toggle Radius"
+msgstr "切换半径"
+
+#Ajout71
+msgid "Set this arcs radius as constrained"
+msgstr "设置此作为约束弧半径"
+
+#Ajout72
+msgid "click on centre point"
+msgstr "点击中心点"
+
+#Ajout73  RegularShapesDrawing.cpp
+msgid "excribed circle"
+msgstr "外切圆"
+
+#Ajout74 RegularShapesDrawing.cpp
+msgid "inscribed circle"
+msgstr "内切圆"
+
+#Ajout100  : PythonStuff.cpp
+msgid "not found"
+msgstr "未发现"
+
+#Ajout102 : PythonStuff.cpp
+msgid "Machine name (defined in Program Properties) not found"
+msgstr "没有发现机器名（在程序属性中定义的）"
+
+#Ajout103  : PythonStuff.cpp
+msgid "couldn't write post.py!"
+msgstr "不能写post.py！"
+
+#Ajout104  : PythonStuff.cpp
+msgid "Error while post-processing the program!"
+msgstr "后处理程序，而错误！"
+
+#Ajout105  : PythonStuff.cpp
+msgid "Error while backplotting the program!"
+msgstr "而背面绘制程序的错误！"
+
+#Ajout106
+msgid "Export"
+msgstr "输出"
+
+#Ajout107
+msgid "Select a file to export to"
+msgstr "选择导出到一个文件"
+
+#Ajout108
+msgid "export"
+msgstr "输出"
+
+#Ajout109
+msgid "facing"
+msgstr "覆盖层"
+
+#Ajout109
+msgid "clearance"
+msgstr "间隙"
+
+#Ajout110
+msgid "Cannot generate GCode for profile without a cutting tool assigned"
+msgstr "无法产生G代码分配没有切割工具的配置文件"
+
+#Ajout111
+msgid "Could not open '%s' for reading\n"
+msgstr "无法打开阅读 '%s'  \n"
+
+#Ajout112
+msgid "Pattern repetition is not yet supported\n"
+msgstr "重复模式尚不支持\n"
+
+#Ajout113
+msgid "Expected number following 'X'\n"
+msgstr "等待下一个号码  'X'\n"
+
+#Ajout114
+msgid "Expected number following 'Y'\n"
+msgstr "等待下一个号码 'Y'\n"
+
+#Ajout114
+msgid "Ignoring select drill mode (G05) command\n"
+msgstr "忽略选择钻取模式（G05）命令\n"
+
+#Ajout115
+msgid "Ignoring select drill mode (G81) command\n"
+msgstr "忽略选择钻取模式（G81）指令\n"
+
+#Ajout116
+msgid "Ignoring variable dwell (G04) command\n"
+msgstr "忽略变量纠缠（G04）命令\n"
+
+#Ajout117
+msgid "Incremental coordinates mode (G91) is not yet supported\n"
+msgstr "增量坐标模式（G91）尚未支持\n"
+
+#Ajout118
+msgid "Set zero (G92) is not yet supported\n"
+msgstr "目前尚不支持设置为零（G92）\n"
+
+#Ajout119
+msgid "Set zero (G93) is not yet supported\n"
+msgstr "目前尚不支持设置为零（G93）\n"
+
+#Ajout120
+msgid "Unexpected command '%s'\n"
+msgstr "意外的命令 '%s'\n"
+
+#Ajout121
+msgid "Hole position defined without selecting a tool first\n"
+msgstr "孔位定义而不选择工具的第一个\n"
+
+#Ajout122
+msgid "Excellon::Read(%s)\n"
+msgstr "Excellon::Read(%s)\n"
+
+#Ajout123
+msgid " rotated "
+msgstr "旋转"
+
+#Ajout124
+msgid " degrees in YZ plane"
+msgstr "YZ 平面角度"
+
+#Ajout125
+msgid " degrees in XZ plane"
+msgstr "XZ平面角度"
+
+#Ajout126
+msgid " degrees in XY plane"
+msgstr "XY平面角度"
+
+#Ajout127
+msgid "path"
+msgstr "路径"
+
+#Ajout128
+msgid "Apply NC Code to solids. NOTE: This not ready yet."
+msgstr "CN代码应用到（不是功能）3D物体"
+
+#Ajout129
+msgid "Applying NC operations to solid"
+msgstr "CN操作适用于三维对象"
+
+#Ajout130
+msgid "Replacing solids in model"
+msgstr "更换对象的三维模型"
+
+#Ajout131
+msgid "Machined "
+msgstr "加工"
+
+#Ajout132
+msgid "Standard_DomainError thrown during shape operations\n"
+msgstr "在造型过程中发生错误操作\n"
+
+#Ajout133
+msgid "Unexpected exception thrown during shape operations\n"
+msgstr "意外的异常操作过程中形成\n"
+
+#Ajout134
+msgid "nccode"
+msgstr "NC 代码"
+
+#Ajout135
+msgid "edited"
+msgstr "已编辑"
+
+#Ajout136
+msgid "ncblock"
+msgstr "欧盟CN"
+
+#Ajout137
+msgid "Set this line to be horizontal"
+msgstr "解决这些线是横向的"
+
+#Ajout138
+msgid "Set this line to be vertical"
+msgstr "解决这些线是垂直"
+
+#Ajout139
+msgid "Set this lines length as constrained"
+msgstr "说的线路长度的限制"
+
+#Ajout140
+msgid ") with "
+msgstr ") 和"
+
+#Ajout141 :
+msgid "Make selected edges into a new sketch"
+msgstr "选定的边到一个新的草图"
+
+#Ajout142 : aucun effet
+msgid "Blend edge"
+msgstr "混合边缘"
+
+#Ajout143 HeeksCAD.cpp
+msgid "stl save facet tolerance"
+msgstr "保存公差"
+
+#Ajout144
+msgid "Draw circles through 3 points"
+msgstr "由三点定义圆"
+
+#Ajout145
+msgid "Draw circles, centre and point"
+msgstr "圆的中心和一个点"
+
+#Ajout146
+msgid "Draw circles, centre and radius"
+msgstr "圆的圆心和半径"
+
+#Ajout147  Nombre d'étapes d'interpolations???
+msgid "Arc Interpolation Count"
+msgstr "插值弧"
+
+#Ajout148 Drilling.cpp
+msgid "Chamfering bit for drilling op (id="
+msgstr "倒角钻运 (id="
+
+#Ajout149 Drilling.cpp
+msgid ") is too big for previously drilled hole (drilling id="
+msgstr ") 以前钻孔太大 ( 钻孔 id="
+
+#Ajout150 Drilling.cpp
+msgid ") is too small for previously drilled hole (drilling id="
+msgstr ") 太小，上面的孔 ( 钻孔 id="
+
+#Ajout151 Drilling.cpp
+msgid "Adjusting depth of drill cycle id='"
+msgstr "钻井周期调整的ID='"
+
+#Ajout152 Drilling.cpp
+msgid "' from '"
+msgstr "'从 '"
+
+#Ajout153 Drilling.cpp
+msgid " to "
+msgstr "到"
+
+#Ajout154 Drilling.cpp
+msgid "WARNING: Drilling (id="
+msgstr "注意：钻孔 (id="
+
+#Ajout155 Drilling.cpp
+msgid ").  Can't drill hole "
+msgstr "). 不能钻洞"
+
+#Ajout156 Drilling.cpp
+msgid " when the drill bit's cutting length is only "
+msgstr "当钻头的切削长度仅"
+
+#Ajout157 Drilling.cpp
+msgid " long\n"
+msgstr "长 \n"
+
+#Ajout157 HeeksCNC.cpp
+msgid "Importing data from %s\n"
+msgstr "导入数据 %s\n"
+
+#Ajout158 HeeksCNC.cpp
+msgid "speed"
+msgstr "S tr/min"
+
+#Ajout159 HeeksCNC.cpp
+msgid "feed"
+msgstr "F mm/min"
+
+#Ajout160 HeeksCNC.cpp
+msgid "tool"
+msgstr "工具"
+
+#Ajout161 HeeksCNC.cpp
+msgid "fixture"
+msgstr "夹具"
+
+#Ajout162 HeeksCNC.cpp
+msgid "possible default filename does not contain either 'speed', 'feed' or 'tool' in its name.\n"
+msgstr "可能默认的文件名不包含无论是“速度”，“喂”或“工具”，在其名称.\n"
+
+#Ajout162
+msgid "roll radius"
+msgstr "轧辊半径"
+
+#Ajout163
+msgid "execution_order"
+msgstr "执行顺序"
+
+#Ajout164  Aucun effet
+msgid "CuttingTool"
+msgstr "刀具"
+
+#Ajout 165 HSpline.cpp
+msgid "col"
+msgstr "与"
+
+#Ajout 166 HSpline.cpp
+msgid "rational"
+msgstr "理性"
+
+#Ajout 167 HSpline.cpp
+msgid "periodic"
+msgstr "定期"
+
+#Ajout 168 HSpline.cpp
+msgid "knots"
+msgstr "节"
+
+#Ajout 168 HSpline.cpp
+msgid "poles"
+msgstr "两极"
+
+#Ajout 169 HSpline.cpp
+msgid "degree"
+msgstr "度"
+
+#Ajout 170 HSpline.cpp
+msgid "knot"
+msgstr "节"
+
+#Ajout 171 Pad.cpp
+msgid "Pad"
+msgstr "记事本"
+
+#Ajout 171 Pad.cpp
+msgid "Height"
+msgstr "高度"
+
+#Ajout 172 TreeCanvas.cpp
+msgid "root"
+msgstr "Root"
+
+#Ajout 173 TreeCanvas.cpp
+msgid "not "
+msgstr "否"
+
+#Ajout 174 MarkedList.cpp
+msgid "delete"
+msgstr "删除"
+
+#Ajout 175 MarkedList.cpp
+msgid "copy"
+msgstr "复制"
+
+#Ajout 176 MarkedList.cpp
+msgid "Paste"
+msgstr "粘贴"
+
+#Ajout 177 MarkedList.cpp
+msgid "paste"
+msgstr "粘贴"
+
+#Ajout 177 Sketch.cpp
+msgid "clockwise"
+msgstr "顺时针"
+
+#Ajout 178 LineArcDrawin.cpp
+msgid "set previous direction"
+msgstr "设置以前的方向"
+
+#Ajout 179 LineArcDrawin.cpp
+msgid "Ellipse drawing mode"
+msgstr "椭圆形的绘制模式"
+
+#Ajout 180 LineArcDrawin.cpp
+msgid "center and 2 points mode"
+msgstr "中心和2分模式"
+
+#Ajout 181 LineArcDrawin.cpp
+msgid "click on point on ellipse\n"
+msgstr "上点一下椭圆\n"
+
+#Ajout 182 LineArcDrawin.cpp
+msgid "(colinear or orthogonal to axis)"
+msgstr "（共线或垂直轴）"
+
+#Ajout 183 LineArcDrawin.cpp
+msgid "click on another point on ellipse"
+msgstr "点击另一个椭圆上的点"
+
+#Ajout 184 LineArcDrawin.cpp
+msgid "Spline drawing mode"
+msgstr "样条绘图模式"
+
+#Ajout 185 LineArcDrawin.cpp
+msgid "cubic spline mode"
+msgstr "三次样条模式"
+
+#Ajout 186 LineArcDrawin.cpp
+msgid "click on end point"
+msgstr "点击终点"
+
+#Ajout 186 LineArcDrawin.cpp
+msgid "click on first control point"
+msgstr "点击第一个控制点"
+
+#Ajout 187 LineArcDrawin.cpp
+msgid "click on second control point"
+msgstr "点击第二个控制点"
+
+#Ajout 188 LineArcDrawin.cpp
+msgid "quartic spline mode"
+msgstr "二次样条模式"
+
+#Ajout 189 LineArcDrawin.cpp
+msgid "click on control point"
+msgstr "点击控制点"
+
+#Ajout 190 LineArcDrawin.cpp
+msgid "rational spline mode"
+msgstr "有理样条模式"
+
+#Ajout 191 LineArcDrawin.cpp
+msgid "click on next control point or endpoint"
+msgstr "点击下一个控制点或端点"
+
+#Ajout 192 UndoEngine.cpp
+msgid "OldTree: "
+msgstr "旧树: "
+
+#Ajout 193 UndoEngine.cpp
+msgid "NewTree: "
+msgstr "新树: "
+
+#Ajout 194 HeeksCAD.cpp
+msgid "single color"
+msgstr "单色"
+
+#Ajout 195 HeeksCAD.cpp
+msgid "top color and bottom color"
+msgstr "顶部及底部颜色"
+
+#Ajout 196 HeeksCAD.cpp
+msgid "left color and right color"
+msgstr "左侧及右侧颜色"
+
+#Ajout 197 HeeksCAD.cpp
+msgid "four corner colors"
+msgstr "四个角落的颜色"
+
+#Ajout 198 HeeksCAD.cpp
+msgid "background mode"
+msgstr "背景模式"
+
+#Ajout 199 HeeksCAD.cpp
+msgid "background color"
+msgstr "背景颜色"
+
+#Ajout 200 HeeksCAD.cpp
+msgid "top background color"
+msgstr "顶部背景颜色"
+
+#Ajout 201 HeeksCAD.cpp
+msgid "bottom background color"
+msgstr "底部背景颜色"
+
+#Ajout 202 HeeksCAD.cpp
+msgid "left background color"
+msgstr "左侧背景颜色"
+
+#Ajout 203 HeeksCAD.cpp
+msgid "right background color"
+msgstr "右侧背景颜色"
+
+#Ajout 204 HeeksCAD.cpp
+msgid "top left background color"
+msgstr "左上背景颜色"
+
+#Ajout 205 HeeksCAD.cpp
+msgid "bottom left background color"
+msgstr "左下背景颜色"
+
+#Ajout 206 HeeksCAD.cpp
+msgid "top right background color"
+msgstr "右上背景颜色"
+
+#Ajout 207 HeeksCAD.cpp
+msgid "bottom right background color"
+msgstr "右下背景颜色"
+
+#Ajout 208 RegularShapesDrawing.cpp
+msgid "polygon mode"
+msgstr "多边形模式"
+
+#Ajout 209
+msgid "Vertices"
+msgstr "顶点"
+
+#Ajout 210
+msgid "Vertex"
+msgstr "顶点"
+
+#Ajout 211: aucun effet
+msgid "Stop rotating"
+msgstr "停止旋转"
+
+#Ajout 212 : aucun effet
+msgid "Sketch On Face"
+msgstr "表面绘图"
+
+#Ajout 213
+msgid "Part"
+msgstr "零件"
+
+#Ajout 214 : aucun effet
+msgid "Pocket Sketch"
+msgstr "画出口袋"
+
+#Ajout 215: aucun effet
+msgid "Make To Part"
+msgstr "产生零件"
+
+#Ajout 216 : aucun effet
+msgid "Make a sketch from face"
+msgstr "从面创建一个草图"
+
+#Ajout 217 . shape.cpp : aucun effet
+msgid "STEP solid"
+msgstr "STEP实体"
+
+#Ajout 218 : shape.cpp
+msgid "BREP solid"
+msgstr "BREP实体"
+
+#Ajout 219  Program.cpp
+msgid "Maximum Spindle Speed (RPM)"
+msgstr "引脚马克西频率（转/分）"
+
+#Ajout 220 : HeeksCNC.cpp
+msgid "Open BOM File"
+msgstr "打开BOM文件"
+
+#Ajout 221. Plugins.cpp
+msgid "/plugins"
+msgstr "/插件"
+
+#Ajout 222. Plugins.cpp
+msgid "MyPlugin"
+msgstr "我的插件"
+
+#Ajout 223. Plugins.cpp
+msgid "plugins"
+msgstr "插件"
+
+#Ajout 224. ConstraintTools.cpp
+msgid "Add a dimension object"
+msgstr "增加一个标注对象"
+
+#Ajout 225. ConstraintTools.cpp
+msgid "Set Point On Circle"
+msgstr "在圈设置点"
+
+#Ajout 226. ConstraintTools.cpp
+msgid "Set this point on circle"
+msgstr "设置这一圈上点"
+
+#Ajout 227. Plugins.cpp
+msgid "New"
+msgstr "新建"
+
+#Ajout 228. Plugins.cpp
+msgid "Delete"
+msgstr "删除"
+
+#Ajout 229. AboutBox.cpp
+msgid ""
+"HeeksCAD\n"
+" see http://code.google.com/p/heekscad/\n"
+"\n"
+"using Open CASCADE solid modeller - http://www.opencascade.org"
+msgstr ""
+"HeeksCAD\n"
+"访问 : http://code.google.com/p/heekscad/\n"
+"\n"
+"基于 Open CASCADE - http://www.opencascade.org"
+
+#Ajout 230. AboutBox.cpp
+msgid ""
+"\n"
+"\n"
+"windows made with wxWidgets 2.8.9 - http://wxwidgets.org"
+msgstr ""
+"\n"
+"\n"
+"界面使用wxWidgets 2.8.9 - http://wxwidgets.org"
+
+#Ajout 231. AboutBox.cpp
+msgid ""
+"\n"
+"\n"
+"text uses glFont Copyright (c) 1998 Brad Fish E-mail: bhf5@email.byu.edu Web: http://students.cs.byu.edu/~bfish/"
+msgstr ""
+"\n"
+"\n"
+"文字使用 glFont Copyright (c) 1998 Brad Fish E-mail: bhf5@email.byu.edu Web: http://students.cs.byu.edu/~bfish/"
+
+#Ajout 232. AboutBox.cpp
+msgid ""
+"\n"
+"\n"
+"Written by:\n"
+" Dan Heeks\n"
+" Jon Pry\n"
+" Jonathan George\n"
+" David Nicholls"
+msgstr ""
+"\n"
+"\n"
+"作者:\n"
+" Dan Heeks\n"
+" Jon Pry\n"
+" Jonathan George\n"
+" David Nicholls"
+
+#Ajout 233. AboutBox.cpp
+msgid ""
+"\n"
+"\n"
+"With contributions from:\n"
+" Hirutso Enni\n"
+" Perttu Ahola\n"
+" Dave ( the archivist )\n"
+" mpictor\n"
+" fenn\n"
+" fungunner2\n"
+" andrea ( openSUSE )\n"
+" g_code"
+msgstr ""
+"\n"
+"\n"
+"贡献:\n"
+" Hirutso Enni\n"
+" Perttu Ahola\n"
+" Dave ( the archivist )\n"
+" mpictor\n"
+" fenn\n"
+" fungunner2\n"
+" andrea ( openSUSE )\n"
+" g_code"
+
+#Ajout 234. AboutBox.cpp
+msgid ""
+"\n"
+"\n"
+"This is free, open source software."
+msgstr ""
+"\n"
+"\n"
+"这个是自由，开源软件"
+
+#Ajout 235. HeeksCNC.cpp
+msgid "BOM files"
+msgstr "BOM文件"
+
+#Ajout 236. HeeksCNC.cpp
+msgid "NC files"
+msgstr "NC文件"
+
+#Ajout 237. HeeksCNC.cpp
+msgid "opprofile"
+msgstr "轮廓"
+
+#Ajout 238. HeeksCNC.cpp
+msgid "pocket"
+msgstr "铣削"
+
+#Ajout 239. HeeksCNC.cpp
+msgid "zigzag"
+msgstr "锯齿"
+
+#Ajout 240. HeeksCNC.cpp
+msgid "adapt"
+msgstr "草案"
+
+#Ajout 241. HeeksCNC.cpp
+msgid "drilling"
+msgstr "钻孔"
+
+#Ajout 242. HeeksCNC.cpp
+msgid "turnrough"
+msgstr "拍摄草案"
+
+#Ajout 243. HeeksCNC.cpp
+msgid "drill"
+msgstr "打孔"
+
+#Ajout 244. HeeksCNC.cpp
+msgid "Machining tools"
+msgstr "加工工具"
+
+#Ajout245  ConversionTools.cpp
+msgid "Add Angular Dimension"
+msgstr "添加角尺寸"
+
+#Ajout246  ConversionTools.cpp
+msgid "Add an angular dimension object"
+msgstr "添加一个角度标注对象"
+
+#Ajout247  HAngularDimension.cpp
+msgid "Toggle Dimension Constraint"
+msgstr "切换尺寸约束"
+
+#Ajout248  HAngularDimension.cpp
+msgid "Set this dimension as constrained"
+msgstr "作为约束，设置此维度"
+
+#Ajout249  HAngularDimension.cpp
+msgid "string"
+msgstr "字符"
+
+#Ajout250 HAngularDimension.cpp
+msgid "pythagorean"
+msgstr "毕达哥拉斯"
+
+#Ajout250 HAngularDimension.cpp
+msgid "horizontal"
+msgstr "水平"
+
+#Ajout250 HAngularDimension.cpp
+msgid "vertical"
+msgstr "垂直"
+
+#Ajout251 HAngularDimension.cpp
+msgid "text mode"
+msgstr "文本模式"
+
+#Ajout252 HAngularDimension.cpp
+msgid "scale"
+msgstr "缩放"
+
+#Ajout253 HAngularDimension.cpp
+msgid "textmode"
+msgstr "文本模式"
+
+#Ajout254 HAngularDimension.cpp
+msgid "dimension value"
+msgstr "标注值"
+
+#Ajout255 HAngularDimension.cpp
+msgid "DimensionDrawFlat"
+msgstr "平面绘制"
+
+#Ajout256 HeeksCAD.cpp
+msgid "sky and ground"
+msgstr "天空与地面"
+
+#Ajout256 HeeksCAD.cpp
+msgid "sky top color"
+msgstr "天空上方的颜色"
+
+#Ajout257 HeeksCAD.cpp
+msgid "sky middle color"
+msgstr "天空中间色"
+
+#Ajout258 HeeksCAD.cpp
+msgid "sky bottom color"
+msgstr "天空底色"
+
+#Ajout259 HeeksCAD.cpp
+msgid "ground top color"
+msgstr "顶层颜色"
+
+#Ajout260 HeeksCAD.cpp
+msgid "ground middle color"
+msgstr "地面中间色"
+
+#Ajout261 HeeksCAD.cpp
+msgid "ground bottom color"
+msgstr "地面底色"
+
+#Ajout262 HeeksCAD.cpp
+msgid "flat on screen dimension text"
+msgstr "平屏幕尺寸文本"
+
+#Ajout263 Ruler.cpp
+msgid "use view units"
+msgstr "使用视图单位"
+
+#Ajout263 Ruler.cpp
+msgid "ResetRuler"
+msgstr "复位标尺"
+
+#Ajout264 HPoint.cpp
+msgid "Toggle Fixed"
+msgstr "切换固定"
+
+#Ajout264 HPoint.cpp
+msgid "Set this point as fixed"
+msgstr "设置为固定点"
+
+#Ajout265 HeeksCNC.cpp
+msgid "There are no more coordinate systems available"
+msgstr "有没有更多可用的坐标系"
+
+#Ajout266 HeeksCNC.cpp
+msgid "You may only select a single cutting tool for each drilling operation.!"
+msgstr "你只可以选择一个单一的刀具，每个钻井作业。"
+
+#Ajout 267 : HeeksCNC.cpp
+msgid "New Touch Probe..."
+msgstr "新的接触式探针..."
+
+#Ajout 268 : HeeksCNC.cpp
+msgid "New Tool Length Switch..."
+msgstr "探头长度..."
+
+#Ajout 269 : HeeksCNC.cpp
+msgid "Probing"
+msgstr "探测"
+
+#Ajout 269 : HeeksCNC.cpp
+msgid "New Probe Centre Operation..."
+msgstr "新探中心操作..."
+
+#Ajout 270 : HeeksCNC.cpp
+msgid "New Probe Edge Operation..."
+msgstr "新探边操作......"
+
+#Ajout 271 : Operation.cpp
+msgid "Import Excellon Drill File"
+msgstr "导入Excellon钻文件"
+
+#Ajout 272 : Operation.cpp
+msgid "Excellon Drill Files"
+msgstr "Excellon文件"
+
+#Ajout 273
+msgid "Touch Probe"
+msgstr "接触式探针"
+
+#Ajout 274
+msgid "Tool Length Switch"
+msgstr "探头长度"
+
+#Ajout 275 TransfromTools.cpp
+msgid "Pick line for rotation axis"
+msgstr "选择行轴旋转"
+
+#Ajout 276 AutoSave.cpp
+msgid "Do you want to recover using the automatic backup file?"
+msgstr "还原备份文件自动?"
+
+#Ajout 277 AutoSave.cpp
+msgid "Confirm"
+msgstr "确认"
+
+#Ajout 278 AutoSave.cpp
+msgid "Recovering from backup file %s\n"
+msgstr "还原档案 %s\n"
+
+#Ajout 279 HText.cpp
+msgid "Convert the lines and arcs that make up this text into a sketch object."
+msgstr "转换线和圆弧，使这个文本对象的轮廓"
+
+#Ajout 280 CxFont.cpp  Pas d'effet
+msgid "Failed to load font.  Error is %s\n"
+msgstr "无法加载字体。错误是 : %s\n"
+
+#Ajout 281 CxFont.cpp  Pas d'effet
+msgid "Read %d Cxf-format font files\n"
+msgstr "读取%d个CXF格式的字体文件\n"
+
+#Ajout 282 HeeksCNC.cpp
+msgid "You haven't selected a cutting tool for this hole.  By default no 'tool definition' or 'select tool' code will be generated for this drilling cycle."
+msgstr "没有刀具选择了钻探。默认情况下，没有​​定义或选择工具，将生成的代码为这种钻探轮。"
+
+#Ajout 283 Probing.cpp
+msgid "Depth"
+msgstr "深度"
+
+#Ajout 284 Fixture.cpp
+msgid "Select a file to import"
+msgstr "选择要导入的文件"
+
+#Ajout 285 Fixture.cpp
+msgid "import"
+msgstr "输入"
+
+#Ajout 286 Probing.cpp
+msgid "Two"
+msgstr "二"
+
+#Ajout 287 Probing.cpp
+msgid "Four"
+msgstr "四"
+
+#Ajout 288 Probing.cpp
+msgid "Number of points"
+msgstr "点的数量"
+
+#Ajout 289 Probing.cpp
+msgid "Alignment"
+msgstr "对齐"
+
+#Ajout 290 Probing.cpp
+msgid "Retract"
+msgstr "提款"
+
+#Ajout 291 Probing.cpp
+msgid "One"
+msgstr "一"
+
+#Ajout 292 Probing.cpp
+msgid "Number of edges"
+msgstr "边数"
+
+#Ajout 293 Probing.cpp
+msgid "Direction"
+msgstr "方向"
+
+#Ajout 294 Probing.cpp
+msgid "Generate GCode"
+msgstr "生成NC代码"
+
+#Ajout 295 SelectMode.cpp
+msgid "Error! The \"Stop Picking\" button shouldn't have been available!"
+msgstr "错误!\"停止选取\"按钮无效!"
+
+#Ajout 296 SelectMode.cpp
+msgid "Set the selection filter to only faces"
+msgstr "仅选择面"
+
+#Ajout 297 SelectMode.cpp
+msgid "Pick Faces"
+msgstr "拣选面"
+
+#Ajout 298 HeeksCAD.cpp
+msgid "pad"
+msgstr "便笺本"
+
+#Ajout 299 HeeksCAD.cpp
+msgid "part"
+msgstr "零件"
+
+#Ajout 300 HeeksCAD.cpp
+msgid "auto save interval (in minutes)"
+msgstr "自动保存时间间隔（分钟）"
+
+#Ajout 301 RuledSurface.cpp
+msgid "Pipe"
+msgstr "圆管"
+
+#Ajout 302 Profile.cpp
+msgid "Climb"
+msgstr "延伸"
+
+#Ajout 303 DepthOp.cpp
+msgid "WARNING"
+msgstr "警告"
+
+#Ajout 304 DepthOp.cpp
+msgid "Depth Operation"
+msgstr "深度操作"
+
+#Ajout 305 DepthOp.cpp
+msgid "is set to cut deeper than the assigned cutting tool will allow"
+msgstr "更深的削减比分配的切割工具将允许"
+
+#Ajout 306 DepthOp.cpp
+msgid "has poor start and final depths"
+msgstr "开局不佳，最终深处"
+
+#Ajout 307 DepthOp.cpp
+msgid "Can't change this setting automatically"
+msgstr "不能更改此设置自动"
+
+#Ajout 308 DepthOp.cpp
+msgid "Clearance height is below start depth"
+msgstr "净空高度低于启动深入"
+
+#Ajout 309 DepthOp.cpp
+msgid "Raising clearance height up to start depth (+5 mm)"
+msgstr "提高净空高度，深度（+五毫米）"
+
+#Ajout 310 DepthOp.cpp
+msgid "does not have a cutting tool assigned"
+msgstr "没有分配切削刀具"
+
+#Ajout 311 DepthOp.cpp
+msgid "It can not produce GCode without a cutting tool assignment"
+msgstr "它不能产生无刀具分配的G代码"
+
+#Ajout 312 Pocket.cpp
+msgid "Pocket"
+msgstr "铣削"
+
+#Ajout 313 Pocket.cpp
+msgid "Invalid reference to sketch"
+msgstr "参考草图无效"
+
+#Ajout 314 Pocket.cpp
+msgid "in pocket operations"
+msgstr "在加工的口袋"
+
+#Ajout 315HeeksCAD.cpp
+msgid "Language"
+msgstr "语言"
+
+#Ajout 316 RuledSurface.cpp
+msgid "Input revolution angle"
+msgstr "角的革命"
+
+#Ajout 317 GraphicCanvas.cpp
+msgid "some text"
+msgstr "一些文字"
+
+#Ajout 317 wxImageLoader.cpp
+msgid "Failed to load resource image from "
+msgstr "无法加载资源形象"
+
+#Ajout 318 HeeksFrame.cpp
+msgid "Pick one or more sketches, faces or circles, to create a revolved body from"
+msgstr "选择一个或多个草图，面或圆形，营造革命卷"
+
+#Ajout 319 HeeksFrame.cpp
+msgid "hold down Ctrl key to select more than one solid"
+msgstr "按Ctrl的卷物"
+
+#Ajout 320 HeeksFrame.cpp
+msgid "Pick one or more sketches, faces or circles, to create an extruded body from"
+msgstr "选择一个或多个草图，面或圆，以创建一个挤出量"
+
+#Ajout 321 HeeksFrame.cpp
+msgid "Pick two or more sketches, to create a lofted solid between"
+msgstr "选择两个或两个以上的草图，创建卷平滑他们"
+
+#Ajout 322 HeeksFrame.cpp
+msgid "Revolve a sketch"
+msgstr "旋转截面"
+
+#Ajout 323 HeeksFrame.cpp
+msgid "Revolve a wire or face"
+msgstr "网或面临革命"
+
+#Ajout 324 HeeksFrame.cpp
+msgid "Revolve"
+msgstr "革命"
+
+#Ajout 325 RuledSurface.cpp
+msgid "pick sketches, faces or circles"
+msgstr "选择草图，面或圆形"
+
+#Ajout 326 RuledSurface.cpp
+msgid "Extrude makes a solid"
+msgstr "挤出实体/曲面"
+
+#Ajout 327 RuledSurface.cpp
+msgid "Error making revolved solid"
+msgstr "建立稳固的革新错误"
+
+#Ajout 328 RuledSurface.cpp
+msgid "Fatal error making revolved solid"
+msgstr "围绕坚实的致命错误"
+
+#Ajout 329 RuledSurface.cpp
+msgid "Error making extruded solid"
+msgstr "错误决策的挤压固体"
+
+#Ajout 330 RuledSurface.cpp
+msgid "Error making ruled solid"
+msgstr "错误建立健全规则"
+
+#Ajout 331 RuledSurface.cpp
+msgid "Error making pipe"
+msgstr "错误创建弯头"
+
+#Ajout 332 Face.cpp
+msgid "Extrude Face"
+msgstr "挤出机脸"
+
+#Ajout 333 HeeksFrame.cpp
+msgid "3D Move Rotate"
+msgstr "三维移动旋转"
+
+#Ajout 334 HeeksFrame.cpp
+msgid "3D Rotate selected items"
+msgstr "三维旋转选中的实体"
+
+#Ajout 335 HeeksFrame.cpp
+msgid "3D Copy Rotate"
+msgstr "三维复制旋转"
+
+#Ajout 335 HeeksFrame.cpp
+msgid "3D Copy and rotate selected items"
+msgstr "三维复制旋转选中的实体"
+
+#Ajout 336 Shape.cpp
+msgid "Error making offset"
+msgstr "错误的扩张对象"
+
+#Ajout 337 Shape.cpp
+msgid "Stretched Shape"
+msgstr "变形对象"
+
+#Ajout 338 Shape.cpp
+msgid "Error with cut operation"
+msgstr "减法错误"
+
+#Ajout 339 Shape.cpp
+msgid "Error with fuse operation"
+msgstr "错误的融合"
+
+#Ajout 340 Shape.cpp
+msgid "Error with common operation"
+msgstr "错误交叉口"
+
+#Ajout 341 HeeksFrame.cpp
+msgid "Start drawing rectangles"
+msgstr "绘制矩形"
+
+#Ajout 342 HeeksFrame.cpp
+msgid "Start drawing obrounds"
+msgstr "绘制椭圆形"
+
+#Ajout 343 HeeksFrame.cpp
+msgid "Start drawing polygons"
+msgstr "绘制多边形"
+
+#Ajout 344 HeekscAD.cpp
+msgid "Select how the file is to be interpreted"
+msgstr "选择如何解释文件"
+
+#Ajout 345 HeekscAD.cpp
+msgid "RS274X file interpretation"
+msgstr "RS274X文件解释"
+
+#Ajout 346 HeekscAD.cpp Traduction hypothétique
+msgid "Produce trace isolation sketches"
+msgstr "生产跟踪隔离草图"
+
+#Ajout 347 HeekscAD.cpp Traduction hypothétique
+msgid "Produce trace centre-line sketches"
+msgstr "生产跟踪中心线草图"
+
+#Ajout 348 HeekscAD.cpp
+msgid "Solid revolution angle"
+msgstr "实体交叉角度"
+
+#Ajout 349 HeekscAD.cpp
+msgid "Use old solid fuse ( to prevent coplanar faces )"
+msgstr "使用旧有实体合并"
+
+#Ajout 350 HText.cpp
+msgid "Make a Sketch"
+msgstr "建立草图"
+
+#Ajout 351 Shape.cpp
+msgid "Error making fillet"
+msgstr "倒圆角错误"
+
+#Ajout 352
+msgid "command not done"
+msgstr "命令未完成"
+
+#Ajout 353  HeeksFrame.cpp
+msgid "View XY Front"
+msgstr "查看XY前面"
+
+#Ajout 354  HeeksFrame.cpp
+msgid "View XY Back"
+msgstr "查看XY背面"
+
+#Ajout 355  HeeksFrame.cpp
+msgid "View XZ Top"
+msgstr "查看XZ顶面"
+
+#Ajout 356  HeeksFrame.cpp
+msgid "View XZ Bottom"
+msgstr "查看XZ底面"
+
+#Ajout 357  HeeksFrame.cpp
+msgid "View YZ Right"
+msgstr "查看YZ右面"
+
+#Ajout 358  HeeksFrame.cpp
+msgid "View XZ Left"
+msgstr "查看XZ左面"
+
+#Ajout 359  HeeksFrame.cpp
+msgid "View XZY Isometric"
+msgstr "三维实体"
+
+#Ajout 360 Sketch.cpp Aucun effet
+msgid "Copy Parallel"
+msgstr "平行复制"
+
+#Ajout 361 Sketch.cpp  Aucun effet
+msgid "Enter Sketch Mode"
+msgstr "输入草图模式"
+
+#Ajout 362 HeeksFrame.cpp
+msgid "View pan"
+msgstr "视图平移"
+
+#Ajout 363 HeeksFrame.cpp
+msgid "View Pan"
+msgstr "视图平移"
+
+#Ajout 364 HeeksFrame.cpp
+msgid "Save Settings"
+msgstr "保存设置"
+
+#Ajout 365 HeeksCAD.cpp
+msgid "Allow OpenGL stippling"
+msgstr "允许OpenGL的点阵"
+
+#Ajout 366 HeeksCAD.cpp
+msgid "solid view mode"
+msgstr "实体视图模式"
+
+#Ajout 367 HeeksCAD.cpp
+msgid "faces and edges"
+msgstr "面域和边缘"
+
+#Ajout 368 HeeksCAD.cpp
+msgid "edges only"
+msgstr "仅边缘"
+
+#Ajout 369 HeeksCAD.cpp
+msgid "faces only"
+msgstr "仅面域"
+
+#Ajout 370 HeeksCAD.cpp
+msgid "face selection color"
+msgstr "选择面的颜色"
+
+#Ajout 371 RegularShapesDrawing.cpp
+msgid "Rectangle drawing"
+msgstr "矩形绘制"
+
+#Ajout 372 RegularShapesDrawing.cpp
+msgid "Polygon drawing"
+msgstr "多边形绘图"
+
+#Ajout 373 RegularShapesDrawing.cpp
+msgid "Obround drawing"
+msgstr "Obround绘图"
+
+#Ajout 374 RegularShapesDrawing.cpp
+msgid "Regular shapes drawing"
+msgstr "绘图规则形状"
+
+#Ajout 375 HeeksFrame.cpp
+msgid "Draw Ellipses"
+msgstr "绘制椭圆"
+
+#Ajout 376 SketchTools.cpp
+msgid "simplify sketch options"
+msgstr "简化草图选项"
+
+#Ajout 377 SketchTools.cpp
+msgid "max deviation"
+msgstr "最大偏差"
+
+#Ajout 378 SketchTools.cpp
+msgid "cleanup tolerance (temporary)"
+msgstr "清理宽容（临时）"
+
+#Ajout 379 SketchTools.cpp
+msgid "bspline min degree (eg: 3)"
+msgstr "b样条最小角度（如：3）"
+
+#Ajout 380 SketchTools.cpp
+msgid "bspline max degree (eg: 8)"
+msgstr "B样条的最大角度（例如：8）"
+
+#Ajout 381 SketchTools.cpp
+msgid "bspline continuity (eg: GeomAbs_C2)"
+msgstr "b样条的连续性（如：GeomAbs_C2）"
+
+#Ajout 382 SketchTools.cpp
+msgid "Sort Points"
+msgstr "排序积分"
+
+#Ajout 383 SketchTools.cpp
+msgid "Force closed shape"
+msgstr "强行关闭的形状"
+
+#Ajout 384
+msgid "Simplify Sketch to Lines"
+msgstr "简化轮廓为线段"
+
+#Ajout 385
+msgid "Simplify Sketch to BSplines"
+msgstr "讲轮廓简化为B样条线"
+
+#Ajout 386 Heeksframe.cpp
+msgid "Save As"
+msgstr "另存为"
+
+#Ajout 392 HeeksFrame.cpp
+msgid "&Set Origin"
+msgstr "设置原点"
+
+#Ajout 393 HeeksFrame.cpp
+msgid "Pick 3 points"
+msgstr "挑选3点"
+
+#Ajout 394 HeeksFrame.cpp
+msgid "Pick 1 point"
+msgstr "挑选1点"
+
+#Ajout 395 HeeksCAD.cpp
+msgid "Word Space Percentage"
+msgstr "字空间的百分比"
+
+#Ajput 396 HeeksCAD.cpp
+msgid "Character Space Percentage"
+msgstr "字符空间的百分比"
+
+#Ajout 397 HeeksCAD.cpp
+msgid "ignore errors where possible"
+msgstr "在可能的情况下忽略错误"
+
+#Ajout 398 Sketch.cpp
+msgid "Use negative for smaller and Positive for larger)"
+msgstr "使用较小和较大的正负面）"
+
+#Ajout 399 Sketch.cpp
+msgid "Enter the distance"
+msgstr "输入距离"
+
+#Ajout 400 SelectMode.cpp
+msgid "End Sketch Mode"
+msgstr "底部草图模式"
+
+#Ajout 401 HeeksFrame.cpp
+msgid "Spline Through Points"
+msgstr "穿过点的样条线"
+
+#Ajout 402 HeeksFrame.cpp
+msgid "Pick three or more points to be splined"
+msgstr "选取3个或更多点的绘制样条曲线"
+
+#Ajout 403 HeeksFrame.cpp
+msgid "Reading Vector Font Definition Files"
+msgstr "读矢量字体定义文件"
+
+#Ajout 404 HLine.cpp
+msgid "Make Cylinder On Line"
+msgstr "在线上创建圆柱体"
+
+#Ajout 405 HLine.cpp
+msgid "Make Cone On Line"
+msgstr "在线上创建圆锥体"
+
+#Ajout 406 HeeksCAD.cpp
+msgid "logging"
+msgstr "日志"
+
+#Ajout 407 HeeksCAD.cpp
+msgid "FatalError"
+msgstr "致命错误"
+
+#Ajout 408 HeelsCAD.cpp
+msgid "Error"
+msgstr "错误"
+
+#Ajout 409 HeeksCAD.cpp
+msgid "Warning"
+msgstr "警告"
+
+#Ajout 410 HeeksCAD.cpp
+msgid "Message"
+msgstr "信息"
+
+#Ajout 411 HeeksCAD.cpp
+msgid "Status"
+msgstr "状态"
+
+#Ajout 412 HeeksCAD.cpp
+msgid "Info"
+msgstr "信息"
+
+#Ajout 413 HeeksCAD.cpp
+msgid "Debug"
+msgstr "调试"
+
+#Ajout 414 HeeksCAD.cpp
+msgid "Trace"
+msgstr "跟踪"
+
+#Ajout 415 HeeksCAD.cpp
+msgid "log level"
+msgstr "日志等级"
+
+#Ajout 416 HeeksCAD.cpp
+msgid "use repetition counting"
+msgstr "使用重复计数"
+
+#Ajout 419 HeeksCAD.cpp
+msgid "use timestamps"
+msgstr "使用时间戳"
+
+#===================================================
+msgid "OK"
+msgstr "OK"
+
+#Cone.cpp
+msgid "centre pos"
+msgstr "圆心位置"
+
+#Cone.cpp
+msgid "direction"
+msgstr "方向"
+
+#Cone.cpp
+msgid "x direction"
+msgstr "X 方向"
+
+#Cone.cpp
+msgid "r1"
+msgstr "r1"
+
+#Cone.cpp
+msgid "r2"
+msgstr "r2"
+
+#Cone.cpp
+msgid "height"
+msgstr "高度"
+
+#Cone.cpp
+msgid "cone must not have both radiuses the same"
+msgstr "圆锥体不能使用2个相同的半径"
+
+#ConversionTools.cpp
+msgid "Fatal Error converting sketch to face"
+msgstr "转化草图为面时发生致命错误"
+
+msgid "Set position and orientation by picking 3 points"
+msgstr "使用3点设置位置及坐标系"
+
+msgid "Set this coordinate system as the active one"
+msgstr "设置该坐标系统为当前"
+
+msgid "Set world coordinate system active"
+msgstr "设置世界坐标系统为当前"
+
+msgid "position"
+msgstr "位置"
+
+msgid "x axis"
+msgstr "X 轴线"
+
+msgid "y axis"
+msgstr "Y 轴线"
+
+msgid "Vertical Angle"
+msgstr "竖向角度"
+
+msgid "Horizontal Angle"
+msgstr "横向角度"
+
+msgid "Twist Angle"
+msgstr "扭曲角度"
+
+msgid "Pick the location"
+msgstr "选取位置"
+
+msgid "Pick a point on the x-axis"
+msgstr "在 X 轴上选取点"
+
+msgid "Pick a point where y > 0"
+msgstr "在Y轴上选取大于0的点"
+
+msgid "width ( x )"
+msgstr "宽度r X"
+
+msgid "height( y )"
+msgstr "高度 Y"
+
+msgid "depth ( z )"
+msgstr "深度 Z"
+
+msgid "radius"
+msgstr "半径"
+
+msgid "Digitize Mode"
+msgstr "捕捉模式"
+
+msgid "X"
+msgstr "X"
+
+msgid "Y"
+msgstr "Y"
+
+msgid "Z"
+msgstr "Z"
+
+msgid "Error! The 'Stop Picking' button shouldn't have been available!"
+msgstr "错误！“放弃选取”按钮无法访问！"
+
+msgid "Stop Picking"
+msgstr "放弃选取"
+
+msgid "Finish picking"
+msgstr "完成选取"
+
+msgid "between two points"
+msgstr "2点之间"
+
+msgid "orthogonal"
+msgstr "直角的"
+
+msgid "mode"
+msgstr "模式"
+
+msgid "Stop drawing"
+msgstr "放弃绘图"
+
+msgid "Finish drawing"
+msgstr "完成图纸"
+
+msgid "Add point"
+msgstr "增加点"
+
+msgid "Add a point to drawing"
+msgstr "在图纸里增加点"
+
+msgid "Get Position"
+msgstr "选取位置"
+
+msgid "Pick position without adding to the drawing"
+msgstr "选取位置而不增加到图纸内"
+
+msgid "Blend"
+msgstr "混合"
+
+msgid "Enter Blend Radius"
+msgstr "输入混合半径"
+
+msgid "Radius"
+msgstr "半径"
+
+#Shape.cpp
+msgid "Solid with edge blend"
+msgstr "边缘混合的实体"
+
+#Shape.cpp
+msgid "A fatal error happened during Blend"
+msgstr "混合时发生致命错误"
+
+msgid "surface type"
+msgstr "表面类型"
+
+msgid "Make Sketch"
+msgstr "创建草图"
+
+#Sketch.cpp
+msgid "unknown"
+msgstr "未知的"
+
+msgid "plane"
+msgstr "平面"
+
+msgid "cylinder"
+msgstr "圆柱体"
+
+msgid "cone"
+msgstr "圆锥体"
+
+msgid "sphere"
+msgstr "球体"
+
+msgid "torus"
+msgstr "圆环"
+
+msgid "bezier"
+msgstr "贝赛尔曲线"
+
+msgid "bspline"
+msgstr "B样条线"
+
+msgid "revolution"
+msgstr "旋转"
+
+msgid "extrusion"
+msgstr "拉伸 (2D>3D)"
+
+msgid "offset"
+msgstr "偏移"
+
+msgid "start"
+msgstr "起点"
+
+msgid "end"
+msgstr "端点"
+
+msgid "centre"
+msgstr "圆心"
+
+msgid "axis"
+msgstr "轴线"
+
+msgid "length"
+msgstr "长度"
+
+msgid ".orientation"
+msgstr ".原点"
+
+msgid "major radius"
+msgstr "较大半径"
+
+msgid "minor radius"
+msgstr "镜像半径"
+
+msgid "rotation"
+msgstr "旋转"
+
+msgid "start angle"
+msgstr "起点角度"
+
+msgid "end angle"
+msgstr "端部角度"
+
+msgid "Length"
+msgstr "长度"
+
+msgid "Picture - "
+msgstr "图片 -"
+
+#HSpline.cpp
+msgid "%s %d"
+msgstr "%s %d"
+
+#HSpline.cpp
+msgid "Knot"
+msgstr "结"
+
+#HSpline.cpp
+msgid "Pole"
+msgstr "极点"
+
+#HSpline.cpp
+msgid "Weight"
+msgstr "重量"
+
+msgid "Untitled"
+msgstr "未命名的"
+
+msgid "This is not an SVG document!"
+msgstr "这不是SVG文件！"
+
+msgid "Invalid file type chosen"
+msgstr "选择了非法的文件格式"
+
+msgid "expecting"
+msgstr "期待的"
+
+#HeeksCAD.cpp
+msgid "couldn't open file"
+msgstr "无法打开"
+
+#HeeksCAD.cpp
+msgid "Save graphical data file"
+msgstr "保存图形数据文件"
+
+msgid "Exit Full Screen Mode"
+msgstr "退出全屏"
+
+msgid "Show Full Screen"
+msgstr "全屏显示"
+
+msgid "view options"
+msgstr "视图选项"
+
+msgid "stay upright"
+msgstr "保持竖向"
+
+msgid "free"
+msgstr "自由"
+
+msgid "rotate mode"
+msgstr "旋转模式"
+
+msgid "none"
+msgstr "无"
+
+msgid "input mode title"
+msgstr "输入模式标题"
+
+msgid "full help"
+msgstr "完整帮助"
+
+msgid "screen text"
+msgstr "屏幕文字"
+
+msgid "antialiasing"
+msgstr "抗锯齿"
+
+msgid "fixed light"
+msgstr "固定灯光"
+
+msgid "reverse mouse wheel"
+msgstr "反向鼠标滑轮"
+
+msgid "reverse zooming mode"
+msgstr "反向缩放模式"
+
+msgid "Ctrl key does rotate"
+msgstr "Ctrl键旋转"
+
+msgid "show datum"
+msgstr "显示数据"
+
+msgid "datum is solid"
+msgstr "实体数据"
+
+msgid "datum size"
+msgstr "数据大小"
+
+msgid "datum size is pixels not mm"
+msgstr "按像素而不是毫米显示数据大小"
+
+msgid "show ruler"
+msgstr "显示标尺"
+
+msgid "no grid"
+msgstr "无轴线"
+
+msgid "faint color"
+msgstr "浅色系"
+
+msgid "alpha blending"
+msgstr "Alpha通道"
+
+msgid "colored alpha blending"
+msgstr "彩色混合Alpha通道"
+
+msgid "grid mode"
+msgstr "轴线模式"
+
+msgid "perspective"
+msgstr "远景"
+
+msgid "tool icon size"
+msgstr "工具条图标尺寸"
+
+msgid "mm"
+msgstr "mm"
+
+msgid "inch"
+msgstr "英寸"
+
+msgid "units"
+msgstr "单位"
+
+msgid "digitizing"
+msgstr "捕捉"
+
+msgid "intersection"
+msgstr "交点"
+
+msgid "midpoint"
+msgstr "中点"
+
+msgid "nearest"
+msgstr "最近"
+
+msgid "tangent"
+msgstr "切线"
+
+msgid "radius for undefined circles"
+msgstr "未定义圆的半径"
+
+msgid "coordinates"
+msgstr "坐标"
+
+msgid "screen"
+msgstr "屏幕"
+
+msgid "grid size"
+msgstr "轴线尺寸"
+
+msgid "snap to grid"
+msgstr "捕捉轴线"
+
+msgid "drawing"
+msgstr "图纸"
+
+msgid "current color"
+msgstr "当前颜色"
+
+msgid "construction color"
+msgstr "建造颜色"
+
+msgid "geometry tolerance"
+msgstr "几何公差"
+
+#HeeksCAD.cpp
+msgid "selection filter"
+msgstr "选择过滤"
+
+msgid "point"
+msgstr "点"
+
+msgid "line"
+msgstr "线"
+
+msgid "arc"
+msgstr "弧"
+
+msgid "infinite line"
+msgstr "直线"
+
+msgid "circle"
+msgstr "园"
+
+msgid "edge"
+msgstr "边"
+
+msgid "face"
+msgstr "面"
+
+msgid "solid"
+msgstr "实体"
+
+msgid "stl_solid"
+msgstr "STL_实体"
+
+msgid "wire"
+msgstr "线框"
+
+msgid "sketch"
+msgstr "线框"
+
+msgid "image"
+msgstr "图片"
+
+msgid "coordinate system"
+msgstr "坐标系"
+
+msgid "text"
+msgstr "文本"
+
+msgid "dimension"
+msgstr "标注"
+
+msgid "ruler"
+msgstr "尺度"
+
+msgid "file options"
+msgstr "文件选项"
+
+msgid "DXF"
+msgstr "DXF"
+
+msgid "make sketch"
+msgstr "创建草图"
+
+msgid "Known Files"
+msgstr "已知文件"
+
+msgid "Heeks files"
+msgstr "Heeks文件"
+
+msgid "IGES files"
+msgstr "IGES文件"
+
+msgid "STEP files"
+msgstr "STEP文件"
+
+msgid "STL files"
+msgstr "STL文件"
+
+msgid "Scalar Vector Graphics files"
+msgstr "SVG文件"
+
+msgid "DXF files"
+msgstr "DXF文件"
+
+msgid "Picture files"
+msgstr "照片文件"
+
+msgid "Unmark"
+msgstr "取消编号"
+
+msgid "Mark"
+msgstr "编号"
+
+msgid "Properties"
+msgstr "属性"
+
+msgid "Save changes to file"
+msgstr "保存到文件"
+
+msgid "Apply"
+msgstr "接受"
+
+msgid "Accept value and continue"
+msgstr "接受值且继续"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Cancel operation"
+msgstr "取消操作"
+
+msgid "New\tCtrl+N"
+msgstr "新建\tCtrl+N"
+
+msgid "Open\tCtrl+O"
+msgstr "打开\tCtrl+O"
+
+msgid "Save\tCtrl+S"
+msgstr "保存\tCtrl+S"
+
+msgid "Print\tCtrl+P"
+msgstr "打印\tCtrl+P"
+
+msgid "Page Setup"
+msgstr "页面设置"
+
+msgid "Print Preview"
+msgstr "打印预览"
+
+msgid "Open Recent"
+msgstr "打开上次"
+
+msgid "Import"
+msgstr "导入"
+
+msgid "About"
+msgstr "关于"
+
+msgid "Plugins"
+msgstr "插件"
+
+msgid "Exit\tCtrl+Q"
+msgstr "退出\tCtrl+Q"
+
+msgid "Undo\tCtrl+Z"
+msgstr "撤销\tCtrl+Z"
+
+msgid "Redo\tCtrl+Shift+Z"
+msgstr "重做\tCtrl+Shift+Z"
+
+msgid "Cut\tCtrl+X"
+msgstr "剪切\tCtrl+X"
+
+msgid "Copy\tCtrl+C"
+msgstr "复制\tCtrl+C"
+
+msgid "Paste\tCtrl+V"
+msgstr "黏贴\tCtrl+V"
+
+msgid "Delete\tDel"
+msgstr "删除\tDel"
+
+msgid "Select Mode"
+msgstr "选择模式"
+
+msgid "Draw a sketch"
+msgstr "绘制草图"
+
+msgid "Draw Circles"
+msgstr "绘制园"
+
+msgid "Draw Infinite Lines"
+msgstr "绘制直线"
+
+msgid "Draw Points"
+msgstr "绘制点"
+
+msgid "Draw Regular Shapes"
+msgstr "绘制规则形状"
+
+msgid "Add Text"
+msgstr "添加文本"
+
+#ConstraintTools.cpp
+msgid "Add Dimension"
+msgstr "增加标注"
+
+#HeeksFrame.cpp
+msgid "Add Coordinate System"
+msgstr "增加坐标系"
+
+#HeeksFrame.cpp
+msgid "Previous view"
+msgstr "预览视图"
+
+#HeeksFrame.cpp
+msgid "Zoom window"
+msgstr "缩放视图"
+
+#HeeksFrame.cpp
+msgid "Fit view to extents"
+msgstr "适合视图范围"
+
+#HeeksFrame.cpp
+msgid "Fit view to extents, but no rotation"
+msgstr "适合视图范围，但不旋转"
+
+#HeeksFrame.cpp
+msgid "View rotate"
+msgstr "视图旋转"
+
+#HeeksFrame.cpp
+msgid "View zoom"
+msgstr "视图缩放"
+
+#HeeksFrame.cpp
+msgid "Full screen"
+msgstr "全屏"
+
+#HeeksFrame.cpp
+msgid "Redraw"
+msgstr "重画"
+
+#HeeksFrame.cpp
+msgid "Add a sphere"
+msgstr "增加球体"
+
+#HeeksFrame.cpp
+msgid "Add a cube"
+msgstr "增加立方体"
+
+#HeeksFrame.cpp
+msgid "Add a cylinder"
+msgstr "增加圆柱体"
+
+#HeeksFrame.cpp
+msgid "Add a cone"
+msgstr "增加圆锥体"
+
+#HeeksFrame.cpp
+msgid "Loft two sketches"
+msgstr "放样2个草图"
+
+#HeeksFrame.cpp
+msgid "Extrude a sketch"
+msgstr "拉伸草图"
+
+msgid "Fuse"
+msgstr "合并"
+
+msgid "Common"
+msgstr "交集"
+
+msgid "Fillet"
+msgstr "倒圆"
+
+msgid "Chamfer"
+msgstr "倒角"
+
+msgid "Move Translate"
+msgstr "移动平移"
+
+msgid "Copy Translate"
+msgstr "复制平移"
+
+msgid "Move Rotate"
+msgstr "旋转移动"
+
+msgid "Copy Rotate"
+msgstr "旋转复制"
+
+msgid "Move Mirror"
+msgstr "镜像移动"
+
+msgid "Copy Mirror"
+msgstr "镜像复制"
+
+msgid "Move Scale"
+msgstr "移动缩放"
+
+msgid "Objects"
+msgstr "对象"
+
+msgid "Options"
+msgstr "选项"
+
+msgid "Input"
+msgstr "输入"
+
+msgid "Tool Bar"
+msgstr "工具条"
+
+msgid "Solids Tool Bar"
+msgstr "实体工具条"
+
+msgid "Geometry Tool Bar"
+msgstr "几何工具条"
+
+msgid "Viewing Tool Bar"
+msgstr "视图工具条"
+
+msgid "Transformations Tool Bar"
+msgstr "修改工具条"
+
+msgid "Status Bar"
+msgstr "标准工具条"
+
+msgid "&File"
+msgstr "文件"
+
+msgid "&Edit"
+msgstr "编辑"
+
+msgid "&Geometry"
+msgstr "几何"
+
+msgid "&View"
+msgstr "视图"
+
+msgid "&Solid"
+msgstr "实体"
+
+msgid "&Transform"
+msgstr "修改"
+
+msgid "&Window"
+msgstr "窗口"
+
+msgid "Graphics"
+msgstr "图形"
+
+msgid "Reset Layout"
+msgstr "重设层"
+
+msgid "Set toolbars to left"
+msgstr "设置工具条到左边"
+
+msgid "Coordinate System"
+msgstr "坐标系"
+
+msgid "Open file"
+msgstr "打开文件"
+
+msgid "Import file"
+msgstr "导入文件"
+
+#HeeksFrame.cpp
+msgid "Pick two or more solids, the first one will be cut by the others"
+msgstr "选择两个或两个以上的固体，第一个将被削减其他"
+
+#HeeksFrame.cpp
+msgid "Subtract Solids"
+msgstr "减去实体"
+
+#HeeksFrame.cpp
+msgid "Pick two or more solids to be fused together"
+msgstr "选择两个或更多的是融合在一起的固体"
+
+#HeeksFrame.cpp
+msgid "Fuse Solids"
+msgstr "合并实体"
+
+#HeeksFrame.cpp
+msgid "Pick two or more solids, only the shape that is contained by all of them will remain"
+msgstr "选择两个或两个以上的固体，只有包含所有的形状会保持"
+
+#HeeksFrame.cpp
+msgid "Intersection of Solids"
+msgstr "实体的交集"
+
+#HeeksFrame.cpp
+msgid "Pick one or more edges to add a fillet to"
+msgstr "选择一个或多个边缘添加圆角"
+
+#HeeksFrame.cpp
+msgid "Edge Fillet"
+msgstr "边缘圆角"
+
+#HeeksFrame.cpp
+msgid "Pick one or more edges to add a chamfer to"
+msgstr "选择一个或多个边缘添加倒角"
+
+#HeeksFrame.cpp
+msgid "Edge Chamfer"
+msgstr "边缘倒角"
+
+#HeeksFrame.cpp
+msgid "Enter chamfer distance"
+msgstr "输入倒角距离"
+
+#HeeksFrame.cpp
+msgid "Distance"
+msgstr "距离"
+
+msgid ""
+"Pick two or more sketches, to create a lofted solid between\n"
+"( hold down Ctrl key to select more than one solid )"
+msgstr ""
+"选择两个或两个以上的草图，创建一个 \n"
+"之间的放样固体（按住Ctrl键选择超过一个实体）"
+
+msgid "Lofted Body"
+msgstr "Corps Lissé"
+
+msgid ""
+"Pick one or more sketches, to create extruded body from\n"
+"( hold down Ctrl key to select more than one solid )"
+msgstr ""
+"选择一个或多个草图，创建 \n"
+" 挤压（按住Ctrl键选择超过一个实体）"
+
+msgid "Extrude"
+msgstr "拉伸"
+
+msgid "Sphere"
+msgstr "球体"
+
+msgid "Cuboid"
+msgstr "立方体"
+
+msgid "Cylinder"
+msgstr "圆柱"
+
+msgid "Cone"
+msgstr "圆锥体"
+
+msgid ""
+"There was a problem printing.\n"
+"Perhaps your current printer is not set correctly?"
+msgstr ""
+"有一个问题打印.\n"
+"也许您当前的打印机设置不正确？"
+
+msgid "Printing"
+msgstr "打印"
+
+msgid "You canceled printing"
+msgstr "您可以取消打印"
+
+msgid ""
+"There was a problem previewing.\n"
+"Perhaps your current printer is not set correctly?"
+msgstr ""
+"Problemes d'aperçu d'impression.\n"
+"L'imprimante est-elle correctement configurée?"
+
+msgid "Previewing"
+msgstr "预览"
+
+msgid "Demo Print Preview"
+msgstr "打印预览Demo"
+
+msgid "New file"
+msgstr "新文件"
+
+msgid "Save file"
+msgstr "保存文件"
+
+msgid "Cut selected items to the clipboard"
+msgstr "Couper les éléments sélectionnés dans le presse-papiers"
+
+msgid "Copy selected items to the clipboard"
+msgstr "Copier les éléments sélectionnés dans le presse-papiers"
+
+msgid "Paste items from the clipboard"
+msgstr "Coller les éléments contenus dans le presse-papiers"
+
+msgid "Undo the previous command"
+msgstr "Défaire la commande précédente"
+
+msgid "Redo the next command"
+msgstr "Refaire la commande suivante"
+
+msgid "Start Circle Drawing"
+msgstr "Dessiner des Cercles"
+
+msgid "Start Drawing Infinite Lines"
+msgstr "Dessiner des Lignes infinies"
+
+msgid "Start Drawing Points"
+msgstr "Poser des Points"
+
+msgid "Draw regular shapes; rectangles, polygons, obrounds"
+msgstr "Dessiner des formes régulières : rectangles, polygones, oblongs"
+
+msgid "Add a text object"
+msgstr "Ajouter un Texte"
+
+msgid "Add a dimension"
+msgstr "Ajouter une dimension"
+
+msgid "Create a Coordinate System"
+msgstr "Créer un système  de coordonnées"
+
+msgid "Create a lofted face"
+msgstr "Créer une surface lissée"
+
+msgid "Extrude a wire or face"
+msgstr "Extruder un maillage ou une face"
+
+msgid "Cut one solid from another"
+msgstr "Soustraire un objet 3D à un autre"
+
+msgid "Fuse one solid to another"
+msgstr "Fusionner un objet 3D avec un autre"
+
+msgid "Find common solid between two solids"
+msgstr "Chercher le volume commun à deux Objets 3D"
+
+msgid "Make a fillet on selected edges"
+msgstr "Créer un Congé sur les arêtes sélectionnées"
+
+msgid "Make a chamfer on selected edges"
+msgstr "Créer un Chanfrein sur les arêtes sélectionnées"
+
+msgid "Go back to previous view"
+msgstr "Revenir à la vue précédente"
+
+msgid "Zoom in to a dragged window"
+msgstr "Zoom + dans la fenêtre tracée"
+
+msgid "Zoom in to fit the extents of the drawing into the graphics window"
+msgstr "Maximise l'objet avec X, Y ou Z Normal au plan  de la fenêtre graphique"
+
+msgid "Zoom in to fit the extents of the drawing into the graphics window, but without rotating the view"
+msgstr "Maximise l'objet sans redressement  dans la fenêtre graphique"
+
+msgid "Enter view rotating mode"
+msgstr "Entrer le mode rotation dynamique"
+
+msgid "Drag to zoom in and out"
+msgstr "Déplacer pour un Zoom + ou - dynamique"
+
+msgid "Switch to full screen view ( press escape to return )"
+msgstr "Basculer en mode plein écran (presser ESC pour en sortir)"
+
+msgid "Translate selected items"
+msgstr "Translater les éléments sélectionnés"
+
+msgid "Copy and translate selected items"
+msgstr "复制平移选中的物体"
+
+msgid "Rotate selected items"
+msgstr "旋转选中的物体"
+
+msgid "Copy and rotate selected items"
+msgstr "旋转复制选中的物体"
+
+msgid "Mirror selected items"
+msgstr "镜像选中物体"
+
+msgid "Copy and mirror selected items"
+msgstr "旋转复制选中物体"
+
+msgid "Scale selected items"
+msgstr "缩放选中物体"
+
+msgid "General Tools"
+msgstr "标准"
+
+msgid "Geometry Tools"
+msgstr "几何"
+
+msgid "Solid Tools"
+msgstr "实体"
+
+msgid "Viewing Tools"
+msgstr "查看"
+
+msgid "Transformation Tools"
+msgstr "修改"
+
+msgid "Input Mode"
+msgstr "输入模式"
+
+msgid "Line drawing mode"
+msgstr "画线模式"
+
+msgid "click on start point"
+msgstr "点击起点"
+
+msgid "click on end of line"
+msgstr "点击线段终点"
+
+msgid "Arc drawing mode"
+msgstr "画弧线模式"
+
+msgid "click on end of arc"
+msgstr "选择狐终点"
+
+msgid "Infinite line drawing"
+msgstr "画直线"
+
+msgid "click on first point"
+msgstr "点击第一点"
+
+msgid "click on second point"
+msgstr "选择第二点"
+
+msgid "Circle drawing mode"
+msgstr "画圆模式"
+
+msgid "center and point mode"
+msgstr "圆心和点模式"
+
+msgid "click on center point"
+msgstr "点击圆心"
+
+msgid "click on point on circle"
+msgstr "点击圆上的一个点"
+
+msgid "three points mode"
+msgstr "三点模式"
+
+msgid "click on third point"
+msgstr "点击第三点"
+
+msgid "draw lines"
+msgstr "画线"
+
+msgid "draw tangential arcs"
+msgstr "画正切的弧线"
+
+msgid "draw circles"
+msgstr "画圆"
+
+# RegularShapesDrawing.cpp
+msgid "drawing mode"
+msgstr "绘图模式"
+
+msgid "(press 'a' for arcs)"
+msgstr "(为弧线按“一”个)"
+
+msgid "Number of items selected"
+msgstr "选中对象数量:"
+
+msgid "Delete Marked Items"
+msgstr "删除标记的对象"
+
+msgid "Copies the selected items to the clipboard"
+msgstr "复制选中物体到接铁板"
+
+msgid "Paste Into"
+msgstr "黏贴到"
+
+msgid "Paste items from the clipboard to the drawing"
+msgstr "从剪贴板粘贴到图纸"
+
+msgid "Apply any changes made to the properties"
+msgstr "应用所有更改到属性"
+
+msgid "Stop editing the object"
+msgstr "放弃编辑对象"
+
+#Plugins.cpp
+msgid "Name"
+msgstr "名称"
+
+#Plugins.cpp
+msgid "File Path"
+msgstr "文件路径"
+
+#Plugins.cpp
+msgid "Plugin must have a name!"
+msgstr "插件必须命名！"
+
+#Plugins.cpp
+msgid "No file specified!"
+msgstr "无特定文件"
+
+#Plugins.cpp
+msgid "shared library files"
+msgstr "共享库文件"
+
+#Plugins.cpp
+msgid "Choose shared library file"
+msgstr "选择共享库文件"
+
+#Plugins.cpp
+msgid "HeeksCAD plugin libraries"
+msgstr "HeeksCAD插件库"
+
+#Plugins.cpp
+msgid "Edit"
+msgstr "编辑"
+
+#Plugins.cpp
+msgid "Add New Plugin"
+msgstr "增加新插件"
+
+msgid "x"
+msgstr "x"
+
+msgid "y"
+msgstr "y"
+
+msgid "z"
+msgstr "z"
+
+msgid "vertical angle"
+msgstr "竖向角度"
+
+msgid "horizontal angle"
+msgstr "水平角"
+
+msgid "twist angle"
+msgstr "扭曲角度"
+
+# RegularShapesDrawing.cpp
+msgid "draw rectangles"
+msgstr "画矩形"
+
+# RegularShapesDrawing.cpp
+msgid "draw polygons"
+msgstr "画多段线"
+
+# RegularShapesDrawing.cpp
+msgid "draw slots"
+msgstr "画槽口"
+
+# RegularShapesDrawing.cpp
+msgid "number of sides for polygon"
+msgstr "多段线的边数"
+
+msgid "Add "
+msgstr "增加"
+
+msgid "Add Objects"
+msgstr "增加对象"
+
+msgid "Remove Objects"
+msgstr "删除镀锡"
+
+#RuledSurface.cpp
+msgid "pick some sketches"
+msgstr "选择多个草图"
+
+#RuledSurface.cpp
+msgid "Ruled Surface"
+msgstr "平滑表面"
+
+msgid "pick sketches"
+msgstr "选取草图"
+
+#RuledSurface.cpp
+msgid "Input extrusion height"
+msgstr "输入挤压高度"
+
+#RuledSurface.cpp
+msgid "Extruded Solid"
+msgstr "挤压实体"
+
+#RuledSurface.cpp
+msgid "Fatal error making ruled solid"
+msgstr "致命错误：用尺子画实体"
+
+#RuledSurface.cpp
+msgid "Fatal error making extruded solid"
+msgstr "致命错误:挤压实体"
+
+msgid "Reset the ruler"
+msgstr "重设标尺"
+
+msgid "Left button for selecting objects"
+msgstr "Left button for selecting objects"
+
+msgid "( with Ctrl key for extra objects)"
+msgstr "( with Ctrl key for extra objects)"
+
+msgid "Drag with left button to window select"
+msgstr "Drag with left button to window select"
+
+msgid "or to move object if on an object"
+msgstr "or to move object if on an object"
+
+msgid "Mouse wheel to zoom in and out"
+msgstr "Mouse wheel to zoom in and out"
+
+msgid "Middle button to pan view"
+msgstr "Middle button to pan view"
+
+msgid "( with Ctrl key to rotate view )"
+msgstr "( with Ctrl key to rotate view )"
+
+msgid "Middle button to rotate view"
+msgstr "Middle button to rotate view"
+
+msgid "( with Ctrl key to pan view )"
+msgstr "( with Ctrl key to pan view )"
+
+msgid "Right button for object menu"
+msgstr "Right button for object menu"
+
+msgid "See options window to hide this help"
+msgstr "See options window to hide this help"
+
+msgid "Pick Anything"
+msgstr "选取任何对象"
+
+msgid "Set the selection filter to all items"
+msgstr "设置选择过滤为所有"
+
+msgid "Pick Edges"
+msgstr "选取边"
+
+msgid "Set the selection filter to only edges"
+msgstr "设置选择过滤为仅边缘"
+
+msgid "Enter Offset Value, + for making bigger, - for making smaller"
+msgstr "输入偏移数据，+放大，-缩小。"
+
+msgid "Offset value"
+msgstr "偏移数据"
+
+#Shape.cpp
+msgid "Result of 'Offset Shape'"
+msgstr "偏移形状结果"
+
+#Shape.cpp
+msgid "Offset Shape"
+msgstr "偏移形状"
+
+#Shape.cpp
+msgid "Offset the shape"
+msgstr "偏移形状"
+
+#Shape.cpp
+msgid "Result of Fuse Operation"
+msgstr "合并操作结果"
+
+#Shape.cpp
+msgid "Result of Common Operation"
+msgstr "交叉操作结果"
+
+#Shape.cpp : Sans effet
+msgid "Result of Cut Operation"
+msgstr "剪切操作结果"
+
+#Shape.cpp
+msgid "STEP import not done!"
+msgstr "STEP导入失败！"
+
+#Shape.cpp
+msgid "sewed IGES solid"
+msgstr "IGES三维实体"
+
+#Shape.cpp
+msgid "IGES import not done!"
+msgstr "IGES导入失败！"
+
+msgid "Number of elements"
+msgstr "元素数量"
+
+msgid "order"
+msgstr "命令"
+
+msgid "Transform"
+msgstr "转化"
+
+msgid "Transform Objects"
+msgstr "转化对象"
+
+#TransformTools.cpp
+msgid "Pick objects to move"
+msgstr "选取需移动的对象"
+
+#TransformTools.cpp
+msgid "Enter number of copies"
+msgstr "输入复制数量"
+
+#TransformTools.cpp
+msgid "number of copies"
+msgstr "复制数量"
+
+#TransformTools.cpp
+msgid "Click position to move from"
+msgstr "点击移动参照点"
+
+#TransformTools.cpp
+msgid "Click position to move to"
+msgstr "移动到点击位置"
+
+#TransformTools.cpp
+msgid "Pick objects to rotate"
+msgstr "选取旋转对象"
+
+#TransformTools.cpp
+msgid "Click centre position to rotate about"
+msgstr "点击旋转的参照中心"
+
+#TransformTools.cpp
+msgid "Enter angle to rotate by"
+msgstr "输入旋转角度"
+
+#TransformTools.cpp
+msgid "angle"
+msgstr "角度"
+
+#TransformTools.cpp
+msgid "Pick objects to mirror"
+msgstr "选取镜像的对象"
+
+#TransformTools.cpp
+msgid "Pick line to mirror about"
+msgstr "选取镜像的线"
+
+#TransformTools.cpp
+msgid "Pick objects to scale"
+msgstr "选取缩放的对象"
+
+#TransformTools.cpp
+msgid "Click centre position to scale about"
+msgstr "点击缩放的参照中心"
+
+#TransformTools.cpp
+msgid "Enter scale factor"
+msgstr "输入缩放因子"
+
+#TransformTools.cpp
+msgid "scale factor"
+msgstr "缩放因子"
+
+msgid "Drag with the left mouse button"
+msgstr "鼠标左键拖动"
+
+msgid "Forward to zoom in, Back to zoom out"
+msgstr "向前放大，向后缩小"
+
+msgid "Back to zoom in, Forward to zoom out"
+msgstr "向后放大，向前缩小"
+
+msgid "Hold middle mouse button down to pan"
+msgstr "按下中键偏移"
+
+msgid "Result of Wire Offset"
+msgstr "线框偏移结果"
+
+msgid "Generated"
+msgstr "生成的"
+
+msgid "Generated from edge"
+msgstr "从边缘生成"
+
+msgid "Modified"
+msgstr "编辑的"
+
+msgid "Is Deleted"
+msgstr "被删除的"
+
+msgid "Offset Wire"
+msgstr "线框偏移"
+
+msgid "Point Size"
+msgstr "点大小"
+
+msgid "Family"
+msgstr "族类"
+
+msgid "Face Name"
+msgstr "面名称"
+
+msgid "Style"
+msgstr "样式"
+
+msgid "Underlined"
+msgstr "加下划线的"
+
+msgid "files"
+msgstr "文件"
+
+msgid "All files"
+msgstr "所有文件"
+
+msgid "Make a selection:"
+msgstr "选择集"
+
+msgid "Categorized Mode"
+msgstr "分类模式"
+
+msgid "Alphabetic Mode"
+msgstr "字母模式"
+
+msgid "<< Compact"
+msgstr "挤压"
+
+msgid "Expand >>"
+msgstr "拉伸"
+
+msgid "False"
+msgstr "FALSE"
+
+msgid "True"
+msgstr "TRUE"
+
+msgid "Unspecified"
+msgstr " 非特定的"
+
+msgid "is not a floating-point number"
+msgstr "非浮点数"
+
+msgid "true"
+msgstr "TRUE"
+
+msgid "false"
+msgstr "FALSE"
+
+msgid "Choose a directory:"
+msgstr "选择路径:"
+
+msgid "Choose a file"
+msgstr "选择文件"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Add"
+msgstr "增加"
+
+msgid "Update"
+msgstr "更新"
+
+msgid "Remove"
+msgstr "删除"
+
+msgid "Up"
+msgstr "上"
+
+msgid "Down"
+msgstr "下"
+
+msgid "Failed to load resource image"
+msgstr "加载资源图片失败"
+
+msgid "Convert sketch to face"
+msgstr "转换草图为面"
+
+msgid "Make To Sketch"
+msgstr "转为草图"
+
+msgid "Make selected lines and arcs into a new sketch"
+msgstr "将选中线与弧设为新草图"
+
+msgid "Combine sketches"
+msgstr "组合草图"
+
+msgid "Combine selected sketches"
+msgstr "组合选中草图"
+
+msgid "Group"
+msgstr "组合"
+
+msgid "Group selected items"
+msgstr "组合选中物体"
+
+msgid "Ungroup"
+msgstr "拆分组"
+
+msgid "Ungroup selected items"
+msgstr "选中的物体拆分组"
+
+msgid "Dimension drawing"
+msgstr "标注图纸"
+
+msgid "Drawing"
+msgstr "图纸"
+
+msgid "Edge"
+msgstr "边"
+
+msgid "Face"
+msgstr "面"
+
+msgid "Gripper"
+msgstr "夹子"
+
+msgid "Arc"
+msgstr "弧"
+
+msgid "Circle"
+msgstr "远"
+
+msgid "Dimension"
+msgstr "标注"
+
+msgid "Ellipse"
+msgstr "椭圆"
+
+msgid "Infinite Line"
+msgstr "直线"
+
+msgid "Image"
+msgstr "图片"
+
+msgid "Line"
+msgstr "线"
+
+msgid "Point"
+msgstr "点"
+
+msgid "Spline"
+msgstr "多段线"
+
+msgid "Text"
+msgstr "文本"
+
+msgid "Xml"
+msgstr "Xml "
+
+msgid "Magnifying by dragging a window"
+msgstr "放大附近的的拖动一个窗口"
+
+msgid "Point drawing"
+msgstr "图纸点"
+
+msgid "Dragging a window or picking a point"
+msgstr "拖动窗口或者选取一个点"
+
+msgid "ChangeOwner"
+msgstr "修改者"
+
+msgid "ManyChangeOwner"
+msgstr "多修改者"
+
+msgid "Ruler"
+msgstr "直尺"
+
+msgid "Faces"
+msgstr "面"
+
+msgid "Edges"
+msgstr "边缘"
+
+msgid "Sketch"
+msgstr "线框"
+
+msgid "Solid"
+msgstr "实体"
+
+msgid "STL Solid"
+msgstr "STL 实体"
+
+msgid "View Rotate"
+msgstr "旋转视图"
+
+msgid "View Zoom"
+msgstr "缩放视图"
+
+msgid "Dragging a window"
+msgstr "拖放窗口"
+
+msgid "Wire"
+msgstr "线框"
+
+msgid "object type"
+msgstr "对象类型"
+
+msgid "object title"
+msgstr "对象标题"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "color"
+msgstr "颜色"
+
+msgid "visible"
+msgstr "可访问的"
+
+msgid "Unknown"
+msgstr "未知的"
+
+msgid "Unknown Property"
+msgstr "未知的属性"
+
+msgid "leadoffdz"
+msgstr "Z向开头"
+
+msgid "leadofflen"
+msgstr "开头长度"
+
+msgid "leadoffrad"
+msgstr "开头Rad"
+
+msgid "retractzheight"
+msgstr "撤销 (Z)高度"
+
+msgid "leadoffsamplestep"
+msgstr "开头简单步进"
+
+msgid "toolcornerrad"
+msgstr "刀具半径角度"
+
+msgid "toolflatrad"
+msgstr "半径"
+
+msgid "samplestep"
+msgstr "型号"
+
+msgid "stepdown"
+msgstr "Z 步进"
+
+msgid "clearcuspheight"
+msgstr ""
+
+msgid "triangleweaveres"
+msgstr "三角网"
+
+msgid "flatradweaveres"
+msgstr ""
+
+msgid "dchangright"
+msgstr ""
+
+msgid "dchangrightoncontour"
+msgstr ""
+
+msgid "dchangleft"
+msgstr ""
+
+msgid "dchangefreespace"
+msgstr ""
+
+msgid "sidecutdisplch"
+msgstr ""
+
+msgid "fcut"
+msgstr ""
+
+msgid "fretract"
+msgstr ""
+
+msgid "thintol"
+msgstr ""
+
+msgid "startpoint_x"
+msgstr "起点_X"
+
+msgid "startpoint_y"
+msgstr "起点_Y"
+
+msgid "startvel_x"
+msgstr "起始_X"
+
+msgid "startvel_y"
+msgstr "起始_Y"
+
+msgid "minz"
+msgstr "最小_z"
+
+msgid "boundaryclear"
+msgstr "范围_z"
+
+msgid "boundary_x0"
+msgstr "范围_x0"
+
+msgid "boundary_x1"
+msgstr "范围_x1"
+
+msgid "boundary_y0"
+msgstr "范围_y0"
+
+msgid "boundary_y1"
+msgstr "范围_y1"
+
+msgid "tool number"
+msgstr "计数工具"
+
+msgid "tool diameter"
+msgstr "测量工具"
+
+#DepthOp.cpp
+msgid "clearance height"
+msgstr "间隙高度"
+
+#DepthOp.cpp
+msgid "step down"
+msgstr "下降"
+
+#DepthOp.cpp
+msgid "start depth"
+msgstr "其实深度"
+
+#DepthOp.cpp
+msgid "final depth"
+msgstr "最终深度"
+
+#DepthOp.cpp
+msgid "rapid down to height"
+msgstr "迅速下降高度"
+
+msgid "horizontal feed rate"
+msgstr "横向给进速度"
+
+msgid "vertical feed rate"
+msgstr "竖向给进速度"
+
+msgid "spindle speed"
+msgstr "主轴转速"
+
+msgid "You must select some sketches, first!"
+msgstr "你必须先选中草图。"
+
+msgid "There are no solids!"
+msgstr "没有三维实体"
+
+msgid "You must select some sketches first!"
+msgstr "你必须先选中草图。"
+
+msgid "Open NC file"
+msgstr "打开NC文件"
+
+msgid "Save NC file"
+msgstr "保存NC文件"
+
+msgid "Couldn't open file"
+msgstr "无法打开"
+
+msgid "Profile"
+msgstr "概况"
+
+msgid "ZigZag"
+msgstr "锯齿"
+
+msgid "Adaptive"
+msgstr "自动适应"
+
+msgid "Python"
+msgstr "Python"
+
+msgid "PostProcess"
+msgstr "发布进程"
+
+msgid "OpenNC"
+msgstr "打开NC"
+
+msgid "SaveNC"
+msgstr "保存NC"
+
+msgid "HeeksCNC is the free machining add-on to HeeksCAD"
+msgstr "HeeksCNC是HeeksCAD的免费插件"
+
+msgid "          http://code.google.com/p/heekscnc/"
+msgstr "          http://code.google.com/p/heekscnc/"
+
+msgid "Written by Dan Heeks, Hirutso Enni, Perttu Ahola"
+msgstr "作者:Dan Heeks, Hirutso Enni, Perttu Ahola"
+
+msgid "With help from archivist, crotchet1, DanielFalck, fenn, Sliptonic"
+msgstr "获得帮补: archivist, crotchet1, DanielFalck, fenn, Sliptonic"
+
+msgid "geometry code, donated by Geoff Hawkesford, Camtek GmbH http://www.peps.de/"
+msgstr "几何代码捐助者 Geoff Hawkesford, Camtek GmbHhttp://www.peps.de/"
+
+msgid "pocketing code from http://code.google.com/p/libarea/ , derived from the kbool library written by Klaas Holwerda http://boolean.klaasholwerda.nl/bool.html"
+msgstr "铣削代码参见 http://code.google.com/p/libarea/ , derived 适应 kbool library ，作者 Klaas Holwerda http://boolean.klaasholwerda.nl/bool.html"
+
+msgid "Zig zag code from pycam http://sourceforge.net/svn/?group_id=237831"
+msgstr "锯齿化代码参见 pycam http://sourceforge.net/svn/?group_id=237831"
+
+msgid "Adaptive Roughing code from http://code.google.com/p/libactp/, using code written in 2004"
+msgstr "自动粗加工参见 http://code.google.com/p/libactp/, 代码版本写于 2004年"
+
+msgid "For a more modern version of adaptive roughing, see Julian Todd and Martin Dunschen of http://www.freesteel.co.uk/"
+msgstr "更加先进的自动粗加工，请访问 Julian Todd 及 Martin Dunschen 的网站: http://www.freesteel.co.uk/"
+
+msgid "This HeeksCNC software installation is restricted by the GPL license http://www.gnu.org/licenses/gpl-3.0.txt"
+msgstr "HeeksCNC安装协议基于 GPL 协议，详见:  http://www.gnu.org/licenses/gpl-3.0.txt"
+
+msgid "  which means it is free and open source, and must stay that way"
+msgstr "意味着它是自由并且开源的,并且必须保持下去。"
+
+msgid "New Profile Operation..."
+msgstr "新概况操作"
+
+msgid "New Pocket Operation..."
+msgstr "新装载操作"
+
+msgid "New ZigZag Operation..."
+msgstr "新锯齿操作"
+
+msgid "New Adaptive Roughing Operation..."
+msgstr "新自动适应操作"
+
+msgid "Operations"
+msgstr "运算"
+
+msgid "Make Python Script"
+msgstr "创建Python脚本"
+
+msgid "Post-Process"
+msgstr "CNC发布进程"
+
+msgid "Machining"
+msgstr "CNC 机器"
+
+msgid "nc options"
+msgstr "CNC 选项"
+
+msgid "text colors"
+msgstr "文本颜色"
+
+msgid "default color"
+msgstr "默认颜色"
+
+msgid "block color"
+msgstr "块颜色"
+
+msgid "misc color"
+msgstr "杂项颜色"
+
+msgid "program color\t"
+msgstr "程序颜色\t"
+
+msgid "tool color"
+msgstr "工具颜色"
+
+msgid "comment color\t"
+msgstr "评论颜色\t"
+
+msgid "variable color"
+msgstr "可变颜色"
+
+msgid "prep color"
+msgstr "预备颜色"
+
+msgid "axis color"
+msgstr "轴线颜色"
+
+msgid "rapid color"
+msgstr "快速颜色"
+
+msgid "feed color"
+msgstr "着色"
+
+msgid "comment"
+msgstr "评论"
+
+msgid "active"
+msgstr "活动"
+
+#Pocket.cpp
+msgid "step over"
+msgstr "步进"
+
+#Pocket.cpp
+msgid "material allowance"
+msgstr "材料定额"
+
+#Pocket.cpp
+msgid "round corner factor"
+msgstr "圆形拐角因子"
+
+#Pocket.cpp
+msgid "for 90 degree corners"
+msgstr "90度拐角"
+
+#Pocket.cpp
+msgid "1.5 for square, 1.0 for round"
+msgstr "1.5 正方形,1.0 圆形"
+
+#Pocket.cpp
+msgid "Boundary"
+msgstr "范围"
+
+#Pocket.cpp
+msgid "Center"
+msgstr "中心"
+
+#Pocket.cpp
+msgid "starting_place"
+msgstr "开始放置..."
+
+#Pocket.cpp
+msgid "Pocket operation - Sketch doesn't exist - %d"
+msgstr "小运算 - 草图不存在 - %d"
+
+#Pocket.cpp
+msgid "Pocket operation - Sketch must be a closed shape - sketch %d"
+msgstr "小运算 -草图必须闭合 - 线框 %d"
+
+#Pocket.cpp
+msgid "Pocket operation - Badly ordered sketch - sketch %d"
+msgstr "小运算 - 非法序列草图- 线框 %d"
+
+msgid "Left"
+msgstr "左侧"
+
+msgid "Right"
+msgstr "右侧"
+
+msgid "On"
+msgstr "开"
+
+msgid "tool on side"
+msgstr "边栏工具"
+
+msgid "auto roll on"
+msgstr "自动找平"
+
+msgid "roll on point"
+msgstr "碾平点"
+
+msgid "auto roll off"
+msgstr "自动找平"
+
+msgid "roll off point"
+msgstr "碾平点"
+
+msgid "use start point"
+msgstr "使用起点"
+
+msgid "start point"
+msgstr "起点"
+
+msgid "use end point"
+msgstr "使用终点"
+
+msgid "end point"
+msgstr "终点"
+
+msgid "Pick Start"
+msgstr "选取开始"
+
+msgid "Pick new start point"
+msgstr "选取新的起始点"
+
+msgid "Pick End"
+msgstr "选取结束"
+
+msgid "Pick new end point"
+msgstr "选取新的终点"
+
+msgid "Set All Operations Active"
+msgstr "设置所有运算为 激活状态"
+
+msgid "Set All Operations Inactive"
+msgstr "设置所有运算为 冻结状态"
+
+msgid "machine"
+msgstr "机器NC"
+
+msgid "output file"
+msgstr "输出文件"
+
+msgid "spherical"
+msgstr "球体"
+
+msgid "cylindrical"
+msgstr "圆柱"
+
+msgid "toroidal"
+msgstr "圆环"
+
+msgid "tool type"
+msgstr "工具类型"
+
+msgid "corner radius"
+msgstr "拐角半径"
+
+msgid "z0"
+msgstr "z0"
+
+msgid "z1"
+msgstr "z1"
+
+msgid "dx"
+msgstr "dx"
+
+msgid "dy"
+msgstr "dy"
+
+msgid "Simple Mesh"
+msgstr "简单网格"
+
+msgid "HeeksArt is a free random add-on to HeeksCAD"
+msgstr "HeeksArt 是 HeeksCAD 的一个随意化的扩展"
+
+msgid "          http://code.google.com/p/heeksart/"
+msgstr "        http://code.google.com/p/heeksart/"
+
+msgid "Written by Dan Heeks"
+msgstr "作者;Dan Heeks"
+
+msgid "Add a simple mesh"
+msgstr "在家一个简单的网格"
+
+msgid "Mesh"
+msgstr "网格"
+
+msgid "mesh options"
+msgstr "网格选项"
+
+msgid "number of splits"
+msgstr "拆分数量"
+
+msgid "Edge cannot have more than 2 faces!"
+msgstr "边缘不能包含多于2个面"
+
+msgid "Convert Mesh To Triangles"
+msgstr "转化网格为三角形"
+
+msgid "Normalize All Vertices"
+msgstr "规则化所有顶点"
+
+msgid "Set All Vertex Normals"
+msgstr "设置所有顶点规则化"
+
+msgid "At least one vertex could not be normalized!"
+msgstr "至少有一个顶点可以规则化"
+
+msgid "Recalculate All Face Centres"
+msgstr "重新计算所有面的中心"
+
+msgid "Mirror all x<1"
+msgstr "镜像所有 x<1"
+
+msgid "Split Edge"
+msgstr "拆分边缘"
+
+msgid "Recalculate a Good Centre Point"
+msgstr "重新计算更好的中心点"
+
+msgid "Normalize All Edge Directions"
+msgstr "使所有边缘方向规格化"
+
+msgid "Set Normal From Edges"
+msgstr "设置边缘规则"
+
+msgid "Mesh Edge"
+msgstr "网格边缘"
+
+msgid "Mesh Face"
+msgstr "网格面"
+
+msgid "Mesh Vertex"
+msgstr "网格法线"
+
+msgid "Split arcs to little lines"
+msgstr "拆分圆弧为线段"
+
+#Sketch.cpp
+msgid "empty"
+msgstr "空"
+
+#Sketch.cpp
+msgid "open"
+msgstr "打开"
+
+#Sketch.cpp
+msgid "reverse"
+msgstr "反转"
+
+#Sketch.cpp
+msgid "bad"
+msgstr "坏的"
+
+#Sketch.cpp
+msgid "re-order"
+msgstr "重执行"
+
+# Pas d'effet
+msgid "clockwise\n"
+msgstr "顺时针 \n"
+
+#Pas d'effet. Sketch.cpp
+msgid "counter-clockwise"
+msgstr "计数器-顺时针"
+
+#Sketch.cpp
+msgid "multiple"
+msgstr "多任务的"
+
+#Sketch.cpp
+msgid "Split Sketch"
+msgstr "拆分草图"
+
+msgid "fixture offset"
+msgstr "固定偏移"
+
+msgid "correlation"
+msgstr "交互"
+
+msgid "Minimum correlation factor (0.0 (nothing like it) -> 1.0 (perfect match))"
+msgstr "最小交互因子 (0.0(没有它) 到 1.0(完美匹配)) "
+
+msgid "Maximum scale threshold (1.0 - must be same size, 1.5 (can be half as big again or 2/3 size)"
+msgstr "最大比例起始值 (1.0 -必须一致, 1.5 (可以再次是一半)或者 2/3 的大小)"
+
+msgid "orientation"
+msgstr "原点"
+
+msgid "Make Coordinate System"
+msgstr "创建坐标系"
+
+msgid "vertex"
+msgstr "矢量"
+
+msgid "autosolve constraints"
+msgstr "自动提示约束"
+
+msgid "circle mode"
+msgstr "圆弧模式"
+
+msgid "three points"
+msgstr "3个点"
+
+msgid "centre and point"
+msgstr "中点及点"
+
+msgid "two points"
+msgstr "2 点"
+
+msgid "centre and radius"
+msgstr "中心及半径"
+
+#HeeksCAD.cpp
+msgid "Number of sample points"
+msgstr "相同点数量"
+
+#HeeksCAD.cpp
+msgid "face to sketch deviaton"
+msgstr "面到线框偏移"
+
