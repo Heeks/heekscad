@@ -1,0 +1,4955 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Spanish translation Juan Carlos Gavari Starkie, 8/10/2014
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-10-03 16:34+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n""Content-Transfer-Encoding: 8bit\n"
+
+#: C:\Dev\HeeksCAD1.0\src\AboutBox.cpp:17
+#: C:\Dev\HeeksCAD1.0\interface\HDialogs.cpp:122
+msgid "OK"
+msgstr "Ok"
+
+#: C:\Dev\HeeksCAD1.0\src\advprops.cpp:497
+msgid "Point Size"
+msgstr "Tamaño de punto"
+
+#: C:\Dev\HeeksCAD1.0\src\advprops.cpp:499
+msgid "Family"
+msgstr "Familia"
+
+#: C:\Dev\HeeksCAD1.0\src\advprops.cpp:509
+msgid "Face Name"
+msgstr "Nombre de la cara"
+
+#: C:\Dev\HeeksCAD1.0\src\advprops.cpp:516
+msgid "Style"
+msgstr "Estilo"
+
+#: C:\Dev\HeeksCAD1.0\src\advprops.cpp:519
+#: C:\Dev\HeeksCAD1.0\src\HSpline.cpp:248
+msgid "Weight"
+msgstr "Peso"
+
+#: C:\Dev\HeeksCAD1.0\src\advprops.cpp:522
+msgid "Underlined"
+msgstr "Subrayado"
+
+#: C:\Dev\HeeksCAD1.0\src\advprops.cpp:1316
+msgid "files"
+msgstr "archivos"
+
+#: C:\Dev\HeeksCAD1.0\src\advprops.cpp:1324
+#: C:\Dev\HeeksCAD1.0\src\props.cpp:1509
+msgid "All files"
+msgstr "Todos los archivos"
+
+#: C:\Dev\HeeksCAD1.0\src\advprops.cpp:1576
+msgid "Make a selection:"
+msgstr "Hacer una selección :"
+
+#: C:\Dev\HeeksCAD1.0\src\AutoSave.cpp:15
+msgid ".HeeksCAD_Backup_Data_File.heeks"
+msgstr ".Heekscad_Backup_Data_File.heeks"
+
+#: C:\Dev\HeeksCAD1.0\src\AutoSave.cpp:29
+msgid "Do you want to recover using the automatic backup file?"
+msgstr "¿desea recuperar utilizando el archivo de copia de seguridad automática ?"
+
+#: C:\Dev\HeeksCAD1.0\src\Cone.cpp:173
+msgid "Stretched Cone"
+msgstr "Cono estirado"
+
+#: C:\Dev\HeeksCAD1.0\src\Cone.cpp:178
+msgid "r1"
+msgstr "r1"
+
+#: C:\Dev\HeeksCAD1.0\src\Cone.cpp:179
+msgid "r2"
+msgstr "r2"
+
+#: C:\Dev\HeeksCAD1.0\src\Cone.cpp:180 C:\Dev\HeeksCAD1.0\src\Cylinder.cpp:83
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:249
+#: C:\Dev\HeeksCNC1.0\src\Tag.cpp:75
+msgid "height"
+msgstr "altura"
+
+#: C:\Dev\HeeksCAD1.0\src\Cone.cpp:214
+msgid "can not enter negative value for radius"
+msgstr "no puede introducir un valor negativo para el radio"
+
+#: C:\Dev\HeeksCAD1.0\src\Cone.cpp:221
+msgid "cone must not have both radiuses the same"
+msgstr "cono no debe tener ambos radios iguales"
+
+#: C:\Dev\HeeksCAD1.0\src\ConversionTools.cpp:399
+msgid "Cannot convert object type "
+msgstr "No se puede convertir el tipo de objeto"
+
+#: C:\Dev\HeeksCAD1.0\src\ConversionTools.cpp:399
+msgid " to edge"
+msgstr "al borde"
+
+#: C:\Dev\HeeksCAD1.0\src\ConversionTools.cpp:408
+#: C:\Dev\HeeksCAD1.0\src\ConversionTools.cpp:467
+msgid "Error converting sketch to face"
+msgstr "Error convirtiendo objeto a cara"
+
+#: C:\Dev\HeeksCAD1.0\src\ConversionTools.cpp:472
+msgid "Fatal Error converting sketch to face"
+msgstr "Error fatal convirtiendo objeto a cara"
+
+#: C:\Dev\HeeksCAD1.0\src\CoordinateSystem.cpp:1259
+msgid "Set position and orientation by picking 3 points"
+msgstr "Ajustar la posición y la orientación escogiendo 3 puntos"
+
+#: C:\Dev\HeeksCAD1.0\src\CoordinateSystem.cpp:1273
+msgid "Set this coordinate system as the active one"
+msgstr "Establece este sistema de coordenadas como el activo"
+
+#: C:\Dev\HeeksCAD1.0\src\CoordinateSystem.cpp:1295
+msgid "Transform selected items to world coordinates"
+msgstr "Transformar los elementos seleccionados a coordenadas espaciales"
+
+#: C:\Dev\HeeksCAD1.0\src\CoordinateSystem.cpp:1315
+#: C:\Dev\HeeksCAD1.0\src\CoordinateSystem.cpp:1510
+#: C:\Dev\HeeksCAD1.0\src\HPoint.cpp:116 C:\Dev\HeeksCNC1.0\src\Tag.cpp:72
+msgid "position"
+msgstr "posición"
+
+#: C:\Dev\HeeksCAD1.0\src\CoordinateSystem.cpp:1316
+msgid "x axis"
+msgstr "eje x"
+
+#: C:\Dev\HeeksCAD1.0\src\CoordinateSystem.cpp:1317
+msgid "y axis"
+msgstr "eje Y"
+
+#: C:\Dev\HeeksCAD1.0\src\CoordinateSystem.cpp:1319
+#: C:\Dev\HeeksCAD1.0\src\CoordinateSystem.cpp:1512
+msgid "Vertical Angle"
+msgstr "Ángulo vertical"
+
+#: C:\Dev\HeeksCAD1.0\src\CoordinateSystem.cpp:1320
+#: C:\Dev\HeeksCAD1.0\src\CoordinateSystem.cpp:1513
+msgid "Horizontal Angle"
+msgstr "Ángulo horizontal"
+
+#: C:\Dev\HeeksCAD1.0\src\CoordinateSystem.cpp:1321
+#: C:\Dev\HeeksCAD1.0\src\CoordinateSystem.cpp:1514
+msgid "Twist Angle"
+msgstr "Ángulo de torsión"
+
+#: C:\Dev\HeeksCAD1.0\src\CoordinateSystem.cpp:1575
+#: C:\Dev\HeeksCAD1.0\src\CoordinateSystem.cpp:1602
+msgid "Pick the location"
+msgstr "Recoger la ubicación"
+
+#: C:\Dev\HeeksCAD1.0\src\CoordinateSystem.cpp:1577
+msgid "Pick a point on the x-axis"
+msgstr "Seleccione un punto en el eje x"
+
+#: C:\Dev\HeeksCAD1.0\src\CoordinateSystem.cpp:1579
+msgid "Pick a point where y > 0"
+msgstr "Elegir un punto en el que y mayor que 0"
+
+#: C:\Dev\HeeksCAD1.0\src\Cuboid.cpp:98
+msgid "Stretched Cuboid"
+msgstr "Cuboid estirado"
+
+#: C:\Dev\HeeksCAD1.0\src\Cuboid.cpp:103
+msgid "width ( x )"
+msgstr "anchura ( x)"
+
+#: C:\Dev\HeeksCAD1.0\src\Cuboid.cpp:104
+msgid "height( y )"
+msgstr "altura ( y)"
+
+#: C:\Dev\HeeksCAD1.0\src\Cuboid.cpp:105
+msgid "depth ( z )"
+msgstr "profundidad ( z)"
+
+#: C:\Dev\HeeksCAD1.0\src\CuboidDlg.cpp:19
+msgid "Position"
+msgstr "Posición"
+
+#: C:\Dev\HeeksCAD1.0\src\CuboidDlg.cpp:19
+msgid "X position"
+msgstr "posición x"
+
+#: C:\Dev\HeeksCAD1.0\src\CuboidDlg.cpp:19
+msgid "Y position"
+msgstr "posición y"
+
+#: C:\Dev\HeeksCAD1.0\src\CuboidDlg.cpp:19
+msgid "Z position"
+msgstr "posición z"
+
+#: C:\Dev\HeeksCAD1.0\src\CuboidDlg.cpp:20
+msgid "Size"
+msgstr "Tamaño"
+
+#: C:\Dev\HeeksCAD1.0\src\CuboidDlg.cpp:20
+msgid "X width"
+msgstr "ancho x"
+
+#: C:\Dev\HeeksCAD1.0\src\CuboidDlg.cpp:20
+msgid "Y depth"
+msgstr "largo y"
+
+#: C:\Dev\HeeksCAD1.0\src\CuboidDlg.cpp:20
+msgid "Z depth"
+msgstr "profundidad z"
+
+#: C:\Dev\HeeksCAD1.0\src\Cylinder.cpp:77
+msgid "Stretched Cylinder"
+msgstr "cilindro de estirado"
+
+#: C:\Dev\HeeksCAD1.0\src\Cylinder.cpp:82 C:\Dev\HeeksCNC1.0\src\CTool.cpp:337
+msgid "diameter"
+msgstr "diámetro"
+
+#: C:\Dev\HeeksCAD1.0\src\DigitizeMode.cpp:54
+#: C:\Dev\HeeksCAD1.0\src\HArc.cpp:340
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3258
+#: C:\Dev\HeeksCAD1.0\src\HILine.cpp:108 C:\Dev\HeeksCAD1.0\src\HLine.cpp:210
+msgid "end"
+msgstr "fin"
+
+#: C:\Dev\HeeksCAD1.0\src\DigitizeMode.cpp:57
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3259
+msgid "intersection"
+msgstr "intersección"
+
+#: C:\Dev\HeeksCAD1.0\src\DigitizeMode.cpp:60
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3261
+msgid "midpoint"
+msgstr "punto medio"
+
+#: C:\Dev\HeeksCAD1.0\src\DigitizeMode.cpp:63
+#: C:\Dev\HeeksCAD1.0\src\HArc.cpp:341 C:\Dev\HeeksCAD1.0\src\HCircle.cpp:194
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3260
+#: C:\Dev\HeeksCAD1.0\src\HEllipse.cpp:254
+#: C:\Dev\HeeksCAD1.0\src\Sphere.cpp:84
+msgid "centre"
+msgstr "centro"
+
+#: C:\Dev\HeeksCAD1.0\src\DigitizeMode.cpp:66
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3265
+msgid "screen"
+msgstr "pantalla"
+
+#: C:\Dev\HeeksCAD1.0\src\DigitizeMode.cpp:69
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3262
+msgid "nearest"
+msgstr "más cercano"
+
+#: C:\Dev\HeeksCAD1.0\src\DigitizeMode.cpp:72
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3263
+msgid "tangent"
+msgstr "tangente"
+
+#: C:\Dev\HeeksCAD1.0\src\DigitizeMode.cpp:85
+msgid "Digitize Mode"
+msgstr "modo digital"
+
+#: C:\Dev\HeeksCAD1.0\src\DigitizeMode.cpp:93
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:95
+msgid "Press Esc key to cancel"
+msgstr "Presione la tecla ESC para cancelar"
+
+#: C:\Dev\HeeksCAD1.0\src\DigitizeMode.cpp:95
+msgid "Left button to accept position"
+msgstr "Botón izquierdo para aceptar la posición"
+
+#: C:\Dev\HeeksCAD1.0\src\DigitizeMode.cpp:426
+#: C:\Dev\HeeksCAD1.0\src\Input.cpp:125 C:\Dev\HeeksCAD1.0\src\Input.cpp:161
+#: C:\Dev\HeeksCAD1.0\src\Input.cpp:465 C:\Dev\HeeksCAD1.0\src\Input.cpp:478
+msgid "X"
+msgstr "x"
+
+#: C:\Dev\HeeksCAD1.0\src\DigitizeMode.cpp:427
+#: C:\Dev\HeeksCAD1.0\src\Input.cpp:126 C:\Dev\HeeksCAD1.0\src\Input.cpp:162
+#: C:\Dev\HeeksCAD1.0\src\Input.cpp:466 C:\Dev\HeeksCAD1.0\src\Input.cpp:479
+msgid "Y"
+msgstr "y"
+
+#: C:\Dev\HeeksCAD1.0\src\DigitizeMode.cpp:428
+#: C:\Dev\HeeksCAD1.0\src\Input.cpp:127 C:\Dev\HeeksCAD1.0\src\Input.cpp:163
+#: C:\Dev\HeeksCAD1.0\src\Input.cpp:467 C:\Dev\HeeksCAD1.0\src\Input.cpp:480
+msgid "Z"
+msgstr "z"
+
+#: C:\Dev\HeeksCAD1.0\src\DigitizeMode.cpp:438
+msgid "Offset (from last point)"
+msgstr "desplazamiento ( desde el último punto )"
+
+#: C:\Dev\HeeksCAD1.0\src\DigitizeMode.cpp:450
+msgid "Error! The 'Stop Picking' button shouldn't have been available!"
+msgstr "Error ! El ' dejar de recoger ' botón no debería haber estado disponible !"
+
+#: C:\Dev\HeeksCAD1.0\src\DigitizeMode.cpp:453
+msgid "Stop Picking"
+msgstr "Dejar de recoger"
+
+#: C:\Dev\HeeksCAD1.0\src\DigitizeMode.cpp:455
+msgid "Finish picking"
+msgstr "Recogido acabado"
+
+#: C:\Dev\HeeksCAD1.0\src\DimensionDrawing.cpp:82
+#: C:\Dev\HeeksCAD1.0\src\HDimension.cpp:320
+msgid "between two points"
+msgstr "entre dos puntos"
+
+#: C:\Dev\HeeksCAD1.0\src\DimensionDrawing.cpp:83
+#: C:\Dev\HeeksCAD1.0\src\HDimension.cpp:321
+msgid "between two points, XY only"
+msgstr "sólo entre dos puntos , xy"
+
+#: C:\Dev\HeeksCAD1.0\src\DimensionDrawing.cpp:84
+msgid "between two points, X only"
+msgstr "entre dos puntos , x sólo"
+
+#: C:\Dev\HeeksCAD1.0\src\DimensionDrawing.cpp:85
+msgid "between two points, Y only"
+msgstr "entre dos puntos, y sólo"
+
+#: C:\Dev\HeeksCAD1.0\src\DimensionDrawing.cpp:86
+msgid "between two points, Z only"
+msgstr "sólo entre dos puntos , z"
+
+#: C:\Dev\HeeksCAD1.0\src\DimensionDrawing.cpp:87
+#: C:\Dev\HeeksCAD1.0\src\HDimension.cpp:322
+msgid "orthogonal"
+msgstr "ortogonal"
+
+#: C:\Dev\HeeksCAD1.0\src\DimensionDrawing.cpp:89
+#: C:\Dev\HeeksCAD1.0\src\HDimension.cpp:323
+msgid "mode"
+msgstr "modo"
+
+#: C:\Dev\HeeksCAD1.0\src\Drawing.cpp:207
+msgid "Stop drawing"
+msgstr "Dejar de dibujar"
+
+#: C:\Dev\HeeksCAD1.0\src\Drawing.cpp:209
+msgid "Finish drawing"
+msgstr "Dibujo acabado"
+
+#: C:\Dev\HeeksCAD1.0\src\Drawing.cpp:225
+msgid "Add point"
+msgstr "Añadir puntos"
+
+#: C:\Dev\HeeksCAD1.0\src\Drawing.cpp:227
+msgid "Add a point to drawing"
+msgstr "Añadir un punto de dibujo"
+
+#: C:\Dev\HeeksCAD1.0\src\Drawing.cpp:242
+msgid "Get Position"
+msgstr "Obtener la posición"
+
+#: C:\Dev\HeeksCAD1.0\src\Drawing.cpp:244
+msgid "Pick position without adding to the drawing"
+msgstr "Elije posición sin añadir al dibujo"
+
+#: C:\Dev\HeeksCAD1.0\src\Drawing.cpp:296
+msgid "set_draw_step"
+msgstr "define_dibujo_step"
+
+#: C:\Dev\HeeksCAD1.0\src\Drawing.cpp:315
+msgid "set_position"
+msgstr "elije_position"
+
+#: C:\Dev\HeeksCAD1.0\src\Edge.cpp:151
+msgid "Blend edge"
+msgstr "borde difuminado"
+
+#: C:\Dev\HeeksCAD1.0\src\Edge.cpp:157
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:855
+msgid "Enter Blend Radius"
+msgstr "entrar radio de fusiónn"
+
+#: C:\Dev\HeeksCAD1.0\src\Edge.cpp:157
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:855
+msgid "Radius"
+msgstr "radio"
+
+#: C:\Dev\HeeksCAD1.0\src\Edge.cpp:171
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1774
+#: C:\Dev\HeeksCNC1.0\src\CTool.cpp:298 C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:37
+msgid "Chamfer"
+msgstr "chaflán"
+
+#: C:\Dev\HeeksCAD1.0\src\Edge.cpp:177
+msgid "Enter Chamfer Distance"
+msgstr "introducir distancia de chaflán"
+
+#: C:\Dev\HeeksCAD1.0\src\Edge.cpp:177
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:871
+#: C:\Dev\HeeksCAD1.0\src\Sketch.cpp:290
+msgid "Distance"
+msgstr "distancia"
+
+#: C:\Dev\HeeksCAD1.0\src\Edge.cpp:191
+msgid "Make a sketch from edge"
+msgstr "hacer un boceto desde el  borde"
+
+#: C:\Dev\HeeksCAD1.0\src\Edge.cpp:211
+msgid "Select Flat Linked Edges"
+msgstr "seleccionar bordes plana vinculados"
+
+#: C:\Dev\HeeksCAD1.0\src\Edge.cpp:267
+msgid "Solid with edge chamfer"
+msgstr "sólido con borde achaflanado"
+
+#: C:\Dev\HeeksCAD1.0\src\Edge.cpp:274 C:\Dev\HeeksCAD1.0\src\Shape.cpp:710
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:721
+msgid "Solid with edge blend"
+msgstr "sólido con mezcla fusionado"
+
+#: C:\Dev\HeeksCAD1.0\src\Edge.cpp:281 C:\Dev\HeeksCAD1.0\src\Shape.cpp:727
+msgid "Error making fillet"
+msgstr "toma de error corte"
+
+#: C:\Dev\HeeksCAD1.0\src\Edge.cpp:285
+msgid "A fatal error happened during Chamfer"
+msgstr "ocurrió un error fatal durante chaflán"
+
+#: C:\Dev\HeeksCAD1.0\src\Edge.cpp:285 C:\Dev\HeeksCAD1.0\src\Shape.cpp:731
+msgid "A fatal error happened during Blend"
+msgstr "ocurrió un error grave durante la mezcla"
+
+#: C:\Dev\HeeksCAD1.0\src\Edge.cpp:291 C:\Dev\HeeksCAD1.0\src\HArc.cpp:344
+#: C:\Dev\HeeksCAD1.0\src\Ruler.cpp:332
+msgid "length"
+msgstr "longitud"
+
+#: C:\Dev\HeeksCAD1.0\src\Face.cpp:200
+msgid "surface type"
+msgstr "tipo de superficie"
+
+#: C:\Dev\HeeksCAD1.0\src\Face.cpp:221
+msgid "Make Coordinate System"
+msgstr "hacer que el sistema de coordenadas"
+
+#: C:\Dev\HeeksCAD1.0\src\Face.cpp:234
+msgid "Face Coordinate System"
+msgstr "cara sistema de coordenadas"
+
+#: C:\Dev\HeeksCAD1.0\src\Face.cpp:247
+msgid "Extrude Face"
+msgstr "cara de extrusión"
+
+#: C:\Dev\HeeksCAD1.0\src\Face.cpp:261
+msgid "Rotate to Face"
+msgstr "girar a cara"
+
+#: C:\Dev\HeeksCAD1.0\src\Face.cpp:419
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:613
+msgid "unknown"
+msgstr "desconocido"
+
+#: C:\Dev\HeeksCAD1.0\src\Face.cpp:423
+msgid "plane"
+msgstr "plano"
+
+#: C:\Dev\HeeksCAD1.0\src\Face.cpp:427
+msgid "cylinder"
+msgstr "cilindro"
+
+#: C:\Dev\HeeksCAD1.0\src\Face.cpp:431
+msgid "cone"
+msgstr "cono"
+
+#: C:\Dev\HeeksCAD1.0\src\Face.cpp:435
+msgid "sphere"
+msgstr "esfera"
+
+#: C:\Dev\HeeksCAD1.0\src\Face.cpp:439
+msgid "torus"
+msgstr "torus"
+
+#: C:\Dev\HeeksCAD1.0\src\Face.cpp:443
+msgid "bezier"
+msgstr "bezier"
+
+#: C:\Dev\HeeksCAD1.0\src\Face.cpp:447
+msgid "bspline"
+msgstr "BSPLINE"
+
+#: C:\Dev\HeeksCAD1.0\src\Face.cpp:451
+msgid "revolution"
+msgstr "revolución"
+
+#: C:\Dev\HeeksCAD1.0\src\Face.cpp:455
+msgid "extrusion"
+msgstr "extrusión"
+
+#: C:\Dev\HeeksCAD1.0\src\Face.cpp:459
+msgid "offset"
+msgstr "desplazamiento"
+
+#: C:\Dev\HeeksCAD1.0\src\Face.cpp:652
+msgid "Error in CFace::GetNurbSurfaceParams"
+msgstr "error en cface :: GetNurbSuraceParams"
+
+#: C:\Dev\HeeksCAD1.0\src\FaceTools.cpp:66
+#: C:\Dev\HeeksCAD1.0\src\FaceTools.cpp:71
+#: C:\Dev\HeeksCAD1.0\src\FaceTools.cpp:76
+msgid "Error in GetFaceNormalAtUV"
+msgstr "Error en GetFaceNormalAtUv"
+
+#: C:\Dev\HeeksCAD1.0\src\Group.cpp:13
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4680
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:138
+#: C:\Dev\HeeksCAD1.0/src/Group.h:24
+msgid "Group"
+msgstr "grupo"
+
+#: C:\Dev\HeeksCAD1.0\src\Group.cpp:236
+msgid "custom grippers"
+msgstr "pinzas personalizadas"
+
+#: C:\Dev\HeeksCAD1.0\src\Group.cpp:240
+msgid "custom grippers just one axis"
+msgstr "pinzas personalizados sólo uno de los ejes"
+
+#: C:\Dev\HeeksCAD1.0\src\Group.cpp:243
+msgid "datum"
+msgstr "datum"
+
+#: C:\Dev\HeeksCAD1.0\src\Group.cpp:245
+#: C:\Dev\HeeksCAD1.0\src\PropertiesCanvas.cpp:206
+#: C:\Dev\HeeksCAD1.0\src\PropertiesCanvas.cpp:238
+msgid "x"
+msgstr "x"
+
+#: C:\Dev\HeeksCAD1.0\src\Group.cpp:247
+#: C:\Dev\HeeksCAD1.0\src\PropertiesCanvas.cpp:209
+#: C:\Dev\HeeksCAD1.0\src\PropertiesCanvas.cpp:241
+msgid "y"
+msgstr "y"
+
+#: C:\Dev\HeeksCAD1.0\src\Group.cpp:249
+#: C:\Dev\HeeksCAD1.0\src\PropertiesCanvas.cpp:214
+#: C:\Dev\HeeksCAD1.0\src\PropertiesCanvas.cpp:244
+msgid "z"
+msgstr "z"
+
+#: C:\Dev\HeeksCAD1.0\src\Group.cpp:289
+msgid "Move datum"
+msgstr "movimiento datum"
+
+#: C:\Dev\HeeksCAD1.0\src\Group.cpp:297
+msgid "Move px"
+msgstr "movimiento px"
+
+#: C:\Dev\HeeksCAD1.0\src\Group.cpp:302
+msgid "Move py"
+msgstr "movimiento py"
+
+#: C:\Dev\HeeksCAD1.0\src\Group.cpp:307
+msgid "Move pz"
+msgstr "movimiento pz"
+
+#: C:\Dev\HeeksCAD1.0\src\HAngularDimension.cpp:305
+msgid "string"
+msgstr "string"
+
+#: C:\Dev\HeeksCAD1.0\src\HAngularDimension.cpp:306
+msgid "pythagorean"
+msgstr "Pitágoras"
+
+#: C:\Dev\HeeksCAD1.0\src\HAngularDimension.cpp:307
+msgid "horizontal"
+msgstr "horizontal"
+
+#: C:\Dev\HeeksCAD1.0\src\HAngularDimension.cpp:308
+msgid "vertical"
+msgstr "verticales"
+
+#: C:\Dev\HeeksCAD1.0\src\HAngularDimension.cpp:309
+msgid "text mode"
+msgstr "modo de texto"
+
+#: C:\Dev\HeeksCAD1.0\src\HAngularDimension.cpp:311
+#: C:\Dev\HeeksCAD1.0\src\HDimension.cpp:325
+msgid "scale"
+msgstr "escala"
+
+#: C:\Dev\HeeksCAD1.0\src\HArc.cpp:92
+msgid "Click centre point"
+msgstr "haga clic en el punto central"
+
+#: C:\Dev\HeeksCAD1.0\src\HArc.cpp:114
+msgid "Click first end point"
+msgstr "haga clic en el primer punto final"
+
+#: C:\Dev\HeeksCAD1.0\src\HArc.cpp:136
+msgid "Click second end point"
+msgstr "haga clic en el segundo punto final"
+
+#: C:\Dev\HeeksCAD1.0\src\HArc.cpp:339 C:\Dev\HeeksCAD1.0\src\HILine.cpp:107
+#: C:\Dev\HeeksCAD1.0\src\HLine.cpp:209
+msgid "start"
+msgstr "inicio"
+
+#: C:\Dev\HeeksCAD1.0\src\HArc.cpp:342 C:\Dev\HeeksCAD1.0\src\HCircle.cpp:195
+#: C:\Dev\HeeksCAD1.0\src\HEllipse.cpp:255
+msgid "axis"
+msgstr "eje"
+
+#: C:\Dev\HeeksCAD1.0\src\HArc.cpp:345 C:\Dev\HeeksCAD1.0\src\HCircle.cpp:196
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:711
+#: C:\Dev\HeeksCAD1.0\src\RegularShapesDrawing.cpp:504
+#: C:\Dev\HeeksCAD1.0\src\RegularShapesDrawing.cpp:505
+#: C:\Dev\HeeksCAD1.0\src\Sphere.cpp:85
+msgid "radius"
+msgstr "radio"
+
+#: C:\Dev\HeeksCAD1.0\src\HArea.cpp:72
+msgid "Delete Curve"
+msgstr "Eliminar curva"
+
+#: C:\Dev\HeeksCAD1.0\src\HArea.cpp:85 C:\Dev\HeeksCAD1.0\src\Shape.cpp:265
+msgid "Enter Offset Value, + for making bigger, - for making smaller"
+msgstr "Introducir valor de desplazamiento , + para hacer más grande, - para hacer más pequeña"
+
+#: C:\Dev\HeeksCAD1.0\src\HArea.cpp:85 C:\Dev\HeeksCAD1.0\src\HArea.cpp:113
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:265
+msgid "Offset value"
+msgstr "Valor de offset"
+
+#: C:\Dev\HeeksCAD1.0\src\HArea.cpp:96
+msgid "Area offset error"
+msgstr "Error de desplazamiento área"
+
+#: C:\Dev\HeeksCAD1.0\src\HArea.cpp:100
+msgid "Offset Area"
+msgstr "Zona de desplazamiento"
+
+#: C:\Dev\HeeksCAD1.0\src\HArea.cpp:113
+msgid "Enter Offset Value"
+msgstr "Introducir valor de desplazamiento"
+
+#: C:\Dev\HeeksCAD1.0\src\HArea.cpp:124
+msgid "Area thicken error"
+msgstr "Error espesor en zona"
+
+#: C:\Dev\HeeksCAD1.0\src\HArea.cpp:128
+msgid "Thicken Area"
+msgstr "Espesar área"
+
+#: C:\Dev\HeeksCAD1.0\src\HArea.cpp:140
+msgid "Reorder Area"
+msgstr "Área de reordenación"
+
+#: C:\Dev\HeeksCAD1.0\src\HArea.cpp:160
+msgid "Split Area"
+msgstr "Área de división"
+
+#: C:\Dev\HeeksCAD1.0\src\HArea.cpp:275
+msgid "number of curves"
+msgstr "número de curvas"
+
+#: C:\Dev\HeeksCAD1.0\src\HCircle.cpp:876
+#: C:\Dev\HeeksCAD1.0\src\Sketch.cpp:353
+msgid "Click midpoint"
+msgstr "Haga clic en el punto medio"
+
+#: C:\Dev\HeeksCAD1.0\src\HCircle.cpp:901
+#: C:\Dev\HeeksCAD1.0\src\Sketch.cpp:378
+msgid "Click centre-top point"
+msgstr "Haga clic en el punto superior central"
+
+#: C:\Dev\HeeksCAD1.0\src\HCircle.cpp:925
+#: C:\Dev\HeeksCAD1.0\src\Sketch.cpp:402
+msgid "Click centre-bottom point"
+msgstr "Haga clic en el punto centro inferior"
+
+#: C:\Dev\HeeksCAD1.0\src\HCircle.cpp:949
+#: C:\Dev\HeeksCAD1.0\src\Sketch.cpp:426
+msgid "Click centre-right point"
+msgstr "Haga clic en el punto de centro-derecha"
+
+#: C:\Dev\HeeksCAD1.0\src\HCircle.cpp:973
+#: C:\Dev\HeeksCAD1.0\src\Sketch.cpp:450
+msgid "Click centre-left point"
+msgstr "Haga clic en el punto de centro-izquierda"
+
+#: C:\Dev\HeeksCAD1.0\src\HDimension.cpp:84
+#: C:\Dev\HeeksCAD1.0\src\HDimension.cpp:331
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3236
+#: C:\Dev\HeeksCAD1.0\src\Ruler.cpp:325 C:\Dev\HeeksCNC1.0\src\Program.cpp:327
+#: C:\Dev\HeeksCNC1.0\src\ProgramDlg.cpp:41
+msgid "mm"
+msgstr "mm"
+
+#: C:\Dev\HeeksCAD1.0\src\HDimension.cpp:85
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3237
+#: C:\Dev\HeeksCAD1.0\src\Ruler.cpp:326 C:\Dev\HeeksCNC1.0\src\Program.cpp:328
+#: C:\Dev\HeeksCNC1.0\src\ProgramDlg.cpp:41
+msgid "inch"
+msgstr "pulgadas"
+
+#: C:\Dev\HeeksCAD1.0\src\HDimension.cpp:317
+#: C:\Dev\HeeksCAD1.0\src\HText.cpp:305
+msgid "orientation"
+msgstr "orientación"
+
+#: C:\Dev\HeeksCAD1.0\src\HDimension.cpp:329
+#: C:\Dev\HeeksCAD1.0\src\Ruler.cpp:322
+msgid "use view units"
+msgstr "utilizar unidades vista"
+
+#: C:\Dev\HeeksCAD1.0\src\HDimension.cpp:330
+msgid "inches"
+msgstr "pulgadas"
+
+#: C:\Dev\HeeksCAD1.0\src\HDimension.cpp:332
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3240
+#: C:\Dev\HeeksCAD1.0\src\Ruler.cpp:329
+msgid "units"
+msgstr "unidades"
+
+#: C:\Dev\HeeksCAD1.0\src\HDimension.cpp:336
+msgid "dimension value"
+msgstr "valor de la cota"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:196
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:709
+msgid "Untitled"
+msgstr "Sin título"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:1054
+msgid ""
+"OpenCascade failures occured during DXF read processing.  Would you like to "
+"import again and ignore the errors?"
+msgstr "Error en proceso de lectura. Quieres importar e ignorar errores?"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:1054
+msgid "DXF Read"
+msgstr "Dxf leer"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:1068
+msgid "OpenCascade failure occured during DXF read processing"
+msgstr "fracaso OpenCascade ocurrido durante dxf leer procesamiento"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:1076
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:815
+msgid "Select how the file is to be interpreted"
+msgstr "selecciona el modo en que el archivo debe ser interpretado"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:1077
+msgid "RS274X file interpretation"
+msgstr "interpretación archivo RS274X"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:1081
+msgid "Produce trace isolation sketches"
+msgstr "Produce trazos de aislamiento"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:1082
+msgid "Produce trace centre-line sketches"
+msgstr "Produce trazos de la línea central"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:1083
+msgid "Produce mirrored trace isolation sketches"
+msgstr "Produce trazos de aislamiento de simetria"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:1084
+msgid "Produce mirrored trace centre-line sketches"
+msgstr "Produce trazos simetricos de la línea central"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:1179
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1834
+msgid "Open file"
+msgstr "Abrir archivo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:1191
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:1270
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:1768
+msgid "Invalid file type chosen"
+msgstr "Tipo de archivo no válido"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:1191
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:1270
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:1768
+msgid "expecting"
+msgstr "esperando"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:1394
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:1528
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:1564
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:1592
+msgid "couldn't open file"
+msgstr "no pudo abrir el archivo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:1727
+msgid "Save graphical data file"
+msgstr "Guardar el archivo de datos gráficos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:2046
+msgid "Exit Full Screen Mode"
+msgstr "Salir de modo de pantalla completa"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:2047
+msgid "Show Full Screen"
+msgstr "Mostrar a pantalla completa"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:2078
+msgid "Move here"
+msgstr "Mover aquí"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:2078
+msgid "Copy here"
+msgstr "Copiar aquí"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:2112
+msgid "Set world coordinate system active"
+msgstr "Define del sistema de coordenadas activo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:2164
+msgid "Add points at intersections"
+msgstr "Añadir puntos en las intersecciones"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:2448
+msgid "Reverse Object"
+msgstr "Invierte objetos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3137
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:91
+msgid "view options"
+msgstr "opciones de visualización"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3141
+msgid "stay upright"
+msgstr "permanecer de pie"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3142
+msgid "free"
+msgstr "libre"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3143
+msgid "rotate mode"
+msgstr "modo de rotación"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3147
+msgid "none"
+msgstr "ninguno"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3148
+msgid "input mode title"
+msgstr "título modo de entrada"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3149
+msgid "full help"
+msgstr "ayuda completa"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3150
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:91
+msgid "screen text"
+msgstr "texto de la pantalla"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3152
+msgid "antialiasing"
+msgstr "antialiasing"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3153
+msgid "reverse mouse wheel"
+msgstr "Invertir rueda del ratón"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3154
+msgid "reverse zooming mode"
+msgstr "Invertir el modo de zoom"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3155
+msgid "Ctrl key does rotate"
+msgstr "tecla ctrl hace girar"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3156
+msgid "show datum"
+msgstr "muestra datum"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3157
+msgid "datum is solid"
+msgstr "datum es sólido"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3158
+msgid "datum size"
+msgstr "tamaño datum"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3159
+msgid "datum size is pixels not mm"
+msgstr "tamaño de referencia es píxeles no mm"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3160
+msgid "show ruler"
+msgstr "Mostrar regla"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3163
+msgid "single color"
+msgstr "color único"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3164
+msgid "top color and bottom color"
+msgstr "color de la parte superior y el color de fondo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3165
+msgid "left color and right color"
+msgstr "color lado izquierdo y color lado derecho"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3166
+msgid "four corner colors"
+msgstr "color de las cuatro esquinas"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3167
+msgid "sky and ground"
+msgstr "cielo y suelo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3168
+msgid "background mode"
+msgstr "modo de fondo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3173
+msgid "background color"
+msgstr "color de fondo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3177
+msgid "top background color"
+msgstr "color de fondo superior"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3178
+msgid "bottom background color"
+msgstr "color de fondo inferior"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3182
+msgid "left background color"
+msgstr "color de fondo izquierda"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3183
+msgid "right background color"
+msgstr "color de fondo derecha"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3187
+msgid "top left background color"
+msgstr "color de fondo a la izquierda superior"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3188
+msgid "bottom left background color"
+msgstr "color de fondo inferior izquierda"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3189
+msgid "top right background color"
+msgstr "top color de fondo derecha"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3190
+msgid "bottom right background color"
+msgstr "color de fondo inferior derecha"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3194
+msgid "sky top color"
+msgstr "color de la parte superior del cielo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3195
+msgid "sky middle color"
+msgstr "color de cielo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3196
+msgid "sky bottom color"
+msgstr "color de fondo de cielo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3197
+msgid "ground top color"
+msgstr "color de la parte superior del suelo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3198
+msgid "ground middle color"
+msgstr "color medio suelo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3199
+msgid "ground bottom color"
+msgstr "color de fondo de suelo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3205
+msgid "no grid"
+msgstr "sin rejilla"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3206
+msgid "faint color"
+msgstr "de color débil"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3207
+msgid "alpha blending"
+msgstr "mezcla alfa"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3208
+msgid "colored alpha blending"
+msgstr "color mezcla alfa"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3209
+msgid "grid mode"
+msgstr "modo de rejilla"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3211
+msgid "face selection color"
+msgstr "selección del color de cara"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3212
+msgid "perspective"
+msgstr "perspectiva"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3231
+msgid "tool icon size"
+msgstr "tamaño de icono de la herramienta"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3242
+msgid "flat on screen dimension text"
+msgstr "dimensiones del texto en pantalla"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3245
+msgid "faces and edges"
+msgstr "caras y aristas"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3246
+msgid "edges only"
+msgstr "sólo los bordes"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3247
+msgid "faces only"
+msgstr "sólo caras"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3248
+msgid "solid view mode"
+msgstr "modo de vista sólido"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3250
+msgid "input uses modal dialog"
+msgstr "entrada utiliza diálogo modal"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3251
+msgid "dragging moves objects"
+msgstr "arrastre de objetos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3252
+msgid "highlight items under mouse"
+msgstr "resaltar los elementos bajo el ratón"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3253
+msgid "highlight color"
+msgstr "color de realce"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3257
+msgid "digitizing"
+msgstr "digitalización"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3264
+msgid "coordinates"
+msgstr "coordenadas"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3266
+msgid "grid size"
+msgstr "tamaño de la cuadrícula"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3267
+msgid "snap to grid"
+msgstr "ajusta a la cuadrícula"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3270
+msgid "correlation"
+msgstr "correlación"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3271
+msgid ""
+"Minimum correlation factor (0.0 (nothing like it) -> 1.0 (perfect match))"
+msgstr "factor mínimo de correlació (0.0 -> 1.0 (ajuste perfecto))"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3272
+msgid ""
+"Maximum scale threshold (1.0 - must be same size, 1.5 (can be half as big "
+"again or 2/3 size)"
+msgstr "Límite de escala (1.0 escala 1:1, 1.5 representa la mitad)"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3273
+msgid "Number of sample points"
+msgstr "Número de puntos de muestreo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3274
+msgid "Correlate by color"
+msgstr "Correlacionar por color"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3277
+msgid "drawing"
+msgstr "dibujo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3278
+msgid "current color"
+msgstr "color actual"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3279
+msgid "geometry tolerance"
+msgstr "tolerancia geometría"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3280
+msgid "sketch reorder tolerance"
+msgstr "la tolerancia de reordenación de croquis"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3281
+msgid "face to sketch deviaton"
+msgstr "cara a boceto"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3282
+msgid "Use old solid fuse ( to prevent coplanar faces )"
+msgstr "utilizar sólido anterior ( para evitar que las caras coplanares )"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3283
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:254
+msgid "Extrude makes a solid"
+msgstr "Extrusión convierte un sólido"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3284
+msgid "Solid revolution angle"
+msgstr "ángulo de revolución sólida"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3295
+msgid "selection filter"
+msgstr "filtro de selección"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3296
+msgid "point"
+msgstr "punto"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3297
+msgid "line"
+msgstr "línea"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3298
+msgid "arc"
+msgstr "arco"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3299
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:690
+msgid "infinite line"
+msgstr "línea infinita"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3300
+msgid "circle"
+msgstr "círculo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3301
+msgid "edge"
+msgstr "borde"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3302
+msgid "face"
+msgstr "cara"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3303
+msgid "vertex"
+msgstr "vértice"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3304
+msgid "solid"
+msgstr "sólido"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3305
+msgid "stl_solid"
+msgstr "stl_solido"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3306
+msgid "wire"
+msgstr "esquema"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3307
+msgid "sketch"
+msgstr "croquis"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3308
+msgid "image"
+msgstr "imagen"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3309
+msgid "coordinate system"
+msgstr "sistema de coordenadas"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3310
+msgid "text"
+msgstr "texto"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3311
+msgid "dimension"
+msgstr "dimensión"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3312
+msgid "ruler"
+msgstr "regla"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3313
+msgid "pad"
+msgstr "pad"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3314
+msgid "part"
+msgstr "parte"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3315
+msgid "pocket"
+msgstr "bolsillo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3318
+msgid "file options"
+msgstr "opciones de archivo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3319
+msgid "DXF"
+msgstr "dxf"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3320
+msgid "make sketch"
+msgstr "hacer croquis"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3321
+msgid "ignore errors where possible"
+msgstr "ignorar los errores cuando sea posible"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3322
+msgid "read points"
+msgstr "leer puntos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3323
+msgid "Layer Name Suffixes To Discard"
+msgstr "nombre de la capa sufijos para descartar"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3326
+msgid "STL"
+msgstr "stl"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3327
+msgid "stl save facet tolerance"
+msgstr "stl ahorro tolerancia "
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3328
+msgid "STL save binary"
+msgstr "guarda stl binario"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3330
+msgid "auto save interval (in minutes)"
+msgstr "ahorro automático de intervalo (en minutos )"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3335
+msgid "font options"
+msgstr "opciones de fuente"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3336
+msgid "Paths (semicolon delimited)"
+msgstr "caminos (punto y coma delimitada )"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3337
+msgid "Word Space Percentage"
+msgstr "porcentaje espacio de las palabras"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3338
+msgid "Character Space Percentage"
+msgstr "porcentaje espacio de carácter"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3376
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3405
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3410
+msgid "Heeks files"
+msgstr "archivos Heeks"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3405
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3410
+#: C:\Dev\HeeksCNC1.0\src\Tools.cpp:113 C:\Dev\HeeksCNC1.0\src\Tools.cpp:190
+msgid "Known Files"
+msgstr "archivos conocidos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3405
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3410
+#: C:\Dev\HeeksCAD1.0\src\SolidTools.cpp:57
+msgid "IGES files"
+msgstr "archivos IGES"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3405
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3410
+#: C:\Dev\HeeksCAD1.0\src\SolidTools.cpp:57
+msgid "STEP files"
+msgstr "archivos STEP"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3405
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3410
+#: C:\Dev\HeeksCAD1.0\src\SolidTools.cpp:57
+msgid "STL files"
+msgstr "archivos STL"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3405
+msgid "Scalar Vector Graphics files"
+msgstr "archivos de gráficos de vectores escalares"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3405
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3410
+msgid "DXF files"
+msgstr "archivos DXF"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3405
+msgid "RX274X/Gerber files"
+msgstr "archivos rx274x / Gerber"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3405
+msgid "Picture files"
+msgstr "archivos de imagen"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3410
+#: C:\Dev\HeeksCAD1.0\src\SolidTools.cpp:57
+msgid "CPP files"
+msgstr "archivos CCP"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3410
+#: C:\Dev\HeeksCAD1.0\src\SolidTools.cpp:57
+msgid "OpenCAMLib python files"
+msgstr "archivos python opencamlib"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3457
+msgid "Deselect"
+msgstr "anular la selección"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3460
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3464
+#: C:\Dev\HeeksCAD1.0\src\Input.cpp:124 C:\Dev\HeeksCAD1.0\src\Input.cpp:128
+#: C:\Dev\HeeksCAD1.0\src\Input.cpp:464 C:\Dev\HeeksCAD1.0\src\Input.cpp:477
+msgid "Select"
+msgstr "seleccionar"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3461
+msgid "Add to selection"
+msgstr "añadir a la selección"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3508
+#: C:\Dev\HeeksCAD1.0\src\Plugins.cpp:148
+msgid "Edit"
+msgstr "edición"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3590
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4656
+#: C:\Dev\HeeksCAD1.0\interface\HeeksObj.h:123
+msgid "Unknown"
+msgstr "desconocido"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:3946
+msgid "Save changes to file"
+msgstr "guardar los cambios al archivo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4657
+msgid "Document"
+msgstr "documento"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4658 C:\Dev\HeeksCAD1.0/src/HPoint.h:30
+msgid "Point"
+msgstr "punto"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4659 C:\Dev\HeeksCAD1.0/src/HLine.h:23
+msgid "Line"
+msgstr "línea"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4660 C:\Dev\HeeksCAD1.0/src/HArc.h:33
+msgid "Arc"
+msgstr "arco"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4661
+msgid "ILine"
+msgstr "iLine"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4662
+#: C:\Dev\HeeksCAD1.0/src/HCircle.h:29
+msgid "Circle"
+msgstr "círculo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4663
+#: C:\Dev\HeeksCAD1.0/src/Gripper.h:23
+msgid "Gripper"
+msgstr "pinza"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4664 C:\Dev\HeeksCAD1.0/src/Vertex.h:33
+msgid "Vertex"
+msgstr "vértice"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4665 C:\Dev\HeeksCAD1.0/src/Edge.h:54
+msgid "Edge"
+msgstr "borde"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4666 C:\Dev\HeeksCAD1.0/src/Face.h:44
+msgid "Face"
+msgstr "cara"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4667
+msgid "Loop"
+msgstr "bucle"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4668 C:\Dev\HeeksCAD1.0/src/Solid.h:26
+#: C:\Dev\HeeksCAD1.0\interface\HeeksCADInterface.cpp:2044
+msgid "Solid"
+msgstr "sólido"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4669
+msgid "StlSolid"
+msgstr "stlsolid"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4670 C:\Dev\HeeksCAD1.0/src/Wire.h:14
+msgid "Wire"
+msgstr "esquema"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4671
+#: C:\Dev\HeeksCAD1.0\src\Sketch.cpp:43 C:\Dev\HeeksCAD1.0/src/Sketch.h:36
+msgid "Sketch"
+msgstr "croquis"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4672 C:\Dev\HeeksCAD1.0/src/HImage.h:42
+msgid "Image"
+msgstr "imagen"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4673
+msgid "CoordinateSystem"
+msgstr "CoordinateSystem"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4674 C:\Dev\HeeksCAD1.0/src/HText.h:44
+msgid "Text"
+msgstr "texto"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4675
+#: C:\Dev\HeeksCAD1.0/src/HAngularDimension.h:46
+#: C:\Dev\HeeksCAD1.0/src/HDimension.h:54
+msgid "Dimension"
+msgstr "dimensión"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4676 C:\Dev\HeeksCAD1.0/src/Ruler.h:50
+msgid "Ruler"
+msgstr "regla"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4677 C:\Dev\HeeksCAD1.0/src/HXml.h:18
+msgid "Xml"
+msgstr "xml"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4678
+#: C:\Dev\HeeksCAD1.0/src/HEllipse.h:40
+msgid "Ellipse"
+msgstr "elipse"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4679
+#: C:\Dev\HeeksCAD1.0/src/HSpline.h:42
+msgid "Spline"
+msgstr "spline"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4681
+msgid "CorrelationTool"
+msgstr "herramienta de correlation"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4682
+msgid "AngularDimension"
+msgstr "dimension angular"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4683
+msgid "OrientationModifier"
+msgstr "modifier de morientación"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4684
+msgid "Hole"
+msgstr "agujero"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4685
+msgid "Positions"
+msgstr "posiciones"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksCAD.cpp:4686
+msgid "ObjectMaximum"
+msgstr "tamaño máximo de objeto"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:136
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1999
+msgid "Graphics"
+msgstr "gráficos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:137
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1792
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:2000
+msgid "Objects"
+msgstr "objetos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:138
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1793
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:2001
+msgid "Options"
+msgstr "opciones"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:139
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1794
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:2002
+msgid "Input"
+msgstr "entrada"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:140
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1795
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:2003
+msgid "Properties"
+msgstr "propiedades"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:190
+msgid "Reset Layout"
+msgstr "Reiniciar diseño"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:191
+msgid "Set toolbars to left"
+msgstr "configurar las barras de herramientas a la izquierda"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:515
+msgid "Pick three or more points to be splined"
+msgstr "elegir tres o más puntos para ser acanalados"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:515
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1722
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1873
+msgid "Spline Through Points"
+msgstr "spline a través de puntos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:643
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:666
+#: C:\Dev\HeeksCAD1.0/src/CoordinateSystem.h:32
+#: C:\Dev\HeeksCAD1.0\interface\HeeksCADInterface.cpp:539
+msgid "Coordinate System"
+msgstr "sistema de coordenadas"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:709
+msgid "Import file"
+msgstr "importar archivo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:746
+msgid "You must restart the application for the settings to be changed"
+msgstr "debe reiniciar la aplicación para que los valores puedan cambiar"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:826
+msgid "Pick two or more faces or solids, the first one will be cut by the others"
+msgstr "elegir dos o mas caras o sólidos, el primero será cortado por los segundos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:826
+msgid "Subtract Solids"
+msgstr "Restar sólidos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:834
+msgid "Pick two or more solids to be fused together"
+msgstr "recoger dos o más sólidos para ser fusionados"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:834
+msgid "Fuse Solids"
+msgstr "Fundir sólidos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:842
+msgid ""
+"Pick two or more solids, only the shape that is contained by all of them "
+"will remain"
+msgstr "elige dos o más sólidos, solo quedará el que está contenido por el resto"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:842
+msgid "Intersection of Solids"
+msgstr "intersección de sólidos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:851
+msgid "Pick one or more edges to add a fillet to"
+msgstr "elige uno o más bordes para añadir un corte a"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:851
+msgid "Edge Fillet"
+msgstr "borde de corte"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:867
+msgid "Pick one or more edges to add a chamfer to"
+msgstr "elige uno o más bordes para añadir un chaflán a"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:867
+msgid "Edge Chamfer"
+msgstr "chaflán borde"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:871
+msgid "Enter chamfer distance"
+msgstr "entrar distancia de chaflán"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:888
+msgid "Pick two or more sketches, to create a lofted solid between"
+msgstr "elige dos o más croquis , para crear un sólido soportado"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:888
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:896
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:904
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:912
+msgid "hold down Ctrl key to select more than one solid"
+msgstr "Utilice la tecla Ctrl para seleccionar más de un sólido"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:888
+msgid "Lofted Body"
+msgstr "cuerpo soportado"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:896
+msgid "Pick one or more sketches, faces or circles, to create an extruded body from"
+msgstr "elige uno o más croquis, caras o circulos, para crear un cuerdo extruido"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:896
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:904
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:912
+msgid "Extrude"
+msgstr "extrusión"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:904
+msgid "Pick one or more sketches, faces or circles, to create a revolved body from"
+msgstr "Elige un o más croquis, caras o circulos, para crear un cuerpo de revolución"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:912
+msgid "Pick one or more sketches, faces or circles, to sweep"
+msgstr "elegir uno o más bocetos , caras o círculos , para borrar"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1581
+msgid ""
+"There was a problem printing.\n"
+"Perhaps your current printer is not set correctly?"
+msgstr "Problema de impresión, settings incorrectos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1581
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1583
+msgid "Printing"
+msgstr "imprimendo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1583
+msgid "You canceled printing"
+msgstr "ha cancelado la impresión"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1602
+msgid ""
+"There was a problem previewing.\n"
+"Perhaps your current printer is not set correctly?"
+msgstr "Problema de visualización, settings incorrectos "
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1602
+msgid "Previewing"
+msgstr "vista previa"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1606
+msgid "Demo Print Preview"
+msgstr "vista previa de impresión de muestra"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1680
+msgid "New\tCtrl+N"
+msgstr "Nuevo \tCtrl + n"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1681
+msgid "Open\tCtrl+O"
+msgstr "abrir \tCtrl + o"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1682
+msgid "Save\tCtrl+S"
+msgstr "guardar \tCtrl + s"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1683
+msgid "Save As"
+msgstr "guardar como"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1685
+msgid "Print\tCtrl+P"
+msgstr "print \tCtrl + p"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1686
+msgid "Page Setup"
+msgstr "configuración de página"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1687
+msgid "Print Preview"
+msgstr "vista previa de impresión"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1690
+msgid "Open Recent"
+msgstr "reciente abierto"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1691
+#: C:\Dev\HeeksCNC1.0\src\Tools.cpp:175
+msgid "Import"
+msgstr "importación"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1692
+msgid "About"
+msgstr "acerca"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1694
+msgid "Plugins"
+msgstr "plugins"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1698
+msgid "Restore All Defaults"
+msgstr "restaurar todos los valores predeterminados"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1700
+msgid "Exit\tCtrl+Q"
+msgstr "exit \tCtrl + q"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1704
+msgid "Undo\tCtrl+Z"
+msgstr "deshacer \tCtrl + z"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1705
+msgid "Redo\tCtrl+Shift+Z"
+msgstr "rehacer \tCtrl + shift + z"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1707
+msgid "Cut\tCtrl+X"
+msgstr "cortar \tCtrl + x"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1708
+msgid "Copy\tCtrl+C"
+msgstr "copia \tCtrl + c"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1709
+msgid "Paste\tCtrl+V"
+msgstr "pegar \tCtrl + v"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1710
+#: C:\Dev\HeeksCAD1.0\src\Plugins.cpp:149
+msgid "Delete"
+msgstr "eliminar"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1712
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1841
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:65
+msgid "Select Mode"
+msgstr "modo de selección"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1716
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1852
+msgid "Draw a sketch"
+msgstr "dibujar un boceto"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1718
+msgid "Draw Ellipses"
+msgstr "dibujar elipses"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1719
+msgid "Draw Infinite Lines"
+msgstr "dibujar líneas infinitas"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1720
+msgid "Draw Points"
+msgstr "dibujar puntos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1721
+#: C:\Dev\HeeksCAD1.0/src/HGear.h:34
+msgid "Gear"
+msgstr "engranajes"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1724
+msgid "Add Text"
+msgstr "añadir texto"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1725
+msgid "Add Dimension"
+msgstr "agregar la dimensión"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1731
+msgid "Pick 3 points"
+msgstr "recoger 3 puntos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1733
+msgid "Pick 1 point"
+msgstr "recoger 1 punto"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1737
+msgid "Previous view"
+msgstr "vista anterior"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1739
+msgid "Zoom window"
+msgstr "ventana de zoom"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1740
+msgid "Fit view to extents"
+msgstr "ajuste miras a extensiones"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1741
+msgid "Fit view to extents, but no rotation"
+msgstr "ajuste miras a extensiones , pero sin rotación"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1742
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1967
+msgid "View XY Front"
+msgstr "vista frontal xy"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1743
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1968
+msgid "View XY Back"
+msgstr "vista xy detrás"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1744
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1969
+msgid "View XZ Top"
+msgstr "vista superior xz"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1745
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1970
+msgid "View XZ Bottom"
+msgstr "vista inferior xz"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1746
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1971
+msgid "View YZ Right"
+msgstr "vista yz derecha"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1747
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1972
+msgid "View YZ Left"
+msgstr "vista yz izquierda"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1748
+msgid "View XZY Isometric"
+msgstr "vista isométrica xzy"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1750
+msgid "View rotate"
+msgstr "vista rotación"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1751
+msgid "View zoom"
+msgstr "vista zoom"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1752
+msgid "View pan"
+msgstr "vista pan"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1753
+msgid "Full screen"
+msgstr "pantalla completa"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1755
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1985
+msgid "Redraw"
+msgstr "redibujar"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1759
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1917
+msgid "Add a sphere"
+msgstr "añadir una esfera"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1760
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1918
+msgid "Add a cube"
+msgstr "añadir un cubo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1761
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1919
+msgid "Add a cylinder"
+msgstr "añadir un cilindro"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1762
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1920
+msgid "Add a cone"
+msgstr "añadir un cono"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1764
+msgid "Loft two sketches"
+msgstr "Loft dos croquis"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1765
+msgid "Extrude a sketch"
+msgstr "extruir un boceto"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1766
+msgid "Revolve a sketch"
+msgstr "revoluciona en un croquis"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1767
+msgid "Sweep objects along a sketch"
+msgstr "borrado de objetos en un croquis"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1769
+msgid "Cut"
+msgstr "corte"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1770
+msgid "Fuse"
+msgstr "fundir"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1771
+msgid "Common"
+msgstr "común"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1773
+msgid "Fillet"
+msgstr "corte"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1775
+msgid "Sectioning"
+msgstr "seccionamiento"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1779
+msgid "Move Translate"
+msgstr "mover traducción"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1780
+msgid "Copy Translate"
+msgstr "copiar traducción"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1782
+msgid "Move Rotate"
+msgstr "movimiento de rotación"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1783
+msgid "Copy Rotate"
+msgstr "copia rotación"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1785
+msgid "Move Mirror"
+msgstr "movimiento simetrico"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1786
+msgid "Copy Mirror"
+msgstr "copia simetricamente"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1788
+msgid "Move Scale"
+msgstr "mover escala"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1796
+msgid "Tool Bar"
+msgstr "barra de herramientas"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1797
+msgid "Solids Tool Bar"
+msgstr "barra de herramientas de sólidos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1798
+msgid "Geometry Tool Bar"
+msgstr "barra de herramientas de la geometría"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1799
+msgid "Viewing Tool Bar"
+msgstr "la visualización de la barra de herramientas"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1800
+msgid "Transformations Tool Bar"
+msgstr "barra de herramientas transformaciones"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1804
+msgid "&File"
+msgstr "y archivo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1805
+msgid "&Edit"
+msgstr "y editar"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1806
+msgid "&View"
+msgstr "y vista"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1807
+msgid "&Geometry"
+msgstr "y geometría"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1808
+msgid "&Solid"
+msgstr "y sólida"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1809
+msgid "&Set Origin"
+msgstr "y establecer el origen"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1810
+msgid "&Transform"
+msgstr "y transformar"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1811
+msgid "&Window"
+msgstr "y ventana"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1833
+msgid "New file"
+msgstr "nuevo archivo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1835
+msgid "Save file"
+msgstr "guardar el archivo"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1836
+msgid "Cut selected items to the clipboard"
+msgstr "corte los elementos seleccionados al portapapeles"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1837
+msgid "Copy selected items to the clipboard"
+msgstr "copiar los elementos seleccionados al portapapeles"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1838
+msgid "Paste items from the clipboard"
+msgstr "pegar elementos del Portapapeles"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1839
+msgid "Undo the previous command"
+msgstr "deshacer el comando anterior"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1840
+msgid "Redo the next command"
+msgstr "rehacer el siguiente comando"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1844
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:2004
+msgid "General Tools"
+msgstr "herramientas generales"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1853
+msgid "Start drawing rectangles"
+msgstr "empezar a dibujar rectángulos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1854
+msgid "Start drawing obrounds"
+msgstr "empezar a dibujar obrounds"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1855
+msgid "Start drawing polygons"
+msgstr "empezar a dibujar polígonos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1856
+msgid "Add a gear"
+msgstr "añadir un engranaje"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1862
+msgid "Draw circles through 3 points"
+msgstr "dibujar círculos a través de 3 puntos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1863
+msgid "Draw circles, centre and point"
+msgstr "dibujar círculos , centro y punto"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1864
+msgid "Draw circles, centre and radius"
+msgstr "dibujar círculos , centro y radio"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1865
+msgid "Draw ellipses"
+msgstr "dibujar elipses"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1871
+msgid "Start Drawing Infinite Lines"
+msgstr "empezar a dibujar líneas infinitas"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1872
+msgid "Start Drawing Points"
+msgstr "empezar a dibujar puntos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1879
+msgid "Add a text object"
+msgstr "agregar un objeto de texto"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1880
+msgid "Add a dimension"
+msgstr "añadir una dimensión"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1881
+msgid "Add Coordinate System"
+msgstr "añadir sistema de coordenadas"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1887
+msgid "Translate selected items"
+msgstr "traducir artículos seleccionados"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1888
+msgid "Copy and translate selected items"
+msgstr "copiar y traducir los elementos seleccionados"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1889
+msgid "Rotate selected items"
+msgstr "rotar los elementos seleccionados"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1890
+msgid "Copy and rotate selected items"
+msgstr "copiar y rotar los elementos seleccionados"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1891
+msgid "Mirror selected items"
+msgstr "espejo elementos seleccionados"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1892
+msgid "Copy and mirror selected items"
+msgstr "copia y espejo elementos seleccionados"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1893
+msgid "Scale selected items"
+msgstr "ítems de la escala seleccionada"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1899
+msgid "End point"
+msgstr "punto final"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1900
+msgid "Intersection"
+msgstr "intersección"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1901
+#: C:\Dev\HeeksCAD1.0\src\OrientationModifier.cpp:120
+msgid "Centre"
+msgstr "centro"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1902
+msgid "Midpoint"
+msgstr "punto medio"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1903
+msgid "Snap"
+msgstr "broche de presión"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1904
+msgid "edit grid"
+msgstr "cuadrícula de edición"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1909
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:2005
+msgid "Geometry Tools"
+msgstr "herramientas de geometría"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1926
+msgid "Create a lofted face"
+msgstr "crear una cara lofted"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1927
+msgid "Extrude a wire or face"
+msgstr "extruir un alambre o la cara"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1928
+msgid "Revolve a wire or face"
+msgstr "girar un alambre o la cara"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1929
+msgid "Sweep a wire or face"
+msgstr "barrer un alambre o la cara"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1935
+msgid "Cut one solid from another"
+msgstr "cortar un sólido a partir de otra"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1936
+msgid "Fuse one solid to another"
+msgstr "fusible de un sólido a otro"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1937
+msgid "Find common solid between two solids"
+msgstr "encontrar común sólida entre dos sólidos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1943
+msgid "Make a fillet on selected edges"
+msgstr "hacer un filete en los bordes seleccionados"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1944
+msgid "Make a chamfer on selected edges"
+msgstr "hacer un chaflán en los bordes seleccionados"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1949
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:2006
+msgid "Solid Tools"
+msgstr "herramientas sólidas"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1957
+msgid "Zoom in to fit the extents of the drawing into the graphics window"
+msgstr "acercar la imagen para adaptarse a la extensión del dibujo en la ventana de gráficos"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1958
+msgid ""
+"Zoom in to fit the extents of the drawing into the graphics window, but "
+"without rotating the view"
+msgstr ""
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1959
+msgid "Zoom in to a dragged window"
+msgstr "acercar a una ventana arrastrada"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1960
+msgid "Go back to previous view"
+msgstr "volver a la vista anterior"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1961
+msgid "Switch to full screen view ( press escape to return )"
+msgstr "cambiar a la vista de pantalla completa ( pulse ESCAPE para volver )"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1973
+msgid "View XY Isometric"
+msgstr "vista isométrica xy"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1979
+msgid "Enter view rotating mode"
+msgstr "entrar en el modo de rotación vista"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1980
+msgid "Drag to zoom in and out"
+msgstr "arrastre para acercar y alejar"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1981
+msgid "Drag to move view"
+msgstr "arrastre para mover la vista"
+
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:1988
+#: C:\Dev\HeeksCAD1.0\src\HeeksFrame.cpp:2007
+msgid "Viewing Tools"
+msgstr "herramientas de visualización"
+
+#: C:\Dev\HeeksCAD1.0\src\HEllipse.cpp:256
+msgid "major radius"
+msgstr "radio mayor"
+
+#: C:\Dev\HeeksCAD1.0\src\HEllipse.cpp:257
+msgid "minor radius"
+msgstr "radio menor"
+
+#: C:\Dev\HeeksCAD1.0\src\HEllipse.cpp:258
+msgid "rotation"
+msgstr "rotación"
+
+#: C:\Dev\HeeksCAD1.0\src\HEllipse.cpp:259
+msgid "start angle"
+msgstr "ángulo inicial"
+
+#: C:\Dev\HeeksCAD1.0\src\HEllipse.cpp:260
+msgid "end angle"
+msgstr "ángulo final"
+
+#: C:\Dev\HeeksCAD1.0\src\HGear.cpp:549
+msgid "num teeth"
+msgstr "dientes num"
+
+#: C:\Dev\HeeksCAD1.0\src\HGear.cpp:550
+msgid "module"
+msgstr "módulo"
+
+#: C:\Dev\HeeksCAD1.0\src\HGear.cpp:551
+msgid "pressure angle"
+msgstr "ángulo de presión"
+
+#: C:\Dev\HeeksCAD1.0\src\HGear.cpp:552
+msgid "tip relief"
+msgstr "alivio de la punta"
+
+#: C:\Dev\HeeksCAD1.0\src\HGear.cpp:553
+msgid "depth"
+msgstr "profundidad"
+
+#: C:\Dev\HeeksCAD1.0\src\HGear.cpp:554
+msgid "cone half angle"
+msgstr "cono de ángulo medio"
+
+#: C:\Dev\HeeksCAD1.0\src\HGear.cpp:555
+msgid "drawn angle"
+msgstr "ángulo dibujado"
+
+#: C:\Dev\HeeksCAD1.0\src\HGear.cpp:623
+msgid "Make Sketches"
+msgstr "hacer bocetos"
+
+#: C:\Dev\HeeksCAD1.0\src\HGear.cpp:632
+msgid "Make One Tooth Sketches"
+msgstr "hacer uno bocetos dientes"
+
+#: C:\Dev\HeeksCAD1.0\src\HILine.cpp:110 C:\Dev\HeeksCAD1.0\src\HLine.cpp:212
+msgid "Length"
+msgstr "longitud"
+
+#: C:\Dev\HeeksCAD1.0\src\HImage.cpp:155
+msgid "Picture - "
+msgstr "foto -"
+
+#: C:\Dev\HeeksCAD1.0\src\HLine.cpp:46 C:\Dev\HeeksCAD1.0/src/Cylinder.h:25
+msgid "Cylinder"
+msgstr "cilindro"
+
+#: C:\Dev\HeeksCAD1.0\src\HLine.cpp:51
+msgid "Make Cylinder On Line"
+msgstr "hacer cilindro en la línea"
+
+#: C:\Dev\HeeksCAD1.0\src\HLine.cpp:60 C:\Dev\HeeksCAD1.0/src/Cone.h:29
+msgid "Cone"
+msgstr "cono"
+
+#: C:\Dev\HeeksCAD1.0\src\HLine.cpp:65
+msgid "Make Cone On Line"
+msgstr "hacer cono en línea"
+
+#: C:\Dev\HeeksCAD1.0\src\HLine.cpp:83
+msgid "Click Midpoint On Line"
+msgstr "haga clic en el punto medio en la línea"
+
+#: C:\Dev\HeeksCAD1.0\src\HLine.cpp:99
+msgid "Click Start Of Line"
+msgstr "Haga clic en Inicio de la línea"
+
+#: C:\Dev\HeeksCAD1.0\src\HLine.cpp:115
+msgid "Click End Of Line"
+msgstr "haga clic en final de la línea"
+
+#: C:\Dev\HeeksCAD1.0\src\HSpline.cpp:235
+msgid "Knot"
+msgstr "nudo"
+
+#: C:\Dev\HeeksCAD1.0\src\HSpline.cpp:246
+msgid "Pole"
+msgstr "polo"
+
+#: C:\Dev\HeeksCAD1.0\src\HText.cpp:317
+msgid "OpenGL (default) font"
+msgstr "OpenGL (por defecto ) de la fuente"
+
+#: C:\Dev\HeeksCAD1.0\src\HText.cpp:329
+msgid "Font"
+msgstr "fuente"
+
+#: C:\Dev\HeeksCAD1.0\src\HText.cpp:334
+msgid "left"
+msgstr "izquierda"
+
+#: C:\Dev\HeeksCAD1.0\src\HText.cpp:335
+msgid "center"
+msgstr "centro"
+
+#: C:\Dev\HeeksCAD1.0\src\HText.cpp:336
+msgid "right"
+msgstr "derecho"
+
+#: C:\Dev\HeeksCAD1.0\src\HText.cpp:337
+msgid "horizontal justification"
+msgstr "justificación horizontal"
+
+#: C:\Dev\HeeksCAD1.0\src\HText.cpp:341
+msgid "baseline"
+msgstr "línea de base"
+
+#: C:\Dev\HeeksCAD1.0\src\HText.cpp:342
+msgid "bottom"
+msgstr "inferior"
+
+#: C:\Dev\HeeksCAD1.0\src\HText.cpp:343
+msgid "middle"
+msgstr "medio"
+
+#: C:\Dev\HeeksCAD1.0\src\HText.cpp:344
+msgid "top"
+msgstr "superior"
+
+#: C:\Dev\HeeksCAD1.0\src\HText.cpp:345
+msgid "vertical justification"
+msgstr "justificación verticales"
+
+#: C:\Dev\HeeksCAD1.0\src\HText.cpp:463
+msgid "Only a single orientation modifier is supported"
+msgstr "Sólo se admite un único modificador de orientación"
+
+#: C:\Dev\HeeksCAD1.0\src\HText.cpp:496
+msgid "Make a Sketch"
+msgstr "hacer un bosquejo"
+
+#: C:\Dev\HeeksCAD1.0\src\HText.cpp:498
+msgid "Convert the lines and arcs that make up this text into a sketch object."
+msgstr "convertir las líneas y arcos que componen este texto en un objeto de dibujo."
+
+#: C:\Dev\HeeksCAD1.0\src\HText.cpp:512
+msgid "Add Orientation Modifier"
+msgstr "añadir modificador de orientación"
+
+#: C:\Dev\HeeksCAD1.0\src\HText.cpp:514
+msgid "Add graphics to orient text"
+msgstr "añadir gráficos a texto orient"
+
+#: C:\Dev\HeeksCAD1.0\src\Input.cpp:109 C:\Dev\HeeksCAD1.0\src\Input.cpp:458
+#: C:\Dev\HeeksCAD1.0\src\TransformTools.cpp:293
+msgid "number of copies"
+msgstr "número de copias"
+
+#: C:\Dev\HeeksCAD1.0\src\Input.cpp:123 C:\Dev\HeeksCAD1.0\src\Input.cpp:124
+msgid "Position to rotate about"
+msgstr "posición para girar alrededor"
+
+#: C:\Dev\HeeksCAD1.0\src\Input.cpp:160
+msgid "Axis to rotate about"
+msgstr "eje gire alrededor"
+
+#: C:\Dev\HeeksCAD1.0\src\Input.cpp:164
+msgid "Select a line"
+msgstr "seleccione una línea"
+
+#: C:\Dev\HeeksCAD1.0\src\Input.cpp:185
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:324
+#: C:\Dev\HeeksCNC1.0\src\Tag.cpp:74
+msgid "angle"
+msgstr "ángulo"
+
+#: C:\Dev\HeeksCAD1.0\src\Input.cpp:190
+msgid "axial shift"
+msgstr "desplazamiento axial"
+
+#: C:\Dev\HeeksCAD1.0\src\Input.cpp:349
+msgid "Pick Position"
+msgstr "posición de recogida"
+
+#: C:\Dev\HeeksCAD1.0\src\Input.cpp:382
+msgid "Pick line for rotation axis"
+msgstr "recoger la línea de eje de rotación"
+
+#: C:\Dev\HeeksCAD1.0\src\Input.cpp:464
+msgid "Position to move from"
+msgstr "posición para pasar de"
+
+#: C:\Dev\HeeksCAD1.0\src\Input.cpp:477
+msgid "Position to move to"
+msgstr "posición para pasar a"
+
+#: C:\Dev\HeeksCAD1.0\src\Input.cpp:557
+msgid "Pick position to move from"
+msgstr "posición para pasar de recoger"
+
+#: C:\Dev\HeeksCAD1.0\src\Input.cpp:561
+msgid "Pick position to move to"
+msgstr "posición para mover a recoger"
+
+#: C:\Dev\HeeksCAD1.0\src\InputModeCanvas.cpp:75
+msgid "Input Mode"
+msgstr "el modo de entrada"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:65
+msgid "set previous direction"
+msgstr "establecer la dirección anterior"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:501
+msgid "Line drawing mode"
+msgstr "modo de dibujo de línea"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:503
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:510
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:547
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:555
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:562
+msgid "click on start point"
+msgstr "haga clic en el punto de partida"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:504
+msgid "click on end of line"
+msgstr "haga clic en el final de la línea"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:508
+msgid "Arc drawing mode"
+msgstr "modo de dibujo de arco"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:511
+msgid "click on end of arc"
+msgstr "haga clic en el extremo del arco"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:515
+msgid "Infinite line drawing"
+msgstr "dibujo lineal infinita"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:517
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:589
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:598
+msgid "click on first point"
+msgstr "haga clic en el primer punto"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:518
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:590
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:599
+msgid "click on second point"
+msgstr "haga clic en el segundo punto"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:522
+msgid "Ellipse drawing mode"
+msgstr "modo de dibujo elipse"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:525
+msgid "center and 2 points mode"
+msgstr "centro y 2 puntos de modo"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:527
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:581
+msgid "click on center point"
+msgstr "haga clic en el punto central"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:530
+msgid "click on point on ellipse"
+msgstr "haga clic en el punto en la elipse"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:532
+msgid "(colinear or orthogonal to axis)"
+msgstr "( colineal u ortogonal al eje )"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:534
+msgid "click on another point on ellipse"
+msgstr "haga clic en otro punto de la elipse"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:540
+msgid "Spline drawing mode"
+msgstr "modo de dibujo estriado"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:545
+msgid "cubic spline mode"
+msgstr "modo spline cúbico"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:548
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:556
+msgid "click on end point"
+msgstr "haga clic en el punto final"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:549
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:563
+msgid "click on first control point"
+msgstr "haga clic en el primer punto de control"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:550
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:564
+msgid "click on second control point"
+msgstr "haga clic en el segundo punto de control"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:553
+msgid "quartic spline mode"
+msgstr "modo spline cuártica"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:557
+msgid "click on control point"
+msgstr "haga clic en el punto de control"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:560
+msgid "rational spline mode"
+msgstr "modo spline racional"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:565
+msgid "click on next control point or endpoint"
+msgstr "haga clic en el siguiente punto de control o punto final"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:573
+msgid "Circle drawing mode"
+msgstr "modo de dibujo círculo"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:579
+msgid "center and point mode"
+msgstr "centro y el modo de punto"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:582
+msgid "click on point on circle"
+msgstr "haga clic en el punto en el círculo"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:587
+msgid "three points mode"
+msgstr "modo de tres puntos"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:591
+msgid "click on third point"
+msgstr "haga clic en el tercer punto"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:596
+msgid "two points mode"
+msgstr "modo de dos puntos"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:604
+msgid "centre with radius mode"
+msgstr "centro con el modo de radio"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:606
+msgid "click on centre point"
+msgstr "haga clic en el punto central"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:688
+msgid "draw lines"
+msgstr "dibujar líneas"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:689
+msgid "draw tangential arcs"
+msgstr "dibujar arcos tangenciales"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:691
+msgid "draw circles"
+msgstr "dibujar círculos"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:692
+#: C:\Dev\HeeksCAD1.0\src\RegularShapesDrawing.cpp:501
+msgid "drawing mode"
+msgstr "modo de dibujo"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:699
+msgid "(press 'a' for arcs)"
+msgstr "(pulsar 'a' para los arcos )"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:706
+msgid "centre and point"
+msgstr "centro y punto"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:707
+msgid "three points"
+msgstr "tres puntos"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:708
+msgid "two points"
+msgstr "dos puntos"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:709
+msgid "centre and radius"
+msgstr "centro y el radio"
+
+#: C:\Dev\HeeksCAD1.0\src\LineArcDrawing.cpp:710
+msgid "circle mode"
+msgstr "modo de círculo"
+
+#: C:\Dev\HeeksCAD1.0\src\manager.cpp:1293
+msgid "Categorized Mode"
+msgstr "modo categorizado"
+
+#: C:\Dev\HeeksCAD1.0\src\manager.cpp:1294
+msgid "Alphabetic Mode"
+msgstr "modo alfabético"
+
+#: C:\Dev\HeeksCAD1.0\src\manager.cpp:1339
+#: C:\Dev\HeeksCAD1.0\src\manager.cpp:1737
+msgid "<< Compact"
+msgstr "<< compacto"
+
+#: C:\Dev\HeeksCAD1.0\src\manager.cpp:1339
+#: C:\Dev\HeeksCAD1.0\src\manager.cpp:1732
+msgid "Expand >>"
+msgstr "ampliar >>"
+
+#: C:\Dev\HeeksCAD1.0\src\MarkedList.cpp:300
+msgid "Delete Marked Items"
+msgstr "eliminar elementos marcados"
+
+#: C:\Dev\HeeksCAD1.0\src\MarkedList.cpp:309
+msgid "Copy"
+msgstr "copia"
+
+#: C:\Dev\HeeksCAD1.0\src\MarkedList.cpp:311
+msgid "Copies the selected items to the clipboard"
+msgstr "copia los elementos seleccionados en el portapapeles"
+
+#: C:\Dev\HeeksCAD1.0\src\MarkedList.cpp:326
+msgid "Paste Into"
+msgstr "pegar en"
+
+#: C:\Dev\HeeksCAD1.0\src\MarkedList.cpp:326
+msgid "Paste"
+msgstr "pasta"
+
+#: C:\Dev\HeeksCAD1.0\src\MarkedList.cpp:328
+msgid "Paste items from the clipboard to the drawing"
+msgstr "pegar elementos desde el portapapeles en el dibujo"
+
+#: C:\Dev\HeeksCAD1.0\src\OrientationModifier.cpp:104
+msgid "Normally spaced"
+msgstr "normalmente espaciados"
+
+#: C:\Dev\HeeksCAD1.0\src\OrientationModifier.cpp:106
+msgid "Spacing"
+msgstr "espaciamiento"
+
+#: C:\Dev\HeeksCAD1.0\src\OrientationModifier.cpp:109
+msgid "Number of Rotations (negative for reverse direction)"
+msgstr "número de rotaciones ( negativo para dirección inversa )"
+
+#: C:\Dev\HeeksCAD1.0\src\OrientationModifier.cpp:110
+msgid "Sketch rotates text"
+msgstr "boceto gira texto"
+
+#: C:\Dev\HeeksCAD1.0\src\OrientationModifier.cpp:119
+#: C:\Dev\HeeksCAD1.0\src\OrientationModifier.cpp:125
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:157
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:29
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:223
+msgid "Left"
+msgstr "izquierda"
+
+#: C:\Dev\HeeksCAD1.0\src\OrientationModifier.cpp:121
+#: C:\Dev\HeeksCAD1.0\src\OrientationModifier.cpp:126
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:158
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:29
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:224
+msgid "Right"
+msgstr "derecho"
+
+#: C:\Dev\HeeksCAD1.0\src\OrientationModifier.cpp:127
+msgid "Top"
+msgstr "superior"
+
+#: C:\Dev\HeeksCAD1.0\src\OrientationModifier.cpp:128
+msgid "Bottom"
+msgstr "inferior"
+
+#: C:\Dev\HeeksCAD1.0\src\OrientationModifier.cpp:131
+msgid "Justification"
+msgstr "justificación"
+
+#: C:\Dev\HeeksCAD1.0\src\Plugins.cpp:39
+msgid "Name"
+msgstr "nombre"
+
+#: C:\Dev\HeeksCAD1.0\src\Plugins.cpp:43
+msgid "File Path"
+msgstr "ruta del archivo"
+
+#: C:\Dev\HeeksCAD1.0\src\Plugins.cpp:84
+msgid "Plugin must have a name!"
+msgstr "Plugin debe tener un nombre !"
+
+#: C:\Dev\HeeksCAD1.0\src\Plugins.cpp:92
+msgid "No file specified!"
+msgstr "ningún archivo especificado !"
+
+#: C:\Dev\HeeksCAD1.0\src\Plugins.cpp:115
+msgid "shared library files"
+msgstr "archivos de biblioteca compartida"
+
+#: C:\Dev\HeeksCAD1.0\src\Plugins.cpp:117
+msgid "Choose shared library file"
+msgstr "elegir archivo de biblioteca compartida"
+
+#: C:\Dev\HeeksCAD1.0\src\Plugins.cpp:137
+msgid "HeeksCAD plugin libraries"
+msgstr "bibliotecas de plugins HeeksCAD"
+
+#: C:\Dev\HeeksCAD1.0\src\Plugins.cpp:147
+msgid "New"
+msgstr "nuevo"
+
+#: C:\Dev\HeeksCAD1.0\src\Plugins.cpp:347
+#: C:\Dev\HeeksCAD1.0\src\Plugins.cpp:362
+msgid "Add New Plugin"
+msgstr "añadir nuevo plugin"
+
+#: C:\Dev\HeeksCAD1.0\src\PropertiesCanvas.cpp:247
+msgid "vertical angle"
+msgstr "ángulo vertical"
+
+#: C:\Dev\HeeksCAD1.0\src\PropertiesCanvas.cpp:250
+msgid "horizontal angle"
+msgstr "ángulo horizontal"
+
+#: C:\Dev\HeeksCAD1.0\src\PropertiesCanvas.cpp:253
+msgid "twist angle"
+msgstr "ángulo de torsión"
+
+#: C:\Dev\HeeksCAD1.0\src\propgrid.cpp:635
+#: C:\Dev\HeeksCAD1.0\src\props.cpp:569
+#: C:\Dev\HeeksCNC1.0\src\Excellon.cpp:888
+msgid "False"
+msgstr "falsa"
+
+#: C:\Dev\HeeksCAD1.0\src\propgrid.cpp:636
+#: C:\Dev\HeeksCAD1.0\src\props.cpp:570
+#: C:\Dev\HeeksCNC1.0\src\Excellon.cpp:889
+msgid "True"
+msgstr "cierto"
+
+#: C:\Dev\HeeksCAD1.0\src\propgrid.cpp:637
+#: C:\Dev\HeeksCAD1.0\src\props.cpp:571
+msgid "Unspecified"
+msgstr "sin especificar"
+
+#: C:\Dev\HeeksCAD1.0\src\props.cpp:480
+msgid "is not a floating-point number"
+msgstr "no es un número de punto flotante"
+
+#: C:\Dev\HeeksCAD1.0\src\props.cpp:581 C:\Dev\HeeksCAD1.0\src\props.cpp:602
+msgid "true"
+msgstr "cierto"
+
+#: C:\Dev\HeeksCAD1.0\src\props.cpp:582
+msgid "false"
+msgstr "falsa"
+
+#: C:\Dev\HeeksCAD1.0\src\props.cpp:1470
+msgid "Choose a directory:"
+msgstr "elegir un directorio :"
+
+#: C:\Dev\HeeksCAD1.0\src\props.cpp:1685
+msgid "Choose a file"
+msgstr "elegir un archivo"
+
+#: C:\Dev\HeeksCAD1.0\src\props.cpp:1851 C:\Dev\HeeksCAD1.0\src\props.cpp:2083
+msgid "Ok"
+msgstr "Okay"
+
+#: C:\Dev\HeeksCAD1.0\src\props.cpp:1853 C:\Dev\HeeksCAD1.0\src\props.cpp:2085
+#: C:\Dev\HeeksCAD1.0\interface\DoubleInput.cpp:29
+#: C:\Dev\HeeksCAD1.0\interface\HDialogs.cpp:124
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:793
+msgid "Cancel"
+msgstr "cancelar"
+
+#: C:\Dev\HeeksCAD1.0\src\props.cpp:2029
+msgid "Add"
+msgstr "añadir"
+
+#: C:\Dev\HeeksCAD1.0\src\props.cpp:2057
+msgid "Update"
+msgstr "actualización"
+
+#: C:\Dev\HeeksCAD1.0\src\props.cpp:2060
+#: C:\Dev\HeeksCAD1.0/src/RemoveOrAddTool.h:40
+msgid "Remove"
+msgstr "eliminar"
+
+#: C:\Dev\HeeksCAD1.0\src\props.cpp:2063
+msgid "Up"
+msgstr "hasta"
+
+#: C:\Dev\HeeksCAD1.0\src\props.cpp:2066
+msgid "Down"
+msgstr "abajo"
+
+#: C:\Dev\HeeksCAD1.0\src\RegularShapesDrawing.cpp:481
+msgid "Rectangle drawing"
+msgstr "dibujo de rectángulos"
+
+#: C:\Dev\HeeksCAD1.0\src\RegularShapesDrawing.cpp:484
+msgid "Polygon drawing"
+msgstr "dibujo polígono"
+
+#: C:\Dev\HeeksCAD1.0\src\RegularShapesDrawing.cpp:487
+msgid "Obround drawing"
+msgstr "oblonga dibujo"
+
+#: C:\Dev\HeeksCAD1.0\src\RegularShapesDrawing.cpp:490
+msgid "Regular shapes drawing"
+msgstr "formas regulares de dibujo"
+
+#: C:\Dev\HeeksCAD1.0\src\RegularShapesDrawing.cpp:497
+msgid "draw rectangles"
+msgstr "dibujar rectángulos"
+
+#: C:\Dev\HeeksCAD1.0\src\RegularShapesDrawing.cpp:498
+msgid "draw polygons"
+msgstr "dibujar polígonos"
+
+#: C:\Dev\HeeksCAD1.0\src\RegularShapesDrawing.cpp:499
+msgid "draw slots"
+msgstr "dibujar ranuras"
+
+#: C:\Dev\HeeksCAD1.0\src\RegularShapesDrawing.cpp:508
+msgid "number of sides for polygon"
+msgstr "número de lados de polígono"
+
+#: C:\Dev\HeeksCAD1.0\src\RegularShapesDrawing.cpp:511
+msgid "excribed circle"
+msgstr "círculo excribed"
+
+#: C:\Dev\HeeksCAD1.0\src\RegularShapesDrawing.cpp:512
+msgid "inscribed circle"
+msgstr "círculo inscrito"
+
+#: C:\Dev\HeeksCAD1.0\src\RegularShapesDrawing.cpp:513
+msgid "polygon mode"
+msgstr "modo de polígono"
+
+#: C:\Dev\HeeksCAD1.0\src\RemoveOrAddTool.cpp:28
+msgid "Add "
+msgstr "añadir"
+
+#: C:\Dev\HeeksCAD1.0\src\RemoveOrAddTool.cpp:150
+msgid "Add Objects"
+msgstr "agregar objetos"
+
+#: C:\Dev\HeeksCAD1.0\src\RemoveOrAddTool.cpp:165
+msgid "Remove Objects"
+msgstr "eliminar objetos"
+
+#: C:\Dev\HeeksCAD1.0\src\RS274X.cpp:191
+msgid "pcb"
+msgstr "pcb"
+
+#: C:\Dev\HeeksCAD1.0\src\RS274X.cpp:191
+msgid "_width_"
+msgstr "_width_"
+
+#: C:\Dev\HeeksCAD1.0\src\RS274X.cpp:191
+msgid "_height_"
+msgstr "_height_"
+
+#: C:\Dev\HeeksCAD1.0\src\RS274X.cpp:2602
+msgid ""
+"# This file converts the RAW image file generated by the HeeksCAD import of\n"
+msgstr ""
+
+#: C:\Dev\HeeksCAD1.0\src\RS274X.cpp:2603
+msgid ""
+"# a GERBER format data file into a GIF format file.   This just makes it\n"
+msgstr ""
+
+#: C:\Dev\HeeksCAD1.0\src\RS274X.cpp:2604
+msgid ""
+"# more convenient for viewing\n"
+"\n"
+msgstr ""
+
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:22
+msgid "pick some sketches"
+msgstr "recoger algunos bocetos"
+
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:52
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:235
+msgid "Ruled Surface"
+msgstr "superficie reglada"
+
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:113
+msgid "Revolved Solid"
+msgstr "sólido de revolución"
+
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:113
+msgid "Extruded Solid"
+msgstr "sólido extruido"
+
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:144
+msgid "Pipe"
+msgstr "tubería"
+
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:149
+msgid "Error making pipe"
+msgstr "toma de error tubería"
+
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:199
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:286
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:352
+msgid "pick sketches, faces or circles"
+msgstr "recoger bocetos, caras o círculos"
+
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:204
+msgid "Pick a Sketch to sweep along"
+msgstr "elegir un boceto para barrer a lo largo de"
+
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:244
+msgid "Make extrusion"
+msgstr "hacer extrusión"
+
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:264
+msgid "taper outward angle"
+msgstr "conicidad ángulo hacia el exterior"
+
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:319
+msgid "Input revolution angle"
+msgstr "ángulo de revolución de entrada"
+
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:329
+msgid "Makes a solid"
+msgstr "hace un sólido"
+
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:391
+msgid "Error making ruled solid"
+msgstr "toma de error descartar sólido"
+
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:396
+msgid "Fatal error making ruled solid"
+msgstr "toma de error fatal gobernó sólido"
+
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:449
+msgid "Error making extruded solid"
+msgstr "la toma de error sólido extruido"
+
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:453
+msgid "Fatal error making extruded solid"
+msgstr "error fatal haciendo extruye sólido"
+
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:480
+msgid "Error making revolved solid"
+msgstr "toma de error giraba sólido"
+
+#: C:\Dev\HeeksCAD1.0\src\RuledSurface.cpp:484
+msgid "Fatal error making revolved solid"
+msgstr "toma de error fatal giraba sólido"
+
+#: C:\Dev\HeeksCAD1.0\src\Ruler.cpp:280
+msgid "ResetRuler"
+msgstr "resetruler"
+
+#: C:\Dev\HeeksCAD1.0\src\Ruler.cpp:282
+msgid "Reset the ruler"
+msgstr "restablecer el gobernante"
+
+#: C:\Dev\HeeksCAD1.0\src\Ruler.cpp:331 C:\Dev\HeeksCNC1.0\src\Tag.cpp:73
+msgid "width"
+msgstr "ancho"
+
+#: C:\Dev\HeeksCAD1.0\src\Ruler.cpp:333
+msgid "empty_length"
+msgstr "empty_length"
+
+#: C:\Dev\HeeksCAD1.0\src\Sectioning.cpp:57
+msgid "Points must not be the same!"
+msgstr "puntos no deben ser los mismos !"
+
+#: C:\Dev\HeeksCAD1.0\src\Sectioning.cpp:446
+msgid "Sectioned Solid"
+msgstr "seccionado sólido"
+
+#: C:\Dev\HeeksCAD1.0\src\Sectioning.cpp:454
+msgid "Sectioning failed!"
+msgstr "fallado el corte !"
+
+#: C:\Dev\HeeksCAD1.0\src\Sectioning.cpp:468
+msgid "Pick point on axis"
+msgstr "punto en el eje recoger"
+
+#: C:\Dev\HeeksCAD1.0\src\Sectioning.cpp:476
+msgid "Pick secondary point on axis"
+msgstr "elija un punto secundario en el eje"
+
+#: C:\Dev\HeeksCAD1.0\src\Sectioning.cpp:485
+msgid "Pick objects to section"
+msgstr "recoger objetos a la sección"
+
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:72
+msgid "Left button for selecting objects"
+msgstr "botón izquierdo para seleccionar objetos"
+
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:73
+msgid "( with Ctrl key for extra objects)"
+msgstr "( Con la tecla ctrl para objetos adicionales)"
+
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:74
+msgid "( with Shift key for similar objects)"
+msgstr "(Con tecla de mayúsculas para objetos similares )"
+
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:75
+msgid "Drag with left button to window select"
+msgstr "arrastre con el botón izquierdo para seleccionar la ventana"
+
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:77
+msgid "or to move object if on an object"
+msgstr "o para mover objetos si un objeto"
+
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:78
+msgid "Mouse wheel to zoom in and out"
+msgstr "rueda del ratón para acercar y alejar"
+
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:81
+msgid "Middle button to pan view"
+msgstr "botón central a la vista pan"
+
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:82
+msgid "( with Ctrl key to rotate view )"
+msgstr "( Con la tecla ctrl para girar la vista )"
+
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:85
+msgid "Middle button to rotate view"
+msgstr "botón central para girar la vista"
+
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:86
+msgid "( with Ctrl key to pan view )"
+msgstr "( Con la tecla ctrl para desplazar la vista )"
+
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:89
+msgid "Right button for object menu"
+msgstr "botón derecho para menú de objetos"
+
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:90
+msgid "See options window to hide this help"
+msgstr "ver opciones de ventana para ocultar esta ayuda"
+
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:96
+msgid "Press Return key to accept selection"
+msgstr "tecla de retorno presione para aceptar la selección"
+
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:648
+msgid "Accept selection"
+msgstr "aceptar la selección"
+
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:667
+msgid "Cancel selection"
+msgstr "cancelar la selección"
+
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:679
+msgid "Pick Anything"
+msgstr "recoger nada"
+
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:681
+msgid "Set the selection filter to all items"
+msgstr "establecer el filtro de selección para todos los artículos"
+
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:692
+msgid "Pick Edges"
+msgstr "recoger bordes"
+
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:694
+msgid "Set the selection filter to only edges"
+msgstr "establecer el filtro de selección de bordes sólo"
+
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:705
+msgid "Pick Faces"
+msgstr "recoger caras"
+
+#: C:\Dev\HeeksCAD1.0\src\SelectMode.cpp:707
+msgid "Set the selection filter to only faces"
+msgstr "configurar el filtro de selección de sólo las caras"
+
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:277
+msgid "Result of 'Offset Shape'"
+msgstr "resultado de la 'forma de desplazamiento'"
+
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:284 C:\Dev\HeeksCAD1.0\src\Sketch.cpp:307
+#: C:\Dev\HeeksCAD1.0\src\Wire.cpp:60
+msgid "Error making offset"
+msgstr "la toma de error de desplazamiento"
+
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:288
+msgid "Offset Shape"
+msgstr "forma de desplazamiento"
+
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:308
+msgid "Stretched Shape"
+msgstr "forma estirada"
+
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:396
+msgid "Error with cut operation"
+msgstr "error con la operación de corte"
+
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:409
+msgid "Result of Fuse Operation"
+msgstr "resultado de la operación del fusible"
+
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:417
+msgid "Error with fuse operation"
+msgstr "error con la operación del fusible"
+
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:434
+msgid "Result of Common Operation"
+msgstr "resultado de la operación común"
+
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:442
+msgid "Error with common operation"
+msgstr "error con la operación común"
+
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:600
+msgid "Result of Cut Operation"
+msgstr "resultado de la operación de corte"
+
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:781 C:\Dev\HeeksCAD1.0\src\Shape.cpp:792
+msgid "STEP solid"
+msgstr "paso sólido"
+
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:799 C:\Dev\HeeksCAD1.0\src\Shape.cpp:909
+msgid "STEP import not done!"
+msgstr "paso de importación no se hace !"
+
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:863
+msgid "sewed IGES solid"
+msgstr "iges cosidos sólido"
+
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:879
+msgid "IGES shape"
+msgstr "iges forma"
+
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:887
+msgid "IGES import not done!"
+msgstr "iges importación no se hace !"
+
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:905
+msgid "BREP solid"
+msgstr "brep sólido"
+
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:1115
+msgid "opacity"
+msgstr "opacidad"
+
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:1121
+msgid "volume"
+msgstr "volumen"
+
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:1124
+msgid "centre of gravity"
+msgstr "centro de gravedad"
+
+#: C:\Dev\HeeksCAD1.0\src\Shape.cpp:1128
+msgid "calculate volume"
+msgstr "calcular el volumen"
+
+#: C:\Dev\HeeksCAD1.0\src\Sketch.cpp:85
+msgid "Reorder Object"
+msgstr "objeto de reordenación"
+
+#: C:\Dev\HeeksCAD1.0\src\Sketch.cpp:167
+msgid "Number of elements"
+msgstr "número de elementos"
+
+#: C:\Dev\HeeksCAD1.0\src\Sketch.cpp:186
+msgid "order"
+msgstr "fin"
+
+#: C:\Dev\HeeksCAD1.0\src\Sketch.cpp:202
+msgid "Split Sketch"
+msgstr "esbozo de división"
+
+#: C:\Dev\HeeksCAD1.0\src\Sketch.cpp:225
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:94
+msgid "Convert sketch to face"
+msgstr "convertir boceto a cara"
+
+#: C:\Dev\HeeksCAD1.0\src\Sketch.cpp:249
+msgid "Convert sketch to wire"
+msgstr "convertir boceto de alambre"
+
+#: C:\Dev\HeeksCAD1.0\src\Sketch.cpp:288 C:\Dev\HeeksCAD1.0\src\Sketch.cpp:295
+msgid "Use negative for smaller and Positive for larger)"
+msgstr "utilizar negativa para los más pequeños y positivo para ampliarla)"
+
+#: C:\Dev\HeeksCAD1.0\src\Sketch.cpp:289 C:\Dev\HeeksCAD1.0\src\Sketch.cpp:295
+msgid "Enter the distance"
+msgstr "introducir la distancia"
+
+#: C:\Dev\HeeksCAD1.0\src\Sketch.cpp:311
+msgid "Copy Parallel"
+msgstr "copia paralela"
+
+#: C:\Dev\HeeksCAD1.0\src\Sketch.cpp:329
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:36
+msgid "Split arcs to little lines"
+msgstr "arcos divididos a pequeñas líneas"
+
+#: C:\Dev\HeeksCAD1.0\src\SolidTools.cpp:57
+msgid "Save solid file"
+msgstr "guardar el archivo sólido"
+
+#: C:\Dev\HeeksCAD1.0\src\SolidTools.cpp:57
+msgid "Solid Files"
+msgstr "archivos sólidos"
+
+#: C:\Dev\HeeksCAD1.0\src\SolidTools.cpp:82
+msgid "Invalid solid file type chosen"
+msgstr "inválida tipo de archivo sólido elegido"
+
+#: C:\Dev\HeeksCAD1.0\src\Sphere.cpp:78
+msgid "Ellipsoid"
+msgstr "elipsoide"
+
+#: C:\Dev\HeeksCAD1.0\src\TransformTool.cpp:21
+msgid "Transform"
+msgstr "transformar"
+
+#: C:\Dev\HeeksCAD1.0\src\TransformTool.cpp:46
+msgid "Transform Objects"
+msgstr "transformar objetos"
+
+#: C:\Dev\HeeksCAD1.0\src\TransformTools.cpp:35
+msgid "Pick objects to move"
+msgstr "recoger objetos para mover"
+
+#: C:\Dev\HeeksCAD1.0\src\TransformTools.cpp:118
+msgid "Pick objects to rotate"
+msgstr "recoger objetos para girar"
+
+#: C:\Dev\HeeksCAD1.0\src\TransformTools.cpp:212
+msgid "Pick objects to mirror"
+msgstr "recoger objetos para reflejar"
+
+#: C:\Dev\HeeksCAD1.0\src\TransformTools.cpp:231
+msgid "Pick line to mirror about"
+msgstr "recoger line para reflejar sobre"
+
+#: C:\Dev\HeeksCAD1.0\src\TransformTools.cpp:278
+msgid "Pick objects to scale"
+msgstr "recoger objetos a escala"
+
+#: C:\Dev\HeeksCAD1.0\src\TransformTools.cpp:293
+msgid "Enter number of copies"
+msgstr "introduzca el número de copias"
+
+#: C:\Dev\HeeksCAD1.0\src\TransformTools.cpp:303
+msgid "Click centre position to scale about"
+msgstr "haga clic en posición central a escala acerca"
+
+#: C:\Dev\HeeksCAD1.0\src\TransformTools.cpp:308
+msgid "Enter scale factor"
+msgstr "introducir el factor de escala"
+
+#: C:\Dev\HeeksCAD1.0\src\TransformTools.cpp:308
+msgid "scale factor"
+msgstr "factor de escala"
+
+#: C:\Dev\HeeksCAD1.0\src\ViewPanning.cpp:44
+#: C:\Dev\HeeksCAD1.0\src\ViewZooming.cpp:50
+msgid "Drag with the left mouse button"
+msgstr "arrastre con el botón izquierdo del ratón"
+
+#: C:\Dev\HeeksCAD1.0\src\ViewPanning.cpp:55
+msgid "Stop panning"
+msgstr "detener la exploración"
+
+#: C:\Dev\HeeksCAD1.0\src\ViewRotating.cpp:60
+msgid "Stop rotating"
+msgstr "dejar de girar"
+
+#: C:\Dev\HeeksCAD1.0\src\ViewZooming.cpp:50
+msgid "Forward to zoom in, Back to zoom out"
+msgstr "hacia delante para acercar , de vuelta a alejar"
+
+#: C:\Dev\HeeksCAD1.0\src\ViewZooming.cpp:50
+msgid "Back to zoom in, Forward to zoom out"
+msgstr "volver a acercar, hacia adelante para disminuir el zoom"
+
+#: C:\Dev\HeeksCAD1.0\src\ViewZooming.cpp:50
+msgid "Hold middle mouse button down to pan"
+msgstr "mantenga presionado el botón del medio del ratón para desplazarse"
+
+#: C:\Dev\HeeksCAD1.0\src\ViewZooming.cpp:61
+msgid "Stop zooming"
+msgstr "detener el zoom"
+
+#: C:\Dev\HeeksCAD1.0\src\Wire.cpp:35
+msgid "Generated"
+msgstr "generados"
+
+#: C:\Dev\HeeksCAD1.0\src\Wire.cpp:44
+msgid "Generated from edge"
+msgstr "generada a partir de borde"
+
+#: C:\Dev\HeeksCAD1.0\src\Wire.cpp:50
+msgid "Modified"
+msgstr "modificado"
+
+#: C:\Dev\HeeksCAD1.0\src\Wire.cpp:53
+msgid "Is Deleted"
+msgstr "se suprime"
+
+#: C:\Dev\HeeksCAD1.0\src\Wire.cpp:65
+msgid "Offset Wire"
+msgstr "alambre de compensación"
+
+#: C:\Dev\HeeksCAD1.0\src\wxImageLoader.cpp:22
+msgid "Failed to load resource image from "
+msgstr "Error al cargar la imagen de los recursos de"
+
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:28
+msgid "Convert areas to sketches"
+msgstr "convertir áreas para bocetos"
+
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:44
+msgid "Convert to Area"
+msgstr "convertir a la zona"
+
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:52
+msgid "Unite Areas"
+msgstr "unir áreas"
+
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:61
+msgid "Cut Areas"
+msgstr "áreas de corte"
+
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:70
+msgid "Intersect Areas"
+msgstr "intersectar áreas"
+
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:78
+msgid "Xor Areas"
+msgstr "áreas xor"
+
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:86
+msgid "Inside Curves"
+msgstr "curvas interiores"
+
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:102
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:111
+msgid "Make To Sketch"
+msgstr "hacer esbozar"
+
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:104
+msgid "Make selected objects into a new sketch"
+msgstr "hacer que los objetos seleccionados en un nuevo boceto"
+
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:113
+msgid "Make selected edges into a new sketch"
+msgstr "hacer aristas seleccionadas en un nuevo boceto"
+
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:120
+msgid "Combine sketches"
+msgstr "combinar bocetos"
+
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:122
+msgid "Combine selected sketches"
+msgstr "combinar bocetos seleccionados"
+
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:129
+msgid "Unite sketches"
+msgstr "unir bocetos"
+
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:131
+msgid "Unite selected sketches"
+msgstr "unir bocetos seleccionados"
+
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:140
+msgid "Group selected items"
+msgstr "grupo seleccionado artículos"
+
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:147
+msgid "Ungroup"
+msgstr "desagrupar"
+
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:149
+msgid "Ungroup selected items"
+msgstr "desagrupar elementos seleccionados"
+
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:159
+msgid "Transform to Coordinate System"
+msgstr "transformar al sistema de coordenadas"
+
+#: C:\Dev\HeeksCAD1.0/src/ConversionTools.h:161
+msgid "Transform selected items using two coordinate systems"
+msgstr "transformar elementos seleccionados usando dos sistemas de coordenadas"
+
+#: C:\Dev\HeeksCAD1.0/src/Cuboid.h:28
+msgid "Cuboid"
+msgstr "cuboid"
+
+#: C:\Dev\HeeksCAD1.0/src/DimensionDrawing.h:26
+msgid "Dimension drawing"
+msgstr "croquis de medidas"
+
+#: C:\Dev\HeeksCAD1.0/src/Drawing.h:73
+msgid "Drawing"
+msgstr "dibujo"
+
+#: C:\Dev\HeeksCAD1.0/src/Face.h:85
+msgid "Make a sketch from face"
+msgstr "hacer un bosquejo de la cara"
+
+#: C:\Dev\HeeksCAD1.0/src/HArea.h:35
+msgid "Area"
+msgstr "zona"
+
+#: C:\Dev\HeeksCAD1.0/src/HILine.h:22
+msgid "Infinite Line"
+msgstr "línea infinita"
+
+#: C:\Dev\HeeksCAD1.0/src/MagDragWindow.h:20
+msgid "Magnifying by dragging a window"
+msgstr "magnificando arrastrando una ventana"
+
+#: C:\Dev\HeeksCAD1.0/src/MenuSeparator.h:13
+msgid "MenuSeparator"
+msgstr "menuseparator"
+
+#: C:\Dev\HeeksCAD1.0/src/PointDrawing.h:22
+msgid "Point drawing"
+msgstr "dibujo punto"
+
+#: C:\Dev\HeeksCAD1.0/src/PointOrWindow.h:26
+msgid "Dragging a window or picking a point"
+msgstr "arrastrar una ventana o recoger un punto"
+
+#: C:\Dev\HeeksCAD1.0/src/PropertiesCanvas.h:23
+msgid "Change Property"
+msgstr "cambio de propiedad"
+
+#: C:\Dev\HeeksCAD1.0/src/PropertyChange.h:15
+msgid "Property Change String"
+msgstr "cambio de propiedad de la cadena"
+
+#: C:\Dev\HeeksCAD1.0/src/PropertyChange.h:32
+msgid "Property Change Double"
+msgstr "cambio de propiedad de doble"
+
+#: C:\Dev\HeeksCAD1.0/src/PropertyChange.h:49
+msgid "Property Change Length"
+msgstr "longitud de cambio de propiedad"
+
+#: C:\Dev\HeeksCAD1.0/src/PropertyChange.h:66
+msgid "Property Change Int"
+msgstr "cambio de propiedad int"
+
+#: C:\Dev\HeeksCAD1.0/src/PropertyChange.h:83
+msgid "Property Change Color"
+msgstr "cambio de propiedad de color"
+
+#: C:\Dev\HeeksCAD1.0/src/PropertyChange.h:100
+msgid "Property Change Vertex"
+msgstr "cambio de propiedad vértice"
+
+#: C:\Dev\HeeksCAD1.0/src/PropertyChange.h:117
+msgid "Property Change Trsf"
+msgstr "cambio de propiedad TRSF"
+
+#: C:\Dev\HeeksCAD1.0/src/PropertyChange.h:134
+msgid "Property Change Choice"
+msgstr "cambio de propiedad elección"
+
+#: C:\Dev\HeeksCAD1.0/src/PropertyChange.h:151
+msgid "Property Change Check"
+msgstr "cambio de propiedad cheque"
+
+#: C:\Dev\HeeksCAD1.0/src/ShapeTools.h:12
+msgid "Faces"
+msgstr "caras"
+
+#: C:\Dev\HeeksCAD1.0/src/ShapeTools.h:21
+msgid "Edges"
+msgstr "bordes"
+
+#: C:\Dev\HeeksCAD1.0/src/ShapeTools.h:30
+msgid "Vertices"
+msgstr "vértices"
+
+#: C:\Dev\HeeksCAD1.0/src/SolidTools.h:15
+msgid "Save Solids"
+msgstr "guardar sólidos"
+
+#: C:\Dev\HeeksCAD1.0/src/Sphere.h:25
+msgid "Sphere"
+msgstr "esfera"
+
+#: C:\Dev\HeeksCAD1.0/src/StlSolid.h:41
+msgid "STL Solid"
+msgstr "stl sólido"
+
+#: C:\Dev\HeeksCAD1.0/src/ViewPanning.h:12
+msgid "View Pan"
+msgstr "vista pan"
+
+#: C:\Dev\HeeksCAD1.0/src/ViewRotating.h:15
+msgid "View Rotate"
+msgstr "vista rotación"
+
+#: C:\Dev\HeeksCAD1.0/src/ViewZooming.h:14
+msgid "View Zoom"
+msgstr "vista zoom"
+
+#: C:\Dev\HeeksCAD1.0/src/Window.h:19
+msgid "Dragging a window"
+msgstr "arrastrando una ventana"
+
+#: C:\Dev\HeeksCAD1.0\interface\DoubleInput.cpp:19
+msgid "Apply"
+msgstr "aplicar"
+
+#: C:\Dev\HeeksCAD1.0\interface\DoubleInput.cpp:21
+msgid "Accept value and continue"
+msgstr "aceptar el valor y continuar"
+
+#: C:\Dev\HeeksCAD1.0\interface\DoubleInput.cpp:31
+msgid "Cancel operation"
+msgstr "cancelar la operación"
+
+#: C:\Dev\HeeksCAD1.0\interface\HDialogs.cpp:40
+#: C:\Dev\HeeksCAD1.0\interface\HDialogs.cpp:41
+#: C:\Dev\HeeksCNC1.0\src\Reselect.cpp:137
+msgid "None"
+msgstr "ninguno"
+
+#: C:\Dev\HeeksCAD1.0\interface\HDialogs.cpp:126
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1108
+msgid "Help"
+msgstr "ayudar"
+
+#: C:\Dev\HeeksCAD1.0\interface\HeeksCADInterface.cpp:2042
+msgid "Geometry"
+msgstr "geometría"
+
+#: C:\Dev\HeeksCAD1.0\interface\HeeksCADInterface.cpp:2046
+msgid "Set Origin"
+msgstr "origen conjunto"
+
+#: C:\Dev\HeeksCAD1.0\interface\HeeksObj.cpp:112
+msgid "object type"
+msgstr "tipo de objeto"
+
+#: C:\Dev\HeeksCAD1.0\interface\HeeksObj.cpp:113
+msgid "object title"
+msgstr "título objeto"
+
+#: C:\Dev\HeeksCAD1.0\interface\HeeksObj.cpp:114
+msgid "ID"
+msgstr "Identificación del"
+
+#: C:\Dev\HeeksCAD1.0\interface\HeeksObj.cpp:118
+msgid "color"
+msgstr "de color"
+
+#: C:\Dev\HeeksCAD1.0\interface\HeeksObj.cpp:120
+msgid "visible"
+msgstr "visible"
+
+#: C:\Dev\HeeksCAD1.0\interface\ObjList.h:79
+msgid "Reorder"
+msgstr "reordenar"
+
+#: C:\Dev\HeeksCAD1.0\interface\Property.h:40
+msgid "Unknown Property"
+msgstr "propiedad desconocida"
+
+#: C:\Dev\HeeksCNC1.0\src\CTool.cpp:293 C:\Dev\HeeksCNC1.0\src\CTool.cpp:818
+#: C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:37
+msgid "Drill Bit"
+msgstr "broca"
+
+#: C:\Dev\HeeksCNC1.0\src\CTool.cpp:294 C:\Dev\HeeksCNC1.0\src\CTool.cpp:821
+#: C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:37
+msgid "Centre Drill Bit"
+msgstr "centro de broca"
+
+#: C:\Dev\HeeksCNC1.0\src\CTool.cpp:295 C:\Dev\HeeksCNC1.0\src\CTool.cpp:824
+#: C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:37
+msgid "End Mill"
+msgstr "molino de extremo"
+
+#: C:\Dev\HeeksCNC1.0\src\CTool.cpp:296 C:\Dev\HeeksCNC1.0\src\CTool.cpp:827
+#: C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:37
+msgid "Slot Cutter"
+msgstr "cortador de ranura"
+
+#: C:\Dev\HeeksCNC1.0\src\CTool.cpp:297 C:\Dev\HeeksCNC1.0\src\CTool.cpp:830
+#: C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:37
+msgid "Ball End Mill"
+msgstr "fresa esférica"
+
+#: C:\Dev\HeeksCNC1.0\src\CTool.cpp:307 C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:30
+msgid "Leave manually assigned title"
+msgstr "dejar título asignado manualmente"
+
+#: C:\Dev\HeeksCNC1.0\src\CTool.cpp:308
+msgid "Automatically generate title"
+msgstr "generar automáticamente el título"
+
+#: C:\Dev\HeeksCNC1.0\src\CTool.cpp:310
+msgid "Automatic Title"
+msgstr "título automático"
+
+#: C:\Dev\HeeksCNC1.0\src\CTool.cpp:315 C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:35
+msgid "High Speed Steel"
+msgstr "acero de alta velocidad"
+
+#: C:\Dev\HeeksCNC1.0\src\CTool.cpp:316 C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:35
+msgid "Carbide"
+msgstr "carburo"
+
+#: C:\Dev\HeeksCNC1.0\src\CTool.cpp:317
+msgid "Material"
+msgstr "materiales"
+
+#: C:\Dev\HeeksCNC1.0\src\CTool.cpp:332
+msgid "Type"
+msgstr "tipo"
+
+#: C:\Dev\HeeksCNC1.0\src\CTool.cpp:338
+msgid "tool_length_offset"
+msgstr "tool_length_offset"
+
+#: C:\Dev\HeeksCNC1.0\src\CTool.cpp:339
+msgid "flat_radius"
+msgstr "flat_radius"
+
+#: C:\Dev\HeeksCNC1.0\src\CTool.cpp:340
+msgid "corner_radius"
+msgstr "corner_radius"
+
+#: C:\Dev\HeeksCNC1.0\src\CTool.cpp:341
+msgid "cutting_edge_angle"
+msgstr "cutting_edge_angle"
+
+#: C:\Dev\HeeksCNC1.0\src\CTool.cpp:342
+msgid "cutting_edge_height"
+msgstr "cutting_edge_height"
+
+#: C:\Dev\HeeksCNC1.0\src\CTool.cpp:517
+msgid "tool_number"
+msgstr "tool_number"
+
+#: C:\Dev\HeeksCNC1.0\src\CTool.cpp:835
+msgid "Chamfering Bit"
+msgstr "poco biselado"
+
+#: C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:29 C:\Dev\HeeksCNC1.0\src\OpDlg.cpp:34
+msgid "Title"
+msgstr "título"
+
+#: C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:30
+msgid "Automatically Generate Title"
+msgstr "generar automáticamente el título"
+
+#: C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:31
+msgid "Title Type"
+msgstr "tipo de título"
+
+#: C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:34
+msgid "Tool Number"
+msgstr "número de herramienta"
+
+#: C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:36
+msgid "Tool Material"
+msgstr "material de la herramienta"
+
+#: C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:37
+msgid "Engraving Bit"
+msgstr "bit grabado"
+
+#: C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:38
+msgid "Tool Type"
+msgstr "tipo de herramienta"
+
+#: C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:39
+msgid "Diameter"
+msgstr "de diámetro"
+
+#: C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:40
+msgid "Tool Length Offset"
+msgstr "compensa la longitud de herramienta"
+
+#: C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:41
+msgid "Flat Radius"
+msgstr "radio plana"
+
+#: C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:42
+msgid "Corner Radius"
+msgstr "radio de la esquina"
+
+#: C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:43
+msgid "Cutting Edge Angle"
+msgstr "ángulo del filo"
+
+#: C:\Dev\HeeksCNC1.0\src\CToolDlg.cpp:44
+msgid "Cutting Edge Height"
+msgstr "Altura del borde de corte"
+
+#: C:\Dev\HeeksCNC1.0\src\DepthOp.cpp:117
+msgid "clearance height"
+msgstr "altura libre"
+
+#: C:\Dev\HeeksCNC1.0\src\DepthOp.cpp:121
+msgid "rapid safety space"
+msgstr "espacio de seguridad rápida"
+
+#: C:\Dev\HeeksCNC1.0\src\DepthOp.cpp:122
+msgid "start depth"
+msgstr "iniciar profundidad"
+
+#: C:\Dev\HeeksCNC1.0\src\DepthOp.cpp:123
+msgid "final depth"
+msgstr "profundidad final"
+
+#: C:\Dev\HeeksCNC1.0\src\DepthOp.cpp:124
+msgid "max step down"
+msgstr "max dimita"
+
+#: C:\Dev\HeeksCNC1.0\src\DepthOp.cpp:125
+msgid "z finish depth"
+msgstr "profundidad acabado z"
+
+#: C:\Dev\HeeksCNC1.0\src\DepthOp.cpp:126
+msgid "z thru depth"
+msgstr "z través profundidad"
+
+#: C:\Dev\HeeksCNC1.0\src\DepthOp.cpp:127
+msgid "user depths"
+msgstr "profundidades del usuario"
+
+#: C:\Dev\HeeksCNC1.0\src\DepthOpDlg.cpp:18
+msgid "Clearance Height"
+msgstr "altura libre"
+
+#: C:\Dev\HeeksCNC1.0\src\DepthOpDlg.cpp:19
+msgid "Rapid Safety Space"
+msgstr "espacio de seguridad rápida"
+
+#: C:\Dev\HeeksCNC1.0\src\DepthOpDlg.cpp:20
+msgid "Start Depth"
+msgstr "iniciar profundidad"
+
+#: C:\Dev\HeeksCNC1.0\src\DepthOpDlg.cpp:21
+msgid "Final Depth"
+msgstr "profundidad final"
+
+#: C:\Dev\HeeksCNC1.0\src\DepthOpDlg.cpp:22
+msgid "Step Down"
+msgstr "dimitir"
+
+#: C:\Dev\HeeksCNC1.0\src\DepthOpDlg.cpp:23
+msgid "Z Finish Depth"
+msgstr "profundidad acabado z"
+
+#: C:\Dev\HeeksCNC1.0\src\DepthOpDlg.cpp:24
+msgid "Z Through Depth"
+msgstr "z a través de la profundidad"
+
+#: C:\Dev\HeeksCNC1.0\src\Drilling.cpp:93
+msgid "dwell"
+msgstr "permanencia"
+
+#: C:\Dev\HeeksCNC1.0\src\Drilling.cpp:97
+msgid "Rapid retract"
+msgstr "retracción rápida"
+
+#: C:\Dev\HeeksCNC1.0\src\Drilling.cpp:98
+msgid "Feed retract"
+msgstr "retracción de alimentación"
+
+#: C:\Dev\HeeksCNC1.0\src\Drilling.cpp:101
+msgid "retract_mode"
+msgstr "retract_mode"
+
+#: C:\Dev\HeeksCNC1.0\src\Drilling.cpp:106
+msgid "Keep running"
+msgstr "seguir corriendo"
+
+#: C:\Dev\HeeksCNC1.0\src\Drilling.cpp:107
+msgid "Stop at bottom"
+msgstr "detener en la parte inferior"
+
+#: C:\Dev\HeeksCNC1.0\src\Drilling.cpp:110
+msgid "spindle_mode"
+msgstr "spindle_mode"
+
+#: C:\Dev\HeeksCNC1.0\src\Drilling.cpp:113
+msgid "internal coolant on"
+msgstr "refrigeración interior en"
+
+#: C:\Dev\HeeksCNC1.0\src\Drilling.cpp:114
+msgid "rapid to clearance between positions"
+msgstr "rápida a la distancia entre las posiciones"
+
+#: C:\Dev\HeeksCNC1.0\src\DrillingDlg.cpp:37
+msgid "Points"
+msgstr "puntos"
+
+#: C:\Dev\HeeksCNC1.0\src\DrillingDlg.cpp:37
+#: C:\Dev\HeeksCNC1.0\src\SketchOpDlg.cpp:19
+#: C:\Dev\HeeksCNC1.0\src\SolidsDlg.cpp:20
+msgid "Pick"
+msgstr "recoger"
+
+#: C:\Dev\HeeksCNC1.0\src\DrillingDlg.cpp:38
+msgid "Dwell"
+msgstr "permanencia"
+
+#: C:\Dev\HeeksCNC1.0\src\DrillingDlg.cpp:39
+msgid "Feed Retract"
+msgstr "retracción de alimentación"
+
+#: C:\Dev\HeeksCNC1.0\src\DrillingDlg.cpp:40
+msgid "Stop Spindle at Bottom"
+msgstr "Parada del cabezal en la parte inferior"
+
+#: C:\Dev\HeeksCNC1.0\src\DrillingDlg.cpp:41
+msgid "Interal Coolant On"
+msgstr "refrigerante interal en"
+
+#: C:\Dev\HeeksCNC1.0\src\DrillingDlg.cpp:42
+msgid "Rapid to Clearance"
+msgstr "rápida a la distancia"
+
+#: C:\Dev\HeeksCNC1.0\src\DrillingDlg.cpp:140
+msgid "Pick points to drill"
+msgstr "recoger los puntos para perforar"
+
+#: C:\Dev\HeeksCNC1.0\src\Excellon.cpp:890
+msgid "allow dummy tool definitions"
+msgstr "permitir que las definiciones de herramientas ficticias"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:503
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:529
+msgid "NC files"
+msgstr "archivos nc"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:504
+msgid "Open NC file"
+msgstr "nc archivo abierto"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:531
+msgid "Save NC file"
+msgstr "guardar el archivo nc"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:540
+#: C:\Dev\HeeksCNC1.0\src\PythonStuff.cpp:183
+#: C:\Dev\HeeksCNC1.0\src\PythonStuff.cpp:396
+msgid "Couldn't open file"
+msgstr "no pudo abrir el archivo"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:587
+msgid "New Drill..."
+msgstr "nuevo taladro ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:588
+msgid "New Centre Drill..."
+msgstr "nueva broca de centrar ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:589
+msgid "New End Mill..."
+msgstr "nueva planta de final ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:590
+msgid "New Slot Drill..."
+msgstr "nuevo slot drill ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:591
+msgid "New Ball End Mill..."
+msgstr "nueva fresa esférica ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:592
+msgid "New Chamfer Mill..."
+msgstr "nuevo molino chaflán ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:604
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:769
+msgid "New Pattern..."
+msgstr "nuevo patrón ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:611
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:770
+msgid "New Surface..."
+msgstr "nueva superficie ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:618
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:771
+msgid "New Stock..."
+msgstr "nuevas acciones ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:761
+msgid "Milling operations"
+msgstr "operaciones de fresado"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:762
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1420
+msgid "Profile"
+msgstr "perfil"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:762
+msgid "New Profile Operation..."
+msgstr "Perfil de nueva operación ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:763
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1421
+msgid "Pocket"
+msgstr "bolsillo"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:763
+msgid "New Pocket Operation..."
+msgstr "nueva operación de bolsillo ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:764
+msgid "Drill"
+msgstr "taladro"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:764
+msgid "New Drill Cycle Operation..."
+msgstr "nueva operación de ciclo de taladrado ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:767
+msgid "Other operations"
+msgstr "otras operaciones"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:768
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1427
+msgid "ScriptOp"
+msgstr "scriptop"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:768
+msgid "New Script Operation..."
+msgstr "nueva operación de escritura ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:769 C:\Dev\HeeksCNC1.0\src\OpDlg.cpp:28
+msgid "Pattern"
+msgstr "patrón"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:770 C:\Dev\HeeksCNC1.0\src\OpDlg.cpp:29
+msgid "Surface"
+msgstr "superficie"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:771
+msgid "Stock"
+msgstr "de stock"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:776
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1424 C:\Dev\HeeksCNC1.0/src/Tools.h:24
+msgid "Tools"
+msgstr "herramientas"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:777
+msgid "drill"
+msgstr "taladro"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:777
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1081
+msgid "Drill..."
+msgstr "perforar ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:778
+msgid "centredrill"
+msgstr "centredrill"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:778
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1082
+msgid "Centre Drill..."
+msgstr "broca de centrar ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:779
+msgid "endmill"
+msgstr "fresa radial"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:779
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1083
+msgid "End Mill..."
+msgstr "terminar molino ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:780
+msgid "slotdrill"
+msgstr "slotdrill"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:780
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1084
+msgid "Slot Drill..."
+msgstr "slot drill ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:781
+msgid "ballmill"
+msgstr "molino de bolas"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:781
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1085
+msgid "Ball End Mill..."
+msgstr "final molino de bolas ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:782
+msgid "chamfmill"
+msgstr "chamfmill"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:782
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1086
+msgid "Chamfer Mill..."
+msgstr "chaflán molino ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:785
+msgid "Post Processing"
+msgstr "procesamiento post"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:786
+msgid "PostProcess"
+msgstr "postproceso"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:786
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1094
+msgid "Post-Process"
+msgstr "post- proceso"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:787
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1093
+msgid "Run Python Script"
+msgstr "script de ejecución python"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:788
+msgid "OpenNC"
+msgstr "opennc"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:788
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1098
+msgid "Open NC File"
+msgstr "nc archivo abierto"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:789
+msgid "SaveNC"
+msgstr "savenc"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:789
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1099
+msgid "Save NC File"
+msgstr "guardar el archivo nc"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:791
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1101
+msgid "Send to Machine"
+msgstr "enviar a la máquina"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:793
+msgid "Cancel Python Script"
+msgstr "cancelar script en Python"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:795
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1096
+msgid "Simulate"
+msgstr "simular"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:816
+msgid "Excellon drill file interpretation"
+msgstr "interpretación archivo de perforación Excellon"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:820
+msgid "Produce drill pattern as described"
+msgstr "producir patrón de perforación como se describe"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:821
+msgid "Produce mirrored drill pattern"
+msgstr "producir el patrón de perforación de espejo"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:844
+msgid "Would you like to change the NC code generation units too?"
+msgstr "le gustaría cambiar las unidades de generación de código nc también?"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:844
+#: C:\Dev\HeeksCNC1.0\src\Program.cpp:253
+msgid "Change Units"
+msgstr "unidades de cambio"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:972
+msgid "New Profile Operation"
+msgstr "nueva operación de perfil"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:982
+msgid "New Pocket Operation"
+msgstr "nueva operación de bolsillo"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:992
+msgid "New Drilling Operation"
+msgstr "nueva operación de perforación"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1046
+msgid "HeeksCNC is the free machining add-on to HeeksCAD"
+msgstr "heekscnc es el mecanizado sin add-on para HeeksCAD"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1048
+msgid "Written by Dan Heeks, Hirutso Enni, Perttu Ahola, David Nicholls"
+msgstr "escrito por Heeks dan, hirutso enni , Perttu Ahola , david nicholls"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1049
+msgid "With help from archivist, crotchet1, DanielFalck, fenn, Sliptonic"
+msgstr "con la ayuda del archivero , crotchet1 , danielfalck , fenn , sliptonic"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1050
+msgid ""
+"geometry code, donated by Geoff Hawkesford, Camtek GmbH http://www.peps.de/"
+msgstr ""
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1051
+msgid ""
+"pocketing code from http://code.google.com/p/libarea/ , derived from the "
+"kbool library written by Klaas Holwerda http://boolean.klaasholwerda.nl/bool."
+"html"
+msgstr ""
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1052
+msgid "Zig zag code from opencamlib http://code.google.com/p/opencamlib/"
+msgstr "zig zag código de opencamlib http://code.google.com/p/opencamlib/"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1053
+msgid ""
+"This HeeksCNC software installation is restricted by the GPL license http://"
+"www.gnu.org/licenses/gpl-3.0.txt"
+msgstr ""
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1054
+msgid "  which means it is free and open source, and must stay that way"
+msgstr "lo que significa que es gratuito y de código abierto , y debe seguir siéndolo"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1067
+msgid "Profile Operation..."
+msgstr "operación perfil ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1068
+msgid "Pocket Operation..."
+msgstr "operación de bolsillo ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1069
+msgid "Drilling Operation..."
+msgstr "operación de perforación ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1073
+msgid "Script Operation..."
+msgstr "operación de escritura ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1074
+msgid "Pattern..."
+msgstr "patrón ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1075
+msgid "Surface..."
+msgstr "superficie ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1076
+msgid "Stock..."
+msgstr "existencias ..."
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1090
+msgid "Add New Milling Operation"
+msgstr "añadir nueva operación de fresado"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1091
+msgid "Add Other Operation"
+msgstr "añadir otra operación"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1092
+msgid "Add New Tool"
+msgstr "añadir nueva herramienta"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1103
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNCInterface.cpp:80
+msgid "Machining"
+msgstr "mecanizado"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1107
+msgid "Online HeeksCNC Manual"
+msgstr "Manual heekscnc línea"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1305
+msgid "machining options"
+msgstr "opciones de mecanizado"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1311
+msgid "Use Clipper not Boolean"
+msgstr "utilizar clipper no boolean"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1312
+msgid "Use DOS Line Endings"
+msgstr "utilizar DOS finales de línea"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1316
+msgid "Excellon options"
+msgstr "opciones Excellon"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1416
+msgid "Program"
+msgstr "programa"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1417
+msgid "NCCodeBlock"
+msgstr "nccodeblock"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1418
+msgid "NCCode"
+msgstr "nccode"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1419
+#: C:\Dev\HeeksCNC1.0/src/Operations.h:24
+msgid "Operations"
+msgstr "operaciones"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1422
+msgid "Drilling"
+msgstr "perforación"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1423
+#: C:\Dev\HeeksCNC1.0\src\OpDlg.cpp:26
+msgid "Tool"
+msgstr "herramienta"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1425 C:\Dev\HeeksCNC1.0/src/Tags.h:24
+msgid "Tags"
+msgstr "etiquetas"
+
+#: C:\Dev\HeeksCNC1.0\src\HeeksCNC.cpp:1426 C:\Dev\HeeksCNC1.0/src/Tag.h:28
+msgid "Tag"
+msgstr "etiqueta"
+
+#: C:\Dev\HeeksCNC1.0\src\NCCode.cpp:658
+msgid "nc options"
+msgstr "opciones nc"
+
+#: C:\Dev\HeeksCNC1.0\src\NCCode.cpp:660
+msgid "text colors"
+msgstr "colores de texto"
+
+#: C:\Dev\HeeksCNC1.0\src\NCCode.cpp:661
+msgid "default color"
+msgstr "color por defecto"
+
+#: C:\Dev\HeeksCNC1.0\src\NCCode.cpp:662
+msgid "block color"
+msgstr "color del bloque"
+
+#: C:\Dev\HeeksCNC1.0\src\NCCode.cpp:663
+msgid "misc color"
+msgstr "colores misceláneos"
+
+#: C:\Dev\HeeksCNC1.0\src\NCCode.cpp:664
+msgid "program color\t"
+msgstr "programa de color \t"
+
+#: C:\Dev\HeeksCNC1.0\src\NCCode.cpp:665
+msgid "tool color"
+msgstr "color de la herramienta"
+
+#: C:\Dev\HeeksCNC1.0\src\NCCode.cpp:666
+msgid "comment color\t"
+msgstr "comentario de color \t"
+
+#: C:\Dev\HeeksCNC1.0\src\NCCode.cpp:667
+msgid "variable color"
+msgstr "de color variable"
+
+#: C:\Dev\HeeksCNC1.0\src\NCCode.cpp:668
+msgid "prep color"
+msgstr "colores prep"
+
+#: C:\Dev\HeeksCNC1.0\src\NCCode.cpp:669
+msgid "axis color"
+msgstr "color de eje"
+
+#: C:\Dev\HeeksCNC1.0\src\NCCode.cpp:670
+msgid "rapid color"
+msgstr "rápido de color"
+
+#: C:\Dev\HeeksCNC1.0\src\NCCode.cpp:671
+msgid "feed color"
+msgstr "Color feed"
+
+#: C:\Dev\HeeksCNC1.0\src\NCCode.cpp:762
+msgid "Arc Interpolation Count"
+msgstr "recuento de interpolación de arco"
+
+#: C:\Dev\HeeksCNC1.0\src\Op.cpp:113
+msgid "comment"
+msgstr "comentario"
+
+#: C:\Dev\HeeksCNC1.0\src\Op.cpp:114
+msgid "active"
+msgstr "activo"
+
+#: C:\Dev\HeeksCNC1.0\src\Op.cpp:131
+msgid "tool"
+msgstr "herramienta"
+
+#: C:\Dev\HeeksCNC1.0\src\Op.cpp:134
+msgid "pattern"
+msgstr "patrón"
+
+#: C:\Dev\HeeksCNC1.0\src\Op.cpp:135
+msgid "surface"
+msgstr "superficie"
+
+#: C:\Dev\HeeksCNC1.0\src\OpDlg.cpp:32
+msgid "Comment"
+msgstr "comentario"
+
+#: C:\Dev\HeeksCNC1.0\src\OpDlg.cpp:33
+msgid "Active"
+msgstr "activo"
+
+#: C:\Dev\HeeksCNC1.0\src\Operations.cpp:88
+msgid "Set All Operations Active"
+msgstr "establecer todas las operaciones de activo"
+
+#: C:\Dev\HeeksCNC1.0\src\Operations.cpp:107
+msgid "Set All Operations Inactive"
+msgstr "establecer todas las operaciones inactiva"
+
+#: C:\Dev\HeeksCNC1.0\src\Pattern.cpp:95
+msgid "number of copies 1"
+msgstr "número de copias 1"
+
+#: C:\Dev\HeeksCNC1.0\src\Pattern.cpp:96
+msgid "x shift 1"
+msgstr "x 1 de cambio"
+
+#: C:\Dev\HeeksCNC1.0\src\Pattern.cpp:97
+msgid "y shift 1"
+msgstr "y cambio 1"
+
+#: C:\Dev\HeeksCNC1.0\src\Pattern.cpp:98
+msgid "number of copies 2"
+msgstr "número de copias 2"
+
+#: C:\Dev\HeeksCNC1.0\src\Pattern.cpp:99
+msgid "x shift 2"
+msgstr "x turno 2"
+
+#: C:\Dev\HeeksCNC1.0\src\Pattern.cpp:100
+msgid "y shift 2"
+msgstr "y cambio 2"
+
+#: C:\Dev\HeeksCNC1.0\src\PatternDlg.cpp:24
+msgid "Number of Copies A"
+msgstr "número de copias de un"
+
+#: C:\Dev\HeeksCNC1.0\src\PatternDlg.cpp:25
+msgid "X Shift A"
+msgstr "x desplazar una"
+
+#: C:\Dev\HeeksCNC1.0\src\PatternDlg.cpp:26
+msgid "Y Shift A"
+msgstr "y un cambio"
+
+#: C:\Dev\HeeksCNC1.0\src\PatternDlg.cpp:27
+msgid "Number of Copies B"
+msgstr "número de copias b"
+
+#: C:\Dev\HeeksCNC1.0\src\PatternDlg.cpp:28
+msgid "X Shift B"
+msgstr "x cambio de b"
+
+#: C:\Dev\HeeksCNC1.0\src\PatternDlg.cpp:29
+msgid "Y Shift B"
+msgstr "y cambio de b"
+
+#: C:\Dev\HeeksCNC1.0\src\Pocket.cpp:114
+msgid "step over"
+msgstr "pasar por encima"
+
+#: C:\Dev\HeeksCNC1.0\src\Pocket.cpp:115
+#: C:\Dev\HeeksCNC1.0\src\Surface.cpp:107
+msgid "material allowance"
+msgstr "provisión de material"
+
+#: C:\Dev\HeeksCNC1.0\src\Pocket.cpp:119
+#: C:\Dev\HeeksCNC1.0\src\PocketDlg.cpp:32
+#: C:\Dev\HeeksCNC1.0\src\PocketDlg.cpp:70
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:192
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:231
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:34
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:107
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:116
+msgid "Conventional"
+msgstr "convencional"
+
+#: C:\Dev\HeeksCNC1.0\src\Pocket.cpp:120
+#: C:\Dev\HeeksCNC1.0\src\PocketDlg.cpp:32
+#: C:\Dev\HeeksCNC1.0\src\PocketDlg.cpp:70
+#: C:\Dev\HeeksCNC1.0\src\PocketDlg.cpp:97
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:193
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:232
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:34
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:107
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:116
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:167
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:183
+msgid "Climb"
+msgstr "ascenso"
+
+#: C:\Dev\HeeksCNC1.0\src\Pocket.cpp:121
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:194
+msgid "cut mode"
+msgstr "modo de corte"
+
+#: C:\Dev\HeeksCNC1.0\src\Pocket.cpp:126
+#: C:\Dev\HeeksCNC1.0\src\PocketDlg.cpp:29
+#: C:\Dev\HeeksCNC1.0\src\PocketDlg.cpp:69
+#: C:\Dev\HeeksCNC1.0\src\PocketDlg.cpp:92
+msgid "Boundary"
+msgstr "límite"
+
+#: C:\Dev\HeeksCNC1.0\src\Pocket.cpp:127
+#: C:\Dev\HeeksCNC1.0\src\PocketDlg.cpp:29
+#: C:\Dev\HeeksCNC1.0\src\PocketDlg.cpp:56
+#: C:\Dev\HeeksCNC1.0\src\PocketDlg.cpp:69
+msgid "Center"
+msgstr "centro"
+
+#: C:\Dev\HeeksCNC1.0\src\Pocket.cpp:128
+msgid "starting_place"
+msgstr "starting_place"
+
+#: C:\Dev\HeeksCNC1.0\src\Pocket.cpp:132
+msgid "Plunge"
+msgstr "zambullida"
+
+#: C:\Dev\HeeksCNC1.0\src\Pocket.cpp:133
+msgid "Ramp"
+msgstr "rampa"
+
+#: C:\Dev\HeeksCNC1.0\src\Pocket.cpp:134
+msgid "Helical"
+msgstr "helicoidal"
+
+#: C:\Dev\HeeksCNC1.0\src\Pocket.cpp:135
+msgid "entry_move"
+msgstr "entry_move"
+
+#: C:\Dev\HeeksCNC1.0\src\Pocket.cpp:137
+msgid "keep tool down"
+msgstr "mantener herramienta hacia abajo"
+
+#: C:\Dev\HeeksCNC1.0\src\Pocket.cpp:138
+msgid "use zig zag"
+msgstr "utilizar zig zag"
+
+#: C:\Dev\HeeksCNC1.0\src\Pocket.cpp:141
+msgid "zig angle"
+msgstr "ángulo zig"
+
+#: C:\Dev\HeeksCNC1.0\src\Pocket.cpp:142
+msgid "unidirectional"
+msgstr "unidireccional"
+
+#: C:\Dev\HeeksCNC1.0\src\Pocket.cpp:366
+msgid "Pocket operation - Sketch doesn't exist"
+msgstr "operación de bolsillo - boceto no existe"
+
+#: C:\Dev\HeeksCNC1.0\src\Pocket.cpp:394
+#, c-format
+msgid "Pocket operation - Sketch %d has no children"
+msgstr "operación de bolsillo - boceto % d no tiene hijos"
+
+#: C:\Dev\HeeksCNC1.0\src\Pocket.cpp:418
+#, c-format
+msgid "Pocket operation - Sketch must be a closed shape - sketch %d"
+msgstr "operación de bolsillo - boceto debe ser una forma cerrada - boceto % d"
+
+#: C:\Dev\HeeksCNC1.0\src\Pocket.cpp:426
+#, c-format
+msgid "Pocket operation - Badly ordered sketch - sketch %d"
+msgstr "operación de bolsillo - boceto mal ordenado - boceto % d"
+
+#: C:\Dev\HeeksCNC1.0\src\Pocket.cpp:592
+msgid "Pocket spline deviation"
+msgstr "desviación spline bolsillo"
+
+#: C:\Dev\HeeksCNC1.0\src\PocketDlg.cpp:26
+msgid "Step Over"
+msgstr "pasar por encima"
+
+#: C:\Dev\HeeksCNC1.0\src\PocketDlg.cpp:27
+#: C:\Dev\HeeksCNC1.0\src\SurfaceDlg.cpp:20
+msgid "Material Allowance"
+msgstr "provisión de material"
+
+#: C:\Dev\HeeksCNC1.0\src\PocketDlg.cpp:30
+msgid "Starting Place"
+msgstr "punto de partida"
+
+#: C:\Dev\HeeksCNC1.0\src\PocketDlg.cpp:33
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:35
+msgid "Cut Mode"
+msgstr "modo de corte"
+
+#: C:\Dev\HeeksCNC1.0\src\PocketDlg.cpp:35
+msgid "Use Zig Zag"
+msgstr "utilizar zig zag"
+
+#: C:\Dev\HeeksCNC1.0\src\PocketDlg.cpp:36
+msgid "Keep Tool Down"
+msgstr "mantener herramienta hacia abajo"
+
+#: C:\Dev\HeeksCNC1.0\src\PocketDlg.cpp:37
+msgid "Zig Zag Angle"
+msgstr "zig zag ángulo"
+
+#: C:\Dev\HeeksCNC1.0\src\PocketDlg.cpp:38
+msgid "Zig Unidirectional"
+msgstr "zig unidireccional"
+
+#: C:\Dev\HeeksCNC1.0\src\PocketDlg.cpp:57
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:73
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:81
+msgid "climb"
+msgstr "ascenso"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:163
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:229
+msgid "Outside"
+msgstr "fuera"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:164
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:230
+msgid "Inside"
+msgstr "dentro"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:168
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:234
+msgid "Outside or Left"
+msgstr "fuera o hacia la izquierda"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:169
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:235
+msgid "Inside or Right"
+msgstr "dentro o hacia la derecha"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:172
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:29
+msgid "On"
+msgstr "en"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:187
+msgid "tool on side"
+msgstr "herramienta en el lado"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:198
+msgid "auto roll on"
+msgstr "rollo Auto en"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:199
+msgid "roll on point"
+msgstr "rollo en el punto"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:200
+msgid "auto roll off"
+msgstr "rollo de apagado automático"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:201
+msgid "roll off point"
+msgstr "roll off punto"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:202
+msgid "roll radius"
+msgstr "radio rollo"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:203
+msgid "use start point"
+msgstr "utilizar el punto de partida"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:204
+msgid "start point"
+msgstr "punto de comenzar"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:205
+msgid "use end point"
+msgstr "utilizar el punto final"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:208
+msgid "end point"
+msgstr "punto final"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:209
+msgid "end beyond full profile"
+msgstr "terminar allá perfil completo"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:213
+msgid "extend before start"
+msgstr "extender antes del inicio"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:214
+msgid "extend past end"
+msgstr "extenderse más allá del extremo"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:217
+msgid "lead in line length"
+msgstr "conducir en longitud de la línea"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:218
+msgid "lead out line length"
+msgstr "llevar a cabo longitud de la línea"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:220
+msgid "offset_extra"
+msgstr "offset_extra"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:223
+msgid "do finishing pass"
+msgstr "hacer pasada de acabado"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:226
+msgid "only finishing pass"
+msgstr "sólo pasada de acabado"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:227
+msgid "finishing feed rate"
+msgstr "avance de acabado"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:233
+msgid "finish cut mode"
+msgstr "el modo de corte de acabado"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:235
+msgid "finishing step down"
+msgstr "etapa de acabado hacia abajo"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:965
+msgid "Pick Start"
+msgstr "recoger inicio"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:966
+msgid "Pick new start point"
+msgstr "elegir nuevo punto de partida"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:974
+msgid "Pick End"
+msgstr "recoger final"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:975
+msgid "Pick new end point"
+msgstr "elegir nuevo punto final"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:983
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:984
+msgid "Pick roll on point"
+msgstr "recoger rollo en el punto"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:992
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:993
+msgid "Pick roll off point"
+msgstr "recoger roll off punto"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:1007
+msgid "Add tags by clicking"
+msgstr "añadir etiquetas haciendo clic"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:1067
+msgid "Stop adding tags"
+msgstr "dejar de añadir etiquetas"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:1084
+msgid "Add Tags"
+msgstr "agregar etiquetas"
+
+#: C:\Dev\HeeksCNC1.0\src\Profile.cpp:1194
+msgid "Profile spline deviation"
+msgstr "perfil de desviación spline"
+
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:30
+msgid "Tool On Side"
+msgstr "herramienta en el lado"
+
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:36
+msgid "Roll Radius"
+msgstr "radio rollo"
+
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:37
+msgid "Offset Extra"
+msgstr "compensación adicional"
+
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:38
+msgid "Do Finishing Pass"
+msgstr "hacer pasada de acabado"
+
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:39
+msgid "Only Finishing Pass"
+msgstr "sólo pasada de acabado"
+
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:40
+msgid "Finishing Feed Rate"
+msgstr "avance de acabado"
+
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:41
+msgid "Finishing Cut Mode"
+msgstr "el modo de corte de acabado"
+
+#: C:\Dev\HeeksCNC1.0\src\ProfileDlg.cpp:42
+msgid "Finish Step Down"
+msgstr "paso final hacia abajo"
+
+#: C:\Dev\HeeksCNC1.0\src\Program.cpp:253
+msgid "Would you like to change the HeeksCAD view units too?"
+msgstr "le gustaría cambiar las unidades ver HeeksCAD también?"
+
+#: C:\Dev\HeeksCNC1.0\src\Program.cpp:308
+msgid "machine"
+msgstr "máquina"
+
+#: C:\Dev\HeeksCNC1.0\src\Program.cpp:317
+msgid "output file name follows data file name"
+msgstr "nombre de archivo de salida sigue nombre del archivo de datos"
+
+#: C:\Dev\HeeksCNC1.0\src\Program.cpp:322
+msgid "output file"
+msgstr "archivo de salida"
+
+#: C:\Dev\HeeksCNC1.0\src\Program.cpp:331
+msgid "units for nc output"
+msgstr "unidades para la salida nc"
+
+#: C:\Dev\HeeksCNC1.0\src\Program.cpp:338
+msgid "Exact Path Mode"
+msgstr "modo de ruta exacta"
+
+#: C:\Dev\HeeksCNC1.0\src\Program.cpp:339
+msgid "Exact Stop Mode"
+msgstr "modo de parada exacta"
+
+#: C:\Dev\HeeksCNC1.0\src\Program.cpp:340
+msgid "Best Possible Speed"
+msgstr "mejor velocidad posible"
+
+#: C:\Dev\HeeksCNC1.0\src\Program.cpp:341
+msgid "Undefined"
+msgstr "indefinido"
+
+#: C:\Dev\HeeksCNC1.0\src\Program.cpp:343
+msgid "Path Control Mode"
+msgstr "modo de control de ruta"
+
+#: C:\Dev\HeeksCNC1.0\src\Program.cpp:347
+msgid "Motion Blending Tolerance"
+msgstr "movimiento tolerancia mezcla"
+
+#: C:\Dev\HeeksCNC1.0\src\Program.cpp:348
+msgid "Naive CAM Tolerance"
+msgstr "tolerancia cam ingenuo"
+
+#: C:\Dev\HeeksCNC1.0\src\Program.cpp:917
+msgid "The Python program is too long \n"
+msgstr "el programa python es demasiado largo \n"
+
+#: C:\Dev\HeeksCNC1.0\src\Program.cpp:918
+msgid "to display in this window.\n"
+msgstr "para mostrar en esta ventana . \n"
+
+#: C:\Dev\HeeksCNC1.0\src\Program.cpp:919
+msgid "Please edit the python program directly at \n"
+msgstr "por favor, edite el programa python directamente a \n"
+
+#: C:\Dev\HeeksCNC1.0\src\Program.cpp:1228
+msgid "ProgramPathControlMode"
+msgstr "programpathcontrolmode"
+
+#: C:\Dev\HeeksCNC1.0\src\Program.cpp:1229
+msgid "ProgramMotionBlendingTolerance"
+msgstr "programmotionblendingtolerance"
+
+#: C:\Dev\HeeksCNC1.0\src\Program.cpp:1230
+msgid "ProgramNaiveCamTolerance"
+msgstr "programnaivecamtolerance"
+
+#: C:\Dev\HeeksCNC1.0\src\ProgramDlg.cpp:35
+msgid "Machines"
+msgstr "máquinas"
+
+#: C:\Dev\HeeksCNC1.0\src\ProgramDlg.cpp:38
+msgid "Output File Name Follows Data File Name"
+msgstr "nombre de archivo de salida sigue nombre del archivo de datos"
+
+#: C:\Dev\HeeksCNC1.0\src\ProgramDlg.cpp:40
+msgid "Output File"
+msgstr "archivo de salida"
+
+#: C:\Dev\HeeksCNC1.0\src\ProgramDlg.cpp:42
+msgid "Units for NC Output"
+msgstr "unidades para la salida nc"
+
+#: C:\Dev\HeeksCNC1.0\src\PythonStuff.cpp:286
+msgid "There were errors!, see Output window"
+msgstr "hubo errores !, ver la ventana de salida"
+
+#: C:\Dev\HeeksCNC1.0\src\PythonStuff.cpp:426
+msgid "send-to-machine command"
+msgstr "enviar a máquina comando"
+
+#: C:\Dev\HeeksCNC1.0\src\Reselect.cpp:36
+msgid "Select Sketches"
+msgstr "seleccione bocetos"
+
+#: C:\Dev\HeeksCNC1.0\src\Reselect.cpp:46
+#: C:\Dev\HeeksCNC1.0\src\Reselect.cpp:68
+msgid "Select cancelled. No sketches were selected!"
+msgstr "seleccione cancelado. Se seleccionan bocetos !"
+
+#: C:\Dev\HeeksCNC1.0\src\Reselect.cpp:57
+msgid "Select Sketch"
+msgstr "seleccione boceto"
+
+#: C:\Dev\HeeksCNC1.0\src\Reselect.cpp:99
+msgid "Select Solids"
+msgstr "seleccione sólidos"
+
+#: C:\Dev\HeeksCNC1.0\src\Reselect.cpp:109
+msgid "Select cancelled. No solids were selected!"
+msgstr "seleccione cancelado. Se seleccionan los sólidos !"
+
+#: C:\Dev\HeeksCNC1.0\src\Reselect.cpp:137
+#: C:\Dev\HeeksCNC1.0\src\Reselect.cpp:139
+msgid "solids"
+msgstr "sólidos"
+
+#: C:\Dev\HeeksCNC1.0\src\Reselect.cpp:138
+msgid "solid id"
+msgstr "Identificación del sólido"
+
+#: C:\Dev\HeeksCNC1.0\src\ScriptOpDlg.cpp:25
+msgid "Script"
+msgstr "guión"
+
+#: C:\Dev\HeeksCNC1.0\src\SketchOp.cpp:93
+msgid "sketch id"
+msgstr "Identificación del boceto"
+
+#: C:\Dev\HeeksCNC1.0\src\SketchOpDlg.cpp:19
+msgid "Sketches"
+msgstr "bocetos"
+
+#: C:\Dev\HeeksCNC1.0\src\SketchOpDlg.cpp:50
+msgid "Pick a sketch"
+msgstr "elegir un boceto"
+
+#: C:\Dev\HeeksCNC1.0\src\SolidsDlg.cpp:20
+msgid "Solids"
+msgstr "sólidos"
+
+#: C:\Dev\HeeksCNC1.0\src\SolidsDlg.cpp:51
+msgid "Pick solids"
+msgstr "recoger los sólidos"
+
+#: C:\Dev\HeeksCNC1.0\src\SpeedOp.cpp:51
+msgid "horizontal feed rate"
+msgstr "velocidad de alimentación horizontal"
+
+#: C:\Dev\HeeksCNC1.0\src\SpeedOp.cpp:52
+msgid "vertical feed rate"
+msgstr "tasa de alimentación vertical"
+
+#: C:\Dev\HeeksCNC1.0\src\SpeedOp.cpp:53
+msgid "spindle speed"
+msgstr "la velocidad del husillo"
+
+#: C:\Dev\HeeksCNC1.0\src\SpeedOpDlg.cpp:29
+msgid "Horizontal Feedrate"
+msgstr "avance horizontal"
+
+#: C:\Dev\HeeksCNC1.0\src\SpeedOpDlg.cpp:30
+msgid "Vertical Feedrate"
+msgstr "avance verticales"
+
+#: C:\Dev\HeeksCNC1.0\src\SpeedOpDlg.cpp:31
+msgid "Spindle Speed"
+msgstr "la velocidad del husillo"
+
+#: C:\Dev\HeeksCNC1.0\src\Surface.cpp:106
+msgid "tolerance"
+msgstr "tolerancia"
+
+#: C:\Dev\HeeksCNC1.0\src\Surface.cpp:108
+msgid "same for each pattern position"
+msgstr "misma para cada posición del patrón"
+
+#: C:\Dev\HeeksCNC1.0\src\SurfaceDlg.cpp:19
+msgid "Tolerance"
+msgstr "tolerancia"
+
+#: C:\Dev\HeeksCNC1.0\src\SurfaceDlg.cpp:21
+msgid "Same for Each Pattern Position"
+msgstr "misma para cada posición del patrón"
+
+#: C:\Dev\HeeksCNC1.0\src\Tag.cpp:83 C:\Dev\HeeksCNC1.0\src\Tag.cpp:86
+msgid "Pick position"
+msgstr "posición de recogida"
+
+#: C:\Dev\HeeksCNC1.0\src\Tools.cpp:98
+msgid "Save As Default"
+msgstr "Guardar como predeterminado"
+
+#: C:\Dev\HeeksCNC1.0\src\Tools.cpp:98
+msgid "Export"
+msgstr "exportación"
+
+#: C:\Dev\HeeksCNC1.0\src\Tools.cpp:175
+msgid "Restore Default Tools"
+msgstr "restaurar herramientas predeterminadas"
+
+#: C:\Dev\HeeksCNC1.0\src\Tools.cpp:239
+msgid "Guage number replaces size"
+msgstr "número de calibre reemplaza tamaño"
+
+#: C:\Dev\HeeksCNC1.0\src\Tools.cpp:240
+msgid "Include guage number and size"
+msgstr "incluir el número y tamaño de calibre"
+
+#: C:\Dev\HeeksCNC1.0\src\Tools.cpp:242
+msgid "Title Format"
+msgstr "formato del título"
+
+#: C:\Dev\HeeksCNC1.0/src/Patterns.h:15
+msgid "Patterns"
+msgstr "patrones"
+
+#: C:\Dev\HeeksCNC1.0/src/Reselect.h:14
+msgid "Re-select sketches"
+msgstr "Vuelva a seleccionar bocetos"
+
+#: C:\Dev\HeeksCNC1.0/src/Reselect.h:26
+msgid "Re-select sketch"
+msgstr "re- seleccione boceto"
+
+#: C:\Dev\HeeksCNC1.0/src/Reselect.h:40
+msgid "Re-select solids"
+msgstr "Vuelva a seleccionar sólidos"
+
+#: C:\Dev\HeeksCNC1.0/src/Stocks.h:15
+msgid "Stocks"
+msgstr "stocks"
+
+#: C:\Dev\HeeksCNC1.0/src/Surfaces.h:15
+msgid "Surfaces"
+msgstr "superficies"
