@@ -24,7 +24,7 @@ CAboutBox::CAboutBox(wxWindow *parent):wxDialog(parent, wxID_ANY, _T(""), wxDefa
 		+ wxString(_T("\n\nwindows made with wxWidgets 2.8.9 - http://wxwidgets.org"))
 		+ wxString(_T("\n\ntext uses glFont Copyright (c) 1998 Brad Fish E-mail: bhf5@email.byu.edu Web: http://students.cs.byu.edu/~bfish/"))
 		+ wxString(_T("\n\nWritten by:\n Dan Heeks\n"))
-		+ wxString(_T("\n\nWith contributions from:\n David Nicholls\n Perttu Ahola\n Dave ( the archivist )\n mpictor\n fenn\n fungunner2\n andrea ( openSUSE )\n g_code\n Luigi Barbati (Italian translation)\n Andre Pascual (French translation)"))
+		+ wxString(_T("\n\nWith contributions from:\n David Nicholls\n Perttu Ahola\n Dave ( the archivist )\n mpictor\n fenn\n fungunner2\n andrea ( openSUSE )\n g_code\n Luigi Barbati (Italian translation)\n Andre Pascual (French translation)\n Juan Carlos Gavari (Italian translation)"))
 #ifdef FREE_VERSION
 		+ wxString(_T("\n\nThis is free, open source software, not to be used for commercial use. Please buy the full version."));
 #else
