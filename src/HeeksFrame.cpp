@@ -246,6 +246,7 @@ CHeeksFrame::~CHeeksFrame()
 
 	delete m_aui_manager;
 	delete wxLog::SetActiveTarget(NULL);
+	SetMenuBar(NULL);
 }
 
 void CHeeksFrame::RefreshInputCanvas()
