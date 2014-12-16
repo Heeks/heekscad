@@ -1401,7 +1401,11 @@ CFlyOutButton::~CFlyOutButton()
 		if(event.Entering())
 		{
 			// delete previous popup
+#ifdef WIN32
 			if(m_toolbarPopup)m_toolbarPopup->Close();
+#else
+			if (m_toolbarPopup) delete m_toolbarPopup;
+#endif
 
 			// make a new popup toolbar
 			m_toolbarPopup = new ToolBarPopup( this );
