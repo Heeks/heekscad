@@ -155,6 +155,26 @@ void HCircle::GetBox(CBox &box){
 	}
 }
 
+static double prev_p_for_PlotFunction[3] = { 0.0, 0.0, 0.0 };
+static bool prev_p_set_for_PlotFunction = false;
+
+static void PlotFunction(const double *p)
+{
+	if (prev_p_set_for_PlotFunction)
+	{
+		wxGetApp().PlotLine(prev_p_for_PlotFunction, p);
+	}
+	memcpy(prev_p_for_PlotFunction, p, 3 * sizeof(double));
+	prev_p_set_for_PlotFunction = true;
+}
+
+void HCircle::Draw(wxDC& dc)
+{
+	prev_p_set_for_PlotFunction = false;
+	wxGetApp().PlotSetColor(*GetColor());
+	GetSegments(PlotFunction, 10.0);
+}
+
 gp_Pnt C_for_gripper_posns;
 
 void HCircle::GetGripperPositions(std::list<GripData> *list, bool just_for_endof){

@@ -245,9 +245,17 @@ void HArc::Draw(wxDC& dc)
 {
 	wxGetApp().PlotSetColor(*GetColor());
 	double s[3], e[3], c[3];
-	extract(A, s);
-	extract(B, e);
 	extract(C, c);
+	if (m_axis.Direction().Z() < -0.001)
+	{
+		extract(A, s);
+		extract(B, e);
+	}
+	else
+	{
+		extract(A, e);
+		extract(B, s);
+	}
 	wxGetApp().PlotArc(s, e, c);
 }
 
