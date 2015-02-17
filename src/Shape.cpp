@@ -789,27 +789,33 @@ bool CShape::ImportSolidsFile(const wxChar* filepath, bool undoably, std::map<in
 				Handle_Standard_Transient root = Reader.RootForTransfer(i);
 				Reader.TransferEntity(root);
 				TopoDS_Shape rShape = Reader.Shape(i);
-				if(index_map)
+				TopExp_Explorer ex;
+				for (ex.Init(rShape, TopAbs_SOLID); ex.More(); ex.Next())
 				{
-					// change the id ( and any other data ), to the one in the step file index
-					std::map<int, CShapeData>::iterator FindIt = index_map->find(i);
-					if(FindIt != index_map->end())
+					// get the shape 
+					const TopoDS_Solid& aSolid = TopoDS::Solid(ex.Current());
+					if (index_map)
 					{
-						CShapeData& shape_data = FindIt->second;
-						HeeksObj* new_object = MakeObject(rShape, _("STEP solid"), shape_data.m_solid_type, HeeksColor(191, 191, 191), 1.0f);
-						if(new_object)
+						// change the id ( and any other data ), to the one in the step file index
+						std::map<int, CShapeData>::iterator FindIt = index_map->find(i);
+						if (FindIt != index_map->end())
 						{
-							if(undoably)wxGetApp().AddUndoably(new_object, add_to, NULL);
-							else add_to->Add(new_object, NULL);
-							shape_data.SetShape((CShape*)new_object, !wxGetApp().m_inPaste);
+							CShapeData& shape_data = FindIt->second;
+							HeeksObj* new_object = MakeObject(aSolid, _("STEP solid"), shape_data.m_solid_type, HeeksColor(191, 191, 191), 1.0f);
+							if (new_object)
+							{
+								if (undoably)wxGetApp().AddUndoably(new_object, add_to, NULL);
+								else add_to->Add(new_object, NULL);
+								shape_data.SetShape((CShape*)new_object, !wxGetApp().m_inPaste);
+							}
 						}
 					}
-				}
-				else
-				{
-					HeeksObj* new_object = MakeObject(rShape, _("STEP solid"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191), 1.0f);
-					if(undoably)wxGetApp().AddUndoably(new_object, add_to, NULL);
-					else add_to->Add(new_object, NULL);
+					else
+					{
+						HeeksObj* new_object = MakeObject(aSolid, _("STEP solid"), SOLID_TYPE_UNKNOWN, HeeksColor(191, 191, 191), 1.0f);
+						if (undoably)wxGetApp().AddUndoably(new_object, add_to, NULL);
+						else add_to->Add(new_object, NULL);
+					}
 				}
 			}
 		}
