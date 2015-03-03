@@ -1,21 +1,23 @@
 # Traduction française de HeeksCAD.
 # Copyright (C) 2009 THE HeeksCAD'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the HeeksCAD package.
-# André PASCUAL <andre.pascual@linuxgraphic.org>, 2009-2011
 #
+# André PASCUAL <andre.pascual@linuxgraphic.org>, 2009-2011.
+# Romuald Conty <neomilium@gmail.com>, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: HeeksCAD 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-11 20:42+0200\n"
-"PO-Revision-Date: 2014-08-18 18:33+0100\n"
+"PO-Revision-Date: 2015-03-03 01:43+0100\n"
 "Last-Translator: Romuald Conty <neomilium@gmail.com>\n"
-"Language-Team: none\n"
+"Language-Team: French <>\n"
 "Language: french\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 # ===================================================
 #: src/AboutBox.cpp:17 interface/HDialogs.cpp:124
@@ -69,7 +71,7 @@ msgstr "en face"
 # ConversionTools.cpp
 #: src/ConversionTools.cpp:408 src/ConversionTools.cpp:467
 msgid "Error converting sketch to face"
-msgstr "Erreur lors de la convertion de l'esquisse en face"
+msgstr "Erreur lors de la conversion de l'esquisse en face"
 
 # ConversionTools.cpp
 #: src/ConversionTools.cpp:472
@@ -377,7 +379,7 @@ msgstr "Erreur lors de la création du congé"
 # Shape.cpp
 #: src/Edge.cpp:285
 msgid "A fatal error happened during Chamfer"
-msgstr "Erreur fatale pendant la création du Chamfrein"
+msgstr "Erreur fatale pendant la création du Chanfrein"
 
 # Shape.cpp
 #: src/Edge.cpp:285 src/Shape.cpp:749
@@ -437,7 +439,7 @@ msgstr "tore"
 
 #: src/Face.cpp:443
 msgid "bezier"
-msgstr "bézier"
+msgstr "Bézier"
 
 #: src/Face.cpp:447
 msgid "bspline"
@@ -509,7 +511,7 @@ msgstr "Déplacer py"
 # Ajout 701 HeeksCAD.cpp
 #: src/Group.cpp:307
 msgid "Move pz"
-msgstr "Déplacer ipz"
+msgstr "Déplacer pz"
 
 # Ajout249  HAngularDimension.cpp
 #: src/HAngularDimension.cpp:305
@@ -519,7 +521,7 @@ msgstr "chaîne"
 # Ajout250 HAngularDimension.cpp
 #: src/HAngularDimension.cpp:306
 msgid "pythagorean"
-msgstr "pythagorien"
+msgstr "pythagorique"
 
 # Ajout250 HAngularDimension.cpp
 #: src/HAngularDimension.cpp:307
@@ -622,7 +624,7 @@ msgstr "nombre de courbes"
 # Ajout 695 Sketch.cpp
 #: src/HCircle.cpp:876 src/Sketch.cpp:353
 msgid "Click midpoint"
-msgstr "Clic point millieu"
+msgstr "Clic point milieu"
 
 # Ajout 696 Sketch.cpp
 #: src/HCircle.cpp:901 src/Sketch.cpp:378
@@ -791,7 +793,7 @@ msgstr "Clic Fin de Ligne"
 # HSpline.cpp
 #: src/HSpline.cpp:235
 msgid "Knot"
-msgstr "Noeud"
+msgstr "Nœud"
 
 # HSpline.cpp
 #: src/HSpline.cpp:246
@@ -973,7 +975,7 @@ msgstr "Activer le système de coordonnées global"
 
 #: src/HeeksCAD.cpp:2179
 msgid "Add points at intersections"
-msgstr "Ajouter des poitns aux Intersections"
+msgstr "Ajouter des points aux Intersections"
 
 #: src/HeeksCAD.cpp:2463
 msgid "Reverse Object"
@@ -1065,7 +1067,7 @@ msgstr "couleurs du gauche  et de droite"
 # Ajout 197 HeeksCAD.cpp
 #: src/HeeksCAD.cpp:3191
 msgid "four corner colors"
-msgstr "couleurs aux quatres coins"
+msgstr "couleurs aux quatre coins"
 
 # Ajout256 HeeksCAD.cpp
 #: src/HeeksCAD.cpp:3192
@@ -1274,11 +1276,11 @@ msgstr ""
 # HeeksCAD.cpp
 #: src/HeeksCAD.cpp:3298
 msgid "Number of sample points"
-msgstr "Nombre de points échantillonés"
+msgstr "Nombre de points échantillonnés"
 
 #: src/HeeksCAD.cpp:3299
 msgid "Correlate by color"
-msgstr "Correlation par couleur"
+msgstr "Corrélation par couleur"
 
 #: src/HeeksCAD.cpp:3302
 msgid "drawing"
@@ -1304,7 +1306,7 @@ msgstr "Écart face-esquisse"
 # Ajout 349 HeekscAD.cpp
 #: src/HeeksCAD.cpp:3307
 msgid "Use old solid fuse ( to prevent coplanar faces )"
-msgstr "Utiliser l'ancien objet fusionné (pour éviter les faces coplanes)"
+msgstr "Utiliser l'ancien objet fusionné (pour éviter les faces coplanaires)"
 
 # Ajout 326 RuledSurface.cpp
 #: src/HeeksCAD.cpp:3308 src/RuledSurface.cpp:254
@@ -1511,7 +1513,7 @@ msgstr "Fichiers CPP"
 
 #: src/HeeksCAD.cpp:3435 src/SolidTools.cpp:57
 msgid "OpenCAMLib python files"
-msgstr "Fichiers pyhton OpenCAMLib"
+msgstr "Fichiers python OpenCAMLib"
 
 # Ajout 677 Sectioning.cpp
 #: src/HeeksCAD.cpp:3482
@@ -1787,7 +1789,7 @@ msgstr "Choisir deux esquisses ou plus, pour créer un volume lissé entre elles
 #: src/HeeksFrame.cpp:897 src/HeeksFrame.cpp:905 src/HeeksFrame.cpp:913
 #: src/HeeksFrame.cpp:921
 msgid "hold down Ctrl key to select more than one solid"
-msgstr "Maintenir Ctrl pour chosir plus d'un volume"
+msgstr "Maintenir Ctrl pour choisir plus d'un volume"
 
 #: src/HeeksFrame.cpp:897
 msgid "Lofted Body"
@@ -1827,8 +1829,8 @@ msgid ""
 "There was a problem printing.\n"
 "Perhaps your current printer is not set correctly?"
 msgstr ""
-"Problemes d'impression.\n"
-"L'imprimante est-elle correctement configuree?"
+"Problèmes d'impression.\n"
+"L'imprimante est-elle correctement configurée?"
 
 #: src/HeeksFrame.cpp:1603 src/HeeksFrame.cpp:1605
 msgid "Printing"
@@ -1843,7 +1845,7 @@ msgid ""
 "There was a problem previewing.\n"
 "Perhaps your current printer is not set correctly?"
 msgstr ""
-"Problemes d'aperçu d'impression.\n"
+"Problème d'aperçu d'impression.\n"
 "L'imprimante est-elle correctement configurée?"
 
 #: src/HeeksFrame.cpp:1624
@@ -1873,7 +1875,7 @@ msgstr "Enregistrer\tCtrl+S"
 # Ajout 386 Heeksframe.cpp
 #: src/HeeksFrame.cpp:1712
 msgid "Save As..."
-msgstr "Enregister sous..."
+msgstr "Enregistrer sous..."
 
 #: src/HeeksFrame.cpp:1714
 msgid "Import..."
@@ -2457,7 +2459,7 @@ msgstr "Importer"
 
 #: src/HeeksRibbon.cpp:112
 msgid "Save"
-msgstr "Enregister"
+msgstr "Enregistrer"
 
 # Ajout 386 Heeksframe.cpp
 #: src/HeeksRibbon.cpp:113
@@ -2731,7 +2733,7 @@ msgstr "Mode de Saisie"
 # Ajout 178 LineArcDrawin.cpp
 #: src/LineArcDrawing.cpp:65
 msgid "set previous direction"
-msgstr "règler direction précédente"
+msgstr "régler direction précédente"
 
 #: src/LineArcDrawing.cpp:501
 msgid "Line drawing mode"
@@ -3048,7 +3050,7 @@ msgstr "Dessin d'Oblongs"
 # Ajout 374 RegularShapesDrawing.cpp
 #: src/RegularShapesDrawing.cpp:490
 msgid "Regular shapes drawing"
-msgstr "Dessin de formes regulières"
+msgstr "Dessin de formes régulières"
 
 # RegularShapesDrawing.cpp
 #: src/RegularShapesDrawing.cpp:497
@@ -3249,11 +3251,11 @@ msgstr "(avec Shift pour des objets similaires)"
 
 #: src/SelectMode.cpp:75
 msgid "Drag with left button to window select"
-msgstr "Deplacer avec le bouton gauche vers la fenetre de selection"
+msgstr "Déplacer avec le bouton gauche vers la fenêtre de sélection"
 
 #: src/SelectMode.cpp:77
 msgid "or to move object if on an object"
-msgstr "ou deplacer l'objet si sur un objet"
+msgstr "ou déplacer l'objet si sur un objet"
 
 #: src/SelectMode.cpp:78
 msgid "Mouse wheel to zoom in and out"
@@ -3285,7 +3287,7 @@ msgstr "Voir dans la fenêtre \"Options\" pour cacher l'aide"
 
 #: src/SelectMode.cpp:96
 msgid "Press Return key to accept selection"
-msgstr "Appuyez sur Entrée pour accepter la séléection"
+msgstr "Appuyez sur Entrée pour accepter la sélection"
 
 # Ajout 666 SelectMode.cpp
 #: src/SelectMode.cpp:648
@@ -3420,7 +3422,7 @@ msgstr "calculer le volume"
 
 #: src/Sketch.cpp:85
 msgid "Reorder Object"
-msgstr "Réordonner l'Object"
+msgstr "Réordonner l’Objet"
 
 #: src/Sketch.cpp:167
 msgid "Number of elements"
@@ -3481,7 +3483,7 @@ msgstr "Ellipsoïde"
 
 #: src/TransformTool.cpp:21
 msgid "Transform"
-msgstr "Transfromer"
+msgstr "Transformer"
 
 #: src/TransformTool.cpp:46
 msgid "Transform Objects"
@@ -3616,7 +3618,7 @@ msgstr "Réaliser une sélection :"
 
 #: src/manager.cpp:1293
 msgid "Categorized Mode"
-msgstr "Mode Catégorié"
+msgstr "Mode Catégorie"
 
 #: src/manager.cpp:1294
 msgid "Alphabetic Mode"
@@ -3694,7 +3696,7 @@ msgstr "En bas"
 # Ajout 317 wxImageLoader.cpp
 #: src/wxImageLoader.cpp:22
 msgid "Failed to load resource image from "
-msgstr "Echec pour charger image ressource de "
+msgstr "Échec pour charger l'image à partir de "
 
 # HeeksFrame.cpp
 #: src/ConversionTools.h:28
@@ -3775,7 +3777,7 @@ msgstr "Transformer vers un Système de Coordonnées"
 #: src/ConversionTools.h:161
 msgid "Transform selected items using two coordinate systems"
 msgstr ""
-"Transformer les objects sélectionnés grâce à deux systèmes de coordonées"
+"Transformer les objets sélectionnés grâce à deux systèmes de coordonnées"
 
 #: src/Cuboid.h:28
 msgid "Cuboid"
@@ -3926,7 +3928,7 @@ msgstr "ID"
 
 #: interface/HeeksObj.cpp:118
 msgid "color"
-msgstr "vouleur"
+msgstr "couleur"
 
 #: interface/HeeksObj.cpp:120
 msgid "visible"
@@ -3978,7 +3980,7 @@ msgstr "Saisie manuelle"
 # Ajout 487
 #: ../heekscnc/src/CTool.cpp:308
 msgid "Automatically generate title"
-msgstr "Génèration automatique"
+msgstr "Génération automatique"
 
 # Ajout 488
 #: ../heekscnc/src/CTool.cpp:310
@@ -4062,7 +4064,7 @@ msgstr "Numéro d'Outil"
 # Ajout 655
 #: ../heekscnc/src/CToolDlg.cpp:36
 msgid "Tool Material"
-msgstr "Materiau d'Outil"
+msgstr "Matériau d'Outil"
 
 #: ../heekscnc/src/CToolDlg.cpp:37
 msgid "Engraving Bit"
@@ -4182,7 +4184,7 @@ msgstr "logement"
 # Ajout 290 Probing.cpp
 #: ../heekscnc/src/Drilling.cpp:97
 msgid "Rapid retract"
-msgstr "Ratractation rapide"
+msgstr "Rétractation rapide"
 
 # Ajout 641
 #: ../heekscnc/src/Drilling.cpp:98
@@ -4209,7 +4211,7 @@ msgstr ""
 
 #: ../heekscnc/src/Drilling.cpp:113
 msgid "internal coolant on"
-msgstr "Liquide de refroissement"
+msgstr "Liquide de refroidissement"
 
 #: ../heekscnc/src/Drilling.cpp:114
 msgid "rapid to clearance between positions"
@@ -4228,7 +4230,7 @@ msgstr "Temporisation au fond"
 # Ajout 641
 #: ../heekscnc/src/DrillingDlg.cpp:39
 msgid "Feed Retract"
-msgstr "Vitesse de Retractation"
+msgstr "Vitesse de Rétractation"
 
 #: ../heekscnc/src/DrillingDlg.cpp:40
 msgid "Stop Spindle at Bottom"
@@ -4307,7 +4309,7 @@ msgstr "Nouveau motif..."
 # Ajout 535
 #: ../heekscnc/src/HeeksCNC.cpp:617 ../heekscnc/src/HeeksCNC.cpp:783
 msgid "New Surface..."
-msgstr "Nouveau surfacage..."
+msgstr "Nouveau surfaçage..."
 
 # Ajout78
 #: ../heekscnc/src/HeeksCNC.cpp:624 ../heekscnc/src/HeeksCNC.cpp:784
@@ -4371,7 +4373,7 @@ msgstr "Fraise à rainurer..."
 # Ajout 599
 #: ../heekscnc/src/HeeksCNC.cpp:794 ../heekscnc/src/HeeksCNC.cpp:1102
 msgid "Ball End Mill..."
-msgstr "Fraise sphèrique de finition..."
+msgstr "Fraise sphérique de finition..."
 
 # Ajout 600
 #: ../heekscnc/src/HeeksCNC.cpp:795 ../heekscnc/src/HeeksCNC.cpp:1103
@@ -4471,7 +4473,7 @@ msgstr "avec l'aide de : crotchet1, DanielFalck, fenn, Sliptonic"
 msgid ""
 "geometry code, donated by Geoff Hawkesford, Camtek GmbH http://www.peps.de/"
 msgstr ""
-"Code Géometrie, donné  par Geoff Hawkesford, Camtek GmbHhttp://www.peps.de/"
+"Code Géométrie, donné  par Geoff Hawkesford, Camtek GmbHhttp://www.peps.de/"
 
 #: ../heekscnc/src/HeeksCNC.cpp:1063
 msgid ""
@@ -4744,7 +4746,7 @@ msgstr "Activer toutes les opérations"
 
 #: ../heekscnc/src/Operations.cpp:107
 msgid "Set All Operations Inactive"
-msgstr "Désactiver toutes les operations"
+msgstr "Désactiver toutes les opérations"
 
 # TransformTools.cpp
 #: ../heekscnc/src/Pattern.cpp:94
@@ -4872,7 +4874,7 @@ msgstr "garder l'outil en bas"
 
 #: ../heekscnc/src/Pocket.cpp:138
 msgid "use zig zag"
-msgstr "utilser zig zag"
+msgstr "utiliser zig zag"
 
 # TransformTools.cpp
 #: ../heekscnc/src/Pocket.cpp:141
@@ -4905,7 +4907,7 @@ msgstr "Poche - L'esquisse doit être une forme close - sketch %d"
 #: ../heekscnc/src/Pocket.cpp:426
 #, c-format
 msgid "Pocket operation - Badly ordered sketch - sketch %d"
-msgstr "Poche - Esquisse mal ordonée - esquisse %d"
+msgstr "Poche - Esquisse mal ordonnée - esquisse %d"
 
 # Ajout 614
 #: ../heekscnc/src/Pocket.cpp:592
@@ -5104,7 +5106,7 @@ msgstr "Ajouter des attaches en cliquant"
 
 #: ../heekscnc/src/Profile.cpp:1067
 msgid "Stop adding tags"
-msgstr "Arreter d'ajouter des attaches"
+msgstr "Arrêter d'ajouter des attaches"
 
 # Ajout 691 HeeksFrame.cpp
 #: ../heekscnc/src/Profile.cpp:1084
