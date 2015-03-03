@@ -249,9 +249,11 @@ wchar_t GLFont::get_unaccented_character( wchar_t c)
     case 193: 
     case 192:
       return 'A';
+    case 234:
     case 233:
     case 232:
       return 'e';
+    case 202:
     case 201:
     case 200:
       return 'E';
