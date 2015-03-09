@@ -66,25 +66,25 @@ END_EVENT_TABLE()
 
 class DnDFile : public wxFileDropTarget
 {
-public:
-    DnDFile(wxFrame *pOwner) { m_pOwner = pOwner; }
+	public:
+		DnDFile(wxFrame *pOwner) { m_pOwner = pOwner; }
 
-    virtual bool OnDropFiles(wxCoord x, wxCoord y,
-                             const wxArrayString& filenames);
+		virtual bool OnDropFiles(wxCoord x, wxCoord y,
+				const wxArrayString& filenames);
 
-private:
-    wxFrame *m_pOwner;
+	private:
+		wxFrame *m_pOwner;
 };
 
 bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
 {
-    size_t nFiles = filenames.GetCount();
-    for ( size_t n = 0; n < nFiles; n++ )
-    {
+	size_t nFiles = filenames.GetCount();
+	for ( size_t n = 0; n < nFiles; n++ )
+	{
 		wxGetApp().OpenFile(filenames[n]);
-    }
+	}
 
-    return true;
+	return true;
 }
 
 CHeeksCADInterface heekscad_interface;
@@ -585,48 +585,47 @@ void OnDimensioningButton( wxCommandEvent& WXUNUSED( event ) )
 
 void OnCircles3pButton( wxCommandEvent& WXUNUSED( event ) )
 {
-    // See if the operator has already selected objects.  If we can find three points
-    // from the selected items then we can go ahead with the circle's construction
-    // without prompting for more.  If there is a different number of points found then
-    // prompt the user as usual.
+	// See if the operator has already selected objects.  If we can find three points
+	// from the selected items then we can go ahead with the circle's construction
+	// without prompting for more.  If there is a different number of points found then
+	// prompt the user as usual.
 
-    std::list<HeeksObj *> selected_objects = wxGetApp().m_marked_list->list();
-    std::vector<DigitizedPoint>   points;
-    for (std::list<HeeksObj *>::const_iterator l_itObject = selected_objects.begin();
-            l_itObject != selected_objects.end(); l_itObject++)
-    {
-        switch ((*l_itObject)->GetType())
-        {
-            case PointType:
-            {
-                points.push_back( DigitizedPoint( ((HPoint *)*l_itObject)->m_p, DigitizeCoordsType, *l_itObject ) );
-            }
-            break;
-        } // End switch
-    } // End if - then
+	std::list<HeeksObj *> selected_objects = wxGetApp().m_marked_list->list();
+	std::vector<DigitizedPoint>   points;
+	for (std::list<HeeksObj *>::const_iterator l_itObject = selected_objects.begin();
+			l_itObject != selected_objects.end(); l_itObject++)
+	{
+		switch ((*l_itObject)->GetType())
+		{
+			case PointType:
+				{
+					points.push_back( DigitizedPoint( ((HPoint *)*l_itObject)->m_p, DigitizeCoordsType, *l_itObject ) );
+				}
+				break;
+		} // End switch
+	} // End if - then
 
-
-    if (points.size() == 3)
-    {
-        gp_Circ c;
-        if(DigitizedPoint::GetTangentCircle(points[0], points[1], points[2], c))
-        {
-            double centre[3];
-            centre[0] = c.Location().Coord().X();
-            centre[1] = c.Location().Coord().Y();
-            centre[2] = c.Location().Coord().Z();
+	if (points.size() == 3)
+	{
+		gp_Circ c;
+		if(DigitizedPoint::GetTangentCircle(points[0], points[1], points[2], c))
+		{
+			double centre[3];
+			centre[0] = c.Location().Coord().X();
+			centre[1] = c.Location().Coord().Y();
+			centre[2] = c.Location().Coord().Z();
 
 			wxGetApp().StartHistory();
-            heekscad_interface.AddUndoably( heekscad_interface.NewCircle( centre, c.Radius() ), NULL );
+			heekscad_interface.AddUndoably( heekscad_interface.NewCircle( centre, c.Radius() ), NULL );
 			wxGetApp().EndHistory();
-        }
-    }
-    else
-    {
-        line_strip.drawing_mode = CircleDrawingMode;
-        line_strip.circle_mode = ThreePointsCircleMode;
-        wxGetApp().SetInputMode(&line_strip);
-    }
+		}
+	}
+	else
+	{
+		line_strip.drawing_mode = CircleDrawingMode;
+		line_strip.circle_mode = ThreePointsCircleMode;
+		wxGetApp().SetInputMode(&line_strip);
+	}
 }
 
 void OnCircles2pButton( wxCommandEvent& WXUNUSED( event ) )
@@ -702,16 +701,15 @@ void OnOpenButton( wxCommandEvent& event )
 
 void OnImportButton( wxCommandEvent& event )
 {
-
 	wxString default_directory = wxEmptyString;
 
 	if (wxGetApp().m_recent_files.size() > 0)
 	{
-		#ifdef WIN32
-			wxString delimiter(_T("\\"));
-		#else
-			wxString delimiter(_T("/"));
-		#endif // WIN32
+#ifdef WIN32
+		wxString delimiter(_T("\\"));
+#else
+		wxString delimiter(_T("/"));
+#endif // WIN32
 
 		default_directory = *(wxGetApp().m_recent_files.begin());
 		int last_directory_delimiter = default_directory.Find(delimiter[0],true);
@@ -721,23 +719,23 @@ void OnImportButton( wxCommandEvent& event )
 		}
 	}
 
-    wxFileDialog dialog(wxGetApp().m_frame, _("Import file"), default_directory, wxEmptyString, wxGetApp().GetKnownFilesWildCardString(true, true));
-    dialog.CentreOnParent();
+	wxFileDialog dialog(wxGetApp().m_frame, _("Import file"), default_directory, wxEmptyString, wxGetApp().GetKnownFilesWildCardString(true, true));
+	dialog.CentreOnParent();
 
-    if (dialog.ShowModal() == wxID_OK)
-    {
+	if (dialog.ShowModal() == wxID_OK)
+	{
 		if(wxGetApp().OpenFile(dialog.GetPath().c_str(), true))
 		{
 			wxGetApp().m_frame->m_graphics->OnMagExtents(true, true, 25);
 		}
-    }
+	}
 }
 
 void OnSaveButton( wxCommandEvent& event )
 {
 	wxString temp_filepath = wxGetApp().m_filepath;
 	bool use_dialog = wxGetApp().m_untitled;
-    wxGetApp().SaveFile( temp_filepath.c_str(), use_dialog );
+	wxGetApp().SaveFile( temp_filepath.c_str(), use_dialog );
 }
 
 void OnUpdateSave( wxUpdateUIEvent& event )
@@ -747,7 +745,7 @@ void OnUpdateSave( wxUpdateUIEvent& event )
 
 void OnSaveAsButton( wxCommandEvent& event )
 {
-    wxGetApp().SaveFile( wxGetApp().m_filepath.c_str(), true );
+	wxGetApp().SaveFile( wxGetApp().m_filepath.c_str(), true );
 }
 
 void OnResetDefaultsButton( wxCommandEvent& event )
@@ -1251,16 +1249,16 @@ class CFlyOutButton: public wxBitmapButton
 	wxTimer m_timer;
 	bool m_disappears_on_click;
 
-public:
+	public:
 	CFlyOutList m_flyout_list;
 	ToolBarPopup* m_toolbarPopup;
 
 	CFlyOutButton(const CFlyOutList &flyout_list,
-				wxToolBar *toolbar,
-				int id_to_use,
-				const wxPoint& pos,
-				const wxSize& size,
-				bool disappears_on_click)
+			wxToolBar *toolbar,
+			int id_to_use,
+			const wxPoint& pos,
+			const wxSize& size,
+			bool disappears_on_click)
 		:wxBitmapButton(toolbar, id_to_use, flyout_list.GetMainItem()->m_bitmap, pos, size,
 #ifdef WIN32
 				wxBORDER_SIMPLE
@@ -1288,14 +1286,14 @@ public:
 
 	void OnIdle(wxIdleEvent& event);
 
-private:
-    DECLARE_EVENT_TABLE()
+	private:
+	DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE(CFlyOutButton, wxBitmapButton)
-    EVT_MOUSE_EVENTS(CFlyOutButton::OnMouse)
-    EVT_MENU_RANGE(ID_FIRST_POP_UP_MENU_TOOL, ID_FIRST_POP_UP_MENU_TOOL + 1000, CFlyOutButton::OnMenuEvent)
-    EVT_IDLE(CFlyOutButton::OnIdle)
+	EVT_MOUSE_EVENTS(CFlyOutButton::OnMouse)
+	EVT_MENU_RANGE(ID_FIRST_POP_UP_MENU_TOOL, ID_FIRST_POP_UP_MENU_TOOL + 1000, CFlyOutButton::OnMenuEvent)
+	EVT_IDLE(CFlyOutButton::OnIdle)
 END_EVENT_TABLE()
 
 
@@ -1303,21 +1301,21 @@ class BitmapButton2:public wxBitmapButton
 {
 	CFlyOutButton *m_fly_out_button;
 
-public:
+	public:
 	BitmapButton2( CFlyOutButton *fly_out_button, wxWindow* parent, wxWindowID id, const wxBitmap& bitmap, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize):wxBitmapButton(parent, id, bitmap, pos, size), m_fly_out_button(fly_out_button){}
-    void OnMouse( wxMouseEvent& event )
+	void OnMouse( wxMouseEvent& event )
 	{
 		if(event.LeftUp())
 		{
 			m_fly_out_button->OnMenuEvent2(this->GetId());
 		}
 	}
-private:
-    DECLARE_EVENT_TABLE()
+	private:
+	DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE(BitmapButton2, wxBitmapButton)
-    EVT_MOUSE_EVENTS(BitmapButton2::OnMouse)
+	EVT_MOUSE_EVENTS(BitmapButton2::OnMouse)
 END_EVENT_TABLE()
 
 
@@ -1325,17 +1323,17 @@ END_EVENT_TABLE()
 
 class ToolBarPopup: public wxPopupTransientWindow
 {
-public:
-	wxWindow *m_toolBar;
-    wxScrolledWindow *m_panel;
+	public:
+		wxWindow *m_toolBar;
+		wxScrolledWindow *m_panel;
 
-public:
-	ToolBarPopup( CFlyOutButton *flyout_button):wxPopupTransientWindow( flyout_button )
+	public:
+		ToolBarPopup( CFlyOutButton *flyout_button):wxPopupTransientWindow( flyout_button )
 	{
 		m_panel = new wxScrolledWindow( this, wxID_ANY );
 		m_panel->SetBackgroundColour( *wxLIGHT_GREY );
 
- 		m_toolBar = new wxWindow(m_panel, -1, wxDefaultPosition, wxDefaultSize);
+		m_toolBar = new wxWindow(m_panel, -1, wxDefaultPosition, wxDefaultSize);
 
 		const CFlyOutItem* main_fo = flyout_button->m_flyout_list.GetMainItem();
 		std::list<CFlyOutItem*> items_to_add;
@@ -1387,9 +1385,9 @@ public:
 		topSizer->Fit(this);
 	}
 
-private:
-    wxButton *m_button;
-    wxStaticText *m_mouseText;
+	private:
+		wxButton *m_button;
+		wxStaticText *m_mouseText;
 };
 
 CFlyOutButton::~CFlyOutButton()
@@ -1397,68 +1395,68 @@ CFlyOutButton::~CFlyOutButton()
 	delete m_toolbarPopup;
 }
 
-    void CFlyOutButton::OnMouse( wxMouseEvent& event )
+void CFlyOutButton::OnMouse( wxMouseEvent& event )
+{
+	if(event.Entering())
 	{
-		if(event.Entering())
-		{
-			// delete previous popup
+		// delete previous popup
 #ifdef WIN32
-			if(m_toolbarPopup)m_toolbarPopup->Close();
+		if(m_toolbarPopup)m_toolbarPopup->Close();
 #else
-			if (m_toolbarPopup) delete m_toolbarPopup;
+		if (m_toolbarPopup) delete m_toolbarPopup;
 #endif
 
-			// make a new popup toolbar
-			m_toolbarPopup = new ToolBarPopup( this );
-			wxWindow *btn = (wxWindow*) event.GetEventObject();
-			wxPoint pos = btn->ClientToScreen( wxPoint(0,0) );
-			wxSize sz = btn->GetSize();
+		// make a new popup toolbar
+		m_toolbarPopup = new ToolBarPopup( this );
+		wxWindow *btn = (wxWindow*) event.GetEventObject();
+		wxPoint pos = btn->ClientToScreen( wxPoint(0,0) );
+		wxSize sz = btn->GetSize();
 #ifdef WIN32
-			m_toolbarPopup->Move(pos.x - FLYOUT_PANEL_BORDER, pos.y - 3 - FLYOUT_PANEL_BORDER);
+		m_toolbarPopup->Move(pos.x - FLYOUT_PANEL_BORDER, pos.y - 3 - FLYOUT_PANEL_BORDER);
 #else
-			m_toolbarPopup->Move(pos.x - FLYOUT_PANEL_BORDER, pos.y - FLYOUT_PANEL_BORDER);
+		m_toolbarPopup->Move(pos.x - FLYOUT_PANEL_BORDER, pos.y - FLYOUT_PANEL_BORDER);
 #endif
-			m_toolbarPopup->Popup();
-		}
+		m_toolbarPopup->Popup();
 	}
+}
 
-	void CFlyOutButton::OnMenuEvent2(int id)
+void CFlyOutButton::OnMenuEvent2(int id)
+{
+	int i = 0;
+	for(std::list<CFlyOutItem*>::const_iterator It = m_flyout_list.m_list.begin(); It != m_flyout_list.m_list.end(); It++, i++)
 	{
-		int i = 0;
-		for(std::list<CFlyOutItem*>::const_iterator It = m_flyout_list.m_list.begin(); It != m_flyout_list.m_list.end(); It++, i++)
+		if( i+ID_FIRST_POP_UP_MENU_TOOL == id)
 		{
-			if( i+ID_FIRST_POP_UP_MENU_TOOL == id)
-			{
-				// hide the popup
-				if(m_disappears_on_click)
-				{
-					delete m_toolbarPopup;
-					m_toolbarPopup = NULL;
-				}
-
-				// call the OnButtonFunction
-				const CFlyOutItem &fo = *(*It);
-
-				// call the OnButtonFunction
-				wxCommandEvent event;
-				(*fo.m_onButtonFunction)(event);
-
-				break;
-			}
-		}
-	}
-
-		void CFlyOutButton::OnIdle(wxIdleEvent& event)	{
-		if(m_toolbarPopup)
-		{
-			const wxPoint & pt = ::wxGetMousePosition();
-			if(!m_toolbarPopup->GetScreenRect().Contains(pt))
+			// hide the popup
+			if(m_disappears_on_click)
 			{
 				delete m_toolbarPopup;
 				m_toolbarPopup = NULL;
 			}
+
+			// call the OnButtonFunction
+			const CFlyOutItem &fo = *(*It);
+
+			// call the OnButtonFunction
+			wxCommandEvent event;
+			(*fo.m_onButtonFunction)(event);
+
+			break;
 		}
 	}
+}
+
+void CFlyOutButton::OnIdle(wxIdleEvent& event)	{
+	if(m_toolbarPopup)
+	{
+		const wxPoint & pt = ::wxGetMousePosition();
+		if(!m_toolbarPopup->GetScreenRect().Contains(pt))
+		{
+			delete m_toolbarPopup;
+			m_toolbarPopup = NULL;
+		}
+	}
+}
 
 
 static void OnEndofButton( wxCommandEvent& event )
@@ -1530,16 +1528,16 @@ void CHeeksFrame::AddToolBarFlyout(wxToolBar* toolbar, const CFlyOutList& flyout
 // a class just so I can get at the protected m_tools of wxToolBar
 class ToolBarForGettingToolsFrom: public wxToolBar
 {
-public:
-	void GetToolsIdList(std::list<int> &list)
-	{
-		wxToolBarToolsList::compatibility_iterator node;
-		for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+	public:
+		void GetToolsIdList(std::list<int> &list)
 		{
-			wxToolBarToolBase *tool = node->GetData();
-			list.push_back(tool->GetId());
+			wxToolBarToolsList::compatibility_iterator node;
+			for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+			{
+				wxToolBarToolBase *tool = node->GetData();
+				list.push_back(tool->GetId());
+			}
 		}
-	}
 };
 
 void CHeeksFrame::ClearToolBar(wxToolBar* m_toolBar)
@@ -1561,9 +1559,9 @@ void CHeeksFrame::ClearToolBar(wxToolBar* m_toolBar)
 //static
 void CHeeksFrame::AddToolToListAndMenu(Tool *t, std::vector<ToolIndex> &tool_index_list, wxMenu *menu)
 {
-    assert(t); // NULLs are no longer allowed
+	assert(t); // NULLs are no longer allowed
 
-    if (t->IsSeparator()) menu->AppendSeparator();
+	if (t->IsSeparator()) menu->AppendSeparator();
 	else if (t->IsAToolList())
 	{
 		wxMenu *menu2 = new wxMenu;
@@ -1598,21 +1596,21 @@ void CHeeksFrame::Draw(wxDC& dc)
 
 void OnPrint(wxCommandEvent& WXUNUSED(event))
 {
-    wxPrintDialogData printDialogData(* wxGetApp().m_printData);
+	wxPrintDialogData printDialogData(* wxGetApp().m_printData);
 
-    wxPrinter printer(& printDialogData);
+	wxPrinter printer(& printDialogData);
 	wxGetApp().m_frame->m_printout = new HeeksPrintout(_T("Heeks printout"));
-    if (!printer.Print(wxGetApp().m_frame, wxGetApp().m_frame->m_printout, true /*prompt*/))
-    {
-        if (wxPrinter::GetLastError() == wxPRINTER_ERROR)
-            wxMessageBox(_("There was a problem printing.\nPerhaps your current printer is not set correctly?"), _("Printing"), wxOK);
-        else
-            wxMessageBox(_("You canceled printing"), _("Printing"), wxOK);
-    }
-    else
-    {
-        (*wxGetApp().m_printData) = printer.GetPrintDialogData().GetPrintData();
-    }
+	if (!printer.Print(wxGetApp().m_frame, wxGetApp().m_frame->m_printout, true /*prompt*/))
+	{
+		if (wxPrinter::GetLastError() == wxPRINTER_ERROR)
+			wxMessageBox(_("There was a problem printing.\nPerhaps your current printer is not set correctly?"), _("Printing"), wxOK);
+		else
+			wxMessageBox(_("You canceled printing"), _("Printing"), wxOK);
+	}
+	else
+	{
+		(*wxGetApp().m_printData) = printer.GetPrintDialogData().GetPrintData();
+	}
 
 	delete wxGetApp().m_frame->m_printout;
 	wxGetApp().m_frame->m_printout = NULL;
@@ -1620,31 +1618,31 @@ void OnPrint(wxCommandEvent& WXUNUSED(event))
 
 void OnPrintPreview(wxCommandEvent& WXUNUSED(event))
 {
-    // Pass two printout objects: for preview, and possible printing.
-    wxPrintDialogData printDialogData(* wxGetApp().m_printData);
-    wxPrintPreview *preview = new wxPrintPreview(new HeeksPrintout, new HeeksPrintout, & printDialogData);
-    if (!preview->Ok())
-    {
-        delete preview;
-        wxMessageBox(_("There was a problem previewing.\nPerhaps your current printer is not set correctly?"), _("Previewing"), wxOK);
-        return;
-    }
+	// Pass two printout objects: for preview, and possible printing.
+	wxPrintDialogData printDialogData(* wxGetApp().m_printData);
+	wxPrintPreview *preview = new wxPrintPreview(new HeeksPrintout, new HeeksPrintout, & printDialogData);
+	if (!preview->Ok())
+	{
+		delete preview;
+		wxMessageBox(_("There was a problem previewing.\nPerhaps your current printer is not set correctly?"), _("Previewing"), wxOK);
+		return;
+	}
 
-    wxPreviewFrame *frame = new wxPreviewFrame(preview, wxGetApp().m_frame, _("Demo Print Preview"), wxPoint(100, 100), wxSize(600, 650));
-    frame->Centre(wxBOTH);
-    frame->Initialize();
-    frame->Show();
+	wxPreviewFrame *frame = new wxPreviewFrame(preview, wxGetApp().m_frame, _("Demo Print Preview"), wxPoint(100, 100), wxSize(600, 650));
+	frame->Centre(wxBOTH);
+	frame->Initialize();
+	frame->Show();
 }
 
 void OnPageSetup(wxCommandEvent& WXUNUSED(event))
 {
-    (*wxGetApp().m_pageSetupData) = *(wxGetApp().m_printData);
+	(*wxGetApp().m_pageSetupData) = *(wxGetApp().m_printData);
 
 	wxPageSetupDialog pageSetupDialog(wxGetApp().m_frame, wxGetApp().m_pageSetupData);
-    pageSetupDialog.ShowModal();
+	pageSetupDialog.ShowModal();
 
-    (*wxGetApp().m_printData) = pageSetupDialog.GetPageSetupDialogData().GetPrintData();
-    (*wxGetApp().m_pageSetupData) = pageSetupDialog.GetPageSetupDialogData();
+	(*wxGetApp().m_printData) = pageSetupDialog.GetPageSetupDialogData().GetPrintData();
+	(*wxGetApp().m_pageSetupData) = pageSetupDialog.GetPageSetupDialogData();
 }
 
 void CHeeksFrame::OnChangeBitmapSize()
@@ -1719,7 +1717,7 @@ void CHeeksFrame::MakeMenus()
 	AddMenuItem(file_menu, _("Import..."), ToolImage(_T("import")), OnImportButton);
 	file_menu->AppendSeparator();
 	AddMenuItem(file_menu, _("Print...\tCtrl+P"), ToolImage(_T("print")), OnPrint);
- 	AddMenuItem(file_menu, _("Page Setup..."), ToolImage(_T("psetup")), OnPageSetup);
+	AddMenuItem(file_menu, _("Page Setup..."), ToolImage(_T("psetup")), OnPageSetup);
 	AddMenuItem(file_menu, _("Print Preview"), ToolImage(_T("ppreview")), OnPrintPreview);
 	file_menu->AppendSeparator();
 	AddMenuItem(file_menu, _("Plugins"), ToolImage(_T("plugin")), OnPlugins);
@@ -1757,11 +1755,11 @@ void CHeeksFrame::MakeMenus()
 
 	wxMenu *coordinate_menu = new wxMenu;
 	//AddMenuItem(coordinate_menu, _("Add Coordinate System"), ToolImage(_T("coordsys")), coordinate_menu);
-	
+
 	AddMenuItem(coordinate_menu, _("Pick 3 points"), ToolImage(_T("coordsys")), OnCoordinateSystem);
 	//coordinate_menu->AppendSeparator();
 	AddMenuItem(coordinate_menu, _("Pick 1 point"), ToolImage(_T("coordsys")), OnNewOrigin);
-	
+
 	// View Menu
 	wxMenu *view_menu = new wxMenu;
 	AddMenuItem(view_menu, _("Previous view"), ToolImage(_T("magprev")), OnMagPreviousButton);
