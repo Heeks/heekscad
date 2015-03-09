@@ -1884,6 +1884,7 @@ void CDxfRead::get_line()
 	}
 	str[j] = 0;
 	strcpy(m_str, str);
+	// wprintf(wxT("DXF: get_line() -> %s\n"), m_str);
 
 #ifdef STORE_LINE_NUMBERS
 	m_line_number++;
@@ -1958,9 +1959,6 @@ bool CDxfRead::ReadUnits()
 		std::istringstream ss;
 		ss.imbue(std::locale("C"));
 		switch(n){
-			case 9:	// next item found, so finish
-				return true;
-
 			case 70:
 				// x
 				get_line();
@@ -1968,10 +1966,10 @@ bool CDxfRead::ReadUnits()
 				{
 					m_eUnits = eDxfUnits_t( n );
 				}
+				return true;
 				break;
 			default:
-				// skip the next line
-				get_line();
+				return false;
 				break;
 		}
 	}
@@ -2038,37 +2036,41 @@ bool CDxfRead::ReadLayer()
 
 bool CDxfRead::ReadSection()
 {
-	get_line();
-	get_line();
-	strcpy(m_section_name, m_str);
-	get_line();
+	// wprintf(wxT("CDxfRead::ReadSection()\n"));
 
+	get_line();
 	while(!((*m_ifs).eof()))
 	{
 		int n;
 
 		if(sscanf(m_str, "%d", &n) != 1)
 		{
-			printf("CDxfRead::ReadSection() Failed to read integer from '%s'\n", m_str );
+			wprintf(wxT("CDxfRead::ReadSection() Failed to read integer from '%s'\n"),m_str );
 			return false;
 		}
 
 		switch(n){
 			case 0:	// next item found, so finish with section
 				return true;
+			case 2: // Name (attribute tag, block name, and so on)
+				get_line();
+				strcpy(m_section_name, m_str);
+				// wprintf(wxT("DXF: section name found => %s\n"), m_section_name);
+				break;
 
-			case 9:	// header variable
+			case 9:	// DXF: variable name identifier (used only in HEADER section of the DXF file)
 				get_line();
 				if (!strcmp( m_str, "$INSUNITS" )){
 					if (!ReadUnits())	
 					{
-						printf("CDxfRead::DoRead() Failed to read block\n");
+						wprintf(wxT("CDxfRead::ReadSection() Failed to read units\n"));
 						return false;
 					}
-					continue;
+					break;
 				} // End if - then
 				if (!strcmp( m_str, "$MEASUREMENT" )){
 					get_line();
+					// wprintf(wxT("DXF: previous line skipped\n"));
 					get_line();
 					int n = 1;
 					if(sscanf(m_str, "%d", &n) == 1)
@@ -2082,22 +2084,29 @@ bool CDxfRead::ReadSection()
 					if(!ReadUCS())return false;
 					continue;
 				} // End if - then
+
+				// We reach this part of code when unknown or unsed HEADER variable have been found
+				// So we skip these HEADER variable parameters too
+				get_line();
+				get_line();
+				// wprintf(wxT("DXF: previous HEADER variable skipped\n"));
+
 				break;
 
 			default:
 				// skip the next line
 				get_line();
+				// wprintf(wxT("DXF: unknown group code, previous line skipped\n"));
 				break;
 		}
-
 		get_line();
 	}
-
 	return false;
 }
 
 bool CDxfRead::ReadBlock()
 {
+	// wprintf(wxT("CDxfRead::ReadBlock()\n"));
 	std::string blockname;
 	double e[3] = {0, 0, 0};
 
@@ -2163,7 +2172,6 @@ bool CDxfRead::ReadBlock()
 	}
 	return false;
 }
-
 
 bool CDxfRead::ReadInsert()
 {
@@ -2287,7 +2295,7 @@ enum DxfVariable
 void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 {
 	m_ignore_errors = ignore_errors;
-	if(m_fail)return;
+	if(m_fail) return;
 
 	get_line();
 
@@ -2299,7 +2307,7 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			if (!strcmp( m_str, "SECTION" )){
 				if(!ReadSection())
 				{
-					printf("CDxfRead::DoRead() Failed to read block\n");
+					wprintf(wxT("CDxfRead::DoRead() Failed to read section\n"));
 					return;
 				}
 				continue;
@@ -2307,7 +2315,7 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			if (!strcmp( m_str, "BLOCK" )){
 				if(!ReadBlock())
 				{
-					printf("CDxfRead::DoRead() Failed to read block\n");
+					wprintf(wxT("CDxfRead::DoRead() Failed to read block\n"));
 					return;
 				}
 				continue;
@@ -2316,7 +2324,7 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			if (!strcmp( m_str, "ENDBLK" )){
 				if(!ReadEndBlock())
 				{
-					printf("CDxfRead::DoRead() Failed to read end block\n");
+					wprintf(wxT("CDxfRead::DoRead() Failed to read end block\n"));
 					return;
 				}
 				continue;
@@ -2325,7 +2333,7 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			if (!strcmp( m_str, "INSERT" )){
 				if(!ReadInsert())
 				{
-					printf("CDxfRead::DoRead() Failed to read insert\n");
+					wprintf(wxT("CDxfRead::DoRead() Failed to read insert\n"));
 					return;
 				}
 				continue;
@@ -2339,7 +2347,7 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			else if (!strcmp( m_str, "LAYER" )){
 				if(!ReadLayer())
 				{
-					printf("CDxfRead::DoRead() Failed to read layer\n");
+					wprintf(wxT("CDxfRead::DoRead() Failed to read layer\n"));
 					return;
 				}
 				continue;		}
@@ -2350,7 +2358,7 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			else if(!strcmp(m_str, "LINE")){
 				if(!ReadLine())
 				{
-					printf("CDxfRead::DoRead() Failed to read line\n");
+					wprintf(wxT("CDxfRead::DoRead() Failed to read line\n"));
 					return;
 				}
 				continue;
@@ -2358,7 +2366,7 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			else if(!strcmp(m_str, "ARC")){
 				if(!ReadArc())
 				{
-					printf("CDxfRead::DoRead() Failed to read arc\n");
+					wprintf(wxT("CDxfRead::DoRead() Failed to read arc\n"));
 					return;
 				}
 				continue;
@@ -2366,7 +2374,7 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			else if(!strcmp(m_str, "CIRCLE")){
 				if(!ReadCircle())
 				{
-					printf("CDxfRead::DoRead() Failed to read circle\n");
+					wprintf(wxT("CDxfRead::DoRead() Failed to read circle\n"));
 					return;
 				}
 				continue;
@@ -2374,7 +2382,7 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			else if(!strcmp(m_str, "TEXT")){
 				if(!ReadText())
 				{
-					printf("CDxfRead::DoRead() Failed to read text\n");
+					wprintf(wxT("CDxfRead::DoRead() Failed to read text\n"));
 					return;
 				}
 				continue;
@@ -2382,7 +2390,7 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			else if(!strcmp(m_str, "MTEXT")){
 				if(!ReadMText())
 				{
-					printf("CDxfRead::DoRead() Failed to read mtext\n");
+					wprintf(wxT("CDxfRead::DoRead() Failed to read mtext\n"));
 					return;
 				}
 				continue;
@@ -2390,7 +2398,7 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			else if(!strcmp(m_str, "ELLIPSE")){
 				if(!ReadEllipse())
 				{
-					printf("CDxfRead::DoRead() Failed to read ellipse\n");
+					wprintf(wxT("CDxfRead::DoRead() Failed to read ellipse\n"));
 					return;
 				}
 				continue;
@@ -2398,7 +2406,7 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			else if(!strcmp(m_str, "SPLINE")){
 				if(!ReadSpline())
 				{
-					printf("CDxfRead::DoRead() Failed to read spline\n");
+					wprintf(wxT("CDxfRead::DoRead() Failed to read spline\n"));
 					return;
 				}
 				continue;
@@ -2406,7 +2414,7 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			else if (!strcmp(m_str, "LWPOLYLINE")) {
 				if(!ReadLwPolyLine())
 				{
-					printf("CDxfRead::DoRead() Failed to read LW Polyline\n");
+					wprintf(wxT("CDxfRead::DoRead() Failed to read LW Polyline\n"));
 					return;
 				}
 				continue;
@@ -2414,7 +2422,7 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			else if (!strcmp(m_str, "POLYLINE")) {
 				if(!ReadPolyLine())
 				{
-					printf("CDxfRead::DoRead() Failed to read Polyline\n");
+					wprintf(wxT("CDxfRead::DoRead() Failed to read Polyline\n"));
 					return;
 				}
 				continue;
@@ -2422,7 +2430,7 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			else if (!strcmp(m_str, "POINT")) {
 				if(!ReadPoint())
 				{
-					printf("CDxfRead::DoRead() Failed to read Point\n");
+					wprintf(wxT("CDxfRead::DoRead() Failed to read Point\n"));
 					return;
 				}
 				continue;
@@ -2430,7 +2438,7 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			else if (!strcmp(m_str, "LEADER")) {
 				if(!ReadLeader())
 				{
-					printf("CDxfRead::DoRead() Failed to read Leader\n");
+					wprintf(wxT("CDxfRead::DoRead() Failed to read Leader\n"));
 					return;
 				}
 				continue;
@@ -2438,7 +2446,7 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			else if (!strcmp(m_str, "MLINE")) {
 				if(!ReadMLine())
 				{
-					printf("CDxfRead::DoRead() Failed to read MLine\n");
+					wprintf(wxT("CDxfRead::DoRead() Failed to read MLine\n"));
 					return;
 				}
 				continue;
@@ -2446,7 +2454,7 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			else if (!strcmp(m_str, "XLINE")) {
 				if(!ReadXLine())
 				{
-					printf("CDxfRead::DoRead() Failed to read XLine\n");
+					wprintf(wxT("CDxfRead::DoRead() Failed to read XLine\n"));
 					return;
 				}
 				continue;
@@ -2454,7 +2462,7 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 			else if (!strcmp(m_str, "DIMENSION")) {
 				if(!ReadDimension())
 				{
-					printf("CDxfRead::DoRead() Failed to read Dimension\n");
+					wprintf(wxT("CDxfRead::DoRead() Failed to read Dimension\n"));
 					return;
 				}
 				continue;
