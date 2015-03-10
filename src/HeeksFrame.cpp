@@ -441,20 +441,6 @@ void OnUpdateViewViewingBar( wxUpdateUIEvent& event )
 	event.Check(wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_viewingBar).IsShown());
 }
 
-void OnViewTransformBar( wxCommandEvent& event )
-{
-	wxAuiPaneInfo& pane_info = wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_transformBar);
-	if(pane_info.IsOk()){
-		pane_info.Show(event.IsChecked());
-		wxGetApp().m_frame->m_aui_manager->Update();
-	}
-}
-
-void OnUpdateViewTransformBar( wxUpdateUIEvent& event )
-{
-	event.Check(wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_transformBar).IsShown());
-}
-
 void CHeeksFrame::OnResetLayout( wxCommandEvent& event )
 {
 	ToolImage::SetBitmapSize(ToolImage::default_bitmap_size);
@@ -1826,7 +1812,6 @@ void CHeeksFrame::MakeMenus()
 	m_solids_toolbar_menu_id = AddMenuItem(m_menuWindow, _("Solids Tool Bar"), wxBitmap(), OnViewSolidBar, OnUpdateViewSolidBar, NULL, true);
 	m_geometry_toolbar_menu_id = AddMenuItem(m_menuWindow, _("Geometry Tool Bar"), wxBitmap(), OnViewGeometryBar, OnUpdateViewGeometryBar, NULL, true);
 	m_viewing_toolbar_menu_id = AddMenuItem(m_menuWindow, _("Viewing Tool Bar"), wxBitmap(), OnViewViewingBar, OnUpdateViewViewingBar, NULL, true);
-	m_transform_toolbar_menu_id = AddMenuItem(m_menuWindow, _("Transformations Tool Bar"), wxBitmap(), OnViewTransformBar, OnUpdateViewTransformBar, NULL, true);
 
 	// Help Menu
 	m_menuHelp = new wxMenu;

@@ -1499,17 +1499,6 @@ void CHeeksCADInterface::RemoveViewingToolbar()
 	wxGetApp().m_frame->m_viewingBar = NULL;
 }
 
-void CHeeksCADInterface::RemoveTransformToolbar()
-{
-	wxGetApp().RemoveHideableWindow(wxGetApp().m_frame->m_transformBar);
-	wxGetApp().m_frame->m_aui_manager->GetPane(wxGetApp().m_frame->m_transformBar).Show(false);
-	wxGetApp().m_frame->m_aui_manager->DetachPane(wxGetApp().m_frame->m_transformBar);
-	wxGetApp().m_frame->m_transform_toolbar_removed = true;
-	wxGetApp().m_frame->m_menuWindow->Remove(wxGetApp().m_frame->m_transform_toolbar_menu_id);
-	//delete wxGetApp().m_frame->m_transformBar;
-	wxGetApp().m_frame->m_transformBar = NULL;
-}
-
 void CHeeksCADInterface::RemoveOptionsWindow()
 {
 	wxGetApp().RemoveHideableWindow(wxGetApp().m_frame->m_options);
