@@ -300,7 +300,6 @@ public:
 	virtual void RemoveGeometryToolbar();
 	virtual void RemoveSolidToolbar();
 	virtual void RemoveViewingToolbar();
-	virtual void RemoveTransformToolbar();
 	virtual void RemoveOptionsWindow();
 	virtual void RemovePropertiesWindow();
 	virtual void RemoveLogWindow();

@@ -117,7 +117,6 @@ public:
 	int m_solids_toolbar_menu_id;
 	int m_geometry_toolbar_menu_id;
 	int m_viewing_toolbar_menu_id;
-	int m_transform_toolbar_menu_id;
 
 	CHeeksFrame( const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize );
 	virtual ~CHeeksFrame();
