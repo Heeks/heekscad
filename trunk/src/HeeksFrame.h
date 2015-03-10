@@ -200,8 +200,6 @@ void OnViewSolidBar(wxCommandEvent& event);
 void OnUpdateViewSolidBar(wxUpdateUIEvent& event);
 void OnViewViewingBar(wxCommandEvent& event);
 void OnUpdateViewViewingBar(wxUpdateUIEvent& event);
-void OnViewTransformBar(wxCommandEvent& event);
-void OnUpdateViewTransformBar(wxUpdateUIEvent& event);
 void OnViewProperties(wxCommandEvent& event);
 void OnSelectModeButton(wxCommandEvent& event);
 void OnLinesButton(wxCommandEvent& event);
