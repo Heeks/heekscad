@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <wx/string.h>
 
 //Following is required to be defined on Ubuntu with OCC 6.3.1
 #ifndef HAVE_IOSTREAM
@@ -171,8 +172,8 @@ public:
 	bool IgnoreErrors() const { return(m_ignore_errors); }
 
 	virtual void OnReadUCS(const double* /*ucs point*/){}
-	virtual void OnReadBlock(const char* /*block_name*/, const double* /*base_point*/){}
-	virtual void OnReadInsert(const char* /*block_name*/, const double* /*insert_point*/, double /*rotation_angle*/){}
+	virtual void OnReadBlock(const wxString& /*block_name*/, const double* /*base_point*/){}
+	virtual void OnReadInsert(const wxString& /*block_name*/, const double* /*insert_point*/, double /*rotation_angle*/){}
 	virtual void OnReadEndBlock(){}
 	virtual void OnReadLine(const double* /*s*/, const double* /*e*/, bool /*hidden*/){}
 	virtual void OnReadPoint(const double* /*s*/){}
@@ -184,6 +185,7 @@ public:
 	virtual void OnReadDimension(int /*dimension_type*/, double /*angle*/, double /*angle2*/, double /*angle3*/, double /*radius_leader_length*/, const double * /*def_point*/, const double * /*mid*/, const double * /*p1*/, const double * /*p2*/, const double * /*p3*/, const double * /*p4*/, const double * /*p5*/){}
 	virtual void AddGraphics() { }
 
-    std::string LayerName() const;
+    wxString LayerName() const;
+	wxString ParseUnicode(const wxString&) const;
 
 };

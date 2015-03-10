@@ -3,7 +3,9 @@
 // This program is released under the BSD license. See the file COPYING for details.
 
 #include "dxf.h"
-#include <wx/string.h>
+
+#include <wx/regex.h>
+
 using namespace std;
 static const double Pi = 3.14159265358979323846264338327950288419716939937511;
 
@@ -177,7 +179,7 @@ CDxfRead::CDxfRead(const char* filepath)
 	m_ifs = new ifstream(filepath);
 	if(!(*m_ifs)){
 		m_fail = true;
-		wprintf(_T("DXF file didn't load\n"));
+		wprintf(wxT("DXF file didn't load\n"));
 		return;
 	}
 	m_ifs->imbue(std::locale("C"));
@@ -878,7 +880,7 @@ bool CDxfRead::ReadMText()
 		int n;
 		if(sscanf(m_str, "%d", &n) != 1)
 		{
-			printf("CDxfRead::ReadText() Failed to read integer from '%s'\n", m_str);
+			printf("CDxfRead::ReadMText() Failed to read integer from '%s'\n", m_str);
 			return false;
 		}
 		std::istringstream ss;
@@ -1864,9 +1866,9 @@ void CDxfRead::get_line()
 		memset( m_unused_line, '\0', sizeof(m_unused_line));
 		return;
 	}
-
 	m_ifs->getline(m_str, 1024);
 
+	// Clean whitespaces
 	char str[1024];
 	int len = strlen(m_str);
 	int j = 0;
@@ -2107,7 +2109,7 @@ bool CDxfRead::ReadSection()
 bool CDxfRead::ReadBlock()
 {
 	// wprintf(wxT("CDxfRead::ReadBlock()\n"));
-	std::string blockname;
+	wxString block_name;
 	double e[3] = {0, 0, 0};
 
 	while(!((*m_ifs).eof()))
@@ -2125,18 +2127,18 @@ bool CDxfRead::ReadBlock()
 		ss.imbue(std::locale("C"));
 		switch(n){
 			case 0:	// next item found, so finish with line
-				if (blockname.empty())
+				if (block_name.empty())
 				{
 					printf("CDxfRead::ReadBlock() - no block name\n");
 					return false;
 				}
-				OnReadBlock(blockname.c_str(), e);
+				OnReadBlock(block_name, e);
 				return true;
 
 			case 2: // Block name follows
 			case 3: // Block name follows
 				get_line();
-				blockname = m_str;
+				block_name = ParseUnicode(wxString::FromAscii(m_str));
 				break;
 
 			case 10:
@@ -2175,7 +2177,7 @@ bool CDxfRead::ReadBlock()
 
 bool CDxfRead::ReadInsert()
 {
-	std::string blockname;
+	wxString block_name;
 	double e[3] = {0, 0, 0};
 	double rotation_angle = 0.0;
 
@@ -2196,17 +2198,17 @@ bool CDxfRead::ReadInsert()
 		ss.imbue(std::locale("C"));
 		switch(n){
 			case 0:	// next item found, so finish with line
-				if (blockname.empty())
+				if (block_name.empty())
 				{
 					printf("CDxfRead::ReadInsert() - no block name\n");
 					return false;
 				}
-				OnReadInsert(blockname.c_str(), e, rotation_angle);
+				OnReadInsert(block_name, e, rotation_angle);
 				return true;
 
 			case 2: // Block name follows
 				get_line();
-				blockname = m_str;
+				block_name = ParseUnicode(wxString::FromAscii(m_str));
 				break;
 
 			case 10:
@@ -2247,7 +2249,7 @@ bool CDxfRead::ReadInsert()
 
 bool CDxfRead::ReadEndBlock()
 {
-	std::string blockname;
+	// wxString block_name;
 
 	while(!((*m_ifs).eof()))
 	{
@@ -2268,7 +2270,7 @@ bool CDxfRead::ReadEndBlock()
 			case 2: // Block name follows
 			case 3: // Block name follows
 				get_line();
-				blockname = m_str;
+				// block_name = ParseUnicode(wxString::FromAscii(m_str));
 				break;
 
 			case 5:	// handle
@@ -2484,19 +2486,36 @@ void  CDxfRead::DerefACI()
 	}
 }
 
-std::string CDxfRead::LayerName() const
+wxString CDxfRead::ParseUnicode(const wxString& str) const
 {
-	std::string result;
+	wxString ret = str;
+	wxRegEx reg;
+
+	if (reg.Compile(wxT("\\\\[Uu]\\+([0-9a-fA-F]{4})"))) {
+		while (reg.Matches(ret)) {
+			wxString unicode_as_hex = reg.GetMatch(ret, 1);
+			unsigned long val;
+			unicode_as_hex.ToULong(&val, 16);
+			wchar_t unicode = val;
+			reg.ReplaceFirst(&ret, wxString(unicode));
+		}
+	}
+	return ret;
+}
+
+wxString CDxfRead::LayerName() const
+{
+	wxString result;
 
 	if (strlen(m_section_name) > 0)
 	{
-		result.append(m_section_name);
+		result.append(wxString::FromAscii(m_section_name));
 	}
 
 	if (strlen(m_layer_name) > 0)
 	{
-		result.append(" ");
-		result.append(m_layer_name);
+		result.append(wxT(" "));
+		result.append(ParseUnicode(wxString::FromAscii(m_layer_name)));
 	}
 
 	return(result);
