@@ -63,9 +63,9 @@ public:
 
 	// CDxfRead's virtual functions
 	void OnReadUCS(const double* ucs_point);
-	void OnReadBlock(const char* block_name, const double* base_point);
+	void OnReadBlock(const wxString& block_name, const double* base_point);
 	void OnReadEndBlock();
-	void OnReadInsert(const char* block_name, const double* insert_point, double rotation_angle);
+	void OnReadInsert(const wxString& block_name, const double* insert_point, double rotation_angle);
 	void OnReadLine(const double* s, const double* e, bool hidden);
 	void OnReadPoint(const double* s);
 	void OnReadText(const double* point, const double height,  const char* text, int hj, int vj);

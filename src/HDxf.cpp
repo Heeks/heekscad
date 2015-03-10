@@ -50,29 +50,29 @@ void HeeksDxfRead::OnReadUCS(const double* ucs_point)
 	extract(tm, m_ucs_matrix);
 }
 
-void HeeksDxfRead::OnReadBlock(const char* block_name, const double* base_point)
+void HeeksDxfRead::OnReadBlock(const wxString& block_name, const double* base_point)
 {
-	if (m_blocks.find( wxString(Ctt(block_name)) ) == m_blocks.end())
+	if (m_blocks.find(block_name) == m_blocks.end())
 	{
 		m_current_block = new CSketch();
-		m_current_block->OnEditString(Ctt(block_name));
-		m_blocks.insert( std::make_pair( wxString(Ctt(block_name)), m_current_block ) );
+		m_current_block->OnEditString(block_name);
+		m_blocks.insert( std::make_pair( block_name, m_current_block ) );
 	}
 	else
 	{
-		m_current_block = m_blocks[wxString(Ctt(block_name))];
+		m_current_block = m_blocks[block_name];
 	}
 }
 
-void HeeksDxfRead::OnReadInsert(const char* block_name, const double* insert_point, double rotation_angle)
+void HeeksDxfRead::OnReadInsert(const wxString& block_name, const double* insert_point, double rotation_angle)
 {
-	if (m_blocks.find( wxString(Ctt(block_name)) ) == m_blocks.end())
+	if (m_blocks.find(block_name) == m_blocks.end())
 	{
 		return; // block not foundblock_name, const double* insert_point, double rotation_angle
 	}
 	else
 	{
-		BlockName_t b_name = wxString(Ctt(block_name));
+		BlockName_t b_name = block_name;
 #if 0
 		// insert an insert object. To be expanded at the end
 		HInsert* new_object = new HInsert(block_name, insert_point, rotation_angle);
@@ -401,7 +401,7 @@ bool HeeksDxfRead::IsValidLayerName( const wxString layer_name ) const
 
 void HeeksDxfRead::AddObject(HeeksObj *object)
 {
-	if (! IsValidLayerName(Ctt(LayerName().c_str())))
+	if (! IsValidLayerName(LayerName()))
 	{
 		// This is one of the forbidden layer names.  Discard the
 		// graphics object and move on.
@@ -420,16 +420,16 @@ void HeeksDxfRead::AddObject(HeeksObj *object)
 		// Check to see if we've already added a sketch for the current layer name.  If not
 		// then add one now.
 
-		if (m_sketches.find( wxString(Ctt(LayerName().c_str())) ) == m_sketches.end())
+		if (m_sketches.find(LayerName()) == m_sketches.end())
 		{
-			m_sketches.insert( std::make_pair( wxString(Ctt(LayerName().c_str())), new CSketch() ) );
+			m_sketches.insert( std::make_pair( LayerName(), new CSketch() ) );
 		}
 
 		if(m_current_block)m_current_block->Add(object, NULL);
 		else
 		{
 			object->ModifyByMatrix(m_ucs_matrix);
-			m_sketches[wxString(Ctt(LayerName().c_str()))]->Add( object, NULL );
+			m_sketches[LayerName()]->Add( object, NULL );
 		}
 	}
 	else
