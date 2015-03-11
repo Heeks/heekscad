@@ -59,3 +59,17 @@ Default:
 Debug:
   mkdir debug && cd debug && cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$PWD/install .. && make && make install
   LD_LIBRARY_PATH=install/lib install/bin/heekscad
+
+X. Translation
+--------------
+Merge new strings:
+ * Generate a .pot file
+ sh translations/generate-pot-file.sh updated-catalog.pot
+
+ Note: this script assumes you have heekscad and heekscnc in the same parent directory
+ 
+ * Integrate .pot file to .po file
+ msgmerge --update HeeksCAD.po updated-catalog.pot
+
+ * After translating them, you can test compilation using:
+ msgfmt -o HeeksCAD.mo HeeksCAD.po
