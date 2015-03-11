@@ -1729,15 +1729,18 @@ void CHeeksFrame::MakeMenus()
 	// Geometry Menu
 	wxMenu *geometry_menu = new wxMenu;
 	AddMenuItem(geometry_menu, _("Draw a sketch"), ToolImage(_T("lines")), OnLinesButton);
-	//AddMenuItem(geometry_menu, _("Draw Circles"), ToolImage(_T("circles")), OnCirclesButton);
+	AddMenuItem(geometry_menu, _("Draw Rectangles"), ToolImage(_T("rect")), OnRectanglesButton);
+	AddMenuItem(geometry_menu, _("Draw Obrounds"), ToolImage(_T("obround")), OnObroundsButton);
+	AddMenuItem(geometry_menu, _("Draw Polygons"), ToolImage(_T("pentagon")), OnPolygonsButton);
 	AddMenuItem(geometry_menu, _("Draw Ellipses"), ToolImage(_T("circles")), OnEllipseButton);
 	AddMenuItem(geometry_menu, _("Draw Infinite Lines"), ToolImage(_T("iline")), OnILineButton);
 	AddMenuItem(geometry_menu, _("Draw Points"), ToolImage(_T("point")), OnPointsButton);
-	AddMenuItem(geometry_menu, _("Gear"), ToolImage(_T("gear")), OnGearButton);
+	geometry_menu->AppendSeparator();
 	AddMenuItem(geometry_menu, _("Spline Through Points"), ToolImage(_T("splpts")), OnSplinePointsButton);
 	geometry_menu->AppendSeparator();
 	AddMenuItem(geometry_menu, _("Add Text"), ToolImage(_T("text")), OnTextButton);
 	AddMenuItem(geometry_menu, _("Add Dimension"), ToolImage(_T("dimension")), OnDimensioningButton);
+	AddMenuItem(geometry_menu, _("Add Gear"), ToolImage(_T("gear")), OnGearButton);
 
 	wxMenu *coordinate_menu = new wxMenu;
 	//AddMenuItem(coordinate_menu, _("Add Coordinate System"), ToolImage(_T("coordsys")), coordinate_menu);
@@ -1808,7 +1811,7 @@ void CHeeksFrame::MakeMenus()
 	m_input_menu_id = AddMenuItem(m_menuWindow, _("Input"), wxBitmap(), OnViewInput, OnUpdateViewInput, NULL, true);
 	m_properties_menu_id = AddMenuItem(m_menuWindow, _("Properties"), wxBitmap(), OnViewProperties, OnUpdateViewProperties, NULL, true);
 	m_menuWindow->AppendSeparator();
-	m_main_toolbar_menu_id = AddMenuItem(m_menuWindow, _("Tool Bar"), wxBitmap(), OnViewToolBar, OnUpdateViewToolBar, NULL, true);
+	m_main_toolbar_menu_id = AddMenuItem(m_menuWindow, _("Standard Tool Bar"), wxBitmap(), OnViewToolBar, OnUpdateViewToolBar, NULL, true);
 	m_solids_toolbar_menu_id = AddMenuItem(m_menuWindow, _("Solids Tool Bar"), wxBitmap(), OnViewSolidBar, OnUpdateViewSolidBar, NULL, true);
 	m_geometry_toolbar_menu_id = AddMenuItem(m_menuWindow, _("Geometry Tool Bar"), wxBitmap(), OnViewGeometryBar, OnUpdateViewGeometryBar, NULL, true);
 	m_viewing_toolbar_menu_id = AddMenuItem(m_menuWindow, _("Viewing Tool Bar"), wxBitmap(), OnViewViewingBar, OnUpdateViewViewingBar, NULL, true);
