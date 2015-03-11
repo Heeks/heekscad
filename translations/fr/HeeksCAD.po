@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HeeksCAD 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-11 23:08+0100\n"
-"PO-Revision-Date: 2015-03-03 01:43+0100\n"
+"POT-Creation-Date: 2015-03-11 20:50+0100\n"
+"PO-Revision-Date: 2015-03-11 23:07+0100\n"
 "Last-Translator: Romuald Conty <neomilium@gmail.com>\n"
 "Language-Team: French <>\n"
 "Language: french\n"
@@ -743,9 +743,8 @@ msgstr "Créer des Esquisses"
 
 # Ajout 689 HGear.cpp
 #: src/HGear.cpp:632
-#, fuzzy
 msgid "Make One Tooth Sketches"
-msgstr "Esquisser_d'Une_Dent"
+msgstr "Créer une esquisse à partir d'une dent"
 
 #: src/HILine.cpp:110 src/HLine.cpp:212
 msgid "Length"
@@ -918,15 +917,13 @@ msgstr "Produire un tracé d'esquisses centre-lignes"
 
 # Ajout 346 HeekscAD.cpp Traduction hypothétique
 #: src/HeeksCAD.cpp:1091
-#, fuzzy
 msgid "Produce mirrored trace isolation sketches"
-msgstr "Isoler le tracé d'esquisses"
+msgstr ""
 
 # Ajout 347 HeekscAD.cpp Traduction hypothétique
 #: src/HeeksCAD.cpp:1092
-#, fuzzy
 msgid "Produce mirrored trace centre-line sketches"
-msgstr "Tracé d'esquisses centre-lignes"
+msgstr ""
 
 #: src/HeeksCAD.cpp:1187 src/HeeksFrame.cpp:1856 src/HeeksRibbon.cpp:110
 msgid "Open file"
@@ -1126,37 +1123,31 @@ msgstr "couleur en bas-droite"
 
 # Ajout256 HeeksCAD.cpp
 #: src/HeeksCAD.cpp:3213
-#, fuzzy
 msgid "sky top color"
 msgstr "couleur de ciel en haut"
 
 # Ajout257 HeeksCAD.cpp
 #: src/HeeksCAD.cpp:3214
-#, fuzzy
 msgid "sky middle color"
 msgstr "couleur en milieu de ciel"
 
 # Ajout258 HeeksCAD.cpp
 #: src/HeeksCAD.cpp:3215
-#, fuzzy
 msgid "sky bottom color"
 msgstr "couleur de ciel en bas"
 
 # Ajout259 HeeksCAD.cpp
 #: src/HeeksCAD.cpp:3216
-#, fuzzy
 msgid "ground top color"
 msgstr "couleur de sol en haut"
 
 # Ajout260 HeeksCAD.cpp
 #: src/HeeksCAD.cpp:3217
-#, fuzzy
 msgid "ground middle color"
 msgstr "couleur en milieu de sol"
 
 # Ajout261 HeeksCAD.cpp
 #: src/HeeksCAD.cpp:3218
-#, fuzzy
 msgid "ground bottom color"
 msgstr "couleur de sol en bas"
 
@@ -1195,9 +1186,8 @@ msgstr "taille des icônes"
 
 # Ajout262 HeeksCAD.cpp
 #: src/HeeksCAD.cpp:3261
-#, fuzzy
 msgid "flat on screen dimension text"
-msgstr "Texte de dimension Gras"
+msgstr ""
 
 # Ajout 367 HeeksCAD.cpp
 #: src/HeeksCAD.cpp:3264
@@ -1220,9 +1210,8 @@ msgid "solid view mode"
 msgstr "visualisation solide"
 
 #: src/HeeksCAD.cpp:3269
-#, fuzzy
 msgid "input uses modal dialog"
-msgstr "Titre en mode Entrée"
+msgstr ""
 
 #: src/HeeksCAD.cpp:3270
 msgid "dragging moves objects"
@@ -1265,13 +1254,10 @@ msgstr ""
 "parfaite)) "
 
 #: src/HeeksCAD.cpp:3291
-#, fuzzy
 msgid ""
 "Maximum scale threshold (1.0 - must be same size, 1.5 (can be half as big "
 "again or 2/3 size)"
 msgstr ""
-"Échelle de seuil maxi (1.0 - doit être même taille), 1.5 (peut être de "
-"moitié ou 2/3 de la taille)"
 
 # HeeksCAD.cpp
 #: src/HeeksCAD.cpp:3292
@@ -1638,15 +1624,13 @@ msgid "Spline"
 msgstr "Spline"
 
 #: src/HeeksCAD.cpp:4713
-#, fuzzy
 msgid "CorrelationTool"
-msgstr "Corrélation"
+msgstr ""
 
 # Ajout245  ConversionTools.cpp
 #: src/HeeksCAD.cpp:4714
-#, fuzzy
 msgid "AngularDimension"
-msgstr "Ajouter Valeur Angulaire"
+msgstr ""
 
 # Ajout 423
 #: src/HeeksCAD.cpp:4715
@@ -1662,9 +1646,8 @@ msgid "Positions"
 msgstr "Positions"
 
 #: src/HeeksCAD.cpp:4718
-#, fuzzy
 msgid "ObjectMaximum"
-msgstr "Objets"
+msgstr ""
 
 #: src/HeeksFrame.cpp:140 src/HeeksFrame.cpp:2034
 msgid "Graphics"
@@ -1818,11 +1801,8 @@ msgstr ""
 
 # Ajout 318 HeeksFrame.cpp
 #: src/HeeksFrame.cpp:906
-#, fuzzy
 msgid "Pick one or more sketches, faces or circles, to sweep"
 msgstr ""
-"Choisir une ou plusieurs esquisses, faces ou cercles, pour créer un volume "
-"de révolution"
 
 #: src/HeeksFrame.cpp:1592
 msgid ""
@@ -1941,21 +1921,18 @@ msgstr "Dessiner une esquisse"
 
 # RegularShapesDrawing.cpp
 #: src/HeeksFrame.cpp:1732
-#, fuzzy
 msgid "Draw Rectangles"
-msgstr "Dessin de rectangles"
+msgstr "Dessiner des rectangles"
 
 # Ajout 342 HeeksFrame.cpp
 #: src/HeeksFrame.cpp:1733
-#, fuzzy
 msgid "Draw Obrounds"
 msgstr "Dessiner des oblongs"
 
 # RegularShapesDrawing.cpp
 #: src/HeeksFrame.cpp:1734
-#, fuzzy
 msgid "Draw Polygons"
-msgstr "Dessin de polygones"
+msgstr "Dessiner des polygones"
 
 # Ajout 375 HeeksFrame.cpp
 #: src/HeeksFrame.cpp:1735
@@ -1981,7 +1958,6 @@ msgstr "Ajouter une dimension"
 
 # Ajout 691 HeeksFrame.cpp
 #: src/HeeksFrame.cpp:1743
-#, fuzzy
 msgid "Add Gear"
 msgstr "Dessiner une roue dentée"
 
@@ -2073,7 +2049,7 @@ msgstr "Plein écran"
 # HeeksFrame.cpp
 #: src/HeeksFrame.cpp:1772 src/HeeksFrame.cpp:2013 src/HeeksRibbon.cpp:242
 msgid "Redraw"
-msgstr "Redessiner"
+msgstr "Actualiser l'affichage"
 
 # HeeksFrame.cpp
 #: src/HeeksFrame.cpp:1776 src/HeeksFrame.cpp:1945 src/HeeksRibbon.cpp:190
@@ -2165,9 +2141,8 @@ msgid "Move Scale"
 msgstr "Homothétie"
 
 #: src/HeeksFrame.cpp:1814
-#, fuzzy
 msgid "Standard Tool Bar"
-msgstr "Barre d'outils Solides"
+msgstr "Barre d'outils standard"
 
 #: src/HeeksFrame.cpp:1815
 msgid "Solids Tool Bar"
@@ -2300,7 +2275,7 @@ msgstr "Dessiner des droites"
 
 #: src/HeeksFrame.cpp:1900
 msgid "Start Drawing Points"
-msgstr "Dessiner des Points"
+msgstr "Dessiner des points"
 
 #: src/HeeksFrame.cpp:1907 src/HeeksRibbon.cpp:164
 msgid "Add a text object"
@@ -2388,9 +2363,8 @@ msgstr "Faire une révolution sur une maille ou une face"
 
 # Ajout 323 HeeksFrame.cpp
 #: src/HeeksFrame.cpp:1957 src/HeeksRibbon.cpp:201
-#, fuzzy
 msgid "Sweep a wire or face"
-msgstr "Révolution maille ou face"
+msgstr ""
 
 #: src/HeeksFrame.cpp:1963 src/HeeksRibbon.cpp:206
 msgid "Cut one solid from another"
@@ -2602,7 +2576,7 @@ msgstr "Droite"
 
 #: src/HeeksRibbon.cpp:157
 msgid "Drawing Infinite Lines"
-msgstr "Dessiner une droite"
+msgstr "Dessiner des droites"
 
 #: src/HeeksRibbon.cpp:158 ../heekscnc/src/DrillingDlg.cpp:37
 msgid "Points"
@@ -2610,7 +2584,7 @@ msgstr "Points"
 
 #: src/HeeksRibbon.cpp:158
 msgid "Drawing Points"
-msgstr "Dessiner des Points"
+msgstr "Dessiner des points"
 
 #: src/HeeksRibbon.cpp:165
 msgid "Dimensioning"
@@ -2771,7 +2745,7 @@ msgstr "désigner le point de fin de la ligne"
 
 #: src/LineArcDrawing.cpp:508
 msgid "Arc drawing mode"
-msgstr "Mode dessin d'arcs"
+msgstr "Mode dessin d'arc"
 
 #: src/LineArcDrawing.cpp:511
 msgid "click on end of arc"
@@ -2779,7 +2753,7 @@ msgstr "désigner la fin de l'arc"
 
 #: src/LineArcDrawing.cpp:515
 msgid "Infinite line drawing"
-msgstr "dessin de droite"
+msgstr "Mode dessin de droite"
 
 #: src/LineArcDrawing.cpp:517 src/LineArcDrawing.cpp:589
 #: src/LineArcDrawing.cpp:598
@@ -2823,7 +2797,7 @@ msgstr "Désigner un autre point de l'ellipse"
 # Ajout 184 LineArcDrawin.cpp
 #: src/LineArcDrawing.cpp:540
 msgid "Spline drawing mode"
-msgstr "mode dessin de spline"
+msgstr "Mode dessin de spline"
 
 # Ajout 185 LineArcDrawin.cpp
 #: src/LineArcDrawing.cpp:545
@@ -3131,9 +3105,8 @@ msgstr "Surface réglée"
 
 # Ajout 664  Sectioning.cpp
 #: src/RuledSurface.cpp:113
-#, fuzzy
 msgid "Revolved Solid"
-msgstr "Solide Sectionné"
+msgstr ""
 
 # RuledSurface.cpp
 #: src/RuledSurface.cpp:113
@@ -3156,18 +3129,16 @@ msgid "pick sketches, faces or circles"
 msgstr "choisir esquisses, faces ou cercles"
 
 #: src/RuledSurface.cpp:204
-#, fuzzy
 msgid "Pick a Sketch to sweep along"
-msgstr "Choisir une esquisse à suivre"
+msgstr ""
 
 #: src/RuledSurface.cpp:244
 msgid "Make extrusion"
 msgstr "Extruder"
 
 #: src/RuledSurface.cpp:264
-#, fuzzy
 msgid "taper outward angle"
-msgstr "Angle de départ"
+msgstr ""
 
 # Ajout 316 RuledSurface.cpp
 #: src/RuledSurface.cpp:319
@@ -3211,9 +3182,8 @@ msgstr "Erreur fatale lors de la révolution du solide"
 
 # Ajout263 Ruler.cpp
 #: src/Ruler.cpp:280
-#, fuzzy
 msgid "ResetRuler"
-msgstr "Réinitialise la règle"
+msgstr ""
 
 #: src/Ruler.cpp:282
 msgid "Reset the ruler"
@@ -3472,9 +3442,8 @@ msgstr "Convertir une esquisse en maille"
 
 # Ajout 398 Sketch.cpp
 #: src/Sketch.cpp:288 src/Sketch.cpp:295
-#, fuzzy
 msgid "Use negative for smaller and Positive for larger)"
-msgstr "Valeur négative pour diminuer et Positive pour augmenter"
+msgstr "Valeur négative pour diminuer et positive pour augmenter"
 
 # Ajout 399 Sketch.cpp
 #: src/Sketch.cpp:289 src/Sketch.cpp:295
@@ -3835,7 +3804,7 @@ msgstr ""
 
 #: src/PointDrawing.h:22
 msgid "Point drawing"
-msgstr "Point de dessin"
+msgstr "Mode dessin de point"
 
 #: src/PointOrWindow.h:26
 msgid "Dragging a window or picking a point"
@@ -4112,9 +4081,8 @@ msgstr "Décalage Longueur d'Outil"
 
 # Ajout 558
 #: ../heekscnc/src/CToolDlg.cpp:41
-#, fuzzy
 msgid "Flat Radius"
-msgstr "Rayon de pointe"
+msgstr ""
 
 #: ../heekscnc/src/CToolDlg.cpp:42
 msgid "Corner Radius"
@@ -4607,9 +4575,8 @@ msgstr "Fichier de sortie"
 
 # Ajout 244. HeeksCNC.cpp
 #: ../heekscnc/src/HeeksCNC.cpp:1153
-#, fuzzy
 msgid "Machining Tool Bar"
-msgstr "Outils d'usinage"
+msgstr "Barre d'outils Usinage"
 
 # Ajout 610
 #: ../heekscnc/src/HeeksCNC.cpp:1304
@@ -5066,15 +5033,13 @@ msgstr ""
 
 # Ajout20: aucun effet
 #: ../heekscnc/src/Profile.cpp:217
-#, fuzzy
 msgid "lead in line length"
-msgstr "Afficher Longueur"
+msgstr ""
 
 # Ajout20: aucun effet
 #: ../heekscnc/src/Profile.cpp:218
-#, fuzzy
 msgid "lead out line length"
-msgstr "Afficher Longueur"
+msgstr ""
 
 #: ../heekscnc/src/Profile.cpp:220
 msgid "offset_extra"
@@ -5419,9 +5384,8 @@ msgid "Drilling Operation"
 msgstr "Perçage"
 
 #: ../heekscnc/src/NCCode.h:194
-#, fuzzy
 msgid "NC Code"
-msgstr "NCCode"
+msgstr "G-Code"
 
 #: ../heekscnc/src/Patterns.h:15
 msgid "Patterns"
