@@ -63,13 +63,12 @@ Debug:
 X. Translation
 --------------
 Merge new strings:
- * Generate a .pot file
- sh translations/generate-pot-file.sh updated-catalog.pot
+ * Generate a .pot file and merge it to your catalog
+ sh translations/generate-pot-file.sh translations/xx/HeeksCAD.po
 
  Note: this script assumes you have heekscad and heekscnc in the same parent directory
  
- * Integrate .pot file to .po file
- msgmerge --update HeeksCAD.po updated-catalog.pot
-
  * After translating them, you can test compilation using:
  msgfmt -o HeeksCAD.mo HeeksCAD.po
+
+ Note: if you lunch "heekscad" from a folder that contains "HeeksCAD.mo" file, this catalog will be loaded instead of system-wide one.
