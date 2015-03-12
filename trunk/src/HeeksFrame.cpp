@@ -1493,7 +1493,7 @@ static void OnSnapButton(wxCommandEvent& event)
 
 static void OnEditGridButton(wxCommandEvent& event)
 {
-	wxGetApp().InputDouble(_T("Edit snap grid"), _T("snap grid"), wxGetApp().digitizing_grid);
+	wxGetApp().InputDouble(_("Edit snap grid"), _("snap grid"), wxGetApp().digitizing_grid);
 	wxGetApp().m_frame->m_graphics->Refresh();
 }
 
