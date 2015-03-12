@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HeeksCAD 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-11 20:50+0100\n"
-"PO-Revision-Date: 2015-03-11 23:07+0100\n"
+"POT-Creation-Date: 2015-03-12 14:20+0100\n"
+"PO-Revision-Date: 2015-03-12 14:24+0100\n"
 "Last-Translator: Romuald Conty <neomilium@gmail.com>\n"
 "Language-Team: French <>\n"
 "Language: french\n"
@@ -19,12 +19,10 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-# ===================================================
 #: src/AboutBox.cpp:17 interface/HDialogs.cpp:124
 msgid "OK"
 msgstr "OK"
 
-# Ajout 276 AutoSave.cpp
 #: src/AutoSave.cpp:34
 msgid "Do you want to recover using the automatic backup file?"
 msgstr "Voulez-vous restaurer le fichier de sauvegarde automatique ?"
@@ -1415,7 +1413,7 @@ msgstr "lecture des points"
 
 #: src/HeeksCAD.cpp:3342
 msgid "Layer Name Suffixes To Discard"
-msgstr ""
+msgstr "suffixes des couches à exclure"
 
 #: src/HeeksCAD.cpp:3345
 msgid "STL"
@@ -1443,7 +1441,7 @@ msgstr "options de la police"
 # Ajout37 HeeksCAD.cpp
 #: src/HeeksCAD.cpp:3355
 msgid "Paths (semicolon delimited)"
-msgstr "Chemins (séparés par ;)"
+msgstr "chemins (séparés par ;)"
 
 # Ajout 395 HeeksCAD.cpp
 #: src/HeeksCAD.cpp:3356
@@ -1803,6 +1801,15 @@ msgstr ""
 #: src/HeeksFrame.cpp:906
 msgid "Pick one or more sketches, faces or circles, to sweep"
 msgstr ""
+
+# Ajout135
+#: src/HeeksFrame.cpp:1496
+msgid "Edit snap grid"
+msgstr "Éditer le pas de grille"
+
+#: src/HeeksFrame.cpp:1496
+msgid "snap grid"
+msgstr "Pas de grille"
 
 #: src/HeeksFrame.cpp:1592
 msgid ""
@@ -2337,12 +2344,12 @@ msgstr "Point Milieu"
 
 #: src/HeeksFrame.cpp:1931
 msgid "Snap"
-msgstr ""
+msgstr "Grille"
 
 # Ajout135
 #: src/HeeksFrame.cpp:1932
 msgid "edit grid"
-msgstr "éditer la grille"
+msgstr "Éditer le pas de grille"
 
 #: src/HeeksFrame.cpp:1937 src/HeeksFrame.cpp:2040
 msgid "Geometry Tools"
@@ -4004,12 +4011,12 @@ msgstr "Type"
 # Ajout 511
 #: ../heekscnc/src/CTool.cpp:338
 msgid "tool_length_offset"
-msgstr "Décalage d'outil"
+msgstr "décalage longueur d'outil"
 
 # Ajout 558
 #: ../heekscnc/src/CTool.cpp:339
 msgid "flat_radius"
-msgstr "Rayon de pointe"
+msgstr "rayon de pointe"
 
 # Ajout 559
 #: ../heekscnc/src/CTool.cpp:340
@@ -4029,7 +4036,7 @@ msgstr "Hauteur de l'arête de coupe"
 # Ajout 509
 #: ../heekscnc/src/CTool.cpp:517
 msgid "tool_number"
-msgstr ""
+msgstr "numéro d'outil"
 
 # Ajout 506
 #: ../heekscnc/src/CTool.cpp:835
@@ -4062,7 +4069,7 @@ msgstr "Matériau d'Outil"
 
 #: ../heekscnc/src/CToolDlg.cpp:37
 msgid "Engraving Bit"
-msgstr "Point à Graver"
+msgstr "Pointe à Graver"
 
 # Ajout 658
 #: ../heekscnc/src/CToolDlg.cpp:38
@@ -4082,7 +4089,7 @@ msgstr "Décalage Longueur d'Outil"
 # Ajout 558
 #: ../heekscnc/src/CToolDlg.cpp:41
 msgid "Flat Radius"
-msgstr ""
+msgstr "Rayon de pointe"
 
 #: ../heekscnc/src/CToolDlg.cpp:42
 msgid "Corner Radius"
@@ -4125,17 +4132,17 @@ msgstr "passe en Z maximale"
 # DepthOp.cpp
 #: ../heekscnc/src/DepthOp.cpp:125
 msgid "z finish depth"
-msgstr "profondeur en Z pour la finition"
+msgstr "hauteur à réserver pour la finition"
 
 # DepthOp.cpp
 #: ../heekscnc/src/DepthOp.cpp:126
 msgid "z thru depth"
-msgstr ""
+msgstr "hauteur de la passe traversante"
 
 # DepthOp.cpp
 #: ../heekscnc/src/DepthOp.cpp:127
 msgid "user depths"
-msgstr ""
+msgstr "profondeurs manuelles"
 
 # DepthOp.cpp
 #: ../heekscnc/src/DepthOpDlg.cpp:19
@@ -4163,11 +4170,11 @@ msgstr "Passe en Z"
 
 #: ../heekscnc/src/DepthOpDlg.cpp:24
 msgid "Z Finish Depth"
-msgstr "Profondeur en Z pour la Finition"
+msgstr "Hauteur à réserver pour la Finition"
 
 #: ../heekscnc/src/DepthOpDlg.cpp:25
 msgid "Z Through Depth"
-msgstr ""
+msgstr "Hauteur de la Passe traversante"
 
 # Ajout 471
 #: ../heekscnc/src/Drilling.cpp:93
@@ -4182,12 +4189,12 @@ msgstr "Rétractation rapide"
 # Ajout 641
 #: ../heekscnc/src/Drilling.cpp:98
 msgid "Feed retract"
-msgstr "Vitesse de rétractation"
+msgstr "Rétractation normale"
 
 # Ajout 470
 #: ../heekscnc/src/Drilling.cpp:101
 msgid "retract_mode"
-msgstr ""
+msgstr "rétractation"
 
 #: ../heekscnc/src/Drilling.cpp:106
 msgid "Keep running"
@@ -4200,7 +4207,7 @@ msgstr "Arrêter la broche à la fin"
 
 #: ../heekscnc/src/Drilling.cpp:110
 msgid "spindle_mode"
-msgstr ""
+msgstr "broche"
 
 #: ../heekscnc/src/Drilling.cpp:113
 msgid "internal coolant on"
@@ -4223,19 +4230,19 @@ msgstr "Temporisation au fond"
 # Ajout 641
 #: ../heekscnc/src/DrillingDlg.cpp:39
 msgid "Feed Retract"
-msgstr "Vitesse de Rétractation"
+msgstr "Rétractation à la vitesse d'usinage"
 
 #: ../heekscnc/src/DrillingDlg.cpp:40
-msgid "Stop Spindle at Bottom"
-msgstr "Arrêter la broche à la fin"
-
-#: ../heekscnc/src/DrillingDlg.cpp:41
-msgid "Interal Coolant On"
-msgstr "Activer le Refroidissement Interne"
-
-#: ../heekscnc/src/DrillingDlg.cpp:42
 msgid "Rapid to Clearance"
 msgstr "Déplacement rapide jusqu'à la hauteur libre"
+
+#: ../heekscnc/src/DrillingDlg.cpp:41
+msgid "Stop Spindle at Bottom"
+msgstr "Arrêter la broche au fond du perçage"
+
+#: ../heekscnc/src/DrillingDlg.cpp:42
+msgid "Interal Coolant On"
+msgstr "Activer le Refroidissement Interne"
 
 # Ajout 393 HeeksFrame.cpp
 #: ../heekscnc/src/DrillingDlg.cpp:140
@@ -4338,7 +4345,7 @@ msgid "New Script Operation..."
 msgstr "Nouvelle Opération Scriptée..."
 
 # Ajout 501
-#: ../heekscnc/src/HeeksCNC.cpp:781 ../heekscnc/src/HeeksCNC.cpp:1464
+#: ../heekscnc/src/HeeksCNC.cpp:781 ../heekscnc/src/HeeksCNC.cpp:1453
 #: ../heekscnc/src/Tools.h:24
 msgid "Tools"
 msgstr "Outils"
@@ -4565,7 +4572,7 @@ msgstr "&Usinage"
 # Messages CNC regroupés
 # Ajout2  HeeksCNC.cpp. Pas d'effet
 #: ../heekscnc/src/HeeksCNC.cpp:1116 ../heekscnc/src/HeeksCNC.cpp:1149
-#: ../heekscnc/src/HeeksCNC.cpp:1456 ../heekscnc/src/Program.h:135
+#: ../heekscnc/src/HeeksCNC.cpp:1445 ../heekscnc/src/Program.h:135
 msgid "Program"
 msgstr "Programme CN"
 
@@ -4579,65 +4586,65 @@ msgid "Machining Tool Bar"
 msgstr "Barre d'outils Usinage"
 
 # Ajout 610
-#: ../heekscnc/src/HeeksCNC.cpp:1304
+#: ../heekscnc/src/HeeksCNC.cpp:1301
 msgid "machining options"
 msgstr "options d'usinage"
 
-#: ../heekscnc/src/HeeksCNC.cpp:1310
+#: ../heekscnc/src/HeeksCNC.cpp:1307
 msgid "Use Clipper not Boolean"
 msgstr "Utiliser \"Clipper\" (et non \"Boolean\")"
 
-#: ../heekscnc/src/HeeksCNC.cpp:1311
+#: ../heekscnc/src/HeeksCNC.cpp:1308
 msgid "Use DOS Line Endings"
 msgstr "Utiliser les Fins de Lignes DOS"
 
 # Ajout34 HeeksCAD.cpp
-#: ../heekscnc/src/HeeksCNC.cpp:1315
+#: ../heekscnc/src/HeeksCNC.cpp:1312
 msgid "Excellon options"
 msgstr "options Excellon"
 
-#: ../heekscnc/src/HeeksCNC.cpp:1457
+#: ../heekscnc/src/HeeksCNC.cpp:1446
 msgid "NCCodeBlock"
 msgstr "NCCodeBlock"
 
-#: ../heekscnc/src/HeeksCNC.cpp:1458
+#: ../heekscnc/src/HeeksCNC.cpp:1447
 msgid "NCCode"
 msgstr "NCCode"
 
-#: ../heekscnc/src/HeeksCNC.cpp:1459 ../heekscnc/src/Operations.h:24
+#: ../heekscnc/src/HeeksCNC.cpp:1448 ../heekscnc/src/Operations.h:24
 msgid "Operations"
 msgstr "Opérations"
 
-#: ../heekscnc/src/HeeksCNC.cpp:1460 ../heekscnc/src/Profile.h:90
+#: ../heekscnc/src/HeeksCNC.cpp:1449 ../heekscnc/src/Profile.h:90
 msgid "Profile"
 msgstr "Contournage"
 
 # Ajout 312 Pocket.cpp
-#: ../heekscnc/src/HeeksCNC.cpp:1461 ../heekscnc/src/Pocket.h:65
+#: ../heekscnc/src/HeeksCNC.cpp:1450 ../heekscnc/src/Pocket.h:65
 msgid "Pocket"
 msgstr "Poche"
 
 # Ajout 241. HeeksCNC.cpp
-#: ../heekscnc/src/HeeksCNC.cpp:1462 ../heekscnc/src/Drilling.h:63
+#: ../heekscnc/src/HeeksCNC.cpp:1451 ../heekscnc/src/Drilling.h:63
 msgid "Drilling"
 msgstr "Perçage"
 
 # Ajout 501
-#: ../heekscnc/src/HeeksCNC.cpp:1463 ../heekscnc/src/OpDlg.cpp:26
+#: ../heekscnc/src/HeeksCNC.cpp:1452 ../heekscnc/src/OpDlg.cpp:26
 #: ../heekscnc/src/CTool.h:99
 msgid "Tool"
 msgstr "Outil"
 
-#: ../heekscnc/src/HeeksCNC.cpp:1465 ../heekscnc/src/Tags.h:24
+#: ../heekscnc/src/HeeksCNC.cpp:1454 ../heekscnc/src/Tags.h:24
 msgid "Tags"
 msgstr "Attaches"
 
 # Ajout 483
-#: ../heekscnc/src/HeeksCNC.cpp:1466 ../heekscnc/src/Tag.h:28
+#: ../heekscnc/src/HeeksCNC.cpp:1455 ../heekscnc/src/Tag.h:28
 msgid "Tag"
 msgstr "Attache"
 
-#: ../heekscnc/src/HeeksCNC.cpp:1467 ../heekscnc/src/ScriptOp.h:31
+#: ../heekscnc/src/HeeksCNC.cpp:1456 ../heekscnc/src/ScriptOp.h:31
 msgid "ScriptOp"
 msgstr "ScriptOp"
 
@@ -4700,7 +4707,7 @@ msgstr "Nombre d'interpolation d'arc"
 
 #: ../heekscnc/src/Op.cpp:113
 msgid "comment"
-msgstr "Commentaire"
+msgstr "commentaire"
 
 #: ../heekscnc/src/Op.cpp:114
 msgid "active"
@@ -4807,7 +4814,7 @@ msgstr "matière à conserver"
 
 # Ajout29. Profile.cpp
 #: ../heekscnc/src/Pocket.cpp:119 ../heekscnc/src/PocketDlg.cpp:32
-#: ../heekscnc/src/PocketDlg.cpp:70 ../heekscnc/src/Profile.cpp:192
+#: ../heekscnc/src/PocketDlg.cpp:71 ../heekscnc/src/Profile.cpp:192
 #: ../heekscnc/src/Profile.cpp:231 ../heekscnc/src/ProfileDlg.cpp:34
 #: ../heekscnc/src/ProfileDlg.cpp:107 ../heekscnc/src/ProfileDlg.cpp:116
 msgid "Conventional"
@@ -4815,7 +4822,7 @@ msgstr "Conventionnel"
 
 # Ajout 302 Profile.cpp
 #: ../heekscnc/src/Pocket.cpp:120 ../heekscnc/src/PocketDlg.cpp:32
-#: ../heekscnc/src/PocketDlg.cpp:70 ../heekscnc/src/PocketDlg.cpp:97
+#: ../heekscnc/src/PocketDlg.cpp:71 ../heekscnc/src/PocketDlg.cpp:99
 #: ../heekscnc/src/Profile.cpp:193 ../heekscnc/src/Profile.cpp:232
 #: ../heekscnc/src/ProfileDlg.cpp:34 ../heekscnc/src/ProfileDlg.cpp:107
 #: ../heekscnc/src/ProfileDlg.cpp:116 ../heekscnc/src/ProfileDlg.cpp:167
@@ -4830,20 +4837,20 @@ msgstr "mode de coupe"
 
 # Pocket.cpp
 #: ../heekscnc/src/Pocket.cpp:126 ../heekscnc/src/PocketDlg.cpp:29
-#: ../heekscnc/src/PocketDlg.cpp:69 ../heekscnc/src/PocketDlg.cpp:92
+#: ../heekscnc/src/PocketDlg.cpp:70 ../heekscnc/src/PocketDlg.cpp:94
 msgid "Boundary"
 msgstr "Limite"
 
 # Pocket.cpp
 #: ../heekscnc/src/Pocket.cpp:127 ../heekscnc/src/PocketDlg.cpp:29
-#: ../heekscnc/src/PocketDlg.cpp:56 ../heekscnc/src/PocketDlg.cpp:69
+#: ../heekscnc/src/PocketDlg.cpp:56 ../heekscnc/src/PocketDlg.cpp:70
 msgid "Center"
 msgstr "Centre"
 
 # Pocket.cpp
 #: ../heekscnc/src/Pocket.cpp:128
 msgid "starting_place"
-msgstr ""
+msgstr "position de départ"
 
 #: ../heekscnc/src/Pocket.cpp:132
 msgid "Plunge"
@@ -4860,7 +4867,7 @@ msgstr "Hélicoïdal"
 
 #: ../heekscnc/src/Pocket.cpp:135
 msgid "entry_move"
-msgstr ""
+msgstr "mouvement d'entrée"
 
 # DepthOp.cpp
 #: ../heekscnc/src/Pocket.cpp:137
@@ -4880,6 +4887,10 @@ msgstr "angle zig"
 #: ../heekscnc/src/Pocket.cpp:142
 msgid "unidirectional"
 msgstr "unidirectionnel"
+
+#: ../heekscnc/src/Pocket.cpp:356
+msgid "Cannot generate G-Code for pocket without a tool assigned"
+msgstr "Impossible de générer le G-Code pour la poche sans outil assigné"
 
 # Pocket.cpp
 #: ../heekscnc/src/Pocket.cpp:366
@@ -4929,16 +4940,13 @@ msgid "Cut Mode"
 msgstr "Mode de Coupe"
 
 #: ../heekscnc/src/PocketDlg.cpp:35
-msgid "Use Zig Zag"
-msgstr "Utiliser Zig Zag"
-
-#: ../heekscnc/src/PocketDlg.cpp:36
 msgid "Keep Tool Down"
 msgstr "Garder l'Outil en Bas"
 
-# ======================================================================
-# Ajout du 28/02/2011
-# Ajout 420
+#: ../heekscnc/src/PocketDlg.cpp:36
+msgid "Use Zig Zag"
+msgstr "Utiliser Zig Zag"
+
 #: ../heekscnc/src/PocketDlg.cpp:37
 msgid "Zig Zag Angle"
 msgstr "Angle de Zig Zag"
@@ -5025,11 +5033,11 @@ msgstr ""
 
 #: ../heekscnc/src/Profile.cpp:213
 msgid "extend before start"
-msgstr ""
+msgstr "décalage du départ"
 
 #: ../heekscnc/src/Profile.cpp:214
 msgid "extend past end"
-msgstr ""
+msgstr "décalage de l'arrivée"
 
 # Ajout20: aucun effet
 #: ../heekscnc/src/Profile.cpp:217
@@ -5043,7 +5051,7 @@ msgstr ""
 
 #: ../heekscnc/src/Profile.cpp:220
 msgid "offset_extra"
-msgstr ""
+msgstr "déport"
 
 #: ../heekscnc/src/Profile.cpp:223
 msgid "do finishing pass"
@@ -5066,6 +5074,10 @@ msgstr "mode de coupe de finition"
 #: ../heekscnc/src/Profile.cpp:235
 msgid "finishing step down"
 msgstr "passe en Z pour la finition"
+
+#: ../heekscnc/src/Profile.cpp:839
+msgid "Cannot generate G-Code for profile without a tool assigned"
+msgstr "Impossible de générer le G-Code pour le contournage sans outil assigné"
 
 #: ../heekscnc/src/Profile.cpp:976
 msgid "Pick Start"
@@ -5171,16 +5183,16 @@ msgstr "unités du fichier CN"
 # Ajout 361 Sketch.cpp  Aucun effet
 #: ../heekscnc/src/Program.cpp:338
 msgid "Exact Path Mode"
-msgstr ""
+msgstr "Mode trajectoire exacte (G61)"
 
 # Ajout 361 Sketch.cpp  Aucun effet
 #: ../heekscnc/src/Program.cpp:339
 msgid "Exact Stop Mode"
-msgstr ""
+msgstr "Mode arrêt exact (G61.1)"
 
 #: ../heekscnc/src/Program.cpp:340
 msgid "Best Possible Speed"
-msgstr "Meilleure Vitesse Possible"
+msgstr "Mode trajectoire continue avec tolérance"
 
 #: ../heekscnc/src/Program.cpp:341
 msgid "Undefined"
@@ -5188,16 +5200,16 @@ msgstr "Non défini"
 
 #: ../heekscnc/src/Program.cpp:343
 msgid "Path Control Mode"
-msgstr ""
+msgstr "Contrôle des trajectoires"
 
 #: ../heekscnc/src/Program.cpp:347
 msgid "Motion Blending Tolerance"
-msgstr ""
+msgstr "déviation maximale tolérée"
 
 # Ajout143 HeeksCAD.cpp
 #: ../heekscnc/src/Program.cpp:348
 msgid "Naive CAM Tolerance"
-msgstr ""
+msgstr "tolérance \"naïve CAM\""
 
 #: ../heekscnc/src/Program.cpp:926
 msgid "The Python program is too long \n"
