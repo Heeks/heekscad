@@ -1228,16 +1228,13 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 		m_file_open_matrix = file_open_matrix;
 	}
 
+	wxFileName filename(filepath);
+	wxString extension = filename.GetExt().Lower();
+
+	bool open_succeeded = true;
 	// returns true if file open was successful
 	wxString wf(filepath);
 	wf.LowerCase();
-
-	wxString extension(filepath);
-	int offset = extension.Find('.',true);
-	if (offset > 0) extension.Remove(0, offset+1);
-	extension.LowerCase();
-
-	bool open_succeeded = true;
 
 	if(wf.EndsWith(_T(".heeks")))
 	{
