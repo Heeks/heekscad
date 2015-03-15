@@ -88,7 +88,7 @@ const wxChar* CSelectMode::GetHelpText()
 
 	str_for_GetHelpText.Append(wxString(_T("\n")) + _("Right button for object menu"));
 	str_for_GetHelpText.Append(wxString(_T("\n")) + _("See options window to hide this help"));
-	str_for_GetHelpText.Append(wxString(_T("\n")) + _T("( ") + _("view options") + _T("->") + _("screen text") + _T(" )"));
+	str_for_GetHelpText.Append(wxString(_T("\n")) + _T("(\"") + _("view options") + _T("\"->\"") + _("screen text") + _T("\")"));
 
 	if(m_doing_a_main_loop)
 	{
