@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HeeksCAD 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-16 01:16+0100\n"
-"PO-Revision-Date: 2015-03-12 14:24+0100\n"
+"POT-Creation-Date: 2015-03-16 01:11+0100\n"
+"PO-Revision-Date: 2015-03-16 01:14+0100\n"
 "Last-Translator: Romuald Conty <neomilium@gmail.com>\n"
 "Language-Team: French <>\n"
 "Language: french\n"
@@ -227,7 +227,7 @@ msgstr "Appuyez sur Échap. pour annuler"
 
 #: src/DigitizeMode.cpp:95
 msgid "Left button to accept position"
-msgstr "Bouton gauche pour accepter la position"
+msgstr "Clic : valide la position"
 
 #: src/DigitizeMode.cpp:426 src/Input.cpp:125 src/Input.cpp:161
 #: src/Input.cpp:465 src/Input.cpp:478
@@ -974,7 +974,7 @@ msgstr "Inverser l'Objet"
 
 #: src/HeeksCAD.cpp:3182 src/SelectMode.cpp:91
 msgid "view options"
-msgstr "voir les options "
+msgstr "options de la vue"
 
 #: src/HeeksCAD.cpp:3186
 msgid "stay upright"
@@ -1002,7 +1002,7 @@ msgstr "aide complète"
 
 #: src/HeeksCAD.cpp:3195 src/SelectMode.cpp:91
 msgid "screen text"
-msgstr " OSD"
+msgstr "OSD"
 
 #: src/HeeksCAD.cpp:3197
 msgid "antialiasing"
@@ -1010,15 +1010,15 @@ msgstr "anticrénelage"
 
 #: src/HeeksCAD.cpp:3198
 msgid "reverse mouse wheel"
-msgstr "Inverser la molette"
+msgstr "inverser la molette"
 
 #: src/HeeksCAD.cpp:3199
 msgid "reverse zooming mode"
-msgstr "Inverser le zoom"
+msgstr "inverser le zoom"
 
 #: src/HeeksCAD.cpp:3200
 msgid "Ctrl key does rotate"
-msgstr "Ctrl fait pivoter"
+msgstr "pivoter avec Ctrl"
 
 #: src/HeeksCAD.cpp:3201
 msgid "show datum"
@@ -1026,7 +1026,7 @@ msgstr "affiche le repère de coordonnées"
 
 #: src/HeeksCAD.cpp:3202
 msgid "datum is solid"
-msgstr "le repère de coordonnées est solide"
+msgstr "repère de coordonnées solide"
 
 #: src/HeeksCAD.cpp:3203
 msgid "datum size"
@@ -1034,7 +1034,7 @@ msgstr "taille du repère"
 
 #: src/HeeksCAD.cpp:3204
 msgid "datum size is pixels not mm"
-msgstr "la taille du repère est en pixels, non en mm"
+msgstr "taille du repère en pixels"
 
 #: src/HeeksCAD.cpp:3205
 msgid "show ruler"
@@ -1163,7 +1163,7 @@ msgstr "mélange de transparence coloré"
 
 #: src/HeeksCAD.cpp:3254
 msgid "grid mode"
-msgstr "mode Grille"
+msgstr "affichage de la grille"
 
 # Ajout 370 HeeksCAD.cpp
 #: src/HeeksCAD.cpp:3256
@@ -1209,7 +1209,7 @@ msgstr ""
 
 #: src/HeeksCAD.cpp:3296
 msgid "dragging moves objects"
-msgstr "glisser déplace les objects"
+msgstr "clic maintenu déplace les objects"
 
 #: src/HeeksCAD.cpp:3297
 msgid "highlight items under mouse"
@@ -1278,25 +1278,24 @@ msgstr "tolérance géométrique"
 msgid "sketch reorder tolerance"
 msgstr "tolérance pour réordonner l'esquisse"
 
-# HeeksCAD.cpp
 #: src/HeeksCAD.cpp:3326
 msgid "face to sketch deviaton"
-msgstr "Écart face-esquisse"
+msgstr "écart face-esquisse"
 
-# Ajout 349 HeekscAD.cpp
 #: src/HeeksCAD.cpp:3327
+#, fuzzy
 msgid "Use old solid fuse ( to prevent coplanar faces )"
-msgstr "Utiliser l'ancien objet fusionné (pour éviter les faces coplanaires)"
+msgstr "utiliser l'ancien solide fusionné (pour éviter les faces coplanaires)"
 
 # Ajout 326 RuledSurface.cpp
 #: src/HeeksCAD.cpp:3328 src/RuledSurface.cpp:254
 msgid "Extrude makes a solid"
-msgstr "Extrusion produit un solide"
+msgstr "extrusion produit un solide"
 
 # Ajout 348 HeekscAD.cpp
 #: src/HeeksCAD.cpp:3329
 msgid "Solid revolution angle"
-msgstr "Angle de révolution du solide"
+msgstr "angle de révolution du solide"
 
 # HeeksCAD.cpp
 #: src/HeeksCAD.cpp:3340
@@ -1424,10 +1423,9 @@ msgstr "tolérance de face sauvée"
 msgid "STL save binary"
 msgstr "STL binaire"
 
-# Ajout 300 HeeksCAD.cpp
 #: src/HeeksCAD.cpp:3375
 msgid "auto save interval (in minutes)"
-msgstr "Intervalle d'auto-sauve (min)"
+msgstr "intervalle entre sauvegarde auto (min)"
 
 # Ajout34 HeeksCAD.cpp
 #: src/HeeksCAD.cpp:3380
@@ -1521,9 +1519,8 @@ msgid "Unknown"
 msgstr "Inconnu"
 
 #: src/HeeksCAD.cpp:3995
-#, fuzzy
 msgid "Would you like to save changes?"
-msgstr "Voulez-vous également changer l'unité de visualisation d'HeeksCAD ?"
+msgstr "Voulez-vous enregistrer les changements ?"
 
 #: src/HeeksCAD.cpp:4021
 msgid "Untitled"
@@ -1882,9 +1879,8 @@ msgid "Print Preview"
 msgstr "Aperçu avant impression"
 
 #: src/HeeksFrame.cpp:1707
-#, fuzzy
 msgid "Plugins..."
-msgstr "Greffons"
+msgstr "Greffons..."
 
 #: src/HeeksFrame.cpp:1711
 msgid "Restore All Defaults"
@@ -2472,7 +2468,6 @@ msgstr "Enregistre le fichier en spécifiant son nom"
 msgid "Plugins"
 msgstr "Greffons"
 
-# Ajout 223. Plugins.cpp
 #: src/HeeksRibbon.cpp:114
 msgid "Edit plugins"
 msgstr "Éditer les greffons"
@@ -3000,7 +2995,7 @@ msgstr "Chemin des Fichiers"
 # Plugins.cpp
 #: src/Plugins.cpp:84
 msgid "Plugin must have a name!"
-msgstr "Le greffon doit avoir un nom!"
+msgstr "Le greffon doit avoir un nom !"
 
 # Plugins.cpp
 #: src/Plugins.cpp:92
@@ -3241,28 +3236,27 @@ msgstr "Choisir object à sectionner"
 
 #: src/SelectMode.cpp:72
 msgid "Left button for selecting objects"
-msgstr "Bouton gauche pour sélectionner des objets"
+msgstr "Clic : sélectionne l'objet"
 
 #: src/SelectMode.cpp:73
 msgid "( with Ctrl key for extra objects)"
-msgstr "(avec Ctrl pour plusieurs objets)"
+msgstr "Ctrl+clic : sélection multiple"
 
-# Ajout5
 #: src/SelectMode.cpp:74
 msgid "( with Shift key for similar objects)"
-msgstr "(avec Shift pour des objets similaires)"
+msgstr "Maj.+clic : sélectionne les objets similaires"
 
 #: src/SelectMode.cpp:75
 msgid "Drag with left button to window select"
-msgstr "Déplacer avec le bouton gauche vers la fenêtre de sélection"
+msgstr "Clic (maintenu) : créer une fenêtre de sélection"
 
 #: src/SelectMode.cpp:77
 msgid "or to move object if on an object"
-msgstr "ou déplacer l'objet si sur un objet"
+msgstr "Ctrl+clic (maintenu) sur un objet : déplace l'objet"
 
 #: src/SelectMode.cpp:78
 msgid "Mouse wheel to zoom in and out"
-msgstr "Zoom dynamique avec la roulette de souris"
+msgstr "Molette : Zoom"
 
 #: src/SelectMode.cpp:81
 msgid "Middle button to pan view"
@@ -3270,23 +3264,23 @@ msgstr "Panoramique avec le bouton du milieu"
 
 #: src/SelectMode.cpp:82
 msgid "( with Ctrl key to rotate view )"
-msgstr "(avec Ctrl pour pivoter la vue)"
+msgstr "Ctrl+clic (maintenu) : pivoter la vue"
 
 #: src/SelectMode.cpp:85
 msgid "Middle button to rotate view"
-msgstr "Bouton du milieu pour pivoter la vue"
+msgstr "Clic molette (maintenu) : pivote la vue"
 
 #: src/SelectMode.cpp:86
 msgid "( with Ctrl key to pan view )"
-msgstr "(avec Ctrl pour panoramiquer)"
+msgstr "Ctrl+clic molette (maintenu) : déplacer la vue"
 
 #: src/SelectMode.cpp:89
 msgid "Right button for object menu"
-msgstr "Clic droit pour le menu de l'objet"
+msgstr "Clic droit : menu de l'objet"
 
 #: src/SelectMode.cpp:90
 msgid "See options window to hide this help"
-msgstr "Voir dans la fenêtre \"Options\" pour cacher l'aide"
+msgstr "Voir la fenêtre \"Options\" pour cacher l'aide"
 
 #: src/SelectMode.cpp:96
 msgid "Press Return key to accept selection"
@@ -4586,7 +4580,7 @@ msgstr "Programme CN"
 
 #: ../heekscnc/src/HeeksCNC.cpp:1143 ../heekscnc/src/HeeksCNC.cpp:1173
 msgid "Output"
-msgstr "Fichier de sortie"
+msgstr "G-Code"
 
 # Ajout 244. HeeksCNC.cpp
 #: ../heekscnc/src/HeeksCNC.cpp:1176
@@ -4600,11 +4594,11 @@ msgstr "options d'usinage"
 
 #: ../heekscnc/src/HeeksCNC.cpp:1330
 msgid "Use Clipper not Boolean"
-msgstr "Utiliser \"Clipper\" (et non \"Boolean\")"
+msgstr "utiliser \"Clipper\" (et non \"Boolean\")"
 
 #: ../heekscnc/src/HeeksCNC.cpp:1331
 msgid "Use DOS Line Endings"
-msgstr "Utiliser les Fins de Lignes DOS"
+msgstr "utiliser le format DOS (CRLF)"
 
 # Ajout34 HeeksCAD.cpp
 #: ../heekscnc/src/HeeksCNC.cpp:1335
@@ -4658,7 +4652,7 @@ msgstr "ScriptOp"
 
 #: ../heekscnc/src/NCCode.cpp:658
 msgid "nc options"
-msgstr "options du code CN"
+msgstr "affichage"
 
 #: ../heekscnc/src/NCCode.cpp:660
 msgid "text colors"
@@ -4923,10 +4917,10 @@ msgstr "Poche - L'esquisse doit être une forme close - sketch %d"
 msgid "Pocket operation - Badly ordered sketch - sketch %d"
 msgstr "Poche - Esquisse mal ordonnée - esquisse %d"
 
-# Ajout 614
 #: ../heekscnc/src/Pocket.cpp:592
+#, fuzzy
 msgid "Pocket spline deviation"
-msgstr "Écart poche spline"
+msgstr "écart poche spline"
 
 # Pocket.cpp
 #: ../heekscnc/src/PocketDlg.cpp:26
@@ -5126,10 +5120,10 @@ msgstr "Arrêter d'ajouter des attaches"
 msgid "Add Tags"
 msgstr "Ajouter des attaches"
 
-# Ajout 613
 #: ../heekscnc/src/Profile.cpp:1205
+#, fuzzy
 msgid "Profile spline deviation"
-msgstr "Écart spline contournage"
+msgstr "écart contournage sur spline"
 
 #: ../heekscnc/src/ProfileDlg.cpp:30
 msgid "Tool On Side"
@@ -5174,10 +5168,9 @@ msgstr "Voulez-vous également changer l'unité de visualisation d'HeeksCAD ?"
 msgid "machine"
 msgstr "machine"
 
-# Ajout 553
 #: ../heekscnc/src/Program.cpp:317
 msgid "output file name follows data file name"
-msgstr "nom du fichier de sortie similaire au fichier de données"
+msgstr "nom du G-Code identique à celui du projet"
 
 #: ../heekscnc/src/Program.cpp:322
 msgid "output file"
@@ -5236,14 +5229,13 @@ msgstr "Veuillez éditer le fichier python directement depuis\n"
 msgid "Machines"
 msgstr "Machines"
 
-# Ajout 553
 #: ../heekscnc/src/ProgramDlg.cpp:38
 msgid "Output File Name Follows Data File Name"
-msgstr "Nom du Fichier de Sortie Similaire au Fichier de Données"
+msgstr "Nom du G-Code identique à celui du projet"
 
 #: ../heekscnc/src/ProgramDlg.cpp:40
 msgid "Output File"
-msgstr "Fichier de Sortie"
+msgstr "Nom du G-Code"
 
 # Ajout 500
 #: ../heekscnc/src/ProgramDlg.cpp:42
