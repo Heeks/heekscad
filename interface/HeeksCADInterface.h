@@ -21,6 +21,7 @@ class wxMenuBar;
 class wxMenu;
 class wxToolBar;
 class wxString;
+class wxFileName;
 class wxCommandEvent;
 class wxUpdateUIEvent;
 class wxSizeEvent;
@@ -172,7 +173,8 @@ public:
 	virtual bool FileOpenTypeHeeks();
 	virtual bool InPaste();
 	virtual void RemoveID(HeeksObj* object); // only call this from ObjList::Remove()
-	virtual const wxChar* GetFileFullPath(); // returns NULL for untitled
+	virtual const wxString GetProjectTitle() const;
+	virtual const wxFileName GetProjectFileName() const;
 	virtual void SetViewBox(const double* b);
 	virtual void ViewExtents(bool rotate);
 	virtual void XYZView(bool recalculate_gl_lists);

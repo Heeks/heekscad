@@ -719,9 +719,7 @@ void OnImportButton( wxCommandEvent& event )
 
 void OnSaveButton( wxCommandEvent& event )
 {
-	wxString temp_filepath = wxGetApp().m_filepath;
-	bool use_dialog = wxGetApp().m_untitled;
-	wxGetApp().SaveFile( temp_filepath.c_str(), use_dialog );
+	wxGetApp().SaveProject();
 }
 
 void OnUpdateSave( wxUpdateUIEvent& event )
@@ -731,7 +729,7 @@ void OnUpdateSave( wxUpdateUIEvent& event )
 
 void OnSaveAsButton( wxCommandEvent& event )
 {
-	wxGetApp().SaveFile( wxGetApp().m_filepath.c_str(), true );
+	wxGetApp().SaveProject(true);
 }
 
 void OnResetDefaultsButton( wxCommandEvent& event )

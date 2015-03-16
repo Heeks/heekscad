@@ -193,8 +193,6 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_show_ruler = false;
 	m_show_datum_coords_system = true;
 	m_datum_coords_system_solid_arrows = true;
-	m_filepath = wxString(_("Untitled")) + _T(".heeks");
-	m_untitled = true;
 	m_in_OpenFile = false;
 	m_transform_gl_list = 0;
 	m_current_coordinate_system = NULL;
@@ -708,8 +706,8 @@ void HeeksCADapp::Reset(){
 	m_doing_rollback = false;
 	gp_Vec vy(0, 1, 0), vz(0, 0, 1);
 	m_current_viewport->m_view_point.SetView(vy, vz, 6);
-	m_filepath = wxString(_("Untitled")) + _T(".heeks");
-	m_untitled = true;
+	m_project_filename.Clear();
+	m_project_title.Clear();
 	m_hidden_for_drag.clear();
 	m_show_grippers_on_drag = true;
 	*m_ruler = HRuler();
@@ -1277,17 +1275,35 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 		open_succeeded = false;
 	}
 
-	if(open_succeeded && !import_not_open)
+	if(open_succeeded)
 	{
-	    InsertRecentFileItem(filepath);
-
-		if(retain_filename)
+		if(!import_not_open)
 		{
-			m_filepath.assign(filepath);
-			m_untitled = false;
-			SetFrameTitle();
+			// "Open" action succeedded
+			InsertRecentFileItem(filepath);
+
+			if(retain_filename)
+			{
+				m_project_filename = wxFileName(filepath);
+				// Title will contains only name + ext, not the full path
+				m_project_title = wxFileName(filepath).GetFullName();
+				SetFrameTitle();
+			}
+			SetLikeNewFile();
 		}
-		SetLikeNewFile();
+		else
+		{
+			// "Import" action succeedded
+			history->SetAsModified();
+			if(m_project_title.IsEmpty()) 
+			{
+				// Update project title without setting a filename
+				// Usually, when you import a file you want same filename + heeks extension
+				// So, we sets a title (only the first import) but no full path as we dont have one
+				m_project_title = wxFileName(filepath).GetName();
+				SetFrameTitle();
+			}
+		}
 	}
 
 	m_file_open_matrix = NULL;
@@ -1727,12 +1743,25 @@ void HeeksCADapp::SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar 
 	doc.SaveFile( Ttc(filepath) );
 }
 
+bool HeeksCADapp::SaveProject(const bool force_dialog)
+{
+	if(GetProjectFileName().IsOk())
+	{
+		return SaveFile(GetProjectFileName().GetFullPath().c_str(), force_dialog);
+	}
+	else
+	{
+		wxString filename = GetProjectTitle() + wxT(".heeks");
+		return SaveFile(filename.c_str(), true);
+	}
+}
+
 bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_recent_file_list, bool set_app_caption)
 {
 	if(use_dialog){
 		wxFileDialog fd(m_frame, _("Save graphical data file"), wxEmptyString, filepath, GetKnownFilesWildCardString(false, false), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 		fd.SetFilterIndex(1);
-		if (fd.ShowModal() == wxID_CANCEL)return false;
+		if (fd.ShowModal() == wxID_CANCEL) return false;
 		return SaveFile( fd.GetPath().c_str(), false, update_recent_file_list );
 	}
 
@@ -1776,8 +1805,8 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 		return false;
 	}
 
-	m_filepath.assign(filepath);
-	m_untitled = false;
+	m_project_filename = wxFileName(filepath);
+	m_project_title = m_project_filename.GetFullName();
 
 	if(update_recent_file_list)InsertRecentFileItem(filepath);
 	if(set_app_caption)SetFrameTitle();
@@ -3963,7 +3992,7 @@ int HeeksCADapp::CheckForModifiedDoc()
 	// returns wxCANCEL if not OK to continue opening file
 	if(!m_no_creation_mode && IsModified())
 	{
-		wxString str = wxString(_("Save changes to file")) + _T(" ") + m_filepath;
+		wxString str = wxString(_("Would you like to save changes?"));
 		int res = wxMessageBox(str, wxMessageBoxCaptionStr, wxCANCEL|wxYES_NO|wxCENTRE);
 		if(res == wxCANCEL || res == wxNO) return res;
 		if(res == wxYES)
@@ -3982,10 +4011,22 @@ void HeeksCADapp::SetFrameTitle()
 	str = _T("TRIAL VERSION of ");
 #endif
 	str += GetAppName().c_str();
-	if((!m_untitled) || (!m_no_creation_mode))str += wxString(_T(" - ")) + m_filepath;
+	if(!m_no_creation_mode) str += wxString(_T(" - ")) + GetProjectTitle();
 	m_frame->SetTitle(str);
 }
 
+wxString HeeksCADapp::GetProjectTitle() const
+{
+	if(m_project_title.IsEmpty())
+	  return _("Untitled");
+	else
+	  return m_project_title;
+}
+
+wxFileName HeeksCADapp::GetProjectFileName() const
+{
+	return m_project_filename;
+}
 
 HeeksObj* HeeksCADapp::GetIDObject(int type, int id)
 {

@@ -103,7 +103,12 @@ class HeeksCADapp : public wxApp, public ObjList
 		void RenderDatumOrCurrentCoordSys();
 
 	protected:
-		wxLocale m_locale; // locale we'll be using
+		// Project
+		wxString m_project_title;
+		wxFileName m_project_filename;
+
+		// Locale
+		wxLocale m_locale;
 		bool m_locale_initialised;
 
 	public:
@@ -157,8 +162,11 @@ class HeeksCADapp : public wxApp, public ObjList
 		CViewport *m_current_viewport;
 		MarkedList *m_marked_list;
 		bool m_doing_rollback;
-		wxString m_filepath;
-		bool m_untitled;
+
+		// Project
+		wxString GetProjectTitle() const;
+		wxFileName GetProjectFileName() const;
+
 		bool m_light_push_matrix;
 		std::list<HeeksObj*> m_hidden_for_drag;
 		bool m_show_grippers_on_drag;
@@ -323,6 +331,7 @@ class HeeksCADapp : public wxApp, public ObjList
 		void SavePyFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, double facet_tolerance = -1.0);
 		void SaveXMLFile(const std::list<HeeksObj*>& objects, const wxChar *filepath, bool for_clipboard = false);
 		void SaveXMLFile(const wxChar *filepath){SaveXMLFile(m_objects, filepath);}
+		bool SaveProject(const bool force_dialog = false);
 		bool SaveFile(const wxChar *filepath, bool use_dialog = false, bool update_recent_file_list = true, bool set_app_caption = true);
 		void AddUndoably(HeeksObj *object, HeeksObj* owner, HeeksObj* prev_object);
 		void AddUndoably(const std::list<HeeksObj*>& list, HeeksObj* owner);
