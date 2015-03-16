@@ -849,10 +849,14 @@ void CHeeksCADInterface::RemoveID(HeeksObj* object)
 	wxGetApp().RemoveID(object);
 }
 
-const wxChar* CHeeksCADInterface::GetFileFullPath()
+const wxString CHeeksCADInterface::GetProjectTitle() const
 {
-	if(wxGetApp().m_untitled)return NULL;
-	return wxGetApp().m_filepath;
+	return wxGetApp().GetProjectTitle();
+}
+
+const wxFileName CHeeksCADInterface::GetProjectFileName() const
+{
+	return wxGetApp().GetProjectFileName();
 }
 
 void CHeeksCADInterface::SetViewBox(const double* b)
