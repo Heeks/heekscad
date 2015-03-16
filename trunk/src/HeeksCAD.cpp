@@ -3997,7 +3997,7 @@ int HeeksCADapp::CheckForModifiedDoc()
 		if(res == wxCANCEL || res == wxNO) return res;
 		if(res == wxYES)
 		{
-			return (int) SaveFile(m_filepath.c_str(), true);
+			return SaveProject()?wxOK:wxCANCEL;
 		}
 	}
 	return wxOK;
