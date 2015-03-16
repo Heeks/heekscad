@@ -1704,7 +1704,7 @@ void CHeeksFrame::MakeMenus()
 	AddMenuItem(file_menu, _("Page Setup..."), ToolImage(_T("psetup")), OnPageSetup);
 	AddMenuItem(file_menu, _("Print Preview"), ToolImage(_T("ppreview")), OnPrintPreview);
 	file_menu->AppendSeparator();
-	AddMenuItem(file_menu, _("Plugins"), ToolImage(_T("plugin")), OnPlugins);
+	AddMenuItem(file_menu, _("Plugins..."), ToolImage(_T("plugin")), OnPlugins);
 	file_menu->AppendSeparator();
 	//AddMenuItem(file_menu, _("Save Settings"), ToolImage(_T("save")), OnSaveSettingsButton);
 	//file_menu->AppendSeparator();
