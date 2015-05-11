@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: HeeksCAD 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-03-16 01:11+0100\n"
-"PO-Revision-Date: 2015-03-16 01:14+0100\n"
+"PO-Revision-Date: 2015-05-11 12:41+0200\n"
 "Last-Translator: Romuald Conty <neomilium@gmail.com>\n"
 "Language-Team: French <>\n"
 "Language: french\n"
@@ -4312,10 +4312,9 @@ msgstr "Nouveau motif..."
 msgid "New Surface..."
 msgstr "Nouveau surfaçage..."
 
-# Ajout78
 #: ../heekscnc/src/HeeksCNC.cpp:647 ../heekscnc/src/HeeksCNC.cpp:799
 msgid "New Stock..."
-msgstr ""
+msgstr "Nouveau Brut..."
 
 # Ajout 578
 #: ../heekscnc/src/HeeksCNC.cpp:789
@@ -4538,7 +4537,7 @@ msgstr "Surface..."
 
 #: ../heekscnc/src/HeeksCNC.cpp:1108
 msgid "Stock..."
-msgstr ""
+msgstr "Brut..."
 
 # Ajout 569
 #: ../heekscnc/src/HeeksCNC.cpp:1122
@@ -5430,11 +5429,11 @@ msgstr "Re-sélectionner les solides"
 
 #: ../heekscnc/src/Stock.h:23
 msgid "Stock"
-msgstr ""
+msgstr "Brut"
 
 #: ../heekscnc/src/Stocks.h:15
 msgid "Stocks"
-msgstr ""
+msgstr "Bruts"
 
 # RuledSurface.cpp
 #: ../heekscnc/src/Surfaces.h:15
