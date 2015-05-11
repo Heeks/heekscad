@@ -34,7 +34,7 @@ Copy 4 of the dlls that get made from C:\wxWidgets-3.0.0\lib\vc_dll to HeeksCAD 
 
 They are: wxbase30u_vc_custom.dll wxmsw30u_aui_vc_custom.dll wxmsw30u_core_vc_custom.dll wxmsw30u_gl_vc_custom.dll
 
-Make and environment variable called
+Make an environment variable called
 CASROOT
 with value of
 C:\OpenCASCADE6.5.2\ros
