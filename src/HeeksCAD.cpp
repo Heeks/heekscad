@@ -3008,6 +3008,13 @@ void on_edit_layer_name_suffixes_to_discard(const wxChar* value, HeeksObj* objec
 	config.Write(_T("LayerNameSuffixesToDiscard"), HeeksDxfRead::m_layer_name_suffixes_to_discard);
 }
 
+void on_add_uninstanced_blocks(bool value, HeeksObj* object)
+{
+	HeeksDxfRead::m_add_uninstanced_blocks = value;
+
+	HeeksConfig config;
+	config.Write(_T("DxfAddUninstancedBlocks"), HeeksDxfRead::m_add_uninstanced_blocks);
+}
 
 void on_stl_facet_tolerance(double value, HeeksObj* object){
 	wxGetApp().m_stl_facet_tolerance = value;
@@ -3321,6 +3328,7 @@ void HeeksCADapp::GetOptions(std::list<Property *> *list)
 	dxf_options->m_list.push_back(new PropertyCheck(_("ignore errors where possible"), HeeksDxfRead::m_ignore_errors, NULL, on_sel_dxf_read_errors));
 	dxf_options->m_list.push_back(new PropertyCheck(_("read points"), HeeksDxfRead::m_read_points, NULL, on_dxf_read_points));
 	dxf_options->m_list.push_back( new PropertyString(_("Layer Name Suffixes To Discard"), HeeksDxfRead::m_layer_name_suffixes_to_discard, this, on_edit_layer_name_suffixes_to_discard));
+	dxf_options->m_list.push_back( new PropertyCheck(_("add uninstanced blocks"), HeeksDxfRead::m_add_uninstanced_blocks, NULL, on_add_uninstanced_blocks));
 
 	file_options->m_list.push_back(dxf_options);
 	PropertyList* stl_options = new PropertyList(_("STL"));

@@ -687,24 +687,9 @@ static void OnOpenButton( wxCommandEvent& event )
 
 static void OnImportButton( wxCommandEvent& event )
 {
-
+	HeeksConfig config;
 	wxString default_directory = wxEmptyString;
-
-	if (wxGetApp().m_recent_files.size() > 0)
-	{
-		#ifdef WIN32
-			wxString delimiter(_T("\\"));
-		#else
-			wxString delimiter(_T("/"));
-		#endif // WIN32
-
-		default_directory = *(wxGetApp().m_recent_files.begin());
-		int last_directory_delimiter = default_directory.Find(delimiter[0],true);
-		if (last_directory_delimiter > 0)
-		{
-			default_directory.Remove(last_directory_delimiter);
-		}
-	}
+	config.Read(_T("ImportDirectory"), &default_directory, _T(""));
 
     wxFileDialog dialog(wxGetApp().m_frame, _("Import file"), default_directory, wxEmptyString, wxGetApp().GetKnownFilesWildCardString(true, true));
     dialog.CentreOnParent();
@@ -714,6 +699,7 @@ static void OnImportButton( wxCommandEvent& event )
 		if(wxGetApp().OpenFile(dialog.GetPath().c_str(), true))
 		{
 			wxGetApp().m_frame->m_graphics->OnMagExtents(true, true, 25);
+			config.Write(_T("ImportDirectory"), dialog.GetDirectory());
 		}
     }
 }
