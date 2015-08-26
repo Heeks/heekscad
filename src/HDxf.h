@@ -60,6 +60,7 @@ public:
 	static bool m_ignore_errors;
 	static bool m_read_points;
 	static wxString m_layer_name_suffixes_to_discard;
+	static bool m_add_uninstanced_blocks;
 
 	// CDxfRead's virtual functions
 	void OnReadUCS(const double* ucs_point);

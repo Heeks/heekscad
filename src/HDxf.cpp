@@ -20,6 +20,7 @@ bool HeeksDxfRead::m_make_as_sketch = false;
 bool HeeksDxfRead::m_ignore_errors = false;
 bool HeeksDxfRead::m_read_points = false;
 wxString HeeksDxfRead::m_layer_name_suffixes_to_discard = _T("_DOT,_DOTSMALL,_DOTBLANK,_OBLIQUE,_CLOSEDBLANK");
+bool HeeksDxfRead::m_add_uninstanced_blocks = false;
 
 HeeksDxfRead::HeeksDxfRead(const wxChar* filepath, bool undoable) : CDxfRead(Ttc(filepath)), m_undoable(undoable)
 {
@@ -29,6 +30,7 @@ HeeksDxfRead::HeeksDxfRead(const wxChar* filepath, bool undoable) : CDxfRead(Ttc
 	config.Read(_T("IgnoreDxfReadErrors"), &m_ignore_errors);
 	config.Read(_T("DxfReadPoints"), &m_read_points);
 	config.Read(_T("LayerNameSuffixesToDiscard"), m_layer_name_suffixes_to_discard);
+	config.Read(_T("DxfAddUninstancedBlocks"), &m_add_uninstanced_blocks);
 
 	m_current_block = NULL;
 	extract(gp_Trsf(), m_ucs_matrix);
@@ -446,16 +448,19 @@ void HeeksDxfRead::AddObject(HeeksObj *object)
 
 void HeeksDxfRead::AddGraphics()
 {
-	// add one insert of any blocks which haven't been added at all
-	for(Blocks_t::const_iterator It = m_blocks.begin(); It != m_blocks.end(); It++)
+	if (HeeksDxfRead::m_add_uninstanced_blocks)
 	{
-		if(inserted_blocks.find(It->first) == inserted_blocks.end())
+		// add one insert of any blocks which haven't been added at all
+		for (Blocks_t::const_iterator It = m_blocks.begin(); It != m_blocks.end(); It++)
 		{
-			CSketch* block = It->second;
-			if(block->GetNumChildren() > 0)
+			if (inserted_blocks.find(It->first) == inserted_blocks.end())
 			{
-				CSketch* block_copy = new CSketch(*(It->second));
-				AddObject(block_copy);
+				CSketch* block = It->second;
+				if (block->GetNumChildren() > 0)
+				{
+					CSketch* block_copy = new CSketch(*(It->second));
+					AddObject(block_copy);
+				}
 			}
 		}
 	}
