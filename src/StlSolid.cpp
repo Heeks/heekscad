@@ -55,29 +55,86 @@ CStlSolid::CStlSolid(const wxChar* filepath, const HeeksColor* col):m_color(*col
 	}
 }
 
+bool IsAsciiStlFile(ifstream *ifs)
+{
+	char solid_string[6] = "aaaaa";
+	ifs->read(solid_string, 5);
+	if (ifs->eof())return false;
+
+	bool ascii = false;
+
+	if (!strcmp(solid_string, "solid"))
+	{
+		ifs->seekg(-1, ios_base::end);
+
+		bool found = false;
+		bool started = false;
+		int i = 0;
+		while (!found && i < 15)
+		{
+			char c = ifs->get();
+
+
+			if ((int)ifs->tellg() <= 1)
+			{
+				ifs->seekg(0);
+				found = true;
+			}
+			else if (c == '\n')
+			{
+				if (started)
+					found = true;
+				else
+				{
+					ifs->seekg(-2, ios_base::cur);
+				}
+			}
+			else
+			{
+				ifs->seekg(-2, ios_base::cur);
+				i++;
+				started = true;
+			}
+		}
+
+		if (found)
+		{
+			char str[1024];
+			ifs->getline(str, 1024);
+
+			wxString wstr(Ctt(str));
+			if (wstr.Contains(_T("endsolid")))
+			{
+				ascii = true;
+			}
+		}
+	}
+
+	ifs->seekg(0);
+
+	return ascii;
+}
+
 void CStlSolid::read_from_file(const wxChar* filepath)
 {
 	// read the stl file
 	ifstream ifs(Ttc(filepath), ios::binary);
 	if(!ifs)return;
 
-	char solid_string[6] = "aaaaa";
-	ifs.read(solid_string, 5);
-	if(ifs.eof())return;
-	if(strcmp(solid_string, "solid"))
+
+	if (!IsAsciiStlFile(&ifs))
 	{
 		// try binary file read
 
 		// read the header
 		char header[81];
 		header[80] = 0;
-		memcpy(header, solid_string, 5);
-		ifs.read(&header[5], 75);
+		ifs.read(header, 80);
 
 		unsigned int num_facets = 0;
 		ifs.read((char*)(&num_facets), 4);
 
-		for(unsigned int i = 0; i<num_facets; i++)
+		for (unsigned int i = 0; i<num_facets; i++)
 		{
 			CStlTri tri;
 			float n[3];
@@ -87,55 +144,53 @@ void CStlSolid::read_from_file(const wxChar* filepath)
 			ifs.read((char*)(&attr), 2);
 			m_list.push_back(tri);
 		}
-	}
+}
 	else
 	{
-		// "solid" already found
+		// first 5 chars will be "solid"
 		char str[1024] = "solid";
-		ifs.getline(&str[5], 1024);
-		char title[1024];
-		if(sscanf(str, "solid %s", title) == 1)
-			m_title.assign(Ctt(title));
+		ifs.getline(str, 1024);
+		m_title.assign(Ctt(&(str[6])));
 
 		CStlTri t;
 		char five_chars[6] = "aaaaa";
 
 		int vertex = 0;
 
-		while(!ifs.eof())
+		while (!ifs.eof() && !ifs.fail())
 		{
 			ifs.getline(str, 1024);
 
 			int i = 0, j = 0;
-			for(; i<5; i++, j++)
+			for (; i<5; i++, j++)
 			{
-				if(str[j] == 0)break;
-				while(str[j] == ' ' || str[j] == '\t')j++;
+				if (str[j] == 0)break;
+				while (str[j] == ' ' || str[j] == '\t')j++;
 				five_chars[i] = str[j];
 			}
-			if(i == 5)
+			if (i == 5)
 			{
-				if(!strcmp(five_chars, "verte"))
+				if (!strcmp(five_chars, "verte"))
 				{
 #ifdef WIN32
 					sscanf(str, " vertex %f %f %f", &(t.x[vertex][0]), &(t.x[vertex][1]), &(t.x[vertex][2]));
 #else
 					std::istringstream ss(str);
 					ss.imbue(std::locale("C"));
-					while(ss.peek() == ' ') ss.seekg(1, ios_base::cur);
+					while (ss.peek() == ' ') ss.seekg(1, ios_base::cur);
 					ss.seekg(std::string("vertex").size(), ios_base::cur);
 					ss >> t.x[vertex][0] >> t.x[vertex][1] >> t.x[vertex][2];
 #endif
 					vertex++;
-					if(vertex > 2)vertex = 2;
+					if (vertex > 2)vertex = 2;
 				}
-				else if(!strcmp(five_chars, "facet"))
+				else if (!strcmp(five_chars, "facet"))
 				{
 					vertex = 0;
 				}
-				else if(!strcmp(five_chars, "endfa"))
+				else if (!strcmp(five_chars, "endfa"))
 				{
-					if(vertex == 2)
+					if (vertex == 2)
 					{
 						m_list.push_back(t);
 					}

@@ -15,3 +15,11 @@ public:
 	const wxChar* GetTitle(){return _("Save Solids");}
 	wxString BitmapPath(){return _T("saveas");}
 };
+
+class OutlineSolids: public Tool {
+public:
+
+    virtual void Run();
+	const wxChar* GetTitle(){return _("Make Outline Sketch Around Solids");}
+	wxString BitmapPath(){return _T("outline");}
+};

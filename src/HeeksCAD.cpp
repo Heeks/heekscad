@@ -1335,7 +1335,7 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
 			double s[3], e[3];
 			extract(l->A, s);
 			extract(l->B, e);
-			dxf_file.WriteLine(s, e, Ttc(layer_name.c_str()));
+			dxf_file.WriteLine(s, e, Ttc(layer_name.c_str()), 0);
 		}
 		break;
 	case PointType:
@@ -1354,7 +1354,7 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
 			extract(a->B, e);
 			extract(a->C, c);
 			bool dir = a->m_axis.Direction().Z() > 0;
-			dxf_file.WriteArc(s, e, c, dir, Ttc(layer_name.c_str()));
+			dxf_file.WriteArc(s, e, c, dir, Ttc(layer_name.c_str()), 0);
 		}
 		break;
       case EllipseType:
@@ -1366,7 +1366,7 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
 			double maj_r = e->m_majr;
 			double min_r = e->m_minr;
 			double rot = e->GetRotation();
-			dxf_file.WriteEllipse(c, maj_r, min_r, rot, 0, 2 * M_PI, dir, Ttc(layer_name.c_str()));
+			dxf_file.WriteEllipse(c, maj_r, min_r, rot, 0, 2 * M_PI, dir, Ttc(layer_name.c_str()), 0);
                 }
 		break;
         case CircleType:
@@ -1375,7 +1375,7 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const wxString
 			double c[3];
 			extract(cir->m_axis.Location(), c);
 			double radius = cir->m_radius;
-			dxf_file.WriteCircle(c, radius, Ttc(layer_name.c_str()));
+			dxf_file.WriteCircle(c, radius, Ttc(layer_name.c_str()), 0);
                 }
 		break;
 	default:

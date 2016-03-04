@@ -78,17 +78,19 @@ private:
 	std::ofstream* m_ofs;
 	bool m_fail;
 
+	void WriteExtrusion(double thickness, const double* extru);
+
 public:
 	CDxfWrite(const char* filepath);
 	~CDxfWrite();
 
 	bool Failed(){return m_fail;}
 
-	void WriteLine(const double* s, const double* e, const char* layer_name );
+	void WriteLine(const double* s, const double* e, const char* layer_name, double thickness, const double* extru = NULL);
 	void WritePoint(const double*, const char*);
-	void WriteArc(const double* s, const double* e, const double* c, bool dir, const char* layer_name );
-    void WriteEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir, const char* layer_name );
-	void WriteCircle(const double* c, double radius, const char* layer_name );
+	void WriteArc(const double* s, const double* e, const double* c, bool dir, const char* layer_name, double thickness, const double* extru = NULL);
+	void WriteEllipse(const double* c, double major_radius, double minor_radius, double rotation, double start_angle, double end_angle, bool dir, const char* layer_name, double thickness, const double* extru = NULL);
+	void WriteCircle(const double* c, double radius, const char* layer_name, double thickness, const double* extru = NULL);
 };
 
 #define STORE_LINE_NUMBERS
@@ -135,6 +137,7 @@ private:
 	bool ReadLine();
 	bool ReadText();
 	bool ReadMText();
+	bool ReadRText();
 	bool ReadArc();
 	bool ReadCircle();
 	bool ReadEllipse();
@@ -143,7 +146,7 @@ private:
 	bool ReadLwPolyLine();
 	bool ReadPolyLine();
 	bool ReadVertex(double *pVertex, bool *bulge_found, double *bulge);
-	void OnReadArc(double start_angle, double end_angle, double radius, const double* c, double z_extrusion_dir, bool hidden);
+	void OnReadArc(double start_angle, double end_angle, double radius, const double* c, bool hidden);
 	void OnReadCircle(const double* c, double radius, bool hidden);
     void OnReadEllipse(const double* c, const double* m, double ratio, double start_angle, double end_angle);
 	bool ReadLeader();
@@ -156,9 +159,13 @@ private:
 	void DerefACI();
 	void StorePolyLinePoint(double x, double y, double z, bool bulge_found, double bulge);
 	void AddPolyLinePoints(bool mirrored, bool closed);
+	void ResetExtrusionAndThickness();
+	bool ReadExtrusionOrThickness(int n);
 
 protected:
 	Aci_t m_aci; // manifest color name or 256 for layer color
+	double m_extrusion_vector[3];
+	double m_thickness;
 
 public:
 	CDxfRead(const char* filepath); // this opens the file
