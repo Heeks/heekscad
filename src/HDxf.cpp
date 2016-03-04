@@ -403,7 +403,7 @@ bool HeeksDxfRead::IsValidLayerName( const wxString layer_name ) const
 
 void HeeksDxfRead::AddObject(HeeksObj *object)
 {
-	if (! IsValidLayerName(LayerName()))
+    if (! IsValidLayerName(LayerName()))
 	{
 		// This is one of the forbidden layer names.  Discard the
 		// graphics object and move on.

@@ -1242,11 +1242,11 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\Geom.cpp"
+			RelativePath="..\interface\Geom.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\Geom.h"
+			RelativePath="..\interface\Geom.h"
 			>
 		</File>
 		<File

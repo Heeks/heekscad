@@ -38,7 +38,7 @@
 #include "StlSolid.h"
 #include "RuledSurface.h"
 #include "HeeksConfig.h"
-#include "Geom.h"
+#include "../interface/Geom.h"
 #include "wxImageLoader.h"
 #include "CoordinateSystem.h"
 #include "HText.h"
