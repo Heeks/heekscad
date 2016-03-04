@@ -101,7 +101,7 @@ static void OutlineSolids_triangle(const double* x, const double* n)
 {
 	gp_Vec axis(0, 0, 1);
 	gp_Vec norm = gp_Vec(gp_Pnt(x[0], x[1], x[2]), gp_Pnt(x[3], x[4], x[5])) ^ gp_Vec(gp_Pnt(x[0], x[1], x[2]), gp_Pnt(x[6], x[7], x[8]));
-	if (norm * axis > 0.0)
+	if (norm * axis > 0)
 	{
 		CArea tri_area;
 		CCurve curve;
@@ -120,6 +120,8 @@ static void OutlineSolids_triangle(const double* x, const double* n)
 }
 
 void OutlineSolids::Run(){
+	bool save_fit_arcs = CArea::m_fit_arcs;
+	CArea::m_fit_arcs = false;
 	OutlineSolids_curves.clear();
 	for(std::list<HeeksObj*>::const_iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++){
 		HeeksObj* object = *It;
@@ -129,13 +131,21 @@ void OutlineSolids::Run(){
 	if(OutlineSolids_curves.size() > 0)
 	{
 		CArea area = CArea::UniteCurves(OutlineSolids_curves);
+		CArea new_area;
 		for (std::list<CCurve>::iterator It = area.m_curves.begin(); It != area.m_curves.end(); It++)
 		{
 			CCurve& curve = *It;
 			curve.Reverse();
+			double a = curve.GetArea();
+			if(fabs(a) > 0.001)
+				new_area.append(curve);
 		}
 
-		wxGetApp().AddUndoably(MakeNewSketchFromArea(area), NULL, NULL);
+		if(save_fit_arcs)
+			new_area.FitArcs();
+		wxGetApp().AddUndoably(MakeNewSketchFromArea(new_area), NULL, NULL);
 	}
+	CArea::m_fit_arcs = save_fit_arcs;
+
 }
 
