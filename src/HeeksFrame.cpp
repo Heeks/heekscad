@@ -779,15 +779,18 @@ void OnPasteButton( wxCommandEvent& event )
 
 void OnDeleteButton( wxCommandEvent& event )
 {
-	wxGetApp().StartHistory();
 	std::list<HeeksObj *> list;
 	for(std::list<HeeksObj*>::iterator It = wxGetApp().m_marked_list->list().begin(); It != wxGetApp().m_marked_list->list().end(); It++)
 	{
 		HeeksObj* object = *It;
-		if(object->CanBeRemoved())wxGetApp().DeleteUndoably(object);
+		if(object->CanBeRemoved())list.push_back(object);
 	}
 	wxGetApp().m_marked_list->Clear(true);
-	wxGetApp().EndHistory();
+
+	if(list.size() > 0)
+	{
+		wxGetApp().DeleteUndoably(list);
+	}
 }
 
 void OnUpdateDelete( wxUpdateUIEvent& event )
