@@ -685,7 +685,7 @@ void OnOpenButton( wxCommandEvent& event )
 	wxGetApp().OnOpenButton();
 }
 
-static void OnImportButton(wxCommandEvent& event)
+void OnImportButton(wxCommandEvent& event)
 {
 	HeeksConfig config;
 	wxString default_directory = wxEmptyString;
