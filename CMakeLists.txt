@@ -1,9 +1,9 @@
 project( HeeksCAD )
 cmake_minimum_required( VERSION 2.6 )
 
-
 add_definitions ( -Wall )
-FIND_PACKAGE( wxWidgets REQUIRED COMPONENTS base core gl )
+
+find_package( wxWidgets REQUIRED COMPONENTS base core gl )
 
 #set additionnal CMake module path
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
