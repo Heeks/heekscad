@@ -79,7 +79,7 @@ void CEdge::glCommands(bool select, bool marked, bool no_color){
 		{
 			BRepTools::Clean(m_topods_edge);
 			double pixels_per_mm = wxGetApp().GetPixelScale();
-			BRepMesh::Mesh(m_topods_edge, 1/pixels_per_mm);
+			BRepMesh_IncrementalMesh(m_topods_edge, 1/pixels_per_mm);
 			if(marked){
 				glGetFloatv(GL_DEPTH_RANGE, save_depth_range);
 				glDepthRange(0, 0);

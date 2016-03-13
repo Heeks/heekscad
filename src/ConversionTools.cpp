@@ -637,7 +637,7 @@ bool ConvertEdgeToSketch2(const TopoDS_Edge& edge, HeeksObj* sketch, double devi
 		{
 			// make lots of small lines
 			BRepTools::Clean(edge);
-			BRepMesh::Mesh(edge, deviation);
+			BRepMesh_IncrementalMesh(edge, deviation);
 
 			TopLoc_Location L;
 			Handle(Poly_Polygon3D) Polyg = BRep_Tool::Polygon3D(edge, L);

@@ -383,7 +383,7 @@ void HRuler::ReadFromConfig(HeeksConfig& config)
 	config.Read(_T("RulerTrsf32"), &m32, 0.0);
 	config.Read(_T("RulerTrsf33"), &m33, 1.0);
 	config.Read(_T("RulerTrsf34"), &m34, 0.0);
-	m_trsf.SetValues(m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, 0.0001, 0.00000001);
+	m_trsf.SetValues(m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34);
 
 	config.Read(_T("RulerUseViewUnits"), &m_use_view_units);
 	config.Read(_T("RulerUnits"), &m_units);

@@ -28,7 +28,7 @@ static Standard_Boolean TriangleIsValid(const gp_Pnt& P1, const gp_Pnt& P2, cons
 void MeshFace(TopoDS_Face face, double pixels_per_mm)
 {
 	BRepTools::Clean(face);
-	BRepMesh::Mesh(face, 1/pixels_per_mm);
+	BRepMesh_IncrementalMesh(face, 1/pixels_per_mm);
 }
 
 void command_callback(const double* x, const double* n)
@@ -175,7 +175,7 @@ void DrawFace(TopoDS_Face face,void(*callbackfunc)(const double* x, const double
 		// ni  : sommet i du triangle courant
 		for (nt = 1; nt <= nnn; nt++)					
 		{
-			if (SST.Orientation(face) == TopAbs_REVERSED)			// si la face est "reversed"
+			if (face.Orientation() == TopAbs_REVERSED)			// si la face est "reversed"
 				triangles(nt).Get(n1,n3,n2);						// le triangle est n1,n3,n2
 			else 
 				triangles(nt).Get(n1,n2,n3);						// le triangle est n1,n2,n3
