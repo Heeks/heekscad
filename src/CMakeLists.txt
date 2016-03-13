@@ -231,8 +231,6 @@ set( heekscad_SRCS
     wxImageLoader.cpp
     )
 
-# remove lsketchsolve below
-# -L../bin -ltinyxml -lheeksintf
 set( HeeksCAD_LIBS
        -L../bin -lheekstinyxml -lheeksintf
     )
@@ -241,6 +239,8 @@ target_link_libraries( heekscad
                        ${wxWidgets_LIBRARIES} ${OpenCASCADE_LIBRARIES}
                        ${OPENGL_LIBRARIES} ${PYTHON_LIBRARIES} ${OSX_LIBS}
                        ${HeeksCAD_LIBS} ${libarea_LIBRARIES} )
+
+
 message(STATUS "wxWidgets_LIBRARIES: ${wxWidgets_LIBRARIES}")
 message(STATUS "wxWidgets_ROOT_DIR: ${wxWidgets_ROOT_DIR}")
 message(STATUS "wxWidgets_INCLUDE_DIRS: ${wxWidgets_INCLUDE_DIRS}")
