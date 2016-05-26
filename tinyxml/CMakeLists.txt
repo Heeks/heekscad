@@ -31,7 +31,7 @@ target_link_libraries( heekstinyxml ${PYTHON_LIBRARIES} )
 
 set_target_properties( heekstinyxml PROPERTIES SOVERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} )
 
-install( TARGETS heekstinyxml DESTINATION lib )
+install(TARGETS heekstinyxml DESTINATION ${LIB_INSTALL_DIR} )
 
 file( GLOB sources ${heekstinyxml_HDRS} )
 # FIXME: to install in right directory (ie. include/heekstinyxml), sources must be updated to use "heekstinyxml/tinyxml.h"

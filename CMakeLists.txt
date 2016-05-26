@@ -54,6 +54,13 @@ set(CPACK_PACKAGE_VERSION_MAJOR 1)
 set(CPACK_PACKAGE_VERSION_MINOR 0)
 set(CPACK_PACKAGE_VERSION_PATCH 0)
 
+if(DEFINED LIB_INSTALL_DIR)
+    set(LIB_INSTALL_DIR ${LIB_INSTALL_DIR})
+else(DEFINED LIB_INSTALL_DIR)
+    set(LIB_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib)
+endif(DEFINED LIB_INSTALL_DIR)
+message(STATUS "LIB_INSTALL_DIR: " ${LIB_INSTALL_DIR})
+
 #---------- put subdirs down here so that the package version vars above are visible to them -----------
 add_subdirectory( interface )
 add_subdirectory( tinyxml )
