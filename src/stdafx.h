@@ -279,3 +279,10 @@ extern "C" {
 #if _MSC_VER == 1600
 	#include <iterator>
 #endif
+
+#include <Standard_Version.hxx>
+#if OCC_VERSION_HEX >= 0x060800
+  #define _OCC_BACKPORT_PRECISION
+#else
+  #define _OCC_BACKPORT_PRECISION , 0.0001, 0.00000001
+#endif

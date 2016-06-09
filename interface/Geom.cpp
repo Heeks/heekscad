@@ -1165,7 +1165,7 @@ gp_Trsf make_matrix(const double* m)
 	gp_Trsf tr;
 	try
 	{
-		tr.SetValues(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8], m[9], m[10], m[11]);
+		tr.SetValues(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8], m[9], m[10], m[11] _OCC_BACKPORT_PRECISION);
 	}
 	catch(...) {}
 	return tr;
