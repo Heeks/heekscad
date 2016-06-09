@@ -2,7 +2,7 @@ Source: heekscad
 Section: editors
 Priority: extra
 Maintainer: Romuald Conty <neomilium@gmail.com>
-Build-Depends: debhelper (>= 7.0.0), cmake, libopencascade-visualization-dev | liboce-visualization-dev, libwxgtk2.8-dev, libgtkglext1-dev, python-dev, libarea-dev
+Build-Depends: debhelper (>= 7.0.0), cmake, libopencascade-visualization-dev | liboce-visualization-dev, libwxgtk2.8-dev | libwxgtk3.0-dev, libgtkglext1-dev, python-dev, libarea-dev
 Standards-Version: 3.9.3
 Homepage: https://github.com/Heeks/heekscad
 Vcs-Svn: http://heekscad.googlecode.com/svn/trunk/
