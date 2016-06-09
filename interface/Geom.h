@@ -5,6 +5,13 @@
 #pragma once
 #include "GripData.h"
 
+#include <Standard_Version.hxx>
+#if OCC_VERSION_HEX >= 0x060800
+  #define _OCC_BACKPORT_PRECISION
+#else
+  #define _OCC_BACKPORT_PRECISION , 0.0001, 0.00000001
+#endif
+
 // functions to find intersections between gp items
 bool intersect(const gp_Lin& lin, const gp_Lin& lin2, gp_Pnt &pnt);
 bool intersect(const gp_Lin& lin, const gp_Pln& pln, gp_Pnt &pnt);

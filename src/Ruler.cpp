@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "Ruler.h"
 #include "Gripper.h"
+#include "../interface/Geom.h"
 #include "../interface/Tool.h"
 #include "../interface/PropertyCheck.h"
 #include "../interface/PropertyLength.h"
