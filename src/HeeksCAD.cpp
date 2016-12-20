@@ -1760,7 +1760,6 @@ bool HeeksCADapp::SaveFile(const wxChar *filepath, bool use_dialog, bool update_
 {
 	if(use_dialog){
 		wxFileDialog fd(m_frame, _("Save graphical data file"), wxEmptyString, filepath, GetKnownFilesWildCardString(false, false), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
-		fd.SetFilterIndex(1);
 		if (fd.ShowModal() == wxID_CANCEL) return false;
 		return SaveFile( fd.GetPath().c_str(), false, update_recent_file_list );
 	}
