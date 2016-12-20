@@ -378,7 +378,7 @@ class HeeksCADapp : public wxApp, public ObjList
 		void RegisterReadXMLfunction(const char* type_name, HeeksObj*(*read_xml_function)(TiXmlElement* pElem));
 		void GetRecentFilesProfileString();
 		void WriteRecentFilesProfileString(wxConfigBase &config);
-		void InsertRecentFileItem(const wxChar* filepath);
+		void InsertRecentFileItem(const wxString filepath);
 		int CheckForModifiedDoc(); // returns wxCANCEL, if NOT OK to continue with file open etc.
 		void SetFrameTitle();
 		HeeksObj* GetIDObject(int type, int id);

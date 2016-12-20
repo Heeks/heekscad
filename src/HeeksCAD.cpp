@@ -1284,9 +1284,9 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 
 			if(retain_filename)
 			{
-				m_project_filename = wxFileName(filepath);
+				m_project_filename = filename;
 				// Title will contains only name + ext, not the full path
-				m_project_title = wxFileName(filepath).GetFullName();
+				m_project_title = m_project_filename.GetFullName();
 				SetFrameTitle();
 			}
 			SetLikeNewFile();
@@ -1300,7 +1300,7 @@ bool HeeksCADapp::OpenFile(const wxChar *filepath, bool import_not_open, HeeksOb
 				// Update project title without setting a filename
 				// Usually, when you import a file you want same filename + heeks extension
 				// So, we sets a title (only the first import) but no full path as we dont have one
-				m_project_title = wxFileName(filepath).GetName();
+				m_project_title = filename.GetName();
 				SetFrameTitle();
 			}
 		}
@@ -3986,7 +3986,7 @@ void HeeksCADapp::WriteRecentFilesProfileString(wxConfigBase &config)
 	}
 }
 
-void HeeksCADapp::InsertRecentFileItem(const wxChar* filepath)
+void HeeksCADapp::InsertRecentFileItem(const wxString filepath)
 {
 	// add to recent files list
 	m_recent_files.remove(filepath);
@@ -4017,7 +4017,7 @@ void HeeksCADapp::SetFrameTitle()
 #ifdef FREE_VERSION
 	str = _T("TRIAL VERSION of ");
 #endif
-	str += GetAppName().c_str();
+	str += GetAppName();
 	if(!m_no_creation_mode) str += wxString(_T(" - ")) + GetProjectTitle();
 	m_frame->SetTitle(str);
 }
