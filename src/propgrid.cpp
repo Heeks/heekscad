@@ -3059,7 +3059,6 @@ public:
 
         m_state = 0;
         m_boxHeight = ((wxPropertyGrid*)parent)->GetFontHeight();
-        SetBackgroundStyle( wxBG_STYLE_COLOUR );
     }
 
     virtual ~wxSimpleCheckBox();
