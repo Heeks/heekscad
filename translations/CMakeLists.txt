@@ -1,6 +1,5 @@
 project( heekscad-translations )
 cmake_minimum_required( VERSION 2.6 )
-set ( CMAKE_BUILD_TYPE Debug )
 
 #foreach ( _lang de fr it sk )
 #  add_custom_command ( OUTPUT
