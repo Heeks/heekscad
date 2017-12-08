@@ -458,11 +458,6 @@ bool HeeksCADapp::OnInit()
 		SetTopWindow(m_frame);
 	}
 
-	OnNewOrOpen(false,wxNO);
-	ClearHistory();
-	SetLikeNewFile();
-	SetFrameTitle();
-
 #ifndef PYHEEKSCAD
 	if ((m_pAutoSave.get() != NULL) && (m_pAutoSave->AutoRecoverRequested()))
 	{
@@ -470,6 +465,8 @@ bool HeeksCADapp::OnInit()
 	}
 	else
 	{
+		bool open_done_from_command_line = false;
+
 		// Open the file passed in the command line argument
 		wxCmdLineEntryDesc cmdLineDesc[2];
 		cmdLineDesc[0].kind = wxCMD_LINE_PARAM;
@@ -503,9 +500,20 @@ bool HeeksCADapp::OnInit()
 					OnBeforeNewOrOpen(true, wxOK);
 					OpenFile(parser.GetParam(i));
 					OnNewOrOpen(true, wxOK);
+					open_done_from_command_line = true;
 				}
 			}
 		}
+
+		if(!open_done_from_command_line)
+		{
+			// do New File code
+			OnNewOrOpen(false,wxNO);
+			ClearHistory();
+			SetLikeNewFile();
+			SetFrameTitle();
+		}
+
 	}
 	//#define USE_DEBUG_WXPATH  
 	#ifdef USE_DEBUG_WXPATH
