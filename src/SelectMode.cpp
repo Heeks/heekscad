@@ -72,20 +72,37 @@ static wxString str_for_GetHelpText;
 const wxChar* CSelectMode::GetHelpText()
 {
 	str_for_GetHelpText = wxString(_("Left button for selecting objects"))
-		+ _T("\n") + _("( with Ctrl key for extra objects)")
+#ifdef __WXMAC__
+		+ _T("\n") + _("( with Command key for extra objects)")
+#else
+        + _T("\n") + _("( with Ctrl key for extra objects)")
+#endif
 		+ _T("\n") + _("( with Shift key for similar objects)")
 		+ _T("\n") + _("Drag with left button to window select");
 
 	if(wxGetApp().m_dragging_moves_objects)str_for_GetHelpText.Append(wxString(_T("\n")) + _("or to move object if on an object"));
-	str_for_GetHelpText.Append(wxString(_T("\n")) + _("Mouse wheel to zoom in and out"));
-
+#ifdef __WXMAC__
+    str_for_GetHelpText.Append(wxString(_T("\n")) + _("Two finger scroll to zoom in and out"));
+#else
+    str_for_GetHelpText.Append(wxString(_T("\n")) + _("Mouse wheel to zoom in and out"));
+#endif
 	if(wxGetApp().ctrl_does_rotate){
-		str_for_GetHelpText.Append(wxString(_T("\n")) + _("Middle button to pan view"));
-		str_for_GetHelpText.Append(wxString(_T("\n")) + _("( with Ctrl key to rotate view )"));
+#ifdef __WXMAC__
+        str_for_GetHelpText.Append(wxString(_T("\n")) + _("alt+Left button to pan view"));
+        str_for_GetHelpText.Append(wxString(_T("\n")) + _("( with Command key to rotate view )"));
+#else
+        str_for_GetHelpText.Append(wxString(_T("\n")) + _("Middle button to pan view"));
+        str_for_GetHelpText.Append(wxString(_T("\n")) + _("( with Ctrl key to rotate view )"));
+#endif
 	}
 	else{
-		str_for_GetHelpText.Append(wxString(_T("\n")) + _("Middle button to rotate view"));
-		str_for_GetHelpText.Append(wxString(_T("\n")) + _("( with Ctrl key to pan view )"));
+#ifdef __WXMAC__
+        str_for_GetHelpText.Append(wxString(_T("\n")) + _("alt+Left button to rotate view"));
+        str_for_GetHelpText.Append(wxString(_T("\n")) + _("( with Command key to pan view )"));
+#else
+        str_for_GetHelpText.Append(wxString(_T("\n")) + _("Middle button to rotate view"));
+        str_for_GetHelpText.Append(wxString(_T("\n")) + _("( with Ctrl key to pan view )"));
+#endif
 	}
 
 	str_for_GetHelpText.Append(wxString(_T("\n")) + _("Right button for object menu"));
@@ -332,13 +349,13 @@ void CSelectMode::OnLeftUp( wxMouseEvent& event )
 
 void CSelectMode::OnDragging( wxMouseEvent& event )
 {
-	if(event.MiddleIsDown())
+	if(event.MiddleIsDown() || (event.LeftIsDown() && event.AltDown()))
 	{
 		wxPoint dm;
 		dm.x = event.GetX() - CurrentPoint.x;
 		dm.y = event.GetY() - CurrentPoint.y;
-		if(wxGetApp().ctrl_does_rotate == event.ControlDown())
-		{
+        if(wxGetApp().ctrl_does_rotate == event.ControlDown())
+        {
 			if(wxGetApp().m_rotate_mode)
 			{
 				wxGetApp().m_current_viewport->m_view_point.Turn(dm);

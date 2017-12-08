@@ -12,7 +12,7 @@
 #ifndef _WX_PROPGRID_ODCOMBO_H_
 #define _WX_PROPGRID_ODCOMBO_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA) && !defined(__APPLE_CC__)
     #pragma interface "odcombo.h"
 #endif
 

@@ -33,6 +33,12 @@
 	#endif
 #endif
 
+#if defined(__GNUC__)
+#define UNUSED(x) x __attribute__((unused))
+#else
+#define UNUSED(x) x
+#endif
+
 #include <algorithm>
 #include <list>
 #include <vector>
@@ -247,8 +253,13 @@
 #include "../tinyxml/tinyxml.h"
 
 extern "C" {
+#ifdef __WXMAC__
+#include "OpenGL/gl.h"
+#include "OpenGL/glu.h"
+#else
 #include <GL/gl.h>
 #include <GL/glu.h>
+#endif
 }
 
 #include "../interface/strconv.h"

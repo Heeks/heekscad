@@ -431,7 +431,8 @@ bool HeeksCADapp::OnInit()
 
 	GetRecentFilesProfileString();
 
-	wxImage::AddHandler(new wxPNGHandler);
+	// Seems to be pre-added in wxWidgets 3.x
+    // wxImage::AddHandler(new wxPNGHandler);
 	m_current_viewport = NULL;
 #ifdef PYHEEKSCAD
 	m_frame = NULL;
@@ -2121,7 +2122,7 @@ HeeksObj* MoveOrCopyTool::paste_before(NULL);
 void HeeksCADapp::DoMoveOrCopyDropDownMenu(wxWindow *wnd, const wxPoint &point, MarkedObject* marked_object, HeeksObj* paste_into, HeeksObj* paste_before)
 {
 	tool_index_list.clear();
-	wxPoint new_point = point;
+	wxPoint UNUSED(new_point) = point;
 	wxMenu menu;
 	std::list<Tool*> f_list;
 

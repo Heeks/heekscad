@@ -57,7 +57,9 @@ CPropertiesCanvas::CPropertiesCanvas(wxWindow* parent)
 
 CPropertiesCanvas::~CPropertiesCanvas()
 {
-	ClearProperties();
+    // ClearProperties was causing multiple assert errors
+    // on exit. Removing it seems reasonable.
+	// ClearProperties();
 	wxGetApp().RemoveObserver(this);
 	delete m_pg;
 	delete m_map;

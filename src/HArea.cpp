@@ -277,8 +277,8 @@ void HArea::GetProperties(std::list<Property *> *list){
 }
 
 bool HArea::Stretch(const double *p, const double* shift, void* data){
-	gp_Pnt vp = make_point(p);
-	gp_Vec vshift = make_vector(shift);
+    gp_Pnt UNUSED(vp) = make_point(p);
+	gp_Vec UNUSED(vshift) = make_vector(shift);
 #if 0
 	if(A->m_p.IsEqual(vp, wxGetApp().m_geom_tol)){
 		gp_Vec direction = -(GetSegmentVector(1.0));

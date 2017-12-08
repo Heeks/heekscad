@@ -54,11 +54,19 @@ static int graphics_attrib_list[] = {
 
 
 CGraphicsCanvas::CGraphicsCanvas(wxWindow* parent)
-        : wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, _T("some text"), graphics_attrib_list),CViewport(0, 0)
+        : wxGLCanvas(parent, wxID_ANY, graphics_attrib_list, wxDefaultPosition, wxDefaultSize, 0, _T("some text"), wxNullPalette),CViewport(300, 300)
 {
 	m_render_on_front_done = false;
+    
+    // Explicitly create a new rendering context instance for this canvas.
+    m_glRC = new wxGLContext(this);
 
 	wxGetApp().RegisterObserver(this);
+}
+
+CGraphicsCanvas::~CGraphicsCanvas()
+{
+    delete m_glRC;
 }
 
 void CViewport::SetViewport()
@@ -246,10 +254,10 @@ void CGraphicsCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
     wxPaintDC dc(this);
 
 #ifndef __WXMOTIF__
-    if (!GetContext()) return;
+    //if (!GetContext()) return;
 #endif
 
-    SetCurrent();
+    SetCurrent(*m_glRC);
 
 	glCommands();
 
@@ -262,7 +270,7 @@ void CGraphicsCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 void CGraphicsCanvas::OnSize(wxSizeEvent& event)
 {
     // this is also necessary to update the context on some platforms
-    wxGLCanvas::OnSize(event);
+    // Deprecated: wxGLCanvas::OnSize(event);
     int w, h;
     GetClientSize(&w, &h);
 	WidthAndHeightChanged(w, h);
@@ -348,7 +356,7 @@ void CGraphicsCanvas::OnMouse( wxMouseEvent& event )
 	if(wxGetApp().m_property_grid_validation)return;
 
 	if(event.Entering()){
-	    SetCurrent();
+	    SetCurrent(*m_glRC);
 		SetFocus(); // so middle wheel works
 	}
 
@@ -457,7 +465,8 @@ void CGraphicsCanvas::Thaw()
 	}
 }
 
-void CGraphicsCanvas::Refresh()
+void CGraphicsCanvas::Refresh( bool eraseBackground,
+                              const wxRect *rect)
 {
 	if(m_frozen)
 	{

@@ -272,7 +272,7 @@ public:
 			x_direction = plane.YAxis().Direction();
 		}
 		gp_Trsf face_matrix = make_matrix(plane.Location(), x_direction, y_direction);
-		gp_Trsf inv_matrix = face_matrix.Inverted();
+        gp_Trsf UNUSED(inv_matrix) = face_matrix.Inverted();
 
 		wxGetApp().StartHistory();
 		double m[16];
@@ -373,9 +373,9 @@ bool CFace::IsAPlane(gp_Pln *returned_plane)
 
 			// define plane from three corners
 			gp_Pnt p00, pN0, pNN;
-			gp_Dir n00 = GetNormalAtUV(u[0], v[0], &p00);
-			gp_Dir nN0 = GetNormalAtUV(u[GRID], v[0], &pN0);
-			gp_Dir nNN = GetNormalAtUV(u[GRID], v[GRID], &pNN);
+            gp_Dir UNUSED(n00) = GetNormalAtUV(u[0], v[0], &p00);
+            gp_Dir UNUSED(nN0) = GetNormalAtUV(u[GRID], v[0], &pN0);
+            gp_Dir UNUSED(nNN0) = GetNormalAtUV(u[GRID], v[GRID], &pNN);
 
 			gp_Trsf m;
 			try
@@ -385,9 +385,9 @@ bool CFace::IsAPlane(gp_Pln *returned_plane)
 			catch(...)
 			{
 				// matrix failed, probably two points in the same place. Try again 0.1 inwards from the edges
-				gp_Dir n00 = GetNormalAtUV(uv_box[0] + U * 0.1, uv_box[2] + V * 0.1, &p00);
-				gp_Dir nN0 = GetNormalAtUV(uv_box[0] + U * 0.9, uv_box[2] + V * 0.1, &pN0);
-				gp_Dir nNN = GetNormalAtUV(uv_box[0] + U * 0.9, uv_box[2] + V * 0.9, &pNN);
+                gp_Dir UNUSED(n00) = GetNormalAtUV(uv_box[0] + U * 0.1, uv_box[2] + V * 0.1, &p00);
+                gp_Dir UNUSED(nN0) = GetNormalAtUV(uv_box[0] + U * 0.9, uv_box[2] + V * 0.1, &pN0);
+                gp_Dir UNUSED(nNN) = GetNormalAtUV(uv_box[0] + U * 0.9, uv_box[2] + V * 0.9, &pNN);
 				m = make_matrix(p00, make_vector(p00, pN0), make_vector(p00, pNN));
 			}
 			gp_Pln plane(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1));
@@ -399,7 +399,7 @@ bool CFace::IsAPlane(gp_Pln *returned_plane)
 				for(int j = 0; j <= GRID; j++)
 				{
 					gp_Pnt p;
-					gp_Dir n = GetNormalAtUV(u[i], v[j], &p);
+                    gp_Dir UNUSED(n)= GetNormalAtUV(u[i], v[j], &p);
 
 					// check the point lies on the plane
 					double d = fabs(plane.Distance(p));

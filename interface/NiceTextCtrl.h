@@ -9,8 +9,8 @@ class CDoubleCtrl: public wxTextCtrl
 	double m_factor;
 public:
 	CDoubleCtrl(wxWindow* parent, wxWindowID id = wxID_ANY, double factor = 1.0);
-	double GetValue();
-	void SetValue(double value);
+    using wxTextCtrl::GetValue; double GetValue();
+    using wxTextCtrl::SetValue; void SetValue(double value);
 };
 
 // a dialog control to enter a number in the current units

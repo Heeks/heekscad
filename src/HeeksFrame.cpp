@@ -1218,7 +1218,7 @@ class ToolBarPopup;
 
 class CFlyOutButton: public wxBitmapButton
 {
-	wxToolBar *m_toolBar;
+	wxToolBar *UNUSED(m_toolBar);
 	wxBitmap m_current_bitmap;
 	wxTimer m_timer;
 	bool m_disappears_on_click;
@@ -1360,8 +1360,8 @@ class ToolBarPopup: public wxPopupTransientWindow
 	}
 
 	private:
-		wxButton *m_button;
-		wxStaticText *m_mouseText;
+		wxButton *UNUSED(m_button);
+		wxStaticText *UNUSED(m_mouseText);
 };
 
 CFlyOutButton::~CFlyOutButton()
@@ -1384,7 +1384,7 @@ void CFlyOutButton::OnMouse( wxMouseEvent& event )
 		m_toolbarPopup = new ToolBarPopup( this );
 		wxWindow *btn = (wxWindow*) event.GetEventObject();
 		wxPoint pos = btn->ClientToScreen( wxPoint(0,0) );
-		wxSize sz = btn->GetSize();
+		wxSize UNUSED(sz) = btn->GetSize();
 #ifdef WIN32
 		m_toolbarPopup->Move(pos.x - FLYOUT_PANEL_BORDER, pos.y - 3 - FLYOUT_PANEL_BORDER);
 #else

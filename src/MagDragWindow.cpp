@@ -29,7 +29,7 @@ void MagDragWindow::OnMouse( wxMouseEvent& event )
 	}
 	else if(event.Dragging())
 	{
-		wxGetApp().m_frame->m_graphics->SetCurrent();
+		wxGetApp().m_frame->m_graphics->SetCurrent(*wxGetApp().m_frame->m_graphics->m_glRC);
 		wxGetApp().m_current_viewport->SetXOR();
 		if(window_box_exists)wxGetApp().m_current_viewport->DrawWindow(window_box, false);// undraw the window
 		window_box.width = event.GetX() - window_box.x;

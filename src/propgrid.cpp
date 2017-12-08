@@ -11,7 +11,7 @@
 
 #include "stdafx.h"
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA) && !defined(__APPLE_CC__)
     #pragma implementation "propgrid.h"
 #endif
 
@@ -3688,15 +3688,30 @@ void wxPropertyGrid::Init2()
 	// adjust bitmap icon y position so they are centered
     m_vspacing = wxPG_DEFAULT_VSPACING;
 
-    if ( !m_font.Ok() )
+
+    if ( m_font.Ok() )
+        // This should be otherwise called by SetOwnFont
+        CalculateFontAndBitmapStuff( wxPG_DEFAULT_VSPACING );
+    else if ( wxNORMAL_FONT->Ok() )
+    {
+        m_font = *wxNORMAL_FONT;
+        CalculateFontAndBitmapStuff( wxPG_DEFAULT_VSPACING );
+    }
+    else
     {
         wxFont useFont = wxScrolledWindow::GetFont();
         wxScrolledWindow::SetOwnFont( useFont );
     }
-    else
-        // This should be otherwise called by SetOwnFont
-	    CalculateFontAndBitmapStuff( wxPG_DEFAULT_VSPACING );
-
+    
+    //    if ( !m_font.Ok() )
+    //   {
+    //        wxFont useFont = wxScrolledWindow::GetFont();
+    //       wxScrolledWindow::SetOwnFont( useFont );
+    //    }
+    //    else
+    //        // This should be otherwise called by SetOwnFont
+    //        CalculateFontAndBitmapStuff( wxPG_DEFAULT_VSPACING );
+    
     // Add base brush item
     m_arrBgBrushes.Add((void*)new wxPGBrush());
 
@@ -8735,8 +8750,9 @@ void wxPropertyGrid::PGAdjustScrollbars( int y )
 {
     // Adjust scrollbars.
 
-	y += wxPG_PIXELS_PER_UNIT+2; // One more scrollbar unit + 2 pixels.
-    int y_amount = y/wxPG_PIXELS_PER_UNIT;
+    y += wxPG_PIXELS_PER_UNIT+2; // One more scrollbar unit + 2 pixels.
+    int y_amount = y/2;
+    if (wxPG_PIXELS_PER_UNIT > 0) y_amount = y/wxPG_PIXELS_PER_UNIT;
 
     int y_pos = GetScrollPos( wxVERTICAL );
     SetScrollbars( 0, wxPG_PIXELS_PER_UNIT, 0,

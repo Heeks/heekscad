@@ -389,7 +389,7 @@ void CTreeCanvas::Thaw()
 	}
 }
 
-void CTreeCanvas::Refresh()
+void CTreeCanvas::Refresh(bool eraseBackground, const wxRect *rect)
 {
 	if(m_frozen)
 	{

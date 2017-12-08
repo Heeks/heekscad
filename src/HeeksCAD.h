@@ -360,7 +360,7 @@ class HeeksCADapp : public wxApp, public ObjList
 		void ObserversThaw();
 		const wxChar* GetKnownFilesWildCardString(bool open, bool import_export)const;
 		const wxChar* GetKnownFilesCommaSeparatedList(bool open, bool import_export)const;
-		void GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool control_pressed);
+        using HeeksObj::GetTools; void GetTools(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool control_pressed);
 		void GetTools2(MarkedObject* marked_object, std::list<Tool*>& t_list, const wxPoint& point, bool control_pressed, bool make_tool_list_container);
 		wxString GetExeFolder()const;
 		wxString GetResFolder()const;
@@ -436,7 +436,7 @@ class HeeksCADapp : public wxApp, public ObjList
 		typedef std::map< ObjectReference_t, HeeksObj * > ObjectReferences_t;
 
 		wxString HeeksType( const int type ) const;
-		unsigned int GetIndex(HeeksObj *object);
+        using HeeksObj::GetIndex; unsigned int GetIndex(HeeksObj *object);
 		void ReleaseIndex(unsigned int index);
 
 		void GetExternalMarkedListTools(std::list<Tool*>& t_list);

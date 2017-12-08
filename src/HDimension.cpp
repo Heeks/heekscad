@@ -536,7 +536,7 @@ void HDimension::draw_arrow_line(DimensionMode mode, const gp_Pnt &p0, const gp_
 	if(xm < x0)
 	{
 		// long line first
-		gp_Pnt vt4 = vt2.XYZ() + xdir_along.XYZ() * (-long_line_extra);
+		gp_Pnt UNUSED(vt4) = vt2.XYZ() + xdir_along.XYZ() * (-long_line_extra);
 		glBegin(GL_LINES);
 		glVertex3d(vt2.X(), vt2.Y(), vt2.Z());
 		glVertex3d(new_vt0.X(), new_vt0.Y(), new_vt0.Z());

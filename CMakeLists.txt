@@ -9,16 +9,18 @@ find_package( wxWidgets REQUIRED COMPONENTS base core gl )
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 #find OCE or OpenCASCADE
-set( CASCADE_LIBS TKernel )
-if( UNIX )
+set( CASCADE_LIBS TKernel TKG3d TKBRep )
+if ( APPLE )
+  set ( OCE_DIR "/usr/local/opt/oce/OCE.framework/Versions/0.18/Resources/" )
+elseif( UNIX )
   set( OCE_DIR "/usr/local/share/cmake/" )
 else()
   set( OCE_DIR "c:/OCE-0.3.0/share/cmake" )
 endif()
-find_package ( OCE )
+find_package ( OCE REQUIRED COMPONENTS ${CASCADE_LIBS} )
 if( ${OCE_FOUND} )
   add_definitions ( -DHAVE_CONFIG_H )
-  set( OpenCASCADE_LIBRARIES ${CASCADE_LIBS} )
+  set( OpenCASCADE_LIBRARIES ${OCE_LIBS} )
   set( OpenCASCADE_INCLUDE_DIR ${OCE_INCLUDE_DIRS} )
 else() #look for OpenCASCADE
   find_package ( OpenCASCADE REQUIRED COMPONENTS ${CASCADE_LIBS} )
@@ -28,11 +30,12 @@ endif()
 #find libarea
 find_package( libarea REQUIRED )
 
-if( APPLE )
-  # Apple includes two different openGL implementations, for Carbon and X11.  We want X11
-  set( OSX_INCLUDE_DIRS /usr/X11R6/include )
-  set( OSX_LIBS -L/usr/X11R6/lib -lGL -lX11 -lGLU -lglut )
-endif( APPLE )
+# Apple also includes GLKit which cmake will set up by default. Lets use that instead.
+#if( APPLE )
+#  # Apple includes two different openGL implementations, for Carbon and X11.  We want X11
+#  set( OSX_INCLUDE_DIRS /usr/X11/include )
+#   set( OSX_LIBS -L/usr/X11/lib -lGL -lX11 -lGLU -lglut )
+#endif( APPLE )
 
 include(${wxWidgets_USE_FILE})
 
@@ -43,7 +46,7 @@ include_directories ( SYSTEM
 include_directories (
   ${CMAKE_SOURCE_DIR}
   ${wxWidgets_INCLUDE_DIRS}
-  ${OSX_INCLUDE_DIRS}
+#  ${OSX_INCLUDE_DIRS}
 )
 
 # CMake summary

@@ -12,7 +12,7 @@
 #ifndef __WX_PROPGRID_PROPGRID_H__
 #define __WX_PROPGRID_PROPGRID_H__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA) && !defined(__APPLE_CC__)
     #pragma interface "propgrid.cpp"
 #endif
 
@@ -413,15 +413,15 @@ extern WXDLLIMPEXP_PG const wxChar *wxPropertyGridNameStr;
     #define wxPG_EMPTY_ARRAYINT     wxArrayInt()
     #define wxPG_EMPTY_ARRAYSTRING  wxArrayString()
 #elif !defined(SWIG)
-    #define wxPG_EMPTY_ARRAYINT     (*((wxArrayInt*)NULL))
-    #define wxPG_EMPTY_ARRAYSTRING  (*((wxArrayString*)NULL))
+    #define wxPG_EMPTY_ARRAYINT     wxArrayInt() //(*((wxArrayInt*)NULL))
+    #define wxPG_EMPTY_ARRAYSTRING  wxArrayString() //(*((wxArrayString*)NULL))
 #else
     #define wxPG_EMPTY_ARRAYINT     wxArrayInt_wxPG_EMPTY
     #define wxPG_EMPTY_ARRAYSTRING  wxArrayString_wxPG_EMPTY
 #endif
 
 #if !defined(SWIG)
-    #define wxPG_LABEL              (*((wxString*)NULL))  // Used to tell wxPGProperty to use label as name as well.
+    #define wxPG_LABEL              wxEmptyString   //(*((wxString*)NULL))  // Used to tell wxPGProperty to use label as name as well.
     #define wxPG_NULL_BITMAP        wxNullBitmap
     #define wxPG_COLOUR_BLACK       (*wxBLACK)
 #else

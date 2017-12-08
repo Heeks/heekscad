@@ -592,7 +592,7 @@ bool HCircle::GetArcTangentPoints(const gp_Circ& c1, const gp_Circ &c2, const gp
 
 	// find left and right
 	gp_Vec join(c1.Location(), c2.Location());
-	gp_Vec forward = join.Normalized();
+    gp_Vec UNUSED(forward) = join.Normalized();
 	gp_Vec left1 = c1.Axis().Direction() ^ join;
 	gp_Vec left2 = c2.Axis().Direction() ^ join;
 	if(left1 * left2 < 0)left2 = -left2;
@@ -1011,4 +1011,4 @@ void HCircle::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 		t_list->push_back(&click_western_midpoint_of_circle);
 	}
 
-}
+}
