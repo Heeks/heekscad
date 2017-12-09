@@ -413,8 +413,8 @@ extern WXDLLIMPEXP_PG const wxChar *wxPropertyGridNameStr;
     #define wxPG_EMPTY_ARRAYINT     wxArrayInt()
     #define wxPG_EMPTY_ARRAYSTRING  wxArrayString()
 #elif !defined(SWIG)
-    #define wxPG_EMPTY_ARRAYINT     wxArrayInt() //(*((wxArrayInt*)NULL))
-    #define wxPG_EMPTY_ARRAYSTRING  wxArrayString() //(*((wxArrayString*)NULL))
+    #define wxPG_EMPTY_ARRAYINT     (*((wxArrayInt*)NULL))
+    #define wxPG_EMPTY_ARRAYSTRING  (*((wxArrayString*)NULL))
 #else
     #define wxPG_EMPTY_ARRAYINT     wxArrayInt_wxPG_EMPTY
     #define wxPG_EMPTY_ARRAYSTRING  wxArrayString_wxPG_EMPTY
@@ -423,6 +423,7 @@ extern WXDLLIMPEXP_PG const wxChar *wxPropertyGridNameStr;
 #if !defined(SWIG)
     #define wxPG_LABEL              wxEmptyString   //(*((wxString*)NULL))  // Used to tell wxPGProperty to use label as name as well.
     #define wxPG_NULL_BITMAP        wxNullBitmap
+    #define wxPG_NULL_POINT         wxNullPoint
     #define wxPG_COLOUR_BLACK       (*wxBLACK)
 #else
     #define wxPG_LABEL              wxString_wxPG_LABEL
