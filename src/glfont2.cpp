@@ -16,7 +16,11 @@ using namespace std;
 #ifdef _WINDOWS
 #include <windows.h>
 #endif
+#ifdef __WXMAC__
+#include "OpenGL/gl.h"
+#else
 #include <GL/gl.h>
+#endif
 
 //glFont header
 #include "glfont2.h"

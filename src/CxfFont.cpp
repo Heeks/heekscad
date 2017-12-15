@@ -10,8 +10,13 @@
 #include <wx/window.h>
 #include <wx/strconv.h>
 
+#ifdef __WXMAC__
+#include "OpenGL/gl.h"
+#include "OpenGL/glu.h"
+#else
 #include <GL/gl.h>
 #include <GL/glu.h>
+#endif
 
 #include <iostream>
 #include <fstream>

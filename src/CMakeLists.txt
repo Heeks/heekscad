@@ -15,7 +15,7 @@ else() #look for OpenCASCADE
 endif()
 
 find_package( OpenGL REQUIRED )
-find_package( wxWidgets REQUIRED COMPONENTS base core gl aui )
+find_package( wxWidgets REQUIRED COMPONENTS base core gl aui propgrid )
 find_package( PythonLibs REQUIRED )
 
 include(${wxWidgets_USE_FILE})
@@ -120,13 +120,8 @@ set( heekscad_HDRS
     ViewZooming.h
     Window.h
     Wire.h
-    advprops.h
     dxf.h
     glfont2.h
-    manager.h
-    odcombo.h
-    propdev.h
-    propgrid.h
     stdafx.h
     svg.h
     wxImageLoader.h
@@ -219,13 +214,8 @@ set( heekscad_SRCS
     ViewZooming.cpp
     Window.cpp
     Wire.cpp
-    advprops.cpp
     dxf.cpp
     glfont2.cpp
-    manager.cpp
-    odcombo.cpp
-    propgrid.cpp
-    props.cpp
     stdafx.cpp
     svg.cpp
     wxImageLoader.cpp

@@ -89,7 +89,7 @@ private:
     // NOTE: These three variables are relatively transient.  They are only held here to reduce re-work
     // during a single rendering session.
 
-    HeeksObj *m_last_child;
+    HeeksObj *UNUSED(m_last_child);
     Edges_t m_edges;
     double m_total_edge_length;
 

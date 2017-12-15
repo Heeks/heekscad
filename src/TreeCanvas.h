@@ -13,11 +13,11 @@
 class CTreeCanvas: public wxScrolledWindow, Observer
 {
 private:
-	bool m_LButton;
+	bool UNUSED(m_LButton);
 	wxPoint m_CurrentPoint;
 	bool m_frozen;
 	bool m_refresh_wanted_on_thaw;
-    int width, height, textureWidth, textureHeight;
+    int UNUSED(width), UNUSED(height), UNUSED(textureWidth), UNUSED(textureHeight);
 	std::set<HeeksObj*> m_expanded;
 	std::set<HeeksObj*> m_collapsed;
 	//int scroll_y_pos;
@@ -66,7 +66,7 @@ public:
 	void Clear();
 	void Freeze();
 	void Thaw();
-	void Refresh();
+    void Refresh(bool eraseBackground = true, const wxRect *rect = NULL);
 	void RefreshSoon(); // for dragging the view, for example
 
 private:

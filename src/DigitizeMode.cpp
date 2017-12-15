@@ -50,28 +50,37 @@ const wxChar* DigitizeMode::GetTitle()
 		const wxChar* type_str = NULL;
 		switch(digitized_point.m_type)
 		{
-		case DigitizeEndofType:
-			type_str = _("end");
-			break;
-		case DigitizeIntersType:
-			type_str = _("intersection");
-			break;
-		case DigitizeMidpointType:
-			type_str = _("midpoint");
-			break;
-		case DigitizeCentreType:
-			type_str = _("centre");
-			break;
-		case DigitizeScreenType:
-			type_str = _("screen");
-			break;
-		case DigitizeNearestType:
-			type_str = _("nearest");
-			break;
-		case DigitizeTangentType:
-			type_str = _("tangent");
-			break;
-		}
+            case DigitizeNoItemType:
+                type_str = _("none");
+                break;
+            case DigitizeEndofType:
+                type_str = _("end");
+                break;
+            case DigitizeIntersType:
+                type_str = _("intersection");
+                break;
+            case DigitizeMidpointType:
+                type_str = _("midpoint");
+                break;
+            case DigitizeCentreType:
+                type_str = _("centre");
+                break;
+            case DigitizeScreenType:
+                type_str = _("screen");
+                break;
+            case DigitizeCoordsType:
+                type_str = _("coords");
+                break;
+            case DigitizeNearestType:
+                type_str = _("nearest");
+                break;
+            case DigitizeTangentType:
+                type_str = _("tangent");
+                break;
+            case DigitizeInputType:
+                type_str = _("input");
+                break;
+        }
 
 		if(type_str)
 		{
@@ -97,7 +106,7 @@ const wxChar* DigitizeMode::GetHelpText()
 }
 
 void DigitizeMode::OnMouse( wxMouseEvent& event ){
-	if(event.MiddleIsDown() || event.GetWheelRotation() != 0)
+	if(event.MiddleIsDown() || event.GetWheelRotation() != 0 || (event.LeftIsDown() && event.AltDown()))
 	{
 		wxGetApp().m_select_mode->OnMouse(event);
 		return;

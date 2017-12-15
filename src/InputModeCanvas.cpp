@@ -8,7 +8,7 @@
 #include "../interface/Property.h"
 #include "../interface/PropertyString.h"
 #include "../interface/ToolImage.h"
-#include "propgrid.h"
+#include <wx/propgrid/propgrid.h>
 #include "HeeksFrame.h"
 
 BEGIN_EVENT_TABLE(CInputModeCanvas, wxScrolledWindow)
@@ -49,7 +49,7 @@ void CInputModeCanvas::OnSize(wxSizeEvent& event)
 	wxSize size = GetClientSize();
 	if(m_toolBar->GetToolsCount() > 0)
 	{
-		wxSize toolbar_size = m_toolBar->GetClientSize();
+		wxSize UNUSED(toolbar_size) = m_toolBar->GetClientSize();
 		int toolbar_height = ToolImage::GetBitmapSize() + EXTRA_TOOLBAR_HEIGHT;
 		m_pg->SetSize(0, 0, size.x, size.y - toolbar_height );
 		m_toolBar->SetSize(0, size.y - toolbar_height , size.x, toolbar_height );
@@ -122,7 +122,7 @@ void CInputModeCanvas::RefreshByRemovingAndAddingAll2(){
 
 		wxSize size = GetClientSize();
 		if(m_toolBar->GetToolsCount() > 0){
-			wxSize toolbar_size = m_toolBar->GetClientSize();
+			wxSize UNUSED(toolbar_size) = m_toolBar->GetClientSize();
 			int toolbar_height = ToolImage::GetBitmapSize() + EXTRA_TOOLBAR_HEIGHT;
 			m_pg->SetSize(0, 0, size.x, size.y - toolbar_height );
 			m_toolBar->SetSize(0, size.y - toolbar_height , size.x, toolbar_height );

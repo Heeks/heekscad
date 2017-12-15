@@ -62,7 +62,7 @@ void PictureWindow::SetPicture(const wxString& filepath, long image_type)
 	wxBitmap* bitmap = NULL;
 	if(FindIt == m_bitmaps.end())
 	{
-		bitmap = new wxBitmap(wxImage(filepath, image_type));
+		bitmap = new wxBitmap(wxImage(filepath, (wxBitmapType )image_type));
 	}
 	else
 	{

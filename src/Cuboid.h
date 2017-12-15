@@ -36,7 +36,7 @@ public:
 	bool DescendForUndo(){return false;}
 	void WriteDefaultValues();
 	void ReadDefaultValues();
-	void GetOnEdit(bool(**callback)(HeeksObj*, std::list<HeeksObj*> *));
+    using HeeksObj::GetOnEdit; void GetOnEdit(bool(**callback)(HeeksObj*, std::list<HeeksObj*> *));
 
 	// CShape's virtual functions
 	void SetXMLElement(TiXmlElement* element);

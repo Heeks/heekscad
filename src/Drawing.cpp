@@ -130,7 +130,7 @@ void Drawing::OnMouse( wxMouseEvent& event )
 	}
 
 	if(!event_used){
-		if(event.MiddleIsDown() || event.GetWheelRotation() != 0)
+		if(event.MiddleIsDown() || event.GetWheelRotation() != 0 || (event.LeftIsDown() && event.AltDown()))
 		{
 			wxGetApp().m_select_mode->OnMouse(event);
 		}

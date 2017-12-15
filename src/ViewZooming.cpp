@@ -29,7 +29,7 @@ void ViewZooming::OnMouse( wxMouseEvent& event )
 		{
 			wxGetApp().m_current_viewport->m_view_point.Scale(wxPoint(event.GetX(), event.GetY()), m_reversed);
 		}
-		else if(event.MiddleIsDown())
+		else if(event.MiddleIsDown() || (event.LeftIsDown() && event.AltDown()))
 		{
 			wxGetApp().m_current_viewport->m_view_point.Shift(dm, wxPoint(event.GetX(), event.GetY()));
 		}

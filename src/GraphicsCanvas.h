@@ -54,9 +54,12 @@ public:
 class CGraphicsCanvas: public wxGLCanvas, public CViewport, Observer
 {
 public:
+    wxGLContext* m_glRC;
+
+public:
 
     CGraphicsCanvas(wxWindow* parent);
-    virtual ~CGraphicsCanvas(){};
+    virtual ~CGraphicsCanvas();
 
     void OnPaint(wxPaintEvent& event);
     void OnSize(wxSizeEvent& event);
@@ -70,7 +73,8 @@ public:
 	void Clear();
 	void Freeze();
 	void Thaw();
-	void Refresh();
+    void Refresh( bool eraseBackground = true,
+                 const wxRect *rect = NULL );
 	void RefreshSoon(); // for dragging the view, for example
 	void OnEditColor();
 	void OnSelectDetails();
@@ -91,5 +95,6 @@ public:
 	void WindowMag(wxRect &window_box);
 
 private:
+    wxDECLARE_NO_COPY_CLASS(CGraphicsCanvas);
     DECLARE_EVENT_TABLE()
 };

@@ -285,8 +285,8 @@ bool DigitizedPoint::GetEllipse(const DigitizedPoint& d1, const DigitizedPoint& 
 	gp_Pnt zp(0,0,0);
 	e.Rotate(gp_Ax1(d1.m_point,up),rot);
 
-	gp_Dir x_axis = e.XAxis().Direction();
-	gp_Dir y_axis = e.YAxis().Direction();
+	gp_Dir UNUSED(x_axis) = e.XAxis().Direction();
+	gp_Dir UNUSED(y_axis) = e.YAxis().Direction();
 	double maj_r = d;
 
 	//We have to rotate the incoming vector to be in our coordinate system

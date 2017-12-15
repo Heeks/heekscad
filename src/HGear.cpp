@@ -260,7 +260,10 @@ void base_point(double tooth_angle, ClearancePointType point_type)
 	case CLEARANCE_POINT1_TYPE:
 		point(p1.X(), p1.Y());	
 		break;
-	}
+    case CLEARANCE_POINT2_TYPE:
+        point(p2.X(), p2.Y());
+        break;
+    }
 }
 
 void clearance_point1(double tooth_angle, double clearance)
