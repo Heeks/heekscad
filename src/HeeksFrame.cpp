@@ -215,6 +215,8 @@ CHeeksFrame::CHeeksFrame( const wxString& title, const wxPoint& pos, const wxSiz
 
 CHeeksFrame::~CHeeksFrame()
 {
+    wxWindow::SendDestroyEvent();
+    
 	wxGetApp().Clear(); // delete all the objects, from the dlls
 
 	// call the shared libraries function OnFrameDelete, so they can write profile strings while aui manager still exists
@@ -244,6 +246,7 @@ CHeeksFrame::~CHeeksFrame()
 	config.Write(_T("ToolImageSize"), ToolImage::GetBitmapSize());
 	config.Write(_T("Perspective"), m_graphics->m_view_point.GetPerspective());
 
+    m_aui_manager->UnInit();
 	delete m_aui_manager;
 	delete wxLog::SetActiveTarget(NULL);
 	SetMenuBar(NULL);

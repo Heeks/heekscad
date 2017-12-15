@@ -8,7 +8,7 @@
 #include "../interface/Property.h"
 #include "../interface/PropertyString.h"
 #include "../interface/ToolImage.h"
-#include "propgrid.h"
+#include <wx/propgrid/propgrid.h>
 #include "HeeksFrame.h"
 
 BEGIN_EVENT_TABLE(CInputModeCanvas, wxScrolledWindow)

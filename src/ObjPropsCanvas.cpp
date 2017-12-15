@@ -6,7 +6,7 @@
 #include "../interface/Property.h"
 #include "../interface/ToolImage.h"
 #include "../interface/PropertyVertex.h"
-#include "propgrid.h"
+#include <wx/propgrid/propgrid.h>
 #include "HeeksFrame.h"
 #include "MarkedList.h"
 #include "../interface/MarkedObject.h"
