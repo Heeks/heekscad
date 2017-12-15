@@ -24,6 +24,32 @@
 #include "CoordinateSystem.h"
 #include "PropertyChange.h"
 
+class wxPGPropertyReadOnlyShim : wxPGProperty {
+    /**
+     Default constructor.
+     */
+    wxPGPropertyReadOnlyShim() : wxPGProperty() { }
+    
+    /**
+     Constructor.
+     
+     All non-abstract property classes should have a constructor with
+     the same first two arguments as this one.
+     */
+    wxPGPropertyReadOnlyShim( const wxString& label, const wxString& name ) : wxPGProperty(label, name) { }
+    
+    /**
+     Virtual destructor.
+     It is customary for derived properties to implement this.
+     */
+    virtual ~wxPGPropertyReadOnlyShim();
+    
+public:
+    void SetReadOnly() {
+        this->SetFlag(wxPG_PROP_READONLY);
+    }
+};
+
 BEGIN_EVENT_TABLE(CPropertiesCanvas, wxScrolledWindow)
 	EVT_SIZE(CPropertiesCanvas::OnSize)
 
@@ -156,7 +182,7 @@ void CPropertiesCanvas::AddProperty(Property* p, wxPGProperty* parent_prop)
 	case StringPropertyType:
 		{
 			wxPGProperty *new_prop = new wxStringProperty(p->GetShortString(),wxPG_LABEL, ((PropertyString*)p)->m_initial_value);
-			///if(!p->property_editable())new_prop->SetFlag(wxPG_PROP_READONLY);
+			if(!p->property_editable())((wxPGPropertyReadOnlyShim *)new_prop)->SetReadOnly();
 			Append( parent_prop, new_prop, p);
 			if(p->m_highlighted)m_pg->SetPropertyBackgroundColour(new_prop, wxColour(71, 141, 248));
 		}
@@ -165,14 +191,14 @@ void CPropertiesCanvas::AddProperty(Property* p, wxPGProperty* parent_prop)
 	case LengthPropertyType:
 		{
 			wxPGProperty *new_prop = new wxFloatProperty(p->GetShortString(),wxPG_LABEL, ((PropertyDouble*)p)->m_initial_value);
-			///if(!p->property_editable())new_prop->SetFlag(wxPG_PROP_READONLY);
+			if(!p->property_editable())((wxPGPropertyReadOnlyShim *)new_prop)->SetReadOnly();
 			Append( parent_prop, new_prop, p);
 		}
 		break;
 	case IntPropertyType:
 		{
 			wxPGProperty *new_prop = new wxIntProperty(p->GetShortString(),wxPG_LABEL, ((PropertyInt*)p)->m_initial_value);
-			///if(!p->property_editable())new_prop->SetFlag(wxPG_PROP_READONLY);
+			if(!p->property_editable())((wxPGPropertyReadOnlyShim *)new_prop)->SetReadOnly();
 			Append( parent_prop, new_prop, p);
 		}
 		break;
@@ -181,7 +207,7 @@ void CPropertiesCanvas::AddProperty(Property* p, wxPGProperty* parent_prop)
 			HeeksColor& col = ((PropertyColor*)p)->m_initial_value;
 			wxColour wcol(col.red, col.green, col.blue);
 			wxPGProperty *new_prop = new wxColourProperty(p->GetShortString(),wxPG_LABEL, wcol);
-			///if(!p->property_editable())new_prop->SetFlag(wxPG_PROP_READONLY);
+			if(!p->property_editable())((wxPGPropertyReadOnlyShim *)new_prop)->SetReadOnly();
 			Append( parent_prop, new_prop, p);
 		}
 		break;
@@ -193,7 +219,7 @@ void CPropertiesCanvas::AddProperty(Property* p, wxPGProperty* parent_prop)
 				array_string.Add(wxString(It->c_str()));
 			}
 			wxPGProperty *new_prop = new wxEnumProperty(p->GetShortString(),wxPG_LABEL,array_string, wxArrayInt(), ((PropertyChoice*)p)->m_initial_index);
-			///if(!p->property_editable())new_prop->SetFlag(wxPG_PROP_READONLY);
+			if(!p->property_editable())((wxPGPropertyReadOnlyShim *)new_prop)->SetReadOnly();
 			Append( parent_prop, new_prop, p );
 		}
 		break;
@@ -210,16 +236,16 @@ void CPropertiesCanvas::AddProperty(Property* p, wxPGProperty* parent_prop)
 				for(unsigned int i = 0; i<number_of_axes; i++)x[i] /= wxGetApp().m_view_units;
 			}
 			wxPGProperty* x_prop = new wxFloatProperty(_("x"),wxPG_LABEL, x[0]);
-			///if(!p->property_editable())x_prop->SetFlag(wxPG_PROP_READONLY);
+			if(!p->property_editable())((wxPGPropertyReadOnlyShim *)x_prop)->SetReadOnly();
 			Append( new_prop, x_prop, p );
 			wxPGProperty* y_prop = new wxFloatProperty(_("y"),wxPG_LABEL, x[1]);
-			///if(!p->property_editable())y_prop->SetFlag(wxPG_PROP_READONLY);
+			if(!p->property_editable())((wxPGPropertyReadOnlyShim *)y_prop)->SetReadOnly();
 			Append( new_prop, y_prop, p );
 			if(!((PropertyVertex*)p)->xyOnly())
 			{
 				wxPGProperty* z_prop = new wxFloatProperty(_("z"),wxPG_LABEL, x[2]);
-				///if(!p->property_editable())z_prop->SetFlag(wxPG_PROP_READONLY);
-				///new_prop->SetFlag(wxPG_PROP_READONLY);
+				if(!p->property_editable())((wxPGPropertyReadOnlyShim *)z_prop)->SetReadOnly();
+				((wxPGPropertyReadOnlyShim *)new_prop)->SetReadOnly();
 				Append( new_prop, z_prop, p );
 			}
 		}
@@ -242,30 +268,30 @@ void CPropertiesCanvas::AddProperty(Property* p, wxPGProperty* parent_prop)
 			wxPGProperty* new_prop = new wxStringProperty(p->GetShortString(),wxPG_LABEL,wxT("<composed>"));
 			Append( parent_prop, new_prop, p );
 			wxPGProperty* x_prop = new wxFloatProperty(_("x"),wxPG_LABEL,x[0]);
-			///if(!p->property_editable())x_prop->SetFlag(wxPG_PROP_READONLY);
+			if(!p->property_editable())((wxPGPropertyReadOnlyShim *)x_prop)->SetReadOnly();
 			Append( new_prop, x_prop, p );
 			wxPGProperty* y_prop = new wxFloatProperty(_("y"),wxPG_LABEL,x[1]);
-			///if(!p->property_editable())y_prop->SetFlag(wxPG_PROP_READONLY);
+			if(!p->property_editable())((wxPGPropertyReadOnlyShim *)y_prop)->SetReadOnly();
 			Append( new_prop, y_prop, p );
 			wxPGProperty* z_prop = new wxFloatProperty(_("z"),wxPG_LABEL,x[2]);
-			///if(!p->property_editable())z_prop->SetFlag(wxPG_PROP_READONLY);
+			if(!p->property_editable())((wxPGPropertyReadOnlyShim *)z_prop)->SetReadOnly();
 			Append( new_prop, z_prop, p );
 			wxPGProperty* v_prop = new wxFloatProperty(_("vertical angle"),wxPG_LABEL,vertical_angle);
-			///if(!p->property_editable())v_prop->SetFlag(wxPG_PROP_READONLY);
+			if(!p->property_editable())((wxPGPropertyReadOnlyShim *)v_prop)->SetReadOnly();
 			Append( new_prop, v_prop, p );
 			wxPGProperty* h_prop = new wxFloatProperty(_("horizontal angle"),wxPG_LABEL,horizontal_angle);
-			///if(!p->property_editable())h_prop->SetFlag(wxPG_PROP_READONLY);
+			if(!p->property_editable())((wxPGPropertyReadOnlyShim *)h_prop)->SetReadOnly();
 			Append( new_prop, h_prop, p );
 			wxPGProperty* t_prop = new wxFloatProperty(_("twist angle"),wxPG_LABEL,twist_angle);
-			///if(!p->property_editable())t_prop->SetFlag(wxPG_PROP_READONLY);
-			///new_prop->SetFlag(wxPG_PROP_READONLY);
+			if(!p->property_editable())((wxPGPropertyReadOnlyShim *)t_prop)->SetReadOnly();
+			((wxPGPropertyReadOnlyShim *)new_prop)->SetReadOnly();
 			Append( new_prop, t_prop, p );
 		}
 		break;
 	case CheckPropertyType:
 		{
 			wxPGProperty* new_prop = new wxBoolProperty(p->GetShortString(),wxPG_LABEL, ((PropertyCheck*)p)->m_initial_value);
-			///if(!p->property_editable())new_prop->SetFlag(wxPG_PROP_READONLY);
+			if(!p->property_editable())((wxPGPropertyReadOnlyShim *)new_prop)->SetReadOnly();
 			Append( parent_prop, new_prop, p );
 			m_pg->SetPropertyAttribute(new_prop, wxPG_BOOL_USE_CHECKBOX, true);
 		}
@@ -273,7 +299,7 @@ void CPropertiesCanvas::AddProperty(Property* p, wxPGProperty* parent_prop)
 	case ListOfPropertyType:
 		{
 			wxPGProperty* new_prop = new wxStringProperty(p->GetShortString(),wxPG_LABEL,wxT("<composed>"));
-			///if(!p->property_editable())new_prop->SetFlag(wxPG_PROP_READONLY);
+			if(!p->property_editable())((wxPGPropertyReadOnlyShim *)new_prop)->SetReadOnly();
 			Append( parent_prop, new_prop, p );
 			std::list< Property* >::iterator It;
 			for(It = ((PropertyList*)p)->m_list.begin(); It != ((PropertyList*)p)->m_list.end(); It++){
@@ -285,7 +311,7 @@ void CPropertiesCanvas::AddProperty(Property* p, wxPGProperty* parent_prop)
 	case FilePropertyType:
 		{
 			wxPGProperty *new_prop = new wxFileProperty(p->GetShortString(),wxPG_LABEL, ((PropertyFile*)p)->m_initial_value);
-			///if(!p->property_editable())new_prop->SetFlag(wxPG_PROP_READONLY);
+			if(!p->property_editable())((wxPGPropertyReadOnlyShim *)new_prop)->SetReadOnly();
 			Append( parent_prop, new_prop, p);
 			if(p->m_highlighted)m_pg->SetPropertyBackgroundColour(new_prop, wxColour(71, 141, 248));
 		}
