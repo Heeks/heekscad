@@ -1,7 +1,7 @@
 HeeksCAD is an open source, CAD application based on OpenCASCADE
 
 Best known as the CAD in HeeksCNC ( CAD/CAM software )
-see http://www.heeks.net
+see http://sites.google.com/site/heekscad/
 
 # Features #
 * Import solid models from STEP and IGES files.
