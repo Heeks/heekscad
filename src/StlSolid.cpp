@@ -70,7 +70,7 @@ bool IsAsciiStlFile(ifstream *ifs)
 		bool found = false;
 		bool started = false;
 		int i = 0;
-		while (!found && i < 15)
+		while (!found && i < 512)
 		{
 			char c = ifs->get();
 
