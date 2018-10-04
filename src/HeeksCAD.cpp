@@ -578,7 +578,7 @@ void HeeksCADapp::WriteConfig()
 	config.Write(_T("ZoomingReversed"), ViewZooming::m_reversed);
 	config.Write(_T("CtrlDoesRotate"), ctrl_does_rotate);
 	config.Write(_T("DrawDatum"), m_show_datum_coords_system);
-	config.Write(_T("DrawDatumSolid"), m_show_datum_coords_system);
+	config.Write(_T("DrawDatumSolid"), m_datum_coords_system_solid_arrows);
 	config.Write(_T("DatumSize"), CoordinateSystem::size);
 	config.Write(_T("DatumSizeIsPixels"), CoordinateSystem::size_is_pixels);
 	config.Write(_T("DrawRuler"), m_show_ruler);
@@ -2801,12 +2801,16 @@ void on_set_face_to_sketch_deviation(double value, HeeksObj* object)
 void on_set_show_datum(bool onoff, HeeksObj* object)
 {
 	wxGetApp().m_show_datum_coords_system = onoff;
+	HeeksConfig config;
+	config.Write(_T("SketchReorderTolerance"), wxGetApp().m_sketch_reorder_tol);
 	wxGetApp().Repaint();
 }
 
 void on_set_solid_datum(bool onoff, HeeksObj* object)
 {
 	wxGetApp().m_datum_coords_system_solid_arrows = onoff;
+	HeeksConfig config;
+	config.Write(_T("DrawDatumSolid"), wxGetApp().m_datum_coords_system_solid_arrows);
 	wxGetApp().Repaint();
 }
 
