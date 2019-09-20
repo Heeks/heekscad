@@ -142,7 +142,8 @@ void HeeksDxfRead::OnReadCircle(const double* s, const double* c, bool dir, bool
 void HeeksDxfRead::OnReadSpline(TColgp_Array1OfPnt &control, TColStd_Array1OfReal &weight, TColStd_Array1OfReal &knot,TColStd_Array1OfInteger &mult, int degree, bool periodic, bool rational)
 {
 	try{
-		Geom_BSplineCurve spline(control,weight,knot,mult,degree,periodic,rational);
+		Geom_BSplineCurve spline(control,weight,knot,mult,degree,false,rational);
+		if(periodic)spline.SetPeriodic();
 		HSpline* new_object = new HSpline(spline, ActiveColorPtr(m_aci));
 		AddObject(new_object);
 	}
@@ -226,7 +227,7 @@ void HeeksDxfRead::OnReadSpline(struct SplineData& sd)
 	{
 		knot.SetValue(i,*it);
 		int m = *itm;
-		if(closed && (i == 1 || i == knoto.size()))m = 1;
+		//if(closed && (i == 1 || i == knoto.size()))m = 1;
 		mult.SetValue(i, m);
 		++itm;
 		++i;

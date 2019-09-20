@@ -358,7 +358,7 @@
 				ProgramDataBaseFileName="vc_msw\HeeksCAD.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
-				DebugInformationFormat="0"
+				DebugInformationFormat="3"
 				CompileAs="0"
 			/>
 			<Tool
@@ -380,7 +380,7 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="&quot;$(WXWIN)\lib\vc_dll&quot;;&quot;$(CASROOT)\win32\vc8\lib&quot;"
-				GenerateDebugInformation="false"
+				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\vc_msw/HeeksCAD.pdb"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
