@@ -95,6 +95,7 @@
 #include "History.h"
 #include "RemoveOrAddTool.h"
 #include "../interface/HeeksCADInterface.h"
+#include "Picking.h"
 
 using namespace std;
 
@@ -230,6 +231,7 @@ HeeksCADapp::HeeksCADapp(): ObjList()
 	m_stl_save_as_binary = true;
 	m_mouse_move_highlighting = true;
 	m_highlight_color = HeeksColor(128, 255, 0);
+	m_rendering_highlight = false;
 
     {
         std::list<wxString> extensions;
@@ -1855,7 +1857,7 @@ void HeeksCADapp::RenderDatumOrCurrentCoordSys()
 			if(m_show_datum_coords_system)
 			{
 				glClear(GL_DEPTH_BUFFER_BIT);
-				CoordinateSystem::RenderDatum(bright_datum, true);
+				CoordinateSystem::RenderDatum(bright_datum, true, false);
 			}
 			if(m_current_coordinate_system)
 			{
@@ -1880,7 +1882,7 @@ void HeeksCADapp::RenderDatumOrCurrentCoordSys()
 			}
 			if(m_show_datum_coords_system)
 			{
-				CoordinateSystem::RenderDatum(bright_datum, false);
+				CoordinateSystem::RenderDatum(bright_datum, false, false);
 			}
 
 			// restore the depth range
@@ -1891,17 +1893,26 @@ void HeeksCADapp::RenderDatumOrCurrentCoordSys()
 
 void HeeksCADapp::glCommandsAll(const CViewPoint &view_point)
 {
-
+#ifndef PICKING_COLOUR_VIEW_TEST
 	CreateLights();
+#endif
 	glDisable(GL_LIGHTING);
+#ifndef PICKING_COLOUR_VIEW_TEST
 	Material().glMaterial(1.0);
 	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_DEPTH_TEST);
+#endif
 	glLineWidth(1);
 	glDepthMask(1);
 	glEnable(GL_POLYGON_OFFSET_FILL);
 	glShadeModel(GL_FLAT);
 	view_point.SetPolygonOffset();
+
+
+#ifdef PICKING_COLOUR_VIEW_TEST
+	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+	glEnable(GL_COLOR_MATERIAL);
+#endif
 
 	std::list<HeeksObj*> after_others_objects;
 
@@ -1913,16 +1924,23 @@ void HeeksCADapp::glCommandsAll(const CViewPoint &view_point)
 			if(object->DrawAfterOthers())after_others_objects.push_back(object);
 			else
 			{
+#ifdef PICKING_COLOUR_VIEW_TEST
+				object->glCommands(true, m_marked_list->ObjectMarked(object), true);
+#else
 				object->glCommands(false, m_marked_list->ObjectMarked(object), false);
+#endif
 			}
 		}
 	}
-
 	// draw any last_objects
 	for(std::list<HeeksObj*>::iterator It = after_others_objects.begin(); It != after_others_objects.end(); It++)
 	{
 		HeeksObj* object = *It;
+#ifdef PICKING_COLOUR_VIEW_TEST
+		object->glCommands(true, m_marked_list->ObjectMarked(object), true);
+#else
 		object->glCommands(false, m_marked_list->ObjectMarked(object), false);
+#endif
 	}
 
 	glDisable(GL_POLYGON_OFFSET_FILL);
@@ -1950,6 +1968,7 @@ void HeeksCADapp::glCommandsAll(const CViewPoint &view_point)
 		m_ruler->glCommands(false, false, false);
 	}
 
+#ifndef PICKING_COLOUR_VIEW_TEST
 	// draw the grid
 	glDepthFunc(GL_LESS);
 	RenderGrid(&view_point);
@@ -1959,9 +1978,14 @@ void HeeksCADapp::glCommandsAll(const CViewPoint &view_point)
 	RenderDatumOrCurrentCoordSys();
 
 	DestroyLights();
+#endif
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glPolygonMode(GL_FRONT_AND_BACK ,GL_FILL );
+
+#ifdef PICKING_COLOUR_VIEW_TEST
+	glDisable(GL_COLOR_MATERIAL);
+#else
 	if(m_hidden_for_drag.size() == 0 || !m_show_grippers_on_drag)m_marked_list->GrippersGLCommands(false, false);
 
 	// draw the input mode text on the top
@@ -1982,8 +2006,9 @@ void HeeksCADapp::glCommandsAll(const CViewPoint &view_point)
 				screen_text2.Append(help_str);
 			}
 		}
-		render_screen_text(screen_text1, screen_text2);
+		render_screen_text(screen_text1, screen_text2, false);
 	}
+#endif
 }
 
 void HeeksCADapp::OnInputModeTitleChanged()
@@ -2012,18 +2037,16 @@ void HeeksCADapp::glCommands(bool select, bool marked, bool no_color)
 		HeeksObj* object = *It;
 		if(object->OnVisibleLayer() && object->m_visible)
 		{
-			if(select)glPushName(object->GetIndex());
+			if (select)SetPickingColor(object->GetIndex());
 			object->glCommands(select, marked || m_marked_list->ObjectMarked(object), no_color);
-			if(select)glPopName();
 		}
 	}
 
 	// draw the ruler
 	if(m_show_ruler)
 	{
-		if(select)glPushName(m_ruler->GetIndex());
+		if (select)SetPickingColor(m_ruler->GetIndex());
 		m_ruler->glCommands(select, false, false);
-		if(select)glPopName();
 	}
 }
 
@@ -4363,24 +4386,30 @@ void HeeksCADapp::create_font()
 	m_gl_font_initialized = true;
 }
 
-void HeeksCADapp::render_text(const wxChar* str)
+void HeeksCADapp::render_text(const wxChar* str, bool select)
 {
-	//Needs to be called before text output
-	create_font();
-	//glColor4ub(0, 0, 0, 255);
-	EnableBlend();
-	glEnable(GL_TEXTURE_2D);
-	glDepthMask(0);
-	glDisable(GL_POLYGON_OFFSET_FILL);
-	m_gl_font.Begin();
+	if(!select)
+	{
+		//Needs to be called before text output
+		create_font();
+		//glColor4ub(0, 0, 0, 255);
+		EnableBlend();
+		glEnable(GL_TEXTURE_2D);
+		glDepthMask(0);
+		glDisable(GL_POLYGON_OFFSET_FILL);
+		m_gl_font.Begin();
+	}
 
 	//Draws text with a glFont
 	m_gl_font.DrawString(str, 0.08f, 0.0f, 0.0f);
 
-	glDepthMask(1);
-	glEnable(GL_POLYGON_OFFSET_FILL);
-	glDisable(GL_TEXTURE_2D);
-	DisableBlend();
+	if(!select)
+	{
+		glDepthMask(1);
+		glEnable(GL_POLYGON_OFFSET_FILL);
+		glDisable(GL_TEXTURE_2D);
+		DisableBlend();
+	}
 }
 
 bool HeeksCADapp::get_text_size(const wxChar* str, float* width, float* height)
@@ -4395,7 +4424,7 @@ bool HeeksCADapp::get_text_size(const wxChar* str, float* width, float* height)
 	return true;
 }
 
-void HeeksCADapp::render_screen_text2(const wxChar* str)
+void HeeksCADapp::render_screen_text2(const wxChar* str, bool select)
 {
 #if wxUSE_UNICODE
 	size_t n = wcslen(str);
@@ -4415,14 +4444,14 @@ void HeeksCADapp::render_screen_text2(const wxChar* str)
 		j++;
 		if(str[i] == newline || i == n-1 || j == 1023){
 			buffer[j] = 0;
-			render_text(buffer);
+			render_text(buffer, select);
 			if(str[i] == newline)glTranslated(0.0, -2.2, 1.0);
 			j = 0;
 		}
 	}
 }
 
-void HeeksCADapp::render_screen_text(const wxChar* str1, const wxChar* str2)
+void HeeksCADapp::render_screen_text(const wxChar* str1, const wxChar* str2, bool select)
 {
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -4435,10 +4464,10 @@ void HeeksCADapp::render_screen_text(const wxChar* str1, const wxChar* str2)
 	glTranslated(2.0, h - 1.0, 0.0);
 
 	glScaled(10.0, 10.0, 0);
-	render_screen_text2(str1);
+	render_screen_text2(str1, select);
 
 	glScaled(0.612, 0.612, 0);
-	render_screen_text2(str2);
+	render_screen_text2(str2, select);
 
 //Even though this is in reverse order, the different matrices have different stacks, and we want to exit here in the modelview
 	glMatrixMode(GL_PROJECTION);
@@ -4462,7 +4491,7 @@ void HeeksCADapp::DisableBlend()
 	if(!m_antialiasing)glDisable(GL_BLEND);
 }
 
-void HeeksCADapp::render_screen_text_at(const wxChar* str1, double scale, double x, double y, double theta)
+void HeeksCADapp::render_screen_text_at(const wxChar* str1, double scale, double x, double y, double theta, bool select)
 {
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -4476,7 +4505,7 @@ void HeeksCADapp::render_screen_text_at(const wxChar* str1, double scale, double
 
 	glScaled(scale, scale, 0);
 	glRotated(theta,0,0,1);
-	render_screen_text2(str1);
+	render_screen_text2(str1,  select);
 
 //Even though this is in reverse order, the different matrices have different stacks, and we want to exit here in the modelview
 	glMatrixMode(GL_PROJECTION);

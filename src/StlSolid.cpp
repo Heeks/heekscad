@@ -3,6 +3,7 @@
 // This program is released under the BSD license. See the file COPYING for details.
 #include "stdafx.h"
 #include "StlSolid.h"
+#include "Picking.h"
 
 using namespace std;
 
@@ -249,8 +250,11 @@ const wxBitmap &CStlSolid::GetIcon()
 }
 
 void CStlSolid::glCommands(bool select, bool marked, bool no_color){
-	glEnable(GL_LIGHTING);
-	Material(m_color).glMaterial(1.0);
+	if(!no_color)
+	{
+		glEnable(GL_LIGHTING);
+		Material(m_color).glMaterial(1.0);
+	}
 
 	if(m_gl_list)
 	{
@@ -291,7 +295,10 @@ void CStlSolid::glCommands(bool select, bool marked, bool no_color){
 		glEndList();
 	}
 
-	glDisable(GL_LIGHTING);
+	if(!no_color)
+	{
+		glDisable(GL_LIGHTING);
+	}
 }
 
 void CStlSolid::GetBox(CBox &box){

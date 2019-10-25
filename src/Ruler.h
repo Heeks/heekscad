@@ -59,4 +59,5 @@ public:
 
 	void WriteToConfig(HeeksConfig& config);
 	void ReadFromConfig(HeeksConfig& config);
+	void DrawMainRectangle();
 };

@@ -748,6 +748,15 @@ void CFace::UpdateMarkingGLList(bool marked)
 	{
 		glNewList(m_marking_gl_list, GL_COMPILE);
 
+		if(wxGetApp().m_rendering_highlight)
+		{
+			Material(wxGetApp().m_highlight_color).glMaterial(1.0);
+			glDisable(GL_BLEND);
+			glDepthMask(1);
+		}
+		else
+		{
+
 		if(marked)
 		{
 			Material(wxGetApp().face_selection_color).glMaterial(1.0);
@@ -765,6 +774,8 @@ void CFace::UpdateMarkingGLList(bool marked)
 				glDisable(GL_BLEND);
 				glDepthMask(1);
 			}
+		}
+
 		}
 
 		glEndList();

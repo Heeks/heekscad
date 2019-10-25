@@ -1930,6 +1930,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Picking.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Picking.h"
+			>
+		</File>
+		<File
 			RelativePath="..\interface\PictureFrame.cpp"
 			>
 		</File>

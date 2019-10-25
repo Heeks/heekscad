@@ -6,8 +6,10 @@
 #ifdef HEEKSCAD
 #include "../src/MarkedList.h"
 #include "../tinyxml/tinyxml.h"
+#include "Picking.h"
 #else
 #include "HeeksCADInterface.h"
+#include "src/Picking.h"
 #endif
 
 #include <algorithm>
@@ -106,13 +108,12 @@ void ObjList::glCommands(bool select, bool marked, bool no_color)
 		HeeksObj* object = *It;
 		if(object->OnVisibleLayer() && object->m_visible)
 		{
-			if(select)glPushName(object->GetIndex());
+			if (select)SetPickingColor(object->GetIndex());
 #ifdef HEEKSCAD
 			(*It)->glCommands(select, marked || wxGetApp().m_marked_list->ObjectMarked(object), no_color);
 #else
 			(*It)->glCommands(select, marked || heeksCAD->ObjectMarked(object), no_color);
 #endif
-			if(select)glPopName();
 		}
 	}
 }

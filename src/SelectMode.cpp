@@ -485,10 +485,9 @@ void CSelectMode::OnRender()
 	{
 		HeeksObj* object = *It;
 		wxGetApp().m_highlight_color.glColor();
-		glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-		glEnable(GL_COLOR_MATERIAL);
+		wxGetApp().m_rendering_highlight = true;
 		object->glCommands(false, true, true);
-		glDisable(GL_COLOR_MATERIAL);
+		wxGetApp().m_rendering_highlight = false;
 	}
 }
 

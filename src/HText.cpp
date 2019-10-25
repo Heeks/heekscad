@@ -105,7 +105,7 @@ void HText::glCommands(bool select, bool marked, bool no_color)
 					break;
 			}
 		}
-		wxGetApp().render_text(m_text);
+		wxGetApp().render_text(m_text, select);
 #ifndef WIN32
 	} // End if - then
 	else

@@ -10,6 +10,7 @@
 #include "HeeksFrame.h"
 #include "../interface/HeeksCADInterface.h"
 #include "TreeCanvas.h"
+#include "Picking.h"
 
 extern CHeeksCADInterface heekscad_interface;
 
@@ -71,6 +72,10 @@ void CViewport::glCommands()
 	glDrawBuffer(GL_BACK);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
+#ifdef PICKING_COLOUR_VIEW_TEST
+	glDisable(GL_BLEND);
+	glDisable(GL_LINE_SMOOTH);
+#else
 	if(wxGetApp().m_antialiasing)
 	{
 		glEnable(GL_LINE_SMOOTH);
@@ -83,9 +88,11 @@ void CViewport::glCommands()
 		glDisable(GL_BLEND);
 		glDisable(GL_LINE_SMOOTH);
 	}
+#endif
 
 	SetViewport();
 
+#ifndef PICKING_COLOUR_VIEW_TEST
 	switch(wxGetApp().m_background_mode)
 	{
 	case BackgroundModeTwoColors:
@@ -138,10 +145,15 @@ void CViewport::glCommands()
 	default:
 		break;
 	}
+#endif
 
 	m_view_point.SetProjection(true);
 	m_view_point.SetModelview();
 
+#ifdef PICKING_COLOUR_VIEW_TEST
+	glClearColor(0, 0, 0, 0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+#else
 	switch(wxGetApp().m_background_mode)
 	{
 	case BackgroundModeOneColor:
@@ -232,6 +244,7 @@ void CViewport::glCommands()
 		}
 		break;
 	}
+#endif
 
 	// render everything
 	wxGetApp().glCommandsAll(m_view_point);

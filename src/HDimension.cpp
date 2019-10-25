@@ -168,12 +168,12 @@ void HDimension::glCommands(bool select, bool marked, bool no_color)
 	draw_arrow_line(m_mode, A, b, GetC2(), xdir, ydir, width, m_scale);
 
 	// draw text
-	RenderText(text, GetC2(), xdir, ydir, m_scale);
+	RenderText(text, GetC2(), xdir, ydir, m_scale, select);
 
 	EndedObject::glCommands(select,marked,no_color);
 }
 
-void HDimension::RenderText(const wxString &text, const gp_Pnt& p, const gp_Dir& xdir, const gp_Dir& ydir, double scale)
+void HDimension::RenderText(const wxString &text, const gp_Pnt& p, const gp_Dir& xdir, const gp_Dir& ydir, double scale, bool select)
 {
 	float width, height;
 	if(!wxGetApp().get_text_size(text, &width, &height))return;
@@ -209,11 +209,11 @@ void HDimension::RenderText(const wxString &text, const gp_Pnt& p, const gp_Dir&
 			model_view, projection, viewport,
 			&x, &y, &z);
 
-		wxGetApp().render_screen_text_at(text, scale*8,x,y,atan2(xdir.Y(),xdir.X()) * 180 / M_PI);
+		wxGetApp().render_screen_text_at(text, scale*8,x,y,atan2(xdir.Y(),xdir.X()) * 180 / M_PI, select);
 	}
 	else
 	{
-		wxGetApp().render_text(text);
+		wxGetApp().render_text(text, select);
 	}
 
 	glPopMatrix();

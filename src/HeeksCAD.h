@@ -99,7 +99,7 @@ class HeeksCADapp : public wxApp, public ObjList
 		std::map< int, int > next_id_map;
 		std::map< std::string, HeeksObj*(*)(TiXmlElement* pElem) > xml_read_fn_map;
 
-		void render_screen_text2(const wxChar* str);
+		void render_screen_text2(const wxChar* str, bool select);
 		void RenderDatumOrCurrentCoordSys();
 
 	protected:
@@ -143,6 +143,7 @@ class HeeksCADapp : public wxApp, public ObjList
 		bool m_stl_save_as_binary;
 		bool m_mouse_move_highlighting;
 		HeeksColor m_highlight_color;
+		bool m_rendering_highlight;
 
 		//gp_Trsf digitizing_matrix;
 		CoordinateSystem *m_current_coordinate_system;
@@ -411,10 +412,10 @@ class HeeksCADapp : public wxApp, public ObjList
 		bool CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num, int type, const wxString& msg, const wxString& caption);
 		bool CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num, int type1, int type2, const wxString& msg, const wxString& caption);
 		bool CheckForNOrMore(const std::list<HeeksObj*> &list, int min_num, int type1, int type2, int type3, const wxString& msg, const wxString& caption);
-		void render_text(const wxChar* str);
+		void render_text(const wxChar* str, bool select);
 		bool get_text_size(const wxChar* str, float* width, float* height);
-		void render_screen_text(const wxChar* str1, const wxChar* str2);
-		void render_screen_text_at(const wxChar* str1, double scale, double x, double y, double theta);
+		void render_screen_text(const wxChar* str1, const wxChar* str2, bool select);
+		void render_screen_text_at(const wxChar* str1, double scale, double x, double y, double theta, bool select);
 		void OnInputModeTitleChanged();
 		void OnInputModeHelpTextChanged();
 		void PlotSetColor(const HeeksColor &c);

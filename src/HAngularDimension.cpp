@@ -202,7 +202,7 @@ void HAngularDimension::glCommands(bool select, bool marked, bool no_color)
 
 		wxString text = MakeText(da);
 
-		HDimension::RenderText(text, m_p4->m_p, gp_Dir(1, 0, 0), gp_Dir(0, 1, 0), m_scale);
+		HDimension::RenderText(text, m_p4->m_p, gp_Dir(1, 0, 0), gp_Dir(0, 1, 0), m_scale, select);
 	}
 }
 

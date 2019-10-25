@@ -21,6 +21,7 @@
 #include "../interface/MarkedObject.h"
 #include "Arc.h"
 #include "HeeksConfig.h"
+#include "Picking.h"
 
 HArea::HArea(const HArea &a){
 	operator=(a);
@@ -214,12 +215,11 @@ void HArea::glCommands(bool select, bool marked, bool no_color){
 	for(std::list<CCurve>::iterator It = m_area.m_curves.begin(); It != m_area.m_curves.end(); It++, i++)
 	{
 		CCurve& curve = *It;
-		if(select)glPushName(i);
+		//if (select)SetPickingColor(i);
 	
-		if(marked && (&curve == m_selected_curve))glColor3ub(0, 255, 0);
+		if(marked && (&curve == m_selected_curve) && !no_color)glColor3ub(0, 255, 0);
 		render_curve(curve);
-		if(marked && (&curve == m_selected_curve))wxGetApp().glColorEnsuringContrast(HeeksColor(0));
-		if(select)glPopName();
+		if(marked && (&curve == m_selected_curve) && !no_color)wxGetApp().glColorEnsuringContrast(HeeksColor(0));
 	}
 
 	if(marked){

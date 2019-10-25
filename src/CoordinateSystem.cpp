@@ -1101,7 +1101,7 @@ void CoordinateSystem::RenderArrow()
 }
 
 // static
-void CoordinateSystem::RenderDatum(bool bright, bool solid)
+void CoordinateSystem::RenderDatum(bool bright, bool solid, bool no_colour)
 {
 	double s = size;
 	if(size_is_pixels)s /= wxGetApp().GetPixelScale();
@@ -1109,19 +1109,31 @@ void CoordinateSystem::RenderDatum(bool bright, bool solid)
 	if(solid)
 	{
 		// render an arrow, like I saw on a commercial CAD system
-		glEnable(GL_LIGHTING);
-		glShadeModel(GL_SMOOTH);
+		if(!no_colour)
+		{
+			glEnable(GL_LIGHTING);
+			glShadeModel(GL_SMOOTH);
+		}
 		glPushMatrix();
 		glScaled(s, s, s);
-		if(bright)Material(HeeksColor(0, 0, 255)).glMaterial(1.0);
-		else Material(HeeksColor(64, 64, 128)).glMaterial(1.0);
+		if(!no_colour)
+		{
+			if(bright)Material(HeeksColor(0, 0, 255)).glMaterial(1.0);
+			else Material(HeeksColor(64, 64, 128)).glMaterial(1.0);
+		}
 		RenderArrow();
-		if(bright)Material(HeeksColor(255, 0, 0)).glMaterial(1.0);
-		else Material(HeeksColor(128, 64, 64)).glMaterial(1.0);
+		if(!no_colour)
+		{
+			if(bright)Material(HeeksColor(255, 0, 0)).glMaterial(1.0);
+			else Material(HeeksColor(128, 64, 64)).glMaterial(1.0);
+		}
 		glRotated(90, 0, 1, 0);
 		RenderArrow();
-		if(bright)Material(HeeksColor(0, 255, 0)).glMaterial(1.0);
-		else Material(HeeksColor(64, 128, 64)).glMaterial(1.0);
+		if(!no_colour)
+		{
+			if(bright)Material(HeeksColor(0, 255, 0)).glMaterial(1.0);
+			else Material(HeeksColor(64, 128, 64)).glMaterial(1.0);
+		}
 		glRotated(90, -1, 0, 0);
 		RenderArrow();
 		glPopMatrix();
@@ -1132,16 +1144,25 @@ void CoordinateSystem::RenderDatum(bool bright, bool solid)
 	{
 		// red, green, blue for x, y, z, like I saw on Open Arena
 		glBegin(GL_LINES);
-		if(bright)glColor3ub(255, 0, 0);
-		else glColor3ub(128, 64, 64);
+		if(!no_colour)
+		{
+			if(bright)glColor3ub(255, 0, 0);
+			else glColor3ub(128, 64, 64);
+		}
 		glVertex3d(0, 0, 0);
 		glVertex3d(s, 0, 0);
-		if(bright)glColor3ub(0, 255, 0);
-		else glColor3ub(64, 128, 64);
+		if(!no_colour)
+		{
+			if(bright)glColor3ub(0, 255, 0);
+			else glColor3ub(64, 128, 64);
+		}
 		glVertex3d(0, 0, 0);
 		glVertex3d(0, s, 0);
-		if(bright)glColor3ub(0, 0, 255);
-		else glColor3ub(64, 64, 128);
+		if(!no_colour)
+		{
+			if(bright)glColor3ub(0, 0, 255);
+			else glColor3ub(64, 64, 128);
+		}
 		glVertex3d(0, 0, 0);
 		glVertex3d(0, 0, s);
 		glEnd();
@@ -1152,13 +1173,13 @@ void CoordinateSystem::RenderDatum(bool bright, bool solid)
 		// render X, Y, Z text
 		double extra_pixels_out = 10.0;
 		double s2 = s + extra_pixels_out /wxGetApp().GetPixelScale();
-		glColor3ub(255, 0, 0);
+		if(!no_colour)glColor3ub(255, 0, 0);
 		glRasterPos3d(s2, 0, 0);
 		glBitmap(8, 11, 3, 5, 0.0, 0.0, bitmapX);
-		glColor3ub(0, 255, 0);
+		if(!no_colour)glColor3ub(0, 255, 0);
 		glRasterPos3d(0, s2, 0);
 		glBitmap(8, 11, 3, 5, 0.0, 0.0, bitmapY);
-		glColor3ub(0, 0, 255);
+		if(!no_colour)glColor3ub(0, 0, 255);
 		glRasterPos3d(0, 0, s2);
 		glBitmap(8, 11, 3, 5, 0.0, 0.0, bitmapZ);
 	}
@@ -1173,7 +1194,7 @@ void CoordinateSystem::ApplyMatrix()
 
 void CoordinateSystem::glCommands(bool select, bool marked, bool no_color)
 {
-	if(!select && !rendering_current && this == wxGetApp().m_current_coordinate_system)return; // will get rendered in HeeksCADapp::glCommandsAll
+	if(!no_color && !rendering_current && this == wxGetApp().m_current_coordinate_system)return; // will get rendered in HeeksCADapp::glCommandsAll
 	if(marked)glLineWidth(2);
 	glPushMatrix();
 	double m[16];
@@ -1182,7 +1203,7 @@ void CoordinateSystem::glCommands(bool select, bool marked, bool no_color)
 
 	bool bright = rendering_current;
 
-	RenderDatum(bright, wxGetApp().m_datum_coords_system_solid_arrows);
+	RenderDatum(bright, wxGetApp().m_datum_coords_system_solid_arrows, no_color);
 
 	glPopMatrix();
 	glLineWidth(1);

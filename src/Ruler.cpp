@@ -64,7 +64,7 @@ void RulerMark::glCommands(double units)
 		glPushMatrix();
 		glTranslated(dpos + half_width, -length + 2.05, 0.0);
 		glColor4ub(0, 0, 0, 255);
-		wxGetApp().render_text(str);
+		wxGetApp().render_text(str, false);
 		glPopMatrix();
 	}
 	else if(pos % 10 == 0)
@@ -74,7 +74,7 @@ void RulerMark::glCommands(double units)
 		if(!wxGetApp().get_text_size(str, &text_width, &text_height))return;
 		glPushMatrix();
 		glTranslated(dpos - half_width - text_width, -length + 2.05, 0.0);
-		wxGetApp().render_text(str);
+		wxGetApp().render_text(str, false);
 		glPopMatrix();
 	}
 	glEnable(GL_POLYGON_OFFSET_FILL);
@@ -170,6 +170,20 @@ void HRuler::CalculateMarks(std::list<RulerMark> &marks)
 	}
 }
 
+void HRuler::DrawMainRectangle()
+{
+	gp_Pnt point[4];
+	GetFourCorners(point);
+	glBegin(GL_TRIANGLES);
+	glVertex3d(point[0].X(), point[0].Y(), point[0].Z());
+	glVertex3d(point[1].X(), point[1].Y(), point[1].Z());
+	glVertex3d(point[2].X(), point[2].Y(), point[2].Z());
+	glVertex3d(point[0].X(), point[0].Y(), point[0].Z());
+	glVertex3d(point[2].X(), point[2].Y(), point[2].Z());
+	glVertex3d(point[3].X(), point[3].Y(), point[3].Z());
+	glEnd();
+}
+
 void HRuler::glCommands(bool select, bool marked, bool no_color)
 {
 	double m[16];
@@ -177,55 +191,55 @@ void HRuler::glCommands(bool select, bool marked, bool no_color)
 	glPushMatrix();
 	glMultMatrixd(m);
 
-	if(m_gl_list)
+	if(select)
 	{
-		glCallList(m_gl_list);
+		DrawMainRectangle();
 	}
-	else{
-		m_gl_list = glGenLists(1);
-		glNewList(m_gl_list, GL_COMPILE_AND_EXECUTE);
-
-		// draw a filled white rectangle
-		glDisable(GL_POLYGON_OFFSET_FILL);
-		glPolygonOffset(1.0, 0.0);
-		glColor4ub(255, 255, 255, 120); // white
-		wxGetApp().EnableBlend();
-		glDepthMask(0);
-		gp_Pnt point[4];
-		GetFourCorners(point);
-		glBegin(GL_TRIANGLES);
-		glVertex3d(point[0].X(), point[0].Y(), point[0].Z());
-		glVertex3d(point[1].X(), point[1].Y(), point[1].Z());
-		glVertex3d(point[2].X(), point[2].Y(), point[2].Z());
-		glVertex3d(point[0].X(), point[0].Y(), point[0].Z());
-		glVertex3d(point[2].X(), point[2].Y(), point[2].Z());
-		glVertex3d(point[3].X(), point[3].Y(), point[3].Z());
-		glEnd();
-		wxGetApp().DisableBlend();
-		glDepthMask(1);
-
-		// draw a black rectangle border
-		glColor4ub(0, 0, 0, 255); // black
-
-		glBegin(GL_LINE_STRIP);
-		glVertex3d(point[0].X(), point[0].Y(), point[0].Z());
-		glVertex3d(point[1].X(), point[1].Y(), point[1].Z());
-		glVertex3d(point[2].X(), point[2].Y(), point[2].Z());
-		glVertex3d(point[3].X(), point[3].Y(), point[3].Z());
-		glVertex3d(point[0].X(), point[0].Y(), point[0].Z());
-		glEnd();
-
-		// draw the marks ( with their numbers )
-		std::list<RulerMark> marks;
-		CalculateMarks(marks);
-		for(std::list<RulerMark>::iterator It = marks.begin(); It != marks.end(); It++)
+	else
+	{
+		if(m_gl_list)
 		{
-			RulerMark& mark = *It;
-			mark.glCommands(GetUnits());
+			glCallList(m_gl_list);
 		}
-		glEnable(GL_POLYGON_OFFSET_FILL);
+		else{
+			m_gl_list = glGenLists(1);
+			glNewList(m_gl_list, GL_COMPILE_AND_EXECUTE);
 
-		glEndList();
+			// draw a filled white rectangle
+			glDisable(GL_POLYGON_OFFSET_FILL);
+			glPolygonOffset(1.0, 0.0);
+			glColor4ub(255, 255, 255, 120); // white
+			wxGetApp().EnableBlend();
+			glDepthMask(0);
+			DrawMainRectangle();
+			wxGetApp().DisableBlend();
+			glDepthMask(1);
+
+			// draw a black rectangle border
+			glColor4ub(0, 0, 0, 255); // black
+
+			gp_Pnt point[4];
+			GetFourCorners(point);
+			glBegin(GL_LINE_STRIP);
+			glVertex3d(point[0].X(), point[0].Y(), point[0].Z());
+			glVertex3d(point[1].X(), point[1].Y(), point[1].Z());
+			glVertex3d(point[2].X(), point[2].Y(), point[2].Z());
+			glVertex3d(point[3].X(), point[3].Y(), point[3].Z());
+			glVertex3d(point[0].X(), point[0].Y(), point[0].Z());
+			glEnd();
+
+			// draw the marks ( with their numbers )
+			std::list<RulerMark> marks;
+			CalculateMarks(marks);
+			for(std::list<RulerMark>::iterator It = marks.begin(); It != marks.end(); It++)
+			{
+				RulerMark& mark = *It;
+				mark.glCommands(GetUnits());
+			}
+			glEnable(GL_POLYGON_OFFSET_FILL);
+
+			glEndList();
+		}
 	}
 
 	glPopMatrix();

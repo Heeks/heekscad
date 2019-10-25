@@ -23,6 +23,7 @@
 #include "../interface/PropertyVertex.h"
 #include "../interface/PropertyCheck.h"
 #include <locale.h>
+#include "Picking.h"
 
 // static member variable
 bool CShape::m_solids_found = false;
@@ -195,26 +196,26 @@ void CShape::glCommands(bool select, bool marked, bool no_color)
 			// make the display list
 			m_face_gl_list = glGenLists(1);
 			glNewList(m_face_gl_list, GL_COMPILE);
-
 			// render all the faces
 			m_faces->glCommands(true, marked, no_color);
-
 			glEndList();
 		}
 
 		// update faces marking display list
-		GLint currentListIndex;
-		glGetIntegerv(GL_LIST_INDEX, &currentListIndex);
-		if(currentListIndex == 0){
-			for(HeeksObj* object = m_faces->GetFirstChild(); object; object = m_faces->GetNextChild())
-			{
-				CFace* f = (CFace*)object;
-				f->UpdateMarkingGLList(wxGetApp().m_marked_list->ObjectMarked(f));
+		{
+			GLint currentListIndex;
+			glGetIntegerv(GL_LIST_INDEX, &currentListIndex);
+			if(currentListIndex == 0){
+				for(HeeksObj* object = m_faces->GetFirstChild(); object; object = m_faces->GetNextChild())
+				{
+					CFace* f = (CFace*)object;
+					f->UpdateMarkingGLList(wxGetApp().m_marked_list->ObjectMarked(f));
+				}
 			}
 		}
 	}
 
-	if(draw_edges && !m_edge_gl_list)
+	if(draw_edges && !m_edge_gl_list && !select)
 	{
 		if(!mesh_called)
 		{
@@ -227,10 +228,10 @@ void CShape::glCommands(bool select, bool marked, bool no_color)
 		glNewList(m_edge_gl_list, GL_COMPILE);
 
 		// render all the edges
-		m_edges->glCommands(true, marked, no_color);
+		m_edges->glCommands(select, marked, no_color);
 
 		// render all the vertices
-		m_vertices->glCommands(true, false, false);
+		m_vertices->glCommands(select, false, false);
 
 		glEndList();
 	}
@@ -238,8 +239,11 @@ void CShape::glCommands(bool select, bool marked, bool no_color)
 	if(draw_faces && m_face_gl_list)
 	{
 		// draw the face display list
-		glEnable(GL_LIGHTING);
-		glShadeModel(GL_SMOOTH);
+		if(!select)
+		{
+			glEnable(GL_LIGHTING);
+			glShadeModel(GL_SMOOTH);
+		}
 		glCallList(m_face_gl_list);
 		glDisable(GL_LIGHTING);
 		glShadeModel(GL_FLAT);
@@ -251,10 +255,21 @@ void CShape::glCommands(bool select, bool marked, bool no_color)
 		glDepthMask(1);
 	}
 
-	if(draw_edges && m_edge_gl_list)
+	if(draw_edges)
 	{
-		// draw the edge display list
-		glCallList(m_edge_gl_list);
+		if(select)
+		{
+			// render all the edges
+			m_edges->glCommands(true, marked, true);
+
+			// render all the vertices
+			m_vertices->glCommands(true, false, true);
+		}
+		else if(m_edge_gl_list)
+		{
+			// draw the edge display list
+			glCallList(m_edge_gl_list);
+		}
 	}
 }
 
@@ -339,8 +354,8 @@ void CShape::ModifyByMatrix(const double* m){
 	{
 		MakeTransformedShape(mat);
 	}
-	delete_faces_and_edges();
 	KillGLLists();
+	delete_faces_and_edges();
 	create_faces_and_edges();
 }
 
