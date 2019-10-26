@@ -249,7 +249,8 @@ void TransformTools::Mirror(bool copy)
 	// transform the objects
 	wxGetApp().StartHistory();
 	gp_Trsf mat;
-	mat.SetMirror(gp_Ax1(line.Location(), line.Direction()));
+	gp_Dir reflect_dir(line.Direction().Y(), -(line.Direction().X()), 0.0);
+	mat.SetMirror(gp_Ax2(line.Location(), reflect_dir, line.Direction()));
 	double m[16];
 	extract(mat, m);
 

@@ -267,6 +267,8 @@ HeeksObj *HArc::MakeACopy(void)const{
 void HArc::ModifyByMatrix(const double* m){
 	EndedObject::ModifyByMatrix(m);
 	gp_Trsf mat = make_matrix(m);
+	if(mat.IsNegative())
+		m_axis.SetDirection( -(m_axis.Direction()) );
 	m_axis.Transform(mat);
 	C.Transform(mat);
 	m_radius = C.Distance(A);
