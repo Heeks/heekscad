@@ -43,6 +43,7 @@ set( heekscad_HDRS
     CoordinateSystem.h
     CorrelationTool.h
     Cuboid.h
+    CxfFont.h
     Cylinder.h
     DigitizeMode.h
     DigitizedPoint.h
