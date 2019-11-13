@@ -249,6 +249,9 @@ message(STATUS "wxWidgets_INCLUDE_DIRS: ${wxWidgets_INCLUDE_DIRS}")
 set_target_properties( heekscad PROPERTIES VERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} )
 install( TARGETS heekscad DESTINATION bin )
 
+file( GLOB sources ${heekscad_SRCS} ${heekscad_HDRS} )
+install( FILES ${sources} DESTINATION "share/heekscad/src" COMPONENT heekscad )
+
 # Bitmaps, fonts, etc.
 foreach( bitmap_relpath "" "angle" "cuboid" )
   file( GLOB bitmaps_${bitmap_relpath} "${CMAKE_CURRENT_SOURCE_DIR}/../bitmaps/${bitmap_relpath}/*.png"
