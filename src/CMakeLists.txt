@@ -2,6 +2,7 @@ project( heekscad )
 cmake_minimum_required( VERSION 2.6 )
 
 add_definitions ( -Wall -DUSE_GENERIC_TREECTRL -DHEEKSCAD -DUNICODE -DTIXML_USE_STL )
+configure_file( "Plugins.cpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/Plugins.cpp" )
 
 #find OCE or OpenCASCADE
 set( CASCADE_LIBS TKBRep TKIGES TKSTEP TKXSBase TKBool TKernel TKFillet TKG2d TKG3d TKGeomAlgo TKGeomBase TKMath TKOffset TKPrim TKTopAlgo TKV3d TKMesh TKBO )

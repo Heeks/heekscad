@@ -228,7 +228,7 @@ void ReadPluginsList(std::list<PluginData> &plugins)
   #else
 		wxStandardPaths sp;
   #endif
-		wxString sCncplugPath = sp.GetInstallPrefix()  + wxT("/lib/libheekscnc.so");
+		wxString sCncplugPath = sp.GetInstallPrefix()  + wxT("/@LIB_INSTALL_DIR@/libheekscnc.so");
 #endif
 		wprintf(_T("Attempt to automatically load HeeksCNC: ") + sCncplugPath  + wxT("\n"));
 		if (wxFileName::FileExists(sCncplugPath)) {
