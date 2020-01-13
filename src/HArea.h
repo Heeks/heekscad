@@ -44,7 +44,7 @@ public:
 	bool DescendForUndo(){return false;}
 	bool IsDifferent(HeeksObj* other);
 	void SetClickMarkPoint(MarkedObject* marked_object, const double* ray_start, const double* ray_direction);
-	bool UsesCustomSubNames(){return true;}
+	int PickPriority(){ return 2; } // lines
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 };

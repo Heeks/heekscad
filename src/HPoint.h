@@ -40,6 +40,7 @@ public:
 	void CopyFrom(const HeeksObj* object){operator=(*((HPoint*)object));}
 	void WriteXML(TiXmlNode *root);
 	bool IsDifferent(HeeksObj* other);
+	int PickPriority(){ return 3; } // points
 
 	void Draw(wxDC& dc);
 

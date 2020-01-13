@@ -1984,6 +1984,7 @@ void HeeksCADapp::glCommandsAll(const CViewPoint &view_point)
 	glPolygonMode(GL_FRONT_AND_BACK ,GL_FILL );
 
 #ifdef PICKING_COLOUR_VIEW_TEST
+	if(m_hidden_for_drag.size() == 0 || !m_show_grippers_on_drag)m_marked_list->GrippersGLCommands(true, true);
 	glDisable(GL_COLOR_MATERIAL);
 #else
 	if(m_hidden_for_drag.size() == 0 || !m_show_grippers_on_drag)m_marked_list->GrippersGLCommands(false, false);
@@ -2043,7 +2044,7 @@ void HeeksCADapp::glCommands(bool select, bool marked, bool no_color)
 	}
 
 	// draw the ruler
-	if(m_show_ruler)
+	if(m_show_ruler && ((m_marked_list->m_filter & MARKING_FILTER_RULER) != 0))
 	{
 		if (select)SetPickingColor(m_ruler->GetIndex());
 		m_ruler->glCommands(select, false, false);

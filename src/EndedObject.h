@@ -33,4 +33,5 @@ public:
 	bool IsDifferent(HeeksObj* other);
 	void WriteBaseXML(TiXmlElement *element);
 	void ReadBaseXML(TiXmlElement* element);
+	int PickPriority(){ return 2; } // lines
 };

@@ -191,7 +191,7 @@ public:
 	virtual void SetIdPreservation(const bool flag) { m_preserving_id = flag; }
 	virtual void ToString(char* buf, unsigned int* rlen, unsigned int len);
 	virtual unsigned int GetIndex();
-	virtual bool UsesCustomSubNames(){return false;}
+	virtual int PickPriority(){ return 1; }; // 1 for faces, 2 for edges, 3 for points
 protected:
 	virtual void GetGripperPositions(std::list<GripData> *list, bool just_for_endof);
 public:

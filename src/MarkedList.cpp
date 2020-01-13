@@ -111,6 +111,60 @@ void MarkedList::GrippersGLCommands(bool select, bool no_color){
 	}
 }
 
+int MarkedList::GetObjectListFromColor(unsigned int color, std::list< HeeksObj* > &object_list)
+{
+	bool ignore_coords_only_found = false;
+	HeeksObj *object = m_name_index.find(color);
+
+	std::list<HeeksObj*> owner_list;
+	while (object && (object != &(wxGetApp())))
+	{
+		owner_list.push_front(object);
+		object = object->m_owner;
+	}
+
+	int highest_pick_priority = 0;
+
+	for (std::list<HeeksObj*>::iterator It = owner_list.begin(); It != owner_list.end(); It++)
+	{
+		object = *It;
+
+		if (!ignore_coords_only_found){
+			if (ignore_coords_only && wxGetApp().m_digitizing->OnlyCoords(object)){
+				ignore_coords_only_found = true;
+			}
+			else{
+				if ((object->GetType() == GripperType) || ((object->GetMarkingMask() & m_filter) && (object->GetMarkingMask() != 0))){
+					object_list.push_back(object);
+					if(object->PickPriority() > highest_pick_priority)highest_pick_priority = object->PickPriority();
+				}
+			}
+		}
+	}
+
+	return highest_pick_priority;
+}
+
+int MarkedList::GetObjectsFromColors(const std::set<unsigned int> &color_list, std::multimap< int, std::list< HeeksObj* > > &objects)
+{
+	int objects_highest_pick_priority = 0;
+
+	for (std::set<unsigned int>::const_iterator It = color_list.begin(); It != color_list.end(); It++)
+	{
+		unsigned int color = *It;
+		std::list< HeeksObj* > object_list;
+		int highest_pick_priority = GetObjectListFromColor(color, object_list);
+
+		if(object_list.size() > 0)
+		{
+			objects.insert(std::make_pair(highest_pick_priority, object_list));
+			if(highest_pick_priority > objects_highest_pick_priority)objects_highest_pick_priority = highest_pick_priority;
+		}
+	}
+
+	return objects_highest_pick_priority;
+}
+
 void MarkedList::ObjectsInWindow( wxRect window, MarkedObject* marked_object, bool single_picking){
 	// render everything with unique colors
 
@@ -140,9 +194,10 @@ void MarkedList::ObjectsInWindow( wxRect window, MarkedObject* marked_object, bo
 
 	wxGetApp().glCommands(true, false, true);
 
+	glDisable(GL_DEPTH_TEST);
+
 	GrippersGLCommands(true, true);
 
-	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glDisable(GL_COLOR_MATERIAL);
@@ -163,61 +218,48 @@ void MarkedList::ObjectsInWindow( wxRect window, MarkedObject* marked_object, bo
 	memset((void*)pixels, 0, pixel_size);
 	glReadPixels(window.x, window.y, window.width, window.height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
+	// check all the pixels in the box
 	std::set<unsigned int> color_list;
+	for (unsigned int i = 0; i < pixel_size; i += 4)
+	{
+		unsigned int color = GetPickingName(pixels[i], pixels[i + 1], pixels[i + 2]);
+		if (color != 0)color_list.insert(color);
+	}
+	std::multimap< int, std::list< HeeksObj* > > objects;
+	int objects_highest_pick_priority = GetObjectsFromColors(color_list, objects);
 
 	if (single_picking){
 		// check centre pixel of box
 		int half_window_width = (window.width) / 2;
 		unsigned char* pixel_pos = pixels + 4 * ( half_window_width * window.width + half_window_width );
 		unsigned int color = GetPickingName(pixel_pos[0], pixel_pos[1], pixel_pos[2]);
+		std::list< HeeksObj* > object_list;
 		if (color != 0)
-			color_list.insert(color);
-	}
-
-	if(color_list.size() == 0 || !single_picking){ // if no colours found in centre pixel of box
-		// check all the pixels in the box
-		for (unsigned int i = 0; i < pixel_size; i += 4)
 		{
-			unsigned int color = GetPickingName(pixels[i], pixels[i + 1], pixels[i + 2]);
-			if (color != 0)
+			int highest_pick_priority = GetObjectListFromColor(color, object_list);
+			if(highest_pick_priority >= objects_highest_pick_priority)
 			{
-				color_list.insert(color);
-				if(single_picking)break; // happy with first item found
+				objects.clear();
+				objects.insert(std::make_pair(highest_pick_priority, object_list));
 			}
+		}
+
+		while(objects.size() > 1)
+		{
+			objects.erase(objects.begin());
 		}
 	}
 
-	bool added = false;
-	for (std::set<unsigned int>::iterator It = color_list.begin(); It != color_list.end(); It++)
+	for (std::multimap< int, std::list< HeeksObj* > >::iterator It = objects.begin(); It != objects.end(); It++)
 	{
-		unsigned int name = *It;
+		std::list< HeeksObj* > &object_list = It->second;
 		MarkedObject* current_found_object = marked_object;
-		bool ignore_coords_only_found = false;
-		HeeksObj *object = m_name_index.find(name);
 
-		std::list<HeeksObj*> owner_list;
-		while (object && (object != &(wxGetApp())))
+		for (std::list<HeeksObj*>::iterator It2 = object_list.begin(); (It2 != object_list.end()) && (current_found_object != NULL); It2++)
 		{
-			owner_list.push_front(object);
-			object = object->m_owner;
-		}
-
-		for (std::list<HeeksObj*>::iterator It = owner_list.begin(); It != owner_list.end(); It++)
-		{
-			object = *It;
-
-			if (!ignore_coords_only_found && current_found_object != NULL){
-				if (ignore_coords_only && wxGetApp().m_digitizing->OnlyCoords(object)){
-					ignore_coords_only_found = true;
-				}
-				else{
-					if ((object->GetType() == GripperType) || ((object->GetMarkingMask() & m_filter) && (object->GetMarkingMask() != 0))){
-						int window_size = window.width;
-						current_found_object = current_found_object->Add(object, 0, window_size, 0, NULL);
-						added = true;
-					}
-				}
-			}
+			HeeksObj* object = *It2;
+			int window_size = window.width;
+			current_found_object = current_found_object->Add(object, 0, window_size, 0, NULL);
 		}
 	}
 

@@ -46,6 +46,7 @@ public:
 	bool DescendForUndo(){return false;}
 	bool IsDifferent(HeeksObj* other);
 	void GetTools(std::list<Tool*>* t_list, const wxPoint* p);
+	int PickPriority(){ return 2; } // lines
 
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
 	static bool GetLineTangentPoints(const gp_Circ& c1, const gp_Circ& c2, const gp_Pnt& a, const gp_Pnt& b, gp_Pnt& p1, gp_Pnt& p2);

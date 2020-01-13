@@ -59,6 +59,7 @@ public:
 	bool GetMidPoint(double* pos);
 	bool GetStartPoint(double* pos);
 	bool GetEndPoint(double* pos);
+	int PickPriority(){ return 2; } // lines
 
 	const TopoDS_Edge &Edge(){return m_topods_edge;}
 	//void Blend(double radius);

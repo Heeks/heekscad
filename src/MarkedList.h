@@ -10,6 +10,7 @@
 
 class Gripper;
 class PointOrWindow;
+class HeeksObj;
 
 class MarkedList{
 private:
@@ -24,6 +25,8 @@ private:
 	void render_move_grips(bool select, bool no_color);
 	void OnChangedAdded(HeeksObj* object);
 	void OnChangedRemoved(HeeksObj* object);
+	int GetObjectListFromColor(unsigned int color, std::list< HeeksObj* > &object_list);
+	int GetObjectsFromColors(const std::set<unsigned int> &color_list, std::multimap< int, std::list< HeeksObj* > > &objects);
 
 public:
 	PointOrWindow *point_or_window;

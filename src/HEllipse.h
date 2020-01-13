@@ -53,5 +53,6 @@ public:
 	void WriteXML(TiXmlNode *root);
 	int Intersects(const HeeksObj *object, std::list< double > *rl)const;
 	static HeeksObj* ReadFromXMLElement(TiXmlElement* pElem);
+	int PickPriority(){ return 2; } // lines
 };
 
