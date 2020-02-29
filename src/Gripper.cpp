@@ -27,120 +27,52 @@ void Gripper::glCommands(bool select, bool marked, bool no_color){
 
 	if(wxGetApp().m_dragging_moves_objects)
 	{
-		if(select)
+		glRasterPos3d(m_data.m_x, m_data.m_y, m_data.m_z);
+		switch(m_data.m_type){
+	case GripperTypeTranslate:
+		glBitmap(16, 15, 8, 7, 10.0, 0.0, translation_circle);
+		break;
+	case GripperTypeRotateObject:
+		glBitmap(16, 13, 8, 4, 10.0, 0.0, rotation_object_circle);
+		break;
+	case GripperTypeRotateObjectXY:
+		glBitmap(16, 13, 8, 4, 10.0, 0.0, rotation_object_circle);
+		break;
+	case GripperTypeRotateObjectXZ:
+		glBitmap(16, 13, 8, 4, 10.0, 0.0, rotation_object_circle);
+		break;
+	case GripperTypeRotateObjectYZ:
+		glBitmap(16, 13, 8, 4, 10.0, 0.0, rotation_object_circle);
+		break;
+	case GripperTypeRotate:
+		glBitmap(16, 13, 8, 4, 10.0, 0.0, rotation_circle);
+		break;
+	case GripperTypeScale:
+		glBitmap(16, 15, 8, 7, 10.0, 0.0, scale_circle);
+		break;
+	case GripperTypeAngle:
+		glBitmap(14, 16, 9, 11, 10.0, 0.0, angle_circle);
+		break;
+	case GripperTypeStretch:
+		switch(m_data.m_alternative_icon)
 		{
-			double s = 5.0 / wxGetApp().GetPixelScale();
-			double p[8][3] = {
-				{-s, -s, -s},
-				{s, -s, -s},
-				{s, s, -s},
-				{-s, s, -s},
-				{-s, -s, s},
-				{s, -s, s},
-				{s, s, s},
-				{-s, s, s}
-			};
-
-			for(int i = 0; i<8; i++){
-				p[i][0] += m_data.m_x;
-				p[i][1] += m_data.m_y;
-				p[i][2] += m_data.m_z;
-			}
-
-			glBegin(GL_TRIANGLES);
-			glVertex3dv(p[0]);
-			glVertex3dv(p[2]);
-			glVertex3dv(p[1]);
-			glVertex3dv(p[0]);
-			glVertex3dv(p[3]);
-			glVertex3dv(p[2]);
-
-			glVertex3dv(p[0]);
-			glVertex3dv(p[1]);
-			glVertex3dv(p[5]);
-			glVertex3dv(p[0]);
-			glVertex3dv(p[5]);
-			glVertex3dv(p[4]);
-
-			glVertex3dv(p[3]);
-			glVertex3dv(p[0]);
-			glVertex3dv(p[4]);
-			glVertex3dv(p[3]);
-			glVertex3dv(p[4]);
-			glVertex3dv(p[7]);
-
-			glVertex3dv(p[4]);
-			glVertex3dv(p[5]);
-			glVertex3dv(p[6]);
-			glVertex3dv(p[4]);
-			glVertex3dv(p[6]);
-			glVertex3dv(p[7]);
-
-			glVertex3dv(p[3]);
-			glVertex3dv(p[7]);
-			glVertex3dv(p[6]);
-			glVertex3dv(p[3]);
-			glVertex3dv(p[6]);
-			glVertex3dv(p[2]);
-
-			glVertex3dv(p[2]);
-			glVertex3dv(p[6]);
-			glVertex3dv(p[5]);
-			glVertex3dv(p[2]);
-			glVertex3dv(p[5]);
-			glVertex3dv(p[1]);
-
-			glEnd();
-		}
-		else
-		{
-			glRasterPos3d(m_data.m_x, m_data.m_y, m_data.m_z);
-			switch(m_data.m_type){
-		case GripperTypeTranslate:
-			glBitmap(16, 15, 8, 7, 10.0, 0.0, translation_circle);
+		case 1:
+			glBitmap(9, 9, 4, 4, 10.0, 0.0, square);
 			break;
-		case GripperTypeRotateObject:
-			glBitmap(16, 13, 8, 4, 10.0, 0.0, rotation_object_circle);
+		case 2:
+			glBitmap(9, 9, 4, 4, 10.0, 0.0, cross);
 			break;
-		case GripperTypeRotateObjectXY:
-			glBitmap(16, 13, 8, 4, 10.0, 0.0, rotation_object_circle);
-			break;
-		case GripperTypeRotateObjectXZ:
-			glBitmap(16, 13, 8, 4, 10.0, 0.0, rotation_object_circle);
-			break;
-		case GripperTypeRotateObjectYZ:
-			glBitmap(16, 13, 8, 4, 10.0, 0.0, rotation_object_circle);
-			break;
-		case GripperTypeRotate:
-			glBitmap(16, 13, 8, 4, 10.0, 0.0, rotation_circle);
-			break;
-		case GripperTypeScale:
-			glBitmap(16, 15, 8, 7, 10.0, 0.0, scale_circle);
-			break;
-		case GripperTypeAngle:
-			glBitmap(14, 16, 9, 11, 10.0, 0.0, angle_circle);
-			break;
-		case GripperTypeStretch:
-			switch(m_data.m_alternative_icon)
-			{
-			case 1:
-				glBitmap(9, 9, 4, 4, 10.0, 0.0, square);
-				break;
-			case 2:
-				glBitmap(9, 9, 4, 4, 10.0, 0.0, cross);
-				break;
-			case 3:
-				glBitmap(9, 9, 4, 4, 10.0, 0.0, flower);
-				break;
-			default:
-				glBitmap(9, 9, 4, 4, 10.0, 0.0, circle);
-				break;
-			}
+		case 3:
+			glBitmap(9, 9, 4, 4, 10.0, 0.0, flower);
 			break;
 		default:
 			glBitmap(9, 9, 4, 4, 10.0, 0.0, circle);
 			break;
-			}
+		}
+		break;
+	default:
+		glBitmap(9, 9, 4, 4, 10.0, 0.0, circle);
+		break;
 		}
 	}
 	else
