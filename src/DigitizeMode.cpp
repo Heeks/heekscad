@@ -180,7 +180,7 @@ DigitizedPoint DigitizeMode::digitize1(const wxPoint &input_point){
 	if(wxGetApp().digitize_end || wxGetApp().digitize_inters || wxGetApp().digitize_centre || wxGetApp().digitize_midpoint || wxGetApp().digitize_nearest || wxGetApp().digitize_tangent){
 		point_or_window->SetWithPoint(input_point);
 		wxGetApp().m_marked_list->ignore_coords_only = true;
-		wxGetApp().m_marked_list->ObjectsInWindow(point_or_window->box_chosen, &marked_object);
+		wxGetApp().m_marked_list->ObjectsInWindow(point_or_window->box_chosen, &marked_object, false);
 		wxGetApp().m_marked_list->ignore_coords_only = false;
 	}
 	if(wxGetApp().digitize_end){
