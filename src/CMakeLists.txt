@@ -268,3 +268,5 @@ install( FILES ${menu_icon} DESTINATION share/icons/hicolor/scalable/apps ) # fr
 file( GLOB desktop "${CMAKE_CURRENT_SOURCE_DIR}/../HeeksCAD.desktop" )
 install( FILES ${desktop} DESTINATION share/applications )
 
+file( GLOB picking "${CMAKE_CURRENT_SOURCE_DIR}/../src/Picking.*" )
+install( FILES ${picking} DESTINATION share/heekscad/src )
