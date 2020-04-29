@@ -720,7 +720,8 @@ void HeeksCADapp::Reset(){
 	m_project_title.Clear();
 	m_hidden_for_drag.clear();
 	m_show_grippers_on_drag = true;
-	*m_ruler = HRuler();
+	if(m_ruler)delete m_ruler;
+	m_ruler = new HRuler();
 	SetInputMode(m_select_mode);
 
 	ResetIDs();
