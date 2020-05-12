@@ -67,8 +67,10 @@ Merge new strings:
  sh translations/generate-pot-file.sh translations/xx/HeeksCAD.po
 
  Note: this script assumes you have heekscad and heekscnc in the same parent directory
- 
+
  * After translating them, you can test compilation using:
  msgfmt -o HeeksCAD.mo HeeksCAD.po
+ * if you use Poedit, it calls msgfmt automatically when you save .mo file,
+ so step above isn't needed
 
- Note: if you lunch "heekscad" from a folder that contains "HeeksCAD.mo" file, this catalog will be loaded instead of system-wide one.
+ Note: if you launch "heekscad" from a folder that contains "HeeksCAD.mo" file, this catalog will be loaded instead of system-wide one.
