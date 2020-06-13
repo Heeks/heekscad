@@ -1,3 +1,9 @@
+heekscad (1.5.0-1ubuntu1) unstable; urgency=low
+
+  * New upstream version
+
+ -- Romuald Conty <neomilium@gmail.com>  Sat, 13 Jun 2020 22:37:40 +0200
+
 heekscad (1.1.0-1) unstable; urgency=low
 
   * New upstream version
