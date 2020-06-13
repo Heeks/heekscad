@@ -16,13 +16,13 @@ heekscad (0.22-1) unstable; urgency=low
 
  -- Romuald Conty <neomilium@gmail.com>  Sat, 15 Jun 2013 19:33:48 +0200
 
-heekscad (0.8.2-svn274) intrepid; urgency=low
+heekscad (0.8.2-svn274) unstable; urgency=low
 
   * rebuild for svn r674
 
  -- Joachim Steiger <ubuntu@hyte.de>  Fri, 17 Jul 2009 23:26:41 +0200
 
-heekscad (0.8.2-svn643) intrepid; urgency=low
+heekscad (0.8.2-svn643) unstable; urgency=low
 
   * rebuild for svn r643
 
