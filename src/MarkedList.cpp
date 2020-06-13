@@ -16,7 +16,7 @@
 #include "ConversionTools.h"
 #include "SolidTools.h"
 #include "MenuSeparator.h"
-#include "Picking.h"
+#include "../interface/Picking.h"
 using namespace std;
 
 MarkedList::MarkedList(){

@@ -3,7 +3,7 @@
 // This program is released under the BSD license. See the file COPYING for details.
 #include "stdafx.h"
 #include "StlSolid.h"
-#include "Picking.h"
+#include "../interface/Picking.h"
 
 using namespace std;
 

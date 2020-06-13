@@ -32,6 +32,7 @@ set( heeksintf_SRCS
     MarkedObject.cpp
     NiceTextCtrl.cpp
     ObjList.cpp
+    Picking.cpp
     PictureFrame.cpp
     PropertyCheck.cpp
     PropertyChoice.cpp
@@ -69,6 +70,7 @@ set( heeksintf_HDRS
     NurbSurfaceParams.h
     ObjList.h
     Observer.h
+    Picking.h
     PictureFrame.h
     Plugin.h
     Property.h

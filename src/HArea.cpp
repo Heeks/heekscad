@@ -21,7 +21,7 @@
 #include "../interface/MarkedObject.h"
 #include "Arc.h"
 #include "HeeksConfig.h"
-#include "Picking.h"
+#include "../interface/Picking.h"
 
 HArea::HArea(const HArea &a){
 	operator=(a);

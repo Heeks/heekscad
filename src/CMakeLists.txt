@@ -89,7 +89,6 @@ set( heekscad_HDRS
     ObjPropsCanvas.h
     OptionsCanvas.h
     OrientationModifier.h
-    Picking.h
     Plugins.h
     PointDrawing.h
     PointOrWindow.h
@@ -188,7 +187,6 @@ set( heekscad_SRCS
     ObjPropsCanvas.cpp
     OptionsCanvas.cpp
     OrientationModifier.cpp
-    Picking.cpp
     Plugins.cpp
     PointDrawing.cpp
     PointOrWindow.cpp

@@ -23,7 +23,7 @@
 #include "../interface/PropertyVertex.h"
 #include "../interface/PropertyCheck.h"
 #include <locale.h>
-#include "Picking.h"
+#include "../interface/Picking.h"
 
 // static member variable
 bool CShape::m_solids_found = false;

@@ -95,7 +95,7 @@
 #include "History.h"
 #include "RemoveOrAddTool.h"
 #include "../interface/HeeksCADInterface.h"
-#include "Picking.h"
+#include "../interface/Picking.h"
 
 using namespace std;
 

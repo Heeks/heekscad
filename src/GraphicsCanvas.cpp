@@ -10,7 +10,7 @@
 #include "HeeksFrame.h"
 #include "../interface/HeeksCADInterface.h"
 #include "TreeCanvas.h"
-#include "Picking.h"
+#include "../interface/Picking.h"
 
 extern CHeeksCADInterface heekscad_interface;
 
