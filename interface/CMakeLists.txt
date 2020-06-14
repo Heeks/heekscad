@@ -93,7 +93,7 @@ set( heeksintf_HDRS
 
 add_library( heeksintf SHARED ${heeksintf_SRCS} )
 
-target_link_libraries( heeksintf ${PYTHON_LIBRARIES} ${wxWidgets_LIBRARIES} ${libarea_LIBRARIES} )
+target_link_libraries( heeksintf ${PYTHON_LIBRARIES} ${wxWidgets_LIBRARIES} ${libarea_LIBRARIES} ${OpenCASCADE_LIBRARIES})
 
 set_target_properties( heeksintf PROPERTIES SOVERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} )
 install( TARGETS heeksintf DESTINATION ${LIB_INSTALL_DIR} )
