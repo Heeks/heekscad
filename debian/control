@@ -12,7 +12,7 @@ Package: heekscad
 Architecture: any
 Depends: ${shlibs:Depends}, python (>= 2.5)
 Breaks: heekscnc (<< 1.0.0)
-Recommends: wx2.8-i18n
+Recommends: wx2.8-i18n | wx3.0-i18n
 Description: Computer-aided design application based on OCE
  HeeksCAD is a CAD application which features:
   * Import solid models from STEP and IGES files;
