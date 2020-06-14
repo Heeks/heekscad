@@ -4,5 +4,8 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+# Disable optimization to prevent segfault
+export DEB_BUILD_OPTIONS=noopt
+
 %:
-	dh $@ 
+	dh $@
