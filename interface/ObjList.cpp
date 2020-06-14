@@ -9,7 +9,7 @@
 #include "Picking.h"
 #else
 #include "HeeksCADInterface.h"
-#include "src/Picking.h"
+#include "interface/Picking.h"
 #endif
 
 #include <algorithm>
