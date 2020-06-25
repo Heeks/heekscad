@@ -232,7 +232,7 @@ set( heekscad_SRCS
     )
 
 set( HeeksCAD_LIBS
-       -L../bin -lheekstinyxml -lheeksintf
+       -L"${CMAKE_CURRENT_BINARY_DIR}/../bin" -lheekstinyxml -lheeksintf
     )
 add_executable( heekscad ${heekscad_SRCS} ${platform_SRCS} )
 target_link_libraries( heekscad
